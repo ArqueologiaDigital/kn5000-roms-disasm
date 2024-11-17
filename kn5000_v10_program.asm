@@ -130890,860 +130890,317 @@ Read_VGA_Register:
 	LD L (XBC)
 	RET
 
+MACRO VGA_WRITE(register, value)
+	LD WA, 0x#register
+	LD BC 0x#value
+	CALR Write_VGA_Register
+ENDMACRO
+
+MACRO PALLETE_WRITE(red, green, blue)
+	LD WA, 0x3c9
+	LD BC 0x#red
+	CALR Write_VGA_Register
+	LD BC 0x#green
+	CALR Write_VGA_Register
+	LD BC 0x#blue
+	CALR Write_VGA_Register
+ENDMACRO
+
 LABEL_EF5163:
-	LD WA, 0x03c4
-	LD BC 6
-	CALR Write_VGA_Register
-	LD WA, 0x03c5
-	LD BC 1
-	CALR Write_VGA_Register
-	LD WA, 0x03c4
-	LD BC, 0x0009
-	CALR Write_VGA_Register
-	LD WA, 0x03c5
-	LD BC 4
-	CALR Write_VGA_Register
-	LD WA, 0x03c4
-	LD BC, 0x000a
-	CALR Write_VGA_Register
-	LD WA, 0x03c5
-	LD BC, 0x0010
-	CALR Write_VGA_Register
-	LD WA, 0x03c4
-	LD BC, 0x000b
-	CALR Write_VGA_Register
-	LD WA, 0x03c5
-	LD BC, 0x0013
-	CALR Write_VGA_Register
-	LD WA, 0x03c4
-	LD BC, 0x000c
-	CALR Write_VGA_Register
-	LD WA, 0x03c5
-	LD BC 5
-	CALR Write_VGA_Register
-	LD WA, 0x03c4
-	LD BC, 0x0009
-	CALR Write_VGA_Register
-	LD WA, 0x03c5
-	LD BC 6
-	CALR Write_VGA_Register
-	LD WA, 0x03c4
-	LD BC, 0x000a
-	CALR Write_VGA_Register
-	LD WA, 0x03c5
-	LD BC, 0x0015
-	CALR Write_VGA_Register
-	LD WA, 0x03c4
-	LD BC, 0x000b
-	CALR Write_VGA_Register
-	LD WA, 0x03c5
-	LD BC, 0x0064
-	CALR Write_VGA_Register
-	LD WA, 0x03c4
-	LD BC, 0x000c
-	CALR Write_VGA_Register
-	LD WA, 0x03c5
-	LD BC 7
-	CALR Write_VGA_Register
-	LD WA, 0x03c4
-	LD BC, 0x0009
-	CALR Write_VGA_Register
-	LD WA, 0x03c5
-	LD BC 0
-	CALR Write_VGA_Register
-	LD WA, 0x03c4
-	LD BC, 0x000a
-	CALR Write_VGA_Register
-	LD WA, 0x03c5
-	LD BC, 0x001c
-	CALR Write_VGA_Register
-	LD WA, 0x03c4
-	LD BC, 0x000b
-	CALR Write_VGA_Register
-	LD WA, 0x03c5
-	LD BC, 0x0011
-	CALR Write_VGA_Register
-	LD WA, 0x03c4
-	LD BC, 0x000c
-	CALR Write_VGA_Register
-	LD WA, 0x03c5
-	LD BC 3
-	CALR Write_VGA_Register
-	LD WA, 0x03c4
-	LD BC, 0x0009
-	CALR Write_VGA_Register
-	LD WA, 0x03c5
-	LD BC 2
-	CALR Write_VGA_Register
-	LD WA, 0x03c4
-	LD BC, 0x000a
-	CALR Write_VGA_Register
-	LD WA, 0x03c5
-	LD BC 5
-	CALR Write_VGA_Register
-	LD WA, 0x03c4
-	LD BC, 0x000b
-	CALR Write_VGA_Register
-	LD WA, 0x03c5
-	LD BC, 0x0011
-	CALR Write_VGA_Register
-	LD WA, 0x03c4
-	LD BC, 0x000c
-	CALR Write_VGA_Register
-	LD WA, 0x03c5
-	LD BC 3
-	CALR Write_VGA_Register
-	LD WA, 0x03c4
-	LD BC, 0x0009
-	CALR Write_VGA_Register
-	LD WA, 0x03c5
-	LD BC, 0x0008
-	CALR Write_VGA_Register
-	LD WA, 0x03c4
-	LD BC, 0x000a
-	CALR Write_VGA_Register
-	LD WA, 0x03c5
-	LD BC, 0x0092
-	CALR Write_VGA_Register
-	LD WA, 0x03c4
-	LD BC, 0x000b
-	CALR Write_VGA_Register
-	LD WA, 0x03c5
-	LD BC, 0x0013
-	CALR Write_VGA_Register
-	LD WA, 0x03c4
-	LD BC, 0x000c
-	CALR Write_VGA_Register
-	LD WA, 0x03c5
-	LD BC, 0x0008
-	CALR Write_VGA_Register
-	LD WA, 0x03c4
-	LD BC, 0x0009
-	CALR Write_VGA_Register
-	LD WA, 0x03c5
-	LD BC, 0x000a
-	CALR Write_VGA_Register
-	LD WA, 0x03c4
-	LD BC, 0x000a
-	CALR Write_VGA_Register
-	LD WA, 0x03c5
-	LD BC 1
-	CALR Write_VGA_Register
-	LD WA, 0x03c4
-	LD BC, 0x000b
-	CALR Write_VGA_Register
-	LD WA, 0x03c5
-	LD BC, 0x0014
-	CALR Write_VGA_Register
-	LD WA, 0x03c4
-	LD BC, 0x000c
-	CALR Write_VGA_Register
-	LD WA, 0x03c5
-	LD BC 6
-	CALR Write_VGA_Register
-	LD WA, 0x03c4
-	LD BC, 0x0009
-	CALR Write_VGA_Register
-	LD WA, 0x03c5
-	LD BC, 0x000d
-	CALR Write_VGA_Register
-	LD WA, 0x03c4
-	LD BC, 0x000a
-	CALR Write_VGA_Register
-	LD WA, 0x03c5
-	LD BC 1
-	CALR Write_VGA_Register
-	LD WA, 0x03c4
-	LD BC, 0x0009
-	CALR Write_VGA_Register
-	LD WA, 0x03c5
-	LD BC, 0x000c
-	CALR Write_VGA_Register
-	LD WA, 0x03c4
-	LD BC, 0x000a
-	CALR Write_VGA_Register
-	LD WA, 0x03c5
-	LD BC 0
-	CALR Write_VGA_Register
-	LD WA, 0x03c4
-	LD BC, 0x000b
-	CALR Write_VGA_Register
-	LD WA, 0x03c5
-	LD BC, 0x0072
-	CALR Write_VGA_Register
-	LD WA, 0x03c4
-	LD BC, 0x000c
-	CALR Write_VGA_Register
-	LD WA, 0x03c5
-	LD BC, 0x0009
-	CALR Write_VGA_Register
-	LD WA, 0x03c4
-	LD BC, 0x0009
-	CALR Write_VGA_Register
-	LD WA, 0x03c5
-	LD BC, 0x000f
-	CALR Write_VGA_Register
-	LD WA, 0x03c4
-	LD BC, 0x000a
-	CALR Write_VGA_Register
-	LD WA, 0x03c5
-	LD BC, 0x0011
-	CALR Write_VGA_Register
-	LD WA, 0x03c4
-	LD BC, 0x0009
-	CALR Write_VGA_Register
-	LD WA, 0x03c5
-	LD BC, 0x000e
-	CALR Write_VGA_Register
-	LD WA, 0x03c4
-	LD BC, 0x000a
-	CALR Write_VGA_Register
-	LD WA, 0x03c5
-	LD BC 0
-	CALR Write_VGA_Register
-	LD WA, 0x03c4
-	LD BC, 0x000b
-	CALR Write_VGA_Register
-	LD WA, 0x03c5
-	LD BC, 0x0013
-	CALR Write_VGA_Register
-	LD WA, 0x03c4
-	LD BC, 0x000c
-	CALR Write_VGA_Register
-	LD WA, 0x03c5
-	LD BC, 0x0008
-	CALR Write_VGA_Register
-	LD WA, 0x03c4
-	LD BC, 0x0009
-	CALR Write_VGA_Register
-	LD WA, 0x03c5
-	LD BC, 0x0011
-	CALR Write_VGA_Register
-	LD WA, 0x03c4
-	LD BC, 0x000a
-	CALR Write_VGA_Register
-	LD WA, 0x03c5
-	LD BC, 0x00ff
-	CALR Write_VGA_Register
-	LD WA, 0x03c4
-	LD BC, 0x0009
-	CALR Write_VGA_Register
-	LD WA, 0x03c5
-	LD BC, 0x0010
-	CALR Write_VGA_Register
-	LD WA, 0x03c4
-	LD BC, 0x000a
-	CALR Write_VGA_Register
-	LD WA, 0x03c5
-	LD BC, 0x00fe
-	CALR Write_VGA_Register
-	LD WA, 0x03c4
-	LD BC, 0x000b
-	CALR Write_VGA_Register
-	LD WA, 0x03c5
-	LD BC, 0x0073
-	CALR Write_VGA_Register
-	LD WA, 0x03c4
-	LD BC, 0x000c
-	CALR Write_VGA_Register
-	LD WA, 0x03c5
-	LD BC, 0x000f
-	CALR Write_VGA_Register
-	LD WA, 0x03c4
-	LD BC, 0x0009
-	CALR Write_VGA_Register
-	LD WA, 0x03c5
-	LD BC 1
-	CALR Write_VGA_Register
-	LD WA, 0x03c4
-	LD BC, 0x000c
-	CALR Write_VGA_Register
-	LD WA, 0x03c5
-	LD BC, 0x0074
-	CALR Write_VGA_Register
-	LD WA, 0x03c4
-	LD BC, 0x0009
-	CALR Write_VGA_Register
-	LD WA, 0x03c5
-	LD BC 3
-	CALR Write_VGA_Register
-	LD WA, 0x03c4
-	LD BC, 0x000c
-	CALR Write_VGA_Register
-	LD WA, 0x03c5
-	LD BC, 0x0009
-	CALR Write_VGA_Register
-	LD WA, 0x03c4
-	LD BC, 0x0009
-	CALR Write_VGA_Register
-	LD WA, 0x03c5
-	LD BC 5
-	CALR Write_VGA_Register
-	LD WA, 0x03c4
-	LD BC, 0x000c
-	CALR Write_VGA_Register
-	LD WA, 0x03c5
-	LD BC, 0x002b
-	CALR Write_VGA_Register
-	LD WA, 0x03c4
-	LD BC, 0x0009
-	CALR Write_VGA_Register
-	LD WA, 0x03c5
-	LD BC 7
-	CALR Write_VGA_Register
-	LD WA, 0x03c4
-	LD BC, 0x000c
-	CALR Write_VGA_Register
-	LD WA, 0x03c5
-	LD BC, 0x0068
-	CALR Write_VGA_Register
-	LD WA, 0x03c4
-	LD BC, 0x0009
-	CALR Write_VGA_Register
-	LD WA, 0x03c5
-	LD BC, 0x0009
-	CALR Write_VGA_Register
-	LD WA, 0x03c4
-	LD BC, 0x000c
-	CALR Write_VGA_Register
-	LD WA, 0x03c5
-	LD BC 5
-	CALR Write_VGA_Register
-	LD WA, 0x03c4
-	LD BC, 0x0009
-	CALR Write_VGA_Register
-	LD WA, 0x03c5
-	LD BC, 0x000b
-	CALR Write_VGA_Register
-	LD WA, 0x03c4
-	LD BC, 0x000c
-	CALR Write_VGA_Register
-	LD WA, 0x03c5
-	LD BC 1
-	CALR Write_VGA_Register
-	LD WA, 0x03c4
-	LD BC, 0x0009
-	CALR Write_VGA_Register
-	LD WA, 0x03c5
-	LD BC, 0x000d
-	CALR Write_VGA_Register
-	LD WA, 0x03c4
-	LD BC, 0x000c
-	CALR Write_VGA_Register
-	LD WA, 0x03c5
-	LD BC, 0x000c
-	CALR Write_VGA_Register
-	LD WA, 0x03c4
-	LD BC, 0x0009
-	CALR Write_VGA_Register
-	LD WA, 0x03c5
-	LD BC, 0x000f
-	CALR Write_VGA_Register
-	LD WA, 0x03c4
-	LD BC, 0x000c
-	CALR Write_VGA_Register
-	LD WA, 0x03c5
-	LD BC, 0x003a
-	CALR Write_VGA_Register
-	LD WA, 0x03c4
-	LD BC, 0x0009
-	CALR Write_VGA_Register
-	LD WA, 0x03c5
-	LD BC, 0x0011
-	CALR Write_VGA_Register
-	LD WA, 0x03c4
-	LD BC, 0x000c
-	CALR Write_VGA_Register
-	LD WA, 0x03c5
-	LD BC, 0x000d
-	CALR Write_VGA_Register
-	LD WA, 0x03c4
-	LD BC 6
-	CALR Write_VGA_Register
-	LD WA, 0x03c5
-	LD BC 0
-	JRL T Write_VGA_Register
+
+	; Sequencer
+	VGA_WRITE(3c4, 06)
+	VGA_WRITE(3c5, 01)
+	VGA_WRITE(3c4, 09)
+	VGA_WRITE(3c5, 04)
+	VGA_WRITE(3c4, 0a)
+	VGA_WRITE(3c5, 10)
+	VGA_WRITE(3c4, 0b)
+	VGA_WRITE(3c5, 13)
+	VGA_WRITE(3c4, 0c)
+	VGA_WRITE(3c5, 05)
+	VGA_WRITE(3c4, 09)
+	VGA_WRITE(3c5, 06)
+	VGA_WRITE(3c4, 0a)
+	VGA_WRITE(3c5, 15)
+	VGA_WRITE(3c4, 0b)
+	VGA_WRITE(3c5, 64)
+	VGA_WRITE(3c4, 0c)
+	VGA_WRITE(3c5, 07)
+	VGA_WRITE(3c4, 09)
+	VGA_WRITE(3c5, 00)
+	VGA_WRITE(3c4, 0a)
+	VGA_WRITE(3c5, 1c)
+	VGA_WRITE(3c4, 0b)
+	VGA_WRITE(3c5, 11)
+	VGA_WRITE(3c4, 0c)
+	VGA_WRITE(3c5, 03)
+	VGA_WRITE(3c4, 09)
+	VGA_WRITE(3c5, 02)
+	VGA_WRITE(3c4, 0a)
+	VGA_WRITE(3c5, 05)
+	VGA_WRITE(3c4, 0b)
+	VGA_WRITE(3c5, 11)
+	VGA_WRITE(3c4, 0c)
+	VGA_WRITE(3c5, 03)
+	VGA_WRITE(3c4, 09)
+	VGA_WRITE(3c5, 08)
+	VGA_WRITE(3c4, 0a)
+	VGA_WRITE(3c5, 92)
+	VGA_WRITE(3c4, 0b)
+	VGA_WRITE(3c5, 13)
+	VGA_WRITE(3c4, 0c)
+	VGA_WRITE(3c5, 08)
+	VGA_WRITE(3c4, 09)
+	VGA_WRITE(3c5, 0a)
+	VGA_WRITE(3c4, 0a)
+	VGA_WRITE(3c5, 01)
+	VGA_WRITE(3c4, 0b)
+	VGA_WRITE(3c5, 14)
+	VGA_WRITE(3c4, 0c)
+	VGA_WRITE(3c5, 06)
+	VGA_WRITE(3c4, 09)
+	VGA_WRITE(3c5, 0d)
+	VGA_WRITE(3c4, 0a)
+	VGA_WRITE(3c5, 01)
+	VGA_WRITE(3c4, 09)
+	VGA_WRITE(3c5, 0c)
+	VGA_WRITE(3c4, 0a)
+	VGA_WRITE(3c5, 00)
+	VGA_WRITE(3c4, 0b)
+	VGA_WRITE(3c5, 72)
+	VGA_WRITE(3c4, 0c)
+	VGA_WRITE(3c5, 09)
+	VGA_WRITE(3c4, 09)
+	VGA_WRITE(3c5, 0f)
+	VGA_WRITE(3c4, 0a)
+	VGA_WRITE(3c5, 11)
+	VGA_WRITE(3c4, 09)
+	VGA_WRITE(3c5, 0e)
+	VGA_WRITE(3c4, 0a)
+	VGA_WRITE(3c5, 00)
+	VGA_WRITE(3c4, 0b)
+	VGA_WRITE(3c5, 13)
+	VGA_WRITE(3c4, 0c)
+	VGA_WRITE(3c5, 08)
+	VGA_WRITE(3c4, 09)
+	VGA_WRITE(3c5, 11)
+	VGA_WRITE(3c4, 0a)
+	VGA_WRITE(3c5, ff)
+	VGA_WRITE(3c4, 09)
+	VGA_WRITE(3c5, 10)
+	VGA_WRITE(3c4, 0a)
+	VGA_WRITE(3c5, fe)
+	VGA_WRITE(3c4, 0b)
+	VGA_WRITE(3c5, 73)
+	VGA_WRITE(3c4, 0c)
+	VGA_WRITE(3c5, 0f)
+	VGA_WRITE(3c4, 09)
+	VGA_WRITE(3c5, 01)
+	VGA_WRITE(3c4, 0c)
+	VGA_WRITE(3c5, 74)
+	VGA_WRITE(3c4, 09)
+	VGA_WRITE(3c5, 03)
+	VGA_WRITE(3c4, 0c)
+	VGA_WRITE(3c5, 09)
+	VGA_WRITE(3c4, 09)
+	VGA_WRITE(3c5, 05)
+	VGA_WRITE(3c4, 0c)
+	VGA_WRITE(3c5, 2b)
+	VGA_WRITE(3c4, 09)
+	VGA_WRITE(3c5, 07)
+	VGA_WRITE(3c4, 0c)
+	VGA_WRITE(3c5, 68)
+	VGA_WRITE(3c4, 09)
+	VGA_WRITE(3c5, 09)
+	VGA_WRITE(3c4, 0c)
+	VGA_WRITE(3c5, 05)
+	VGA_WRITE(3c4, 09)
+	VGA_WRITE(3c5, 0b)
+	VGA_WRITE(3c4, 0c)
+	VGA_WRITE(3c5, 01)
+	VGA_WRITE(3c4, 09)
+	VGA_WRITE(3c5, 0d)
+	VGA_WRITE(3c4, 0c)
+	VGA_WRITE(3c5, 0c)
+	VGA_WRITE(3c4, 09)
+	VGA_WRITE(3c5, 0f)
+	VGA_WRITE(3c4, 0c)
+	VGA_WRITE(3c5, 3a)
+	VGA_WRITE(3c4, 09)
+	VGA_WRITE(3c5, 11)
+	VGA_WRITE(3c4, 0c)
+	VGA_WRITE(3c5, 0d)
+	VGA_WRITE(3c4, 06)
+	VGA_WRITE(3c5, 00)
+	RET
 
 Some_VGA_setup:
-	LD WA, 0x03c3
-	LD BC 1
-	CALR Write_VGA_Register
-	LD WA, 0x03c2
-	LD BC, 0x00e3
-	CALR Write_VGA_Register
-	LD WA, 0x03c4
-	LD BC 0
-	CALR Write_VGA_Register
-	LD WA, 0x03c5
-	LD BC 0
-	CALR Write_VGA_Register
-	LD WA, 0x03c4
-	LD BC 1
-	CALR Write_VGA_Register
-	LD WA, 0x03c5
-	LD BC, 0x0021
-	CALR Write_VGA_Register
-	LD WA, 0x03c4
-	LD BC 0
-	CALR Write_VGA_Register
-	LD WA, 0x03c5
-	LD BC 3
-	CALR Write_VGA_Register
-	LD WA, 0x03c4
-	LD BC 2
-	CALR Write_VGA_Register
-	LD WA, 0x03c5
-	LD BC, 0x000f
-	CALR Write_VGA_Register
-	LD WA, 0x03c4
-	LD BC 3
-	CALR Write_VGA_Register
-	LD WA, 0x03c5
-	LD BC 0
-	CALR Write_VGA_Register
-	LD WA, 0x03c4
-	LD BC 4
-	CALR Write_VGA_Register
-	LD WA, 0x03c5
-	LD BC 6
-	CALR Write_VGA_Register
-	LD WA, 0x03ce
-	LD BC 1
-	CALR Write_VGA_Register
-	LD WA, 0x03cf
-	LD BC 0
-	CALR Write_VGA_Register
-	LD WA, 0x03ce
-	LD BC 3
-	CALR Write_VGA_Register
-	LD WA, 0x03cf
-	LD BC 0
-	CALR Write_VGA_Register
-	LD WA, 0x03ce
-	LD BC 4
-	CALR Write_VGA_Register
-	LD WA, 0x03cf
-	LD BC 0
-	CALR Write_VGA_Register
-	LD WA, 0x03ce
-	LD BC 5
-	CALR Write_VGA_Register
-	LD WA, 0x03cf
-	LD BC 0
-	CALR Write_VGA_Register
-	LD WA, 0x03ce
-	LD BC 6
-	CALR Write_VGA_Register
-	LD WA, 0x03cf
-	LD BC 1
-	CALR Write_VGA_Register
-	LD WA, 0x03ce
-	LD BC, 0x0008
-	CALR Write_VGA_Register
-	LD WA, 0x03cf
-	LD BC, 0x00ff
-	CALR Write_VGA_Register
-	LD WA, 0x03d4
-	LD BC, 0x0011
-	CALR Write_VGA_Register
-	LD WA, 0x03d5
-	LD BC 0
-	CALR Write_VGA_Register
-	LD WA, 0x03d4
-	LD BC 7
-	CALR Write_VGA_Register
-	LD WA, 0x03d5
-	LD BC, 0x0010
-	CALR Write_VGA_Register
-	LD WA, 0x03d4
-	LD BC, 0x0008
-	CALR Write_VGA_Register
-	LD WA, 0x03d5
-	LD BC 0
-	CALR Write_VGA_Register
-	LD WA, 0x03d4
-	LD BC, 0x0009
-	CALR Write_VGA_Register
-	LD WA, 0x03d5
-	LD BC, 0x0040
-	CALR Write_VGA_Register
-	LD WA, 0x03d4
-	LD BC, 0x000c
-	CALR Write_VGA_Register
-	LD WA, 0x03d5
-	LD BC 0
-	CALR Write_VGA_Register
-	LD WA, 0x03d4
-	LD BC, 0x000d
-	CALR Write_VGA_Register
-	LD WA, 0x03d5
-	LD BC 0
-	CALR Write_VGA_Register
-	LD WA, 0x03d4
-	LD BC, 0x0012
-	CALR Write_VGA_Register
-	LD WA, 0x03d5
-	LD BC, 0x00ef
-	CALR Write_VGA_Register
-	LD WA, 0x03d4
-	LD BC, 0x0013
-	CALR Write_VGA_Register
-	LD WA, 0x03d5
-	LD BC, 0x0014
-	CALR Write_VGA_Register
-	LD WA, 0x03d4
-	LD BC, 0x0014
-	CALR Write_VGA_Register
-	LD WA, 0x03d5
-	LD BC 0
-	CALR Write_VGA_Register
-	LD WA, 0x03d4
-	LD BC, 0x0017
-	CALR Write_VGA_Register
-	LD WA, 0x03d5
-	LD BC, 0x00e3
-	CALR Write_VGA_Register
-	LD WA, 0x03d4
-	LD BC, 0x0018
-	CALR Write_VGA_Register
-	LD WA, 0x03d5
-	LD BC, 0x00ff
-	CALR Write_VGA_Register
-	LD WA, 0x03da
-	CALR Read_VGA_Register
-	LD WA, 0x03c0
-	LD BC 0
-	CALR Write_VGA_Register
-	LD WA, 0x03c0
-	LD BC 0
-	CALR Write_VGA_Register
-	LD WA, 0x03c0
-	LD BC 1
-	CALR Write_VGA_Register
-	LD WA, 0x03c0
-	LD BC 1
-	CALR Write_VGA_Register
-	LD WA, 0x03c0
-	LD BC 2
-	CALR Write_VGA_Register
-	LD WA, 0x03c0
-	LD BC 2
-	CALR Write_VGA_Register
-	LD WA, 0x03c0
-	LD BC 3
-	CALR Write_VGA_Register
-	LD WA, 0x03c0
-	LD BC 3
-	CALR Write_VGA_Register
-	LD WA, 0x03c0
-	LD BC 4
-	CALR Write_VGA_Register
-	LD WA, 0x03c0
-	LD BC 4
-	CALR Write_VGA_Register
-	LD WA, 0x03c0
-	LD BC 5
-	CALR Write_VGA_Register
-	LD WA, 0x03c0
-	LD BC 5
-	CALR Write_VGA_Register
-	LD WA, 0x03c0
-	LD BC 6
-	CALR Write_VGA_Register
-	LD WA, 0x03c0
-	LD BC, 0x0014
-	CALR Write_VGA_Register
-	LD WA, 0x03c0
-	LD BC 7
-	CALR Write_VGA_Register
-	LD WA, 0x03c0
-	LD BC 7
-	CALR Write_VGA_Register
-	LD WA, 0x03c0
-	LD BC, 0x0008
-	CALR Write_VGA_Register
-	LD WA, 0x03c0
-	LD BC, 0x0038
-	CALR Write_VGA_Register
-	LD WA, 0x03c0
-	LD BC, 0x0009
-	CALR Write_VGA_Register
-	LD WA, 0x03c0
-	LD BC, 0x0039
-	CALR Write_VGA_Register
-	LD WA, 0x03c0
-	LD BC, 0x000a
-	CALR Write_VGA_Register
-	LD WA, 0x03c0
-	LD BC, 0x003a
-	CALR Write_VGA_Register
-	LD WA, 0x03c0
-	LD BC, 0x000b
-	CALR Write_VGA_Register
-	LD WA, 0x03c0
-	LD BC, 0x003b
-	CALR Write_VGA_Register
-	LD WA, 0x03c0
-	LD BC, 0x000c
-	CALR Write_VGA_Register
-	LD WA, 0x03c0
-	LD BC, 0x003c
-	CALR Write_VGA_Register
-	LD WA, 0x03c0
-	LD BC, 0x000d
-	CALR Write_VGA_Register
-	LD WA, 0x03c0
-	LD BC, 0x003d
-	CALR Write_VGA_Register
-	LD WA, 0x03c0
-	LD BC, 0x000e
-	CALR Write_VGA_Register
-	LD WA, 0x03c0
-	LD BC, 0x003e
-	CALR Write_VGA_Register
-	LD WA, 0x03c0
-	LD BC, 0x000f
-	CALR Write_VGA_Register
-	LD WA, 0x03c0
-	LD BC, 0x003f
-	CALR Write_VGA_Register
-	LD WA, 0x03c0
-	LD BC, 0x0010
-	CALR Write_VGA_Register
-	LD WA, 0x03c0
-	LD BC 1
-	CALR Write_VGA_Register
-	LD WA, 0x03c0
-	LD BC, 0x0011
-	CALR Write_VGA_Register
-	LD WA, 0x03c0
-	LD BC 0
-	CALR Write_VGA_Register
-	LD WA, 0x03c0
-	LD BC, 0x0012
-	CALR Write_VGA_Register
-	LD WA, 0x03c0
-	LD BC, 0x000f
-	CALR Write_VGA_Register
-	LD WA, 0x03c0
-	LD BC, 0x0013
-	CALR Write_VGA_Register
-	LD WA, 0x03c0
-	LD BC 0
-	CALR Write_VGA_Register
-	LD WA, 0x03c0
-	LD BC, 0x0034
-	CALR Write_VGA_Register
-	LD WA, 0x03c0
-	LD BC 0
-	CALR Write_VGA_Register
-	LD WA, 0x03c4
-	LD BC 6
-	CALR Write_VGA_Register
-	LD WA, 0x03c5
-	LD BC 1
-	CALR Write_VGA_Register
-	LD WA, 0x03d4
-	LD BC 0
-	CALR Write_VGA_Register
-	LD WA, 0x03d5
-	LD BC, 0x0065
-	CALR Write_VGA_Register
-	LD WA, 0x03d4
-	LD BC 1
-	CALR Write_VGA_Register
-	LD WA, 0x03d5
-	LD BC, 0x0027
-	CALR Write_VGA_Register
-	LD WA, 0x03d4
-	LD BC 4
-	CALR Write_VGA_Register
-	LD WA, 0x03d5
-	LD BC, 0x0028
-	CALR Write_VGA_Register
-	LD WA, 0x03d4
-	LD BC 5
-	CALR Write_VGA_Register
-	LD WA, 0x03d5
-	LD BC, 0x0029
-	CALR Write_VGA_Register
-	LD WA, 0x03d4
-	LD BC 6
-	CALR Write_VGA_Register
-	LD WA, 0x03d5
-	LD BC, 0x00f3
-	CALR Write_VGA_Register
-	LD WA, 0x03d4
-	LD BC 7
-	CALR Write_VGA_Register
-	LD WA, 0x03d5
-	LD BC 0
-	CALR Write_VGA_Register
-	LD WA, 0x03d4
-	LD BC, 0x0009
-	CALR Write_VGA_Register
-	LD WA, 0x03d5
-	LD BC 0
-	CALR Write_VGA_Register
-	LD WA, 0x03d4
-	LD BC, 0x0010
-	CALR Write_VGA_Register
-	LD WA, 0x03d5
-	LD BC, 0x00f2
-	CALR Write_VGA_Register
-	LD WA, 0x03d4
-	LD BC, 0x0011
-	CALR Write_VGA_Register
-	LD WA, 0x03d5
-	LD BC 3
-	CALR Write_VGA_Register
-	LD WA, 0x03d4
-	LD BC, 0x0015
-	CALR Write_VGA_Register
-	LD WA, 0x03d5
-	LD BC, 0x00ef
-	CALR Write_VGA_Register
-	LD WA, 0x03d4
-	LD BC, 0x0016
-	CALR Write_VGA_Register
-	LD WA, 0x03d5
-	LD BC, 0x00f3
-	CALR Write_VGA_Register
-	LD WA, 0x03c4
-	LD BC, 0x0008
-	CALR Write_VGA_Register
-	LD WA, 0x03c5
-	LD BC 1
-	CALR Write_VGA_Register
-	LD WA, 0x03c4
-	LD BC, 0x000d
-	CALR Write_VGA_Register
-	LD WA, 0x03c5
-	LD BC 3
-	CALR Write_VGA_Register
-	LD WA, 0x03c4
-	LD BC, 0x000f
-	CALR Write_VGA_Register
-	LD WA, 0x03c5
-	LD BC 0
-	CALR Write_VGA_Register
-	LD WA, 0x03d4
-	LD BC, 0x0019
-	CALR Write_VGA_Register
-	LD WA, 0x03d5
-	LD BC 0
-	CALR Write_VGA_Register
-	LD WA, 0x03d4
-	LD BC, 0x001a
-	CALR Write_VGA_Register
-	LD WA, 0x03d5
-	LD BC, 0x0010
-	CALR Write_VGA_Register
-	LD WA, 0x03c4
-	LD BC 7
-	CALR Write_VGA_Register
-	LD WA, 0x03c5
-	LD BC, 0x0020
-	CALR Write_VGA_Register
-	LD WA, 0x03c4
-	LD BC 6
-	CALR Write_VGA_Register
-	LD WA, 0x03c5
-	LD BC 0
-	CALR Write_VGA_Register
-	LD WA, 0x03d4
-	LD BC, 0x0011
-	CALR Write_VGA_Register
-	LD WA, 0x03d5
-	LD BC, 0x0080
-	CALR Write_VGA_Register
-	LD WA, 0x03c6
-	LD BC, 0x00ff
-	CALR Write_VGA_Register
-	LD WA, 0x03c8
-	LD BC 0
-	CALR Write_VGA_Register
-	LD WA, 0x03c9
-	LD BC 0
-	CALR Write_VGA_Register
-	LD WA, 0x03c9
-	LD BC 0
-	CALR Write_VGA_Register
-	LD WA, 0x03c9
-	LD BC 0
-	CALR Write_VGA_Register
-	LD WA, 0x03c9
-	LD BC, 0x000f
-	CALR Write_VGA_Register
-	LD WA, 0x03c9
-	LD BC, 0x000f
-	CALR Write_VGA_Register
-	LD WA, 0x03c9
-	LD BC, 0x000f
-	CALR Write_VGA_Register
-	LD WA, 0x03c9
-	LD BC, 0x000f
-	CALR Write_VGA_Register
-	LD WA, 0x03c9
-	LD BC 0
-	CALR Write_VGA_Register
-	LD WA, 0x03c9
-	LD BC 0
-	CALR Write_VGA_Register
-	LD WA, 0x03c9
-	LD BC 0
-	CALR Write_VGA_Register
-	LD WA, 0x03c9
-	LD BC, 0x000f
-	CALR Write_VGA_Register
-	LD WA, 0x03c9
-	LD BC 0
-	CALR Write_VGA_Register
-	LD WA, 0x03c9
-	LD BC 0
-	CALR Write_VGA_Register
-	LD WA, 0x03c9
-	LD BC 0
-	CALR Write_VGA_Register
-	LD WA, 0x03c9
-	LD BC, 0x000f
-	CALR Write_VGA_Register
-	LD WA, 0x03c9
-	LD BC 0
-	CALR Write_VGA_Register
-	LD WA, 0x03c9
-	LD BC, 0x000f
-	CALR Write_VGA_Register
-	LD WA, 0x03c9
-	LD BC, 0x000f
-	CALR Write_VGA_Register
-	LD WA, 0x03c9
-	LD BC, 0x000f
-	CALR Write_VGA_Register
-	LD WA, 0x03c9
-	LD BC, 0x000f
-	CALR Write_VGA_Register
-	LD WA, 0x03c9
-	LD BC 0
-	CALR Write_VGA_Register
-	LD WA, 0x03c9
-	LD BC, 0x000f
-	CALR Write_VGA_Register
-	LD WA, 0x03c9
-	LD BC 0
-	CALR Write_VGA_Register
-	LD WA, 0x03c9
-	LD BC, 0x000f
-	CALR Write_VGA_Register
-	LD WA, 0x03c9
-	LD BC 0
-	CALR Write_VGA_Register
-	LD WA, 0x03c9
-	LD BC 0
-	CALR Write_VGA_Register
-	LD WA, 0x03c9
-	LD BC 4
-	CALR Write_VGA_Register
+	VGA_WRITE(3c3, 01)  ; Global enable
+	VGA_WRITE(3c2, e3)  ; Misc. Output
+
+	; Sequencer
+	VGA_WRITE(3c4, 00)
+	VGA_WRITE(3c5, 00)
+	VGA_WRITE(3c4, 01)
+	VGA_WRITE(3c5, 21)
+	VGA_WRITE(3c4, 00)
+	VGA_WRITE(3c5, 03)
+	VGA_WRITE(3c4, 02)
+	VGA_WRITE(3c5, 0f)
+	VGA_WRITE(3c4, 03)
+	VGA_WRITE(3c5, 00)
+	VGA_WRITE(3c4, 04)
+	VGA_WRITE(3c5, 06)
+
+	; Graphics controller
+	VGA_WRITE(3ce, 01)
+	VGA_WRITE(3cf, 00)
+	VGA_WRITE(3ce, 03)
+	VGA_WRITE(3cf, 00)
+	VGA_WRITE(3ce, 04)
+	VGA_WRITE(3cf, 00)
+	VGA_WRITE(3ce, 05)
+	VGA_WRITE(3cf, 00)
+	VGA_WRITE(3ce, 06)
+	VGA_WRITE(3cf, 01)
+	VGA_WRITE(3ce, 08)
+	VGA_WRITE(3cf, ff)
+
+	; CRT controller? (3x4/3x5)
+	VGA_WRITE(3d4, 11)
+	VGA_WRITE(3d5, 00)
+	VGA_WRITE(3d4, 07)
+	VGA_WRITE(3d5, 10)
+	VGA_WRITE(3d4, 08)
+	VGA_WRITE(3d5, 00)
+	VGA_WRITE(3d4, 09)
+	VGA_WRITE(3d5, 40)
+	VGA_WRITE(3d4, 0c)
+	VGA_WRITE(3d5, 00)
+	VGA_WRITE(3d4, 0d)
+	VGA_WRITE(3d5, 00)
+	VGA_WRITE(3d4, 12)
+	VGA_WRITE(3d5, ef)
+	VGA_WRITE(3d4, 13)
+	VGA_WRITE(3d5, 14)
+	VGA_WRITE(3d4, 14)
+	VGA_WRITE(3d5, 00)
+	VGA_WRITE(3d4, 17)
+	VGA_WRITE(3d5, e3)
+	VGA_WRITE(3d4, 18)
+	VGA_WRITE(3d5, ff)
+	VGA_WRITE(3da, ff)
+
+	; Attribute
+	VGA_WRITE(3c0, 00)
+	VGA_WRITE(3c0, 00)
+	VGA_WRITE(3c0, 01)
+	VGA_WRITE(3c0, 01)
+	VGA_WRITE(3c0, 02)
+	VGA_WRITE(3c0, 02)
+	VGA_WRITE(3c0, 03)
+	VGA_WRITE(3c0, 03)
+	VGA_WRITE(3c0, 04)
+	VGA_WRITE(3c0, 04)
+	VGA_WRITE(3c0, 05)
+	VGA_WRITE(3c0, 05)
+	VGA_WRITE(3c0, 06)
+	VGA_WRITE(3c0, 14)
+	VGA_WRITE(3c0, 07)
+	VGA_WRITE(3c0, 07)
+	VGA_WRITE(3c0, 08)
+	VGA_WRITE(3c0, 38)
+	VGA_WRITE(3c0, 09)
+	VGA_WRITE(3c0, 39)
+	VGA_WRITE(3c0, 0a)
+	VGA_WRITE(3c0, 3a)
+	VGA_WRITE(3c0, 0b)
+	VGA_WRITE(3c0, 3b)
+	VGA_WRITE(3c0, 0c)
+	VGA_WRITE(3c0, 3c)
+	VGA_WRITE(3c0, 0d)
+	VGA_WRITE(3c0, 3d)
+	VGA_WRITE(3c0, 0e)
+	VGA_WRITE(3c0, 3e)
+	VGA_WRITE(3c0, 0f)
+	VGA_WRITE(3c0, 3f)
+	VGA_WRITE(3c0, 10)
+	VGA_WRITE(3c0, 01)
+	VGA_WRITE(3c0, 11)
+	VGA_WRITE(3c0, 00)
+	VGA_WRITE(3c0, 12)
+	VGA_WRITE(3c0, 0f)
+	VGA_WRITE(3c0, 13)
+	VGA_WRITE(3c0, 00)
+	VGA_WRITE(3c0, 34)
+	VGA_WRITE(3c0, 00)
+
+  ; Sequencer
+	VGA_WRITE(3c4, 06)
+	VGA_WRITE(3c5, 01)
+
+  ; CRT controller? (3x4/3x5)
+	VGA_WRITE(3d4, 00)
+	VGA_WRITE(3d5, 65)
+	VGA_WRITE(3d4, 01)
+	VGA_WRITE(3d5, 27)
+	VGA_WRITE(3d4, 04)
+	VGA_WRITE(3d5, 28)
+	VGA_WRITE(3d4, 05)
+	VGA_WRITE(3d5, 29)
+	VGA_WRITE(3d4, 06)
+	VGA_WRITE(3d5, f3)
+	VGA_WRITE(3d4, 07)
+	VGA_WRITE(3d5, 00)
+	VGA_WRITE(3d4, 09)
+	VGA_WRITE(3d5, 00)
+	VGA_WRITE(3d4, 10)
+	VGA_WRITE(3d5, f2)
+	VGA_WRITE(3d4, 11)
+	VGA_WRITE(3d5, 03)
+	VGA_WRITE(3d4, 15)
+	VGA_WRITE(3d5, ef)
+	VGA_WRITE(3d4, 16)
+	VGA_WRITE(3d5, f3)
+
+	; Sequencer
+	VGA_WRITE(3c4, 08)
+	VGA_WRITE(3c5, 01)
+	VGA_WRITE(3c4, 0d)
+	VGA_WRITE(3c5, 03)
+	VGA_WRITE(3c4, 0f)
+	VGA_WRITE(3c5, 00)
+
+	; CRT controller? (3x4/3x5)
+	VGA_WRITE(3d4, 19)
+	VGA_WRITE(3d5, 00)
+	VGA_WRITE(3d4, 1a)
+	VGA_WRITE(3d5, 10)
+
+	; Sequencer 
+	VGA_WRITE(3c4, 07)
+	VGA_WRITE(3c5, 20)
+	VGA_WRITE(3c4, 06)
+	VGA_WRITE(3c5, 00)
+
+	; CRT controller? (3x4/3x5)
+	VGA_WRITE(3d4, 11)
+	VGA_WRITE(3d5, 80)
+	VGA_WRITE(3c6, ff)
+
+	; Palette
+  	VGA_WRITE(3c8, 0)
+	PALLETE_WRITE(00, 00, 00)  ;  0: Black
+	PALLETE_WRITE(0f, 0f, 0f)  ;  1: white
+	PALLETE_WRITE(0f, 00, 00)  ;  2: red
+	PALLETE_WRITE(00, 0f, 00)  ;  3: green
+	PALLETE_WRITE(00, 00, 0f)  ;  4: blue
+	PALLETE_WRITE(00, 0f, 0f)  ;  5: cyan
+	PALLETE_WRITE(0f, 0f, 00)  ;  6: yellow
+	PALLETE_WRITE(0f, 00, 0f)  ;  7: magenta
+	PALLETE_WRITE(00, 00, 04)  ;  8: dark blue
+
 	CALR LABEL_EF5163
 	LD XWA, 0x00043c00
 	LD BC, 0x0808
@@ -131753,12 +131210,11 @@ Some_VGA_setup:
 	LD XBC, 0x00043c00
 	LD DE, 0x9600
 	CALL Copy_DE_words_from_XBC_to_XWA
-	LD WA, 0x03c4
-	LD BC 1
-	CALR Write_VGA_Register
-	LD WA, 0x03c5
-	LD BC 1
-	JRL T Write_VGA_Register
+
+	; Sequencer
+	VGA_WRITE(3c4, 01)
+	VGA_WRITE(3c5, 01)
+	RET
 
 LABEL_EF5B27:
 	LD (0x0205E6), 0x0000
