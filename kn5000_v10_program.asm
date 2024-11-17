@@ -129006,30 +129006,62 @@ LABEL_EF3DBB:
 	PUSH XIZ
 	LD XIZ, 0x00800000
 	EI, 0x06
+
+; == Notes ==
+; This routine can be summarized as this sequence of memory writes:
+; [0x00815554] = 0x00aa00aa
+; [0x0080aaa8] = 0x00550055
+; [0x00815554] = 0x00800080
+; [0x00815554] = 0x00aa00aa
+; [0x0080aaa8] = 0x00550055
+; [0x00815554] = 0x00100010
+;
+; addresses:   ----------------| |||||||| ||||||--
+; 0x00815554 = 00000000 10000001 01010101 01010100
+; 0x0080aaa8 = 00000000 10000000 10101010 10101000
+;
+; data values: -------- |||||||| -------- ||||||||
+; 0x00550055 = 00000000 01010101 00000000 01010101
+; 0x00aa00aa = 00000000 10101010 00000000 10101010
+; 0x00800080 = 00000000 10000000 00000000 10000000
+; 0x00100010 = 00000000 00010000 00000000 00010000
+
+	; [0x00815554] = 0x00aa00aa
 	LD XBC XIZ
 	ADD XBC, 0x00015554
 	LD XWA, 0x00aa00aa
 	LD (XBC) XWA
+
+	; [0x0080aaa8] = 0x00550055
 	LD XBC XIZ
 	ADD XBC, 0x0000aaa8
 	LD XWA, 0x00550055
 	LD (XBC) XWA
+
+	; [0x00815554] = 0x00800080
 	LD XBC XIZ
 	ADD XBC, 0x00015554
 	LD XWA, 0x00800080
 	LD (XBC) XWA
+
+	; [0x00815554] = 0x00aa00aa
 	LD XBC XIZ
 	ADD XBC, 0x00015554
 	LD XWA, 0x00aa00aa
 	LD (XBC) XWA
+
+	; [0x0080aaa8] = 0x00550055
 	LD XBC XIZ
 	ADD XBC, 0x0000aaa8
 	LD XWA, 0x00550055
 	LD (XBC) XWA
+
+	; [0x00815554] = 0x00100010
 	LD XBC XIZ
 	ADD XBC, 0x00015554
 	LD XWA, 0x00100010
 	LD (XBC) XWA
+
 	EI, 0x00
 	POP XIZ
 	RET
@@ -130752,11 +130784,11 @@ Draw_FlashMemUpdate_message_bitmap:  ; EF5040
 LABEL_EF5050:
 	LD WA IZ
 	EXTZ XWA
-	DIV WA, 0x001c
+	DIV WA, 0x001c ; 28 bytes = 224 pixels de largura da imagem a ser desenhada
 	LD WA QWA
 	CP WA 0
 	JR NZ LABEL_EF5063
-	LD IY HL
+	LD IY HL ; IY = coordanada X do canto esquerdo da imagem a ser desenhada
 	DEC 1 IX
 
 LABEL_EF5063:
@@ -130766,16 +130798,16 @@ LABEL_EF5066:
 	LD DE IZ
 	EXTZ XDE
 	ADD XDE (XSP + 0x02)
-	LDA XWA 0xE36A
+	LDA XWA 0xE36A       ; table of bit masks (equivalent to 0x1044 on boot "table_data" rom)
 	LD BC QHL
 	EXTZ XBC
-	ADD XBC XWA
+	ADD XBC XWA  ; indexing bit masks with value of QHL
 	LD A (XBC)
-	AND A (XDE)
+	AND A (XDE)  ; here XDE points at one of the bytes of the image we're drawing and we select the bit we need
 	LD QIXL A
 	LD DE IX
 	EXTZ XDE
-	LDA XBC 0x043C00
+	LDA XBC 0x043C00   ; aparentemente isso é um buffer offscreen
 
 Set_XWA_to_320_times_XDE:
 	LD XWA XDE
@@ -130795,12 +130827,12 @@ Set_XWA_to_320_times_XDE:
 	JR T LABEL_EF50BB
 
 LABEL_EF50AA:
-	LD DE IY
+	LD DE IY    
 	INC 1 IY
 	EXTZ XDE
-	ADD XWA XDE
+	ADD XWA XDE   ; XWA = 320*y + x
 	LD XDE XBC
-	ADD XDE XWA
+	ADD XDE XWA   ; XDE = offscreen_buffer[320*y + x]
 	LD A (XSP + 0x0c)
 	LD (XDE) A
 
@@ -130809,11 +130841,11 @@ LABEL_EF50BB:
 	CP QHL, 0x0008
 	JR C LABEL_EF5066
 	INC 1 IZ
-	CP IZ, 0x0268
+	CP IZ, 0x0268     ; 28 bytes (224 pixels/line) * 22 lines = 0x268 bytes 
 	JR C LABEL_EF5050
-	LDA XWA 0x1A0000
-	LD DE, 0x9600
-	CALL Copy_DE_words_from_XBC_to_XWA
+	LDA XWA 0x1A0000 ; memoria de video
+	LD DE, 0x9600 ; 320x120 words = 320x240 pixels
+	CALL Copy_DE_words_from_XBC_to_XWA  ; <-- "blit-screen"
 	POP IZ
 	INC 4 XSP
 	RETD, 0x0004
