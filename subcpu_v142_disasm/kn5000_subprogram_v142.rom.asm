@@ -531,24 +531,24 @@ LABEL_00F420:
 LABEL_00F428:
 	dd 0x00000000
 
-LABEL_00F42c:
+LABEL_00F42C:
 	db 0xCD, 0x3B, 0x7F, 0x66, 0x9E, 0xA0, 0xF6, 0x3F
 
-LABEL_00F434:
-	db 0x00, 0x0A, 0x00, 0x00
-	db 0xFF, 0x0D, 0x00, 0x00
-	db 0x00, 0x0A, 0x00, 0x00
-	db 0x00, 0x0A, 0x00, 0x00
-	db 0x00, 0x0A, 0x00, 0x00
-	db 0xFF, 0x03
+LABEL_00F434:				; Struct do buffer de transmissão da serial #1
+	dd 0x00000A00	;  0  <-- start
+	dd 0x00000DFF	;  4  <-- end
+	dd 0x00000A00	;  8  <-- current_write_pointer
+	dd 0x00000A00	;  c  <-- current_read_pointer
+	dd 0x00000A00	; 10
+	dw 0x03FF		; 14  <-- counter
 
-LABEL_00F44a:
-	db 0x16, 0x0E, 0x00, 0x00
-	db 0x15, 0x10, 0x00, 0x00
-	db 0x16, 0x0E, 0x00, 0x00
-	db 0x16, 0x0E, 0x00, 0x00
-	db 0x16, 0x0E, 0x00, 0x00
-	db 0xFF, 0x01
+LABEL_00F44A:				; Struct do buffer de recepção da serial #1
+	dd 0x00000E16	;  0
+	dd 0x00001015	;  4
+	dd 0x00000E16	;  8
+	dd 0x00000E16	;  c
+	dd 0x00000E16	; 10
+	dw 0x01FF		; 14
 
 
 OFFSETS_F460:
@@ -565,7 +565,7 @@ CALL_TABLE_F46C:
 	db LABEL_1FC7C
 	db LABEL_1FC7F
 	db LABEL_35893
-	db LABEL_1F890
+	db LABEL_1F890 ; <-- leads to the setup of serial port #1 as 38400 baud - PC2 (I think!)
 	db LABEL_3CFEE
 	db LABEL_20C12
 	db LABEL_20C12
@@ -8981,7 +8981,7 @@ LABEL_1F74F:
 	BIT 2 (SERIAL_1_VAR_1034)
 	JR Z LABEL_1F75D
 	LD XWA, 0x00000e00
-	CALR LABEL_1F7DD
+	CALR SAVE_BYTE_TO_RING_BUFFER
 
 LABEL_1F75D:
 	POP XWA
@@ -9010,7 +9010,7 @@ INTTX1_HANDLER:		; 1F765
 
 LABEL_1F77B:
 	LD XWA, 0x00001016
-	CALR LABEL_1F7B9
+	CALR READ_BYTE_FROM_RING_BUFFER
 	CP HL, 0xffff
 	JR Z LABEL_1F78C
 	LD (SC1BUF) L
@@ -9019,7 +9019,7 @@ LABEL_1F78C:
 	BIT 0 (SERIAL_1_VAR_1034)
 	JR NZ LABEL_1F7A3
 	LD XWA, 0x00001016
-	CALR LABEL_1F7AB
+	CALR RING_BUFFER_HAS_OVERRUN
 	CP HL, 0xffff
 	JR NZ LABEL_1F7A3
 	LD (INTES1), 0xfd
@@ -9034,37 +9034,44 @@ LABEL_1F7A3:
 	POP XIZ
 	RETI
 
-LABEL_1F7AB:
+
+; returns:
+; HL = 0xffff (True)
+; HL = 0x0000 (False)
+;
+RING_BUFFER_HAS_OVERRUN:  ; 1F7AB
 	LD HL 0
-	LD XBC (XWA + 0x0c)
-	CP XBC (XWA + 0x08)
+	LD XBC (XWA + 0x0c)  ; current_read_pointer
+	CP XBC (XWA + 0x08)  ; current_write_pointer
 	RET NZ
 	LD HL, 0xffff
 	RET
 
-LABEL_1F7B9:
+
+READ_BYTE_FROM_RING_BUFFER:		; 1F7B9
 	LD HL, 0xffff
-	LDA XDE XWA + 0x08
-	LD XBC (XDE)
-	LD XIX XBC
-	CP (XWA + 0x0c) XBC
+	LDA XDE, XWA + 0x08  ; current_write_pointer
+	LD XBC, (XDE)
+	LD XIX, XBC
+	CP (XWA + 0x0c), XBC  ; current_read_pointer
 	RET Z
-	LD L (XBC)
-	CP XBC (XWA + 0x04)
+	LD L, (XBC)
+	CP XBC, (XWA + 0x04)  ; buffer_end
 	JR NZ LABEL_1F7D3
-	LD XIX (XWA)
+	LD XIX, (XWA)  ; buffer_start
 	JR T LABEL_1F7D5
 
 LABEL_1F7D3:
-	INC 1 XIX
+	INC 1, XIX
 
 LABEL_1F7D5:
-	LD (XDE) XIX
+	LD (XDE), XIX
 	INCW 1 (XWA + 0x14)
 	EXTZ HL
 	RET
 
-LABEL_1F7DD:
+
+SAVE_BYTE_TO_RING_BUFFER:	; 1F7DD
 	LDA XIX XWA + 0x14
 	LD HL (XIX)
 	LDA XDE XWA + 0x0c
@@ -9086,6 +9093,7 @@ LABEL_1F7F8:
 	DEC 1 HL
 	LD (XIX) HL
 	RET
+
 
 LABEL_1F801:
 	PUSH SR
@@ -9131,7 +9139,7 @@ LABEL_1F856:
 
 LABEL_1F859:
 	LD XWA, 0x00000e00
-	CALR LABEL_1F7B9
+	CALR READ_BYTE_FROM_RING_BUFFER
 	CP HL, 0xffff
 	JR Z LABEL_1F87B
 	LD WA IZ
@@ -9179,7 +9187,7 @@ LABEL_1F8B2:
 	LD (XSP + 0x06) XWA
 	EXTZ BC
 	LD XWA, 0x00001016
-	CALR LABEL_1F7DD
+	CALR SAVE_BYTE_TO_RING_BUFFER
 	CALR LABEL_1F801
 
 LABEL_1F8C8:
@@ -9203,11 +9211,11 @@ LABEL_1F8DF:
 	LD (SERIAL_1_VAR_1034), 0x00
 	SET 0 (SERIAL_1_VAR_1034)
 	LD (SERIAL_1_VAR_1038), 0x00
-	LD XIY, 0x0000f434
+	LD XIY, LABEL_00F434
 	LD XIX, 0x00000e00
 	LD BC, 0x000b
 	LDIRW
-	LD XIY, 0x0000f44a
+	LD XIY, LABEL_00f44a
 	LD XIX, 0x00001016
 	LD BC, 0x000b
 	LDIRW
@@ -9344,12 +9352,12 @@ LABEL_1FAA6:
 
 LABEL_1FACB:
 	PUSH IZ
-	CALL LABEL_20C15
-	CALL LABEL_1F8DF
-	CALL LABEL_34C45
-	CALL LABEL_3581D
-	CALL LABEL_1FC95
-	CALL LABEL_3D016
+	CALL LABEL_20C15 ; <-- setup inter-cpu comms via latches
+	CALL LABEL_1F8DF ; <-- initialize serial port #1 (set up rx and tx buffers and pointers)
+	CALL LABEL_34C45 ; <-- TODO: I know that at some point this leads to toggling reset signals for both DSP chips.
+	CALL LABEL_3581D ; <-- TODO: I dont know. But I guess this could write to the other DSP chip (other than the LABEL_1FC95 one)
+	CALL LABEL_1FC95 ; <-- writes to something (possibly the DSP1 chip -- but could be DSP2 as well?) mapped to 0x00130000
+	CALL LABEL_3D016 ; <-- writes to tone generator mapped to 0x00110000
 	EI, 0x00
 
 LABEL_1FAE6:
@@ -37844,7 +37852,7 @@ LABEL_34C3B:
 LABEL_34C45:
 	LD BC 0
 	LDA XWA 0x041342
-	CP BC, 0x0026
+	CP BC, 0x0026		; How could this be possible? Maybe some code not disasm'd yet calls here?!
 	JR NC LABEL_34C5E
 
 LABEL_34C52:
@@ -37870,7 +37878,7 @@ LABEL_34C77:
 	LD WA 0
 	LD (0x2B0F) WA
 	LD (0x2B0D) WA
-	BIT 3 (PH)
+	BIT 3 (PH) 			; <--- what is this? In the schematics there's nothing at the "port H bit 3" pin.
 	JR Z LABEL_34C95
 	AND (0x041343), 0xfff7
 	JR T LABEL_34C9C
@@ -39057,6 +39065,7 @@ LABEL_3581D:
 	LD (0x3B62) WA
 	LD (0x3B60) WA
 	RET
+
 LABEL_3582E:
 	db 0x0E, 0x0E
 
@@ -44617,44 +44626,45 @@ LABEL_38392:
 	JP LABEL_36305
 
 LABEL_38396:
-	RES 1 (PH)
+	RES 1 (PH)		; DSPRST (DSP1 reset signal ?)
 	RET
 
 LABEL_3839A:
-	SET 1 (PH)
+	SET 1 (PH)		; DSPRST (DSP1 reset signal ?)
 	RET
 
 LABEL_3839E:
-	RES 2 (PH)
+	RES 2 (PH)		; DSPRST2 (DSP2 reset signal ?)
 	RET
 
 LABEL_383A2:
-	SET 2 (PH)
+	SET 2 (PH)		; DSPRST2 (DSP2 reset signal ?)
 	RET
 
 LABEL_383A6:
 	RET
 
 LABEL_383A7:
-	RES 6 (P7)
+	RES 6 (P7)		; DSPCD (command/data ?)
 	RET
 
 LABEL_383AB:
-	SET 6 (P7)
+	SET 6 (P7)		; DSPCD (command/data ?)
 	RET
 
 LABEL_383AF:
-	RES 3 (P7)
+	RES 3 (P7)		; DSPWR (DSP1 write signal)
 	RET
 
 LABEL_383B3:
-	SET 3 (P7)
+	SET 3 (P7)		; DSPWR (DSP1 write signal)
 	RET
+
 LABEL_383B7:
 	db 0xF0, 0x1C, 0xB4, 0x0E
 
 LABEL_383BB:
-	SET 4 (P7)
+	SET 4 (P7)		; DSPRD (DSP1 read signal)
 	RET
 
 LABEL_383BF:
@@ -44667,11 +44677,11 @@ LABEL_383BF:
 	JR Z LABEL_383D6
 	CP WA 0
 	JR NZ LABEL_383D9
-	RES 5 (P7)
+	RES 5 (P7)		; chip-select do DSP1
 	JR T LABEL_383D9
 
 LABEL_383D6:
-	RES 6 (PE)
+	RES 6 (PE)		; chip-select do DSP2
 
 LABEL_383D9:
 	POP IZ
@@ -44687,11 +44697,11 @@ LABEL_383DB:
 	JR Z LABEL_383F2
 	CP WA 0
 	JR NZ LABEL_383F5
-	SET 5 (P7)
+	SET 5 (P7)		; chip-select do DSP1
 	JR T LABEL_383F5
 
 LABEL_383F2:
-	SET 6 (PE)
+	SET 6 (PE)		; chip-select do DSP2
 
 LABEL_383F5:
 	POP IZ
@@ -51249,7 +51259,7 @@ LABEL_3D227:
 	JR C LABEL_3D227
 
 LABEL_3D230:
-	SET 7 (P6)
+	SET 7 (P6)	; A23 pin tied to D5VNAD (both pins "NAD" and "EXADL0" of of tone generator)
 	NOP
 	LD WA (0x110002)
 	RES 7 (P6)
