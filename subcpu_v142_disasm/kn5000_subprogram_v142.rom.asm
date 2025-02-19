@@ -188,43 +188,43 @@ PMEMCR		EQU 0x166
 
 	org 0x0400
 
-INT_HANDLER_00:
+INT_HANDLER_00:		; 0400
 	JP RESET
 	RET
 
-INT_HANDLER_01:
+INT_HANDLER_01:		; 0405
 	JP EMPTY_HANDLER
 	RET
 
-INT_HANDLER_02:
+INT_HANDLER_02:		; 040A
 	JP EMPTY_HANDLER
 	RET
 
-INT_HANDLER_03:
+INT_HANDLER_03:		; 040F
 	JP EMPTY_HANDLER
 	RET
 
-INT_HANDLER_04:
+INT_HANDLER_04:		; 0414
 	JP EMPTY_HANDLER
 	RET
 
-INT_HANDLER_05:
+INT_HANDLER_05:		; 0419
 	JP EMPTY_HANDLER
 	RET
 
-INT_HANDLER_06:
+INT_HANDLER_06:		; 041E
 	JP EMPTY_HANDLER
 	RET
 
-INT_HANDLER_07:
+INT_HANDLER_07:		; 0423
 	JP EMPTY_HANDLER
 	RET
 
-INT_HANDLER_08:		; watchdog
+INT_HANDLER_08:		; 0428: watchdog
 	JP EMPTY_HANDLER_WITH_RESET
 	RET
 
-INT_HANDLER_09:		; Interrupt #0: Receive data from main-cpu via 8bit latch
+INT_HANDLER_09:		; 042D: Interrupt #0: Receive data from main-cpu via 8bit latch
 	JP INT0_HANDLER
 	RET
 
@@ -8970,12 +8970,14 @@ INTRX1_HANDLER:		; 1F736
 	PUSH XDE
 	PUSH XBC
 	PUSH XWA
-	LD C (SC1BUF)
-	LD A (SC1CR)
-	AND A, 0x1c
+	LD C, (SC1BUF)
+	LD A, (SC1CR)
+	AND A, 0x1c     0001 1100
 	JR Z LABEL_1F74F
-	LD (0x1036) (SC1CR)
-	JR T LABEL_1F75D
+	
+	; serial comms error happened:
+	LD (0x1036), (SC1CR)
+	JR T exit_INTRX1_HANDLER
 
 LABEL_1F74F:
 	BIT 2 (SERIAL_1_VAR_1034)
@@ -8983,7 +8985,7 @@ LABEL_1F74F:
 	LD XWA, 0x00000e00
 	CALR SAVE_BYTE_TO_RING_BUFFER
 
-LABEL_1F75D:
+exit_INTRX1_HANDLER:  ; 1F75D
 	POP XWA
 	POP XBC
 	POP XDE
@@ -9207,7 +9209,7 @@ LABEL_1F8D5:
 	POP SR
 	JRL T LABEL_1F836
 
-LABEL_1F8DF:
+INIT_RING_BUFFERS:
 	LD (SERIAL_1_VAR_1034), 0x00
 	SET 0 (SERIAL_1_VAR_1034)
 	LD (SERIAL_1_VAR_1038), 0x00
@@ -9219,7 +9221,7 @@ LABEL_1F8DF:
 	LD XIX, 0x00001016
 	LD BC, 0x000b
 	LDIRW
-	EI, 0x06
+	EI, 0x06 ; <-------  1f90b
 	LD (SC1MOD), 0x29
 	LD (SC1CR), 0x00
 	LD (BR1CR), 0x0a
@@ -9227,6 +9229,7 @@ LABEL_1F8DF:
 	LD (SC1BUF), 0xfe
 	EI, 0x00
 	RET
+
 LABEL_1F91F:
 	db 0x05, 0x0E, 0x68, 0x01, 0x0E
 
@@ -9353,7 +9356,7 @@ LABEL_1FAA6:
 LABEL_1FACB:
 	PUSH IZ
 	CALL LABEL_20C15 ; <-- setup inter-cpu comms via latches
-	CALL LABEL_1F8DF ; <-- initialize serial port #1 (set up rx and tx buffers and pointers)
+	CALL INIT_RING_BUFFERS ; <-- initialize serial port #1 (set up rx and tx buffers and pointers)
 	CALL LABEL_34C45 ; <-- TODO: I know that at some point this leads to toggling reset signals for both DSP chips.
 	CALL LABEL_3581D ; <-- TODO: I dont know. But I guess this could write to the other DSP chip (other than the LABEL_1FC95 one)
 	CALL LABEL_1FC95 ; <-- writes to something (possibly the DSP1 chip -- but could be DSP2 as well?) mapped to 0x00130000
