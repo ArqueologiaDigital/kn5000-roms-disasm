@@ -123202,7 +123202,7 @@ RESET:
 	LD (WDCR), 0xb1
 	LD (CLKMOD), 0x04
 	LD (PF), 0x00
-	LD (PFFC), 0x73
+	LD (PFFC), 0x73; Control panel enabled / MIDI disabled
 	LD (PFCR), 0x15
 	AND (PB), 0xf0
 	RES 3 (P8)
@@ -131053,12 +131053,12 @@ LABEL_EF5163:
 
 Some_VGA_setup:
 	VGA_WRITE(3c3, 01)  ; Global enable
-	VGA_WRITE(3c2, e3)  ; Misc. Output
+	VGA_WRITE(3c2, e3)  ; Misc. Output (select 25 MHz dot clock & 60 Hz scanning rate)
 
 	VGA_SEQUENCER(00, 00)  ; Reset
 	VGA_SEQUENCER(01, 21)  ; Clocking Mode (screen off)
 	VGA_SEQUENCER(00, 03)  ; Reset
-	VGA_SEQUENCER(02, 0f)  ; Map Mask
+	VGA_SEQUENCER(02, 0f)  ; Map Mask (enable writes to all four planes)
 	VGA_SEQUENCER(03, 00)  ; Character Map Select
 	VGA_SEQUENCER(04, 06)  ; Memory Mode
 
@@ -393268,8 +393268,8 @@ LABEL_FC3EF5:
 	LD (XHL + 0xfc), 0x0000
 	LD (XHL + 0xf8), 0x0000
 	LD (XHL + 0xfe), 0x0080
-	LD A, 0x03
-	AND A, 0xaf
+	LD A, 0x03 ; PF2=SCK0 Disabled, PF0=TxD0 and PF1=RxD0 (MIDI) 
+	AND A, 0xaf ; PF6=SCK1 Disabled, PF4=TxD1 and PF5=RxD1 (Control Panel)
 	LD (0x8D8F) A
 	LD (PFFC) A
 	LD A, 0x15
@@ -393286,17 +393286,19 @@ LABEL_FC3EF5:
 	                  ; wake-up function: disable
 	                  ; receive control: receive disable
 	                  ; handshake function control: CTS disable
-	LD (BR1CR), 0x14
+	LD (BR1CR), 0x14 ; Internal Clock T2 (16/fc)
+	                 ; Divide by 4
+	                 ; fc = 16MHz, so fc/16/4 = 250kHz
 	LD (SC1CR), 0x01 ; Parity: odd
 	                 ; Parity addition: disable
 	                 ; clear all errors
 	                 ; Data transmit/receive at SCLK1 rising edge
 	                 ; I/O interface input clock: SCLK1 pin input
 	LD (INTEAB), 0x07
-	LD (INTCLR), 0x12
+	LD (INTCLR), 0x12 ; INTA Pin
 	LD (INTES1), 0xff
-	LD (INTCLR), 0x22
-	LD (INTCLR), 0x23
+	LD (INTCLR), 0x22 ; INTRX1: Serial receive 1
+	LD (INTCLR), 0x23 ; INTTX1: Serial send 1
 	OR (TAMOD), 0x10
 	AND (TAMOD), 0xf7
 	LD (0x8D91), 0x7d
@@ -393347,10 +393349,10 @@ LABEL_FC3FA9:
 	CALR LABEL_FC4118
 	EI, 0x06
 	LD (INTES1), 0xff
-	LD (INTCLR), 0x22
-	LD (INTCLR), 0x23
+	LD (INTCLR), 0x22 ; INTRX1: Serial receive 1
+	LD (INTCLR), 0x23 ; INTTX1: Serial send 1
 	AND (SC1MOD), 0xdf  ; RXE (bit 5) = 0: receive disable
-	LD (INTCLR), 0x12
+	LD (INTCLR), 0x12 ; INTA Pin
 	LD (INTEAB), 0x05
 	LD (0x8D9D), 0x0000
 	LD (0x8D9F), 0x0000
@@ -393360,33 +393362,81 @@ LABEL_FC3FA9:
 
 
 LABEL_FC4021:
-	db 0xF1, 0x01, 0x8E, 0x50, 0xC1, 0x8F, 0x8D, 0x3C
-	db 0xBF, 0xC1, 0x8F, 0x8D, 0x21, 0xF0, 0x3F, 0x41
-	db 0x08, 0xEB, 0xFF, 0x08, 0xF8, 0x22, 0x08, 0xF8
-	db 0x23, 0x08, 0xE3, 0x07, 0x08, 0xF8, 0x12, 0xC0
-	db 0x3C, 0x3C, 0xBF, 0xC1, 0x8E, 0x8D, 0x3E, 0x40
-	db 0xC1, 0x8E, 0x8D, 0x21, 0xF0, 0x3E, 0x41, 0x1E
-	db 0xAD, 0x00, 0x1E, 0xAA, 0x00, 0xC1, 0x8E, 0x8D
-	db 0x3C, 0xBF, 0xC1, 0x8E, 0x8D, 0x21, 0xF0, 0x3E
-	db 0x41, 0x1E, 0x9B, 0x00, 0x1E, 0x98, 0x00, 0xC1
-	db 0x8F, 0x8D, 0x3E, 0x50, 0xC1, 0x8F, 0x8D, 0x21
-	db 0xF0, 0x3F, 0x41, 0xC1, 0x8E, 0x8D, 0x3E, 0x50
-	db 0xC1, 0x8E, 0x8D, 0x21, 0xF0, 0x3E, 0x41, 0xC0
-	db 0xD5, 0x3C, 0xFE, 0x08, 0xEB, 0xFF, 0x08, 0xF8
-	db 0x22, 0x08, 0xF8, 0x23, 0x45, 0x01, 0x8E, 0x00
-	db 0x00, 0xD1, 0xFD, 0x8D, 0x85, 0x85, 0x21, 0xD1
-	db 0xFD, 0x8D, 0x61, 0xF0, 0xD4, 0x41, 0x1E, 0x5E
-	db 0x00, 0x1E, 0x5B, 0x00, 0x45, 0x01, 0x8E, 0x00
-	db 0x00, 0xD1, 0xFD, 0x8D, 0x85, 0x85, 0x21, 0xD1
-	db 0xFD, 0x8D, 0x61, 0xF0, 0xD4, 0x41, 0x1E, 0x46
-	db 0x00, 0x1E, 0x43, 0x00, 0xC0, 0xD5, 0x3E, 0x01
-	db 0xC0, 0xD5, 0x3C, 0xFD, 0xC1, 0x8E, 0x8D, 0x3C
-	db 0xAF, 0xC1, 0x8E, 0x8D, 0x21, 0xF0, 0x3E, 0x41
-	db 0xC1, 0x8F, 0x8D, 0x3C, 0xAF, 0xC1, 0x8F, 0x8D
-	db 0x21, 0xF0, 0x3F, 0x41, 0x0E, 0xD8, 0xAA, 0xD8
-	db 0x69, 0xD8, 0xD8, 0x66, 0x02, 0x68, 0xF8, 0x0E
-	db 0xD8, 0xAE, 0xD8, 0x69, 0xD8, 0xD8, 0x66, 0x02
-	db 0x68, 0xF8, 0x0E
+fc4021: f1 01 8e 50           ld (0x8e01),WA
+fc4025: c1 8f 8d 3c bf        and (0x8d8f),0xbf
+fc402a: c1 8f 8d 21           ld A,(0x8d8f)
+fc402e: f0 3f 41              ld (0x3f),A
+fc4031: 08 eb ff              ld (0xeb),0xff
+fc4034: 08 f8 22              ld (0xf8),0x22
+fc4037: 08 f8 23              ld (0xf8),0x23
+fc403a: 08 e3 07              ld (0xe3),0x07
+fc403d: 08 f8 12              ld (0xf8),0x12
+fc4040: c0 3c 3c bf           and (0x3c),0xbf
+fc4044: c1 8e 8d 3e 40        or (0x8d8e),0x40
+fc4049: c1 8e 8d 21           ld A,(0x8d8e)
+fc404d: f0 3e 41              ld (0x3e),A
+fc4050: 1e ad 00              calr 0xfc4100
+fc4053: 1e aa 00              calr 0xfc4100
+fc4056: c1 8e 8d 3c bf        and (0x8d8e),0xbf
+fc405b: c1 8e 8d 21           ld A,(0x8d8e)
+fc405f: f0 3e 41              ld (0x3e),A
+fc4062: 1e 9b 00              calr 0xfc4100
+fc4065: 1e 98 00              calr 0xfc4100
+fc4068: c1 8f 8d 3e 50        or (0x8d8f),0x50
+fc406d: c1 8f 8d 21           ld A,(0x8d8f)
+fc4071: f0 3f 41              ld (0x3f),A
+fc4074: c1 8e 8d 3e 50        or (0x8d8e),0x50
+fc4079: c1 8e 8d 21           ld A,(0x8d8e)
+fc407d: f0 3e 41              ld (0x3e),A
+fc4080: c0 d5 3c fe           and (0xd5),0xfe
+fc4084: 08 eb ff              ld (0xeb),0xff
+fc4087: 08 f8 22              ld (0xf8),0x22
+fc408a: 08 f8 23              ld (0xf8),0x23
+fc408d: 45 01 8e 00 00        ld XIY,0x00008e01
+fc4092: d1 fd 8d 85           add IY,(0x8dfd)
+fc4096: 85 21                 ld A,(XIY)
+fc4098: d1 fd 8d 61           incw 1,(0x8dfd)
+fc409c: f0 d4 41              ld (0xd4),A
+fc409f: 1e 5e 00              calr 0xfc4100
+fc40a2: 1e 5b 00              calr 0xfc4100
+fc40a5: 45 01 8e 00 00        ld XIY,0x00008e01
+fc40aa: d1 fd 8d 85           add IY,(0x8dfd)
+fc40ae: 85 21                 ld A,(XIY)
+fc40b0: d1 fd 8d 61           incw 1,(0x8dfd)
+fc40b4: f0 d4 41              ld (0xd4),A
+fc40b7: 1e 46 00              calr 0xfc4100
+fc40ba: 1e 43 00              calr 0xfc4100
+fc40bd: c0 d5 3e 01           or (0xd5),0x01
+fc40c1: c0 d5 3c fd           and (0xd5),0xfd
+fc40c5: c1 8e 8d 3c af        and (0x8d8e),0xaf
+fc40ca: c1 8e 8d 21           ld A,(0x8d8e)
+fc40ce: f0 3e 41              ld (0x3e),A
+fc40d1: c1 8f 8d 3c af        and (0x8d8f),0xaf
+fc40d6: c1 8f 8d 21           ld A,(0x8d8f)
+fc40da: f0 3f 41              ld (0x3f),A
+fc40dd: 0e                    ret
+
+
+
+; Below are routines that loop N times, where
+; N = 2, 6, 10, 300, 1500 or 3000
+; These are likely pauses
+; But these values are also suspiciously similar to proportions
+; between typical baudrates, but this is just a hunch for now...
+
+fc40de: d8 aa                 ld WA,2
+fc40e0: d8 69                 dec 1,WA
+fc40e2: d8 d8                 cp WA,0
+fc40e4: 66 02                 jr Z,0xfc40e8
+fc40e6: 68 f8                 jr T,0xfc40e0
+fc40e8: 0e                    ret
+
+fc40e9: d8 ae                 ld WA,6
+fc40eb: d8 69                 dec 1,WA
+fc40ed: d8 d8                 cp WA,0
+fc40ef: 66 02                 jr Z,0xfc40f3
+fc40f1: 68 f8                 jr T,0xfc40eb
+fc40f3: 0e                    ret
 
 LABEL_FC40F4:
 	LD WA, 0x000a
@@ -393399,9 +393449,14 @@ LABEL_FC40F7:
 
 LABEL_FC40FF:
 	RET
+
 LABEL_FC4100:
-	db 0x30, 0x2C, 0x01, 0xD8, 0x69, 0xD8, 0xD8, 0x66
-	db 0x02, 0x68, 0xF8, 0x0E
+fc4100: 30 2c 01              ld WA,0x012c
+fc4103: d8 69                 dec 1,WA
+fc4105: d8 d8                 cp WA,0
+fc4107: 66 02                 jr Z,0xfc410b
+fc4109: 68 f8                 jr T,0xfc4103
+fc410b: 0e                    ret
 
 LABEL_FC410C:
 	LD WA, 0x05dc
@@ -393426,6 +393481,8 @@ LABEL_FC411B:
 
 LABEL_FC4123:
 	RET
+
+
 LABEL_FC4124:
 	db 0xD1, 0x09, 0x04, 0x20, 0xF1, 0x9B, 0x8D, 0x50
 	db 0xD1, 0x09, 0x04, 0x20, 0xD1, 0x9B, 0x8D, 0xA0
@@ -393676,8 +393733,8 @@ LABEL_FC43A6:
 
 LABEL_FC43B0:
 	EI, 0x06
-	LD (INTCLR), 0x22
-	LD (INTCLR), 0x23
+	LD (INTCLR), 0x22 ; INTRX1: Serial receive 1
+	LD (INTCLR), 0x23 ; INTTX1: Serial send 1
 	LD (INTES1), 0xdd
 	AND (SC1MOD), 0xdf  ; RXE (bit 5) = 0: receive disable
 	OR (0x8D92), 0x80
@@ -393693,8 +393750,10 @@ LABEL_FC43C7:
 	OR (0x8D8C), 0x02
 	AND (0x8D8C), 0xfe
 	LD (0x8D8A), 0x04
-	LD (BR1CR), 0x28
-	AND (0x8D8F), 0xbf
+	LD (BR1CR), 0x28 ; Internal Clock T8 (64/fc)
+	                 ; Divide by 8
+	                 ; fc = 16MHz, so fc/64/8 = 31250
+	AND (0x8D8F), 0xbf ; disable CPanel serial ckl
 	LD A (0x8D8F)
 	LD (PFFC) A
 	AND (PF), 0xbf ; PF bit 6 (SCLK1 | /CTS1) = 0
@@ -393702,12 +393761,12 @@ LABEL_FC43C7:
 	LD A (0x8D8E)
 	LD (PFCR) A
 	LD (INTEAB), 0x07
-	LD (INTCLR), 0x12
-	AND (SC1MOD), 0xdf  ; RXE (bit 5) = 0: receive disable
+	LD (INTCLR), 0x12 ; INTA Pin
+	AND (SC1MOD), 0xdf  ; RXE (bit 5) = 0: CPanel receive disable
 	AND (SC1CR), 0xfe  ; IOC (bit 0) = 0: I/O interface input clock select = Baud rate generator 
-	LD (INTCLR), 0x23
+	LD (INTCLR), 0x23 ; INTTX1: Serial send 1
 	LD (INTES1), 0xdf
-	LD (INTCLR), 0x22
+	LD (INTCLR), 0x22 ; INTRX1: Serial receive 1
 	LD (SC1BUF) A
 	EI, 0x00
 	NOP
@@ -393743,15 +393802,15 @@ LABEL_FC4470:
 
 INTA_HANDLER_END:      ; FC447E
 	POP XWA
-	LD (INTCLR), 0x12
-	LD (INTCLR), 0x22
-	LD (INTCLR), 0x23
+	LD (INTCLR), 0x12 ; INTA Pin
+	LD (INTCLR), 0x22 ; INTRX1: Serial receive 1
+	LD (INTCLR), 0x23 ; INTTX1: Serial send 1
 	RETI
 
 
 LABEL_FC4489:
-    dd SERIAL_METHOD_0
-    dd SERIAL_METHOD_1
+	dd SERIAL_METHOD_0
+	dd SERIAL_METHOD_1
 	dd SERIAL_METHOD_2
 	dd SERIAL_METHOD_3
 	dd SERIAL_METHOD_4
@@ -393770,7 +393829,7 @@ INTTX1_HANDLER:   ; FC44B5
 	LD L (0x8D8A)
 	XOR H H
 	EXTZ XHL
-	ADD XHL, 0x00fc4489
+	ADD XHL, LABEL_FC4489
 	LD XHL (XHL)
 	JP T XHL
 
@@ -393778,9 +393837,9 @@ LABEL_FC44CA:
 	POP XIY
 	POP XHL
 	POP XWA
-	LD (INTCLR), 0x12
-	LD (INTCLR), 0x22
-	LD (INTCLR), 0x23
+	LD (INTCLR), 0x12 ; INTA Pin
+	LD (INTCLR), 0x22 ; INTRX1: Serial receive 1
+	LD (INTCLR), 0x23 ; INTTX1: Serial send 1
 	RETI
 
 INTRX1_HANDLER:   ; FC44D7
@@ -393790,7 +393849,7 @@ INTRX1_HANDLER:   ; FC44D7
 	LD L (0x8D8A)
 	XOR H H
 	EXTZ XHL
-	ADD XHL, 0x00fc4489
+	ADD XHL, LABEL_FC4489
 	LD XHL (XHL)
 	JP T XHL
 
@@ -393798,9 +393857,9 @@ LABEL_FC44EC:
 	POP XIY
 	POP XHL
 	POP XWA
-	LD (INTCLR), 0x12
-	LD (INTCLR), 0x22
-	LD (INTCLR), 0x23
+	LD (INTCLR), 0x12 ; INTA Pin
+	LD (INTCLR), 0x22 ; INTRX1: Serial receive 1
+	LD (INTCLR), 0x23 ; INTTX1: Serial send 1
 	RETI
 
 
@@ -393808,9 +393867,11 @@ SERIAL_METHOD_1:        ; FC44F9
 	AND (0x8D8E), 0xbf
 	LD A (0x8D8E)
 	LD (PFCR) A
-	LD (BR1CR), 0x24
-	LD (INTEAB), 0x07
-	LD (INTES1), 0xd0
+	LD (BR1CR), 0x24 ; Internal Clock T8 (64/fc)
+	                 ; Divide by 4
+	                 ; fc = 16MHz, so fc/64/4 = 62500
+	LD (INTEAB), 0x07 ; INTTRA(TREGA): M=7
+	LD (INTES1), 0xd0 ; INTTX1: M=5
 	AND (SC1CR), 0xfe
 	LD (SC1BUF) A
 	INC 4 (0x8D8A)
@@ -393823,7 +393884,9 @@ SERIAL_METHOD_1:        ; FC44F9
 	OR (0x8D92), 0x02
 	LD (INTEAB), 0x05
 	LD (INTES1), 0xff
-	LD (BR1CR), 0x24
+	LD (BR1CR), 0x24 ; Internal Clock T8 (64/fc)
+	                 ; Divide by 4
+	                 ; fc = 16MHz, so fc/64/4 = 62500
 	AND (0x8D8C), 0xfd
 	JRL T LABEL_FC44CA
 
@@ -393833,11 +393896,13 @@ SERIAL_METHOD_3:       ; FC4544
 	AND (0x8D8E), 0xaf
 	LD A (0x8D8E)
 	LD (PFCR) A
-	AND (0x8D8F), 0xaf
+	AND (0x8D8F), 0xaf ; disable CPanel serial clk and TX pin.
 	LD A (0x8D8F)
 	LD (PFFC) A
-	LD (BR1CR), 0x24
-	LD (INTES1), 0xd0
+	LD (BR1CR), 0x24 ; Internal Clock T8 (64/fc)
+	                 ; Divide by 4
+	                 ; fc = 16MHz, so fc/64/4 = 62500
+	LD (INTES1), 0xd0 ; INTTX1: M=5
 	AND (SC1CR), 0xfe
 	LD (SC1BUF) A
 	INC 4 (0x8D8A)
@@ -393849,13 +393914,15 @@ SERIAL_METHOD_5:       ; FC4573
 	AND (0x8D8E), 0xaf
 	LD A (0x8D8E)
 	LD (PFCR) A
-	AND (0x8D8F), 0xaf
+	AND (0x8D8F), 0xaf ; disable CPanel serial clk and TX pin.
 	LD A (0x8D8F)
 	LD (PFFC) A
-	LD (BR1CR), 0x24
+	LD (BR1CR), 0x24 ; Internal Clock T8 (64/fc)
+	                 ; Divide by 4
+	                 ; fc = 16MHz, so fc/64/4 = 62500
 	LD (SC1BUF) A
 	LD (INTEAB), 0x05
-	LD (INTES1), 0xd0
+	LD (INTES1), 0xd0 ; INTTX1: M=5
 	AND (SC1CR), 0xfe
 	LD (SC1BUF) A
 	INC 4 (0x8D8A)
@@ -393863,8 +393930,10 @@ SERIAL_METHOD_5:       ; FC4573
 
 
 SERIAL_METHOD_2:      ; FC45A8
-	LD (BR1CR), 0x14
-	OR (0x8D8F), 0x50
+	LD (BR1CR), 0x14 ; Internal Clock T2 (16/fc)
+	                 ; Divide by 4
+	                 ; fc = 16MHz, so fc/16/4 = 250kHz
+	OR (0x8D8F), 0x50 ; Enable CPanel serial clk and TX pin.
 	LD A (0x8D8F)
 	LD (PFFC) A
 	OR (0x8D8E), 0x50
@@ -393872,7 +393941,7 @@ SERIAL_METHOD_2:      ; FC45A8
 	LD (PFCR) A
 	AND (SC1CR), 0xfe
 	LD (INTEAB), 0x05
-	LD (INTES1), 0xd0
+	LD (INTES1), 0xd0 ; INTTX1: M=5
 	LD XIY, 0x00008e01
 	ADD IY (0x8DFD)
 	LD A (XIY)
@@ -393898,8 +393967,10 @@ LABEL_FC4606:
 
 
 SERIAL_METHOD_4:       ; FC460D
-	LD (BR1CR), 0x14
-	OR (0x8D8F), 0x50
+	LD (BR1CR), 0x14 ; Internal Clock T2 (16/fc)
+	                 ; Divide by 4
+	                 ; fc = 16MHz, so fc/16/4 = 250kHz
+	OR (0x8D8F), 0x50 ; Enable CPanel serial clk and TX pin.
 	LD A (0x8D8F)
 	LD (PFFC) A
 	OR (0x8D8E), 0x50
@@ -393907,7 +393978,7 @@ SERIAL_METHOD_4:       ; FC460D
 	LD (PFCR) A
 	AND (SC1CR), 0xfe
 	LD (INTEAB), 0x05
-	LD (INTES1), 0xd0
+	LD (INTES1), 0xd0 ; INTTX1: M=5
 	LD XIY, 0x00008e01
 	ADD IY (0x8DFD)
 	LD A (XIY)
@@ -393939,17 +394010,19 @@ SERIAL_METHOD_6:       ; FC4672
 	CP WA 2
 	JR C LABEL_FC46C1
 	LD (0x8D8A), 0x04
-	AND (0x8D8F), 0xbf
+	AND (0x8D8F), 0xbf  ; disable CPanel serial clk
 	LD A (0x8D8F)
 	LD (PFFC) A
 	AND (PF), 0xbf ; PF bit 6 (SCLK1 | /CTS1) = 0
 	OR (0x8D8E), 0x40
 	LD A (0x8D8E)
 	LD (PFCR) A
-	LD (BR1CR), 0x28
+	LD (BR1CR), 0x28 ; Internal Clock T8 (64/fc)
+	                 ; Divide by 8
+	                 ; fc = 16MHz, so fc/64/8 = 31250
 	LD (INTEAB), 0x07
 	AND (SC1CR), 0xfe
-	LD (INTES1), 0xd0
+	LD (INTES1), 0xd0 ; INTTX1: M=5
 	LD (SC1BUF) A
 	OR (0x8D8C), 0x02
 	JRL T LABEL_FC44CA
@@ -393958,12 +394031,14 @@ LABEL_FC46C1:
 	AND (0x8D8E), 0xbf
 	LD A (0x8D8E)
 	LD (PFCR) A
-	AND (0x8D8F), 0xbf
+	AND (0x8D8F), 0xbf ; disable CPanel serial clk
 	LD A (0x8D8F)
 	LD (PFFC) A
 	LD (INTEAB), 0x05
-	LD (INTES1), 0xff
-	LD (BR1CR), 0x24
+	LD (INTES1), 0xff ; INTTX1: M=7 | INTRX1: M=7 (meaning: disable int.req.)
+	LD (BR1CR), 0x24 ; Internal Clock T8 (64/fc)
+	                 ; Divide by 4
+	                 ; fc = 16MHz, so fc/64/4 = 62500
 	AND (0x8D8C), 0xfd
 	JRL T LABEL_FC44CA
 
@@ -394040,7 +394115,7 @@ LABEL_FC478D:
 	AND (0x8D8E), 0x9f
 	LD A (0x8D8E)
 	LD (PFCR) A
-	AND (0x8D8F), 0xbf
+	AND (0x8D8F), 0xbf ; disable CPanel serial clk
 	LD A (0x8D8F)
 	LD (PFFC) A
 	LD (INTEAB), 0x05
@@ -394065,12 +394140,12 @@ SERIAL_METHOD_0:       ; FC47E9
 
 	AND (0x8D8C), 0xfc
 	OR (0x8D92), 0x04
-	LD (INTCLR), 0x23
+	LD (INTCLR), 0x23 ; INTTX1: Serial send 1
 	AND (SC1MOD), 0xdf  ; RXE (bit 5) = 0: receive disable
 	LD (INTES1), 0x0f
-	LD (INTCLR), 0x22
+	LD (INTCLR), 0x22 ; INTRX1: Serial receive 1
 	LD (INTEAB), 0x07
-	LD (INTCLR), 0x12
+	LD (INTCLR), 0x12 ; INTA Pin
 	RETI
 
 
@@ -394142,19 +394217,21 @@ LABEL_FC48A4:
 	JR C LABEL_FC48E8
 	OR (0x8D8C), 0x02
 	LD (0x8D8A), 0x04
-	AND (0x8D8F), 0xbf
+	AND (0x8D8F), 0xbf ; disable CPanel serial clk
 	LD A (0x8D8F)
 	LD (PFFC) A
 	AND (PF), 0xbf ; PF bit 6 (SCLK1 | /CTS1) = 0
 	OR (0x8D8E), 0x40
 	LD A (0x8D8E)
 	LD (PFCR) A
-	LD (BR1CR), 0x28
-	AND (SC1MOD), 0xdf  ; RXE (bit 5) = 0: receive disable
+	LD (BR1CR), 0x28 ; Internal Clock T8 (64/fc)
+	                 ; Divide by 8
+	                 ; fc = 16MHz, so fc/64/8 = 31250
+	AND (SC1MOD), 0xdf  ; RXE (bit 5) = 0: CPanel receive disable
 	AND (SC1CR), 0xfe
 	LD (INTEAB), 0x07
-	LD (INTCLR), 0x12
-	LD (INTCLR), 0x23
+	LD (INTCLR), 0x12 ; INTA Pin
+	LD (INTCLR), 0x23 ; INTTX1: Serial send 1 
 	LD (INTES1), 0xd0
 	LD (SC1BUF) A
 
@@ -394167,10 +394244,10 @@ LABEL_FC48EB:
 	CP (0x8D98), 0x14
 	JR ULE LABEL_FC48E8
 	EI, 0x06
-	LD (INTCLR), 0x22
-	LD (INTCLR), 0x23
+	LD (INTCLR), 0x22 ; INTRX1: Serial receive 1
+	LD (INTCLR), 0x23 ; INTTX1: Serial send 1
 	LD (INTES1), 0xdd
-	LD (INTCLR), 0x12
+	LD (INTCLR), 0x12 ; INTA Pin
 	LD (INTEAB), 0x05
 	OR (0x8D92), 0x80
 	JR T LABEL_FC48E8
@@ -394211,11 +394288,15 @@ LABEL_FC4945:
 	LD XHL (XHL)
 	JP T XHL
 LABEL_FC4963:
-	db 0xFF, 0xFF, 0x85, 0x49, 0xFC, 0x00, 0x85, 0x49
-	db 0xFC, 0x00, 0xE0, 0x49, 0xFC, 0x00, 0x10, 0x4B
-	db 0xFC, 0x00, 0x10, 0x4B, 0xFC, 0x00, 0x10, 0x4B
-	db 0xFC, 0x00, 0x40, 0x4A, 0xFC, 0x00, 0x40, 0x4A
-	db 0xFC, 0x00
+	db 0xFF, 0xFF
+	db 0x85, 0x49, 0xFC, 0x00
+	db 0x85, 0x49, 0xFC, 0x00
+	db 0xE0, 0x49, 0xFC, 0x00
+	db 0x10, 0x4B, 0xFC, 0x00
+	db 0x10, 0x4B, 0xFC, 0x00
+	db 0x10, 0x4B, 0xFC, 0x00
+	db 0x40, 0x4A, 0xFC, 0x00
+	db 0x40, 0x4A, 0xFC, 0x00
 
 LABEL_FC4985:
 	LD W (XDE + IY)
@@ -394434,10 +394515,14 @@ LABEL_FC4B63:
 	LD XHL (XHL)
 	JP T XHL
 LABEL_FC4B83:
-	db 0xFF, 0xFF, 0x95, 0x4B, 0xFC, 0x00, 0x95, 0x4B
-	db 0xFC, 0x00, 0x95, 0x4B, 0xFC, 0x00, 0xC5, 0x4B
-	db 0xFC, 0x00, 0xC3, 0x07, 0xF8, 0xF0, 0x21, 0x1E
-	db 0x97, 0x00, 0xF3, 0x07, 0xE8, 0xF4, 0x41, 0x1E
+	db 0xFF, 0xFF
+	db 0x95, 0x4B, 0xFC, 0x00
+	db 0x95, 0x4B, 0xFC, 0x00
+	db 0x95, 0x4B, 0xFC, 0x00
+	db 0xC5, 0x4B, 0xFC, 0x00
+
+	db 0xC3, 0x07, 0xF8, 0xF0, 0x21, 0x1E, 0x97, 0x00
+	db 0xF3, 0x07, 0xE8, 0xF4, 0x41, 0x1E
 	db 0x6E, 0x00, 0xC3, 0x07, 0xF8, 0xF0, 0x20, 0x1E
 	db 0x87, 0x00, 0xF3, 0x07, 0xE8, 0xF4, 0x40, 0x1E
 	db 0x5E, 0x00, 0xBE, 0xF8, 0x54, 0x9E, 0xFE, 0x61
@@ -405897,7 +405982,7 @@ LABEL_FCF8B1:
 	LD (0xB7D6), 0x28b0
 	LD (0xB7D8), 0x1046
 	LD (0xB7DA), 0x03e8
-	LD (0xB7DC), 0x08
+	LD (0xB7DC), 0x08	; BR0CR: clk=fc/4/8 = 500kHz (baudrate for MIDI ?!)
 	JR T LABEL_FCF8F5
 
 LABEL_FCF8D8:
@@ -405905,7 +405990,7 @@ LABEL_FCF8D8:
 	LD (0xB7D6), 0x1e84
 	LD (0xB7D8), 0x0c35
 	LD (0xB7DA), 0x02ee
-	LD (0xB7DC), 0x06
+	LD (0xB7DC), 0x06	; BR0CR: clk=fc/4/6 = 666.6kHz (baudrate for MIDI ?!)
 
 LABEL_FCF8F5:
 	RET
