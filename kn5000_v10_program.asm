@@ -190,7 +190,7 @@ COM_SELECT: db	0x??
 
 	org 0xE00000
 
-LABEL_E00000:  ; LED patterns for firmware version number:
+LED_patterns_indicating_firmware_version:	; E00000
 	db 0x10 ; v0:  0001 0000
 	db 0x18 ; v1:  0001 1000
 	db 0x14 ; v2:  0001 0100
@@ -123545,7 +123545,7 @@ LABEL_EF07A2:
 	CALL Get_Firmware_Version
 	AND L, 0x0f
 	EXTZ HL
-	LDA XBC 0xE00000
+	LDA XBC, LED_patterns_indicating_firmware_version
 	LD C (XBC + HL)
 	EXTZ BC
 	LD WA 7
