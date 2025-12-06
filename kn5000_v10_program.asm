@@ -42,6 +42,9 @@ CPANEL_LEDS__ROW_AND_PATTERN_BYTES	EQU 0x8F38 ; (word) 0x8F38=row_select 0x8F39=
 
 
 
+Bitmap_Technics_Logo	EQU 0xE8FFA6
+Bitmap_KN5000_Logo	EQU 0xE9367E
+
 
 P0		EQU 0x00
 P0CR		EQU 0x02
@@ -123327,12 +123330,12 @@ RESET:
 	LD (P8CR), 0x3f
 	LD BC, 0x0400
 
-DRAM_related_short_pause:
+DRAM_related_short_pause:			; EF04A1
 	DJNZ BC DRAM_related_short_pause
 	LD (DRAM1REF), 0x81
 	LD BC, 0x2000
 
-DRAM_related_short_pause_2:
+DRAM_related_short_pause_2:			; EF04AC
 	DJNZ BC DRAM_related_short_pause_2
 	LD (DRAM1REF), 0x71
 	LD (DRAM1CRL), 0x8b
@@ -123370,7 +123373,7 @@ LABEL_EF0529:
 	CP L, 0xff
 	JR NZ LABEL_EF054F
 
-We_seem_to_be_running_boot_ROM_code:
+We_seem_to_be_running_boot_ROM_code:			; EF0536
 	CALL Some_VGA_setup
 	PUSH, 0x0008
 	PUSH, 0x0003
@@ -123655,7 +123658,7 @@ LABEL_EF0839:
 	LD L (0x8E6A)
 	RET
 
-Detect_Area_Region_Code:
+Detect_Area_Region_Code:		; EF083E
 	BIT 2 (PH)
 	JR Z LABEL_EF0854
 	BIT 1 (PH)
@@ -123677,7 +123680,7 @@ LABEL_EF085F:
 	LD (0x0408), 0x04
 	RET
 
-Get_Area_Region_Code:
+Get_Area_Region_Code:		; EF0865
 	LD L (0x0408)
 	RET
 
@@ -124018,7 +124021,7 @@ LABEL_EF0BF4:
 LABEL_EF0BF8:
 	db 0x0E
 
-INTT1_HANDLER:
+INTT1_HANDLER:				; EF0BF9
 	INCW 1 (0x05C3)
 	PUSH WA
 	PUSH XHL
@@ -125476,7 +125479,7 @@ LABEL_EF1958:
 	JRL T LABEL_EF234F
 	RET
 
-INTT3_HANDLER:
+INTT3_HANDLER:			; EF1965
 	INCW 1 (0x05C3)
 	INC 1 (0x0486)
 	PUSH WA
@@ -282783,6 +282786,7 @@ InitializeEast:
 	LDA XSP XSP + 0x0e
 	RET
 
+
 BitmapBmphk:
 	CP XBC, 0x01e000a3
 	JR Z LABEL_F735A7
@@ -291900,6 +291904,7 @@ LABEL_F7B4F1:
 	db 0xE8, 0x33, 0x0E, 0x43, 0x16, 0x00, 0x00, 0x00
 	db 0x0E, 0x43, 0xDE, 0x00, 0x00, 0x00, 0x0E
 
+
 BitmapTechnics:
 	CP XBC, 0x01e000a3
 	JR Z LABEL_F7B59F
@@ -291911,7 +291916,7 @@ BitmapTechnics:
 	RET
 
 LABEL_F7B593:
-	LDA XHL 0xE8FFA6
+	LDA XHL, Bitmap_Technics_Logo
 	RET
 
 LABEL_F7B599:
@@ -291921,6 +291926,7 @@ LABEL_F7B599:
 LABEL_F7B59F:
 	LD XHL, 0x0000002d
 	RET
+
 
 BitmapKn5000:
 	CP XBC, 0x01e000a3
@@ -291933,7 +291939,7 @@ BitmapKn5000:
 	RET
 
 LABEL_F7B5C0:
-	LDA XHL 0xE9367E
+	LDA XHL, Bitmap_KN5000_Logo
 	RET
 
 LABEL_F7B5C6:
@@ -303392,7 +303398,8 @@ LABEL_F840C5:
 	LDA XSP XSP + 0x0118
 	RET
 
-VwUserBitmapSpProc:
+
+VwUserBitmapSpProc:			; f840cc
 	LDA XSP XSP + 0xf6
 	PUSH XIZ
 	CP XBC, 0x01c0000d
@@ -329365,6 +329372,7 @@ LABEL_F9700A:
 	CALR LABEL_F975AD
 	RET
 
+
 LABEL_F97021:
 	DEC 2 XSP
 	LD (XSP) A
@@ -329393,17 +329401,23 @@ LABEL_F9703F:
 	INC 2 XSP
 	RET
 
+
 LABEL_F97042:
 	SET 0 (PH)
 	LD WA, 0x000a
 	CALR LABEL_F97021
 	RES 0 (PH)
 	RET
+
+
 LABEL_F9704F:
 	db 0x68, 0x00
 
+
 LABEL_F97051:
 	RET
+
+
 LABEL_F97052:
 	db 0xD1, 0x1C, 0x8A, 0x21, 0xD9, 0x2E, 0x4C, 0xC1
 	db 0x28, 0x8A, 0x21, 0xC9, 0xCF, 0x4D, 0x66, 0x2F
@@ -329467,6 +329481,8 @@ LABEL_F9714F:
 LABEL_F97159:
 	POP XIZ
 	RET
+
+
 LABEL_F9715B:
 	db 0xEF, 0x6A, 0x3E, 0xBF, 0x04, 0x16, 0x09, 0x04
 	db 0xD7, 0xFA, 0x03, 0x80, 0x00, 0xD7, 0xFA, 0xCF
@@ -329579,6 +329595,8 @@ LABEL_F972BF:
 LABEL_F972C5:
 	LD L, 0x08
 	RET
+
+
 LABEL_F972C8:
 	db 0x08, 0xF8, 0x0B, 0xF0, 0xE0, 0x31, 0x81, 0x21
 	db 0xC9, 0xCC, 0xF8, 0xC9, 0x31, 0x02, 0xB1, 0x41
@@ -329701,6 +329719,8 @@ LABEL_F975D0:
 LABEL_F975D1:
 	LD L (0x8A24)
 	RET
+
+
 LABEL_F975D6:
 	db 0xF1, 0x24, 0x8A, 0x00, 0x00, 0x0E, 0xF1, 0x60
 	db 0x8A, 0x00, 0xFF, 0x0E, 0x3E, 0xD7, 0xFA, 0x03
@@ -329727,6 +329747,8 @@ LABEL_F97621:
 	CP HL, 0xffff
 	JR C LABEL_F97621
 	RET
+
+
 LABEL_F97634:
 	db 0x30, 0x28, 0x00, 0x68, 0xD9, 0x1E, 0x13, 0xFA
 	db 0x1E, 0x03, 0xFA, 0xF1, 0x6A, 0x8A, 0x00, 0x00
@@ -330026,6 +330048,8 @@ LABEL_F97DE1:
 LABEL_F97DEC:
 	POP XIZ
 	RET
+
+
 LABEL_F97DEE:
 	db 0xD1, 0x1C, 0x8A, 0x3F, 0x00, 0x00, 0xB0, 0xF6
 	db 0xD1, 0x40, 0x8A, 0x20, 0xD8, 0xDC, 0x66, 0x24
@@ -330056,9 +330080,11 @@ INTTC3:
 	POP XIZ
 	RETI
 
+
 INT5_HANDLER:
 	LD (DMAR), 0x08
 	RETI
+
 
 INT4_HANDLER:
 	PUSH XIZ
@@ -330211,13 +330237,13 @@ LABEL_F97F09:
 	INCW 1 (0xE3DA)
 	RET
 
-Check_for_Floppy_Disk_Change:
+Check_for_Floppy_Disk_Change:		; F98001
 	BIT 6 (PD)
 	JR Z Detected_Floppy_Disk_Change
 	LD L, 0x00
 	RET
 
-Detected_Floppy_Disk_Change:
+Detected_Floppy_Disk_Change:		; F98009
 	LD L, 0x01
 	RET
 
@@ -348842,38 +348868,39 @@ LABEL_FA4983:
 	LD XHL (XDE)
 	RET
 
+
 ApFuncCall:
-	DEC 0 XSP
+	DEC 0, XSP
 	PUSH XIZ
-	LD (XSP + 0x04) XDE
-	LD (XSP + 0x08) XBC
-	LD XIZ XWA
-	LD XWA XIZ
+	LD (XSP + 0x04), XDE
+	LD (XSP + 0x08), XBC
+	LD XIZ, XWA
+	LD XWA, XIZ
 	LD XBC, 0x01e00014
 	LD XDE, 0x01600002
 	CALL SendEvent
-	OR XHL XHL
+	OR XHL, XHL
 	JR Z LABEL_FA4A0F
-	LD XWA XIZ
-	SRL, 0x00 XWA
+	LD XWA, XIZ
+	SRL 0x00, XWA
 	AND XWA, 0x00000fff
-	LD XDE XIZ
-	LD QDE 0
+	LD XDE, XIZ
+	LD QDE, 0
 	EXTZ XWA
-	LD XBC XWA
-	SLL, 0x03 XBC
-	SUB XBC XWA
-	ADD XBC XBC
-	LDA XWA 0x027EDC
-	ADD XWA XBC
-	LD XBC (XWA)
+	LD XBC, XWA
+	SLL 0x03, XBC
+	SUB XBC, XWA
+	ADD XBC, XBC
+	LDA XWA, 0x027EDC
+	ADD XWA, XBC
+	LD XBC, (XWA)
 	EXTZ XDE
-	SLL, 0x02 XDE
-	ADD XDE XBC
-	LD XIX (XDE)
-	LD XWA XIZ
-	LD XBC (XSP + 0x08)
-	LD XDE (XSP + 0x04)
+	SLL 0x02, XDE
+	ADD XDE, XBC
+	LD XIX, (XDE)
+	LD XWA, XIZ
+	LD XBC, (XSP + 0x08)
+	LD XDE, (XSP + 0x04)
 	CALL T XIX
 	JR T LABEL_FA4A11
 
@@ -374847,6 +374874,8 @@ LABEL_FB69EA:
 LABEL_FB6A58:
 	POP IZ
 	RET
+
+
 LABEL_FB6A5A:
 	db 0xF1, 0x58, 0x8D, 0x02, 0xFF, 0xFF, 0x78, 0x88
 	db 0x02, 0xC1, 0x7D, 0xC0, 0x3F, 0x02, 0xB0, 0xFE
@@ -374906,6 +374935,7 @@ LABEL_FB6A5A:
 	db 0x80, 0x02, 0x00, 0x1D, 0x37, 0xD4, 0xFC, 0xF1
 	db 0x54, 0x8D, 0x47, 0xF1, 0xE2, 0xB7, 0xBF, 0x1E
 	db 0xBE, 0x05, 0xC1, 0x52, 0x8D, 0x3C, 0xD7, 0x0E
+
 
 LABEL_FB6C2A:
 	CALR LABEL_FB6D16
@@ -375648,7 +375678,8 @@ LABEL_FB728D:
 	LD (0x8D52) A
 	RET
 
-MainCPU_self_test_routines:
+
+MainCPU_self_test_routines:		; FB729E
 	SET 1 (PC)
 	BIT 0 (PC)
 	RET NZ
@@ -375682,7 +375713,8 @@ MainCPU_self_test_routines:
 	CALR Report_test_result_by_blinking_LED
 	RET
 
-Report_test_result_by_blinking_LED:
+
+Report_test_result_by_blinking_LED:		; FB72EA
 	LD L, 0x00
 
 LABEL_FB72EC:
@@ -375724,7 +375756,8 @@ LABEL_FB7314:
 	JR ULE LABEL_FB72EC
 	RET
 
-A_Short_Pause:
+
+A_Short_Pause:		; FB7328
 	LD BC 0
 
 LABEL_FB732A:
@@ -375748,7 +375781,8 @@ LABEL_FB733F:
 	JR C LABEL_FB733F
 	RET
 
-Test_DRAM_IC10_and_IC9:
+
+Test_DRAM_IC10_and_IC9:		; FB7348
 	LDA XSP XSP + 0xf4
 	PUSH XIZ
 	LD (XSP + 0x0e) A
@@ -375828,7 +375862,8 @@ LABEL_FB73EC:
 	LDA XSP XSP + 0x0c
 	RET
 
-Test_SRAM_IC21:
+
+Test_SRAM_IC21:		; FB7400
 	LD L, 0x00
 
 LABEL_FB7402:
@@ -375873,7 +375908,7 @@ LABEL_FB744B:
 	EXTZ HL
 	RET
 
-Test_PROGRAM_and_TABLE_DATA_ROMs:
+Test_PROGRAM_and_TABLE_DATA_ROMs:		; FB7456
 	LDA XSP XSP + 0xee
 	PUSH XIZ
 	LD (XSP + 0x14) A
