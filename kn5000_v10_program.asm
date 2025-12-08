@@ -44,18 +44,18 @@ CPANEL_LEDS__ROW_AND_PATTERN_BYTES	EQU 0x8F38 ; (word) 0x8F38=row_select 0x8F39=
 
 // These seem to be circular buffers:
 
-SomeCpanelData + f8:	EQU 0x000200a5 (word)
-			(unused word)
-SomeCpanelData + fc:	EQU 0x000200a9 (word)
-SomeCpanelData + fe:	EQU 0x000200ab (word)
-SomeCpanelData		EQU 0x000200ad ; (128 bytes) Not sure yet what is placed here
+SomeCpanelData	-8:	EQU 0x000200a5 (word)
+		-6: (unused word)
+		-4:	EQU 0x000200a9 (word)
+		-2:	EQU 0x000200ab (word)
+SomeCpanelData	  :	EQU 0x000200ad ; (128 bytes) Not sure yet what is placed here
 
-				(unused word)
-SomeOtherCpanelData + f8:	EQU 0x0002012f (word) 
-				(unused word)
-SomeOtherCpanelData + fc:	EQU 0x00020133 (word)
-SomeOtherCpanelData + fe:	EQU 0x00020135 (word)
-SomeOtherCpanelData		EQU 0x00020137 ; (128 bytes), Also not sure yet here.
+	; 2012d:	 (unused word ?)
+SomeOtherCpanelData  -8:	EQU 0x0002012f (word) 
+		     -6: (unused word)
+		     -4:	EQU 0x00020133 (word)
+		     -2:	EQU 0x00020135 (word)
+SomeOtherCpanelData    :	EQU 0x00020137 ; (128 bytes), Also not sure yet here.
 
 SomethingElse: EQU 0x0201C1
 
