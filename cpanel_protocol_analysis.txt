@@ -1,0 +1,88 @@
+--------------------------------------------------------------------------------
+LABEL_FC4194: (this seems to just be a test)
+
+RX index = 0
+send 20 00 & wait 6 ticks
+check if RX index > 0 (did we receive an answer) but don't actually read the data
+
+RX index = 0
+send E0 00 & wait 6 ticks
+check if RX index > 0 (did we receive an answer) but don't actually read the data
+
+
+--------------------------------------------------------------------------------
+SEND_SOME_CPANEL_COMMANDS__FC41FC:
+
+RX index = restore from CPANEL_BACKUP_RX_INDEX
+set CP_Flags_B.0
+send 25 01 & wait 3 * 6 ticks
+send e2 04 & wait 2 * 6 ticks
+send 20 10 & wait 2 * 6 ticks
+send e2 11 & wait 2 * 6 ticks
+interpret data received via routine LABEL_FC4915
+
+--------------------------------------------------------------------------------
+LABEL_FC42FB: //do that
+
+CPANEL_BACKUP_RX_INDEX = 0
+RX index = 0
+set CP_Flags_B.0
+
+send 2b 00 & wait 3 * 6 ticks
+interpret data received via routine LABEL_FC490E
+
+send eb 00 & wait 3 * 6 ticks
+interpret data received via routine LABEL_FC490E
+
+send 20 10 & wait 2 * 6 ticks
+interpret data received via routine LABEL_FC490E
+
+send e3 10 & wait 2 * 6 ticks
+interpret data received via routine LABEL_FC490E
+
+--------------------------------------------------------------------------------
+ANOTHER_CPANEL_ROUTINE__FC426A:
+
+CPANEL_BACKUP_RX_INDEX = 0
+RX index = 0
+set CP_Flags_B.0
+
+send 20 0b & wait 1 * 6 ticks
+interpret data received via routine LABEL_FC4915
+
+based on bits 6 and 7 of (STATE_OF_CPANEL_BUTTONS + 11)
+select the value to store at 0x8E6A:
+0x0c, 0x0d or 0x0e
+
+--------------------------------------------------------------------------------
+SOME_CPANEL_ROUTINE__FC3EF5:
+
+A larger (initial?) setup.
+Then:
+
+set CP_Flags_A.6
+clear CP_Flags_A.10
+
+CPANEL_STATE_0_TO_17 = 0
+CPANEL_INDEX_FOR_LEDS = 0
+CPANEL_VAR_RELATED_TO_ARRAY_OF_LEDS = 0
+CPANEL_BACKUP_RX_INDEX = 0
+
+RX_INDEX = 0
+delay 1 * 6 ticks
+
+send 1f da / wait 1 * 3000 loops / INDEX_FOR_LEDS = 0 / wait 1 * 3000 loops
+send 1f 1a / wait 1 * 3000 loops / INDEX_FOR_LEDS = 0 / wait 1 * 3000 loops
+send 1d 00 / wait 1 * 3000 loops / INDEX_FOR_LEDS = 0 / wait 2 * 3000 loops
+send dd 03 / wait 1 * 3000 loops / INDEX_FOR_LEDS = 0 / wait 2 * 3000 loops
+send 1e 80 / wait 3 * 3000 loops
+
+--------------------------------------------------------------------------------
+LABEL_FC4915 and LABEL_FC490E:
+
+CP_Flags_A.2 is set or unset, but apparently nothing else reads that flag...
+And then:
+... TODO ...
+--------------------------------------------------------------------------------
+
+
