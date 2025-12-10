@@ -50,9 +50,9 @@ images_8bit = {
 	# 9F960 base adddress referenced at LABEL_F83B92
 
 	"BitmapWormWearingHat": [ 24,  24, 0xA9F20],	# (is is a debugging reference?)
-	"BitmapFaceInPicture": [112,  25, 0xB8072],		# Fade In Picture
+	"BitmapFadeInPicture": [112,  25, 0xB8072],		# Fade In Picture
 	"BitmapFadeInText": [ 80,  18, 0xB8B62],		# Fade In Text
-	"BitmapFaceOutPicture": [114,  25, 0xB9102],		# Fade Out Picture
+	"BitmapFadeOutPicture": [114,  25, 0xB9102],		# Fade Out Picture
 	"BitmapFadeOutText": [108,  20, 0xB9C24],		# Fade Out Text
 }
 

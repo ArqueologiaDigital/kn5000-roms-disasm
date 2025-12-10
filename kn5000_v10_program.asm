@@ -285,9 +285,9 @@ Bitmap_SplitPoint_Bb: include("images/BitmapSplitPoint_Bb.bin")	; 0xe62fe2-0xe63
 Bitmap_SplitPoint_B: include("images/BitmapSplitPoint_B.bin")	; 0xe63baa-0xe6473e
 
 
-Bitmap_FaceInPicture: include("images/BitmapFaceInPicture.bin")	; 0xeb8072
+Bitmap_FadeInPicture: include("images/BitmapFadeInPicture.bin")	; 0xeb8072
 Bitmap_FadeInText: include("images/BitmapFadeInText.bin")	; 0xeb8b62
-Bitmap_FaceOutPicture: include("images/BitmapFaceOutPicture.bin")	; 0xeb9102
+Bitmap_FadeOutPicture: include("images/BitmapFadeOutPicture.bin")	; 0xeb9102
 Bitmap_FadeOutText: include("images/BitmapFadeOutText.bin")	; 0xeb9c24
 LABEL_EBA494:
 
