@@ -65,3 +65,14 @@ for name, values in images_8bit.items():
 	w, h, offs = values
 	count = int(w*h)
 	print(f"dd if=kn5000_v10_program.rom bs=1 count={count} of=includes/{name}.bin skip={offs}")
+
+
+for name, values in images_1bit.items():
+	w, h, offs = values
+	count = int(w*h/8)
+	print(f"{name}: include(\"images/{name}.bin\")\t; {hex(0xE00000 + offs)}-{hex(0xE00000 + offs + count)}")
+
+for name, values in images_8bit.items():
+	w, h, offs = values
+	count = int(w*h)
+	print(f"{name}: include(\"images/{name}.bin\")\t; {hex(0xE00000 + offs)}-{hex(0xE00000 + offs + count)}")
