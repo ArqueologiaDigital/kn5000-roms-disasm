@@ -14,19 +14,19 @@ images_8bit = {
 	"BitmapNtedt0d": [240, 127, 0x35668],			# A grid
 	"BitmapDredt0k": [ 88, 119, 0x3CD78],			# Horizontal lines 
 	"BitmapDredt0d": [168, 119, 0x3F660],			# A grid
-	"BitmapSplitPoint_no_split": [ 57,  52, 0x5ae4a],	# Split-point - no split
-	"BitmapSplitPoint_C": [ 57,  52, 0x5ba12],		# Split-point C
-	"BitmapSplitPoint_Db": [ 57,  52, 0x5c5da],		# Split-point Db
-	"BitmapSplitPoint_D": [ 57,  52, 0x5d1a2],		# Split-point D
-	"BitmapSplitPoint_Eb": [ 57,  52, 0x5dd6a],		# Split-point Eb
-	"BitmapSplitPoint_E": [ 57,  52, 0x5e932],		# Split-point E
-	"BitmapSplitPoint_F": [ 57,  52, 0x5f4fa],		# Split-point F
-	"BitmapSplitPoint_Gb": [ 57,  52, 0x600c2],		# Split-point Gb
-	"BitmapSplitPoint_G": [ 57,  52, 0x60c8a],		# Split-point G
-	"BitmapSplitPoint_Ab": [ 57,  52, 0x61852],		# Split-point Ab
-	"BitmapSplitPoint_A": [ 57,  52, 0x6241a],		# Split-point A
-	"BitmapSplitPoint_Bb": [ 57,  52, 0x62fe2],		# Split-point Bb
-	"BitmapSplitPoint_B": [ 57,  52, 0x63baa],		# Split-point B
+	"BitmapSplitPoint_no_split": [ 58,  52, 0x5ae4a],	# Split-point - no split
+	"BitmapSplitPoint_C": [ 58,  52, 0x5ba12],		# Split-point C
+	"BitmapSplitPoint_Db": [ 58,  52, 0x5c5da],		# Split-point Db
+	"BitmapSplitPoint_D": [ 58,  52, 0x5d1a2],		# Split-point D
+	"BitmapSplitPoint_Eb": [ 58,  52, 0x5dd6a],		# Split-point Eb
+	"BitmapSplitPoint_E": [ 58,  52, 0x5e932],		# Split-point E
+	"BitmapSplitPoint_F": [ 58,  52, 0x5f4fa],		# Split-point F
+	"BitmapSplitPoint_Gb": [ 58,  52, 0x600c2],		# Split-point Gb
+	"BitmapSplitPoint_G": [ 58,  52, 0x60c8a],		# Split-point G
+	"BitmapSplitPoint_Ab": [ 58,  52, 0x61852],		# Split-point Ab
+	"BitmapSplitPoint_A": [ 58,  52, 0x6241a],		# Split-point A
+	"BitmapSplitPoint_Bb": [ 58,  52, 0x62fe2],		# Split-point Bb
+	"BitmapSplitPoint_B": [ 58,  52, 0x63baa],		# Split-point B
 	"BitmapMIDIConnections_1": [296, 108, 0x64772],		# 1st diagram of MIDI connections
 	"BitmapMIDIConnections_2": [296, 108, 0x6c452],		# 2nd diagram ...
 	"BitmapMIDIConnections_3": [296, 108, 0x74132],		# 3rd diagram ...
@@ -59,12 +59,12 @@ images_8bit = {
 for name, values in images_1bit.items():
 	w, h, offs = values
 	count = int(w*h/8)
-	print(f"dd if=kn5000_v10_program.rom bs=1 count={count} of=includes/{name}.bin skip={offs}")
+	print(f"dd if=kn5000_v10_program.rom bs=1 count={count} of=images/{name}.bin skip={offs}")
 
 for name, values in images_8bit.items():
 	w, h, offs = values
 	count = int(w*h)
-	print(f"dd if=kn5000_v10_program.rom bs=1 count={count} of=includes/{name}.bin skip={offs}")
+	print(f"dd if=kn5000_v10_program.rom bs=1 count={count} of=images/{name}.bin skip={offs}")
 
 
 for name, values in images_1bit.items():
