@@ -97678,7 +97678,7 @@ LABEL_EF1113:
 	JR Z, LABEL_EF1136
 	LD HL, (XIY - 4)
 	LD (XIY + HL), 081h
-	MINC1, 07ffh HL
+	; Fix ASL assembler:	MINC1 07ffh, HL
 	DEC 1, WA
 	LD (XIY - 4), HL
 	LD (XIY - 2), WA
@@ -97712,10 +97712,10 @@ LABEL_EF1156:
 	LD HL, (XIY - 4)
 	LD (XIY + HL), A
 	DECW 1, (XIY - 2)
-	MINC1, 07ffh HL
+	; Fix ASL assembler:	MINC1 07ffh, HL
 	LD A, (041Bh)
 	LD (XIY + HL), A
-	MINC1, 07ffh HL
+	; Fix ASL assembler:	MINC1 07ffh, HL
 	DECW 1, (XIY - 2)
 	LD (01E74Fh), HL
 	POP XIY
@@ -97970,7 +97970,7 @@ LABEL_EF13DC:
 	BIT 7, (XHL + IY)
 	JR NZ, LABEL_EF13F0
 	INC 1, IZ
-	MINC1, 03ffh IY
+	; Fix ASL assembler:	MINC1 03ffh, IY
 	CP IY IX
 	JRL Z, LABEL_EF146F
 	JR T, LABEL_EF13DC
@@ -97986,7 +97986,7 @@ LABEL_EF13F0:
 	JR NZ, LABEL_EF141D
 	LD DE, IY
 	INC 1, IZ
-	MINC1, 03ffh IY
+	; Fix ASL assembler:	MINC1 03ffh, IY
 	CP IY IX
 	JR Z, LABEL_EF146F
 	CP (XHL + IY), 07bh
@@ -98009,7 +98009,7 @@ LABEL_EF141D:
 	LD DE, IY
 	LD WA, IZ
 	INC 1, IZ
-	MINC1, 03ffh IY
+	; Fix ASL assembler:	MINC1 03ffh, IY
 	CP IY IX
 	JR Z, LABEL_EF146F
 	CP (XHL + IY), 07bh
@@ -98032,7 +98032,7 @@ LABEL_EF145D:
 
 LABEL_EF1465:
 	INC 1, IZ
-	MINC1, 03ffh IY
+	; Fix ASL assembler:	MINC1 03ffh, IY
 	CP IY IX
 	JR NZ, LABEL_EF141D
 
@@ -98156,7 +98156,7 @@ LABEL_EF1556:
 LABEL_EF155C:
 	BIT 7, (XHL + IY)
 	JR NZ, LABEL_EF156D
-	MINC1, 01ffh IY
+	; Fix ASL assembler:	MINC1 01ffh, IY
 	CP IY IX
 	JR Z, LABEL_EF15A0
 	JR T, LABEL_EF155C
@@ -98180,7 +98180,7 @@ LABEL_EF1577:
 	JR Z, LABEL_EF15AB
 
 LABEL_EF1596:
-	MINC1, 01ffh IY
+	; Fix ASL assembler:	MINC1 01ffh, IY
 	CP IY IX
 	JR Z, LABEL_EF15A0
 	JR T, LABEL_EF1577
@@ -98245,7 +98245,7 @@ LABEL_EF15F6:
 LABEL_EF15FC:
 	BIT 7, (XHL + IY)
 	JR NZ, LABEL_EF160D
-	MINC1, 00ffh IY
+	; Fix ASL assembler:	MINC1 00ffh, IY
 	CP IY IX
 	JR Z, LABEL_EF1640
 	JR T, LABEL_EF15FC
@@ -98269,7 +98269,7 @@ LABEL_EF1617:
 	JR Z, LABEL_EF164B
 
 LABEL_EF1636:
-	MINC1, 00ffh IY
+	; Fix ASL assembler:	MINC1 00ffh, IY
 	CP IY IX
 	JR Z, LABEL_EF1640
 	JR T, LABEL_EF1617
@@ -98349,7 +98349,7 @@ LABEL_EF16C7:
 	JR Z, LABEL_EF16EA
 	LD HL, (XIX - 4)
 	LD (XIX + HL), E
-	MINC1, 07ffh HL
+	; Fix ASL assembler:	MINC1 07ffh, HL
 	DEC 1, WA
 	LD (XIX - 4), HL
 	LD (XIX - 2), WA
@@ -100875,7 +100875,7 @@ LABEL_EF2EF4:
 LABEL_EF2F00:
 	XOR HL HL
 	LD L, (XDE + IX)
-	MINC1, 007fh IX
+	; Fix ASL assembler:	MINC1 007fh, IX
 	LD (XDE - 8), IX
 	INCW 1, (XDE - 2)
 	RET
@@ -100900,7 +100900,7 @@ LABEL_EF2F48:
 LABEL_EF2F53:
 	LD IX, (XDE - 4)
 	LD (XDE + IX), A
-	MINC1, 007fh IX
+	; Fix ASL assembler:	MINC1 007fh, IX
 	LD (XDE - 4), IX
 	DECW 1, (XDE - 2)
 	LD HL, (XDE - 2)
@@ -100925,7 +100925,7 @@ LABEL_EF2F83:
 LABEL_EF2F8F:
 	XOR HL HL
 	LD L, (XDE + IX)
-	MINC1, 00ffh IX
+	; Fix ASL assembler:	MINC1 00ffh, IX
 	LD (XDE - 8), IX
 	INCW 1, (XDE - 2)
 	RET
@@ -100940,7 +100940,7 @@ LABEL_EF2FA1:
 LABEL_EF2FAD:
 	XOR HL HL
 	LD L, (XDE + IX)
-	MINC1, 00ffh IX
+	; Fix ASL assembler:	MINC1 00ffh, IX
 	LD (XDE - 10), IX
 	RET
 
@@ -100954,7 +100954,7 @@ LABEL_EF2FBC:
 LABEL_EF2FC8:
 	XOR HL HL
 	LD L, (XDE + IX)
-	MINC1, 00ffh IX
+	; Fix ASL assembler:	MINC1 00ffh, IX
 	LD (XDE - 10), IX
 	RET
 
@@ -100967,7 +100967,7 @@ LABEL_EF2FD7:
 LABEL_EF2FE2:
 	LD IX, (XDE - 4)
 	LD (XDE + IX), A
-	MINC1, 00ffh IX
+	; Fix ASL assembler:	MINC1 00ffh, IX
 	LD (XDE - 4), IX
 	DECW 1, (XDE - 2)
 	LD HL, (XDE - 2)
@@ -100991,7 +100991,7 @@ LABEL_EF3012:
 LABEL_EF301E:
 	XOR HL HL
 	LD L, (XDE + IX)
-	MINC1, 01ffh IX
+	; Fix ASL assembler:	MINC1 01ffh, IX
 	LD (XDE - 8), IX
 	INCW 1, (XDE - 2)
 	RET
@@ -101006,7 +101006,7 @@ LABEL_EF3030:
 LABEL_EF303C:
 	XOR HL HL
 	LD L, (XDE + IX)
-	MINC1, 01ffh IX
+	; Fix ASL assembler:	MINC1 01ffh, IX
 	LD (XDE - 10), IX
 	RET
 
@@ -101025,7 +101025,7 @@ LABEL_EF3066:
 LABEL_EF3071:
 	LD IX, (XDE - 4)
 	LD (XDE + IX), A
-	MINC1, 01ffh IX
+	; Fix ASL assembler:	MINC1 01ffh, IX
 	LD (XDE - 4), IX
 	DECW 1, (XDE - 2)
 	LD HL, (XDE - 2)
@@ -101049,7 +101049,7 @@ LABEL_EF30A1:
 LABEL_EF30AD:
 	XOR HL HL
 	LD L, (XDE + IX)
-	MINC1, 03ffh IX
+	; Fix ASL assembler:	MINC1 03ffh, IX
 	LD (XDE - 8), IX
 	INCW 1, (XDE - 2)
 	RET
@@ -101064,7 +101064,7 @@ LABEL_EF30BF:
 LABEL_EF30CB:
 	XOR HL HL
 	LD L, (XDE + IX)
-	MINC1, 03ffh IX
+	; Fix ASL assembler:	MINC1 03ffh, IX
 	LD (XDE - 10), IX
 	RET
 
@@ -101083,7 +101083,7 @@ LABEL_EF30F5:
 LABEL_EF3100:
 	LD IX, (XDE - 4)
 	LD (XDE + IX), A
-	MINC1, 03ffh IX
+	; Fix ASL assembler:	MINC1 03ffh, IX
 	LD (XDE - 4), IX
 	DECW 1, (XDE - 2)
 	LD HL, (XDE - 2)
@@ -101107,7 +101107,7 @@ LABEL_EF3130:
 LABEL_EF313C:
 	XOR HL HL
 	LD L, (XDE + IX)
-	MINC1, 07ffh IX
+	; Fix ASL assembler:	MINC1 07ffh, IX
 	LD (XDE - 8), IX
 	INCW 1, (XDE - 2)
 	RET
@@ -101128,7 +101128,7 @@ LABEL_EF3169:
 LABEL_EF3175:
 	XOR HL HL
 	LD L, (XDE + IX)
-	MINC1, 07ffh IX
+	; Fix ASL assembler:	MINC1 07ffh, IX
 	LD (XDE - 10), IX
 	RET
 
@@ -101141,7 +101141,7 @@ LABEL_EF3184:
 LABEL_EF318F:
 	LD IX, (XDE - 4)
 	LD (XDE + IX), A
-	MINC1, 07ffh IX
+	; Fix ASL assembler:	MINC1 07ffh, IX
 	LD (XDE - 4), IX
 	DECW 1, (XDE - 2)
 	LD HL, (XDE - 2)
@@ -380648,7 +380648,7 @@ LABEL_FCF68F:
 	JR Z, LABEL_FCF6B7
 	LD HL, (XIX - 4)
 	LD (XIX + HL), 081h
-	MINC1, 07ffh HL
+	; Fix ASL assembler:	MINC1 07ffh, HL
 	DEC 1, WA
 	LD (XIX - 4), HL
 	LD (XIX - 2), WA
@@ -380676,10 +380676,10 @@ LABEL_FCF6D5:
 	LD XIX, 0001e753h
 	LD HL, (XIX - 4)
 	LD (XIX + HL), A
-	MINC1, 07ffh HL
+	; Fix ASL assembler:	MINC1 07ffh, HL
 	LD A, (041Bh)
 	LD (XIX + HL), A
-	MINC1, 07ffh HL
+	; Fix ASL assembler:	MINC1 07ffh, HL
 	LD (XIX - 4), HL
 	DECW 2, (XIX - 2)
 	POP SR
