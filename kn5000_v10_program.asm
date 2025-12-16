@@ -322726,7 +322726,7 @@ RegisterObjectTable:
 	SUB XDE, XWA
 	ADD XDE, XDE
 	LD XIX, 00027ed2h
-	ADD XIX, XDE             ; XIX =, 27edh2 + 14 * XWA 
+	ADD XIX, XDE             ; XIX = 27ed2h + 14 * XWA
 	LD XIY, XBC
 	LD BC, 7
 	LDIRW
