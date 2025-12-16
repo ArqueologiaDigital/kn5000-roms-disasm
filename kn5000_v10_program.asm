@@ -10,7 +10,8 @@ COM_SELECT			EQU 0xB7E0 ; (byte)
 
 
 CPANEL_SELECT_SERIAL_ROUTINE	EQU 0x8D8A ; (byte)
-CPANEL_STATE_0_TO_17		EQU 0x8D8B ; (byte) // range 0-17 (0, 1 or 2 + nibble)
+CPANEL_STATE_0_TO_17		EQU 0x8D8B ; (byte) // range 0-17
+					   ;          (0, 1 or 2 + nibble)
 CPANEL_SERIAL_FLAGS_A		EQU 0x8D8C ; (8 bits)
 				;   0x8D8D: unused byte?
 PFCR_VALUE			EQU 0x8D8E ; (byte)
@@ -19,47 +20,53 @@ PFFC_VALUE			EQU 0x8D8F ; (byte)
 CPANEL_UNUSED_1			EQU 0x8D91 ; (byte) // This one looks pointless...
 CPANEL_SERIAL_FLAGS_B		EQU 0x8D92 ; (8 bits)
 CPANEL_SERIAL_FLAGS_C		EQU 0x8D93 ; (8 bits)
-CPANEL_UNUSED_2			EQU 0x8D94 ; (byte) // This one looks pointless... (1st Value saved to XIZ + IX(mod 0x80) array)
-CPANEL_UNUSED_3			EQU 0x8D95 ; (byte) // This one looks pointless... (2nd Value saved to XIZ + IX(mod 0x80) array)
+CPANEL_UNUSED_2			EQU 0x8D94 ; (byte) // This one looks pointless...
+					   ; (1st Value saved to
+					   ;  XIZ + IX(mod 0x80) array)
+CPANEL_UNUSED_3			EQU 0x8D95 ; (byte) // This one looks pointless...
+					   ; (2nd Value saved to
+					   ;  XIZ + IX(mod 0x80) array)
 CPANEL_VAR__8D96		EQU 0x8D96 ; (byte) // Another value saved to XIZ + IX(mod 0x80) array (but later read at FC4AC1)
-CPANEL_COUNTER_DOWN_FROM_200	EQU 0x8D97 (byte) counts down from 0xc8 (=200) to zero.
-CPANEL_COUNTER_UP_TO_20		EQU 0x8D98 (byte) counts up to 0x14 (=20).
+CPANEL_COUNTER_DOWN_FROM_200	EQU 0x8D97 ; (byte) counts down
+					   ; from 0xc8 (=200) to zero.
+CPANEL_COUNTER_UP_TO_20		EQU 0x8D98 ; (byte) counts up to 0x14 (=20).
 				;   0x8D99: unused byte?
-CPANEL_COUNTER_UP_TO_42		EQU 0x8D9A (byte) counts up to 0x2a (=42).
-TIMESTAMP_FOR_DELAY		EQU 0x8D9B (word)
-CPANEL_BACKUP_RX_INDEX	EQU 0x8D9D (word)  // NOTE: Used as index IY for CPANEL_RX_DATA[IY MOD 0x5C]
-				           //       in code near LABEL_FC490E and LABEL_FC4B10
+CPANEL_COUNTER_UP_TO_42		EQU 0x8D9A ; (byte) counts up to 0x2a (=42).
+TIMESTAMP_FOR_DELAY		EQU 0x8D9B ; (word)
+CPANEL_BACKUP_RX_INDEX	EQU 0x8D9D ; (word)  NOTE: Used as index IY for
+				   ;         CPANEL_RX_DATA[IY MOD 0x5C]
+				   ; in code near LABEL_FC490E and LABEL_FC4B10
 CPANEL_RX_INDEX		EQU 0x8D9F ; (word)
 CPANEL_RX_DATA		EQU 0x8DA1 ; 0x5c (=92) bytes
 CPANEL_INDEX_FOR_LEDS		EQU 0x8DFD ; (word)
 CPANEL_VAR_RELATED_TO_ARRAY_OF_LEDS	EQU 0x8DFF ; (word)
 				;   0x8E00: unused byte?
 CPANEL_ARRAY__STATE_OF_LEDS	EQU 0x8E01 ; 0x3c (=60) bytes
-		... ? 0x8E3D
+	;		... ? 0x8E3D
 
 STATE_OF_CPANEL_BUTTONS 	EQU 0x8E4A ; NOTE: 0x8E4A=Right / 0x8E5A=Left
 STATE_OF_CPANEL_BUTTONS_RIGHT = STATE_OF_CPANEL_BUTTONS + 0
 STATE_OF_CPANEL_BUTTONS_LEFT = STATE_OF_CPANEL_BUTTONS + 16
-			// ... //
+	;			// ... //
 CPANEL_LEDS__ROW_AND_PATTERN_BYTES	EQU 0x8F38 ; (word) 0x8F38=row_select 0x8F39=pattern
 
 
-// These seem to be circular buffers:
+; These seem to be circular buffers:
 
-SomeCpanelData	-8:	EQU 0x000200a5 (word)
-		-6: (unused word)
-		-4:	EQU 0x000200a9 (word)
-		-2:	EQU 0x000200ab (word)
-SomeCpanelData	  :	EQU 0x000200ad ; (128 bytes) Not sure yet what is placed here
+;SomeCpanelData	-8:	EQU 0x000200a5 (word)
+;		-6: (unused word)
+;		-4:	EQU 0x000200a9 (word)
+;		-2:	EQU 0x000200ab (word)
+SomeCpanelData		EQU 0x000200ad ; (128 bytes) Not sure yet what is placed here
 
 	; 2012d:	 (unused word ?)
-SomeOtherCpanelData  -8:	EQU 0x0002012f (word) 
-		     -6: (unused word)
-		     -4:	EQU 0x00020133 (word)
-		     -2:	EQU 0x00020135 (word)
-SomeOtherCpanelData    :	EQU 0x00020137 ; (128 bytes), Also not sure yet here.
+;SomeOtherCpanelData  -8:	EQU 0x0002012f (word) 
+;		      -6: (unused word)
+;		      -4:	EQU 0x00020133 (word)
+;		      -2:	EQU 0x00020135 (word)
+SomeOtherCpanelData		EQU 0x00020137 ; (128 bytes), Also not sure yet here.
 
-SomethingElse: EQU 0x0201C1
+SomethingElse		EQU 0x0201C1
 
 
 P0		EQU 0x00
@@ -182,13 +189,13 @@ INTET89		EQU 0xE8
 INTETAB		EQU 0xE9
 INTES0		EQU 0xEA
 INTES1		EQU 0xEB
-INTETC01		EQU 0xEC
-INTETC23		EQU 0xED
-INTETC45		EQU 0xEE
-INTETC67		EQU 0xEF
+INTETC01	EQU 0xEC
+INTETC23	EQU 0xED
+INTETC45	EQU 0xEE
+INTETC67	EQU 0xEF
 INTE0AD		EQU 0xF0
 IIMC		EQU 0xF6
-INTNMWDT		EQU 0xF7
+INTNMWDT	EQU 0xF7
 INTCLR		EQU 0xF8
 DMA0V		EQU 0x100
 DMA1V		EQU 0x101
@@ -203,14 +210,14 @@ DMAR		EQU 0x109
 CLKMOD		EQU 0x10A
 WDMOD		EQU 0x110
 WDCR		EQU 0x111
-ADREG04L		EQU 0x120
-ADREG04H		EQU 0x121
-ADREG15L		EQU 0x122
-ADREG15H		EQU 0x123
-ADREG26L		EQU 0x124
-ADREG26H		EQU 0x125
-ADREG37L		EQU 0x126
-ADREG37H		EQU 0x127
+ADREG04L	EQU 0x120
+ADREG04H	EQU 0x121
+ADREG15L	EQU 0x122
+ADREG15H	EQU 0x123
+ADREG26L	EQU 0x124
+ADREG26H	EQU 0x125
+ADREG37L	EQU 0x126
+ADREG37H	EQU 0x127
 ADMOD1		EQU 0x128
 ADMOD2		EQU 0x129
 DAREG0		EQU 0x130
@@ -240,12 +247,12 @@ B5CSL		EQU 0x154
 B5CSH		EQU 0x155
 MAMR5		EQU 0x156
 MSAR5		EQU 0x157
-DRAM0CRL		EQU 0x160
-DRAM0CRH		EQU 0x161
-DRAM1CRL		EQU 0x162
-DRAM1CRH		EQU 0x163
-DRAM0REF		EQU 0x164
-DRAM1REF		EQU 0x165
+DRAM0CRL	EQU 0x160
+DRAM0CRH	EQU 0x161
+DRAM1CRL	EQU 0x162
+DRAM1CRH	EQU 0x163
+DRAM0REF	EQU 0x164
+DRAM1REF	EQU 0x165
 PMEMCR		EQU 0x166
 
 
