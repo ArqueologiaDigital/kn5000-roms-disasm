@@ -96409,8 +96409,8 @@ RESET:				; EF03C6
 	LD (T4MOD), 005h
 	LD (T4FFCR), 000h
 	LD (T16CR), 000h
-	db 0x0A, 0x90, 0x01, 0x00 ; LD (TREG4L), 0001h		TODO: Fix ASL assembler: opcodes specific to tmp94c241f
-	db 0x0A, 0x92, 0x09, 0x3d ; LD (TREG5L), 3d09h		TODO: Fix ASL assembler: range overflow
+	db 0Ah, 90h, 01h, 00h ; LD (TREG4L), 0001h		TODO: Fix ASL assembler: opcodes specific to tmp94c241f
+	db 0Ah, 92h, 09h, 3dh ; LD (TREG5L), 3d09h		TODO: Fix ASL assembler: range overflow
 	SET 7, (T16RUN)
 	SET 0, (T16RUN)
 	LD (MSAR0), 01eh
