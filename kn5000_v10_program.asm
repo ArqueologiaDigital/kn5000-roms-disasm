@@ -96681,7 +96681,7 @@ LABEL_EF0792:
 
 LABEL_EF0797:
 	LDCF 7, (0406h)
-	SCC C A
+	SCC C, A
 	CP A, 1
 	SCC Z HL
 	RET
@@ -383201,7 +383201,7 @@ LABEL_FD2D3A:
 	LDA XIX XBC + 005h
 	LDA XHL XDE + 005h
 	LDCF 7, (XHL)
-	SCC C A
+	SCC C, A
 	AND A, 001h
 	SLA, 007h A
 	AND (XIX),, 07fh
@@ -383213,25 +383213,25 @@ LABEL_FD2D3A:
 	LDA XIX XBC + 006h
 	LDA XHL XDE + 006h
 	LDCF 7, (XHL)
-	SCC C A
+	SCC C, A
 	AND A, 001h
 	SLA, 007h A
 	AND (XIX),, 07fh
 	OR (XIX), A
 	LDCF 6, (XHL)
-	SCC C A
+	SCC C, A
 	AND A, 001h
 	SLA, 006h A
 	AND (XIX),, 0bfh
 	OR (XIX), A
 	LDCF 4, (XHL)
-	SCC C A
+	SCC C, A
 	AND A, 001h
 	SLA, 004h A
 	AND (XIX),, 0efh
 	OR (XIX), A
 	LDCF 3, (XHL)
-	SCC C A
+	SCC C, A
 	AND A, 001h
 	SLA, 003h A
 	AND (XIX),, 0f7h
@@ -383247,7 +383247,7 @@ LABEL_FD2D3A:
 	LDA XIX XBC + 008h
 	LDA XHL XDE + 008h
 	LDCF 7, (XHL)
-	SCC C A
+	SCC C, A
 	AND A, 001h
 	SLA, 007h A
 	AND (XIX),, 07fh
@@ -383283,19 +383283,19 @@ LABEL_FD2D3A:
 	AND (XIX),, 03fh
 	OR (XIX), A
 	LDCF 5, (XHL)
-	SCC C A
+	SCC C, A
 	AND A, 001h
 	SLA, 005h A
 	AND (XIX),, 0dfh
 	OR (XIX), A
 	LDCF 4, (XHL)
-	SCC C A
+	SCC C, A
 	AND A, 001h
 	SLA, 004h A
 	AND (XIX),, 0efh
 	OR (XIX), A
 	LDCF 3, (XHL)
-	SCC C A
+	SCC C, A
 	AND A, 001h
 	SLA, 003h A
 	AND (XIX),, 0f7h
@@ -383307,25 +383307,25 @@ LABEL_FD2D3A:
 	LDA XIX XBC + 00fh
 	LDA XHL XDE + 00fh
 	LDCF 7, (XHL)
-	SCC C A
+	SCC C, A
 	AND A, 001h
 	SLA, 007h A
 	AND (XIX),, 07fh
 	OR (XIX), A
 	LDCF 6, (XHL)
-	SCC C A
+	SCC C, A
 	AND A, 001h
 	SLA, 006h A
 	AND (XIX),, 0bfh
 	OR (XIX), A
 	LDCF 5, (XHL)
-	SCC C A
+	SCC C, A
 	AND A, 001h
 	SLA, 005h A
 	AND (XIX),, 0dfh
 	OR (XIX), A
 	LDCF 4, (XHL)
-	SCC C A
+	SCC C, A
 	AND A, 001h
 	SLA, 004h A
 	AND (XIX),, 0efh
@@ -383337,7 +383337,7 @@ LABEL_FD2D3A:
 	LDA XIX XBC + 010h
 	LDA XHL XDE + 010h
 	LDCF 7, (XHL)
-	SCC C A
+	SCC C, A
 	AND A, 001h
 	SLA, 007h A
 	AND (XIX),, 07fh
@@ -383353,7 +383353,7 @@ LABEL_FD2D3A:
 	LDA XIX XBC + 013h
 	LDA XHL XDE + 013h
 	LDCF 7, (XHL)
-	SCC C A
+	SCC C, A
 	AND A, 001h
 	SLA, 007h A
 	AND (XIX),, 07fh
@@ -383365,7 +383365,7 @@ LABEL_FD2D3A:
 	LDA XIX XBC + 014h
 	LDA XHL XDE + 014h
 	LDCF 7, (XHL)
-	SCC C A
+	SCC C, A
 	AND A, 001h
 	SLA, 007h A
 	AND (XIX),, 07fh
@@ -383377,7 +383377,7 @@ LABEL_FD2D3A:
 	LDA XIX XBC + 015h
 	LDA XHL XDE + 015h
 	LDCF 7, (XHL)
-	SCC C A
+	SCC C, A
 	AND A, 001h
 	SLA, 007h A
 	AND (XIX),, 07fh
@@ -383389,7 +383389,7 @@ LABEL_FD2D3A:
 	LDA XIX XBC + 016h
 	LDA XHL XDE + 016h
 	LDCF 7, (XHL)
-	SCC C A
+	SCC C, A
 	AND A, 001h
 	SLA, 007h A
 	AND (XIX),, 07fh
@@ -383504,7 +383504,7 @@ LABEL_FD3055:
 	LDA XIX XBC + 005h
 	LDA XHL XDE + 005h
 	LDCF 3, (XHL)
-	SCC C A
+	SCC C, A
 	AND A, 001h
 	SLA, 003h A
 	AND (XIX),, 0f7h
@@ -383516,25 +383516,25 @@ LABEL_FD3055:
 	LDA XIX XBC + 006h
 	LDA XHL XDE + 006h
 	LDCF 7, (XHL)
-	SCC C A
+	SCC C, A
 	AND A, 001h
 	SLA, 007h A
 	AND (XIX),, 07fh
 	OR (XIX), A
 	LDCF 6, (XHL)
-	SCC C A
+	SCC C, A
 	AND A, 001h
 	SLA, 006h A
 	AND (XIX),, 0bfh
 	OR (XIX), A
 	LDCF 5, (XHL)
-	SCC C A
+	SCC C, A
 	AND A, 001h
 	SLA, 005h A
 	AND (XIX),, 0dfh
 	OR (XIX), A
 	LDCF 4, (XHL)
-	SCC C A
+	SCC C, A
 	AND A, 001h
 	SLA, 004h A
 	AND (XIX),, 0efh
@@ -383546,43 +383546,43 @@ LABEL_FD3055:
 	LDA XIX XBC + 007h
 	LDA XHL XDE + 007h
 	LDCF 7, (XHL)
-	SCC C A
+	SCC C, A
 	AND A, 001h
 	SLA, 007h A
 	AND (XIX),, 07fh
 	OR (XIX), A
 	LDCF 6, (XHL)
-	SCC C A
+	SCC C, A
 	AND A, 001h
 	SLA, 006h A
 	AND (XIX),, 0bfh
 	OR (XIX), A
 	LDCF 5, (XHL)
-	SCC C A
+	SCC C, A
 	AND A, 001h
 	SLA, 005h A
 	AND (XIX),, 0dfh
 	OR (XIX), A
 	LDCF 4, (XHL)
-	SCC C A
+	SCC C, A
 	AND A, 001h
 	SLA, 004h A
 	AND (XIX),, 0efh
 	OR (XIX), A
 	LDCF 3, (XHL)
-	SCC C A
+	SCC C, A
 	AND A, 001h
 	SLA, 003h A
 	AND (XIX),, 0f7h
 	OR (XIX), A
 	LDCF 2, (XHL)
-	SCC C A
+	SCC C, A
 	AND A, 001h
 	SLA, 002h A
 	AND (XIX),, 0fbh
 	OR (XIX), A
 	LDCF 1, (XHL)
-	SCC C A
+	SCC C, A
 	AND A, 001h
 	SLA, 001h A
 	AND (XIX),, 0fdh
@@ -383592,31 +383592,31 @@ LABEL_FD3055:
 	LDA XIX XBC + 008h
 	LDA XHL XDE + 008h
 	LDCF 7, (XHL)
-	SCC C A
+	SCC C, A
 	AND A, 001h
 	SLA, 007h A
 	AND (XIX),, 07fh
 	OR (XIX), A
 	LDCF 6, (XHL)
-	SCC C A
+	SCC C, A
 	AND A, 001h
 	SLA, 006h A
 	AND (XIX),, 0bfh
 	OR (XIX), A
 	LDCF 5, (XHL)
-	SCC C A
+	SCC C, A
 	AND A, 001h
 	SLA, 005h A
 	AND (XIX),, 0dfh
 	OR (XIX), A
 	LDCF 4, (XHL)
-	SCC C A
+	SCC C, A
 	AND A, 001h
 	SLA, 004h A
 	AND (XIX),, 0efh
 	OR (XIX), A
 	LDCF 3, (XHL)
-	SCC C A
+	SCC C, A
 	AND A, 001h
 	SLA, 003h A
 	AND (XIX),, 0f7h
@@ -383638,7 +383638,7 @@ LABEL_FD31C0:
 	LDA XIX XBC + 002h
 	LDA XHL XDE + 002h
 	LDCF 1, (XHL)
-	SCC C A
+	SCC C, A
 	AND A, 001h
 	SLA, 001h A
 	AND (XIX),, 0fdh
@@ -383650,37 +383650,37 @@ LABEL_FD31C0:
 	LDA XIX XBC + 004h
 	LDA XHL XDE + 004h
 	LDCF 6, (XHL)
-	SCC C A
+	SCC C, A
 	AND A, 001h
 	SLA, 006h A
 	AND (XIX),, 0bfh
 	OR (XIX), A
 	LDCF 5, (XHL)
-	SCC C A
+	SCC C, A
 	AND A, 001h
 	SLA, 005h A
 	AND (XIX),, 0dfh
 	OR (XIX), A
 	LDCF 4, (XHL)
-	SCC C A
+	SCC C, A
 	AND A, 001h
 	SLA, 004h A
 	AND (XIX),, 0efh
 	OR (XIX), A
 	LDCF 3, (XHL)
-	SCC C A
+	SCC C, A
 	AND A, 001h
 	SLA, 003h A
 	AND (XIX),, 0f7h
 	OR (XIX), A
 	LDCF 2, (XHL)
-	SCC C A
+	SCC C, A
 	AND A, 001h
 	SLA, 002h A
 	AND (XIX),, 0fbh
 	OR (XIX), A
 	LDCF 1, (XHL)
-	SCC C A
+	SCC C, A
 	AND A, 001h
 	SLA, 001h A
 	AND (XIX),, 0fdh
@@ -383969,13 +383969,13 @@ LABEL_FD34DB:
 	AND (XIX),, 0cfh
 	OR (XIX), A
 	LDCF 3, (XHL)
-	SCC C A
+	SCC C, A
 	AND A, 001h
 	SLA, 003h A
 	AND (XIX),, 0f7h
 	OR (XIX), A
 	LDCF 2, (XHL)
-	SCC C A
+	SCC C, A
 	AND A, 001h
 	SLA, 002h A
 	AND (XIX),, 0fbh
@@ -384119,31 +384119,31 @@ LABEL_FD3679:
 	LDA XIX XBC + 002h
 	LDA XHL XDE + 002h
 	LDCF 6, (XHL)
-	SCC C A
+	SCC C, A
 	AND A, 001h
 	SLA, 006h A
 	AND (XIX),, 0bfh
 	OR (XIX), A
 	LDCF 5, (XHL)
-	SCC C A
+	SCC C, A
 	AND A, 001h
 	SLA, 005h A
 	AND (XIX),, 0dfh
 	OR (XIX), A
 	LDCF 4, (XHL)
-	SCC C A
+	SCC C, A
 	AND A, 001h
 	SLA, 004h A
 	AND (XIX),, 0efh
 	OR (XIX), A
 	LDCF 3, (XHL)
-	SCC C A
+	SCC C, A
 	AND A, 001h
 	SLA, 003h A
 	AND (XIX),, 0f7h
 	OR (XIX), A
 	LDCF 2, (XHL)
-	SCC C A
+	SCC C, A
 	AND A, 001h
 	SLA, 002h A
 	AND (XIX),, 0fbh
@@ -384168,19 +384168,19 @@ LABEL_FD3679:
 	LDA XIX XBC + 005h
 	LDA XHL XDE + 005h
 	LDCF 7, (XHL)
-	SCC C A
+	SCC C, A
 	AND A, 001h
 	SLA, 007h A
 	AND (XIX),, 07fh
 	OR (XIX), A
 	LDCF 6, (XHL)
-	SCC C A
+	SCC C, A
 	AND A, 001h
 	SLA, 006h A
 	AND (XIX),, 0bfh
 	OR (XIX), A
 	LDCF 2, (XHL)
-	SCC C A
+	SCC C, A
 	AND A, 001h
 	SLA, 002h A
 	AND (XIX),, 0fbh
@@ -384190,7 +384190,7 @@ LABEL_FD3679:
 	LDA XIX XBC + 006h
 	LDA XHL XDE + 006h
 	LDCF 5, (XHL)
-	SCC C A
+	SCC C, A
 	AND A, 001h
 	SLA, 005h A
 	AND (XIX),, 0dfh
@@ -384202,13 +384202,13 @@ LABEL_FD3679:
 	LDA XIX XBC + 007h
 	LDA XHL XDE + 007h
 	LDCF 5, (XHL)
-	SCC C A
+	SCC C, A
 	AND A, 001h
 	SLA, 005h A
 	AND (XIX),, 0dfh
 	OR (XIX), A
 	LDCF 4, (XHL)
-	SCC C A
+	SCC C, A
 	AND A, 001h
 	SLA, 004h A
 	AND (XIX),, 0efh
@@ -384220,43 +384220,43 @@ LABEL_FD3679:
 	LDA XIX XBC + 008h
 	LDA XHL XDE + 008h
 	LDCF 7, (XHL)
-	SCC C A
+	SCC C, A
 	AND A, 001h
 	SLA, 007h A
 	AND (XIX),, 07fh
 	OR (XIX), A
 	LDCF 6, (XHL)
-	SCC C A
+	SCC C, A
 	AND A, 001h
 	SLA, 006h A
 	AND (XIX),, 0bfh
 	OR (XIX), A
 	LDCF 5, (XHL)
-	SCC C A
+	SCC C, A
 	AND A, 001h
 	SLA, 005h A
 	AND (XIX),, 0dfh
 	OR (XIX), A
 	LDCF 4, (XHL)
-	SCC C A
+	SCC C, A
 	AND A, 001h
 	SLA, 004h A
 	AND (XIX),, 0efh
 	OR (XIX), A
 	LDCF 3, (XHL)
-	SCC C A
+	SCC C, A
 	AND A, 001h
 	SLA, 003h A
 	AND (XIX),, 0f7h
 	OR (XIX), A
 	LDCF 2, (XHL)
-	SCC C A
+	SCC C, A
 	AND A, 001h
 	SLA, 002h A
 	AND (XIX),, 0fbh
 	OR (XIX), A
 	LDCF 1, (XHL)
-	SCC C A
+	SCC C, A
 	AND A, 001h
 	SLA, 001h A
 	AND (XIX),, 0fdh
@@ -384266,43 +384266,43 @@ LABEL_FD3679:
 	LDA XIX XBC + 009h
 	LDA XHL XDE + 009h
 	LDCF 7, (XHL)
-	SCC C A
+	SCC C, A
 	AND A, 001h
 	SLA, 007h A
 	AND (XIX),, 07fh
 	OR (XIX), A
 	LDCF 6, (XHL)
-	SCC C A
+	SCC C, A
 	AND A, 001h
 	SLA, 006h A
 	AND (XIX),, 0bfh
 	OR (XIX), A
 	LDCF 5, (XHL)
-	SCC C A
+	SCC C, A
 	AND A, 001h
 	SLA, 005h A
 	AND (XIX),, 0dfh
 	OR (XIX), A
 	LDCF 4, (XHL)
-	SCC C A
+	SCC C, A
 	AND A, 001h
 	SLA, 004h A
 	AND (XIX),, 0efh
 	OR (XIX), A
 	LDCF 3, (XHL)
-	SCC C A
+	SCC C, A
 	AND A, 001h
 	SLA, 003h A
 	AND (XIX),, 0f7h
 	OR (XIX), A
 	LDCF 2, (XHL)
-	SCC C A
+	SCC C, A
 	AND A, 001h
 	SLA, 002h A
 	AND (XIX),, 0fbh
 	OR (XIX), A
 	LDCF 1, (XHL)
-	SCC C A
+	SCC C, A
 	AND A, 001h
 	SLA, 001h A
 	AND (XIX),, 0fdh
@@ -384312,43 +384312,43 @@ LABEL_FD3679:
 	LDA XIX XBC + 00ah
 	LDA XHL XDE + 00ah
 	LDCF 7, (XHL)
-	SCC C A
+	SCC C, A
 	AND A, 001h
 	SLA, 007h A
 	AND (XIX),, 07fh
 	OR (XIX), A
 	LDCF 6, (XHL)
-	SCC C A
+	SCC C, A
 	AND A, 001h
 	SLA, 006h A
 	AND (XIX),, 0bfh
 	OR (XIX), A
 	LDCF 5, (XHL)
-	SCC C A
+	SCC C, A
 	AND A, 001h
 	SLA, 005h A
 	AND (XIX),, 0dfh
 	OR (XIX), A
 	LDCF 4, (XHL)
-	SCC C A
+	SCC C, A
 	AND A, 001h
 	SLA, 004h A
 	AND (XIX),, 0efh
 	OR (XIX), A
 	LDCF 3, (XHL)
-	SCC C A
+	SCC C, A
 	AND A, 001h
 	SLA, 003h A
 	AND (XIX),, 0f7h
 	OR (XIX), A
 	LDCF 2, (XHL)
-	SCC C A
+	SCC C, A
 	AND A, 001h
 	SLA, 002h A
 	AND (XIX),, 0fbh
 	OR (XIX), A
 	LDCF 1, (XHL)
-	SCC C A
+	SCC C, A
 	AND A, 001h
 	SLA, 001h A
 	AND (XIX),, 0fdh
@@ -400141,7 +400141,7 @@ LABEL_FDFBD0:
 	EXTZ XWA
 	ADD XWA XBC
 	LDCF 6, (XWA)
-	SCC C A
+	SCC C, A
 	CP A E
 	JR Z, LABEL_FDFC23
 	LD A IZL
@@ -400166,7 +400166,7 @@ LABEL_FDFC23:
 
 LABEL_FDFC2C:
 	LDCF 4, (0C488h)
-	SCC C A
+	SCC C, A
 	LDCF 4, (0C322h)
 	SCC C C
 	CP C A
@@ -400690,7 +400690,7 @@ LABEL_FE007A:
 	EXTZ XWA
 	ADD XWA XBC
 	LDCF 5, (XWA)
-	SCC C A
+	SCC C, A
 	CP A E
 	JR Z, LABEL_FE0133
 	LD A IZL
@@ -400730,7 +400730,7 @@ LABEL_FE00DF:
 	EXTZ XWA
 	ADD XWA XBC
 	LDCF 5, (XWA)
-	SCC C A
+	SCC C, A
 	CP A E
 	JR Z, LABEL_FE0133
 	LD A IZL
@@ -424489,11 +424489,11 @@ LABEL_FEF6B0:
 
 LABEL_FEF6B1:
 	LDCF 4, (PE)
-	SCC C A
+	SCC C, A
 	CP A, (0E35Ch)
 	RET Z
 	LDCF 4, (PE)
-	SCC C A
+	SCC C, A
 	LD (0E35Ch), A
 	LD XWA, 0000e35ch
 	LD BC, 0008h
