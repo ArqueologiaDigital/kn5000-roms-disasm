@@ -723,7 +723,7 @@ LABEL_E01F80:
 	dd LABEL_E01F7E
 
 LABEL_E02380:
-	ds "HK              "
+	db "HK              "
 	db 001h, 000h, 000h, 000h
 	db 0FFh, 0FFh, 0FFh, 0FFh
 	db 0FFh, 0FFh, 0FFh, 0FFh
@@ -756,24 +756,24 @@ LABEL_E023B0:
 	dd LABEL_E0B418
 
 LABEL_E023F0:
-	ds "     PIANO      "
-	ds "     GUITAR     "
+	db "     PIANO      "
+	db "     GUITAR     "
 	dd "STRINGS & VOCAL      "
-	ds "BRASS           "
-	ds "FLUTE         "
-	ds "SAX & REED   "
-	ds "MALLET&ORCH PERC   "
-	ds "WORLD PERC   "
-	ds "ORGAN&ACCORDION  "
-	ds "ORCHESTRAL PAD      "
-	ds "SYNTH            "
-	ds "BASS      "
-	ds "DIGITAL DRAWBAR  "
-	ds "ACCORDION REG.    "
-	ds "GM SPECIAL      "
-	ds "DRUM KITS        "
-	ds "MEMORY A        "
-	ds "MEMORY B    "
+	db "BRASS           "
+	db "FLUTE         "
+	db "SAX & REED   "
+	db "MALLET&ORCH PERC   "
+	db "WORLD PERC   "
+	db "ORGAN&ACCORDION  "
+	db "ORCHESTRAL PAD      "
+	db "SYNTH            "
+	db "BASS      "
+	db "DIGITAL DRAWBAR  "
+	db "ACCORDION REG.    "
+	db "GM SPECIAL      "
+	db "DRUM KITS        "
+	db "MEMORY A        "
+	db "MEMORY B    "
 
 LABEL_E02510:
 	db 000h, 001h, 002h, 003h, 004h, 005h, 006h, 007h
@@ -10849,7 +10849,7 @@ LABEL_E1438A:	db 000h, 0FFh
 LABEL_E1438C:	db 000h, 0FFh
 LABEL_E1438E:	db 000h, 0FFh
 LABEL_E14390:	db 000h, 0FFh
-LABEL_E14392:	ds "ftdemo43", 000h, 0FFh
+LABEL_E14392:	db "ftdemo43", 000h, 0FFh
 LABEL_E1439C:	db 000h, 0FFh
 LABEL_E1439E:	db 000h, 0FFh
 LABEL_E143A0:	db 000h, 0FFh
@@ -10870,7 +10870,7 @@ LABEL_E143BC:	db 000h, 0FFh
 LABEL_E143BE:	db 000h, 0FFh
 LABEL_E143C0:	db 000h, 0FFh
 LABEL_E143C2:	db 000h, 0FFh
-LABEL_E143C4:	ds "ftdemo48", 000h, 0FFh
+LABEL_E143C4:	db "ftdemo48", 000h, 0FFh
 LABEL_E143CE:	db 000h, 0FFh
 LABEL_E143D0:	db 000h, 0FFh
 LABEL_E143D2:	db 000h, 0FFh
@@ -10914,7 +10914,7 @@ LABEL_E14424:	db 000h, 0FFh
 LABEL_E14426:	db 000h, 0FFh
 LABEL_E14428:	db 000h, 0FFh
 LABEL_E1442A:	db 000h, 0FFh
-LABEL_E1442C:	ds "ftdemo46", 000h, 0FFh
+LABEL_E1442C:	db "ftdemo46", 000h, 0FFh
 LABEL_E14436:	db 000h, 0FFh
 	db 000h, 0FFh, 000h, 0FFh, 000h, 0FFh, 000h, 0FFh
 	db 000h, 0FFh, 000h, 0FFh, 000h, 0FFh, 000h, 0FFh
@@ -11038,16 +11038,16 @@ LABEL_E14436:	db 000h, 0FFh
 	db 000h, 0FFh, 000h, 0FFh, 000h, 0FFh, 000h, 0FFh
 
 LABEL_E147F8:
-	ds "ftdemo02", 000h, 0FFh
+	db "ftdemo02", 000h, 0FFh
 
 LABEL_E14802:
-	ds "ftdemobmptop", 000h, 0FFh
+	db "ftdemobmptop", 000h, 0FFh
 
 LABEL_E14810:
-	ds "ftdemo01", 000h, 0FFh
+	db "ftdemo01", 000h, 0FFh
 
 LABEL_E1481A:
-	ds "TT_FDMSP", 000h, 0FFh
+	db "TT_FDMSP", 000h, 0FFh
 	dd 00000000h
 
 LABEL_E14828:
@@ -11064,12 +11064,12 @@ LABEL_E1482E:
 	dd LABEL_E14858
 	dd LABEL_E14846
 	
-LABEL_E14846:	ds "Bass Port Speaker", 000h
-LABEL_E14858:	ds "Italian", 000h
+LABEL_E14846:	db "Bass Port Speaker", 000h
+LABEL_E14858:	db "Italian", 000h
 LABEL_E14860:	db 000h, 0FFh
-LABEL_E14862:	ds "Amplification des graves", 000h, 0FFh
-LABEL_E1487C:	ds "Bass Port Speaker", 000h
-LABEL_E1488E:	ds "Bass Port Speaker", 000h
+LABEL_E14862:	db "Amplification des graves", 000h, 0FFh
+LABEL_E1487C:	db "Bass Port Speaker", 000h
+LABEL_E1488E:	db "Bass Port Speaker", 000h
 
 LABEL_E148A0:
 	db LABEL_E148DE
@@ -11082,7 +11082,7 @@ LABEL_E148A0:
 	db 000h, 0FFh
 
 LABEL_E148BC:
-	ds "Altavoz con port.n para bajos", 000h
+	db "Altavoz con port.n para bajos", 000h
 	..
 	..
 	..
@@ -11112,7 +11112,7 @@ LABEL_E148BC:
 	db 06Bh, 075h, 061h, 074h, 020h, 064h, 061h, 06Eh
 	db 020h, 062h, 061h, 069h, 06Bh, 02Eh, 000h, 0FFh
 
-	ds "Italian", 000h
+	db "Italian", 000h
 
 	db 0A1h, 045h, 06Ch, 020h, 070h, 06Fh, 072h, 074h
 	db 0F3h, 06Eh, 020h, 070h, 061h, 072h, 061h, 020h
@@ -11697,8 +11697,8 @@ LABEL_E148BC:
 	db 069h, 061h, 06Eh, 000h, 048h, 075h, 067h, 065h
 	db 020h, 053h, 074h, 079h, 06Ch, 065h, 073h, 000h
 	db "Huge Styles", 000h
-	ds "Huge Styles(G)", 000h, 0FFh
-	ds "Huge Styles", 000h
+	db "Huge Styles(G)", 000h, 0FFh
+	db "Huge Styles", 000h
 
 LABEL_E15A20:
 	db 080h, 0FFh, 0FFh, 0FFh, 0FFh, 087h, 090h, 000h
@@ -16126,44 +16126,44 @@ LABEL_E15B20:
 	dd LABEL_E1C8D2
 	db 000h, 0FFh
 	
-	ds "ApcOnBass", 000h
-	ds "ApcMem", 000h, 0FFh
-	ds "", 000h, 0FFh
-	ds "", 000h, 0FFh
-	ds "", 000h, 0FFh
-	ds "ApcSelScreen", 000h, 0FFh
-	ds "MD_CMP", 000h, 0FFh
-	ds "MD_MSP", 000h, 0FFh
-	ds "MD_MSP_REC", 000h, 0FFh
-	ds "MD_SND_ARG", 000h, 0FFh
-	ds "TT_STYLCNVWAIT", 000h, 0FFh
-	ds "TT_STYLCNVMODL", 000h, 0FFh
-	ds "TT_STYLCNVCNVT", 000h, 0FFh
-	ds "TT_STYLCNVSTOR", 000h, 0FFh
-	ds "TT_STYLCNVTXT", 000h
-	ds "TT_STYLCNVSEL", 000h
-	ds "TT_STYLCNVCONT", 000h, 0FFh
-	ds "TT_CMMENU", 000h
-	ds "TT_CMBKSL", 000h
-	ds "TT_CMBKSL_S", 000h
-	ds "TT_CMNAME", 000h
-	ds "TT_CMSET", 000h, 0FFh
-	ds "TT_CMREAL", 000h
-	ds "TT_CMSTEP", 000h
-	ds "TT_CMBAL", 000h, 0FFh
-	ds "TT_CMPNCP", 000h
-	ds "TT_CMSEQCP", 000h, 0FFh
-	ds "TT_CMEASY", 000h
-	ds "TT_CMBEND", 000h
-	ds "TT_CMMODE", 000h
-	ds "TT_CMCSTMCP", 000h
-	ds "TT_MSPBKSL", 000h, 0FFh
-	ds "TT_MSPREC", 000h
-	ds "TT_MSPMENU", 000h, 0FFh
-	ds "TT_MSPNAME", 000h, 0FFh
-	ds "TT_MSPGROUP", 000h
-	ds "TT_SNDARG", 000h
-	ds "TT_APCSEL", 000h
+	db "ApcOnBass", 000h
+	db "ApcMem", 000h, 0FFh
+	db "", 000h, 0FFh
+	db "", 000h, 0FFh
+	db "", 000h, 0FFh
+	db "ApcSelScreen", 000h, 0FFh
+	db "MD_CMP", 000h, 0FFh
+	db "MD_MSP", 000h, 0FFh
+	db "MD_MSP_REC", 000h, 0FFh
+	db "MD_SND_ARG", 000h, 0FFh
+	db "TT_STYLCNVWAIT", 000h, 0FFh
+	db "TT_STYLCNVMODL", 000h, 0FFh
+	db "TT_STYLCNVCNVT", 000h, 0FFh
+	db "TT_STYLCNVSTOR", 000h, 0FFh
+	db "TT_STYLCNVTXT", 000h
+	db "TT_STYLCNVSEL", 000h
+	db "TT_STYLCNVCONT", 000h, 0FFh
+	db "TT_CMMENU", 000h
+	db "TT_CMBKSL", 000h
+	db "TT_CMBKSL_S", 000h
+	db "TT_CMNAME", 000h
+	db "TT_CMSET", 000h, 0FFh
+	db "TT_CMREAL", 000h
+	db "TT_CMSTEP", 000h
+	db "TT_CMBAL", 000h, 0FFh
+	db "TT_CMPNCP", 000h
+	db "TT_CMSEQCP", 000h, 0FFh
+	db "TT_CMEASY", 000h
+	db "TT_CMBEND", 000h
+	db "TT_CMMODE", 000h
+	db "TT_CMCSTMCP", 000h
+	db "TT_MSPBKSL", 000h, 0FFh
+	db "TT_MSPREC", 000h
+	db "TT_MSPMENU", 000h, 0FFh
+	db "TT_MSPNAME", 000h, 0FFh
+	db "TT_MSPGROUP", 000h
+	db "TT_SNDARG", 000h
+	db "TT_APCSEL", 000h
 
 	dd LABEL_F67D9F
 	db LABEL_F67E59
@@ -16242,42 +16242,42 @@ LABEL_E15B20:
 	dd LABEL_E1CB96
 	db 000h, 0FFh
 	
-	ds "MainStylCnvFunc", 000h
-	ds "StylCnvStorTtlFunc", 000h, 0FFh
-	ds "StylCnvContTtlFunc", 000h, 0FFh
-	ds "StylCnvSelTtlFunc", 000h
-	ds "StylCnvCnvtTtlFunc", 000h, 0FFh
-	ds "StylCnvModlTtlFunc", 000h, 0FFh
-	ds "StylCnvTxtTtlFunc", 000h
-	ds "StylCnvWaitTtlFunc", 000h, 0FFh
-	ds "SndArgNmGet", 000h
-	ds "MainCstmNameFunc", 000h, 0FFh
-	ds "CmpStepTitleFunc", 000h, 0FFh
-	ds "MainEsCmpFunc", 000h
-	ds "SndArgTtlFunc", 000h
-	ds "SndArgModeFunc", 000h, 0FFh
-	ds "MspRecTtlFunc", 000h
-	ds "MspRecModeFunc", 000h, 0FFh
-	ds "MspNameTtlFunc", 000h, 0FFh
-	ds "MspMenuTtlFunc", 000h, 0FFh
-	ds "MspBkslTtlFunc", 000h, 0FFh
-	ds "MainMspBnkNameFunc", 000h, 0FFh
-	ds "MainMspRgpSetFunc", 000h
-	ds "MainS2cFunc", 000h
-	ds "MainCmpSetFunc", 000h, 0FFh
-	ds "MiddleCmpClrFunc", 000h, 0FFh
-	ds "MainCmpCpFunc", 000h
-	ds "MiddleNameFunc", 000h, 0FFh
-	ds "CstmCpTtlFunc", 000h
-	ds "S2cTtlFunc", 000h, 0FFh
-	ds "CmEsyTtlFunc", 000h, 0FFh
-	ds "CmpNcpTtlFunc", 000h
-	ds "CmpMenuTtlFunc", 000h, 0FFh
-	ds "CmpBksl_STtlFunc", 000h, 0FFh
-	ds "CmpBkslTtlFunc", 000h, 0FFh
-	ds "CmpRealTtlFunc", 000h, 0FFh
-	ds "CmpSetTtlFunc", 000h
-	ds "CmpModeFunc", 000h
+	db "MainStylCnvFunc", 000h
+	db "StylCnvStorTtlFunc", 000h, 0FFh
+	db "StylCnvContTtlFunc", 000h, 0FFh
+	db "StylCnvSelTtlFunc", 000h
+	db "StylCnvCnvtTtlFunc", 000h, 0FFh
+	db "StylCnvModlTtlFunc", 000h, 0FFh
+	db "StylCnvTxtTtlFunc", 000h
+	db "StylCnvWaitTtlFunc", 000h, 0FFh
+	db "SndArgNmGet", 000h
+	db "MainCstmNameFunc", 000h, 0FFh
+	db "CmpStepTitleFunc", 000h, 0FFh
+	db "MainEsCmpFunc", 000h
+	db "SndArgTtlFunc", 000h
+	db "SndArgModeFunc", 000h, 0FFh
+	db "MspRecTtlFunc", 000h
+	db "MspRecModeFunc", 000h, 0FFh
+	db "MspNameTtlFunc", 000h, 0FFh
+	db "MspMenuTtlFunc", 000h, 0FFh
+	db "MspBkslTtlFunc", 000h, 0FFh
+	db "MainMspBnkNameFunc", 000h, 0FFh
+	db "MainMspRgpSetFunc", 000h
+	db "MainS2cFunc", 000h
+	db "MainCmpSetFunc", 000h, 0FFh
+	db "MiddleCmpClrFunc", 000h, 0FFh
+	db "MainCmpCpFunc", 000h
+	db "MiddleNameFunc", 000h, 0FFh
+	db "CstmCpTtlFunc", 000h
+	db "S2cTtlFunc", 000h, 0FFh
+	db "CmEsyTtlFunc", 000h, 0FFh
+	db "CmpNcpTtlFunc", 000h
+	db "CmpMenuTtlFunc", 000h, 0FFh
+	db "CmpBksl_STtlFunc", 000h, 0FFh
+	db "CmpBkslTtlFunc", 000h, 0FFh
+	db "CmpRealTtlFunc", 000h, 0FFh
+	db "CmpSetTtlFunc", 000h
+	db "CmpModeFunc", 000h
 
 LABEL_E1CDDE:
 	db 020h, 031h
@@ -28271,50 +28271,50 @@ LABEL_E1CDDE:
 	dd LABEL_E30684
 	db 000h, 0FFh
 
-	ds "MainPanic", 000h
-	ds "EtmenuTitleFunc", 000h
-	ds "HelpFlashFunc", 000h
-	ds "HelpLangChkMain", 000h
-	ds "HelpTitleFunc", 000h
-	ds "HelpModeFunc", 000h, 0FFh
-	ds "SqDrmCycpTitleFunc", 000h, 0FFh
-	ds "SqNoteCycpTitleFunc", 000h
-	ds "MimeSyori", 000h
-	ds "SdAccillTitleFunc", 000h
-	ds "SdDspeffTitleFunc", 000h
-	ds "SdRevsetTitleFunc", 000h
-	ds "NoteEditSyori", 000h
-	ds "SngSelSyori", 000h
-	ds "SqNoteSelTitleFunc", 000h, 0FFh
-	ds "SqNoteEdtTitleFunc", 000h, 0FFh
-	ds "SqDrmSelTitleFunc", 000h
-	ds "SqDrmEdtTitleFunc", 000h
-	ds "SqAdlyTitleFunc", 000h
-	ds "SqTrmgTitleFunc", 000h
-	ds "SqSngcpTitleFunc", 000h, 0FFh
-	ds "SqTrclTitleFunc", 000h
-	ds "SqMinsTitleFunc", 000h
-	ds "SqMcpyTitleFunc", 000h
-	ds "SqSoclTitleFunc", 000h
-	ds "SqNcngTitleFunc", 000h
-	ds "SqTrnsTitleFunc", 000h
-	ds "SqVcngTitleFunc", 000h
-	ds "SqMersTitleFunc", 000h
-	ds "SqMdelTitleFunc", 000h
-	ds "SqQtzTitleFunc", 000h, 0FFh
-	ds "SqPunchmTitleFunc", 000h
-	ds "SqPunchTitleFunc", 000h, 0FFh
-	ds "SqPlayTitleFunc", 000h
-	ds "SqRealRecTitleFunc", 000h, 0FFh
-	ds "SeqEditModeFunc", 000h
-	ds "SeqErecModeFunc", 000h
-	ds "SeqPlayModeFunc", 000h
-	ds "SeqRealModeFunc", 000h
-	ds "SeqModeFunc", 000h
-	ds "ApPlaySyori", 000h
-	ds "EffEditMain", 000h
-	ds "MainExeCall", 000h
-	ds "ApEditSyori", 000h
+	db "MainPanic", 000h
+	db "EtmenuTitleFunc", 000h
+	db "HelpFlashFunc", 000h
+	db "HelpLangChkMain", 000h
+	db "HelpTitleFunc", 000h
+	db "HelpModeFunc", 000h, 0FFh
+	db "SqDrmCycpTitleFunc", 000h, 0FFh
+	db "SqNoteCycpTitleFunc", 000h
+	db "MimeSyori", 000h
+	db "SdAccillTitleFunc", 000h
+	db "SdDspeffTitleFunc", 000h
+	db "SdRevsetTitleFunc", 000h
+	db "NoteEditSyori", 000h
+	db "SngSelSyori", 000h
+	db "SqNoteSelTitleFunc", 000h, 0FFh
+	db "SqNoteEdtTitleFunc", 000h, 0FFh
+	db "SqDrmSelTitleFunc", 000h
+	db "SqDrmEdtTitleFunc", 000h
+	db "SqAdlyTitleFunc", 000h
+	db "SqTrmgTitleFunc", 000h
+	db "SqSngcpTitleFunc", 000h, 0FFh
+	db "SqTrclTitleFunc", 000h
+	db "SqMinsTitleFunc", 000h
+	db "SqMcpyTitleFunc", 000h
+	db "SqSoclTitleFunc", 000h
+	db "SqNcngTitleFunc", 000h
+	db "SqTrnsTitleFunc", 000h
+	db "SqVcngTitleFunc", 000h
+	db "SqMersTitleFunc", 000h
+	db "SqMdelTitleFunc", 000h
+	db "SqQtzTitleFunc", 000h, 0FFh
+	db "SqPunchmTitleFunc", 000h
+	db "SqPunchTitleFunc", 000h, 0FFh
+	db "SqPlayTitleFunc", 000h
+	db "SqRealRecTitleFunc", 000h, 0FFh
+	db "SeqEditModeFunc", 000h
+	db "SeqErecModeFunc", 000h
+	db "SeqPlayModeFunc", 000h
+	db "SeqRealModeFunc", 000h
+	db "SeqModeFunc", 000h
+	db "ApPlaySyori", 000h
+	db "EffEditMain", 000h
+	db "MainExeCall", 000h
+	db "ApEditSyori", 000h
 
 	db 000h, 000h, 000h, 000h, 000h, 000h, 000h, 000h, 07Eh, 034h
 	db 033h, 07Eh, 032h, 064h, 07Eh, 033h, 032h, 07Eh
@@ -78626,17 +78626,17 @@ LABEL_EBA494:
 	dd LABEL_ED27A2
 	dd LABEL_ED27A0
 	db 000h, 0FFh
-	ds "oldswno", 000h
-	ds "nowswno", 000h
-	ds "fontcolor", 000h
-	ds "font", 000h, 0FFh
-	ds "func", 000h, 0FFh
+	db "oldswno", 000h
+	db "nowswno", 000h
+	db "fontcolor", 000h
+	db "font", 000h, 0FFh
+	db "func", 000h, 0FFh
 	dd LABEL_ED27DE
 	dd LABEL_ED27D6
 	dd LABEL_ED27D4
 	db 000h, 0FFh
-	ds "window", 000h, 0FFh
-	ds "page", 000h, 0FFh
+	db "window", 000h, 0FFh
+	db "page", 000h, 0FFh
 
 LABEL_ED27E4:
 	dd LABEL_FBCD62
@@ -106163,43 +106163,43 @@ LABEL_EF72AA:
 	RET
 
 LABEL_EF72AB:
-	ds "TEMPO"
+	db "TEMPO"
 
 LABEL_EF72B0:
-	ds "REPEAT"
+	db "REPEAT"
 
 LABEL_EF72B6:
-	ds "START"
+	db "START"
 
 LABEL_EF72BB:
-	ds "STOP"
+	db "STOP"
 
 LABEL_EF72BF:
-	ds "RHYTHM"
+	db "RHYTHM"
 
 LABEL_EF72C5:
-	ds "VARI 1    "
-	ds "VARI 2    "
-	ds "VARI 3    "
-	ds "VARI 4    "
+	db "VARI 1    "
+	db "VARI 2    "
+	db "VARI 3    "
+	db "VARI 4    "
 
 LABEL_EF72ED:
-	ds "        "
-	ds "        "
-	ds "INTRO1  "
-	ds "COUNT   "
-	ds "ENDING1 "
-	ds "ENDING2 "
-	ds "FILL IN1"
-	ds "FILL IN2"
-	ds "        "
-	ds "        "
-	ds "INTRO2  "
-	ds "        "
-	ds "        "
-	ds "        "
-	ds "        "
-	ds "        "
+	db "        "
+	db "        "
+	db "INTRO1  "
+	db "COUNT   "
+	db "ENDING1 "
+	db "ENDING2 "
+	db "FILL IN1"
+	db "FILL IN2"
+	db "        "
+	db "        "
+	db "INTRO2  "
+	db "        "
+	db "        "
+	db "        "
+	db "        "
+	db "        "
 
 LABEL_EF736D:
 	LD XIX, 00000ef8h
