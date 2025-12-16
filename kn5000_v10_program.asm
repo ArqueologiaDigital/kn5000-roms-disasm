@@ -11083,10 +11083,8 @@ LABEL_E148A0:
 
 LABEL_E148BC:
 	db "Altavoz con port.n para bajos", 000h
-	..
-	..
-	..
-	.
+
+	; TODO!
 
 	db 041h, 06Ch, 074h, 061h
 	db 076h, 06Fh, 07Ah, 020h, 063h, 06Fh, 06Eh, 020h
