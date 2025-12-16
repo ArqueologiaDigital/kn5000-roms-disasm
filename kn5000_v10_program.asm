@@ -96525,12 +96525,12 @@ LABEL_EF05B5:
 	LD (0402h), L
 	CALL Get_Firmware_Version
 	CP L, 0ffh
-	JR NZ User_didnt_request_flash_mem_update
+	JR NZ, User_didnt_request_flash_mem_update
 	CALL Check_for_Floppy_Disk_Change
 	CP HL 0
-	JR Z User_didnt_request_flash_mem_update
+	JR Z, User_didnt_request_flash_mem_update
 	CP (0402h), 004h
-	JR NZ User_didnt_request_flash_mem_update
+	JR NZ, User_didnt_request_flash_mem_update
 	CALL FLASH_MEM_UPDATE
 
 LABEL_EF05E6:
@@ -103313,7 +103313,7 @@ LABEL_EF46EB:
 	JR C LABEL_EF46EB
 	CALR Detect_Disk_Type
 	CP L (XSP)
-	JR NZ SHOW_CHANGE_FLOPPY_2_OF_2_MESSAGE
+	JR NZ, SHOW_CHANGE_FLOPPY_2_OF_2_MESSAGE
 	CALR SHOW_FD_TO_FLASH_MEMORY_MESSAGE
 	INC 2 XSP
 	RET
@@ -104138,9 +104138,9 @@ LABEL_EF4FE4:
 	LD WA 2
 	CALL LABEL_EF379A
 	CP HL, 0ffffh
-	JR Z flash_update__not_today
+	JR Z, flash_update__not_today
 	CP QIZH 6  ; Is it "HD-AEPRG DATA FILE"?
-	JR NZ flash_update__not_today
+	JR NZ, flash_update__not_today
 	PUSH 0008h
 	PUSH 0002h
 	LD XWA, Bitmap_1bit_Flash_Memory_Update  ; "Flash Memory Update"
@@ -304779,7 +304779,7 @@ LABEL_F97F09:
 
 Check_for_Floppy_Disk_Change:		; F98001
 	BIT 6, (PD)
-	JR Z Detected_Floppy_Disk_Change
+	JR Z, Detected_Floppy_Disk_Change
 	LD L, 000h
 	RET
 
@@ -368678,7 +368678,7 @@ CPANEL_SERIAL_ROUTINE_1:        ; FC44F9	// Start transmitting command to set LE
 	MUL A, 001h
 	MUL A, 001h
 	BIT 6, (PF)		; PF.6 = state of SCLK1 pin
-	JR NZ MOST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
+	JR NZ, MOST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
 
 
 						; If we receive a SCLK1 LOW, does it mean CPANEL is trying to spreak and we revert to IDLE state (ROUTINE_0) ?
