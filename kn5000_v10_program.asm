@@ -96431,12 +96431,12 @@ RESET:				; EF03C6
 	LD BC, 0400h
 
 DRAM_related_short_pause:			; EF04A1
-	DJNZ BC DRAM_related_short_pause
+	DJNZ BC, DRAM_related_short_pause
 	LD (DRAM1REF), 081h
 	LD BC, 2000h
 
 DRAM_related_short_pause_2:			; EF04AC
-	DJNZ BC DRAM_related_short_pause_2
+	DJNZ BC, DRAM_related_short_pause_2
 	LD (DRAM1REF), 071h
 	LD (DRAM1CRL), 08bh
 	LD (DRAM1CRH), 058h
