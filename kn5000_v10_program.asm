@@ -11139,21 +11139,17 @@ LABEL_E148A0:
 	db 000h, 0FFh
 
 LABEL_E148BC:
-	db "Altavoz con port.n para bajos", 000h
-
-	; TODO!
-
-	db 041h, 06Ch, 074h, 061h
-	db 076h, 06Fh, 07Ah, 020h, 063h, 06Fh, 06Eh, 020h
-	db 070h, 06Fh, 072h, 074h, 0F3h, 06Eh, 020h, 070h
-	db 061h, 072h, 061h, 020h, 062h, 061h, 06Ah, 06Fh
-	db 073h, 000h, 000h, 0FFh, 000h, 0FFh, 000h, 0FFh
+	db "Altavoz con port", 0F3h, "n para bajos", 000h
+	db 000h, 0FFh
+	db 000h, 0FFh
+	db 000h, 0FFh
 	dd LABEL_E14A88
 	dd LABEL_E14A2C
 	dd LABEL_E149BC
 	dd LABEL_E14960
 	dd LABEL_E14958
 	dd LABEL_E148F8
+
 	db 053h, 070h, 065h, 063h, 069h, 061h, 06Ch, 020h
 	db 057h, 06Fh, 06Fh, 066h, 065h, 072h, 020h, 064h
 	db 061h, 06Eh, 020h, 042h, 061h, 073h, 073h, 020h
