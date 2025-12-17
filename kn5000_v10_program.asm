@@ -438,7 +438,64 @@ LABEL_E0157E:
 	db 0FFh, 0FFh
 
 LABEL_E01580:
-	; TODO!
+	db 000h, 000h, 000h, 001h, 000h, 002h, 000h, 003h
+	db 000h, 004h, 000h, 005h, 000h, 006h, 000h, 007h
+	db 000h, 008h, 000h, 009h, 000h, 00Ah, 000h, 00Bh
+	db 000h, 00Ch, 000h, 00Dh, 000h, 00Eh, 000h, 00Fh
+	db 000h, 010h, 000h, 011h, 000h, 012h, 000h, 013h
+	db 000h, 014h, 000h, 015h, 000h, 016h, 000h, 017h
+	db 000h, 018h, 001h, 000h, 001h, 001h, 001h, 002h
+	db 001h, 003h, 001h, 004h, 001h, 005h, 001h, 006h
+	db 001h, 007h, 001h, 008h, 001h, 009h, 001h, 00Ah
+	db 001h, 00Bh, 001h, 00Ch, 001h, 00Dh, 001h, 00Eh
+	db 001h, 00Fh, 001h, 010h, 001h, 011h, 001h, 012h
+	db 001h, 013h, 001h, 014h, 001h, 015h, 001h, 016h
+	db 001h, 017h, 001h, 018h, 003h, 000h, 003h, 001h
+	db 003h, 002h, 003h, 003h, 003h, 004h, 003h, 005h
+	db 003h, 006h, 003h, 007h, 003h, 008h, 003h, 009h
+	db 003h, 00Ah, 003h, 00Bh, 003h, 00Ch, 003h, 00Dh
+	db 003h, 00Eh, 003h, 00Fh, 003h, 010h, 003h, 011h
+	db 003h, 012h, 003h, 013h, 003h, 014h, 003h, 015h
+	db 003h, 016h, 003h, 072h, 004h, 098h, 001h, 043h
+	db 008h, 000h, 008h, 001h, 008h, 002h, 008h, 003h
+	db 008h, 004h, 008h, 005h, 008h, 006h, 008h, 007h
+	db 008h, 008h, 008h, 009h, 008h, 00Ah, 008h, 00Bh
+	db 008h, 00Ch, 008h, 00Dh, 008h, 00Eh, 008h, 00Fh
+	db 008h, 010h, 008h, 011h, 008h, 012h, 008h, 013h
+	db 008h, 014h, 008h, 015h, 008h, 016h, 007h, 000h
+	db 007h, 001h, 007h, 002h, 007h, 003h, 007h, 004h
+	db 007h, 005h, 007h, 006h, 007h, 007h, 007h, 008h
+	db 007h, 009h, 007h, 00Ah, 007h, 00Bh, 007h, 00Ch
+	db 007h, 00Dh, 007h, 00Eh, 007h, 00Fh, 007h, 010h
+	db 007h, 011h, 007h, 012h, 007h, 013h, 007h, 014h
+	db 007h, 015h, 007h, 016h, 007h, 072h, 005h, 000h
+	db 005h, 001h, 005h, 002h, 005h, 003h, 005h, 004h
+	db 005h, 005h, 005h, 006h, 005h, 007h, 005h, 008h
+	db 005h, 009h, 005h, 00Ah, 005h, 00Bh, 005h, 00Ch
+	db 005h, 00Dh, 005h, 00Eh, 005h, 00Fh, 004h, 000h
+	db 004h, 001h, 004h, 002h, 004h, 003h, 004h, 004h
+	db 004h, 005h, 004h, 006h, 004h, 007h, 004h, 008h
+	db 004h, 009h, 004h, 00Ah, 004h, 00Bh, 004h, 00Ch
+	db 004h, 00Dh, 004h, 00Eh, 004h, 00Fh, 004h, 015h
+	db 004h, 016h, 009h, 000h, 009h, 001h, 009h, 002h
+	db 009h, 003h, 009h, 004h, 009h, 005h, 009h, 006h
+	db 009h, 007h, 009h, 008h, 009h, 009h, 009h, 00Ah
+	db 009h, 00Bh, 009h, 00Ch, 009h, 00Dh, 009h, 00Eh
+	db 009h, 00Fh, 00Ah, 000h, 00Ah, 001h, 00Ah, 002h
+	db 00Ah, 003h, 00Ah, 004h, 00Ah, 005h, 00Ah, 006h
+	db 00Ah, 007h, 00Ah, 008h, 00Ah, 009h, 00Ah, 00Ah
+	db 00Ah, 00Bh, 00Ah, 00Ch, 00Ah, 00Dh, 00Ah, 00Eh
+	db 00Ah, 00Fh, 00Bh, 000h, 00Bh, 001h, 00Bh, 002h
+	db 00Bh, 003h, 00Bh, 004h, 00Bh, 005h, 00Bh, 006h
+	db 00Bh, 007h, 00Bh, 008h, 00Bh, 009h, 00Bh, 00Ah
+	db 00Bh, 00Bh, 00Bh, 00Ch, 00Bh, 00Dh, 00Bh, 00Eh
+	db 00Bh, 00Fh, 00Ch, 000h, 00Ch, 001h, 00Ch, 002h
+	db 00Ch, 003h, 00Ch, 004h, 00Ch, 005h, 00Ch, 006h
+	db 00Ch, 007h, 00Ch, 008h, 00Ch, 009h, 00Ch, 00Ah
+	db 00Ch, 00Bh, 00Ch, 00Ch, 00Ch, 00Dh, 00Ch, 00Eh
+	db 00Ch, 00Fh, 00Ch, 010h, 00Ch, 011h, 00Ch, 012h
+	db 00Ch, 013h, 00Ch, 014h, 00Ch, 015h, 00Ch, 016h
+	db 0FFh, 0FFh
 
 LABEL_E0174A:
 	db 000h, 091h
@@ -462,7 +519,7 @@ LABEL_E0174E:
 	db 0FFh, 0FFh 
 
 LABEL_E0176C:
-	; TODO!
+	binclude "includes/e0176c_e01f7f.bin" ; FIXME: describe this data structure
 
 LABEL_E01F80:
 	dd LABEL_E014CE
