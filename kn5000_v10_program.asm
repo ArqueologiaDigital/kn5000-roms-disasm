@@ -815,7 +815,7 @@ LABEL_E023B0:
 LABEL_E023F0:
 	db "     PIANO      "
 	db "     GUITAR     "
-	dd "STRINGS & VOCAL      "
+	db "STRINGS & VOCAL      "
 	db "BRASS           "
 	db "FLUTE         "
 	db "SAX & REED   "
