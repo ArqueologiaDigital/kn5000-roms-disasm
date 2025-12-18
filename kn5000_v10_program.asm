@@ -98860,6 +98860,7 @@ LABEL_EF1AE9:
 	EXTZ XIX
 
 LABEL_EF1AF0:
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	LD HL, (XIX + 000h)
 	CP HL, IX
 	JR NZ, LABEL_EF1AFE
