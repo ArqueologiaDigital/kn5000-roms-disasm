@@ -104190,7 +104190,7 @@ LABEL_EF4EA4:
 	ADD XBC, (XSP + 010h)
 	LD A, IZL
 	LD (XBC), A
-	AND (XSP + 00ah), 0fffh
+	ANDW (XSP + 00ah), 0fffh
 	JR T, LABEL_EF4F55
 
 LABEL_EF4ED7:
@@ -104232,7 +104232,7 @@ LABEL_EF4F17:
 	ADD XBC, (XSP + 00ch)
 	LD A, IZL
 	LD (XBC), A
-	AND (XSP + 00ah), 0fffh
+	ANDW (XSP + 00ah), 0fffh
 	INCW 1, (XSP + 006h)
 	LD WA, (XSP + 006h)
 	CP WA, (XSP + 008h)
