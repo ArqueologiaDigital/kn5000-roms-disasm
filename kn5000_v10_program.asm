@@ -98810,6 +98810,7 @@ LABEL_EF1A6C:
 	NOP
 	NORMAL
 	NOP
+	db 000h, 000h, 000h, 000h	;TODO: Fix ASL assembler encoding of:
 	; FIXME: JR PE/OV, LABEL_EF1A9D
 	; FIXME: DB
 
