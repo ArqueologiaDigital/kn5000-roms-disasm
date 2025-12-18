@@ -99857,8 +99857,7 @@ LABEL_EF22C9:
 	LD IY, WA
 	EXTZ XIY
 	LD WA, (XIX + 002h)
-	db 000h, 000h, 000h	;TODO: Fix ASL assembler encoding of:
-	LD (000h + WA), XIY
+	db 000h, 000h, 000h	;TODO: Fix ASL assembler encoding of: LD (000h + WA), XIY
 	LD (XIY + 002h), WA
 	LD XWA, (XIX + 004h)
 	LD (XIY + 004h), XWA
@@ -104172,7 +104171,7 @@ LABEL_EF4E85:
 	CP IZ, 0ffffh
 	JRL Z, LABEL_EF4F60
 	LD (XSP + 004h), IZ
-	OR (XSP + 004h), 0ff00h
+	ORW (XSP + 004h), 0ff00h
 
 LABEL_EF4EA4:
 	LD WA, (XSP + 004h)
@@ -383593,8 +383592,7 @@ LABEL_FD0D25:
 	LD W, (XIZ + W)
 	CP W, 0ffh
 	JR Z, LABEL_FD0D53
-	db 000h, 000h, 000h	;TODO: Fix ASL assembler encoding of:
-	LD (000h + WA), XIY
+	db 000h, 000h, 000h	;TODO: Fix ASL assembler encoding of: LD (000h + WA), XIY
 	LD (XIY + 002h), E
 	CALR LABEL_FD0DEE
 
@@ -383633,8 +383631,7 @@ LABEL_FD0DC0:
 	AND A, 00fh
 	OR A, 0b0h
 	LD W, 000h
-	db 000h, 000h, 000h	;TODO: Fix ASL assembler encoding of:
-	LD (000h + WA), XIY
+	db 000h, 000h, 000h	;TODO: Fix ASL assembler encoding of: LD (000h + WA), XIY
 	RES 007h, D
 	LD (XIY + 002h), D
 	CALR LABEL_FD0DEE
