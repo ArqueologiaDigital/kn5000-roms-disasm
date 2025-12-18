@@ -98778,6 +98778,7 @@ LABEL_EF1A38:
 	EXTZ XIX
 	EXTZ XIY
 	XOR XWA, XWA
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	LD (XIX + 000h), IY
 	LD WA, (XIY + 002h)
 	LD (XIX + 002h), WA
@@ -98968,6 +98969,7 @@ LABEL_EF1B9C:
 	EXTZ XIX
 	EXTZ XIY
 	XOR XWA, XWA
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	LD (XIX + 000h), IY
 	LD WA, (XIY + 002h)
 	LD (XIX + 002h), WA
@@ -99035,6 +99037,7 @@ LABEL_EF1C5F:
 	EXTZ XIX
 	EXTZ XIY
 	XOR XWA, XWA
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	LD (XIX + 000h), IY
 	LD WA, (XIY + 002h)
 	LD (XIX + 002h), WA
@@ -99065,6 +99068,7 @@ LABEL_EF1CA8:
 	EXTZ XIX
 	EXTZ XIY
 	XOR XWA, XWA
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	LD (XIX + 000h), IY
 	LD WA, (XIY + 002h)
 	LD (XIX + 002h), WA
@@ -99133,6 +99137,7 @@ LABEL_EF1D24:
 	EXTZ XIX
 	EXTZ XIY
 	XOR XWA, XWA
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	LD (XIX + 000h), IY
 	LD WA, (XIY + 002h)
 	LD (XIX + 002h), WA
@@ -99163,6 +99168,7 @@ LABEL_EF1D68:
 	EXTZ XIX
 	EXTZ XIY
 	XOR XWA, XWA
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	LD (XIX + 000h), IY
 	LD WA, (XIY + 002h)
 	LD (XIX + 002h), WA
@@ -99238,6 +99244,7 @@ LABEL_EF1E01:
 	EXTZ XIX
 	EXTZ XIY
 	XOR XWA, XWA
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	LD (XIX + 000h), IY
 	LD WA, (XIY + 002h)
 	LD (XIX + 002h), WA
@@ -99289,6 +99296,7 @@ LABEL_EF1E69:
 	EXTZ XIX
 	EXTZ XIY
 	XOR XWA, XWA
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	LD (XIX + 000h), IY
 	LD WA, (XIY + 002h)
 	LD (XIX + 002h), WA
@@ -99337,6 +99345,7 @@ LABEL_EF1EC4:
 	EXTZ XIX
 	EXTZ XIY
 	XOR XWA, XWA
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	LD (XIX + 000h), IY
 	LD WA, (XIY + 002h)
 	LD (XIX + 002h), WA
@@ -99399,6 +99408,7 @@ LABEL_EF1F42:
 	EXTZ XIX
 	EXTZ XIY
 	XOR XWA, XWA
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	LD (XIX + 000h), IY
 	LD WA, (XIY + 002h)
 	LD (XIX + 002h), WA
@@ -99453,6 +99463,7 @@ LABEL_EF1FB0:
 	EXTZ XIX
 	EXTZ XIY
 	XOR XWA, XWA
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	LD (XIX + 000h), IY
 	LD WA, (XIY + 002h)
 	LD (XIX + 002h), WA
@@ -99501,6 +99512,7 @@ LABEL_EF200C:
 	EXTZ XIX
 	EXTZ XIY
 	XOR XWA, XWA
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	LD (XIX + 000h), IY
 	LD WA, (XIY + 002h)
 	LD (XIX + 002h), WA
@@ -99575,6 +99587,7 @@ LABEL_EF2070:
 	EXTZ XIX
 	EXTZ XIY
 	XOR XWA, XWA
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	LD (XIX + 000h), IY
 	LD WA, (XIY + 002h)
 	LD (XIX + 002h), WA
@@ -99606,6 +99619,7 @@ LABEL_EF20E1:
 	EXTZ XIX
 	EXTZ XIY
 	XOR XWA, XWA
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	LD (XIX + 000h), IY
 	LD WA, (XIY + 002h)
 	LD (XIX + 002h), WA
@@ -99650,6 +99664,7 @@ LABEL_EF20E1:
 	EXTZ XIX
 	EXTZ XIY
 	XOR XWA, XWA
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	LD (XIX + 000h), IY
 	LD WA, (XIY + 002h)
 	LD (XIX + 002h), WA
@@ -99689,6 +99704,7 @@ LABEL_EF219B:
 	EXTZ XIX
 	EXTZ XIY
 	XOR XWA, XWA
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	LD (XIX + 000h), IY
 	LD WA, (XIY + 002h)
 	LD (XIX + 002h), WA
@@ -99736,6 +99752,7 @@ LABEL_EF21E1:
 	EXTZ XIX
 	EXTZ XIY
 	XOR XWA, XWA
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	LD (XIX + 000h), IY
 	LD WA, (XIY + 002h)
 	LD (XIX + 002h), WA
@@ -99759,6 +99776,7 @@ LABEL_EF223B:
 	EXTZ XIX
 	EXTZ XIY
 	XOR XWA, XWA
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	LD (XIX + 000h), IY
 	LD WA, (XIY + 002h)
 	LD (XIX + 002h), WA
@@ -99793,6 +99811,7 @@ LABEL_EF2272:
 	EXTZ XIX
 	EXTZ XIY
 	XOR XWA, XWA
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	LD (XIX + 000h), IY
 	LD WA, (XIY + 002h)
 	LD (XIX + 002h), WA
@@ -99865,6 +99884,7 @@ LABEL_EF22F5:
 	EXTZ XIX
 	EXTZ XIY
 	XOR XWA, XWA
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	LD (XIX + 000h), IY
 	LD WA, (XIY + 002h)
 	LD (XIX + 002h), WA
@@ -99906,6 +99926,7 @@ LABEL_EF234F:
 	EXTZ XIX
 	EXTZ XIY
 	XOR XWA, XWA
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	LD (XIX + 000h), IY
 	LD WA, (XIY + 002h)
 	LD (XIX + 002h), WA
