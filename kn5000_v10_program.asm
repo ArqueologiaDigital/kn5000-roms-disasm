@@ -103986,7 +103986,6 @@ LABEL_EF4CB2:
 LABEL_EF4CB9:
 	LD C, (0654h)
 	EXTZ BC
-	db 000h	;TODO: Fix ASL assembler encoding of LDA XDE, word
 	LDA XDE, 062Ch
 	EXTZ XBC
 	ADD XBC, XDE
