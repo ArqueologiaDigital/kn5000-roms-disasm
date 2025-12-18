@@ -101681,7 +101681,6 @@ LABEL_EF34C8:
 	LDA XBC, 0608h
 	LD XWA, (XBC)
 	LD (05DAh), XWA
-	db 000h	;TODO: Fix ASL assembler encoding of LDW instruction
 	LDW (05DEh), (XBC + 004h)
 	CALR LABEL_EF341B
 	LD (05E0h), 000h
