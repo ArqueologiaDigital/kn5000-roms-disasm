@@ -100879,6 +100879,7 @@ LABEL_EF2D2D:
 	POP IX
 	RET
 
+
 LABEL_EF2D3B:
 	db 02Bh, 0D2h, 0C3h, 002h, 002h, 023h, 0F2h, 0C1h
 	db 002h, 002h, 053h, 04Bh, 00Eh, 02Ch, 03Ah, 0F2h
@@ -100890,6 +100891,8 @@ LABEL_EF2D3B:
 	db 0C7h, 002h, 002h, 023h, 0F2h, 0C5h, 002h, 002h
 	db 053h, 04Bh, 00Eh, 02Ch, 03Ah, 0F2h, 0D5h, 003h
 	db 002h, 032h, 01Eh, 0FBh, 001h, 05Ah, 04Ch, 00Eh
+
+LABEL_EF2D8B:
 	db 0EEh, 00Ch, 000h, 000h, 02Ch, 03Ah, 08Eh, 008h
 	db 021h, 0F2h, 0D5h, 003h, 002h, 032h, 01Eh, 03Bh
 	db 002h, 05Ah, 04Ch, 0EEh, 00Dh, 00Eh, 0EEh, 00Ch
@@ -101281,129 +101284,149 @@ LABEL_EF31A5:
 
 
 LABEL_EF31A6:
-        ef 6e                 dec 6,XSP
-ef31a8: 2e                    push IZ
-ef31a9: bf 02 61              ld (XSP+002h),XBC
-ef31ac: bf 06 41              ld (XSP+006h),A
-ef31af: de a8                 ld IZ,0
-ef31b1: 8f 06 21              ld A,(XSP+006h)
-ef31b4: d8 12                 extz WA
-ef31b6: d8 d8                 cp WA,0
-ef31b8: 63 1d                 jr ULE,0ef31d7h
-ef31ba: af 02 20              ld XWA,(XSP+002h)
-ef31bd: c5 e0 23              ld C,(XWA+)
-ef31c0: bf 02 60              ld (XSP+002h),XWA
-ef31c3: d9 12                 extz BC
-ef31c5: 29                    push BC
-ef31c6: 1d 8b 2d ef           call 0ef2d8bh
-ef31ca: ef 62                 inc 2,XSP
-ef31cc: de 61                 inc 1,IZ
-ef31ce: 8f 06 21              ld A,(XSP+006h)
-ef31d1: d8 12                 extz WA
-ef31d3: d8 f6                 cp IZ,WA
-ef31d5: 67 e3                 jr C,0ef31bah
-ef31d7: 4e                    pop IZ
-ef31d8: ef 66                 inc 6,XSP
-ef31da: 0e                    ret
+	dec 6, XSP
+	push IZ
+	ld (XSP + 002h), XBC
+	ld (XSP + 006h), A
+	ld IZ,0
+	ld A,(XSP + 006h)
+	extz WA
+	cp WA, 0
+	jr ULE, LABEL_EF31D7
+
+LABEL_EF31BA:
+	ld XWA, (XSP + 002h)
+	ld C, (XWA+)
+	ld (XSP + 002h), XWA
+	extz BC
+	push BC
+	call LABEL_EF2D8B
+	inc 2, XSP
+	inc 1, IZ
+	ld A, (XSP + 006h)
+	extz WA
+	cp IZ, WA
+	jr C, LABEL_EF31BA
+
+LABEL_EF31D7:
+	pop IZ
+	inc 6, XSP
+	ret
 
 
 LABEL_EF31DB:
-        ef 6e                 dec 6,XSP
-ef31dd: 2e                    push IZ
-ef31de: bf 02 61              ld (XSP+002h),XBC
-ef31e1: bf 06 41              ld (XSP+006h),A
-ef31e4: de a8                 ld IZ,0
-ef31e6: 8f 06 21              ld A,(XSP+006h)
-ef31e9: d8 12                 extz WA
-ef31eb: d8 d8                 cp WA,0
-ef31ed: 63 1d                 jr ULE,0ef320ch
-ef31ef: af 02 20              ld XWA,(XSP+002h)
-ef31f2: c5 e0 23              ld C,(XWA+)
-ef31f5: bf 02 60              ld (XSP+002h),XWA
-ef31f8: d9 12                 extz BC
-ef31fa: 29                    push BC
-ef31fb: 1d 2f 2c ef           call 0ef2c2fh
-ef31ff: ef 62                 inc 2,XSP
-ef3201: de 61                 inc 1,IZ
-ef3203: 8f 06 21              ld A,(XSP+006h)
-ef3206: d8 12                 extz WA
-ef3208: d8 f6                 cp IZ,WA
-ef320a: 67 e3                 jr C,0ef31efh
-ef320c: 4e                    pop IZ
-ef320d: ef 66                 inc 6,XSP
-ef320f: 0e                    ret
-ef3210: ef 6e                 dec 6,XSP
-ef3212: 2e                    push IZ
-ef3213: bf 02 61              ld (XSP+002h),XBC
-ef3216: bf 06 41              ld (XSP+006h),A
-ef3219: de a8                 ld IZ,0
-ef321b: 8f 06 21              ld A,(XSP+006h)
-ef321e: d8 12                 extz WA
-ef3220: d8 d8                 cp WA,0
-ef3222: 63 1d                 jr ULE,0ef3241h
-ef3224: af 02 20              ld XWA,(XSP+002h)
-ef3227: c5 e0 23              ld C,(XWA+)
-ef322a: bf 02 60              ld (XSP+002h),XWA
-ef322d: d9 12                 extz BC
-ef322f: 29                    push BC
-ef3230: 1d 25 2a ef           call 0ef2a25h
-ef3234: ef 62                 inc 2,XSP
-ef3236: de 61                 inc 1,IZ
-ef3238: 8f 06 21              ld A,(XSP+006h)
-ef323b: d8 12                 extz WA
-ef323d: d8 f6                 cp IZ,WA
-ef323f: 67 e3                 jr C,0ef3224h
-ef3241: 4e                    pop IZ
-ef3242: ef 66                 inc 6,XSP
-ef3244: 0e                    ret
+	dec 6, XSP
+	push IZ
+	ld (XSP + 002h), XBC
+	ld (XSP + 006h), A
+	ld IZ, 0
+	ld A, (XSP + 006h)
+	extz WA
+	cp WA, 0
+	jr ULE, LABEL_EF320C
+
+LABEL_EF31EF:
+	ld XWA, (XSP + 002h)
+	ld C, (XWA+)
+	ld (XSP + 002h), XWA
+	extz BC
+	push BC
+	call LABEL_EF2C2F
+	inc 2, XSP
+	inc 1, IZ
+	ld A, (XSP + 006h)
+	extz WA
+	cp IZ, WA
+	jr C, LABEL_EF31EF
+
+LABEL_EF320C:
+	pop IZ
+	inc 6, XSP
+	ret
+
+LABEL_EF3210:
+	dec 6, XSP
+	push IZ
+	ld (XSP + 002h), XBC
+	ld (XSP + 006h), A
+	ld IZ, 0
+	ld A, (XSP + 006h)
+	extz WA
+	cp WA, 0
+	jr ULE, LABEL_EF3241
+
+LABEL_EF3224:
+	ld XWA, (XSP + 002h)
+	ld C, (XWA+)
+	ld (XSP + 002h), XWA
+	extz BC
+	push BC
+	call LABEL_EF2A25
+	inc 2, XSP
+	inc 1, IZ
+	ld A, (XSP + 006h)
+	extz WA
+	cp IZ, WA
+	jr C, LABEL_EF3224
+
+LABEL_EF3241:
+	pop IZ
+	inc 6, XSP
+	ret
 
 
 LABEL_EF3245:
-ef3245: ef 6e                 dec 6,XSP
-ef3247: 2e                    push IZ
-ef3248: bf 02 61              ld (XSP+002h),XBC
-ef324b: bf 06 41              ld (XSP+006h),A
-ef324e: de a8                 ld IZ,0
-ef3250: 8f 06 21              ld A,(XSP+006h)
-ef3253: d8 12                 extz WA
-ef3255: d8 d8                 cp WA,0
-ef3257: 63 1d                 jr ULE,0ef3276h
-ef3259: af 02 20              ld XWA,(XSP+002h)
-ef325c: c5 e0 23              ld C,(XWA+)
-ef325f: bf 02 60              ld (XSP+002h),XWA
-ef3262: d9 12                 extz BC
-ef3264: 29                    push BC
-ef3265: 1d 39 2e ef           call 0ef2e39h
-ef3269: ef 62                 inc 2,XSP
-ef326b: de 61                 inc 1,IZ
-ef326d: 8f 06 21              ld A,(XSP+006h)
-ef3270: d8 12                 extz WA
-ef3272: d8 f6                 cp IZ,WA
-ef3274: 67 e3                 jr C,0ef3259h
-ef3276: 4e                    pop IZ
-ef3277: ef 66                 inc 6,XSP
-ef3279: 0e                    ret
+	dec 6, XSP
+	push IZ
+	ld (XSP + 002h), XBC
+	ld (XSP + 006h), A
+	ld IZ, 0
+	ld A, (XSP + 006h)
+	extz WA
+	cp WA, 0
+	jr ULE, LABEL_EF3276
+
+LABEL_EF3259:
+	ld XWA,(XSP + 002h)
+	ld C, (XWA+)
+	ld (XSP + 002h), XWA
+	extz BC
+	push BC
+	call LABEL_EF2E39
+	inc 2, XSP
+	inc 1, IZ
+	ld A, (XSP + 006h)
+	extz WA
+	cp IZ, WA
+	jr C, LABEL_EF3259
+
+LABEL_EF3276:
+	pop IZ
+	inc 6, XSP
+	ret
 
 
 LABEL_EF327A:
-        3e                    push XIZ
-ef327b: e9 8e                 ld XIZ,XBC
-ef327d: 86 21                 ld A,(XIZ)
-ef327f: c9 cf 90              cp A,090h
-ef3282: 6e 18                 jr NZ,0ef329ch
-ef3284: ee 61                 inc 1,XIZ
-ef3286: 86 21                 ld A,(XIZ)
-ef3288: d8 12                 extz WA
-ef328a: 28                    push WA
-ef328b: 1d dd 2c ef           call 0ef2cddh
-ef328f: ee 61                 inc 1,XIZ
-ef3291: 86 21                 ld A,(XIZ)
-ef3293: d8 12                 extz WA
-ef3295: 28                    push WA
-ef3296: 1d dd 2c ef           call 0ef2cddh
-ef329a: ef 64                 inc 4,XSP
-ef329c: 5e                    pop XIZ
-ef329d: 0e                    ret
+	push XIZ
+	ld XIZ, XBC
+	ld A, (XIZ)
+	cp A, 090h
+	jr NZ, LABEL_EF329C
+	inc 1, XIZ
+	ld A, (XIZ)
+	extz WA
+	push WA
+	call LABEL_EF2CDD
+	inc 1, XIZ
+	ld A, (XIZ)
+	extz WA
+	push WA
+	call LABEL_EF2CDD
+	inc 4, XSP
+
+LABEL_EF329C:
+	pop XIZ
+	ret
 
 
 LABEL_EF329E:
