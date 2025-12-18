@@ -98956,6 +98956,7 @@ LABEL_EF1B9C:
 	SUB XIY, 00000022h
 	LD WA, (XHL + 008h)
 	LD (XIY + 01ch), WA
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	LD XWA, (XHL + 000h)
 	LD (XIY + 01eh), XWA
 	LD (XIX + 004h), XIY
