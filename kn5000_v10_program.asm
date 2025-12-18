@@ -98768,6 +98768,7 @@ LABEL_EF1A1E:
 	DJNZ B, LABEL_EF1A1E
 	LD IY, 05b7h
 	EXTZ XIY
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	LD (XIY + 000h), IY
 	LD (XIY + 002h), IY
 	LD IX, 0567h
