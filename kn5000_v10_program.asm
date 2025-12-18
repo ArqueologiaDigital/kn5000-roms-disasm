@@ -103923,7 +103923,7 @@ LABEL_EF4C17:
 	ADD XWA, 00009000h
 	CP XWA, (064Ah)
 	JR NZ, LABEL_EF4C69
-	INCW 0, (064Eh)
+	db 000h, 000h, 000h, 000h	;TODO: Fix ASL assembler encoding of: INCW 0, (064Eh)
 	LD WA, (064Eh)
 	LD BC, (0650h)
 	LD DE, 6
@@ -274899,7 +274899,7 @@ LABEL_F7FFFB:
 	LD XWA, (XSP + 052h)
 	CP XWA, 0000008fh
 	JRL NZ, LABEL_F800F5
-	INCW 0, (024790h)
+	db 000h, 000h, 000h, 000h	;TODO: Fix ASL assembler encoding of: INCW 0, (024790h)
 	INCW 1, (024794h)
 	LD WA, (024790h)
 	CALR LABEL_F808D4
@@ -322454,7 +322454,7 @@ LABEL_FA2DC2:
 	LDA XIX, XSP + 056h
 	LD BC, 4
 	LDIRW
-	INCW 0, (XSP + 058h)
+	db 000h, 000h, 000h, 000h	;TODO: Fix ASL assembler encoding of: INCW 0, (XSP + 058h)
 	LDA XIY, XSP + 05eh
 	LDA XIX, XSP + 04eh
 	LD BC, 4
@@ -361931,7 +361931,7 @@ LABEL_FBE6FB:
 	LDW (XWA), 00beh
 
 LABEL_FBE703:
-	DECW 0, (XBC)
+	db 000h, 000h, 000h, 000h	;TODO: Fix ASL assembler encoding of: DECW 0, (XBC)
 	LD XWA, (XSP + 018h)
 	LD XWA, (XWA + 02ch)
 	LD BC, (XWA)
@@ -362214,7 +362214,7 @@ LABEL_FBE9EC:
 	LDW (XWA), 00beh
 
 LABEL_FBE9F4:
-	DECW 0, (XBC)
+	db 000h, 000h, 000h, 000h	;TODO: Fix ASL assembler encoding of: DECW 0, (XBC)
 	LD XDE, (XSP + 018h)
 	LD XWA, (XDE + 02ch)
 	LD BC, (XWA)
@@ -362515,7 +362515,7 @@ LABEL_FBED27:
 	LDW (XWA), 00beh
 
 LABEL_FBED2F:
-	DECW 0, (XIY)
+	db 000h, 000h, 000h, 000h	;TODO: Fix ASL assembler encoding of: DECW 0, (XIY)
 	LD XWA, (XSP + 004h)
 	LD XWA, (XWA + 02ch)
 	LD BC, (XWA)
@@ -362729,7 +362729,7 @@ LABEL_FBEF58:
 	LDW (XWA), 00beh
 
 LABEL_FBEF60:
-	DECW 0, (XBC)
+	db 000h, 000h, 000h, 000h	;TODO: Fix ASL assembler encoding of: DECW 0, (XBC)
 	LD XWA, (XSP + 018h)
 	LD XWA, (XWA + 02ch)
 	LD BC, (XWA)
@@ -363578,7 +363578,7 @@ LABEL_FBF85D:
 	LD (XDE + 006h), WA
 	LDW (XDE), 00a3h
 	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL assembler encoding of: LD (XDE + 004h), 00beh
-	DECW 0, (XBC)
+	db 000h, 000h, 000h, 000h	;TODO: Fix ASL assembler encoding of: DECW 0, (XBC)
 	LD XWA, (XIZ + 040h)
 	LD WA, (XWA)
 	EXTS XWA
@@ -363699,7 +363699,7 @@ LABEL_FBF85D:
 	LD (XDE + 006h), WA
 	LDW (XDE), 00a3h
 	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL assembler encoding of: LD (XDE + 004h), 00beh
-	DECW 0, (XBC)
+	db 000h, 000h, 000h, 000h	;TODO: Fix ASL assembler encoding of: DECW 0, (XBC)
 	LD XWA, (XIZ + 03ch)
 	LD WA, (XWA)
 	EXTS XWA
@@ -363983,7 +363983,7 @@ LABEL_FBFD9B:
 	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL assembler encoding of: LD (XWA + 004h), 00beh
 
 LABEL_FBFDA9:
-	DECW 0, (XSP + 0216h)
+	db 000h, 000h, 000h, 000h	;TODO: Fix ASL assembler encoding of: DECW 0, (XSP + 0216h)
 	LD XWA, (XIZ + 02ch)
 	LD BC, (XWA)
 	MULS BC, 000ah
@@ -364181,7 +364181,7 @@ LABEL_FBFFD2:
 	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL assembler encoding of: LD (XWA + 004h), 00beh
 
 LABEL_FBFFE0:
-	DECW 0, (XSP + 0216h)
+	db 000h, 000h, 000h, 000h	;TODO: Fix ASL assembler encoding of: DECW 0, (XSP + 0216h)
 	LD XWA, (XIZ + 02ch)
 	LD BC, (XWA)
 	MULS BC, 000ah
@@ -364678,7 +364678,7 @@ LABEL_FC056D:
 	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL assembler encoding of: LD (XWA + 004h), 00beh
 
 LABEL_FC057B:
-	DECW 0, (XSP + 0216h)
+	db 000h, 000h, 000h, 000h	;TODO: Fix ASL assembler encoding of: DECW 0, (XSP + 0216h)
 	LD A, (XSP + 008h)
 	EXTZ WA
 	SLA 002h, WA
@@ -364966,7 +364966,7 @@ LABEL_FC08BE:
 	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL assembler encoding of: LD (XWA + 004h), 00beh
 
 LABEL_FC08CC:
-	DECW 0, (XSP + 0216h)
+	db 000h, 000h, 000h, 000h	;TODO: Fix ASL assembler encoding of: DECW 0, (XSP + 0216h)
 	LD XWA, (XIZ + 02ch)
 	LD BC, (XWA)
 	MULS BC, 000ah
@@ -365215,7 +365215,7 @@ LABEL_FC0B89:
 	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL assembler encoding of: LD (XWA + 004h), 00beh
 
 LABEL_FC0B97:
-	DECW 0, (XSP + 0216h)
+	db 000h, 000h, 000h, 000h	;TODO: Fix ASL assembler encoding of: DECW 0, (XSP + 0216h)
 	LD XWA, (XSP + 006h)
 	LD A, (XWA)
 	EXTZ WA
@@ -365383,7 +365383,7 @@ LABEL_FC0D6A:
 	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL assembler encoding of: LD (XWA + 004h), 00beh
 
 LABEL_FC0D78:
-	DECW 0, (XSP + 0216h)
+	db 000h, 000h, 000h, 000h	;TODO: Fix ASL assembler encoding of: DECW 0, (XSP + 0216h)
 	LD XWA, (XIZ + 02ch)
 	LD BC, (XWA)
 	MULS BC, 000ah
@@ -366821,7 +366821,7 @@ LABEL_FC1CFE:
 	LDW (XWA), 00beh
 
 LABEL_FC1D06:
-	DECW 0, (XBC)
+	db 000h, 000h, 000h, 000h	;TODO: Fix ASL assembler encoding of: DECW 0, (XBC)
 	LD XWA, (XSP + 0114h)
 	LD A, (XWA)
 	INC 1, A
@@ -381326,7 +381326,7 @@ LABEL_FCEDAB:
 
 LABEL_FCEDF2:
 	LD (XDE), 0ffh
-	INCW 0, (90DEh)
+	db 000h, 000h, 000h, 000h	;TODO: Fix ASL assembler encoding of: INCW 0, (90DEh)
 	JR T, LABEL_FCEE47
 
 LABEL_FCEDFB:
