@@ -100637,32 +100637,34 @@ LABEL_EF2A18:
 
 
 LABEL_EF2A25:
-        ee 0c 00 00           link XIZ,0000h
-ef2a29: 2c                    push IX
-ef2a2a: 3a                    push XDE
-ef2a2b: 8e 08 21              ld A,(XIZ+008h)
-ef2a2e: f2 a3 fc 01 32        lda XDE,01fca3h
-ef2a33: 1e bf 06              calr 0ef30f5h
-ef2a36: 5a                    pop XDE
-ef2a37: 4c                    pop IX
-ef2a38: ee 0d                 unlk XIZ
-ef2a3a: 0e                    ret
-ef2a3b: ee 0c 00 00           link XIZ,0000h
-ef2a3f: 3d                    push XIY
-ef2a40: 3c                    push XIX
-ef2a41: 3a                    push XDE
-ef2a42: 9e 08 21              ld BC,(XIZ+008h)
-ef2a45: ae 0a 25              ld XIY,(XIZ+00ah)
-ef2a48: f2 a3 fc 01 32        lda XDE,01fca3h
-ef2a4d: 85 21                 ld A,(XIY)
-ef2a4f: 1e a3 06              calr 0ef30f5h
-ef2a52: ed 61                 inc 1,XIY
-ef2a54: d9 1c f6              djnz BC,0ef2a4dh
-ef2a57: 5a                    pop XDE
-ef2a58: 5c                    pop XIX
-ef2a59: 5d                    pop XIY
-ef2a5a: ee 0d                 unlk XIZ
-ef2a5c: 0e                    ret
+	LINK XIZ, 0000h
+	PUSH IX
+	PUSH XDE
+	LD A, (XIZ + 008h)
+	LDA XDE, 01fca3h
+	CALR LABEL_EF30F5
+	POP XDE
+	POP IX
+	UNLK XIZ
+	RET
+
+LABEL_EF2A3B:
+	LINK XIZ, 0000h
+	PUSH XIY
+	PUSH XIX
+	PUSH XDE
+	LD BC, (XIZ + 008h)
+	LD XIY, (XIZ + 00ah)
+	LDA XDE, 01fca3h
+	LD A, (XIY)
+	CALR LABEL_EF30F5
+	INC 1, XIY
+	DJNZ BC, LABEL_EF2A4D
+	POP XDE
+	POP XIX
+	POP XIY
+	UNLK XIZ
+	RET
 
 
 LABEL_EF2A5D:
@@ -100779,46 +100781,52 @@ LABEL_EF2C22:
 
 
 LABEL_EF2C2F:
-        ee 0c 00 00           link XIZ,0000h
-ef2c33: 2c                    push IX
-ef2c34: 3a                    push XDE
-ef2c35: 8e 08 21              ld A,(XIZ+008h)
-ef2c38: f2 c1 01 02 32        lda XDE,0201c1h
-ef2c3d: 1e 97 03              calr 0ef2fd7h
-ef2c40: 5a                    pop XDE
-ef2c41: 4c                    pop IX
-ef2c42: ee 0d                 unlk XIZ
-ef2c44: 0e                    ret
+	LINK XIZ, 0000h
+	PUSH IX
+	PUSH XDE
+	LD A, (XIZ + 008h)
+	LDA XDE, 0201c1h
+	CALR LABEL_EF2FD7
+	POP XDE
+	POP IX
+	UNLK XIZ
+	RET
 
 
-ef2c45: ee 0c 00 00           link XIZ,0000h
-ef2c49: 3d                    push XIY
-ef2c4a: 3c                    push XIX
-ef2c4b: 3a                    push XDE
-ef2c4c: 9e 08 21              ld BC,(XIZ+008h)
-ef2c4f: ae 0a 25              ld XIY,(XIZ+00ah)
-ef2c52: f2 c1 01 02 32        lda XDE,0201c1h
-ef2c57: 85 21                 ld A,(XIY)
-ef2c59: 1e 7b 03              calr 0ef2fd7h
-ef2c5c: ed 61                 inc 1,XIY
-ef2c5e: d9 1c f6              djnz BC,0ef2c57h
-ef2c61: 5a                    pop XDE
-ef2c62: 5c                    pop XIX
-ef2c63: 5d                    pop XIY
-ef2c64: ee 0d                 unlk XIZ
-ef2c66: 0e                    ret
+LABEL_EF2C45:
+	LINK XIZ, 0000h
+	PUSH XIY
+	PUSH XIX
+	PUSH XDE
+	LD BC, (XIZ + 008h)
+	LD XIY, (XIZ + 00ah)
+	LDA XDE, 0201c1h
+
+LABEL_EF2C57:
+	LD A, (XIY)
+	CALR LABEL_EF2FD7
+	INC 1, XIY
+	DJNZ BC, LABEL_EF2C57
+	POP XDE
+	POP XIX
+	POP XIY
+	UNLK XIZ
+	RET
+
+LABEL_EF2C67:
+	LD HL, (0201bdh)
+	CP HL, (0201b9h)
+	LD HL, 0
+	JR Z, LABEL_EF2C78
+	LD HL, 0ffffh
+
+LABEL_EF2C78:
+	RET
 
 
-ef2c67: d2 bd 01 02 23        ld HL,(0201bdh)
-ef2c6c: d2 b9 01 02 f3        cp HL,(0201b9h)
-ef2c71: db a8                 ld HL,0
-ef2c73: 66 03                 jr Z,0ef2c78h
-ef2c75: 33 ff ff              ld HL,0ffffh
-ef2c78: 0e                    ret
-
-
-ef2c79: d2 bf 01 02 23        ld HL,(0201bfh)
-ef2c7e: 0e                    ret
+LABEL_EF2C79:
+	LD HL, (0201bfh)
+	RET
 
 
 LABEL_EF2C7F:
