@@ -98697,7 +98697,7 @@ LABEL_EF1977:
 	XOR WA, WA
 	LD (0487h), WA
 	INC 1, WA
-	; FIXME: LDC <Unknown 16-bit ControlReg 07Ch> WA
+	db 000h, 000h, 000h	; Fix ASL assembler:	LDC <Unknown 16-bit ControlReg 07Ch> WA
 	LD (05C3h), WA
 	LD HL, 04c5h
 	EXTZ XHL
@@ -98825,7 +98825,7 @@ LABEL_EF1A86:
 	EI 006h
 	LD (0485h), 000h
 	XOR WA, WA
-	; FIXME: LDC <Unknown 16-bit ControlReg 07Ch> WA
+	db 000h, 000h, 000h	; Fix ASL assembler:	LDC <Unknown 16-bit ControlReg 07Ch> WA
 	LD (05C3h), WA
 	JRL T, LABEL_EF1AC0
 
@@ -98903,14 +98903,14 @@ LABEL_EF1B6F:
 	JR Z, LABEL_EF1B83
 	DEC 1, WA
 	LD (05C3h), WA
-	; FIXME: LDC <Unknown 16-bit ControlReg 07Ch> WA
+	db 000h, 000h, 000h	; Fix ASL assembler:	LDC <Unknown 16-bit ControlReg 07Ch> WA
 	POP WA
 	RETI
 
 LABEL_EF1B83:
 	XOR WA, WA
 	LD (05C3h), WA
-	; FIXME: LDC <Unknown 16-bit ControlReg 07Ch> WA
+	db 000h, 000h, 000h	; Fix ASL assembler:	LDC <Unknown 16-bit ControlReg 07Ch> WA
 	POP WA
 	EI 000h
 	NOP
