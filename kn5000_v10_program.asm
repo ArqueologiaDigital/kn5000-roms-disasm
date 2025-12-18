@@ -97518,6 +97518,7 @@ LABEL_EF0EDF:
 	JR LT, LABEL_EF0F04
 	LD (041Bh), 000h
 	INCW 1, (041Ch)
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (28AAh), 0000h
 	JR Z, LABEL_EF0F04
 	CALR LABEL_EF1113
@@ -97677,6 +97678,7 @@ LABEL_EF1061:
 	JR NZ, LABEL_EF108E
 	LD (041Eh), 008h
 	AND (0431h), 0f7h
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (28AAh), 0000h
 	JR Z, LABEL_EF108E
 	LD A, 086h
@@ -97689,6 +97691,7 @@ LABEL_EF108E:
 	JR NZ, LABEL_EF10B1
 	LD (041Eh), 001h
 	AND (0431h), 0feh
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (28AAh), 0000h
 	JR Z, LABEL_EF10B1
 	LD A, 085h
@@ -112305,6 +112308,7 @@ LABEL_F00C4A:
 	LD (1191h), A
 	LD (1192h), A
 	LD XIY, 00e0bdach
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (0E50h), 0000h
 	JR NZ, LABEL_F00C77
 	LD XIX, 00e0bde8h
@@ -112327,10 +112331,12 @@ LABEL_F00C89:
 	LD (03EFA8h), 002h
 	CALR LABEL_F00AD3
 	CALR LABEL_F00D31
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (0E4Ch), 0000h
 	JR Z, LABEL_F00CCE
 	XOR BC, BC
 	CALR LABEL_F00D59
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (0E4Ch), 03e8h
 	JR C, LABEL_F00CBD
 	LD XIY, 00e0bd70h
@@ -112344,10 +112350,12 @@ LABEL_F00CBD:
 	CALL LABEL_EF5D92
 
 LABEL_F00CCE:
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (0E4Eh), 0000h
 	JR Z, LABEL_F00CFF
 	LD BC, 1
 	CALR LABEL_F00D59
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (0E4Eh), 03e8h
 	JR C, LABEL_F00CEE
 	LD XIY, 00e0bd75h
@@ -112361,10 +112369,12 @@ LABEL_F00CEE:
 	CALL LABEL_EF5D92
 
 LABEL_F00CFF:
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (0E50h), 0000h
 	JR Z, LABEL_F00D30
 	LD BC, 2
 	CALR LABEL_F00D59
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (0E50h), 03e8h
 	JR C, LABEL_F00D1F
 	LD XIY, 00e0bd7ah
@@ -142496,6 +142506,7 @@ LABEL_F22348:
 	JR NZ, LABEL_F223C8
 
 LABEL_F22390:
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (28B4h), 0000h
 	JR NZ, LABEL_F223C8
 	CP (0D2Fh), 000h
@@ -142504,6 +142515,7 @@ LABEL_F22390:
 	JR T, LABEL_F223B6
 
 LABEL_F223A4:
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (28B4h), 0000h
 	JR NZ, LABEL_F223C8
 	CP (0D2Fh), 000h
@@ -142569,6 +142581,7 @@ LABEL_F22412:
 	JR NZ, LABEL_F2248E
 
 LABEL_F22456:
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (28B4h), 0000h
 	JR NZ, LABEL_F2248E
 	CP (0D2Fh), 000h
@@ -142577,6 +142590,7 @@ LABEL_F22456:
 	JR T, LABEL_F2247C
 
 LABEL_F2246A:
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (28B4h), 0000h
 	JR NZ, LABEL_F2248E
 	CP (0D2Fh), 000h
@@ -142642,6 +142656,7 @@ LABEL_F224D8:
 	JR NZ, LABEL_F22554
 
 LABEL_F2251C:
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (28B4h), 0000h
 	JR NZ, LABEL_F22554
 	CP (0D2Fh), 000h
@@ -142650,6 +142665,7 @@ LABEL_F2251C:
 	JR T, LABEL_F22542
 
 LABEL_F22530:
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (28B4h), 0000h
 	JR NZ, LABEL_F22554
 	CP (0D2Fh), 000h
@@ -144116,6 +144132,7 @@ LABEL_F233A9:
 	JRL NZ, LABEL_F2366B
 	CALL LABEL_F23713
 	LD (0F60h), A
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (0F60h), 0000h
 	JRL NZ, LABEL_F2341E
 	LD (1A2Bh), 0030h
@@ -144135,10 +144152,13 @@ LABEL_F2341E:
 LABEL_F23436:
 	LD A, (11F8h)
 	CALL LABEL_F23779
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (0F5Ch), 0000h
 	JRL Z, LABEL_F2347E
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (0F5Ch), 0001h
 	JRL NZ, LABEL_F2366B
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (0F5Eh), 0001h
 	JRL Z, LABEL_F2347E
 	CALL LABEL_F23790
@@ -144148,6 +144168,7 @@ LABEL_F23436:
 	JRL NZ, LABEL_F2361A
 	CP (0EF6h), 000h
 	JRL Z, LABEL_F23678
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (1A2Bh), 0031h
 	JRL T, LABEL_F23645
 
@@ -144367,6 +144388,7 @@ LABEL_F2361A:
 	LD (0FFECh), WA
 	db 000h	;TODO: Fix ASL assembler encoding of LDW instruction
 	LDW (0F19Ch), 0000h
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (1A2Bh), 0031h
 	JRL Z, LABEL_F236AA
 	LD (1A2Bh), 001fh
@@ -145285,8 +145307,10 @@ LABEL_F23DD0:
 	db 078h, 0C3h, 0FFh
 
 LABEL_F23DD3:
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (0F5Ch), 0000h
 	JRL Z, LABEL_F23DEC
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (0F5Eh), 0001h
 	JRL Z, LABEL_F23DEC
 	CALL LABEL_F24727
@@ -146135,8 +146159,10 @@ LABEL_F24541:
 	SLA 001h, H
 	OR W H
 	LD XIY, 7
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (0F5Ch), 0000h
 	JRL Z, LABEL_F24574
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (0F5Eh), 0001h
 	JRL Z, LABEL_F24574
 	LD IY, (108Dh)
@@ -146149,8 +146175,10 @@ LABEL_F24574:
 	POP WA
 	LD BC, WA
 	LD A, 080h
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (0F5Ch), 0000h
 	JRL Z, LABEL_F24596
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (0F5Eh), 0001h
 	JRL Z, LABEL_F24596
 	LD A, 0a0h
@@ -146164,8 +146192,10 @@ LABEL_F24596:
 	CP (10E3h), 000h
 	JRL NZ, LABEL_F24646
 	LD IY, 7
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (0F5Ch), 0000h
 	JRL Z, LABEL_F245C2
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (0F5Eh), 0001h
 	JRL Z, LABEL_F245C2
 	LD IY, (108Dh)
@@ -146206,8 +146236,10 @@ LABEL_F245C2:
 	CP (10E3h), 000h
 	JRL NZ, LABEL_F24646
 	LD XIY, 7
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (0F5Ch), 0000h
 	JRL Z, LABEL_F2462C
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (0F5Eh), 0001h
 	JRL Z, LABEL_F2462C
 	LD IY, (108Dh)
@@ -147447,6 +147479,7 @@ LABEL_F25181:
 	CALL LABEL_F26ECC
 	LD XWA, 00001a57h
 	CALL LABEL_FEE8F1
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (1A5Fh), 0009h
 	JR Z, LABEL_F251E5
 	LD XHL, 00001a37h
@@ -148165,6 +148198,7 @@ LABEL_F258B4:
 	CALL LABEL_F26ECC
 	LD XWA, 00001a57h
 	CALL LABEL_FEE8F1
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (1A5Fh), 0009h
 	JR Z, LABEL_F25922
 	LD XHL, 00001a37h
@@ -149083,6 +149117,7 @@ LABEL_F261A8:
 	CALL LABEL_F26ECC
 	LD XWA, 00001a57h
 	CALL LABEL_FEE8F1
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (1A5Fh), 0009h
 	JR Z, LABEL_F26218
 	LD XHL, 00001a37h
@@ -149851,8 +149886,10 @@ LABEL_F26C1E:
 
 LABEL_F26CAA:
 	PUSH XIY
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (0F5Ch), 0000h
 	JR Z, LABEL_F26CC5
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (0F5Eh), 0002h
 	JR C, LABEL_F26CC5
 	LD IY, (108Dh)
@@ -149900,8 +149937,10 @@ LABEL_F26CDF:
 	LD L, (0FABh)
 	AND L, 00fh
 	XOR H, H
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (0F5Ch), 0000h
 	JR Z, LABEL_F26D36
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (0F5Eh), 0002h
 	JR C, LABEL_F26D36
 	LD A, L
@@ -149952,8 +149991,10 @@ LABEL_F26D4C:
 	LD IY, (0FABh)
 	AND IY, 000fh
 	EXTZ XIY
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (0F5Ch), 0000h
 	JR Z, LABEL_F26DC5
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (0F5Eh), 0002h
 	JR C, LABEL_F26DC5
 	LD IY, (108Dh)
@@ -150109,6 +150150,7 @@ LABEL_F26ECC:
 	AND E, 00fh
 	LD (1A5Fh), DE
 	POP XDE
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (1A5Fh), 0009h
 	JR NZ, LABEL_F26F07
 	LD XWA, 00001a57h
@@ -150156,6 +150198,7 @@ LABEL_F26F35:
 	LD BC, IX
 	SUB A, C
 	SUB A, 001h
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (1074h), 0000h
 	JR NZ, LABEL_F26F78
 	CP (1073h), A
@@ -152447,6 +152490,7 @@ LABEL_F281B5:
 	JP LABEL_F28217
 
 LABEL_F281BB:
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (10FBh), 0000h
 	JR NZ, LABEL_F281DF
 	CALL LABEL_F287AB
@@ -152861,6 +152905,7 @@ LABEL_F2851E:
 	JR T, LABEL_F285B3
 
 LABEL_F28538:
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (10FBh), 0000h
 	JR NZ, LABEL_F28562
 	LD C, A
@@ -153184,6 +153229,7 @@ LABEL_F287AB:
 	RET
 
 LABEL_F287B0:
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (10FBh), 0000h
 	JR Z, LABEL_F287D0
 	PUSH XWA
@@ -153564,8 +153610,10 @@ LABEL_F28AF3:
 	LD (1070h), 0000h
 	CP (1087h), 000h
 	JR NZ, LABEL_F28B17
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (1085h), 007fh
 	JRL ULE LABEL_F28B96
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (1085h), 3fffh
 	JR ULE, LABEL_F28B6D
 
@@ -154319,6 +154367,7 @@ LABEL_F29243:
 	PUSH XIX
 	PUSH XIY
 	LD XIY, 0000112ch
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (1132h), 0004h
 	JR NZ, LABEL_F29255
 	CALR LABEL_F299B2
@@ -154332,6 +154381,7 @@ LABEL_F29259:
 	PUSH XIX
 	PUSH XIY
 	LD XIY, 0000112ch
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (1132h), 0005h
 	JR NZ, LABEL_F29268
 
@@ -154344,6 +154394,7 @@ LABEL_F2926C:
 	PUSH XIX
 	PUSH XIY
 	LD XIY, 0000112ch
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (1132h), 0005h
 	JR NZ, LABEL_F2927E
 	CALR LABEL_F29666
@@ -154357,12 +154408,16 @@ LABEL_F29282:
 	PUSH XIX
 	PUSH XIY
 	LD XIY, 0000112ch
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (1132h), 0004h
 	JR Z, LABEL_F292FA
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (1132h), 0005h
 	JR Z, LABEL_F292BA
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (1132h), 0002h
 	JR Z, LABEL_F292AB
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (1132h), 0003h
 	JR Z, LABEL_F292B5
 	JR T, LABEL_F29302
@@ -154412,6 +154467,7 @@ LABEL_F29306:
 	PUSH XIX
 	PUSH XIY
 	LD XIY, 0000112ch
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (1132h), 0005h
 	JR Z, LABEL_F29317
 	JR T, LABEL_F29302
@@ -162160,6 +162216,7 @@ LABEL_F2ECAD:
 	CALL SendEvent
 	OR XHL, XHL
 	JR Z, LABEL_F2ECE1
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (28A8h), 0000h
 	JR Z, LABEL_F2ECCE
 	BIT 2, (0421h)
@@ -173211,6 +173268,7 @@ LABEL_F36F8B:
 
 LABEL_F36FA7:
 	PUSH IZ
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (2792h), 0000h
 	JR NZ, LABEL_F36FB6
 	LD (2792h), 0030h
@@ -173460,6 +173518,7 @@ LABEL_F37203:
 LABEL_F37218:
 	DEC 4, XSP
 	CALR LABEL_F3689A
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (279Ah), 0000h
 	JR NZ, LABEL_F37246
 	JR T, LABEL_F3726B
@@ -173537,6 +173596,7 @@ LABEL_F372B4:
 
 LABEL_F372CA:
 	CALR LABEL_F37897
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (2772h), 0000h
 	RET NZ
 	LD (2772h), 0002h
@@ -173698,6 +173758,7 @@ LABEL_F3743D:
 
 LABEL_F3744A:
 	CALL LABEL_F413CB
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (2772h), 0000h
 	JR NZ, LABEL_F3743D
 	RET
@@ -174078,6 +174139,7 @@ LABEL_F377A1:
 	SUB BC, WA
 	LD (2772h), BC
 	CALR LABEL_F374A1
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (2772h), 0000h
 	JR Z, LABEL_F377F9
 
@@ -174107,6 +174169,7 @@ LABEL_F37804:
 LABEL_F37806:
 	DEC 4, XSP
 	RES 3, (295Fh)
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (279Ch), 0000h
 	JR NZ, LABEL_F37838
 	CALL LABEL_F421A6
@@ -174222,8 +174285,10 @@ LABEL_F378D7:
 	CALR LABEL_F37806
 	BIT 3, (295Fh)
 	JR Z, LABEL_F3791A
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (2744h), 0001h
 	JR Z, LABEL_F3790E
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (279Ch), 0000h
 	JR Z, LABEL_F37914
 
@@ -174271,8 +174336,10 @@ LABEL_F37969:
 	CALR LABEL_F379A8
 	BIT 3, (295Fh)
 	JR Z, LABEL_F37984
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (2744h), 0001h
 	JR Z, LABEL_F3790E
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (279Ch), 0000h
 	JR Z, LABEL_F37914
 	JR T, LABEL_F3790E
@@ -174730,6 +174797,7 @@ LABEL_F37D71:
 	LD (XSP + 004h), 0001h
 	LD XWA, (XSP + 006h)
 	LD (XWA), 0000h
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (287Fh), 0001h
 	JR Z, LABEL_F37DD1
 
@@ -175562,6 +175630,7 @@ LABEL_F38561:
 	LD QIZH, 0
 	LD (275Eh), IZ
 	LD (2760h), 000h
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (2782h), 0000h
 	JR Z, LABEL_F385A6
 	LD (2772h), 0000h
@@ -175744,6 +175813,7 @@ LABEL_F386DB:
 LABEL_F386E0:
 	LD (275Eh), IZ
 	LD (2760h), 000h
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (2782h), 0000h
 	JRL NZ, LABEL_F3863A
 	CALL LABEL_F421A6
@@ -175874,6 +175944,7 @@ LABEL_F38820:
 LABEL_F38836:
 	db 000h	;TODO: Fix ASL assembler encoding of LDW instruction
 	LDW (2668h), (251Ch)
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (2668h), 0001h
 	JR Z, LABEL_F38848
 	SET 3, (28A7h)
@@ -176091,6 +176162,7 @@ LABEL_F38A32:
 	JR NZ, LABEL_F38A4B
 	BIT 2, (0421h)
 	JR Z, LABEL_F38A4B
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (28A8h), 0000h
 	JR NZ, LABEL_F38A50
 
@@ -176115,6 +176187,7 @@ LABEL_F38A50:
 
 LABEL_F38A75:
 	CALR LABEL_F38AE5
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (28B4h), 0000h
 	JR NZ, LABEL_F38A85
 	LD (22FCh), 000h
@@ -176910,6 +176983,7 @@ LABEL_F39346:
 	DEC 1, WA
 	LD (28CCh), WA
 	LD (28CBh), 05fh
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (28B4h), 0000h
 	JR NZ, LABEL_F39394
 	LD (22FCh), 000h
@@ -176973,6 +177047,7 @@ LABEL_F393FC:
 	db 000h 	;TODO: Fix ASL assembler encoding of CPW instruction
 	CPW (0F19Eh), 0000h
 	JR NZ, LABEL_F39434
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (28A8h), 0000h
 	JRL NZ, LABEL_F394B5
 	LD A, (28A7h)
@@ -177021,8 +177096,10 @@ LABEL_F39499:
 
 LABEL_F3949C:
 	RES 4, (28ACh)
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (2316h), 0000h
 	JR NZ, LABEL_F394BC
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (28A8h), 0000h
 	JR NZ, LABEL_F394B5
 
@@ -177035,6 +177112,7 @@ LABEL_F394B5:
 
 LABEL_F394BC:
 	CALR LABEL_F3993B
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (28A8h), 0000h
 	JR NZ, LABEL_F394DA
 	CP (1D92h), 000h
@@ -177181,6 +177259,7 @@ LABEL_F39651:
 	CALL LABEL_F4656C
 	db 000h	;TODO: Fix ASL assembler encoding of LDW instruction
 	LDW (2330h), (041Ch)
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (2314h), 0000h
 	JR Z, LABEL_F3966D
 	SET 0, (28A7h)
@@ -177220,6 +177299,7 @@ LABEL_F396A8:
 	RES 0, (045Bh)
 	BIT 1, (28A7h)
 	JRL Z, LABEL_F397AD
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (28A8h), 0000h
 	JR Z, LABEL_F396C5
 	BIT 0, (28B2h)
@@ -177892,6 +177972,7 @@ LABEL_F39CF3:
 	RES 3, (28B3h)
 	CALL LABEL_FDDE6F
 	RES 3, (28A7h)
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (28A8h), 0000h
 	JRL Z, LABEL_F39DFC
 	LD (2326h), 0000h
@@ -177999,6 +178080,7 @@ LABEL_F39DFF:
 	RES 001h, A
 	RES 007h, A
 	LD (28B2h), A
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (28A8h), 0000h
 	JRL Z, LABEL_F39EEC
 	db 000h	;TODO: Fix ASL assembler encoding of LDW instruction
@@ -178162,6 +178244,7 @@ LABEL_F39FA8:
 	JRL T, LABEL_F3A096
 
 LABEL_F39FAE:
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (28AAh), 0000h
 	JRL Z, LABEL_F3A094
 
@@ -178293,6 +178376,7 @@ LABEL_F3A0E8:
 	CALR LABEL_F3A6CE
 	db 000h	;TODO: Fix ASL assembler encoding of LDW instruction
 	LDW (1DA4h), (041Ch)
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (28A8h), 0000h
 	JR NZ, LABEL_F3A11E
 	CP (1D92h), 000h
@@ -178413,6 +178497,7 @@ LABEL_F3A20C:
 	JRL T, LABEL_F3A33B
 
 LABEL_F3A213:
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (28AAh), 0000h
 	JR NZ, LABEL_F3A289
 	LD A, (28BEh)
@@ -178530,6 +178615,7 @@ LABEL_F3A342:
 	CALR LABEL_F3A867
 	CP L, 0
 	JR NZ, LABEL_F3A3CC
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (28A8h), 0000h
 	JR Z, LABEL_F3A3CA
 	LD A, (28C5h)
@@ -179134,6 +179220,7 @@ LABEL_F3A867:
 	LDA XSP, XSP - 10
 	PUSH XIZ
 	LD (XSP + 006h), 000h
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (28B4h), 0000h
 	JR NZ, LABEL_F3A87C
 	LD L, 000h
@@ -179185,6 +179272,7 @@ LABEL_F3A8D8:
 	LD (2866h), 000h
 
 LABEL_F3A8EF:
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (28A8h), 0000h
 	JR Z, LABEL_F3A933
 
@@ -179207,6 +179295,7 @@ LABEL_F3A914:
 	JRL NZ, LABEL_F3AD22
 	LD WA, 0011h
 	CALL LABEL_F3ED99
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (28A8h), 0000h
 	JR NZ, LABEL_F3A8F7
 
@@ -179640,6 +179729,7 @@ LABEL_F3AD2A:
 	DEC 6, XSP
 	PUSH XIZ
 	LD (XSP + 008h), 000h
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (28B4h), 0000h
 	JR NZ, LABEL_F3AD3E
 	LD L, 000h
@@ -179936,6 +180026,7 @@ LABEL_F3AF9A:
 	JR C, LABEL_F3AF9A
 	CP (XSP + 014h), 011h
 	JR NZ, LABEL_F3AFE1
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (28A8h), 0000h
 	JR Z, LABEL_F3AFE1
 	LD (XSP + 014h), (231Ah)
@@ -180142,6 +180233,7 @@ LABEL_F3B19D:
 	AND (2316h), DE
 	LD WA, BC
 	CALR LABEL_F3C75C
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (28A8h), 0000h
 	JR NZ, LABEL_F3B1CA
 	CP (1D92h), 000h
@@ -182800,6 +182892,7 @@ LABEL_F3C939:
 
 LABEL_F3C947:
 	LD A, (22FEh)
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (28A8h), 0000h
 	JR Z, LABEL_F3C95B
 	RES 007h, A
@@ -182877,6 +182970,7 @@ LABEL_F3C9EF:
 
 LABEL_F3CA14:
 	CALL LABEL_F464E4
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (2668h), 0001h
 	JR NZ, LABEL_F3CA31
 	RES 3, (28A7h)
@@ -182939,6 +183033,7 @@ LABEL_F3CABD:
 LABEL_F3CAC1:
 	BIT 0, (28C5h)
 	JR Z, LABEL_F3CAD5
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (28A8h), 0000h
 	RET NZ
 	LD (22FCh), 000h
@@ -183056,6 +183151,7 @@ LABEL_F3CBD7:
 LABEL_F3CBE7:
 	LDA XSP, XSP - 018h
 	PUSH XIZ
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (28A8h), 0000h
 	SCC NZ A
 	LD (XSP + 012h), A
@@ -183813,6 +183909,7 @@ LABEL_F3D2A6:
 	CALL LABEL_F3F179
 	CALL LABEL_F3DF7C
 	CALL LABEL_FDDE6F
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (28A8h), 0000h
 	JRL Z, LABEL_F3D53E
 	CALR LABEL_F3CE53
@@ -184356,6 +184453,7 @@ LABEL_F3D7A7:
 LABEL_F3D7DF:
 	CP (1D92h), 001h
 	JR NZ, LABEL_F3D809
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (28A8h), 0000h
 	JR Z, LABEL_F3D809
 	LD A, (231Ah)
@@ -184422,6 +184520,7 @@ LABEL_F3D840:
 	LD (XBC), WA
 	LD WA, (XDE)
 	LD (XBC + 002h), WA
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (1D78h), 0000h
 	JR ULE, LABEL_F3D8BA
 
@@ -186232,6 +186331,7 @@ LABEL_F3E899:
 	SET 4, (28B3h)
 	SET 2, (28A7h)
 	LD (2524h), 001h
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (2668h), 0001h
 	JR Z, LABEL_F3E8B9
 	LD (1D5Eh), 0fah
@@ -186816,6 +186916,7 @@ LABEL_F3ED5E:
 	LD A, (28A7h)
 	RES 000h, A
 	LD (28A7h), A
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (28A8h), 0000h
 	JR Z, LABEL_F3ED7E
 	SET 000h, A
@@ -188581,6 +188682,7 @@ LABEL_F3FE4C:
 	CP (287Ah), 000h
 	JR NZ, LABEL_F3FE9A
 	CALR LABEL_F400D9
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (287Fh), 0001h
 	JR Z, LABEL_F3FE9A
 
@@ -188766,6 +188868,7 @@ LABEL_F3FFE0:
 	LD XWA, 1
 	LD (25DAh), XWA
 	RES 1, (287Bh)
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (25DEh), 0000h
 	JR Z, LABEL_F40050
 
@@ -189514,6 +189617,7 @@ LABEL_F406E2:
 	LD IZ, (269Ch)
 	LD (26B8h), IZ
 	LD (XSP + 004h), 0000h
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (269Ah), 0000h
 	JR ULE, LABEL_F40775
 
@@ -189939,6 +190043,7 @@ LABEL_F40AFD:
 	db 000h	;TODO: Fix ASL assembler encoding of LDW instruction
 	LDW (288Bh), (28AFh)
 	LD (XSP + 004h), 0000h
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (26DCh), 0000h
 	JRL Z, LABEL_F40BBF
 
@@ -190070,6 +190175,7 @@ LABEL_F40C28:
 	LD (XSP + 002h), 0001h
 	LD (XSP + 004h), 0000h
 	LD (XSP), 0000h
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (0CE3h), 0000h
 	JR Z, LABEL_F40C86
 
@@ -192775,6 +192881,7 @@ LABEL_F4238B:
 	LD BC, (2316h)
 	AND BC, WA
 	LD (2316h), BC
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (28A8h), 0000h
 	JRL Z, LABEL_F4249C
 	BIT 1, (28B1h)
@@ -192840,6 +192947,7 @@ LABEL_F42427:
 	LD BC, (2316h)
 	AND BC, WA
 	LD (2316h), BC
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (28A8h), 0000h
 	JR Z, LABEL_F424B0
 	BIT 1, (28B1h)
@@ -194293,6 +194401,7 @@ LABEL_F432C4:
 LABEL_F432E4:
 	db 000h	;TODO: Fix ASL assembler encoding of LDW instruction
 	LDW (2668h), (2520h)
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (2668h), 0001h
 	JR Z, LABEL_F432F6
 	SET 3, (28A7h)
@@ -194329,6 +194438,7 @@ LABEL_F4332D:
 
 LABEL_F43331:
 	CALL LABEL_F464E4
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (2668h), 0001h
 	JR NZ, LABEL_F43343
 	RES 3, (28A7h)
@@ -194413,6 +194523,7 @@ LABEL_F433DB:
 
 LABEL_F433DF:
 	CALL LABEL_F464E4
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (2668h), 0001h
 	JR NZ, LABEL_F433F1
 	RES 3, (28A7h)
@@ -194487,6 +194598,7 @@ LABEL_F43452:
 	JR NZ, LABEL_F434EF
 
 LABEL_F43471:
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (28A8h), 0000h
 	JR NZ, LABEL_F4347D
 	RES 2, (28A7h)
@@ -194675,6 +194787,7 @@ LABEL_F435FA:
 	LD BC, 5
 	LD DE, 0
 	CALL AddswbWr
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (28A8h), 0000h
 	JR NZ, LABEL_F43658
 	CP (1D92h), 000h
@@ -194714,8 +194827,10 @@ LABEL_F43679:
 	db 000h 	;TODO: Fix ASL assembler encoding of CPW instruction
 	CPW (0F19Eh), 0000h
 	RET NZ
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (28A8h), 0000h
 	RET Z
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (28AAh), 0000h
 	RET NZ
 	BIT 1, (28B2h)
@@ -194723,6 +194838,7 @@ LABEL_F43679:
 	CALL LABEL_F3C1D1
 	CP L, 0
 	JRL NZ, LABEL_F4382A
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (28AAh), 0000h
 	RET Z
 	SET 1, (28B3h)
@@ -194827,6 +194943,7 @@ LABEL_F437CB:
 	CALR LABEL_F427AB
 	CP L, 0
 	RET NZ
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (041Ch), 0000h
 	JR NZ, LABEL_F437E1
 	CP (041Bh), 000h
@@ -198463,6 +198580,7 @@ LABEL_F46B39:
 	LD WA, (251Eh)
 	CALL LABEL_F3DFF7
 	LD (232Ah), HL
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (2668h), 0001h
 	JR NZ, LABEL_F46BA3
 	RES 3, (28A7h)
@@ -199050,6 +199168,7 @@ LABEL_F4710C:
 	LD A, (0421h)
 	AND A, 014h
 	JRL Z, LABEL_F47518
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (28A8h), 0000h
 	JRL Z, LABEL_F47518
 	SET 1, (266Ah)
@@ -199108,6 +199227,7 @@ LABEL_F471A9:
 LABEL_F471AD:
 	CALR LABEL_F46696
 	JRL T, LABEL_F47518
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (25E8h), 0000h
 	JR NZ, LABEL_F471C1
 	LD WA, 009ah
@@ -199859,6 +199979,7 @@ LABEL_F47B5C:
 	LD (XIX + 001h), WA
 	INC 1, BC
 	LD (XIX + 003h), BC
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (29F4h), 0000h
 	JR NZ, LABEL_F47B95
 	LD (XDE + 001h), 0000h
@@ -203014,6 +203135,7 @@ LABEL_F498F7:
 	LD (2592h), (25D0h)
 
 LABEL_F498FD:
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (2590h), 0000h
 	JR NZ, LABEL_F4990C
 	CP (2592h), 000h
@@ -204262,6 +204384,7 @@ LABEL_F4A5FA:
 	LD (XSP + 004h), 0000h
 	CP A, 0
 	JRL NZ, LABEL_F4A747
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (25DEh), 0000h
 	JRL Z, LABEL_F4A8E3
 
@@ -204348,6 +204471,7 @@ LABEL_F4A739:
 LABEL_F4A747:
 	CP A, 1
 	JRL NZ, LABEL_F4A807
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (25DEh), 0000h
 	JRL Z, LABEL_F4A8E3
 
@@ -204424,6 +204548,7 @@ LABEL_F4A7E9:
 	JRL T, LABEL_F4A956
 
 LABEL_F4A807:
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (25DEh), 0000h
 	JRL Z, LABEL_F4A8E3
 
@@ -204904,6 +205029,7 @@ LABEL_F4AF4E:
 	db 000h	;TODO: Fix ASL assembler encoding of LDW instruction
 	LDW (2889h), (2666h)
 	LD IZ, 0
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (25DEh), 0000h
 	JR Z, LABEL_F4AFF1
 
@@ -206381,6 +206507,7 @@ LABEL_F4BF43:
 	SUB XWA, XBC
 	LD (25DAh), XWA
 	LD IZ, 0
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (27F4h), 0000h
 	JR Z, LABEL_F4BF99
 
@@ -206650,6 +206777,7 @@ LABEL_F4C1D6:
 	CP (287Ah), 000h
 	JRL NZ, LABEL_F4C2A1
 	LD IZ, 0
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (25DEh), 0000h
 	JRL Z, LABEL_F4C2A1
 
@@ -207017,6 +207145,7 @@ LABEL_F4C5D3:
 	CP (287Ah), 000h
 	JRL NZ, LABEL_F4C829
 	LD IZ, 0
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (25DEh), 0000h
 	JR Z, LABEL_F4C698
 
@@ -207404,6 +207533,7 @@ LABEL_F4C98A:
 	CP (287Ah), 000h
 	JRL NZ, LABEL_F4CA7F
 	LD IZ, 0
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (25DEh), 0000h
 	JRL Z, LABEL_F4CA7F
 
@@ -207611,6 +207741,7 @@ LABEL_F4CB4A:
 	db 000h	;TODO: Fix ASL assembler encoding of LDW instruction
 	LDW (288Bh), (28AFh)
 	LD IZ, 0
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (25DEh), 0000h
 	JR Z, LABEL_F4CC09
 
@@ -207768,6 +207899,7 @@ LABEL_F4CD06:
 	CP (287Ah), 000h
 	JRL NZ, LABEL_F4CE37
 	LD (XSP + 004h), 0000h
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (25DEh), 0000h
 	JRL Z, LABEL_F4CDCD
 
@@ -208068,6 +208200,7 @@ LABEL_F4CFDA:
 	CP A, 00ah
 	JRL NZ, LABEL_F4D1B2
 	LD (287Ah), 000h
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (2632h), 0001h
 	JR NZ, LABEL_F4D047
 	CP IZ, 0
@@ -210514,10 +210647,12 @@ LABEL_F4E6AA:
 	RES 004h, A
 	LD (0421h), A
 	EI 000h
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (28A8h), 0000h
 	JR NZ, LABEL_F4E705
 	BIT 004h, QIZH
 	JR Z, LABEL_F4E6D5
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (28B4h), 0000h
 	JR NZ, LABEL_F4E6E1
 
@@ -210538,6 +210673,7 @@ LABEL_F4E6E7:
 	JR T, LABEL_F4E723
 
 LABEL_F4E6F3:
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (28B4h), 0000h
 	JR Z, LABEL_F4E701
 	CALL LABEL_F3A867
@@ -210550,6 +210686,7 @@ LABEL_F4E701:
 LABEL_F4E705:
 	BIT 004h, QIZH
 	JR Z, LABEL_F4E713
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (28AAh), 0000h
 	JR NZ, LABEL_F4E71F
 
@@ -210580,8 +210717,10 @@ LABEL_F4E735:
 	JR T, LABEL_F4E723
 
 LABEL_F4E741:
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (28AAh), 0000h
 	JR NZ, LABEL_F4E757
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (28B4h), 0000h
 	JR Z, LABEL_F4E701
 	BIT 0, (28C5h)
@@ -221837,6 +221976,7 @@ LABEL_F57018:
 	JR NZ, LABEL_F5703F
 	LD XHL, 00002a94h
 	CALR LABEL_F5708F
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (3324h), 0010h
 	JR ULE, LABEL_F5703F
 	OR (33E1h), 001h
@@ -222172,6 +222312,7 @@ LABEL_F5733C:
 	JR NZ, LABEL_F5737B
 	LD XHL, 00002b94h
 	CALR LABEL_F5708F
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (3324h), 0010h
 	JR ULE, LABEL_F5737B
 	OR (33E1h), 001h
@@ -222543,6 +222684,7 @@ LABEL_F576B8:
 	JR NZ, LABEL_F57703
 	LD XHL, 00002c94h
 	CALL LABEL_F5708F
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (3324h), 0010h
 	JR UGT, LABEL_F576FE
 	CALR LABEL_F57895
@@ -222891,6 +223033,7 @@ LABEL_F57A45:
 	JR NZ, LABEL_F57A9C
 	LD XHL, 00002d94h
 	CALL LABEL_F5708F
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (3324h), 0010h
 	JR UGT, LABEL_F57A97
 	CALR LABEL_F57895
@@ -223066,6 +223209,7 @@ LABEL_F57C02:
 	JR NZ, LABEL_F57C59
 	LD XHL, 00002e94h
 	CALL LABEL_F5708F
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (3324h), 0010h
 	JR UGT, LABEL_F57C54
 	CALR LABEL_F57895
@@ -223241,6 +223385,7 @@ LABEL_F57DBF:
 	JR NZ, LABEL_F57E16
 	LD XHL, 00002f94h
 	CALL LABEL_F5708F
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (3324h), 0010h
 	JR UGT, LABEL_F57E11
 	CALR LABEL_F57895
@@ -225086,8 +225231,10 @@ LABEL_F59259:
 	JR C, LABEL_F59259
 	BIT 007h, A
 	JR NZ, LABEL_F592CC
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (28B4h), 0000h
 	JR NZ, LABEL_F59283
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (28A8h), 0000h
 	JR NZ, LABEL_F59283
 	CALL LABEL_F59ACF
@@ -227237,6 +227384,7 @@ LABEL_F5A862:
 	OR (3498h), 080h
 
 LABEL_F5A867:
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (28A8h), 0000h
 	JR Z, LABEL_F5A89C
 	BIT 2, (041Eh)
@@ -227259,6 +227407,7 @@ LABEL_F5A89C:
 
 LABEL_F5A89D:
 	LD C, 000h
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (28A8h), 0000h
 	JR Z, LABEL_F5A8B9
 	BIT 3, (28B3h)
@@ -227424,6 +227573,7 @@ LABEL_F5A9B9:
 	db 000h 	;TODO: Fix ASL assembler encoding of CPW instruction
 	CPW (0F19Eh), 0000h
 	JR Z, LABEL_F5A9DE
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (28A8h), 0000h
 	JR NZ, LABEL_F5A9DE
 	CALR LABEL_F5AAFB
@@ -227474,8 +227624,10 @@ LABEL_F5AA35:
 	JR NZ, LABEL_F5AA8E
 	BIT 7, (346Dh)
 	JR Z, LABEL_F5AA82
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (349Ch), 0000h
 	JR NZ, LABEL_F5AA66
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (349Ah), 0000h
 	JR Z, LABEL_F5AA66
 	CALR LABEL_F5ACB6
@@ -227485,8 +227637,10 @@ LABEL_F5AA35:
 	JR T, LABEL_F5AA8E
 
 LABEL_F5AA66:
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (349Ch), 0000h
 	JR NZ, LABEL_F5AA80
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (349Ah), 0000h
 	JR NZ, LABEL_F5AA80
 	LD (3498h), 000h
@@ -227548,6 +227702,7 @@ LABEL_F5AACB:
 	db 034h, 041h, 0C1h, 098h, 034h, 03Eh, 001h, 00Eh
 
 LABEL_F5AAFB:
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (28A8h), 0000h
 	JR NZ, LABEL_F5AB2F
 	db 000h 	;TODO: Fix ASL assembler encoding of CPW instruction
@@ -227576,6 +227731,7 @@ LABEL_F5AB35:
 	AND (346Eh), 01fh
 	CP (379Bh), 000h
 	JR NZ, LABEL_F5AB53
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (28A8h), 0000h
 	JR NZ, LABEL_F5AB5D
 	db 000h 	;TODO: Fix ASL assembler encoding of CPW instruction
@@ -227643,6 +227799,7 @@ LABEL_F5ABDF:
 	db 000h 	;TODO: Fix ASL assembler encoding of CPW instruction
 	CPW (0F19Eh), 0000h
 	JR NZ, LABEL_F5ABEF
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (28A8h), 0000h
 	JR Z, LABEL_F5ABF2
 
@@ -227738,6 +227895,7 @@ LABEL_F5ACB4:
 LABEL_F5ACB6:
 	CP (379Bh), 000h
 	JR NZ, LABEL_F5AD08
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (28AAh), 0000h
 	JR NZ, LABEL_F5AD08
 	BIT 2, (041Eh)
@@ -227912,6 +228070,7 @@ LABEL_F5ADF7:
 	db 0F5h, 000h, 00Eh, 000h, 000h
 
 LABEL_F5AE1C:
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (28A8h), 0000h
 	JR Z, LABEL_F5AE36
 	db 000h 	;TODO: Fix ASL assembler encoding of CPW instruction
@@ -228252,6 +228411,7 @@ LABEL_F5B082:
 	db 000h, 000h
 
 LABEL_F5B084:
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (28AAh), 0000h
 	JR Z, LABEL_F5B0A2
 
@@ -234081,6 +234241,7 @@ LABEL_F5FECD:
 	LD (360Eh), 0000h
 	LD (35FFh), 000h
 	CALR LABEL_F60611
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (360Ah), 0000h
 	JR Z, LABEL_F5FF10
 	LD WA, (3602h)
@@ -234093,6 +234254,7 @@ LABEL_F5FECD:
 	LD (360Ah), 0000h
 
 LABEL_F5FF10:
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (360Eh), 0000h
 	JR Z, LABEL_F5FF1B
 	CALR LABEL_F60D35
@@ -234612,6 +234774,7 @@ LABEL_F60340:
 	CALR LABEL_F5FE18
 	CP A, 083h
 	JR Z, LABEL_F60372
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (360Ah), 0000h
 	JR Z, LABEL_F6036F
 	CALR LABEL_F60388
@@ -234645,6 +234808,7 @@ LABEL_F60388:
 	RET
 
 LABEL_F603A7:
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (360Ah), 0000h
 	JR Z, LABEL_F603FB
 	LD WA, (35DEh)
@@ -235001,6 +235165,7 @@ LABEL_F60699:
 	db 000h, 000h
 
 LABEL_F6069B:
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (360Ah), 0000h
 	JR Z, LABEL_F606C2
 	LD WA, (3602h)
@@ -235013,6 +235178,7 @@ LABEL_F6069B:
 	LD (360Ah), 0000h
 
 LABEL_F606C2:
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (360Eh), 0000h
 	JR Z, LABEL_F606CD
 	CALR LABEL_F60D35
@@ -235148,6 +235314,7 @@ LABEL_F607B3:
 
 LABEL_F607C6:
 	LD DE, IY
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (34D4h), 0000h
 	JR Z, LABEL_F60839
 	LD (3431h), 000h
@@ -235338,6 +235505,7 @@ LABEL_F609A5:
 	LD WA, (3614h)
 	CP WA, 00feh
 	JR NZ, LABEL_F609BC
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (34D4h), 0000h
 	JR Z, LABEL_F609C2
 	CALR LABEL_F609C3
@@ -235416,6 +235584,7 @@ LABEL_F60A51:
 	db 000h, 000h
 
 LABEL_F60A53:
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (34D4h), 0000h
 	JR Z, LABEL_F60A94
 	LD A, (36EAh)
@@ -237599,6 +237768,7 @@ LABEL_F61D97:
 LABEL_F61D99:
 	BIT 7, (34D0h)
 	JR Z, LABEL_F61E06
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (34D4h), 0000h
 	JR NZ, LABEL_F61DC3
 	LD (7F42h), 00fh
@@ -239048,6 +239218,7 @@ LABEL_F62BC1:
 	db 000h, 000h
 
 LABEL_F62BC3:
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (34D4h), 0000h
 	JR Z, LABEL_F62C28
 	LD XIY, 0000366ah
@@ -241743,6 +241914,7 @@ LABEL_F64B9D:
 	CALL LABEL_F59AB9
 	CALR LABEL_F64BD2
 	CALL LABEL_F43704
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (28A8h), 0000h
 	JR NZ, LABEL_F64BBA
 	db 000h 	;TODO: Fix ASL assembler encoding of CPW instruction
@@ -249692,6 +249864,7 @@ LABEL_F6C291:
 	JR C, LABEL_F6C291
 
 LABEL_F6C2B9:
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (3A82h), 0000h
 	JR NZ, LABEL_F6C2C7
 	LD WA, 0010h
@@ -250636,6 +250809,7 @@ LABEL_F6CC18:
 	LD A, (0FFC00h)
 	CP A, 0
 	JR NZ, LABEL_F6CC3B
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (48ACh), 0001h
 	JR NZ, LABEL_F6CC35
 	CALR LABEL_F6BD18
@@ -251261,6 +251435,7 @@ LABEL_F6D260:
 	LD XWA, (3D5Ch)
 	LD (3D60h), XWA
 	LD (XSP + 004h), 0000h
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (48D8h), 0000h
 	JRL ULE LABEL_F6D32D
 
@@ -251336,6 +251511,7 @@ LABEL_F6D32D:
 	LD (0FFC01h), 000h
 	LD (XSP + 004h), 0000h
 	LD IZ, 0
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (48D8h), 0000h
 	JRL ULE LABEL_F6D778
 
@@ -251416,6 +251592,7 @@ LABEL_F6D3F7:
 	EXTZ XBC
 	ADD XBC, XWA
 	LD (XBC), 000h
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (48D8h), 0002h
 	JRL NC, LABEL_F6D320
 	JRL T, LABEL_F6D1E8
@@ -251427,6 +251604,7 @@ LABEL_F6D414:
 	EXTZ XBC
 	ADD XBC, XWA
 	LD (XBC), 000h
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (48D8h), 0002h
 	JRL NC, LABEL_F6D320
 	JRL T, LABEL_F6D1E8
@@ -252395,6 +252573,7 @@ LABEL_F6E09C:
 LABEL_F6E0A0:
 	CALR LABEL_F6E15D
 	CALR LABEL_F6E188
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (7E50h), 0010h
 	JR UGT, LABEL_F6E0B3
 	CALR LABEL_F6E1B8
@@ -252416,6 +252595,7 @@ LABEL_F6E0C4:
 	LD (7E5Bh), A
 	CALR LABEL_F6DEE0
 	CALR LABEL_F6E188
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (7E50h), 0010h
 	JR UGT, LABEL_F6E0E5
 	CALR LABEL_F6E1B8
@@ -252444,6 +252624,7 @@ LABEL_F6E0F6:
 	LD (7E57h), A
 	CALR LABEL_F6DEE0
 	CALR LABEL_F6E188
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (7E50h), 0010h
 	JR UGT, LABEL_F6E12B
 	CALR LABEL_F6E1B8
@@ -252461,6 +252642,7 @@ LABEL_F6E138:
 LABEL_F6E13A:
 	CALR LABEL_F6E15D
 	CALR LABEL_F6E188
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (7E50h), 0010h
 	JR UGT, LABEL_F6E14D
 	CALR LABEL_F6E1B8
@@ -253274,6 +253456,7 @@ LABEL_F6E9FA:
 	POP HL
 	LD WA, HL
 	LD HL, BC
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (28AAh), 0000h
 	JR NZ, LABEL_F6EA1D
 	CP (8D36h), 08ah
@@ -256097,6 +256280,7 @@ LABEL_F72029:
 	JP LABEL_F71FB1
 
 LABEL_F72030:
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (7E18h), 0000h
 	JR NZ, LABEL_F7203D
 	CALR LABEL_F72B16
@@ -256374,6 +256558,7 @@ LABEL_F72293:
 	RET
 
 LABEL_F72294:
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (7E18h), 0000h
 	JR Z, LABEL_F722A7
 	CALR LABEL_F72398
@@ -257198,6 +257383,7 @@ LABEL_F72A68:
 	RET
 
 LABEL_F72A69:
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (7E18h), 0000h
 	JR Z, LABEL_F72A9A
 	XOR IX, IX
@@ -281943,6 +282129,7 @@ LABEL_F86AE9:
 	db 078h, 0E3h, 000h
 
 LABEL_F86B7C:
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (28B4h), 0000h
 	JR Z, LABEL_F86BC7
 	BIT 3, (28ADh)
@@ -288451,6 +288638,7 @@ LABEL_F8B268:
 	JRL NZ, LABEL_F8B335
 	LD WA, 0
 	CALR LABEL_F8B204
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (8500h), 0000h
 	JR GE, LABEL_F8B2A2
 	CALL LABEL_F89520
@@ -288468,6 +288656,7 @@ LABEL_F8B2A2:
 	JRL T, LABEL_F8B335
 
 LABEL_F8B2B4:
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (8502h), 0000h
 	JR GE, LABEL_F8B2C7
 	CALL LABEL_F8987D
@@ -288475,6 +288664,7 @@ LABEL_F8B2B4:
 	CALR LABEL_F8B260
 
 LABEL_F8B2C7:
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (8502h), 0000h
 	JR Z, LABEL_F8B335
 	LD A, (042Ch)
@@ -288549,6 +288739,7 @@ LABEL_F8B36E:
 	DEC 4, XSP
 	LD (XSP), C
 	LD (XSP + 002h), A
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (8500h), 0000h
 	JR GE, LABEL_F8B387
 	CALL LABEL_F89520
@@ -288605,6 +288796,7 @@ LABEL_F8B3D5:
 	RET
 
 LABEL_F8B3D8:
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (8500h), 0000h
 	JR GE, LABEL_F8B3EA
 	CALL LABEL_F89520
@@ -288657,6 +288849,7 @@ LABEL_F8B425:
 LABEL_F8B435:
 	DEC 2, XSP
 	LD (XSP), A
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (8500h), 0000h
 	JR GE, LABEL_F8B44B
 	CALL LABEL_F89520
@@ -289100,6 +289293,7 @@ FmmUtilityTitleFunc:
 	LD XDE, 0
 	CALL ApDeliveryEvent
 	LD (7F5Ch), (8D37h)
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (8500h), 0000h
 	JR GE, LABEL_F8B8D5
 	CALL LABEL_F89520
@@ -289115,6 +289309,7 @@ LABEL_F8B8D5:
 	JRL Z, LABEL_F8B988
 	CP WA, 5
 	JR Z, LABEL_F8B944
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (8502h), 0000h
 	JR GE, LABEL_F8B902
 	CALL LABEL_F8987D
@@ -289124,8 +289319,10 @@ LABEL_F8B8D5:
 	CALR LABEL_F8B260
 
 LABEL_F8B902:
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (8502h), 0000h
 	JRL NZ, LABEL_F8B9EC
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (8504h), 0000h
 	JR GE, LABEL_F8B91E
 	CALL LABEL_F89C78
@@ -289133,6 +289330,7 @@ LABEL_F8B902:
 	CALR LABEL_F8B260
 
 LABEL_F8B91E:
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (8504h), 0000h
 	JRL LE, LABEL_F8B9EC
 	CP (7F5Ch), 07ch
@@ -289232,6 +289430,7 @@ FmmSmfUtilityTitleFunc:
 	LD XDE, 0
 	CALL ApDeliveryEvent
 	LD (7F5Eh), (8D37h)
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (8500h), 0000h
 	JR GE, LABEL_F8BA64
 	CALL LABEL_F89520
@@ -289247,6 +289446,7 @@ LABEL_F8BA64:
 	JRL Z, LABEL_F8BB17
 	CP WA, 5
 	JR Z, LABEL_F8BAD3
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (8504h), 0000h
 	JR GE, LABEL_F8BA91
 	CALL LABEL_F89C78
@@ -289256,8 +289456,10 @@ LABEL_F8BA64:
 	CALR LABEL_F8B260
 
 LABEL_F8BA91:
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (8504h), 0000h
 	JRL NZ, LABEL_F8BB7B
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (8502h), 0000h
 	JR GE, LABEL_F8BAAD
 	CALL LABEL_F8987D
@@ -289265,6 +289467,7 @@ LABEL_F8BA91:
 	CALR LABEL_F8B260
 
 LABEL_F8BAAD:
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (8502h), 0000h
 	JRL LE, LABEL_F8BB7B
 	CP (7F5Eh), 07bh
@@ -289784,6 +289987,7 @@ FmmFormatFunc:
 	LD WA, 1
 	CALR LABEL_F8B204
 	LD (7F6Ah), (8D37h)
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (8500h), 0000h
 	JR GE, LABEL_F8C06A
 	CALL LABEL_F89520
@@ -289971,6 +290175,7 @@ FmmLoadTitleFunc:
 	LD XDE, 5
 	CALL ApPostEvent
 	LD (7F6Eh), (8D37h)
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (8500h), 0000h
 	JR GE, LABEL_F8C28B
 	CALL LABEL_F89520
@@ -289986,6 +290191,7 @@ LABEL_F8C28B:
 	JRL Z, LABEL_F8C33F
 	CP WA, 5
 	JR Z, LABEL_F8C2FB
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (8502h), 0000h
 	JR GE, LABEL_F8C2B8
 	CALL LABEL_F8987D
@@ -289995,8 +290201,10 @@ LABEL_F8C28B:
 	CALR LABEL_F8B260
 
 LABEL_F8C2B8:
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (8502h), 0000h
 	JRL NZ, LABEL_F8C3A1
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (8504h), 0000h
 	JR GE, LABEL_F8C2D4
 	CALL LABEL_F89C78
@@ -290004,6 +290212,7 @@ LABEL_F8C2B8:
 	CALR LABEL_F8B260
 
 LABEL_F8C2D4:
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (8504h), 0000h
 	JRL LE, LABEL_F8C3A1
 	CP (7F6Eh), 064h
@@ -290096,6 +290305,7 @@ LABEL_F8C3E6:
 	JR T, LABEL_F8C450
 
 LABEL_F8C3FE:
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (7F70h), 0000h
 	JR LT, LABEL_F8C450
 	CALL LABEL_F895EF
@@ -290153,6 +290363,7 @@ FmmSaveTitleFunc:
 	LD XBC, 01c00001h
 	LD XDE, 5
 	CALL ApPostEvent
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (8502h), 0000h
 	JR GE, LABEL_F8C4AE
 	CALL LABEL_F8987D
@@ -290315,6 +290526,7 @@ DiskInfoFunc:
 	JRL NZ, LABEL_F8C735
 	LD WA, 0
 	CALR LABEL_F8B204
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (8500h), 0000h
 	JR GE, LABEL_F8C636
 	CALL LABEL_F89520
@@ -291454,6 +291666,7 @@ FmmComposerLoadFunc:
 	LD XBC, 01c00001h
 	LD XDE, 5
 	CALL ApPostEvent
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (8500h), 0000h
 	JR GE, LABEL_F8D1E4
 	CALL LABEL_F89520
@@ -291469,6 +291682,7 @@ LABEL_F8D1E4:
 	JR Z, LABEL_F8D26F
 	CP WA, 5
 	JR Z, LABEL_F8D22F
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (8502h), 0000h
 	JR GE, LABEL_F8D210
 	CALL LABEL_F8987D
@@ -292405,6 +292619,7 @@ FmmSmfLoadTitleFunc:
 	LD XDE, 5
 	CALL ApPostEvent
 	LD (808Ah), (8D37h)
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (8500h), 0000h
 	JR GE, LABEL_F8DBA6
 	CALL LABEL_F89520
@@ -292420,6 +292635,7 @@ LABEL_F8DBA6:
 	JRL Z, LABEL_F8DC5A
 	CP WA, 5
 	JR Z, LABEL_F8DC16
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (8504h), 0000h
 	JR GE, LABEL_F8DBD3
 	CALL LABEL_F89C78
@@ -292429,8 +292645,10 @@ LABEL_F8DBA6:
 	CALR LABEL_F8B260
 
 LABEL_F8DBD3:
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (8504h), 0000h
 	JRL NZ, LABEL_F8DCBB
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (8502h), 0000h
 	JR GE, LABEL_F8DBEF
 	CALL LABEL_F8987D
@@ -292438,6 +292656,7 @@ LABEL_F8DBD3:
 	CALR LABEL_F8B260
 
 LABEL_F8DBEF:
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (8502h), 0000h
 	JRL LE, LABEL_F8DCBB
 	CP (808Ah), 061h
@@ -292548,6 +292767,7 @@ FmmSmfSaveTitleFunc:
 	LD XBC, 01c00001h
 	LD XDE, 5
 	CALL ApPostEvent
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (8504h), 0000h
 	JR GE, LABEL_F8DD4D
 	CALL LABEL_F89C78
@@ -293500,6 +293720,7 @@ LABEL_F8E735:
 LABEL_F8E73A:
 	CP XIZ, 00000028h
 	JR NZ, LABEL_F8E75D
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (81AEh), 0000h
 	JR Z, LABEL_F8E75D
 	LD XWA, (81A4h)
@@ -293714,6 +293935,7 @@ FmmWallpaperLoadFunc:
 	LD XBC, 01c00001h
 	LD XDE, 5
 	CALL ApPostEvent
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (8500h), 0000h
 	JR GE, LABEL_F8E9AC
 	CALL LABEL_F89520
@@ -293729,6 +293951,7 @@ LABEL_F8E9AC:
 	JR Z, LABEL_F8EA38
 	CP WA, 5
 	JR Z, LABEL_F8E9F7
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (850Ah), 0000h
 	JR GE, LABEL_F8E9D8
 	CALL LABEL_F8B16F
@@ -296334,6 +296557,7 @@ FmmCmpSingleLoadFunc:
 	LD XBC, 01c00001h
 	LD XDE, 5
 	CALL ApPostEvent
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (8500h), 0000h
 	JR GE, LABEL_F91903
 	CALL LABEL_F89520
@@ -296349,6 +296573,7 @@ LABEL_F91903:
 	JRL Z, LABEL_F9199C
 	CP WA, 5
 	JR Z, LABEL_F9197B
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (8502h), 0000h
 	JR GE, LABEL_F91930
 	CALL LABEL_F8987D
@@ -297484,6 +297709,7 @@ FmmDiskMedleySelectFunc:
 	LD XBC, 01c0000ah
 	LD XDE, 0
 	CALL ApPostEvent
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (8502h), 0000h
 	JR GE, LABEL_F92489
 	LD XWA, 00600026h
@@ -298241,6 +298467,7 @@ LABEL_F92C21:
 	JR NZ, LABEL_F92C6C
 
 LABEL_F92C35:
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (8504h), 0000h
 	JR LE, LABEL_F92C6C
 	CALL LABEL_F89AC7
@@ -298280,6 +298507,7 @@ LABEL_F92C70:
 	JR NZ, LABEL_F92CAA
 
 LABEL_F92C7D:
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (8508h), 0000h
 	JR LE, LABEL_F92CAA
 	CALL LABEL_F8A7CE
@@ -298314,6 +298542,7 @@ LABEL_F92CAC:
 	JR NZ, LABEL_F92CE6
 
 LABEL_F92CB9:
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (8506h), 0000h
 	JR LE, LABEL_F92CE6
 	CALL LABEL_F8A4C8
@@ -298626,6 +298855,7 @@ LABEL_F92FA8:
 	LD XWA, 006c0018h
 	LD XBC, 01e0003bh
 	CALL ApPostEvent
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (8504h), 0000h
 	JR GE, LABEL_F93007
 	LD XWA, 00600026h
@@ -299396,6 +299626,7 @@ LABEL_F93738:
 	JRL T, LABEL_F939CA
 
 LABEL_F9373F:
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (8506h), 0000h
 	JR GE, LABEL_F93783
 	LD XWA, 00600026h
@@ -300200,8 +300431,10 @@ LABEL_F93EE3:
 	JRL T, LABEL_F9418F
 
 LABEL_F93EEA:
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (8508h), 0000h
 	JR LT, LABEL_F93EFA
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (8504h), 0000h
 	JR NZ, LABEL_F93F3C
 
@@ -304536,6 +304769,7 @@ LABEL_F96E22:
 	JRL T, LABEL_F975AD
 
 LABEL_F96E3C:
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (8A40h), 0002h
 	JR NZ, LABEL_F96E4C
 	CALR LABEL_F96FE8
@@ -304543,6 +304777,7 @@ LABEL_F96E3C:
 	RET
 
 LABEL_F96E4C:
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (8A4Ah), 0000h
 	JR NZ, LABEL_F96E5A
 	LD WA, 00feh
@@ -304698,8 +304933,10 @@ LABEL_F97009:
 	RET
 
 LABEL_F9700A:
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (8A44h), 0000h
 	RET Z
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (8A44h), 0001h
 	RET Z
 	LD WA, 00feh
@@ -350445,6 +350682,7 @@ LABEL_FB6CA9:
 	LD (8D4Eh), A
 	CP A, 0
 	RET NZ
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (8D56h), 0000h
 	JR Z, LABEL_FB6CCE
 	PUSH XDE
@@ -372025,6 +372263,7 @@ LABEL_FC6A53:
 	JR T, LABEL_FC6A94
 
 LABEL_FC6A7C:
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (8EC8h), 0000h
 	JR NZ, LABEL_FC6A94
 	LDA XWA, 8EBAh
@@ -373911,6 +374150,7 @@ LABEL_FC8396:
 	EXTZ XWA
 	ADD XWA, XHL
 	LD (XWA), 0ffh
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (90DEh), 01fch
 	JR C, LABEL_FC840C
 	PUSH XDE
@@ -374010,6 +374250,7 @@ LABEL_FC84EA:
 	LDA XBC, 0EDAA64h
 	LD XHL, (XBC + WA)
 	CALL T, XHL
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (90DEh), 01fch
 	JR C, LABEL_FC851C
 	PUSH XDE
@@ -375008,6 +375249,7 @@ LABEL_FC9644:
 LABEL_FC9663:
 	CP (912Ah), 000h
 	RET Z
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (90DEh), 01fch
 	JR C, LABEL_FC9684
 	PUSH XDE
@@ -375032,6 +375274,7 @@ LABEL_FC9688:
 	db 000h, 000h, 078h, 0EAh, 006h
 
 LABEL_FC96A5:
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (90DEh), 01fch
 	JR C, LABEL_FC96BF
 	PUSH XDE
@@ -376490,6 +376733,7 @@ LABEL_FCA6DA:
 LABEL_FCA6DB:
 	PUSH WA
 	CALR LABEL_FCA770
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (91C5h), 0000h
 	JR Z, LABEL_FCA75A
 	XOR L, L
@@ -376602,6 +376846,7 @@ LABEL_FCA7C0:
 	JR T, LABEL_FCA80B
 
 LABEL_FCA7E5:
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (28A8h), 0000h
 	JR Z, LABEL_FCA80B
 	LD WA, (28A8h)
@@ -376622,6 +376867,7 @@ LABEL_FCA80B:
 
 LABEL_FCA810:
 	PUSH XIZ
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (91C5h), 0000h
 	JRL Z, LABEL_FCA8B6
 	EI 006h
@@ -376773,6 +377019,7 @@ LABEL_FCAA9C:
 	LD (91BDh), BC
 	LD (91BFh), DE
 	CALR LABEL_FCA770
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (91C5h), 0000h
 	JR Z, LABEL_FCAB08
 	EI 006h
@@ -376872,6 +377119,7 @@ LABEL_FCAB9A:
 LABEL_FCAB9B:
 	PUSH XIZ
 	CALR LABEL_FCA770
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (91C5h), 0000h
 	JRL Z, LABEL_FCAC38
 	EI 006h
@@ -380418,6 +380666,7 @@ LABEL_FCEC8F:
 	JR Z, LABEL_FCECEC
 	CP HL, 1
 	JR NZ, LABEL_FCED30
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (90DEh), 01fch
 	CALL NC assswb_op
 	LDA XBC, 0BD3Ch
@@ -380435,6 +380684,7 @@ LABEL_FCEC8F:
 	JR T, LABEL_FCED1B
 
 LABEL_FCECEC:
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (90DEh), 01fch
 	CALL NC assswb_out
 	LDA XBC, 0BD3Ch
@@ -380489,6 +380739,7 @@ LABEL_FCED32:
 	JR Z, LABEL_FCEDAB
 	CP WA, 1
 	JRL NZ, LABEL_FCEE47
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (90DEh), 01f8h
 	CALL NC assswb_op
 	LDA XBC, 0BD3Ch
@@ -380514,6 +380765,7 @@ LABEL_FCED32:
 	JR T, LABEL_FCEDF2
 
 LABEL_FCEDAB:
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (90DEh), 01f8h
 	CALL NC assswb_out
 	LDA XBC, 0BD3Ch
@@ -381257,6 +381509,7 @@ LABEL_FCF41D:
 	JR NZ, LABEL_FCF452
 	RES 0, (0431h)
 	LD (041Eh), 001h
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (28AAh), 0000h
 	JR Z, LABEL_FCF452
 	LD A, 085h
@@ -381269,6 +381522,7 @@ LABEL_FCF452:
 	JR NZ, LABEL_FCF474
 	RES 3, (0431h)
 	LD (041Eh), 008h
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (28AAh), 0000h
 	JR Z, LABEL_FCF474
 	LD A, 086h
@@ -381279,6 +381533,7 @@ LABEL_FCF474:
 	JR NZ, LABEL_FCF4DE
 	LD (041Bh), 000h
 	INCW 1, (041Ch)
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (28AAh), 0000h
 	JR Z, LABEL_FCF48F
 	CALR LABEL_FCF68F
@@ -381297,6 +381552,7 @@ LABEL_FCF48F:
 
 LABEL_FCF4AF:
 	LD (041Eh), 010h
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (28AAh), 0000h
 	JR Z, LABEL_FCF4C1
 	LD A, 086h
@@ -381362,6 +381618,7 @@ LABEL_FCF51B:
 	LD (0435h), A
 	LD (041Eh), 001h
 	RES 0, (28A6h)
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (28AAh), 0000h
 	JR Z, LABEL_FCF556
 	LD A, 085h
@@ -381450,6 +381707,7 @@ LABEL_FCF5F9:
 
 LABEL_FCF629:
 	LD (041Eh), 00ch
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (28AAh), 0000h
 	JR Z, LABEL_FCF63B
 	LD A, 086h
@@ -394274,6 +394532,7 @@ LABEL_FDB3D0:
 	RET
 
 LABEL_FDB3D1:
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (90DEh), 01fbh
 	JR UGT, LABEL_FDB3F0
 	LD XHL, 0000bd3ch
@@ -394287,6 +394546,7 @@ LABEL_FDB3F0:
 	RET
 
 LABEL_FDB3F1:
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (90E2h), 00fbh
 	JR UGT, LABEL_FDB411
 	LD XHL, 0000bf39h
@@ -395147,6 +395407,7 @@ LABEL_FDBB3C:
 	JR Z, LABEL_FDBB65
 	BIT 5, (0C1F0h)
 	JR Z, LABEL_FDBB65
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (28A8h), 0000h
 	JR NZ, LABEL_FDBBC3
 	JR T, LABEL_FDBBC7
@@ -395161,6 +395422,7 @@ LABEL_FDBB65:
 LABEL_FDBB75:
 	BIT 5, (0C1F0h)
 	JR Z, LABEL_FDBBCF
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (28A8h), 0000h
 	JR Z, LABEL_FDBB87
 	SET 1, (266Ah)
@@ -395189,6 +395451,7 @@ LABEL_FDBB9F:
 	JR T, LABEL_FDBBCF
 
 LABEL_FDBBBB:
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	CP (28A8h), 0000h
 	JR Z, LABEL_FDBBC7
 
