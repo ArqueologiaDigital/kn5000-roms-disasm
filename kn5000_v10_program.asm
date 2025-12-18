@@ -97114,6 +97114,7 @@ Seems_to_copy_some_data_buffers:
 	SRL 1, XBC
 	JR Z, LABEL_EF0B73
 	LD XHL, XDE
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	LD (XDE+), 0000h
 	DEC 1, XBC
 	OR XBC, XBC
@@ -97139,6 +97140,7 @@ LABEL_EF0B7B:
 	SRL 1, XBC
 	JR Z, LABEL_EF0BA8
 	LD XHL, XDE
+	db 000h	;TODO: Fix ASL assembler encoding of:
 	LD (XDE+), 0000h
 	DEC 1, XBC
 	OR XBC, XBC
