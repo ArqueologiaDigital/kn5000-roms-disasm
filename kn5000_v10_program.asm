@@ -139255,7 +139255,6 @@ LABEL_F1FB0E:
 	POP XDE
 	LD IY, 1
 	CALL LABEL_F1FF9E
-	db 000h	;TODO: Fix ASL assembler encoding of LDW instruction
 	LDW (0F22Fh), 0001h
 	LD XIY, (10FDh)
 	XOR XHL, XHL
