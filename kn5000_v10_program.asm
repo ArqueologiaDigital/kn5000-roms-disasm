@@ -140152,7 +140152,7 @@ LABEL_F2065A:
 	XOR BC, BC
 	LD L, A
 	EXTZ HL
-	MUL HL, 0800h
+	db 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: MUL HL, 0800h
 	ADD XHL, 000ab0d0h
 	LD XIY, XHL
 	LD B, 010h
@@ -154280,7 +154280,7 @@ LABEL_F28F35:
 	XOR XBC, XBC
 	LD C, A
 	LD XHL, XBC
-	MUL HL, 0800h
+	db 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: MUL HL, 0800h
 	ADD XHL, 000ab000h
 	PUSH XHL
 	LD DE, 00afh
