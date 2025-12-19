@@ -138223,7 +138223,7 @@ LABEL_F1F092:
 
 LABEL_F1F09C:
 	CALL LABEL_F2295B
-	LD WA, (0FFECh)
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: LD WA, (0FFECh)
 	LD (2875h), WA
 	LD A, (0CDFh)
 	INC 1, A
@@ -138231,7 +138231,7 @@ LABEL_F1F09C:
 	CALL LABEL_F017BA
 	CALL LABEL_F1F53A
 	LD WA, (2875h)
-	LD (0FFECh), WA
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: LD (0FFECh), WA
 	XOR WA, WA
 	LD A, (0CDFh)
 	LD IY, WA
