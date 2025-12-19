@@ -117129,7 +117129,7 @@ LABEL_F061B0:
 	db 0B0h, 014h, 098h, 006h, 00Eh
 
 LABEL_F061B5:
-	LD C, (8D3Ah)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (8D3Ah)
 	LD (XWA), C
 	RET
 
@@ -183135,7 +183135,7 @@ LABEL_F3C95B:
 
 LABEL_F3C969:
 	LD WA, (2668h)
-	LD C, (8D38h)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (8D38h)
 	CP C, 085h
 	JR Z, LABEL_F3C97B
 	CP C, 086h
@@ -186489,7 +186489,7 @@ LABEL_F3E7DF:
 	RET
 
 LABEL_F3E7EB:
-	LD C, (8D36h)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (8D36h)
 	CP C, 085h
 	JR Z, LABEL_F3E7F9
 	CP C, 086h
@@ -197496,7 +197496,7 @@ ApPlaySyori:
 	JRL NZ, LABEL_F4637B
 	LD XWA, (XSP + 002h)
 	LD (2972h), XWA
-	LD C, (8D36h)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (8D36h)
 	CP C, 099h
 	JRL Z, LABEL_F45D7F
 	CP C, 096h
@@ -198187,7 +198187,7 @@ LABEL_F464D4:
 	JP ApDeliveryEvent
 
 LABEL_F464E4:
-	LD C, (8D38h)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (8D38h)
 	LD XWA, (2972h)
 	CP C, 099h
 	JR Z, LABEL_F46557
@@ -290390,7 +290390,7 @@ LABEL_F8C0BE:
 	EXTZ WA
 	CP XDE, 0000000fh
 	JRL Z, LABEL_F8C1FC
-	LD C, (84FEh)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (84FEh)
 	CP XDE, 0000000bh
 	JRL Z, LABEL_F8C1C0
 	CP XDE, 0000000ah
@@ -293641,7 +293641,7 @@ LABEL_F8E23C:
 	CALR LABEL_F8B204
 	LD A, (8948h)
 	EXTZ WA
-	LD C, (8946h)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (8946h)
 	EXTZ BC
 	CALL LoadFileSMF
 	LD (XSP + 006h), HL
@@ -293672,7 +293672,7 @@ LABEL_F8E2AC:
 	CALR LABEL_F8DF96
 	LDA XWA, 0AB000h
 	LD XBC, 0
-	LD C, (8948h)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (8948h)
 	SLL 11, XBC
 	ADD XWA, XBC
 	LDA XWA, XWA + 0100h
@@ -293751,7 +293751,7 @@ LABEL_F8E3A6:
 	CALR LABEL_F8B204
 	LD A, (8948h)
 	EXTZ WA
-	LD C, (894Ah)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (894Ah)
 	EXTZ BC
 	LD E, (894Ch)
 	EXTZ DE
@@ -293793,7 +293793,7 @@ LABEL_F8E41B:
 	CALR LABEL_F8B204
 	LD A, (8948h)
 	EXTZ WA
-	LD C, (894Ah)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (894Ah)
 	EXTZ BC
 	LD E, (894Ch)
 	EXTZ DE
@@ -293937,7 +293937,7 @@ LABEL_F8E5F2:
 LABEL_F8E5FA:
 	CP XIZ, 00000015h
 	JR NZ, LABEL_F8E635
-	LD C, (8946h)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (8946h)
 	LD A, C
 	INC 1, A
 	CP A, 3
@@ -293998,7 +293998,7 @@ LABEL_F8E693:
 	JRL T, LABEL_F8E75D
 
 LABEL_F8E69B:
-	LD C, (8948h)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (8948h)
 	LD A, C
 	INC 1, A
 	CP XIZ, 0000001eh
@@ -294822,7 +294822,7 @@ LABEL_F8EFE2:
 	JR T, LABEL_F8F016
 
 LABEL_F8F003:
-	LD C, (89F8h)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (89F8h)
 	EXTZ BC
 	SLA 002h, BC
 	LD XDE, (XDE + BC)
@@ -294846,7 +294846,7 @@ SingleLoadSrcBankFunc:
 LABEL_F8F033:
 	LD XWA, (81C2h)
 	LDA XDE, 0EA05F2h
-	LD C, (89F8h)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (89F8h)
 	CP C, 0
 	JR NZ, LABEL_F8F055
 	CP (8A0Ah), 000h
@@ -294879,7 +294879,7 @@ SingleLoadSrcMemFunc:
 LABEL_F8F081:
 	LD XWA, (81C6h)
 	LDA XDE, 0EA0624h
-	LD C, (89F8h)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (89F8h)
 	CP C, 1
 	JR Z, LABEL_F8F099
 	CP (89FAh), 000h
@@ -295382,7 +295382,7 @@ LABEL_F8FEEF:
 	LD XDE, 0ffffffffh
 	CALL ApPostEvent
 	LD XWA, (81E0h)
-	LD C, (89F8h)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (89F8h)
 	EXTZ BC
 	SLA 002h, BC
 	LDA XDE, 0EA0996h
@@ -295412,7 +295412,7 @@ LABEL_F8FF43:
 LABEL_F8FF51:
 	CALL ApPostEvent
 	LD XWA, (81E0h)
-	LD C, (89F8h)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (89F8h)
 	EXTZ BC
 	SLA 002h, BC
 	LDA XDE, 0EA0996h
@@ -295443,7 +295443,7 @@ LABEL_F8FF9B:
 LABEL_F8FFA9:
 	CALL ApPostEvent
 	LD XWA, (81E0h)
-	LD C, (89F8h)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (89F8h)
 	EXTZ BC
 	SLA 002h, BC
 	LDA XDE, 0EA0996h
@@ -295462,7 +295462,7 @@ LABEL_F8FFD0:
 	LD XDE, 0ffffffffh
 	CALL ApPostEvent
 	LD XWA, (81E0h)
-	LD C, (89F8h)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (89F8h)
 	EXTZ BC
 	SLA 002h, BC
 	LDA XDE, 0EA0996h
@@ -295480,7 +295480,7 @@ LABEL_F9000C:
 	LD XDE, 0ffffffffh
 	CALL ApPostEvent
 	LD XWA, (81E0h)
-	LD C, (89F8h)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (89F8h)
 	EXTZ BC
 	SLA 002h, BC
 	LDA XDE, 0EA0996h
@@ -295494,7 +295494,7 @@ LABEL_F9000C:
 LABEL_F90044:
 	CP XIZ, 00000028h
 	JR NZ, LABEL_F90068
-	LD C, (89F8h)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (89F8h)
 	EXTZ BC
 	SLA 002h, BC
 	LDA XDE, 0EA0996h
@@ -296037,7 +296037,7 @@ LABEL_F90E6D:
 	LD XDE, 0
 	CALL ApPostEvent
 	LD XWA, (81F0h)
-	LD C, (89F8h)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (89F8h)
 	EXTZ BC
 	SLA 002h, BC
 	LDA XDE, 0EA0A16h
@@ -296054,7 +296054,7 @@ LABEL_F90EEA:
 	LD XDE, 0ffffffffh
 	CALL ApPostEvent
 	LD XWA, (81F0h)
-	LD C, (89F8h)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (89F8h)
 	EXTZ BC
 	SLA 002h, BC
 	LDA XDE, 0EA0A16h
@@ -296092,7 +296092,7 @@ LABEL_F90F21:
 	LD XDE, 0
 	CALL ApPostEvent
 	LD XWA, (81F0h)
-	LD C, (89F8h)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (89F8h)
 	EXTZ BC
 	SLA 002h, BC
 	LDA XDE, 0EA0A16h
@@ -296156,7 +296156,7 @@ LABEL_F90FDF:
 	LD XDE, 0
 	CALL ApPostEvent
 	LD XWA, (81F0h)
-	LD C, (89F8h)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (89F8h)
 	EXTZ BC
 	SLA 002h, BC
 	LDA XDE, 0EA0A16h
@@ -296186,7 +296186,7 @@ LABEL_F91072:
 	LD WA, 0
 	CALR LABEL_F8B204
 	LD XWA, (81F0h)
-	LD C, (89F8h)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (89F8h)
 	EXTZ BC
 	SLA 002h, BC
 	LDA XDE, 0EA0A16h
@@ -296218,7 +296218,7 @@ LABEL_F910DF:
 	LD XDE, 1
 	CALL ApPostEvent
 	LD XWA, (81F0h)
-	LD C, (89F8h)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (89F8h)
 	EXTZ BC
 	SLA 002h, BC
 	LDA XDE, 0EA0A16h
@@ -296235,7 +296235,7 @@ LABEL_F91124:
 	LD XDE, 0ffffffffh
 	CALL ApPostEvent
 	LD XWA, (81F0h)
-	LD C, (89F8h)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (89F8h)
 	EXTZ BC
 	SLA 002h, BC
 	LDA XDE, 0EA0A16h
@@ -296257,7 +296257,7 @@ LABEL_F9115A:
 	LD XDE, 2
 	CALL ApPostEvent
 	LD XWA, (81F0h)
-	LD C, (89F8h)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (89F8h)
 	EXTZ BC
 	SLA 002h, BC
 	LDA XDE, 0EA0A16h
@@ -296275,7 +296275,7 @@ LABEL_F911A0:
 	LD XDE, 3
 	CALL ApPostEvent
 	LD XWA, (81F0h)
-	LD C, (89F8h)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (89F8h)
 	EXTZ BC
 	SLA 002h, BC
 	LDA XDE, 0EA0A16h
@@ -296291,7 +296291,7 @@ LABEL_F911D6:
 	LD XDE, 0ffffffffh
 	CALL ApPostEvent
 	LD XWA, (81F0h)
-	LD C, (89F8h)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (89F8h)
 	EXTZ BC
 	SLA 002h, BC
 	LDA XDE, 0EA0A16h
@@ -296310,7 +296310,7 @@ LABEL_F91208:
 	LD XDE, 0ffffffffh
 	CALL ApPostEvent
 	LD XWA, (81F0h)
-	LD C, (89F8h)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (89F8h)
 	EXTZ BC
 	SLA 002h, BC
 	LDA XDE, 0EA0A16h
@@ -296329,7 +296329,7 @@ LABEL_F91245:
 	LD XDE, 0ffffffffh
 	CALL ApPostEvent
 	LD XWA, (81F0h)
-	LD C, (89F8h)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (89F8h)
 	EXTZ BC
 	SLA 002h, BC
 	LDA XDE, 0EA0A16h
@@ -296376,7 +296376,7 @@ LABEL_F912D6:
 	LD XDE, 0ffffffffh
 	CALL ApPostEvent
 	LD XWA, (81F4h)
-	LD C, (89F8h)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (89F8h)
 	EXTZ BC
 	SLA 002h, BC
 	LDA XDE, 0EA0A2Ah
@@ -296396,7 +296396,7 @@ LABEL_F9130B:
 	LD XDE, 1
 	CALL ApPostEvent
 	LD XWA, (81F4h)
-	LD C, (89F8h)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (89F8h)
 	EXTZ BC
 	SLA 002h, BC
 	LDA XDE, 0EA0A2Ah
@@ -296418,7 +296418,7 @@ LABEL_F91348:
 	LD XDE, 3
 	CALL ApPostEvent
 	LD XWA, (81F4h)
-	LD C, (89F8h)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (89F8h)
 	EXTZ BC
 	SLA 002h, BC
 	LDA XDE, 0EA0A2Ah
@@ -296435,7 +296435,7 @@ LABEL_F9138C:
 	LD XDE, 0ffffffffh
 	CALL ApPostEvent
 	LD XWA, (81F4h)
-	LD C, (89F8h)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (89F8h)
 	EXTZ BC
 	SLA 002h, BC
 	LDA XDE, 0EA0A2Ah
@@ -296455,7 +296455,7 @@ LABEL_F913C1:
 	LD XDE, 0ffffffffh
 	CALL ApPostEvent
 	LD XWA, (81F4h)
-	LD C, (89F8h)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (89F8h)
 	EXTZ BC
 	SLA 002h, BC
 	LDA XDE, 0EA0A2Ah
@@ -296476,7 +296476,7 @@ LABEL_F91400:
 	LD XDE, 0ffffffffh
 	CALL ApPostEvent
 	LD XWA, (81F4h)
-	LD C, (89F8h)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (89F8h)
 	EXTZ BC
 	SLA 002h, BC
 	LDA XDE, 0EA0A2Ah
@@ -296491,7 +296491,7 @@ LABEL_F91442:
 	LD XBC, (XSP + 004h)
 	CP XBC, 00000028h
 	JR NZ, LABEL_F91469
-	LD C, (89F8h)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (89F8h)
 	EXTZ BC
 	SLA 002h, BC
 	LDA XDE, 0EA0A2Ah
@@ -296563,7 +296563,7 @@ LABEL_F914C8:
 	LD XDE, 0
 	CALL ApPostEvent
 	LD XWA, (81F8h)
-	LD C, (89F8h)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (89F8h)
 	EXTZ BC
 	SLA 002h, BC
 	LDA XDE, 0EA0A3Eh
@@ -296599,7 +296599,7 @@ LABEL_F9153A:
 	LD XDE, 0
 	CALL ApPostEvent
 	LD XWA, (81F8h)
-	LD C, (89F8h)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (89F8h)
 	EXTZ BC
 	SLA 002h, BC
 	LDA XDE, 0EA0A3Eh
@@ -296627,7 +296627,7 @@ LABEL_F915BF:
 	LD WA, 0
 	CALR LABEL_F8B204
 	LD XWA, (81F8h)
-	LD C, (89F8h)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (89F8h)
 	EXTZ BC
 	SLA 002h, BC
 	LDA XDE, 0EA0A3Eh
@@ -296657,7 +296657,7 @@ LABEL_F9162C:
 	LD XDE, 1
 	CALL ApPostEvent
 	LD XWA, (81F8h)
-	LD C, (89F8h)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (89F8h)
 	EXTZ BC
 	SLA 002h, BC
 	LDA XDE, 0EA0A3Eh
@@ -296679,7 +296679,7 @@ LABEL_F9166A:
 	LD XDE, 3
 	CALL ApPostEvent
 	LD XWA, (81F8h)
-	LD C, (89F8h)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (89F8h)
 	EXTZ BC
 	SLA 002h, BC
 	LDA XDE, 0EA0A3Eh
@@ -296695,7 +296695,7 @@ LABEL_F916AF:
 	LD XDE, 0ffffffffh
 	CALL ApPostEvent
 	LD XWA, (81F8h)
-	LD C, (89F8h)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (89F8h)
 	EXTZ BC
 	SLA 002h, BC
 	LDA XDE, 0EA0A3Eh
@@ -296714,7 +296714,7 @@ LABEL_F916E0:
 	LD XDE, 0ffffffffh
 	CALL ApPostEvent
 	LD XWA, (81F8h)
-	LD C, (89F8h)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (89F8h)
 	EXTZ BC
 	SLA 002h, BC
 	LDA XDE, 0EA0A3Eh
@@ -296735,7 +296735,7 @@ LABEL_F9171C:
 	LD XDE, 0ffffffffh
 	CALL ApPostEvent
 	LD XWA, (81F8h)
-	LD C, (89F8h)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (89F8h)
 	EXTZ BC
 	SLA 002h, BC
 	LDA XDE, 0EA0A3Eh
@@ -297634,7 +297634,7 @@ LABEL_F9200F:
 	LD C, (XDE)
 	CP C, 0feh
 	JR NZ, LABEL_F9207D
-	LD C, (889Ah)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (889Ah)
 	LD (XDE), C
 	INC 1, (889Ah)
 	LD C, (XDE)
@@ -299868,7 +299868,7 @@ LABEL_F93646:
 	CP L, 1
 	JRL NZ, LABEL_F93722
 	LD (84FEh), 001h
-	LD C, (8922h)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (8922h)
 	LDA XWA, 88A0h
 	CP C, (8920h)
 	JR NC, LABEL_F936B8
@@ -300673,7 +300673,7 @@ LABEL_F93DF1:
 	CP L, 1
 	JRL NZ, LABEL_F93ECD
 	LD (84FEh), 001h
-	LD C, (8922h)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (8922h)
 	LDA XWA, 88A0h
 	CP C, (8920h)
 	JR NC, LABEL_F93E63
@@ -346981,7 +346981,7 @@ LABEL_FB45C5:
 	LD C, (XDE + 001h)
 	CP XBC, XHL
 	JR NZ, LABEL_FB461C
-	LD C, (8D52h)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (8D52h)
 	BIT 002h, C
 	JR NZ, LABEL_FB4619
 	BIT 001h, C
@@ -348995,7 +348995,7 @@ LABEL_FB57C8:
 	PUSH XIX
 	PUSH XIZ
 	LD (8D4Ch), 000h
-	LD C, (8D4Ch)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (8D4Ch)
 	LD (8D4Ch), 00fh
 	LD B, (8D4Ch)
 	LD A, (0F9C5h)
@@ -349006,7 +349006,7 @@ LABEL_FB57C8:
 	LD D, (8D4Ch)
 	CALL LABEL_FD055E
 	LD (8D4Ch), 000h
-	LD C, (8D4Ch)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (8D4Ch)
 	LD (8D4Ch), 000h
 	LD B, (8D4Ch)
 	LD A, (0F9C4h)
@@ -349028,7 +349028,7 @@ LABEL_FB582D:
 	PUSH XIX
 	PUSH XIZ
 	LD (8D4Ch), 001h
-	LD C, (8D4Ch)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (8D4Ch)
 	LD (8D4Ch), 00fh
 	LD B, (8D4Ch)
 	LD A, (0F9DFh)
@@ -349039,7 +349039,7 @@ LABEL_FB582D:
 	LD D, (8D4Ch)
 	CALL LABEL_FD055E
 	LD (8D4Ch), 001h
-	LD C, (8D4Ch)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (8D4Ch)
 	LD (8D4Ch), 000h
 	LD B, (8D4Ch)
 	LD A, (0F9DEh)
@@ -349061,7 +349061,7 @@ LABEL_FB5892:
 	PUSH XIX
 	PUSH XIZ
 	LD (8D4Ch), 002h
-	LD C, (8D4Ch)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (8D4Ch)
 	LD (8D4Ch), 00fh
 	LD B, (8D4Ch)
 	LD A, (0F9F9h)
@@ -349072,7 +349072,7 @@ LABEL_FB5892:
 	LD D, (8D4Ch)
 	CALL LABEL_FD055E
 	LD (8D4Ch), 002h
-	LD C, (8D4Ch)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (8D4Ch)
 	LD (8D4Ch), 000h
 	LD B, (8D4Ch)
 	LD A, (0F9F8h)
@@ -349094,7 +349094,7 @@ LABEL_FB58F7:
 	PUSH XIX
 	PUSH XIZ
 	LD (8D4Ch), 000h
-	LD C, (8D4Ch)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (8D4Ch)
 	LD (8D4Ch), 003h
 	LD B, (8D4Ch)
 	LD A, (0F9C7h)
@@ -349116,7 +349116,7 @@ LABEL_FB592E:
 	PUSH XIX
 	PUSH XIZ
 	LD (8D4Ch), 001h
-	LD C, (8D4Ch)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (8D4Ch)
 	LD (8D4Ch), 003h
 	LD B, (8D4Ch)
 	LD A, (0F9E1h)
@@ -349138,7 +349138,7 @@ LABEL_FB5965:
 	PUSH XIX
 	PUSH XIZ
 	LD (8D4Ch), 002h
-	LD C, (8D4Ch)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (8D4Ch)
 	LD (8D4Ch), 003h
 	LD B, (8D4Ch)
 	LD A, (0F9FBh)
@@ -351127,7 +351127,7 @@ LABEL_FB6DAB:
 	LD WA, 1
 
 LABEL_FB6DB3:
-	LD C, (8D38h)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (8D38h)
 	CP C, 0c2h
 	JR Z, LABEL_FB6DC1
 	CP C, 0c5h
@@ -351151,7 +351151,7 @@ LABEL_FB6DCD:
 
 LABEL_FB6DDC:
 	PUSH IZ
-	LD C, (8D38h)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (8D38h)
 	CP C, 0c0h
 	JR Z, LABEL_FB6DF0
 	CP C, 0c2h
@@ -351623,7 +351623,7 @@ LABEL_FB71D6:
 	RET
 
 LABEL_FB71E2:
-	LD C, (8D36h)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (8D36h)
 	CP C, 078h
 	JR Z, LABEL_FB7214
 	CP C, 07ah
@@ -351683,7 +351683,7 @@ LABEL_FB725D:
 	RET
 
 LABEL_FB726A:
-	LD C, (8D54h)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (8D54h)
 	INC 1, C
 	EXTZ BC
 	LD XWA, 00000300h
@@ -352633,7 +352633,7 @@ LABEL_FB7A86:
 	RET
 
 LABEL_FB7B01:
-	LD C, (8D78h)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (8D78h)
 	CP C, 0
 	JR NZ, LABEL_FB7B46
 	EXTZ WA
@@ -361285,7 +361285,7 @@ LABEL_FBE15F:
 	JR T, LABEL_FBE1DC
 
 LABEL_FBE1BB:
-	LD C, (8D40h)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (8D40h)
 	OR C, (8D42h)
 	OR C, (8D44h)
 	JR NZ, LABEL_FBE1D0
@@ -366892,7 +366892,7 @@ LABEL_FC1FDF:
 	LD A, (8D86h)
 	EXTZ WA
 	PUSH WA
-	LD C, (8D84h)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (8D84h)
 	LD A, C
 	EXTZ WA
 	DIV A, 00ch
@@ -371285,17 +371285,17 @@ LABEL_FC5185:
 	RET
 
 LABEL_FC520F:
-	LD C, (8E6Ch)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (8E6Ch)
 	EXTZ BC
 	LD XWA, 0
 	LD DE, 0
 	CALL LABEL_FCD201
-	LD C, (8E6Eh)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (8E6Eh)
 	EXTZ BC
 	LD XWA, 00000102h
 	LD DE, 0
 	CALL LABEL_FCD201
-	LD C, (8E70h)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (8E70h)
 	EXTZ BC
 	LD XWA, 00000103h
 	LD DE, 0
@@ -371796,7 +371796,7 @@ LABEL_FC57AA:
 
 LABEL_FC57CB:
 	PUSH XIZ
-	LD C, (8E90h)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (8E90h)
 	EXTZ BC
 	SLA 002h, BC
 	LD XWA, 00ed9c1eh
@@ -372708,7 +372708,7 @@ LABEL_FC6B6D:
 LABEL_FC6B87:
 	PUSH XIZ
 	LD XIZ, XWA
-	LD C, (8EC4h)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (8EC4h)
 	LD A, C
 	EXTZ WA
 	db 000h, 000h, 000h, 000h	;TODO: Fix ASL assembler encoding of: MULSW WA, 0003h
@@ -372721,7 +372721,7 @@ LABEL_FC6B87:
 	JR NZ, LABEL_FC6BD3
 	CP (XIZ + 002h), 001h
 	JR NZ, LABEL_FC6BD3
-	LD C, (8D80h)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (8D80h)
 	RES 000h, C
 	LD (8D80h), C
 	LD A, (XIZ + 002h)
@@ -372954,7 +372954,7 @@ LABEL_FC6EE0:
 	LD QIZH, L
 	LD A, QIZH
 	EXTZ WA
-	LD C, (8EFCh)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (8EFCh)
 	EXTZ BC
 	LD XDE, 00008f04h
 	CALR LABEL_FC6F86
@@ -372988,7 +372988,7 @@ LABEL_FC6F33:
 	LD QIZH, L
 	LD A, QIZH
 	EXTZ WA
-	LD C, (8EFEh)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (8EFEh)
 	EXTZ BC
 	LD XDE, 00008f06h
 	CALR LABEL_FC6F86
@@ -373675,7 +373675,7 @@ LABEL_FC7A10:
 	LDA XIZ, 8F18h
 	CALR LABEL_FC7A88
 	LDA XDE, XIZ + 00eh
-	LD C, (8E76h)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (8E76h)
 	BIT 2, (041Eh)
 	JR NZ, LABEL_FC7A35
 	LD A, C
@@ -375281,7 +375281,7 @@ LABEL_FC92E7:
 	JR NZ, LABEL_FC9331
 	LD A, (917Eh)
 	EXTZ WA
-	LD C, (917Fh)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (917Fh)
 	EXTZ BC
 	LD E, (9180h)
 	EXTZ DE
@@ -375357,7 +375357,7 @@ LABEL_FC9392:
 	JR NZ, LABEL_FC93E0
 	LD A, (917Eh)
 	EXTZ WA
-	LD C, (917Fh)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (917Fh)
 	EXTZ BC
 	LD E, (9180h)
 	EXTZ DE
@@ -375421,7 +375421,7 @@ LABEL_FC9412:
 	JR NZ, LABEL_FC9470
 	LD A, (917Eh)
 	EXTZ WA
-	LD C, (917Fh)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (917Fh)
 	EXTZ BC
 	LD E, (9180h)
 	EXTZ DE
@@ -375480,7 +375480,7 @@ LABEL_FC948C:
 	JR NZ, LABEL_FC94FB
 	LD A, (917Eh)
 	EXTZ WA
-	LD C, (917Fh)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (917Fh)
 	EXTZ BC
 	LD E, (9180h)
 	EXTZ DE
@@ -375619,7 +375619,7 @@ LABEL_FC96BF:
 	JRL T, LABEL_FC9D8F
 	DEC 2, XSP
 	LD (XSP), A
-	LD C, (9131h)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (9131h)
 	LD A, C
 	AND A, (XSP)
 	JR Z, LABEL_FC9718
@@ -375637,7 +375637,7 @@ LABEL_FC96BF:
 	LD A, (9130h)
 	AND A, (9131h)
 	XOR, (XHL), A
-	LD C, (9132h)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (9132h)
 	CP (XHL), C
 	JR Z, LABEL_FC9718
 	LD A, (XHL)
@@ -376646,7 +376646,7 @@ LABEL_FCA262:
 	RET
 
 LABEL_FCA266:
-	LD C, (917Eh)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (917Eh)
 	LD B, (917Fh)
 	LD E, (9180h)
 	LD D, (9181h)
@@ -377381,7 +377381,7 @@ LABEL_FCAB08:
 
 LABEL_FCAB09:
 	LD (91D2h), 0ffh
-	LD C, (91C7h)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (91C7h)
 	LD RL3, A
 	LD QHL3, DE
 	LD DE, (91C5h)
@@ -377513,7 +377513,7 @@ LABEL_FCAC3A:
 	LD (91C8h), 000h
 
 LABEL_FCAC40:
-	LD C, (91C8h)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (91C8h)
 	LD RL3, A
 	LD QHL3, DE
 	LD DE, (0F19Eh)
@@ -378552,7 +378552,7 @@ LABEL_FCB990:
 	PUSH WA
 	PUSH BC
 	LD WA, (0F1D0h)
-	LD C, (91C8h)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (91C8h)
 	INC 1, C
 
 LABEL_FCB99C:
@@ -393080,7 +393080,7 @@ LABEL_FD9FC1:
 	LD (XDE), C
 	LD C, (XWA + 007h)
 	LD (XDE + 001h), C
-	LD C, (8EE4h)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (8EE4h)
 	LD (XDE + 002h), C
 	LD C, (XWA + 008h)
 	LD (XDE + 003h), C
@@ -400038,7 +400038,7 @@ LABEL_FDEB87:
 	JR NZ, LABEL_FDEC11
 
 LABEL_FDEB95:
-	LD C, (8D3Ah)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (8D3Ah)
 	EXTZ BC
 	LDA XDE, 0EE8E62h
 	LD C, (XDE + BC)
@@ -400091,7 +400091,7 @@ LABEL_FDEC11:
 LABEL_FDEC16:
 	CP (8D36h), 051h
 	JR NZ, LABEL_FDEC99
-	LD C, (8D3Ah)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (8D3Ah)
 	EXTZ BC
 	LDA XDE, 0EE8E82h
 	LD C, (XDE + BC)
@@ -400142,7 +400142,7 @@ LABEL_FDEC99:
 	JRL T, LABEL_FDE9AE
 
 LABEL_FDEC9E:
-	LD C, (8D36h)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (8D36h)
 	CP C, 076h
 	JR Z, LABEL_FDECB6
 	CP C, 073h
@@ -400153,7 +400153,7 @@ LABEL_FDEC9E:
 	JR NZ, LABEL_FDECEA
 
 LABEL_FDECB6:
-	LD C, (8D3Ah)
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (8D3Ah)
 	EXTZ BC
 	LDA XDE, 0EE8E82h
 	LD C, (XDE + BC)
