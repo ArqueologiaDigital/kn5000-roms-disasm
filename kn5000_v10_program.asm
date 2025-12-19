@@ -139275,13 +139275,13 @@ LABEL_F1FB39:
 	AND (XIY), 07fh
 	LD (XIY + 001h), HL
 	LD (XIY + 005h), 082h
-	LD (XIY + 003h), 0ffffh
+	LDW (XIY + 003h), 0ffffh
 	LD XHL, 0000f250h
 	LD BC, 0010h
 
 LABEL_F1FB6A:
 	LD (XHL), 000h
-	LD (XHL + 001h), 0ffffh
+	LDW (XHL + 001h), 0ffffh
 	ADD XHL, 00000003h
 	DJNZ BC, LABEL_F1FB6A
 	LD XHL, 00000c9eh
@@ -143501,13 +143501,13 @@ LABEL_F22C4E:
 	AND (XIY), 07fh
 	LD (XIY + 001h), HL
 	LD (XIY + 005h), 082h
-	LD (XIY + 003h), 0ffffh
+	LDW (XIY + 003h), 0ffffh
 	LD XHL, 0000f250h
 	LD BC, 0010h
 
 LABEL_F22C7F:
 	LD (XHL), 000h
-	LD (XHL + 001h), 0ffffh
+	LDW (XHL + 001h), 0ffffh
 	ADD XHL, 00000003h
 	DJNZ BC, LABEL_F22C7F
 	LD XHL, 00000c9eh
@@ -143783,7 +143783,7 @@ LABEL_F22EF0:
 	SLA 001h, IZ
 	CALL LABEL_F22DFE
 	LD XHL, (10FDh)
-	LD (XHL + 003h), 0ffffh
+	LDW (XHL + 003h), 0ffffh
 	LD (289Fh), IY
 	LD WA, IY
 	PUSH DE
@@ -143862,7 +143862,7 @@ LABEL_F22F85:
 	CALL LABEL_F22DFE
 	LD XHL, (10FDh)
 	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL assembler encoding of: LD (XHL + 001h), 0000h
-	LD (XHL + 003h), 0ffffh
+	LDW (XHL + 003h), 0ffffh
 	JRL T, LABEL_F22E2F
 
 LABEL_F22FF0:
@@ -144880,7 +144880,7 @@ LABEL_F238CD:
 	LD XHL, (10FDh)
 	OR (XHL), 080h
 	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL assembler encoding of: LD (XHL + 001h), 0000h
-	LD (XHL + 003h), 0ffffh
+	LDW (XHL + 003h), 0ffffh
 	POP WA
 	LD XHL, 0000f250h
 	OR (XHL + IY), 080h
@@ -145600,7 +145600,7 @@ LABEL_F23E8D:
 	LD XHL, (10FDh)
 	OR (XHL), 080h
 	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL assembler encoding of: LD (XHL + 001h), 0000h
-	LD (XHL + 003h), 0ffffh
+	LDW (XHL + 003h), 0ffffh
 	POP WA
 	LD HL, IY
 	SLA 001h, IY
@@ -146780,7 +146780,7 @@ LABEL_F248F0:
 	LD (2881h), XHL
 	LD IX, 5
 	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL assembler encoding of: LD (XHL + 001h), 0000h
-	LD (XHL + 003h), 0ffffh
+	LDW (XHL + 003h), 0ffffh
 	CALL LABEL_F25B8D
 	CALL LABEL_F25BD6
 
@@ -149743,7 +149743,7 @@ LABEL_F26928:
 	LD WA, (0CECh)
 	LD XHL, (10FDh)
 	LD (XHL + 001h), WA
-	LD (XHL + 003h), 0ffffh
+	LDW (XHL + 003h), 0ffffh
 	LD (0CECh), IX
 	LD IX, 5
 
@@ -149764,7 +149764,7 @@ LABEL_F2694C:
 	LD XHL, (10FDh)
 	LD BC, (28AFh)
 	LD (XHL + 001h), BC
-	LD (XHL + 003h), 0ffffh
+	LDW (XHL + 003h), 0ffffh
 	LD (28AFh), WA
 	db 000h	;TODO: Fix ASL assembler encoding of:
 	LD (2666h), 0005h
@@ -200266,7 +200266,7 @@ LABEL_F47B5C:
 LABEL_F47B95:
 	CPW (XSP + 004h), 0ffffh
 	JR NZ, LABEL_F47BA1
-	LD (XIX + 003h), 0ffffh
+	LDW (XIX + 003h), 0ffffh
 
 LABEL_F47BA1:
 	LD WA, (29F6h)
@@ -215989,7 +215989,7 @@ LABEL_F52F3F:
 
 LABEL_F52F49:
 	LD XWA, (023582h)
-	LD (XWA + 002h), 0ffffh
+	LDW (XWA + 002h), 0ffffh
 	LD XBC, (023582h)
 	LD WA, 2
 	CALL LABEL_EF2070
@@ -233036,9 +233036,9 @@ LABEL_F5EEEC:
 
 LABEL_F5EEF9:
 	LD HL, WA
-	LD (XIX + 003h), 0ffffh
+	LDW (XIX + 003h), 0ffffh
 	CALR LABEL_F5EDCC
-	LD (XIX + 001h), 0ffffh
+	LDW (XIX + 001h), 0ffffh
 	AND (XIX), 07fh
 	INCW 1, (34D4h)
 	LD WA, (XIX + 003h)
@@ -234347,9 +234347,9 @@ LABEL_F5FCBE:
 
 LABEL_F5FCCB:
 	LD HL, WA
-	LD (XIX + 003h), 0ffffh
+	LDW (XIX + 003h), 0ffffh
 	CALR LABEL_F5FCEE
-	LD (XIX + 001h), 0ffffh
+	LDW (XIX + 001h), 0ffffh
 	AND (XIX), 07fh
 	INCW 1, (34D4h)
 	LD WA, (XIX + 003h)
@@ -235221,11 +235221,11 @@ LABEL_F603FE:
 	LD HL, (365Ah)
 	CALR LABEL_F5EDCC
 	LD WA, (XIX + 003h)
-	LD (XIX + 003h), 0ffffh
+	LDW (XIX + 003h), 0ffffh
 	LD HL, WA
 	CALR LABEL_F5EDCC
 	AND (XIX), 07fh
-	LD (XIX + 001h), 0ffffh
+	LDW (XIX + 001h), 0ffffh
 
 LABEL_F60453:
 	LD WA, (365Ah)
@@ -236109,7 +236109,7 @@ LABEL_F60BE0:
 	OR (XIX), 080h
 	LD BC, (3606h)
 	LD (XIX + 001h), BC
-	LD (XIX + 003h), 0ffffh
+	LDW (XIX + 003h), 0ffffh
 	DECW 1, (34D4h)
 	RET
 
@@ -256757,8 +256757,8 @@ LABEL_F720E4:
 LABEL_F720ED:
 	CALR LABEL_F72A04
 	LD HL, (XIX + 003h)
-	LD (XIX + 001h), 0ffffh
-	LD (XIX + 003h), 0ffffh
+	LDW (XIX + 001h), 0ffffh
+	LDW (XIX + 003h), 0ffffh
 	AND (XIX), 07fh
 	INCW 1, (7E18h)
 	CP HL, 0ffffh
@@ -325104,8 +325104,8 @@ LABEL_FA4C66:
 	LD XBC, 00000016h
 	CALL LABEL_FF0A5C
 	ADD XHL, XIZ
-	LD (XHL + 012h), 0ffffh
-	LD (XHL + 014h), 0ffffh
+	LDW (XHL + 012h), 0ffffh
+	LDW (XHL + 014h), 0ffffh
 	LD XWA, 0ffffffffh
 	LD (XHL + 00eh), XWA
 	LD XDE, (03EF82h)
@@ -325189,7 +325189,7 @@ UnregisteredMode:
 	LD (XBC), XWA
 	LD XWA, 0ffffffffh
 	LD (XBC + 004h), XWA
-	LD (XBC + 008h), 0ffffh
+	LDW (XBC + 008h), 0ffffh
 	LDA XWA, 0EAA914h
 	LD (XBC + 00ah), XWA
 	RET
@@ -325212,8 +325212,8 @@ RegisterTitle:
 	LD (XBC + 00ah), XWA
 	LD XWA, 0ffffffffh
 	LD (XBC + 00eh), XWA
-	LD (XBC + 012h), 0ffffh
-	LD (XBC + 014h), 0ffffh
+	LDW (XBC + 012h), 0ffffh
+	LDW (XBC + 014h), 0ffffh
 	POP XIZ
 	INC 4, XSP
 	RETD 0006h
@@ -325227,13 +325227,13 @@ UnregisteredTitle:
 	LD (XBC), XWA
 	LD XWA, 0ffffffffh
 	LD (XBC + 004h), XWA
-	LD (XBC + 008h), 0ffffh
+	LDW (XBC + 008h), 0ffffh
 	LDA XWA, 0EAA916h
 	LD (XBC + 00ah), XWA
 	LD XWA, 0ffffffffh
 	LD (XBC + 00eh), XWA
-	LD (XBC + 012h), 0ffffh
-	LD (XBC + 014h), 0ffffh
+	LDW (XBC + 012h), 0ffffh
+	LDW (XBC + 014h), 0ffffh
 	RET
 
 TitleProc:
@@ -325432,8 +325432,8 @@ LABEL_FA5083:
 	LD (03EF8Ah), XWA
 
 LABEL_FA508D:
-	LD (XHL + 012h), 0ffffh
-	LD (XHL + 014h), 0ffffh
+	LDW (XHL + 012h), 0ffffh
+	LDW (XHL + 014h), 0ffffh
 	LD XWA, 0ffffffffh
 	LD (XHL + 00eh), XWA
 	LD XDE, (03EF8Ah)
@@ -325617,14 +325617,14 @@ LABEL_FA523F:
 	LD XBC, 00000016h
 	CALL LABEL_FF0A5C
 	ADD XHL, (XSP + 004h)
-	LD (XHL + 012h), 0ffffh
+	LDW (XHL + 012h), 0ffffh
 	LD WA, (XSP + 00ch)
 	EXTZ XWA
 	LD XBC, 00000016h
 	CALL LABEL_FF0A5C
 	LD XWA, XHL
 	ADD XWA, (XSP + 004h)
-	LD (XWA + 014h), 0ffffh
+	LDW (XWA + 014h), 0ffffh
 	ADD XHL, (XSP + 004h)
 	LD XWA, 0ffffffffh
 	LD (XHL + 00eh), XWA
@@ -325649,7 +325649,7 @@ LABEL_FA523F:
 	LD XBC, 00000016h
 	CALL LABEL_FF0A5C
 	ADD XHL, (XSP + 004h)
-	LD (XHL + 014h), 0ffffh
+	LDW (XHL + 014h), 0ffffh
 	LD WA, (02BC32h)
 	EXTS XWA
 	LD XBC, 01c00028h
@@ -327120,7 +327120,7 @@ Unlink:
 	CALR SetChange
 	LD XWA, (XSP + 00ch)
 	CALR GetViewInstance
-	LD (XHL + 00ah), 0ffffh
+	LDW (XHL + 00ah), 0ffffh
 	LD XWA, (XSP + 00ch)
 	LD BC, 1
 	CALR SetChange
@@ -327141,7 +327141,7 @@ LABEL_FA6111:
 	CALR SetChange
 	LD XWA, (XSP + 00ch)
 	CALR GetViewInstance
-	LD (XHL + 008h), 0ffffh
+	LDW (XHL + 008h), 0ffffh
 	LD XWA, (XSP + 00ch)
 	LD BC, 1
 	CALR SetChange
@@ -327169,7 +327169,7 @@ LABEL_FA614C:
 LABEL_FA617F:
 	LD XWA, (XSP + 00ch)
 	CALR GetViewInstance
-	LD (XHL + 004h), 0ffffh
+	LDW (XHL + 004h), 0ffffh
 	LD XWA, (XSP + 00ch)
 	LD BC, 1
 	CALR SetChange
@@ -333840,7 +333840,7 @@ LABEL_FA9F71:
 	db 000h, 000h, 000h, 000h	;TODO: Fix ASL assembler encoding of: MULSW WA, 0018h
 	EXTS XWA
 	ADD XWA, XHL
-	LD (XWA + 002h), 0ffffh
+	LDW (XWA + 002h), 0ffffh
 	LD WA, (030448h)
 	db 000h, 000h, 000h, 000h	;TODO: Fix ASL assembler encoding of: MULSW WA, 0018h
 	LDA XHL, XHL + WA
@@ -333872,7 +333872,7 @@ LABEL_FA9FCD:
 	db 000h, 000h, 000h, 000h	;TODO: Fix ASL assembler encoding of: MULSW WA, 0018h
 	EXTS XWA
 	ADD XWA, XHL
-	LD (XWA + 002h), 0ffffh
+	LDW (XWA + 002h), 0ffffh
 	LD WA, (030448h)
 	db 000h, 000h, 000h, 000h	;TODO: Fix ASL assembler encoding of: MULSW WA, 0018h
 	LDA XHL, XHL + WA
@@ -333932,7 +333932,7 @@ LABEL_FAA03A:
 	db 000h, 000h, 000h, 000h	;TODO: Fix ASL assembler encoding of: MULSW WA, 0018h
 	EXTS XWA
 	ADD XWA, XHL
-	LD (XWA + 002h), 0ffffh
+	LDW (XWA + 002h), 0ffffh
 	LD WA, (030448h)
 	db 000h, 000h, 000h, 000h	;TODO: Fix ASL assembler encoding of: MULSW WA, 0018h
 	LDA XIX, XHL + WA
@@ -334666,8 +334666,8 @@ LABEL_FAA73E:
 	LDA XWA, 030456h
 	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL assembler encoding of: LD (XWA + 002h), 00f0h
 	LDW (XWA), 0140h
-	LD (XWA + 004h), 0ffffh
-	LD (XWA + 006h), 0ffffh
+	LDW (XWA + 004h), 0ffffh
+	LDW (XWA + 006h), 0ffffh
 
 LABEL_FAA75D:
 	POP IZ
