@@ -132492,7 +132492,7 @@ PsSeqSongNoBoxProc:
 LABEL_F1AEDC:
 	LD XWA, XIZ
 	CALL InheritedProc
-	LD A, (0FFE3h)
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: LD A, (0FFE3h)
 	INC 1, A
 	EXTZ WA
 	PUSH WA
