@@ -143824,7 +143824,6 @@ LABEL_F22F6D:
 	CALL LABEL_FEBDA1
 	AND (0E3E2h), 06fh
 	LD (7F42h), 00fh
-	db 000h	;TODO: Fix ASL assembler encoding of LDW instruction
 	LDW (0E3DCh), 40eeh
 	POP BC
 	RET
@@ -143890,7 +143889,7 @@ LABEL_F2300B:
 	LD WA, BC
 	SLA 00bh, XWA
 	ADD XDE, XWA
-	LD XHL, 00000004h
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: LD XHL, 00000004h
 	ADD XHL, XDE
 	CP (XHL + 001h), 000h
 	JR NZ, LABEL_F2302F
@@ -144028,7 +144027,7 @@ LABEL_F2313A:
 	LD WA, BC
 	SLA 00bh, XWA
 	ADD XDE, XWA
-	LD XHL, 00000004h
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: LD XHL, 00000004h
 	ADD XHL, XDE
 	CP (XHL + 001h), 000h
 	JR NZ, LABEL_F2315E
@@ -144111,7 +144110,7 @@ LABEL_F231D9:
 	LD WA, BC
 	SLA 00bh, XWA
 	ADD XDE, XWA
-	LD XHL, 00000004h
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: LD XHL, 00000004h
 	ADD XHL, XDE
 	CP (XHL + 001h), 000h
 	JR NZ, LABEL_F231FD
