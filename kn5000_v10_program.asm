@@ -139901,7 +139901,7 @@ LABEL_F2021A:
 	LD WA, (2871h)
 	LD (0F231h), WA
 	LD WA, (0F19Eh)
-	LD (0FFECh), WA
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: LD (0FFECh), WA
 	AND (28A5h), 0feh
 	CP WA, 0
 	JR Z, LABEL_F2026C
