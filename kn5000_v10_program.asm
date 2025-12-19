@@ -138638,12 +138638,12 @@ LABEL_F1F50A:
 LABEL_F1F53A:
 	LD RL3, A
 	LD QHL3, DE
-	LD DE, (0FFECh)
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: LD DE, (0FFECh)
 	LD A, (0CDFh)
 	RCF
 	STCF A, DE
 	LD A, RL3
-	LD (0FFECh), DE
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: LD (0FFECh), DE
 	LD DE, QHL3
 	RET
 
@@ -145378,7 +145378,7 @@ LABEL_F23D00:
 	XOR C, C
 
 LABEL_F23D02:
-	LD DE, (0FFECh)
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: LD DE, (0FFECh)
 	LD A, C
 	SCF
 	XORCF A, DE
@@ -146429,11 +146429,11 @@ LABEL_F245C2:
 
 LABEL_F2462C:
 	LD BC, IY
-	LD DE, (0FFECh)
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: LD DE, (0FFECh)
 	LD A, C
 	SCF
 	STCF A, DE
-	LD (0FFECh), DE
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: LD (0FFECh), DE
 	CALL LABEL_F24B67
 	LD (10E3h), 000h
 
@@ -147000,11 +147000,11 @@ LABEL_F24B4A:
 	LD A, C
 	SCF
 	STCF A, (19FAh)
-	LD DE, (0FFECh)
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: LD DE, (0FFECh)
 	LD A, C
 	SCF
 	STCF A, DE
-	LD (0FFECh), DE
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: LD (0FFECh), DE
 	RET
 
 LABEL_F24B67:
@@ -147028,7 +147028,7 @@ LABEL_F24B8C:
 LABEL_F24B91:
 	LD RL3, A
 	LD QHL3, DE
-	LD DE, (0FFECh)
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: LD DE, (0FFECh)
 	LD A, C
 	SCF
 	XORCF A, DE
@@ -148884,11 +148884,11 @@ LABEL_F25DE5:
 	AND IY, 000fh
 	LD BC, IY
 	XOR B, B
-	LD DE, (0FFECh)
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: LD DE, (0FFECh)
 	LD A, C
 	SCF
 	STCF A, DE
-	LD (0FFECh), DE
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: LD (0FFECh), DE
 	POP BC
 	RET
 
@@ -150552,7 +150552,7 @@ LABEL_F270B2:
 	XOR C, C
 
 LABEL_F270CB:
-	LD DE, (0FFECh)
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: LD DE, (0FFECh)
 	LD A, C
 	SCF
 	XORCF A, DE
@@ -152751,7 +152751,7 @@ LABEL_F282A0:
 LABEL_F282A4:
 	LD RL3, A
 	LD QHL3, DE
-	LD DE, (0FFECh)
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: LD DE, (0FFECh)
 	LD A, C
 	SCF
 	XORCF A, DE
@@ -152800,7 +152800,7 @@ LABEL_F28308:
 	XOR BC, BC
 
 LABEL_F2830C:
-	LD DE, (0FFECh)
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: LD DE, (0FFECh)
 	LD A, C
 	SCF
 	XORCF A, DE
@@ -152826,7 +152826,7 @@ LABEL_F28333:
 	XOR BC, BC
 
 LABEL_F28341:
-	LD DE, (0FFECh)
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: LD DE, (0FFECh)
 	LD A, C
 	SCF
 	XORCF A, DE
@@ -152859,7 +152859,7 @@ LABEL_F28354:
 	INC 1, (2877h)
 
 LABEL_F28388:
-	LD DE, (0FFECh)
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: LD DE, (0FFECh)
 	LD A, C
 	SCF
 	XORCF A, DE
@@ -153470,7 +153470,7 @@ LABEL_F28836:
 	LD BC, IY
 	LD RL3, A
 	LD QHL3, DE
-	LD DE, (0FFECh)
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: LD DE, (0FFECh)
 	LD A, C
 	SCF
 	XORCF A, DE
@@ -153522,7 +153522,7 @@ LABEL_F288B5:
 	LD BC, IY
 	LD RL3, A
 	LD QHL3, DE
-	LD DE, (0FFECh)
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: LD DE, (0FFECh)
 	LD A, C
 	SCF
 	XORCF A, DE
@@ -153679,7 +153679,7 @@ LABEL_F28A04:
 	LD C, L
 	LD RL3, A
 	LD QHL3, DE
-	LD DE, (0FFECh)
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: LD DE, (0FFECh)
 	LD A, C
 	SCF
 	XORCF A, DE
@@ -153750,7 +153750,7 @@ LABEL_F28A9A:
 	LD C, L
 	LD RL3, A
 	LD QHL3, DE
-	LD DE, (0FFECh)
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: LD DE, (0FFECh)
 	LD A, C
 	SCF
 	XORCF A, DE
@@ -153994,7 +153994,7 @@ LABEL_F28CB6:
 	LD BC, IY
 	LD RL3, A
 	LD QHL3, DE
-	LD DE, (0FFECh)
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: LD DE, (0FFECh)
 	LD A, C
 	SCF
 	XORCF A, DE
@@ -154043,7 +154043,7 @@ LABEL_F28D24:
 	LD BC, IY
 	LD RL3, A
 	LD QHL3, DE
-	LD DE, (0FFECh)
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: LD DE, (0FFECh)
 	LD A, C
 	SCF
 	XORCF A, DE
@@ -154228,7 +154228,7 @@ LABEL_F28ECA:
 	LD BC, IY
 	LD RL3, A
 	LD QHL3, DE
-	LD DE, (0FFECh)
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: LD DE, (0FFECh)
 	LD A, C
 	SCF
 	XORCF A, DE
@@ -209538,7 +209538,7 @@ LABEL_F4DA04:
 	DEC 1, A
 	db 0, 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: CP A, (0FFE3h)
 	JR NZ, LABEL_F4DA23
-	LD DE, (0FFECh)
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: LD DE, (0FFECh)
 	JR T, LABEL_F4DA30
 
 LABEL_F4DA23:
@@ -209554,7 +209554,7 @@ LABEL_F4DA30:
 	DEC 1, A
 	db 0, 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: CP A, (0FFE3h)
 	JR NZ, LABEL_F4DA46
-	LD (0FFECh), DE
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: LD (0FFECh), DE
 	JR T, LABEL_F4DA51
 
 LABEL_F4DA46:
@@ -211431,7 +211431,7 @@ LABEL_F4EAD7:
 	LD WA, 1
 	LD BC, 00c7h
 	CALL LABEL_F4151E
-	LD DE, (0FFECh)
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: LD DE, (0FFECh)
 	LD WA, 1
 	LD BC, 00c8h
 	CALL LABEL_F41543
