@@ -118052,7 +118052,6 @@ LABEL_F06B16:
 
 LABEL_F06B2E:
 	EXTZ WA
-	db 000h	;TODO: Fix ASL assembler encoding of LDA XDE, word
 	LDA XDE, 0660h
 	EXTZ XWA
 	ADD XWA, XDE
@@ -118061,7 +118060,6 @@ LABEL_F06B2E:
 
 LABEL_F06B3B:
 	EXTZ WA
-	db 000h	;TODO: Fix ASL assembler encoding of LDA XDE, word
 	LDA XDE, 0660h
 	EXTZ XWA
 	ADD XWA, XDE
