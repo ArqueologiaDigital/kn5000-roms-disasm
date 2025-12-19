@@ -140642,7 +140642,6 @@ LABEL_F20ACD:
 	CALL LABEL_F20CA9
 	LD WA, (0F19Eh)
 	LD (2875h), WA
-	db 000h	;TODO: Fix ASL assembler encoding of LDW instruction
 	LDW (0F19Eh), 0000h
 	db 000h	;TODO: Fix ASL assembler encoding of:
 	LD (2314h), 0000h
@@ -140656,7 +140655,6 @@ LABEL_F20B2B:
 
 LABEL_F20B2C:
 	LD (1AE2h), 000h
-	db 000h 	;TODO: Fix ASL assembler encoding of CPW instruction
 	CPW (0F19Eh), 0000h
 	JR NZ, LABEL_F20B3E
 	LD (1AE2h), 001h
@@ -140674,7 +140672,6 @@ LABEL_F20B3E:
 	LDIR
 	CP (1AE2h), 001h
 	JR NZ, LABEL_F20B6F
-	db 000h	;TODO: Fix ASL assembler encoding of LDW instruction
 	LDW (0F19Eh), 0000h
 
 LABEL_F20B6F:
