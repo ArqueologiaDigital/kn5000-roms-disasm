@@ -139839,7 +139839,7 @@ LABEL_F200D5:
 	CALL LABEL_F202C7
 	POP WA
 	LD A, (1D4Eh)
-	LD (0FFE3h), A
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: LD (0FFE3h), A
 	CALL LABEL_F2021A
 	RET
 
@@ -140712,7 +140712,7 @@ LABEL_F20BC4:
 	RET
 
 LABEL_F20BCE:
-	LD (0FFE3h), A
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: LD (0FFE3h), A
 	CALL LABEL_F20BDC
 	CALL LABEL_F20433
 	RET
@@ -144184,7 +144184,7 @@ LABEL_F23264:
 	db 0, 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: CP A, (0FFE3h)
 	JRL Z, LABEL_F23284
 	LD A, (11F7h)
-	LD (0FFE3h), A
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: LD (0FFE3h), A
 	CALL LABEL_F232D9
 
 LABEL_F23284:
@@ -150459,7 +150459,7 @@ LABEL_F26FCE:
 	db 0, 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: CP A, (0FFE3h)
 	JR Z, LABEL_F26FFD
 	LD A, (11F7h)
-	LD (0FFE3h), A
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: LD (0FFE3h), A
 	CALL LABEL_F232D9
 	CALL LABEL_F2706D
 
@@ -152702,7 +152702,7 @@ LABEL_F281DF:
 	CALL LABEL_F287B0
 	CALL LABEL_EF0A73
 	LD A, (11F7h)
-	LD (0FFE3h), A
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: LD (0FFE3h), A
 	CALL LABEL_F232D9
 	CALL LABEL_F2706D
 	db 000h	;TODO: Fix ASL assembler encoding of:
@@ -152714,7 +152714,7 @@ LABEL_F281FE:
 LABEL_F28200:
 	CALL LABEL_EF0A73
 	LD A, (11F7h)
-	LD (0FFE3h), A
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: LD (0FFE3h), A
 	CALL LABEL_F232D9
 	CALL LABEL_F2706D
 	JR T, LABEL_F28238
@@ -152726,7 +152726,7 @@ LABEL_F28217:
 	POP XHL
 	CALL LABEL_EF0A73
 	LD A, (11F7h)
-	LD (0FFE3h), A
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: LD (0FFE3h), A
 	CALL LABEL_F232D9
 	CALL LABEL_F2706D
 	JR T, LABEL_F28238
