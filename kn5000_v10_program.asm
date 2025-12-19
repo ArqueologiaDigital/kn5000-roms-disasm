@@ -101993,7 +101993,7 @@ LABEL_EF3806:
 LABEL_EF380E:
 	LD HL, (XSP + 008h)
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 LABEL_EF3815:
@@ -102432,7 +102432,7 @@ LABEL_EF3C8F:
 	LD XBC, XIZ
 	CALR LABEL_EF3B55
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RETD 0004h
 	LD XWA, 00069800h
 	LD BC, 8000h
@@ -102509,7 +102509,7 @@ LABEL_EF3D71:
 LABEL_EF3D74:
 	LD XHL, (XSP + 008h)
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 LABEL_EF3D7B:
@@ -103479,7 +103479,7 @@ LABEL_EF471A:
 	LD XWA, (SYSTEM_TIMESTAMP)
 	CP XWA, 000001f4h
 	JR ULE, LABEL_EF4739
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, IZ
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, IZ
 	LD WA, IZ
 	LD BC, 00b4h
 	LD DE, 5
@@ -118610,7 +118610,7 @@ LABEL_F0758B:
 
 LABEL_F075B4:
 	LD C, (XSP + 00eh)
-	INC 0, C
+	db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, C
 	LD A, (XSP + 00eh)
 	ADD A, 00ch
 	LD (XSP + 004h), A
@@ -123770,7 +123770,7 @@ LABEL_F0EBA8:
 
 LABEL_F0EBB4:
 	CALL LABEL_F0EF5B
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 LABEL_F0EBBB:
@@ -131472,7 +131472,7 @@ LABEL_F1A37A:
 LABEL_F1A380:
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XHL, XIZ
 	JR T, LABEL_F1A398
 
@@ -131774,7 +131774,7 @@ LABEL_F1A69F:
 	LD XWA, (XSP + 010h)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	JR T, LABEL_F1A6C7
 
 LABEL_F1A6B4:
@@ -131963,7 +131963,7 @@ LABEL_F1A992:
 	LDA XWA, XSP + 008h
 	PUSH XWA
 	CALL LABEL_FF0A72
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 
 LABEL_F1A9AA:
 	CALL GetFocusObject
@@ -132361,7 +132361,7 @@ LABEL_F1AD51:
 	LDA XWA, XSP + 008h
 	PUSH XWA
 	CALL LABEL_FF0A72
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LDA XDE, XSP + 004h
 	LD XWA, XIZ
 	LD XBC, 01c0000fh
@@ -132544,7 +132544,7 @@ LABEL_F1AF3A:
 	LDA XWA, XSP + 008h
 	PUSH XWA
 	CALL LABEL_FF0A72
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LDA XWA, XIZ + 016h
 	LDA XBC, XIZ + 020h
 	CP (3A77h), 002h
@@ -132769,7 +132769,7 @@ LABEL_F1B206:
 	LD XWA, (XSP + 010h)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	JR T, LABEL_F1B253
 
 LABEL_F1B21B:
@@ -132883,7 +132883,7 @@ LABEL_F1B341:
 	PUSH XWA
 	PUSH XDE
 	CALL LABEL_FF0A72
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 
 LABEL_F1B38A:
 	CALL GetFocusObject
@@ -132965,7 +132965,7 @@ LABEL_F1B44F:
 	LDA XWA, XSP + 010h
 	PUSH XWA
 	CALL LABEL_FF0A72
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LDA XWA, XIZ + 016h
 	LDA XBC, XIZ + 020h
 	CP (39A7h), 000h
@@ -133077,7 +133077,7 @@ LABEL_F1B57C:
 	LDA XWA, XSP + 010h
 	PUSH XWA
 	CALL LABEL_FF0A72
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LDA XWA, XIZ + 016h
 	LDA XBC, XIZ + 020h
 	CP (39A7h), 001h
@@ -133179,7 +133179,7 @@ LABEL_F1B685:
 	LDA XWA, XSP + 010h
 	PUSH XWA
 	CALL LABEL_FF0A72
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LDA XWA, XIZ + 016h
 	LDA XBC, XIZ + 020h
 	CP (39A7h), 002h
@@ -133285,7 +133285,7 @@ LABEL_F1B79A:
 	LDA XWA, XSP + 008h
 	PUSH XWA
 	CALL LABEL_FF0A72
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LDA XDE, XSP + 004h
 	LD XWA, XIZ
 	LD XBC, 01c0000fh
@@ -133356,7 +133356,7 @@ LABEL_F1B842:
 
 LABEL_F1B844:
 	CALL LABEL_FF0A72
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LDA XDE, XSP + 004h
 	LD XWA, XIZ
 	LD XBC, 01c0000fh
@@ -133440,7 +133440,7 @@ LABEL_F1B901:
 	LDA XWA, XSP + 008h
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LDA XDE, XSP + 004h
 	LD XWA, XIZ
 	LD XBC, 01c0000fh
@@ -133456,7 +133456,7 @@ LABEL_F1B92A:
 	LDA XWA, XSP + 008h
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LDA XDE, XSP + 004h
 	LD XWA, XIZ
 	LD XBC, 01c0000fh
@@ -133507,7 +133507,7 @@ LABEL_F1B99A:
 	LDA XWA, XSP + 008h
 	PUSH XWA
 	CALL LABEL_FF0A72
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LDA XDE, XSP + 004h
 	LD XWA, XIZ
 	LD XBC, 01c0000fh
@@ -133563,7 +133563,7 @@ LABEL_F1BA11:
 	LDA XWA, XSP + 010h
 	PUSH XWA
 	CALL LABEL_FF0A72
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LDA XWA, XIZ + 016h
 	LDA XBC, XIZ + 020h
 	CP (39A8h), 001h
@@ -133680,7 +133680,7 @@ LABEL_F1BB51:
 	PUSH XWA
 	PUSH XBC
 	CALL LABEL_FF0A72
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XWA, (XSP + 00ch)
 	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL assembler encoding of: LD (XWA + 016h), 00f2h
 	JR T, LABEL_F1BBBF
@@ -133692,14 +133692,14 @@ LABEL_F1BB9B:
 	AND A, E
 	CP A, E
 	JR NZ, LABEL_F1BBAD
-	INC 0, XHL
+	db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XHL
 
 LABEL_F1BBAD:
 	LD XWA, (XHL)
 	PUSH XWA
 	PUSH XBC
 	CALL LABEL_FF0A72
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XWA, (XSP + 008h)
 	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL assembler encoding of: LD (XWA + 016h), 00f5h
 
@@ -133762,7 +133762,7 @@ LABEL_F1BC28:
 	LDA XWA, XSP + 008h
 	PUSH XWA
 	CALL LABEL_FF0A72
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LDA XDE, XSP + 004h
 	LD XWA, XIZ
 	LD XBC, 01c0000fh
@@ -134078,7 +134078,7 @@ LABEL_F1BF76:
 	LDA XWA, XSP + 008h
 	PUSH XWA
 	CALL LABEL_FF0A72
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LDA XWA, XIZ + 016h
 	LDA XBC, XIZ + 020h
 	CP (39A8h), 000h
@@ -134331,7 +134331,7 @@ LABEL_F1C266:
 	LD XWA, (XSP + 010h)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	JR T, LABEL_F1C28E
 
 LABEL_F1C27B:
@@ -134435,7 +134435,7 @@ LABEL_F1C3B5:
 LABEL_F1C3C9:
 	PUSH XDE
 	CALL LABEL_FF0A72
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	JR T, LABEL_F1C3E3
 
 LABEL_F1C3D2:
@@ -134608,7 +134608,7 @@ LABEL_F1C56E:
 	LDA XWA, XSP + 008h
 	PUSH XWA
 	CALL LABEL_FF0A72
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LDA XDE, XSP + 004h
 	LD XWA, XIZ
 	LD XBC, 01c0000fh
@@ -134859,7 +134859,7 @@ LABEL_F1C85D:
 	LD XWA, (XSP + 0118h)
 	PUSH XWA
 	CALL LABEL_FF0A72
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	JR T, LABEL_F1C840
 
 LABEL_F1C87D:
@@ -135242,7 +135242,7 @@ LABEL_F1CC61:
 	LDA XWA, XSP + 008h
 	PUSH XWA
 	CALL LABEL_FF0A72
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LDA XDE, XSP + 004h
 	LD XWA, XIZ
 	LD XBC, 01c0000fh
@@ -135256,7 +135256,7 @@ LABEL_F1CC83:
 	LDA XWA, XSP + 008h
 	PUSH XWA
 	CALL LABEL_FF0A72
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LDA XDE, XSP + 004h
 	LD XWA, XIZ
 	LD XBC, 01c0000fh
@@ -135270,7 +135270,7 @@ LABEL_F1CCA5:
 	LDA XWA, XSP + 008h
 	PUSH XWA
 	CALL LABEL_FF0A72
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LDA XDE, XSP + 004h
 	LD XWA, XIZ
 	LD XBC, 01c0000fh
@@ -135284,7 +135284,7 @@ LABEL_F1CCC7:
 	LDA XWA, XSP + 008h
 	PUSH XWA
 	CALL LABEL_FF0A72
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LDA XDE, XSP + 004h
 	LD XWA, XIZ
 	LD XBC, 01c0000fh
@@ -135380,7 +135380,7 @@ LABEL_F1CDD0:
 	PUSH XWA
 	PUSH XDE
 	CALL LABEL_FF0A72
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	JR T, LABEL_F1CE6A
 
 LABEL_F1CE33:
@@ -135460,7 +135460,7 @@ LABEL_F1CEBE:
 	LDA XWA, XSP + 008h
 	PUSH XWA
 	CALL LABEL_FF0A72
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LDA XDE, XSP + 004h
 	LD XWA, XIZ
 	LD XBC, 01c0000fh
@@ -136070,7 +136070,7 @@ LABEL_F1D52E:
 	LD XWA, (XSP + 016h)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	JRL T, LABEL_F1D67D
 	LD XWA, (XSP + 016h)
 	LD XBC, XIZ
@@ -136290,7 +136290,7 @@ LABEL_F1D771:
 	PUSH XWA
 	PUSH XBC
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 
 LABEL_F1D779:
 	CALL GetFocusObject
@@ -136339,7 +136339,7 @@ LABEL_F1D7C8:
 	PUSH XWA
 	PUSH XBC
 	CALL LABEL_FF0A72
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 
 LABEL_F1D7D0:
 	CALL GetFocusObject
@@ -136526,7 +136526,7 @@ LABEL_F1D8F9:
 	LDA XWA, XSP + 012h
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XBC, (XSP + 006h)
 	LD XIX, (XBC + 026h)
 	LD XWA, (XSP + 009eh)
@@ -136640,7 +136640,7 @@ LABEL_F1DAD2:
 	LDA XWA, XSP + 008h
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LDA XDE, XSP + 004h
 	LD XWA, XIZ
 	LD XBC, 01c0000fh
@@ -136695,7 +136695,7 @@ LABEL_F1DB49:
 	LDA XWA, XSP + 008h
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LDA XDE, XSP + 004h
 	LD XWA, XIZ
 	LD XBC, 01c0000fh
@@ -137016,7 +137016,7 @@ LABEL_F1E119:
 	LDA XWA, XSP + 008h
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LDA XDE, XSP + 004h
 	LD XWA, XIZ
 	LD XBC, 01c0000fh
@@ -137366,7 +137366,7 @@ LABEL_F1E647:
 	LDA XWA, 0E1FE46h
 	PUSH XWA
 	CALL LABEL_F4EB97
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XIZ, XHL
 	OR XIZ, XIZ
 	JR NZ, LABEL_F1E677
@@ -137418,7 +137418,7 @@ LABEL_F1E6AF:
 	LDA XWA, 0E1FE46h
 	PUSH XWA
 	CALL LABEL_F4EB97
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XIZ, XHL
 	OR XIZ, XIZ
 	JR NZ, LABEL_F1E705
@@ -137547,7 +137547,7 @@ LABEL_F1E885:
 	LD XWA, (XHL + 02ah)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XHL, 0
 
 LABEL_F1E898:
@@ -156790,7 +156790,7 @@ LABEL_F2AB15:
 	PUSHW 0002h
 	PUSHW 0dfeh
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LDA XBC, XSP + 014h
 	LDA XWA, XSP + 028h
 	LD DE, (XWA)
@@ -156854,7 +156854,7 @@ LABEL_F2AB6C:
 	PUSHW 0002h
 	PUSHW 0dfeh
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD BC, (XSP + 00ah)
 	SLL 3, BC
 	LDA XWA, XSP + 028h
@@ -156880,7 +156880,7 @@ LABEL_F2AC23:
 	PUSH XHL
 	PUSH XBC
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LDA XBC, XSP + 014h
 	LDA XWA, XSP + 028h
 	LD DE, (XWA)
@@ -157468,7 +157468,7 @@ LABEL_F2B256:
 	PUSHW 61fah
 	PUSH XDE
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	JRL T, LABEL_F2B3B9
 
 LABEL_F2B266:
@@ -157965,7 +157965,7 @@ LABEL_F2B72C:
 	LDA XWA, XSP + 008h
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LDA XDE, XSP + 004h
 	LD XWA, XIZ
 	LD XBC, 01c0000fh
@@ -157975,7 +157975,7 @@ LABEL_F2B72C:
 	LDA XWA, XSP + 008h
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LDA XDE, XSP + 004h
 	LD XWA, XIZ
 	LD XBC, 01c0000fh
@@ -158035,7 +158035,7 @@ LABEL_F2B7D3:
 	LDA XWA, XSP + 008h
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LDA XDE, XSP + 004h
 	LD XWA, XIZ
 	LD XBC, 01c0000fh
@@ -158045,7 +158045,7 @@ LABEL_F2B7D3:
 	LDA XWA, XSP + 008h
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LDA XDE, XSP + 004h
 	LD XWA, XIZ
 	LD XBC, 01c0000fh
@@ -158105,7 +158105,7 @@ LABEL_F2B87A:
 	LDA XWA, XSP + 008h
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LDA XDE, XSP + 004h
 	LD XWA, XIZ
 	LD XBC, 01c0000fh
@@ -158115,7 +158115,7 @@ LABEL_F2B87A:
 	LDA XWA, XSP + 008h
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LDA XDE, XSP + 004h
 	LD XWA, XIZ
 	LD XBC, 01c0000fh
@@ -158175,7 +158175,7 @@ LABEL_F2B921:
 	LDA XWA, XSP + 008h
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LDA XDE, XSP + 004h
 	LD XWA, XIZ
 	LD XBC, 01c0000fh
@@ -158185,7 +158185,7 @@ LABEL_F2B921:
 	LDA XWA, XSP + 008h
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LDA XDE, XSP + 004h
 	LD XWA, XIZ
 	LD XBC, 01c0000fh
@@ -158245,7 +158245,7 @@ LABEL_F2B9C8:
 	LDA XWA, XSP + 008h
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LDA XDE, XSP + 004h
 	LD XWA, XIZ
 	LD XBC, 01c0000fh
@@ -158255,7 +158255,7 @@ LABEL_F2B9C8:
 	LDA XWA, XSP + 008h
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LDA XDE, XSP + 004h
 	LD XWA, XIZ
 	LD XBC, 01c0000fh
@@ -158315,7 +158315,7 @@ LABEL_F2BA6F:
 	LDA XWA, XSP + 008h
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LDA XDE, XSP + 004h
 	LD XWA, XIZ
 	LD XBC, 01c0000fh
@@ -158325,7 +158325,7 @@ LABEL_F2BA6F:
 	LDA XWA, XSP + 008h
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LDA XDE, XSP + 004h
 	LD XWA, XIZ
 	LD XBC, 01c0000fh
@@ -158385,7 +158385,7 @@ LABEL_F2BB16:
 	LDA XWA, XSP + 008h
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LDA XDE, XSP + 004h
 	LD XWA, XIZ
 	LD XBC, 01c0000fh
@@ -158395,7 +158395,7 @@ LABEL_F2BB16:
 	LDA XWA, XSP + 008h
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LDA XDE, XSP + 004h
 	LD XWA, XIZ
 	LD XBC, 01c0000fh
@@ -158430,7 +158430,7 @@ LABEL_F2BB86:
 	LD XWA, (XSP + 008h)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XHL, 0
 	JR T, LABEL_F2BBF5
 
@@ -158470,7 +158470,7 @@ LABEL_F2BBF1:
 
 LABEL_F2BBF5:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 LABEL_F2BBF9:
@@ -158937,7 +158937,7 @@ LABEL_F2C312:
 	LD XWA, (XSP + 00ch)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	JRL T, LABEL_F2C3F5
 
 LABEL_F2C31F:
@@ -159219,7 +159219,7 @@ LABEL_F2C798:
 	LDA XWA, XSP + 008h
 	PUSH XWA
 	CALL LABEL_FF0A72
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	CALL GetFocusObject
 	LD XWA, XHL
 	LDA XDE, XSP + 00eh
@@ -159243,7 +159243,7 @@ LABEL_F2C7E5:
 	PUSH XWA
 	PUSH XBC
 	CALL LABEL_FF0A72
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	CALL GetFocusObject
 	LD XWA, XHL
 	LD XBC, 01e0008fh
@@ -159286,7 +159286,7 @@ LABEL_F2C84A:
 	PUSH XWA
 	PUSH XBC
 	CALL LABEL_FF0A72
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	CALL GetFocusObject
 	LD XWA, XHL
 	LD XBC, 01e0008fh
@@ -159318,7 +159318,7 @@ LABEL_F2C890:
 	LDA XWA, XSP + 008h
 	PUSH XWA
 	CALL LABEL_FF0A72
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 
 LABEL_F2C89B:
 	CALL GetFocusObject
@@ -159344,7 +159344,7 @@ LABEL_F2C8CB:
 	LDA XWA, XSP + 008h
 	PUSH XWA
 	CALL LABEL_FF0A72
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	CALL GetFocusObject
 	LD XWA, XHL
 	LD XBC, 01e0008fh
@@ -159387,7 +159387,7 @@ LABEL_F2C930:
 	LDA XWA, XSP + 008h
 	PUSH XWA
 	CALL LABEL_FF0A72
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	CALL GetFocusObject
 	LD XWA, XHL
 	LD XBC, 01e0008fh
@@ -159419,7 +159419,7 @@ LABEL_F2C979:
 	LDA XWA, XSP + 008h
 	PUSH XWA
 	CALL LABEL_FF0A72
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 
 LABEL_F2C984:
 	CALL GetFocusObject
@@ -159706,7 +159706,7 @@ LABEL_F2CBCB:
 	LDA XWA, XSP + 008h
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LDA XDE, XSP + 004h
 	LD XWA, XIZ
 	LD XBC, 01c0000fh
@@ -159716,7 +159716,7 @@ LABEL_F2CBCB:
 	LDA XWA, XSP + 008h
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LDA XDE, XSP + 004h
 	LD XWA, XIZ
 	LD XBC, 01c0000fh
@@ -159816,7 +159816,7 @@ SqAftSetFunc:
 	LD XWA, (XDE + 00ah)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XHL, XIZ
 	JR T, LABEL_F2CD37
 
@@ -159918,7 +159918,7 @@ LABEL_F2CDFE:
 
 LABEL_F2CE32:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 SMFMuteOnOffFunc:
@@ -160156,7 +160156,7 @@ LABEL_F2D093:
 	PUSH XWA
 	PUSH XBC
 	CALL LABEL_FF0A72
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LDA XDE, XSP + 004h
 	LD XWA, XIZ
 	LD XBC, 01c0000fh
@@ -160288,7 +160288,7 @@ LABEL_F2D242:
 	LD XWA, (XSP + 008h)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XHL, 0
 	JR T, LABEL_F2D2C0
 
@@ -160328,7 +160328,7 @@ LABEL_F2D2BC:
 
 LABEL_F2D2C0:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 InitializeKubo:
@@ -161566,7 +161566,7 @@ LABEL_F2E4B5:
 	LD XWA, (XSP + 008h)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XHL, 0
 	JR T, LABEL_F2E52E
 
@@ -161604,7 +161604,7 @@ LABEL_F2E52A:
 
 LABEL_F2E52E:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 AcPanicEditSwProc:
@@ -161727,7 +161727,7 @@ LABEL_F2E648:
 
 LABEL_F2E64C:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 PanicFunc:
@@ -162043,7 +162043,7 @@ LABEL_F2E962:
 	LD XWA, (XDE + 012h)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XHL, XIZ
 
 LABEL_F2E97C:
@@ -162107,14 +162107,14 @@ LABEL_F2EA07:
 	LD XWA, (XSP + 008h)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 
 LABEL_F2EA17:
 	LD XHL, 0
 
 LABEL_F2EA19:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 IvSddspProc:
@@ -162184,7 +162184,7 @@ LABEL_F2EAC1:
 	LD XWA, (XSP + 006h)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 
 LABEL_F2EAD1:
 	LD XHL, 0
@@ -162251,14 +162251,14 @@ LABEL_F2EB60:
 	LD XWA, (XSP + 008h)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 
 LABEL_F2EB70:
 	LD XHL, 0
 
 LABEL_F2EB72:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 IvPlayExitProc:
@@ -162283,7 +162283,7 @@ LABEL_F2EB9F:
 	LD XWA, (XSP + 00ch)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XHL, 0
 	JR T, LABEL_F2EBFA
 
@@ -162342,7 +162342,7 @@ LABEL_F2EC24:
 	LD XWA, (XSP + 008h)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XHL, 0
 	JR T, LABEL_F2EC70
 
@@ -162370,7 +162370,7 @@ LABEL_F2EC6C:
 
 LABEL_F2EC70:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 IvAutoPunchExitProc:
@@ -162394,7 +162394,7 @@ LABEL_F2EC99:
 	LD XWA, (XSP + 008h)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XHL, 0
 	JR T, LABEL_F2ECED
 
@@ -162426,7 +162426,7 @@ LABEL_F2ECE9:
 
 LABEL_F2ECED:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 AcIndexWideToggleProc:
@@ -163356,7 +163356,7 @@ LABEL_F2FAF2:
 	LD XWA, (XIZ + 012h)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	JRL T, LABEL_F2FD33
 	LD XIZ, XDE
 	LD WA, (2782h)
@@ -163468,7 +163468,7 @@ LABEL_F2FC05:
 
 LABEL_F2FC0A:
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	JRL T, LABEL_F2FD33
 
 LABEL_F2FC13:
@@ -163640,7 +163640,7 @@ LABEL_F2FD71:
 
 LABEL_F2FDA7:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 SngSelProc:
@@ -164114,7 +164114,7 @@ LABEL_F302B6:
 	LD XWA, (XSP + 010h)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	JR T, LABEL_F30311
 	LD XWA, XIZ
 	CALL GetViewInstance
@@ -164345,7 +164345,7 @@ LABEL_F3068A:
 	LDA XWA, XSP + 034h
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	CALL GetFocusObject
 	LD XWA, XHL
 	LDA XDE, XSP + 028h
@@ -164633,7 +164633,7 @@ LABEL_F30964:
 	LD XWA, (XSP + 008h)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XHL, 0
 	JR T, LABEL_F309D3
 
@@ -164673,7 +164673,7 @@ LABEL_F309CF:
 
 LABEL_F309D3:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 IvPnlWrExitProc:
@@ -164697,7 +164697,7 @@ LABEL_F309FC:
 	LD XWA, (XSP + 008h)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XHL, 0
 	JR T, LABEL_F30A6B
 
@@ -164737,7 +164737,7 @@ LABEL_F30A67:
 
 LABEL_F30A6B:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 SqplyValProc:
@@ -169839,7 +169839,7 @@ LABEL_F34825:
 	LD XWA, (XBC)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	JR T, LABEL_F34881
 
 LABEL_F34831:
@@ -170280,7 +170280,7 @@ LABEL_F34F46:
 	LD XWA, (XWA + 012h)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	JR T, LABEL_F34FE7
 
 LABEL_F34F68:
@@ -170304,7 +170304,7 @@ LABEL_F34F7D:
 	LD XWA, (XWA + 012h)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	JR T, LABEL_F34FE7
 
 LABEL_F34F9F:
@@ -170861,7 +170861,7 @@ LABEL_F355F3:
 	LD XWA, (XWA + 012h)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	JRL T, LABEL_F35725
 	LD (XSP), XDE
 	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL assembler encoding of: LD (XSP + 012h), 0000h
@@ -171156,7 +171156,7 @@ LABEL_F3593C:
 	JR T, LABEL_F3599D
 	LD XIX, XDE
 	PUSHW 0005h
-	INC 0, XHL
+	db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XHL
 	JR T, LABEL_F35980
 	LD XIX, XDE
 	PUSHW 0005h
@@ -171444,7 +171444,7 @@ LABEL_F35C6F:
 	PUSHW 4e1eh
 	PUSH XHL
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	JR T, LABEL_F35C93
 
 LABEL_F35C7E:
@@ -171919,7 +171919,7 @@ LABEL_F360D5:
 	LDW (XWA + 006h), (27C0h)
 	LD BC, 0
 	CALL DrawFrame
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 LABEL_F360F3:
@@ -172063,7 +172063,7 @@ LABEL_F36262:
 	LD BC, 0
 	LD DE, 0
 	CALL DrawDesignBox
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 LABEL_F36282:
@@ -174308,7 +174308,7 @@ LABEL_F37740:
 	LD BC, 5
 	CALL LABEL_F3D9AC
 	CALL LABEL_F3DA7C
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 LABEL_F3776B:
@@ -174323,7 +174323,7 @@ LABEL_F3776B:
 	LD BC, 5
 	CALL LABEL_F3D9AC
 	CALL LABEL_F3DA7C
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 LABEL_F37795:
@@ -175029,7 +175029,7 @@ LABEL_F37DD1:
 
 LABEL_F37DD5:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 LABEL_F37DD9:
@@ -179206,7 +179206,7 @@ LABEL_F3A607:
 	JRL NC, LABEL_F3A570
 
 LABEL_F3A619:
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 LABEL_F3A61C:
@@ -183067,7 +183067,7 @@ LABEL_F3C87E:
 
 LABEL_F3C88C:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 LABEL_F3C890:
@@ -183620,7 +183620,7 @@ LABEL_F3CE1C:
 	LD DE, 1
 	CALR LABEL_F3C056
 	POP IZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 LABEL_F3CE2E:
@@ -183952,7 +183952,7 @@ LABEL_F3D0FB:
 	LD XWA, (XSP + 006h)
 	LD (XWA + 002h), BC
 	POP IZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 LABEL_F3D10D:
@@ -184642,7 +184642,7 @@ LABEL_F3D773:
 	CP QIZH, 010h
 	JR ULE, LABEL_F3D710
 	POP QIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 LABEL_F3D782:
@@ -185852,7 +185852,7 @@ LABEL_F3E1E6:
 
 LABEL_F3E24C:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 LABEL_F3E250:
@@ -185946,7 +185946,7 @@ LABEL_F3E319:
 	CP QIZH, 010h
 	JRL ULE, LABEL_F3E293
 	POP QIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 LABEL_F3E329:
@@ -185984,7 +185984,7 @@ LABEL_F3E342:
 	CALR LABEL_F41AF8
 
 LABEL_F3E378:
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 LABEL_F3E37B:
@@ -186725,7 +186725,7 @@ LABEL_F3E9FA:
 
 LABEL_F3EA00:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 LABEL_F3EA04:
@@ -187476,7 +187476,7 @@ LABEL_F3F05A:
 	LD BC, 1
 	CALL LABEL_F3C13F
 	POP IZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 LABEL_F3F08A:
@@ -190470,7 +190470,7 @@ LABEL_F40C86:
 	LD HL, (XSP + 002h)
 
 LABEL_F40C89:
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 LABEL_F40C8C:
@@ -190911,7 +190911,7 @@ LABEL_F4108B:
 
 LABEL_F4109C:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 LABEL_F410A0:
@@ -191243,7 +191243,7 @@ LABEL_F413C2:
 
 LABEL_F413C7:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 LABEL_F413CB:
@@ -197451,7 +197451,7 @@ LABEL_F45A89:
 
 LABEL_F45A9F:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 MimeSyori:
@@ -201030,7 +201030,7 @@ LABEL_F4834F:
 
 LABEL_F483AB:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 LABEL_F483AF:
@@ -210177,7 +210177,7 @@ LABEL_F4DFE6:
 
 LABEL_F4DFED:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 LABEL_F4DFF1:
@@ -211490,7 +211490,7 @@ LABEL_F4EB66:
 	PUSHW 0000h
 	PUSH XIZ
 	CALL LABEL_FF0FFA
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	JR T, LABEL_F4EB93
 
 LABEL_F4EB8C:
@@ -211582,7 +211582,7 @@ LABEL_F4EC31:
 	LD XWA, (XSP + 010h)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XWA, (XSP + 00ch)
 	LD (XSP + 010h), XWA
 
@@ -211633,7 +211633,7 @@ LABEL_F4EC96:
 	LD XWA, (XSP + 01ch)
 	PUSH XWA
 	CALL LABEL_FF0FA0
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD WA, HL
 	EXTZ XWA
 	LD XBC, (XSP + 018h)
@@ -211655,7 +211655,7 @@ LABEL_F4ECD4:
 	LD XWA, (XSP + 010h)
 	PUSH XWA
 	CALL LABEL_FF0F35
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	CP HL, 0
 	JR Z, LABEL_F4ED00
 	INC 1, (XSP + 006h)
@@ -211784,7 +211784,7 @@ LABEL_F4EDD4:
 	LD XWA, (XWA + 012h)
 	LD XWA, (XWA)
 	CALL T, XWA
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	CP HL, 0
 	JR Z, LABEL_F4EE69
 	LD A, (XSP + 00eh)
@@ -212145,7 +212145,7 @@ LABEL_F4F21F:
 	LD XWA, (XSP + 008h)
 	PUSH XWA
 	CALL LABEL_F4EB97
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	OR XHL, XHL
 	JR NZ, LABEL_F4F237
 	LD HL, 0ffffh
@@ -212229,7 +212229,7 @@ LABEL_F4F374:
 	LD XWA, (XBC + 00eh)
 	LD XWA, (XWA + 018h)
 	CALL T, XWA
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	JR T, LABEL_F4F3C2
 
 LABEL_F4F386:
@@ -212249,7 +212249,7 @@ LABEL_F4F395:
 	LD XWA, (XBC + 00eh)
 	LD XWA, (XWA + 018h)
 	CALL T, XWA
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	JR T, LABEL_F4F3C2
 
 LABEL_F4F3AA:
@@ -212261,7 +212261,7 @@ LABEL_F4F3AA:
 	LD XWA, (XBC + 00eh)
 	LD XWA, (XWA + 018h)
 	CALL T, XWA
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	JR T, LABEL_F4F3C2
 
 LABEL_F4F3BF:
@@ -212322,7 +212322,7 @@ LABEL_F4F421:
 	LD XWA, (XSP + 012h)
 	PUSH XWA
 	CALL LABEL_F4EB97
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD (XSP + 004h), XHL
 	LD XWA, (XSP + 004h)
 	OR XWA, XWA
@@ -212335,7 +212335,7 @@ LABEL_F4F421:
 	LD XWA, (XSP + 012h)
 	PUSH XWA
 	CALL LABEL_F4EB97
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD (XSP + 004h), XHL
 	LD XWA, (XSP + 004h)
 	OR XWA, XWA
@@ -212355,7 +212355,7 @@ LABEL_F4F47D:
 	LD XWA, (XSP + 016h)
 	PUSH XWA
 	CALL LABEL_F4EB97
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XIZ, XHL
 	OR XIZ, XIZ
 	JR Z, LABEL_F4F4AE
@@ -212364,7 +212364,7 @@ LABEL_F4F47D:
 	CALL LABEL_F4F05A
 	PUSH XIZ
 	CALL LABEL_F4F05A
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD (01E53Ch), 0015h
 	LD HL, 0ffffh
 	JR T, LABEL_F4F526
@@ -212376,7 +212376,7 @@ LABEL_F4F4AE:
 	LD XWA, (XSP + 016h)
 	PUSH XWA
 	CALL LABEL_F4EB97
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XIZ, XHL
 	OR XIZ, XIZ
 	JR NZ, LABEL_F4F4DA
@@ -212608,7 +212608,7 @@ LABEL_F4F711:
 	LD XWA, (XWA + 00ah)
 	LD XWA, (XWA + 010h)
 	CALL T, XWA
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD (XIZ + 014h), HL
 	LD XWA, (XSP + 00ah)
 	LD (XWA + 006h), HL
@@ -212626,7 +212626,7 @@ LABEL_F4F711:
 	LD XWA, (XWA + 00ah)
 	LD XWA, (XWA + 010h)
 	CALL T, XWA
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD (XIZ + 014h), HL
 	LD XWA, (XSP + 00ah)
 	LD (XWA + 006h), HL
@@ -212653,7 +212653,7 @@ LABEL_F4F79A:
 	LD XWA, (XWA + 00ah)
 	LD XWA, (XWA + 010h)
 	CALL T, XWA
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD (XIZ + 014h), HL
 	LD XWA, (XSP + 00ah)
 	LD (XWA + 006h), HL
@@ -212719,7 +212719,7 @@ LABEL_F4F83A:
 	LD XWA, (XWA + 00eh)
 	LD XWA, (XWA + 014h)
 	CALL T, XWA
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD (XIZ + 014h), HL
 	LD A, (XIZ + 017h)
 	EXTZ WA
@@ -212749,7 +212749,7 @@ LABEL_F4F880:
 	LD XWA, (XWA + 00eh)
 	LD XWA, (XWA + 014h)
 	CALL T, XWA
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LDA XWA, XIZ + 014h
 	OR (XWA), HL
 	LD DE, (XWA)
@@ -214548,7 +214548,7 @@ LABEL_F5214A:
 	LD XWA, (XSP + 006h)
 	PUSH XWA
 	CALL LABEL_FF0FFA
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL assembler encoding of: LD (XSP + 006h), 0004h
 	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL assembler encoding of: LD (XSP + 008h), 0000h
 	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL assembler encoding of: LD (XSP + 00ah), 0000h
@@ -214652,7 +214652,7 @@ LABEL_F5223E:
 	LD XWA, (XSP + 006h)
 	PUSH XWA
 	CALL LABEL_FF0AF2
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	CP QIZH, 0
 	JR NZ, LABEL_F52280
 	LD HL, 1
@@ -214792,7 +214792,7 @@ LABEL_F523CF:
 	LD XWA, (XSP + 006h)
 	PUSH XWA
 	CALL LABEL_FF0FFA
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL assembler encoding of: LD (XSP + 00eh), 0003h
 	JR T, LABEL_F52412
 
@@ -214862,7 +214862,7 @@ LABEL_F52486:
 	LD XWA, (XSP + 006h)
 	PUSH XWA
 	CALL LABEL_FF0FFA
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL assembler encoding of: LD (XSP + 00eh), 000ch
 	JR T, LABEL_F524C9
 
@@ -214915,7 +214915,7 @@ LABEL_F52503:
 	LD XWA, (XSP + 006h)
 	PUSH XWA
 	CALL LABEL_FF0FFA
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL assembler encoding of: LD (XSP + 00eh), 0002h
 	JR T, LABEL_F52546
 
@@ -214984,7 +214984,7 @@ LABEL_F52599:
 	LD XWA, (XSP + 006h)
 	PUSH XWA
 	CALL LABEL_FF0AF2
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	CP QIZH, 0
 	JR NZ, LABEL_F525DB
 	LD HL, 1
@@ -215183,7 +215183,7 @@ LABEL_F5279B:
 	PUSHW 00e4h
 	PUSHW 5100h
 	CALL LABEL_F4EB97
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XIZ, XHL
 	OR XIZ, XIZ
 	JR NZ, LABEL_F527B7
@@ -215197,7 +215197,7 @@ LABEL_F527B7:
 	LD (XWA), XHL
 	PUSH XIZ
 	CALL LABEL_F4F05A
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD HL, 1
 
 LABEL_F527CA:
@@ -215229,7 +215229,7 @@ LABEL_F527FC:
 	PUSHW 00e4h
 	PUSHW 5114h
 	CALL LABEL_F4EB97
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XIZ, XHL
 	OR XIZ, XIZ
 	JR NZ, LABEL_F52818
@@ -215253,7 +215253,7 @@ LABEL_F5282E:
 	LDA XWA, XSP + 028h
 	PUSH XWA
 	CALL LABEL_F4FA59
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	BIT 1, (XSP + 030h)
 	JR NZ, LABEL_F52878
 	CP (XSP + 024h), 0e5h
@@ -215376,7 +215376,7 @@ LABEL_F5291F:
 	LD XWA, (XSP + 016h)
 	PUSH XWA
 	CALL LABEL_FF0DC1
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 
 LABEL_F52947:
 	LDA XWA, XSP + 004h
@@ -215384,7 +215384,7 @@ LABEL_F52947:
 	LD XWA, (XSP + 016h)
 	PUSH XWA
 	CALL LABEL_FF0DC1
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD DE, 0
 	LD XWA, (XIZ)
 	INC 1, XWA
@@ -215468,7 +215468,7 @@ LABEL_F529E3:
 	LD XWA, XIZ
 	PUSH XWA
 	CALL LABEL_FF0AF2
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XHL, 0ffffffffh
 	JRL T, LABEL_F52AA5
 
@@ -215478,7 +215478,7 @@ LABEL_F52A0E:
 	LD XWA, XIZ
 	PUSH XWA
 	CALL LABEL_F4EB97
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD (XSP + 004h), XHL
 	LD XWA, (XSP + 004h)
 	OR XWA, XWA
@@ -215489,7 +215489,7 @@ LABEL_F52A0E:
 	LD XWA, XIZ
 	PUSH XWA
 	CALL LABEL_FF0AF2
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XHL, 0ffffffffh
 	JR T, LABEL_F52AA5
 
@@ -215519,7 +215519,7 @@ LABEL_F52A6F:
 	PUSH XWA
 	PUSH XIZ
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XWA, (XSP + 008h)
 	LD (XWA + 004h), XIZ
 	LD XWA, (XSP + 008h)
@@ -215615,7 +215615,7 @@ LABEL_F52B29:
 	LDA XWA, XSP + 030h
 	PUSH XWA
 	CALL LABEL_F4FA59
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	CP (XSP + 02ch), 0e5h
 	JR Z, LABEL_F52B90
 	CP (XSP + 02ch), 000h
@@ -215687,7 +215687,7 @@ LABEL_F52BC6:
 	LDA XWA, XSP + 008h
 	PUSH XWA
 	CALL LABEL_FF0FFA
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD (XSP + 00fh), 000h
 	LDA XWA, XSP + 004h
 	LD XBC, XWA
@@ -216049,7 +216049,7 @@ LABEL_F52FB1:
 	PUSHW 5132h
 	PUSH XWA
 	CALL LABEL_F4EB97
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD (02357Ah), XHL
 	LD XWA, (02357Ah)
 	OR XWA, XWA
@@ -216338,7 +216338,7 @@ LABEL_F53278:
 	ADD XWA, XBC
 	PUSH XWA
 	CALL LABEL_FF0FFA
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	INC 1, IZ
 	CP IZ, 0050h
 	JR LT, LABEL_F53278
@@ -244053,7 +244053,7 @@ LABEL_F66986:
 
 LABEL_F6698E:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 LABEL_F66992:
@@ -247525,7 +247525,7 @@ MiddleNameFunc:
 	PUSH XDE
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	PUSH XDE
 	PUSH XHL
 	PUSH XIX
@@ -247542,7 +247542,7 @@ LABEL_F697B5:
 	PUSH XDE
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD C, (7F3Eh)
 	LD A, C
 	SLL 4, A
@@ -250336,7 +250336,7 @@ LABEL_F6C387:
 	PUSHW 0e3d2h
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 
 LABEL_F6C394:
 	LD XWA, 00110007h
@@ -251219,7 +251219,7 @@ LABEL_F6CC4B:
 	PUSH XWA
 	PUSH XBC
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD (3D06h), 005h
 	LD WA, 0014h
 	JRL T, LABEL_F6D83D
@@ -251263,7 +251263,7 @@ LABEL_F6CCC6:
 
 LABEL_F6CCDF:
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	JRL T, LABEL_F6CF3E
 
 LABEL_F6CCE8:
@@ -251499,7 +251499,7 @@ LABEL_F6CF31:
 
 LABEL_F6CF38:
 	CALL LABEL_FF0DC1
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 
 LABEL_F6CF3E:
 	LD (0FFC00h), 0ffh
@@ -251599,7 +251599,7 @@ LABEL_F6D029:
 	LDA XWA, XSP + 016h
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LDA XWA, XSP + 012h
 	LD XBC, 00e4c152h
 	CALL LABEL_F8AC27
@@ -251642,7 +251642,7 @@ LABEL_F6D029:
 	PUSH XHL
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	JR T, LABEL_F6D0C5
 
 LABEL_F6D0C2:
@@ -251844,7 +251844,7 @@ LABEL_F6D2A9:
 	PUSH XDE
 	PUSH XBC
 	CALL LABEL_FF0DC1
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XWA, 0000488ch
 	LD XBC, 00e4c15ah
 	CALL LABEL_F88BC7
@@ -251991,7 +251991,7 @@ LABEL_F6D431:
 	LDA XWA, XSP + 016h
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XWA, (3D5Ch)
 	LD (XSP + 00ah), XWA
 	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL assembler encoding of: LD (XSP + 008h), 0000h
@@ -252330,7 +252330,7 @@ LABEL_F6D79E:
 	INC 1, XWA
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	INCW 1, (3A82h)
 	JR T, LABEL_F6D83A
 
@@ -252351,7 +252351,7 @@ LABEL_F6D7DB:
 	INC 1, XWA
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LDA XBC, XSP + 012h
 	LD XWA, XBC
 	LDA XBC, XBC + 064h
@@ -258847,7 +258847,7 @@ LABEL_F73884:
 	LD XWA, (XSP + 010h)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	JR T, LABEL_F738BD
 	LD XWA, XIZ
 	CALL GetViewInstance
@@ -260214,7 +260214,7 @@ LABEL_F74ACB:
 	PUSH XWA
 	PUSH XBC
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XWA, 0ffffffffh
 	LD XBC, 01e00078h
 	LD XDE, 0
@@ -260297,7 +260297,7 @@ LABEL_F74B86:
 	PUSHW 0f848h
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LDA XWA, XSP + 004h
 	PUSHW 006ch
 	LD XBC, Bitmap_MIDIConnections_1
@@ -260309,7 +260309,7 @@ LABEL_F74BB5:
 	PUSHW 0f862h
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LDA XWA, XSP + 004h
 	PUSHW 006ch
 	LD XBC, Bitmap_MIDIConnections_2
@@ -260321,7 +260321,7 @@ LABEL_F74BD2:
 	PUSHW 0f87ch
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LDA XWA, XSP + 004h
 	PUSHW 006ch
 	LD XBC, Bitmap_MIDIConnections_3
@@ -260333,7 +260333,7 @@ LABEL_F74BEF:
 	PUSHW 0f896h
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LDA XWA, XSP + 004h
 	PUSHW 006ch
 	LD XBC, Bitmap_MIDIConnections_1
@@ -260375,7 +260375,7 @@ MdPcgModeFunc:
 LABEL_F74C4E:
 	LD XWA, XDE
 	LD DE, (XWA + 004h)
-	INC 0, XWA
+	db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XWA
 	CP DE, 3
 	JR Z, LABEL_F74C71
 	LD XBC, (XWA)
@@ -260406,7 +260406,7 @@ LABEL_F74C81:
 
 LABEL_F74C83:
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XHL, XIZ
 	JR T, LABEL_F74C96
 
@@ -260440,7 +260440,7 @@ MdDrumTypeFunc:
 LABEL_F74CC7:
 	LD XWA, XDE
 	LD DE, (XWA + 004h)
-	INC 0, XWA
+	db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XWA
 	CP DE, 3
 	JR Z, LABEL_F74CEA
 	LD XBC, (XWA)
@@ -260471,7 +260471,7 @@ LABEL_F74CFA:
 
 LABEL_F74CFC:
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XHL, XIZ
 	JR T, LABEL_F74D0F
 
@@ -260583,7 +260583,7 @@ LABEL_F74E30:
 	LD XWA, (XSP + 008h)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	JRL T, LABEL_F74F87
 
 LABEL_F74E3D:
@@ -260812,7 +260812,7 @@ LABEL_F75083:
 	LD XWA, (XSP + 008h)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	JRL T, LABEL_F751DA
 
 LABEL_F75090:
@@ -261184,7 +261184,7 @@ LABEL_F75470:
 	LD XWA, (XSP + 010h)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	JR T, LABEL_F754A9
 	LD XWA, XIZ
 	CALL GetViewInstance
@@ -261345,7 +261345,7 @@ LABEL_F756FB:
 	PUSH XWA
 	PUSH XBC
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	CALL GetFocusObject
 	LD XWA, XHL
 	LDA XDE, XSP + 004h
@@ -261637,7 +261637,7 @@ LABEL_F75A3B:
 	LD XWA, (XSP + 00ch)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	JR T, LABEL_F75A6D
 	LD XWA, (XSP + 010h)
 	CALL GetViewInstance
@@ -262005,7 +262005,7 @@ LABEL_F76288:
 	LD XWA, (XSP + 008h)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	JRL T, LABEL_F7631D
 
 LABEL_F7629B:
@@ -263000,7 +263000,7 @@ LABEL_F76F14:
 	LD XWA, (XSP + 010h)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	JR T, LABEL_F76F4D
 	LD XWA, XIZ
 	CALL GetViewInstance
@@ -263182,7 +263182,7 @@ LABEL_F7724E:
 	LD XWA, (XSP + 014h)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	CALL GetFocusObject
 	LD XWA, XHL
 	LDA XDE, XSP + 014h
@@ -263198,7 +263198,7 @@ LABEL_F772AB:
 	LD XWA, (XSP + 014h)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	CALL GetFocusObject
 	LD XWA, XHL
 	LDA XDE, XSP + 014h
@@ -263215,7 +263215,7 @@ LABEL_F772D3:
 	LD XWA, (XSP + 014h)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	CALL GetFocusObject
 	LD XWA, XHL
 	LDA XDE, XSP + 014h
@@ -263232,7 +263232,7 @@ LABEL_F772FE:
 	LD XWA, (XSP + 014h)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	CALL GetFocusObject
 	LD XWA, XHL
 	LDA XDE, XSP + 014h
@@ -263502,7 +263502,7 @@ LABEL_F77605:
 	LD XWA, (XSP + 010h)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	JR T, LABEL_F7763E
 	LD XWA, XIZ
 	CALL GetViewInstance
@@ -263777,7 +263777,7 @@ LABEL_F77BC7:
 	PUSHW 0ffaah
 	PUSH XBC
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	CALL GetFocusObject
 	LD XWA, XHL
 	LDA XDE, XSP + 004h
@@ -263789,7 +263789,7 @@ LABEL_F77BC7:
 	LDA XWA, XSP + 010h
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	CALL GetFocusObject
 	LD XWA, XHL
 	LDA XDE, XSP + 004h
@@ -263838,7 +263838,7 @@ LABEL_F77C77:
 	PUSHW 0ffc6h
 	PUSH XBC
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	CALL GetFocusObject
 	LD XWA, XHL
 	LDA XDE, XSP + 004h
@@ -263850,7 +263850,7 @@ LABEL_F77C77:
 	LDA XWA, XSP + 010h
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	CALL GetFocusObject
 	LD XWA, XHL
 	LDA XDE, XSP + 004h
@@ -263862,7 +263862,7 @@ LABEL_F77C77:
 	LDA XWA, XSP + 010h
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	CALL GetFocusObject
 	LD XWA, XHL
 	LDA XDE, XSP + 004h
@@ -264010,7 +264010,7 @@ LABEL_F77E36:
 	LDA XWA, XSP + 008h
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XBC, (XIZ + 030h)
 	LDA XDE, XSP + 004h
 	LDA XWA, 0E7FFFCh
@@ -264261,7 +264261,7 @@ LABEL_F78251:
 	PUSH XWA
 	PUSH XBC
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	CALL GetFocusObject
 	LD XWA, XHL
 	LDA XDE, XSP + 004h
@@ -264307,7 +264307,7 @@ LABEL_F782B7:
 	LDA XWA, XSP + 010h
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	CALL GetFocusObject
 	LD XWA, XHL
 	LDA XDE, XSP + 004h
@@ -264624,7 +264624,7 @@ LABEL_F7862B:
 	LD XWA, (XSP + 00ch)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	JR T, LABEL_F78666
 	LD XWA, (XSP + 010h)
 	CALL GetViewInstance
@@ -264905,7 +264905,7 @@ LABEL_F78937:
 	LD XWA, (XSP + 00ch)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	JR T, LABEL_F78972
 	LD XWA, (XSP + 010h)
 	CALL GetViewInstance
@@ -265276,7 +265276,7 @@ LABEL_F79193:
 	LD XWA, (XSP + 018h)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	CALL GetFocusObject
 	LD XWA, XHL
 	LDA XDE, XSP + 024h
@@ -265293,7 +265293,7 @@ LABEL_F791AE:
 	LD XWA, (XSP + 018h)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	CALL GetFocusObject
 	LD XWA, XHL
 	LDA XDE, XSP + 024h
@@ -265620,7 +265620,7 @@ LABEL_F79957:
 	LD XWA, (XSP + 010h)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	JR T, LABEL_F799E8
 
 LABEL_F799D2:
@@ -265682,7 +265682,7 @@ LABEL_F79A2D:
 	LD XWA, (XSP + 010h)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	JR T, LABEL_F79A7F
 
 LABEL_F79A69:
@@ -265833,7 +265833,7 @@ LABEL_F79BD8:
 	LDA XWA, XSP + 00ch
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LDA XDE, XSP + 008h
 	LD XWA, 0
 	PUSH XWA
@@ -266130,7 +266130,7 @@ LABEL_F79F40:
 	LD XWA, (XSP + 01ch)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	JR T, LABEL_F79F72
 	LD XWA, (XSP + 020h)
 	CALL GetViewInstance
@@ -266269,7 +266269,7 @@ LABEL_F7A16A:
 	PUSH XWA
 	PUSH XBC
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	CALL GetFocusObject
 	LD XWA, XHL
 	LDA XDE, XSP + 00ch
@@ -266418,7 +266418,7 @@ LABEL_F7A2F0:
 	LDA XWA, XSP + 00ch
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LDA XDE, XSP + 008h
 	LD XWA, 0
 	PUSH XWA
@@ -266852,7 +266852,7 @@ LABEL_F7A821:
 	LD XWA, (XSP + 01ch)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	JR T, LABEL_F7A853
 	LD XWA, (XSP + 020h)
 	CALL GetViewInstance
@@ -267064,7 +267064,7 @@ LABEL_F7AC20:
 	LDA XWA, XSP + 01ch
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	JR T, LABEL_F7ACA9
 
 LABEL_F7AC8E:
@@ -267101,7 +267101,7 @@ LABEL_F7ACBA:
 	LDA XWA, XSP + 01ch
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	CALL GetFocusObject
 	LD XWA, XHL
 	LDA XDE, XSP + 010h
@@ -267126,7 +267126,7 @@ LABEL_F7AD25:
 	LDA XWA, XSP + 01ch
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	CALL GetFocusObject
 	LD XWA, XHL
 	LDA XDE, XSP + 010h
@@ -267864,7 +267864,7 @@ LABEL_F7B6B0:
 
 LABEL_F7B6B4:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 LswLeftHold:
@@ -267903,7 +267903,7 @@ LABEL_F7B705:
 LABEL_F7B70B:
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XHL, XIZ
 	JR T, LABEL_F7B723
 
@@ -268247,7 +268247,7 @@ LABEL_F7BB4B:
 	LD XWA, (XSP + 008h)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 
 LABEL_F7BB5B:
 	LD XHL, 0
@@ -268263,7 +268263,7 @@ LABEL_F7BB67:
 
 LABEL_F7BB6B:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 AcLswPartEditBoxProc:
@@ -269753,7 +269753,7 @@ LswSound:
 	LD XWA, (XDE + 008h)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 
 LABEL_F7CC28:
 	LD XHL, XIZ
@@ -269862,7 +269862,7 @@ LABEL_F7CD10:
 	PUSH XWA
 	PUSH XBC
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 
 LABEL_F7CD18:
 	LD XHL, XIZ
@@ -269987,7 +269987,7 @@ LABEL_F7CE1E:
 	PUSH XWA
 	PUSH XBC
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 
 LABEL_F7CE26:
 	LD XHL, XIZ
@@ -270127,7 +270127,7 @@ LABEL_F7CF5B:
 	PUSH XWA
 	PUSH XBC
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 
 LABEL_F7CF63:
 	LD XHL, XIZ
@@ -270227,7 +270227,7 @@ LABEL_F7D028:
 	PUSHW 55c0h
 	PUSH XBC
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 
 LABEL_F7D035:
 	LD XHL, XIZ
@@ -270343,7 +270343,7 @@ LABEL_F7D128:
 	PUSHW 55c8h
 	PUSH XBC
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 
 LABEL_F7D135:
 	LD XHL, XIZ
@@ -270443,7 +270443,7 @@ LABEL_F7D206:
 	PUSH XWA
 	PUSH XBC
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XHL, XIZ
 	JR T, LABEL_F7D255
 
@@ -270541,7 +270541,7 @@ LABEL_F7D2DF:
 	PUSH XWA
 	PUSH XBC
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XHL, XIZ
 	JR T, LABEL_F7D32E
 
@@ -270638,7 +270638,7 @@ LABEL_F7D3B4:
 	PUSHW 55e8h
 	PUSH XBC
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 
 LABEL_F7D3C1:
 	LD XHL, XIZ
@@ -270748,7 +270748,7 @@ LABEL_F7D4B2:
 	PUSH XWA
 	PUSH XBC
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 
 LABEL_F7D4BA:
 	LD XHL, XIZ
@@ -270866,7 +270866,7 @@ LABEL_F7D5B6:
 	PUSH XWA
 	PUSH XBC
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 
 LABEL_F7D5BE:
 	LD XHL, XIZ
@@ -270971,7 +270971,7 @@ LABEL_F7D692:
 	PUSHW 5610h
 	PUSH XBC
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 
 LABEL_F7D69F:
 	LD XHL, XIZ
@@ -271071,7 +271071,7 @@ LABEL_F7D770:
 	PUSH XWA
 	PUSH XBC
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XHL, XIZ
 	JR T, LABEL_F7D7C3
 
@@ -271171,7 +271171,7 @@ LABEL_F7D84D:
 	PUSH XWA
 	PUSH XBC
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XHL, XIZ
 	JR T, LABEL_F7D8A0
 
@@ -271271,7 +271271,7 @@ LABEL_F7D92A:
 	PUSH XWA
 	PUSH XBC
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XHL, XIZ
 	JR T, LABEL_F7D97D
 
@@ -271371,7 +271371,7 @@ LABEL_F7DA07:
 	PUSH XWA
 	PUSH XBC
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XHL, XIZ
 	JR T, LABEL_F7DA5A
 
@@ -271471,7 +271471,7 @@ LABEL_F7DAE5:
 	PUSH XWA
 	PUSH XBC
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XHL, XIZ
 	JR T, LABEL_F7DB39
 
@@ -271571,7 +271571,7 @@ LABEL_F7DBC2:
 	PUSH XWA
 	PUSH XBC
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XHL, XIZ
 	JR T, LABEL_F7DC0F
 
@@ -271692,7 +271692,7 @@ LABEL_F7DCC6:
 
 LABEL_F7DCD0:
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 
 LABEL_F7DCD6:
 	LD XHL, (XSP + 004h)
@@ -271832,7 +271832,7 @@ LABEL_F7DE2F:
 	PUSHW 0d7c6h
 	PUSH XDE
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 
 LABEL_F7DE3C:
 	LD XHL, 0
@@ -272045,7 +272045,7 @@ LABEL_F7E01D:
 	LD XWA, (XDE + 012h)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 
 LABEL_F7E03C:
 	LD XHL, 0
@@ -272566,7 +272566,7 @@ LABEL_F7E636:
 	PUSHW 0d9bah
 	PUSH XIZ
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 
 LABEL_F7E643:
 	LD XHL, 0
@@ -272629,7 +272629,7 @@ LABEL_F7E6C0:
 	LD XWA, (XSP + 008h)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 
 LABEL_F7E6D0:
 	LD XHL, 0
@@ -272819,14 +272819,14 @@ LABEL_F7E88B:
 	LD XWA, (XSP + 008h)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 
 LABEL_F7E89B:
 	LD XHL, 0
 
 LABEL_F7E89D:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 IvSdtecd1Proc:
@@ -272999,7 +272999,7 @@ LABEL_F7EA9C:
 	PUSHW 0da22h
 	PUSH XIZ
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 
 LABEL_F7EAA9:
 	LD XHL, 0
@@ -273047,7 +273047,7 @@ LABEL_F7EB09:
 LABEL_F7EB0F:
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XHL, XIZ
 	JR T, LABEL_F7EB2B
 
@@ -273127,7 +273127,7 @@ LABEL_F7EBF2:
 	PUSH XWA
 	PUSH XDE
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 
 LABEL_F7EBFF:
 	LDA XHL, XSP + 0108h
@@ -273249,7 +273249,7 @@ LABEL_F7ED3E:
 	LD XWA, (XSP + 0114h)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 
 LABEL_F7ED57:
 	LD XHL, 0
@@ -273350,7 +273350,7 @@ LABEL_F7EE3C:
 	LD XWA, (XWA + 008h)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XHL, (XSP + 00ch)
 	JR T, LABEL_F7EE5C
 
@@ -273534,7 +273534,7 @@ LABEL_F7F061:
 	LD XWA, (XSP + 008h)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 
 LABEL_F7F071:
 	LD XHL, 0
@@ -273548,7 +273548,7 @@ LABEL_F7F075:
 
 LABEL_F7F081:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 LswScalingType:
@@ -273587,7 +273587,7 @@ LABEL_F7F0E1:
 LABEL_F7F0E7:
 	PUSH XBC
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XHL, (XSP + 004h)
 	JR T, LABEL_F7F104
 
@@ -273634,7 +273634,7 @@ LswScalingShift:
 	LD XWA, (XDE + 008h)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XHL, XIZ
 	JR T, LABEL_F7F16B
 
@@ -273680,7 +273680,7 @@ LswScalingShift2:
 	LD XWA, (XDE + 008h)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XHL, XIZ
 	JR T, LABEL_F7F1D0
 
@@ -273726,7 +273726,7 @@ LswScalingMode:
 	LD XWA, (XDE + 008h)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XHL, XIZ
 	JR T, LABEL_F7F235
 
@@ -273794,7 +273794,7 @@ LABEL_F7F2BD:
 	PUSHW 0de38h
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 
 LABEL_F7F2CA:
 	LD XHL, (XSP + 004h)
@@ -273938,7 +273938,7 @@ LABEL_F7F40E:
 	PUSHW 0de4eh
 	PUSH XDE
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 
 LABEL_F7F41B:
 	LD XHL, 0
@@ -273997,7 +273997,7 @@ LABEL_F7F492:
 	PUSHW 0de5ch
 	PUSH XDE
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 
 LABEL_F7F49F:
 	LD XHL, 0
@@ -275432,7 +275432,7 @@ LABEL_F80713:
 	LD XWA, (XSP + 056h)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 
 LABEL_F80723:
 	LD XHL, 0
@@ -275479,7 +275479,7 @@ LABEL_F8075D:
 
 LABEL_F8077B:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 AcTrackMixerProc:
@@ -275611,7 +275611,7 @@ LABEL_F808AB:
 
 LABEL_F808B9:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 LABEL_F808BD:
@@ -277002,7 +277002,7 @@ LABEL_F82A3A:
 	LD XWA, (XSP + 008h)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 
 LABEL_F82A4A:
 	LD XHL, 0
@@ -277018,7 +277018,7 @@ LABEL_F82A56:
 
 LABEL_F82A5A:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 AcDrawSettingProc:
@@ -277409,7 +277409,7 @@ LABEL_F82E39:
 	LD XWA, (XSP + 008h)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	JRL T, LABEL_F82EE6
 
 LABEL_F82E4C:
@@ -277555,7 +277555,7 @@ LABEL_F82F95:
 
 LABEL_F82F99:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 LswPercDecay:
@@ -277593,7 +277593,7 @@ LswPercDecay:
 	LD XWA, (XDE + 008h)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XHL, XIZ
 	JR T, LABEL_F8307C
 
@@ -277710,7 +277710,7 @@ LswPercLevel:
 	LD XWA, (XDE + 008h)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XHL, XIZ
 	JR T, LABEL_F8318B
 
@@ -277797,7 +277797,7 @@ LswDrawAttack:
 	LD XWA, (XDE + 008h)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XHL, XIZ
 	JR T, LABEL_F8326C
 
@@ -277884,7 +277884,7 @@ LswDrawRelease:
 	LD XWA, (XDE + 008h)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XHL, XIZ
 	JR T, LABEL_F8334D
 
@@ -278365,7 +278365,7 @@ LABEL_F837C2:
 	LD XWA, (XSP + 008h)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 
 LABEL_F837D2:
 	LD XHL, 0
@@ -278553,7 +278553,7 @@ LABEL_F839C1:
 	LD XWA, (XSP + 008h)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 
 LABEL_F839D1:
 	LD XHL, 0
@@ -278567,7 +278567,7 @@ LABEL_F839D5:
 
 LABEL_F839E1:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 IvDrawbarNormProc:
@@ -278692,7 +278692,7 @@ LABEL_F83B2D:
 	LD XWA, (XSP + 008h)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 
 LABEL_F83B3D:
 	LD XHL, 0
@@ -278706,7 +278706,7 @@ LABEL_F83B41:
 
 LABEL_F83B4D:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 IvDrawbarSndEProc:
@@ -278734,7 +278734,7 @@ LABEL_F83B81:
 	PUSHW 0f948h
 	PUSH XDE
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 
 LABEL_F83B8E:
 	LD XHL, 0
@@ -279339,7 +279339,7 @@ LABEL_F841E8:
 
 LABEL_F841EA:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 IvDemofeature1Proc:
@@ -279367,7 +279367,7 @@ LABEL_F8421E:
 	PUSHW 0f9a6h
 	PUSH XDE
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 
 LABEL_F8422B:
 	LD XHL, 0
@@ -279426,7 +279426,7 @@ LABEL_F842A3:
 	PUSHW 0f9ach
 	PUSH XDE
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 
 LABEL_F842B0:
 	LD XHL, 0
@@ -279623,7 +279623,7 @@ LABEL_F844C2:
 	LD XWA, (XSP + 00ch)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	JRL T, LABEL_F84332
 
 LABEL_F844DA:
@@ -279763,7 +279763,7 @@ LABEL_F8468B:
 
 LABEL_F84697:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 LABEL_F8469B:
@@ -280623,7 +280623,7 @@ LABEL_F84F2A:
 	LD XWA, XBC
 	CALL LABEL_FEE7EA
 	LD L, (XSP + 000h)
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 LABEL_F84F56:
@@ -281575,7 +281575,7 @@ LABEL_F85E7A:
 	LD IX, (XWA)
 	INC 1, IX
 	LD HL, (XSP + 004h)
-	INC 0, HL
+	db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, HL
 	SUB HL, (XIZ)
 	CP IX, 0028h
 	JR GE, LABEL_F85EC6
@@ -281588,14 +281588,14 @@ LABEL_F85EB0:
 	ADD BC, IX
 	CP (XDE + BC), 054h
 	JR NZ, LABEL_F85EC6
-	INC 0, HL
+	db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, HL
 	INC 1, IX
 	CP IX, 0028h
 	JR LT, LABEL_F85EB0
 
 LABEL_F85EC6:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 LABEL_F85ECA:
@@ -281893,7 +281893,7 @@ LABEL_F86258:
 	LDA XWA, XWA + BC
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD WA, QIZ
 	db 000h, 000h, 000h, 000h	;TODO: Fix ASL assembler encoding of: MULSW WA, 0018h
 	LDA XBC, 0249D8h
@@ -282272,7 +282272,7 @@ LABEL_F86841:
 	LD XWA, (XSP + 008h)
 	PUSH XWA
 	CALL LABEL_FF0F35
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	CP HL, 0
 	JR Z, LABEL_F8685A
 	LDA XIZ, XIZ + 018h
@@ -284176,7 +284176,7 @@ LABEL_F8803A:
 
 LABEL_F88057:
 	POP IZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 LABEL_F8805B:
@@ -284215,7 +284215,7 @@ LABEL_F880A7:
 
 LABEL_F880A9:
 	POP IZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 LABEL_F880AD:
@@ -284972,7 +284972,7 @@ LABEL_F88BC7:
 	LDA XWA, XSP + 008h
 	PUSH XWA
 	CALL LABEL_F4EB97
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD (7F44h), XHL
 	OR XHL, XHL
 	JR NZ, LABEL_F88C37
@@ -285081,7 +285081,7 @@ LABEL_F88C9C:
 	LDA XWA, XSP + 018h
 	PUSH XWA
 	CALL LABEL_F4F421
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	CP HL, 0
 	JR NZ, LABEL_F88CE6
 	LD HL, 0
@@ -285440,7 +285440,7 @@ LABEL_F88F75:
 	LDA XWA, XSP + 014h
 	PUSH XWA
 	CALL LABEL_F4EB97
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD (XSP + 006h), XHL
 	LD XWA, (XSP + 006h)
 	OR XWA, XWA
@@ -285463,7 +285463,7 @@ LABEL_F88FD5:
 	LDA XWA, XSP + 024h
 	PUSH XWA
 	CALL LABEL_F4EB97
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD (XSP + 002h), XHL
 	LD XWA, (XSP + 002h)
 	OR XWA, XWA
@@ -285506,7 +285506,7 @@ LABEL_F89042:
 	LD XWA, (XSP + 00ah)
 	PUSH XWA
 	CALL LABEL_F4F05A
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD HL, (XSP + 00ah)
 
 LABEL_F89057:
@@ -287025,7 +287025,7 @@ LABEL_F89D78:
 
 LABEL_F89D8B:
 	POP IZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 LABEL_F89D8F:
@@ -287351,7 +287351,7 @@ LABEL_F8A072:
 
 LABEL_F8A07B:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 LABEL_F8A07F:
@@ -287924,7 +287924,7 @@ LABEL_F8A7E4:
 	LDA XBC, XSP + 004h
 	CALR LABEL_F890DC
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 LABEL_F8A807:
@@ -291028,7 +291028,7 @@ LABEL_F8C79C:
 LABEL_F8C7AD:
 	LD XHL, 0
 	POP IZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 SaveFileNameNumFunc:
@@ -291985,7 +291985,7 @@ LABEL_F8D169:
 LABEL_F8D16D:
 	LD XHL, 0
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 FmmComposerLoadFunc:
@@ -296343,7 +296343,7 @@ LABEL_F91283:
 
 LABEL_F91288:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 CmpSingleLoadSrcFunc:
@@ -296752,7 +296752,7 @@ LABEL_F91761:
 
 LABEL_F91766:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 CmpSingleLoadFileFunc:
@@ -297779,7 +297779,7 @@ LABEL_F921A9:
 LABEL_F921C7:
 	LD XHL, 0
 	POP IZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 FmmDiskMedley1Func:
@@ -301962,7 +301962,7 @@ PasswordOk:
 	PUSHW 8bf6h
 	PUSH XDE
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XHL, XIZ
 	JR T, LABEL_F94DAB
 
@@ -302016,7 +302016,7 @@ CheckPasswordOk:
 	PUSHW 8bfah
 	PUSH XDE
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XHL, XIZ
 	JRL T, LABEL_F94E82
 
@@ -302329,7 +302329,7 @@ FilePriorityFunc:
 	LD XWA, (XDE + 00ah)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XHL, XIZ
 	JR T, LABEL_F95134
 
@@ -302963,7 +302963,7 @@ LABEL_F95777:
 	LDA XWA, XSP + 016h
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XHL, (XSP + 00ah)
 	LD XBC, (XHL + 02ah)
 	LDA XDE, XSP + 012h
@@ -303065,7 +303065,7 @@ LABEL_F95844:
 	LDA XWA, XSP + 016h
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XWA, (XSP + 00ah)
 	LD XIX, (XWA + 02ah)
 	LD XWA, (XSP + 00a2h)
@@ -303374,7 +303374,7 @@ LABEL_F95BF9:
 
 LABEL_F95BFD:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 PsWindowToggleProc:
@@ -303848,7 +303848,7 @@ LABEL_F960A5:
 	LD XWA, (XSP + 00ch)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	JR T, LABEL_F960F9
 
 LABEL_F960B7:
@@ -303919,7 +303919,7 @@ LABEL_F96115:
 
 LABEL_F96149:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 LABEL_F9614D:
@@ -303945,7 +303945,7 @@ LABEL_F96175:
 
 LABEL_F96177:
 	CALL DrawLine
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RETD 0002h
 
 LABEL_F96180:
@@ -304462,7 +304462,7 @@ LABEL_F9665E:
 	LD XWA, (XSP + 00ch)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	JRL T, LABEL_F967D3
 
 LABEL_F96671:
@@ -304813,7 +304813,7 @@ LABEL_F969F3:
 	LD XWA, (XSP + 008h)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	JR T, LABEL_F96A6E
 
 LABEL_F96A05:
@@ -304866,7 +304866,7 @@ LABEL_F96A72:
 
 LABEL_F96A7C:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 IvWaitWinCtlProc:
@@ -304897,7 +304897,7 @@ LABEL_F96ABC:
 	PUSHW 98a2h
 	PUSH XDE
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	JR T, LABEL_F96B09
 
 LABEL_F96ACB:
@@ -307364,7 +307364,7 @@ LABEL_F98CA4:
 LABEL_F98CA8:
 	LD XHL, 0
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 MainGetSoundName:
@@ -307422,7 +307422,7 @@ LABEL_F98D3E:
 	LD XWA, (XSP + 00eh)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 
 LABEL_F98D4E:
 	LD XWA, 0ffffffffh
@@ -307837,7 +307837,7 @@ LABEL_F990FE:
 	CALL ApPostEvent
 	LD XHL, 0
 	POP QIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 MainTrSwControl:
@@ -308256,7 +308256,7 @@ GetClientBox:
 	LD XDE, XIZ
 	CALR GetClientBox2
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 GetClientBox2:
@@ -311474,7 +311474,7 @@ LABEL_F9BE36:
 	PUSHW 0002h
 	PUSHW 74b0h
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XWA, (XSP + 032h)
 	LD XBC, 01e00080h
 	LD XDE, 0
@@ -311486,7 +311486,7 @@ LABEL_F9BE53:
 	LD XWA, (XSP + 02eh)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	JRL T, LABEL_F9C115
 
 LABEL_F9BE66:
@@ -312436,7 +312436,7 @@ LABEL_F9C7D7:
 
 LABEL_F9C7FA:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 GetClientFrame:
@@ -312454,7 +312454,7 @@ GetClientFrame:
 	LD BC, (XHL + 018h)
 	CALR GetClientFrame2
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 GetClientFrame2:
@@ -312673,7 +312673,7 @@ LABEL_F9CAC5:
 	PUSH XWA
 	PUSH XBC
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LDA XWA, XSP + 002h
 	LD XBC, 0
 	CALL CalcTotalWidth
@@ -312825,7 +312825,7 @@ LABEL_F9CC2A:
 	PUSHW 0a17eh
 	PUSH XIZ
 	CALL LABEL_FF097D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LDA XWA, XIZ + HL
 	LD (XSP + 00ah), XWA
 	LD (XWA), 000h
@@ -313038,7 +313038,7 @@ LABEL_F9CE3B:
 	PUSH XWA
 	PUSH XDE
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 
 LABEL_F9CE48:
 	LDA XWA, XSP + 0108h
@@ -313499,7 +313499,7 @@ LABEL_F9D303:
 	LDA XWA, XSP + 008h
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 
 LABEL_F9D313:
 	LDA XDE, XSP + 004h
@@ -313599,7 +313599,7 @@ LABEL_F9D458:
 	PUSH XWA
 	PUSH XDE
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 
 LABEL_F9D465:
 	CALR GetDialFocus
@@ -313853,7 +313853,7 @@ LABEL_F9D71B:
 	PUSH XWA
 	PUSH XIZ
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XHL, 0
 
 LABEL_F9D72C:
@@ -313915,7 +313915,7 @@ LABEL_F9D7E5:
 	PUSH XWA
 	PUSH XDE
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 
 LABEL_F9D7F2:
 	LD XWA, (XSP + 012ah)
@@ -314305,7 +314305,7 @@ LABEL_F9DBB6:
 	LD XWA, (XSP + 012ah)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 
 LABEL_F9DBC8:
 	LD XHL, 0
@@ -314452,7 +314452,7 @@ LABEL_F9DD5E:
 	LD XWA, (XSP + 00ch)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 
 LABEL_F9DD73:
 	LD XHL, 0
@@ -315520,7 +315520,7 @@ LABEL_F9E801:
 	LD XWA, (XSP + 014ah)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	JRL T, LABEL_F9DEF3
 	LD XWA, (XSP + 014eh)
 	CALL GetViewInstance
@@ -315839,7 +315839,7 @@ LABEL_F9EB87:
 	LD XWA, (XSP + 010h)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	JR T, LABEL_F9EBAF
 
 LABEL_F9EB9C:
@@ -316040,7 +316040,7 @@ LABEL_F9ED89:
 	LDA XWA, XSP + 0110h
 	PUSH XWA
 	CALL LABEL_FF0FA0
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LDA XWA, XSP + 020ch
 	LDA XDE, XWA + 004h
 	LD BC, (XDE)
@@ -316133,7 +316133,7 @@ LABEL_F9EEEC:
 	PUSH XWA
 	PUSH XDE
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 
 LABEL_F9EEF9:
 	LD XIY, (XSP + 008h)
@@ -316380,7 +316380,7 @@ PasTableCheck:
 	PUSH XWA
 	PUSH XDE
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 
 LABEL_F9F18E:
 	LD XHL, 0
@@ -316425,7 +316425,7 @@ LABEL_F9F1E0:
 	LD XWA, (XSP + 008h)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	JRL T, LABEL_F9F288
 
 LABEL_F9F207:
@@ -317085,7 +317085,7 @@ MainLswPut:
 	CALL MainFuncCall
 	LD HL, 0
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 MainLswPartPut:
@@ -317122,7 +317122,7 @@ MainLswPartPut:
 	CALL MainFuncCall
 	LD HL, 0
 	POP IZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RETD 0002h
 
 MainLswAdd:
@@ -317153,7 +317153,7 @@ MainLswAdd:
 	CALL MainFuncCall
 	LD HL, 0
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 MainLswPartAdd:
@@ -317190,7 +317190,7 @@ MainLswPartAdd:
 	CALL MainFuncCall
 	LD HL, 0
 	POP IZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RETD 0002h
 
 MainLswGet:
@@ -317858,7 +317858,7 @@ BitEditCheck:
 	LD XWA, (XDE + 00ah)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XHL, XIZ
 	JR T, LABEL_FA0185
 
@@ -317927,7 +317927,7 @@ MainBitGet:
 	LD XDE, XIZ
 	CALL MainFuncCall
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 PsMenuBoxProc:
@@ -317992,7 +317992,7 @@ LABEL_FA02B7:
 	PUSH XWA
 	PUSH XDE
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 
 LABEL_FA02C4:
 	LDA XHL, XSP + 010ch
@@ -318195,7 +318195,7 @@ LABEL_FA04BC:
 	LDA XWA, XSP + 010h
 	PUSH XWA
 	CALL LABEL_FF0FA0
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XWA, (XSP + 008h)
 	LD XBC, (XWA + 01ch)
 	LDA XWA, XSP + 00ch
@@ -318552,7 +318552,7 @@ LABEL_FA0894:
 	LDA XWA, XSP + 00eh
 	PUSH XWA
 	CALL LABEL_FF0FA0
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XWA, (XSP + 006h)
 	LD XBC, (XWA + 01ch)
 	LDA XWA, XSP + 00ah
@@ -319377,7 +319377,7 @@ LABEL_FA1271:
 
 LABEL_FA1275:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 VwEditSwBoxProc:
@@ -319447,7 +319447,7 @@ LABEL_FA130A:
 	LD XWA, (XSP + 008h)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 
 LABEL_FA131D:
 	LD XHL, 0
@@ -320286,7 +320286,7 @@ LABEL_FA1B0C:
 	LD XWA, (XSP + 00ch)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	JR T, LABEL_FA1B74
 
 LABEL_FA1B1E:
@@ -320363,7 +320363,7 @@ LABEL_FA1BCB:
 	LD XWA, (XSP + 008h)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	JR T, LABEL_FA1C2B
 
 LABEL_FA1BDD:
@@ -320441,7 +320441,7 @@ LABEL_FA1C71:
 	PUSHW 0a36ch
 	PUSH XDE
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 
 LABEL_FA1C7E:
 	LD XHL, 0
@@ -320478,7 +320478,7 @@ LABEL_FA1CBA:
 	LD XWA, (XSP + 008h)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XHL, 0
 	JR T, LABEL_FA1D40
 
@@ -320552,7 +320552,7 @@ LABEL_FA1D71:
 	LD XWA, (XSP + 008h)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XHL, 0
 	JR T, LABEL_FA1DF4
 
@@ -320625,7 +320625,7 @@ LABEL_FA1E1F:
 	LD XWA, (XSP + 008h)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XHL, 0
 	JR T, LABEL_FA1EAA
 
@@ -320675,7 +320675,7 @@ LABEL_FA1EA7:
 
 LABEL_FA1EAA:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 IvFixWinProc:
@@ -320733,7 +320733,7 @@ LABEL_FA1F27:
 
 LABEL_FA1F29:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 IvNamingProc:
@@ -320798,7 +320798,7 @@ LABEL_FA1FC1:
 
 LABEL_FA1FC3:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 GetNamingWindowID:
@@ -320818,7 +320818,7 @@ NamingCheck:
 	PUSH XWA
 	PUSH XDE
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XHL, XIZ
 	JR T, LABEL_FA2006
 
@@ -320878,7 +320878,7 @@ LABEL_FA2062:
 
 LABEL_FA2068:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 IvCatchEventProc:
@@ -321035,7 +321035,7 @@ LABEL_FA21D4:
 	LD XWA, (XSP + 008h)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 
 LABEL_FA21E4:
 	LD XHL, 0
@@ -321059,7 +321059,7 @@ LABEL_FA21F6:
 
 LABEL_FA220A:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 IvIntReminderProc:
@@ -321071,7 +321071,7 @@ IvIntReminderProc:
 	PUSHW 0a3a2h
 	PUSH XDE
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XHL, 0
 	RET
 
@@ -321089,7 +321089,7 @@ IvIntCompleteProc:
 	PUSHW 0a3a8h
 	PUSH XDE
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XHL, 0
 	RET
 
@@ -321107,7 +321107,7 @@ IvIntErrorProc:
 	PUSHW 0a3aeh
 	PUSH XDE
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XHL, 0
 	RET
 
@@ -321161,7 +321161,7 @@ LABEL_FA22E4:
 	LD XWA, (XSP + 008h)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 
 LABEL_FA22F4:
 	LD XHL, 0
@@ -321173,7 +321173,7 @@ LABEL_FA22F8:
 
 LABEL_FA22FF:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 IvIntEasySetProc:
@@ -321185,7 +321185,7 @@ IvIntEasySetProc:
 	PUSHW 0a3bah
 	PUSH XDE
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XHL, 0
 	RET
 
@@ -321239,7 +321239,7 @@ LABEL_FA2387:
 	LD XWA, (XSP + 008h)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 
 LABEL_FA2397:
 	LD XHL, 0
@@ -321250,7 +321250,7 @@ LABEL_FA239B:
 
 LABEL_FA239D:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 IvShowHideProc:
@@ -321305,7 +321305,7 @@ LABEL_FA241C:
 
 LABEL_FA2427:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 AcSoundNameProc:
@@ -322727,7 +322727,7 @@ LABEL_FA3236:
 	PUSH XWA
 	PUSH XDE
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 
 LABEL_FA3243:
 	LD XWA, (XSP + 00eh)
@@ -323545,7 +323545,7 @@ LABEL_FA3B57:
 
 LABEL_FA3B59:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 PsTextBoxProc:
@@ -323645,7 +323645,7 @@ LABEL_FA3C46:
 	LD XWA, (XSP + 00eh)
 	PUSH XWA
 	CALL LABEL_FF097D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XWA, (XSP + 00ah)
 	LDA XWA, XWA + HL
 	LD (XSP + 00eh), XWA
@@ -324451,7 +324451,7 @@ LABEL_FA45D1:
 	PUSH XWA
 	PUSH XDE
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XWA, 0
 	LD (XSP + 00ah), XWA
 	JR T, LABEL_FA463F
@@ -324531,7 +324531,7 @@ LABEL_FA46CF:
 	LDA XWA, XSP + 0096h
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XWA, 0
 	LD (XSP + 00ah), XWA
 	JR T, LABEL_FA4720
@@ -324574,7 +324574,7 @@ LABEL_FA473A:
 	LDA XWA, XSP + 016h
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LDA XWA, XSP + 0092h
 	ADD XWA, (XSP + 00ah)
 	LD A, (XWA)
@@ -324595,7 +324595,7 @@ LABEL_FA473A:
 	LD XWA, (XBC + 004h)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	JR T, LABEL_FA47BC
 
 LABEL_FA47A2:
@@ -324867,7 +324867,7 @@ LABEL_FA4A0F:
 
 LABEL_FA4A11:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 DefaultFunction:
@@ -326501,7 +326501,7 @@ LABEL_FA5BC5:
 	LD XWA, (XWA)
 	PUSH XWA
 	CALL LABEL_FF0FA0
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	CP HL, (XSP + 008h)
 	JR NC, LABEL_FA5C0A
 	LD XWA, (XSP + 010h)
@@ -326527,7 +326527,7 @@ LABEL_FA5C0A:
 	LD XWA, (XWA)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	JRL T, LABEL_FA5B65
 
 LABEL_FA5C25:
@@ -326680,7 +326680,7 @@ LABEL_FA5D5D:
 	SUB WA, 0009h
 	LD (XDE), WA
 	LD WA, (XIZ)
-	INC 0, WA
+	db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, WA
 	LD (XHL), WA
 	LDW (XBC), 0008h
 	LDW (XIX), 0026h
@@ -326693,7 +326693,7 @@ LABEL_FA5D94:
 	SUB WA, 0009h
 	LD (XDE), WA
 	LD WA, (XIZ)
-	INC 0, WA
+	db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, WA
 	LD (XHL), WA
 	LDW (XBC), 0119h
 	LDW (XIX), 0137h
@@ -327101,7 +327101,7 @@ LABEL_FA6093:
 	LD BC, 1
 	CALR SetChange
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 Unlink:
@@ -327236,7 +327236,7 @@ LABEL_FA61FD:
 
 LABEL_FA6203:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 GetLinkView:
@@ -327411,7 +327411,7 @@ LABEL_FA634A:
 
 LABEL_FA634C:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 uwordProc:
@@ -327461,7 +327461,7 @@ LABEL_FA63AE:
 
 LABEL_FA63B0:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 ucharProc:
@@ -327511,7 +327511,7 @@ LABEL_FA6412:
 
 LABEL_FA6414:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 scharProc:
@@ -327562,7 +327562,7 @@ LABEL_FA6478:
 
 LABEL_FA647A:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 slongProc:
@@ -327611,7 +327611,7 @@ LABEL_FA64DA:
 
 LABEL_FA64DC:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 ulongProc:
@@ -327660,7 +327660,7 @@ LABEL_FA653C:
 
 LABEL_FA653E:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 boolProc:
@@ -327710,7 +327710,7 @@ LABEL_FA65A0:
 
 LABEL_FA65A2:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 pBoolProc:
@@ -328581,7 +328581,7 @@ LABEL_FA6E5F:
 	LDA XWA, XSP + 008h
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD IX, 0
 	LD IY, 0
 	LDA XHL, XSP + 004h
@@ -328661,7 +328661,7 @@ LABEL_FA6F0D:
 	LD XWA, (XSP + 010ch)
 	PUSH XWA
 	CALL LABEL_FF0DC1
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	JR T, LABEL_FA6F4E
 
 LABEL_FA6F21:
@@ -328755,7 +328755,7 @@ LABEL_FA6FEF:
 	LD XWA, (XSP + 00ch)
 	PUSH XWA
 	CALL LABEL_FF0DC1
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 
 LABEL_FA6FFF:
 	LD XHL, 0
@@ -328830,7 +328830,7 @@ LABEL_FA708E:
 	LD XWA, (XSP + 00ch)
 	PUSH XWA
 	CALL LABEL_FF0DC1
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	JR T, LABEL_FA70DC
 
 LABEL_FA70A0:
@@ -328861,7 +328861,7 @@ LABEL_FA70BC:
 	INC 1, WA
 	PUSH WA
 	CALL LABEL_FF0DE3
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 
 LABEL_FA70DC:
 	LD XHL, 0
@@ -328919,7 +328919,7 @@ LABEL_FA7151:
 	LD XWA, (XSP + 00ch)
 	PUSH XWA
 	CALL LABEL_FF0DC1
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XHL, 1
 	JR T, LABEL_FA71E4
 
@@ -328929,7 +328929,7 @@ LABEL_FA7165:
 	LD XWA, (XSP + 00ch)
 	PUSH XWA
 	CALL LABEL_FF0DC1
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	JR T, LABEL_FA71B3
 
 LABEL_FA7177:
@@ -328960,7 +328960,7 @@ LABEL_FA7193:
 	INC 1, WA
 	PUSH WA
 	CALL LABEL_FF0DE3
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 
 LABEL_FA71B3:
 	LD XHL, 0
@@ -329008,7 +329008,7 @@ LABEL_FA7206:
 	LDA XWA, XSP + 006h
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD IY, 0
 	LD IZ, 0
 	LDA XIX, XSP + 002h
@@ -329078,7 +329078,7 @@ LABEL_FA72A7:
 	LD XWA, (XSP + 0108h)
 	PUSH XWA
 	CALL LABEL_FF0DC1
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	JR T, LABEL_FA72E8
 
 LABEL_FA72BB:
@@ -329166,7 +329166,7 @@ LABEL_FA737D:
 	LD XWA, (XSP + 008h)
 	PUSH XWA
 	CALL LABEL_FF0DC1
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XHL, 1
 	JR T, LABEL_FA73E2
 
@@ -329176,7 +329176,7 @@ LABEL_FA7391:
 	LD XWA, (XSP + 008h)
 	PUSH XWA
 	CALL LABEL_FF0DC1
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 
 LABEL_FA73A1:
 	LD XHL, 0
@@ -329216,7 +329216,7 @@ LABEL_FA73E0:
 
 LABEL_FA73E2:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 ClassIDProc:
@@ -329332,7 +329332,7 @@ LABEL_FA74FE:
 
 LABEL_FA7507:
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XHL, 0
 	JRL T, LABEL_FA75A6
 
@@ -329358,7 +329358,7 @@ LABEL_FA752A:
 	CALL ClassProc
 	PUSH XHL
 	CALL LABEL_FF0F35
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	CP HL, 0
 	JR NZ, LABEL_FA756C
 	LD XWA, (XSP + 008h)
@@ -329452,7 +329452,7 @@ LABEL_FA760B:
 
 LABEL_FA760D:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 ColorIDProc:
@@ -329502,7 +329502,7 @@ LABEL_FA766F:
 
 LABEL_FA7671:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 BorderIDProc:
@@ -329552,7 +329552,7 @@ LABEL_FA76D3:
 
 LABEL_FA76D5:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 AlignmentIDProc:
@@ -329602,7 +329602,7 @@ LABEL_FA7737:
 
 LABEL_FA7739:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 EditSwStyleIDProc:
@@ -329652,7 +329652,7 @@ LABEL_FA779B:
 
 LABEL_FA779D:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 EditSwIDProc:
@@ -329780,7 +329780,7 @@ LABEL_FA78A0:
 
 LABEL_FA78A2:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 FrameIDProc:
@@ -329830,7 +329830,7 @@ LABEL_FA7904:
 
 LABEL_FA7906:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 UserIDProc:
@@ -329880,7 +329880,7 @@ LABEL_FA7968:
 
 LABEL_FA796A:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 PartIDProc:
@@ -329930,7 +329930,7 @@ LABEL_FA79CC:
 
 LABEL_FA79CE:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 TrackIDProc:
@@ -329980,7 +329980,7 @@ LABEL_FA7A30:
 
 LABEL_FA7A32:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 IntTimeIDProc:
@@ -330030,7 +330030,7 @@ LABEL_FA7A94:
 
 LABEL_FA7A96:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 StringProc:
@@ -330126,7 +330126,7 @@ LABEL_FA7B74:
 	LD (XSP + 010h), HL
 	PUSH XIZ
 	CALL LABEL_FF0FA0
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	CP HL, (XSP + 00ch)
 	JR NC, LABEL_FA7BB6
 	LD XWA, (XSP + 004h)
@@ -330150,7 +330150,7 @@ LABEL_FA7BBD:
 
 LABEL_FA7BC0:
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XHL, 0
 
 LABEL_FA7BC8:
@@ -330226,7 +330226,7 @@ LABEL_FA7C78:
 
 LABEL_FA7C81:
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XHL, 0
 	JR T, LABEL_FA7CE8
 
@@ -330242,7 +330242,7 @@ LABEL_FA7C97:
 	LD XWA, (XWA + 004h)
 	PUSH XWA
 	CALL LABEL_FF0F35
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	CP HL, 0
 	JR NZ, LABEL_FA7CB2
 	LD XWA, 0
@@ -330350,7 +330350,7 @@ LABEL_FA7D98:
 
 LABEL_FA7DA1:
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XHL, 0
 	JR T, LABEL_FA7E08
 
@@ -330366,7 +330366,7 @@ LABEL_FA7DB7:
 	LD XWA, (XWA + 004h)
 	PUSH XWA
 	CALL LABEL_FF0F35
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	CP HL, 0
 	JR NZ, LABEL_FA7DD2
 	LD XWA, 0
@@ -330474,7 +330474,7 @@ LABEL_FA7EB8:
 
 LABEL_FA7EC1:
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XHL, 0
 	JR T, LABEL_FA7F28
 
@@ -330490,7 +330490,7 @@ LABEL_FA7ED7:
 	LD XWA, (XWA + 004h)
 	PUSH XWA
 	CALL LABEL_FF0F35
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	CP HL, 0
 	JR NZ, LABEL_FA7EF2
 	LD XWA, 0
@@ -330647,7 +330647,7 @@ LABEL_FA8050:
 
 LABEL_FA805C:
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XHL, 0
 	JRL T, LABEL_FA810F
 
@@ -330676,7 +330676,7 @@ LABEL_FA8087:
 	PUSH XWA
 	PUSH XHL
 	CALL LABEL_FF0F35
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	CP HL, 0
 	JR NZ, LABEL_FA80CF
 	LD XWA, (XSP + 00ch)
@@ -330843,7 +330843,7 @@ LABEL_FA8237:
 
 LABEL_FA8243:
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XHL, 0
 	JRL T, LABEL_FA82F6
 
@@ -330872,7 +330872,7 @@ LABEL_FA826E:
 	PUSH XWA
 	PUSH XHL
 	CALL LABEL_FF0F35
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	CP HL, 0
 	JR NZ, LABEL_FA82B6
 	LD XWA, (XSP + 00ch)
@@ -331006,7 +331006,7 @@ LABEL_FA8391:
 	LD XWA, (XWA + 004h)
 	PUSH XWA
 	CALL LABEL_FF0A72
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	JRL T, LABEL_FA8555
 
 LABEL_FA83ED:
@@ -331146,7 +331146,7 @@ LABEL_FA8542:
 
 LABEL_FA854F:
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 
 LABEL_FA8555:
 	LD XHL, 0
@@ -331177,7 +331177,7 @@ LABEL_FA857A:
 	PUSH XWA
 	PUSH XHL
 	CALL LABEL_FF0F35
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	CP HL, 0
 	JR NZ, LABEL_FA85C2
 	LD XWA, (XSP + 008h)
@@ -331319,7 +331319,7 @@ LABEL_FA86B9:
 	LD XWA, (XWA + 004h)
 	PUSH XWA
 	CALL LABEL_FF0A72
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	JRL T, LABEL_FA8847
 
 LABEL_FA8715:
@@ -331436,7 +331436,7 @@ LABEL_FA8834:
 	LD XWA, (XWA + 004h)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 
 LABEL_FA8847:
 	LD XHL, 0
@@ -331508,7 +331508,7 @@ LABEL_FA88F0:
 	LDA XWA, XSP + 018h
 	PUSH XWA
 	CALL LABEL_FF0F35
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	CP HL, 0
 	JR NZ, LABEL_FA8921
 	LD XWA, (XSP + 008h)
@@ -331539,7 +331539,7 @@ LABEL_FA892F:
 	PUSHW 00eah
 	PUSHW 0ab2ah
 	CALL LABEL_FF0F35
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	CP HL, 0
 	JR NZ, LABEL_FA895F
 	LD XWA, (XSP + 004h)
@@ -331670,7 +331670,7 @@ LABEL_FA8A49:
 	LD XWA, (XWA + 004h)
 	PUSH XWA
 	CALL LABEL_FF0A72
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	JRL T, LABEL_FA8BD7
 
 LABEL_FA8AA5:
@@ -331787,7 +331787,7 @@ LABEL_FA8BC4:
 	LD XWA, (XWA + 004h)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 
 LABEL_FA8BD7:
 	LD XHL, 0
@@ -331859,7 +331859,7 @@ LABEL_FA8C80:
 	LDA XWA, XSP + 018h
 	PUSH XWA
 	CALL LABEL_FF0F35
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	CP HL, 0
 	JR NZ, LABEL_FA8CB1
 	LD XWA, (XSP + 008h)
@@ -331890,7 +331890,7 @@ LABEL_FA8CBF:
 	PUSHW 00eah
 	PUSHW 0ab6ch
 	CALL LABEL_FF0F35
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	CP HL, 0
 	JR NZ, LABEL_FA8CEF
 	LD XWA, (XSP + 004h)
@@ -332087,7 +332087,7 @@ LABEL_FA8EA9:
 
 LABEL_FA8EAD:
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 
 LABEL_FA8EB3:
 	LD XHL, 0
@@ -332116,7 +332116,7 @@ LABEL_FA8ED5:
 	LDA XWA, XSP + 014h
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LDA XBC, XSP + 010h
 	CP (XBC), 000h
 	JR NZ, LABEL_FA8F14
@@ -332134,7 +332134,7 @@ LABEL_FA8F14:
 	LDA XWA, XSP + 014h
 	PUSH XWA
 	CALL LABEL_FF0F35
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	CP HL, 0
 	JR NZ, LABEL_FA8F3F
 	LD XWA, (XSP + 008h)
@@ -332332,7 +332332,7 @@ LABEL_FA90EF:
 
 LABEL_FA90F3:
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 
 LABEL_FA90F9:
 	LD XHL, 0
@@ -332361,7 +332361,7 @@ LABEL_FA911B:
 	LDA XWA, XSP + 014h
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LDA XBC, XSP + 010h
 	CP (XBC), 000h
 	JR NZ, LABEL_FA915A
@@ -332379,7 +332379,7 @@ LABEL_FA915A:
 	LDA XWA, XSP + 014h
 	PUSH XWA
 	CALL LABEL_FF0F35
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	CP HL, 0
 	JR NZ, LABEL_FA9185
 	LD XWA, (XSP + 008h)
@@ -332474,7 +332474,7 @@ LABEL_FA9224:
 
 LABEL_FA9227:
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 
 LABEL_FA922D:
 	LD XHL, 0
@@ -332533,7 +332533,7 @@ LABEL_FA9296:
 
 LABEL_FA92A3:
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	JR T, LABEL_FA92CC
 
 LABEL_FA92AB:
@@ -332569,7 +332569,7 @@ LABEL_FA92EC:
 
 LABEL_FA92EE:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 ObjectIDProc:
@@ -332637,7 +332637,7 @@ LABEL_FA938D:
 	LD XWA, (XWA + 004h)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	JR T, LABEL_FA9405
 	LD XWA, (XSP + 010h)
 	LD (XSP + 004h), XWA
@@ -332668,12 +332668,12 @@ LABEL_FA93DF:
 	LD XWA, (XWA + 004h)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	JR T, LABEL_FA9405
 
 LABEL_FA93F6:
 	INC 1, IZ
-	INC 0, XDE
+	db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XDE
 
 LABEL_FA93FA:
 	LD XHL, XDE
@@ -332701,7 +332701,7 @@ LABEL_FA941F:
 	LD XWA, (XBC)
 	PUSH XWA
 	CALL LABEL_FF0F35
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	CP HL, 0
 	JR NZ, LABEL_FA944B
 	LD BC, IZ
@@ -333040,7 +333040,7 @@ LABEL_FA977F:
 	LD WA, 4
 	CALL LABEL_EF1DD4
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 
 LABEL_FA9788:
 	JR T, LABEL_FA9788
@@ -333071,7 +333071,7 @@ LABEL_FA97C0:
 	LD WA, 2
 	CALL LABEL_EF1DD4
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 GetEvent:
@@ -333248,7 +333248,7 @@ LABEL_FA993B:
 LABEL_FA993D:
 	CALL LABEL_EF1DD4
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 LABEL_FA9945:
@@ -333395,7 +333395,7 @@ LABEL_FA9B57:
 
 LABEL_FA9B59:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 MainPostEvent:
@@ -333459,7 +333459,7 @@ LABEL_FA9BFC:
 
 LABEL_FA9C02:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 MainGetEvent:
@@ -333508,7 +333508,7 @@ LABEL_FA9C6F:
 
 LABEL_FA9C77:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 MainDeleteEvent:
@@ -333626,7 +333626,7 @@ LABEL_FA9D4E:
 LABEL_FA9D50:
 	CALL LABEL_EF1DD4
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 ApPostEvent:
@@ -333692,7 +333692,7 @@ LABEL_FA9DF7:
 
 LABEL_FA9E03:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 ApDeliveryEvent:
@@ -333972,7 +333972,7 @@ LABEL_FAA12A:
 	LD XWA, 1
 	ADD (030444h), XWA
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 SetApTimer:
@@ -334497,7 +334497,7 @@ InitializeGraphics:
 	CALR UpdateScreen
 	CALR LcdOn
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 LcdOn:
@@ -334676,7 +334676,7 @@ LABEL_FAA73E:
 
 LABEL_FAA75D:
 	POP IZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 SetNeedUpdate:
@@ -335172,7 +335172,7 @@ LABEL_FAABA2:
 
 LABEL_FAABB5:
 	CALL LABEL_FF0FFA
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	JRL T, LABEL_FAAEEC
 
 LABEL_FAABBE:
@@ -335990,7 +335990,7 @@ LABEL_FAB363:
 	LD XWA, (XSP + 006h)
 	PUSH XWA
 	CALL LABEL_FF0FFA
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XWA, (XSP + 002h)
 	LDA XWA, XWA + 0140h
 	LD (XSP + 002h), XWA
@@ -336149,7 +336149,7 @@ LABEL_FAB490:
 	ADD XBC, XWA
 	PUSH XBC
 	CALL LABEL_FF0FFA
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	JRL T, LABEL_FAB7FE
 
 LABEL_FAB4EF:
@@ -338569,7 +338569,7 @@ LABEL_FACAFF:
 	PUSH XWA
 	PUSH XBC
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XWA, (XSP + 01ch)
 	LD (XIZ + 014h), XWA
 	LD WA, (XSP + 01ah)
@@ -342756,7 +342756,7 @@ LABEL_FAF8B9:
 
 LABEL_FAF8BC:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 LABEL_FAF8C0:
@@ -343076,7 +343076,7 @@ LABEL_FAFB41:
 
 LABEL_FAFB44:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 LABEL_FAFB48:
@@ -343750,7 +343750,7 @@ LABEL_FB0EBF:
 	PUSH XWA
 	PUSH XBC
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XWA, (XSP + 01ch)
 	LD (XIZ + 014h), XWA
 	LD WA, (XSP + 01ah)
@@ -343910,7 +343910,7 @@ LABEL_FB1074:
 	LDA XWA, XSP + 02ah
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LDA XWA, XSP + 026h
 	LD (XSP + 01eh), XWA
 	LD XWA, (XSP + 004h)
@@ -344819,7 +344819,7 @@ LABEL_FB1DFA:
 	LD (XWA + 004h), DE
 	LD BC, (03EFA2h)
 	CALR LABEL_FAF8C0
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 LABEL_FB1E40:
@@ -345192,7 +345192,7 @@ LABEL_FB24EC:
 	LD A, QIZH
 	LD (03EFA8h), A
 	POP QIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 LABEL_FB2538:
@@ -345462,7 +345462,7 @@ LABEL_FB27B8:
 	LD XWA, (XSP + 00ah)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XWA, (XSP + 006h)
 	LD BC, (XSP + 004h)
 	LD (XWA + BC), 000h
@@ -347222,7 +347222,7 @@ LABEL_FB4661:
 	RES 007h, A
 	OR E, A
 	LD (XIY), E
-	INC 0, XHL
+	db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XHL
 	LD E, (XHL)
 	AND E, 080h
 	LD (XHL), E
@@ -347972,7 +347972,7 @@ LABEL_FB4E92:
 
 LABEL_FB4ED6:
 	LD XWA, (XSP + 006h)
-	INC 0, XWA
+	db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XWA
 	LD (XSP + 00ah), XWA
 	BIT 0, (XWA)
 	JR Z, LABEL_FB4F03
@@ -349312,7 +349312,7 @@ LABEL_FB5AE4:
 LABEL_FB5AEB:
 	SET 6, (8D46h)
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RETD 0006h
 
 LABEL_FB5AF5:
@@ -349811,7 +349811,7 @@ LABEL_FB5F00:
 	LD A, (XBC)
 	LD (XDE), A
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 LABEL_FB5F24:
@@ -350366,7 +350366,7 @@ LABEL_FB63DC:
 	ADD XIY, XDE
 	LD C, (XWA + 01bh)
 	LD (XIY), C
-	INC 0, XHL
+	db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XHL
 	SUB XHL, XIX
 	ADD XHL, XDE
 	LD C, (XWA + 01ch)
@@ -350785,7 +350785,7 @@ LABEL_FB63DC:
 	ADD XIY, XDE
 	LD C, (XWA + 06ah)
 	LD (XIY), C
-	INC 0, XHL
+	db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XHL
 	SUB XHL, XIX
 	ADD XHL, XDE
 	LD C, (XWA + 06bh)
@@ -353279,7 +353279,7 @@ LABEL_FB816B:
 	LDA XWA, XSP + 010h
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	JR T, LABEL_FB81DF
 
 LABEL_FB81C5:
@@ -353288,7 +353288,7 @@ LABEL_FB81C5:
 	LDA XWA, XSP + 010h
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XWA, (XSP + 008h)
 	LD XWA, (XWA + 04eh)
 	LDW (XWA), 03e7h
@@ -353389,7 +353389,7 @@ LABEL_FB828B:
 	PUSH XWA
 	PUSH XBC
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	JR T, LABEL_FB82E3
 
 LABEL_FB82CC:
@@ -353397,7 +353397,7 @@ LABEL_FB82CC:
 	PUSH XWA
 	PUSH XBC
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XWA, (XSP + 008h)
 	LD XWA, (XWA + 04eh)
 	LDW (XWA), 0000h
@@ -353508,7 +353508,7 @@ LABEL_FB8332:
 	PUSH XWA
 	PUSH XDE
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	JR T, LABEL_FB841D
 
 LABEL_FB8406:
@@ -353516,7 +353516,7 @@ LABEL_FB8406:
 	PUSH XWA
 	PUSH XDE
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XWA, (XSP + 004h)
 	LD XWA, (XWA + 04eh)
 	LDW (XWA), 03e7h
@@ -353727,7 +353727,7 @@ LABEL_FB8561:
 	LDA XWA, XSP + 010h
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	JR T, LABEL_FB8671
 
 LABEL_FB865A:
@@ -353736,7 +353736,7 @@ LABEL_FB865A:
 	LDA XWA, XSP + 010h
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XWA, (XSP + 008h)
 	LD XWA, (XWA + 04eh)
 	LDW (XWA), 0000h
@@ -353899,7 +353899,7 @@ LABEL_FB8808:
 	LD XWA, (XSP + 046h)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	JRL T, LABEL_FB88BF
 
 LABEL_FB8820:
@@ -354064,7 +354064,7 @@ LABEL_FB896C:
 	LD XWA, (XSP + 010h)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD (XSP + 00eh), 000h
 	JR T, LABEL_FB8A1E
 
@@ -354109,7 +354109,7 @@ LABEL_FB8A60:
 	LD XWA, (XSP + 010h)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	JR T, LABEL_FB8AEB
 
 LABEL_FB8A72:
@@ -354123,7 +354123,7 @@ LABEL_FB8A72:
 	LD XWA, (XSP + 010h)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD (XSP + 00eh), 000h
 	JR T, LABEL_FB8AAC
 
@@ -354459,7 +354459,7 @@ LABEL_FB8E50:
 	LD XWA, (XSP + 00ch)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	JR T, LABEL_FB8E79
 
 LABEL_FB8E65:
@@ -354553,7 +354553,7 @@ LABEL_FB8ED1:
 	PUSH XWA
 	PUSH XBC
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD (XSP + 00ah), 000h
 	JR T, LABEL_FB8F70
 
@@ -354593,7 +354593,7 @@ LABEL_FB8FA7:
 	PUSHW 0d76h
 	PUSH XBC
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	JR T, LABEL_FB901D
 
 LABEL_FB8FB6:
@@ -354604,7 +354604,7 @@ LABEL_FB8FB6:
 	PUSH XWA
 	PUSH XBC
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD (XSP + 00ah), 000h
 	JR T, LABEL_FB8FE8
 
@@ -355096,7 +355096,7 @@ LABEL_FB952F:
 	LD XWA, (XSP + 03eh)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	JRL T, LABEL_FB95D6
 
 LABEL_FB9547:
@@ -355235,7 +355235,7 @@ LABEL_FB962D:
 	PUSH XWA
 	PUSH XDE
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD QIZH, 0
 	JR T, LABEL_FB96C2
 
@@ -355276,7 +355276,7 @@ LABEL_FB96F8:
 	PUSHW 0daeh
 	PUSH XDE
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	JR T, LABEL_FB976D
 
 LABEL_FB9707:
@@ -355288,7 +355288,7 @@ LABEL_FB9707:
 	PUSH XWA
 	PUSH XDE
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD QIZH, 0
 	JR T, LABEL_FB9739
 
@@ -356348,7 +356348,7 @@ LABEL_FBA19A:
 	LD XWA, (XSP + 034h)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	JRL T, LABEL_FBA3AB
 
 LABEL_FBA1B2:
@@ -356414,7 +356414,7 @@ LABEL_FBA1B2:
 	PUSHW 0dd4h
 	PUSH XDE
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XWA, 00ed0de6h
 	JR T, LABEL_FBA2AB
 
@@ -356453,7 +356453,7 @@ LABEL_FBA2AB:
 	LDA XWA, XSP + 010h
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LDA XBC, XSP + 024h
 	LDW (XBC), 000ah
 	LDA XHL, XBC + 002h
@@ -356652,7 +356652,7 @@ LABEL_FBA486:
 	LD XWA, (XSP + 010h)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD (XSP + 012h), 000h
 	JR T, LABEL_FBA534
 
@@ -356699,7 +356699,7 @@ LABEL_FBA568:
 	LD XWA, (XSP + 010h)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD (XSP + 012h), 000h
 	JR T, LABEL_FBA599
 
@@ -356748,7 +356748,7 @@ LABEL_FBA5CF:
 	LD XWA, (XSP + 010h)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD (XSP + 012h), 000h
 	JR T, LABEL_FBA601
 
@@ -356804,7 +356804,7 @@ LABEL_FBA635:
 	LD XWA, (XSP + 010h)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD (XSP + 012h), 000h
 	JR T, LABEL_FBA67D
 
@@ -356851,7 +356851,7 @@ LABEL_FBA6B6:
 	LD XWA, (XSP + 010h)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 
 LABEL_FBA6C1:
 	LD WA, (XSP + 036h)
@@ -357185,7 +357185,7 @@ LABEL_FBAA13:
 	LD XWA, (XSP + 010h)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	JR T, LABEL_FBAA4C
 	LD XWA, XIZ
 	CALL GetViewInstance
@@ -357347,7 +357347,7 @@ LABEL_FBAD09:
 	LDA XWA, XSP + 008h
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	CALL GetFocusObject
 	LD XWA, XHL
 	LDA XDE, XSP + 00eh
@@ -357595,7 +357595,7 @@ LABEL_FBAFC1:
 	LD XWA, (XSP + 010h)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	JR T, LABEL_FBAFFA
 	LD XWA, XIZ
 	CALL GetViewInstance
@@ -358437,7 +358437,7 @@ LABEL_FBBCFC:
 	LDA XWA, XSP + 01ch
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LDA XWA, XSP + 010h
 	LDA XBC, XSP + 00ch
 	LDA XDE, XSP + 018h
@@ -358505,7 +358505,7 @@ LABEL_FBBDC4:
 	LDA XWA, XSP + 01ch
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LDA XWA, XSP + 010h
 	LDA XBC, XSP + 00ch
 	LDA XDE, XSP + 018h
@@ -358687,7 +358687,7 @@ LABEL_FBC083:
 	LD XWA, (XSP + 0124h)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	JR T, LABEL_FBC0C6
 	LD XWA, XIZ
 	CALL GetViewInstance
@@ -358867,7 +358867,7 @@ LABEL_FBC3A0:
 	LDA XWA, XSP + 004h
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	CALL GetFocusObject
 	LD XWA, XHL
 	LDA XDE, XSP + 0100h
@@ -358900,7 +358900,7 @@ LABEL_FBC3E9:
 
 LABEL_FBC3F0:
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	CALL GetFocusObject
 	LD XWA, XHL
 	LDA XDE, XSP + 0100h
@@ -359140,7 +359140,7 @@ LABEL_FBC6AC:
 	LD XWA, (XSP + 010h)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	JR T, LABEL_FBC6E5
 	LD XWA, XIZ
 	CALL GetViewInstance
@@ -359562,7 +359562,7 @@ LABEL_FBCDDB:
 
 LABEL_FBCDED:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 IvWindowPageControlProc:
@@ -359769,7 +359769,7 @@ LABEL_FBD01C:
 
 LABEL_FBD01E:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 IvPageOverWrProc:
@@ -359809,7 +359809,7 @@ LABEL_FBD07D:
 	LD XWA, (XSP + 008h)
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	JRL T, LABEL_FBD12A
 
 LABEL_FBD090:
@@ -359935,7 +359935,7 @@ LABEL_FBD17D:
 	PUSHW 0000h
 	PUSHW 0f9a2h
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XWA, 0ffffffffh
 	LD XBC, 01c00016h
 	LD XDE, 01a000d1h
@@ -360140,7 +360140,7 @@ LABEL_FBD47C:
 	PUSHW 15c0h
 	PUSH XDE
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	JR T, LABEL_FBD4D1
 
 LABEL_FBD4AA:
@@ -360588,7 +360588,7 @@ LABEL_FBD90A:
 	LDA XWA, XSP + 00ch
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LDA XWA, XSP + 010ch
 	LDA XBC, XSP + 0108h
 	LDA XDE, XSP + 008h
@@ -365417,7 +365417,7 @@ LABEL_FC0FEB:
 	EXTS XWA
 	db 000h, 000h, 000h, 000h	;TODO: Fix ASL assembler encoding of: DIVSW WA, 0004h
 	LD WA, QWA
-	INC 0, WA
+	db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, WA
 	LD (XBC), WA
 	LD XWA, (XSP + 0228h)
 	CALR LABEL_FC19CB
@@ -367281,7 +367281,7 @@ LABEL_FC2519:
 
 LABEL_FC251B:
 	CALL LABEL_FF0A72
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD XHL, (XSP + 004h)
 	JR T, LABEL_FC2533
 	LD XHL, 1
@@ -367867,7 +367867,7 @@ LABEL_FC2BB3:
 LABEL_FC2BB7:
 	LD XHL, 0
 	POP QIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 MainSysControl:		; fc2bbf
@@ -368044,7 +368044,7 @@ LABEL_FC2D9D:
 	LDA XWA, XSP + 008h
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	JR T, LABEL_FC2E1E
 
 LABEL_FC2DD0:
@@ -368090,7 +368090,7 @@ LABEL_FC2E2E:
 	LDA XWA, XSP + 008h
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	JR T, LABEL_FC2EA3
 
 LABEL_FC2E55:
@@ -368200,7 +368200,7 @@ LABEL_FC2F4A:
 	PUSHW 1c86h
 	PUSH XBC
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	JR T, LABEL_FC2F9B
 
 LABEL_FC2F7F:
@@ -370892,7 +370892,7 @@ LABEL_FC4CB7:
 	PUSHW 0000h
 	PUSHW 0f9a2h
 	CALL LABEL_FF0FFA
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 LABEL_FC4CDE:
@@ -371863,7 +371863,7 @@ LABEL_FC584C:
 	CALL T, XHL
 
 LABEL_FC5863:
-	INC 0, XIZ
+	db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XIZ
 
 LABEL_FC5865:
 	LDA XBC, 8E7Ch
@@ -373076,7 +373076,7 @@ LABEL_FC6FF9:
 	RES 2, (XWA)
 
 LABEL_FC6FFD:
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 LABEL_FC7000:
@@ -373265,7 +373265,7 @@ LABEL_FC71A3:
 
 LABEL_FC71AC:
 	POP QIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 
@@ -374030,7 +374030,7 @@ LABEL_FC7DD8:
 	ADD XWA, XBC
 	PUSH XWA
 	CALL LABEL_FF0FFA
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD IZ, (XSP + 004h)
 	EXTZ XIZ
 	LD XWA, XIZ
@@ -376017,7 +376017,7 @@ LABEL_FC9CD2:
 
 LABEL_FC9CF3:
 	POP QIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 LABEL_FC9CF9:
@@ -376053,7 +376053,7 @@ LABEL_FC9D33:
 	JR T, LABEL_FC9D10
 
 LABEL_FC9D3E:
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 LABEL_FC9D41:
@@ -381187,7 +381187,7 @@ LABEL_FCEEB2:
 	LD XIX, XWA
 	LD BC, 4
 	LDIRW
-	INC 0, XWA
+	db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XWA
 	CP XWA, XDE
 	JR C, LABEL_FCEEB2
 	RET
@@ -381590,7 +381590,7 @@ INTRX0_HANDLER:
 	LD WA, 1
 	PUSH WA
 	CALL LABEL_FDB7DC
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	POP XIZ
 	POP XIY
 	POP XIX
@@ -385187,7 +385187,7 @@ LABEL_FD3260:
 	LDA XWA, XBC + 003h
 	PUSH XWA
 	CALL LABEL_FF0FFA
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LDA XBC, 0FC74h
 	LD A, (XBC)
 	LD (XSP + 004h), A
@@ -385236,7 +385236,7 @@ LABEL_FD332A:
 	LDA XWA, XBC + 003h
 	PUSH XWA
 	CALL LABEL_FF0FFA
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LDA XBC, 0FC8Eh
 	LD A, (XBC)
 	LD (XSP + 004h), A
@@ -385302,7 +385302,7 @@ LABEL_FD33A7:
 	LDA XWA, XBC + 003h
 	PUSH XWA
 	CALL LABEL_FF0FFA
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LDA XBC, 0FC74h
 	LD A, (XBC)
 	LD (XSP + 004h), A
@@ -385356,7 +385356,7 @@ LABEL_FD3453:
 	LDA XWA, XBC + 003h
 	PUSH XWA
 	CALL LABEL_FF0FFA
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LDA XBC, 0FC8Eh
 	LD A, (XBC)
 	LD (XSP + 004h), A
@@ -386783,7 +386783,7 @@ LABEL_FD4C0C:
 	LDA XWA, XBC + 02f5h
 	PUSH XWA
 	CALL LABEL_FF0FFA
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LDA XBC, 0FC74h
 	LD A, (XBC)
 	LD (XSP + 004h), A
@@ -386842,7 +386842,7 @@ LABEL_FD4CD7:
 	LDA XWA, XBC + 030fh
 	PUSH XWA
 	CALL LABEL_FF0FFA
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LDA XBC, 0FC8Eh
 	LD A, (XBC)
 	LD (XSP + 004h), A
@@ -387659,7 +387659,7 @@ LABEL_FD579C:
 	EXTZ BC
 	LD XWA, (XSP)
 	CALR LABEL_FD56BC
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 LABEL_FD57F2:
@@ -392563,7 +392563,7 @@ LABEL_FD97C2:
 
 LABEL_FD97C6:
 	POP QIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 LABEL_FD97CC:
@@ -392653,7 +392653,7 @@ LABEL_FD986C:
 
 LABEL_FD989B:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 LABEL_FD989F:
@@ -392713,7 +392713,7 @@ LABEL_FD98F2:
 
 LABEL_FD992D:
 	POP QIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 LABEL_FD9933:
@@ -393173,7 +393173,7 @@ LABEL_FDA06F:
 	LD XHL, (XBC)
 	CALL T, XHL
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 LABEL_FDA0A3:
@@ -393197,7 +393197,7 @@ LABEL_FDA0A3:
 	LD XHL, (XBC)
 	CALL T, XHL
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 LABEL_FDA0D7:
@@ -393221,7 +393221,7 @@ LABEL_FDA0D7:
 	LD XHL, (XBC)
 	CALL T, XHL
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 LABEL_FDA10B:
@@ -393245,7 +393245,7 @@ LABEL_FDA10B:
 	LD XHL, (XBC)
 	CALL T, XHL
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 LABEL_FDA13F:
@@ -393269,7 +393269,7 @@ LABEL_FDA13F:
 	LD XHL, (XBC)
 	CALL T, XHL
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 LABEL_FDA173:
@@ -393322,7 +393322,7 @@ LABEL_FDA173:
 
 LABEL_FDA1E9:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 LABEL_FDA1ED:
@@ -393371,7 +393371,7 @@ LABEL_FDA229:
 
 LABEL_FDA254:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 LABEL_FDA258:
@@ -393888,7 +393888,7 @@ LABEL_FDA7C4:
 	LD XHL, (XBC)
 	CALL T, XHL
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 LABEL_FDA7F9:
@@ -394312,7 +394312,7 @@ LABEL_FDAF20:
 
 LABEL_FDAF2E:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 LABEL_FDAF32:
@@ -394390,7 +394390,7 @@ LABEL_FDAFC5:
 
 LABEL_FDAFD3:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 LABEL_FDAFD7:
@@ -394470,7 +394470,7 @@ LABEL_FDB078:
 
 LABEL_FDB086:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 LABEL_FDB08A:
@@ -394548,7 +394548,7 @@ LABEL_FDB11D:
 
 LABEL_FDB12B:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 LABEL_FDB12F:
@@ -395543,7 +395543,7 @@ LABEL_FDB9DB:
 	JR ULE, LABEL_FDB9DB
 	LD (0424h), 000h
 	POP QIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 LABEL_FDBA02:
@@ -396699,7 +396699,7 @@ LABEL_FDC41D:
 	PUSH XHL
 	CALR LABEL_FDC3C9
 	LD HL, (XSP + 002h)
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 LABEL_FDC448:
@@ -405302,7 +405302,7 @@ LABEL_FE1F37:
 
 LABEL_FE1F41:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 LABEL_FE1F45:
@@ -410541,7 +410541,7 @@ LABEL_FE5322:
 	CALL LABEL_EF1679
 	CALL LABEL_F43679
 	POP IZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 LABEL_FE533B:
@@ -410664,7 +410664,7 @@ LABEL_FE543C:
 	JRL C, LABEL_FE5358
 	CALL LABEL_EF1679
 	POP IZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 LABEL_FE5451:
@@ -410787,7 +410787,7 @@ LABEL_FE5552:
 	JRL C, LABEL_FE546E
 	CALL LABEL_EF1679
 	POP IZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 LABEL_FE5567:
@@ -420489,7 +420489,7 @@ LABEL_FEC0A7:
 	LDA XWA, 0E9C4h
 	PUSH XWA
 	CALL LABEL_FF0F4D
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD WA, 6
 	CALR LABEL_FEC318
 	OR (0E9E5h), 0001h
@@ -423916,7 +423916,7 @@ LABEL_FEDF90:
 	LDA XWA, XSP + 004h
 	PUSH XWA
 	CALL LABEL_FF0DC1
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LDA XWA, XSP
 	CALL LABEL_F52FB1
 	JR T, LABEL_FEDFB8
@@ -424806,7 +424806,7 @@ LABEL_FEE6A1:
 
 LABEL_FEE6AB:
 	POP QIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 LABEL_FEE6B1:
@@ -424892,7 +424892,7 @@ LABEL_FEE760:
 
 LABEL_FEE76A:
 	POP QIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 LABEL_FEE770:
@@ -425352,7 +425352,7 @@ LABEL_FEEB0E:
 LABEL_FEEB18:
 	EXTZ HL
 	db 000h, 000h, 000h, 000h	;TODO: Fix ASL assembler encoding of: MULSW HL, 0018h
-	INC 0, HL
+	db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, HL
 	JR T, LABEL_FEEB2C
 
 LABEL_FEEB22:
@@ -425840,14 +425840,14 @@ LABEL_FEF3AE:
 	SLL 3, XBC
 	SUB XBC, XWA
 	SLL 3, XBC
-	INC 0, XBC
+	db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XBC
 	LD XIY, 0003c0fah
 	ADD XIY, XBC
 	LDA XIX, XDE + 008h
 	LD BC, 001ch
 	LDIRW
 	LD C, (XHL)
-	INC 0, C
+	db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, C
 	EXTZ BC
 	LD WA, 3
 	CALL sendCOMM
@@ -425895,7 +425895,7 @@ LABEL_FEF428:
 	JR C, LABEL_FEF428
 
 LABEL_FEF43E:
-	INC 0, E
+	db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, E
 	EXTZ DE
 	LD WA, 3
 	LD BC, DE
@@ -425990,7 +425990,7 @@ LABEL_FEF507:
 	SLL 3, XBC
 	SUB XBC, XWA
 	SLL 3, XBC
-	INC 0, XBC
+	db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XBC
 	LD XWA, 0003c0fah
 	ADD XWA, XBC
 	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL assembler encoding of: LD (XWA + 02ah), 0001h
@@ -426054,7 +426054,7 @@ LABEL_FEF5CF:
 	SLL 3, XBC
 	SUB XBC, XWA
 	SLL 3, XBC
-	INC 0, XBC
+	db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XBC
 	LD XWA, 0003c0fah
 	ADD XWA, XBC
 	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL assembler encoding of: LD (XWA + 02eh), 0001h
@@ -426178,7 +426178,7 @@ LABEL_FEF6FC:
 	LD A, E
 	EXTZ WA
 	db 000h, 000h, 000h, 000h	;TODO: Fix ASL assembler encoding of: MULSW WA, 0038h
-	INC 0, WA
+	db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, WA
 	LDA XBC, 03C0FAh
 	LD WA, (XBC + WA)
 	LD QIZH, A
@@ -426190,7 +426190,7 @@ LABEL_FEF6FC:
 	LD C, (XSP + 002h)
 	EXTZ BC
 	db 000h, 000h, 000h, 000h	;TODO: Fix ASL assembler encoding of: MULSW BC, 0038h
-	INC 0, BC
+	db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, BC
 	LDA XDE, 03C0FAh
 	LD BC, (XDE + BC)
 	EXTZ BC
@@ -426313,7 +426313,7 @@ LABEL_FEF893:
 	SLL 3, XDE
 	SUB XDE, XWA
 	SLL 3, XDE
-	INC 0, XDE
+	db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XDE
 	LD XWA, 0003c0fah
 	ADD XWA, XDE
 	LD (XWA), BC
@@ -426337,7 +426337,7 @@ LABEL_FEF8BC:
 	SUB XWA, XIX
 	SLL 3, XWA
 	LD XIY, XWA
-	INC 0, XIY
+	db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XIY
 	LDA XIX, 03C0FAh
 	LD XIZ, XIX
 	ADD XIZ, XIY
@@ -426366,7 +426366,7 @@ LABEL_FEF8F5:
 	SLL 3, XDE
 	SUB XDE, XWA
 	SLL 3, XDE
-	INC 0, XDE
+	db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XDE
 	LDA XWA, 03C126h
 	ADD XWA, XDE
 	LD (XWA), BC
@@ -426387,7 +426387,7 @@ LABEL_FEF918:
 	SLL 3, XDE
 	SUB XDE, XWA
 	SLL 3, XDE
-	INC 0, XDE
+	db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XDE
 	LDA XWA, 03C120h
 	ADD XWA, XDE
 	LD (XWA), BC
@@ -428084,7 +428084,7 @@ LABEL_FF0FA0:
 	LD XIZ, (XSP + 00ch)
 	PUSH XIZ
 	CALL LABEL_FF28D1
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	OR XHL, XHL
 	JR NZ, LABEL_FF0FBA
 	LD HL, 0ffffh
@@ -430266,7 +430266,7 @@ LABEL_FF2139:
 	PUSHW 0003h
 	PUSHW 0c224h
 	CALL LABEL_FF0FFA
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD QIZ, 0
 
 LABEL_FF215E:
@@ -430487,7 +430487,7 @@ LABEL_FF2321:
 
 LABEL_FF233B:
 	CALR LABEL_FF2424
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD QIZ, 1
 
 LABEL_FF2343:
@@ -430658,7 +430658,7 @@ LABEL_FF2498:
 LABEL_FF24A3:
 	LD (XIY), BC
 	POP IZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 LABEL_FF24A9:
@@ -430962,7 +430962,7 @@ LABEL_FF26F1:
 	LD XWA, (XSP + 00ch)
 	PUSH XWA
 	CALR LABEL_FF24A9
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 
 LABEL_FF2702:
 	ADD (XSP + 002h), IZ
@@ -431027,7 +431027,7 @@ LABEL_FF2758:
 	PUSH IZ
 	PUSH XDE
 	CALR LABEL_FF2424
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 
 LABEL_FF2764:
 	LD HL, IZ
@@ -431096,7 +431096,7 @@ LABEL_FF27E6:
 
 LABEL_FF27E8:
 	POP XIZ
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	RET
 
 LABEL_FF27EC:
@@ -431192,7 +431192,7 @@ LABEL_FF2891:
 	LD XWA, (XSP + 012h)
 	PUSH XWA
 	CALL LABEL_FF28D1
-	db 000h, 000h	;TODO: Fix ASL assembler encoding of: INC 0, XSP
+	db 000h, 000h	;TODO: Fix ASL assembler encoding of: db 0, 0	;TODO: Fix ASL assembler encoding of: INC 0, XSP
 	LD (XSP + 002h), XHL
 	LD XWA, (XSP + 002h)
 	OR XWA, XWA
