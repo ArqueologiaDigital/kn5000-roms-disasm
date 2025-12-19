@@ -139364,10 +139364,17 @@ LABEL_F1FC17:
 	INC 1, BC
 	CP BC, 000ah
 	JRL C, LABEL_F1FBC0
+
+
+	; Very interesting... Why the same instruction (LDW) gets two diff encodings here?
+
+	LDW (0F19Eh), 0000h		; encoding is fine: F1 9E F1 02 00 00
+
 	db 000h	;TODO: Fix ASL assembler encoding of LDW instruction
-	LDW (0F19Eh), 0000h
-	db 000h	;TODO: Fix ASL assembler encoding of LDW instruction
-	LDW (0FFECh), 0000h
+	LDW (0FFECh), 0000h		;                encoding here is: F1 EC FF 02 00 00
+					; while in the original ROM it is: F2 EC FF 00 02 00 00
+
+
 	LD (0F24Bh), 000h
 	LD XIX, 00000cefh
 	XOR WA, WA
