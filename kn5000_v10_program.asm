@@ -120157,7 +120157,6 @@ LABEL_F098D1:
 LABEL_F098E0:
 	DEC 1, A
 	EXTZ WA
-	db 000h	;TODO: Fix ASL assembler encoding of LDA XDE, word
 	LDA XDE, 06BAh
 	EXTZ XWA
 	ADD XWA, XDE
@@ -120167,7 +120166,6 @@ LABEL_F098E0:
 LABEL_F098EF:
 	DEC 1, A
 	EXTZ WA
-	db 000h	;TODO: Fix ASL assembler encoding of LDA XDE, word
 	LDA XDE, 06BAh
 	EXTZ XWA
 	ADD XWA, XDE
@@ -120197,7 +120195,6 @@ LABEL_F09912:
 
 LABEL_F09921:
 	EXTZ WA
-	db 000h	;TODO: Fix ASL assembler encoding of LDA XDE, word
 	LDA XDE, 06BEh
 	EXTZ XWA
 	ADD XWA, XDE
@@ -120210,7 +120207,6 @@ LABEL_F0992E:
 
 LABEL_F0993D:
 	EXTZ WA
-	db 000h	;TODO: Fix ASL assembler encoding of LDA XDE, word
 	LDA XDE, 06C1h
 	EXTZ XWA
 	ADD XWA, XDE
