@@ -137030,7 +137030,7 @@ InitializeHama:
 	LDA XSP, XSP - 14
 	LD XWA, 01600004h
 	db 000h	;TODO: Fix ASL assembler encoding of:
-	LD (000h + XW), XSPA
+	LD (XSP + 000h), XWA
 	LDA XWA, 0FA44E2h
 	LD (XSP + 004h), XWA
 	LD WA, (0E1F0BCh)
@@ -137043,7 +137043,7 @@ InitializeHama:
 	CALL RegisterObjectTable
 	LD XWA, 0160000ch
 	db 000h	;TODO: Fix ASL assembler encoding of:
-	LD (000h + XW), XSPA
+	LD (XSP + 000h), XWA
 	LDA XWA, 0FA58FBh
 	LD (XSP + 004h), XWA
 	LD WA, (0E1F0D4h)
@@ -137056,7 +137056,7 @@ InitializeHama:
 	CALL RegisterObjectTable
 	LD XWA, 0160000dh
 	db 000h	;TODO: Fix ASL assembler encoding of:
-	LD (000h + XW), XSPA
+	LD (XSP + 000h), XWA
 	LDA XWA, 0FA5948h
 	LD (XSP + 004h), XWA
 	LD WA, (0E1F0EAh)
@@ -137069,7 +137069,7 @@ InitializeHama:
 	CALL RegisterObjectTable
 	LD XWA, 01600002h
 	db 000h	;TODO: Fix ASL assembler encoding of:
-	LD (000h + XW), XSPA
+	LD (XSP + 000h), XWA
 	LDA XWA, 0FA496Ch
 	LD (XSP + 004h), XWA
 	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL assembler encoding of: LD (XSP + 008h), 0002h
@@ -137081,7 +137081,7 @@ InitializeHama:
 	CALL RegisterObjectTable
 	LD XWA, 01600002h
 	db 000h	;TODO: Fix ASL assembler encoding of:
-	LD (000h + XW), XSPA
+	LD (XSP + 000h), XWA
 	LDA XWA, 0FA496Ch
 	LD (XSP + 004h), XWA
 	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL assembler encoding of: LD (XSP + 008h), 0002h
@@ -137093,7 +137093,7 @@ InitializeHama:
 	CALL RegisterObjectTable
 	LD XWA, 01600001h
 	db 000h	;TODO: Fix ASL assembler encoding of:
-	LD (000h + XW), XSPA
+	LD (XSP + 000h), XWA
 	LDA XWA, 0FA48A9h
 	LD (XSP + 004h), XWA
 	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL assembler encoding of: LD (XSP + 008h), 004bh
@@ -137105,7 +137105,7 @@ InitializeHama:
 	CALL RegisterObjectTable
 	LD XWA, 01600001h
 	db 000h	;TODO: Fix ASL assembler encoding of:
-	LD (000h + XW), XSPA
+	LD (XSP + 000h), XWA
 	LDA XWA, 0FA48A9h
 	LD (XSP + 004h), XWA
 	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL assembler encoding of: LD (XSP + 008h), 004bh
@@ -137117,7 +137117,7 @@ InitializeHama:
 	CALL RegisterObjectTable
 	LD XWA, 01600003h
 	db 000h	;TODO: Fix ASL assembler encoding of:
-	LD (000h + XW), XSPA
+	LD (XSP + 000h), XWA
 	LDA XWA, 0FA4A18h
 	LD (XSP + 004h), XWA
 	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL assembler encoding of: LD (XSP + 008h), 0001h
@@ -137129,7 +137129,7 @@ InitializeHama:
 	CALL RegisterObjectTable
 	LD XWA, 01600003h
 	db 000h	;TODO: Fix ASL assembler encoding of:
-	LD (000h + XW), XSPA
+	LD (XSP + 000h), XWA
 	LDA XWA, 0FA4A18h
 	LD (XSP + 004h), XWA
 	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL assembler encoding of: LD (XSP + 008h), 0001h
@@ -137141,7 +137141,7 @@ InitializeHama:
 	CALL RegisterObjectTable
 	LD XWA, 01600010h
 	db 000h	;TODO: Fix ASL assembler encoding of:
-	LD (000h + XW), XSPA
+	LD (XSP + 000h), XWA
 	LDA XWA, 0FA5995h
 	LD (XSP + 004h), XWA
 	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL assembler encoding of: LD (XSP + 008h), 0000h
@@ -137153,7 +137153,7 @@ InitializeHama:
 	CALL RegisterObjectTable
 	LD XWA, 0160000fh
 	db 000h	;TODO: Fix ASL assembler encoding of:
-	LD (000h + XW), XSPA
+	LD (XSP + 000h), XWA
 	LDA XWA, 0FA62CBh
 	LD (XSP + 004h), XWA
 	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL assembler encoding of: LD (XSP + 008h), 0000h
@@ -137165,7 +137165,7 @@ InitializeHama:
 	CALL RegisterObjectTable
 	LD XWA, 01600010h
 	db 000h	;TODO: Fix ASL assembler encoding of:
-	LD (000h + XW), XSPA
+	LD (XSP + 000h), XWA
 	LDA XWA, 0FA5995h
 	LD (XSP + 004h), XWA
 	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL assembler encoding of: LD (XSP + 008h), 001ah
@@ -137177,7 +137177,7 @@ InitializeHama:
 	CALL RegisterObjectTable
 	LD XWA, 0160000fh
 	db 000h	;TODO: Fix ASL assembler encoding of:
-	LD (000h + XW), XSPA
+	LD (XSP + 000h), XWA
 	LDA XWA, 0FA62CBh
 	LD (XSP + 004h), XWA
 	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL assembler encoding of: LD (XSP + 008h), 001ah
