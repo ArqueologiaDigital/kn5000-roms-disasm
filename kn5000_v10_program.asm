@@ -140734,7 +140734,7 @@ LABEL_F20BFA:
 	LD BC, 0800h
 	LDIR
 	LD WA, (0F19Eh)
-	LD (0FFECh), WA
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: LD (0FFECh), WA
 	LD WA, (286Fh)
 	LD (0F22Fh), WA
 	LD WA, (2871h)
