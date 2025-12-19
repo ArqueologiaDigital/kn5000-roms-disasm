@@ -120003,7 +120003,7 @@ LABEL_F0969B:
 LABEL_F096A0:
 	DEC 1, A
 	EXTZ WA
-	MUL WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: MULW WA, 000ah
 	LD XDE, XBC
 	EXTZ XWA
 	ADD XWA, 000205f3h
@@ -135647,7 +135647,7 @@ LABEL_F1D07A:
 	LD XWA, XIZ
 	CALL GetViewInstance
 	LD WA, (7E18h)
-	MUL WA, 0064h
+	db 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: MULW WA, 0064h
 	EXTZ XWA
 	db 000h, 000h, 000h, 000h	;TODO: Fix ASL assembler encoding of: DIVW WA, 0039h
 	CP WA, 0063h
@@ -142936,7 +142936,7 @@ LABEL_F22628:
 	ADD XBC, XWA
 	LDA XBC, XBC + 0100h
 	LD WA, (XSP + 004h)
-	MUL WA, 0015h
+	db 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: MULW WA, 0015h
 	LDA XIX, 1AFAh
 	LD IZ, WA
 	EXTZ XIZ
@@ -142966,7 +142966,7 @@ LABEL_F2267E:
 	CALL LABEL_F890F2
 	LD (XIZ + 010h), 000h
 	LD WA, (XSP + 004h)
-	MUL WA, 0015h
+	db 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: MULW WA, 0015h
 	LDA XBC, 1AFAh
 	EXTZ XWA
 	ADD XWA, XBC
@@ -143087,7 +143087,7 @@ LABEL_F227A5:
 	EXTZ XWA
 	ADD XIX, XWA
 	LD WA, (XSP + 004h)
-	MUL WA, 0007h
+	db 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: MULW WA, 0007h
 	LDA XHL, 1BD2h
 	LD IZ, WA
 	EXTZ XIZ
@@ -143122,7 +143122,7 @@ LABEL_F227EC:
 	LDA XSP, XSP + 00ah
 	LD (XIZ + 004h), 000h
 	LD WA, (XSP + 004h)
-	MUL WA, 0007h
+	db 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: MULW WA, 0007h
 	LDA XBC, 1BD2h
 	EXTZ XWA
 	ADD XWA, XBC
@@ -154164,7 +154164,7 @@ LABEL_F28E19:
 	LD (0FA2h), WA
 	LD (0FA4h), WA
 	LD WA, (10FBh)
-	MUL WA, 0400h
+	db 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: MULW WA, 0400h
 	LD XHL, (1118h)
 	SUB XHL, 000013fah
 	ADD XWA, XHL
@@ -168469,7 +168469,7 @@ LABEL_F33752:
 	LD (XSP + 013ch), BC
 	PUSHW 0011h
 	LD WA, IZ
-	MUL WA, 0011h
+	db 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: MULW WA, 0011h
 	LDA XBC, XSP + 03ch
 	ADD XBC, XWA
 	PUSH XBC
@@ -171928,7 +171928,7 @@ LABEL_F360F3:
 	MUL BC, 0060h
 	ADD BC, (0210A2h)
 	LD WA, (27F6h)
-	MUL WA, 0060h
+	db 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: MULW WA, 0060h
 	ADD WA, (27F8h)
 	SUB BC, WA
 	LD (2808h), BC
@@ -172112,7 +172112,7 @@ LABEL_F36306:
 	MUL BC, 0060h
 	ADD BC, (2816h)
 	LD WA, (280Ch)
-	MUL WA, 0060h
+	db 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: MULW WA, 0060h
 	ADD WA, (280Eh)
 	SUB BC, WA
 	LD (281Eh), BC
@@ -173002,7 +173002,7 @@ LABEL_F36ACE:
 	LDW (XDE), (275Eh)
 	LD XHL, XDE
 	LD WA, (XHL)
-	MUL WA, 0060h
+	db 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: MULW WA, 0060h
 	LD (XHL), WA
 	LD A, (2760h)
 	EXTZ WA
@@ -173011,7 +173011,7 @@ LABEL_F36ACE:
 	LDW (XBC), (276Ah)
 	LD XDE, XBC
 	LD WA, (XDE)
-	MUL WA, 0060h
+	db 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: MULW WA, 0060h
 	LD (XDE), WA
 	LD A, (276Ch)
 	EXTZ WA
@@ -173179,7 +173179,7 @@ LABEL_F36C48:
 
 LABEL_F36C4E:
 	LD WA, DE
-	MUL WA, 0003h
+	db 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: MULW WA, 0003h
 	EXTZ XWA
 	ADD XWA, XBC
 	BIT 7, (XWA)
@@ -174085,7 +174085,7 @@ LABEL_F37555:
 	LD C, (2774h)
 	LD A, C
 	EXTZ WA
-	MUL WA, 0060h
+	db 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: MULW WA, 0060h
 	DEC 1, WA
 	CP (279Ah), WA
 	JR C, LABEL_F37585
@@ -176108,7 +176108,7 @@ LABEL_F38728:
 	AND IZ, 007fh
 	AND HL, 007fh
 	LD WA, HL
-	MUL WA, 0060h
+	db 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: MULW WA, 0060h
 	LD HL, WA
 	ADD HL, IZ
 	LD (2820h), HL
@@ -195360,7 +195360,7 @@ LABEL_F439D3:
 	JR UGT, LABEL_F439D3
 
 LABEL_F439DF:
-	MUL WA, 0064h
+	db 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: MULW WA, 0064h
 	EXTZ XWA
 	DIV XWA, BC
 	LD L, A
@@ -198586,7 +198586,7 @@ LABEL_F46846:
 	LD WA, (2772h)
 	CP WA, BC
 	JR UGT, LABEL_F468A4
-	MUL WA, 0018h
+	db 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: MULW WA, 0018h
 	BIT 0, (2742h)
 	JR Z, LABEL_F4689A
 	ADD WA, 0053h
@@ -212977,7 +212977,7 @@ LABEL_F4FBA5:
 	CPW (XWA + 024h), 0fffh
 	JR NZ, LABEL_F4FBCE
 	LD WA, (XSP + 016h)
-	MUL WA, 0003h
+	db 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: MULW WA, 0003h
 	SRL 1, WA
 	LD BC, WA
 	EXTZ XBC
@@ -244167,7 +244167,7 @@ LABEL_F66A64:
 	EXTZ BC
 	LD A, (398Fh)
 	EXTZ WA
-	MUL WA, 0005h
+	db 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: MULW WA, 0005h
 	ADD WA, BC
 	LD (3980h), WA
 	db 000h	;TODO: Fix ASL assembler encoding of:
@@ -248348,7 +248348,7 @@ LABEL_F6A14D:
 	EXTZ WA
 	ADD (XSP + 002h), WA
 	LD WA, (XSP + 002h)
-	MUL WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: MULW WA, 000ah
 	EXTZ XWA
 	ADD XWA, 001e7810h
 	LD XIX, XWA
@@ -250569,7 +250569,7 @@ LABEL_F6C5D1:
 	LD IZ, 0
 	LDA XHL, 0E3CAh
 	LD WA, (3D04h)
-	MUL WA, 0025h
+	db 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: MULW WA, 0025h
 	LDA XBC, 55E4h
 
 LABEL_F6C5FF:
@@ -250595,7 +250595,7 @@ LABEL_F6C61C:
 	LD (0FFC01h), 000h
 	PUSHW 0004h
 	LD WA, (3D04h)
-	MUL WA, 0025h
+	db 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: MULW WA, 0025h
 	EXTZ XWA
 	ADD XWA, XBC
 	LDA XWA, XWA + 021h
@@ -251004,7 +251004,7 @@ LABEL_F6CA0F:
 	LD XBC, 01c0000fh
 	CALL ApPostEvent
 	LD WA, (3D04h)
-	MUL WA, 0025h
+	db 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: MULW WA, 0025h
 	LDA XBC, 55E4h
 	LD DE, WA
 	EXTZ XDE
@@ -251559,7 +251559,7 @@ LABEL_F6CFA2:
 	LDA XWA, XSP + 022h
 	PUSH XWA
 	LD WA, (XSP + 018h)
-	MUL WA, 0064h
+	db 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: MULW WA, 0064h
 	LDA XBC, 48DCh
 	EXTZ XWA
 	ADD XWA, XBC
@@ -251591,7 +251591,7 @@ LABEL_F6D014:
 
 LABEL_F6D029:
 	LD WA, (XSP + 008h)
-	MUL WA, 0064h
+	db 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: MULW WA, 0064h
 	LDA XBC, 48DCh
 	EXTZ XWA
 	ADD XWA, XBC
@@ -252324,7 +252324,7 @@ LABEL_F6D79E:
 	PUSH XBC
 	LD WA, IZ
 	DEC 1, WA
-	MUL WA, 0025h
+	db 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: MULW WA, 0025h
 	EXTZ XWA
 	ADD XWA, (XSP + 012h)
 	INC 1, XWA
@@ -252345,7 +252345,7 @@ LABEL_F6D7DB:
 	PUSH XBC
 	LD WA, IZ
 	DEC 2, WA
-	MUL WA, 0025h
+	db 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: MULW WA, 0025h
 	EXTZ XWA
 	ADD XWA, (XSP + 012h)
 	INC 1, XWA
@@ -286833,7 +286833,7 @@ LABEL_F89BB9:
 	LD WA, IZ
 	EXTZ XWA
 	db 000h, 000h, 000h, 000h	;TODO: Fix ASL assembler encoding of: DIVW WA, 003ch
-	MUL WA, 003ch
+	db 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: MULW WA, 003ch
 	LD BC, WA
 	LD (0271EEh), BC
 	ADD BC, 003bh
@@ -287663,7 +287663,7 @@ LABEL_F8A5BA:
 	LD WA, IZ
 	EXTZ XWA
 	db 000h, 000h, 000h, 000h	;TODO: Fix ASL assembler encoding of: DIVW WA, 003ch
-	MUL WA, 003ch
+	db 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: MULW WA, 003ch
 	LD BC, WA
 	LD (0271EEh), BC
 	ADD BC, 003bh
@@ -287963,7 +287963,7 @@ LABEL_F8A866:
 	LDA XWA, 027200h
 	LD A, (XWA + IZ)
 	EXTS WA
-	MUL WA, 0030h
+	db 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: MULW WA, 0030h
 	ADD WA, 00a0h
 	EXTS XWA
 	LD BC, 0
@@ -288061,7 +288061,7 @@ LABEL_F8A96B:
 	LD WA, IZ
 	EXTZ XWA
 	db 000h, 000h, 000h, 000h	;TODO: Fix ASL assembler encoding of: DIVW WA, 003ch
-	MUL WA, 003ch
+	db 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: MULW WA, 003ch
 	LD BC, WA
 	LD (0271EEh), BC
 	ADD BC, 003bh
@@ -288160,7 +288160,7 @@ LABEL_F8AA5D:
 	LDA XWA, 027200h
 	LD A, (XWA + IZ)
 	EXTS WA
-	MUL WA, 0030h
+	db 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: MULW WA, 0030h
 	ADD WA, 00a0h
 	LD QIZ, WA
 	EXTS XWA
@@ -288852,7 +288852,7 @@ LABEL_F8B106:
 	LD WA, IZ
 	EXTZ XWA
 	db 000h, 000h, 000h, 000h	;TODO: Fix ASL assembler encoding of: DIVW WA, 000ah
-	MUL WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: MULW WA, 000ah
 	LD BC, WA
 	LD (0271EEh), BC
 	ADD BC, 0009h
@@ -296999,7 +296999,7 @@ LABEL_F919E3:
 	ADD XBC, XWA
 	LDA XBC, XBC + 0100h
 	LD WA, (XSP + 004h)
-	MUL WA, 0015h
+	db 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: MULW WA, 0015h
 	LDA XIX, 8202h
 	LD IZ, WA
 	EXTZ XIZ
@@ -297029,7 +297029,7 @@ LABEL_F91A39:
 	CALL LABEL_F890F2
 	LD (XIZ + 010h), 000h
 	LD WA, (XSP + 004h)
-	MUL WA, 0015h
+	db 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: MULW WA, 0015h
 	LDA XBC, 8202h
 	EXTZ XWA
 	ADD XWA, XBC
@@ -298916,7 +298916,7 @@ LABEL_F92CE8:
 	EXTZ XWA
 	db 000h, 000h, 000h, 000h	;TODO: Fix ASL assembler encoding of: DIVW WA, 000ah
 	LD QIZ, WA
-	MUL WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: MULW WA, 000ah
 	LD QIZ, WA
 	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL assembler encoding of: LD (XSP + 004h), 000ah
 	LD WA, QIZ
@@ -299748,7 +299748,7 @@ LABEL_F934F1:
 	EXTZ XWA
 	db 000h, 000h, 000h, 000h	;TODO: Fix ASL assembler encoding of: DIVW WA, 000ah
 	LD QIZ, WA
-	MUL WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: MULW WA, 000ah
 	LD QIZ, WA
 	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL assembler encoding of: LD (XSP + 004h), 000ah
 	LD WA, QIZ
@@ -300553,7 +300553,7 @@ LABEL_F93C9C:
 	EXTZ XWA
 	db 000h, 000h, 000h, 000h	;TODO: Fix ASL assembler encoding of: DIVW WA, 000ah
 	LD QIZ, WA
-	MUL WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: MULW WA, 000ah
 	LD QIZ, WA
 	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL assembler encoding of: LD (XSP + 004h), 000ah
 	LD WA, QIZ
@@ -311108,7 +311108,7 @@ LABEL_F9B60F:
 	LD WA, (0274E0h)
 	EXTZ XWA
 	db 000h, 000h, 000h, 000h	;TODO: Fix ASL assembler encoding of: DIVW WA, 000dh
-	MUL WA, 0018h
+	db 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: MULW WA, 0018h
 	LD DE, WA
 	LDA XBC, XSP + 022h
 	LD WA, (XBC + 002h)
@@ -311153,7 +311153,7 @@ LABEL_F9B6BE:
 	LD WA, (0274DEh)
 	EXTZ XWA
 	db 000h, 000h, 000h, 000h	;TODO: Fix ASL assembler encoding of: DIVW WA, 000dh
-	MUL WA, 0018h
+	db 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: MULW WA, 0018h
 	LD DE, WA
 	LDA XBC, XSP + 022h
 	LD WA, (XBC + 002h)
@@ -311629,7 +311629,7 @@ LABEL_F9BFE7:
 
 LABEL_F9BFE9:
 	LD WA, (0274E2h)
-	MUL WA, 0003h
+	db 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: MULW WA, 0003h
 	INC 2, WA
 	EXTZ XWA
 	ADD XWA, XWA
@@ -311680,7 +311680,7 @@ LABEL_F9C04D:
 	LD XBC, 01e0007fh
 	CALL SendEvent
 	LD WA, (0274E2h)
-	MUL WA, 0003h
+	db 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: MULW WA, 0003h
 	ADD WA, (0274DAh)
 	LD BC, WA
 	EXTZ XBC
@@ -396689,7 +396689,7 @@ LABEL_FDC41D:
 	SLL 2, XBC
 	LD XDE, 00ee6044h
 	ADD XDE, XBC
-	MUL WA, 0006h
+	db 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: MULW WA, 0006h
 	ADD XWA, (XDE)
 	LDA XBC, XSP + 006h
 	LDA XDE, XSP + 004h
@@ -397105,7 +397105,7 @@ LABEL_FDC803:
 	LD XBC, 00ee6044h
 	ADD XBC, XWA
 	LD WA, (XSP + 010h)
-	MUL WA, 0006h
+	db 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: MULW WA, 0006h
 	ADD XWA, (XBC)
 	LDA XBC, XSP + 00ah
 	LDA XDE, XSP + 008h
@@ -402817,7 +402817,7 @@ LABEL_FE0721:
 
 LABEL_FE0730:
 	LD WA, IZ
-	MUL WA, 0005h
+	db 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: MULW WA, 0005h
 	INC 4, WA
 	LDA XBC, 0CC1Fh
 	EXTZ XWA
@@ -402825,7 +402825,7 @@ LABEL_FE0730:
 	CP (XWA), 000h
 	JR Z, LABEL_FE0762
 	LD WA, IZ
-	MUL WA, 0005h
+	db 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: MULW WA, 0005h
 	LDA XBC, 0CC22h
 	EXTZ XWA
 	ADD XWA, XBC
@@ -402853,7 +402853,7 @@ LABEL_FE0764:
 
 LABEL_FE077F:
 	LD WA, IZ
-	MUL WA, 0005h
+	db 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: MULW WA, 0005h
 	INC 4, WA
 	LDA XBC, 0CC1Fh
 	EXTZ XWA
@@ -402861,7 +402861,7 @@ LABEL_FE077F:
 	CP (XWA), 000h
 	JR Z, LABEL_FE07BC
 	LD WA, IZ
-	MUL WA, 0005h
+	db 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: MULW WA, 0005h
 	LDA XBC, 0CC22h
 	EXTZ XWA
 	ADD XWA, XBC
@@ -402872,7 +402872,7 @@ LABEL_FE077F:
 
 LABEL_FE07AA:
 	LD WA, IZ
-	MUL WA, 0005h
+	db 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: MULW WA, 0005h
 	LDA XBC, 0CC22h
 	EXTZ XWA
 	ADD XWA, XBC
@@ -402900,7 +402900,7 @@ LABEL_FE07D0:
 
 LABEL_FE07D6:
 	LD WA, IZ
-	MUL WA, 0005h
+	db 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: MULW WA, 0005h
 	LDA XBC, 0CC22h
 	EXTZ XWA
 	ADD XWA, XBC
@@ -402908,7 +402908,7 @@ LABEL_FE07D6:
 	LD E, A
 	EXTZ DE
 	LD WA, IZ
-	MUL WA, 0005h
+	db 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: MULW WA, 0005h
 	INC 4, WA
 	LDA XBC, 0CC1Fh
 	EXTZ XWA
@@ -410446,7 +410446,7 @@ LABEL_FE5228:
 	CP (XDE + 002h), 0ffh
 	JRL Z, LABEL_FE52F5
 	LD WA, BC
-	MUL WA, 0005h
+	db 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: MULW WA, 0005h
 	LDA XDE, 0CCD4h
 	LD HL, WA
 	EXTZ XHL
@@ -410459,7 +410459,7 @@ LABEL_FE5228:
 	OR A, 090h
 	LD (XHL), A
 	LD WA, BC
-	MUL WA, 0005h
+	db 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: MULW WA, 0005h
 	LDA XDE, 0CCD5h
 	LD HL, WA
 	EXTZ XHL
@@ -410467,7 +410467,7 @@ LABEL_FE5228:
 	LD A, (XSP + 002h)
 	LD (XHL), A
 	LD WA, BC
-	MUL WA, 0005h
+	db 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: MULW WA, 0005h
 	LDA XDE, 0CCD6h
 	LD HL, WA
 	EXTZ XHL
@@ -410483,7 +410483,7 @@ LABEL_FE5228:
 	RES 007h, A
 	LD (XHL), A
 	LD WA, BC
-	MUL WA, 0005h
+	db 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: MULW WA, 0005h
 	LDA XDE, 0CCD7h
 	LD HL, WA
 	EXTZ XHL
@@ -410498,7 +410498,7 @@ LABEL_FE5228:
 	LD A, (XDE + 001h)
 	LD (XHL), A
 	LD WA, BC
-	MUL WA, 0005h
+	db 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: MULW WA, 0005h
 	LDA XDE, 0CCD8h
 	LD HL, WA
 	EXTZ XHL
@@ -410523,7 +410523,7 @@ LABEL_FE530B:
 	LD XWA, 0000ccd4h
 	PUSH XWA
 	LD WA, BC
-	MUL WA, 0005h
+	db 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: MULW WA, 0005h
 	PUSH WA
 	CALL LABEL_EF24CB
 	INC 6, XSP
@@ -410577,13 +410577,13 @@ LABEL_FE5358:
 	CP (XDE + 002h), 0ffh
 	JRL Z, LABEL_FE540F
 	LD WA, BC
-	MUL WA, 0005h
+	db 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: MULW WA, 0005h
 	LDA XDE, 0CCF2h
 	EXTZ XWA
 	ADD XWA, XDE
 	LD (XWA), 090h
 	LD WA, BC
-	MUL WA, 0005h
+	db 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: MULW WA, 0005h
 	LDA XDE, 0CCF3h
 	LD HL, WA
 	EXTZ XHL
@@ -410591,7 +410591,7 @@ LABEL_FE5358:
 	LD A, (XSP + 002h)
 	LD (XHL), A
 	LD WA, BC
-	MUL WA, 0005h
+	db 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: MULW WA, 0005h
 	LDA XDE, 0CCF4h
 	LD HL, WA
 	EXTZ XHL
@@ -410607,7 +410607,7 @@ LABEL_FE5358:
 	RES 007h, A
 	LD (XHL), A
 	LD WA, BC
-	MUL WA, 0005h
+	db 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: MULW WA, 0005h
 	LDA XDE, 0CCF5h
 	LD HL, WA
 	EXTZ XHL
@@ -410622,7 +410622,7 @@ LABEL_FE5358:
 	LD A, (XDE + 001h)
 	LD (XHL), A
 	LD WA, BC
-	MUL WA, 0005h
+	db 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: MULW WA, 0005h
 	LDA XDE, 0CCF6h
 	LD HL, WA
 	EXTZ XHL
@@ -410647,7 +410647,7 @@ LABEL_FE5425:
 	LD XWA, 0000ccf2h
 	PUSH XWA
 	LD WA, BC
-	MUL WA, 0005h
+	db 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: MULW WA, 0005h
 	PUSH WA
 	CALL LABEL_EF24CB
 	INC 6, XSP
@@ -410700,13 +410700,13 @@ LABEL_FE546E:
 	CP (XDE + 002h), 0ffh
 	JRL Z, LABEL_FE5525
 	LD WA, BC
-	MUL WA, 0005h
+	db 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: MULW WA, 0005h
 	LDA XDE, 0CD10h
 	EXTZ XWA
 	ADD XWA, XDE
 	LD (XWA), 090h
 	LD WA, BC
-	MUL WA, 0005h
+	db 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: MULW WA, 0005h
 	LDA XDE, 0CD11h
 	LD HL, WA
 	EXTZ XHL
@@ -410714,7 +410714,7 @@ LABEL_FE546E:
 	LD A, (XSP + 002h)
 	LD (XHL), A
 	LD WA, BC
-	MUL WA, 0005h
+	db 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: MULW WA, 0005h
 	LDA XDE, 0CD12h
 	LD HL, WA
 	EXTZ XHL
@@ -410730,7 +410730,7 @@ LABEL_FE546E:
 	RES 007h, A
 	LD (XHL), A
 	LD WA, BC
-	MUL WA, 0005h
+	db 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: MULW WA, 0005h
 	LDA XDE, 0CD13h
 	LD HL, WA
 	EXTZ XHL
@@ -410745,7 +410745,7 @@ LABEL_FE546E:
 	LD A, (XDE + 001h)
 	LD (XHL), A
 	LD WA, BC
-	MUL WA, 0005h
+	db 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: MULW WA, 0005h
 	LDA XDE, 0CD14h
 	LD HL, WA
 	EXTZ XHL
@@ -410770,7 +410770,7 @@ LABEL_FE553B:
 	LD XWA, 0000cd10h
 	PUSH XWA
 	LD WA, BC
-	MUL WA, 0005h
+	db 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: MULW WA, 0005h
 	PUSH WA
 	CALL LABEL_EF24CB
 	INC 6, XSP
@@ -411457,7 +411457,7 @@ LABEL_FE5B45:
 	CP (XDE + 001h), 000h
 	JR Z, LABEL_FE5BEE
 	LD WA, BC
-	MUL WA, 0003h
+	db 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: MULW WA, 0003h
 	LDA XDE, 0CD30h
 	LD HL, WA
 	EXTZ XHL
@@ -411466,7 +411466,7 @@ LABEL_FE5B45:
 	OR A, 090h
 	LD (XHL), A
 	LD WA, BC
-	MUL WA, 0003h
+	db 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: MULW WA, 0003h
 	LDA XDE, 0CD31h
 	LD HL, WA
 	EXTZ XHL
@@ -411482,7 +411482,7 @@ LABEL_FE5B45:
 	RES 007h, A
 	LD (XHL), A
 	LD WA, BC
-	MUL WA, 0003h
+	db 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: MULW WA, 0003h
 	LDA XDE, 0CD32h
 	LD HL, WA
 	EXTZ XHL
@@ -411514,7 +411514,7 @@ LABEL_FE5C04:
 	LD XWA, 0000cd30h
 	PUSH XWA
 	LD WA, BC
-	MUL WA, 0003h
+	db 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: MULW WA, 0003h
 	PUSH WA
 	CALL LABEL_EF2627
 	INC 6, XSP
@@ -420913,7 +420913,7 @@ LABEL_FEC405:
 	LD XBC, 0
 	LD C, A
 	LD WA, (041Ch)
-	MUL WA, 0060h
+	db 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: MULW WA, 0060h
 	LD XIZ, XWA
 	ADD XIZ, XBC
 	EI 000h
@@ -423566,7 +423566,7 @@ LABEL_FEDC42:
 	JR Z, LABEL_FEDC79
 	LD A, (0EC05h)
 	EXTZ WA
-	MUL WA, 004bh
+	db 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: MULW WA, 004bh
 	EXTZ XWA
 	db 000h, 000h, 000h, 000h	;TODO: Fix ASL assembler encoding of: DIVW WA, 0064h
 	ADD WA, 0020h
@@ -430828,7 +430828,7 @@ LABEL_FF2602:
 	LD XDE, XBC
 	ADD XDE, XHL
 	LD WA, (XDE)
-	MUL WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: MULW WA, 000ah
 	LD (XDE), WA
 	CP IX, 0
 	JR Z, LABEL_FF2642
@@ -430882,7 +430882,7 @@ LABEL_FF2669:
 	CPW (XBC), 0000h
 	JR Z, LABEL_FF2677
 	LD WA, (XBC)
-	MUL WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: MULW WA, 000ah
 	LD (XBC), WA
 
 LABEL_FF2677:
