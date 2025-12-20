@@ -171666,13 +171666,9 @@ LABEL_F35E60:
 	LD (27FAh), WA
 	LD WA, (2804h)
 	LD (27FCh), WA
-	db 000h	;TODO: Fix ASL assembler encoding of LDW instruction
 	LDW (0210A0h), (27FEh)
-	db 000h	;TODO: Fix ASL assembler encoding of LDW instruction
 	LDW (0210A2h), (2800h)
-	db 000h	;TODO: Fix ASL assembler encoding of LDW instruction
 	LDW (0210A4h), (2802h)
-	db 000h	;TODO: Fix ASL assembler encoding of LDW instruction
 	LDW (0210A6h), (2804h)
 	LD (0210A8h), (2822h)
 	LD (0210AAh), (2824h)
