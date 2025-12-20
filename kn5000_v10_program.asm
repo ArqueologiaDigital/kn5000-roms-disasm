@@ -144243,7 +144243,7 @@ LABEL_F232D9:
 	LD WA, (2871h)
 	LD (0F231h), WA
 	LD WA, (0F19Eh)
-	LD (0FFECh), WA
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: LD (0FFECh), WA
 	XOR WA, WA
 	LD (0F19Eh), WA
 	RET
@@ -144410,7 +144410,7 @@ LABEL_F234CE:
 	CALL LABEL_F2041B
 	XOR WA, WA
 	LD (0F19Eh), WA
-	LD (0FFECh), WA
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: LD (0FFECh), WA
 	CALL LABEL_F238C4
 	CP (10E3h), 000h
 	JRL NZ, LABEL_F2361A
@@ -144573,7 +144573,7 @@ LABEL_F2361A:
 	CALL LABEL_F2041B
 	XOR WA, WA
 	LD (0F19Eh), WA
-	LD (0FFECh), WA
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: LD (0FFECh), WA
 	db 000h	;TODO: Fix ASL assembler encoding of LDW instruction
 	LDW (0F19Ch), 0000h
 	CPW (1A2Bh), 0031h
@@ -144587,7 +144587,7 @@ LABEL_F23645:
 	CALL LABEL_F2041B
 	XOR WA, WA
 	LD (0F19Eh), WA
-	LD (0FFECh), WA
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: LD (0FFECh), WA
 	db 000h	;TODO: Fix ASL assembler encoding of LDW instruction
 	LDW (0F19Ch), 0000h
 	PUSH XHL
@@ -144824,7 +144824,7 @@ LABEL_F23855:
 	CALL LABEL_F2041B
 	XOR WA, WA
 	LD (0F19Eh), WA
-	LD (0FFECh), WA
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: LD (0FFECh), WA
 	LD (108Dh), WA
 
 LABEL_F2386C:
@@ -195077,7 +195077,7 @@ LABEL_F43658:
 
 LABEL_F4365C:
 	LD WA, (0F19Eh)
-	LD (0FFECh), WA
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: LD (0FFECh), WA
 	BIT 0, (28A5h)
 	JR NZ, LABEL_F43675
 	db 000h	;TODO: Fix ASL assembler encoding of LDW instruction
