@@ -154272,7 +154272,7 @@ LABEL_F28F35:
 	LD DE, 00b1h
 	LD WA, (XHL + DE)
 	LD (0F231h), WA
-	LD (0FFE3h), 000h
+	db 0, 0, 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: LD (0FFE3h), 000h
 
 LABEL_F28F67:
 	CALR LABEL_F28F7F
@@ -194508,7 +194508,7 @@ LABEL_F43138:
 	LD (28B2h), 000h
 	db 000h	;TODO: Fix ASL assembler encoding of:
 	LD (2668h), 0001h
-	LD (0FFE3h), 000h
+	db 0, 0, 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: LD (0FFE3h), 000h
 	db 000h	;TODO: Fix ASL assembler encoding of:
 	LD (251Ch), 0001h
 	db 000h	;TODO: Fix ASL assembler encoding of:
@@ -200088,7 +200088,7 @@ LABEL_F478CA:
 	LD BC, 4
 	LD DE, 0
 	CALL LABEL_F4151E
-	LD (0FFE3h), 000h
+	db 0, 0, 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: LD (0FFE3h), 000h
 	CALL LABEL_F4E779
 	db 0, 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: LD A, (0FFE3h)
 	EXTZ WA
