@@ -173391,9 +173391,7 @@ LABEL_F36F5B:
 	LD (1D50h), XHL
 	LD (1D54h), XHL
 	CALR LABEL_F388A8
-	db 000h	;TODO: Fix ASL assembler encoding of:
-	LD (278Eh), 000ah
-	db 000h	;TODO: Fix ASL assembler encoding of LDW instruction
+	LDW (278Eh), 000ah
 	LDW (2792h), (2796h)
 	SET 0, (2742h)
 	LD (2774h), 007h
@@ -173401,9 +173399,7 @@ LABEL_F36F5B:
 	JR T, LABEL_F36FA7
 
 LABEL_F36F8B:
-	db 000h	;TODO: Fix ASL assembler encoding of LDW instruction
 	LDW (2792h), (2794h)
-	db 000h	;TODO: Fix ASL assembler encoding of LDW instruction
 	LDW (278Eh), (2790h)
 	RES 0, (2742h)
 	LD (2774h), 00ah
@@ -173414,8 +173410,7 @@ LABEL_F36FA7:
 	PUSH IZ
 	CPW (2792h), 0000h
 	JR NZ, LABEL_F36FB6
-	db 000h	;TODO: Fix ASL assembler encoding of:
-	LD (2792h), 0030h
+	LDW (2792h), 0030h
 
 LABEL_F36FB6:
 	LD A, (8D36h)
@@ -173440,7 +173435,6 @@ LABEL_F36FE1:
 	LD (295Ch), 000h
 	LD WA, (2963h)
 	LD (0D4Fh), WA
-	db 000h	;TODO: Fix ASL assembler encoding of LDW instruction
 	LDW (0D51h), (2963h)
 	LD A, (8D39h)
 	CP A, 096h
@@ -173475,13 +173469,11 @@ LABEL_F3703A:
 	JR Z, LABEL_F37055
 
 LABEL_F3704C:
-	db 000h	;TODO: Fix ASL assembler encoding of LDW instruction
 	LDW (2744h), (2668h)
 	JRL T, LABEL_F370D7
 
 LABEL_F37055:
-	db 000h	;TODO: Fix ASL assembler encoding of:
-	LD (2744h), 0001h
+	LDW (2744h), 0001h
 	CPW (0F231h), 0000h
 	JRL Z, LABEL_F37102
 	CALL LABEL_F4203B
@@ -173520,8 +173512,7 @@ LABEL_F37055:
 	LD DE, 5
 	CALL LABEL_F415DB
 	LD (28AFh), IZ
-	db 000h	;TODO: Fix ASL assembler encoding of:
-	LD (2666h), 0005h
+	LDW (2666h), 0005h
 	CALR LABEL_F37CC9
 	INCW 1, (2666h)
 	CALR LABEL_F37CC9
@@ -173535,8 +173526,7 @@ LABEL_F370D7:
 	CALR LABEL_F37DFA
 	CP (287Ah), 000h
 	JR Z, LABEL_F37107
-	db 000h	;TODO: Fix ASL assembler encoding of:
-	LD (2744h), 0001h
+	LDW (2744h), 0001h
 	CALR LABEL_F37DFA
 	CP (287Ah), 000h
 	JR Z, LABEL_F37107
@@ -173546,15 +173536,13 @@ LABEL_F37102:
 	JR T, LABEL_F37132
 
 LABEL_F37107:
-	db 000h	;TODO: Fix ASL assembler encoding of:
-	LD (279Ah), 0000h
+	LDW (279Ah), 0000h
 	CALR LABEL_F3689A
 	CALR LABEL_F37AF6
 	CALR LABEL_F36B92
 	CALR LABEL_F36A30
 	CALR LABEL_F36AFD
-	db 000h	;TODO: Fix ASL assembler encoding of:
-	LD (2782h), 0000h
+	LDW (2782h), 0000h
 	LD (2784h), 000h
 	CALR LABEL_F37F46
 
