@@ -113538,7 +113538,7 @@ LABEL_F0184F:
 	CP IX, 0
 	JR Z, LABEL_F018EC
 	LD IY, IX
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL assembler encoding of: LD (XHL + 001h), 0000h
+	LDW (XHL + 001h), 0000h
 	CALL LABEL_F22BFD
 	LD XHL, (10FDh)
 	LD IX, IY
@@ -143565,7 +143565,7 @@ LABEL_F22CD3:
 	LD IY, WA
 	CALL LABEL_F22DFE
 	LD XHL, (10FDh)
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL assembler encoding of: LD (XHL + 001h), 0000h
+	LDW (XHL + 001h), 0000h
 
 LABEL_F22D16:
 	LD IY, IX
@@ -143601,7 +143601,7 @@ LABEL_F22D34:
 	CP IX, 0
 	JR Z, LABEL_F22DDE
 	LD IY, IX
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL assembler encoding of: LD (XHL + 001h), 0000h
+	LDW (XHL + 001h), 0000h
 	CALL LABEL_F22DFE
 	LD IX, IY
 	LD XHL, (10FDh)
@@ -143863,7 +143863,7 @@ LABEL_F22F85:
 	POP WA
 	CALL LABEL_F22DFE
 	LD XHL, (10FDh)
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL assembler encoding of: LD (XHL + 001h), 0000h
+	LDW (XHL + 001h), 0000h
 	LDW (XHL + 003h), 0ffffh
 	JRL T, LABEL_F22E2F
 
@@ -144877,7 +144877,7 @@ LABEL_F238CD:
 	CALL LABEL_F2437B
 	LD XHL, (10FDh)
 	OR (XHL), 080h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL assembler encoding of: LD (XHL + 001h), 0000h
+	LDW (XHL + 001h), 0000h
 	LDW (XHL + 003h), 0ffffh
 	POP WA
 	LD XHL, 0000f250h
@@ -145517,7 +145517,6 @@ LABEL_F23E03:
 	LD XIX, 0000f1a0h
 	LD BC, 0010h
 	LDIR
-	db 000h	;TODO: Fix ASL assembler encoding of LDW instruction
 	LDW (0F290h), 0ffffh
 	CALL LABEL_FC9E29
 	RET
@@ -145578,7 +145577,6 @@ LABEL_F23E8D:
 	LD IY, (108Dh)
 	CALL LABEL_F247A6
 	LD IX, IY
-	db 000h 	;TODO: Fix ASL assembler encoding of CPW instruction
 	CPW (0F231h), 0010h
 	JRL C, LABEL_F23F12
 	PUSH XIY
@@ -145597,7 +145595,7 @@ LABEL_F23E8D:
 	CALL LABEL_F2437B
 	LD XHL, (10FDh)
 	OR (XHL), 080h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL assembler encoding of: LD (XHL + 001h), 0000h
+	LDW (XHL + 001h), 0000h
 	LDW (XHL + 003h), 0ffffh
 	POP WA
 	LD HL, IY
@@ -145901,7 +145899,6 @@ LABEL_F24112:
 	RET
 
 LABEL_F24137:
-	db 000h 	;TODO: Fix ASL assembler encoding of CPW instruction
 	CPW (0F231h), 0010h
 	JRL NC, LABEL_F24148
 	LD (10E3h), 0ffh
@@ -146777,7 +146774,7 @@ LABEL_F248F0:
 	LD XHL, (10FDh)
 	LD (2881h), XHL
 	LD IX, 5
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL assembler encoding of: LD (XHL + 001h), 0000h
+	LDW (XHL + 001h), 0000h
 	LDW (XHL + 003h), 0ffffh
 	CALL LABEL_F25B8D
 	CALL LABEL_F25BD6
