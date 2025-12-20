@@ -154279,7 +154279,7 @@ LABEL_F28F67:
 	CALR LABEL_F28F94
 	CALL LABEL_F29E48
 	db 0, 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: INC 1, (0FFE3h)
-	CP (0FFE3h), 00ah
+	db 0, 0, 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: CP (0FFE3h), 00ah
 	JR C, LABEL_F28F67
 
 LABEL_F28F7E:
