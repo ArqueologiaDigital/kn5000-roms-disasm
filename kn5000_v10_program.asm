@@ -174065,7 +174065,7 @@ LABEL_F375D7:
 	LD A, (2774h)
 	db 000h, 000h, 000h;	TODO: Fix ASL assembler encoding of: MUL A, 060h
 	CP (279Ah), WA
-	CALL C LABEL_F38445
+	CALL C, LABEL_F38445
 	BIT 0, (295Fh)
 	JR NZ, LABEL_F3763C
 	CALR LABEL_F3767B
@@ -285562,7 +285562,7 @@ LABEL_F89573:
 	LDA XBC, XWA + 004h
 	LD XDE, (0EA0394h)
 	CP XDE, (XBC)
-	CALL Z GetDiskFreeSpace
+	CALL Z, GetDiskFreeSpace
 	LD XHL, (025D70h)
 	RET
 
@@ -305811,7 +305811,7 @@ LABEL_F98302:
 LABEL_F98308:
 	CALL Get_Firmware_Version
 	CP L, 0ffh
-	CALL Z CaptureLcd
+	CALL Z, CaptureLcd
 
 LABEL_F98314:
 	CP (0C07Dh), 020h
@@ -305898,7 +305898,7 @@ LABEL_F983C1:
 	JRL NZ, LABEL_F98695
 	CALL Get_Firmware_Version
 	CP L, 0ffh
-	CALL Z CaptureLcd
+	CALL Z, CaptureLcd
 
 LABEL_F98424:
 	LD XWA, 0
@@ -322014,7 +322014,7 @@ LABEL_FA317D:
 
 CaptureLcdCheck:
 	CP XBC, 01c00007h
-	CALL Z CaptureLcd
+	CALL Z, CaptureLcd
 	LD XHL, 0
 	RET
 
