@@ -143967,7 +143967,7 @@ LABEL_F230AC:
 	LD WA, BC
 	SLA 00bh, XWA
 	ADD XDE, XWA
-	LD XHL, 00000000h
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: LD XHL, 00000000h
 	ADD XHL, XDE
 	XOR IY, IY
 
