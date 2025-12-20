@@ -150526,7 +150526,6 @@ LABEL_F27088:
 
 LABEL_F270A0:
 	PUSH WA
-	db 000h 	;TODO: Fix ASL assembler encoding of CPW instruction
 	CPW (0F19Ch), 0000h
 	JR Z, LABEL_F270B2
 	db 000h	;TODO: Fix ASL assembler encoding of:
@@ -150665,7 +150664,6 @@ LABEL_F271F2:
 	LD A, 008h
 	LD (XIX+), A
 	LD (1118h), XIX
-	db 000h; TODO: Fix ASL assembler encoding of:
 	LD L, (0FC62h)
 	XOR H, H
 	PUSH BC
