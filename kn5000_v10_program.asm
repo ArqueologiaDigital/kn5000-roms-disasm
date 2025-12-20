@@ -172941,7 +172941,6 @@ LABEL_F36ABC:
 
 LABEL_F36ACE:
 	LD XDE, XWA
-	db 000h	;TODO: Fix ASL assembler encoding of LDW instruction
 	LDW (XDE), (275Eh)
 	LD XHL, XDE
 	LD WA, (XHL)
@@ -172950,7 +172949,6 @@ LABEL_F36ACE:
 	LD A, (2760h)
 	EXTZ WA
 	ADD (XDE), WA
-	db 000h	;TODO: Fix ASL assembler encoding of LDW instruction
 	LDW (XBC), (276Ah)
 	LD XDE, XBC
 	LD WA, (XDE)
