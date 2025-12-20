@@ -182859,7 +182859,7 @@ LABEL_F3C95B:
 
 LABEL_F3C969:
 	LD WA, (2668h)
-	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (8D38h)
+	LD C, (8D38h)
 	CP C, 085h
 	JR Z, LABEL_F3C97B
 	CP C, 086h
@@ -186188,7 +186188,7 @@ LABEL_F3E7DF:
 	RET
 
 LABEL_F3E7EB:
-	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (8D36h)
+	LD C, (8D36h)
 	CP C, 085h
 	JR Z, LABEL_F3E7F9
 	CP C, 086h
@@ -196982,7 +196982,7 @@ ApPlaySyori:
 	JRL NZ, LABEL_F4637B
 	LD XWA, (XSP + 002h)
 	LD (2972h), XWA
-	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (8D36h)
+	LD C, (8D36h)
 	CP C, 099h
 	JRL Z, LABEL_F45D7F
 	CP C, 096h
@@ -350589,7 +350589,7 @@ LABEL_FB71D6:
 	RET
 
 LABEL_FB71E2:
-	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (8D36h)
+	LD C, (8D36h)
 	CP C, 078h
 	JR Z, LABEL_FB7214
 	CP C, 07ah
@@ -399072,7 +399072,7 @@ LABEL_FDEC99:
 	JRL T, LABEL_FDE9AE
 
 LABEL_FDEC9E:
-	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (8D36h)
+	LD C, (8D36h)
 	CP C, 076h
 	JR Z, LABEL_FDECB6
 	CP C, 073h
