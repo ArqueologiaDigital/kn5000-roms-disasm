@@ -149261,7 +149261,7 @@ LABEL_F2614D:
 	POP XIY
 	LD L, (1A5Ah)
 	LD H, (1A5Bh)
-	LD (XIY + 000h), L
+	db 0, 0, 0	;TODO: Fix ASL assembler encoding of: LD (XIY + 000h), L
 	LD (XIY + 001h), H
 	JRL T, LABEL_F26276
 
@@ -149303,7 +149303,7 @@ LABEL_F26218:
 	POP XIY
 	LD L, (1A5Ah)
 	LD H, (1A5Bh)
-	LD (XIY + 000h), L
+	db 0, 0, 0	;TODO: Fix ASL assembler encoding of: LD (XIY + 000h), L
 	LD (XIY + 001h), H
 	JR T, LABEL_F26276
 
@@ -149320,7 +149320,7 @@ LABEL_F26229:
 	RRC 001h, C
 	AND A, 07fh
 	OR A, C
-	LD (XIY + 000h), A
+	db 0, 0, 0	;TODO: Fix ASL assembler encoding of: LD (XIY + 000h), A
 	XOR H, H
 	LD L, (0FABh)
 	AND L, 00fh
@@ -230965,7 +230965,7 @@ LABEL_F5CA35:
 	AND W, 07fh
 	LD (3395h), WA
 	AND A, 00fh
-	LD (XIY + 000h), A
+	db 0, 0, 0	;TODO: Fix ASL assembler encoding of: LD (XIY + 000h), A
 	AND (XIY + 001h), 080h
 	OR (XIY + 001h), W
 	LD A, (0FBA4h)
@@ -231108,7 +231108,7 @@ LABEL_F5CC63:
 	CP (3395h), WA
 	JR Z, LABEL_F5CC89
 	AND A, 00fh
-	LD (XIY + 000h), A
+	db 0, 0, 0	;TODO: Fix ASL assembler encoding of: LD (XIY + 000h), A
 	AND (XIY + 001h), 080h
 	OR (XIY + 001h), W
 	OR A, 0f0h
@@ -234037,7 +234037,7 @@ LABEL_F5F8C8:
 	CP HL, WA
 	JR Z, LABEL_F5F8FA
 	PUSH WA
-	LD (XIY + 000h), W
+	db 0, 0, 0	;TODO: Fix ASL assembler encoding of: LD (XIY + 000h), W
 	LD C, A
 	AND C, 07fh
 	LD (XIY + 001h), C
@@ -234075,7 +234075,7 @@ LABEL_F5F923:
 	CP HL, WA
 	JR Z, LABEL_F5F955
 	PUSH WA
-	LD (XIY + 000h), W
+	db 0, 0, 0	;TODO: Fix ASL assembler encoding of: LD (XIY + 000h), W
 	LD C, A
 	AND C, 07fh
 	LD (XIY + 001h), C
@@ -234112,7 +234112,7 @@ LABEL_F5F97B:
 	CP HL, WA
 	JR Z, LABEL_F5F9AD
 	PUSH WA
-	LD (XIY + 000h), W
+	db 0, 0, 0	;TODO: Fix ASL assembler encoding of: LD (XIY + 000h), W
 	LD C, A
 	AND C, 07fh
 	LD (XIY + 001h), C
@@ -234149,7 +234149,7 @@ LABEL_F5F9D3:
 	CP HL, WA
 	JR Z, LABEL_F5FA05
 	PUSH WA
-	LD (XIY + 000h), W
+	db 0, 0, 0	;TODO: Fix ASL assembler encoding of: LD (XIY + 000h), W
 	LD C, A
 	AND C, 07fh
 	LD (XIY + 001h), C
@@ -234186,7 +234186,7 @@ LABEL_F5FA2B:
 	CP HL, WA
 	JR Z, LABEL_F5FA5D
 	PUSH WA
-	LD (XIY + 000h), W
+	db 0, 0, 0	;TODO: Fix ASL assembler encoding of: LD (XIY + 000h), W
 	LD C, A
 	AND C, 07fh
 	LD (XIY + 001h), C
