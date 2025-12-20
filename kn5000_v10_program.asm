@@ -173583,11 +173583,9 @@ LABEL_F37173:
 	RES 2, (28A7h)
 	LD (295Ch), 000h
 	LD WA, (0D4Fh)
-	OR (0FFECh), WA
-	db 000h	;TODO: Fix ASL assembler encoding of:
-	LD (0D4Fh), 0000h
-	db 000h	;TODO: Fix ASL assembler encoding of:
-	LD (0D51h), 0000h
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: OR (0FFECh), WA
+	LDW (0D4Fh), 0000h
+	LDW (0D51h), 0000h
 	LDW (2668h), (2744h)
 	CALL LABEL_FDDE6F
 	RES 0, (27B0h)
@@ -198819,7 +198817,7 @@ LABEL_F46DD5:
 
 LABEL_F46DDB:
 	LD WA, (2875h)
-	OR (0FFECh), WA
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: OR (0FFECh), WA
 
 LABEL_F46DE4:
 	LD XHL, 0
@@ -198890,7 +198888,7 @@ SqTrmgTitleFunc:
 	CP XDE, 00000003h
 	JR NZ, LABEL_F46E92
 	LD WA, (2875h)
-	OR (0FFECh), WA
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: OR (0FFECh), WA
 
 LABEL_F46E92:
 	LD XHL, 0
