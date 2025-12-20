@@ -146761,7 +146761,7 @@ LABEL_F248F0:
 	XOR HL, HL
 	LD L, (2684h)
 	DEC 1, HL
-	MULS L, 003h
+	db 0, 0, 0	;TODO: Fix ASL assembler encoding of: MULS L, 003h
 	PUSH XIY
 	LD XIY, 0000f250h
 	OR (XIY + HL), 080h
@@ -146870,7 +146870,7 @@ LABEL_F24A34:
 	PUSH XIX
 	DEC 1, HL
 	LD IY, HL
-	MULS IYL, 003h
+	db 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: MULS IYL, 003h
 	LD XIX, 0000f250h
 	AND (XIX + IY), 07fh
 	INC 1, IY
@@ -148569,7 +148569,7 @@ LABEL_F25AEA:
 LABEL_F25B0B:
 	DEC 1, HL
 	LD IY, HL
-	MULS IYL, 003h
+	db 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: MULS IYL, 003h
 	PUSH XIX
 	LD XIX, 0000f250h
 	AND (XIX + IY), 07fh
