@@ -148828,7 +148828,6 @@ LABEL_F25D8F:
 	LD WA, (2666h)
 	CP WA, 00ffh
 	JR NZ, LABEL_F25DAE
-	db 000h 	;TODO: Fix ASL assembler encoding of CPW instruction
 	CPW (0F231h), 0000h
 	JR NZ, LABEL_F25DA8
 	LD (10E3h), 0ffh
@@ -148852,7 +148851,6 @@ LABEL_F25DBA:
 	LD WA, (2666h)
 	CP WA, 00ffh
 	JR NZ, LABEL_F25DD9
-	db 000h 	;TODO: Fix ASL assembler encoding of CPW instruction
 	CPW (0F231h), 0000h
 	JR NZ, LABEL_F25DD3
 	LD (10E3h), 0ffh
@@ -172179,7 +172177,6 @@ LABEL_F363C3:
 LABEL_F363D9:
 	BIT 7, (295Ch)
 	RET NZ
-	db 000h 	;TODO: Fix ASL assembler encoding of CPW instruction
 	CPW (0F231h), 0000h
 	JR Z, LABEL_F3644E
 	CALL LABEL_EF24ED
@@ -173531,7 +173528,6 @@ LABEL_F3704C:
 LABEL_F37055:
 	db 000h	;TODO: Fix ASL assembler encoding of:
 	LD (2744h), 0001h
-	db 000h 	;TODO: Fix ASL assembler encoding of CPW instruction
 	CPW (0F231h), 0000h
 	JRL Z, LABEL_F37102
 	CALL LABEL_F4203B
@@ -208991,7 +208987,6 @@ LABEL_F4D4D5:
 	JR ULE, LABEL_F4D4AF
 
 LABEL_F4D4DE:
-	db 000h 	;TODO: Fix ASL assembler encoding of CPW instruction
 	CPW (0F231h), 0000h
 	JR NZ, LABEL_F4D52A
 
@@ -209020,7 +209015,6 @@ LABEL_F4D4F3:
 	EXTZ BC
 	LD DE, 0
 	CALL LABEL_F416A7
-	db 000h 	;TODO: Fix ASL assembler encoding of CPW instruction
 	CPW (0F231h), 0000h
 	JR Z, LABEL_F4D4E6
 
@@ -209091,7 +209085,6 @@ LABEL_F4D5C4:
 	JRL T, LABEL_F4D66C
 
 LABEL_F4D5D6:
-	db 000h 	;TODO: Fix ASL assembler encoding of CPW instruction
 	CPW (0F231h), 0000h
 	JR NZ, LABEL_F4D5FD
 
@@ -209293,7 +209286,6 @@ LABEL_F4D7C1:
 	LD (2877h), 000h
 
 LABEL_F4D7CA:
-	db 000h 	;TODO: Fix ASL assembler encoding of CPW instruction
 	CPW (0F231h), 0000h
 	JRL Z, LABEL_F4D864
 	LD C, (2708h)
@@ -209354,7 +209346,6 @@ LABEL_F4D84A:
 	JRL T, LABEL_F4D8F7
 
 LABEL_F4D85C:
-	db 000h 	;TODO: Fix ASL assembler encoding of CPW instruction
 	CPW (0F231h), 0000h
 	JR NZ, LABEL_F4D888
 
@@ -209998,7 +209989,6 @@ LABEL_F4DE1E:
 	JR T, LABEL_F4DEAB
 
 LABEL_F4DE50:
-	db 000h 	;TODO: Fix ASL assembler encoding of CPW instruction
 	CPW (0F231h), 0000h
 	JR Z, LABEL_F4DEAF
 	LD WA, 0081h
@@ -210169,7 +210159,6 @@ LABEL_F4DFED:
 
 LABEL_F4DFF1:
 	PUSH IZ
-	db 000h 	;TODO: Fix ASL assembler encoding of CPW instruction
 	CPW (0F231h), 0000h
 	JR NZ, LABEL_F4DFFF
 	LD HL, 0ffffh
