@@ -171314,7 +171314,7 @@ LABEL_F35B02:
 	JR Z, LABEL_F35BA6
 	LD A, W
 	EXTZ WA
-	DEC 0, WA
+	db 0, 0	;TODO: Fix ASL assembler encoding of: DEC 0, WA
 	CP WA, 0
 	JRL LT, LABEL_F35C7E
 	CP WA, 0011h
@@ -322270,7 +322270,7 @@ LABEL_FA2DC2:
 	LD WA, (XHL)
 	LD (XIX), WA
 	LD WA, (XBC)
-	DEC 0, WA
+	db 0, 0	;TODO: Fix ASL assembler encoding of: DEC 0, WA
 	LD (XIX + 002h), WA
 	LDA XIY, XSP + 05eh
 	LDA XIX, XSP + 056h
@@ -322283,7 +322283,7 @@ LABEL_FA2DC2:
 	LDIRW
 	LDA XBC, XSP + 04eh
 	LD WA, (XBC + 006h)
-	DEC 0, WA
+	db 0, 0	;TODO: Fix ASL assembler encoding of: DEC 0, WA
 	LD (XBC + 002h), WA
 	LDA XBC, XSP + 046h
 	LD WA, (XHL)
@@ -362732,7 +362732,7 @@ LABEL_FBF1B7:
 	LD XWA, (XHL + 02ch)
 	LD WA, (XWA)
 	db 000h, 000h, 000h, 000h	;TODO: Fix ASL assembler encoding of: MULSW WA, 000ah
-	DEC 0, WA
+	db 0, 0	;TODO: Fix ASL assembler encoding of: DEC 0, WA
 	LD (XBC), WA
 	LD XWA, (XSP + 0236h)
 	LD XBC, 01c0000eh
@@ -366010,7 +366010,7 @@ LABEL_FC166F:
 	LD XWA, (XIZ + 02ch)
 	LD WA, (XWA)
 	db 000h, 000h, 000h, 000h	;TODO: Fix ASL assembler encoding of: MULSW WA, 000ah
-	DEC 0, WA
+	db 0, 0	;TODO: Fix ASL assembler encoding of: DEC 0, WA
 	LD (XBC), WA
 	LD XWA, (XSP + 0228h)
 	LD XBC, 01c0000eh
