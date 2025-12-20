@@ -159798,7 +159798,7 @@ SqAftSetFunc:
 	JR T, LABEL_F2CD37
 
 LABEL_F2CD2A:
-	LDA XHL, 0FFC2h
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: LDA XHL, 0FFC2h
 	JR T, LABEL_F2CD37
 
 LABEL_F2CD31:
