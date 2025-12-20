@@ -154137,10 +154137,8 @@ LABEL_F28DF3:
 	SUB BC, WA
 	LD (1085h), BC
 	CALR LABEL_F28AF3
-	db 000h	;TODO: Fix ASL assembler encoding of:
-	LD (0F62h), 0000h
-	db 000h	;TODO: Fix ASL assembler encoding of:
-	LD (0F64h), 0000h
+	LDW (0F62h), 0000h
+	LDW (0F64h), 0000h
 	RET
 
 LABEL_F28E19:
@@ -154397,8 +154395,7 @@ LABEL_F290CD:
 	XOR W, W
 	LD (287Ah), 000h
 	LD (287Dh), WA
-	db 000h	;TODO: Fix ASL assembler encoding of:
-	LD (287Fh), 0001h
+	LDW (287Fh), 0001h
 	CALL LABEL_F1FA6D
 	CP (287Ah), 000h
 	JR Z, LABEL_F290F1
@@ -154470,23 +154467,19 @@ LABEL_F29168:
 	JR T, LABEL_F29152
 
 LABEL_F2918D:
-	db 000h	;TODO: Fix ASL assembler encoding of:
-	LD (1132h), 0005h
+	LDW (1132h), 0005h
 	JR T, LABEL_F291AB
 
 LABEL_F29195:
-	db 000h	;TODO: Fix ASL assembler encoding of:
-	LD (1132h), 0004h
+	LDW (1132h), 0004h
 	JR T, LABEL_F291AB
 
 LABEL_F2919D:
-	db 000h	;TODO: Fix ASL assembler encoding of:
-	LD (1132h), 0002h
+	LDW (1132h), 0002h
 	JR T, LABEL_F291AB
 
 LABEL_F291A5:
-	db 000h	;TODO: Fix ASL assembler encoding of:
-	LD (1132h), 0003h
+	LDW (1132h), 0003h
 
 LABEL_F291AB:
 	PUSH WA
