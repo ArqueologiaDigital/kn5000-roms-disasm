@@ -172732,7 +172732,7 @@ LABEL_F368F3:
 	SLA A, BC
 
 LABEL_F3690B:
-	AND BC, (0FFECh)
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: AND BC, (0FFECh)
 	JR Z, LABEL_F3691F
 	LD (2776h), 001h
 	RET
@@ -172765,7 +172765,7 @@ LABEL_F3692F:
 	SLA A, BC
 
 LABEL_F36949:
-	AND BC, (0FFECh)
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: AND BC, (0FFECh)
 	JR Z, LABEL_F36988
 	BIT 0, (2776h)
 	JR Z, LABEL_F36988
