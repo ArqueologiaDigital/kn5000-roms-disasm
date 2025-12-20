@@ -155761,7 +155761,7 @@ LABEL_F29DD0:
 	LD L, (XIY + 003h)
 	LD H, L
 	SRL 2, L
-	RL, 001h W
+	RL 001h, W
 	AND W, 07fh
 	SLA 001h, H
 	OR A, H
