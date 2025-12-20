@@ -177803,8 +177803,7 @@ LABEL_F39A7E:
 	BIT 2, (XHL)
 	JR Z, LABEL_F39B15
 	SET 1, (230Eh)
-	db 000h	;TODO: Fix ASL assembler encoding of:
-	LD (1108h), 0400h
+	LDW (1108h), 0400h
 	CALL LABEL_F5D678
 	EXTZ HL
 	INC 1, HL
@@ -177820,8 +177819,7 @@ LABEL_F39AC0:
 	BIT 2, (XHL)
 	JR Z, LABEL_F39B15
 	SET 1, (230Eh)
-	db 000h	;TODO: Fix ASL assembler encoding of:
-	LD (1108h), 0004h
+	LDW (1108h), 0004h
 	CALL LABEL_F5D678
 	EXTZ HL
 	INC 1, HL
@@ -177834,8 +177832,7 @@ LABEL_F39AE5:
 	BIT 3, (XHL)
 	JR Z, LABEL_F39B15
 	SET 1, (230Eh)
-	db 000h	;TODO: Fix ASL assembler encoding of:
-	LD (1108h), 0008h
+	LDW (1108h), 0008h
 	CALL LABEL_F5D678
 	EXTZ HL
 	INC 1, HL
@@ -177921,13 +177918,11 @@ LABEL_F39B8F:
 
 LABEL_F39BA0:
 	RES 5, (28B3h)
-	db 000h	;TODO: Fix ASL assembler encoding of:
-	LD (232Ch), 0000h
+	LDW (232Ch), 0000h
 	RES 0, (28A6h)
 	CALL LABEL_F59AF3
 	EI 006h
-	db 000h	;TODO: Fix ASL assembler encoding of:
-	LD (041Ch), 0000h
+	LDW (041Ch), 0000h
 	LD (041Bh), 000h
 	EI 000h
 	LD L, (0433h)
@@ -178066,8 +178061,7 @@ LABEL_F39CF3:
 	RES 3, (28A7h)
 	CPW (28A8h), 0000h
 	JRL Z, LABEL_F39DFC
-	db 000h	;TODO: Fix ASL assembler encoding of:
-	LD (2326h), 0000h
+	LDW (2326h), 0000h
 	LD (22FAh), 0ffffh
 	LD L, 001h
 	LD C, 000h
@@ -178110,12 +178104,10 @@ LABEL_F39D52:
 	CALL LABEL_FDDE6F
 
 LABEL_F39D7B:
-	db 000h	;TODO: Fix ASL assembler encoding of:
-	LD (2330h), 0000h
+	LDW (2330h), 0000h
 	CALL LABEL_F464E4
 	EI 006h
-	db 000h	;TODO: Fix ASL assembler encoding of:
-	LD (041Ch), 0000h
+	LDW (041Ch), 0000h
 	LD (041Bh), 000h
 	EI 000h
 	LD A, (0433h)
@@ -178128,8 +178120,7 @@ LABEL_F39D7B:
 	JR T, LABEL_F39DCA
 
 LABEL_F39DB2:
-	db 000h	;TODO: Fix ASL assembler encoding of:
-	LD (2314h), 0000h
+	LDW (2314h), 0000h
 	LD A, (28A7h)
 	SET 000h, A
 	SET 001h, A
@@ -178282,8 +178273,7 @@ LABEL_F39EF0:
 
 LABEL_F39F29:
 	LD (1D62h), 000h
-	db 000h	;TODO: Fix ASL assembler encoding of:
-	LD (232Eh), 0000h
+	LDW (232Eh), 0000h
 	RES 1, (28B3h)
 	RET
 
@@ -178508,8 +178498,7 @@ LABEL_F3A14D:
 	LD (1D94h), 000h
 	LD WA, (28B4h)
 	LD (2314h), WA
-	db 000h	;TODO: Fix ASL assembler encoding of:
-	LD (28B4h), 0000h
+	LDW (28B4h), 0000h
 	LD WA, 0032h
 	CALL LABEL_F3DFFF
 	CALL LABEL_FE118D
@@ -178523,8 +178512,7 @@ LABEL_F3A14D:
 	JR NZ, LABEL_F3A19E
 	LDW (0F19Eh), 0000h
 	CALL LABEL_FDDE6F
-	db 000h	;TODO: Fix ASL assembler encoding of:
-	LD (28B4h), 0000h
+	LDW (28B4h), 0000h
 
 LABEL_F3A19E:
 	SET 2, (28A7h)
