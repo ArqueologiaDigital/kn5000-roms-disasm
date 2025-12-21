@@ -189823,7 +189823,7 @@ LABEL_F40A16:
 	JR T, LABEL_F40A4D
 
 LABEL_F40A22:
-	CP (0FFE3h), A
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: CP (0FFE3h), A
 	JR NZ, LABEL_F40A2D
 	LD A, 000h
 	JR T, LABEL_F40A2F
@@ -194833,13 +194833,11 @@ LABEL_F439AB:
 	RET
 
 LABEL_F439B7:
-	db 000h; TODO: Fix ASL assembler encoding of:
 	LD L, (0FDADh)
 	AND L, 004h
 	RET
 
 LABEL_F439BF:
-	db 000h; TODO: Fix ASL assembler encoding of:
 	LD L, (0FD52h)
 	AND L, A
 	RET
@@ -195105,7 +195103,6 @@ LABEL_F43BD9:
 	LD QIZH, A
 	EXTZ WA
 	CALL LABEL_F86FB7
-	db 000h	;TODO: Fix ASL assembler encoding of:
 	LD (0F19Eh), HL
 	CALL LABEL_FDDE6F
 	LD A, QIZH
@@ -195172,7 +195169,6 @@ LABEL_F43C8A:
 	PUSH XIZ
 	CALL assswb_out
 	POP XIZ
-	db 000h 	;TODO: Fix ASL assembler encoding of CPW instruction
 	CPW (0F19Eh), 0000h
 	JR Z, LABEL_F43CA3
 	LD (11F4h), 000h
@@ -195217,7 +195213,6 @@ LABEL_F43CFF:
 	RET
 
 LABEL_F43D05:
-	db 000h 	;TODO: Fix ASL assembler encoding of CPW instruction
 	CPW (0F19Eh), 0000h
 	JR Z, LABEL_F43D16
 	AND (28A7h), 0f7h
@@ -196735,7 +196730,7 @@ LABEL_F45871:
 
 LABEL_F45884:
 	LD BC, WA
-	LDA XWA, 29ABh
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: LDA XWA, 29ABh
 	EXTZ XBC
 	ADD XBC, XWA
 	LD A, (XBC)
