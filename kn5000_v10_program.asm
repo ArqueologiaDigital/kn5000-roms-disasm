@@ -196789,7 +196789,7 @@ LABEL_F4590A:
 
 LABEL_F4591D:
 	LD DE, WA
-	LDA XBC, 29ABh
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: LDA XBC, 29ABh
 	EXTZ XDE
 	ADD XDE, XBC
 	CP (XDE), 055h
@@ -197672,7 +197672,7 @@ LABEL_F464D4:
 	JP ApDeliveryEvent
 
 LABEL_F464E4:
-	db 0, 0, 0, 0, 0;	TODO: Fix ASL assembler encoding of: LD C, (8D38h)
+	LD C, (8D38h)
 	LD XWA, (2972h)
 	CP C, 099h
 	JR Z, LABEL_F46557
@@ -198562,7 +198562,7 @@ SqSoclTitleFunc:
 	JR Z, LABEL_F46DAD
 	CP XDE, 00000002h
 	JR NZ, LABEL_F46DAD
-	LD (2878h), (0FFE3h)
+	db 0, 0, 0, 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: LD (2878h), (0FFE3h)
 
 LABEL_F46DAD:
 	LD XHL, 0
@@ -198609,7 +198609,7 @@ LABEL_F46E0C:
 	JR T, LABEL_F46E19
 
 LABEL_F46E12:
-	LDW (0FFECh), (2875h)
+	db 0, 0, 0, 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: LDW (0FFECh), (2875h)
 
 LABEL_F46E19:
 	LD XHL, 0
@@ -198628,7 +198628,7 @@ SqTrclTitleFunc:
 LABEL_F46E3C:
 	LD WA, (2738h)
 	CPL WA
-	AND (0FFECh), WA
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: AND (0FFECh), WA
 
 LABEL_F46E47:
 	LD XHL, 0
@@ -199051,7 +199051,7 @@ LABEL_F4724E:
 
 LABEL_F47263:
 	CPL BC
-	AND (0FFECh), BC
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: AND (0FFECh), BC
 	LD A, (2682h)
 	DEC 1, A
 	LD BC, 1
@@ -199071,7 +199071,7 @@ LABEL_F47279:
 
 LABEL_F4728E:
 	CPL BC
-	AND (0FFECh), BC
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: AND (0FFECh), BC
 	LD A, (2684h)
 	DEC 1, A
 	LD BC, 1
@@ -199089,7 +199089,7 @@ LABEL_F472A4:
 	SLA A, BC
 
 LABEL_F472B7:
-	OR (0FFECh), BC
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: OR (0FFECh), BC
 	LD A, (7F42h)
 	CP A, 0ffh
 	JR NZ, LABEL_F472CB
@@ -199538,11 +199538,10 @@ LABEL_F47864:
 	db 0, 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: LD A, (0FFE3h)
 	EXTZ WA
 	CALL LABEL_F41426
-	db 000h 	;TODO: Fix ASL assembler encoding of CPW instruction
 	CPW (0F1CEh), 0000h
 	JR Z, LABEL_F47899
 	CALL LABEL_F4E7AA
-	db 0, 0, 0,0 ,0 , 0, 0	;TODO: Fix ASL assembler encoding of: LDW (0F19Eh), (0FFECh)
+	db 0, 0, 0, 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: LDW (0F19Eh), (0FFECh)
 	CALL LABEL_FDDE6F
 	JR T, LABEL_F478A2
 
@@ -199932,7 +199931,7 @@ LABEL_F47D86:
 	ADD A, 0d1h
 	LD W, 000h
 	EXTZ XWA
-	CP (XDE + BC), 0000h
+	CPW (XDE + BC), 0000h
 	JR NZ, LABEL_F47DD6
 	LD BC, 0ffffh
 	CALR LABEL_F480CA
@@ -200125,7 +200124,7 @@ LABEL_F47FA4:
 	LD WA, 1
 	LD BC, 00c7h
 	CALL LABEL_F41568
-	LD (0FFE3h), L
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: LD (0FFE3h), L
 	LD WA, 1
 	LD BC, 00c7h
 	LD DE, 0
@@ -208437,7 +208436,7 @@ LABEL_F4D78D:
 	SLA A, BC
 
 LABEL_F4D7B8:
-	OR (0FFECh), BC
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL assembler encoding of: OR (0FFECh), BC
 
 LABEL_F4D7BD:
 	POP XIZ
