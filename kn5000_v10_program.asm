@@ -344696,7 +344696,7 @@ _VGA_WRITE MACRO regnum,value
 _VGA_READ MACRO regnum
 	LDW WA, regnum
 	CALR _Read_VGA_Register
-ENDMACRO
+	ENDM
 
 _PALLETE_WRITE MACRO red,green,blue
 	LD WA, 3c9h
