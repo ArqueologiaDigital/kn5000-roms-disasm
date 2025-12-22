@@ -245234,6 +245234,9 @@ LABEL_F5F578:
 	CALR LABEL_F5F7F2
 	RET
 
+; Curious thing I've just observed:
+; The routines below are almost identical to each other...
+
 LABEL_F5F58B:
 	PUSH XIY
 	ADD XIY, 00000020h
@@ -245251,8 +245254,8 @@ LABEL_F5F58B:
 	OR (XIX + 001h), A
 	LD D, A
 	db 0, 0, 0	;TODO: Fix ASL: LD A, (XIY + 000h)
-	AND (XIX + 000h), 000h
-	OR (XIX + 000h), A
+	db 0, 0, 0, 0	;TODO: Fix ASL: AND (XIX + 000h), 000h
+	db 0, 0, 0	;TODO: Fix ASL: OR (XIX + 000h), A
 	LD E, A
 	SLL 1, B
 	LD (34E1h), E
@@ -245307,8 +245310,8 @@ LABEL_F5F624:
 	LD D, A
 	db 0, 0, 0	;TODO: Fix ASL: LD A, (XIY + 000h)
 	OR A, 0f0h
-	AND (XIX + 000h), 000h
-	OR (XIX + 000h), A
+	db 0, 0, 0, 0	;TODO: Fix ASL: AND (XIX + 000h), 000h
+	db 0, 0, 0	;TODO: Fix ASL: OR (XIX + 000h), A
 	LD E, A
 	SLL 1, B
 	LD (34DFh), E
@@ -245362,8 +245365,8 @@ LABEL_F5F6C0:
 	OR (XIX + 001h), A
 	LD D, A
 	db 0, 0, 0	;TODO: Fix ASL: LD A, (XIY + 000h)
-	AND (XIX + 000h), 000h
-	OR (XIX + 000h), A
+	db 0, 0, 0, 0	;TODO: Fix ASL: AND (XIX + 000h), 000h
+	db 0, 0, 0	;TODO: Fix ASL: OR (XIX + 000h), A
 	LD E, A
 	SLL 1, B
 	LD (34E3h), E
@@ -245417,8 +245420,8 @@ LABEL_F5F759:
 	OR (XIX + 001h), A
 	LD D, A
 	db 0, 0, 0	;TODO: Fix ASL: LD A, (XIY + 000h)
-	AND (XIX + 000h), 000h
-	OR (XIX + 000h), A
+	db 0, 0, 0, 0	;TODO: Fix ASL: AND (XIX + 000h), 000h
+	db 0, 0, 0	;TODO: Fix ASL: OR (XIX + 000h), A
 	LD E, A
 	SLL 1, B
 	LD (34E5h), E
@@ -245472,8 +245475,8 @@ LABEL_F5F7F2:
 	OR (XIX + 001h), A
 	LD D, A
 	db 0, 0, 0	;TODO: Fix ASL: LD A, (XIY + 000h)
-	AND (XIX + 000h), 000h
-	OR (XIX + 000h), A
+	db 0, 0, 0, 0	;TODO: Fix ASL: AND (XIX + 000h), 000h
+	db 0, 0, 0	;TODO: Fix ASL: OR (XIX + 000h), A
 	LD E, A
 	SLL 1, B
 	LD (34E7h), E
@@ -245529,7 +245532,7 @@ LABEL_F5F8A4:
 	PUSH XIY
 	ADD XIY, 00000020h
 	LD XIX, 0000fba4h
-	LD W, (XIX + 000h)
+	db 0, 0, 0	;TODO: Fix ASL: LD W, (XIX + 000h)
 	AND W, 0ffh
 	LD A, (XIX + 001h)
 	AND A, 07fh
@@ -245566,7 +245569,7 @@ LABEL_F5F8FC:
 	PUSH XIY
 	ADD XIY, 00000018h
 	LD XIX, 0000fbbeh
-	LD W, (XIX + 000h)
+	db 0, 0, 0	;TODO: Fix ASL: LD W, (XIX + 000h)
 	AND W, 0ffh
 	AND W, 00fh
 	LD A, (XIX + 001h)
@@ -245604,7 +245607,7 @@ LABEL_F5F957:
 	PUSH XIY
 	ADD XIY, 00000028h
 	LD XIX, 0000fb56h
-	LD W, (XIX + 000h)
+	db 0, 0, 0	;TODO: Fix ASL: LD W, (XIX + 000h)
 	AND W, 0ffh
 	LD A, (XIX + 001h)
 	AND A, 07fh
@@ -245641,7 +245644,7 @@ LABEL_F5F9AF:
 	PUSH XIY
 	ADD XIY, 00000030h
 	LD XIX, 0000fb70h
-	LD W, (XIX + 000h)
+	db 0, 0, 0	;TODO: Fix ASL: LD W, (XIX + 000h)
 	AND W, 0ffh
 	LD A, (XIX + 001h)
 	AND A, 07fh
@@ -245678,7 +245681,7 @@ LABEL_F5FA07:
 	PUSH XIY
 	ADD XIY, 00000038h
 	LD XIX, 0000fb8ah
-	LD W, (XIX + 000h)
+	db 0, 0, 0	;TODO: Fix ASL: LD W, (XIX + 000h)
 	AND W, 0ffh
 	LD A, (XIX + 001h)
 	AND A, 07fh
@@ -248111,7 +248114,7 @@ LABEL_F610B4:
 	LD HL, (XIY + 001h)
 	LD (3658h), HL
 	CALR LABEL_F5EDCC
-	BIT 7, (XIX + 000h)
+	db 0, 0, 0	;TODO: Fix ASL: BIT 7, (XIX + 000h)
 	JR NZ, LABEL_F610CF
 	LD (7F42h), 00bh
 	JR T, LABEL_F610D8
@@ -248130,7 +248133,7 @@ LABEL_F610DA:
 	LD HL, (XIX + 001h)
 	LD (365Ah), HL
 	CALR LABEL_F5EDCC
-	BIT 7, (XIX + 000h)
+	db 0, 0, 0	;TODO: Fix ASL: BIT 7, (XIX + 000h)
 	JR NZ, LABEL_F610F4
 	LD (7F42h), 00bh
 	JR T, LABEL_F610FD
@@ -248796,15 +248799,16 @@ LABEL_F61681:
 	XOR B, B
 	LD XIX, 00f616a1h
 	LD C, (XIX + BC)
-	JR T, LABEL_F616A9
+	JR T, LABEL_F616A7
 	NORMAL
 	PUSH SR
 	MAX
 	LD (P4), 020h
 
-LABEL_F616A9:
-	LD L, (350Fh)
-	XOR H, H
+LABEL_F616A7:
+	LD L, (350Fh)	; TODO: ASL: Review encoding 
+	XOR H, H	; TODO: ASL: Review encoding
+	db 0, 0		; TODO: ASL: Review encoding
 	LD A, (350Eh)
 	AND A, 003h
 	SLA 002h, A
@@ -394783,7 +394787,7 @@ LABEL_FD0DEE:
 	PUSH XHL
 	LD XIX, 0000963ch
 	LD C, (XIX + 004h)
-	LD W, (XIX + 000h)
+	db 0, 0, 0	;TODO: Fix ASL: LD W, (XIX + 000h)
 	LD XIY, 00fdb773h
 	LD XIZ, 00000424h
 	PUSH WA
