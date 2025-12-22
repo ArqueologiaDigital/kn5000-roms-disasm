@@ -9,6 +9,7 @@ kn5000_v10_rebuilt.p:
 
 kn5000_v10_rebuilt.rom: kn5000_v10_rebuilt.p
 	$(P2BIN) kn5000_v10_rebuilt.p kn5000_v10_rebuilt.rom
+	python compare_roms.py
 
 clean:
 	rm -f kn5000_v10_rebuilt.rom

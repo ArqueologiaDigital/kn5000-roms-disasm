@@ -1,6 +1,5 @@
 original = open("kn5000_v10_program.rom", "rb").read()
-#rebuilt =  open("kn5000_v10_rebuilt.rom", "rb").read()
-rebuilt =  open("kn5000_v10_rebuilt.p", "rb").read()
+rebuilt =  open("kn5000_v10_rebuilt.rom", "rb").read()
 
 if len(rebuilt) > len(original):
 	print("Rebuilt ROM is too big!")
@@ -13,5 +12,5 @@ for i in range(len(original)):
 	if original[i] == rebuilt[i]:
 		score += 1
 
-print(f"Similarity: {score/len(original):0.8f}%")
+print(f"Similarity: {100*score/len(original):0.2f}%")
 
