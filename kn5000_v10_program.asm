@@ -8,7 +8,9 @@ SYSTEM_TIMESTAMP		EQU 0409h
 COM_SELECT			EQU 0B7E0h ; (byte)
 
 
-; map(008d7ch, 008d7ch).lr8(NAME([this] (offs_t o) { return 009h; })); // Fool the self-test at address FB7824 of Program ROM v10 ;-) We still need proper HLE of the control panel MCUs.
+; Fool the self-test at address FB7824 of Program ROM v10 ;-)
+; We still need proper HLE of the control panel MCUs.
+; map(008d7ch, 008d7ch).lr8(NAME([this] (offs_t o) { return 009h; }));
 
 
 CPANEL_SELECT_SERIAL_ROUTINE	EQU 8D8Ah ; (byte)
@@ -268171,7 +268173,7 @@ LABEL_F7C5BD:
 LABEL_F7C5EF:
 	LD XWA, (XSP + 00ah)
 	LD XWA, (XWA + 03ah)
-	AND (XWA), 0ff7fh
+	ANDW (XWA), 0ff7fh
 
 LABEL_F7C5F9:
 	LD XWA, (XSP + 026h)
@@ -268229,7 +268231,7 @@ LABEL_F7C649:
 
 LABEL_F7C67C:
 	LD XWA, (XBC)
-	AND (XWA), 0ff7fh
+	ANDW (XWA), 0ff7fh
 
 LABEL_F7C682:
 	LD XWA, (XSP + 026h)
@@ -270962,7 +270964,7 @@ LABEL_F7DF45:
 	ADD IX, IX
 	LD WA, (02477Ah)
 	EXTS XWA
-	DIVS XWA IX
+	DIVS XWA, IX
 	LD HL, QWA
 	LD A, (0340E4h)
 	EXTZ WA
@@ -285070,7 +285072,7 @@ LABEL_F89418:
 	LD A, C
 	AND A, 00fh
 	JR Z, LABEL_F89423
-	SLL A HL
+	SLL A, HL
 
 LABEL_F89423:
 	EXTZ XDE
@@ -293686,7 +293688,7 @@ LABEL_F8EDA0:
 	LD A, (XIX)
 	AND A, 00fh
 	JR Z, LABEL_F8EDBC
-	SLL A IY
+	SLL A, IY
 
 LABEL_F8EDBC:
 	AND IY, BC
@@ -305176,11 +305178,11 @@ LABEL_F98066:
 LABEL_F9806C:
 	ld xwa, 0ffffffffh
 	ld xbc, 01e0009eh
-	ls xde, 0
+	ld xde, 0
 	call 0fa9752h
 	ld xwa, 0ffffffffh
 	ld xbc, 01c0000ah
-	ls xde, 0
+	ld xde, 0
 	call 0fa9752h
 	ld wa, 0
 	call 0faa761h
@@ -305205,15 +305207,15 @@ LABEL_F980A0:
 	call 0fa9f45h
 	call DispatchEvent
 	call 0f9adf0h
-	cp hl,0
+	cp hl, 0
 	jr z, LABEL_F980EA
 
 	calr 0f9883ch
-	ld xwa,0
-	ld xbc,01c00000h
-	ld xde,0
+	ld xwa, 0
+	ld xbc, 01c00000h
+	ld xde, 0
 	call 0f9ae97h
-	ld wa,1
+	ld wa, 1
 	call 0faa761h
 	call 0faa61dh
 	call 0f980a0h
@@ -325718,7 +325720,7 @@ SetChange:
 	JR T, LABEL_FA5E53
 
 LABEL_FA5E4F:
-	AND (XWA), 0fffbh
+	ANDW (XWA), 0fffbh
 
 LABEL_FA5E53:
 	POP IZ
@@ -325743,7 +325745,7 @@ SetConst:
 	JR T, LABEL_FA5E7B
 
 LABEL_FA5E77:
-	AND (XWA), 0fff7h
+	ANDW (XWA), 0fff7h
 
 LABEL_FA5E7B:
 	POP IZ
@@ -325764,7 +325766,7 @@ SetVisible:
 	LDA XWA, XHL + 00ch
 	CP IZ, 0
 	JR Z, LABEL_FA5E9F
-	AND (XWA), 0fffeh
+	ANDW (XWA), 0fffeh
 	JR T, LABEL_FA5EA3
 
 LABEL_FA5E9F:
@@ -325789,7 +325791,7 @@ SetMovable:
 	LDA XWA, XHL + 00ch
 	CP IZ, 0
 	JR Z, LABEL_FA5EC7
-	AND (XWA), 0fffdh
+	ANDW (XWA), 0fffdh
 	JR T, LABEL_FA5ECB
 
 LABEL_FA5EC7:
@@ -333241,7 +333243,7 @@ LABEL_FAA3CB:
 
 LABEL_FAA3DB:
 	LD XHL, (XDE + IX)
-	MINC4, 007ch IX
+	db 0, 0, 0, 0	;TODO: Fix ASL: MINC4 007ch, IX
 	LD (XDE - 8), IX
 	INCW 4, (XDE - 2)
 	RET
@@ -333256,7 +333258,7 @@ LABEL_FAA3EB:
 LABEL_FAA3FB:
 	LD IX, (XDE - 4)
 	LD (XDE + IX), XWA
-	MINC4, 007ch IX
+	db 0, 0, 0, 0	;TODO: Fix ASL: MINC4 007ch, IX
 	LD (XDE - 4), IX
 	DECW 4, (XDE - 2)
 	LD HL, IX
@@ -333283,7 +333285,7 @@ LABEL_FAA427:
 
 LABEL_FAA437:
 	LD XHL, (XDE + IX)
-	MINC4, 007ch IX
+	db 0, 0, 0, 0	;TODO: Fix ASL: MINC4 007ch, IX
 	LD (XDE - 10), IX
 	RET
 
@@ -368651,9 +368653,9 @@ LABEL_FC4156:
 	JR LT, LABEL_FC4156
 	RET
 
-???? R        L
-???? 25 (001 00101): 01 | e2 (111 00010): 04
-???? 20 (001 00000): 10 | e2 (111 00010): 11
+; ???? R        L
+; ???? 25 (001 00101): 01 | e2 (111 00010): 04
+; ???? 20 (001 00000): 10 | e2 (111 00010): 11
 
 Detect_Control_Panel_button_combos:
 	CP (STATE_OF_CPANEL_BUTTONS_LEFT + 4), 06ch   ;  CPL_SEG4 = 0110 1100 = AUTO PLAY CHORD + SPLIT POINT + VARIATION 4 + VARIATION 3 => display sw internal build numbers
@@ -368694,14 +368696,14 @@ LABEL_FC4194:
 	LD (CPANEL_RX_INDEX), 0000h
 	OR (CPANEL_SERIAL_FLAGS_B), 001h		; CP_Flags_B.0 = 1
 	EI 000h
-	LD A, 020h	// my guess: 20 = 001 00000 where 001 = left-panel mcu
+	LD A, 020h	; my guess: 20 = 001 00000 where 001 = left-panel mcu
 	LD W, 000h
 	CALR SEND_CMD_TO_CPANEL
 	CALR DELAY_6_TICKS
 	CP (CPANEL_RX_INDEX), 0000h
 	JR Z, LABEL_FC41C8
-	OR (CPANEL_SERIAL_FLAGS_C), 001h // my guess: CP_Flags_C.0
-					// = Got response from left-panel MCU 
+	OR (CPANEL_SERIAL_FLAGS_C), 001h  ; my guess: CP_Flags_C.0
+					  ; = Got response from left-panel MCU 
 
 LABEL_FC41C8:
 	CALR CHECK_IF_WE_ARE_READY_TO_SEND_CMD_TO_CPANEL
@@ -368710,14 +368712,14 @@ LABEL_FC41C8:
 	LD (CPANEL_RX_INDEX), 0000h
 	OR (CPANEL_SERIAL_FLAGS_B), 001h		; CP_Flags_B.0 = 1
 	EI 000h
-	LD A, 0e0h	// my guess: E0 = 111 00000 where 111 = right-panel mcu
+	LD A, 0e0h	; my guess: E0 = 111 00000 where 111 = right-panel mcu
 	LD W, 000h
 	CALR SEND_CMD_TO_CPANEL
 	CALR DELAY_6_TICKS
 	CP (CPANEL_RX_INDEX), 0000h
 	JR Z, LABEL_FC41F7
-	OR (CPANEL_SERIAL_FLAGS_C), 008h // my guess: CP_Flags_C.4
-					// = Got response from right-panel MCU
+	OR (CPANEL_SERIAL_FLAGS_C), 008h ; my guess: CP_Flags_C.4
+					 ; = Got response from right-panel MCU
 
 LABEL_FC41F7:
 	LD A, (CPANEL_SERIAL_FLAGS_C)
@@ -368816,7 +368818,7 @@ LABEL_FC42B7:
 	RET
 
 
-LABEL_FC42FB: //do that
+LABEL_FC42FB: ; do that
 	LD XHL, SomeCpanelData
 	LDW (XHL - 4), 0000h
 	LDW (XHL - 8), 0000h
@@ -368963,7 +368965,7 @@ LABEL_FC4462:
 
 LABEL_FC4470:
 	DECW 1, (CPANEL_RX_INDEX)
-	OR (CPANEL_SERIAL_FLAGS_B), 040h	; CP_Flags_B.6 = 1  // UNUSED
+	OR (CPANEL_SERIAL_FLAGS_B), 040h	; CP_Flags_B.6 = 1  ; UNUSED
 	AND (CPANEL_SERIAL_FLAGS_A), 0fdh	; CP_Flags_A.1 = 0
 
 INTA_HANDLER_END:      ; FC447E
@@ -368975,17 +368977,17 @@ INTA_HANDLER_END:      ; FC447E
 
 
 CPANEL_SERIAL_ROUTINES_LIST:		; FC4489
-	dd CPANEL_SERIAL_ROUTINE_0 (offsets: 000h)  // IDLE
-	dd CPANEL_SERIAL_ROUTINE_1 (         004h)  
-	dd CPANEL_SERIAL_ROUTINE_2 (         008h)
-	dd CPANEL_SERIAL_ROUTINE_3 (         00ch)
-	dd CPANEL_SERIAL_ROUTINE_4 (         010h)
-	dd CPANEL_SERIAL_ROUTINE_5 (         014h)
-	dd CPANEL_SERIAL_ROUTINE_6 (         018h)
-	dd CPANEL_SERIAL_ROUTINE_0 (         01ch)  
-	dd CPANEL_SERIAL_ROUTINE_7 (         020h)  // READ_BUTTONS_STATE_1
-	dd CPANEL_SERIAL_ROUTINE_8 (         024h)  // READ_BUTTONS_STATE_2
-	dd CPANEL_SERIAL_ROUTINE_0 (         028h)  // UNREACHABLE_STATE (?)
+	dd CPANEL_SERIAL_ROUTINE_0 ;(offsets: 000h)  ; IDLE
+	dd CPANEL_SERIAL_ROUTINE_1 ;(         004h)  
+	dd CPANEL_SERIAL_ROUTINE_2 ;(         008h)
+	dd CPANEL_SERIAL_ROUTINE_3 ;(         00ch)
+	dd CPANEL_SERIAL_ROUTINE_4 ;(         010h)
+	dd CPANEL_SERIAL_ROUTINE_5 ;(         014h)
+	dd CPANEL_SERIAL_ROUTINE_6 ;(         018h)
+	dd CPANEL_SERIAL_ROUTINE_0 ;(         01ch)  
+	dd CPANEL_SERIAL_ROUTINE_7 ;(         020h)  ; READ_BUTTONS_STATE_1
+	dd CPANEL_SERIAL_ROUTINE_8 ;(         024h)  ; READ_BUTTONS_STATE_2
+	dd CPANEL_SERIAL_ROUTINE_0 ;(         028h)  ; UNREACHABLE_STATE (?)
 
 
 INTTX1_HANDLER:   ; FC44B5
@@ -369031,7 +369033,7 @@ LEAST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES:			; FC44EC
 	RETI
 
 
-CPANEL_SERIAL_ROUTINE_1:        ; FC44F9	// Start transmitting command to set LEDs on the control panel... (?)
+CPANEL_SERIAL_ROUTINE_1:        ; FC44F9	; Start transmitting command to set LEDs on the control panel... (?)
 	AND (PFCR_VALUE), 0bfh
 	LD A, (PFCR_VALUE)
 	LD (PFCR), A
@@ -369052,7 +369054,7 @@ CPANEL_SERIAL_ROUTINE_1:        ; FC44F9	// Start transmitting command to set LE
 						; If we receive a SCLK1 LOW, does it mean CPANEL is trying to spreak and we revert to IDLE state (ROUTINE_0) ?
 	LD (CPANEL_STATE_0_TO_17), 000h
 	LD (CPANEL_SELECT_SERIAL_ROUTINE), 000h ; ROUTINE_0
-	OR (CPANEL_SERIAL_FLAGS_B), 002h	; CP_Flags_B.1 = 1  // UNUSED
+	OR (CPANEL_SERIAL_FLAGS_B), 002h	; CP_Flags_B.1 = 1  ; UNUSED
 	LD (INTEAB), 005h
 	LD (INTES1), 0ffh
 	LD (BR1CR), 024h ; Internal Clock T8 (64/fc)
@@ -369305,13 +369307,13 @@ LABEL_FC47CC:
 	JRL T, LEAST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
 
 
-CPANEL_SERIAL_ROUTINE_0:       ; FC47E9		// CPANEL_SERIAL_IDLE_STATE (?)
+CPANEL_SERIAL_ROUTINE_0:       ; FC47E9		; CPANEL_SERIAL_IDLE_STATE (?)
 	OR (CPANEL_SERIAL_FLAGS_B), 080h	; CP_Flags_B.7 = 1
 	JRL T, LEAST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
 
 	AND (CPANEL_SERIAL_FLAGS_A), 0fch 	; CP_Flags_A.0 = 0
 						; CP_Flags_A.1 = 0
-	OR (CPANEL_SERIAL_FLAGS_B), 004h	; CP_Flags_B.2 = 1  // UNUSED
+	OR (CPANEL_SERIAL_FLAGS_B), 004h	; CP_Flags_B.2 = 1  : UNUSED
 	LD (INTCLR), 023h ; INTTX1: Serial send 1
 	AND (SC1MOD), 0dfh  ; RXE (bit 5) = 0: receive disable
 	LD (INTES1), 00fh
@@ -369352,17 +369354,17 @@ LABEL_FC4831:
 	LD (CPANEL_VAR_RELATED_TO_ARRAY_OF_LEDS), IY
 
 
-0 => 0 do_this
-1 => 2 do_this
-2 => 3 do_this
-3 => 0 do_that
+; 0 => 0 do_this
+; 1 => 2 do_this
+; 2 => 3 do_this
+; 3 => 0 do_that
 
 LABEL_FC485B:
 	EI 000h
 	LD A, (CPANEL_SERIAL_FLAGS_A)
 	AND A, 0c0h
 	CP A, 0					; if (CP_Flags_A.76 == 0) {
-	JR Z, LABEL_FC4877			; 	goto LABEL_FC4877; //do this
+	JR Z, LABEL_FC4877			; 	goto LABEL_FC4877; ; do this
 						; }
 
 
@@ -369370,13 +369372,13 @@ LABEL_FC485B:
 	CP A, 0c0h
 	JR NZ, LABEL_FC4877 	; if (CP_Flags_A.76++ == 3) {
 
-	CALR LABEL_FC42FB // do that
+	CALR LABEL_FC42FB ; do that
 
 	JR T, LABEL_FC487A
 				; } else {
 
 LABEL_FC4877:
-	CALR LABEL_FC4B2D // do this
+	CALR LABEL_FC4B2D 		; do this
 				; }
 LABEL_FC487A:
 	EI 006h
@@ -369444,11 +369446,11 @@ LABEL_FC48EB:
 
 
 LABEL_FC490E:
-	OR (CPANEL_SERIAL_FLAGS_A), 004h ; CP_Flags_A.2 = 1  // UNUSED?
+	OR (CPANEL_SERIAL_FLAGS_A), 004h ; CP_Flags_A.2 = 1  ; UNUSED?
 	JR T, LABEL_FC491A
 
 LABEL_FC4915:
-	AND (CPANEL_SERIAL_FLAGS_A), 0fbh ; CP_Flags_A.2 = 0  // UNUSED?
+	AND (CPANEL_SERIAL_FLAGS_A), 0fbh ; CP_Flags_A.2 = 0  ; UNUSED?
 
 LABEL_FC491A:
 	LD XDE, CPANEL_RX_DATA
@@ -369639,7 +369641,7 @@ c:
 	EX (XHL), A
 	XOR A, (XHL)
 	INC 1, HL
-	BIT 4, (CPANEL_SERIAL_FLAGS_A)	; // This is never set ?!
+	BIT 4, (CPANEL_SERIAL_FLAGS_A)	; This is never set ?!
 	JR Z, LABEL_FC4AEC
 	CP A, 0
 	JR NZ, LABEL_FC4AEC
@@ -369676,14 +369678,14 @@ LABEL_FC4B10:
 	LD A, (XDE + IY)
 	CALR INC_IY_MOD_05Ch
 	LD (CPANEL_BACKUP_RX_INDEX), IY
-	OR (CPANEL_SERIAL_FLAGS_B), 008h	; CP_Flags_B.3 = 1  // UNUSED
+	OR (CPANEL_SERIAL_FLAGS_B), 008h	; CP_Flags_B.3 = 1  ; UNUSED
 	JRL T, LABEL_FC492B
 
 END_OF_ROUTINE_FC491A ; FC4B2C
 	RET
 
 
-LABEL_FC4B2D: // do this
+LABEL_FC4B2D: 		; do this
 	LD IY, (CPANEL_VAR_RELATED_TO_ARRAY_OF_LEDS)
 	LD XDE, CPANEL_ARRAY__STATE_OF_LEDS
 	LD XIZ, SomeOtherCpanelData
@@ -369737,7 +369739,7 @@ LABEL_FC4B95:
 	db 087h, 000h, 0F3h, 007h, 0E8h, 0F4h, 040h, 01Eh
 	db 05Eh, 000h, 0BEh, 0F8h, 054h, 09Eh, 0FEh, 061h
 	db 09Eh, 0FEh, 061h, 0F1h, 0FFh, 08Dh, 055h, 078h
-	db 079h, 0FFh, 
+	db 079h, 0FFh
 
 LABEL_FC4BC5:	
 	db 0C3h, 007h, 0F8h, 0F0h, 021h, 01Eh
@@ -370792,7 +370794,7 @@ LABEL_FC580A:
 	LD A, E
 	AND A, 00fh
 	JR Z, LABEL_FC582F
-	SLL A D
+	SLL A, D
 
 LABEL_FC582F:
 	LD A, E
@@ -372235,7 +372237,7 @@ Set_LEDs:				; FC71B2
 	RET UGT
 	LDA XWA, CPANEL_LEDS__ROW_AND_PATTERN_BYTES
 	EXTZ DE
-	LDA XHL Protocol_values_for_LED_rows
+	LDA XHL, Protocol_values_for_LED_rows
 	LD E, (XHL + DE)
 	LD (XWA), E
 	LD (XWA + 001h), C
@@ -377010,7 +377012,7 @@ LABEL_FCB40B:
 LABEL_FCB42C:
 	LD XIX, (0FC62h)
 	AND W, 001h
-	AND (XIX), 0fe00h
+	ANDW (XIX), 0fe00h
 	OR (XIX), WA
 	LD W, 0ffh
 	CALL LABEL_FCA318
@@ -379170,7 +379172,7 @@ LABEL_FCD9C1:
 	LD A, (XWA + 009h)
 	AND A, 00fh
 	RET Z
-	SRA A HL
+	SRA A, HL
 	RET
 
 LABEL_FCD9FF:
@@ -419543,14 +419545,14 @@ LABEL_FEC1C3:
 	ORW (0E9E5h), 0002h
 
 LABEL_FEC1DA:
-	AND (0E9E5h), 0fffbh
+	ANDW (0E9E5h), 0fffbh
 	RET
 
 LABEL_FEC1E1:
 	LD WA, 3
 	CALR LABEL_FEC318
-	AND (0E9E5h), 0fffdh
-	AND (0E9E5h), 0fffbh
+	ANDW (0E9E5h), 0fffdh
+	ANDW (0E9E5h), 0fffbh
 	RET
 
 LABEL_FEC1F3:
@@ -421365,7 +421367,7 @@ LABEL_FED1A2:
 	LD C, L
 	AND A, 00fh
 	JR Z, LABEL_FED1B0
-	SLL A C
+	SLL A, C
 
 LABEL_FED1B0:
 	LD XWA, 0
@@ -423174,7 +423176,7 @@ LABEL_FEE285:
 
 LABEL_FEE295:
 	CP IZ, (0D8B2h)
-	CALL UGT LABEL_FEE1A9
+	CALL UGT, LABEL_FEE1A9
 	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 002h), 0000h
 	LD WA, 0
 	CP WA, IZ
@@ -423321,8 +423323,8 @@ LABEL_FEE39D:
 
 LABEL_FEE3AD:
 	CP IZ, (0E0B8h)
-	CALL UGT LABEL_FEE2C9
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 002h), 0000h
+	CALL UGT, LABEL_FEE2C9
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL: LD (XSP + 002h), 0000h
 	LD WA, 0
 	CP WA, IZ
 	JR NC, LABEL_FEE3DB
@@ -426483,7 +426485,7 @@ LABEL_FF0C6A:
 	INC 1, D
 	ADD XBC, XBC
 	JR NC, LABEL_FF0C6A
-	RR, 001h XBC
+	RR 001h, XBC
 	JR T, LABEL_FF0C7C
 
 LABEL_FF0C79:
@@ -428074,7 +428076,7 @@ LABEL_FF18C1:
 	JR Z, LABEL_FF18E1
 	LD XWA, XBC
 	LD XDE, (XSP + 056h)
-	LDA XBC P2CR
+	LDA XBC, P2CR
 	ADD (XDE), XBC
 	LD XBC, (XDE)
 	LDA XBC, XBC - 10
@@ -428084,7 +428086,7 @@ LABEL_FF18C1:
 LABEL_FF18E1:
 	LD XWA, XBC
 	LD XDE, (XSP + 056h)
-	LDA XBC P2
+	LDA XBC, P2
 	ADD (XDE), XBC
 	LD XBC, (XDE)
 	DEC 0, XBC
@@ -428138,13 +428140,13 @@ LABEL_FF194A:
 	LD (XSP + 004h), XBC
 	LD (XSP + 00ch), XWA
 	LD XWA, XIZ
-	LDA XBC P2CR
+	LDA XBC, P2CR
 	CALL LABEL_FF0C12
 	ADD XHL, 00000030h
 	LD XWA, (XSP + 004h)
 	LD (XWA), L
 	LD XWA, XIZ
-	LDA XBC P2CR
+	LDA XBC, P2CR
 	CALL LABEL_FF0C18
 	LD XIZ, XHL
 	OR XIZ, XIZ
@@ -428166,13 +428168,13 @@ LABEL_FF1989:
 	LD (XSP + 004h), XBC
 	LD (XSP + 00ch), XWA
 	LD XWA, XIZ
-	LDA XBC P2CR
+	LDA XBC, P2CR
 	CALL LABEL_FF0C12
 	ADD XHL, 00000030h
 	LD XWA, (XSP + 004h)
 	LD (XWA), L
 	LD XWA, XIZ
-	LDA XBC P2CR
+	LDA XBC, P2CR
 	CALL LABEL_FF0C18
 	LD XIZ, XHL
 	OR XIZ, XIZ
@@ -429525,7 +429527,7 @@ LABEL_FF24A3:
 
 LABEL_FF24A9:
 	LD XIY, (XSP + 004h)
-	AND (XIY), 00ffh
+	ANDW (XIY), 00ffh
 	LD IX, 1
 	LD HL, (XSP + 008h)
 	ADD HL, HL
@@ -429553,7 +429555,7 @@ LABEL_FF24CD:
 	LD WA, (XDE)
 	SRL 8, WA
 	ADD (XBC), WA
-	AND (XDE), 00ffh
+	ANDW (XDE), 00ffh
 	INC 1, IX
 
 LABEL_FF24E8:
@@ -429705,7 +429707,7 @@ LABEL_FF2619:
 	ADD XIY, XHL
 	SRL 8, WA
 	ADD (XIY), WA
-	AND (XDE), 00ffh
+	ANDW (XDE), 00ffh
 	DEC 1, IZ
 
 LABEL_FF262E:
@@ -429762,7 +429764,7 @@ LABEL_FF2683:
 	DEC 2, IX
 	SRL 8, WA
 	ADD (XHL + IX), WA
-	AND (XBC), 00ffh
+	ANDW (XBC), 00ffh
 
 LABEL_FF269B:
 	DEC 2, DE
