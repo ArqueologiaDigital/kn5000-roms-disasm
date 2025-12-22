@@ -344762,7 +344762,7 @@ LABEL_FB2B06:
 	_VGA_COLOR_CRTC 17h, 0e3h
 	_VGA_COLOR_CRTC 18h, 0ffh
 
-	_VGA_READ(3dah)
+	_VGA_READ 3dah
 	_VGA_ATTRIBUTE 00h, 000h
 	_VGA_ATTRIBUTE 01h, 001h
 	_VGA_ATTRIBUTE 02h, 002h
@@ -345408,7 +345408,7 @@ LABEL_FB36A9:
 	_VGA_SEQUENCER 0ah, 005h
 	_VGA_SEQUENCER 0bh, 022h
 	_VGA_WRITE 3c5h, 011h
-	_VGA_SEQUENCER(0c, 3)
+	_VGA_SEQUENCER 0ch, 3
 
 	_VGA_SEQUENCER 09h, 008h
 	_VGA_SEQUENCER 0ah, 092h
@@ -351112,22 +351112,22 @@ LABEL_FB7631:
 Test_LCD_Controller_IC206:
 	DEC 2, XSP
 	LD (XSP), A
-	_VGA_WRITE(3c3, 0)
-	_VGA_READ(3c3)
+	_VGA_WRITE 3c3h, 0
+	_VGA_READ 3c3h
 	CP L, 0
 	JR Z, LABEL_FB7654
 	SET 2, (XSP)
 
 LABEL_FB7654:
-	_VGA_WRITE(3c3, 1)
-	_VGA_READ(3c3)
+	_VGA_WRITE 3c3h, 1
+	_VGA_READ 3c3h
 	CP L, 1
 	JR Z, LABEL_FB766A
 	SET 2, (XSP)
 
 LABEL_FB766A:
-	_VGA_WRITE(3c3, 0)
-	_VGA_READ(3c3)
+	_VGA_WRITE 3c3h, 0
+	_VGA_READ 3c3h
 	CP L, 0
 	JR Z, LABEL_FB7680
 	SET 2, (XSP)
@@ -368488,59 +368488,59 @@ LABEL_FC3FA9:
 
 
 LABEL_FC4021:
-fc4021: f1 01 8e 50           ld (CPANEL_ARRAY__STATE_OF_LEDS),WA
-fc4025: c1 8f 8d 3c bf        and (PFFC_VALUE),0bfh
-fc402a: c1 8f 8d 21           ld A,(PFFC_VALUE)
-fc402e: f0 3f 41              ld (PFFC),A
-fc4031: 08 eb ff              ld (0ebh),0ffh
-fc4034: 08 f8 22              ld (0f8h),022h
-fc4037: 08 f8 23              ld (0f8h),023h
-fc403a: 08 e3 07              ld (0e3h),007h
-fc403d: 08 f8 12              ld (0f8h),012h
-fc4040: c0 3c 3c bf           and (03ch),0bfh
-fc4044: c1 8e 8d 3e 40        or (PFCR_VALUE),040h
-fc4049: c1 8e 8d 21           ld A,(PFCR_VALUE)
-fc404d: f0 3e 41              ld (PFCR),A
-fc4050: 1e ad 00              calr DELAY_300_LOOPS
-fc4053: 1e aa 00              calr DELAY_300_LOOPS
-fc4056: c1 8e 8d 3c bf        and (PFCR_VALUE),0bfh
-fc405b: c1 8e 8d 21           ld A,(PFCR_VALUE)
-fc405f: f0 3e 41              ld (PFCR),A
-fc4062: 1e 9b 00              calr DELAY_300_LOOPS
-fc4065: 1e 98 00              calr DELAY_300_LOOPS
-fc4068: c1 8f 8d 3e 50        or (PFFC_VALUE),050h
-fc406d: c1 8f 8d 21           ld A,(PFFC_VALUE)
-fc4071: f0 3f 41              ld (PFFC),A
-fc4074: c1 8e 8d 3e 50        or (PFCR_VALUE),050h
-fc4079: c1 8e 8d 21           ld A,(PFCR_VALUE)
-fc407d: f0 3e 41              ld (PFCR),A
-fc4080: c0 d5 3c fe           and (SC1CR),0feh
-fc4084: 08 eb ff              ld (0ebh),0ffh
-fc4087: 08 f8 22              ld (0f8h),022h
-fc408a: 08 f8 23              ld (0f8h),023h
-fc408d: 45 01 8e 00 00        ld XIY,CPANEL_ARRAY__STATE_OF_LEDS
-fc4092: d1 fd 8d 85           add IY,(CPANEL_INDEX_FOR_LEDS)
-fc4096: 85 21                 ld A,(XIY)
-fc4098: d1 fd 8d 61           incw 1,(CPANEL_INDEX_FOR_LEDS)
-fc409c: f0 d4 41              ld (SC1BUF),A
-fc409f: 1e 5e 00              calr DELAY_300_LOOPS
-fc40a2: 1e 5b 00              calr DELAY_300_LOOPS
-fc40a5: 45 01 8e 00 00        ld XIY,CPANEL_ARRAY__STATE_OF_LEDS
-fc40aa: d1 fd 8d 85           add IY,(CPANEL_INDEX_FOR_LEDS)
-fc40ae: 85 21                 ld A,(XIY)
-fc40b0: d1 fd 8d 61           incw 1,(CPANEL_INDEX_FOR_LEDS)
-fc40b4: f0 d4 41              ld (SC1BUF),A
-fc40b7: 1e 46 00              calr DELAY_300_LOOPS
-fc40ba: 1e 43 00              calr DELAY_300_LOOPS
-fc40bd: c0 d5 3e 01           or (SC1CR),001h
-fc40c1: c0 d5 3c fd           and (SC1CR),0fdh
-fc40c5: c1 8e 8d 3c af        and (PFCR_VALUE),0afh
-fc40ca: c1 8e 8d 21           ld A,(PFCR_VALUE)
-fc40ce: f0 3e 41              ld (PFCR),A
-fc40d1: c1 8f 8d 3c af        and (PFFC_VALUE),0afh
-fc40d6: c1 8f 8d 21           ld A,(PFFC_VALUE)
-fc40da: f0 3f 41              ld (PFFC),A
-fc40dd: 0e                    ret
+	LD (CPANEL_ARRAY__STATE_OF_LEDS), WA
+	AND (PFFC_VALUE), 0bfh
+	LD A,(PFFC_VALUE)
+	LD (PFFC), A
+	LD (0ebh), 0ffh
+	LD (0f8h), 022h
+	LD (0f8h), 023h
+	LD (0e3h), 007h
+	LD (0f8h), 012h
+	AND (03ch), 0bfh
+	OR (PFCR_VALUE), 040h
+	LD A,(PFCR_VALUE)
+	LD (PFCR), A
+	CALR DELAY_300_LOOPS
+	CALR DELAY_300_LOOPS
+	AND (PFCR_VALUE), 0bfh
+	LD A,(PFCR_VALUE)
+	LD (PFCR), A
+	CALR DELAY_300_LOOPS
+	CALR DELAY_300_LOOPS
+	OR (PFFC_VALUE), 050h
+	LD A, (PFFC_VALUE)
+	LD (PFFC), A
+	OR (PFCR_VALUE), 050h
+	LD A, (PFCR_VALUE)
+	LD (PFCR), A
+	AND (SC1CR), 0feh
+	LD (0ebh), 0ffh
+	LD (0f8h), 022h
+	LD (0f8h), 023h
+	LD XIY, CPANEL_ARRAY__STATE_OF_LEDS
+	ADD IY, (CPANEL_INDEX_FOR_LEDS)
+	LD A, (XIY)
+	INCW 1, (CPANEL_INDEX_FOR_LEDS)
+	LD (SC1BUF), A
+	CALR DELAY_300_LOOPS
+	CALR DELAY_300_LOOPS
+	LD XIY, CPANEL_ARRAY__STATE_OF_LEDS
+	ADD IY, (CPANEL_INDEX_FOR_LEDS)
+	LD A, (XIY)
+	INCW 1, (CPANEL_INDEX_FOR_LEDS)
+	LD (SC1BUF), A
+	CALR DELAY_300_LOOPS
+	CALR DELAY_300_LOOPS
+	OR (SC1CR), 001h
+	AND (SC1CR), 0fdh
+	AND (PFCR_VALUE), 0afh
+	LD A, (PFCR_VALUE)
+	LD (PFCR), A
+	AND (PFFC_VALUE), 0afh
+	LD A, (PFFC_VALUE)
+	LD (PFFC), A
+	RET
 
 
 
