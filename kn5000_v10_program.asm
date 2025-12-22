@@ -344686,46 +344686,48 @@ InitializeRoot:
 	LDA XSP, XSP + 00eh
 	RET
 
-MACRO _VGA_WRITE(register, value)
-	LD WA, 0x#register
-	LD BC, 0x#value
-	CALR _Write_VGA_Register
-ENDMACRO
 
-MACRO _VGA_READ(register)
-	LD WA, 0x#register
+_VGA_WRITE MACRO regnum,value
+	LDW WA, regnum
+	LDW BC, value
+	CALR _Write_VGA_Register
+	ENDM
+
+_VGA_READ MACRO regnum
+	LDW WA, regnum
 	CALR _Read_VGA_Register
 ENDMACRO
 
-MACRO _PALLETE_WRITE(red, green, blue)
-	LD WA, 03ch9
-	LD BC, 0x#red
+_PALLETE_WRITE MACRO red,green,blue
+	LD WA, 3c9h
+	LDW BC, red
 	CALR _Write_VGA_Register
-	LD BC, 0x#green
+	LDW BC, green
 	CALR _Write_VGA_Register
-	LD BC, 0x#blue
+	LDW BC, blue
 	CALR _Write_VGA_Register
-ENDMACRO
+	ENDM
 
-MACRO _VGA_ATTRIBUTE(field, value)
-	_VGA_WRITE(3c0, #field)
-	_VGA_WRITE(3c0, #value)
-ENDMACRO
+_VGA_ATTRIBUTE MACRO field,value
+	_VGA_WRITE 3c0h, field
+	_VGA_WRITE 3c0h, value
+	ENDM
 
-MACRO _VGA_SEQUENCER(field, value)
-	_VGA_WRITE(3c4, #field)
-	_VGA_WRITE(3c5, #value)
-ENDMACRO
+_VGA_SEQUENCER MACRO field,value
+	_VGA_WRITE 3c4h, field
+	_VGA_WRITE 3c5h, value
+	ENDM
 
-MACRO _VGA_GFX_CONTROLLER(field, value)
-	_VGA_WRITE(3ce, #field)
-	_VGA_WRITE(3cf, #value)
-ENDMACRO
+_VGA_GFX_CONTROLLER MACRO field,value
+	_VGA_WRITE 3ceh, field
+	_VGA_WRITE 3cfh, value
+	ENDM
 
-MACRO _VGA_COLOR_CRTC(field, value)
-	_VGA_WRITE(3d4, #field)
-	_VGA_WRITE(3d5, #value)
-ENDMACRO
+_VGA_COLOR_CRTC MACRO field,value
+	_VGA_WRITE 3d4h, field
+	_VGA_WRITE 3d5h, value
+	ENDM
+
 
 LABEL_FB2B06:
 	DEC 2, XSP
@@ -344760,7 +344762,7 @@ LABEL_FB2B06:
 	_VGA_COLOR_CRTC 17h, 0e3h
 	_VGA_COLOR_CRTC 18h, 0ffh
 
-	_VGA_READ(3da)
+	_VGA_READ(3dah)
 	_VGA_ATTRIBUTE 00h, 000h
 	_VGA_ATTRIBUTE 01h, 001h
 	_VGA_ATTRIBUTE 02h, 002h
@@ -344822,7 +344824,7 @@ LABEL_FB2F21:
 	_VGA_WRITE 3c6h, 0ffh
 	_VGA_WRITE 3c8h, 000h
 
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 004h), 0000h
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL: LD (XSP + 004h), 0000h
 
 LABEL_FB2FA1:
 	LD WA, (XSP + 004h)
