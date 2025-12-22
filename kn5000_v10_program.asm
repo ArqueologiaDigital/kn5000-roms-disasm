@@ -284913,7 +284913,7 @@ LABEL_F8930C:
 	LD BC, 1
 	AND A, 00fh
 	JR Z, LABEL_F89315
-	SLL A BC
+	SLL A, BC
 
 LABEL_F89315:
 	LD WA, (0272CCh)
@@ -284928,7 +284928,7 @@ LABEL_F89321:
 	LD BC, 1
 	AND A, 00fh
 	JR Z, LABEL_F8932F
-	SLL A BC
+	SLL A, BC
 
 LABEL_F8932F:
 	OR (0272CCh), BC
@@ -284940,7 +284940,7 @@ LABEL_F89335:
 	LD BC, 1
 	AND A, 00fh
 	JR Z, LABEL_F89343
-	SLL A BC
+	SLL A, BC
 
 LABEL_F89343:
 	XOR BC, 0ffffh
@@ -284968,7 +284968,7 @@ LABEL_F8936A:
 	LD BC, 1
 	AND A, 00fh
 	JR Z, LABEL_F89373
-	SLL A BC
+	SLL A, BC
 
 LABEL_F89373:
 	LD WA, (0272CEh)
@@ -284983,7 +284983,7 @@ LABEL_F8937F:
 	LD BC, 1
 	AND A, 00fh
 	JR Z, LABEL_F8938D
-	SLL A BC
+	SLL A, BC
 
 LABEL_F8938D:
 	OR (0272CEh), BC
@@ -284995,7 +284995,7 @@ LABEL_F89393:
 	LD BC, 1
 	AND A, 00fh
 	JR Z, LABEL_F893A1
-	SLL A BC
+	SLL A, BC
 
 LABEL_F893A1:
 	XOR BC, 0ffffh
@@ -285042,7 +285042,7 @@ LABEL_F893E8:
 	LD DE, 1
 	AND A, 00fh
 	JR Z, LABEL_F893F1
-	SLL A DE
+	SLL A, DE
 
 LABEL_F893F1:
 	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW BC, 000ch
@@ -285457,7 +285457,7 @@ LABEL_F89755:
 	LD A, QIZH
 	AND A, 00fh
 	JR Z, LABEL_F89776
-	SLL A BC
+	SLL A, BC
 
 LABEL_F89776:
 	OR (XDE), BC
@@ -293579,7 +293579,7 @@ LABEL_F8ECC3:
 	LD A, C
 	AND A, 00fh
 	JR Z, LABEL_F8ECDB
-	SLL A DE
+	SLL A, DE
 
 LABEL_F8ECDB:
 	AND DE, QIZ
@@ -293597,7 +293597,7 @@ LABEL_F8ECDB:
 	LD A, (XBC)
 	AND A, 00fh
 	JR Z, LABEL_F8ED04
-	SLL A DE
+	SLL A, DE
 
 LABEL_F8ED04:
 	OR (89F6h), DE
@@ -293623,7 +293623,7 @@ LABEL_F8ED11:
 	LD A, (XBC)
 	AND A, 00fh
 	JR Z, LABEL_F8ED3D
-	SLL A DE
+	SLL A, DE
 
 LABEL_F8ED3D:
 	OR (89F6h), DE
@@ -293643,7 +293643,7 @@ LABEL_F8ED4A:
 	LD A, (XBC)
 	AND A, 00fh
 	JR Z, LABEL_F8ED68
-	SLL A DE
+	SLL A, DE
 
 LABEL_F8ED68:
 	OR (89F6h), DE
@@ -333250,7 +333250,7 @@ LABEL_FAA3EB:
 	LDA XDE, 03247Ch
 	CPW (XDE - 2), 0004h
 	JR GT, LABEL_FAA3FB
-	LDA XHL P0
+	LDA XHL, P0
 	RET
 
 LABEL_FAA3FB:
@@ -368305,7 +368305,7 @@ LABEL_FC3E94:
 	LD A, (CPANEL_SERIAL_FLAGS_A)
 	AND A, 0c0h
 	JR Z, LABEL_FC3EC8
-				if CP_Flags_A.76 != 0:
+				; if CP_Flags_A.76 != 0:
 	LD XHL, SomeCpanelData
 	LDW (XHL - 4), 0000h
 	LDW (XHL - 8), 0000h
@@ -368316,7 +368316,7 @@ LABEL_FC3E94:
 	OR (CPANEL_SERIAL_FLAGS_B), 001h	; CP_Flags_B.0 = 1
 	EI 000h
 	JR T, LABEL_FC3ECB
-				else:
+				; else:
 LABEL_FC3EC8:
 	CALR LABEL_FC4915
 
@@ -368546,19 +368546,30 @@ fc40dd: 0e                    ret
 ; But these values are also suspiciously similar to proportions
 ; between typical baudrates, but this is just a hunch for now...
 
-fc40de: d8 aa                 ld WA,2
-fc40e0: d8 69                 dec 1,WA
-fc40e2: d8 d8                 cp WA,0
-fc40e4: 66 02                 jr Z,0fc40e8h
-fc40e6: 68 f8                 jr T,0fc40e0h
-fc40e8: 0e                    ret
+LABEL_FC0DE:
+	LD WA, 2
 
-fc40e9: d8 ae                 ld WA,6
-fc40eb: d8 69                 dec 1,WA
-fc40ed: d8 d8                 cp WA,0
-fc40ef: 66 02                 jr Z,0fc40f3h
-fc40f1: 68 f8                 jr T,0fc40ebh
-fc40f3: 0e                    ret
+LABEL_FC40E0:
+	DEC 1, WA
+	CP WA, 0
+	JR Z, LABEL_FC40E8
+	JR T, LABEL_FC40E0
+
+LABEL_FC40E8:
+	ret
+
+
+LABEL_FC40E9:
+	LD WA, 6
+
+LABEL_FC40EB:
+	DEC 1, WA
+	CP WA, 0
+	JR Z, LABEL_FC40F3
+	JR T, LABEL_FC40EB
+
+LABEL_FC40F3:
+	RET
 
 
 DELAY_10_LOOPS:			; FC40F4
@@ -368575,12 +368586,14 @@ LABEL_FC40FF:
 
 
 DELAY_300_LOOPS:		; FC4100
-fc4100: 30 2c 01              ld WA,012ch
-fc4103: d8 69                 dec 1,WA
-fc4105: d8 d8                 cp WA,0
-fc4107: 66 02                 jr Z,0fc410bh
-fc4109: 68 f8                 jr T,0fc4103h
-fc410b: 0e                    ret
+	LD WA, 012ch
+	DEC 1, WA
+	CP WA, 0
+	JR Z, LABEL_FC410B
+	JR T, fc4103h
+
+LABEL_FC410B:
+	RET
 
 
 DELAY_1500_LOOPS:		; FC410C
@@ -370785,7 +370798,7 @@ LABEL_FC582F:
 	LD A, E
 	AND A, 00fh
 	JR Z, LABEL_FC5838
-	SLL A L
+	SLL A, L
 
 LABEL_FC5838:
 	JR T, LABEL_FC584C
@@ -391124,7 +391137,7 @@ LABEL_FD91E1:
 	LD A, (XIZ + 00bh)
 	AND A, 00fh
 	JR Z, LABEL_FD924C
-	SLL A E
+	SLL A, E
 
 LABEL_FD924C:
 	LD A, (XIZ + 00fh)
@@ -391144,7 +391157,7 @@ LABEL_FD925D:
 	LD A, (XIZ + 00bh)
 	AND A, 00fh
 	JR Z, LABEL_FD9274
-	SLL A E
+	SLL A, E
 
 LABEL_FD9274:
 	LD A, (XIZ + 00fh)
@@ -391204,7 +391217,7 @@ LABEL_FD928B:
 	LD A, (XIZ + 00bh)
 	AND A, 00fh
 	JR Z, LABEL_FD92FA
-	SLL A E
+	SLL A, E
 
 LABEL_FD92FA:
 	LD A, (XIZ + 00fh)
@@ -391224,7 +391237,7 @@ LABEL_FD930B:
 	LD A, (XIZ + 00bh)
 	AND A, 00fh
 	JR Z, LABEL_FD9322
-	SLL A E
+	SLL A, E
 
 LABEL_FD9322:
 	LD A, (XIZ + 00fh)
@@ -391408,7 +391421,7 @@ LABEL_FD970A:
 	LD A, (XIZ + 00bh)
 	AND A, 00fh
 	JR Z, LABEL_FD972F
-	SLL A L
+	SLL A, L
 
 LABEL_FD972F:
 	EXTZ HL
@@ -391444,7 +391457,7 @@ LABEL_FD9743:
 	LD A, (XIY + 00bh)
 	AND A, 00fh
 	JR Z, LABEL_FD9778
-	SLL A QIZH
+	SLL A, QIZH
 
 LABEL_FD9778:
 	LD A, (XIY + 009h)
@@ -391523,7 +391536,7 @@ LABEL_FD9802:
 	LD A, (XIZ + 00bh)
 	AND A, 00fh
 	JR Z, LABEL_FD9829
-	SLL A L
+	SLL A, L
 
 LABEL_FD9829:
 	LD (XBC), L
@@ -391641,7 +391654,7 @@ LABEL_FD9933:
 	LD A, (XIZ + 00bh)
 	AND A, 00fh
 	JR Z, LABEL_FD9948
-	SLL A L
+	SLL A, L
 
 LABEL_FD9948:
 	LD (0BD26h), L
@@ -391667,7 +391680,7 @@ LABEL_FD995B:
 	LD A, (XIZ + 00bh)
 	AND A, 00fh
 	JR Z, LABEL_FD997F
-	SLL A L
+	SLL A, L
 
 LABEL_FD997F:
 	LD (347Ch), L
@@ -391709,7 +391722,7 @@ LABEL_FD99D9:
 	LD A, (XWA)
 	AND A, 00fh
 	JR Z, LABEL_FD99E7
-	SLL A L
+	SLL A, L
 
 LABEL_FD99E7:
 	LD (347Ch), L
@@ -391721,7 +391734,7 @@ LABEL_FD99ED:
 	DEC 1, A
 	AND A, 00fh
 	JR Z, LABEL_FD99FD
-	SLL A L
+	SLL A, L
 
 LABEL_FD99FD:
 	LD (347Ch), L
@@ -429487,7 +429500,7 @@ LABEL_FF2470:
 	LD WA, (XSP + 002h)
 	AND A, 00fh
 	JR Z, LABEL_FF248B
-	SLL A BC
+	SLL A, BC
 
 LABEL_FF248B:
 	LD XWA, (XSP + 006h)
@@ -429527,7 +429540,7 @@ LABEL_FF24B9:
 	LD BC, (XDE)
 	AND A, 00fh
 	JR Z, LABEL_FF24CD
-	SLL A BC
+	SLL A, BC
 
 LABEL_FF24CD:
 	LD (XDE), BC
