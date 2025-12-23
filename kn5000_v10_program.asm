@@ -440463,9 +440463,9 @@ LABEL_FE1445:
 	CALL LABEL_FE448E
 	CP L, 0
 	JRL Z, LABEL_FE1BA3
-	LD (XSP + 000h), 004h
-	LD (XSP + 000h), 0b0h
-	LD A, (XSP + 014eh)
+	db 0, 0, 0, 0;		TODO: Fix ASL: LD (XSP + 000h), 004h
+	db 0, 0, 0, 0;		TODO: Fix ASL: LD (XSP + 000h), 0b0h
+	db 0, 0, 0, 0, 0;	TODO: Fix ASL: LD A, (XSP + 014eh)
 	LD (XSP + 001h), A
 	LD (XSP + 002h), 07bh
 	LD (XSP + 003h), 000h
@@ -440524,7 +440524,7 @@ LABEL_FE14F8:
 	CALL LABEL_FE448E
 	CP L, 0
 	JRL Z, LABEL_FE1728
-	LD (XSP + 000h), 004h
+	db 0, 0, 0, 0;	TODO: Fix ASL: LD (XSP + 000h), 004h
 	LD (XSP + 001h), 0b0h
 	LD A, (XSP + 014eh)
 	LD (XSP + 002h), A
@@ -440757,7 +440757,7 @@ LABEL_FE1728:
 	CALL LABEL_FE448E
 	CP L, 0
 	JRL Z, LABEL_FE18E1
-	LD (XSP + 000h), 004h
+	db 0, 0, 0, 0;	TODO: Fix ASL: LD (XSP + 000h), 004h
 	LD (XSP + 001h), 0b0h
 	LD A, (XSP + 014eh)
 	LD (XSP + 002h), A
@@ -440937,7 +440937,7 @@ LABEL_FE18E1:
 	CALL LABEL_FE448E
 	CP L, 0
 	JRL Z, LABEL_FE1A31
-	LD (XSP + 000h), 004h
+	db 0, 0, 0, 0;	TODO: Fix ASL: LD (XSP + 000h), 004h
 	LD (XSP + 001h), 0b0h
 	LD A, (XSP + 014eh)
 	LD (XSP + 002h), A
@@ -441074,7 +441074,7 @@ LABEL_FE1A31:
 	CALL LABEL_FE448E
 	CP L, 0
 	JRL Z, LABEL_FE1B1E
-	LD (XSP + 000h), 004h
+	db 0, 0, 0, 0;	TODO: Fix ASL: LD (XSP + 000h), 004h
 	LD (XSP + 001h), 0b0h
 	LD A, (XSP + 014eh)
 	LD (XSP + 002h), A
@@ -441168,7 +441168,7 @@ LABEL_FE1B1E:
 	CALL LABEL_FE448E
 	CP L, 0
 	JR Z, LABEL_FE1BA3
-	LD (XSP + 000h), 004h
+	db 0, 0, 0, 0;	TODO: Fix ASL: LD (XSP + 000h), 004h
 	LD (XSP + 001h), 0b0h
 	LD A, (XSP + 014eh)
 	LD (XSP + 002h), A
@@ -441229,8 +441229,8 @@ LABEL_FE1BA9:
 	CALL LABEL_FE448E
 	CP L, 0
 	JRL Z, LABEL_FE1CB3
-	LD (XSP + 000h), 004h
-	LD (XSP + 000h), 0b0h
+	db 0, 0, 0, 0;		TODO: Fix ASL: LD (XSP + 000h), 004h
+	db 0, 0, 0, 0;		TODO: Fix ASL: LD (XSP + 000h), 0b0h
 	LD A, (XSP + 014eh)
 	LD (XSP + 001h), A
 	LD (XSP + 002h), 07bh
@@ -441270,7 +441270,7 @@ LABEL_FE1C37:
 	CALL LABEL_FE448E
 	CP L, 0
 	JR Z, LABEL_FE1CB3
-	LD (XSP + 000h), 004h
+	db 0, 0, 0, 0;	TODO: Fix ASL: LD (XSP + 000h), 004h
 	LD (XSP + 001h), 0b0h
 	LD A, (XSP + 014eh)
 	LD (XSP + 002h), A
@@ -449010,7 +449010,7 @@ LABEL_FE66D2:
 
 LABEL_FE66D7:
 	DEC 6, XSP
-	LD (XSP + 000h), 004h
+	db 0, 0, 0, 0;	TODO: Fix ASL: LD (XSP + 000h), 004h
 	LD (XSP + 001h), 090h
 	LD (XSP + 002h), 019h
 	LD (XSP + 003h), A
