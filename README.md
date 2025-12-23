@@ -21,7 +21,7 @@ As of 23rd Dec 2025, I'm at roughly 85% of that goal.
 
 The main reason for not yet being able to get a perfect build is that the ASL assembler only supports the TLCS900 TMP96C141 CPU instruction set, while the KN5000 maincpu is a TMP94C241F.
 
-So, my current goal is to get as close to 99.9% as possible, while leaving placeholder zero bytes on the unsupported isntructions. Then, this will guide me to patch ASL to implement TMP94C241F support. And only after that there's hope of getting a perfect byte-matching rebuild of the ROM.
+So, my current goal is to get as close to 99.9% as possible, while leaving placeholder zero bytes on the unsupported instructions. Then, this will guide me to patch ASL to implement TMP94C241F support. And only after that there's hope of getting a perfect byte-matching rebuild of the ROM.
 
 Once that is acchieved, I'll be able to use such assembler to resume my effort of developing homebrew software for the KN5000. My main project is to port Eric Chahi's Another World virtual machine to run on the musical keyboard (because we can! LOL).
 
