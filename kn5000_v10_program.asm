@@ -357221,13 +357221,21 @@ LABEL_FB2B06:
 	CALL Get_Area_Region_Code
 	CP L, 4
 	JR NZ, LABEL_FB2F12
-	_VGA_SEQUENCER 0fh, 000h
-	JR T, LABEL_FB2F21
+
+	; For byte-matching purposes, the following instructions
+	; are equivalent to: _VGA_SEQUENCER 0fh, 000h
+	_VGA_WRITE 3c4h, 0fh
+	LDW WA, 3c5h
+	LDW BC, 000h
+	; but omitting the final "CALR _Write_VGA_Register"
+
+	JR T, LABEL_FB2F24
+
 
 LABEL_FB2F12:
 	_VGA_SEQUENCER 0fh, 044h
 
-LABEL_FB2F21:
+LABEL_FB2F24:
 	_VGA_SEQUENCER 13h, 001h
 	
 	_VGA_COLOR_CRTC 19h, 000h
@@ -357477,13 +357485,32 @@ LABEL_FB3179:
 	LDA XSP, XSP + 00ch
 	RET
 
+
 LABEL_FB318A:
-	_VGA_SEQUENCER 01h, 001h
-	RET
+	; For byte-matching purposes:
+	; This is equivalent to:
+	;
+	; _VGA_SEQUENCER 01h, 001h
+	; RET
+	;
+	_VGA_WRITE 3c4h, 01h
+	LD WA, 3c5h
+	LD BC, 01h
+	JRL T, _Write_VGA_Register
+
 
 LABEL_FB319A:
-	_VGA_SEQUENCER 01h, 021h
-	RET
+	; For byte-matching purposes:
+	; This is equivalent to:
+	;
+	; _VGA_SEQUENCER 01h, 021h
+	; RET
+	;
+	_VGA_WRITE 3c4h, 01h
+	LD WA, 3c5h
+	LD BC, 21h
+	JRL T, _Write_VGA_Register
+
 
 LABEL_FB31AB:
 	PUSH XIZ
@@ -357797,12 +357824,20 @@ LABEL_FB36A9:
 	_VGA_SEQUENCER 09h, 011h
 	_VGA_SEQUENCER 0ch, 00dh
 
-	_VGA_SEQUENCER 06h, 000h
-	RET
+	; For byte-matching purposes:
+	; This is equivalent to:
+	;
+	; _VGA_SEQUENCER 06h, 000h
+	; RET
+	;
+	_VGA_WRITE 3c4h, 06h
+	LD WA, 3c5h
+	LD BC, 00h
+	JRL T, _Write_VGA_Register
+
 
 ; who calls here?	
-; what's the address here?
-
+LABEL_FB3AED:
 	_VGA_SEQUENCER 06h, 001h
 	_VGA_SEQUENCER 09h, 004h
 	_VGA_SEQUENCER 0ah, 010h
@@ -357891,8 +357926,17 @@ LABEL_FB36A9:
 	_VGA_SEQUENCER 09h, 011h
 	_VGA_SEQUENCER 0ch, 008h
 
-	_VGA_SEQUENCER 06h, 000h
-	RET
+	; For byte-matching purposes:
+	; This is equivalent to:
+	;
+	; _VGA_SEQUENCER 06h, 000h
+	; RET
+	;
+	_VGA_WRITE 3c4h, 06h
+	LD WA, 3c5h
+	LD BC, 00h
+	JRL T, _Write_VGA_Register
+
 
 BitMapOut:
 	LDA XSP, XSP - 010h
@@ -358353,7 +358397,7 @@ LABEL_FB45C5:
 	LD C, (XDE + 001h)
 	CP XBC, XHL
 	JR NZ, LABEL_FB461C
-	db 0, 0, 0, 0, 0;	TODO: Fix ASL: LD C, (8D52h)
+	LD C, (8D52h)
 	BIT 002h, C
 	JR NZ, LABEL_FB4619
 	BIT 001h, C
