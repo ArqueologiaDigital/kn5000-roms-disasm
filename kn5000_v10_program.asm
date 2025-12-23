@@ -111240,7 +111240,7 @@ LABEL_EF1A6C:
 	NOP
 	NORMAL
 	NOP
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL:
+	db 0, 0, 0, 0	;TODO: Fix ASL:
 	; FIXME: JR PE/OV, LABEL_EF1A9D
 	; FIXME: DB
 
@@ -112012,7 +112012,7 @@ LABEL_EF2070:
 	LD IY, (XIX + 000h)
 	CP IY, IX
 	JRL Z, LABEL_EF20D9
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 018h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 018h), 0000h
 	EXTZ XIX
 	XOR XWA, XWA
 	XOR XHL, XHL
@@ -112040,7 +112040,7 @@ LABEL_EF20D9:
 	JRL T, LABEL_EF1B11
 
 LABEL_EF20E1:
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 018h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 018h), 0000h
 	EXTZ XIX
 	XOR XWA, XWA
 	XOR XHL, XHL
@@ -112091,7 +112091,7 @@ LABEL_EF20E1:
 	LD IY, (XIX + 000h)
 	CP IY, IX
 	JRL Z, LABEL_EF2194
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 004h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 004h), 0000h
 	EXTZ XIX
 	XOR XWA, XWA
 	XOR XHL, XHL
@@ -115398,11 +115398,11 @@ LABEL_EF4241:
 	LDA XSP, XSP - 010h
 	LDA XBC, XSP
 	LDW (XBC), 0000h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 002h), 0000h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 004h), 0000h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 006h), 00d3h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0001h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 00ah), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 002h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 004h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 006h), 00d3h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 00ah), 0001h
 	LD XWA, 0
 	LD (XBC + 00ch), XWA
 	PUSH XBC
@@ -115420,7 +115420,7 @@ LABEL_EF4271:
 	LD XBC, 00000012h
 	CALL LABEL_FF0C18
 	LDA XIZ, 062Eh
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XIZ + 002h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XIZ + 002h), 0000h
 	LD WA, HL
 	SRL 1, WA
 	LD (XIZ + 006h), WA
@@ -115593,7 +115593,7 @@ LABEL_EF441B:
 	LD (XSP + 006h), WA
 	LD WA, (XSP + 006h)
 	EXTZ XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVW WA, 0012h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVW WA, 0012h
 	LD WA, QWA
 	LD IZ, 0
 	CP WA, 0
@@ -115630,13 +115630,13 @@ LABEL_EF4479:
 
 LABEL_EF4485:
 	ADD (XSP + 006h), IZ
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 008h), 0800h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 008h), 0800h
 	SUB (XSP + 008h), IZ
 	LD WA, (XSP + 008h)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0012h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0012h
 	LD (XSP + 008h), WA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 004h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 004h), 0000h
 	LD WA, (XSP + 008h)
 	CP WA, 0
 	JR ULE, LABEL_EF44F5
@@ -115719,7 +115719,7 @@ LABEL_EF454D:
 	LD (XSP + 006h), WA
 	LD WA, (XSP + 006h)
 	EXTZ XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVW WA, 0012h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVW WA, 0012h
 	LD WA, QWA
 	LD IZ, 0
 	CP WA, 0
@@ -115762,9 +115762,9 @@ LABEL_EF45BF:
 	LD BC, (XSP + 01ah)
 	SUB BC, WA
 	EXTZ XBC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVW BC, 0012h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVW BC, 0012h
 	LD (XSP + 008h), BC
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 004h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 004h), 0000h
 	LD WA, (XSP + 008h)
 	CP WA, 0
 	JR ULE, LABEL_EF4630
@@ -116353,7 +116353,7 @@ LABEL_EF4C17:
 	ADD XWA, 00009000h
 	CP XWA, (064Ah)
 	JR NZ, LABEL_EF4C69
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: INCW 0, (064Eh)
+	db 0, 0, 0, 0	;TODO: Fix ASL: INCW 0, (064Eh)
 	LD WA, (064Eh)
 	LD BC, (0650h)
 	LD DE, 6
@@ -116531,8 +116531,8 @@ LABEL_EF4DB1:
 	LD (0642h), XWA
 	CP XWA, 00000feeh
 	JR C, LABEL_EF4DB1
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ah), 0feeh
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 004h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ah), 0feeh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 004h), 0000h
 	LD (0654h), 000h
 	LD XWA, 0
 	LD (0642h), XWA
@@ -116636,7 +116636,7 @@ LABEL_EF4ED7:
 	LD QIZ, WA
 	ANDW (XSP + 008h), 000fh
 	INCW 2, (XSP + 008h)
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 006h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 006h), 0000h
 	CPW (XSP + 008h), 0000h
 	JR C, LABEL_EF4F55
 
@@ -116762,7 +116762,7 @@ Draw_FlashMemUpdate_message_bitmap:  ; EF5040
 LABEL_EF5050:
 	LD WA, IZ
 	EXTZ XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVW WA, 001ch ; 28 bytes = 224 pixels de largura da imagem a ser desenhada
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVW WA, 001ch ; 28 bytes = 224 pixels de largura da imagem a ser desenhada
 	LD WA, QWA
 	CP WA, 0
 	JR NZ, LABEL_EF5063
@@ -118550,7 +118550,7 @@ LABEL_EF6F82:
 	LD XIX, 00000f07h
 	LD (XIX), 028h
 	LD (XIX + 001h), L
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XIX + 002h), 342fh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XIX + 002h), 342fh
 	LD (XIX + 004h), 029h
 
 LABEL_EF6FA2:
@@ -118606,7 +118606,7 @@ LABEL_EF702A:
 	LD XIX, 00000f25h
 	LD (XIX), 028h
 	LD (XIX + 001h), L
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XIX + 002h), 342fh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XIX + 002h), 342fh
 	LD (XIX + 004h), 029h
 
 LABEL_EF704A:
@@ -118659,7 +118659,7 @@ LABEL_EF70BC:
 	LD XIX, 00000f43h
 	LD (XIX), 028h
 	LD (XIX + 001h), L
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XIX + 002h), 342fh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XIX + 002h), 342fh
 	LD (XIX + 004h), 029h
 
 LABEL_EF70DC:
@@ -125016,7 +125016,7 @@ LABEL_F00D41:
 LABEL_F00D47:
 	LD XIY, LABEL_E0BB90
 	LD XIX, XIY
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW BC, 002dh
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW BC, 002dh
 	ADD XIX, XBC
 	CALL LABEL_EF5CF9
 	RET
@@ -125050,7 +125050,7 @@ LABEL_F00D90:
 	LD XIX, XIY
 	ADD XIX, 0000000ah
 	XOR W, W
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0014h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0014h
 	ADD XIX, XWA
 	CALL LABEL_EF5CE8
 
@@ -125219,7 +125219,7 @@ LABEL_F00F3A:
 	XOR WA, WA
 	LD A, (0F5Ah)
 	DEC 1, WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0708h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0708h
 	ADD XIX, XWA
 	XOR XWA, XWA
 	LD A, (0F5Bh)
@@ -125933,7 +125933,7 @@ LABEL_F017CD:
 	LDW (XIX + IY), 0ffffh
 	LD XIX, 00000c9eh
 	LDW (XIX + IY), 0ffffh
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0003h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0003h
 	LD IY, WA
 	LD XIX, 0000f250h
 	BIT 7, (XIX + IY)
@@ -126062,10 +126062,10 @@ LABEL_F01956:
 	LD DE, (XBC + 00bh)
 	LD WA, HL
 	EXTZ XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVW WA, 0028h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVW WA, 0028h
 	LD (XSP + 010ah), WA
 	LD WA, (XSP + 010ah)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0028h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0028h
 	SUB HL, WA
 	SLL 3, HL
 	LD (XSP + 0108h), HL
@@ -126261,10 +126261,10 @@ LABEL_F01DAB:
 	EXTZ DE
 	LD BC, HL
 	EXTZ XBC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVW BC, 0028h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVW BC, 0028h
 	LD (XSP + 0104h), BC
 	LD BC, (XSP + 0104h)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW BC, 0028h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW BC, 0028h
 	SUB HL, BC
 	SLL 3, HL
 	LD (XSP + 0102h), HL
@@ -126560,10 +126560,10 @@ LABEL_F023CF:
 	EXTZ HL
 	LD WA, BC
 	EXTZ XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVW WA, 0028h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVW WA, 0028h
 	LD (XSP + 0108h), WA
 	LD WA, (XSP + 0108h)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0028h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0028h
 	SUB BC, WA
 	SLL 3, BC
 	LD (XSP + 0106h), BC
@@ -126846,7 +126846,7 @@ InitializeScoop:
 	LD (XBC), XWA
 	LDA XWA, 0FA496Ch
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0000h
 	LDA XWA, 0E0CD8Ah
 	LD (XBC + 00ah), XWA
 	LD WA, 0126h
@@ -126856,7 +126856,7 @@ InitializeScoop:
 	LD (XBC), XWA
 	LDA XWA, 0FA496Ch
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0000h
 	LDA XWA, 0E0CD8Eh
 	LD (XBC + 00ah), XWA
 	LD WA, 0426h
@@ -126866,7 +126866,7 @@ InitializeScoop:
 	LD (XBC), XWA
 	LDA XWA, 0FA48A9h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0000h
 	LDA XWA, 0E0CDBAh
 	LD (XBC + 00ah), XWA
 	LD WA, 0106h
@@ -126876,7 +126876,7 @@ InitializeScoop:
 	LD (XBC), XWA
 	LDA XWA, 0FA48A9h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0000h
 	LDA XWA, 0E0CDBEh
 	LD (XBC + 00ah), XWA
 	LD WA, 0406h
@@ -126886,7 +126886,7 @@ InitializeScoop:
 	LD (XBC), XWA
 	LDA XWA, 0FA4A18h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0021h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0021h
 	LDA XWA, 0E0D72Eh
 	LD (XBC + 00ah), XWA
 	LD WA, 0146h
@@ -126896,7 +126896,7 @@ InitializeScoop:
 	LD (XBC), XWA
 	LDA XWA, 0FA4A18h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0021h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0021h
 	LDA XWA, 0E0D7B6h
 	LD (XBC + 00ah), XWA
 	LD WA, 0446h
@@ -126906,7 +126906,7 @@ InitializeScoop:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0001h
 	LDA XWA, 0E0D204h
 	LD (XBC + 00ah), XWA
 	LD WA, 0020h
@@ -126916,7 +126916,7 @@ InitializeScoop:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0001h
 	LDA XWA, 0E0D304h
 	LD (XBC + 00ah), XWA
 	LD WA, 0320h
@@ -126926,7 +126926,7 @@ InitializeScoop:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0001h
 	LDA XWA, 0E0D20Ch
 	LD (XBC + 00ah), XWA
 	LD WA, 0021h
@@ -126936,7 +126936,7 @@ InitializeScoop:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0001h
 	LDA XWA, 0E0D316h
 	LD (XBC + 00ah), XWA
 	LD WA, 0321h
@@ -126946,7 +126946,7 @@ InitializeScoop:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0001h
 	LDA XWA, 0E0D214h
 	LD (XBC + 00ah), XWA
 	LD WA, 0022h
@@ -126956,7 +126956,7 @@ InitializeScoop:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0001h
 	LDA XWA, 0E0D328h
 	LD (XBC + 00ah), XWA
 	LD WA, 0322h
@@ -126966,7 +126966,7 @@ InitializeScoop:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0001h
 	LDA XWA, 0E0D21Ch
 	LD (XBC + 00ah), XWA
 	LD WA, 0023h
@@ -126976,7 +126976,7 @@ InitializeScoop:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0001h
 	LDA XWA, 0E0D33Ch
 	LD (XBC + 00ah), XWA
 	LD WA, 0323h
@@ -126986,7 +126986,7 @@ InitializeScoop:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0001h
 	LDA XWA, 0E0D224h
 	LD (XBC + 00ah), XWA
 	LD WA, 0024h
@@ -126996,7 +126996,7 @@ InitializeScoop:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0001h
 	LDA XWA, 0E0D350h
 	LD (XBC + 00ah), XWA
 	LD WA, 0324h
@@ -127006,7 +127006,7 @@ InitializeScoop:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0001h
 	LDA XWA, 0E0D22Ch
 	LD (XBC + 00ah), XWA
 	LD WA, 0025h
@@ -127016,7 +127016,7 @@ InitializeScoop:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0001h
 	LDA XWA, 0E0D364h
 	LD (XBC + 00ah), XWA
 	LD WA, 0325h
@@ -127026,7 +127026,7 @@ InitializeScoop:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0001h
 	LDA XWA, 0E0D234h
 	LD (XBC + 00ah), XWA
 	LD WA, 0026h
@@ -127036,7 +127036,7 @@ InitializeScoop:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0001h
 	LDA XWA, 0E0D378h
 	LD (XBC + 00ah), XWA
 	LD WA, 0326h
@@ -127046,7 +127046,7 @@ InitializeScoop:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0001h
 	LDA XWA, 0E0D23Ch
 	LD (XBC + 00ah), XWA
 	LD WA, 0027h
@@ -127056,7 +127056,7 @@ InitializeScoop:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0001h
 	LDA XWA, 0E0D38Ch
 	LD (XBC + 00ah), XWA
 	LD WA, 0327h
@@ -127066,7 +127066,7 @@ InitializeScoop:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0001h
 	LDA XWA, 0E0D244h
 	LD (XBC + 00ah), XWA
 	LD WA, 0028h
@@ -127076,7 +127076,7 @@ InitializeScoop:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0001h
 	LDA XWA, 0E0D3A0h
 	LD (XBC + 00ah), XWA
 	LD WA, 0328h
@@ -127086,7 +127086,7 @@ InitializeScoop:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0001h
 	LDA XWA, 0E0D24Ch
 	LD (XBC + 00ah), XWA
 	LD WA, 0029h
@@ -127096,7 +127096,7 @@ InitializeScoop:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0001h
 	LDA XWA, 0E0D3B4h
 	LD (XBC + 00ah), XWA
 	LD WA, 0329h
@@ -127106,7 +127106,7 @@ InitializeScoop:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0001h
 	LDA XWA, 0E0D254h
 	LD (XBC + 00ah), XWA
 	LD WA, 002ah
@@ -127116,7 +127116,7 @@ InitializeScoop:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0001h
 	LDA XWA, 0E0D3C8h
 	LD (XBC + 00ah), XWA
 	LD WA, 032ah
@@ -127126,7 +127126,7 @@ InitializeScoop:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0001h
 	LDA XWA, 0E0D25Ch
 	LD (XBC + 00ah), XWA
 	LD WA, 002bh
@@ -127136,7 +127136,7 @@ InitializeScoop:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0001h
 	LDA XWA, 0E0D3DCh
 	LD (XBC + 00ah), XWA
 	LD WA, 032bh
@@ -127146,7 +127146,7 @@ InitializeScoop:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0001h
 	LDA XWA, 0E0D264h
 	LD (XBC + 00ah), XWA
 	LD WA, 002ch
@@ -127156,7 +127156,7 @@ InitializeScoop:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0001h
 	LDA XWA, 0E0D3F0h
 	LD (XBC + 00ah), XWA
 	LD WA, 032ch
@@ -127166,7 +127166,7 @@ InitializeScoop:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0001h
 	LDA XWA, 0E0D26Ch
 	LD (XBC + 00ah), XWA
 	LD WA, 002dh
@@ -127176,7 +127176,7 @@ InitializeScoop:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0001h
 	LDA XWA, 0E0D404h
 	LD (XBC + 00ah), XWA
 	LD WA, 032dh
@@ -127186,7 +127186,7 @@ InitializeScoop:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0001h
 	LDA XWA, 0E0D274h
 	LD (XBC + 00ah), XWA
 	LD WA, 002eh
@@ -127196,7 +127196,7 @@ InitializeScoop:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0001h
 	LDA XWA, 0E0D418h
 	LD (XBC + 00ah), XWA
 	LD WA, 032eh
@@ -127206,7 +127206,7 @@ InitializeScoop:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0001h
 	LDA XWA, 0E0D27Ch
 	LD (XBC + 00ah), XWA
 	LD WA, 002fh
@@ -127216,7 +127216,7 @@ InitializeScoop:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0001h
 	LDA XWA, 0E0D42Ch
 	LD (XBC + 00ah), XWA
 	LD WA, 032fh
@@ -127226,7 +127226,7 @@ InitializeScoop:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0001h
 	LDA XWA, 0E0D284h
 	LD (XBC + 00ah), XWA
 	LD WA, 0030h
@@ -127236,7 +127236,7 @@ InitializeScoop:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0001h
 	LDA XWA, 0E0D440h
 	LD (XBC + 00ah), XWA
 	LD WA, 0330h
@@ -127246,7 +127246,7 @@ InitializeScoop:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0001h
 	LDA XWA, 0E0D28Ch
 	LD (XBC + 00ah), XWA
 	LD WA, 0031h
@@ -127256,7 +127256,7 @@ InitializeScoop:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0001h
 	LDA XWA, 0E0D454h
 	LD (XBC + 00ah), XWA
 	LD WA, 0331h
@@ -127266,7 +127266,7 @@ InitializeScoop:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0001h
 	LDA XWA, 0E0D294h
 	LD (XBC + 00ah), XWA
 	LD WA, 0032h
@@ -127276,7 +127276,7 @@ InitializeScoop:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0001h
 	LDA XWA, 0E0D468h
 	LD (XBC + 00ah), XWA
 	LD WA, 0332h
@@ -127286,7 +127286,7 @@ InitializeScoop:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0001h
 	LDA XWA, 0E0D29Ch
 	LD (XBC + 00ah), XWA
 	LD WA, 0033h
@@ -127296,7 +127296,7 @@ InitializeScoop:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0001h
 	LDA XWA, 0E0D47Ch
 	LD (XBC + 00ah), XWA
 	LD WA, 0333h
@@ -127306,7 +127306,7 @@ InitializeScoop:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0001h
 	LDA XWA, 0E0D2A4h
 	LD (XBC + 00ah), XWA
 	LD WA, 0034h
@@ -127316,7 +127316,7 @@ InitializeScoop:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0001h
 	LDA XWA, 0E0D490h
 	LD (XBC + 00ah), XWA
 	LD WA, 0334h
@@ -127326,7 +127326,7 @@ InitializeScoop:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0001h
 	LDA XWA, 0E0D2ACh
 	LD (XBC + 00ah), XWA
 	LD WA, 0035h
@@ -127336,7 +127336,7 @@ InitializeScoop:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0001h
 	LDA XWA, 0E0D4A4h
 	LD (XBC + 00ah), XWA
 	LD WA, 0335h
@@ -127346,7 +127346,7 @@ InitializeScoop:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0001h
 	LDA XWA, 0E0D2B4h
 	LD (XBC + 00ah), XWA
 	LD WA, 0036h
@@ -127356,7 +127356,7 @@ InitializeScoop:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0001h
 	LDA XWA, 0E0D4B8h
 	LD (XBC + 00ah), XWA
 	LD WA, 0336h
@@ -127366,7 +127366,7 @@ InitializeScoop:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0001h
 	LDA XWA, 0E0D2BCh
 	LD (XBC + 00ah), XWA
 	LD WA, 0037h
@@ -127376,7 +127376,7 @@ InitializeScoop:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0001h
 	LDA XWA, 0E0D4CCh
 	LD (XBC + 00ah), XWA
 	LD WA, 0337h
@@ -127386,7 +127386,7 @@ InitializeScoop:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0001h
 	LDA XWA, 0E0D2C4h
 	LD (XBC + 00ah), XWA
 	LD WA, 0038h
@@ -127396,7 +127396,7 @@ InitializeScoop:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0001h
 	LDA XWA, 0E0D4E0h
 	LD (XBC + 00ah), XWA
 	LD WA, 0338h
@@ -127406,7 +127406,7 @@ InitializeScoop:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0001h
 	LDA XWA, 0E0D2CCh
 	LD (XBC + 00ah), XWA
 	LD WA, 0039h
@@ -127416,7 +127416,7 @@ InitializeScoop:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0001h
 	LDA XWA, 0E0D4F4h
 	LD (XBC + 00ah), XWA
 	LD WA, 0339h
@@ -127426,7 +127426,7 @@ InitializeScoop:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0001h
 	LDA XWA, 0E0D2D4h
 	LD (XBC + 00ah), XWA
 	LD WA, 003ah
@@ -127436,7 +127436,7 @@ InitializeScoop:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0001h
 	LDA XWA, 0E0D508h
 	LD (XBC + 00ah), XWA
 	LD WA, 033ah
@@ -127446,7 +127446,7 @@ InitializeScoop:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0001h
 	LDA XWA, 0E0D2DCh
 	LD (XBC + 00ah), XWA
 	LD WA, 003bh
@@ -127456,7 +127456,7 @@ InitializeScoop:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0001h
 	LDA XWA, 0E0D51Ch
 	LD (XBC + 00ah), XWA
 	LD WA, 033bh
@@ -127466,7 +127466,7 @@ InitializeScoop:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0001h
 	LDA XWA, 0E0D2E4h
 	LD (XBC + 00ah), XWA
 	LD WA, 003ch
@@ -127476,7 +127476,7 @@ InitializeScoop:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0001h
 	LDA XWA, 0E0D52Eh
 	LD (XBC + 00ah), XWA
 	LD WA, 033ch
@@ -127486,7 +127486,7 @@ InitializeScoop:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0001h
 	LDA XWA, 0E0D2ECh
 	LD (XBC + 00ah), XWA
 	LD WA, 003dh
@@ -127496,7 +127496,7 @@ InitializeScoop:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0001h
 	LDA XWA, 0E0D540h
 	LD (XBC + 00ah), XWA
 	LD WA, 033dh
@@ -127506,7 +127506,7 @@ InitializeScoop:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0001h
 	LDA XWA, 0E0D2F4h
 	LD (XBC + 00ah), XWA
 	LD WA, 003eh
@@ -127516,7 +127516,7 @@ InitializeScoop:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0001h
 	LDA XWA, 0E0D552h
 	LD (XBC + 00ah), XWA
 	LD WA, 033eh
@@ -127526,7 +127526,7 @@ InitializeScoop:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0001h
 	LDA XWA, 0E0D2FCh
 	LD (XBC + 00ah), XWA
 	LD WA, 003fh
@@ -127536,7 +127536,7 @@ InitializeScoop:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0001h
 	LDA XWA, 0E0D566h
 	LD (XBC + 00ah), XWA
 	LD WA, 033fh
@@ -130346,7 +130346,7 @@ LABEL_F069E7:
 	LD E, QIZH
 	EXTZ DE
 	LD WA, DE
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0015h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0015h
 	EXTZ XWA
 	LDA XWA, XWA + 010h
 	INC 5, XWA
@@ -133307,7 +133307,7 @@ LABEL_F0A4A0:
 LABEL_F0A4BC:
 	LD A, QIZH
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0015h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0015h
 	EXTZ XWA
 	LDA XWA, XWA + 010h
 	INC 5, XWA
@@ -133324,7 +133324,7 @@ LABEL_F0A4BC:
 LABEL_F0A4E4:
 	LD A, QIZH
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0015h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0015h
 	EXTZ XWA
 	LDA XWA, XWA + 010h
 	INC 3, XWA
@@ -133341,7 +133341,7 @@ LABEL_F0A4E4:
 LABEL_F0A50C:
 	LD A, QIZH
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0015h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0015h
 	EXTZ XWA
 	LDA XWA, XWA + 010h
 	INC 4, XWA
@@ -133358,7 +133358,7 @@ LABEL_F0A50C:
 LABEL_F0A534:
 	LD A, QIZH
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0015h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0015h
 	EXTZ XWA
 	LDA XWA, XWA + 010h
 	LD C, A
@@ -140385,7 +140385,7 @@ InitializeNaka:
 	LD (XBC), XWA
 	LDA XWA, 0FA496Ch
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0012h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0012h
 	LDA XWA, 0E0E7AEh
 	LD (XBC + 00ah), XWA
 	LD WA, 012bh
@@ -140395,7 +140395,7 @@ InitializeNaka:
 	LD (XBC), XWA
 	LDA XWA, 0FA496Ch
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0012h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0012h
 	LDA XWA, 0E0E7FAh
 	LD (XBC + 00ah), XWA
 	LD WA, 042bh
@@ -140405,7 +140405,7 @@ InitializeNaka:
 	LD (XBC), XWA
 	LDA XWA, 0FA48A9h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0000h
 	LDA XWA, 0E0E96Ah
 	LD (XBC + 00ah), XWA
 	LD WA, 010bh
@@ -140415,7 +140415,7 @@ InitializeNaka:
 	LD (XBC), XWA
 	LDA XWA, 0FA48A9h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0000h
 	LDA XWA, 0E0E96Eh
 	LD (XBC + 00ah), XWA
 	LD WA, 040bh
@@ -140425,7 +140425,7 @@ InitializeNaka:
 	LD (XBC), XWA
 	LDA XWA, 0FA4A18h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0000h
 	LDA XWA, 0E14824h
 	LD (XBC + 00ah), XWA
 	LD WA, 014bh
@@ -140435,7 +140435,7 @@ InitializeNaka:
 	LD (XBC), XWA
 	LDA XWA, 0FA4A18h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0000h
 	LDA XWA, LABEL_E14828
 	LD (XBC + 00ah), XWA
 	LD WA, 044bh
@@ -140445,7 +140445,7 @@ InitializeNaka:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 01deh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 01deh
 	LDA XWA, LABEL_E1344E
 	LD (XBC + 00ah), XWA
 	LD WA, 00fdh
@@ -140455,7 +140455,7 @@ InitializeNaka:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 01deh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 01deh
 	LDA XWA, 0E13BCAh
 	LD (XBC + 00ah), XWA
 	LD WA, 03fdh
@@ -140827,7 +140827,7 @@ LABEL_F16E91:
 	EXTZ BC
 	LD A, (XSP + 006h)
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0003h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0003h
 	ADD WA, BC
 	LDA XBC, 0E160C0h
 	LD A, (XBC + WA)
@@ -140835,7 +140835,7 @@ LABEL_F16E91:
 	CP (XSP + 004h), 004h
 	JR Z, LABEL_F16F02
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0060h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0060h
 	LD BC, WA
 	ADD BC, 0060h
 	LD XWA, (XSP)
@@ -140874,7 +140874,7 @@ LABEL_F16EFC:
 
 LABEL_F16F02:
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0060h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0060h
 	LD BC, WA
 	ADD BC, 0060h
 	LD XWA, (XSP)
@@ -142753,7 +142753,7 @@ LABEL_F1940C:
 	EXTZ BC
 	LD A, QIZH
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0003h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0003h
 	LD DE, WA
 	ADD DE, BC
 	LDA XWA, 0E160C0h
@@ -142774,7 +142774,7 @@ LABEL_F1944E:
 	EXTZ DE
 	LD A, QIZH
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0003h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0003h
 	LD BC, WA
 	ADD WA, DE
 	LDA XDE, 0E160C0h
@@ -143014,7 +143014,7 @@ InitializeSuna:
 	LD (XBC), XWA
 	LDA XWA, 0FA496Ch
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0049h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0049h
 	LDA XWA, 0E16284h
 	LD (XBC + 00ah), XWA
 	LD WA, 0124h
@@ -143024,7 +143024,7 @@ InitializeSuna:
 	LD (XBC), XWA
 	LDA XWA, 0FA496Ch
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0049h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0049h
 	LDA XWA, 0E163ACh
 	LD (XBC + 00ah), XWA
 	LD WA, 0424h
@@ -143034,7 +143034,7 @@ InitializeSuna:
 	LD (XBC), XWA
 	LDA XWA, 0FA48A9h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0001h
 	LDA XWA, 0E176D4h
 	LD (XBC + 00ah), XWA
 	LD WA, 0104h
@@ -143044,7 +143044,7 @@ InitializeSuna:
 	LD (XBC), XWA
 	LDA XWA, 0FA48A9h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0001h
 	LDA XWA, 0E176DCh
 	LD (XBC + 00ah), XWA
 	LD WA, 0404h
@@ -143054,7 +143054,7 @@ InitializeSuna:
 	LD (XBC), XWA
 	LDA XWA, 0FA4A18h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0024h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0024h
 	LDA XWA, 0E1CA6Eh
 	LD (XBC + 00ah), XWA
 	LD WA, 0144h
@@ -143064,7 +143064,7 @@ InitializeSuna:
 	LD (XBC), XWA
 	LDA XWA, 0FA4A18h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0024h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0024h
 	LDA XWA, 0E1CB02h
 	LD (XBC + 00ah), XWA
 	LD WA, 0444h
@@ -143074,7 +143074,7 @@ InitializeSuna:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0003h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0003h
 	LDA XWA, 0E1B4E2h
 	LD (XBC + 00ah), XWA
 	LD WA, 0010h
@@ -143084,7 +143084,7 @@ InitializeSuna:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0003h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0003h
 	LDA XWA, 0E1BAFAh
 	LD (XBC + 00ah), XWA
 	LD WA, 0310h
@@ -143094,7 +143094,7 @@ InitializeSuna:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0008h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0008h
 	LDA XWA, 0E1B4F2h
 	LD (XBC + 00ah), XWA
 	LD WA, 0011h
@@ -143104,7 +143104,7 @@ InitializeSuna:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0008h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0008h
 	LDA XWA, 0E1BB22h
 	LD (XBC + 00ah), XWA
 	LD WA, 0311h
@@ -143114,7 +143114,7 @@ InitializeSuna:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0007h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0007h
 	LDA XWA, 0E1B516h
 	LD (XBC + 00ah), XWA
 	LD WA, 0012h
@@ -143124,7 +143124,7 @@ InitializeSuna:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0007h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0007h
 	LDA XWA, 0E1BB80h
 	LD (XBC + 00ah), XWA
 	LD WA, 0312h
@@ -143134,7 +143134,7 @@ InitializeSuna:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0004h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0004h
 	LDA XWA, 0E1B536h
 	LD (XBC + 00ah), XWA
 	LD WA, 0013h
@@ -143144,7 +143144,7 @@ InitializeSuna:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0004h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0004h
 	LDA XWA, 0E1BBCEh
 	LD (XBC + 00ah), XWA
 	LD WA, 0313h
@@ -143154,7 +143154,7 @@ InitializeSuna:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0004h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0004h
 	LDA XWA, 0E1B54Ah
 	LD (XBC + 00ah), XWA
 	LD WA, 0014h
@@ -143164,7 +143164,7 @@ InitializeSuna:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0004h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0004h
 	LDA XWA, 0E1BBFCh
 	LD (XBC + 00ah), XWA
 	LD WA, 0314h
@@ -143174,7 +143174,7 @@ InitializeSuna:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0008h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0008h
 	LDA XWA, 0E1B55Eh
 	LD (XBC + 00ah), XWA
 	LD WA, 0015h
@@ -143184,7 +143184,7 @@ InitializeSuna:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0008h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0008h
 	LDA XWA, 0E1BC2Ah
 	LD (XBC + 00ah), XWA
 	LD WA, 0315h
@@ -143194,7 +143194,7 @@ InitializeSuna:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0007h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0007h
 	LDA XWA, 0E1B582h
 	LD (XBC + 00ah), XWA
 	LD WA, 0016h
@@ -143204,7 +143204,7 @@ InitializeSuna:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0007h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0007h
 	LDA XWA, 0E1BC7Ch
 	LD (XBC + 00ah), XWA
 	LD WA, 0316h
@@ -143214,7 +143214,7 @@ InitializeSuna:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0012h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0012h
 	LDA XWA, 0E1B5A2h
 	LD (XBC + 00ah), XWA
 	LD WA, 00b0h
@@ -143224,7 +143224,7 @@ InitializeSuna:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0012h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0012h
 	LDA XWA, 0E1BCBCh
 	LD (XBC + 00ah), XWA
 	LD WA, 03b0h
@@ -143234,7 +143234,7 @@ InitializeSuna:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 000ch
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 000ch
 	LDA XWA, 0E1B5EEh
 	LD (XBC + 00ah), XWA
 	LD WA, 00b1h
@@ -143244,7 +143244,7 @@ InitializeSuna:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 000ch
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 000ch
 	LDA XWA, 0E1BD3Ah
 	LD (XBC + 00ah), XWA
 	LD WA, 03b1h
@@ -143254,7 +143254,7 @@ InitializeSuna:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0016h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0016h
 	LDA XWA, 0E1B622h
 	LD (XBC + 00ah), XWA
 	LD WA, 00b2h
@@ -143264,7 +143264,7 @@ InitializeSuna:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0016h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0016h
 	LDA XWA, 0E1BD94h
 	LD (XBC + 00ah), XWA
 	LD WA, 03b2h
@@ -143274,7 +143274,7 @@ InitializeSuna:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0005h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0005h
 	LDA XWA, 0E1B67Eh
 	LD (XBC + 00ah), XWA
 	LD WA, 00b3h
@@ -143284,7 +143284,7 @@ InitializeSuna:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0005h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0005h
 	LDA XWA, 0E1BE54h
 	LD (XBC + 00ah), XWA
 	LD WA, 03b3h
@@ -143294,7 +143294,7 @@ InitializeSuna:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0012h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0012h
 	LDA XWA, 0E1B696h
 	LD (XBC + 00ah), XWA
 	LD WA, 00b4h
@@ -143304,7 +143304,7 @@ InitializeSuna:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0012h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0012h
 	LDA XWA, 0E1BE9Ah
 	LD (XBC + 00ah), XWA
 	LD WA, 03b4h
@@ -143314,7 +143314,7 @@ InitializeSuna:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 001fh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 001fh
 	LDA XWA, 0E1B6E2h
 	LD (XBC + 00ah), XWA
 	LD WA, 00b5h
@@ -143324,7 +143324,7 @@ InitializeSuna:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 001fh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 001fh
 	LDA XWA, 0E1BF7Ah
 	LD (XBC + 00ah), XWA
 	LD WA, 03b5h
@@ -143334,7 +143334,7 @@ InitializeSuna:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0001h
 	LDA XWA, 0E1B762h
 	LD (XBC + 00ah), XWA
 	LD WA, 00b6h
@@ -143344,7 +143344,7 @@ InitializeSuna:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0001h
 	LDA XWA, 0E1C076h
 	LD (XBC + 00ah), XWA
 	LD WA, 03b6h
@@ -143354,7 +143354,7 @@ InitializeSuna:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0006h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0006h
 	LDA XWA, 0E1B76Ah
 	LD (XBC + 00ah), XWA
 	LD WA, 00b7h
@@ -143364,7 +143364,7 @@ InitializeSuna:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0006h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0006h
 	LDA XWA, 0E1C082h
 	LD (XBC + 00ah), XWA
 	LD WA, 03b7h
@@ -143374,7 +143374,7 @@ InitializeSuna:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0021h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0021h
 	LDA XWA, 0E1B786h
 	LD (XBC + 00ah), XWA
 	LD WA, 00b8h
@@ -143384,7 +143384,7 @@ InitializeSuna:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0021h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0021h
 	LDA XWA, 0E1C0E0h
 	LD (XBC + 00ah), XWA
 	LD WA, 03b8h
@@ -143394,7 +143394,7 @@ InitializeSuna:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0025h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0025h
 	LDA XWA, 0E1B80Eh
 	LD (XBC + 00ah), XWA
 	LD WA, 00b9h
@@ -143404,7 +143404,7 @@ InitializeSuna:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0025h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0025h
 	LDA XWA, 0E1C1FAh
 	LD (XBC + 00ah), XWA
 	LD WA, 03b9h
@@ -143414,7 +143414,7 @@ InitializeSuna:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 000eh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 000eh
 	LDA XWA, 0E1B8A6h
 	LD (XBC + 00ah), XWA
 	LD WA, 00bah
@@ -143424,7 +143424,7 @@ InitializeSuna:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 000eh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 000eh
 	LDA XWA, 0E1C318h
 	LD (XBC + 00ah), XWA
 	LD WA, 03bah
@@ -143434,7 +143434,7 @@ InitializeSuna:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0004h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0004h
 	LDA XWA, 0E1B8E2h
 	LD (XBC + 00ah), XWA
 	LD WA, 00bbh
@@ -143444,7 +143444,7 @@ InitializeSuna:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0004h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0004h
 	LDA XWA, 0E1C392h
 	LD (XBC + 00ah), XWA
 	LD WA, 03bbh
@@ -143454,7 +143454,7 @@ InitializeSuna:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 000bh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 000bh
 	LDA XWA, 0E1B8F6h
 	LD (XBC + 00ah), XWA
 	LD WA, 00bdh
@@ -143464,7 +143464,7 @@ InitializeSuna:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 000bh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 000bh
 	LDA XWA, 0E1C3BCh
 	LD (XBC + 00ah), XWA
 	LD WA, 03bdh
@@ -143474,7 +143474,7 @@ InitializeSuna:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0021h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0021h
 	LDA XWA, 0E1B926h
 	LD (XBC + 00ah), XWA
 	LD WA, 00beh
@@ -143484,7 +143484,7 @@ InitializeSuna:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0021h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0021h
 	LDA XWA, 0E1C410h
 	LD (XBC + 00ah), XWA
 	LD WA, 03beh
@@ -143494,7 +143494,7 @@ InitializeSuna:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 001bh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 001bh
 	LDA XWA, 0E1B9AEh
 	LD (XBC + 00ah), XWA
 	LD WA, 00c8h
@@ -143504,7 +143504,7 @@ InitializeSuna:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 001bh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 001bh
 	LDA XWA, 0E1C560h
 	LD (XBC + 00ah), XWA
 	LD WA, 03c8h
@@ -143514,7 +143514,7 @@ InitializeSuna:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0010h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0010h
 	LDA XWA, 0E1BA1Eh
 	LD (XBC + 00ah), XWA
 	LD WA, 00c9h
@@ -143524,7 +143524,7 @@ InitializeSuna:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0010h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0010h
 	LDA XWA, 0E1C6DCh
 	LD (XBC + 00ah), XWA
 	LD WA, 03c9h
@@ -143534,7 +143534,7 @@ InitializeSuna:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0006h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0006h
 	LDA XWA, 0E1BA62h
 	LD (XBC + 00ah), XWA
 	LD WA, 00cah
@@ -143544,7 +143544,7 @@ InitializeSuna:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0006h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0006h
 	LDA XWA, 0E1C798h
 	LD (XBC + 00ah), XWA
 	LD WA, 03cah
@@ -143554,7 +143554,7 @@ InitializeSuna:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0004h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0004h
 	LDA XWA, 0E1BA7Eh
 	LD (XBC + 00ah), XWA
 	LD WA, 00cbh
@@ -143564,7 +143564,7 @@ InitializeSuna:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0004h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0004h
 	LDA XWA, 0E1C7CEh
 	LD (XBC + 00ah), XWA
 	LD WA, 03cbh
@@ -143574,7 +143574,7 @@ InitializeSuna:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0009h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0009h
 	LDA XWA, 0E1BA92h
 	LD (XBC + 00ah), XWA
 	LD WA, 00cch
@@ -143584,7 +143584,7 @@ InitializeSuna:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0009h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0009h
 	LDA XWA, 0E1C7FAh
 	LD (XBC + 00ah), XWA
 	LD WA, 03cch
@@ -143594,7 +143594,7 @@ InitializeSuna:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0008h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0008h
 	LDA XWA, 0E1BABAh
 	LD (XBC + 00ah), XWA
 	LD WA, 00dch
@@ -143604,7 +143604,7 @@ InitializeSuna:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0008h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0008h
 	LDA XWA, 0E1C85Eh
 	LD (XBC + 00ah), XWA
 	LD WA, 03dch
@@ -143614,7 +143614,7 @@ InitializeSuna:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0006h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0006h
 	LDA XWA, 0E1BADEh
 	LD (XBC + 00ah), XWA
 	LD WA, 00edh
@@ -143624,7 +143624,7 @@ InitializeSuna:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0006h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0006h
 	LDA XWA, 0E1C8B6h
 	LD (XBC + 00ah), XWA
 	LD WA, 03edh
@@ -146102,7 +146102,7 @@ LABEL_F1BB51:
 	CALL LABEL_FF0A72
 	db 0, 0	;TODO: Fix ASL: INC 0, XSP
 	LD XWA, (XSP + 00ch)
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 016h), 00f2h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 016h), 00f2h
 	JR T, LABEL_F1BBBF
 
 LABEL_F1BB9B:
@@ -146121,7 +146121,7 @@ LABEL_F1BBAD:
 	CALL LABEL_FF0A72
 	db 0, 0	;TODO: Fix ASL: INC 0, XSP
 	LD XWA, (XSP + 008h)
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 016h), 00f5h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 016h), 00f5h
 
 LABEL_F1BBBF:
 	LD XWA, (XSP + 0118h)
@@ -148069,7 +148069,7 @@ LABEL_F1D07A:
 	LD WA, (7E18h)
 	db 0, 0, 0, 0	;TODO: Fix ASL: MULW WA, 0064h
 	EXTZ XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVW WA, 0039h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVW WA, 0039h
 	CP WA, 0063h
 	JR ULE, LABEL_F1D09D
 	LD WA, 0063h
@@ -149496,7 +149496,7 @@ InitializeHama:
 	LD (XSP + 000h), XWA
 	LDA XWA, 0FA496Ch
 	LD (XSP + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 008h), 0002h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 008h), 0002h
 	LDA XWA, 0E1F04Ah
 	LD (XSP + 00ah), XWA
 	LDA XWA, XSP
@@ -149508,7 +149508,7 @@ InitializeHama:
 	LD (XSP + 000h), XWA
 	LDA XWA, 0FA496Ch
 	LD (XSP + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 008h), 0002h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 008h), 0002h
 	LDA XWA, 0E1F056h
 	LD (XSP + 00ah), XWA
 	LDA XWA, XSP
@@ -149520,7 +149520,7 @@ InitializeHama:
 	LD (XSP + 000h), XWA
 	LDA XWA, 0FA48A9h
 	LD (XSP + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 008h), 004bh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 008h), 004bh
 	LDA XWA, 0E1F0ECh
 	LD (XSP + 00ah), XWA
 	LDA XWA, XSP
@@ -149532,7 +149532,7 @@ InitializeHama:
 	LD (XSP + 000h), XWA
 	LDA XWA, 0FA48A9h
 	LD (XSP + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 008h), 004bh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 008h), 004bh
 	LDA XWA, 0E1F240h
 	LD (XSP + 00ah), XWA
 	LDA XWA, XSP
@@ -149544,7 +149544,7 @@ InitializeHama:
 	LD (XSP + 000h), XWA
 	LDA XWA, 0FA4A18h
 	LD (XSP + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 008h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 008h), 0001h
 	LDA XWA, 0E1FD2Ch
 	LD (XSP + 00ah), XWA
 	LDA XWA, XSP
@@ -149556,7 +149556,7 @@ InitializeHama:
 	LD (XSP + 000h), XWA
 	LDA XWA, 0FA4A18h
 	LD (XSP + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 008h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 008h), 0001h
 	LDA XWA, 0E1FD34h
 	LD (XSP + 00ah), XWA
 	LDA XWA, XSP
@@ -149568,7 +149568,7 @@ InitializeHama:
 	LD (XSP + 000h), XWA
 	LDA XWA, 0FA5995h
 	LD (XSP + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 008h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 008h), 0000h
 	LDA XWA, 0E1FBD0h
 	LD (XSP + 00ah), XWA
 	LDA XWA, XSP
@@ -149580,7 +149580,7 @@ InitializeHama:
 	LD (XSP + 000h), XWA
 	LDA XWA, 0FA62CBh
 	LD (XSP + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 008h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 008h), 0000h
 	LDA XWA, 0E1FC40h
 	LD (XSP + 00ah), XWA
 	LDA XWA, XSP
@@ -149592,7 +149592,7 @@ InitializeHama:
 	LD (XSP + 000h), XWA
 	LDA XWA, 0FA5995h
 	LD (XSP + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 008h), 001ah
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 008h), 001ah
 	LDA XWA, 0E1FBD4h
 	LD (XSP + 00ah), XWA
 	LDA XWA, XSP
@@ -149604,7 +149604,7 @@ InitializeHama:
 	LD (XSP + 000h), XWA
 	LDA XWA, 0FA62CBh
 	LD (XSP + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 008h), 001ah
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 008h), 001ah
 	LDA XWA, 0E1FC46h
 	LD (XSP + 00ah), XWA
 	LDA XWA, XSP
@@ -151822,7 +151822,7 @@ LABEL_F1FC64:
 LABEL_F1FC80:
 	XOR W, W
 	DEC 1, A
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0003h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0003h
 	LD IY, WA
 	PUSH XDE
 	LD XDE, 0000f250h
@@ -168251,7 +168251,7 @@ InitializeYoko:
 	LD (XBC), XWA
 	LDA XWA, 0FA496Ch
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 002eh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 002eh
 	LDA XWA, 0E20260h
 	LD (XBC + 00ah), XWA
 	LD WA, 0127h
@@ -168261,7 +168261,7 @@ InitializeYoko:
 	LD (XBC), XWA
 	LDA XWA, 0FA496Ch
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 002eh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 002eh
 	LDA XWA, 0E2031Ch
 	LD (XBC + 00ah), XWA
 	LD WA, 0427h
@@ -168271,7 +168271,7 @@ InitializeYoko:
 	LD (XBC), XWA
 	LDA XWA, 0FA48A9h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0001h
 	LDA XWA, 0E2106Ch
 	LD (XBC + 00ah), XWA
 	LD WA, 0107h
@@ -168281,7 +168281,7 @@ InitializeYoko:
 	LD (XBC), XWA
 	LDA XWA, 0FA48A9h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0001h
 	LDA XWA, 0E21074h
 	LD (XBC + 00ah), XWA
 	LD WA, 0407h
@@ -168291,7 +168291,7 @@ InitializeYoko:
 	LD (XBC), XWA
 	LDA XWA, 0FA4A18h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 001fh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 001fh
 	LDA XWA, 0E25042h
 	LD (XBC + 00ah), XWA
 	LD WA, 0147h
@@ -168301,7 +168301,7 @@ InitializeYoko:
 	LD (XBC), XWA
 	LDA XWA, 0FA4A18h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 001fh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 001fh
 	LDA XWA, 0E250C2h
 	LD (XBC + 00ah), XWA
 	LD WA, 0447h
@@ -168311,7 +168311,7 @@ InitializeYoko:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 002bh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 002bh
 	LDA XWA, 0E240ACh
 	LD (XBC + 00ah), XWA
 	LD WA, 006fh
@@ -168321,7 +168321,7 @@ InitializeYoko:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 002bh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 002bh
 	LDA XWA, 0E24578h
 	LD (XBC + 00ah), XWA
 	LD WA, 036fh
@@ -168331,7 +168331,7 @@ InitializeYoko:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 000ch
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 000ch
 	LDA XWA, 0E2415Ch
 	LD (XBC + 00ah), XWA
 	LD WA, 0070h
@@ -168341,7 +168341,7 @@ InitializeYoko:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 000ch
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 000ch
 	LDA XWA, 0E246C8h
 	LD (XBC + 00ah), XWA
 	LD WA, 0370h
@@ -168351,7 +168351,7 @@ InitializeYoko:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 000bh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 000bh
 	LDA XWA, 0E24190h
 	LD (XBC + 00ah), XWA
 	LD WA, 0071h
@@ -168361,7 +168361,7 @@ InitializeYoko:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 000bh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 000bh
 	LDA XWA, 0E2472Eh
 	LD (XBC + 00ah), XWA
 	LD WA, 0371h
@@ -168371,7 +168371,7 @@ InitializeYoko:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0007h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0007h
 	LDA XWA, 0E241C0h
 	LD (XBC + 00ah), XWA
 	LD WA, 0072h
@@ -168381,7 +168381,7 @@ InitializeYoko:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0007h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0007h
 	LDA XWA, 0E24788h
 	LD (XBC + 00ah), XWA
 	LD WA, 0372h
@@ -168391,7 +168391,7 @@ InitializeYoko:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0010h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0010h
 	LDA XWA, 0E241E0h
 	LD (XBC + 00ah), XWA
 	LD WA, 0073h
@@ -168401,7 +168401,7 @@ InitializeYoko:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0010h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0010h
 	LDA XWA, 0E247CAh
 	LD (XBC + 00ah), XWA
 	LD WA, 0373h
@@ -168411,7 +168411,7 @@ InitializeYoko:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 000fh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 000fh
 	LDA XWA, 0E24224h
 	LD (XBC + 00ah), XWA
 	LD WA, 0074h
@@ -168421,7 +168421,7 @@ InitializeYoko:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 000fh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 000fh
 	LDA XWA, 0E24844h
 	LD (XBC + 00ah), XWA
 	LD WA, 0374h
@@ -168431,7 +168431,7 @@ InitializeYoko:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 000dh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 000dh
 	LDA XWA, 0E24264h
 	LD (XBC + 00ah), XWA
 	LD WA, 0075h
@@ -168441,7 +168441,7 @@ InitializeYoko:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 000dh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 000dh
 	LDA XWA, 0E248CCh
 	LD (XBC + 00ah), XWA
 	LD WA, 0375h
@@ -168451,7 +168451,7 @@ InitializeYoko:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0008h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0008h
 	LDA XWA, 0E2429Ch
 	LD (XBC + 00ah), XWA
 	LD WA, 0076h
@@ -168461,7 +168461,7 @@ InitializeYoko:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0008h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0008h
 	LDA XWA, 0E2493Ah
 	LD (XBC + 00ah), XWA
 	LD WA, 0376h
@@ -168471,7 +168471,7 @@ InitializeYoko:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 001eh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 001eh
 	LDA XWA, 0E242C0h
 	LD (XBC + 00ah), XWA
 	LD WA, 0078h
@@ -168481,7 +168481,7 @@ InitializeYoko:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 001eh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 001eh
 	LDA XWA, 0E2497Ch
 	LD (XBC + 00ah), XWA
 	LD WA, 0378h
@@ -168491,7 +168491,7 @@ InitializeYoko:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 000ch
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 000ch
 	LDA XWA, 0E2433Ch
 	LD (XBC + 00ah), XWA
 	LD WA, 007ah
@@ -168501,7 +168501,7 @@ InitializeYoko:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 000ch
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 000ch
 	LDA XWA, 0E24A3Eh
 	LD (XBC + 00ah), XWA
 	LD WA, 037ah
@@ -168511,7 +168511,7 @@ InitializeYoko:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0005h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0005h
 	LDA XWA, 0E24370h
 	LD (XBC + 00ah), XWA
 	LD WA, 0089h
@@ -168521,7 +168521,7 @@ InitializeYoko:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0005h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0005h
 	LDA XWA, 0E24A94h
 	LD (XBC + 00ah), XWA
 	LD WA, 0389h
@@ -168531,7 +168531,7 @@ InitializeYoko:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0001h
 	LDA XWA, 0E24388h
 	LD (XBC + 00ah), XWA
 	LD WA, 008ah
@@ -168541,7 +168541,7 @@ InitializeYoko:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0001h
 	LDA XWA, 0E24ABEh
 	LD (XBC + 00ah), XWA
 	LD WA, 038ah
@@ -168551,7 +168551,7 @@ InitializeYoko:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0016h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0016h
 	LDA XWA, 0E24390h
 	LD (XBC + 00ah), XWA
 	LD WA, 008bh
@@ -168561,7 +168561,7 @@ InitializeYoko:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0016h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0016h
 	LDA XWA, 0E24ACAh
 	LD (XBC + 00ah), XWA
 	LD WA, 038bh
@@ -168571,7 +168571,7 @@ InitializeYoko:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 001ch
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 001ch
 	LDA XWA, 0E243ECh
 	LD (XBC + 00ah), XWA
 	LD WA, 008ch
@@ -168581,7 +168581,7 @@ InitializeYoko:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 001ch
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 001ch
 	LDA XWA, 0E24B80h
 	LD (XBC + 00ah), XWA
 	LD WA, 038ch
@@ -168591,7 +168591,7 @@ InitializeYoko:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0005h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0005h
 	LDA XWA, 0E24460h
 	LD (XBC + 00ah), XWA
 	LD WA, 008eh
@@ -168601,7 +168601,7 @@ InitializeYoko:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0005h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0005h
 	LDA XWA, 0E24C70h
 	LD (XBC + 00ah), XWA
 	LD WA, 038eh
@@ -168611,7 +168611,7 @@ InitializeYoko:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0006h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0006h
 	LDA XWA, 0E24478h
 	LD (XBC + 00ah), XWA
 	LD WA, 008fh
@@ -168621,7 +168621,7 @@ InitializeYoko:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0006h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0006h
 	LDA XWA, 0E24C9Ch
 	LD (XBC + 00ah), XWA
 	LD WA, 038fh
@@ -168631,7 +168631,7 @@ InitializeYoko:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0004h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0004h
 	LDA XWA, 0E24494h
 	LD (XBC + 00ah), XWA
 	LD WA, 0092h
@@ -168641,7 +168641,7 @@ InitializeYoko:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0004h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0004h
 	LDA XWA, 0E24CCEh
 	LD (XBC + 00ah), XWA
 	LD WA, 0392h
@@ -168651,7 +168651,7 @@ InitializeYoko:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0000h
 	LDA XWA, 0E244A8h
 	LD (XBC + 00ah), XWA
 	LD WA, 00a7h
@@ -168661,7 +168661,7 @@ InitializeYoko:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0000h
 	LDA XWA, 0E24CF8h
 	LD (XBC + 00ah), XWA
 	LD WA, 03a7h
@@ -168671,7 +168671,7 @@ InitializeYoko:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0006h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0006h
 	LDA XWA, 0E244ACh
 	LD (XBC + 00ah), XWA
 	LD WA, 00a9h
@@ -168681,7 +168681,7 @@ InitializeYoko:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0006h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0006h
 	LDA XWA, 0E24CFEh
 	LD (XBC + 00ah), XWA
 	LD WA, 03a9h
@@ -168691,7 +168691,7 @@ InitializeYoko:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0004h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0004h
 	LDA XWA, 0E244C8h
 	LD (XBC + 00ah), XWA
 	LD WA, 00e0h
@@ -168701,7 +168701,7 @@ InitializeYoko:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0004h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0004h
 	LDA XWA, 0E24D32h
 	LD (XBC + 00ah), XWA
 	LD WA, 03e0h
@@ -168711,7 +168711,7 @@ InitializeYoko:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 000ch
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 000ch
 	LDA XWA, 0E244DCh
 	LD (XBC + 00ah), XWA
 	LD WA, 00e1h
@@ -168721,7 +168721,7 @@ InitializeYoko:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 000ch
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 000ch
 	LDA XWA, 0E24D58h
 	LD (XBC + 00ah), XWA
 	LD WA, 03e1h
@@ -168731,7 +168731,7 @@ InitializeYoko:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 000ch
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 000ch
 	LDA XWA, 0E24510h
 	LD (XBC + 00ah), XWA
 	LD WA, 00e2h
@@ -168741,7 +168741,7 @@ InitializeYoko:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 000ch
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 000ch
 	LDA XWA, 0E24DE6h
 	LD (XBC + 00ah), XWA
 	LD WA, 03e2h
@@ -168751,7 +168751,7 @@ InitializeYoko:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 000ch
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 000ch
 	LDA XWA, 0E24544h
 	LD (XBC + 00ah), XWA
 	LD WA, 00e3h
@@ -168761,7 +168761,7 @@ InitializeYoko:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 000ch
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 000ch
 	LDA XWA, 0E24E78h
 	LD (XBC + 00ah), XWA
 	LD WA, 03e3h
@@ -169142,7 +169142,7 @@ LABEL_F2AAED:
 	INCW 4, (XWA + 002h)
 	DECW 1, (XWA + 004h)
 	DECW 2, (XWA + 006h)
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 008h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 008h), 0000h
 	LD XWA, (XSP + 00ch)
 	CPW (XWA + 026h), 0000h
 	JRL ULE, LABEL_F2AE80
@@ -169331,7 +169331,7 @@ LABEL_F2AC98:
 	LDA XBC, XSP + 014h
 	LD (XBC), IX
 	LD HL, (XHL + 002h)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW HL, 0012h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW HL, 0012h
 	ADD HL, (XWA + 002h)
 	LD (XBC + 002h), HL
 	LD XIX, (XSP + 00ch)
@@ -169399,7 +169399,7 @@ LABEL_F2AD62:
 	LDA XBC, XSP + 014h
 	LD (XBC), IX
 	LD HL, (XHL + 002h)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW HL, 0012h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW HL, 0012h
 	ADD HL, (XWA + 002h)
 	LD (XBC + 002h), HL
 	LD XIX, (XSP + 00ch)
@@ -169705,10 +169705,10 @@ LABEL_F2B0BC:
 	CP WA, 4
 	JR LE, LABEL_F2B084
 	LDA XWA, 020E3Eh
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 002h), 0002h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 002h), 0002h
 	LDW (XWA), 0000h
 	LDA XWA, 020E42h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 002h), 0002h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 002h), 0002h
 	LDW (XWA), 0000h
 	LDA XBC, 020E48h
 	LD WA, (XBC)
@@ -169845,16 +169845,16 @@ LABEL_F2B256:
 LABEL_F2B266:
 	LDA XBC, 020E3Eh
 	LDW (XBC), 0000h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 002h), 0002h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 002h), 0002h
 	LDA XBC, 020E42h
 	LDW (XBC), 0000h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 002h), 0002h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 002h), 0002h
 	LDA XBC, 020E46h
 	LDW (XBC), 0000h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 002h), 0002h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 002h), 0002h
 	LDA XBC, 020E4Ah
 	LDW (XBC), 0000h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 002h), 0002h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 002h), 0002h
 	LD (XWA), 000h
 	LD (020F4Eh), 000h
 	JRL T, LABEL_F2B3B9
@@ -170212,7 +170212,7 @@ LABEL_F2B5EB:
 	LD WA, (XWA)
 	SUB WA, (XHL)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0002h
 	LD IX, (XHL)
 	ADD IX, WA
 	LDA XHL, XSP + 02eh
@@ -170221,7 +170221,7 @@ LABEL_F2B5EB:
 	LD WA, (XDE)
 	SUB WA, BC
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0002h
 	ADD BC, WA
 	LD (XHL + 002h), BC
 	LD XWA, (XSP + 004h)
@@ -172742,7 +172742,7 @@ InitializeKubo:
 	LD (XBC), XWA
 	LDA XWA, 0FA496Ch
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0049h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0049h
 	LDA XWA, 0E26804h
 	LD (XBC + 00ah), XWA
 	LD WA, 0128h
@@ -172752,7 +172752,7 @@ InitializeKubo:
 	LD (XBC), XWA
 	LDA XWA, 0FA496Ch
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0049h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0049h
 	LDA XWA, 0E2692Ch
 	LD (XBC + 00ah), XWA
 	LD WA, 0428h
@@ -172762,7 +172762,7 @@ InitializeKubo:
 	LD (XBC), XWA
 	LDA XWA, 0FA48A9h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0000h
 	LDA XWA, 03DF10h
 	LD (XBC + 00ah), XWA
 	LD WA, 0108h
@@ -172772,7 +172772,7 @@ InitializeKubo:
 	LD (XBC), XWA
 	LDA XWA, 0FA48A9h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0000h
 	LDA XWA, 03DF14h
 	LD (XBC + 00ah), XWA
 	LD WA, 0408h
@@ -172782,7 +172782,7 @@ InitializeKubo:
 	LD (XBC), XWA
 	LDA XWA, 0FA4A18h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 002ch
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 002ch
 	LDA XWA, 0E3051Ch
 	LD (XBC + 00ah), XWA
 	LD WA, 0148h
@@ -172792,7 +172792,7 @@ InitializeKubo:
 	LD (XBC), XWA
 	LDA XWA, 0FA4A18h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 002ch
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 002ch
 	LDA XWA, 0E305D0h
 	LD (XBC + 00ah), XWA
 	LD WA, 0448h
@@ -172802,7 +172802,7 @@ InitializeKubo:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 000ch
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 000ch
 	LDA XWA, 0E2E624h
 	LD (XBC + 00ah), XWA
 	LD WA, 000ah
@@ -172812,7 +172812,7 @@ InitializeKubo:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 000ch
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 000ch
 	LDA XWA, 0E2F0ACh
 	LD (XBC + 00ah), XWA
 	LD WA, 030ah
@@ -172822,7 +172822,7 @@ InitializeKubo:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 000ch
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 000ch
 	LDA XWA, 0E2E658h
 	LD (XBC + 00ah), XWA
 	LD WA, 000bh
@@ -172832,7 +172832,7 @@ InitializeKubo:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 000ch
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 000ch
 	LDA XWA, 0E2F0FAh
 	LD (XBC + 00ah), XWA
 	LD WA, 030bh
@@ -172842,7 +172842,7 @@ InitializeKubo:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0025h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0025h
 	LDA XWA, 0E2E68Ch
 	LD (XBC + 00ah), XWA
 	LD WA, 000ch
@@ -172852,7 +172852,7 @@ InitializeKubo:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0025h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0025h
 	LDA XWA, 0E2F148h
 	LD (XBC + 00ah), XWA
 	LD WA, 030ch
@@ -172862,7 +172862,7 @@ InitializeKubo:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 000ch
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 000ch
 	LDA XWA, 0E2E724h
 	LD (XBC + 00ah), XWA
 	LD WA, 000eh
@@ -172872,7 +172872,7 @@ InitializeKubo:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 000ch
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 000ch
 	LDA XWA, 0E2F232h
 	LD (XBC + 00ah), XWA
 	LD WA, 030eh
@@ -172882,7 +172882,7 @@ InitializeKubo:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 000ch
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 000ch
 	LDA XWA, 0E2E758h
 	LD (XBC + 00ah), XWA
 	LD WA, 0080h
@@ -172892,7 +172892,7 @@ InitializeKubo:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 000ch
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 000ch
 	LDA XWA, 0E2F280h
 	LD (XBC + 00ah), XWA
 	LD WA, 0380h
@@ -172902,7 +172902,7 @@ InitializeKubo:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 001ch
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 001ch
 	LDA XWA, 0E2E78Ch
 	LD (XBC + 00ah), XWA
 	LD WA, 0081h
@@ -172912,7 +172912,7 @@ InitializeKubo:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 001ch
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 001ch
 	LDA XWA, 0E2F2CEh
 	LD (XBC + 00ah), XWA
 	LD WA, 0381h
@@ -172922,7 +172922,7 @@ InitializeKubo:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0008h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0008h
 	LDA XWA, 0E2E800h
 	LD (XBC + 00ah), XWA
 	LD WA, 0082h
@@ -172932,7 +172932,7 @@ InitializeKubo:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0008h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0008h
 	LDA XWA, 0E2F3AAh
 	LD (XBC + 00ah), XWA
 	LD WA, 0382h
@@ -172942,7 +172942,7 @@ InitializeKubo:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0010h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0010h
 	LDA XWA, 0E2E824h
 	LD (XBC + 00ah), XWA
 	LD WA, 0083h
@@ -172952,7 +172952,7 @@ InitializeKubo:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0010h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0010h
 	LDA XWA, 0E2F3E0h
 	LD (XBC + 00ah), XWA
 	LD WA, 0383h
@@ -172962,7 +172962,7 @@ InitializeKubo:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 000ah
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 000ah
 	LDA XWA, 0E2E868h
 	LD (XBC + 00ah), XWA
 	LD WA, 0084h
@@ -172972,7 +172972,7 @@ InitializeKubo:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 000ah
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 000ah
 	LDA XWA, 0E2F446h
 	LD (XBC + 00ah), XWA
 	LD WA, 0384h
@@ -172982,7 +172982,7 @@ InitializeKubo:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0019h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0019h
 	LDA XWA, 0E2E894h
 	LD (XBC + 00ah), XWA
 	LD WA, 0085h
@@ -172992,7 +172992,7 @@ InitializeKubo:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0019h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0019h
 	LDA XWA, 0E2F488h
 	LD (XBC + 00ah), XWA
 	LD WA, 0385h
@@ -173002,7 +173002,7 @@ InitializeKubo:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 000bh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 000bh
 	LDA XWA, 0E2E8FCh
 	LD (XBC + 00ah), XWA
 	LD WA, 0086h
@@ -173012,7 +173012,7 @@ InitializeKubo:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 000bh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 000bh
 	LDA XWA, 0E2F560h
 	LD (XBC + 00ah), XWA
 	LD WA, 0386h
@@ -173022,7 +173022,7 @@ InitializeKubo:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0018h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0018h
 	LDA XWA, 0E2E92Ch
 	LD (XBC + 00ah), XWA
 	LD WA, 0087h
@@ -173032,7 +173032,7 @@ InitializeKubo:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0018h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0018h
 	LDA XWA, 0E2F5B2h
 	LD (XBC + 00ah), XWA
 	LD WA, 0387h
@@ -173042,7 +173042,7 @@ InitializeKubo:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 000ch
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 000ch
 	LDA XWA, 0E2E990h
 	LD (XBC + 00ah), XWA
 	LD WA, 0088h
@@ -173052,7 +173052,7 @@ InitializeKubo:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 000ch
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 000ch
 	LDA XWA, 0E2F66Ah
 	LD (XBC + 00ah), XWA
 	LD WA, 0388h
@@ -173062,7 +173062,7 @@ InitializeKubo:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0004h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0004h
 	LDA XWA, 0E2E9C4h
 	LD (XBC + 00ah), XWA
 	LD WA, 008dh
@@ -173072,7 +173072,7 @@ InitializeKubo:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0004h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0004h
 	LDA XWA, 0E2F6C2h
 	LD (XBC + 00ah), XWA
 	LD WA, 038dh
@@ -173082,7 +173082,7 @@ InitializeKubo:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0011h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0011h
 	LDA XWA, 0E2E9D8h
 	LD (XBC + 00ah), XWA
 	LD WA, 0090h
@@ -173092,7 +173092,7 @@ InitializeKubo:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0011h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0011h
 	LDA XWA, 0E2F6E0h
 	LD (XBC + 00ah), XWA
 	LD WA, 0390h
@@ -173102,7 +173102,7 @@ InitializeKubo:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0013h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0013h
 	LDA XWA, 0E2EA20h
 	LD (XBC + 00ah), XWA
 	LD WA, 0091h
@@ -173112,7 +173112,7 @@ InitializeKubo:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0013h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0013h
 	LDA XWA, 0E2F758h
 	LD (XBC + 00ah), XWA
 	LD WA, 0391h
@@ -173122,7 +173122,7 @@ InitializeKubo:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 001ah
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 001ah
 	LDA XWA, 0E2EA70h
 	LD (XBC + 00ah), XWA
 	LD WA, 0093h
@@ -173132,7 +173132,7 @@ InitializeKubo:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 001ah
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 001ah
 	LDA XWA, 0E2F7DCh
 	LD (XBC + 00ah), XWA
 	LD WA, 0393h
@@ -173142,7 +173142,7 @@ InitializeKubo:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0004h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0004h
 	LDA XWA, 0E2EADCh
 	LD (XBC + 00ah), XWA
 	LD WA, 0094h
@@ -173152,7 +173152,7 @@ InitializeKubo:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0004h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0004h
 	LDA XWA, 0E2F898h
 	LD (XBC + 00ah), XWA
 	LD WA, 0394h
@@ -173162,7 +173162,7 @@ InitializeKubo:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 001bh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 001bh
 	LDA XWA, 0E2EAF0h
 	LD (XBC + 00ah), XWA
 	LD WA, 0095h
@@ -173172,7 +173172,7 @@ InitializeKubo:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 001bh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 001bh
 	LDA XWA, 0E2F8B6h
 	LD (XBC + 00ah), XWA
 	LD WA, 0395h
@@ -173182,7 +173182,7 @@ InitializeKubo:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0008h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0008h
 	LDA XWA, 0E2EB60h
 	LD (XBC + 00ah), XWA
 	LD WA, 0096h
@@ -173192,7 +173192,7 @@ InitializeKubo:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0008h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0008h
 	LDA XWA, 0E2F966h
 	LD (XBC + 00ah), XWA
 	LD WA, 0396h
@@ -173202,7 +173202,7 @@ InitializeKubo:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0004h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0004h
 	LDA XWA, 0E2EB84h
 	LD (XBC + 00ah), XWA
 	LD WA, 0097h
@@ -173212,7 +173212,7 @@ InitializeKubo:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0004h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0004h
 	LDA XWA, 0E2F99Ch
 	LD (XBC + 00ah), XWA
 	LD WA, 0397h
@@ -173222,7 +173222,7 @@ InitializeKubo:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 001ah
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 001ah
 	LDA XWA, 0E2EB98h
 	LD (XBC + 00ah), XWA
 	LD WA, 0098h
@@ -173232,7 +173232,7 @@ InitializeKubo:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 001ah
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 001ah
 	LDA XWA, 0E2F9BAh
 	LD (XBC + 00ah), XWA
 	LD WA, 0398h
@@ -173242,7 +173242,7 @@ InitializeKubo:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0008h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0008h
 	LDA XWA, 0E2EC04h
 	LD (XBC + 00ah), XWA
 	LD WA, 0099h
@@ -173252,7 +173252,7 @@ InitializeKubo:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0008h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0008h
 	LDA XWA, 0E2FA64h
 	LD (XBC + 00ah), XWA
 	LD WA, 0399h
@@ -173262,7 +173262,7 @@ InitializeKubo:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 000eh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 000eh
 	LDA XWA, 0E2EC28h
 	LD (XBC + 00ah), XWA
 	LD WA, 009ah
@@ -173272,7 +173272,7 @@ InitializeKubo:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 000eh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 000eh
 	LDA XWA, 0E2FA9Ah
 	LD (XBC + 00ah), XWA
 	LD WA, 039ah
@@ -173282,7 +173282,7 @@ InitializeKubo:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0016h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0016h
 	LDA XWA, 0E2EC64h
 	LD (XBC + 00ah), XWA
 	LD WA, 009bh
@@ -173292,7 +173292,7 @@ InitializeKubo:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0016h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0016h
 	LDA XWA, 0E2FB02h
 	LD (XBC + 00ah), XWA
 	LD WA, 039bh
@@ -173302,7 +173302,7 @@ InitializeKubo:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0015h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0015h
 	LDA XWA, 0E2ECC0h
 	LD (XBC + 00ah), XWA
 	LD WA, 009ch
@@ -173312,7 +173312,7 @@ InitializeKubo:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0015h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0015h
 	LDA XWA, 0E2FB9Ah
 	LD (XBC + 00ah), XWA
 	LD WA, 039ch
@@ -173322,7 +173322,7 @@ InitializeKubo:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0010h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0010h
 	LDA XWA, 0E2ED18h
 	LD (XBC + 00ah), XWA
 	LD WA, 009dh
@@ -173332,7 +173332,7 @@ InitializeKubo:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0010h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0010h
 	LDA XWA, 0E2FC28h
 	LD (XBC + 00ah), XWA
 	LD WA, 039dh
@@ -173342,7 +173342,7 @@ InitializeKubo:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0010h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0010h
 	LDA XWA, 0E2ED5Ch
 	LD (XBC + 00ah), XWA
 	LD WA, 009eh
@@ -173352,7 +173352,7 @@ InitializeKubo:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0010h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0010h
 	LDA XWA, 0E2FC9Ah
 	LD (XBC + 00ah), XWA
 	LD WA, 039eh
@@ -173362,7 +173362,7 @@ InitializeKubo:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0019h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0019h
 	LDA XWA, 0E2EDA0h
 	LD (XBC + 00ah), XWA
 	LD WA, 009fh
@@ -173372,7 +173372,7 @@ InitializeKubo:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0019h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0019h
 	LDA XWA, 0E2FD0Ch
 	LD (XBC + 00ah), XWA
 	LD WA, 039fh
@@ -173382,7 +173382,7 @@ InitializeKubo:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0010h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0010h
 	LDA XWA, 0E2EE08h
 	LD (XBC + 00ah), XWA
 	LD WA, 00a0h
@@ -173392,7 +173392,7 @@ InitializeKubo:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0010h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0010h
 	LDA XWA, 0E2FDB4h
 	LD (XBC + 00ah), XWA
 	LD WA, 03a0h
@@ -173402,7 +173402,7 @@ InitializeKubo:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0010h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0010h
 	LDA XWA, 0E2EE4Ch
 	LD (XBC + 00ah), XWA
 	LD WA, 00a1h
@@ -173412,7 +173412,7 @@ InitializeKubo:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0010h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0010h
 	LDA XWA, 0E2FE24h
 	LD (XBC + 00ah), XWA
 	LD WA, 03a1h
@@ -173422,7 +173422,7 @@ InitializeKubo:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0011h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0011h
 	LDA XWA, 0E2EE90h
 	LD (XBC + 00ah), XWA
 	LD WA, 00a2h
@@ -173432,7 +173432,7 @@ InitializeKubo:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0011h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0011h
 	LDA XWA, 0E2FE96h
 	LD (XBC + 00ah), XWA
 	LD WA, 03a2h
@@ -173442,7 +173442,7 @@ InitializeKubo:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 000fh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 000fh
 	LDA XWA, 0E2EED8h
 	LD (XBC + 00ah), XWA
 	LD WA, 00a3h
@@ -173452,7 +173452,7 @@ InitializeKubo:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 000fh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 000fh
 	LDA XWA, 0E2FF0Ch
 	LD (XBC + 00ah), XWA
 	LD WA, 03a3h
@@ -173462,7 +173462,7 @@ InitializeKubo:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0011h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0011h
 	LDA XWA, 0E2EF18h
 	LD (XBC + 00ah), XWA
 	LD WA, 00a4h
@@ -173472,7 +173472,7 @@ InitializeKubo:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0011h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0011h
 	LDA XWA, 0E2FF78h
 	LD (XBC + 00ah), XWA
 	LD WA, 03a4h
@@ -173482,7 +173482,7 @@ InitializeKubo:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0000h
 	LDA XWA, 0E2EF60h
 	LD (XBC + 00ah), XWA
 	LD WA, 00a8h
@@ -173492,7 +173492,7 @@ InitializeKubo:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0000h
 	LDA XWA, 0E2FFF0h
 	LD (XBC + 00ah), XWA
 	LD WA, 03a8h
@@ -173502,7 +173502,7 @@ InitializeKubo:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0000h
 	LDA XWA, 0E2EF64h
 	LD (XBC + 00ah), XWA
 	LD WA, 00aah
@@ -173512,7 +173512,7 @@ InitializeKubo:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0000h
 	LDA XWA, 0E2FFF6h
 	LD (XBC + 00ah), XWA
 	LD WA, 03aah
@@ -173522,7 +173522,7 @@ InitializeKubo:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0002h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0002h
 	LDA XWA, 0E2EF68h
 	LD (XBC + 00ah), XWA
 	LD WA, 00abh
@@ -173532,7 +173532,7 @@ InitializeKubo:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0002h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0002h
 	LDA XWA, 0E2FFFCh
 	LD (XBC + 00ah), XWA
 	LD WA, 03abh
@@ -173542,7 +173542,7 @@ InitializeKubo:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 000fh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 000fh
 	LDA XWA, 0E2EF74h
 	LD (XBC + 00ah), XWA
 	LD WA, 00d6h
@@ -173552,7 +173552,7 @@ InitializeKubo:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 000fh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 000fh
 	LDA XWA, 0E3000Eh
 	LD (XBC + 00ah), XWA
 	LD WA, 03d6h
@@ -173562,7 +173562,7 @@ InitializeKubo:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 003dh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 003dh
 	LDA XWA, 0E2EFB4h
 	LD (XBC + 00ah), XWA
 	LD WA, 00e7h
@@ -173572,7 +173572,7 @@ InitializeKubo:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 003dh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 003dh
 	LDA XWA, 0E3009Eh
 	LD (XBC + 00ah), XWA
 	LD WA, 03e7h
@@ -175266,7 +175266,7 @@ LABEL_F2F0F9:
 	LD WA, (XDE)
 	SUB WA, (XIX)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0002h
 	LD IX, (XIX)
 	ADD IX, WA
 	LDA XDE, XSP + 018h
@@ -175275,7 +175275,7 @@ LABEL_F2F0F9:
 	LD WA, (XHL)
 	SUB WA, BC
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0002h
 	ADD BC, WA
 	LD (XDE + 002h), BC
 	LD XWA, (XIY + 01ah)
@@ -175746,7 +175746,7 @@ LABEL_F2FAF2:
 	CP L, 095h
 	JR NZ, LABEL_F2FB54
 	PUSHW 0009h
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0009h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0009h
 	LDA XBC, 0E30946h
 	EXTS XWA
 	ADD XWA, XBC
@@ -175945,7 +175945,7 @@ LABEL_F2FD14:
 
 LABEL_F2FD1D:
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0006h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0006h
 	EXTS XWA
 	ADD XWA, XHL
 	PUSH XWA
@@ -176096,7 +176096,7 @@ LABEL_F2FE05:
 	LD BC, (XDE)
 	SUB BC, (XWA)
 	EXTS XBC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW BC, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW BC, 0002h
 	LD DE, (XWA)
 	ADD DE, BC
 	LDA XBC, XSP + 008h
@@ -176105,7 +176105,7 @@ LABEL_F2FE05:
 	LD DE, (XIX)
 	SUB DE, HL
 	EXTS XDE
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW DE, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW DE, 0002h
 	ADD HL, DE
 	LD (XBC + 002h), HL
 	LDA XDE, XSP + 014h
@@ -177233,7 +177233,7 @@ LABEL_F30B75:
 	LD WA, (XWA)
 	SUB WA, (XHL)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0002h
 	LD IX, (XHL)
 	ADD IX, WA
 	LDA XHL, XSP + 030h
@@ -177242,7 +177242,7 @@ LABEL_F30B75:
 	LD WA, (XDE)
 	SUB WA, BC
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0002h
 	ADD BC, WA
 	LD (XHL + 002h), BC
 	LD XWA, (XIY + 01ah)
@@ -177695,7 +177695,7 @@ LABEL_F31125:
 	LD WA, (XWA)
 	SUB WA, (XHL)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0002h
 	LD IX, (XHL)
 	ADD IX, WA
 	LDA XHL, XSP + 036h
@@ -177704,7 +177704,7 @@ LABEL_F31125:
 	LD WA, (XDE)
 	SUB WA, BC
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0002h
 	ADD BC, WA
 	LD (XHL + 002h), BC
 	LD XWA, (XIY + 01ah)
@@ -178062,7 +178062,7 @@ LABEL_F315F8:
 	LD BC, (XHL)
 	SUB BC, (XWA)
 	EXTS XBC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW BC, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW BC, 0002h
 	LD HL, (XWA)
 	ADD HL, BC
 	LDA XBC, XSP + 06ah
@@ -178071,7 +178071,7 @@ LABEL_F315F8:
 	LD DE, (XIX)
 	SUB DE, HL
 	EXTS XDE
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW DE, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW DE, 0002h
 	ADD HL, DE
 	LD (XBC + 002h), HL
 	LDA XDE, XSP + 064h
@@ -178088,7 +178088,7 @@ LABEL_F315F8:
 	LD (XWA + 004h), BC
 	SUB BC, (XWA)
 	EXTS XBC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW BC, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW BC, 0002h
 	LD DE, (XWA)
 	ADD DE, BC
 	LDA XBC, XSP + 06ah
@@ -178115,7 +178115,7 @@ LABEL_F315F8:
 	LD BC, (XHL)
 	SUB BC, (XWA)
 	EXTS XBC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW BC, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW BC, 0002h
 	LD HL, (XWA)
 	ADD HL, BC
 	LDA XBC, XSP + 06ah
@@ -178124,7 +178124,7 @@ LABEL_F315F8:
 	LD DE, (XIX)
 	SUB DE, HL
 	EXTS XDE
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW DE, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW DE, 0002h
 	ADD HL, DE
 	LD (XBC + 002h), HL
 	LDA XDE, XSP + 064h
@@ -178141,7 +178141,7 @@ LABEL_F315F8:
 	LD (XWA + 004h), BC
 	SUB BC, (XWA)
 	EXTS XBC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW BC, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW BC, 0002h
 	LD DE, (XWA)
 	ADD DE, BC
 	LDA XBC, XSP + 06ah
@@ -178168,7 +178168,7 @@ LABEL_F315F8:
 	LD BC, (XHL)
 	SUB BC, (XWA)
 	EXTS XBC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW BC, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW BC, 0002h
 	LD HL, (XWA)
 	ADD HL, BC
 	LDA XBC, XSP + 06ah
@@ -178177,7 +178177,7 @@ LABEL_F315F8:
 	LD DE, (XIX)
 	SUB DE, HL
 	EXTS XDE
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW DE, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW DE, 0002h
 	ADD HL, DE
 	LD (XBC + 002h), HL
 	LDA XDE, XSP + 05ah
@@ -178194,7 +178194,7 @@ LABEL_F315F8:
 	LD (XWA + 004h), BC
 	SUB BC, (XWA)
 	EXTS XBC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW BC, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW BC, 0002h
 	LD DE, (XWA)
 	ADD DE, BC
 	LDA XBC, XSP + 06ah
@@ -178213,7 +178213,7 @@ LABEL_F315F8:
 	LD (XWA + 004h), BC
 	SUB BC, (XWA)
 	EXTS XBC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW BC, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW BC, 0002h
 	LD DE, (XWA)
 	ADD DE, BC
 	LDA XBC, XSP + 06ah
@@ -178232,7 +178232,7 @@ LABEL_F315F8:
 	LD (XWA + 004h), BC
 	SUB BC, (XWA)
 	EXTS XBC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW BC, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW BC, 0002h
 	LD DE, (XWA)
 	ADD DE, BC
 	LDA XBC, XSP + 06ah
@@ -178272,11 +178272,11 @@ LABEL_F315F8:
 	CALL DrawDesignBox
 	LDA XWA, XSP + 072h
 	LDW (XWA), 0004h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 002h), 00c8h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 002h), 00c8h
 	LDA XBC, XSP + 06eh
 	LD DE, (XWA)
 	LD (XBC), DE
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 002h), 00d6h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 002h), 00d6h
 	LD XDE, (XSP + 004h)
 	LD DE, (XDE + 016h)
 	CALL DrawLine
@@ -178356,7 +178356,7 @@ LABEL_F3195D:
 	LD DE, (XIZ)
 	SUB DE, (XWA)
 	EXTS XDE
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW DE, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW DE, 0002h
 	LD HL, (XWA)
 	ADD HL, DE
 	LD (XBC), HL
@@ -178364,7 +178364,7 @@ LABEL_F3195D:
 	LD DE, (XIY)
 	SUB DE, HL
 	EXTS XDE
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW DE, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW DE, 0002h
 	ADD HL, DE
 	LD XDE, (XSP + 010h)
 	LD (XDE), HL
@@ -178379,12 +178379,12 @@ LABEL_F3195D:
 	LDA XWA, XSP + 076h
 	LDA XBC, XWA + 002h
 	LDW (XBC), 0048h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 006h), 0057h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 006h), 0057h
 	LD DE, (XBC)
 	LD BC, 0057h
 	SUB BC, DE
 	EXTS XBC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW BC, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW BC, 0002h
 	ADD DE, BC
 	LDA XBC, XSP + 06ah
 	LD (XBC + 002h), DE
@@ -178398,12 +178398,12 @@ LABEL_F3195D:
 	LDA XWA, XSP + 076h
 	LDA XBC, XWA + 002h
 	LDW (XBC), 005ch
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 006h), 006bh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 006h), 006bh
 	LD DE, (XBC)
 	LD BC, 006bh
 	SUB BC, DE
 	EXTS XBC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW BC, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW BC, 0002h
 	ADD DE, BC
 	LDA XBC, XSP + 06ah
 	LD (XBC + 002h), DE
@@ -178417,12 +178417,12 @@ LABEL_F3195D:
 	LDA XWA, XSP + 076h
 	LDA XBC, XWA + 002h
 	LDW (XBC), 006ah
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 006h), 0079h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 006h), 0079h
 	LD DE, (XBC)
 	LD BC, 0079h
 	SUB BC, DE
 	EXTS XBC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW BC, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW BC, 0002h
 	ADD DE, BC
 	LDA XBC, XSP + 06ah
 	LD (XBC + 002h), DE
@@ -178436,12 +178436,12 @@ LABEL_F3195D:
 	LDA XWA, XSP + 076h
 	LDA XBC, XWA + 002h
 	LDW (XBC), 007eh
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 006h), 008dh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 006h), 008dh
 	LD DE, (XBC)
 	LD BC, 008dh
 	SUB BC, DE
 	EXTS XBC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW BC, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW BC, 0002h
 	ADD DE, BC
 	LDA XBC, XSP + 06ah
 	LD (XBC + 002h), DE
@@ -178455,12 +178455,12 @@ LABEL_F3195D:
 	LDA XWA, XSP + 076h
 	LDA XBC, XWA + 002h
 	LDW (XBC), 008ch
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 006h), 009bh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 006h), 009bh
 	LD DE, (XBC)
 	LD BC, 009bh
 	SUB BC, DE
 	EXTS XBC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW BC, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW BC, 0002h
 	ADD DE, BC
 	LDA XBC, XSP + 06ah
 	LD (XBC + 002h), DE
@@ -178486,7 +178486,7 @@ LABEL_F3195D:
 	LD BC, (XHL)
 	SUB BC, (XWA)
 	EXTS XBC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW BC, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW BC, 0002h
 	LD HL, (XWA)
 	ADD HL, BC
 	LDA XBC, XSP + 06ah
@@ -178495,7 +178495,7 @@ LABEL_F3195D:
 	LD DE, (XIX)
 	SUB DE, HL
 	EXTS XDE
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW DE, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW DE, 0002h
 	ADD HL, DE
 	LD (XBC + 002h), HL
 	LDA XDE, XSP + 04eh
@@ -178508,12 +178508,12 @@ LABEL_F3195D:
 	LDA XWA, XSP + 076h
 	LDA XBC, XWA + 002h
 	LDW (XBC), 0048h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 006h), 0057h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 006h), 0057h
 	LD DE, (XBC)
 	LD BC, 0057h
 	SUB BC, DE
 	EXTS XBC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW BC, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW BC, 0002h
 	ADD DE, BC
 	LDA XBC, XSP + 06ah
 	LD (XBC + 002h), DE
@@ -178527,12 +178527,12 @@ LABEL_F3195D:
 	LDA XWA, XSP + 076h
 	LDA XBC, XWA + 002h
 	LDW (XBC), 005ch
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 006h), 006bh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 006h), 006bh
 	LD DE, (XBC)
 	LD BC, 006bh
 	SUB BC, DE
 	EXTS XBC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW BC, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW BC, 0002h
 	ADD DE, BC
 	LDA XBC, XSP + 06ah
 	LD (XBC + 002h), DE
@@ -178546,12 +178546,12 @@ LABEL_F3195D:
 	LDA XWA, XSP + 076h
 	LDA XBC, XWA + 002h
 	LDW (XBC), 006ah
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 006h), 0079h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 006h), 0079h
 	LD DE, (XBC)
 	LD BC, 0079h
 	SUB BC, DE
 	EXTS XBC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW BC, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW BC, 0002h
 	ADD DE, BC
 	LDA XBC, XSP + 06ah
 	LD (XBC + 002h), DE
@@ -178565,12 +178565,12 @@ LABEL_F3195D:
 	LDA XWA, XSP + 076h
 	LDA XBC, XWA + 002h
 	LDW (XBC), 007eh
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 006h), 008dh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 006h), 008dh
 	LD DE, (XBC)
 	LD BC, 008dh
 	SUB BC, DE
 	EXTS XBC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW BC, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW BC, 0002h
 	ADD DE, BC
 	LDA XBC, XSP + 06ah
 	LD (XBC + 002h), DE
@@ -178584,12 +178584,12 @@ LABEL_F3195D:
 	LDA XWA, XSP + 076h
 	LDA XBC, XWA + 002h
 	LDW (XBC), 008ch
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 006h), 009bh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 006h), 009bh
 	LD DE, (XBC)
 	LD BC, 009bh
 	SUB BC, DE
 	EXTS XBC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW BC, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW BC, 0002h
 	ADD DE, BC
 	LDA XBC, XSP + 06ah
 	LD (XBC + 002h), DE
@@ -178613,7 +178613,7 @@ LABEL_F31C2C:
 	LD DE, (XIZ)
 	SUB DE, (XWA)
 	EXTS XDE
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW DE, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW DE, 0002h
 	LD HL, (XWA)
 	ADD HL, DE
 	LD (XBC), HL
@@ -178621,7 +178621,7 @@ LABEL_F31C2C:
 	LD DE, (XIY)
 	SUB DE, HL
 	EXTS XDE
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW DE, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW DE, 0002h
 	ADD HL, DE
 	LD XDE, (XSP + 010h)
 	LD (XDE), HL
@@ -178636,12 +178636,12 @@ LABEL_F31C2C:
 	LDA XWA, XSP + 076h
 	LDA XBC, XWA + 002h
 	LDW (XBC), 004eh
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 006h), 005dh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 006h), 005dh
 	LD DE, (XBC)
 	LD BC, 005dh
 	SUB BC, DE
 	EXTS XBC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW BC, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW BC, 0002h
 	ADD DE, BC
 	LDA XBC, XSP + 06ah
 	LD (XBC + 002h), DE
@@ -178655,12 +178655,12 @@ LABEL_F31C2C:
 	LDA XWA, XSP + 076h
 	LDA XBC, XWA + 002h
 	LDW (XBC), 005fh
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 006h), 006eh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 006h), 006eh
 	LD DE, (XBC)
 	LD BC, 006eh
 	SUB BC, DE
 	EXTS XBC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW BC, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW BC, 0002h
 	ADD DE, BC
 	LDA XBC, XSP + 06ah
 	LD (XBC + 002h), DE
@@ -178674,12 +178674,12 @@ LABEL_F31C2C:
 	LDA XWA, XSP + 076h
 	LDA XBC, XWA + 002h
 	LDW (XBC), 0073h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 006h), 0082h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 006h), 0082h
 	LD DE, (XBC)
 	LD BC, 0082h
 	SUB BC, DE
 	EXTS XBC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW BC, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW BC, 0002h
 	ADD DE, BC
 	LDA XBC, XSP + 06ah
 	LD (XBC + 002h), DE
@@ -178693,12 +178693,12 @@ LABEL_F31C2C:
 	LDA XWA, XSP + 076h
 	LDA XBC, XWA + 002h
 	LDW (XBC), 0083h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 006h), 0092h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 006h), 0092h
 	LD DE, (XBC)
 	LD BC, 0092h
 	SUB BC, DE
 	EXTS XBC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW BC, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW BC, 0002h
 	ADD DE, BC
 	LDA XBC, XSP + 06ah
 	LD (XBC + 002h), DE
@@ -178724,7 +178724,7 @@ LABEL_F31C2C:
 	LD BC, (XHL)
 	SUB BC, (XWA)
 	EXTS XBC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW BC, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW BC, 0002h
 	LD HL, (XWA)
 	ADD HL, BC
 	LDA XBC, XSP + 06ah
@@ -178733,7 +178733,7 @@ LABEL_F31C2C:
 	LD DE, (XIX)
 	SUB DE, HL
 	EXTS XDE
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW DE, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW DE, 0002h
 	ADD HL, DE
 	LD (XBC + 002h), HL
 	LDA XDE, XSP + 014h
@@ -178746,12 +178746,12 @@ LABEL_F31C2C:
 	LDA XWA, XSP + 076h
 	LDA XBC, XWA + 002h
 	LDW (XBC), 004eh
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 006h), 005dh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 006h), 005dh
 	LD DE, (XBC)
 	LD BC, 005dh
 	SUB BC, DE
 	EXTS XBC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW BC, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW BC, 0002h
 	ADD DE, BC
 	LDA XBC, XSP + 06ah
 	LD (XBC + 002h), DE
@@ -178765,12 +178765,12 @@ LABEL_F31C2C:
 	LDA XWA, XSP + 076h
 	LDA XBC, XWA + 002h
 	LDW (XBC), 005fh
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 006h), 006eh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 006h), 006eh
 	LD DE, (XBC)
 	LD BC, 006eh
 	SUB BC, DE
 	EXTS XBC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW BC, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW BC, 0002h
 	ADD DE, BC
 	LDA XBC, XSP + 06ah
 	LD (XBC + 002h), DE
@@ -178784,12 +178784,12 @@ LABEL_F31C2C:
 	LDA XWA, XSP + 076h
 	LDA XBC, XWA + 002h
 	LDW (XBC), 0073h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 006h), 0082h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 006h), 0082h
 	LD DE, (XBC)
 	LD BC, 0082h
 	SUB BC, DE
 	EXTS XBC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW BC, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW BC, 0002h
 	ADD DE, BC
 	LDA XBC, XSP + 06ah
 	LD (XBC + 002h), DE
@@ -178803,12 +178803,12 @@ LABEL_F31C2C:
 	LDA XWA, XSP + 076h
 	LDA XBC, XWA + 002h
 	LDW (XBC), 0083h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 006h), 0092h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 006h), 0092h
 	LD DE, (XBC)
 	LD BC, 0092h
 	SUB BC, DE
 	EXTS XBC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW BC, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW BC, 0002h
 	ADD DE, BC
 	LDA XBC, XSP + 06ah
 	LD (XBC + 002h), DE
@@ -178902,7 +178902,7 @@ LABEL_F31F13:
 	LD WA, (XWA)
 	SUB WA, (XHL)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0002h
 	LD IX, (XHL)
 	ADD IX, WA
 	LDA XHL, XSP + 032h
@@ -178911,7 +178911,7 @@ LABEL_F31F13:
 	LD WA, (XDE)
 	SUB WA, BC
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0002h
 	ADD BC, WA
 	LD (XHL + 002h), BC
 	LD XWA, (XSP + 004h)
@@ -178961,7 +178961,7 @@ LABEL_F31FB4:
 	LD WA, (XWA)
 	SUB WA, (XHL)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0002h
 	LD IX, (XHL)
 	ADD IX, WA
 	LDA XHL, XSP + 032h
@@ -178970,7 +178970,7 @@ LABEL_F31FB4:
 	LD WA, (XDE)
 	SUB WA, BC
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0002h
 	ADD BC, WA
 	LD (XHL + 002h), BC
 	LD XWA, (XSP + 004h)
@@ -179020,7 +179020,7 @@ LABEL_F3205D:
 	LD WA, (XWA)
 	SUB WA, (XHL)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0002h
 	LD IX, (XHL)
 	ADD IX, WA
 	LDA XHL, XSP + 032h
@@ -179029,7 +179029,7 @@ LABEL_F3205D:
 	LD WA, (XDE)
 	SUB WA, BC
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0002h
 	ADD BC, WA
 	LD (XHL + 002h), BC
 	LD XWA, (XSP + 004h)
@@ -179079,7 +179079,7 @@ LABEL_F32106:
 	LD WA, (XWA)
 	SUB WA, (XHL)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0002h
 	LD IX, (XHL)
 	ADD IX, WA
 	LDA XHL, XSP + 032h
@@ -179088,7 +179088,7 @@ LABEL_F32106:
 	LD WA, (XDE)
 	SUB WA, BC
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0002h
 	ADD BC, WA
 	LD (XHL + 002h), BC
 	LD XWA, (XSP + 004h)
@@ -179285,7 +179285,7 @@ LABEL_F32380:
 	LD WA, (XWA)
 	SUB WA, (XHL)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0002h
 	LD IX, (XHL)
 	ADD IX, WA
 	LDA XHL, XSP + 036h
@@ -179294,7 +179294,7 @@ LABEL_F32380:
 	LD WA, (XDE)
 	SUB WA, BC
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0002h
 	ADD BC, WA
 	LD (XHL + 002h), BC
 	LD XWA, (XSP + 004h)
@@ -180366,7 +180366,7 @@ LABEL_F331DF:
 	LD WA, (XDE)
 	SUB WA, (XIX)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0002h
 	LD IX, (XIX)
 	ADD IX, WA
 	LDA XDE, XSP + 032h
@@ -180375,7 +180375,7 @@ LABEL_F331DF:
 	LD WA, (XHL)
 	SUB WA, BC
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0002h
 	ADD BC, WA
 	LD (XDE + 002h), BC
 	LDA XBC, XSP + 01eh
@@ -180436,7 +180436,7 @@ LABEL_F3329E:
 	LD WA, (XDE)
 	SUB WA, (XIX)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0002h
 	LD IX, (XIX)
 	ADD IX, WA
 	LDA XDE, XSP + 032h
@@ -180445,7 +180445,7 @@ LABEL_F3329E:
 	LD WA, (XHL)
 	SUB WA, BC
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0002h
 	ADD BC, WA
 	LD (XDE + 002h), BC
 	LDA XBC, XSP + 01eh
@@ -180744,7 +180744,7 @@ LABEL_F33627:
 	LD WA, (XDE)
 	SUB WA, (XIX)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0002h
 	LD IX, (XIX)
 	ADD IX, WA
 	LDA XDE, XSP + 013ah
@@ -180753,7 +180753,7 @@ LABEL_F33627:
 	LD WA, (XHL)
 	SUB WA, BC
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0002h
 	ADD BC, WA
 	LD (XDE + 002h), BC
 	LDA XBC, XSP + 026h
@@ -180793,7 +180793,7 @@ LABEL_F336A1:
 	LD (XBC + 004h), WA
 	SUB WA, (XBC)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0002h
 	LD BC, (XBC)
 	ADD BC, WA
 	LD (XSP + 013ah), BC
@@ -180835,7 +180835,7 @@ LABEL_F33752:
 	LD BC, (XBC)
 	SUB WA, BC
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0002h
 	ADD BC, WA
 	LD (XSP + 013ch), BC
 	PUSHW 0011h
@@ -180867,7 +180867,7 @@ LABEL_F33752:
 	LD (XBC + 004h), WA
 	SUB WA, (XBC)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0002h
 	LD BC, (XBC)
 	ADD BC, WA
 	LD (XSP + 013ah), BC
@@ -180896,7 +180896,7 @@ LABEL_F337F8:
 	LD BC, (XBC)
 	SUB WA, BC
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0002h
 	ADD BC, WA
 	LD (XSP + 013ch), BC
 	PUSHW 0002h
@@ -180936,7 +180936,7 @@ LABEL_F337F8:
 	LD WA, (XDE)
 	SUB WA, (XIX)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0002h
 	LD IX, (XIX)
 	ADD IX, WA
 	LDA XDE, XSP + 013ah
@@ -180945,7 +180945,7 @@ LABEL_F337F8:
 	LD WA, (XHL)
 	SUB WA, BC
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0002h
 	ADD BC, WA
 	LD (XDE + 002h), BC
 	LD XWA, (XSP + 004h)
@@ -180983,12 +180983,12 @@ LABEL_F338EC:
 	LDA XBC, XSP + 013eh
 	LDA XWA, XBC + 002h
 	LDW (XWA), 00b6h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 006h), 00c4h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 006h), 00c4h
 	LD BC, (XWA)
 	LD WA, 00c4h
 	SUB WA, BC
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0002h
 	ADD BC, WA
 	LD (XSP + 013ch), BC
 	LD QIZH, 7
@@ -181079,7 +181079,7 @@ LABEL_F339BF:
 	LD WA, (XDE)
 	SUB WA, (XIX)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0002h
 	LD IX, (XIX)
 	ADD IX, WA
 	LDA XDE, XSP + 013ah
@@ -181088,7 +181088,7 @@ LABEL_F339BF:
 	LD WA, (XHL)
 	SUB WA, BC
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0002h
 	ADD BC, WA
 	LD (XDE + 002h), BC
 	LDA XBC, XSP + 026h
@@ -181613,7 +181613,7 @@ LABEL_F34061:
 	LD WA, (XDE)
 	SUB WA, (XIX)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0002h
 	LD IX, (XIX)
 	ADD IX, WA
 	LDA XDE, XSP + 04ch
@@ -181622,7 +181622,7 @@ LABEL_F34061:
 	LD WA, (XHL)
 	SUB WA, BC
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0002h
 	ADD BC, WA
 	LD (XDE + 002h), BC
 	LDA XBC, XSP + 01ah
@@ -181754,9 +181754,9 @@ LABEL_F3425D:
 	JRL NZ, LABEL_F345CF
 	LDA XWA, XSP + 050h
 	LDW (XWA), 0020h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 002h), 0024h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 004h), 00f8h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 006h), 0078h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 002h), 0024h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 004h), 00f8h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 006h), 0078h
 	LD BC, 0
 	LD DE, 00f5h
 	CALL DrawDesignBox
@@ -181819,7 +181819,7 @@ LABEL_F3425D:
 	LD XWA, (XSP + 058h)
 	CP XWA, 00000001h
 	JR NZ, LABEL_F34368
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 018h), 00fbh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 018h), 00fbh
 	JR T, LABEL_F34371
 
 LABEL_F34368:
@@ -181859,26 +181859,26 @@ LABEL_F343A6:
 	LD DE, (XSP + 008h)
 	ADD DE, IZ
 	LD (XBC), DE
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 002h), 004dh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 002h), 004dh
 	LD DE, (XSP + 018h)
 	CALL DrawLine
 	LDA XWA, XSP + 048h
 	LD BC, (XSP + 008h)
 	ADD BC, IZ
 	LD (XWA), BC
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 002h), 004dh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 002h), 004dh
 	LDA XBC, XSP + 044h
 	LD DE, (XSP + 00ch)
 	SUB DE, IZ
 	LD (XBC), DE
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 002h), 004dh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 002h), 004dh
 	LD DE, (XSP + 018h)
 	CALL DrawLine
 	LDA XWA, XSP + 048h
 	LD BC, (XSP + 00ch)
 	SUB BC, IZ
 	LD (XWA), BC
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 002h), 004dh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 002h), 004dh
 	LDA XBC, XSP + 044h
 	LD DE, (XSP + 00ch)
 	LD (XBC), DE
@@ -181907,26 +181907,26 @@ LABEL_F34429:
 	LD DE, (XSP + 00ch)
 	ADD DE, IZ
 	LD (XBC), DE
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 002h), 004dh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 002h), 004dh
 	LD DE, (XSP + 018h)
 	CALL DrawLine
 	LDA XWA, XSP + 048h
 	LD BC, (XSP + 00ch)
 	ADD BC, IZ
 	LD (XWA), BC
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 002h), 004dh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 002h), 004dh
 	LDA XBC, XSP + 044h
 	LD DE, (XSP + 010h)
 	SUB DE, IZ
 	LD (XBC), DE
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 002h), 004dh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 002h), 004dh
 	LD DE, (XSP + 018h)
 	CALL DrawLine
 	LDA XWA, XSP + 048h
 	LD BC, (XSP + 010h)
 	SUB BC, IZ
 	LD (XWA), BC
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 002h), 004dh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 002h), 004dh
 	LDA XBC, XSP + 044h
 	LD DE, (XSP + 010h)
 	LD (XBC), DE
@@ -181955,26 +181955,26 @@ LABEL_F344AC:
 	LD DE, (XSP + 010h)
 	ADD DE, IZ
 	LD (XBC), DE
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 002h), 004dh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 002h), 004dh
 	LD DE, (XSP + 018h)
 	CALL DrawLine
 	LDA XWA, XSP + 048h
 	LD BC, (XSP + 010h)
 	ADD BC, IZ
 	LD (XWA), BC
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 002h), 004dh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 002h), 004dh
 	LDA XBC, XSP + 044h
 	LD DE, (XSP + 014h)
 	SUB DE, IZ
 	LD (XBC), DE
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 002h), 004dh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 002h), 004dh
 	LD DE, (XSP + 018h)
 	CALL DrawLine
 	LDA XWA, XSP + 048h
 	LD BC, (XSP + 014h)
 	SUB BC, IZ
 	LD (XWA), BC
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 002h), 004dh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 002h), 004dh
 	LDA XBC, XSP + 044h
 	LD DE, (XSP + 014h)
 	LD (XBC), DE
@@ -181995,7 +181995,7 @@ LABEL_F344AC:
 	LD XWA, (XSP + 058h)
 	CP XWA, 00000001h
 	JR NZ, LABEL_F3454A
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 018h), 00ffh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 018h), 00ffh
 	JR T, LABEL_F34553
 
 LABEL_F3454A:
@@ -182011,7 +182011,7 @@ LABEL_F34553:
 	LD (XWA + 002h), BC
 	LDA XBC, XSP + 044h
 	LD (XBC), DE
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 002h), 0078h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 002h), 0078h
 	LD DE, (XSP + 018h)
 	CALL DrawLine
 	LDA XWA, XSP + 048h
@@ -182021,7 +182021,7 @@ LABEL_F34553:
 	LD (XWA + 002h), BC
 	LDA XBC, XSP + 044h
 	LD (XBC), DE
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 002h), 0078h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 002h), 0078h
 	LD DE, (XSP + 018h)
 	CALL DrawLine
 	LDA XWA, XSP + 048h
@@ -182031,7 +182031,7 @@ LABEL_F34553:
 	LD (XWA + 002h), BC
 	LDA XBC, XSP + 044h
 	LD (XBC), DE
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 002h), 0078h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 002h), 0078h
 	LD DE, (XSP + 018h)
 	CALL DrawLine
 	LDA XWA, XSP + 048h
@@ -182041,7 +182041,7 @@ LABEL_F34553:
 	LD (XWA + 002h), BC
 	LDA XBC, XSP + 044h
 	LD (XBC), DE
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 002h), 0078h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 002h), 0078h
 	LD DE, (XSP + 018h)
 	CALL DrawLine
 
@@ -182626,7 +182626,7 @@ LABEL_F34F16:
 	PUSHW 0006h
 	LD A, (2878h)
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0006h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0006h
 	LD XBC, 00e349d4h
 	EXTS XWA
 	ADD XWA, XBC
@@ -183235,7 +183235,7 @@ LABEL_F355F3:
 	db 0, 0	;TODO: Fix ASL: INC 0, XSP
 	JRL T, LABEL_F35725
 	LD (XSP), XDE
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 012h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 012h), 0000h
 
 LABEL_F3561F:
 	PUSHW 0011h
@@ -183247,7 +183247,7 @@ LABEL_F3561F:
 	ADD XWA, XBC
 	LD A, (XWA)
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0011h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0011h
 	LDA XBC, 0E324C4h
 	EXTS XWA
 	ADD XWA, XBC
@@ -183263,7 +183263,7 @@ LABEL_F3561F:
 	INCW 1, (XSP + 012h)
 	CPW (XSP + 012h), 0008h
 	JR C, LABEL_F3561F
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 012h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 012h), 0000h
 
 LABEL_F3566C:
 	PUSHW 0002h
@@ -185520,12 +185520,12 @@ LABEL_F36C60:
 LABEL_F36C6B:
 	LD WA, (279Ah)
 	EXTZ XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVW WA, 0060h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVW WA, 0060h
 	LD WA, QWA
 	LD (2760h), A
 	LD WA, (279Ah)
 	EXTZ XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVW WA, 0060h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVW WA, 0060h
 	LD (275Eh), WA
 	LD WA, (276Ah)
 	ADD (275Eh), WA
@@ -185631,7 +185631,7 @@ LABEL_F36DB1:
 	CALL LABEL_F40052
 	LD WA, (278Ch)
 	EXTZ XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVW WA, 0060h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVW WA, 0060h
 	LD WA, QWA
 	AND WA, 007fh
 	EXTZ WA
@@ -185639,7 +185639,7 @@ LABEL_F36DB1:
 	CALL LABEL_F40052
 	LD WA, (278Ch)
 	EXTZ XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVW WA, 0060h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVW WA, 0060h
 	AND WA, 007fh
 	EXTZ WA
 	CALL LABEL_F421B5
@@ -186639,7 +186639,7 @@ LABEL_F377A1:
 	CALR LABEL_F37884
 	LD BC, (279Ah)
 	EXTZ XBC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVW BC, 0060h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVW BC, 0060h
 	INC 1, BC
 	LD WA, (2772h)
 	CP BC, WA
@@ -187244,20 +187244,20 @@ LABEL_F37CE8:
 	LD (2967h), 090h
 	LD WA, (279Ah)
 	EXTZ XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVW WA, 0060h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVW WA, 0060h
 	LD WA, QWA
 	LD (2968h), A
 	LD (2969h), (2960h)
 	LD (296Ah), (2961h)
 	LD WA, (278Eh)
 	EXTZ XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVW WA, 0060h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVW WA, 0060h
 	LD WA, QWA
 	RES 007h, A
 	LD (296Bh), A
 	LD WA, (278Eh)
 	EXTZ XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVW WA, 0060h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVW WA, 0060h
 	RES 007h, A
 	LD (296Ch), A
 	CALR LABEL_F369E6
@@ -187292,7 +187292,7 @@ LABEL_F37D71:
 	LD (28AFh), IZ
 	LD WA, QIZ
 	LD (2666h), WA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 004h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 004h), 0001h
 	LD XWA, (XSP + 006h)
 	LDW (XWA), 0000h
 	CPW (287Fh), 0001h
@@ -187475,7 +187475,7 @@ LABEL_F37F46:
 	LD (27B2h), WA
 	LDW (287Fh), (2744h)
 	LD IZ, 0
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 002h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 002h), 0000h
 
 LABEL_F37F61:
 	CALR LABEL_F36BE0
@@ -187989,7 +187989,7 @@ LABEL_F38441:
 LABEL_F38445:
 	LD WA, (279Ah)
 	EXTZ XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVW WA, 0060h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVW WA, 0060h
 	LD (25D8h), 000h
 	LD (2772h), WA
 	CP WA, 0
@@ -188022,7 +188022,7 @@ LABEL_F3848D:
 	LD (2782h), WA
 	LD WA, (279Ah)
 	EXTZ XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVW WA, 0060h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVW WA, 0060h
 	LD WA, QWA
 	LD (2784h), A
 	JR T, LABEL_F384AA
@@ -188030,7 +188030,7 @@ LABEL_F3848D:
 LABEL_F384AA:
 	LD BC, (279Ah)
 	EXTZ XBC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVW BC, 0060h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVW BC, 0060h
 	LD (25D8h), 000h
 	LD (2772h), BC
 	CP BC, 0
@@ -189867,7 +189867,7 @@ LABEL_F397E1:
 	LDA XSP, XSP - 12
 	LD (XSP + 00ah), A
 	LDW (XSP + 004h), 0ffffh
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 006h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 006h), 0000h
 	LD C, (XSP + 00ah)
 	EXTZ BC
 	LD WA, 0
@@ -190345,7 +190345,7 @@ LABEL_F39C3E:
 	EXTS XBC
 	ADD XBC, XHL
 	LD (XBC), IX
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 002h), 0005h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 002h), 0005h
 	LD C, E
 	EXTZ BC
 	SLA 003h, BC
@@ -191029,7 +191029,7 @@ LABEL_F3A33B:
 LABEL_F3A342:
 	LDA XSP, XSP - 10
 	PUSH XIZ
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 004h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 004h), 0000h
 	CALR LABEL_F3A867
 	CP L, 0
 	JR NZ, LABEL_F3A3CC
@@ -192001,7 +192001,7 @@ LABEL_F3ABE6:
 LABEL_F3AC06:
 	EXTZ WA
 	LD BC, WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW BC, 0009h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW BC, 0009h
 	LDA XDE, 1DB6h
 	LDA XDE, XDE + BC
 	LD BC, (XDE + 002h)
@@ -192155,7 +192155,7 @@ LABEL_F3AD3E:
 LABEL_F3AD4E:
 	EXTZ WA
 	LD BC, WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW BC, 0009h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW BC, 0009h
 	LDA XDE, 1DB6h
 	LDA XDE, XDE + BC
 	LD BC, (XDE + 002h)
@@ -192273,7 +192273,7 @@ LABEL_F3AE2E:
 	CALL LT, LABEL_F3DA7C
 	LD A, (XSP)
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0009h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0009h
 	LDA XBC, 1DBAh
 	EXTS XWA
 	ADD XWA, XBC
@@ -193492,7 +193492,7 @@ LABEL_F3B8E7:
 	LD A, QIZL
 	EXTZ WA
 	LD BC, WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW BC, 000ch
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW BC, 000ch
 	LDA XDE, 1FFAh
 	EXTS XBC
 	ADD XBC, XDE
@@ -193517,7 +193517,7 @@ LABEL_F3B8E7:
 LABEL_F3B92B:
 	LD A, QIZL
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ch
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ch
 	LD BC, WA
 	LDA XWA, 2003h
 	LD A, (XWA + BC)
@@ -193580,7 +193580,7 @@ LABEL_F3B9BA:
 	EXTZ HL
 	LD A, QL
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ch
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ch
 	LD DE, WA
 	LDA XWA, 1FFAh
 	LDA XWA, XWA + DE
@@ -193600,7 +193600,7 @@ LABEL_F3B9BA:
 	CALL LABEL_F41AF8
 	LD A, QIZL
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ch
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ch
 	LDA XBC, 1FFAh
 	LDA XDE, XBC + WA
 	LDA XWA, XSP + 006h
@@ -193673,7 +193673,7 @@ LABEL_F3BA9E:
 LABEL_F3BAAF:
 	LD A, QIZL
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ch
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ch
 	LD BC, WA
 	LDA XWA, 1FFAh
 	EXTS XBC
@@ -193751,7 +193751,7 @@ LABEL_F3BB47:
 	EXTZ IX
 	LD A, QB
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ch
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ch
 	LDA XHL, 1FFAh
 	EXTS XWA
 	ADD XWA, XHL
@@ -193766,7 +193766,7 @@ LABEL_F3BB47:
 	INC 1, QC
 	CP QC, 4
 	JR C, LABEL_F3BB47
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW BC, 000ch
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW BC, 000ch
 	LDA XIX, XHL + BC
 	LD IY, (XIX + 004h)
 	LD L, (XDE + 001h)
@@ -193941,7 +193941,7 @@ LABEL_F3BCCA:
 	EXTZ HL
 	LD A, QL
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ch
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ch
 	LDA XDE, 1FFAh
 	EXTS XWA
 	ADD XWA, XDE
@@ -193955,7 +193955,7 @@ LABEL_F3BCCA:
 	INC 1, QC
 	CP QC, 4
 	JR C, LABEL_F3BCCA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW BC, 000ch
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW BC, 000ch
 	EXTS XBC
 	ADD XBC, XDE
 	LD A, (XSP + 004h)
@@ -194028,7 +194028,7 @@ LABEL_F3BD99:
 	CALL LABEL_F41AF8
 	LD A, (XSP + 006h)
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ch
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ch
 	LDA XBC, 1FFAh
 	LDA XDE, XBC + WA
 	LDA XWA, XSP + 00ah
@@ -194118,7 +194118,7 @@ LABEL_F3BE6A:
 LABEL_F3BE7E:
 	LD A, (XSP + 006h)
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ch
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ch
 	LDA XDE, XHL + WA
 	LD W, (XDE + 002h)
 	LD A, (XDE + 009h)
@@ -194312,7 +194312,7 @@ LABEL_F3C016:
 	LD A, QIZL
 	EXTZ WA
 	LD BC, WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW BC, 0009h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW BC, 0009h
 	LDA XDE, 1DB6h
 	LDA XDE, XDE + BC
 	LD XHL, (XSP + 004h)
@@ -194576,7 +194576,7 @@ LABEL_F3C22B:
 	EXTS XWA
 	ADD XWA, XBC
 	LD (XWA), IZ
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 002h), 0005h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 002h), 0005h
 
 LABEL_F3C284:
 	INC 1, QIZH
@@ -194633,7 +194633,7 @@ LABEL_F3C2BB:
 	EXTS XWA
 	ADD XWA, XDE
 	LD (XWA), IZ
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 002h), 0005h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 002h), 0005h
 	LD DE, 1
 	LD A, L
 	AND A, 00fh
@@ -194662,7 +194662,7 @@ LABEL_F3C310:
 	EXTS XBC
 	ADD XBC, XDE
 	LD (XBC), IZ
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 002h), 0005h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 002h), 0005h
 	CALL LABEL_F3ED99
 
 LABEL_F3C352:
@@ -195151,7 +195151,7 @@ LABEL_F3C7A7:
 LABEL_F3C7BA:
 	LD A, (XSP + 00ah)
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0009h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0009h
 	LDA XHL, 1DB6h
 	LDA XDE, XHL + WA
 	LD IY, (XDE + 002h)
@@ -195175,7 +195175,7 @@ LABEL_F3C7E4:
 	JR Z, LABEL_F3C810
 	LD A, QA
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0009h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0009h
 	LD BC, WA
 	LD A, (XSP + 00ah)
 	LD (XHL + BC), A
@@ -195194,7 +195194,7 @@ LABEL_F3C825:
 	LD A, QA
 	LD IZL, A
 	EXTZ IZ
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW IZ, 0009h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW IZ, 0009h
 	EXTS XIZ
 	ADD XIZ, XHL
 	LD WA, (XIZ + 002h)
@@ -195235,7 +195235,7 @@ LABEL_F3C874:
 
 LABEL_F3C87E:
 	EXTZ DE
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW DE, 0009h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW DE, 0009h
 	LD A, (XSP + 00ah)
 	LD (XHL + DE), A
 
@@ -195498,7 +195498,7 @@ LABEL_F3CB82:
 	CALL LABEL_F417E5
 	LD XWA, (XSP + 010h)
 	LD (XWA), HL
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 002h), 0005h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 002h), 0005h
 	CPW (XSP + 014h), 0000h
 	JR ULE, LABEL_F3CBC7
 
@@ -195809,7 +195809,7 @@ LABEL_F3CE53:
 	CP WA, (23C0h)
 	JRL NC, LABEL_F3CEED
 	LD (XSP + 01ah), 081h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 010h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 010h), 0000h
 	JR T, LABEL_F3CE7B
 
 LABEL_F3CE6D:
@@ -196592,7 +196592,7 @@ LABEL_F3D571:
 LABEL_F3D58E:
 	LD A, QIZH
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ch
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ch
 	LDA XBC, 1FFAh
 	LDA XHL, XBC + WA
 	LD A, (XHL + 009h)
@@ -196642,7 +196642,7 @@ LABEL_F3D5F3:
 LABEL_F3D5FA:
 	LD A, QIZH
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ch
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ch
 	LD BC, WA
 	LDA XWA, 2005h
 	LD A, (XWA + BC)
@@ -197559,7 +197559,7 @@ LABEL_F3DE42:
 	LDA XBC, XSP + 01ch
 	LD (XSP + 00ah), XBC
 	LD (XSP + 006h), XBC
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00eh), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00eh), 0000h
 	JR T, LABEL_F3DE92
 
 LABEL_F3DE54:
@@ -198241,7 +198241,7 @@ LABEL_F3E444:
 	INC 4, IY
 	LD C, QL
 	EXTZ BC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW BC, 0009h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW BC, 0009h
 	LD HL, BC
 	LDA XBC, 1DB6h
 	LDA XBC, XBC + HL
@@ -198260,7 +198260,7 @@ LABEL_F3E444:
 	CALL Z, LABEL_F3E6FD
 	LD A, QIZH
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0009h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0009h
 	LD BC, WA
 	LDA XWA, 1DB7h
 	LD A, (XWA + BC)
@@ -198296,7 +198296,7 @@ LABEL_F3E4FA:
 	LD W, (XIX)
 	LD C, A
 	EXTZ BC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW BC, 000ch
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW BC, 000ch
 	LD IY, BC
 	LDA XHL, 1FFAh
 	LDA XBC, XHL + IY
@@ -198310,7 +198310,7 @@ LABEL_F3E4FA:
 LABEL_F3E525:
 	LD C, W
 	EXTZ BC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW BC, 000ch
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW BC, 000ch
 	EXTS XBC
 	ADD XBC, XHL
 	LD (XBC + 00bh), A
@@ -198326,7 +198326,7 @@ LABEL_F3E536:
 LABEL_F3E543:
 	PUSH XIZ
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ch
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ch
 	LDA XIZ, 1FFAh
 	LDA XBC, XIZ + WA
 	LD A, (XBC + 00ah)
@@ -198346,7 +198346,7 @@ LABEL_F3E543:
 LABEL_F3E57A:
 	LD A, IXL
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ch
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ch
 	EXTS XWA
 	ADD XWA, XIZ
 	LDA XHL, XWA + 00ah
@@ -198360,7 +198360,7 @@ LABEL_F3E57A:
 LABEL_F3E59A:
 	LD A, IYL
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ch
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ch
 	EXTS XWA
 	ADD XWA, XIZ
 	LDA XDE, XWA + 00bh
@@ -198388,7 +198388,7 @@ LABEL_F3E5C6:
 	LD W, (XIX)
 	LD C, A
 	EXTZ BC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW BC, 000ch
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW BC, 000ch
 	LD IY, BC
 	LDA XHL, 1FFAh
 	LDA XBC, XHL + IY
@@ -198402,7 +198402,7 @@ LABEL_F3E5C6:
 LABEL_F3E5F2:
 	LD C, W
 	EXTZ BC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW BC, 000ch
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW BC, 000ch
 	EXTS XBC
 	ADD XBC, XHL
 	LD (XBC + 00bh), A
@@ -198447,7 +198447,7 @@ LABEL_F3E649:
 	EXTZ IZ
 	LD A, QC
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ch
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ch
 	LDA XIX, 1FFAh
 	EXTS XWA
 	ADD XWA, XIX
@@ -198460,7 +198460,7 @@ LABEL_F3E649:
 	INC 1, H
 	CP H, 4
 	JR C, LABEL_F3E649
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW BC, 000ch
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW BC, 000ch
 	EXTS XBC
 	ADD XBC, XIX
 	LD A, L
@@ -198487,7 +198487,7 @@ LABEL_F3E69F:
 
 LABEL_F3E6AF:
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ch
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ch
 	EXTS XWA
 	ADD XWA, XBC
 	LD DE, (XWA + 004h)
@@ -198506,7 +198506,7 @@ LABEL_F3E6CA:
 
 LABEL_F3E6CF:
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0009h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0009h
 	LDA XBC, 1DB6h
 	EXTS XWA
 	ADD XWA, XBC
@@ -198516,7 +198516,7 @@ LABEL_F3E6CF:
 	CP E, 0ffh
 	JR Z, LABEL_F3E6F9
 	EXTZ DE
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW DE, 0009h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW DE, 0009h
 	LD (XBC + DE), 0ffh
 	RET
 
@@ -198529,7 +198529,7 @@ LABEL_F3E6FD:
 	PUSH XIZ
 	LD C, A
 	EXTZ BC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW BC, 0009h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW BC, 0009h
 	LDA XHL, 1DB6h
 	LDA XDE, XHL + BC
 	LD W, (XDE)
@@ -198549,7 +198549,7 @@ LABEL_F3E6FD:
 LABEL_F3E736:
 	LD C, QA
 	EXTZ BC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW BC, 0009h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW BC, 0009h
 	LDA XIZ, XHL + BC
 	LDA XIX, 1DB2h
 	CP W, 0ffh
@@ -198562,7 +198562,7 @@ LABEL_F3E736:
 LABEL_F3E756:
 	LD C, W
 	EXTZ BC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW BC, 0009h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW BC, 0009h
 	EXTS XBC
 	ADD XBC, XHL
 	LDA XIY, XBC + 001h
@@ -198592,7 +198592,7 @@ LABEL_F3E77A:
 LABEL_F3E78F:
 	LD C, W
 	EXTZ BC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW BC, 0009h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW BC, 0009h
 	EXTS XBC
 	ADD XBC, XHL
 	LD (XBC + 001h), A
@@ -198613,7 +198613,7 @@ LABEL_F3E7AC:
 	RET Z
 	LD A, L
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ch
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ch
 	LDA XBC, 1FFAh
 	EXTS XWA
 	ADD XWA, XBC
@@ -198622,7 +198622,7 @@ LABEL_F3E7AC:
 	JR Z, LABEL_F3E7DF
 	LD A, H
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ch
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ch
 	EXTS XWA
 	ADD XWA, XBC
 	LD (XWA + 00ah), 0ffh
@@ -199431,7 +199431,7 @@ LABEL_F3EEB0:
 	CALR LABEL_F417E5
 	LDA XWA, XSP + 004h
 	LD (XWA), HL
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 002h), 0005h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 002h), 0005h
 
 LABEL_F3EEC4:
 	LD A, (XSP + 010h)
@@ -199561,26 +199561,26 @@ LABEL_F3EFC5:
 	LDA XBC, 2474h
 	LDA XWA, XBC + 0080h
 	LDW (XWA), 0001h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 002h), 0005h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 002h), 0005h
 	LDA XWA, XBC + 0090h
 	LDW (XWA), 0001h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 002h), 0005h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 002h), 0005h
 	LDA XWA, XBC + 0088h
 	LDW (XWA), 0002h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 002h), 0005h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 002h), 0005h
 	LDA XBC, 23E0h
 	LDA XWA, XBC + 040h
 	LDW (XWA), 0001h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 002h), 0005h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 002h), 0005h
 	LDA XWA, XBC + 048h
 	LDW (XWA), 0001h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 002h), 0005h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 002h), 0005h
 	LDA XWA, XBC + 044h
 	LDW (XWA), 0002h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 002h), 0005h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 002h), 0005h
 	LDA XWA, XSP + 002h
 	LDW (XWA), 0001h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 002h), 0005h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 002h), 0005h
 	LD IZ, 0
 	LD WA, (232Ah)
 	SUB WA, (2328h)
@@ -201924,7 +201924,7 @@ LABEL_F406E2:
 	JR UGT, LABEL_F40746
 	LD IZ, (269Ch)
 	LD (26B8h), IZ
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 004h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 004h), 0000h
 	CPW (269Ah), 0000h
 	JR ULE, LABEL_F40775
 
@@ -202223,7 +202223,7 @@ LABEL_F409C4:
 	JR T, LABEL_F409EF
 
 LABEL_F409C8:
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 002h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 002h), 0001h
 	CP IZ, 0ffffh
 	JR Z, LABEL_F409EC
 
@@ -202343,7 +202343,7 @@ LABEL_F40AFD:
 	JRL NZ, LABEL_F40BBF
 	LDW (2889h), (2666h)
 	LDW (288Bh), (28AFh)
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 004h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 004h), 0000h
 	CPW (26DCh), 0000h
 	JRL Z, LABEL_F40BBF
 
@@ -202472,8 +202472,8 @@ LABEL_F40C02:
 
 LABEL_F40C28:
 	CALR LABEL_F400D9
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 002h), 0001h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 004h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 002h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 004h), 0000h
 	LDW (XSP), 0000h
 	CPW (0CE3h), 0000h
 	JR Z, LABEL_F40C86
@@ -202624,7 +202624,7 @@ LABEL_F40D30:
 	CALR LABEL_F41C39
 	LDA XWA, 2830h
 	LD (XWA), HL
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 002h), 00ffh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 002h), 00ffh
 	JR T, LABEL_F40D77
 
 LABEL_F40D73:
@@ -202645,7 +202645,7 @@ LABEL_F40D77:
 	LDA XWA, 28CEh
 	LD WA, (XWA + DE)
 	LD (XBC), WA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 002h), 0005h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 002h), 0005h
 	LD C, L
 	EXTZ BC
 	LDA XHL, 290Eh
@@ -202745,7 +202745,7 @@ LABEL_F40E21:
 	LDA XIZ, 282Ch
 	LD WA, (XDE)
 	LD (XIZ), WA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XIZ + 002h), 0005h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XIZ + 002h), 0005h
 	LD WA, (XIY)
 	LD (XBC), WA
 	EXTZ HL
@@ -202797,7 +202797,7 @@ LABEL_F40E21:
 	LDA XBC, 2834h
 	LD WA, (XSP + 016h)
 	LD (XBC), WA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 002h), 00ffh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 002h), 00ffh
 	JR T, LABEL_F40F44
 
 LABEL_F40F40:
@@ -202854,7 +202854,7 @@ LABEL_F40F63:
 	LDA XWA, 28CEh
 	LD WA, (XWA + BC)
 	LD (XDE), WA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XDE + 002h), 0005h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XDE + 002h), 0005h
 	LDA XDE, 2834h
 	LDA XWA, 28EEh
 	LD WA, (XWA + BC)
@@ -204167,7 +204167,7 @@ LABEL_F41AF8:
 	SLL 8, XWA
 	LDA XDE, 0B0000h
 	ADD XDE, XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 004h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 004h), 0000h
 	LD A, (XSP + 006h)
 	EXTZ WA
 	CP WA, 0
@@ -204249,7 +204249,7 @@ LABEL_F41BC1:
 	SLL 8, XWA
 	LD XDE, 000b0000h
 	ADD XDE, XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 002h), 0005h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 002h), 0005h
 
 LABEL_F41BD9:
 	INCW 1, (XSP + 004h)
@@ -205466,7 +205466,7 @@ LABEL_F42708:
 
 LABEL_F4270A:
 	DEC 4, XSP
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 002h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 002h), 0000h
 	LD (XSP), 000h
 	LDA XBC, XSP + 002h
 	LDA XDE, XSP
@@ -205498,7 +205498,7 @@ LABEL_F42722:
 LABEL_F427AB:
 	DEC 6, XSP
 	PUSH XIZ
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 008h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 008h), 0000h
 	LD (XSP + 006h), 000h
 	LD (XSP + 004h), 000h
 	CALR LABEL_F42828
@@ -205603,7 +205603,7 @@ LABEL_F4289F:
 	CALR LABEL_F42B2E
 	LD QIZL, L
 	LD IZ, 1
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 004h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 004h), 0000h
 	LD XWA, (XSP + 012h)
 	LDW (XWA), 0000h
 	LD C, QIZH
@@ -205612,7 +205612,7 @@ LABEL_F4289F:
 	CALR LABEL_F417E5
 	LDA XWA, XSP + 006h
 	LD (XWA), HL
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 002h), 0005h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 002h), 0005h
 	LDA XIY, XSP + 006h
 	LDA XIX, XSP + 00ah
 	LDIW
@@ -205643,7 +205643,7 @@ LABEL_F428DB:
 	CP (XSP + 004h), BC
 	JR C, LABEL_F4294B
 	INC 1, IZ
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 004h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 004h), 0000h
 	JR T, LABEL_F4294B
 
 LABEL_F42917:
@@ -205763,8 +205763,8 @@ LABEL_F429A0:
 LABEL_F429F6:
 	CALR LABEL_F42B2E
 	LD QIZH, L
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 004h), 0001h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 006h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 004h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 006h), 0000h
 	LD IZH, 0
 	LD XWA, (XSP + 014h)
 	LDW (XWA), 0001h
@@ -205774,7 +205774,7 @@ LABEL_F429F6:
 	CALR LABEL_F417E5
 	LDA XWA, XSP + 008h
 	LD (XWA), HL
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 002h), 0005h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 002h), 0005h
 	LDA XIY, XSP + 008h
 	LDA XIX, XSP + 00ch
 	LDIW
@@ -207423,7 +207423,7 @@ LABEL_F43AAF:
 	SUB HL, 0100h
 	EXTZ XHL
 	ADD XHL, (283Eh)
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 002h), 0005h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 002h), 0005h
 	JR T, LABEL_F43AEA
 
 LABEL_F43AE6:
@@ -207490,7 +207490,7 @@ LABEL_F43B1B:
 	SUB HL, 0100h
 	EXTZ XHL
 	ADD XHL, (283Eh)
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 002h), 0005h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 002h), 0005h
 	JR T, LABEL_F43B81
 
 LABEL_F43B7D:
@@ -212174,7 +212174,7 @@ LABEL_F47B5C:
 	LD (XIX + 003h), BC
 	CPW (29F4h), 0000h
 	JR NZ, LABEL_F47B95
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XDE + 001h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XDE + 001h), 0000h
 
 LABEL_F47B95:
 	CPW (XSP + 004h), 0ffffh
@@ -212212,7 +212212,7 @@ LABEL_F47BE0:
 	DEC 6, XSP
 	PUSH XIZ
 	LD (XSP + 008h), A
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 006h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 006h), 0000h
 	LDW (29F2h), 0001h
 	LDW (29F6h), 0000h
 	LD (XSP + 004h), 001h
@@ -212363,7 +212363,7 @@ LABEL_F47D4E:
 	LD XIZ, XHL
 	CP XIZ, 00000000h
 	JRL LT, LABEL_F47E36
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 006h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 006h), 0000h
 	LD (XSP + 004h), 000h
 
 LABEL_F47D86:
@@ -212591,7 +212591,7 @@ LABEL_F47FE1:
 	DEC 4, XSP
 	PUSH QIZ
 	LD (XSP + 004h), A
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 002h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 002h), 0000h
 	CP (XSP + 004h), 010h
 	JR C, LABEL_F47FFB
 	LD XHL, 0ffffffffh
@@ -213009,7 +213009,7 @@ LABEL_F48440:
 	PUSH XIZ
 	LD (XSP + 00ah), C
 	LD (XSP + 00ch), A
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 006h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 006h), 0000h
 	LD A, (XSP + 00ch)
 	EXTZ WA
 	LD C, (XSP + 00ah)
@@ -213241,7 +213241,7 @@ LABEL_F48629:
 	LD (XSP + 004h), DE
 	LD (XSP + 006h), BC
 	LD IZ, WA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 002h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 002h), 0000h
 	LD WA, IZ
 	CALL LABEL_F41C39
 	CP HL, (XSP + 006h)
@@ -215901,7 +215901,7 @@ LABEL_F49E4A:
 	EXTS XWA
 	ADD XWA, XBC
 	LDW (XWA), 0ffffh
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 002h), 0005h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 002h), 0005h
 	INC 2, XSP
 	RET
 
@@ -216509,7 +216509,7 @@ LABEL_F4A5FA:
 	LDW (2889h), (2666h)
 	LDW (288Bh), (28AFh)
 	LD A, (2650h)
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 004h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 004h), 0000h
 	CP A, 0
 	JRL NZ, LABEL_F4A747
 	CPW (25DEh), 0000h
@@ -216788,7 +216788,7 @@ LABEL_F4A928:
 	JR Z, LABEL_F4A956
 	LDA XWA, 2834h
 	LD (XWA), HL
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 002h), 00ffh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 002h), 00ffh
 
 LABEL_F4A93D:
 	LDA XDE, 2834h
@@ -216993,7 +216993,7 @@ LABEL_F4AD01:
 	CALL LABEL_F41C39
 	LDA XWA, 2834h
 	LD (XWA), HL
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 002h), 00ffh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 002h), 00ffh
 	JR T, LABEL_F4AD31
 
 LABEL_F4AD2D:
@@ -217240,7 +217240,7 @@ LABEL_F4B09F:
 	CALL LABEL_F41C39
 	LDA XWA, 2834h
 	LD (XWA), HL
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 002h), 00ffh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 002h), 00ffh
 	JR T, LABEL_F4B0C3
 
 LABEL_F4B0BF:
@@ -217957,7 +217957,7 @@ LABEL_F4B8BC:
 	LD (XWA), HL
 	CPW (XWA), 0000h
 	JRL Z, LABEL_F4B9B5
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 002h), 00ffh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 002h), 00ffh
 	JR T, LABEL_F4B940
 
 LABEL_F4B93C:
@@ -218169,7 +218169,7 @@ LABEL_F4BB3A:
 	LD (XWA), HL
 	CPW (XWA), 0000h
 	JRL Z, LABEL_F4BE81
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 002h), 00ffh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 002h), 00ffh
 	JR T, LABEL_F4BBBA
 
 LABEL_F4BBB6:
@@ -218294,7 +218294,7 @@ LABEL_F4BCAC:
 	LD (XWA), HL
 	CPW (XWA), 0000h
 	JRL Z, LABEL_F4BE81
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 002h), 00ffh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 002h), 00ffh
 
 LABEL_F4BD6A:
 	LDA XDE, 2834h
@@ -218350,7 +218350,7 @@ LABEL_F4BD94:
 	LD (XWA), HL
 	CPW (XWA), 0000h
 	JR Z, LABEL_F4BE81
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 002h), 00ffh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 002h), 00ffh
 	JR T, LABEL_F4BE2A
 
 LABEL_F4BE26:
@@ -219284,7 +219284,7 @@ LABEL_F4C7E6:
 	EXTZ BC
 	MUL XWA, BC
 	EXTZ XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVW WA, 0064h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVW WA, 0064h
 	LD B, E
 	CP E, 07fh
 	JR NZ, LABEL_F4C7FB
@@ -219834,7 +219834,7 @@ LABEL_F4CD06:
 	CALL LABEL_F3FE4C
 	CP (287Ah), 000h
 	JRL NZ, LABEL_F4CE37
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 004h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 004h), 0000h
 	CPW (25DEh), 0000h
 	JRL Z, LABEL_F4CDCD
 
@@ -223999,7 +223999,7 @@ LABEL_F4F5E4:
 	CALR LABEL_F4F33E
 	LDA XSP, XSP + 00ah
 	LD XWA, (XSP + 004h)
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 006h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 006h), 0000h
 	RET
 
 LABEL_F4F5FD:
@@ -224047,7 +224047,7 @@ LABEL_F4F657:
 	LD XWA, (XSP + 00eh)
 	CP XWA, 00000001h
 	JR NZ, LABEL_F4F667
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 004h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 004h), 0001h
 
 LABEL_F4F667:
 	LDA XWA, 02121Ah
@@ -224055,7 +224055,7 @@ LABEL_F4F667:
 	LD XHL, 0
 	LD XIZ, 0
 	LD DE, 8000h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 004h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 004h), 0000h
 	CPW (XSP + 004h), 000ah
 	JR GE, LABEL_F4F6D0
 
@@ -224118,7 +224118,7 @@ LABEL_F4F6FF:
 	OR XIZ, XIZ
 	JRL NZ, LABEL_F4F611
 	LD XWA, (XSP + 00ah)
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 006h), 000ah
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 006h), 000ah
 
 LABEL_F4F70C:
 	LD XHL, 0
@@ -224136,7 +224136,7 @@ LABEL_F4F711:
 	LD XWA, (XSP + 00ah)
 	LD A, (XWA)
 	LD (XIZ + 018h), A
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XIZ + 014h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XIZ + 014h), 0000h
 	LD WA, (XSP + 016h)
 	BIT 005h, A
 	JRL NZ, LABEL_F4F7EF
@@ -224175,7 +224175,7 @@ LABEL_F4F711:
 	RES 1, (XWA + 002h)
 
 LABEL_F4F793:
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 004h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 004h), 0001h
 	JR T, LABEL_F4F7C8
 
 LABEL_F4F79A:
@@ -224226,7 +224226,7 @@ LABEL_F4F7EF:
 	RES 005h, WA
 	SET 000h, WA
 	LD (XIZ + 016h), A
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XIZ + 012h), 0014h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XIZ + 012h), 0014h
 	LD WA, 0014h
 	BIT 00fh, WA
 	JR Z, LABEL_F4F824
@@ -224272,7 +224272,7 @@ LABEL_F4F83A:
 	JR Z, LABEL_F4F8CE
 	LD XWA, (XIZ + 004h)
 	LD (XSP + 006h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 004h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 004h), 0001h
 	JR T, LABEL_F4F8BF
 
 LABEL_F4F880:
@@ -224321,7 +224321,7 @@ LABEL_F4F8D9:
 	RES 0, (XIZ + 016h)
 	LDA XWA, 02121Ah
 	LD XBC, XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 004h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 004h), 0000h
 	CPW (XSP + 004h), 000ah
 	JR GE, LABEL_F4F913
 
@@ -224510,7 +224510,7 @@ LABEL_F4FABE:
 LABEL_F4FBA5:
 	LDA XSP, XSP - 10
 	PUSH XIZ
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ch), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ch), 0000h
 	LD XWA, (XSP + 012h)
 	LD XWA, (XWA + 01eh)
 	LD (XSP + 004h), XWA
@@ -224524,7 +224524,7 @@ LABEL_F4FBA5:
 	JR T, LABEL_F4FBDC
 
 LABEL_F4FBCE:
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ch), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ch), 0001h
 	LD WA, (XSP + 016h)
 	EXTZ XWA
 	LD XBC, XWA
@@ -225886,12 +225886,12 @@ LABEL_F51F0F:
 	LD XWA, (XSP + 010h)
 	PUSH XWA
 	CALL LABEL_FF0D99
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 018h), 0004h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 01ah), 0000h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 01ch), 0000h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 01eh), 0000h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 020h), 0001h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 022h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 018h), 0004h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 01ah), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 01ch), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 01eh), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 020h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 022h), 0001h
 	LD XWA, (XSP + 014h)
 	LD (XSP + 024h), XWA
 	LDA XWA, XSP + 018h
@@ -225923,12 +225923,12 @@ LABEL_F51F7C:
 	LD XWA, (XSP + 010h)
 	PUSH XWA
 	CALL LABEL_FF0D99
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 018h), 0004h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 01ah), 0000h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 01ch), 0000h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 01eh), 0000h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 020h), 0002h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 022h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 018h), 0004h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 01ah), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 01ch), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 01eh), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 020h), 0002h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 022h), 0001h
 	LD XWA, (XSP + 014h)
 	LD (XSP + 024h), XWA
 	LDA XWA, XSP + 018h
@@ -225954,7 +225954,7 @@ LABEL_F51FE9:
 	LD XWA, (XSP + 006h)
 	PUSH XWA
 	CALL LABEL_FF0FFA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 016h), 0003h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 016h), 0003h
 	LDA XWA, XSP + 00eh
 	PUSH XWA
 	CALL LABEL_F97CCA
@@ -225978,7 +225978,7 @@ LABEL_F52026:
 	LD XWA, (XSP + 006h)
 	PUSH XWA
 	CALL LABEL_FF0FFA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 016h), 0004h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 016h), 0004h
 	LDA XWA, XSP + 00eh
 	PUSH XWA
 	CALL LABEL_F97CCA
@@ -226008,12 +226008,12 @@ LABEL_F52063:
 	LD XWA, (XSP + 010h)
 	PUSH XWA
 	CALL LABEL_FF0D99
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 018h), 0004h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 01ah), 0000h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 01ch), 0000h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 01eh), 0000h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 020h), 0005h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 022h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 018h), 0004h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 01ah), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 01ch), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 01eh), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 020h), 0005h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 022h), 0001h
 	LD XWA, (XSP + 014h)
 	LD (XSP + 024h), XWA
 	LDA XWA, XSP + 018h
@@ -226039,7 +226039,7 @@ LABEL_F520D0:
 	LD XWA, (XSP + 006h)
 	PUSH XWA
 	CALL LABEL_FF0FFA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 016h), 0006h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 016h), 0006h
 	LDA XWA, XSP + 00eh
 	PUSH XWA
 	CALL LABEL_F97CCA
@@ -226063,7 +226063,7 @@ LABEL_F5210D:
 	LD XWA, (XSP + 006h)
 	PUSH XWA
 	CALL LABEL_FF0FFA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 016h), 0007h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 016h), 0007h
 	LDA XWA, XSP + 00eh
 	PUSH XWA
 	CALL LABEL_F97CCA
@@ -226088,14 +226088,14 @@ LABEL_F5214A:
 	PUSH XWA
 	CALL LABEL_FF0FFA
 	db 0, 0	;TODO: Fix ASL: INC 0, XSP
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 006h), 0004h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 008h), 0000h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ah), 0000h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ch), 0000h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 010h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 006h), 0004h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 008h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ah), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ch), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 010h), 0001h
 	LD XWA, (XSP + 002h)
 	LD (XSP + 012h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00eh), 0008h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00eh), 0008h
 	JR T, LABEL_F521AC
 
 LABEL_F52180:
@@ -226122,8 +226122,8 @@ LABEL_F521A9:
 LABEL_F521AC:
 	CPW (XSP + 00eh), 0009h
 	JR ULE, LABEL_F52180
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ah), 0001h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00eh), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ah), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00eh), 0001h
 	JR T, LABEL_F521EB
 
 LABEL_F521BF:
@@ -226150,12 +226150,12 @@ LABEL_F521E8:
 LABEL_F521EB:
 	CPW (XSP + 00eh), 0005h
 	JR ULE, LABEL_F521BF
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 006h), 0003h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 008h), 0000h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ah), 0000h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ch), 004fh
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00eh), 0009h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 010h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 006h), 0003h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 008h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ah), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ch), 004fh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00eh), 0009h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 010h), 0001h
 	LD XWA, (XSP + 002h)
 	LD (XSP + 012h), XWA
 	LDA XWA, XSP + 006h
@@ -226176,12 +226176,12 @@ LABEL_F521EB:
 	JR T, LABEL_F5228A
 
 LABEL_F5223E:
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 006h), 0003h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 008h), 0000h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ah), 0000h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ch), 0000h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00eh), 0009h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 010h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 006h), 0003h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 008h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ah), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ch), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00eh), 0009h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 010h), 0001h
 	LD XWA, (XSP + 002h)
 	LD (XSP + 012h), XWA
 	LDA XWA, XSP + 006h
@@ -226263,12 +226263,12 @@ LABEL_F522F5:
 	LD XWA, (XSP + 010h)
 	PUSH XWA
 	CALL LABEL_FF0D99
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 018h), 0004h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 01ah), 0000h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 01ch), 0000h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 01eh), 0000h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 020h), 0001h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 022h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 018h), 0004h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 01ah), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 01ch), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 01eh), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 020h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 022h), 0001h
 	LD XWA, (XSP + 014h)
 	LD (XSP + 024h), XWA
 	LDA XWA, XSP + 018h
@@ -226300,12 +226300,12 @@ LABEL_F52362:
 	LD XWA, (XSP + 010h)
 	PUSH XWA
 	CALL LABEL_FF0D99
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 018h), 0004h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 01ah), 0000h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 01ch), 0000h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 01eh), 0000h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 020h), 0002h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 022h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 018h), 0004h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 01ah), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 01ch), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 01eh), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 020h), 0002h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 022h), 0001h
 	LD XWA, (XSP + 014h)
 	LD (XSP + 024h), XWA
 	LDA XWA, XSP + 018h
@@ -226332,7 +226332,7 @@ LABEL_F523CF:
 	PUSH XWA
 	CALL LABEL_FF0FFA
 	db 0, 0	;TODO: Fix ASL: INC 0, XSP
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00eh), 0003h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00eh), 0003h
 	JR T, LABEL_F52412
 
 LABEL_F523E6:
@@ -226370,12 +226370,12 @@ LABEL_F52412:
 	LD XWA, (XSP + 010h)
 	PUSH XWA
 	CALL LABEL_FF0D99
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 018h), 0004h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 01ah), 0000h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 01ch), 0000h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 01eh), 0000h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 020h), 000bh
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 022h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 018h), 0004h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 01ah), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 01ch), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 01eh), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 020h), 000bh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 022h), 0001h
 	LD XWA, (XSP + 014h)
 	LD (XSP + 024h), XWA
 	LDA XWA, XSP + 018h
@@ -226402,7 +226402,7 @@ LABEL_F52486:
 	PUSH XWA
 	CALL LABEL_FF0FFA
 	db 0, 0	;TODO: Fix ASL: INC 0, XSP
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00eh), 000ch
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00eh), 000ch
 	JR T, LABEL_F524C9
 
 LABEL_F5249D:
@@ -226429,8 +226429,8 @@ LABEL_F524C6:
 LABEL_F524C9:
 	CPW (XSP + 00eh), 0012h
 	JR ULE, LABEL_F5249D
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ah), 0001h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00eh), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ah), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00eh), 0001h
 	LDA XWA, XSP + 006h
 	PUSH XWA
 	CALL LABEL_F97CCA
@@ -226455,7 +226455,7 @@ LABEL_F52503:
 	PUSH XWA
 	CALL LABEL_FF0FFA
 	db 0, 0	;TODO: Fix ASL: INC 0, XSP
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00eh), 0002h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00eh), 0002h
 	JR T, LABEL_F52546
 
 LABEL_F5251A:
@@ -226482,12 +226482,12 @@ LABEL_F52543:
 LABEL_F52546:
 	CPW (XSP + 00eh), 000fh
 	JR ULE, LABEL_F5251A
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 006h), 0003h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 008h), 0000h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ah), 0000h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ch), 004fh
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00eh), 0012h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 010h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 006h), 0003h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 008h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ah), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ch), 004fh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00eh), 0012h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 010h), 0001h
 	LD XWA, (XSP + 002h)
 	LD (XSP + 012h), XWA
 	LDA XWA, XSP + 006h
@@ -226508,12 +226508,12 @@ LABEL_F52546:
 	JR T, LABEL_F525E5
 
 LABEL_F52599:
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 006h), 0003h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 008h), 0000h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ah), 0000h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ch), 0000h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00eh), 0012h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 010h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 006h), 0003h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 008h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ah), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ch), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00eh), 0012h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 010h), 0001h
 	LD XWA, (XSP + 002h)
 	LD (XSP + 012h), XWA
 	LDA XWA, XSP + 006h
@@ -226561,12 +226561,12 @@ GetMediaType:
 	JRL T, LABEL_F5274A
 
 LABEL_F5261C:
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 006h), 0003h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 008h), 0000h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ah), 0000h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ch), 0000h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00eh), 0002h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 010h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 006h), 0003h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 008h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ah), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ch), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00eh), 0002h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 010h), 0001h
 	LD XWA, (XSP + 002h)
 	LD (XSP + 012h), XWA
 	LDW (8A10h), 0ffffh
@@ -227375,13 +227375,13 @@ LABEL_F52CE0:
 	CPW (XIZ), 0050h
 	JR GE, LABEL_F52D41
 	LD WA, (XIZ)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 002ch
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 002ch
 	LDA XBC, 0235A8h
 	CPW (XBC + WA), 0fefeh
 	JR Z, LABEL_F52D41
 	PUSHW 0014h
 	LD WA, (XIZ)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 002ch
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 002ch
 	LDA XBC, 02358Eh
 	EXTS XWA
 	ADD XWA, XBC
@@ -227394,7 +227394,7 @@ LABEL_F52CE0:
 	LD XWA, (XSP + 004h)
 	LD (XWA + 01ah), 000h
 	LD WA, (XIZ)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 002ch
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 002ch
 	LDA XBC, 0235A6h
 	LD BC, (XBC + WA)
 	EXTZ XBC
@@ -227608,18 +227608,18 @@ LABEL_F52FF3:
 LABEL_F53009:
 	LD HL, WA
 	EXTZ XHL
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVW HL, 0009h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVW HL, 0009h
 	LD HL, QHL
 	INC 1, HL
 	LD (XBC), HL
 	LD BC, WA
 	EXTZ XBC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVW BC, 0009h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVW BC, 0009h
 	AND BC, 0001h
 	LD (XDE), BC
 	LD XBC, (XSP + 004h)
 	EXTZ XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVW WA, 0012h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVW WA, 0012h
 	LD (XBC), WA
 	RETD 0004h
 
@@ -227635,15 +227635,15 @@ LABEL_F53034:
 	PUSH XBC
 	LD XBC, XHL
 	CALR LABEL_F53009
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 004h), 0003h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 006h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 004h), 0003h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 006h), 0000h
 	LD WA, (XSP + 016h)
 	LD (XSP + 008h), WA
 	LD WA, (XSP + 014h)
 	LD (XSP + 00ah), WA
 	LD WA, (XSP + 018h)
 	LD (XSP + 00ch), WA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00eh), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00eh), 0001h
 	LD XWA, XIZ
 	LD (XSP + 010h), XWA
 	LDA XWA, XSP + 004h
@@ -227672,11 +227672,11 @@ LABEL_F530B3:
 
 LABEL_F530BF:
 	LD BC, WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW BC, 002ch
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW BC, 002ch
 	LDA XDE, 0235A8h
 	LD BC, (XDE + BC)
 	LD (02358Ch), BC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 002ch
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 002ch
 	LDA XBC, 0235A6h
 	LD WA, (XBC + WA)
 	LD (02474Eh), WA
@@ -227836,19 +227836,19 @@ LABEL_F5321F:
 
 LABEL_F53227:
 	LD WA, IZ
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 002ch
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 002ch
 	LDA XBC, 0235A8h
 	CPW (XBC + WA), 0fefeh
 	JR Z, LABEL_F5326D
 	PUSHW 0014h
 	LD WA, IZ
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 002ch
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 002ch
 	LDA XBC, 02358Eh
 	EXTS XWA
 	ADD XWA, XBC
 	PUSH XWA
 	LD WA, IZ
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0014h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0014h
 	LDA XBC, 022732h
 	EXTS XWA
 	ADD XWA, XBC
@@ -227868,7 +227868,7 @@ LABEL_F53278:
 	PUSHW 0014h
 	PUSHW 0020h
 	LD WA, IZ
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0014h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0014h
 	LDA XBC, 022732h
 	EXTS XWA
 	ADD XWA, XBC
@@ -241948,11 +241948,11 @@ LABEL_F5C0D2:
 LABEL_F5C0D4:
 	LD A, L
 	XOR W, W
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0014h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0014h
 	LD L, H
 	XOR H, H
 	ADD WA, HL
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000dh
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000dh
 	ADD XWA, 00e47147h
 	LD XIY, XWA
 	LD XIX, 000034abh
@@ -242124,7 +242124,7 @@ LABEL_F5C498:
 LABEL_F5C4A3:
 	LD A, L
 	XOR W, W
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0010h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0010h
 	ADD XWA, 00e47047h
 	LD XIY, XWA
 	LD XIX, 000034abh
@@ -259769,7 +259769,7 @@ SndArgNmGet:
 	LD (XWA + 004h), L
 	LD (XWA + 002h), 048h
 	CALL LABEL_FC9B55
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 002h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 002h), 0000h
 	LD (XSP + 004h), 000h
 	JR T, LABEL_F6A14D
 
@@ -261304,7 +261304,7 @@ LABEL_F6BEFD:
 	EXTZ BC
 	LD A, QIZH
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0003h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0003h
 	LD DE, WA
 	ADD DE, BC
 	LDA XWA, 0E4C114h
@@ -261316,7 +261316,7 @@ LABEL_F6BEFD:
 	LD (39B2h), XWA
 	LD A, QIZH
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0003h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0003h
 	LD BC, WA
 	LDA XDE, 0E4C114h
 	LD (39ACh), (XDE + BC)
@@ -261349,7 +261349,7 @@ LABEL_F6BF90:
 	EXTZ BC
 	LD A, QIZH
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0003h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0003h
 	LD DE, WA
 	ADD DE, BC
 	LDA XWA, 0E4C114h
@@ -261445,7 +261445,7 @@ LABEL_F6C052:
 	ADD XBC, XDE
 	LD WA, IX
 	EXTZ XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVW WA, 0014h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVW WA, 0014h
 	LD WA, QWA
 	LD (XBC), A
 	LD IZ, 0
@@ -261869,7 +261869,7 @@ LABEL_F6C456:
 	CP IZ, BC
 	JRL Z, LABEL_F6C67A
 	EXTZ XBC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVW BC, 0014h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVW BC, 0014h
 	LD DE, QBC
 	EXTZ XDE
 	LD XWA, 00110002h
@@ -261878,10 +261878,10 @@ LABEL_F6C456:
 	LD DE, (3D04h)
 	LD BC, DE
 	EXTZ XBC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVW BC, 0014h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVW BC, 0014h
 	LD WA, IZ
 	EXTZ XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVW WA, 0014h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVW WA, 0014h
 	CP WA, BC
 	JRL NZ, LABEL_F6C670
 	db 0, 0, 0, 0	;TODO: Fix ASL: MUL IZ, 0025h
@@ -261940,13 +261940,13 @@ LABEL_F6C517:
 	DEC 1, BC
 	LD IX, BC
 	EXTZ XIX
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVW IX, 0014h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVW IX, 0014h
 	EXTZ XDE
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVW DE, 0014h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVW DE, 0014h
 	CP DE, IX
 	JRL NC, LABEL_F6C452
 	EXTZ XHL
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVW HL, 0014h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVW HL, 0014h
 	LD WA, QHL
 	CP WA, 0
 	JRL Z, LABEL_F6C452
@@ -262211,7 +262211,7 @@ LABEL_F6C7E1:
 	CP IZ, BC
 	JRL Z, LABEL_F6C922
 	EXTZ XBC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVW BC, 0014h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVW BC, 0014h
 	LD DE, QBC
 	EXTZ XDE
 	LD XWA, 00120002h
@@ -262220,10 +262220,10 @@ LABEL_F6C7E1:
 	LD DE, (3D04h)
 	LD BC, DE
 	EXTZ XBC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVW BC, 0014h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVW BC, 0014h
 	LD WA, IZ
 	EXTZ XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVW WA, 0014h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVW WA, 0014h
 	CP WA, BC
 	JRL NZ, LABEL_F6C918
 	db 0, 0, 0, 0	;TODO: Fix ASL: MUL IZ, 0025h
@@ -262282,13 +262282,13 @@ LABEL_F6C8A2:
 	DEC 1, BC
 	LD IX, BC
 	EXTZ XIX
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVW IX, 0014h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVW IX, 0014h
 	EXTZ XHL
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVW HL, 0014h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVW HL, 0014h
 	CP HL, IX
 	JRL NC, LABEL_F6C7DD
 	EXTZ XDE
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVW DE, 0014h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVW DE, 0014h
 	LD WA, QDE
 	CP WA, 0
 	JRL Z, LABEL_F6C7DD
@@ -262423,7 +262423,7 @@ LABEL_F6CA0F:
 	CP IZ, BC
 	JRL Z, LABEL_F6CB26
 	EXTZ XBC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVW BC, 0014h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVW BC, 0014h
 	LD DE, QBC
 	EXTZ XDE
 	LD XWA, 00150002h
@@ -262432,10 +262432,10 @@ LABEL_F6CA0F:
 	LD DE, (3D04h)
 	LD BC, DE
 	EXTZ XBC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVW BC, 0014h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVW BC, 0014h
 	LD WA, IZ
 	EXTZ XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVW WA, 0014h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVW WA, 0014h
 	CP WA, BC
 	JRL NZ, LABEL_F6CB1C
 	db 0, 0, 0, 0	;TODO: Fix ASL: MUL IZ, 0025h
@@ -262495,14 +262495,14 @@ LABEL_F6CAD2:
 	DEC 1, BC
 	LD HL, BC
 	EXTZ XHL
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVW HL, 0014h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVW HL, 0014h
 	LD WA, IX
 	EXTZ XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVW WA, 0014h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVW WA, 0014h
 	CP WA, HL
 	JRL NC, LABEL_F6CA0B
 	EXTZ XDE
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVW DE, 0014h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVW DE, 0014h
 	LD WA, QDE
 	CP WA, 0
 	JRL Z, LABEL_F6CA0B
@@ -262715,7 +262715,7 @@ LABEL_F6CCE8:
 	LD (3D06h), 006h
 	CALR LABEL_F6BFF4
 	CALR LABEL_F6C014
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 004h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 004h), 0000h
 	LDW (48D8h), 0000h
 
 LABEL_F6CD07:
@@ -262740,7 +262740,7 @@ LABEL_F6CD07:
 	JRL Z, LABEL_F6CDDB
 	CP A, 03fh
 	JRL Z, LABEL_F6CDDB
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 006h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 006h), 0000h
 
 LABEL_F6CD4C:
 	LD WA, (XSP + 004h)
@@ -262773,7 +262773,7 @@ LABEL_F6CD89:
 	JRL LT, LABEL_F6CD07
 
 LABEL_F6CD94:
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 004h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 004h), 0000h
 	LD IX, (3D04h)
 	db 0, 0, 0, 0	;TODO: Fix ASL: MUL IX, 0025h
 	LDA XHL, 55E4h
@@ -262816,13 +262816,13 @@ LABEL_F6CDFA:
 	LD (XWA+), 000h
 	CP XWA, XBC
 	JR C, LABEL_F6CDFA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 004h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 004h), 0000h
 	LD IZ, 0
 
 LABEL_F6CE09:
 	CPW (XSP + 004h), 0000h
 	JR NZ, LABEL_F6CE44
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 006h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 006h), 0000h
 	CPW (XSP + 004h), 0028h
 	JR GE, LABEL_F6CE44
 
@@ -262842,7 +262842,7 @@ LABEL_F6CE1C:
 	JR LT, LABEL_F6CE1C
 
 LABEL_F6CE44:
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 006h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 006h), 0000h
 
 LABEL_F6CE49:
 	LD WA, (XSP + 006h)
@@ -262853,7 +262853,7 @@ LABEL_F6CE49:
 	JR LT, LABEL_F6CE49
 
 LABEL_F6CE5E:
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 010h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 010h), 0000h
 
 LABEL_F6CE63:
 	LD WA, (XSP + 006h)
@@ -262867,7 +262867,7 @@ LABEL_F6CE63:
 LABEL_F6CE7B:
 	LD WA, (XSP + 010h)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0002h
 	LD WA, QWA
 	LD QIZ, 1
 	CP WA, 0
@@ -262914,7 +262914,7 @@ LABEL_F6CEEB:
 
 LABEL_F6CEF6:
 	CALR LABEL_F6C014
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 004h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 004h), 0000h
 	LD IX, (3D04h)
 	db 0, 0, 0, 0	;TODO: Fix ASL: MUL IX, 0025h
 	LDA XHL, 55E4h
@@ -262973,7 +262973,7 @@ LABEL_F6CF70:
 LABEL_F6CF7E:
 	LD XWA, (3D5Ch)
 	LD (XSP + 00ah), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 004h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 004h), 0000h
 	CALR LABEL_F6C026
 	CALR LABEL_F6C0B7
 	LD XWA, 0000488ch
@@ -263027,7 +263027,7 @@ LABEL_F6D002:
 LABEL_F6D014:
 	CPW (XSP + 004h), 0000h
 	JRL Z, LABEL_F6D1E8
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 008h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 008h), 0000h
 	CPW (XSP + 004h), 0000h
 	JRL LE, LABEL_F6D0D5
 
@@ -263101,7 +263101,7 @@ LABEL_F6D0D5:
 	CALR LABEL_F6C0A5
 	LD (0FFC00h), 0ffh
 	LD (0FFC01h), 000h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 010h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 010h), 0000h
 	LD QIZ, 0
 	CPW (XSP + 004h), 0000h
 	JRL LE, LABEL_F6D778
@@ -263155,7 +263155,7 @@ LABEL_F6D154:
 	INC 1, QIZ
 	LD WA, IZ
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0002h
 	LD WA, QWA
 	CP WA, 0
 	JR NZ, LABEL_F6D189
@@ -263216,7 +263216,7 @@ LABEL_F6D1EE:
 	PUSH XWA
 	CALL LABEL_FF0D99
 	LDA XSP, XSP + 00ah
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 004h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 004h), 0000h
 	LDA XDE, 48B6h
 
 LABEL_F6D21C:
@@ -263252,7 +263252,7 @@ LABEL_F6D260:
 	JR C, LABEL_F6D260
 	LD XWA, (3D5Ch)
 	LD (3D60h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 004h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 004h), 0000h
 	CPW (48D8h), 0000h
 	JRL ULE, LABEL_F6D32D
 
@@ -263326,7 +263326,7 @@ LABEL_F6D32D:
 	CALR LABEL_F6C0A5
 	LD (0FFC00h), 0ffh
 	LD (0FFC01h), 000h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 004h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 004h), 0000h
 	LD IZ, 0
 	CPW (48D8h), 0000h
 	JRL ULE, LABEL_F6D778
@@ -263350,7 +263350,7 @@ LABEL_F6D34C:
 	CALL LABEL_FF0D99
 	LDA XSP, XSP + 00ah
 	INC 4, IZ
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 006h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 006h), 0000h
 	LD BC, (XSP + 004h)
 	SLL 5, BC
 	LDA XDE, 3F88h
@@ -263383,7 +263383,7 @@ LABEL_F6D3B5:
 	INC 1, IZ
 	LD WA, (XSP + 006h)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0002h
 	LD WA, QWA
 	CP WA, 0
 	JR NZ, LABEL_F6D3E7
@@ -263436,7 +263436,7 @@ LABEL_F6D431:
 	db 0, 0	;TODO: Fix ASL: INC 0, XSP
 	LD XWA, (3D5Ch)
 	LD (XSP + 00ah), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 008h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 008h), 0000h
 	LDA XWA, XSP + 012h
 	LD XBC, 00e4c15eh
 	CALL LABEL_F88BC7
@@ -263460,7 +263460,7 @@ LABEL_F6D431:
 	LD (4788h), XWA
 	LD XWA, (XSP + 00eh)
 	ADD (XSP + 00ah), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 004h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 004h), 0000h
 	LDA XWA, XSP + 012h
 
 LABEL_F6D4AD:
@@ -263492,7 +263492,7 @@ LABEL_F6D4CB:
 	JR LT, LABEL_F6D4CB
 
 LABEL_F6D4EF:
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 004h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 004h), 0000h
 
 LABEL_F6D4F4:
 	LD BC, (XSP + 004h)
@@ -263522,7 +263522,7 @@ LABEL_F6D50A:
 	CALL LABEL_F88EE0
 	CP HL, 0
 	JRL LT, LABEL_F6D5C6
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 008h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 008h), 0001h
 	CALL LABEL_F88F39
 	LD (XSP + 00eh), XHL
 	CALL LABEL_F88F10
@@ -263536,7 +263536,7 @@ LABEL_F6D50A:
 	LD (478Ch), XWA
 	LD XWA, (XSP + 00eh)
 	ADD (XSP + 00ah), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 004h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 004h), 0000h
 	LDA XBC, XSP + 012h
 
 LABEL_F6D580:
@@ -263569,7 +263569,7 @@ LABEL_F6D59E:
 	JR LT, LABEL_F6D59E
 
 LABEL_F6D5C6:
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 004h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 004h), 0000h
 	LDA XWA, XSP + 012h
 
 LABEL_F6D5CE:
@@ -263621,7 +263621,7 @@ LABEL_F6D5E4:
 	ADD XBC, XWA
 	LD XWA, (XSP + 00ah)
 	LD (XBC), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 004h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 004h), 0000h
 	LDA XBC, XSP + 012h
 
 LABEL_F6D66C:
@@ -263659,7 +263659,7 @@ LABEL_F6D6B6:
 	CALR LABEL_F6C0A5
 	LD (0FFC00h), 0ffh
 	LD (0FFC01h), 000h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 004h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 004h), 0000h
 	LD IZ, 0
 	LD WA, (XSP + 008h)
 	ADD WA, 0001h
@@ -263681,7 +263681,7 @@ LABEL_F6D6D6:
 	CALL LABEL_FF0D99
 	LDA XSP, XSP + 00ah
 	INC 4, IZ
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 006h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 006h), 0000h
 	LD BC, (XSP + 004h)
 	SLL 5, BC
 	LDA XDE, 3F88h
@@ -263714,7 +263714,7 @@ LABEL_F6D738:
 	INC 1, IZ
 	LD WA, (XSP + 006h)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0002h
 	LD WA, QWA
 	CP WA, 0
 	JR NZ, LABEL_F6D76A
@@ -263747,7 +263747,7 @@ LABEL_F6D78F:
 	LD (XWA+), 000h
 	CP XWA, XBC
 	JR C, LABEL_F6D78F
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 004h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 004h), 0000h
 	LD IZ, 0
 
 LABEL_F6D79E:
@@ -263779,7 +263779,7 @@ LABEL_F6D7DB:
 	CP E, 07ch
 	JR NZ, LABEL_F6D81B
 	LD (XHL), 000h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 006h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 006h), 0000h
 	INC 1, IZ
 	CP IZ, 1
 	JR LE, LABEL_F6D82D
@@ -264513,11 +264513,11 @@ LABEL_F6E1B3:
 
 LABEL_F6E1B8:
 	LD XHL, (7E4Ch)
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XHL + 000h), 000ah
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XHL + 002h), 00ffh
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XHL + 004h), 000ah
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XHL + 006h), 000ah
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XHL + 008h), 00f6h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XHL + 000h), 000ah
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XHL + 002h), 00ffh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XHL + 004h), 000ah
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XHL + 006h), 000ah
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XHL + 008h), 00f6h
 	RET
 
 LABEL_F6E1D6:
@@ -269372,7 +269372,7 @@ InitializeEast:
 	LD (XBC), XWA
 	LDA XWA, 0FA496Ch
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 003ch
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 003ch
 	LDA XWA, 0E55210h
 	LD (XBC + 00ah), XWA
 	LD WA, 0123h
@@ -269382,7 +269382,7 @@ InitializeEast:
 	LD (XBC), XWA
 	LDA XWA, 0FA496Ch
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 003ch
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 003ch
 	LDA XWA, 0E55304h
 	LD (XBC + 00ah), XWA
 	LD WA, 0423h
@@ -269392,7 +269392,7 @@ InitializeEast:
 	LD (XBC), XWA
 	LDA XWA, 0FA48A9h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0010h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0010h
 	LDA XWA, 0E55DAEh
 	LD (XBC + 00ah), XWA
 	LD WA, 0103h
@@ -269402,7 +269402,7 @@ InitializeEast:
 	LD (XBC), XWA
 	LDA XWA, 0FA48A9h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0010h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0010h
 	LDA XWA, 0E55DF2h
 	LD (XBC + 00ah), XWA
 	LD WA, 0403h
@@ -269412,7 +269412,7 @@ InitializeEast:
 	LD (XBC), XWA
 	LDA XWA, 0FA4A18h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0007h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0007h
 	LDA XWA, 0E5AD8Ch
 	LD (XBC + 00ah), XWA
 	LD WA, 0143h
@@ -269422,7 +269422,7 @@ InitializeEast:
 	LD (XBC), XWA
 	LDA XWA, 0FA4A18h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0007h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0007h
 	LDA XWA, 0E5ADACh
 	LD (XBC + 00ah), XWA
 	LD WA, 0443h
@@ -269432,7 +269432,7 @@ InitializeEast:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0004h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0004h
 	LDA XWA, 0E59C5Ah
 	LD (XBC + 00ah), XWA
 	LD WA, 0009h
@@ -269442,7 +269442,7 @@ InitializeEast:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0004h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0004h
 	LDA XWA, 0E5A122h
 	LD (XBC + 00ah), XWA
 	LD WA, 0309h
@@ -269452,7 +269452,7 @@ InitializeEast:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0003h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0003h
 	LDA XWA, 0E59C6Eh
 	LD (XBC + 00ah), XWA
 	LD WA, 000fh
@@ -269462,7 +269462,7 @@ InitializeEast:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0003h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0003h
 	LDA XWA, 0E5A152h
 	LD (XBC + 00ah), XWA
 	LD WA, 030fh
@@ -269472,7 +269472,7 @@ InitializeEast:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 000ch
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 000ch
 	LDA XWA, 0E59C7Eh
 	LD (XBC + 00ah), XWA
 	LD WA, 0018h
@@ -269482,7 +269482,7 @@ InitializeEast:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 000ch
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 000ch
 	LDA XWA, 0E5A17Ah
 	LD (XBC + 00ah), XWA
 	LD WA, 0318h
@@ -269492,7 +269492,7 @@ InitializeEast:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 000ch
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 000ch
 	LDA XWA, 0E59CB2h
 	LD (XBC + 00ah), XWA
 	LD WA, 0019h
@@ -269502,7 +269502,7 @@ InitializeEast:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 000ch
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 000ch
 	LDA XWA, 0E5A1D4h
 	LD (XBC + 00ah), XWA
 	LD WA, 0319h
@@ -269512,7 +269512,7 @@ InitializeEast:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 000ch
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 000ch
 	LDA XWA, 0E59CE6h
 	LD (XBC + 00ah), XWA
 	LD WA, 001ah
@@ -269522,7 +269522,7 @@ InitializeEast:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 000ch
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 000ch
 	LDA XWA, 0E5A23Ah
 	LD (XBC + 00ah), XWA
 	LD WA, 031ah
@@ -269532,7 +269532,7 @@ InitializeEast:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0014h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0014h
 	LDA XWA, 0E59D1Ah
 	LD (XBC + 00ah), XWA
 	LD WA, 0050h
@@ -269542,7 +269542,7 @@ InitializeEast:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0014h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0014h
 	LDA XWA, 0E5A2A8h
 	LD (XBC + 00ah), XWA
 	LD WA, 0350h
@@ -269552,7 +269552,7 @@ InitializeEast:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0007h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0007h
 	LDA XWA, 0E59D6Eh
 	LD (XBC + 00ah), XWA
 	LD WA, 0051h
@@ -269562,7 +269562,7 @@ InitializeEast:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0007h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0007h
 	LDA XWA, 0E5A350h
 	LD (XBC + 00ah), XWA
 	LD WA, 0351h
@@ -269572,7 +269572,7 @@ InitializeEast:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0008h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0008h
 	LDA XWA, 0E59D8Eh
 	LD (XBC + 00ah), XWA
 	LD WA, 0052h
@@ -269582,7 +269582,7 @@ InitializeEast:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0008h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0008h
 	LDA XWA, 0E5A39Eh
 	LD (XBC + 00ah), XWA
 	LD WA, 0352h
@@ -269592,7 +269592,7 @@ InitializeEast:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0006h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0006h
 	LDA XWA, 0E59DB2h
 	LD (XBC + 00ah), XWA
 	LD WA, 0053h
@@ -269602,7 +269602,7 @@ InitializeEast:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0006h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0006h
 	LDA XWA, 0E5A3F2h
 	LD (XBC + 00ah), XWA
 	LD WA, 0353h
@@ -269612,7 +269612,7 @@ InitializeEast:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0005h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0005h
 	LDA XWA, 0E59DCEh
 	LD (XBC + 00ah), XWA
 	LD WA, 0054h
@@ -269622,7 +269622,7 @@ InitializeEast:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0005h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0005h
 	LDA XWA, 0E5A448h
 	LD (XBC + 00ah), XWA
 	LD WA, 0354h
@@ -269632,7 +269632,7 @@ InitializeEast:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0005h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0005h
 	LDA XWA, 0E59DE6h
 	LD (XBC + 00ah), XWA
 	LD WA, 0055h
@@ -269642,7 +269642,7 @@ InitializeEast:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0005h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0005h
 	LDA XWA, 0E5A488h
 	LD (XBC + 00ah), XWA
 	LD WA, 0355h
@@ -269652,7 +269652,7 @@ InitializeEast:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0043h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0043h
 	LDA XWA, 0E59DFEh
 	LD (XBC + 00ah), XWA
 	LD WA, 0056h
@@ -269662,7 +269662,7 @@ InitializeEast:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0043h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0043h
 	LDA XWA, 0E5A4C8h
 	LD (XBC + 00ah), XWA
 	LD WA, 0356h
@@ -269672,7 +269672,7 @@ InitializeEast:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 001ch
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 001ch
 	LDA XWA, 0E59F0Eh
 	LD (XBC + 00ah), XWA
 	LD WA, 0057h
@@ -269682,7 +269682,7 @@ InitializeEast:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 001ch
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 001ch
 	LDA XWA, 0E5A77Ch
 	LD (XBC + 00ah), XWA
 	LD WA, 0357h
@@ -269692,7 +269692,7 @@ InitializeEast:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0015h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0015h
 	LDA XWA, 0E59F82h
 	LD (XBC + 00ah), XWA
 	LD WA, 0058h
@@ -269702,7 +269702,7 @@ InitializeEast:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0015h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0015h
 	LDA XWA, 0E5A906h
 	LD (XBC + 00ah), XWA
 	LD WA, 0358h
@@ -269712,7 +269712,7 @@ InitializeEast:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0006h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0006h
 	LDA XWA, 0E59FDAh
 	LD (XBC + 00ah), XWA
 	LD WA, 0059h
@@ -269722,7 +269722,7 @@ InitializeEast:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0006h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0006h
 	LDA XWA, 0E5A9AEh
 	LD (XBC + 00ah), XWA
 	LD WA, 0359h
@@ -269732,7 +269732,7 @@ InitializeEast:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0006h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0006h
 	LDA XWA, 0E59FF6h
 	LD (XBC + 00ah), XWA
 	LD WA, 005ah
@@ -269742,7 +269742,7 @@ InitializeEast:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0006h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0006h
 	LDA XWA, 0E5A9F0h
 	LD (XBC + 00ah), XWA
 	LD WA, 035ah
@@ -269752,7 +269752,7 @@ InitializeEast:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0011h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0011h
 	LDA XWA, 0E5A012h
 	LD (XBC + 00ah), XWA
 	LD WA, 005bh
@@ -269762,7 +269762,7 @@ InitializeEast:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0011h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0011h
 	LDA XWA, 0E5AA30h
 	LD (XBC + 00ah), XWA
 	LD WA, 035bh
@@ -269772,7 +269772,7 @@ InitializeEast:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0008h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0008h
 	LDA XWA, 0E5A05Ah
 	LD (XBC + 00ah), XWA
 	LD WA, 005ch
@@ -269782,7 +269782,7 @@ InitializeEast:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0008h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0008h
 	LDA XWA, 0E5AAC6h
 	LD (XBC + 00ah), XWA
 	LD WA, 035ch
@@ -269792,7 +269792,7 @@ InitializeEast:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0018h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0018h
 	LDA XWA, 0E5A07Eh
 	LD (XBC + 00ah), XWA
 	LD WA, 00d7h
@@ -269802,7 +269802,7 @@ InitializeEast:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0018h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0018h
 	LDA XWA, 0E5AB12h
 	LD (XBC + 00ah), XWA
 	LD WA, 03d7h
@@ -269812,7 +269812,7 @@ InitializeEast:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0008h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0008h
 	LDA XWA, 0E5A0E2h
 	LD (XBC + 00ah), XWA
 	LD WA, 00d8h
@@ -269822,7 +269822,7 @@ InitializeEast:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0008h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0008h
 	LDA XWA, 0E5AC06h
 	LD (XBC + 00ah), XWA
 	LD WA, 03d8h
@@ -269832,7 +269832,7 @@ InitializeEast:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0006h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0006h
 	LDA XWA, 0E5A106h
 	LD (XBC + 00ah), XWA
 	LD WA, 00ech
@@ -269842,7 +269842,7 @@ InitializeEast:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0006h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0006h
 	LDA XWA, 0E5AC5Ah
 	LD (XBC + 00ah), XWA
 	LD WA, 03ech
@@ -271542,11 +271542,11 @@ LABEL_F749CC:
 	LD BC, (XDE + 004h)
 	LD WA, BC
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 000ch
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 000ch
 	DEC 2, WA
 	PUSH WA
 	EXTS XBC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW BC, 000ch
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW BC, 000ch
 	LD WA, QBC
 	SLA 002h, WA
 	LDA XBC, 0E7F778h
@@ -275217,7 +275217,7 @@ LABEL_F77BC7:
 	LDA XDE, XSP + 004h
 	LD XBC, 01e0008ch
 	CALL SendEvent
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 006h), 0004h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 006h), 0004h
 	PUSHW 00e7h
 	PUSHW 0ffb0h
 	LDA XWA, XSP + 010h
@@ -275244,7 +275244,7 @@ LABEL_F77C14:
 	LDA XDE, XSP + 004h
 	LD XBC, 01e0008ch
 	CALL SendEvent
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 006h), 0004h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 006h), 0004h
 	LD C, (024770h)
 	EXTS BC
 	LD A, (02476Eh)
@@ -275278,7 +275278,7 @@ LABEL_F77C77:
 	LDA XDE, XSP + 004h
 	LD XBC, 01e0008ch
 	CALL SendEvent
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 006h), 0003h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 006h), 0003h
 	PUSHW 00e7h
 	PUSHW 0ffcch
 	LDA XWA, XSP + 010h
@@ -275290,7 +275290,7 @@ LABEL_F77C77:
 	LDA XDE, XSP + 004h
 	LD XBC, 01e0008ch
 	CALL SendEvent
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 006h), 0004h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 006h), 0004h
 	PUSHW 00e7h
 	PUSHW 0ffd2h
 	LDA XWA, XSP + 010h
@@ -275317,7 +275317,7 @@ LABEL_F77CEF:
 	LDA XDE, XSP + 004h
 	LD XBC, 01e0008ch
 	CALL SendEvent
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 006h), 0003h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 006h), 0003h
 	LD A, (024770h)
 	EXTS WA
 	PUSH WA
@@ -275332,7 +275332,7 @@ LABEL_F77CEF:
 	LDA XDE, XSP + 004h
 	LD XBC, 01e0008ch
 	CALL SendEvent
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 006h), 0004h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 006h), 0004h
 	LD C, (024770h)
 	EXTS BC
 	LD A, (02476Eh)
@@ -277685,7 +277685,7 @@ LABEL_F7A113:
 	SLA 002h, DE
 	LD A, (024776h)
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0024h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0024h
 	LD BC, WA
 	ADD BC, DE
 	LD XWA, (XSP + 008h)
@@ -277900,7 +277900,7 @@ LABEL_F7A38E:
 	CALL SendEvent
 	LD A, (024778h)
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ah
 	LDA XBC, 0E80400h
 	LD XDE, 0
 	LD E, (XBC + WA)
@@ -277933,7 +277933,7 @@ LABEL_F7A3ED:
 	CALL SendEvent
 	LD A, (024778h)
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ah
 	LDA XBC, 0E80400h
 	LD XDE, 0
 	LD E, (XBC + WA)
@@ -278002,7 +278002,7 @@ LABEL_F7A495:
 	EXTZ BC
 	LD A, (024778h)
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ah
 	ADD WA, BC
 	LDA XBC, 0E803FEh
 	LD XDE, 0
@@ -278038,7 +278038,7 @@ LABEL_F7A51D:
 	SUB BC, WA
 	LD A, (024778h)
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ah
 	ADD WA, BC
 	LDA XBC, 0E803FEh
 	LD XDE, 0
@@ -278060,7 +278060,7 @@ LABEL_F7A584:
 	DEC 1, BC
 	LD A, (024778h)
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ah
 	ADD WA, BC
 	LDA XBC, 0E803FEh
 	LD XDE, 0
@@ -278148,7 +278148,7 @@ LABEL_F7A681:
 	CALL SendEvent
 	LD A, (024778h)
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ah
 	LDA XBC, 0E80400h
 	LD XDE, 0
 	LD E, (XBC + WA)
@@ -278181,7 +278181,7 @@ LABEL_F7A6DA:
 	ADD BC, IZ
 	LD A, (024778h)
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ah
 	ADD WA, BC
 	LDA XBC, 0E803FEh
 	LD XDE, 0
@@ -278203,7 +278203,7 @@ LABEL_F7A73D:
 	INC 1, BC
 	LD A, (024778h)
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ah
 	ADD WA, BC
 	LDA XBC, 0E803FEh
 	LD XDE, 0
@@ -278471,11 +278471,11 @@ LABEL_F7AC20:
 	LD (XDE), XHL
 	LD DE, (XIY)
 	LD BC, (XBC)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW BC, 000ch
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW BC, 000ch
 	SUB BC, 0018h
 	LD A, (024778h)
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0060h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0060h
 	ADD WA, BC
 	CP DE, 3
 	JRL Z, LABEL_F7ACFB
@@ -278623,7 +278623,7 @@ InitializeMurai:
 	LD (XBC), XWA
 	LDA XWA, 0FA496Ch
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 002ch
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 002ch
 	LDA XWA, 0E8070Ah
 	LD (XBC + 00ah), XWA
 	LD WA, 0121h
@@ -278633,7 +278633,7 @@ InitializeMurai:
 	LD (XBC), XWA
 	LDA XWA, 0FA496Ch
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 002ch
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 002ch
 	LDA XWA, 0E807BEh
 	LD (XBC + 00ah), XWA
 	LD WA, 0421h
@@ -278643,7 +278643,7 @@ InitializeMurai:
 	LD (XBC), XWA
 	LDA XWA, 0FA48A9h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0025h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0025h
 	LDA XWA, 0E814F4h
 	LD (XBC + 00ah), XWA
 	LD WA, 0101h
@@ -278653,7 +278653,7 @@ InitializeMurai:
 	LD (XBC), XWA
 	LDA XWA, 0FA48A9h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0025h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0025h
 	LDA XWA, 0E8158Ch
 	LD (XBC + 00ah), XWA
 	LD WA, 0401h
@@ -278663,7 +278663,7 @@ InitializeMurai:
 	LD (XBC), XWA
 	LDA XWA, 0FA4A18h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0002h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0002h
 	LDA XWA, 0E86638h
 	LD (XBC + 00ah), XWA
 	LD WA, 0141h
@@ -278673,7 +278673,7 @@ InitializeMurai:
 	LD (XBC), XWA
 	LDA XWA, 0FA4A18h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0002h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0002h
 	LDA XWA, 0E86644h
 	LD (XBC + 00ah), XWA
 	LD WA, 0441h
@@ -278683,7 +278683,7 @@ InitializeMurai:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0014h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0014h
 	LDA XWA, 0E85470h
 	LD (XBC + 00ah), XWA
 	LD WA, 2
@@ -278693,7 +278693,7 @@ InitializeMurai:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0014h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0014h
 	LDA XWA, 0E859F4h
 	LD (XBC + 00ah), XWA
 	LD WA, 0302h
@@ -278703,7 +278703,7 @@ InitializeMurai:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0054h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0054h
 	LDA XWA, 0E854C4h
 	LD (XBC + 00ah), XWA
 	LD WA, 3
@@ -278713,7 +278713,7 @@ InitializeMurai:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0054h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0054h
 	LDA XWA, 0E85A8Eh
 	LD (XBC + 00ah), XWA
 	LD WA, 0303h
@@ -278723,7 +278723,7 @@ InitializeMurai:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0004h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0004h
 	LDA XWA, 0E85618h
 	LD (XBC + 00ah), XWA
 	LD WA, 4
@@ -278733,7 +278733,7 @@ InitializeMurai:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0004h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0004h
 	LDA XWA, 0E85CF0h
 	LD (XBC + 00ah), XWA
 	LD WA, 0304h
@@ -278743,7 +278743,7 @@ InitializeMurai:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0036h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0036h
 	LDA XWA, 0E8562Ch
 	LD (XBC + 00ah), XWA
 	LD WA, 5
@@ -278753,7 +278753,7 @@ InitializeMurai:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0036h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0036h
 	LDA XWA, 0E85D14h
 	LD (XBC + 00ah), XWA
 	LD WA, 0305h
@@ -278763,7 +278763,7 @@ InitializeMurai:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0003h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0003h
 	LDA XWA, 0E85708h
 	LD (XBC + 00ah), XWA
 	LD WA, 7
@@ -278773,7 +278773,7 @@ InitializeMurai:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0003h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0003h
 	LDA XWA, 0E85F0Ah
 	LD (XBC + 00ah), XWA
 	LD WA, 0307h
@@ -278783,7 +278783,7 @@ InitializeMurai:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0004h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0004h
 	LDA XWA, 0E85718h
 	LD (XBC + 00ah), XWA
 	LD WA, 0008h
@@ -278793,7 +278793,7 @@ InitializeMurai:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0004h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0004h
 	LDA XWA, 0E85F2Ah
 	LD (XBC + 00ah), XWA
 	LD WA, 0308h
@@ -278803,7 +278803,7 @@ InitializeMurai:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 001dh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 001dh
 	LDA XWA, 0E8572Ch
 	LD (XBC + 00ah), XWA
 	LD WA, 000dh
@@ -278813,7 +278813,7 @@ InitializeMurai:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 001dh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 001dh
 	LDA XWA, 0E85F4Eh
 	LD (XBC + 00ah), XWA
 	LD WA, 030dh
@@ -278823,7 +278823,7 @@ InitializeMurai:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0004h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0004h
 	LDA XWA, 0E857A4h
 	LD (XBC + 00ah), XWA
 	LD WA, 00a5h
@@ -278833,7 +278833,7 @@ InitializeMurai:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0004h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0004h
 	LDA XWA, 0E8608Eh
 	LD (XBC + 00ah), XWA
 	LD WA, 03a5h
@@ -278843,7 +278843,7 @@ InitializeMurai:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 000fh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 000fh
 	LDA XWA, 0E857B8h
 	LD (XBC + 00ah), XWA
 	LD WA, 00e4h
@@ -278853,7 +278853,7 @@ InitializeMurai:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 000fh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 000fh
 	LDA XWA, 0E860B2h
 	LD (XBC + 00ah), XWA
 	LD WA, 03e4h
@@ -278863,7 +278863,7 @@ InitializeMurai:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 002ch
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 002ch
 	LDA XWA, 0E857F8h
 	LD (XBC + 00ah), XWA
 	LD WA, 00eah
@@ -278873,7 +278873,7 @@ InitializeMurai:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 002ch
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 002ch
 	LDA XWA, 0E8617Eh
 	LD (XBC + 00ah), XWA
 	LD WA, 03eah
@@ -278883,7 +278883,7 @@ InitializeMurai:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0025h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0025h
 	LDA XWA, 0E858ACh
 	LD (XBC + 00ah), XWA
 	LD WA, 00ebh
@@ -278893,7 +278893,7 @@ InitializeMurai:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0025h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0025h
 	LDA XWA, 0E862F2h
 	LD (XBC + 00ah), XWA
 	LD WA, 03ebh
@@ -278903,7 +278903,7 @@ InitializeMurai:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0018h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0018h
 	LDA XWA, 0E85944h
 	LD (XBC + 00ah), XWA
 	LD WA, 00eeh
@@ -278913,7 +278913,7 @@ InitializeMurai:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0018h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0018h
 	LDA XWA, 0E863FEh
 	LD (XBC + 00ah), XWA
 	LD WA, 03eeh
@@ -278923,7 +278923,7 @@ InitializeMurai:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 000bh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 000bh
 	LDA XWA, 0E859A8h
 	LD (XBC + 00ah), XWA
 	LD WA, 00efh
@@ -278933,7 +278933,7 @@ InitializeMurai:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 000bh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 000bh
 	LDA XWA, 0E864D0h
 	LD (XBC + 00ah), XWA
 	LD WA, 03efh
@@ -278943,7 +278943,7 @@ InitializeMurai:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0006h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0006h
 	LDA XWA, 0E859D8h
 	LD (XBC + 00ah), XWA
 	LD WA, 00f0h
@@ -278953,7 +278953,7 @@ InitializeMurai:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0006h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0006h
 	LDA XWA, 0E86534h
 	LD (XBC + 00ah), XWA
 	LD WA, 03f0h
@@ -280904,7 +280904,7 @@ LABEL_F7C8E8:
 	LD WA, BC
 	SUB WA, (XDE + 002h)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0002h
 	SUB BC, WA
 	LDA XWA, XSP + 010h
 	LD (XWA + 002h), BC
@@ -280927,7 +280927,7 @@ LABEL_F7C8E8:
 	LD WA, (XBC + 004h)
 	SUB WA, (XBC)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0002h
 	LD DE, (XBC)
 	ADD DE, WA
 	LDA XBC, XSP + 00ch
@@ -280940,7 +280940,7 @@ LABEL_F7C8E8:
 	LD WA, (XBC + 004h)
 	SUB WA, (XBC)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0004h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0004h
 	LD DE, (XBC)
 	ADD DE, WA
 	LDA XBC, XSP + 00ch
@@ -280954,7 +280954,7 @@ LABEL_F7C8E8:
 	LD DE, BC
 	SUB DE, (XWA)
 	EXTS XDE
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW DE, 0004h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW DE, 0004h
 	LD WA, DE
 	LD DE, BC
 	SUB DE, WA
@@ -283202,7 +283202,7 @@ IvMesageProc:
 	LD XWA, XIZ
 	CALL InheritedProc
 	LD WA, (02478Ch)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000eh
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000eh
 	LDA XBC, 0E9D340h
 	LD WA, (XBC + WA)
 	SLA 002h, WA
@@ -283212,7 +283212,7 @@ IvMesageProc:
 	LD XDE, 0
 	CALL SendEvent
 	LD WA, (02478Ch)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000eh
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000eh
 	LDA XBC, 0E9D340h
 	CPW (XBC + WA), 0005h
 	JRL NZ, LABEL_F7DE3C
@@ -283236,7 +283236,7 @@ LABEL_F7DDD0:
 	LD XWA, XIZ
 	CALL InheritedProc
 	LD WA, (02478Ch)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000eh
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000eh
 	LDA XBC, 0E9D340h
 	CPW (XBC + WA), 0005h
 	CALL NZ, DrawWall
@@ -283250,7 +283250,7 @@ LABEL_F7DDF9:
 
 LABEL_F7DDFF:
 	LD (02478Ch), WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000eh
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000eh
 	LDA XBC, 0E9D340h
 	LD WA, (XBC + WA)
 	SLA 002h, WA
@@ -283505,7 +283505,7 @@ CheckMessage:
 	CP XBC, 01c00007h
 	JRL NZ, LABEL_F7E115
 	LD WA, (02478Ch)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000eh
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000eh
 	LDA XBC, 0E9D340h
 	LD WA, (XBC + WA)
 	SLA 002h, WA
@@ -283526,7 +283526,7 @@ CheckMessage:
 
 LABEL_F7E0B3:
 	LD BC, WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000eh
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000eh
 	ADD WA, 000eh
 	LDA XDE, 0E9D34Ah
 	LD XWA, (XDE + WA)
@@ -283537,7 +283537,7 @@ LABEL_F7E0B3:
 
 LABEL_F7E0D2:
 	LD WA, (02478Ch)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000eh
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000eh
 	LDA XBC, 0E9D340h
 	LD WA, (XBC + WA)
 	SLA 002h, WA
@@ -283582,7 +283582,7 @@ LABEL_F7E12F:
 	LD WA, (02478Ch)
 	CP WA, 001ah
 	JR Z, LABEL_F7E149
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000eh
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000eh
 	LDA XBC, 0E9D34Ah
 	LD XHL, (XBC + WA)
 	RET
@@ -283622,7 +283622,7 @@ MessageHeader:
 
 LABEL_F7E183:
 	LD BC, (02478Ch)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW BC, 000eh
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW BC, 000eh
 	LDA XWA, 0E9D340h
 	LDA XWA, XWA + BC
 	CPW (XWA), 0003h
@@ -283635,11 +283635,11 @@ LABEL_F7E183:
 	LD XBC, 01e00023h
 	LD XDE, (XSP + 004h)
 	CALL PostEvent
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 008h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 008h), 0000h
 
 LABEL_F7E1BF:
 	LD BC, (02478Ch)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW BC, 000eh
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW BC, 000eh
 	LDA XWA, 0E9D346h
 	LD DE, (XSP + 008h)
 	EXTZ XDE
@@ -283653,7 +283653,7 @@ LABEL_F7E1BF:
 	CALL LABEL_FF0E80
 	LD XIZ, XHL
 	LD BC, (02478Ch)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW BC, 000eh
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW BC, 000eh
 	LDA XWA, 0E9D340h
 	LDA XWA, XWA + BC
 	PUSHW (XWA + 004h)
@@ -284099,7 +284099,7 @@ LABEL_F7E6ED:
 	LD BC, (XHL)
 	SUB BC, DE
 	EXTS XBC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW BC, 0003h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW BC, 0003h
 	ADD DE, BC
 	LD (XHL), DE
 	LDA XBC, XSP + 004h
@@ -284144,7 +284144,7 @@ LABEL_F7E752:
 	SUB IX, BC
 	LD BC, IX
 	EXTS XBC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW BC, 0003h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW BC, 0003h
 	SUB DE, BC
 	LD (XHL), DE
 	LDA XBC, XSP + 004h
@@ -284741,7 +284741,7 @@ LABEL_F7EDDD:
 	JR NZ, LABEL_F7EE34
 	LD WA, IZ
 	EXTZ XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVW WA, 0003h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVW WA, 0003h
 	ADD WA, 001bh
 	PUSH WA
 	PUSHW 00e9h
@@ -284752,7 +284752,7 @@ LABEL_F7EDDD:
 	LDA XSP, XSP + 00ah
 	LD WA, IZ
 	EXTZ XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVW WA, 0003h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVW WA, 0003h
 	LD BC, QWA
 	LDA XWA, XSP + 006h
 	CP BC, 2
@@ -285838,7 +285838,7 @@ LABEL_F7FB3C:
 	LDW (024790h), 0000h
 	LDW (024796h), 0000h
 	LDW (024792h), 0000h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ah), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ah), 0000h
 
 LABEL_F7FB5D:
 	LD WA, (XSP + 00ah)
@@ -285957,9 +285957,9 @@ LABEL_F7FC85:
 
 LABEL_F7FC9F:
 	LD WA, (024796h)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0005h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0005h
 	LD (XSP + 008h), WA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ah), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ah), 0000h
 
 LABEL_F7FCB0:
 	LD WA, (XSP + 008h)
@@ -286002,7 +286002,7 @@ LABEL_F7FD13:
 LABEL_F7FD1F:
 	LD IZ, (024794h)
 	SLA 003h, IZ
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ch), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ch), 0000h
 
 LABEL_F7FD2C:
 	LD BC, (XSP + 008h)
@@ -286048,9 +286048,9 @@ LABEL_F7FD2C:
 	LD XWA, (XSP + 052h)
 	DEC 1, WA
 	LD (024796h), WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0005h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0005h
 	LD (XSP + 008h), WA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ah), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ah), 0000h
 
 LABEL_F7FDC5:
 	LD WA, (XSP + 008h)
@@ -286174,7 +286174,7 @@ LABEL_F7FF08:
 	CP IZ, 008ch
 	JRL GT, LABEL_F7FFFB
 	LD WA, (024796h)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0005h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0005h
 	LD (XSP + 008h), IZ
 	SUBW (XSP + 008h), 0088h
 	ADD (XSP + 008h), WA
@@ -286264,7 +286264,7 @@ LABEL_F7FFFB:
 LABEL_F8003D:
 	LD WA, (024790h)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0008h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0008h
 	LD WA, QWA
 	LD (024790h), WA
 	LDW (024794h), 0000h
@@ -286484,9 +286484,9 @@ LABEL_F80274:
 	LDA XDE, XSP + 042h
 	CALL LABEL_FCD7C5
 	LD WA, (024796h)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0005h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0005h
 	LD (XSP + 008h), WA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ah), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ah), 0000h
 	CP HL, 0ffffh
 	JRL Z, LABEL_F80406
 
@@ -286502,7 +286502,7 @@ LABEL_F802F1:
 	LD (XSP + 00eh), XWA
 	LD IZ, (024794h)
 	SLA 003h, IZ
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ch), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ch), 0000h
 
 LABEL_F8031C:
 	LD WA, IZ
@@ -286599,7 +286599,7 @@ LABEL_F80406:
 	LD (XSP + 00eh), XWA
 	LD IZ, (024794h)
 	SLA 003h, IZ
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ch), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ch), 0000h
 
 LABEL_F80431:
 	LD WA, IZ
@@ -286708,7 +286708,7 @@ LABEL_F80503:
 LABEL_F80559:
 	LD IZ, (024794h)
 	SLA 003h, IZ
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ah), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ah), 0000h
 
 LABEL_F80566:
 	LD WA, IZ
@@ -286753,7 +286753,7 @@ LABEL_F805AB:
 	LD (024790h), IZ
 	LD WA, IZ
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0008h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0008h
 	LD (024794h), WA
 	LD WA, QIZ
 	ADD WA, WA
@@ -286826,9 +286826,9 @@ LABEL_F80644:
 
 LABEL_F806AE:
 	LD WA, (024796h)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0005h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0005h
 	LD (XSP + 008h), WA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ah), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ah), 0000h
 
 LABEL_F806BF:
 	LD WA, (XSP + 008h)
@@ -290186,7 +290186,7 @@ LABEL_F83B92:
 	LDA XIX, 0E9F94Eh
 	LD HL, (XIX + HL)
 	LD (XWA), HL
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 002h), 0072h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 002h), 0072h
 	SLA 002h, DE
 	LDA XHL, 03EC28h
 	LD XDE, (XHL + DE)
@@ -292129,7 +292129,7 @@ LABEL_F84FC3:
 	LD WA, 0
 	LD BC, 6
 	CALL sendCOMM
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 006h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 006h), 0000h
 	CALL LABEL_EF2E71
 	CP HL, 0
 	JR NZ, LABEL_F85026
@@ -292450,7 +292450,7 @@ LABEL_F8541D:
 	PUSH XIZ
 	LD (XSP + 054h), BC
 	LD (XSP + 056h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 012h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 012h), 0000h
 	LD XWA, (XSP + 056h)
 	CP (XWA), 000h
 	JR NZ, LABEL_F8543A
@@ -292461,7 +292461,7 @@ LABEL_F8543A:
 	LD XWA, (XSP + 056h)
 	CP (XWA), 03ch
 	JRL NZ, LABEL_F855C7
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 010h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 010h), 0000h
 	JRL T, LABEL_F85598
 
 LABEL_F8544B:
@@ -292977,11 +292977,11 @@ LABEL_F85729:
 LABEL_F85E50:
 	LD DE, (XWA)
 	EXTS XDE
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW DE, 0008h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW DE, 0008h
 	LD (XBC), DE
 	LD WA, (XWA + 002h)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0004h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0004h
 	LD (XBC + 002h), WA
 	RET
 
@@ -293014,7 +293014,7 @@ LABEL_F85E7A:
 	CP IX, 0028h
 	JR GE, LABEL_F85EC6
 	LD WA, (XWA + 002h)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0028h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0028h
 	LDA XDE, 0251DAh
 
 LABEL_F85EB0:
@@ -293051,7 +293051,7 @@ LABEL_F85ECA:
 	CALL GetCharHeight
 	ADD HL, IZ
 	EXTS XHL
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW HL, 0004h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW HL, 0004h
 	INC 1, HL
 	LDA XWA, XSP + 002h
 	LDA XDE, XWA + 002h
@@ -293063,7 +293063,7 @@ LABEL_F85ECA:
 	LD IY, 0ffffh
 	LD IZ, (XWA)
 	LDA XIX, 0251DAh
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW BC, 0028h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW BC, 0028h
 	LD HL, BC
 	CP IZ, 0
 	JR LE, LABEL_F85F4E
@@ -293144,7 +293144,7 @@ LABEL_F85F8C:
 	NEG WA
 	INC 3, WA
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0004h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0004h
 	SLA 002h, WA
 	ADD BC, WA
 	LD (XDE), BC
@@ -293185,7 +293185,7 @@ LABEL_F85FED:
 	LD IZ, HL
 	CP IZ, QIZ
 	JR Z, LABEL_F86076
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00eh), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00eh), 0001h
 	LD XWA, (XSP + 010h)
 	LDA XWA, XWA + IZ
 	LD (XSP + 00ah), XWA
@@ -293198,7 +293198,7 @@ LABEL_F85FED:
 	JR T, LABEL_F8607B
 
 LABEL_F86076:
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00eh), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00eh), 0000h
 
 LABEL_F8607B:
 	LD WA, (025B3Eh)
@@ -293222,11 +293222,11 @@ LABEL_F8607B:
 	JR NZ, LABEL_F860DD
 	LD DE, (XSP + 004h)
 	EXTS XDE
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW DE, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW DE, 0002h
 	ADD DE, (XBC)
 	LD WA, (XSP + 008h)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0002h
 	SUB DE, WA
 	LD (XBC), DE
 	JR T, LABEL_F860DD
@@ -293322,20 +293322,20 @@ LABEL_F86258:
 	PUSHW 00eah
 	PUSHW 0004h
 	LD BC, QIZ
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW BC, 0018h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW BC, 0018h
 	LDA XWA, 0249D8h
 	LDA XWA, XWA + BC
 	PUSH XWA
 	CALL LABEL_FF0F4D
 	db 0, 0	;TODO: Fix ASL: INC 0, XSP
 	LD WA, QIZ
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0018h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0018h
 	LDA XBC, 0249D8h
 	LDA XDE, XBC + WA
 	LD XWA, 0
 	LD (XDE + 010h), XWA
 	LD WA, QIZ
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0018h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0018h
 	LDA XBC, XBC + WA
 	LD XWA, 0
 	LD (XBC + 014h), XWA
@@ -294269,7 +294269,7 @@ LABEL_F86E93:
 	LD BC, (XDE + BC)
 	AND BC, (0F19Eh)
 	JR Z, LABEL_F86ED9
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0003h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0003h
 	LDA XBC, 0F250h
 	BIT 7, (XBC + WA)
 	JR Z, LABEL_F86ED9
@@ -295237,19 +295237,19 @@ LABEL_F87A1F:
 	LDA XWA, XSP + 00ah
 	LD XDE, (XSP + 004h)
 	CALL LABEL_F8917E
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 008h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 008h), 0000h
 	LD IZ, 0
 
 LABEL_F87A3E:
 	LD WA, IZ
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0006h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0006h
 	LDA XBC, 0EA01C0h
 	LD A, (XBC + WA)
 	CALL LABEL_F892F5
 	CP L, 0
 	JR Z, LABEL_F87A95
 	LD WA, IZ
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0006h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0006h
 	LDA XBC, 0EA01C0h
 	LD A, (XBC + WA)
 	CALL LABEL_F893D1
@@ -295257,7 +295257,7 @@ LABEL_F87A3E:
 	JR Z, LABEL_F87A95
 	LDA XWA, XSP + 00ah
 	LD BC, IZ
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW BC, 0006h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW BC, 0006h
 	LDA XDE, 0EA01C2h
 	EXTS XBC
 	ADD XBC, XDE
@@ -295448,7 +295448,7 @@ LABEL_F87AF6:
 LABEL_F87EAD:
 	LDA XSP, XSP - 01ah
 	PUSH XIZ
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 004h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 004h), 0000h
 	CALL LABEL_F895EF
 	LD IZ, HL
 	CP IZ, 0
@@ -295468,7 +295468,7 @@ LABEL_F87EC6:
 
 LABEL_F87EDD:
 	LD WA, QIZ
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0006h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0006h
 	LDA XBC, 0EA0210h
 	LD A, (XBC + WA)
 	CALL LABEL_F893D1
@@ -295476,7 +295476,7 @@ LABEL_F87EDD:
 	JR Z, LABEL_F87F23
 	LDA XBC, XSP + 014h
 	LD WA, QIZ
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0006h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0006h
 	LDA XDE, 0EA0210h
 	LD E, (XDE + WA)
 	LDA XWA, XSP + 006h
@@ -295513,7 +295513,7 @@ LABEL_F87F23:
 
 LABEL_F87F6A:
 	LD WA, QIZ
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0006h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0006h
 	LDA XBC, 0EA0210h
 	LD A, (XBC + WA)
 	CALL LABEL_F89353
@@ -295521,7 +295521,7 @@ LABEL_F87F6A:
 	JR Z, LABEL_F87FA4
 	LDA XWA, XSP + 014h
 	LD BC, QIZ
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW BC, 0006h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW BC, 0006h
 	LDA XDE, 0EA0212h
 	EXTS XBC
 	ADD XBC, XDE
@@ -295543,7 +295543,7 @@ LABEL_F87FAE:
 
 LABEL_F87FB8:
 	LD WA, QIZ
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0006h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0006h
 	LDA XBC, 0EA0210h
 	LD A, (XBC + WA)
 	CALL LABEL_F89353
@@ -295551,7 +295551,7 @@ LABEL_F87FB8:
 	JR Z, LABEL_F87FF3
 	LDA XBC, XSP + 014h
 	LD WA, QIZ
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0006h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0006h
 	LDA XDE, 0EA0210h
 	LD E, (XDE + WA)
 	LDA XWA, XSP + 006h
@@ -296188,7 +296188,7 @@ LABEL_F889D9:
 	LDA XSP, XSP - 03ah
 	PUSH XIZ
 	LD (XSP + 03ch), WA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 006h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 006h), 0000h
 	CALL LABEL_F895EF
 	LD (XSP + 004h), HL
 	CPW (XSP + 004h), 0000h
@@ -296607,7 +296607,7 @@ LABEL_F88D74:
 	LDA XSP, XSP - 012h
 	PUSH XIZ
 	LD (XSP + 012h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 004h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 004h), 0000h
 	LD XWA, 0
 	LD (XSP + 006h), XWA
 	LD XWA, (7F44h)
@@ -296690,7 +296690,7 @@ LABEL_F88E28:
 	PUSH XIZ
 	LD (XSP + 00eh), XBC
 	LD (XSP + 012h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 004h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 004h), 0000h
 	LD XWA, (7F44h)
 	OR XWA, XWA
 	JR Z, LABEL_F88EB3
@@ -296855,7 +296855,7 @@ LABEL_F88F75:
 	PUSH IZ
 	LD (XSP + 030h), XBC
 	LD XDE, XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ah), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ah), 0000h
 	LD XIY, 00ea0318h
 	LDA XIX, XSP + 020h
 	LD BC, 0008h
@@ -297171,18 +297171,18 @@ LABEL_F891DD:
 	LDA XIX, XWA+
 	LD HL, DE
 	EXTZ XHL
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVW HL, 0064h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVW HL, 0064h
 	ADD L, 030h
 	LD (XIX), L
 	SUB DE, 0064h
 	LDA XIX, XWA+
 	LD HL, DE
 	EXTZ XHL
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVW HL, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVW HL, 000ah
 	ADD L, 030h
 	LD (XIX), L
 	EXTZ XDE
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVW DE, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVW DE, 000ah
 	LD DE, QDE
 	ADD E, 030h
 	LD (XWA), E
@@ -297192,12 +297192,12 @@ LABEL_F89218:
 	LDA XIX, XWA+
 	LD HL, DE
 	EXTZ XHL
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVW HL, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVW HL, 000ah
 	ADD L, 030h
 	LD (XIX), L
 	LDA XHL, XWA+
 	EXTZ XDE
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVW DE, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVW DE, 000ah
 	LD DE, QDE
 	ADD E, 030h
 	LD (XHL), E
@@ -297466,7 +297466,7 @@ LABEL_F893E8:
 	SLL A, DE
 
 LABEL_F893F1:
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW BC, 000ch
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW BC, 000ch
 	LD WA, BC
 	LDA XBC, 025DB8h
 	LD WA, (XBC + WA)
@@ -297519,7 +297519,7 @@ LABEL_F8944D:
 	RET
 
 LABEL_F89450:
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ch
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ch
 	LDA XBC, 025DB8h
 	LD HL, (XBC + WA)
 	RET
@@ -297758,7 +297758,7 @@ LABEL_F8964C:
 
 LABEL_F8965B:
 	LD WA, (025EA8h)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ch
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ch
 	LDA XBC, 025DC2h
 	LD L, (XBC + WA)
 	RET
@@ -297926,7 +297926,7 @@ LABEL_F897B7:
 	LD (XSP + 00ah), XBC
 	LD IZ, WA
 	LD BC, IZ
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW BC, 000ch
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW BC, 000ch
 	LDA XWA, 025DB8h
 	LDA XWA, XWA + BC
 	CP (XWA + 002h), 000h
@@ -297938,14 +297938,14 @@ LABEL_F897B7:
 	CPW (XSP + 004h), 0000h
 	JRL LT, LABEL_F89876
 	LD BC, IZ
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW BC, 000ch
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW BC, 000ch
 	LDA XWA, 025DBAh
 	LDA XWA, XWA + BC
 	LD XBC, (XSP + 00ah)
 	INC 2, XBC
 	LD DE, 6
 	CALR LABEL_F890F2
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW IZ, 000ch
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW IZ, 000ch
 	LDA XWA, 025DB8h
 	LDA XWA, XWA + IZ
 	LD (XWA + 008h), 000h
@@ -297979,7 +297979,7 @@ LABEL_F89839:
 	CP HL, 0
 	JR NZ, LABEL_F89876
 	LDA XBC, 025DC2h
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW IZ, 000ch
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW IZ, 000ch
 	LDA XBC, XBC + IZ
 	LD XWA, (XSP + 006h)
 	CP XWA, 00001388h
@@ -298146,7 +298146,7 @@ LABEL_F89AAB:
 
 LABEL_F89AAE:
 	SUB WA, BC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0052h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0052h
 	LDA XBC, 025EB2h
 	CP (XBC + WA), 000h
 	JR NZ, LABEL_F89AC4
@@ -298200,7 +298200,7 @@ LABEL_F89AEF:
 	CPW (0271F0h), 0000h
 	JR LT, LABEL_F89B4B
 	NEG WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0052h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0052h
 	LDA XBC, 025EB2h
 	EXTS XWA
 	ADD XWA, XBC
@@ -298223,7 +298223,7 @@ LABEL_F89B5B:
 	JR GT, LABEL_F89B84
 	LD BC, IZ
 	SUB BC, WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW BC, 0052h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW BC, 0052h
 	LD WA, BC
 	LDA XBC, 025EB2h
 	EXTS XWA
@@ -298264,7 +298264,7 @@ LABEL_F89BB9:
 	JR NZ, LABEL_F89BE7
 	LD WA, IZ
 	EXTZ XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVW WA, 003ch
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVW WA, 003ch
 	db 0, 0, 0, 0	;TODO: Fix ASL: MULW WA, 003ch
 	LD BC, WA
 	LD (0271EEh), BC
@@ -298404,7 +298404,7 @@ LABEL_F89D09:
 	JR T, LABEL_F89D6A
 
 LABEL_F89D1F:
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 002h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 002h), 0001h
 
 LABEL_F89D24:
 	CALL LABEL_F88CFC
@@ -298417,7 +298417,7 @@ LABEL_F89D24:
 	JR Z, LABEL_F89D48
 	CP HL, 0020h
 	JR Z, LABEL_F89D4A
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 002h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 002h), 0000h
 
 LABEL_F89D48:
 	LD (XWA), C
@@ -298976,7 +298976,7 @@ LABEL_F8A4AC:
 
 LABEL_F8A4AF:
 	SUB WA, BC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0052h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0052h
 	LDA XBC, 025EC0h
 	CP (XBC + WA), 000h
 	JR NZ, LABEL_F8A4C5
@@ -299030,7 +299030,7 @@ LABEL_F8A4F0:
 	CPW (0271F0h), 0000h
 	JR LT, LABEL_F8A54C
 	NEG WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0052h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0052h
 	LDA XBC, 025EC0h
 	EXTS XWA
 	ADD XWA, XBC
@@ -299053,7 +299053,7 @@ LABEL_F8A55C:
 	JR GT, LABEL_F8A585
 	LD BC, IZ
 	SUB BC, WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW BC, 0052h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW BC, 0052h
 	LD WA, BC
 	LDA XBC, 025EC0h
 	EXTS XWA
@@ -299094,7 +299094,7 @@ LABEL_F8A5BA:
 	JR NZ, LABEL_F8A5E8
 	LD WA, IZ
 	EXTZ XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVW WA, 003ch
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVW WA, 003ch
 	db 0, 0, 0, 0	;TODO: Fix ASL: MULW WA, 003ch
 	LD BC, WA
 	LD (0271EEh), BC
@@ -299320,7 +299320,7 @@ LABEL_F8A7B2:
 
 LABEL_F8A7B5:
 	SUB WA, BC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0052h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0052h
 	LDA XBC, 025EB2h
 	CP (XBC + WA), 000h
 	JR NZ, LABEL_F8A7CB
@@ -299402,7 +299402,7 @@ LABEL_F8A866:
 	CALL LABEL_F88EE0
 	LD WA, IZ
 	SUB WA, (0271EEh)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0052h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0052h
 	LDA XBC, 025EB2h
 	EXTS XWA
 	ADD XWA, XBC
@@ -299410,7 +299410,7 @@ LABEL_F8A866:
 	CALL LABEL_F88D74
 	LD WA, IZ
 	SUB WA, (0271EEh)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0052h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0052h
 	LDA XBC, 025EB2h
 	EXTS XWA
 	ADD XWA, XBC
@@ -299457,7 +299457,7 @@ LABEL_F8A8E4:
 	JR GT, LABEL_F8A94A
 	LD WA, QIZ
 	SUB WA, DE
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0052h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0052h
 	LDA XDE, 025EB2h
 	EXTS XWA
 	ADD XWA, XDE
@@ -299465,7 +299465,7 @@ LABEL_F8A8E4:
 	CALR LABEL_F890F2
 	LD WA, QIZ
 	SUB WA, (0271EEh)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0052h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0052h
 	LDA XBC, 025EB2h
 	EXTS XWA
 	ADD XWA, XBC
@@ -299492,7 +299492,7 @@ LABEL_F8A96B:
 	JR NZ, LABEL_F8A999
 	LD WA, IZ
 	EXTZ XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVW WA, 003ch
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVW WA, 003ch
 	db 0, 0, 0, 0	;TODO: Fix ASL: MULW WA, 003ch
 	LD BC, WA
 	LD (0271EEh), BC
@@ -299574,7 +299574,7 @@ LABEL_F8AA03:
 LABEL_F8AA2E:
 	LD WA, IZ
 	SUB WA, (0271EEh)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0052h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0052h
 	LDA XBC, 025EB2h
 	LDA XBC, XBC + WA
 	LDA XWA, XBC + 00eh
@@ -299600,7 +299600,7 @@ LABEL_F8AA5D:
 	CALL LABEL_F88EE0
 	LD WA, IZ
 	SUB WA, (0271EEh)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0052h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0052h
 	LD BC, WA
 	LDA XWA, 025EC0h
 	LDA XWA, XWA + BC
@@ -299608,7 +299608,7 @@ LABEL_F8AA5D:
 	CALL LABEL_F88D74
 	LD WA, IZ
 	SUB WA, (0271EEh)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0052h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0052h
 	LD BC, WA
 	LDA XWA, 025EC0h
 	EXTS XBC
@@ -299620,7 +299620,7 @@ LABEL_F8AA5D:
 	JR GE, LABEL_F8AADA
 	LD WA, IZ
 	SUB WA, (0271EEh)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0052h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0052h
 	LDA XBC, 025EB2h
 	LDA XBC, XBC + WA
 	LDA XWA, XBC + 00eh
@@ -299646,7 +299646,7 @@ LABEL_F8AAE7:
 LABEL_F8AB08:
 	LD WA, IZ
 	SUB WA, (0271EEh)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0052h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0052h
 	LDA XBC, 025EB2h
 	LDA XBC, XBC + WA
 	LDA XWA, XBC + 00eh
@@ -299669,7 +299669,7 @@ LABEL_F8AB3D:
 	CALL LABEL_F88EE0
 	LD WA, IZ
 	SUB WA, (0271EEh)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0052h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0052h
 	LD BC, WA
 	LDA XWA, 025EC0h
 	LDA XWA, XWA + BC
@@ -299677,7 +299677,7 @@ LABEL_F8AB3D:
 	CALL LABEL_F88D74
 	LD WA, IZ
 	SUB WA, (0271EEh)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0052h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0052h
 	LD BC, WA
 	LDA XWA, 025EC0h
 	EXTS XBC
@@ -299689,7 +299689,7 @@ LABEL_F8AB3D:
 	JR GE, LABEL_F8ABA5
 	LD WA, IZ
 	SUB WA, (0271EEh)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0052h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0052h
 	LDA XBC, 025EB2h
 	LDA XBC, XBC + WA
 	LDA XWA, XBC + 00eh
@@ -300165,7 +300165,7 @@ LABEL_F8AFF9:
 
 LABEL_F8AFFC:
 	SUB WA, BC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000eh
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000eh
 	LDA XBC, 02723Ch
 	CP (XBC + WA), 000h
 	JR NZ, LABEL_F8B012
@@ -300219,7 +300219,7 @@ LABEL_F8B03D:
 	CPW (0271F0h), 0000h
 	JR LT, LABEL_F8B098
 	NEG WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000eh
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000eh
 	LDA XBC, 02723Ch
 	EXTS XWA
 	ADD XWA, XBC
@@ -300242,7 +300242,7 @@ LABEL_F8B0A8:
 	JR GT, LABEL_F8B0D1
 	LD BC, IZ
 	SUB BC, WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW BC, 000eh
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW BC, 000eh
 	LD WA, BC
 	LDA XBC, 02723Ch
 	EXTS XWA
@@ -300283,7 +300283,7 @@ LABEL_F8B106:
 	JR NZ, LABEL_F8B134
 	LD WA, IZ
 	EXTZ XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVW WA, 000ah
 	db 0, 0, 0, 0	;TODO: Fix ASL: MULW WA, 000ah
 	LD BC, WA
 	LD (0271EEh), BC
@@ -300845,7 +300845,7 @@ LABEL_F8B6A4:
 	JR C, LABEL_F8B6D0
 	LD IY, WA
 	EXTZ XIY
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVW IY, 2710h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVW IY, 2710h
 	LD IZ, IX
 	INC 1, IX
 	LDA XDE, 7F4Ah
@@ -300874,7 +300874,7 @@ LABEL_F8B6E5:
 	JR C, LABEL_F8B70F
 	LD IY, WA
 	EXTZ XIY
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVW IY, 03e8h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVW IY, 03e8h
 	LD IZ, IX
 	INC 1, IX
 	LDA XDE, 7F4Ah
@@ -300914,7 +300914,7 @@ LABEL_F8B739:
 	JR C, LABEL_F8B763
 	LD IY, WA
 	EXTZ XIY
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVW IY, 0064h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVW IY, 0064h
 	LD IZ, IX
 	INC 1, IX
 	LDA XDE, 7F4Ah
@@ -300954,7 +300954,7 @@ LABEL_F8B78D:
 	JR C, LABEL_F8B7B7
 	LD IY, WA
 	EXTZ XIY
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVW IY, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVW IY, 000ah
 	LD DE, IX
 	INC 1, IX
 	LDA XBC, 7F4Ah
@@ -302889,7 +302889,7 @@ LABEL_F8CB95:
 	JRL T, LABEL_F8D16D
 
 LABEL_F8CBA2:
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 006h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 006h), 0000h
 
 LABEL_F8CBA7:
 	LD WA, (XSP + 006h)
@@ -303288,7 +303288,7 @@ LABEL_F8CFFC:
 	LD XWA, (7F72h)
 	LD XBC, 01c0000fh
 	CALL ApPostEvent
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 006h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 006h), 0000h
 
 LABEL_F8D05A:
 	LD WA, (XSP + 006h)
@@ -304934,8 +304934,8 @@ LABEL_F8E0C8:
 LABEL_F8E11E:
 	LD BC, (81ACh)
 	EXTS XBC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW BC, 000ah
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW BC, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW BC, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW BC, 000ah
 	CALR LABEL_F8DFD2
 
 LABEL_F8E12F:
@@ -305001,7 +305001,7 @@ LABEL_F8E1AE:
 	LD BC, (8504h)
 	LD DE, IX
 	EXTS XDE
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW DE, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW DE, 000ah
 	CP (8D36h), 06bh
 	JR Z, LABEL_F8E205
 	LD HL, BC
@@ -305011,11 +305011,11 @@ LABEL_F8E1AE:
 	DEC 1, BC
 	LD WA, BC
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 000ah
 	CP DE, WA
 	JRL GE, LABEL_F8E75D
 	EXTS XHL
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW HL, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW HL, 000ah
 	LD WA, QHL
 	CP WA, 0
 	JRL Z, LABEL_F8E75D
@@ -305040,11 +305040,11 @@ LABEL_F8E211:
 LABEL_F8E21A:
 	LD WA, HL
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 000ah
 	CP DE, WA
 	JRL GE, LABEL_F8E75D
 	EXTS XBC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW BC, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW BC, 000ah
 	LD WA, QBC
 	CP WA, 0
 	JRL Z, LABEL_F8E75D
@@ -305501,7 +305501,7 @@ LABEL_F8E761:
 	CALL LABEL_F89BA4
 	LD WA, (81ACh)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 000ah
 	LD DE, QWA
 	EXTS XDE
 	LD XWA, (81A0h)
@@ -305509,16 +305509,16 @@ LABEL_F8E761:
 	CALL ApPostEvent
 	LD BC, (81ACh)
 	EXTS XBC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW BC, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW BC, 000ah
 	LD DE, (XSP + 004h)
 	EXTS XDE
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW DE, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW DE, 000ah
 	LD XWA, (81A0h)
 	CP DE, BC
 	JR NZ, LABEL_F8E7EF
 	LD BC, (XSP + 004h)
 	EXTS XBC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW BC, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW BC, 000ah
 	LD BC, QBC
 	SLL 5, BC
 	LDA XHL, 850Ch
@@ -305529,7 +305529,7 @@ LABEL_F8E761:
 	CALL ApPostEvent
 	LD WA, (81ACh)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 000ah
 	LD WA, QWA
 	SLL 5, WA
 	LDA XBC, 850Ch
@@ -305542,7 +305542,7 @@ LABEL_F8E761:
 	JR T, LABEL_F8E80A
 
 LABEL_F8E7EF:
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW BC, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW BC, 000ah
 	CALR LABEL_F8DFD2
 	CP (8D36h), 06ch
 	JR NZ, LABEL_F8E80A
@@ -305599,7 +305599,7 @@ LABEL_F8E85B:
 	CALL LABEL_F89BA4
 	LD WA, (81ACh)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 000ah
 	LD DE, QWA
 	EXTS XDE
 	LD XWA, (81A0h)
@@ -305794,7 +305794,7 @@ LABEL_F8EAA1:
 LABEL_F8EABA:
 	LD WA, (81B4h)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 000ah
 	LD DE, QWA
 	EXTS XDE
 	LD XWA, (81B0h)
@@ -305804,8 +305804,8 @@ LABEL_F8EABA:
 LABEL_F8EAD5:
 	LD BC, (81B4h)
 	EXTS XBC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW BC, 000ah
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW BC, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW BC, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW BC, 000ah
 	CALR LABEL_F8E8B9
 	JRL T, LABEL_F8ECAD
 
@@ -305866,13 +305866,13 @@ LABEL_F8EB6B:
 	DEC 1, BC
 	LD IX, BC
 	EXTS XIX
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW IX, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW IX, 000ah
 	EXTS XHL
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW HL, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW HL, 000ah
 	CP HL, IX
 	JRL GE, LABEL_F8EC05
 	EXTS XDE
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW DE, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW DE, 000ah
 	LD WA, QDE
 	CP WA, 0
 	JR Z, LABEL_F8EC05
@@ -305922,7 +305922,7 @@ LABEL_F8EC09:
 	CALL LABEL_F8B0F1
 	LD WA, (81B4h)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 000ah
 	LD DE, QWA
 	EXTS XDE
 	LD XWA, (81B0h)
@@ -305930,16 +305930,16 @@ LABEL_F8EC09:
 	CALL ApPostEvent
 	LD BC, (81B4h)
 	EXTS XBC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW BC, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW BC, 000ah
 	LD DE, (XSP + 004h)
 	EXTS XDE
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW DE, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW DE, 000ah
 	LD XWA, (81B0h)
 	CP DE, BC
 	JR NZ, LABEL_F8EC97
 	LD BC, (XSP + 004h)
 	EXTS XBC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW BC, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW BC, 000ah
 	LD BC, QBC
 	SLL 5, BC
 	LDA XHL, 850Ch
@@ -305950,7 +305950,7 @@ LABEL_F8EC09:
 	CALL ApPostEvent
 	LD WA, (81B4h)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 000ah
 	LD WA, QWA
 	SLL 5, WA
 	LDA XBC, 850Ch
@@ -305963,7 +305963,7 @@ LABEL_F8EC09:
 	JR T, LABEL_F8EC9E
 
 LABEL_F8EC97:
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW BC, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW BC, 000ah
 	CALR LABEL_F8E8B9
 
 LABEL_F8EC9E:
@@ -309085,7 +309085,7 @@ LABEL_F9207D:
 	LD XWA, (82DAh)
 	LD XBC, 01c0000fh
 	CALL ApPostEvent
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 002h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 002h), 0000h
 	LD IZ, 0
 	LD A, (889Ah)
 	EXTZ WA
@@ -310330,11 +310330,11 @@ LABEL_F92CE8:
 	LD QIZ, HL
 	LD WA, QIZ
 	EXTZ XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVW WA, 000ah
 	LD QIZ, WA
 	db 0, 0, 0, 0	;TODO: Fix ASL: MULW WA, 000ah
 	LD QIZ, WA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 004h), 000ah
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 004h), 000ah
 	LD WA, QIZ
 	ADD WA, 000ah
 	CP WA, IZ
@@ -310965,7 +310965,7 @@ FmmPdFileNameFunc:
 	JRL Z, LABEL_F934B6
 	LD HL, WA
 	EXTS XHL
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW HL, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW HL, 000ah
 	CP XBC, 01c00018h
 	JR Z, LABEL_F9337D
 	CP XBC, 01c00017h
@@ -310984,7 +310984,7 @@ FmmPdFileNameFunc:
 LABEL_F93350:
 	LD WA, (8442h)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 000ah
 	LD DE, QWA
 	EXTS XDE
 	LD XWA, (843Eh)
@@ -310992,7 +310992,7 @@ LABEL_F93350:
 	JRL T, LABEL_F934E0
 
 LABEL_F9336B:
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW HL, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW HL, 000ah
 	LD XWA, (843Eh)
 	LD BC, HL
 	CALR LABEL_F93283
@@ -311054,11 +311054,11 @@ LABEL_F933F0:
 	DEC 1, BC
 	LD WA, BC
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 000ah
 	CP HL, WA
 	JR GE, LABEL_F93411
 	EXTS XDE
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW DE, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW DE, 000ah
 	LD WA, QDE
 	CP WA, 0
 	JR Z, LABEL_F93411
@@ -311073,7 +311073,7 @@ LABEL_F93415:
 	CALL LABEL_F8A5A5
 	LD WA, (8442h)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 000ah
 	LD DE, QWA
 	EXTS XDE
 	LD XWA, (843Eh)
@@ -311081,16 +311081,16 @@ LABEL_F93415:
 	CALL ApPostEvent
 	LD BC, (8442h)
 	EXTS XBC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW BC, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW BC, 000ah
 	LD DE, IZ
 	EXTS XDE
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW DE, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW DE, 000ah
 	LD XWA, (843Eh)
 	CP DE, BC
 	JR NZ, LABEL_F9349F
 	LD BC, IZ
 	EXTS XBC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW BC, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW BC, 000ah
 	LD BC, QBC
 	SLL 5, BC
 	LDA XHL, 850Ch
@@ -311101,7 +311101,7 @@ LABEL_F93415:
 	CALL ApPostEvent
 	LD WA, (8442h)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 000ah
 	LD WA, QWA
 	SLL 5, WA
 	LDA XBC, 850Ch
@@ -311114,7 +311114,7 @@ LABEL_F93415:
 	JRL T, LABEL_F93378
 
 LABEL_F9349F:
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW BC, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW BC, 000ah
 	CALR LABEL_F93283
 	LD XWA, (XSP + 002h)
 	LD XBC, 01c0000bh
@@ -311130,7 +311130,7 @@ LABEL_F934B6:
 	CALL LABEL_F8A5A5
 	LD WA, (8442h)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 000ah
 	LD DE, QWA
 	EXTS XDE
 	LD XWA, (843Eh)
@@ -311161,11 +311161,11 @@ LABEL_F934F1:
 	LD QIZ, HL
 	LD WA, QIZ
 	EXTZ XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVW WA, 000ah
 	LD QIZ, WA
 	db 0, 0, 0, 0	;TODO: Fix ASL: MULW WA, 000ah
 	LD QIZ, WA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 004h), 000ah
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 004h), 000ah
 	LD WA, QIZ
 	ADD WA, 000ah
 	CP WA, IZ
@@ -311769,7 +311769,7 @@ FmmDocFileNameFunc:
 	JRL Z, LABEL_F93C61
 	LD HL, WA
 	EXTS XHL
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW HL, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW HL, 000ah
 	CP XBC, 01c00018h
 	JR Z, LABEL_F93B28
 	CP XBC, 01c00017h
@@ -311788,7 +311788,7 @@ FmmDocFileNameFunc:
 LABEL_F93AFB:
 	LD WA, (84A2h)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 000ah
 	LD DE, QWA
 	EXTS XDE
 	LD XWA, (849Eh)
@@ -311796,7 +311796,7 @@ LABEL_F93AFB:
 	JRL T, LABEL_F93C8B
 
 LABEL_F93B16:
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW HL, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW HL, 000ah
 	LD XWA, (849Eh)
 	LD BC, HL
 	CALR LABEL_F93A2E
@@ -311858,11 +311858,11 @@ LABEL_F93B9B:
 	DEC 1, BC
 	LD WA, BC
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 000ah
 	CP HL, WA
 	JR GE, LABEL_F93BBC
 	EXTS XDE
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW DE, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW DE, 000ah
 	LD WA, QDE
 	CP WA, 0
 	JR Z, LABEL_F93BBC
@@ -311877,7 +311877,7 @@ LABEL_F93BC0:
 	CALL LABEL_F8A956
 	LD WA, (84A2h)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 000ah
 	LD DE, QWA
 	EXTS XDE
 	LD XWA, (849Eh)
@@ -311885,16 +311885,16 @@ LABEL_F93BC0:
 	CALL ApPostEvent
 	LD BC, (84A2h)
 	EXTS XBC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW BC, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW BC, 000ah
 	LD DE, IZ
 	EXTS XDE
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW DE, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW DE, 000ah
 	LD XWA, (849Eh)
 	CP DE, BC
 	JR NZ, LABEL_F93C4A
 	LD BC, IZ
 	EXTS XBC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW BC, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW BC, 000ah
 	LD BC, QBC
 	SLL 5, BC
 	LDA XHL, 850Ch
@@ -311905,7 +311905,7 @@ LABEL_F93BC0:
 	CALL ApPostEvent
 	LD WA, (84A2h)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 000ah
 	LD WA, QWA
 	SLL 5, WA
 	LDA XBC, 850Ch
@@ -311918,7 +311918,7 @@ LABEL_F93BC0:
 	JRL T, LABEL_F93B23
 
 LABEL_F93C4A:
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW BC, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW BC, 000ah
 	CALR LABEL_F93A2E
 	LD XWA, (XSP + 002h)
 	LD XBC, 01c0000bh
@@ -311934,7 +311934,7 @@ LABEL_F93C61:
 	CALL LABEL_F8A956
 	LD WA, (84A2h)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 000ah
 	LD DE, QWA
 	EXTS XDE
 	LD XWA, (849Eh)
@@ -311965,11 +311965,11 @@ LABEL_F93C9C:
 	LD QIZ, HL
 	LD WA, QIZ
 	EXTZ XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVW WA, 000ah
 	LD QIZ, WA
 	db 0, 0, 0, 0	;TODO: Fix ASL: MULW WA, 000ah
 	LD QIZ, WA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 004h), 000ah
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 004h), 000ah
 	LD WA, QIZ
 	ADD WA, 000ah
 	CP WA, IZ
@@ -312628,7 +312628,7 @@ InitializeCheap:
 	LD (XBC), XWA
 	LDA XWA, 0FA496Ch
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 001dh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 001dh
 	LDA XWA, 0EA0A56h
 	LD (XBC + 00ah), XWA
 	LD WA, 0125h
@@ -312638,7 +312638,7 @@ InitializeCheap:
 	LD (XBC), XWA
 	LDA XWA, 0FA496Ch
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 001dh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 001dh
 	LDA XWA, 0EA0ACEh
 	LD (XBC + 00ah), XWA
 	LD WA, 0425h
@@ -312648,7 +312648,7 @@ InitializeCheap:
 	LD (XBC), XWA
 	LDA XWA, 0FA48A9h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 000dh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 000dh
 	LDA XWA, 0EA135Ah
 	LD (XBC + 00ah), XWA
 	LD WA, 0105h
@@ -312658,7 +312658,7 @@ InitializeCheap:
 	LD (XBC), XWA
 	LDA XWA, 0FA48A9h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 000dh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 000dh
 	LDA XWA, 0EA1392h
 	LD (XBC + 00ah), XWA
 	LD WA, 0405h
@@ -312668,7 +312668,7 @@ InitializeCheap:
 	LD (XBC), XWA
 	LDA XWA, 0FA4A18h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0039h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0039h
 	LDA XWA, 0EA7FCEh
 	LD (XBC + 00ah), XWA
 	LD WA, 0145h
@@ -312678,7 +312678,7 @@ InitializeCheap:
 	LD (XBC), XWA
 	LDA XWA, 0FA4A18h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0039h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0039h
 	LDA XWA, 0EA80B6h
 	LD (XBC + 00ah), XWA
 	LD WA, 0445h
@@ -312688,7 +312688,7 @@ InitializeCheap:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 004ah
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 004ah
 	LDA XWA, 0EA67B6h
 	LD (XBC + 00ah), XWA
 	LD WA, 0060h
@@ -312698,7 +312698,7 @@ InitializeCheap:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 004ah
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 004ah
 	LDA XWA, 0EA6FE2h
 	LD (XBC + 00ah), XWA
 	LD WA, 0360h
@@ -312708,7 +312708,7 @@ InitializeCheap:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0080h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0080h
 	LDA XWA, 0EA68E2h
 	LD (XBC + 00ah), XWA
 	LD WA, 0061h
@@ -312718,7 +312718,7 @@ InitializeCheap:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0080h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0080h
 	LDA XWA, 0EA7228h
 	LD (XBC + 00ah), XWA
 	LD WA, 0361h
@@ -312728,7 +312728,7 @@ InitializeCheap:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0000h
 	LDA XWA, 0EA6AE6h
 	LD (XBC + 00ah), XWA
 	LD WA, 0062h
@@ -312738,7 +312738,7 @@ InitializeCheap:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0000h
 	LDA XWA, 0EA75C6h
 	LD (XBC + 00ah), XWA
 	LD WA, 0362h
@@ -312748,7 +312748,7 @@ InitializeCheap:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0000h
 	LDA XWA, 0EA6AEAh
 	LD (XBC + 00ah), XWA
 	LD WA, 0063h
@@ -312758,7 +312758,7 @@ InitializeCheap:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0000h
 	LDA XWA, 0EA75CCh
 	LD (XBC + 00ah), XWA
 	LD WA, 0363h
@@ -312768,7 +312768,7 @@ InitializeCheap:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0000h
 	LDA XWA, 0EA6AEEh
 	LD (XBC + 00ah), XWA
 	LD WA, 0064h
@@ -312778,7 +312778,7 @@ InitializeCheap:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0000h
 	LDA XWA, 0EA75D2h
 	LD (XBC + 00ah), XWA
 	LD WA, 0364h
@@ -312788,7 +312788,7 @@ InitializeCheap:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0003h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0003h
 	LDA XWA, 0EA6AF2h
 	LD (XBC + 00ah), XWA
 	LD WA, 0065h
@@ -312798,7 +312798,7 @@ InitializeCheap:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0003h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0003h
 	LDA XWA, 0EA75D8h
 	LD (XBC + 00ah), XWA
 	LD WA, 0365h
@@ -312808,7 +312808,7 @@ InitializeCheap:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0000h
 	LDA XWA, 0EA6B02h
 	LD (XBC + 00ah), XWA
 	LD WA, 0066h
@@ -312818,7 +312818,7 @@ InitializeCheap:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0000h
 	LDA XWA, 0EA75FCh
 	LD (XBC + 00ah), XWA
 	LD WA, 0366h
@@ -312828,7 +312828,7 @@ InitializeCheap:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0047h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0047h
 	LDA XWA, 0EA6B06h
 	LD (XBC + 00ah), XWA
 	LD WA, 0067h
@@ -312838,7 +312838,7 @@ InitializeCheap:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0047h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0047h
 	LDA XWA, 0EA7602h
 	LD (XBC + 00ah), XWA
 	LD WA, 0367h
@@ -312848,7 +312848,7 @@ InitializeCheap:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0000h
 	LDA XWA, 0EA6C26h
 	LD (XBC + 00ah), XWA
 	LD WA, 006ah
@@ -312858,7 +312858,7 @@ InitializeCheap:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0000h
 	LDA XWA, 0EA77E4h
 	LD (XBC + 00ah), XWA
 	LD WA, 036ah
@@ -312868,7 +312868,7 @@ InitializeCheap:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0015h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0015h
 	LDA XWA, 0EA6C2Ah
 	LD (XBC + 00ah), XWA
 	LD WA, 006bh
@@ -312878,7 +312878,7 @@ InitializeCheap:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0015h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0015h
 	LDA XWA, 0EA77EAh
 	LD (XBC + 00ah), XWA
 	LD WA, 036bh
@@ -312888,7 +312888,7 @@ InitializeCheap:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0053h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0053h
 	LDA XWA, 0EA6C82h
 	LD (XBC + 00ah), XWA
 	LD WA, 006ch
@@ -312898,7 +312898,7 @@ InitializeCheap:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0053h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0053h
 	LDA XWA, 0EA7878h
 	LD (XBC + 00ah), XWA
 	LD WA, 036ch
@@ -312908,7 +312908,7 @@ InitializeCheap:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0000h
 	LDA XWA, 0EA6DD2h
 	LD (XBC + 00ah), XWA
 	LD WA, 006dh
@@ -312918,7 +312918,7 @@ InitializeCheap:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0000h
 	LDA XWA, 0EA7ACAh
 	LD (XBC + 00ah), XWA
 	LD WA, 036dh
@@ -312928,7 +312928,7 @@ InitializeCheap:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0000h
 	LDA XWA, 0EA6DD6h
 	LD (XBC + 00ah), XWA
 	LD WA, 006eh
@@ -312938,7 +312938,7 @@ InitializeCheap:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0000h
 	LDA XWA, 0EA7AD0h
 	LD (XBC + 00ah), XWA
 	LD WA, 036eh
@@ -312948,7 +312948,7 @@ InitializeCheap:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0015h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0015h
 	LDA XWA, 0EA6DDAh
 	LD (XBC + 00ah), XWA
 	LD WA, 0077h
@@ -312958,7 +312958,7 @@ InitializeCheap:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0015h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0015h
 	LDA XWA, 0EA7AD6h
 	LD (XBC + 00ah), XWA
 	LD WA, 0377h
@@ -312968,7 +312968,7 @@ InitializeCheap:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0000h
 	LDA XWA, 0EA6E32h
 	LD (XBC + 00ah), XWA
 	LD WA, 0079h
@@ -312978,7 +312978,7 @@ InitializeCheap:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0000h
 	LDA XWA, 0EA7B8Ch
 	LD (XBC + 00ah), XWA
 	LD WA, 0379h
@@ -312988,7 +312988,7 @@ InitializeCheap:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 005eh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 005eh
 	LDA XWA, 0EA6E36h
 	LD (XBC + 00ah), XWA
 	LD WA, 007bh
@@ -312998,7 +312998,7 @@ InitializeCheap:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 005eh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 005eh
 	LDA XWA, 0EA7B92h
 	LD (XBC + 00ah), XWA
 	LD WA, 037bh
@@ -313008,7 +313008,7 @@ InitializeCheap:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0000h
 	LDA XWA, 0EA6FB2h
 	LD (XBC + 00ah), XWA
 	LD WA, 007ch
@@ -313018,7 +313018,7 @@ InitializeCheap:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0000h
 	LDA XWA, 0EA7E98h
 	LD (XBC + 00ah), XWA
 	LD WA, 037ch
@@ -313028,7 +313028,7 @@ InitializeCheap:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0000h
 	LDA XWA, 0EA6FB6h
 	LD (XBC + 00ah), XWA
 	LD WA, 007dh
@@ -313038,7 +313038,7 @@ InitializeCheap:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0000h
 	LDA XWA, 0EA7E9Eh
 	LD (XBC + 00ah), XWA
 	LD WA, 037dh
@@ -313048,7 +313048,7 @@ InitializeCheap:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0008h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0008h
 	LDA XWA, 0EA6FBAh
 	LD (XBC + 00ah), XWA
 	LD WA, 007eh
@@ -313058,7 +313058,7 @@ InitializeCheap:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0008h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0008h
 	LDA XWA, 0EA7EA4h
 	LD (XBC + 00ah), XWA
 	LD WA, 037eh
@@ -313068,7 +313068,7 @@ InitializeCheap:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0000h
 	LDA XWA, 0EA6FDEh
 	LD (XBC + 00ah), XWA
 	LD WA, 00bch
@@ -313078,7 +313078,7 @@ InitializeCheap:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0000h
 	LDA XWA, 0EA7EE2h
 	LD (XBC + 00ah), XWA
 	LD WA, 03bch
@@ -314286,7 +314286,7 @@ LABEL_F95669:
 	LD WA, (XDE + 006h)
 	DEC 1, WA
 	LD (XSP + 009ch), WA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ch), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ch), 0001h
 	JR T, LABEL_F9570C
 
 LABEL_F956E4:
@@ -315040,9 +315040,9 @@ LABEL_F95E61:
 	SUB (XSP + 006h), WA
 	LD WA, (XSP + 006h)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0008h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0008h
 	LD (XSP + 006h), WA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 004h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 004h), 0001h
 
 LABEL_F95EB4:
 	LDA XHL, 0EA97F2h
@@ -315319,10 +315319,10 @@ LABEL_F96115:
 	LD XWA, XIZ
 	CALL GetViewInstance
 	LDA XWA, XSP + 004h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 002h), 0000h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 006h), 001fh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 002h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 006h), 001fh
 	LDW (XWA), 0000h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 004h), 013fh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 004h), 013fh
 	LD XBC, (XHL + 01ch)
 	PUSH XBC
 	PUSHW (XHL + 024h)
@@ -315374,7 +315374,7 @@ LABEL_F96180:
 	CP BC, 1
 	SCC NZ, BC
 	LD (XSP + 008h), BC
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ah), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ah), 0000h
 	LD XIY, XWA
 	LDA XIX, XSP + 018h
 	LD BC, 4
@@ -315388,7 +315388,7 @@ LABEL_F961A7:
 	MUL XWA, DE
 	LD IZ, WA
 	EXTZ XIZ
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVW IZ, 0064h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVW IZ, 0064h
 	LDA XWA, XHL + 006h
 	LD (XSP + 00ch), XWA
 	LDA XDE, XHL + 002h
@@ -315398,7 +315398,7 @@ LABEL_F961A7:
 	MUL XWA, (XSP + 028h)
 	LD IX, WA
 	EXTZ XIX
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVW IX, 0064h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVW IX, 0064h
 	LD WA, BC
 	SUB WA, (XHL)
 	LD (XSP + 004h), WA
@@ -315410,14 +315410,14 @@ LABEL_F961A7:
 	JR T, LABEL_F96227
 
 LABEL_F961F1:
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 008h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 008h), 0001h
 	JR T, LABEL_F961FD
 
 LABEL_F961F8:
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 008h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 008h), 0000h
 
 LABEL_F961FD:
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ah), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ah), 0001h
 	LDA XHL, XSP + 018h
 	LD BC, (XWA + 002h)
 	LD (XHL), BC
@@ -315432,7 +315432,7 @@ LABEL_F961FD:
 LABEL_F9621D:
 	LD WA, (XHL)
 	LD (XSP + 014h), WA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 006h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 006h), 0001h
 
 LABEL_F96227:
 	LDA XHL, XSP + 010h
@@ -315444,7 +315444,7 @@ LABEL_F96227:
 	LD WA, (XWA)
 	SUB WA, BC
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0002h
 	ADD BC, WA
 	SRL 1, IX
 	LD WA, IX
@@ -315455,11 +315455,11 @@ LABEL_F96227:
 	LD WA, (XWA)
 	SUB WA, BC
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0002h
 	ADD BC, WA
 	SUB BC, IX
 	LD (XHL + 002h), BC
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00eh), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00eh), 0000h
 	CP IZ, 0
 	JR ULE, LABEL_F9628B
 
@@ -315491,7 +315491,7 @@ LABEL_F962A6:
 	LD WA, (XWA)
 	ADD WA, IZ
 	LD (XBC), WA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 006h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 006h), 0001h
 
 LABEL_F962B1:
 	LDA XIX, XSP + 010h
@@ -315506,10 +315506,10 @@ LABEL_F962B1:
 	LD WA, (XDE + 006h)
 	SUB WA, BC
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0002h
 	ADD BC, WA
 	LD (XIX + 002h), BC
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00eh), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00eh), 0000h
 	CPW (XSP + 004h), 0000h
 	JR ULE, LABEL_F96304
 
@@ -315539,10 +315539,10 @@ LABEL_F96304:
 	LD WA, BC
 	SUB WA, (XDE + 002h)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0002h
 	SUB BC, WA
 	LD (XIX + 002h), BC
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00eh), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00eh), 0000h
 	CPW (XSP + 004h), 0000h
 	JR ULE, LABEL_F96357
 
@@ -315576,7 +315576,7 @@ LABEL_F9635E:
 	CP BC, 1
 	SCC NZ, BC
 	LD (XSP + 006h), BC
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 008h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 008h), 0000h
 	LD XIY, XWA
 	LDA XIX, XSP + 01ah
 	LD BC, 4
@@ -315591,7 +315591,7 @@ LABEL_F96385:
 	MUL XWA, DE
 	LD QIZ, WA
 	EXTZ XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVW WA, 0064h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVW WA, 0064h
 	LD QIZ, WA
 	LDA XDE, XHL + 006h
 	LDA XIY, XHL + 002h
@@ -315600,7 +315600,7 @@ LABEL_F96385:
 	MUL XWA, (XSP + 02ah)
 	LD IZ, WA
 	EXTZ XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVW WA, 0064h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVW WA, 0064h
 	LD IZ, WA
 	LD WA, BC
 	SUB WA, (XHL)
@@ -315616,14 +315616,14 @@ LABEL_F96385:
 	JR T, LABEL_F96410
 
 LABEL_F963D7:
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 006h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 006h), 0001h
 	JR T, LABEL_F963E3
 
 LABEL_F963DE:
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 006h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 006h), 0000h
 
 LABEL_F963E3:
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 008h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 008h), 0001h
 	LDA XHL, XSP + 01ah
 	LD BC, (XWA + 002h)
 	LD (XHL), BC
@@ -315647,7 +315647,7 @@ LABEL_F96410:
 	LD WA, (XDE)
 	SUB WA, BC
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0002h
 	ADD BC, WA
 	LD WA, IZ
 	SRL 1, WA
@@ -315681,7 +315681,7 @@ LABEL_F96410:
 	LD BC, (XBC + 006h)
 	SUB BC, DE
 	EXTS XBC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW BC, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW BC, 0002h
 	ADD DE, BC
 	LD BC, IZ
 	SRL 1, BC
@@ -315750,7 +315750,7 @@ LABEL_F9650A:
 	LD BC, (XHL + 006h)
 	SUB BC, DE
 	EXTS XBC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW BC, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW BC, 0002h
 	ADD DE, BC
 	LDA XBC, XSP + 012h
 	LD (XBC + 002h), DE
@@ -315766,7 +315766,7 @@ LABEL_F9650A:
 	LD BC, DE
 	SUB BC, (XHL + 002h)
 	EXTS XBC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW BC, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW BC, 0002h
 	SUB DE, BC
 	LDA XBC, XSP + 012h
 	LD (XBC + 002h), DE
@@ -318880,7 +318880,7 @@ LABEL_F98E13:
 	JRL GT, LABEL_F98F99
 
 LABEL_F98E2D:
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ch), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ch), 0000h
 	LD XWA, (XSP + 014h)
 	db 000h, 000h, 000h	;TODO: Fix ASL: SRL 0, XWA
 	LD QWA, 0
@@ -318936,7 +318936,7 @@ LABEL_F98EA2:
 	JR GT, LABEL_F98ED0
 	LD WA, (XSP + 008h)
 	LD QIZ, WA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ah), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ah), 0000h
 	LD HL, (XSP + 006h)
 	JR T, LABEL_F98F3F
 
@@ -319039,7 +319039,7 @@ LABEL_F98FA0:
 	LD IZ, (XSP + 006h)
 
 LABEL_F98FA3:
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ch), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ch), 0001h
 	JR T, LABEL_F98F53
 
 LABEL_F98FAA:
@@ -319810,7 +319810,7 @@ GetBoxCenter:
 	SUB DE, (XWA)
 	INC 1, DE
 	EXTS XDE
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW DE, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW DE, 0002h
 	LD HL, (XWA)
 	ADD HL, DE
 	LD (XBC), HL
@@ -319819,7 +319819,7 @@ GetBoxCenter:
 	SUB WA, DE
 	INC 1, WA
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0002h
 	ADD DE, WA
 	LD (XBC + 002h), DE
 	RET
@@ -320195,7 +320195,7 @@ LABEL_F99C06:
 	CALL SendEvent
 
 LABEL_F99C2D:
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 002h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 002h), 0000h
 	CALL GetTitleNow
 	LD XWA, XHL
 	LD XBC, 01e0007ah
@@ -320756,7 +320756,7 @@ LABEL_F9A2BA:
 	CALL LABEL_FCD437
 	LDA XDE, XSP + 012h
 	LD (XDE + 004h), HL
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XDE + 006h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XDE + 006h), 0000h
 	LD XWA, 0
 	LD (XDE + 008h), XWA
 	LD XWA, 0ffffffffh
@@ -321590,10 +321590,10 @@ DrawTitleBar:
 	LD WA, (XWA + 004h)
 	DEC 4, WA
 	LD (XBC + 004h), WA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ah), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ah), 0000h
 	CPW (XSP + 032h), 0000h
 	JR Z, LABEL_F9AB04
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ah), 0040h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ah), 0040h
 
 LABEL_F9AB04:
 	LD IZ, 0018h
@@ -321629,7 +321629,7 @@ LABEL_F9AB10:
 	LD XHL, XBC
 	LD DE, (XSP + 008h)
 	EXTS XDE
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW DE, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW DE, 0002h
 	LD IX, DE
 	ADD IX, (XBC)
 	LD WA, (XWA + 004h)
@@ -321644,7 +321644,7 @@ LABEL_F9AB10:
 	INC 4, DE
 	LD WA, (XSP + 00ah)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0002h
 	CP DE, WA
 	JR LE, LABEL_F9ABB9
 	LD XWA, 1
@@ -321656,7 +321656,7 @@ LABEL_F9AB10:
 	LDA XBC, XSP + 00ch
 	LD DE, (XSP + 008h)
 	EXTS XDE
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW DE, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW DE, 0002h
 	LD HL, DE
 	ADD HL, (XBC)
 	LD WA, (XSP + 01ch)
@@ -321716,7 +321716,7 @@ LABEL_F9AC05:
 	LDA XHL, XSP + 00ch
 	LD WA, (XSP + 008h)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0002h
 	ADD WA, 001ch
 	SUB (XHL), WA
 	LDA XDE, XHL + 002h
@@ -322479,7 +322479,7 @@ LABEL_F9B60F:
 	CALL ConvertStrings
 	LD WA, (0274E0h)
 	EXTZ XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVW WA, 000dh
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVW WA, 000dh
 	db 0, 0, 0, 0	;TODO: Fix ASL: MULW WA, 0018h
 	LD DE, WA
 	LDA XBC, XSP + 022h
@@ -322490,7 +322490,7 @@ LABEL_F9B60F:
 	LD (XDE + 002h), WA
 	LD WA, (0274E0h)
 	EXTZ XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVW WA, 000dh
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVW WA, 000dh
 	LD HL, QWA
 	SLL 4, HL
 	LD WA, (XBC)
@@ -322524,7 +322524,7 @@ LABEL_F9B6BE:
 	CALL ConvertStrings
 	LD WA, (0274DEh)
 	EXTZ XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVW WA, 000dh
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVW WA, 000dh
 	db 0, 0, 0, 0	;TODO: Fix ASL: MULW WA, 0018h
 	LD DE, WA
 	LDA XBC, XSP + 022h
@@ -322535,7 +322535,7 @@ LABEL_F9B6BE:
 	LD (XDE + 002h), WA
 	LD WA, (0274DEh)
 	EXTZ XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVW WA, 000dh
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVW WA, 000dh
 	LD HL, QWA
 	SLL 4, HL
 	LD WA, (XBC)
@@ -322585,7 +322585,7 @@ LABEL_F9B74B:
 LABEL_F9B789:
 	LD WA, IZ
 	EXTZ XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVW WA, 000dh
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVW WA, 000dh
 	LD DE, QWA
 	SLL 4, DE
 	LDA XWA, XSP + 022h
@@ -322596,7 +322596,7 @@ LABEL_F9B789:
 	LD (XBC), HL
 	LD DE, IZ
 	EXTZ XDE
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVW DE, 000dh
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVW DE, 000dh
 	db 0, 0, 0, 0	;TODO: Fix ASL: MUL DE, 0018h
 	LD HL, DE
 	LD DE, (XWA + 002h)
@@ -324055,7 +324055,7 @@ LABEL_F9CAC5:
 	LDA XBC, XSP + 008h
 	LD DE, HL
 	EXTS XDE
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW DE, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW DE, 0002h
 	LDA XWA, XSP + 00ch
 	CPW (XBC), 0000h
 	JR NZ, LABEL_F9CAFE
@@ -324080,7 +324080,7 @@ LABEL_F9CB13:
 	JR NZ, LABEL_F9CB34
 	LD DE, IZ
 	EXTS XDE
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW DE, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW DE, 0002h
 	LD IY, (XBC)
 	SUB IY, DE
 	DEC 1, IY
@@ -324171,7 +324171,7 @@ LABEL_F9CBD7:
 	LD WA, (XBC + 004h)
 	SUB WA, (XBC)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0002h
 	LD BC, (XBC)
 	ADD BC, WA
 	LD (XSP + 022h), BC
@@ -324188,7 +324188,7 @@ LABEL_F9CBD7:
 	EXTZ XDE
 	DIV XDE, BC
 	LD (XSP + 008h), DE
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 010h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 010h), 0000h
 	CP BC, 0
 	JRL ULE, LABEL_F9CCD5
 
@@ -324232,7 +324232,7 @@ LABEL_F9CC7E:
 	ADD BC, WA
 	LD WA, (XSP + 008h)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0002h
 	ADD WA, BC
 	LDA XBC, XSP + 022h
 	LD (XBC + 002h), WA
@@ -325310,8 +325310,8 @@ LABEL_F9D7F2:
 	ADD DE, (XSP + 008h)
 	INC 3, DE
 	LD (XHL), DE
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ch), 0000h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ah), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ch), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ah), 0000h
 	CPW (XIX), 0000h
 	JRL ULE, LABEL_F9DBC8
 
@@ -325447,8 +325447,8 @@ LABEL_F9D903:
 	LD XWA, (XSP + 012ah)
 	LD XBC, 01e0003ah
 	CALL SendEvent
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ch), 0000h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ah), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ch), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ah), 0000h
 	JR T, LABEL_F9D9CD
 
 LABEL_F9D99B:
@@ -325548,8 +325548,8 @@ LABEL_F9DA1E:
 	LD XWA, (XSP + 012ah)
 	LD XBC, 01e0003ah
 	CALL SendEvent
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ch), 0000h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ah), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ch), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ah), 0000h
 	JR T, LABEL_F9DAC9
 
 LABEL_F9DA97:
@@ -325974,8 +325974,8 @@ LABEL_F9DEF8:
 	LD XWA, (XSP + 014eh)
 	LD XBC, 01e0008ah
 	CALL SendEvent
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00eh), 0000h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 012h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00eh), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 012h), 0000h
 	JR T, LABEL_F9DF32
 
 LABEL_F9DF27:
@@ -326010,13 +326010,13 @@ LABEL_F9DF32:
 	LD WA, (XSP + 012h)
 	SUB HL, WA
 	LD (XSP + 00ah), HL
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00eh), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00eh), 0000h
 	LD XDE, (XSP + 004h)
 	LD XWA, (XDE + 032h)
 	LD XBC, (XWA)
 	LD WA, (XSP + 013eh)
 	LD (XBC), WA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ch), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ch), 0001h
 	CPW (XDE + 026h), 0001h
 	JR C, LABEL_F9E00A
 
@@ -326087,9 +326087,9 @@ LABEL_F9E00A:
 	LD XWA, (XSP + 014h)
 	LD XWA, (XWA + 01ch)
 	CALL GetCharHeight
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ah), 0000h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00eh), 0000h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ch), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ah), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00eh), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ch), 0001h
 	LD XWA, (XSP + 014h)
 	LDA XWA, XWA + 024h
 	LD (XSP + 014h), XWA
@@ -326209,7 +326209,7 @@ LABEL_F9E0F7:
 	LD XWA, (XDE)
 	LD XWA, (XWA)
 	LD (XWA), BC
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ch), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ch), 0001h
 	LD XWA, (XSP + 014h)
 	CPW (XWA), 0001h
 	JR C, LABEL_F9E16E
@@ -326298,8 +326298,8 @@ LABEL_F9E1C8:
 	LD WA, (XWA + 002h)
 	DEC 1, WA
 	LD (XBC + 006h), WA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00eh), 0000h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ch), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00eh), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ch), 0000h
 	CPW (XHL + 026h), 0000h
 	JRL ULE, LABEL_F9E2D0
 
@@ -326389,8 +326389,8 @@ LABEL_F9E2D0:
 	LD XWA, (XWA)
 	LD WA, (XWA + 002h)
 	LD (XBC + 004h), WA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00eh), 0000h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ch), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00eh), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ch), 0000h
 	CPW (XHL + 024h), 0000h
 	JRL ULE, LABEL_F9E41A
 
@@ -326492,7 +326492,7 @@ LABEL_F9E3AF:
 	LD DE, (XDE)
 	ADD DE, (XIX)
 	EXTS XDE
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW DE, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW DE, 0002h
 	INC 2, DE
 	LD (XWA + 002h), DE
 	LD (XBC + 002h), DE
@@ -326507,13 +326507,13 @@ LABEL_F9E40B:
 	JRL C, LABEL_F9E310
 
 LABEL_F9E41A:
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00eh), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00eh), 0000h
 	LD XWA, (XSP + 014h)
 	CPW (XWA + 024h), 0000h
 	JRL ULE, LABEL_F9DEF3
 
 LABEL_F9E42A:
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ch), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ch), 0001h
 	LD XWA, (XSP + 014h)
 	CPW (XWA + 026h), 0001h
 	JR ULE, LABEL_F9E478
@@ -326626,7 +326626,7 @@ LABEL_F9E528:
 	LD (XSP + 0130h), WA
 	LD WA, (XBC + 006h)
 	LD (XSP + 012ch), WA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ch), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ch), 0001h
 	LD XWA, (XSP + 014h)
 	CPW (XWA + 026h), 0001h
 	JR ULE, LABEL_F9E5A3
@@ -328575,8 +328575,8 @@ MainLswGet:
 	LD XIZ, XHL
 	LD XWA, (XSP + 004h)
 	LD (XIZ), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XIZ + 004h), 0000h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XIZ + 006h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XIZ + 004h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XIZ + 006h), 0000h
 	LD XWA, 0
 	LD (XIZ + 008h), XWA
 	LD XWA, 01400002h
@@ -328609,8 +328609,8 @@ MainLswPartGet:
 	ADD XDE, XBC
 	LD XWA, (XSP + 002h)
 	LD (XWA), XDE
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 004h), 0000h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 006h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 004h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 006h), 0000h
 	LD XBC, 0
 	LD (XWA + 008h), XBC
 	LD XWA, 01400002h
@@ -329287,7 +329287,7 @@ MainBitGet:
 	LD (XIZ), XWA
 	LD XWA, (XSP + 004h)
 	LD (XIZ + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XIZ + 008h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XIZ + 008h), 0000h
 	LD XWA, 0
 	LD (XIZ + 00ah), XWA
 	LD XWA, 01400007h
@@ -329529,11 +329529,11 @@ LABEL_FA0478:
 	LD WA, (XWA + 006h)
 	SUB WA, BC
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0002h
 	ADD BC, WA
 	LD WA, (XSP + 004h)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0002h
 	SUB BC, WA
 	LD WA, BC
 	INC 2, WA
@@ -329589,11 +329589,11 @@ LABEL_FA0515:
 	LD WA, (XWA + 006h)
 	SUB WA, BC
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0004h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0004h
 	ADD BC, WA
 	LD WA, (XSP + 004h)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0002h
 	SUB BC, WA
 	LD WA, BC
 	INC 2, WA
@@ -329612,12 +329612,12 @@ LABEL_FA0515:
 	LD WA, (XWA + 006h)
 	SUB WA, BC
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0004h
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0003h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0004h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0003h
 	ADD BC, WA
 	LD WA, (XSP + 004h)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0002h
 	SUB BC, WA
 	LD WA, BC
 	INC 2, WA
@@ -329660,7 +329660,7 @@ LABEL_FA05D9:
 	LD WA, (XWA + 006h)
 	SUB WA, BC
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0002h
 	ADD BC, WA
 	SUB BC, 000bh
 	LDA XHL, XSP + 0124h
@@ -329888,11 +329888,11 @@ LABEL_FA0850:
 	LD WA, (XWA + 006h)
 	SUB WA, BC
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0002h
 	ADD BC, WA
 	LD WA, (XSP + 004h)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0002h
 	SUB BC, WA
 	LD WA, BC
 	INC 2, WA
@@ -329945,12 +329945,12 @@ LABEL_FA08E9:
 	LD WA, (XWA + 006h)
 	SUB WA, BC
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0004h
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0003h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0004h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0003h
 	ADD BC, WA
 	LD WA, (XSP + 004h)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0002h
 	SUB BC, WA
 	LD WA, BC
 	INC 2, WA
@@ -329991,7 +329991,7 @@ LABEL_FA0966:
 	LD WA, (XWA + 006h)
 	SUB WA, BC
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0002h
 	ADD BC, WA
 	SUB BC, 000bh
 	LDA XHL, XSP + 0122h
@@ -330130,7 +330130,7 @@ LABEL_FA0AA4:
 	JR T, LABEL_FA0AE0
 
 LABEL_FA0ADB:
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 004h), 013fh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 004h), 013fh
 
 LABEL_FA0AE0:
 	LDA XWA, XSP + 008h
@@ -330204,7 +330204,7 @@ LABEL_FA0BDC:
 	LD BC, (XWA + 006h)
 	SUB BC, DE
 	EXTS XBC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW BC, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW BC, 0002h
 	ADD DE, BC
 	LD (XHL + 002h), DE
 	LD (XIX + 002h), DE
@@ -330442,8 +330442,8 @@ LABEL_FA0F35:
 	CPW (XBC + 002h), 00efh
 	JR NZ, LABEL_FA0F73
 	LD XWA, (XSP + 008h)
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 010h), 00d8h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 014h), 00eeh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 010h), 00d8h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 014h), 00eeh
 	LD BC, (XBC)
 	SUB BC, 0010h
 	LD (XWA + 00eh), BC
@@ -331301,7 +331301,7 @@ LABEL_FA178D:
 	JR T, LABEL_FA17CB
 
 LABEL_FA17C6:
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 004h), 013fh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 004h), 013fh
 
 LABEL_FA17CB:
 	LDA XWA, XSP + 008h
@@ -331561,8 +331561,8 @@ LABEL_FA1A1E:
 	CPW (XBC + 002h), 00efh
 	JR NZ, LABEL_FA1A5C
 	LD XWA, (XSP + 008h)
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 010h), 00d8h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 014h), 00eeh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 010h), 00d8h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 014h), 00eeh
 	LD BC, (XBC)
 	SUB BC, 0010h
 	LD (XWA + 00eh), BC
@@ -333125,7 +333125,7 @@ LABEL_FA2836:
 	LD BC, (XDE)
 	SUB BC, (XWA)
 	EXTS XBC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW BC, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW BC, 0002h
 	LD HL, (XWA)
 	ADD HL, BC
 	LDA XIX, XSP + 020h
@@ -333206,7 +333206,7 @@ LABEL_FA28D7:
 	LD WA, (XDE + 004h)
 	SUB WA, (XDE)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0002h
 	LD HL, (XDE)
 	ADD HL, WA
 	LDA XBC, XSP + 020h
@@ -333243,9 +333243,9 @@ LABEL_FA28D7:
 	LDA XWA, XSP + 020h
 	LD BC, 0080h
 	SUB BC, (XSP + 004h)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW BC, 0024h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW BC, 0024h
 	EXTS XBC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW BC, 0080h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW BC, 0080h
 	ADD (XWA + 002h), BC
 	LD XBC, 3
 	CALL DrawBitmapFast
@@ -333289,13 +333289,13 @@ LABEL_FA2A18:
 	LD WA, (XBC)
 	CP WA, 001bh
 	JR NZ, LABEL_FA2A39
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ah), 0013h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ah), 0013h
 	JR T, LABEL_FA2A5C
 
 LABEL_FA2A39:
 	CP WA, 001ah
 	JR NZ, LABEL_FA2A46
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ah), 0012h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ah), 0012h
 	JR T, LABEL_FA2A5C
 
 LABEL_FA2A46:
@@ -333671,7 +333671,7 @@ LABEL_FA2DC2:
 	LD WA, (XWA)
 	SUB WA, (XHL)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0006h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0006h
 	LD (XSP + 004h), WA
 	LDA XIX, XSP + 04ah
 	LD WA, (XHL)
@@ -334141,7 +334141,7 @@ LABEL_FA3243:
 	SUB WA, QIZ
 	LD IX, WA
 	EXTS XIX
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW IX, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW IX, 0002h
 	LD WA, (XBC)
 	SUB WA, IX
 	LD (XBC), WA
@@ -334158,7 +334158,7 @@ LABEL_FA3243:
 	JR NZ, LABEL_FA330A
 	LD WA, (XSP + 004h)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0002h
 	SUB (XDE), WA
 	JR T, LABEL_FA330A
 
@@ -334571,7 +334571,7 @@ LABEL_FA3724:
 	LD BC, (XHL)
 	SUB BC, DE
 	EXTS XBC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW BC, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW BC, 0002h
 	LD IZ, DE
 	ADD IZ, BC
 	LDA XDE, XIX + 002h
@@ -334990,7 +334990,7 @@ LABEL_FA3BC7:
 	LD WA, (XBC + 004h)
 	SUB WA, (XBC)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0002h
 	LD BC, (XBC)
 	ADD BC, WA
 	LD (XSP + 024h), BC
@@ -335007,7 +335007,7 @@ LABEL_FA3BC7:
 	EXTZ XDE
 	DIV XDE, BC
 	LD (XSP + 008h), DE
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 012h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 012h), 0000h
 	CP BC, 0
 	JRL ULE, LABEL_FA3CFC
 
@@ -335053,7 +335053,7 @@ LABEL_FA3CA3:
 	ADD BC, WA
 	LD WA, (XSP + 008h)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0002h
 	ADD WA, BC
 	LDA XBC, XSP + 024h
 	LD (XBC + 002h), WA
@@ -335333,7 +335333,7 @@ LABEL_FA411E:
 	LD (XBC), XWA
 	LDA XWA, 0FA4836h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0037h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0037h
 	LDA XWA, 0EB7690h
 	LD (XBC + 00ah), XWA
 	LD WA, 0260h
@@ -335343,7 +335343,7 @@ LABEL_FA411E:
 	LD (XBC), XWA
 	LDA XWA, 0FA4A6Dh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0020h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0020h
 	LDA XWA, 0328FCh
 	LD (XBC + 00ah), XWA
 	LD WA, 0180h
@@ -335353,7 +335353,7 @@ LABEL_FA411E:
 	LD (XBC), XWA
 	LDA XWA, 0FA4E03h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0100h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0100h
 	LDA XWA, 032ABCh
 	LD (XBC + 00ah), XWA
 	LD WA, 01a0h
@@ -335366,7 +335366,7 @@ LABEL_FA41A2:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0000h
 	LD WA, IZ
 	EXTZ XWA
 	SLL 2, XWA
@@ -336430,7 +336430,7 @@ LABEL_FA4BEF:
 	JR NZ, LABEL_FA4C15
 	LD XWA, 01800001h
 	LD (XSP + 00ah), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 008h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 008h), 0001h
 	LD XWA, (XBC + 150ah)
 	LD (XSP + 004h), XWA
 
@@ -344420,7 +344420,7 @@ LABEL_FA9788:
 LABEL_FA978A:
 	INCW 1, (02F840h)
 	LD BC, DE
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW BC, 000ch
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW BC, 000ch
 	LDA XWA, 02BC34h
 	EXTS XBC
 	ADD XBC, XWA
@@ -344467,7 +344467,7 @@ LABEL_FA97F8:
 	LD WA, (02EC34h)
 	LD (XSP + 004h), WA
 	LD BC, (XSP + 004h)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW BC, 000ch
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW BC, 000ch
 	LDA XWA, 02BC34h
 	LD XWA, (XWA + BC)
 	LD (XIZ), XWA
@@ -344478,7 +344478,7 @@ LABEL_FA97F8:
 
 LABEL_FA9825:
 	LD BC, (XSP + 004h)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW BC, 000ch
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW BC, 000ch
 	LDA XWA, 02BC34h
 	LDA XDE, XWA + BC
 	LD XWA, (XSP + 00ah)
@@ -344527,7 +344527,7 @@ LABEL_FA9888:
 
 LABEL_FA9893:
 	LD WA, IX
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ch
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ch
 	LDA XHL, XIY + WA
 	LDA XDE, XHL + 004h
 	LD XWA, (XDE)
@@ -344585,7 +344585,7 @@ LABEL_FA98F4:
 
 LABEL_FA98FF:
 	LD WA, HL
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ch
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ch
 	LDA XIY, XIX + WA
 	LDA XDE, XIY + 004h
 	LD XWA, (XDE)
@@ -344802,16 +344802,16 @@ LABEL_FA9B83:
 	JR Z, LABEL_FA9B6C
 	INCW 1, (02F842h)
 	LD WA, (02F83Ah)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ch
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ch
 	LDA XBC, 02EC38h
 	LD (XBC + WA), XIZ
 	LD WA, (02F83Ah)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ch
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ch
 	LDA XDE, XBC + WA
 	LD XWA, (XSP + 008h)
 	LD (XDE + 004h), XWA
 	LD WA, (02F83Ah)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ch
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ch
 	LDA XBC, XBC + WA
 	LD XWA, (XSP + 004h)
 	LD (XBC + 008h), XWA
@@ -344854,7 +344854,7 @@ LABEL_FA9C2D:
 	DECW 1, (02F842h)
 	LD DE, (02F838h)
 	LD BC, DE
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW BC, 000ch
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW BC, 000ch
 	LDA XWA, 02EC38h
 	LDA XHL, XWA + BC
 	LD XWA, (XHL)
@@ -344905,7 +344905,7 @@ LABEL_FA9C9B:
 
 LABEL_FA9CA6:
 	LD WA, IX
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ch
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ch
 	LDA XHL, XIY + WA
 	LDA XDE, XHL + 004h
 	LD XWA, (XDE)
@@ -344963,7 +344963,7 @@ LABEL_FA9D07:
 
 LABEL_FA9D12:
 	LD WA, HL
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ch
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ch
 	LDA XIY, XIX + WA
 	LDA XDE, XIY + 004h
 	LD XWA, (XDE)
@@ -345033,16 +345033,16 @@ LABEL_FA9D7E:
 	JR Z, LABEL_FA9D67
 	INCW 1, (02F840h)
 	LD WA, (02EC36h)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ch
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ch
 	LDA XBC, 02BC34h
 	LD (XBC + WA), XIZ
 	LD WA, (02EC36h)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ch
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ch
 	LDA XDE, XBC + WA
 	LD XWA, (XSP + 008h)
 	LD (XDE + 004h), XWA
 	LD WA, (02EC36h)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ch
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ch
 	LDA XBC, XBC + WA
 	LD XWA, (XSP + 004h)
 	LD (XBC + 008h), XWA
@@ -345121,16 +345121,16 @@ LABEL_FA9E80:
 LABEL_FA9E85:
 	INCW 1, (02F840h)
 	LD WA, (02EC36h)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ch
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ch
 	LDA XBC, 02BC34h
 	LD (XBC + WA), XIZ
 	LD WA, (02EC36h)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ch
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ch
 	LDA XDE, XBC + WA
 	LD XWA, (XSP + 00ch)
 	LD (XDE + 004h), XWA
 	LD WA, (02EC36h)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ch
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ch
 	LDA XBC, XBC + WA
 	LD XWA, (XSP + 008h)
 	LD (XBC + 008h), XWA
@@ -345204,7 +345204,7 @@ LABEL_FA9F55:
 
 LABEL_FA9F71:
 	LD WA, (030448h)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0018h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0018h
 	LDA XHL, 02F844h
 	LDA XIX, XHL + WA
 	LDA XWA, XIX + 002h
@@ -345214,12 +345214,12 @@ LABEL_FA9F71:
 	LD BC, (XWA)
 	LDW (XIX), 0ffffh
 	LD WA, (030448h)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0018h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0018h
 	EXTS XWA
 	ADD XWA, XHL
 	LDW (XWA + 002h), 0ffffh
 	LD WA, (030448h)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0018h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0018h
 	LDA XHL, XHL + WA
 	LD XWA, 0ffffffffh
 	LD (XHL + 008h), XWA
@@ -345246,12 +345246,12 @@ LABEL_FA9FCD:
 	LD BC, (XWA)
 	LDW (XIX), 0ffffh
 	LD WA, (030448h)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0018h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0018h
 	EXTS XWA
 	ADD XWA, XHL
 	LDW (XWA + 002h), 0ffffh
 	LD WA, (030448h)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0018h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0018h
 	LDA XHL, XHL + WA
 	LD XWA, 0ffffffffh
 	LD (XHL + 008h), XWA
@@ -345260,7 +345260,7 @@ LABEL_FA9FCD:
 	JRL Z, LABEL_FAA12A
 
 LABEL_FAA02C:
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW BC, 0018h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW BC, 0018h
 	LDW (XDE + BC), 0ffffh
 	JRL T, LABEL_FAA10D
 
@@ -345299,26 +345299,26 @@ LABEL_FAA03A:
 	ADD XBC, XDE
 	LD XDE, (XBC)
 	LD WA, (030448h)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0018h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0018h
 	LDA XHL, 02F844h
 	EXTS XWA
 	ADD XWA, XHL
 	LD BC, (XWA + 002h)
 	LDW (XWA), 0ffffh
 	LD WA, (030448h)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0018h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0018h
 	EXTS XWA
 	ADD XWA, XHL
 	LDW (XWA + 002h), 0ffffh
 	LD WA, (030448h)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0018h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0018h
 	LDA XIX, XHL + WA
 	LD XWA, 0ffffffffh
 	LD (XIX + 008h), XWA
 	LD (030448h), BC
 	CP BC, 0ffffh
 	JR Z, LABEL_FAA0F8
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW BC, 0018h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW BC, 0018h
 	LDW (XHL + BC), 0ffffh
 
 LABEL_FAA0F8:
@@ -345332,7 +345332,7 @@ LABEL_FAA0F8:
 
 LABEL_FAA10D:
 	LD BC, (030448h)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW BC, 0018h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW BC, 0018h
 	LDA XWA, 02F844h
 	EXTS XBC
 	ADD XBC, XWA
@@ -345395,7 +345395,7 @@ LABEL_FAA19D:
 
 LABEL_FAA1A8:
 	LD IZ, IX
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW IZ, 0018h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW IZ, 0018h
 	LD XWA, (XSP + 004h)
 	EXTS XIZ
 	ADD XIZ, XWA
@@ -345408,7 +345408,7 @@ LABEL_FAA1BC:
 	LD (XHL + 002h), IX
 	CP IY, 0ffffh
 	JR Z, LABEL_FAA1D6
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW IY, 0018h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW IY, 0018h
 	LD XWA, (XSP + 004h)
 	LDA XWA, XWA + IY
 	LD (XWA + 002h), BC
@@ -345417,7 +345417,7 @@ LABEL_FAA1D6:
 	CP IX, 0ffffh
 	JR Z, LABEL_FAA1EA
 	LD DE, IX
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW DE, 0018h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW DE, 0018h
 	LD XWA, (XSP + 004h)
 	LD (XWA + DE), BC
 
@@ -345493,7 +345493,7 @@ KillApTimer:
 
 LABEL_FAA26E:
 	LD WA, IX
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0018h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0018h
 	LDA XHL, XIY + WA
 	LDA XDE, XHL + 008h
 	LDA XIZ, XHL + 002h
@@ -345512,7 +345512,7 @@ LABEL_FAA26E:
 	LD WA, (XIZ)
 	CP WA, 0ffffh
 	JR Z, LABEL_FAA2B2
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0018h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0018h
 	LD IZ, WA
 	LD WA, (XHL)
 	LD (XIY + IZ), WA
@@ -345521,7 +345521,7 @@ LABEL_FAA2B2:
 	CPW (XHL), 0ffffh
 	JR Z, LABEL_FAA2C8
 	LD WA, (XHL)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0018h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0018h
 	LDA XIY, XIY + WA
 	LD WA, (XBC)
 	LD (XIY + 002h), WA
@@ -345861,10 +345861,10 @@ InitializeGraphics:
 	CALL LABEL_FF0FFA
 	LDA XSP, XSP + 010h
 	LDA XWA, XSP + 004h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 002h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 002h), 0000h
 	LDW (XWA), 0000h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 004h), 013fh
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 006h), 00efh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 004h), 013fh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 006h), 00efh
 	CALR SetChangeRect
 	CALR UpdateScreen
 	CALR LcdOn
@@ -346041,7 +346041,7 @@ LABEL_FAA737:
 LABEL_FAA73E:
 	LDW (03045Eh), 0000h
 	LDA XWA, 030456h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 002h), 00f0h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 002h), 00f0h
 	LDW (XWA), 0140h
 	LDW (XWA + 004h), 0ffffh
 	LDW (XWA + 006h), 0ffffh
@@ -346141,7 +346141,7 @@ ModifyPixel:
 	JR NZ, LABEL_FAA81C
 	LD XWA, (XSP + 002h)
 	LD BC, (XWA + 002h)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW BC, 0140h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW BC, 0140h
 	ADD BC, (XWA)
 	EXTZ XBC
 	ADD XBC, (030452h)
@@ -346194,7 +346194,7 @@ ModifyPixelEx:
 	JR NZ, LABEL_FAA895
 	LD XWA, (XSP + 004h)
 	LD BC, (XWA + 002h)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW BC, 0140h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW BC, 0140h
 	ADD BC, (XWA)
 	EXTZ XBC
 	ADD XBC, (030452h)
@@ -346683,7 +346683,7 @@ LABEL_FAACF1:
 	LD XIZ, XIY
 	ADD XIZ, XWA
 	LD WA, (XSP + 02eh)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0140h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0140h
 	ADD WA, (XIX)
 	EXTZ XWA
 	ADD XWA, (030452h)
@@ -346707,7 +346707,7 @@ LABEL_FAAD32:
 	LD WA, (XWA)
 	LD (XSP + 030h), WA
 	LD BC, (XSP + 030h)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW BC, 0140h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW BC, 0140h
 	LD XDE, (XSP + 02ah)
 	ADD BC, (XDE)
 	EXTZ XBC
@@ -346730,7 +346730,7 @@ LABEL_FAAD32:
 LABEL_FAAD7E:
 	LD XWA, (XSP + 02eh)
 	LD BC, (XWA)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW BC, 0140h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW BC, 0140h
 	LD XWA, (XSP + 02ah)
 	ADD BC, (XWA)
 	EXTZ XBC
@@ -346789,7 +346789,7 @@ LABEL_FAADF0:
 	ADD XWA, XDE
 	LD (XSP + 01ch), XWA
 	LD DE, (XSP + 02eh)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW DE, 0140h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW DE, 0140h
 	ADD DE, (XHL)
 	LD WA, DE
 	EXTZ XWA
@@ -346848,7 +346848,7 @@ LABEL_FAAE90:
 	ADD XWA, XDE
 	LD (XSP + 01ch), XWA
 	LD DE, (XSP + 02eh)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW DE, 0140h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW DE, 0140h
 	ADD DE, (XHL)
 	LD WA, DE
 	EXTZ XWA
@@ -347572,7 +347572,7 @@ LABEL_FAB4EF:
 	LD WA, (XSP + 028h)
 	CP WA, (XSP + 026h)
 	JR LE, LABEL_FAB570
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 01ch), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 01ch), 0001h
 
 LABEL_FAB570:
 	LD WA, (XSP + 01ch)
@@ -347735,7 +347735,7 @@ LABEL_FAB66D:
 	LD DE, (XDE + 002h)
 	CP BC, DE
 	JR LE, LABEL_FAB6F8
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 004h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 004h), 0001h
 
 LABEL_FAB6F8:
 	LD WA, DE
@@ -348192,7 +348192,7 @@ LABEL_FABAB5:
 	LD BC, (XBC)
 	SUB (XSP + 006h), BC
 	JRL LT, LABEL_FABB6E
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 008h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 008h), 0000h
 	CPW (XSP + 006h), 0000h
 	JR LT, LABEL_FABB6B
 
@@ -348324,10 +348324,10 @@ LABEL_FABBE7:
 	CALL LABEL_FF0D99
 	LDA XSP, XSP + 014h
 	LDA XWA, XSP + 008h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 002h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 002h), 0000h
 	LDW (XWA), 0000h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 004h), 013fh
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 006h), 00efh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 004h), 013fh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 006h), 00efh
 	CALR SetChangeRect
 	POP XIZ
 	LDA XSP, XSP + 00ch
@@ -348387,7 +348387,7 @@ LABEL_FABC98:
 	SLL 3, XHL
 	ADD XHL, 00913000h
 	LD XIX, (XHL + 004h)
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 004h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 004h), 0000h
 	JRL T, LABEL_FABDE0
 
 LABEL_FABCCB:
@@ -348485,14 +348485,14 @@ LABEL_FABD87:
 LABEL_FABD90:
 	LD WA, (XHL)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0002h
 	LD DE, IY
 	ADD DE, DE
 	CP IY, WA
 	JRL C, LABEL_FABD12
 	LD WA, (XHL)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0002h
 	LD WA, QWA
 	CP WA, 0
 	JR Z, LABEL_FABDDD
@@ -348618,7 +348618,7 @@ LABEL_FABE6F:
 	ADD XIZ, 00913000h
 	LD XWA, (XIZ + 004h)
 	LD (XSP + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ah), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ah), 0000h
 	JR T, LABEL_FABF0D
 
 LABEL_FABEC9:
@@ -348634,11 +348634,11 @@ LABEL_FABEC9:
 	LDA XSP, XSP + 00ah
 	LD WA, (XIZ)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0002h
 	LD WA, QWA
 	ADD WA, (XIZ)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0002h
 	EXTS XWA
 	ADD XWA, XWA
 	ADD (XSP + 004h), XWA
@@ -348865,7 +348865,7 @@ LABEL_FAC0E7:
 	ADD XBC, 00934000h
 	LD XWA, (XBC + 004h)
 	LD (XSP), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 004h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 004h), 0000h
 	LDA XWA, XBC + 002h
 	LD (XSP + 006h), XWA
 	CPW (XWA), 0000h
@@ -348933,7 +348933,7 @@ LABEL_FAC198:
 LABEL_FAC1A2:
 	LD WA, (XBC)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0002h
 	ADD WA, WA
 	CP WA, (XBC)
 	JR Z, LABEL_FAC1B4
@@ -349030,7 +349030,7 @@ LABEL_FAC268:
 	CALR LABEL_FAD1D8
 	CP HL, 0
 	JRL Z, LABEL_FAC3D4
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 004h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 004h), 0000h
 	LD WA, (XSP + 022h)
 	LD (XSP + 006h), WA
 	CPW (XSP + 006h), 0000h
@@ -349128,14 +349128,14 @@ LABEL_FAC348:
 LABEL_FAC351:
 	LD WA, (XSP + 014h)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0002h
 	LD IZ, IX
 	ADD IZ, IZ
 	CP IX, WA
 	JRL C, LABEL_FAC2CD
 	LD WA, (XSP + 014h)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0002h
 	LD WA, QWA
 	CP WA, 0
 	JR Z, LABEL_FAC3A3
@@ -349267,7 +349267,7 @@ LABEL_FAC457:
 	ADD XDE, XWA
 	LD XIZ, XDE
 	LD (XSP + 006h), BC
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 004h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 004h), 0000h
 	LD WA, (XSP + 01eh)
 	CP WA, 0
 	JR ULE, LABEL_FAC4DD
@@ -349285,7 +349285,7 @@ LABEL_FAC4A1:
 	LD WA, (XSP + 010h)
 	INC 1, WA
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0002h
 	EXTS XWA
 	ADD XWA, XWA
 	ADD (XSP + 012h), XWA
@@ -349466,7 +349466,7 @@ LABEL_FAC654:
 	LD WA, (XSP + 00eh)
 	ADD WA, 000fh
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0010h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0010h
 	CP IZ, WA
 	JR C, LABEL_FAC608
 	INC 1, HL
@@ -349843,7 +349843,7 @@ LABEL_FACA00:
 	LD XWA, 00056800h
 	LD (XSP + 024h), XWA
 	LD (XSP + 022h), BC
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 020h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 020h), 0000h
 	LD WA, (XSP + 02ah)
 	CP WA, 0
 	JR ULE, LABEL_FACA97
@@ -350198,7 +350198,7 @@ LABEL_FACD70:
 	ADD XDE, (XSP + 00ch)
 
 LABEL_FACD9E:
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 014h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 014h), 0000h
 	CPW (XSP + 012h), 0000h
 	JRL ULE, LABEL_FACE8D
 
@@ -350228,7 +350228,7 @@ LABEL_FACDBF:
 	LDA XWA, 043C00h
 	ADD XWA, XHL
 	LD (XSP + 01ch), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 016h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 016h), 0000h
 	JR T, LABEL_FACE70
 
 LABEL_FACDF5:
@@ -350344,12 +350344,12 @@ DrawStringCentered:
 	LDA XBC, XSP + 0104h
 	LD WA, IZ
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0002h
 	SUB (XBC), WA
 	LD WA, (XSP + 002h)
 	SUB WA, HL
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0002h
 	SUB (XBC + 002h), WA
 	LD XWA, (XSP + 0118h)
 	CALL GetCenteredDelta
@@ -350389,7 +350389,7 @@ DrawStringLeftJustify:
 	LD WA, (XSP + 004h)
 	SUB WA, HL
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0002h
 	SUB (XBC + 002h), WA
 	LD XWA, (XSP + 01ah)
 	CALL GetCenteredDelta
@@ -350438,7 +350438,7 @@ DrawStringRightJustify:
 	LD WA, (XSP + 006h)
 	SUB WA, HL
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0002h
 	SUB (XBC + 002h), WA
 	LD XWA, XIZ
 	CALL GetCenteredDelta
@@ -350520,7 +350520,7 @@ DrawStringReverse:
 	SUB WA, IZ
 	LD IX, WA
 	EXTS XIX
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW IX, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW IX, 0002h
 	LD WA, (XBC)
 	SUB WA, IX
 	LD (XBC), WA
@@ -350535,7 +350535,7 @@ DrawStringReverse:
 	JR NZ, LABEL_FAD10F
 	LD WA, (XSP + 004h)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0002h
 	SUB (XDE), WA
 	JR T, LABEL_FAD10F
 
@@ -351017,13 +351017,13 @@ LABEL_FAD6FC:
 	JR NZ, LABEL_FAD779
 
 LABEL_FAD76D:
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 004h), 00ffh
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 006h), 00f8h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 004h), 00ffh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 006h), 00f8h
 	JR T, LABEL_FAD783
 
 LABEL_FAD779:
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 004h), 00f8h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 006h), 00ffh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 004h), 00f8h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 006h), 00ffh
 
 LABEL_FAD783:
 	LDA XWA, XSP + 03eh
@@ -351112,37 +351112,37 @@ LABEL_FAD862:
 	LD XWA, (XSP + 00ah)
 	OR XWA, XWA
 	JR NZ, LABEL_FAD885
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 004h), 0007h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 004h), 0007h
 	LD XWA, (XSP + 00eh)
 	CP XWA, 00000001h
 	JR NZ, LABEL_FAD87E
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 004h), 00ffh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 004h), 00ffh
 
 LABEL_FAD87E:
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 006h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 006h), 0000h
 	JR T, LABEL_FAD8B9
 
 LABEL_FAD885:
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 004h), 00ffh
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 006h), 00f8h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 004h), 00ffh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 006h), 00f8h
 	JR T, LABEL_FAD8B9
 
 LABEL_FAD891:
 	LD XWA, (XSP + 00ah)
 	OR XWA, XWA
 	JR NZ, LABEL_FAD8AF
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 004h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 004h), 0000h
 	LD XWA, (XSP + 00eh)
 	CP XWA, 00000001h
 	JR Z, LABEL_FAD8B4
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 006h), 0007h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 006h), 0007h
 	JR T, LABEL_FAD8B9
 
 LABEL_FAD8AF:
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 004h), 00f8h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 004h), 00f8h
 
 LABEL_FAD8B4:
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 006h), 00ffh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 006h), 00ffh
 
 LABEL_FAD8B9:
 	LDA XWA, XSP + 032h
@@ -351200,19 +351200,19 @@ LABEL_FAD8B9:
 	JRL T, LABEL_FAE7D9
 
 LABEL_FAD94C:
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 010h), 0000h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00eh), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 010h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00eh), 0000h
 	CPW (XSP + 048h), 00a0h
 	JR Z, LABEL_FAD970
 	CPW (XSP + 048h), 0080h
 	JR NZ, LABEL_FAD97A
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ch), 0019h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 010h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ch), 0019h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 010h), 0001h
 	JR T, LABEL_FAD988
 
 LABEL_FAD970:
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ch), 0014h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00eh), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ch), 0014h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00eh), 0001h
 
 LABEL_FAD97A:
 	CPW (XSP + 010h), 0001h
@@ -351237,11 +351237,11 @@ LABEL_FAD995:
 	LD BC, (XHL + 006h)
 	SUB BC, DE
 	EXTS XBC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW BC, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW BC, 0002h
 	ADD DE, BC
 	LD BC, (XSP + 012h)
 	EXTS XBC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW BC, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW BC, 0002h
 	SUB DE, BC
 	INC 1, DE
 	LD (XWA + 002h), DE
@@ -351262,11 +351262,11 @@ LABEL_FAD9CF:
 	LD BC, (XBC + 006h)
 	SUB BC, DE
 	EXTS XBC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW BC, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW BC, 0002h
 	ADD DE, BC
 	LD BC, (XSP + 012h)
 	EXTS XBC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW BC, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW BC, 0002h
 	SUB DE, BC
 	INC 1, DE
 	LD (XWA + 002h), DE
@@ -351363,8 +351363,8 @@ LABEL_FADAB4:
 	JRL T, LABEL_FAE7D6
 
 LABEL_FADAD6:
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 010h), 0000h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00eh), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 010h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00eh), 0000h
 	LD WA, (XSP + 048h)
 	CPW (XSP + 048h), 000bh
 	JRL Z, LABEL_FADB88
@@ -351396,139 +351396,139 @@ LABEL_FADB24:
 
 LABEL_FADB3A:
 	LD IZ, 0
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 008h), 0001h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ah), 0002h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 008h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ah), 0002h
 	LD QIZ, 3
 	JRL T, LABEL_FADD24
 
 LABEL_FADB4C:
 	LD IZ, 4
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 008h), 0005h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ah), 0006h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 008h), 0005h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ah), 0006h
 	LD QIZ, 7
 	JRL T, LABEL_FADD24
 
 LABEL_FADB5E:
 	LD IZ, 0008h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 008h), 0009h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ah), 000ah
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 008h), 0009h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ah), 000ah
 	LD QIZ, 000bh
 	JRL T, LABEL_FADD24
 
 LABEL_FADB73:
 	LD IZ, 000ch
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 008h), 000dh
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ah), 000eh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 008h), 000dh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ah), 000eh
 	LD QIZ, 000fh
 	JRL T, LABEL_FADD24
 
 LABEL_FADB88:
 	LD IZ, 0010h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 008h), 0011h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ah), 0012h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 008h), 0011h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ah), 0012h
 	LD QIZ, 0013h
 	JRL T, LABEL_FADD24
 	LD IZ, 0
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 008h), 0001h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ah), 0002h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 008h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ah), 0002h
 	LD QIZ, 3
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ch), 001ah
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ch), 001ah
 	JRL T, LABEL_FADCBC
 	LD IZ, 0
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 008h), 0001h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ah), 0002h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 008h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ah), 0002h
 	LD QIZ, 3
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ch), 0015h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ch), 0015h
 	JRL T, LABEL_FADD1F
 	LD IZ, 4
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 008h), 0005h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ah), 0006h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 008h), 0005h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ah), 0006h
 	LD QIZ, 7
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ch), 001bh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ch), 001bh
 	JRL T, LABEL_FADCBC
 	LD IZ, 4
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 008h), 0005h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ah), 0006h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 008h), 0005h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ah), 0006h
 	LD QIZ, 7
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ch), 0016h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ch), 0016h
 	JRL T, LABEL_FADD1F
 	LD IZ, 0008h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 008h), 0009h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ah), 000ah
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 008h), 0009h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ah), 000ah
 	LD QIZ, 000bh
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ch), 001ch
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ch), 001ch
 	JRL T, LABEL_FADCBC
 	LD IZ, 0008h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 008h), 0009h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ah), 000ah
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 008h), 0009h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ah), 000ah
 	LD QIZ, 000bh
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ch), 0017h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ch), 0017h
 	JRL T, LABEL_FADD1F
 	LD IZ, 0008h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 008h), 0009h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ah), 000ah
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 008h), 0009h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ah), 000ah
 	LD QIZ, 000bh
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ch), 001dh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ch), 001dh
 	JR T, LABEL_FADCBC
 	LD IZ, 0008h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 008h), 0009h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ah), 000ah
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 008h), 0009h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ah), 000ah
 	LD QIZ, 000bh
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ch), 0018h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ch), 0018h
 	JRL T, LABEL_FADD1F
 	LD IZ, 0
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 008h), 0001h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ah), 0002h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 008h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ah), 0002h
 	LD QIZ, 3
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ch), 001eh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ch), 001eh
 	JR T, LABEL_FADCBC
 	LD IZ, 4
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 008h), 0005h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ah), 0006h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 008h), 0005h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ah), 0006h
 	LD QIZ, 7
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ch), 001fh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ch), 001fh
 	JR T, LABEL_FADCBC
 	LD IZ, 0008h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 008h), 0009h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ah), 000ah
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 008h), 0009h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ah), 000ah
 	LD QIZ, 000bh
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ch), 0020h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ch), 0020h
 	JR T, LABEL_FADCBC
 	LD IZ, 0008h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 008h), 0009h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ah), 000ah
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 008h), 0009h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ah), 000ah
 	LD QIZ, 000bh
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ch), 0021h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ch), 0021h
 
 LABEL_FADCBC:
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 010h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 010h), 0001h
 	JR T, LABEL_FADD24
 	LD IZ, 0
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 008h), 0001h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ah), 0002h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 008h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ah), 0002h
 	LD QIZ, 3
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ch), 0022h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ch), 0022h
 	JR T, LABEL_FADD1F
 	LD IZ, 4
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 008h), 0005h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ah), 0006h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 008h), 0005h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ah), 0006h
 	LD QIZ, 7
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ch), 0023h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ch), 0023h
 	JR T, LABEL_FADD1F
 	LD IZ, 0008h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 008h), 0009h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ah), 000ah
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 008h), 0009h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ah), 000ah
 	LD QIZ, 000bh
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ch), 0024h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ch), 0024h
 	JR T, LABEL_FADD1F
 	LD IZ, 0008h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 008h), 0009h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ah), 000ah
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 008h), 0009h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ah), 000ah
 	LD QIZ, 000bh
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ch), 0025h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ch), 0025h
 
 LABEL_FADD1F:
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00eh), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00eh), 0001h
 
 LABEL_FADD24:
 	LDA XBC, XSP + 024h
@@ -351603,11 +351603,11 @@ LABEL_FADDCC:
 	LD BC, (XHL + 006h)
 	SUB BC, DE
 	EXTS XBC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW BC, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW BC, 0002h
 	ADD DE, BC
 	LD BC, (XSP + 012h)
 	EXTS XBC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW BC, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW BC, 0002h
 	SUB DE, BC
 	INC 1, DE
 	LD (XWA + 002h), DE
@@ -351662,11 +351662,11 @@ LABEL_FADE62:
 	LD BC, (XHL + 006h)
 	SUB BC, DE
 	EXTS XBC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW BC, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW BC, 0002h
 	ADD DE, BC
 	LD BC, (XSP + 012h)
 	EXTS XBC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW BC, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW BC, 0002h
 	SUB DE, BC
 	INC 1, DE
 	LD (XWA + 002h), DE
@@ -351798,20 +351798,20 @@ LABEL_FADF9F:
 	CPW (XSP + 048h), 00cah
 	JR Z, LABEL_FADFE5
 	LD IZ, 0028h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 008h), 0029h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ah), 002ah
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 008h), 0029h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ah), 002ah
 	LD QIZ, 002bh
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 004h), 00ffh
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 006h), 00f8h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 004h), 00ffh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 006h), 00f8h
 	JR T, LABEL_FAE001
 
 LABEL_FADFE5:
 	LD IZ, 0030h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 008h), 0031h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ah), 0032h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 008h), 0031h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ah), 0032h
 	LD QIZ, 0033h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 006h), 00ffh
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 004h), 00f8h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 006h), 00ffh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 004h), 00f8h
 
 LABEL_FAE001:
 	LD WA, IZ
@@ -353111,7 +353111,7 @@ LABEL_FAED88:
 	INC 1, C
 	CP XDE, XWA
 	JR C, LABEL_FAED88
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 012h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 012h), 0000h
 	LD XWA, (XSP + 020h)
 	LD XBC, (XSP + 028h)
 
@@ -353385,8 +353385,8 @@ CaptureLcd:
 	LDA XBC, XSP + 0442h
 	LD XWA, 00013036h
 	LD (XBC + 002h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 006h), 0000h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 006h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0000h
 	LD XWA, 00000436h
 	LD (XBC + 00ah), XWA
 	LDA XBC, XSP + 041ah
@@ -353396,8 +353396,8 @@ CaptureLcd:
 	LD (XBC + 004h), XWA
 	LD XWA, 000000f0h
 	LD (XBC + 008h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 00ch), 0001h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 00eh), 0008h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 00ch), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 00eh), 0008h
 	LD XWA, 0
 	LD (XBC + 010h), XWA
 	LD XWA, 00012c00h
@@ -355410,7 +355410,7 @@ LABEL_FB1174:
 	ADD (XSP + 010h), XWA
 
 LABEL_FB11A8:
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 01ah), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 01ah), 0000h
 	CPW (XSP + 016h), 0000h
 	JRL ULE, LABEL_FB142B
 
@@ -355422,7 +355422,7 @@ LABEL_FB11B5:
 	LD (XSP + 018h), WA
 	CPW (XSP + 018h), 0008h
 	JR C, LABEL_FB11CF
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 018h), 0008h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 018h), 0008h
 
 LABEL_FB11CF:
 	LD A, (03EFAAh)
@@ -355432,7 +355432,7 @@ LABEL_FB11CF:
 	JRL Z, LABEL_FB12B7
 	CP A, 0
 	JRL NZ, LABEL_FB1417
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 01ch), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 01ch), 0000h
 	JRL T, LABEL_FB12A8
 
 LABEL_FB11EB:
@@ -355523,7 +355523,7 @@ LABEL_FB12A8:
 	JRL T, LABEL_FB1417
 
 LABEL_FB12B7:
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 01ch), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 01ch), 0000h
 	JRL T, LABEL_FB135A
 
 LABEL_FB12BF:
@@ -355606,7 +355606,7 @@ LABEL_FB135A:
 	JRL T, LABEL_FB1417
 
 LABEL_FB1369:
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 01ch), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 01ch), 0000h
 	JRL T, LABEL_FB140B
 
 LABEL_FB1371:
@@ -355890,10 +355890,10 @@ LABEL_FB164E:
 	LD (XSP + 006h), XBC
 	LD DE, HL
 	EXTZ XDE
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVW DE, 0028h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVW DE, 0028h
 	LD XBC, (XSP + 006h)
 	LD (XBC + 002h), DE
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW DE, 0028h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW DE, 0028h
 	SUB HL, DE
 	SLL 3, HL
 	LD (XBC), HL
@@ -356173,11 +356173,11 @@ LABEL_FB1DFA:
 	LDA XIX, XBC + 002h
 	LD DE, (XIX)
 	EXTZ XDE
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVW DE, 0028h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVW DE, 0028h
 	LD (XHL), DE
 	LD DE, (XIX)
 	EXTZ XDE
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVW DE, 0028h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVW DE, 0028h
 	LD DE, QDE
 	SLL 3, DE
 	LD (XWA), DE
@@ -356235,10 +356235,10 @@ LABEL_FB1EAA:
 	LD (XSP + 00ch), XWA
 	LD BC, (XSP + 00ah)
 	EXTZ XBC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVW BC, 0028h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVW BC, 0028h
 	LD XHL, (XSP + 00ch)
 	LD (XHL + 002h), BC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW BC, 0028h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW BC, 0028h
 	LD WA, BC
 	LD BC, (XSP + 00ah)
 	SUB BC, WA
@@ -356353,9 +356353,9 @@ LABEL_FB2072:
 	LDA XBC, XSP + 0104h
 	LD WA, DE
 	EXTZ XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVW WA, 0028h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVW WA, 0028h
 	LD (XBC + 002h), WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0028h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0028h
 	SUB DE, WA
 	SLL 3, DE
 	LD (XBC), DE
@@ -356789,8 +356789,8 @@ WordwrapStrings:
 	LD (XSP + 010h), DE
 	LD (XSP + 012h), XBC
 	LD (XSP + 016h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 004h), 0000h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ah), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 004h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ah), 0000h
 	LD XIZ, (XSP + 016h)
 	PUSH XIZ
 	CALL LABEL_FF0FA0
@@ -356984,7 +356984,7 @@ InitializeRoot:
 	LD (XBC), XWA
 	LDA XWA, 0FA496Ch
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 000ch
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 000ch
 	LDA XWA, 0EAB2B4h
 	LD (XBC + 00ah), XWA
 	LD WA, 0120h
@@ -356994,7 +356994,7 @@ InitializeRoot:
 	LD (XBC), XWA
 	LDA XWA, 0FA496Ch
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 000ch
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 000ch
 	LDA XWA, 0EAB2E8h
 	LD (XBC + 00ah), XWA
 	LD WA, 0420h
@@ -357004,7 +357004,7 @@ InitializeRoot:
 	LD (XBC), XWA
 	LDA XWA, 0FA48A9h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0160h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0160h
 	LDA XWA, 0EAFA6Eh
 	LD (XBC + 00ah), XWA
 	LD WA, 0100h
@@ -357014,7 +357014,7 @@ InitializeRoot:
 	LD (XBC), XWA
 	LDA XWA, 0FA48A9h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0160h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0160h
 	LDA XWA, 0EAFFF2h
 	LD (XBC + 00ah), XWA
 	LD WA, 0400h
@@ -357024,7 +357024,7 @@ InitializeRoot:
 	LD (XBC), XWA
 	LDA XWA, 0FA4A18h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 000dh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 000dh
 	LDA XWA, 0EB3698h
 	LD (XBC + 00ah), XWA
 	LD WA, 0140h
@@ -357034,7 +357034,7 @@ InitializeRoot:
 	LD (XBC), XWA
 	LDA XWA, 0FA4A18h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 000dh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 000dh
 	LDA XWA, 0EB36D0h
 	LD (XBC + 00ah), XWA
 	LD WA, 0440h
@@ -357044,7 +357044,7 @@ InitializeRoot:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0033h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0033h
 	LDA XWA, 0EB3374h
 	LD (XBC + 00ah), XWA
 	LD WA, 0
@@ -357054,7 +357054,7 @@ InitializeRoot:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0033h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0033h
 	LDA XWA, 0EB346Ch
 	LD (XBC + 00ah), XWA
 	LD WA, 0300h
@@ -357064,7 +357064,7 @@ InitializeRoot:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0009h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0009h
 	LDA XWA, 0EB3444h
 	LD (XBC + 00ah), XWA
 	LD WA, 00ffh
@@ -357074,7 +357074,7 @@ InitializeRoot:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0009h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0009h
 	LDA XWA, 0EB362Ah
 	LD (XBC + 00ah), XWA
 	LD WA, 03ffh
@@ -359876,7 +359876,7 @@ LABEL_FB532A:
 	BIT 1, (XWA)
 	JRL Z, LABEL_FB53C7
 	LD DE, 0
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 004h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 004h), 0000h
 
 LABEL_FB5339:
 	LD HL, 0
@@ -363230,7 +363230,7 @@ Test_DRAM_IC10_and_IC9:		; FB7348
 LABEL_FB7353:
 	LD A, (XSP + 004h)
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ah
 	LDA XBC, 0EB802Eh
 	LDA XDE, XBC + WA
 	LD XHL, (XDE)
@@ -363308,7 +363308,7 @@ Test_SRAM_IC21:		; FB7400
 LABEL_FB7402:
 	LD C, L
 	EXTZ BC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW BC, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW BC, 000ah
 	LDA XDE, 0EB8038h
 	LDA XDE, XDE + BC
 	LD XIY, (XDE)
@@ -364662,11 +364662,11 @@ LABEL_FB809C:
 	LD XDE, (XWA + 04eh)
 	LD XWA, (XWA + 05ah)
 	LD WA, (XWA)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0009h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0009h
 	SUB WA, 0009h
 	ADD WA, (XDE)
 	ADD BC, WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW BC, 0006h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW BC, 0006h
 	LD WA, BC
 	LDA XBC, 0EBA498h
 	LD DE, (XBC + WA)
@@ -364710,7 +364710,7 @@ LABEL_FB816B:
 	LD WA, (XBC)
 	DEC 1, WA
 	LD (XBC), WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0006h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0006h
 	LDA XBC, 0EBA494h
 	LD XWA, (XBC + WA)
 	PUSH XWA
@@ -364783,7 +364783,7 @@ LABEL_FB8229:
 	LD XWA, (XHL)
 	LD WA, (XWA)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0009h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0009h
 	INC 1, WA
 	LD (XBC), WA
 	LD XWA, (XDE + 05ah)
@@ -364821,7 +364821,7 @@ LABEL_FB828B:
 	LD (XDE), WA
 	LD XWA, (XIX)
 	LD WA, (XWA)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0006h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0006h
 	LDA XDE, 0EBA494h
 	LD XWA, (XDE + WA)
 	PUSH XWA
@@ -364889,7 +364889,7 @@ LABEL_FB8332:
 	LD XWA, (XBC)
 	LD WA, (XWA)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0009h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0009h
 	INC 1, WA
 	LD (XDE), WA
 	LD XWA, (XSP + 004h)
@@ -364941,7 +364941,7 @@ LABEL_FB8332:
 	LD WA, (XBC)
 	DEC 1, WA
 	LD (XBC), WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0006h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0006h
 	LD XWA, (XHL + WA)
 	PUSH XWA
 	PUSH XDE
@@ -365012,7 +365012,7 @@ LABEL_FB8467:
 	LD XWA, (XHL)
 	LD WA, (XWA)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0009h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0009h
 	INC 1, WA
 	LD (XBC), WA
 	LD XBC, (XIX + 05ah)
@@ -365027,7 +365027,7 @@ LABEL_FB8467:
 	LD XWA, (XWA + 052h)
 	LD WA, (XWA)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0009h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0009h
 	LD DE, QWA
 	EXTZ XDE
 	ADD XDE, 0ffff0000h
@@ -365133,13 +365133,13 @@ LABEL_FB8561:
 	LD XDE, (XIX + 052h)
 	LD XBC, (XIX + 05ah)
 	LD WA, (XBC)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0009h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0009h
 	DEC 1, WA
 	CP WA, (XDE)
 	JRL LT, LABEL_FB8724
 	LD WA, (XDE)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0009h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0009h
 	LD WA, QWA
 	CP WA, HL
 	JRL NZ, LABEL_FB8774
@@ -365159,7 +365159,7 @@ LABEL_FB8561:
 	LD (XWA), DE
 	LD XWA, (XIX)
 	LD WA, (XWA)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0006h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0006h
 	LD XWA, (XBC + WA)
 	PUSH XWA
 	LDA XWA, XSP + 010h
@@ -365229,7 +365229,7 @@ LABEL_FB86C0:
 	LD XWA, (XBC)
 	LD WA, (XWA)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0009h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0009h
 	INC 1, WA
 	LD (XDE), WA
 	LD XWA, (XHL + 05ah)
@@ -365475,7 +365475,7 @@ LABEL_FB896C:
 	LD XWA, (XSP + 004h)
 	LD XIZ, (XWA + 04eh)
 	LD WA, (XIX)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0009h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0009h
 	SUB WA, 0009h
 	LD IX, WA
 	ADD IX, (XIZ)
@@ -365486,7 +365486,7 @@ LABEL_FB896C:
 	LD XHL, (XWA + 052h)
 	LD XWA, (XDE)
 	LD WA, (XWA)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0009h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0009h
 	SUB WA, 000ah
 	LD DE, (XHL)
 	SUB DE, WA
@@ -365494,7 +365494,7 @@ LABEL_FB896C:
 	CP WA, DE
 	JR GE, LABEL_FB8A60
 	ADD WA, IX
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0006h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0006h
 	LD BC, WA
 	LD XWA, (XSP + 008h)
 	LD XWA, (XWA + BC)
@@ -365521,12 +365521,12 @@ LABEL_FB8A1E:
 	LD XBC, (XWA + 04eh)
 	LD XWA, (XWA + 05ah)
 	LD WA, (XWA)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0009h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0009h
 	SUB WA, 0009h
 	ADD WA, (XBC)
 	LD BC, (XSP + 034h)
 	ADD BC, WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW BC, 0006h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW BC, 0006h
 	LD WA, BC
 	LDA XBC, 0EBA494h
 	LD XWA, (XBC + WA)
@@ -365553,7 +365553,7 @@ LABEL_FB8A60:
 LABEL_FB8A72:
 	LD WA, (XBC)
 	ADD WA, IX
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0006h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0006h
 	LD BC, WA
 	LD XWA, (XSP + 008h)
 	LD XWA, (XWA + BC)
@@ -365580,12 +365580,12 @@ LABEL_FB8AAC:
 	LD XBC, (XWA + 04eh)
 	LD XWA, (XWA + 05ah)
 	LD WA, (XWA)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0009h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0009h
 	SUB WA, 0009h
 	ADD WA, (XBC)
 	LD BC, (XSP + 034h)
 	ADD BC, WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW BC, 0006h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW BC, 0006h
 	LD WA, BC
 	LDA XBC, 0EBA494h
 	LD XWA, (XBC + WA)
@@ -365665,7 +365665,7 @@ LABEL_FB8B6D:
 	LD IY, HL
 	LD XWA, (XIZ + 052h)
 	LD WA, (XWA)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ah
 	SUB WA, 000ah
 	ADD WA, IY
 	LD (0340C4h), WA
@@ -365698,7 +365698,7 @@ LABEL_FB8B6D:
 	DECW 1, (XWA)
 	LD XWA, (XBC)
 	LD WA, (XWA)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ah
 	DEC 1, WA
 	LD (0340C4h), WA
 	LD XWA, (XSP + 010h)
@@ -365788,7 +365788,7 @@ LABEL_FB8C9E:
 	INCW 1, (XDE)
 	LD XWA, (XHL)
 	LD WA, (XWA)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ah
 	SUB WA, 000ah
 	LD (0340C4h), WA
 	LD XWA, (XSP + 010h)
@@ -365830,11 +365830,11 @@ LABEL_FB8DA9:
 	LD DE, (XWA)
 	LD WA, DE
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 000ah
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ah
 	LD HL, WA
 	EXTS XDE
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW DE, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW DE, 000ah
 	LD DE, QDE
 	ADD DE, HL
 	LD WA, BC
@@ -365968,7 +365968,7 @@ LABEL_FB8ED1:
 	LD (XSP + 008h), XWA
 	LD XWA, (XIX)
 	LD IX, (XWA)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW IX, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW IX, 000ah
 	SUB IX, 000ah
 	LD WA, (XIZ)
 	CP WA, (XIY)
@@ -365977,7 +365977,7 @@ LABEL_FB8ED1:
 	LD XIY, (XWA + 04ah)
 	LD XWA, (XHL)
 	LD WA, (XWA)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ah
 	SUB WA, 000ah
 	LD HL, (XIY)
 	SUB HL, WA
@@ -366009,7 +366009,7 @@ LABEL_FB8F70:
 	LD XWA, (XSP + 004h)
 	LD XWA, (XWA + 052h)
 	LD WA, (XWA)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ah
 	SUB WA, 000ah
 	ADD WA, (XSP + 020h)
 	SLA 003h, WA
@@ -366060,7 +366060,7 @@ LABEL_FB8FE8:
 	LD XWA, (XSP + 004h)
 	LD XWA, (XWA + 052h)
 	LD WA, (XWA)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ah
 	SUB WA, 000ah
 	ADD WA, (XSP + 020h)
 	SLA 003h, WA
@@ -366213,7 +366213,7 @@ LABEL_FB9160:
 	LD XBC, (XWA + 052h)
 	LD WA, (0340C6h)
 	EXTZ XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVW WA, 000ah
 	INC 1, WA
 	LD (XBC), WA
 	JRL T, LABEL_FB95D6
@@ -366227,7 +366227,7 @@ LABEL_FB91A8:
 	CALL GetViewInstance
 	LD WA, (0340C6h)
 	EXTZ XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVW WA, 000ah
 	LD DE, QWA
 	EXTZ XDE
 	ADD XDE, 0ffff0000h
@@ -366289,7 +366289,7 @@ LABEL_FB922C:
 	LD XBC, (XHL + 052h)
 	LD WA, (0340C6h)
 	EXTZ XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVW WA, 000ah
 	INC 1, WA
 	LD (XBC), WA
 	LD XWA, (XSP + 042h)
@@ -366325,7 +366325,7 @@ LABEL_FB922C:
 	DECW 1, (XWA)
 	LD XWA, (XDE)
 	LD WA, (XWA)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ah
 	DEC 1, WA
 	LD (0340C6h), WA
 	LD DE, (0340C4h)
@@ -366433,7 +366433,7 @@ LABEL_FB9353:
 	INCW 1, (XIY)
 	LD XWA, (XIZ)
 	LD WA, (XWA)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ah
 	SUB WA, 000ah
 	LD (0340C6h), WA
 	LD BC, (0340C4h)
@@ -366473,7 +366473,7 @@ LABEL_FB948A:
 	LD XWA, (XWA + 04ah)
 	LD WA, (XWA)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 000ah
 	LD WA, QWA
 	CP HL, WA
 	JRL GE, LABEL_FB95D6
@@ -366649,7 +366649,7 @@ LABEL_FB962D:
 	LD XIZ, (XIX)
 	LD XWA, (XHL)
 	LD HL, (XWA)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW HL, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW HL, 000ah
 	SUB HL, 000ah
 	LD WA, (XIZ)
 	CP WA, (XIY)
@@ -366658,7 +366658,7 @@ LABEL_FB962D:
 	LD XIY, (XWA + 04ah)
 	LD XWA, (XIX)
 	LD WA, (XWA)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ah
 	SUB WA, 000ah
 	LD IX, (XIY)
 	SUB IX, WA
@@ -366691,7 +366691,7 @@ LABEL_FB96C2:
 	LD XWA, (XSP + 004h)
 	LD XWA, (XWA + 052h)
 	LD WA, (XWA)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ah
 	SUB WA, 000ah
 	ADD WA, (XSP + 01ch)
 	EXTS XWA
@@ -366744,7 +366744,7 @@ LABEL_FB9739:
 	LD XWA, (XSP + 004h)
 	LD XWA, (XWA + 052h)
 	LD WA, (XWA)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ah
 	SUB WA, 000ah
 	ADD WA, (XSP + 01ch)
 	EXTS XWA
@@ -366917,7 +366917,7 @@ LABEL_FB98C5:
 LABEL_FB9921:
 	LD A, C
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0006h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0006h
 	LD XWA, (XHL + WA)
 	OR XWA, XWA
 	JR Z, LABEL_FB9938
@@ -366951,7 +366951,7 @@ LABEL_FB993E:
 LABEL_FB996B:
 	LD A, C
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0006h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0006h
 	LD XWA, (XDE + WA)
 	OR XWA, XWA
 	JR Z, LABEL_FB9982
@@ -366992,7 +366992,7 @@ LABEL_FB99B0:
 LABEL_FB99C6:
 	LD A, C
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0006h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0006h
 	LD XWA, (XDE + WA)
 	OR XWA, XWA
 	JR Z, LABEL_FB99DD
@@ -367021,7 +367021,7 @@ LABEL_FB99E3:
 LABEL_FB9A06:
 	LD A, C
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0006h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0006h
 	LD XWA, (XDE + WA)
 	OR XWA, XWA
 	JR Z, LABEL_FB9A1D
@@ -367105,7 +367105,7 @@ LABEL_FB9AAB:
 	JRL Z, LABEL_FBA3AB
 	LD WA, (XIX)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0002h
 	LD WA, QWA
 	CP WA, 0
 	JR Z, LABEL_FB9B31
@@ -367144,7 +367144,7 @@ LABEL_FB9B31:
 LABEL_FB9B54:
 	LD A, C
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0006h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0006h
 	LD XWA, (XHL + WA)
 	OR XWA, XWA
 	JR Z, LABEL_FB9B6B
@@ -367181,7 +367181,7 @@ LABEL_FB9B71:
 LABEL_FB9BA3:
 	LD A, C
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0006h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0006h
 	LD XWA, (XHL + WA)
 	OR XWA, XWA
 	JR Z, LABEL_FB9BBA
@@ -367235,7 +367235,7 @@ LABEL_FB9C12:
 	JRL GE, LABEL_FBA3AB
 	LD WA, (XIY)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0002h
 	LD WA, QWA
 	CP WA, 0
 	JR NZ, LABEL_FB9C67
@@ -367274,7 +367274,7 @@ LABEL_FB9C67:
 LABEL_FB9C8A:
 	LD A, C
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0006h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0006h
 	LD XWA, (XHL + WA)
 	OR XWA, XWA
 	JR Z, LABEL_FB9CA1
@@ -367316,7 +367316,7 @@ LABEL_FB9CA7:
 LABEL_FB9CEC:
 	LD A, C
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0006h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0006h
 	LD XWA, (XHL + WA)
 	OR XWA, XWA
 	JR Z, LABEL_FB9D03
@@ -367413,7 +367413,7 @@ LABEL_FB9D13:
 LABEL_FB9DF1:
 	LD A, C
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0006h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0006h
 	LD XWA, (XHL + WA)
 	OR XWA, XWA
 	JR Z, LABEL_FB9E08
@@ -367450,7 +367450,7 @@ LABEL_FB9E0E:
 LABEL_FB9E40:
 	LD A, C
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0006h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0006h
 	LD XWA, (XDE + WA)
 	OR XWA, XWA
 	JR Z, LABEL_FB9E57
@@ -367645,7 +367645,7 @@ LABEL_FB9FFD:
 LABEL_FBA04D:
 	LD A, C
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0006h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0006h
 	LD XWA, (XIY + WA)
 	OR XWA, XWA
 	JR Z, LABEL_FBA064
@@ -367682,7 +367682,7 @@ LABEL_FBA06A:
 LABEL_FBA09B:
 	LD A, C
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0006h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0006h
 	LD XWA, (XHL + WA)
 	OR XWA, XWA
 	JR Z, LABEL_FBA0B2
@@ -369846,10 +369846,10 @@ LABEL_FBBCFC:
 	CP (XSP + 00ah), 009h
 	JR C, LABEL_FBBCFC
 	LDA XWA, XSP + 010h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 002h), 0006h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 006h), 0017h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 002h), 0006h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 006h), 0017h
 	LDW (XWA), 00f5h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 004h), 013bh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 004h), 013bh
 	LD BC, 00c1h
 	LD DE, 00f3h
 	CALL DrawDesignBox
@@ -369857,7 +369857,7 @@ LABEL_FBBCFC:
 	LD WA, (XDE + 004h)
 	SUB WA, (XDE)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0002h
 	LD BC, (XDE)
 	ADD BC, WA
 	LDA XHL, XSP + 00ch
@@ -369866,7 +369866,7 @@ LABEL_FBBCFC:
 	LD WA, (XDE + 006h)
 	SUB WA, BC
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0002h
 	ADD BC, WA
 	INC 1, BC
 	LD (XHL + 002h), BC
@@ -369914,10 +369914,10 @@ LABEL_FBBDC4:
 	CP (XSP + 00ah), 009h
 	JR C, LABEL_FBBDC4
 	LDA XWA, XSP + 010h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 002h), 0006h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 006h), 0017h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 002h), 0006h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 006h), 0017h
 	LDW (XWA), 00f5h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 004h), 013bh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 004h), 013bh
 	LD BC, 00c1h
 	LD DE, 00f3h
 	CALL DrawDesignBox
@@ -369925,7 +369925,7 @@ LABEL_FBBDC4:
 	LD WA, (XDE + 004h)
 	SUB WA, (XDE)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0002h
 	LD BC, (XDE)
 	ADD BC, WA
 	LDA XHL, XSP + 00ch
@@ -369934,7 +369934,7 @@ LABEL_FBBDC4:
 	LD WA, (XDE + 006h)
 	SUB WA, BC
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0002h
 	ADD BC, WA
 	INC 1, BC
 	LD (XHL + 002h), BC
@@ -371585,12 +371585,12 @@ LABEL_FBD4AA:
 	DEC 1, BC
 	LD WA, BC
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0008h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0008h
 	LD WA, QWA
 	INC 1, WA
 	PUSH WA
 	EXTS XBC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW BC, 0008h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW BC, 0008h
 	INC 1, BC
 	PUSH BC
 	PUSHW 00edh
@@ -371997,10 +371997,10 @@ LABEL_FBD90A:
 	LD XDE, (XSP + 0114h)
 	CALL InheritedProc
 	LDA XWA, XSP + 010ch
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 002h), 0006h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 006h), 0017h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 002h), 0006h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 006h), 0017h
 	LDW (XWA), 00f5h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 004h), 013bh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 004h), 013bh
 	LD BC, 00c1h
 	LD DE, 00f3h
 	CALL DrawDesignBox
@@ -372008,7 +372008,7 @@ LABEL_FBD90A:
 	LD WA, (XDE + 004h)
 	SUB WA, (XDE)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0002h
 	LD BC, (XDE)
 	ADD BC, WA
 	LDA XHL, XSP + 0108h
@@ -372017,7 +372017,7 @@ LABEL_FBD90A:
 	LD WA, (XDE + 006h)
 	SUB WA, BC
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0002h
 	ADD BC, WA
 	INC 1, BC
 	LD (XHL + 002h), BC
@@ -372292,10 +372292,10 @@ LABEL_FBDC73:
 	EXTZ WA
 	LD (XBC + 002h), WA
 	LDA XWA, XSP + 010h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 002h), 0055h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 006h), 00ebh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 002h), 0055h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 006h), 00ebh
 	LDW (XWA), 0022h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 004h), 012ch
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 004h), 012ch
 	LD A, (XDE)
 	DEC 1, A
 	AND A, 007h
@@ -372829,7 +372829,7 @@ LABEL_FBE284:
 	LD XWA, (XWA + 03ch)
 	LD WA, (XWA)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 000ah
 	INC 1, WA
 	LD (XBC), WA
 	LD XWA, (XSP + 0236h)
@@ -372948,7 +372948,7 @@ LABEL_FBE321:
 	LD XDE, (XSP + 018h)
 	LD XDE, (XDE + 030h)
 	LD DE, (XDE)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW DE, 0007h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW DE, 0007h
 	LDA XHL, 0ECFDFEh
 	EXTS XDE
 	ADD XDE, XHL
@@ -372985,7 +372985,7 @@ LABEL_FBE4BE:
 	LDA XBC, XWA + 02ch
 	LD XWA, (XBC)
 	LD WA, (XWA)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ah
 	DEC 1, WA
 	LD HL, (XHL)
 	SUB HL, WA
@@ -372993,7 +372993,7 @@ LABEL_FBE4BE:
 	LD XDE, (XDE)
 	LD XWA, (XBC)
 	LD WA, (XWA)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ah
 	DEC 1, WA
 	SUB WA, (XDE)
 	LD DE, 0009h
@@ -373006,7 +373006,7 @@ LABEL_FBE515:
 	LD XBC, (XWA + 040h)
 	LD WA, (XBC)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 000ah
 	INC 1, WA
 	CP WA, (XDE)
 	JRL NZ, LABEL_FBE80A
@@ -373017,7 +373017,7 @@ LABEL_FBE515:
 	LDA XHL, 03F214h
 	LD WA, (XBC)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 000ah
 	LD BC, QWA
 	LD XWA, (XHL + DE)
 	LD A, (XWA + BC)
@@ -373080,7 +373080,7 @@ LABEL_FBE596:
 	LD XDE, (XWA + 034h)
 	LD XHL, (XWA + 02ch)
 	LD BC, (XHL)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW BC, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW BC, 000ah
 	LD WA, BC
 	DEC 1, WA
 	LD IX, (XDE)
@@ -373098,7 +373098,7 @@ LABEL_FBE613:
 	LD XDE, (XIX + 03ch)
 	LD WA, (XDE)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 000ah
 	INC 1, WA
 	CP WA, (XHL)
 	JR NZ, LABEL_FBE64F
@@ -373178,11 +373178,11 @@ LABEL_FBE6FB:
 	LDW (XWA), 00beh
 
 LABEL_FBE703:
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DECW 0, (XBC)
+	db 0, 0		;TODO: Fix ASL: DECW 0, (XBC)
 	LD XWA, (XSP + 018h)
 	LD XWA, (XWA + 02ch)
 	LD BC, (XWA)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW BC, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW BC, 000ah
 	SUB BC, 000ah
 	LD XWA, (XSP + 004h)
 	LD XWA, (XWA + 040h)
@@ -373290,7 +373290,7 @@ LABEL_FBE80A:
 	LD XBC, (XWA + 03ch)
 	LD WA, (XBC)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 000ah
 	INC 1, WA
 	CP WA, (XDE)
 	JRL NZ, LABEL_FBF42D
@@ -373301,7 +373301,7 @@ LABEL_FBE80A:
 	LDA XHL, 03F214h
 	LD WA, (XBC)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 000ah
 	LD BC, QWA
 	LD XWA, (XHL + DE)
 	LD A, (XWA + BC)
@@ -373364,7 +373364,7 @@ LABEL_FBE88C:
 	LD XDE, (XWA + 034h)
 	LD XHL, (XWA + 02ch)
 	LD BC, (XHL)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW BC, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW BC, 000ah
 	LD WA, BC
 	DEC 1, WA
 	LD IX, (XDE)
@@ -373382,7 +373382,7 @@ LABEL_FBE909:
 	LD XDE, (XWA + 03ch)
 	LD WA, (XDE)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 000ah
 	INC 1, WA
 	CP WA, (XHL)
 	JR NZ, LABEL_FBE946
@@ -373461,11 +373461,11 @@ LABEL_FBE9EC:
 	LDW (XWA), 00beh
 
 LABEL_FBE9F4:
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DECW 0, (XBC)
+	db 0, 0		;TODO: Fix ASL: DECW 0, (XBC)
 	LD XDE, (XSP + 018h)
 	LD XWA, (XDE + 02ch)
 	LD BC, (XWA)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW BC, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW BC, 000ah
 	SUB BC, 000ah
 	LD XWA, (XDE + 03ch)
 	LD WA, (XWA)
@@ -373576,10 +373576,10 @@ LABEL_FBEAFA:
 	LD XWA, (XSP + 010h)
 	LD (XSP + 004h), XWA
 	LDA XWA, XSP + 0226h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 002h), 0006h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 006h), 0017h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 002h), 0006h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 006h), 0017h
 	LDW (XWA), 00f5h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 004h), 013bh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 004h), 013bh
 	LD BC, 00c1h
 	LD DE, 00f3h
 	CALL DrawDesignBox
@@ -373587,7 +373587,7 @@ LABEL_FBEAFA:
 	LD WA, (XDE + 004h)
 	SUB WA, (XDE)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0002h
 	LD BC, (XDE)
 	ADD BC, WA
 	LDA XHL, XSP + 0222h
@@ -373596,7 +373596,7 @@ LABEL_FBEAFA:
 	LD WA, (XDE + 006h)
 	SUB WA, BC
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0002h
 	ADD BC, WA
 	INC 1, BC
 	LD (XHL + 002h), BC
@@ -373604,7 +373604,7 @@ LABEL_FBEAFA:
 	LD XWA, (XBC + 034h)
 	LD WA, (XWA)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 000ah
 	INC 1, WA
 	PUSH WA
 	LD XWA, (XBC + 02ch)
@@ -373628,7 +373628,7 @@ LABEL_FBEAFA:
 	LD XBC, (XWA + 034h)
 	LD XWA, (XWA + 02ch)
 	LD WA, (XWA)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ah
 	DEC 1, WA
 	LD DE, (XBC)
 	SUB DE, WA
@@ -373672,7 +373672,7 @@ LABEL_FBEBE6:
 	LD XDE, (XWA + 034h)
 	LD XHL, (XWA + 02ch)
 	LD BC, (XHL)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW BC, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW BC, 000ah
 	LD WA, BC
 	DEC 1, WA
 	LD IX, (XDE)
@@ -373690,7 +373690,7 @@ LABEL_FBEC52:
 	LD XDE, (XWA + 03ch)
 	LD WA, (XDE)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 000ah
 	INC 1, WA
 	CP WA, (XHL)
 	JR NZ, LABEL_FBEC85
@@ -373762,11 +373762,11 @@ LABEL_FBED27:
 	LDW (XWA), 00beh
 
 LABEL_FBED2F:
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DECW 0, (XIY)
+	db 0, 0		;TODO: Fix ASL: DECW 0, (XIY)
 	LD XWA, (XSP + 004h)
 	LD XWA, (XWA + 02ch)
 	LD BC, (XWA)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW BC, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW BC, 000ah
 	SUB BC, 000ah
 	LD A, (XSP + 00ah)
 	INC 1, A
@@ -373882,7 +373882,7 @@ LABEL_FBEE34:
 	LDA XBC, XWA + 02ch
 	LD XWA, (XBC)
 	LD WA, (XWA)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ah
 	DEC 1, WA
 	LD HL, (XHL)
 	SUB HL, WA
@@ -373890,7 +373890,7 @@ LABEL_FBEE34:
 	LD XDE, (XDE)
 	LD XWA, (XBC)
 	LD WA, (XWA)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ah
 	DEC 1, WA
 	SUB WA, (XDE)
 	LD DE, 0009h
@@ -373905,12 +373905,12 @@ LABEL_FBEE7D:
 	LD XBC, (XWA + 03ch)
 	LD WA, (XBC)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 000ah
 	INC 1, WA
 	CP WA, (XDE)
 	JR NZ, LABEL_FBEEBC
 	LD DE, (XDE)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW DE, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW DE, 000ah
 	SUB DE, 000ah
 	LD XWA, (XSP + 022eh)
 	LD A, (XWA)
@@ -373976,11 +373976,11 @@ LABEL_FBEF58:
 	LDW (XWA), 00beh
 
 LABEL_FBEF60:
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DECW 0, (XBC)
+	db 0, 0		;TODO: Fix ASL: DECW 0, (XBC)
 	LD XWA, (XSP + 018h)
 	LD XWA, (XWA + 02ch)
 	LD BC, (XWA)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW BC, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW BC, 000ah
 	SUB BC, 000ah
 	LD XWA, (XSP + 014h)
 	LD A, (XWA)
@@ -374101,7 +374101,7 @@ LABEL_FBF06A:
 	LD (XSP + 018h), XWA
 	LD XWA, (XWA)
 	LD WA, (XWA)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ah
 	DEC 1, WA
 	LD BC, (XBC)
 	SUB BC, WA
@@ -374111,7 +374111,7 @@ LABEL_FBF06A:
 	LD XWA, (XSP + 018h)
 	LD XWA, (XWA)
 	LD WA, (XWA)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ah
 	DEC 1, WA
 	SUB WA, (XBC)
 	LD BC, 0009h
@@ -374156,7 +374156,7 @@ LABEL_FBF0CD:
 	LD XBC, (XBC)
 	LD XWA, (XHL + 02ch)
 	LD WA, (XWA)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ah
 	SUB WA, 000ah
 	LD (XBC), WA
 	LD XWA, (XSP + 0236h)
@@ -374180,7 +374180,7 @@ LABEL_FBF175:
 	LD XBC, (XBC)
 	LD XWA, (XHL + 02ch)
 	LD WA, (XWA)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ah
 	SUB WA, 0009h
 	LD (XBC), WA
 	LD XWA, (XSP + 0236h)
@@ -374204,7 +374204,7 @@ LABEL_FBF1B7:
 	LD XBC, (XBC)
 	LD XWA, (XHL + 02ch)
 	LD WA, (XWA)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ah
 	db 0, 0	;TODO: Fix ASL: DEC 0, WA
 	LD (XBC), WA
 	LD XWA, (XSP + 0236h)
@@ -374228,7 +374228,7 @@ LABEL_FBF1F7:
 	LD XBC, (XBC)
 	LD XWA, (XHL + 02ch)
 	LD WA, (XWA)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ah
 	DEC 7, WA
 	LD (XBC), WA
 	LD XWA, (XSP + 0236h)
@@ -374252,7 +374252,7 @@ LABEL_FBF237:
 	LD XBC, (XBC)
 	LD XWA, (XHL + 02ch)
 	LD WA, (XWA)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ah
 	DEC 6, WA
 	LD (XBC), WA
 	LD XWA, (XSP + 0236h)
@@ -374280,7 +374280,7 @@ LABEL_FBF277:
 	LD XBC, (XSP + 010h)
 	LD XWA, (XBC + 02ch)
 	LD WA, (XWA)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ah
 	SUB WA, 000ah
 	LD DE, WA
 	ADD DE, HL
@@ -374313,7 +374313,7 @@ LABEL_FBF2CB:
 	LD XBC, (XSP + 010h)
 	LD XWA, (XBC + 02ch)
 	LD WA, (XWA)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ah
 	SUB WA, 000ah
 	LD DE, WA
 	ADD DE, HL
@@ -374346,7 +374346,7 @@ LABEL_FBF324:
 	LD XBC, (XSP + 010h)
 	LD XWA, (XBC + 02ch)
 	LD WA, (XWA)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ah
 	SUB WA, 000ah
 	LD DE, WA
 	ADD DE, HL
@@ -374379,7 +374379,7 @@ LABEL_FBF37D:
 	LD XBC, (XSP + 010h)
 	LD XWA, (XBC + 02ch)
 	LD WA, (XWA)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ah
 	SUB WA, 000ah
 	LD DE, WA
 	ADD DE, HL
@@ -374412,7 +374412,7 @@ LABEL_FBF3D5:
 	LD XBC, (XSP + 010h)
 	LD XWA, (XBC + 02ch)
 	LD WA, (XWA)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ah
 	SUB WA, 000ah
 	LD DE, WA
 	ADD DE, HL
@@ -374441,7 +374441,7 @@ LABEL_FBF432:
 	LD XWA, (XWA)
 	LD WA, (XWA)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 000ah
 	INC 1, WA
 	CP (XBC), WA
 	JR GE, LABEL_FBF467
@@ -374481,7 +374481,7 @@ LABEL_FBF4A8:
 	LD XWA, (XWA + 034h)
 	LD WA, (XWA)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 000ah
 	INC 1, WA
 	CP WA, 1
 	JR LE, LABEL_FBF4CE
@@ -374596,7 +374596,7 @@ RVariScreenProc:
 	LD XWA, (XIZ + 03ch)
 	LD WA, (XWA)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0028h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0028h
 	INC 1, WA
 	LD (XBC), WA
 	JR T, LABEL_FBF605
@@ -374606,7 +374606,7 @@ LABEL_FBF5F3:
 	LD XWA, (XIZ + 03ch)
 	LD WA, (XWA)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 000ah
 	INC 1, WA
 	LD (XBC), WA
 
@@ -374743,7 +374743,7 @@ LABEL_FBF789:
 	LD XWA, (XIZ + 040h)
 	LD WA, (XWA)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0004h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0004h
 	LD WA, QWA
 	LDA XBC, 0ECFDA8h
 	LD A, (XBC + WA)
@@ -374759,7 +374759,7 @@ LABEL_FBF789:
 	ADD BC, 0010h
 	LD (XWA + 006h), BC
 	LDW (XWA), 00a3h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 004h), 0137h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 004h), 0137h
 	LD BC, 0
 	LD DE, 00f5h
 	CALL DrawDesignBox
@@ -374783,12 +374783,12 @@ LABEL_FBF789:
 	LD XWA, (XIZ + 03ch)
 	LD WA, (XWA)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0004h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0004h
 	LD BC, QWA
 	LD XWA, (XIZ + 040h)
 	LD WA, (XWA)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0004h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0004h
 	LD WA, QWA
 	CP WA, BC
 	JR NZ, LABEL_FBF85D
@@ -374799,7 +374799,7 @@ LABEL_FBF85D:
 	LD XWA, (XIZ + 040h)
 	LD WA, (XWA)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0004h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0004h
 	LD WA, QWA
 	LDA XBC, 0ECFDA8h
 	LD A, (XBC + WA)
@@ -374808,7 +374808,7 @@ LABEL_FBF85D:
 	LD XWA, (XIZ + 040h)
 	LD WA, (XWA)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0004h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0004h
 	LD WA, QWA
 	LDA XBC, 0ECFDA8h
 	LD A, (XBC + WA)
@@ -374824,12 +374824,12 @@ LABEL_FBF85D:
 	ADD WA, 0010h
 	LD (XDE + 006h), WA
 	LDW (XDE), 00a3h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XDE + 004h), 00beh
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DECW 0, (XBC)
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XDE + 004h), 00beh
+	db 0, 0		;TODO: Fix ASL: DECW 0, (XBC)
 	LD XWA, (XIZ + 040h)
 	LD WA, (XWA)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0004h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0004h
 	LD WA, QWA
 	SLA 002h, WA
 	LDA XBC, 0ED1626h
@@ -374866,7 +374866,7 @@ LABEL_FBF85D:
 	ADD WA, 0010h
 	LD (XBC + 006h), WA
 	LDW (XBC), 00b7h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 004h), 014bh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 004h), 014bh
 	LDA XDE, XSP + 0114h
 	LD XWA, 1
 	PUSH XWA
@@ -374882,7 +374882,7 @@ LABEL_FBF85D:
 	LD XWA, (XIZ + 03ch)
 	LD WA, (XWA)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0004h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0004h
 	LD WA, QWA
 	LDA XBC, 0ECFDA8h
 	LD A, (XBC + WA)
@@ -374898,7 +374898,7 @@ LABEL_FBF85D:
 	ADD BC, 0010h
 	LD (XWA + 006h), BC
 	LDW (XWA), 00a3h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 004h), 0137h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 004h), 0137h
 	LD BC, 00c1h
 	LD DE, 7
 	CALL DrawDesignBox
@@ -374920,7 +374920,7 @@ LABEL_FBF85D:
 	LD XWA, (XIZ + 03ch)
 	LD WA, (XWA)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0004h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0004h
 	LD WA, QWA
 	LDA XBC, 0ECFDA8h
 	LD A, (XBC + WA)
@@ -374929,7 +374929,7 @@ LABEL_FBF85D:
 	LD XWA, (XIZ + 03ch)
 	LD WA, (XWA)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0004h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0004h
 	LD WA, QWA
 	LDA XBC, 0ECFDA8h
 	LD A, (XBC + WA)
@@ -374945,12 +374945,12 @@ LABEL_FBF85D:
 	ADD WA, 0010h
 	LD (XDE + 006h), WA
 	LDW (XDE), 00a3h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XDE + 004h), 00beh
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DECW 0, (XBC)
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XDE + 004h), 00beh
+	db 0, 0		;TODO: Fix ASL: DECW 0, (XBC)
 	LD XWA, (XIZ + 03ch)
 	LD WA, (XWA)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0004h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0004h
 	LD WA, QWA
 	SLA 002h, WA
 	LDA XBC, 0ED1626h
@@ -374982,7 +374982,7 @@ LABEL_FBF85D:
 	ADD DE, 0010h
 	LD (XWA + 006h), DE
 	LDW (XWA), 00b7h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 004h), 014bh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 004h), 014bh
 	LDA XDE, XSP + 0114h
 	LD XHL, 1
 	PUSH XHL
@@ -374992,7 +374992,7 @@ LABEL_FBF85D:
 	LD XWA, (XIZ + 040h)
 	LD WA, (XWA)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0004h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0004h
 	LDA XBC, 0ECFDACh
 	LD A, (XBC + WA)
 	EXTZ WA
@@ -375007,7 +375007,7 @@ LABEL_FBF85D:
 	ADD BC, 0010h
 	LD (XWA + 006h), BC
 	LDW (XWA), 0008h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 004h), 009ch
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 004h), 009ch
 	LD BC, 0
 	LD DE, 00f5h
 	CALL DrawDesignBox
@@ -375021,7 +375021,7 @@ LABEL_FBF85D:
 	ADD DE, 0010h
 	LD (XWA + 006h), DE
 	LDW (XWA), 002dh
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 004h), 00ach
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 004h), 00ach
 	LD XDE, (XIZ + 040h)
 	LD DE, (XDE)
 	SRL 2, E
@@ -375037,7 +375037,7 @@ LABEL_FBF85D:
 	LD XWA, (XIZ + 03ch)
 	LD WA, (XWA)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0004h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0004h
 	LDA XBC, 0ECFDACh
 	LD A, (XBC + WA)
 	EXTZ WA
@@ -375052,7 +375052,7 @@ LABEL_FBF85D:
 	ADD BC, 0010h
 	LD (XWA + 006h), BC
 	LDW (XWA), 0008h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 004h), 009ch
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 004h), 009ch
 	LD BC, 00c1h
 	LD DE, 7
 	CALL DrawDesignBox
@@ -375066,7 +375066,7 @@ LABEL_FBF85D:
 	ADD DE, 0010h
 	LD (XWA + 006h), DE
 	LDW (XWA), 002dh
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 004h), 00ach
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 004h), 00ach
 	LD XDE, (XIZ + 03ch)
 	LD DE, (XDE)
 	SRL 2, E
@@ -375086,7 +375086,7 @@ LABEL_FBFC00:
 	LD XBC, (XIZ + 034h)
 	LD XWA, (XIZ + 02ch)
 	LD WA, (XWA)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ah
 	DEC 1, WA
 	LD BC, (XBC)
 	SUB BC, WA
@@ -375094,7 +375094,7 @@ LABEL_FBFC00:
 	LD XBC, (XIZ + 034h)
 	LD XWA, (XIZ + 02ch)
 	LD WA, (XWA)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ah
 	DEC 1, WA
 	SUB WA, (XBC)
 	LD BC, 0009h
@@ -375109,9 +375109,9 @@ LABEL_FBFC30:
 	LD XWA, (XIZ + 040h)
 	LD WA, (XWA)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 000ah
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0004h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0004h
 	INC 1, WA
 	CP WA, (XBC)
 	JRL NZ, LABEL_FBFE74
@@ -375123,9 +375123,9 @@ LABEL_FBFC30:
 	LD XWA, (XIZ + 040h)
 	LD WA, (XWA)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0004h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0004h
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 000ah
 	LD HL, QWA
 	LD XWA, (XDE + BC)
 	LD A, (XWA + HL)
@@ -375145,13 +375145,13 @@ LABEL_FBFC30:
 	JR NZ, LABEL_FBFCC3
 	LDA XWA, XSP + 0218h
 	LDW (XWA), 0008h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 004h), 009ch
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 004h), 009ch
 	JR T, LABEL_FBFCD1
 
 LABEL_FBFCC3:
 	LDA XWA, XSP + 0218h
 	LDW (XWA), 00a3h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 004h), 0137h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 004h), 0137h
 
 LABEL_FBFCD1:
 	LDA XWA, XSP + 0218h
@@ -375179,20 +375179,20 @@ LABEL_FBFCD1:
 	LD XWA, (XIZ + 03ch)
 	LD WA, (XWA)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 000ah
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0004h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0004h
 	INC 1, WA
 	CP WA, (XBC)
 	JR NZ, LABEL_FBFD66
 	LD XWA, (XIZ + 02ch)
 	LD BC, (XWA)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW BC, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW BC, 000ah
 	SUB BC, 000ah
 	LD XWA, (XIZ + 040h)
 	LD WA, (XWA)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0004h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0004h
 	EXTZ WA
 	db 0, 0, 0	;TODO: Fix ASL: DIV A, 00ah
 	LD E, W
@@ -375201,7 +375201,7 @@ LABEL_FBFCD1:
 	LD XWA, (XIZ + 03ch)
 	LD WA, (XWA)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0004h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0004h
 	CP WA, DE
 	JR NZ, LABEL_FBFD66
 	LD (XSP + 00ah), 000h
@@ -375221,24 +375221,24 @@ LABEL_FBFD66:
 	JR NZ, LABEL_FBFD9B
 	LDA XWA, XSP + 0218h
 	LDW (XWA), 0008h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 004h), 001eh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 004h), 001eh
 	JR T, LABEL_FBFDA9
 
 LABEL_FBFD9B:
 	LDA XWA, XSP + 0218h
 	LDW (XWA), 00a3h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 004h), 00beh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 004h), 00beh
 
 LABEL_FBFDA9:
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DECW 0, (XSP + 0216h)
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL: DECW 0, (XSP + 0216h)
 	LD XWA, (XIZ + 02ch)
 	LD BC, (XWA)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW BC, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW BC, 000ah
 	SUB BC, 000ah
 	LD XWA, (XIZ + 040h)
 	LD WA, (XWA)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0004h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0004h
 	EXTZ WA
 	db 0, 0, 0	;TODO: Fix ASL: DIV A, 00ah
 	LD A, W
@@ -375280,13 +375280,13 @@ LABEL_FBFDA9:
 	JR NZ, LABEL_FBFE42
 	LDA XWA, XSP + 0218h
 	LDW (XWA), 001ch
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 004h), 00b0h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 004h), 00b0h
 	JR T, LABEL_FBFE50
 
 LABEL_FBFE42:
 	LDA XWA, XSP + 0218h
 	LDW (XWA), 00b7h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 004h), 014bh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 004h), 014bh
 
 LABEL_FBFE50:
 	LDA XHL, XSP + 0218h
@@ -375308,9 +375308,9 @@ LABEL_FBFE74:
 	LD XWA, (XIZ + 03ch)
 	LD WA, (XWA)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 000ah
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0004h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0004h
 	INC 1, WA
 	CP WA, (XBC)
 	JRL NZ, LABEL_FC047D
@@ -375322,9 +375322,9 @@ LABEL_FBFE74:
 	LD XWA, (XIZ + 03ch)
 	LD WA, (XWA)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0004h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0004h
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 000ah
 	LD HL, QWA
 	LD XWA, (XDE + BC)
 	LD A, (XWA + HL)
@@ -375344,13 +375344,13 @@ LABEL_FBFE74:
 	JR NZ, LABEL_FBFEFD
 	LDA XWA, XSP + 0218h
 	LDW (XWA), 0008h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 004h), 009ch
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 004h), 009ch
 	JR T, LABEL_FBFF0B
 
 LABEL_FBFEFD:
 	LDA XWA, XSP + 0218h
 	LDW (XWA), 00a3h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 004h), 0137h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 004h), 0137h
 
 LABEL_FBFF0B:
 	LDA XWA, XSP + 0218h
@@ -375378,20 +375378,20 @@ LABEL_FBFF0B:
 	LD XWA, (XIZ + 03ch)
 	LD WA, (XWA)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 000ah
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0004h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0004h
 	INC 1, WA
 	CP WA, (XBC)
 	JR NZ, LABEL_FBFF9D
 	LD XWA, (XIZ + 02ch)
 	LD DE, (XWA)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW DE, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW DE, 000ah
 	SUB DE, 000ah
 	LD XBC, (XIZ + 03ch)
 	LD WA, (XBC)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0004h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0004h
 	EXTZ WA
 	db 0, 0, 0	;TODO: Fix ASL: DIV A, 00ah
 	LD L, W
@@ -375399,7 +375399,7 @@ LABEL_FBFF0B:
 	ADD HL, DE
 	LD WA, (XBC)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0004h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0004h
 	CP WA, HL
 	JR NZ, LABEL_FBFF9D
 	LD (XSP + 00ah), 000h
@@ -375419,24 +375419,24 @@ LABEL_FBFF9D:
 	JR NZ, LABEL_FBFFD2
 	LDA XWA, XSP + 0218h
 	LDW (XWA), 0008h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 004h), 001eh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 004h), 001eh
 	JR T, LABEL_FBFFE0
 
 LABEL_FBFFD2:
 	LDA XWA, XSP + 0218h
 	LDW (XWA), 00a3h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 004h), 00beh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 004h), 00beh
 
 LABEL_FBFFE0:
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DECW 0, (XSP + 0216h)
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL: DECW 0, (XSP + 0216h)
 	LD XWA, (XIZ + 02ch)
 	LD BC, (XWA)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW BC, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW BC, 000ah
 	SUB BC, 000ah
 	LD XWA, (XIZ + 03ch)
 	LD WA, (XWA)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0004h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0004h
 	EXTZ WA
 	db 0, 0, 0	;TODO: Fix ASL: DIV A, 00ah
 	LD A, W
@@ -375478,13 +375478,13 @@ LABEL_FBFFE0:
 	JR NZ, LABEL_FC0079
 	LDA XWA, XSP + 0218h
 	LDW (XWA), 001ch
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 004h), 00b0h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 004h), 00b0h
 	JR T, LABEL_FC0087
 
 LABEL_FC0079:
 	LDA XWA, XSP + 0218h
 	LDW (XWA), 00b7h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 004h), 014bh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 004h), 014bh
 
 LABEL_FC0087:
 	LDA XHL, XSP + 0218h
@@ -375507,7 +375507,7 @@ LABEL_FC00AE:
 	LD XWA, (XIZ + 040h)
 	LD WA, (XWA)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 000ah
 	INC 1, WA
 	CP WA, (XBC)
 	JRL NZ, LABEL_FC0297
@@ -375519,7 +375519,7 @@ LABEL_FC00AE:
 	LD XWA, (XIZ + 040h)
 	LD WA, (XWA)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 000ah
 	LD HL, QWA
 	LD XWA, (XDE + BC)
 	LD A, (XWA + HL)
@@ -375539,13 +375539,13 @@ LABEL_FC00AE:
 	JR NZ, LABEL_FC012B
 	LDA XWA, XSP + 0218h
 	LDW (XWA), 0008h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 004h), 009ch
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 004h), 009ch
 	JR T, LABEL_FC0139
 
 LABEL_FC012B:
 	LDA XWA, XSP + 0218h
 	LDW (XWA), 00a3h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 004h), 0137h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 004h), 0137h
 
 LABEL_FC0139:
 	LDA XWA, XSP + 0218h
@@ -375582,13 +375582,13 @@ LABEL_FC0139:
 	LD XWA, (XIZ + 03ch)
 	LD WA, (XWA)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 000ah
 	INC 1, WA
 	CP WA, (XBC)
 	JR NZ, LABEL_FC01CF
 	LD XWA, (XIZ + 02ch)
 	LD BC, (XWA)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW BC, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW BC, 000ah
 	SUB BC, 000ah
 	LD XWA, (XIZ + 040h)
 	LD WA, (XWA)
@@ -375648,13 +375648,13 @@ LABEL_FC01CF:
 	JR NZ, LABEL_FC0265
 	LDA XWA, XSP + 0218h
 	LDW (XWA), 001ch
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 004h), 00b0h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 004h), 00b0h
 	JR T, LABEL_FC0273
 
 LABEL_FC0265:
 	LDA XWA, XSP + 0218h
 	LDW (XWA), 00b7h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 004h), 014bh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 004h), 014bh
 
 LABEL_FC0273:
 	LDA XHL, XSP + 0218h
@@ -375676,7 +375676,7 @@ LABEL_FC0297:
 	LD XWA, (XIZ + 03ch)
 	LD WA, (XWA)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 000ah
 	INC 1, WA
 	CP WA, (XBC)
 	JRL NZ, LABEL_FC047D
@@ -375688,7 +375688,7 @@ LABEL_FC0297:
 	LD XWA, (XIZ + 03ch)
 	LD WA, (XWA)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 000ah
 	LD HL, QWA
 	LD XWA, (XDE + BC)
 	LD A, (XWA + HL)
@@ -375708,13 +375708,13 @@ LABEL_FC0297:
 	JR NZ, LABEL_FC0314
 	LDA XWA, XSP + 0218h
 	LDW (XWA), 0008h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 004h), 009ch
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 004h), 009ch
 	JR T, LABEL_FC0322
 
 LABEL_FC0314:
 	LDA XWA, XSP + 0218h
 	LDW (XWA), 00a3h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 004h), 0137h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 004h), 0137h
 
 LABEL_FC0322:
 	LDA XWA, XSP + 0218h
@@ -375751,13 +375751,13 @@ LABEL_FC0322:
 	LD XWA, (XIZ + 03ch)
 	LD WA, (XWA)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 000ah
 	INC 1, WA
 	CP WA, (XBC)
 	JR NZ, LABEL_FC03B5
 	LD XWA, (XIZ + 02ch)
 	LD DE, (XWA)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW DE, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW DE, 000ah
 	SUB DE, 000ah
 	LD XBC, (XIZ + 03ch)
 	LD WA, (XBC)
@@ -375816,13 +375816,13 @@ LABEL_FC03B5:
 	JR NZ, LABEL_FC044B
 	LDA XWA, XSP + 0218h
 	LDW (XWA), 001ch
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 004h), 00b0h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 004h), 00b0h
 	JR T, LABEL_FC0459
 
 LABEL_FC044B:
 	LDA XWA, XSP + 0218h
 	LDW (XWA), 00b7h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 004h), 014bh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 004h), 014bh
 
 LABEL_FC0459:
 	LDA XHL, XSP + 0218h
@@ -375880,7 +375880,7 @@ LABEL_FC04AE:
 	LD XWA, (XIZ + 03ch)
 	LD WA, (XWA)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0004h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0004h
 	LD BC, QWA
 	LD A, (XSP + 008h)
 	EXTZ WA
@@ -375916,16 +375916,16 @@ LABEL_FC0509:
 	JR NZ, LABEL_FC056D
 	LDA XWA, XSP + 0218h
 	LDW (XWA), 0008h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 004h), 001eh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 004h), 001eh
 	JR T, LABEL_FC057B
 
 LABEL_FC056D:
 	LDA XWA, XSP + 0218h
 	LDW (XWA), 00a3h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 004h), 00beh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 004h), 00beh
 
 LABEL_FC057B:
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DECW 0, (XSP + 0216h)
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL: DECW 0, (XSP + 0216h)
 	LD A, (XSP + 008h)
 	EXTZ WA
 	SLA 002h, WA
@@ -375966,13 +375966,13 @@ LABEL_FC057B:
 	JR NZ, LABEL_FC0601
 	LDA XWA, XSP + 0218h
 	LDW (XWA), 001ch
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 004h), 00b0h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 004h), 00b0h
 	JR T, LABEL_FC060F
 
 LABEL_FC0601:
 	LDA XWA, XSP + 0218h
 	LDW (XWA), 00b7h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 004h), 014bh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 004h), 014bh
 
 LABEL_FC060F:
 	LDA XHL, XSP + 0218h
@@ -376017,7 +376017,7 @@ LABEL_FC0641:
 	ADD BC, 0010h
 	LD (XWA + 006h), BC
 	LDW (XWA), 002dh
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 004h), 00ach
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 004h), 00ach
 	LD C, (XSP + 008h)
 	EXTZ BC
 	SLA 002h, BC
@@ -376037,10 +376037,10 @@ LABEL_FC0641:
 
 LABEL_FC06C8:
 	LDA XWA, XSP + 0218h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 002h), 0006h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 006h), 0017h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 002h), 0006h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 006h), 0017h
 	LDW (XWA), 00f5h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 004h), 013bh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 004h), 013bh
 	LD BC, 00c1h
 	LD DE, 00f3h
 	CALL DrawDesignBox
@@ -376048,7 +376048,7 @@ LABEL_FC06C8:
 	LD WA, (XDE + 004h)
 	SUB WA, (XDE)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0002h
 	LD BC, (XDE)
 	ADD BC, WA
 	LDA XHL, XSP + 0214h
@@ -376057,14 +376057,14 @@ LABEL_FC06C8:
 	LD WA, (XDE + 006h)
 	SUB WA, BC
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0002h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0002h
 	ADD BC, WA
 	INC 1, BC
 	LD (XHL + 002h), BC
 	LD XWA, (XIZ + 034h)
 	LD WA, (XWA)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 000ah
 	INC 1, WA
 	PUSH WA
 	LD XWA, (XIZ + 02ch)
@@ -376087,7 +376087,7 @@ LABEL_FC06C8:
 	LD XBC, (XIZ + 034h)
 	LD XWA, (XIZ + 02ch)
 	LD WA, (XWA)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ah
 	DEC 1, WA
 	LD BC, (XBC)
 	SUB BC, WA
@@ -376095,7 +376095,7 @@ LABEL_FC06C8:
 	LD XBC, (XIZ + 034h)
 	LD XWA, (XIZ + 02ch)
 	LD WA, (XWA)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ah
 	DEC 1, WA
 	SUB WA, (XBC)
 	LD BC, 0009h
@@ -376126,7 +376126,7 @@ LABEL_FC07A1:
 	LD XBC, (XIZ + 03ch)
 	LD BC, (XBC)
 	EXTS XBC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW BC, 0004h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW BC, 0004h
 	LD BC, QBC
 	ADD C, E
 	EXTZ BC
@@ -376145,15 +376145,15 @@ LABEL_FC07A1:
 	LD XWA, (XIZ + 03ch)
 	LD WA, (XWA)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 000ah
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0004h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0004h
 	INC 1, WA
 	CP WA, (XBC)
 	JR NZ, LABEL_FC083A
 	LD XWA, (XIZ + 02ch)
 	LD BC, (XWA)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW BC, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW BC, 000ah
 	SUB BC, 000ah
 	LD E, (XSP + 008h)
 	EXTZ DE
@@ -376161,7 +376161,7 @@ LABEL_FC07A1:
 	LD XWA, (XIZ + 03ch)
 	LD WA, (XWA)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0004h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0004h
 	CP WA, DE
 	JR NZ, LABEL_FC083A
 	LD (XSP + 00ah), 000h
@@ -376204,19 +376204,19 @@ LABEL_FC083A:
 	JR NZ, LABEL_FC08BE
 	LDA XWA, XSP + 0218h
 	LDW (XWA), 0008h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 004h), 001eh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 004h), 001eh
 	JR T, LABEL_FC08CC
 
 LABEL_FC08BE:
 	LDA XWA, XSP + 0218h
 	LDW (XWA), 00a3h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 004h), 00beh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 004h), 00beh
 
 LABEL_FC08CC:
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DECW 0, (XSP + 0216h)
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL: DECW 0, (XSP + 0216h)
 	LD XWA, (XIZ + 02ch)
 	LD BC, (XWA)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW BC, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW BC, 000ah
 	SUB BC, 000ah
 	LD A, (XSP + 008h)
 	INC 1, A
@@ -376257,13 +376257,13 @@ LABEL_FC08CC:
 	JR NZ, LABEL_FC0956
 	LDA XWA, XSP + 0218h
 	LDW (XWA), 001ch
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 004h), 00b0h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 004h), 00b0h
 	JR T, LABEL_FC0964
 
 LABEL_FC0956:
 	LDA XWA, XSP + 0218h
 	LDW (XWA), 00b7h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 004h), 014bh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 004h), 014bh
 
 LABEL_FC0964:
 	LDA XHL, XSP + 0218h
@@ -376315,13 +376315,13 @@ LABEL_FC09A2:
 	LD XWA, (XIZ + 03ch)
 	LD WA, (XWA)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 000ah
 	INC 1, WA
 	CP WA, (XBC)
 	JR NZ, LABEL_FC0A14
 	LD XWA, (XIZ + 02ch)
 	LD BC, (XWA)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW BC, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW BC, 000ah
 	SUB BC, 000ah
 	LD E, (XSP + 008h)
 	EXTZ DE
@@ -376369,13 +376369,13 @@ LABEL_FC0A14:
 	JR NZ, LABEL_FC0A98
 	LDA XWA, XSP + 0218h
 	LDW (XWA), 001ch
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 004h), 00b0h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 004h), 00b0h
 	JR T, LABEL_FC0AA6
 
 LABEL_FC0A98:
 	LDA XWA, XSP + 0218h
 	LDW (XWA), 00b7h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 004h), 014bh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 004h), 014bh
 
 LABEL_FC0AA6:
 	LDA XHL, XSP + 0218h
@@ -376414,7 +376414,7 @@ LABEL_FC0ADB:
 	LD XWA, (XIZ + 03ch)
 	LD WA, (XWA)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0004h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0004h
 	LD BC, QWA
 	LD XWA, (XSP + 006h)
 	LD A, (XWA)
@@ -376453,16 +376453,16 @@ LABEL_FC0B21:
 	JR NZ, LABEL_FC0B89
 	LDA XWA, XSP + 0218h
 	LDW (XWA), 0008h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 004h), 001eh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 004h), 001eh
 	JR T, LABEL_FC0B97
 
 LABEL_FC0B89:
 	LDA XWA, XSP + 0218h
 	LDW (XWA), 00a3h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 004h), 00beh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 004h), 00beh
 
 LABEL_FC0B97:
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DECW 0, (XSP + 0216h)
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL: DECW 0, (XSP + 0216h)
 	LD XWA, (XSP + 006h)
 	LD A, (XWA)
 	EXTZ WA
@@ -376504,13 +376504,13 @@ LABEL_FC0B97:
 	JR NZ, LABEL_FC0C23
 	LDA XWA, XSP + 0218h
 	LDW (XWA), 001ch
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 004h), 00b0h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 004h), 00b0h
 	JR T, LABEL_FC0C31
 
 LABEL_FC0C23:
 	LDA XWA, XSP + 0218h
 	LDW (XWA), 00b7h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 004h), 014bh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 004h), 014bh
 
 LABEL_FC0C31:
 	LDA XHL, XSP + 0218h
@@ -376534,7 +376534,7 @@ LABEL_FC0C59:
 	LD XBC, (XIZ + 034h)
 	LD XWA, (XIZ + 02ch)
 	LD WA, (XWA)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ah
 	DEC 1, WA
 	LD BC, (XBC)
 	SUB BC, WA
@@ -376542,7 +376542,7 @@ LABEL_FC0C59:
 	LD XBC, (XIZ + 034h)
 	LD XWA, (XIZ + 02ch)
 	LD WA, (XWA)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ah
 	DEC 1, WA
 	SUB WA, (XBC)
 	LD BC, 0009h
@@ -376584,15 +376584,15 @@ LABEL_FC0C89:
 	LD XWA, (XIZ + 03ch)
 	LD WA, (XWA)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 000ah
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0004h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0004h
 	INC 1, WA
 	CP WA, (XBC)
 	JR NZ, LABEL_FC0D35
 	LD XWA, (XIZ + 02ch)
 	LD BC, (XWA)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW BC, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW BC, 000ah
 	SUB BC, 000ah
 	LD XWA, (XSP + 006h)
 	LD E, (XWA)
@@ -376601,7 +376601,7 @@ LABEL_FC0C89:
 	LD XWA, (XIZ + 03ch)
 	LD WA, (XWA)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0004h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0004h
 	CP WA, DE
 	JR NZ, LABEL_FC0D35
 	LD (XSP + 00ah), 000h
@@ -376621,19 +376621,19 @@ LABEL_FC0D35:
 	JR NZ, LABEL_FC0D6A
 	LDA XWA, XSP + 0218h
 	LDW (XWA), 0008h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 004h), 001eh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 004h), 001eh
 	JR T, LABEL_FC0D78
 
 LABEL_FC0D6A:
 	LDA XWA, XSP + 0218h
 	LDW (XWA), 00a3h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 004h), 00beh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 004h), 00beh
 
 LABEL_FC0D78:
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DECW 0, (XSP + 0216h)
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL: DECW 0, (XSP + 0216h)
 	LD XWA, (XIZ + 02ch)
 	LD BC, (XWA)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW BC, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW BC, 000ah
 	SUB BC, 000ah
 	LD XWA, (XSP + 006h)
 	LD A, (XWA)
@@ -376675,13 +376675,13 @@ LABEL_FC0D78:
 	JR NZ, LABEL_FC0E08
 	LDA XWA, XSP + 0218h
 	LDW (XWA), 001ch
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 004h), 00b0h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 004h), 00b0h
 	JR T, LABEL_FC0E16
 
 LABEL_FC0E08:
 	LDA XWA, XSP + 0218h
 	LDW (XWA), 00b7h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 004h), 014bh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 004h), 014bh
 
 LABEL_FC0E16:
 	LDA XHL, XSP + 0218h
@@ -376707,13 +376707,13 @@ LABEL_FC0E3E:
 	LD XWA, (XIZ + 03ch)
 	LD WA, (XWA)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 000ah
 	INC 1, WA
 	CP WA, (XBC)
 	JR NZ, LABEL_FC0E7F
 	LD XWA, (XIZ + 02ch)
 	LD BC, (XWA)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW BC, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW BC, 000ah
 	SUB BC, 000ah
 	LD XWA, (XSP + 006h)
 	LD E, (XWA)
@@ -376739,13 +376739,13 @@ LABEL_FC0E7F:
 	JR NZ, LABEL_FC0EB4
 	LDA XWA, XSP + 0218h
 	LDW (XWA), 001ch
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 004h), 00b0h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 004h), 00b0h
 	JR T, LABEL_FC0EC2
 
 LABEL_FC0EB4:
 	LDA XWA, XSP + 0218h
 	LDW (XWA), 00b7h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 004h), 014bh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 004h), 014bh
 
 LABEL_FC0EC2:
 	LDA XHL, XSP + 0218h
@@ -376802,7 +376802,7 @@ LABEL_FC0EEC:
 	LD XBC, (XBC)
 	LD WA, (XBC)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0004h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0004h
 	LD WA, QWA
 	LD (XBC), WA
 	LD XWA, (XSP + 0228h)
@@ -376827,7 +376827,7 @@ LABEL_FC0FA1:
 	LD XBC, (XBC)
 	LD WA, (XBC)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0004h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0004h
 	LD WA, QWA
 	INC 4, WA
 	LD (XBC), WA
@@ -376853,7 +376853,7 @@ LABEL_FC0FEB:
 	LD XBC, (XBC)
 	LD WA, (XBC)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0004h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0004h
 	LD WA, QWA
 	db 0, 0	;TODO: Fix ASL: INC 0, WA
 	LD (XBC), WA
@@ -376879,7 +376879,7 @@ LABEL_FC1035:
 	LD XBC, (XBC)
 	LD WA, (XBC)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0004h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0004h
 	SLA 002h, WA
 	LD (XBC), WA
 	LD XWA, (XSP + 0228h)
@@ -376900,7 +376900,7 @@ LABEL_FC106D:
 	LD XBC, (XBC)
 	LD WA, (XBC)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0004h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0004h
 	SLA 002h, WA
 	INC 1, WA
 	LD (XBC), WA
@@ -376922,7 +376922,7 @@ LABEL_FC10A7:
 	LD XBC, (XBC)
 	LD WA, (XBC)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0004h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0004h
 	SLA 002h, WA
 	INC 2, WA
 	LD (XBC), WA
@@ -376944,7 +376944,7 @@ LABEL_FC10E1:
 	LD XBC, (XBC)
 	LD WA, (XBC)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0004h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0004h
 	SLA 002h, WA
 	INC 3, WA
 	LD (XBC), WA
@@ -376962,7 +376962,7 @@ LABEL_FC111B:
 	LD XBC, (XIZ + 034h)
 	LD XWA, (XIZ + 02ch)
 	LD WA, (XWA)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ah
 	DEC 1, WA
 	LD BC, (XBC)
 	SUB BC, WA
@@ -376970,7 +376970,7 @@ LABEL_FC111B:
 	LD XBC, (XIZ + 034h)
 	LD XWA, (XIZ + 02ch)
 	LD WA, (XWA)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ah
 	DEC 1, WA
 	SUB WA, (XBC)
 	LD BC, 0009h
@@ -377017,11 +377017,11 @@ LABEL_FC114B:
 	LD XBC, (XBC)
 	LD WA, (XBC)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0004h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0004h
 	LD DE, QWA
 	LD XWA, (XIZ + 02ch)
 	LD WA, (XWA)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ah
 	SLA 002h, WA
 	SUB WA, 0028h
 	ADD WA, DE
@@ -377052,11 +377052,11 @@ LABEL_FC120D:
 	LD XBC, (XBC)
 	LD WA, (XBC)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0004h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0004h
 	LD DE, QWA
 	LD XWA, (XIZ + 02ch)
 	LD WA, (XWA)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ah
 	SLA 002h, WA
 	SUB WA, 0024h
 	ADD WA, DE
@@ -377087,11 +377087,11 @@ LABEL_FC1265:
 	LD XBC, (XBC)
 	LD WA, (XBC)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0004h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0004h
 	LD DE, QWA
 	LD XWA, (XIZ + 02ch)
 	LD WA, (XWA)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ah
 	SLA 002h, WA
 	SUB WA, 0020h
 	ADD WA, DE
@@ -377122,11 +377122,11 @@ LABEL_FC12BD:
 	LD XBC, (XBC)
 	LD WA, (XBC)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0004h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0004h
 	LD DE, QWA
 	LD XWA, (XIZ + 02ch)
 	LD WA, (XWA)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ah
 	SLA 002h, WA
 	SUB WA, 001ch
 	ADD WA, DE
@@ -377157,11 +377157,11 @@ LABEL_FC1315:
 	LD XBC, (XBC)
 	LD WA, (XBC)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0004h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0004h
 	LD DE, QWA
 	LD XWA, (XIZ + 02ch)
 	LD WA, (XWA)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ah
 	SLA 002h, WA
 	SUB WA, 0018h
 	ADD WA, DE
@@ -377196,7 +377196,7 @@ LABEL_FC136D:
 	EXTZ HL
 	LD XWA, (XIZ + 02ch)
 	LD WA, (XWA)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ah
 	SLA 002h, WA
 	SUB WA, 0028h
 	LD DE, WA
@@ -377204,7 +377204,7 @@ LABEL_FC136D:
 	LD XBC, (XIZ + 03ch)
 	LD WA, (XBC)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0004h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0004h
 	LD WA, QWA
 	ADD WA, DE
 	LD (XBC), WA
@@ -377238,7 +377238,7 @@ LABEL_FC13D7:
 	EXTZ HL
 	LD XWA, (XIZ + 02ch)
 	LD WA, (XWA)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ah
 	SLA 002h, WA
 	SUB WA, 0028h
 	LD DE, WA
@@ -377246,7 +377246,7 @@ LABEL_FC13D7:
 	LD XBC, (XIZ + 03ch)
 	LD WA, (XBC)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0004h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0004h
 	LD WA, QWA
 	ADD WA, DE
 	LD (XBC), WA
@@ -377280,7 +377280,7 @@ LABEL_FC1441:
 	EXTZ HL
 	LD XWA, (XIZ + 02ch)
 	LD WA, (XWA)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ah
 	SLA 002h, WA
 	SUB WA, 0028h
 	LD DE, WA
@@ -377288,7 +377288,7 @@ LABEL_FC1441:
 	LD XBC, (XIZ + 03ch)
 	LD WA, (XBC)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0004h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0004h
 	LD WA, QWA
 	ADD WA, DE
 	LD (XBC), WA
@@ -377322,7 +377322,7 @@ LABEL_FC14AB:
 	EXTZ HL
 	LD XWA, (XIZ + 02ch)
 	LD WA, (XWA)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ah
 	SLA 002h, WA
 	SUB WA, 0028h
 	LD DE, WA
@@ -377330,7 +377330,7 @@ LABEL_FC14AB:
 	LD XBC, (XIZ + 03ch)
 	LD WA, (XBC)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0004h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0004h
 	LD WA, QWA
 	ADD WA, DE
 	LD (XBC), WA
@@ -377364,7 +377364,7 @@ LABEL_FC1515:
 	EXTZ HL
 	LD XWA, (XIZ + 02ch)
 	LD WA, (XWA)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ah
 	SLA 002h, WA
 	SUB WA, 0028h
 	LD DE, WA
@@ -377372,7 +377372,7 @@ LABEL_FC1515:
 	LD XBC, (XIZ + 03ch)
 	LD WA, (XBC)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 0004h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 0004h
 	LD WA, QWA
 	ADD WA, DE
 	LD (XBC), WA
@@ -377424,7 +377424,7 @@ LABEL_FC157F:
 	LD XBC, (XBC)
 	LD XWA, (XIZ + 02ch)
 	LD WA, (XWA)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ah
 	SUB WA, 000ah
 	LD (XBC), WA
 	LD XWA, (XSP + 0228h)
@@ -377453,7 +377453,7 @@ LABEL_FC1627:
 	LD XBC, (XBC)
 	LD XWA, (XIZ + 02ch)
 	LD WA, (XWA)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ah
 	SUB WA, 0009h
 	LD (XBC), WA
 	LD XWA, (XSP + 0228h)
@@ -377482,7 +377482,7 @@ LABEL_FC166F:
 	LD XBC, (XBC)
 	LD XWA, (XIZ + 02ch)
 	LD WA, (XWA)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ah
 	db 0, 0	;TODO: Fix ASL: DEC 0, WA
 	LD (XBC), WA
 	LD XWA, (XSP + 0228h)
@@ -377511,7 +377511,7 @@ LABEL_FC16B5:
 	LD XBC, (XBC)
 	LD XWA, (XIZ + 02ch)
 	LD WA, (XWA)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ah
 	DEC 7, WA
 	LD (XBC), WA
 	LD XWA, (XSP + 0228h)
@@ -377540,7 +377540,7 @@ LABEL_FC16FB:
 	LD XBC, (XBC)
 	LD XWA, (XIZ + 02ch)
 	LD WA, (XWA)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ah
 	DEC 6, WA
 	LD (XBC), WA
 	LD XWA, (XSP + 0228h)
@@ -377572,7 +377572,7 @@ LABEL_FC1741:
 	EXTZ HL
 	LD XWA, (XIZ + 02ch)
 	LD WA, (XWA)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ah
 	SUB WA, 000ah
 	ADD WA, HL
 	LD XBC, (XIZ + 03ch)
@@ -377606,7 +377606,7 @@ LABEL_FC1796:
 	EXTZ HL
 	LD XWA, (XIZ + 02ch)
 	LD WA, (XWA)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ah
 	SUB WA, 000ah
 	ADD WA, HL
 	LD XBC, (XIZ + 03ch)
@@ -377640,7 +377640,7 @@ LABEL_FC17EB:
 	EXTZ HL
 	LD XWA, (XIZ + 02ch)
 	LD WA, (XWA)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ah
 	SUB WA, 000ah
 	ADD WA, HL
 	LD XBC, (XIZ + 03ch)
@@ -377674,7 +377674,7 @@ LABEL_FC1840:
 	EXTZ HL
 	LD XWA, (XIZ + 02ch)
 	LD WA, (XWA)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ah
 	SUB WA, 000ah
 	ADD WA, HL
 	LD XBC, (XIZ + 03ch)
@@ -377708,7 +377708,7 @@ LABEL_FC1895:
 	EXTZ HL
 	LD XWA, (XIZ + 02ch)
 	LD WA, (XWA)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ah
 	SUB WA, 000ah
 	ADD WA, HL
 	LD XBC, (XIZ + 03ch)
@@ -377728,7 +377728,7 @@ LABEL_FC18EA:
 	LD XWA, (XIZ + 034h)
 	LD WA, (XWA)
 	EXTS XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW WA, 000ah
 	INC 1, WA
 	LD (0340BCh), WA
 	LD XWA, (XSP + 0220h)
@@ -378068,7 +378068,7 @@ LABEL_FC1CFE:
 	LDW (XWA), 00beh
 
 LABEL_FC1D06:
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DECW 0, (XBC)
+	db 0, 0	;TODO: Fix ASL: DECW 0, (XBC)
 	LD XWA, (XSP + 0114h)
 	LD A, (XWA)
 	INC 1, A
@@ -378328,7 +378328,7 @@ LABEL_FC1FDF:
 	LD A, (8D86h)
 	EXTZ WA
 	PUSH WA
-	db 0, 0, 0, 0, 0;	TODO: Fix ASL: LD C, (8D84h)
+	LD C, (8D84h)
 	LD A, C
 	EXTZ WA
 	db 0, 0, 0	;TODO: Fix ASL: DIV A, 00ch
@@ -379489,7 +379489,7 @@ LABEL_FC2DD0:
 	LD XWA, 00004181h
 	CALL LABEL_FCD437
 	EXTS XHL
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW HL, 000ch
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW HL, 000ch
 	SLA 002h, HL
 	LDA XBC, 0ED1BAAh
 	LD XWA, (XBC + HL)
@@ -379497,7 +379497,7 @@ LABEL_FC2DD0:
 	LD XWA, 00004181h
 	CALL LABEL_FCD437
 	EXTS XHL
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW HL, 000ch
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW HL, 000ch
 	LD WA, QHL
 	SLA 002h, WA
 	LDA XBC, 0ED1B40h
@@ -379535,7 +379535,7 @@ LABEL_FC2E55:
 	LD XWA, 00004181h
 	CALL LABEL_FCD437
 	EXTS XHL
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW HL, 000ch
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW HL, 000ch
 	SLA 002h, HL
 	LDA XBC, 0ED1BAAh
 	LD XWA, (XBC + HL)
@@ -379543,7 +379543,7 @@ LABEL_FC2E55:
 	LD XWA, 00004181h
 	CALL LABEL_FCD437
 	EXTS XHL
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVSW HL, 000ch
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVSW HL, 000ch
 	LD WA, QHL
 	SLA 002h, WA
 	LDA XBC, 0ED1B40h
@@ -379836,7 +379836,7 @@ InitializeToshi:
 	LD (XBC), XWA
 	LDA XWA, 0FA496Ch
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 002ah
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 002ah
 	LDA XWA, 0ED1C9Eh
 	LD (XBC + 00ah), XWA
 	LD WA, 0122h
@@ -379846,7 +379846,7 @@ InitializeToshi:
 	LD (XBC), XWA
 	LDA XWA, 0FA496Ch
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 002ah
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 002ah
 	LDA XWA, 0ED1D4Ah
 	LD (XBC + 00ah), XWA
 	LD WA, 0422h
@@ -379856,7 +379856,7 @@ InitializeToshi:
 	LD (XBC), XWA
 	LDA XWA, 0FA48A9h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 001ch
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 001ch
 	LDA XWA, 0ED2F66h
 	LD (XBC + 00ah), XWA
 	LD WA, 0102h
@@ -379866,7 +379866,7 @@ InitializeToshi:
 	LD (XBC), XWA
 	LDA XWA, 0FA48A9h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 001ch
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 001ch
 	LDA XWA, 0ED2FDAh
 	LD (XBC + 00ah), XWA
 	LD WA, 0402h
@@ -379876,7 +379876,7 @@ InitializeToshi:
 	LD (XBC), XWA
 	LDA XWA, 0FA4A18h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0014h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0014h
 	LDA XWA, 0ED3292h
 	LD (XBC + 00ah), XWA
 	LD WA, 0142h
@@ -379886,7 +379886,7 @@ InitializeToshi:
 	LD (XBC), XWA
 	LDA XWA, 0FA4A18h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0014h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0014h
 	LDA XWA, 0ED32E6h
 	LD (XBC + 00ah), XWA
 	LD WA, 0442h
@@ -379896,7 +379896,7 @@ InitializeToshi:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 003fh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 003fh
 	LDA XWA, 0ED77CEh
 	LD (XBC + 00ah), XWA
 	LD WA, 1
@@ -379906,7 +379906,7 @@ InitializeToshi:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 003fh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 003fh
 	LDA XWA, 0ED7E56h
 	LD (XBC + 00ah), XWA
 	LD WA, 0301h
@@ -379916,7 +379916,7 @@ InitializeToshi:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0009h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0009h
 	LDA XWA, 0ED78CEh
 	LD (XBC + 00ah), XWA
 	LD WA, 0040h
@@ -379926,7 +379926,7 @@ InitializeToshi:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0009h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0009h
 	LDA XWA, 0ED7FF6h
 	LD (XBC + 00ah), XWA
 	LD WA, 0340h
@@ -379936,7 +379936,7 @@ InitializeToshi:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0011h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0011h
 	LDA XWA, 0ED78F6h
 	LD (XBC + 00ah), XWA
 	LD WA, 0041h
@@ -379946,7 +379946,7 @@ InitializeToshi:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0011h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0011h
 	LDA XWA, 0ED803Ch
 	LD (XBC + 00ah), XWA
 	LD WA, 0341h
@@ -379956,7 +379956,7 @@ InitializeToshi:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0006h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0006h
 	LDA XWA, 0ED793Eh
 	LD (XBC + 00ah), XWA
 	LD WA, 0042h
@@ -379966,7 +379966,7 @@ InitializeToshi:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0006h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0006h
 	LDA XWA, 0ED80C2h
 	LD (XBC + 00ah), XWA
 	LD WA, 0342h
@@ -379976,7 +379976,7 @@ InitializeToshi:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0008h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0008h
 	LDA XWA, 0ED795Ah
 	LD (XBC + 00ah), XWA
 	LD WA, 0043h
@@ -379986,7 +379986,7 @@ InitializeToshi:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0008h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0008h
 	LDA XWA, 0ED80F6h
 	LD (XBC + 00ah), XWA
 	LD WA, 0343h
@@ -379996,7 +379996,7 @@ InitializeToshi:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0013h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0013h
 	LDA XWA, 0ED797Eh
 	LD (XBC + 00ah), XWA
 	LD WA, 0044h
@@ -380006,7 +380006,7 @@ InitializeToshi:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0013h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0013h
 	LDA XWA, 0ED8136h
 	LD (XBC + 00ah), XWA
 	LD WA, 0344h
@@ -380016,7 +380016,7 @@ InitializeToshi:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0013h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0013h
 	LDA XWA, 0ED79CEh
 	LD (XBC + 00ah), XWA
 	LD WA, 0045h
@@ -380026,7 +380026,7 @@ InitializeToshi:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0013h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0013h
 	LDA XWA, 0ED81AEh
 	LD (XBC + 00ah), XWA
 	LD WA, 0345h
@@ -380036,7 +380036,7 @@ InitializeToshi:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0000h
 	LDA XWA, 0ED7A1Eh
 	LD (XBC + 00ah), XWA
 	LD WA, 0046h
@@ -380046,7 +380046,7 @@ InitializeToshi:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0000h
 	LDA XWA, 0ED822Eh
 	LD (XBC + 00ah), XWA
 	LD WA, 0346h
@@ -380056,7 +380056,7 @@ InitializeToshi:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0007h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0007h
 	LDA XWA, 0ED7A22h
 	LD (XBC + 00ah), XWA
 	LD WA, 0047h
@@ -380066,7 +380066,7 @@ InitializeToshi:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0007h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0007h
 	LDA XWA, 0ED8234h
 	LD (XBC + 00ah), XWA
 	LD WA, 0347h
@@ -380076,7 +380076,7 @@ InitializeToshi:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0019h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0019h
 	LDA XWA, 0ED7A42h
 	LD (XBC + 00ah), XWA
 	LD WA, 0048h
@@ -380086,7 +380086,7 @@ InitializeToshi:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0019h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0019h
 	LDA XWA, 0ED826Eh
 	LD (XBC + 00ah), XWA
 	LD WA, 0348h
@@ -380096,7 +380096,7 @@ InitializeToshi:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0004h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0004h
 	LDA XWA, 0ED7AAAh
 	LD (XBC + 00ah), XWA
 	LD WA, 00c0h
@@ -380106,7 +380106,7 @@ InitializeToshi:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0004h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0004h
 	LDA XWA, 0ED8322h
 	LD (XBC + 00ah), XWA
 	LD WA, 03c0h
@@ -380116,7 +380116,7 @@ InitializeToshi:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0004h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0004h
 	LDA XWA, 0ED7ABEh
 	LD (XBC + 00ah), XWA
 	LD WA, 00c1h
@@ -380126,7 +380126,7 @@ InitializeToshi:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0004h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0004h
 	LDA XWA, 0ED8346h
 	LD (XBC + 00ah), XWA
 	LD WA, 03c1h
@@ -380136,7 +380136,7 @@ InitializeToshi:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0014h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0014h
 	LDA XWA, 0ED7AD2h
 	LD (XBC + 00ah), XWA
 	LD WA, 00c2h
@@ -380146,7 +380146,7 @@ InitializeToshi:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0014h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0014h
 	LDA XWA, 0ED836Ch
 	LD (XBC + 00ah), XWA
 	LD WA, 03c2h
@@ -380156,7 +380156,7 @@ InitializeToshi:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0011h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0011h
 	LDA XWA, 0ED7B26h
 	LD (XBC + 00ah), XWA
 	LD WA, 00c3h
@@ -380166,7 +380166,7 @@ InitializeToshi:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0011h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0011h
 	LDA XWA, 0ED83FCh
 	LD (XBC + 00ah), XWA
 	LD WA, 03c3h
@@ -380176,7 +380176,7 @@ InitializeToshi:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0008h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0008h
 	LDA XWA, 0ED7B6Eh
 	LD (XBC + 00ah), XWA
 	LD WA, 00c4h
@@ -380186,7 +380186,7 @@ InitializeToshi:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0008h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0008h
 	LDA XWA, 0ED8478h
 	LD (XBC + 00ah), XWA
 	LD WA, 03c4h
@@ -380196,7 +380196,7 @@ InitializeToshi:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0007h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0007h
 	LDA XWA, 0ED7B92h
 	LD (XBC + 00ah), XWA
 	LD WA, 00c5h
@@ -380206,7 +380206,7 @@ InitializeToshi:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0007h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0007h
 	LDA XWA, 0ED84B8h
 	LD (XBC + 00ah), XWA
 	LD WA, 03c5h
@@ -380216,7 +380216,7 @@ InitializeToshi:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0006h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0006h
 	LDA XWA, 0ED7BB2h
 	LD (XBC + 00ah), XWA
 	LD WA, 00d0h
@@ -380226,7 +380226,7 @@ InitializeToshi:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0006h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0006h
 	LDA XWA, 0ED84F0h
 	LD (XBC + 00ah), XWA
 	LD WA, 03d0h
@@ -380236,7 +380236,7 @@ InitializeToshi:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 000dh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 000dh
 	LDA XWA, 0ED7BCEh
 	LD (XBC + 00ah), XWA
 	LD WA, 00d1h
@@ -380246,7 +380246,7 @@ InitializeToshi:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 000dh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 000dh
 	LDA XWA, 0ED8520h
 	LD (XBC + 00ah), XWA
 	LD WA, 03d1h
@@ -380256,7 +380256,7 @@ InitializeToshi:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0007h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0007h
 	LDA XWA, 0ED7C06h
 	LD (XBC + 00ah), XWA
 	LD WA, 00d2h
@@ -380266,7 +380266,7 @@ InitializeToshi:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0007h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0007h
 	LDA XWA, 0ED857Ah
 	LD (XBC + 00ah), XWA
 	LD WA, 03d2h
@@ -380276,7 +380276,7 @@ InitializeToshi:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0007h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0007h
 	LDA XWA, 0ED7C26h
 	LD (XBC + 00ah), XWA
 	LD WA, 00d3h
@@ -380286,7 +380286,7 @@ InitializeToshi:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0007h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0007h
 	LDA XWA, 0ED85B0h
 	LD (XBC + 00ah), XWA
 	LD WA, 03d3h
@@ -380296,7 +380296,7 @@ InitializeToshi:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0002h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0002h
 	LDA XWA, 0ED7C46h
 	LD (XBC + 00ah), XWA
 	LD WA, 00e8h
@@ -380306,7 +380306,7 @@ InitializeToshi:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0002h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0002h
 	LDA XWA, 0ED85E8h
 	LD (XBC + 00ah), XWA
 	LD WA, 03e8h
@@ -380316,7 +380316,7 @@ InitializeToshi:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0003h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0003h
 	LDA XWA, 0ED7C52h
 	LD (XBC + 00ah), XWA
 	LD WA, 00e9h
@@ -380326,7 +380326,7 @@ InitializeToshi:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0003h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0003h
 	LDA XWA, 0ED85FEh
 	LD (XBC + 00ah), XWA
 	LD WA, 03e9h
@@ -380336,7 +380336,7 @@ InitializeToshi:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 000eh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 000eh
 	LDA XWA, 0ED7C62h              ;  <--- LABEL_FC38EF
 	LD (XBC + 00ah), XWA
 	LD WA, 00f4h
@@ -380346,7 +380346,7 @@ InitializeToshi:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 000eh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 000eh
 	LDA XWA, 0ED861Ah
 	LD (XBC + 00ah), XWA
 	LD WA, 03f4h
@@ -380356,7 +380356,7 @@ InitializeToshi:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0017h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0017h
 	LDA XWA, 0ED7C9Eh
 	LD (XBC + 00ah), XWA
 	LD WA, 00f5h
@@ -380366,7 +380366,7 @@ InitializeToshi:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0017h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0017h
 	LDA XWA, 0ED8682h
 	LD (XBC + 00ah), XWA
 	LD WA, 03f5h
@@ -380376,7 +380376,7 @@ InitializeToshi:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0001h
 	LDA XWA, 0ED7CFEh
 	LD (XBC + 00ah), XWA
 	LD WA, 00f6h
@@ -380386,7 +380386,7 @@ InitializeToshi:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0001h
 	LDA XWA, 0ED8736h
 	LD (XBC + 00ah), XWA
 	LD WA, 03f6h
@@ -380396,7 +380396,7 @@ InitializeToshi:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0003h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0003h
 	LDA XWA, 0ED7D06h
 	LD (XBC + 00ah), XWA
 	LD WA, 00f7h
@@ -380406,7 +380406,7 @@ InitializeToshi:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0003h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0003h
 	LDA XWA, 0ED8746h
 	LD (XBC + 00ah), XWA
 	LD WA, 03f7h
@@ -380416,7 +380416,7 @@ InitializeToshi:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0043h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0043h
 	LDA XWA, 0ED7D16h
 	LD (XBC + 00ah), XWA
 	LD WA, 00f8h
@@ -380426,7 +380426,7 @@ InitializeToshi:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0043h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0043h
 	LDA XWA, 0ED8762h
 	LD (XBC + 00ah), XWA
 	LD WA, 03f8h
@@ -380436,7 +380436,7 @@ InitializeToshi:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0009h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0009h
 	LDA XWA, 0ED7E26h
 	LD (XBC + 00ah), XWA
 	LD WA, 00f9h
@@ -380446,7 +380446,7 @@ InitializeToshi:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0009h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0009h
 	LDA XWA, 0ED8922h
 	LD (XBC + 00ah), XWA
 	LD WA, 03f9h
@@ -380456,7 +380456,7 @@ InitializeToshi:
 	LD (XBC), XWA
 	LDA XWA, 0FA5995h
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0001h
 	LDA XWA, 0ED7E4Eh
 	LD (XBC + 00ah), XWA
 	LD WA, 00fbh
@@ -380466,7 +380466,7 @@ InitializeToshi:
 	LD (XBC), XWA
 	LDA XWA, 0FA62CBh
 	LD (XBC + 004h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XBC + 008h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XBC + 008h), 0001h
 	LDA XWA, 0ED896Eh
 	LD (XBC + 00ah), XWA
 	LD WA, 03fbh
@@ -382300,7 +382300,7 @@ LABEL_FC4C4B:
 LABEL_FC4C63:
 	DEC 2, XSP
 	PUSH XIZ
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 004h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 004h), 0000h
 	LDA XIZ, 1ED400h
 
 LABEL_FC4C70:
@@ -382360,7 +382360,7 @@ LABEL_FC4CEB:
 LABEL_FC4CED:
 	LDA XSP, XSP - 14
 	PUSH XIZ
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ah), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ah), 0000h
 
 LABEL_FC4CF6:
 	LD WA, (XSP + 00ah)
@@ -382423,7 +382423,7 @@ LABEL_FC4D7E:
 LABEL_FC4D8E:
 	DEC 2, XSP
 	PUSH XIZ
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 004h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 004h), 0000h
 	LDA XIZ, 1ED400h
 
 LABEL_FC4D9B:
@@ -383218,7 +383218,7 @@ LABEL_FC5773:
 	CALL LABEL_FC6C4F
 	LD A, (8E8Ch)
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0003h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0003h
 	LD A, (XHL + WA)
 	LD (8E90h), A
 	CP A, 0ffh
@@ -383237,7 +383237,7 @@ LABEL_FC57AA:
 	CALL LABEL_FC6C4F
 	LD A, (8E8Ch)
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0003h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0003h
 	LDA XIY, XHL + WA
 	LD XIX, 00008e78h
 	LDI
@@ -384160,7 +384160,7 @@ LABEL_FC6B87:
 	db 0, 0, 0, 0, 0;	TODO: Fix ASL: LD C, (8EC4h)
 	LD A, C
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0003h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0003h
 	LDA XDE, 8E94h
 	EXTS XWA
 	ADD XWA, XDE
@@ -384217,7 +384217,7 @@ LABEL_FC6C0B:
 	LDIW
 	LD A, (8EC4h)
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0003h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0003h
 	LD (XDE + WA), 0ffh
 
 LABEL_FC6C29:
@@ -384232,7 +384232,7 @@ LABEL_FC6C2B:
 	LDIW
 	LD A, (8EC4h)
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0003h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0003h
 	LD (XDE + WA), 0ffh
 	CALL LABEL_F4E684
 
@@ -385722,7 +385722,7 @@ LABEL_FC821B:
 LABEL_FC822D:
 	DEC 2, XSP
 	PUSH XIZ
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 004h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 004h), 0000h
 
 LABEL_FC8235:
 	LD WA, (XSP + 004h)
@@ -390930,7 +390930,7 @@ LABEL_FCD201:
 	PUSH XIZ
 	LD (XSP + 00ah), DE
 	LD (XSP + 00ch), BC
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 004h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 004h), 0000h
 	LD XIZ, XWA
 	LD XWA, 0
 	LD (XSP + 006h), XWA
@@ -390976,7 +390976,7 @@ LABEL_FCD26D:
 	LD WA, IX
 	INC 3, WA
 	EXTZ XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVW WA, 07ffh
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVW WA, 07ffh
 	LD IX, QWA
 
 LABEL_FCD282:
@@ -391062,7 +391062,7 @@ LABEL_FCD32F:
 	PUSH XIZ
 	LD (XSP + 00ah), DE
 	LD (XSP + 00ch), BC
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 004h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 004h), 0000h
 	LD XIZ, XWA
 	LD XWA, 0
 	LD (XSP + 006h), XWA
@@ -391108,7 +391108,7 @@ LABEL_FCD39B:
 	LD WA, IX
 	INC 3, WA
 	EXTZ XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVW WA, 07ffh
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVW WA, 07ffh
 	LD IX, QWA
 
 LABEL_FCD3B0:
@@ -391217,7 +391217,7 @@ LABEL_FCD49C:
 	LD WA, IX
 	INC 3, WA
 	EXTZ XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVW WA, 07ffh
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVW WA, 07ffh
 	LD IX, QWA
 
 LABEL_FCD4B1:
@@ -391540,7 +391540,7 @@ LABEL_FCD83B:
 	LD WA, IX
 	INC 3, WA
 	EXTZ XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVW WA, 07ffh
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVW WA, 07ffh
 	LD IX, QWA
 
 LABEL_FCD850:
@@ -391575,7 +391575,7 @@ LABEL_FCD868:
 	AND XBC, 000003ffh
 	LD XWA, (XSP + 00eh)
 	LD (XWA), BC
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 004h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 004h), 0000h
 
 LABEL_FCD8B1:
 	LD XBC, (XSP + 016h)
@@ -391597,7 +391597,7 @@ LABEL_FCD8B1:
 	ADD BC, 0400h
 	LD XWA, (XSP + 00eh)
 	LD (XWA), BC
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 004h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 004h), 0000h
 
 LABEL_FCD8F6:
 	LD HL, (XSP + 004h)
@@ -392540,7 +392540,7 @@ LABEL_FCEDAB:
 
 LABEL_FCEDF2:
 	LD (XDE), 0ffh
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: INCW 0, (90DEh)
+	db 0, 0, 0, 0	;TODO: Fix ASL: INCW 0, (90DEh)
 	JR T, LABEL_FCEE47
 
 LABEL_FCEDFB:
@@ -392645,7 +392645,7 @@ LABEL_FCEEE6:
 	PUSH XIZ
 	LD (XSP + 006h), XBC
 	LD XIZ, XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 004h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 004h), 0000h
 	LD XHL, XIZ
 	AND XHL, 000000ffh
 	LD XWA, XHL
@@ -392701,7 +392701,7 @@ LABEL_FCEF67:
 LABEL_FCEF6F:
 	INC 3, HL
 	EXTZ XHL
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVW HL, 07ffh
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVW HL, 07ffh
 	LD WA, QHL
 	LD HL, WA
 	CP WA, 07ffh
@@ -395930,7 +395930,7 @@ LABEL_FD2B7C:
 	LD (XSP + 00eh), XWA
 	LD XWA, 000002e0h
 	ADD (XSP + 00eh), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 004h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 004h), 0000h
 
 LABEL_FD2BD4:
 	LD WA, (XSP + 004h)
@@ -395950,7 +395950,7 @@ LABEL_FD2BD4:
 	INCW 1, (XSP + 004h)
 	CPW (XSP + 004h), 0018h
 	JR C, LABEL_FD2BD4
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 004h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 004h), 0000h
 
 LABEL_FD2C11:
 	LD WA, (XSP + 004h)
@@ -395983,7 +395983,7 @@ LABEL_FD2C11:
 	LD XBC, (XSP + 00eh)
 	LDA XBC, XBC + 02ech
 	CALR LABEL_FD3253
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 004h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 004h), 0000h
 
 LABEL_FD2C7E:
 	LD WA, (XSP + 004h)
@@ -397771,7 +397771,7 @@ LABEL_FD464C:
 	LD (XSP + 00eh), XWA
 	LD XWA, 000002e0h
 	ADD (XSP + 00eh), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 004h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 004h), 0000h
 
 LABEL_FD46A4:
 	LD WA, (XSP + 004h)
@@ -398896,7 +398896,7 @@ LABEL_FD5682:
 	CP A, 019h
 	JR NC, LABEL_FD5698
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 00eah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 00eah
 	LDA XBC, 0EE15FEh
 	LDA XHL, XBC + WA
 	RET
@@ -399811,7 +399811,7 @@ LABEL_FD5F57:
 LABEL_FD5F74:
 	LD A, QIZH
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0006h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0006h
 	EXTS XWA
 	ADD XWA, XBC
 	CP (XWA), 0ffh
@@ -399835,7 +399835,7 @@ LABEL_FD5F9A:
 	CALR LABEL_FD5E3A
 	LD A, QIZH
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0006h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0006h
 	LDA XBC, 0EE493Eh
 	EXTS XWA
 	ADD XWA, XBC
@@ -399847,7 +399847,7 @@ LABEL_FD5F9A:
 	CALR LABEL_FD5E3A
 	LD A, QIZH
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0006h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0006h
 	LD BC, WA
 	LDA XWA, 0EE4940h
 	LD XWA, (XWA + BC)
@@ -399857,7 +399857,7 @@ LABEL_FD5F9A:
 	CALR LABEL_FD5E3A
 	LD A, QIZH
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0006h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0006h
 	LD BC, WA
 	LDA XWA, 0EE4940h
 	LD XWA, (XWA + BC)
@@ -399884,7 +399884,7 @@ LABEL_FD601C:
 LABEL_FD6026:
 	LD A, QIZH
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0006h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0006h
 	LD BC, WA
 	LD XWA, (XSP + 002h)
 	LDA XWA, XWA + BC
@@ -399909,7 +399909,7 @@ LABEL_FD6054:
 	CALR LABEL_FD5E3A
 	LD A, QIZH
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0006h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0006h
 	LD BC, WA
 	LD XWA, (XSP + 002h)
 	LDA XWA, XWA + BC
@@ -399919,7 +399919,7 @@ LABEL_FD6054:
 	CALR LABEL_FD5E3A
 	LD A, QIZH
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0006h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0006h
 	LD BC, WA
 	LD XWA, (XSP + 002h)
 	LDA XWA, XWA + BC
@@ -399931,7 +399931,7 @@ LABEL_FD6054:
 	CALR LABEL_FD5E3A
 	LD A, QIZH
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0006h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0006h
 	LD BC, WA
 	LD XWA, (XSP + 002h)
 	LDA XWA, XWA + BC
@@ -399942,7 +399942,7 @@ LABEL_FD6054:
 	CALR LABEL_FD5E3A
 	LD A, QIZH
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0006h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0006h
 	LD BC, WA
 	LD XWA, (XSP + 002h)
 	LDA XWA, XWA + BC
@@ -399962,7 +399962,7 @@ LABEL_FD60E6:
 LABEL_FD60F6:
 	LD A, QIZH
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0006h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0006h
 	LD BC, WA
 	LD XWA, (XSP + 002h)
 	LDA XWA, XWA + BC
@@ -399991,7 +399991,7 @@ LABEL_FD612A:
 	CALR LABEL_FD5E3A
 	LD A, QIZH
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0006h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0006h
 	LD BC, WA
 	LD XWA, (XSP + 002h)
 	LDA XWA, XWA + BC
@@ -400001,7 +400001,7 @@ LABEL_FD612A:
 	CALR LABEL_FD5E3A
 	LD A, QIZH
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0006h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0006h
 	LD BC, WA
 	LD XWA, (XSP + 002h)
 	LDA XWA, XWA + BC
@@ -400013,7 +400013,7 @@ LABEL_FD612A:
 	CALR LABEL_FD5E3A
 	LD A, QIZH
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0006h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0006h
 	LD BC, WA
 	LD XWA, (XSP + 002h)
 	LDA XWA, XWA + BC
@@ -400024,7 +400024,7 @@ LABEL_FD612A:
 	CALR LABEL_FD5E3A
 	LD A, QIZH
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0006h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0006h
 	LD BC, WA
 	LD XWA, (XSP + 002h)
 	LDA XWA, XWA + BC
@@ -400044,7 +400044,7 @@ LABEL_FD61BC:
 LABEL_FD61CC:
 	LD A, QIZH
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0006h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0006h
 	LD BC, WA
 	LD XWA, (XSP + 002h)
 	LDA XWA, XWA + BC
@@ -400073,7 +400073,7 @@ LABEL_FD6200:
 	CALR LABEL_FD5E3A
 	LD A, QIZH
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0006h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0006h
 	LD BC, WA
 	LD XWA, (XSP + 002h)
 	LDA XWA, XWA + BC
@@ -400083,7 +400083,7 @@ LABEL_FD6200:
 	CALR LABEL_FD5E3A
 	LD A, QIZH
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0006h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0006h
 	LD BC, WA
 	LD XWA, (XSP + 002h)
 	LDA XWA, XWA + BC
@@ -400095,7 +400095,7 @@ LABEL_FD6200:
 	CALR LABEL_FD5E3A
 	LD A, QIZH
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0006h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0006h
 	LD BC, WA
 	LD XWA, (XSP + 002h)
 	LDA XWA, XWA + BC
@@ -400106,7 +400106,7 @@ LABEL_FD6200:
 	CALR LABEL_FD5E3A
 	LD A, QIZH
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0006h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0006h
 	LD BC, WA
 	LD XWA, (XSP + 002h)
 	LDA XWA, XWA + BC
@@ -400126,7 +400126,7 @@ LABEL_FD6293:
 LABEL_FD62A3:
 	LD A, QIZH
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0006h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0006h
 	LD BC, WA
 	LD XWA, (XSP + 002h)
 	LDA XWA, XWA + BC
@@ -400155,7 +400155,7 @@ LABEL_FD62D7:
 	CALR LABEL_FD5E3A
 	LD A, QIZH
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0006h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0006h
 	LD BC, WA
 	LD XWA, (XSP + 002h)
 	LDA XWA, XWA + BC
@@ -400165,7 +400165,7 @@ LABEL_FD62D7:
 	CALR LABEL_FD5E3A
 	LD A, QIZH
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0006h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0006h
 	LD BC, WA
 	LD XWA, (XSP + 002h)
 	LDA XWA, XWA + BC
@@ -400177,7 +400177,7 @@ LABEL_FD62D7:
 	CALR LABEL_FD5E3A
 	LD A, QIZH
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0006h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0006h
 	LD BC, WA
 	LD XWA, (XSP + 002h)
 	LDA XWA, XWA + BC
@@ -400188,7 +400188,7 @@ LABEL_FD62D7:
 	CALR LABEL_FD5E3A
 	LD A, QIZH
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0006h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0006h
 	LD BC, WA
 	LD XWA, (XSP + 002h)
 	LDA XWA, XWA + BC
@@ -400208,7 +400208,7 @@ LABEL_FD636A:
 LABEL_FD637A:
 	LD A, QIZH
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0006h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0006h
 	LD BC, WA
 	LD XWA, (XSP + 002h)
 	LDA XWA, XWA + BC
@@ -400237,7 +400237,7 @@ LABEL_FD63AE:
 	CALR LABEL_FD5E3A
 	LD A, QIZH
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0006h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0006h
 	LD BC, WA
 	LD XWA, (XSP + 002h)
 	LDA XWA, XWA + BC
@@ -400247,7 +400247,7 @@ LABEL_FD63AE:
 	CALR LABEL_FD5E3A
 	LD A, QIZH
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0006h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0006h
 	LD BC, WA
 	LD XWA, (XSP + 002h)
 	LDA XWA, XWA + BC
@@ -400259,7 +400259,7 @@ LABEL_FD63AE:
 	CALR LABEL_FD5E3A
 	LD A, QIZH
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0006h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0006h
 	LD BC, WA
 	LD XWA, (XSP + 002h)
 	LDA XWA, XWA + BC
@@ -400270,7 +400270,7 @@ LABEL_FD63AE:
 	CALR LABEL_FD5E3A
 	LD A, QIZH
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0006h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0006h
 	LD BC, WA
 	LD XWA, (XSP + 002h)
 	LDA XWA, XWA + BC
@@ -400290,7 +400290,7 @@ LABEL_FD6441:
 LABEL_FD6451:
 	LD A, QIZH
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0006h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0006h
 	LD BC, WA
 	LD XWA, (XSP + 002h)
 	LDA XWA, XWA + BC
@@ -400319,7 +400319,7 @@ LABEL_FD6485:
 	CALR LABEL_FD5E3A
 	LD A, QIZH
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0006h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0006h
 	LD BC, WA
 	LD XWA, (XSP + 002h)
 	LDA XWA, XWA + BC
@@ -400329,7 +400329,7 @@ LABEL_FD6485:
 	CALR LABEL_FD5E3A
 	LD A, QIZH
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0006h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0006h
 	LD BC, WA
 	LD XWA, (XSP + 002h)
 	LDA XWA, XWA + BC
@@ -400341,7 +400341,7 @@ LABEL_FD6485:
 	CALR LABEL_FD5E3A
 	LD A, QIZH
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0006h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0006h
 	LD BC, WA
 	LD XWA, (XSP + 002h)
 	LDA XWA, XWA + BC
@@ -400352,7 +400352,7 @@ LABEL_FD6485:
 	CALR LABEL_FD5E3A
 	LD A, QIZH
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0006h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0006h
 	LD BC, WA
 	LD XWA, (XSP + 002h)
 	LDA XWA, XWA + BC
@@ -400372,7 +400372,7 @@ LABEL_FD6518:
 LABEL_FD6528:
 	LD A, QIZH
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0006h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0006h
 	LD BC, WA
 	LD XWA, (XSP + 002h)
 	LDA XWA, XWA + BC
@@ -400401,7 +400401,7 @@ LABEL_FD655C:
 	CALR LABEL_FD5E3A
 	LD A, QIZH
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0006h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0006h
 	LD BC, WA
 	LD XWA, (XSP + 002h)
 	LDA XWA, XWA + BC
@@ -400411,7 +400411,7 @@ LABEL_FD655C:
 	CALR LABEL_FD5E3A
 	LD A, QIZH
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0006h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0006h
 	LD BC, WA
 	LD XWA, (XSP + 002h)
 	LDA XWA, XWA + BC
@@ -400423,7 +400423,7 @@ LABEL_FD655C:
 	CALR LABEL_FD5E3A
 	LD A, QIZH
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0006h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0006h
 	LD BC, WA
 	LD XWA, (XSP + 002h)
 	LDA XWA, XWA + BC
@@ -400434,7 +400434,7 @@ LABEL_FD655C:
 	CALR LABEL_FD5E3A
 	LD A, QIZH
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0006h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0006h
 	LD BC, WA
 	LD XWA, (XSP + 002h)
 	LDA XWA, XWA + BC
@@ -400454,7 +400454,7 @@ LABEL_FD65EF:
 LABEL_FD65FF:
 	LD A, QIZH
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0006h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0006h
 	LD BC, WA
 	LD XWA, (XSP + 002h)
 	EXTS XBC
@@ -400483,7 +400483,7 @@ LABEL_FD6632:
 	CALR LABEL_FD5E3A
 	LD A, QIZH
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0006h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0006h
 	LD BC, WA
 	LD XWA, (XSP + 002h)
 	LDA XWA, XWA + BC
@@ -400493,7 +400493,7 @@ LABEL_FD6632:
 	CALR LABEL_FD5E3A
 	LD A, QIZH
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0006h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0006h
 	LD BC, WA
 	LD XWA, (XSP + 002h)
 	LDA XWA, XWA + BC
@@ -400505,7 +400505,7 @@ LABEL_FD6632:
 	CALR LABEL_FD5E3A
 	LD A, QIZH
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0006h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0006h
 	LD BC, WA
 	LD XWA, (XSP + 002h)
 	LDA XWA, XWA + BC
@@ -400516,7 +400516,7 @@ LABEL_FD6632:
 	CALR LABEL_FD5E3A
 	LD A, QIZH
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0006h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0006h
 	LD BC, WA
 	LD XWA, (XSP + 002h)
 	LDA XWA, XWA + BC
@@ -400537,7 +400537,7 @@ LABEL_FD66C1:
 LABEL_FD66D5:
 	LD C, QIZH
 	EXTZ BC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW BC, 0006h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW BC, 0006h
 	LD DE, BC
 	LD XBC, (XSP + 002h)
 	LDA XBC, XBC + DE
@@ -400564,7 +400564,7 @@ LABEL_FD6705:
 	CALR LABEL_FD5E3A
 	LD A, QIZH
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0006h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0006h
 	LD BC, WA
 	LD XWA, (XSP + 002h)
 	LDA XWA, XWA + BC
@@ -400574,7 +400574,7 @@ LABEL_FD6705:
 	CALR LABEL_FD5E3A
 	LD A, QIZH
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0006h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0006h
 	LD BC, WA
 	LD XWA, (XSP + 002h)
 	LDA XWA, XWA + BC
@@ -400586,7 +400586,7 @@ LABEL_FD6705:
 	CALR LABEL_FD5E3A
 	LD A, QIZH
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0006h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0006h
 	LD BC, WA
 	LD XWA, (XSP + 002h)
 	LDA XWA, XWA + BC
@@ -400597,7 +400597,7 @@ LABEL_FD6705:
 	CALR LABEL_FD5E3A
 	LD A, QIZH
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0006h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0006h
 	LD BC, WA
 	LD XWA, (XSP + 002h)
 	LDA XWA, XWA + BC
@@ -401300,7 +401300,7 @@ LABEL_FD7132:
 	DEC 2, XSP
 	PUSH XIZ
 	LD XIZ, XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 004h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 004h), 0000h
 	LD A, (XIZ)
 	EXTZ WA
 	CALR LABEL_FD7107
@@ -401336,7 +401336,7 @@ LABEL_FD7181:
 	DEC 2, XSP
 	PUSH XIZ
 	LD XIZ, XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 004h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 004h), 0000h
 	LD A, (XIZ)
 	EXTZ WA
 	CALR LABEL_FD7107
@@ -403597,7 +403597,7 @@ LABEL_FD91E1:
 	CP A, 1
 	JR NC, LABEL_FD9287
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0006h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0006h
 	LDA XBC, 0EE4E16h
 	EXTS XWA
 	ADD XWA, XBC
@@ -403677,7 +403677,7 @@ LABEL_FD928B:
 	CP A, 1
 	JR NC, LABEL_FD9335
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0006h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0006h
 	LDA XBC, 0EE4E16h
 	EXTS XWA
 	ADD XWA, XBC
@@ -405247,7 +405247,7 @@ LABEL_FDA777:
 	CP C, 0
 	JR Z, LABEL_FDA79A
 	EXTZ BC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW BC, 0006h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW BC, 0006h
 	LDA XDE, 0EE4DF2h
 	LDA XDE, XDE + BC
 	LD XHL, (XDE)
@@ -405261,7 +405261,7 @@ LABEL_FDA79A:
 	CP A, 0
 	JR Z, LABEL_FDA7C1
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0006h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0006h
 	LDA XBC, 0EE4E04h
 	LDA XBC, XBC + WA
 	LD XDE, (XBC)
@@ -406859,7 +406859,7 @@ LABEL_FDB904:
 	LD (XSP + 00ah), DE
 	LD (XSP + 00ch), C
 	LD (XSP + 00eh), A
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 008h), 0002h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 008h), 0002h
 	PUSHW 0007h
 	CALL LABEL_FF0E80
 	INC 2, XSP
@@ -406888,7 +406888,7 @@ LABEL_FDB904:
 	AND DE, 007fh
 	LD (XWA + 004h), E
 	LD XDE, (XSP + 004h)
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 008h), 0007h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 008h), 0007h
 
 LABEL_FDB96B:
 	LD A, (XSP + 00eh)
@@ -407891,9 +407891,9 @@ LABEL_FDC25A:
 	LD (XSP + 00ch), DE
 	LD XIZ, XBC
 	LD (XSP + 00eh), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ah), 0000h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 008h), 0000h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 004h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ah), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 008h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 004h), 0000h
 	CPW (XSP + 00ch), 0000h
 	JR ULE, LABEL_FDC2B8
 
@@ -407953,9 +407953,9 @@ LABEL_FDC2E8:
 	LD (XSP + 00ah), DE
 	LD (XSP + 00ch), XBC
 	LD XIZ, XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 008h), 0000h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 006h), 0000h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 004h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 008h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 006h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 004h), 0000h
 	CPW (XSP + 00ah), 0000h
 	JR ULE, LABEL_FDC345
 
@@ -408181,7 +408181,7 @@ LABEL_FDC504:
 	LD (XSP + 006h), XDE
 	LD (XSP + 00ah), XBC
 	LD XIZ, XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 004h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 004h), 0000h
 	LD XWA, (XSP + 016h)
 	CALR LABEL_FDC35F
 	LD XWA, XIZ
@@ -408256,7 +408256,7 @@ LABEL_FDC5C7:
 LABEL_FDC5CD:
 	CP XIZ, 00004a00h
 	JR NC, LABEL_FDC5F5
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 008h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 008h), 0000h
 	LD WA, 0
 	CALR LABEL_FDBFC6
 	LD (XSP + 004h), XHL
@@ -408272,7 +408272,7 @@ LABEL_FDC5CD:
 LABEL_FDC5F5:
 	CP XIZ, 00004b00h
 	JR NC, LABEL_FDC623
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 008h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 008h), 0001h
 	LD WA, 1
 	CALR LABEL_FDBFC6
 	LD (XSP + 004h), XHL
@@ -408289,7 +408289,7 @@ LABEL_FDC5F5:
 LABEL_FDC623:
 	CP XIZ, 00004c00h
 	JR NC, LABEL_FDC650
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 008h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 008h), 0001h
 	LD WA, 1
 	CALR LABEL_FDBFC6
 	LD (XSP + 004h), XHL
@@ -408306,7 +408306,7 @@ LABEL_FDC623:
 LABEL_FDC650:
 	CP XIZ, 00004d00h
 	JR NC, LABEL_FDC67D
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 008h), 0004h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 008h), 0004h
 	LD WA, 4
 	CALR LABEL_FDBFC6
 	LD (XSP + 004h), XHL
@@ -408323,7 +408323,7 @@ LABEL_FDC650:
 LABEL_FDC67D:
 	CP XIZ, 00004e00h
 	JR NC, LABEL_FDC6AA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 008h), 0002h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 008h), 0002h
 	LD WA, 2
 	CALR LABEL_FDBFC6
 	LD (XSP + 004h), XHL
@@ -408338,7 +408338,7 @@ LABEL_FDC67D:
 	JR T, LABEL_FDC6CD
 
 LABEL_FDC6AA:
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 008h), 0003h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 008h), 0003h
 	LD WA, 3
 	CALR LABEL_FDBFC6
 	LD (XSP + 004h), XHL
@@ -409257,8 +409257,8 @@ LABEL_FDD00A:
 	JRL T, LABEL_FDD1B1
 
 LABEL_FDD06F:
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 014h), 0000h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 012h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 014h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 012h), 0000h
 	LD A, (XIZ + 015h)
 	EXTZ WA
 	LD (XSP + 00ah), WA
@@ -409271,7 +409271,7 @@ LABEL_FDD06F:
 	ADD XBC, XWA
 	LD XWA, (XBC)
 	LD (XSP + 00eh), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ch), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ch), 0000h
 	LD WA, (XSP + 006h)
 	CP WA, 0
 	JR ULE, LABEL_FDD0E2
@@ -409339,8 +409339,8 @@ LABEL_FDD12B:
 	LD XDE, XIZ
 	SUB XDE, XWA
 	LD (XDE), C
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 014h), 0000h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 012h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 014h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 012h), 0000h
 	LD XWA, (XSP + 016h)
 	LDA XIZ, XWA + 001h
 	LD WA, (XSP + 004h)
@@ -409350,7 +409350,7 @@ LABEL_FDD12B:
 	ADD XBC, XWA
 	LD XWA, (XBC)
 	LD (XSP + 00eh), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ch), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ch), 0000h
 	LD WA, (XSP + 006h)
 	CP WA, 0
 	JR ULE, LABEL_FDD1B1
@@ -409402,7 +409402,7 @@ LABEL_FDD1B1:
 LABEL_FDD1B9:
 	LDA XSP, XSP - 044h
 	PUSH XIZ
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 004h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 004h), 0000h
 	LD E, (XWA+)
 	EXTZ DE
 	LD (XSP + 01eh), DE
@@ -413757,7 +413757,7 @@ LABEL_FE0275:
 	JRL Z, LABEL_FE04E0
 	CP A, 090h
 	JRL NZ, LABEL_FE06C7
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 006h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 006h), 0000h
 	CPW (XSP + 006h), 001ah
 	JRL NC, LABEL_FE06C7
 
@@ -413990,7 +413990,7 @@ LABEL_FE04D2:
 	JRL T, LABEL_FE06C7
 
 LABEL_FE04E0:
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 006h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 006h), 0000h
 	CPW (XSP + 006h), 001ah
 	JRL NC, LABEL_FE06C7
 
@@ -416518,7 +416518,7 @@ LABEL_FE1D5C:
 	CALL LABEL_FE41D2
 	LD A, QIZH
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0003h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0003h
 	LD DE, WA
 	LDA XHL, 0C5CBh
 	LD WA, IZ
@@ -416532,7 +416532,7 @@ LABEL_FE1D5C:
 	LD (XHL + DE), A
 	LD A, QIZH
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0003h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0003h
 	LD DE, WA
 	LDA XHL, 0C5CCh
 	LD WA, IZ
@@ -416572,12 +416572,12 @@ LABEL_FE1DFC:
 	CALL LABEL_FE41D2
 	LD A, QIZH
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0003h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0003h
 	LDA XBC, 0C5CBh
 	LD (XBC + WA), 0ffh
 	LD A, QIZH
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0003h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0003h
 	LDA XBC, 0C5CCh
 	LD (XBC + WA), 0ffh
 	DECW 1, (0E9BAh)
@@ -416611,7 +416611,7 @@ LABEL_FE1E8C:
 	PUSH XIZ
 	LD XIZ, XBC
 	LD (XSP + 008h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 004h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 004h), 0000h
 	LD (XIZ), 090h
 	LD (XIZ + 002h), 000h
 	LD (XIZ + 003h), 000h
@@ -416696,7 +416696,7 @@ LABEL_FE1F45:
 	PUSH XIZ
 	LD (XSP + 00ah), XBC
 	LD XIZ, XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 004h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 004h), 0000h
 	LD A, (XIZ)
 	CP A, 0ffh
 	JRL Z, LABEL_FE2062
@@ -416983,7 +416983,7 @@ LABEL_FE21DB:
 	PUSH IZ
 	LD (XSP + 00ah), XBC
 	LD (XSP + 00eh), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 002h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 002h), 0000h
 	LD XWA, (XSP + 00eh)
 	LD A, (XWA)
 	CP A, 0ffh
@@ -417288,7 +417288,7 @@ LABEL_FE24B1:
 	PUSH IZ
 	LD (XSP + 006h), XBC
 	LD (XSP + 00ah), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 002h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 002h), 0000h
 	LD XWA, (XSP + 00ah)
 	LD A, (XWA)
 	CP A, 0ffh
@@ -417555,7 +417555,7 @@ LABEL_FE273A:
 	PUSH IZ
 	LD (XSP + 006h), XBC
 	LD (XSP + 00ah), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 002h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 002h), 0000h
 	LD XWA, (XSP + 00ah)
 	LD A, (XWA)
 	CP A, 0ffh
@@ -420141,7 +420141,7 @@ LABEL_FE4231:
 	LDA XHL, 0EE8EB6h
 	LD E, (XHL + DE)
 	EXTZ BC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW BC, 0005h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW BC, 0005h
 	INC 4, BC
 	LD C, (XWA + BC)
 	LD A, E
@@ -420156,7 +420156,7 @@ LABEL_FE4231:
 LABEL_FE4266:
 	LD A, L
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0003h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0003h
 	EXTS XWA
 	ADD XWA, XIX
 	CP (XWA + 001h), C
@@ -420201,7 +420201,7 @@ LABEL_FE42C2:
 	ADD XIY, XWA
 	LD C, QD
 	EXTZ BC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW BC, 0003h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW BC, 0003h
 	EXTS XBC
 	ADD XBC, XHL
 	LD C, (XBC + 001h)
@@ -420215,7 +420215,7 @@ LABEL_FE42C2:
 	ADD XIY, XWA
 	LD C, QD
 	EXTZ BC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW BC, 0003h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW BC, 0003h
 	EXTS XBC
 	ADD XBC, XHL
 	LD C, (XBC + 002h)
@@ -420278,7 +420278,7 @@ LABEL_FE4377:
 	ADD XIY, XWA
 	LD C, QD
 	EXTZ BC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW BC, 0003h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW BC, 0003h
 	EXTS XBC
 	ADD XBC, XHL
 	LD C, (XBC + 001h)
@@ -420323,16 +420323,16 @@ LABEL_FE43E4:
 	PUSH XIZ
 	LD L, C
 	EXTZ HL
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW HL, 000dh
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW HL, 000dh
 	LDA XIX, 0EE8F2Eh
 	LD XIX, (XIX + HL)
 	LD L, C
 	EXTZ HL
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW HL, 000dh
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW HL, 000dh
 	LDA XIY, 0EE8F32h
 	LD XIY, (XIY + HL)
 	EXTZ BC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW BC, 000dh
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW BC, 000dh
 	LDA XHL, 0EE8F36h
 	EXTZ DE
 	LD XBC, (XHL + BC)
@@ -420353,7 +420353,7 @@ LABEL_FE4431:
 	LDA XIZ, XIX + BC
 	LD C, (XSP + 008h)
 	EXTZ BC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW BC, 0005h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW BC, 0005h
 	INC 4, BC
 	LD C, (XWA + BC)
 	CP C, (XIZ + 002h)
@@ -420405,7 +420405,7 @@ LABEL_FE449F:
 LABEL_FE44A8:
 	LD C, L
 	EXTZ BC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW BC, 000dh
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW BC, 000dh
 	LD IX, BC
 	LDA XIY, 0EE8F36h
 	LD C, (XSP + 00ch)
@@ -420415,11 +420415,11 @@ LABEL_FE44A8:
 	LD B, (XBC + IZ)
 	LD IXL, L
 	EXTZ IX
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW IX, 000dh
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW IX, 000dh
 	LDA XIY, 0EE8F2Eh
 	LD XIX, (XIY + IX)
 	EXTZ HL
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW HL, 000dh
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW HL, 000dh
 	LDA XIY, 0EE8F32h
 	LD XHL, (XIY + HL)
 	LD (XSP + 004h), XHL
@@ -420678,7 +420678,7 @@ LABEL_FE4735:
 LABEL_FE473E:
 	LD C, E
 	EXTZ BC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW BC, 000dh
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW BC, 000dh
 	LD HL, BC
 	LDA XIY, 0EE8F36h
 	LD C, (XSP + 00ch)
@@ -420688,12 +420688,12 @@ LABEL_FE473E:
 	LD D, (XBC + IZ)
 	LD C, E
 	EXTZ BC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW BC, 000dh
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW BC, 000dh
 	LDA XHL, 0EE8F2Eh
 	LD XIY, (XHL + BC)
 	LD C, E
 	EXTZ BC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW BC, 000dh
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW BC, 000dh
 	LDA XHL, 0EE8F32h
 	LD XBC, (XHL + BC)
 	LD (XSP + 004h), XBC
@@ -420925,7 +420925,7 @@ LABEL_FE4980:
 LABEL_FE498E:
 	LD A, L
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000dh
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000dh
 	LD BC, WA
 	LDA XDE, 0EE8F36h
 	LD A, (XSP + 00b8h)
@@ -420936,12 +420936,12 @@ LABEL_FE498E:
 	LD (XSP + 002h), A
 	LD A, L
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000dh
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000dh
 	LDA XBC, 0EE8F2Eh
 	LD XDE, (XBC + WA)
 	LD A, L
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000dh
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000dh
 	LDA XBC, 0EE8F32h
 	LD XWA, (XBC + WA)
 	LD (XSP + 004h), XWA
@@ -421197,7 +421197,7 @@ LABEL_FE4C0D:
 	LDA XBC, 0EE8EB8h
 	LD A, (XBC + WA)
 	LD (XSP + 004h), A
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 002h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 002h), 0000h
 	JRL T, LABEL_FE4EE4
 
 LABEL_FE4C41:
@@ -421574,7 +421574,7 @@ LABEL_FE4FFD:
 
 LABEL_FE5002:
 	LD WA, IZ
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0005h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0005h
 	LD BC, WA
 	INC 4, BC
 	LD XWA, (XSP + 01ah)
@@ -421582,7 +421582,7 @@ LABEL_FE5002:
 	BIT 1, (XWA + 004h)
 	JRL NZ, LABEL_FE50B4
 	LD WA, IZ
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0005h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0005h
 	LD BC, WA
 	INC 4, BC
 	LD XWA, (XSP + 01ah)
@@ -421596,7 +421596,7 @@ LABEL_FE5002:
 	LD A, (XSP + 018h)
 	LD (XSP + 006h), A
 	LD WA, IZ
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0005h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0005h
 	LD BC, WA
 	INC 4, BC
 	LD XWA, (XSP + 01ah)
@@ -421605,7 +421605,7 @@ LABEL_FE5002:
 	RES 007h, A
 	LD (XSP + 007h), A
 	LD WA, IZ
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0005h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0005h
 	LD BC, WA
 	INC 4, BC
 	LD XWA, (XSP + 01ah)
@@ -421615,7 +421615,7 @@ LABEL_FE5002:
 	LDA XWA, XSP + 004h
 	CALL LABEL_FEBF48
 	LD WA, IZ
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0005h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0005h
 	LD BC, WA
 	INC 4, BC
 	LD XWA, (XSP + 01ah)
@@ -422178,7 +422178,7 @@ LABEL_FE5567:
 	LD (XSP + 004h), A
 	LDA XWA, 0E970h
 	LD (XSP + 006h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 002h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 002h), 0000h
 	JRL T, LABEL_FE580F
 
 LABEL_FE5594:
@@ -422560,7 +422560,7 @@ LABEL_FE592A:
 	DEC 6, XSP
 	PUSH XIZ
 	LD (XSP + 006h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 004h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 004h), 0000h
 	JRL T, LABEL_FE5A2E
 
 LABEL_FE5938:
@@ -422992,7 +422992,7 @@ LABEL_FE5CBD:
 	LD (XSP + 012h), XWA
 	CP (8D36h), 098h
 	JR NZ, LABEL_FE5D2D
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 002h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 002h), 0000h
 	JR T, LABEL_FE5D1D
 
 LABEL_FE5CD7:
@@ -423126,7 +423126,7 @@ LABEL_FE5E10:
 	LD A, 004h
 
 LABEL_FE5E16:
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 002h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 002h), 0000h
 	JRL T, LABEL_FE5FAC
 
 LABEL_FE5E1E:
@@ -423369,7 +423369,7 @@ LABEL_FE6033:
 	LD (XSP + 006h), 004h
 
 LABEL_FE603B:
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 002h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 002h), 0000h
 	JRL T, LABEL_FE613A
 
 LABEL_FE6043:
@@ -423548,7 +423548,7 @@ LABEL_FE61D3:
 	LD A, 004h
 
 LABEL_FE61D9:
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 002h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 002h), 0000h
 	JRL T, LABEL_FE62E4
 
 LABEL_FE61E1:
@@ -423733,7 +423733,7 @@ LABEL_FE637D:
 	LD A, 004h
 
 LABEL_FE6383:
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 002h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 002h), 0000h
 	JRL T, LABEL_FE648E
 
 LABEL_FE638B:
@@ -426897,8 +426897,8 @@ LABEL_FE84AA:
 	CPW (XSP + 004h), 0014h
 	JR NZ, LABEL_FE84C0
 	ORW (XSP + 006h), 00f0h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ch), 0040h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00eh), 0048h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ch), 0040h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00eh), 0048h
 
 LABEL_FE84C0:
 	LD WA, (XSP + 004h)
@@ -427277,7 +427277,7 @@ LABEL_FE889A:
 	JRL NZ, LABEL_FE87CB
 	CP IZ, 0
 	JRL NZ, LABEL_FE87CB
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 008h), 0017h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 008h), 0017h
 	CPW (XSP + 008h), 0018h
 	JRL GE, LABEL_FE87CB
 
@@ -427884,7 +427884,7 @@ LABEL_FE8E38:
 	LD A, (0CEDFh)
 	DEC 1, A
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ch
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ch
 	LDA XBC, 0EE8FCEh
 	EXTS XWA
 	ADD XWA, XBC
@@ -427930,7 +427930,7 @@ LABEL_FE8EA1:
 	LD A, (0CEDFh)
 	DEC 1, A
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ch
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ch
 	LDA XBC, 0EE98FEh
 	EXTS XWA
 	ADD XWA, XBC
@@ -427978,7 +427978,7 @@ LABEL_FE8F0A:
 	LD A, (0CEDFh)
 	DEC 1, A
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0018h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0018h
 	LDA XBC, 0EE911Eh
 	EXTS XWA
 	ADD XWA, XBC
@@ -427993,7 +427993,7 @@ LABEL_FE8F0A:
 	LD A, (0CEDFh)
 	DEC 1, A
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0018h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0018h
 	LDA XBC, 0EE911Eh
 	EXTS XWA
 	ADD XWA, XBC
@@ -428037,12 +428037,12 @@ LABEL_FE8FA5:
 	LD L, W
 	LD A, L
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0003h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0003h
 	LD DE, WA
 	LD A, (0CEDFh)
 	DEC 1, A
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0024h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0024h
 	LDA XBC, 0EE9A4Eh
 	EXTS XWA
 	ADD XWA, XBC
@@ -428052,12 +428052,12 @@ LABEL_FE8FA5:
 	LD (XIZ + 005h), A
 	LD A, L
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0003h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0003h
 	LD DE, WA
 	LD A, (0CEDFh)
 	DEC 1, A
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0024h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0024h
 	LDA XBC, 0EE9A4Eh
 	EXTS XWA
 	ADD XWA, XBC
@@ -428068,12 +428068,12 @@ LABEL_FE8FA5:
 	LD (XIZ + 007h), A
 	LD A, L
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0003h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0003h
 	LD DE, WA
 	LD A, (0CEDFh)
 	DEC 1, A
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0024h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0024h
 	LDA XBC, 0EE9A4Eh
 	EXTS XWA
 	ADD XWA, XBC
@@ -428122,7 +428122,7 @@ LABEL_FE9075:
 	LD A, (0CEDFh)
 	DEC 1, A
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0030h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0030h
 	LDA XBC, 0EE93BEh
 	EXTS XWA
 	ADD XWA, XBC
@@ -428137,7 +428137,7 @@ LABEL_FE9075:
 	LD A, (0CEDFh)
 	DEC 1, A
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0030h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0030h
 	LDA XBC, 0EE93BEh
 	EXTS XWA
 	ADD XWA, XBC
@@ -428153,7 +428153,7 @@ LABEL_FE9075:
 	LD A, (0CEDFh)
 	DEC 1, A
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0030h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0030h
 	LDA XBC, 0EE93BEh
 	EXTS XWA
 	ADD XWA, XBC
@@ -428169,7 +428169,7 @@ LABEL_FE9075:
 	LD A, (0CEDFh)
 	DEC 1, A
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0030h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0030h
 	LDA XBC, 0EE93BEh
 	EXTS XWA
 	ADD XWA, XBC
@@ -428213,12 +428213,12 @@ LABEL_FE9171:
 	LD L, W
 	LD A, L
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0003h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0003h
 	LD DE, WA
 	LD A, (0CEDFh)
 	DEC 1, A
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0024h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0024h
 	LDA XBC, 0EE9E3Eh
 	EXTS XWA
 	ADD XWA, XBC
@@ -428228,12 +428228,12 @@ LABEL_FE9171:
 	LD (XIZ + 005h), A
 	LD A, L
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0003h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0003h
 	LD DE, WA
 	LD A, (0CEDFh)
 	DEC 1, A
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0024h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0024h
 	LDA XBC, 0EE9E3Eh
 	EXTS XWA
 	ADD XWA, XBC
@@ -428244,12 +428244,12 @@ LABEL_FE9171:
 	LD (XIZ + 007h), A
 	LD A, L
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0003h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0003h
 	LD DE, WA
 	LD A, (0CEDFh)
 	DEC 1, A
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0024h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0024h
 	LDA XBC, 0EE9E3Eh
 	EXTS XWA
 	ADD XWA, XBC
@@ -428298,7 +428298,7 @@ LABEL_FE9241:
 	LD A, (0CEDFh)
 	DEC 1, A
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0030h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0030h
 	LDA XBC, 0EEA8BEh
 	EXTS XWA
 	ADD XWA, XBC
@@ -428313,7 +428313,7 @@ LABEL_FE9241:
 	LD A, (0CEDFh)
 	DEC 1, A
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0030h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0030h
 	LDA XBC, 0EEA8BEh
 	EXTS XWA
 	ADD XWA, XBC
@@ -428329,7 +428329,7 @@ LABEL_FE9241:
 	LD A, (0CEDFh)
 	DEC 1, A
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0030h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0030h
 	LDA XBC, 0EEA8BEh
 	EXTS XWA
 	ADD XWA, XBC
@@ -428345,7 +428345,7 @@ LABEL_FE9241:
 	LD A, (0CEDFh)
 	DEC 1, A
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0030h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0030h
 	LDA XBC, 0EEA8BEh
 	EXTS XWA
 	ADD XWA, XBC
@@ -431897,7 +431897,7 @@ LABEL_FEC12A:
 	LDA XSP, XSP - 14
 	PUSH IZ
 	LD (XSP + 00eh), WA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 002h), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 002h), 0001h
 	LD WA, (XSP + 00eh)
 	LD (0E9F3h), WA
 	LD IZ, 0
@@ -433241,7 +433241,7 @@ LABEL_FECCDF:
 	LD IZ, 0
 	LD XWA, 0
 	LD (XSP + 006h), XWA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ah), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ah), 0000h
 	CPW (0EBFBh), 0000h
 	JR Z, LABEL_FECD18
 	LD DE, (0EBFBh)
@@ -433378,7 +433378,7 @@ LABEL_FECE34:
 	LD (XSP + 00dh), 004h
 	LD (XSP + 00eh), 001h
 	LD (XSP + 00fh), 020h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ah), 0004h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ah), 0004h
 	JRL T, LABEL_FECF8B
 
 LABEL_FECE4C:
@@ -434866,7 +434866,7 @@ LABEL_FEDC42:
 	EXTZ WA
 	db 0, 0, 0, 0	;TODO: Fix ASL: MULW WA, 004bh
 	EXTZ XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVW WA, 0064h
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVW WA, 0064h
 	ADD WA, 0020h
 	LD (0EC05h), A
 	CP (0EC05h), 07fh
@@ -435431,7 +435431,7 @@ LABEL_FEE168:
 LABEL_FEE173:
 	CP (0D0ACh), IZ
 	JR ULE, LABEL_FEE1A2
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 002h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 002h), 0000h
 	LD WA, 0
 	CP WA, IZ
 	JR NC, LABEL_FEE19E
@@ -435584,7 +435584,7 @@ LABEL_FEE285:
 LABEL_FEE295:
 	CP IZ, (0D8B2h)
 	CALL UGT, LABEL_FEE1A9
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 002h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 002h), 0000h
 	LD WA, 0
 	CP WA, IZ
 	JR NC, LABEL_FEE2C3
@@ -436608,24 +436608,24 @@ LABEL_FEEAC7:
 
 LABEL_FEEB06:
 	EXTZ HL
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW HL, 0018h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW HL, 0018h
 	JR T, LABEL_FEEB2C
 
 LABEL_FEEB0E:
 	EXTZ HL
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW HL, 0018h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW HL, 0018h
 	INC 4, HL
 	JR T, LABEL_FEEB2C
 
 LABEL_FEEB18:
 	EXTZ HL
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW HL, 0018h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW HL, 0018h
 	db 0, 0	;TODO: Fix ASL: INC 0, HL
 	JR T, LABEL_FEEB2C
 
 LABEL_FEEB22:
 	EXTZ HL
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW HL, 0018h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW HL, 0018h
 	ADD HL, 000ch
 
 LABEL_FEEB2C:
@@ -436697,7 +436697,7 @@ LABEL_FEEBA6:
 
 LABEL_FEEBA9:
 	EXTZ HL
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW HL, 0018h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW HL, 0018h
 	ADD HL, BC
 	LDA XBC, 0EC11h
 	LD XBC, (XBC + HL)
@@ -437261,8 +437261,8 @@ LABEL_FEF507:
 	db 0, 0	;TODO: Fix ASL: INC 0, XBC
 	LD XWA, 0003c0fah
 	ADD XWA, XBC
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 02ah), 0001h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 002h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 02ah), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 002h), 0000h
 	LD WA, (XSP + 004h)
 	SLL 8, WA
 	EXTZ XWA
@@ -437325,11 +437325,11 @@ LABEL_FEF5CF:
 	db 0, 0	;TODO: Fix ASL: INC 0, XBC
 	LD XWA, 0003c0fah
 	ADD XWA, XBC
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 02eh), 0001h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 028h), 0000h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 030h), 0063h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 032h), 0000h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XWA + 034h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 02eh), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 028h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 030h), 0063h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 032h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XWA + 034h), 0000h
 	LDA XBC, XWA + 036h
 	CPW (XSP + 008h), 0004h
 	JR Z, LABEL_FEF669
@@ -437445,7 +437445,7 @@ LABEL_FEF6FC:
 	LD E, (XSP + 002h)
 	LD A, E
 	EXTZ WA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 0038h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 0038h
 	db 0, 0	;TODO: Fix ASL: INC 0, WA
 	LDA XBC, 03C0FAh
 	LD WA, (XBC + WA)
@@ -437457,7 +437457,7 @@ LABEL_FEF6FC:
 	EXTZ WA
 	LD C, (XSP + 002h)
 	EXTZ BC
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW BC, 0038h
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW BC, 0038h
 	db 0, 0	;TODO: Fix ASL: INC 0, BC
 	LDA XDE, 03C0FAh
 	LD BC, (XDE + BC)
@@ -438544,7 +438544,7 @@ LABEL_FF09CB:
 	BIT 2, (XBC + WA)
 	JR Z, LABEL_FF09E7
 	SUB DE, 0030h
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW IY, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW IY, 000ah
 	ADD IY, DE
 	JR T, LABEL_FF09CB
 
@@ -439442,7 +439442,7 @@ LABEL_FF103E:
 LABEL_FF1048:
 	LDA XSP, XSP - 04ah
 	PUSH XIZ
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 004h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 004h), 0000h
 	JRL T, LABEL_FF1918
 
 LABEL_FF1054:
@@ -439456,9 +439456,9 @@ LABEL_FF1054:
 	JRL T, LABEL_FF1918
 
 LABEL_FF1068:
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 008h), 0000h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ah), 0000h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 006h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 008h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ah), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 006h), 0000h
 	LDW (03C220h), 0020h
 
 LABEL_FF107E:
@@ -439525,7 +439525,7 @@ LABEL_FF1101:
 	LD BC, IZ
 	SUB BC, 0030h
 	LD WA, (XSP + 008h)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ah
 	LD (XSP + 008h), WA
 	ADD (XSP + 008h), BC
 	LD XWA, (XSP + 052h)
@@ -439574,7 +439574,7 @@ LABEL_FF1179:
 	LD BC, IZ
 	SUB BC, 0030h
 	LD WA, (XSP + 00ah)
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: MULSW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: MULSW WA, 000ah
 	LD (XSP + 00ah), WA
 	ADD (XSP + 00ah), BC
 	LD XWA, (XSP + 052h)
@@ -439721,7 +439721,7 @@ LABEL_FF12C8:
 LABEL_FF12CB:
 	CP HL, (XSP + 008h)
 	JR LE, LABEL_FF12DA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 008h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 008h), 0000h
 	ADD (XSP + 004h), HL
 	JR T, LABEL_FF12E3
 
@@ -439802,7 +439802,7 @@ LABEL_FF135D:
 	LD (XSP + 010h), XWA
 
 LABEL_FF136E:
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00eh), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00eh), 0000h
 	LDA XBC, XSP + 038h
 	LD WA, (XSP + 006h)
 	BIT 004h, WA
@@ -439813,7 +439813,7 @@ LABEL_FF136E:
 	OR XWA, XWA
 	JR NZ, LABEL_FF1396
 	LD (XBC), 000h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ch), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ch), 0000h
 	JR T, LABEL_FF13BC
 
 LABEL_FF1396:
@@ -439829,7 +439829,7 @@ LABEL_FF1396:
 	LD XWA, (XSP + 010h)
 	CP XWA, 00000000h
 	JR GE, LABEL_FF13BC
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00eh), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00eh), 0001h
 
 LABEL_FF13BC:
 	LD WA, (XSP + 006h)
@@ -439840,7 +439840,7 @@ LABEL_FF13BC:
 	JR GE, LABEL_FF13D3
 
 LABEL_FF13CC:
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ah), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ah), 0000h
 	JR T, LABEL_FF13D9
 
 LABEL_FF13D3:
@@ -439851,7 +439851,7 @@ LABEL_FF13D9:
 	LD WA, (XSP + 006h)
 	AND WA, 0005h
 	JR Z, LABEL_FF13E7
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00eh), 0001h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00eh), 0001h
 
 LABEL_FF13E7:
 	LD WA, (XSP + 00ch)
@@ -439859,7 +439859,7 @@ LABEL_FF13E7:
 	ADD WA, (XSP + 00eh)
 	SUB (XSP + 008h), WA
 	JR GE, LABEL_FF13FA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 008h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 008h), 0000h
 
 LABEL_FF13FA:
 	LD WA, (XSP + 008h)
@@ -439889,7 +439889,7 @@ LABEL_FF1432:
 	DECW 1, (XSP + 008h)
 	CP WA, 0
 	JR NZ, LABEL_FF1428
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 008h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 008h), 0000h
 
 LABEL_FF1441:
 	LD XWA, (XSP + 010h)
@@ -440030,7 +440030,7 @@ LABEL_FF1543:
 	JR GE, LABEL_FF1557
 
 LABEL_FF1550:
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ah), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ah), 0000h
 	JR T, LABEL_FF155A
 
 LABEL_FF1557:
@@ -440041,7 +440041,7 @@ LABEL_FF155A:
 	ADD WA, (XSP + 00ah)
 	SUB (XSP + 008h), WA
 	JR GE, LABEL_FF1569
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 008h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 008h), 0000h
 
 LABEL_FF1569:
 	LD WA, (XSP + 008h)
@@ -440140,7 +440140,7 @@ LABEL_FF160D:
 	OR XDE, XDE
 	JR NZ, LABEL_FF162D
 	LD (XBC), 000h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 012h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 012h), 0000h
 	JR T, LABEL_FF1641
 
 LABEL_FF162D:
@@ -440163,7 +440163,7 @@ LABEL_FF1641:
 	JR GE, LABEL_FF1658
 
 LABEL_FF1651:
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ah), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ah), 0000h
 	JR T, LABEL_FF165E
 
 LABEL_FF1658:
@@ -440183,7 +440183,7 @@ LABEL_FF166C:
 	ADD WA, QIZ
 	SUB (XSP + 008h), WA
 	JR GE, LABEL_FF167F
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 008h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 008h), 0000h
 
 LABEL_FF167F:
 	LD WA, (XSP + 008h)
@@ -440337,7 +440337,7 @@ LABEL_FF17A4:
 	JR GE, LABEL_FF17B8
 
 LABEL_FF17B1:
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 00ah), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 00ah), 0000h
 	JR T, LABEL_FF17BB
 
 LABEL_FF17B8:
@@ -440354,7 +440354,7 @@ LABEL_FF17BB:
 	ADD WA, (XSP + 012h)
 	SUB (XSP + 008h), WA
 	JR GE, LABEL_FF17DB
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 008h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 008h), 0000h
 
 LABEL_FF17DB:
 	LD WA, (XSP + 008h)
@@ -440630,7 +440630,7 @@ LABEL_FF19FB:
 LABEL_FF1A17:
 	LDA XSP, XSP - 01ah
 	PUSH XIZ
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 004h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 004h), 0000h
 	LDA XWA, XSP + 006h
 	PUSH XWA
 	LDA XWA, XSP + 008h
@@ -440722,10 +440722,10 @@ LABEL_FF1ABF:
 LABEL_FF1AC4:
 	DEC 4, XSP
 	PUSH IZ
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 004h), 000fh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 004h), 000fh
 	CPW (XSP + 01ah), 0001h
 	JR GE, LABEL_FF1ADA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 002h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 002h), 0000h
 	JR T, LABEL_FF1AE0
 
 LABEL_FF1ADA:
@@ -440736,13 +440736,13 @@ LABEL_FF1AE0:
 	LD WA, (XSP + 010h)
 	BIT 004h, WA
 	JR NZ, LABEL_FF1AED
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 014h), 0006h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 014h), 0006h
 
 LABEL_FF1AED:
 	LD WA, (XSP + 010h)
 	BIT 007h, WA
 	JR Z, LABEL_FF1AFA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 004h), 0012h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 004h), 0012h
 
 LABEL_FF1AFA:
 	LD C, (XSP + 00ah)
@@ -440869,7 +440869,7 @@ LABEL_FF1BCF:
 LABEL_FF1BE3:
 	CPW (XSP + 012h), 0000h
 	JR GE, LABEL_FF1BEF
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 012h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 012h), 0000h
 
 LABEL_FF1BEF:
 	LD WA, (XSP + 010h)
@@ -441120,11 +441120,11 @@ LABEL_FF1DD5:
 LABEL_FF1DE9:
 	DEC 2, XSP
 	PUSH XIZ
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 004h), 000fh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 004h), 000fh
 	LD WA, (XSP + 010h)
 	BIT 004h, WA
 	JR NZ, LABEL_FF1DFE
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 014h), 0006h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 014h), 0006h
 
 LABEL_FF1DFE:
 	LD A, (XSP + 00ah)
@@ -441154,7 +441154,7 @@ LABEL_FF1E2B:
 	LD WA, (XSP + 010h)
 	BIT 007h, WA
 	JR Z, LABEL_FF1E40
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 004h), 0012h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 004h), 0012h
 
 LABEL_FF1E40:
 	LD DE, (XSP + 004h)
@@ -441239,7 +441239,7 @@ LABEL_FF1EE2:
 	LD WA, (XSP + 014h)
 	SUB (XSP + 012h), WA
 	JR GE, LABEL_FF1EEF
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 012h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 012h), 0000h
 
 LABEL_FF1EEF:
 	LD WA, (XSP + 010h)
@@ -441527,8 +441527,8 @@ LABEL_FF2139:
 	LDA XSP, XSP - 010h
 	PUSH XIZ
 	LD IZ, 0
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 006h), 000fh
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 008h), 0008h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 006h), 000fh
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 008h), 0008h
 	PUSHW 0020h
 	PUSHW 0000h
 	PUSHW 0003h
@@ -441550,8 +441550,8 @@ LABEL_FF215E:
 	LD WA, (XSP + 020h)
 	BIT 007h, WA
 	JR Z, LABEL_FF2197
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 006h), 0012h
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 008h), 000ah
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 006h), 0012h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 008h), 000ah
 
 LABEL_FF2197:
 	LD QIZ, 0
@@ -441777,7 +441777,7 @@ LABEL_FF2343:
 	JR ULE, LABEL_FF2383
 	LD DE, 1
 	EXTZ XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVW WA, 000ah
 	LD (XHL), A
 	INCW 1, (XSP + 004h)
 
@@ -441786,7 +441786,7 @@ LABEL_FF2383:
 	INC 1, DE
 	LD WA, (XBC)
 	EXTZ XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVW WA, 000ah
 	LD WA, QWA
 	LD (XHL + IX), A
 	INCW 1, (XSP + 004h)
@@ -441877,7 +441877,7 @@ LABEL_FF243D:
 	CP IZ, 0
 	JR LE, LABEL_FF2498
 	LD (XSP + 004h), WA
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 002h), 0008h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 002h), 0008h
 	SUB (XSP + 002h), HL
 	LD WA, IZ
 	EXTS XWA
@@ -442074,13 +442074,13 @@ LABEL_FF25D4:
 LABEL_FF25DC:
 	LD WA, (XBC)
 	EXTZ XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVW WA, 000ah
 	LD WA, QWA
 	SLL 8, WA
 	ADD (XBC + 002h), WA
 	LD WA, (XBC)
 	EXTZ XWA
-	db 000h, 000h, 000h, 000h	;TODO: Fix ASL: DIVW WA, 000ah
+	db 0, 0, 0, 0	;TODO: Fix ASL: DIVW WA, 000ah
 	LD (XBC+), WA
 	CP XBC, XDE
 	JR C, LABEL_FF25DC
@@ -442202,7 +442202,7 @@ LABEL_FF26C6:
 	JR T, LABEL_FF2712
 
 LABEL_FF26CF:
-	db 000h, 000h, 000h, 000h, 000h;	TODO: Fix ASL: LD (XSP + 002h), 0000h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 002h), 0000h
 	JR T, LABEL_FF2705
 
 LABEL_FF26D6:
