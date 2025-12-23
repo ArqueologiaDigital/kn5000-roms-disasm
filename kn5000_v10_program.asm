@@ -360411,7 +360411,7 @@ LABEL_FB57C8:
 	PUSH XIX
 	PUSH XIZ
 	LD (8D4Ch), 000h
-	db 0, 0, 0, 0, 0;	TODO: Fix ASL: LD C, (8D4Ch)
+	LD C, (8D4Ch)
 	LD (8D4Ch), 00fh
 	LD B, (8D4Ch)
 	LD A, (0F9C5h)
@@ -360422,7 +360422,7 @@ LABEL_FB57C8:
 	LD D, (8D4Ch)
 	CALL LABEL_FD055E
 	LD (8D4Ch), 000h
-	db 0, 0, 0, 0, 0;	TODO: Fix ASL: LD C, (8D4Ch)
+	LD C, (8D4Ch)
 	LD (8D4Ch), 000h
 	LD B, (8D4Ch)
 	LD A, (0F9C4h)
@@ -360444,7 +360444,7 @@ LABEL_FB582D:
 	PUSH XIX
 	PUSH XIZ
 	LD (8D4Ch), 001h
-	db 0, 0, 0, 0, 0;	TODO: Fix ASL: LD C, (8D4Ch)
+	LD C, (8D4Ch)
 	LD (8D4Ch), 00fh
 	LD B, (8D4Ch)
 	LD A, (0F9DFh)
@@ -360455,7 +360455,7 @@ LABEL_FB582D:
 	LD D, (8D4Ch)
 	CALL LABEL_FD055E
 	LD (8D4Ch), 001h
-	db 0, 0, 0, 0, 0;	TODO: Fix ASL: LD C, (8D4Ch)
+	LD C, (8D4Ch)
 	LD (8D4Ch), 000h
 	LD B, (8D4Ch)
 	LD A, (0F9DEh)
@@ -360477,7 +360477,7 @@ LABEL_FB5892:
 	PUSH XIX
 	PUSH XIZ
 	LD (8D4Ch), 002h
-	db 0, 0, 0, 0, 0;	TODO: Fix ASL: LD C, (8D4Ch)
+	LD C, (8D4Ch)
 	LD (8D4Ch), 00fh
 	LD B, (8D4Ch)
 	LD A, (0F9F9h)
@@ -360488,7 +360488,7 @@ LABEL_FB5892:
 	LD D, (8D4Ch)
 	CALL LABEL_FD055E
 	LD (8D4Ch), 002h
-	db 0, 0, 0, 0, 0;	TODO: Fix ASL: LD C, (8D4Ch)
+	LD C, (8D4Ch)
 	LD (8D4Ch), 000h
 	LD B, (8D4Ch)
 	LD A, (0F9F8h)
@@ -360510,7 +360510,7 @@ LABEL_FB58F7:
 	PUSH XIX
 	PUSH XIZ
 	LD (8D4Ch), 000h
-	db 0, 0, 0, 0, 0;	TODO: Fix ASL: LD C, (8D4Ch)
+	LD C, (8D4Ch)
 	LD (8D4Ch), 003h
 	LD B, (8D4Ch)
 	LD A, (0F9C7h)
@@ -360532,7 +360532,7 @@ LABEL_FB592E:
 	PUSH XIX
 	PUSH XIZ
 	LD (8D4Ch), 001h
-	db 0, 0, 0, 0, 0;	TODO: Fix ASL: LD C, (8D4Ch)
+	LD C, (8D4Ch)
 	LD (8D4Ch), 003h
 	LD B, (8D4Ch)
 	LD A, (0F9E1h)
@@ -360554,7 +360554,7 @@ LABEL_FB5965:
 	PUSH XIX
 	PUSH XIZ
 	LD (8D4Ch), 002h
-	db 0, 0, 0, 0, 0;	TODO: Fix ASL: LD C, (8D4Ch)
+	LD C, (8D4Ch)
 	LD (8D4Ch), 003h
 	LD B, (8D4Ch)
 	LD A, (0F9FBh)
@@ -362541,7 +362541,7 @@ LABEL_FB6DAB:
 	LD WA, 1
 
 LABEL_FB6DB3:
-	db 0, 0, 0, 0, 0;	TODO: Fix ASL: LD C, (8D38h)
+	LD C, (8D38h)
 	CP C, 0c2h
 	JR Z, LABEL_FB6DC1
 	CP C, 0c5h
@@ -362565,7 +362565,7 @@ LABEL_FB6DCD:
 
 LABEL_FB6DDC:
 	PUSH IZ
-	db 0, 0, 0, 0, 0;	TODO: Fix ASL: LD C, (8D38h)
+	LD C, (8D38h)
 	CP C, 0c0h
 	JR Z, LABEL_FB6DF0
 	CP C, 0c2h
@@ -363097,7 +363097,7 @@ LABEL_FB725D:
 	RET
 
 LABEL_FB726A:
-	db 0, 0, 0, 0, 0;	TODO: Fix ASL: LD C, (8D54h)
+	LD C, (8D54h)
 	INC 1, C
 	EXTZ BC
 	LD XWA, 00000300h
@@ -363573,22 +363573,44 @@ LABEL_FB7631:
 Test_LCD_Controller_IC206:
 	DEC 2, XSP
 	LD (XSP), A
-	_VGA_WRITE 3c3h, 0
-	_VGA_READ 3c3h
+
+	; equivalent to "_VGA_WRITE 3c3h, 0" but with CALL instead of CALR
+	LDW WA, 3C3h
+	LDW BC, 0
+	CALL _Write_VGA_Register
+
+	; equivalent to "_VGA_READ 3c3h" but with CALL instead of CALR
+	LDW WA, 3C3h
+	CALL _Read_VGA_Register
+
 	CP L, 0
 	JR Z, LABEL_FB7654
 	SET 2, (XSP)
 
 LABEL_FB7654:
-	_VGA_WRITE 3c3h, 1
-	_VGA_READ 3c3h
+	; equivalent to "_VGA_WRITE 3c3h, 1" but with CALL instead of CALR
+	LDW WA, 3C3h
+	LDW BC, 1
+	CALL _Write_VGA_Register
+
+	; equivalent to "_VGA_READ 3c3h" but with CALL instead of CALR
+	LDW WA, 3C3h
+	CALL _Read_VGA_Register
+
 	CP L, 1
 	JR Z, LABEL_FB766A
 	SET 2, (XSP)
 
 LABEL_FB766A:
-	_VGA_WRITE 3c3h, 0
-	_VGA_READ 3c3h
+	; equivalent to "_VGA_WRITE 3c3h, 0" but with CALL instead of CALR
+	LDW WA, 3C3h
+	LDW BC, 0
+	CALL _Write_VGA_Register
+
+	; equivalent to "_VGA_READ 3c3h" but with CALL instead of CALR
+	LDW WA, 3C3h
+	CALL _Read_VGA_Register
+
 	CP L, 0
 	JR Z, LABEL_FB7680
 	SET 2, (XSP)
@@ -364047,7 +364069,7 @@ LABEL_FB7A86:
 	RET
 
 LABEL_FB7B01:
-	db 0, 0, 0, 0, 0;	TODO: Fix ASL: LD C, (8D78h)
+	LD C, (8D78h)
 	CP C, 0
 	JR NZ, LABEL_FB7B46
 	EXTZ WA
@@ -372699,7 +372721,7 @@ LABEL_FBE15F:
 	JR T, LABEL_FBE1DC
 
 LABEL_FBE1BB:
-	db 0, 0, 0, 0, 0;	TODO: Fix ASL: LD C, (8D40h)
+	LD C, (8D40h)
 	OR C, (8D42h)
 	OR C, (8D44h)
 	JR NZ, LABEL_FBE1D0
