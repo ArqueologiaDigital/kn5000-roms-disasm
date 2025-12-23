@@ -1,6 +1,6 @@
 It's been many many years that I've been studying the ROM code of the Technics KN5000 music keyboard with two major goals:
 
-- To emulate it on MAME
+- [To emulate it on MAME](https://github.com/mamedev/mame/pull/14558)
 - To be able to develop custom software to run on the real device.
 
 There's much more info at https://forum.fiozera.com.br/t/technics-kn5000-homebrew-development/321
