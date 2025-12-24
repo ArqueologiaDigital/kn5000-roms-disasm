@@ -454272,8 +454272,8 @@ LABEL_FE9C81:
 LABEL_FE9C8D:
 	CP HL, 2
 	JR NZ, LABEL_FE9C9E
-	db 0, 0, 0, 0, 0, 0	;TODO: Fix ASL: LD (CEB5h), 002h
-	OR (0CEDEh), 020h
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL: LD (CEB5h), 002h
+	db 0, 0, 0, 0, 0, 0	;TODO: Fix ASL: OR (0CEDEh), 020h
 	JR T, LABEL_FE9CC4
 
 LABEL_FE9C9E:
@@ -454378,7 +454378,7 @@ LABEL_FE9D90:
 	RET
 
 LABEL_FE9D91:
-	LD C, (0CEE5h)
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL: LD C, (0CEE5h)
 	LD B, C
 	PUSH BC
 	CALR LABEL_FE981C
@@ -454397,7 +454397,7 @@ LABEL_FE9D91:
 LABEL_FE9DBE:
 	db 0, 0, 0, 0, 0, 0, 0		;TODO: Fix ASL: CPW (0CF2Fh), 0000h
 	JR NZ, LABEL_FE9E2F
-	LD C, (0CEE5h)
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL: LD C, (0CEE5h)
 	LD B, 003h
 
 LABEL_FE9DCE:
@@ -454477,13 +454477,13 @@ LABEL_FE9E84:
 
 LABEL_FE9E8A:
 	POP BC
-	LD (0CEE5h), C
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL: LD (0CEE5h), C
 	RET
 
 LABEL_FE9E91:
 	db 0, 0, 0, 0, 0	;TODO: Fix ASL: LD L, (0CEE5h)
 	XOR H, H
-	LD A, (0CF34h)
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL: LD A, (0CF34h)
 	LD XIZ, 0000cee6h
 	LD (XIZ + HL), A
 	LD BC, HL
@@ -454526,9 +454526,9 @@ LABEL_FE9EF9:
 	PUSH XIZ
 	db 0, 0, 0, 0, 0, 0	;TODO: Fix ASL: CP (CEE1h), 000h
 	JR NZ, LABEL_FE9F15
-	AND (0CEDEh), 0f9h
-	OR (0CEDEh), 010h
-	AND (0CEDEh), 0feh
+	db 0, 0, 0, 0, 0, 0	;TODO: Fix ASL: AND (0CEDEh), 0f9h
+	db 0, 0, 0, 0, 0, 0	;TODO: Fix ASL: OR (0CEDEh), 010h
+	db 0, 0, 0, 0, 0, 0	;TODO: Fix ASL: AND (0CEDEh), 0feh
 
 LABEL_FE9F15:
 	POP XIZ
@@ -454538,15 +454538,15 @@ LABEL_FE9F15:
 LABEL_FE9F18:
 	PUSH XIX
 	PUSH XIZ
-	LD (0CEDFh), A
-	LD (0CEE0h), W
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL: LD (0CEDFh), A
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL: LD (0CEE0h), W
 	db 0, 0, 0, 0, 0, 0	;TODO: Fix ASL: LD (CEE1h), 000h
 	db 0, 0, 0, 0, 0, 0	;TODO: Fix ASL: LD (CEE4h), 000h
 	db 0, 0, 0, 0, 0, 0	;TODO: Fix ASL: AND (0CEDEh), 0fdh
-	AND (0CEDEh), 0fbh
-	AND (0CEDEh), 0feh
-	AND (0CEDEh), 07fh
-	OR (0CEDEh), 010h
+	db 0, 0, 0, 0, 0, 0	;TODO: Fix ASL: AND (0CEDEh), 0fbh
+	db 0, 0, 0, 0, 0, 0	;TODO: Fix ASL: AND (0CEDEh), 0feh
+	db 0, 0, 0, 0, 0, 0	;TODO: Fix ASL: AND (0CEDEh), 07fh
+	db 0, 0, 0, 0, 0, 0	;TODO: Fix ASL: OR (0CEDEh), 010h
 	POP XIZ
 	POP XIX
 	RET
@@ -454585,11 +454585,11 @@ LABEL_FE9FA6:
 	db 0, 0, 0, 0, 0, 0	;TODO: Fix ASL: LD (CEE4h), 000h
 
 LABEL_FE9FB1:
-	AND (0CEDEh), 0fbh
-	OR (0CEDEh), 002h
-	AND (0CEDEh), 0feh
-	AND (0CEDEh), 07fh
-	OR (0CEDEh), 010h
+	db 0, 0, 0, 0, 0, 0	;TODO: Fix ASL: AND (0CEDEh), 0fbh
+	db 0, 0, 0, 0, 0, 0	;TODO: Fix ASL: OR (0CEDEh), 002h
+	db 0, 0, 0, 0, 0, 0	;TODO: Fix ASL: AND (0CEDEh), 0feh
+	db 0, 0, 0, 0, 0, 0	;TODO: Fix ASL: AND (0CEDEh), 07fh
+	db 0, 0, 0, 0, 0, 0	;TODO: Fix ASL: OR (0CEDEh), 010h
 	JR T, LABEL_FEA013
 
 LABEL_FE9FD1:
@@ -454604,11 +454604,11 @@ LABEL_FE9FE7:
 	db 0, 0, 0, 0, 0, 0	;TODO: Fix ASL: LD (CEE4h), 000h
 
 LABEL_FE9FF3:
-	OR (0CEDEh), 004h
+	db 0, 0, 0, 0, 0, 0	;TODO: Fix ASL: OR (0CEDEh), 004h
 	db 0, 0, 0, 0, 0, 0	;TODO: Fix ASL: AND (0CEDEh), 0fdh
-	AND (0CEDEh), 0feh
-	AND (0CEDEh), 07fh
-	OR (0CEDEh), 010h
+	db 0, 0, 0, 0, 0, 0	;TODO: Fix ASL: AND (0CEDEh), 0feh
+	db 0, 0, 0, 0, 0, 0	;TODO: Fix ASL: AND (0CEDEh), 07fh
+	db 0, 0, 0, 0, 0, 0	;TODO: Fix ASL: OR (0CEDEh), 010h
 	JR T, LABEL_FEA013
 
 LABEL_FEA013:
@@ -454621,10 +454621,10 @@ LABEL_FEA016:
 	LD (0CEE0h), W
 	db 0, 0, 0, 0, 0, 0	;TODO: Fix ASL: LD (CEE1h), 000h
 	LD (0CEE4h), W
-	OR (0CEDEh), 004h
+	db 0, 0, 0, 0, 0, 0	;TODO: Fix ASL: OR (0CEDEh), 004h
 	db 0, 0, 0, 0, 0, 0	;TODO: Fix ASL: AND (0CEDEh), 0fdh
-	AND (0CEDEh), 07fh
-	OR (0CEDEh), 010h
+	db 0, 0, 0, 0, 0, 0	;TODO: Fix ASL: AND (0CEDEh), 07fh
+	db 0, 0, 0, 0, 0, 0	;TODO: Fix ASL: OR (0CEDEh), 010h
 	RET
 
 LABEL_FEA044:
@@ -454717,7 +454717,7 @@ LABEL_FEA0C7:
 	SLA 001h, HL
 	OR WA, (XIZ + HL)
 	LD XIY, 0000cee6h
-	LD C, (0CEE5h)
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL: LD C, (0CEE5h)
 	XOR B, B
 	ADD IY, BC
 	DEC 1, IY
@@ -454878,7 +454878,7 @@ LABEL_FEA2C9:
 LABEL_FEA2CA:
 	LD XIY, 0000cee6h
 	LD XIX, 0000cf5fh
-	LD C, (0CEE5h)
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL: LD C, (0CEE5h)
 	XOR B, B
 	LD (XIX + 000h), BC
 
