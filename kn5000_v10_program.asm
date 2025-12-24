@@ -454151,7 +454151,7 @@ LABEL_FE9B48:
 LABEL_FE9B49:
 	PUSH XIZ
 	LD XIY, 0000ceffh
-	LD HL, (0CEFFh)
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL: LD HL, (0CEFFh)
 	EXTZ XHL
 	DEC 1, XHL
 	db 0, 0, 0	;TODO: Fix ASL: SLA 001h, XHL
@@ -454169,12 +454169,12 @@ LABEL_FE9B71:
 	db 0, 0, 0, 0, 0	;TODO: Fix ASL: LD DE, (CEFFh)
 	CP DE, 4
 	JR C, LABEL_FE9BE1
-	LDW (0CF2Fh), 0001h
+	db 0, 0, 0, 0, 0, 0, 0		;TODO: Fix ASL: LDW (0CF2Fh), 0001h
 	LD XIZ, XIY
 	ADD XIZ, XHL
 	LD WA, (XIZ + 004h)
-	LD (0CF33h), WA
-	OR (0CEDEh), 002h
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL: LD (0CF33h), WA
+	db 0, 0, 0, 0, 0, 0	;TODO: Fix ASL: OR (0CEDEh), 002h
 	db 0, 0, 0, 0, 0, 0	;TODO: Fix ASL: LD (CEE5h), 007h
 	DEC 1, DE
 	CALR LABEL_FE9C48
@@ -454190,12 +454190,12 @@ LABEL_FE9BA1:
 	db 0, 0, 0, 0, 0	;TODO: Fix ASL: LD DE, (CEFFh)
 	CP DE, 5
 	JR C, LABEL_FE9BE1
-	LDW (0CF2Fh), 0001h
+	db 0, 0, 0, 0, 0, 0, 0	;TODO: Fix ASL: LDW (0CF2Fh), 0001h
 	LD XIZ, XIY
 	ADD XIZ, XHL
 	LD WA, (XIZ + 004h)
-	LD (0CF33h), WA
-	OR (0CEDEh), 002h
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL: LD (0CF33h), WA
+	db 0, 0, 0, 0, 0, 0	;TODO: Fix ASL: OR (0CEDEh), 002h
 	db 0, 0, 0, 0, 0, 0	;TODO: Fix ASL: LD (CEE5h), 007h
 	DEC 1, DE
 	DEC 1, DE
