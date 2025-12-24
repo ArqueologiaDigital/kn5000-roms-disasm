@@ -454554,8 +454554,8 @@ LABEL_FE9F18:
 LABEL_FE9F51:
 	PUSH XIX
 	PUSH XIZ
-	LD (0CEDFh), A
-	LD (0CEE0h), W
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (0CEDFh), A
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (0CEE0h), W
 	XOR HL, HL
 	db 0, 0, 0, 0, 0, 0, 0		;TODO: Fix ASL: CPW (0CF2Fh), 0000h
 	JR Z, LABEL_FE9F6F
@@ -454572,16 +454572,16 @@ LABEL_FE9F6F:
 LABEL_FE9F80:
 	LD XIZ, 00fea356h
 	LD A, (XIZ + HL)
-	CP (0CEE0h), A
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: CP (0CEE0h), A
 	JR Z, LABEL_FE9FD1
 	db 0, 0, 0, 0, 0, 0, 0		;TODO: Fix ASL: CPW (0CF2Fh), 0000h
 	JR Z, LABEL_FE9FA6
-	LD (0CEE1h), A
-	LD (0CEE4h), A
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (0CEE1h), A
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (0CEE4h), A
 	JR T, LABEL_FE9FB1
 
 LABEL_FE9FA6:
-	LD (0CEE1h), A
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (0CEE1h), A
 	db 0, 0, 0, 0, 0, 0	;TODO: Fix ASL: LD (CEE4h), 000h
 
 LABEL_FE9FB1:
