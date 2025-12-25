@@ -454793,7 +454793,7 @@ LABEL_FEA1E9:
 	JR T, LABEL_FEA1FA
 
 LABEL_FEA1F3:
-	DEC 1, (0CEF1h)
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL: DEC 1, (0CEF1h)
 	JR T, LABEL_FEA1FA
 
 LABEL_FEA1FA:
@@ -454802,17 +454802,17 @@ LABEL_FEA1FA:
 	JR T, LABEL_FEA242
 
 LABEL_FEA201:
-	LD L, (0CEDFh)
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL: LD L, (0CEDFh)
 	XOR H, H
 	DEC 1, HL
 	LD XIZ, 00fea3dah
 	LD C, (XIZ + HL)
-	LD (0CEF1h), C
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL: LD (0CEF1h), C
 	XOR B, B
 	LD XIY, 00fea403h
 	LD XIX, 0000cef2h
 	SLA 002h, HL
-	LD E, (0CEE0h)
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL: LD E, (0CEE0h)
 	DEC 1, E
 	ADD E, 030h
 
@@ -454828,34 +454828,34 @@ LABEL_FEA242:
 	RET
 
 LABEL_FEA243:
-	LD L, (0CEDFh)
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL: LD L, (0CEDFh)
 	XOR H, H
 	DEC 1, HL
 	LD XIZ, 00fea3dah
 	LD A, (XIZ + HL)
-	LD (0CEF1h), A
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL: LD (0CEF1h), A
 	LD XIZ, 00fea403h
 	SLA 002h, HL
 	LD BC, (XIZ + HL)
 	INC 2, HL
 	LD DE, (XIZ + HL)
 	LD XIZ, 00fea349h
-	LD L, (0CEE0h)
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL: LD L, (0CEE0h)
 	LD L, (XIZ + L)
 	ADD L, 00ch
 	ADD C, L
 	ADD B, L
 	ADD E, L
 	ADD D, L
-	LD (0CEF2h), C
-	LD (0CEF3h), B
-	LD (0CEF4h), E
-	LD (0CEF5h), D
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL: LD (0CEF2h), C
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL: LD (0CEF3h), B
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL: LD (0CEF4h), E
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL: LD (0CEF5h), D
 	RET
 
 LABEL_FEA29E:
 	db 0, 0, 0, 0, 0	;TODO: Fix ASL: LD BC, (0CEFFh)
-	LD (0CF5Fh), BC
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL: LD (0CF5Fh), BC
 	CP BC, 0
 	JR Z, LABEL_FEA2C9
 	LD XIY, 0000cf03h
@@ -474300,4 +474300,4 @@ LABEL_FFFEEB:
 	db 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 00Ah, 0FFh, 0FFh
 	db 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh
 	db 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh
-	db 0FFh, 0FFh, 0FFh, 0FFh, 0FFh
+	;db 0FFh, 0FFh, 0FFh, 0FFh, 0FFh
