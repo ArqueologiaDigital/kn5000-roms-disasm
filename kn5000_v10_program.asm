@@ -454880,7 +454880,7 @@ LABEL_FEA2CA:
 	LD XIX, 0000cf5fh
 	db 0, 0, 0, 0, 0	;TODO: Fix ASL: LD C, (0CEE5h)
 	XOR B, B
-	LD (XIX + 000h), BC
+	db 0, 0, 0		;TODO: Fix ASL: LD (XIX + 000h), BC
 
 LABEL_FEA2DE:
 	LD W, (XIY)
@@ -454895,9 +454895,9 @@ LABEL_FEA2DE:
 LABEL_FEA2EF:
 	db 0, 0, 0, 0, 0	;TODO: Fix ASL: BIT 0, (0CEDEh)
 	JR NZ, LABEL_FEA333
-	LD A, (0CEDFh)
-	LD W, (0CEE0h)
-	LD L, (0CEE1h)
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL: LD A, (0CEDFh)
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL: LD W, (0CEE0h)
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL: LD L, (0CEE1h)
 	CP A, (8D42h)
 	JR NZ, LABEL_FEA317
 	CP W, (8D40h)
@@ -474299,5 +474299,5 @@ LABEL_FFFEEB:
 	db 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh
 	db 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 00Ah, 0FFh, 0FFh
 	db 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh
-	db 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh
+	;db 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh
 	;db 0FFh, 0FFh, 0FFh, 0FFh, 0FFh
