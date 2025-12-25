@@ -454685,18 +454685,18 @@ LABEL_FEA0AC:
 LABEL_FEA0C7:
 	db 0, 0, 0, 0, 0	;TODO: Fix ASL: BIT 4, (0CEDEh)
 	JRL NZ, LABEL_FEA159
-	LD L, (0CEDFh)
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL: LD L, (0CEDFh)
 	XOR H, H
 	DEC 1, HL
 	LD XIZ, 00fea3dah
 	LD A, (XIZ + HL)
-	LD (0CEE5h), A
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL: LD (0CEE5h), A
 	LD XIZ, 00fea403h
 	SLA 002h, HL
 	LD BC, (XIZ + HL)
 	INC 2, HL
 	LD DE, (XIZ + HL)
-	LD L, (0CEE0h)
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL: LD L, (0CEE0h)
 	DEC 1, L
 	ADD C, L
 	ADD B, L
@@ -454738,39 +454738,39 @@ LABEL_FEA15A:
 	XOR HL, HL
 	db 0, 0, 0, 0, 0	;TODO: Fix ASL: BIT 1, (0CEDEh)
 	JR Z, LABEL_FEA16A
-	LD L, (0CEE1h)
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL: LD L, (0CEE1h)
 	JR T, LABEL_FEA171
 
 LABEL_FEA16A:
-	LD L, (0CEE0h)
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL: LD L, (0CEE0h)
 	JR T, LABEL_FEA171
 
 LABEL_FEA171:
 	LD XIZ, 00fea349h
 	LD W, (XIZ + HL)
 	LD A, 040h
-	LDW (0CF77h), 0001h
-	LD (0CF7Bh), WA
+	db 0, 0, 0, 0, 0, 0, 0	;TODO: Fix ASL: LDW (0CF77h), 0001h
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL: LD (0CF7Bh), WA
 	RET
 
 LABEL_FEA18A:
 	db 0, 0, 0, 0, 0	;TODO: Fix ASL: BIT 1, (0CEDEh)
 	JR Z, LABEL_FEA201
-	LD L, (0CEDFh)
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL: LD L, (0CEDFh)
 	XOR H, H
 	DEC 1, HL
 	LD XIZ, 00fea3dah
 	LD C, (XIZ + HL)
-	LD (0CEF1h), C
-	INC 1, (0CEF1h)
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL: LD (0CEF1h), C
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL: INC 1, (0CEF1h)
 	XOR B, B
 	LD XIY, 00fea403h
 	LD XIX, 0000cef2h
 	SLA 002h, HL
-	LD D, (0CEE1h)
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL: LD D, (0CEE1h)
 	DEC 1, D
 	ADD D, 030h
-	LD E, (0CEE0h)
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL: LD E, (0CEE0h)
 	DEC 1, E
 	ADD E, 030h
 	LD A, D
