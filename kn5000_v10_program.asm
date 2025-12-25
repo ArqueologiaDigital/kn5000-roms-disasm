@@ -454596,7 +454596,7 @@ LABEL_FE9FD1:
 	db 0, 0, 0, 0, 0, 0, 0		;TODO: Fix ASL: CPW (0CF2Fh), 0000h
 	JR Z, LABEL_FE9FE7
 	db 0, 0, 0, 0, 0, 0	;TODO: Fix ASL: LD (CEE1h), 000h
-	LD (0CEE4h), W
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL: LD (0CEE4h), W
 	JR T, LABEL_FE9FF3
 
 LABEL_FE9FE7:
@@ -454617,10 +454617,10 @@ LABEL_FEA013:
 	RET
 
 LABEL_FEA016:
-	LD (0CEDFh), A
-	LD (0CEE0h), W
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL: LD (0CEDFh), A
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL: LD (0CEE0h), W
 	db 0, 0, 0, 0, 0, 0	;TODO: Fix ASL: LD (CEE1h), 000h
-	LD (0CEE4h), W
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL: LD (0CEE4h), W
 	db 0, 0, 0, 0, 0, 0	;TODO: Fix ASL: OR (0CEDEh), 004h
 	db 0, 0, 0, 0, 0, 0	;TODO: Fix ASL: AND (0CEDEh), 0fdh
 	db 0, 0, 0, 0, 0, 0	;TODO: Fix ASL: AND (0CEDEh), 07fh
@@ -454630,11 +454630,11 @@ LABEL_FEA016:
 LABEL_FEA044:
 	CALR LABEL_FEA066
 	CALR LABEL_FEA2EF
-	ORW (0CF01h), 0ff00h
-	LD A, (0CEDFh)
-	LD (0CEE2h), A
-	LD A, (0CEE0h)
-	LD (0CEE3h), A
+	db 0, 0, 0, 0, 0, 0, 0		;TODO: Fix ASL: ORW (0CF01h), 0ff00h
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD A, (0CEDFh)
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (0CEE2h), A
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD A, (0CEE0h)
+	db 0, 0, 0, 0, 0		;TODO: Fix ASL: LD (0CEE3h), A
 	RET
 
 LABEL_FEA066:
@@ -454677,8 +454677,8 @@ LABEL_FEA0A9:
 
 LABEL_FEA0AC:
 	db 0, 0, 0, 0, 0, 0	;TODO: Fix ASL: LD (CEE5h), 000h
-	LDW (0CF5Fh), 0000h
-	LDW (0CF77h), 0000h
+	db 0, 0, 0, 0, 0, 0, 0	;TODO: Fix ASL: LDW (0CF5Fh), 0000h
+	db 0, 0, 0, 0, 0, 0, 0	;TODO: Fix ASL: LDW (0CF77h), 0000h
 	db 0, 0, 0, 0, 0, 0	;TODO: Fix ASL: LD (CEF1h), 000h
 	RET
 
