@@ -456128,7 +456128,7 @@ LABEL_FEBADE:
 
 LABEL_FEBB17:
 	DEC 6, XSP
-	LD (XSP + 000h), 004h
+	db 0, 0, 0, 0	;TODO: Fix ASL: LD (XSP + 000h), 004h
 	LD (XSP + 001h), 0b0h
 	LD (XSP + 002h), A
 	LD (XSP + 003h), C
@@ -456141,7 +456141,7 @@ LABEL_FEBB17:
 
 LABEL_FEBB37:
 	DEC 6, XSP
-	LD (XSP + 000h), 004h
+	db 0, 0, 0, 0	;TODO: Fix ASL: LD (XSP + 000h), 004h
 	LD (XSP + 001h), 0e0h
 	LD (XSP + 002h), A
 	LD A, C
@@ -456159,7 +456159,7 @@ LABEL_FEBB37:
 
 LABEL_FEBB65:
 	DEC 6, XSP
-	LD (XSP + 000h), 004h
+	db 0, 0, 0, 0	;TODO: Fix ASL: LD (XSP + 000h), 004h
 	LD (XSP + 001h), 0d0h
 	LD (XSP + 002h), A
 	LD (XSP + 003h), 000h
@@ -456245,7 +456245,7 @@ LABEL_FEBC2F:
 
 LABEL_FEBC36:
 	DEC 6, XSP
-	LD (XSP + 000h), 004h
+	db 0, 0, 0, 0	;TODO: Fix ASL: LD (XSP + 000h), 004h
 	LD (XSP + 001h), 0f0h
 	LD (XSP + 002h), A
 	LD (XSP + 003h), C
@@ -456302,7 +456302,7 @@ LABEL_FEBC56:
 
 LABEL_FEBDA1:
 	DEC 6, XSP
-	LD (XSP + 000h), 004h
+	db 0, 0, 0, 0	;TODO: Fix ASL: LD (XSP + 000h), 004h
 	LD (XSP + 001h), 0f0h
 	LD (XSP + 002h), 050h
 	LD (XSP + 003h), 087h
@@ -457002,7 +457002,7 @@ LABEL_FEC318:
 LABEL_FEC344:
 	CPW (0D09Ah), 0000h
 	RET LE
-	SUB (0D09Ah), 0001h
+	db 0, 0, 0, 0, 0, 0	;TODO: Fix ASL: SUB (0D09Ah), 0001h
 	RET NZ
 	RES 1, (28B2h)
 	RES 2, (28B2h)
@@ -474299,5 +474299,5 @@ LABEL_FFFEEB:
 	db 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh
 	db 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 00Ah, 0FFh, 0FFh
 	db 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh
-	db 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh
-	db 0FFh, 0FFh;, 0FFh, 0FFh, 0FFh
+	db 0FFh, 0FFh, 0FFh, 0FFh;, 0FFh, 0FFh, 0FFh, 0FFh
+	;db 0FFh, 0FFh, 0FFh, 0FFh, 0FFh
