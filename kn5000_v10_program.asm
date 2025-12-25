@@ -461827,7 +461827,6 @@ LABEL_FEF252:
 	LD (XDE + 005h), 000h
 	LD (XDE + 006h), 002h
 	INC 1, (0E197h)
-	db 000h; TODO: Fix ASL:
 	LD L, (0E197h)
 	RES 007h, L
 	LD (XDE + 007h), L
@@ -461836,7 +461835,6 @@ LABEL_FEF252:
 	LD WA, 3
 	LD BC, 000ah
 	CALL sendCOMM
-	db 000h; TODO: Fix ASL:
 	LD L, (0E2BFh)
 	RET
 
@@ -461850,7 +461848,6 @@ LABEL_FEF293:
 	LD (XDE + 005h), 000h
 	LD (XDE + 006h), 002h
 	INC 1, (0E197h)
-	db 000h; TODO: Fix ASL:
 	LD L, (0E197h)
 	RES 007h, L
 	LD (XDE + 007h), L
@@ -461859,7 +461856,6 @@ LABEL_FEF293:
 	LD WA, 3
 	LD BC, 000ah
 	CALL sendCOMM
-	db 000h; TODO: Fix ASL:
 	LD L, (0E2C9h)
 	RET
 
@@ -461873,7 +461869,6 @@ LABEL_FEF2D4:
 	LD (XDE + 005h), 000h
 	LD (XDE + 006h), 002h
 	INC 1, (0E197h)
-	db 000h; TODO: Fix ASL:
 	LD L, (0E197h)
 	RES 007h, L
 	LD (XDE + 007h), L
@@ -461882,7 +461877,6 @@ LABEL_FEF2D4:
 	LD WA, 3
 	LD BC, 000ah
 	CALL sendCOMM
-	db 000h; TODO: Fix ASL:
 	LD L, (0E2D3h)
 	RET
 
@@ -461896,7 +461890,6 @@ LABEL_FEF315:
 	LD (XDE + 005h), 000h
 	LD (XDE + 006h), 002h
 	INC 1, (0E197h)
-	db 000h; TODO: Fix ASL:
 	LD L, (0E197h)
 	RES 007h, L
 	LD (XDE + 007h), L
@@ -461905,7 +461898,6 @@ LABEL_FEF315:
 	LD WA, 3
 	LD BC, 000ah
 	CALL sendCOMM
-	db 000h; TODO: Fix ASL:
 	LD L, (0E2DDh)
 	RET
 
@@ -461977,7 +461969,6 @@ LABEL_FEF3AE:
 
 LABEL_FEF3DD:
 	INC 1, (0E197h)
-	db 000h; TODO: Fix ASL:
 	LD L, (0E197h)
 	RES 007h, L
 	RET
@@ -462024,7 +462015,6 @@ LABEL_FEF43E:
 	LD BC, DE
 	LD XDE, XHL
 	CALL sendCOMM
-	db 000h; TODO: Fix ASL:
 	LD L, (0E197h)
 	RES 007h, L
 	POP XIZ
@@ -462040,7 +462030,6 @@ LABEL_FEF455:
 	LD (XDE + 005h), 000h
 	LD (XDE + 006h), 002h
 	INC 1, (0E197h)
-	db 000h; TODO: Fix ASL:
 	LD L, (0E197h)
 	RES 007h, L
 	LD (XDE + 007h), L
@@ -462060,7 +462049,6 @@ LABEL_FEF491:
 	LD (XDE + 005h), 000h
 	LD (XDE + 006h), 002h
 	INC 1, (0E197h)
-	db 000h; TODO: Fix ASL:
 	LD L, (0E197h)
 	RES 007h, L
 	LD (XDE + 007h), L
@@ -474299,5 +474287,5 @@ LABEL_FFFEEB:
 	db 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh
 	db 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 00Ah, 0FFh, 0FFh
 	db 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh
-	db 0FFh, 0FFh, 0FFh, 0FFh;, 0FFh, 0FFh, 0FFh, 0FFh
-	;db 0FFh, 0FFh, 0FFh, 0FFh, 0FFh
+	db 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh
+	db 0FFh, 0FFh, 0FFh, 0FFh, 0FFh
