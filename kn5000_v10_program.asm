@@ -455132,12 +455132,12 @@ LABEL_FEA738:
 	LD BC, 5
 	LDIRW
 	LDI
-	db 0, 0, 0, 0, 0, 0	;TODO: Fix ASL: CP (CEE5h), 000h
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL: CP (CEE5h), 000h
 	JR NZ, LABEL_FEA761
 	CALL LABEL_FE9EF9
-	db 0, 0, 0, 0, 0, 0	;TODO: Fix ASL: LD (CEDFh), 000h
-	db 0, 0, 0, 0, 0, 0	;TODO: Fix ASL: LD (CEE0h), 000h
-	db 0, 0, 0, 0, 0, 0	;TODO: Fix ASL: LD (CEE1h), 000h
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL: LD (CEDFh), 000h
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL: LD (CEE0h), 000h
+	db 0, 0, 0, 0, 0	;TODO: Fix ASL: LD (CEE1h), 000h
 	JR T, LABEL_FEA7A0
 
 LABEL_FEA761:
@@ -455155,9 +455155,9 @@ LABEL_FEA761:
 	CALL LABEL_FE99DE
 	CP HL, 0
 	JR NZ, LABEL_FEA792
-	db 0, 0, 0, 0, 0	;TODO: Fix ASL: DEC 1, (0CEE5h)
+	db 0, 0, 0, 0	;TODO: Fix ASL: DEC 1, (0CEE5h)
 	CALL LABEL_FE99DE
-	db 0, 0, 0, 0, 0	;TODO: Fix ASL: INC 1, (0CEE5h)
+	db 0, 0, 0, 0	;TODO: Fix ASL: INC 1, (0CEE5h)
 
 LABEL_FEA792:
 	CALL LABEL_FE9F51
@@ -455196,7 +455196,7 @@ LABEL_FEA7C4:
 
 LABEL_FEA7EB:
 	DEC 6, XSP
-	LD (XSP + 000h), 005h
+	db 0, 0, 0, 0		;TODO: Fix ASL: LD (XSP + 000h), 005h
 	LD (XSP + 001h), 0c0h
 	LD (XSP + 002h), 019h
 	LD (XSP + 003h), 000h
@@ -474299,5 +474299,5 @@ LABEL_FFFEEB:
 	db 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh
 	db 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 00Ah, 0FFh, 0FFh
 	db 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh
-	;db 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh
-	;db 0FFh, 0FFh, 0FFh, 0FFh, 0FFh
+	db 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh
+	db 0FFh, 0FFh;, 0FFh, 0FFh, 0FFh
