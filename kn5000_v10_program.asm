@@ -262288,7 +262288,7 @@ LABEL_F597B4:
 	AND A, 080h
 	SRL 7, A
 	LD (3250h), A
-	db 0, 0, 0	; Fix ASL assembler: LD A, (XHL + 000h)
+	LD A, (XHL + 000h:8)
 	LD (3246h), A
 	LD A, (XHL + 001h)
 	AND A, 07fh
@@ -262304,7 +262304,7 @@ LABEL_F5984E:
 	ADD XHL, 001e7810h
 	BIT 7, (XHL + 001h)
 	JR Z, LABEL_F5986E
-	db 0, 0, 0	; Fix ASL assembler: LD A, (XHL + 000h)
+	LD A, (XHL + 000h:8)
 	LD (3246h), A
 	LD A, (XHL + 001h)
 	AND A, 07fh
@@ -293052,7 +293052,7 @@ LABEL_F721C3:
 	POP XIY
 	LD (XIY + 003h), WA
 	LD L, 001h
-	db 0, 0, 0;	TODO: Fix ASL: OR (XIY + 000h), L
+	OR (XIY + 000h:8), L
 	LD (7F10h), WA
 	LD WA, 6
 	LD (7F12h), WA
