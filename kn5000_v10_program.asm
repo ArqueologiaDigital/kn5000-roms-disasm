@@ -270032,8 +270032,8 @@ LABEL_F5F58B:
 	OR (XIX + 001h), A
 	LD D, A
 	LD A, (XIY + 000h:8)
-	db 0, 0, 0, 0;	TODO: Fix ASL: AND (XIX + 000h), 000h
-	db 0, 0, 0;	TODO: Fix ASL: OR (XIX + 000h), A
+	AND (XIX + 000h:8), 000h
+	OR (XIX + 000h:8), A
 	LD E, A
 	SLL 1, B
 	LD (34E1h), E
@@ -270088,8 +270088,8 @@ LABEL_F5F624:
 	LD D, A
 	LD A, (XIY + 000h:8)
 	OR A, 0f0h
-	db 0, 0, 0, 0;	TODO: Fix ASL: AND (XIX + 000h), 000h
-	db 0, 0, 0;	TODO: Fix ASL: OR (XIX + 000h), A
+	AND (XIX + 000h:8), 000h
+	OR (XIX + 000h:8), A
 	LD E, A
 	SLL 1, B
 	LD (34DFh), E
@@ -270143,8 +270143,8 @@ LABEL_F5F6C0:
 	OR (XIX + 001h), A
 	LD D, A
 	LD A, (XIY + 000h:8)
-	db 0, 0, 0, 0;	TODO: Fix ASL: AND (XIX + 000h), 000h
-	db 0, 0, 0;	TODO: Fix ASL: OR (XIX + 000h), A
+	AND (XIX + 000h:8), 000h
+	OR (XIX + 000h:8), A
 	LD E, A
 	SLL 1, B
 	LD (34E3h), E
@@ -270198,8 +270198,8 @@ LABEL_F5F759:
 	OR (XIX + 001h), A
 	LD D, A
 	LD A, (XIY + 000h:8)
-	db 0, 0, 0, 0;	TODO: Fix ASL: AND (XIX + 000h), 000h
-	db 0, 0, 0;	TODO: Fix ASL: OR (XIX + 000h), A
+	AND (XIX + 000h:8), 000h
+	OR (XIX + 000h:8), A
 	LD E, A
 	SLL 1, B
 	LD (34E5h), E
@@ -270253,8 +270253,8 @@ LABEL_F5F7F2:
 	OR (XIX + 001h), A
 	LD D, A
 	LD A, (XIY + 000h:8)
-	db 0, 0, 0, 0;	TODO: Fix ASL: AND (XIX + 000h), 000h
-	db 0, 0, 0;	TODO: Fix ASL: OR (XIX + 000h), A
+	AND (XIX + 000h:8), 000h
+	OR (XIX + 000h:8), A
 	LD E, A
 	SLL 1, B
 	LD (34E7h), E
