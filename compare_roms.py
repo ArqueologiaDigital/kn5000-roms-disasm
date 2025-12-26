@@ -12,5 +12,5 @@ for i in range(len(original)):
 	if original[i] == rebuilt[i]:
 		score += 1
 
-print(f"Similarity: {100*score/len(original):0.2f}%")
+print(f"Similarity: {100*score/len(original):0.2f}%  ({len(original)-score} incorrect bytes)")
 
