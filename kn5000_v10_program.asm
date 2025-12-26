@@ -136289,7 +136289,7 @@ LABEL_EF1B9C:
 	db 000h	;TODO: Fix ASL:
 	LD WA, (XIX + 000h)
 	LD HL, (XIX + 002h)
-	db 000h, 000h, 000h;	TODO: Fix ASL: LD (000h + WA), XHL
+	LD (XHL + 000h:8), WA
 	LD (XWA + 002h), HL
 	JRL T, LABEL_EF1AC0
 
@@ -136334,7 +136334,7 @@ LABEL_EF1C5F:
 	db 000h	;TODO: Fix ASL:
 	LD WA, (XIX + 000h)
 	LD HL, (XIX + 002h)
-	db 000h, 000h, 000h;	TODO: Fix ASL: LD (000h + WA), XHL
+	LD (XHL + 000h:8), WA
 	LD (XWA + 002h), HL
 	EXTZ XIX
 	EXTZ XIY
@@ -136366,7 +136366,7 @@ LABEL_EF1CA8:
 	db 000h	;TODO: Fix ASL:
 	LD WA, (XIX + 000h)
 	LD HL, (XIX + 002h)
-	db 000h, 000h, 000h;	TODO: Fix ASL: LD (000h + WA), XHL
+	LD (XHL + 000h:8), WA
 	LD (XWA + 002h), HL
 	EXTZ XIX
 	EXTZ XIY
@@ -136405,7 +136405,7 @@ LABEL_EF1CEC:
 	db 000h	;TODO: Fix ASL:
 	LD WA, (XIX + 000h)
 	LD HL, (XIX + 002h)
-	db 000h, 000h, 000h;	TODO: Fix ASL: LD (000h + WA), XHL
+	LD (XHL + 000h:8), WA
 	LD (XWA + 002h), HL
 	LD (XIX + 009h), 003h
 	JRL T, LABEL_EF1AC0
@@ -136536,7 +136536,7 @@ LABEL_EF1E01:
 	db 000h	;TODO: Fix ASL:
 	LD WA, (XIX + 000h)
 	LD HL, (XIX + 002h)
-	db 000h, 000h, 000h;	TODO: Fix ASL: LD (000h + WA), XHL
+	LD (XHL + 000h:8), WA
 	LD (XWA + 002h), HL
 	LD (XIX + 009h), 004h
 	LD A, (XIX + 008h)
@@ -136589,7 +136589,7 @@ LABEL_EF1E69:
 	db 000h	;TODO: Fix ASL:
 	LD WA, (XIX + 000h)
 	LD HL, (XIX + 002h)
-	db 000h, 000h, 000h;	TODO: Fix ASL: LD (000h + WA), XHL
+	LD (XHL + 000h:8), WA
 	LD (XWA + 002h), HL
 	LD (XIX + 009h), 004h
 	LD A, (XIX + 008h)
@@ -136639,7 +136639,7 @@ LABEL_EF1EC4:
 	db 000h	;TODO: Fix ASL:
 	LD WA, (XIX + 000h)
 	LD HL, (XIX + 002h)
-	db 000h, 000h, 000h;	TODO: Fix ASL: LD (000h + WA), XHL
+	LD (XHL + 000h:8), WA
 	LD (XWA + 002h), HL
 	LD (XIX + 009h), 003h
 	SLL 2, E
@@ -136702,7 +136702,7 @@ LABEL_EF1F42:
 	db 000h	;TODO: Fix ASL:
 	LD WA, (XIX + 000h)
 	LD HL, (XIX + 002h)
-	db 000h, 000h, 000h;	TODO: Fix ASL: LD (000h + WA), XHL
+	LD (XHL + 000h:8), WA
 	LD (XWA + 002h), HL
 	LD (XIX + 009h), 004h
 	LD A, (XIX + 008h)
@@ -136758,7 +136758,7 @@ LABEL_EF1FB0:
 	db 000h	;TODO: Fix ASL:
 	LD WA, (XIX + 000h)
 	LD HL, (XIX + 002h)
-	db 000h, 000h, 000h;	TODO: Fix ASL: LD (000h + WA), XHL
+	LD (XHL + 000h:8), WA
 	LD (XWA + 002h), HL
 	LD (XIX + 009h), 004h
 	LD A, (XIX + 008h)
@@ -136808,7 +136808,7 @@ LABEL_EF200C:
 	db 000h	;TODO: Fix ASL:
 	LD WA, (XIX + 000h)
 	LD HL, (XIX + 002h)
-	db 000h, 000h, 000h;	TODO: Fix ASL: LD (000h + WA), XHL
+	LD (XHL + 000h:8), WA
 	LD (XWA + 002h), HL
 	LD (XIX + 009h), 003h
 	SLL 2, E
@@ -136886,7 +136886,7 @@ LABEL_EF2070:
 	db 000h	;TODO: Fix ASL:
 	LD WA, (XIX + 000h)
 	LD HL, (XIX + 002h)
-	db 000h, 000h, 000h;	TODO: Fix ASL: LD (000h + WA), XHL
+	LD (XHL + 000h:8), WA
 	LD (XWA + 002h), HL
 	LD (XIX + 004h), XIZ
 	EXTZ BC
@@ -136911,12 +136911,11 @@ LABEL_EF20E1:
 	EXTZ XIX
 	XOR XWA, XWA
 	XOR XHL, XHL
-	db 000h	;TODO: Fix ASL:
-	LD WA, (XIX + 000h)
-	LD HL, (XIX + 002h)
-	db 000h, 000h, 000h;	TODO: Fix ASL: LD (000h + WA), XHL
-	LD (XWA + 002h), HL
-	LD (XIX + 009h), 004h
+	LD WA, (XIX + 000h:8)
+	LD HL, (XIX + 002h:8)
+	LD (XHL + 000h:8), WA
+	LD (XWA + 002h:8), HL
+	LD (XIX + 009h:8), 004h
 	LD XWA, (XIX + 004h)
 	LD (XWA + 018h), XIZ
 	LD A, (XIX + 008h)
@@ -136927,7 +136926,7 @@ LABEL_EF20E1:
 	EXTZ XIX
 	EXTZ XIY
 	XOR XWA, XWA
-	LD (XIY + 000h:8), IY
+	LD (XIX + 000h:8), IY
 	LD WA, (XIY + 002h)
 	LD (XIX + 002h), WA
 	LD (XWA), IX
@@ -136965,7 +136964,7 @@ LABEL_EF20E1:
 	db 000h	;TODO: Fix ASL:
 	LD WA, (XIX + 000h)
 	LD HL, (XIX + 002h)
-	db 000h, 000h, 000h;	TODO: Fix ASL: LD (000h + WA), XHL
+	LD (XHL + 000h:8), WA
 	LD (XWA + 002h), HL
 	LD (XIX + 004h), XIZ
 	EXTZ BC
@@ -137001,7 +137000,7 @@ LABEL_EF219B:
 	db 000h	;TODO: Fix ASL:
 	LD WA, (XIX + 000h)
 	LD HL, (XIX + 002h)
-	db 000h, 000h, 000h;	TODO: Fix ASL: LD (000h + WA), XHL
+	LD (XHL + 000h:8), WA
 	LD (XWA + 002h), HL
 	LD (XIX + 009h), 004h
 	LD XWA, (XIX + 004h)
@@ -137054,7 +137053,7 @@ LABEL_EF21E1:
 	db 000h	;TODO: Fix ASL:
 	LD WA, (XIX + 000h)
 	LD HL, (XIX + 002h)
-	db 000h, 000h, 000h;	TODO: Fix ASL: LD (000h + WA), XHL
+	LD (XHL + 000h:8), WA
 	LD (XWA + 002h), HL
 	LD XIZ, (XIX + 004h)
 	LD XBC, 0ffffffffh
@@ -137079,7 +137078,7 @@ LABEL_EF223B:
 	db 000h	;TODO: Fix ASL:
 	LD WA, (XIX + 000h)
 	LD HL, (XIX + 002h)
-	db 000h, 000h, 000h;	TODO: Fix ASL: LD (000h + WA), XHL
+	LD (XHL + 000h:8), WA
 	LD (XWA + 002h), HL
 	LD (XIX + 009h), 003h
 	ADD DE, 053bh
@@ -137114,7 +137113,7 @@ LABEL_EF2272:
 	db 000h	;TODO: Fix ASL:
 	LD WA, (XIX + 000h)
 	LD HL, (XIX + 002h)
-	db 000h, 000h, 000h;	TODO: Fix ASL: LD (000h + WA), XHL
+	LD (XHL + 000h:8), WA
 	LD (XWA + 002h), HL
 	LD XIZ, (XIX + 004h)
 	LD XWA, 0ffffffffh
@@ -137186,7 +137185,7 @@ LABEL_EF22F5:
 	db 000h	;TODO: Fix ASL:
 	LD WA, (XIX + 000h)
 	LD HL, (XIX + 002h)
-	db 000h, 000h, 000h;	TODO: Fix ASL: LD (000h + WA), XHL
+	LD (XHL + 000h:8), WA
 	LD (XWA + 002h), HL
 	LD (XIX + 008h), E
 	SLL 2, E
@@ -137228,7 +137227,7 @@ LABEL_EF234F:
 	db 000h	;TODO: Fix ASL:
 	LD WA, (XIX + 000h)
 	LD HL, (XIX + 002h)
-	db 000h, 000h, 000h;	TODO: Fix ASL: LD (000h + WA), XHL
+	LD (XHL + 000h:8), WA
 	LD (XWA + 002h), HL
 	LD (XIX + 008h), E
 	SLL 2, E
@@ -290863,7 +290862,7 @@ LABEL_F6F352:
 	RET
 
 LABEL_F6F375:
-	db 000h, 000h, 000h;	TODO: Fix ASL: LD (000h + WA), XHL
+	LD (XHL + 000h:8), WA
 	LD (XHL + 002h), BC
 	LD (XHL + 004h), WA
 	LD (XHL + 006h), WA
