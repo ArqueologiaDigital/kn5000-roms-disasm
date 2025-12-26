@@ -453946,7 +453946,7 @@ LABEL_FE9A50:
 	LD L, (0CEE6h:24)
 	XOR H, H
 	db 0, 0, 0, 0, 0;	TODO: Fix ASL: LD XIZ, 00fea356h
-	db 0, 0, 0, 0, 0;	TODO: Fix ASL: LD W, (XIZ + HL)
+	LD W, (XIZ + HL)
 
 LABEL_FE9A63:
 	AND (0CEDEh:24), 07fh
