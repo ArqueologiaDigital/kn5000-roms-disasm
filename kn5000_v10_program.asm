@@ -138733,16 +138733,16 @@ LABEL_EF329E:
 	LDA XWA, 140000h
 	db 0e8h, 2eh, 28h	;TODO: Fix ASL mapping of control-regs: LDC DMAD2, XWA
 	LD A, 008h
-	db 0c9h, 2eh, 4ah	;TODO: Fix ASL mapping of control-regs: LDC DMAM2, A
+	db 0c9h, 2eh, 4ah	;TODO: Fix ASL mapping of control-regs: LDC DMAC2, A
 	LDA XWA, 140000h
 	db 0e8h, 2eh, 00h	;TODO: Fix ASL mapping of control-regs: LDC DMAS0, XWA
 	LD A, 000h
-	db 0c9h, 2eh, 42h	;TODO: Fix ASL mapping of control-regs: LDC DMAM0, A
+	db 0c9h, 2eh, 42h	;TODO: Fix ASL mapping of control-regs: LDC DMAC0, A
 	LD (05E0h), 000h
 	LD (05E2h), 000h
 	RET
 
-sendCOMM:
+sendCOMM:			; ef32f4
 	DEC 6, XSP
 	PUSH IZ
 	LD (XSP + 002h), XDE
@@ -139027,9 +139027,9 @@ LABEL_EF3536:
 	LD (05E2h), 002h
 	LDA XWA, 060Eh
 	LD (05D6h), XWA
-	db 0c9h, 2eh, 42h	;TODO: Fix ASL mapping of control-regs: LDC DMAD0, XWA
+	db 0e8h, 2eh, 20h	;TODO: Fix ASL mapping of control-regs: LDC DMAD0, XWA
 	LD WA, 6
-	db 0c9h, 2eh, 42h	;TODO: Fix ASL mapping of control-regs: LDC DMAC0, WA
+	db 0d8h, 2eh, 40h	;TODO: Fix ASL mapping of control-regs: LDC DMAM0, WA
 	LDA XBC, INTE0AD
 	LD A, (XBC)
 	AND A, 0f8h
@@ -139043,9 +139043,9 @@ LABEL_EF356F:
 	LD (05E2h), 003h
 	LDA XWA, 0614h
 	LD (05D6h), XWA
-	db 0c9h, 2eh, 42h	;TODO: Fix ASL mapping of control-regs: LDC DMAD0, XWA
+	db 0e8h, 2eh, 20h	;TODO: Fix ASL mapping of control-regs: LDC DMAD0, XWA
 	LD WA, 000ah
-	db 0c9h, 2eh, 42h	;TODO: Fix ASL mapping of control-regs: LDC DMAC0, WA
+	db 0d8h, 2eh, 40h	;TODO: Fix ASL mapping of control-regs: LDC DMAM0, WA
 	LDA XBC, INTE0AD
 	LD A, (XBC)
 	AND A, 0f8h
@@ -139057,12 +139057,12 @@ LABEL_EF3599:
 	LD (05E2h), 001h
 	LDA XWA, 05E8h
 	LD (05D6h), XWA
-	db 0c9h, 2eh, 42h	;TODO: Fix ASL mapping of control-regs: LDC DMAD0, XWA
+	db 0e8h, 2eh, 20h	;TODO: Fix ASL mapping of control-regs: LDC DMAD0, XWA
 	LD A, (05E4h)
 	AND A, 01fh
 	INC 1, A
 	EXTZ WA
-	db 0c9h, 2eh, 42h	;TODO: Fix ASL mapping of control-regs: LDC DMAC0, WA
+	db 0d8h, 2eh, 40h	;TODO: Fix ASL mapping of control-regs: LDC DMAM0, WA
 	LDA XBC, INTE0AD
 	LD A, (XBC)
 	AND A, 0f8h
@@ -139131,9 +139131,9 @@ INTTC0:
 LABEL_EF363F:
 	LDA XWA, 060Eh
 	LD XBC, (XWA)
-	db 0c9h, 2eh, 42h	;TODO: Fix ASL mapping of control-regs: LDC DMAD0, XBC
+	db 0e9h, 2eh, 20h	;TODO: Fix ASL mapping of control-regs: LDC DMAD0, XBC
 	LD WA, (XWA + 004h)
-	db 0c9h, 2eh, 42h	;TODO: Fix ASL mapping of control-regs: LDC DMAC0, WA
+	db 0d8h, 2eh, 40h	;TODO: Fix ASL mapping of control-regs: LDC DMAC0, WA
 	LDA XBC, INTE0AD
 	LD A, (XBC)
 	AND A, 0f8h
