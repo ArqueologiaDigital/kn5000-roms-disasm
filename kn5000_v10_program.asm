@@ -138568,27 +138568,27 @@ LABEL_EF31A5:
 LABEL_EF31A6:
 	dec 6, XSP
 	push IZ
-	ld (XSP + 002h), XBC
-	ld (XSP + 006h), A
-	ld IZ,0
-	ld A,(XSP + 006h)
+	LD (XSP + 002h), XBC
+	LD (XSP + 006h), A
+	LD IZ,0
+	LD A,(XSP + 006h)
 	extz WA
-	cp WA, 0
-	jr ULE, LABEL_EF31D7
+	CP WA, 0
+	JR ULE, LABEL_EF31D7
 
 LABEL_EF31BA:
-	ld XWA, (XSP + 002h)
-	ld C, (XWA+)
-	ld (XSP + 002h), XWA
+	LD XWA, (XSP + 002h)
+	LD C, (XWA+)
+	LD (XSP + 002h), XWA
 	extz BC
 	push BC
 	call LABEL_EF2D8B
 	inc 2, XSP
 	inc 1, IZ
-	ld A, (XSP + 006h)
+	LD A, (XSP + 006h)
 	extz WA
-	cp IZ, WA
-	jr C, LABEL_EF31BA
+	CP IZ, WA
+	JR C, LABEL_EF31BA
 
 LABEL_EF31D7:
 	pop IZ
@@ -138599,27 +138599,27 @@ LABEL_EF31D7:
 LABEL_EF31DB:
 	dec 6, XSP
 	push IZ
-	ld (XSP + 002h), XBC
-	ld (XSP + 006h), A
-	ld IZ, 0
-	ld A, (XSP + 006h)
+	LD (XSP + 002h), XBC
+	LD (XSP + 006h), A
+	LD IZ, 0
+	LD A, (XSP + 006h)
 	extz WA
-	cp WA, 0
-	jr ULE, LABEL_EF320C
+	CP WA, 0
+	JR ULE, LABEL_EF320C
 
 LABEL_EF31EF:
-	ld XWA, (XSP + 002h)
-	ld C, (XWA+)
-	ld (XSP + 002h), XWA
+	LD XWA, (XSP + 002h)
+	LD C, (XWA+)
+	LD (XSP + 002h), XWA
 	extz BC
 	push BC
 	call LABEL_EF2C2F
 	inc 2, XSP
 	inc 1, IZ
-	ld A, (XSP + 006h)
+	LD A, (XSP + 006h)
 	extz WA
-	cp IZ, WA
-	jr C, LABEL_EF31EF
+	CP IZ, WA
+	JR C, LABEL_EF31EF
 
 LABEL_EF320C:
 	pop IZ
@@ -138629,27 +138629,27 @@ LABEL_EF320C:
 LABEL_EF3210:
 	dec 6, XSP
 	push IZ
-	ld (XSP + 002h), XBC
-	ld (XSP + 006h), A
-	ld IZ, 0
-	ld A, (XSP + 006h)
+	LD (XSP + 002h), XBC
+	LD (XSP + 006h), A
+	LD IZ, 0
+	LD A, (XSP + 006h)
 	extz WA
-	cp WA, 0
-	jr ULE, LABEL_EF3241
+	CP WA, 0
+	JR ULE, LABEL_EF3241
 
 LABEL_EF3224:
-	ld XWA, (XSP + 002h)
-	ld C, (XWA+)
-	ld (XSP + 002h), XWA
+	LD XWA, (XSP + 002h)
+	LD C, (XWA+)
+	LD (XSP + 002h), XWA
 	extz BC
 	push BC
 	call LABEL_EF2A25
 	inc 2, XSP
 	inc 1, IZ
-	ld A, (XSP + 006h)
+	LD A, (XSP + 006h)
 	extz WA
-	cp IZ, WA
-	jr C, LABEL_EF3224
+	CP IZ, WA
+	JR C, LABEL_EF3224
 
 LABEL_EF3241:
 	pop IZ
@@ -138660,27 +138660,27 @@ LABEL_EF3241:
 LABEL_EF3245:
 	dec 6, XSP
 	push IZ
-	ld (XSP + 002h), XBC
-	ld (XSP + 006h), A
-	ld IZ, 0
-	ld A, (XSP + 006h)
+	LD (XSP + 002h), XBC
+	LD (XSP + 006h), A
+	LD IZ, 0
+	LD A, (XSP + 006h)
 	extz WA
-	cp WA, 0
-	jr ULE, LABEL_EF3276
+	CP WA, 0
+	JR ULE, LABEL_EF3276
 
 LABEL_EF3259:
-	ld XWA,(XSP + 002h)
-	ld C, (XWA+)
-	ld (XSP + 002h), XWA
+	LD XWA,(XSP + 002h)
+	LD C, (XWA+)
+	LD (XSP + 002h), XWA
 	extz BC
 	push BC
 	call LABEL_EF2E39
 	inc 2, XSP
 	inc 1, IZ
-	ld A, (XSP + 006h)
+	LD A, (XSP + 006h)
 	extz WA
-	cp IZ, WA
-	jr C, LABEL_EF3259
+	CP IZ, WA
+	JR C, LABEL_EF3259
 
 LABEL_EF3276:
 	pop IZ
@@ -138690,17 +138690,17 @@ LABEL_EF3276:
 
 LABEL_EF327A:
 	push XIZ
-	ld XIZ, XBC
-	ld A, (XIZ)
-	cp A, 090h
-	jr NZ, LABEL_EF329C
+	LD XIZ, XBC
+	LD A, (XIZ)
+	CP A, 090h
+	JR NZ, LABEL_EF329C
 	inc 1, XIZ
-	ld A, (XIZ)
+	LD A, (XIZ)
 	extz WA
 	push WA
 	call LABEL_EF2CDD
 	inc 1, XIZ
-	ld A, (XIZ)
+	LD A, (XIZ)
 	extz WA
 	push WA
 	call LABEL_EF2CDD
@@ -341519,31 +341519,98 @@ LABEL_F97051:
 
 
 LABEL_F97052:
-	db 0D1h, 01Ch, 08Ah, 021h, 0D9h, 02Eh, 04Ch, 0C1h
-	db 028h, 08Ah, 021h, 0C9h, 0CFh, 04Dh, 066h, 02Fh
-	db 0C9h, 0CFh, 0C9h, 066h, 02Ah, 0C9h, 0CFh, 0C5h
-	db 066h, 025h, 0C9h, 0CFh, 0DDh, 066h, 01Eh, 0C9h
-	db 0CFh, 0D9h, 066h, 019h, 0C9h, 0CFh, 0D1h, 066h
-	db 014h, 0C9h, 0CFh, 04Ah, 066h, 00Fh, 0C9h, 0CFh
-	db 042h, 066h, 00Ah, 0C9h, 0CFh, 0CCh, 066h, 005h
-	db 0C9h, 0CFh, 0C6h, 0B0h, 0FEh, 068h, 004h, 01Eh
-	db 017h, 000h, 00Eh, 043h, 000h, 000h, 012h, 000h
-	db 0EBh, 02Eh, 00Ch, 0E1h, 04Ch, 08Ah, 023h, 0EBh
-	db 02Eh, 02Ch, 021h, 000h, 0C9h, 02Eh, 04Eh, 068h
-	db 0A6h, 0E1h, 04Ch, 08Ah, 023h, 0EBh, 02Eh, 00Ch
-	db 043h, 000h, 000h, 012h, 000h, 0EBh, 02Eh, 02Ch
-	db 021h, 008h, 0C9h, 02Eh, 04Eh, 068h, 090h, 0D1h
-	db 01Ch, 08Ah, 021h, 0D9h, 02Eh, 04Ch, 00Eh, 03Eh
-	db 0D1h, 009h, 004h, 026h, 0D7h, 0FAh, 003h, 080h
-	db 000h, 0D7h, 0FAh, 0CFh, 080h, 000h, 06Eh, 02Dh
-	db 01Eh, 036h, 0FAh, 0CFh, 030h, 004h, 0CFh, 089h
-	db 0C9h, 0CFh, 080h, 066h, 008h, 0C9h, 0CFh, 0C0h
-	db 06Eh, 003h, 0D7h, 0FAh, 0A8h, 0D1h, 009h, 004h
-	db 020h, 0DEh, 0A0h, 0D8h, 0CFh, 0F4h, 001h, 063h
-	db 005h, 0D7h, 0FAh, 003h, 0FFh, 0FFh, 0D7h, 0FAh
-	db 0CFh, 080h, 000h, 066h, 0D3h, 0D7h, 0FAh, 0D8h
-	db 066h, 005h, 0D8h, 0AAh, 01Eh, 09Ch, 004h, 05Eh
-	db 00Eh
+	LD BC, (8a1ch)
+	db 0d9h, 2eh, 4ch	;TODO: Fix ASL mapping of control-regs: LDC DMAM3, BC
+	LD A, (8a28h)
+	CP A, 04dh
+	JR Z, LABEL_F97091
+	CP A, 0c9h
+	JR Z, LABEL_F97091
+	CP A, 0c5h
+	JR Z, LABEL_F97091
+	CP A, 0ddh
+	JR Z, LABEL_F9708F
+	CP A, 0d9h
+	JR Z, LABEL_F9708F
+	CP A, 0d1h
+	JR Z, LABEL_F9708F
+	CP A, 04ah
+	JR Z, LABEL_F9708F
+	CP A, 042h
+	JR Z, LABEL_F9708F
+	CP A, 0cch
+	JR Z, LABEL_F9708F
+	CP A, 0c6h
+	RET NZ
+
+LABEL_F9708F:
+	JR T, LABEL_F97095
+
+LABEL_F97091:
+	CALR LABEL_F970AB
+
+LABEL_F97094:
+	RET
+
+LABEL_F97095:
+	LD XHL, 00120000h
+	db 0ebh, 2eh, 0ch	;TODO: Fix ASL mapping of control-regs: LDC DMAS3, XHL
+	LD XHL, (08a4ch)
+	db 0ebh, 2eh, 2ch	;TODO: Fix ASL mapping of control-regs: LDC DMAD3, XHL
+	LD A, 0
+	db 0c9h, 2eh, 4eh	;TODO: Fix ASL mapping of control-regs: LDC DMAC3, A
+	JR T, LABEL_F97051
+
+LABEL_F970AB:
+	LD XHL, (08a4ch)
+	db 0ebh, 2eh, 0ch	;TODO: Fix ASL mapping of control-regs: LDC DMAS3, XHL
+	LD XHL, 00120000h
+	db 0ebh, 2eh, 2ch	;TODO: Fix ASL mapping of control-regs: LDC DMAD3, XHL
+	LD A, 8
+	db 0c9h, 2eh, 4eh	;TODO: Fix ASL mapping of control-regs: LDC DMAC3, A
+	JR T, LABEL_F97051
+	LD BC, (08a1ch)
+	db 0d9h, 2eh, 4ch	;TODO: Fix ASL mapping of control-regs: LDC DMAM3, BC
+	RET
+
+LABEL_F970C9:
+	PUSH XIZ
+	LD IZ, (0409h)
+	LD QIZ, 0080h
+	CP QIZ, 0080h
+	JR NZ, 0f97107h
+
+LABEL_F970DA:
+	CALR LABEL_F96B13
+	RES 4, L
+	LD A, L
+	CP A, 080h
+	JR Z, LABEL_F970EF
+	CP A, 0c0h
+	JR NZ, LABEL_F970EF
+	LD QIZ, 0
+
+LABEL_F970EF:
+	LD WA, (0409h)
+	SUB WA, IZ
+	CP WA, 01f4h
+	JR ULE, LABEL_F97100
+	LD QIZ, 0ffffh
+
+LABEL_F97100:
+	CP QIZ, 0080h
+	JR Z, LABEL_F970DA
+
+LABEL_F97107:
+	CP QIZ, 0
+	JR Z, LABEL_F97111
+	LD WA,2
+	CALR LABEL_F975AD
+
+LABEL_F97111:
+	POP XIZ
+	RET
+
 
 LABEL_F97113:
 	PUSH XIZ
