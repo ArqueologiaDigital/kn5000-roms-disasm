@@ -176609,18 +176609,8 @@ LABEL_F1FC17:
 	INC 1, BC
 	CP BC, 000ah
 	JRL C, LABEL_F1FBC0
-
-
-	; Very interesting... Why the same instruction (LDW) gets two diff encodings here?
-
-	LDW (0F19Eh), 0000h		; encoding is fine: F1 9E F1 02 00 00
-
-	db 000h	;TODO: Fix ASL assembler encoding of LDW instruction
-	LDW (0FFECh), 0000h
-					;encoding here is: F1 EC FF 02 00 00
-					; while in the original ROM it is: F2 EC FF 00 02 00 00
-
-
+	LDW (0F19Eh:16), 0000h
+	LDW (0FFECh:24), 0000h
 	LD (0F24Bh), 000h
 	LD XIX, 00000cefh
 	XOR WA, WA
@@ -176638,8 +176628,7 @@ LABEL_F1FC64:
 	LD (0F24Bh), 000h
 	CALL LABEL_F1FF8C
 	LDW (2875h), 0000h
-	LDW (0FFECh), 0000h
-	db 0; Fix ASL encoding of the LDW instruction above.
+	LDW (0FFECh:24), 0000h
 	RET
 
 LABEL_F1FC80:
@@ -250418,7 +250407,7 @@ LABEL_F5190A:
 LABEL_F519A1:
 	LDA XSP, XSP - 010h
 	LD WA, (XSP + 014h)
-	db 0, 0, 0;	TODO: Fix ASL: LD (XSP + 000h), WA
+	LD (XSP + 000h:8), WA
 	LD WA, (XSP + 016h)
 	LD (XSP + 002h), WA
 	LD WA, (XSP + 018h)
