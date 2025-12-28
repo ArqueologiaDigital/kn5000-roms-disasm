@@ -132361,7 +132361,7 @@ LABEL_EF3012:
 LABEL_EF301E:
 	XOR HL, HL
 	LD L, (XDE + IX)
-	db 000h, 000h, 000h, 000h	; Fix ASL assembler:	MINC1 01ffh, IX
+	MINC1 0200h, IX
 	LD (XDE - 8), IX
 	INCW 1, (XDE - 2)
 	RET
@@ -132376,7 +132376,7 @@ LABEL_EF3030:
 LABEL_EF303C:
 	XOR HL, HL
 	LD L, (XDE + IX)
-	db 000h, 000h, 000h, 000h	; Fix ASL assembler:	MINC1 01ffh, IX
+	MINC1 0200h, IX
 	LD (XDE - 10), IX
 	RET
 
@@ -132395,7 +132395,7 @@ LABEL_EF3066:
 LABEL_EF3071:
 	LD IX, (XDE - 4)
 	LD (XDE + IX), A
-	db 000h, 000h, 000h, 000h	; Fix ASL assembler:	MINC1 01ffh, IX
+	MINC1 0200h, IX
 	LD (XDE - 4), IX
 	DECW 1, (XDE - 2)
 	LD HL, (XDE - 2)
@@ -132419,7 +132419,7 @@ LABEL_EF30A1:
 LABEL_EF30AD:
 	XOR HL, HL
 	LD L, (XDE + IX)
-	db 000h, 000h, 000h, 000h	; Fix ASL assembler:	MINC1 03ffh, IX
+	MINC1 0400h, IX
 	LD (XDE - 8), IX
 	INCW 1, (XDE - 2)
 	RET
@@ -132434,7 +132434,7 @@ LABEL_EF30BF:
 LABEL_EF30CB:
 	XOR HL, HL
 	LD L, (XDE + IX)
-	db 000h, 000h, 000h, 000h	; Fix ASL assembler:	MINC1 03ffh, IX
+	MINC1 0400h, IX
 	LD (XDE - 10), IX
 	RET
 
@@ -132453,7 +132453,7 @@ LABEL_EF30F5:
 LABEL_EF3100:
 	LD IX, (XDE - 4)
 	LD (XDE + IX), A
-	db 000h, 000h, 000h, 000h	; Fix ASL assembler:	MINC1 03ffh, IX
+	MINC1 0400h, IX
 	LD (XDE - 4), IX
 	DECW 1, (XDE - 2)
 	LD HL, (XDE - 2)
@@ -132477,7 +132477,7 @@ LABEL_EF3130:
 LABEL_EF313C:
 	XOR HL, HL
 	LD L, (XDE + IX)
-	db 000h, 000h, 000h, 000h	; Fix ASL assembler:	MINC1 07ffh, IX
+	MINC1 0800h, IX
 	LD (XDE - 8), IX
 	INCW 1, (XDE - 2)
 	RET
@@ -132498,7 +132498,7 @@ LABEL_EF3169:
 LABEL_EF3175:
 	XOR HL, HL
 	LD L, (XDE + IX)
-	db 000h, 000h, 000h, 000h	; Fix ASL assembler:	MINC1 07ffh, IX
+	MINC1 0800h, IX
 	LD (XDE - 10), IX
 	RET
 
@@ -132511,7 +132511,7 @@ LABEL_EF3184:
 LABEL_EF318F:
 	LD IX, (XDE - 4)
 	LD (XDE + IX), A
-	db 000h, 000h, 000h, 000h	; Fix ASL assembler:	MINC1 07ffh, IX
+	MINC1 0800h, IX
 	LD (XDE - 4), IX
 	DECW 1, (XDE - 2)
 	LD HL, (XDE - 2)
@@ -412333,7 +412333,7 @@ LABEL_FCF68F:
 	JR Z, LABEL_FCF6B7
 	LD HL, (XIX - 4)
 	LD (XIX + HL), 081h
-	db 0, 0, 0, 0		; TODO: Fix ASL:	MINC1 07ffh, HL
+	MINC1 0800h, HL
 	DEC 1, WA
 	LD (XIX - 4), HL
 	LD (XIX - 2), WA
