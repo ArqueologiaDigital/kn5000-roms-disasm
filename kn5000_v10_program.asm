@@ -219321,8 +219321,7 @@ LABEL_F3F93D:
 	JR NZ, LABEL_F3FA0C
 	LDW (0F19Eh), 0000h
 	CALL LABEL_FDDE6F
-	LDW (0FFECh), 0000h
-	db 0; Fix ASL encoding of the LDW instruction above.
+	LDW (0FFECh:24), 0000h
 	LDW (0F19Ch), 0000h
 	LD (0F24Bh), 000h
 	LD IZH, 1
@@ -219418,14 +219417,12 @@ LABEL_F3FA2B:
 	CP QIZH, 00ah
 	JR ULE, LABEL_F3FA1B
 	LDW (0F19Eh), 0000h
-	LDW (0FFECh), 0000h
-	db 0; Fix ASL encoding of the LDW instruction above.
+	LDW (0FFECh:24), 0000h
 	CALL LABEL_FDDE6F
 	LD (0F24Bh), 000h
 	CALR LABEL_F43A33
 	LDW (2875h), 0000h
-	LDW (0FFECh), 0000h
-	db 0; Fix ASL encoding of the LDW instruction above.
+	LDW (0FFECh:24), 0000h
 	POP QIZ
 	RET
 
@@ -222780,8 +222777,7 @@ LABEL_F419B6:
 	PUSH QIZ
 	CP (2878h), 00ah
 	JR NZ, LABEL_F419E2
-	LDW (0FFECh), 0000h
-	db 0; Fix ASL encoding of the LDW instruction above.
+	LDW (0FFECh:24), 0000h
 	LD QIZH, 1
 
 LABEL_F419CA:
@@ -223407,8 +223403,7 @@ LABEL_F41F07:
 LABEL_F41F09:
 	PUSH QIZ
 	CALR LABEL_F41BEE
-	LDW (0FFECh), 0000h
-	db 0; Fix ASL encoding of the LDW instruction above.
+	LDW (0FFECh:24), 0000h
 	CALR LABEL_F41E36
 	LD QIZL, 0
 
@@ -230195,8 +230190,7 @@ LABEL_F47169:
 	CP A, (2878h)
 	JR NZ, LABEL_F47193
 	LDW (2875h), 0000h
-	LDW (0FFECh), 0000h
-	db 0; Fix ASL encoding of the LDW instruction above.
+	LDW (0FFECh:24), 0000h
 
 LABEL_F47193:
 	LD WA, 0023h
@@ -230598,8 +230592,7 @@ LABEL_F47612:
 	CALL LABEL_FDDE6F
 	CALL LABEL_F59AF3
 	RES 0, (28A6h)
-	LDW (0FFECh), 0000h
-	db 0; Fix ASL encoding of the LDW instruction above.
+	LDW (0FFECh:24), 0000h
 	LD (26FCh), 001h
 	CALL LABEL_F3E052
 	LD WA, 000bh
