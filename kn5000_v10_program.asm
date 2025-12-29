@@ -75456,6 +75456,54 @@ LABEL_E819D0:
 	db "PART SETTING", 000h, 0FFh
 
 
+MenuItem     STRUCT
+header   db 6 dup (?)
+unk06		dw ?
+unk08		dw ?
+unk0a		dw ?
+unk0c		dw ?
+x		dw ?	; 0eh
+icon_y		dw ?	; 10h
+unk12		dw ?
+y		dw ?	; 14h
+bg_color	dw ?	; 16h
+unk18		dw ?
+unk1a		dw ?
+unk1c		dw ?
+unk1e		dw ?
+unk20		dw ?
+unk22		dw ?
+flags		dw ?	; 24h
+ptr26		dd ?
+text_string	dd ?	; 2ah
+unk2e		dw ?
+unk30		dw ?
+icon_id		dd ?	; 32h
+MenuItem     ENDSTRUCT
+
+
+;LABEL_E819DE:
+;0	db 01Dh, 000h, 060h, 001h, 006h, 000h
+;6	dw 0FFFFh, 00009h
+;a	dw 00007h, 00008h
+;e	dw 00008h ; X coord of menu item
+;10	dw 00048h 	; <== affects Y coord of the menu item's icon
+			;     and the text seems to disappear
+;12	dw 0009Ch
+;14	dw 00061h ; Y coord of menu item
+;16	dw 000F7h ; bg color of menu item (00F7 means transparent)
+;18	dw 00000h
+;1a	dw 0FFFFh, 00000h
+;1e	dw 00000h, 000FFh
+;22	dw 00000h
+;24	dw 00089h	; <= affects positioning of label and icon
+			;    with mirror and offset on the x axis
+
+;26	dd 0003E670h
+;2a	dd LABEL_E81A14 ; Pointer to the text string
+;2e	dw 00008h, 001A0h
+;32	dd 000000007h ; <== Select Icon (0 = no-icon, 1=worm, 2=... etc)
+
 LABEL_E819DE:
 	db 01Dh, 000h, 060h, 001h, 006h, 000h
 	dw 0FFFFh, 00009h
@@ -75472,6 +75520,7 @@ LABEL_E819DE:
 	dw 00000h
 	dw 00089h	; <= affects positioning of label and icon
 			;    with mirror and offset on the x axis
+
 	dd 0003E670h
 	dd LABEL_E81A14 ; Pointer to the text string
 	dw 00008h, 001A0h
