@@ -13834,9 +13834,6 @@ LABEL_E28610:
 	ORG 0E2863Ah
 LABEL_E2863A:
 
-	ORG 0E2865Ah
-LABEL_E2865A:
-
 	ORG 0E28660h
 LABEL_E28660:
 
@@ -13858,9 +13855,6 @@ LABEL_E286EA:
 	ORG 0E28704h
 LABEL_E28704:
 
-	ORG 0E28724h
-LABEL_E28724:
-
 	ORG 0E2872Eh
 LABEL_E2872E:
 
@@ -13870,14 +13864,8 @@ LABEL_E28758:
 	ORG 0E2877Ch
 LABEL_E2877C:
 
-	ORG 0E2879Ch
-LABEL_E2879C:
-
 	ORG 0E287A4h
 LABEL_E287A4:
-
-	ORG 0E287C4h
-LABEL_E287C4:
 
 	ORG 0E287CEh
 LABEL_E287CE:
@@ -45631,12 +45619,15 @@ String_EASY_COMPOSER:		; E17EBA
 	dd LABEL_E19F1A
 	db 000h, 000h, 000h, 000h
 	db 0FFh, 000h, 056h, 041h, 04Ch, 055h, 045h, 000h
+
+
 	db 034h, 000h, 060h, 001h, 0FFh, 0FFh, 001h, 000h
 	db 0FFh, 0FFh, 0FFh, 0FFh, 00Ah, 000h, 000h, 000h
 	db 000h, 000h
 	dd LABEL_EF013F
-	db 0F9h, 000h
-	db 000h, 000h, 0B0h, 000h, 0A0h, 001h, 00Ah, 0D7h
+	db 0F9h, 000h, 000h, 000h
+	
+	db 0B0h, 000h, 0A0h, 001h, 00Ah, 0D7h
 	db 003h, 000h
 	dd LABEL_E19F4A
 	db 055h, 000h
@@ -45730,16 +45721,20 @@ String_EASY_COMPOSER:		; E17EBA
 	db 0FFh, 000h, 001h, 000h, 000h, 000h, 08Ah, 000h
 	db 001h, 000h, 010h, 0D7h, 003h, 000h, 001h, 000h
 	db 020h, 045h, 058h, 050h, 041h, 04Eh, 044h, 020h
-	db 04Dh, 04Fh, 044h, 045h, 03Ah, 000h, 034h, 000h
+	db 04Dh, 04Fh, 044h, 045h, 03Ah, 000h
+	
+	db 034h, 000h
 	db 060h, 001h, 0FFh, 0FFh, 001h, 000h, 0FFh, 0FFh
 	db 0FFh, 0FFh, 00Ah, 000h, 000h, 000h, 000h, 000h
 	dd LABEL_EF013F
 	db 0F9h, 000h, 000h, 000h
 	db 0B0h, 000h, 0A0h, 001h, 012h, 0D7h, 003h, 000h
-	dd LABEL_E1A1F8
+	dd String_CUSTOM_COPY
 	db 0A1h, 000h, 000h, 000h
-	db 043h, 055h, 053h, 054h, 04Fh, 04Dh, 020h, 043h
-	db 04Fh, 050h, 059h, 000h, 02Bh, 000h, 060h, 001h
+
+String_CUSTOM_COPY:			; 1A1F8
+	db "CUSTOM COPY", 000h
+	db 02Bh, 000h, 060h, 001h
 	db 000h, 000h, 0FFh, 0FFh, 002h, 000h, 0FFh, 0FFh
 	db 008h, 000h, 00Ah, 000h, 050h, 000h, 04Dh, 000h
 	db 062h, 000h
@@ -45759,7 +45754,9 @@ String_EASY_COMPOSER:		; E17EBA
 	db 008h, 000h, 008h, 000h, 07Ch, 000h, 089h, 000h
 	db 08Dh, 000h, 0F5h, 000h, 000h, 000h, 0FFh, 0FFh
 	db 000h, 000h, 000h, 000h, 0FFh, 000h, 000h, 000h
-	db 000h, 000h, 02Bh, 000h, 060h, 001h, 000h, 000h
+	db 000h, 000h
+	
+	db 02Bh, 000h, 060h, 001h, 000h, 000h
 	db 0FFh, 0FFh, 006h, 000h, 002h, 000h, 008h, 000h
 	db 0B8h, 000h, 050h, 000h, 0DBh, 000h, 062h, 000h
 	dd LABEL_E1A2B2
@@ -46083,7 +46080,9 @@ String_MSP_PHRASE_RECORDING:			; E1AB82
 	db 011h, 000h, 060h, 001h, 000h, 000h, 002h, 000h
 	db 006h, 000h, 0FFh, 0FFh, 008h, 000h, 015h, 000h
 	db 026h, 000h, 022h, 001h, 067h, 000h, 0F5h, 000h
-	db 0C1h, 000h, 0FFh, 0FFh, 02Bh, 000h, 060h, 001h
+	db 0C1h, 000h, 0FFh, 0FFh
+	
+	db 02Bh, 000h, 060h, 001h
 	db 001h, 000h, 0FFh, 0FFh, 003h, 000h, 0FFh, 0FFh
 	db 008h, 000h, 022h, 000h, 02Ah, 000h, 0A5h, 000h
 	db 03Ch, 000h
@@ -46091,8 +46090,9 @@ String_MSP_PHRASE_RECORDING:			; E1AB82
 	db 000h, 000h
 	db 000h, 000h, 0F1h, 000h, 052h, 065h, 063h, 06Fh
 	db 072h, 064h, 069h, 06Eh, 067h, 020h, 050h, 068h
-	db 072h, 061h, 073h, 065h, 000h, 0FFh, 02Bh, 000h
-	db 060h, 001h, 001h, 000h, 0FFh, 0FFh, 004h, 000h
+	db 072h, 061h, 073h, 065h, 000h, 0FFh
+	
+	db 02Bh, 000h, 060h, 001h, 001h, 000h, 0FFh, 0FFh, 004h, 000h
 	db 002h, 000h, 008h, 000h, 042h, 000h, 03Eh, 000h
 	db 075h, 000h, 050h, 000h, 006h, 0ACh, 0E1h, 000h
 	db 001h, 000h, 000h, 000h, 0FFh, 000h, 042h, 041h
@@ -46109,7 +46109,9 @@ String_MSP_PHRASE_RECORDING:			; E1AB82
 	db 060h, 001h, 000h, 000h, 007h, 000h, 00Ch, 000h
 	db 001h, 000h, 008h, 000h, 015h, 000h, 06Ch, 000h
 	db 022h, 001h, 0ADh, 000h, 0F5h, 000h, 0C1h, 000h
-	db 0FFh, 0FFh, 02Bh, 000h, 060h, 001h, 006h, 000h
+	db 0FFh, 0FFh
+	
+	db 02Bh, 000h, 060h, 001h, 006h, 000h
 	db 0FFh, 0FFh, 008h, 000h, 0FFh, 0FFh, 008h, 000h
 	db 022h, 000h, 07Ch, 000h, 06Dh, 000h, 08Eh, 000h
 	dd LABEL_E1AC92
@@ -46129,11 +46131,14 @@ String_MSP_PHRASE_RECORDING:			; E1AB82
 	db 008h, 000h, 0AAh, 000h, 096h, 000h, 021h, 001h
 	db 0A3h, 000h, 0F5h, 000h, 000h, 000h, 0FFh, 0FFh
 	db 001h, 000h, 000h, 000h, 0FFh, 000h, 001h, 000h
+
 	db 02Bh, 000h, 060h, 001h, 00Ah, 000h, 0FFh, 0FFh
 	db 0FFh, 0FFh, 0FFh, 0FFh, 008h, 000h, 006h, 001h
 	db 096h, 000h, 011h, 001h, 0A8h, 000h, 028h, 0ADh
 	db 0E1h, 000h, 001h, 000h, 000h, 000h, 0FFh, 000h
-	db 025h, 000h, 02Bh, 000h, 060h, 001h, 000h, 000h
+	db 025h, 000h
+	
+	db 02Bh, 000h, 060h, 001h, 000h, 000h
 	db 0FFh, 0FFh, 00Dh, 000h, 006h, 000h, 008h, 000h
 	db 042h, 000h, 053h, 000h, 075h, 000h, 065h, 000h
 	dd LABEL_E1AD4A
@@ -46158,7 +46163,9 @@ String_MSP_PHRASE_RECORDING:			; E1AB82
 	db 003h, 000h, 048h, 000h, 060h, 001h, 000h, 000h
 	db 0FFh, 0FFh, 0FFh, 0FFh, 00Eh, 000h, 018h, 000h
 	db 000h, 000h, 000h, 000h, 01Fh, 000h, 01Fh, 000h
-	db 001h, 000h, 080h, 001h, 034h, 000h, 060h, 001h
+	db 001h, 000h, 080h, 001h
+	
+	db 034h, 000h, 060h, 001h
 	db 0FFh, 0FFh, 001h, 000h, 0FFh, 0FFh, 0FFh, 0FFh
 	db 00Ah, 000h, 000h, 000h, 000h, 000h, 03Fh, 001h
 	db 0EFh, 000h, 0F9h, 000h, 002h, 000h, 001h, 000h
@@ -46205,7 +46212,9 @@ String_MSP_PHRASE_RECORDING:			; E1AB82
 	db 007h, 000h
 	db 0C9h, 000h, 000h, 000h, 000h, 000h, 000h, 000h
 	db 000h, 000h, 000h, 000h, 006h, 000h, 007h, 000h
-	db 003h, 000h, 034h, 000h, 060h, 001h, 0FFh, 0FFh
+	db 003h, 000h
+	
+	db 034h, 000h, 060h, 001h, 0FFh, 0FFh
 	db 001h, 000h, 0FFh, 0FFh, 0FFh, 0FFh, 00Ah, 000h
 	db 000h, 000h, 000h, 000h, 03Fh, 001h, 0EFh, 000h
 	db 0F9h, 000h, 000h, 000h, 0CAh, 000h, 0A0h, 001h
@@ -46224,7 +46233,9 @@ String_MSP_PHRASE_RECORDING:			; E1AB82
 	db 0FFh, 0FFh, 0FFh, 0FFh, 002h, 000h, 008h, 000h
 	db 035h, 000h, 032h, 000h, 0CAh, 000h, 041h, 000h
 	db 0F5h, 000h, 000h, 000h, 0FFh, 0FFh, 001h, 000h
-	db 000h, 000h, 0FFh, 000h, 001h, 000h, 034h, 000h
+	db 000h, 000h, 0FFh, 000h, 001h, 000h
+	
+	db 034h, 000h
 	db 060h, 001h, 0FFh, 0FFh, 001h, 000h, 0FFh, 0FFh
 	db 0FFh, 0FFh, 00Ah, 000h, 000h, 000h, 000h, 000h
 	dd LABEL_EF013F
@@ -46284,13 +46295,17 @@ String_MSP_PHRASE_RECORDING:			; E1AB82
 	db 002h, 000h, 000h, 000h, 000h, 000h, 000h, 000h
 	db 000h, 000h, 006h, 000h, 007h, 000h, 003h, 000h
 	db 017h, 000h, 064h, 001h, 000h, 000h, 0FFh, 0FFh
-	db 008h, 000h, 006h, 000h, 008h, 000h, 034h, 000h
+	db 008h, 000h, 006h, 000h, 008h, 000h
+	
+	db 034h, 000h
 	db 022h, 000h, 0ABh, 000h, 031h, 000h, 0F5h, 000h
 	db 000h, 000h, 0FFh, 0FFh, 000h, 000h, 000h, 000h
 	db 0FFh, 000h, 000h, 000h, 064h, 000h, 060h, 001h
 	db 000h, 000h, 0FFh, 0FFh, 0FFh, 0FFh, 007h, 000h
 	db 018h, 000h, 000h, 000h, 000h, 000h, 01Fh, 000h
-	db 01Fh, 000h, 018h, 000h, 024h, 001h, 034h, 000h
+	db 01Fh, 000h, 018h, 000h, 024h, 001h
+	
+	db 034h, 000h
 	db 060h, 001h, 0FFh, 0FFh, 001h, 000h, 0FFh, 0FFh
 	db 0FFh, 0FFh, 00Ah, 000h, 000h, 000h, 000h, 000h
 	dd LABEL_EF013F
@@ -46349,7 +46364,9 @@ String_MSP_PHRASE_RECORDING:			; E1AB82
 	db 008h, 000h, 014h, 000h, 044h, 000h, 02Bh, 001h
 	db 05Bh, 000h, 0F5h, 000h, 000h, 000h, 0FFh, 0FFh
 	db 007h, 000h, 000h, 000h, 0F1h, 000h, 001h, 000h
-	db 001h, 000h, 047h, 000h, 024h, 001h, 034h, 000h
+	db 001h, 000h, 047h, 000h, 024h, 001h
+	
+	db 034h, 000h
 	db 060h, 001h, 0FFh, 0FFh, 001h, 000h, 0FFh, 0FFh
 	db 0FFh, 0FFh, 00Ah, 000h, 000h, 000h, 000h, 000h
 	dd LABEL_EF013F
@@ -49215,8 +49232,9 @@ LABEL_E1CDDE:
 	dd LABEL_EE0073
 	db 007h, 000h
 	db 0C9h, 000h, 0FFh, 0FFh, 000h, 000h, 000h, 000h
-	db 000h, 000h, 000h, 000h, 002h, 000h, 02Bh, 000h
-	db 060h, 001h, 005h, 000h, 0FFh, 0FFh, 0FFh, 0FFh
+	db 000h, 000h, 000h, 000h, 002h, 000h
+	
+	db 02Bh, 000h, 060h, 001h, 005h, 000h, 0FFh, 0FFh, 0FFh, 0FFh
 	db 0FFh, 0FFh, 008h, 000h, 05Eh, 000h, 0DDh, 000h
 	dd LABEL_EF0069
 	dd LABEL_E1F8AE
@@ -49231,7 +49249,9 @@ LABEL_E1CDDE:
 	db 0DEh, 000h
 	dd LABEL_E80040
 	db 000h, 000h
-	db 000h, 000h, 02Bh, 000h, 060h, 001h, 000h, 000h
+	db 000h, 000h
+	
+	db 02Bh, 000h, 060h, 001h, 000h, 000h
 	db 0FFh, 0FFh, 0FFh, 0FFh, 007h, 000h, 008h, 000h
 	db 01Eh, 000h, 0C5h, 000h, 081h, 000h, 0D7h, 000h
 	dd LABEL_E1F912
@@ -49280,8 +49300,9 @@ LABEL_E1CDDE:
 	dd LABEL_E1FA2E
 	dd LABEL_FC0012
 	db 000h, 000h, 000h, 000h, 043h, 04Fh
-	db 04Eh, 053h, 04Fh, 04Ch, 045h, 000h, 02Bh, 000h
-	db 060h, 001h, 00Fh, 000h, 0FFh, 0FFh, 0FFh, 0FFh
+	db 04Eh, 053h, 04Fh, 04Ch, 045h, 000h
+	
+	db 02Bh, 000h, 060h, 001h, 00Fh, 000h, 0FFh, 0FFh, 0FFh, 0FFh
 	db 0FFh, 0FFh, 008h, 000h, 086h, 000h, 02Ah, 000h
 	db 0E1h, 000h, 03Ch, 000h, 056h, 0FAh, 0E1h, 000h
 	db 000h, 000h, 000h, 000h, 0FFh, 000h, 04Dh, 045h
@@ -49325,15 +49346,23 @@ LABEL_E1CDDE:
 	db 088h, 000h, 0D2h, 0DCh, 003h, 000h, 08Ah, 0FBh
 	db 0E1h, 000h, 00Ah, 000h, 0FCh, 000h, 000h, 000h
 	db 000h, 000h, 04Dh, 045h, 04Dh, 04Fh, 052h, 059h
-	db 000h, 0FFh, 046h, 000h, 060h, 001h, 012h, 000h
+	db 000h, 0FFh
+	
+	db 046h, 000h, 060h, 001h, 012h, 000h
 	db 0FFh, 0FFh, 019h, 000h, 017h, 000h, 008h, 000h
 	db 039h, 000h, 03Dh, 000h, 03Fh, 001h, 0EFh, 000h
+
 	db 02Bh, 000h, 060h, 001h, 012h, 000h, 0FFh, 0FFh
 	db 0FFh, 0FFh, 018h, 000h, 008h, 000h, 08Eh, 000h
-	db 02Ah, 000h, 0C9h, 000h, 03Ch, 000h, 0C8h, 0FBh
-	db 0E1h, 000h, 000h, 000h, 000h, 000h, 0FFh, 000h
-	db 043h, 04Fh, 04Eh, 053h, 04Fh, 04Ch, 045h, 000h
+	db 02Ah, 000h, 0C9h, 000h, 03Ch, 000h
+	dd String_CONSOLE
+	db 000h, 000h, 000h, 000h
+	db 0FFh, 000h
+
+String_CONSOLE:			; E1FBC8
+	db "CONSOLE", 000h
 	db 000h, 000h, 000h, 000h, 0D4h, 0DCh, 003h, 000h
+
 	dd LABEL_E1F794
 	dd LABEL_E1F7D2
 	dd LABEL_E1F810
@@ -50243,7 +50272,9 @@ LABEL_E1CDDE:
 	db 000h, 000h, 000h, 000h, 0FFh, 000h, 000h, 000h
 	db 089h, 000h, 016h, 0DDh, 003h, 000h, 0C6h, 012h
 	db 0E2h, 000h, 000h, 000h, 000h, 000h, 04Dh, 049h
-	db 043h, 000h, 02Bh, 000h, 060h, 001h, 000h, 000h
+	db 043h, 000h
+	
+	db 02Bh, 000h, 060h, 001h, 000h, 000h
 	db 0FFh, 0FFh, 0FFh, 0FFh, 00Ch, 000h, 008h, 000h
 	db 0F0h, 000h, 0C8h, 000h, 03Bh, 001h, 0DAh, 000h
 	dd LABEL_E212EA
@@ -50291,6 +50322,7 @@ LABEL_E1CDDE:
 	db 0E3h, 000h, 007h, 000h, 0C1h, 000h, 0FFh, 0FFh
 	db 000h, 000h, 000h, 000h, 000h, 000h, 000h, 000h
 	db 08Ch, 000h, 000h, 000h, 000h, 000h, 020h, 001h
+
 	db 02Bh, 000h, 060h, 001h, 013h, 000h, 0FFh, 0FFh
 	db 0FFh, 0FFh, 0FFh, 0FFh, 008h, 000h, 00Ah, 000h
 	db 0D3h, 000h
@@ -50303,8 +50335,9 @@ LABEL_E1CDDE:
 	dd LABEL_EE013B
 	db 007h, 000h, 0C9h, 000h
 	db 000h, 000h, 000h, 000h, 000h, 000h, 000h, 000h
-	db 000h, 000h, 007h, 000h, 003h, 000h, 02Bh, 000h
-	db 060h, 001h, 00Eh, 000h, 0FFh, 0FFh, 017h, 000h
+	db 000h, 000h, 007h, 000h, 003h, 000h
+	
+	db 02Bh, 000h, 060h, 001h, 00Eh, 000h, 0FFh, 0FFh, 017h, 000h
 	db 015h, 000h, 008h, 000h, 020h, 001h, 0C8h, 000h
 	db 033h, 001h, 0DAh, 000h, 09Eh, 014h, 0E2h, 000h
 	db 000h, 000h, 000h, 000h, 0FFh, 000h, 043h, 048h
@@ -50632,8 +50665,9 @@ LABEL_E1CDDE:
 	db 0C1h, 000h, 0FFh, 0FFh, 000h, 000h, 000h, 000h
 	db 000h, 000h, 000h, 000h, 08Ch, 000h, 000h, 000h
 	dd LABEL_E21D94
-	db 000h, 0FFh, 02Bh, 000h
-	db 060h, 001h, 007h, 000h, 0FFh, 0FFh, 0FFh, 0FFh
+	db 000h, 0FFh
+	
+	db 02Bh, 000h, 060h, 001h, 007h, 000h, 0FFh, 0FFh, 0FFh, 0FFh
 	db 0FFh, 0FFh, 008h, 000h, 00Ah, 000h, 0CBh, 000h
 	db 02Dh, 000h, 0DDh, 000h, 0B6h, 01Dh, 0E2h, 000h
 	db 000h, 000h, 000h, 000h, 000h, 000h, 053h, 04Bh
@@ -50676,7 +50710,9 @@ LABEL_E1CDDE:
 	db 000h, 000h, 000h, 000h, 0FFh, 000h, 000h, 000h
 	db 089h, 000h, 06Ah, 0DDh, 003h, 000h, 0C6h, 01Eh
 	db 0E2h, 000h, 000h, 000h, 000h, 000h, 04Dh, 049h
-	db 043h, 000h, 02Bh, 000h, 060h, 001h, 000h, 000h
+	db 043h, 000h
+	
+	db 02Bh, 000h, 060h, 001h, 000h, 000h
 	db 0FFh, 0FFh, 0FFh, 0FFh, 00Eh, 000h, 008h, 000h
 	db 0F0h, 000h, 0C8h, 000h, 03Bh, 001h, 0DAh, 000h
 	dd LABEL_E21EEA
@@ -50718,7 +50754,9 @@ LABEL_E1CDDE:
 	db 031h, 000h, 0DBh, 000h, 007h, 000h, 0C1h, 000h
 	db 0FFh, 0FFh, 000h, 000h, 000h, 000h, 000h, 000h
 	db 000h, 000h, 08Ch, 000h, 000h, 000h, 012h, 020h
-	db 0E2h, 000h, 000h, 0FFh, 02Bh, 000h, 060h, 001h
+	db 0E2h, 000h, 000h, 0FFh
+	
+	db 02Bh, 000h, 060h, 001h
 	db 006h, 000h, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh
 	db 008h, 000h, 00Ah, 000h, 0CBh, 000h, 02Dh, 000h
 	db 0DDh, 000h
@@ -50802,7 +50840,9 @@ LABEL_E1CDDE:
 	db 031h, 000h, 0DBh, 000h, 007h, 000h, 0C1h, 000h
 	db 0FFh, 0FFh, 000h, 000h, 000h, 000h, 000h, 000h
 	db 000h, 000h, 08Ch, 000h, 000h, 000h, 06Ah, 022h
-	db 0E2h, 000h, 000h, 0FFh, 02Bh, 000h, 060h, 001h
+	db 0E2h, 000h, 000h, 0FFh
+	
+	db 02Bh, 000h, 060h, 001h
 	db 005h, 000h, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh
 	db 008h, 000h, 00Ah, 000h, 0CBh, 000h, 02Dh, 000h
 	db 0DDh, 000h
@@ -50863,7 +50903,9 @@ LABEL_E1CDDE:
 	db 031h, 000h, 0DBh, 000h, 007h, 000h, 0C1h, 000h
 	db 0FFh, 0FFh, 000h, 000h, 000h, 000h, 000h, 000h
 	db 000h, 000h, 08Ch, 000h, 000h, 000h, 022h, 024h
-	db 0E2h, 000h, 000h, 0FFh, 02Bh, 000h, 060h, 001h
+	db 0E2h, 000h, 000h, 0FFh
+	
+	db 02Bh, 000h, 060h, 001h
 	db 002h, 000h, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh
 	db 008h, 000h, 00Ah, 000h, 0CBh, 000h, 02Dh, 000h
 	db 0DDh, 000h
@@ -50932,8 +50974,9 @@ LABEL_E1CDDE:
 	db 0FFh, 0FFh, 00Ah, 000h, 008h, 000h, 008h, 000h
 	db 0D2h, 000h, 008h, 000h, 03Dh, 001h, 01Ah, 000h
 	db 0F5h, 000h, 000h, 000h, 0FFh, 0FFh, 000h, 000h
-	db 000h, 000h, 0FFh, 000h, 000h, 000h, 02Bh, 000h
-	db 060h, 001h, 000h, 000h, 0FFh, 0FFh, 00Bh, 000h
+	db 000h, 000h, 0FFh, 000h, 000h, 000h
+	
+	db 02Bh, 000h, 060h, 001h, 000h, 000h, 0FFh, 0FFh, 00Bh, 000h
 	db 009h, 000h, 008h, 000h, 010h, 001h, 077h, 000h
 	db 033h, 001h, 089h, 000h, 04Eh, 026h, 0E2h, 000h
 	db 000h, 000h, 000h, 000h, 000h, 000h, 053h, 04Bh
@@ -51063,7 +51106,9 @@ LABEL_E1CDDE:
 	db 087h, 000h, 007h, 000h, 0C1h, 000h, 0FFh, 0FFh
 	db 000h, 000h, 000h, 000h, 000h, 000h, 000h, 000h
 	db 00Ah, 000h, 000h, 000h, 0E8h, 029h, 0E2h, 000h
-	db 000h, 0FFh, 02Bh, 000h, 060h, 001h, 005h, 000h
+	db 000h, 0FFh
+	
+	db 02Bh, 000h, 060h, 001h, 005h, 000h
 	db 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 008h, 000h
 	db 010h, 001h, 077h, 000h, 033h, 001h, 089h, 000h
 	dd LABEL_E22A0A
@@ -51097,6 +51142,7 @@ LABEL_E1CDDE:
 	db 036h, 000h, 000h, 000h, 053h, 054h, 045h, 050h
 	db 020h, 052h, 045h, 043h, 04Fh, 052h, 044h, 020h
 	db 020h, 020h, 020h, 020h, 020h, 020h, 000h, 0FFh
+
 	db 02Bh, 000h, 060h, 001h, 000h, 000h, 0FFh, 0FFh
 	db 002h, 000h, 0FFh, 0FFh, 008h, 000h, 0C8h, 000h
 	db 00Ah, 000h, 033h, 001h, 01Ch, 000h, 010h, 02Bh
@@ -51268,7 +51314,9 @@ LABEL_E1CDDE:
 	db 039h, 000h
 	db 000h, 000h, 054h, 052h, 041h, 043h, 04Bh, 020h
 	db 041h, 053h, 053h, 049h, 047h, 04Eh, 020h, 050h
-	db 052h, 045h, 053h, 045h, 054h, 000h, 02Bh, 000h
+	db 052h, 045h, 053h, 045h, 054h, 000h
+	
+	db 02Bh, 000h
 	db 060h, 001h, 000h, 000h, 0FFh, 0FFh, 002h, 000h
 	db 0FFh, 0FFh, 008h, 000h, 004h, 001h, 0C8h, 000h
 	db 027h, 001h, 0DAh, 000h, 0AEh, 02Fh, 0E2h, 000h
@@ -51473,7 +51521,9 @@ LABEL_E1CDDE:
 	db 0FFh, 0FFh, 008h, 000h, 08Ah, 000h, 032h, 000h
 	db 0C3h, 000h, 044h, 000h, 0F5h, 000h, 000h, 000h
 	db 0FFh, 0FFh, 000h, 000h, 000h, 000h, 0FFh, 000h
-	db 000h, 000h, 02Bh, 000h, 060h, 001h, 001h, 000h
+	db 000h, 000h
+	
+	db 02Bh, 000h, 060h, 001h, 001h, 000h
 	db 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 008h, 000h
 	db 03Ch, 000h, 034h, 000h, 0C7h, 000h, 046h, 000h
 	dd LABEL_E235B2
@@ -54498,19 +54548,24 @@ LABEL_E1CDDE:
 	db 008h, 000h, 0F4h, 000h, 0D8h, 000h, 03Bh, 001h
 	db 0EEh, 000h, 007h, 000h, 0C9h, 000h, 002h, 000h
 	db 000h, 000h, 000h, 000h, 000h, 000h, 000h, 000h
-	db 006h, 000h, 007h, 000h, 003h, 000h, 02Bh, 000h
-	db 060h, 001h, 000h, 000h, 0FFh, 0FFh, 005h, 000h
+	db 006h, 000h, 007h, 000h, 003h, 000h
+	
+	db 02Bh, 000h, 060h, 001h, 000h, 000h, 0FFh, 0FFh, 005h, 000h
 	db 003h, 000h, 008h, 000h, 014h, 000h, 0CAh, 000h
 	db 037h, 000h, 0DCh, 000h, 076h, 080h, 0E2h, 000h
 	db 000h, 000h, 000h, 000h, 0FFh, 000h, 054h, 059h
-	db 050h, 045h, 000h, 0FFh, 02Bh, 000h, 060h, 001h
+	db 050h, 045h, 000h, 0FFh
+	
+	db 02Bh, 000h, 060h, 001h
 	db 000h, 000h, 0FFh, 0FFh, 006h, 000h, 004h, 000h
 	db 008h, 000h, 078h, 000h, 0CAh, 000h, 0C3h, 000h
 	db 0DCh, 000h
 	dd LABEL_E2809C
 	db 000h, 000h
 	db 000h, 000h, 0FFh, 000h, 050h, 041h, 052h, 041h
-	db 04Dh, 045h, 054h, 045h, 052h, 000h, 02Bh, 000h
+	db 04Dh, 045h, 054h, 045h, 052h, 000h
+	
+	db 02Bh, 000h
 	db 060h, 001h, 000h, 000h, 0FFh, 0FFh, 007h, 000h
 	db 005h, 000h, 008h, 000h, 000h, 001h, 0CAh, 000h
 	db 02Bh, 001h, 0DCh, 000h, 0C6h, 080h, 0E2h, 000h
@@ -54523,7 +54578,9 @@ LABEL_E1CDDE:
 	db 00Ah, 000h, 031h, 000h, 060h, 001h, 000h, 000h
 	db 0FFh, 0FFh, 009h, 000h, 007h, 000h, 008h, 000h
 	db 028h, 000h, 022h, 000h, 01Fh, 001h, 03Dh, 000h
-	db 0F5h, 000h, 0C1h, 000h, 02Bh, 000h, 060h, 001h
+	db 0F5h, 000h, 0C1h, 000h
+	
+	db 02Bh, 000h, 060h, 001h
 	db 000h, 000h, 0FFh, 0FFh, 00Ah, 000h, 008h, 000h
 	db 008h, 000h, 034h, 000h, 028h, 000h, 05Fh, 000h
 	db 03Ah, 000h
@@ -54546,8 +54603,9 @@ LABEL_E1CDDE:
 	dd LABEL_E2818A
 	db 00Ch, 000h
 	db 000h, 000h, 044h, 053h, 050h, 020h, 045h, 046h
-	db 046h, 045h, 043h, 054h, 000h, 0FFh, 02Bh, 000h
-	db 060h, 001h, 000h, 000h, 0FFh, 0FFh, 002h, 000h
+	db 046h, 045h, 043h, 054h, 000h, 0FFh
+
+	db 02Bh, 000h, 060h, 001h, 000h, 000h, 0FFh, 0FFh, 002h, 000h
 	db 0FFh, 0FFh, 008h, 000h, 034h, 000h, 028h, 000h
 	db 067h, 000h, 03Ah, 000h, 0B6h, 081h, 0E2h, 000h
 	db 001h, 000h, 000h, 000h, 0FFh, 000h, 054h, 059h
@@ -54558,6 +54616,7 @@ LABEL_E1CDDE:
 	db 007h, 000h, 0C9h, 000h
 	db 000h, 000h, 000h, 000h, 000h, 000h, 000h, 000h
 	db 000h, 000h, 000h, 000h, 001h, 000h, 003h, 000h
+
 	db 02Bh, 000h, 060h, 001h, 000h, 000h, 0FFh, 0FFh
 	db 004h, 000h, 002h, 000h, 008h, 000h, 014h, 000h
 	db 0CAh, 000h, 037h, 000h, 0DCh, 000h, 008h, 082h
@@ -54576,13 +54635,17 @@ LABEL_E1CDDE:
 	db 007h, 000h
 	db 0C9h, 000h, 002h, 000h, 000h, 000h, 000h, 000h
 	db 000h, 000h, 000h, 000h, 006h, 000h, 007h, 000h
-	db 003h, 000h, 02Bh, 000h, 060h, 001h, 000h, 000h
+	db 003h, 000h
+
+	db 02Bh, 000h, 060h, 001h, 000h, 000h
 	db 0FFh, 0FFh, 007h, 000h, 005h, 000h, 008h, 000h
 	db 078h, 000h, 0CAh, 000h, 0C3h, 000h, 0DCh, 000h
 	dd LABEL_E28282
 	db 000h, 000h, 000h, 000h
 	db 0FFh, 000h, 050h, 041h, 052h, 041h, 04Dh, 045h
-	db 054h, 045h, 052h, 000h, 02Bh, 000h, 060h, 001h
+	db 054h, 045h, 052h, 000h
+
+	db 02Bh, 000h, 060h, 001h
 	db 000h, 000h, 0FFh, 0FFh, 008h, 000h, 006h, 000h
 	db 008h, 000h, 000h, 001h, 0CAh, 000h, 02Bh, 001h
 	db 0DCh, 000h
@@ -54653,87 +54716,115 @@ LABEL_E1CDDE:
 	db 008h, 000h, 01Ch, 001h, 0D9h, 000h, 03Bh, 001h
 	db 0EFh, 000h, 007h, 000h, 0C9h, 000h, 007h, 000h
 	db 000h, 000h, 000h, 000h, 000h, 000h, 000h, 000h
-	db 007h, 000h, 003h, 000h, 02Bh, 000h, 060h, 001h
+	db 007h, 000h, 003h, 000h
+
+	db 02Bh, 000h, 060h, 001h
 	db 000h, 000h, 0FFh, 0FFh, 00Ah, 000h, 008h, 000h
 	db 008h, 000h, 005h, 000h, 0CEh, 000h, 020h, 000h
 	db 0D8h, 000h
 	dd LABEL_E284B4
 	db 003h, 000h
 	db 000h, 000h, 0FFh, 000h, 046h, 052h, 045h, 051h
-	db 000h, 0FFh, 02Bh, 000h, 060h, 001h, 000h, 000h
+	db 000h, 0FFh
+
+	db 02Bh, 000h, 060h, 001h, 000h, 000h
 	db 0FFh, 0FFh, 00Bh, 000h, 009h, 000h, 008h, 000h
 	db 02Dh, 000h, 0CEh, 000h, 048h, 000h, 0D8h, 000h
 	dd LABEL_E284DA
 	db 003h, 000h, 000h, 000h
 	db 0FFh, 000h, 047h, 041h, 049h, 04Eh, 000h, 0FFh
+
 	db 02Bh, 000h, 060h, 001h, 000h, 000h, 0FFh, 0FFh
 	db 00Ch, 000h, 00Ah, 000h, 008h, 000h, 055h, 000h
 	db 0CEh, 000h, 070h, 000h, 0D8h, 000h, 000h, 085h
 	db 0E2h, 000h, 003h, 000h, 000h, 000h, 0FFh, 000h
-	db 046h, 052h, 045h, 051h, 000h, 0FFh, 02Bh, 000h
-	db 060h, 001h, 000h, 000h, 0FFh, 0FFh, 00Dh, 000h
+	db 046h, 052h, 045h, 051h, 000h, 0FFh
+
+	db 02Bh, 000h, 060h, 001h, 000h, 000h, 0FFh, 0FFh, 00Dh, 000h
 	db 00Bh, 000h, 008h, 000h, 0A5h, 000h, 0CEh, 000h
 	db 0C0h, 000h, 0D8h, 000h, 026h, 085h, 0E2h, 000h
 	db 003h, 000h, 000h, 000h, 0FFh, 000h, 046h, 052h
-	db 045h, 051h, 000h, 0FFh, 02Bh, 000h, 060h, 001h
+	db 045h, 051h, 000h, 0FFh
+
+	db 02Bh, 000h, 060h, 001h
 	db 000h, 000h, 0FFh, 0FFh, 00Eh, 000h, 00Ch, 000h
 	db 008h, 000h, 0F5h, 000h, 0CEh, 000h, 010h, 001h
 	db 0D8h, 000h
 	dd LABEL_E2854C
 	db 003h, 000h
 	db 000h, 000h, 0FFh, 000h, 046h, 052h, 045h, 051h
-	db 000h, 0FFh, 02Bh, 000h, 060h, 001h, 000h, 000h
+	db 000h, 0FFh
+
+	db 02Bh, 000h, 060h, 001h, 000h, 000h
 	db 0FFh, 0FFh, 00Fh, 000h, 00Dh, 000h, 008h, 000h
 	db 07Dh, 000h, 0CEh, 000h, 098h, 000h, 0D8h, 000h
 	dd LABEL_E28572
 	db 003h, 000h, 000h, 000h
 	db 0FFh, 000h, 047h, 041h, 049h, 04Eh, 000h, 0FFh
+
 	db 02Bh, 000h, 060h, 001h, 000h, 000h, 0FFh, 0FFh
 	db 010h, 000h, 00Eh, 000h, 008h, 000h, 0CDh, 000h
 	dd LABEL_E800CE
 	db 0D8h, 000h, 098h, 085h
 	db 0E2h, 000h, 003h, 000h, 000h, 000h, 0FFh, 000h
-	db 047h, 041h, 049h, 04Eh, 000h, 0FFh, 02Bh, 000h
-	db 060h, 001h, 000h, 000h, 0FFh, 0FFh, 011h, 000h
+	db 047h, 041h, 049h, 04Eh, 000h, 0FFh
+
+	db 02Bh, 000h, 060h, 001h, 000h, 000h, 0FFh, 0FFh, 011h, 000h
 	db 00Fh, 000h, 008h, 000h, 01Dh, 001h, 0CEh, 000h
 	db 038h, 001h, 0D8h, 000h, 0BEh, 085h, 0E2h, 000h
 	db 003h, 000h, 000h, 000h, 0FFh, 000h, 047h, 041h
-	db 049h, 04Eh, 000h, 0FFh, 02Bh, 000h, 060h, 001h
+	db 049h, 04Eh, 000h, 0FFh
+
+	db 02Bh, 000h, 060h, 001h
 	db 000h, 000h, 0FFh, 0FFh, 012h, 000h, 010h, 000h
 	db 008h, 000h, 01Ch, 000h, 0C2h, 000h, 031h, 000h
 	db 0CCh, 000h
 	dd LABEL_E285E4
 	db 003h, 000h
 	db 000h, 000h, 0FFh, 000h, 04Ch, 04Fh, 057h, 000h
+
 	db 02Bh, 000h, 060h, 001h, 000h, 000h, 0FFh, 0FFh
 	db 013h, 000h, 011h, 000h, 008h, 000h, 060h, 000h
 	db 0C2h, 000h, 08Dh, 000h, 0CCh, 000h, 008h, 086h
 	db 0E2h, 000h, 003h, 000h, 000h, 000h, 0FFh, 000h
 	db 04Dh, 049h, 044h, 02Dh, 04Ch, 04Fh, 057h, 000h
+
 	db 02Bh, 000h, 060h, 001h, 000h, 000h, 0FFh, 0FFh
 	db 014h, 000h, 012h, 000h, 008h, 000h, 0ACh, 000h
 	db 0C2h, 000h, 0DFh, 000h, 0CCh, 000h, 030h, 086h
 	db 0E2h, 000h, 003h, 000h, 000h, 000h, 0FFh, 000h
 	db 04Dh, 049h, 044h, 02Dh, 048h, 049h, 047h, 048h
-	db 000h, 0FFh, 02Bh, 000h, 060h, 001h, 000h, 000h
+	db 000h, 0FFh
+
+	db 02Bh, 000h, 060h, 001h, 000h, 000h
 	db 0FFh, 0FFh, 015h, 000h, 013h, 000h, 008h, 000h
 	db 009h, 001h, 0C2h, 000h, 024h, 001h, 0CCh, 000h
 	dd LABEL_E2865A
 	db 003h, 000h, 000h, 000h
-	db 0FFh, 000h, 048h, 049h, 047h, 048h, 000h, 0FFh
+	db 0FFh, 000h
+
+LABEL_E2865A:
+	db "HIGH", 000h, 0FFh
+
 	db 02Eh, 000h, 060h, 001h, 000h, 000h, 0FFh, 0FFh
 	db 016h, 000h, 014h, 000h, 008h, 000h, 006h, 000h
 	db 0C6h, 000h, 01Bh, 000h, 0C6h, 000h, 0FFh, 000h
-	db 001h, 000h, 02Eh, 000h, 060h, 001h, 000h, 000h
+	db 001h, 000h
+	
+	db 02Eh, 000h, 060h, 001h, 000h, 000h
 	db 0FFh, 0FFh, 017h, 000h, 015h, 000h, 008h, 000h
 	db 033h, 000h, 0C6h, 000h, 048h, 000h, 0C6h, 000h
-	db 0FFh, 000h, 001h, 000h, 02Eh, 000h, 060h, 001h
+	db 0FFh, 000h, 001h, 000h
+	
+	db 02Eh, 000h, 060h, 001h
 	db 000h, 000h, 0FFh, 0FFh, 018h, 000h, 016h, 000h
 	db 008h, 000h, 0F5h, 000h, 0C6h, 000h, 008h, 001h
-	db 0C6h, 000h, 0FFh, 000h, 001h, 000h, 02Eh, 000h
-	db 060h, 001h, 000h, 000h, 0FFh, 0FFh, 019h, 000h
+	db 0C6h, 000h, 0FFh, 000h, 001h, 000h
+	
+	db 02Eh, 000h, 060h, 001h, 000h, 000h, 0FFh, 0FFh, 019h, 000h
 	db 017h, 000h, 008h, 000h, 026h, 001h, 0C6h, 000h
 	db 039h, 001h, 0C6h, 000h, 0FFh, 000h, 001h, 000h
+
 	db 001h, 000h, 068h, 001h, 000h, 000h, 0FFh, 0FFh
 	db 01Ah, 000h, 018h, 000h, 008h, 000h, 01Eh, 000h
 	db 020h, 000h, 0FAh, 000h, 07Ah, 000h, 0F5h, 000h
@@ -54741,39 +54832,60 @@ LABEL_E1CDDE:
 	db 00Ch, 000h, 031h, 000h, 060h, 001h, 000h, 000h
 	db 01Bh, 000h, 023h, 000h, 019h, 000h, 008h, 000h
 	db 004h, 000h, 088h, 000h, 03Bh, 001h, 0BEh, 000h
-	db 0F5h, 000h, 0C1h, 000h, 02Bh, 000h, 060h, 001h
+	db 0F5h, 000h, 0C1h, 000h
+
+	db 02Bh, 000h, 060h, 001h
 	db 01Ah, 000h, 0FFh, 0FFh, 01Ch, 000h, 0FFh, 0FFh
 	db 008h, 000h, 008h, 000h, 09Ch, 000h, 04Bh, 000h
 	db 0AEh, 000h
 	dd LABEL_E28724
 	db 000h, 000h
-	db 000h, 000h, 0F1h, 000h, 046h, 052h, 045h, 051h
-	db 028h, 048h, 07Ah, 029h, 000h, 0FFh, 02Bh, 000h
-	db 060h, 001h, 01Ah, 000h, 0FFh, 0FFh, 01Dh, 000h
+	db 000h, 000h, 0F1h, 000h
+
+LABEL_E28724:
+	db "FREQ(Hz)", 000h, 0FFh
+
+	db 02Bh, 000h, 060h, 001h, 01Ah, 000h, 0FFh, 0FFh, 01Dh, 000h
 	db 01Bh, 000h, 008h, 000h, 008h, 000h, 0ACh, 000h
-	db 04Bh, 000h, 0BEh, 000h, 04Eh, 087h, 0E2h, 000h
-	db 000h, 000h, 000h, 000h, 0F1h, 000h, 047h, 041h
-	db 049h, 04Eh, 028h, 064h, 042h, 029h, 000h, 0FFh
+	db 04Bh, 000h, 0BEh, 000h
+	dd LABEL_E2874E
+	db 000h, 000h, 000h, 000h, 0F1h, 000h
+
+LABEL_E2874E:
+	db "GAIN(dB)", 000h, 0FFh
+
 	db 02Bh, 000h, 060h, 001h, 01Ah, 000h, 0FFh, 0FFh
 	db 01Eh, 000h, 01Ch, 000h, 008h, 000h, 05Ch, 000h
-	db 08Ah, 000h, 077h, 000h, 09Ch, 000h, 078h, 087h
-	db 0E2h, 000h, 000h, 000h, 000h, 000h, 0F1h, 000h
-	db 04Ch, 04Fh, 057h, 000h, 02Bh, 000h, 060h, 001h
+	db 08Ah, 000h, 077h, 000h, 09Ch, 000h
+	dd LABEL_E28778
+	db 000h, 000h, 000h, 000h, 0F1h, 000h
+
+LABEL_E28778:
+	db "LOW", 000h
+
+	db 02Bh, 000h, 060h, 001h
 	db 01Ah, 000h, 0FFh, 0FFh, 01Fh, 000h, 01Dh, 000h
 	db 008h, 000h, 082h, 000h, 08Ah, 000h, 0BDh, 000h
 	db 09Ch, 000h
 	dd LABEL_E2879C
 	db 000h, 000h
-	db 000h, 000h, 0F1h, 000h, 04Dh, 049h, 044h, 02Dh
-	db 04Ch, 04Fh, 057h, 000h, 02Bh, 000h, 060h, 001h
+	db 000h, 000h, 0F1h, 000h
+	
+LABEL_E2879C:
+	db "MID-LOW", 000h
+
+	db 02Bh, 000h, 060h, 001h
 	db 01Ah, 000h, 0FFh, 0FFh, 020h, 000h, 01Eh, 000h
 	db 008h, 000h, 0C4h, 000h, 08Ah, 000h, 007h, 001h
 	db 09Ch, 000h
 	dd LABEL_E287C4
 	db 000h, 000h
-	db 000h, 000h, 0F1h, 000h, 04Dh, 049h, 044h, 02Dh
-	db 048h, 049h, 047h, 048h, 000h, 0FFh, 02Bh, 000h
-	db 060h, 001h, 01Ah, 000h, 0FFh, 0FFh, 021h, 000h
+	db 000h, 000h, 0F1h, 000h
+	
+LABEL_E287C4:
+	db "MID-HIGH", 000h, 0FFh
+
+	db 02Bh, 000h, 060h, 001h, 01Ah, 000h, 0FFh, 0FFh, 021h, 000h
 	db 01Fh, 000h, 008h, 000h, 00Ch, 001h, 08Ah, 000h
 	db 02Fh, 001h, 09Ch, 000h, 0EEh, 087h, 0E2h, 000h
 	db 000h, 000h, 000h, 000h, 0F1h, 000h, 048h, 049h
@@ -54784,6 +54896,7 @@ LABEL_E1CDDE:
 	db 060h, 001h, 01Ah, 000h, 0FFh, 0FFh, 0FFh, 0FFh
 	db 021h, 000h, 008h, 000h, 04Ch, 000h, 088h, 000h
 	db 04Ch, 000h, 0BCh, 000h, 0FFh, 000h, 001h, 000h
+
 	db 02Bh, 000h, 060h, 001h, 000h, 000h, 0FFh, 0FFh
 	db 024h, 000h, 01Ah, 000h, 008h, 000h, 07Ah, 000h
 	db 07Ch, 000h, 095h, 000h, 086h, 000h, 048h, 088h
@@ -54820,12 +54933,14 @@ LABEL_E1CDDE:
 	db 007h, 000h, 0C9h, 000h
 	db 001h, 000h, 000h, 000h, 000h, 000h, 000h, 000h
 	db 000h, 000h, 005h, 000h, 006h, 000h, 003h, 000h
+
 	db 02Bh, 000h, 060h, 001h, 000h, 000h, 0FFh, 0FFh
 	db 004h, 000h, 002h, 000h, 008h, 000h, 03Eh, 000h
 	db 0C8h, 000h, 061h, 000h, 0DAh, 000h, 038h, 089h
 	db 0E2h, 000h, 000h, 000h, 000h, 000h, 0FFh, 000h
-	db 054h, 059h, 050h, 045h, 000h, 0FFh, 02Bh, 000h
-	db 060h, 001h, 000h, 000h, 0FFh, 0FFh, 005h, 000h
+	db 054h, 059h, 050h, 045h, 000h, 0FFh
+
+	db 02Bh, 000h, 060h, 001h, 000h, 000h, 0FFh, 0FFh, 005h, 000h
 	db 003h, 000h, 008h, 000h, 0DAh, 000h, 0C8h, 000h
 	db 005h, 001h, 0DAh, 000h, 05Eh, 089h, 0E2h, 000h
 	db 000h, 000h, 000h, 000h, 0FFh, 000h, 04Ch, 045h
@@ -54840,12 +54955,14 @@ LABEL_E1CDDE:
 	db 060h, 001h, 000h, 000h, 008h, 000h, 009h, 000h
 	db 006h, 000h, 008h, 000h, 01Eh, 000h, 087h, 000h
 	db 021h, 001h, 0A4h, 000h, 0F5h, 000h, 0C1h, 000h
+
 	db 02Bh, 000h, 060h, 001h, 007h, 000h, 0FFh, 0FFh
 	db 0FFh, 0FFh, 0FFh, 0FFh, 008h, 000h, 028h, 000h
 	db 090h, 000h, 0A3h, 000h, 0A2h, 000h, 0D8h, 089h
 	db 0E2h, 000h, 001h, 000h, 000h, 000h, 0FFh, 000h
 	db 049h, 04Ch, 04Ch, 055h, 053h, 049h, 04Fh, 04Eh
 	db 020h, 04Ch, 045h, 056h, 045h, 04Ch, 03Ah, 000h
+
 	db 02Bh, 000h, 060h, 001h, 000h, 000h, 0FFh, 0FFh
 	db 00Ah, 000h, 007h, 000h, 008h, 000h, 028h, 000h
 	db 060h, 000h, 062h, 000h, 072h, 000h, 008h, 08Ah
@@ -54880,6 +54997,7 @@ String_SEQUENCER_MENU:		; E28A66
 
 String_CREATE:		; E28AAC
 	db "CREATE", 000h, 0FFh
+
 	db 02Bh, 000h, 060h, 001h
 	db 000h, 000h, 0FFh, 0FFh, 003h, 000h, 001h, 000h
 	db 008h, 000h, 016h, 001h, 038h, 000h, 039h, 001h
@@ -54943,8 +55061,9 @@ String_CREATE:		; E28AAC
 	db 0A0h, 001h, 034h, 0DFh, 003h, 000h, 07Eh, 08Ch
 	db 0E2h, 000h, 07Eh, 000h, 000h, 000h, 053h, 045h
 	db 051h, 055h, 045h, 04Eh, 043h, 045h, 052h, 020h
-	db 050h, 04Ch, 041h, 059h, 000h, 0FFh, 02Bh, 000h
-	db 060h, 001h, 000h, 000h, 0FFh, 0FFh, 002h, 000h
+	db 050h, 04Ch, 041h, 059h, 000h, 0FFh
+
+	db 02Bh, 000h, 060h, 001h, 000h, 000h, 0FFh, 0FFh, 002h, 000h
 	db 0FFh, 0FFh, 008h, 000h, 006h, 000h, 038h, 000h
 	db 029h, 000h, 04Ah, 000h, 0AEh, 08Ch, 0E2h, 000h
 	db 000h, 000h, 000h, 000h, 0FFh, 000h, 04Dh, 045h
