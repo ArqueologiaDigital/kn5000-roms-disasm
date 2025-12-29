@@ -168552,8 +168552,7 @@ LABEL_F1E13F:
 InitializeHama:
 	LDA XSP, XSP - 14
 	LD XWA, 01600004h
-	db 000h	;TODO: Fix ASL:
-	LD (XSP + 000h), XWA
+	LD (XSP + 000h:8), XWA
 	LDA XWA, 0FA44E2h
 	LD (XSP + 004h), XWA
 	LD WA, (0E1F0BCh)
@@ -168565,8 +168564,7 @@ InitializeHama:
 	LD WA, 0169h
 	CALL RegisterObjectTable
 	LD XWA, 0160000ch
-	db 000h	;TODO: Fix ASL:
-	LD (XSP + 000h), XWA
+	LD (XSP + 000h:8), XWA
 	LDA XWA, 0FA58FBh
 	LD (XSP + 004h), XWA
 	LD WA, (0E1F0D4h)
@@ -168578,8 +168576,7 @@ InitializeHama:
 	LD WA, 01c9h
 	CALL RegisterObjectTable
 	LD XWA, 0160000dh
-	db 000h	;TODO: Fix ASL:
-	LD (XSP + 000h), XWA
+	LD (XSP + 000h:8), XWA
 	LDA XWA, 0FA5948h
 	LD (XSP + 004h), XWA
 	LD WA, (0E1F0EAh)
@@ -168591,8 +168588,7 @@ InitializeHama:
 	LD WA, 01e9h
 	CALL RegisterObjectTable
 	LD XWA, 01600002h
-	db 000h	;TODO: Fix ASL:
-	LD (XSP + 000h), XWA
+	LD (XSP + 000h:8), XWA
 	LDA XWA, 0FA496Ch
 	LD (XSP + 004h), XWA
 	LDW (XSP + 008h:8), 0002h
@@ -168603,8 +168599,7 @@ InitializeHama:
 	LD WA, 0129h
 	CALL RegisterObjectTable
 	LD XWA, 01600002h
-	db 000h	;TODO: Fix ASL:
-	LD (XSP + 000h), XWA
+	LD (XSP + 000h:8), XWA
 	LDA XWA, 0FA496Ch
 	LD (XSP + 004h), XWA
 	LDW (XSP + 008h:8), 0002h
@@ -168615,8 +168610,7 @@ InitializeHama:
 	LD WA, 0429h
 	CALL RegisterObjectTable
 	LD XWA, 01600001h
-	db 000h	;TODO: Fix ASL:
-	LD (XSP + 000h), XWA
+	LD (XSP + 000h:8), XWA
 	LDA XWA, 0FA48A9h
 	LD (XSP + 004h), XWA
 	LDW (XSP + 008h:8), 004bh
@@ -168627,8 +168621,7 @@ InitializeHama:
 	LD WA, 0109h
 	CALL RegisterObjectTable
 	LD XWA, 01600001h
-	db 000h	;TODO: Fix ASL:
-	LD (XSP + 000h), XWA
+	LD (XSP + 000h:8), XWA
 	LDA XWA, 0FA48A9h
 	LD (XSP + 004h), XWA
 	LDW (XSP + 008h:8), 004bh
@@ -168639,8 +168632,7 @@ InitializeHama:
 	LD WA, SYSTEM_TIMESTAMP
 	CALL RegisterObjectTable
 	LD XWA, 01600003h
-	db 000h	;TODO: Fix ASL:
-	LD (XSP + 000h), XWA
+	LD (XSP + 000h:8), XWA
 	LDA XWA, 0FA4A18h
 	LD (XSP + 004h), XWA
 	LDW (XSP + 008h:8), 0001h
@@ -168651,8 +168643,7 @@ InitializeHama:
 	LD WA, 0149h
 	CALL RegisterObjectTable
 	LD XWA, 01600003h
-	db 000h	;TODO: Fix ASL:
-	LD (XSP + 000h), XWA
+	LD (XSP + 000h:8), XWA
 	LDA XWA, 0FA4A18h
 	LD (XSP + 004h), XWA
 	LDW (XSP + 008h:8), 0001h
@@ -168663,8 +168654,7 @@ InitializeHama:
 	LD WA, 0449h
 	CALL RegisterObjectTable
 	LD XWA, 01600010h
-	db 000h	;TODO: Fix ASL:
-	LD (XSP + 000h), XWA
+	LD (XSP + 000h:8), XWA
 	LDA XWA, 0FA5995h
 	LD (XSP + 004h), XWA
 	LDW (XSP + 008h:8), 0000h
@@ -168675,8 +168665,7 @@ InitializeHama:
 	LD WA, 007fh
 	CALL RegisterObjectTable
 	LD XWA, 0160000fh
-	db 000h	;TODO: Fix ASL:
-	LD (XSP + 000h), XWA
+	LD (XSP + 000h:8), XWA
 	LDA XWA, 0FA62CBh
 	LD (XSP + 004h), XWA
 	LDW (XSP + 008h:8), 0000h
@@ -168687,8 +168676,7 @@ InitializeHama:
 	LD WA, 037fh
 	CALL RegisterObjectTable
 	LD XWA, 01600010h
-	db 000h	;TODO: Fix ASL:
-	LD (XSP + 000h), XWA
+	LD (XSP + 000h:8), XWA
 	LDA XWA, 0FA5995h
 	LD (XSP + 004h), XWA
 	LDW (XSP + 008h:8), 001ah
@@ -168699,8 +168687,7 @@ InitializeHama:
 	LD WA, 00fch
 	CALL RegisterObjectTable
 	LD XWA, 0160000fh
-	db 000h	;TODO: Fix ASL:
-	LD (XSP + 000h), XWA
+	LD (XSP + 000h:8), XWA
 	LDA XWA, 0FA62CBh
 	LD (XSP + 004h), XWA
 	LDW (XSP + 008h:8), 001ah
