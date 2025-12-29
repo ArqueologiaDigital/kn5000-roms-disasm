@@ -6042,12 +6042,6 @@ LABEL_E1A6D2:
 	ORG 0E1A6FEh
 LABEL_E1A6FE:
 
-	ORG 0E1A704h
-LABEL_E1A704:
-
-	ORG 0E1A73Eh
-LABEL_E1A73E:
-
 	ORG 0E1A762h
 LABEL_E1A762:
 
@@ -17555,9 +17549,6 @@ LABEL_E5672C:
 
 	ORG 0E5681Ch
 LABEL_E5681C:
-
-	ORG 0E5693Eh
-LABEL_E5693E:
 
 	ORG 0E56ACCh
 LABEL_E56ACC:
@@ -45923,15 +45914,22 @@ String_EASY_COMPOSER:		; E17EBA
 	db 000h, 000h, 000h, 000h, 000h, 000h, 00Bh, 000h
 	db 000h, 000h
 	dd LABEL_E1A6FE
-	db 041h, 042h
-	db 04Fh, 052h, 054h, 000h, 034h, 000h, 060h, 001h
-	db 0FFh, 0FFh, 001h, 000h, 0FFh, 0FFh, 0FFh, 0FFh
-	db 00Ah, 000h, 000h, 000h, 000h, 000h, 03Fh, 001h
-	db 0EFh, 000h, 0FFh, 000h, 000h, 000h, 001h, 000h
-	db 0A0h, 001h, 026h, 0D7h, 003h, 000h, 02Eh, 0A7h
-	db 0E1h, 000h, 0A5h, 000h, 000h, 000h, 04Dh, 053h
-	db 050h, 020h, 042h, 041h, 04Eh, 04Bh, 020h, 053h
-	db 045h, 04Ch, 045h, 043h, 054h, 000h, 025h, 000h
+	db "ABORT", 000h
+
+LABEL_E1A704:
+	db 034h, 000h, 060h, 001h, 0FFh, 0FFh, 001h, 000h
+	db 0FFh, 0FFh, 0FFh, 0FFh, 00Ah, 000h, 000h, 000h
+	db 000h, 000h, 03Fh, 001h, 0EFh, 000h, 0FFh, 000h
+	db 000h, 000h, 001h, 000h, 0A0h, 001h, 026h, 0D7h
+	db 003h, 000h
+	dd String_MSP_BANK_SELECT
+	db 0A5h, 000h, 000h, 000h
+
+String_MSP_BANK_SELECT:		; E1A72E
+	db "MSP BANK SELECT", 000h
+
+LABEL_E1A73E:
+	db 025h, 000h
 	db 060h, 001h, 000h, 000h, 0FFh, 0FFh, 002h, 000h
 	db 0FFh, 0FFh, 008h, 000h, 0F5h, 000h, 006h, 000h
 	db 03Bh, 001h, 017h, 000h, 0F3h, 000h, 0C1h, 000h
@@ -71366,12 +71364,17 @@ LABEL_E44478:
 	db 06Dh, 000h, 044h, 000h, 060h, 001h, 000h, 000h
 	db 0FFh, 0FFh, 00Bh, 000h, 009h, 000h, 008h, 000h
 	db 0F1h, 000h, 0CAh, 000h, 037h, 001h, 0DBh, 000h
-	db 000h, 000h, 000h, 000h, 048h, 069h, 0E5h, 000h
-	dd LABEL_E5693E
+	db 000h, 000h, 000h, 000h
+	dd String_EQ_ON
+	dd String_EQ_OFF
 	db 04Ah, 0E4h, 003h, 000h
-	db 00Ch, 000h, 03Bh, 000h, 023h, 001h, 045h, 051h
-	db 020h, 03Ah, 020h, 04Fh, 046h, 046h, 000h, 0FFh
-	db 045h, 051h, 020h, 03Ah, 020h, 04Fh, 04Eh, 000h
+	db 00Ch, 000h, 03Bh, 000h, 023h, 001h
+
+String_EQ_OFF:				; E5693E
+	db "EQ : OFF", 000h, 0FFh
+
+String_EQ_ON:				; E56948
+	db "EQ : ON", 000h
 	db 052h, 000h, 060h, 001h, 000h, 000h, 0FFh, 0FFh
 	db 0FFh, 0FFh, 00Ah, 000h, 018h, 000h, 000h, 000h
 	db 000h, 000h, 01Fh, 000h, 01Fh, 000h, 03Ah, 000h
@@ -71379,9 +71382,13 @@ LABEL_E44478:
 	db 001h, 000h, 0FFh, 0FFh, 0FFh, 0FFh, 00Ah, 000h
 	db 000h, 000h, 000h, 000h, 03Fh, 001h, 0EFh, 000h
 	db 0F8h, 000h, 002h, 000h, 001h, 000h, 0A0h, 001h
-	db 04Ch, 0E4h, 003h, 000h, 094h, 069h, 0E5h, 000h
-	db 019h, 000h, 000h, 000h, 04Dh, 049h, 044h, 049h
-	db 020h, 04Dh, 045h, 04Eh, 055h, 000h, 025h, 000h
+	db 04Ch, 0E4h, 003h, 000h
+	dd String_MIDI_MENU
+	db 019h, 000h, 000h, 000h
+
+String_MIDI_MENU:		; E56994
+	db "MIDI MENU", 000h
+	db 025h, 000h
 	db 060h, 001h, 000h, 000h, 0FFh, 0FFh, 002h, 000h
 	db 0FFh, 0FFh, 008h, 000h, 0F5h, 000h, 006h, 000h
 	db 03Bh, 001h, 017h, 000h, 0F3h, 000h, 0C1h, 000h
