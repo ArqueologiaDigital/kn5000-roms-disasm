@@ -167264,6 +167264,15 @@ RegObjTablHama MACRO ParamA,ParamB,ParamC,ParamD,ParamE
 	CALL RegisterObjectTable
 	ENDM
 
+RegTitleHama MACRO ParamA,ParamB,ParamC,ParamD,ParamE
+	PUSHW ParamA
+	LDA XWA, ParamB
+	PUSH XWA
+	LD XWA, ParamC
+	LD XBC, ParamD
+	LD XDE, ParamE
+	CALL RegisterTitle
+	ENDM
 
 InitializeHama:
 	LDA XSP, XSP - 14
@@ -167282,21 +167291,10 @@ InitializeHama:
 	RegObjTablHama  01600010h, 0FA5995h, 001ah,	0E1FBD4h, 00fch
 	RegObjTablHama  0160000fh, 0FA62CBh, 001ah,	0E1FC46h, 03fch
 
-	PUSHW 0009h
-	LDA XWA, 0E1FD18h
-	PUSH XWA
-	LD XWA, 0000007fh
-	LD XBC, 01490000h
-	LD XDE, 00fc0000h
-	CALL RegisterTitle
-	PUSHW 0009h
-	LDA XWA, 0E1FD22h
-	PUSH XWA
-	LD XWA, 000000fch
-	LD XBC, 01490000h
-	LD XDE, 00fc0000h
-	CALL RegisterTitle
-	LDA XSP, XSP + 00eh
+	RegTitleHama 0009h, 0E1FD18h, 0000007fh, 01490000h, 00fc0000h
+	RegTitleHama 0009h, 0E1FD22h, 000000fch, 01490000h, 00fc0000h
+
+	LDA XSP, XSP + 14
 	RET
 
 LABEL_F1E396:
