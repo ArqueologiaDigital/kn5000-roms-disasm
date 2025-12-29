@@ -18655,12 +18655,6 @@ LABEL_E81876:
 	ORG 0E8188Ch
 LABEL_E8188C:
 
-	ORG 0E818B0h
-LABEL_E818B0:
-
-	ORG 0E818E6h
-LABEL_E818E6:
-
 	ORG 0E8190Ah
 LABEL_E8190A:
 
@@ -18675,18 +18669,6 @@ LABEL_E8195C:
 
 	ORG 0E81976h
 LABEL_E81976:
-
-	ORG 0E8199Ah
-LABEL_E8199A:
-
-	ORG 0E819DEh
-LABEL_E819DE:
-
-	ORG 0E81A14h
-LABEL_E81A14:
-
-	ORG 0E81A1Ah
-LABEL_E81A1A:
 
 	ORG 0E81A5Eh
 LABEL_E81A5E:
@@ -75412,13 +75394,24 @@ LABEL_E7ECF2:
 	db 074h, 042h, 06Fh, 078h, 050h, 072h, 06Fh, 063h
 	db 000h, 0FFh, 049h, 076h, 053h, 064h, 070h, 061h
 	db 072h, 074h, 050h, 072h, 06Fh, 063h, 000h, 0FFh
+
+LABEL_E818B0:
 	db 034h, 000h, 060h, 001h, 0FFh, 0FFh, 001h, 000h
 	db 0FFh, 0FFh, 0FFh, 0FFh, 00Ah, 000h, 000h, 000h
-	db 000h, 000h, 03Fh, 001h, 0EFh, 000h, 0F8h, 000h
-	db 002h, 000h, 000h, 000h, 0A0h, 001h, 060h, 0E6h
-	db 003h, 000h, 0DAh, 018h, 0E8h, 000h, 015h, 000h
-	db 000h, 000h, 053h, 04Fh, 055h, 04Eh, 044h, 020h
-	db 04Dh, 045h, 04Eh, 055h, 000h, 0FFh, 025h, 000h
+	db 000h, 000h
+	dd LABEL_EF013F
+	db 0F8h, 000h
+	db 002h, 000h, 000h, 000h
+	db 0A0h, 001h, 060h, 0E6h
+	db 003h, 000h
+	dd LABEL_E818DA
+	dd 00000015h
+
+LABEL_E818DA:
+	db "SOUND MENU", 000h, 0FFh
+
+LABEL_E818E6:
+	db 025h, 000h
 	db 060h, 001h, 000h, 000h, 0FFh, 0FFh, 002h, 000h
 	db 0FFh, 0FFh, 008h, 000h, 0F5h, 000h, 006h, 000h
 	db 03Bh, 001h, 017h, 000h, 0F3h, 000h, 0C1h, 000h
@@ -75441,32 +75434,64 @@ LABEL_E7ECF2:
 	db 0FFh, 0FFh, 008h, 000h, 084h, 000h, 040h, 000h
 	db 0ABh, 000h, 053h, 000h, 0F7h, 000h, 000h, 000h
 	db 000h, 000h, 066h, 0E6h, 003h, 000h, 06Ah, 0E6h
-	db 003h, 000h, 01Dh, 000h, 060h, 001h, 006h, 000h
-	db 0FFh, 0FFh, 008h, 000h, 0FFh, 0FFh, 008h, 000h
-	db 008h, 000h, 01Eh, 000h, 09Ch, 000h, 037h, 000h
-	db 0F7h, 000h, 000h, 000h, 0FFh, 0FFh, 000h, 000h
-	db 000h, 000h, 0FFh, 000h, 000h, 000h, 088h, 000h
-	db 06Eh, 0E6h, 003h, 000h, 0D0h, 019h, 0E8h, 000h
-	db 003h, 000h, 0A0h, 001h, 002h, 000h, 000h, 000h
-	db 050h, 041h, 052h, 054h, 020h, 053h, 045h, 054h
-	db 054h, 049h, 04Eh, 047h, 000h, 0FFh, 01Dh, 000h
-	db 060h, 001h, 006h, 000h, 0FFh, 0FFh, 009h, 000h
-	db 007h, 000h, 008h, 000h, 008h, 000h, 048h, 000h
-	db 09Ch, 000h, 061h, 000h, 0F7h, 000h, 000h, 000h
-	db 0FFh, 0FFh, 000h, 000h, 000h, 000h, 0FFh, 000h
-	db 000h, 000h, 089h, 000h, 070h, 0E6h, 003h, 000h
-	dd LABEL_E81A14
-	db 008h, 000h, 0A0h, 001h
-	db 007h, 000h, 000h, 000h, 04Dh, 049h, 058h, 045h
-	db 052h, 000h, 01Dh, 000h, 060h, 001h, 006h, 000h
+	db 003h, 000h
+
+
+LABEL_E8199A:
+	db 01Dh, 000h, 060h, 001h, 006h, 000h
+	dw 0FFFFh, 00008h
+	dw 0FFFFh, 00008h
+	dw 00008h, 0001Eh
+	dw 0009Ch, 00037h
+	dw 000F7h, 00000h
+	dw 0FFFFh, 00000h
+	dw 00000h, 000FFh
+	dw 00000h, 00088h
+	dd 0003E66Eh
+	dd LABEL_E819D0
+	dw 00003h, 001A0h
+	dd 000000002h
+
+LABEL_E819D0:
+	db "PART SETTING", 000h, 0FFh
+
+
+LABEL_E819DE:
+	db 01Dh, 000h, 060h, 001h, 006h, 000h
+	dw 0FFFFh, 00009h
+	dw 00007h, 00008h
+	dw 00008h ; X coord of menu item
+	dw 00048h 	; <== affects Y coord of the menu item's icon
+			;     and the text seems to disappear
+	dw 0009Ch
+	dw 00061h ; Y coord of menu item
+	dw 000F7h ; bg color of menu item (00F7 means transparent)
+	dw 00000h
+	dw 0FFFFh, 00000h
+	dw 00000h, 000FFh
+	dw 00000h
+	dw 00089h	; <= affects positioning of label and icon
+			;    with mirror and offset on the x axis
+	dd 0003E670h
+	dd LABEL_E81A14 ; Pointer to the text string
+	dw 00008h, 001A0h
+	dd 000000007h ; <== Select Icon (0 = no-icon, 1=worm, 2=... etc)
+
+LABEL_E81A14:
+	db "MIXER", 000h
+
+
+LABEL_E81A1A:
+	db 01Dh, 000h, 060h, 001h, 006h, 000h
 	db 0FFh, 0FFh, 00Ah, 000h, 008h, 000h, 008h, 000h
 	db 008h, 000h, 09Ch, 000h, 09Ch, 000h, 0B5h, 000h
 	db 0F7h, 000h, 000h, 000h, 0FFh, 0FFh, 000h, 000h
 	db 000h, 000h, 0FFh, 000h, 000h, 000h, 08Bh, 000h
 	db 072h, 0E6h, 003h, 000h, 050h, 01Ah, 0E8h, 000h
 	db 004h, 000h, 0A0h, 001h, 009h, 000h, 000h, 000h
-	db 04Dh, 041h, 053h, 054h, 045h, 052h, 020h, 054h
-	db 055h, 04Eh, 049h, 04Eh, 047h, 000h, 01Dh, 000h
+	db "MASTER TUNING", 000h
+
+	db 01Dh, 000h
 	db 060h, 001h, 006h, 000h, 0FFh, 0FFh, 00Bh, 000h
 	db 009h, 000h, 008h, 000h, 008h, 000h, 0C6h, 000h
 	db 09Ch, 000h, 0DFh, 000h, 0F7h, 000h, 000h, 000h
@@ -77401,8 +77426,8 @@ LABEL_E7ECF2:
 	dd LABEL_E81942
 	dd LABEL_E8195C
 	dd LABEL_E81976
-	dd LABEL_E8199A
-	dd LABEL_E819DE
+	dd LABEL_E8199A ; PART SETTING
+	dd LABEL_E819DE ; MIXER
 	dd LABEL_E81A1A
 	dd LABEL_E81A5E
 	dd LABEL_E81AA0
@@ -343357,13 +343382,15 @@ LABEL_FA0382:
 	CALL GetCharHeight
 	LD (XSP + 004h), HL
 	LD XWA, (XSP + 008h)
-	LDA XDE, XWA + 032h
+	LDA XDE, XWA + 032h ; ICON ID
 	LDA XBC, XSP + 012ch
-	LD XWA, (XDE)
+	LD XWA, (XDE)      ; <--- here we get the ID of the selected menu item's icon
 	OR XWA, XWA
 	JR Z, LABEL_FA03DD
+
 	CPW (XSP + 0128h), 0000h
 	JR NZ, LABEL_FA03DD
+
 	LD WA, 0020h
 	JR T, LABEL_FA03DF
 
@@ -343376,11 +343403,13 @@ LABEL_FA03DF:
 	LD (XBC), HL
 	LD (XSP + 0114h), HL
 	LDA XBC, XSP + 0118h
-	LD XWA, (XDE)
+	LD XWA, (XDE)		; also ICON ID here
 	OR XWA, XWA
 	JR Z, LABEL_FA0406
+
 	CPW (XSP + 0128h), 0000h
 	JR Z, LABEL_FA0406
+
 	LD WA, 001ch
 	JR T, LABEL_FA0408
 
@@ -343413,11 +343442,13 @@ LABEL_FA0408:
 	LDA XWA, XIX + 032h
 	CP DE, HL
 	JR NZ, LABEL_FA04BC
-	LD XWA, (XWA)
+	LD XWA, (XWA)			; <-- ICON ID
 	OR XWA, XWA
 	JR Z, LABEL_FA0478
+
 	CPW (XBC), 0000h
 	JR Z, LABEL_FA0478
+
 	LDA XWA, XSP + 00ch
 	LD XBC, (XIX + 01ch)
 	CALL CalcTotalWidth
@@ -343540,9 +343571,10 @@ LABEL_FA0515:
 LABEL_FA05A6:
 	CALL DrawString
 	LD XWA, (XSP + 008h)
-	LD XWA, (XWA + 032h)
+	LD XWA, (XWA + 032h)		; ICON ID
 	OR XWA, XWA
 	JRL Z, LABEL_FA070D
+
 	LDA XBC, XSP + 0124h
 	LDA XWA, XSP + 011ch
 	CPW (XSP + 0128h), 0000h
@@ -343587,7 +343619,7 @@ LABEL_FA05D9:
 	CALL DrawDesignBox
 	LDA XWA, XSP + 0124h
 	LD XBC, (XSP + 008h)
-	LD XBC, (XBC + 032h)
+	LD XBC, (XBC + 032h)		; <-- ICON ID
 	CALL DrawIcons
 	JRL T, LABEL_FA070D
 
@@ -362622,18 +362654,21 @@ LABEL_FABF9B:
 	PUSH XIZ
 	LD (XSP + 020h), XBC
 	LD (XSP + 024h), XWA
-	LD XWA, (XSP + 020h)
+	LD XWA, (XSP + 020h)   ; ICON ID
 	OR XWA, XWA
 	JRL Z, LABEL_FAC077
+
 	LD XWA, (XSP + 024h)
 	CALR LABEL_FAD1D8
 	CP HL, 0
 	JRL Z, LABEL_FAC077
-	LD XWA, (XSP + 020h)
+	LD XWA, (XSP + 020h)   ; ICON ID
 	LD (XSP + 004h), XWA
 	SLL 3, XWA
-	LD (XSP + 004h), XWA
-	LD XWA, 00938000h
+	LD (XSP + 004h), XWA   ; 8 * ICON ID
+	LD XWA, 00938000h 	; <-- base address for icon data
+				;    (this is at the end of the
+				;     "table_data" ROM at IC1 and IC3)
 	ADD (XSP + 004h), XWA
 	LD XWA, (XSP + 004h)
 	LD XWA, (XWA + 004h)
