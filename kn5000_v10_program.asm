@@ -75410,13 +75410,20 @@ LABEL_E818B0:
 LABEL_E818DA:
 	db "SOUND MENU", 000h, 0FFh
 
-LABEL_E818E6:
-	db 025h, 000h
-	db 060h, 001h, 000h, 000h, 0FFh, 0FFh, 002h, 000h
-	db 0FFh, 0FFh, 008h, 000h, 0F5h, 000h, 006h, 000h
-	db 03Bh, 001h, 017h, 000h, 0F3h, 000h, 0C1h, 000h
-	db 0FFh, 0FFh, 064h, 0E6h, 003h, 000h, 001h, 000h
-	db 002h, 000h, 028h, 000h, 060h, 001h, 000h, 000h
+LABEL_E818E6:			; This is a yellow "PAGE 1/2" button
+	db 025h, 000h, 060h, 001h, 000h, 000h
+	dw 0FFFFh, 00002h
+	dw 0FFFFh, 00008h
+	dw 000F5h ; X-left coord of the button
+	dw 00006h ; y-top coord of the button
+	dw 0013Bh, 00017h ; x-right coord of the button
+	dw 000F3h, 000C1h ; y-botton coord
+	dw 0FFFFh
+	dd 00003E664h ; <-- the LSByte here affects the page number
+	dw 00001h
+	dw 00002h ; total number of pages
+
+	db 028h, 000h, 060h, 001h, 000h, 000h
 	db 0FFh, 0FFh, 003h, 000h, 001h, 000h, 018h, 000h
 	db 000h, 000h, 000h, 000h, 01Fh, 000h, 01Fh, 000h
 	db 001h, 000h, 006h, 000h, 002h, 000h, 028h, 000h
@@ -75455,57 +75462,36 @@ LABEL_E8199A:
 LABEL_E819D0:
 	db "PART SETTING", 000h, 0FFh
 
+; header: type=1D
+;MenuItem     STRUCT
+;header   db 6 dup (?)
+;unk06		dw ?
+;unk08		dw ?
+;unk0a		dw ?
+;unk0c		dw ?
+;x		dw ?	; 0eh
+;icon_y		dw ?	; 10h
+;unk12		dw ?
+;y		dw ?	; 14h
+;bg_color	dw ?	; 16h
+;unk18		dw ?
+;unk1a		dw ?
+;unk1c		dw ?
+;unk1e		dw ?
+;unk20		dw ?
+;unk22		dw ?
+;flags		dw ?	; 24h
+;ptr26		dd ?
+;text_string	dd ?	; 2ah
+;unk2e		dw ?
+;unk30		dw ?
+;icon_id		dd ?	; 32h
+;MenuItem     ENDSTRUCT
 
-MenuItem     STRUCT
-header   db 6 dup (?)
-unk06		dw ?
-unk08		dw ?
-unk0a		dw ?
-unk0c		dw ?
-x		dw ?	; 0eh
-icon_y		dw ?	; 10h
-unk12		dw ?
-y		dw ?	; 14h
-bg_color	dw ?	; 16h
-unk18		dw ?
-unk1a		dw ?
-unk1c		dw ?
-unk1e		dw ?
-unk20		dw ?
-unk22		dw ?
-flags		dw ?	; 24h
-ptr26		dd ?
-text_string	dd ?	; 2ah
-unk2e		dw ?
-unk30		dw ?
-icon_id		dd ?	; 32h
-MenuItem     ENDSTRUCT
-
-
-;LABEL_E819DE:
-;0	db 01Dh, 000h, 060h, 001h, 006h, 000h
-;6	dw 0FFFFh, 00009h
-;a	dw 00007h, 00008h
-;e	dw 00008h ; X coord of menu item
-;10	dw 00048h 	; <== affects Y coord of the menu item's icon
-			;     and the text seems to disappear
-;12	dw 0009Ch
-;14	dw 00061h ; Y coord of menu item
-;16	dw 000F7h ; bg color of menu item (00F7 means transparent)
-;18	dw 00000h
-;1a	dw 0FFFFh, 00000h
-;1e	dw 00000h, 000FFh
-;22	dw 00000h
-;24	dw 00089h	; <= affects positioning of label and icon
-			;    with mirror and offset on the x axis
-
-;26	dd 0003E670h
-;2a	dd LABEL_E81A14 ; Pointer to the text string
-;2e	dw 00008h, 001A0h
-;32	dd 000000007h ; <== Select Icon (0 = no-icon, 1=worm, 2=... etc)
 
 LABEL_E819DE:
-	db 01Dh, 000h, 060h, 001h, 006h, 000h
+	db 01Dh, 000h
+	db 060h, 001h, 006h, 000h
 	dw 0FFFFh, 00009h
 	dw 00007h, 00008h
 	dw 00008h ; X coord of menu item
@@ -75540,71 +75526,105 @@ LABEL_E81A1A:
 	db 004h, 000h, 0A0h, 001h, 009h, 000h, 000h, 000h
 	db "MASTER TUNING", 000h
 
-	db 01Dh, 000h
-	db 060h, 001h, 006h, 000h, 0FFh, 0FFh, 00Bh, 000h
-	db 009h, 000h, 008h, 000h, 008h, 000h, 0C6h, 000h
-	db 09Ch, 000h, 0DFh, 000h, 0F7h, 000h, 000h, 000h
+	db 01Dh, 000h, 060h, 001h, 006h, 000h
+	db 0FFh, 0FFh, 00Bh, 000h
+	db 009h, 000h, 008h, 000h
+	db 008h, 000h, 0C6h, 000h
+	db 09Ch, 000h, 0DFh, 000h
+	db 0F7h, 000h, 000h, 000h
 	db 0FFh, 0FFh, 000h, 000h, 000h, 000h, 0FFh, 000h
-	db 000h, 000h, 08Ch, 000h, 074h, 0E6h, 003h, 000h
+	db 000h, 000h, 08Ch, 000h
+	dd 3E674h
 	dd LABEL_E81A94
 	db 005h, 000h, 0A0h, 001h
-	db 084h, 000h, 000h, 000h, 04Bh, 045h, 059h, 020h
-	db 053h, 043h, 041h, 04Ch, 049h, 04Eh, 047h, 000h
-	db 01Dh, 000h, 060h, 001h, 006h, 000h, 0FFh, 0FFh
-	db 00Ch, 000h, 00Ah, 000h, 008h, 000h, 0A3h, 000h
-	db 01Eh, 000h, 037h, 001h, 037h, 000h, 0F7h, 000h
-	db 000h, 000h, 0FFh, 0FFh, 000h, 000h, 000h, 000h
-	db 0FFh, 000h, 000h, 000h, 008h, 000h, 076h, 0E6h
-	db 003h, 000h, 0D6h, 01Ah, 0E8h, 000h, 009h, 000h
-	db 0A0h, 001h, 091h, 000h, 000h, 000h, 052h, 045h
-	db 056h, 045h, 052h, 042h, 020h, 026h, 020h, 045h
-	db 051h, 020h, 050h, 052h, 045h, 053h, 045h, 054h
-	db 053h, 000h, 01Dh, 000h, 060h, 001h, 006h, 000h
+	db 084h, 000h, 000h, 000h
+	db "KEY SCALING", 000h
+
+	db 01Dh, 000h, 060h, 001h, 006h, 000h
+	db 0FFh, 0FFh, 00Ch, 000h
+	db 00Ah, 000h, 008h, 000h
+	db 0A3h, 000h, 01Eh, 000h
+	db 037h, 001h, 037h, 000h
+	db 0F7h, 000h, 000h, 000h
+	db 0FFh, 0FFh, 000h, 000h, 000h, 000h
+	db 0FFh, 000h, 000h, 000h, 008h, 000h
+	dd 3E676h
+	dd LABEL_E81AD6
+	db 009h, 000h
+	db 0A0h, 001h, 091h, 000h, 000h, 000h
+
+LABEL_E81AD6:
+	db "REVERB & EQ PRESETS", 000h
+
+	db 01Dh, 000h, 060h, 001h, 006h, 000h
 	db 0FFh, 0FFh, 00Dh, 000h, 00Bh, 000h, 008h, 000h
 	db 0A3h, 000h, 048h, 000h, 037h, 001h, 061h, 000h
 	db 0F7h, 000h, 000h, 000h, 0FFh, 0FFh, 000h, 000h
 	db 000h, 000h, 0FFh, 000h, 000h, 000h, 009h, 000h
 	db 078h, 0E6h, 003h, 000h, 020h, 01Bh, 0E8h, 000h
 	db 00Ah, 000h, 0A0h, 001h, 017h, 000h, 000h, 000h
-	db 052h, 045h, 056h, 045h, 052h, 042h, 000h, 0FFh
+	db "REVERB", 000h, 0FFh
+
 	db 01Dh, 000h, 060h, 001h, 006h, 000h, 0FFh, 0FFh
 	db 00Eh, 000h, 00Ch, 000h, 008h, 000h, 0A3h, 000h
 	db 072h, 000h, 037h, 001h, 08Bh, 000h, 0F7h, 000h
 	db 000h, 000h, 0FFh, 0FFh, 000h, 000h, 000h, 000h
 	db 0FFh, 000h, 000h, 000h, 00Ah, 000h, 07Ah, 0E6h
 	db 003h, 000h, 05Eh, 01Bh, 0E8h, 000h, 00Ch, 000h
-	db 0A0h, 001h, 00Dh, 000h, 000h, 000h, 045h, 051h
-	db 055h, 041h, 04Ch, 049h, 05Ah, 045h, 052h, 000h
+	db 0A0h, 001h, 00Dh, 000h, 000h, 000h
+	db "EQUALIZER", 000h
+
 	db 01Dh, 000h, 060h, 001h, 006h, 000h, 0FFh, 0FFh
 	db 00Fh, 000h, 00Dh, 000h, 008h, 000h, 0A3h, 000h
 	db 09Ch, 000h, 037h, 001h, 0B5h, 000h, 0F7h, 000h
 	db 000h, 000h, 0FFh, 0FFh, 000h, 000h, 000h, 000h
 	db 0FFh, 000h, 000h, 000h, 00Bh, 000h, 07Ch, 0E6h
 	db 003h, 000h, 09Eh, 01Bh, 0E8h, 000h, 00Bh, 000h
-	db 0A0h, 001h, 00Ch, 000h, 000h, 000h, 044h, 053h
-	db 050h, 020h, 045h, 046h, 046h, 045h, 043h, 054h
-	db 000h, 0FFh, 01Dh, 000h, 060h, 001h, 006h, 000h
+	db 0A0h, 001h, 00Ch, 000h, 000h, 000h
+	db "DSP EFFECT", 000h, 0FFh
+
+	db 01Dh, 000h, 060h, 001h, 006h, 000h
 	db 0FFh, 0FFh, 010h, 000h, 00Eh, 000h, 008h, 000h
 	db 0A3h, 000h, 0C6h, 000h, 037h, 001h, 0DFh, 000h
 	db 0F7h, 000h, 000h, 000h, 0FFh, 0FFh, 000h, 000h
 	db 000h, 000h, 0FFh, 000h, 000h, 000h, 00Ch, 000h
-	db 07Eh, 0E6h, 003h, 000h, 0E0h, 01Bh, 0E8h, 000h
+	dd 3E67Eh
+	dd LABEL_E81BE0
 	db 00Eh, 000h, 0A0h, 001h, 092h, 000h, 000h, 000h
-	db 041h, 043h, 04Fh, 055h, 053h, 054h, 049h, 043h
-	db 020h, 049h, 04Ch, 04Ch, 055h, 053h, 049h, 04Fh
-	db 04Eh, 000h, 020h, 000h, 061h, 001h, 006h, 000h
-	db 0FFh, 0FFh, 0FFh, 0FFh, 00Fh, 000h, 008h, 000h
-	db 008h, 000h, 072h, 000h, 09Ch, 000h, 08Bh, 000h
-	db 0F7h, 000h, 000h, 000h, 0FFh, 0FFh, 000h, 000h
-	db 000h, 000h, 0FFh, 000h, 000h, 000h, 08Ah, 000h
-	db 080h, 0E6h, 003h, 000h, 028h, 01Ch, 0E8h, 000h
+
+LABEL_E81BE0:
+	db "ACOUSTIC ILLUSION", 000h
+
+	db 020h, 000h, 061h, 001h, 006h, 000h
+	db 0FFh, 0FFh
+	db 0FFh, 0FFh
+	db 00Fh, 000h
+	db 008h, 000h
+	db 008h, 000h
+	db 072h, 000h
+	db 09Ch, 000h
+	db 08Bh, 000h
+	db 0F7h, 000h
+	db 000h, 000h
+	db 0FFh, 0FFh
+	db 000h, 000h
+	db 000h, 000h
+	db 0FFh, 000h
+	db 000h, 000h
+	db 08Ah, 000h
+	dd 3E680h
+	dd LABEL_E81C28
 	db 003h, 000h, 080h, 001h, 00Fh, 000h, 000h, 000h
-	db 053h, 04Fh, 055h, 04Eh, 044h, 020h, 045h, 044h
-	db 049h, 054h, 000h, 0FFh, 035h, 000h, 060h, 001h
+
+LABEL_E81C28:
+	db "SOUND EDIT", 000h, 0FFh
+
+	db 035h, 000h, 060h, 001h
 	db 0FFh, 0FFh, 012h, 000h, 0FFh, 0FFh, 0FFh, 0FFh
 	db 008h, 000h, 038h, 000h, 078h, 000h, 05Bh, 000h
 	db 087h, 000h, 0F7h, 000h, 000h, 000h, 000h, 000h
 	db 082h, 0E6h, 003h, 000h, 086h, 0E6h, 003h, 000h
+
 	db 01Dh, 000h, 060h, 001h, 011h, 000h, 0FFh, 0FFh
 	db 013h, 000h, 0FFh, 0FFh, 008h, 000h, 008h, 000h
 	db 072h, 000h, 09Ch, 000h, 08Bh, 000h, 0F7h, 000h
@@ -75613,33 +75633,52 @@ LABEL_E81A1A:
 	db 003h, 000h, 08Eh, 01Ch, 0E8h, 000h, 007h, 000h
 	db 0A0h, 001h, 016h, 000h, 000h, 000h, 04Ch, 045h
 	db 046h, 054h, 020h, 048h, 04Fh, 04Ch, 044h, 000h
-	db 01Dh, 000h, 060h, 001h, 011h, 000h, 0FFh, 0FFh
-	db 0FFh, 0FFh, 012h, 000h, 008h, 000h, 0A3h, 000h
-	db 072h, 000h, 037h, 001h, 08Bh, 000h, 0F7h, 000h
-	db 000h, 000h, 0FFh, 0FFh, 000h, 000h, 000h, 000h
-	db 0FFh, 000h, 000h, 000h, 00Ah, 000h, 08Ch, 0E6h
-	db 003h, 000h, 0CEh, 01Ch, 0E8h, 000h, 00Dh, 000h
-	db 0A0h, 001h, 018h, 000h, 000h, 000h, 054h, 045h
-	db 043h, 048h, 04Eh, 049h, 02Dh, 043h, 048h, 04Fh
-	db 052h, 044h, 000h, 0FFh, 034h, 000h, 060h, 001h
+
+	db 01Dh, 000h, 060h, 001h, 011h, 000h
+	db 0FFh, 0FFh, 0FFh, 0FFh, 012h, 000h, 008h, 000h
+	db 0A3h, 000h, 072h, 000h, 037h, 001h, 08Bh, 000h
+	db 0F7h, 000h, 000h, 000h, 0FFh, 0FFh, 000h, 000h
+	db 000h, 000h, 0FFh, 000h, 000h, 000h, 00Ah, 000h
+	dd 3E68Ch
+	dd LABEL_E81CCE
+	db 00Dh, 000h
+	db 0A0h, 001h, 018h, 000h, 000h, 000h
+
+LABEL_E81CCE:
+	db "TECHNI-CHORD", 000h, 0FFh
+
+
+	db 034h, 000h, 060h, 001h
 	db 0FFh, 0FFh, 001h, 000h, 0FFh, 0FFh, 0FFh, 0FFh
-	db 00Ah, 000h, 000h, 000h, 000h, 000h, 03Fh, 001h
-	db 0EFh, 000h, 0F8h, 000h, 000h, 000h, 000h, 000h
-	db 0A0h, 001h, 08Eh, 0E6h, 003h, 000h, 006h, 01Dh
-	db 0E8h, 000h, 002h, 000h, 000h, 000h, 053h, 04Fh
-	db 055h, 04Eh, 044h, 020h, 050h, 041h, 052h, 054h
-	db 020h, 053h, 045h, 054h, 054h, 049h, 04Eh, 047h
-	db 000h, 0FFh, 01Fh, 000h, 060h, 001h, 000h, 000h
+	db 00Ah, 000h, 000h, 000h, 000h, 000h
+	db 03Fh, 001h, 0EFh, 000h
+	db 0F8h, 000h, 000h, 000h, 000h, 000h
+	db 0A0h, 001h
+	dd 00003E68Eh
+	dd LABEL_E81D06
+	db 002h, 000h, 000h, 000h
+
+LABEL_E81D06:
+	db "SOUND PART SETTING", 000h, 0FFh
+
+
+	db 01Fh, 000h, 060h, 001h, 000h, 000h
 	db 0FFh, 0FFh, 002h, 000h, 0FFh, 0FFh, 008h, 000h
 	db 008h, 000h, 022h, 000h, 026h, 000h, 033h, 000h
 	db 007h, 000h, 0C1h, 000h, 009h, 000h, 000h, 000h
 	db 000h, 000h, 000h, 000h, 000h, 000h, 088h, 000h
-	db 001h, 000h, 01Fh, 000h, 060h, 001h, 000h, 000h
+	db 001h, 000h
+
+
+	db 01Fh, 000h, 060h, 001h, 000h, 000h
 	db 0FFh, 0FFh, 003h, 000h, 001h, 000h, 008h, 000h
 	db 008h, 000h, 04Ch, 000h, 026h, 000h, 05Dh, 000h
 	db 007h, 000h, 0C1h, 000h, 009h, 000h, 000h, 000h
 	db 000h, 000h, 000h, 000h, 000h, 000h, 089h, 000h
-	db 002h, 000h, 02Eh, 000h, 060h, 001h, 000h, 000h
+	db 002h, 000h
+
+
+	db 02Eh, 000h, 060h, 001h, 000h, 000h
 	db 0FFh, 0FFh, 004h, 000h, 002h, 000h, 008h, 000h
 	db 040h, 000h, 034h, 000h, 007h, 001h, 034h, 000h
 	db 0FFh, 000h, 001h, 000h, 02Eh, 000h, 060h, 001h
