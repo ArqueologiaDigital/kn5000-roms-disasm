@@ -1,5 +1,5 @@
-original = open("kn5000_v10_program.rom", "rb").read()
-rebuilt =  open("kn5000_v10_rebuilt.rom", "rb").read()
+original = open("original_ROMs/kn5000_v10_program.rom", "rb").read()
+rebuilt =  open("rebuilt/kn5000_v10_program.rebuilt.rom", "rb").read()
 
 if len(rebuilt) > len(original):
 	print("Rebuilt ROM is too big!")
