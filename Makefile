@@ -29,7 +29,7 @@ clean_maincpu:
 	rm -f rebuilt_ROMs/kn5000_v10_program.rebuilt.*
 
 clean_subcpu:
-	rm part_a.rom
-	rm part_b.rom
+	rm -f part_a.rom
+	rm -f part_b.rom
 	rm -f rebuilt_ROMs/kn5000_subprogram_v142.full
 	rm -f rebuilt_ROMs/kn5000_subprogram_v142.rebuilt.*
