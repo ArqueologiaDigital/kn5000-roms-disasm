@@ -2,7 +2,10 @@ import sys
 
 print()
 
-for filename in ["kn5000_v10_program"]:
+for filename in [
+	"kn5000_v10_program",
+	"kn5000_subprogram_v142"
+]:
 	print(f" ==== {filename} ====")
 	original_name = f"original_ROMs/{filename}.rom"
 	rebuilt_name = f"rebuilt_ROMs/{filename}.rebuilt.rom"
