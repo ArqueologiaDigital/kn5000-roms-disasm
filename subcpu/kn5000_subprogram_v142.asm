@@ -9679,7 +9679,7 @@ LABEL_1FDDA:
 	XOR WA, WA
 	LD (1046h), WA
 	INC 1, WA
-	LDC 07Ch, WA
+	db 0d8h, 2eh, 7ch	;TODO: Fix ASL mapping of control-regs: LDC INTNEST, WA
 	LD (10D2h), WA
 	LD HL, 106ch
 	EXTZ XHL
@@ -9807,7 +9807,7 @@ LABEL_1FEE7:
 	EI 6
 	LD (1044h), 000h
 	XOR WA, WA
-	LDC 07Ch, WA
+	db 0d8h, 2eh, 7ch	;TODO: Fix ASL mapping of control-regs: LDC INTNEST, WA
 	LD (10D2h), WA
 	JRL T, LABEL_1FF21
 
@@ -9824,7 +9824,7 @@ LABEL_1FF21:
 	OR WA, WA
 	JR NZ, LABEL_1FF72
 	XOR WA, WA
-	CP (1046h) WA
+	CP (1046h), WA
 	JR Z, LABEL_1FF4A
 	LD IY, (1046h)
 	EXTZ XIY
@@ -9884,14 +9884,14 @@ LABEL_1FFD0:
 	JR Z, LABEL_1FFE4
 	DEC 1, WA
 	LD (10D2h), WA
-	LDC 07Ch, WA
+	db 0d8h, 2eh, 7ch	;TODO: Fix ASL mapping of control-regs: LDC INTNEST, WA
 	POP WA
 	RETI
 
 LABEL_1FFE4:
 	XOR WA, WA
 	LD (10D2h), WA
-	LDC 07Ch, WA
+	db 0d8h, 2eh, 7ch	;TODO: Fix ASL mapping of control-regs: LDC INTNEST, WA
 	POP WA
 	EI 0
 	NOP
@@ -9917,11 +9917,11 @@ LABEL_1FFFD:
 	PUSH XIZ
 	LD W, A
 	LD L, 00ch
-	MUL HL A
+	MUL HL, A
 	EXTZ XHL
 	ADD XHL, 0001fd8ch
 	LD C, 00ch
-	MUL BC A
+	MUL BC, A
 	ADD BC, 103ch
 	EXTZ XBC
 	LD XIX, XBC
@@ -10350,7 +10350,7 @@ LABEL_204D1:
 	JRL T, LABEL_1FF72
 
 LABEL_2053A:
-	LD (XSP + 018h), 0ffffh
+	LDW (XSP + 018h), 0ffffh
 	JRL T, LABEL_1FF72
 
 LABEL_20542:
@@ -10434,7 +10434,7 @@ LABEL_205ED:
 	RET
 
 LABEL_205F5:
-	LD (XSP + 004h), 0ffffh
+	LDW (XSP + 004h), 0ffffh
 	JR T, LABEL_205ED
 
 LABEL_205FC:
@@ -12480,7 +12480,7 @@ LABEL_21BF5:
 	DEC 2, XSP
 	PUSH XIZ
 	LD C, 030h
-	MUL BC A
+	MUL BC, A
 	LD IZ, BC
 	LD (XSP + 004h), IZ
 	ADD (XSP + 004h), 0030h
