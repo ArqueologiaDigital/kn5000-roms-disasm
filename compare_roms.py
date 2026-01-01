@@ -2,26 +2,40 @@ import sys
 
 print()
 
-for filename in [
-	"kn5000_v10_program",
-	"kn5000_subprogram_v142"
+results = {}
+msg = ""
+for entry in [
+	("maincpu", "kn5000_v10_program"),
+	("subcpu payload", "kn5000_subprogram_v142")
 ]:
-	print(f" ==== {filename} ====")
+	key, filename = entry
+	msg += f"==== {filename} ====\n"
 	original_name = f"original_ROMs/{filename}.rom"
 	rebuilt_name = f"rebuilt_ROMs/{filename}.rebuilt.rom"
 	original = open(original_name, "rb").read()
 	rebuilt =  open(rebuilt_name, "rb").read()
 
 	if len(rebuilt) > len(original):
-		print("Rebuilt ROM is too big!")
+		msg += "Rebuilt ROM is too big!\n"
 
 	score = 0
 	for i in range(len(original)):
 		if i >= len(rebuilt):
-			print("Rebuilt ROM is too small")
+			msg += "Rebuilt ROM is too small\n"
 			break
 		if original[i] == rebuilt[i]:
 			score += 1
 
-	print(f"Similarity: {100*score/len(original):0.2f}%  ({len(original)-score} incorrect bytes)\n\n")
+	percentage = f"{100*score/len(original):0.2f}%"
+	badbytes = len(original)-score
+	results[key] = (percentage, badbytes)
 
+	msg += f"Similarity: {percentage}  ({badbytes} incorrect bytes)\n\n"
+
+
+title = []
+for key, value in results.items():
+	percentage, badbytes = value
+	title.append(f"{key}: {percentage} ({badbytes} bad bytes)")
+print (" | ".join(title) + "\n")
+print (msg)
