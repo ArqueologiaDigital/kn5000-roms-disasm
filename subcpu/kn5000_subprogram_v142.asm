@@ -10797,11 +10797,11 @@ LABEL_020A22:
 	db 053h, 04Bh, 00Eh
 
 LABEL_020A65:
-	LDW (XDE + 0f6h), 0000h
-	LDW (XDE + 0f8h), 0000h
-	LDW (XDE + 0fch), 0000h
-	LDW (XDE + 0fah), 0000h
-	LDW (XDE + 0feh), 00ffh
+	LDW (XDE - 10), 0000h
+	LDW (XDE - 8), 0000h
+	LDW (XDE - 4), 0000h
+	LDW (XDE - 6), 0000h
+	LDW (XDE - 2), 00ffh
 	RET
 LABEL_020A7F:
 	db 09Ah, 0F8h, 024h, 09Ah, 0FCh, 0F4h, 06Eh, 004h
@@ -10821,11 +10821,11 @@ LABEL_020A7F:
 	db 069h, 09Ah, 0FEh, 023h, 00Eh
 
 LABEL_020AF4:
-	LDW (XDE + 0f6h), 0000h
-	LDW (XDE + 0f8h), 0000h
-	LDW (XDE + 0fch), 0000h
-	LDW (XDE + 0fah), 0000h
-	LDW (XDE + 0feh), 01ffh
+	LDW (XDE - 10), 0000h
+	LDW (XDE - 8), 0000h
+	LDW (XDE - 4), 0000h
+	LDW (XDE - 6), 0000h
+	LDW (XDE - 2), 01ffh
 	RET
 LABEL_020B0E:
 	db 09Ah, 0F8h, 024h, 09Ah, 0FCh, 0F4h, 06Eh, 004h
@@ -10845,11 +10845,11 @@ LABEL_020B0E:
 	db 069h, 09Ah, 0FEh, 023h, 00Eh
 
 LABEL_020B83:
-	LDW (XDE + 0f6h), 0000h
-	LDW (XDE + 0f8h), 0000h
-	LDW (XDE + 0fch), 0000h
-	LDW (XDE + 0fah), 0000h
-	LDW (XDE + 0feh), 03ffh
+	LDW (XDE - 10), 0000h
+	LDW (XDE - 8), 0000h
+	LDW (XDE - 4), 0000h
+	LDW (XDE - 6), 0000h
+	LDW (XDE - 2), 03ffh
 	RET
 LABEL_020B9D:
 	db 09Ah, 0F8h, 024h, 09Ah, 0FCh, 0F4h, 06Eh, 004h
