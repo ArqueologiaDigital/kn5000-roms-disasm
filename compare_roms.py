@@ -30,12 +30,17 @@ for entry in [
 	badbytes = len(original)-score
 	results[key] = (percentage, badbytes)
 
-	msg += f"Similarity: {percentage}  ({badbytes} incorrect bytes)\n\n"
-
+	if badbytes:
+		msg += f"Similarity: {percentage}  ({badbytes} incorrect bytes)\n\n"
+	else:
+		msg += f"Similarity: {percentage}\n\n"		
 
 title = []
 for key, value in results.items():
 	percentage, badbytes = value
-	title.append(f"{key}: {percentage} ({badbytes} bad bytes)")
+	if badbytes:
+		title.append(f"{key}: {percentage} ({badbytes} bad bytes)")
+	else:
+		title.append(f"{key}: {percentage}")
 print (" | ".join(title) + "\n")
 print (msg)
