@@ -130237,7 +130237,7 @@ LABEL_EF1977:
 	XOR WA, WA
 	LD (0487h), WA
 	INC 1, WA
-	db 0d8h, 2eh, 7ch	;TODO: Fix ASL mapping of control-regs: LDC INTNEST, WA
+	LDC_INTNEST_WA
 	LD (05C3h), WA
 	LD HL, 04c5h
 	EXTZ XHL
@@ -130361,7 +130361,7 @@ LABEL_EF1A86:
 	EI 006h
 	LD (0485h), 000h
 	XOR WA, WA
-	db 0d8h, 2eh, 7ch;	;TODO: Fix ASL mapping of control-regs: LDC INTNEST, WA
+	LDC_INTNEST_WA
 	LD (05C3h), WA
 	JRL T, LABEL_EF1AC0
 
@@ -130424,7 +130424,7 @@ LABEL_EF1B1A:
 	LD WA, (05c3h)
 	INC 1, WA
 	LD (05c3h), WA
-	db 0d8h, 2eh, 7ch;	;TODO: Fix ASL mapping of control-regs: LDC INTNEST, WA
+	LDC_INTNEST_WA
 	EI 0
 	LD IX, 05bbh
 	EXTZ XIX
@@ -130448,7 +130448,7 @@ LABEL_EF1B47:
 	LD WA,(05c3h)
 	DEC 1, WA
 	LD (05c3h),WA
-	db 0d8h, 2eh, 7ch;	;TODO: Fix ASL mapping of control-regs: LDC INTNEST, WA
+	LDC_INTNEST_WA
 	RET
 
 LABEL_EF1B5E:
@@ -130467,14 +130467,14 @@ LABEL_EF1B6F:
 	JR Z, LABEL_EF1B83
 	DEC 1, WA
 	LD (05C3h), WA
-	db 0d8h, 2eh, 7ch;	;TODO: Fix ASL mapping of control-regs: LDC INTNEST, WA
+	LDC_INTNEST_WA
 	POP WA
 	RETI
 
 LABEL_EF1B83:
 	XOR WA, WA
 	LD (05C3h), WA
-	db 0d8h, 2eh, 7ch;	;TODO: Fix ASL mapping of control-regs: LDC INTNEST, WA
+	LDC_INTNEST_WA
 	POP WA
 	EI 000h
 	NOP
@@ -330677,7 +330677,7 @@ LABEL_F97051:
 
 LABEL_F97052:
 	LD BC, (8a1ch)
-	db 0d9h, 2eh, 4ch	;TODO: Fix ASL mapping of control-regs: LDC DMAM3, BC
+	LDC_DMAM3_BC
 	LD A, (8a28h)
 	CP A, 04dh
 	JR Z, LABEL_F97091
@@ -330711,23 +330711,23 @@ LABEL_F97094:
 
 LABEL_F97095:
 	LD XHL, 00120000h
-	db 0ebh, 2eh, 0ch	;TODO: Fix ASL mapping of control-regs: LDC DMAS3, XHL
+	LDC_DMAS3_XHL
 	LD XHL, (08a4ch)
-	db 0ebh, 2eh, 2ch	;TODO: Fix ASL mapping of control-regs: LDC DMAD3, XHL
+	LDC_DMAD3_XHL
 	LD A, 0
-	db 0c9h, 2eh, 4eh	;TODO: Fix ASL mapping of control-regs: LDC DMAC3, A
+	LDC_DMAC3_A
 	JR T, LABEL_F97051
 
 LABEL_F970AB:
 	LD XHL, (08a4ch)
-	db 0ebh, 2eh, 0ch	;TODO: Fix ASL mapping of control-regs: LDC DMAS3, XHL
+	LDC_DMAS3_XHL
 	LD XHL, 00120000h
-	db 0ebh, 2eh, 2ch	;TODO: Fix ASL mapping of control-regs: LDC DMAD3, XHL
+	LDC_DMAD3_XHL
 	LD A, 8
-	db 0c9h, 2eh, 4eh	;TODO: Fix ASL mapping of control-regs: LDC DMAC3, A
+	LDC_DMAC3_A
 	JR T, LABEL_F97051
 	LD BC, (08a1ch)
-	db 0d9h, 2eh, 4ch	;TODO: Fix ASL mapping of control-regs: LDC DMAM3, BC
+	LDC_DMAM3_BC
 	RET
 
 LABEL_F970C9:
@@ -331637,7 +331637,7 @@ LABEL_F980A0:
 	CP HL, 0
 	JR Z, LABEL_F980EA
 
-	db 0, 0, 0	; Fix ASL assembler: CALR LABEL_F9883C
+	CALR LABEL_F9883C
 	LD XWA, 0
 	LD XBC, 01c00000h
 	LD XDE, 0
