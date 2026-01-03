@@ -154,6 +154,22 @@ MUL_DE MACRO value
 	db 0dah, 008h, value & 0ffh, (value >> 8) & 0ffh	; MUL DE, word
 	ENDM
 
+MUL_HL MACRO value
+	db 0dbh, 008h, value & 0ffh, (value >> 8) & 0ffh	; MUL HL, word
+	ENDM
+
+MUL_IX MACRO value
+	db 0dch, 008h, value & 0ffh, (value >> 8) & 0ffh	; MUL IX, word
+	ENDM
+
+MUL_IY MACRO value
+	db 0ddh, 008h, value & 0ffh, (value >> 8) & 0ffh	; MUL IY, word
+	ENDM
+
+MUL_IZ MACRO value
+	db 0deh, 008h, value & 0ffh, (value >> 8) & 0ffh	; MUL IZ, word
+	ENDM
+
 MULW_WA MACRO value
 	db 0d8h, 008h, value & 0ffh, (value >> 8) & 0ffh	; MULW WA, word
 	ENDM
