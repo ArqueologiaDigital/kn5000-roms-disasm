@@ -116,7 +116,7 @@ LD_L MACRO value
 	db 027h, value		; LD L, byte
 	ENDM
 
-LD_16_16 MACRO dst, src
+LDW_16_16 MACRO dst, src
 	db 0d1h, src & 0ffh, (src >> 8) & 0ffh, 019h, dst & 0ffh, (dst >> 8) & 0ffh	; LDW (word_dst), (word_src)
 	ENDM
 
