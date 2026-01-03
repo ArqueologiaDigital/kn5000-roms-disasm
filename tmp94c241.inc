@@ -279,6 +279,22 @@ DIVS_WA MACRO value
 	db 0d8h, 00bh, value & 0ffh, (value >> 8) & 0ffh	; DIVS WA, word
 	ENDM
 
+DIVS_BC MACRO value
+	db 0d9h, 00bh, value & 0ffh, (value >> 8) & 0ffh	; DIVS BC, word
+	ENDM
+
+DIVS_DE MACRO value
+	db 0dah, 00bh, value & 0ffh, (value >> 8) & 0ffh	; DIVS DE, word
+	ENDM
+
+DIVS_HL MACRO value
+	db 0dbh, 00bh, value & 0ffh, (value >> 8) & 0ffh	; DIVS HL, word
+	ENDM
+
+DIVS_IX MACRO value
+	db 0dch, 00bh, value & 0ffh, (value >> 8) & 0ffh	; DIVS IX, word
+	ENDM
+
 DIVS_IY MACRO value
 	db 0ddh, 00bh, value & 0ffh, (value >> 8) & 0ffh	; DIVS IY, word
 	ENDM
