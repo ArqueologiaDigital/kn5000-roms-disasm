@@ -206,6 +206,14 @@ MULS_IX MACRO value
 	db 0dch, 009h, value & 0ffh, (value >> 8) & 0ffh	; MULS IX, word
 	ENDM
 
+MULS_IY MACRO value
+	db 0ddh, 009h, value & 0ffh, (value >> 8) & 0ffh	; MULS IY, word
+	ENDM
+
+MULS_IZ MACRO value
+	db 0deh, 009h, value & 0ffh, (value >> 8) & 0ffh	; MULS IZ, word
+	ENDM
+
 ; NOTE: I am not so sure about this one...
 MULS_IYL MACRO value
 	db 0c7h, 0f4h, value & 0ffh, (value >> 8) & 0ffh	; MULS IYL, word
