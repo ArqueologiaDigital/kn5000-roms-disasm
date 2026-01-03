@@ -219,6 +219,14 @@ DIV_C MACRO value
 	db 0cbh, 00ah, value	; DIV C, byte
 	ENDM
 
+DIV_E MACRO value
+	db 0cdh, 00ah, value	; DIV E, byte
+	ENDM
+
+DIV_L MACRO value
+	db 0cfh, 00ah, value	; DIV L, byte
+	ENDM
+
 DIVW_WA MACRO value
 	db 0d8h, 00ah, value & 0ffh, (value >> 8) & 0ffh	; DIVW WA, word
 	ENDM
