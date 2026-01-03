@@ -215832,7 +215832,7 @@ LABEL_F3F6C6:
 	LD A, (25FEh)
 	EXTZ WA
 	CP WA, 0
-	JR MI, LABEL_F3F6EC ; what does M/MI mean? TODO: Fix ASL encoding. Should be 65 06
+	JR MI, LABEL_F3F6EC
 	CP WA, 000ch
 	JR LE, LABEL_F3F6EF
 
@@ -242273,7 +242273,7 @@ GetDiskFreeSpace:		; f52751
 	LD A, L
 	EXTZ WA
 	CP WA, 0
-	JR MI, LABEL_F5279B ; what does M/MI mean? TODO: Fix ASL encoding. Should be 65 37
+	JR MI, LABEL_F5279B
 	CP WA, 6
 	JR GT, LABEL_F5279B
 	ADD WA, WA
@@ -252837,8 +252837,7 @@ LABEL_F595C4:
 	RET
 
 LABEL_F595E5:
-	db 000h	;TODO: Fix ASL:
-	LD (XHL + 000h), 00ah
+	LD (XHL + 000h:8), 00ah
 	LD (XHL + 002h), 0ffh
 	LD WA, 000ah
 	LD BC, 000ah
@@ -253614,8 +253613,7 @@ LABEL_F59CD9:
 	LD E, (0FC5Fh)
 	AND E, 002h
 	LD XIX, 000038e8h
-	db 000h	;TODO: Fix ASL:
-	LD (XIX + 000h), 048h
+	LD (XIX + 000h:8), 048h
 	LD (XIX + 001h), 005h
 	LD (XIX + 002h), E
 	LD (XIX + 003h), 002h
@@ -253984,8 +253982,7 @@ LABEL_F5A01B:
 	LD D, A
 	LD E, (3482h)
 	LD XIX, 000038e8h
-	db 000h	;TODO: Fix ASL:
-	LD (XIX + 000h), 048h
+	LD (XIX + 000h:8), 048h
 	LD (XIX + 001h), B
 	LD (XIX + 002h), E
 	LD (XIX + 003h), D
@@ -254028,8 +254025,7 @@ LABEL_F5A088:
 	LD D, A
 	LD E, (3486h)
 	LD XIX, 000038e8h
-	db 000h	;TODO: Fix ASL:
-	LD (XIX + 000h), 048h
+	LD (XIX + 000h:8), 048h
 	LD (XIX + 001h), B
 	LD (XIX + 002h), E
 	LD (XIX + 003h), D
@@ -254071,8 +254067,7 @@ LABEL_F5A0F5:
 	LD D, A
 	LD E, (3482h)
 	LD XIX, 000038e8h
-	db 000h	;TODO: Fix ASL:
-	LD (XIX + 000h), 048h
+	LD (XIX + 000h:8), 048h
 	LD (XIX + 001h), B
 	LD (XIX + 002h), E
 	LD (XIX + 003h), D
@@ -254113,8 +254108,7 @@ LABEL_F5A15C:
 	LD D, A
 	LD E, (3486h)
 	LD XIX, 000038e8h
-	db 000h	;TODO: Fix ASL:
-	LD (XIX + 000h), 048h
+	LD (XIX + 000h:8), 048h
 	LD (XIX + 001h), B
 	LD (XIX + 002h), E
 	LD (XIX + 003h), D
