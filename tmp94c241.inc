@@ -1,0 +1,266 @@
+; The macros in this file describe the encoding of
+; TOSHIBA TLCS900 TMP94C241 instructions
+; that are not supported by Alfred Arnold's
+; Macro assembler 1.42 Beta [Bld 298]
+
+
+
+
+
+LDC_DMAD0_XWA MACRO
+	db 0e8h, 2eh, 20h	; LDC DMAD0, XWA
+	ENDM
+
+LDC_DMAD0_XBC MACRO
+	db 0e9h, 2eh, 20h	; LDC DMAD0, XBC
+	ENDM
+
+LDC_DMAD2_XWA MACRO
+	db 0e8h, 2eh, 28h	; LDC DMAD2, XWA
+	ENDM
+
+LDC_DMAC0_A MACRO
+	db 0C9h, 2eh, 42h	; LDC DMAC0, A
+	ENDM
+
+LDC_DMAC0_WA MACRO
+	db 0d8h, 2eh, 40h	; LDC DMAC0, WA
+	ENDM
+
+LDC_DMAC2_XWA MACRO
+	db 0C9h, 2eh, 4ah	; LDC DMAC2, WA
+	ENDM
+
+LDC_DMAC2_A MACRO
+	db 0c9h, 2eh, 4ah	; LDC DMAC2, A
+	ENDM
+
+LDC_DMAM0_WA MACRO
+	db 0d8h, 2eh, 40h	; LDC DMAM0, WA
+	ENDM
+
+LDC_WA_DMAM0 MACRO
+	db 0d8h, 2fh, 40h	; LDC WA, DMAM0
+	ENDM
+
+LDC_DMAM2_WA MACRO
+	db 0d8h, 2eh, 48h	; LDC DMAM2, WA
+	ENDM
+
+LDC_DMAM2_BC MACRO
+	db 0d9h, 2eh, 48h	; LDC DMAM2, BC
+	ENDM
+
+LDC_DMAS0_XWA MACRO
+	db 0e8h, 2eh, 00h	; LDC DMAS0, XWA
+	ENDM
+
+LDC_DMAS2_XWA MACRO
+	db 0e8h, 2eh, 08h	; LDC DMAS2, XWA
+	ENDM
+
+LDC_DMAS2_XBC MACRO
+	db 0e9h, 2eh, 08h	; LDC DMAS2, XBC
+	ENDM
+
+LDC_DMAS2_XDE MACRO
+	db 0eah, 2eh, 08h	; LDC DMAS2, XDE
+	ENDM
+
+LDC_INTNEST_WA MACRO
+	db 0d8h, 2eh, 7ch	; LDC INTNEST, WA
+	ENDM
+
+LD_W MACRO value
+	db 020h, value		; LD W, byte
+	ENDM
+
+LD_A MACRO value
+	db 021h, value		; LD A, byte
+	ENDM
+
+LD_B MACRO value
+	db 022h, value		; LD B, byte
+	ENDM
+
+LD_C MACRO value
+	db 023h, value		; LD C, byte
+	ENDM
+
+LD_D MACRO value
+	db 024h, value		; LD D, byte
+	ENDM
+
+LD_E MACRO value
+	db 025h, value		; LD E, byte
+	ENDM
+
+LD_H MACRO value
+	db 026h, value		; LD H, byte
+	ENDM
+
+LD_L MACRO value
+	db 027h, value		; LD L, byte
+	ENDM
+
+LD_16_16 MACRO dst, src
+	db 0d1h, src & 0ffh, (src >> 8) & 0ffh, 019h, dst & 0ffh, (dst >> 8) & 0ffh	; LDW (word_dst), (word_src)
+	ENDM
+
+LD_XWA_XDE_plus MACRO
+	db 0f5h, 0e8h, 030h	; LDA XWA, XDE+
+	ENDM
+
+
+; Note: It is unclear to me why do we have 2 different encodings for LDIRW
+;       Maybe these are actually two different instructions.
+;	I should take a look at the CPU datasheet to clarify this.
+;
+LDIRW_95 MACRO
+	db 095h, 011h		; LDIRW
+	ENDM
+
+LDIRW_93 MACRO
+	db 093h, 011h		; LDIRW
+	ENDM
+
+
+LDI MACRO
+	db 085h, 010h		; LDI
+	ENDM
+
+MUL_A MACRO value
+	db 0c9h, 008h, value	; MUL A, byte
+	ENDM
+
+MUL_C MACRO value
+	db 0d9h, 008h, value & 0ffh, (value >> 8) & 0ffh	; MUL C, word
+	ENDM
+
+MUL_WA MACRO value
+	db 0d8h, 008h, value & 0ffh, (value >> 8) & 0ffh	; MUL WA, word
+	ENDM
+
+MUL_BC MACRO value
+	db 0d9h, 008h, value & 0ffh, (value >> 8) & 0ffh	; MUL BC, word
+	ENDM
+
+MUL_DE MACRO value
+	db 0dah, 008h, value & 0ffh, (value >> 8) & 0ffh	; MUL DE, word
+	ENDM
+
+MULW_WA MACRO value
+	db 0d8h, 008h, value & 0ffh, (value >> 8) & 0ffh	; MULW WA, word
+	ENDM
+
+MULS_WA MACRO value
+	db 0d8h, 009h, value & 0ffh, (value >> 8) & 0ffh	; MULS WA, word
+	ENDM
+
+MULS_BC MACRO value
+	db 0d9h, 009h, value & 0ffh, (value >> 8) & 0ffh	; MULS BC, word
+	ENDM
+
+MULS_DE MACRO value
+	db 0dah, 009h, value & 0ffh, (value >> 8) & 0ffh	; MULS DE, word
+	ENDM
+
+MULS_HL MACRO value
+	db 0dbh, 009h, value & 0ffh, (value >> 8) & 0ffh	; MULS HL, word
+	ENDM
+
+MULS_IX MACRO value
+	db 0dch, 009h, value & 0ffh, (value >> 8) & 0ffh	; MULS IX, word
+	ENDM
+
+MULS_XWA_IX MACRO
+	db 0dch, 48h	; MULS XWA, IX
+	ENDM
+
+MULS_XWA_DE MACRO
+	db 0dah, 48h	; MULS XWA, DE
+	ENDM
+
+MULS_XDE_IY MACRO
+	db 0ddh, 4ah	; MULS XDE IY
+	ENDM
+
+DIV_A MACRO value
+	db 0c9h, 00ah, value	; DIV A, byte
+	ENDM
+
+DIV_C MACRO value
+	db 0cbh, 00ah, value	; DIV C, byte
+	ENDM
+
+DIVW_WA MACRO value
+	db 0d8h, 00ah, value & 0ffh, (value >> 8) & 0ffh	; DIVW WA, word
+	ENDM
+
+DIVW_BC MACRO value
+	db 0d9h, 00ah, value & 0ffh, (value >> 8) & 0ffh	; DIVW BC, word
+	ENDM
+
+DIVW_DE MACRO value
+	db 0dah, 00ah, value & 0ffh, (value >> 8) & 0ffh	; DIVW DE, word
+	ENDM
+
+DIVW_HL MACRO value
+	db 0dbh, 00ah, value & 0ffh, (value >> 8) & 0ffh	; DIVW HL, word
+	ENDM
+
+DIVW_IX MACRO value
+	db 0dch, 00ah, value & 0ffh, (value >> 8) & 0ffh	; DIVW IX, word
+	ENDM
+
+DIVW_IY MACRO value
+	db 0ddh, 00ah, value & 0ffh, (value >> 8) & 0ffh	; DIVW IY, word
+	ENDM
+
+DIVW_IZ MACRO value
+	db 0deh, 00ah, value & 0ffh, (value >> 8) & 0ffh	; DIVW IZ, word
+	ENDM
+
+DIVS_WA MACRO value
+	db 0d8h, 00bh, value & 0ffh, (value >> 8) & 0ffh	; DIVS WA, word
+	ENDM
+
+DIVS_IY MACRO value
+	db 0ddh, 00bh, value & 0ffh, (value >> 8) & 0ffh	; DIVS IY, word
+	ENDM
+	
+SRA_0_XWA MACRO
+	db 0e8h, 0edh, 000h	; SRA ?, XWA
+	ENDM
+
+SRA_8_XWA MACRO
+	db 0e8h, 0edh, 008h	; SRA ?, XWA
+	ENDM
+
+SLA_0_XBC MACRO
+	db 0e9h, 0ech, 000h	; SLA ., XBC
+	ENDM
+
+SLA_8_XDE MACRO
+	db 0eah, 0ech, 008h	; SLA ., XDE
+	ENDM
+
+SRL_0_XDE MACRO
+	db 0eah, 0efh, 000h	; SRL ?, XDE
+	ENDM
+
+SLA_8_XWA MACRO
+	db 0e8h, 0ech, 000h	; SLA ?, XWA
+	ENDM
+
+SLA_0_XIX MACRO
+	db 0ech, 0ech, 000h	; SLA ., XIX
+	ENDM
+
+SRL_0_XHL MACRO
+	db 0ebh, 0efh, 000h	; SRL ?, XHL
+	ENDM
+
+SRL_0_XWA MACRO
+	db 0e8h, 0efh, 000h	; SRL ?, XWA
+	ENDM

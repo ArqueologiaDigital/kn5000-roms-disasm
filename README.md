@@ -13,6 +13,8 @@ Cheers,
 Felipe Sanches
 
 
+**Note:** I am using Alfred Arnold's **Macro assembler 1.42 Beta (Build 298)**.
+
 Current state of this effort:
 
 I am trying to rebuild the ROM and compare it with the original one with a 100% byte-matching goal.
