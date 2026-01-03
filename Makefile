@@ -5,12 +5,14 @@ P2BIN=$(ASL_PATH)/p2bin
 all: rebuilt_ROMs/kn5000_v10_program.rebuilt.rom rebuilt_ROMs/kn5000_subprogram_v142.rebuilt.rom
 	python compare_roms.py
 
-rebuilt_ROMs/kn5000_v10_program.rebuilt.p:
+rebuilt_ROMs/kn5000_v10_program.rebuilt.p: tmp94c241.inc maincpu/kn5000_v10_program.asm
 	mkdir -p rebuilt_ROMs
+	rm -f rebuilt_ROMs/kn5000_v10_program.rebuilt.p
 	$(ASL) maincpu/kn5000_v10_program.asm -l -o rebuilt_ROMs/kn5000_v10_program.rebuilt.p
 
-rebuilt_ROMs/kn5000_subprogram_v142.rebuilt.p:
+rebuilt_ROMs/kn5000_subprogram_v142.rebuilt.p: tmp94c241.inc subcpu/kn5000_subprogram_v142.asm
 	mkdir -p rebuilt_ROMs
+	rm -f rebuilt_ROMs/kn5000_subprogram_v142.rebuilt.p
 	$(ASL) subcpu/kn5000_subprogram_v142.asm -l -o rebuilt_ROMs/kn5000_subprogram_v142.rebuilt.p
 
 

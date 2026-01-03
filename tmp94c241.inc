@@ -4,9 +4,6 @@
 ; Macro assembler 1.42 Beta [Bld 298]
 
 
-
-
-
 LDC_DMAD0_XWA MACRO
 	db 0e8h, 2eh, 20h	; LDC DMAD0, XWA
 	ENDM
