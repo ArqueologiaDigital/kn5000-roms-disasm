@@ -125,8 +125,9 @@ LD_XWA_XDE_plus MACRO
 	ENDM
 
 
-; Note: It is unclear to me why do we have 2 different encodings for LDIRW
-;       Maybe these are actually two different instructions.
+; Note: It is unclear to me why do we have 2 different encodings for some of
+;       these LDI instructions and its variants.
+;       Maybe these are actually different instructions?
 ;	I should take a look at the CPU datasheet to clarify this.
 ;
 LDIRW_95 MACRO
@@ -140,6 +141,14 @@ LDIRW_93 MACRO
 
 LDI MACRO
 	db 085h, 010h		; LDI
+	ENDM
+
+LDIR_83 MACRO
+	db 083h, 011h		; LDIR
+	ENDM
+
+LDIR MACRO
+	db 085h, 011h		; LDIR
 	ENDM
 
 MUL_A MACRO value
