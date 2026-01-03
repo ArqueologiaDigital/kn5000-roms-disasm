@@ -120,6 +120,14 @@ LD_16_16 MACRO dst, src
 	db 0d1h, src & 0ffh, (src >> 8) & 0ffh, 019h, dst & 0ffh, (dst >> 8) & 0ffh	; LDW (word_dst), (word_src)
 	ENDM
 
+LDA_XBC_XWA_plus MACRO
+	db 0f5h, 0e2h, 031h	; LDA XBC, XWA+
+	ENDM
+
+LDA_XDE_XBC_plus MACRO
+	db 0f5h, 0e5h, 031h	; LDA XDE, XBC+
+	ENDM
+
 LD_XWA_XDE_plus MACRO
 	db 0f5h, 0e8h, 030h	; LDA XWA, XDE+
 	ENDM
@@ -333,11 +341,15 @@ SRA_8_XWA MACRO
 	ENDM
 
 SLA_0_XBC MACRO
-	db 0e9h, 0ech, 000h	; SLA ., XBC
+	db 0e9h, 0ech, 000h	; SLA ?, XBC
+	ENDM
+
+SLA_0_XHL MACRO
+	db 0ebh, 0ech, 000h	; SLA ?, XHL
 	ENDM
 
 SLA_8_XDE MACRO
-	db 0eah, 0ech, 008h	; SLA ., XDE
+	db 0eah, 0ech, 008h	; SLA ?, XDE
 	ENDM
 
 SRL_0_XDE MACRO
@@ -349,7 +361,11 @@ SLA_8_XWA MACRO
 	ENDM
 
 SLA_0_XIX MACRO
-	db 0ech, 0ech, 000h	; SLA ., XIX
+	db 0ech, 0ech, 000h	; SLA ?, XIX
+	ENDM
+
+SLL_0_XIX MACRO
+	db 0ech, 0eeh, 000h	; SLL ?, XIX
 	ENDM
 
 SRL_0_XHL MACRO
