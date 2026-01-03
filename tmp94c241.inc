@@ -174,6 +174,18 @@ MULW_WA MACRO value
 	db 0d8h, 008h, value & 0ffh, (value >> 8) & 0ffh	; MULW WA, word
 	ENDM
 
+MULS_A MACRO value
+	db 0c9h, 009h, value	; MULS A, word
+	ENDM
+
+MULS_C MACRO value
+	db 0cbh, 009h, value	; MULS C, word
+	ENDM
+
+MULS_L MACRO value
+	db 0cfh, 009h, value	; MULS L, word
+	ENDM
+
 MULS_WA MACRO value
 	db 0d8h, 009h, value & 0ffh, (value >> 8) & 0ffh	; MULS WA, word
 	ENDM

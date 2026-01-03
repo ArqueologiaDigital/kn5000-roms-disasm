@@ -176459,7 +176459,7 @@ LABEL_F248F0:
 	XOR HL, HL
 	LD L, (2684h)
 	DEC 1, HL
-	db 0, 0, 0;	TODO: Fix ASL: MULS L, 003h
+	MULS_L 003h
 	PUSH XIY
 	LD XIY, 0000f250h
 	OR (XIY + HL), 080h
@@ -312417,7 +312417,7 @@ LABEL_F89781:
 	CP C, 039h
 	JR GT, LABEL_F897AE
 	LD A, (XWA)
-	db 0, 0, 0;	TODO: Fix ASL: MULS A, 00ah
+	MULS_A 00ah
 	ADD A, C
 	SUB A, 010h
 	EXTS WA
@@ -436154,7 +436154,7 @@ LABEL_FE5D2D:
 	LD A, (XBC + WA)
 	SLL 4, A
 	SRA 005h, A
-	db 0, 0, 0;	TODO: Fix ASL: MULS A, 00ch
+	MULS_A 00ch
 	LD (XSP + 006h), A
 	ADD (XSP + 006h), E
 	LD A, (XSP + 010h)
@@ -436183,7 +436183,7 @@ LABEL_FE5D81:
 	LD A, (XBC + WA)
 	SLL 4, A
 	SRA 005h, A
-	db 0, 0, 0;	TODO: Fix ASL: MULS A, 00ch
+	MULS_A 00ch
 	LD (XSP + 006h), A
 	ADD (XSP + 006h), E
 	LD A, (XSP + 010h)
@@ -436436,7 +436436,7 @@ LABEL_FE5FC1:
 	LD A, (XBC + WA)
 	SLL 4, A
 	SRA 005h, A
-	db 0, 0, 0;	TODO: Fix ASL: MULS A, 00ch
+	MULS_A 00ch
 	NEG A
 	LD (XSP + 004h), A
 	LD A, (XSP + 00eh)
@@ -436615,7 +436615,7 @@ LABEL_FE614F:
 	LD A, (XBC + WA)
 	SLL 4, A
 	SRA 005h, A
-	db 0, 0, 0;	TODO: Fix ASL: MULS A, 00ch
+	MULS_A 00ch
 	LD (XSP + 004h), A
 	ADD (XSP + 004h), E
 	LD A, (XSP + 00ch)
@@ -436800,7 +436800,7 @@ LABEL_FE62F9:
 	LD A, (XBC + WA)
 	SLL 4, A
 	SRA 005h, A
-	db 0, 0, 0;	TODO: Fix ASL: MULS A, 00ch
+	MULS_A 00ch
 	LD (XSP + 004h), A
 	ADD (XSP + 004h), E
 	LD A, (XSP + 00ch)
@@ -437047,7 +437047,7 @@ LABEL_FE6525:
 	LD C, (XBC + DE)
 	SLL 4, C
 	SRA 005h, C
-	db 0, 0, 0;	TODO: Fix ASL: MULS C, 00ch
+	MULS_C 00ch
 	LD L, C
 	ADD L, H
 	LD IX, 0
