@@ -49453,9 +49453,22 @@ String_CONSOLE:			; E1FBC8
 	db 0F1h, 000h, 0CDh, 0E9h, 0F1h, 000h, 0CEh, 0E9h
 	db 0F1h, 000h, 0CFh, 0E9h, 0F1h, 000h, 058h, 041h
 	db 050h, 052h, 000h, 0FFh, 054h, 045h, 053h, 054h
-	db 000h, 0FFh, 000h, 000h, 018h, 000h, 031h, 000h
-	db 073h, 000h, 083h, 000h, 09Ch, 000h, 04Ah, 000h
-	db 0B5h, 000h, 0CEh, 000h, 063h, 000h, 0B0h, 000h
+	db 000h, 0FFh
+
+LABEL_E1FFD2:
+	dw -LABEL_F1EA4C + LABEL_F1EA4C
+	dw -LABEL_F1EA4C + LABEL_F1EA64
+	dw -LABEL_F1EA4C + LABEL_F1EA7D
+	dw -LABEL_F1EA4C + LABEL_F1EABF
+	dw -LABEL_F1EA4C + LABEL_F1EACF
+	dw -LABEL_F1EA4C + LABEL_F1EAE8
+	dw -LABEL_F1EA4C + LABEL_F1EA96
+	dw -LABEL_F1EA4C + LABEL_F1EB01
+	dw -LABEL_F1EA4C + LABEL_F1EB1A
+	dw -LABEL_F1EA4C + LABEL_F1EAAF
+	dw -LABEL_F1EA4C + LABEL_F1EAFC
+
+LABEL_E1FFE8:
 	db 09Bh, 001h, 0B0h, 000h, 09Bh, 020h, 0B0h, 000h
 	db 09Dh, 000h, 0B0h, 000h, 09Dh, 001h, 0B0h, 000h
 	db 09Dh, 002h, 000h, 000h, 00Eh, 000h, 01Ah, 000h
@@ -167375,41 +167388,94 @@ GetResouceInfo:
 	CP WA, 0009h
 	RET UGT
 	ADD WA, WA
-	LDA XIX, 0E1FFD2h
+	LDA XIX, LABEL_E1FFD2
 	LD WA, (XIX + WA)
-	LDA XIX, 0F1EA4Ch
+	LDA XIX, LABEL_F1EA4C
 	JP T, XIX + WA
+
 LABEL_F1EA4C:
-	db 0F1h, 080h, 0F9h, 030h, 0B1h, 060h, 0F1h, 0BEh
-	db 0FFh, 030h, 0E8h, 08Ah, 0EAh, 062h, 0F1h, 080h
-	db 0F9h, 030h, 0E8h, 0A2h, 0B9h, 004h, 062h, 00Eh
-	db 0F2h, 000h, 078h, 01Eh, 030h, 0B1h, 060h, 0F2h
-	db 000h, 078h, 01Eh, 030h, 0E8h, 08Ah, 0F2h, 000h
-	db 080h, 01Eh, 030h, 0EAh, 0A0h, 0B9h, 004h, 060h
-	db 00Eh, 0F2h, 050h, 0D3h, 01Eh, 030h, 0B1h, 060h
-	db 0F2h, 050h, 0D3h, 01Eh, 030h, 0E8h, 08Ah, 0F2h
-	db 000h, 000h, 020h, 030h, 0EAh, 0A0h, 0B9h, 004h
-	db 060h, 00Eh, 0F2h, 000h, 000h, 01Eh, 030h, 0B1h
+	lda XWA, 0f980h
+	ld (XBC), XWA
+	lda XWA, 0ffbeh
+	ld XDE, XWA
+	inc 2, XDE
+	lda XWA, 0f980h
+	sub XDE, XWA
+	ld (XBC + 004h:8), XDE
+	ret
+
+LABEL_F1EA64:
+	lda XWA, 1e7800h
+	ld (XBC), XWA
+	lda XWA, 1e7800h
+	ld XDE, XWA
+	lda XWA, 1e8000h
+	sub XWA, XDE
+	ld (XBC + 004h:8), XWA
+	ret
+
+LABEL_F1EA7D:
+	lda XWA, 1ed350h:24
+	ld (XBC), XWA
+	lda XWA, 1ed350h:24
+	ld XDE, XWA
+	lda XWA, 200000h:24
+	sub XWA, XDE
+	ld (XBC + 004h:8), XWA
+	ret
+
+LABEL_F1EA96:
+	db 0F2h, 000h, 000h, 01Eh, 030h, 0B1h
 	db 060h, 0F2h, 000h, 000h, 01Eh, 030h, 0E8h, 08Ah
 	db 0F2h, 000h, 078h, 01Eh, 030h, 0EAh, 0A0h, 0B9h
-	db 004h, 060h, 00Eh, 040h, 000h, 030h, 03Dh, 000h
+	db 004h, 060h
+	ret
+
+LABEL_F1EAAF:
+	db 040h, 000h, 030h, 03Dh, 000h
 	db 0B1h, 060h, 040h, 000h, 004h, 000h, 000h, 0B9h
-	db 004h, 060h, 00Eh, 0F2h, 000h, 0B0h, 00Ah, 030h
+	db 004h, 060h
+	ret
+
+LABEL_F1EABF:
+	db 0F2h, 000h, 0B0h, 00Ah, 030h
 	db 0B1h, 060h, 040h, 000h, 050h, 000h, 000h, 0B9h
-	db 004h, 060h, 00Eh, 0F2h, 000h, 000h, 00Bh, 030h
+	db 004h, 060h
+	ret
+
+LABEL_F1EACF:
+	db 0F2h, 000h, 000h, 00Bh, 030h
 	db 0B1h, 060h, 0F2h, 000h, 000h, 00Bh, 030h, 0E8h
 	db 08Ah, 0F2h, 000h, 0D8h, 00Fh, 030h, 0EAh, 0A0h
-	db 0B9h, 004h, 060h, 00Eh, 0F2h, 000h, 048h, 009h
+	db 0B9h, 004h, 060h
+	ret
+
+LABEL_F1EAE8:
+	db 0F2h, 000h, 048h, 009h
 	db 030h, 0B1h, 060h, 0F2h, 000h, 048h, 009h, 030h
 	db 0E8h, 08Ah, 0F2h, 000h, 0B0h, 00Ah, 030h, 0EAh
-	db 0A0h, 0B9h, 004h, 060h, 00Eh, 0F2h, 000h, 088h
+
+LABEL_F1EAFC:
+	db 0A0h, 0B9h, 004h, 060h
+	ret
+
+LABEL_F1EB01:
+	db 0F2h, 000h, 088h
 	db 01Eh, 030h, 0B1h, 060h, 0F2h, 000h, 088h, 01Eh
 	db 030h, 0E8h, 08Ah, 0F2h, 000h, 0C4h, 01Eh, 030h
-	db 0EAh, 0A0h, 0B9h, 004h, 060h, 00Eh, 0F2h, 0CCh
-	db 0FFh, 0E1h, 030h, 0B1h, 060h, 0E8h, 0A8h, 0B9h
-	db 004h, 060h, 00Eh, 00Eh
+	db 0EAh, 0A0h, 0B9h, 004h, 060h
+	ret
 
-rcm_ld_XAPR_j:
+LABEL_F1EB1A:
+	db 0F2h, 0CCh
+	db 0FFh, 0E1h, 030h, 0B1h, 060h, 0E8h, 0A8h, 0B9h
+	db 004h, 060h
+	ret
+
+LABEL_F1EB27:
+	ret
+
+rcm_ld_XAPR_j:			; F1EB28
 	JP LABEL_F18A74
 
 rcm_sv_XAPR_j:
