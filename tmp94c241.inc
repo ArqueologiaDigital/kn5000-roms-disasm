@@ -124,8 +124,12 @@ LDA_XBC_XWA_plus MACRO
 	db 0f5h, 0e2h, 031h	; LDA XBC, XWA+
 	ENDM
 
+LDA_XBC_XWA_plus__e1__ MACRO
+	db 0f5h, 0e1h, 031h	; LDA XBC, XWA+
+	ENDM
+
 LDA_XDE_XBC_plus MACRO
-	db 0f5h, 0e5h, 031h	; LDA XDE, XBC+
+	db 0f5h, 0e5h, 032h	; LDA XDE, XBC+
 	ENDM
 
 LD_XWA_XDE_plus MACRO
@@ -149,6 +153,10 @@ LDIRW_93 MACRO
 
 LDI MACRO
 	db 085h, 010h		; LDI
+	ENDM
+
+LDIW MACRO
+	db 095h, 010h		; LDIW
 	ENDM
 
 LDIR_83 MACRO
