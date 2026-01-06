@@ -56,6 +56,16 @@ images_8bit = {
 	"BitmapFadeOutText": [108,  20, 0xB9C24],		# Fade Out Text
 }
 
+# wip looking for MIDI files:
+# 8E1A29 291A8E 029h, 01Ah
+# 982684 842698
+# 9859AE AE5998
+# 98A684 84A698
+# 98D9AE AED998
+# 99164A 4A1699
+# 995053 535099
+# 998690 908699
+
 table_data = {
 	"includes/hkst_55.ssf": [0x8000E, 0x00409], # XML file describing the demo
 	"images/FTBMP01.BMP": [0x80418, 0x13036], # Technics logo + World Globe
