@@ -57,17 +57,18 @@ images_8bit = {
 }
 
 table_data = {
-	"FTBMP01.BMP": [0x80418, 0x13036], # Technics logo + World Globe
-	"FTBMP02.BMP": [0x9344E, 0xA6B6],  # Upside-down showcasing subwoofers
-	"FTBMP03.BMP": [0x9DB04, 0x9A36],  # Some floppy disks
-	"FTBMP04.BMP": [0xA753A, 0x9A53],  # Inserting disks into the floppy drive
-	"FTBMP05.BMP": [0xB0F70, 0xA076],  # Arrows representing 360 surround sound
-	"FTBMP06.BMP": [0xBAFE6, 0x13036], # KN5000 name + rainbow comet
+	"includes/hkst_55.ssf": [0x8000E, 0x00409], # XML file describing the demo
+	"images/FTBMP01.BMP": [0x80418, 0x13036], # Technics logo + World Globe
+	"images/FTBMP02.BMP": [0x9344E, 0x0A6B6], # Upside-down showcasing subwoofers
+	"images/FTBMP03.BMP": [0x9DB04, 0x09A36], # Some floppy disks
+	"images/FTBMP04.BMP": [0xA753A, 0x09A53], # Inserting disks into the floppy drive
+	"images/FTBMP05.BMP": [0xB0F70, 0x0A076], # Arrows representing 360 surround sound
+	"images/FTBMP06.BMP": [0xBAFE6, 0x13036], # KN5000 name + rainbow comet
 }
 
 for name, values in table_data.items():
 	offs, count = values
-	print(f"dd if=original_ROMs/kn5000_table_data.rom bs=1 count={count} of=maincpu/images/{name} skip={offs}")
+	print(f"dd if=original_ROMs/kn5000_table_data.rom bs=1 count={count} of=table_data/{name} skip={offs}")
 
 for name, values in images_1bit.items():
 	w, h, offs = values
