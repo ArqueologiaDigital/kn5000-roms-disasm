@@ -89,7 +89,9 @@ FeatureDemo_FileEntry6:
 	db 30 dup (000h)
 
 	; Unused ROM space:
-	; db 011F36h dup (0ffh)
+	db 08000h dup (0ffh)
+	db 08000h dup (0ffh)
+	db 01F36h dup (0ffh)
 
 
 	ORG 08E0000h
