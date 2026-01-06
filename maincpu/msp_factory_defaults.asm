@@ -1,8 +1,21 @@
 
 MSP_FACTORY_DEFAULTS:		; F6F62F
-	db 080h, 0FFh, 0FFh, 0FFh, 0FFh, 087h, 090h, 001h
-	db 030h, 058h, 04Ch, 003h, 091h, 02Fh, 037h, 043h
-	db 04Bh, 000h, 003h, 000h, 090h, 032h, 03Ch, 04Eh
+	db 080h, 0FFh, 0FFh, 0FFh, 0FFh, 087h
+
+	db 090h, 001h
+	db 030h, 058h
+
+; offs 000Ah:
+	db 04Ch
+	db 003h, 091h, 02Fh
+
+; offs 000Eh:
+	dw 04337h
+
+; offs 0010h:
+	dd 0003004Bh	
+
+	db 090h, 032h, 03Ch, 04Eh
 	db 054h, 000h, 091h, 046h, 040h, 042h, 04Ch, 000h
 	db 000h, 011h, 090h, 05Ah, 032h, 04Eh, 01Ch, 000h
 	db 081h, 091h, 019h, 034h, 040h, 05Bh, 000h, 000h
@@ -32,6 +45,7 @@ MSP_FACTORY_DEFAULTS:		; F6F62F
 	db 000h, 000h, 000h, 000h, 000h, 000h, 000h, 000h
 	db 000h, 000h, 000h, 000h, 000h, 000h, 000h, 000h
 	db 000h, 000h, 000h, 000h, 000h, 000h, 000h, 087h
+
 	db 080h, 0FFh, 0FFh, 0FFh, 0FFh, 087h, 090h, 001h
 	db 03Ch, 050h, 015h, 000h, 091h, 001h, 043h, 024h
 	db 02Ah, 000h, 003h, 000h, 090h, 017h, 03Eh, 043h
