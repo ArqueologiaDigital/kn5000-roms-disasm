@@ -37061,17 +37061,18 @@ LABEL_E0E974:
 	db 0A0h, 001h, 0B0h, 0D5h, 003h, 000h
 	dd LABEL_E0E99E
 	db 000h, 000h, 000h, 000h
-
 LABEL_E0E99E:
 	db 000h, 0FFh
 
 
 LABEL_E0E9A0:
-	db 06Ch, 000h, 060h, 001h, 000h, 000h, 0FFh, 0FFh
-	db 0FFh, 0FFh, 0FFh, 0FFh, 008h, 000h, 000h, 000h
-	db 000h, 000h, 020h, 000h, 020h, 000h
+	db 06Ch, 000h, 060h, 001h
+	db 000h, 000h, 0FFh, 0FFh
+	db 0FFh, 0FFh, 0FFh, 0FFh
+	db 008h, 000h, 000h, 000h
+	db 000h, 000h, 020h, 000h
+	db 020h, 000h
 	dd LABEL_E0E9BA
-
 LABEL_E0E9BA:	db "FTBMP01", 000h
 
 
@@ -37083,7 +37084,6 @@ LABEL_E0E9C2:
 	db 0B4h, 0D5h, 003h, 000h
 	dd LABEL_E0E9EC
 	db 000h, 000h, 000h, 000h
-
 LABEL_E0E9EC:	db 000h, 0FFh
 
 
@@ -37108,7 +37108,6 @@ LABEL_E0EA22:
 	dd LABEL_E0EA42
 	db 001h, 000h, 000h, 000h
 	db 0FCh, 000h
-
 LABEL_E0EA42: db "200 Preset", 000h, 0FFh
 
 
@@ -37118,7 +37117,6 @@ LABEL_E0EA4E:
 	db 023h, 001h, 0E6h, 000h
 	dd LABEL_E0EA6E
 	db 000h, 000h, 000h, 000h, 000h, 000h
-
 LABEL_E0EA6E: db "Performance", 000h
 
 
@@ -37137,8 +37135,7 @@ LABEL_E0EA94:
 	dd LABEL_E0EAB4
 	db 001h, 000h
 	db 000h, 000h, 0FCh, 000h
-
-LABEL_E0EAB4: db "20 Custom", 000h
+LABEL_E0EAB4:	db "20 Custom", 000h
 
 
 LABEL_E0EABE:
@@ -37150,19 +37147,21 @@ LABEL_E0EABE:
 LABEL_E0EAD8:
 	db 02Bh, 000h, 060h, 001h, 009h, 000h, 0FFh, 0FFh
 	db 0FFh, 0FFh, 0FFh, 0FFh, 008h, 000h, 0BCh, 000h
-	db 054h, 000h, 00Fh, 001h, 066h, 000h, 0F8h, 0EAh
-	db 0E0h, 000h, 001h, 000h, 000h, 000h, 0FCh, 000h
-	db 033h, 020h, 043h, 06Fh, 06Dh, 070h, 06Fh, 073h
-	db 065h, 072h, 000h, 0FFh
+	db 054h, 000h, 00Fh, 001h, 066h, 000h
+	dd LABEL_E0EAF8
+	db 001h, 000h, 000h, 000h, 0FCh, 000h
+LABEL_E0EAF8:	db "3 Composer", 000h, 0FFh
 
 
 LABEL_E0EB04:
 	db 02Bh, 000h, 060h, 001h
 	db 003h, 000h, 0FFh, 0FFh, 00Ch, 000h, 009h, 000h
 	db 008h, 000h, 038h, 000h, 0D4h, 000h, 073h, 000h
-	db 0E6h, 000h, 024h, 0EBh, 0E0h, 000h, 000h, 000h
-	db 000h, 000h, 000h, 000h, 042h, 061h, 063h, 06Bh
-	db 02Dh, 075h, 070h, 000h
+	db 0E6h, 000h
+	dd LABEL_E0EB24
+	db 000h, 000h
+	db 000h, 000h, 000h, 000h
+LABEL_E0EB24:	db "Back-up", 000h
 
 
 LABEL_E0EB2C:
@@ -37326,35 +37325,42 @@ LABEL_E0EDA4:
 	db 02Bh, 000h, 060h, 001h
 	db 003h, 000h, 0FFh, 0FFh, 023h, 000h, 01Bh, 000h
 	db 008h, 000h, 0CEh, 000h, 036h, 000h, 011h, 001h
-	db 048h, 000h, 0C4h, 0EDh, 0E0h, 000h, 000h, 000h
-	db 000h, 000h, 000h, 000h, 056h, 06Fh, 06Ch, 061h
-	db 074h, 069h, 06Ch, 065h, 000h, 0FFh
+	db 048h, 000h
+	dd LABEL_E0EDC4
+	db 000h, 000h
+	db 000h, 000h, 000h, 000h
+LABEL_E0EDC4:	db "Volatile", 000h, 0FFh
 
 
 LABEL_E0EDCE:
-	db 02Bh, 000h, 060h, 001h, 003h, 000h, 0FFh, 0FFh, 024h, 000h
+	db 02Bh, 000h, 060h, 001h
+	db 003h, 000h, 0FFh, 0FFh, 024h, 000h
 	db 022h, 000h, 008h, 000h, 01Eh, 000h, 056h, 000h
-	db 081h, 000h, 068h, 000h, 0EEh, 0EDh, 0E0h, 000h
-	db 000h, 000h, 000h, 000h, 000h, 000h, 04Eh, 06Fh
-	db 06Eh, 020h, 056h, 06Fh, 06Ch, 061h, 074h, 069h
-	db 06Ch, 065h, 000h, 0FFh
+	db 081h, 000h, 068h, 000h
+	dd LABEL_E0EDEE
+	db 000h, 000h, 000h, 000h, 000h, 000h
+	
+LABEL_E0EDEE:	db "Non Volatile", 000h, 0FFh
 
 
 LABEL_E0EDFC:
 	db 02Bh, 000h, 060h, 001h
 	db 003h, 000h, 0FFh, 0FFh, 025h, 000h, 023h, 000h
 	db 008h, 000h, 01Eh, 000h, 016h, 000h, 069h, 000h
-	db 028h, 000h, 01Ch, 0EEh, 0E0h, 000h, 000h, 000h
-	db 000h, 000h, 000h, 000h, 050h, 06Ch, 061h, 079h
-	db 020h, 04Fh, 06Eh, 06Ch, 079h, 000h
+	db 028h, 000h
+	dd LABEL_E0EE1C
+	db 000h, 000h
+	db 000h, 000h, 000h, 000h
+LABEL_E0EE1C:	db "Play Only", 000h
 
 
 LABEL_E0EE26:
 	db 02Bh, 000h, 060h, 001h, 003h, 000h, 0FFh, 0FFh, 026h, 000h
 	db 024h, 000h, 008h, 000h, 0B6h, 000h, 0AAh, 000h
-	db 0C1h, 000h, 0BCh, 000h, 046h, 0EEh, 0E0h, 000h
-	db 000h, 000h, 000h, 000h, 007h, 000h, 07Eh, 037h
-	db 066h, 000h
+	db 0C1h, 000h, 0BCh, 000h
+	dd LABEL_E0EE46
+	db 000h, 000h, 000h, 000h, 007h, 000h
+LABEL_E0EE46:	db "~7f", 000h
 
 
 LABEL_E0EE4A:
@@ -37540,8 +37546,11 @@ LABEL_E0F108:
 	db 0FFh, 0FFh, 0FFh, 0FFh, 00Ah, 000h, 000h, 000h
 	db 000h, 000h, 03Fh, 001h, 0EFh, 000h, 0FFh, 000h
 	db 000h, 000h, 000h, 000h, 0A0h, 001h, 0B8h, 0D5h
-	db 003h, 000h, 032h, 0F1h, 0E0h, 000h, 000h, 000h
-	db 000h, 000h, 000h, 0FFh
+	db 003h, 000h
+	dd LABEL_E0F132
+	db 000h, 000h
+	db 000h, 000h
+LABEL_E0F132:	db 000h, 0FFh
 
 
 LABEL_E0F134:	
@@ -37554,10 +37563,10 @@ LABEL_E0F134:
 LABEL_E0F14E:	
 	db 02Bh, 000h, 060h, 001h, 042h, 000h, 0FFh, 0FFh, 044h, 000h
 	db 0FFh, 0FFh, 008h, 000h, 0BCh, 000h, 040h, 000h
-	db 00Fh, 001h, 052h, 000h, 06Eh, 0F1h, 0E0h, 000h
-	db 000h, 000h, 000h, 000h, 000h, 000h, 053h, 074h
-	db 079h, 06Ch, 065h, 020h, 044h, 061h, 074h, 061h
-	db 000h, 0FFh
+	db 00Fh, 001h, 052h, 000h
+	dd LABEL_E0F16E
+	db 000h, 000h, 000h, 000h, 000h, 000h
+LABEL_E0F16E:	db "Style Data", 000h, 0FFh
 
 
 LABEL_E0F17A:	
@@ -37571,9 +37580,11 @@ LABEL_E0F194:
 	db 02Bh, 000h, 060h, 001h
 	db 044h, 000h, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh
 	db 008h, 000h, 02Ah, 000h, 070h, 000h, 075h, 000h
-	db 082h, 000h, 0B4h, 0F1h, 0E0h, 000h, 001h, 000h
-	db 000h, 000h, 0FCh, 000h, 032h, 030h, 020h, 043h
-	db 075h, 073h, 074h, 06Fh, 06Dh, 000h
+	db 082h, 000h
+	dd LABEL_E0F1B4
+	db 001h, 000h
+	db 000h, 000h, 0FCh, 000h
+LABEL_E0F1B4:	db "20 Custom", 000h
 
 
 LABEL_E0F1BE:	
@@ -37881,10 +37892,13 @@ LABEL_E0F650:
 
 LABEL_E0F67C:
 	db 06Ch, 000h, 060h, 001h
-	db 06Dh, 000h, 0FFh, 0FFh, 06Fh, 000h, 0FFh, 0FFh
-	db 008h, 000h, 000h, 000h, 06Ch, 000h, 020h, 000h
-	db 08Ch, 000h, 096h, 0F6h, 0E0h, 000h, 046h, 054h
-	db 042h, 04Dh, 050h, 030h, 032h, 000h
+	db 06Dh, 000h, 0FFh, 0FFh
+	db 06Fh, 000h, 0FFh, 0FFh
+	db 008h, 000h, 000h, 000h
+	db 06Ch, 000h, 020h, 000h
+	db 08Ch, 000h
+	dd LABEL_E0F696
+LABEL_E0F696:	db "FTBMP02", 000h
 
 
 LABEL_E0F69E:
@@ -37970,10 +37984,13 @@ LABEL_E0F7E2:
 
 LABEL_E0F80C:
 	db 06Ch, 000h, 060h, 001h
-	db 076h, 000h, 0FFh, 0FFh, 0FFh, 0FFh, 077h, 000h
-	db 008h, 000h, 000h, 000h, 06Ch, 000h, 020h, 000h
-	db 08Ch, 000h, 026h, 0F8h, 0E0h, 000h, 046h, 054h
-	db 042h, 04Dh, 050h, 030h, 033h, 000h
+	db 076h, 000h, 0FFh, 0FFh
+	db 0FFh, 0FFh, 077h, 000h
+	db 008h, 000h, 000h, 000h
+	db 06Ch, 000h, 020h, 000h
+	db 08Ch, 000h
+	dd LABEL_E0F826
+LABEL_E0F826:	db "FTBMP03", 000h
 
 
 LABEL_E0F82E:
@@ -37988,12 +38005,14 @@ LABEL_E0F82E:
 
 
 LABEL_E0F85A:
-	db 06Ch, 000h, 060h, 001h, 079h, 000h
-	db 0FFh, 0FFh, 07Bh, 000h, 0FFh, 0FFh, 008h, 000h
-	db 000h, 000h, 06Ch, 000h, 020h, 000h, 08Ch, 000h
-	db 074h, 0F8h, 0E0h, 000h
-	db 046h, 054h, 042h, 04Dh
-	db 050h, 030h, 034h, 000h
+	db 06Ch, 000h, 060h, 001h
+	db 079h, 000h, 0FFh, 0FFh
+	db 07Bh, 000h, 0FFh, 0FFh
+	db 008h, 000h, 000h, 000h
+	db 06Ch, 000h, 020h, 000h
+	db 08Ch, 000h
+	dd LABEL_E0F874
+LABEL_E0F874:	db "FTBMP04", 000h
 
 
 LABEL_E0F87C:
@@ -38108,10 +38127,13 @@ LABEL_E0FA52:
 
 LABEL_E0FA7C:
 	db 06Ch, 000h, 060h, 001h
-	db 084h, 000h, 0FFh, 0FFh, 0FFh, 0FFh, 086h, 000h
-	db 008h, 000h, 000h, 000h, 064h, 000h, 020h, 000h
-	db 084h, 000h, 096h, 0FAh, 0E0h, 000h, 046h, 054h
-	db 042h, 04Dh, 050h, 030h, 035h, 000h
+	db 084h, 000h, 0FFh, 0FFh
+	db 0FFh, 0FFh, 086h, 000h
+	db 008h, 000h, 000h, 000h
+	db 064h, 000h, 020h, 000h
+	db 084h, 000h
+	dd LABEL_E0FA96
+LABEL_E0FA96:	db "FTBMP05", 000h
 
 
 LABEL_E0FA9E:
@@ -38402,41 +38424,38 @@ LABEL_E0FFAA:
 	db 02Bh, 000h, 060h, 001h, 0A6h, 000h
 	db 0FFh, 0FFh, 0A8h, 000h, 0FFh, 0FFh, 008h, 000h
 	db 01Eh, 000h, 096h, 000h, 0F9h, 000h, 0A8h, 000h
-	db 0CAh, 0FFh, 0E0h, 000h
+	dd LABEL_E0FFCA
 	db 000h, 000h, 000h, 000h
-	db 000h, 000h, 04Fh, 068h, 02Ch, 049h, 020h, 077h
-	db 061h, 06Eh, 074h, 020h, 074h, 06Fh, 020h, 062h
-	db 065h, 020h, 069h, 06Eh, 020h, 074h, 068h, 061h
-	db 074h, 020h, 06Eh, 075h, 06Dh, 000h
+	db 000h, 000h
+LABEL_E0FFCA:	db "Oh,I want to be in that num", 000h
 
 
 LABEL_E0FFE6:
 	db 02Bh, 000h, 060h, 001h, 0A6h, 000h, 0FFh, 0FFh, 0A9h, 000h
 	db 0A7h, 000h, 008h, 000h, 0F6h, 000h, 096h, 000h
-	db 019h, 001h, 0A8h, 000h, 006h, 000h, 0E1h, 000h
-	db 000h, 000h, 000h, 000h, 0FCh, 000h, 062h, 065h
-	db 072h, 02Eh, 000h, 0FFh
+	db 019h, 001h, 0A8h, 000h
+	dd LABEL_E10006
+	db 000h, 000h, 000h, 000h, 0FCh, 000h
+LABEL_E10006:	db "ber.", 000h, 0FFh
 
 
 LABEL_E1000C:
 	db 02Bh, 000h, 060h, 001h
 	db 0A6h, 000h, 0FFh, 0FFh, 0AAh, 000h, 0A8h, 000h
 	db 008h, 000h, 01Eh, 000h, 066h, 000h, 0B1h, 000h
-	db 078h, 000h, 02Ch, 000h, 0E1h, 000h, 000h, 000h
-	db 000h, 000h, 000h, 000h, 04Fh, 068h, 02Ch, 057h
-	db 068h, 065h, 06Eh, 020h, 074h, 068h, 065h, 020h
-	db 053h, 061h, 069h, 06Eh, 074h, 073h, 000h, 0FFh
+	db 078h, 000h
+	dd LABEL_E1002C
+	db 000h, 000h, 000h, 000h, 000h, 000h
+LABEL_E1002C:	db "Oh,When the Saints", 000h, 0FFh
 
 
 LABEL_E10040:
 	db 02Bh, 000h, 060h, 001h, 0A6h, 000h, 0FFh, 0FFh
 	db 0ABh, 000h, 0A9h, 000h, 008h, 000h, 01Eh, 000h
-	db 0A6h, 000h, 011h, 001h, 0B8h, 000h, 060h, 000h
-	db 0E1h, 000h, 000h, 000h, 000h, 000h, 0FCh, 000h
-	db 057h, 068h, 065h, 06Eh, 020h, 074h, 068h, 065h
-	db 020h, 053h, 061h, 069h, 06Eh, 074h, 073h, 020h
-	db 067h, 06Fh, 020h, 06Dh, 061h, 072h, 063h, 068h
-	db 069h, 06Eh, 027h, 069h, 06Eh, 02Eh, 000h, 0FFh
+	db 0A6h, 000h, 011h, 001h, 0B8h, 000h
+	dd LABEL_E10060h
+	db 000h, 000h, 000h, 000h, 0FCh, 000h
+LABEL_E10060h:	db "When the Saints go marchin'in.", 000h, 0FFh
 
 
 LABEL_E10080:
@@ -38903,11 +38922,14 @@ LABEL_E1086C:
 
 
 LABEL_E10898:
-	db 06Ch, 000h, 060h, 001h, 0E0h, 000h, 0FFh, 0FFh
-	db 0FFh, 0FFh, 0FFh, 0FFh, 008h, 000h, 000h, 000h
-	db 000h, 000h, 020h, 000h, 020h, 000h, 0B2h, 008h
-	db 0E1h, 000h, 046h, 054h, 042h, 04Dh, 050h, 030h
-	db 036h, 000h
+	db 06Ch, 000h, 060h, 001h
+	db 0E0h, 000h, 0FFh, 0FFh
+	db 0FFh, 0FFh, 0FFh, 0FFh
+	db 008h, 000h, 000h, 000h
+	db 000h, 000h, 020h, 000h
+	db 020h, 000h
+	dd LABEL_E108B2
+LABEL_E108B2:	db "FTBMP06", 000h
 
 
 LABEL_E108BA:
