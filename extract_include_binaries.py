@@ -56,23 +56,36 @@ images_8bit = {
 	"BitmapFadeOutText": [108,  20, 0xB9C24],		# Fade Out Text
 }
 
+table_data = {
+	"FTBMP01.BMP": [0x80418, 0x13036], # Technics logo + World Globe
+	"FTBMP02.BMP": [0x9344E, 0xA6B6],  # Upside-down showcasing subwoofers
+	"FTBMP03.BMP": [0x9DB04, 0x9A36],  # Some floppy disks
+	"FTBMP04.BMP": [0xA753A, 0x9A53],  # Inserting disks into the floppy drive
+	"FTBMP05.BMP": [0xB0F70, 0xA076],  # Arrows representing 360 surround sound
+	"FTBMP06.BMP": [0xBAFE6, 0x13036], # KN5000 name + rainbow comet
+}
+
+for name, values in table_data.items():
+	offs, count = values
+	print(f"dd if=original_ROMs/kn5000_table_data.rom bs=1 count={count} of=maincpu/images/{name} skip={offs}")
+
 for name, values in images_1bit.items():
 	w, h, offs = values
 	count = int(w*h/8)
-	print(f"dd if=kn5000_v10_program.rom bs=1 count={count} of=images/{name}.bin skip={offs}")
+	print(f"dd if=original_ROMs/kn5000_v10_program.rom bs=1 count={count} of=maincpu/images/{name}.bin skip={offs}")
 
 for name, values in images_8bit.items():
 	w, h, offs = values
 	count = int(w*h)
-	print(f"dd if=kn5000_v10_program.rom bs=1 count={count} of=images/{name}.bin skip={offs}")
+	print(f"dd if=original_ROMs/kn5000_v10_program.rom bs=1 count={count} of=maincpu/images/{name}.bin skip={offs}")
 
 
 for name, values in images_1bit.items():
 	w, h, offs = values
 	count = int(w*h/8)
-	print(f"{name}: include(\"images/{name}.bin\")\t; {hex(0xE00000 + offs)}-{hex(0xE00000 + offs + count)}")
+	print(f"{name}: include(\"original_ROMs/images/{name}.bin\")\t; {hex(0xE00000 + offs)}-{hex(0xE00000 + offs + count)}")
 
 for name, values in images_8bit.items():
 	w, h, offs = values
 	count = int(w*h)
-	print(f"{name}: include(\"images/{name}.bin\")\t; {hex(0xE00000 + offs)}-{hex(0xE00000 + offs + count)}")
+	print(f"{name}: include(\"original_ROMs/images/{name}.bin\")\t; {hex(0xE00000 + offs)}-{hex(0xE00000 + offs + count)}")

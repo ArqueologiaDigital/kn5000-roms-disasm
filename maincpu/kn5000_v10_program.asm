@@ -37073,7 +37073,7 @@ LABEL_E0E9A0:
 	db 000h, 000h, 020h, 000h
 	db 020h, 000h
 	dd LABEL_E0E9BA
-LABEL_E0E9BA:	db "FTBMP01", 000h
+LABEL_E0E9BA:	db "FTBMP01", 000h	; Technics logo + World Globe
 
 
 LABEL_E0E9C2:
@@ -37898,7 +37898,7 @@ LABEL_E0F67C:
 	db 06Ch, 000h, 020h, 000h
 	db 08Ch, 000h
 	dd LABEL_E0F696
-LABEL_E0F696:	db "FTBMP02", 000h
+LABEL_E0F696:	db "FTBMP02", 000h	; Upside-down showcasing subwoofers
 
 
 LABEL_E0F69E:
@@ -37990,7 +37990,7 @@ LABEL_E0F80C:
 	db 06Ch, 000h, 020h, 000h
 	db 08Ch, 000h
 	dd LABEL_E0F826
-LABEL_E0F826:	db "FTBMP03", 000h
+LABEL_E0F826:	db "FTBMP03", 000h	; Some floppy disks
 
 
 LABEL_E0F82E:
@@ -38012,7 +38012,7 @@ LABEL_E0F85A:
 	db 06Ch, 000h, 020h, 000h
 	db 08Ch, 000h
 	dd LABEL_E0F874
-LABEL_E0F874:	db "FTBMP04", 000h
+LABEL_E0F874:	db "FTBMP04", 000h	; Inserting disks into the floppy drive
 
 
 LABEL_E0F87C:
@@ -38133,7 +38133,7 @@ LABEL_E0FA7C:
 	db 064h, 000h, 020h, 000h
 	db 084h, 000h
 	dd LABEL_E0FA96
-LABEL_E0FA96:	db "FTBMP05", 000h
+LABEL_E0FA96:	db "FTBMP05", 000h	; Arrows representing 360 surround sound
 
 
 LABEL_E0FA9E:
@@ -38929,7 +38929,7 @@ LABEL_E10898:
 	db 000h, 000h, 020h, 000h
 	db 020h, 000h
 	dd LABEL_E108B2
-LABEL_E108B2:	db "FTBMP06", 000h
+LABEL_E108B2:	db "FTBMP06", 000h	; KN5000 name + rainbow comet
 
 
 LABEL_E108BA:
