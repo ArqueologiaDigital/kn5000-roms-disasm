@@ -6,7 +6,8 @@ results = {}
 msg = ""
 for entry in [
 	("maincpu", "kn5000_v10_program"),
-	("subcpu payload", "kn5000_subprogram_v142")
+	("subcpu payload", "kn5000_subprogram_v142"),
+	("table data", "kn5000_table_data")
 ]:
 	key, filename = entry
 	msg += f"==== {filename} ====\n"
