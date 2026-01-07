@@ -248633,7 +248633,7 @@ LABEL_F525E5:
 GetMediaType:
 	LDA XSP, XSP - 014h
 	PUSH QIZ
-	CALL LABEL_F97EC9
+	CALL Reset_Floppy_Disk_Controller
 	PUSHW 0400h
 	CALL LABEL_FF0E80
 	INC 2, XSP
@@ -336863,7 +336863,8 @@ LABEL_F975D6:
 	db 01Eh, 0A4h, 0FFh, 031h, 0FFh, 0FFh, 0D9h, 0D8h
 	db 066h, 0DEh, 05Eh, 00Eh
 
-LABEL_F97612:
+
+SOME_DELAY:			; F97612
 	SRL 1, WA
 	LD DE, (SYSTEM_TIMESTAMP)
 	LD HL, 0
@@ -337094,6 +337095,8 @@ LABEL_F97634:
 	db 033h, 006h, 066h, 006h, 030h, 02Fh, 000h, 01Eh
 	db 0E7h, 0F8h, 0D7h, 0FAh, 005h, 00Eh
 
+;==================== (guessed) start of floppy routines =======================
+
 LABEL_F97CCA:
 	PUSH XIZ
 	LD XIZ, (XSP + 008h)
@@ -337214,12 +337217,12 @@ INTTC3_HANDLER:			; F97E35
 	RETI
 
 
-INT5_HANDLER:			; F97E4A
+INT5_HANDLER:			; F97E4A	"FDCIRQ"
 	LD (DMAR), 008h
 	RETI
 
 
-INT4_HANDLER:			; F97E50
+INT4_HANDLER:			; F97E50	"FDCINT"
 	PUSH XIZ
 	PUSH XIY
 	PUSH XIX
@@ -337235,24 +337238,24 @@ LABEL_F97E59:
 	CP WA, 0064h
 	JR GT, LABEL_F97EBC
 	CALR LABEL_F96B13
-	BIT 007h, L
+	BIT 7, L
 	JR Z, LABEL_F97E59
 
 LABEL_F97E6B:
 	CALR LABEL_F96B13
-	BIT 007h, L
+	BIT 7, L
 	JR Z, LABEL_F97E6B
 	CALR LABEL_F96B13
-	BIT 006h, L
+	BIT 6, L
 	JR NZ, LABEL_F97E93
-	LD_L 000h
-	CP L, 080h
+	LD_L 0
+	CP L, 80h
 	JR Z, LABEL_F97E8D
 
 LABEL_F97E82:
 	CALR LABEL_F96B13
 	AND L, 0f0h
-	CP L, 080h
+	CP L, 80h
 	JR NZ, LABEL_F97E82
 
 LABEL_F97E8D:
@@ -337270,17 +337273,17 @@ LABEL_F97E99:
 
 LABEL_F97EA2:
 	CALR LABEL_F96B13
-	BIT 007h, L
+	BIT 7, L
 	JR Z, LABEL_F97EA2
 	CALR LABEL_F96B13
-	BIT 006h, L
+	BIT 6, L
 	JR NZ, LABEL_F97E99
 	CALR LABEL_F9723D
-	CP (8A61h), 080h
+	CP (8A61h), 80h
 	JR NZ, LABEL_F97E6B
 
 LABEL_F97EBC:
-	LD (8A60h), 000h
+	LD (8A60h), 0
 	POP XWA
 	POP XBC
 	POP XDE
@@ -337290,17 +337293,24 @@ LABEL_F97EBC:
 	POP XIZ
 	RETI
 
-LABEL_F97EC9:
+
+Reset_Floppy_Disk_Controller:		; F97EC9
+; I am not entirely sure yet, but it looks like FDC initialization code...
+
+	; reset FDC by toggling Port D bit 0
 	SET 0, (PD)
 	LD WA, 000ah
-	CALR LABEL_F97612
+	CALR SOME_DELAY
 	RES 0, (PD)
 	LD WA, 000ah
-	JRL T, LABEL_F97612
+	JRL T, SOME_DELAY
+
+	; then do a lot of other stuff I still don't undertsand:
+
 	LD (PHFC), 01eh
-	BIT 6, (PD)
+	BIT 6, (PD)	; Port D bit 6: "FD.I/O signal"
 	RET NZ
-	LD_A 000h
+	LD_A 0
 	LDW (8B24h), 0000h
 	LDW (8B26h), 0000h
 	LDW (8B28h), 0000h
@@ -337366,7 +337376,7 @@ LABEL_F97F09:
 	CALR LABEL_F97CCA
 	LDA XSP, XSP + 014h
 	LD WA, 00c8h
-	CALR LABEL_F97612
+	CALR SOME_DELAY
 	INCW 1, (0E3DAh)
 	RET
 
@@ -337379,6 +337389,10 @@ Check_for_Floppy_Disk_Change:		; F98001
 Detected_Floppy_Disk_Change:		; F98009
 	LD_L 001h
 	RET
+;==================== (guessed) end of floppy routines =========================
+
+
+
 
 CheckTitleFunc:
 	LD XHL, 0
@@ -429271,7 +429285,7 @@ LABEL_FDDB19:
 LABEL_FDDB2E:
 	CALL LABEL_FC6E42
 	CALL LABEL_FC7000
-	CALL LABEL_F97EC9
+	CALL Reset_Floppy_Disk_Controller
 	CALL LABEL_FEA7EB
 	CALL LABEL_F9800F
 	JP LABEL_F1E9E0
