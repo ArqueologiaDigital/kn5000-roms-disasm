@@ -7,6 +7,7 @@
 LABEL_800000:
 	db 0 ;	TODO: figure out what's here.
 
+
 	ORG 87FFF0h
 
 hkst_55:
@@ -104,8 +105,65 @@ Compressed_data:
 	; etc...
 
 
+
+	ORG 9FA000h
+LABEL_9FA000:
+	db "SLIDE", 000h
+	db "Technics KN5000 Program  DATA FILE 1/2", 000h, 0ffh		; 9FA007
+	db "Technics KN5000 Program  DATA FILE 2/2", 000h, 0ffh		; 9FA02F
+	db "Technics KN5000 Program  DATA FILE PCK", 000h, 0ffh		; 9FA057
+	db "Technics KN5000 Table    DATA FILE 1/2", 000h, 0ffh		; 9FA07F
+	db "Technics KN5000 Table    DATA FILE 2/2", 000h, 0ffh		; 9FA0A7
+	db "Technics KN5000 Table    DATA FILE PCK", 000h, 0ffh		; 9FA1CF
+	db "Technics KN5000 CMPCUSTOMDATA FILE    ", 000h, 0ffh		; 9FA0F7
+	db "Technics KN5000 HD-AEPRG DATA FILE    ", 000h, 0ffh		; 9FA11F
+
+;HANDLE_UPDATE_BASE_ADDR		EQU HANDLE_UPDATE_FILE_TYPE_ID_001h
+;
+;HANDLE_UPDATE_OFFSETS:			; E00178
+;	dw (HANDLE_UPDATE_FILE_TYPE_ID_001h - HANDLE_UPDATE_BASE_ADDR)	; "Technics KN5000 ;Program DATA FILE 1/2"
+;	dw (SHOW_ILLEGAL_DISK_MESSAGE - HANDLE_UPDATE_BASE_ADDR)	; "Technics KN5000 Program DATA FILE 2/2"
+;	dw (HANDLE_UPDATE_FILE_TYPE_ID_003h - HANDLE_UPDATE_BASE_ADDR)	; "Technics KN5000 Table DATA FILE 1/2"
+;	dw (SHOW_ILLEGAL_DISK_MESSAGE - HANDLE_UPDATE_BASE_ADDR)	; "Technics KN5000 Table DATA FILE 2/2"
+;	dw (HANDLE_UPDATE_FILE_TYPE_ID_005h - HANDLE_UPDATE_BASE_ADDR)	; "Technics KN5000 CMPCUSTOMDATA FILE"
+;	dw (HANDLE_UPDATE_FILE_TYPE_ID_006h - HANDLE_UPDATE_BASE_ADDR)	; "Technics KN5000 HD-AEPRG DATA FILE"
+;	dw (HANDLE_UPDATE_FILE_TYPE_ID_007h - HANDLE_UPDATE_BASE_ADDR)	; "Technics KN5000 Program DATA FILE PCK"
+;	dw (HANDLE_UPDATE_FILE_TYPE_ID_008h - HANDLE_UPDATE_BASE_ADDR)	; "Technics KN5000 Table DATA FILE PCK"
+
+
+	ORG 9FA150h
+
+LABEL_9FA150:
+	db "SLIDE", 000h
+
+Bitmap_1bit_Flash_Memory_Update:	; 9FA156
+	binclude "../maincpu/images/Bitmap_1bit_Flash_Memory_Update.bin"
+
+Bitmap_1bit_Now_Erasing:		;
+	binclude "../maincpu/images/Bitmap_1bit_Now_Erasing.bin"
+
+Bitmap_1bit_FD_to_Flash_Memory:		;
+	binclude "../maincpu/images/Bitmap_1bit_FD_to_Flash_Memory.bin"
+
+Bitmap_1bit_Completed:			;
+	binclude "../maincpu/images/Bitmap_1bit_Completed.bin"
+
+Bitmap_1bit_Please_Wait:		;
+	binclude "../maincpu/images/Bitmap_1bit_Please_Wait.bin"
+
+Bitmap_1bit_Change_FD_2_of_2:		;
+	binclude "../maincpu/images/Bitmap_1bit_Change_FD_2_of_2.bin"
+
+Bitmap_1bit_Illegal_Disk:		;
+	binclude "../maincpu/images/Bitmap_1bit_Illegal_Disk.bin"
+
+Bitmap_1bit_Turn_On_AGAIN:		;
+	binclude "../maincpu/images/Bitmap_1bit_Turn_On_AGAIN.bin"
+
+
 	ORG 09FB705h
 EMPTY_HANDLER:
+	RETI
 
 	ORG 09FFEE0h
 RESET_HANDLER:
