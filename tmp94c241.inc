@@ -176,7 +176,7 @@ MUL_A MACRO value
 	ENDM
 
 MUL_C MACRO value
-	db 0d9h, 008h, value	; MUL C, byte
+	db 0cbh, 008h, value	; MUL C, byte
 	ENDM
 
 MUL_E MACRO value
