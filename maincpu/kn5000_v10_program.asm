@@ -142609,7 +142609,7 @@ Some_VGA_setup:		; ef55a7
 	; (no need to set BC = 0ffh because it is the same value previously set):
 	;
 	LDW WA, 3dah
-	CALR Write_VGA_Register
+	CALR Read_VGA_Register
 
 
     ; The colors below are the default EGA palette selection:
@@ -183085,7 +183085,7 @@ LABEL_F24A34:
 	PUSH XIX
 	DEC 1, HL
 	LD IY, HL
-	MULS_IYL 003h
+	MULS_IYL 0309h
 	LD XIX, 0000f250h
 	AND (XIX + IY), 07fh
 	INC 1, IY
@@ -184784,7 +184784,7 @@ LABEL_F25AEA:
 LABEL_F25B0B:
 	DEC 1, HL
 	LD IY, HL
-	MULS_IYL 3
+	MULS_IYL 0309h
 	PUSH XIX
 	LD XIX, 0000f250h
 	AND (XIX + IY), 07fh
