@@ -164,6 +164,10 @@ LDA_XDE_XBC_plus MACRO
 	db 0f5h, 0e5h, 032h	; LDA XDE, XBC+
 	ENDM
 
+LDA_XHL_XBC_plus__e4__ MACRO
+	db 0f5h, 0e4h, 033h	; LDA XHL, XBC+ (E4 variant)
+	ENDM
+
 LD_XWA_XDE_plus MACRO
 	db 0f5h, 0e8h, 030h	; LDA XWA, XDE+
 	ENDM
