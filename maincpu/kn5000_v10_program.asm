@@ -270878,16 +270878,13 @@ LABEL_F61681:
 	XOR B, B
 	LD XIX, 00f616a1h
 	LD C, (XIX + BC)
-	JR T, LABEL_F616A7
-	NORMAL
-	PUSH SR
-	MAX
-	LD (P4), 020h
+	JR T, LABEL_F616A9
+	; Bit mask lookup table (powers of 2):
+	db 01h, 02h, 04h, 08h, 10h, 20h, 40h, 80h
 
-LABEL_F616A7:
-	LD L, (350Fh)	; TODO: ASL: Review encoding 
-	XOR H, H	; TODO: ASL: Review encoding
-	db 0, 0		; TODO: ASL: Review encoding
+LABEL_F616A9:
+	LD L, (350Fh)
+	XOR H, H
 	LD A, (350Eh)
 	AND A, 003h
 	SLA 002h, A
