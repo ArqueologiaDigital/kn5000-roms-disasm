@@ -172,6 +172,10 @@ LDA_XIY_XDE_plus__e8__ MACRO
 	db 0f5h, 0e8h, 035h	; LDA XIY, XDE+ (E8 variant)
 	ENDM
 
+LDA_XBC_XHL__ec__ MACRO
+	db 0f5h, 0ech, 031h	; LDA XBC, (XHL) (EC variant, no auto-increment)
+	ENDM
+
 LD_XWA_XDE_plus MACRO
 	db 0f5h, 0e8h, 030h	; LDA XWA, XDE+
 	ENDM
