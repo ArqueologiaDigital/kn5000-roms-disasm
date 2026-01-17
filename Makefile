@@ -8,17 +8,17 @@ all: rebuilt_ROMs/kn5000_v10_program.rebuilt.rom rebuilt_ROMs/kn5000_subprogram_
 rebuilt_ROMs/kn5000_v10_program.rebuilt.p: tmp94c241.inc maincpu/kn5000_v10_program.asm
 	mkdir -p rebuilt_ROMs
 	rm -f rebuilt_ROMs/kn5000_v10_program.rebuilt.p
-	$(ASL) maincpu/kn5000_v10_program.asm -l -o rebuilt_ROMs/kn5000_v10_program.rebuilt.p
+	$(ASL) maincpu/kn5000_v10_program.asm -o rebuilt_ROMs/kn5000_v10_program.rebuilt.p
 
 rebuilt_ROMs/kn5000_subprogram_v142.rebuilt.p: tmp94c241.inc subcpu/kn5000_subprogram_v142.asm
 	mkdir -p rebuilt_ROMs
 	rm -f rebuilt_ROMs/kn5000_subprogram_v142.rebuilt.p
-	$(ASL) subcpu/kn5000_subprogram_v142.asm -l -o rebuilt_ROMs/kn5000_subprogram_v142.rebuilt.p
+	$(ASL) subcpu/kn5000_subprogram_v142.asm -o rebuilt_ROMs/kn5000_subprogram_v142.rebuilt.p
 
 rebuilt_ROMs/kn5000_table_data.rebuilt.p: tmp94c241.inc table_data/kn5000_table_data.asm
 	mkdir -p rebuilt_ROMs
 	rm -f rebuilt_ROMs/kn5000_table_data.rebuilt.p
-	$(ASL) table_data/kn5000_table_data.asm -l -o rebuilt_ROMs/kn5000_table_data.rebuilt.p
+	$(ASL) table_data/kn5000_table_data.asm -o rebuilt_ROMs/kn5000_table_data.rebuilt.p
 
 
 
