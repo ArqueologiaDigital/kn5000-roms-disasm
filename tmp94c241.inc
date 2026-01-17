@@ -120,6 +120,10 @@ LDW_16_16 MACRO dst, src
 	db 0d1h, src & 0ffh, (src >> 8) & 0ffh, 019h, dst & 0ffh, (dst >> 8) & 0ffh	; LDW (word_dst), (word_src)
 	ENDM
 
+LD_8_8 MACRO dst, src
+	db 0c1h, src & 0ffh, (src >> 8) & 0ffh, 019h, dst & 0ffh, (dst >> 8) & 0ffh	; LD (byte_dst), (byte_src)
+	ENDM
+
 LDA_XBC_XWA_plus MACRO
 	db 0f5h, 0e2h, 031h	; LDA XBC, XWA+
 	ENDM
