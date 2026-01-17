@@ -132,6 +132,26 @@ LDA_XBC_XWA_plus__e1__ MACRO
 	db 0f5h, 0e1h, 031h	; LDA XBC, XWA+
 	ENDM
 
+LDA_XBC_XWA_plus__e0__ MACRO
+	db 0f5h, 0e0h, 031h	; LDA XBC, XWA+ (E0 variant)
+	ENDM
+
+LDA_XDE_XWA_plus__e0__ MACRO
+	db 0f5h, 0e0h, 032h	; LDA XDE, XWA+ (E0 variant)
+	ENDM
+
+LDA_XHL_XWA_plus__e0__ MACRO
+	db 0f5h, 0e0h, 033h	; LDA XHL, XWA+ (E0 variant)
+	ENDM
+
+LDA_XWA_XWA_plus__e0__ MACRO
+	db 0f5h, 0e0h, 030h	; LDA XWA, XWA+ (E0 variant)
+	ENDM
+
+LDA_XIX_XWA_plus__e0__ MACRO
+	db 0f5h, 0e0h, 034h	; LDA XIX, XWA+ (E0 variant)
+	ENDM
+
 LDA_XDE_XBC_plus MACRO
 	db 0f5h, 0e5h, 032h	; LDA XDE, XBC+
 	ENDM
