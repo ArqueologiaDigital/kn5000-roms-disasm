@@ -191,6 +191,10 @@ LDIR MACRO
 	db 085h, 011h		; LDIR
 	ENDM
 
+LDDR_85 MACRO
+	db 085h, 013h		; LDDR (85 variant)
+	ENDM
+
 MUL_A MACRO value
 	db 0c9h, 008h, value	; MUL A, byte
 	ENDM
