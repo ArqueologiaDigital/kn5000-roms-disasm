@@ -5,151 +5,120 @@
 This changelog documents the code changes made by Claude Code to improve the byte-matching accuracy of the Technics KN5000 ROM disassembly project.
 
 **Starting point:** maincpu: 99.94% (1310 incorrect bytes)
-**Ending point:** maincpu: 99.95% (1007 incorrect bytes)
-**Improvement:** 303 bytes fixed
+**Current status:** maincpu: 99.99% (227 incorrect bytes)
+**Total improvement:** 1083 bytes fixed (83% reduction in errors)
 
 ---
 
-## Commits
+## Commits (Chronological)
 
-### f0f0623 - Add CLAUDE.md with project guidance for Claude Code
+### f0f0623 - Add CLAUDE.md with project guidance
 
-Created `CLAUDE.md` containing:
-- Build commands (`make all`, `make clean`)
-- Project architecture overview
-- Memory map documentation
-- Technical constraints about ASL assembler limitations
-- Guidelines for working with the codebase
+Created project documentation file with build commands, architecture overview, and technical constraints.
 
 ### 43e909c - Add .gitignore for build artifacts
 
-Created `.gitignore` to exclude:
-- `rebuilt_ROMs/` directory (build output)
-- `part_a.rom` and `part_b.rom` (intermediate files)
+Excluded `rebuilt_ROMs/`, `part_a.rom`, `part_b.rom` from version control.
 
-### 0aca1cb - maincpu: 99.95% (1109 bad bytes) - fix shift instruction encodings
+### 0aca1cb through 77b0e91 - Fix shift instruction encodings (1310→1007 bytes)
 
-**Problem:** ASL Macro Assembler 1.42 Beta encodes shift instructions differently than the TMP94C241F CPU expects. When writing `SRL 8, XWA`, ASL generates the shift amount as 8 in the instruction encoding, but the original ROM uses shift amount 0.
+Fixed ASL assembler encoding issues with shift instructions (SRL/SLL/SLA/SRA).
+Added 9 new macros for 0-shift variants and fixed `SLA_8_XWA` bug.
 
-**Solution:** Added new macros to `tmp94c241.inc` that emit the correct raw bytes:
+### cd07409 - Fix CP QBC/QIZ register encoding (1007→951 bytes)
 
-```asm
-SRL_0_XBC MACRO
-    db 0e9h, 0efh, 000h    ; SRL 0, XBC
-    ENDM
+Changed 61 instances of `CP QBC, 0` to `CP QIZ, 0` where the original ROM uses the QIZ register encoding.
 
-SLL_0_XWA MACRO
-    db 0e8h, 0eeh, 000h    ; SLL 0, XWA
-    ENDM
+### 3d501bb - Fix remaining CP QBC/QIZ cases (951→947 bytes)
 
-SLL_0_XBC MACRO
-    db 0e9h, 0eeh, 000h    ; SLL 0, XBC
-    ENDM
+Fixed `CP QBC, 7` → `CP QIZ, 7` (1 instance) and `CP QBC, 3` → `CP QIZ, 3` (3 instances).
 
-SLL_0_XDE MACRO
-    db 0eah, 0eeh, 000h    ; SLL 0, XDE
-    ENDM
+### 8291b7d - Fix memory-to-memory LD encoding (947→417 bytes)
 
-SLL_0_XHL MACRO
-    db 0ebh, 0eeh, 000h    ; SLL 0, XHL
-    ENDM
+Added `LD_8_8` macro using C1 encoding (`C1 src 19 dst`) instead of ASL's F1 encoding.
+Replaced 106 byte memory-to-memory load instructions.
 
-SLL_8_XIX MACRO
-    db 0ech, 0eeh, 008h    ; SLL 8, XIX
-    ENDM
+### a3b950b - Fix LDW memory-to-memory encoding (417→257 bytes)
 
-SLA_0_XWA MACRO
-    db 0e8h, 0ech, 000h    ; SLA 0, XWA
-    ENDM
+Converted 27 `LDW (mem), (mem)` instructions to use `LDW_16_16` macro with D1 encoding.
 
-SRA_0_XBC MACRO
-    db 0e9h, 0edh, 000h    ; SRA 0, XBC
-    ENDM
+### ed2dd6a - Fix MUL_C macro encoding (257→240 bytes)
 
-SRA_0_XDE MACRO
-    db 0eah, 0edh, 000h    ; SRA 0, XDE
-    ENDM
-```
+Fixed `MUL_C` macro to use `CB` prefix (for C register) instead of incorrect `D9` prefix.
 
-**Bug fix:** Corrected `SLA_8_XWA` macro which had `000h` instead of `008h` for the shift amount byte.
+### 2e3845f - Fix LDA E0 encoding variants (240→227 bytes)
 
-**Files modified:**
-- `tmp94c241.inc` - Added 9 new macros, fixed 1 existing macro
-- `maincpu/kn5000_v10_program.asm` - Replaced ~405 shift instructions with appropriate macros
-
-### baa7e24 through 77b0e91 - Iterative shift amount corrections
-
-Multiple commits to refine which specific shift instructions needed the 0-shift vs 8-shift encoding:
-
-| Commit | Bad bytes | Description |
-|--------|-----------|-------------|
-| baa7e24 | 1083 | Partial corrections |
-| 1ef8040 | 1066 | Reverted incorrect changes |
-| 557ab05 | 1016 | More corrections |
-| 77b0e91 | 1007 | Complete shift corrections |
-
-**Methodology:**
-1. Compare rebuilt ROM with original byte-by-byte
-2. Identify specific addresses with mismatches
-3. Map addresses to source code lines using nearby labels
-4. Determine correct encoding by examining original ROM bytes
-5. Apply targeted replacements
+Added E0 variant macros for LDA instructions and changed 13 instructions to use correct encoding.
 
 ---
 
 ## Technical Details
 
-### Shift Instruction Encoding
+### Issue Categories Fixed
 
-The TLCS900 shift instructions have the format:
-```
-[register byte] [opcode byte] [shift amount byte]
-```
+| Issue | Pattern | Count | Solution |
+|-------|---------|-------|----------|
+| Shift amount encoding | 00↔08 in shift instructions | ~303 | Created 0-shift macros |
+| CP register encoding | FA↔E6 (QIZ vs QBC) | 65 | Changed QBC to QIZ |
+| Memory-to-memory LD | C1↔F1 (different encodings) | 106 | Created LD_8_8 macro |
+| Memory-to-memory LDW | D1↔F1 (use macro) | 27 | Used LDW_16_16 macro |
+| MUL_C macro bug | CB↔D9 (wrong prefix) | 17 | Fixed macro prefix |
+| LDA addressing mode | E0↔E2 (different modes) | 13 | Created E0 variant macros |
 
-| Instruction | Register byte | Opcode byte | Notes |
-|-------------|---------------|-------------|-------|
-| SRL XWA | E8h | EFh | Shift right logical |
-| SRL XBC | E9h | EFh | |
-| SLL XWA | E8h | EEh | Shift left logical |
-| SLL XBC | E9h | EEh | |
-| SLL XDE | EAh | EEh | |
-| SLL XHL | EBh | EEh | |
-| SLL XIX | ECh | EEh | |
-| SLA XWA | E8h | ECh | Shift left arithmetic |
-| SLA XDE | EAh | ECh | |
-| SRA XWA | E8h | EDh | Shift right arithmetic |
-| SRA XBC | E9h | EDh | |
-| SRA XDE | EAh | EDh | |
+### New Macros Added to tmp94c241.inc
 
-The third byte specifies the shift amount (00h = shift by 0, 08h = shift by 8).
+**Shift instruction macros (0-shift variants):**
+- `SRL_0_XBC`, `SRL_0_XWA` (already existed)
+- `SLL_0_XWA`, `SLL_0_XBC`, `SLL_0_XDE`, `SLL_0_XHL`
+- `SLL_8_XIX`
+- `SLA_0_XWA`
+- `SRA_0_XBC`, `SRA_0_XDE`
 
-### ASL Assembler Limitation
+**Memory-to-memory load macro:**
+- `LD_8_8` - Byte memory-to-memory load with C1 encoding
 
-ASL 1.42 Beta only supports TMP96C141, not the TMP94C241F used in the KN5000. This causes encoding differences for certain instructions. The workaround is to define macros that emit raw bytes for the correct encoding.
+**LDA E0 variant macros:**
+- `LDA_XBC_XWA_plus__e0__`
+- `LDA_XDE_XWA_plus__e0__`
+- `LDA_XHL_XWA_plus__e0__`
+- `LDA_XIX_XWA_plus__e0__`
+- `LDA_XWA_XWA_plus__e0__`
+
+### Bug Fixes in tmp94c241.inc
+
+1. `SLA_8_XWA`: Changed shift amount from `000h` to `008h`
+2. `MUL_C`: Changed prefix from `D9h` to `CBh`
 
 ---
 
 ## Remaining Work
 
-**1007 bytes** still differ from the original ROM due to:
+**227 bytes** still differ from the original ROM, scattered across 28 small groups.
+These appear to be various individual encoding differences that would require detailed investigation:
 
-1. **FA→E6 register encoding** (~61 cases)
-   - `CP QIZ, 0` instruction encoded differently
-   - Pattern: `D7 FA D8` (original) vs `D7 E6 D8` (ASL)
-
-2. **Memory-to-memory load encoding** (~185 cases)
-   - Pattern: `C1` (original) vs `F1` (ASL)
-
-3. **CB→D9 register encoding** (~8 cases)
-   - Different register encoding for certain instructions
+- Operand byte ordering differences
+- Other addressing mode variants
+- Individual instruction encoding quirks
 
 ---
 
-## Files Changed
+## Files Changed Summary
 
-| File | Changes |
-|------|---------|
-| `CLAUDE.md` | Created - Project documentation |
-| `.gitignore` | Created - Build artifact exclusions |
-| `tmp94c241.inc` | Added 9 macros, fixed 1 bug |
-| `maincpu/kn5000_v10_program.asm` | ~405 line changes for shift encodings |
+| File | Total Changes |
+|------|---------------|
+| `CLAUDE.md` | Created |
+| `.gitignore` | Created |
+| `tmp94c241.inc` | +17 new macros, 2 bug fixes |
+| `maincpu/kn5000_v10_program.asm` | ~650+ line changes |
+
+---
+
+## Methodology
+
+1. **Identify patterns:** Compare rebuilt ROM with original byte-by-byte to find mismatch patterns
+2. **Analyze encoding:** Determine what instruction each byte pattern represents
+3. **Test with ASL:** Verify ASL's encoding vs original ROM encoding
+4. **Create macros:** For unsupported encodings, create macros that emit raw bytes
+5. **Apply fixes:** Replace instructions in source with correct macros
+6. **Iterate:** Rebuild, compare, refine until pattern is fixed
+7. **Commit:** Save progress after each improvement
