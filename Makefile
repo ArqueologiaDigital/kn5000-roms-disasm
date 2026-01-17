@@ -1,5 +1,5 @@
 ASL_PATH=/home/fsanches/devel/Projeto_KN5000/kn5000_homebrew/asl-current
-ASL=$(ASL_PATH)/asl
+ASL=$(ASL_PATH)/asl -w
 P2BIN=$(ASL_PATH)/p2bin
 
 all: rebuilt_ROMs/kn5000_v10_program.rebuilt.rom rebuilt_ROMs/kn5000_subprogram_v142.rebuilt.rom rebuilt_ROMs/kn5000_table_data.rebuilt.rom
