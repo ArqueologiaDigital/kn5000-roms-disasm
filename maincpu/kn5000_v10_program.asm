@@ -377056,7 +377056,7 @@ LABEL_FB2B06:
 	LDW BC, 000h
 	; but omitting the final "CALR _Write_VGA_Register"
 
-	JR T, LABEL_FB2F24
+	db 68h, 0fh  ; JR T to CALR inside _VGA_SEQUENCER macro below
 
 
 LABEL_FB2F12:
