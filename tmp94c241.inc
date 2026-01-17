@@ -156,6 +156,10 @@ LDA_XIX_XIZ_plus__f9__ MACRO
 	db 0f5h, 0f9h, 034h	; LDA XIX, XIZ+ (F9 variant)
 	ENDM
 
+LDA_XIX_XIZ_plus__f8__ MACRO
+	db 0f5h, 0f8h, 034h	; LDA XIX, XIZ+ (F8 variant)
+	ENDM
+
 LDA_XDE_XBC_plus MACRO
 	db 0f5h, 0e5h, 032h	; LDA XDE, XBC+
 	ENDM
