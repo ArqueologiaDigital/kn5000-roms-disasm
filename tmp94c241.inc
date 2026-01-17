@@ -365,7 +365,7 @@ SRL_0_XDE MACRO
 	ENDM
 
 SLA_8_XWA MACRO
-	db 0e8h, 0ech, 000h	; SLA ?, XWA
+	db 0e8h, 0ech, 008h	; SLA 8, XWA
 	ENDM
 
 SLA_0_XIX MACRO
@@ -381,5 +381,41 @@ SRL_0_XHL MACRO
 	ENDM
 
 SRL_0_XWA MACRO
-	db 0e8h, 0efh, 000h	; SRL ?, XWA
+	db 0e8h, 0efh, 000h	; SRL 0, XWA
+	ENDM
+
+SRL_0_XBC MACRO
+	db 0e9h, 0efh, 000h	; SRL 0, XBC
+	ENDM
+
+SLL_0_XWA MACRO
+	db 0e8h, 0eeh, 000h	; SLL 0, XWA
+	ENDM
+
+SLL_0_XBC MACRO
+	db 0e9h, 0eeh, 000h	; SLL 0, XBC
+	ENDM
+
+SLL_0_XDE MACRO
+	db 0eah, 0eeh, 000h	; SLL 0, XDE
+	ENDM
+
+SLL_0_XHL MACRO
+	db 0ebh, 0eeh, 000h	; SLL 0, XHL
+	ENDM
+
+SLL_8_XIX MACRO
+	db 0ech, 0eeh, 008h	; SLL 8, XIX
+	ENDM
+
+SLA_0_XWA MACRO
+	db 0e8h, 0ech, 000h	; SLA 0, XWA
+	ENDM
+
+SRA_0_XBC MACRO
+	db 0e9h, 0edh, 000h	; SRA 0, XBC
+	ENDM
+
+SRA_0_XDE MACRO
+	db 0eah, 0edh, 000h	; SRA 0, XDE
 	ENDM
