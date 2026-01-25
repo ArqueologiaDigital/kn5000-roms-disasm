@@ -125,14 +125,21 @@ REG_0163		EQU	0163h
 REG_0165		EQU	0165h
 REG_0166		EQU	0166h
 
-; RAM variables
-VAR_04FE		EQU	04FEh	; Payload ready flag (bit 6=ready, bit 7=complete)
-VAR_0512		EQU	0512h	; DMA transfer address storage
-VAR_0516		EQU	0516h	; DMA state machine (0=idle, 1=pending, 2=in progress)
-VAR_0518		EQU	0518h	; Command processing state (0-4)
-VAR_051A		EQU	051Ah	; Last received command byte
-VAR_0556		EQU	0556h	; Memory test result flags
-VAR_0558		EQU	0558h	; Serial status bytes (8 bytes)
+; RAM variables - Communication and State
+SUBCPU_STATUS_FLAGS	EQU	04FEh	; Status flags (bit 6=payload ready, bit 7=xfer complete)
+DMA_TARGET_ADDR		EQU	0512h	; Current DMA destination address (4 bytes)
+DMA_STATE		EQU	0516h	; DMA state machine (0=idle, 1=pending, 2=in progress)
+CMD_PROCESSING_STATE	EQU	0518h	; Command processing state (0-4)
+LAST_CMD_BYTE		EQU	051Ah	; Last received command byte from main CPU
+
+; RAM variables - Data Buffers
+CMD_DATA_BUFFER		EQU	051Eh	; Variable-length command data (32 bytes max)
+CMD_E1_BUFFER		EQU	0544h	; E1 command data buffer (6 bytes)
+CMD_E2_BUFFER		EQU	054Ah	; E2 command data buffer (10 bytes)
+
+; RAM variables - Diagnostics
+MEMTEST_RESULT		EQU	0556h	; Memory test result flags
+SERIAL_STATUS		EQU	0558h	; Serial status bytes (8 bytes)
 
 ; ==============================================================================
 ; ROM starts with 96KB of 0xFF (erased flash)
@@ -309,9 +316,9 @@ BOOT_INIT:
 ; ==============================================================================
 
 MAIN_LOOP:
-	res	6, (VAR_04FE)		; Clear ready flag
+	res	6, (SUBCPU_STATUS_FLAGS)		; Clear ready flag
 .wait_loop:
-	bit	6, (VAR_04FE)		; Check if payload ready
+	bit	6, (SUBCPU_STATUS_FLAGS)		; Check if payload ready
 	jr	Z, .check_status
 	ei	6			; Enable interrupt level 6
 	call	PAYLOAD_ENTRY		; Call payload at 0x0400!
@@ -475,8 +482,8 @@ INIT_DMA_SERIAL:
 	ldc	unknown, A		; DMA mode
 
 	; Clear variables
-	ld	(VAR_0516), 00h
-	ld	(VAR_0518), 00h
+	ld	(DMA_STATE), 00h
+	ld	(CMD_PROCESSING_STATE), 00h
 	ret
 
 ; ==============================================================================
@@ -486,30 +493,30 @@ INIT_DMA_SERIAL:
 	org	0FF8956h
 
 INIT_MEMORY_TEST:
-	ld	(VAR_0556), 00h
+	ld	(MEMTEST_RESULT), 00h
 	set	1, (INTTC01)
 	bit	0, (INTTC01)
 	ret	NZ			; Return if bit set
 
 	ld	WA, 0
 	call	MEM_TEST_ROUTINE	; 0xFF89FC
-	ld	(VAR_0556), L
+	ld	(MEMTEST_RESULT), L
 	extz	HL
 	ld	WA, HL
 	call	SUB_8AB4		; 0xFF8AB4
-	ld	(VAR_0556), L
+	ld	(MEMTEST_RESULT), L
 	call	SUB_8C80		; 0xFF8C80
 	cp	HL, 0FFFFh
 	jr	NZ, .no_error
-	set	3, (VAR_0556)
+	set	3, (MEMTEST_RESULT)
 .no_error:
-	ld	A, (VAR_0556)
+	ld	A, (MEMTEST_RESULT)
 	extz	WA
 	call	DELAY_ROUTINE		; 0xFF89A9
 
 	; Clear serial buffer area
 	ld	(110002h), 0003h
-	lda	XBC, VAR_0558
+	lda	XBC, SERIAL_STATUS
 	ld	XWA, XBC
 	inc	0, XBC
 .clear_loop:
@@ -533,13 +540,13 @@ INT_HANDLER_9:
 	bit	2, (SC0BUF)		; Check serial status
 	jr	NZ, .exit
 	ld	A, (INTER_CPU_LATCH)	; Read command from main CPU
-	ld	(VAR_051A), A		; Save received byte
+	ld	(LAST_CMD_BYTE), A		; Save received byte
 	cp	A, 0E1h			; Command E1?
 	jr	NZ, .not_e1
 	; E1: Set up DMA for 6 bytes
-	ld	(VAR_0518), 02h
+	ld	(CMD_PROCESSING_STATE), 02h
 	lda	XWA, 0544h
-	ld	(VAR_0512), XWA
+	ld	(DMA_TARGET_ADDR), XWA
 	ldc	unknown, XWA		; DMA destination
 	ld	WA, 6
 	ldc	unknown, WA		; DMA count
@@ -548,9 +555,9 @@ INT_HANDLER_9:
 	cp	A, 0E2h			; Command E2?
 	jr	NZ, .not_e2
 	; E2: Set up DMA for 10 bytes
-	ld	(VAR_0518), 03h
+	ld	(CMD_PROCESSING_STATE), 03h
 	lda	XWA, 054Ah
-	ld	(VAR_0512), XWA
+	ld	(DMA_TARGET_ADDR), XWA
 	ldc	unknown, XWA		; DMA destination
 	ld	WA, 000Ah
 	ldc	unknown, WA		; DMA count
@@ -559,15 +566,15 @@ INT_HANDLER_9:
 	cp	A, 0E3h			; Command E3?
 	jr	NZ, .default_cmd
 	; E3: Signal payload ready
-	set	6, (VAR_04FE)
+	set	6, (SUBCPU_STATUS_FLAGS)
 	jr	.clear_flag
 .default_cmd:
 	; Other commands: variable-length DMA based on low 5 bits
-	ld	(VAR_0518), 01h
+	ld	(CMD_PROCESSING_STATE), 01h
 	lda	XWA, 051Eh
-	ld	(VAR_0512), XWA
+	ld	(DMA_TARGET_ADDR), XWA
 	ldc	unknown, XWA		; DMA destination
-	ld	A, (VAR_051A)
+	ld	A, (LAST_CMD_BYTE)
 	and	A, 1Fh			; Low 5 bits = count - 1
 	inc	1, A
 	extz	WA
@@ -582,27 +589,27 @@ INT_HANDLER_9:
 
 ; ==============================================================================
 ; Interrupt Handler 37 (0xFF889A) - DMA Complete Interrupt
-; Updates state machine variable VAR_0516
+; Updates state machine variable DMA_STATE
 ; ==============================================================================
 
 	org	0FF889Ah
 
 INT_HANDLER_37:
 	res	2, (WDMOD)		; Clear watchdog bit
-	cp	(VAR_0516), 01h		; State 1?
+	cp	(DMA_STATE), 01h		; State 1?
 	jr	NZ, .not_state1
-	ld	(VAR_0516), 00h		; -> State 0
+	ld	(DMA_STATE), 00h		; -> State 0
 	jr	.done
 .not_state1:
-	cp	(VAR_0516), 02h		; State 2?
+	cp	(DMA_STATE), 02h		; State 2?
 	jr	NZ, .done
-	ld	(VAR_0516), 01h		; -> State 1
+	ld	(DMA_STATE), 01h		; -> State 1
 .done:
 	reti
 
 ; ==============================================================================
 ; Interrupt Handler 35 (0xFF88B8) - Timer/Processing Interrupt
-; Main processing handler, dispatches based on VAR_0518 state
+; Main processing handler, dispatches based on CMD_PROCESSING_STATE state
 ; ==============================================================================
 
 	org	0FF88B8h
@@ -615,7 +622,7 @@ INT_HANDLER_35:
 	push	XDE
 	push	XBC
 	push	XWA
-	ld	A, (VAR_0518)
+	ld	A, (CMD_PROCESSING_STATE)
 	cp	A, 4			; State 4?
 	jr	Z, .state4
 	cp	A, 3			; State 3?
@@ -627,7 +634,7 @@ INT_HANDLER_35:
 	; State 1: Process received data, call handler from table
 	push	0000h
 	push	051Eh
-	ld	C, (VAR_051A)
+	ld	C, (LAST_CMD_BYTE)
 	ld	A, C
 	and	A, 1Fh			; Low 5 bits = count
 	inc	1, A
@@ -641,7 +648,7 @@ INT_HANDLER_35:
 	ld	XWA, (XBC+WA)		; Get handler address
 	call	T, XWA			; Call handler (if valid)
 	inc	6, XSP			; Clean up stack
-	ld	(VAR_0518), 00h
+	ld	(CMD_PROCESSING_STATE), 00h
 	jr	.set_flag_exit
 .state2:
 	; State 2: Set up secondary DMA transfer
@@ -651,19 +658,19 @@ INT_HANDLER_35:
 	ld	WA, (XWA+4)
 	ldc	unknown, WA		; DMA count
 	ld	(0100h), 0Ah		; Trigger DMA
-	ld	(VAR_0518), 04h		; -> State 4
+	ld	(CMD_PROCESSING_STATE), 04h		; -> State 4
 	jr	.check_watchdog
 .state3:
 	; State 3: Set completion flags
 	ld	(051Ch), 0FFh
-	ld	(VAR_0518), 00h
+	ld	(CMD_PROCESSING_STATE), 00h
 	set	1, (SC0BUF)
 	set	7, (0554h)
 	jr	.check_watchdog
 .state4:
 	; State 4: Final state, clear ready flag
-	ld	(VAR_0518), 00h
-	res	7, (VAR_04FE)
+	ld	(CMD_PROCESSING_STATE), 00h
+	res	7, (SUBCPU_STATUS_FLAGS)
 .set_flag_exit:
 	set	1, (SC0BUF)
 .check_watchdog:
@@ -891,7 +898,7 @@ SERIAL_INIT:
 	push	QIZ
 	ld	QIZH, 0			; Error accumulator
 	calr	SUB_8B37		; Initialize serial subsystem
-	lda	XWA, VAR_0558
+	lda	XWA, SERIAL_STATUS
 	ld	XBC, XWA
 	lda	XDE, XWA+8
 .check_loop:
