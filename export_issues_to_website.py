@@ -88,6 +88,10 @@ def generate_markdown(issues: list) -> str:
         category = get_category(issue.get('title', ''))
         by_category[category].append(issue)
 
+    # Generate category anchor IDs
+    def category_to_anchor(cat):
+        return cat.lower().replace(' ', '-').replace('&', '').replace('--', '-')
+
     lines = [
         "---",
         "layout: page",
@@ -101,16 +105,30 @@ def generate_markdown(issues: list) -> str:
         "",
         f"**Total Issues:** {len(issues)} ({len(open_issues)} open, {len(closed_issues)} closed)",
         "",
+        "**Quick Links:** ",
+    ]
+
+    # Add category quick links
+    category_links = []
+    for category in sorted(by_category.keys()):
+        anchor = category_to_anchor(category)
+        count = len(by_category[category])
+        category_links.append(f"[{category}](#{anchor}) ({count})")
+    lines.append(" · ".join(category_links))
+
+    lines.extend([
+        "",
         "---",
         "",
         "## Open Issues",
         "",
-    ]
+    ])
 
     # Generate open issues by category
     for category in sorted(by_category.keys()):
         cat_issues = by_category[category]
-        lines.append(f"### {category}")
+        anchor = category_to_anchor(category)
+        lines.append(f"### {category} {{#{anchor}}}")
         lines.append("")
 
         for issue in cat_issues:
@@ -132,7 +150,7 @@ def generate_markdown(issues: list) -> str:
             else:
                 badge = "⚪"
 
-            lines.append(f"#### {badge} {title}")
+            lines.append(f"#### {badge} {title} {{#issue-{issue_id}}}")
             lines.append("")
             lines.append(f"**ID:** `{issue_id}` | **Priority:** {priority_label} | **Created:** {created}")
             lines.append("")
@@ -150,7 +168,8 @@ def generate_markdown(issues: list) -> str:
             if deps:
                 blocking = [d['depends_on_id'] for d in deps if d.get('type') == 'blocks']
                 if blocking:
-                    lines.append(f"**Blocked by:** {', '.join(f'`{b}`' for b in blocking)}")
+                    links = [f"[`{b}`](#issue-{b})" for b in blocking]
+                    lines.append(f"**Depends on:** {', '.join(links)}")
                     lines.append("")
 
             lines.append("---")
