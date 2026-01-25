@@ -2,7 +2,7 @@ ASL_PATH=/home/fsanches/claude_jail/asl-current
 ASL=$(ASL_PATH)/asl -w
 P2BIN=$(ASL_PATH)/p2bin
 
-all: rebuilt_ROMs/kn5000_v10_program.rebuilt.rom rebuilt_ROMs/kn5000_subprogram_v142.rebuilt.rom rebuilt_ROMs/kn5000_table_data.rebuilt.rom
+all: rebuilt_ROMs/kn5000_v10_program.rebuilt.rom rebuilt_ROMs/kn5000_subprogram_v142.rebuilt.rom rebuilt_ROMs/kn5000_subcpu_boot.rebuilt.rom rebuilt_ROMs/kn5000_table_data.rebuilt.rom
 	python compare_roms.py
 
 rebuilt_ROMs/kn5000_v10_program.rebuilt.p: tmp94c241.inc maincpu/kn5000_v10_program.asm
@@ -20,6 +20,10 @@ rebuilt_ROMs/kn5000_table_data.rebuilt.p: tmp94c241.inc table_data/kn5000_table_
 	rm -f rebuilt_ROMs/kn5000_table_data.rebuilt.p
 	$(ASL) table_data/kn5000_table_data.asm -o rebuilt_ROMs/kn5000_table_data.rebuilt.p
 
+rebuilt_ROMs/kn5000_subcpu_boot.rebuilt.p: tmp94c241.inc subcpu_boot/kn5000_subcpu_boot.asm subcpu_boot/subcpu_boot_data_8000.bin
+	mkdir -p rebuilt_ROMs
+	rm -f rebuilt_ROMs/kn5000_subcpu_boot.rebuilt.p
+	$(ASL) subcpu_boot/kn5000_subcpu_boot.asm -o rebuilt_ROMs/kn5000_subcpu_boot.rebuilt.p
 
 
 rebuilt_ROMs/kn5000_v10_program.rebuilt.rom: rebuilt_ROMs/kn5000_v10_program.rebuilt.p
@@ -33,6 +37,9 @@ rebuilt_ROMs/kn5000_subprogram_v142.rebuilt.rom: rebuilt_ROMs/kn5000_subprogram_
 
 rebuilt_ROMs/kn5000_table_data.rebuilt.rom: rebuilt_ROMs/kn5000_table_data.rebuilt.p
 	$(P2BIN) rebuilt_ROMs/kn5000_table_data.rebuilt.p rebuilt_ROMs/kn5000_table_data.rebuilt.rom
+
+rebuilt_ROMs/kn5000_subcpu_boot.rebuilt.rom: rebuilt_ROMs/kn5000_subcpu_boot.rebuilt.p
+	$(P2BIN) rebuilt_ROMs/kn5000_subcpu_boot.rebuilt.p rebuilt_ROMs/kn5000_subcpu_boot.rebuilt.rom
 
 
 # Documentation website targets
@@ -49,7 +56,7 @@ issues:
 website: gallery issues
 	@echo "Website content updated. Don't forget to commit kn5000-docs."
 
-clean: clean_subcpu clean_maincpu clean_table_data
+clean: clean_subcpu clean_subcpu_boot clean_maincpu clean_table_data
 
 clean_maincpu:
 	rm -f rebuilt_ROMs/kn5000_v10_program.rebuilt.*
@@ -62,3 +69,6 @@ clean_subcpu:
 
 clean_table_data:
 	rm -f rebuilt_ROMs/kn5000_table_data.rebuilt.*
+
+clean_subcpu_boot:
+	rm -f rebuilt_ROMs/kn5000_subcpu_boot.rebuilt.*
