@@ -28,9 +28,35 @@ make clean_table_data   # Table data only
 
 # Verify rebuilt ROMs against originals (runs automatically after make all)
 python compare_roms.py
+
+# Convert extracted images to PNG for documentation website gallery
+make gallery
 ```
 
 The ASL assembler path is configured in the Makefile at `ASL_PATH`.
+
+## Project Policies
+
+### Image Extraction and Gallery Updates
+
+When new images are discovered and extracted as `.bin` files in `maincpu/images/` or `table_data/images/`:
+
+1. **Add metadata** to `convert_images.py` in the `IMAGE_METADATA` dictionary:
+   - Filename
+   - Dimensions (width, height)
+   - Bit depth (1, 4, or 8)
+   - Description
+
+2. **Run the gallery conversion**:
+   ```bash
+   make gallery
+   ```
+
+3. **Update the image gallery** page at `../kn5000-docs/image-gallery.md` with the new images
+
+4. **Commit both repositories** (roms-disasm and docs) together
+
+This ensures the documentation website always reflects the latest extracted images.
 
 ## Architecture
 

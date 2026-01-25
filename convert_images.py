@@ -1,0 +1,223 @@
+#!/usr/bin/env python3
+"""
+Convert extracted KN5000 bitmap images from raw .bin format to PNG.
+
+This script knows the dimensions and format of each extracted image.
+When new images are extracted, add their metadata to IMAGE_METADATA.
+
+Usage:
+    python convert_images.py [output_dir]
+
+Default output_dir is ../kn5000-docs/assets/images/gallery/
+"""
+
+import os
+import sys
+from pathlib import Path
+
+try:
+    from PIL import Image
+except ImportError:
+    print("Error: Pillow is required. Install with: pip install Pillow")
+    sys.exit(1)
+
+# Image metadata: filename -> (width, height, bit_depth, description)
+# bit_depth: 1 = monochrome, 4 = 16 colors, 8 = 256 colors
+IMAGE_METADATA = {
+    # 1-bit status messages (224x22, 28 bytes per row, from disassembly comment)
+    "Bitmap_1bit_Flash_Memory_Update.bin": (224, 22, 1, "Flash Memory Update message"),
+    "Bitmap_1bit_Now_Erasing.bin": (224, 22, 1, "Now Erasing message"),
+    "Bitmap_1bit_FD_to_Flash_Memory.bin": (224, 22, 1, "FD to Flash Memory message"),
+    "Bitmap_1bit_Completed.bin": (224, 22, 1, "Completed message"),
+    "Bitmap_1bit_Please_Wait.bin": (224, 22, 1, "Please Wait message"),
+    "Bitmap_1bit_Change_FD_2_of_2.bin": (224, 22, 1, "Change FD 2 of 2 message"),
+    "Bitmap_1bit_Illegal_Disk.bin": (224, 22, 1, "Illegal Disk message"),
+    "Bitmap_1bit_Turn_On_AGAIN.bin": (224, 22, 1, "Turn On AGAIN message"),
+
+    # Logos - dimensions estimated from file size assuming 8bpp
+    # 14040 bytes: likely 180x78 or 195x72 or 234x60
+    "BitmapTechnicsLogo.bin": (234, 60, 8, "Technics brand logo"),
+    # 7200 bytes: likely 120x60 or 150x48 or 180x40
+    "BitmapKN5000Logo.bin": (150, 48, 8, "KN5000 model logo"),
+
+    # Split point indicators - 3016 bytes each, likely 58x52 at 8bpp
+    "BitmapSplitPoint_C.bin": (58, 52, 8, "Split point C"),
+    "BitmapSplitPoint_Db.bin": (58, 52, 8, "Split point Db"),
+    "BitmapSplitPoint_D.bin": (58, 52, 8, "Split point D"),
+    "BitmapSplitPoint_Eb.bin": (58, 52, 8, "Split point Eb"),
+    "BitmapSplitPoint_E.bin": (58, 52, 8, "Split point E"),
+    "BitmapSplitPoint_F.bin": (58, 52, 8, "Split point F"),
+    "BitmapSplitPoint_Gb.bin": (58, 52, 8, "Split point Gb"),
+    "BitmapSplitPoint_G.bin": (58, 52, 8, "Split point G"),
+    "BitmapSplitPoint_Ab.bin": (58, 52, 8, "Split point Ab"),
+    "BitmapSplitPoint_A.bin": (58, 52, 8, "Split point A"),
+    "BitmapSplitPoint_Bb.bin": (58, 52, 8, "Split point Bb"),
+    "BitmapSplitPoint_B.bin": (58, 52, 8, "Split point B"),
+    "BitmapSplitPoint_no_split.bin": (58, 52, 8, "Split point - no split"),
+
+    # Drawbar sliders - 4884 bytes each, likely 111x44 at 8bpp
+    "BitmapDrawbarNumberedSlider_1.bin": (111, 44, 8, "Drawbar slider 1"),
+    "BitmapDrawbarNumberedSlider_2.bin": (111, 44, 8, "Drawbar slider 2"),
+    "BitmapDrawbarNumberedSlider_3.bin": (111, 44, 8, "Drawbar slider 3"),
+
+    # MIDI connection diagrams - 31968 bytes each, likely 296x108 at 8bpp or 148x216
+    "BitmapMIDIConnections_1.bin": (296, 108, 8, "MIDI connections diagram 1"),
+    "BitmapMIDIConnections_2.bin": (296, 108, 8, "MIDI connections diagram 2"),
+    "BitmapMIDIConnections_3.bin": (296, 108, 8, "MIDI connections diagram 3"),
+
+    # Other UI elements - dimensions estimated
+    "BitmapWormWearingHat.bin": (24, 24, 8, "Easter egg - worm wearing hat"),
+    "BitmapSomeArrows.bin": (42, 42, 8, "Arrow icons"),
+    "BitmapFadeInPicture.bin": (70, 40, 8, "Fade in picture effect"),
+    "BitmapFadeOutPicture.bin": (70, 40, 8, "Fade out picture effect"),  # 2850 slightly larger
+    "BitmapFadeInText.bin": (60, 24, 8, "Fade in text effect"),
+    "BitmapFadeOutText.bin": (60, 36, 8, "Fade out text effect"),
+
+    # Larger graphics - dimensions estimated
+    "BitmapAccger16.bin": (150, 76, 8, "Accompaniment graphic (German)"),
+    "BitmapAccita16.bin": (150, 76, 8, "Accompaniment graphic (Italian)"),
+    "BitmapBmphk.bin": (150, 80, 8, "Unknown graphic"),
+    "BitmapDredt0d.bin": (222, 90, 8, "Unknown graphic"),
+    "BitmapDredt0k.bin": (131, 80, 8, "Unknown graphic"),
+    "BitmapNtedt0d.bin": (254, 120, 8, "Note edit graphic"),
+    "BitmapNtedt0k.bin": (127, 16, 8, "Note edit graphic small"),
+}
+
+
+def convert_1bit_image(data: bytes, width: int, height: int) -> Image.Image:
+    """Convert 1-bit packed bitmap to PIL Image."""
+    img = Image.new('1', (width, height), 1)  # White background
+    pixels = img.load()
+
+    bytes_per_row = (width + 7) // 8
+
+    for y in range(height):
+        for x in range(width):
+            byte_idx = y * bytes_per_row + x // 8
+            if byte_idx < len(data):
+                bit_idx = 7 - (x % 8)
+                pixel = (data[byte_idx] >> bit_idx) & 1
+                pixels[x, y] = pixel
+
+    return img
+
+
+def convert_8bit_image(data: bytes, width: int, height: int) -> Image.Image:
+    """Convert 8-bit grayscale/indexed bitmap to PIL Image."""
+    img = Image.new('L', (width, height), 255)  # White background
+    pixels = img.load()
+
+    for y in range(height):
+        for x in range(width):
+            idx = y * width + x
+            if idx < len(data):
+                pixels[x, y] = data[idx]
+
+    return img
+
+
+def convert_4bit_image(data: bytes, width: int, height: int) -> Image.Image:
+    """Convert 4-bit packed bitmap to PIL Image."""
+    img = Image.new('L', (width, height), 255)
+    pixels = img.load()
+
+    for y in range(height):
+        for x in range(width):
+            byte_idx = (y * width + x) // 2
+            if byte_idx < len(data):
+                if x % 2 == 0:
+                    pixel = (data[byte_idx] >> 4) & 0x0F
+                else:
+                    pixel = data[byte_idx] & 0x0F
+                pixels[x, y] = pixel * 17  # Scale 0-15 to 0-255
+
+    return img
+
+
+def convert_image(bin_path: Path, output_dir: Path) -> bool:
+    """Convert a single .bin image to PNG."""
+    filename = bin_path.name
+
+    if filename not in IMAGE_METADATA:
+        print(f"  Warning: Unknown image {filename} - skipping (add to IMAGE_METADATA)")
+        return False
+
+    width, height, bit_depth, description = IMAGE_METADATA[filename]
+
+    with open(bin_path, 'rb') as f:
+        data = f.read()
+
+    # Verify size matches expected
+    if bit_depth == 1:
+        expected_size = ((width + 7) // 8) * height
+    elif bit_depth == 4:
+        expected_size = ((width + 1) // 2) * height
+    else:
+        expected_size = width * height
+
+    if len(data) != expected_size:
+        print(f"  Warning: {filename} size mismatch: {len(data)} bytes, expected {expected_size}")
+        print(f"           Dimensions {width}x{height} at {bit_depth}bpp may be wrong")
+        # Try to convert anyway
+
+    try:
+        if bit_depth == 1:
+            img = convert_1bit_image(data, width, height)
+        elif bit_depth == 4:
+            img = convert_4bit_image(data, width, height)
+        else:
+            img = convert_8bit_image(data, width, height)
+
+        output_name = bin_path.stem + ".png"
+        output_path = output_dir / output_name
+        img.save(output_path)
+        print(f"  Converted: {filename} -> {output_name} ({width}x{height}, {bit_depth}bpp)")
+        return True
+
+    except Exception as e:
+        print(f"  Error converting {filename}: {e}")
+        return False
+
+
+def main():
+    # Determine paths
+    script_dir = Path(__file__).parent
+    images_dir = script_dir / "maincpu" / "images"
+
+    if len(sys.argv) > 1:
+        output_dir = Path(sys.argv[1])
+    else:
+        output_dir = script_dir.parent / "kn5000-docs" / "assets" / "images" / "gallery"
+
+    if not images_dir.exists():
+        print(f"Error: Images directory not found: {images_dir}")
+        sys.exit(1)
+
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    print(f"Converting images from: {images_dir}")
+    print(f"Output directory: {output_dir}")
+    print()
+
+    bin_files = sorted(images_dir.glob("*.bin"))
+    converted = 0
+    skipped = 0
+
+    for bin_path in bin_files:
+        if convert_image(bin_path, output_dir):
+            converted += 1
+        else:
+            skipped += 1
+
+    print()
+    print(f"Done: {converted} converted, {skipped} skipped")
+
+    if skipped > 0:
+        print("\nTo add support for skipped images:")
+        print("1. Determine dimensions from disassembly or experimentation")
+        print("2. Add entry to IMAGE_METADATA in this script")
+        print("3. Run again")
+
+
+if __name__ == "__main__":
+    main()

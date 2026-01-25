@@ -1,4 +1,4 @@
-ASL_PATH=/home/fsanches/devel/Projeto_KN5000/kn5000_homebrew/asl-current
+ASL_PATH=/home/fsanches/claude_jail/asl-current
 ASL=$(ASL_PATH)/asl -w
 P2BIN=$(ASL_PATH)/p2bin
 
@@ -34,6 +34,12 @@ rebuilt_ROMs/kn5000_subprogram_v142.rebuilt.rom: rebuilt_ROMs/kn5000_subprogram_
 rebuilt_ROMs/kn5000_table_data.rebuilt.rom: rebuilt_ROMs/kn5000_table_data.rebuilt.p
 	$(P2BIN) rebuilt_ROMs/kn5000_table_data.rebuilt.p rebuilt_ROMs/kn5000_table_data.rebuilt.rom
 
+
+# Documentation website image gallery
+DOCS_GALLERY=../kn5000-docs/assets/images/gallery
+
+gallery:
+	python convert_images.py $(DOCS_GALLERY)
 
 clean: clean_subcpu clean_maincpu clean_table_data
 
