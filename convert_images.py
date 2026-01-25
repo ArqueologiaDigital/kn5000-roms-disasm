@@ -5,6 +5,9 @@ Convert extracted KN5000 bitmap images from raw .bin format to PNG.
 This script knows the dimensions and format of each extracted image.
 When new images are extracted, add their metadata to IMAGE_METADATA.
 
+Uses the extracted 8-bit RGBA palette (Palette_8bit_RGBA.bin) for proper
+color rendering of indexed images.
+
 Usage:
     python convert_images.py [output_dir]
 
@@ -20,6 +23,40 @@ try:
 except ImportError:
     print("Error: Pillow is required. Install with: pip install Pillow")
     sys.exit(1)
+
+# Palette file for 8-bit indexed images
+PALETTE_FILE = "Palette_8bit_RGBA.bin"
+
+
+def load_palette(palette_path: Path) -> list:
+    """Load 256-color RGBA palette from binary file.
+
+    The palette is stored as 256 entries of 4 bytes each in BGRA format
+    (Blue, Green, Red, Alpha - common Windows format).
+    Returns a list of 256 RGB tuples for PIL palette.
+    """
+    if not palette_path.exists():
+        print(f"  Warning: Palette file not found: {palette_path}")
+        return None
+
+    with open(palette_path, 'rb') as f:
+        data = f.read()
+
+    if len(data) != 1024:
+        print(f"  Warning: Palette file size mismatch: {len(data)} bytes, expected 1024")
+        return None
+
+    # Convert BGRA to RGB palette (flatten for PIL)
+    palette = []
+    for i in range(256):
+        b = data[i * 4 + 0]
+        g = data[i * 4 + 1]
+        r = data[i * 4 + 2]
+        # a = data[i * 4 + 3]  # Alpha ignored for now
+        palette.extend([r, g, b])
+
+    return palette
+
 
 # Image metadata: filename -> (width, height, bit_depth, description)
 # bit_depth: 1 = monochrome, 4 = 16 colors, 8 = 256 colors
@@ -117,16 +154,36 @@ def convert_1bit_image(data: bytes, width: int, height: int) -> Image.Image:
     return img
 
 
-def convert_8bit_image(data: bytes, width: int, height: int) -> Image.Image:
-    """Convert 8-bit grayscale/indexed bitmap to PIL Image."""
-    img = Image.new('L', (width, height), 255)  # White background
-    pixels = img.load()
+def convert_8bit_image(data: bytes, width: int, height: int, palette: list = None) -> Image.Image:
+    """Convert 8-bit indexed bitmap to PIL Image.
 
-    for y in range(height):
-        for x in range(width):
-            idx = y * width + x
-            if idx < len(data):
-                pixels[x, y] = data[idx]
+    If palette is provided, creates an indexed color image with the palette.
+    Otherwise falls back to grayscale.
+    """
+    if palette:
+        # Create indexed color image with palette
+        img = Image.new('P', (width, height), 0)
+        img.putpalette(palette)
+        pixels = img.load()
+
+        for y in range(height):
+            for x in range(width):
+                idx = y * width + x
+                if idx < len(data):
+                    pixels[x, y] = data[idx]
+
+        # Convert to RGB for better PNG output
+        img = img.convert('RGB')
+    else:
+        # Fallback to grayscale
+        img = Image.new('L', (width, height), 255)
+        pixels = img.load()
+
+        for y in range(height):
+            for x in range(width):
+                idx = y * width + x
+                if idx < len(data):
+                    pixels[x, y] = data[idx]
 
     return img
 
@@ -149,11 +206,13 @@ def convert_4bit_image(data: bytes, width: int, height: int) -> Image.Image:
     return img
 
 
-def convert_image(bin_path: Path, output_dir: Path) -> bool:
+def convert_image(bin_path: Path, output_dir: Path, palette: list = None) -> bool:
     """Convert a single .bin image to PNG."""
     filename = bin_path.name
 
     if filename not in IMAGE_METADATA:
+        if filename == PALETTE_FILE:
+            return False  # Skip the palette file itself
         print(f"  Warning: Unknown image {filename} - skipping (add to IMAGE_METADATA)")
         return False
 
@@ -181,12 +240,13 @@ def convert_image(bin_path: Path, output_dir: Path) -> bool:
         elif bit_depth == 4:
             img = convert_4bit_image(data, width, height)
         else:
-            img = convert_8bit_image(data, width, height)
+            img = convert_8bit_image(data, width, height, palette)
 
         output_name = bin_path.stem + ".png"
         output_path = output_dir / output_name
         img.save(output_path)
-        print(f"  Converted: {filename} -> {output_name} ({width}x{height}, {bit_depth}bpp)")
+        color_info = "indexed color" if (bit_depth == 8 and palette) else f"{bit_depth}bpp"
+        print(f"  Converted: {filename} -> {output_name} ({width}x{height}, {color_info})")
         return True
 
     except Exception as e:
@@ -212,6 +272,14 @@ def main():
 
     print(f"Converting images from: {images_dir}")
     print(f"Output directory: {output_dir}")
+
+    # Load palette for 8-bit indexed color images
+    palette_path = images_dir / PALETTE_FILE
+    palette = load_palette(palette_path)
+    if palette:
+        print(f"Loaded palette: {PALETTE_FILE}")
+    else:
+        print("Warning: No palette loaded, 8-bit images will be grayscale")
     print()
 
     bin_files = sorted(images_dir.glob("*.bin"))
@@ -219,7 +287,7 @@ def main():
     skipped = 0
 
     for bin_path in bin_files:
-        if convert_image(bin_path, output_dir):
+        if convert_image(bin_path, output_dir, palette):
             converted += 1
         else:
             skipped += 1
