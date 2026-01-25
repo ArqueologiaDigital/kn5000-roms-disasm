@@ -23627,8 +23627,7 @@ LABEL_EB37BC:
 LABEL_EB37CE:
 
 	ORG 0EB37DEh
-Palette_8bit_RGBA:			; eb37de - 256 colors x 4 bytes (RGBA)
-	; Data is in sequential section, also extracted to images/Palette_8bit_RGBA.bin
+Palette_8bit_RGBA:			; eb37de - see Palette_8bit_RGBA_Data for binclude
 
 	ORG 0EB3BDEh
 LABEL_EB3BDE:
@@ -134109,137 +134108,8 @@ LABEL_EED098:
 	db 043h, 053h, 020h, 056h, 031h, 02Eh, 030h, 020h
 	db 020h, 020h, 000h, 000h, 000h, 0FFh, 000h, 0FFh
 	db 000h, 0FFh, 000h, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh
-	db 000h, 000h, 000h, 000h, 080h, 000h, 000h, 000h
-	db 000h, 080h, 000h, 000h, 080h, 080h, 000h, 000h
-	db 000h, 000h, 080h, 000h, 080h, 000h, 080h, 000h
-	db 000h, 080h, 080h, 000h, 0A0h, 0A0h, 0A0h, 000h
-	db 0C0h, 0DCh, 0C0h, 000h, 0A6h, 0CAh, 0F0h, 000h
-	db 0C1h, 000h, 000h, 000h, 0CEh, 063h, 000h, 000h
-	db 0DEh, 000h, 000h, 000h, 0D6h, 031h, 094h, 000h
-	db 0FFh, 0F3h, 00Ch, 000h, 0E7h, 0E7h, 09Ch, 000h
-	db 0BDh, 0BDh, 0BDh, 000h, 0E4h, 0E4h, 0E4h, 000h
-	db 019h, 02Bh, 02Eh, 000h, 036h, 0A6h, 0BBh, 000h
-	db 02Fh, 052h, 053h, 000h, 012h, 020h, 020h, 000h
-	db 03Ch, 070h, 073h, 000h, 039h, 07Fh, 081h, 000h
-	db 036h, 068h, 06Ah, 000h, 032h, 0A1h, 0A7h, 000h
-	db 016h, 02Bh, 02Dh, 000h, 037h, 092h, 0B1h, 000h
-	db 01Fh, 026h, 02Ch, 000h, 050h, 065h, 021h, 000h
-	db 011h, 07Ah, 07Fh, 000h, 03Fh, 053h, 063h, 000h
-	db 047h, 067h, 07Fh, 000h, 006h, 0C9h, 0D5h, 000h
-	db 00Bh, 01Fh, 085h, 000h, 057h, 036h, 013h, 000h
-	db 00Dh, 021h, 098h, 000h, 021h, 04Fh, 099h, 000h
-	db 071h, 06Bh, 018h, 000h, 083h, 07Fh, 05Ch, 000h
-	db 044h, 07Ch, 0A7h, 000h, 039h, 09Ch, 0E1h, 000h
-	db 006h, 006h, 026h, 000h, 006h, 00Dh, 047h, 000h
-	db 008h, 016h, 06Ch, 000h, 00Ch, 01Eh, 08Dh, 000h
-	db 013h, 01Eh, 006h, 000h, 01Bh, 01Ch, 006h, 000h
-	db 02Fh, 01Eh, 007h, 000h, 046h, 021h, 00Ch, 000h
-	db 056h, 023h, 012h, 000h, 06Bh, 027h, 018h, 000h
-	db 021h, 033h, 009h, 000h, 034h, 033h, 009h, 000h
-	db 02Eh, 02Dh, 007h, 000h, 046h, 032h, 00Ch, 000h
-	db 056h, 037h, 012h, 000h, 06Bh, 03Eh, 018h, 000h
-	db 033h, 04Dh, 00Dh, 000h, 040h, 04Dh, 00Dh, 000h
-	db 04Eh, 04Dh, 00Dh, 000h, 046h, 042h, 00Ch, 000h
-	db 056h, 046h, 012h, 000h, 06Bh, 04Ch, 018h, 000h
-	db 03Fh, 061h, 013h, 000h, 04Eh, 061h, 013h, 000h
-	db 05Fh, 061h, 013h, 000h, 05Fh, 060h, 013h, 000h
-	db 054h, 052h, 012h, 000h, 06Bh, 05Ch, 018h, 000h
-	db 05Dh, 078h, 017h, 000h, 06Ch, 078h, 017h, 000h
-	db 076h, 078h, 017h, 000h, 075h, 076h, 017h, 000h
-	db 006h, 020h, 020h, 000h, 006h, 018h, 026h, 000h
-	db 006h, 01Ah, 047h, 000h, 008h, 021h, 06Ch, 000h
-	db 00Ch, 027h, 08Dh, 000h, 00Eh, 030h, 0B0h, 000h
-	db 006h, 01Eh, 007h, 000h, 019h, 021h, 028h, 000h
-	db 01Dh, 025h, 04Ah, 000h, 022h, 02Fh, 06Ch, 000h
-	db 024h, 037h, 091h, 000h, 006h, 01Bh, 0C0h, 000h
-	db 010h, 033h, 007h, 000h, 028h, 038h, 02Fh, 000h
-	db 031h, 030h, 02Bh, 000h, 044h, 034h, 02Fh, 000h
-	db 05Ah, 03Bh, 033h, 000h, 081h, 03Eh, 01Ch, 000h
-	db 022h, 04Dh, 00Dh, 000h, 038h, 04Ch, 031h, 000h
-	db 046h, 04Ch, 031h, 000h, 044h, 041h, 030h, 000h
-	db 05Ah, 04Ah, 033h, 000h, 081h, 055h, 01Ch, 000h
-	db 033h, 061h, 013h, 000h, 046h, 064h, 033h, 000h
-	db 054h, 064h, 033h, 000h, 065h, 064h, 033h, 000h
-	db 057h, 058h, 033h, 000h, 081h, 069h, 01Ch, 000h
-	db 044h, 078h, 017h, 000h, 05Fh, 092h, 01Bh, 000h
-	db 074h, 092h, 01Bh, 000h, 087h, 092h, 01Bh, 000h
-	db 090h, 091h, 01Ah, 000h, 07Fh, 07Bh, 01Ch, 000h
-	db 006h, 03Ch, 03Eh, 000h, 006h, 03Ch, 047h, 000h
-	db 006h, 029h, 047h, 000h, 008h, 02Fh, 06Ch, 000h
-	db 00Ch, 038h, 08Dh, 000h, 00Eh, 03Dh, 0B0h, 000h
-	db 006h, 032h, 02Ah, 000h, 01Ch, 041h, 049h, 000h
-	db 01Bh, 035h, 04Ch, 000h, 022h, 03Dh, 06Ch, 000h
-	db 024h, 040h, 091h, 000h, 006h, 02Dh, 0C0h, 000h
-	db 006h, 032h, 013h, 000h, 01Ch, 034h, 02Eh, 000h
-	db 032h, 043h, 050h, 000h, 03Ah, 048h, 072h, 000h
-	db 013h, 033h, 0C3h, 000h, 006h, 01Dh, 0D1h, 000h
-	db 00Eh, 04Ch, 00Ah, 000h, 020h, 04Ch, 023h, 000h
-	db 03Bh, 051h, 04Fh, 000h, 049h, 04Eh, 053h, 000h
-	db 064h, 04Fh, 047h, 000h, 092h, 04Fh, 02Bh, 000h
-	db 01Eh, 061h, 00Eh, 000h, 038h, 064h, 033h, 000h
-	db 053h, 073h, 044h, 000h, 068h, 073h, 044h, 000h
-	db 066h, 061h, 046h, 000h, 092h, 06Dh, 02Bh, 000h
-	db 02Fh, 078h, 017h, 000h, 049h, 092h, 01Bh, 000h
-	db 068h, 0B0h, 01Bh, 000h, 087h, 0B0h, 01Bh, 000h
-	db 0AAh, 0B0h, 01Bh, 000h, 090h, 08Bh, 02Ah, 000h
-	db 009h, 056h, 05Bh, 000h, 008h, 063h, 06Ch, 000h
-	db 008h, 050h, 06Ch, 000h, 008h, 03Ch, 06Ch, 000h
-	db 00Ch, 044h, 08Dh, 000h, 00Eh, 048h, 0B0h, 000h
-	db 009h, 051h, 04Dh, 000h, 01Fh, 061h, 067h, 000h
-	db 01Eh, 056h, 06Ch, 000h, 01Eh, 047h, 06Ch, 000h
-	db 024h, 04Dh, 091h, 000h, 006h, 045h, 0C0h, 000h
-	db 009h, 04Bh, 035h, 000h, 01Dh, 04Ch, 04Ch, 000h
-	db 034h, 066h, 072h, 000h, 033h, 058h, 074h, 000h
-	db 013h, 053h, 0C3h, 000h, 006h, 040h, 0D1h, 000h
-	db 009h, 04Bh, 01Dh, 000h, 01Dh, 04Bh, 039h, 000h
-	db 035h, 051h, 053h, 000h, 047h, 061h, 076h, 000h
-	db 01Bh, 046h, 0D4h, 000h, 006h, 027h, 0D8h, 000h
-	db 00Dh, 060h, 00Dh, 000h, 022h, 064h, 02Dh, 000h
-	db 031h, 071h, 03Bh, 000h, 04Ch, 078h, 062h, 000h
-	db 06Ch, 06Eh, 06Bh, 000h, 0A6h, 069h, 03Ah, 000h
-	db 021h, 077h, 013h, 000h, 02Ch, 092h, 017h, 000h
-	db 040h, 0B0h, 01Bh, 000h, 069h, 0C9h, 025h, 000h
-	db 0AAh, 0C9h, 025h, 000h, 0A3h, 09Eh, 03Ah, 000h
-	db 00Bh, 074h, 07Ah, 000h, 00Bh, 085h, 08Ch, 000h
-	db 00Bh, 06Eh, 08Ch, 000h, 00Bh, 064h, 08Ch, 000h
-	db 00Bh, 054h, 08Ch, 000h, 00Eh, 05Ah, 0B0h, 000h
-	db 00Ch, 070h, 06Eh, 000h, 021h, 07Fh, 086h, 000h
-	db 021h, 07Ah, 090h, 000h, 021h, 068h, 090h, 000h
-	db 021h, 05Dh, 090h, 000h, 006h, 05Eh, 0C0h, 000h
-	db 00Bh, 060h, 051h, 000h, 021h, 069h, 06Dh, 000h
-	db 01Dh, 0A0h, 0ABh, 000h, 013h, 094h, 0BFh, 000h
-	db 013h, 075h, 0BFh, 000h, 006h, 05Fh, 0D1h, 000h
-	db 00Bh, 060h, 03Ah, 000h, 020h, 064h, 05Ah, 000h
-	db 02Eh, 074h, 072h, 000h, 01Ah, 0B4h, 0D0h, 000h
-	db 016h, 082h, 0D5h, 000h, 006h, 05Eh, 0D8h, 000h
-	db 00Bh, 060h, 022h, 000h, 020h, 064h, 042h, 000h
-	db 02Dh, 073h, 054h, 000h, 040h, 076h, 075h, 000h
-	db 040h, 089h, 0BDh, 000h, 013h, 039h, 0E1h, 000h
-	db 00Fh, 079h, 00Fh, 000h, 015h, 08Fh, 017h, 000h
-	db 019h, 0A8h, 017h, 000h, 020h, 0C2h, 01Ah, 000h
-	db 05Ch, 0CBh, 048h, 000h, 0A2h, 0A0h, 05Fh, 000h
-	db 00Eh, 09Eh, 0AEh, 000h, 00Ch, 090h, 0B2h, 000h
-	db 00Ch, 082h, 0B2h, 000h, 00Ch, 077h, 0B2h, 000h
-	db 00Fh, 08Ch, 08Ch, 000h, 006h, 0AFh, 0B4h, 000h
-	db 006h, 0B1h, 0BBh, 000h, 008h, 019h, 019h, 000h
-	db 008h, 021h, 021h, 000h, 010h, 021h, 021h, 000h
-	db 011h, 029h, 029h, 000h, 019h, 042h, 042h, 000h
-	db 019h, 042h, 04Bh, 000h, 019h, 053h, 053h, 000h
-	db 009h, 06Ch, 08Dh, 000h, 009h, 07Dh, 07Dh, 000h
-	db 009h, 07Dh, 095h, 000h, 019h, 053h, 053h, 000h
-	db 019h, 05Bh, 064h, 000h, 019h, 06Ch, 074h, 000h
-	db 019h, 09Dh, 0C7h, 000h, 000h, 008h, 000h, 000h
-	db 031h, 031h, 029h, 000h, 0FFh, 048h, 000h, 000h
-	db 040h, 040h, 040h, 000h, 0FFh, 0FFh, 0A6h, 000h
-	db 0D6h, 0FEh, 069h, 000h, 09Ch, 09Ch, 0FFh, 000h
-	dd LABEL_F0FBFF
-	db 0A0h, 0A0h, 0A4h, 000h
-	db 060h, 060h, 060h, 000h, 0FFh, 000h, 000h, 000h
-	db 000h, 0FFh, 000h, 000h, 0FFh, 0FFh, 000h, 000h
-	dd LABEL_FF0000
-	dd LABEL_FF00FF
-	dd LABEL_FFFF00
-	dd LABEL_FFFFFF
+Palette_8bit_RGBA_Data:			; eb37de - 256 colors x 4 bytes (RGBA)
+	binclude "images/Palette_8bit_RGBA.bin"
 	db 020h, 001h, 000h, 002h, 001h, 003h, 002h, 004h
 	db 003h, 005h, 004h, 006h, 005h, 007h, 006h, 008h
 	db 007h, 009h, 008h, 00Ah, 009h, 00Bh, 00Ah, 00Ch
