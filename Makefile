@@ -35,11 +35,19 @@ rebuilt_ROMs/kn5000_table_data.rebuilt.rom: rebuilt_ROMs/kn5000_table_data.rebui
 	$(P2BIN) rebuilt_ROMs/kn5000_table_data.rebuilt.p rebuilt_ROMs/kn5000_table_data.rebuilt.rom
 
 
-# Documentation website image gallery
-DOCS_GALLERY=../kn5000-docs/assets/images/gallery
+# Documentation website targets
+DOCS_DIR=../kn5000-docs
+DOCS_GALLERY=$(DOCS_DIR)/assets/images/gallery
 
 gallery:
 	python convert_images.py $(DOCS_GALLERY)
+
+issues:
+	python export_issues_to_website.py $(DOCS_DIR)/issues.md
+
+# Update all website content (gallery + issues)
+website: gallery issues
+	@echo "Website content updated. Don't forget to commit kn5000-docs."
 
 clean: clean_subcpu clean_maincpu clean_table_data
 
