@@ -31,9 +31,9 @@ PALETTE_FILE = "Palette_8bit_RGBA.bin"
 def load_palette(palette_path: Path) -> list:
     """Load 256-color RGBA palette from binary file.
 
-    The palette is stored as 256 entries of 4 bytes each in BGRA format
-    (Blue, Green, Red, Alpha - common Windows format).
-    Returns a list of 256 RGB tuples for PIL palette.
+    The palette is stored as 256 entries of 4 bytes each in RGBA format
+    (Red, Green, Blue, Alpha).
+    Returns a list of 256 RGB values (flattened) for PIL palette.
     """
     if not palette_path.exists():
         print(f"  Warning: Palette file not found: {palette_path}")
@@ -46,12 +46,12 @@ def load_palette(palette_path: Path) -> list:
         print(f"  Warning: Palette file size mismatch: {len(data)} bytes, expected 1024")
         return None
 
-    # Convert BGRA to RGB palette (flatten for PIL)
+    # Extract RGB from RGBA palette (flatten for PIL)
     palette = []
     for i in range(256):
-        b = data[i * 4 + 0]
+        r = data[i * 4 + 0]
         g = data[i * 4 + 1]
-        r = data[i * 4 + 2]
+        b = data[i * 4 + 2]
         # a = data[i * 4 + 3]  # Alpha ignored for now
         palette.extend([r, g, b])
 
