@@ -295,11 +295,11 @@ BOOT_INIT:
 	ld	(REG_F6), 00h
 
 	; Set up stack pointer
-	lda	XWA, STACK_INIT
+	LDA_XWA_IMM24 STACK_INIT	; lda XWA, 0x0005a2 (24-bit encoding)
 	ld	XSP, XWA
 
 	; Copy interrupt vector trampolines to RAM at 0x0400
-	call	COPY_VECTORS
+	CALR COPY_VECTORS		; calr is shorter than call
 
 	; Enable interrupts at level 0
 	ei	0
@@ -473,13 +473,13 @@ INIT_DMA_SERIAL:
 
 	; Set up DMA for inter-CPU latch at 0x120000
 	lda	XWA, INTER_CPU_LATCH
-	ldc	unknown, XWA		; DMA destination (undocumented opcode)
+	LDC_DMAD2_XWA			; DMA channel 2 destination = 0x120000
 	ld	A, 08h
-	ldc	unknown, A		; DMA control
+	LDC_DMAC2_A			; DMA channel 2 count = 8
 	lda	XWA, INTER_CPU_LATCH
-	ldc	DMAS0, XWA		; DMA source
+	LDC_DMAS0_XWA			; DMA channel 0 source = 0x120000
 	ld	A, 00h
-	ldc	unknown, A		; DMA mode
+	LDC_DMAC0_A			; DMA channel 0 mode = 0
 
 	; Clear variables
 	ld	(DMA_STATE), 00h
@@ -503,7 +503,7 @@ INIT_MEMORY_TEST:
 	ld	(MEMTEST_RESULT), L
 	extz	HL
 	ld	WA, HL
-	call	SUB_8AB4		; 0xFF8AB4
+	call	ROM_CHECKSUM		; 0xFF8AB4
 	ld	(MEMTEST_RESULT), L
 	call	SUB_8C80		; 0xFF8C80
 	cp	HL, 0FFFFh
@@ -518,14 +518,15 @@ INIT_MEMORY_TEST:
 	ld	(110002h), 0003h
 	lda	XBC, SERIAL_STATUS
 	ld	XWA, XBC
-	inc	0, XBC
+	INC_0_XBC			; Increment XBC by 1
 .clear_loop:
 	ld	(XWA+), 00h
 	cp	XWA, XBC
 	jr	C, .clear_loop
 
+.serial_loop:
 	call	SERIAL_INIT		; 0xFF8B07
-	jr	SERIAL_INIT		; Loop calling serial init
+	jr	.serial_loop		; Loop calling serial init forever
 
 ; ==============================================================================
 ; Interrupt Handler 9 (0xFF881F) - Serial Receive Interrupt
@@ -547,9 +548,9 @@ INT_HANDLER_9:
 	ld	(CMD_PROCESSING_STATE), 02h
 	lda	XWA, 0544h
 	ld	(DMA_TARGET_ADDR), XWA
-	ldc	unknown, XWA		; DMA destination
+	LDC_DMAD0_XWA			; DMA channel 0 destination
 	ld	WA, 6
-	ldc	unknown, WA		; DMA count
+	LDC_DMAC0_WA			; DMA channel 0 count = 6
 	jr	.start_dma
 .not_e1:
 	cp	A, 0E2h			; Command E2?
@@ -558,9 +559,9 @@ INT_HANDLER_9:
 	ld	(CMD_PROCESSING_STATE), 03h
 	lda	XWA, 054Ah
 	ld	(DMA_TARGET_ADDR), XWA
-	ldc	unknown, XWA		; DMA destination
+	LDC_DMAD0_XWA			; DMA channel 0 destination
 	ld	WA, 000Ah
-	ldc	unknown, WA		; DMA count
+	LDC_DMAC0_WA			; DMA channel 0 count = 10
 	jr	.start_dma
 .not_e2:
 	cp	A, 0E3h			; Command E3?
@@ -573,12 +574,12 @@ INT_HANDLER_9:
 	ld	(CMD_PROCESSING_STATE), 01h
 	lda	XWA, 051Eh
 	ld	(DMA_TARGET_ADDR), XWA
-	ldc	unknown, XWA		; DMA destination
+	LDC_DMAD0_XWA			; DMA channel 0 destination
 	ld	A, (LAST_CMD_BYTE)
 	and	A, 1Fh			; Low 5 bits = count - 1
 	inc	1, A
 	extz	WA
-	ldc	unknown, WA		; DMA count
+	LDC_DMAC0_WA			; DMA channel 0 count
 .start_dma:
 	ld	(0100h), 0Ah		; Trigger DMA
 .clear_flag:
@@ -632,8 +633,8 @@ INT_HANDLER_35:
 	cp	A, 1			; State 1?
 	jr	NZ, .check_watchdog
 	; State 1: Process received data, call handler from table
-	push	0000h
-	push	051Eh
+	PUSH_WORD 0000h
+	PUSH_WORD 051Eh
 	ld	C, (LAST_CMD_BYTE)
 	ld	A, C
 	and	A, 1Fh			; Low 5 bits = count
@@ -654,9 +655,9 @@ INT_HANDLER_35:
 	; State 2: Set up secondary DMA transfer
 	lda	XWA, 0544h
 	ld	XBC, (XWA)
-	ldc	unknown, XBC		; DMA source
+	LDC_DMAD0_XBC			; DMA channel 0 destination (from XBC)
 	ld	WA, (XWA+4)
-	ldc	unknown, WA		; DMA count
+	LDC_DMAC0_WA			; DMA channel 0 count
 	ld	(0100h), 0Ah		; Trigger DMA
 	ld	(CMD_PROCESSING_STATE), 04h		; -> State 4
 	jr	.check_watchdog
@@ -790,12 +791,12 @@ MEM_TEST_ROUTINE:
 	; Verify pattern 1
 	lda	XWA, XSP+10
 	ld	XBC, XWA
-	cp	(XWA), 5A5Ah		; Check low word
+	CP_pXWA_WORD 5A5Ah		; Check low word
 	jr	Z, .low1_ok
 	ld	A, (XDE+8)		; Error code for low word
 	or	(XSP+14), A
 .low1_ok:
-	cp	(XBC+2), 5A5Ah		; Check high word
+	CP_pXBC_d_WORD 2, 5A5Ah		; Check high word at (XBC+2)
 	jr	Z, .high1_ok
 	ld	A, (XDE+9)		; Error code for high word
 	or	(XSP+14), A
@@ -815,12 +816,12 @@ MEM_TEST_ROUTINE:
 	; Verify pattern 2
 	lda	XWA, XSP+10
 	ld	XBC, XWA
-	cp	(XWA), 0A5A5h
+	CP_pXWA_WORD 0A5A5h		; Check low word
 	jr	Z, .low2_ok
 	ld	A, (XDE+8)
 	or	(XSP+14), A
 .low2_ok:
-	cp	(XBC+2), 0A5A5h
+	CP_pXBC_d_WORD 2, 0A5A5h	; Check high word at (XBC+2)
 	jr	Z, .high2_ok
 	ld	A, (XDE+9)
 	or	(XSP+14), A
@@ -833,7 +834,7 @@ MEM_TEST_ROUTINE:
 .region_done:
 	inc	1, (XSP+4)
 	cp	(XSP+4), 01h		; Only 1 region in boot ROM
-	jr	NZ, .next_region
+	jrl	NZ, .next_region	; Long relative jump needed (distance > 127)
 	ld	L, (XSP+14)
 	extz	HL
 	pop	XIZ

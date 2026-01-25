@@ -467,3 +467,45 @@ SRA_0_XBC MACRO
 SRA_0_XDE MACRO
 	db 0eah, 0edh, 000h	; SRA 0, XDE
 	ENDM
+
+; ==============================================================================
+; Additional macros for Sub CPU boot ROM assembly
+; ==============================================================================
+
+; INC 0, XBC - Increment XBC by 1 (0+1=1)
+; Encoding: e9 60
+INC_0_XBC MACRO
+	db 0e9h, 060h		; INC 0, XBC
+	ENDM
+
+; PUSH word immediate
+; Encoding: 0b LL HH (little-endian)
+PUSH_WORD MACRO value
+	db 00bh, value & 0FFh, (value >> 8) & 0FFh	; PUSH word
+	ENDM
+
+; CP (XWA), word - Compare memory at XWA with 16-bit immediate
+; Encoding: 90 3f LL HH
+CP_pXWA_WORD MACRO value
+	db 090h, 03fh, value & 0FFh, (value >> 8) & 0FFh	; CP (XWA), word
+	ENDM
+
+; CP (XBC+d), word - Compare memory at XBC+d with 16-bit immediate
+; Encoding: 99 dd 3f LL HH
+CP_pXBC_d_WORD MACRO disp, value
+	db 099h, disp, 03fh, value & 0FFh, (value >> 8) & 0FFh	; CP (XBC+d), word
+	ENDM
+
+; LDA XWA, 24-bit address - Load effective address into XWA
+; Encoding: f2 LL MM HH (where address is 0xHHMMLLL)
+LDA_XWA_IMM24 MACRO value
+	db 0f2h, value & 0FFh, (value >> 8) & 0FFh, (value >> 16) & 0FFh, 030h
+	ENDM
+
+; CALR addr - Call relative (shorter encoding than CALL)
+; Encoding: 1e LL HH (16-bit signed relative offset)
+; Note: offset is calculated from the byte after the instruction
+CALR MACRO target
+	db 01eh
+	dw target - $ - 2		; Relative offset ($ is already at byte 1)
+	ENDM
