@@ -23626,6 +23626,10 @@ LABEL_EB37BC:
 	ORG 0EB37CEh
 LABEL_EB37CE:
 
+	ORG 0EB37DEh
+Palette_8bit_RGBA:			; eb37de - 256 colors x 4 bytes (RGBA)
+	; Data is in sequential section, also extracted to images/Palette_8bit_RGBA.bin
+
 	ORG 0EB3BDEh
 LABEL_EB3BDE:
 
