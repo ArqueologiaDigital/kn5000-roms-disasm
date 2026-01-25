@@ -85,7 +85,10 @@ IMAGE_METADATA = {
 
 
 def convert_1bit_image(data: bytes, width: int, height: int) -> Image.Image:
-    """Convert 1-bit packed bitmap to PIL Image."""
+    """Convert 1-bit packed bitmap to PIL Image.
+
+    Note: 1-bit images are stored bottom-to-top, so we flip the y-axis.
+    """
     img = Image.new('1', (width, height), 1)  # White background
     pixels = img.load()
 
@@ -97,7 +100,7 @@ def convert_1bit_image(data: bytes, width: int, height: int) -> Image.Image:
             if byte_idx < len(data):
                 bit_idx = 7 - (x % 8)
                 pixel = (data[byte_idx] >> bit_idx) & 1
-                pixels[x, y] = pixel
+                pixels[x, height - 1 - y] = pixel  # Flip y-axis
 
     return img
 
