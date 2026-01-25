@@ -55,10 +55,10 @@ IMAGE_METADATA = {
     "BitmapSplitPoint_B.bin": (58, 52, 8, "Split point B"),
     "BitmapSplitPoint_no_split.bin": (58, 52, 8, "Split point - no split"),
 
-    # Drawbar sliders - 4884 bytes each, likely 111x44 at 8bpp
-    "BitmapDrawbarNumberedSlider_1.bin": (111, 44, 8, "Drawbar slider 1"),
-    "BitmapDrawbarNumberedSlider_2.bin": (111, 44, 8, "Drawbar slider 2"),
-    "BitmapDrawbarNumberedSlider_3.bin": (111, 44, 8, "Drawbar slider 3"),
+    # Drawbar sliders - 4884 bytes each, 22x222 at 8bpp
+    "BitmapDrawbarNumberedSlider_1.bin": (22, 222, 8, "Drawbar slider 1"),
+    "BitmapDrawbarNumberedSlider_2.bin": (22, 222, 8, "Drawbar slider 2"),
+    "BitmapDrawbarNumberedSlider_3.bin": (22, 222, 8, "Drawbar slider 3"),
 
     # MIDI connection diagrams - 31968 bytes each, likely 296x108 at 8bpp or 148x216
     "BitmapMIDIConnections_1.bin": (296, 108, 8, "MIDI connections diagram 1"),
