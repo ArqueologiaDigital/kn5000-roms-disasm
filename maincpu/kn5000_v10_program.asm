@@ -23627,7 +23627,7 @@ LABEL_EB37BC:
 LABEL_EB37CE:
 
 	ORG 0EB37DEh
-Palette_8bit_RGBA:			; eb37de - see Palette_8bit_RGBA_Data for binclude
+Palette_8bit_RGBA:			; eb37de - first palette (256 colors x 4 bytes RGBA), data in sequential section
 
 	ORG 0EB3BDEh
 LABEL_EB3BDE:
@@ -134108,8 +134108,8 @@ LABEL_EED098:
 	db 043h, 053h, 020h, 056h, 031h, 02Eh, 030h, 020h
 	db 020h, 020h, 000h, 000h, 000h, 0FFh, 000h, 0FFh
 	db 000h, 0FFh, 000h, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh
-Palette_8bit_RGBA_Data:			; eb37de - 256 colors x 4 bytes (RGBA)
-	binclude "images/Palette_8bit_RGBA.bin"
+Palette_8bit_RGBA_2_Data:		; eefaf0 - second palette, 256 colors x 4 bytes (RGBA)
+	binclude "images/Palette_8bit_RGBA_2.bin"
 	db 020h, 001h, 000h, 002h, 001h, 003h, 002h, 004h
 	db 003h, 005h, 004h, 006h, 005h, 007h, 006h, 008h
 	db 007h, 009h, 008h, 00Ah, 009h, 00Bh, 00Ah, 00Ch
