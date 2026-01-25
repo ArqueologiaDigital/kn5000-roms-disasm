@@ -3,14 +3,26 @@
 ; Target CPU: TMP94C241F (TLCS-900/H2)
 ;
 ; This is the boot ROM for the sub CPU (tone generator controller).
-; It initializes hardware, copies interrupt vectors to RAM, and
-; jumps to the payload entry point at 0x0400.
+; It initializes hardware, copies interrupt vector trampolines to RAM,
+; and enters a main loop that calls the payload at 0x0400.
 ;
 ; Memory Map:
 ;   0x0000-0x00FF  - Special Function Registers (SFR)
 ;   0x0100-0x01FF  - Extended SFR / Memory Controller
-;   0x0400+        - Payload loaded by main CPU via MicroDMA
+;   0x0400-0x04E0  - Interrupt vector trampolines (copied from ROM at boot)
+;   0x0500+        - RAM / Payload data area
+;   0x120000       - Inter-CPU Communication Latches (shared with main CPU)
+;   0x130000       - Tone generator registers
 ;   0xFE0000-0xFFFFFF - This boot ROM (128KB, but mostly 0xFF)
+;
+; Boot sequence:
+;   1. Reset vector at 0xFFFEE0 jumps to 0xFF8290
+;   2. Initialize SFR registers (ports, timers, DMA, etc.)
+;   3. Copy interrupt trampolines from ROM (0xFF8F6C) to RAM (0x0400)
+;   4. Enable interrupts
+;   5. Call initialization routines
+;   6. Enter main loop, waiting for payload ready flag
+;   7. Call payload entry point at 0x0400
 ;
 ; Actual code starts at 0xFF8000 (file offset 0x18000)
 
@@ -25,6 +37,8 @@
 
 PAYLOAD_ENTRY		EQU	0400h	; Entry point of loaded payload
 STACK_INIT		EQU	05A2h	; Initial stack pointer
+INTER_CPU_LATCH		EQU	120000h	; Inter-CPU communication latch
+TONE_GEN_BASE		EQU	130000h	; Tone generator base address
 
 ; SFR addresses (directly addressable 0x00-0xFF)
 P0FC			EQU	07h	; Port 0 Function Control
@@ -41,11 +55,82 @@ PAFC			EQU	2Bh	; Port A Function Control
 PB			EQU	2Ch	; Port B Data
 PBFC			EQU	2Fh	; Port B Function Control
 INTTC01			EQU	30h	; Interrupt control (Timer 0/1)
+SC0BUF			EQU	34h	; Serial Channel 0 Buffer
+SC0CR			EQU	36h	; Serial Channel 0 Control
+SC0MOD			EQU	38h	; Serial Channel 0 Mode
+SC1BUF			EQU	3Ah	; Serial Channel 1 Buffer
+SC1CR			EQU	3Ch	; Serial Channel 1 Control
+SC1MOD			EQU	3Eh	; Serial Channel 1 Mode
+REG_40			EQU	40h
+REG_44			EQU	44h
+REG_46			EQU	46h
+REG_47			EQU	47h
+REG_68			EQU	68h
+REG_6A			EQU	6Ah
+WDMOD			EQU	80h	; Watchdog Mode
+WDCR			EQU	81h	; Watchdog Control
+REG_82			EQU	82h
+REG_84			EQU	84h
+REG_85			EQU	85h
+REG_88			EQU	88h
+REG_89			EQU	89h
+REG_8A			EQU	8Ah
+REG_8B			EQU	8Bh
+REG_98			EQU	98h
+REG_99			EQU	99h
+REG_9E			EQU	9Eh
+REG_9F			EQU	9Fh
+REG_D1			EQU	0D1h
+REG_D2			EQU	0D2h
+REG_D3			EQU	0D3h
+REG_D5			EQU	0D5h
+REG_D6			EQU	0D6h
+REG_D7			EQU	0D7h
+REG_E5			EQU	0E5h
+REG_EC			EQU	0ECh
+REG_ED			EQU	0EDh
+REG_F0			EQU	0F0h
+REG_F6			EQU	0F6h
 
 ; Extended SFR (0x0100+)
+REG_010A		EQU	010Ah
 REG_0110		EQU	0110h
 REG_0111		EQU	0111h
-REG_010A		EQU	010Ah
+REG_0140		EQU	0140h
+REG_0141		EQU	0141h
+REG_0142		EQU	0142h
+REG_0143		EQU	0143h
+REG_0144		EQU	0144h
+REG_0145		EQU	0145h
+REG_0146		EQU	0146h
+REG_0147		EQU	0147h
+REG_0148		EQU	0148h
+REG_0149		EQU	0149h
+REG_014A		EQU	014Ah
+REG_014B		EQU	014Bh
+REG_014C		EQU	014Ch
+REG_014D		EQU	014Dh
+REG_014E		EQU	014Eh
+REG_014F		EQU	014Fh
+REG_0150		EQU	0150h
+REG_0151		EQU	0151h
+REG_0152		EQU	0152h
+REG_0153		EQU	0153h
+REG_0154		EQU	0154h
+REG_0155		EQU	0155h
+REG_0156		EQU	0156h
+REG_0157		EQU	0157h
+REG_0162		EQU	0162h	; DRAM refresh
+REG_0163		EQU	0163h
+REG_0165		EQU	0165h
+REG_0166		EQU	0166h
+
+; RAM variables
+VAR_04FE		EQU	04FEh	; Payload ready flag
+VAR_0516		EQU	0516h
+VAR_0518		EQU	0518h
+VAR_0556		EQU	0556h
+VAR_0558		EQU	0558h
 
 ; ==============================================================================
 ; ROM starts with 96KB of 0xFF (erased flash)
@@ -60,8 +145,8 @@ REG_010A		EQU	010Ah
 	endm
 
 ; ==============================================================================
-; Data Tables (0xFF8000 - 0xFF8289)
-; These appear to be lookup tables, not code
+; Data Tables (0xFF8000 - 0xFF828F)
+; These appear to be lookup tables (possibly for audio/DSP)
 ; ==============================================================================
 
 	org	0FF8000h
@@ -73,134 +158,556 @@ DATA_TABLE_8000:
 
 ; ==============================================================================
 ; Boot Entry Point (0xFF8290)
-; Called from reset vector area
+; Jumped to from reset handler at 0xFFFEE0
 ; ==============================================================================
 
 	org	0FF8290h
 
 BOOT_INIT:
-	; Initialize extended registers
+	; Initialize memory controller registers
 	ld	(REG_0110), 00h
 	ld	(REG_0111), 0B1h
 	ld	(REG_010A), 04h
 
-	; Initialize port function control registers
-	ld	(P0FC), 0FFh
-	ld	(P1FC), 0FFh
-	ld	(P2FC), 0FFh
-	ld	(P7), 0FFh
-	ld	(P7FC), 07h
-	ld	(P7CR), 78h
-	ld	(P8), 3Bh
-	ld	(P8FC), 3Fh
-	ld	(P8CR), 0FFh
-	ld	(PA), 0FFh
-	ld	(PAFC), 08h
-	ld	(PB), 0FFh
-	ld	(PBFC), 1Fh
+	; Initialize port function control registers (set all pins to function mode)
+	ld	(P0FC), 0FFh		; Port 0 all function
+	ld	(P1FC), 0FFh		; Port 1 all function
+	ld	(P2FC), 0FFh		; Port 2 all function
+	ld	(P7), 0FFh		; Port 7 data
+	ld	(P7FC), 07h		; Port 7 function
+	ld	(P7CR), 78h		; Port 7 control
+	ld	(P8), 3Bh		; Port 8 data
+	ld	(P8FC), 3Fh		; Port 8 function
+	ld	(P8CR), 0FFh		; Port 8 control
+	ld	(PA), 0FFh		; Port A data
+	ld	(PAFC), 08h		; Port A function
+	ld	(PB), 0FFh		; Port B data
+	ld	(PBFC), 1Fh		; Port B function
 
-	; Continue with more initialization...
-	; TODO: Complete the initialization sequence
+	; Initialize interrupt control
+	ld	(INTTC01), 03h
+	ld	(33h), 00h
+	ld	(32h), 02h
+	ld	(SC0BUF), 0FFh
+	ld	(37h), 00h
+	ld	(SC0CR), 63h
+	ld	(SC0MOD), 0FEh
+	ld	(3Bh), 00h
+	ld	(SC1BUF), 71h
+	ld	(SC1CR), 0FFh
+	ld	(3Fh), 70h
+	ld	(SC1MOD), 17h
+
+	; Initialize more registers
+	ld	(REG_44), 0FFh
+	ld	(REG_47), 18h
+	ld	(REG_46), 07h
+	ld	(REG_68), 00h
+	ld	(REG_6A), 0FFh
+	ld	(REG_84), 1Dh
+	ld	(REG_85), 1Dh
+	ld	(REG_82), 00h
+	ld	(REG_88), 0Ah
+	ld	(REG_89), 10h
+	ld	(REG_8A), 40h
+	ld	(REG_8B), 20h
+	ld	(WDCR), 00h		; Watchdog control
+	set	1, (WDMOD)		; Watchdog mode
+	ld	(REG_98), 05h
+	ld	(REG_99), 00h
+	ld	(REG_9F), 00h
+	ld	(REG_9E), 00h
+	set	7, (REG_9E)
+
+	; Initialize timer registers
+	ld	(REG_0143), 10h
+	ld	(REG_0147), 11h
+	ld	(REG_014B), 0FFh
+	ld	(REG_014F), 00h
+	ld	(REG_0153), 12h
+	ld	(REG_0157), 13h
+	ld	(REG_0142), 07h
+	ld	(REG_0146), 03h
+	ld	(REG_014A), 01h
+
+	; Check bit 0 of register 0x40 for clock configuration
+	bit	0, (REG_40)
+	jr	NZ, .clock_alt
+	ld	(REG_014E), 1Fh
+	jr	.clock_done
+.clock_alt:
+	ld	(REG_014E), 0Fh
+.clock_done:
+	ld	(REG_0152), 01h
+	ld	(REG_0156), 01h
+
+	; Initialize serial/DMA registers
+	ld	(REG_D2), 01h
+	ld	(REG_D1), 00h
+	and	(REG_D3), 0CFh
+	and	(REG_D3), 0F0h
+	ld	(REG_D6), 29h
+	lda	XBC, REG_D6
+	ld	A, (XBC)
+	and	A, 0FCh
+	set	0, A
+	ld	(XBC), A
+	ld	(REG_D5), 00h
+	and	(REG_D7), 0CFh
+	and	(REG_D7), 0F0h
+
+	; Initialize DRAM refresh
+	ld	(REG_0165), 71h
+	ld	(REG_0162), 8Bh
+	ld	(REG_0163), 58h
+	res	4, (REG_0166)
+
+	; More timer configuration
+	ld	(REG_0140), 66h
+	ld	(REG_0144), 66h
+	ld	(REG_0148), 22h
+	ld	(REG_014C), 22h
+	ld	(REG_0150), 66h
+	ld	(REG_0154), 66h
+	ld	(REG_0141), 81h
+	ld	(REG_0145), 81h
+	ld	(REG_0149), 0C0h
+
+	; Check clock config again
+	bit	0, (REG_40)
+	jr	NZ, .clock_alt2
+	ld	(REG_014D), 8Ah
+	jr	.clock_done2
+.clock_alt2:
+	ld	(REG_014D), 89h
+.clock_done2:
+	ld	(REG_0151), 80h
+	ld	(REG_0155), 81h
+	ld	(REG_F6), 00h
 
 	; Set up stack pointer
 	lda	XWA, STACK_INIT
 	ld	XSP, XWA
 
-	; Copy interrupt vectors to RAM
+	; Copy interrupt vector trampolines to RAM at 0x0400
 	call	COPY_VECTORS
 
-	; Enable interrupts
+	; Enable interrupts at level 0
 	ei	0
 
 	; Call initialization routines
-	call	INIT_ROUTINE_1		; 0xFF8956
-	call	INIT_ROUTINE_2		; 0xFF85AE
-	call	INIT_ROUTINE_3		; 0xFF84A8
+	call	INIT_MEMORY_TEST	; 0xFF8956 - Memory test
+	call	INIT_DMA_SERIAL		; 0xFF85AE - DMA/Serial init
+	call	INIT_TONE_GEN		; 0xFF84A8 - Tone generator init
+
+	; Fall through to main loop
+
+; ==============================================================================
+; Main Loop - Wait for payload ready, then call it
+; ==============================================================================
 
 MAIN_LOOP:
-	; Check some flag and call payload
-	res	6, (04FEh)
-	bit	6, (04FEh)
-	jr	Z, .skip_payload
-	ei	6
-	call	PAYLOAD_ENTRY		; Jump to payload at 0x0400
-.skip_payload:
-	; ... main loop continues
-	jr	MAIN_LOOP
+	res	6, (VAR_04FE)		; Clear ready flag
+.wait_loop:
+	bit	6, (VAR_04FE)		; Check if payload ready
+	jr	Z, .check_status
+	ei	6			; Enable interrupt level 6
+	call	PAYLOAD_ENTRY		; Call payload at 0x0400!
+.check_status:
+	; Read serial status and update control
+	ldcf	1, (INTTC01)
+	scc	C, A
+	cpl	A
+	and	A, 01h
+	sla	1, A
+	and	(INTTC01), 0FDh
+	or	(INTTC01), A
+	jr	.wait_loop
 
 ; ==============================================================================
-; COPY_VECTORS - Copy interrupt vector table to RAM at 0x0400
+; DEFAULT_HANDLER (0xFF8432) - Default interrupt handler (just returns)
 ; ==============================================================================
+
+	org	0FF8432h
+
+DEFAULT_HANDLER:
+	reti
+
+; ==============================================================================
+; RESET_ENTRY (0xFF8433) - Alternative reset/NMI handler
+; ==============================================================================
+
+RESET_ENTRY:
+	jp	BOOT_INIT		; Jump back to boot init
+
+; ==============================================================================
+; COPY_VECTORS (0xFF846D) - Copy interrupt trampolines to RAM
+; ==============================================================================
+
+	org	0FF846Dh
 
 COPY_VECTORS:
-	ld	XDE, 00000400h		; Destination: 0x0400 (payload area)
-	ld	XHL, 0FF8F6Ch		; Source: Vector data in ROM
-	ld	XBC, 0000000E1h		; Count: 0xE1 bytes
+	ld	XDE, 00000400h		; Destination: RAM at 0x0400
+	ld	XHL, 0FF8F6Ch		; Source: Trampoline data in ROM
+	ld	XBC, 0000000E1h		; Count: 225 bytes (45 handlers x 5 bytes)
 	or	XBC, XBC
 	jr	Z, .done
 	ldir				; Block copy
+	cp	QBC, 0
+	jr	Z, .done
+	ld	WA, QBC
+.copy_rest:
+	ldir
+	djnz	WA, .copy_rest
 .done:
 	ret
 
 ; ==============================================================================
-; Placeholder for other routines
+; HALT_LOOP (0xFF8490) - Halt and loop forever (error condition)
 ; ==============================================================================
 
-INIT_ROUTINE_1:		; 0xFF8956
+	org	0FF8490h
+
+HALT_LOOP:
+	res	0, (SC0MOD)		; Disable serial
+	halt				; Halt CPU
+	jr	HALT_LOOP		; Loop forever if we wake
+
+; ==============================================================================
+; INIT_TONE_GEN (0xFF84A8) - Initialize tone generator at 0x130000
+; ==============================================================================
+
+	org	0FF84A8h
+
+INIT_TONE_GEN:
+	link	XIZ, -8			; Reserve 8 bytes on stack
+	xor	XWA, XWA
+	ld	XWA, 5A5A5A5Ah		; Test pattern
+	ld	(XIZ-8), XWA
+	ld	(XIZ-4), XWA
+	lda	XWA, XIZ-8
+	push	XWA
+	ld	BC, 0
+	call	TONE_GEN_WRITE
+	pop	XWA
+	push	XWA
+	ld	BC, 1
+	call	TONE_GEN_WRITE
+	pop	XWA
+	push	XWA
+	ld	BC, 2
+	call	TONE_GEN_WRITE
+	pop	XWA
+	push	XWA
+	ld	BC, 3
+	call	TONE_GEN_WRITE
+	pop	XWA
+
+	; Initialize tone generator registers
+	ld	XBC, TONE_GEN_BASE
+	ld	XWA, 0101001Fh
+	ld	D, 4
+.init_loop:
+	ld	W, A
+	ld	(XBC), XWA
+	add	A, 20h
+	djnz	D, .init_loop
+	unlk	XIZ
+	ret
+
+; ==============================================================================
+; TONE_GEN_WRITE (0xFF84F1) - Write to tone generator
+; ==============================================================================
+
+	org	0FF84F1h
+
+TONE_GEN_WRITE:
+	push	DE
+	sll	5, A			; A = A << 5
+	set	4, A			; A |= 0x10
+	ld	XHL, TONE_GEN_BASE
+	ld	D, 8
+.write_loop:
+	ld	(XHL), A
+	ld	E, (XBC+)
+	ld	(XHL+2), E
+	inc	1, A
+	djnz	D, .write_loop
+	pop	DE
+	ret
+
+; ==============================================================================
+; INIT_DMA_SERIAL (0xFF85AE) - Initialize DMA and serial for inter-CPU comm
+; ==============================================================================
+
+	org	0FF85AEh
+
+INIT_DMA_SERIAL:
+	and	(REG_E5), 0F8h		; Clear E5 bits
+	res	2, (WDMOD)		; Watchdog mode
+	lda	XBC, REG_EC
+	ld	A, (XBC)
+	and	A, 0F8h
+	or	A, 05h
+	ld	(XBC), A
+	lda	XBC, REG_ED
+	ld	A, (XBC)
+	and	A, 0F8h
+	or	A, 05h
+	ld	(XBC), A
+	lda	XBC, REG_F0
+	ld	A, (XBC)
+	and	A, 0F8h
+	set	0, A
+	ld	(XBC), A
+	ld	(REG_8A), 0Ah
+
+	; Set up DMA for inter-CPU latch at 0x120000
+	lda	XWA, INTER_CPU_LATCH
+	ldc	unknown, XWA		; DMA destination (undocumented opcode)
+	ld	A, 08h
+	ldc	unknown, A		; DMA control
+	lda	XWA, INTER_CPU_LATCH
+	ldc	DMAS0, XWA		; DMA source
+	ld	A, 00h
+	ldc	unknown, A		; DMA mode
+
+	; Clear variables
+	ld	(VAR_0516), 00h
+	ld	(VAR_0518), 00h
+	ret
+
+; ==============================================================================
+; INIT_MEMORY_TEST (0xFF8956) - Memory test/initialization
+; ==============================================================================
+
+	org	0FF8956h
+
+INIT_MEMORY_TEST:
+	ld	(VAR_0556), 00h
+	set	1, (INTTC01)
+	bit	0, (INTTC01)
+	ret	NZ			; Return if bit set
+
+	ld	WA, 0
+	call	MEM_TEST_ROUTINE	; 0xFF89FC
+	ld	(VAR_0556), L
+	extz	HL
+	ld	WA, HL
+	call	SUB_8AB4		; 0xFF8AB4
+	ld	(VAR_0556), L
+	call	SUB_8C80		; 0xFF8C80
+	cp	HL, 0FFFFh
+	jr	NZ, .no_error
+	set	3, (VAR_0556)
+.no_error:
+	ld	A, (VAR_0556)
+	extz	WA
+	call	DELAY_ROUTINE		; 0xFF89A9
+
+	; Clear serial buffer area
+	ld	(110002h), 0003h
+	lda	XBC, VAR_0558
+	ld	XWA, XBC
+	inc	0, XBC
+.clear_loop:
+	ld	(XWA+), 00h
+	cp	XWA, XBC
+	jr	C, .clear_loop
+
+	call	SERIAL_INIT		; 0xFF8B07
+	jr	SERIAL_INIT		; Loop calling serial init
+
+; ==============================================================================
+; Placeholder for subroutines (to be disassembled)
+; ==============================================================================
+
+MEM_TEST_ROUTINE:	; 0xFF89FC
 	; TODO: Disassemble
 	ret
 
-INIT_ROUTINE_2:		; 0xFF85AE
+SUB_8AB4:		; 0xFF8AB4
 	; TODO: Disassemble
 	ret
 
-INIT_ROUTINE_3:		; 0xFF84A8
+SUB_8C80:		; 0xFF8C80
+	; TODO: Disassemble
+	ret
+
+DELAY_ROUTINE:		; 0xFF89A9
+	; TODO: Disassemble
+	ret
+
+SERIAL_INIT:		; 0xFF8B07
 	; TODO: Disassemble
 	ret
 
 ; ==============================================================================
-; Data area for vector copy source
+; Interrupt Handler 9 (0xFF881F)
+; ==============================================================================
+
+	org	0FF881Fh
+
+INT_HANDLER_9:
+	; TODO: Disassemble
+	reti
+
+; ==============================================================================
+; Interrupt Handler 35 (0xFF88B8)
+; ==============================================================================
+
+	org	0FF88B8h
+
+INT_HANDLER_35:
+	; TODO: Disassemble
+	reti
+
+; ==============================================================================
+; Interrupt Handler 37 (0xFF889A)
+; ==============================================================================
+
+	org	0FF889Ah
+
+INT_HANDLER_37:
+	; TODO: Disassemble
+	reti
+
+; ==============================================================================
+; Vector Trampoline Data (0xFF8F6C)
+; This data gets copied to RAM at 0x0400 during boot.
+; Each entry is: JP addr (4 bytes) + RET (1 byte) = 5 bytes per handler
+; Total: 45 handlers x 5 bytes = 225 (0xE1) bytes
 ; ==============================================================================
 
 	org	0FF8F6Ch
 
-VECTOR_DATA:
-	; This data gets copied to 0x0400 at boot
-	; TODO: Extract and include
+VECTOR_TRAMPOLINES:
+	; Handler 0 - Reset/Main entry
+	jp	0FFFEE0h		; Jump to ROM reset handler
+	ret
+	; Handler 1
+	jp	DEFAULT_HANDLER
+	ret
+	; Handler 2
+	jp	DEFAULT_HANDLER
+	ret
+	; Handler 3
+	jp	DEFAULT_HANDLER
+	ret
+	; Handler 4
+	jp	DEFAULT_HANDLER
+	ret
+	; Handler 5
+	jp	DEFAULT_HANDLER
+	ret
+	; Handler 6
+	jp	DEFAULT_HANDLER
+	ret
+	; Handler 7
+	jp	DEFAULT_HANDLER
+	ret
+	; Handler 8 - Uses RESET_ENTRY
+	jp	RESET_ENTRY
+	ret
+	; Handler 9 - Specific handler
+	jp	INT_HANDLER_9
+	ret
+	; Handlers 10-34: Default
+	rept	25
+	jp	DEFAULT_HANDLER
+	ret
+	endm
+	; Handler 35 - Specific handler
+	jp	INT_HANDLER_35
+	ret
+	; Handler 36 - Default
+	jp	DEFAULT_HANDLER
+	ret
+	; Handler 37 - Specific handler
+	jp	INT_HANDLER_37
+	ret
+	; Handlers 38-44: Default
+	rept	7
+	jp	DEFAULT_HANDLER
+	ret
+	endm
+
+; ==============================================================================
+; Reset Handler (0xFFFEE0)
+; This is the actual reset entry point, called from vector table
+; ==============================================================================
+
+	org	0FFFEE0h
+
+RESET_HANDLER:
+	jp	BOOT_INIT		; Jump to main boot initialization
+	ret				; Never reached
 
 ; ==============================================================================
 ; Interrupt Vector Table (0xFFFF00 - 0xFFFFFF)
-; These point to handlers in the loaded payload at 0x04xx
+; 4-byte entries pointing to handlers in RAM at 0x04xx
+; These addresses point to the trampolines copied to RAM
 ; ==============================================================================
 
 	org	0FFFF00h
 
 VECTOR_TABLE:
-	; Interrupt vectors - 4 bytes each, pointing to 0x04xx handlers
-	dd	0000FEE0h	; Vector 0 - points to ROM code at 0xFEE0
-	dd	00000405h	; Vector 1 - INT_HANDLER_01 in payload
-	dd	0000040Ah	; Vector 2 - INT_HANDLER_02 in payload
-	dd	0000040Fh	; Vector 3
-	dd	00000414h	; Vector 4
-	dd	00000419h	; Vector 5
-	dd	0000041Eh	; Vector 6
-	dd	00000423h	; Vector 7
-	dd	000004DCh	; Vector 8
-	dd	00000428h	; Vector 9
-	dd	0000042Dh	; Vector 10
-	dd	00000432h	; Vector 11
-	dd	00000437h	; Vector 12
-	dd	0000043Ch	; Vector 13
-	dd	00000441h	; Vector 14
-	dd	00000446h	; Vector 15
-	; ... more vectors ...
+	dd	0000FEE0h		; Reset - points to ROM handler
+	dd	00000405h		; Handler 1 at 0x0405
+	dd	0000040Ah		; Handler 2 at 0x040A
+	dd	0000040Fh		; Handler 3 at 0x040F
+	dd	00000414h		; Handler 4 at 0x0414
+	dd	00000419h		; Handler 5 at 0x0419
+	dd	0000041Eh		; Handler 6 at 0x041E
+	dd	00000423h		; Handler 7 at 0x0423
+	dd	000004DCh		; Handler 8 at 0x04DC (different!)
+	dd	00000428h		; Handler 9 at 0x0428
+	dd	0000042Dh		; Handler 10
+	dd	00000432h		; Handler 11
+	dd	00000437h		; Handler 12
+	dd	0000043Ch		; Handler 13
+	dd	00000441h		; Handler 14
+	dd	00000446h		; Handler 15
+	dd	0000044Bh		; Handler 16
+	dd	00000450h		; Handler 17
+	dd	00000455h		; Handler 18
+	dd	0000045Ah		; Handler 19
+	dd	0000045Fh		; Handler 20
+	dd	00000464h		; Handler 21
+	dd	00000469h		; Handler 22
+	dd	0000046Eh		; Handler 23
+	dd	00000473h		; Handler 24
+	dd	00000478h		; Handler 25
+	dd	0000047Dh		; Handler 26
+	dd	00000482h		; Handler 27
+	dd	00000487h		; Handler 28
+	dd	0000048Ch		; Handler 29
+	dd	00000491h		; Handler 30
+	dd	00000496h		; Handler 31
+	dd	0000049Bh		; Handler 32
+	dd	000004A0h		; Handler 33
+	dd	000004A5h		; Handler 34
+	dd	000004AAh		; Handler 35
+	dd	000004AFh		; Handler 36
+	dd	000004B4h		; Handler 37
+	dd	000004B9h		; Handler 38
+	dd	000004BEh		; Handler 39
+	dd	000004C3h		; Handler 40
+	dd	000004C8h		; Handler 41
+	dd	000004CDh		; Handler 42
+	dd	000004D2h		; Handler 43
+	dd	000004D7h		; Handler 44
+	; Fill rest with FF
+	db	0FFh, 0FFh, 0FFh, 0FFh
+	db	0FFh, 0FFh, 0FFh, 0FFh
+	db	0FFh, 0FFh, 0FFh, 0FFh
 
 	org	0FFFFF0h
 
 RESET_VECTORS:
-	; Reset vector area - repeated pattern
-	; These bytes: 41 B1 62 1B (repeated 4 times)
-	; Meaning still being analyzed
+	; Reset vector area - these bytes form a specific pattern
+	; 41 B1 62 1B repeated 4 times
+	; Analysis: Could be checksum or configuration data
 	db	41h, 0B1h, 62h, 1Bh
 	db	41h, 0B1h, 62h, 1Bh
 	db	41h, 0B1h, 62h, 1Bh
