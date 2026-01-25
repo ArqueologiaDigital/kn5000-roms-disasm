@@ -29,8 +29,10 @@ make clean_table_data   # Table data only
 # Verify rebuilt ROMs against originals (runs automatically after make all)
 python compare_roms.py
 
-# Convert extracted images to PNG for documentation website gallery
-make gallery
+# Update documentation website
+make gallery            # Convert images to PNG for gallery
+make issues             # Export issue tracker to website
+make website            # Both gallery + issues
 ```
 
 The ASL assembler path is configured in the Makefile at `ASL_PATH`.
@@ -58,13 +60,40 @@ When new images are discovered and extracted as `.bin` files in `maincpu/images/
 
 This ensures the documentation website always reflects the latest extracted images.
 
+### Website Synchronization
+
+The documentation website at `../kn5000-docs/` must be kept in sync with project progress. **Run these commands regularly:**
+
+```bash
+make website   # Updates both gallery and issues
+```
+
+This runs:
+1. `make gallery` - Converts extracted images to PNG
+2. `make issues` - Exports Beads issue tracker to `issues.md`
+
+**When to update the website:**
+- After extracting new images
+- After closing or creating issues
+- After significant reverse engineering discoveries
+- Before committing major changes
+
+Always commit both repositories together when making website updates.
+
+### Issue Tracking
+
+Project issues are tracked using [Beads](https://github.com/beads-ai/beads) in `.beads/issues.jsonl`. The issue tracker is:
+- Synced to git for persistence
+- Exported to the website via `make issues`
+- Visible at `/issues/` on the documentation site
+
 ## Architecture
 
 ### ROM Components
 
 | Component | Source | Status |
 |-----------|--------|--------|
-| maincpu | `maincpu/kn5000_v10_program.asm` (461K lines) | ~99.94% |
+| maincpu | `maincpu/kn5000_v10_program.asm` (461K lines) | 99.99% |
 | subcpu payload | `subcpu/kn5000_subprogram_v142.asm` | 100% |
 | table_data | `table_data/kn5000_table_data.asm` | ~32% |
 
