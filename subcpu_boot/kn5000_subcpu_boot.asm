@@ -126,11 +126,13 @@ REG_0165		EQU	0165h
 REG_0166		EQU	0166h
 
 ; RAM variables
-VAR_04FE		EQU	04FEh	; Payload ready flag
-VAR_0516		EQU	0516h
-VAR_0518		EQU	0518h
-VAR_0556		EQU	0556h
-VAR_0558		EQU	0558h
+VAR_04FE		EQU	04FEh	; Payload ready flag (bit 6=ready, bit 7=complete)
+VAR_0512		EQU	0512h	; DMA transfer address storage
+VAR_0516		EQU	0516h	; DMA state machine (0=idle, 1=pending, 2=in progress)
+VAR_0518		EQU	0518h	; Command processing state (0-4)
+VAR_051A		EQU	051Ah	; Last received command byte
+VAR_0556		EQU	0556h	; Memory test result flags
+VAR_0558		EQU	0558h	; Serial status bytes (8 bytes)
 
 ; ==============================================================================
 ; ROM starts with 96KB of 0xFF (erased flash)
@@ -519,58 +521,435 @@ INIT_MEMORY_TEST:
 	jr	SERIAL_INIT		; Loop calling serial init
 
 ; ==============================================================================
-; Placeholder for subroutines (to be disassembled)
-; ==============================================================================
-
-MEM_TEST_ROUTINE:	; 0xFF89FC
-	; TODO: Disassemble
-	ret
-
-SUB_8AB4:		; 0xFF8AB4
-	; TODO: Disassemble
-	ret
-
-SUB_8C80:		; 0xFF8C80
-	; TODO: Disassemble
-	ret
-
-DELAY_ROUTINE:		; 0xFF89A9
-	; TODO: Disassemble
-	ret
-
-SERIAL_INIT:		; 0xFF8B07
-	; TODO: Disassemble
-	ret
-
-; ==============================================================================
-; Interrupt Handler 9 (0xFF881F)
+; Interrupt Handler 9 (0xFF881F) - Serial Receive Interrupt
+; Handles commands from main CPU via inter-CPU latch at 0x120000
+; Commands: E1=DMA 6 bytes, E2=DMA 10 bytes, E3=Set payload ready flag
 ; ==============================================================================
 
 	org	0FF881Fh
 
 INT_HANDLER_9:
-	; TODO: Disassemble
+	push	XWA
+	bit	2, (SC0BUF)		; Check serial status
+	jr	NZ, .exit
+	ld	A, (INTER_CPU_LATCH)	; Read command from main CPU
+	ld	(VAR_051A), A		; Save received byte
+	cp	A, 0E1h			; Command E1?
+	jr	NZ, .not_e1
+	; E1: Set up DMA for 6 bytes
+	ld	(VAR_0518), 02h
+	lda	XWA, 0544h
+	ld	(VAR_0512), XWA
+	ldc	unknown, XWA		; DMA destination
+	ld	WA, 6
+	ldc	unknown, WA		; DMA count
+	jr	.start_dma
+.not_e1:
+	cp	A, 0E2h			; Command E2?
+	jr	NZ, .not_e2
+	; E2: Set up DMA for 10 bytes
+	ld	(VAR_0518), 03h
+	lda	XWA, 054Ah
+	ld	(VAR_0512), XWA
+	ldc	unknown, XWA		; DMA destination
+	ld	WA, 000Ah
+	ldc	unknown, WA		; DMA count
+	jr	.start_dma
+.not_e2:
+	cp	A, 0E3h			; Command E3?
+	jr	NZ, .default_cmd
+	; E3: Signal payload ready
+	set	6, (VAR_04FE)
+	jr	.clear_flag
+.default_cmd:
+	; Other commands: variable-length DMA based on low 5 bits
+	ld	(VAR_0518), 01h
+	lda	XWA, 051Eh
+	ld	(VAR_0512), XWA
+	ldc	unknown, XWA		; DMA destination
+	ld	A, (VAR_051A)
+	and	A, 1Fh			; Low 5 bits = count - 1
+	inc	1, A
+	extz	WA
+	ldc	unknown, WA		; DMA count
+.start_dma:
+	ld	(0100h), 0Ah		; Trigger DMA
+.clear_flag:
+	res	1, (SC0BUF)
+.exit:
+	pop	XWA
 	reti
 
 ; ==============================================================================
-; Interrupt Handler 35 (0xFF88B8)
-; ==============================================================================
-
-	org	0FF88B8h
-
-INT_HANDLER_35:
-	; TODO: Disassemble
-	reti
-
-; ==============================================================================
-; Interrupt Handler 37 (0xFF889A)
+; Interrupt Handler 37 (0xFF889A) - DMA Complete Interrupt
+; Updates state machine variable VAR_0516
 ; ==============================================================================
 
 	org	0FF889Ah
 
 INT_HANDLER_37:
-	; TODO: Disassemble
+	res	2, (WDMOD)		; Clear watchdog bit
+	cp	(VAR_0516), 01h		; State 1?
+	jr	NZ, .not_state1
+	ld	(VAR_0516), 00h		; -> State 0
+	jr	.done
+.not_state1:
+	cp	(VAR_0516), 02h		; State 2?
+	jr	NZ, .done
+	ld	(VAR_0516), 01h		; -> State 1
+.done:
 	reti
+
+; ==============================================================================
+; Interrupt Handler 35 (0xFF88B8) - Timer/Processing Interrupt
+; Main processing handler, dispatches based on VAR_0518 state
+; ==============================================================================
+
+	org	0FF88B8h
+
+INT_HANDLER_35:
+	push	XIZ
+	push	XIY
+	push	XIX
+	push	XHL
+	push	XDE
+	push	XBC
+	push	XWA
+	ld	A, (VAR_0518)
+	cp	A, 4			; State 4?
+	jr	Z, .state4
+	cp	A, 3			; State 3?
+	jr	Z, .state3
+	cp	A, 2			; State 2?
+	jr	Z, .state2
+	cp	A, 1			; State 1?
+	jr	NZ, .check_watchdog
+	; State 1: Process received data, call handler from table
+	push	0000h
+	push	051Eh
+	ld	C, (VAR_051A)
+	ld	A, C
+	and	A, 1Fh			; Low 5 bits = count
+	inc	1, A
+	extz	WA
+	push	WA
+	srl	5, C			; High 3 bits = handler index
+	ld	A, C
+	extz	WA
+	sla	2, WA			; index * 4
+	lda	XBC, DATA_TABLE_8000	; Jump table at ROM start
+	ld	XWA, (XBC+WA)		; Get handler address
+	call	T, XWA			; Call handler (if valid)
+	inc	6, XSP			; Clean up stack
+	ld	(VAR_0518), 00h
+	jr	.set_flag_exit
+.state2:
+	; State 2: Set up secondary DMA transfer
+	lda	XWA, 0544h
+	ld	XBC, (XWA)
+	ldc	unknown, XBC		; DMA source
+	ld	WA, (XWA+4)
+	ldc	unknown, WA		; DMA count
+	ld	(0100h), 0Ah		; Trigger DMA
+	ld	(VAR_0518), 04h		; -> State 4
+	jr	.check_watchdog
+.state3:
+	; State 3: Set completion flags
+	ld	(051Ch), 0FFh
+	ld	(VAR_0518), 00h
+	set	1, (SC0BUF)
+	set	7, (0554h)
+	jr	.check_watchdog
+.state4:
+	; State 4: Final state, clear ready flag
+	ld	(VAR_0518), 00h
+	res	7, (VAR_04FE)
+.set_flag_exit:
+	set	1, (SC0BUF)
+.check_watchdog:
+	bit	2, (WDMOD)
+	jr	Z, .exit
+	res	2, (WDMOD)
+	nop
+	nop
+	set	2, (WDMOD)
+.exit:
+	pop	XWA
+	pop	XBC
+	pop	XDE
+	pop	XHL
+	pop	XIX
+	pop	XIY
+	pop	XIZ
+	reti
+
+; ==============================================================================
+; DELAY_ROUTINE (0xFF89A9) - Variable delay based on bit pattern in A
+; Uses nested loops with timer register 0x30
+; ==============================================================================
+
+	org	0FF89A9h
+
+DELAY_ROUTINE:
+	ld	L, 00h
+.outer_loop:
+	res	1, (INTTC01)
+	ld	BC, 4000h		; Default count
+	bit	0, A			; Check current bit
+	jr	Z, .skip_long
+	ld	BC, 0C000h		; Longer delay if bit set
+	jr	.delay_loop
+.skip_long:
+	cp	BC, 0
+	jr	Z, .next_bit
+.delay_loop:
+	ld	E, 00h
+.inner_loop:
+	inc	1, E
+	cp	E, 20h
+	jr	C, .inner_loop
+	djnz	BC, .delay_loop
+.next_bit:
+	set	1, (INTTC01)
+	ld	BC, 4000h
+.delay2_outer:
+	ld	E, 00h
+.delay2_inner:
+	inc	1, E
+	cp	E, 20h
+	jr	C, .delay2_inner
+	djnz	BC, .delay2_outer
+	srl	1, A			; Next bit
+	inc	1, L
+	cp	L, 3
+	jr	ULE, .outer_loop
+	ret
+
+; ==============================================================================
+; LONG_DELAY (0xFF89E7) - Fixed long delay loop
+; ==============================================================================
+
+	org	0FF89E7h
+
+LONG_DELAY:
+	ld	BC, 0
+.outer:
+	ld	WA, 0
+.inner:
+	inc	1, WA
+	cp	WA, 0100h
+	jr	C, .inner
+	inc	1, BC
+	cp	BC, 1000h
+	jr	C, .outer
+	ret
+
+; ==============================================================================
+; MEM_TEST_ROUTINE (0xFF89FC) - RAM Test
+; Tests memory regions with patterns 0x5A5A5A5A and 0xA5A5A5A5
+; Uses test configuration table at 0xFF8020
+; Returns: L = error flags
+; ==============================================================================
+
+	org	0FF89FCh
+
+MEM_TEST_ROUTINE:
+	lda	XSP, XSP-12		; Reserve 12 bytes on stack
+	push	XIZ
+	ld	(XSP+14), A		; Save error accumulator
+	ld	(XSP+4), 00h		; Test index = 0
+.next_region:
+	ld	A, (XSP+4)
+	extz	WA
+	muls	WA, 000Ah		; Each entry is 10 bytes
+	lda	XBC, 0FF8020h		; Test config table
+	lda	XDE, XBC+WA		; Point to current entry
+	ld	XHL, (XDE)		; Memory start address
+	ld	XIZ, (XDE+4)		; Size in dwords
+	srl	3, XIZ			; Convert to iteration count
+	or	XIZ, XIZ
+	jr	Z, .region_done
+.test_loop:
+	; Save original value
+	ld	XWA, (XHL)
+	ld	(XSP+6), XWA
+	; Write pattern 1: 0x5A5A5A5A
+	ld	XWA, 5A5A5A5Ah
+	ld	(XHL), XWA
+	ld	XIY, XHL
+	lda	XIX, XSP+10
+	ldiw				; Copy to temp
+	ldiw
+	; Verify pattern 1
+	lda	XWA, XSP+10
+	ld	XBC, XWA
+	cp	(XWA), 5A5Ah		; Check low word
+	jr	Z, .low1_ok
+	ld	A, (XDE+8)		; Error code for low word
+	or	(XSP+14), A
+.low1_ok:
+	cp	(XBC+2), 5A5Ah		; Check high word
+	jr	Z, .high1_ok
+	ld	A, (XDE+9)		; Error code for high word
+	or	(XSP+14), A
+.high1_ok:
+	; Restore and test pattern 2
+	ld	XWA, (XSP+6)
+	ld	(XHL+), XWA		; Restore and advance
+	ld	XWA, (XHL)
+	ld	(XSP+6), XWA
+	; Write pattern 2: 0xA5A5A5A5
+	ld	XWA, 0A5A5A5A5h
+	ld	(XHL), XWA
+	ld	XIY, XHL
+	lda	XIX, XSP+10
+	ldiw
+	ldiw
+	; Verify pattern 2
+	lda	XWA, XSP+10
+	ld	XBC, XWA
+	cp	(XWA), 0A5A5h
+	jr	Z, .low2_ok
+	ld	A, (XDE+8)
+	or	(XSP+14), A
+.low2_ok:
+	cp	(XBC+2), 0A5A5h
+	jr	Z, .high2_ok
+	ld	A, (XDE+9)
+	or	(XSP+14), A
+.high2_ok:
+	; Restore original
+	ld	XWA, (XSP+6)
+	ld	(XHL+), XWA
+	sub	XIZ, 1
+	jr	NZ, .test_loop
+.region_done:
+	inc	1, (XSP+4)
+	cp	(XSP+4), 01h		; Only 1 region in boot ROM
+	jr	NZ, .next_region
+	ld	L, (XSP+14)
+	extz	HL
+	pop	XIZ
+	lda	XSP, XSP+12
+	ret
+
+; ==============================================================================
+; ROM_CHECKSUM (0xFF8AB4) - Calculate and verify boot ROM checksum
+; Sums 0x800 words from 0xFE0000, compares against expected
+; Returns: L = error flags (bit 2 set on mismatch)
+; ==============================================================================
+
+	org	0FF8AB4h
+
+ROM_CHECKSUM:
+	dec	4, XSP			; Reserve 4 bytes
+	push	XIZ
+	lda	XIX, XSP+4
+	ld	(XIX), 0000h		; Checksum accumulator 1
+	lda	XHL, XIX+2
+	ld	(XHL), 0000h		; Checksum accumulator 2
+	ld	W, 00h			; Bank counter
+.bank_loop:
+	ld	XIY, 00FE0000h		; Boot ROM base
+	ld	XIZ, 0			; Word counter
+.word_loop:
+	ld	C, W
+	extz	BC
+	add	BC, BC			; Bank offset
+	lda	XDE, XIX+BC
+	ld	BC, (XDE)		; Get current sum
+	ld	QWA, BC
+	ld	BC, (XIY+)		; Read word from ROM
+	add	BC, QWA			; Add to sum
+	ld	(XDE), BC		; Store result
+	inc	1, XIZ
+	cp	XIZ, 00000800h
+	jr	C, .word_loop
+	inc	1, W
+	cp	W, 2
+	jr	C, .bank_loop
+	; Compare checksums
+	ld	BC, (XHL)
+	cp	BC, (XIX)
+	jr	Z, .match
+	set	2, A			; Mismatch error
+.match:
+	ld	L, A
+	extz	HL
+	pop	XIZ
+	inc	4, XSP
+	ret
+
+; ==============================================================================
+; SERIAL_INIT (0xFF8B07) - Initialize serial communication
+; Checks status bytes and sets interrupt flag accordingly
+; ==============================================================================
+
+	org	0FF8B07h
+
+SERIAL_INIT:
+	push	QIZ
+	ld	QIZH, 0			; Error accumulator
+	calr	SUB_8B37		; Initialize serial subsystem
+	lda	XWA, VAR_0558
+	ld	XBC, XWA
+	lda	XDE, XWA+8
+.check_loop:
+	ld	A, QIZH
+	or	A, (XBC+)		; OR all status bytes
+	ld	QIZH, A
+	cp	XBC, XDE
+	jr	C, .check_loop
+	cp	QIZH, 0
+	jr	Z, .no_error
+	res	1, (INTTC01)		; Disable timer interrupt on error
+	jr	.done
+.no_error:
+	set	1, (INTTC01)		; Enable timer interrupt
+.done:
+	pop	QIZ
+	ret
+
+; ==============================================================================
+; SUB_8B37 (0xFF8B37) - Serial subsystem helper
+; ==============================================================================
+
+	org	0FF8B37h
+
+SUB_8B37:
+	dec	2, XSP
+	lda	XWA, XSP
+	calr	SUB_8B89
+	cp	HL, 0FFFFh
+	jr	Z, .done
+	lda	XBC, XSP
+	ld	E, (XBC)
+	; ... continues with more initialization
+.done:
+	; Stub - full routine TBD
+	ret
+
+; ==============================================================================
+; SUB_8B89 (0xFF8B89) - Serial subsystem helper 2
+; ==============================================================================
+
+	org	0FF8B89h
+
+SUB_8B89:
+	; Stub - TBD
+	ret
+
+; ==============================================================================
+; SUB_8C80 (0xFF8C80) - Additional initialization
+; Returns 0xFFFF on error
+; ==============================================================================
+
+	org	0FF8C80h
+
+SUB_8C80:
+	; Stub - TBD
+	ld	HL, 0
+	ret
 
 ; ==============================================================================
 ; Vector Trampoline Data (0xFF8F6C)
@@ -606,31 +985,34 @@ VECTOR_TRAMPOLINES:
 	; Handler 7
 	jp	DEFAULT_HANDLER
 	ret
-	; Handler 8 - Uses RESET_ENTRY
+	; Handler 8 - Uses RESET_ENTRY (software reset)
 	jp	RESET_ENTRY
 	ret
-	; Handler 9 - Specific handler
+	; Handler 9 - Serial Receive Interrupt (inter-CPU communication)
 	jp	INT_HANDLER_9
 	ret
-	; Handlers 10-34: Default
+	; Handlers 10-34: Default (25 handlers)
 	rept	25
 	jp	DEFAULT_HANDLER
 	ret
 	endm
-	; Handler 35 - Specific handler
+	; Handler 35 - Timer/Processing Interrupt (main work handler)
 	jp	INT_HANDLER_35
 	ret
 	; Handler 36 - Default
 	jp	DEFAULT_HANDLER
 	ret
-	; Handler 37 - Specific handler
+	; Handler 37 - DMA Complete Interrupt
 	jp	INT_HANDLER_37
 	ret
-	; Handlers 38-44: Default
-	rept	7
+	; Handlers 38-43: Default (6 handlers)
+	rept	6
 	jp	DEFAULT_HANDLER
 	ret
 	endm
+	; Handler 44 - Error/Halt handler
+	jp	HALT_LOOP
+	ret
 
 ; ==============================================================================
 ; Reset Handler (0xFFFEE0)
