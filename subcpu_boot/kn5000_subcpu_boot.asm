@@ -309,7 +309,7 @@ BOOT_INIT:
 	call	INIT_DMA_SERIAL		; 0xFF85AE - DMA/Serial init
 	call	INIT_TONE_GEN		; 0xFF84A8 - Tone generator init
 
-	; Fall through to main loop
+	jr	T, MAIN_LOOP		; Jump to main loop (2-byte NOP in fall-through)
 
 ; ==============================================================================
 ; Main Loop - Wait for payload ready, then call it
@@ -321,7 +321,7 @@ MAIN_LOOP:
 	bit	6, (SUBCPU_STATUS_FLAGS)		; Check if payload ready
 	jr	Z, .check_status
 	ei	6			; Enable interrupt level 6
-	call	PAYLOAD_ENTRY		; Call payload at 0x0400!
+	CALL_ABS24 PAYLOAD_ENTRY	; Call payload at 0x0400 (4-byte encoding)
 .check_status:
 	; Read serial status and update control
 	ldcf	1, (INTTC01)
@@ -347,13 +347,38 @@ DEFAULT_HANDLER:
 ; ==============================================================================
 
 RESET_ENTRY:
-	jp	BOOT_INIT		; Jump back to boot init
+	JRL_T	BOOT_INIT		; Jump back to boot init (3-byte relative jump)
+	reti				; 0xFF8436: Alternate entry point
+
+; ==============================================================================
+; SUB_8437 (0xFF8437) - Initialize tone generator channels
+; Loops through 4 channels and calls TONE_GEN_WRITE for each
+; ==============================================================================
+
+SUB_8437:
+	push	QIZ			; Save QIZ (used as loop variable)
+	db	0d2h, 0eeh, 0feh, 0ffh, 03fh, 0ffh, 0ffh	; cp (0xFFFEEE), 0xFFFF
+	jr	NZ, .done		; Skip if memory not 0xFFFF
+	db	0c7h, 0fbh, 0a8h	; Clear loop counter (special reg at 0xFB)
+.loop:
+	db	0c7h, 0fbh, 089h	; Load A from special reg
+	extz	WA			; Zero-extend A to WA
+	db	0c7h, 0fbh, 08bh	; Load C from special reg
+	extz	BC			; Zero-extend C to BC
+	db	0d9h, 0ech, 002h	; sla 2, BC (shift left by 2 = multiply by 4)
+	db	0f2h, 0f0h, 0feh, 0ffh, 032h	; lda XDE, 0xFFFEF0
+	db	0e3h, 007h, 0e8h, 0e4h, 021h	; ld XBC, (XDE+BC)
+	call	TONE_GEN_WRITE		; Write to tone generator
+	db	0c7h, 0fbh, 061h	; Increment loop counter
+	db	0c7h, 0fbh, 0dch	; Compare counter with 4
+	jr	C, .loop		; Loop while counter < 4
+.done:
+	pop	QIZ			; Restore QIZ
+	ret
 
 ; ==============================================================================
 ; COPY_VECTORS (0xFF846D) - Copy interrupt trampolines to RAM
 ; ==============================================================================
-
-	org	0FF846Dh
 
 COPY_VECTORS:
 	ld	XDE, 00000400h		; Destination: RAM at 0x0400
@@ -361,12 +386,12 @@ COPY_VECTORS:
 	ld	XBC, 0000000E1h		; Count: 225 bytes (45 handlers x 5 bytes)
 	or	XBC, XBC
 	jr	Z, .done
-	ldir				; Block copy
+	LDIR_94				; Block copy (TMP94C241 encoding)
 	cp	QBC, 0
 	jr	Z, .done
 	ld	WA, QBC
 .copy_rest:
-	ldir
+	LDIR_94				; TMP94C241 encoding
 	djnz	WA, .copy_rest
 .done:
 	ret
@@ -379,14 +404,42 @@ COPY_VECTORS:
 
 HALT_LOOP:
 	res	0, (SC0MOD)		; Disable serial
+.halt:
 	halt				; Halt CPU
-	jr	HALT_LOOP		; Loop forever if we wake
+	jr	T, .halt		; Loop forever if we wake (jump to halt, not start)
+
+; ==============================================================================
+; Stub routines (0xFF8496) - Return 0 in HL
+; These are placeholder/unused routines
+; ==============================================================================
+
+STUB_8496:
+	ld	HL, 0
+	ret
+
+STUB_8499:
+	ld	HL, 0
+	ret
+
+STUB_849C:
+	ld	HL, 0
+	ret
+
+STUB_849F:
+	ld	HL, 0
+	ret
+
+STUB_84A2:
+	ld	HL, 0
+	ret
+
+STUB_84A5:
+	ld	HL, 0
+	ret
 
 ; ==============================================================================
 ; INIT_TONE_GEN (0xFF84A8) - Initialize tone generator at 0x130000
 ; ==============================================================================
-
-	org	0FF84A8h
 
 INIT_TONE_GEN:
 	link	XIZ, -8			; Reserve 8 bytes on stack
@@ -397,25 +450,25 @@ INIT_TONE_GEN:
 	lda	XWA, XIZ-8
 	push	XWA
 	ld	BC, 0
-	call	TONE_GEN_WRITE
+	CALR	TONE_GEN_WRITE		; Call relative (3-byte encoding)
 	pop	XWA
 	push	XWA
 	ld	BC, 1
-	call	TONE_GEN_WRITE
+	CALR	TONE_GEN_WRITE
 	pop	XWA
 	push	XWA
 	ld	BC, 2
-	call	TONE_GEN_WRITE
+	CALR	TONE_GEN_WRITE
 	pop	XWA
 	push	XWA
 	ld	BC, 3
-	call	TONE_GEN_WRITE
+	CALR	TONE_GEN_WRITE
 	pop	XWA
 
 	; Initialize tone generator registers
 	ld	XBC, TONE_GEN_BASE
 	ld	XWA, 0101001Fh
-	ld	D, 4
+	LD_D	4			; TMP94C241 encoding (24 04)
 .init_loop:
 	ld	W, A
 	ld	(XBC), XWA
@@ -446,10 +499,121 @@ TONE_GEN_WRITE:
 	ret
 
 ; ==============================================================================
-; INIT_DMA_SERIAL (0xFF85AE) - Initialize DMA and serial for inter-CPU comm
+; SUB_850E (0xFF850E) - Push registers and call SUB_853A multiple times
+; Appears to write multiple register pairs to tone generator
 ; ==============================================================================
 
-	org	0FF85AEh
+SUB_850E:
+	push	XBC
+	push	XDE
+	PUSH_WORD 1			; Push channel 1
+	CALR	SUB_853A
+	db	0afh, 00ah, 021h	; ld XBC, (XSP+0x0A)
+	db	0eeh, 08ah		; ld XDE, XIZ
+	PUSH_WORD 0			; Push channel 0
+	CALR	SUB_853A
+	ld	XBC, XWA
+	ld	XDE, XHL
+	PUSH_WORD 2			; Push channel 2
+	CALR	SUB_853A
+	ld	XBC, XIX
+	ld	XDE, XIY
+	PUSH_WORD 3			; Push channel 3
+	CALR	SUB_853A
+	db	0efh, 060h		; inc 0, XSP (adjust stack)
+	pop	XDE
+	pop	XBC
+	ret
+
+; ==============================================================================
+; SUB_853A (0xFF853A) - Write register pair to tone generator channel
+; ==============================================================================
+
+SUB_853A:
+	push	XIY
+	push	WA
+	push	BC
+	db	08fh, 00ch, 021h	; ld A, (XSP+0x0C) - get channel from stack
+	sll	5, A			; A = A << 5
+	set	4, A			; A |= 0x10
+	ld	XIY, TONE_GEN_BASE
+	ld	(XIY), A		; Write register address
+	ld	(XIY+2), C		; Write C
+	inc	1, A
+	ld	(XIY), A
+	ld	(XIY+2), B		; Write B
+	inc	1, A
+	ld	(XIY), A
+	db	0d7h, 0e6h, 089h	; ld BC, QBC (high word of XBC)
+	ld	(XIY+2), C
+	inc	1, A
+	ld	(XIY), A
+	ld	(XIY+2), B
+	inc	1, A
+	ld	(XIY), A
+	ld	(XIY+2), E		; Write E
+	inc	1, A
+	ld	(XIY), A
+	ld	(XIY+2), D		; Write D
+	inc	1, A
+	ld	(XIY), A
+	db	0d7h, 0eah, 089h	; ld BC, QDE (high word of XDE)
+	ld	(XIY+2), C
+	inc	1, A
+	ld	(XIY), A
+	ld	(XIY+2), B
+	pop	BC
+	pop	WA
+	pop	XIY
+	ret
+
+; ==============================================================================
+; COPY_WORDS (0xFF858B) - Copy words from XBC to XDE, count in DE
+; ==============================================================================
+
+COPY_WORDS:
+	ld	XIX, XWA
+	ld	XIY, XBC
+	ld	BC, DE
+	db	095h, 011h		; ldirw (word block copy)
+	ret
+
+; ==============================================================================
+; FILL_WORDS (0xFF8594) - Fill memory at XWA with BC, count in DE
+; ==============================================================================
+
+FILL_WORDS:
+	db	0f5h, 0e1h, 051h	; ld (XWA+), BC
+	db	0dah, 01ch, 0fah	; djnz DE, FILL_WORDS
+	ret
+
+; ==============================================================================
+; CHECKSUM_CALC (0xFF859B) - Calculate checksum from XWA to XWA+XBC
+; Returns complemented sum in HL
+; ==============================================================================
+
+CHECKSUM_CALC:
+	xor	XHL, XHL		; Clear XHL
+	extz	XBC			; Zero-extend BC to XBC
+	add	XBC, XWA		; End address = start + count
+.loop:
+	db	0e5h, 0e2h, 083h	; add XHL, (XWA+)
+	cp	XWA, XBC
+	jr	LT, .loop		; Loop while XWA < end
+	cpl	HL			; Complement result
+	ret
+
+; ==============================================================================
+; STUB_85AB (0xFF85AB) - Return 0 in HL
+; ==============================================================================
+
+STUB_85AB:
+	ld	HL, 0
+	ret
+
+; ==============================================================================
+; INIT_DMA_SERIAL (0xFF85AE) - Initialize DMA and serial for inter-CPU comm
+; ==============================================================================
 
 INIT_DMA_SERIAL:
 	and	(REG_E5), 0F8h		; Clear E5 bits
@@ -478,7 +642,7 @@ INIT_DMA_SERIAL:
 	LDC_DMAC2_A			; DMA channel 2 count = 8
 	lda	XWA, INTER_CPU_LATCH
 	LDC_DMAS0_XWA			; DMA channel 0 source = 0x120000
-	ld	A, 00h
+	LD_A	0			; TMP94C241 encoding (21 00)
 	LDC_DMAC0_A			; DMA channel 0 mode = 0
 
 	; Clear variables

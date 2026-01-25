@@ -509,3 +509,25 @@ CALR MACRO target
 	db 01eh
 	dw target - $ - 2		; Relative offset ($ is already at byte 1)
 	ENDM
+
+; CALL_ABS24 addr - Call absolute with 24-bit address (4-byte encoding)
+; Encoding: 1d LL MM HH
+; Use when ASL generates wrong encoding for call instruction
+CALL_ABS24 MACRO target
+	db 01dh, target & 0FFh, (target >> 8) & 0FFh, (target >> 16) & 0FFh
+	ENDM
+
+; JRL_T addr - Jump relative long (always true condition)
+; Encoding: 78 LL HH (3-byte instruction)
+; Use when ASL generates jp instead of jrl
+JRL_T MACRO target
+	db 078h
+	dw target - $ - 2		; Relative offset from after instruction
+	ENDM
+
+; LDIR_94 - Load, Increment, Repeat (TMP94C241 encoding)
+; Encoding: 83 11 (ASL generates 85 11 which is TMP96C141 encoding)
+; Copies bytes from (XHL) to (XDE), count in XBC
+LDIR_94 MACRO
+	db 083h, 011h
+	ENDM
