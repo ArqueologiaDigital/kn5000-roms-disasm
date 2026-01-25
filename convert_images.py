@@ -34,11 +34,11 @@ IMAGE_METADATA = {
     "Bitmap_1bit_Illegal_Disk.bin": (224, 22, 1, "Illegal Disk message"),
     "Bitmap_1bit_Turn_On_AGAIN.bin": (224, 22, 1, "Turn On AGAIN message"),
 
-    # Logos - dimensions estimated from file size assuming 8bpp
-    # 14040 bytes: likely 180x78 or 195x72 or 234x60
-    "BitmapTechnicsLogo.bin": (234, 60, 8, "Technics brand logo"),
-    # 7200 bytes: likely 120x60 or 150x48 or 180x40
-    "BitmapKN5000Logo.bin": (150, 48, 8, "KN5000 model logo"),
+    # Logos - dimensions from assembly code (a2=width, a3=height)
+    # TechnicsLogo: a2=0x138=312, a3=0x2D=45, 312*45=14040 bytes
+    "BitmapTechnicsLogo.bin": (312, 45, 8, "Technics brand logo"),
+    # KN5000Logo: a2=0xC7=199, a3=0x24=36, stride=200, 200*36=7200 bytes
+    "BitmapKN5000Logo.bin": (200, 36, 8, "KN5000 model logo"),
 
     # Split point indicators - 3016 bytes each, likely 58x52 at 8bpp
     "BitmapSplitPoint_C.bin": (58, 52, 8, "Split point C"),
@@ -65,21 +65,33 @@ IMAGE_METADATA = {
     "BitmapMIDIConnections_2.bin": (296, 108, 8, "MIDI connections diagram 2"),
     "BitmapMIDIConnections_3.bin": (296, 108, 8, "MIDI connections diagram 3"),
 
-    # Other UI elements - dimensions estimated
+    # Other UI elements - dimensions from assembly code
     "BitmapWormWearingHat.bin": (24, 24, 8, "Easter egg - worm wearing hat"),
-    "BitmapSomeArrows.bin": (42, 42, 8, "Arrow icons"),
-    "BitmapFadeInPicture.bin": (70, 40, 8, "Fade in picture effect"),
-    "BitmapFadeOutPicture.bin": (70, 40, 8, "Fade out picture effect"),  # 2850 slightly larger
-    "BitmapFadeInText.bin": (60, 24, 8, "Fade in text effect"),
-    "BitmapFadeOutText.bin": (60, 36, 8, "Fade out text effect"),
+    # SomeArrows: a2=0x126=294, 1764/294=6
+    "BitmapSomeArrows.bin": (294, 6, 8, "Arrow icons strip"),
+    # FadeInPicture: a2=0x70=112, 2800/112=25
+    "BitmapFadeInPicture.bin": (112, 25, 8, "Fade in picture effect"),
+    # FadeOutPicture: a2=0x71=113, 2850/114=25 (padded stride)
+    "BitmapFadeOutPicture.bin": (114, 25, 8, "Fade out picture effect"),
+    # FadeInText: a2=0x50=80, 1440/80=18
+    "BitmapFadeInText.bin": (80, 18, 8, "Fade in text effect"),
+    # FadeOutText: a2=0x6C=108, 2160/108=20
+    "BitmapFadeOutText.bin": (108, 20, 8, "Fade out text effect"),
 
-    # Larger graphics - dimensions estimated
-    "BitmapAccger16.bin": (150, 76, 8, "Accompaniment graphic (German)"),
-    "BitmapAccita16.bin": (150, 76, 8, "Accompaniment graphic (Italian)"),
-    "BitmapBmphk.bin": (150, 80, 8, "Unknown graphic"),
-    "BitmapDredt0d.bin": (222, 90, 8, "Unknown graphic"),
-    "BitmapDredt0k.bin": (131, 80, 8, "Unknown graphic"),
-    "BitmapNtedt0d.bin": (254, 120, 8, "Note edit graphic"),
+    # Larger graphics - dimensions from assembly code
+    # Accger16: a2=0x78=120, 11400/120=95
+    "BitmapAccger16.bin": (120, 95, 8, "Accompaniment graphic (German)"),
+    # Accita16: a2=0x78=120, 11400/120=95
+    "BitmapAccita16.bin": (120, 95, 8, "Accompaniment graphic (Italian)"),
+    # Bmphk: a2=0x64=100, 12000/100=120
+    "BitmapBmphk.bin": (100, 120, 8, "Unknown graphic"),
+    # Dredt0d: a2=0xA8=168, 19992/168=119
+    "BitmapDredt0d.bin": (168, 119, 8, "Unknown graphic"),
+    # Dredt0k: a2=0x58=88, 10472/88=119
+    "BitmapDredt0k.bin": (88, 119, 8, "Unknown graphic"),
+    # Ntedt0d: a2=0xF0=240, 30480/240=127
+    "BitmapNtedt0d.bin": (240, 127, 8, "Note edit graphic"),
+    # Ntedt0k: a2=0x10=16, 2032/16=127
     "BitmapNtedt0k.bin": (127, 16, 8, "Note edit graphic small"),
 }
 
