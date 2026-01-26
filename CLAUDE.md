@@ -80,9 +80,27 @@ This runs:
 
 Always commit both repositories together when making website updates.
 
-### Issue Tracking
+### Issue Tracking (STRICT POLICY)
 
-Project issues are tracked using [Beads](https://github.com/beads-ai/beads) in `.beads/issues.jsonl`. The issue tracker is:
+Project issues are tracked using [Beads](https://github.com/beads-ai/beads) in `.beads/issues.jsonl`.
+
+**CRITICAL: NEVER edit `.beads/issues.jsonl` directly!** Always use the `bd` command:
+
+```bash
+# The bd command is located at:
+~/claude_jail/bd
+
+# Common operations:
+~/claude_jail/bd list                              # List all issues
+~/claude_jail/bd show <issue-id>                   # Show issue details
+~/claude_jail/bd close <issue-id>                  # Close an issue
+~/claude_jail/bd reopen <issue-id>                 # Reopen a closed issue
+~/claude_jail/bd comments add <issue-id> "text"   # Add a comment to an issue
+~/claude_jail/bd create "title"                    # Create new issue
+~/claude_jail/bd update <issue-id> --notes "text" # Update issue notes
+```
+
+The issue tracker is:
 - Synced to git for persistence
 - Exported to the website via `make issues`
 - Visible at `/issues/` on the documentation site
