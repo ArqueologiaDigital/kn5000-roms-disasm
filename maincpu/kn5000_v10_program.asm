@@ -50376,16 +50376,16 @@ String_CONSOLE:			; E1FBC8
 	db 000h, 0FFh
 
 LABEL_E1FFD2:
-	dw -LABEL_F1EA4C + LABEL_F1EA4C
-	dw -LABEL_F1EA4C + LABEL_F1EA64
-	dw -LABEL_F1EA4C + LABEL_F1EA7D
-	dw -LABEL_F1EA4C + LABEL_F1EABF
-	dw -LABEL_F1EA4C + LABEL_F1EACF
-	dw -LABEL_F1EA4C + LABEL_F1EAE8
-	dw -LABEL_F1EA4C + LABEL_F1EA96
-	dw -LABEL_F1EA4C + LABEL_F1EB01
-	dw -LABEL_F1EA4C + LABEL_F1EB1A
-	dw -LABEL_F1EA4C + LABEL_F1EAAF
+	dw -RESOURCE_INFO_HANDLERS + RESOURCE_INFO_HANDLERS
+	dw -RESOURCE_INFO_HANDLERS + LABEL_F1EA64
+	dw -RESOURCE_INFO_HANDLERS + LABEL_F1EA7D
+	dw -RESOURCE_INFO_HANDLERS + LABEL_F1EABF
+	dw -RESOURCE_INFO_HANDLERS + LABEL_F1EACF
+	dw -RESOURCE_INFO_HANDLERS + LABEL_F1EAE8
+	dw -RESOURCE_INFO_HANDLERS + LABEL_F1EA96
+	dw -RESOURCE_INFO_HANDLERS + LABEL_F1EB01
+	dw -RESOURCE_INFO_HANDLERS + LABEL_F1EB1A
+	dw -RESOURCE_INFO_HANDLERS + LABEL_F1EAAF
 
 LABEL_E1FFE6:
 	dw 00B0h
@@ -165640,9 +165640,11 @@ LABEL_F1712D:
 	ADD BC, BC
 	LDA XIX, 0E16128h
 	LD BC, (XIX + BC)
-	LDA XIX, 0F17155h
+	LDA XIX, NOTE_EVENT_DISPATCH_1
 	JP T, XIX + BC
-LABEL_F17155:
+; Note event dispatch table 1 (raw bytes - needs disassembly)
+; 7 cases (BC 0-6), offset table at 0xE16128
+NOTE_EVENT_DISPATCH_1:			; F17155
 	db 0E1h, 076h, 00Ch, 021h, 068h, 022h, 0E1h, 07Ah
 	db 00Ch, 021h, 068h, 01Ch, 0E1h, 07Eh, 00Ch, 021h
 	db 068h, 016h, 0E1h, 082h, 00Ch, 021h, 068h, 010h
@@ -165672,10 +165674,11 @@ LABEL_F17189:
 	ADD WA, WA
 	LDA XIX, 0E16136h
 	LD WA, (XIX + WA)
-	LDA XIX, LABEL_F171C4
+	LDA XIX, NOTE_EVENT_DISPATCH_2
 	JP T, XIX + WA
-
-LABEL_F171C4:
+; Note event dispatch table 2 (raw bytes - needs disassembly)
+; 7 cases (WA 0-6), offset table at 0xE16136
+NOTE_EVENT_DISPATCH_2:			; F171C4
 	db 0E1h, 076h, 00Ch, 020h, 0BFh, 004h, 060h, 078h
 	db 08Ch, 000h, 0E1h, 07Ah, 00Ch, 020h, 0BFh, 004h
 	db 060h
@@ -168081,10 +168084,11 @@ LABEL_F1A78B:
 	ADD WA, WA
 	LDA XIX, 0E1CEF0h
 	LD WA, (XIX + WA)
-	LDA XIX, LABEL_F1A7CB
+	LDA XIX, UI_COMPONENT_DISPATCH
 	JP T, XIX + WA
-
-LABEL_F1A7CB:
+; UI component dispatch table (raw bytes - needs disassembly)
+; 8 cases (WA 0-7), offset table at 0xE1CEF0, related to grid/focus handling
+UI_COMPONENT_DISPATCH:			; F1A7CB
 	db 0C1h, 0D7h, 034h, 021h, 0C9h, 061h, 0D8h, 012h
 	db 028h, 00Bh, 0E1h, 000h, 00Bh, 0E4h, 0CEh, 03Ah
 	db 01Dh, 072h, 00Ah, 0FFh, 0BFh, 00Ah, 037h, 078h
@@ -173776,16 +173780,18 @@ LABEL_F1EA20:
 	db 0C2h, 004h, 0DDh, 003h, 03Fh, 000h, 0B0h, 0F6h
 	db 043h, 014h, 000h, 028h, 000h, 0B3h, 0E8h, 00Eh
 
+; Get resource info based on resource type (WA 0-9)
+; Uses offset table at LABEL_E1FFD2 (10 entries)
 GetResouceInfo:
 	CP WA, 0009h
 	RET UGT
 	ADD WA, WA
 	LDA XIX, LABEL_E1FFD2
 	LD WA, (XIX + WA)
-	LDA XIX, LABEL_F1EA4C
+	LDA XIX, RESOURCE_INFO_HANDLERS
 	JP T, XIX + WA
-
-LABEL_F1EA4C:
+; Resource info handlers - 10 handlers for different resource types
+RESOURCE_INFO_HANDLERS:			; F1EA4C
 	lda XWA, 0f980h
 	ld (XBC), XWA
 	lda XWA, 0ffbeh
@@ -177023,10 +177029,12 @@ SqSngNameTtlFunc:
 	ADD XDE, XDE
 	ADD XDE, 00e20006h
 	LD DE, (XDE)
-	LDA XIX, LABEL_F20D37
+	LDA XIX, SQTR_DISPATCH_TABLE_1
 	JP T, XIX + DE
 
-LABEL_F20D37:
+; Sequencer track dispatch table 1 (raw bytes - needs disassembly)
+; Handler for SqTrAsTtlFunc, 6 cases (XDE 0-5)
+SQTR_DISPATCH_TABLE_1:			; F20D37
 	db 03Ah, 03Bh, 03Ch, 03Eh, 01Dh, 0EEh, 000h, 0F2h
 	db 05Eh, 05Ch, 05Bh, 05Ah, 068h, 00Ch, 03Ah, 03Bh
 	db 03Ch, 03Eh, 01Dh, 0EFh, 000h, 0F2h, 05Eh, 05Ch
@@ -177049,9 +177057,11 @@ SqTrAsTtlFunc:
 	ADD XDE, XDE
 	ADD XDE, 00e20012h
 	LD DE, (XDE)
-	LDA XIX, 0F20D8Eh
+	LDA XIX, SQTR_DISPATCH_TABLE_2
 	JP T, XIX + DE
-LABEL_F20D8E:
+; Sequencer track dispatch table 2 (raw bytes - needs disassembly)
+; Handler for SqTrAsTtlFunc, 6 cases (XDE 0-5)
+SQTR_DISPATCH_TABLE_2:			; F20D8E
 	db 040h, 004h, 000h, 08Bh, 000h, 041h, 08Eh, 000h
 	db 0E0h, 001h, 042h, 002h, 000h, 0FFh, 0FFh, 01Dh
 	db 058h, 09Dh, 0FAh, 03Ah, 03Bh, 03Ch, 03Eh, 01Dh
@@ -230031,9 +230041,11 @@ LABEL_F44147:
 	ADD XBC, XBC
 	ADD XBC, 00e448f6h
 	LD BC, (XBC)
-	LDA XIX, 0F44169h
+	LDA XIX, APP_EVENT_HANDLER_TABLE
 	JP T, XIX + BC
-LABEL_F44169:
+; Application event handler dispatch table (raw bytes - needs disassembly)
+; Up to 32 event types (XBC 0-0x1F), used by ApDeliveryEvent system
+APP_EVENT_HANDLER_TABLE:		; F44169
 	db 0C1h, 036h, 08Dh, 021h, 0D8h, 012h, 0D8h, 0CAh
 	db 09Ch, 000h, 0D8h, 0D8h, 061h, 004h, 0D8h, 0DFh
 	db 062h, 003h, 030h, 008h, 000h, 0D8h, 0EEh, 002h
@@ -336174,7 +336186,10 @@ LABEL_F96B36:
 	db 06Eh, 006h, 030h, 0FCh, 000h, 01Eh, 0FFh, 007h
 	db 0DBh, 0A8h, 00Eh
 
-LABEL_F96DB1:
+; FDC command dispatcher
+; Reads command from (8A40h), dispatches to 12 handlers (0-0xB)
+; Uses offset table at 0xEA98B2
+FDC_COMMAND_DISPATCHER:			; F96DB1
 	LD (8A2Ah), 000h
 	LD WA, (8A40h)
 	CP WA, 000bh
@@ -336182,10 +336197,10 @@ LABEL_F96DB1:
 	ADD WA, WA
 	LDA XIX, 0EA98B2h
 	LD WA, (XIX + WA)
-	LDA XIX, LABEL_F96DD6
+	LDA XIX, FDC_CMD_HANDLER_BASE
 	JP T, XIX + WA
-
-LABEL_F96DD6:
+; FDC command handler base - entry point for command 0
+FDC_CMD_HANDLER_BASE:			; F96DD6
 	CALR LABEL_F96ED8
 	LD L, (8A24h)
 	RET
@@ -337131,7 +337146,7 @@ LABEL_F97CEF:
 	LD (8A20h), 000h
 	LD_8_8 08A26h, 08A24h
 	LD (8A24h), 000h
-	CALR LABEL_F96DB1
+	CALR FDC_COMMAND_DISPATCHER
 	CP L, 0
 	JR NZ, LABEL_F97DE1
 	LD WA, (8A40h)
