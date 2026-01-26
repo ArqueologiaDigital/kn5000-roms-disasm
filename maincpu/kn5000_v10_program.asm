@@ -336882,8 +336882,8 @@ LABEL_F97639:
 	LD (8a6ah), 0
 	LD (8b00h), 0
 	CALR LABEL_F972C8
-	CALR LABEL_F96BBF
-	JRL T, LABEL_F96BD0
+	CALR FDC_INIT
+	JRL T, FDC_CONFIG_VERIFY
 
 LABEL_F97652:
 	db 0D7h, 0FAh
@@ -337159,44 +337159,41 @@ LABEL_F97CEF:
 	JP T, XIX + WA
 
 
-; TODO: disassemble these routines:
-	ORG 0F97696h
-LABEL_F97696:
+; =============================================================================
+; FDC (Floppy Disk Controller) Handler Routines - Label Definitions
+; These labels point to routines in raw byte sections
+; Full disassembly documentation saved to docs/fdc_disassembly.md
+; =============================================================================
 
-	ORG 0F976E4h
-LABEL_F976E4:
+; FDC routine labels (code is in raw byte sections)
+FDC_INIT		equ	0F96BBFh	; Basic FDC initialization
+FDC_CONFIG_VERIFY	equ	0F96BD0h	; Configuration/status verification
+FDC_CMD_DISPATCH_SUB	equ	0F96D95h	; Command handler subroutine
+FDC_STATUS_HANDLER	equ	0F97696h	; Status/interrupt handler
+FDC_CMD_EXEC		equ	0F976E4h	; Command execution handler
+FDC_SECTOR_XFER		equ	0F97835h	; Sector/data transfer handler
+FDC_MODE_CONFIG		equ	0F97984h	; Mode configuration (Handler 5)
+FDC_CMD_ENABLE		equ	0F97C21h	; Command enable setup
+FDC_CMD_DISABLE		equ	0F97C4Bh	; Command disable
+FDC_STATUS_COPY		equ	0F97C54h	; Copy cached status
+FDC_OUTPUT_CTRL		equ	0F97C5Bh	; Output control
+FDC_INTERRUPT_HANDLER	equ	0F97C7Ch	; Main interrupt handler
 
-	ORG 0F97835h
-LABEL_F97835:
+; Forward references to helper routines in raw byte sections
+LABEL_F97544	equ	0F97544h	; FDC drive detection routine
+LABEL_F97592	equ	0F97592h	; FDC drive status routine
+LABEL_F975AC	equ	0F975ACh	; FDC pre-operation check
+LABEL_F975DC	equ	0F975DCh	; FDC timing/delay routine
+LABEL_F975E2	equ	0F975E2h	; FDC post-operation routine
+LABEL_F972F9	equ	0F972F9h	; FDC command send routine
+LABEL_F974FE	equ	0F974FEh	; FDC detection check routine
 
-	ORG 0F97C21h
-LABEL_F97C21:
-
-	ORG 0F97C7Ch
-LABEL_F97C7C:
-
-	ORG 0F96BBFh
-LABEL_F96BBF:
-
-	ORG 0F96BD0h
-LABEL_F96BD0:
-
-	ORG 0F97984h
-LABEL_F97984:
-
-	ORG 0F97C4Bh
-LABEL_F97C4B:
-
-	ORG 0F97C54h
-LABEL_F97C54:
-
-	ORG 0F97C5Bh
-LABEL_F97C5B:
-
-	ORG 0F96D95h
-LABEL_F96D95:
-
-
+; Jump targets within FDC routines
+FDC_CE_DISPATCH	equ	0F9782Ah
+FDC_CE_EXIT	equ	0F97833h
+FDC_SX_MAIN	equ	0F9795Eh
+FDC_SX_EXIT	equ	0F97967h
+FDC_MC_EXIT	equ	0F97A3Ch
 
 
 	ORG 0F97D8Dh
@@ -337205,53 +337202,53 @@ FDC_HANDLER_DISPATCH_BASE:
 	JR T, LABEL_F97DE1
 
 FDC_HANDLER_01:
-	CALR LABEL_F97C21
+	CALR FDC_CMD_ENABLE
 	CALR LABEL_F97652
 	JR T, LABEL_F97DE1
 
 FDC_HANDLER_02:
-	CALR LABEL_F97C21
-	CALR LABEL_F97696
+	CALR FDC_CMD_ENABLE
+	CALR FDC_STATUS_HANDLER
 	JR T, LABEL_F97DE1
 
 FDC_HANDLER_03:
-	CALR LABEL_F97C21
-	CALR LABEL_F976E4
+	CALR FDC_CMD_ENABLE
+	CALR FDC_CMD_EXEC
 	JR T, LABEL_F97DE1
 
 FDC_HANDLER_04:
-	CALR LABEL_F97C21
-	CALR LABEL_F97835
+	CALR FDC_CMD_ENABLE
+	CALR FDC_SECTOR_XFER
 	JR T, LABEL_F97DE1
 
 FDC_HANDLER_05:
-	CALR LABEL_F97C21
-	CALR LABEL_F97984
+	CALR FDC_CMD_ENABLE
+	CALR FDC_MODE_CONFIG
 	JR T, LABEL_F97DE1
 
 FDC_HANDLER_06:
-	CALR LABEL_F97C21
+	CALR FDC_CMD_ENABLE
 	JR T, LABEL_F97DE1
 
 FDC_HANDLER_07:
-	CALR LABEL_F97C4B
+	CALR FDC_CMD_DISABLE
 	JR T, LABEL_F97DE1
 
 FDC_HANDLER_08:
-	CALR LABEL_F97C54
+	CALR FDC_STATUS_COPY
 	JR T, LABEL_F97DE1
 
 FDC_HANDLER_09:
-	CALR LABEL_F97C5B
+	CALR FDC_OUTPUT_CTRL
 	JR T, LABEL_F97DE1
 
 FDC_HANDLER_10:
-	CALR LABEL_F96D95
+	CALR FDC_CMD_DISPATCH_SUB
 	JR T, LABEL_F97DE1
 
 FDC_HANDLER_11:
-	CALR LABEL_F97C21
-	CALR LABEL_F97C7C
+	CALR FDC_CMD_ENABLE
+	CALR FDC_INTERRUPT_HANDLER
 	JR T, LABEL_F97DE1
 
 LABEL_F97DDB:
