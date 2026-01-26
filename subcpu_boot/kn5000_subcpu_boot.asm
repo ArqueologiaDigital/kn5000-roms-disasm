@@ -37,6 +37,8 @@
 
 PAYLOAD_ENTRY		EQU	0400h	; Entry point of loaded payload
 STACK_INIT		EQU	05A2h	; Initial stack pointer
+DMA_MODE_REG		EQU	0102h	; DMA mode register (in SFR area)
+DMA_SYNC_FLAG		EQU	0516h	; DMA synchronization flag (RAM variable)
 INTER_CPU_LATCH		EQU	120000h	; Inter-CPU communication latch
 TONE_GEN_BASE		EQU	130000h	; Tone generator base address
 
@@ -777,28 +779,59 @@ DMA_SEND_CHUNKED:
 
 ; ------------------------------------------------------------------------------
 ; DMA_SEND_BLOCK (0xFF8649) - Send single data block via DMA
-; Remaining routines still use raw bytes - TODO: disassemble
+; Input: A = command, BC = byte count, XDE = source address
+; Sends command byte with count to inter-CPU latch, then DMA transfers data
+; Includes timeout loops to wait for handshaking
 ; ------------------------------------------------------------------------------
 DMA_SEND_BLOCK:
-	db	0cbh, 0d8h, 0b0h
-	db	0f6h, 0dch, 0a8h, 0f0h, 034h, 0cch, 066h, 03fh
-	; 0xFF8654-0xFF8663
-	db	0f0h, 034h, 0b0h, 0f1h, 016h, 005h, 000h, 001h
-	db	0cbh, 08fh, 0cfh, 069h, 0c9h, 0eeh, 005h, 0cfh
-	; 0xFF8664-0xFF8673
-	db	0e1h, 0f2h, 000h, 000h, 012h, 041h, 0dch, 0a8h
-	db	0f0h, 034h, 0cch, 06eh, 02dh, 0f0h, 034h, 0b8h
-	; 0xFF8674-0xFF8683
-	db	0eah, 02eh, 008h, 0d9h, 012h, 0d9h, 02eh, 048h
-	db	0f1h, 002h, 001h, 000h, 016h, 0f0h, 080h, 0bah
-	; 0xFF8684-0xFF8693
-	db	0c1h, 016h, 005h, 03fh, 000h, 0b0h, 0f6h, 0c1h
-	db	016h, 005h, 03fh, 000h, 06eh, 0f9h, 00eh, 0dch
-	; 0xFF8694-0xFF86A3
-	db	08bh, 0dch, 061h, 0dbh, 0cfh, 060h, 0eah, 063h
-	db	0b2h, 00eh, 0dch, 088h, 0dch, 061h, 0d8h, 0cfh
-	; 0xFF86A4-0xFF86B3 (SEND_E3_CMD at 0xFF86AC)
-	db	060h, 0eah, 063h, 0c4h, 0f0h, 034h, 0b8h, 00eh
+	cp	C, 0			; Is count zero?
+	ret	Z			; Yes - nothing to send
+	ld	IX, 0			; IX = timeout counter
+.wait_ready1:
+	bit	4, (INTERCPU_STATUS)	; Check if other CPU ready
+	jr	Z, .timeout1		; Not ready - check timeout
+	res	0, (INTERCPU_STATUS)	; Clear our ready flag
+	ld	(DMA_SYNC_FLAG), 01h	; Set DMA sync flag
+	ld	L, C			; L = byte count
+	dec	1, L			; L = count - 1
+	sll	5, A			; A = command << 5
+	or	A, L			; A = (command << 5) | (count - 1)
+	ld	(INTER_CPU_LATCH), A	; Send command+count to main CPU
+	ld	IX, 0			; Reset timeout counter
+.wait_ready2:
+	bit	4, (INTERCPU_STATUS)	; Check if main CPU acknowledged
+	jr	NZ, .timeout2		; Main CPU responded - check timeout
+	set	0, (INTERCPU_STATUS)	; Set our ready flag
+	LDC_DMAS2_XDE			; DMA source = XDE
+	EXTZ_BC				; Zero-extend BC (count)
+	LDC_DMAC2_BC			; DMA count = BC
+	ld	(DMA_MODE_REG), 16h	; Set DMA mode
+	set	2, (T01MOD)		; Start DMA transfer
+	cp	(DMA_SYNC_FLAG), 00h	; Is DMA complete?
+	ret	Z			; Yes - return
+.wait_dma_done:
+	cp	(DMA_SYNC_FLAG), 00h	; Check DMA sync flag
+	jr	NZ, .wait_dma_done	; Wait until cleared
+	ret
+.timeout1:
+	ld	HL, IX			; HL = timeout counter
+	inc	1, IX			; Increment counter
+	cp	HL, 0EA60h		; Timeout limit (60000 iterations)
+	jr	ULE, .wait_ready1	; Keep waiting if not timed out
+	ret				; Timeout - give up
+.timeout2:
+	ld	WA, IX			; WA = timeout counter
+	inc	1, IX			; Increment counter
+	cp	WA, 0EA60h		; Timeout limit
+	jr	ULE, .wait_ready2	; Keep waiting if not timed out
+	set	0, (INTERCPU_STATUS)	; Set ready flag before returning
+	ret
+
+; ------------------------------------------------------------------------------
+; SEND_E3_CMD (0xFF86AC) - Send E3 command (payload ready signal)
+; Remaining routines still use raw bytes - TODO: disassemble
+; ------------------------------------------------------------------------------
+SEND_E3_CMD:
 	db	0d9h, 0a8h, 0f0h, 034h, 0cch, 066h, 012h, 0f0h
 	; 0xFF86B4-0xFF86C3
 	db	034h, 0b0h, 0f2h, 000h, 000h, 012h, 000h, 0e3h

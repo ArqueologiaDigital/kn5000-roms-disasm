@@ -32,6 +32,10 @@ LDC_DMAC2_A MACRO
 	db 0c9h, 2eh, 4ah	; LDC DMAC2, A
 	ENDM
 
+LDC_DMAC2_BC MACRO
+	db 0d9h, 2eh, 48h	; LDC DMAC2, BC (DMA channel 2 count)
+	ENDM
+
 LDC_DMAC3_A MACRO
 	db 0c9h, 2eh, 4eh	; LDC DMAC3, A
 	ENDM
