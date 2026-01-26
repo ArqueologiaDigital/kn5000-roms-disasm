@@ -287,11 +287,11 @@ BOOT_INIT:
 	ld	(SC1MOD), 17h
 
 	; Initialize more registers
-	ld	(REG_44), 0FFh
-	ld	(REG_47), 18h
-	ld	(REG_46), 07h
-	ld	(REG_68), 00h
-	ld	(REG_6A), 0FFh
+	ld	(P8_FC_LO), 0FFh
+	ld	(P8_FC_EXT), 18h
+	ld	(P8_FC_HI), 07h
+	ld	(PE_DATA), 00h
+	ld	(PE_CR), 0FFh
 	ld	(TREG0), 1Dh
 	ld	(TREG1), 1Dh
 	ld	(T8RUN), 00h
@@ -319,7 +319,7 @@ BOOT_INIT:
 	ld	(MAMR2), 01h
 
 	; Check bit 0 of register 0x40 for clock configuration
-	bit	0, (REG_40)
+	bit	0, (P8_DATA)
 	jr	NZ, .clock_alt
 	ld	(MAMR3), 1Fh
 	jr	.clock_done
@@ -362,7 +362,7 @@ BOOT_INIT:
 	ld	(B2CSH), 0C0h
 
 	; Check clock config again
-	bit	0, (REG_40)
+	bit	0, (P8_DATA)
 	jr	NZ, .clock_alt2
 	ld	(B3CSH), 8Ah
 	jr	.clock_done2
