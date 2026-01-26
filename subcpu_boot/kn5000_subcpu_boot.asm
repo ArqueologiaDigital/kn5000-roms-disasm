@@ -1412,14 +1412,408 @@ SUB_8C75:
 ;
 ; Complex routine that communicates with hardware at 0x100000.
 ; Performs some kind of calibration or initialization sequence.
-; Returns 0xFFFF on error, 0 on success.
+; Loops up to 1000 times (0x3E8) checking for hardware response.
+; Returns IZ value (0 on success, 0xFFFF on timeout/error).
 ; ==============================================================================
 
 	org	0FF8C80h
 
 SUB_8C80:
 	push	XIZ
-	ld	IZ, 0FFFFh		; Initialize timeout/error counter
+	ld	IZ, 0FFFFh		; Initialize error flag to -1
+
+	; First hardware write sequence
+	LD_MEM24_IMM16 100000h, 0840h	; Write 0x0840 to hardware reg
+	nop
+	LD_MEM24_IMM16 100002h, 0FF00h	; Write 0xFF00 to hardware reg+2
+	jr	T, $+2			; Short delay (jump to next instruction)
+	nop
+	nop
+	nop
+
+	; Second hardware write sequence
+	LD_MEM24_IMM16 100000h, 0800h	; Write 0x0800 to hardware reg
+	nop
+	LD_MEM24_IMM16 100002h, 0FF80h	; Write 0xFF80 to hardware reg+2
+	jr	T, $+2			; Short delay
+	nop
+	nop
+	nop
+
+	; Call SUB_8D0A with parameter block at 0xFF824C
+	ld	WA, 0
+	ld	XBC, 00FF824Ch		; Parameter block address
+	calr	SUB_8D0A		; Write parameters to hardware
+
+	; Read back and verify
+	ld	BC, (0FF824Ch)		; Read first word from param block
+	ld	WA, 0
+	calr	SUB_8F57		; Call verification routine
+
+	; Check timeout counter
+	cp	QIZ, 03E8h		; Compare with 1000
+	jr	NC, .exit		; If >= 1000, exit (timeout)
+
+.retry_loop:
+	ld	WA, 0
+	calr	SUB_8C75		; Read hardware status
+	cp	HL, 0			; Check result
+	jr	Z, .success		; If 0, hardware responded
+
+	; Hardware still busy, reset and retry
+	ld	IZ, 0			; Clear error flag (will succeed)
+
+	; Repeat first hardware write sequence
+	LD_MEM24_IMM16 100000h, 0840h
+	nop
+	LD_MEM24_IMM16 100002h, 0FF00h
+	jr	T, $+2
+	nop
+	nop
+	nop
+
+	; Repeat second hardware write sequence
+	LD_MEM24_IMM16 100000h, 0800h
+	nop
+	LD_MEM24_IMM16 100002h, 0FF80h
+	jr	T, $+2
+	nop
+	nop
+	nop
+	jr	T, .exit		; Exit after reset sequence
+
+.success:
+	inc	1, QIZ			; Increment retry counter
+	cp	QIZ, 03E8h		; Compare with 1000
+	jr	C, .retry_loop		; If < 1000, continue loop
+
+.exit:
+	ld	HL, IZ			; Return IZ as result
+	pop	XIZ
+	ret
+
+; ==============================================================================
+; SUB_8D0A (0xFF8D0A) - Hardware parameter write routine
+;
+; Writes a block of parameters from memory to hardware registers at 0x100000.
+; Each parameter pair is written with specific address offsets.
+;
+; Input: WA = base offset for hardware addresses
+;        XBC = pointer to 18-byte parameter block
+; ==============================================================================
+
+	org	0FF8D0Ah
+
+SUB_8D0A:
+	dec	4, XSP			; Reserve 4 bytes on stack
+	push	IZ
+	ld	(XSP+2), XBC		; Save XBC to stack
+	ld	IZ, WA			; IZ = base offset
+
+	; Write parameter 0 (offset +0x40)
+	ld	WA, IZ
+	add	WA, 0040h
+	ld	(100000h), WA		; Address = base + 0x40
+	nop
+	ld	XBC, (XSP+2)		; Restore XBC
+	ld	WA, (XBC+2)		; Get param[2:3]
+	ld	(100002h), WA		; Write data
+	jr	T, $+2
+	nop
+	nop
+	nop
+
+	; Write parameter 1 (offset +0x80)
+	ld	WA, IZ
+	add	WA, 0080h
+	ld	(100000h), WA
+	nop
+	ld	WA, (XBC+4)		; Get param[4:5]
+	set	15, WA			; Set bit 15
+	ld	(100002h), WA
+	jr	T, $+2
+	nop
+	nop
+	nop
+
+	; Write parameter 2 (offset +0xC0)
+	ld	WA, IZ
+	add	WA, 00C0h
+	ld	(100000h), WA
+	nop
+	ld	WA, (XBC+6)		; Get param[6:7]
+	ld	(100002h), WA
+	jr	T, $+2
+	nop
+	nop
+	nop
+
+	; Write parameter 3 (offset +0x100)
+	ld	WA, IZ
+	add	WA, 0100h
+	ld	(100000h), WA
+	nop
+	ld	WA, (XBC+8)		; Get param[8:9]
+	ld	(100002h), WA
+	jr	T, $+2
+	nop
+	nop
+	nop
+
+	; Write parameter 4 (offset +0x140)
+	ld	WA, IZ
+	add	WA, 0140h
+	ld	(100000h), WA
+	nop
+	ld	WA, (XBC+0Ah)		; Get param[10:11]
+	ld	(100002h), WA
+	jr	T, $+2
+	nop
+	nop
+	nop
+
+	; Write parameter 5 (offset +0x180)
+	ld	WA, IZ
+	add	WA, 0180h
+	ld	(100000h), WA
+	nop
+	ld	WA, (XBC+0Ch)		; Get param[12:13]
+	ld	(100002h), WA
+	jr	T, $+2
+	nop
+	nop
+	nop
+
+	; Write parameter 6 (offset +0x400)
+	ld	WA, IZ
+	add	WA, 0400h
+	ld	(100000h), WA
+	nop
+	ld	WA, (XBC+0Eh)		; Get param[14:15]
+	ld	(100002h), WA
+	jr	T, $+2
+	nop
+	nop
+	nop
+
+	; Write parameter 7 (offset +0x440)
+	ld	WA, IZ
+	add	WA, 0440h
+	ld	(100000h), WA
+	nop
+	ld	WA, (XBC+10h)		; Get param[16:17]
+	ld	(100002h), WA
+	jr	T, $+2
+	nop
+	nop
+	nop
+
+	; Write parameter 8 (offset +0x480)
+	ld	WA, IZ
+	add	WA, 0480h
+	ld	(100000h), WA
+	nop
+	ld	WA, (XBC+12h)		; Get param[18:19]
+	ld	(100002h), WA
+	jr	T, $+2
+	nop
+	nop
+	nop
+
+	; Write parameter 9 (offset +0x4C0)
+	ld	WA, IZ
+	add	WA, 04C0h
+	ld	(100000h), WA
+	nop
+	ld	WA, (XBC+14h)		; Get param[20:21]
+	ld	(100002h), WA
+	jr	T, $+2
+	nop
+	nop
+	nop
+
+	; Write parameter 10 (offset +0x500)
+	ld	WA, IZ
+	add	WA, 0500h
+	ld	(100000h), WA
+	nop
+	ld	WA, (XBC+16h)		; Get param[22:23]
+	ld	(100002h), WA
+	jr	T, $+2
+	nop
+	nop
+	nop
+
+	; Write parameter 11 (offset +0x800)
+	ld	WA, IZ
+	add	WA, 0800h
+	ld	(100000h), WA
+	nop
+	ld	WA, (XBC+18h)		; Get param[24:25]
+	ld	(100002h), WA
+	jr	T, $+2
+	nop
+	nop
+	nop
+
+	; Write IZ directly with constant 0x8100
+	ld	(100000h), IZ		; Write base offset
+	nop
+	LD_MEM24_IMM16 100002h, 8100h	; Write 0x8100
+	jr	T, $+2
+	nop
+	nop
+	nop
+
+	; Write parameter 12 (offset +0x840)
+	ld	WA, IZ
+	add	WA, 0840h
+	ld	(100000h), WA
+	nop
+	ld	WA, (XBC+1Ah)		; Get param[26:27]
+	ld	(100002h), WA
+	jr	T, $+2
+	nop
+	nop
+	nop
+
+	; Write parameter 13 (offset +0x880)
+	ld	WA, IZ
+	add	WA, 0880h
+	ld	(100000h), WA
+	nop
+	ld	WA, (XBC+1Ch)		; Get param[28:29]
+	ld	(100002h), WA
+	jr	T, $+2
+	nop
+	nop
+	nop
+
+	; Write parameter 14 (offset +0x8C0)
+	ld	WA, IZ
+	add	WA, 08C0h
+	ld	(100000h), WA
+	nop
+	ld	WA, (XBC+1Eh)		; Get param[30:31]
+	ld	(100002h), WA
+	jr	T, $+2
+	nop
+	nop
+	nop
+
+	; Write parameter 15 (offset +0x900)
+	ld	WA, IZ
+	add	WA, 0900h
+	ld	(100000h), WA
+	nop
+	ld	WA, (XBC+20h)		; Get param[32:33]
+	ld	(100002h), WA
+	jr	T, $+2
+	nop
+	nop
+	nop
+
+	; Write parameter 16 (offset +0x940)
+	ld	WA, IZ
+	add	WA, 0940h
+	ld	(100000h), WA
+	nop
+	ld	WA, (XBC+22h)		; Get param[34:35]
+	ld	(100002h), WA
+	jr	T, $+2
+	nop
+	nop
+	nop
+
+	; Write parameter 17 (offset +0x980)
+	ld	WA, IZ
+	add	WA, 0980h
+	ld	(100000h), WA
+	nop
+	ld	WA, (XBC+24h)		; Get param[36:37]
+	ld	(100002h), WA
+	jr	T, $+2
+	nop
+	nop
+	nop
+
+	; Write parameter 18 (offset +0x9C0)
+	ld	WA, IZ
+	add	WA, 09C0h
+	ld	(100000h), WA
+	nop
+	ld	WA, (XBC+26h)		; Get param[38:39]
+	ld	(100002h), WA
+	jr	T, $+2
+	nop
+	nop
+	nop
+
+	; Write parameter 19 (offset +0xA00)
+	ld	WA, IZ
+	add	WA, 0A00h
+	ld	(100000h), WA
+	nop
+	ld	WA, (XBC+28h)		; Get param[40:41]
+	ld	(100002h), WA
+	jr	T, $+2
+	nop
+	nop
+	nop
+
+	; Write parameter 20 (offset +0xA40)
+	ld	WA, IZ
+	add	WA, 0A40h
+	ld	(100000h), WA
+	nop
+	ld	WA, (XBC+2Ah)		; Get param[42:43]
+	ld	(100002h), WA
+	jr	T, $+2
+	nop
+	nop
+	nop
+
+	; Final write - parameter 1 again with bit 15 cleared (offset +0x80)
+	ld	WA, IZ
+	add	WA, 0080h
+	ld	(100000h), WA
+	nop
+	ld	WA, (XBC+4)		; Get param[4:5] again
+	res	15, WA			; Clear bit 15 (was set earlier)
+	ld	(100002h), WA
+	jr	T, $+2
+	nop
+	nop
+	nop
+
+	pop	IZ
+	inc	4, XSP			; Release 4 bytes from stack
+	ret
+
+; ==============================================================================
+; SUB_8F57 (0xFF8F57) - Hardware write routine
+;
+; Writes WA to 0x100000, then IZ (from BC) to 0x100002.
+; Simple write with timing delays (nops and jr T).
+;
+; Input: WA = value to write to 0x100000
+;        BC = value to write to 0x100002
+; ==============================================================================
+
+	org	0FF8F57h
+
+SUB_8F57:
+	push	IZ
+	ld	IZ, BC			; Save BC in IZ
+	ld	(100000h), WA		; Write address/command
+	nop
+	ld	(100002h), IZ		; Write data from IZ
+	jr	T, $+2			; Short delay
+	nop
+	nop
+	nop
+	pop	IZ
+	ret
 
 ; ==============================================================================
 ; Vector Trampoline Data (0xFF8F6C)
@@ -1461,22 +1855,22 @@ VECTOR_TRAMPOLINES:
 	; Handler 9 - Serial Receive Interrupt (inter-CPU communication)
 	jp	INT_HANDLER_9
 	ret
-	; Handlers 10-34: Default (25 handlers)
-	rept	25
+	; Handlers 10-35: Default (26 handlers)
+	rept	26
 	jp	DEFAULT_HANDLER
 	ret
 	endm
-	; Handler 35 - Timer/Processing Interrupt (main work handler)
-	jp	INT_HANDLER_35
+	; Handler 36 - Timer/Processing Interrupt (main work handler)
+	jp	INT_HANDLER_35		; Note: Handler 36 uses INT_HANDLER_35 code
 	ret
-	; Handler 36 - Default
+	; Handler 37 - Default
 	jp	DEFAULT_HANDLER
 	ret
-	; Handler 37 - DMA Complete Interrupt
-	jp	INT_HANDLER_37
+	; Handler 38 - DMA Complete Interrupt
+	jp	INT_HANDLER_37		; Note: Handler 38 uses INT_HANDLER_37 code
 	ret
-	; Handlers 38-43: Default (6 handlers)
-	rept	6
+	; Handlers 39-43: Default (5 handlers)
+	rept	5
 	jp	DEFAULT_HANDLER
 	ret
 	endm
