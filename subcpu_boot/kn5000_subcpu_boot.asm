@@ -40,91 +40,169 @@ STACK_INIT		EQU	05A2h	; Initial stack pointer
 INTER_CPU_LATCH		EQU	120000h	; Inter-CPU communication latch
 TONE_GEN_BASE		EQU	130000h	; Tone generator base address
 
+; ==============================================================================
 ; SFR addresses (directly addressable 0x00-0xFF)
+; Based on TMP94C241 datasheet with some variations for this hardware config
+; ==============================================================================
+
+; Port Function Control Registers
 P0FC			EQU	07h	; Port 0 Function Control
 P1FC			EQU	0Bh	; Port 1 Function Control
 P2FC			EQU	0Fh	; Port 2 Function Control
 P7			EQU	1Ch	; Port 7 Data
 P7CR			EQU	1Eh	; Port 7 Control
 P7FC			EQU	1Fh	; Port 7 Function Control
-P8			EQU	20h	; Port 8 Data
+P8			EQU	20h	; Port 8 Data (Chip Select/WAIT)
 P8CR			EQU	22h	; Port 8 Control
 P8FC			EQU	23h	; Port 8 Function Control
-PA			EQU	28h	; Port A Data
+PA			EQU	28h	; Port A Data (DRAM signals)
 PAFC			EQU	2Bh	; Port A Function Control
-PB			EQU	2Ch	; Port B Data
+PB			EQU	2Ch	; Port B Data (DRAM signals)
 PBFC			EQU	2Fh	; Port B Function Control
-INTTC01			EQU	30h	; Interrupt control (Timer 0/1)
-SC0BUF			EQU	34h	; Serial Channel 0 Buffer
-SC0CR			EQU	36h	; Serial Channel 0 Control
-SC0MOD			EQU	38h	; Serial Channel 0 Mode
-SC1BUF			EQU	3Ah	; Serial Channel 1 Buffer
-SC1CR			EQU	3Ch	; Serial Channel 1 Control
-SC1MOD			EQU	3Eh	; Serial Channel 1 Mode
-REG_40			EQU	40h
-REG_44			EQU	44h
-REG_46			EQU	46h
-REG_47			EQU	47h
-REG_68			EQU	68h
-REG_6A			EQU	6Ah
-WDMOD			EQU	80h	; Watchdog Mode
-WDCR			EQU	81h	; Watchdog Control
-REG_82			EQU	82h
-REG_84			EQU	84h
-REG_85			EQU	85h
-REG_88			EQU	88h
-REG_89			EQU	89h
-REG_8A			EQU	8Ah
-REG_8B			EQU	8Bh
-REG_98			EQU	98h
-REG_99			EQU	99h
-REG_9E			EQU	9Eh
-REG_9F			EQU	9Fh
-REG_D1			EQU	0D1h
-REG_D2			EQU	0D2h
-REG_D3			EQU	0D3h
-REG_D5			EQU	0D5h
-REG_D6			EQU	0D6h
-REG_D7			EQU	0D7h
-REG_E5			EQU	0E5h
-REG_EC			EQU	0ECh
-REG_ED			EQU	0EDh
-REG_F0			EQU	0F0h
-REG_F6			EQU	0F6h
 
+; Interrupt Control
+INTTC01			EQU	30h	; Interrupt control (Timer 0/1)
+
+; Inter-CPU Status Register (at 0x34, directly addressable)
+; Used for handshaking between main CPU and sub CPU
+; Bit 0: Handshake flag (set/res by DMA routines)
+; Bit 2: Serial status check
+; Bit 4: DMA ready flag
+INTERCPU_STATUS		EQU	34h
+
+; Port 8 area (legacy names for compatibility)
+SC0BUF			EQU	34h	; Alias for INTERCPU_STATUS
+SC0CR			EQU	36h
+SC0MOD			EQU	38h
+SC1BUF			EQU	3Ah
+SC1CR			EQU	3Ch
+SC1MOD			EQU	3Eh
+
+; Port 8 extended area
+P8_DATA			EQU	40h	; Port 8 extended data
+P8_FC_LO		EQU	44h	; Port 8 function control low
+P8_FC_HI		EQU	46h	; Port 8 function control high
+P8_FC_EXT		EQU	47h	; Port 8 function control extended
+
+; Port E area (Timer/Interrupt signals)
+PE_DATA			EQU	68h	; Port E Data
+PE_CR			EQU	6Ah	; Port E Control
+
+; 8-Bit Timer Registers (0x80-0x8F)
+T01MOD			EQU	80h	; Timer 0/1 Mode (NOT watchdog - that's at 110h)
+				; Bit 0: PRRUN (Prescaler run)
+				; Bit 1-2: T0CLK (Timer 0 clock source)
+				; Bit 3-4: T01M (Timer 0/1 mode)
+				; Bit 5: PWM0
+				; Bit 6-7: T1CLK (Timer 1 clock source)
+T01FFCR			EQU	81h	; Timer 0/1 Flip-Flop Control
+T8RUN			EQU	82h	; 8-bit Timer Run Control (T0RUN, T1RUN, T2RUN, T3RUN)
+TRDC			EQU	83h	; Timer Register Double-buffer Control
+TREG0			EQU	84h	; Timer 0 Register (write-only)
+TREG1			EQU	85h	; Timer 1 Register (write-only)
+T23MOD			EQU	88h	; Timer 2/3 Mode
+T23FFCR			EQU	89h	; Timer 2/3 Flip-Flop Control
+TREG2			EQU	8Ah	; Timer 2 Register (write-only)
+TREG3			EQU	8Bh	; Timer 3 Register (write-only)
+
+; Legacy aliases for backward compatibility with existing code
+WDMOD			EQU	80h	; Legacy alias - actually T01MOD, not watchdog!
+WDCR			EQU	81h	; Legacy alias - actually T01FFCR
+REG_40			EQU	40h	; = P8_DATA
+REG_44			EQU	44h	; = P8_FC_LO
+REG_46			EQU	46h	; = P8_FC_HI
+REG_47			EQU	47h	; = P8_FC_EXT
+REG_68			EQU	68h	; = PE_DATA
+REG_6A			EQU	6Ah	; = PE_CR
+
+; 16-Bit Timer 4 Registers (0x98-0x9F)
+T4MOD			EQU	98h	; Timer 4 Mode
+T4FFCR			EQU	99h	; Timer 4 Flip-Flop Control
+CAP4L			EQU	9Eh	; Timer 4 Capture Low
+CAP4H			EQU	9Fh	; Timer 4 Capture High
+
+; Serial Channel 0 Registers (0xD0-0xD3)
+SER0_BUF		EQU	0D0h	; Serial 0 Buffer (TX/RX)
+SER0_CR			EQU	0D1h	; Serial 0 Control
+SER0_MOD		EQU	0D2h	; Serial 0 Mode
+SER0_BAUD		EQU	0D3h	; Serial 0 Baud Rate Control
+
+; Serial Channel 1 Registers (0xD4-0xD7)
+SER1_BUF		EQU	0D4h	; Serial 1 Buffer (TX/RX)
+SER1_CR			EQU	0D5h	; Serial 1 Control
+SER1_MOD		EQU	0D6h	; Serial 1 Mode
+SER1_BAUD		EQU	0D7h	; Serial 1 Baud Rate Control
+
+; (Legacy aliases removed - now using primary names SER0_CR, SER0_MOD, etc.)
+
+; Port F area (Serial I/O pins)
+PF_FC			EQU	0E5h	; Port F Function Control
+
+; Other Port Function Controls
+PORT_FC_1		EQU	0ECh	; Port function control
+PORT_FC_2		EQU	0EDh	; Port function control
+PORT_FC_3		EQU	0F0h	; Port function control
+PORT_FC_4		EQU	0F6h	; Port function control
+
+; ==============================================================================
 ; Extended SFR (0x0100+)
-REG_0102		EQU	0102h	; DMA control register
-REG_010A		EQU	010Ah
-REG_0110		EQU	0110h
-REG_0111		EQU	0111h
-REG_0140		EQU	0140h
-REG_0141		EQU	0141h
-REG_0142		EQU	0142h
-REG_0143		EQU	0143h
-REG_0144		EQU	0144h
-REG_0145		EQU	0145h
-REG_0146		EQU	0146h
-REG_0147		EQU	0147h
-REG_0148		EQU	0148h
-REG_0149		EQU	0149h
-REG_014A		EQU	014Ah
-REG_014B		EQU	014Bh
-REG_014C		EQU	014Ch
-REG_014D		EQU	014Dh
-REG_014E		EQU	014Eh
-REG_014F		EQU	014Fh
-REG_0150		EQU	0150h
-REG_0151		EQU	0151h
-REG_0152		EQU	0152h
-REG_0153		EQU	0153h
-REG_0154		EQU	0154h
-REG_0155		EQU	0155h
-REG_0156		EQU	0156h
-REG_0157		EQU	0157h
-REG_0162		EQU	0162h	; DRAM refresh
-REG_0163		EQU	0163h
-REG_0165		EQU	0165h
-REG_0166		EQU	0166h
+; ==============================================================================
+
+; DMA/Interrupt Controller Area (0x100-0x10F)
+DMA_VECTOR		EQU	0102h	; DMA interrupt vector/control
+
+; Interrupt Controller (0x10A area)
+INT_CTRL		EQU	010Ah	; Interrupt controller
+
+; Watchdog Timer (0x110-0x111) - The REAL watchdog registers!
+WDMOD_REAL		EQU	0110h	; Watchdog Mode Register
+				; Bit 0-1: WDTP (Detection time)
+				; Bit 4-5: HALTM (HALT mode)
+				; Bit 6: DRVE (Drive enable in STOP)
+				; Bit 7: WDTE (Watchdog enable)
+WDCR_REAL		EQU	0111h	; Watchdog Control (write 4Eh to clear)
+
+; Memory Controller - Block 0 (0x140-0x143)
+B0CSL			EQU	0140h	; Block 0 Control Low (wait states)
+B0CSH			EQU	0141h	; Block 0 Control High (bus width, mode)
+MAMR0			EQU	0142h	; Block 0 Address Mask
+MSAR0			EQU	0143h	; Block 0 Start Address
+
+; Memory Controller - Block 1 (0x144-0x147)
+B1CSL			EQU	0144h	; Block 1 Control Low
+B1CSH			EQU	0145h	; Block 1 Control High
+MAMR1			EQU	0146h	; Block 1 Address Mask
+MSAR1			EQU	0147h	; Block 1 Start Address
+
+; Memory Controller - Block 2 (0x148-0x14B)
+B2CSL			EQU	0148h	; Block 2 Control Low
+B2CSH			EQU	0149h	; Block 2 Control High
+MAMR2			EQU	014Ah	; Block 2 Address Mask
+MSAR2			EQU	014Bh	; Block 2 Start Address
+
+; Memory Controller - Block 3 (0x14C-0x14F)
+B3CSL			EQU	014Ch	; Block 3 Control Low
+B3CSH			EQU	014Dh	; Block 3 Control High
+MAMR3			EQU	014Eh	; Block 3 Address Mask
+MSAR3			EQU	014Fh	; Block 3 Start Address
+
+; Memory Controller - Block 4 (0x150-0x153)
+B4CSL			EQU	0150h	; Block 4 Control Low
+B4CSH			EQU	0151h	; Block 4 Control High
+MAMR4			EQU	0152h	; Block 4 Address Mask
+MSAR4			EQU	0153h	; Block 4 Start Address
+
+; Memory Controller - Block 5 (0x154-0x157)
+B5CSL			EQU	0154h	; Block 5 Control Low
+B5CSH			EQU	0155h	; Block 5 Control High
+MAMR5			EQU	0156h	; Block 5 Address Mask
+MSAR5			EQU	0157h	; Block 5 Start Address
+
+; DRAM Controller (0x160-0x167)
+DRAM_REFRESH		EQU	0162h	; DRAM Refresh Control
+DRAM_CTRL		EQU	0163h	; DRAM Controller Mode
+DRAM_TIMING1		EQU	0165h	; DRAM Timing 1
+DRAM_TIMING2		EQU	0166h	; DRAM Timing 2
 
 ; RAM variables - Communication and State
 SUBCPU_STATUS_FLAGS	EQU	04FEh	; Status flags (bit 6=payload ready, bit 7=xfer complete)
@@ -175,9 +253,9 @@ DATA_TABLE_8000:
 
 BOOT_INIT:
 	; Initialize memory controller registers
-	ld	(REG_0110), 00h
-	ld	(REG_0111), 0B1h
-	ld	(REG_010A), 04h
+	ld	(WDMOD_REAL), 00h
+	ld	(WDCR_REAL), 0B1h
+	ld	(INT_CTRL), 04h
 
 	; Initialize port function control registers (set all pins to function mode)
 	ld	(P0FC), 0FFh		; Port 0 all function
@@ -214,86 +292,86 @@ BOOT_INIT:
 	ld	(REG_46), 07h
 	ld	(REG_68), 00h
 	ld	(REG_6A), 0FFh
-	ld	(REG_84), 1Dh
-	ld	(REG_85), 1Dh
-	ld	(REG_82), 00h
-	ld	(REG_88), 0Ah
-	ld	(REG_89), 10h
-	ld	(REG_8A), 40h
-	ld	(REG_8B), 20h
+	ld	(TREG0), 1Dh
+	ld	(TREG1), 1Dh
+	ld	(T8RUN), 00h
+	ld	(T23MOD), 0Ah
+	ld	(T23FFCR), 10h
+	ld	(TREG2), 40h
+	ld	(TREG3), 20h
 	ld	(WDCR), 00h		; Watchdog control
 	set	1, (WDMOD)		; Watchdog mode
-	ld	(REG_98), 05h
-	ld	(REG_99), 00h
-	ld	(REG_9F), 00h
-	ld	(REG_9E), 00h
-	set	7, (REG_9E)
+	ld	(T4MOD), 05h
+	ld	(T4FFCR), 00h
+	ld	(CAP4H), 00h
+	ld	(CAP4L), 00h
+	set	7, (CAP4L)
 
 	; Initialize timer registers
-	ld	(REG_0143), 10h
-	ld	(REG_0147), 11h
-	ld	(REG_014B), 0FFh
-	ld	(REG_014F), 00h
-	ld	(REG_0153), 12h
-	ld	(REG_0157), 13h
-	ld	(REG_0142), 07h
-	ld	(REG_0146), 03h
-	ld	(REG_014A), 01h
+	ld	(MSAR0), 10h
+	ld	(MSAR1), 11h
+	ld	(MSAR2), 0FFh
+	ld	(MSAR3), 00h
+	ld	(MSAR4), 12h
+	ld	(MSAR5), 13h
+	ld	(MAMR0), 07h
+	ld	(MAMR1), 03h
+	ld	(MAMR2), 01h
 
 	; Check bit 0 of register 0x40 for clock configuration
 	bit	0, (REG_40)
 	jr	NZ, .clock_alt
-	ld	(REG_014E), 1Fh
+	ld	(MAMR3), 1Fh
 	jr	.clock_done
 .clock_alt:
-	ld	(REG_014E), 0Fh
+	ld	(MAMR3), 0Fh
 .clock_done:
-	ld	(REG_0152), 01h
-	ld	(REG_0156), 01h
+	ld	(MAMR4), 01h
+	ld	(MAMR5), 01h
 
 	; Initialize serial/DMA registers
-	ld	(REG_D2), 01h
-	ld	(REG_D1), 00h
-	and	(REG_D3), 0CFh
-	and	(REG_D3), 0F0h
-	ld	(REG_D6), 29h
-	lda	XBC, REG_D6
+	ld	(SER0_MOD), 01h
+	ld	(SER0_CR), 00h
+	and	(SER0_BAUD), 0CFh
+	and	(SER0_BAUD), 0F0h
+	ld	(SER1_MOD), 29h
+	lda	XBC, SER1_MOD
 	ld	A, (XBC)
 	and	A, 0FCh
 	set	0, A
 	ld	(XBC), A
-	ld	(REG_D5), 00h
-	and	(REG_D7), 0CFh
-	and	(REG_D7), 0F0h
+	ld	(SER1_CR), 00h
+	and	(SER1_BAUD), 0CFh
+	and	(SER1_BAUD), 0F0h
 
 	; Initialize DRAM refresh
-	ld	(REG_0165), 71h
-	ld	(REG_0162), 8Bh
-	ld	(REG_0163), 58h
-	res	4, (REG_0166)
+	ld	(DRAM_TIMING1), 71h
+	ld	(DRAM_REFRESH), 8Bh
+	ld	(DRAM_CTRL), 58h
+	res	4, (DRAM_TIMING2)
 
 	; More timer configuration
-	ld	(REG_0140), 66h
-	ld	(REG_0144), 66h
-	ld	(REG_0148), 22h
-	ld	(REG_014C), 22h
-	ld	(REG_0150), 66h
-	ld	(REG_0154), 66h
-	ld	(REG_0141), 81h
-	ld	(REG_0145), 81h
-	ld	(REG_0149), 0C0h
+	ld	(B0CSL), 66h
+	ld	(B1CSL), 66h
+	ld	(B2CSL), 22h
+	ld	(B3CSL), 22h
+	ld	(B4CSL), 66h
+	ld	(B5CSL), 66h
+	ld	(B0CSH), 81h
+	ld	(B1CSH), 81h
+	ld	(B2CSH), 0C0h
 
 	; Check clock config again
 	bit	0, (REG_40)
 	jr	NZ, .clock_alt2
-	ld	(REG_014D), 8Ah
+	ld	(B3CSH), 8Ah
 	jr	.clock_done2
 .clock_alt2:
-	ld	(REG_014D), 89h
+	ld	(B3CSH), 89h
 .clock_done2:
-	ld	(REG_0151), 80h
-	ld	(REG_0155), 81h
-	ld	(REG_F6), 00h
+	ld	(B4CSH), 80h
+	ld	(B5CSH), 81h
+	ld	(PORT_FC_4), 00h
 
 	; Set up stack pointer
 	LDA_XWA_IMM24 STACK_INIT	; lda XWA, 0x0005a2 (24-bit encoding)
@@ -617,24 +695,24 @@ STUB_85AB:
 ; ==============================================================================
 
 INIT_DMA_SERIAL:
-	and	(REG_E5), 0F8h		; Clear E5 bits
+	and	(PF_FC), 0F8h		; Clear E5 bits
 	res	2, (WDMOD)		; Watchdog mode
-	lda	XBC, REG_EC
+	lda	XBC, PORT_FC_1
 	ld	A, (XBC)
 	and	A, 0F8h
 	or	A, 05h
 	ld	(XBC), A
-	lda	XBC, REG_ED
+	lda	XBC, PORT_FC_2
 	ld	A, (XBC)
 	and	A, 0F8h
 	or	A, 05h
 	ld	(XBC), A
-	lda	XBC, REG_F0
+	lda	XBC, PORT_FC_3
 	ld	A, (XBC)
 	and	A, 0F8h
 	set	0, A
 	ld	(XBC), A
-	ld	(REG_8A), 0Ah
+	ld	(TREG2), 0Ah
 
 	; Set up DMA for inter-CPU latch at 0x120000
 	lda	XWA, INTER_CPU_LATCH
