@@ -746,3 +746,67 @@ DJNZ_DE MACRO target
 ADD_XHL_pXWA_plus MACRO
 	db 0e5h, 0e2h, 083h		; add XHL, (XWA+)
 	ENDM
+
+; ==============================================================================
+; Stack frame macros (for DMA Transfer Routines)
+; ==============================================================================
+
+; DEC_6_XSP - Decrement XSP by 6 (allocate 6 bytes on stack)
+; Encoding: ef 6e (2 bytes)
+DEC_6_XSP MACRO
+	db 0efh, 06eh			; dec 6, XSP
+	ENDM
+
+; INC_6_XSP - Increment XSP by 6 (deallocate 6 bytes from stack)
+; Encoding: ef 66 (2 bytes)
+INC_6_XSP MACRO
+	db 0efh, 066h			; inc 6, XSP
+	ENDM
+
+; ==============================================================================
+; IZ register operations
+; ==============================================================================
+
+; LD_IZ_BC - Load IZ from BC (16-bit transfer)
+; Encoding: d9 8e (2 bytes)
+LD_IZ_BC MACRO
+	db 0d9h, 08eh			; ld IZ, BC
+	ENDM
+
+; CP_IZ_imm16 - Compare IZ with 16-bit immediate
+; Encoding: de cf low high (4 bytes)
+CP_IZ_imm16 MACRO value
+	db 0deh, 0cfh
+	db (value) & 0FFh		; low byte
+	db ((value) >> 8) & 0FFh	; high byte
+	ENDM
+
+; SUB_IZ_imm16 - Subtract 16-bit immediate from IZ
+; Encoding: de ca low high (4 bytes)
+SUB_IZ_imm16 MACRO value
+	db 0deh, 0cah
+	db (value) & 0FFh		; low byte
+	db ((value) >> 8) & 0FFh	; high byte
+	ENDM
+
+; LD_C_IZL - Load C from IZL (low byte of IZ)
+; Encoding: c7 f8 8b (3 bytes)
+LD_C_IZL MACRO
+	db 0c7h, 0f8h, 08bh		; ld C, IZL
+	ENDM
+
+; ==============================================================================
+; Zero-extend operations
+; ==============================================================================
+
+; EXTZ_WA - Zero-extend A to WA (clear W, keep A)
+; Encoding: d8 12 (2 bytes)
+EXTZ_WA MACRO
+	db 0d8h, 012h			; extz WA
+	ENDM
+
+; EXTZ_BC - Zero-extend C to BC (clear B, keep C)
+; Encoding: d9 12 (2 bytes)
+EXTZ_BC MACRO
+	db 0d9h, 012h			; extz BC
+	ENDM
