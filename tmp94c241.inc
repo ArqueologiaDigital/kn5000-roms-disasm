@@ -80,6 +80,10 @@ LDC_DMAS2_XDE MACRO
 	db 0eah, 2eh, 08h	; LDC DMAS2, XDE
 	ENDM
 
+LDC_DMAS2_XHL MACRO
+	db 0ebh, 2eh, 08h	; LDC DMAS2, XHL
+	ENDM
+
 LDC_INTNEST_WA MACRO
 	db 0d8h, 2eh, 7ch	; LDC INTNEST, WA
 	ENDM
@@ -654,6 +658,30 @@ LD_XBC_pXSP_d MACRO disp
 ; Encoding: 8f dd 21 (3 bytes)
 LD_A_pXSP_d MACRO disp
 	db 08fh, disp, 021h		; ld A, (XSP+disp)
+	ENDM
+
+; LD_XDE_pXSP_d - Load XDE from (XSP+disp)
+; Encoding: af dd 22 (3 bytes)
+LD_XDE_pXSP_d MACRO disp
+	db 0afh, disp, 022h		; ld XDE, (XSP+disp)
+	ENDM
+
+; LD_pXSP_d_XDE - Store XDE to (XSP+disp)
+; Encoding: bf dd 62 (3 bytes)
+LD_pXSP_d_XDE MACRO disp
+	db 0bfh, disp, 062h		; ld (XSP+disp), XDE
+	ENDM
+
+; LD_pXSP_d_A - Store A to (XSP+disp)
+; Encoding: bf dd 41 (3 bytes)
+LD_pXSP_d_A MACRO disp
+	db 0bfh, disp, 041h		; ld (XSP+disp), A
+	ENDM
+
+; ADD_pXSP_d_XWA - Add XWA to memory at (XSP+disp)
+; Encoding: af dd 88 (3 bytes)
+ADD_pXSP_d_XWA MACRO disp
+	db 0afh, disp, 088h		; add (XSP+disp), XWA
 	ENDM
 
 ; ==============================================================================

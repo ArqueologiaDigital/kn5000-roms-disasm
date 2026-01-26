@@ -93,6 +93,7 @@ REG_F0			EQU	0F0h
 REG_F6			EQU	0F6h
 
 ; Extended SFR (0x0100+)
+REG_0102		EQU	0102h	; DMA control register
 REG_010A		EQU	010Ah
 REG_0110		EQU	0110h
 REG_0111		EQU	0111h
@@ -652,10 +653,16 @@ INIT_DMA_SERIAL:
 
 ; ==============================================================================
 ; DMA Transfer Routines (0xFF8604-0xFF881E) - 539 bytes
-; TODO: Disassemble these routines
+; These routines handle DMA-based data transfer between CPUs
+;
+; DMA_SEND_CHUNKED (0xFF8604): Send data in 32-byte chunks
+; DMA_SEND_BLOCK (0xFF8649): Send single data block via DMA
+; SEND_E3_CMD (0xFF86AC): Send E3 command (payload ready signal)
+; WAIT_DMA_THEN_E2 (0xFF86DC): Wait for DMA completion then send E2
+; DMA_MULTI_STAGE (0xFF874C): Complex multi-stage DMA transfer
 ; ==============================================================================
 
-	; 0xFF8604-0xFF8613
+	; 0xFF8604-0xFF8613 (DMA_SEND_CHUNKED start)
 	db	0efh, 06eh, 02eh, 0bfh, 002h, 062h, 0d9h, 08eh
 	db	0bfh, 006h, 041h, 0deh, 0cfh, 020h, 000h, 063h
 	; 0xFF8614-0xFF8623
@@ -667,7 +674,7 @@ INIT_DMA_SERIAL:
 	; 0xFF8634-0xFF8643
 	db	0e0h, 08fh, 006h, 021h, 0d8h, 012h, 0c7h, 0f8h
 	db	08bh, 0d9h, 012h, 0afh, 002h, 022h, 01eh, 004h
-	; 0xFF8644-0xFF8653
+	; 0xFF8644-0xFF8653 (DMA_SEND_BLOCK at 0xFF8649)
 	db	000h, 04eh, 0efh, 066h, 00eh, 0cbh, 0d8h, 0b0h
 	db	0f6h, 0dch, 0a8h, 0f0h, 034h, 0cch, 066h, 03fh
 	; 0xFF8654-0xFF8663
@@ -685,7 +692,7 @@ INIT_DMA_SERIAL:
 	; 0xFF8694-0xFF86A3
 	db	08bh, 0dch, 061h, 0dbh, 0cfh, 060h, 0eah, 063h
 	db	0b2h, 00eh, 0dch, 088h, 0dch, 061h, 0d8h, 0cfh
-	; 0xFF86A4-0xFF86B3
+	; 0xFF86A4-0xFF86B3 (SEND_E3_CMD at 0xFF86AC)
 	db	060h, 0eah, 063h, 0c4h, 0f0h, 034h, 0b8h, 00eh
 	db	0d9h, 0a8h, 0f0h, 034h, 0cch, 066h, 012h, 0f0h
 	; 0xFF86B4-0xFF86C3
@@ -694,7 +701,7 @@ INIT_DMA_SERIAL:
 	; 0xFF86C4-0xFF86D3
 	db	00eh, 0d9h, 088h, 0d9h, 061h, 0d8h, 0cfh, 060h
 	db	0eah, 063h, 0dfh, 00eh, 0d9h, 088h, 0d9h, 061h
-	; 0xFF86D4-0xFF86E3
+	; 0xFF86D4-0xFF86E3 (WAIT_DMA_THEN_E2 at 0xFF86DC)
 	db	0d8h, 0cfh, 060h, 0eah, 06bh, 0e7h, 068h, 0e0h
 	db	0dch, 0a8h, 0c1h, 016h, 005h, 03fh, 000h, 066h
 	; 0xFF86E4-0xFF86F3
@@ -715,7 +722,7 @@ INIT_DMA_SERIAL:
 	; 0xFF8734-0xFF8743
 	db	0b0h, 0f6h, 0c1h, 016h, 005h, 03fh, 000h, 06eh
 	db	0f9h, 00eh, 0dch, 08bh, 0dch, 061h, 0dbh, 0cfh
-	; 0xFF8744-0xFF8753
+	; 0xFF8744-0xFF8753 (DMA_MULTI_STAGE at 0xFF874C)
 	db	060h, 0eah, 063h, 0beh, 0f0h, 034h, 0b8h, 00eh
 	db	02eh, 0deh, 0a8h, 0c1h, 016h, 005h, 03fh, 000h
 	; 0xFF8754-0xFF8763
