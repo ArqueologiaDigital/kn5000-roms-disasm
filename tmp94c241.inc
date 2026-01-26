@@ -639,3 +639,82 @@ LDA_XDE_IMM24 MACRO addr
 LD_XBC_pXDE_BC MACRO
 	db 0e3h, 007h, 0e8h, 0e4h, 021h	; ld XBC, (XDE+BC)
 	ENDM
+
+; ==============================================================================
+; Stack-relative load macros
+; ==============================================================================
+
+; LD_XBC_pXSP_d - Load XBC from (XSP+disp)
+; Encoding: af dd 21 (3 bytes)
+LD_XBC_pXSP_d MACRO disp
+	db 0afh, disp, 021h		; ld XBC, (XSP+disp)
+	ENDM
+
+; LD_A_pXSP_d - Load A from (XSP+disp)
+; Encoding: 8f dd 21 (3 bytes)
+LD_A_pXSP_d MACRO disp
+	db 08fh, disp, 021h		; ld A, (XSP+disp)
+	ENDM
+
+; ==============================================================================
+; Register-to-register load macros
+; ==============================================================================
+
+; LD_XDE_XIZ - Load XDE from XIZ
+; Encoding: ee 8a (2 bytes)
+LD_XDE_XIZ MACRO
+	db 0eeh, 08ah			; ld XDE, XIZ
+	ENDM
+
+; LD_BC_QBC - Load BC from QBC (high word of XBC)
+; Encoding: d7 e6 89 (3 bytes)
+LD_BC_QBC MACRO
+	db 0d7h, 0e6h, 089h		; ld BC, QBC
+	ENDM
+
+; LD_BC_QDE - Load BC from QDE (high word of XDE)
+; Encoding: d7 ea 89 (3 bytes)
+LD_BC_QDE MACRO
+	db 0d7h, 0eah, 089h		; ld BC, QDE
+	ENDM
+
+; ==============================================================================
+; Stack pointer increment macro
+; ==============================================================================
+
+; INC_0_XSP - Increment XSP by 1 (0+1=1) - adjust stack
+; Encoding: ef 60 (2 bytes)
+INC_0_XSP MACRO
+	db 0efh, 060h			; inc 0, XSP
+	ENDM
+
+; ==============================================================================
+; Memory store with auto-increment
+; ==============================================================================
+
+; LD_pXWA_plus_BC - Store BC to memory at XWA, then increment XWA
+; Encoding: f5 e1 51 (3 bytes)
+LD_pXWA_plus_BC MACRO
+	db 0f5h, 0e1h, 051h		; ld (XWA+), BC
+	ENDM
+
+; ==============================================================================
+; Decrement and jump if not zero macros
+; ==============================================================================
+
+; DJNZ_DE - Decrement DE and jump if not zero (relative)
+; Encoding: da 1c dd (3 bytes, signed 8-bit displacement)
+DJNZ_DE MACRO target
+	db 0dah, 01ch
+	db (target - $ - 1) & 0FFh	; Signed 8-bit displacement
+	ENDM
+
+; ==============================================================================
+; Memory arithmetic with auto-increment
+; ==============================================================================
+
+; ADD_XHL_pXWA_plus - Add (XWA+) to XHL, post-increment XWA
+; Encoding: e5 e2 83 (3 bytes)
+ADD_XHL_pXWA_plus MACRO
+	db 0e5h, 0e2h, 083h		; add XHL, (XWA+)
+	ENDM

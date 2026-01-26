@@ -508,8 +508,8 @@ SUB_850E:
 	push	XDE
 	PUSH_WORD 1			; Push channel 1
 	CALR	SUB_853A
-	db	0afh, 00ah, 021h	; ld XBC, (XSP+0x0A)
-	db	0eeh, 08ah		; ld XDE, XIZ
+	LD_XBC_pXSP_d 0Ah		; ld XBC, (XSP+0x0A)
+	LD_XDE_XIZ			; ld XDE, XIZ
 	PUSH_WORD 0			; Push channel 0
 	CALR	SUB_853A
 	ld	XBC, XWA
@@ -520,7 +520,7 @@ SUB_850E:
 	ld	XDE, XIY
 	PUSH_WORD 3			; Push channel 3
 	CALR	SUB_853A
-	db	0efh, 060h		; inc 0, XSP (adjust stack)
+	INC_0_XSP			; inc 0, XSP (adjust stack)
 	pop	XDE
 	pop	XBC
 	ret
@@ -533,7 +533,7 @@ SUB_853A:
 	push	XIY
 	push	WA
 	push	BC
-	db	08fh, 00ch, 021h	; ld A, (XSP+0x0C) - get channel from stack
+	LD_A_pXSP_d 0Ch			; ld A, (XSP+0x0C) - get channel from stack
 	sll	5, A			; A = A << 5
 	set	4, A			; A |= 0x10
 	ld	XIY, TONE_GEN_BASE
@@ -544,7 +544,7 @@ SUB_853A:
 	ld	(XIY+2), B		; Write B
 	inc	1, A
 	ld	(XIY), A
-	db	0d7h, 0e6h, 089h	; ld BC, QBC (high word of XBC)
+	LD_BC_QBC			; ld BC, QBC (high word of XBC)
 	ld	(XIY+2), C
 	inc	1, A
 	ld	(XIY), A
@@ -557,7 +557,7 @@ SUB_853A:
 	ld	(XIY+2), D		; Write D
 	inc	1, A
 	ld	(XIY), A
-	db	0d7h, 0eah, 089h	; ld BC, QDE (high word of XDE)
+	LD_BC_QDE			; ld BC, QDE (high word of XDE)
 	ld	(XIY+2), C
 	inc	1, A
 	ld	(XIY), A
@@ -575,7 +575,7 @@ COPY_WORDS:
 	ld	XIX, XWA
 	ld	XIY, XBC
 	ld	BC, DE
-	db	095h, 011h		; ldirw (word block copy)
+	LDIRW_95			; ldirw (word block copy)
 	ret
 
 ; ==============================================================================
@@ -583,8 +583,8 @@ COPY_WORDS:
 ; ==============================================================================
 
 FILL_WORDS:
-	db	0f5h, 0e1h, 051h	; ld (XWA+), BC
-	db	0dah, 01ch, 0fah	; djnz DE, FILL_WORDS
+	LD_pXWA_plus_BC			; ld (XWA+), BC
+	DJNZ_DE FILL_WORDS		; djnz DE, FILL_WORDS
 	ret
 
 ; ==============================================================================
@@ -597,7 +597,7 @@ CHECKSUM_CALC:
 	extz	XBC			; Zero-extend BC to XBC
 	add	XBC, XWA		; End address = start + count
 .loop:
-	db	0e5h, 0e2h, 083h	; add XHL, (XWA+)
+	ADD_XHL_pXWA_plus		; add XHL, (XWA+)
 	cp	XWA, XBC
 	jr	LT, .loop		; Loop while XWA < end
 	cpl	HL			; Complement result
