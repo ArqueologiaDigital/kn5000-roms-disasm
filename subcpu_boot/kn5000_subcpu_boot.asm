@@ -829,18 +829,41 @@ DMA_SEND_BLOCK:
 
 ; ------------------------------------------------------------------------------
 ; SEND_E3_CMD (0xFF86AC) - Send E3 command (payload ready signal)
-; Remaining routines still use raw bytes - TODO: disassemble
+; Signals to main CPU that data payload is ready
+; Uses same handshaking protocol as other DMA routines
+; Structure: wait_ready -> send E3 -> wait_ack -> set_flag_ret -> timeout loops
 ; ------------------------------------------------------------------------------
 SEND_E3_CMD:
-	db	0d9h, 0a8h, 0f0h, 034h, 0cch, 066h, 012h, 0f0h
-	; 0xFF86B4-0xFF86C3
-	db	034h, 0b0h, 0f2h, 000h, 000h, 012h, 000h, 0e3h
-	db	0f0h, 034h, 0cch, 06eh, 00fh, 0f0h, 034h, 0b8h
-	; 0xFF86C4-0xFF86D3
-	db	00eh, 0d9h, 088h, 0d9h, 061h, 0d8h, 0cfh, 060h
-	db	0eah, 063h, 0dfh, 00eh, 0d9h, 088h, 0d9h, 061h
-	; 0xFF86D4-0xFF86E3 (WAIT_DMA_THEN_E2 at 0xFF86DC)
-	db	0d8h, 0cfh, 060h, 0eah, 06bh, 0e7h, 068h, 0e0h
+	ld	BC, 0			; BC = timeout counter
+.wait_ready:
+	bit	4, (INTERCPU_STATUS)	; Check if main CPU ready
+	jr	Z, .timeout1		; Not ready - check timeout
+	res	0, (INTERCPU_STATUS)	; Clear our ready flag
+	ld	(INTER_CPU_LATCH), 0E3h	; Send E3 command to main CPU
+.wait_ack:
+	bit	4, (INTERCPU_STATUS)	; Check for acknowledgment
+	jr	NZ, .timeout2		; Got response - handle in timeout2
+.set_flag_ret:				; Success path AND timeout2 target
+	set	0, (INTERCPU_STATUS)	; Set our ready flag
+	ret				; Done
+.timeout1:
+	ld	WA, BC			; WA = timeout counter
+	inc	1, BC			; Increment counter
+	cp	WA, 0EA60h		; Timeout limit (60000)
+	jr	ULE, .wait_ready	; Keep waiting if not timed out
+	ret				; Timeout - give up
+.timeout2:
+	ld	WA, BC			; WA = timeout counter
+	inc	1, BC			; Increment counter
+	cp	WA, 0EA60h		; Timeout limit
+	jr	UGT, .set_flag_ret	; Timed out - set flag and return
+	jr	T, .wait_ack		; Not timed out - keep waiting
+
+; ------------------------------------------------------------------------------
+; WAIT_DMA_THEN_E2 (0xFF86DC) - Wait for DMA completion then send E2
+; Remaining routines still use raw bytes - TODO: disassemble
+; ------------------------------------------------------------------------------
+WAIT_DMA_THEN_E2:
 	db	0dch, 0a8h, 0c1h, 016h, 005h, 03fh, 000h, 066h
 	; 0xFF86E4-0xFF86F3
 	db	011h, 0dch, 08bh, 0dch, 061h, 0dbh, 0cfh, 060h
