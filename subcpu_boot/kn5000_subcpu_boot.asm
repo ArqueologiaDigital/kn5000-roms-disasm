@@ -1126,10 +1126,10 @@ ROM_CHECKSUM:
 	dec	4, XSP			; Reserve 4 bytes
 	push	XIZ
 	lda	XIX, XSP+4
-	ld	(XIX), 0000h		; Checksum accumulator 1
+	LD_pXIX_IMM16	0000h		; Checksum accumulator 1 (TMP94C241 encoding)
 	lda	XHL, XIX+2
-	ld	(XHL), 0000h		; Checksum accumulator 2
-	ld	W, 00h			; Bank counter
+	LD_pXHL_IMM16	0000h		; Checksum accumulator 2 (TMP94C241 encoding)
+	LD_W	0			; Bank counter (TMP94C241 encoding)
 .bank_loop:
 	ld	XIY, 00FE0000h		; Boot ROM base
 	ld	XIZ, 0			; Word counter
@@ -1192,22 +1192,64 @@ SERIAL_INIT:
 	ret
 
 ; ==============================================================================
-; SUB_8B37 (0xFF8B37) - Serial subsystem helper
+; SUB_8B37 (0xFF8B37) - LED/Output bit manipulation routine
+;
+; This routine sets or clears bits in an output buffer based on input parameters.
+; Parameters are passed on stack:
+;   (SP+0): Button/LED index (0x24-based offset)
+;   (SP+1): Action (0 = clear bit, non-zero = set bit)
+;
+; The routine calculates:
+;   - Byte offset = (index - 0x24) >> 3 (which byte in buffer)
+;   - Bit position = (index - 0x24) & 7 (which bit in byte)
+;   - Buffer base = 0x0558
+;
+; Uses SUB_8B89 to send/receive data to hardware.
 ; ==============================================================================
 
 	org	0FF8B37h
 
 SUB_8B37:
-	dec	2, XSP
-	lda	XWA, XSP
-	calr	SUB_8B89
-	cp	HL, 0FFFFh
-	jr	Z, .done
-	lda	XBC, XSP
-	ld	E, (XBC)
-	; ... continues with more initialization
+	dec	2, XSP			; Reserve 2 bytes on stack for local vars
+	lda	XWA, XSP		; XWA = pointer to stack frame
+	calr	SUB_8B89		; Call to get/send data
+	cp	HL, 0FFFFh		; Check return value
+	jr	Z, .done		; If -1 (error), skip to done
+
+.loop:
+	lda	XBC, XSP		; XBC = pointer to parameters
+	db	81h, 25h		; ld E, (XBC) - Load LED/button index
+	sub	E, 24h			; E = index - 0x24 (normalize to 0-based)
+	ld	L, E			; L = normalized index
+	srl	3, L			; L = index >> 3 (byte offset)
+	and	L, 07h			; L = byte offset (mask to 0-7)
+	and	E, 07h			; E = bit position (index & 7)
+	ld	A, E			; A = bit position
+	ld	E, L			; E = byte offset
+	extz	DE			; Zero-extend DE (byte offset in DE)
+	lda	XIX, 0558h		; XIX = buffer base address
+	ld	HL, 1			; HL = initial bit mask (1)
+	and	A, 0Fh			; Mask bit position to 0-15
+	jr	Z, .skip_shift		; If A=0, skip shift (bit already = 1)
+	sla	A, HL			; HL = HL << A (create bit mask)
+.skip_shift:
+	extz	XDE			; Zero-extend XDE (32-bit offset)
+	add	XDE, XIX		; XDE = buffer base + byte offset
+	cp	(XBC+1), 0		; Check action parameter
+	jr	Z, .clear_bit		; If 0, clear the bit
+	or	(XDE), L		; Set bit: buffer[offset] |= mask
+	jr	T, .next		; Jump to next iteration (always)
+.clear_bit:
+	cpl	HL			; Complement mask (for AND)
+	and	(XDE), L		; Clear bit: buffer[offset] &= ~mask
+.next:
+	ld	XWA, XBC		; XWA = parameter pointer
+	calr	SUB_8B89		; Call to send/get next item
+	cp	HL, 0FFFFh		; Check return value
+	jr	NZ, .loop		; If not -1, continue loop
+
 .done:
-	; Stub - full routine TBD
+	inc	2, XSP			; Release 2 bytes from stack
 	ret
 
 ; ==============================================================================

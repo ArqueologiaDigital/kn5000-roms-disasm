@@ -513,6 +513,22 @@ LD_MEM24_IMM16 MACRO addr, value
 	db value & 0FFh, (value >> 8) & 0FFh
 	ENDM
 
+; LD_pXIX_IMM16 - Store 16-bit immediate to memory via XIX
+; Encoding: b4 02 LL HH (4 bytes)
+; Use when ASL generates 3-byte encoding instead of 4-byte
+LD_pXIX_IMM16 MACRO value
+	db 0b4h, 02h
+	db value & 0FFh, (value >> 8) & 0FFh
+	ENDM
+
+; LD_pXHL_IMM16 - Store 16-bit immediate to memory via XHL
+; Encoding: b3 02 LL HH (4 bytes)
+; Use when ASL generates 3-byte encoding instead of 4-byte
+LD_pXHL_IMM16 MACRO value
+	db 0b3h, 02h
+	db value & 0FFh, (value >> 8) & 0FFh
+	ENDM
+
 ; CALR addr - Call relative (shorter encoding than CALL)
 ; Encoding: 1e LL HH (16-bit signed relative offset)
 ; Note: offset is calculated from the byte after the instruction
