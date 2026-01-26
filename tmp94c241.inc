@@ -502,6 +502,17 @@ LDA_XWA_IMM24 MACRO value
 	db 0f2h, value & 0FFh, (value >> 8) & 0FFh, (value >> 16) & 0FFh, 030h
 	ENDM
 
+; LD_MEM24_IMM16 - Store 16-bit immediate to 24-bit memory address
+; Encoding: f2 LL MM HH 02 VV WW (7 bytes)
+; where address is 0xHHMMLLL and value is 0xWWVV
+; Use when ASL generates 6-byte encoding instead of 7-byte
+LD_MEM24_IMM16 MACRO addr, value
+	db 0f2h
+	db addr & 0FFh, (addr >> 8) & 0FFh, (addr >> 16) & 0FFh
+	db 02h		; Size specifier for word (16-bit)
+	db value & 0FFh, (value >> 8) & 0FFh
+	ENDM
+
 ; CALR addr - Call relative (shorter encoding than CALL)
 ; Encoding: 1e LL HH (16-bit signed relative offset)
 ; Note: offset is calculated from the byte after the instruction

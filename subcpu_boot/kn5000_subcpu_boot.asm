@@ -651,46 +651,112 @@ INIT_DMA_SERIAL:
 	ret
 
 ; ==============================================================================
-; INIT_MEMORY_TEST (0xFF8956) - Memory test/initialization
+; DMA Transfer Routines (0xFF8604-0xFF881E) - 539 bytes
+; TODO: Disassemble these routines
 ; ==============================================================================
 
-	org	0FF8956h
-
-INIT_MEMORY_TEST:
-	ld	(MEMTEST_RESULT), 00h
-	set	1, (INTTC01)
-	bit	0, (INTTC01)
-	ret	NZ			; Return if bit set
-
-	ld	WA, 0
-	call	MEM_TEST_ROUTINE	; 0xFF89FC
-	ld	(MEMTEST_RESULT), L
-	extz	HL
-	ld	WA, HL
-	call	ROM_CHECKSUM		; 0xFF8AB4
-	ld	(MEMTEST_RESULT), L
-	call	SUB_8C80		; 0xFF8C80
-	cp	HL, 0FFFFh
-	jr	NZ, .no_error
-	set	3, (MEMTEST_RESULT)
-.no_error:
-	ld	A, (MEMTEST_RESULT)
-	extz	WA
-	call	DELAY_ROUTINE		; 0xFF89A9
-
-	; Clear serial buffer area
-	ld	(110002h), 0003h
-	lda	XBC, SERIAL_STATUS
-	ld	XWA, XBC
-	INC_0_XBC			; Increment XBC by 1
-.clear_loop:
-	ld	(XWA+), 00h
-	cp	XWA, XBC
-	jr	C, .clear_loop
-
-.serial_loop:
-	call	SERIAL_INIT		; 0xFF8B07
-	jr	.serial_loop		; Loop calling serial init forever
+	; 0xFF8604-0xFF8613
+	db	0efh, 06eh, 02eh, 0bfh, 002h, 062h, 0d9h, 08eh
+	db	0bfh, 006h, 041h, 0deh, 0cfh, 020h, 000h, 063h
+	; 0xFF8614-0xFF8623
+	db	020h, 08fh, 006h, 021h, 0d8h, 012h, 031h, 020h
+	db	000h, 0afh, 002h, 022h, 01eh, 026h, 000h, 040h
+	; 0xFF8624-0xFF8633
+	db	020h, 000h, 000h, 000h, 0afh, 002h, 088h, 0deh
+	db	0cah, 020h, 000h, 0deh, 0cfh, 020h, 000h, 06bh
+	; 0xFF8634-0xFF8643
+	db	0e0h, 08fh, 006h, 021h, 0d8h, 012h, 0c7h, 0f8h
+	db	08bh, 0d9h, 012h, 0afh, 002h, 022h, 01eh, 004h
+	; 0xFF8644-0xFF8653
+	db	000h, 04eh, 0efh, 066h, 00eh, 0cbh, 0d8h, 0b0h
+	db	0f6h, 0dch, 0a8h, 0f0h, 034h, 0cch, 066h, 03fh
+	; 0xFF8654-0xFF8663
+	db	0f0h, 034h, 0b0h, 0f1h, 016h, 005h, 000h, 001h
+	db	0cbh, 08fh, 0cfh, 069h, 0c9h, 0eeh, 005h, 0cfh
+	; 0xFF8664-0xFF8673
+	db	0e1h, 0f2h, 000h, 000h, 012h, 041h, 0dch, 0a8h
+	db	0f0h, 034h, 0cch, 06eh, 02dh, 0f0h, 034h, 0b8h
+	; 0xFF8674-0xFF8683
+	db	0eah, 02eh, 008h, 0d9h, 012h, 0d9h, 02eh, 048h
+	db	0f1h, 002h, 001h, 000h, 016h, 0f0h, 080h, 0bah
+	; 0xFF8684-0xFF8693
+	db	0c1h, 016h, 005h, 03fh, 000h, 0b0h, 0f6h, 0c1h
+	db	016h, 005h, 03fh, 000h, 06eh, 0f9h, 00eh, 0dch
+	; 0xFF8694-0xFF86A3
+	db	08bh, 0dch, 061h, 0dbh, 0cfh, 060h, 0eah, 063h
+	db	0b2h, 00eh, 0dch, 088h, 0dch, 061h, 0d8h, 0cfh
+	; 0xFF86A4-0xFF86B3
+	db	060h, 0eah, 063h, 0c4h, 0f0h, 034h, 0b8h, 00eh
+	db	0d9h, 0a8h, 0f0h, 034h, 0cch, 066h, 012h, 0f0h
+	; 0xFF86B4-0xFF86C3
+	db	034h, 0b0h, 0f2h, 000h, 000h, 012h, 000h, 0e3h
+	db	0f0h, 034h, 0cch, 06eh, 00fh, 0f0h, 034h, 0b8h
+	; 0xFF86C4-0xFF86D3
+	db	00eh, 0d9h, 088h, 0d9h, 061h, 0d8h, 0cfh, 060h
+	db	0eah, 063h, 0dfh, 00eh, 0d9h, 088h, 0d9h, 061h
+	; 0xFF86D4-0xFF86E3
+	db	0d8h, 0cfh, 060h, 0eah, 06bh, 0e7h, 068h, 0e0h
+	db	0dch, 0a8h, 0c1h, 016h, 005h, 03fh, 000h, 066h
+	; 0xFF86E4-0xFF86F3
+	db	011h, 0dch, 08bh, 0dch, 061h, 0dbh, 0cfh, 060h
+	db	0eah, 0b0h, 0fbh, 0c1h, 016h, 005h, 03fh, 000h
+	; 0xFF86F4-0xFF8703
+	db	06eh, 0efh, 0f0h, 034h, 0b0h, 0f1h, 016h, 005h
+	db	000h, 001h, 0f2h, 000h, 000h, 012h, 000h, 0e2h
+	; 0xFF8704-0xFF8713
+	db	0dch, 0a8h, 0f0h, 034h, 0cch, 06eh, 033h, 0f0h
+	db	034h, 0b8h, 0f1h, 002h, 005h, 033h, 0b3h, 060h
+	; 0xFF8714-0xFF8723
+	db	0bbh, 004h, 062h, 0bbh, 008h, 051h, 0ebh, 02eh
+	db	008h, 030h, 00ah, 000h, 0d8h, 02eh, 048h, 0f1h
+	; 0xFF8724-0xFF8733
+	db	002h, 001h, 000h, 016h, 0f0h, 080h, 0bah, 0f1h
+	db	0feh, 004h, 0bfh, 0c1h, 016h, 005h, 03fh, 000h
+	; 0xFF8734-0xFF8743
+	db	0b0h, 0f6h, 0c1h, 016h, 005h, 03fh, 000h, 06eh
+	db	0f9h, 00eh, 0dch, 08bh, 0dch, 061h, 0dbh, 0cfh
+	; 0xFF8744-0xFF8753
+	db	060h, 0eah, 063h, 0beh, 0f0h, 034h, 0b8h, 00eh
+	db	02eh, 0deh, 0a8h, 0c1h, 016h, 005h, 03fh, 000h
+	; 0xFF8754-0xFF8763
+	db	066h, 012h, 0deh, 08bh, 0deh, 061h, 0dbh, 0cfh
+	db	060h, 0eah, 07bh, 0bch, 000h, 0c1h, 016h, 005h
+	; 0xFF8764-0xFF8773
+	db	03fh, 000h, 06eh, 0eeh, 0deh, 0a8h, 0f0h, 034h
+	db	0cch, 076h, 092h, 000h, 0f0h, 034h, 0b0h, 0f1h
+	; 0xFF8774-0xFF8783
+	db	016h, 005h, 000h, 002h, 0f2h, 000h, 000h, 012h
+	db	000h, 0e1h, 0deh, 0a8h, 0f0h, 034h, 0cch, 07eh
+	; 0xFF8784-0xFF8793
+	db	089h, 000h, 0f0h, 034h, 0b8h, 0f1h, 03eh, 005h
+	db	033h, 0b3h, 060h, 0f1h, 00ch, 005h, 030h, 0b0h
+	; 0xFF8794-0xFF87A3
+	db	062h, 0bbh, 004h, 051h, 0b8h, 004h, 051h, 0e8h
+	db	02eh, 008h, 0d8h, 0aeh, 0d8h, 02eh, 048h, 0f1h
+	; 0xFF87A4-0xFF87B3
+	db	002h, 001h, 000h, 016h, 0f0h, 080h, 0bah, 0c1h
+	db	016h, 005h, 03fh, 001h, 066h, 007h, 0c1h, 016h
+	; 0xFF87B4-0xFF87C3
+	db	005h, 03fh, 001h, 06eh, 0f9h, 0deh, 0a8h, 0deh
+	db	0cfh, 0c8h, 000h, 06fh, 009h, 000h, 0deh, 061h
+	; 0xFF87C4-0xFF87D3
+	db	0deh, 0cfh, 0c8h, 000h, 067h, 0f7h, 0f1h, 03eh
+	db	005h, 030h, 0a0h, 021h, 0e9h, 02eh, 008h, 098h
+	; 0xFF87D4-0xFF87E3
+	db	004h, 020h, 0d8h, 02eh, 048h, 0f1h, 002h, 001h
+	db	000h, 016h, 0f0h, 080h, 0bah, 0c1h, 016h, 005h
+	; 0xFF87E4-0xFF87F3
+	db	03fh, 000h, 066h, 007h, 0c1h, 016h, 005h, 03fh
+	db	000h, 06eh, 0f9h, 0deh, 0a8h, 0deh, 0cfh, 0c8h
+	; 0xFF87F4-0xFF8803
+	db	000h, 06fh, 009h, 000h, 0deh, 061h, 0deh, 0cfh
+	db	0c8h, 000h, 067h, 0f7h, 068h, 01bh, 0deh, 08bh
+	; 0xFF8804-0xFF8813
+	db	0deh, 061h, 0dbh, 0cfh, 060h, 0eah, 073h, 05dh
+	db	0ffh, 068h, 00eh, 0deh, 08bh, 0deh, 061h, 0dbh
+	; 0xFF8814-0xFF881E (partial - 11 bytes)
+	db	0cfh, 060h, 0eah, 073h, 066h, 0ffh, 0f0h, 034h
+	db	0b8h, 04eh, 00eh
 
 ; ==============================================================================
 ; Interrupt Handler 9 (0xFF881F) - Serial Receive Interrupt
@@ -705,12 +771,12 @@ INT_HANDLER_9:
 	bit	2, (SC0BUF)		; Check serial status
 	jr	NZ, .exit
 	ld	A, (INTER_CPU_LATCH)	; Read command from main CPU
-	ld	(LAST_CMD_BYTE), A		; Save received byte
+	ld	(LAST_CMD_BYTE), A	; Save received byte
 	cp	A, 0E1h			; Command E1?
 	jr	NZ, .not_e1
 	; E1: Set up DMA for 6 bytes
 	ld	(CMD_PROCESSING_STATE), 02h
-	lda	XWA, 0544h
+	lda	XWA, CMD_E1_BUFFER
 	ld	(DMA_TARGET_ADDR), XWA
 	LDC_DMAD0_XWA			; DMA channel 0 destination
 	ld	WA, 6
@@ -721,7 +787,7 @@ INT_HANDLER_9:
 	jr	NZ, .not_e2
 	; E2: Set up DMA for 10 bytes
 	ld	(CMD_PROCESSING_STATE), 03h
-	lda	XWA, 054Ah
+	lda	XWA, CMD_E2_BUFFER
 	ld	(DMA_TARGET_ADDR), XWA
 	LDC_DMAD0_XWA			; DMA channel 0 destination
 	ld	WA, 000Ah
@@ -736,7 +802,7 @@ INT_HANDLER_9:
 .default_cmd:
 	; Other commands: variable-length DMA based on low 5 bits
 	ld	(CMD_PROCESSING_STATE), 01h
-	lda	XWA, 051Eh
+	lda	XWA, CMD_DATA_BUFFER
 	ld	(DMA_TARGET_ADDR), XWA
 	LDC_DMAD0_XWA			; DMA channel 0 destination
 	ld	A, (LAST_CMD_BYTE)
@@ -761,14 +827,14 @@ INT_HANDLER_9:
 
 INT_HANDLER_37:
 	res	2, (WDMOD)		; Clear watchdog bit
-	cp	(DMA_STATE), 01h		; State 1?
+	cp	(DMA_STATE), 01h	; State 1?
 	jr	NZ, .not_state1
-	ld	(DMA_STATE), 00h		; -> State 0
+	ld	(DMA_STATE), 00h	; -> State 0
 	jr	.done
 .not_state1:
-	cp	(DMA_STATE), 02h		; State 2?
+	cp	(DMA_STATE), 02h	; State 2?
 	jr	NZ, .done
-	ld	(DMA_STATE), 01h		; -> State 1
+	ld	(DMA_STATE), 01h	; -> State 1
 .done:
 	reti
 
@@ -798,7 +864,7 @@ INT_HANDLER_35:
 	jr	NZ, .check_watchdog
 	; State 1: Process received data, call handler from table
 	PUSH_WORD 0000h
-	PUSH_WORD 051Eh
+	PUSH_WORD CMD_DATA_BUFFER
 	ld	C, (LAST_CMD_BYTE)
 	ld	A, C
 	and	A, 1Fh			; Low 5 bits = count
@@ -817,13 +883,13 @@ INT_HANDLER_35:
 	jr	.set_flag_exit
 .state2:
 	; State 2: Set up secondary DMA transfer
-	lda	XWA, 0544h
+	lda	XWA, CMD_E1_BUFFER
 	ld	XBC, (XWA)
 	LDC_DMAD0_XBC			; DMA channel 0 destination (from XBC)
 	ld	WA, (XWA+4)
 	LDC_DMAC0_WA			; DMA channel 0 count
 	ld	(0100h), 0Ah		; Trigger DMA
-	ld	(CMD_PROCESSING_STATE), 04h		; -> State 4
+	ld	(CMD_PROCESSING_STATE), 04h	; -> State 4
 	jr	.check_watchdog
 .state3:
 	; State 3: Set completion flags
@@ -854,6 +920,49 @@ INT_HANDLER_35:
 	pop	XIY
 	pop	XIZ
 	reti
+	ret			; 0xFF8955: Extra return instruction
+
+; ==============================================================================
+; INIT_MEMORY_TEST (0xFF8956) - Memory test/initialization
+; ==============================================================================
+
+	org	0FF8956h
+
+INIT_MEMORY_TEST:
+	ld	(MEMTEST_RESULT), 00h
+	set	1, (INTTC01)
+	bit	0, (INTTC01)
+	ret	NZ			; Return if bit set
+
+	ld	WA, 0
+	CALR	MEM_TEST_ROUTINE	; 0xFF89FC (3-byte relative call)
+	ld	(MEMTEST_RESULT), L
+	extz	HL
+	ld	WA, HL
+	CALR	ROM_CHECKSUM		; 0xFF8AB4 (3-byte relative call)
+	ld	(MEMTEST_RESULT), L
+	CALR	SUB_8C80		; 0xFF8C80 (3-byte relative call)
+	cp	HL, 0FFFFh
+	jr	NZ, .no_error
+	set	3, (MEMTEST_RESULT)
+.no_error:
+	ld	A, (MEMTEST_RESULT)
+	extz	WA
+	CALR	DELAY_ROUTINE		; 0xFF89A9 (3-byte relative call)
+
+	; Clear serial buffer area
+	LD_MEM24_IMM16	110002h, 0003h	; 7-byte encoding: f2 02 00 11 02 03 00
+	lda	XBC, SERIAL_STATUS
+	ld	XWA, XBC
+	INC_0_XBC			; Increment XBC by 1
+.clear_loop:
+	ld	(XWA+), 00h
+	cp	XWA, XBC
+	jr	C, .clear_loop
+
+.serial_loop:
+	CALR	SERIAL_INIT		; 0xFF8B07 (3-byte relative call)
+	jr	.serial_loop		; Loop calling serial init forever
 
 ; ==============================================================================
 ; DELAY_ROUTINE (0xFF89A9) - Variable delay based on bit pattern in A
@@ -863,7 +972,7 @@ INT_HANDLER_35:
 	org	0FF89A9h
 
 DELAY_ROUTINE:
-	ld	L, 00h
+	LD_L	0			; ld L, 00h (TMP94C241 encoding)
 .outer_loop:
 	res	1, (INTTC01)
 	ld	BC, 4000h		; Default count
@@ -875,7 +984,7 @@ DELAY_ROUTINE:
 	cp	BC, 0
 	jr	Z, .next_bit
 .delay_loop:
-	ld	E, 00h
+	LD_E	0			; ld E, 00h (TMP94C241 encoding)
 .inner_loop:
 	inc	1, E
 	cp	E, 20h
@@ -885,7 +994,7 @@ DELAY_ROUTINE:
 	set	1, (INTTC01)
 	ld	BC, 4000h
 .delay2_outer:
-	ld	E, 00h
+	LD_E	0			; ld E, 00h (TMP94C241 encoding)
 .delay2_inner:
 	inc	1, E
 	cp	E, 20h
@@ -933,7 +1042,7 @@ MEM_TEST_ROUTINE:
 .next_region:
 	ld	A, (XSP+4)
 	extz	WA
-	muls	WA, 000Ah		; Each entry is 10 bytes
+	MULS_WA	000Ah			; Each entry is 10 bytes (TMP94C241 encoding)
 	lda	XBC, 0FF8020h		; Test config table
 	lda	XDE, XBC+WA		; Point to current entry
 	ld	XHL, (XDE)		; Memory start address

@@ -87,6 +87,30 @@ Project issues are tracked using [Beads](https://github.com/beads-ai/beads) in `
 - Exported to the website via `make issues`
 - Visible at `/issues/` on the documentation site
 
+### Disassembly Quality Standards (MANDATORY)
+
+**Always prefer disassembled code over raw bytes.** This is a strict policy:
+
+1. **Disassembled code is always preferred** - Named labels, proper instructions, and comments provide understanding and maintainability. Raw `db` byte sequences should only be used as a last resort for truly undeciphered data.
+
+2. **When fixing ROM divergences:**
+   - Keep existing disassembled routines intact
+   - Use raw bytes ONLY to fill gaps between known routines
+   - Never replace disassembled code with raw bytes just to achieve byte-matching
+   - If raw bytes are needed, clearly document the address range and mark as "TODO: disassemble"
+
+3. **Address boundaries must be calculated precisely:**
+   - Raw byte segments should end exactly where disassembled routines begin
+   - Use `org` directives for disassembled routines at known addresses
+   - Document any gaps that need raw bytes to maintain alignment
+
+4. **Goal hierarchy:**
+   - First priority: Correct, understandable disassembly
+   - Second priority: Byte-accurate ROM reconstruction
+   - Never sacrifice readability for byte-matching
+
+This policy ensures the disassembly remains useful for understanding the firmware, not just rebuilding it.
+
 ## Architecture
 
 ### ROM Components
