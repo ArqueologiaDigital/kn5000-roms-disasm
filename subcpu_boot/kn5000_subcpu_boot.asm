@@ -1253,26 +1253,173 @@ SUB_8B37:
 	ret
 
 ; ==============================================================================
-; SUB_8B89 (0xFF8B89) - Serial subsystem helper 2
+; SUB_8B89 (0xFF8B89) - Inter-CPU communication handler
+;
+; Reads data from inter-CPU communication latches at 0x110000-0x110002.
+; Checks status bits and dispatches to SUB_8BD2 for processing.
+;
+; Input: XWA = pointer to parameter buffer
+; Output: HL = 0 on success, 0xFFFF on error/no data
 ; ==============================================================================
 
 	org	0FF8B89h
 
 SUB_8B89:
-	; Stub - TBD
+	push	XIZ
+	ld	XIZ, XWA		; Save parameter pointer in XIZ
+	ld	HL, (110002h)		; Read status register
+	bit	0, HL			; Check bit 0 (data available?)
+	jr	Z, .error		; If not set, return error
+
+	ld	WA, (110000h)		; Read data word from latch
+	ld	B, A			; B = low byte
+	and	B, 0FFh			; Mask to byte
+	srl	8, WA			; WA >>= 8 (get high byte in A)
+	and	A, 0FFh			; Mask to byte
+	ld	C, B			; C = copy of low byte
+	ld	E, A			; E = high byte
+	cp	A, 0FFh			; Check if high byte is 0xFF
+	jr	Z, .check_bit7		; If so, check bit 7 path
+	bit	1, HL			; Check bit 1 of status
+	jr	Z, .process_normal	; If not set, process normally
+
+.check_bit7:
+	bit	7, B			; Check bit 7 of low byte
+	jr	NZ, .error		; If set, return error
+	ld	XWA, XIZ		; Restore parameter pointer
+	calr	SUB_8BD2		; Call processing routine
+	ld	(XIZ+1), 0		; Clear byte at param+1
+	jr	T, .success		; Jump to success (always)
+
+.process_normal:
+	ld	XWA, XIZ		; Restore parameter pointer
+	calr	SUB_8BD2		; Call processing routine
+
+.success:
+	ld	HL, 0			; Return success
+	jr	T, .done		; Jump to done (always)
+
+.error:
+	ld	HL, 0FFFFh		; Return error (-1)
+
+.done:
+	pop	XIZ
 	ret
 
 ; ==============================================================================
-; SUB_8C80 (0xFF8C80) - Additional initialization
-; Returns 0xFFFF on error
+; SUB_8BD2 (0xFF8BD2) - Note/velocity calculation routine
+;
+; Calculates velocity values based on note index and lookup tables.
+; Uses tables at 0xFF804C, 0xFF8040, 0xFF802A, 0xFF802C, 0xFF814C.
+;
+; Input: XWA = pointer to output buffer
+;        C = note index (low byte from latch)
+;        E = velocity index (high byte from latch)
+; ==============================================================================
+
+	org	0FF8BD2h
+
+SUB_8BD2:
+	ld	(0560h), 06h		; Set mode/flag byte
+	ld	L, C			; L = note index
+	res	7, L			; Clear bit 7
+	add	L, 24h			; Add 0x24 offset
+	ld	(XWA), L		; Store adjusted note to output[0]
+	bit	7, C			; Check bit 7 of original C
+	jrl	Z, .zero_velocity	; If clear, set velocity to 0
+
+	; Calculate velocity from tables
+	ld	C, E			; C = velocity index
+	extz	BC			; Zero-extend BC
+	lda	XDE, 0FF804Ch		; XDE = velocity curve table base
+	ld	XHL, 0			; Clear XHL
+	ld	L, (XDE+BC)		; L = table[velocity_index]
+	ld	BC, (0FF802Ah)		; BC = parameter from table
+	sub	HL, BC			; HL = L - BC
+	lda	XDE, 0FF8040h		; XDE = another table
+	ld	C, (XDE)		; C = table[0]
+	extz	BC			; Zero-extend BC
+	muls	XBC, HL			; XBC = BC * HL (signed)
+	ld	HL, (0FF802Ch)		; HL = divisor from table
+	exts	XBC			; Sign-extend XBC
+	divs	XBC, HL			; XBC = XBC / HL (signed)
+	ld	HL, BC			; HL = quotient
+	ld	C, (XDE+1)		; C = table[1] (offset)
+	extz	BC			; Zero-extend BC
+	add	BC, HL			; BC = BC + HL
+	ld	HL, BC			; HL = result
+	exts	XHL			; Sign-extend XHL
+
+	; Get note and check for special semitones
+	ld	C, (XWA)		; C = adjusted note
+	extz	BC			; Zero-extend BC
+	DIV_C	0Ch			; C = note / 12, B = note % 12 (semitone)
+	ld	C, B			; C = semitone (0-11)
+	cp	C, 0Ah			; Is it A# (10)?
+	jr	Z, .apply_offset
+	cp	C, 08h			; Is it G# (8)?
+	jr	Z, .apply_offset
+	cp	C, 6			; Is it F# (6)?
+	jr	Z, .apply_offset
+	cp	C, 3			; Is it D# (3)?
+	jr	Z, .apply_offset
+	cp	C, 1			; Is it C# (1)?
+	jr	NZ, .clamp_velocity	; If not a sharp, skip offset
+
+.apply_offset:
+	ld	XBC, 0			; Clear XBC
+	ld	C, (XDE+2)		; C = offset for sharp notes
+	sub	XHL, XBC		; XHL = XHL - offset
+
+.clamp_velocity:
+	; Clamp velocity to 0-255 range
+	ld	XDE, 000000FFh		; Max velocity = 255
+	cp	XHL, 000000FFh		; Compare with max
+	jr	GT, .use_max		; If greater, use max
+	ld	XDE, XHL		; Otherwise use calculated value
+.use_max:
+	ld	XBC, 0			; Min velocity = 0
+	cp	XDE, 00000000h		; Compare with min
+	jr	LT, .use_min		; If less, use min
+	ld	XBC, XDE		; Otherwise use clamped value
+.use_min:
+	; Look up final velocity in curve table
+	extz	BC			; Zero-extend BC (velocity 0-255)
+	lda	XDE, 0FF814Ch		; XDE = final velocity curve table
+	ld	C, (XDE+BC)		; C = curve[velocity]
+	ld	(XWA+1), C		; Store final velocity to output[1]
+	ret
+
+.zero_velocity:
+	ld	(XWA+1), 0		; Store 0 velocity to output[1]
+	ret
+
+; ==============================================================================
+; SUB_8C75 (0xFF8C75) - Hardware register write helper
+;
+; Writes WA to address 0x100000, reads HL from 0x100004.
+; ==============================================================================
+
+	org	0FF8C75h
+
+SUB_8C75:
+	ld	(100000h), WA		; Write WA to hardware register
+	ld	HL, (100004h)		; Read status/result
+	ret
+
+; ==============================================================================
+; SUB_8C80 (0xFF8C80) - Hardware communication/calibration routine
+;
+; Complex routine that communicates with hardware at 0x100000.
+; Performs some kind of calibration or initialization sequence.
+; Returns 0xFFFF on error, 0 on success.
 ; ==============================================================================
 
 	org	0FF8C80h
 
 SUB_8C80:
-	; Stub - TBD
-	ld	HL, 0
-	ret
+	push	XIZ
+	ld	IZ, 0FFFFh		; Initialize timeout/error counter
 
 ; ==============================================================================
 ; Vector Trampoline Data (0xFF8F6C)
