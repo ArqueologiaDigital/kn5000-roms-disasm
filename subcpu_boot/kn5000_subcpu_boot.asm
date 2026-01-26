@@ -740,20 +740,47 @@ INIT_DMA_SERIAL:
 ; DMA_MULTI_STAGE (0xFF874C): Complex multi-stage DMA transfer
 ; ==============================================================================
 
-	; 0xFF8604-0xFF8613 (DMA_SEND_CHUNKED start)
-	db	0efh, 06eh, 02eh, 0bfh, 002h, 062h, 0d9h, 08eh
-	db	0bfh, 006h, 041h, 0deh, 0cfh, 020h, 000h, 063h
-	; 0xFF8614-0xFF8623
-	db	020h, 08fh, 006h, 021h, 0d8h, 012h, 031h, 020h
-	db	000h, 0afh, 002h, 022h, 01eh, 026h, 000h, 040h
-	; 0xFF8624-0xFF8633
-	db	020h, 000h, 000h, 000h, 0afh, 002h, 088h, 0deh
-	db	0cah, 020h, 000h, 0deh, 0cfh, 020h, 000h, 06bh
-	; 0xFF8634-0xFF8643
-	db	0e0h, 08fh, 006h, 021h, 0d8h, 012h, 0c7h, 0f8h
-	db	08bh, 0d9h, 012h, 0afh, 002h, 022h, 01eh, 004h
-	; 0xFF8644-0xFF8653 (DMA_SEND_BLOCK at 0xFF8649)
-	db	000h, 04eh, 0efh, 066h, 00eh, 0cbh, 0d8h, 0b0h
+; ------------------------------------------------------------------------------
+; DMA_SEND_CHUNKED - Send data in 32-byte chunks via DMA
+; Input: A = channel/command, BC = total byte count, XDE = source address
+; Uses IZ as remaining count, processes in 32-byte chunks
+; ------------------------------------------------------------------------------
+DMA_SEND_CHUNKED:
+	DEC_6_XSP			; Allocate 6 bytes on stack
+	push	IZ			; Save IZ
+	LD_pXSP_d_XDE	02h		; Save source address at (SP+2)
+	LD_IZ_BC			; IZ = total byte count
+	LD_pXSP_d_A	06h		; Save channel/command at (SP+6)
+	CP_IZ_imm16	0020h		; Is count <= 32?
+	jr	ULE, .send_final	; Yes - send final chunk directly
+.chunk_loop:
+	LD_A_pXSP_d	06h		; A = channel/command
+	EXTZ_WA				; Zero-extend A to WA
+	ld	BC, 0020h		; BC = 32 (chunk size)
+	LD_XDE_pXSP_d	02h		; XDE = current source address
+	calr	DMA_SEND_BLOCK		; Send 32-byte chunk
+	ld	XWA, 00000020h		; XWA = 32
+	ADD_pXSP_d_XWA	02h		; Advance source address by 32
+	SUB_IZ_imm16	0020h		; Subtract 32 from remaining count
+	CP_IZ_imm16	0020h		; Is remaining > 32?
+	jr	UGT, .chunk_loop	; Yes - continue chunking
+.send_final:
+	LD_A_pXSP_d	06h		; A = channel/command
+	EXTZ_WA				; Zero-extend A to WA
+	LD_C_IZL			; C = remaining count (low byte)
+	EXTZ_BC				; Zero-extend C to BC
+	LD_XDE_pXSP_d	02h		; XDE = current source address
+	calr	DMA_SEND_BLOCK		; Send final chunk
+	pop	IZ			; Restore IZ
+	INC_6_XSP			; Deallocate 6 bytes from stack
+	ret
+
+; ------------------------------------------------------------------------------
+; DMA_SEND_BLOCK (0xFF8649) - Send single data block via DMA
+; Remaining routines still use raw bytes - TODO: disassemble
+; ------------------------------------------------------------------------------
+DMA_SEND_BLOCK:
+	db	0cbh, 0d8h, 0b0h
 	db	0f6h, 0dch, 0a8h, 0f0h, 034h, 0cch, 066h, 03fh
 	; 0xFF8654-0xFF8663
 	db	0f0h, 034h, 0b0h, 0f1h, 016h, 005h, 000h, 001h
