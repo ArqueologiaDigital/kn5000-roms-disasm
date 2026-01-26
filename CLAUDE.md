@@ -86,6 +86,38 @@ Project issues are tracked using [Beads](https://github.com/beads-ai/beads) in `
 
 **CRITICAL: NEVER edit `.beads/issues.jsonl` directly!** Always use the `bd` command:
 
+### Issue Closure Requirements (MANDATORY)
+
+**Before closing ANY issue, you MUST complete ALL of the following steps:**
+
+1. **Website Documentation Update**: Update the relevant pages in `../kn5000-docs/` with detailed findings:
+   - Add new sections with specific technical details discovered
+   - Include code addresses, register values, and protocol specifics
+   - Document data structures with byte-level precision
+   - Add diagrams or tables where helpful
+
+2. **Exhaustive Investigation**: Make every effort to extract ALL available information:
+   - Search the codebase thoroughly for related routines
+   - Cross-reference with other documentation (service manual, datasheets)
+   - Document related findings even if not strictly required by the issue title
+   - Look for patterns that connect to other open issues
+
+3. **Closure Comment Quality**: The closing comment must include:
+   - Summary of what was discovered
+   - Links to website pages that were updated
+   - Any caveats or limitations of the findings
+   - References to related issues that may benefit
+
+4. **Re-opening Policy**: If ANY of the following are true, do NOT close the issue:
+   - Website documentation was not updated with findings
+   - More details could potentially be discovered with additional effort
+   - Related questions remain unanswered
+   - The investigation was incomplete due to time or context constraints
+
+**When in doubt, add a detailed comment and leave the issue OPEN for future work.**
+
+This policy exists because the primary goal is building comprehensive documentation for MAME emulation and homebrew development. Closing issues prematurely loses institutional knowledge and creates incomplete documentation.
+
 ```bash
 # The bd command is located at:
 ~/claude_jail/bd
