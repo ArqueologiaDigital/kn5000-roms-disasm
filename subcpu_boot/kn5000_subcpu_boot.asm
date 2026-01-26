@@ -36,9 +36,11 @@
 ; ==============================================================================
 
 PAYLOAD_ENTRY		EQU	0400h	; Entry point of loaded payload
+DMA_READY_FLAG		EQU	04FEh	; DMA ready flag (RAM variable)
+DMA_PARAM_BLOCK		EQU	0502h	; DMA parameter block address (RAM)
+DMA_SYNC_FLAG		EQU	0516h	; DMA synchronization flag (RAM variable)
 STACK_INIT		EQU	05A2h	; Initial stack pointer
 DMA_MODE_REG		EQU	0102h	; DMA mode register (in SFR area)
-DMA_SYNC_FLAG		EQU	0516h	; DMA synchronization flag (RAM variable)
 INTER_CPU_LATCH		EQU	120000h	; Inter-CPU communication latch
 TONE_GEN_BASE		EQU	130000h	; Tone generator base address
 
@@ -860,31 +862,60 @@ SEND_E3_CMD:
 	jr	T, .wait_ack		; Not timed out - keep waiting
 
 ; ------------------------------------------------------------------------------
-; WAIT_DMA_THEN_E2 (0xFF86DC) - Wait for DMA completion then send E2
-; Remaining routines still use raw bytes - TODO: disassemble
+; WAIT_DMA_THEN_E2 (0xFF86DC) - Wait for DMA completion then send E2 command
+; Waits for DMA sync flag to clear, then sets up and starts another DMA transfer
+; Sends E2 command after DMA is set up
 ; ------------------------------------------------------------------------------
 WAIT_DMA_THEN_E2:
-	db	0dch, 0a8h, 0c1h, 016h, 005h, 03fh, 000h, 066h
-	; 0xFF86E4-0xFF86F3
-	db	011h, 0dch, 08bh, 0dch, 061h, 0dbh, 0cfh, 060h
-	db	0eah, 0b0h, 0fbh, 0c1h, 016h, 005h, 03fh, 000h
-	; 0xFF86F4-0xFF8703
-	db	06eh, 0efh, 0f0h, 034h, 0b0h, 0f1h, 016h, 005h
-	db	000h, 001h, 0f2h, 000h, 000h, 012h, 000h, 0e2h
-	; 0xFF8704-0xFF8713
-	db	0dch, 0a8h, 0f0h, 034h, 0cch, 06eh, 033h, 0f0h
-	db	034h, 0b8h, 0f1h, 002h, 005h, 033h, 0b3h, 060h
-	; 0xFF8714-0xFF8723
-	db	0bbh, 004h, 062h, 0bbh, 008h, 051h, 0ebh, 02eh
-	db	008h, 030h, 00ah, 000h, 0d8h, 02eh, 048h, 0f1h
-	; 0xFF8724-0xFF8733
-	db	002h, 001h, 000h, 016h, 0f0h, 080h, 0bah, 0f1h
-	db	0feh, 004h, 0bfh, 0c1h, 016h, 005h, 03fh, 000h
-	; 0xFF8734-0xFF8743
-	db	0b0h, 0f6h, 0c1h, 016h, 005h, 03fh, 000h, 06eh
-	db	0f9h, 00eh, 0dch, 08bh, 0dch, 061h, 0dbh, 0cfh
-	; 0xFF8744-0xFF8753 (DMA_MULTI_STAGE at 0xFF874C)
-	db	060h, 0eah, 063h, 0beh, 0f0h, 034h, 0b8h, 00eh
+	ld	IX, 0			; IX = timeout counter
+.wait_sync_clear:
+	cp	(DMA_SYNC_FLAG), 00h	; Is DMA sync flag clear?
+	jr	Z, .sync_cleared	; Yes - proceed
+.timeout_wait:
+	ld	HL, IX			; HL = timeout counter
+	inc	1, IX			; Increment counter
+	cp	HL, 0EA60h		; Timeout limit (60000)
+	ret	UGT			; Timeout - give up and return
+	cp	(DMA_SYNC_FLAG), 00h	; Check sync flag again
+	jr	NZ, .timeout_wait	; Still not clear - keep waiting
+.sync_cleared:
+	res	0, (INTERCPU_STATUS)	; Clear our ready flag
+	ld	(DMA_SYNC_FLAG), 01h	; Set DMA sync flag
+	ld	(INTER_CPU_LATCH), 0E2h	; Send E2 command to main CPU
+	ld	IX, 0			; Reset timeout counter
+.wait_cpu_ready:
+	bit	4, (INTERCPU_STATUS)	; Check if main CPU ready
+	jr	NZ, .timeout2		; Not ready yet - check timeout
+	set	0, (INTERCPU_STATUS)	; Set our ready flag
+	lda	XHL, DMA_PARAM_BLOCK	; XHL = address of DMA parameter block
+	ld	(XHL), XWA		; Store XWA parameter
+	ld	(XHL+04h), XDE		; Store XDE parameter
+	ld	(XHL+08h), BC		; Store BC parameter
+	LDC_DMAS2_XHL			; DMA source = XHL (param block addr)
+	ld	WA, 000Ah		; WA = 10 (DMA count)
+	LDC_DMAC2_WA			; DMA count = 10
+	ld	(DMA_MODE_REG), 16h	; Set DMA mode
+	set	2, (T01MOD)		; Start DMA transfer
+	set	7, (DMA_READY_FLAG)	; Set DMA ready flag
+	cp	(DMA_SYNC_FLAG), 00h	; Is DMA complete?
+	ret	Z			; Yes - return
+.wait_dma_done:
+	cp	(DMA_SYNC_FLAG), 00h	; Check DMA sync flag
+	jr	NZ, .wait_dma_done	; Wait until cleared
+	ret
+.timeout2:
+	ld	HL, IX			; HL = timeout counter
+	inc	1, IX			; Increment counter
+	cp	HL, 0EA60h		; Timeout limit
+	jr	ULE, .wait_cpu_ready	; Keep waiting if not timed out
+	set	0, (INTERCPU_STATUS)	; Set ready flag before returning
+	ret
+
+; ------------------------------------------------------------------------------
+; DMA_MULTI_STAGE (0xFF874C) - Complex multi-stage DMA transfer
+; Remaining routines still use raw bytes - TODO: disassemble
+; ------------------------------------------------------------------------------
+DMA_MULTI_STAGE:
 	db	02eh, 0deh, 0a8h, 0c1h, 016h, 005h, 03fh, 000h
 	; 0xFF8754-0xFF8763
 	db	066h, 012h, 0deh, 08bh, 0deh, 061h, 0dbh, 0cfh
