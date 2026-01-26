@@ -167,13 +167,22 @@ This policy ensures the disassembly remains useful for understanding the firmwar
 
 **MAME's `unidasm` tool is available for generating reference disassembly listings.** Pre-generated `.unidasm` files are stored in `original_ROMs/` for each ROM.
 
+**Tool location:**
+```bash
+~/claude_jail/unidasm
+```
+
 **Usage:**
 ```bash
 # Generate reference disassembly for a ROM
-unidasm <rom_file> -arch tlcs900 -basepc <base_address> > <output.unidasm>
+~/claude_jail/unidasm <rom_file> -arch tlcs900 -basepc <base_address> > <output.unidasm>
 
 # Example for Sub CPU boot ROM (base at 0xFE0000):
-unidasm original_ROMs/kn5000_subcpu_boot.ic30 -arch tlcs900 -basepc 0xFE0000 > original_ROMs/kn5000_subcpu_boot.ic30.unidasm
+~/claude_jail/unidasm original_ROMs/kn5000_subcpu_boot.ic30 -arch tlcs900 -basepc 0xFE0000 > original_ROMs/kn5000_subcpu_boot.ic30.unidasm
+
+# Decode raw bytes:
+echo "XX XX XX XX" | xxd -r -p > /tmp/bytes.bin
+~/claude_jail/unidasm /tmp/bytes.bin -arch tlcs900 -basepc 0
 ```
 
 **When to use unidasm:**
