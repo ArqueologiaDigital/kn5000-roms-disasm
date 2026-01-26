@@ -558,3 +558,84 @@ JRL_T MACRO target
 LDIR_94 MACRO
 	db 083h, 011h
 	ENDM
+
+; ==============================================================================
+; QIZH register access macros
+; QIZH is the high byte of the QIZ register (32-bit index register)
+; Register code 0xFB in the extended register encoding
+; ==============================================================================
+
+; LD_QIZH_IMM - Load immediate value into QIZH
+; Encoding: c7 fb a8+value (for value 0-7) or c7 fb 20 value
+LD_QIZH_0 MACRO
+	db 0c7h, 0fbh, 0a8h		; ld QIZH, 0
+	ENDM
+
+; LD_A_QIZH - Load A from QIZH
+; Encoding: c7 fb 89
+LD_A_QIZH MACRO
+	db 0c7h, 0fbh, 089h		; ld A, QIZH
+	ENDM
+
+; LD_C_QIZH - Load C from QIZH
+; Encoding: c7 fb 8b
+LD_C_QIZH MACRO
+	db 0c7h, 0fbh, 08bh		; ld C, QIZH
+	ENDM
+
+; INC_1_QIZH - Increment QIZH by 1
+; Encoding: c7 fb 61
+INC_1_QIZH MACRO
+	db 0c7h, 0fbh, 061h		; inc 1, QIZH
+	ENDM
+
+; CP_QIZH_IMM - Compare QIZH with immediate value
+; Encoding: c7 fb d8+value (for value 0-7) or c7 fb cf value
+CP_QIZH_4 MACRO
+	db 0c7h, 0fbh, 0dch		; cp QIZH, 4
+	ENDM
+
+; ==============================================================================
+; Memory comparison macro
+; ==============================================================================
+
+; CP_MEM24_IMM16 - Compare 16-bit value at 24-bit address with immediate
+; Encoding: d2 LL MM HH 3f VV WW (7 bytes)
+CP_MEM24_IMM16 MACRO addr, value
+	db 0d2h
+	db addr & 0FFh, (addr >> 8) & 0FFh, (addr >> 16) & 0FFh
+	db 03fh
+	db value & 0FFh, (value >> 8) & 0FFh
+	ENDM
+
+; ==============================================================================
+; Shift macros
+; ==============================================================================
+
+; SLA_2_BC - Shift BC left arithmetic by 2 (multiply by 4)
+; Encoding: d9 ec 02
+SLA_2_BC MACRO
+	db 0d9h, 0ech, 002h		; sla 2, BC
+	ENDM
+
+; ==============================================================================
+; Load effective address macros
+; ==============================================================================
+
+; LDA_XDE_IMM24 - Load 24-bit effective address into XDE
+; Encoding: f2 LL MM HH 32 (5 bytes)
+LDA_XDE_IMM24 MACRO addr
+	db 0f2h
+	db addr & 0FFh, (addr >> 8) & 0FFh, (addr >> 16) & 0FFh
+	db 032h
+	ENDM
+
+; ==============================================================================
+; Indexed load macros
+; ==============================================================================
+
+; LD_XBC_pXDE_BC - Load XBC from memory at (XDE+BC)
+; Encoding: e3 07 e8 e4 21 (5 bytes)
+LD_XBC_pXDE_BC MACRO
+	db 0e3h, 007h, 0e8h, 0e4h, 021h	; ld XBC, (XDE+BC)
+	ENDM

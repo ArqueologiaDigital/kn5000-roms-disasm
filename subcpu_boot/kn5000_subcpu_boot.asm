@@ -356,21 +356,21 @@ RESET_ENTRY:
 ; ==============================================================================
 
 SUB_8437:
-	push	QIZ			; Save QIZ (used as loop variable)
-	db	0d2h, 0eeh, 0feh, 0ffh, 03fh, 0ffh, 0ffh	; cp (0xFFFEEE), 0xFFFF
-	jr	NZ, .done		; Skip if memory not 0xFFFF
-	db	0c7h, 0fbh, 0a8h	; Clear loop counter (special reg at 0xFB)
+	push	QIZ			; Save QIZ (QIZH used as loop counter)
+	CP_MEM24_IMM16 0FFFEEEh, 0FFFFh	; cp (0xFFFEEE), 0xFFFF - check init flag
+	jr	NZ, .done		; Skip if memory not 0xFFFF (already initialized)
+	LD_QIZH_0			; Clear loop counter (QIZH = 0)
 .loop:
-	db	0c7h, 0fbh, 089h	; Load A from special reg
+	LD_A_QIZH			; A = loop counter (QIZH)
 	extz	WA			; Zero-extend A to WA
-	db	0c7h, 0fbh, 08bh	; Load C from special reg
+	LD_C_QIZH			; C = loop counter (QIZH)
 	extz	BC			; Zero-extend C to BC
-	db	0d9h, 0ech, 002h	; sla 2, BC (shift left by 2 = multiply by 4)
-	db	0f2h, 0f0h, 0feh, 0ffh, 032h	; lda XDE, 0xFFFEF0
-	db	0e3h, 007h, 0e8h, 0e4h, 021h	; ld XBC, (XDE+BC)
-	call	TONE_GEN_WRITE		; Write to tone generator
-	db	0c7h, 0fbh, 061h	; Increment loop counter
-	db	0c7h, 0fbh, 0dch	; Compare counter with 4
+	SLA_2_BC			; BC <<= 2 (multiply by 4 for table index)
+	LDA_XDE_IMM24 0FFFEF0h		; XDE = pointer to channel config table
+	LD_XBC_pXDE_BC			; XBC = config[channel] (4 bytes per entry)
+	call	TONE_GEN_WRITE		; Write config to tone generator
+	INC_1_QIZH			; Increment loop counter
+	CP_QIZH_4			; Compare counter with 4
 	jr	C, .loop		; Loop while counter < 4
 .done:
 	pop	QIZ			; Restore QIZ
