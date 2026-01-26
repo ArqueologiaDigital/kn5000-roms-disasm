@@ -196,6 +196,79 @@ All ROM files must undergo thorough exploratory disassembly until every byte is 
 
 This procedure should be run periodically until 100% documentation is achieved.
 
+### Binary Include Splitting (MANDATORY)
+
+**When disassembled code references an address inside a binary include, the binary must be split.**
+
+This ensures:
+- Cross-references are symbolic (label-based) rather than numeric (hardcoded addresses)
+- Binary files become smaller and easier to analyze
+- Data structure boundaries are explicitly marked
+
+**When to split:**
+
+If code references an address that lies **inside** a `binclude` file's address range (but NOT the first address), the binary must be split at that reference point.
+
+**Example:** If `data.bin` covers addresses 0xE02510-0xE06BAF and code references 0xE04000:
+- The reference is inside the range but not at the start
+- Split required at 0xE04000
+
+**Splitting procedure:**
+
+1. **Identify the split point** from the code reference address
+
+2. **Calculate byte offsets:**
+   - Part 1: From original start to (split_address - 1)
+   - Part 2: From split_address to original end
+
+3. **Extract the two parts:**
+   ```bash
+   # Calculate sizes
+   SPLIT_OFFSET=$((split_address - original_start))
+   PART1_SIZE=$SPLIT_OFFSET
+   PART2_SIZE=$((original_size - SPLIT_OFFSET))
+
+   # Extract parts
+   dd if=original.bin of=part1.bin bs=1 count=$PART1_SIZE
+   dd if=original.bin of=part2.bin bs=1 skip=$SPLIT_OFFSET
+   ```
+
+4. **Update the assembly source:**
+   ```asm
+   ; Before:
+   LABEL_E02510:
+       binclude "includes/e02510_e06baf.bin"
+
+   ; After:
+   LABEL_E02510:
+       binclude "includes/e02510_e03fff.bin"
+
+   LABEL_E04000:  ; Now the cross-reference target has a proper label
+       binclude "includes/e04000_e06baf.bin"
+   ```
+
+5. **Remove the old binary and add the new ones:**
+   ```bash
+   git rm includes/original.bin
+   git add includes/part1.bin includes/part2.bin
+   ```
+
+6. **Verify the build** still produces identical ROM output:
+   ```bash
+   make all
+   python compare_roms.py
+   ```
+
+**Naming convention for split binaries:**
+- Use address ranges in filenames: `e02510_e03fff.bin`, `e04000_e06baf.bin`
+- This makes it clear what address range each file covers
+
+**Benefits:**
+- Code references become `LABEL_E04000` instead of hardcoded `0E04000h`
+- Smaller files are easier to analyze and document
+- Clear data structure boundaries emerge naturally
+- Future splits at the same location are already handled
+
 ### Reference Disassembly with MAME's unidasm
 
 **MAME's `unidasm` tool is available for generating reference disassembly listings.** Pre-generated `.unidasm` files are stored in `original_ROMs/` for each ROM.
