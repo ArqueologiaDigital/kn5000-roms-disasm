@@ -39,10 +39,11 @@ PAYLOAD_ENTRY		EQU	0400h	; Entry point of loaded payload
 DMA_READY_FLAG		EQU	04FEh	; DMA ready flag (RAM variable)
 DMA_PARAM_BLOCK		EQU	0502h	; DMA parameter block address (RAM)
 DMA_BUFFER_1		EQU	050Ch	; First DMA buffer address (RAM)
-DMA_SYNC_FLAG		EQU	0516h	; DMA synchronization flag (RAM variable)
+DMA_SYNC_FLAG		EQU	0516h	; DMA sync state: 0=idle, 1=single xfer, 2=multi-stage (E1)
 DMA_BUFFER_2		EQU	053Eh	; Second DMA buffer address (RAM)
 STACK_INIT		EQU	05A2h	; Initial stack pointer
 DMA_MODE_REG		EQU	0102h	; DMA mode register (in SFR area)
+AUDIO_HW_BASE		EQU	100000h	; Audio hardware registers (DSP/DAC?)
 INTER_CPU_LATCH		EQU	120000h	; Inter-CPU communication latch
 TONE_GEN_BASE		EQU	130000h	; Tone generator base address
 
@@ -71,9 +72,10 @@ INTTC01			EQU	30h	; Interrupt control (Timer 0/1)
 
 ; Inter-CPU Status Register (at 0x34, directly addressable)
 ; Used for handshaking between main CPU and sub CPU
-; Bit 0: Handshake flag (set/res by DMA routines)
-; Bit 2: Serial status check
-; Bit 4: DMA ready flag
+; Bit 0: Sub CPU ready flag (set when ready, cleared when starting transfer)
+; Bit 1: Used by interrupt handler to signal completion
+; Bit 2: Checked in INT_HANDLER_9 to gate command processing
+; Bit 4: Main CPU ready flag (polled by sub CPU, set by main CPU)
 INTERCPU_STATUS		EQU	34h
 
 ; Port 8 area (legacy names for compatibility)
@@ -213,7 +215,7 @@ DRAM_TIMING2		EQU	0166h	; DRAM Timing 2
 ; RAM variables - Communication and State
 SUBCPU_STATUS_FLAGS	EQU	04FEh	; Status flags (bit 6=payload ready, bit 7=xfer complete)
 DMA_TARGET_ADDR		EQU	0512h	; Current DMA destination address (4 bytes)
-DMA_STATE		EQU	0516h	; DMA state machine (0=idle, 1=pending, 2=in progress)
+; Note: DMA_SYNC_FLAG was here but is same address as DMA_SYNC_FLAG (0x0516)
 CMD_PROCESSING_STATE	EQU	0518h	; Command processing state (0-4)
 LAST_CMD_BYTE		EQU	051Ah	; Last received command byte from main CPU
 
@@ -731,7 +733,7 @@ INIT_DMA_SERIAL:
 	LDC_DMAC0_A			; DMA channel 0 mode = 0
 
 	; Clear variables
-	ld	(DMA_STATE), 00h
+	ld	(DMA_SYNC_FLAG), 00h
 	ld	(CMD_PROCESSING_STATE), 00h
 	ret
 
@@ -1017,9 +1019,14 @@ DMA_MULTI_STAGE:
 	ret
 
 ; ==============================================================================
-; Interrupt Handler 9 (0xFF881F) - Serial Receive Interrupt
+; Interrupt Handler 9 (0xFF881F) - Inter-CPU Command Receive Interrupt
 ; Handles commands from main CPU via inter-CPU latch at 0x120000
-; Commands: E1=DMA 6 bytes, E2=DMA 10 bytes, E3=Set payload ready flag
+;
+; Commands:
+;   E1: Receive 6 bytes to CMD_E1_BUFFER (contains addr+count for secondary DMA)
+;   E2: Receive 10 bytes to CMD_E2_BUFFER (completion data)
+;   E3: Set payload ready flag (bit 6 of SUBCPU_STATUS_FLAGS)
+;   Other: Low 5 bits = byte count-1, high 3 bits = handler index (from table)
 ; ==============================================================================
 
 	org	0FF881Fh
@@ -1078,21 +1085,22 @@ INT_HANDLER_9:
 
 ; ==============================================================================
 ; Interrupt Handler 37 (0xFF889A) - DMA Complete Interrupt
-; Updates state machine variable DMA_STATE
+; Decrements DMA_SYNC_FLAG: 2->1->0 to track multi-phase transfer progress
+; Called when DMA channel completes a transfer
 ; ==============================================================================
 
 	org	0FF889Ah
 
 INT_HANDLER_37:
 	res	2, (WDMOD)		; Clear watchdog bit
-	cp	(DMA_STATE), 01h	; State 1?
+	cp	(DMA_SYNC_FLAG), 01h	; State 1?
 	jr	NZ, .not_state1
-	ld	(DMA_STATE), 00h	; -> State 0
+	ld	(DMA_SYNC_FLAG), 00h	; -> State 0
 	jr	.done
 .not_state1:
-	cp	(DMA_STATE), 02h	; State 2?
+	cp	(DMA_SYNC_FLAG), 02h	; State 2?
 	jr	NZ, .done
-	ld	(DMA_STATE), 01h	; -> State 1
+	ld	(DMA_SYNC_FLAG), 01h	; -> State 1
 .done:
 	reti
 
@@ -1751,13 +1759,16 @@ SUB_8C80:
 	ret
 
 ; ==============================================================================
-; SUB_8D0A (0xFF8D0A) - Hardware parameter write routine
+; SUB_8D0A (0xFF8D0A) - Audio hardware parameter write routine
 ;
-; Writes a block of parameters from memory to hardware registers at 0x100000.
-; Each parameter pair is written with specific address offsets.
+; Writes 21 parameter pairs from memory to AUDIO_HW_BASE (0x100000).
+; Each pair: address written to 0x100000, data written to 0x100002.
+; Hardware offsets: 0x40, 0x80, 0xC0, 0x100, 0x140, 0x180, 0x400, 0x440,
+;                   0x480, 0x4C0, 0x500, 0x800, (base), 0x840, 0x880, 0x8C0,
+;                   0x900, 0x940, 0x980, 0x9C0, 0xA00, 0xA40, then 0x80 again
 ;
 ; Input: WA = base offset for hardware addresses
-;        XBC = pointer to 18-byte parameter block
+;        XBC = pointer to 44-byte parameter block (offsets 0x00-0x2A)
 ; ==============================================================================
 
 	org	0FF8D0Ah
@@ -2314,9 +2325,10 @@ VECTOR_TABLE:
 	org	0FFFFF0h
 
 RESET_VECTORS:
-	; Reset vector area - these bytes form a specific pattern
-	; 41 B1 62 1B repeated 4 times
-	; Analysis: Could be checksum or configuration data
+	; TMP94C241 reserved area (0xFFFFF0-0xFFFFFF)
+	; Per datasheet: "Do not use" / reserved for system configuration
+	; Pattern 41 B1 62 1B repeated 4 times - may be factory calibration data
+	; or ROM identification/checksum (not part of interrupt vector table)
 	db	41h, 0B1h, 62h, 1Bh
 	db	41h, 0B1h, 62h, 1Bh
 	db	41h, 0B1h, 62h, 1Bh
