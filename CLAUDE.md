@@ -163,6 +163,58 @@ The issue tracker is:
 
 This policy ensures the disassembly remains useful for understanding the firmware, not just rebuilding it.
 
+### Symbolic Cross-Referencing (STRICT POLICY)
+
+**All cross-references must be symbolic (using labels), never numeric addresses.**
+
+This is a strict policy to ensure the disassembly is maintainable and understandable:
+
+1. **Never use hardcoded addresses in code references:**
+   ```asm
+   ; WRONG - numeric address
+   CALL 0F97544h
+   LDA XIX, 0E46312h
+   LD XWA, (0FC3E65h)
+
+   ; CORRECT - symbolic label
+   CALL FDC_DRIVE_DETECT
+   LDA XIX, FONT_METRICS_TABLE
+   LD XWA, (DYNAMIC_HANDLER_PTR)
+   ```
+
+2. **Meaningful names are STRONGLY preferred:**
+   - Labels should describe the purpose of the code or data
+   - Use descriptive names based on analysis: `FDC_SEND_COMMAND`, `LED_CONTROL_DISPATCH`, `MIDI_EVENT_HANDLER`
+   - Use domain-specific prefixes: `FDC_`, `UI_`, `MIDI_`, `HDAE_`, `DMA_`, etc.
+
+3. **Address-based labels (LABEL_XXXXXX) are a LAST RESORT:**
+   - Only use `LABEL_E04FB9` style names when there is **absolutely no understanding** of the semantic purpose
+   - These labels indicate "needs analysis" - they are placeholders, not final names
+   - When you discover what a `LABEL_*` does, rename it immediately
+
+4. **When encountering numeric addresses in existing code:**
+   - Create a label at that address (even if just `LABEL_XXXXXX` initially)
+   - Update the reference to use the label
+   - Add a TODO comment if the purpose is unknown: `; TODO: identify purpose`
+
+5. **Label naming conventions:**
+   ```
+   Routines:     VerbNoun format - SendCommand, InitHardware, HandleEvent
+   Data tables:  NOUN_TABLE format - FONT_METRICS_TABLE, JUMP_HANDLER_TABLE
+   Constants:    NOUN format - SYSTEM_TIMESTAMP, FDC_STATUS_PORT
+   Flags:        NOUN_FLAG format - DMA_READY_FLAG, PAYLOAD_LOADED_FLAG
+   Buffers:      NOUN_BUFFER format - CMD_DATA_BUFFER, DMA_PARAM_BLOCK
+   ```
+
+6. **Benefits of symbolic references:**
+   - Code is self-documenting
+   - Renaming propagates automatically
+   - Cross-reference analysis tools work correctly
+   - Easier to understand control flow and data dependencies
+   - Facilitates collaborative reverse engineering
+
+**This policy applies to ALL references:** CALL, JP, JR, LD, LDA, and any other instruction that references a memory address.
+
 ### Exploratory Disassembly (MANDATORY)
 
 **Goal: Eliminate all undocumented raw bytes from ROM source files.**
