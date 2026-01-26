@@ -20,6 +20,25 @@ RHYTHM_DATA_ROM__BASE_ADDR	EQU  400000h
 TABLE_DATA_ROM__BASE_ADDR	EQU  800000h
 PROGRAM_FLASH__BASE_ADDR	EQU 0E00000h
 
+; Video Hardware
+VGA_IO_BASE			EQU  170000h	; LCD controller (MN89304) I/O base
+VIDEO_RAM_BASE			EQU  1A0000h	; 4Mbit VRAM (IC207 M5M44265CJ8S)
+
+; VGA I/O Ports (directly addressable, accent via VGA_IO_BASE)
+VGA_ATTR_ADDR			EQU  3C0h	; Attribute Controller Address/Data
+VGA_MISC_OUTPUT			EQU  3C2h	; Miscellaneous Output Register (write)
+VGA_ENABLE			EQU  3C3h	; VGA Enable
+VGA_SEQ_ADDR			EQU  3C4h	; Sequencer Address
+VGA_SEQ_DATA			EQU  3C5h	; Sequencer Data
+VGA_DAC_MASK			EQU  3C6h	; DAC Mask
+VGA_DAC_ADDR_WRITE		EQU  3C8h	; DAC Write Address
+VGA_DAC_DATA			EQU  3C9h	; DAC Data (R, G, B sequentially)
+VGA_GC_ADDR			EQU  3CEh	; Graphics Controller Address
+VGA_GC_DATA			EQU  3CFh	; Graphics Controller Data
+VGA_CRTC_ADDR			EQU  3D4h	; CRTC Address
+VGA_CRTC_DATA			EQU  3D5h	; CRTC Data
+VGA_INPUT_STATUS		EQU  3DAh	; Input Status 1
+
 SYSTEM_TIMESTAMP		EQU  0409h
 
 MSP_SETTINGS			EQU  0C9Ah ; 1500h = 5376 bytes
@@ -142227,7 +142246,7 @@ LABEL_EF50BB:
 	INC 1, IZ
 	CP IZ, 0268h     ; 28 bytes (224 pixels/line) * 22 lines = 0268h bytes
 	JR C, LABEL_EF5050
-	LDA XWA, 1A0000h	; video memory
+	LDA XWA, VIDEO_RAM_BASE
 	LD DE, 320 * 240 / 2			; 2 pixels per word
 	CALL Copy_DE_words_from_XBC_to_XWA  ; <-- "blit-screen"
 	POP IZ
@@ -142294,14 +142313,14 @@ LABEL_EF5143:
 	CP DE, 0100h
 	JR C, LABEL_EF5143
 	EXTZ XWA
-	LD XDE, 00170000h
+	LD XDE, VGA_IO_BASE
 	ADD XDE, XWA
 	LD (XDE), C
 	RET
 
 Read_VGA_Register:		; ef5157
 	EXTZ XWA
-	LD XBC, 00170000h
+	LD XBC, VGA_IO_BASE
 	ADD XBC, XWA
 	LD L, (XBC)
 	RET
@@ -142314,7 +142333,7 @@ VGA_WRITE MACRO regnum,value
 	ENDM
 
 PALLETE_WRITE MACRO red,green,blue
-	LD WA, 3c9h
+	LD WA, VGA_DAC_DATA
 	LDW BC, red
 	CALR Write_VGA_Register
 	LDW BC, green
@@ -142324,23 +142343,23 @@ PALLETE_WRITE MACRO red,green,blue
 	ENDM
 
 VGA_ATTRIBUTE MACRO field,value
-	VGA_WRITE 3c0h, field
-	VGA_WRITE 3c0h, value
+	VGA_WRITE VGA_ATTR_ADDR, field
+	VGA_WRITE VGA_ATTR_ADDR, value
 	ENDM
 
 VGA_SEQUENCER MACRO field,value
-	VGA_WRITE 3c4h, field
-	VGA_WRITE 3c5h, value
+	VGA_WRITE VGA_SEQ_ADDR, field
+	VGA_WRITE VGA_SEQ_DATA, value
 	ENDM
 
 VGA_GFX_CONTROLLER MACRO field,value
-	VGA_WRITE 3ceh, field
-	VGA_WRITE 3cfh, value
+	VGA_WRITE VGA_GC_ADDR, field
+	VGA_WRITE VGA_GC_DATA, value
 	ENDM
 
 VGA_COLOR_CRTC MACRO field,value
-	VGA_WRITE 3d4h, field
-	VGA_WRITE 3d5h, value
+	VGA_WRITE VGA_CRTC_ADDR, field
+	VGA_WRITE VGA_CRTC_DATA, value
 	ENDM
 
 
@@ -142354,8 +142373,8 @@ RET_VGA_WRITE MACRO regnum,value
 	ENDM
 
 RET_VGA_SEQUENCER MACRO field,value
-	VGA_WRITE 3c4h, field
-	RET_VGA_WRITE 3c5h, value
+	VGA_WRITE VGA_SEQ_ADDR, field
+	RET_VGA_WRITE VGA_SEQ_DATA, value
 	ENDM
 
 
@@ -142447,8 +142466,8 @@ LABEL_EF5163:
 
 
 Some_VGA_setup:		; ef55a7
-	VGA_WRITE 3c3h, 001h  ; Global enable
-	VGA_WRITE 3c2h, 0e3h  ; Misc. Output (select 25 MHz dot clock & 60 Hz scanning rate)
+	VGA_WRITE VGA_ENABLE, 001h  ; Global enable
+	VGA_WRITE VGA_MISC_OUTPUT, 0e3h  ; Misc. Output (select 25 MHz dot clock & 60 Hz scanning rate)
 
 	VGA_SEQUENCER 00h, 000h  ; Reset
 	VGA_SEQUENCER 01h, 021h  ; Clocking Mode (screen off)
@@ -142477,12 +142496,12 @@ Some_VGA_setup:		; ef55a7
 	VGA_COLOR_CRTC 18h, 0ffh  ; Line Compare
 
 	; This is equivalent to:
-	;	VGA_WRITE 3dah, 0ffh
+	;	VGA_WRITE VGA_INPUT_STATUS, 0ffh
 	;
 	; For purposes of byte-matching, replicating an optimization of the original ROM
 	; (no need to set BC = 0ffh because it is the same value previously set):
 	;
-	LDW WA, 3dah
+	LDW WA, VGA_INPUT_STATUS
 	CALR Read_VGA_Register
 
 
@@ -142646,7 +142665,7 @@ Some_VGA_setup:		; ef55a7
 	LD BC, 0808h
 	LD DE, 320 * 240 / 2
 	CALL Fill_memory_at_XWA_with_DE_words_of_BC_value
-	LDA XWA, 1A0000h
+	LDA XWA, VIDEO_RAM_BASE
 	LD XBC, OFFSCREEN_BUFFER_1
 	LD DE, 320 * 240 / 2
 	CALL Copy_DE_words_from_XBC_to_XWA	; Blit video buffer
@@ -383327,16 +383346,16 @@ Test_Video_RAM_IC207:
 	LD (XSP), A
 	LD XHL, (0EB7932h)
 	CALL T, XHL
-	LDW (1A0000h), 5a5ah
+	LDW (VIDEO_RAM_BASE), 5a5ah		; VRAM self-test pattern 1
 	CALR LABEL_FB733D
-	CPW (1A0000h), 5a5ah
+	CPW (VIDEO_RAM_BASE), 5a5ah
 	JR Z, LABEL_FB76A7
 	SET 3, (XSP)
 
 LABEL_FB76A7:
-	LDW (1A0004h), 0a5a5h
+	LDW (VIDEO_RAM_BASE + 4), 0a5a5h	; VRAM self-test pattern 2
 	CALR LABEL_FB733D
-	CPW (1A0004h), 0a5a5h
+	CPW (VIDEO_RAM_BASE + 4), 0a5a5h
 	JR Z, LABEL_FB76BC
 	SET 3, (XSP)
 
