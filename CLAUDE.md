@@ -222,6 +222,20 @@ echo "XX XX XX XX" | xxd -r -p > /tmp/bytes.bin
 - `table_data/images/`: BMP assets for feature demo
 - `docs/`: Protocol analysis notes (control panel serial communication)
 
+### Original ROM Files
+
+| File | Size | Description |
+|------|------|-------------|
+| `original_ROMs/kn5000_v10_program.rom` | 2MB | Main CPU program ROM |
+| `original_ROMs/kn5000_subprogram_v142.rom` | 192KB | Sub CPU payload (sent by main CPU) |
+| `original_ROMs/kn5000_subcpu_boot.ic30` | 128KB | Sub CPU boot ROM |
+| `original_ROMs/kn5000_table_data_rom_odd.ic1` | 1MB | Table data ROM (odd bytes) |
+| `original_ROMs/kn5000_table_data_rom_even.ic3` | 1MB | Table data ROM (even bytes) |
+| `original_ROMs/kn5000_custom_data.ic19` | 1MB | Custom data flash (user storage) |
+| `original_ROMs/hd-ae5000_v2_06i.ic4` | 512KB | HDAE5000 hard disk expansion ROM |
+
+Reference disassembly files (`.unidasm`) are generated with MAME's unidasm tool.
+
 ### Main CPU Memory Map (key addresses)
 
 ```
