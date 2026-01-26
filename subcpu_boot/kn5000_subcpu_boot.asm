@@ -1879,6 +1879,90 @@ VECTOR_TRAMPOLINES:
 	ret
 
 ; ==============================================================================
+; Debug/Utility Routines (0xFFFE80 - 0xFFFED1)
+;
+; These appear to be debug or diagnostic routines, possibly for serial output.
+; SUB_FE80: Wrapper that calls SUB_FEC1
+; SUB_FE86: Output hex byte (calls SUB_FEB4 for nibble conversion, SUB_FEC1 for output)
+; SUB_FEA1: Output null-terminated string from (XIX)
+; SUB_FEB4: Convert nibble (0-15) to ASCII hex character ('0'-'9', 'a'-'f')
+; SUB_FEC1: Output character (loads IZ with 0xFE00, placeholder NOPs)
+; ==============================================================================
+
+	org	0FFFE80h
+
+SUB_FE80:
+	push	XIZ
+	calr	SUB_FEC1
+	pop	XIZ
+	ret
+
+SUB_FE86:
+	push	XIZ
+	ld	W, A			; Save A in W
+	srl	4, A			; A >>= 4 (high nibble)
+	calr	SUB_FEB4		; Convert to hex char
+	push	WA
+	calr	SUB_FEC1		; Output character
+	pop	WA
+	ld	A, W			; Restore original A
+	and	A, 0Fh			; Mask low nibble
+	calr	SUB_FEB4		; Convert to hex char
+	calr	SUB_FEC1		; Output character
+	pop	XIZ
+	ret
+
+SUB_FEA1:
+	push	XIZ
+	ld	XIX, XWA		; XIX = string pointer
+.loop:
+	ld	A, (XIX+)		; Load next char, increment
+	cp	A, 0			; Check for null terminator
+	jr	Z, .done		; If null, exit
+	push	XIX
+	calr	SUB_FEC1		; Output character
+	pop	XIX
+	jr	T, .loop		; Continue loop
+.done:
+	pop	XIZ
+	ret
+
+SUB_FEB4:
+	cp	A, 0Ah			; Compare with 10
+	jr	NC, .letter		; If >= 10, use letter
+	add	A, 30h			; '0' = 0x30
+	ret
+.letter:
+	add	A, 57h			; 'a' - 10 = 0x57
+	ret
+
+SUB_FEC1:
+	ld	IZ, 0FE00h		; Output port address (placeholder)
+	nop				; Timing/placeholder
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	ret
+
+; ==============================================================================
+; Reserved area (0xFFFED2 - 0xFFFEDF)
+; ==============================================================================
+
+	org	0FFFED2h
+
+	db	0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh	; 0xFFFED2-0xFFFED9
+	db	0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh			; 0xFFFEDA-0xFFFEDF
+
+; ==============================================================================
 ; Reset Handler (0xFFFEE0)
 ; This is the actual reset entry point, called from vector table
 ; ==============================================================================
@@ -1890,6 +1974,27 @@ RESET_HANDLER:
 	ret				; Never reached
 
 ; ==============================================================================
+; Reserved area (0xFFFEE5 - 0xFFFEEF)
+; ==============================================================================
+
+	org	0FFFEE5h
+
+	db	0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh	; 0xFFFEE5-0xFFFEED
+	db	00h, 00h			; 0xFFFEEE-0xFFFEEF
+
+; ==============================================================================
+; Reserved data area (0xFFFEF0 - 0xFFFEFF)
+; Appears to be some kind of configuration or padding data
+; ==============================================================================
+
+	org	0FFFEF0h
+
+	db	00h, 04h, 00h, 00h	; 0xFFFEF0-0xFFFEF3
+	db	00h, 04h, 00h, 00h	; 0xFFFEF4-0xFFFEF7
+	db	00h, 04h, 00h, 00h	; 0xFFFEF8-0xFFFEFB
+	db	00h, 04h, 00h, 00h	; 0xFFFEFC-0xFFFEFF
+
+; ==============================================================================
 ; Interrupt Vector Table (0xFFFF00 - 0xFFFFFF)
 ; 4-byte entries pointing to handlers in RAM at 0x04xx
 ; These addresses point to the trampolines copied to RAM
@@ -1898,7 +2003,7 @@ RESET_HANDLER:
 	org	0FFFF00h
 
 VECTOR_TABLE:
-	dd	0000FEE0h		; Reset - points to ROM handler
+	dd	00FFFEe0h		; Reset - points to ROM handler at 0xFFFEE0
 	dd	00000405h		; Handler 1 at 0x0405
 	dd	0000040Ah		; Handler 2 at 0x040A
 	dd	0000040Fh		; Handler 3 at 0x040F
