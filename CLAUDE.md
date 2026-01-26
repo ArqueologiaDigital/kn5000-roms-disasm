@@ -111,6 +111,30 @@ Project issues are tracked using [Beads](https://github.com/beads-ai/beads) in `
 
 This policy ensures the disassembly remains useful for understanding the firmware, not just rebuilding it.
 
+### Reference Disassembly with MAME's unidasm
+
+**MAME's `unidasm` tool is available for generating reference disassembly listings.** Pre-generated `.unidasm` files are stored in `original_ROMs/` for each ROM.
+
+**Usage:**
+```bash
+# Generate reference disassembly for a ROM
+unidasm <rom_file> -arch tlcs900 -basepc <base_address> > <output.unidasm>
+
+# Example for Sub CPU boot ROM (base at 0xFE0000):
+unidasm original_ROMs/kn5000_subcpu_boot.ic30 -arch tlcs900 -basepc 0xFE0000 > original_ROMs/kn5000_subcpu_boot.ic30.unidasm
+```
+
+**When to use unidasm:**
+- To get initial instruction decoding for undisassembled regions
+- To verify instruction encodings when debugging divergences
+- To understand control flow in new routines
+
+**Reference files available:**
+- `original_ROMs/kn5000_subcpu_boot.ic30.unidasm` - Sub CPU boot ROM
+- `original_ROMs/kn5000_v10_program.ic9.unidasm` - Main CPU ROM (if available)
+
+**Note:** unidasm provides a linear disassembly without distinguishing code from data. Manual analysis is still required to identify routine boundaries, data tables, and add meaningful labels/comments.
+
 ## Architecture
 
 ### ROM Components
