@@ -38,7 +38,9 @@
 PAYLOAD_ENTRY		EQU	0400h	; Entry point of loaded payload
 DMA_READY_FLAG		EQU	04FEh	; DMA ready flag (RAM variable)
 DMA_PARAM_BLOCK		EQU	0502h	; DMA parameter block address (RAM)
+DMA_BUFFER_1		EQU	050Ch	; First DMA buffer address (RAM)
 DMA_SYNC_FLAG		EQU	0516h	; DMA synchronization flag (RAM variable)
+DMA_BUFFER_2		EQU	053Eh	; Second DMA buffer address (RAM)
 STACK_INIT		EQU	05A2h	; Initial stack pointer
 DMA_MODE_REG		EQU	0102h	; DMA mode register (in SFR area)
 INTER_CPU_LATCH		EQU	120000h	; Inter-CPU communication latch
@@ -913,49 +915,106 @@ WAIT_DMA_THEN_E2:
 
 ; ------------------------------------------------------------------------------
 ; DMA_MULTI_STAGE (0xFF874C) - Complex multi-stage DMA transfer
-; Remaining routines still use raw bytes - TODO: disassemble
+; Performs two-phase DMA transfer with E1 command and delay loops
+; Phase 1: Transfer from 0x050C buffer, Phase 2: Transfer from 0x053E buffer
+; Includes 200-iteration delay loops between phases for timing
 ; ------------------------------------------------------------------------------
 DMA_MULTI_STAGE:
-	db	02eh, 0deh, 0a8h, 0c1h, 016h, 005h, 03fh, 000h
-	; 0xFF8754-0xFF8763
-	db	066h, 012h, 0deh, 08bh, 0deh, 061h, 0dbh, 0cfh
-	db	060h, 0eah, 07bh, 0bch, 000h, 0c1h, 016h, 005h
-	; 0xFF8764-0xFF8773
-	db	03fh, 000h, 06eh, 0eeh, 0deh, 0a8h, 0f0h, 034h
-	db	0cch, 076h, 092h, 000h, 0f0h, 034h, 0b0h, 0f1h
-	; 0xFF8774-0xFF8783
-	db	016h, 005h, 000h, 002h, 0f2h, 000h, 000h, 012h
-	db	000h, 0e1h, 0deh, 0a8h, 0f0h, 034h, 0cch, 07eh
-	; 0xFF8784-0xFF8793
-	db	089h, 000h, 0f0h, 034h, 0b8h, 0f1h, 03eh, 005h
-	db	033h, 0b3h, 060h, 0f1h, 00ch, 005h, 030h, 0b0h
-	; 0xFF8794-0xFF87A3
-	db	062h, 0bbh, 004h, 051h, 0b8h, 004h, 051h, 0e8h
-	db	02eh, 008h, 0d8h, 0aeh, 0d8h, 02eh, 048h, 0f1h
-	; 0xFF87A4-0xFF87B3
-	db	002h, 001h, 000h, 016h, 0f0h, 080h, 0bah, 0c1h
-	db	016h, 005h, 03fh, 001h, 066h, 007h, 0c1h, 016h
-	; 0xFF87B4-0xFF87C3
-	db	005h, 03fh, 001h, 06eh, 0f9h, 0deh, 0a8h, 0deh
-	db	0cfh, 0c8h, 000h, 06fh, 009h, 000h, 0deh, 061h
-	; 0xFF87C4-0xFF87D3
-	db	0deh, 0cfh, 0c8h, 000h, 067h, 0f7h, 0f1h, 03eh
-	db	005h, 030h, 0a0h, 021h, 0e9h, 02eh, 008h, 098h
-	; 0xFF87D4-0xFF87E3
-	db	004h, 020h, 0d8h, 02eh, 048h, 0f1h, 002h, 001h
-	db	000h, 016h, 0f0h, 080h, 0bah, 0c1h, 016h, 005h
-	; 0xFF87E4-0xFF87F3
-	db	03fh, 000h, 066h, 007h, 0c1h, 016h, 005h, 03fh
-	db	000h, 06eh, 0f9h, 0deh, 0a8h, 0deh, 0cfh, 0c8h
-	; 0xFF87F4-0xFF8803
-	db	000h, 06fh, 009h, 000h, 0deh, 061h, 0deh, 0cfh
-	db	0c8h, 000h, 067h, 0f7h, 068h, 01bh, 0deh, 08bh
-	; 0xFF8804-0xFF8813
-	db	0deh, 061h, 0dbh, 0cfh, 060h, 0eah, 073h, 05dh
-	db	0ffh, 068h, 00eh, 0deh, 08bh, 0deh, 061h, 0dbh
-	; 0xFF8814-0xFF881E (partial - 11 bytes)
-	db	0cfh, 060h, 0eah, 073h, 066h, 0ffh, 0f0h, 034h
-	db	0b8h, 04eh, 00eh
+	push	IZ			; Save IZ
+	ld	IZ, 0			; IZ = timeout counter
+.wait_sync:
+	cp	(DMA_SYNC_FLAG), 00h	; Is DMA sync clear?
+	jr	Z, .sync_cleared	; Yes - proceed
+.timeout_sync:
+	ld	HL, IZ			; HL = timeout counter
+	inc	1, IZ			; Increment counter
+	cp	HL, 0EA60h		; Timeout limit (60000)
+	jrl	UGT, .exit		; Timeout - exit
+	cp	(DMA_SYNC_FLAG), 00h	; Check sync again
+	jr	NZ, .timeout_sync	; Still not clear - keep waiting
+.sync_cleared:
+	ld	IZ, 0			; Reset timeout counter
+.wait_cpu_ready:
+	bit	4, (INTERCPU_STATUS)	; Check if CPU ready
+	jrl	Z, .timeout_ready1	; Not ready - timeout handler
+	res	0, (INTERCPU_STATUS)	; Clear our ready flag
+	ld	(DMA_SYNC_FLAG), 02h	; Set sync flag to E1 mode
+	ld	(INTER_CPU_LATCH), 0E1h	; Send E1 command
+	ld	IZ, 0			; Reset timeout counter
+.wait_ack:
+	bit	4, (INTERCPU_STATUS)	; Check for acknowledgment
+	jrl	NZ, .timeout_ack	; Not acknowledged - timeout handler
+	set	0, (INTERCPU_STATUS)	; Set our ready flag
+	; Phase 1: Set up first DMA transfer
+	lda	XHL, DMA_BUFFER_2	; XHL = 0x053E (second buffer)
+	ld	(XHL), XWA		; Store XWA to buffer
+	lda	XWA, DMA_BUFFER_1	; XWA = 0x050C (first buffer)
+	ld	(XWA), XDE		; Store XDE to first buffer
+	ld	(XHL+04h), BC		; Store BC to second buffer+4
+	ld	(XWA+04h), BC		; Store BC to first buffer+4
+	LDC_DMAS2_XWA			; DMA source = first buffer (0x050C)
+	ld	WA, 6			; WA = 6 (DMA count)
+	LDC_DMAC2_WA			; DMA count = 6
+	ld	(DMA_MODE_REG), 16h	; Set DMA mode
+	set	2, (T01MOD)		; Start DMA transfer
+	; Wait for first transfer to complete (sync flag = 1)
+	cp	(DMA_SYNC_FLAG), 01h	; Is sync flag = 1?
+	jr	Z, .phase1_done		; Yes - phase 1 complete
+.wait_phase1:
+	cp	(DMA_SYNC_FLAG), 01h	; Check sync flag
+	jr	NZ, .wait_phase1	; Wait until = 1
+.phase1_done:
+	; Delay loop (200 iterations)
+	ld	IZ, 0			; IZ = delay counter
+	cp	IZ, 00C8h		; Counter reached 200?
+	jr	NC, .delay1_done	; Yes - done
+.delay1_loop:
+	nop				; Small delay
+	inc	1, IZ			; Increment counter
+	cp	IZ, 00C8h		; Check again
+	jr	C, .delay1_loop		; Continue if < 200
+.delay1_done:
+	; Phase 2: Set up second DMA transfer
+	lda	XWA, DMA_BUFFER_2	; XWA = 0x053E (second buffer)
+	ld	XBC, (XWA)		; XBC = contents of second buffer
+	LDC_DMAS2_XBC			; DMA source = XBC
+	ld	WA, (XWA+04h)		; WA = count from buffer+4
+	LDC_DMAC2_WA			; DMA count = WA
+	ld	(DMA_MODE_REG), 16h	; Set DMA mode
+	set	2, (T01MOD)		; Start DMA transfer
+	; Wait for second transfer to complete (sync flag = 0)
+	cp	(DMA_SYNC_FLAG), 00h	; Is sync flag = 0?
+	jr	Z, .phase2_done		; Yes - phase 2 complete
+.wait_phase2:
+	cp	(DMA_SYNC_FLAG), 00h	; Check sync flag
+	jr	NZ, .wait_phase2	; Wait until = 0
+.phase2_done:
+	; Second delay loop (200 iterations)
+	ld	IZ, 0			; IZ = delay counter
+	cp	IZ, 00C8h		; Counter reached 200?
+	jr	NC, .delay2_done	; Yes - skip to exit jump
+.delay2_loop:
+	nop				; Small delay
+	inc	1, IZ			; Increment counter
+	cp	IZ, 00C8h		; Check again
+	jr	C, .delay2_loop		; Continue if < 200
+.delay2_done:
+	jr	T, .exit		; Unconditional jump to exit
+.timeout_ready1:
+	ld	HL, IZ			; HL = timeout counter
+	inc	1, IZ			; Increment counter
+	cp	HL, 0EA60h		; Timeout limit
+	jrl	ULE, .wait_cpu_ready	; Keep waiting if not timed out
+	jr	T, .exit		; Timeout - exit
+.timeout_ack:
+	ld	HL, IZ			; HL = timeout counter
+	inc	1, IZ			; Increment counter
+	cp	HL, 0EA60h		; Timeout limit
+	jrl	ULE, .wait_ack		; Keep waiting if not timed out
+	set	0, (INTERCPU_STATUS)	; Set ready flag before exit
+.exit:
+	pop	IZ			; Restore IZ
+	ret
 
 ; ==============================================================================
 ; Interrupt Handler 9 (0xFF881F) - Serial Receive Interrupt
