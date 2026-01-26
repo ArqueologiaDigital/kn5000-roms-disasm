@@ -98,6 +98,8 @@ Project issues are tracked using [Beads](https://github.com/beads-ai/beads) in `
 ~/claude_jail/bd comments add <issue-id> "text"   # Add a comment to an issue
 ~/claude_jail/bd create "title"                    # Create new issue
 ~/claude_jail/bd update <issue-id> --notes "text" # Update issue notes
+~/claude_jail/bd ready                             # Find available work (unblocked, unassigned)
+~/claude_jail/bd sync                              # Sync issues with git
 ```
 
 The issue tracker is:
