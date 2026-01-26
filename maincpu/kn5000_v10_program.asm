@@ -117,10 +117,10 @@ PFFC_VALUE			EQU 8D8Fh ; (byte)
 CPANEL_UNUSED_1			EQU 8D91h ; (byte) // This one looks pointless...
 CPANEL_SERIAL_FLAGS_B		EQU 8D92h ; (8 bits)
 CPANEL_SERIAL_FLAGS_C		EQU 8D93h ; (8 bits)
-CPANEL_UNUSED_2			EQU 8D94h ; (byte) // This one looks pointless...
+CPANEL_RX_PACKET_BYTE_1		EQU 8D94h ; (byte) First byte from incoming panel packets
 					   ; (1st Value saved to
 					   ;  XIZ + IX(mod 080h) array)
-CPANEL_UNUSED_3			EQU 8D95h ; (byte) // This one looks pointless...
+CPANEL_RX_PACKET_BYTE_2		EQU 8D95h ; (byte) Second byte from incoming panel packets
 					   ; (2nd Value saved to
 					   ;  XIZ + IX(mod 080h) array)
 CPANEL_VAR__8D96		EQU 8D96h ; (byte) // Another value saved to XIZ + IX(mod 080h) array (but later read at FC4AC1)
@@ -132,7 +132,7 @@ CPANEL_COUNTER_UP_TO_42		EQU 8D9Ah ; (byte) counts up to 02ah (=42).
 TIMESTAMP_FOR_DELAY		EQU 8D9Bh ; (word)
 CPANEL_BACKUP_RX_INDEX	EQU 8D9Dh ; (word)  NOTE: Used as index IY for
 				   ;         CPANEL_RX_DATA[IY MOD 05Ch]
-				   ; in code near LABEL_FC490E and LABEL_FC4B10
+				   ; in code near Process_CPanel_Rx_SetFlag and CPanel_Handle_SyncPacket
 CPANEL_RX_INDEX		EQU 8D9Fh ; (word)
 CPANEL_RX_DATA		EQU 8DA1h ; 05ch (=92) bytes
 CPANEL_INDEX_FOR_LEDS		EQU 8DFDh ; (word)
@@ -405,11 +405,7 @@ LABEL_E00B04:
 	ORG 0E00B28h
 LABEL_E00B28:
 
-	ORG 0E04590h
-LABEL_E04590:
-
-	ORG 0E04B30h
-LABEL_E04B30:
+; Note: LABEL_E04590 and LABEL_E04B30 are now defined at their binclude locations
 
 	ORG 0E06DB0h
 LABEL_E06DB0:
@@ -36673,7 +36669,13 @@ SOUND_CATEGORY_NAMES:			; E023F0
 	db "MEMORY B    "			; Category 17
 
 LABEL_E02510:
-	binclude "includes/e02510_e06baf.bin" ; FIXME: describe this data structure
+	binclude "includes/e02510_e0458f.bin" ; Instrument category data (PIANO, ORGAN, etc.)
+
+LABEL_E04590:  ; GUITAR data (referenced from sound category table)
+	binclude "includes/e04590_e04b2f.bin"
+
+LABEL_E04B30:  ; STRINGS & VOCAL data (referenced from sound category table)
+	binclude "includes/e04b30_e06baf.bin"
 
 LABEL_E06BB0:
 	dd LABEL_E06DB0
@@ -399820,7 +399822,7 @@ LABEL_FC3E94:
 	JR T, LABEL_FC3ECB
 				; else:
 LABEL_FC3EC8:
-	CALR LABEL_FC4915
+	CALR Process_CPanel_Rx_ClearFlag
 
 LABEL_FC3ECB:
 	RET
@@ -399834,7 +399836,7 @@ LABEL_FC3ED0:
 	PUSH XIZ
 	PUSH XHL
 	PUSH XDE
-	CALR LABEL_FC42FB
+	CALR CPanel_Init_StateArray
 	POP XDE
 	POP XHL
 	POP XIZ
@@ -399986,7 +399988,7 @@ LABEL_FC3FA9:
 	RET
 
 
-LABEL_FC4021:
+CPanel_Init_Serial_LEDs:
 	LD (CPANEL_ARRAY__STATE_OF_LEDS), WA
 	AND (PFFC_VALUE), 0bfh
 	LD A,(PFFC_VALUE)
@@ -400270,7 +400272,7 @@ SEND_SOME_CPANEL_COMMANDS__FC41FC:
 	CALR DELAY_6_TICKS
 	CALR DELAY_6_TICKS
 
-	CALR LABEL_FC4915
+	CALR Process_CPanel_Rx_ClearFlag
 	RET
 
 
@@ -400285,27 +400287,27 @@ ANOTHER_CPANEL_ROUTINE__FC426A:
 	OR (CPANEL_SERIAL_FLAGS_B), 001h		; CP_Flags_B.0 = 1
 	EI 000h
 
-LABEL_FC4293:
+CPanel_PollButtonState_Loop:
 	CALR CHECK_IF_WE_ARE_READY_TO_SEND_CMD_TO_CPANEL
 	LD_A 020h
 	LD_W 0bh
 	CALR SEND_CMD_TO_CPANEL
 	CALR DELAY_6_TICKS
-	CALR LABEL_FC4915
+	CALR Process_CPanel_Rx_ClearFlag
 
 	LD A, (STATE_OF_CPANEL_BUTTONS + 11)
 	LD_W 0dh
 	BIT 7, A
-	JR NZ, LABEL_FC42B7
+	JR NZ, CPanel_CheckEncoderState
 	LD_W 0eh
 	BIT 6, A
-	JR NZ, LABEL_FC42B7
+	JR NZ, CPanel_CheckEncoderState
 	LD_W 0ch
 
-LABEL_FC42B7:
+CPanel_CheckEncoderState:
 	CP (8E6Ah), W
 	LD (8E6Ah), W
-	JR NZ, LABEL_FC4293
+	JR NZ, CPanel_PollButtonState_Loop
 	LD (8E6Ah), W
 	LD XHL, SomeCpanelData
 	LDW (XHL - 4), 0000h
@@ -400321,7 +400323,7 @@ LABEL_FC42B7:
 	RET
 
 
-LABEL_FC42FB: ; do that
+CPanel_Init_StateArray: ; do that
 	LD XHL, SomeCpanelData
 	LDW (XHL - 4), 0000h
 	LDW (XHL - 8), 0000h
@@ -400340,7 +400342,7 @@ LABEL_FC42FB: ; do that
 	CALR DELAY_6_TICKS
 	CALR DELAY_6_TICKS
 	CALR DELAY_6_TICKS
-	CALR LABEL_FC490E
+	CALR Process_CPanel_Rx_SetFlag
 
 	CALR CHECK_IF_WE_ARE_READY_TO_SEND_CMD_TO_CPANEL
 	LD_A 0ebh
@@ -400349,7 +400351,7 @@ LABEL_FC42FB: ; do that
 	CALR DELAY_6_TICKS
 	CALR DELAY_6_TICKS
 	CALR DELAY_6_TICKS
-	CALR LABEL_FC490E
+	CALR Process_CPanel_Rx_SetFlag
 
 	CALR CHECK_IF_WE_ARE_READY_TO_SEND_CMD_TO_CPANEL
 	LD_A 020h
@@ -400357,7 +400359,7 @@ LABEL_FC42FB: ; do that
 	CALR SEND_CMD_TO_CPANEL
 	CALR DELAY_6_TICKS
 	CALR DELAY_6_TICKS
-	CALR LABEL_FC490E
+	CALR Process_CPanel_Rx_SetFlag
 
 	CALR CHECK_IF_WE_ARE_READY_TO_SEND_CMD_TO_CPANEL
 	LD_A 0e3h
@@ -400365,7 +400367,7 @@ LABEL_FC42FB: ; do that
 	CALR SEND_CMD_TO_CPANEL
 	CALR DELAY_6_TICKS
 	CALR DELAY_6_TICKS
-	CALR LABEL_FC490E
+	CALR Process_CPanel_Rx_SetFlag
 	RET
 
 
@@ -400875,13 +400877,13 @@ LABEL_FC485B:
 	CP A, 0c0h
 	JR NZ, LABEL_FC4877 	; if (CP_Flags_A.76++ == 3) {
 
-	CALR LABEL_FC42FB ; do that
+	CALR CPanel_Init_StateArray ; do that
 
 	JR T, LABEL_FC487A
 				; } else {
 
 LABEL_FC4877:
-	CALR LABEL_FC4B2D 		; do this
+	CALR CPanel_Send_LED_Data 		; do this
 				; }
 LABEL_FC487A:
 	EI 006h
@@ -400948,22 +400950,22 @@ LABEL_FC48EB:
 
 
 
-LABEL_FC490E:
+Process_CPanel_Rx_SetFlag:
 	OR (CPANEL_SERIAL_FLAGS_A), 004h ; CP_Flags_A.2 = 1  ; UNUSED?
-	JR T, LABEL_FC491A
+	JR T, Process_CPanel_Rx_Setup
 
-LABEL_FC4915:
+Process_CPanel_Rx_ClearFlag:
 	AND (CPANEL_SERIAL_FLAGS_A), 0fbh ; CP_Flags_A.2 = 0  ; UNUSED?
 
-LABEL_FC491A:
+Process_CPanel_Rx_Setup:
 	LD XDE, CPANEL_RX_DATA
 	LD IY, (CPANEL_BACKUP_RX_INDEX)
 	LD XIZ, SomeCpanelData
 	LD IX, (XIZ - 4)
 
-LABEL_FC492B:
+Process_CPanel_Rx_Loop:
 	CPW (XIZ - 2), 0004h
-	JRL C, END_OF_ROUTINE_FC491A
+	JRL C, Process_CPanel_Rx_Return
 
 	LD WA, (CPANEL_RX_INDEX)
 	SUB WA, (CPANEL_BACKUP_RX_INDEX)
@@ -400975,42 +400977,42 @@ LABEL_FC492B:
 
 LABEL_FC4945:
 	CP A, 2
-	JRL C, END_OF_ROUTINE_FC491A
+	JRL C, Process_CPanel_Rx_Return
 
 	LD L, (XDE + IY)
 	AND L, 038h
 	SRL 1, L
 	XOR H, H
 	EXTZ XHL
-	ADD XHL, LABEL_FC4965
+	ADD XHL, CPanel_Packet_Handler_Table
 	LD XHL, (XHL)
 	JP T, XHL
 
 LABEL_FC4963:
 	db 0FFh, 0FFh
 
-LABEL_FC4965:
-	dd LABEL_FC4985
-	dd LABEL_FC4985
-	dd LABEL_FC49E0
-	dd LABEL_FC4B10
-	dd LABEL_FC4B10
-	dd LABEL_FC4B10
-	dd LABEL_FC4A40
-	dd LABEL_FC4A40
+CPanel_Packet_Handler_Table:
+	dd CPanel_Handle_ButtonState
+	dd CPanel_Handle_ButtonState
+	dd CPanel_Handle_EncoderLookup
+	dd CPanel_Handle_SyncPacket
+	dd CPanel_Handle_SyncPacket
+	dd CPanel_Handle_SyncPacket
+	dd CPanel_Handle_MultiBytePacket
+	dd CPanel_Handle_MultiBytePacket
 
-LABEL_FC4985:
+CPanel_Handle_ButtonState:
 	LD W, (XDE + IY)
 	CALR INC_IY_MOD_05Ch
 	LD (XIZ + IX), W
 	CALR INC_IX_MOD_080h
-	LD (CPANEL_UNUSED_2), W
+	LD (CPANEL_RX_PACKET_BYTE_1), W
 
 	LD A, (XDE + IY)
 	CALR INC_IY_MOD_05Ch
 	LD (XIZ + IX), A
 	CALR INC_IX_MOD_080h
-	LD (CPANEL_UNUSED_3), A
+	LD (CPANEL_RX_PACKET_BYTE_2), A
 
 	AND W, 04fh
 	LD XHL, STATE_OF_CPANEL_BUTTONS
@@ -401034,17 +401036,17 @@ LABEL_FC49C3:
 	LD (XIZ - 4), IX
 	DECW 3, (XIZ - 2)
 	LD (CPANEL_BACKUP_RX_INDEX), IY
-	JRL T, LABEL_FC492B
+	JRL T, Process_CPanel_Rx_Loop
 
-LABEL_FC49E0:
+CPanel_Handle_EncoderLookup:
 	LD W, (XDE + IY)
 	CALR INC_IY_MOD_05Ch
 	LD (XIZ + IX), W
 	CALR INC_IX_MOD_080h
-	LD (CPANEL_UNUSED_2), W
+	LD (CPANEL_RX_PACKET_BYTE_1), W
 	LD A, (XDE + IY)
 	CALR INC_IY_MOD_05Ch
-	LD (CPANEL_UNUSED_3), A
+	LD (CPANEL_RX_PACKET_BYTE_2), A
 	LD C, W
 	CALR LABEL_FC4A36
 	CP HL, 0ffffh
@@ -401064,7 +401066,7 @@ LABEL_FC4A14:
 	LD (CPANEL_BACKUP_RX_INDEX), IY
 
 LABEL_FC4A33:
-	JRL T, LABEL_FC492B
+	JRL T, Process_CPanel_Rx_Loop
 
 LABEL_FC4A36:
 	PUSH XDE
@@ -401076,7 +401078,7 @@ LABEL_FC4A36:
 	POP XDE
 	RET
 
-LABEL_FC4A40:
+CPanel_Handle_MultiBytePacket:
 	LD W, A
 	LD A, (XDE + IY)
 	LD C, A
@@ -401085,7 +401087,7 @@ LABEL_FC4A40:
 	LD B, A
 	ADD A, 002h
 	CP W, A
-	JRL C, END_OF_ROUTINE_FC491A
+	JRL C, Process_CPanel_Rx_Return
 
 	CALR INC_IY_MOD_05Ch
 	LD A, (XDE + IY)
@@ -401173,22 +401175,22 @@ LABEL_FC4B04:
 	DEC 1, B
 	CP B, 0
 	JRL NZ, LABEL_FC4A8B
-	JRL T, LABEL_FC492B
+	JRL T, Process_CPanel_Rx_Loop
 
-LABEL_FC4B10:
+CPanel_Handle_SyncPacket:
 	LD A, (XDE + IY)
 	CALR INC_IY_MOD_05Ch
 	LD A, (XDE + IY)
 	CALR INC_IY_MOD_05Ch
 	LD (CPANEL_BACKUP_RX_INDEX), IY
 	OR (CPANEL_SERIAL_FLAGS_B), 008h	; CP_Flags_B.3 = 1  ; UNUSED
-	JRL T, LABEL_FC492B
+	JRL T, Process_CPanel_Rx_Loop
 
-END_OF_ROUTINE_FC491A ; FC4B2C
+Process_CPanel_Rx_Return ; FC4B2C
 	RET
 
 
-LABEL_FC4B2D: 		; do this
+CPanel_Send_LED_Data: 		; do this
 	LD IY, (CPANEL_VAR_RELATED_TO_ARRAY_OF_LEDS)
 	LD XDE, CPANEL_ARRAY__STATE_OF_LEDS
 	LD XIZ, SomeOtherCpanelData
@@ -401220,7 +401222,7 @@ LABEL_FC4B63:
 	LD L, A
 	XOR H, H
 	EXTZ XHL
-	ADD XHL, LABEL_FC4B85
+	ADD XHL, CPanel_LED_Handler_Table
 	LD XHL, (XHL)
 	JP T, XHL
 
@@ -401228,7 +401230,7 @@ LABEL_FC4B83:
 	db 0FFh, 0FFh
 
 
-LABEL_FC4B85:
+CPanel_LED_Handler_Table:
 	dd LABEL_FC4B95
 	dd LABEL_FC4B95
 	dd LABEL_FC4B95
