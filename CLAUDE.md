@@ -163,6 +163,39 @@ The issue tracker is:
 
 This policy ensures the disassembly remains useful for understanding the firmware, not just rebuilding it.
 
+### Exploratory Disassembly (MANDATORY)
+
+**Goal: Eliminate all undocumented raw bytes from ROM source files.**
+
+All ROM files must undergo thorough exploratory disassembly until every byte is either:
+1. **Disassembled code** with meaningful labels and comments
+2. **Documented data** (images, lookup tables, sound data, etc.) with clear descriptions
+3. **Known padding/alignment** bytes explicitly marked as such
+
+**Systematic exploration procedure:**
+
+1. **Find jump tables** by searching for:
+   - Indirect calls: `CALL T, XHL`, `CALL T, XIX`, etc.
+   - Indexed jumps: `JP T, XIX + WA`, `JP T, XIX + BC`, `JP T, XIX + DE`
+   - Tables of addresses (`dd LABEL_*`) or offsets (`dw offset`)
+   - Raw address loads before indirect jumps (`LDA XIX, 0E*h` / `LDA XHL, 0F*h`)
+
+2. **Trace all jump table targets** to ensure referenced routines are disassembled
+
+3. **Document binary includes** - all `binclude` files must have:
+   - Clear description of data type (image, lookup table, sound, etc.)
+   - Dimensions/format if applicable
+   - Purpose in the firmware
+
+4. **Create issues** for each undocumented block found:
+   - Address range
+   - How it was discovered (which jump table references it, etc.)
+   - Priority based on importance for emulation
+
+5. **Repeat on all ROM components** (maincpu, subcpu, subcpu_boot, table_data)
+
+This procedure should be run periodically until 100% documentation is achieved.
+
 ### Reference Disassembly with MAME's unidasm
 
 **MAME's `unidasm` tool is available for generating reference disassembly listings.** Pre-generated `.unidasm` files are stored in `original_ROMs/` for each ROM.
