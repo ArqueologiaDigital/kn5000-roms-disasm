@@ -389,6 +389,42 @@ echo "XX XX XX XX" | xxd -r -p > /tmp/bytes.bin
 
 **Note:** unidasm provides a linear disassembly without distinguishing code from data. Manual analysis is still required to identify routine boundaries, data tables, and add meaningful labels/comments.
 
+### MAME Driver Development Workflow
+
+**The `mame_driver/` directory contains reference copies of MAME source files for HLE development.**
+
+This is NOT the complete MAME codebase - only the files needed for sketching driver improvements, particularly control panel High Level Emulation (HLE).
+
+**Files included:**
+
+| File | Purpose |
+|------|---------|
+| `mame_driver/src/mame/matsushita/kn5000.cpp` | Main driver (machine config, address maps) |
+| `mame_driver/src/mame/matsushita/kn5000_cpanel.cpp` | Control panel HLE device |
+| `mame_driver/src/mame/matsushita/kn5000_cpanel.h` | Control panel HLE header |
+
+**Workflow for driver improvements:**
+
+1. **Study reverse engineering findings** - Analyze protocol details from disassembly
+2. **Understand current HLE** - Read the existing MAME driver files
+3. **Design improvements** - Plan changes based on protocol understanding
+4. **Draft changes** - Update the reference files with proposed code
+5. **Document the rationale** - Explain why changes are needed
+6. **Submit to MAME** - Create pull request to upstream MAME repository
+
+**Connection to disassembly:**
+
+- Control panel protocol details: See `CPanel_*` routines in `maincpu/kn5000_v10_program.asm`
+- Memory-mapped I/O: Latch at `0x120000`, documented in `../kn5000-docs/memory-map.md`
+- Protocol state machine: See `../kn5000-docs/control-panel-protocol.md`
+
+**Important notes:**
+
+- These are **reference copies** - always sync with upstream MAME before submitting changes
+- The HLE uses protocol analysis from the disassembly to emulate the MCU's behavior
+- MCU ROM dumps are not available - HLE is the only emulation approach
+- Additional reference files may be added as needed
+
 ## Architecture
 
 ### ROM Components
