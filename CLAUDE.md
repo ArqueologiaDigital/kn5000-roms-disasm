@@ -80,6 +80,41 @@ This runs:
 
 Always commit both repositories together when making website updates.
 
+### Symbol Name Synchronization (STRICT POLICY)
+
+**When updating documentation, ALL symbol names must match the current assembly source.**
+
+This is a strict policy to prevent documentation from becoming outdated as symbols are renamed during reverse engineering:
+
+1. **Before committing documentation changes**, verify that all symbol names mentioned exist in the assembly:
+   ```bash
+   # Search for a symbol in the assembly
+   grep -n "SYMBOL_NAME" maincpu/kn5000_v10_program.asm
+   ```
+
+2. **When renaming symbols in assembly**, search documentation for the old name:
+   ```bash
+   # Find all references in documentation
+   grep -rn "OLD_SYMBOL_NAME" ../kn5000-docs/
+   ```
+
+3. **Common symbol categories to check:**
+   - Jump tables: `*_TABLE`, `*_HANDLERS`
+   - Routines: `CPanel_*`, `FDC_*`, `MIDI_*`, etc.
+   - Variables: `CPANEL_*`, `ENCODER_*`, `MIDI_CC_*`
+   - Addresses referenced in Code Reference sections
+
+4. **Symbol name format consistency:**
+   - Assembly uses: `CPanel_RX_PacketHandlers`, `CPANEL_STATE_MACHINE_TABLE`
+   - Documentation must use exact same names in backticks: `` `CPanel_RX_PacketHandlers` ``
+
+5. **When in doubt**, grep the assembly for the address to find the current label:
+   ```bash
+   grep "FC4489\|0xFC4489" maincpu/*.asm  # Find label at address 0xFC4489
+   ```
+
+**This policy exists because stale symbol names in documentation cause confusion and make it harder for contributors to navigate between docs and source code.**
+
 ### Issue Tracking (STRICT POLICY)
 
 Project issues are tracked using [Beads](https://github.com/beads-ai/beads) in `.beads/issues.jsonl`.
