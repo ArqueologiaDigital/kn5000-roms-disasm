@@ -27,6 +27,15 @@ except ImportError:
 # Palette file for 8-bit indexed images
 PALETTE_FILE = "Palette_8bit_RGBA.bin"
 
+# HDAE5000 palette files (discovered from disassembly analysis)
+# Main images use palette at ROM offset 0x65dce (loaded during boot at 0x28f585)
+HDAE5000_MAIN_PALETTE = "HDAE5000_Palette_0x65dce.bin"
+# Icon uses Windows halftone-style palette at ROM offset 0x6158e
+HDAE5000_ICON_PALETTE = "HDAE5000_Palette.bin"
+
+# HDAE5000 images that use the icon palette instead of main palette
+HDAE5000_ICON_IMAGES = {"HDAE5000_Icon.bin"}
+
 
 def load_palette(palette_path: Path) -> list:
     """Load 256-color RGBA palette from binary file.
@@ -131,16 +140,20 @@ IMAGE_METADATA = {
     # Ntedt0k: a2=0x10=16, 2032/16=127
     "BitmapNtedt0k.bin": (127, 16, 8, "Note edit graphic small"),
 
-    # HDAE5000 Hard Disk Expansion ROM images (320x240, 8-bit grayscale)
-    # These images are stored in the HD-AE5000 expansion ROM at specific offsets
-    # ROM offset 0x28c00: Logo with hard disk graphic
+    # HDAE5000 Hard Disk Expansion ROM images (8-bit indexed color)
+    # Offsets and palettes determined from disassembly analysis:
+    # - Boot code at 0x28f585 loads palette from ROM offset 0x65dce (CPU: 0x2E5DCE)
+    # - Main images (Logo, Hands, FilePanel) use this palette
+    # - Icon uses Windows halftone-style palette at ROM offset 0x6158e
+    #
+    # ROM offset 0x2898e (CPU: 0x2A898E): Logo with hard disk graphic
     "HDAE5000_Logo.bin": (320, 240, 8, "HD-AE5000 product logo with hard disk graphic"),
-    # ROM offset 0x3b800: Hands operating the unit
+    # ROM offset 0x3b98e (CPU: 0x2BB98E): Hands operating the unit
     "HDAE5000_Hands.bin": (320, 240, 8, "Hands operating HD-AE5000 unit"),
-    # ROM offset 0x4e400: File selection UI
+    # ROM offset 0x4e98e (CPU: 0x2CE98E): File selection UI
     "HDAE5000_FilePanel.bin": (320, 240, 8, "File selection UI panel"),
-    # ROM offset 0x60400: Startup screen
-    "HDAE5000_StartupScreen.bin": (320, 240, 8, "HD-AE5000 Version 2 startup screen"),
+    # ROM offset 0x6198e (CPU: 0x2E198E): Small icon (uses halftone palette)
+    "HDAE5000_Icon.bin": (28, 28, 8, "Hard disk with magnetic head icon"),
 }
 
 
@@ -289,9 +302,18 @@ def main():
     palette_path = maincpu_images / PALETTE_FILE
     palette = load_palette(palette_path)
     if palette:
-        print(f"Loaded palette: {PALETTE_FILE}")
+        print(f"Loaded maincpu palette: {PALETTE_FILE}")
     else:
-        print("Warning: No palette loaded, 8-bit images will be grayscale")
+        print("Warning: No maincpu palette loaded, 8-bit images will be grayscale")
+
+    # Load HDAE5000 palettes (discovered from disassembly analysis)
+    hdae5000_images = script_dir / "hdae5000" / "images"
+    hdae5000_main_palette = load_palette(hdae5000_images / HDAE5000_MAIN_PALETTE)
+    hdae5000_icon_palette = load_palette(hdae5000_images / HDAE5000_ICON_PALETTE)
+    if hdae5000_main_palette:
+        print(f"Loaded HDAE5000 main palette: {HDAE5000_MAIN_PALETTE}")
+    if hdae5000_icon_palette:
+        print(f"Loaded HDAE5000 icon palette: {HDAE5000_ICON_PALETTE}")
     print()
 
     total_converted = 0
@@ -310,8 +332,15 @@ def main():
         skipped = 0
 
         for bin_path in bin_files:
-            # HDAE5000 images don't use the main CPU palette (grayscale)
-            use_palette = palette if dir_name != "HDAE5000" else None
+            # Select appropriate palette based on image source
+            if dir_name == "HDAE5000":
+                # HDAE5000 images use their own palettes discovered from disassembly
+                if bin_path.name in HDAE5000_ICON_IMAGES:
+                    use_palette = hdae5000_icon_palette
+                else:
+                    use_palette = hdae5000_main_palette
+            else:
+                use_palette = palette
             if convert_image(bin_path, output_dir, use_palette):
                 converted += 1
             else:

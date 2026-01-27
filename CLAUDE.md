@@ -292,6 +292,51 @@ This is a strict policy to ensure the disassembly is maintainable and understand
 
 **This policy applies to ALL references:** CALL, JP, JR, LD, LDA, and any other instruction that references a memory address.
 
+### Inter-ROM Cross-References (STRICT POLICY)
+
+**When code references an address outside its own ROM's memory range, the target ROM's assembly file must be inspected for cross-reference labels.**
+
+This is a strict policy to maintain consistency across all ROM components and ensure complete understanding of inter-component communication:
+
+1. **Memory ranges for each ROM component:**
+   | Component | Code Range | RAM Range |
+   |-----------|------------|-----------|
+   | maincpu | 0xE00000-0xFFFFFF | 0x000000-0x001FFF, 0x200000-0x23FFFF |
+   | subcpu | 0x000000-0x02FFFF | Internal RAM |
+   | hdae5000 | 0x280000-0x2FFFFF | Shared with maincpu |
+   | table_data | 0x800000-0x9FFFFF | N/A (data only) |
+
+2. **When an address falls outside the current ROM's range:**
+   - Identify which ROM component owns that address
+   - Search that component's assembly file for existing labels at that address
+   - If a label exists, reference it (may require `EXTERN` declaration or cross-file include)
+   - If no label exists, create one in the target file and document the cross-reference
+
+3. **Common cross-reference scenarios:**
+   ```asm
+   ; HDAE5000 calling maincpu routine:
+   CALL 0xE12345        ; -> Should reference maincpu label
+
+   ; Maincpu loading HDAE5000 data:
+   LDA XIX, 0x2A898E    ; -> Should reference HDAE5000 label (e.g., HDAE5000_Logo)
+
+   ; Any ROM accessing shared RAM:
+   LD XWA, (0x23A1A2)   ; -> Should have consistent label across all ROMs
+   ```
+
+4. **Documentation requirement:**
+   - Add comments noting cross-ROM references: `; Cross-ref: maincpu/kn5000_v10_program.asm`
+   - Document the purpose of the call/reference if known
+   - Update both assembly files to maintain bidirectional awareness
+
+5. **Benefits:**
+   - Complete picture of inter-component communication
+   - Easier to trace execution flow across ROM boundaries
+   - Identifies shared data structures and protocols
+   - Essential for accurate MAME emulation
+
+**This policy applies to all assembly files:** maincpu, subcpu, hdae5000, table_data, and any future ROM components.
+
 ### Exploratory Disassembly (MANDATORY)
 
 **Goal: Eliminate all undocumented raw bytes from ROM source files.**
