@@ -58,6 +58,9 @@ private:
 	void send_button_packet(int segment, bool is_left_panel);
 	void send_all_button_states(bool is_left_panel);
 
+	// LED control
+	void process_led_command(uint8_t row, uint8_t data);
+
 	// Read button state from input ports
 	uint8_t read_button_segment(int segment, bool is_left_panel);
 
@@ -91,6 +94,10 @@ private:
 	// Input port pointers (set by main driver)
 	ioport_port *m_cpl_ports[11];  // Left panel segments 0-10
 	ioport_port *m_cpr_ports[11];  // Right panel segments 0-10
+
+	// LED outputs
+	output_finder<50> m_cpl_leds;  // Left panel LEDs (CPL_0 through CPL_49)
+	output_finder<69> m_cpr_leds;  // Right panel LEDs (CPR_0 through CPR_68)
 };
 
 DECLARE_DEVICE_TYPE(KN5000_CPANEL, kn5000_cpanel_device)

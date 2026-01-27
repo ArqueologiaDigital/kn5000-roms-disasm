@@ -85,39 +85,44 @@ void tmp94c241_serial_device::sioclk(int state)
 
 	m_sioclk_state = state;
 
-	// Only process on rising edge to avoid shifting 2 bits per clock cycle
-	if (!state)
-		return;
+	// Always forward the clock to the slave device - this was missing!
+	// The slave needs clock pulses for both RX and TX directions.
+	m_sclk_out_cb(state);
 
 	// logerror("sioclk state=%d rxd=%d m_rx_clock_count=%d txd=%d m_tx_clock_count=%d\n", m_sioclk_state, m_rxd, m_rx_clock_count, m_txd, m_tx_clock_count);
 
-	if (m_rx_clock_count){
-		m_rx_clock_count--;
+	if (state)
+	{
+		// Rising edge: Sample RXD from slave device
+		if (m_rx_clock_count){
+			m_rx_clock_count--;
 
-		m_rx_shift_register >>= 1;
-		m_rx_shift_register |= (m_rxd << 7);
+			m_rx_shift_register >>= 1;
+			m_rx_shift_register |= (m_rxd << 7);
 
-		if (m_rx_clock_count == 0)
-		{
-			m_rx_clock_count = 8;
-			m_rx_buffer = m_rx_shift_register;
-			m_cpu->m_int_reg[(m_channel == 0) ? INTES0 : INTES1] |= 0x08;
-			m_cpu->m_check_irqs = 1;
+			if (m_rx_clock_count == 0)
+			{
+				m_rx_clock_count = 8;
+				m_rx_buffer = m_rx_shift_register;
+				m_cpu->m_int_reg[(m_channel == 0) ? INTES0 : INTES1] |= 0x08;
+				m_cpu->m_check_irqs = 1;
+			}
 		}
 	}
+	else
+	{
+		// Falling edge: Output TXD for slave to sample on next rising edge
+		if (m_tx_clock_count){
+			logerror("send bit #%d: %d\n", 8-m_tx_clock_count, m_tx_shift_register & 1);
 
-	if (m_tx_clock_count){
-		logerror("send bit #%d: %d\n", 8-m_tx_clock_count, m_tx_shift_register & 1);
-
-		m_txd_cb(m_tx_shift_register & 1);
-		m_sclk_out_cb(1);
-		m_sclk_out_cb(0);
-		m_tx_shift_register >>= 1;
-		if (--m_tx_clock_count == 0) {
-			logerror("Finished sending byte.\n");
-			// We finished sending the data:
-			m_cpu->m_int_reg[(m_channel == 0) ? INTES0 : INTES1] |= 0x80;
-			m_cpu->m_check_irqs = 1;
+			m_txd_cb(m_tx_shift_register & 1);
+			m_tx_shift_register >>= 1;
+			if (--m_tx_clock_count == 0) {
+				logerror("Finished sending byte.\n");
+				// We finished sending the data:
+				m_cpu->m_int_reg[(m_channel == 0) ? INTES0 : INTES1] |= 0x80;
+				m_cpu->m_check_irqs = 1;
+			}
 		}
 	}
 }
