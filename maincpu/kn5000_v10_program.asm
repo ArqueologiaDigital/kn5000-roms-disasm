@@ -141,6 +141,51 @@ CPANEL_LED_WRITE_PTR	EQU 8DFFh ; (word)
 CPANEL_LED_TX_BUFFER	EQU 8E01h ; 03ch (=60) bytes
 	;		... ? 8E3Dh
 
+; ============================================================================
+; CONTROL PANEL BUTTON STATE ARRAYS
+; ============================================================================
+; Two arrays of 11 bytes each (segments 0-10), one per panel.
+; Each byte represents 8 buttons (1=pressed), active high.
+;
+; RIGHT PANEL (CPR) - Offset +0 to +10:
+;   SEG0: bit5=TRANSPOSE-, bit6=TRANSPOSE+
+;   SEG1: bit0=ORGAN&ACCORDION, bit1=ORCHESTRAL PAD, bit2=SYNTH, bit3=BASS,
+;         bit4=DIGITAL DRAWBAR, bit5=ACCORDION REGISTER, bit6=GM SPECIAL, bit7=DRUM KITS
+;   SEG2: bit0=PIANO, bit1=GUITAR, bit2=STRINGS&VOCAL, bit3=BRASS,
+;         bit4=FLUTE, bit5=SAX&REED, bit6=MALLET&ORCH PERC, bit7=WORLD PERC
+;   SEG3: bit0=SUSTAIN, bit1=DIGITAL EFFECT, bit2=DSP EFFECT, bit3=DIGITAL REVERB,
+;         bit4=ACOUSTIC ILLUSION
+;   SEG4: bit0=PART:LEFT, bit1=PART:RIGHT2, bit2=PART:RIGHT1, bit3=ENTERTAINER,
+;         bit4=CONDUCTOR:LEFT, bit5=CONDUCTOR:RIGHT2, bit6=CONDUCTOR:RIGHT1, bit7=TECHNI CHORD
+;   SEG5: bit3=SEQUENCER:PLAY, bit4=SEQUENCER:EASY REC, bit5=SEQUENCER:MENU
+;   SEG6: bit0=PM1, bit1=PM2, bit2=PM3, bit3=PM4, bit4=PM5, bit5=PM6, bit6=PM7, bit7=PM8
+;   SEG7: bit0=PM:SET, bit1=PM:NEXT BANK, bit2=PM:BANK VIEW
+;   SEG8: bit3=R1/R2 OCTAVE-, bit4=R1/R2 OCTAVE+, bit5=START/STOP, bit6=SYNCHRO&BREAK, bit7=TAP TEMPO
+;   SEG9: bit6=MEMORY A, bit7=MEMORY B
+;   SEG10: bit2=MENU:SOUND, bit3=MENU:CONTROL, bit4=MENU:MIDI, bit5=MENU:DISK
+;
+; LEFT PANEL (CPL) - Offset +16 to +26:
+;   SEG0: bit0=STANDARD ROCK, bit1=R&ROLL&BLUES, bit2=POP&BALLAD, bit3=FUNK&FUSION,
+;         bit4=SOUL&MODERN DANCE, bit5=BIG BAND&SWING, bit6=JAZZ COMBO
+;   SEG1: bit0=COMPOSER:MEMORY, bit1=COMPOSER:MENU, bit2=SOUND ARR:SET, bit3=SOUND ARR:ON/OFF,
+;         bit4=MUSIC STYLIST, bit5=FADE IN, bit6=FADE OUT
+;   SEG2: bit0=FILL IN 1, bit1=FILL IN 2, bit2=INTRO&ENDING 1, bit3=INTRO&ENDING 2,
+;         bit6=PAGE DOWN, bit7=PAGE UP
+;   SEG3: bit0=DEMO, bit1=MSP BANK, bit2=MSP MENU, bit3=MSP STOP/RECORD
+;   SEG4: bit0=VARIATION 1, bit1=VARIATION 2, bit2=VARIATION 3, bit3=VARIATION 4,
+;         bit4=MUSIC STYLE ARRANGER, bit5=SPLIT POINT, bit6=AUTO PLAY CHORD
+;   SEG5: bit0=MSP1, bit1=MSP2, bit2=MSP3, bit3=MSP4, bit4=MSP5, bit5=MSP6
+;   SEG6: bit0=U.S. TRAD, bit1=COUNTRY, bit2=LATIN, bit3=MARCH&WALTZ,
+;         bit4=PARTY TIME, bit5=SHOWTIME&TRAD DANCE, bit6=WORLD, bit7=CUSTOM
+;   SEG7: bit0=RIGHT 5, bit1=RIGHT 4, bit2=DISPLAY HOLD, bit3=EXIT,
+;         bit4=DOWN 7, bit5=UP 7, bit6=DOWN 8, bit7=UP 8
+;   SEG8: bit0=RIGHT 3, bit1=RIGHT 2, bit2=RIGHT 1,
+;         bit4=DOWN 5, bit5=UP 5, bit6=DOWN 6, bit7=UP 6
+;   SEG9: bit0=LEFT 5, bit1=LEFT 4, bit2=LEFT 3,
+;         bit4=DOWN 3, bit5=UP 3, bit6=DOWN 4, bit7=UP 4
+;   SEG10: bit0=LEFT 2, bit1=LEFT 1, bit2=HELP, bit3=OTHER PARTS/TR,
+;          bit4=DOWN 1, bit5=UP 1, bit6=DOWN 2, bit7=UP 2
+; ============================================================================
 STATE_OF_CPANEL_BUTTONS 	EQU 8E4Ah ; NOTE: 8E4Ah=Right / 8E5Ah=Left
 STATE_OF_CPANEL_BUTTONS_RIGHT = STATE_OF_CPANEL_BUTTONS + 0
 STATE_OF_CPANEL_BUTTONS_LEFT = STATE_OF_CPANEL_BUTTONS + 16
@@ -186,6 +231,40 @@ ENCODER_1_OUTPUT		EQU 8F16h ; Encoder 1 output buffer (2 bytes: value + flags)
 ENCODER_STATE_BASE		EQU 8F18h ; Base of encoder state structure
 ENCODER_HANDLER_TABLE		EQU 0EDA0BCh ; Jump table for encoder-specific handlers (in ROM)
 
+; ============================================================================
+; CONTROL PANEL LED ROW/PATTERN OUTPUT
+; ============================================================================
+; LEDs are addressed via 2-byte sequences: [row_select, pattern]
+; row_select bits 7-6 select panel (0x00-0x0F=CPR, 0xC0-0xCF=CPL)
+;
+; RIGHT PANEL (CPR) LED Rows:
+;   Row 0x00: bit0=SUSTAIN, bit1=DIGITAL EFFECT, bit2=DSP EFFECT, bit3=DIGITAL REVERB,
+;             bit4=ACOUSTIC ILLUSION, bit5=SEQ:PLAY, bit6=SEQ:EASY REC, bit7=SEQ:MENU
+;   Row 0x01: bit0=PIANO, bit1=GUITAR, bit2=STRINGS&VOCAL, bit3=BRASS,
+;             bit4=FLUTE, bit5=SAX&REED, bit6=MALLET&ORCH PERC, bit7=WORLD PERC
+;   Row 0x02: bit0=ORGAN&ACCORDION, bit1=ORCHESTRAL PAD, bit2=SYNTH, bit3=BASS,
+;             bit4=DIGITAL DRAWBAR, bit5=ACCORDION REGISTER, bit6=GM SPECIAL, bit7=DRUM KITS
+;   Row 0x03: bit0=PM1, bit1=PM2, bit2=PM3, bit3=PM4, bit4=PM5, bit5=PM6, bit6=PM7, bit7=PM8
+;   Row 0x04: bit0=PART:LEFT, bit1=PART:RIGHT2, bit2=PART:RIGHT1, bit3=ENTERTAINER,
+;             bit4=COND:LEFT, bit5=COND:RIGHT2, bit6=COND:RIGHT1, bit7=TECHNI CHORD
+;   Row 0x08: bit0=MENU:SOUND, bit1=MENU:CONTROL, bit2=MENU:MIDI, bit3=MENU:DISK
+;   Row 0x0A: bit0=MEMORY A, bit1=MEMORY B
+;   Row 0x0B: bit0=SYNCHRO&BREAK, bit1=R1/R2 OCTAVE-, bit2=R1/R2 OCTAVE+, bit3=BANK VIEW
+;   Row 0x0C: bit0=START/STOP BEAT1, bit1=BEAT2, bit2=BEAT3, bit3=BEAT4
+;
+; LEFT PANEL (CPL) LED Rows:
+;   Row 0xC0: bit0=COMPOSER:MEMORY, bit1=COMPOSER:MENU, bit2=SOUND ARR:SET, bit3=SOUND ARR:ON/OFF,
+;             bit4=MUSIC STYLIST, bit5=FADE IN, bit6=FADE OUT, bit7=DISPLAY HOLD
+;   Row 0xC1: bit0=U.S. TRAD, bit1=COUNTRY, bit2=LATIN, bit3=MARCH&WALTZ,
+;             bit4=PARTY TIME, bit5=SHOWTIME&TRAD DANCE, bit6=WORLD, bit7=CUSTOM
+;   Row 0xC2: bit0=STANDARD ROCK, bit1=R&ROLL&BLUES, bit2=POP&BALLAD, bit3=FUNK&FUSION,
+;             bit4=SOUL&MODERN DANCE, bit5=BIG BAND&SWING, bit6=JAZZ COMBO, bit7=MSP:MENU
+;   Row 0xC3: bit0=VARIATION1, bit1=VARIATION2, bit2=VARIATION3, bit3=VARIATION4,
+;             bit4=MUSIC STYLE ARRANGER, bit5=AUTO PLAY CHORD
+;   Row 0xC4: bit0=FILL IN 1, bit1=FILL IN 2, bit2=INTRO&ENDING 1, bit3=INTRO&ENDING 2,
+;             bit4=SPLIT POINT(L), bit5=SPLIT POINT(C), bit6=SPLIT POINT(R), bit7=TEMPO/PROGRAM
+;   Row 0xC8: bit0=OTHER PARTS/TR
+; ============================================================================
 CPANEL_LEDS__ROW_AND_PATTERN_BYTES	EQU 8F38h ; (word) 8F38h=row_select 8F39h=pattern
 
 ; These seem to be circular buffers:
@@ -400786,14 +400865,14 @@ CPanel_ButtonPollLoop:
 	CALR DELAY_6_TICKS
 	CALR CPanel_RX_Process
 
-	LD A, (STATE_OF_CPANEL_BUTTONS + 11)
-	LD_W 0dh
-	BIT 7, A
+	LD A, (STATE_OF_CPANEL_BUTTONS + 11)  ; Byte 11 is in gap between CPR (0-10) and CPL (16-26), possibly status/mode
+	LD_W 0dh                               ; Default encoder check mode
+	BIT 7, A                               ; Test bit 7 of status byte
 	JR NZ, CPanel_EncoderCheck
-	LD_W 0eh
-	BIT 6, A
+	LD_W 0eh                               ; Alternate mode if bit 7 set
+	BIT 6, A                               ; Test bit 6 of status byte
 	JR NZ, CPanel_EncoderCheck
-	LD_W 0ch
+	LD_W 0ch                               ; Third mode if bit 6 set
 
 CPanel_EncoderCheck:
 	CP (8E6Ah), W
