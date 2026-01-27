@@ -661,6 +661,13 @@ void kn5000_state::machine_start()
 	m_checking_device_led_cn12.resolve();
 	m_CPL_LED.resolve();
 	m_CPR_LED.resolve();
+
+	// Connect button input ports to control panel HLE device
+	for (int i = 0; i < 11; i++)
+	{
+		m_cpanel->set_cpl_port(i, m_CPL_SEG[i].target());
+		m_cpanel->set_cpr_port(i, m_CPR_SEG[i].target());
+	}
 }
 
 void kn5000_state::machine_reset()
