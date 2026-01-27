@@ -28,6 +28,7 @@ public:
 	// Serial interface from main CPU
 	void rxd(int state);
 	void sioclk(int state);
+	void tx_start(int state);  // Called when CPU starts a new byte transmission
 
 	// Callbacks to main CPU
 	auto txd() { return m_txd_cb.bind(); }

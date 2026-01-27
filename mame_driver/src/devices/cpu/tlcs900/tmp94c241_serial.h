@@ -26,6 +26,7 @@ public:
 	auto txd() { return m_txd_cb.bind(); }
 	auto sclk_in() { return m_sclk_in_cb.bind(); }
 	auto sclk_out() { return m_sclk_out_cb.bind(); }
+	auto tx_start() { return m_tx_start_cb.bind(); }  // Signals start of new byte transmission
 	void sioclk(int state);
 
 	uint8_t brNcr_r();
@@ -67,6 +68,7 @@ protected:
 	devcb_write_line m_txd_cb;
 	devcb_write_line m_sclk_in_cb;
 	devcb_write_line m_sclk_out_cb;
+	devcb_write_line m_tx_start_cb;  // Signals start of new byte transmission
 
 	tmp94c241_device *m_cpu;
 };

@@ -2,7 +2,7 @@ ASL_PATH=/home/fsanches/claude_jail/asl-current
 ASL=$(ASL_PATH)/asl -w
 P2BIN=$(ASL_PATH)/p2bin
 
-all: rebuilt_ROMs/kn5000_v10_program.rebuilt.rom rebuilt_ROMs/kn5000_subprogram_v142.rebuilt.rom rebuilt_ROMs/kn5000_subcpu_boot.rebuilt.rom rebuilt_ROMs/kn5000_table_data.rebuilt.rom
+all: rebuilt_ROMs/kn5000_v10_program.rebuilt.rom rebuilt_ROMs/kn5000_subprogram_v142.rebuilt.rom rebuilt_ROMs/kn5000_subcpu_boot.rebuilt.rom rebuilt_ROMs/kn5000_table_data.rebuilt.rom rebuilt_ROMs/hd-ae5000_v2_06i.rebuilt.rom
 	python compare_roms.py
 
 rebuilt_ROMs/kn5000_v10_program.rebuilt.p: tmp94c241.inc maincpu/kn5000_v10_program.asm
@@ -41,6 +41,14 @@ rebuilt_ROMs/kn5000_table_data.rebuilt.rom: rebuilt_ROMs/kn5000_table_data.rebui
 rebuilt_ROMs/kn5000_subcpu_boot.rebuilt.rom: rebuilt_ROMs/kn5000_subcpu_boot.rebuilt.p
 	$(P2BIN) rebuilt_ROMs/kn5000_subcpu_boot.rebuilt.p rebuilt_ROMs/kn5000_subcpu_boot.rebuilt.rom
 
+rebuilt_ROMs/hd-ae5000_v2_06i.rebuilt.p: tmp94c241.inc hdae5000/hd-ae5000_v2_06i.asm
+	mkdir -p rebuilt_ROMs
+	rm -f rebuilt_ROMs/hd-ae5000_v2_06i.rebuilt.p
+	$(ASL) hdae5000/hd-ae5000_v2_06i.asm -o rebuilt_ROMs/hd-ae5000_v2_06i.rebuilt.p
+
+rebuilt_ROMs/hd-ae5000_v2_06i.rebuilt.rom: rebuilt_ROMs/hd-ae5000_v2_06i.rebuilt.p
+	$(P2BIN) rebuilt_ROMs/hd-ae5000_v2_06i.rebuilt.p rebuilt_ROMs/hd-ae5000_v2_06i.rebuilt.rom
+
 
 # Documentation website targets
 DOCS_DIR=../kn5000-docs
@@ -56,7 +64,7 @@ issues:
 website: gallery issues
 	@echo "Website content updated. Don't forget to commit kn5000-docs."
 
-clean: clean_subcpu clean_subcpu_boot clean_maincpu clean_table_data
+clean: clean_subcpu clean_subcpu_boot clean_maincpu clean_table_data clean_hdae5000
 
 clean_maincpu:
 	rm -f rebuilt_ROMs/kn5000_v10_program.rebuilt.*
@@ -72,3 +80,6 @@ clean_table_data:
 
 clean_subcpu_boot:
 	rm -f rebuilt_ROMs/kn5000_subcpu_boot.rebuilt.*
+
+clean_hdae5000:
+	rm -f rebuilt_ROMs/hd-ae5000_v2_06i.rebuilt.*

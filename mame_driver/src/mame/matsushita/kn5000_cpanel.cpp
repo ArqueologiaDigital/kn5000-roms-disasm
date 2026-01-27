@@ -28,7 +28,7 @@
 #define LOG_BUTTONS  (1U << 3)
 #define LOG_LEDS     (1U << 4)
 
-#define VERBOSE (LOG_COMMANDS)
+#define VERBOSE (LOG_COMMANDS | LOG_SERIAL)
 #include "logmacro.h"
 
 DEFINE_DEVICE_TYPE(KN5000_CPANEL, kn5000_cpanel_device, "kn5000_cpanel", "KN5000 Control Panel HLE")
@@ -116,12 +116,26 @@ void kn5000_cpanel_device::rxd(int state)
 	m_rxd = state;
 }
 
+void kn5000_cpanel_device::tx_start(int state)
+{
+	// Called when CPU starts transmitting a new byte - reset RX to sync byte boundaries
+	if (state)
+	{
+		LOGMASKED(LOG_SERIAL, "cpanel tx_start: resetting RX counter for sync\n");
+		m_rx_clock_count = 8;
+		m_rx_shift_register = 0;
+	}
+}
+
 void kn5000_cpanel_device::sioclk(int state)
 {
 	if (m_sioclk_state == state)
 		return;
 
 	m_sioclk_state = state;
+
+	LOGMASKED(LOG_SERIAL, "cpanel sioclk state=%d rxd=%d rx_count=%d tx_count=%d\n",
+		state, m_rxd, m_rx_clock_count, m_tx_clock_count);
 
 	if (state)
 	{
@@ -131,6 +145,9 @@ void kn5000_cpanel_device::sioclk(int state)
 			m_rx_shift_register >>= 1;
 			m_rx_shift_register |= (m_rxd << 7);
 			m_rx_clock_count--;
+
+			LOGMASKED(LOG_SERIAL, "cpanel RX bit: %d, shift_reg=%02X, count=%d\n",
+				m_rxd, m_rx_shift_register, m_rx_clock_count);
 
 			if (m_rx_clock_count == 0)
 			{
@@ -146,6 +163,9 @@ void kn5000_cpanel_device::sioclk(int state)
 		// This prepares the bit for the CPU to sample on the next rising edge
 		if (m_tx_clock_count > 0)
 		{
+			LOGMASKED(LOG_SERIAL, "cpanel TX bit: %d, shift_reg=%02X, count=%d\n",
+				m_tx_shift_register & 1, m_tx_shift_register, m_tx_clock_count);
+
 			m_txd_cb(m_tx_shift_register & 1);
 			m_tx_shift_register >>= 1;
 			m_tx_clock_count--;
@@ -158,10 +178,20 @@ void kn5000_cpanel_device::sioclk(int state)
 					m_tx_shift_register = m_tx_queue.front();
 					m_tx_queue.pop();
 					m_tx_clock_count = 8;
+
+					LOGMASKED(LOG_SERIAL, "cpanel TX next byte: %02X\n", m_tx_shift_register);
+
+					// Pre-output first bit of next byte
+					m_txd_cb(m_tx_shift_register & 1);
+
+					// Advance to bit 1 so the next falling edge outputs bit 1, not bit 0 again
+					m_tx_shift_register >>= 1;
+					--m_tx_clock_count;  // Now 7
 				}
 				else
 				{
 					// Return to idle
+					LOGMASKED(LOG_SERIAL, "cpanel TX done, returning to idle\n");
 					m_txd_cb(1);
 				}
 			}
@@ -171,16 +201,29 @@ void kn5000_cpanel_device::sioclk(int state)
 
 void kn5000_cpanel_device::send_byte(uint8_t data)
 {
+	LOGMASKED(LOG_SERIAL, "cpanel send_byte(%02X) tx_count=%d queue_size=%zu\n",
+		data, m_tx_clock_count, m_tx_queue.size());
+
 	if (m_tx_clock_count == 0)
 	{
 		// Start sending immediately
 		m_tx_shift_register = data;
 		m_tx_clock_count = 8;
+
+		// Pre-output first bit immediately so CPU can sample it on the first rising edge
+		m_txd_cb(m_tx_shift_register & 1);
+		LOGMASKED(LOG_SERIAL, "cpanel TX start: byte=%02X, pre-output bit=%d\n",
+			data, data & 1);
+
+		// Advance to bit 1 so the first falling edge outputs bit 1, not bit 0 again
+		m_tx_shift_register >>= 1;
+		--m_tx_clock_count;  // Now 7
 	}
 	else
 	{
 		// Queue for later
 		m_tx_queue.push(data);
+		LOGMASKED(LOG_SERIAL, "cpanel TX queued: byte=%02X\n", data);
 	}
 }
 

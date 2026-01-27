@@ -198,6 +198,48 @@ The issue tracker is:
 
 This policy ensures the disassembly remains useful for understanding the firmware, not just rebuilding it.
 
+### String Literals in Disassembly (STRICT POLICY)
+
+**When data is clearly readable text, it MUST be represented as a string literal, not raw bytes.**
+
+This is a strict policy to maximize readability and facilitate understanding of the firmware:
+
+1. **Always use string literals for text:**
+   ```asm
+   ; WRONG - raw bytes for ASCII text
+   db 058h, 041h, 050h, 052h, 034h  ; "XAPR4"
+
+   ; CORRECT - string literal
+   db "XAPR4"
+   ```
+
+2. **Detection criteria for strings:**
+   - Sequences of printable ASCII characters (0x20-0x7E)
+   - Null-terminated sequences
+   - Known header signatures (e.g., "XAPR", "MIDI", "WAVE")
+   - Error messages, menu text, file names, version strings
+
+3. **Mixed data handling:**
+   ```asm
+   ; When string is followed by non-printable data:
+   db "ERROR", 0x00, 0x01, 0x02
+
+   ; When string contains special characters, escape or split:
+   db "Line1", 0x0D, 0x0A, "Line2"  ; CR+LF between strings
+   ```
+
+4. **Documentation requirement:**
+   - Add comments explaining the purpose of the string when known
+   - Note encoding if non-ASCII (e.g., Shift-JIS for Japanese text)
+
+5. **Benefits:**
+   - Immediately reveals firmware functionality
+   - Error messages help identify code purpose
+   - Version strings aid in ROM identification
+   - Menu text maps UI to code routines
+
+**This policy applies to all ROM components:** maincpu, subcpu, table_data, and expansion ROMs like HDAE5000.
+
 ### Symbolic Cross-Referencing (STRICT POLICY)
 
 **All cross-references must be symbolic (using labels), never numeric addresses.**
@@ -386,6 +428,7 @@ echo "XX XX XX XX" | xxd -r -p > /tmp/bytes.bin
 **Reference files available:**
 - `original_ROMs/kn5000_subcpu_boot.ic30.unidasm` - Sub CPU boot ROM
 - `original_ROMs/kn5000_v10_program.ic9.unidasm` - Main CPU ROM (if available)
+- `original_ROMs/hd-ae5000_v2_06i.ic4.unidasm` - HDAE5000 expansion ROM
 
 **Note:** unidasm provides a linear disassembly without distinguishing code from data. Manual analysis is still required to identify routine boundaries, data tables, and add meaningful labels/comments.
 
@@ -434,6 +477,7 @@ This is NOT the complete MAME codebase - only the files needed for sketching dri
 | maincpu | `maincpu/kn5000_v10_program.asm` (461K lines) | 99.99% |
 | subcpu payload | `subcpu/kn5000_subprogram_v142.asm` | 100% |
 | table_data | `table_data/kn5000_table_data.asm` | ~32% |
+| hdae5000 | `hdae5000/hd-ae5000_v2_06i.asm` | ~5% (skeleton) |
 
 ### Key Files
 
@@ -449,6 +493,7 @@ This is NOT the complete MAME codebase - only the files needed for sketching dri
 - `rebuilt_ROMs/`: Build output (created by make)
 - `maincpu/images/`, `maincpu/includes/`: Binary image data included in main CPU ROM
 - `table_data/images/`: BMP assets for feature demo
+- `hdae5000/`: HDAE5000 hard disk expansion ROM disassembly
 - `docs/`: Protocol analysis notes (control panel serial communication)
 
 ### Original ROM Files

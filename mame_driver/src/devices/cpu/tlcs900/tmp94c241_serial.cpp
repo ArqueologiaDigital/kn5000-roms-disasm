@@ -29,11 +29,12 @@ tmp94c241_serial_device::tmp94c241_serial_device(const machine_config &mconfig, 
 	m_sioclk_state(0),
 	m_tx_clock_count(0),
 	m_tx_shift_register(0),
-	m_txd(0),
+	m_txd(1),  // Idle state is HIGH for serial lines
 	m_sclk_out(0),
 	m_txd_cb(*this),
 	m_sclk_in_cb(*this),
-	m_sclk_out_cb(*this)
+	m_sclk_out_cb(*this),
+	m_tx_start_cb(*this)
 {
 }
 
@@ -70,10 +71,13 @@ void tmp94c241_serial_device::device_reset()
 
 void tmp94c241_serial_device::TO2_trigger(int state)
 {
-//	logerror("TO2_trigger state=%d\n", state);
-	if ((m_serial_mode & 3) == 0 && BIT(m_serial_control, 1))
+	logerror("TO2_trigger state=%d serial_mode=%02X serial_control=%02X\n", state, m_serial_mode, m_serial_control);
+	// serial_mode & 3 == 0: TO2 trigger clock source
+	// BIT(serial_control, 1) == IOC: 0=SCLK output (master), 1=SCLK input (slave)
+	// For master mode with TO2 trigger, IOC should be 0 (NOT set)
+	if ((m_serial_mode & 3) == 0 && !BIT(m_serial_control, 1))
 	{
-		/* Clock source: TO2 output compare trigger */
+		/* Clock source: TO2 output compare trigger, master mode */
 		sioclk(state);
 	}
 }
@@ -89,7 +93,7 @@ void tmp94c241_serial_device::sioclk(int state)
 	// The slave needs clock pulses for both RX and TX directions.
 	m_sclk_out_cb(state);
 
-	// logerror("sioclk state=%d rxd=%d m_rx_clock_count=%d txd=%d m_tx_clock_count=%d\n", m_sioclk_state, m_rxd, m_rx_clock_count, m_txd, m_tx_clock_count);
+	logerror("sioclk state=%d rxd=%d m_rx_clock_count=%d m_tx_clock_count=%d\n", m_sioclk_state, m_rxd, m_rx_clock_count, m_tx_clock_count);
 
 	if (state)
 	{
@@ -104,6 +108,7 @@ void tmp94c241_serial_device::sioclk(int state)
 			{
 				m_rx_clock_count = 8;
 				m_rx_buffer = m_rx_shift_register;
+				logerror("RX byte received: %02X\n", m_rx_buffer);
 				m_cpu->m_int_reg[(m_channel == 0) ? INTES0 : INTES1] |= 0x08;
 				m_cpu->m_check_irqs = 1;
 			}
@@ -145,6 +150,17 @@ void tmp94c241_serial_device::scNbuf_w(uint8_t data)
 	logerror("buf write: %02X\n", data);
 	m_tx_shift_register = data;
 	m_tx_clock_count = 8;
+
+	// Signal the start of a new byte transmission for receiver synchronization
+	m_tx_start_cb(1);
+
+	// Pre-output first bit immediately so slave can sample it on the first rising edge
+	logerror("pre-output bit #0: %d\n", m_tx_shift_register & 1);
+	m_txd_cb(m_tx_shift_register & 1);
+
+	// Advance to bit 1 so the first falling edge outputs bit 1, not bit 0 again
+	m_tx_shift_register >>= 1;
+	--m_tx_clock_count;  // Now 7
 }
 
 uint8_t tmp94c241_serial_device::scNcr_r()

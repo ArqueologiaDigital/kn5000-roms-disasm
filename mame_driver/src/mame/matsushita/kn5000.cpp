@@ -573,6 +573,7 @@ void kn5000_state::kn5000(machine_config &config)
 	auto &m_cpanel(KN5000_CPANEL(config, "cpanel"));
 	m_maincpu->m_serial[1].lookup()->txd().set(m_cpanel, FUNC(kn5000_cpanel_device::rxd));
 	m_maincpu->m_serial[1].lookup()->sclk_out().set(m_cpanel, FUNC(kn5000_cpanel_device::sioclk));
+	m_maincpu->m_serial[1].lookup()->tx_start().set(m_cpanel, FUNC(kn5000_cpanel_device::tx_start));
 	m_cpanel.txd().set(m_maincpu->m_serial[1], FUNC(tmp94c241_serial_device::rxd));
 	//m_cpanel.sclk_out().set_inputline(m_maincpu, TLCS900_INTA);
 	// .set(m_maincpu->m_serial[1], FUNC(tmp94c241_serial_device::sioclk));
