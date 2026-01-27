@@ -240,6 +240,37 @@ This is a strict policy to maximize readability and facilitate understanding of 
 
 **This policy applies to all ROM components:** maincpu, subcpu, table_data, and expansion ROMs like HDAE5000.
 
+### String Alignment Padding (IMPORTANT)
+
+**Null-terminated strings sometimes have an additional 0xFF padding byte for 16-bit alignment.**
+
+This is an observed pattern in the KN5000 firmware:
+
+1. **Alignment requirement:** When strings are part of pointer tables, they may need to start at even addresses for 16-bit memory access efficiency.
+
+2. **Padding byte format:**
+   ```asm
+   ; String with 0xFF padding for alignment
+   db "ATTENTION!", 000h, 0FFh    ; 12 bytes total (11 + padding)
+
+   ; String without padding (already aligned)
+   db "ACHTUNG !", 000h           ; 10 bytes total
+   ```
+
+3. **When to use padding:**
+   - Check the original ROM bytes to determine if padding exists
+   - Labels like `LABEL_E1E4D0` imply the data must be at address 0xE1E4D0
+   - Calculate byte distances between consecutive labels to determine required padding
+   - If `next_label_addr - current_label_addr` doesn't match your string length, add 0xFF padding
+
+4. **Verification method:**
+   ```bash
+   # Extract original ROM bytes at a label's address
+   xxd -s $((0xE1E4D0 - 0xE00000)) -l 64 original_ROMs/kn5000_v10_program.rom
+   ```
+
+5. **Common pattern:** Multilingual string tables often have this structure where some strings need padding and others don't, depending on the natural length of each translation.
+
 ### Symbolic Cross-Referencing (STRICT POLICY)
 
 **All cross-references must be symbolic (using labels), never numeric addresses.**
