@@ -84,6 +84,11 @@ void tmp94c241_serial_device::sioclk(int state)
 		return;
 
 	m_sioclk_state = state;
+
+	// Only process on rising edge to avoid shifting 2 bits per clock cycle
+	if (!state)
+		return;
+
 	// logerror("sioclk state=%d rxd=%d m_rx_clock_count=%d txd=%d m_tx_clock_count=%d\n", m_sioclk_state, m_rxd, m_rx_clock_count, m_txd, m_tx_clock_count);
 
 	if (m_rx_clock_count){

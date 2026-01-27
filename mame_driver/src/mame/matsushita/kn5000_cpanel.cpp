@@ -116,10 +116,9 @@ void kn5000_cpanel_device::sioclk(int state)
 
 	m_sioclk_state = state;
 
-	// Sample on clock edge (assuming rising edge for now)
 	if (state)
 	{
-		// Receive bit
+		// Rising edge: Sample RXD (receive bit from CPU)
 		if (m_rx_clock_count > 0)
 		{
 			m_rx_shift_register >>= 1;
@@ -133,8 +132,11 @@ void kn5000_cpanel_device::sioclk(int state)
 				process_received_byte(m_rx_shift_register);
 			}
 		}
-
-		// Transmit bit if we have data
+	}
+	else
+	{
+		// Falling edge: Output TXD (transmit bit to CPU)
+		// This prepares the bit for the CPU to sample on the next rising edge
 		if (m_tx_clock_count > 0)
 		{
 			m_txd_cb(m_tx_shift_register & 1);
