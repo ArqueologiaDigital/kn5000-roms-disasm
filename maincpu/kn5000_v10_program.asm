@@ -401512,7 +401512,7 @@ LABEL_FC4A36:
 	PUSH XDE
 	PUSH XIZ
 	PUSH XIX
-	CALR LABEL_FC6C5F
+	CALR CPanel_EncoderDispatch
 	POP XIX
 	POP XIZ
 	POP XDE
@@ -403710,20 +403710,23 @@ LABEL_FC6C54:
 	LD (8EC4h), 000h
 	RET
 
-LABEL_FC6C5F:
+; CPanel_EncoderDispatch - Dispatch to encoder-specific handler
+; Input: A = encoder data value, BC = encoder type/index
+; Extracts encoder ID from bits 0-2 and 6-7, looks up handler in jump table
+CPanel_EncoderDispatch:
 	EXTZ WA
 	LD E, C
-	AND E, 007h
-	AND C, 0c0h
-	SRL 3, C
-	OR C, E
+	AND E, 007h			; Extract bits 0-2 of encoder ID
+	AND C, 0c0h			; Extract bits 6-7
+	SRL 3, C			; Shift to bits 3-4
+	OR C, E				; Combine to form 5-bit index
 	EXTZ BC
-	SLA 002h, BC
-	LDA XDE, 0EDA0BCh
+	SLA 002h, BC			; Multiply by 4 (jump table entry size)
+	LDA XDE, 0EDA0BCh		; Encoder handler jump table
 	EXTS XBC
-	ADD XBC, XDE
-	LD XIX, (XBC)
-	JP T, XIX
+	ADD XBC, XDE			; XBC = table entry address
+	LD XIX, (XBC)			; Load handler address
+	JP T, XIX			; Jump to handler
 
 LABEL_FC6C80:
 	db 033h, 0FFh, 0FFh, 0C9h, 006h, 0C9h, 08Bh, 0F1h
@@ -403792,7 +403795,7 @@ LABEL_FC6E42:
 	CALR LABEL_FC6EA7
 	LD A, L
 	LD BC, 2
-	CALL LABEL_FC6C5F
+	CALL CPanel_EncoderDispatch
 	LD A, (8EE4h)
 	CPL A
 	LD (8EE4h), A
@@ -403800,7 +403803,7 @@ LABEL_FC6E42:
 	CALR LABEL_FC6EA7
 	LD A, L
 	LD BC, 2
-	CALL LABEL_FC6C5F
+	CALL CPanel_EncoderDispatch
 	LDA XWA, 8F10h
 	LD (XWA), L
 	SET 7, (XWA + 001h)
@@ -403808,7 +403811,7 @@ LABEL_FC6E42:
 	CALR LABEL_FC6EA7
 	LD A, L
 	LD BC, 5
-	CALL LABEL_FC6C5F
+	CALL CPanel_EncoderDispatch
 	LD A, (8EF4h)
 	CPL A
 	LD (8EF4h), A
@@ -403816,7 +403819,7 @@ LABEL_FC6E42:
 	CALR LABEL_FC6EA7
 	LD A, L
 	LD BC, 5
-	CALL LABEL_FC6C5F
+	CALL CPanel_EncoderDispatch
 	LDA XWA, 8F16h
 	LD (XWA), L
 	SET 7, (XWA + 001h)
@@ -403877,7 +403880,7 @@ LABEL_FC6EE0:
 	LD A, QIZH
 	EXTZ WA
 	LD BC, 2
-	CALL LABEL_FC6C5F
+	CALL CPanel_EncoderDispatch
 	CP HL, 0ffffh
 	JR Z, LABEL_FC6F2D
 	LD XWA, (XSP + 002h)
@@ -403911,7 +403914,7 @@ LABEL_FC6F33:
 	LD A, QIZH
 	EXTZ WA
 	LD BC, 5
-	CALL LABEL_FC6C5F
+	CALL CPanel_EncoderDispatch
 	CP HL, 0ffffh
 	JR Z, LABEL_FC6F80
 	LD XWA, (XSP + 002h)
