@@ -101,7 +101,7 @@ Compressed_data:
 	; I think this is probably the subprogram rom compressed using
 	; the LZSS algorithm, as described at
 	; https://github.com/felipesanches/kn5000_homebrew/blob/main/kn5000_extract.py
-	db "SLIDE4K", 000h, 000h, 095h, 000h, 07Dh, 05Ah, 0EEh, 0F0h
+	db "SLIDE4K", 000h, 000h, 095h, 000h, "}Z", 0EEh, 0F0h
 	; etc...
 
 
