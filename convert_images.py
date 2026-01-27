@@ -130,6 +130,17 @@ IMAGE_METADATA = {
     "BitmapNtedt0d.bin": (240, 127, 8, "Note edit graphic"),
     # Ntedt0k: a2=0x10=16, 2032/16=127
     "BitmapNtedt0k.bin": (127, 16, 8, "Note edit graphic small"),
+
+    # HDAE5000 Hard Disk Expansion ROM images (320x240, 8-bit grayscale)
+    # These images are stored in the HD-AE5000 expansion ROM at specific offsets
+    # ROM offset 0x28c00: Logo with hard disk graphic
+    "HDAE5000_Logo.bin": (320, 240, 8, "HD-AE5000 product logo with hard disk graphic"),
+    # ROM offset 0x3b800: Hands operating the unit
+    "HDAE5000_Hands.bin": (320, 240, 8, "Hands operating HD-AE5000 unit"),
+    # ROM offset 0x4e400: File selection UI
+    "HDAE5000_FilePanel.bin": (320, 240, 8, "File selection UI panel"),
+    # ROM offset 0x60400: Startup screen
+    "HDAE5000_StartupScreen.bin": (320, 240, 8, "HD-AE5000 Version 2 startup screen"),
 }
 
 
@@ -257,24 +268,25 @@ def convert_image(bin_path: Path, output_dir: Path, palette: list = None) -> boo
 def main():
     # Determine paths
     script_dir = Path(__file__).parent
-    images_dir = script_dir / "maincpu" / "images"
 
     if len(sys.argv) > 1:
         output_dir = Path(sys.argv[1])
     else:
         output_dir = script_dir.parent / "kn5000-docs" / "assets" / "images" / "gallery"
 
-    if not images_dir.exists():
-        print(f"Error: Images directory not found: {images_dir}")
-        sys.exit(1)
-
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    print(f"Converting images from: {images_dir}")
+    # Image directories to process
+    image_dirs = [
+        ("Main CPU", script_dir / "maincpu" / "images"),
+        ("HDAE5000", script_dir / "hdae5000" / "images"),
+    ]
+
     print(f"Output directory: {output_dir}")
 
-    # Load palette for 8-bit indexed color images
-    palette_path = images_dir / PALETTE_FILE
+    # Load palette for 8-bit indexed color images (from maincpu)
+    maincpu_images = script_dir / "maincpu" / "images"
+    palette_path = maincpu_images / PALETTE_FILE
     palette = load_palette(palette_path)
     if palette:
         print(f"Loaded palette: {PALETTE_FILE}")
@@ -282,20 +294,38 @@ def main():
         print("Warning: No palette loaded, 8-bit images will be grayscale")
     print()
 
-    bin_files = sorted(images_dir.glob("*.bin"))
-    converted = 0
-    skipped = 0
+    total_converted = 0
+    total_skipped = 0
 
-    for bin_path in bin_files:
-        if convert_image(bin_path, output_dir, palette):
-            converted += 1
-        else:
-            skipped += 1
+    for dir_name, images_dir in image_dirs:
+        if not images_dir.exists():
+            print(f"Skipping {dir_name}: directory not found ({images_dir})")
+            continue
 
-    print()
-    print(f"Done: {converted} converted, {skipped} skipped")
+        print(f"=== {dir_name} Images ===")
+        print(f"Source: {images_dir}")
 
-    if skipped > 0:
+        bin_files = sorted(images_dir.glob("*.bin"))
+        converted = 0
+        skipped = 0
+
+        for bin_path in bin_files:
+            # HDAE5000 images don't use the main CPU palette (grayscale)
+            use_palette = palette if dir_name != "HDAE5000" else None
+            if convert_image(bin_path, output_dir, use_palette):
+                converted += 1
+            else:
+                skipped += 1
+
+        print(f"  {dir_name}: {converted} converted, {skipped} skipped")
+        print()
+
+        total_converted += converted
+        total_skipped += skipped
+
+    print(f"Total: {total_converted} converted, {total_skipped} skipped")
+
+    if total_skipped > 0:
         print("\nTo add support for skipped images:")
         print("1. Determine dimensions from disassembly or experimentation")
         print("2. Add entry to IMAGE_METADATA in this script")
