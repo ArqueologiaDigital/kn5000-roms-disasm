@@ -165641,16 +165641,28 @@ LABEL_F1712D:
 	LD BC, (XIX + BC)
 	LDA XIX, NOTE_EVENT_DISPATCH_1
 	JP T, XIX + BC
-; Note event dispatch table 1 (raw bytes - needs disassembly)
-; 7 cases (BC 0-6), offset table at 0xE16128
+; Note event buffer copy dispatch - 7 cases (BC 0-6)
+; Selects destination buffer pointer based on case, then copies 46080 bytes
+; Offset table at 0xE16128
 NOTE_EVENT_DISPATCH_1:			; F17155
-	db 0E1h, 076h, 00Ch, 021h, 068h, 022h, 0E1h, 07Ah
-	db 00Ch, 021h, 068h, 01Ch, 0E1h, 07Eh, 00Ch, 021h
-	db 068h, 016h, 0E1h, 082h, 00Ch, 021h, 068h, 010h
-	db 0E1h, 086h, 00Ch, 021h, 068h, 00Ah, 0E1h, 08Ah
-	db 00Ch, 021h, 068h, 004h, 0E1h, 08Eh, 00Ch, 021h
-	db 0E9h, 08Dh, 0E8h, 08Ch, 031h, 000h, 0B4h, 095h
-	db 011h
+	LD XBC, (0C76h)			; Case 0: Load dest pointer
+	JR T, NOTE_EVENT_COPY_COMMON
+	LD XBC, (0C7Ah)			; Case 1: Load dest pointer
+	JR T, NOTE_EVENT_COPY_COMMON
+	LD XBC, (0C7Eh)			; Case 2: Load dest pointer
+	JR T, NOTE_EVENT_COPY_COMMON
+	LD XBC, (0C82h)			; Case 3: Load dest pointer
+	JR T, NOTE_EVENT_COPY_COMMON
+	LD XBC, (0C86h)			; Case 4: Load dest pointer
+	JR T, NOTE_EVENT_COPY_COMMON
+	LD XBC, (0C8Ah)			; Case 5: Load dest pointer
+	JR T, NOTE_EVENT_COPY_COMMON
+	LD XBC, (0C8Eh)			; Case 6: Load dest pointer (falls through)
+NOTE_EVENT_COPY_COMMON:			; F1717D - Common handler
+	LD XIY, XBC			; XIY = destination pointer
+	LD XIX, XWA			; XIX = source pointer
+	LD BC, 0B400h			; BC = 46080 byte count
+	LDIRW_95			; Block copy words
 
 LABEL_F17186:
 	JRL T, LABEL_F16FFD
@@ -165675,12 +165687,15 @@ LABEL_F17189:
 	LD WA, (XIX + WA)
 	LDA XIX, NOTE_EVENT_DISPATCH_2
 	JP T, XIX + WA
-; Note event dispatch table 2 (raw bytes - needs disassembly)
+; Note event dispatch table 2
 ; 7 cases (WA 0-6), offset table at 0xE16136
 NOTE_EVENT_DISPATCH_2:			; F171C4
-	db 0E1h, 076h, 00Ch, 020h, 0BFh, 004h, 060h, 078h
-	db 08Ch, 000h, 0E1h, 07Ah, 00Ch, 020h, 0BFh, 004h
-	db 060h
+	LD XWA, (0C76h)
+	LD (XSP + 004h), XWA
+	JRL T, LABEL_F1725A
+NOTE_EVENT_DISPATCH_2b:			; F171CE
+	LD XWA, (0C7Ah)
+	LD (XSP + 004h), XWA
 
 LABEL_F171D5:
 	LD XWA, (XSP)
@@ -168085,30 +168100,75 @@ LABEL_F1A78B:
 	LD WA, (XIX + WA)
 	LDA XIX, UI_COMPONENT_DISPATCH
 	JP T, XIX + WA
-; UI component dispatch table (raw bytes - needs disassembly)
-; 8 cases (WA 0-7), offset table at 0xE1CEF0, related to grid/focus handling
+; UI component dispatch table - handles cases 0-7 for grid/focus handling
+; Offset table at 0xE1CEF0 selects which handler to run based on WA value
 UI_COMPONENT_DISPATCH:			; F1A7CB
-	db 0C1h, 0D7h, 034h, 021h, 0C9h, 061h, 0D8h, 012h
-	db 028h, 00Bh, 0E1h, 000h, 00Bh, 0E4h, 0CEh, 03Ah
-	db 01Dh, 072h, 00Ah, 0FFh, 0BFh, 00Ah, 037h, 078h
-	db 08Ah, 000h, 0C1h, 0CEh, 034h, 021h, 0C9h, 0EFh
-	db 007h, 0D8h, 012h, 0D8h, 0ECh, 002h, 0F2h, 0F6h
-	db 0D9h, 003h, 031h, 0E3h, 007h, 0E4h, 0E0h, 020h
-	db 038h, 0C1h, 0D8h, 034h, 021h, 0D8h, 012h, 0D8h
-	db 0ECh, 002h, 0F2h, 00Eh, 0DAh, 003h, 031h, 0E3h
-	db 007h, 0E4h, 0E0h, 020h, 038h, 00Bh, 0E1h, 000h
-	db 00Bh, 0E8h, 0CEh, 03Ah, 01Dh, 072h, 00Ah, 0FFh
-	db 0BFh, 010h, 037h, 068h, 04Fh, 0C1h, 0E9h, 034h
-	db 023h, 040h, 0C6h, 0D9h, 003h, 000h, 068h, 011h
-	db 0C1h, 0EAh, 034h, 021h, 0C9h, 0EFh, 004h, 0C9h
-	db 0CCh, 001h, 0C9h, 08Bh, 040h, 0FEh, 0D9h, 003h
-	db 000h, 0D9h, 012h, 0D9h, 0ECh, 002h, 0E3h, 007h
-	db 0E0h, 0E4h, 020h, 038h, 068h, 01Fh, 0D8h, 0AEh
-	db 068h, 002h, 0D8h, 0ADh, 0C1h, 0EAh, 034h, 023h
-	db 0C9h, 0CCh, 00Fh, 066h, 002h, 0CBh, 0FFh, 0CBh
-	db 0CCh, 001h, 0D9h, 012h, 0D9h, 0ECh, 002h, 0E3h
-	db 007h, 0ECh, 0E4h, 020h, 038h, 03Ah, 01Dh, 072h
-	db 00Ah, 0FFh, 0EFh, 060h
+	LD A, (034D7h)			; Load byte from UI state
+	INC 1, A			; Increment by 1
+	EXTZ WA				; Zero-extend A to WA
+	PUSH WA				; Push WA as parameter
+	PUSH_WORD 00E1h			; Push parameter
+	PUSH_WORD 0CEE4h		; Push parameter
+	PUSH XDE			; Push XDE
+	CALL LABEL_FF0A72		; Call handler function
+	LDA XSP, XSP + 00Ah		; Clean up stack (10 bytes)
+	JRL T, LABEL_F1A86F		; Jump to end
+UI_COMPONENT_DISPATCH_CASE1:		; F1A7E5
+	LD A, (034CEh)			; Load byte from UI state
+	SRL 7, A			; Shift right logical by 7
+	EXTZ WA				; Zero-extend A to WA
+	SLA 2, WA			; Shift left by 2 (multiply by 4)
+	LDA XBC, 03D9F6h		; Load table address
+	LD XWA, (XBC + WA)		; Load entry from table
+	PUSH XWA			; Push parameter
+	LD A, (034D8h)			; Load byte from UI state
+	EXTZ WA				; Zero-extend A to WA
+	SLA 2, WA			; Shift left by 2 (multiply by 4)
+	LDA XBC, 03DA0Eh		; Load table address
+	LD XWA, (XBC + WA)		; Load entry from table
+	PUSH XWA			; Push parameter
+	PUSH_WORD 00E1h			; Push parameter
+	PUSH_WORD 0CEE8h		; Push parameter
+	PUSH XDE			; Push XDE
+	CALL LABEL_FF0A72		; Call handler function
+	LDA XSP, XSP + 010h		; Clean up stack (16 bytes)
+	JR T, LABEL_F1A86F		; Jump to end
+UI_COMPONENT_DISPATCH_CASE2:		; F1A820
+	LD C, (034E9h)			; Load byte from UI state
+	LD XWA, 03D9C6h			; Load table address
+	JR T, UI_COMPONENT_DISPATCH_CASE2_COMMON	; Jump to common code
+UI_COMPONENT_DISPATCH_CASE3:		; F1A82B
+	LD A, (034EAh)			; Load byte from UI state
+	SRL 4, A			; Shift right logical by 4
+	AND A, 001h			; Mask to get bit 4
+	LD C, A				; Copy to C
+	LD XWA, 03D9FEh			; Load table address
+UI_COMPONENT_DISPATCH_CASE2_COMMON:	; F1A83C
+	EXTZ BC				; Zero-extend C to BC
+	SLA 2, BC			; Shift left by 2 (multiply by 4)
+	LD XWA, (XWA + BC)		; Load entry from table
+	PUSH XWA			; Push parameter
+	JR T, UI_COMPONENT_DISPATCH_PUSH_CALL	; Jump to push and call
+UI_COMPONENT_DISPATCH_CASE4:		; F1A849
+	LD WA, 6			; Load 6
+	JR T, UI_COMPONENT_DISPATCH_CASE5_COMMON	; Jump to common code
+UI_COMPONENT_DISPATCH_CASE5:		; F1A84D
+	LD WA, 5			; Load 5
+UI_COMPONENT_DISPATCH_CASE5_COMMON:	; F1A84F
+	LD C, (034EAh)			; Load byte from UI state
+	AND A, 00Fh			; Mask lower nibble
+	JR Z, UI_COMPONENT_DISPATCH_CASE5_SKIP	; Skip shift if zero
+	SRL A, C			; Shift A right by C
+UI_COMPONENT_DISPATCH_CASE5_SKIP:	; F1A85A
+	AND C, 001h			; Mask C to get bit 0
+	EXTZ BC				; Zero-extend C to BC
+	SLA 2, BC			; Shift left by 2 (multiply by 4)
+	LD XWA, (XHL + BC)		; Load entry from table
+	PUSH XWA			; Push parameter
+UI_COMPONENT_DISPATCH_PUSH_CALL:	; F1A868
+	PUSH XDE			; Push XDE
+	CALL LABEL_FF0A72		; Call handler function
+	INC_0_XSP			; Increment stack pointer
 
 LABEL_F1A86F:
 	CPW (XSP + 016h), 0004h
@@ -176030,7 +176090,11 @@ LABEL_F200D5:
 	RET
 
 LABEL_F200ED:
-	db 00Eh, 00Eh, 00Eh, 00Eh, 044h, 080h, 0F2h, 000h
+	db 00Eh
+LABEL_F200EE:
+	db 00Eh
+LABEL_F200EF:
+	db 00Eh, 00Eh, 044h, 080h, 0F2h, 000h
 	db 000h, 045h, 059h, 011h, 000h, 000h, 031h, 010h
 	db 000h, 085h, 011h, 0E8h, 0D0h, 0C2h, 0E3h, 0FFh
 	db 000h, 021h, 0E8h, 0ECh, 00Bh, 044h, 000h, 0B0h
@@ -177031,13 +177095,27 @@ SqSngNameTtlFunc:
 	LDA XIX, SQTR_DISPATCH_TABLE_1
 	JP T, XIX + DE
 
-; Sequencer track dispatch table 1 (raw bytes - needs disassembly)
-; Handler for SqTrAsTtlFunc, 6 cases (XDE 0-5)
+; Sequencer track dispatch table 1 - Handler for SqTrAsTtlFunc, 6 cases (XDE 0-5)
 SQTR_DISPATCH_TABLE_1:			; F20D37
-	db 03Ah, 03Bh, 03Ch, 03Eh, 01Dh, 0EEh, 000h, 0F2h
-	db 05Eh, 05Ch, 05Bh, 05Ah, 068h, 00Ch, 03Ah, 03Bh
-	db 03Ch, 03Eh, 01Dh, 0EFh, 000h, 0F2h, 05Eh, 05Ch
-	db 05Bh, 05Ah
+	PUSH XDE
+	PUSH XHL
+	PUSH XIX
+	PUSH XIZ
+	CALL LABEL_F200EE
+	POP XIZ
+	POP XIX
+	POP XHL
+	POP XDE
+	JR T, LABEL_F20D51
+	PUSH XDE
+	PUSH XHL
+	PUSH XIX
+	PUSH XIZ
+	CALL LABEL_F200EF
+	POP XIZ
+	POP XIX
+	POP XHL
+	POP XDE
 
 LABEL_F20D51:
 	LD XHL, 0
