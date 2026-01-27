@@ -154,6 +154,28 @@ MIDI_CC_BREATH_VALUE		EQU 8EE8h ; Breath controller value (CC#2?)
 MIDI_CC_FOOT_VALUE		EQU 8EEAh ; Foot controller value (CC#4?)
 MIDI_CC_VOLUME_VALUE		EQU 8EF4h ; Volume controller value
 
+; Encoder raw input storage (before lookup table processing)
+ENCODER_RAW_MODWHEEL		EQU 8ECAh ; Raw modulation wheel input
+ENCODER_RAW_VOLUME		EQU 8ECCh ; Raw volume input
+ENCODER_RAW_BREATH		EQU 8ED4h ; Raw breath controller input
+ENCODER_RAW_FOOT		EQU 8ED6h ; Raw foot controller input
+ENCODER_RAW_EXPRESSION		EQU 8ED8h ; Raw expression input
+
+; Encoder configuration/mode values
+ENCODER_BREATH_MODE		EQU 8EDAh ; Breath controller mode/enable
+ENCODER_VOLUME_MODE		EQU 8EDCh ; Volume mode value
+ENCODER_RANGE_LIMIT		EQU 8EDEh ; Encoder range limit value
+
+; Encoder lookup tables in ROM
+ENCODER_LUT_MODWHEEL		EQU 0EDA13Ch ; Modulation wheel lookup table
+ENCODER_LUT_VOLUME		EQU 0EDA1BCh ; Volume lookup table
+ENCODER_LUT_BREATH_INDEX	EQU 0EDA2BCh ; Breath controller index lookup (word)
+ENCODER_LUT_BREATH_VALUE	EQU 0EDA2D2h ; Breath controller value lookup
+ENCODER_LUT_BREATH_MULT		EQU 0EDA3D2h ; Breath controller multiplier table
+ENCODER_LUT_BREATH_OFFSET	EQU 0EDA3EAh ; Breath controller offset table
+ENCODER_LUT_FOOT		EQU 0EDA402h ; Foot controller lookup table
+ENCODER_LUT_EXPRESSION		EQU 0EDA482h ; Expression lookup table
+
 ; Encoder state tracking
 ENCODER_0_LAST_VALUE		EQU 8EFCh ; Previous encoder 0 reading (for delta)
 ENCODER_1_LAST_VALUE		EQU 8EFEh ; Previous encoder 1 reading (for delta)
@@ -120907,38 +120929,46 @@ LABEL_ED27E4:
 	db 01Fh, 01Fh, 01Fh, 01Fh, 01Fh, 016h, 017h, 018h
 	db 01Fh, 01Fh, 01Fh, 019h, 01Fh, 01Fh, 01Fh, 01Fh
 	db 01Fh, 01Fh, 01Fh, 01Fh
-	dd LABEL_FC6DEE
-	dd LABEL_FC6DEE
-	dd LABEL_FC6C80
-	dd LABEL_FC6DEE
-	dd LABEL_FC6DEE
-	dd LABEL_FC6CAE
-	dd LABEL_FC6DEE
-	dd LABEL_FC6DEE
-	dd LABEL_FC6DEE
-	dd LABEL_FC6DEE
-	dd LABEL_FC6DEE
-	dd LABEL_FC6DEE
-	dd LABEL_FC6DEE
-	dd LABEL_FC6DEE
-	dd LABEL_FC6DEE
-	dd LABEL_FC6DEE
-	dd LABEL_FC6DEE
-	dd LABEL_FC6DEE
-	dd LABEL_FC6DEE
-	dd LABEL_FC6DEE
-	dd LABEL_FC6DEE
-	dd LABEL_FC6DEE
-	dd LABEL_FC6DEE
-	dd LABEL_FC6DEE
-	dd LABEL_FC6DEE
-	dd LABEL_FC6D2D
-	dd LABEL_FC6D9F
-	dd LABEL_FC6DC9
-	dd LABEL_FC6DEE
-	dd LABEL_FC6DEE
-	dd LABEL_FC6DEE
-	dd LABEL_FC6DE9
+
+; ENCODER_HANDLER_TABLE - Jump table for encoder-specific value processing
+; Indexed by 5-bit encoder ID (0-31). Each entry is a 32-bit address.
+; Most entries point to Encoder_ReturnOne (default/unused).
+; Entry 2: Modulation wheel, Entry 5: Volume slider
+; Entry 25: Breath controller, Entry 26: Foot controller, Entry 27: Expression
+; Entry 31: Simple passthrough
+ENCODER_HANDLER_TABLE_DATA:
+	dd Encoder_ReturnOne		; ID 0: unused
+	dd Encoder_ReturnOne		; ID 1: unused
+	dd Encoder_ProcessModwheel	; ID 2: Modulation wheel
+	dd Encoder_ReturnOne		; ID 3: unused
+	dd Encoder_ReturnOne		; ID 4: unused
+	dd Encoder_ProcessVolume	; ID 5: Volume slider
+	dd Encoder_ReturnOne		; ID 6: unused
+	dd Encoder_ReturnOne		; ID 7: unused
+	dd Encoder_ReturnOne		; ID 8: unused
+	dd Encoder_ReturnOne		; ID 9: unused
+	dd Encoder_ReturnOne		; ID 10: unused
+	dd Encoder_ReturnOne		; ID 11: unused
+	dd Encoder_ReturnOne		; ID 12: unused
+	dd Encoder_ReturnOne		; ID 13: unused
+	dd Encoder_ReturnOne		; ID 14: unused
+	dd Encoder_ReturnOne		; ID 15: unused
+	dd Encoder_ReturnOne		; ID 16: unused
+	dd Encoder_ReturnOne		; ID 17: unused
+	dd Encoder_ReturnOne		; ID 18: unused
+	dd Encoder_ReturnOne		; ID 19: unused
+	dd Encoder_ReturnOne		; ID 20: unused
+	dd Encoder_ReturnOne		; ID 21: unused
+	dd Encoder_ReturnOne		; ID 22: unused
+	dd Encoder_ReturnOne		; ID 23: unused
+	dd Encoder_ReturnOne		; ID 24: unused
+	dd Encoder_ProcessBreath	; ID 25: Breath controller
+	dd Encoder_ProcessFoot		; ID 26: Foot controller
+	dd Encoder_ProcessExpression	; ID 27: Expression
+	dd Encoder_ReturnOne		; ID 28: unused
+	dd Encoder_ReturnOne		; ID 29: unused
+	dd Encoder_ReturnOne		; ID 30: unused
+	dd Encoder_ReturnValue		; ID 31: Simple passthrough
 	db 000h, 002h, 003h, 004h
 	db 005h, 006h, 006h, 007h, 008h, 009h, 00Ah, 00Bh
 	db 00Ch, 00Dh, 00Eh, 00Eh, 00Fh, 010h, 011h, 012h
@@ -403749,65 +403779,225 @@ CPanel_EncoderDispatch:
 	LD XIX, (XBC)			; Load handler address
 	JP T, XIX			; Jump to handler
 
-LABEL_FC6C80:
-	db 033h, 0FFh, 0FFh, 0C9h, 006h, 0C9h, 08Bh, 0F1h
-	db 0CAh, 08Eh, 043h, 0C9h, 0EFh, 001h, 0D8h, 012h
-	db 0F2h, 03Ch, 0A1h, 0EDh, 031h, 0C3h, 007h, 0E4h
-	db 0E0h, 021h, 0C1h, 0E4h, 08Eh, 023h, 0CBh, 030h
-	db 007h, 0C9h, 0F3h, 0B0h, 0F6h, 0F1h, 0E4h, 08Eh
-	db 041h, 0C9h, 08Fh, 0DBh, 012h, 00Eh, 02Eh, 036h
-	db 0FFh, 0FFh, 0F1h, 0CCh, 08Eh, 041h, 0D8h, 012h
-	db 0F2h, 0BCh, 0A1h, 0EDh, 031h, 0C3h, 007h, 0E4h
-	db 0E0h, 021h, 01Eh, 015h, 000h, 0CFh, 089h, 0C1h
-	db 0F4h, 08Eh, 0F1h, 066h, 009h, 0F1h, 0F4h, 08Eh
-	db 041h, 0C7h, 0F8h, 099h, 0DEh, 012h, 0DEh, 08Bh
-	db 04Eh, 00Eh, 0C9h, 08Fh, 0C1h, 0DEh, 08Eh, 023h
-	db 0CBh, 0F7h, 06Fh, 002h, 0CBh, 08Fh, 0CBh, 0A7h
-	db 026h, 000h, 0EBh, 012h, 0EBh, 0EEh, 008h, 0EBh
-	db 088h, 041h, 0ECh, 000h
-	db 000h, 000h, 01Dh, 018h
-	db 00Ch, 0FFh, 0C1h, 0DCh, 08Eh, 021h, 0D8h, 012h
-	db 0D8h, 080h, 0F2h, 0BCh, 0A2h, 0EDh, 031h, 0D3h
-	db 007h, 0E4h, 0E0h, 021h, 0E9h, 012h, 0EBh, 088h
-	db 01Dh, 05Ch, 00Ah, 0FFh, 0EBh, 088h, 041h, 014h
-	db 000h, 000h, 000h, 01Dh, 018h, 00Ch, 0FFh, 0EBh
-	db 0CFh, 07Fh, 000h, 000h, 000h, 0B0h, 0F3h, 043h
-	db 07Fh, 000h, 000h, 000h, 00Eh, 033h, 0FFh, 0FFh
-	db 0C9h, 006h, 0F1h, 0D4h, 08Eh, 041h, 0D8h, 012h
-	db 0F2h, 0D2h, 0A2h, 0EDh, 031h, 0C3h, 007h, 0E4h
-	db 0E0h, 021h, 0C1h, 09Bh, 037h, 023h, 0CBh, 0CCh
-	db 00Fh, 06Eh, 007h, 0C1h, 00Bh, 07Fh, 03Fh, 000h
-	db 066h, 03Eh, 0C1h, 0DAh, 08Eh, 023h, 0CBh, 0D8h
-	db 0B0h, 0F6h, 0C9h, 0EFh, 001h, 0C9h, 08Fh, 0DBh
-	db 012h, 0CBh, 069h, 0D9h, 012h, 0D9h, 081h, 0F2h
-	db 0D2h, 0A3h, 0EDh, 030h, 0D3h, 007h, 0E0h, 0E4h
-	db 022h, 0DAh, 043h, 0F2h, 0EAh, 0A3h, 0EDh, 030h
-	db 0D3h, 007h, 0E0h, 0E4h, 020h, 0D8h, 0A3h, 0DBh
-	db 0C8h, 080h, 040h, 0DBh, 0EFh, 008h, 0DBh, 083h
-	db 0CFh, 089h, 0F1h, 0E8h, 08Eh, 041h, 068h, 00Eh
-	db 0C1h, 0E8h, 08Eh, 0F9h, 0B0h, 0F6h, 0F1h, 0E8h
-	db 08Eh, 041h, 0C9h, 08Fh, 0DBh, 012h, 00Eh, 033h
-	db 0FFh, 0FFh, 0F1h, 0D6h, 08Eh, 041h, 0C9h, 0EFh
-	db 001h, 0D8h, 012h, 0F2h, 002h, 0A4h, 0EDh, 031h
-	db 0C3h, 007h, 0E4h, 0E0h, 021h, 0C1h, 0EAh, 08Eh
-	db 023h, 0CBh, 030h, 007h, 0C9h, 0F3h, 0B0h, 0F6h
-	db 0F1h, 0EAh, 08Eh, 041h, 0C9h, 08Fh, 0DBh, 012h
-	db 00Eh, 0C9h, 006h, 0C9h, 08Bh, 0F1h, 0D8h, 08Eh
-	db 043h, 0C9h, 0EFh, 001h, 0D8h, 012h, 0F2h, 082h
-	db 0A4h, 0EDh, 031h, 0C3h, 007h, 0E4h, 0E0h, 021h
-	db 0F1h, 0E6h, 08Eh, 041h, 0D8h, 012h, 0D8h, 08Bh
-	db 00Eh, 0C9h, 08Fh, 0DBh, 012h, 00Eh, 0DBh, 0A9h
-	db 00Eh, 0C1h, 07Dh, 0C0h, 021h, 0C9h, 0DEh, 066h
-	db 032h, 0C9h, 0DDh, 066h, 019h, 0C9h, 0DCh, 0B0h
-	db 0FEh, 0C1h, 07Fh, 0C0h, 021h, 0C9h, 0CCh, 00Fh
-	db 0B0h, 0F6h, 0C1h, 07Eh, 0C0h, 021h, 0C9h, 0CCh
-	db 00Fh, 0F1h, 0DAh, 08Eh, 041h, 00Eh, 0C1h, 07Fh
-	db 0C0h, 021h, 0C9h, 0CCh, 0FFh, 0B0h, 0F6h, 0C1h
-	db 07Eh, 0C0h, 021h, 0C9h, 0CCh, 0FFh, 0F1h, 0DCh
-	db 08Eh, 041h, 00Eh, 0C1h, 07Fh, 0C0h, 021h, 0C9h
-	db 030h, 007h, 0C9h, 0D8h, 0B0h, 0F6h, 0C1h, 07Eh
-	db 0C0h, 021h, 0C9h, 030h, 007h, 0F1h, 0DEh, 08Eh
-	db 041h, 00Eh
+; ============================================================================
+; Encoder Value Processing Handlers
+; These routines process raw encoder inputs and convert them to MIDI CC values
+; using lookup tables. Called via ENCODER_HANDLER_TABLE dispatch.
+; ============================================================================
+
+; Encoder_ProcessModwheel - Process modulation wheel input (Encoder ID 2)
+; Input: A = raw encoder value
+; Output: HL = processed MIDI CC value, or 0xFFFF if unchanged
+Encoder_ProcessModwheel:
+	LD HL, 0FFFFh			; Default return = no change
+	CPL A				; Invert input value
+	LD C, A
+	LD (ENCODER_RAW_MODWHEEL), C	; Store raw value
+	SRL 001h, A			; Divide by 2
+	EXTZ WA
+	LDA XBC, ENCODER_LUT_MODWHEEL	; Lookup table address
+	LD A, (XBC + WA)		; Get processed value from table
+	LD C, (MIDI_CC_MODWHEEL_VALUE)	; Get current value
+	RES 007h, C			; Clear change flag
+	CP C, A				; Compare with new value
+	RET Z				; Return if unchanged
+	LD (MIDI_CC_MODWHEEL_VALUE), A	; Store new value
+	LD L, A
+	EXTZ HL				; Return value in HL
+	RET
+
+; Encoder_ProcessVolume - Process volume/expression slider (Encoder ID 5)
+; Input: A = raw encoder value
+; Output: HL = processed MIDI CC value, or 0xFFFF if unchanged
+Encoder_ProcessVolume:
+	PUSH IZ
+	LD IZ, 0FFFFh			; Default return = no change
+	LD (ENCODER_RAW_VOLUME), A	; Store raw value
+	EXTZ WA
+	LDA XBC, ENCODER_LUT_VOLUME	; Lookup table address
+	LD A, (XBC + WA)		; Get processed value
+	CALR Encoder_ClampToRange	; Clamp to valid range
+	LD A, L
+	CP A, (MIDI_CC_VOLUME_VALUE)	; Compare with current
+	JR Z, Encoder_Volume_NoChange
+	LD (MIDI_CC_VOLUME_VALUE), A	; Store new value
+	LD IZL, A
+	EXTZ IZ				; IZ = new value
+
+Encoder_Volume_NoChange:
+	LD HL, IZ			; Return value in HL
+	POP IZ
+	RET
+
+; Encoder_ClampToRange - Clamp value L to minimum in ENCODER_RANGE_LIMIT
+; Input: L = value to clamp, A = raw lookup value
+; Output: HL = clamped and scaled value
+Encoder_ClampToRange:
+	LD L, A
+	LD C, (ENCODER_RANGE_LIMIT)	; Get minimum limit
+	CP L, C				; Compare with limit
+	JR NC, Encoder_Clamp_OK		; Skip if >= limit
+	LD L, C				; Clamp to minimum
+
+Encoder_Clamp_OK:
+	SUB L, C			; Subtract minimum
+	LD_H 000h
+	EXTZ XHL
+	SLL 008h, XHL			; Scale up (multiply by 256)
+	LD XWA, XHL
+	LD XBC, 0000ECh			; Divisor
+	CALL 0FF0C18h			; Division routine
+	LD A, (ENCODER_VOLUME_MODE)	; Get mode value
+	EXTZ WA
+	ADD WA, WA			; Double for word table index
+	LDA XBC, ENCODER_LUT_BREATH_INDEX ; Index table
+	LD BC, (XBC + WA)		; Get index offset
+	EXTZ XBC
+	LD XWA, XHL
+	CALL 0FF0A5Ch			; Processing routine
+	LD XWA, XHL
+	LD XBC, 00000014h		; Constant
+	CALL 0FF0C18h			; Division
+	CP XHL, 0000007Fh		; Clamp to 127 max
+	RET ULE				; Return if <= 127
+	LD XHL, 0000007Fh		; Clamp to 127
+	RET
+
+; Encoder_ProcessBreath - Process breath controller input
+; Input: A = raw encoder value
+; Output: HL = processed MIDI CC value, or 0xFFFF if unchanged
+Encoder_ProcessBreath:
+	LD HL, 0FFFFh			; Default return = no change
+	CPL A				; Invert input
+	LD (ENCODER_RAW_BREATH), A	; Store raw value
+	EXTZ WA
+	LDA XBC, ENCODER_LUT_BREATH_VALUE ; Lookup table
+	LD A, (XBC + WA)		; Get processed value
+	LD C, (0379Bh)			; Get system mode flags
+	AND C, 00Fh			; Mask relevant bits
+	JR NZ, Encoder_Breath_Process	; If mode active, process
+	CP (07F0Bh), 000h		; Check alternate condition
+	JR Z, Encoder_Breath_Simple	; Simple processing if clear
+
+Encoder_Breath_Process:
+	LD C, (ENCODER_BREATH_MODE)	; Get breath mode
+	CP C, 0
+	RET Z				; Return if disabled
+	SRL 001h, A			; Divide by 2
+	LD L, A
+	EXTZ HL
+	DEC 1, C			; Decrement mode for index
+	EXTZ BC
+	ADD BC, BC			; Word index
+	LDA XWA, ENCODER_LUT_BREATH_MULT ; Multiplier table
+	LD DE, (XWA + BC)		; Get multiplier
+	MUL XHL, DE			; Multiply
+	LDA XWA, ENCODER_LUT_BREATH_OFFSET ; Offset table
+	LD WA, (XWA + BC)		; Get offset
+	SUB HL, WA			; Subtract offset
+	ADD HL, 04080h			; Add center offset
+	SRL 008h, HL			; Divide by 256
+	ADD HL, HL			; Double
+	LD A, L
+	LD (MIDI_CC_BREATH_VALUE), A	; Store result
+	JR T, Encoder_Breath_Done
+
+Encoder_Breath_Simple:
+	CP (MIDI_CC_BREATH_VALUE), A	; Compare with current
+	RET Z				; Return if unchanged
+	LD (MIDI_CC_BREATH_VALUE), A	; Store new value
+	LD L, A
+	EXTZ HL
+
+Encoder_Breath_Done:
+	RET
+
+; Encoder_ProcessFoot - Process foot controller input
+; Input: A = raw encoder value
+; Output: HL = processed MIDI CC value, or 0xFFFF if unchanged
+Encoder_ProcessFoot:
+	LD HL, 0FFFFh			; Default return = no change
+	LD (ENCODER_RAW_FOOT), A	; Store raw value
+	SRL 001h, A			; Divide by 2
+	EXTZ WA
+	LDA XBC, ENCODER_LUT_FOOT	; Lookup table
+	LD A, (XBC + WA)		; Get processed value
+	LD C, (MIDI_CC_FOOT_VALUE)	; Get current value
+	RES 007h, C			; Clear change flag
+	CP C, A				; Compare
+	RET Z				; Return if unchanged
+	LD (MIDI_CC_FOOT_VALUE), A	; Store new value
+	LD L, A
+	EXTZ HL				; Return value in HL
+	RET
+
+; Encoder_ProcessExpression - Process expression controller input
+; Input: A = raw encoder value
+; Output: HL = processed MIDI CC value (always returns value, no skip)
+Encoder_ProcessExpression:
+	CPL A				; Invert input
+	LD C, A
+	LD (ENCODER_RAW_EXPRESSION), C	; Store raw value
+	SRL 001h, A			; Divide by 2
+	EXTZ WA
+	LDA XBC, ENCODER_LUT_EXPRESSION	; Lookup table
+	LD A, (XBC + WA)		; Get processed value
+	LD (MIDI_CC_EXPRESSION_VALUE), A ; Store value
+	EXTZ WA
+	LD HL, WA			; Return value in HL
+	RET
+
+; Encoder_ReturnValue - Simple passthrough: returns input value in HL
+; Input: A = value
+; Output: HL = value
+Encoder_ReturnValue:
+	LD L, A
+	EXTZ HL
+	RET
+
+; Encoder_ReturnOne - Returns constant 1
+; Output: HL = 1
+Encoder_ReturnOne:
+	LD HL, 1
+	RET
+
+; Encoder_ModeSelect - Select processing mode based on system state
+; Reads mode value from 0xC07D and configures encoder processing accordingly
+Encoder_ModeSelect:
+	LD A, (0C07Dh)			; Get mode selector
+	CP A, 6
+	JR Z, Encoder_Mode6		; Jump if mode 6
+	CP A, 5
+	JR Z, Encoder_Mode5		; Jump if mode 5
+	CP A, 4
+	RET NZ				; Return if not mode 4
+	; Mode 4: Configure breath mode
+	LD A, (0C07Fh)
+	AND A, 00Fh			; Mask low nibble
+	RET Z				; Return if zero
+	LD A, (0C07Eh)
+	AND A, 00Fh			; Mask low nibble
+	LD (ENCODER_BREATH_MODE), A	; Set breath mode
+	RET
+
+Encoder_Mode5:
+	LD A, (0C07Fh)
+	AND A, 0FFh			; Full byte check
+	RET Z				; Return if zero
+	LD A, (0C07Eh)
+	AND A, 0FFh			; Full byte
+	LD (ENCODER_VOLUME_MODE), A	; Set volume mode
+	RET
+
+Encoder_Mode6:
+	LD A, (0C07Fh)
+	RES 007h, A			; Clear bit 7
+	CP A, 0
+	RET Z				; Return if zero
+	LD A, (0C07Eh)
+	RES 007h, A			; Clear bit 7
+	LD (ENCODER_RANGE_LIMIT), A	; Set range limit
+	RET
 
 LABEL_FC6E42:
 	LD (ADMOD2), 083h
