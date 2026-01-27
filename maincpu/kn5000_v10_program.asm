@@ -123,7 +123,7 @@ CPANEL_RX_PACKET_BYTE_1		EQU 8D94h ; (byte) First byte from incoming panel packe
 CPANEL_RX_PACKET_BYTE_2		EQU 8D95h ; (byte) Second byte from incoming panel packets
 					   ; (2nd Value saved to
 					   ;  XIZ + IX(mod 080h) array)
-CPANEL_VAR__8D96		EQU 8D96h ; (byte) // Another value saved to XIZ + IX(mod 080h) array (but later read at FC4AC1)
+CPANEL_LAST_EVENT_VALUE		EQU 8D96h ; (byte) Last processed event value (stored to event queue)
 CPANEL_COUNTER_DOWN_FROM_200	EQU 8D97h ; (byte) counts down
 					   ; from 0c8h (=200) to zero.
 CPANEL_COUNTER_UP_TO_20		EQU 8D98h ; (byte) counts up to 014h (=20).
@@ -162,6 +162,7 @@ ENCODER_1_STATUS		EQU 8F06h ; Encoder 1 status flags (bit 3 = changed)
 ENCODER_0_OUTPUT		EQU 8F10h ; Encoder 0 output buffer (2 bytes: value + flags)
 ENCODER_1_OUTPUT		EQU 8F16h ; Encoder 1 output buffer (2 bytes: value + flags)
 ENCODER_STATE_BASE		EQU 8F18h ; Base of encoder state structure
+ENCODER_HANDLER_TABLE		EQU 0EDA0BCh ; Jump table for encoder-specific handlers (in ROM)
 
 CPANEL_LEDS__ROW_AND_PATTERN_BYTES	EQU 8F38h ; (word) 8F38h=row_select 8F39h=pattern
 
@@ -400394,11 +400395,13 @@ CPanel_InitHardware:
 	LDW (CPANEL_LED_READ_PTR), 0000h
 	CALR DELAY_3000_LOOPS
 
-	CALR LABEL_FC3FA9
+	CALR CPanel_SendInitSequence
 	RET
 
 
-LABEL_FC3FA9:
+; CPanel_SendInitSequence - Send initialization command sequence to control panel MCUs
+; Commands sent: 0x1F 0x1A, 0x1D 0x00, 0xDD 0x03, 0x1E 0x80
+CPanel_SendInitSequence:
 	LD_A 01fh
 	LD_W 01ah
 	CALR CPanel_SendCommand
@@ -401490,7 +401493,7 @@ LABEL_FC49C3:
 	LD (XIZ + IX), A
 	CALR CPanel_IncEventPtr
 
-	LD (CPANEL_VAR__8D96), A
+	LD (CPANEL_LAST_EVENT_VALUE), A
 	LD (XIZ - 4), IX
 	DECW 3, (XIZ - 2)
 	LD (CPANEL_RX_READ_PTR), IY
@@ -401516,7 +401519,7 @@ CPanel_RX_EncoderPacket:
 LABEL_FC4A14:
 	LD (XIZ + IX), L
 	CALR CPanel_IncEventPtr
-	LD (CPANEL_VAR__8D96), L
+	LD (CPANEL_LAST_EVENT_VALUE), L
 	LD (XIZ + IX), 0ffh
 	CALR CPanel_IncEventPtr
 	LD (XIZ - 4), IX
@@ -401582,7 +401585,7 @@ LABEL_FC4A8B:
 	CALR LABEL_FC4A36
 	POP WA
 	CP HL, 0ffffh
-	LD (CPANEL_VAR__8D96), L
+	LD (CPANEL_LAST_EVENT_VALUE), L
 	POP HL
 	POP BC
 	JR NZ, LABEL_FC4AC1
@@ -401594,7 +401597,7 @@ LABEL_FC4AB7:
 	JRL T, LABEL_FC4B04
 
 LABEL_FC4AC1:
-	LD A, (CPANEL_VAR__8D96)
+	LD A, (CPANEL_LAST_EVENT_VALUE)
 
 c:
 	LD (XIZ + IX), A
@@ -403740,7 +403743,7 @@ CPanel_EncoderDispatch:
 	OR C, E				; Combine to form 5-bit index
 	EXTZ BC
 	SLA 002h, BC			; Multiply by 4 (jump table entry size)
-	LDA XDE, 0EDA0BCh		; Encoder handler jump table
+	LDA XDE, ENCODER_HANDLER_TABLE
 	EXTS XBC
 	ADD XBC, XDE			; XBC = table entry address
 	LD XIX, (XBC)			; Load handler address
