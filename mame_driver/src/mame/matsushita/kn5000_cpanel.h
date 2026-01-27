@@ -17,6 +17,8 @@
 
 #pragma once
 
+#include <queue>
+
 class kn5000_cpanel_device :
 	public device_t
 {

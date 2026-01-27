@@ -23,10 +23,6 @@
 #include "emu.h"
 #include "kn5000_cpanel.h"
 
-#include <queue>
-
-#include "logmacro.h"
-
 #define LOG_COMMANDS (1U << 1)
 #define LOG_SERIAL   (1U << 2)
 #define LOG_BUTTONS  (1U << 3)
