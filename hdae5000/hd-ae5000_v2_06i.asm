@@ -47,7 +47,8 @@
 ;   0x28033B  HDAE5000_Util_033B - Utility routine
 ;   0x280368  HDAE5000_Util_0368 - Utility routine
 ;   0x2803C2  HDAE5000_Register_Frame - Register frame handler callback
-;   0x28F543  HDAE5000_Alloc_Memory - Memory allocation routine
+;   0x28F543  HDAE5000_Alloc_Memory - Display parameter lookup (DISASSEMBLED)
+;   0x28F570  HDAE5000_Get_Init_Flag - Return HD presence flag (DISASSEMBLED)
 ;
 ; Code Section 2 (0x28F662-0x2FFFFF):
 ;   0x28F662  HDAE5000_Frame_Handler - Main frame handler entry point
@@ -57,9 +58,9 @@
 ;   0x28F781  HDAE5000_Frame_Handler_Exit - Exit via JP to PPORT handler
 ;   0x28F785  HDAE5000_Clear_Work_Buffer - Clear 0xF52A bytes at 0x22A000
 ;   0x28F7DD  HDAE5000_Delay_Loop - Delay/timing utility
-;   0x28F7EE  HDAE5000_VGA_Port_Write - Write to VGA ports 0x3C8/0x3C9
-;   0x28F813  HDAE5000_Palette_Setup - Palette configuration
-;   0x28F8E0  HDAE5000_Load_Palette - Load 256-entry palette table
+;   0x28F7EE  HDAE5000_VGA_Port_Write - Write to VGA port (mem-mapped at 0x170000)
+;   0x28F813  HDAE5000_Palette_Setup - Set one VGA palette entry (LABEL EXPOSED)
+;   0x28F8E0  HDAE5000_Load_Palette - Load all 256 palette entries (DISASSEMBLED)
 ;   0x28F90B  HDAE5000_Ret_Stub - Just returns (placeholder)
 ;   0x28F90C  HDAE5000_Display_Init - Display/callback initialization
 ;   0x28F97E  HDAE5000_Calc_Offset_16 - Calculate 16-byte offset in table
@@ -219,13 +220,36 @@ HDAE5000_Register_Frame:		; 2803C2h
 	binclude "includes/code_2803c2_28f542.bin"
 
 HDAE5000_Alloc_Memory:			; 28F543h
-	; Memory allocation routine
-	; Input: XBC = allocation type (0x01E000A1, A2, or A3)
-	; Output: XHL = pointer to allocated memory or 0 if invalid type
-	;   A1 -> 0x2E61CE
-	;   A2 -> (determined by jump at 0x28F564)
-	;   A3 -> (determined by jump at 0x28F56A)
-	binclude "includes/code_28f543_28f575.bin"
+	; Memory/display parameter lookup routine
+	; Input: XBC = request type (0x01E000A1, A2, or A3)
+	; Output: XHL = result based on type:
+	;   A1 -> 0x2E61CE (ROM palette data pointer)
+	;   A2 -> 0x140 (320 decimal - display width)
+	;   A3 -> 0xF0 (240 decimal - display height)
+	;   else -> 0 (invalid type)
+	cp	XBC, 01E000A3h		; Check for type A3
+	jr	Z, .type_A3
+	cp	XBC, 01E000A2h		; Check for type A2
+	jr	Z, .type_A2
+	cp	XBC, 01E000A1h		; Check for type A1
+	jr	Z, .type_A1
+	ld	XHL, 0			; Invalid type - return 0
+	ret
+.type_A1:
+	lda	XHL, 2E61CEh		; Return palette data pointer
+	ret
+.type_A2:
+	ld	XHL, 00000140h		; Return 320 (width)
+	ret
+.type_A3:
+	ld	XHL, 000000F0h		; Return 240 (height)
+	ret
+
+HDAE5000_Get_Init_Flag:			; 28F570h
+	; Returns HD presence flag in L
+	; Output: L = value from HDAE5000_INIT_FLAG (0x230EDA)
+	ld	L, (HDAE5000_INIT_FLAG)
+	ret
 
 ; ============================================================================
 ; BOOT INITIALIZATION ROUTINE (0x28F576 - 0x28F661)
@@ -403,13 +427,48 @@ HDAE5000_Frame_Handler:			; 28F662h
 HDAE5000_Clear_Work_Buffer:		; 28F785h
 	; 1. Clear 0xF52A bytes at 0x22A000 using LDIRW
 	; 2. Copy 0x0C82 bytes from 0x2F94B2 to 0x23952A using LDIR
-	; Contains: Clear_Work_Buffer, Delay_Loop, VGA_Port_Write, Palette_Setup
-	binclude "includes/code_28f785_28f8df.bin"
+	; Contains: Clear_Work_Buffer (0x28F785), Delay_Loop (0x28F7DD),
+	;           VGA_Port_Write (0x28F7EE)
+	binclude "includes/code_28f785_28f812.bin"
+
+HDAE5000_Palette_Setup:			; 28F813h
+	; Set one VGA palette entry
+	; Input: A = palette index (0-255)
+	;        XBC = pointer to RGBX color data (4 bytes)
+	; Writes to VGA DAC ports at 0x170000+port:
+	;   0x3C8 = palette index register
+	;   0x3C9 = R, G, B data (sequential writes)
+	; RGB values are stored as 8-bit but shifted right 4 for VGA (6-bit)
+	binclude "includes/code_28f813_28f8df.bin"
 
 HDAE5000_Load_Palette:			; 28F8E0h
 	; Load all 256 VGA palette entries from ROM data
-	; Iterates IZ from 0xFF down to 0, calling Palette_Setup for each
-	binclude "includes/code_28f8e0_28f90a.bin"
+	; Input: XWA = pointer to palette data (256 entries × 4 bytes)
+	; Iterates from index 255 down to 0, calling Palette_Setup for each
+	;
+	; Each palette entry is 4 bytes: RGBX (X unused)
+	; VGA DAC ports: 0x3C8 = index, 0x3C9 = R/G/B data (mapped at 0x170000+port)
+	db	0EFh, 06Ch		; dec 4, XSP (allocate 4 bytes on stack)
+	push	IZ
+	db	0BFh, 02h, 60h		; ld (XSP+0x02), XWA  ; store palette ptr
+	ld	IZ, 00FFh		; IZ = 255 (palette index counter)
+	cp	IZ, 0			; initial check
+	jr	LT, .done		; skip loop if IZ < 0 (never happens here)
+.loop:
+	ld	E, IZL			; E = current palette index
+	ld	WA, IZ
+	exts	XWA			; sign-extend WA to XWA
+	db	0E8h, 0EEh, 02h		; sll 2, XWA  ; XWA = index × 4
+	ld	XBC, XWA		; XBC = offset
+	db	0AFh, 02h, 81h		; add XBC, (XSP+0x02)  ; XBC = palette_ptr + offset
+	ld	A, E			; A = palette index
+	calr	HDAE5000_Palette_Setup	; Set one palette entry
+	sub	IZ, 0001h		; IZ--
+	jr	GE, .loop		; continue while IZ >= 0
+.done:
+	pop	IZ
+	db	0EFh, 64h		; inc 4, XSP (deallocate stack)
+	ret
 
 HDAE5000_Finalize_Init:			; 28F90Bh
 	; Final initialization and remaining code section 2A routines
