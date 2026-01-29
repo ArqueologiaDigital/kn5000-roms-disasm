@@ -9396,7 +9396,7 @@ LABEL_01FAFF:
 	BIT 1, (103Eh)
 	JR Z, LABEL_01FB2F
 	RES 1, (103Eh)
-	CALL LABEL_020FBC
+	CALL Cmd_Check_E2_Pending
 	CALL LABEL_034CDB
 	LD WA, (0F012h)
 	LD BC, WA
@@ -11160,57 +11160,66 @@ LABEL_020E84:
 	RET
 
 
+; ----------------------------------------------------------------------------
+; INT0_HANDLER - External Interrupt 0 Handler (Inter-CPU Command Reception)
+; Entry: Triggered when main CPU sends command via latch at 0x120000
+; Notes: Reads command byte from latch, dispatches based on value:
+;        0xE1 = Start E1 command (6 bytes, state 2) - bulk data transfer setup
+;        0xE2 = Start E2 command (10 bytes, state 3) - extended data transfer
+;        0xE3 = Payload ready signal (sets PAYLOAD_LOADED_FLAG bit 6)
+;        Other = Standard command (1-32 bytes based on bits 4-0, state 1)
+; ----------------------------------------------------------------------------
 INT0_HANDLER:				; 20E86
 	PUSH XWA
-	BIT 2, (PD)  ; MSTAT0
-	JR NZ, LABEL_020EFF
+	BIT 2, (PD)  ; MSTAT0 - check if busy
+	JR NZ, INT0_Exit
 	LD A, (INTER_CPU_COMM_LATCHES)
 	LD (BYTE_FROM_MAINCPU_LATCH), A
 	CP A, 0e1h
-	JR NZ, LABEL_020EB1
-	LD (CMD_PROCESSING_STATE), 002h
-	LDA XWA, 1116h
-	LD (10E4h), XWA
+	JR NZ, INT0_Check_E2
+	LD (CMD_PROCESSING_STATE), 002h	; E1 command - state 2
+	LDA XWA, 1116h			; E1 data buffer
+	LD (10E4h), XWA			; Save DMA target
 	LDC_DMAD0_XWA
-	LD WA, 6
+	LD WA, 6			; 6 bytes for E1
 	LDC_DMAM0_WA
-	JR T, LABEL_020EF7
+	JR T, INT0_Start_DMA
 
-LABEL_020EB1:
+INT0_Check_E2:				; 020EB1h
 	CP A, 0e2h
-	JR NZ, LABEL_020ECE
-	LD (CMD_PROCESSING_STATE), 003h
-	LDA XWA, 111Ch
+	JR NZ, INT0_Check_E3
+	LD (CMD_PROCESSING_STATE), 003h	; E2 command - state 3
+	LDA XWA, 111Ch			; E2 data buffer
 	LD (10E4h), XWA
 	LDC_DMAD0_XWA
-	LD WA, 000ah
+	LD WA, 000ah			; 10 bytes for E2
 	LDC_DMAM0_WA
-	JR T, LABEL_020EF7
+	JR T, INT0_Start_DMA
 
-LABEL_020ECE:
+INT0_Check_E3:				; 020ECEh
 	CP A, 0e3h
-	JR NZ, LABEL_020ED9
-	SET 6, (PAYLOAD_LOADED_FLAG)
-	JR T, LABEL_020EFC
+	JR NZ, INT0_Standard_Cmd
+	SET 6, (PAYLOAD_LOADED_FLAG)	; E3 = payload ready
+	JR T, INT0_Ack
 
-LABEL_020ED9:
-	LD (CMD_PROCESSING_STATE), 001h
-	LDA XWA, 10F0h
+INT0_Standard_Cmd:			; 020ED9h - standard variable-length command
+	LD (CMD_PROCESSING_STATE), 001h	; State 1
+	LDA XWA, 10F0h			; Standard command buffer
 	LD (10E4h), XWA
 	LDC_DMAD0_XWA
 	LD A, (BYTE_FROM_MAINCPU_LATCH)
-	AND A, 01fh
-	INC 1, A
+	AND A, 01fh			; Bits 4-0 = length - 1
+	INC 1, A			; Add 1 for actual length
 	EXTZ WA
 	LDC_DMAM0_WA
 
-LABEL_020EF7:
-	LD (DMA0V), 00ah
+INT0_Start_DMA:				; 020EF7h
+	LD (DMA0V), 00ah		; Start DMA channel 0
 
-LABEL_020EFC:
-	RES 1, (PD)  ; SSTAT1
+INT0_Ack:				; 020EFCh
+	RES 1, (PD)  ; SSTAT1 - acknowledge interrupt
 
-LABEL_020EFF:
+INT0_Exit:				; 020EFFh
 	POP XWA
 	RETI
 
@@ -11227,16 +11236,16 @@ LABEL_020EFF:
 MICRODMA_CH2_HANDLER:  ; Channel #2 completion		; 20F01
 	RES 2, (T8RUN)
 	CP (DMA_XFER_STATE), 001h
-	JR NZ, LABEL_020F12
+	JR NZ, MICRODMA_CH2_State2
 	LD (DMA_XFER_STATE), 000h
-	JR T, LABEL_020F1E
+	JR T, MICRODMA_CH2_Done
 
-LABEL_020F12:
+MICRODMA_CH2_State2:			; 020F12h - two-phase transfer, go to state 1
 	CP (DMA_XFER_STATE), 002h
-	JR NZ, LABEL_020F1E
+	JR NZ, MICRODMA_CH2_Done
 	LD (DMA_XFER_STATE), 001h
 
-LABEL_020F1E:
+MICRODMA_CH2_Done:			; 020F1Eh
 	RETI
 
 
@@ -11251,7 +11260,7 @@ LABEL_020F1E:
 ;   State 3: Process E2 command (transfer parameters)
 ;   State 4: Process E3 command (payload ready signal)
 ;=============================================================================
-MICRODMA_CH0_HANDLER  ; Channel #0 completion		; 20F1F
+MICRODMA_CH0_HANDLER:			; 20F1Fh - Channel #0 completion (command dispatch)
 	PUSH XIZ
 	PUSH XIY
 	PUSH XIX
@@ -11261,66 +11270,67 @@ MICRODMA_CH0_HANDLER  ; Channel #0 completion		; 20F1F
 	PUSH XWA
 	LD A, (CMD_PROCESSING_STATE)
 	CP A, 4
-	JR Z, LABEL_020F9B
+	JR Z, CH0_State4_E1_Done
 	CP A, 3
-	JR Z, LABEL_020F88
+	JR Z, CH0_State3_E2
 	CP A, 2
-	JR Z, LABEL_020F6D
+	JR Z, CH0_State2_E1
 	CP A, 1
-	JR NZ, LABEL_020FA7
+	JR NZ, CH0_Timer_Reset
+	; State 1: Standard command processing
 	PUSHW 0000h
-	PUSHW 10f0h
+	PUSHW 10f0h			; Command buffer address
 	LD C, (BYTE_FROM_MAINCPU_LATCH)
 	LD A, C
 	AND A, 01fh
-	INC 1, A
+	INC 1, A			; Length = (byte & 0x1F) + 1
 	EXTZ WA
 	PUSH WA
 	SRL 5, C  ; The 3 highest bits from the byte received via maincpu latch
 	             ; are used to select one of the 8 call-table entries
 	LD A, C
 	EXTZ WA
-	SLA 2, WA
+	SLA 2, WA			; Multiply by 4 (table entry size)
 	LDA XBC, CALL_TABLE_F46C:24
 	LD XWA, (XBC + WA)
-	CALL T, XWA
+	CALL T, XWA			; Dispatch to handler
 	INC 6, XSP
 	LD (CMD_PROCESSING_STATE), 000h
-	JR T, LABEL_020FA4
+	JR T, CH0_Ack
 
-LABEL_020F6D:
-	LDA XWA, 1116h
-	LD XBC, (XWA)
+CH0_State2_E1:				; 020F6Dh - E1 command phase 1 complete, start phase 2
+	LDA XWA, 1116h			; E1 data buffer
+	LD XBC, (XWA)			; Get DMA destination address
 	LDC_DMAD0_XBC
-	LD WA, (XWA + 004h)
+	LD WA, (XWA + 004h)		; Get DMA byte count
 	LDC_DMAM0_WA
-	LD (DMA0V), 00ah
-	LD (CMD_PROCESSING_STATE), 004h
-	JR T, LABEL_020FA7
+	LD (DMA0V), 00ah		; Start DMA
+	LD (CMD_PROCESSING_STATE), 004h	; Move to state 4
+	JR T, CH0_Timer_Reset
 
-LABEL_020F88:
+CH0_State3_E2:				; 020F88h - E2 command complete
 	LD (10EEh), 0ffh
 	LD (CMD_PROCESSING_STATE), 000h
-	SET 1, (PD)  ; SSTAT1
-	SET 7, (1126h)
-	JR T, LABEL_020FA7
+	SET 1, (PD)  ; SSTAT1 - signal ready
+	SET 7, (1126h)			; Set E2 pending flag
+	JR T, CH0_Timer_Reset
 
-LABEL_020F9B:
+CH0_State4_E1_Done:			; 020F9Bh - E1 two-phase transfer complete
 	LD (CMD_PROCESSING_STATE), 000h
 	RES 7, (PAYLOAD_LOADED_FLAG)
 
-LABEL_020FA4:
-	SET 1, (PD)  ; SSTAT1
+CH0_Ack:				; 020FA4h
+	SET 1, (PD)  ; SSTAT1 - acknowledge ready for next command
 
-LABEL_020FA7:
+CH0_Timer_Reset:			; 020FA7h - reset Timer 8 if running
 	BIT 2, (T8RUN)
-	JR Z, LABEL_020FB4
-	RES 2, (T8RUN)
+	JR Z, CH0_Exit
+	RES 2, (T8RUN)			; Stop timer
 	NOP
 	NOP
-	SET 2, (T8RUN)
+	SET 2, (T8RUN)			; Restart timer
 
-LABEL_020FB4:
+CH0_Exit:				; 020FB4h
 	POP XWA
 	POP XBC
 	POP XDE
@@ -11330,48 +11340,56 @@ LABEL_020FB4:
 	POP XIZ
 	RETI
 
-LABEL_020FBC:
+; ----------------------------------------------------------------------------
+; Cmd_Check_E2_Pending - Check and process pending E2 command
+; Entry: None
+; Exit:  E2 data processed if pending flag set
+; Notes: Called from main loop to handle deferred E2 processing
+; ----------------------------------------------------------------------------
+Cmd_Check_E2_Pending:		; 020FBCh
 	EI 6
 	LDA XWA, 1126h
-	BIT 7, (XWA)
-	JR Z, LABEL_020FD9
-	RES 7, (XWA)
+	BIT 7, (XWA)		; Check E2 pending flag
+	JR Z, Cmd_Check_DMA_Timeout
+	RES 7, (XWA)		; Clear pending flag
 	EI 0
-	LDA XDE, 111Ch
+	LDA XDE, 111Ch		; E2 data buffer
 	LD XWA, (XDE)
 	LD BC, (XDE + 008h)
 	LD XDE, (XDE + 004h)
-	CALR LABEL_020DB3
+	CALR LABEL_020DB3	; Process E2 data
 
-LABEL_020FD9:
+; Check for DMA timeout (stuck transfer detection)
+Cmd_Check_DMA_Timeout:		; 020FD9h
 	EI 0
-	BIT 1, (PD)  ; SSTAT1
-	JR NZ, LABEL_020FFB
-	LDC_WA_DMAM0
-	CP (0F01Ch), WA
-	JR NZ, LABEL_020FEF
-	INCW 1, (0F01Ah)
-	JR T, LABEL_020FF5
+	BIT 1, (PD)  ; SSTAT1 - check if idle
+	JR NZ, Cmd_DMA_Idle
+	LDC_WA_DMAM0		; Get current DMA byte count
+	CP (0F01Ch), WA		; Compare with previous
+	JR NZ, Cmd_DMA_Reset_Counter
+	INCW 1, (0F01Ah)	; Increment stuck counter
+	JR T, Cmd_DMA_Save_Count
 
-LABEL_020FEF:
+Cmd_DMA_Reset_Counter:		; 020FEFh
+	LDW (0F01Ah), 0000h	; Reset stuck counter
+
+Cmd_DMA_Save_Count:		; 020FF5h
+	LD (0F01Ch), WA		; Save current count
+	JR T, Cmd_DMA_Check_Stuck
+
+Cmd_DMA_Idle:			; 020FFBh
 	LDW (0F01Ah), 0000h
 
-LABEL_020FF5:
-	LD (0F01Ch), WA
-	JR T, LABEL_021001
-
-LABEL_020FFB:
-	LDW (0F01Ah), 0000h
-
-LABEL_021001:
+Cmd_DMA_Check_Stuck:		; 021001h
 	LD WA, (0F01Ah)
-	CP WA, 000ah
+	CP WA, 000ah		; Stuck for 10 iterations?
 	RET ULE
+	; Timeout recovery - abort stuck DMA
 	LDW (0F01Ah), 0000h
-	LD (DMA0V), 000h
+	LD (DMA0V), 000h	; Stop DMA
 	LD (CMD_PROCESSING_STATE), 000h
 	SET 1, (PD)  ; SSTAT1
-	INC 1, (0F018h)
+	INC 1, (0F018h)		; Increment error counter
 	RET
 
 LABEL_021023:
