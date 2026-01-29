@@ -57,8 +57,8 @@
 ;                Checks handler bit 2, calls status routines if changed
 ;   0x28F781  HDAE5000_Frame_Handler_Exit - Exit via JP to PPORT (DISASSEMBLED)
 ;   0x28F785  HDAE5000_Clear_Work_Buffer - Clear 0xF52A bytes at 0x22A000 (LABEL EXPOSED)
-;   0x28F7DD  HDAE5000_Delay_Loop - Delay/timing utility (LABEL EXPOSED)
-;   0x28F7EE  HDAE5000_VGA_Port_Write - Write to VGA port (mem-mapped at 0x170000) (LABEL EXPOSED)
+;   0x28F7DD  HDAE5000_Delay_Loop - Nested delay loop (DISASSEMBLED)
+;   0x28F7EE  HDAE5000_VGA_Port_Write - Write to VGA port (mem-mapped at 0x170000) (DISASSEMBLED)
 ;   0x28F813  HDAE5000_Palette_Setup - Set one VGA palette entry (LABEL EXPOSED)
 ;   0x28F8E0  HDAE5000_Load_Palette - Load all 256 palette entries (DISASSEMBLED)
 ;   0x28F90B  HDAE5000_Finalize_Init - Just returns (1-byte stub) (DISASSEMBLED)
@@ -451,18 +451,42 @@ HDAE5000_Clear_Work_Buffer:		; 28F785h
 	binclude "includes/code_28f785_28f7dc.bin"
 
 HDAE5000_Delay_Loop:			; 28F7DDh
-	; Simple delay loop - decrements XWA until zero
-	; Input: XWA = delay count (nested loop iterations)
+	; Simple nested delay loop - decrements XWA until zero
+	; Input: XWA = delay count (outer loop iterations)
 	; Clobbers: XWA, XBC
-	binclude "includes/code_28f7dd_28f7ed.bin"
+	; Algorithm: Outer loop decrements XWA, inner loop spins on XBC copy
+	ld	XBC, XWA		; Copy count for comparison
+	db	0E8h, 69h		; dec 1, XWA (decrement outer counter)
+	or	XBC, XBC		; Check if original was zero
+	ret	Z			; Return immediately if zero
+.inner_loop:
+	ld	XBC, XWA		; Copy remaining count
+	db	0E8h, 69h		; dec 1, XWA (decrement inner counter)
+	or	XBC, XBC		; Check if done
+	jr	NZ, .inner_loop		; Continue spinning until zero
+	ret
 
 HDAE5000_VGA_Port_Write:		; 28F7EEh
 	; Write byte to VGA I/O port (memory-mapped at 0x170000)
 	; Input: WA = VGA port number (e.g., 0x3C8, 0x3C9)
 	;        C = data byte to write
 	; VGA DAC ports: 0x3C8 = palette index, 0x3C9 = R/G/B data
-	; Called with 0x100 delay before write to ensure VGA timing
-	binclude "includes/code_28f7ee_28f812.bin"
+	; Includes 0x100 delay before write to ensure VGA timing
+	db	0EFh, 6Ah		; dec 2, XSP (allocate 2 bytes)
+	push	IZ
+	db	0BFh, 02h, 43h		; ld (XSP+0x02), C  ; save data byte
+	ld	IZ, WA			; save port number in IZ
+	ld	XWA, 00000100h		; delay count = 256
+	calr	HDAE5000_Delay_Loop	; wait for VGA timing
+	ld	WA, IZ			; restore port number
+	extz	XWA			; zero-extend to 32-bit
+	db	0E8h, 0C8h, 00h, 00h, 17h, 00h	; add XWA, 0x00170000
+	ld	XBC, XWA		; XBC = 0x170000 + port
+	db	8Fh, 02h, 21h		; ld A, (XSP+0x02)  ; restore data byte
+	ld	(XBC), A		; write byte to VGA port
+	pop	IZ
+	db	0EFh, 62h		; inc 2, XSP (deallocate)
+	ret
 
 HDAE5000_Palette_Setup:			; 28F813h
 	; Set one VGA palette entry
