@@ -51,11 +51,11 @@
 ;   0x28F570  HDAE5000_Get_Init_Flag - Return HD presence flag (DISASSEMBLED)
 ;
 ; Code Section 2 (0x28F662-0x2FFFFF):
-;   0x28F662  HDAE5000_Frame_Handler - Main frame handler entry point
-;                Checks workspace pointers, calls registered handlers
-;                Jumps to 0x29501C for PPORT state machine
-;   0x28F6E0  HDAE5000_Frame_Handler_Part2 - Handler continuation
-;   0x28F781  HDAE5000_Frame_Handler_Exit - Exit via JP to PPORT handler
+;   0x28F662  HDAE5000_Frame_Handler - Main frame handler entry (LABEL EXPOSED)
+;                Calculates display offset, calls registered callbacks
+;   0x28F6E0  HDAE5000_Frame_Handler_Status - Status check section (LABEL EXPOSED)
+;                Checks handler bit 2, calls status routines if changed
+;   0x28F781  HDAE5000_Frame_Handler_Exit - Exit via JP to PPORT (DISASSEMBLED)
 ;   0x28F785  HDAE5000_Clear_Work_Buffer - Clear 0xF52A bytes at 0x22A000 (LABEL EXPOSED)
 ;   0x28F7DD  HDAE5000_Delay_Loop - Delay/timing utility (LABEL EXPOSED)
 ;   0x28F7EE  HDAE5000_VGA_Port_Write - Write to VGA port (mem-mapped at 0x170000) (LABEL EXPOSED)
@@ -292,6 +292,9 @@ HDAE5000_Display_Params	equ	2F8DCEh
 
 ; All routine addresses are now exposed as labels in split binary sections
 
+; PPORT state machine handler (in code_28f90c_2953e1.bin)
+HDAE5000_PPORT_Handler	equ	29501Ch	; PPORT state machine entry point
+
 ; PPORT command handler addresses (in code_295642_2fffff.bin)
 HDAE5000_Cmd01_SendInfo	equ	2958D6h	; Send HD info to PC
 HDAE5000_Cmd02_Exit	equ	295914h	; Exit PPORT mode
@@ -417,9 +420,24 @@ HDAE5000_Boot_Init:			; 28F576h
 ; ============================================================================
 
 HDAE5000_Frame_Handler:			; 28F662h
-	; Frame handler main loop - checks workspace, calls handlers
-	; Exits via JP to PPORT handler at 0x29501C
-	binclude "includes/code_28f662_28f784.bin"
+	; Frame handler main entry - calculates display offset, calls callbacks
+	; 1. Check workspace pointer at 0x23A19E (skip if -1)
+	; 2. Read handler states from 0x230ED2, 0x230ED6
+	; 3. Calculate display offset = (WA * 3) << 2, store at 0x230EC6
+	; 4. Call registered callback via workspace[0x0E0A][0x0124]
+	binclude "includes/code_28f662_28f6df.bin"
+
+HDAE5000_Frame_Handler_Status:		; 28F6E0h
+	; Frame handler status check section
+	; 1. Check handler 1 status bit 2 at (0x230ECC)
+	; 2. Compare with previous state at 0x230ED0
+	; 3. If changed and now 0, call status routine at 0x28B3B3
+	; 4. If L=1, initialize display via workspace callbacks
+	binclude "includes/code_28f6e0_28f780.bin"
+
+HDAE5000_Frame_Handler_Exit:		; 28F781h
+	; Exit frame handler by jumping to PPORT handler
+	jp	HDAE5000_PPORT_Handler
 
 ; ----------------------------------------------------------------------------
 ; Utility routines (0x28F785 - 0x2953E1)
