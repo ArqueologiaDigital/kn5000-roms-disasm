@@ -241,6 +241,15 @@ HDAE5000_INIT_FLAG	equ	230EDAh
 HDAE5000_Palette_Data	equ	2E5DCEh
 HDAE5000_Display_Params	equ	2F8DCEh
 
+; Routine addresses in code sections (forward declarations)
+HDAE5000_Clear_Work_Buffer	equ	28F785h	; Clear 0xF52A bytes at 0x22A000
+HDAE5000_Load_Palette	equ	28F8E0h	; Load 256-entry VGA palette
+HDAE5000_Alloc_Memory	equ	28F543h	; Memory allocation
+HDAE5000_MemCopy	equ	29AE9Fh	; Memory copy utility
+HDAE5000_Check_HD_Present	equ	2971A3h	; HD presence detection
+HDAE5000_Finalize_Init	equ	28F90Bh	; Final initialization
+HDAE5000_Register_Frame	equ	2803C2h	; Register frame handler
+
 ; PPORT command handler addresses (in code_295642_2fffff.bin)
 HDAE5000_Cmd01_SendInfo	equ	2958D6h	; Send HD info to PC
 HDAE5000_Cmd02_Exit	equ	295914h	; Exit PPORT mode
@@ -256,7 +265,98 @@ HDAE5000_Cmd11_SaveMem	equ	29659Ah	; Save memory to HD
 HDAE5000_Cmd12_Nothing	equ	296680h	; (reserved)
 
 HDAE5000_Boot_Init:			; 28F576h
-	binclude "includes/boot_init_28f576_28f661.bin"
+	push	XIZ
+	ld	XIZ, XWA		; XIZ = workspace pointer from main CPU
+
+	calr	HDAE5000_Clear_Work_Buffer	; Clear 0xF52A bytes at 0x22A000
+
+	ld	(HDAE5000_WORKSPACE_PTR), XIZ	; Store workspace pointer
+
+	call	HDAE5000_Code_Section_1	; Register handlers with main CPU
+
+	lda	XWA, HDAE5000_Palette_Data	; Load palette data address
+	calr	HDAE5000_Load_Palette	; Load 256-entry VGA palette
+
+	; Allocate memory for VRAM copy
+	ld	XWA, 0
+	ld	XBC, 01E000A1h		; Allocation type A1
+	ld	XDE, 0
+	calr	HDAE5000_Alloc_Memory	; Returns address in XHL
+	ld	XIZ, XHL		; XIZ = allocated buffer
+
+	; Copy from allocated buffer to VRAM area 1 (0x1A0000, size 0x9600)
+	db	0Bh, 00h, 96h		; push 9600h (16-bit immediate)
+	ld	XWA, XIZ
+	push	XWA			; Source
+	ld	XWA, 001A0000h		; Destination
+	push	XWA
+	call	HDAE5000_MemCopy
+
+	; Copy from allocated buffer + offset to VRAM area 2 (0x1A9600)
+	db	0Bh, 00h, 96h		; push 9600h (16-bit immediate)
+	ld	XWA, XIZ
+	add	XWA, 00009600h		; Source + offset
+	push	XWA
+	ld	XWA, 001A9600h		; Destination
+	push	XWA
+	call	HDAE5000_MemCopy
+
+	lda	XSP, XSP + 14h		; Clean stack (5 pushes × 4 bytes = 20)
+
+	; Register callback handler 1
+	ld	XWA, (HDAE5000_WORKSPACE_PTR)
+	ld	XWA, (XWA + 0E0Ah)	; Handler table A
+	ld	XIX, (XWA + 02C4h)	; Registration function
+	ld	XWA, 00600002h		; Handler ID
+	call	T, XIX			; Call registration
+	ld	XWA, 016A0005h		; Handler flags
+	ld	(XHL), XWA		; Store at returned address
+	lda	XWA, HDAE5000_Display_Params
+	ld	(XHL + 2Ah), XWA	; Store display params pointer
+
+	; Initialize handler 1 pointer
+	ld	XWA, (HDAE5000_WORKSPACE_PTR)
+	ld	XWA, (XWA + 0E88h)	; Handler table B
+	ld	XHL, (XWA + 0108h)	; Init function
+	call	T, XHL
+	ld	(HDAE5000_HANDLER_1), XHL
+
+	; Initialize handler 2 pointer
+	ld	XWA, (HDAE5000_WORKSPACE_PTR)
+	ld	XWA, (XWA + 0E88h)
+	ld	XHL, (XWA + 0100h)
+	call	T, XHL
+	ld	(HDAE5000_HANDLER_2), XHL
+
+	; Initialize handler 3 pointer
+	ld	XWA, (HDAE5000_WORKSPACE_PTR)
+	ld	XWA, (XWA + 0E88h)
+	ld	XHL, (XWA + 0104h)
+	call	T, XHL
+	ld	(HDAE5000_HANDLER_3), XHL
+
+	; Check for hard disk presence
+	call	HDAE5000_Check_HD_Present
+	ld	(HDAE5000_INIT_FLAG), L	; Store result
+
+	cp	L, 0
+	jr	Z, .skip_hd_init	; Skip if no HD
+
+	; Hard disk present - initialize it
+	ld	XWA, (HDAE5000_WORKSPACE_PTR)
+	ld	XWA, (XWA + 0E0Ah)
+	ld	XHL, (XWA + 0124h)	; HD init function
+	ld	XWA, 0FFFFFFFFh		; Full init
+	ld	XBC, 01C00016h		; HD params
+	ld	XDE, 01A0007Fh		; Buffer
+	call	T, XHL
+
+.skip_hd_init:
+	call	HDAE5000_Finalize_Init	; Final setup
+	call	HDAE5000_Register_Frame	; Register frame handler
+
+	pop	XIZ
+	ret
 
 ; ============================================================================
 ; CODE SECTION 2 PART A (0x28F662 - 0x2953E1)
