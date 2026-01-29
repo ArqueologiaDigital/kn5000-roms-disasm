@@ -79,6 +79,7 @@ private:
 	uint8_t m_tx_clock_count;
 	uint8_t m_tx_shift_register;
 	std::queue<uint8_t> m_tx_queue;
+	bool m_tx_skip_first_falling;  // Skip first falling edge after pre-outputting bit 0
 
 	// Command buffer (2-byte commands)
 	uint8_t m_cmd_buffer[2];

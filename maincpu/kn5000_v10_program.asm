@@ -7618,38 +7618,16 @@ LABEL_E1E320:
 	ORG 0E1E332h
 LABEL_E1E332:
 
-	ORG 0E1ED96h
-LABEL_E1ED96:
 
-	ORG 0E1EDB2h
-LABEL_E1EDB2:
 
-	ORG 0E1EDCAh
-LABEL_E1EDCA:
 
-	ORG 0E1EDF4h
-LABEL_E1EDF4:
 
-	ORG 0E1EE0Eh
-LABEL_E1EE0E:
 
-	ORG 0E1EE44h
-LABEL_E1EE44:
 
-	ORG 0E1EE6Ah
-LABEL_E1EE6A:
 
-	ORG 0E1EEAAh
-LABEL_E1EEAA:
 
-	ORG 0E1EED0h
-LABEL_E1EED0:
 
-	ORG 0E1EEF6h
-LABEL_E1EEF6:
 
-	ORG 0E1EF1Ch
-LABEL_E1EF1C:
 
 	ORG 0E1EF5Ah
 LABEL_E1EF5A:
@@ -49355,187 +49333,119 @@ LABEL_E1E4BC:
 	; Control codes/header
 	db 01Ch, 000h, 01Ch, 000h, 02Dh, 000h, 02Dh, 000h, 02Dh, 000h, 020h, 000h
 	db 02Dh, 000h, 027h, 000h, 01Ch, 000h, 000h, 000h
-	; "ATTENTION!" in 6 languages
-LABEL_E1E4D0:
-	db "ATTENTION!", 000h, 0FFh				; English (12 bytes)
-LABEL_E1E4DC:
-	db "ACHTUNG !", 000h					; German (10 bytes)
-LABEL_E1E4E6:
-	db "ATTENTION!", 000h, 0FFh				; French (12 bytes)
-LABEL_E1E4F2:
-	db 0A1h, "ATENCI", 0D3h, "N!", 000h, 0FFh		; Spanish: ¡ATENCIÓN! (12 bytes)
-LABEL_E1E4FE:
-	db "ATTENTION!", 000h, 0FFh				; (duplicate, 12 bytes)
-LABEL_E1E50A:
-	db "Perhatian !", 000h					; Indonesian (12 bytes)
-	; Pointer table for ATTENTION messages
+	; Localization: Attention (6 languages)
+LABEL_E1E4D0:	db "ATTENTION!", 000h, 0FFh	; English (12 bytes)
+LABEL_E1E4DC:	db "ACHTUNG !", 000h	; German (10 bytes)
+LABEL_E1E4E6:	db "ATTENTION!", 000h, 0FFh	; French (12 bytes)
+LABEL_E1E4F2:	db 0A1h, "ATENCI", 0D3h, "N!", 000h, 0FFh	; Spanish (12 bytes)
+LABEL_E1E4FE:	db "ATTENTION!", 000h, 0FFh	; Duplicate (12 bytes)
+LABEL_E1E50A:	db "Perhatian !", 000h	; Indonesian (12 bytes)
+	; Pointer table at 0xE1E516
 	dd LABEL_E1E4D0
 	dd LABEL_E1E4DC
 	dd LABEL_E1E4E6
 	dd LABEL_E1E4F2
 	dd LABEL_E1E4FE
 	dd LABEL_E1E50A
-	; "Are You Sure?" in 6 languages
-LABEL_E1E52E:
-	db "Are You Sure?", 000h				; English (14 bytes)
-LABEL_E1E53C:
-	db "Sind Sie sicher ?", 000h				; German (18 bytes)
-LABEL_E1E54E:
-	db "Etes vous s", 0FBh, "r?", 000h, 0FFh		; French: Êtes vous sûr? (16 bytes)
-LABEL_E1E55E:
-	db 0BFh, "Est", 0E1h, " seguro?", 000h			; Spanish: ¿Está seguro? (14 bytes)
-LABEL_E1E56C:
-	db "Are You Sure?", 000h				; (duplicate, 14 bytes)
-LABEL_E1E57A:
-	db "Apakah yakin akan dihapus ?", 000h			; Indonesian (28 bytes)
-	; Pointer table for "Are You Sure?" messages (at E1E596)
+
+
+	; Localization: AreYouSure (6 languages)
+LABEL_E1E52E:	db "Are You Sure?", 000h	; English (14 bytes)
+LABEL_E1E53C:	db "Sind Sie sicher ?", 000h	; German (18 bytes)
+LABEL_E1E54E:	db "Etes vous s", 0FBh, "r?", 000h, 0FFh	; French (16 bytes)
+LABEL_E1E55E:	db 0BFh, "Est", 0E1h, " seguro?", 000h	; Spanish (14 bytes)
+LABEL_E1E56C:	db "Are You Sure?", 000h	; Duplicate (14 bytes)
+LABEL_E1E57A:	db "Apakah yakin akan dihapus ?", 000h	; Indonesian (28 bytes)
+	; Pointer table at 0xE1E596
 	dd LABEL_E1E52E
 	dd LABEL_E1E53C
 	dd LABEL_E1E54E
 	dd LABEL_E1E55E
 	dd LABEL_E1E56C
 	dd LABEL_E1E57A
-	; "Custom sound memories will be copied..." in 6 languages (starts at E1E5AE)
-LABEL_E1E5AE:
-	db "The Custom sound memories included with this pattern will be copied into the Sound "
-	db "Group memories. Some of the Sound Group memories will be replaced by them. OK?", 000h
-LABEL_E1E650:
-	db "Die Custom Sounds, die in diesem Pattern enthalten sind, werden in den Sound Memory "
-	db "Speicher kopiert. Dadurch werden einige Sounds ", 0FCh, "berschrieben. OK ?", 000h, 0FFh	; German (ü=0xFC, 152 bytes with trailing 0xFF)
-LABEL_E1E6E8:
-	db "Les m", 0E9h, "moires de sonorit", 0E9h, "s ", 0E9h, "dit", 0E9h, "es incluses dans ce Pattern "
-	db "seront copi", 0E9h, "es dans les m", 0E9h, "moires de groupes de sonorit", 0E9h, "s. Certaines "
-	db "des m", 0E9h, "moires de groupe de sonorit", 0E9h, "s seront remplac", 0E9h, "es. OK?", 000h	; French (é=0xE9, 186 bytes)
-LABEL_E1E7A2:
-	db "Las memorias de sonido personalizado de este esquema musical ser", 0E1h, "n copiadas a las "
-	db "memorias de los grupos de sonido.Algunas memorias de los grupos de sonido ser", 0E1h, "n "
-	db "reemplazadas. ", 0BFh, "Est", 0E1h, " de acuerdo?", 000h				; Spanish (á=0xE1, ¿=0xBF)
-LABEL_E1E864:
-	db "The Custom sound memories included with this pattern will be copied into the Sound "
-	db "Group memories. Some of the Sound Group memories will be replaced by them. OK?", 000h	; (duplicate)
-LABEL_E1E906:
-	db "Custom Sound Memory termasuk dengan Pattern yang akan digandakan kedalam SOUND GROUP "
-	db "MEMORIES. Beberapa Sound Group Memory dikembalikan. OK ?", 000h			; Indonesian (142 bytes)
-	; Pointer table for "Custom sound memories..." messages (at E1E994)
+
+
+	; Localization: CustomSoundWillBeCopied (6 languages)
+LABEL_E1E5AE:	db "The Custom sound memories included with this pattern will be copied into the Sound Group memories. Some of the Sound Group memories will be replaced by them. OK?", 000h	; English (162 bytes)
+LABEL_E1E650:	db "Die Custom Sounds, die in diesem Pattern enthalten sind, werden in den Sound Memory Speicher kopiert. Dadurch werden einige Sounds ", 0FCh, "berschrieben. OK ?", 000h, 0FFh	; German (152 bytes)
+LABEL_E1E6E8:	db "Les m", 0E9h, "moires de sonorit", 0E9h, "s ", 0E9h, "dit", 0E9h, "es incluses dans ce Pattern seront copi", 0E9h, "es dans les m", 0E9h, "moires de groupes de sonorit", 0E9h, "s. Certaines des m", 0E9h, "moires de groupe de sonorit", 0E9h, "s seront remplac", 0E9h, "es. OK?", 000h	; French (186 bytes)
+LABEL_E1E7A2:	db "Las memorias de sonido personalizado de este esquema musical ser", 0E1h, "n copiadas a las memorias de los grupos de sonido.Algunas memorias de los grupos de sonido ser", 0E1h, "n reemplazadas. ", 0BFh, "Est", 0E1h, " de acuerdo?", 000h	; Spanish (194 bytes)
+LABEL_E1E864:	db "The Custom sound memories included with this pattern will be copied into the Sound Group memories. Some of the Sound Group memories will be replaced by them. OK?", 000h	; Duplicate (162 bytes)
+LABEL_E1E906:	db "Custom Sound Memory termasuk dengan Pattern yang akan digandakan kedalam SOUND GROUP MEMORIES. Beberapa Sound Group Memory dikembalikan. OK ?", 000h	; Indonesian (142 bytes)
+	; Pointer table at 0xE1E994
 	dd LABEL_E1E5AE
 	dd LABEL_E1E650
 	dd LABEL_E1E6E8
 	dd LABEL_E1E7A2
 	dd LABEL_E1E864
 	dd LABEL_E1E906
-	; "Sound Group memories affected:" in 6 languages (at E1E9AC)
-LABEL_E1E9AC:
-	db "Sound Group memories affected:", 000h, 0FFh			; English (32 bytes)
-LABEL_E1E9CC:
-	db "Betroffene Sounds:", 000h, 0FFh				; German (20 bytes)
-LABEL_E1E9E0:
-	db "Les m", 0E9h, "moires de groupe de sonorit", 0E9h, "s rep", 0E9h, "r", 0E9h, "es :", 000h, 0FFh	; French (48 bytes)
-LABEL_E1EA10:
-	db "Las memorias de los grupos de sonido afectadas son:", 000h	; Spanish (52 bytes, no trailing FF)
-LABEL_E1EA44:
-	db "Sound Group memories affected:", 000h, 0FFh			; Duplicate (32 bytes)
-LABEL_E1EA64:
-	db "Sound Group memory sudah bekerja :", 000h, 0FFh		; Indonesian (36 bytes)
-	; Pointer table for "Sound Group memories affected:" messages (at E1EA88)
+
+
+	; Localization: SoundGroupAffected (6 languages)
+LABEL_E1E9AC:	db "Sound Group memories affected:", 000h, 0FFh	; English (32 bytes)
+LABEL_E1E9CC:	db "Betroffene Sounds:", 000h, 0FFh	; German (20 bytes)
+LABEL_E1E9E0:	db "Les m", 0E9h, "moires de groupe de sonorit", 0E9h, "s rep", 0E9h, "r", 0E9h, "es :", 000h, 0FFh	; French (48 bytes)
+LABEL_E1EA10:	db "Las memorias de los grupos de sonido afectadas son:", 000h	; Spanish (52 bytes)
+LABEL_E1EA44:	db "Sound Group memories affected:", 000h, 0FFh	; Duplicate (32 bytes)
+LABEL_E1EA64:	db "Sound Group memory sudah bekerja :", 000h, 0FFh	; Indonesian (36 bytes)
+	; Pointer table at 0xE1EA88
 	dd LABEL_E1E9AC
 	dd LABEL_E1E9CC
 	dd LABEL_E1E9E0
 	dd LABEL_E1EA10
 	dd LABEL_E1EA44
 	dd LABEL_E1EA64
-	; "Custom sound memory is full..." in 6 languages
-LABEL_E1EA88:
-	db "The Custom sound memory is full.Some sounds which are used by current Custom "
-	db "Rhythms will be deleted. OK?", 000h						; English
-LABEL_E1EB0A:
-	db "Der Custom Sound Speicher ist voll.inige Kl", 0E4h, "nge, die von Custom Rhythmen "
-	db "ben", 0F6h, "tigt werden, werden gel", 0F6h, "scht. OK ?", 000h			; German (ä=0xE4, ö=0xF6)
-LABEL_E1EB7A:
-	db "La m", 0E9h, "moire de sonorit", 0E9h, "s ", 0E9h, "dit", 0E9h, "es est satur", 0E9h, "e."
-	db "Certaines sonorit", 0E9h, "s utilis", 0E9h, "es par Custom Rhythms seront effac", 0E9h, "es. OK?", 000h	; French (é=0xE9)
-LABEL_E1EBEC:
-	db "La memoria de sonido personalizado est", 0E1h, " llena.Algunos sonidos utilizados "
-	db "por los ritmos personalizados actuales ser", 0E1h, "n borrados. ", 0BFh, "Est", 0E1h, " de acuerdo?", 000h	; Spanish
-LABEL_E1EC7E:
-	db "The Custom sound memory is full.Some sounds which are used by current Custom "
-	db "Rhythms will be deleted. OK?", 000h						; (duplicate)
-LABEL_E1ECE8:
-	db "Custom Sound memory sudah penuh.Beberapa suara (Sounds) yang digunakan dengan "
-	db "Custom Rhythms sekarang akan dihapus. Benar ?", 000h				; Indonesian
-	db 0A0h, 0EAh, 0E1h, 000h	; Unknown marker/padding
-	; Pointer table for "Custom sound memory is full..." messages
+
+
+	; Localization: CustomSoundMemoryFull (6 languages)
+LABEL_E1EAA0:	db "The Custom sound memory is full.Some sounds which are used by current Custom Rhythms will be deleted. OK?", 000h	; English (106 bytes)
+LABEL_E1EB0A:	db "Der Custom Sound Speicher ist voll.inige Kl", 0E4h, "nge, die von Custom Rhythmen ben", 0F6h, "tigt werden, werden gel", 0F6h, "scht. OK ?", 000h	; German (112 bytes)
+LABEL_E1EB7A:	db "La m", 0E9h, "moire de sonorit", 0E9h, "s ", 0E9h, "dit", 0E9h, "es est satur", 0E9h, "e.Certaines sonorit", 0E9h, "s utilis", 0E9h, "es par Custom Rhythms seront effac", 0E9h, "es. OK?", 000h	; French (114 bytes)
+LABEL_E1EBEC:	db "La memoria de sonido personalizado est", 0E1h, " llena.Algunos sonidos utilizados por los ritmos personalizados actuales ser", 0E1h, "n borrados. ", 0BFh, "Est", 0E1h, " de acuerdo?", 000h	; Spanish (146 bytes)
+LABEL_E1EC7E:	db "The Custom sound memory is full.Some sounds which are used by current Custom Rhythms will be deleted. OK?", 000h	; Duplicate (106 bytes)
+LABEL_E1ECE8:	db "Custom Sound memory sudah penuh.Beberapa suara (Sounds) yang digunakan dengan Custom Rhythms sekarang akan dihapus. Benar ?", 000h	; Indonesian (124 bytes)
+	; Pointer table at 0xE1ED64
+	dd LABEL_E1EAA0
 	dd LABEL_E1EB0A
 	dd LABEL_E1EB7A
 	dd LABEL_E1EBEC
 	dd LABEL_E1EC7E
 	dd LABEL_E1ECE8
-	db "Cust"
-	db "om Rhyth"
-	db "ms affec"
-	db "ted:", 000h, 0FFh, "Be"
-	db "troffene"
-	db " Custom "
-	db "Rhythmen"
-	db ":", 000h, "Custom"
-	db " Rhythms"
-	db " rep", 0E9h, "r", 0E9h, "s"
-	db ":", 000h, "Los ri"
-	db "tmos per"
-	db "sonaliza"
-	db "dos afec"
-	db "tados so"
-	db "n:", 000h, 0FFh, "Cust"
-	db "om Rhyth"
-	db "ms affec"
-	db "ted:", 000h, 0FFh, "Cu"
-	db "stom Rhy"
-	db "thm suda"
-	db "h bekerj"
-	db 061h, 020h, 03Ah, 000h, 07Ch, 0EDh, 0E1h, 000h
+
+
+	; Localization: CustomRhythmsAffected (6 languages)
+LABEL_E1ED7C:	db "Custom Rhythms affected:", 000h, 0FFh	; English (26 bytes)
+LABEL_E1ED96:	db "Betroffene Custom Rhythmen:", 000h	; German (28 bytes)
+LABEL_E1EDB2:	db "Custom Rhythms rep", 0E9h, "r", 0E9h, "s:", 000h	; French (24 bytes)
+LABEL_E1EDCA:	db "Los ritmos personalizados afectados son:", 000h, 0FFh	; Spanish (42 bytes)
+LABEL_E1EDF4:	db "Custom Rhythms affected:", 000h, 0FFh	; Duplicate (26 bytes)
+LABEL_E1EE0E:	db "Custom Rhythm sudah bekerja :", 000h	; Indonesian (30 bytes)
+	; Pointer table at 0xE1EE2C
+	dd LABEL_E1ED7C
 	dd LABEL_E1ED96
 	dd LABEL_E1EDB2
 	dd LABEL_E1EDCA
 	dd LABEL_E1EDF4
 	dd LABEL_E1EE0E
-	db "Plea"
-	db "se Inser"
-	db "t the St"
-	db "yle Conv"
-	db "ert Disk"
-	db "!", 000h, "Bitte "
-	db "legen Si"
-	db "e die St"
-	db "yle Conv"
-	db "ert Disk"
-	db "ette in "
-	db "das Lauf"
-	db "werk ein"
-	db ".", 000h, "Please"
-	db " Insert "
-	db "the Styl"
-	db "e Conver"
-	db "t Disk!", 000h
-	db "Please I"
-	db "nsert th"
-	db "e Style "
-	db "Convert "
-	db "Disk!", 000h, "Pl"
-	db "ease Ins"
-	db "ert the "
-	db "Style Co"
-	db "nvert Di"
-	db "sk!", 000h, "Plea"
-	db "se Inser"
-	db "t the St"
-	db "yle Conv"
-	db "ert Disk"
-	db 021h, 000h
+
+
+	; Localization: InsertStyleConvertDisk (6 languages)
+LABEL_E1EE44:	db "Please Insert the Style Convert Disk!", 000h	; English (38 bytes)
+LABEL_E1EE6A:	db "Bitte legen Sie die Style Convert Diskette in das Laufwerk ein.", 000h	; German (64 bytes)
+LABEL_E1EEAA:	db "Please Insert the Style Convert Disk!", 000h	; French (38 bytes)
+LABEL_E1EED0:	db "Please Insert the Style Convert Disk!", 000h	; Spanish (38 bytes)
+LABEL_E1EEF6:	db "Please Insert the Style Convert Disk!", 000h	; Duplicate (38 bytes)
+LABEL_E1EF1C:	db "Please Insert the Style Convert Disk!", 000h	; Indonesian (38 bytes)
+	; Pointer table at 0xE1EF42
 	dd LABEL_E1EE44
 	dd LABEL_E1EE6A
 	dd LABEL_E1EEAA
 	dd LABEL_E1EED0
 	dd LABEL_E1EEF6
 	dd LABEL_E1EF1C
+
+
+
 	db "Select"
 	db " the sou"
 	db "nd for e"

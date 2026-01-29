@@ -31,6 +31,7 @@ tmp94c241_serial_device::tmp94c241_serial_device(const machine_config &mconfig, 
 	m_tx_shift_register(0),
 	m_txd(1),  // Idle state is HIGH for serial lines
 	m_sclk_out(0),
+	m_tx_skip_first_falling(false),
 	m_txd_cb(*this),
 	m_sclk_in_cb(*this),
 	m_sclk_out_cb(*this),
@@ -57,6 +58,7 @@ void tmp94c241_serial_device::device_start()
 	save_item(NAME(m_tx_shift_register));
 	save_item(NAME(m_txd));
 	save_item(NAME(m_sclk_out));
+	save_item(NAME(m_tx_skip_first_falling));
 
 	m_sclk_out_cb(m_sclk_out);
 	m_txd_cb(m_txd);
@@ -67,6 +69,7 @@ void tmp94c241_serial_device::device_reset()
 	m_serial_control &= 0x80;
 	m_serial_mode &= 0x80;
 	m_baud_rate = 0x00;
+	m_tx_skip_first_falling = false;
 }
 
 void tmp94c241_serial_device::TO2_trigger(int state)
@@ -118,15 +121,23 @@ void tmp94c241_serial_device::sioclk(int state)
 	{
 		// Falling edge: Output TXD for slave to sample on next rising edge
 		if (m_tx_clock_count){
-			logerror("send bit #%d: %d\n", 8-m_tx_clock_count, m_tx_shift_register & 1);
+			if (m_tx_skip_first_falling) {
+				// Skip this falling edge - bit 0 was pre-output in scNbuf_w
+				// and we need to give the receiver a rising edge to sample it
+				logerror("skipping first falling edge (bit 0 already on line)\n");
+				m_tx_skip_first_falling = false;
+			} else {
+				// Normal operation: shift out the next bit
+				m_tx_shift_register >>= 1;
+				logerror("send bit #%d: %d\n", 8-m_tx_clock_count, m_tx_shift_register & 1);
 
-			m_txd_cb(m_tx_shift_register & 1);
-			m_tx_shift_register >>= 1;
-			if (--m_tx_clock_count == 0) {
-				logerror("Finished sending byte.\n");
-				// We finished sending the data:
-				m_cpu->m_int_reg[(m_channel == 0) ? INTES0 : INTES1] |= 0x80;
-				m_cpu->m_check_irqs = 1;
+				m_txd_cb(m_tx_shift_register & 1);
+				if (--m_tx_clock_count == 0) {
+					logerror("Finished sending byte.\n");
+					// We finished sending the data:
+					m_cpu->m_int_reg[(m_channel == 0) ? INTES0 : INTES1] |= 0x80;
+					m_cpu->m_check_irqs = 1;
+				}
 			}
 		}
 	}
@@ -147,20 +158,30 @@ uint8_t tmp94c241_serial_device::scNbuf_r()
 
 void tmp94c241_serial_device::scNbuf_w(uint8_t data)
 {
-	logerror("buf write: %02X\n", data);
-	m_tx_shift_register = data;
-	m_tx_clock_count = 8;
+	bool was_idle = (m_tx_clock_count == 0);
+	logerror("buf write: %02X (sioclk_state=%d, was_idle=%d)\n", data, m_sioclk_state, was_idle);
 
-	// Signal the start of a new byte transmission for receiver synchronization
-	m_tx_start_cb(1);
+	m_tx_shift_register = data;
+	m_tx_clock_count = 7;  // 7 more bits to send (bits 1-7) after pre-outputting bit 0
+
+	// Only signal start of new transmission if we were idle.
+	// If transmission was in progress, the slave should continue receiving
+	// (the CPU is replacing the current byte, but byte boundary stays the same)
+	if (was_idle)
+	{
+		m_tx_start_cb(1);
+	}
 
 	// Pre-output first bit immediately so slave can sample it on the first rising edge
 	logerror("pre-output bit #0: %d\n", m_tx_shift_register & 1);
 	m_txd_cb(m_tx_shift_register & 1);
 
-	// Advance to bit 1 so the first falling edge outputs bit 1, not bit 0 again
-	m_tx_shift_register >>= 1;
-	--m_tx_clock_count;  // Now 7
+	// Only skip the first falling edge if clock is currently HIGH AND we were idle.
+	// If clock is HIGH: next edge = falling (skip it to avoid outputting bit 1 before receiver samples bit 0)
+	// If clock is LOW: next edge = rising (receiver samples bit 0), then falling outputs bit 1 (no skip needed)
+	// If we weren't idle: the slave is mid-byte, don't disrupt its counting
+	m_tx_skip_first_falling = was_idle && (m_sioclk_state == 1);
+	logerror("skip_first_falling = %d\n", m_tx_skip_first_falling);
 }
 
 uint8_t tmp94c241_serial_device::scNcr_r()

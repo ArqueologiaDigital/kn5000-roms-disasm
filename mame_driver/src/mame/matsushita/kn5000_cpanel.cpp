@@ -43,6 +43,7 @@ kn5000_cpanel_device::kn5000_cpanel_device(const machine_config &mconfig, const 
 	m_sioclk_state(0),
 	m_tx_clock_count(0),
 	m_tx_shift_register(0xff),
+	m_tx_skip_first_falling(false),
 	m_cmd_index(0),
 	m_initialized(false),
 	m_txd_cb(*this),
@@ -72,6 +73,7 @@ void kn5000_cpanel_device::device_start()
 	save_item(NAME(m_sioclk_state));
 	save_item(NAME(m_tx_clock_count));
 	save_item(NAME(m_tx_shift_register));
+	save_item(NAME(m_tx_skip_first_falling));
 	save_item(NAME(m_cmd_buffer));
 	save_item(NAME(m_cmd_index));
 	save_item(NAME(m_initialized));
@@ -86,6 +88,7 @@ void kn5000_cpanel_device::device_reset()
 	m_baud_rate = 0;
 	m_rx_clock_count = 8;
 	m_tx_clock_count = 0;
+	m_tx_skip_first_falling = false;
 	m_cmd_index = 0;
 	m_initialized = false;
 
@@ -161,13 +164,21 @@ void kn5000_cpanel_device::sioclk(int state)
 	{
 		// Falling edge: Output TXD (transmit bit to CPU)
 		// This prepares the bit for the CPU to sample on the next rising edge
-		if (m_tx_clock_count > 0)
+		if (m_tx_skip_first_falling)
 		{
+			// Skip this falling edge - bit 0 was pre-output and we need to give
+			// CPU a rising edge to sample it before we output bit 1
+			LOGMASKED(LOG_SERIAL, "cpanel skipping first falling edge (bit 0 already on line)\n");
+			m_tx_skip_first_falling = false;
+		}
+		else if (m_tx_clock_count > 0)
+		{
+			// Normal operation: shift out the next bit
+			m_tx_shift_register >>= 1;
 			LOGMASKED(LOG_SERIAL, "cpanel TX bit: %d, shift_reg=%02X, count=%d\n",
 				m_tx_shift_register & 1, m_tx_shift_register, m_tx_clock_count);
 
 			m_txd_cb(m_tx_shift_register & 1);
-			m_tx_shift_register >>= 1;
 			m_tx_clock_count--;
 
 			if (m_tx_clock_count == 0)
@@ -177,16 +188,16 @@ void kn5000_cpanel_device::sioclk(int state)
 				{
 					m_tx_shift_register = m_tx_queue.front();
 					m_tx_queue.pop();
-					m_tx_clock_count = 8;
+					m_tx_clock_count = 7;  // 7 more bits after pre-outputting bit 0
 
 					LOGMASKED(LOG_SERIAL, "cpanel TX next byte: %02X\n", m_tx_shift_register);
 
 					// Pre-output first bit of next byte
 					m_txd_cb(m_tx_shift_register & 1);
 
-					// Advance to bit 1 so the next falling edge outputs bit 1, not bit 0 again
-					m_tx_shift_register >>= 1;
-					--m_tx_clock_count;  // Now 7
+					// We're in the falling edge handler, so clock is LOW.
+					// Next edge will be rising (CPU samples bit 0), so no skip needed.
+					m_tx_skip_first_falling = false;
 				}
 				else
 				{
@@ -201,23 +212,25 @@ void kn5000_cpanel_device::sioclk(int state)
 
 void kn5000_cpanel_device::send_byte(uint8_t data)
 {
-	LOGMASKED(LOG_SERIAL, "cpanel send_byte(%02X) tx_count=%d queue_size=%zu\n",
-		data, m_tx_clock_count, m_tx_queue.size());
+	LOGMASKED(LOG_SERIAL, "cpanel send_byte(%02X) tx_count=%d queue_size=%zu sioclk_state=%d\n",
+		data, m_tx_clock_count, m_tx_queue.size(), m_sioclk_state);
 
-	if (m_tx_clock_count == 0)
+	if (m_tx_clock_count == 0 && !m_tx_skip_first_falling)
 	{
 		// Start sending immediately
 		m_tx_shift_register = data;
-		m_tx_clock_count = 8;
+		m_tx_clock_count = 7;  // 7 more bits to send after pre-outputting bit 0
 
 		// Pre-output first bit immediately so CPU can sample it on the first rising edge
 		m_txd_cb(m_tx_shift_register & 1);
 		LOGMASKED(LOG_SERIAL, "cpanel TX start: byte=%02X, pre-output bit=%d\n",
 			data, data & 1);
 
-		// Advance to bit 1 so the first falling edge outputs bit 1, not bit 0 again
-		m_tx_shift_register >>= 1;
-		--m_tx_clock_count;  // Now 7
+		// Only skip the first falling edge if clock is currently HIGH.
+		// If clock is HIGH: next edge = falling (skip it)
+		// If clock is LOW: next edge = rising (CPU samples), then falling outputs bit 1 (no skip)
+		m_tx_skip_first_falling = (m_sioclk_state == 1);
+		LOGMASKED(LOG_SERIAL, "cpanel TX skip_first_falling=%d\n", m_tx_skip_first_falling);
 	}
 	else
 	{

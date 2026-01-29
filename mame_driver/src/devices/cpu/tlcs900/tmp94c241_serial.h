@@ -64,6 +64,7 @@ protected:
 	uint8_t m_tx_shift_register;
 	uint8_t m_txd;
 	uint8_t m_sclk_out;
+	bool m_tx_skip_first_falling;  // Skip first falling edge after buf write to let receiver sample bit 0
 
 	devcb_write_line m_txd_cb;
 	devcb_write_line m_sclk_in_cb;
