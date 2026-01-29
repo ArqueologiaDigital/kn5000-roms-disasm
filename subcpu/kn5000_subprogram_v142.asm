@@ -9361,17 +9361,25 @@ LABEL_01FAA6:
 	CALR LABEL_01FC70
 	EI 0
 	LDW (103Ch), 0000h
-	JR T, LABEL_01FACB
+	JR T, Audio_System_Init
 
-LABEL_01FACB:
+; ============================================================================
+; AUDIO SYSTEM INITIALIZATION
+; Main initialization routine for all audio subsystems:
+;   - Inter-CPU communication setup
+;   - Serial port ring buffers
+;   - DSP chip configuration (dual DSPs at 0x00130000)
+;   - Tone generator initialization (at 0x00110000)
+; ============================================================================
+Audio_System_Init:		; 01FACBh
 	PUSH IZ
-	CALL LABEL_020C15 ; <-- setup inter-cpu comms via latches
-	CALL INIT_RING_BUFFERS ; <-- initialize serial port #1 (set up rx and tx buffers and pointers)
-	CALL LABEL_034C45 ; <-- TODO: I know that at some point this leads to toggling reset signals for both DSP chips.
-	CALL LABEL_03581D ; <-- TODO: I dont know. But I guess this could write to the other DSP chip (other than the LABEL_1FC95 one)
-	CALL DSP_Init_Channels ; <-- writes to something (possibly the DSP1 chip -- but couLD be, DSP2 as well?) mapped to 00130000h
-	CALL LABEL_03D016 ; <-- writes to tone generator mapped to 00110000h
-	EI 0
+	CALL LABEL_020C15	; Setup inter-CPU comms via latches
+	CALL INIT_RING_BUFFERS	; Initialize serial port #1 ring buffers
+	CALL DSP_System_Init	; Initialize DSP state buffers, toggle reset signals
+	CALL LABEL_03581D	; Initialize DSP2 (second DSP chip)
+	CALL DSP_Init_Channels	; Write channel config to DSP at 0x00130000
+	CALL ToneGen_Init	; Initialize tone generator at 0x00110000
+	EI 0			; Enable interrupts
 
 LABEL_01FAE6:
 	BIT 5, (103Eh)
@@ -37947,44 +37955,53 @@ LABEL_034C3B:
 	INC 6, XSP
 	RET
 
-LABEL_034C45:
+; ----------------------------------------------------------------------------
+; DSP_System_Init - Initialize DSP subsystem state and buffers
+; Entry: None
+; Exit:  None (jumps to DSP_Audio_Init via JP)
+; Notes: Clears DSP state buffers at 0x041342 (38 bytes) and 0x041368 (7462 bytes)
+;        Initializes control variables at 0x2B0D, 0x2B0F, 0x2B11
+;        Checks PH.3 hardware pin for configuration variant
+;        Then calls DSP reset and audio initialization routines
+; ----------------------------------------------------------------------------
+DSP_System_Init:		; 034C45h
 	LD BC, 0
-	LDA XWA, 041342h
-	CP BC, 0026h		; How could this be possible? Maybe some code not disasm'd yet calls here?!
-	JR NC, LABEL_034C5E
+	LDA XWA, 041342h	; DSP state buffer 1
+	CP BC, 0026h		; 38 bytes
+	JR NC, DSP_System_Init_Clear2
 
-LABEL_034C52:
-	LD (XWA+), 000h
+DSP_System_Init_Clear1:
+	LD (XWA+), 000h		; Clear byte
 	INC 1, BC
 	CP BC, 0026h
-	JR C, LABEL_034C52
+	JR C, DSP_System_Init_Clear1
 
-LABEL_034C5E:
+DSP_System_Init_Clear2:
 	LD BC, 0
-	LDA XWA, 041368h
-	CP BC, 1d26h
-	JR NC, LABEL_034C77
+	LDA XWA, 041368h	; DSP state buffer 2
+	CP BC, 1d26h		; 7462 bytes
+	JR NC, DSP_System_Init_Vars
 
-LABEL_034C6B:
+DSP_System_Init_Clear2_Loop:
 	LD (XWA+), 000h
 	INC 1, BC
 	CP BC, 1d26h
-	JR C, LABEL_034C6B
+	JR C, DSP_System_Init_Clear2_Loop
 
-LABEL_034C77:
-	LDW (2B11h), 0000h
+DSP_System_Init_Vars:
+	LDW (2B11h), 0000h	; Clear DSP control variable
 	LD WA, 0
-	LD (2B0Fh), WA
-	LD (2B0Dh), WA
-	BIT 3, (PH) 			; <--- what is this? In the schematics there's nothing at the "port H bit 3" pin.
-	JR Z, LABEL_034C95
-	ANDW (041343h), 0fff7h
-	JR T, LABEL_034C9C
+	LD (2B0Fh), WA		; Clear control variable
+	LD (2B0Dh), WA		; Clear control variable
+	BIT 3, (PH)		; Check hardware config pin
+	JR Z, DSP_System_Init_SetBit
+	ANDW (041343h), 0fff7h	; Clear bit 3 of DSP config
+	JR T, DSP_System_Init_Continue
 
-LABEL_034C95:
-	ORW (041343h), 0008h
+DSP_System_Init_SetBit:
+	ORW (041343h), 0008h	; Set bit 3 of DSP config
 
-LABEL_034C9C:
+DSP_System_Init_Continue:
 	LD XWA, 00050000h
 	LD (045310h), XWA
 	LD XWA, 00050000h
@@ -51186,9 +51203,17 @@ LABEL_03D013:
 	LD HL, 0
 	RET
 
-LABEL_03D016:
-	LD (4A48h), 006h
-	JRL T, LABEL_03D1FB
+; ----------------------------------------------------------------------------
+; ToneGen_Init - Initialize tone generator subsystem
+; Entry: None
+; Exit:  Via JRL to ToneGen_Process
+; Notes: Sets up tone generator state at 0x4A48 (mode = 6)
+;        Tone generator is memory-mapped at 0x00110000
+;        State buffer at 0x4A42-0x4A5C
+; ----------------------------------------------------------------------------
+ToneGen_Init:			; 03D016h
+	LD (4A48h), 006h	; Set tone gen mode to 6
+	JRL T, LABEL_03D1FB	; Continue to main processing
 
 LABEL_03D01E:
 	DEC 2, XSP
