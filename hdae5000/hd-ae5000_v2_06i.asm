@@ -1018,16 +1018,123 @@ HDAE5000_Code_2_PartB:			; 295642h
 	binclude "includes/code_295642_2971a2.bin"
 
 HDAE5000_Check_HD_Present:		; 2971A3h
-	; Check for hard disk presence
-	; Writes 0 to 0x229D92, calls internal routine at 0x2971B7
-	; Returns: HL = 0 (result stored in HDAE5000_INIT_FLAG)
-	binclude "includes/code_2971a3_29ae9e.bin"
+	; Entry wrapper for HD presence detection
+	; Clears result flag, calls internal RAM test routine, returns result
+	; Output: L = 0 if no HD, non-zero if HD detected
+	push	XIZ
+	db	0F2h, 92h, 9Dh, 22h, 00h, 00h	; ld (229D92h), 0 - clear result flag
+	call	HDAE5000_RAM_Test		; Call internal test routine
+	pop	XIZ
+	xor	HL, HL				; Clear HL
+	db	0C2h, 92h, 9Dh, 22h, 27h	; ld L, (229D92h) - get result
+	ret
+
+HDAE5000_RAM_Test:			; 2971B7h
+	; Internal RAM test and HD initialization
+	; 1. Fills 32KB (0x230F1C-0x238F1C) with 0x5A5A pattern
+	; 2. Verifies the pattern
+	; 3. Clears the RAM
+	; 4. Initializes HD-related variables at 0x229Dxx
+	binclude "includes/code_2971b7_29ae9e.bin"
+
+; ----------------------------------------------------------------------------
+; Memory Utility Routines (0x29AE9F - 0x29AF2C)
+;
+; Optimized memory manipulation functions used throughout HDAE5000 firmware.
+; All routines take parameters on the stack (C calling convention).
+; ----------------------------------------------------------------------------
 
 HDAE5000_MemCopy:			; 29AE9Fh
-	; Memory copy utility
-	; Stack parameters: [+0x04] = dest, [+0x08] = src, [+0x0C] = count
-	; Handles overlapping regions correctly (forward/backward copy)
-	binclude "includes/code_29ae9f_2fffff.bin"
+	; Copy memory block using word operations where possible
+	; Stack: [+0x04] = dest (XHL), [+0x08] = src (XIY), [+0x0C] = count (BC)
+	; Uses LDIRW for word copies, handles odd byte at start/end
+	db	9Fh, 0Ch, 21h		; ld BC, (XSP+0x0C) - count
+	db	0AFh, 04h, 23h		; ld XHL, (XSP+0x04) - dest
+	cp	BC, 0
+	ret	Z			; Return if count = 0
+	ld	XIX, XHL		; XIX = dest
+	db	0AFh, 08h, 25h		; ld XIY, (XSP+0x08) - src
+	cp	XIX, XIY
+	ret	Z			; Return if src = dest
+	db	0DCh, 33h, 00h		; bit 0, IX - check odd alignment
+	jr	Z, .copy_words
+	db	85h, 10h		; ldi - copy one byte
+	db	0B0h, 0FCh		; ret PO - return if count exhausted
+.copy_words:
+	db	0D9h, 0EFh, 01h		; srl 1, BC - divide count by 2
+	jr	Z, .check_odd
+	db	95h, 11h		; ldirw - copy words
+.check_odd:
+	db	0B0h, 0FFh		; ret NC - return if no odd byte
+	db	85h, 10h		; ldi - copy final odd byte
+	ret
+
+HDAE5000_MemFill:			; 29AEC7h
+	; Fill memory with byte value, optimized for 32-bit writes
+	; Stack: [+0x04] = dest (XHL), [+0x08] = value (WA), [+0x0A] = count (BC)
+	; Aligns to 4-byte boundary, uses 32-bit writes for bulk fill
+	db	9Fh, 0Ah, 21h		; ld BC, (XSP+0x0A) - count
+	db	0AFh, 04h, 23h		; ld XHL, (XSP+0x04) - dest
+	cp	BC, 0
+	ret	Z			; Return if count = 0
+	ld	XIX, XHL		; XIX = dest
+	db	9Fh, 08h, 20h		; ld WA, (XSP+0x08) - fill value in A
+	ld	DE, IX			; DE = low word of dest address
+	neg	DE			; Negate for alignment calc
+	and	DE, 0003h		; DE = bytes to align (0-3)
+	jr	Z, .aligned
+.align_loop:
+	db	0F5h, 0F0h, 41h		; ld (XIX+), A - store byte
+	db	0D9h, 0CAh, 01h, 00h	; sub BC, 1 - decrement count
+	ret	Z			; Return if done
+	db	0DAh, 1Ch, 0F4h		; djnz DE, .align_loop
+.aligned:
+	ld	DE, BC			; Save count for remainder calc
+	db	0D9h, 0EFh, 02h		; srl 2, BC - divide by 4
+	jr	Z, .remainder
+	ld	W, A			; W = A (fill byte)
+	db	0D7h, 0E2h, 98h		; ld QWA, WA - expand to 32-bit
+.fill_dwords:
+	db	0F5h, 0F2h, 60h		; ld (XIX+), XWA - store 4 bytes
+	db	0D9h, 1Ch, 0FAh		; djnz BC, .fill_dwords
+.remainder:
+	and	DE, 0003h		; DE = remaining bytes (0-3)
+	ret	Z			; Return if none
+.fill_bytes:
+	db	0F5h, 0F0h, 41h		; ld (XIX+), A
+	db	0DAh, 1Ch, 0FAh		; djnz DE, .fill_bytes
+	ret
+
+HDAE5000_StrCopy:			; 29AF0Bh
+	; Copy null-terminated string including terminator
+	; Stack: [+0x04] = dest (XDE), [+0x08] = src (XBC)
+	; Finds end of dest string, then copies src to that position
+	db	0AFh, 04h, 22h		; ld XDE, (XSP+0x04) - dest
+	ld	XHL, XDE		; Save original dest
+	jr	T, .find_end
+.find_loop:
+	db	0EAh, 61h		; inc 1, XDE
+.find_end:
+	db	82h, 3Fh, 00h		; cp (XDE), 0 - check for null
+	jr	NZ, .find_loop
+	db	0AFh, 08h, 21h		; ld XBC, (XSP+0x08) - src
+	jr	T, .copy_check
+.copy_loop:
+	db	0C5h, 0E4h, 21h		; ld A, (XBC+) - read src byte
+	db	0F5h, 0E8h, 41h		; ld (XDE+), A - write to dest
+.copy_check:
+	db	81h, 3Fh, 00h		; cp (XBC), 0 - check for null
+	jr	NZ, .copy_loop
+	db	0B2h, 00h, 00h		; ld (XDE), 0 - write null terminator
+	ret
+
+; ----------------------------------------------------------------------------
+; Remaining Code and Data (0x29AF2D - 0x2FFFFF)
+; Contains additional utility routines, lookup tables, and padding
+; ----------------------------------------------------------------------------
+
+HDAE5000_Code_Remainder:		; 29AF2Dh
+	binclude "includes/code_29af2d_2fffff.bin"
 
 ; ============================================================================
 ; END OF ROM
