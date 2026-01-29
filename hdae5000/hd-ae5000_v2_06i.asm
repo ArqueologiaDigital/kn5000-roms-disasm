@@ -42,7 +42,7 @@
 ; Key Routine Addresses (within code sections):
 ;
 ; Code Section 1 (0x280020-0x28F575):
-;   0x280020  HDAE5000_Code_Section_1 - Handler registration entry
+;   0x280020  HDAE5000_Handler_Registration - Handler registration entry
 ;   0x28030E  HDAE5000_Alloc_Check - Memory allocation parameter check
 ;   0x28033B  HDAE5000_Util_033B - Utility routine
 ;   0x280368  HDAE5000_Util_0368 - Utility routine
@@ -202,18 +202,146 @@ HDAE5000_ENTRY_4:			; 28001Ch
 ; CODE SECTION 1 (0x280020 - 0x28F575)
 ;
 ; Key routines:
-;   0x280020  Code_Section_1 - Handler registration entry (called from boot_init)
-;   0x28030E  Alloc_Check - Memory allocation parameter check
-;   0x28033B  Utility routine
-;   0x280368  Utility routine
+;   0x280020  Handler_Registration - Register 12 handlers with main CPU workspace
+;   0x28030E  Alloc_Memory_1 - Memory lookup (palette at 0x2A898E)
+;   0x28033B  Alloc_Memory_2 - Memory lookup (palette at 0x2BB98E)
+;   0x280368  Alloc_Memory_3 - Memory lookup (palette at 0x2CE98E)
+;   0x280395  Alloc_Memory_4 - Memory lookup (palette at 0x2E198E, small display)
 ;   0x2803C2  Register_Frame - Register frame handler callback
-;   0x28F543  Alloc_Memory - Memory allocation routine
+;   0x28F543  Alloc_Memory - Primary memory lookup (palette at 0x2E61CE)
 ; ============================================================================
 
-HDAE5000_Code_Section_1:		; 280020h
-	; Handler registration and utility routines
-	; Contains multiple indirect callback registrations via workspace pointers
-	binclude "includes/code_280020_2803c1.bin"
+; ----------------------------------------------------------------------------
+; HDAE5000_Handler_Registration (0x280020 - 0x28030D)
+;
+; Registers 12 callback handlers with the main CPU workspace dispatch system.
+; Called from HDAE5000_Boot_Init after workspace pointer is stored.
+;
+; The workspace dispatch system works via function tables:
+;   WORKSPACE_PTR (0x23A1A2) -> Handler Table A (offset 0x0E0A)
+;   Handler Table A + offset -> Function pointer or sub-table
+;
+; Registration structure (14 bytes on stack):
+;   (XSP+0x00): PPI port address (identifies handler type)
+;   (XSP+0x04): Handler function pointer (from workspace table)
+;   (XSP+0x08): Data size (byte/word count)
+;   (XSP+0x0A): Data pointer (RAM or ROM address)
+;
+; Handler Registration Table:
+;   ID     Port        TableOff  Size   DataPtr    Description
+;   0x016A 0x01600004  0x0168    var    0x29C0AA   UI config strings
+;   0x01CA 0x0160000C  0x013C    var    0x2397EA   RAM data area
+;   0x01EA 0x0160000D  0x0140    var    0x239824   RAM data area
+;   0x012A 0x01600002  0x0248    0x45   0x23952A   Init data copy dest
+;   0x042A 0x01600002  0x0248    0x45   0x239642   Init data area
+;   0x010A 0x01600001  0x0244    0x0D   0x239872   RAM data
+;   0x040A 0x01600001  0x0244    0x0D   0x2398AA   RAM data
+;   0x014A 0x01600003  0x024C    0x0E   0x239FD2   RAM data
+;   0x044A 0x01600003  0x024C    0x0E   0x23A00E   RAM data
+;   0x007F 0x01600010  0x0280    0x315  0x2A5D2C   ROM graphics data
+;   0x037F 0x0160000F  0x0148    0x315  0x2A6984   ROM graphics data
+;   (special call via 0x0270 with 0x2A849A and params 0x7F, 0x014A0000, 0x7F01EE)
+;
+; Each registration calls workspace[0x0E0A][0x00E4] with:
+;   WA = handler ID
+;   XBC = pointer to parameter block on stack
+; ----------------------------------------------------------------------------
+
+HDAE5000_Handler_Registration:		; 280020h
+	binclude "includes/code_280020_28030d.bin"
+
+; ----------------------------------------------------------------------------
+; Memory Allocation Parameter Lookup Routines (0x28030E - 0x2803C1)
+;
+; Four variants that return display parameters based on request type.
+; Called by main CPU to get palette data pointers and display dimensions.
+;
+; Input: XBC = request type (0x01E000A1, 0x01E000A2, or 0x01E000A3)
+; Output: XHL = result
+;
+; Each variant returns different palette data pointer for A1, but same
+; dimensions for A2/A3 (except Alloc_Memory_4 which returns 0x1B for both).
+; ----------------------------------------------------------------------------
+
+HDAE5000_Alloc_Memory_1:		; 28030Eh
+	; Returns 0x2A898E for A1, 0x140 for A2, 0xF0 for A3
+	cp	XBC, 01E000A3h
+	jr	Z, .type_A3
+	cp	XBC, 01E000A2h
+	jr	Z, .type_A2
+	cp	XBC, 01E000A1h
+	jr	Z, .type_A1
+	ld	XHL, 0
+	ret
+.type_A1:
+	lda	XHL, 2A898Eh		; Palette data pointer 1
+	ret
+.type_A2:
+	ld	XHL, 00000140h		; 320 (width)
+	ret
+.type_A3:
+	ld	XHL, 000000F0h		; 240 (height)
+	ret
+
+HDAE5000_Alloc_Memory_2:		; 28033Bh
+	; Returns 0x2BB98E for A1, 0x140 for A2, 0xF0 for A3
+	cp	XBC, 01E000A3h
+	jr	Z, .type_A3
+	cp	XBC, 01E000A2h
+	jr	Z, .type_A2
+	cp	XBC, 01E000A1h
+	jr	Z, .type_A1
+	ld	XHL, 0
+	ret
+.type_A1:
+	lda	XHL, 2BB98Eh		; Palette data pointer 2
+	ret
+.type_A2:
+	ld	XHL, 00000140h		; 320 (width)
+	ret
+.type_A3:
+	ld	XHL, 000000F0h		; 240 (height)
+	ret
+
+HDAE5000_Alloc_Memory_3:		; 280368h
+	; Returns 0x2CE98E for A1, 0x140 for A2, 0xF0 for A3
+	cp	XBC, 01E000A3h
+	jr	Z, .type_A3
+	cp	XBC, 01E000A2h
+	jr	Z, .type_A2
+	cp	XBC, 01E000A1h
+	jr	Z, .type_A1
+	ld	XHL, 0
+	ret
+.type_A1:
+	lda	XHL, 2CE98Eh		; Palette data pointer 3
+	ret
+.type_A2:
+	ld	XHL, 00000140h		; 320 (width)
+	ret
+.type_A3:
+	ld	XHL, 000000F0h		; 240 (height)
+	ret
+
+HDAE5000_Alloc_Memory_4:		; 280395h
+	; Returns 0x2E198E for A1, 0x1B for A2 and A3 (small display mode)
+	cp	XBC, 01E000A3h
+	jr	Z, .type_A3
+	cp	XBC, 01E000A2h
+	jr	Z, .type_A2
+	cp	XBC, 01E000A1h
+	jr	Z, .type_A1
+	ld	XHL, 0
+	ret
+.type_A1:
+	lda	XHL, 2E198Eh		; Palette data pointer 4
+	ret
+.type_A2:
+	ld	XHL, 0000001Bh		; 27 (small width)
+	ret
+.type_A3:
+	ld	XHL, 0000001Bh		; 27 (small height)
+	ret
 
 HDAE5000_Register_Frame:		; 2803C2h
 	; Register frame handler callback with main CPU
@@ -317,7 +445,7 @@ HDAE5000_Boot_Init:			; 28F576h
 
 	ld	(HDAE5000_WORKSPACE_PTR), XIZ	; Store workspace pointer
 
-	call	HDAE5000_Code_Section_1	; Register handlers with main CPU
+	call	HDAE5000_Handler_Registration	; Register handlers with main CPU
 
 	lda	XWA, HDAE5000_Palette_Data	; Load palette data address
 	calr	HDAE5000_Load_Palette	; Load 256-entry VGA palette

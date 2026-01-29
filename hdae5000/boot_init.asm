@@ -46,7 +46,7 @@ HDAE5000_Boot_Init:
 
 	ld	(HDAE5000_WORKSPACE_PTR), XIZ	; Store workspace pointer for later use
 
-	call	HDAE5000_Code_Section_1	; Initialize code section 1 (at 0x280020)
+	call	HDAE5000_Handler_Registration	; Register handlers (at 0x280020)
 
 	; Load configuration data address
 	lda	XWA, 02E5DCEh		; Source address for configuration
