@@ -9369,7 +9369,7 @@ LABEL_01FACB:
 	CALL INIT_RING_BUFFERS ; <-- initialize serial port #1 (set up rx and tx buffers and pointers)
 	CALL LABEL_034C45 ; <-- TODO: I know that at some point this leads to toggling reset signals for both DSP chips.
 	CALL LABEL_03581D ; <-- TODO: I dont know. But I guess this could write to the other DSP chip (other than the LABEL_1FC95 one)
-	CALL LABEL_01FC95 ; <-- writes to something (possibly the DSP1 chip -- but couLD be, DSP2 as well?) mapped to 00130000h
+	CALL DSP_Init_Channels ; <-- writes to something (possibly the DSP1 chip -- but couLD be, DSP2 as well?) mapped to 00130000h
 	CALL LABEL_03D016 ; <-- writes to tone generator mapped to 00110000h
 	EI 0
 
@@ -9593,54 +9593,70 @@ LABEL_01FC92:
 	LD HL, 0
 	RET
 
-LABEL_01FC95:
+; ----------------------------------------------------------------------------
+; DSP_Init_Channels - Initialize DSP channel configuration
+; Entry: None
+; Exit:  None
+; Notes: Writes test pattern 0x5A5A5A5A to 4 channels via DSP_Write_Channel
+;        Then initializes 4 channel base registers at 0x00130000
+;        Memory-mapped DSP register space at 0x00130000
+; ----------------------------------------------------------------------------
+DSP_Init_Channels:		; 01FC95h
 	LINK XIZ, 0fff8h
 	XOR XWA, XWA
-	LD XWA, 5a5a5a5ah
-	LD (XIZ - 8), XWA
-	LD (XIZ - 4), XWA
-	LDA XWA, XIZ - 8
+	LD XWA, 5a5a5a5ah	; Test pattern
+	LD (XIZ - 8), XWA	; Local buffer[0-3]
+	LD (XIZ - 4), XWA	; Local buffer[4-7]
+	LDA XWA, XIZ - 8	; Pointer to test data
 	PUSH XWA
-	LD BC, 0
-	CALR LABEL_01FCDE
+	LD BC, 0		; Channel 0
+	CALR DSP_Write_Channel
 	POP XWA
 	PUSH XWA
-	LD BC, 1
-	CALR LABEL_01FCDE
+	LD BC, 1		; Channel 1
+	CALR DSP_Write_Channel
 	POP XWA
 	PUSH XWA
-	LD BC, 2
-	CALR LABEL_01FCDE
+	LD BC, 2		; Channel 2
+	CALR DSP_Write_Channel
 	POP XWA
 	PUSH XWA
-	LD BC, 3
-	CALR LABEL_01FCDE
+	LD BC, 3		; Channel 3
+	CALR DSP_Write_Channel
 	POP XWA
-	LD XBC, 00130000h
-	LD XWA, 0101001fh
-	LD_D 004h
+	LD XBC, 00130000h	; DSP register base
+	LD XWA, 0101001fh	; Initial channel config
+	LD_D 004h		; 4 channels
 
-LABEL_01FCD1:
+DSP_Init_Channels_Loop:
 	LD W, A
-	LD (XBC), XWA
-	ADD A, 020h
-	DJNZ D, LABEL_01FCD1
+	LD (XBC), XWA		; Write to DSP register
+	ADD A, 020h		; Next channel (0x20 spacing)
+	DJNZ D, DSP_Init_Channels_Loop
 	UNLK XIZ
 	RET
 
-LABEL_01FCDE:
+; ----------------------------------------------------------------------------
+; DSP_Write_Channel - Write 8 bytes of config data to a DSP channel
+; Entry: XWA = pointer to 8 bytes of channel data
+;        BC  = channel number (0-3)
+; Exit:  None
+; Notes: Calculates channel register address from channel number
+;        Writes 8 sequential bytes to DSP at 0x00130000 + offset
+; ----------------------------------------------------------------------------
+DSP_Write_Channel:		; 01FCDEh
 	PUSH DE
-	SLL 5, A
-	SET 4, A
-	LD XHL, 00130000h
-	LD_D 008h
+	SLL 5, A		; Channel * 32 (register spacing)
+	SET 4, A		; Add 0x10 offset
+	LD XHL, 00130000h	; DSP register base
+	LD_D 008h		; 8 bytes per channel
 
-LABEL_01FCEC:
-	LD (XHL), A
-	LD E, (XBC+)
-	LD (XHL + 002h), E
-	INC 1, A
-	DJNZ D, LABEL_01FCEC
+DSP_Write_Channel_Loop:
+	LD (XHL), A		; Write register address
+	LD E, (XBC+)		; Get next data byte
+	LD (XHL + 002h), E	; Write data value
+	INC 1, A		; Next register
+	DJNZ D, DSP_Write_Channel_Loop
 	POP DE
 	RET
 
