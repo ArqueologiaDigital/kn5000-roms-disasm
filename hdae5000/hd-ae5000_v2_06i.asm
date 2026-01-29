@@ -53,8 +53,8 @@
 ; Code Section 2 (0x28F662-0x2FFFFF):
 ;   0x28F662  HDAE5000_Frame_Handler - Main frame handler entry (DISASSEMBLED)
 ;                Calculates display offset, calls registered callbacks
-;   0x28F6E0  HDAE5000_Frame_Handler_Status - Status check section (LABEL EXPOSED)
-;                Checks handler bit 2, calls status routines if changed
+;   0x28F6E0  HDAE5000_Frame_Handler_Status - Status check section (DISASSEMBLED)
+;                Monitors bit 2, triggers display init on state change
 ;   0x28F781  HDAE5000_Frame_Handler_Exit - Exit via JP to PPORT (DISASSEMBLED)
 ;   0x28F785  HDAE5000_Clear_Work_Buffer - Clear/init work buffer (DISASSEMBLED)
 ;   0x28F7DD  HDAE5000_Delay_Loop - Nested delay loop (DISASSEMBLED)
@@ -475,11 +475,63 @@ HDAE5000_Frame_Handler:			; 28F662h
 
 HDAE5000_Frame_Handler_Status:		; 28F6E0h
 	; Frame handler status check section
-	; 1. Check handler 1 status bit 2 at (0x230ECC)
-	; 2. Compare with previous state at 0x230ED0
-	; 3. If changed and now 0, call status routine at 0x28B3B3
-	; 4. If L=1, initialize display via workspace callbacks
-	binclude "includes/code_28f6e0_28f780.bin"
+	; Monitors handler 1 status bit 2, triggers display init when it transitions to 0
+	;
+	ld	XWA, (230ECCh)		; Load handler 1 pointer
+	ld	A, (XWA)		; Read status byte
+	and	A, 04h			; Isolate bit 2
+	cp	A, (230ED0h)		; Compare with previous state
+	db	76h, 8Fh, 00h		; jrl Z, Frame_Handler_Exit  ; Skip if unchanged
+	;
+	; Status changed - update previous state
+	ld	(230ED0h), A		; Store new state
+	cp	A, 0			; Check if bit 2 now clear
+	db	7Eh, 85h, 00h		; jrl NZ, Frame_Handler_Exit  ; Skip if bit still set
+	;
+	; Bit 2 cleared - check if display init needed
+	call	28B3B3h			; Call status check routine
+	cp	L, 1			; Check return value
+	jr	NZ, HDAE5000_Frame_Handler_Exit	; Skip if not 1
+	;
+	; Initialize display - call workspace callback
+	ld	XWA, (23A1A2h)		; Main workspace pointer
+	ld	XWA, (XWA + 0E0Ah)	; Handler table A
+	ld	XIX, (XWA + 0278h)	; Get display callback
+	call	T, XIX			; Call if valid
+	cp	XHL, 01A0007Fh		; Check return value
+	jr	Z, .init_display	; If match, do full init
+	;
+	; Partial update
+	ld	WA, 1
+	call	28B3B9h			; Call update routine
+	ld	WA, 007Fh
+	call	28AC68h			; Call UI update
+	jr	T, HDAE5000_Frame_Handler_Exit
+	;
+.init_display:
+	; Full display initialization sequence
+	ld	XWA, (23A1A2h)
+	ld	XWA, (XWA + 0E0Ah)
+	ld	XHL, (XWA + 0124h)	; Init callback 1
+	ld	XWA, 007F013Eh		; Display params
+	ld	XBC, 01C00001h		; Init flags
+	ld	XDE, 0
+	call	T, XHL
+	;
+	ld	XWA, (23A1A2h)
+	ld	XWA, (XWA + 0E0Ah)
+	ld	XHL, (XWA + 0534h)	; Init callback 2
+	ld	XWA, 007F013Eh
+	ld	XBC, 01CA0000h
+	call	T, XHL
+	;
+	ld	XWA, (23A1A2h)
+	ld	XWA, (XWA + 0E0Ah)
+	ld	XHL, (XWA + 0124h)	; Init callback 3
+	ld	XWA, 007F013Eh
+	ld	XBC, 01CA0000h
+	ld	XDE, 0
+	call	T, XHL
 
 HDAE5000_Frame_Handler_Exit:		; 28F781h
 	; Exit frame handler by jumping to PPORT handler
