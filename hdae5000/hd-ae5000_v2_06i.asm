@@ -59,7 +59,7 @@
 ;   0x28F785  HDAE5000_Clear_Work_Buffer - Clear/init work buffer (DISASSEMBLED)
 ;   0x28F7DD  HDAE5000_Delay_Loop - Nested delay loop (DISASSEMBLED)
 ;   0x28F7EE  HDAE5000_VGA_Port_Write - Write to VGA port (mem-mapped at 0x170000) (DISASSEMBLED)
-;   0x28F813  HDAE5000_Palette_Setup - Set one VGA palette entry (LABEL EXPOSED)
+;   0x28F813  HDAE5000_Palette_Setup - Set one VGA palette entry (DISASSEMBLED)
 ;   0x28F8E0  HDAE5000_Load_Palette - Load all 256 palette entries (DISASSEMBLED)
 ;   0x28F90B  HDAE5000_Finalize_Init - Just returns (1-byte stub) (DISASSEMBLED)
 ;   0x28F90C  HDAE5000_Display_Init - Display/callback initialization (LABEL EXPOSED)
@@ -529,14 +529,112 @@ HDAE5000_VGA_Port_Write:		; 28F7EEh
 	ret
 
 HDAE5000_Palette_Setup:			; 28F813h
-	; Set one VGA palette entry
+	; Set one VGA palette entry - converts 8-bit RGB to VGA 6-bit format
 	; Input: A = palette index (0-255)
-	;        XBC = pointer to RGBX color data (4 bytes)
-	; Writes to VGA DAC ports at 0x170000+port:
-	;   0x3C8 = palette index register
-	;   0x3C9 = R, G, B data (sequential writes)
-	; RGB values are stored as 8-bit but shifted right 4 for VGA (6-bit)
-	binclude "includes/code_28f813_28f8df.bin"
+	;        XBC = pointer to RGBX color data (4 bytes: R, G, B, unused)
+	;
+	; VGA DAC format: 6-bit per channel (0-63), ROM has 8-bit (0-255)
+	; Conversion: value >> 4, with rounding if bit 3 set and value < 0xF0
+	;
+	; === Write palette index to port 0x3C8 ===
+	push	XIZ
+	ld	XIZ, XBC		; XIZ = pointer to RGBX data
+	extz	WA			; A = palette index, zero-extend
+	ld	BC, WA
+	ld	WA, 03C8h		; VGA palette index port
+	calr	HDAE5000_VGA_Port_Write
+	;
+	; === Process Red component (XIZ+0) ===
+	db	0B6h, 0CBh		; bit 3, (XIZ)  ; check rounding flag
+	jr	Z, .red_no_round
+	db	86h, 3Fh, 0F0h		; cp (XIZ), 0xF0
+	jr	NC, .red_high
+	db	86h, 21h		; ld A, (XIZ)
+	db	0C9h, 0EFh, 04h		; srl 4, A  ; divide by 16
+	db	0C9h, 61h		; inc 1, A  ; round up
+	extz	WA
+	ld	BC, WA
+	ld	WA, 03C9h		; VGA palette data port
+	calr	HDAE5000_VGA_Port_Write
+	jr	T, .green_start
+.red_high:
+	db	86h, 21h		; ld A, (XIZ)
+	db	0C9h, 0EFh, 04h		; srl 4, A
+	extz	WA
+	ld	BC, WA
+	ld	WA, 03C9h
+	calr	HDAE5000_VGA_Port_Write
+	jr	T, .green_start
+.red_no_round:
+	db	86h, 21h		; ld A, (XIZ)
+	db	0C9h, 0EFh, 04h		; srl 4, A
+	extz	WA
+	ld	BC, WA
+	ld	WA, 03C9h
+	calr	HDAE5000_VGA_Port_Write
+	;
+	; === Process Green component (XIZ+1) ===
+.green_start:
+	db	0BEh, 01h, 0CBh		; bit 3, (XIZ+1)
+	jr	Z, .green_no_round
+	db	8Eh, 01h, 3Fh, 0F0h	; cp (XIZ+1), 0xF0
+	jr	NC, .green_high
+	db	8Eh, 01h, 21h		; ld A, (XIZ+1)
+	db	0C9h, 0EFh, 04h		; srl 4, A
+	db	0C9h, 61h		; inc 1, A
+	extz	WA
+	ld	BC, WA
+	ld	WA, 03C9h
+	calr	HDAE5000_VGA_Port_Write
+	jr	T, .blue_start
+.green_high:
+	db	8Eh, 01h, 21h		; ld A, (XIZ+1)
+	db	0C9h, 0EFh, 04h		; srl 4, A
+	extz	WA
+	ld	BC, WA
+	ld	WA, 03C9h
+	calr	HDAE5000_VGA_Port_Write
+	jr	T, .blue_start
+.green_no_round:
+	db	8Eh, 01h, 21h		; ld A, (XIZ+1)
+	db	0C9h, 0EFh, 04h		; srl 4, A
+	extz	WA
+	ld	BC, WA
+	ld	WA, 03C9h
+	calr	HDAE5000_VGA_Port_Write
+	;
+	; === Process Blue component (XIZ+2) ===
+.blue_start:
+	db	0BEh, 02h, 0CBh		; bit 3, (XIZ+2)
+	jr	Z, .blue_no_round
+	db	8Eh, 02h, 3Fh, 0F0h	; cp (XIZ+2), 0xF0
+	jr	NC, .blue_high
+	db	8Eh, 02h, 21h		; ld A, (XIZ+2)
+	db	0C9h, 0EFh, 04h		; srl 4, A
+	db	0C9h, 61h		; inc 1, A
+	extz	WA
+	ld	BC, WA
+	ld	WA, 03C9h
+	calr	HDAE5000_VGA_Port_Write
+	jr	T, .done
+.blue_high:
+	db	8Eh, 02h, 21h		; ld A, (XIZ+2)
+	db	0C9h, 0EFh, 04h		; srl 4, A
+	extz	WA
+	ld	BC, WA
+	ld	WA, 03C9h
+	calr	HDAE5000_VGA_Port_Write
+	jr	T, .done
+.blue_no_round:
+	db	8Eh, 02h, 21h		; ld A, (XIZ+2)
+	db	0C9h, 0EFh, 04h		; srl 4, A
+	extz	WA
+	ld	BC, WA
+	ld	WA, 03C9h
+	calr	HDAE5000_VGA_Port_Write
+.done:
+	pop	XIZ
+	ret
 
 HDAE5000_Load_Palette:			; 28F8E0h
 	; Load all 256 VGA palette entries from ROM data
