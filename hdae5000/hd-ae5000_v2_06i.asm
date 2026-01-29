@@ -51,7 +51,7 @@
 ;   0x28F570  HDAE5000_Get_Init_Flag - Return HD presence flag (DISASSEMBLED)
 ;
 ; Code Section 2 (0x28F662-0x2FFFFF):
-;   0x28F662  HDAE5000_Frame_Handler - Main frame handler entry (LABEL EXPOSED)
+;   0x28F662  HDAE5000_Frame_Handler - Main frame handler entry (DISASSEMBLED)
 ;                Calculates display offset, calls registered callbacks
 ;   0x28F6E0  HDAE5000_Frame_Handler_Status - Status check section (LABEL EXPOSED)
 ;                Checks handler bit 2, calls status routines if changed
@@ -420,12 +420,58 @@ HDAE5000_Boot_Init:			; 28F576h
 ; ============================================================================
 
 HDAE5000_Frame_Handler:			; 28F662h
-	; Frame handler main entry - calculates display offset, calls callbacks
+	; Frame handler main entry - called periodically from main loop
 	; 1. Check workspace pointer at 0x23A19E (skip if -1)
 	; 2. Read handler states from 0x230ED2, 0x230ED6
 	; 3. Calculate display offset = (WA * 3) << 2, store at 0x230EC6
 	; 4. Call registered callback via workspace[0x0E0A][0x0124]
-	binclude "includes/code_28f662_28f6df.bin"
+	;
+	ld	XWA, (23A19Eh)		; Load secondary workspace pointer
+	cp	XWA, 0FFFFFFFFh		; Check if uninitialized (-1)
+	jr	Z, HDAE5000_Frame_Handler_Status	; Skip to status check if no workspace
+	;
+	; Calculate display offset from handler states
+	ld	XWA, (230ED6h)		; Load handler 3 pointer
+	ld	A, (XWA)		; Read state byte
+	db	0C9h, 0EFh, 03h		; srl 3, A  ; divide by 8
+	ld	E, A			; Save in E
+	;
+	ld	XWA, (230ED2h)		; Load handler 2 pointer
+	ld	WA, (XWA)		; Read state word
+	extz	XWA			; Zero-extend to 32-bit
+	ld	XBC, XWA		; XBC = state value
+	add	XBC, XBC		; XBC *= 2
+	add	XBC, XWA		; XBC *= 3 (total: state * 3)
+	db	0E9h, 0EEh, 02h		; sll 2, XBC  ; XBC *= 4 (total: state * 12)
+	ld	XWA, 0			; Clear XWA
+	ld	A, E			; Restore shifted value
+	db	0E8h, 62h		; inc 2, XWA  ; Add 2 (?) to low word
+	add	XWA, XBC		; Combine offsets
+	ld	(230EC6h), XWA		; Store calculated display offset
+	;
+	; Check if state changed
+	db	0CDh, 61h		; inc 1, E
+	ld	A, E
+	extz	WA
+	cp	WA, (230EC4h)		; Compare with previous state
+	jr	Z, HDAE5000_Frame_Handler_Status	; Skip if unchanged
+	;
+	; State changed - update and call callback
+	ld	A, E
+	extz	WA
+	ld	(230EC4h), WA		; Update state variable
+	ld	XWA, (230ED2h)		; Load handler 2 pointer
+	ld	WA, (XWA)		; Read state
+	ld	(230EC2h), WA		; Store in temp
+	lda	XWA, 230EC2h		; Load address of temp
+	ld	XBC, XWA		; XBC = temp address
+	ld	XWA, (23A19Eh)		; Secondary workspace pointer
+	ld	XDE, XBC		; XDE = temp address
+	ld	XBC, (23A1A2h)		; Main workspace pointer
+	ld	XBC, (XBC + 0E0Ah)	; Handler table A
+	ld	XHL, (XBC + 0124h)	; Get callback function
+	ld	XBC, 01CA0004h		; Callback parameter
+	call	T, XHL			; Call callback if valid
 
 HDAE5000_Frame_Handler_Status:		; 28F6E0h
 	; Frame handler status check section
