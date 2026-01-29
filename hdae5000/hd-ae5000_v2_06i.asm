@@ -56,7 +56,7 @@
 ;   0x28F6E0  HDAE5000_Frame_Handler_Status - Status check section (LABEL EXPOSED)
 ;                Checks handler bit 2, calls status routines if changed
 ;   0x28F781  HDAE5000_Frame_Handler_Exit - Exit via JP to PPORT (DISASSEMBLED)
-;   0x28F785  HDAE5000_Clear_Work_Buffer - Clear 0xF52A bytes at 0x22A000 (LABEL EXPOSED)
+;   0x28F785  HDAE5000_Clear_Work_Buffer - Clear/init work buffer (DISASSEMBLED)
 ;   0x28F7DD  HDAE5000_Delay_Loop - Nested delay loop (DISASSEMBLED)
 ;   0x28F7EE  HDAE5000_VGA_Port_Write - Write to VGA port (mem-mapped at 0x170000) (DISASSEMBLED)
 ;   0x28F813  HDAE5000_Palette_Setup - Set one VGA palette entry (LABEL EXPOSED)
@@ -445,10 +445,50 @@ HDAE5000_Frame_Handler_Exit:		; 28F781h
 
 HDAE5000_Clear_Work_Buffer:		; 28F785h
 	; Clear work buffer and copy initialization data from ROM
-	; 1. Clear 0xF52A bytes (62,762) at 0x22A000 using LDIRW
-	; 2. Copy 0x0C82 bytes (3,202) from ROM 0x2F94B2 to RAM 0x23952A
-	; Uses LDIRW for word copy, LDIR for byte copy with loop handling
-	binclude "includes/code_28f785_28f7dc.bin"
+	; Part 1: Clear 0xF52A bytes (62,762) at 0x22A000 using word operations
+	; Part 2: Copy 0x0C82 bytes (3,202) from ROM 0x2F94B2 to RAM 0x23952A
+	;
+	; Uses LDIRW for word block copy, LDIR for byte copy
+	; Handles large counts via QBC (high word of XBC) loop
+	;
+	; === Part 1: Clear work buffer ===
+	ld	XDE, 0022A000h		; Destination = work buffer
+	ld	XBC, 0000F52Ah		; Count = 62,762 bytes
+	ld	IX, BC			; Save low word for odd byte check
+	db	0E9h, 0EFh, 01h		; srl 1, XBC  ; divide by 2 for word ops
+	jr	Z, .clear_done		; Skip if count was 0 or 1
+	ld	XHL, XDE		; Source = destination (for LDIRW)
+	db	0F5h, 0E9h, 02h, 00h, 00h	; ld (XDE+), 0x0000  ; store first word
+	db	0E9h, 69h		; dec 1, XBC
+	or	XBC, XBC
+	jr	Z, .clear_done
+	db	93h, 11h		; ldirw  ; copy words (fills with zeros)
+	db	0D7h, 0E6h, 0D8h	; cp QBC, 0  ; check high word
+	jr	Z, .clear_done
+	db	0D7h, 0E6h, 88h		; ld WA, QBC  ; get high word count
+.clear_loop:
+	db	93h, 11h		; ldirw  ; continue word copy
+	db	0D8h, 1Ch, 0FBh		; djnz WA, .clear_loop
+.clear_done:
+	db	0DCh, 33h, 00h		; bit 0, IX  ; check if odd byte
+	jr	Z, .no_odd_byte
+	ld	(XDE), 00h		; Clear final odd byte
+.no_odd_byte:
+	; === Part 2: Copy init data from ROM to RAM ===
+	ld	XDE, 0023952Ah		; Destination = RAM init area
+	ld	XHL, 002F94B2h		; Source = ROM init data
+	ld	XBC, 00000C82h		; Count = 3,202 bytes
+	or	XBC, XBC
+	jr	Z, .copy_done
+	db	83h, 11h		; ldir  ; copy bytes
+	db	0D7h, 0E6h, 0D8h	; cp QBC, 0
+	jr	Z, .copy_done
+	db	0D7h, 0E6h, 88h		; ld WA, QBC
+.copy_loop:
+	db	83h, 11h		; ldir
+	db	0D8h, 1Ch, 0FBh		; djnz WA, .copy_loop
+.copy_done:
+	ret
 
 HDAE5000_Delay_Loop:			; 28F7DDh
 	; Simple nested delay loop - decrements XWA until zero
