@@ -121,6 +121,25 @@
 ;   0x22A000  HDAE5000_WORK_BUFFER - Work buffer (0xF52A bytes, cleared at init)
 ;   0x23952A  HDAE5000_DATA_COPY_DEST - Data copy destination
 ;
+; Hard Disk RAM Variables (0x229Dxx):
+;   0x229D90  HD_STATUS_FLAG - Current drive status
+;   0x229D92  HD_RESULT_FLAG - Last operation result (0=no HD, non-zero=present)
+;   0x229D99  HD_CONFIG_START - Start of drive configuration flags
+;   0x229DAE  HD_CONFIG_END - End of drive configuration flags
+;   0x229DC8  HD_CONTROL_FLAG - Control register shadow
+;   0x229DD9  HD_ENABLE_FLAG - Drive enabled flag
+;   0x23A08E  HD_COMMAND_SHADOW - Shadow of last ATA command sent
+;
+; Hard Disk Interface:
+;   The HD-AE5000 uses an IDE/ATA hard disk accessed via PPI bridge.
+;   The disk uses CHS (Cylinder/Head/Sector) addressing.
+;   Debug strings reveal parameters: hddtrck, hddhead, hddsctr, hddscby
+;
+; Filesystem Structures:
+;   FSB - File System Block (master metadata)
+;   FGB - File Group Block (file grouping)
+;   FEB - File Entry Block (individual file metadata)
+;
 ; PPORT (PC Parallel Port) Command Menu:
 ;   The HD-AE5000 provides a parallel port interface for PC communication.
 ;   Command menu strings at 0x295412 define available operations:
@@ -1129,15 +1148,23 @@ HDAE5000_StrCopy:			; 29AF0Bh
 	ret
 
 ; ----------------------------------------------------------------------------
-; Remaining Code and Data (0x29AF2D - 0x2FFFFF)
-; Contains additional utility routines, lookup tables, and padding
+; Remaining Code and Data (0x29AF2D - 0x2FA134)
+; Contains additional utility routines, lookup tables, and data:
+;   - String manipulation utilities (strlen, strncpy, etc.)
+;   - Memory utilities (compare, search)
+;   - Number formatting (itoa, hex conversion)
+;   - 32-bit multiply routine (0x29B72D)
+;   - UI configuration tables
+;   - Graphics/image data
+;
+; Followed by 24,267 bytes of zero padding (0x2FA135 - 0x2FFFFF)
 ; ----------------------------------------------------------------------------
 
 HDAE5000_Code_Remainder:		; 29AF2Dh
 	binclude "includes/code_29af2d_2fffff.bin"
 
 ; ============================================================================
-; END OF ROM
+; END OF ROM (0x300000)
 ; ============================================================================
 
 	end

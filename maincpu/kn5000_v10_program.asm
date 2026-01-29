@@ -525,7 +525,7 @@ LABEL_E00B04:
 	ORG 0E00B28h
 LABEL_E00B28:
 
-; Note: LABEL_E04590 and LABEL_E04B30 are now defined at their binclude locations
+; Note: SOUND_DATA_GUITAR and SOUND_DATA_STRINGS_VOCAL are now defined at their binclude locations
 
 	ORG 0E06DB0h
 LABEL_E06DB0:
@@ -1293,7 +1293,7 @@ LABEL_E0B14A:
 LABEL_E0B14D:
 
 	ORG 0E0B150h
-LABEL_E0B150:
+SOUND_DATA_ORGAN_ACCORDION:
 
 
 
@@ -35306,16 +35306,16 @@ LABEL_E00012:
 	dd LABEL_EF31A5
 	dd LABEL_EF31A5
 
-LABEL_E00032:
+SLIDE_STRING:
 	db "SLIDE", 000h
-	db "Technics KN5000 Program  DATA FILE 1/2", 000h, 0ffh		; E00038
-	db "Technics KN5000 Program  DATA FILE 2/2", 000h, 0ffh		; E00060
-	db "Technics KN5000 Program  DATA FILE PCK", 000h, 0ffh		; E00088
-	db "Technics KN5000 Table    DATA FILE 1/2", 000h, 0ffh		; E000B0
-	db "Technics KN5000 Table    DATA FILE 2/2", 000h, 0ffh		; E000D8
-	db "Technics KN5000 Table    DATA FILE PCK", 000h, 0ffh		; E00100
-	db "Technics KN5000 CMPCUSTOMDATA FILE    ", 000h, 0ffh		; E00128
-	db "Technics KN5000 HD-AEPRG DATA FILE    ", 000h, 0ffh		; E00150
+FILETYPE_SIG_PROGRAM_1:	db "Technics KN5000 Program  DATA FILE 1/2", 000h, 0ffh		; E00038
+FILETYPE_SIG_PROGRAM_2:	db "Technics KN5000 Program  DATA FILE 2/2", 000h, 0ffh		; E00060
+FILETYPE_SIG_PROGRAM_PCK:	db "Technics KN5000 Program  DATA FILE PCK", 000h, 0ffh		; E00088
+FILETYPE_SIG_TABLE_1:	db "Technics KN5000 Table    DATA FILE 1/2", 000h, 0ffh		; E000B0
+FILETYPE_SIG_TABLE_2:	db "Technics KN5000 Table    DATA FILE 2/2", 000h, 0ffh		; E000D8
+FILETYPE_SIG_TABLE_PCK:	db "Technics KN5000 Table    DATA FILE PCK", 000h, 0ffh		; E00100
+FILETYPE_SIG_CMPCUSTOM:	db "Technics KN5000 CMPCUSTOMDATA FILE    ", 000h, 0ffh		; E00128
+FILETYPE_SIG_HDAE_PRG:	db "Technics KN5000 HD-AEPRG DATA FILE    ", 000h, 0ffh		; E00150
 
 HANDLE_UPDATE_BASE_ADDR		EQU HANDLE_UPDATE_FILE_TYPE_ID_001h
 
@@ -35329,7 +35329,7 @@ HANDLE_UPDATE_OFFSETS:			; E00178
 	dw (HANDLE_UPDATE_FILE_TYPE_ID_007h - HANDLE_UPDATE_BASE_ADDR)	; "Technics KN5000 Program DATA FILE PCK"
 	dw (HANDLE_UPDATE_FILE_TYPE_ID_008h - HANDLE_UPDATE_BASE_ADDR)	; "Technics KN5000 Table DATA FILE PCK"
 
-LABEL_E00188:
+SLIDE_STRING_2:
 	db "SLIDE", 000h
 
 Bitmap_1bit_Flash_Memory_Update:	; e0018e
@@ -36560,22 +36560,22 @@ LABEL_E023A0:
 ; Sound data section pointers (16 entries)
 ; Each pointer references a sound data block for a category
 SOUND_DATA_SECTION_PTRS:		; E023B0
-	dd LABEL_E02510			; 0: PIANO data
-	dd LABEL_E04590			; 1: GUITAR data
-	dd LABEL_E04B30			; 2: STRINGS & VOCAL data
-	dd LABEL_E06BB0			; 3: BRASS data (pointer table)
-	dd LABEL_E06F30			; 4: FLUTE data
-	dd LABEL_E08BB0			; 5: SAX & REED data
-	dd LABEL_E09150			; 6: MALLET&ORCH PERC data
-	dd LABEL_E0ADD0			; 7: WORLD PERC data
-	dd LABEL_E0B150			; 8: ORGAN&ACCORDION data
-	dd LABEL_E0B250			; 9: ORCHESTRAL PAD data
-	dd LABEL_E0B2D0			; 10: SYNTH data
-	dd LABEL_E0B3D0			; 11: BASS data
-	dd LABEL_E0B3E2			; 12: DIGITAL DRAWBAR data
-	dd LABEL_E0B3F4			; 13: ACCORDION REG. data
-	dd LABEL_E0B406			; 14: GM SPECIAL data
-	dd LABEL_E0B418			; 15: DRUM KITS data
+	dd SOUND_DATA_PIANO			; 0: PIANO data
+	dd SOUND_DATA_GUITAR			; 1: GUITAR data
+	dd SOUND_DATA_STRINGS_VOCAL			; 2: STRINGS & VOCAL data
+	dd SOUND_DATA_BRASS_PTRS			; 3: BRASS data (pointer table)
+	dd SOUND_DATA_FLUTE			; 4: FLUTE data
+	dd SOUND_DATA_SAX_REED			; 5: SAX & REED data
+	dd SOUND_DATA_MALLET_ORCH_PERC			; 6: MALLET&ORCH PERC data
+	dd SOUND_DATA_WORLD_PERC			; 7: WORLD PERC data
+	dd SOUND_DATA_ORGAN_ACCORDION			; 8: ORGAN&ACCORDION data
+	dd SOUND_DATA_ORCHESTRAL_PAD			; 9: ORCHESTRAL PAD data
+	dd SOUND_DATA_SYNTH			; 10: SYNTH data
+	dd SOUND_DATA_BASS			; 11: BASS data
+	dd SOUND_DATA_DIGITAL_DRAWBAR			; 12: DIGITAL DRAWBAR data
+	dd SOUND_DATA_ACCORDION_REG			; 13: ACCORDION REG. data
+	dd SOUND_DATA_GM_SPECIAL			; 14: GM SPECIAL data
+	dd SOUND_DATA_DRUM_KITS			; 15: DRUM KITS data
 
 ; Sound category names - 18 categories for the sound selection UI
 SOUND_CATEGORY_NAMES:			; E023F0
@@ -36598,16 +36598,16 @@ SOUND_CATEGORY_NAMES:			; E023F0
 	db "MEMORY A        "		; Category 16
 	db "MEMORY B    "			; Category 17
 
-LABEL_E02510:
+SOUND_DATA_PIANO:
 	binclude "includes/e02510_e0458f.bin" ; Instrument category data (PIANO, ORGAN, etc.)
 
-LABEL_E04590:  ; GUITAR data (referenced from sound category table)
+SOUND_DATA_GUITAR:  ; GUITAR data (referenced from sound category table)
 	binclude "includes/e04590_e04b2f.bin"
 
-LABEL_E04B30:  ; STRINGS & VOCAL data (referenced from sound category table)
+SOUND_DATA_STRINGS_VOCAL:  ; STRINGS & VOCAL data (referenced from sound category table)
 	binclude "includes/e04b30_e06baf.bin"
 
-LABEL_E06BB0:
+SOUND_DATA_BRASS_PTRS:
 	dd LABEL_E06DB0
 	dd LABEL_E06DB3
 	dd LABEL_E06DB6
@@ -36786,19 +36786,19 @@ LABEL_E06BB0:
 	db 0FFh, 07Dh, 002h, 0FFh, 07Bh, 000h, 0FFh, 07Bh
 	db 001h, 0FFh, 07Dh, 003h, 0FFh, 07Bh, 002h, 0FFh
 
-LABEL_E06F30:  ; FLUTE sound data
+SOUND_DATA_FLUTE:  ; FLUTE sound data
 	binclude "includes/e06f30_e078f1.bin"
 
 LABEL_E078F2:  ; Additional FLUTE data (referenced by pointer table)
 	binclude "includes/e078f2_e08baf.bin"
 
-LABEL_E08BB0:  ; SAX & REED sound data
+SOUND_DATA_SAX_REED:  ; SAX & REED sound data
 	binclude "includes/e08bb0_e0914f.bin"
 
-LABEL_E09150:  ; MALLET & ORCH PERC sound data
+SOUND_DATA_MALLET_ORCH_PERC:  ; MALLET & ORCH PERC sound data
 	binclude "includes/e09150_e0adcf.bin"
 
-LABEL_E0ADD0:
+SOUND_DATA_WORLD_PERC:
 	dd LABEL_E0AFD0
 	dd LABEL_E0AFD3
 	dd LABEL_E0AFD6
@@ -37010,25 +37010,25 @@ LABEL_E0AFD0:
 	db 0F0h, 000h, 0F0h, 000h, 0F0h, 000h, 0F0h, 000h
 	db 0F0h, 000h, 0F0h, 000h, 0F0h, 000h, 0F0h, 000h
 
-LABEL_E0B250:
+SOUND_DATA_ORCHESTRAL_PAD:
 	binclude "includes/e0b250_e0b2cf.bin"
 
-LABEL_E0B2D0:
+SOUND_DATA_SYNTH:
 	binclude "includes/e0b2d0_e0b3cf.bin"
 
-LABEL_E0B3D0:
+SOUND_DATA_BASS:
 	binclude "includes/e0b3d0_e0b3e1.bin"
 
-LABEL_E0B3E2:
+SOUND_DATA_DIGITAL_DRAWBAR:
 	binclude "includes/e0b3e2_e0b3f3.bin"
 
-LABEL_E0B3F4:
+SOUND_DATA_ACCORDION_REG:
 	binclude "includes/e0b3f4_e0b405.bin"
 
-LABEL_E0B406:
+SOUND_DATA_GM_SPECIAL:
 	binclude "includes/e0b406_e0b417.bin"
 
-LABEL_E0B418:
+SOUND_DATA_DRUM_KITS:
 	binclude "includes/e0b418_e0b4ec.bin"
 
 LABEL_E0B4ED:
@@ -37185,8 +37185,8 @@ LABEL_E0E9A0:
 	db 008h, 000h, 000h, 000h
 	db 000h, 000h, 020h, 000h
 	db 020h, 000h
-	dd LABEL_E0E9BA
-LABEL_E0E9BA:	db "FTBMP01", 000h	; Technics logo + World Globe
+	dd FTDEMO_BMP01_TECHNICS_GLOBE
+FTDEMO_BMP01_TECHNICS_GLOBE:	db "FTBMP01", 000h	; Technics logo + World Globe
 
 
 LABEL_E0E9C2:
@@ -37218,19 +37218,19 @@ LABEL_E0EA22:
 	db 02Bh, 000h, 060h, 001h, 004h, 000h
 	db 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 008h, 000h
 	db 02Ah, 000h, 034h, 000h, 07Dh, 000h, 046h, 000h
-	dd LABEL_E0EA42
+	dd UI_CATEGORY_200_PRESET
 	db 001h, 000h, 000h, 000h
 	db 0FCh, 000h
-LABEL_E0EA42: db "200 Preset", 000h, 0FFh
+UI_CATEGORY_200_PRESET: db "200 Preset", 000h, 0FFh
 
 
 LABEL_E0EA4E:
 	db 02Bh, 000h, 060h, 001h, 003h, 000h, 0FFh, 0FFh, 007h, 000h
 	db 004h, 000h, 008h, 000h, 0C8h, 000h, 0D4h, 000h
 	db 023h, 001h, 0E6h, 000h
-	dd LABEL_E0EA6E
+	dd UI_CATEGORY_PERFORMANCE
 	db 000h, 000h, 000h, 000h, 000h, 000h
-LABEL_E0EA6E: db "Performance", 000h
+UI_CATEGORY_PERFORMANCE: db "Performance", 000h
 
 
 LABEL_E0EA7A:
@@ -37245,10 +37245,10 @@ LABEL_E0EA94:
 	db 007h, 000h, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh
 	db 008h, 000h, 02Ah, 000h, 074h, 000h, 075h, 000h
 	db 086h, 000h
-	dd LABEL_E0EAB4
+	dd UI_CATEGORY_20_CUSTOM
 	db 001h, 000h
 	db 000h, 000h, 0FCh, 000h
-LABEL_E0EAB4:	db "20 Custom", 000h
+UI_CATEGORY_20_CUSTOM:	db "20 Custom", 000h
 
 
 LABEL_E0EABE:
@@ -37261,9 +37261,9 @@ LABEL_E0EAD8:
 	db 02Bh, 000h, 060h, 001h, 009h, 000h, 0FFh, 0FFh
 	db 0FFh, 0FFh, 0FFh, 0FFh, 008h, 000h, 0BCh, 000h
 	db 054h, 000h, 00Fh, 001h, 066h, 000h
-	dd LABEL_E0EAF8
+	dd UI_CATEGORY_3_COMPOSER
 	db 001h, 000h, 000h, 000h, 0FCh, 000h
-LABEL_E0EAF8:	db "3 Composer", 000h, 0FFh
+UI_CATEGORY_3_COMPOSER:	db "3 Composer", 000h, 0FFh
 
 
 LABEL_E0EB04:
@@ -37271,10 +37271,10 @@ LABEL_E0EB04:
 	db 003h, 000h, 0FFh, 0FFh, 00Ch, 000h, 009h, 000h
 	db 008h, 000h, 038h, 000h, 0D4h, 000h, 073h, 000h
 	db 0E6h, 000h
-	dd LABEL_E0EB24
+	dd UI_CATEGORY_BACKUP
 	db 000h, 000h
 	db 000h, 000h, 000h, 000h
-LABEL_E0EB24:	db "Back-up", 000h
+UI_CATEGORY_BACKUP:	db "Back-up", 000h
 
 
 LABEL_E0EB2C:
@@ -37439,10 +37439,10 @@ LABEL_E0EDA4:
 	db 003h, 000h, 0FFh, 0FFh, 023h, 000h, 01Bh, 000h
 	db 008h, 000h, 0CEh, 000h, 036h, 000h, 011h, 001h
 	db 048h, 000h
-	dd LABEL_E0EDC4
+	dd UI_CATEGORY_VOLATILE
 	db 000h, 000h
 	db 000h, 000h, 000h, 000h
-LABEL_E0EDC4:	db "Volatile", 000h, 0FFh
+UI_CATEGORY_VOLATILE:	db "Volatile", 000h, 0FFh
 
 
 LABEL_E0EDCE:
@@ -37450,10 +37450,10 @@ LABEL_E0EDCE:
 	db 003h, 000h, 0FFh, 0FFh, 024h, 000h
 	db 022h, 000h, 008h, 000h, 01Eh, 000h, 056h, 000h
 	db 081h, 000h, 068h, 000h
-	dd LABEL_E0EDEE
+	dd UI_CATEGORY_NON_VOLATILE
 	db 000h, 000h, 000h, 000h, 000h, 000h
 	
-LABEL_E0EDEE:	db "Non Volatile", 000h, 0FFh
+UI_CATEGORY_NON_VOLATILE:	db "Non Volatile", 000h, 0FFh
 
 
 LABEL_E0EDFC:
@@ -37461,19 +37461,19 @@ LABEL_E0EDFC:
 	db 003h, 000h, 0FFh, 0FFh, 025h, 000h, 023h, 000h
 	db 008h, 000h, 01Eh, 000h, 016h, 000h, 069h, 000h
 	db 028h, 000h
-	dd LABEL_E0EE1C
+	dd UI_CATEGORY_PLAY_ONLY
 	db 000h, 000h
 	db 000h, 000h, 000h, 000h
-LABEL_E0EE1C:	db "Play Only", 000h
+UI_CATEGORY_PLAY_ONLY:	db "Play Only", 000h
 
 
 LABEL_E0EE26:
 	db 02Bh, 000h, 060h, 001h, 003h, 000h, 0FFh, 0FFh, 026h, 000h
 	db 024h, 000h, 008h, 000h, 0B6h, 000h, 0AAh, 000h
 	db 0C1h, 000h, 0BCh, 000h
-	dd LABEL_E0EE46
+	dd UI_CATEGORY_7F
 	db 000h, 000h, 000h, 000h, 007h, 000h
-LABEL_E0EE46:	db "~7f", 000h
+UI_CATEGORY_7F:	db "~7f", 000h
 
 
 LABEL_E0EE4A:
@@ -37677,9 +37677,9 @@ LABEL_E0F14E:
 	db 02Bh, 000h, 060h, 001h, 042h, 000h, 0FFh, 0FFh, 044h, 000h
 	db 0FFh, 0FFh, 008h, 000h, 0BCh, 000h, 040h, 000h
 	db 00Fh, 001h, 052h, 000h
-	dd LABEL_E0F16E
+	dd UI_CATEGORY_STYLE_DATA
 	db 000h, 000h, 000h, 000h, 000h, 000h
-LABEL_E0F16E:	db "Style Data", 000h, 0FFh
+UI_CATEGORY_STYLE_DATA:	db "Style Data", 000h, 0FFh
 
 
 LABEL_E0F17A:	
@@ -37694,10 +37694,10 @@ LABEL_E0F194:
 	db 044h, 000h, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh
 	db 008h, 000h, 02Ah, 000h, 070h, 000h, 075h, 000h
 	db 082h, 000h
-	dd LABEL_E0F1B4
+	dd UI_CATEGORY_20_CUSTOM_2
 	db 001h, 000h
 	db 000h, 000h, 0FCh, 000h
-LABEL_E0F1B4:	db "20 Custom", 000h
+UI_CATEGORY_20_CUSTOM_2:	db "20 Custom", 000h
 
 
 LABEL_E0F1BE:	
@@ -38010,8 +38010,8 @@ LABEL_E0F67C:
 	db 008h, 000h, 000h, 000h
 	db 06Ch, 000h, 020h, 000h
 	db 08Ch, 000h
-	dd LABEL_E0F696
-LABEL_E0F696:	db "FTBMP02", 000h	; Upside-down showcasing subwoofers
+	dd FTDEMO_BMP02_SUBWOOFERS
+FTDEMO_BMP02_SUBWOOFERS:	db "FTBMP02", 000h	; Upside-down showcasing subwoofers
 
 
 LABEL_E0F69E:
@@ -38102,8 +38102,8 @@ LABEL_E0F80C:
 	db 008h, 000h, 000h, 000h
 	db 06Ch, 000h, 020h, 000h
 	db 08Ch, 000h
-	dd LABEL_E0F826
-LABEL_E0F826:	db "FTBMP03", 000h	; Some floppy disks
+	dd FTDEMO_BMP03_FLOPPY_DISKS
+FTDEMO_BMP03_FLOPPY_DISKS:	db "FTBMP03", 000h	; Some floppy disks
 
 
 LABEL_E0F82E:
@@ -38124,8 +38124,8 @@ LABEL_E0F85A:
 	db 008h, 000h, 000h, 000h
 	db 06Ch, 000h, 020h, 000h
 	db 08Ch, 000h
-	dd LABEL_E0F874
-LABEL_E0F874:	db "FTBMP04", 000h	; Inserting disks into the floppy drive
+	dd FTDEMO_BMP04_DISK_INSERT
+FTDEMO_BMP04_DISK_INSERT:	db "FTBMP04", 000h	; Inserting disks into the floppy drive
 
 
 LABEL_E0F87C:
@@ -38245,8 +38245,8 @@ LABEL_E0FA7C:
 	db 008h, 000h, 000h, 000h
 	db 064h, 000h, 020h, 000h
 	db 084h, 000h
-	dd LABEL_E0FA96
-LABEL_E0FA96:	db "FTBMP05", 000h	; Arrows representing 360 surround sound
+	dd FTDEMO_BMP05_SURROUND_ARROWS
+FTDEMO_BMP05_SURROUND_ARROWS:	db "FTBMP05", 000h	; Arrows representing 360 surround sound
 
 
 LABEL_E0FA9E:
@@ -38537,19 +38537,19 @@ LABEL_E0FFAA:
 	db 02Bh, 000h, 060h, 001h, 0A6h, 000h
 	db 0FFh, 0FFh, 0A8h, 000h, 0FFh, 0FFh, 008h, 000h
 	db 01Eh, 000h, 096h, 000h, 0F9h, 000h, 0A8h, 000h
-	dd LABEL_E0FFCA
+	dd LYRICS_SAINTS_PART1
 	db 000h, 000h, 000h, 000h
 	db 000h, 000h
-LABEL_E0FFCA:	db "Oh,I want to be in that num", 000h
+LYRICS_SAINTS_PART1:	db "Oh,I want to be in that num", 000h
 
 
 LABEL_E0FFE6:
 	db 02Bh, 000h, 060h, 001h, 0A6h, 000h, 0FFh, 0FFh, 0A9h, 000h
 	db 0A7h, 000h, 008h, 000h, 0F6h, 000h, 096h, 000h
 	db 019h, 001h, 0A8h, 000h
-	dd LABEL_E10006
+	dd LYRICS_SAINTS_PART2
 	db 000h, 000h, 000h, 000h, 0FCh, 000h
-LABEL_E10006:	db "ber.", 000h, 0FFh
+LYRICS_SAINTS_PART2:	db "ber.", 000h, 0FFh
 
 
 LABEL_E1000C:
@@ -38557,9 +38557,9 @@ LABEL_E1000C:
 	db 0A6h, 000h, 0FFh, 0FFh, 0AAh, 000h, 0A8h, 000h
 	db 008h, 000h, 01Eh, 000h, 066h, 000h, 0B1h, 000h
 	db 078h, 000h
-	dd LABEL_E1002C
+	dd LYRICS_SAINTS_PART3
 	db 000h, 000h, 000h, 000h, 000h, 000h
-LABEL_E1002C:	db "Oh,When the Saints", 000h, 0FFh
+LYRICS_SAINTS_PART3:	db "Oh,When the Saints", 000h, 0FFh
 
 
 LABEL_E10040:
@@ -39041,8 +39041,8 @@ LABEL_E10898:
 	db 008h, 000h, 000h, 000h
 	db 000h, 000h, 020h, 000h
 	db 020h, 000h
-	dd LABEL_E108B2
-LABEL_E108B2:	db "FTBMP06", 000h	; KN5000 name + rainbow comet
+	dd FTDEMO_BMP06_KN5000_RAINBOW
+FTDEMO_BMP06_KN5000_RAINBOW:	db "FTBMP06", 000h	; KN5000 name + rainbow comet
 
 
 LABEL_E108BA:
@@ -42265,7 +42265,7 @@ LABEL_E1344E:
 	dd LABEL_E1443A
 	dd LABEL_E14438
 	dd LABEL_E14436
-	dd LABEL_E1442C
+	dd FTDEMO_FILENAME_46
 	dd LABEL_E1442A
 	dd LABEL_E14428
 	dd LABEL_E14426
@@ -42288,7 +42288,7 @@ LABEL_E1344E:
 	dd LABEL_E14404
 	dd LABEL_E14402
 	dd LABEL_E14400
-	dd LABEL_E143F6
+	dd FTDEMO_FILENAME_47
 	dd LABEL_E143F4
 	dd LABEL_E143F2
 	dd LABEL_E143F0
@@ -42309,7 +42309,7 @@ LABEL_E1344E:
 	dd LABEL_E143D2
 	dd LABEL_E143D0
 	dd LABEL_E143CE
-	dd LABEL_E143C4
+	dd FTDEMO_FILENAME_48
 	dd LABEL_E143C2
 	dd LABEL_E143C0
 	dd LABEL_E143BE
@@ -42330,7 +42330,7 @@ LABEL_E1344E:
 	dd LABEL_E143A0
 	dd LABEL_E1439E
 	dd LABEL_E1439C
-	dd LABEL_E14392
+	dd FTDEMO_FILENAME_43
 	dd LABEL_E14390
 	dd LABEL_E1438E
 	dd LABEL_E1438C
@@ -42409,7 +42409,7 @@ LABEL_E1438A:	db 000h, 0FFh
 LABEL_E1438C:	db 000h, 0FFh
 LABEL_E1438E:	db 000h, 0FFh
 LABEL_E14390:	db 000h, 0FFh
-LABEL_E14392:	db "ftdemo43", 000h, 0FFh
+FTDEMO_FILENAME_43:	db "ftdemo43", 000h, 0FFh
 LABEL_E1439C:	db 000h, 0FFh
 LABEL_E1439E:	db 000h, 0FFh
 LABEL_E143A0:	db 000h, 0FFh
@@ -42430,7 +42430,7 @@ LABEL_E143BC:	db 000h, 0FFh
 LABEL_E143BE:	db 000h, 0FFh
 LABEL_E143C0:	db 000h, 0FFh
 LABEL_E143C2:	db 000h, 0FFh
-LABEL_E143C4:	db "ftdemo48", 000h, 0FFh
+FTDEMO_FILENAME_48:	db "ftdemo48", 000h, 0FFh
 LABEL_E143CE:	db 000h, 0FFh
 LABEL_E143D0:	db 000h, 0FFh
 LABEL_E143D2:	db 000h, 0FFh
@@ -42451,7 +42451,7 @@ LABEL_E143EE:	db 000h, 0FFh
 LABEL_E143F0:	db 000h, 0FFh
 LABEL_E143F2:	db 000h, 0FFh
 LABEL_E143F4:	db 000h, 0FFh
-LABEL_E143F6:	db "ftdemo47", 000h, 0FFh
+FTDEMO_FILENAME_47:	db "ftdemo47", 000h, 0FFh
 LABEL_E14400:	db 000h, 0FFh
 LABEL_E14302:	db 000h, 0FFh
 LABEL_E14304:	db 000h, 0FFh
@@ -42474,7 +42474,7 @@ LABEL_E14424:	db 000h, 0FFh
 LABEL_E14426:	db 000h, 0FFh
 LABEL_E14428:	db 000h, 0FFh
 LABEL_E1442A:	db 000h, 0FFh
-LABEL_E1442C:	db "ftdemo46", 000h, 0FFh
+FTDEMO_FILENAME_46:	db "ftdemo46", 000h, 0FFh
 LABEL_E14436:	db 000h, 0FFh
 	db 000h, 0FFh, 000h, 0FFh, 000h, 0FFh, 000h, 0FFh
 	db 000h, 0FFh, 000h, 0FFh, 000h, 0FFh, 000h, 0FFh
@@ -42617,19 +42617,19 @@ LABEL_E1482C:
 	db 000h, 0FFh
 
 LABEL_E1482E:
-	dd LABEL_E1488E
-	dd LABEL_E1487C
-	dd LABEL_E14862
-	dd LABEL_E14860
-	dd LABEL_E14858
-	dd LABEL_E14846
+	dd MSG_BASS_PORT_ID		; Indonesian
+	dd MSG_BASS_PORT_EN2		; Duplicate
+	dd MSG_BASS_PORT_FR		; French
+	dd MSG_BASS_PORT_ES_UNUSED	; Spanish (empty)
+	dd MSG_BASS_PORT_DE		; German: "Italian" (incorrect label)
+	dd MSG_BASS_PORT_EN		; English
 
-LABEL_E14846:	db "Bass Port Speaker", 000h
-LABEL_E14858:	db "Italian", 000h
-LABEL_E14860:	db 000h, 0FFh
-LABEL_E14862:	db "Amplification des graves", 000h, 0FFh
-LABEL_E1487C:	db "Bass Port Speaker", 000h
-LABEL_E1488E:	db "Bass Port Speaker", 000h
+MSG_BASS_PORT_EN:	db "Bass Port Speaker", 000h
+MSG_BASS_PORT_DE:	db "Italian", 000h	; NOTE: Appears to be mislabeled in ROM
+MSG_BASS_PORT_ES_UNUSED:	db 000h, 0FFh
+MSG_BASS_PORT_FR:	db "Amplification des graves", 000h, 0FFh
+MSG_BASS_PORT_EN2:	db "Bass Port Speaker", 000h
+MSG_BASS_PORT_ID:	db "Bass Port Speaker", 000h
 
 LABEL_E148A0:
 	dd LABEL_E148DE
@@ -49280,169 +49280,169 @@ LABEL_E1CDDE:
 	db 000h, 000h
 	db 000h, 000h
 
-LABEL_E1E37A:
-	dd LABEL_E1E4B2 ; MEMORY A
-	dd LABEL_E1E4A8 ; MEMORY B
-	dd LABEL_E1E49E ; MEMORY C
-	dd LABEL_E1E494 ; CUSTOM 1
-	dd LABEL_E1E48A ; CUSTOM 2
-	dd LABEL_E1E480 ; CUSTOM 3
-	dd LABEL_E1E476 ; CUSTOM 4
-	dd LABEL_E1E46C ; CUSTOM 5
-	dd LABEL_E1E462 ; CUSTOM 6
-	dd LABEL_E1E458 ; CUSTOM 7
-	dd LABEL_E1E44E ; CUSTOM 8
-	dd LABEL_E1E444 ; CUSTOM 9
-	dd LABEL_E1E43A ; CUSTOM 10
-	dd LABEL_E1E430 ; CUSTOM 11
-	dd LABEL_E1E426 ; CUSTOM 12
-	dd LABEL_E1E41C ; CUSTOM 13
-	dd LABEL_E1E412 ; CUSTOM 14
-	dd LABEL_E1E408 ; CUSTOM 15
-	dd LABEL_E1E3FE ; CUSTOM 16
-	dd LABEL_E1E3F4 ; CUSTOM 17
-	dd LABEL_E1E3EA ; CUSTOM 18
-	dd LABEL_E1E3E0 ; CUSTOM 19
-	dd LABEL_E1E3D6 ; CUSTOM 20
+SLOT_NAME_PTRS:	; Pointer table for rhythm slot names
+	dd SLOT_NAME_MEMORY_A
+	dd SLOT_NAME_MEMORY_B
+	dd SLOT_NAME_MEMORY_C
+	dd SLOT_NAME_CUSTOM_01
+	dd SLOT_NAME_CUSTOM_02
+	dd SLOT_NAME_CUSTOM_03
+	dd SLOT_NAME_CUSTOM_04
+	dd SLOT_NAME_CUSTOM_05
+	dd SLOT_NAME_CUSTOM_06
+	dd SLOT_NAME_CUSTOM_07
+	dd SLOT_NAME_CUSTOM_08
+	dd SLOT_NAME_CUSTOM_09
+	dd SLOT_NAME_CUSTOM_10
+	dd SLOT_NAME_CUSTOM_11
+	dd SLOT_NAME_CUSTOM_12
+	dd SLOT_NAME_CUSTOM_13
+	dd SLOT_NAME_CUSTOM_14
+	dd SLOT_NAME_CUSTOM_15
+	dd SLOT_NAME_CUSTOM_16
+	dd SLOT_NAME_CUSTOM_17
+	dd SLOT_NAME_CUSTOM_18
+	dd SLOT_NAME_CUSTOM_19
+	dd SLOT_NAME_CUSTOM_20
 
-LABEL_E1E3D6:	db "CUSTOM 20", 000h
-LABEL_E1E3E0:	db "CUSTOM 19", 000h
-LABEL_E1E3EA:	db "CUSTOM 18", 000h
-LABEL_E1E3F4:	db "CUSTOM 17", 000h
-LABEL_E1E3FE:	db "CUSTOM 16", 000h
-LABEL_E1E408:	db "CUSTOM 15", 000h
-LABEL_E1E412:	db "CUSTOM 14", 000h
-LABEL_E1E41C:	db "CUSTOM 13", 000h
-LABEL_E1E426:	db "CUSTOM 12", 000h
-LABEL_E1E430:	db "CUSTOM 11", 000h
-LABEL_E1E43A:	db "CUSTOM 10", 000h
-LABEL_E1E444:	db "CUSTOM 9 ", 000h
-LABEL_E1E44E:	db "CUSTOM 8 ", 000h
-LABEL_E1E458:	db "CUSTOM 7 ", 000h
-LABEL_E1E462:	db "CUSTOM 6 ", 000h
-LABEL_E1E46C:	db "CUSTOM 5 ", 000h
-LABEL_E1E476:	db "CUSTOM 4 ", 000h
-LABEL_E1E480:	db "CUSTOM 3 ", 000h
-LABEL_E1E48A:	db "CUSTOM 2 ", 000h
-LABEL_E1E494:	db "CUSTOM 1 ", 000h
-LABEL_E1E49E:	db "MEMORY C ", 000h
-LABEL_E1E4A8:	db "MEMORY B ", 000h
-LABEL_E1E4B2:	db "MEMORY A ", 000h
+SLOT_NAME_CUSTOM_20:	db "CUSTOM 20", 000h
+SLOT_NAME_CUSTOM_19:	db "CUSTOM 19", 000h
+SLOT_NAME_CUSTOM_18:	db "CUSTOM 18", 000h
+SLOT_NAME_CUSTOM_17:	db "CUSTOM 17", 000h
+SLOT_NAME_CUSTOM_16:	db "CUSTOM 16", 000h
+SLOT_NAME_CUSTOM_15:	db "CUSTOM 15", 000h
+SLOT_NAME_CUSTOM_14:	db "CUSTOM 14", 000h
+SLOT_NAME_CUSTOM_13:	db "CUSTOM 13", 000h
+SLOT_NAME_CUSTOM_12:	db "CUSTOM 12", 000h
+SLOT_NAME_CUSTOM_11:	db "CUSTOM 11", 000h
+SLOT_NAME_CUSTOM_10:	db "CUSTOM 10", 000h
+SLOT_NAME_CUSTOM_09:	db "CUSTOM 9 ", 000h
+SLOT_NAME_CUSTOM_08:	db "CUSTOM 8 ", 000h
+SLOT_NAME_CUSTOM_07:	db "CUSTOM 7 ", 000h
+SLOT_NAME_CUSTOM_06:	db "CUSTOM 6 ", 000h
+SLOT_NAME_CUSTOM_05:	db "CUSTOM 5 ", 000h
+SLOT_NAME_CUSTOM_04:	db "CUSTOM 4 ", 000h
+SLOT_NAME_CUSTOM_03:	db "CUSTOM 3 ", 000h
+SLOT_NAME_CUSTOM_02:	db "CUSTOM 2 ", 000h
+SLOT_NAME_CUSTOM_01:	db "CUSTOM 1 ", 000h
+SLOT_NAME_MEMORY_C:	db "MEMORY C ", 000h
+SLOT_NAME_MEMORY_B:	db "MEMORY B ", 000h
+SLOT_NAME_MEMORY_A:	db "MEMORY A ", 000h
 
 LABEL_E1E4BC:
 	; Control codes/header
 	db 01Ch, 000h, 01Ch, 000h, 02Dh, 000h, 02Dh, 000h, 02Dh, 000h, 020h, 000h
 	db 02Dh, 000h, 027h, 000h, 01Ch, 000h, 000h, 000h
 	; Localization: Attention (6 languages)
-LABEL_E1E4D0:	db "ATTENTION!", 000h, 0FFh	; English (12 bytes)
-LABEL_E1E4DC:	db "ACHTUNG !", 000h	; German (10 bytes)
-LABEL_E1E4E6:	db "ATTENTION!", 000h, 0FFh	; French (12 bytes)
-LABEL_E1E4F2:	db 0A1h, "ATENCI", 0D3h, "N!", 000h, 0FFh	; Spanish (12 bytes)
-LABEL_E1E4FE:	db "ATTENTION!", 000h, 0FFh	; Duplicate (12 bytes)
-LABEL_E1E50A:	db "Perhatian !", 000h	; Indonesian (12 bytes)
+MSG_ATTENTION_EN:	db "ATTENTION!", 000h, 0FFh	; English (12 bytes)
+MSG_ATTENTION_DE:	db "ACHTUNG !", 000h	; German (10 bytes)
+MSG_ATTENTION_FR:	db "ATTENTION!", 000h, 0FFh	; French (12 bytes)
+MSG_ATTENTION_ES:	db 0A1h, "ATENCI", 0D3h, "N!", 000h, 0FFh	; Spanish (12 bytes)
+MSG_ATTENTION_EN2:	db "ATTENTION!", 000h, 0FFh	; Duplicate (12 bytes)
+MSG_ATTENTION_ID:	db "Perhatian !", 000h	; Indonesian (12 bytes)
 	; Pointer table at 0xE1E516
-	dd LABEL_E1E4D0
-	dd LABEL_E1E4DC
-	dd LABEL_E1E4E6
-	dd LABEL_E1E4F2
-	dd LABEL_E1E4FE
-	dd LABEL_E1E50A
+	dd MSG_ATTENTION_EN
+	dd MSG_ATTENTION_DE
+	dd MSG_ATTENTION_FR
+	dd MSG_ATTENTION_ES
+	dd MSG_ATTENTION_EN2
+	dd MSG_ATTENTION_ID
 
 
 	; Localization: AreYouSure (6 languages)
-LABEL_E1E52E:	db "Are You Sure?", 000h	; English (14 bytes)
-LABEL_E1E53C:	db "Sind Sie sicher ?", 000h	; German (18 bytes)
-LABEL_E1E54E:	db "Etes vous s", 0FBh, "r?", 000h, 0FFh	; French (16 bytes)
-LABEL_E1E55E:	db 0BFh, "Est", 0E1h, " seguro?", 000h	; Spanish (14 bytes)
-LABEL_E1E56C:	db "Are You Sure?", 000h	; Duplicate (14 bytes)
-LABEL_E1E57A:	db "Apakah yakin akan dihapus ?", 000h	; Indonesian (28 bytes)
+MSG_ARE_YOU_SURE_EN:	db "Are You Sure?", 000h	; English (14 bytes)
+MSG_ARE_YOU_SURE_DE:	db "Sind Sie sicher ?", 000h	; German (18 bytes)
+MSG_ARE_YOU_SURE_FR:	db "Etes vous s", 0FBh, "r?", 000h, 0FFh	; French (16 bytes)
+MSG_ARE_YOU_SURE_ES:	db 0BFh, "Est", 0E1h, " seguro?", 000h	; Spanish (14 bytes)
+MSG_ARE_YOU_SURE_EN2:	db "Are You Sure?", 000h	; Duplicate (14 bytes)
+MSG_ARE_YOU_SURE_ID:	db "Apakah yakin akan dihapus ?", 000h	; Indonesian (28 bytes)
 	; Pointer table at 0xE1E596
-	dd LABEL_E1E52E
-	dd LABEL_E1E53C
-	dd LABEL_E1E54E
-	dd LABEL_E1E55E
-	dd LABEL_E1E56C
-	dd LABEL_E1E57A
+	dd MSG_ARE_YOU_SURE_EN
+	dd MSG_ARE_YOU_SURE_DE
+	dd MSG_ARE_YOU_SURE_FR
+	dd MSG_ARE_YOU_SURE_ES
+	dd MSG_ARE_YOU_SURE_EN2
+	dd MSG_ARE_YOU_SURE_ID
 
 
 	; Localization: CustomSoundWillBeCopied (6 languages)
-LABEL_E1E5AE:	db "The Custom sound memories included with this pattern will be copied into the Sound Group memories. Some of the Sound Group memories will be replaced by them. OK?", 000h	; English (162 bytes)
-LABEL_E1E650:	db "Die Custom Sounds, die in diesem Pattern enthalten sind, werden in den Sound Memory Speicher kopiert. Dadurch werden einige Sounds ", 0FCh, "berschrieben. OK ?", 000h, 0FFh	; German (152 bytes)
-LABEL_E1E6E8:	db "Les m", 0E9h, "moires de sonorit", 0E9h, "s ", 0E9h, "dit", 0E9h, "es incluses dans ce Pattern seront copi", 0E9h, "es dans les m", 0E9h, "moires de groupes de sonorit", 0E9h, "s. Certaines des m", 0E9h, "moires de groupe de sonorit", 0E9h, "s seront remplac", 0E9h, "es. OK?", 000h	; French (186 bytes)
-LABEL_E1E7A2:	db "Las memorias de sonido personalizado de este esquema musical ser", 0E1h, "n copiadas a las memorias de los grupos de sonido.Algunas memorias de los grupos de sonido ser", 0E1h, "n reemplazadas. ", 0BFh, "Est", 0E1h, " de acuerdo?", 000h	; Spanish (194 bytes)
-LABEL_E1E864:	db "The Custom sound memories included with this pattern will be copied into the Sound Group memories. Some of the Sound Group memories will be replaced by them. OK?", 000h	; Duplicate (162 bytes)
-LABEL_E1E906:	db "Custom Sound Memory termasuk dengan Pattern yang akan digandakan kedalam SOUND GROUP MEMORIES. Beberapa Sound Group Memory dikembalikan. OK ?", 000h	; Indonesian (142 bytes)
+MSG_CUSTOM_SOUND_COPY_EN:	db "The Custom sound memories included with this pattern will be copied into the Sound Group memories. Some of the Sound Group memories will be replaced by them. OK?", 000h	; English (162 bytes)
+MSG_CUSTOM_SOUND_COPY_DE:	db "Die Custom Sounds, die in diesem Pattern enthalten sind, werden in den Sound Memory Speicher kopiert. Dadurch werden einige Sounds ", 0FCh, "berschrieben. OK ?", 000h, 0FFh	; German (152 bytes)
+MSG_CUSTOM_SOUND_COPY_FR:	db "Les m", 0E9h, "moires de sonorit", 0E9h, "s ", 0E9h, "dit", 0E9h, "es incluses dans ce Pattern seront copi", 0E9h, "es dans les m", 0E9h, "moires de groupes de sonorit", 0E9h, "s. Certaines des m", 0E9h, "moires de groupe de sonorit", 0E9h, "s seront remplac", 0E9h, "es. OK?", 000h	; French (186 bytes)
+MSG_CUSTOM_SOUND_COPY_ES:	db "Las memorias de sonido personalizado de este esquema musical ser", 0E1h, "n copiadas a las memorias de los grupos de sonido.Algunas memorias de los grupos de sonido ser", 0E1h, "n reemplazadas. ", 0BFh, "Est", 0E1h, " de acuerdo?", 000h	; Spanish (194 bytes)
+MSG_CUSTOM_SOUND_COPY_EN2:	db "The Custom sound memories included with this pattern will be copied into the Sound Group memories. Some of the Sound Group memories will be replaced by them. OK?", 000h	; Duplicate (162 bytes)
+MSG_CUSTOM_SOUND_COPY_ID:	db "Custom Sound Memory termasuk dengan Pattern yang akan digandakan kedalam SOUND GROUP MEMORIES. Beberapa Sound Group Memory dikembalikan. OK ?", 000h	; Indonesian (142 bytes)
 	; Pointer table at 0xE1E994
-	dd LABEL_E1E5AE
-	dd LABEL_E1E650
-	dd LABEL_E1E6E8
-	dd LABEL_E1E7A2
-	dd LABEL_E1E864
-	dd LABEL_E1E906
+	dd MSG_CUSTOM_SOUND_COPY_EN
+	dd MSG_CUSTOM_SOUND_COPY_DE
+	dd MSG_CUSTOM_SOUND_COPY_FR
+	dd MSG_CUSTOM_SOUND_COPY_ES
+	dd MSG_CUSTOM_SOUND_COPY_EN2
+	dd MSG_CUSTOM_SOUND_COPY_ID
 
 
 	; Localization: SoundGroupAffected (6 languages)
-LABEL_E1E9AC:	db "Sound Group memories affected:", 000h, 0FFh	; English (32 bytes)
-LABEL_E1E9CC:	db "Betroffene Sounds:", 000h, 0FFh	; German (20 bytes)
-LABEL_E1E9E0:	db "Les m", 0E9h, "moires de groupe de sonorit", 0E9h, "s rep", 0E9h, "r", 0E9h, "es :", 000h, 0FFh	; French (48 bytes)
-LABEL_E1EA10:	db "Las memorias de los grupos de sonido afectadas son:", 000h	; Spanish (52 bytes)
-LABEL_E1EA44:	db "Sound Group memories affected:", 000h, 0FFh	; Duplicate (32 bytes)
-LABEL_E1EA64:	db "Sound Group memory sudah bekerja :", 000h, 0FFh	; Indonesian (36 bytes)
+MSG_SOUND_GROUP_AFFECTED_EN:	db "Sound Group memories affected:", 000h, 0FFh	; English (32 bytes)
+MSG_SOUND_GROUP_AFFECTED_DE:	db "Betroffene Sounds:", 000h, 0FFh	; German (20 bytes)
+MSG_SOUND_GROUP_AFFECTED_FR:	db "Les m", 0E9h, "moires de groupe de sonorit", 0E9h, "s rep", 0E9h, "r", 0E9h, "es :", 000h, 0FFh	; French (48 bytes)
+MSG_SOUND_GROUP_AFFECTED_ES:	db "Las memorias de los grupos de sonido afectadas son:", 000h	; Spanish (52 bytes)
+MSG_SOUND_GROUP_AFFECTED_EN2:	db "Sound Group memories affected:", 000h, 0FFh	; Duplicate (32 bytes)
+MSG_SOUND_GROUP_AFFECTED_ID:	db "Sound Group memory sudah bekerja :", 000h, 0FFh	; Indonesian (36 bytes)
 	; Pointer table at 0xE1EA88
-	dd LABEL_E1E9AC
-	dd LABEL_E1E9CC
-	dd LABEL_E1E9E0
-	dd LABEL_E1EA10
-	dd LABEL_E1EA44
-	dd LABEL_E1EA64
+	dd MSG_SOUND_GROUP_AFFECTED_EN
+	dd MSG_SOUND_GROUP_AFFECTED_DE
+	dd MSG_SOUND_GROUP_AFFECTED_FR
+	dd MSG_SOUND_GROUP_AFFECTED_ES
+	dd MSG_SOUND_GROUP_AFFECTED_EN2
+	dd MSG_SOUND_GROUP_AFFECTED_ID
 
 
 	; Localization: CustomSoundMemoryFull (6 languages)
-LABEL_E1EAA0:	db "The Custom sound memory is full.Some sounds which are used by current Custom Rhythms will be deleted. OK?", 000h	; English (106 bytes)
-LABEL_E1EB0A:	db "Der Custom Sound Speicher ist voll.inige Kl", 0E4h, "nge, die von Custom Rhythmen ben", 0F6h, "tigt werden, werden gel", 0F6h, "scht. OK ?", 000h	; German (112 bytes)
-LABEL_E1EB7A:	db "La m", 0E9h, "moire de sonorit", 0E9h, "s ", 0E9h, "dit", 0E9h, "es est satur", 0E9h, "e.Certaines sonorit", 0E9h, "s utilis", 0E9h, "es par Custom Rhythms seront effac", 0E9h, "es. OK?", 000h	; French (114 bytes)
-LABEL_E1EBEC:	db "La memoria de sonido personalizado est", 0E1h, " llena.Algunos sonidos utilizados por los ritmos personalizados actuales ser", 0E1h, "n borrados. ", 0BFh, "Est", 0E1h, " de acuerdo?", 000h	; Spanish (146 bytes)
-LABEL_E1EC7E:	db "The Custom sound memory is full.Some sounds which are used by current Custom Rhythms will be deleted. OK?", 000h	; Duplicate (106 bytes)
-LABEL_E1ECE8:	db "Custom Sound memory sudah penuh.Beberapa suara (Sounds) yang digunakan dengan Custom Rhythms sekarang akan dihapus. Benar ?", 000h	; Indonesian (124 bytes)
+MSG_CUSTOM_SOUND_FULL_EN:	db "The Custom sound memory is full.Some sounds which are used by current Custom Rhythms will be deleted. OK?", 000h	; English (106 bytes)
+MSG_CUSTOM_SOUND_FULL_DE:	db "Der Custom Sound Speicher ist voll.inige Kl", 0E4h, "nge, die von Custom Rhythmen ben", 0F6h, "tigt werden, werden gel", 0F6h, "scht. OK ?", 000h	; German (112 bytes)
+MSG_CUSTOM_SOUND_FULL_FR:	db "La m", 0E9h, "moire de sonorit", 0E9h, "s ", 0E9h, "dit", 0E9h, "es est satur", 0E9h, "e.Certaines sonorit", 0E9h, "s utilis", 0E9h, "es par Custom Rhythms seront effac", 0E9h, "es. OK?", 000h	; French (114 bytes)
+MSG_CUSTOM_SOUND_FULL_ES:	db "La memoria de sonido personalizado est", 0E1h, " llena.Algunos sonidos utilizados por los ritmos personalizados actuales ser", 0E1h, "n borrados. ", 0BFh, "Est", 0E1h, " de acuerdo?", 000h	; Spanish (146 bytes)
+MSG_CUSTOM_SOUND_FULL_EN2:	db "The Custom sound memory is full.Some sounds which are used by current Custom Rhythms will be deleted. OK?", 000h	; Duplicate (106 bytes)
+MSG_CUSTOM_SOUND_FULL_ID:	db "Custom Sound memory sudah penuh.Beberapa suara (Sounds) yang digunakan dengan Custom Rhythms sekarang akan dihapus. Benar ?", 000h	; Indonesian (124 bytes)
 	; Pointer table at 0xE1ED64
-	dd LABEL_E1EAA0
-	dd LABEL_E1EB0A
-	dd LABEL_E1EB7A
-	dd LABEL_E1EBEC
-	dd LABEL_E1EC7E
-	dd LABEL_E1ECE8
+	dd MSG_CUSTOM_SOUND_FULL_EN
+	dd MSG_CUSTOM_SOUND_FULL_DE
+	dd MSG_CUSTOM_SOUND_FULL_FR
+	dd MSG_CUSTOM_SOUND_FULL_ES
+	dd MSG_CUSTOM_SOUND_FULL_EN2
+	dd MSG_CUSTOM_SOUND_FULL_ID
 
 
 	; Localization: CustomRhythmsAffected (6 languages)
-LABEL_E1ED7C:	db "Custom Rhythms affected:", 000h, 0FFh	; English (26 bytes)
-LABEL_E1ED96:	db "Betroffene Custom Rhythmen:", 000h	; German (28 bytes)
-LABEL_E1EDB2:	db "Custom Rhythms rep", 0E9h, "r", 0E9h, "s:", 000h	; French (24 bytes)
-LABEL_E1EDCA:	db "Los ritmos personalizados afectados son:", 000h, 0FFh	; Spanish (42 bytes)
-LABEL_E1EDF4:	db "Custom Rhythms affected:", 000h, 0FFh	; Duplicate (26 bytes)
-LABEL_E1EE0E:	db "Custom Rhythm sudah bekerja :", 000h	; Indonesian (30 bytes)
+MSG_CUSTOM_RHYTHMS_AFFECTED_EN:	db "Custom Rhythms affected:", 000h, 0FFh	; English (26 bytes)
+MSG_CUSTOM_RHYTHMS_AFFECTED_DE:	db "Betroffene Custom Rhythmen:", 000h	; German (28 bytes)
+MSG_CUSTOM_RHYTHMS_AFFECTED_FR:	db "Custom Rhythms rep", 0E9h, "r", 0E9h, "s:", 000h	; French (24 bytes)
+MSG_CUSTOM_RHYTHMS_AFFECTED_ES:	db "Los ritmos personalizados afectados son:", 000h, 0FFh	; Spanish (42 bytes)
+MSG_CUSTOM_RHYTHMS_AFFECTED_EN2:	db "Custom Rhythms affected:", 000h, 0FFh	; Duplicate (26 bytes)
+MSG_CUSTOM_RHYTHMS_AFFECTED_ID:	db "Custom Rhythm sudah bekerja :", 000h	; Indonesian (30 bytes)
 	; Pointer table at 0xE1EE2C
-	dd LABEL_E1ED7C
-	dd LABEL_E1ED96
-	dd LABEL_E1EDB2
-	dd LABEL_E1EDCA
-	dd LABEL_E1EDF4
-	dd LABEL_E1EE0E
+	dd MSG_CUSTOM_RHYTHMS_AFFECTED_EN
+	dd MSG_CUSTOM_RHYTHMS_AFFECTED_DE
+	dd MSG_CUSTOM_RHYTHMS_AFFECTED_FR
+	dd MSG_CUSTOM_RHYTHMS_AFFECTED_ES
+	dd MSG_CUSTOM_RHYTHMS_AFFECTED_EN2
+	dd MSG_CUSTOM_RHYTHMS_AFFECTED_ID
 
 
 	; Localization: InsertStyleConvertDisk (6 languages)
-LABEL_E1EE44:	db "Please Insert the Style Convert Disk!", 000h	; English (38 bytes)
-LABEL_E1EE6A:	db "Bitte legen Sie die Style Convert Diskette in das Laufwerk ein.", 000h	; German (64 bytes)
-LABEL_E1EEAA:	db "Please Insert the Style Convert Disk!", 000h	; French (38 bytes)
-LABEL_E1EED0:	db "Please Insert the Style Convert Disk!", 000h	; Spanish (38 bytes)
-LABEL_E1EEF6:	db "Please Insert the Style Convert Disk!", 000h	; Duplicate (38 bytes)
-LABEL_E1EF1C:	db "Please Insert the Style Convert Disk!", 000h	; Indonesian (38 bytes)
+MSG_INSERT_STYLE_CONVERT_EN:	db "Please Insert the Style Convert Disk!", 000h	; English (38 bytes)
+MSG_INSERT_STYLE_CONVERT_DE:	db "Bitte legen Sie die Style Convert Diskette in das Laufwerk ein.", 000h	; German (64 bytes)
+MSG_INSERT_STYLE_CONVERT_FR:	db "Please Insert the Style Convert Disk!", 000h	; French (38 bytes)
+MSG_INSERT_STYLE_CONVERT_ES:	db "Please Insert the Style Convert Disk!", 000h	; Spanish (38 bytes)
+MSG_INSERT_STYLE_CONVERT_EN2:	db "Please Insert the Style Convert Disk!", 000h	; Duplicate (38 bytes)
+MSG_INSERT_STYLE_CONVERT_ID:	db "Please Insert the Style Convert Disk!", 000h	; Indonesian (38 bytes)
 	; Pointer table at 0xE1EF42
-	dd LABEL_E1EE44
-	dd LABEL_E1EE6A
-	dd LABEL_E1EEAA
-	dd LABEL_E1EED0
-	dd LABEL_E1EEF6
-	dd LABEL_E1EF1C
+	dd MSG_INSERT_STYLE_CONVERT_EN
+	dd MSG_INSERT_STYLE_CONVERT_DE
+	dd MSG_INSERT_STYLE_CONVERT_FR
+	dd MSG_INSERT_STYLE_CONVERT_ES
+	dd MSG_INSERT_STYLE_CONVERT_EN2
+	dd MSG_INSERT_STYLE_CONVERT_ID
 
 
 
@@ -50140,7 +50140,7 @@ String_CONSOLE:			; E1FBC8
 	db "PR", 000h, 0FFh, "TEST"
 	db 000h, 0FFh
 
-LABEL_E1FFD2:
+RESOURCE_INFO_HANDLER_OFFSETS:
 	dw -RESOURCE_INFO_HANDLERS + RESOURCE_INFO_HANDLERS
 	dw -RESOURCE_INFO_HANDLERS + LABEL_F1EA64
 	dw -RESOURCE_INFO_HANDLERS + LABEL_F1EA7D
@@ -140134,7 +140134,7 @@ FlashWrite:
 	LD XWA, (XSP + 008h)
 	PUSH XWA
 	PUSH XDE
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ah
 	CALR LABEL_EF3AE1
 	CP HL, 0ffffh
@@ -140635,7 +140635,7 @@ LABEL_EF41E3:
 	PUSH XIZ
 	LD (XSP + 00ah), XBC
 	LD XIZ, XWA
-	LD XIY, LABEL_E00032  ; "SLIDE"
+	LD XIY, SLIDE_STRING  ; "SLIDE"
 	LDA XIX, XSP + 004h
 	LD BC, 3
 	LDIRW_95
@@ -170980,7 +170980,7 @@ LABEL_F1C8AB:
 	PUSH XWA
 	LD XWA, (XSP + 011ah)
 	PUSH XWA
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ah
 	JR T, LABEL_F1C840
 
@@ -171484,7 +171484,7 @@ LABEL_F1CE42:
 	PUSHW 0010h
 	PUSH XWA
 	PUSH XDE
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ah
 	LD (XSP + 010h), 000h
 	JR T, LABEL_F1CE6A
@@ -171809,7 +171809,7 @@ LABEL_F1D121:
 	PUSH XWA
 	LDA XWA, XSP + 00ah
 	PUSH XWA
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ah
 	LDA XDE, XSP + 004h
 	LD (XDE + 010h), 000h
@@ -172670,7 +172670,7 @@ StylCnvStorBnkSel:
 	LD XHL, XDE
 	LD XDE, XBC
 	LD XIZ, XWA
-	LD XIY, LABEL_E1E37A
+	LD XIY, SLOT_NAME_PTRS
 	LDA XIX, XSP + 004h
 	LD BC, 002eh
 	LDIRW_95
@@ -173634,12 +173634,12 @@ LABEL_F1EA20:
 	db 043h, 014h, 000h, 028h, 000h, 0B3h, 0E8h, 00Eh
 
 ; Get resource info based on resource type (WA 0-9)
-; Uses offset table at LABEL_E1FFD2 (10 entries)
+; Uses offset table at RESOURCE_INFO_HANDLER_OFFSETS (10 entries)
 GetResouceInfo:
 	CP WA, 0009h
 	RET UGT
 	ADD WA, WA
-	LDA XIX, LABEL_E1FFD2
+	LDA XIX, RESOURCE_INFO_HANDLER_OFFSETS
 	LD WA, (XIX + WA)
 	LDA XIX, RESOURCE_INFO_HANDLERS
 	JP T, XIX + WA
@@ -192723,7 +192723,7 @@ LABEL_F2B084:
 	PUSH XDE
 	LDA XWA, XWA + BC
 	PUSH XWA
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ah
 	LD BC, IZ
 	SLA 006h, BC
@@ -246758,7 +246758,7 @@ LABEL_F4FA59:
 	PUSH XWA
 	LD XWA, (XSP + 012h)
 	PUSH XWA
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LD XWA, (XSP + 016h)
 	LD (XWA + 00bh), 000h
 	LD XWA, (XSP + 016h)
@@ -248199,7 +248199,7 @@ LABEL_F51F0F:
 	PUSH XWA
 	LD XWA, (XSP + 010h)
 	PUSH XWA
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDW (XSP + 018h:8), 0004h
 	LDW (XSP + 01ah:8), 0000h
 	LDW (XSP + 01ch:8), 0000h
@@ -248236,7 +248236,7 @@ LABEL_F51F7C:
 	PUSH XWA
 	LD XWA, (XSP + 010h)
 	PUSH XWA
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDW (XSP + 018h:8), 0004h
 	LDW (XSP + 01ah:8), 0000h
 	LDW (XSP + 01ch:8), 0000h
@@ -248321,7 +248321,7 @@ LABEL_F52063:
 	PUSH XWA
 	LD XWA, (XSP + 010h)
 	PUSH XWA
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDW (XSP + 018h:8), 0004h
 	LDW (XSP + 01ah:8), 0000h
 	LDW (XSP + 01ch:8), 0000h
@@ -248576,7 +248576,7 @@ LABEL_F522F5:
 	PUSH XWA
 	LD XWA, (XSP + 010h)
 	PUSH XWA
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDW (XSP + 018h:8), 0004h
 	LDW (XSP + 01ah:8), 0000h
 	LDW (XSP + 01ch:8), 0000h
@@ -248613,7 +248613,7 @@ LABEL_F52362:
 	PUSH XWA
 	LD XWA, (XSP + 010h)
 	PUSH XWA
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDW (XSP + 018h:8), 0004h
 	LDW (XSP + 01ah:8), 0000h
 	LDW (XSP + 01ch:8), 0000h
@@ -248683,7 +248683,7 @@ LABEL_F52412:
 	PUSH XWA
 	LD XWA, (XSP + 010h)
 	PUSH XWA
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDW (XSP + 018h:8), 0004h
 	LDW (XSP + 01ah:8), 0000h
 	LDW (XSP + 01ch:8), 0000h
@@ -249121,7 +249121,7 @@ LABEL_F5282E:
 	PUSH XWA
 	LDA XWA, 022720h
 	PUSH XWA
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LD (02272Bh), 000h
 	PUSH XIZ
 	CALL LABEL_F4F05A
@@ -249487,14 +249487,14 @@ LABEL_F52B29:
 	PUSH XWA
 	LDA XWA, XIZ + 006h
 	PUSH XWA
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LD (XIZ + 00eh), 02eh
 	PUSHW 0003h
 	LDA XWA, XSP + 040h
 	PUSH XWA
 	LDA XWA, XIZ + 00fh
 	PUSH XWA
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 014h
 	LD (XIZ + 012h), 000h
 	LD XWA, (XSP + 03fh)
@@ -249705,7 +249705,7 @@ LABEL_F52CE0:
 	LD XWA, (XSP + 00ah)
 	INC 6, XWA
 	PUSH XWA
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ah
 	LD XWA, (XSP + 004h)
 	LD (XWA + 01ah), 000h
@@ -250169,7 +250169,7 @@ LABEL_F53227:
 	EXTS XWA
 	ADD XWA, XBC
 	PUSH XWA
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ah
 	INC 1, IZ
 	CP IZ, 0050h
@@ -281126,7 +281126,7 @@ MainCstmNameFunc:
 	PUSHW 000dh
 	PUSH XWA
 	PUSH XIZ
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ch
 	LD (XIZ + 00dh), 000h
 	LD (XIZ + 00eh), 000h
@@ -281154,7 +281154,7 @@ LABEL_F69648:
 	PUSHW 000dh
 	PUSH XWA
 	PUSH XIZ
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ch
 	LD (XIZ + 00dh), 000h
 	LD (XIZ + 00eh), 000h
@@ -281368,7 +281368,7 @@ MainCmpCpFunc:
 	PUSHW 0010h
 	PUSH XHL
 	PUSH XIZ
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ah
 	LD (XIZ + 010h), 000h
 	LD XWA, 00b8001eh
@@ -281439,7 +281439,7 @@ LABEL_F69969:
 
 LABEL_F6996D:
 	PUSH XIZ
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ah
 	LD (XIZ + 00dh), 000h
 	LD A, (8D38h)
@@ -282151,7 +282151,7 @@ LABEL_F6A22B:
 	PUSH XWA
 	PUSHW 0000h
 	PUSHW 39e4h
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ah
 	LD (39E7h), 000h
 	JR T, LABEL_F6A29A
@@ -282176,7 +282176,7 @@ LABEL_F6A24A:
 	LDA XBC, XSP + 012h
 	LD XWA, (XBC + DE)
 	PUSH XWA
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ah
 	LD A, QIZH
 	EXTZ WA
@@ -283540,7 +283540,7 @@ LABEL_F6BE77:
 	PUSH XWA
 	LDA XWA, XBC + 00a0h
 	PUSH XWA
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ah
 	LD QIZH, 0
 	LD BC, 0
@@ -284329,7 +284329,7 @@ LABEL_F6C61C:
 	PUSH XWA
 	LD XWA, 000ffc02h
 	PUSH XWA
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ah
 	LD BC, (3D04h)
 	MUL_BC 0025h
@@ -284859,7 +284859,7 @@ LABEL_F6CB93:
 	PUSHW 3d58h
 	LD XWA, 000ffc02h
 	PUSH XWA
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ah
 	CALR LABEL_F6D846
 	CALR LABEL_F6CC14
@@ -285174,7 +285174,7 @@ LABEL_F6CE91:
 	PUSH XWA
 	PUSHW 0000h
 	PUSHW 48aeh
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	INCW 4, (XSP + 00eh)
 	PUSHW 0004h
 	LD WA, (XSP + 010h)
@@ -285184,7 +285184,7 @@ LABEL_F6CE91:
 	PUSH XWA
 	PUSHW 0000h
 	PUSHW 48b2h
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 014h
 	JR T, LABEL_F6CEF6
 
@@ -285400,7 +285400,7 @@ LABEL_F6D0F4:
 	EXTZ XWA
 	ADD XWA, 000ffc00h
 	PUSH XWA
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ah
 	INC 4, QIZ
 	LD IZ, 0
@@ -285495,7 +285495,7 @@ LABEL_F6D1EE:
 	PUSHW 3d5ch
 	LD XWA, 000ffc02h
 	PUSH XWA
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ah
 	LDW (XSP + 004h:8), 0000h
 	LDA XDE, 48B6h
@@ -285628,7 +285628,7 @@ LABEL_F6D34C:
 	EXTZ XWA
 	ADD XWA, 000ffc00h
 	PUSH XWA
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ah
 	INC 4, IZ
 	LDW (XSP + 006h:8), 0000h
@@ -285959,7 +285959,7 @@ LABEL_F6D6D6:
 	EXTZ XWA
 	ADD XWA, 000ffc00h
 	PUSH XWA
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ah
 	INC 4, IZ
 	LDW (XSP + 006h:8), 0000h
@@ -313216,7 +313216,7 @@ LABEL_F855E8:
 	PUSH XWA
 	LD XWA, (XSP + 018h)
 	PUSH XWA
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ch
 	LD WA, (XSP + 00eh)
 	EXTZ XWA
@@ -314328,7 +314328,7 @@ LABEL_F8696F:
 	PUSH XBC
 	PUSHW 0003h
 	PUSHW 0cf04h
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ah
 	CALL LABEL_FDBD52
 	CALR LABEL_F86DA6
@@ -314427,7 +314427,7 @@ LABEL_F86A9F:
 	PUSHW 0003h
 	PUSHW 0cf04h
 	PUSH XBC
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ah
 	JR T, LABEL_F86AE1
 
@@ -314842,7 +314842,7 @@ LABEL_F86EF0:
 	PUSHW 0cceh
 	PUSHW 0000h
 	PUSHW 0f1a0h
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ah
 	RET
 
@@ -314852,7 +314852,7 @@ LABEL_F86F07:
 	PUSHW 0f1a0h
 	PUSHW 0000h
 	PUSHW 0cceh
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ah
 	RET
 
@@ -337416,13 +337416,13 @@ FDC_OUTPUT_CTRL		equ	0F97C5Bh	; Output control
 FDC_INTERRUPT_HANDLER	equ	0F97C7Ch	; Main interrupt handler
 
 ; Forward references to helper routines in raw byte sections
-LABEL_F97544	equ	0F97544h	; FDC drive detection routine
-LABEL_F97592	equ	0F97592h	; FDC drive status routine
-LABEL_F975AC	equ	0F975ACh	; FDC pre-operation check
-LABEL_F975DC	equ	0F975DCh	; FDC timing/delay routine
-LABEL_F975E2	equ	0F975E2h	; FDC post-operation routine
-LABEL_F972F9	equ	0F972F9h	; FDC command send routine
-LABEL_F974FE	equ	0F974FEh	; FDC detection check routine
+FDC_DRIVE_DETECT	equ	0F97544h	; FDC drive detection routine
+FDC_DRIVE_STATUS	equ	0F97592h	; FDC drive status routine
+FDC_PRE_OP_CHECK	equ	0F975ACh	; FDC pre-operation check
+FDC_TIMING_DELAY	equ	0F975DCh	; FDC timing/delay routine
+FDC_POST_OP	equ	0F975E2h	; FDC post-operation routine
+FDC_CMD_SEND	equ	0F972F9h	; FDC command send routine
+FDC_DETECT_CHECK	equ	0F974FEh	; FDC detection check routine
 
 ; Jump targets within FDC routines
 FDC_CE_DISPATCH	equ	0F9782Ah
@@ -349415,7 +349415,7 @@ MainBitPut:
 	PUSH XIZ
 	LD XWA, (XSP + 00ch)
 	PUSH XWA
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ch
 	LD XWA, 01400007h
 	LD XBC, 01e00067h
@@ -354042,7 +354042,7 @@ LABEL_FA2FE8:
 	PUSH XIZ
 	LDA XWA, XSP + 010h
 	PUSH XWA
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LD WA, IZ
 	PUSH WA
 	LD XWA, XIZ
@@ -366910,7 +366910,7 @@ LABEL_FAAD7E:
 	PUSH XBC
 
 LABEL_FAADA7:
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ah
 	JRL T, LABEL_FAAEEC
 
@@ -367555,7 +367555,7 @@ LABEL_FAB3A4:
 	PUSH XWA
 	LD XWA, (XSP + 008h)
 	PUSH XWA
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ah
 	LD XWA, 00000140h
 	ADD (XSP + 006h), XWA
@@ -367843,7 +367843,7 @@ LABEL_FAB628:
 	LD XBC, OFFSCREEN_BUFFER_1
 	ADD XBC, XWA
 	PUSH XBC
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ah
 	JRL T, LABEL_FAB7FE
 
@@ -367866,7 +367866,7 @@ LABEL_FAB66D:
 	LD XBC, OFFSCREEN_BUFFER_1
 	ADD XBC, XWA
 	PUSH XBC
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LD XHL, (XSP + 036h)
 	LD BC, (XHL + 004h)
 	SUB BC, (XHL)
@@ -367890,7 +367890,7 @@ LABEL_FAB66D:
 	LD XBC, OFFSCREEN_BUFFER_1
 	ADD XBC, XWA
 	PUSH XBC
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 014h
 	LDW (XSP + 004h), 0ffffh
 	LD XDE, (XSP + 02ch)
@@ -368478,7 +368478,7 @@ LABEL_FABBE7:
 	PUSHW 320 * 240 / 2
 	PUSH XIZ
 	PUSH XWA
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LD XWA, 320 * 240 / 2
 	ADD (XSP + 00eh), XWA
 	ADD XIZ, 320 * 240 / 2
@@ -368486,7 +368486,7 @@ LABEL_FABBE7:
 	PUSH XIZ
 	LD XWA, (XSP + 014h)
 	PUSH XWA
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 014h
 	LDA XWA, XSP + 008h
 	LDW (XWA + 002h:8), 0000h
@@ -368795,7 +368795,7 @@ LABEL_FABEC9:
 	PUSH XWA
 	LD XWA, (XSP + 012h)
 	PUSH XWA
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ah
 	LD WA, (XIZ)
 	EXTS XWA
@@ -369448,7 +369448,7 @@ LABEL_FAC4A1:
 	LD XWA, (XSP + 014h)
 	PUSH XWA
 	PUSH XIZ
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ah
 	LD WA, (XSP + 010h)
 	INC 1, WA
@@ -369748,7 +369748,7 @@ LABEL_FAC6F3:
 	PUSH XWA
 	LDA XWA, XSP + 03ah
 	PUSH XWA
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ah
 	LD XWA, (XSP + 020h)
 	SRL 2, XWA
@@ -369880,7 +369880,7 @@ LABEL_FAC8E7:
 	PUSH XWA
 	LD XWA, (XSP + 01eh)
 	PUSH XWA
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ah
 	LD XWA, (XSP + 004h)
 	LD DE, (XWA + 00eh)
@@ -369915,7 +369915,7 @@ LABEL_FAC939:
 	CALL LABEL_FF0A5C
 	ADD XHL, (XSP + 022h)
 	PUSH XHL
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ah
 	INC 1, XIZ
 	LD XBC, (XSP + 010h)
@@ -369937,7 +369937,7 @@ LABEL_FAC967:
 	PUSH XHL
 
 LABEL_FAC980:
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ah
 	LD XWA, 00000140h
 	SUB (XSP + 01ch), XWA
@@ -369968,7 +369968,7 @@ LABEL_FAC9D4:
 	PUSH XIZ
 	LD XWA, (XSP + 022h)
 	PUSH XWA
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ah
 	LDA XIZ, XIZ + 320
 	LD XWA, 320
@@ -370024,7 +370024,7 @@ LABEL_FACA65:
 	LD XWA, (XSP + 026h)
 	PUSH XWA
 	PUSH XIZ
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ah
 	LD XWA, 00000140h
 	ADD (XSP + 024h), XWA
@@ -372996,7 +372996,7 @@ LABEL_FAEACA:
 	CALL LABEL_FF0A5C
 	ADD XHL, (XSP + 01ch)
 	PUSH XHL
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ah
 	LD XWA, 1
 	ADD (XSP + 00ah), XWA
@@ -373019,7 +373019,7 @@ LABEL_FAEAFD:
 	PUSH XHL
 
 LABEL_FAEB17:
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ah
 	LD XWA, 00000140h
 	SUB (XSP + 016h), XWA
@@ -373050,7 +373050,7 @@ LABEL_FAEB66:
 	PUSH XWA
 	LD XWA, (XSP + 01ch)
 	PUSH XWA
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ah
 	LD XWA, 00000140h
 	ADD (XSP + 01ah), XWA
@@ -373105,7 +373105,7 @@ LABEL_FAEBA7:
 	LD XWA, (XSP + 020h)
 	PUSH XWA
 	PUSH XBC
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ch
 	LD XBC, 0
 	LD XWA, (XSP + 012h)
@@ -373152,7 +373152,7 @@ LABEL_FAEC4C:
 	LD XWA, (XSP + 020h)
 	PUSH XWA
 	PUSH XBC
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ch
 	LD XBC, 0
 	LD XWA, (XSP + 012h)
@@ -373876,13 +373876,13 @@ LABEL_FAF360:
 	PUSH XWA
 	LD XWA, OFFSCREEN_BUFFER_2
 	PUSH XWA
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	ADD XIZ, 320 * 240 / 2
 	PUSHW 320 * 240 / 2
 	PUSH XIZ
 	LD XWA, OFFSCREEN_BUFFER_3
 	PUSH XWA
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 014h
 	LDA XWA, OFFSCREEN_BUFFER_1
 	LD XBC, XWA
@@ -373913,13 +373913,13 @@ LABEL_FAF3A5:
 	PUSH XWA
 	LD XWA, 00069800h
 	PUSH XWA
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	ADD XIZ, 320 * 240 / 2
 	PUSHW 320 * 240 / 2
 	PUSH XIZ
 	LD XWA, 00072e00h
 	PUSH XWA
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 014h
 	POP XIZ
 	RET
@@ -377426,13 +377426,13 @@ AllBOut:
 	PUSHW 3c00h
 	PUSHW 001ah
 	PUSHW 0000h
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	PUSHW 320 * 240 / 2
 	LDA XWA, 04D200h
 	PUSH XWA
 	LDA XWA, 1A9600h	; Is this a second video page?
 	PUSH XWA
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 014h
 	RET
 
@@ -377475,7 +377475,7 @@ LABEL_FB3108:
 	LD XBC, 001a0000h
 	ADD XBC, XWA
 	PUSH XBC
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ah
 	INC 1, XIZ
 
@@ -377505,7 +377505,7 @@ LABEL_FB314A:
 	LD XBC, 001a0000h
 	ADD XBC, XWA
 	PUSH XBC
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ah
 	INC 1, XIZ
 
@@ -379268,7 +379268,7 @@ LABEL_FB4D50:
 	PUSH XWA
 	PUSHW 0000h
 	PUSHW 0f9a0h
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ah
 	RET
 
@@ -380188,7 +380188,7 @@ LABEL_FB5588:
 	PUSHW 0f9a0h
 	PUSHW 0003h
 	PUSHW 0c8e4h
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ah
 	RET
 
@@ -381471,7 +381471,7 @@ LABEL_FB6184:
 
 LABEL_FB61AB:
 	PUSH XIZ
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ah
 	LD (XIZ + 010h), 000h
 	POP XIZ
@@ -381492,7 +381492,7 @@ LABEL_FB61B9:
 	SUB XWA, 00000020h
 	ADD XWA, XDE
 	PUSH XWA
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ah
 	RET
 
@@ -381507,7 +381507,7 @@ LABEL_FB61ED:
 	ADD XWA, XBC
 	PUSH XWA
 	PUSH XIZ
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ah
 	LD (XIZ + 010h), 000h
 	POP XIZ
@@ -381522,7 +381522,7 @@ LABEL_FB6210:
 	EXTS XWA
 	ADD XWA, XBC
 	PUSH XWA
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ah
 	RET
 
@@ -382898,7 +382898,7 @@ LABEL_FB704E:
 	PUSH XBC
 	PUSHW 0003h
 	PUSHW 0c2c4h
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ah
 	RET
 
@@ -394736,7 +394736,7 @@ LABEL_FBF635:
 	PUSH XHL
 	LDA XWA, XSP + 011ah
 	PUSH XWA
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ah
 	LDA XDE, XSP + 0114h
 	LD (XDE + 010h), 000h
@@ -394817,7 +394817,7 @@ LABEL_FBF789:
 	PUSH XHL
 	LDA XWA, XSP + 011ah
 	PUSH XWA
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ah
 	LD (XSP + 0121h), 000h
 	LD (XSP + 00ah), 0ffh
@@ -394956,7 +394956,7 @@ LABEL_FBF85D:
 	PUSH XHL
 	LDA XWA, XSP + 011ah
 	PUSH XWA
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ah
 	LD (XSP + 0121h), 000h
 	LD XWA, (XIZ + 03ch)
@@ -395212,7 +395212,7 @@ LABEL_FBFCD1:
 	PUSH XHL
 	LDA XWA, XSP + 011bh
 	PUSH XWA
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ah
 	LD (XSP + 0122h), 000h
 	LD (XSP + 00ah), 0ffh
@@ -395411,7 +395411,7 @@ LABEL_FBFF0B:
 	PUSH XHL
 	LDA XWA, XSP + 011bh
 	PUSH XWA
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ah
 	LD (XSP + 0122h), 000h
 	LD (XSP + 00ah), 0ffh
@@ -395615,7 +395615,7 @@ LABEL_FC0139:
 	PUSH XHL
 	LDA XWA, XSP + 011bh
 	PUSH XWA
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ah
 	LD (XSP + 0122h), 000h
 	LD (XSP + 00ah), 0ffh
@@ -395784,7 +395784,7 @@ LABEL_FC0322:
 	PUSH XHL
 	LDA XWA, XSP + 011bh
 	PUSH XWA
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ah
 	LD (XSP + 0122h), 000h
 	LD (XSP + 00ah), 0ffh
@@ -395914,7 +395914,7 @@ LABEL_FC04AE:
 	PUSH XHL
 	LDA XWA, XSP + 011ah
 	PUSH XWA
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ah
 	LD (XSP + 0121h), 000h
 	LD (XSP + 00ah), 0ffh
@@ -396178,7 +396178,7 @@ LABEL_FC07A1:
 	PUSH XHL
 	LDA XWA, XSP + 011bh
 	PUSH XWA
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ah
 	LD (XSP + 0122h), 000h
 	LD (XSP + 00ah), 0ffh
@@ -396348,7 +396348,7 @@ LABEL_FC09A2:
 	PUSH XHL
 	LDA XWA, XSP + 011bh
 	PUSH XWA
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ah
 	LD (XSP + 0122h), 000h
 	LD (XSP + 00ah), 0ffh
@@ -399199,7 +399199,7 @@ MainGetRhyGrpName:
 	PUSHW 0010h
 	PUSH XHL
 	PUSH XIZ
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ah
 	LD (XIZ + 010h), 000h
 	LD XWA, 0ffffffffh
@@ -399241,7 +399241,7 @@ MainGetRhyName:
 	LD XWA, (XSP + 00ch)
 	INC 1, XWA
 	PUSH XWA
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ah
 	LD XWA, (XSP + 006h)
 	LD (XWA + 00eh), 000h
@@ -401664,7 +401664,7 @@ LABEL_FC4D67:
 	PUSHW 0c8e4h
 	PUSHW 0000h
 	PUSHW 0f9a0h
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ah
 	RET
 
@@ -401967,7 +401967,7 @@ LABEL_FC5185:
 	PUSHW 0f9a0h
 	PUSHW 0003h
 	PUSHW 0c8e4h
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ah
 	LDA XBC, 0F9A0h
 	LDA XWA, 0F9B6h
@@ -402145,7 +402145,7 @@ LABEL_FC534C:
 	PUSH WA
 	PUSH XIZ
 	PUSH XBC
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ah
 	LDA XWA, XSP + 004h
 	LD (0FD50h), (XWA)
@@ -402165,7 +402165,7 @@ LABEL_FC5399:
 	PUSHW 0cf04h
 	PUSHW 0000h
 	PUSHW 0f9a0h
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ah
 	SET 5, (8E76h)
 	CALR LABEL_FC520F
@@ -402224,32 +402224,32 @@ LABEL_FC53E9:
 	PUSHW 00edh
 	PUSHW 931ch
 	PUSH XIZ
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	PUSHW 000ch
 	PUSHW 00edh
 	PUSHW 9324h
 	LDA XWA, XIZ + 010h
 	PUSH XWA
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 01ch
 	PUSHW 0004h
 	PUSHW 00edh
 	PUSHW 9330h
 	LDA XWA, XIZ + 020h
 	PUSH XWA
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	PUSHW 0004h
 	PUSHW 00edh
 	PUSHW 9320h
 	LDA XWA, XIZ + 030h
 	PUSH XWA
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	PUSHW 0006h
 	PUSHW 00edh
 	PUSHW 9334h
 	LDA XWA, XIZ + 040h
 	PUSH XWA
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 01eh
 	LD XWA, 003d3400h
 	PUSH XWA
@@ -402281,32 +402281,32 @@ LABEL_FC54B2:
 	LD XWA, 003d3400h
 	PUSH XWA
 	PUSH XIZ
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	PUSHW 000ch
 	PUSHW 00edh
 	PUSHW 9324h
 	LDA XWA, XIZ + 010h
 	PUSH XWA
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 01ch
 	PUSHW 0004h
 	PUSHW 00edh
 	PUSHW 9330h
 	LDA XWA, XIZ + 020h
 	PUSH XWA
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	PUSHW 0004h
 	PUSHW 00edh
 	PUSHW 9320h
 	LDA XWA, XIZ + 030h
 	PUSH XWA
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	PUSHW 0006h
 	PUSHW 00edh
 	PUSHW 9334h
 	LDA XWA, XIZ + 040h
 	PUSH XWA
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 01eh
 	LD XWA, 003d3400h
 	PUSH XWA
@@ -402329,32 +402329,32 @@ LABEL_FC5543:
 	PUSH XWA
 	PUSHW 0003h
 	PUSHW 40e4h
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	PUSHW 000ch
 	LD XWA, 003d3410h
 	PUSH XWA
 	PUSHW 0003h
 	PUSHW 40e6h
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	PUSHW 0004h
 	LD XWA, 003d3420h
 	PUSH XWA
 	PUSHW 0003h
 	PUSHW 40f2h
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 01eh
 	PUSHW 0004h
 	LD XWA, 003d3430h
 	PUSH XWA
 	PUSHW 0003h
 	PUSHW 40f6h
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	PUSHW 0006h
 	LD XWA, 003d3440h
 	PUSH XWA
 	PUSHW 0003h
 	PUSHW 40fah
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 014h
 	RET
 
@@ -404909,14 +404909,14 @@ LABEL_FC7DD8:
 	PUSHW 007ch
 	PUSH XHL
 	PUSH XIZ
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XWA, 0EDB3FCh
 	ADD XWA, 0000007ch
 	LDA XIZ, XIZ + 07ch
 	PUSHW 011eh
 	PUSH XWA
 	PUSH XIZ
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 014h
 	LD WA, (XSP + 004h)
 	EXTZ XWA
@@ -404928,7 +404928,7 @@ LABEL_FC7DD8:
 	PUSHW 0226h
 	PUSH XHL
 	PUSH XWA
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ah
 
 LABEL_FC7E7E:
@@ -405088,13 +405088,13 @@ LABEL_FC819D:
 	PUSHW 0b3dch
 	PUSHW 0000h
 	PUSHW 0f980h
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	PUSHW 0620h
 	PUSHW 00edh
 	PUSHW 0b3fch
 	PUSHW 0000h
 	PUSHW 0f9a0h
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 014h
 	RES 0, (0FFC2h:24)
 	SET 1, (0FFC0h:24)
@@ -405119,13 +405119,13 @@ LABEL_FC81EF:
 	PUSHW 0ba1ch
 	PUSHW 001eh
 	PUSHW 0d350h
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	PUSHW 00a0h
 	LD XWA, 0099ec00h
 	PUSH XWA
 	PUSHW 001eh
 	PUSHW 0d360h
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 014h
 	LD IZ, 0
 
@@ -407183,7 +407183,7 @@ LABEL_FC9F9F:
 	PUSH XWA
 	PUSHW 0000h
 	PUSHW 0fc8eh
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ah
 	LD IZ, 0
 
@@ -407219,7 +407219,7 @@ LABEL_FC9FF7:
 	PUSH XWA
 	PUSHW 0000h
 	PUSHW 0fca8h
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ah
 	LD IZ, 0
 
@@ -407258,7 +407258,7 @@ LABEL_FCA04E:
 	PUSH XWA
 	PUSHW 0000h
 	PUSHW 0fc8eh
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ah
 	LD IZ, 0
 
@@ -407283,7 +407283,7 @@ LABEL_FCA079:
 	PUSH XWA
 	PUSHW 0000h
 	PUSHW 0fca8h
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ah
 	LD IZ, 0
 
@@ -415345,7 +415345,7 @@ LABEL_FD2B7C:
 	PUSH XWA
 	LD XWA, (XSP + 00ch)
 	PUSH XWA
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ah
 	LD XWA, (XSP + 006h)
 	LDA XWA, XWA + 02e0h
@@ -416010,7 +416010,7 @@ LABEL_FD3260:
 	PUSH WA
 	PUSH XBC
 	PUSH XDE
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ah
 	LD XWA, (XSP + 006h)
 	INC 2, XWA
@@ -416125,7 +416125,7 @@ LABEL_FD33A7:
 	PUSH WA
 	PUSH XBC
 	PUSH XDE
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ah
 	LD XWA, (XSP + 006h)
 	INC 2, XWA
@@ -417186,7 +417186,7 @@ LABEL_FD464C:
 	PUSH XWA
 	LD XWA, (XSP + 00ch)
 	PUSH XWA
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ah
 	LD XWA, (XSP + 006h)
 	LDA XWA, XWA + 0100h
@@ -418012,7 +418012,7 @@ LABEL_FD53AA:
 	PUSHW 0020h
 	PUSH XWA
 	PUSH XBC
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XBC, 0F180h:24
 	ADD XBC, 00000300h
 	LDA XWA, 0FDA2h
@@ -418021,7 +418021,7 @@ LABEL_FD53AA:
 	PUSHW 00edh
 	PUSHW 0b3fch
 	PUSH XBC
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 014h
 	JR T, LABEL_FD543E
 
@@ -418036,7 +418036,7 @@ LABEL_FD53F0:
 	PUSHW 0020h
 	PUSH XWA
 	PUSH XDE
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LD WA, IZ
 	DEC 1, WA
 	EXTZ XWA
@@ -418050,7 +418050,7 @@ LABEL_FD53F0:
 	PUSHW 00edh
 	PUSHW 0b3fch
 	PUSH XBC
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 014h
 
 LABEL_FD543E:
@@ -418250,7 +418250,7 @@ LABEL_FD55BF:
 	PUSHW 00eeh
 	PUSHW 15feh
 	PUSH XIZ
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ah
 	LDA XWA, XIZ + 005h
 	LD XBC, XWA
@@ -418492,7 +418492,7 @@ LABEL_FD579C:
 	PUSH XBC
 	LD XWA, (XSP + 006h)
 	PUSH XWA
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XBC, 0F9A0h
 	LDA XWA, 0FFC0h
 	SUB XWA, XBC
@@ -418500,7 +418500,7 @@ LABEL_FD579C:
 	PUSHW 0003h
 	PUSHW 0c8e4h
 	PUSH XBC
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 014h
 	RES 0, (0B7EEh)
 	LD C, (XSP + 004h)
@@ -418533,7 +418533,7 @@ LABEL_FD57F2:
 	PUSHW 00eeh
 	PUSHW 2cd8h
 	PUSH XIZ
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ah
 	LD XWA, 00002d00h
 	CALL LABEL_FCD437
@@ -418563,7 +418563,7 @@ LABEL_FD5869:
 	PUSHW 00eeh
 	PUSHW 2cd8h
 	PUSH XIZ
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ah
 	LD (XIZ + 004h), (0B7F2h)
 	LD (XIZ + 009h), 011h
@@ -418612,7 +418612,7 @@ LABEL_FD58DF:
 	PUSHW 00eeh
 	PUSHW 2ceah
 	PUSH XIZ
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ah
 	LD XWA, 00002d00h
 	CALL LABEL_FCD437
@@ -418647,7 +418647,7 @@ LABEL_FD5936:
 	PUSHW 00eeh
 	PUSHW 2ce6h
 	PUSH XIZ
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ah
 	LD XWA, 00002d00h
 	CALL LABEL_FCD437
@@ -418682,7 +418682,7 @@ LABEL_FD598D:
 	PUSHW 00eeh
 	PUSHW 2ce6h
 	PUSH XIZ
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ah
 	LD XWA, 00002d00h
 	CALL LABEL_FCD437
@@ -418725,7 +418725,7 @@ LABEL_FD59F7:
 	PUSHW 00eeh
 	PUSHW 2cd8h
 	PUSH XIZ
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ah
 	LD XWA, 00002d00h
 	CALL LABEL_FCD437
@@ -418757,7 +418757,7 @@ LABEL_FD5A4E:
 	PUSHW 00eeh
 	PUSHW 2cd8h
 	PUSH XIZ
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ah
 	LD XWA, 00002d00h
 	CALL LABEL_FCD437
@@ -418806,7 +418806,7 @@ LABEL_FD5ACA:
 	PUSHW 00eeh
 	PUSHW 2cd8h
 	PUSH XIZ
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ah
 	LD XWA, 00002d00h
 	CALL LABEL_FCD437
@@ -418857,7 +418857,7 @@ LABEL_FD5B4E:
 	PUSHW 00eeh
 	PUSHW 2cd8h
 	PUSH XIZ
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ah
 	LD XWA, 00002d00h
 	CALL LABEL_FCD437
@@ -422665,7 +422665,7 @@ LABEL_FD8C35:
 	PUSH BC
 	PUSH XDE
 	PUSH XHL
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ah
 	INC 1, IZ
 	CP IZ, 7
@@ -425809,7 +425809,7 @@ LABEL_FDB4B3:
 	PUSHW 0fd50h
 	LD XWA, (XSP + 008h)
 	PUSH XWA
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ah
 	POP QIZ
 	INC 4, XSP
@@ -425847,7 +425847,7 @@ LABEL_FDB508:
 	PUSH XWA
 	PUSHW 0000h
 	PUSHW 0fd50h
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ah
 	POP QIZ
 	INC 4, XSP
@@ -425861,7 +425861,7 @@ LABEL_FDB557:
 	PUSH XBC
 	PUSHW 0000h
 	PUSHW 0f460h
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ah
 	RET
 
@@ -425896,13 +425896,13 @@ LABEL_FDB57F:
 	PUSHW 0fc54h
 	LDA XWA, XSP + 028h
 	PUSH XWA
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	PUSHW 0018h
 	PUSHW 0000h
 	PUSHW 0fcdch
 	LDA XWA, XSP + 01ah
 	PUSH XWA
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 014h
 	CALR LABEL_FDB4A4
 	LDA XIX, 0F460h
@@ -425930,13 +425930,13 @@ LABEL_FDB603:
 	PUSH XWA
 	PUSHW 0000h
 	PUSHW 0fc54h
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	PUSHW 0018h
 	LDA XWA, XSP + 016h
 	PUSH XWA
 	PUSHW 0000h
 	PUSHW 0fcdch
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 014h
 	CP (11F4h), 001h
 	JR NZ, LABEL_FDB637
@@ -426305,7 +426305,7 @@ LABEL_FDB904:
 	PUSHW 00eeh
 	PUSHW 4fb2h
 	PUSH XIZ
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ah
 	LDA XBC, XIZ + 005h
 	LD XDE, XBC
@@ -452801,7 +452801,7 @@ LABEL_FECE67:
 	EXTZ XBC
 	ADD XBC, XWA
 	PUSH XBC
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ah
 	LD XWA, (XSP + 002h)
 	ADD (XSP + 00ah), WA
@@ -452847,7 +452847,7 @@ LABEL_FECECF:
 	EXTZ XBC
 	ADD XBC, XWA
 	PUSH XBC
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ah
 	LD WA, (XSP + 00ah)
 	LDA XBC, XSP + 00bh
@@ -452957,7 +452957,7 @@ LABEL_FECFD0:
 	PUSH XWA
 	LDA XWA, 0E9F9h
 	PUSH XWA
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ah
 	LD WA, (XSP + 00ah)
 	LD (0EAF9h), WA
@@ -452973,7 +452973,7 @@ LABEL_FED006:
 	PUSH XWA
 	LDA XWA, 0EAFBh
 	PUSH XWA
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LD WA, (XSP + 014h)
 	LD (0EBFBh), WA
 	LD WA, (XSP + 0118h)
@@ -452986,7 +452986,7 @@ LABEL_FED006:
 	EXTS XWA
 	ADD XWA, XBC
 	PUSH XWA
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 014h
 	LD WA, (XSP + 010eh)
 	ADD (0EBFBh), WA
@@ -458466,7 +458466,7 @@ LABEL_FF0D87:
 	DJNZ DE, LABEL_FF0D87
 	RET
 
-LABEL_FF0D99:
+Mem_Copy:
 	LD BC, (XSP + 00ch)
 	LD XHL, (XSP + 004h)
 	CP BC, 0
@@ -458578,7 +458578,7 @@ LABEL_FF0E59:
 	PUSH WA
 	PUSH XIY
 	PUSH XHL
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ah
 
 LABEL_FF0E68:
@@ -461818,7 +461818,7 @@ LABEL_FF285E:
 	PUSH XWA
 	LD XWA, (XSP + 042h)
 	PUSH XWA
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ch
 
 LABEL_FF2877:
@@ -461867,7 +461867,7 @@ LABEL_FF28BB:
 	PUSH XWA
 	LD XWA, (XSP + 010h)
 	PUSH XWA
-	CALL LABEL_FF0D99
+	CALL Mem_Copy
 	LDA XSP, XSP + 00ah
 	LD XHL, (XSP + 002h)
 	POP IZ

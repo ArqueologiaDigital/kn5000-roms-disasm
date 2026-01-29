@@ -155,18 +155,18 @@ This policy exists because the primary goal is building comprehensive documentat
 
 ```bash
 # The bd command is located at:
-~/claude_jail/bd
+../tools/bd
 
 # Common operations:
-~/claude_jail/bd list                              # List all issues
-~/claude_jail/bd show <issue-id>                   # Show issue details
-~/claude_jail/bd close <issue-id>                  # Close an issue
-~/claude_jail/bd reopen <issue-id>                 # Reopen a closed issue
-~/claude_jail/bd comments add <issue-id> "text"   # Add a comment to an issue
-~/claude_jail/bd create "title"                    # Create new issue
-~/claude_jail/bd update <issue-id> --notes "text" # Update issue notes
-~/claude_jail/bd ready                             # Find available work (unblocked, unassigned)
-~/claude_jail/bd sync                              # Sync issues with git
+../tools/bd list                              # List all issues
+../tools/bd show <issue-id>                   # Show issue details
+../tools/bd close <issue-id>                  # Close an issue
+../tools/bd reopen <issue-id>                 # Reopen a closed issue
+../tools/bd comments add <issue-id> "text"   # Add a comment to an issue
+../tools/bd create "title"                    # Create new issue
+../tools/bd update <issue-id> --notes "text" # Update issue notes
+../tools/bd ready                             # Find available work (unblocked, unassigned)
+../tools/bd sync                              # Sync issues with git
 ```
 
 The issue tracker is:
@@ -480,20 +480,20 @@ If code references an address that lies **inside** a `binclude` file's address r
 
 **Tool location:**
 ```bash
-~/claude_jail/unidasm
+../tools/unidasm
 ```
 
 **Usage:**
 ```bash
 # Generate reference disassembly for a ROM
-~/claude_jail/unidasm <rom_file> -arch tlcs900 -basepc <base_address> > <output.unidasm>
+../tools/unidasm <rom_file> -arch tlcs900 -basepc <base_address> > <output.unidasm>
 
 # Example for Sub CPU boot ROM (base at 0xFE0000):
-~/claude_jail/unidasm original_ROMs/kn5000_subcpu_boot.ic30 -arch tlcs900 -basepc 0xFE0000 > original_ROMs/kn5000_subcpu_boot.ic30.unidasm
+../tools/unidasm original_ROMs/kn5000_subcpu_boot.ic30 -arch tlcs900 -basepc 0xFE0000 > original_ROMs/kn5000_subcpu_boot.ic30.unidasm
 
 # Decode raw bytes:
 echo "XX XX XX XX" | xxd -r -p > /tmp/bytes.bin
-~/claude_jail/unidasm /tmp/bytes.bin -arch tlcs900 -basepc 0
+../tools/unidasm /tmp/bytes.bin -arch tlcs900 -basepc 0
 ```
 
 **When to use unidasm:**
