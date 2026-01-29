@@ -242,7 +242,6 @@ HDAE5000_Palette_Data	equ	2E5DCEh
 HDAE5000_Display_Params	equ	2F8DCEh
 
 ; Routine addresses in code sections (forward declarations)
-HDAE5000_Clear_Work_Buffer	equ	28F785h	; Clear 0xF52A bytes at 0x22A000
 HDAE5000_Load_Palette	equ	28F8E0h	; Load 256-entry VGA palette
 HDAE5000_Alloc_Memory	equ	28F543h	; Memory allocation
 HDAE5000_MemCopy	equ	29AE9Fh	; Memory copy utility
@@ -360,11 +359,33 @@ HDAE5000_Boot_Init:			; 28F576h
 
 ; ============================================================================
 ; CODE SECTION 2 PART A (0x28F662 - 0x2953E1)
-; Frame handler and routines before PPORT command table
+; Frame handler and utility routines before PPORT command table
+;
+; Key routines in this section:
+;   0x28F662  Frame_Handler - Main frame handler entry
+;   0x28F781  Frame_Handler_Exit - JP to PPORT handler
+;   0x28F785  Clear_Work_Buffer - Clear work area, copy init data
+;   0x28F7DD  Delay_Loop - Timing utility
+;   0x28F7EE  VGA_Port_Write - Write to VGA DAC registers
+;   0x28F813  Palette_Setup - Configure single palette entry
+;   0x28F8E0  Load_Palette - Load all 256 palette entries
+;   0x28F90B  Finalize_Init - Just returns (stub)
+;   0x28F90C  Display_Init - Display initialization
 ; ============================================================================
 
 HDAE5000_Frame_Handler:			; 28F662h
-	binclude "includes/code_28f662_2953e1.bin"
+	; Frame handler main loop - checks workspace, calls handlers
+	; Exits via JP to PPORT handler at 0x29501C
+	binclude "includes/code_28f662_28f784.bin"
+
+; ----------------------------------------------------------------------------
+; Utility routines (0x28F785 - 0x2953E1)
+; ----------------------------------------------------------------------------
+
+HDAE5000_Clear_Work_Buffer:		; 28F785h
+	; 1. Clear 0xF52A bytes at 0x22A000 using LDIRW
+	; 2. Copy 0x0C82 bytes from 0x2F94B2 to 0x23952A using LDIR
+	binclude "includes/code_28f785_2953e1.bin"
 
 ; ============================================================================
 ; PPORT COMMAND HANDLER JUMP TABLE (0x2953E2 - 0x295411)
