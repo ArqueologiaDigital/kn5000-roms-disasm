@@ -265,9 +265,7 @@ HDAE5000_INIT_FLAG	equ	230EDAh
 HDAE5000_Palette_Data	equ	2E5DCEh
 HDAE5000_Display_Params	equ	2F8DCEh
 
-; Routine addresses in code sections (forward declarations)
-HDAE5000_MemCopy	equ	29AE9Fh	; Memory copy utility (in code section 2B)
-HDAE5000_Check_HD_Present	equ	2971A3h	; HD presence detection (in code section 2B)
+; All routine addresses are now exposed as labels in split binary sections
 
 ; PPORT command handler addresses (in code_295642_2fffff.bin)
 HDAE5000_Cmd01_SendInfo	equ	2958D6h	; Send HD info to PC
@@ -489,16 +487,31 @@ HDAE5000_PPORT_Strings:			; 295412h
 ; ============================================================================
 ; CODE SECTION 2 PART B (0x295642 - 0x2FFFFF)
 ; All remaining code and data including:
-;   - PPORT command handler implementations
+;   - PPORT command handler implementations (Cmd01-Cmd12)
 ;   - HD file management routines
+;   - Check_HD_Present (0x2971A3)
+;   - MemCopy utility (0x29AE9F)
 ;   - UI configuration data
-;   - Version information
+;   - Version information (0x2999B0)
 ;   - German language error messages
-;   - Zero padding at end
+;   - Zero padding at end (~65KB)
 ; ============================================================================
 
 HDAE5000_Code_2_PartB:			; 295642h
-	binclude "includes/code_295642_2fffff.bin"
+	; PPORT command handlers and HD routines
+	binclude "includes/code_295642_2971a2.bin"
+
+HDAE5000_Check_HD_Present:		; 2971A3h
+	; Check for hard disk presence
+	; Writes 0 to 0x229D92, calls internal routine at 0x2971B7
+	; Returns: HL = 0 (result stored in HDAE5000_INIT_FLAG)
+	binclude "includes/code_2971a3_29ae9e.bin"
+
+HDAE5000_MemCopy:			; 29AE9Fh
+	; Memory copy utility
+	; Stack parameters: [+0x04] = dest, [+0x08] = src, [+0x0C] = count
+	; Handles overlapping regions correctly (forward/backward copy)
+	binclude "includes/code_29ae9f_2fffff.bin"
 
 ; ============================================================================
 ; END OF ROM
