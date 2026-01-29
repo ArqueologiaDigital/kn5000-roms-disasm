@@ -40231,75 +40231,83 @@ LABEL_03632B:
 	LD WA, 1
 	JP LABEL_02044F
 
-LABEL_036331:
+; ----------------------------------------------------------------------------
+; DSP_Send_Command - Send a command byte to DSP chip
+; Entry: BC = chip number (0=DSP1, 1=DSP2)
+;        A  = command byte to send
+; Exit:  HL = 0 on success, 1 on timeout
+; Notes: Polls DSP status with timeout of 0x1F40 iterations (~8000)
+;        Writes command byte to port PZ when DSP is ready
+; ----------------------------------------------------------------------------
+DSP_Send_Command:		; 036331h
 	DEC 8, XSP
 	PUSH IZ
-	LD (XSP + 006h), BC
-	LD (XSP + 008h), A
-	LDW (XSP + 004h), 0000h
-	LDW (XSP + 002h), 1f40h
+	LD (XSP + 006h), BC	; Save chip number
+	LD (XSP + 008h), A	; Save command byte
+	LDW (XSP + 004h), 0000h	; Result = success
+	LDW (XSP + 002h), 1f40h	; Timeout counter
 	EI 6
-	CALL LABEL_0383BB
-	CALL LABEL_0383B3
+	CALL DSP_Deassert_Read
+	CALL DSP_Deassert_Write
 	LD WA, (XSP + 006h)
-	CALL LABEL_0383BF
+	CALL DSP_Select_Chip
 	LD WA, (XSP + 006h)
-	CALL LABEL_0383F7
+	CALL DSP_Read_Status
 	LD IZ, HL
 	LD WA, (XSP + 006h)
-	CALL LABEL_0383DB
+	CALL DSP_Deselect_Chip
 	EI 0
 	CP IZ, 0
-	JR NZ, LABEL_0363A3
+	JR NZ, DSP_Send_Cmd_Ready
 
-LABEL_03636B:
-	LD WA, (XSP + 002h)
-	DECW 1, (XSP + 002h)
+DSP_Send_Cmd_WaitLoop:
+	LD WA, (XSP + 002h)	; Get timeout counter
+	DECW 1, (XSP + 002h)	; Decrement
 	CP WA, 0
-	JR NZ, LABEL_03637C
-	LDW (XSP + 004h), 0001h
-	JR T, LABEL_0363D7
+	JR NZ, DSP_Send_Cmd_Poll
+	LDW (XSP + 004h), 0001h	; Timeout - set error
+	JR T, DSP_Send_Cmd_Cleanup
 
-LABEL_03637C:
+DSP_Send_Cmd_Poll:
 	EI 6
-	CALL LABEL_0383BB
-	CALL LABEL_0383B3
+	CALL DSP_Deassert_Read
+	CALL DSP_Deassert_Write
 	LD WA, (XSP + 006h)
-	CALL LABEL_0383BF
+	CALL DSP_Select_Chip
 	LD WA, (XSP + 006h)
-	CALL LABEL_0383F7
+	CALL DSP_Read_Status
 	LD IZ, HL
 	LD WA, (XSP + 006h)
-	CALL LABEL_0383DB
+	CALL DSP_Deselect_Chip
 	EI 0
 	CP IZ, 0
-	JR Z, LABEL_03636B
+	JR Z, DSP_Send_Cmd_WaitLoop	; Still not ready, keep waiting
 
-LABEL_0363A3:
+DSP_Send_Cmd_Ready:
 	EI 6
 	LD WA, (XSP + 006h)
-	CALL LABEL_0383DB
-	CALL LABEL_0383BB
-	CALL LABEL_0383AF
-	CALL LABEL_0383A7
+	CALL DSP_Deselect_Chip
+	CALL DSP_Deassert_Read
+	CALL DSP_Assert_Write
+	CALL DSP_Set_Command_Mode
 	LD WA, (XSP + 006h)
-	CALL LABEL_0383BF
+	CALL DSP_Select_Chip
 	LD WA, (XSP + 006h)
-	CALL LABEL_0383F7
+	CALL DSP_Read_Status
 	CP HL, 0
-	JR Z, LABEL_0363D2
-	LD A, (XSP + 008h)
-	LD (PZ), A
-	JR T, LABEL_0363D7
+	JR Z, DSP_Send_Cmd_Error
+	LD A, (XSP + 008h)	; Get command byte
+	LD (PZ), A		; Write to DSP data port
+	JR T, DSP_Send_Cmd_Cleanup
 
-LABEL_0363D2:
-	LDW (XSP + 004h), 0001h
+DSP_Send_Cmd_Error:
+	LDW (XSP + 004h), 0001h	; Set error flag
 
-LABEL_0363D7:
+DSP_Send_Cmd_Cleanup:
 	LD WA, (XSP + 006h)
-	CALL LABEL_0383DB
-	CALL LABEL_0383B3
-	CALL LABEL_0383AB
+	CALL DSP_Deselect_Chip
+	CALL DSP_Deassert_Write
+	CALL DSP_Set_Data_Mode
 	EI 0
 	LDA XWA, 012207h
 	CALL LABEL_038365
@@ -40308,7 +40316,7 @@ LABEL_0363D7:
 	CALL LABEL_03836C
 	LDA XWA, 01220Ah
 	CALL LABEL_038365
-	LD HL, (XSP + 004h)
+	LD HL, (XSP + 004h)	; Return result
 	POP IZ
 	INC 8, XSP
 	RET
@@ -41096,7 +41104,7 @@ LABEL_03666B:
 	LD A, (XSP + 008h)
 	LD QIZH, A
 	LD WA, (XSP + 006h)
-	CALL LABEL_0383BF
+	CALL DSP_Select_Chip
 	CALR LABEL_03640A
 	LD IZ, 0008h
 	CP IZ, 0
@@ -41410,7 +41418,7 @@ LABEL_03678F:
 LABEL_036792:
 	NOP
 	LD WA, (XSP + 006h)
-	CALL LABEL_0383DB
+	CALL DSP_Deselect_Chip
 	JR T, LABEL_03679C
 
 LABEL_03679C:
@@ -41488,81 +41496,88 @@ LABEL_0367C9:
 	INC 6, XSP
 	RET
 
-LABEL_0367EE:
+; ----------------------------------------------------------------------------
+; DSP_Send_Data - Send a data byte to DSP chip
+; Entry: BC = chip number (0=DSP1, 1=DSP2)
+;        A  = data byte to send
+; Exit:  HL = 0 on success, 1 on timeout
+; Notes: Similar to DSP_Send_Command but uses data mode
+; ----------------------------------------------------------------------------
+DSP_Send_Data:			; 0367EEh
 	DEC 8, XSP
 	PUSH IZ
-	LD (XSP + 006h), BC
-	LD (XSP + 008h), A
-	LDW (XSP + 004h), 0000h
-	LDW (XSP + 002h), 1f40h
+	LD (XSP + 006h), BC	; Save chip number
+	LD (XSP + 008h), A	; Save data byte
+	LDW (XSP + 004h), 0000h	; Result = success
+	LDW (XSP + 002h), 1f40h	; Timeout counter
 	EI 6
-	CALL LABEL_0383BB
-	CALL LABEL_0383B3
+	CALL DSP_Deassert_Read
+	CALL DSP_Deassert_Write
 	LD WA, (XSP + 006h)
-	CALL LABEL_0383BF
+	CALL DSP_Select_Chip
 	LD WA, (XSP + 006h)
-	CALL LABEL_0383F7
+	CALL DSP_Read_Status
 	LD IZ, HL
 	LD WA, (XSP + 006h)
-	CALL LABEL_0383DB
+	CALL DSP_Deselect_Chip
 	EI 0
 	CP IZ, 0
-	JR NZ, LABEL_036860
+	JR NZ, DSP_Send_Data_Ready
 
-LABEL_036828:
+DSP_Send_Data_WaitLoop:
 	LD WA, (XSP + 002h)
 	DECW 1, (XSP + 002h)
 	CP WA, 0
-	JR NZ, LABEL_036839
-	LDW (XSP + 004h), 0001h
-	JR T, LABEL_036894
+	JR NZ, DSP_Send_Data_Poll
+	LDW (XSP + 004h), 0001h	; Timeout error
+	JR T, DSP_Send_Data_Cleanup
 
-LABEL_036839:
+DSP_Send_Data_Poll:
 	EI 6
-	CALL LABEL_0383BB
-	CALL LABEL_0383B3
+	CALL DSP_Deassert_Read
+	CALL DSP_Deassert_Write
 	LD WA, (XSP + 006h)
-	CALL LABEL_0383BF
+	CALL DSP_Select_Chip
 	LD WA, (XSP + 006h)
-	CALL LABEL_0383F7
+	CALL DSP_Read_Status
 	LD IZ, HL
 	LD WA, (XSP + 006h)
-	CALL LABEL_0383DB
+	CALL DSP_Deselect_Chip
 	EI 0
 	CP IZ, 0
-	JR Z, LABEL_036828
+	JR Z, DSP_Send_Data_WaitLoop
 
-LABEL_036860:
+DSP_Send_Data_Ready:
 	EI 6
-	CALL LABEL_0383AB
+	CALL DSP_Set_Data_Mode	; Set data mode (unlike command routine)
 	LD WA, (XSP + 006h)
-	CALL LABEL_0383DB
-	CALL LABEL_0383BB
-	CALL LABEL_0383AF
+	CALL DSP_Deselect_Chip
+	CALL DSP_Deassert_Read
+	CALL DSP_Assert_Write
 	LD WA, (XSP + 006h)
-	CALL LABEL_0383BF
+	CALL DSP_Select_Chip
 	LD WA, (XSP + 006h)
-	CALL LABEL_0383F7
+	CALL DSP_Read_Status
 	CP HL, 0
-	JR Z, LABEL_03688F
-	LD A, (XSP + 008h)
-	LD (PZ), A
-	JR T, LABEL_036894
+	JR Z, DSP_Send_Data_Error
+	LD A, (XSP + 008h)	; Get data byte
+	LD (PZ), A		; Write to DSP data port
+	JR T, DSP_Send_Data_Cleanup
 
-LABEL_03688F:
+DSP_Send_Data_Error:
 	LDW (XSP + 004h), 0001h
 
-LABEL_036894:
+DSP_Send_Data_Cleanup:
 	LD WA, (XSP + 006h)
-	CALL LABEL_0383DB
-	CALL LABEL_0383B3
+	CALL DSP_Deselect_Chip
+	CALL DSP_Deassert_Write
 	EI 0
 	LD A, (XSP + 008h)
 	EXTZ WA
 	CALL LABEL_03836C
 	LDA XWA, 012222h
 	CALL LABEL_038365
-	LD HL, (XSP + 004h)
+	LD HL, (XSP + 004h)	; Return result
 	POP IZ
 	INC 8, XSP
 	RET
@@ -41577,7 +41592,7 @@ LABEL_0368BA:
 	LD A, (XSP + 008h)
 	LD QIZH, A
 	LD WA, (XSP + 006h)
-	CALL LABEL_0383BF
+	CALL DSP_Select_Chip
 	LD IZ, 0008h
 	CP IZ, 0
 	JRL LE, LABEL_03696A
@@ -41890,7 +41905,7 @@ LABEL_0369D8:
 LABEL_0369DB:
 	NOP
 	LD WA, (XSP + 006h)
-	CALL LABEL_0383DB
+	CALL DSP_Deselect_Chip
 	JR T, LABEL_0369E5
 
 LABEL_0369E5:
@@ -41975,7 +41990,7 @@ LABEL_036A2E:
 	CP DE, 0
 	JR NZ, LABEL_036A49
 	EXTZ WA
-	CALR LABEL_036331
+	CALR DSP_Send_Command
 	JR T, LABEL_036A4B
 
 LABEL_036A42:
@@ -42000,7 +42015,7 @@ LABEL_036A4F:
 	CP DE, 0
 	JR NZ, LABEL_036A6A
 	EXTZ WA
-	CALR LABEL_0367EE
+	CALR DSP_Send_Data
 	JR T, LABEL_036A6C
 
 LABEL_036A63:
@@ -44210,11 +44225,11 @@ LABEL_037E62:
 	CALL LABEL_03836C
 	LDA XWA, 0122D2h
 	CALL LABEL_038365
-	CALL LABEL_03839A
-	CALL LABEL_0383A2
-	CALL LABEL_038396
-	CALL LABEL_03839E
-	CALL LABEL_03839A
+	CALL DSP1_Deassert_Reset
+	CALL DSP2_Deassert_Reset
+	CALL DSP1_Assert_Reset
+	CALL DSP2_Assert_Reset
+	CALL DSP1_Deassert_Reset
 	POP IZ
 	RET
 
@@ -44227,7 +44242,7 @@ LABEL_037E93:
 	CALL LABEL_03836C
 	LDA XWA, 0122E0h
 	CALL LABEL_038365
-	CALL LABEL_0383A2
+	CALL DSP2_Deassert_Reset
 	POP IZ
 	RET
 
@@ -44733,90 +44748,117 @@ LABEL_038375:
 LABEL_038392:
 	JP LABEL_036305
 
-LABEL_038396:
-	RES 1, (PH)		; DSPRST (DSP1 reset signal ?)
+; ============================================================================
+; DSP CONTROL ROUTINES
+; These routines control the two DSP chips via GPIO pins:
+;   PH.1 = DSP1 reset (active low)
+;   PH.2 = DSP2 reset (active low)
+;   P7.3 = DSP write strobe (active low)
+;   P7.4 = DSP read strobe (active low)
+;   P7.5 = DSP1 chip select (active low)
+;   P7.6 = DSP command/data select (0=command, 1=data)
+;   PE.6 = DSP2 chip select (active low)
+; ============================================================================
+
+DSP1_Assert_Reset:		; 038396h
+	RES 1, (PH)		; Assert DSP1 reset (active low)
 	RET
 
-LABEL_03839A:
-	SET 1, (PH)		; DSPRST (DSP1 reset signal ?)
+DSP1_Deassert_Reset:		; 03839Ah
+	SET 1, (PH)		; Deassert DSP1 reset
 	RET
 
-LABEL_03839E:
-	RES 2, (PH)		; DSPRST2 (DSP2 reset signal ?)
+DSP2_Assert_Reset:		; 03839Eh
+	RES 2, (PH)		; Assert DSP2 reset (active low)
 	RET
 
-LABEL_0383A2:
-	SET 2, (PH)		; DSPRST2 (DSP2 reset signal ?)
+DSP2_Deassert_Reset:		; 0383A2h
+	SET 2, (PH)		; Deassert DSP2 reset
 	RET
 
-LABEL_0383A6:
+DSP_Nop:			; 0383A6h - Empty routine, used as placeholder
 	RET
 
-LABEL_0383A7:
-	RES 6, (P7)		; DSPCD (command/data ?)
+DSP_Set_Command_Mode:		; 0383A7h
+	RES 6, (P7)		; DSPCD=0 selects command mode
 	RET
 
-LABEL_0383AB:
-	SET 6, (P7)		; DSPCD (command/data ?)
+DSP_Set_Data_Mode:		; 0383ABh
+	SET 6, (P7)		; DSPCD=1 selects data mode
 	RET
 
-LABEL_0383AF:
-	RES 3, (P7)		; DSPWR (DSP1 write signal)
+DSP_Assert_Write:		; 0383AFh
+	RES 3, (P7)		; Assert write strobe (active low)
 	RET
 
-LABEL_0383B3:
-	SET 3, (P7)		; DSPWR (DSP1 write signal)
+DSP_Deassert_Write:		; 0383B3h
+	SET 3, (P7)		; Deassert write strobe
 	RET
 
-LABEL_0383B7:
+DSP_Assert_Read_Data:		; 0383B7h - Raw bytes, appears to be RES 4, (P7)
 	db 0F0h, 01Ch, 0B4h, 00Eh
 
-LABEL_0383BB:
-	SET 4, (P7)		; DSPRD (DSP1 read signal)
+DSP_Deassert_Read:		; 0383BBh
+	SET 4, (P7)		; Deassert read strobe
 	RET
 
-LABEL_0383BF:
+; ----------------------------------------------------------------------------
+; DSP_Select_Chip - Select DSP chip for communication
+; Entry: WA = chip number (0=DSP1, 1=DSP2)
+; Exit:  Chip select asserted (active low)
+; ----------------------------------------------------------------------------
+DSP_Select_Chip:		; 0383BFh
 	PUSH IZ
 	LD IZ, WA
 	LD WA, IZ
-	CALR LABEL_0383A6
+	CALR DSP_Nop
 	LD WA, IZ
 	CP WA, 1
-	JR Z, LABEL_0383D6
+	JR Z, .select_dsp2
 	CP WA, 0
-	JR NZ, LABEL_0383D9
-	RES 5, (P7)		; chip-select do DSP1
-	JR T, LABEL_0383D9
+	JR NZ, .done
+	RES 5, (P7)		; Assert DSP1 chip select (active low)
+	JR T, .done
 
-LABEL_0383D6:
-	RES 6, (PE)		; chip-select do DSP2
+.select_dsp2:
+	RES 6, (PE)		; Assert DSP2 chip select (active low)
 
-LABEL_0383D9:
+.done:
 	POP IZ
 	RET
 
-LABEL_0383DB:
+; ----------------------------------------------------------------------------
+; DSP_Deselect_Chip - Deselect DSP chip after communication
+; Entry: WA = chip number (0=DSP1, 1=DSP2)
+; Exit:  Chip select deasserted
+; ----------------------------------------------------------------------------
+DSP_Deselect_Chip:		; 0383DBh
 	PUSH IZ
 	LD IZ, WA
 	LD WA, IZ
-	CALR LABEL_0383A6
+	CALR DSP_Nop
 	LD WA, IZ
 	CP WA, 1
-	JR Z, LABEL_0383F2
+	JR Z, .deselect_dsp2
 	CP WA, 0
-	JR NZ, LABEL_0383F5
-	SET 5, (P7)		; chip-select do DSP1
-	JR T, LABEL_0383F5
+	JR NZ, .done
+	SET 5, (P7)		; Deassert DSP1 chip select
+	JR T, .done
 
-LABEL_0383F2:
-	SET 6, (PE)		; chip-select do DSP2
+.deselect_dsp2:
+	SET 6, (PE)		; Deassert DSP2 chip select
 
-LABEL_0383F5:
+.done:
 	POP IZ
 	RET
 
-LABEL_0383F7:
-	CALR LABEL_0383A6
+; ----------------------------------------------------------------------------
+; DSP_Read_Status - Read DSP status from PH.0
+; Entry: None
+; Exit:  HL = status bit (0 or 1)
+; ----------------------------------------------------------------------------
+DSP_Read_Status:		; 0383F7h
+	CALR DSP_Nop
 	SET 0, (PH)
 	LDCF 0, (PH)
 	SCC C, L
