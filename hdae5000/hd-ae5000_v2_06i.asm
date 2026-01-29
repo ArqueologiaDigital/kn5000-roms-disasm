@@ -241,6 +241,20 @@ HDAE5000_INIT_FLAG	equ	230EDAh
 HDAE5000_Palette_Data	equ	2E5DCEh
 HDAE5000_Display_Params	equ	2F8DCEh
 
+; PPORT command handler addresses (in code_295642_2fffff.bin)
+HDAE5000_Cmd01_SendInfo	equ	2958D6h	; Send HD info to PC
+HDAE5000_Cmd02_Exit	equ	295914h	; Exit PPORT mode
+HDAE5000_Cmd03_ReadFSB	equ	2959F6h	; Read FSB from HD
+HDAE5000_Cmd04_SendFSB	equ	295D3Ch	; Send FSB to PC
+HDAE5000_Cmd05_RcvFSB	equ	29605Ah	; Receive FSB from PC
+HDAE5000_Cmd06_WriteFSB	equ	296294h	; Write FSB to HD
+HDAE5000_Cmd07_LoadHD	equ	29632Ah	; Load HD to Memory
+HDAE5000_Cmd08_SendData	equ	29633Ch	; Send data to PC
+HDAE5000_Cmd09_SendFiles	equ	2964A6h	; Send files to PC
+HDAE5000_Cmd10_RcvData	equ	296588h	; Receive data from PC
+HDAE5000_Cmd11_SaveMem	equ	29659Ah	; Save memory to HD
+HDAE5000_Cmd12_Nothing	equ	296680h	; (reserved)
+
 HDAE5000_Boot_Init:			; 28F576h
 	binclude "includes/boot_init_28f576_28f661.bin"
 
@@ -273,7 +287,18 @@ HDAE5000_Frame_Handler:			; 28F662h
 ; ============================================================================
 
 HDAE5000_PPORT_Cmd_Table:		; 2953E2h
-	binclude "includes/pport_cmd_table_2953e2_295411.bin"
+	dd	HDAE5000_Cmd01_SendInfo		; 0: Send HD info to PC
+	dd	HDAE5000_Cmd02_Exit		; 1: Exit PPORT mode
+	dd	HDAE5000_Cmd03_ReadFSB		; 2: Read FSB from HD
+	dd	HDAE5000_Cmd04_SendFSB		; 3: Send FSB to PC
+	dd	HDAE5000_Cmd05_RcvFSB		; 4: Receive FSB from PC
+	dd	HDAE5000_Cmd06_WriteFSB		; 5: Write FSB to HD
+	dd	HDAE5000_Cmd07_LoadHD		; 6: Load HD to Memory
+	dd	HDAE5000_Cmd08_SendData		; 7: Send data to PC
+	dd	HDAE5000_Cmd09_SendFiles	; 8: Send files to PC
+	dd	HDAE5000_Cmd10_RcvData		; 9: Receive data from PC
+	dd	HDAE5000_Cmd11_SaveMem		; 10: Save memory to HD
+	dd	HDAE5000_Cmd12_Nothing		; 11: (reserved)
 
 ; ============================================================================
 ; PPORT COMMAND MENU STRINGS (0x295412 - 0x295641)
