@@ -6,7 +6,7 @@ This document outlines the prioritized plan for disassembling remaining raw byte
 
 | Component | File Size | Disassembled | Raw Bytes | LABEL_* Count |
 |-----------|-----------|--------------|-----------|---------------|
-| **HDAE5000** | 512 KB | ~1% | 511 KB | 0 (skeleton) |
+| **HDAE5000** | 512 KB | ~5% | ~486 KB | 0 (skeleton + labels) |
 | **Main CPU** | 2 MB | ~99.9% | 48 KB | 37,624 |
 | **Sub CPU Payload** | 192 KB | 100% | 0 | 3,249 |
 | **Sub CPU Boot** | 128 KB | ~99% | 0 | 0 |
@@ -14,7 +14,7 @@ This document outlines the prioritized plan for disassembling remaining raw byte
 
 ---
 
-## Priority 1: HDAE5000 ROM (HIGHEST - 511 KB undisassembled)
+## Priority 1: HDAE5000 ROM (HIGHEST - ~486 KB undisassembled)
 
 **Why highest priority:**
 - Contains HD expansion audio processor communication protocol
@@ -22,13 +22,31 @@ This document outlines the prioritized plan for disassembling remaining raw byte
 - File system operations (SMF loading, song storage)
 - Understanding this enables HDAE5000 emulation
 
-**Binary includes to disassemble:**
+**Progress made:**
+- ✅ ROM header and entry points documented
+- ✅ Boot initialization routine analyzed and documented (0x28F576)
+- ✅ Frame handler entry point documented (0x28F662)
+- ✅ PPORT command jump table extracted (12 handlers at 0x2953E2)
+- ✅ PPORT menu strings extracted (21 strings at 0x295412)
+- ✅ Key routine addresses identified (~40 routines)
+- ✅ RAM workspace variables documented
+- ✅ Binary files split into logical sections
 
-| File | Size | Address Range | Priority |
-|------|------|---------------|----------|
-| `code_280020_28f575.bin` | 62.8 KB | 0x280020-0x28F575 | **FIRST** - Main code |
-| `boot_init_28f576_28f661.bin` | 236 B | 0x28F576-0x28F661 | Second - Boot init |
-| `code_28f662_2fffff.bin` | 461 KB | 0x28F662-0x2FFFFF | Third - Bulk code |
+**Binary includes (current state):**
+
+| File | Size | Address Range | Status |
+|------|------|---------------|--------|
+| `code_280020_28f575.bin` | 62.8 KB | 0x280020-0x28F575 | Documented (needs disasm) |
+| `boot_init_28f576_28f661.bin` | 236 B | 0x28F576-0x28F661 | Fully documented |
+| `code_28f662_2953e1.bin` | 23.4 KB | 0x28F662-0x2953E1 | Documented (needs disasm) |
+| `pport_cmd_table_2953e2_295411.bin` | 48 B | 0x2953E2-0x295411 | ✅ Fully documented |
+| `pport_strings_295412_295641.bin` | 560 B | 0x295412-0x295641 | ✅ Fully documented |
+| `code_295642_2fffff.bin` | 427 KB | 0x295642-0x2FFFFF | Needs analysis |
+
+**Next steps:**
+- Disassemble `code_280020_28f575.bin` (code section 1)
+- Disassemble `code_28f662_2953e1.bin` (frame handler routines)
+- Analyze PPORT command handler implementations
 
 **Expected knowledge gain:**
 - DSP command protocol (via PPI at 0x160000)
@@ -180,8 +198,9 @@ This document outlines the prioritized plan for disassembling remaining raw byte
 
 | Metric | Current | Target |
 |--------|---------|--------|
-| HDAE5000 disassembled | ~1% | 100% |
-| Sub CPU LABEL_* renamed | ~18 | 3,249 |
+| HDAE5000 disassembled | ~5% | 100% |
+| HDAE5000 routines documented | ~45 | ~500 |
+| Sub CPU LABEL_* renamed | ~110 | 3,249 |
 | Main CPU LABEL_* renamed | ~500 | 37,624 |
 | Binary includes documented | 8 | 97 |
 
