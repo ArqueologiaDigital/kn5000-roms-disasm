@@ -568,15 +568,20 @@ OFFSETS_F460:
 	dw 0021h  ; LABEL_01FB97
 
 
-CALL_TABLE_F46C:
-	dd LABEL_034D5F
-	dd LABEL_01FC7C
-	dd LABEL_01FC7F
-	dd LABEL_035893
-	dd LABEL_01F890 ; <-- leads to the setup of serial port #1 as 38400 baud - PC2 (I think!)
-	dd LABEL_03CFEE
-	dd LABEL_020C12
-	dd LABEL_020C12
+; ----------------------------------------------------------------------------
+; CMD_DISPATCH_TABLE - Command Handler Jump Table
+; Indexed by bits 7-5 of command byte (8 entries)
+; Entry 0 = commands 0x00-0x1F, Entry 1 = commands 0x20-0x3F, etc.
+; ----------------------------------------------------------------------------
+CMD_DISPATCH_TABLE:
+	dd LABEL_034D5F		; 0x00-0x1F: DSP/audio control
+	dd LABEL_01FC7C		; 0x20-0x3F: Handler 1
+	dd LABEL_01FC7F		; 0x40-0x5F: Handler 2
+	dd LABEL_035893		; 0x60-0x7F: Handler 3
+	dd LABEL_01F890		; 0x80-0x9F: Serial port setup (38400 baud)
+	dd LABEL_03CFEE		; 0xA0-0xBF: Handler 5
+	dd LABEL_020C12		; 0xC0-0xDF: Handler 6
+	dd LABEL_020C12		; 0xE0-0xFF: Handler 7 (shared with 6)
 
 
 LABEL_00F48C:
@@ -11318,7 +11323,7 @@ MICRODMA_CH0_HANDLER:			; 20F1Fh - Channel #0 completion (command dispatch)
 	LD A, C
 	EXTZ WA
 	SLA 2, WA			; Multiply by 4 (table entry size)
-	LDA XBC, CALL_TABLE_F46C:24
+	LDA XBC, CMD_DISPATCH_TABLE:24
 	LD XWA, (XBC + WA)
 	CALL T, XWA			; Dispatch to handler
 	INC 6, XSP
