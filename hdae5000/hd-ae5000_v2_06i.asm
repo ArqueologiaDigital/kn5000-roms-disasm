@@ -56,9 +56,9 @@
 ;                Jumps to 0x29501C for PPORT state machine
 ;   0x28F6E0  HDAE5000_Frame_Handler_Part2 - Handler continuation
 ;   0x28F781  HDAE5000_Frame_Handler_Exit - Exit via JP to PPORT handler
-;   0x28F785  HDAE5000_Clear_Work_Buffer - Clear 0xF52A bytes at 0x22A000
-;   0x28F7DD  HDAE5000_Delay_Loop - Delay/timing utility
-;   0x28F7EE  HDAE5000_VGA_Port_Write - Write to VGA port (mem-mapped at 0x170000)
+;   0x28F785  HDAE5000_Clear_Work_Buffer - Clear 0xF52A bytes at 0x22A000 (LABEL EXPOSED)
+;   0x28F7DD  HDAE5000_Delay_Loop - Delay/timing utility (LABEL EXPOSED)
+;   0x28F7EE  HDAE5000_VGA_Port_Write - Write to VGA port (mem-mapped at 0x170000) (LABEL EXPOSED)
 ;   0x28F813  HDAE5000_Palette_Setup - Set one VGA palette entry (LABEL EXPOSED)
 ;   0x28F8E0  HDAE5000_Load_Palette - Load all 256 palette entries (DISASSEMBLED)
 ;   0x28F90B  HDAE5000_Ret_Stub - Just returns (placeholder)
@@ -425,11 +425,25 @@ HDAE5000_Frame_Handler:			; 28F662h
 ; ----------------------------------------------------------------------------
 
 HDAE5000_Clear_Work_Buffer:		; 28F785h
-	; 1. Clear 0xF52A bytes at 0x22A000 using LDIRW
-	; 2. Copy 0x0C82 bytes from 0x2F94B2 to 0x23952A using LDIR
-	; Contains: Clear_Work_Buffer (0x28F785), Delay_Loop (0x28F7DD),
-	;           VGA_Port_Write (0x28F7EE)
-	binclude "includes/code_28f785_28f812.bin"
+	; Clear work buffer and copy initialization data from ROM
+	; 1. Clear 0xF52A bytes (62,762) at 0x22A000 using LDIRW
+	; 2. Copy 0x0C82 bytes (3,202) from ROM 0x2F94B2 to RAM 0x23952A
+	; Uses LDIRW for word copy, LDIR for byte copy with loop handling
+	binclude "includes/code_28f785_28f7dc.bin"
+
+HDAE5000_Delay_Loop:			; 28F7DDh
+	; Simple delay loop - decrements XWA until zero
+	; Input: XWA = delay count (nested loop iterations)
+	; Clobbers: XWA, XBC
+	binclude "includes/code_28f7dd_28f7ed.bin"
+
+HDAE5000_VGA_Port_Write:		; 28F7EEh
+	; Write byte to VGA I/O port (memory-mapped at 0x170000)
+	; Input: WA = VGA port number (e.g., 0x3C8, 0x3C9)
+	;        C = data byte to write
+	; VGA DAC ports: 0x3C8 = palette index, 0x3C9 = R/G/B data
+	; Called with 0x100 delay before write to ensure VGA timing
+	binclude "includes/code_28f7ee_28f812.bin"
 
 HDAE5000_Palette_Setup:			; 28F813h
 	; Set one VGA palette entry
