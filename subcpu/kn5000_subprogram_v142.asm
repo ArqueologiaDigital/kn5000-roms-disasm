@@ -8982,19 +8982,19 @@ INTRX1_HANDLER:		; 1F736
 	LD C, (SC1BUF)
 	LD A, (SC1CR)
 	AND A, 01ch    ; 0001 1100
-	JR Z, LABEL_01F74F
+	JR Z, Serial1_RX_NoError
 	
 	; serial comms error happened:
 	db 0c0h, 0d5h, 019h, 036h, 010h ; LD (1036h), (SC1CR)
-	JR T, exit_INTRX1_HANDLER
+	JR T, Serial1_RX_Exit
 
-LABEL_01F74F:
-	BIT 2, (SERIAL_1_VAR_1034)
-	JR Z, exit_INTRX1_HANDLER
-	LD XWA, 00000e00h
+Serial1_RX_NoError:		; 01F74Fh
+	BIT 2, (SERIAL_1_VAR_1034)	; Check if RX enabled
+	JR Z, Serial1_RX_Exit
+	LD XWA, 00000e00h		; Ring buffer descriptor at 0x0E00
 	CALR SAVE_BYTE_TO_RING_BUFFER
 
-exit_INTRX1_HANDLER:  ; 1F75D
+Serial1_RX_Exit:		; 01F75Dh
 	POP XWA
 	POP XBC
 	POP XDE
@@ -9005,7 +9005,12 @@ exit_INTRX1_HANDLER:  ; 1F75D
 	RETI
 
 
-INTTX1_HANDLER:		; 1F765
+; ----------------------------------------------------------------------------
+; INTTX1_HANDLER - Serial Port 1 Transmit Complete Interrupt
+; Entry: None
+; Notes: Sends next byte from TX ring buffer (0x1016) or 0xFE if sync needed
+; ----------------------------------------------------------------------------
+INTTX1_HANDLER:			; 01F765h
 	PUSH XIZ
 	PUSH XIY
 	PUSH XIX
@@ -9013,29 +9018,29 @@ INTTX1_HANDLER:		; 1F765
 	PUSH XDE
 	PUSH XBC
 	PUSH XWA
-	BIT 0, (SERIAL_1_VAR_1034)
-	JR Z, LABEL_01F77B
+	BIT 0, (SERIAL_1_VAR_1034)	; Check sync flag
+	JR Z, Serial1_TX_Normal
 	RES 0, (SERIAL_1_VAR_1034)
-	LD (SC1BUF), 0feh
-	JR T, LABEL_01F78C
+	LD (SC1BUF), 0feh		; Send sync byte
+	JR T, Serial1_TX_CheckEmpty
 
-LABEL_01F77B:
-	LD XWA, 00001016h
+Serial1_TX_Normal:		; 01F77Bh
+	LD XWA, 00001016h		; TX ring buffer descriptor
 	CALR READ_BYTE_FROM_RING_BUFFER
-	CP HL, 0ffffh
-	JR Z, LABEL_01F78C
-	LD (SC1BUF), L
+	CP HL, 0ffffh			; Buffer empty?
+	JR Z, Serial1_TX_CheckEmpty
+	LD (SC1BUF), L			; Send byte
 
-LABEL_01F78C:
+Serial1_TX_CheckEmpty:		; 01F78Ch
 	BIT 0, (SERIAL_1_VAR_1034)
-	JR NZ, LABEL_01F7A3
+	JR NZ, Serial1_TX_Exit
 	LD XWA, 00001016h
 	CALR RING_BUFFER_HAS_OVERRUN
-	CP HL, 0ffffh
-	JR NZ, LABEL_01F7A3
-	LD (INTES1), 0fdh
+	CP HL, 0ffffh			; Buffer empty?
+	JR NZ, Serial1_TX_Exit
+	LD (INTES1), 0fdh		; Disable TX interrupt
 
-LABEL_01F7A3:
+Serial1_TX_Exit:		; 01F7A3h
 	POP XWA
 	POP XBC
 	POP XDE
@@ -9059,54 +9064,76 @@ RING_BUFFER_HAS_OVERRUN:  ; 1F7AB
 	RET
 
 
-READ_BYTE_FROM_RING_BUFFER:		; 1F7B9
+; ----------------------------------------------------------------------------
+; READ_BYTE_FROM_RING_BUFFER - Read a byte from a ring buffer
+; Entry: XWA = ring buffer descriptor pointer
+; Exit:  L = byte read, HL = 0 on success
+;        HL = 0xFFFF if buffer empty
+; Notes: Ring buffer descriptor format:
+;        +0x00: buffer_start pointer
+;        +0x04: buffer_end pointer
+;        +0x08: write_pointer
+;        +0x0C: read_pointer
+;        +0x14: available_bytes count
+; ----------------------------------------------------------------------------
+READ_BYTE_FROM_RING_BUFFER:	; 01F7B9h
 	LD HL, 0ffffh
 	LDA XDE, XWA + 008h  ; current_write_pointer
 	LD XBC, (XDE)
 	LD XIX, XBC
 	CP (XWA + 00ch), XBC  ; current_read_pointer
-	RET Z
-	LD L, (XBC)
+	RET Z			; Buffer empty
+	LD L, (XBC)		; Read byte
 	CP XBC, (XWA + 004h)  ; buffer_end
-	JR NZ, LABEL_01F7D3
-	LD XIX, (XWA)  ; buffer_start
-	JR T, LABEL_01F7D5
+	JR NZ, RingBuf_Read_NoWrap
+	LD XIX, (XWA)  ; buffer_start - wrap around
+	JR T, RingBuf_Read_Update
 
-LABEL_01F7D3:
+RingBuf_Read_NoWrap:		; 01F7D3h
 	INC 1, XIX
 
-LABEL_01F7D5:
-	LD (XDE), XIX
-	INCW 1, (XWA + 014h)
+RingBuf_Read_Update:		; 01F7D5h
+	LD (XDE), XIX		; Update write pointer
+	INCW 1, (XWA + 014h)	; Increment available count
 	EXTZ HL
 	RET
 
-
-SAVE_BYTE_TO_RING_BUFFER:	; 1F7DD
+; ----------------------------------------------------------------------------
+; SAVE_BYTE_TO_RING_BUFFER - Write a byte to a ring buffer
+; Entry: XWA = ring buffer descriptor pointer
+;        C = byte to write
+; Exit:  HL = available bytes remaining
+; Notes: Returns without writing if buffer full (available == 0)
+; ----------------------------------------------------------------------------
+SAVE_BYTE_TO_RING_BUFFER:	; 01F7DDh
 	LDA XIX, XWA + 014h
-	LD HL, (XIX)
+	LD HL, (XIX)		; Get available count
 	LDA XDE, XWA + 00ch
 	LD XIY, (XDE)
 	CP HL, 0
-	RET Z
-	LD (XIY), C
+	RET Z			; Buffer full
+	LD (XIY), C		; Write byte
 	CP XIY, (XWA + 004h)
-	JR NZ, LABEL_01F7F6
-	LD XIY, (XWA)
-	JR T, LABEL_01F7F8
+	JR NZ, RingBuf_Write_NoWrap
+	LD XIY, (XWA)		; Wrap around
+	JR T, RingBuf_Write_Update
 
-LABEL_01F7F6:
+RingBuf_Write_NoWrap:		; 01F7F6h
 	INC 1, XIY
 
-LABEL_01F7F8:
-	LD (XDE), XIY
+RingBuf_Write_Update:		; 01F7F8h
+	LD (XDE), XIY		; Update read pointer
 	LD HL, (XIX)
-	DEC 1, HL
+	DEC 1, HL		; Decrement available count
 	LD (XIX), HL
 	RET
 
-
-LABEL_01F801:
+; ----------------------------------------------------------------------------
+; Serial1_Enable_TX_Interrupt - Enable serial port 1 TX interrupt
+; Entry: None
+; Notes: Used to start transmission when data is queued
+; ----------------------------------------------------------------------------
+Serial1_Enable_TX_Interrupt:	; 01F801h
 	PUSH SR
 	EI 6
 	LD (INTES1), 0ddh
@@ -9142,7 +9169,7 @@ LABEL_01F836:
 	RET C
 	LD (102Ch), XBC
 	SET 0, (SERIAL_1_VAR_1034)
-	CALR LABEL_01F801
+	CALR Serial1_Enable_TX_Interrupt
 	RET
 
 LABEL_01F856:
@@ -9200,7 +9227,7 @@ LABEL_01F8B2:
 	EXTZ BC
 	LD XWA, 00001016h
 	CALR SAVE_BYTE_TO_RING_BUFFER
-	CALR LABEL_01F801
+	CALR Serial1_Enable_TX_Interrupt
 
 LABEL_01F8C8:
 	LD A, (XSP + 004h)
