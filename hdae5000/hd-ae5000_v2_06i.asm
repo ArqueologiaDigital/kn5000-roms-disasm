@@ -561,8 +561,38 @@ HDAE5000_PPORT_Cmd_Table:		; 2953E2h
 ;   Error : Wrong Dll Ver
 ; ============================================================================
 
-HDAE5000_PPORT_Strings:			; 295412h
-	binclude "includes/pport_strings_295412_295641.bin"
+HDAE5000_PPORT_Ptrs:			; 295412h
+	; 3 pointers to PPORT utility routines
+	dd	002966BEh	; Pointer to utility 1
+	dd	002966FAh	; Pointer to utility 2
+	dd	0029670Ch	; Pointer to utility 3
+
+HDAE5000_PPORT_Strings:			; 29541Eh
+	; PPORT command menu strings (21 null-terminated strings)
+	; Format: "NN>Description" where NN = command number
+	db	"01>Send Infos About HD", 0, 0
+	db	"02>Exit PPORT         ", 0, 0
+	db	"03>Read FSB from HD   ", 0, 0
+	db	"04>Sending FSB to PC  ", 0, 0
+	db	"05>Rcv FSB from PC    ", 0, 0
+	db	"06>Writing FSB to HD  ", 0, 0
+	db	"07>Load HD to Memory  ", 0, 0
+	db	"08>Send data to PC    ", 0, 0
+	db	"09>Sending files to PC", 0, 0
+	db	"10>Rcv data from PC   ", 0, 0
+	db	"11>Save memory to HD  ", 0, 0
+	db	"12>nothing            ", 0, 0
+	db	"13>Rcv data from PC   ", 0, 0
+	db	"14>Sending infos to PC", 0, 0
+	db	"15>nothing            ", 0, 0
+	db	"16>Delete files       ", 0, 0
+	db	"17>Formating HD       ", 0, 0
+	db	"18>Switch HD-motor off", 0, 0
+	db	"19>nothing            ", 0, 0
+	db	"20>Send XapFile flash ", 0, 0
+	db	"20>End flash right", 09h, "  ", 0
+	db	"20>End flash false", 09h, "  ", 0
+	db	"Error : Wrong Dll Ver ", 0, 0
 
 ; ============================================================================
 ; CODE SECTION 2 PART B (0x295642 - 0x2FFFFF)
