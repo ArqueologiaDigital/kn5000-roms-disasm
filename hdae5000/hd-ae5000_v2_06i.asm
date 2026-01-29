@@ -216,7 +216,16 @@ HDAE5000_Code_Section_1:		; 280020h
 HDAE5000_Register_Frame:		; 2803C2h
 	; Register frame handler callback with main CPU
 	; Clears 0x23A08E, 0x23A092, 0x23A094 and initializes display data
-	binclude "includes/code_2803c2_28f575.bin"
+	binclude "includes/code_2803c2_28f542.bin"
+
+HDAE5000_Alloc_Memory:			; 28F543h
+	; Memory allocation routine
+	; Input: XBC = allocation type (0x01E000A1, A2, or A3)
+	; Output: XHL = pointer to allocated memory or 0 if invalid type
+	;   A1 -> 0x2E61CE
+	;   A2 -> (determined by jump at 0x28F564)
+	;   A3 -> (determined by jump at 0x28F56A)
+	binclude "includes/code_28f543_28f575.bin"
 
 ; ============================================================================
 ; BOOT INITIALIZATION ROUTINE (0x28F576 - 0x28F661)
@@ -257,7 +266,6 @@ HDAE5000_Palette_Data	equ	2E5DCEh
 HDAE5000_Display_Params	equ	2F8DCEh
 
 ; Routine addresses in code sections (forward declarations)
-HDAE5000_Alloc_Memory	equ	28F543h	; Memory allocation (in code section 1)
 HDAE5000_MemCopy	equ	29AE9Fh	; Memory copy utility (in code section 2B)
 HDAE5000_Check_HD_Present	equ	2971A3h	; HD presence detection (in code section 2B)
 
