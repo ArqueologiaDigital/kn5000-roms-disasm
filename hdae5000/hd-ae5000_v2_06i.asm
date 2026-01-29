@@ -197,11 +197,26 @@ HDAE5000_ENTRY_4:			; 28001Ch
 	nop
 
 ; ============================================================================
-; CODE AND DATA SECTION (0x280020 - 0x28F575)
+; CODE SECTION 1 (0x280020 - 0x28F575)
+;
+; Key routines:
+;   0x280020  Code_Section_1 - Handler registration entry (called from boot_init)
+;   0x28030E  Alloc_Check - Memory allocation parameter check
+;   0x28033B  Utility routine
+;   0x280368  Utility routine
+;   0x2803C2  Register_Frame - Register frame handler callback
+;   0x28F543  Alloc_Memory - Memory allocation routine
 ; ============================================================================
 
 HDAE5000_Code_Section_1:		; 280020h
-	binclude "includes/code_280020_28f575.bin"
+	; Handler registration and utility routines
+	; Contains multiple indirect callback registrations via workspace pointers
+	binclude "includes/code_280020_2803c1.bin"
+
+HDAE5000_Register_Frame:		; 2803C2h
+	; Register frame handler callback with main CPU
+	; Clears 0x23A08E, 0x23A092, 0x23A094 and initializes display data
+	binclude "includes/code_2803c2_28f575.bin"
 
 ; ============================================================================
 ; BOOT INITIALIZATION ROUTINE (0x28F576 - 0x28F661)
@@ -243,7 +258,6 @@ HDAE5000_Display_Params	equ	2F8DCEh
 
 ; Routine addresses in code sections (forward declarations)
 HDAE5000_Alloc_Memory	equ	28F543h	; Memory allocation (in code section 1)
-HDAE5000_Register_Frame	equ	2803C2h	; Register frame handler (in code section 1)
 HDAE5000_MemCopy	equ	29AE9Fh	; Memory copy utility (in code section 2B)
 HDAE5000_Check_HD_Present	equ	2971A3h	; HD presence detection (in code section 2B)
 
