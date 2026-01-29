@@ -9412,7 +9412,7 @@ LABEL_01FB29:
 	DEC 1, IZ
 
 LABEL_01FB2F:
-	CALL LABEL_03D01E
+	CALL ToneGen_Process_Notes
 	CALL LABEL_034D93
 	CALL LABEL_035AC8
 	CALL LABEL_01F8D5
@@ -40343,12 +40343,12 @@ DSP_Send_Cmd_Cleanup:
 	CALL DSP_Set_Data_Mode
 	EI 0
 	LDA XWA, 012207h
-	CALL LABEL_038365
+	CALL Debug_Print_String
 	LD A, (XSP + 008h)
 	EXTZ WA
-	CALL LABEL_03836C
+	CALL Debug_Print_Byte
 	LDA XWA, 01220Ah
-	CALL LABEL_038365
+	CALL Debug_Print_String
 	LD HL, (XSP + 004h)	; Return result
 	POP IZ
 	INC 8, XSP
@@ -40580,7 +40580,7 @@ LABEL_0364B7:
 LABEL_0364BA:
 	NOP
 	LDA XWA, 01220Dh
-	JP LABEL_038365
+	JP Debug_Print_String
 
 LABEL_0364C4:
 	RES 2, (PF)
@@ -41124,7 +41124,7 @@ LABEL_03665E:
 LABEL_036661:
 	NOP
 	LDA XWA, 012215h
-	JP LABEL_038365
+	JP Debug_Print_String
 
 LABEL_03666B:
 	DEC 6, XSP
@@ -41518,12 +41518,12 @@ LABEL_0367C9:
 	NOP
 	EI 0
 	LDA XWA, 01221Dh
-	CALL LABEL_038365
+	CALL Debug_Print_String
 	LD A, (XSP + 008h)
 	EXTZ WA
-	CALL LABEL_03836C
+	CALL Debug_Print_Byte
 	LDA XWA, 01221Fh
-	CALL LABEL_038365
+	CALL Debug_Print_String
 	LD HL, (XSP + 004h)
 	POP XIZ
 	INC 6, XSP
@@ -41607,9 +41607,9 @@ DSP_Send_Data_Cleanup:
 	EI 0
 	LD A, (XSP + 008h)
 	EXTZ WA
-	CALL LABEL_03836C
+	CALL Debug_Print_Byte
 	LDA XWA, 012222h
-	CALL LABEL_038365
+	CALL Debug_Print_String
 	LD HL, (XSP + 004h)	; Return result
 	POP IZ
 	INC 8, XSP
@@ -42006,9 +42006,9 @@ LABEL_036A12:
 	EI 0
 	LD A, (XSP + 008h)
 	EXTZ WA
-	CALL LABEL_03836C
+	CALL Debug_Print_Byte
 	LDA XWA, 012224h
-	CALL LABEL_038365
+	CALL Debug_Print_String
 	LD HL, (XSP + 004h)
 	POP XIZ
 	INC 6, XSP
@@ -44253,11 +44253,11 @@ LABEL_037E62:
 	PUSH IZ
 	LD IZ, WA
 	LDA XWA, 0122CCh
-	CALL LABEL_038365
+	CALL Debug_Print_String
 	LD WA, IZ
-	CALL LABEL_03836C
+	CALL Debug_Print_Byte
 	LDA XWA, 0122D2h
-	CALL LABEL_038365
+	CALL Debug_Print_String
 	CALL DSP1_Deassert_Reset
 	CALL DSP2_Deassert_Reset
 	CALL DSP1_Assert_Reset
@@ -44270,11 +44270,11 @@ LABEL_037E93:
 	PUSH IZ
 	LD IZ, WA
 	LDA XWA, 0122DAh
-	CALL LABEL_038365
+	CALL Debug_Print_String
 	LD WA, IZ
-	CALL LABEL_03836C
+	CALL Debug_Print_Byte
 	LDA XWA, 0122E0h
-	CALL LABEL_038365
+	CALL Debug_Print_String
 	CALL DSP2_Deassert_Reset
 	POP IZ
 	RET
@@ -44283,12 +44283,12 @@ LABEL_037EB4:
 	PUSH IZ
 	LD IZ, WA
 	LDA XWA, 0122EDh
-	CALL LABEL_038365
+	CALL Debug_Print_String
 	LD WA, IZ
 	INC 1, WA
-	CALL LABEL_03836C
+	CALL Debug_Print_Byte
 	LDA XWA, 0122F3h
-	CALL LABEL_038365
+	CALL Debug_Print_String
 	LD WA, IZ
 	EXTZ XWA
 	SLL 2, XWA
@@ -44304,11 +44304,11 @@ LABEL_037EE9:
 	PUSH IZ
 	LD IZ, WA
 	LDA XWA, 0122FAh
-	CALL LABEL_038365
+	CALL Debug_Print_String
 	LD WA, IZ
-	CALL LABEL_03836C
+	CALL Debug_Print_Byte
 	LDA XWA, 012300h
-	CALL LABEL_038365
+	CALL Debug_Print_String
 	LD WA, IZ
 	EXTZ XWA
 	SLL 2, XWA
@@ -44324,11 +44324,11 @@ LABEL_037F1C:
 	PUSH IZ
 	LD IZ, WA
 	LDA XWA, 012307h
-	CALL LABEL_038365
+	CALL Debug_Print_String
 	LD WA, IZ
-	CALL LABEL_03836C
+	CALL Debug_Print_Byte
 	LDA XWA, 01230Dh
-	CALL LABEL_038365
+	CALL Debug_Print_String
 	LD WA, IZ
 	EXTZ XWA
 	SLL 2, XWA
@@ -44346,12 +44346,12 @@ LABEL_037F4F:
 	LD (XSP + 002h), BC
 	LD IZ, WA
 	LDA XWA, 012318h
-	CALL LABEL_038365
+	CALL Debug_Print_String
 	LD WA, IZ
 	INC 1, WA
-	CALL LABEL_03836C
+	CALL Debug_Print_Byte
 	LDA XWA, 01231Eh
-	CALL LABEL_038365
+	CALL Debug_Print_String
 	LD WA, IZ
 	EXTZ XWA
 	LD XBC, 0001ed6dh
@@ -44385,12 +44385,12 @@ LABEL_037FAE:
 	LD (XSP + 002h), BC
 	LD IZ, WA
 	LDA XWA, 01232Bh
-	CALL LABEL_038365
+	CALL Debug_Print_String
 	LD WA, IZ
 	INC 1, WA
-	CALL LABEL_03836C
+	CALL Debug_Print_Byte
 	LDA XWA, 012331h
-	CALL LABEL_038365
+	CALL Debug_Print_String
 	LD WA, IZ
 	EXTZ XWA
 	LD XBC, 0001ed6dh
@@ -44423,10 +44423,10 @@ LABEL_03800D:
 	PUSH IZ
 	LD (XSP + 002h), XWA
 	LDA XWA, 012338h
-	CALL LABEL_038365
+	CALL Debug_Print_String
 	LD XWA, (XSP + 002h)
 	LD WA, (XWA + 006h)
-	CALL LABEL_03836C
+	CALL Debug_Print_Byte
 	LD IZ, 0
 	LDA XWA, 01E63Ch
 	LD XBC, XWA
@@ -44478,12 +44478,12 @@ LABEL_0380AB:
 	PUSH IZ
 	LD IZ, WA
 	LDA XWA, 012346h
-	CALL LABEL_038365
+	CALL Debug_Print_String
 	LD WA, IZ
 	INC 1, WA
-	CALL LABEL_03836C
+	CALL Debug_Print_Byte
 	LDA XWA, 01234Ch
-	CALL LABEL_038365
+	CALL Debug_Print_String
 	LD WA, IZ
 	EXTZ XWA
 	LD XBC, 0001ed6dh
@@ -44508,14 +44508,14 @@ LABEL_0380EC:
 	LD (XSP + 002h), BC
 	LD IZ, WA
 	LDA XWA, 012355h
-	CALL LABEL_038365
+	CALL Debug_Print_String
 	LD WA, IZ
 	INC 1, WA
-	CALL LABEL_03836C
+	CALL Debug_Print_Byte
 	LDA XWA, 01235Bh
-	CALL LABEL_038365
+	CALL Debug_Print_String
 	LD WA, (XSP + 002h)
-	CALL LABEL_03836C
+	CALL Debug_Print_Byte
 	LD WA, IZ
 	CP WA, 1
 	JR NZ, LABEL_03818A
@@ -44589,14 +44589,14 @@ LABEL_0381BC:
 	LD IZ, BC
 	LD (XSP + 002h), WA
 	LDA XWA, 012364h
-	CALL LABEL_038365
+	CALL Debug_Print_String
 	LD WA, (XSP + 002h)
 	INC 1, WA
-	CALL LABEL_03836C
+	CALL Debug_Print_Byte
 	LDA XWA, 01236Ah
-	CALL LABEL_038365
+	CALL Debug_Print_String
 	LD WA, IZ
-	CALL LABEL_03836C
+	CALL Debug_Print_Byte
 	LD WA, IZ
 	EXTZ XWA
 	SLL 2, XWA
@@ -44616,16 +44616,16 @@ LABEL_038200:
 	LD (XSP + 004h), BC
 	LD IZ, WA
 	LDA XWA, 012378h
-	CALL LABEL_038365
+	CALL Debug_Print_String
 	LD WA, IZ
 	INC 1, WA
-	CALL LABEL_03836C
+	CALL Debug_Print_Byte
 	LDA XWA, 01237Eh
-	CALL LABEL_038365
+	CALL Debug_Print_String
 	LD WA, (XSP + 002h)
-	CALL LABEL_03836C
+	CALL Debug_Print_Byte
 	LDA XWA, 012384h
-	CALL LABEL_038365
+	CALL Debug_Print_String
 	LD WA, (XSP + 002h)
 	EXTZ XWA
 	LD XBC, XWA
@@ -44639,7 +44639,7 @@ LABEL_038200:
 	ADD XDE, XBC
 	ADD XDE, (XSP + 00ah)
 	LD WA, (XDE + 00ch)
-	CALL LABEL_038375
+	CALL Debug_Print_Word
 	LD XWA, (XSP + 00ah)
 	PUSH XWA
 	LD WA, IZ
@@ -44659,12 +44659,12 @@ LABEL_03826E:
 	CPW (XSP + 004h), 0063h
 	JRL Z, LABEL_03835F
 	LDA XWA, 01238Bh
-	CALL LABEL_038365
+	CALL Debug_Print_String
 	LD WA, IZ
 	INC 1, WA
-	CALL LABEL_03836C
+	CALL Debug_Print_Byte
 	LDA XWA, 012391h
-	CALL LABEL_038365
+	CALL Debug_Print_String
 	LD WA, (XSP + 004h)
 	EXTZ XWA
 	LD XBC, XWA
@@ -44678,7 +44678,7 @@ LABEL_03826E:
 	ADD XDE, XBC
 	ADD XDE, (XSP + 00ch)
 	LD WA, (XDE + 00ch)
-	CALL LABEL_038375
+	CALL Debug_Print_Word
 	LD WA, IZ
 	EXTZ XWA
 	LD XBC, XWA
@@ -44752,26 +44752,44 @@ LABEL_03835F:
 	INC 6, XSP
 	RETD 0004h
 
-LABEL_038365:
+; ----------------------------------------------------------------------------
+; Debug_Print_String - Print null-terminated string via serial port
+; Entry: XWA = pointer to string
+; Exit:  WA = 0
+; Notes: Calls boot ROM serial output routine at 0xFFFEA1
+; ----------------------------------------------------------------------------
+Debug_Print_String:		; 038365h
 	CALL 0FFFEA1h
 	LD WA, 0
 	RET
 
-LABEL_03836C:
+; ----------------------------------------------------------------------------
+; Debug_Print_Byte - Print single byte as hex via serial port
+; Entry: A = byte value
+; Exit:  WA = 0
+; Notes: Calls boot ROM serial byte output routine at 0xFFFE86
+; ----------------------------------------------------------------------------
+Debug_Print_Byte:		; 03836Ch
 	EXTZ WA
 	CALL 0FFFE86h
 	LD WA, 0
 	RET
 
-LABEL_038375:
+; ----------------------------------------------------------------------------
+; Debug_Print_Word - Print 16-bit word as hex via serial port
+; Entry: WA = word value
+; Exit:  WA = 0
+; Notes: Prints high byte first, then low byte
+; ----------------------------------------------------------------------------
+Debug_Print_Word:		; 038375h
 	PUSH IZ
 	LD IZ, WA
 	LD WA, IZ
-	SRL 8, WA
+	SRL 8, WA		; Get high byte
 	EXTZ WA
 	CALL 0FFFE86h
 	LD WA, 0
-	LD A, IZL
+	LD A, IZL		; Get low byte
 	EXTZ WA
 	CALL 0FFFE86h
 	LD WA, 0
@@ -47351,7 +47369,7 @@ LABEL_039D98:
 	LDA XWA, XSP + 040h
 	LDA XBC, 012E2Fh
 	LD DE, 1
-	CALL LABEL_03D2AC
+	CALL ToneGen_Compare_Voice
 	CP HL, 0
 	JR NZ, LABEL_039EDA
 	LDA XBC, XSP + 048h
@@ -48601,7 +48619,7 @@ LABEL_03ACB1:
 	LDA XWA, XSP + 009eh
 	LDA XBC, 012F9Bh
 	LD DE, 0
-	CALL LABEL_03D306
+	CALL ToneGen_Compare_Voice_32
 	CP HL, 0
 	JR NZ, LABEL_03AD1E
 	LD XWA, 3f800000h
@@ -51213,130 +51231,152 @@ LABEL_03D013:
 ; ----------------------------------------------------------------------------
 ToneGen_Init:			; 03D016h
 	LD (4A48h), 006h	; Set tone gen mode to 6
-	JRL T, LABEL_03D1FB	; Continue to main processing
+	JRL T, ToneGen_Poll_Init	; Continue to main processing
 
-LABEL_03D01E:
-	DEC 2, XSP
+; ----------------------------------------------------------------------------
+; ToneGen_Process_Notes - Process incoming note events from tone generator
+; Entry: Called from main tone gen handler
+; Exit:  Note events dispatched to appropriate voice slots
+; Notes: Reads notes via ToneGen_Read_Voice_Data, manages voice allocation
+;        at 0x4A4C-0x4A5C (16 voice slots), sends to DMA at 0x4A42
+; ----------------------------------------------------------------------------
+ToneGen_Process_Notes:		; 03D01Eh
+	DEC 2, XSP		; Allocate 2 bytes for result
 	LD WA, 0
 	LDA XWA, XSP
-	CALR LABEL_03D0C5
+	CALR ToneGen_Read_Voice_Data
 	CP HL, 0ffffh
-	JRL Z, LABEL_03D0C2
+	JRL Z, ToneGen_Note_Done
 
-LABEL_03D02E:
-	CP (XSP + 001h), 000h
-	JR Z, LABEL_03D06D
+ToneGen_Note_Loop:		; 03D02Eh
+	CP (XSP + 001h), 000h	; Check velocity
+	JR Z, ToneGen_Note_Off_Slot
+	LD A, (XSP + 000h:8)	; Get note number
+	EXTZ WA
+	LDA XBC, 4A4Ch		; Voice slot table
+	EXTZ XWA
+	ADD XWA, XBC
+	LD (XWA), 0ffh		; Mark slot as note-on
+	LD (4A42h), 090h	; DMA command: note on
+	LD A, (XSP + 000h:8)
+	LD (4A43h), A		; Store note number
+	LD A, (XSP + 001h)
+	LD (4A44h), A		; Store velocity
+	CP (4A4Ah), 001h	; Check if DMA enabled
+	JR NZ, ToneGen_Note_Continue
+	LD XDE, 00004a42h
+	LD WA, 2
+	LD BC, 3
+	CALL LABEL_020C6B	; Send via DMA
+	JR T, ToneGen_Note_Continue
+
+ToneGen_Note_Off_Slot:		; 03D06Dh
 	LD A, (XSP + 000h:8)
 	EXTZ WA
 	LDA XBC, 4A4Ch
 	EXTZ XWA
 	ADD XWA, XBC
-	LD (XWA), 0ffh
-	LD (4A42h), 090h
+	CP (XWA), 0ffh		; Check if slot was active
+	JR NZ, ToneGen_Note_Continue
+	LD A, (XSP + 000h:8)
+	EXTZ WA
+	LDA XBC, 4A4Ch
+	EXTZ XWA
+	ADD XWA, XBC
+	LD (XWA), 000h		; Clear slot
+	LD (4A42h), 090h	; DMA command: note off
 	LD A, (XSP + 000h:8)
 	LD (4A43h), A
 	LD A, (XSP + 001h)
 	LD (4A44h), A
 	CP (4A4Ah), 001h
-	JR NZ, LABEL_03D0B6
-	LD XDE, 00004a42h
-	LD WA, 2
-	LD BC, 3
-	CALL LABEL_020C6B
-	JR T, LABEL_03D0B6
-
-LABEL_03D06D:
-	LD A, (XSP + 000h:8)
-	EXTZ WA
-	LDA XBC, 4A4Ch
-	EXTZ XWA
-	ADD XWA, XBC
-	CP (XWA), 0ffh
-	JR NZ, LABEL_03D0B6
-	LD A, (XSP + 000h:8)
-	EXTZ WA
-	LDA XBC, 4A4Ch
-	EXTZ XWA
-	ADD XWA, XBC
-	LD (XWA), 000h
-	LD (4A42h), 090h
-	LD A, (XSP + 000h:8)
-	LD (4A43h), A
-	LD A, (XSP + 001h)
-	LD (4A44h), A
-	CP (4A4Ah), 001h
-	JR NZ, LABEL_03D0B6
+	JR NZ, ToneGen_Note_Continue
 	LD XDE, 00004a42h
 	LD WA, 2
 	LD BC, 3
 	CALL LABEL_020C6B
 
-LABEL_03D0B6:
+ToneGen_Note_Continue:		; 03D0B6h
 	LDA XWA, XSP
-	CALR LABEL_03D0C5
+	CALR ToneGen_Read_Voice_Data
 	CP HL, 0ffffh
-	JRL NZ, LABEL_03D02E
+	JRL NZ, ToneGen_Note_Loop
 
-LABEL_03D0C2:
+ToneGen_Note_Done:		; 03D0C2h
 	INC 2, XSP
 	RET
 
-LABEL_03D0C5:
+; ----------------------------------------------------------------------------
+; ToneGen_Read_Voice_Data - Read voice data from tone generator
+; Entry: XWA = pointer to 2-byte result buffer
+; Exit:  HL = 0 (success) or 0xFFFF (not ready)
+; Notes: P6.7 controls A23 address line to tone generator
+;        Reads status from 0x110002, data from 0x110000
+;        Extracts note (low byte) and velocity (high byte)
+; ----------------------------------------------------------------------------
+ToneGen_Read_Voice_Data:	; 03D0C5h
 	PUSH XIZ
 	LD XIZ, XWA
-	SET 7, (P6)
+	SET 7, (P6)		; Assert A23 for status read
 	NOP
-	LD BC, (110002h)
-	BIT 0, BC
-	JR Z, LABEL_03D11A
-	RES 7, (P6)
+	LD BC, (110002h)	; Read status register
+	BIT 0, BC		; Check data ready bit
+	JR Z, ToneGen_Read_Not_Ready
+	RES 7, (P6)		; Deassert A23 for data read
 	NOP
-	LD WA, (110000h)
-	LD L, A
+	LD WA, (110000h)	; Read voice data (16-bit)
+	LD L, A			; L = note byte (low)
 	AND L, 0ffh
 	SRL 8, WA
-	LD E, A
+	LD E, A			; E = velocity byte (high)
 	AND E, 0ffh
-	CP E, 0ffh
-	JR Z, LABEL_03D0F6
-	BIT 1, BC
-	JR Z, LABEL_03D10F
+	CP E, 0ffh		; Check for note-off
+	JR Z, ToneGen_Read_NoteOff
+	BIT 1, BC		; Check status bit 1
+	JR Z, ToneGen_Read_NoteOn
 
-LABEL_03D0F6:
-	BIT 7, L
-	JR Z, LABEL_03D100
-	LD HL, 0ffffh
-	JR T, LABEL_03D11D
+ToneGen_Read_NoteOff:		; 03D0F6h
+	BIT 7, L		; Check note high bit (release flag)
+	JR Z, ToneGen_Read_Release
+	LD HL, 0ffffh		; Return not ready
+	JR T, ToneGen_Read_Done
 
-LABEL_03D100:
+ToneGen_Read_Release:		; 03D100h
 	LD C, L
 	LD XWA, XIZ
-	CALR LABEL_03D11F
-	LD (XIZ + 001h), 000h
+	CALR ToneGen_Calc_Pitch
+	LD (XIZ + 001h), 000h	; Clear velocity for note-off
 	LD HL, 0
-	JR T, LABEL_03D11D
+	JR T, ToneGen_Read_Done
 
-LABEL_03D10F:
+ToneGen_Read_NoteOn:		; 03D10Fh
 	LD C, L
 	LD XWA, XIZ
-	CALR LABEL_03D11F
+	CALR ToneGen_Calc_Pitch
 	LD HL, 0
-	JR T, LABEL_03D11D
+	JR T, ToneGen_Read_Done
 
-LABEL_03D11A:
+ToneGen_Read_Not_Ready:		; 03D11Ah
 	LD HL, 0ffffh
 
-LABEL_03D11D:
+ToneGen_Read_Done:		; 03D11Dh
 	POP XIZ
 	RET
 
-LABEL_03D11F:
+; ----------------------------------------------------------------------------
+; ToneGen_Calc_Pitch - Calculate pitch value for voice
+; Entry: C = note number, XWA = result pointer
+; Exit:  Pitch value stored at (XWA), velocity at (XWA+1)
+; Notes: Uses lookup tables at 0x01F43E (note map), 0x01F420 (mode params)
+;        Mode stored at 0x4A48, calculation uses MULS/DIVS
+; ----------------------------------------------------------------------------
+ToneGen_Calc_Pitch:		; 03D11Fh
 	LD L, C
-	RES 7, L
-	ADD L, 024h
-	LD (XWA), L
-	BIT 7, C
-	JRL Z, LABEL_03D1F5
+	RES 7, L		; Clear release flag
+	ADD L, 024h		; Add pitch offset (36)
+	LD (XWA), L		; Store base pitch
+	BIT 7, C		; Check if release (note-off)
+	JRL Z, ToneGen_Calc_NoVel
 	LD C, E
 	EXTZ BC
 	LDA XDE, 01F43Eh
@@ -51372,86 +51412,98 @@ LABEL_03D11F:
 	DIV_C 00ch
 	LD C, B
 	CP C, 00ah
-	JR Z, LABEL_03D1AA
+	JR Z, ToneGen_Pitch_Adjust
 	CP C, 008h
-	JR Z, LABEL_03D1AA
+	JR Z, ToneGen_Pitch_Adjust
 	CP C, 6
-	JR Z, LABEL_03D1AA
+	JR Z, ToneGen_Pitch_Adjust
 	CP C, 3
-	JR Z, LABEL_03D1AA
+	JR Z, ToneGen_Pitch_Adjust
 	CP C, 1
-	JR NZ, LABEL_03D1C4
+	JR NZ, ToneGen_Pitch_Clamp
 
-LABEL_03D1AA:
-	LD C, (4A48h)
+ToneGen_Pitch_Adjust:		; 03D1AAh - apply mode-specific pitch offset
+	LD C, (4A48h)		; Get tone gen mode
 	EXTZ BC
-	MULS_BC 0003h
-	LDA XHL, 01F422h
+	MULS_BC 0003h		; mode * 3 for table index
+	LDA XHL, 01F422h	; Pitch offset table
 	LD C, (XHL + BC)
 	EXTZ BC
 	EXTZ XBC
-	SUB XDE, XBC
+	SUB XDE, XBC		; Apply offset
 
-LABEL_03D1C4:
+ToneGen_Pitch_Clamp:		; 03D1C4h - clamp pitch to 0-255 range
 	LD XBC, 000000ffh
 	CP XDE, 000000ffh
-	JR GT, LABEL_03D1D3
+	JR GT, ToneGen_Pitch_ClampHi
 	LD XBC, XDE
 
-LABEL_03D1D3:
+ToneGen_Pitch_ClampHi:		; 03D1D3h
 	LD XDE, XBC
 	LD XBC, 0
 	CP XDE, 00000000h
-	JR LT, LABEL_03D1E1
+	JR LT, ToneGen_Pitch_ClampLo
 	LD XBC, XDE
 
-LABEL_03D1E1:
+ToneGen_Pitch_ClampLo:		; 03D1E1h
 	LD XDE, XBC
 	LD C, E
 	EXTZ BC
-	LDA XDE, 01F53Eh
+	LDA XDE, 01F53Eh	; Velocity lookup table
 	LD C, (XDE + BC)
-	LD (XWA + 001h), C
+	LD (XWA + 001h), C	; Store velocity
 	RET
 
-LABEL_03D1F5:
+ToneGen_Calc_NoVel:		; 03D1F5h - note-off, no velocity
 	LD (XWA + 001h), 000h
 	RET
 
-LABEL_03D1FA:
+ToneGen_Poll_Padding:		; 03D1FAh
 	db 00Eh
 
-LABEL_03D1FB:
+; ----------------------------------------------------------------------------
+; ToneGen_Poll_Init - Initialize and poll all tone generator voices
+; Entry: Called from ToneGen_Init
+; Exit:  Voice status updated in buffer at (0x01F41C)
+; Notes: Clears 8 voice buffers, then polls 16 iterations
+; ----------------------------------------------------------------------------
+ToneGen_Poll_Init:		; 03D1FBh
 	LD HL, 0
 	CP HL, 0008h
-	JR NC, LABEL_03D217
+	JR NC, ToneGen_Poll_All
 
-LABEL_03D203:
+ToneGen_Clear_Voice_Loop:	; 03D203h
 	LD WA, HL
 	EXTZ XWA
-	ADD XWA, (01F41Ch)
-	LD (XWA), 000h
+	ADD XWA, (01F41Ch)	; Voice status buffer base
+	LD (XWA), 000h		; Clear voice status
 	INC 1, HL
 	CP HL, 0008h
-	JR C, LABEL_03D203
+	JR C, ToneGen_Clear_Voice_Loop
 
-LABEL_03D217:
+; ----------------------------------------------------------------------------
+; ToneGen_Poll_All - Poll tone generator for all 16 channels
+; Entry: None
+; Exit:  Voice status bits updated
+; Notes: Reads from 0x110000/0x110002, uses P6.7 for control
+; ----------------------------------------------------------------------------
+ToneGen_Poll_All:		; 03D217h
 	LD HL, 0
-	CP HL, 0010h
+	CP HL, 0010h		; 16 iterations (one per MIDI channel)
 	RET NC
 
-LABEL_03D21F:
+ToneGen_Poll_Channel:		; 03D21Fh
 	LD WA, 0
-	CP WA, 2710h
-	JR NC, LABEL_03D230
+	CP WA, 2710h		; 10000 delay cycles
+	JR NC, ToneGen_Poll_Read
 
-LABEL_03D227:
+ToneGen_Poll_Delay:		; 03D227h
 	NOP
 	INC 1, WA
 	CP WA, 2710h
-	JR C, LABEL_03D227
+	JR C, ToneGen_Poll_Delay
 
-LABEL_03D230:
+ToneGen_Poll_Read:		; 03D230h
 	SET 7, (P6)	; A23 pin tied to D5VNAD (both pins "NAD" and "EXADL0" of of tone generator)
 	NOP
 	LD WA, (110002h)
@@ -51463,14 +51515,29 @@ LABEL_03D230:
 	SRL 8, WA
 	AND A, 0ffh
 	LD A, C
-	SRL 3, A
+	SRL 3, A		; Extract voice index (bits 3-5)
 	AND A, 007h
 	LD E, A
 	LD A, C
-	AND A, 007h
+	AND A, 007h		; Extract bit position (bits 0-2)
 	LD W, A
-	BIT 7, C
-	JR Z, LABEL_03D281
+	BIT 7, C		; Check note-on flag
+	JR Z, ToneGen_Poll_NoteOff
+	LD A, E			; Note ON - set voice bit
+	LD IXL, A
+	EXTZ IX
+	LD XBC, (01F41Ch)	; Voice status buffer
+	LD DE, 1
+	LD A, W
+	AND A, 00fh
+	JR Z, ToneGen_Poll_SetBit
+	SLA A, DE		; Create bit mask
+
+ToneGen_Poll_SetBit:		; 03D27Ah
+	OR (XBC + IX), E	; Set voice active bit
+	JR T, ToneGen_Poll_Next
+
+ToneGen_Poll_NoteOff:		; 03D281h - Note OFF - clear voice bit
 	LD A, E
 	LD IXL, A
 	EXTZ IX
@@ -51478,54 +51545,46 @@ LABEL_03D230:
 	LD DE, 1
 	LD A, W
 	AND A, 00fh
-	JR Z, LABEL_03D27A
+	JR Z, ToneGen_Poll_ClearBit
 	SLA A, DE
 
-LABEL_03D27A:
-	OR (XBC + IX), E
-	JR T, LABEL_03D2A1
-
-LABEL_03D281:
-	LD A, E
-	LD IXL, A
-	EXTZ IX
-	LD XBC, (01F41Ch)
-	LD DE, 1
-	LD A, W
-	AND A, 00fh
-	JR Z, LABEL_03D298
-	SLA A, DE
-
-LABEL_03D298:
+ToneGen_Poll_ClearBit:		; 03D298h
 	LD WA, DE
-	CPL WA
-	AND (XBC + IX), A
+	CPL WA			; Invert mask
+	AND (XBC + IX), A	; Clear voice bit
 
-LABEL_03D2A1:
+ToneGen_Poll_Next:		; 03D2A1h
 	INC 1, HL
 	CP HL, 0010h
-	JRL C, LABEL_03D21F
+	JRL C, ToneGen_Poll_Channel
 	RET
 
-LABEL_03D2AB:
+ToneGen_Voice_Padding:		; 03D2ABh
 	db 0FFh
 
-LABEL_03D2AC:
-	LD XIX, (XWA + 004h)
+; ----------------------------------------------------------------------------
+; ToneGen_Compare_Voice - Compare two voice parameter blocks
+; Entry: XWA = voice 1 pointer, XBC = voice 2 pointer, DE = comparison type
+; Exit:  HL = comparison result (0 = different, 1 = same, or lookup value)
+; Notes: Compares 8-byte voice blocks at XWA and XBC
+;        Uses lookup table at 0x03D978 for result mapping
+; ----------------------------------------------------------------------------
+ToneGen_Compare_Voice:		; 03D2ACh
+	LD XIX, (XWA + 004h)	; Compare high 4 bytes
 	CP XIX, (XBC + 004h)
-	JR NZ, LABEL_03D2C7
-	LD XIY, (XWA)
+	JR NZ, ToneGen_Compare_Diff
+	LD XIY, (XWA)		; Compare low 4 bytes
 	CP XIY, (XBC)
-	JR NZ, LABEL_03D2C9
-	LDA XIX, 03D978h
+	JR NZ, ToneGen_Compare_Result
+	LDA XIX, 03D978h	; Exact match - lookup result
 	LD L, (XIX + DE)
 	LD_H 000h
 	RET
 
-LABEL_03D2C7:
+ToneGen_Compare_Diff:		; 03D2C7h
 	LD XIY, (XWA)
 
-LABEL_03D2C9:
+ToneGen_Compare_Result:		; 03D2C9h
 	LD HL, 0
 	CP DE, 4
 	RET Z
@@ -51535,57 +51594,63 @@ LABEL_03D2C9:
 	LD XWA, (XBC + 004h)
 	LD HL, 0
 	LDCF 0fh, QIX
-	JR NC, LABEL_03D2E6
+	JR NC, ToneGen_Compare_Sign
 	XORCF 0fh, QWA
 	SCC NC, HL
 
-LABEL_03D2E6:
+ToneGen_Compare_Sign:		; 03D2E6h
 	CP XIX, XWA
-	JR GT, LABEL_03D2FB
-	JR LT, LABEL_03D2F0
+	JR GT, ToneGen_Cmp_Greater
+	JR LT, ToneGen_Cmp_Less
 	CP XIY, (XBC)
-	JR UGT, LABEL_03D2FB
+	JR UGT, ToneGen_Cmp_Greater
 
-LABEL_03D2F0:
-	LDA XIX, 03D97Eh
+ToneGen_Cmp_Less:		; 03D2F0h - voice 1 < voice 2
+	LDA XIX, 03D97Eh	; Less-than lookup table
 	XOR L, (XIX + DE)
 	RET
 
-LABEL_03D2FB:
-	LDA XIX, 03D984h
+ToneGen_Cmp_Greater:		; 03D2FBh - voice 1 > voice 2
+	LDA XIX, 03D984h	; Greater-than lookup table
 	XOR L, (XIX + DE)
 	RET
 
-LABEL_03D306:
+; ----------------------------------------------------------------------------
+; ToneGen_Compare_Voice_32 - Compare two 32-bit voice parameters
+; Entry: XWA = voice 1 pointer, XBC = voice 2 pointer, DE = comparison type
+; Exit:  HL = comparison result
+; Notes: Simplified version comparing only first 4 bytes
+; ----------------------------------------------------------------------------
+ToneGen_Compare_Voice_32:	; 03D306h
 	LD HL, 0
-	LD XWA, (XWA)
-	LD XBC, (XBC)
+	LD XWA, (XWA)		; Load 32-bit value from voice 1
+	LD XBC, (XBC)		; Load 32-bit value from voice 2
 	CP XWA, XBC
-	JR NZ, LABEL_03D31B
-	LDA XIX, 03D978h
+	JR NZ, ToneGen_Cmp32_NotEqual
+	LDA XIX, 03D978h	; Equal - lookup result
 	LD L, (XIX + DE)
 	RET
 
-LABEL_03D31B:
+ToneGen_Cmp32_NotEqual:		; 03D31Bh
 	CP DE, 4
 	RET Z
 	LD HL, 1
 	CP DE, 5
 	RET Z
 	LD HL, 0
-	LDCF 0fh, QWA
-	JR NC, LABEL_03D333
+	LDCF 0fh, QWA		; Load carry from sign bit
+	JR NC, ToneGen_Cmp32_Sign
 	XORCF 0fh, QBC
 	SCC NC, HL
 
-LABEL_03D333:
+ToneGen_Cmp32_Sign:		; 03D333h
 	CP XWA, XBC
-	JR GT, LABEL_03D342
+	JR GT, ToneGen_Cmp32_Greater
 	LDA XIX, 03D97Eh
 	XOR L, (XIX + DE)
 	RET
 
-LABEL_03D342:
+ToneGen_Cmp32_Greater:		; 03D342h
 	LDA XIX, 03D984h
 	XOR L, (XIX + DE)
 	RET
@@ -51823,13 +51888,13 @@ LABEL_03D533:
 	LDA XWA, XSP + 04ah
 	LDA XBC, 01F646h
 	LD DE, 1
-	CALL LABEL_03D2AC
+	CALL ToneGen_Compare_Voice
 	CP HL, 0
 	JR NZ, LABEL_03D567
 	LDA XWA, XSP + 04ah
 	LDA XBC, 01F64Eh
 	LD DE, 3
-	CALL LABEL_03D2AC
+	CALL ToneGen_Compare_Voice
 	CP HL, 0
 	JR NZ, LABEL_03D567
 	LDA XBC, XSP + 04ah
@@ -51853,7 +51918,7 @@ LABEL_03D56F:
 	LDA XWA, XSP + 012h
 	LDA XBC, XSP + 04ah
 	LD DE, 4
-	CALL LABEL_03D2AC
+	CALL ToneGen_Compare_Voice
 	CP HL, 0
 	JR NZ, LABEL_03D5AC
 	LDW (040C22h), 0021h
@@ -51886,7 +51951,7 @@ LABEL_03D5DC:
 	LDA XWA, XSP + 012h
 	LDA XBC, XSP + 04ah
 	LD DE, 5
-	CALL LABEL_03D2AC
+	CALL ToneGen_Compare_Voice
 	CP HL, 0
 	JRL NZ, LABEL_03D72F
 	LD XWA, (XSP + 036h)
@@ -52275,10 +52340,20 @@ LABEL_03D969:
 	POP XIZ
 	RET
 
-LABEL_03D977:
-	db 0FFh, 001h, 000h, 001h, 000h, 001h, 000h, 001h
-	db 001h, 000h, 000h, 000h, 001h, 000h, 000h, 001h
-	db 001h, 000h, 001h
+; ----------------------------------------------------------------------------
+; ToneGen_Compare_Tables - Lookup tables for voice comparison results
+; 0x03D978: Equal result table (6 bytes)
+; 0x03D97E: Less-than result table (6 bytes)
+; 0x03D984: Greater-than result table (6 bytes)
+; ----------------------------------------------------------------------------
+ToneGen_Compare_Tables:		; 03D977h
+	db 0FFh			; Padding
+	; Equal table (0x03D978)
+	db 001h, 000h, 001h, 000h, 001h, 000h
+	; Less-than table (0x03D97E)
+	db 001h, 001h, 000h, 000h, 000h, 001h
+	; Greater-than table (0x03D984)
+	db 000h, 000h, 001h, 001h, 000h, 001h
 
 LABEL_03D98A:
 	LDA XSP, XSP - 080h
@@ -52312,7 +52387,7 @@ LABEL_03D9B5:
 	LDA XWA, XSP + 064h
 	LDA XBC, 01F696h
 	LD DE, 1
-	CALL LABEL_03D2AC
+	CALL ToneGen_Compare_Voice
 	CP HL, 0
 	JR NZ, LABEL_03D9FF
 	LDA XWA, XSP + 074h
@@ -52344,7 +52419,7 @@ LABEL_03DA1F:
 	LDA XWA, XSP + 05ch
 	LDA XBC, XSP + 0094h
 	LD DE, 4
-	CALL LABEL_03D2AC
+	CALL ToneGen_Compare_Voice
 	CP HL, 0
 	JR NZ, LABEL_03DA56
 	LDA XWA, XSP + 074h
@@ -52407,7 +52482,7 @@ LABEL_03DA56:
 	LDA XBC, 0F3A6h:24
 	LDA XWA, XSP + 04ch
 	LD DE, 0
-	CALL LABEL_03D2AC
+	CALL ToneGen_Compare_Voice
 	CP HL, 0
 	JRL NZ, LABEL_03DBEF
 	LDA XDE, XSP + 07ch
@@ -53849,7 +53924,7 @@ LABEL_03E675:
 	LDA XWA, XSP + 03ah
 	LDA XBC, 01F6C6h
 	LD DE, 0
-	CALL LABEL_03D2AC
+	CALL ToneGen_Compare_Voice
 	CP HL, 0
 	JR NZ, LABEL_03E6A9
 	LDW (040C22h), 0022h
@@ -53862,7 +53937,7 @@ LABEL_03E6A9:
 	LDA XWA, XSP + 03ah
 	LDA XBC, 01F6CEh
 	LD DE, 2
-	CALL LABEL_03D2AC
+	CALL ToneGen_Compare_Voice
 	CP HL, 0
 	JR NZ, LABEL_03E6C9
 	LD XWA, (XSP + 036h)
@@ -53898,7 +53973,7 @@ LABEL_03E6CB:
 	LDA XWA, XSP + 01ah
 	LDA XBC, XSP + 022h
 	LD DE, 5
-	CALL LABEL_03D2AC
+	CALL ToneGen_Compare_Voice
 	CP HL, 0
 	JR Z, LABEL_03E722
 	INC 1, IZ
@@ -54005,7 +54080,7 @@ LABEL_03E7E6:
 	LDA XWA, XSP + 050h
 	LDA XBC, XSP + 058h
 	LD DE, 5
-	CALL LABEL_03D2AC
+	CALL ToneGen_Compare_Voice
 	CP HL, 0
 	JR NZ, LABEL_03E7E6
 	LDA XIZ, 0F3D2h:24
