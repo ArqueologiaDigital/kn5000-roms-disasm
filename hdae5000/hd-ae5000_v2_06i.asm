@@ -61,7 +61,8 @@
 ;   0x28F7EE  HDAE5000_VGA_Port_Write - Write to VGA port (mem-mapped at 0x170000) (LABEL EXPOSED)
 ;   0x28F813  HDAE5000_Palette_Setup - Set one VGA palette entry (LABEL EXPOSED)
 ;   0x28F8E0  HDAE5000_Load_Palette - Load all 256 palette entries (DISASSEMBLED)
-;   0x28F90B  HDAE5000_Ret_Stub - Just returns (placeholder)
+;   0x28F90B  HDAE5000_Finalize_Init - Just returns (1-byte stub) (DISASSEMBLED)
+;   0x28F90C  HDAE5000_Display_Init - Display/callback initialization (LABEL EXPOSED)
 ;   0x28F90C  HDAE5000_Display_Init - Display/callback initialization
 ;   0x28F97E  HDAE5000_Calc_Offset_16 - Calculate 16-byte offset in table
 ;   0x28F98B  HDAE5000_Copy_To_Table - Copy data to table at 0x201632
@@ -485,9 +486,15 @@ HDAE5000_Load_Palette:			; 28F8E0h
 	ret
 
 HDAE5000_Finalize_Init:			; 28F90Bh
-	; Final initialization and remaining code section 2A routines
-	; First byte is just RET (stub), followed by Display_Init at 0x28F90C
-	binclude "includes/code_28f90b_2953e1.bin"
+	; Stub that just returns (placeholder)
+	ret
+
+HDAE5000_Display_Init:			; 28F90Ch
+	; Display and callback initialization
+	; Registers callbacks via workspace function tables
+	; at 0x23A1A2 -> (XWA+0xE88) -> (XWA+0xE8)
+	; Calls Display_String routine at 0x298622
+	binclude "includes/code_28f90c_2953e1.bin"
 
 ; ============================================================================
 ; PPORT COMMAND HANDLER JUMP TABLE (0x2953E2 - 0x295411)
