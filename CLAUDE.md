@@ -310,8 +310,8 @@ This is a strict policy to ensure the disassembly is maintainable and understand
    Routines:     VerbNoun format - SendCommand, InitHardware, HandleEvent
    Data tables:  NOUN_TABLE format - FONT_METRICS_TABLE, JUMP_HANDLER_TABLE
    Constants:    NOUN format - SYSTEM_TIMESTAMP, FDC_STATUS_PORT
-   Flags:        NOUN_FLAG format - DMA_READY_FLAG, PAYLOAD_LOADED_FLAG
-   Buffers:      NOUN_BUFFER format - CMD_DATA_BUFFER, DMA_PARAM_BLOCK
+   Flags:        NOUN_FLAG format - PAYLOAD_LOADED_FLAG, DMA_XFER_STATE
+   Buffers:      NOUN_BUFFER format - CMD_DATA_BUFFER, DMA_SETUP_PARAMS
    ```
 
 6. **Benefits of symbolic references:**

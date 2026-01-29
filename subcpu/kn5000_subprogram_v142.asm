@@ -10,10 +10,15 @@
 INTER_CPU_COMM_LATCHES	EQU 120000h ; This is a pair of 8-bit latches used for
                                     ; bidirectional communication between
                                     ; maincpu and subcpu
+
+; Shared with boot ROM (persists after payload load)
+PAYLOAD_LOADED_FLAG	EQU 04FEh ; bit 6: payload ready, bit 7: transfer complete
+
+; Payload-specific state variables
 SERIAL_1_VAR_1034	EQU 1034h ; byte
 SERIAL_1_VAR_1038	EQU 1038h ; byte
-SOME_STATE		EQU 10E8h ; byte
-ANOTHER_STATE		EQU 10EAh ; byte
+DMA_XFER_STATE		EQU 10E8h ; byte: 0=idle, 1=single xfer, 2=two-phase
+CMD_PROCESSING_STATE	EQU 10EAh ; byte: 0-4, tracks command processing phase
 BYTE_FROM_MAINCPU_LATCH	EQU 10ECh ; byte
 
 
@@ -10918,8 +10923,8 @@ LABEL_020C15:
 	LDC DMAS0, XWA
 	LD_A 0
 	LDC_DMAC0_A
-	LD (SOME_STATE), 0
-	LD (ANOTHER_STATE), 0
+	LD (DMA_XFER_STATE), 0
+	LD (CMD_PROCESSING_STATE), 0
 	RET
 
 LABEL_020C6B:
@@ -10963,7 +10968,7 @@ LABEL_020CB6:
 	BIT 4, (PD)  ; MSTAT1
 	JR Z, LABEL_020CFA
 	RES 0, (PD)  ; SSTAT0
-	LD (SOME_STATE), 001h
+	LD (DMA_XFER_STATE), 001h
 	LD L, C
 	DEC 1, L
 	SLL 5, A
@@ -10980,11 +10985,11 @@ LABEL_020CD3:
 	LDC_DMAM2_BC
 	LD (DMA2V), 016h
 	SET 2, (T8RUN)
-	CP (SOME_STATE), 000h
+	CP (DMA_XFER_STATE), 000h
 	RET Z
 
 LABEL_020CF2:
-	CP (SOME_STATE), 000h
+	CP (DMA_XFER_STATE), 000h
 	JR NZ, LABEL_020CF2
 	RET
 
@@ -11028,7 +11033,7 @@ LABEL_020D13:
 LABEL_020DB3:
 	PUSH IZ
 	LD IZ, 0
-	CP (SOME_STATE), 000h
+	CP (DMA_XFER_STATE), 000h
 	JR Z, LABEL_020DCF
 
 LABEL_020DBD:
@@ -11036,7 +11041,7 @@ LABEL_020DBD:
 	INC 1, IZ
 	CP HL, 0ea60h
 	JRL UGT, LABEL_020E84
-	CP (SOME_STATE), 000h
+	CP (DMA_XFER_STATE), 000h
 	JR NZ, LABEL_020DBD
 
 LABEL_020DCF:
@@ -11046,7 +11051,7 @@ LABEL_020DD1:
 	BIT 4, (PD)  ; MSTAT1
 	JRL Z, LABEL_020E69
 	RES 0, (PD)  ; SSTAT0
-	LD (SOME_STATE), 002h
+	LD (DMA_XFER_STATE), 002h
 	LD (INTER_CPU_COMM_LATCHES), 0e1h
 	LD IZ, 0
 
@@ -11065,11 +11070,11 @@ LABEL_020DE7:
 	LDC_DMAM2_WA
 	LD (DMA2V), 016h
 	SET 2, (T8RUN)
-	CP (SOME_STATE), 001h
+	CP (DMA_XFER_STATE), 001h
 	JR Z, LABEL_020E20
 
 LABEL_020E19:
-	CP (SOME_STATE), 001h
+	CP (DMA_XFER_STATE), 001h
 	JR NZ, LABEL_020E19
 
 LABEL_020E20:
@@ -11091,11 +11096,11 @@ LABEL_020E31:
 	LDC_DMAM2_WA
 	LD (DMA2V), 016h
 	SET 2, (T8RUN)
-	CP (SOME_STATE), 000h
+	CP (DMA_XFER_STATE), 000h
 	JR Z, LABEL_020E56
 
 LABEL_020E4F:
-	CP (SOME_STATE), 000h
+	CP (DMA_XFER_STATE), 000h
 	JR NZ, LABEL_020E4F
 
 LABEL_020E56:
@@ -11139,7 +11144,7 @@ INT0_HANDLER:				; 20E86
 	LD (BYTE_FROM_MAINCPU_LATCH), A
 	CP A, 0e1h
 	JR NZ, LABEL_020EB1
-	LD (ANOTHER_STATE), 002h
+	LD (CMD_PROCESSING_STATE), 002h
 	LDA XWA, 1116h
 	LD (10E4h), XWA
 	LDC_DMAD0_XWA
@@ -11150,7 +11155,7 @@ INT0_HANDLER:				; 20E86
 LABEL_020EB1:
 	CP A, 0e2h
 	JR NZ, LABEL_020ECE
-	LD (ANOTHER_STATE), 003h
+	LD (CMD_PROCESSING_STATE), 003h
 	LDA XWA, 111Ch
 	LD (10E4h), XWA
 	LDC_DMAD0_XWA
@@ -11161,11 +11166,11 @@ LABEL_020EB1:
 LABEL_020ECE:
 	CP A, 0e3h
 	JR NZ, LABEL_020ED9
-	SET 6, (04FEh)
+	SET 6, (PAYLOAD_LOADED_FLAG)
 	JR T, LABEL_020EFC
 
 LABEL_020ED9:
-	LD (ANOTHER_STATE), 001h
+	LD (CMD_PROCESSING_STATE), 001h
 	LDA XWA, 10F0h
 	LD (10E4h), XWA
 	LDC_DMAD0_XWA
@@ -11186,26 +11191,42 @@ LABEL_020EFF:
 	RETI
 
 
+;=============================================================================
+; MICRODMA_CH2_HANDLER - MicroDMA Channel 2 Completion Interrupt
+;=============================================================================
+; Called when DMA channel 2 transfer completes (payload data transfers).
+; Manages the DMA state machine for multi-phase transfers:
+;   - State 2 (two-phase) -> State 1 (waiting for phase 2)
+;   - State 1 (single xfer) -> State 0 (idle)
+; Stops Timer 8 which triggers the DMA transfers.
+;=============================================================================
 MICRODMA_CH2_HANDLER:  ; Channel #2 completion		; 20F01
-; Also update value of var[SOME_STATE]:
-;   2 => 1
-;   1 => 0
-;
 	RES 2, (T8RUN)
-	CP (SOME_STATE), 001h
+	CP (DMA_XFER_STATE), 001h
 	JR NZ, LABEL_020F12
-	LD (SOME_STATE), 000h
+	LD (DMA_XFER_STATE), 000h
 	JR T, LABEL_020F1E
 
 LABEL_020F12:
-	CP (SOME_STATE), 002h
+	CP (DMA_XFER_STATE), 002h
 	JR NZ, LABEL_020F1E
-	LD (SOME_STATE), 001h
+	LD (DMA_XFER_STATE), 001h
 
 LABEL_020F1E:
 	RETI
 
 
+;=============================================================================
+; MICRODMA_CH0_HANDLER - MicroDMA Channel 0 Completion Interrupt
+;=============================================================================
+; Called when DMA channel 0 transfer completes (inter-CPU latch reads).
+; This is the main command dispatcher - receives commands from main CPU
+; and processes them based on CMD_PROCESSING_STATE:
+;   State 1: Decode command byte (bits 7-5 = handler, bits 4-0 = length)
+;   State 2: Process E1 command (two-phase transfer setup)
+;   State 3: Process E2 command (transfer parameters)
+;   State 4: Process E3 command (payload ready signal)
+;=============================================================================
 MICRODMA_CH0_HANDLER  ; Channel #0 completion		; 20F1F
 	PUSH XIZ
 	PUSH XIY
@@ -11214,7 +11235,7 @@ MICRODMA_CH0_HANDLER  ; Channel #0 completion		; 20F1F
 	PUSH XDE
 	PUSH XBC
 	PUSH XWA
-	LD A, (ANOTHER_STATE)
+	LD A, (CMD_PROCESSING_STATE)
 	CP A, 4
 	JR Z, LABEL_020F9B
 	CP A, 3
@@ -11240,7 +11261,7 @@ MICRODMA_CH0_HANDLER  ; Channel #0 completion		; 20F1F
 	LD XWA, (XBC + WA)
 	CALL T, XWA
 	INC 6, XSP
-	LD (ANOTHER_STATE), 000h
+	LD (CMD_PROCESSING_STATE), 000h
 	JR T, LABEL_020FA4
 
 LABEL_020F6D:
@@ -11250,19 +11271,19 @@ LABEL_020F6D:
 	LD WA, (XWA + 004h)
 	LDC_DMAM0_WA
 	LD (DMA0V), 00ah
-	LD (ANOTHER_STATE), 004h
+	LD (CMD_PROCESSING_STATE), 004h
 	JR T, LABEL_020FA7
 
 LABEL_020F88:
 	LD (10EEh), 0ffh
-	LD (ANOTHER_STATE), 000h
+	LD (CMD_PROCESSING_STATE), 000h
 	SET 1, (PD)  ; SSTAT1
 	SET 7, (1126h)
 	JR T, LABEL_020FA7
 
 LABEL_020F9B:
-	LD (ANOTHER_STATE), 000h
-	RES 7, (04FEh)
+	LD (CMD_PROCESSING_STATE), 000h
+	RES 7, (PAYLOAD_LOADED_FLAG)
 
 LABEL_020FA4:
 	SET 1, (PD)  ; SSTAT1
@@ -11324,7 +11345,7 @@ LABEL_021001:
 	RET ULE
 	LDW (0F01Ah), 0000h
 	LD (DMA0V), 000h
-	LD (ANOTHER_STATE), 000h
+	LD (CMD_PROCESSING_STATE), 000h
 	SET 1, (PD)  ; SSTAT1
 	INC 1, (0F018h)
 	RET
