@@ -242,12 +242,10 @@ HDAE5000_Palette_Data	equ	2E5DCEh
 HDAE5000_Display_Params	equ	2F8DCEh
 
 ; Routine addresses in code sections (forward declarations)
-HDAE5000_Load_Palette	equ	28F8E0h	; Load 256-entry VGA palette
-HDAE5000_Alloc_Memory	equ	28F543h	; Memory allocation
-HDAE5000_MemCopy	equ	29AE9Fh	; Memory copy utility
-HDAE5000_Check_HD_Present	equ	2971A3h	; HD presence detection
-HDAE5000_Finalize_Init	equ	28F90Bh	; Final initialization
-HDAE5000_Register_Frame	equ	2803C2h	; Register frame handler
+HDAE5000_Alloc_Memory	equ	28F543h	; Memory allocation (in code section 1)
+HDAE5000_Register_Frame	equ	2803C2h	; Register frame handler (in code section 1)
+HDAE5000_MemCopy	equ	29AE9Fh	; Memory copy utility (in code section 2B)
+HDAE5000_Check_HD_Present	equ	2971A3h	; HD presence detection (in code section 2B)
 
 ; PPORT command handler addresses (in code_295642_2fffff.bin)
 HDAE5000_Cmd01_SendInfo	equ	2958D6h	; Send HD info to PC
@@ -385,7 +383,18 @@ HDAE5000_Frame_Handler:			; 28F662h
 HDAE5000_Clear_Work_Buffer:		; 28F785h
 	; 1. Clear 0xF52A bytes at 0x22A000 using LDIRW
 	; 2. Copy 0x0C82 bytes from 0x2F94B2 to 0x23952A using LDIR
-	binclude "includes/code_28f785_2953e1.bin"
+	; Contains: Clear_Work_Buffer, Delay_Loop, VGA_Port_Write, Palette_Setup
+	binclude "includes/code_28f785_28f8df.bin"
+
+HDAE5000_Load_Palette:			; 28F8E0h
+	; Load all 256 VGA palette entries from ROM data
+	; Iterates IZ from 0xFF down to 0, calling Palette_Setup for each
+	binclude "includes/code_28f8e0_28f90a.bin"
+
+HDAE5000_Finalize_Init:			; 28F90Bh
+	; Final initialization and remaining code section 2A routines
+	; First byte is just RET (stub), followed by Display_Init at 0x28F90C
+	binclude "includes/code_28f90b_2953e1.bin"
 
 ; ============================================================================
 ; PPORT COMMAND HANDLER JUMP TABLE (0x2953E2 - 0x295411)
