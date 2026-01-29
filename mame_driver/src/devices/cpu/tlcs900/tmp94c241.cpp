@@ -912,11 +912,138 @@ void tmp94c241_device::internal_mem(address_map &map)
 //**************************************************************************
 
 //-------------------------------------------------
-//  tlcs900_check_hdma -
+//  tlcs900_process_hdma - process a single HDMA
+//  transfer for a channel
+//-------------------------------------------------
+
+int tmp94c241_device::tlcs900_process_hdma(int channel)
+{
+	// Get DMA start vector for this channel
+	uint8_t start_vector = m_dma_vector[channel];
+	if (start_vector == 0)
+		return 0;  // Channel not configured
+
+	// Find which interrupt this start vector corresponds to
+	int irq = -1;
+	for (int i = 0; i < NUM_MASKABLE_IRQS; i++)
+	{
+		if (tmp94c241_irq_vector_map[i].dma_start_vector == start_vector)
+		{
+			irq = i;
+			break;
+		}
+	}
+
+	if (irq < 0)
+		return 0;  // No matching interrupt found
+
+	// Check if the interrupt flag is set (DMA trigger condition)
+	if (!(m_int_reg[tmp94c241_irq_vector_map[irq].reg] & tmp94c241_irq_vector_map[irq].iff))
+		return 0;  // Interrupt not pending
+
+	// Decode DMAM mode register
+	// TMP94C241 DMAM format:
+	// Bits 7-6: Transfer mode (unused in cycle-steal implementation)
+	// Bits 5-4: Source addressing (00=fixed, 01=increment, 10=decrement)
+	// Bits 3-2: Dest addressing (00=fixed, 01=increment, 10=decrement)
+	// Bits 1-0: Data size (00=byte, 01=word, 10=long)
+	uint8_t dmam = m_dmam[channel].b.l;
+
+	// Data size (bits 1-0)
+	int data_size;
+	switch (dmam & 0x03)
+	{
+		case 0x00: data_size = 1; break;  // byte
+		case 0x01: data_size = 2; break;  // word
+		case 0x02: data_size = 4; break;  // long
+		default:   data_size = 1; break;  // reserved -> byte
+	}
+
+	// Destination addressing (bits 3-2)
+	int dst_dir;
+	switch ((dmam >> 2) & 0x03)
+	{
+		case 0x01: dst_dir = 1; break;   // increment
+		case 0x02: dst_dir = -1; break;  // decrement
+		default:   dst_dir = 0; break;   // fixed
+	}
+
+	// Source addressing (bits 5-4)
+	int src_dir;
+	switch ((dmam >> 4) & 0x03)
+	{
+		case 0x01: src_dir = 1; break;   // increment
+		case 0x02: src_dir = -1; break;  // decrement
+		default:   src_dir = 0; break;   // fixed
+	}
+
+	// Perform the DMA transfer
+	uint32_t src = m_dmas[channel].d;
+	uint32_t dst = m_dmad[channel].d;
+
+	switch (data_size)
+	{
+		case 1:
+			WRMEM(dst, RDMEM(src));
+			m_cycles += 8;
+			break;
+		case 2:
+			WRMEMW(dst, RDMEMW(src));
+			m_cycles += 8;
+			break;
+		case 4:
+			WRMEML(dst, RDMEML(src));
+			m_cycles += 12;
+			break;
+	}
+
+	// Update source and destination addresses
+	m_dmas[channel].d += src_dir * data_size;
+	m_dmad[channel].d += dst_dir * data_size;
+
+	// Decrement transfer count
+	m_dmac[channel].w.l -= 1;
+
+	// Check for transfer completion
+	if (m_dmac[channel].w.l == 0)
+	{
+		// Clear DMA vector to disable channel
+		m_dma_vector[channel] = 0;
+
+		// Set completion interrupt flag
+		switch (channel)
+		{
+			case 0: m_int_reg[INTETC01] |= 0x08; break;
+			case 1: m_int_reg[INTETC01] |= 0x80; break;
+			case 2: m_int_reg[INTETC23] |= 0x08; break;
+			case 3: m_int_reg[INTETC23] |= 0x80; break;
+		}
+		m_check_irqs = 1;
+	}
+
+	// Clear the triggering interrupt flag
+	m_int_reg[tmp94c241_irq_vector_map[irq].reg] &= ~tmp94c241_irq_vector_map[irq].iff;
+
+	return 1;  // Transfer performed
+}
+
+
+//-------------------------------------------------
+//  tlcs900_check_hdma - check and process HDMA
 //-------------------------------------------------
 
 void tmp94c241_device::tlcs900_check_hdma()
 {
+	// HDMA can only be performed if interrupts are allowed
+	if ((m_sr.b.h & 0x70) == 0x70)
+		return;  // All interrupts masked
+
+	// Check channels in priority order (0 highest, 3 lowest)
+	for (int channel = 0; channel < 4; channel++)
+	{
+		if (tlcs900_process_hdma(channel))
+			return;  // Only process one transfer per call
+	}
 }
 
 

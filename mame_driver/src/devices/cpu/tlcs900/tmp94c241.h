@@ -150,6 +150,7 @@ protected:
 	virtual std::unique_ptr<util::disasm_interface> create_disassembler() override;
 
 private:
+	int tlcs900_process_hdma(int channel);
 	void change_timer_flipflop(uint8_t flipflop, uint8_t operation);
 
 	// Ports

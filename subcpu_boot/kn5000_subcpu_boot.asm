@@ -36,13 +36,13 @@
 ; ==============================================================================
 
 PAYLOAD_ENTRY		EQU	0400h	; Entry point of loaded payload
-DMA_READY_FLAG		EQU	04FEh	; DMA ready flag (RAM variable)
-DMA_PARAM_BLOCK		EQU	0502h	; DMA parameter block address (RAM)
-DMA_BUFFER_1		EQU	050Ch	; First DMA buffer address (RAM)
-DMA_SYNC_FLAG		EQU	0516h	; DMA sync state: 0=idle, 1=single xfer, 2=multi-stage (E1)
-DMA_BUFFER_2		EQU	053Eh	; Second DMA buffer address (RAM)
+PAYLOAD_LOADED_FLAG	EQU	04FEh	; Bit 6: payload ready, Bit 7: transfer complete
+DMA_SETUP_PARAMS	EQU	0502h	; DMA setup block: src(4), dst(4), count(2)
+E1_XFER_PARAMS		EQU	050Ch	; E1 command params: dest_addr(4), count(2)
+DMA_XFER_STATE		EQU	0516h	; DMA state machine: 0=idle, 1=single, 2=two-phase
+E2_XFER_PARAMS		EQU	053Eh	; E2 command params: src_addr(4), count(2)
 STACK_INIT		EQU	05A2h	; Initial stack pointer
-DMA_MODE_REG		EQU	0102h	; DMA mode register (in SFR area)
+DMA_BURST_CTRL		EQU	0102h	; DMA burst/trigger control register
 AUDIO_HW_BASE		EQU	100000h	; Audio hardware registers (DSP/DAC?)
 INTER_CPU_LATCH		EQU	120000h	; Inter-CPU communication latch
 TONE_GEN_BASE		EQU	130000h	; Tone generator base address
@@ -74,7 +74,7 @@ INTTC01			EQU	30h	; Interrupt control (Timer 0/1)
 ; Used for handshaking between main CPU and sub CPU
 ; Bit 0: Sub CPU ready flag (set when ready, cleared when starting transfer)
 ; Bit 1: Used by interrupt handler to signal completion
-; Bit 2: Checked in INT_HANDLER_9 to gate command processing
+; Bit 2: Checked in InterCPU_RX_Handler to gate command processing
 ; Bit 4: Main CPU ready flag (polled by sub CPU, set by main CPU)
 INTERCPU_STATUS		EQU	34h
 
@@ -215,7 +215,7 @@ DRAM_TIMING2		EQU	0166h	; DRAM Timing 2
 ; RAM variables - Communication and State
 SUBCPU_STATUS_FLAGS	EQU	04FEh	; Status flags (bit 6=payload ready, bit 7=xfer complete)
 DMA_TARGET_ADDR		EQU	0512h	; Current DMA destination address (4 bytes)
-; Note: DMA_SYNC_FLAG was here but is same address as DMA_SYNC_FLAG (0x0516)
+; Note: DMA_XFER_STATE was here but is same address as DMA_XFER_STATE (0x0516)
 CMD_PROCESSING_STATE	EQU	0518h	; Command processing state (0-4)
 LAST_CMD_BYTE		EQU	051Ah	; Last received command byte from main CPU
 
@@ -699,7 +699,20 @@ STUB_85AB:
 	ret
 
 ; ==============================================================================
-; INIT_DMA_SERIAL (0xFF85AE) - Initialize DMA and serial for inter-CPU comm
+; INIT_DMA_SERIAL (0xFF85AE) - Initialize DMA for payload reception
+; ==============================================================================
+;
+; Configures DMA channels and serial hardware for inter-CPU communication.
+; Called once during boot before the main loop begins waiting for payload.
+;
+; DMA Channel Configuration:
+;   Channel 0: Receive from latch (source = 0x120000, fixed)
+;   Channel 2: Send to latch (dest = 0x120000, used for responses)
+;
+; After this initialization:
+;   - DMA_XFER_STATE = 0 (idle)
+;   - CMD_PROCESSING_STATE = 0 (idle)
+;   - Sub CPU is ready to receive payload from main CPU
 ; ==============================================================================
 
 INIT_DMA_SERIAL:
@@ -733,27 +746,63 @@ INIT_DMA_SERIAL:
 	LDC_DMAC0_A			; DMA channel 0 mode = 0
 
 	; Clear variables
-	ld	(DMA_SYNC_FLAG), 00h
+	ld	(DMA_XFER_STATE), 00h
 	ld	(CMD_PROCESSING_STATE), 00h
 	ret
 
 ; ==============================================================================
-; DMA Transfer Routines (0xFF8604-0xFF881E) - 539 bytes
-; These routines handle DMA-based data transfer between CPUs
+; INTER-CPU DMA TRANSFER ROUTINES (0xFF8604-0xFF881E) - 539 bytes
+; ==============================================================================
 ;
-; DMA_SEND_CHUNKED (0xFF8604): Send data in 32-byte chunks
-; DMA_SEND_BLOCK (0xFF8649): Send single data block via DMA
-; SEND_E3_CMD (0xFF86AC): Send E3 command (payload ready signal)
-; WAIT_DMA_THEN_E2 (0xFF86DC): Wait for DMA completion then send E2
-; DMA_MULTI_STAGE (0xFF874C): Complex multi-stage DMA transfer
+; These routines implement the sub CPU's side of the 192KB payload loading
+; protocol. The main CPU sends firmware payload data to the sub CPU via DMA
+; through the inter-CPU latch at 0x120000.
+;
+; PAYLOAD LOADING PROTOCOL:
+; -------------------------
+; 1. Main CPU sends command byte with count via latch
+; 2. Sub CPU receives interrupt, sets up DMA to receive data
+; 3. Data is DMA'd from latch to sub CPU RAM
+; 4. Sub CPU acknowledges via INTERCPU_STATUS handshake flags
+; 5. Repeat until all 192KB is transferred
+; 6. Main CPU sends E3 command to signal payload complete
+; 7. Sub CPU jumps to payload entry point at 0x0400
+;
+; COMMAND TYPES:
+; --------------
+; E1: Two-phase transfer setup (6 bytes: dest_addr[4] + count[2])
+; E2: Parameter block transfer (10 bytes: src[4] + dest[4] + count[2])
+; E3: Payload complete signal (no data, just sets ready flag)
+; 00-1F: Variable-length data (low 5 bits = count-1, high 3 bits = handler)
+;
+; DMA STATE MACHINE (DMA_XFER_STATE):
+; -----------------------------------
+; 0 = Idle (no transfer in progress)
+; 1 = Single transfer pending (waiting for completion)
+; 2 = Two-phase transfer (E1 mode: phase 1 done, phase 2 pending)
+;
+; ROUTINES:
+; ---------
+; SendData_Chunked  (0xFF8604): Break large transfers into 32-byte chunks
+; SendData_Block    (0xFF8649): Send single data block with handshaking
+; SendCmd_E3        (0xFF86AC): Signal payload ready to main CPU
+; SendParams_E2     (0xFF86DC): Wait for DMA, then send E2 parameters
+; TwoPhase_Transfer (0xFF874C): Execute E1 two-phase DMA sequence
 ; ==============================================================================
 
 ; ------------------------------------------------------------------------------
-; DMA_SEND_CHUNKED - Send data in 32-byte chunks via DMA
-; Input: A = channel/command, BC = total byte count, XDE = source address
-; Uses IZ as remaining count, processes in 32-byte chunks
+; SendData_Chunked (0xFF8604) - Send large data buffer in 32-byte chunks
 ; ------------------------------------------------------------------------------
-DMA_SEND_CHUNKED:
+; Breaks a large transfer into manageable 32-byte chunks to avoid overwhelming
+; the inter-CPU communication channel. Used for bulk payload transfers.
+;
+; Input:  A   = command/channel byte
+;         BC  = total byte count
+;         XDE = source address in sub CPU memory
+; Output: None (data sent via DMA)
+; Modifies: IZ used as remaining count, stack frame for parameters
+; ------------------------------------------------------------------------------
+SendData_Chunked:
 	DEC_6_XSP			; Allocate 6 bytes on stack
 	push	IZ			; Save IZ
 	LD_pXSP_d_XDE	02h		; Save source address at (SP+2)
@@ -766,7 +815,7 @@ DMA_SEND_CHUNKED:
 	EXTZ_WA				; Zero-extend A to WA
 	ld	BC, 0020h		; BC = 32 (chunk size)
 	LD_XDE_pXSP_d	02h		; XDE = current source address
-	calr	DMA_SEND_BLOCK		; Send 32-byte chunk
+	calr	SendData_Block		; Send 32-byte chunk
 	ld	XWA, 00000020h		; XWA = 32
 	ADD_pXSP_d_XWA	02h		; Advance source address by 32
 	SUB_IZ_imm16	0020h		; Subtract 32 from remaining count
@@ -778,18 +827,29 @@ DMA_SEND_CHUNKED:
 	LD_C_IZL			; C = remaining count (low byte)
 	EXTZ_BC				; Zero-extend C to BC
 	LD_XDE_pXSP_d	02h		; XDE = current source address
-	calr	DMA_SEND_BLOCK		; Send final chunk
+	calr	SendData_Block		; Send final chunk
 	pop	IZ			; Restore IZ
 	INC_6_XSP			; Deallocate 6 bytes from stack
 	ret
 
 ; ------------------------------------------------------------------------------
-; DMA_SEND_BLOCK (0xFF8649) - Send single data block via DMA
-; Input: A = command, BC = byte count, XDE = source address
-; Sends command byte with count to inter-CPU latch, then DMA transfers data
-; Includes timeout loops to wait for handshaking
+; SendData_Block (0xFF8649) - Send single data block with handshaking
 ; ------------------------------------------------------------------------------
-DMA_SEND_BLOCK:
+; Core DMA send routine. Implements the full handshaking protocol:
+; 1. Wait for main CPU ready (bit 4 of INTERCPU_STATUS)
+; 2. Clear our ready flag, set DMA_XFER_STATE = 1
+; 3. Send command byte: (channel << 5) | (count - 1)
+; 4. Wait for main CPU acknowledgment
+; 5. Set up DMA source/count, trigger transfer
+; 6. Wait for DMA_XFER_STATE to return to 0
+;
+; Input:  A   = command/channel byte (used in high 3 bits)
+;         BC  = byte count (1-32 bytes)
+;         XDE = source address
+; Output: None
+; Timeout: 60000 iterations (~0.3 sec at 20MHz) before giving up
+; ------------------------------------------------------------------------------
+SendData_Block:
 	cp	C, 0			; Is count zero?
 	ret	Z			; Yes - nothing to send
 	ld	IX, 0			; IX = timeout counter
@@ -797,7 +857,7 @@ DMA_SEND_BLOCK:
 	bit	4, (INTERCPU_STATUS)	; Check if other CPU ready
 	jr	Z, .timeout1		; Not ready - check timeout
 	res	0, (INTERCPU_STATUS)	; Clear our ready flag
-	ld	(DMA_SYNC_FLAG), 01h	; Set DMA sync flag
+	ld	(DMA_XFER_STATE), 01h	; Set DMA sync flag
 	ld	L, C			; L = byte count
 	dec	1, L			; L = count - 1
 	sll	5, A			; A = command << 5
@@ -811,12 +871,12 @@ DMA_SEND_BLOCK:
 	LDC_DMAS2_XDE			; DMA source = XDE
 	EXTZ_BC				; Zero-extend BC (count)
 	LDC_DMAC2_BC			; DMA count = BC
-	ld	(DMA_MODE_REG), 16h	; Set DMA mode
+	ld	(DMA_BURST_CTRL), 16h	; Set DMA mode
 	set	2, (T01MOD)		; Start DMA transfer
-	cp	(DMA_SYNC_FLAG), 00h	; Is DMA complete?
+	cp	(DMA_XFER_STATE), 00h	; Is DMA complete?
 	ret	Z			; Yes - return
 .wait_dma_done:
-	cp	(DMA_SYNC_FLAG), 00h	; Check DMA sync flag
+	cp	(DMA_XFER_STATE), 00h	; Check DMA sync flag
 	jr	NZ, .wait_dma_done	; Wait until cleared
 	ret
 .timeout1:
@@ -834,12 +894,24 @@ DMA_SEND_BLOCK:
 	ret
 
 ; ------------------------------------------------------------------------------
-; SEND_E3_CMD (0xFF86AC) - Send E3 command (payload ready signal)
-; Signals to main CPU that data payload is ready
-; Uses same handshaking protocol as other DMA routines
-; Structure: wait_ready -> send E3 -> wait_ack -> set_flag_ret -> timeout loops
+; SendCmd_E3 (0xFF86AC) - Signal payload transfer complete
 ; ------------------------------------------------------------------------------
-SEND_E3_CMD:
+; Sends the E3 command to main CPU indicating that the 192KB payload has been
+; successfully received and the sub CPU is ready to execute it.
+;
+; After this command, the main CPU knows the sub CPU will jump to 0x0400.
+;
+; Protocol:
+; 1. Wait for main CPU ready
+; 2. Send 0xE3 to inter-CPU latch
+; 3. Wait for acknowledgment
+; 4. Set our ready flag
+;
+; Input:  None
+; Output: None
+; Timeout: 60000 iterations before giving up
+; ------------------------------------------------------------------------------
+SendCmd_E3:
 	ld	BC, 0			; BC = timeout counter
 .wait_ready:
 	bit	4, (INTERCPU_STATUS)	; Check if main CPU ready
@@ -866,45 +938,62 @@ SEND_E3_CMD:
 	jr	T, .wait_ack		; Not timed out - keep waiting
 
 ; ------------------------------------------------------------------------------
-; WAIT_DMA_THEN_E2 (0xFF86DC) - Wait for DMA completion then send E2 command
-; Waits for DMA sync flag to clear, then sets up and starts another DMA transfer
-; Sends E2 command after DMA is set up
+; SendParams_E2 (0xFF86DC) - Send E2 parameter block to main CPU
 ; ------------------------------------------------------------------------------
-WAIT_DMA_THEN_E2:
+; Waits for any pending DMA to complete, then sends an E2 command with a
+; 10-byte parameter block containing transfer parameters.
+;
+; E2 Parameter Block (DMA_SETUP_PARAMS, 10 bytes):
+;   Offset 0-3: XWA value (source address or parameter 1)
+;   Offset 4-7: XDE value (destination address or parameter 2)
+;   Offset 8-9: BC value (count or parameter 3)
+;
+; Protocol:
+; 1. Wait for DMA_XFER_STATE = 0
+; 2. Send 0xE2 command
+; 3. Wait for main CPU ready
+; 4. Build parameter block at DMA_SETUP_PARAMS
+; 5. DMA transfer 10 bytes to main CPU
+; 6. Wait for completion
+;
+; Input:  XWA, XDE, BC = parameters to pack into block
+; Output: Parameter block sent to main CPU
+; ------------------------------------------------------------------------------
+SendParams_E2:
 	ld	IX, 0			; IX = timeout counter
 .wait_sync_clear:
-	cp	(DMA_SYNC_FLAG), 00h	; Is DMA sync flag clear?
+	cp	(DMA_XFER_STATE), 00h	; Is DMA sync flag clear?
 	jr	Z, .sync_cleared	; Yes - proceed
 .timeout_wait:
 	ld	HL, IX			; HL = timeout counter
 	inc	1, IX			; Increment counter
 	cp	HL, 0EA60h		; Timeout limit (60000)
 	ret	UGT			; Timeout - give up and return
-	cp	(DMA_SYNC_FLAG), 00h	; Check sync flag again
+	cp	(DMA_XFER_STATE), 00h	; Check sync flag again
 	jr	NZ, .timeout_wait	; Still not clear - keep waiting
 .sync_cleared:
 	res	0, (INTERCPU_STATUS)	; Clear our ready flag
-	ld	(DMA_SYNC_FLAG), 01h	; Set DMA sync flag
+	ld	(DMA_XFER_STATE), 01h	; Set DMA sync flag
 	ld	(INTER_CPU_LATCH), 0E2h	; Send E2 command to main CPU
 	ld	IX, 0			; Reset timeout counter
 .wait_cpu_ready:
 	bit	4, (INTERCPU_STATUS)	; Check if main CPU ready
 	jr	NZ, .timeout2		; Not ready yet - check timeout
 	set	0, (INTERCPU_STATUS)	; Set our ready flag
-	lda	XHL, DMA_PARAM_BLOCK	; XHL = address of DMA parameter block
+	lda	XHL, DMA_SETUP_PARAMS	; XHL = address of DMA parameter block
 	ld	(XHL), XWA		; Store XWA parameter
 	ld	(XHL+04h), XDE		; Store XDE parameter
 	ld	(XHL+08h), BC		; Store BC parameter
 	LDC_DMAS2_XHL			; DMA source = XHL (param block addr)
 	ld	WA, 000Ah		; WA = 10 (DMA count)
 	LDC_DMAC2_WA			; DMA count = 10
-	ld	(DMA_MODE_REG), 16h	; Set DMA mode
+	ld	(DMA_BURST_CTRL), 16h	; Set DMA mode
 	set	2, (T01MOD)		; Start DMA transfer
-	set	7, (DMA_READY_FLAG)	; Set DMA ready flag
-	cp	(DMA_SYNC_FLAG), 00h	; Is DMA complete?
+	set	7, (PAYLOAD_LOADED_FLAG)	; Set DMA ready flag
+	cp	(DMA_XFER_STATE), 00h	; Is DMA complete?
 	ret	Z			; Yes - return
 .wait_dma_done:
-	cp	(DMA_SYNC_FLAG), 00h	; Check DMA sync flag
+	cp	(DMA_XFER_STATE), 00h	; Check DMA sync flag
 	jr	NZ, .wait_dma_done	; Wait until cleared
 	ret
 .timeout2:
@@ -916,23 +1005,42 @@ WAIT_DMA_THEN_E2:
 	ret
 
 ; ------------------------------------------------------------------------------
-; DMA_MULTI_STAGE (0xFF874C) - Complex multi-stage DMA transfer
-; Performs two-phase DMA transfer with E1 command and delay loops
-; Phase 1: Transfer from 0x050C buffer, Phase 2: Transfer from 0x053E buffer
-; Includes 200-iteration delay loops between phases for timing
+; TwoPhase_Transfer (0xFF874C) - Execute E1 two-phase DMA sequence
 ; ------------------------------------------------------------------------------
-DMA_MULTI_STAGE:
+; Implements the E1 command protocol for transferring data that requires
+; setup parameters before the actual data. Used for complex transfers where
+; the destination and count need to be communicated first.
+;
+; PHASE 1: Send 6-byte setup block
+;   - Source: E1_XFER_PARAMS (0x050C)
+;   - Contains: dest_addr[4] + count[2]
+;   - DMA_XFER_STATE: 2 -> 1 on completion
+;
+; DELAY: 200 iteration pause (hardware settling time)
+;
+; PHASE 2: Send actual data
+;   - Source: Address from E2_XFER_PARAMS (0x053E)
+;   - Count: From E2_XFER_PARAMS + 4
+;   - DMA_XFER_STATE: 1 -> 0 on completion
+;
+; Input:  XWA = source address for phase 2 data
+;         XDE = destination address (stored to both buffers)
+;         BC  = byte count (stored to both buffers)
+; Output: Data transferred in two phases
+; Timing: 200-cycle delays between phases for hardware sync
+; ------------------------------------------------------------------------------
+TwoPhase_Transfer:
 	push	IZ			; Save IZ
 	ld	IZ, 0			; IZ = timeout counter
 .wait_sync:
-	cp	(DMA_SYNC_FLAG), 00h	; Is DMA sync clear?
+	cp	(DMA_XFER_STATE), 00h	; Is DMA sync clear?
 	jr	Z, .sync_cleared	; Yes - proceed
 .timeout_sync:
 	ld	HL, IZ			; HL = timeout counter
 	inc	1, IZ			; Increment counter
 	cp	HL, 0EA60h		; Timeout limit (60000)
 	jrl	UGT, .exit		; Timeout - exit
-	cp	(DMA_SYNC_FLAG), 00h	; Check sync again
+	cp	(DMA_XFER_STATE), 00h	; Check sync again
 	jr	NZ, .timeout_sync	; Still not clear - keep waiting
 .sync_cleared:
 	ld	IZ, 0			; Reset timeout counter
@@ -940,7 +1048,7 @@ DMA_MULTI_STAGE:
 	bit	4, (INTERCPU_STATUS)	; Check if CPU ready
 	jrl	Z, .timeout_ready1	; Not ready - timeout handler
 	res	0, (INTERCPU_STATUS)	; Clear our ready flag
-	ld	(DMA_SYNC_FLAG), 02h	; Set sync flag to E1 mode
+	ld	(DMA_XFER_STATE), 02h	; Set sync flag to E1 mode
 	ld	(INTER_CPU_LATCH), 0E1h	; Send E1 command
 	ld	IZ, 0			; Reset timeout counter
 .wait_ack:
@@ -948,22 +1056,22 @@ DMA_MULTI_STAGE:
 	jrl	NZ, .timeout_ack	; Not acknowledged - timeout handler
 	set	0, (INTERCPU_STATUS)	; Set our ready flag
 	; Phase 1: Set up first DMA transfer
-	lda	XHL, DMA_BUFFER_2	; XHL = 0x053E (second buffer)
+	lda	XHL, E2_XFER_PARAMS	; XHL = 0x053E (second buffer)
 	ld	(XHL), XWA		; Store XWA to buffer
-	lda	XWA, DMA_BUFFER_1	; XWA = 0x050C (first buffer)
+	lda	XWA, E1_XFER_PARAMS	; XWA = 0x050C (first buffer)
 	ld	(XWA), XDE		; Store XDE to first buffer
 	ld	(XHL+04h), BC		; Store BC to second buffer+4
 	ld	(XWA+04h), BC		; Store BC to first buffer+4
 	LDC_DMAS2_XWA			; DMA source = first buffer (0x050C)
 	ld	WA, 6			; WA = 6 (DMA count)
 	LDC_DMAC2_WA			; DMA count = 6
-	ld	(DMA_MODE_REG), 16h	; Set DMA mode
+	ld	(DMA_BURST_CTRL), 16h	; Set DMA mode
 	set	2, (T01MOD)		; Start DMA transfer
 	; Wait for first transfer to complete (sync flag = 1)
-	cp	(DMA_SYNC_FLAG), 01h	; Is sync flag = 1?
+	cp	(DMA_XFER_STATE), 01h	; Is sync flag = 1?
 	jr	Z, .phase1_done		; Yes - phase 1 complete
 .wait_phase1:
-	cp	(DMA_SYNC_FLAG), 01h	; Check sync flag
+	cp	(DMA_XFER_STATE), 01h	; Check sync flag
 	jr	NZ, .wait_phase1	; Wait until = 1
 .phase1_done:
 	; Delay loop (200 iterations)
@@ -977,18 +1085,18 @@ DMA_MULTI_STAGE:
 	jr	C, .delay1_loop		; Continue if < 200
 .delay1_done:
 	; Phase 2: Set up second DMA transfer
-	lda	XWA, DMA_BUFFER_2	; XWA = 0x053E (second buffer)
+	lda	XWA, E2_XFER_PARAMS	; XWA = 0x053E (second buffer)
 	ld	XBC, (XWA)		; XBC = contents of second buffer
 	LDC_DMAS2_XBC			; DMA source = XBC
 	ld	WA, (XWA+04h)		; WA = count from buffer+4
 	LDC_DMAC2_WA			; DMA count = WA
-	ld	(DMA_MODE_REG), 16h	; Set DMA mode
+	ld	(DMA_BURST_CTRL), 16h	; Set DMA mode
 	set	2, (T01MOD)		; Start DMA transfer
 	; Wait for second transfer to complete (sync flag = 0)
-	cp	(DMA_SYNC_FLAG), 00h	; Is sync flag = 0?
+	cp	(DMA_XFER_STATE), 00h	; Is sync flag = 0?
 	jr	Z, .phase2_done		; Yes - phase 2 complete
 .wait_phase2:
-	cp	(DMA_SYNC_FLAG), 00h	; Check sync flag
+	cp	(DMA_XFER_STATE), 00h	; Check sync flag
 	jr	NZ, .wait_phase2	; Wait until = 0
 .phase2_done:
 	; Second delay loop (200 iterations)
@@ -1019,19 +1127,38 @@ DMA_MULTI_STAGE:
 	ret
 
 ; ==============================================================================
-; Interrupt Handler 9 (0xFF881F) - Inter-CPU Command Receive Interrupt
-; Handles commands from main CPU via inter-CPU latch at 0x120000
+; InterCPU_RX_Handler (0xFF881F) - Inter-CPU Command Receive Interrupt
+; ==============================================================================
 ;
-; Commands:
-;   E1: Receive 6 bytes to CMD_E1_BUFFER (contains addr+count for secondary DMA)
-;   E2: Receive 10 bytes to CMD_E2_BUFFER (completion data)
-;   E3: Set payload ready flag (bit 6 of SUBCPU_STATUS_FLAGS)
-;   Other: Low 5 bits = byte count-1, high 3 bits = handler index (from table)
+; Called when data arrives from main CPU via inter-CPU latch at 0x120000.
+; This is the primary entry point for all incoming payload data during boot.
+;
+; The handler reads the command byte, decodes it, and sets up DMA to receive
+; the associated data payload into the appropriate buffer.
+;
+; COMMAND DECODING:
+; -----------------
+; E1: Two-phase transfer setup
+;     - Receives 6 bytes to E1_XFER_PARAMS (dest_addr[4] + count[2])
+;     - Sets CMD_PROCESSING_STATE = 2 for phase 2 execution
+;
+; E2: Parameter block for bulk transfer
+;     - Receives 10 bytes to CMD_E2_BUFFER (src[4] + dest[4] + count[2])
+;     - Used for large payload chunks
+;
+; E3: Payload complete signal
+;     - No data, just sets bit 6 of SUBCPU_STATUS_FLAGS
+;     - Sub CPU can now jump to payload at 0x0400
+;
+; 00-1F: Variable-length data packets
+;     - Low 5 bits = byte count - 1 (so 0x00 = 1 byte, 0x1F = 32 bytes)
+;     - High 3 bits = handler index (looked up in table at 0x8000)
+;     - Data received to CMD_DATA_BUFFER for handler processing
 ; ==============================================================================
 
 	org	0FF881Fh
 
-INT_HANDLER_9:
+InterCPU_RX_Handler:
 	push	XWA
 	bit	2, (SC0BUF)		; Check serial status
 	jr	NZ, .exit
@@ -1084,34 +1211,56 @@ INT_HANDLER_9:
 	reti
 
 ; ==============================================================================
-; Interrupt Handler 37 (0xFF889A) - DMA Complete Interrupt
-; Decrements DMA_SYNC_FLAG: 2->1->0 to track multi-phase transfer progress
-; Called when DMA channel completes a transfer
+; DMA_Complete_Handler (0xFF889A) - DMA Transfer Complete Interrupt
+; ==============================================================================
+;
+; Called when a DMA channel completes its transfer. Advances the DMA state
+; machine to track multi-phase transfer progress:
+;
+;   State 2 (two-phase) -> State 1 (phase 1 done, phase 2 pending)
+;   State 1 (single)    -> State 0 (idle, transfer complete)
+;
+; This handler is critical for the E1 two-phase transfer protocol, where
+; phase 1 sends parameters and phase 2 sends the actual data.
 ; ==============================================================================
 
 	org	0FF889Ah
 
-INT_HANDLER_37:
+DMA_Complete_Handler:
 	res	2, (WDMOD)		; Clear watchdog bit
-	cp	(DMA_SYNC_FLAG), 01h	; State 1?
+	cp	(DMA_XFER_STATE), 01h	; State 1?
 	jr	NZ, .not_state1
-	ld	(DMA_SYNC_FLAG), 00h	; -> State 0
+	ld	(DMA_XFER_STATE), 00h	; -> State 0
 	jr	.done
 .not_state1:
-	cp	(DMA_SYNC_FLAG), 02h	; State 2?
+	cp	(DMA_XFER_STATE), 02h	; State 2?
 	jr	NZ, .done
-	ld	(DMA_SYNC_FLAG), 01h	; -> State 1
+	ld	(DMA_XFER_STATE), 01h	; -> State 1
 .done:
 	reti
 
 ; ==============================================================================
-; Interrupt Handler 35 (0xFF88B8) - Timer/Processing Interrupt
-; Main processing handler, dispatches based on CMD_PROCESSING_STATE state
+; CMD_Dispatch_Handler (0xFF88B8) - Command Processing Dispatcher
+; ==============================================================================
+;
+; Main processing handler that executes after DMA receives data. Dispatches
+; based on CMD_PROCESSING_STATE to handle different phases of command processing.
+;
+; STATE MACHINE:
+; --------------
+; State 0: Idle - check watchdog only
+; State 1: Data received - call handler from jump table based on command byte
+; State 2: E1 phase 2 - set up secondary DMA from E1_XFER_PARAMS
+; State 3: Completion - set status flags for main CPU acknowledgment
+; State 4: Final - clear ready flag, return to idle
+;
+; The jump table at 0x8000 (DATA_TABLE_8000) contains handler addresses
+; indexed by the high 3 bits of the command byte.
 ; ==============================================================================
 
 	org	0FF88B8h
 
-INT_HANDLER_35:
+CMD_Dispatch_Handler:
 	push	XIZ
 	push	XIY
 	push	XIX
@@ -2122,7 +2271,7 @@ VECTOR_TRAMPOLINES:
 	jp	RESET_ENTRY
 	ret
 	; Handler 9 - Serial Receive Interrupt (inter-CPU communication)
-	jp	INT_HANDLER_9
+	jp	InterCPU_RX_Handler
 	ret
 	; Handlers 10-35: Default (26 handlers)
 	rept	26
@@ -2130,13 +2279,13 @@ VECTOR_TRAMPOLINES:
 	ret
 	endm
 	; Handler 36 - Timer/Processing Interrupt (main work handler)
-	jp	INT_HANDLER_35		; Note: Handler 36 uses INT_HANDLER_35 code
+	jp	CMD_Dispatch_Handler		; Note: Handler 36 uses CMD_Dispatch_Handler code
 	ret
 	; Handler 37 - Default
 	jp	DEFAULT_HANDLER
 	ret
 	; Handler 38 - DMA Complete Interrupt
-	jp	INT_HANDLER_37		; Note: Handler 38 uses INT_HANDLER_37 code
+	jp	DMA_Complete_Handler		; Note: Handler 38 uses DMA_Complete_Handler code
 	ret
 	; Handlers 39-43: Default (5 handlers)
 	rept	5
