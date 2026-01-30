@@ -2590,21 +2590,162 @@ Boot_Delay_Loop:
 	RET				; 0e
 
 ; -----------------------------------------------------------------------------
+; Boot_LED_Animation - Cycle progress LEDs
+; Address: 0x9FC50B (boot-time: 0xFFC50B)
+;
+; Entry: None
+; Exit: Never returns (tail calls Boot_Delay_Loop in infinite loop)
+;
+; Cycles through LED patterns 0x01, 0x02, 0x04, 0x08 on port 0x160004.
+; Uses counter at 0x0C08 to track current LED state.
+; Each state has delay of 0x186A0 (100,000) iterations.
+; -----------------------------------------------------------------------------
+Boot_LED_Animation:
+	db	0C1h, 008h, 00Ch, 061h	; INC 1, (0C08h) - increment counter
+	db	0C1h, 008h, 00Ch, 021h	; LD A, (0C08h) - get counter
+	db	0C9h, 0CCh, 003h	; AND A, 03h - mask to 0-3
+	CP	A, 3			; c9 db
+	JR	Z, .led3		; 66 24
+	CP	A, 2			; c9 da
+	JR	Z, .led2		; 66 18
+	CP	A, 1			; c9 d9
+	JR	Z, .led1		; 66 0c
+	CP	A, 0			; c9 d8
+	JR	NZ, .do_delay		; 6e 1e
+
+	; LED pattern 0: bit 0
+	db	0F2h, 004h, 000h, 016h, 000h, 001h	; LD (160004h), 01h
+	JR	T, .do_delay		; 68 16
+
+.led1:	; LED pattern 1: bit 1
+	db	0F2h, 004h, 000h, 016h, 000h, 002h	; LD (160004h), 02h
+	JR	T, .do_delay		; 68 0e
+
+.led2:	; LED pattern 2: bit 2
+	db	0F2h, 004h, 000h, 016h, 000h, 004h	; LD (160004h), 04h
+	JR	T, .do_delay		; 68 06
+
+.led3:	; LED pattern 3: bit 3
+	db	0F2h, 004h, 000h, 016h, 000h, 008h	; LD (160004h), 08h
+
+.do_delay:
+	LD	XWA, 000186A0h		; 40 a0 86 01 00 - delay count
+	JR	T, Boot_Delay_Loop	; 68 b3 - tail call
+
+; -----------------------------------------------------------------------------
+; Boot_LED_Blink_Bit2 - Blink LED bit 2 in infinite loop
+; Address: 0x9FC54B (boot-time: 0xFFC54B)
+;
+; Entry: None
+; Exit: Never returns
+;
+; Toggles bit 2 of LED port with delay between toggles.
+; Used for error indication.
+; -----------------------------------------------------------------------------
+Boot_LED_Blink_Bit2:
+	db	0F2h, 004h, 000h, 016h, 0C2h	; CHG 2, (160004h) - toggle bit 2
+	LD	XWA, 000249F0h		; 40 f0 49 02 00 - delay count
+	db	01Eh, 0A6h, 0FFh	; CALR Boot_Delay_Loop
+	JR	T, Boot_LED_Blink_Bit2	; 68 f1
+
+; -----------------------------------------------------------------------------
+; Boot_LED_Blink_Bit3 - Blink LED bit 3 in infinite loop
+; Address: 0x9FC55A (boot-time: 0xFFC55A)
+;
+; Entry: None
+; Exit: Never returns
+;
+; Toggles bit 3 of LED port with delay between toggles.
+; Used for error indication.
+; -----------------------------------------------------------------------------
+Boot_LED_Blink_Bit3:
+	db	0F2h, 004h, 000h, 016h, 0C3h	; CHG 3, (160004h) - toggle bit 3
+	LD	XWA, 000249F0h		; 40 f0 49 02 00 - delay count
+	db	01Eh, 097h, 0FFh	; CALR Boot_Delay_Loop
+	JR	T, Boot_LED_Blink_Bit3	; 68 f1
+
+; -----------------------------------------------------------------------------
+; Flash_ScanForErased - Scan flash for erased blocks
+; Address: 0x9FC569 (boot-time: 0xFFC569)
+;
+; Entry: XWA = start address
+;        XBC = end address
+; Exit: XHL = 0 if all erased, else address of first non-erased block
+;
+; Scans 64-byte blocks for 0xFFFFFFFF pattern (erased state).
+; -----------------------------------------------------------------------------
+Flash_ScanForErased:
+	LD	XHL, XWA		; e8 8b - start address
+	; First block check (entry point)
+	db	0A3h, 022h		; LD XDE, (XHL) - read dword
+	db	0EAh, 0CFh, 0FFh, 0FFh, 0FFh, 0FFh	; CP XDE, FFFFFFFFh
+	db	0B0h, 0FEh		; RET NZ - not erased, return address
+.advance_block:				; Loop re-entry point
+	db	0BBh, 040h, 033h	; LDA XHL, XHL+40h - advance 64 bytes
+	db	0E9h, 0F3h		; CP XHL, XBC - reached end?
+	JR	NZ, .continue		; 6e 03
+	LD	XHL, 0			; eb a8 - all erased
+	RET				; 0e
+.continue:
+	db	0A3h, 022h		; LD XDE, (XHL) - check next block
+	db	0EAh, 0CFh, 0FFh, 0FFh, 0FFh, 0FFh	; CP XDE, FFFFFFFFh
+	JR	Z, .advance_block	; 66 ec - still erased, continue
+	RET				; 0e - not erased, return current address
+
+; -----------------------------------------------------------------------------
+; Flash_CompareRegions - Compare two memory regions
+; Address: 0x9FC58A (boot-time: 0xFFC58A)
+;
+; Entry: XWA = source 1 address
+;        XBC = source 2 address
+;        E = start bank, (XSP+04) = end bank
+; Exit: XHL = 0 if match, non-zero if mismatch
+;
+; Compares memory regions across multiple banks (0-3 for 16-bit flash).
+; Updates LED display at 0x160000 with current bank.
+; Compares up to 0x3FFFF words per bank.
+; -----------------------------------------------------------------------------
+Flash_CompareRegions:
+	LD	XHL, XWA		; e8 8b - source 1
+	db	0CDh, 088h		; LD W, E - start bank
+	db	08Fh, 004h, 021h	; LD A, (XSP+04h) - end bank
+	db	0C9h, 0F0h		; CP W, A
+	JR	UGT, .done		; 6b 22 - start > end, done
+
+.bank_loop:
+	db	0F2h, 000h, 000h, 016h, 040h	; LD (160000h), W - set LED
+	LD	XIX, XBC		; e9 8c - source 2
+	LD	XIY, 0003FFFFh		; 45 ff ff 03 00 - word count
+
+.compare_loop:
+	db	0D5h, 0F1h, 022h	; LD DE, (XIX+) - get source 2 word
+	db	0D5h, 0EDh, 0F2h	; CP DE, (XHL+) - compare with source 1
+	JR	NZ, .mismatch		; 6e 10
+	LD	XDE, XIY		; ed 8a
+	db	0EDh, 069h		; DEC 1, XIY
+	OR	XDE, XDE		; ea e2
+	JR	NZ, .compare_loop	; 6e f0 - more words
+	db	0C8h, 061h		; INC 1, W - next bank
+	db	0C9h, 0F0h		; CP W, A
+	JR	ULE, .bank_loop		; 63 de
+
+.done:
+	LD	XHL, 0			; eb a8 - match
+.mismatch:
+	db	00Fh, 002h, 000h	; RETD 0002h
+
+; -----------------------------------------------------------------------------
 ; Remaining boot code routines
-; Address: 0x9FC50B onwards (boot-time: 0xFFC50B)
+; Address: 0x9FC5BC onwards (boot-time: 0xFFC5BC)
 ;
 ; Contains:
-;   - Boot_LED_Animation: Progress LED cycling (64 bytes)
-;   - Boot_LED_Blink_Bit2/3: LED toggle routines (28 bytes)
-;   - Flash_ScanForErased: Scan for erased blocks (22 bytes)
-;   - Flash_CheckErased: Verify block erased (11 bytes)
-;   - Flash_CompareRegions: Compare memory regions (132 bytes)
-;   - Boot_Copy_RAM_to_CustomData: Copy to custom flash (82 bytes)
-;   - Boot_Copy_RAM_to_HDAE: Copy to HDAE flash (164 bytes)
+;   - Boot_Copy_RAM_to_CustomData: Copy RAM to custom flash (82 bytes)
+;   - Boot_Copy_RAM_to_HDAE_Low: Copy to HDAE low half (82 bytes)
+;   - Boot_Copy_RAM_to_HDAE_High: Copy to HDAE high half (82 bytes)
 ;   - Boot_Main_Entry: Main boot sequence (349 bytes)
-;   - Boot_Recovery_Entry: Recovery mode (179 bytes)
+;   - Boot_Recovery_Entry: Recovery mode handler (179 bytes)
 ; -----------------------------------------------------------------------------
-	binclude "includes/bootcode_post_fdc_part5.bin"
+	binclude "includes/bootcode_post_fdc_part6.bin"
 
 
 ; =============================================================================
