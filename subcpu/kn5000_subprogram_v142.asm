@@ -11009,39 +11009,50 @@ InterCPU_DMA_Send:
 	LD IZ, BC
 	LD (XSP + 006h), A
 	CP IZ, 0020h
-	JR ULE, LABEL_020C9C
+	JR ULE, DMA_Send_Final
 
-LABEL_020C7C:
+DMA_Send_Loop:
 	LD A, (XSP + 006h)
 	EXTZ WA
 	LD BC, 0020h
 	LD XDE, (XSP + 002h)
-	CALR LABEL_020CB0
+	CALR InterCPU_DMA_Send_Chunk
 	LD XWA, 00000020h
 	ADD (XSP + 002h), XWA
 	SUB IZ, 0020h
 	CP IZ, 0020h
-	JR UGT, LABEL_020C7C
+	JR UGT, DMA_Send_Loop
 
-LABEL_020C9C:
+DMA_Send_Final:
 	LD A, (XSP + 006h)
 	EXTZ WA
 	LD C, IZL
 	EXTZ BC
 	LD XDE, (XSP + 002h)
-	CALR LABEL_020CB0
+	CALR InterCPU_DMA_Send_Chunk
 	POP IZ
 	INC 6, XSP
 	RET
 
-LABEL_020CB0:
+; ===========================================================================
+; InterCPU_DMA_Send_Chunk - Transfer a single chunk of data to main CPU
+; ===========================================================================
+; Entry: XDE = source data pointer
+;        BC = byte count (must be non-zero)
+;        A = command/channel identifier (bits 7-5 used for dispatch)
+; Exit:  Data transferred via DMA channel 2
+; Notes: Helper for InterCPU_DMA_Send - handles one transfer operation.
+;        Waits for MSTAT1 handshake, sets up DMA, then waits for completion.
+;        Command byte format: (A << 5) | (length - 1)
+; ===========================================================================
+InterCPU_DMA_Send_Chunk:
 	CP C, 0
 	RET Z
 	LD IX, 0
 
-LABEL_020CB6:
+DMA_Chunk_Start:
 	BIT 4, (PD)  ; MSTAT1
-	JR Z, LABEL_020CFA
+	JR Z, InterCPU_Wait_MSTAT1_Clear
 	RES 0, (PD)  ; SSTAT0
 	LD (DMA_XFER_STATE), 001h
 	LD L, C
@@ -11051,9 +11062,9 @@ LABEL_020CB6:
 	LD (INTER_CPU_COMM_LATCHES), A
 	LD IX, 0
 
-LABEL_020CD3:
+DMA_Chunk_Transfer:
 	BIT 4, (PD)  ; MSTAT1
-	JR NZ, LABEL_020D05
+	JR NZ, InterCPU_Wait_MSTAT1_Set
 	SET 0, (PD)  ; SSTAT0
 	LDC_DMAS2_XDE
 	EXTZ BC
@@ -11063,23 +11074,23 @@ LABEL_020CD3:
 	CP (DMA_XFER_STATE), 000h
 	RET Z
 
-LABEL_020CF2:
+DMA_Chunk_Wait:
 	CP (DMA_XFER_STATE), 000h
-	JR NZ, LABEL_020CF2
+	JR NZ, DMA_Chunk_Wait
 	RET
 
-LABEL_020CFA:
+InterCPU_Wait_MSTAT1_Clear:
 	LD HL, IX
 	INC 1, IX
 	CP HL, 0ea60h
-	JR ULE, LABEL_020CB6
+	JR ULE, DMA_Chunk_Start
 	RET
 
-LABEL_020D05:
+InterCPU_Wait_MSTAT1_Set:
 	LD WA, IX
 	INC 1, IX
 	CP WA, 0ea60h
-	JR ULE, LABEL_020CD3
+	JR ULE, DMA_Chunk_Transfer
 	SET 0, (PD)  ; SSTAT0
 	RET
 
@@ -11105,34 +11116,47 @@ LABEL_020D13:
 	db 0F9h, 00Eh, 0DCh, 08Bh, 0DCh, 061h, 0DBh, 0CFh
 	db 060h, 0EAh, 063h, 0BEh, 0F0h, 034h, 0B8h, 00Eh
 
-LABEL_020DB3:
+; ===========================================================================
+; InterCPU_E1_DMA_Transfer - E1 command bulk data transfer (Sub→Main CPU)
+; ===========================================================================
+; Entry: XWA = destination address (in main CPU memory)
+;        XDE = source address (in sub CPU memory)
+;        BC = byte count
+; Exit:  Data transferred to main CPU via two-phase E1 protocol
+; Notes: Called from Cmd_Check_E2_Pending to send response data.
+;        Phase 1: Send E1 command + 6-byte header (dest addr, byte count)
+;        Phase 2: Actual data transfer via DMA channel 2
+;        Uses 60000 iteration timeout (0xEA60) for handshake waits.
+;        Stores parameters at 0x1110 and 0x10DE for DMA setup.
+; ===========================================================================
+InterCPU_E1_DMA_Transfer:
 	PUSH IZ
 	LD IZ, 0
 	CP (DMA_XFER_STATE), 000h
-	JR Z, LABEL_020DCF
+	JR Z, E1_DMA_Ready
 
-LABEL_020DBD:
+E1_Wait_DMA_Idle:
 	LD HL, IZ
 	INC 1, IZ
 	CP HL, 0ea60h
-	JRL UGT, LABEL_020E84
+	JRL UGT, E1_Exit
 	CP (DMA_XFER_STATE), 000h
-	JR NZ, LABEL_020DBD
+	JR NZ, E1_Wait_DMA_Idle
 
-LABEL_020DCF:
+E1_DMA_Ready:
 	LD IZ, 0
 
-LABEL_020DD1:
+E1_Check_MSTAT1:
 	BIT 4, (PD)  ; MSTAT1
-	JRL Z, LABEL_020E69
+	JRL Z, E1_Timeout_Retry
 	RES 0, (PD)  ; SSTAT0
 	LD (DMA_XFER_STATE), 002h
 	LD (INTER_CPU_COMM_LATCHES), 0e1h
 	LD IZ, 0
 
-LABEL_020DE7:
+E1_Start_Transfer:
 	BIT 4, (PD)  ; MSTAT1
-	JRL NZ, LABEL_020E76
+	JRL NZ, E1_Busy_Wait
 	SET 0, (PD)  ; SSTAT0
 	LDA XHL, 1110h
 	LD (XHL), XWA
@@ -11146,24 +11170,24 @@ LABEL_020DE7:
 	LD (DMA2V), 016h
 	SET 2, (T8RUN)
 	CP (DMA_XFER_STATE), 001h
-	JR Z, LABEL_020E20
+	JR Z, E1_Delay_Loop1
 
-LABEL_020E19:
+E1_Wait_State1:
 	CP (DMA_XFER_STATE), 001h
-	JR NZ, LABEL_020E19
+	JR NZ, E1_Wait_State1
 
-LABEL_020E20:
+E1_Delay_Loop1:
 	LD IZ, 0
 	CP IZ, 00c8h
-	JR NC, LABEL_020E31
+	JR NC, E1_Phase2_Setup
 
-LABEL_020E28:
+E1_Delay1:
 	NOP
 	INC 1, IZ
 	CP IZ, 00c8h
-	JR C, LABEL_020E28
+	JR C, E1_Delay1
 
-LABEL_020E31:
+E1_Phase2_Setup:
 	LDA XWA, 1110h
 	LD XBC, (XWA)
 	LDC_DMAS2_XBC
@@ -11172,41 +11196,41 @@ LABEL_020E31:
 	LD (DMA2V), 016h
 	SET 2, (T8RUN)
 	CP (DMA_XFER_STATE), 000h
-	JR Z, LABEL_020E56
+	JR Z, E1_Delay_Loop2
 
-LABEL_020E4F:
+E1_Wait_Complete:
 	CP (DMA_XFER_STATE), 000h
-	JR NZ, LABEL_020E4F
+	JR NZ, E1_Wait_Complete
 
-LABEL_020E56:
+E1_Delay_Loop2:
 	LD IZ, 0
 	CP IZ, 00c8h
-	JR NC, LABEL_020E67
+	JR NC, E1_Done
 
-LABEL_020E5E:
+E1_Delay2:
 	NOP
 	INC 1, IZ
 	CP IZ, 00c8h
-	JR C, LABEL_020E5E
+	JR C, E1_Delay2
 
-LABEL_020E67:
-	JR T, LABEL_020E84
+E1_Done:
+	JR T, E1_Exit
 
-LABEL_020E69:
+E1_Timeout_Retry:
 	LD HL, IZ
 	INC 1, IZ
 	CP HL, 0ea60h
-	JRL ULE, LABEL_020DD1
-	JR T, LABEL_020E84
+	JRL ULE, E1_Check_MSTAT1
+	JR T, E1_Exit
 
-LABEL_020E76:
+E1_Busy_Wait:
 	LD HL, IZ
 	INC 1, IZ
 	CP HL, 0ea60h
-	JRL ULE, LABEL_020DE7
+	JRL ULE, E1_Start_Transfer
 	SET 0, (PD)  ; SSTAT0
 
-LABEL_020E84:
+E1_Exit:
 	POP IZ
 	RET
 
@@ -11408,7 +11432,7 @@ Cmd_Check_E2_Pending:		; 020FBCh
 	LD XWA, (XDE)
 	LD BC, (XDE + 008h)
 	LD XDE, (XDE + 004h)
-	CALR LABEL_020DB3	; Process E2 data
+	CALR InterCPU_E1_DMA_Transfer	; Process E2 data
 
 ; Check for DMA timeout (stuck transfer detection)
 Cmd_Check_DMA_Timeout:		; 020FD9h
@@ -11443,7 +11467,16 @@ Cmd_DMA_Check_Stuck:		; 021001h
 	INC 1, (0F018h)		; Increment error counter
 	RET
 
-LABEL_021023:
+; ===========================================================================
+; DAC_Write_Sample - Write audio sample to DAC interface
+; ===========================================================================
+; Entry: WA = 16-bit audio sample value
+; Exit:  HL = readback value from DAC
+; Notes: P6.7 controls A23 address line for tone generator/DAC access.
+;        DAC interface is at 0x100000 (memory-mapped).
+;        Readback may be used for verification or status check.
+; ===========================================================================
+DAC_Write_Sample:
 	RES 7, (P6)
 	LD (100000h), WA
 	LD HL, (100000h)
@@ -13244,7 +13277,7 @@ LABEL_02219F:
 	AND (1128h), 003h
 	LD A, (1128h)
 	EXTZ WA
-	CALR LABEL_021023
+	CALR DAC_Write_Sample
 	LD A, (1128h)
 	EXTZ WA
 	ADD WA, WA
@@ -13304,7 +13337,7 @@ LABEL_02224F:
 	LD A, (XSP + 008h)
 	EXTZ WA
 	ADD WA, 0180h
-	CALR LABEL_021023
+	CALR DAC_Write_Sample
 	AND HL, 3fffh
 	SRL 5, HL
 	LD A, L
@@ -38660,7 +38693,7 @@ LABEL_03519E:
 	LDA XWA, 7800h:24
 	LD BC, 72aah
 	LD XDE, 001e0000h
-	CALL LABEL_020DB3
+	CALL InterCPU_E1_DMA_Transfer
 	POP IZ
 	INC 4, XSP
 	RET
@@ -38800,7 +38833,7 @@ LABEL_035301:
 	LDA XWA, 7800h:24
 	LD BC, 72aah
 	LD XDE, 001e0000h
-	CALL LABEL_020DB3
+	CALL InterCPU_E1_DMA_Transfer
 	LD_L 000h
 
 LABEL_035321:
@@ -38944,7 +38977,7 @@ LABEL_03547B:
 	LDA XWA, 7800h:24
 	LD BC, 72aah
 	LD XDE, 001e0000h
-	CALL LABEL_020DB3
+	CALL InterCPU_E1_DMA_Transfer
 	POP XIZ
 	INC 4, XSP
 	RET
