@@ -60,8 +60,11 @@ gallery:
 issues:
 	python export_issues_to_website.py $(DOCS_DIR)/issues.md
 
-# Update all website content (gallery + issues)
-website: gallery issues
+rom-status:
+	python generate_rom_status_diagram.py
+
+# Update all website content (gallery + issues + rom status diagram)
+website: gallery issues rom-status
 	@echo "Website content updated. Don't forget to commit kn5000-docs."
 
 clean: clean_subcpu clean_subcpu_boot clean_maincpu clean_table_data clean_hdae5000

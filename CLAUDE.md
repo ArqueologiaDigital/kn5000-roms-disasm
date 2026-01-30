@@ -32,7 +32,8 @@ python compare_roms.py
 # Update documentation website
 make gallery            # Convert images to PNG for gallery
 make issues             # Export issue tracker to website
-make website            # Both gallery + issues
+make rom-status         # Generate ROM status diagram
+make website            # All of the above (gallery + issues + rom-status)
 ```
 
 The ASL assembler path is configured in the Makefile at `ASL_PATH`.
@@ -65,12 +66,13 @@ This ensures the documentation website always reflects the latest extracted imag
 The documentation website at `../kn5000-docs/` must be kept in sync with project progress. **Run these commands regularly:**
 
 ```bash
-make website   # Updates both gallery and issues
+make website   # Updates gallery, issues, and ROM status diagram
 ```
 
 This runs:
 1. `make gallery` - Converts extracted images to PNG
 2. `make issues` - Exports Beads issue tracker to `issues.md`
+3. `make rom-status` - Regenerates the ROM status visualization diagram
 
 **When to update the website:**
 - After extracting new images
@@ -79,6 +81,39 @@ This runs:
 - Before committing major changes
 
 Always commit both repositories together when making website updates.
+
+### ROM Status Diagram (STRICT POLICY)
+
+**The ROM status diagram must be kept in sync with disassembly progress.**
+
+The file `generate_rom_status_diagram.py` generates an SVG visualization showing the disassembly status of each ROM component. This diagram provides an at-a-glance view of project progress.
+
+**Status categories:**
+| Color | Category | Description |
+|-------|----------|-------------|
+| Green | Disassembled Code | Properly disassembled with symbolic instructions |
+| Blue | Known Data | Documented data structures |
+| Cyan | String Data | Text strings |
+| Light Green | Pointer/Jump Tables | Tables of addresses |
+| Purple | Binary Includes | External binary files not yet analyzed |
+| Red | Raw Bytes (unknown) | Hex bytes with unknown purpose |
+| Orange | Raw Bytes (known code) | Code not yet disassembled |
+| Gray | Padding/Unused | Fill bytes (0x00 or 0xFF) |
+| Yellow | Undetermined | Not yet categorized |
+
+**Regeneration triggers:**
+- After disassembling new code sections
+- After documenting data structures
+- After splitting binary includes
+- Before any major commit
+
+**Commands:**
+```bash
+make rom-status  # Regenerate the diagram
+make website     # Regenerate all website content
+```
+
+The diagram is displayed on the documentation website at `/rom-reconstruction/`.
 
 ### Symbol Name Synchronization (STRICT POLICY)
 
