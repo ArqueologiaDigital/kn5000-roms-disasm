@@ -1019,8 +1019,228 @@ Flash_SectorErase_16bit:
 
 	; The rest of this routine handles special boot block sectors
 	; This is complex sector layout handling for AM29F400B/AM29F800B
-	; Binary include for the remaining complex sector handling
-	binclude "includes/flash_sector_erase_cont_part1.bin"
+
+	; Check if Custom Data flash (target 1) with region code 4
+	db	01Dh, 000h, 0B7h, 0FFh	; CALL Boot_Get_Region_Code (0xFFB700)
+	CP	L, 4			; cf dc
+	JR	NZ, .check_non_region4	; 6e 5f - skip if not region 4
+
+	; Region 4: Check if Custom Data flash (target 1)
+	db	08Fh, 00Ch, 03Fh, 001h	; CP (XSP+0Ch), 01h - check target
+	db	07Eh, 024h, 001h	; JRL NZ, .sector_done - skip if HDAE
+
+	; Custom Data region 4: Check 0x070000 and 0x0F0000 sectors
+	LDA	XWA, 00300000h		; f2 00 00 30 30
+	LD	XBC, XWA		; e8 89
+	ADD	XBC, 00070000h		; e9 c8 00 00 07 00
+	db	0AFh, 004h, 0F1h	; CP XBC, (XSP+04h)
+	JR	Z, .erase_region4_boot	; 66 0e
+
+	LD	XBC, XWA		; e8 89
+	ADD	XBC, 000F0000h		; e9 c8 00 00 0f 00
+	db	0AFh, 004h, 0F1h	; CP XBC, (XSP+04h)
+	db	07Eh, 004h, 001h	; JRL NZ, .sector_done
+
+.erase_region4_boot:
+	; Erase 8KB boot block sectors at 0x78000, 0x7A000, 0x7C000
+	LD	XBC, XIZ		; ee 89
+	ADD	XBC, 00078000h		; e9 c8 00 80 07 00
+	db	0B1h, 002h, 030h, 000h	; LD (XBC), 0030h (word store)
+	LD	XBC, XIZ		; ee 89
+	ADD	XBC, 0007A000h		; e9 c8 00 a0 07 00
+	db	0B1h, 002h, 030h, 000h	; LD (XBC), 0030h (word store)
+	LD	XBC, XIZ		; ee 89
+	ADD	XBC, 0007C000h		; e9 c8 00 c0 07 00
+	db	0B1h, 002h, 030h, 000h	; LD (XBC), 0030h (word store)
+
+	; Check if sector address is at top of 1MB
+	ADD	XWA, 000FFFFFh		; e8 c8 ff ff 0f 00
+	db	0AFh, 008h, 0F8h	; CP (XSP+08h), XWA
+	db	07Eh, 0D4h, 000h	; JRL NZ, .sector_done
+	LD	XWA, 00060000h		; 40 00 00 06 00
+	db	078h, 0C4h, 000h	; JRL T, .erase_last_sector
+
+.check_non_region4:
+	; Check target 1 (Custom Data) for non-region-4
+	db	08Fh, 00Ch, 03Fh, 001h	; CP (XSP+0Ch), 01h
+	JR	NZ, .check_hdae		; 6e 6e - skip to HDAE handling
+
+	; Custom Data (target 1) - check if AM29LV800B (0x2258)
+	LDA	XWA, 00300000h		; f2 00 00 30 30
+	db	0D2h, 094h, 099h, 000h, 03Fh, 058h, 022h	; CP (009994h), 2258h
+	JR	NZ, .custom_check_f0000	; 6e 1c
+
+	; AM29LV800B: Check if base sector needs boot block erase
+	db	0AFh, 004h, 0F0h	; CP XWA, (XSP+04h)
+	db	07Eh, 0B2h, 000h	; JRL NZ, .sector_done
+
+	; Erase 8KB sectors at 0x4000 and 0x6000
+	db	0F3h, 0F9h, 000h, 040h, 002h, 030h, 000h	; LD (XIZ+4000h), 0030h
+	db	0F3h, 0F9h, 000h, 060h, 002h, 030h, 000h	; LD (XIZ+6000h), 0030h
+	LD	XWA, 00008000h		; 40 00 80 00 00
+	db	078h, 094h, 000h	; JRL T, .erase_last_sector
+
+.custom_check_f0000:
+	; Custom Data: Check 0x0F0000 sector
+	LD	XBC, XWA		; e8 89
+	ADD	XWA, 000F0000h		; e8 c8 00 00 0f 00
+	db	0AFh, 004h, 0F0h	; CP XWA, (XSP+04h)
+	db	07Eh, 08Eh, 000h	; JRL NZ, .sector_done
+
+	; Erase boot block sectors at 0xF8000, 0xFA000, 0xFC000
+	LD	XWA, XIZ		; ee 88
+	ADD	XWA, 000F8000h		; e8 c8 00 80 0f 00
+	db	0B0h, 002h, 030h, 000h	; LD (XWA), 0030h (word store)
+	LD	XWA, XIZ		; ee 88
+	ADD	XWA, 000FA000h		; e8 c8 00 a0 0f 00
+	db	0B0h, 002h, 030h, 000h	; LD (XWA), 0030h (word store)
+	LD	XWA, XIZ		; ee 88
+	ADD	XWA, 000FC000h		; e8 c8 00 c0 0f 00
+	db	0B0h, 002h, 030h, 000h	; LD (XWA), 0030h (word store)
+
+	; Check if top sector
+	ADD	XBC, 000FFFFFh		; e9 c8 ff ff 0f 00
+	db	0AFh, 008h, 0F9h	; CP (XSP+08h), XBC
+	JR	NZ, .sector_done	; 6e 5f
+	LD	XWA, 000E0000h		; 40 00 00 0e 00
+	JR	T, .erase_last_sector	; 68 50
+
+.check_hdae:
+	; HDAE5000 (target 0) - check if AM29F400B (0x22AB)
+	LDA	XWA, 00280000h		; f2 00 00 28 30
+	db	0D2h, 096h, 099h, 000h, 03Fh, 0ABh, 022h	; CP (009996h), 22ABh
+	JR	NZ, .hdae_check_top	; 6e 1a
+
+	; AM29F400B on HDAE: Check base sector
+	db	0AFh, 004h, 0F0h	; CP XWA, (XSP+04h)
+	JR	NZ, .sector_done	; 6e 45
+
+	; Erase 8KB boot block sectors at 0x4000 and 0x6000
+	db	0F3h, 0F9h, 000h, 040h, 002h, 030h, 000h	; LD (XIZ+4000h), 0030h
+	db	0F3h, 0F9h, 000h, 060h, 002h, 030h, 000h	; LD (XIZ+6000h), 0030h
+	LD	XWA, 00008000h		; 40 00 80 00 00
+	JR	T, .erase_last_sector	; 68 28
+
+.hdae_check_top:
+	; HDAE: Check 0x070000 sector (XWA already = 0x280000)
+	ADD	XWA, 00070000h		; e8 c8 00 00 07 00
+	db	0AFh, 004h, 0F0h	; CP XWA, (XSP+04h)
+	JR	NZ, .sector_done	; 6e 25
+
+	; Erase boot block sectors at 0x78000, 0x7A000
+	LD	XWA, XIZ		; ee 88
+	ADD	XWA, 00078000h		; e8 c8 00 80 07 00
+	db	0B0h, 002h, 030h, 000h	; LD (XWA), 0030h (word store)
+	LD	XWA, XIZ		; ee 88
+	ADD	XWA, 0007A000h		; e8 c8 00 a0 07 00
+	db	0B0h, 002h, 030h, 000h	; LD (XWA), 0030h (word store)
+	LD	XWA, 0007C000h		; 40 00 c0 07 00
+
+.erase_last_sector:
+	; Common code to erase the last 8KB sector
+	; XWA = sector offset within bank
+	LD	XBC, XIZ		; ee 89
+	ADD	XBC, XWA		; e8 81
+	db	0B1h, 002h, 030h, 000h	; LD (XBC), 0030h (word store)
+
+.sector_done:
+	EI	0			; 06 00
+	POP	XIZ			; 5e
+	db	0BFh, 00Ah, 037h	; LDA XSP, XSP+0Ah - deallocate stack
+	RET				; 0e
+
+; -----------------------------------------------------------------------------
+; Flash_WaitComplete - Wait for flash operation to complete
+; Address: 0x9FBBCF
+;
+; Purpose: Poll bit 5 of port 0x1C until flash operation completes
+;
+; Entry: None
+; Exit: HL = 0 if success, 0xFFFF if still busy
+; -----------------------------------------------------------------------------
+Flash_WaitComplete:
+	BIT	5, (01Ch)		; f0 1c cd
+	JR	Z, .not_ready		; 66 03
+	LD	HL, 0			; db a8
+	RET				; 0e
+.not_ready:
+	LD	HL, 0FFFFh		; 33 ff ff
+	RET				; 0e
+
+; -----------------------------------------------------------------------------
+; Flash_ChipErase_16bit_Wait - Erase chip and wait for completion
+; Address: 0x9FBBDB
+;
+; Purpose: Call Flash_ChipErase_16bit and poll until complete
+;
+; Entry: A = target (0=HDAE5000, 1=Custom Data)
+; Exit: None
+; -----------------------------------------------------------------------------
+Flash_ChipErase_16bit_Wait:
+	EXTZ	WA			; d8 12
+	db	01Eh, 088h, 0FDh	; CALR Flash_ChipErase_16bit (0x9FB968)
+.wait_loop:
+	db	01Eh, 0ECh, 0FFh	; CALR Flash_WaitComplete (0x9FBBCF)
+	CP	HL, 0FFFFh		; db cf ff ff
+	RET	NZ			; b0 fe
+	db	01Eh, 0E3h, 0FFh	; CALR Flash_WaitComplete (0x9FBBCF)
+	CP	HL, 0FFFFh		; db cf ff ff
+	db	066h, 0F7h		; JR Z, .wait_loop (offset -9)
+	RET				; 0e
+
+; -----------------------------------------------------------------------------
+; Flash_Init_Custom_And_Table - Initialize Custom Data and Table Data flash
+; Address: 0x9FBBF3
+;
+; Purpose: Send reset to Custom Data flash and read IDs for both flashes
+;
+; Entry: None
+; Exit: (0x9994) = Custom Data device ID
+;       (0x9996) = HDAE5000 device ID
+; -----------------------------------------------------------------------------
+Flash_Init_Custom_And_Table:
+	LD	WA, 1			; d8 a9 - Custom Data low bank
+	db	01Eh, 01Ah, 0FCh	; CALR Flash_Reset_16bit (0x9FB812)
+	LD	WA, 2			; d8 aa - Custom Data high bank
+	db	01Eh, 015h, 0FCh	; CALR Flash_Reset_16bit (0x9FB812)
+
+	; Check region and reset Table Data ROM if not region 4
+	db	01Dh, 000h, 0B7h, 0FFh	; CALL Boot_Get_Region_Code (0xFFB700)
+	CP	L, 4			; cf dc
+	db	0F2h, 02Dh, 0BCh, 0FFh, 0EEh	; CALL NZ, Flash_Reset_32bit (0xFFBC2D)
+
+	; Read Custom Data device ID
+	LD	WA, 1			; d8 a9
+	db	01Eh, 07Bh, 0FCh	; CALR Flash_ReadID_16bit (0x9FB888)
+	db	0F2h, 094h, 099h, 000h, 053h	; LD (009994h), HL
+
+	; Read HDAE5000 device ID
+	LD	WA, 2			; d8 aa
+	db	01Eh, 071h, 0FCh	; CALR Flash_ReadID_16bit (0x9FB888)
+	db	0F2h, 096h, 099h, 000h, 053h	; LD (009996h), HL
+	RET				; 0e
+
+; -----------------------------------------------------------------------------
+; ClearMemoryBlockWith0 - Clear a memory block with zeros
+; Address: 0x9FBC1D
+;
+; Purpose: Fill memory from XWA for BC dwords with zeros
+;
+; Entry: XWA = destination address
+;        BC = count (dwords)
+; Exit: XWA = address after filled region
+;       DE = BC (loop counter)
+; -----------------------------------------------------------------------------
+ClearMemoryBlockWith0:
+	LD	DE, 0			; da a8
+	CP	BC, 0			; d9 d8
+	RET	ULE			; b0 f3 - return if count <= 0
+.fill_loop:
+	db	0F5h, 0E1h, 052h	; LD (XWA+), DE - store 0 and advance
+	INC	1, DE			; da 61
+	CP	DE, BC			; d9 f2
+	JR	C, .fill_loop		; 67 f7
+	RET				; 0e
 
 
 ; =============================================================================
