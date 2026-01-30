@@ -273,6 +273,25 @@ SFR_DRAM1REF	EQU	165h		; DRAM 1 Refresh
 SFR_PMEMCR	EQU	166h		; Page ROM Control
 
 
+; -----------------------------------------------------------------------------
+; Boot Data Section - Constants copied to RAM during initialization
+; These are referenced by Boot_ClearRAM routine
+; -----------------------------------------------------------------------------
+	ORG 09FB4D2h
+Boot_BitMaskTable:	; Copied to RAM 0x1044 by Boot_ClearRAM (10 bytes)
+	; Bit mask pattern for bit manipulation operations
+	db	000h, 040h, 020h, 008h, 010h, 004h, 002h, 000h, 001h, 000h
+
+Boot_InitParams:	; Copied to RAM 0x9998 by Boot_ClearRAM (12 bytes)
+	; Stack/display initialization parameters
+	db	07Eh, 000h	; 0x007E (126)
+	db	010h, 000h	; 0x0010 (16)
+	db	000h, 000h	; 0x0000
+	db	080h, 000h	; 0x0080 (128)
+	db	000h, 000h	; 0x0000
+	db	000h, 000h	; 0x0000
+
+
 	ORG 09FB4E8h
 ; -----------------------------------------------------------------------------
 ; Boot_Init - First-stage bootloader entry point
@@ -545,19 +564,118 @@ EMPTY_HANDLER:
 	JRL	T, Boot_Init		; Jump relative long back to boot entry
 
 ; -----------------------------------------------------------------------------
-; Boot routines: flash update, hardware init, display, FDC, etc.
-; Addresses 0x9FB709 to 0x9FFEE0 (includes all interrupt handlers)
+; Various boot handlers and routines before Boot_ClearRAM
+; TODO: Disassemble this section (contains handlers at 0x9FB709-0x9FB73F)
+; -----------------------------------------------------------------------------
+	binclude "includes/bootcode_pre_clearram.bin"
+
+; -----------------------------------------------------------------------------
+; Boot_ClearRAM - Initialize RAM and copy ROM data to RAM
+; Address: 0xFFB740 (boot-time), 0x9FB740 (ROM)
+;
+; Operations performed:
+;   1. Clear 0x894A bytes (35,146) at RAM 0x104E
+;   2. Clear 0x0443 bytes (1,091) at RAM 0x0C00
+;   3. Copy 12 bytes from ROM 0xFFB4DC to RAM 0x9998
+;   4. Copy 10 bytes from ROM 0xFFB4D2 to RAM 0x1044
+;
+; Uses LDIRW for efficient word-mode block operations
+; -----------------------------------------------------------------------------
+	ORG 09FB740h
+Boot_ClearRAM:
+	; === Clear RAM block 1: 0x104E for 0x894A bytes ===
+	db	042h, 04Eh, 010h, 000h, 000h	; LD XDE, 0x0000104E (destination)
+	db	041h, 04Ah, 089h, 000h, 000h	; LD XBC, 0x0000894A (count = 35146 bytes)
+	db	0D9h, 08Ch			; LD IX, BC (save original count)
+	db	0E9h, 0EFh, 001h		; SRL 1, XBC (divide by 2 for word count)
+	db	066h, 01Ch			; JR Z, .clear1_done (skip if zero)
+	db	0EAh, 08Bh			; LD XHL, XDE (source = dest for fill)
+	db	0F5h, 0E9h, 002h, 000h, 000h	; LD (XDE+), 0x0000 (store first zero word)
+	db	0E9h, 069h			; DEC 1, XBC
+	db	0E9h, 0E1h			; OR XBC, XBC (test if zero)
+	db	066h, 00Fh			; JR Z, .clear1_done
+	db	093h, 011h			; LDIRW (word block copy - fills with zeros)
+	db	0D7h, 0E6h, 0D8h		; CP QBC, 0 (check high dword)
+	db	066h, 008h			; JR Z, .clear1_done
+	db	0D7h, 0E6h, 088h		; LD WA, QBC
+	db	093h, 011h			; LDIRW
+	db	0D8h, 01Ch, 0FBh		; DJNZ WA, -5
+.clear1_done:
+	db	0DCh, 033h, 000h		; BIT 0, IX (check if odd byte)
+	db	066h, 003h			; JR Z, .clear1_aligned
+	db	0B2h, 000h, 000h		; LD (XDE), 0x00 (clear last odd byte)
+.clear1_aligned:
+
+	; === Clear RAM block 2: 0x0C00 for 0x0443 bytes ===
+	db	042h, 000h, 00Ch, 000h, 000h	; LD XDE, 0x00000C00 (destination)
+	db	041h, 043h, 004h, 000h, 000h	; LD XBC, 0x00000443 (count = 1091 bytes)
+	db	0D9h, 08Ch			; LD IX, BC
+	db	0E9h, 0EFh, 001h		; SRL 1, XBC
+	db	066h, 01Ch			; JR Z, .clear2_done
+	db	0EAh, 08Bh			; LD XHL, XDE
+	db	0F5h, 0E9h, 002h, 000h, 000h	; LD (XDE+), 0x0000
+	db	0E9h, 069h			; DEC 1, XBC
+	db	0E9h, 0E1h			; OR XBC, XBC
+	db	066h, 00Fh			; JR Z, .clear2_done
+	db	093h, 011h			; LDIRW
+	db	0D7h, 0E6h, 0D8h		; CP QBC, 0
+	db	066h, 008h			; JR Z, .clear2_done
+	db	0D7h, 0E6h, 088h		; LD WA, QBC
+	db	093h, 011h			; LDIRW
+	db	0D8h, 01Ch, 0FBh		; DJNZ WA, -5
+.clear2_done:
+	db	0DCh, 033h, 000h		; BIT 0, IX
+	db	066h, 003h			; JR Z, .clear2_aligned
+	db	0B2h, 000h, 000h		; LD (XDE), 0x00
+.clear2_aligned:
+
+	; === Copy ROM data 1: 12 bytes from 0xFFB4DC to RAM 0x9998 ===
+	db	042h, 098h, 099h, 000h, 000h	; LD XDE, 0x00009998 (destination)
+	db	043h, 0DCh, 0B4h, 0FFh, 000h	; LD XHL, 0x00FFB4DC (source in boot ROM)
+	db	041h, 00Ch, 000h, 000h, 000h	; LD XBC, 0x0000000C (count = 12 bytes)
+	db	0E9h, 0E1h			; OR XBC, XBC
+	db	066h, 00Fh			; JR Z, .copy1_done
+	db	083h, 011h			; LDIR (byte block copy)
+	db	0D7h, 0E6h, 0D8h		; CP QBC, 0
+	db	066h, 008h			; JR Z, .copy1_done
+	db	0D7h, 0E6h, 088h		; LD WA, QBC
+	db	083h, 011h			; LDIR
+	db	0D8h, 01Ch, 0FBh		; DJNZ WA, -5
+.copy1_done:
+
+	; === Copy ROM data 2: 10 bytes from 0xFFB4D2 to RAM 0x1044 ===
+	db	042h, 044h, 010h, 000h, 000h	; LD XDE, 0x00001044 (destination)
+	db	043h, 0D2h, 0B4h, 0FFh, 000h	; LD XHL, 0x00FFB4D2 (source in boot ROM)
+	db	041h, 00Ah, 000h, 000h, 000h	; LD XBC, 0x0000000A (count = 10 bytes)
+	db	0E9h, 0E1h			; OR XBC, XBC
+	db	066h, 00Fh			; JR Z, .copy2_done
+	db	083h, 011h			; LDIR
+	db	0D7h, 0E6h, 0D8h		; CP QBC, 0
+	db	066h, 008h			; JR Z, .copy2_done
+	db	0D7h, 0E6h, 088h		; LD WA, QBC
+	db	083h, 011h			; LDIR
+	db	0D8h, 01Ch, 0FBh		; DJNZ WA, -5
+.copy2_done:
+	db	078h, 042h, 0FEh		; JRL T, Boot_Init+0x14B (return to caller at 0xFFB633)
+	db	00Eh				; RET (never reached)
+
+; -----------------------------------------------------------------------------
+; Boot routines: flash update, hardware init, display, FDC, LZSS decoder, etc.
+; Addresses 0x9FB7F2 to 0x9FFEE0 (includes all interrupt handlers)
 ;
 ; Interrupt handler addresses within this range:
-;   NMI_HANDLER    = 0x9FB7FB (offset 0x0F2 in bootcode_routines.bin)
-;   INTT1_HANDLER  = 0x9FB7F2 (offset 0x0E9)
-;   INTTC3_HANDLER = 0x9FEA9D (offset 0x3394)
-;   INT4_HANDLER   = 0x9FEAB2 (offset 0x33A9)
-;   INTA_HANDLER   = 0x9FF229 (offset 0x3B20)
-;   INTTX1_HANDLER = 0x9FF2AE (offset 0x3BA5)
-;   INTRX1_HANDLER = 0x9FF2D0 (offset 0x3BC7)
+;   INTT1_HANDLER  = 0x9FB7F2 (timer 1 interrupt)
+;   NMI_HANDLER    = 0x9FB7FB
+;   INTTC3_HANDLER = 0x9FEA9D
+;   INT4_HANDLER   = 0x9FEAB2
+;   INTA_HANDLER   = 0x9FF229
+;   INTTX1_HANDLER = 0x9FF2AE
+;   INTRX1_HANDLER = 0x9FF2D0
+;
+; Notable routines:
+;   LZSS_Decompress = 0x9FCA50 (SLIDE4K decompressor, 4KB window)
 ; -----------------------------------------------------------------------------
-	binclude "includes/bootcode_routines.bin"
+	binclude "includes/bootcode_post_clearram.bin"
 
 	ORG 09FFEE0h
 RESET_HANDLER:
