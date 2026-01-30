@@ -144479,7 +144479,7 @@ LABEL_EF739A:
 LABEL_EF77DF:
 	BIT 3, (0D53h)
 	JRL Z, LABEL_EF7808
-	CALL LABEL_EF5B27
+	CALL Display_ResetDirtyFlags
 	LD L, (0D65h)
 	AND L, 003h
 	XOR H, H
@@ -144489,7 +144489,7 @@ LABEL_EF77DF:
 	LD XHL, (XIX + HL)
 	POP XIX
 	CALL T, XHL
-	CALL LABEL_EF5B36
+	CALL Display_UpdateDirtyRegions
 
 LABEL_EF7808:
 	RET
@@ -146105,7 +146105,7 @@ LABEL_EFA3D8:
 	XOR A, A
 	LD (0D61h), A
 	CALL LABEL_EFF518
-	CALL LABEL_EF5C07
+	CALL Display_UpdateRegion3
 	RET
 
 LABEL_EFA3FF:
@@ -146115,7 +146115,7 @@ LABEL_EFA3FF:
 	LD (0D61h), A
 	LD (1127h), A
 	CALL LABEL_EFF518
-	CALL LABEL_EF5C07
+	CALL Display_UpdateRegion3
 	RET
 
 LABEL_EFA41A:
@@ -146188,7 +146188,7 @@ LABEL_EFA497:
 	LD A, (8D44h)
 	LD (1127h), A
 	CALL LABEL_EFF518
-	CALL LABEL_EF5C07
+	CALL Display_UpdateRegion3
 	RET
 
 LABEL_EFA4B8:
@@ -149222,7 +149222,7 @@ LABEL_EFF03F:
 LABEL_EFF06C:
 	LD (XIX+), A
 	DJNZ BC, LABEL_EFF06C
-	CALL LABEL_EF5C07
+	CALL Display_UpdateRegion3
 	RET
 
 LABEL_EFF077:
@@ -149266,7 +149266,7 @@ LABEL_EFF123:
 	LD (XIX + 002h), WA
 
 LABEL_EFF13F:
-	CALL LABEL_EF5C07
+	CALL Display_UpdateRegion3
 	RET
 
 LABEL_EFF144:
@@ -150543,7 +150543,7 @@ LABEL_F00EC5:
 	LD XIY, 00e0c6a9h
 	LD XIX, 00e0c6cah
 	CALL LABEL_EF5D1F
-	CALL LABEL_EF5C02
+	CALL Display_UpdateRegion1_Alt
 
 LABEL_F00EEB:
 	RET
@@ -356006,7 +356006,7 @@ ClassProc:
 	JR Z, LABEL_FA45AD
 	LD XBC, XIX
 	CP XBC, 01e00015h
-	JR Z, LABEL_FA45A7
+	JR Z, ClassProc_Event_LoadFromOffset
 	LD XIZ, XHL
 	INC 4, XHL
 	LD XBC, (XSP + 00eh)
@@ -356020,11 +356020,27 @@ ClassProc:
 	LD BC, (XBC)
 	LDA XIX, 0FA4598h
 	JP T, XIX + BC
-LABEL_FA4598:
-	db 0E8h, 08Bh, 078h, 092h, 002h, 0A3h, 023h, 078h
-	db 08Dh, 002h, 0A6h, 023h, 078h, 088h, 002h
+;-----------------------------------------------------------------------------
+; ClassProc_EventHandlers - Dispatch table for UI event types
+;
+; Jumped to via: JP T, XIX + BC where XIX = 0xFA4598
+; BC offset comes from table at 0xEAA8F8 indexed by event type (0-7)
+;
+; Each handler loads XHL from a different source, then jumps to common code
+;-----------------------------------------------------------------------------
+ClassProc_Event_LoadFromWA:		; FA4598 - Event handler: load XHL from XWA
+	LD XHL, XWA
+	JRL T, LABEL_FA482F
 
-LABEL_FA45A7:
+ClassProc_Event_LoadFromHL:		; FA459D - Event handler: load XHL from (XHL)
+	LD XHL, (XHL)
+	JRL T, LABEL_FA482F
+
+ClassProc_Event_LoadFromIZ:		; FA45A2 - Event handler: load XHL from (XIZ)
+	LD XHL, (XIZ)
+	JRL T, LABEL_FA482F
+
+ClassProc_Event_LoadFromOffset:		; FA45A7 - Event handler: load XHL from (XHL+0Ch)
 	LD XHL, (XHL + 00ch)
 	JRL T, LABEL_FA482F
 
