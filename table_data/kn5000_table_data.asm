@@ -2735,17 +2735,152 @@ Flash_CompareRegions:
 	db	00Fh, 002h, 000h	; RETD 0002h
 
 ; -----------------------------------------------------------------------------
+; Boot_Copy_RAM_to_CustomData - Copy RAM to Custom Data flash
+; Address: 0x9FC5BC (boot-time: 0xFFC5BC)
+;
+; Entry: None
+; Exit: None
+;
+; Copies 0x80000 bytes from RAM (0x200000) to Custom Data flash (0x300000).
+; Uses 16-bit flash programming, 2 banks, 0x40000 words per bank.
+; Updates LED display with bank progress (0-1).
+; -----------------------------------------------------------------------------
+Boot_Copy_RAM_to_CustomData:
+	db	0BFh, 0F6h, 037h	; LDA XSP, XSP+F6h - allocate stack
+	PUSH	XIZ			; 3e
+	db	0F2h, 000h, 000h, 030h, 030h	; LDA XWA, 300000h - dest start
+	db	0BFh, 008h, 060h	; LD (XSP+08h), XWA
+	db	0BFh, 00Ch, 000h, 000h	; LD (XSP+0Ch), 0 - bank counter
+
+.bank_loop_cd:
+	db	08Fh, 00Ch, 021h	; LD A, (XSP+0Ch)
+	db	0F2h, 000h, 000h, 016h, 041h	; LD (160000h), A - LED display
+	db	0F2h, 000h, 000h, 020h, 030h	; LDA XWA, 200000h - source
+	db	0BFh, 004h, 060h	; LD (XSP+04h), XWA
+	db	0EEh, 0A8h		; LD XIZ, 0 - word counter
+
+.word_loop_cd:
+	db	0AFh, 008h, 020h	; LD XWA, (XSP+08h) - dest
+	db	0F5h, 0E1h, 031h	; LDA XBC, XWA+ - advance dest
+	db	0BFh, 008h, 060h	; LD (XSP+08h), XWA
+	db	0AFh, 004h, 020h	; LD XWA, (XSP+04h) - source
+	db	0D5h, 0E1h, 022h	; LD DE, (XWA+) - get word
+	db	0BFh, 004h, 060h	; LD (XSP+04h), XWA
+	LD	WA, 1			; d8 a9 - flash bank 1
+	db	01Dh, 003h, 0B9h, 0FFh	; CALL Flash_ProgramWord_16bit
+	db	0EEh, 061h		; INC 1, XIZ
+	db	0EEh, 0CFh, 000h, 000h, 004h, 000h	; CP XIZ, 40000h
+	JR	C, .word_loop_cd	; 67 de
+
+	db	08Fh, 00Ch, 061h	; INC 1, (XSP+0Ch) - next bank
+	db	08Fh, 00Ch, 03Fh, 002h	; CP (XSP+0Ch), 02h
+	JR	C, .bank_loop_cd	; 67 c3
+
+	POP	XIZ			; 5e
+	db	0BFh, 00Ah, 037h	; LDA XSP, XSP+0Ah - deallocate
+	RET				; 0e
+
+; -----------------------------------------------------------------------------
+; Boot_Copy_RAM_to_HDAE_Low - Copy RAM to HDAE flash (banks 0-3)
+; Address: 0x9FC60E (boot-time: 0xFFC60E)
+;
+; Entry: None
+; Exit: None
+;
+; Copies from HDAE RAM (0x280000) to Table Data flash (0x800000).
+; Uses 32-bit flash programming, 4 banks (0-3), 0x20000 dwords per bank.
+; Updates LED display with bank progress (0-3).
+; -----------------------------------------------------------------------------
+Boot_Copy_RAM_to_HDAE_Low:
+	db	0BFh, 0F6h, 037h	; LDA XSP, XSP+F6h
+	PUSH	XIZ			; 3e
+	LD	XWA, 000800000h		; 40 00 00 80 00 - dest start
+	db	0BFh, 008h, 060h	; LD (XSP+08h), XWA
+	db	0BFh, 00Ch, 000h, 000h	; LD (XSP+0Ch), 0 - bank counter
+
+.bank_loop_low:
+	db	08Fh, 00Ch, 021h	; LD A, (XSP+0Ch)
+	db	0F2h, 000h, 000h, 016h, 041h	; LD (160000h), A - LED
+	db	0F2h, 000h, 000h, 028h, 030h	; LDA XWA, 280000h - source
+	db	0BFh, 004h, 060h	; LD (XSP+04h), XWA
+	db	0EEh, 0A8h		; LD XIZ, 0 - dword counter
+
+.dword_loop_low:
+	db	0AFh, 008h, 020h	; LD XWA, (XSP+08h) - dest
+	db	0F5h, 0E2h, 031h	; LDA XBC, XWA+ - advance 4
+	db	0BFh, 008h, 060h	; LD (XSP+08h), XWA
+	LD	XWA, XBC		; e9 88 - dest address
+	db	0AFh, 004h, 022h	; LD XDE, (XSP+04h) - source
+	db	0E5h, 0EAh, 021h	; LD XBC, (XDE+) - get dword
+	db	0BFh, 004h, 062h	; LD (XSP+04h), XDE
+	db	01Dh, 0D7h, 0BCh, 0FFh	; CALL Flash_ProgramWord_32bit
+	db	0EEh, 061h		; INC 1, XIZ
+	db	0EEh, 0CFh, 000h, 000h, 002h, 000h	; CP XIZ, 20000h
+	JR	C, .dword_loop_low	; 67 de
+
+	db	08Fh, 00Ch, 061h	; INC 1, (XSP+0Ch)
+	db	08Fh, 00Ch, 03Fh, 004h	; CP (XSP+0Ch), 04h
+	JR	C, .bank_loop_low	; 67 c3
+
+	POP	XIZ			; 5e
+	db	0BFh, 00Ah, 037h	; LDA XSP, XSP+0Ah
+	RET				; 0e
+
+; -----------------------------------------------------------------------------
+; Boot_Copy_RAM_to_HDAE_High - Copy RAM to HDAE flash (banks 4-7)
+; Address: 0x9FC660 (boot-time: 0xFFC660)
+;
+; Entry: None
+; Exit: None
+;
+; Continues copy from HDAE RAM to Table Data flash.
+; Uses 32-bit flash programming, 4 banks (4-7), 0x20000 dwords per bank.
+; Updates LED display with bank progress (4-7).
+; -----------------------------------------------------------------------------
+Boot_Copy_RAM_to_HDAE_High:
+	db	0BFh, 0F6h, 037h	; LDA XSP, XSP+F6h
+	PUSH	XIZ			; 3e
+	LD	XWA, 000800000h		; 40 00 00 80 00 - dest start
+	db	0BFh, 008h, 060h	; LD (XSP+08h), XWA
+	db	0BFh, 00Ch, 000h, 004h	; LD (XSP+0Ch), 04h - bank 4
+
+.bank_loop_high:
+	db	08Fh, 00Ch, 021h	; LD A, (XSP+0Ch)
+	db	0F2h, 000h, 000h, 016h, 041h	; LD (160000h), A - LED
+	db	0F2h, 000h, 000h, 028h, 030h	; LDA XWA, 280000h - source
+	db	0BFh, 004h, 060h	; LD (XSP+04h), XWA
+	db	0EEh, 0A8h		; LD XIZ, 0 - dword counter
+
+.dword_loop_high:
+	db	0AFh, 008h, 020h	; LD XWA, (XSP+08h) - dest
+	db	0F5h, 0E2h, 031h	; LDA XBC, XWA+
+	db	0BFh, 008h, 060h	; LD (XSP+08h), XWA
+	LD	XWA, XBC		; e9 88
+	db	0AFh, 004h, 022h	; LD XDE, (XSP+04h)
+	db	0E5h, 0EAh, 021h	; LD XBC, (XDE+)
+	db	0BFh, 004h, 062h	; LD (XSP+04h), XDE
+	db	01Dh, 0D7h, 0BCh, 0FFh	; CALL Flash_ProgramWord_32bit
+	db	0EEh, 061h		; INC 1, XIZ
+	db	0EEh, 0CFh, 000h, 000h, 002h, 000h	; CP XIZ, 20000h
+	JR	C, .dword_loop_high	; 67 de
+
+	db	08Fh, 00Ch, 061h	; INC 1, (XSP+0Ch)
+	db	08Fh, 00Ch, 03Fh, 008h	; CP (XSP+0Ch), 08h
+	JR	C, .bank_loop_high	; 67 c3
+
+	POP	XIZ			; 5e
+	db	0BFh, 00Ah, 037h	; LDA XSP, XSP+0Ah
+	RET				; 0e
+
+; -----------------------------------------------------------------------------
 ; Remaining boot code routines
-; Address: 0x9FC5BC onwards (boot-time: 0xFFC5BC)
+; Address: 0x9FC6B2 onwards (boot-time: 0xFFC6B2)
 ;
 ; Contains:
-;   - Boot_Copy_RAM_to_CustomData: Copy RAM to custom flash (82 bytes)
-;   - Boot_Copy_RAM_to_HDAE_Low: Copy to HDAE low half (82 bytes)
-;   - Boot_Copy_RAM_to_HDAE_High: Copy to HDAE high half (82 bytes)
 ;   - Boot_Main_Entry: Main boot sequence (349 bytes)
 ;   - Boot_Recovery_Entry: Recovery mode handler (179 bytes)
 ; -----------------------------------------------------------------------------
-	binclude "includes/bootcode_post_fdc_part6.bin"
+	binclude "includes/bootcode_post_fdc_part7.bin"
 
 
 ; =============================================================================
