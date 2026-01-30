@@ -279,17 +279,17 @@ SFR_PMEMCR	EQU	166h		; Page ROM Control
 ; -----------------------------------------------------------------------------
 	ORG 09FB4D2h
 Boot_BitMaskTable:	; Copied to RAM 0x1044 by Boot_ClearRAM (10 bytes)
-	; Bit mask pattern for bit manipulation operations
-	db	000h, 040h, 020h, 008h, 010h, 004h, 002h, 000h, 001h, 000h
+	; Bit mask pattern for bit manipulation operations (bits 7..0, plus 2 zeros)
+	db	080h, 040h, 020h, 010h, 008h, 004h, 002h, 001h, 000h, 000h
 
 Boot_InitParams:	; Copied to RAM 0x9998 by Boot_ClearRAM (12 bytes)
 	; Stack/display initialization parameters
-	db	07Eh, 000h	; 0x007E (126)
-	db	010h, 000h	; 0x0010 (16)
-	db	000h, 000h	; 0x0000
-	db	080h, 000h	; 0x0080 (128)
-	db	000h, 000h	; 0x0000
-	db	000h, 000h	; 0x0000
+	db	07Eh, 010h	; Values at 0x9998-9999
+	db	000h, 000h	; Values at 0x999A-999B
+	db	000h, 080h	; Values at 0x999C-999D
+	db	000h, 000h	; Values at 0x999E-999F
+	db	000h, 000h	; Values at 0x99A0-99A1
+	db	000h, 000h	; Values at 0x99A2-99A3
 
 
 	ORG 09FB4E8h
@@ -660,22 +660,468 @@ Boot_ClearRAM:
 	db	00Eh				; RET (never reached)
 
 ; -----------------------------------------------------------------------------
-; Boot routines: flash update, hardware init, display, FDC, LZSS decoder, etc.
-; Addresses 0x9FB7F2 to 0x9FFEE0 (includes all interrupt handlers)
+; Boot routines: flash update, hardware init, display, FDC, etc.
+; Addresses 0x9FB7F2 to 0x9FC8C1
 ;
 ; Interrupt handler addresses within this range:
 ;   INTT1_HANDLER  = 0x9FB7F2 (timer 1 interrupt)
 ;   NMI_HANDLER    = 0x9FB7FB
+; -----------------------------------------------------------------------------
+	binclude "includes/bootcode_pre_lzss.bin"
+
+
+; =============================================================================
+; LZSS DECOMPRESSOR (SLIDE4K FORMAT)
+; =============================================================================
+; The KN5000 bootloader includes an LZSS decompressor for handling compressed
+; firmware data. This implementation uses the standard SLIDE4K format:
+;   - 4KB sliding window (0x1000 bytes)
+;   - 12-bit window offset (masked with 0x0FFF)
+;   - 4-bit match length (stored in high nibble of second byte)
+;   - Flag byte determines literal (bit=1) vs back-reference (bit=0)
+;   - Window pre-filled with zeros for first 4078 (0xFEE) bytes
+;
+; RAM Variables Used:
+;   0x0C20: Expected output size
+;   0x0C24: Current output position
+;   0x0C28: Source ROM address pointer
+;   0x0C2C: Sector read buffer pointer
+;   0x0C30: Current sector X position
+;   0x0C32: Current sector Y position
+;   0x0C34: Sector offset for display
+;   0x0C36: Output byte counter (0-3 for 32-bit writes)
+;
+; Stack Frame (XSP+offset):
+;   +0x04: Flag byte (shifted right each iteration)
+;   +0x06: Copy counter for back-reference
+;   +0x08: Match length
+;   +0x0A: Window write position
+;   +0x0C: Window base address (copy of +0x10)
+;   +0x10: Window buffer pointer (from malloc)
+; =============================================================================
+
+	ORG 09FC8C2h
+; -----------------------------------------------------------------------------
+; LZSS_ReadByte - Read next byte from compressed input stream
+; Address: 0xFFC8C2
+; Returns: HL = byte read (or 0xFFFF if end of data)
+;
+; Handles sector buffering - reads 0x2400 bytes per sector from table_data ROM
+; -----------------------------------------------------------------------------
+LZSS_ReadByte:
+	db	02Eh				; PUSH IZ
+	db	0E1h, 024h, 00Ch, 020h		; LD XWA, (0x0C24) - current position
+	db	0E1h, 020h, 00Ch, 0F0h		; CP XWA, (0x0C20) - compare with expected size
+	db	067h, 005h			; JR C, .not_eof
+	db	033h, 0FFh, 0FFh		; LD HL, 0xFFFF - return EOF
+	db	068h, 061h			; JR T, .exit
+.not_eof:
+	; Check if need to read next sector
+	db	0F2h, 0A4h, 099h, 000h, 030h	; LDA XWA, 0x0099A4
+	db	0E8h, 0C8h, 000h, 090h, 000h, 000h	; ADD XWA, 0x00009000
+	db	0E1h, 02Ch, 00Ch, 0F0h		; CP XWA, (0x0C2C) - buffer limit
+	db	06Eh, 041h			; JR NZ, .read_byte
+	; Need to read next sector
+	db	0D1h, 030h, 00Ch, 060h		; INCW 0, (0x0C30) - next sector X
+	db	0D1h, 030h, 00Ch, 020h		; LD WA, (0x0C30)
+	db	0D1h, 032h, 00Ch, 021h		; LD BC, (0x0C32)
+	db	0DAh, 0AEh			; LD DE, 6 - sector size index
+	db	01Dh, 09Ah, 0CDh, 0FFh		; CALL 0xFFCD9A (display progress)
+	db	0DEh, 0A8h			; LD IZ, 0
+.read_sectors:
+	db	0D1h, 034h, 00Ch, 020h		; LD WA, (0x0C34)
+	db	0E8h, 012h			; EXTZ XWA
+	db	031h, 000h, 024h		; LD BC, 0x2400 - sector size
+	db	0DEh, 041h			; MUL XBC, IZ
+	db	042h, 0A4h, 099h, 000h, 000h	; LD XDE, 0x000099A4 - buffer base
+	db	0E9h, 082h			; ADD XDE, XBC
+	db	031h, 012h, 000h		; LD BC, 0x0012
+	db	01Eh, 083h, 0F6h		; CALR 0xFFBF92 (read sector data)
+	db	0D1h, 034h, 00Ch, 038h, 012h, 000h	; ADD (0x0C34), 0x0012
+	db	0DEh, 061h			; INC 1, IZ
+	db	0DEh, 0DCh			; CP IZ, 4
+	db	067h, 0DCh			; JR C, .read_sectors
+	db	0F2h, 0A4h, 099h, 000h, 030h	; LDA XWA, 0x0099A4
+	db	0F1h, 02Ch, 00Ch, 060h		; LD (0x0C2C), XWA - reset buffer pointer
+.read_byte:
+	db	0E1h, 02Ch, 00Ch, 020h		; LD XWA, (0x0C2C) - get buffer pointer
+	db	0F5h, 0E0h, 031h		; LDA XBC, XWA+ (post-increment read)
+	db	0F1h, 02Ch, 00Ch, 060h		; LD (0x0C2C), XWA - save updated pointer
+	db	081h, 027h			; LD L, (XBC) - read byte into L
+	db	0DBh, 012h			; EXTZ HL - zero-extend to HL
+.exit:
+	db	04Eh				; POP IZ
+	db	00Eh				; RET
+
+; -----------------------------------------------------------------------------
+; LZSS_OutputByte - Write decompressed byte to output buffer
+; Address: 0xFFC935
+; Input: A = byte to output
+;
+; Buffers 4 bytes and writes as 32-bit word to destination
+; -----------------------------------------------------------------------------
+	ORG 09FC935h
+LZSS_OutputByte:
+	db	0C1h, 036h, 00Ch, 025h		; LD E, (0x0C36) - output index
+	db	0DAh, 012h			; EXTZ DE
+	db	0F1h, 00Ah, 00Ch, 031h		; LDA XBC, 0x0C0A - temp buffer
+	db	0EAh, 012h			; EXTZ XDE
+	db	0E9h, 082h			; ADD XDE, XBC
+	db	0B2h, 041h			; LD (XDE), A - store byte
+	db	0C1h, 036h, 00Ch, 021h		; LD A, (0x0C36)
+	db	0C9h, 08Dh			; LD E, A
+	db	0C9h, 061h			; INC 1, A
+	db	0F1h, 036h, 00Ch, 041h		; LD (0x0C36), A
+	db	0CDh, 0DBh			; CP E, 3 - check if 4 bytes buffered
+	db	06Eh, 018h			; JR NZ, .not_full
+	; Flush 4-byte buffer to destination
+	db	0E1h, 028h, 00Ch, 020h		; LD XWA, (0x0C28) - dest ptr
+	db	0F5h, 0E2h, 032h		; LDA XDE, XWA+ (post-increment)
+	db	0F1h, 028h, 00Ch, 060h		; LD (0x0C28), XWA
+	db	0A1h, 021h			; LD XBC, (XBC) - load 4 bytes from buffer
+	db	0EAh, 088h			; LD XWA, XDE
+	db	01Dh, 0D7h, 0BCh, 0FFh		; CALL 0xFFBCD7 (write to dest)
+	db	0F1h, 036h, 00Ch, 000h, 000h	; LD (0x0C36), 0x00 - reset index
+.not_full:
+	db	0E8h, 0A9h			; LD XWA, 1
+	db	0E1h, 024h, 00Ch, 088h		; ADD (0x0C24), XWA - increment output pos
+	db	00Eh				; RET
+
+; -----------------------------------------------------------------------------
+; Routine at 0xFFC974 - alternate output handler
+; Used when writing to a different buffer (0x0C0E instead of 0x0C0A)
+; -----------------------------------------------------------------------------
+	ORG 09FC974h
+LZSS_OutputByte_Alt:
+	db	0C1h, 036h, 00Ch, 023h		; LD C, (0x0C36)
+	db	0D9h, 012h			; EXTZ BC
+	db	0F1h, 00Eh, 00Ch, 032h		; LDA XDE, 0x0C0E
+	db	0E9h, 012h			; EXTZ XBC
+	db	0EAh, 081h			; ADD XBC, XDE
+	db	0B1h, 041h			; LD (XBC), A
+	db	0C1h, 036h, 00Ch, 021h		; LD A, (0x0C36)
+	db	0C9h, 08Bh			; LD C, A
+	db	0C9h, 061h			; INC 1, A
+	db	0F1h, 036h, 00Ch, 041h		; LD (0x0C36), A
+	db	0CBh, 0D9h			; CP C, 1
+	db	06Eh, 018h			; JR NZ, .not_full
+	db	0E1h, 038h, 00Ch, 020h		; LD XWA, (0x0C38)
+	db	0F5h, 0E1h, 031h		; LDA XBC, XWA+
+	db	0F1h, 038h, 00Ch, 060h		; LD (0x0C38), XWA
+	db	092h, 022h			; LD DE, (XDE)
+	db	0D8h, 0A9h			; LD WA, 1
+	db	01Dh, 003h, 0B9h, 0FFh		; CALL 0xFFB903
+	db	0F1h, 036h, 00Ch, 000h, 000h	; LD (0x0C36), 0x00
+.not_full:
+	db	0E8h, 0A9h			; LD XWA, 1
+	db	0E1h, 024h, 00Ch, 088h		; ADD (0x0C24), XWA
+	db	00Eh				; RET
+
+; -----------------------------------------------------------------------------
+; Routine at 0xFFC9B3 - LZSS header parsing helper for flash update
+; Sets up source address (0x3E0000 = Table Data ROM) and validates header
+; -----------------------------------------------------------------------------
+	ORG 09FC9B3h
+LZSS_ParseHeader:
+	db	0EFh, 06Eh			; DEC 6, XSP (allocate 6 bytes)
+	db	02Eh				; PUSH IZ
+	db	0F1h, 036h, 00Ch, 000h, 000h	; LD (0x0C36), 0x00
+	db	0F2h, 000h, 000h, 030h, 030h	; LDA XWA, 0x300000
+	db	0E8h, 0C8h, 000h, 000h, 00Eh, 000h  ; ADD XWA, 0x000E0000 (XWA = 0x3E0000)
+	db	0F1h, 038h, 00Ch, 060h		; LD (0x0C38), XWA - store source ptr
+	db	040h, 000h, 000h, 002h, 000h	; LD XWA, 0x00020000
+	db	0E1h, 020h, 00Ch, 088h		; ADD (0x0C20), XWA
+	db	0DEh, 0A8h			; LD IZ, 0
+.read_header:
+	db	01Eh, 0EAh, 0FEh		; CALR LZSS_ReadByte
+	db	0DEh, 089h			; LD BC, IZ
+	db	0E9h, 012h			; EXTZ XBC
+	db	0BFh, 002h, 030h		; LDA XWA, XSP+0x02
+	db	0E8h, 08Ah			; LD XDE, XWA
+	db	0E9h, 082h			; ADD XDE, XBC
+	db	0B2h, 047h			; LD (XDE), L
+	db	0DEh, 061h			; INC 1, IZ
+	db	0DEh, 0DEh			; CP IZ, 6
+	db	067h, 0EAh			; JR C, .read_header
+	; Validate header against expected signature
+	db	00Bh, 005h, 000h		; PUSH 0x0005
+	db	00Bh, 0FFh, 000h		; PUSH 0x00FF
+	db	00Bh, 050h, 0A1h		; PUSH 0xA150 (expected signature addr)
+	db	038h				; PUSH XWA
+	db	01Dh, 0DCh, 0FBh, 0FFh		; CALL 0xFFFBDC (memcmp)
+	db	0EFh, 0C8h, 00Ah, 000h, 000h, 000h	; ADD XSP, 0x0A
+	db	0DBh, 0D8h			; CP HL, 0
+	db	066h, 005h			; JR Z, .valid
+	db	033h, 0FFh, 0FFh		; LD HL, 0xFFFF
+	db	068h, 044h			; JR T, .exit
+.valid:
+	; Output the 6 header bytes via OutputByte_Alt
+	db	0DEh, 0A8h			; LD IZ, 0
+.read_more:
+	db	0DEh, 089h			; LD BC, IZ
+	db	0E9h, 012h			; EXTZ XBC
+	db	0BFh, 002h, 030h		; LDA XWA, XSP+0x02
+	db	0E9h, 080h			; ADD XWA, XBC
+	db	080h, 021h			; LD A, (XWA)
+	db	0D8h, 012h			; EXTZ WA
+	db	01Eh, 05Ah, 0FFh		; CALR LZSS_OutputByte_Alt
+	db	0DEh, 061h			; INC 1, IZ
+	db	0DEh, 0DEh			; CP IZ, 6
+	db	067h, 0EAh			; JR C, .read_more
+	; Set display coordinates for progress indicator
+	db	0F1h, 030h, 00Ch, 002h, 02Ah, 000h  ; LD (0x0C30), 0x002A
+	db	0F1h, 032h, 00Ch, 002h, 0C8h, 000h  ; LD (0x0C32), 0x00C8
+	; Check if already at target size
+	db	0E1h, 024h, 00Ch, 020h		; LD XWA, (0x0C24)
+	db	0E1h, 020h, 00Ch, 0F0h		; CP XWA, (0x0C20)
+	db	06Fh, 014h			; JR NC, .exit (already done)
+	; Copy remaining raw bytes
+.decompress_loop:
+	db	01Eh, 089h, 0FEh		; CALR LZSS_ReadByte
+	db	0DBh, 012h			; EXTZ HL
+	db	0DBh, 088h			; LD WA, HL
+	db	01Eh, 034h, 0FFh		; CALR LZSS_OutputByte_Alt
+	db	0E1h, 024h, 00Ch, 020h		; LD XWA, (0x0C24)
+	db	0E1h, 020h, 00Ch, 0F0h		; CP XWA, (0x0C20)
+	db	067h, 0ECh			; JR C, .decompress_loop
+.done:
+	db	0DBh, 0A8h			; LD HL, 0 (success)
+.exit:
+	db	04Eh				; POP IZ
+	db	0EFh, 066h			; INC 6, XSP
+	db	00Eh				; RET
+
+; -----------------------------------------------------------------------------
+; LZSS_Decompress - Main SLIDE4K decompression routine
+; Address: 0xFFCA50
+;
+; Decompresses LZSS-encoded data from table_data ROM to RAM.
+; Uses standard SLIDE4K format with 4KB window.
+; -----------------------------------------------------------------------------
+	ORG 09FCA50h
+LZSS_Decompress:
+	; === Prologue: Allocate stack frame ===
+	db	0BFh, 0F0h, 037h		; LDA XSP, XSP+0xF0 (allocate 16 bytes)
+	db	03Eh				; PUSH XIZ
+
+	; === Allocate 4KB sliding window buffer ===
+	db	00Bh, 000h, 010h		; PUSH 0x1000 (4KB)
+	db	01Dh, 056h, 0FBh, 0FFh		; CALL 0xFFFB56 (malloc)
+	db	0EFh, 062h			; INC 2, XSP (pop arg)
+	db	0BFh, 010h, 063h		; LD (XSP+0x10), XHL - save window ptr
+	db	0AFh, 010h, 020h		; LD XWA, (XSP+0x10)
+	db	0BFh, 00Ch, 060h		; LD (XSP+0x0C), XWA - copy to working ptr
+
+	; === Pre-fill window with zeros (positions 0 to 0x0FED) ===
+	db	0E8h, 0A8h			; LD XWA, 0
+	db	0F1h, 024h, 00Ch, 060h		; LD (0x0C24), XWA - window fill index
+.prefill_loop:
+	db	0E1h, 024h, 00Ch, 020h		; LD XWA, (0x0C24)
+	db	0AFh, 010h, 021h		; LD XBC, (XSP+0x10) - window base
+	db	0E8h, 081h			; ADD XBC, XWA
+	db	0B1h, 000h, 000h		; LD (XBC), 0x00
+	db	0E1h, 024h, 00Ch, 020h		; LD XWA, (0x0C24)
+	db	0E8h, 061h			; INC 1, XWA
+	db	0F1h, 024h, 00Ch, 060h		; LD (0x0C24), XWA
+	db	0E8h, 0CFh, 0EEh, 00Fh, 000h, 000h	; CP XWA, 0x00000FEE
+	db	067h, 0E2h			; JR C, .prefill_loop
+
+	; === Initialize decompression state ===
+	db	0BFh, 00Ah, 002h, 0EEh, 00Fh	; LD (XSP+0x0A), 0x0FEE - window write pos
+	db	0BFh, 004h, 002h, 000h, 000h	; LD (XSP+0x04), 0x0000 - flag byte
+	db	0F1h, 036h, 00Ch, 000h, 000h	; LD (0x0C36), 0x00 - output counter
+	db	0E8h, 0A8h			; LD XWA, 0
+	db	0F1h, 024h, 00Ch, 060h		; LD (0x0C24), XWA - output position
+
+	; === Setup source and display parameters ===
+	db	0F2h, 0A4h, 099h, 000h, 030h	; LDA XWA, 0x0099A4 - sector buffer
+	db	0F1h, 02Ch, 00Ch, 060h		; LD (0x0C2C), XWA
+	db	040h, 000h, 000h, 080h, 000h	; LD XWA, 0x00800000 - source ROM base
+	db	0F1h, 028h, 00Ch, 060h		; LD (0x0C28), XWA
+	db	0F1h, 030h, 00Ch, 002h, 032h, 000h	; LD (0x0C30), 0x0032 - display X
+	db	0F1h, 032h, 00Ch, 002h, 0B4h, 000h	; LD (0x0C32), 0x00B4 - display Y
+	db	030h, 032h, 000h		; LD WA, 0x0032
+	db	031h, 0B4h, 000h		; LD BC, 0x00B4
+	db	0DAh, 0AEh			; LD DE, 6
+	db	01Dh, 09Ah, 0CDh, 0FFh		; CALL 0xFFCD9A (init display)
+
+	; === Read expected decompressed size (3 bytes, little-endian) ===
+	db	040h, 0E8h, 003h, 000h, 000h	; LD XWA, 0x000003E8 - initial guess
+	db	0F1h, 020h, 00Ch, 060h		; LD (0x0C20), XWA
+	db	0F1h, 034h, 00Ch, 002h, 024h, 000h	; LD (0x0C34), 0x0024
+
+	; === Pre-read 4 sectors for initial buffer fill ===
+	db	0D7h, 0FAh, 0A8h		; LD QIZ, 0
+.preread_loop:
+	db	0D1h, 034h, 00Ch, 020h		; LD WA, (0x0C34)
+	db	0E8h, 012h			; EXTZ XWA
+	db	031h, 000h, 024h		; LD BC, 0x2400
+	db	0D7h, 0FAh, 041h		; MUL XBC, QIZ
+	db	042h, 0A4h, 099h, 000h, 000h	; LD XDE, 0x000099A4
+	db	0E9h, 082h			; ADD XDE, XBC
+	db	031h, 012h, 000h		; LD BC, 0x0012
+	db	01Eh, 09Eh, 0F4h		; CALR 0xFFBF92
+	db	0D1h, 034h, 00Ch, 038h, 012h, 000h	; ADD (0x0C34), 0x0012
+	db	0D7h, 0FAh, 061h		; INC 1, QIZ
+	db	0D7h, 0FAh, 0DCh		; CP QIZ, 4
+	db	067h, 0D9h			; JR C, .preread_loop
+
+	; === Read 8 header bytes ===
+	db	0D7h, 0FAh, 0A8h		; LD QIZ, 0
+.read_header_loop:
+	db	01Eh, 0BAh, 0FDh		; CALR LZSS_ReadByte
+	db	0D7h, 0FAh, 061h		; INC 1, QIZ
+	db	0D7h, 0FAh, 0CFh, 008h, 000h	; CP QIZ, 0x0008
+	db	067h, 0F3h			; JR C, .read_header_loop
+
+	; === Parse decompressed size (3 bytes) ===
+	db	01Eh, 0ADh, 0FDh		; CALR LZSS_ReadByte
+	db	0EBh, 012h			; EXTZ XHL
+	db	0EBh, 0ECh, 000h		; SLA 0, XHL (shift left for alignment)
+	db	0F1h, 020h, 00Ch, 063h		; LD (0x0C20), XHL
+	db	01Eh, 0A1h, 0FDh		; CALR LZSS_ReadByte
+	db	0DBh, 0EEh, 008h		; SLL 8, HL
+	db	0EBh, 012h			; EXTZ XHL
+	db	0E1h, 020h, 00Ch, 08Bh		; ADD (0x0C20), XHL
+	db	01Eh, 095h, 0FDh		; CALR LZSS_ReadByte
+	db	0EBh, 012h			; EXTZ XHL
+	db	0E1h, 020h, 00Ch, 020h		; LD XWA, (0x0C20)
+	db	0EBh, 080h			; ADD XWA, XHL
+	db	0F1h, 020h, 00Ch, 060h		; LD (0x0C20), XWA
+	db	0E1h, 024h, 00Ch, 0F8h		; CP (0x0C24), XWA
+	db	07Fh, 0DBh, 000h		; JRL NC, .done - already past size
+
+; -----------------------------------------------------------------------------
+; Main decompression loop
+; Processes flag bytes and handles literal/back-reference encoding
+; -----------------------------------------------------------------------------
+.decompress_loop:
+	; === Shift flag byte and check if need new flags ===
+	db	09Fh, 004h, 07Fh		; SRLW (XSP+0x04) - shift flags right
+	db	09Fh, 004h, 020h		; LD WA, (XSP+0x04)
+	db	0D8h, 033h, 008h		; BIT 8, WA - check sentinel bit
+	db	06Eh, 014h			; JR NZ, .flags_valid
+
+	; === Read new flag byte ===
+	db	01Eh, 074h, 0FDh		; CALR LZSS_ReadByte
+	db	0DBh, 08Eh			; LD IZ, HL
+	db	0DEh, 0CFh, 0FFh, 0FFh		; CP IZ, 0xFFFF - check for EOF
+	db	076h, 0C4h, 000h		; JRL Z, .done
+	db	0BFh, 004h, 056h		; LD (XSP+0x04), IZ - store flags
+	db	09Fh, 004h, 03Eh, 000h, 0FFh	; OR (XSP+0x04), 0xFF00 - set sentinel
+
+.flags_valid:
+	; === Check bit 0: 1=literal, 0=back-reference ===
+	db	09Fh, 004h, 020h		; LD WA, (XSP+0x04)
+	db	0D8h, 033h, 000h		; BIT 0, WA
+	db	066h, 02Bh			; JR Z, .back_reference
+
+	; === LITERAL BYTE: Read and output directly ===
+	db	01Eh, 058h, 0FDh		; CALR LZSS_ReadByte
+	db	0DBh, 08Eh			; LD IZ, HL
+	db	0DEh, 0CFh, 0FFh, 0FFh		; CP IZ, 0xFFFF
+	db	076h, 0A8h, 000h		; JRL Z, .done
+	db	0C7h, 0F8h, 089h		; LD A, IZL - get byte value
+	db	0D8h, 012h			; EXTZ WA
+	db	01Eh, 0BAh, 0FDh		; CALR LZSS_OutputByte
+	; Store byte in sliding window
+	db	09Fh, 00Ah, 021h		; LD BC, (XSP+0x0A) - window position
+	db	09Fh, 00Ah, 061h		; INCW 1, (XSP+0x0A)
+	db	0E9h, 012h			; EXTZ XBC
+	db	0AFh, 010h, 081h		; ADD XBC, (XSP+0x10) - add window base
+	db	0C7h, 0F8h, 089h		; LD A, IZL
+	db	0B1h, 041h			; LD (XBC), A - store in window
+	db	09Fh, 00Ah, 03Ch, 0FFh, 00Fh	; AND (XSP+0x0A), 0x0FFF - wrap window pos
+	db	068h, 07Eh			; JR T, .check_done
+
+.back_reference:
+	; === BACK-REFERENCE: Read offset and length ===
+	; First byte: low 8 bits of offset
+	db	01Eh, 02Dh, 0FDh		; CALR LZSS_ReadByte
+	db	0D7h, 0FAh, 09Bh		; LD QIZ, HL - save low offset
+	db	0D7h, 0FAh, 0CFh, 0FFh, 0FFh	; CP QIZ, 0xFFFF
+	db	066h, 07Ch			; JR Z, .done
+
+	; Second byte: high 4 bits of offset + 4-bit length
+	db	01Eh, 020h, 0FDh		; CALR LZSS_ReadByte
+	db	0BFh, 008h, 053h		; LD (XSP+0x08), HL
+	db	09Fh, 008h, 03Fh, 0FFh, 0FFh	; CP (XSP+0x08), 0xFFFF
+	db	066h, 06Fh			; JR Z, .done
+
+	; Combine offset: (high_nibble << 8) | low_byte
+	db	09Fh, 008h, 021h		; LD BC, (XSP+0x08)
+	db	0D9h, 0CCh, 0F0h, 000h		; AND BC, 0x00F0 - extract high nibble
+	db	0D9h, 0EEh, 004h		; SLL 4, BC - shift to bits 11-8
+	db	0D7h, 0FAh, 088h		; LD WA, QIZ
+	db	0D9h, 0E0h			; OR WA, BC - combine with low byte
+	db	0D7h, 0FAh, 098h		; LD QIZ, WA - QIZ = 12-bit offset
+
+	; Extract length: (byte & 0x0F) + 2
+	db	09Fh, 008h, 03Ch, 00Fh, 000h	; AND (XSP+0x08), 0x000F - extract length
+	db	09Fh, 008h, 062h		; INCW 2, (XSP+0x08) - length + 2
+
+	; === Copy from sliding window ===
+	db	0BFh, 006h, 002h, 000h, 000h	; LD (XSP+0x06), 0x0000 - copy counter
+	db	09Fh, 008h, 03Fh, 000h, 000h	; CP (XSP+0x08), 0x0000 - check length
+	db	067h, 03Eh			; JR C, .check_done
+
+.copy_loop:
+	; Calculate source position in window
+	db	0D7h, 0FAh, 088h		; LD WA, QIZ - get offset
+	db	09Fh, 006h, 080h		; ADD WA, (XSP+0x06) - add counter
+	db	0D8h, 0CCh, 0FFh, 00Fh		; AND WA, 0x0FFF - wrap to window
+	db	0E8h, 012h			; EXTZ XWA
+	db	0AFh, 00Ch, 080h		; ADD XWA, (XSP+0x0C) - add window base
+	db	080h, 021h			; LD A, (XWA) - read from window
+	db	0C7h, 0F8h, 099h		; LD IZL, A
+	db	0DEh, 012h			; EXTZ IZ
+	db	0C7h, 0F8h, 089h		; LD A, IZL
+	db	0D8h, 012h			; EXTZ WA
+	db	01Eh, 045h, 0FDh		; CALR LZSS_OutputByte
+
+	; Store byte in sliding window at write position
+	db	09Fh, 00Ah, 021h		; LD BC, (XSP+0x0A)
+	db	09Fh, 00Ah, 061h		; INCW 1, (XSP+0x0A)
+	db	0E9h, 012h			; EXTZ XBC
+	db	0AFh, 00Ch, 081h		; ADD XBC, (XSP+0x0C)
+	db	0C7h, 0F8h, 089h		; LD A, IZL
+	db	0B1h, 041h			; LD (XBC), A
+	db	09Fh, 00Ah, 03Ch, 0FFh, 00Fh	; AND (XSP+0x0A), 0x0FFF - wrap position
+
+	; Increment counter and check if done
+	db	09Fh, 006h, 061h		; INCW 1, (XSP+0x06)
+	db	09Fh, 006h, 020h		; LD WA, (XSP+0x06)
+	db	09Fh, 008h, 0F0h		; CP WA, (XSP+0x08) - compare with length
+	db	063h, 0C2h			; JR ULE, .copy_loop
+
+.check_done:
+	; === Check if decompression complete ===
+	db	0E1h, 024h, 00Ch, 020h		; LD XWA, (0x0C24)
+	db	0E1h, 020h, 00Ch, 0F0h		; CP XWA, (0x0C20)
+	db	077h, 025h, 0FFh		; JRL C, .decompress_loop
+
+.done:
+	; === Epilogue: Free window buffer and return ===
+	db	0AFh, 010h, 020h		; LD XWA, (XSP+0x10)
+	db	038h				; PUSH XWA
+	db	01Dh, 0DDh, 0FCh, 0FFh		; CALL 0xFFFCDD (free)
+	db	0EFh, 064h			; INC 4, XSP
+	db	05Eh				; POP XIZ
+	db	0BFh, 010h, 037h		; LDA XSP, XSP+0x10 (deallocate frame)
+	db	00Eh				; RET
+
+; -----------------------------------------------------------------------------
+; Remaining boot routines: flash update, display, FDC, etc.
+; Addresses 0x9FCC2A to 0x9FFEE0
+;
+; Interrupt handler addresses within this range:
 ;   INTTC3_HANDLER = 0x9FEA9D
 ;   INT4_HANDLER   = 0x9FEAB2
 ;   INTA_HANDLER   = 0x9FF229
 ;   INTTX1_HANDLER = 0x9FF2AE
 ;   INTRX1_HANDLER = 0x9FF2D0
-;
-; Notable routines:
-;   LZSS_Decompress = 0x9FCA50 (SLIDE4K decompressor, 4KB window)
 ; -----------------------------------------------------------------------------
-	binclude "includes/bootcode_post_clearram.bin"
+	binclude "includes/bootcode_post_lzss.bin"
 
 	ORG 09FFEE0h
 RESET_HANDLER:
