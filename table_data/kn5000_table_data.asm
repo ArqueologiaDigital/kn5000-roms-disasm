@@ -2437,24 +2437,174 @@ Boot_Init_Progress_Display:
 	RET				; 0e
 
 ; -----------------------------------------------------------------------------
+; Boot_Update_Flash_ByType - Main disk type dispatcher
+; Address: 0x9FC40B (boot-time: 0xFFC40B)
+;
+; Entry: A = disk type (1-8)
+; Exit: None
+;
+; Dispatches to appropriate flash update handler based on disk type.
+; Uses jump table at 0xFFA140 with base address 0xFFC44A.
+;
+; Disk types:
+;   1-2: Program ROM update (0x800000, 0x900000)
+;   3-4: Program ROM update (alternate)
+;   5: Custom Data update (0x300000)
+;   6: HDAE5000 update (0x280000)
+;   7: Sector erase mode
+;   8: Invalid (shows error)
+; -----------------------------------------------------------------------------
+Boot_Update_Flash_ByType:
+	db	0EFh, 06Ah		; DEC 2, XSP - allocate 2 bytes
+	db	0B7h, 041h		; LD (XSP), A - save disk type
+	db	00Bh, 008h, 000h	; PUSH 0008h
+	db	00Bh, 002h, 000h	; PUSH 0002h
+	LD	XWA, 000FFA3BEh		; 40 be a3 ff 00 - "Select disk type" message
+	LD	BC, 0030h		; 31 30 00
+	LD	DE, 00A0h		; 32 a0 00
+	db	01Dh, 0FBh, 0CCh, 0FFh	; CALL Display_DrawText
+
+	; Validate disk type and dispatch
+	db	087h, 021h		; LD A, (XSP) - get disk type
+	EXTZ	WA			; d8 12
+	db	0D8h, 069h		; DEC 1, WA - make 0-based
+	CP	WA, 0			; d8 d8
+	db	071h, 0B6h, 000h	; JRL LT, Boot_Show_Unknown_Error
+	db	0D8h, 0DFh		; CP WA, 7
+	db	07Ah, 0B1h, 000h	; JRL GT, Boot_Show_Unknown_Error
+
+	; Jump table dispatch
+	db	0D8h, 080h		; ADD WA, WA - word index
+	db	0F2h, 040h, 0A1h, 0FFh, 034h	; LDA XIX, 0FFA140h - jump table
+	db	0D3h, 007h, 0F0h, 0E0h, 020h	; LD WA, (XIX+WA) - get offset
+	db	0F2h, 04Ah, 0C4h, 0FFh, 034h	; LDA XIX, 0FFC44Ah - base address
+	db	0F3h, 007h, 0F0h, 0E0h, 0D8h	; JP T, XIX+WA - jump to handler
+
+; Jump table handlers (embedded at 0x9FC44A = base)
+.handler_type1:				; Type 1: Program ROM bank 1
+	db	01Eh, 07Bh, 0FFh	; CALR Boot_Init_Progress_Display
+	db	01Eh, 004h, 0FFh	; CALR Boot_Display_Update_Message
+	LD	WA, 0024h		; 30 24 00 - starting sector
+	LD	XBC, 000800000h		; 41 00 00 80 00 - dest: Program ROM low
+	db	01Eh, 086h, 0FCh	; CALR Flash_Write_Sectors
+	LD	WA, 2			; d8 aa - key code
+	db	01Eh, 00Ah, 0FFh	; CALR Boot_Wait_For_Key
+	LD	WA, 0024h		; 30 24 00
+	LD	XBC, 000900000h		; 41 00 00 90 00 - dest: Program ROM high
+	JR	T, .common_write	; 68 1e
+
+.handler_type2:				; Type 2: Program ROM bank 2
+	db	01Eh, 05Bh, 0FFh	; CALR Boot_Init_Progress_Display
+	db	01Eh, 0E4h, 0FEh	; CALR Boot_Display_Update_Message
+	LD	WA, 0024h		; 30 24 00
+	LD	XBC, 000800000h		; 41 00 00 80 00
+	db	01Eh, 066h, 0FCh	; CALR Flash_Write_Sectors
+	LD	WA, 4			; d8 ac - key code
+	db	01Eh, 0EAh, 0FEh	; CALR Boot_Wait_For_Key
+	LD	WA, 0024h		; 30 24 00
+	LD	XBC, 000900000h		; 41 00 00 90 00
+
+.common_write:
+	db	01Eh, 056h, 0FCh	; CALR Flash_Write_Sectors
+	JR	T, .done		; 68 55
+
+.handler_type5:				; Type 5: Custom Data
+	LD	WA, 1			; d8 a9 - flash bank
+	db	01Dh, 0DBh, 0BBh, 0FFh	; CALL Flash_SetBank_16bit (0xFFBBDB)
+	db	01Eh, 0BEh, 0FEh	; CALR Boot_Display_Update_Message
+	db	00Bh, 000h, 008h	; PUSH 0800h - sector count
+	LD	WA, 1			; d8 a9 - flash bank
+	LD	BC, 0024h		; 31 24 00 - starting sector
+	LD	XDE, 000300000h		; 42 00 00 30 00 - Custom Data flash
+	JR	T, .write_16bit		; 68 16
+
+.handler_type6:				; Type 6: HDAE5000
+	LD	WA, 2			; d8 aa - flash bank
+	db	01Dh, 0DBh, 0BBh, 0FFh	; CALL Flash_SetBank_16bit
+	db	01Eh, 0A6h, 0FEh	; CALR Boot_Display_Update_Message
+	db	00Bh, 000h, 004h	; PUSH 0400h - sector count
+	LD	WA, 2			; d8 aa - flash bank
+	LD	BC, 0024h		; 31 24 00
+	LD	XDE, 000280000h		; 42 00 00 28 00 - HDAE5000 flash
+
+.write_16bit:
+	db	01Eh, 055h, 0FDh	; CALR Flash_Write_Sectors_16bit
+	JR	T, .done		; 68 22
+
+.handler_type7:				; Type 7: Sector erase
+	LD	WA, 1			; d8 a9 - flash bank
+	LD	XBC, 0003FFFFFh		; 41 ff ff 3f 00 - end address
+	db	01Dh, 017h, 0BAh, 0FFh	; CALL Flash_SectorErase_16bit (0xFFBA17)
+	db	01Eh, 0FAh, 0FEh	; CALR Boot_Init_Progress_Display
+	db	01Eh, 083h, 0FEh	; CALR Boot_Display_Update_Message
+	db	01Eh, 07Ch, 005h	; CALR 0x9FCA50 (unknown routine)
+	db	01Eh, 0DCh, 004h	; CALR 0x9FC9B3 (unknown routine)
+	JR	T, .done		; 68 09
+
+.handler_type8:				; Type 8: Extended erase
+	db	01Eh, 0ECh, 0FEh	; CALR Boot_Init_Progress_Display
+	db	01Eh, 075h, 0FEh	; CALR Boot_Display_Update_Message
+	db	01Eh, 06Eh, 005h	; CALR 0x9FCA50
+
+.done:
+	db	0EFh, 062h		; INC 2, XSP - deallocate
+	RET				; 0e
+
+; -----------------------------------------------------------------------------
+; Boot_Show_Unknown_Error - Display error for invalid disk type and halt
+; Address: 0x9FC4E5 (boot-time: 0xFFC4E5)
+;
+; Entry: None
+; Exit: Never returns (infinite loop)
+;
+; Displays an error message and halts the system.
+; -----------------------------------------------------------------------------
+Boot_Show_Unknown_Error:
+	db	00Bh, 008h, 000h	; PUSH 0008h
+	db	00Bh, 002h, 000h	; PUSH 0002h
+	LD	XWA, 000FFAFC6h		; 40 c6 af ff 00 - error message
+	LD	BC, 0030h		; 31 30 00
+	LD	DE, 00A0h		; 32 a0 00
+	db	01Dh, 0FBh, 0CCh, 0FFh	; CALL Display_DrawText
+	db	0EFh, 062h		; INC 2, XSP
+.halt:
+	JR	T, .halt		; 68 fe - infinite loop
+
+; -----------------------------------------------------------------------------
+; Boot_Delay_Loop - Simple delay counter
+; Address: 0x9FC4FE (boot-time: 0xFFC4FE)
+;
+; Entry: XWA = delay count
+; Exit: None
+;
+; Counts XBC from 0 to XWA for a simple delay.
+; -----------------------------------------------------------------------------
+Boot_Delay_Loop:
+	LD	XBC, 0			; e9 a8
+	db	0E8h, 0F1h		; CP XBC, XWA
+	db	0B0h, 0FFh		; RET NC - return if XBC >= XWA
+.loop:
+	db	0E9h, 061h		; INC 1, XBC
+	db	0E8h, 0F1h		; CP XBC, XWA
+	JR	C, .loop		; 67 fa
+	RET				; 0e
+
+; -----------------------------------------------------------------------------
 ; Remaining boot code routines
-; Address: 0x9FC40B onwards (boot-time: 0xFFC40B)
+; Address: 0x9FC50B onwards (boot-time: 0xFFC50B)
 ;
 ; Contains:
-;   - Boot_Update_Flash_ByType: Main disk type dispatch (218 bytes)
-;   - Boot_Show_Unknown_Error: Error for invalid disk type (25 bytes)
-;   - Boot_Delay_Loop: Simple delay (13 bytes)
-;   - Boot_LED_Animation: Progress LED cycling (73 bytes)
+;   - Boot_LED_Animation: Progress LED cycling (64 bytes)
+;   - Boot_LED_Blink_Bit2/3: LED toggle routines (28 bytes)
 ;   - Flash_ScanForErased: Scan for erased blocks (22 bytes)
 ;   - Flash_CheckErased: Verify block erased (11 bytes)
-;   - Flash_CompareRegions: Compare memory regions (48 bytes)
+;   - Flash_CompareRegions: Compare memory regions (132 bytes)
 ;   - Boot_Copy_RAM_to_CustomData: Copy to custom flash (82 bytes)
-;   - Boot_Copy_RAM_to_HDAE_Low: Copy to HDAE low (82 bytes)
-;   - Boot_Copy_RAM_to_HDAE_High: Copy to HDAE high (82 bytes)
+;   - Boot_Copy_RAM_to_HDAE: Copy to HDAE flash (164 bytes)
 ;   - Boot_Main_Entry: Main boot sequence (349 bytes)
 ;   - Boot_Recovery_Entry: Recovery mode (179 bytes)
 ; -----------------------------------------------------------------------------
-	binclude "includes/bootcode_post_fdc_part4.bin"
+	binclude "includes/bootcode_post_fdc_part5.bin"
 
 
 ; =============================================================================
