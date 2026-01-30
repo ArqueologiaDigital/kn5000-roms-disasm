@@ -1020,7 +1020,260 @@ Flash_SectorErase_16bit:
 	; The rest of this routine handles special boot block sectors
 	; This is complex sector layout handling for AM29F400B/AM29F800B
 	; Binary include for the remaining complex sector handling
-	binclude "includes/flash_sector_erase_16bit_cont.bin"
+	binclude "includes/flash_sector_erase_cont_part1.bin"
+
+
+; =============================================================================
+; 32-BIT FLASH PROGRAMMING ROUTINES
+; =============================================================================
+; These routines operate on the interleaved Table Data ROM using 32-bit bus access.
+; The ROM uses two interleaved 16-bit flash chips:
+;   - IC1 (odd bytes) and IC3 (even bytes)
+;
+; Address Translation (16-bit -> 32-bit):
+;   16-bit 0x5555 -> 32-bit 0x15554 (bit 16 set due to A16 routing)
+;   16-bit 0x2AAA -> 32-bit 0x0AAA8
+;
+; Data values use 32-bit interleaved format:
+;   16-bit 0xAA   -> 32-bit 0x00AA00AA (same byte to both chips)
+;   16-bit 0x55   -> 32-bit 0x00550055
+;   16-bit 0xF0   -> 32-bit 0x00F000F0
+; =============================================================================
+
+; -----------------------------------------------------------------------------
+; Flash_Reset_32bit - Reset Table Data ROM flash chips
+; Address: 0x9FBC2D (boot-time: 0xFFBC2D)
+;
+; Purpose: Send software reset command to both interleaved flash chips
+;
+; Entry: None
+; Exit: XWA = data read from base+0x6464 (completion cycle)
+;
+; Sequence:
+;   Write 0x00AA00AA to base+0x15554 (unlock 1)
+;   Write 0x00550055 to base+0x0AAA8 (unlock 2)
+;   Write 0x00F000F0 to base+0x15554 (reset command)
+;   Read any address to complete cycle
+; -----------------------------------------------------------------------------
+Flash_Reset_32bit:
+	LD	XDE, 00800000h			; Table Data ROM base address
+.wait_ready:
+	BIT	5, (01Ch)			; Wait for P3 bit 5 (flash ready)
+	JR	Z, .wait_ready
+
+	LD	XBC, XDE			; XBC = base
+	ADD	XBC, 00015554h			; XBC = base + unlock addr 1
+	LD	XWA, 00AA00AAh			; Unlock value 1 (both chips)
+	LD	(XBC), XWA			; Write unlock
+
+	LD	XBC, XDE			; Reset XBC
+	ADD	XBC, 0000AAA8h			; XBC = base + unlock addr 2
+	LD	XWA, 00550055h			; Unlock value 2 (both chips)
+	LD	(XBC), XWA			; Write unlock
+
+	LD	XBC, XDE			; Reset XBC
+	ADD	XBC, 00015554h			; XBC = base + command addr
+	LD	XWA, 00F000F0h			; Software reset command (both chips)
+	LD	(XBC), XWA			; Send reset
+
+	db	0E3h, 0E9h, 064h, 064h, 020h	; LD XWA, (XDE+6464h) - completion read
+	RET
+
+; -----------------------------------------------------------------------------
+; Flash_ReadID_32bit - Read Table Data ROM flash IDs
+; Address: 0x9FBC6A (boot-time: 0xFFBC6A)
+;
+; Purpose: Read manufacturer and device IDs from both flash chips
+;
+; Entry: None
+; Exit: XHL = device ID if valid, 0xFFFFFFFF if not recognized
+;
+; Validated Device IDs:
+;   0x22D622D6 - AM29F800B (both chips)
+;   0x22582258 - AM29LV800B (both chips)
+;
+; Manufacturer IDs:
+;   0x00010001 - AMD/Spansion (both chips)
+;   0x00040004 - Fujitsu (both chips)
+; -----------------------------------------------------------------------------
+Flash_ReadID_32bit:
+	db	0EFh, 068h			; DEC 0, XSP - allocate 8 bytes
+	PUSH	XIZ				; Save XIZ
+
+	LD	XWA, 0FFFFFFFFh			; Default: invalid
+	db	0BFh, 008h, 060h		; LD (XSP+08h), XWA - save default
+
+	EI	6				; Disable lower-priority interrupts
+
+	; Send ID read command sequence
+	LD	XWA, 00AA00AAh			; Unlock 1
+	db	0F2h, 054h, 055h, 081h, 060h	; LD (815554h), XWA
+
+	LD	XWA, 00550055h			; Unlock 2
+	db	0F2h, 0A8h, 0AAh, 080h, 060h	; LD (80AAA8h), XWA
+
+	LD	XWA, 00900090h			; ID read command
+	db	0F2h, 054h, 055h, 081h, 060h	; LD (815554h), XWA
+
+	; Read manufacturer ID from base address
+	db	0E2h, 000h, 000h, 080h, 020h	; LD XWA, (800000h)
+	db	0BFh, 004h, 060h		; LD (XSP+04h), XWA - save mfr ID
+
+	; Read device ID from base+4
+	LD	XWA, 00800000h
+	db	0A8h, 004h, 026h		; LD XIZ, (XWA+04h)
+
+	EI	0				; Re-enable interrupts
+
+	; Validate manufacturer ID
+	db	0AFh, 004h, 020h		; LD XWA, (XSP+04h) - get mfr ID
+	CP	XWA, 00010001h			; AMD?
+	JR	Z, .check_device
+	CP	XWA, 00040004h			; Fujitsu?
+	JR	NZ, .done
+
+.check_device:
+	CP	XIZ, 22D622D6h			; AM29F800B?
+	JR	Z, .valid_device
+	CP	XIZ, 22582258h			; AM29LV800B?
+	JR	NZ, .call_reset
+
+.valid_device:
+	db	0BFh, 008h, 066h		; LD (XSP+08h), XIZ - store device ID
+
+.call_reset:
+	CALR	Flash_Reset_32bit		; Exit ID mode
+
+.done:
+	db	0AFh, 008h, 023h		; LD XHL, (XSP+08h) - return device ID
+	POP	XIZ
+	db	0EFh, 060h			; INC 0, XSP - deallocate 8 bytes
+	RET
+
+; -----------------------------------------------------------------------------
+; Flash_ProgramWord_32bit - Program 32-bit word to Table Data ROM
+; Address: 0x9FBCD7 (boot-time: 0xFFBCD7)
+;
+; Entry: XWA = destination address
+;        XBC = data (32 bits, interleaved for both chips)
+; Exit: None
+;
+; Notes:
+;   - Skips programming if data = 0xFFFFFFFF (erased state)
+;   - Writes unlock sequence, then 0xA0 program command
+;   - Data is written directly to destination address
+; -----------------------------------------------------------------------------
+Flash_ProgramWord_32bit:
+	db	0EFh, 06Ch			; DEC 4, XSP - allocate 4 bytes
+	PUSH	XIZ				; Save XIZ
+
+	LD	XIZ, XBC			; XIZ = data
+	db	0BFh, 004h, 060h		; LD (XSP+04h), XWA - save dest addr
+
+	CP	XIZ, 0FFFFFFFFh			; Is data erased state?
+	JR	Z, .skip_program		; Yes, skip
+
+.wait_ready:
+	BIT	5, (01Ch)			; Wait for flash ready
+	JR	Z, .wait_ready
+
+	EI	6				; Disable lower-priority interrupts
+
+	; Send program command sequence
+	LD	XWA, 00AA00AAh			; Unlock 1
+	db	0F2h, 054h, 055h, 081h, 060h	; LD (815554h), XWA
+
+	LD	XWA, 00550055h			; Unlock 2
+	db	0F2h, 0A8h, 0AAh, 080h, 060h	; LD (80AAA8h), XWA
+
+	LD	XWA, 00A000A0h			; Program command
+	db	0F2h, 054h, 055h, 081h, 060h	; LD (815554h), XWA
+
+	; Write data to destination
+	db	0AFh, 004h, 020h		; LD XWA, (XSP+04h) - get dest addr
+	db	0B0h, 066h			; LD (XWA), XIZ - write data
+
+	EI	0				; Re-enable interrupts
+
+.skip_program:
+	POP	XIZ
+	db	0EFh, 064h			; INC 4, XSP - deallocate 4 bytes
+	RET
+
+; -----------------------------------------------------------------------------
+; Flash_ChipErase_32bit - Erase Table Data ROM
+; Address: 0x9FBD17 (boot-time: 0xFFBD17)
+;
+; Purpose: Erase entire Table Data ROM (both flash chips)
+;
+; Entry: None
+; Exit: None
+;
+; Uses standard 6-byte chip erase sequence:
+;   1. base+0x15554 = 0x00AA00AA (unlock 1)
+;   2. base+0x0AAA8 = 0x00550055 (unlock 2)
+;   3. base+0x15554 = 0x00800080 (erase setup)
+;   4. base+0x15554 = 0x00AA00AA (unlock 1)
+;   5. base+0x0AAA8 = 0x00550055 (unlock 2)
+;   6. base+0x15554 = 0x00100010 (chip erase command)
+; -----------------------------------------------------------------------------
+Flash_ChipErase_32bit:
+	PUSH	XIZ
+	LD	XIZ, 00800000h			; Table Data ROM base
+
+	EI	6				; Disable lower-priority interrupts
+
+	; Unlock sequence 1
+	LD	XBC, XIZ
+	ADD	XBC, 00015554h
+	LD	XWA, 00AA00AAh
+	LD	(XBC), XWA
+
+	; Unlock sequence 2
+	LD	XBC, XIZ
+	ADD	XBC, 0000AAA8h
+	LD	XWA, 00550055h
+	LD	(XBC), XWA
+
+	; Erase setup command
+	LD	XBC, XIZ
+	ADD	XBC, 00015554h
+	LD	XWA, 00800080h
+	LD	(XBC), XWA
+
+	; Unlock sequence 1 (again)
+	LD	XBC, XIZ
+	ADD	XBC, 00015554h
+	LD	XWA, 00AA00AAh
+	LD	(XBC), XWA
+
+	; Unlock sequence 2 (again)
+	LD	XBC, XIZ
+	ADD	XBC, 0000AAA8h
+	LD	XWA, 00550055h
+	LD	(XBC), XWA
+
+	; Chip erase command
+	LD	XBC, XIZ
+	ADD	XBC, 00015554h
+	LD	XWA, 00100010h
+	LD	(XBC), XWA
+
+	EI	0				; Re-enable interrupts
+
+	POP	XIZ
+	RET
+
+; -----------------------------------------------------------------------------
+; Remaining 32-bit flash utility routines
+; Address: 0x9FBD7D onwards (boot-time: 0xFFBD7D)
+;
+; Contains:
+;   - Flash_SectorErase_32bit: Multi-sector erase routine
+;   - Flash_WaitReady: Check flash status
+;   - Higher-level flash update routines
+; -----------------------------------------------------------------------------
+	binclude "includes/flash_sector_erase_cont_part3.bin"
 
 
 ; =============================================================================
