@@ -1,0 +1,2 @@
+# Ignore generated test ROMs (they can be recreated with create_test_table_data_rom.py)
+*.rom
