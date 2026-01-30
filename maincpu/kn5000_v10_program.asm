@@ -134352,9 +134352,9 @@ User_didnt_request_flash_mem_update: ; EF05E8
 	CALR LABEL_EF07F3
 	LDW (0FFCAh:24), 0000h
 	SET 0, (PA)
-	CALL LABEL_EF329E
+	CALL SubCPU_Init_DMA_Channels
 	EI 000h
-	CALR LABEL_EF068A
+	CALR SubCPU_Send_Payload
 	CALR LABEL_EF092B
 	LD WA, 0
 	CALL LABEL_FDDB46
@@ -134408,7 +134408,20 @@ LABEL_EF0656:
 	LD (INTETC67), 000h
 	RET
 
-LABEL_EF068A:
+; ===========================================================================
+; SubCPU_Send_Payload - Transfer 192KB Sub-CPU payload from Table Data ROM
+; ===========================================================================
+; Entry: None (reads from 0xFFFEEF to check if transfer should proceed)
+; Exit:  XIZ restored, payload transferred to Sub-CPU RAM
+; Notes: Sends the Sub-CPU firmware payload in multiple 64KB chunks:
+;        - 0x830000-0x870000 (5 x 64KB) → Sub-CPU 0x050000-0x090000
+;        - Additional data from Table Data ROM → Sub-CPU 0x00F000-0x02F000
+;        - Final 256 bytes → Sub-CPU 0x000400 (entry point area)
+;        Uses E1 bulk transfer protocol via InterCPU_E1_Bulk_Transfer
+;        Includes 0x2000 and 0x100000 iteration delay loops for timing
+;        Called during boot sequence after SubCPU_Init_DMA_Channels
+; ===========================================================================
+SubCPU_Send_Payload:
 	PUSH XIZ
 	CP (0FFFEEFh), 0ffh
 	JRL NZ, LABEL_EF078B
@@ -134421,23 +134434,23 @@ LABEL_EF0696:
 	LD XWA, 00830000h
 	LD XBC, 00010000h
 	LD XDE, 00050000h
-	CALL LABEL_EF3457
+	CALL InterCPU_E1_Bulk_Transfer
 	LD XWA, 00840000h
 	LD XBC, 00010000h
 	LD XDE, 00060000h
-	CALL LABEL_EF3457
+	CALL InterCPU_E1_Bulk_Transfer
 	LD XWA, 00850000h
 	LD XBC, 00010000h
 	LD XDE, 00070000h
-	CALL LABEL_EF3457
+	CALL InterCPU_E1_Bulk_Transfer
 	LD XWA, 00860000h
 	LD XBC, 00010000h
 	LD XDE, 00080000h
-	CALL LABEL_EF3457
+	CALL InterCPU_E1_Bulk_Transfer
 	LD XWA, 00870000h
 	LD XBC, 00010000h
 	LD XDE, 00090000h
-	CALL LABEL_EF3457
+	CALL InterCPU_E1_Bulk_Transfer
 	LD XIZ, TABLE_DATA_ROM__BASE_ADDR
 	CP (0FFFEEDh), 0ffh
 	JR NZ, LABEL_EF072A
@@ -134455,21 +134468,21 @@ LABEL_EF072A:
 	ADD XWA, 00000100h
 	LD XBC, 00010000h
 	LD XDE, 0000f000h
-	CALL LABEL_EF3457
+	CALL InterCPU_E1_Bulk_Transfer
 	LD XWA, XIZ
 	ADD XWA, 00010100h
 	LD XBC, 00010000h
 	LD XDE, 0001f000h
-	CALL LABEL_EF3457
+	CALL InterCPU_E1_Bulk_Transfer
 	LD XWA, XIZ
 	ADD XWA, 00020100h
 	LD BC, 0ff00h
 	LD XDE, 0002f000h
-	CALL LABEL_EF3457
+	CALL InterCPU_E1_Bulk_Transfer
 	LD XWA, XIZ
 	LD BC, 0100h
 	LD XDE, 00000400h
-	CALL LABEL_EF3457
+	CALL InterCPU_E1_Bulk_Transfer
 	LD XIZ, 0
 
 LABEL_EF0781:
@@ -139170,7 +139183,19 @@ LABEL_EF329C:
 	ret
 
 
-LABEL_EF329E:
+; ===========================================================================
+; SubCPU_Init_DMA_Channels - Initialize DMA channels for inter-CPU communication
+; ===========================================================================
+; Entry: None
+; Exit:  DMA channels configured for Sub-CPU payload transfer
+; Notes: Sets up MicroDMA channels 0 and 2 for inter-CPU latch communication
+;        - DMA channel 2 destination = latch at 0x140000 (Main→Sub)
+;        - DMA channel 0 source = latch at 0x140000 (Sub→Main)
+;        - Configures interrupt priorities for DMA completion
+;        - Clears transfer state variables at 0x05E0 and 0x05E2
+;        Called during boot after Sub-CPU is released from reset
+; ===========================================================================
+SubCPU_Init_DMA_Channels:
 	AND (INTET23), 0f8h
 	RES 2, (T8RUN)
 	LDA XBC, INTETC01
@@ -139217,7 +139242,7 @@ LABEL_EF330B:
 	EXTZ WA
 	LD BC, 0020h
 	LD XDE, (XSP + 002h)
-	CALR LABEL_EF3345
+	CALR InterCPU_Send_Data_Block
 	LD XWA, 00000020h
 	ADD (XSP + 002h), XWA
 	SUB IZ, 0020h
@@ -139230,14 +139255,34 @@ LABEL_EF332B:
 	LD C, IZL
 	EXTZ BC
 	LD XDE, (XSP + 002h)
-	CALR LABEL_EF3345
+	CALR InterCPU_Send_Data_Block
 	LD WA, 2
 	CALL Audio_Lock_Release
 	POP IZ
 	INC 6, XSP
 	RET
 
-LABEL_EF3345:
+; ===========================================================================
+; InterCPU_Send_Data_Block - Send a data packet to Sub-CPU
+; ===========================================================================
+; Entry: A = command/channel identifier (upper 3 bits)
+;        C = byte count (1-32 bytes)
+;        XDE = source data pointer
+; Exit:  Data transferred to Sub-CPU
+; Notes: Sends a variable-length data packet using encoded command byte:
+;        - Command byte format: (A << 5) | (count - 1)
+;        - Upper 3 bits = channel/command ID
+;        - Lower 5 bits = byte count minus 1 (0-31 = 1-32 bytes)
+;        Protocol:
+;        1. Wait for SSTAT1 high (Sub-CPU ready)
+;        2. Clear MSTAT0, set state to 1
+;        3. Write encoded command byte to latch
+;        4. Wait for SSTAT1 low (Sub-CPU acknowledged)
+;        5. Set MSTAT0, send data via DMA
+;        Timeout: 60000 iterations (0xEA60)
+;        Called by sendCOMM for chunked audio data transfers
+; ===========================================================================
+InterCPU_Send_Data_Block:
 	CP C, 0
 	RET Z
 	LD IX, 0
@@ -139286,7 +139331,21 @@ LABEL_EF339C:
 	SET 0, (PZ)
 	RET
 
-LABEL_EF33AA:
+; ===========================================================================
+; InterCPU_E2_Send - Send E2 extended transfer command
+; ===========================================================================
+; Entry: XWA = first parameter (4 bytes)
+;        XDE = second parameter (4 bytes)
+;        BC = third parameter (2 bytes)
+; Exit:  10-byte header transferred to Sub-CPU
+; Notes: Implements E2 command for extended transfers:
+;        - Sends 10-byte header containing three parameters
+;        - Used for complex audio operations requiring more metadata
+;        Protocol similar to E1 but with larger header
+;        Sets bit 7 of 0x0620 on completion
+;        Timeout: 60000 iterations (0xEA60)
+; ===========================================================================
+InterCPU_E2_Send:
 	LD IX, 0
 	CP (05E0h), 000h
 	JR Z, LABEL_EF33C4
@@ -139373,7 +139432,28 @@ LABEL_EF344A:
 	JR C, LABEL_EF3436
 	RET
 
-LABEL_EF3457:
+; ===========================================================================
+; InterCPU_E1_Bulk_Transfer - E1 two-phase bulk transfer protocol
+; ===========================================================================
+; Entry: XWA = source address in Main-CPU memory space
+;        XBC = byte count to transfer
+;        XDE = destination address in Sub-CPU memory space
+; Exit:  IZ restored, data transferred to Sub-CPU
+; Notes: Implements the E1 command protocol for bulk data transfers:
+;        Phase 1: Send 6-byte header (dest addr + byte count)
+;        Phase 2: Send actual data payload
+;        Protocol:
+;        1. Wait for previous transfer complete (05E0h == 0)
+;        2. Wait for SSTAT1 high (Sub-CPU ready)
+;        3. Clear MSTAT0, set state to 2 (two-phase)
+;        4. Write 0xE1 to latch
+;        5. Wait for SSTAT1 low (Sub-CPU acknowledged)
+;        6. Set MSTAT0, send 6-byte header via DMA
+;        7. Wait for state transition, send data payload
+;        Timeout: 60000 iterations (0xEA60) for each wait loop
+;        Used by SubCPU_Send_Payload for firmware payload transfer
+; ===========================================================================
+InterCPU_E1_Bulk_Transfer:
 	PUSH IZ
 	LD IZ, 0
 	CP (05E0h), 000h
@@ -383927,7 +384007,7 @@ LABEL_FB76F7:
 	LD XWA, 0000f002h
 	LD BC, 0008h
 	LD XDE, 00008d64h
-	CALL LABEL_EF33AA
+	CALL InterCPU_E2_Send
 	LD XWA, 003fffffh
 	JR T, LABEL_FB7723
 
@@ -457316,7 +457396,7 @@ LABEL_FEF973:
 	JR NZ, LABEL_FEF993
 	LD BC, 72aah
 	LD XDE, 00007800h
-	JP LABEL_EF3457
+	JP InterCPU_E1_Bulk_Transfer
 
 LABEL_FEF993:
 	LD WA, 00ffh
@@ -457897,7 +457977,7 @@ PostTmLoad:
 	LD XWA, 001e0000h
 	LD BC, 72aah
 	LD XDE, 00007800h
-	CALL LABEL_EF3457
+	CALL InterCPU_E1_Bulk_Transfer
 	LD WA, 00ffh
 	LD BC, 00ffh
 	CALL LABEL_FEF491
@@ -457940,7 +458020,7 @@ LABEL_FF0506:
 	LD XWA, 001e0000h
 	LD BC, 72aah
 	LD XDE, 00007800h
-	CALL LABEL_EF3457
+	CALL InterCPU_E1_Bulk_Transfer
 	LD WA, 00ffh
 	LD BC, 00ffh
 	CALL LABEL_FEF491
@@ -458001,7 +458081,7 @@ LABEL_FF068C:
 	ADD XWA, 000b0400h
 	LD BC, 0ee1fh
 	LD XDE, 000a0000h
-	CALL LABEL_EF3457
+	CALL InterCPU_E1_Bulk_Transfer
 	JP LABEL_FEF4CD
 LABEL_FF06A7:
 	db 0BFh, 0EEh, 037h, 03Eh, 0BFh, 00Eh, 062h, 0BFh

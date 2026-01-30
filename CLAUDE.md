@@ -545,9 +545,9 @@ echo "XX XX XX XX" | xxd -r -p > /tmp/bytes.bin
 
 ### MAME Driver Development Workflow
 
-**The `mame_driver/` directory contains reference copies of MAME source files for HLE development.**
+**The `mame_driver/` directory contains reference copies of MAME source files for driver development.**
 
-This is NOT the complete MAME codebase - only the files needed for sketching driver improvements, particularly control panel High Level Emulation (HLE).
+This is NOT the complete MAME codebase - only the files needed for sketching driver improvements.
 
 **Files included:**
 
@@ -560,7 +560,7 @@ This is NOT the complete MAME codebase - only the files needed for sketching dri
 **Workflow for driver improvements:**
 
 1. **Study reverse engineering findings** - Analyze protocol details from disassembly
-2. **Understand current HLE** - Read the existing MAME driver files
+2. **Understand current implementation** - Read the existing MAME driver files
 3. **Design improvements** - Plan changes based on protocol understanding
 4. **Draft changes** - Update the reference files with proposed code
 5. **Document the rationale** - Explain why changes are needed
@@ -575,9 +575,46 @@ This is NOT the complete MAME codebase - only the files needed for sketching dri
 **Important notes:**
 
 - These are **reference copies** - always sync with upstream MAME before submitting changes
-- The HLE uses protocol analysis from the disassembly to emulate the MCU's behavior
-- MCU ROM dumps are not available - HLE is the only emulation approach
 - Additional reference files may be added as needed
+
+### Accurate Hardware Emulation (STRICT POLICY)
+
+**All emulator code MUST describe what actually happens on real hardware. No emulation shortcuts or HLE bypasses are acceptable when ROM dumps are available.**
+
+This is a strict policy to ensure the MAME driver accurately represents the actual KN5000 hardware:
+
+1. **When ROM dumps ARE available:**
+   - The emulator MUST execute the actual ROM code
+   - All hardware behavior must be accurately emulated
+   - No preloading RAM with data that would normally be transferred by ROM code
+   - No bypassing boot sequences or initialization routines
+   - No "fast startup" hacks that skip real hardware behavior
+
+2. **The ONLY exception is when ROM dumps are MISSING:**
+   - Control panel MCU: ROM not dumped → HLE is acceptable
+   - LED controller MCU: ROM not dumped → HLE is acceptable
+   - Any other MCU without ROM dump → HLE is acceptable
+
+3. **Sub CPU Boot ROM and Payload Transfer:**
+   - The Sub CPU boot ROM IS dumped (0xFF7800-0xFF9800 and 0xFFFE80-0xFFFFFF regions contain functional code)
+   - The payload transfer protocol MUST be accurately emulated
+   - Main CPU sends payload via inter-CPU latches
+   - Boot ROM receives payload and stores it in RAM
+   - Boot ROM calls payload at 0x000400 when transfer is complete
+   - HLE shortcuts (preloading payload, skipping boot) are NOT acceptable
+
+4. **Rationale:**
+   - Accurate emulation ensures the driver works correctly if new ROM versions are discovered
+   - Documents actual hardware behavior for preservation purposes
+   - Helps identify emulation bugs by matching real hardware timing
+   - Supports homebrew development that relies on accurate hardware behavior
+
+5. **When debugging emulation issues:**
+   - First understand what the real hardware does (via disassembly analysis)
+   - Then fix the emulator to match that behavior
+   - Never fix emulation by adding shortcuts that bypass real behavior
+
+**This policy exists because the goal of this project is hardware preservation and documentation, not just "making it boot."**
 
 ## Architecture
 
