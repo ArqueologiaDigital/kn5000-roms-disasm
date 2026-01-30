@@ -178,7 +178,7 @@ uint8_t hdae5000_device::ata_r(offs_t offset)
 	//    offset 10 (0x13001C) = reg 6 (Device/Head)
 	//    offset 12 (0x13001E) = reg 7 (Status/Command)
 	int reg = (offset >> 1) + 1;
-	uint8_t data = m_hdd->read_cs0(reg);
+	uint8_t data = m_hdd->read_cs0(reg, 0x00ff);
 	LOGMASKED(LOG_ATA, "ATA reg %d read @0x%06x: %02x\n", reg, 0x130012 + offset, data);
 	return data;
 }
@@ -187,7 +187,7 @@ void hdae5000_device::ata_w(offs_t offset, uint8_t data)
 {
 	int reg = (offset >> 1) + 1;
 	LOGMASKED(LOG_ATA, "ATA reg %d write @0x%06x: %02x\n", reg, 0x130012 + offset, data);
-	m_hdd->write_cs0(reg, data);
+	m_hdd->write_cs0(reg, data, 0x00ff);
 }
 
 void hdae5000_device::ata_ctrl_w(uint8_t data)
@@ -195,7 +195,7 @@ void hdae5000_device::ata_ctrl_w(uint8_t data)
 	// Device Control register at 0x130020
 	// Firmware writes 0x0E (SRST + nIEN) and 0x0A (nIEN) during init
 	LOGMASKED(LOG_ATA, "ATA device control write @0x130020: %02x\n", data);
-	m_hdd->write_cs1(6, data);
+	m_hdd->write_cs1(6, data, 0x00ff);
 }
 
 //
