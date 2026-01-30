@@ -2310,24 +2310,151 @@ Flash_Write_Sectors_16bit:
 	db	00Fh, 002h, 000h	; RETD 0x0002 - return, pop 2 extra bytes
 
 ; -----------------------------------------------------------------------------
+; Boot_Display_Update_Message - Display "Updating firmware" message
+; Address: 0x9FC354 (boot-time: 0xFFC354)
+;
+; Entry: None
+; Exit: None
+;
+; Displays a message at position (0x30, 0xA0) using the display routine
+; at 0xFFCCFB. Message is located at 0xFFA626.
+; -----------------------------------------------------------------------------
+Boot_Display_Update_Message:
+	db	00Bh, 008h, 000h	; PUSH 0008h - parameter 1
+	db	00Bh, 002h, 000h	; PUSH 0002h - parameter 2
+	LD	XWA, 000FFA626h		; 40 26 a6 ff 00 - message pointer
+	LD	BC, 0030h		; 31 30 00 - X position
+	LD	DE, 00A0h		; 32 a0 00 - Y position
+	db	01Dh, 0FBh, 0CCh, 0FFh	; CALL Display_DrawText (0xFFCCFB)
+	RET				; 0e
+
+; -----------------------------------------------------------------------------
+; Boot_Wait_For_Key - Wait for key press with display refresh
+; Address: 0x9FC36A (boot-time: 0xFFC36A)
+;
+; Entry: A = expected key code
+; Exit: Returns when correct key is pressed
+;
+; Displays a message and waits for the user to press a specific key.
+; Uses delay loops to debounce and avoid false triggers.
+; Calls FDC_CheckKeypress (0x9FBFC4) for key input.
+; -----------------------------------------------------------------------------
+Boot_Wait_For_Key:
+	db	0EFh, 06Ah		; DEC 2, XSP - allocate 2 bytes
+	db	0B7h, 041h		; LD (XSP), A - save expected key
+.display_loop:				; Loop re-entry point (skips stack alloc)
+	db	00Bh, 008h, 000h	; PUSH 0008h
+	db	00Bh, 002h, 000h	; PUSH 0002h
+	LD	XWA, 000FFAD5Eh		; 40 5e ad ff 00 - message pointer
+	LD	BC, 0030h		; 31 30 00
+	LD	DE, 00A0h		; 32 a0 00
+	db	01Dh, 0FBh, 0CCh, 0FFh	; CALL Display_DrawText
+
+	; Wait for key release first
+	db	01Dh, 063h, 0ECh, 0FFh	; CALL Check_Key_State (0xFFEC63)
+	CP	L, 0			; cf d8
+	JR	Z, .delay_loop1		; 66 08
+.wait_release:
+	db	01Dh, 063h, 0ECh, 0FFh	; CALL Check_Key_State
+	CP	L, 0			; cf d8
+	JR	NZ, .wait_release	; 6e f8
+
+.delay_loop1:
+	LD	XWA, 0			; e8 a8
+.delay1:
+	db	0E8h, 061h		; INC 1, XWA
+	db	0E8h, 0CFh, 000h, 000h, 004h, 000h	; CP XWA, 00040000h
+	JR	C, .delay1		; 67 f6
+
+	; Wait for key press
+	db	01Dh, 063h, 0ECh, 0FFh	; CALL Check_Key_State
+	CP	L, 0			; cf d8
+	JR	NZ, .check_key		; 6e 08
+.wait_press:
+	db	01Dh, 063h, 0ECh, 0FFh	; CALL Check_Key_State
+	CP	L, 0			; cf d8
+	JR	Z, .wait_press		; 66 f8
+
+.check_key:
+	LD	XWA, 0			; e8 a8
+.delay2:
+	db	0E8h, 061h		; INC 1, XWA
+	db	0E8h, 0CFh, 000h, 000h, 020h, 000h	; CP XWA, 00200000h
+	JR	C, .delay2		; 67 f6
+
+	db	01Eh, 006h, 0FCh	; CALR FDC_CheckKeypress (0x9FBFC4)
+	db	087h, 0F7h		; CP L, (XSP) - compare with expected
+	JR	NZ, .display_loop	; 6e ac - retry if wrong key
+
+	db	01Eh, 08Fh, 0FFh	; CALR Boot_Display_Update_Message
+	db	0EFh, 062h		; INC 2, XSP - deallocate
+	RET				; 0e
+
+; -----------------------------------------------------------------------------
+; Boot_Init_Progress_Display - Initialize progress counter and display
+; Address: 0x9FC3C8 (boot-time: 0xFFC3C8)
+;
+; Entry: None
+; Exit: None
+;
+; Initializes the progress counter at 0x0C00 and starts flash erase.
+; Updates progress display at position (0xB4, 5) every 500 (0x1F4) ticks.
+; Counter IZ starts at 0x32 (50).
+; -----------------------------------------------------------------------------
+Boot_Init_Progress_Display:
+	PUSH	IZ			; 2e
+	LD	IZ, 0032h		; 36 32 00 - initial counter value
+	LD	XWA, 0			; e8 a8
+	db	0F1h, 000h, 00Ch, 060h	; LD (0C00h), XWA - clear tick counter
+	db	01Dh, 017h, 0BDh, 0FFh	; CALL Flash_Erase_AllSectors_32bit (0xFFBD17)
+
+	; First flash check
+	db	01Dh, 085h, 0BEh, 0FFh	; CALL Flash_WaitComplete_32bit (0xFFBE85)
+	CP	HL, 0FFFFh		; db cf ff ff
+	JR	NZ, .done		; 6e 29
+
+.wait_loop:				; Loop re-entry point
+	db	0E1h, 000h, 00Ch, 020h	; LD XWA, (0C00h) - get tick counter
+	db	0E8h, 0CFh, 0F4h, 001h, 000h, 000h	; CP XWA, 000001F4h (500)
+	JR	ULE, .continue_wait	; 63 13
+
+	; Update progress display
+	db	0DEh, 060h		; INC 0, IZ - increment counter
+	db	0DEh, 088h		; LD WA, IZ
+	LD	BC, 00B4h		; 31 b4 00 - X position
+	LD	DE, 5			; da ad - Y position
+	db	01Dh, 09Ah, 0CDh, 0FFh	; CALL Display_DrawNumber (0xFFCD9A)
+	LD	XWA, 0			; e8 a8
+	db	0F1h, 000h, 00Ch, 060h	; LD (0C00h), XWA - reset tick counter
+
+.continue_wait:
+	db	01Dh, 085h, 0BEh, 0FFh	; CALL Flash_WaitComplete_32bit
+	CP	HL, 0FFFFh		; db cf ff ff
+	JR	Z, .wait_loop		; 66 d7
+
+.done:
+	POP	IZ			; 4e
+	RET				; 0e
+
+; -----------------------------------------------------------------------------
 ; Remaining boot code routines
-; Address: 0x9FC354 onwards (boot-time: 0xFFC354)
+; Address: 0x9FC40B onwards (boot-time: 0xFFC40B)
 ;
 ; Contains:
-;   - Boot_Display_Update_Message: Display message during update
-;   - Boot_Wait_For_Key: Wait for key with display refresh
-;   - Boot_Init_Display_Progress: Initialize progress counter
-;   - Boot_Update_Flash_ByType: Main disk type dispatch
-;   - Boot_Show_Unknown_Error: Error for invalid disk type
-;   - Boot_Delay_Loop: Simple delay
-;   - Boot_LED_Animation: Progress LED cycling
-;   - Flash_ScanForErased: Scan for erased blocks
-;   - Flash_CompareRegions: Compare memory regions
-;   - Boot_Copy_RAM_to_Flash: RAM to flash copy routines
-;   - Boot_Main_Entry: Main boot sequence
-;   - Boot_Recovery_Entry: Recovery mode handler
+;   - Boot_Update_Flash_ByType: Main disk type dispatch (218 bytes)
+;   - Boot_Show_Unknown_Error: Error for invalid disk type (25 bytes)
+;   - Boot_Delay_Loop: Simple delay (13 bytes)
+;   - Boot_LED_Animation: Progress LED cycling (73 bytes)
+;   - Flash_ScanForErased: Scan for erased blocks (22 bytes)
+;   - Flash_CheckErased: Verify block erased (11 bytes)
+;   - Flash_CompareRegions: Compare memory regions (48 bytes)
+;   - Boot_Copy_RAM_to_CustomData: Copy to custom flash (82 bytes)
+;   - Boot_Copy_RAM_to_HDAE_Low: Copy to HDAE low (82 bytes)
+;   - Boot_Copy_RAM_to_HDAE_High: Copy to HDAE high (82 bytes)
+;   - Boot_Main_Entry: Main boot sequence (349 bytes)
+;   - Boot_Recovery_Entry: Recovery mode (179 bytes)
 ; -----------------------------------------------------------------------------
-	binclude "includes/bootcode_post_fdc_part3.bin"
+	binclude "includes/bootcode_post_fdc_part4.bin"
 
 
 ; =============================================================================
