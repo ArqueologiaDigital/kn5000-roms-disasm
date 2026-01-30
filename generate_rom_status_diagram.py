@@ -2,8 +2,9 @@
 """
 ROM Status Visualization Generator
 
-Generates SVG diagrams showing the disassembly status of each memory
-region in the KN5000 ROM set. Colors represent different status categories.
+Generates pixel-based images showing the disassembly status of each memory
+address in the KN5000 ROM set. Each pixel represents a memory region,
+colored by its disassembly status.
 
 This script is part of the project's mandatory documentation workflow.
 Run after making significant disassembly progress to update the website.
@@ -12,14 +13,15 @@ Usage:
     python generate_rom_status_diagram.py
 
 Output:
-    ../kn5000-docs/assets/images/rom-status-diagram.svg
+    ../kn5000-docs/assets/images/rom-status-diagram.png
 """
 
 import os
 import re
 from dataclasses import dataclass
-from typing import List, Dict
+from typing import List, Dict, Tuple
 from enum import Enum
+from PIL import Image, ImageDraw, ImageFont
 
 class RegionStatus(Enum):
     """Categories for memory region status"""
@@ -33,17 +35,17 @@ class RegionStatus(Enum):
     POINTER_TABLE = "Pointer/Jump Table"
     UNDETERMINED = "Undetermined"
 
-# Color scheme for each status (hex colors for SVG)
+# Color scheme for each status (RGB)
 STATUS_COLORS = {
-    RegionStatus.DISASSEMBLED_CODE: "#00b400",       # Green
-    RegionStatus.KNOWN_DATA: "#0078c8",              # Blue
-    RegionStatus.RAW_BYTES_UNKNOWN: "#dc3c3c",       # Red
-    RegionStatus.RAW_BYTES_CODE: "#ff8c00",          # Orange
-    RegionStatus.PADDING_UNUSED: "#808080",          # Gray
-    RegionStatus.STRING_DATA: "#00c8c8",             # Cyan
-    RegionStatus.BINARY_INCLUDE: "#a064c8",          # Purple
-    RegionStatus.POINTER_TABLE: "#64b464",           # Light green
-    RegionStatus.UNDETERMINED: "#ffdc50",            # Yellow
+    RegionStatus.DISASSEMBLED_CODE: (0, 180, 0),       # Green
+    RegionStatus.KNOWN_DATA: (0, 120, 200),            # Blue
+    RegionStatus.RAW_BYTES_UNKNOWN: (220, 60, 60),     # Red
+    RegionStatus.RAW_BYTES_CODE: (255, 140, 0),        # Orange
+    RegionStatus.PADDING_UNUSED: (128, 128, 128),      # Gray
+    RegionStatus.STRING_DATA: (0, 200, 200),           # Cyan
+    RegionStatus.BINARY_INCLUDE: (160, 100, 200),      # Purple
+    RegionStatus.POINTER_TABLE: (100, 180, 100),       # Light green
+    RegionStatus.UNDETERMINED: (255, 220, 80),         # Yellow
 }
 
 @dataclass
@@ -88,24 +90,21 @@ def parse_assembly_file(filepath: str, base_addr: int, rom_size: int) -> List[Me
     current_status = RegionStatus.UNDETERMINED
     region_start = base_addr
 
-    # Track what we find
     consecutive_db_lines = 0
 
     try:
         with open(filepath, 'r', encoding='utf-8', errors='ignore') as f:
             lines = f.readlines()
     except FileNotFoundError:
-        # Return single undetermined region for missing files
         return [MemoryRegion(base_addr, base_addr + rom_size, RegionStatus.UNDETERMINED)]
 
-    for line_num, line in enumerate(lines):
+    for line in lines:
         line = line.strip()
 
-        # Skip empty lines and pure comments
         if not line or line.startswith(';'):
             continue
 
-        # Check for ORG directive to track address
+        # Check for ORG directive
         org_match = re.match(r'^\s*ORG\s+([0-9A-Fa-fx]+)h?\s*', line, re.IGNORECASE)
         if org_match:
             addr_str = org_match.group(1).replace('0x', '').replace('h', '')
@@ -121,18 +120,16 @@ def parse_assembly_file(filepath: str, base_addr: int, rom_size: int) -> List[Me
             continue
 
         # Check for label definitions
-        label_match = re.match(r'^([A-Za-z_][A-Za-z0-9_]*):', line)
-        if label_match:
+        if re.match(r'^([A-Za-z_][A-Za-z0-9_]*):', line):
             continue
 
-        # Check for binclude (binary include)
+        # Check for binclude
         if 'binclude' in line.lower():
             if current_status != RegionStatus.BINARY_INCLUDE:
                 if current_addr != region_start:
                     regions.append(MemoryRegion(region_start, current_addr, current_status))
                 region_start = current_addr
                 current_status = RegionStatus.BINARY_INCLUDE
-            # Try to determine size from filename pattern like e02510_e0458f.bin
             filename_match = re.search(r'([0-9a-f]+)_([0-9a-f]+)\.bin', line, re.IGNORECASE)
             if filename_match:
                 try:
@@ -140,12 +137,12 @@ def parse_assembly_file(filepath: str, base_addr: int, rom_size: int) -> List[Me
                     end = int(filename_match.group(2), 16)
                     current_addr += (end - start + 1)
                 except ValueError:
-                    current_addr += 1024  # Default estimate
+                    current_addr += 1024
             else:
-                current_addr += 1024  # Default estimate
+                current_addr += 1024
             continue
 
-        # Check for dup pattern (padding/repeated data)
+        # Check for dup pattern (padding)
         dup_match = re.match(r'^\s*db\s+([0-9A-Fa-f]+)h?\s+dup\s*\(\s*([0-9A-Fa-fx]+h?)\s*\)', line, re.IGNORECASE)
         if dup_match:
             count_str = dup_match.group(1).replace('h', '')
@@ -162,42 +159,35 @@ def parse_assembly_file(filepath: str, base_addr: int, rom_size: int) -> List[Me
             continue
 
         # Check for string data
-        string_match = re.match(r'^\s*db\s+"[^"]*"', line)
-        if string_match:
+        if re.match(r'^\s*db\s+"[^"]*"', line):
             if current_status != RegionStatus.STRING_DATA:
                 if current_addr != region_start:
                     regions.append(MemoryRegion(region_start, current_addr, current_status))
                 region_start = current_addr
                 current_status = RegionStatus.STRING_DATA
-            # Estimate string length
             str_content = re.findall(r'"([^"]*)"', line)
             str_len = sum(len(s) for s in str_content)
-            # Count additional bytes (null terminators, etc.)
             hex_bytes = re.findall(r'0[0-9A-Fa-f]+h', line)
             current_addr += str_len + len(hex_bytes)
             continue
 
-        # Check for pointer/jump tables (dd with labels)
-        ptr_match = re.match(r'^\s*dd\s+[A-Za-z_][A-Za-z0-9_]*', line)
-        if ptr_match:
+        # Check for pointer tables
+        if re.match(r'^\s*dd\s+[A-Za-z_][A-Za-z0-9_]*', line):
             if current_status != RegionStatus.POINTER_TABLE:
                 if current_addr != region_start:
                     regions.append(MemoryRegion(region_start, current_addr, current_status))
                 region_start = current_addr
                 current_status = RegionStatus.POINTER_TABLE
-            current_addr += 4  # dd is 4 bytes
+            current_addr += 4
             continue
 
-        # Check for raw db/dw/dd data (hex bytes)
+        # Check for raw data
         raw_data_match = re.match(r'^\s*d[bwd]\s+([0-9A-Fa-f]+h)', line)
         if raw_data_match:
-            # Count bytes in this line
             if line.strip().startswith('db'):
                 byte_count = len(re.findall(r'[0-9A-Fa-f]+h', line))
                 current_addr += byte_count
                 consecutive_db_lines += 1
-
-                # Multiple consecutive db lines with hex = raw bytes
                 if consecutive_db_lines > 2:
                     if current_status != RegionStatus.RAW_BYTES_UNKNOWN:
                         if current_addr != region_start:
@@ -212,7 +202,7 @@ def parse_assembly_file(filepath: str, base_addr: int, rom_size: int) -> List[Me
         else:
             consecutive_db_lines = 0
 
-        # Check for disassembled code instructions
+        # Check for code instructions
         for instr in CODE_INSTRUCTIONS:
             if re.match(rf'^\s*{instr}\b', line, re.IGNORECASE):
                 if current_status != RegionStatus.DISASSEMBLED_CODE:
@@ -220,15 +210,14 @@ def parse_assembly_file(filepath: str, base_addr: int, rom_size: int) -> List[Me
                         regions.append(MemoryRegion(region_start, current_addr, current_status))
                     region_start = current_addr
                     current_status = RegionStatus.DISASSEMBLED_CODE
-                # Estimate instruction size (average ~3 bytes for TLCS-900)
-                current_addr += 3
+                current_addr += 3  # Average instruction size
                 break
 
     # Add final region
     if current_addr != region_start:
         regions.append(MemoryRegion(region_start, current_addr, current_status))
 
-    # Fill to ROM size if needed
+    # Fill to ROM size
     end_addr = base_addr + rom_size
     if regions and regions[-1].end_addr < end_addr:
         regions.append(MemoryRegion(regions[-1].end_addr, end_addr, RegionStatus.UNDETERMINED))
@@ -250,100 +239,221 @@ def merge_adjacent_regions(regions: List[MemoryRegion]) -> List[MemoryRegion]:
             merged.append(region)
     return merged
 
-def calculate_status_stats(regions: List[MemoryRegion], rom_size: int) -> Dict[RegionStatus, float]:
-    """Calculate percentage of ROM for each status"""
+def calculate_status_stats(regions: List[MemoryRegion], rom_size: int) -> Dict[RegionStatus, Tuple[int, float]]:
+    """Calculate bytes and percentage of ROM for each status"""
     stats = {status: 0 for status in RegionStatus}
     for region in regions:
         stats[region.status] += region.size
 
-    # Convert to percentages
+    # Convert to (bytes, percentage) tuples
+    result = {}
     for status in stats:
-        stats[status] = (stats[status] / rom_size) * 100 if rom_size > 0 else 0
+        bytes_count = stats[status]
+        pct = (bytes_count / rom_size) * 100 if rom_size > 0 else 0
+        result[status] = (bytes_count, pct)
 
-    return stats
+    return result
 
-def generate_svg_diagram(rom_infos: List[ROMInfo], output_path: str):
-    """Generate an SVG diagram showing ROM status"""
+def create_rom_pixel_map(regions: List[MemoryRegion], base_addr: int, rom_size: int,
+                         width: int, bytes_per_pixel: int) -> List[List[Tuple[int, int, int]]]:
+    """Create a 2D pixel map for a ROM based on its regions"""
+    height = (rom_size + bytes_per_pixel * width - 1) // (bytes_per_pixel * width)
 
-    # Image dimensions
-    img_width = 900
-    img_height = 650
-    margin = 40
-    legend_height = 150
-    rom_area_height = img_height - legend_height - margin * 2 - 30
+    # Initialize with undetermined color
+    pixels = [[STATUS_COLORS[RegionStatus.UNDETERMINED] for _ in range(width)] for _ in range(height)]
 
-    # Calculate total ROM size for proportional scaling
-    total_size = sum(rom.size for rom in rom_infos)
+    # Build a lookup for address -> status
+    status_map = []
+    for region in regions:
+        status_map.append((region.start_addr, region.end_addr, region.status))
 
-    # Start SVG
-    svg_parts = [
-        f'<?xml version="1.0" encoding="UTF-8"?>',
-        f'<svg xmlns="http://www.w3.org/2000/svg" width="{img_width}" height="{img_height}" viewBox="0 0 {img_width} {img_height}">',
-        f'  <rect width="{img_width}" height="{img_height}" fill="white"/>',
-        f'  <style>',
-        f'    .title {{ font: bold 16px sans-serif; }}',
-        f'    .rom-label {{ font: 11px sans-serif; text-anchor: middle; }}',
-        f'    .legend-text {{ font: 10px sans-serif; }}',
-        f'    .legend-title {{ font: bold 12px sans-serif; }}',
-        f'    .stat-text {{ font: 9px sans-serif; text-anchor: middle; fill: #666; }}',
-        f'  </style>',
+    # Fill pixels
+    for y in range(height):
+        for x in range(width):
+            byte_offset = (y * width + x) * bytes_per_pixel
+            addr = base_addr + byte_offset
+
+            if byte_offset >= rom_size:
+                pixels[y][x] = (40, 40, 40)  # Dark gray for beyond ROM
+                continue
+
+            # Find the region containing this address
+            for start, end, status in status_map:
+                if start <= addr < end:
+                    pixels[y][x] = STATUS_COLORS[status]
+                    break
+
+    return pixels
+
+def generate_rom_status_diagram(output_path: str):
+    """Generate the complete ROM status diagram with pixel representation"""
+
+    # Define ROM components
+    rom_components = [
+        {
+            'name': 'Main CPU (2MB)',
+            'short_name': 'Main CPU',
+            'size': 2 * 1024 * 1024,
+            'asm_file': 'maincpu/kn5000_v10_program.asm',
+            'base_addr': 0xE00000,
+            'width': 512,  # pixels wide
+            'bytes_per_pixel': 8,  # each pixel = 8 bytes
+        },
+        {
+            'name': 'Sub CPU Payload (192KB)',
+            'short_name': 'Sub Payload',
+            'size': 192 * 1024,
+            'asm_file': 'subcpu/kn5000_subprogram_v142.asm',
+            'base_addr': 0x000000,
+            'width': 256,
+            'bytes_per_pixel': 4,
+        },
+        {
+            'name': 'Sub CPU Boot (128KB)',
+            'short_name': 'Sub Boot',
+            'size': 128 * 1024,
+            'asm_file': 'subcpu_boot/kn5000_subcpu_boot.asm',
+            'base_addr': 0xFE0000,
+            'width': 256,
+            'bytes_per_pixel': 4,
+        },
+        {
+            'name': 'Table Data (2MB)',
+            'short_name': 'Table Data',
+            'size': 2 * 1024 * 1024,
+            'asm_file': 'table_data/kn5000_table_data.asm',
+            'base_addr': 0x800000,
+            'width': 512,
+            'bytes_per_pixel': 8,
+        },
+        {
+            'name': 'HDAE5000 (512KB)',
+            'short_name': 'HDAE5000',
+            'size': 512 * 1024,
+            'asm_file': 'hdae5000/hd-ae5000_v2_06i.asm',
+            'base_addr': 0x280000,
+            'width': 256,
+            'bytes_per_pixel': 4,
+        },
     ]
 
-    # Title
-    svg_parts.append(f'  <text x="{img_width // 2}" y="25" class="title" text-anchor="middle">KN5000 ROM Set - Disassembly Status</text>')
+    # Parse all ROMs and create pixel maps
+    rom_data = []
+    script_dir = os.path.dirname(os.path.abspath(__file__))
 
-    # Calculate rectangle positions
-    total_width = img_width - margin * 2 - (len(rom_infos) - 1) * 20
+    for comp in rom_components:
+        asm_path = os.path.join(script_dir, comp['asm_file'])
+        regions = parse_assembly_file(asm_path, comp['base_addr'], comp['size'])
+        regions = merge_adjacent_regions(regions)
+
+        pixel_map = create_rom_pixel_map(
+            regions, comp['base_addr'], comp['size'],
+            comp['width'], comp['bytes_per_pixel']
+        )
+
+        stats = calculate_status_stats(regions, comp['size'])
+
+        rom_data.append({
+            'name': comp['name'],
+            'short_name': comp['short_name'],
+            'size': comp['size'],
+            'width': comp['width'],
+            'height': len(pixel_map),
+            'pixels': pixel_map,
+            'stats': stats,
+            'bytes_per_pixel': comp['bytes_per_pixel'],
+        })
+
+    # Calculate image dimensions
+    margin = 20
+    spacing = 30
+    label_height = 60
+    legend_height = 140
+    title_height = 40
+
+    # Find max height among all ROMs
+    max_rom_height = max(r['height'] for r in rom_data)
+
+    # Total width = sum of all ROM widths + spacing + margins
+    total_rom_width = sum(r['width'] for r in rom_data) + spacing * (len(rom_data) - 1)
+    img_width = total_rom_width + margin * 2
+    img_height = title_height + max_rom_height + label_height + legend_height + margin * 2
+
+    # Create image
+    img = Image.new('RGB', (img_width, img_height), (255, 255, 255))
+
+    # Try to load fonts
+    try:
+        title_font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 16)
+        label_font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 11)
+        small_font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 9)
+    except:
+        title_font = ImageFont.load_default()
+        label_font = title_font
+        small_font = title_font
+
+    draw = ImageDraw.Draw(img)
+
+    # Draw title
+    title = "KN5000 ROM Set - Disassembly Status (each pixel = memory region)"
+    title_bbox = draw.textbbox((0, 0), title, font=title_font)
+    title_width = title_bbox[2] - title_bbox[0]
+    draw.text(((img_width - title_width) // 2, margin // 2), title, fill=(0, 0, 0), font=title_font)
+
+    # Draw each ROM
     x_offset = margin
+    rom_y = title_height + margin
 
-    for rom in rom_infos:
-        # Width proportional to size ratio
-        rom_width = int((rom.size / total_size) * total_width)
-        rom_width = max(rom_width, 80)  # Minimum width
+    for rom in rom_data:
+        # Draw pixel map
+        for y, row in enumerate(rom['pixels']):
+            for x, color in enumerate(row):
+                img.putpixel((x_offset + x, rom_y + y), color)
 
-        rect_x = x_offset
-        rect_y = margin + 30
-        rect_height = rom_area_height - 60
+        # Draw border
+        draw.rectangle(
+            [x_offset - 1, rom_y - 1, x_offset + rom['width'], rom_y + rom['height']],
+            outline=(0, 0, 0), width=1
+        )
 
-        # Draw ROM rectangle border
-        svg_parts.append(f'  <rect x="{rect_x}" y="{rect_y}" width="{rom_width}" height="{rect_height}" fill="none" stroke="black" stroke-width="2"/>')
+        # Draw label below
+        label_y = rom_y + max_rom_height + 5
+        center_x = x_offset + rom['width'] // 2
 
-        # Draw regions as horizontal bands
-        current_y = rect_y
-        for region in rom.regions:
-            region_height = (region.size / rom.size) * rect_height
-            if region_height < 0.5:
-                region_height = 0.5
+        # ROM name
+        name_bbox = draw.textbbox((0, 0), rom['short_name'], font=label_font)
+        name_width = name_bbox[2] - name_bbox[0]
+        draw.text((center_x - name_width // 2, label_y), rom['short_name'], fill=(0, 0, 0), font=label_font)
 
-            color = STATUS_COLORS.get(region.status, "#c8c8c8")
-            svg_parts.append(f'  <rect x="{rect_x}" y="{current_y:.1f}" width="{rom_width}" height="{region_height:.1f}" fill="{color}"/>')
-            current_y += region_height
+        # Size info
+        size_str = f"{rom['size'] // 1024}KB"
+        if rom['size'] >= 1024 * 1024:
+            size_str = f"{rom['size'] // (1024*1024)}MB"
+        size_bbox = draw.textbbox((0, 0), size_str, font=small_font)
+        size_width = size_bbox[2] - size_bbox[0]
+        draw.text((center_x - size_width // 2, label_y + 14), size_str, fill=(80, 80, 80), font=small_font)
 
-            if current_y >= rect_y + rect_height:
-                break
+        # Code percentage
+        code_bytes, code_pct = rom['stats'].get(RegionStatus.DISASSEMBLED_CODE, (0, 0))
+        pct_str = f"{code_pct:.1f}% code"
+        pct_bbox = draw.textbbox((0, 0), pct_str, font=small_font)
+        pct_width = pct_bbox[2] - pct_bbox[0]
+        draw.text((center_x - pct_width // 2, label_y + 28), pct_str, fill=(0, 140, 0), font=small_font)
 
-        # ROM name (multi-line)
-        name_lines = rom.name.split('\n')
-        name_y = rect_y + rect_height + 15
-        center_x = rect_x + rom_width // 2
-        for i, line in enumerate(name_lines):
-            svg_parts.append(f'  <text x="{center_x}" y="{name_y + i * 14}" class="rom-label">{line}</text>')
+        # Resolution info
+        res_str = f"1px = {rom['bytes_per_pixel']} bytes"
+        res_bbox = draw.textbbox((0, 0), res_str, font=small_font)
+        res_width = res_bbox[2] - res_bbox[0]
+        draw.text((center_x - res_width // 2, label_y + 42), res_str, fill=(100, 100, 100), font=small_font)
 
-        # Calculate stats and show code percentage
-        stats = calculate_status_stats(rom.regions, rom.size)
-        code_pct = stats.get(RegionStatus.DISASSEMBLED_CODE, 0)
-        stat_y = name_y + len(name_lines) * 14 + 5
-        svg_parts.append(f'  <text x="{center_x}" y="{stat_y}" class="stat-text">{code_pct:.1f}% code</text>')
+        x_offset += rom['width'] + spacing
 
-        x_offset += rom_width + 20
-
-    # Legend
-    legend_y = img_height - legend_height + 20
+    # Draw legend
+    legend_y = rom_y + max_rom_height + label_height + 10
     legend_x = margin
-    items_per_row = 3
-    item_width = (img_width - margin * 2) // items_per_row
 
-    svg_parts.append(f'  <text x="{legend_x}" y="{legend_y - 10}" class="legend-title">Legend:</text>')
+    draw.text((legend_x, legend_y), "Legend:", fill=(0, 0, 0), font=label_font)
+    legend_y += 20
 
     legend_items = [
         (RegionStatus.DISASSEMBLED_CODE, "Disassembled Code"),
@@ -357,92 +467,34 @@ def generate_svg_diagram(rom_infos: List[ROMInfo], output_path: str):
         (RegionStatus.UNDETERMINED, "Undetermined"),
     ]
 
+    items_per_row = 3
+    item_width = (img_width - margin * 2) // items_per_row
+
     for i, (status, label) in enumerate(legend_items):
         row = i // items_per_row
         col = i % items_per_row
         lx = legend_x + col * item_width
-        ly = legend_y + row * 28
+        ly = legend_y + row * 22
 
         color = STATUS_COLORS[status]
-        svg_parts.append(f'  <rect x="{lx}" y="{ly}" width="15" height="15" fill="{color}" stroke="black" stroke-width="1"/>')
-        svg_parts.append(f'  <text x="{lx + 20}" y="{ly + 12}" class="legend-text">{label}</text>')
+        draw.rectangle([lx, ly, lx + 14, ly + 14], fill=color, outline=(0, 0, 0))
+        draw.text((lx + 18, ly + 1), label, fill=(0, 0, 0), font=small_font)
 
-    # Close SVG
-    svg_parts.append('</svg>')
-
-    # Write to file
+    # Save image
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
-    with open(output_path, 'w') as f:
-        f.write('\n'.join(svg_parts))
-
+    img.save(output_path, 'PNG')
     print(f"Generated: {output_path}")
 
     # Print statistics
     print("\nROM Status Statistics:")
-    print("=" * 60)
-    for rom in rom_infos:
-        stats = calculate_status_stats(rom.regions, rom.size)
-        name = rom.name.replace('\n', ' ')
-        print(f"\n{name}:")
-        for status, pct in sorted(stats.items(), key=lambda x: -x[1]):
+    print("=" * 70)
+    for rom in rom_data:
+        print(f"\n{rom['name']} ({rom['width']}x{rom['height']} pixels, 1px = {rom['bytes_per_pixel']} bytes):")
+        for status, (bytes_count, pct) in sorted(rom['stats'].items(), key=lambda x: -x[1][1]):
             if pct > 0.1:
-                print(f"  {status.value}: {pct:.1f}%")
-
-def generate_rom_status_diagram(output_path: str):
-    """Generate the complete ROM status diagram"""
-
-    # Define ROM components with their sizes and source files
-    rom_components = [
-        {
-            'name': 'Main CPU\n(2MB)',
-            'size': 2 * 1024 * 1024,  # 2MB
-            'asm_file': 'maincpu/kn5000_v10_program.asm',
-            'base_addr': 0xE00000,
-        },
-        {
-            'name': 'Sub CPU\nPayload\n(192KB)',
-            'size': 192 * 1024,  # 192KB
-            'asm_file': 'subcpu/kn5000_subprogram_v142.asm',
-            'base_addr': 0x000000,
-        },
-        {
-            'name': 'Sub CPU\nBoot\n(128KB)',
-            'size': 128 * 1024,  # 128KB
-            'asm_file': 'subcpu_boot/kn5000_subcpu_boot.asm',
-            'base_addr': 0xFE0000,
-        },
-        {
-            'name': 'Table Data\n(2MB)',
-            'size': 2 * 1024 * 1024,  # 2MB (combined odd+even)
-            'asm_file': 'table_data/kn5000_table_data.asm',
-            'base_addr': 0x800000,
-        },
-        {
-            'name': 'HDAE5000\n(512KB)',
-            'size': 512 * 1024,  # 512KB
-            'asm_file': 'hdae5000/hd-ae5000_v2_06i.asm',
-            'base_addr': 0x280000,
-        },
-    ]
-
-    # Parse all ROMs
-    rom_infos = []
-    for comp in rom_components:
-        script_dir = os.path.dirname(os.path.abspath(__file__))
-        asm_path = os.path.join(script_dir, comp['asm_file'])
-        regions = parse_assembly_file(asm_path, comp['base_addr'], comp['size'])
-        regions = merge_adjacent_regions(regions)
-        rom_infos.append(ROMInfo(
-            name=comp['name'],
-            size=comp['size'],
-            regions=regions,
-            base_addr=comp['base_addr']
-        ))
-
-    # Generate SVG
-    generate_svg_diagram(rom_infos, output_path)
+                print(f"  {status.value}: {pct:.1f}% ({bytes_count:,} bytes)")
 
 if __name__ == '__main__':
     script_dir = os.path.dirname(os.path.abspath(__file__))
-    output_path = os.path.join(script_dir, '..', 'kn5000-docs', 'assets', 'images', 'rom-status-diagram.svg')
+    output_path = os.path.join(script_dir, '..', 'kn5000-docs', 'assets', 'images', 'rom-status-diagram.png')
     generate_rom_status_diagram(output_path)
