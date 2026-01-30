@@ -14,14 +14,15 @@ This file tracks references to undisassembled code found during UI subsystem doc
 - Renamed `LABEL_EF50DF` to `VRAM_FillRect` with full header documentation
 - Documents rectangle fill operation for UI regions
 
-## Undisassembled Code Blocks
+### ClassProc Event Handlers (0xFA4598) - COMPLETED
+- Disassembled 15 bytes of raw code into 4 event handlers:
+  - `ClassProc_Event_LoadFromWA` (FA4598) - loads XHL from XWA
+  - `ClassProc_Event_LoadFromHL` (FA459D) - loads XHL from (XHL)
+  - `ClassProc_Event_LoadFromIZ` (FA45A2) - loads XHL from (XIZ)
+  - `ClassProc_Event_LoadFromOffset` (FA45A7) - loads XHL from (XHL+0Ch)
+- These are UI event dispatch handlers for events 0x1E00000-0x1E00007
 
-### ClassProc Jump Table (0xFA4598)
-- **Address**: 0xFA4598 (line 355938)
-- **Size**: ~15 bytes
-- **Context**: Jump offsets for ClassProc event dispatch (events 0x1E00000-0x1E00007)
-- **Referenced from**: ClassProc at line 355937
-- **Priority**: HIGH - Core UI event handler
+## Undisassembled Code Blocks
 
 ### CmpSetGridCheck (0xF1A8C9)
 - **Address**: 0xF1A8C9 (line 167998)
