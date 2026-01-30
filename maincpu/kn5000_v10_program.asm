@@ -137106,7 +137106,16 @@ LABEL_EF1EC4:
 	POP SR
 	RET
 
-LABEL_EF1F0F:
+; ===========================================================================
+; Audio_Lock_Release - Release inter-CPU communication lock
+; ===========================================================================
+; Entry: A = lock index (0-7)
+; Exit:  Lock released, next waiting request (if any) is signaled
+; Notes: Increments counter at (0x0532 + lock_index)
+;        Processes linked list at 0x0487 to wake waiting tasks
+;        Must be paired with Audio_Lock_Acquire
+; ===========================================================================
+Audio_Lock_Release:
 	PUSH SR
 	EI 006h
 	PUSH XHL
@@ -137219,7 +137228,17 @@ LABEL_EF1FB0:
 	POP XWA
 	RET
 
-LABEL_EF1FEE:
+; ===========================================================================
+; Audio_Lock_Acquire - Acquire inter-CPU communication lock
+; ===========================================================================
+; Entry: A = lock index (0-7)
+; Exit:  Lock acquired, safe to send audio commands
+; Notes: Decrements counter at (0x0532 + lock_index)
+;        If counter is zero, adds request to linked list at 0x0487 and waits
+;        Must be paired with Audio_Lock_Release after sending commands
+;        Used by audio subsystem to serialize access to Sub-CPU communication
+; ===========================================================================
+Audio_Lock_Acquire:
 	PUSH SR
 	EI 006h
 	PUSH XHL
@@ -139189,7 +139208,7 @@ sendCOMM:			; ef32f4
 	LD IZ, BC
 	LD (XSP + 006h), A
 	LD WA, 2
-	CALL LABEL_EF1FEE
+	CALL Audio_Lock_Acquire
 	CP IZ, 0020h
 	JR ULE, LABEL_EF332B
 
@@ -139213,7 +139232,7 @@ LABEL_EF332B:
 	LD XDE, (XSP + 002h)
 	CALR LABEL_EF3345
 	LD WA, 2
-	CALL LABEL_EF1F0F
+	CALL Audio_Lock_Release
 	POP IZ
 	INC 6, XSP
 	RET
@@ -139242,7 +139261,7 @@ LABEL_EF3368:
 	LD (05DAh), XDE
 	EXTZ BC
 	LD (05DEh), BC
-	CALR LABEL_EF341B
+	CALR Audio_DMA_Transfer
 	LD (05E0h), 000h
 	CP (05E0h), 000h
 	RET Z
@@ -139296,7 +139315,7 @@ LABEL_EF33D4:
 	LD (XHL + 008h), BC
 	LD (05DAh), XHL
 	LDW (05DEh), 000ah
-	CALR LABEL_EF341B
+	CALR Audio_DMA_Transfer
 	LD (05E0h), 000h
 	SET 7, (0620h)
 	CP (05E0h), 000h
@@ -139315,7 +139334,16 @@ LABEL_EF340D:
 	SET 0, (PZ)
 	RET
 
-LABEL_EF341B:
+; ===========================================================================
+; Audio_DMA_Transfer - Core DMA transfer routine for inter-CPU communication
+; ===========================================================================
+; Entry: Data pointer at 0x05DA, byte count at 0x05DE
+; Exit:  Data transferred to Sub-CPU via DMA
+; Notes: Transfers audio command/data blocks to Sub-CPU
+;        Uses DMA channel configuration set up by Audio_InitDMAChannels
+;        Handles both small transfers and large block transfers
+; ===========================================================================
+Audio_DMA_Transfer:
 	LD WA, (05DEh)
 	LD DE, WA
 	EXTZ XDE
@@ -139382,7 +139410,7 @@ LABEL_EF348B:
 	LD (XWA + 004h), BC
 	LD (05DAh), XWA
 	LDW (05DEh), 0006h
-	CALR LABEL_EF341B
+	CALR Audio_DMA_Transfer
 	LD (05E0h), 001h
 	CP (05E0h), 001h
 	JR Z, LABEL_EF34C6
@@ -139402,7 +139430,7 @@ LABEL_EF34C8:
 	LD XWA, (XBC)
 	LD (05DAh), XWA
 	LDW (05DEh), (XBC + 004h)
-	CALR LABEL_EF341B
+	CALR Audio_DMA_Transfer
 	LD (05E0h), 000h
 	CP (05E0h), 000h
 	JR Z, LABEL_EF34F5
@@ -140197,7 +140225,16 @@ LABEL_EF3CD6:
 	LD XWA, (XDE + 6464h)
 	RET
 
-LABEL_EF3D0E:
+; ===========================================================================
+; HDAE5000_Detect - Detect presence of HDAE5000 expansion board
+; ===========================================================================
+; Entry: None
+; Exit:  XWA at (XSP+8) = 0 if detected, 0xFFFFFFFF if not present
+; Notes: Probes Table Data ROM at 0x800000 using flash command sequence
+;        Sends AMD/Atmel flash ID command (0xAA, 0x55, 0x90)
+;        Checks for valid response to confirm hardware presence
+; ===========================================================================
+HDAE5000_Detect:
 	DEC 8, XSP
 	PUSH XIZ
 	LD XWA, 0ffffffffh
@@ -140265,7 +140302,16 @@ LABEL_EF3DB7:
 	INC 4, XSP
 	RET
 
-LABEL_EF3DBB:
+; ===========================================================================
+; HDAE5000_Flash_Verify - Flash verification sequence on Table Data ROM
+; ===========================================================================
+; Entry: None
+; Exit:  Flash ID verified
+; Notes: Sends flash command sequence to Table Data ROM at 0x800000
+;        Uses standard AMD/Atmel flash protocol for device identification
+;        Called during HDAE5000 initialization to verify ROM presence
+; ===========================================================================
+HDAE5000_Flash_Verify:
 	PUSH XIZ
 	LD XIZ, TABLE_DATA_ROM__BASE_ADDR
 	EI 006h
@@ -140364,7 +140410,15 @@ LABEL_EF3E21:
 	db 0B1h, 060h, 0EEh, 089h, 0E9h, 0C8h, 000h, 040h
 	db 01Fh, 000h, 0B1h, 060h, 006h, 000h, 05Eh, 00Eh
 
-LABEL_EF3F29:
+; ===========================================================================
+; HDAE5000_Status_Check - Check HDAE5000 status register for ready state
+; ===========================================================================
+; Entry: None
+; Exit:  HL = 0 if ready, 0xFFFF if busy
+; Notes: Checks P7 bit 5 for HDAE5000 ready signal
+;        Used to poll expansion board during data transfers
+; ===========================================================================
+HDAE5000_Status_Check:
 	BIT 5, (P7)
 	JR Z, LABEL_EF3F31
 	LD HL, 0
@@ -141196,8 +141250,8 @@ LABEL_EF4702:
 	LD IZ, 0032h
 	LD XWA, 0
 	LD (SYSTEM_TIMESTAMP), XWA
-	CALL LABEL_EF3DBB
-	CALL LABEL_EF3F29
+	CALL HDAE5000_Flash_Verify
+	CALL HDAE5000_Status_Check
 	CP HL, 0ffffh
 	JR NZ, LABEL_EF4743
 
@@ -141214,7 +141268,7 @@ LABEL_EF471A:
 	LD (SYSTEM_TIMESTAMP), XWA
 
 LABEL_EF4739:
-	CALL LABEL_EF3F29
+	CALL HDAE5000_Status_Check
 	CP HL, 0ffffh
 	JR Z, LABEL_EF471A
 
@@ -141395,7 +141449,15 @@ LABEL_EF489F:
 	CALR LABEL_EF4843
 	JR T, LABEL_EF489F
 
-LABEL_EF48AE:
+; ===========================================================================
+; TableData_ROM_Verify - Verify Table Data ROM integrity via checksum
+; ===========================================================================
+; Entry: XWA = start address, XBC = end address
+; Exit:  XHL = 0 if valid, non-zero address of first bad block if invalid
+; Notes: Scans ROM in 64-byte blocks checking for erased (0xFFFFFFFF) markers
+;        Used during boot to verify Table Data ROM contents
+; ===========================================================================
+TableData_ROM_Verify:
 	LD XHL, XWA
 	LD XDE, (XHL)
 	CP XDE, 0ffffffffh
@@ -141414,7 +141476,19 @@ LABEL_EF48C4:
 	JR Z, LABEL_EF48BA
 	RET
 
-LABEL_EF48CF:
+; ===========================================================================
+; HDAE5000_ROM_Transfer - Transfer HDAE5000 ROM data to working memory
+; ===========================================================================
+; Entry: XWA = source address (Table Data ROM)
+;        XBC = destination address (HDAE5000 ROM space)
+;        DE = starting block index
+;        Stack+4 = block count
+; Exit:  XHL = 0 on success, non-zero on verify failure
+; Notes: Transfers data in blocks via HDAE5000 PPI at 0x160000
+;        Block index written to PORT_A for each 256KB block
+;        Verifies each word transferred matches source
+; ===========================================================================
+HDAE5000_ROM_Transfer:
 	LD XHL, XWA
 	LD W, E
 	LD A, (XSP + 004h)
@@ -141571,7 +141645,7 @@ LABEL_EF49F7:
 
 LABEL_EF4B54:
 	LD (HDAE5000_PPI__PORT_C), 000h
-	CALL LABEL_EF3D0E
+	CALL HDAE5000_Detect
 	CP XHL, 0ffffffffh
 	JR NZ, LABEL_EF4B6D
 	SET 2, (HDAE5000_PPI__PORT_C)
@@ -141582,18 +141656,18 @@ Infinite_Loop_at_EF4B6B:
 LABEL_EF4B6D:
 	LD XWA, TABLE_DATA_ROM__BASE_ADDR
 	LD XBC, 00a00000h
-	CALR LABEL_EF48AE
+	CALR TableData_ROM_Verify
 	OR XHL, XHL
 	JR Z, LABEL_EF4B9F
-	CALL LABEL_EF3DBB
-	CALL LABEL_EF3F29
+	CALL HDAE5000_Flash_Verify
+	CALL HDAE5000_Status_Check
 	CP HL, 0ffffh
 	JR NZ, LABEL_EF4B9F
 
 LABEL_EF4B8C:
 	CALR LABEL_EF4850
 	LD (HDAE5000_PPI__PORT_C), 000h
-	CALL LABEL_EF3F29
+	CALL HDAE5000_Status_Check
 	CP HL, 0ffffh
 	JR Z, LABEL_EF4B8C
 
@@ -141606,7 +141680,7 @@ LABEL_EF4B9F:
 	LD XWA, TABLE_DATA_ROM__BASE_ADDR
 	LD XBC, HDAE5000_ROM__BASE_ADDR
 	LD DE, 4
-	CALR LABEL_EF48CF
+	CALR HDAE5000_ROM_Transfer
 	OR XHL, XHL
 	CALL NZ, LABEL_EF4890
 
@@ -141980,7 +142054,7 @@ FLASH_MEM_UPDATE:  ; EF4F6F
 	CALL Get_Area_Region_Code
 	CP L, 4
 	JR Z, LABEL_EF4FE4
-	CALL LABEL_EF3D0E
+	CALL HDAE5000_Detect
 	CP XHL, 0ffffffffh
 	JR Z, LABEL_EF4FE4
 	CP QIZH, 6  ; Is it "HD-AEPRG DATA FILE"?
@@ -174094,13 +174168,13 @@ wai_flg_X:
 	JP LABEL_EF1EA7
 
 sig_sem_X:
-	JP LABEL_EF1F0F
+	JP Audio_Lock_Release
 
 preq_sem_X:
 	JP LABEL_EF2048
 
 wai_sem_X:
-	JP LABEL_EF1FEE
+	JP Audio_Lock_Acquire
 
 ref_sem_X:
 	JP LABEL_EF2063
@@ -282377,11 +282451,11 @@ LABEL_F6A2FF:
 
 LABEL_F6A347:
 	LD WA, 0008h
-	JP LABEL_EF1FEE
+	JP Audio_Lock_Acquire
 
 LABEL_F6A34E:
 	LD WA, 0008h
-	JP LABEL_EF1F0F
+	JP Audio_Lock_Release
 LABEL_F6A355:
 	db 0EDh, 088h, 0ECh, 089h, 01Dh, 094h, 015h, 0FBh
 	db 00Eh
@@ -365899,7 +365973,7 @@ LABEL_FAA333:
 	LD WA, (030450h)
 	LD (03044Eh), WA
 	LD WA, 1
-	CALL LABEL_EF1FEE
+	CALL Audio_Lock_Acquire
 	JR T, LABEL_FAA2FB
 
 InitDrawTask:
@@ -366000,7 +366074,7 @@ LABEL_FAA3FB:
 	ADD XHL, XDE
 	PUSH XHL
 	LD_A 001h
-	CALL LABEL_EF1F0F
+	CALL Audio_Lock_Release
 	POP XHL
 	RET
 
@@ -366027,7 +366101,7 @@ LABEL_FAA444:
 	PUSH XIZ
 	LD IZ, WA
 	LD WA, 4
-	CALL LABEL_EF1FEE
+	CALL Audio_Lock_Acquire
 	LD DE, IZ
 	EXTZ XDE
 	LDA XHL, 030466h
@@ -366051,7 +366125,7 @@ LABEL_FAA478:
 
 LABEL_FAA481:
 	LD WA, 4
-	CALL LABEL_EF1F0F
+	CALL Audio_Lock_Release
 	LD XHL, XIZ
 	POP XIZ
 	RET
@@ -368593,7 +368667,7 @@ LABEL_FABB8A:
 
 LABEL_FABB9A:
 	LD WA, 1
-	CALL LABEL_EF1F0F
+	CALL Audio_Lock_Release
 	LD WA, 3
 	CALL LABEL_EF1C5F
 	CPW (03044Eh), 0000h
@@ -368606,7 +368680,7 @@ LABEL_FABBAF:
 
 LABEL_FABBBF:
 	LD WA, 1
-	CALL LABEL_EF1F0F
+	CALL Audio_Lock_Release
 	LD WA, 3
 	CALL LABEL_EF1C5F
 	CPW (03044Eh), 0000h
@@ -458178,7 +458252,7 @@ LABEL_FF0A72:
 	DEC 4, XSP
 	PUSH IZ
 	LD WA, 7
-	CALL LABEL_EF1FEE
+	CALL Audio_Lock_Acquire
 	LD XWA, (XSP + 00ah)
 	LD (03C21Ch), XWA
 	LD XWA, (XSP + 00ah)
@@ -458196,7 +458270,7 @@ LABEL_FF0A72:
 	LDA XSP, XSP + 00ch
 	LD IZ, HL
 	LD WA, 7
-	CALL LABEL_EF1F0F
+	CALL Audio_Lock_Release
 	LD HL, IZ
 	POP IZ
 	INC 4, XSP

@@ -574,14 +574,14 @@ OFFSETS_F460:
 ; Entry 0 = commands 0x00-0x1F, Entry 1 = commands 0x20-0x3F, etc.
 ; ----------------------------------------------------------------------------
 CMD_DISPATCH_TABLE:
-	dd LABEL_034D5F		; 0x00-0x1F: DSP/audio control
-	dd LABEL_01FC7C		; 0x20-0x3F: Handler 1
-	dd LABEL_01FC7F		; 0x40-0x5F: Handler 2
-	dd LABEL_035893		; 0x60-0x7F: Handler 3
+	dd Audio_CmdHandler_00_1F		; 0x00-0x1F: DSP/audio control
+	dd Audio_CmdHandler_20_3F		; 0x20-0x3F: Handler 1
+	dd Audio_CmdHandler_40_5F		; 0x40-0x5F: Handler 2
+	dd Audio_CmdHandler_60_7F		; 0x60-0x7F: Handler 3
 	dd LABEL_01F890		; 0x80-0x9F: Serial port setup (38400 baud)
-	dd LABEL_03CFEE		; 0xA0-0xBF: Handler 5
-	dd LABEL_020C12		; 0xC0-0xDF: Handler 6
-	dd LABEL_020C12		; 0xE0-0xFF: Handler 7 (shared with 6)
+	dd Audio_CmdHandler_A0_BF		; 0xA0-0xBF: Handler 5
+	dd Audio_CmdHandler_C0_FF		; 0xC0-0xDF: Handler 6
+	dd Audio_CmdHandler_C0_FF		; 0xE0-0xFF: Handler 7 (shared with 6)
 
 
 LABEL_00F48C:
@@ -9202,7 +9202,7 @@ LABEL_01F87B:
 	LD WA, 4
 	LD BC, IZ
 	LD XDE, 00000600h
-	CALL LABEL_020C6B
+	CALL InterCPU_DMA_Send
 
 LABEL_01F88E:
 	POP IZ
@@ -9244,7 +9244,7 @@ LABEL_01F8D2:
 	LD HL, 0
 	RET
 
-LABEL_01F8D5:
+Audio_Process_Final:
 	PUSH SR
 	EI 6
 	CALR LABEL_01F856
@@ -9405,10 +9405,10 @@ LABEL_01FAA6:
 ; ============================================================================
 Audio_System_Init:		; 01FACBh
 	PUSH IZ
-	CALL LABEL_020C15	; Setup inter-CPU comms via latches
+	CALL InterCPU_Latch_Setup	; Setup inter-CPU comms via latches
 	CALL INIT_RING_BUFFERS	; Initialize serial port #1 ring buffers
 	CALL DSP_System_Init	; Initialize DSP state buffers, toggle reset signals
-	CALL LABEL_03581D	; Initialize DSP2 (second DSP chip)
+	CALL DSP2_Init	; Initialize DSP2 (second DSP chip)
 	CALL DSP_Init_Channels	; Write channel config to DSP at 0x00130000
 	CALL ToneGen_Init	; Initialize tone generator at 0x00110000
 	EI 0			; Enable interrupts
@@ -9429,7 +9429,7 @@ LABEL_01FAFF:
 	JR Z, LABEL_01FB2F
 	RES 1, (103Eh)
 	CALL Cmd_Check_E2_Pending
-	CALL LABEL_034CDB
+	CALL Audio_Process_Init
 	LD WA, (0F012h)
 	LD BC, WA
 	INC 1, WA
@@ -9445,9 +9445,9 @@ LABEL_01FB29:
 
 LABEL_01FB2F:
 	CALL ToneGen_Process_Notes
-	CALL LABEL_034D93
-	CALL LABEL_035AC8
-	CALL LABEL_01F8D5
+	CALL MIDI_Dispatch
+	CALL Audio_Process_DSP
+	CALL Audio_Process_Final
 	JR T, LABEL_01FAE6
 
 
@@ -9612,11 +9612,11 @@ LABEL_01FC70:
 	JP LABEL_020A14
 
 
-LABEL_01FC7C:
+Audio_CmdHandler_20_3F:
 	LD HL, 0
 	RET
 
-LABEL_01FC7F:
+Audio_CmdHandler_40_5F:
 	LD C, (XSP + 004h)
 	LD A, C
 	DEC 1, C
@@ -10948,11 +10948,20 @@ LABEL_020B9D:
 	db 038h, 0FFh, 003h, 0BAh, 0FCh, 054h, 09Ah, 0FEh
 	db 069h, 09Ah, 0FEh, 023h, 00Eh
 
-LABEL_020C12:
+Audio_CmdHandler_C0_FF:
 	LD HL, 0
 	RET
 
-LABEL_020C15:
+; ===========================================================================
+; InterCPU_Latch_Setup - Setup inter-CPU communication via latches
+; ===========================================================================
+; Entry: None
+; Exit:  DMA channels and interrupt handlers configured
+; Notes: Configures interrupt priority for DMA channels 0-3
+;        Sets up MicroDMA for inter-CPU latch communication at 0x120000
+;        Initializes DMA_XFER_STATE and CMD_PROCESSING_STATE to 0
+; ===========================================================================
+InterCPU_Latch_Setup:
 	AND (INTET23), 0f8h
 	RES 2, (T8RUN)
 	LDA XBC, INTETC01
@@ -10983,7 +10992,17 @@ LABEL_020C15:
 	LD (CMD_PROCESSING_STATE), 0
 	RET
 
-LABEL_020C6B:
+; ===========================================================================
+; InterCPU_DMA_Send - Send data via DMA to main CPU
+; ===========================================================================
+; Entry: XDE = source data pointer
+;        BC = byte count
+;        A = command/channel identifier
+; Exit:  Data transferred to main CPU via inter-CPU latch
+; Notes: Splits large transfers into 32-byte chunks
+;        Used by tone generator and audio subsystem for command responses
+; ===========================================================================
+InterCPU_DMA_Send:
 	DEC 6, XSP
 	PUSH IZ
 	LD (XSP + 002h), XDE
@@ -11430,11 +11449,11 @@ LABEL_021023:
 	LD HL, (100000h)
 	RET
 
-LABEL_021031:
+RingBuf_SetOffsetHi:
 	LD (27E7h), WA
 	RET
 
-LABEL_021036:
+RingBuf_SetOffsetLo:
 	LD (27E6h), A
 	RET
 
@@ -24652,7 +24671,7 @@ LABEL_029E5B:
 	db 01Eh, 0B7h, 0FCh, 00Eh, 0D8h, 012h, 0D9h, 012h
 	db 00Bh, 003h, 000h, 01Eh, 0ACh, 0FCh, 00Eh, 00Eh
 
-LABEL_029F73:
+Voice_ModWheel_Apply:
 	LDA XSP, XSP - 10
 	PUSH XIZ
 	LD (XSP + 00ah), C
@@ -24940,53 +24959,66 @@ LABEL_02A27F:
 	INC 6, XSP
 	RET
 
-LABEL_02A282:
+; ===========================================================================
+; Voice_CtrlChange - Process MIDI Control Change messages
+; ===========================================================================
+; Entry: XWA = pointer to 4-byte CC data:
+;        +0 = status byte (0xBn where n=channel)
+;        +1 = channel number (0-25)
+;        +2 = controller number
+;        +3 = controller value
+; Exit:  Voice parameters updated based on CC number
+; Notes: Handles standard MIDI CCs: Mod Wheel(1), Volume(7), Pan(10),
+;        Expression(11), Sustain(64), Sostenuto(91), Soft(93), Portamento(94)
+;        Plus proprietary CCs in 0x91-0x9D range for effects depth
+; ===========================================================================
+Voice_CtrlChange:
 	PUSH XIZ
 	LD XIZ, XWA
 	CP (XIZ + 001h), 01ah
-	JRL NC, LABEL_02A4E8
+	JRL NC, Voice_CC_Exit
 	LD A, (XIZ + 002h)
 	CP A, 09dh
-	JRL Z, LABEL_02A4D5
+	JRL Z, Voice_CC_9D
 	CP A, 09ch
-	JRL Z, LABEL_02A4C0
+	JRL Z, Voice_CC_9C
 	CP A, 09bh
-	JRL Z, LABEL_02A4AB
+	JRL Z, Voice_CC_9B
 	CP A, 097h
-	JRL Z, LABEL_02A496
+	JRL Z, Voice_CC_97
 	CP A, 095h
-	JRL Z, LABEL_02A481
+	JRL Z, Voice_CC_95
 	CP A, 091h
-	JRL Z, LABEL_02A46C
+	JRL Z, Voice_CC_91
 	CP A, 05eh
-	JRL Z, LABEL_02A3D5
+	JRL Z, Voice_CC_Portamento
 	CP A, 05dh
-	JRL Z, LABEL_02A3BF
+	JRL Z, Voice_CC_Soft
 	CP A, 05bh
-	JRL Z, LABEL_02A3A9
+	JRL Z, Voice_CC_Sostenuto
 	CP A, 040h
-	JRL Z, LABEL_02A383
+	JRL Z, Voice_CC_Sustain
 	CP A, 00bh
-	JRL Z, LABEL_02A35F
+	JRL Z, Voice_CC_Expression
 	CP A, 00ah
-	JR Z, LABEL_02A340
+	JR Z, Voice_CC_Pan
 	CP A, 7
-	JR Z, LABEL_02A31C
+	JR Z, Voice_CC_Volume
 	CP A, 1
-	JR Z, LABEL_02A306
+	JR Z, Voice_CC_ModWheel
 	EXTZ WA
 	SUB WA, 0078h
 	CP WA, 0
-	JRL LT, LABEL_02A4E8
+	JRL LT, Voice_CC_Exit
 	CP WA, 000ah
-	JRL GT, LABEL_02A4E8
+	JRL GT, Voice_CC_Exit
 	ADD WA, WA
 	LDA XIX, 0F739h:24
 	LD WA, (XIX + WA)
 	LDA XIX, 02A306h
 	JP T, XIX + WA
 
-LABEL_02A306:
+Voice_CC_ModWheel:
 	LD A, (XIZ + 001h)
 	LD E, A
 	EXTZ DE
@@ -24994,10 +25026,10 @@ LABEL_02A306:
 	LD C, A
 	EXTZ BC
 	LD WA, DE
-	CALR LABEL_029F73
-	JRL T, LABEL_02A4E8
+	CALR Voice_ModWheel_Apply
+	JRL T, Voice_CC_Exit
 
-LABEL_02A31C:
+Voice_CC_Volume:
 	LD A, (XIZ + 001h)
 	LD E, A
 	EXTZ DE
@@ -25011,9 +25043,9 @@ LABEL_02A31C:
 	CALL LABEL_02CD36
 	LD XWA, XHL
 	CALR LABEL_028DBF
-	JRL T, LABEL_02A4E8
+	JRL T, Voice_CC_Exit
 
-LABEL_02A340:
+Voice_CC_Pan:
 	LD A, (XIZ + 001h)
 	LD E, A
 	EXTZ DE
@@ -25025,9 +25057,9 @@ LABEL_02A340:
 	LD A, (XIZ + 001h)
 	EXTZ WA
 	CALL LABEL_032E1E
-	JRL T, LABEL_02A4E8
+	JRL T, Voice_CC_Exit
 
-LABEL_02A35F:
+Voice_CC_Expression:
 	LD A, (XIZ + 001h)
 	LD E, A
 	EXTZ DE
@@ -25041,9 +25073,9 @@ LABEL_02A35F:
 	CALL LABEL_02CD36
 	LD XWA, XHL
 	CALR LABEL_028DBF
-	JRL T, LABEL_02A4E8
+	JRL T, Voice_CC_Exit
 
-LABEL_02A383:
+Voice_CC_Sustain:
 	LD A, (XIZ + 001h)
 	LD E, A
 	EXTZ DE
@@ -25058,9 +25090,9 @@ LABEL_02A383:
 	LD XWA, XHL
 	LD BC, 0
 	CALR LABEL_028E26
-	JRL T, LABEL_02A4E8
+	JRL T, Voice_CC_Exit
 
-LABEL_02A3A9:
+Voice_CC_Sostenuto:
 	LD A, (XIZ + 001h)
 	LD E, A
 	EXTZ DE
@@ -25069,9 +25101,9 @@ LABEL_02A3A9:
 	EXTZ BC
 	LD WA, DE
 	CALR LABEL_02898C
-	JRL T, LABEL_02A4E8
+	JRL T, Voice_CC_Exit
 
-LABEL_02A3BF:
+Voice_CC_Soft:
 	LD A, (XIZ + 001h)
 	LD E, A
 	EXTZ DE
@@ -25080,9 +25112,9 @@ LABEL_02A3BF:
 	EXTZ BC
 	LD WA, DE
 	CALR LABEL_02899D
-	JRL T, LABEL_02A4E8
+	JRL T, Voice_CC_Exit
 
-LABEL_02A3D5:
+Voice_CC_Portamento:
 	LD A, (XIZ + 001h)
 	LD E, A
 	EXTZ DE
@@ -25091,15 +25123,15 @@ LABEL_02A3D5:
 	EXTZ BC
 	LD WA, DE
 	CALR LABEL_02A0E9
-	JRL T, LABEL_02A4E8
+	JRL T, Voice_CC_Exit
 	LD A, (XIZ + 001h)
 	EXTZ WA
 	CALR LABEL_02A18F
-	JRL T, LABEL_02A4E8
+	JRL T, Voice_CC_Exit
 	LD A, (XIZ + 001h)
 	EXTZ WA
 	CALL LABEL_0347B7
-	JRL T, LABEL_02A4E8
+	JRL T, Voice_CC_Exit
 	LD A, (XIZ + 001h)
 	EXTZ WA
 	CALL LABEL_027CBE
@@ -25107,8 +25139,8 @@ LABEL_02A3D5:
 	EXTZ WA
 	CALL LABEL_02CCD3
 	LD XWA, XHL
-	CALL LABEL_02CF07
-	JRL T, LABEL_02A4E8
+	CALL Voice_ParamInit
+	JRL T, Voice_CC_Exit
 	LD A, (XIZ + 001h)
 	LD E, A
 	EXTZ DE
@@ -25117,7 +25149,7 @@ LABEL_02A3D5:
 	EXTZ BC
 	LD WA, DE
 	CALR LABEL_0289D8
-	JRL T, LABEL_02A4E8
+	JRL T, Voice_CC_Exit
 	LD A, (XIZ + 001h)
 	LD E, A
 	EXTZ DE
@@ -25131,7 +25163,7 @@ LABEL_02A3D5:
 	CALL LABEL_02CD36
 	LD XWA, XHL
 	CALR LABEL_028D4C
-	JRL T, LABEL_02A4E8
+	JRL T, Voice_CC_Exit
 	LD A, (XIZ + 001h)
 	LD E, A
 	EXTZ DE
@@ -25140,9 +25172,9 @@ LABEL_02A3D5:
 	EXTZ BC
 	LD WA, DE
 	CALR LABEL_028A04
-	JR T, LABEL_02A4E8
+	JR T, Voice_CC_Exit
 
-LABEL_02A46C:
+Voice_CC_91:
 	LD A, (XIZ + 001h)
 	LD E, A
 	EXTZ DE
@@ -25151,9 +25183,9 @@ LABEL_02A46C:
 	EXTZ BC
 	LD WA, DE
 	CALR LABEL_028A44
-	JR T, LABEL_02A4E8
+	JR T, Voice_CC_Exit
 
-LABEL_02A481:
+Voice_CC_95:
 	LD A, (XIZ + 001h)
 	LD E, A
 	EXTZ DE
@@ -25162,9 +25194,9 @@ LABEL_02A481:
 	EXTZ BC
 	LD WA, DE
 	CALR LABEL_028A55
-	JR T, LABEL_02A4E8
+	JR T, Voice_CC_Exit
 
-LABEL_02A496:
+Voice_CC_97:
 	LD A, (XIZ + 001h)
 	LD E, A
 	EXTZ DE
@@ -25173,9 +25205,9 @@ LABEL_02A496:
 	EXTZ BC
 	LD WA, DE
 	CALR LABEL_028A7F
-	JR T, LABEL_02A4E8
+	JR T, Voice_CC_Exit
 
-LABEL_02A4AB:
+Voice_CC_9B:
 	LD A, (XIZ + 001h)
 	LD E, A
 	EXTZ DE
@@ -25184,9 +25216,9 @@ LABEL_02A4AB:
 	EXTZ BC
 	LD WA, DE
 	CALR LABEL_028A90
-	JR T, LABEL_02A4E8
+	JR T, Voice_CC_Exit
 
-LABEL_02A4C0:
+Voice_CC_9C:
 	LD A, (XIZ + 001h)
 	LD E, A
 	EXTZ DE
@@ -25195,9 +25227,9 @@ LABEL_02A4C0:
 	EXTZ BC
 	LD WA, DE
 	CALR LABEL_028AA1
-	JR T, LABEL_02A4E8
+	JR T, Voice_CC_Exit
 
-LABEL_02A4D5:
+Voice_CC_9D:
 	LD A, (XIZ + 001h)
 	LD E, A
 	EXTZ DE
@@ -25207,11 +25239,11 @@ LABEL_02A4D5:
 	LD WA, DE
 	CALR LABEL_028ACB
 
-LABEL_02A4E8:
+Voice_CC_Exit:
 	POP XIZ
 	RET
 
-LABEL_02A4EA:
+Voice_ChanPressure:
 	LDA XSP, XSP - 10
 	PUSH QIZ
 	LD (XSP + 008h), XWA
@@ -25308,7 +25340,7 @@ LABEL_02A5DF:
 	LDA XSP, XSP + 00ah
 	RET
 
-LABEL_02A5E6:
+Voice_PitchBend:
 	CP (XWA + 001h), 01ah
 	RET NC
 	LD E, (XWA + 001h)
@@ -25510,7 +25542,7 @@ LABEL_02A7AB:
 	POP QIZ
 	RET
 
-LABEL_02A7AF:
+Voice_SystemMsg:
 	LD C, (XWA + 002h)
 	CP C, 099h
 	JRL Z, LABEL_02A843
@@ -25654,7 +25686,7 @@ LABEL_02A900:
 	LD A, QIZH
 	EXTZ WA
 	LD BC, 0
-	CALR LABEL_029F73
+	CALR Voice_ModWheel_Apply
 	LD A, QIZH
 	EXTZ WA
 	LD BC, 007fh
@@ -28438,7 +28470,7 @@ LABEL_02C6C7:
 	INC 2, XSP
 	RETD 0002h
 
-LABEL_02C6CD:
+Voice_SetPitch:
 	LDA XSP, XSP - 014h
 	PUSH QIZ
 	LD (XSP + 010h), E
@@ -28538,7 +28570,7 @@ LABEL_02C7CE:
 	LDA XSP, XSP + 014h
 	RETD 0002h
 
-LABEL_02C7D7:
+Voice_NoteOff:
 	LDA XSP, XSP - 014h
 	PUSH QIZ
 	LD (XSP + 010h), E
@@ -28639,7 +28671,7 @@ LABEL_02C8DB:
 	LDA XSP, XSP + 014h
 	RETD 0002h
 
-LABEL_02C8E4:
+Voice_SetVelocity:
 	LDA XSP, XSP - 014h
 	PUSH QIZ
 	LD (XSP + 010h), E
@@ -29031,7 +29063,7 @@ LABEL_02CC8F:
 	LDA XSP, XSP + 014h
 	RETD 0002h
 
-LABEL_02CCAD:
+Voice_Allocate:
 	PUSH XIZ
 	LDA XIZ, 2A5Eh
 	LD (XIZ), 080h
@@ -29276,7 +29308,7 @@ LABEL_02CF04:
 	INC 2, XSP
 	RET
 
-LABEL_02CF07:
+Voice_ParamInit:
 	DEC 4, XSP
 	PUSH XIZ
 	INC 5, XWA
@@ -29349,7 +29381,20 @@ LABEL_02CF93:
 	INC 4, XSP
 	RET
 
-LABEL_02CF97:
+; ===========================================================================
+; Voice_NoteOn - Process MIDI Note On messages
+; ===========================================================================
+; Entry: XWA = pointer to 4-byte note data:
+;        +0 = status byte (0x9n where n=channel)
+;        +1 = channel number (0-25)
+;        +2 = note number (0-127)
+;        +3 = velocity (0-127, 0 = note off)
+; Exit:  Voice allocated and parameters set for new note
+; Notes: Allocates voice slot, sets pitch via Voice_SetPitch
+;        Sets velocity via Voice_SetVelocity
+;        Velocity 0 triggers note-off via Voice_NoteOff
+; ===========================================================================
+Voice_NoteOn:
 	DEC 2, XSP
 	PUSH XIZ
 	LD XIZ, XWA
@@ -29364,7 +29409,7 @@ LABEL_02CF97:
 	JR Z, LABEL_02CFE7
 	LD A, (XIZ)
 	AND A, 008h
-	CALL LABEL_021036
+	CALL RingBuf_SetOffsetLo
 	LD L, (XIZ + 001h)
 	LD C, (XIZ + 002h)
 	LD E, (XIZ + 003h)
@@ -29372,7 +29417,7 @@ LABEL_02CF97:
 	EXTZ WA
 	PUSH WA
 	LD A, L
-	CALR LABEL_02C8E4
+	CALR Voice_SetVelocity
 	LD L, (XIZ + 001h)
 	LD C, (XIZ + 002h)
 	LD E, (XIZ + 003h)
@@ -29380,15 +29425,15 @@ LABEL_02CF97:
 	EXTZ WA
 	PUSH WA
 	LD A, L
-	CALR LABEL_02C6CD
+	CALR Voice_SetPitch
 	JR T, LABEL_02D009
 
 LABEL_02CFE7:
 	LD A, (XIZ + 001h)
 	LD C, (XIZ + 002h)
-	CALR LABEL_02CCAD
+	CALR Voice_Allocate
 	LD XWA, XHL
-	CALR LABEL_02CF07
+	CALR Voice_ParamInit
 	LD L, (XIZ + 001h)
 	LD C, (XIZ + 002h)
 	LD E, (XIZ + 003h)
@@ -29396,7 +29441,7 @@ LABEL_02CFE7:
 	EXTZ WA
 	PUSH WA
 	LD A, L
-	CALR LABEL_02C7D7
+	CALR Voice_NoteOff
 
 LABEL_02D009:
 	POP XIZ
@@ -31014,7 +31059,7 @@ LABEL_02DFA4:
 	NOP
 	RET
 
-LABEL_02DFA8:
+DSP_Config_Init:
 	DEC 4, XSP
 	PUSH IZ
 	LDA XWA, 0F8BBh:24
@@ -33695,7 +33740,7 @@ LABEL_031A5F:
 LABEL_031A6C:
 	db 00Eh, 00Eh, 00Eh, 00Eh, 00Eh, 00Eh
 
-LABEL_031A72:
+Voice_ParamFinalize:
 	PUSH XIZ
 	LD XIZ, XWA
 	LD A, (XIZ)
@@ -33868,7 +33913,7 @@ LABEL_031E50:
 	LD XDE, XWA
 	LD WA, BC
 	LD BC, HL
-	CALL LABEL_020C6B
+	CALL InterCPU_DMA_Send
 
 LABEL_031E68:
 	POP XIZ
@@ -37806,7 +37851,7 @@ LABEL_034A3C:
 	INC 4, XSP
 	RET
 
-LABEL_034A4A:
+Voice_ProgChange:
 	DEC 4, XSP
 	PUSH QIZ
 	LD (XSP + 002h), XWA
@@ -38058,8 +38103,8 @@ DSP_System_Init_Continue:
 	LD (045314h), XWA
 	LDA XWA, 0A0000h
 	LD (045318h), XWA
-	CALL LABEL_02DFA8
-	CALL LABEL_0360A7
+	CALL DSP_Config_Init
+	CALL DSP_Reset
 	LD WA, 0
 	CALL LABEL_021ECB
 	CALL LABEL_03555F
@@ -38069,7 +38114,7 @@ DSP_System_Init_Continue:
 LABEL_034CDA:
 	db 00Eh
 
-LABEL_034CDB:
+Audio_Process_Init:
 	CP (041342h), 000h
 	JR NZ, LABEL_034CED
 	CALL LABEL_027A46
@@ -38084,7 +38129,19 @@ LABEL_034CF5:
 	XOR (041342h), 0ffh
 	RET
 
-LABEL_034CFC:
+; ===========================================================================
+; RingBuf_ReadByte - Read single byte from audio ring buffer
+; ===========================================================================
+; Entry: XWA = pointer to buffer control structure:
+;        +0 = read pointer (16-bit)
+;        +2 = write pointer (16-bit)
+;        +4 = byte count (16-bit)
+;        +6 = buffer data (4KB)
+; Exit:  HL = byte read (0x0000-0x00FF) or 0xFFFF if buffer empty
+; Notes: Uses 12-bit circular index (0xFFF mask = 4KB buffer)
+;        Decrements byte count after successful read
+; ===========================================================================
+RingBuf_ReadByte:
 	CPW (XWA + 004h), 0000h
 	JR Z, LABEL_034D21
 	LDA XBC, XWA + 002h
@@ -38110,17 +38167,17 @@ LABEL_034D24:
 LABEL_034D25:
 	db 0F1h, 00Dh, 02Bh, 030h, 068h, 0D1h
 
-LABEL_034D2B:
+RingBuf_SkipToEnd:
 	PUSH XIZ
 	LD XIZ, XWA
 	LD XWA, XIZ
-	CALR LABEL_034CFC
+	CALR RingBuf_ReadByte
 	CP HL, 0
 	JR LT, LABEL_034D40
 
 LABEL_034D37:
 	LD XWA, XIZ
-	CALR LABEL_034CFC
+	CALR RingBuf_ReadByte
 	CP HL, 0
 	JR GE, LABEL_034D37
 
@@ -38130,17 +38187,29 @@ LABEL_034D40:
 	POP XIZ
 	RET
 
-LABEL_034D47:
+Audio_CmdHandler_ConstData:
 	db 0E8h, 08Ah, 092h, 023h, 092h, 061h, 0DBh, 0CCh
 	db 0FFh, 00Fh, 0DBh, 08Ah, 0EAh, 012h, 0EAh, 066h
 	db 0E8h, 082h, 0B2h, 043h, 098h, 004h, 061h, 00Eh
 
-LABEL_034D5F:
+; ===========================================================================
+; Audio_CmdHandler_00_1F - Audio command handler for DSP/audio control
+; ===========================================================================
+; Entry: Stack contains:
+;        XSP+004h = count of bytes to process (DE)
+;        XSP+006h = pointer to command data (XWA)
+; Exit:  HL = 0 (success)
+; Notes: Writes incoming audio data to circular ring buffer
+;        Buffer control at 0x2B0D (write ptr), 0x2B11 (count), 0x2B13 (base)
+;        Uses 12-bit index (0xFFF mask = 4KB buffer capacity)
+;        Called from CMD_DISPATCH_TABLE for commands 0x00-0x1F
+; ===========================================================================
+Audio_CmdHandler_00_1F:
 	LD DE, (XSP + 004h)
 	CP DE, 0
-	JR Z, LABEL_034D90
+	JR Z, Audio_CmdHandler_00_1F_Done
 
-LABEL_034D66:
+Audio_CmdHandler_00_1F_Loop:
 	LDA XWA, 2B0Dh
 	LD BC, (XWA)
 	INCW 1, (XWA)
@@ -38156,241 +38225,255 @@ LABEL_034D66:
 	LD XWA, 1
 	ADD (XSP + 006h), XWA
 	CP DE, 0
-	JR NZ, LABEL_034D66
+	JR NZ, Audio_CmdHandler_00_1F_Loop
 
-LABEL_034D90:
+Audio_CmdHandler_00_1F_Done:
 	LD HL, 0
 	RET
 
-LABEL_034D93:
+; ===========================================================================
+; MIDI_Dispatch - MIDI message dispatcher
+; ===========================================================================
+; Entry: Ring buffer at 0x2B0D contains MIDI data from main CPU
+; Exit:  Messages dispatched to appropriate voice parameter handlers
+; Notes: Parses MIDI status byte (0x80-0xF0) and routes to handlers:
+;        0x80/0x90 = Note Off/On -> Voice_NoteOn (velocity 0 = off)
+;        0xB0 = Control Change -> Voice_CtrlChange
+;        0xC0 = Program Change -> Voice_ProgChange
+;        0xD0 = Channel Pressure -> Voice_ChanPressure
+;        0xE0 = Pitch Bend -> Voice_PitchBend
+;        0xF0 = System Message -> Voice_SystemMsg
+;        Loops until buffer is empty (RingBuf_ReadByte returns 0xFFFF)
+; ===========================================================================
+MIDI_Dispatch:
 	PUSH XIZ
 	LDA XIZ, 2B0Dh
 	LD WA, (XIZ + 004h)
-	CALL LABEL_021031
-	JRL T, LABEL_034FD8
+	CALL RingBuf_SetOffsetHi
+	JRL T, MIDI_Dispatch_NextByte
 
-LABEL_034DA2:
+MIDI_Dispatch_ParseStatus:
 	LD WA, HL
 	AND WA, 00f0h
 	CP WA, 00f0h
-	JRL Z, LABEL_034F9C
+	JRL Z, MIDI_Status_System
 	CP WA, 00e0h
-	JRL Z, LABEL_034F65
+	JRL Z, MIDI_Status_PitchBend
 	CP WA, 00d0h
-	JRL Z, LABEL_034F2D
+	JRL Z, MIDI_Status_ChanPressure
 	CP WA, 00c0h
-	JRL Z, LABEL_034EEB
+	JRL Z, MIDI_Status_ProgChange
 	CP WA, 00b0h
-	JRL Z, LABEL_034EB2
+	JRL Z, MIDI_Status_CtrlChange
 	CP WA, 0090h
-	JRL Z, LABEL_034E65
+	JRL Z, MIDI_Status_NoteOn
 	CP WA, 0080h
-	JRL NZ, LABEL_034FD3
+	JRL NZ, MIDI_Status_Unknown
 	CPW (XIZ + 004h), 0005h
-	JR C, LABEL_034E5D
+	JR C, MIDI_Status_Incomplete
 	BIT 3, HL
-	JR NZ, LABEL_034E21
+	JR NZ, MIDI_Status_NoteOn_Extended
 	LD (2AE8h), L
 	LD XWA, XIZ
-	CALR LABEL_034CFC
+	CALR RingBuf_ReadByte
 	LD (2AE9h), L
 	LD XWA, XIZ
-	CALR LABEL_034CFC
+	CALR RingBuf_ReadByte
 	LD (2AEAh), L
 	LD XWA, XIZ
-	CALR LABEL_034CFC
+	CALR RingBuf_ReadByte
 	LD (2AEBh), L
 	LD XWA, XIZ
-	CALR LABEL_034CFC
+	CALR RingBuf_ReadByte
 	LD (2AECh), L
 	LD XWA, XIZ
-	CALR LABEL_034CFC
+	CALR RingBuf_ReadByte
 	LD (2AEDh), L
 	LDA XWA, 2AE8h
-	CALL LABEL_031A72
-	JRL T, LABEL_034FE4
+	CALL Voice_ParamFinalize
+	JRL T, MIDI_Dispatch_Exit
 
-LABEL_034E21:
+MIDI_Status_NoteOn_Extended:
 	LD (2AEEh), L
 	LD XWA, XIZ
-	CALR LABEL_034CFC
+	CALR RingBuf_ReadByte
 	LD (2AEFh), L
 	LD XWA, XIZ
-	CALR LABEL_034CFC
+	CALR RingBuf_ReadByte
 	LD (2AF0h), L
 	LD XWA, XIZ
-	CALR LABEL_034CFC
+	CALR RingBuf_ReadByte
 	LD (2AF1h), L
 	LD XWA, XIZ
-	CALR LABEL_034CFC
+	CALR RingBuf_ReadByte
 	LD (2AF2h), L
 	LD XWA, XIZ
-	CALR LABEL_034CFC
+	CALR RingBuf_ReadByte
 	LD (2AF3h), L
 	LDA XWA, 2AEEh
-	CALL LABEL_031A72
-	JRL T, LABEL_034FE4
+	CALL Voice_ParamFinalize
+	JRL T, MIDI_Dispatch_Exit
 
-LABEL_034E5D:
+MIDI_Status_Incomplete:
 	LD XWA, XIZ
-	CALR LABEL_034D2B
-	JRL T, LABEL_034FD8
+	CALR RingBuf_SkipToEnd
+	JRL T, MIDI_Dispatch_NextByte
 
-LABEL_034E65:
+MIDI_Status_NoteOn:
 	CPW (XIZ + 004h), 0003h
-	JR C, LABEL_034EAA
+	JR C, MIDI_Status_NoteOn_Skip
 	LD (2AF4h), L
 	LD XWA, XIZ
-	CALR LABEL_034CFC
+	CALR RingBuf_ReadByte
 	LD (2AF5h), L
 	LD XWA, XIZ
-	CALR LABEL_034CFC
+	CALR RingBuf_ReadByte
 	LD (2AF6h), L
 	LD XWA, XIZ
-	CALR LABEL_034CFC
+	CALR RingBuf_ReadByte
 	LD (2AF7h), L
 	LD A, (2AF5h)
 	CP A, 0f0h
-	JR NC, LABEL_034E9F
+	JR NC, MIDI_Status_NoteOn_Poly
 	LDA XWA, 2AF4h
-	CALL LABEL_02CF97
-	JRL T, LABEL_034FE4
+	CALL Voice_NoteOn
+	JRL T, MIDI_Dispatch_Exit
 
-LABEL_034E9F:
+MIDI_Status_NoteOn_Poly:
 	LDA XWA, 2AF4h
-	CALL LABEL_0356C9
-	JRL T, LABEL_034FE4
+	CALL Voice_Poly_NoteOn
+	JRL T, MIDI_Dispatch_Exit
 
-LABEL_034EAA:
+MIDI_Status_NoteOn_Skip:
 	LD XWA, XIZ
-	CALR LABEL_034D2B
-	JRL T, LABEL_034FD8
+	CALR RingBuf_SkipToEnd
+	JRL T, MIDI_Dispatch_NextByte
 
-LABEL_034EB2:
+MIDI_Status_CtrlChange:
 	CPW (XIZ + 004h), 0003h
-	JR C, LABEL_034EE3
+	JR C, MIDI_Status_CtrlChange_Skip
 	LD (2AF8h), L
 	LD XWA, XIZ
-	CALR LABEL_034CFC
+	CALR RingBuf_ReadByte
 	LD (2AF9h), L
 	LD XWA, XIZ
-	CALR LABEL_034CFC
+	CALR RingBuf_ReadByte
 	LD (2AFAh), L
 	LD XWA, XIZ
-	CALR LABEL_034CFC
+	CALR RingBuf_ReadByte
 	LD (2AFBh), L
 	LDA XWA, 2AF8h
-	CALL LABEL_02A282
-	JRL T, LABEL_034FE4
+	CALL Voice_CtrlChange
+	JRL T, MIDI_Dispatch_Exit
 
-LABEL_034EE3:
+MIDI_Status_CtrlChange_Skip:
 	LD XWA, XIZ
-	CALR LABEL_034D2B
-	JRL T, LABEL_034FD8
+	CALR RingBuf_SkipToEnd
+	JRL T, MIDI_Dispatch_NextByte
 
-LABEL_034EEB:
+MIDI_Status_ProgChange:
 	CPW (XIZ + 004h), 0004h
-	JR C, LABEL_034F25
+	JR C, MIDI_Status_ProgChange_Skip
 	LD (2AFCh), L
 	LD XWA, XIZ
-	CALR LABEL_034CFC
+	CALR RingBuf_ReadByte
 	LD (2AFDh), L
 	LD XWA, XIZ
-	CALR LABEL_034CFC
+	CALR RingBuf_ReadByte
 	LD (2AFEh), L
 	LD XWA, XIZ
-	CALR LABEL_034CFC
+	CALR RingBuf_ReadByte
 	LD (2AFFh), L
 	LD XWA, XIZ
-	CALR LABEL_034CFC
+	CALR RingBuf_ReadByte
 	LD (2B00h), L
 	LDA XWA, 2AFCh
-	CALL LABEL_034A4A
-	JRL T, LABEL_034FE4
+	CALL Voice_ProgChange
+	JRL T, MIDI_Dispatch_Exit
 
-LABEL_034F25:
+MIDI_Status_ProgChange_Skip:
 	LD XWA, XIZ
-	CALR LABEL_034D2B
-	JRL T, LABEL_034FD8
+	CALR RingBuf_SkipToEnd
+	JRL T, MIDI_Dispatch_NextByte
 
-LABEL_034F2D:
+MIDI_Status_ChanPressure:
 	CPW (XIZ + 004h), 0003h
-	JR C, LABEL_034F5E
+	JR C, MIDI_Status_ChanPressure_Skip
 	LD (2B01h), L
 	LD XWA, XIZ
-	CALR LABEL_034CFC
+	CALR RingBuf_ReadByte
 	LD (2B02h), L
 	LD XWA, XIZ
-	CALR LABEL_034CFC
+	CALR RingBuf_ReadByte
 	LD (2B03h), L
 	LD XWA, XIZ
-	CALR LABEL_034CFC
+	CALR RingBuf_ReadByte
 	LD (2B04h), L
 	LDA XWA, 2B01h
-	CALL LABEL_02A4EA
-	JRL T, LABEL_034FE4
+	CALL Voice_ChanPressure
+	JRL T, MIDI_Dispatch_Exit
 
-LABEL_034F5E:
+MIDI_Status_ChanPressure_Skip:
 	LD XWA, XIZ
-	CALR LABEL_034D2B
-	JR T, LABEL_034FD8
+	CALR RingBuf_SkipToEnd
+	JR T, MIDI_Dispatch_NextByte
 
-LABEL_034F65:
+MIDI_Status_PitchBend:
 	CPW (XIZ + 004h), 0003h
-	JR C, LABEL_034F95
+	JR C, MIDI_Status_PitchBend_Skip
 	LD (2B05h), L
 	LD XWA, XIZ
-	CALR LABEL_034CFC
+	CALR RingBuf_ReadByte
 	LD (2B06h), L
 	LD XWA, XIZ
-	CALR LABEL_034CFC
+	CALR RingBuf_ReadByte
 	LD (2B07h), L
 	LD XWA, XIZ
-	CALR LABEL_034CFC
+	CALR RingBuf_ReadByte
 	LD (2B08h), L
 	LDA XWA, 2B05h
-	CALL LABEL_02A5E6
-	JR T, LABEL_034FE4
+	CALL Voice_PitchBend
+	JR T, MIDI_Dispatch_Exit
 
-LABEL_034F95:
+MIDI_Status_PitchBend_Skip:
 	LD XWA, XIZ
-	CALR LABEL_034D2B
-	JR T, LABEL_034FD8
+	CALR RingBuf_SkipToEnd
+	JR T, MIDI_Dispatch_NextByte
 
-LABEL_034F9C:
+MIDI_Status_System:
 	CPW (XIZ + 004h), 0003h
-	JR C, LABEL_034FCC
+	JR C, MIDI_Status_System_Skip
 	LD (2B09h), L
 	LD XWA, XIZ
-	CALR LABEL_034CFC
+	CALR RingBuf_ReadByte
 	LD (2B0Ah), L
 	LD XWA, XIZ
-	CALR LABEL_034CFC
+	CALR RingBuf_ReadByte
 	LD (2B0Bh), L
 	LD XWA, XIZ
-	CALR LABEL_034CFC
+	CALR RingBuf_ReadByte
 	LD (2B0Ch), L
 	LDA XWA, 2B09h
-	CALL LABEL_02A7AF
-	JR T, LABEL_034FE4
+	CALL Voice_SystemMsg
+	JR T, MIDI_Dispatch_Exit
 
-LABEL_034FCC:
+MIDI_Status_System_Skip:
 	LD XWA, XIZ
-	CALR LABEL_034D2B
-	JR T, LABEL_034FD8
+	CALR RingBuf_SkipToEnd
+	JR T, MIDI_Dispatch_NextByte
 
-LABEL_034FD3:
+MIDI_Status_Unknown:
 	LD XWA, XIZ
-	CALR LABEL_034D2B
+	CALR RingBuf_SkipToEnd
 
-LABEL_034FD8:
+MIDI_Dispatch_NextByte:
 	LD XWA, XIZ
-	CALR LABEL_034CFC
+	CALR RingBuf_ReadByte
 	LD WA, HL
 	CP WA, 0
-	JRL GE, LABEL_034DA2
+	JRL GE, MIDI_Dispatch_ParseStatus
 
-LABEL_034FE4:
+MIDI_Dispatch_Exit:
 	POP XIZ
 	RET
 
@@ -39085,7 +39168,7 @@ LABEL_035656:
 	INC 2, XSP
 	RETD 0002h
 
-LABEL_0356C9:
+Voice_Poly_NoteOn:
 	PUSH XIZ
 	LD E, (XWA + 001h)
 	LD C, E
@@ -39234,7 +39317,15 @@ LABEL_035818:
 	LD (4366h), WA
 	RET
 
-LABEL_03581D:
+; ===========================================================================
+; DSP2_Init - Initialize second DSP chip
+; ===========================================================================
+; Entry: None
+; Exit:  DSP2 state cleared
+; Notes: Clears DSP2 control variables at 0x3B60-0x3B64
+;        Called during Audio_System_Init after primary DSP initialization
+; ===========================================================================
+DSP2_Init:
 	LDW (3B64h), 0000h
 	LD WA, 0
 	LD (3B62h), WA
@@ -39244,7 +39335,7 @@ LABEL_03581D:
 LABEL_03582E:
 	db 00Eh, 00Eh
 
-LABEL_035830:
+DSP_RingBuf_Read:
 	CPW (XWA + 004h), 0000h
 	JR Z, LABEL_035855
 	LDA XBC, XWA + 002h
@@ -39270,17 +39361,17 @@ LABEL_035858:
 LABEL_035859:
 	db 0F1h, 060h, 03Bh, 030h, 068h, 0D1h
 
-LABEL_03585F:
+DSP_RingBuf_Skip:
 	PUSH XIZ
 	LD XIZ, XWA
 	LD XWA, XIZ
-	CALR LABEL_035830
+	CALR DSP_RingBuf_Read
 	CP HL, 0
 	JR LT, LABEL_035874
 
 LABEL_03586B:
 	LD XWA, XIZ
-	CALR LABEL_035830
+	CALR DSP_RingBuf_Read
 	CP HL, 0
 	JR GE, LABEL_03586B
 
@@ -39295,7 +39386,7 @@ LABEL_03587B:
 	db 0FFh, 007h, 0DBh, 08Ah, 0EAh, 012h, 0EAh, 066h
 	db 0E8h, 082h, 0B2h, 043h, 098h, 004h, 061h, 00Eh
 
-LABEL_035893:
+Audio_CmdHandler_60_7F:
 	LD XHL, (XSP + 006h)
 	LD DE, (XSP + 004h)
 	CPW (448Ch), 0000h
@@ -39399,25 +39490,25 @@ LABEL_035997:
 	PUSH XIZ
 	LD XIZ, XWA
 	LD XWA, XIZ
-	CALR LABEL_035830
+	CALR DSP_RingBuf_Read
 	LD (4369h), L
 	LD XWA, XIZ
-	CALR LABEL_035830
+	CALR DSP_RingBuf_Read
 	LD (436Ah), L
 	LD XWA, XIZ
-	CALR LABEL_035830
+	CALR DSP_RingBuf_Read
 	LD (436Bh), L
 	LD XWA, XIZ
-	CALR LABEL_035830
+	CALR DSP_RingBuf_Read
 	LD (436Ch), L
 	LD XWA, XIZ
-	CALR LABEL_035830
+	CALR DSP_RingBuf_Read
 	LD (436Dh), L
 	LD XWA, XIZ
-	CALR LABEL_035830
+	CALR DSP_RingBuf_Read
 	LD (436Eh), L
 	LD XWA, XIZ
-	CALR LABEL_035830
+	CALR DSP_RingBuf_Read
 	LD (436Fh), L
 	POP XIZ
 	RET
@@ -39444,7 +39535,7 @@ LABEL_0359DB:
 
 LABEL_035A0E:
 	LD XWA, (XSP + 00ah)
-	CALR LABEL_035830
+	CALR DSP_RingBuf_Read
 	LD XWA, (XSP + 006h)
 	LD (XWA+), L
 	LD (XSP + 006h), XWA
@@ -39468,7 +39559,7 @@ LABEL_035A31:
 
 LABEL_035A42:
 	LD XWA, (XSP + 00ah)
-	CALR LABEL_035830
+	CALR DSP_RingBuf_Read
 	LD XWA, (XSP + 006h)
 	LD (XWA+), L
 	LD (XSP + 006h), XWA
@@ -39483,15 +39574,15 @@ LABEL_035A58:
 
 LABEL_035A60:
 	LD XWA, (XSP + 00ah)
-	CALR LABEL_035830
+	CALR DSP_RingBuf_Read
 	LD XWA, (XSP + 00ah)
-	CALR LABEL_035830
+	CALR DSP_RingBuf_Read
 	LD HL, 0
 	JR T, LABEL_035A79
 
 LABEL_035A70:
 	LD XWA, (XSP + 00ah)
-	CALR LABEL_03585F
+	CALR DSP_RingBuf_Skip
 	LD HL, 0ffffh
 
 LABEL_035A79:
@@ -39509,7 +39600,7 @@ LABEL_035A7E:
 
 LABEL_035A8B:
 	LD XWA, (XSP + 008h)
-	CALR LABEL_035830
+	CALR DSP_RingBuf_Read
 	LD XWA, (XSP + 004h)
 	CP (XWA), L
 	JR Z, LABEL_035A9B
@@ -39543,7 +39634,16 @@ LABEL_035AC4:
 	INC 8, XSP
 	RET
 
-LABEL_035AC8:
+; ===========================================================================
+; Audio_Process_DSP - DSP audio processing main loop
+; ===========================================================================
+; Entry: Called from main audio loop after MIDI_Dispatch
+; Exit:  DSP state updated, audio buffers processed
+; Notes: Processes pending DSP commands from buffer at 0x3B60
+;        Updates DSP2 voice parameters and effect processing
+;        Part of main audio loop: ToneGen -> MIDI -> DSP -> Final
+; ===========================================================================
+Audio_Process_DSP:
 	LDA XSP, XSP - 10
 	PUSH XIZ
 	LDA XWA, 3B60h
@@ -39769,7 +39869,7 @@ LABEL_035D10:
 
 LABEL_035D14:
 	LD XWA, (XSP + 004h)
-	CALR LABEL_03585F
+	CALR DSP_RingBuf_Skip
 	LD HL, 0
 	JR T, LABEL_035D4A
 
@@ -39797,19 +39897,19 @@ LABEL_035D4A:
 	LDA XDE, 4368h
 	LD BC, HL
 	LD WA, 3
-	CALL LABEL_020C6B
+	CALL InterCPU_DMA_Send
 	JRL T, LABEL_036033
 
 LABEL_035D60:
 	CP QIZH, 040h
 	JR NZ, LABEL_035D6F
 	LD XWA, (XSP + 004h)
-	CALR LABEL_03585F
+	CALR DSP_RingBuf_Skip
 	JRL T, LABEL_036033
 
 LABEL_035D6F:
 	LD XWA, (XSP + 004h)
-	CALR LABEL_03585F
+	CALR DSP_RingBuf_Skip
 	JRL T, LABEL_036033
 
 LABEL_035D78:
@@ -39867,7 +39967,7 @@ LABEL_035DD2:
 
 LABEL_035E7B:
 	LD XWA, (XSP + 004h)
-	CALR LABEL_03585F
+	CALR DSP_RingBuf_Skip
 	JRL T, LABEL_036033
 
 LABEL_035E84:
@@ -39899,7 +39999,7 @@ LABEL_035E84:
 
 LABEL_035ECE:
 	LD XWA, (XSP + 004h)
-	CALR LABEL_03585F
+	CALR DSP_RingBuf_Skip
 	JRL T, LABEL_036033
 
 LABEL_035ED7:
@@ -39935,12 +40035,12 @@ LABEL_035F1A:
 	CP QIZH, 040h
 	JR NZ, LABEL_035F29
 	LD XWA, (XSP + 004h)
-	CALR LABEL_03585F
+	CALR DSP_RingBuf_Skip
 	JRL T, LABEL_036033
 
 LABEL_035F29:
 	LD XWA, (XSP + 004h)
-	CALR LABEL_03585F
+	CALR DSP_RingBuf_Skip
 	JRL T, LABEL_036033
 
 LABEL_035F32:
@@ -39997,12 +40097,12 @@ LABEL_035F66:
 
 LABEL_035FC3:
 	LD XWA, (XSP + 004h)
-	CALR LABEL_03585F
+	CALR DSP_RingBuf_Skip
 	JR T, LABEL_036033
 
 LABEL_035FCB:
 	LD XWA, (XSP + 004h)
-	CALR LABEL_03585F
+	CALR DSP_RingBuf_Skip
 	JR T, LABEL_036033
 
 LABEL_035FD3:
@@ -40025,7 +40125,7 @@ LABEL_035FD3:
 
 LABEL_036001:
 	LD XWA, (XSP + 004h)
-	CALR LABEL_03585F
+	CALR DSP_RingBuf_Skip
 	JR T, LABEL_036033
 
 LABEL_036009:
@@ -40037,21 +40137,21 @@ LABEL_036009:
 	LD XWA, (XSP + 004h)
 	CALR LABEL_035A7E
 	LD XWA, (XSP + 004h)
-	CALR LABEL_03585F
+	CALR DSP_RingBuf_Skip
 	JR T, LABEL_036033
 
 LABEL_036025:
 	LD XWA, (XSP + 004h)
-	CALR LABEL_03585F
+	CALR DSP_RingBuf_Skip
 	JR T, LABEL_036033
 
 LABEL_03602D:
 	LD XWA, (XSP + 004h)
-	CALR LABEL_03585F
+	CALR DSP_RingBuf_Skip
 
 LABEL_036033:
 	LD XWA, (XSP + 004h)
-	CALR LABEL_035830
+	CALR DSP_RingBuf_Read
 	LD (XSP + 00ch), HL
 	LD WA, (XSP + 00ch)
 	CP WA, 0
@@ -40070,7 +40170,7 @@ LABEL_036049:
 	LDA XWA, 0121F3h
 	PUSH XWA
 	PUSHW 0004h
-	CALL LABEL_034D5F
+	CALL Audio_CmdHandler_00_1F
 	INC 6, XSP
 	JR T, LABEL_036088
 
@@ -40080,7 +40180,7 @@ LABEL_036064:
 	LDA XWA, 0121EFh
 	PUSH XWA
 	PUSHW 0004h
-	CALL LABEL_034D5F
+	CALL Audio_CmdHandler_00_1F
 	INC 6, XSP
 	JR T, LABEL_036088
 
@@ -40088,11 +40188,11 @@ LABEL_036079:
 	LDA XWA, 0121EBh
 	PUSH XWA
 	PUSHW 0004h
-	CALL LABEL_034D5F
+	CALL Audio_CmdHandler_00_1F
 	INC 6, XSP
 
 LABEL_036088:
-	JP LABEL_034D93
+	JP MIDI_Dispatch
 
 LABEL_03608C:
 	CP WA, 0035h
@@ -40106,7 +40206,7 @@ LABEL_036098:
 	CALL LABEL_038E31
 	RET
 
-LABEL_0360A7:
+DSP_Reset:
 	PUSH IZ
 	LDW (45B0h), 0001h
 	LDW (45B2h), 0000h
@@ -40149,9 +40249,9 @@ LABEL_03611E:
 	LDA XWA, 0121F3h
 	PUSH XWA
 	PUSHW 0004h
-	CALL LABEL_034D5F
+	CALL Audio_CmdHandler_00_1F
 	INC 6, XSP
-	JP LABEL_034D93
+	JP MIDI_Dispatch
 
 LABEL_03613B:
 	CP HL, 2
@@ -40159,9 +40259,9 @@ LABEL_03613B:
 	LDA XWA, 0121EFh
 	PUSH XWA
 	PUSHW 0004h
-	CALL LABEL_034D5F
+	CALL Audio_CmdHandler_00_1F
 	INC 6, XSP
-	JP LABEL_034D93
+	JP MIDI_Dispatch
 
 LABEL_036152:
 	CP HL, 1
@@ -40169,9 +40269,9 @@ LABEL_036152:
 	LDA XWA, 0121EBh
 	PUSH XWA
 	PUSHW 0004h
-	CALL LABEL_034D5F
+	CALL Audio_CmdHandler_00_1F
 	INC 6, XSP
-	CALL LABEL_034D93
+	CALL MIDI_Dispatch
 	RET
 
 LABEL_03616A:
@@ -51250,7 +51350,7 @@ LABEL_03CFED:
 	RET
 
 
-LABEL_03CFEE:
+Audio_CmdHandler_A0_BF:
 	LD XBC, (XSP + 006h)
 	LD A, (XBC)
 	CP A, 1
@@ -51317,7 +51417,7 @@ ToneGen_Note_Loop:		; 03D02Eh
 	LD XDE, 00004a42h
 	LD WA, 2
 	LD BC, 3
-	CALL LABEL_020C6B	; Send via DMA
+	CALL InterCPU_DMA_Send	; Send via DMA
 	JR T, ToneGen_Note_Continue
 
 ToneGen_Note_Off_Slot:		; 03D06Dh
@@ -51344,7 +51444,7 @@ ToneGen_Note_Off_Slot:		; 03D06Dh
 	LD XDE, 00004a42h
 	LD WA, 2
 	LD BC, 3
-	CALL LABEL_020C6B
+	CALL InterCPU_DMA_Send
 
 ToneGen_Note_Continue:		; 03D0B6h
 	LDA XWA, XSP
