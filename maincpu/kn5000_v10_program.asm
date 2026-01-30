@@ -168077,29 +168077,80 @@ CmpSetGridCheck:
 	ADD XWA, XWA
 	ADD XWA, 00e1d40eh
 	LD WA, (XWA)
-	LDA XIX, LABEL_F1A8C9
+	LDA XIX, GridCheck_Handler0
 	JP T, XIX + WA
 
-LABEL_F1A8C9:
-	db 01Dh, 0D0h, 044h, 0FAh, 0EBh, 088h, 041h, 08Fh
-	db 000h, 0E0h, 001h, 0EAh, 0A8h, 01Dh, 060h, 096h
-	db 0FAh, 0EBh, 08Ah, 0BFh, 00Eh, 030h, 0EAh, 089h
-	db 0E9h, 0EFh, 000h, 0D7h, 0E6h, 0A8h, 0B0h, 051h
-	db 0B8h, 002h, 052h, 090h, 020h, 0EAh, 013h, 0D8h
-	db 0DAh, 066h, 011h, 0D8h, 0D9h, 07Eh, 0C3h, 000h
-	db 040h, 00Dh, 000h, 044h, 001h, 041h, 008h, 000h
-	db 0E4h, 001h, 068h, 051h, 040h, 00Dh, 000h, 044h
-	db 001h, 041h, 00Ah, 000h, 0E4h, 001h, 068h, 045h
-	db 01Dh, 0D0h, 044h, 0FAh, 0EBh, 088h, 041h, 08Fh
-	db 000h, 0E0h, 001h, 0EAh, 0A8h, 01Dh, 060h, 096h
-	db 0FAh, 0EBh, 08Ah, 0BFh, 00Eh, 030h, 0EAh, 089h
-	db 0E9h, 0EFh, 000h, 0D7h, 0E6h, 0A8h, 0B0h, 051h
-	db 0B8h, 002h, 052h, 090h, 020h, 0EAh, 013h, 0D8h
-	db 0DAh, 066h, 010h, 0D8h, 0D9h, 06Eh, 07Ch, 040h
-	db 00Dh, 000h, 044h, 001h, 041h, 009h, 000h, 0E4h
-	db 001h, 068h, 00Ah, 040h, 00Dh, 000h, 044h, 001h
-	db 041h, 00Bh, 000h, 0E4h, 001h, 01Dh, 063h, 04Ah
-	db 0FAh, 068h, 060h
+; =============================================================================
+; GridCheck_Handler0 - Grid/Check widget handler for cases 0 and 2
+; Called via jump table when event code is 0x1C00017 + (0 or 2)
+; Queries UI object state and sends appropriate event (0x01E40008 or 0x01E4000A)
+; =============================================================================
+GridCheck_Handler0:
+	CALL 0FA44D0h               ; Get UI object
+	LD XWA, XHL                     ; Save result in XWA
+	LD XBC, 01e0008fh               ; Event code for query
+	LD XDE, 0                       ; Parameter = 0
+	CALL 0FA9660h               ; Query object state
+	LD XDE, XHL                     ; Result in XDE
+	LDA XWA, XSP + 00eh             ; Get local var pointer
+	LD XBC, XDE                     ; Copy result to XBC
+	db 0E9h, 0EFh, 000h             ; SRL 0, XBC (clear carry)
+	db 0D7h, 0E6h, 0A8h             ; LD QBC, 0 (clear high bits)
+	LD (XWA), BC                    ; Store low word
+	LD (XWA + 002h), DE             ; Store high word
+	LD WA, (XWA)                    ; Load state value
+	EXTS XDE                        ; Sign extend DE
+	CP WA, 2                        ; Check if state == 2
+	JR Z, GridCheck_Handler0_State2
+	CP WA, 1                        ; Check if state == 1
+	JRL NZ, LABEL_F1A9BC            ; If neither, exit
+	LD XWA, 0144000dh               ; Widget ID
+	LD XBC, 01e40008h               ; Event: grid check state 1 (case 0)
+	JR T, GridCheck_SendEvent
+GridCheck_Handler0_State2:
+	LD XWA, 0144000dh               ; Widget ID
+	LD XBC, 01e4000ah               ; Event: grid check state 2 (case 0)
+	JR T, GridCheck_SendEvent
+
+; =============================================================================
+; GridCheck_Handler1 - Grid/Check widget handler for cases 1 and 3
+; Called via jump table when event code is 0x1C00017 + (1 or 3)
+; Queries UI object state and sends appropriate event (0x01E40009 or 0x01E4000B)
+; =============================================================================
+GridCheck_Handler1:
+	CALL 0FA44D0h               ; Get UI object
+	LD XWA, XHL                     ; Save result in XWA
+	LD XBC, 01e0008fh               ; Event code for query
+	LD XDE, 0                       ; Parameter = 0
+	CALL 0FA9660h               ; Query object state
+	LD XDE, XHL                     ; Result in XDE
+	LDA XWA, XSP + 00eh             ; Get local var pointer
+	LD XBC, XDE                     ; Copy result to XBC
+	db 0E9h, 0EFh, 000h             ; SRL 0, XBC (clear carry)
+	db 0D7h, 0E6h, 0A8h             ; LD QBC, 0 (clear high bits)
+	LD (XWA), BC                    ; Store low word
+	LD (XWA + 002h), DE             ; Store high word
+	LD WA, (XWA)                    ; Load state value
+	EXTS XDE                        ; Sign extend DE
+	CP WA, 2                        ; Check if state == 2
+	JR Z, GridCheck_Handler1_State2
+	CP WA, 1                        ; Check if state == 1
+	JR NZ, LABEL_F1A9BC             ; If neither, exit
+	LD XWA, 0144000dh               ; Widget ID
+	LD XBC, 01e40009h               ; Event: grid check state 1 (case 1)
+	JR T, GridCheck_SendEvent
+GridCheck_Handler1_State2:
+	LD XWA, 0144000dh               ; Widget ID
+	LD XBC, 01e4000bh               ; Event: grid check state 2 (case 1)
+	; Fall through to GridCheck_SendEvent
+
+; =============================================================================
+; GridCheck_SendEvent - Common epilogue for grid/check handlers
+; Sends the event in XBC with widget ID in XWA
+; =============================================================================
+GridCheck_SendEvent:
+	CALL 0FA4A63h               ; Send event
+	JR T, LABEL_F1A9BC              ; Return to caller
 
 LABEL_F1A95C:
 	LDA XBC, XSP + 00eh

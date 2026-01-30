@@ -22,14 +22,17 @@ This file tracks references to undisassembled code found during UI subsystem doc
   - `ClassProc_Event_LoadFromOffset` (FA45A7) - loads XHL from (XHL+0Ch)
 - These are UI event dispatch handlers for events 0x1E00000-0x1E00007
 
-## Undisassembled Code Blocks
+### GridCheck Handlers (0xF1A8C9-0xF1A95B) - COMPLETED
+- Disassembled 147 bytes of raw code into grid/check widget handlers:
+  - `GridCheck_Handler0` (F1A8C9) - Handler for event cases 0 and 2
+  - `GridCheck_Handler0_State2` (F1A905) - State 2 branch for handler 0
+  - `GridCheck_Handler1` (F1A911) - Handler for event cases 1 and 3
+  - `GridCheck_Handler1_State2` (F1A94C) - State 2 branch for handler 1
+  - `GridCheck_SendEvent` (F1A956) - Common epilogue, sends event via FA4A63
+- Jump table at 0xE1D40E contains word offsets: 0x0000, 0x0048, 0x0000, 0x0048, 0x00F3, 0x00F3, 0x00F3
+- Handlers query object state (via FA9660) and send events 0x01E40008-0x01E4000B based on result
 
-### CmpSetGridCheck (0xF1A8C9)
-- **Address**: 0xF1A8C9 (line 167998)
-- **Size**: ~147 bytes
-- **Context**: Grid/check UI component handler dispatch table
-- **Referenced from**: CmpSetGridCheck at line 167995
-- **Priority**: MEDIUM - Widget handling code
+## Undisassembled Code Blocks
 
 ### LABEL_EF5B79 (0xEF5B79)
 - **Address**: 0xEF5B79 (line 142560)
