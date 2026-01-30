@@ -660,45 +660,367 @@ Boot_ClearRAM:
 	db	00Eh				; RET (never reached)
 
 ; =============================================================================
-; BOOT FLASH PROGRAMMING AND UTILITY ROUTINES
-; Addresses 0x9FB7F2 to 0x9FC8C1 (4304 bytes)
-;
-; This section contains:
-;
-; INTERRUPT HANDLERS (0x9FB7F2-0x9FB811):
-;   0x9FB7F2: INTT1_Handler - Timer 1 interrupt (tick counter at 0x0C00)
-;   0x9FB7FB: NMI_Handler - Fatal error handler (halt loop)
-;   0x9FB802-0x9FB811: Stub routines (return 0 or 0xFFFF)
-;
-; 16-BIT FLASH ROUTINES (0x9FB812-0x9FBC1C):
-; For HDAE5000 expansion ROM (0x280000) and Custom Data Flash (0x300000)
-;   0x9FB812: Flash_Reset_16bit - Send software reset (0xF0)
-;   0x9FB888: Flash_ReadID_16bit - Read manufacturer/device ID
-;   0x9FB903: Flash_ProgramWord_16bit - Program single word
-;   0x9FB968: Flash_ChipErase_16bit - Chip erase (0x80, 0x10)
-;   0x9FBA17: Flash_SectorErase_16bit - Sector erase (0x30)
-;   0x9FBBCF: Flash_StatusCheck_16bit - Check operation complete
-;   0x9FBBDB: Flash_EraseAndWait_16bit - Erase with status wait
-;   0x9FBBF3: Flash_InitBoth_16bit - Initialize both flash chips
-;
-; 32-BIT FLASH ROUTINES (0x9FBC1D-0xFBD7C):
-; For Table Data ROM (0x800000) - interleaved odd/even chips
-;   0x9FBC1D: Utility routine
-;   0x9FBC2D: Flash_Reset_32bit - Reset both chips simultaneously
-;   0x9FBC6A: Flash_ReadID_32bit - Read ID from interleaved ROM
-;   0x9FBCD7: Flash_ProgramWord_32bit - Program 32-bit word
-;   0x9FBD17: Flash_ChipErase_32bit - Chip erase sequence
-;   0x9FBD7D: Flash_SectorErase_32bit - Sector erase
-;
-; DISK DETECTION (0x9FBFC4-0x9FC0D2):
-;   0x9FBFC4: Detect_Disk_Type - Check floppy header against 8 signatures
-;   0x9FBF07: FDC_Reset - Floppy controller reset
-;   0x9FBF37: FDC_ReadSector - Read sector from floppy
-;   0x9FBF92: FDC_MultiSectorRead - Read multiple sectors
-;
-; See also: ../kn5000-docs/flash-programming.md for detailed protocol analysis
+; BOOT INTERRUPT HANDLERS
+; Addresses 0x9FB7F2-0x9FB811
 ; =============================================================================
-	binclude "includes/bootcode_pre_lzss.bin"
+
+	ORG 09FB7F2h
+
+; -----------------------------------------------------------------------------
+; BootCode_INTT1_Handler - Timer 1 interrupt handler
+; Address: 0x9FB7F2
+; Increments 32-bit tick counter at RAM 0x0C00
+; -----------------------------------------------------------------------------
+BootCode_INTT1_Handler:
+	PUSH	XWA			; 38
+	LD	XWA, 1			; e8 a9
+	ADD	(00C00h), XWA		; e1 00 0c 88
+	POP	XWA			; 58
+	RETI				; 07
+
+; -----------------------------------------------------------------------------
+; BootCode_NMI_Handler - Non-maskable interrupt handler
+; Address: 0x9FB7FB
+; Fatal error - disables DRAM refresh and halts
+; -----------------------------------------------------------------------------
+BootCode_NMI_Handler:
+	RES	7, (0162h)		; f1 62 01 b7 - Disable DRAM refresh
+.halt_loop:
+	HALT				; 05
+	JR	T, .halt_loop		; 68 fd
+
+; -----------------------------------------------------------------------------
+; Boot stub routines - return 0 in HL
+; Addresses: 0x9FB802-0x9FB80D
+; -----------------------------------------------------------------------------
+Boot_Stub_Return0_1:
+	LD	HL, 0			; db a8
+	RET				; 0e
+
+Boot_Stub_Return0_2:
+	LD	HL, 0			; db a8
+	RET				; 0e
+
+Boot_Stub_Return0_3:
+	LD	HL, 0			; db a8
+	RET				; 0e
+
+Boot_Stub_Return0_4:
+	LD	HL, 0			; db a8
+	RET				; 0e
+
+; -----------------------------------------------------------------------------
+; Boot stub - return 0xFFFF in HL (error/not found)
+; Address: 0x9FB80E
+; -----------------------------------------------------------------------------
+Boot_Stub_ReturnFFFF:
+	LD	HL, 0FFFFh		; 33 ff ff
+	RET				; 0e
+
+; =============================================================================
+; 16-BIT FLASH PROGRAMMING ROUTINES
+; For HDAE5000 expansion ROM (0x280000) and Custom Data Flash (0x300000)
+; These use 16-bit bus width access
+; =============================================================================
+
+; -----------------------------------------------------------------------------
+; Flash_Reset_16bit - Send software reset command to flash chip
+; Address: 0x9FB812
+;
+; Entry: A = target (0=HDAE5000 at 0x280000, 1=Custom Data at 0x300000)
+; Uses AMD/Atmel flash protocol: AA-55-F0 sequence
+; For region code 4, also resets high bank at base+0x80000
+; -----------------------------------------------------------------------------
+Flash_Reset_16bit:
+	PUSH	XIZ			; 3e
+	LD	XBC, 00280000h		; 41 00 00 28 00 - HDAE5000 base
+	CP	A, 1			; c9 d9
+	JR	NZ, .got_base		; 6e 05
+	LD	XBC, 00300000h		; 41 00 00 30 00 - Custom Data base
+.got_base:
+	LD	XIZ, XBC		; e9 8e
+.wait_ready:
+	BIT	5, (01Ch)		; f0 1c cd - Wait for P3 bit 5 (flash ready)
+	JR	Z, .wait_ready		; 66 fb
+	EI	6			; 06 06 - Disable lower interrupts
+	; Send unlock sequence: base+AAAA = AA
+	LD	XWA, XIZ		; ee 88
+	ADD	XWA, 0000AAAAh		; e8 c8 aa aa 00 00
+	db	0B0h, 002h, 0AAh, 000h	; LD (XWA), 00AAh (word store)
+	; Send unlock sequence: base+5554 = 55
+	db	0F3h, 0F9h, 054h, 055h, 002h, 055h, 000h	; LD (XIZ+5554h), 0055h
+	; Send reset command: base+AAAA = F0
+	LD	XWA, XIZ		; ee 88
+	ADD	XWA, 0000AAAAh		; e8 c8 aa aa 00 00
+	db	0B0h, 002h, 0F0h, 000h	; LD (XWA), 00F0h (word store)
+	; Read to complete cycle
+	db	0D3h, 0F9h, 032h, 032h, 020h	; LD WA, (XIZ+3232h)
+	EI	0			; 06 00 - Re-enable interrupts
+	; Check if region code = 4 (high bank exists)
+	db	01Dh, 000h, 0B7h, 0FFh	; CALL Boot_Get_Region_Code (at 0xFFB700)
+	CP	L, 4			; cf dc
+	JR	NZ, .done		; 6e 2e
+	; Reset high bank at base+0x80000
+	ADD	XIZ, 00080000h		; ee c8 00 00 08 00
+	EI	6			; 06 06
+	LD	XWA, XIZ		; ee 88
+	ADD	XWA, 0000AAAAh		; e8 c8 aa aa 00 00
+	db	0B0h, 002h, 0AAh, 000h	; LD (XWA), 00AAh (word store)
+	db	0F3h, 0F9h, 054h, 055h, 002h, 055h, 000h	; LD (XIZ+5554h), 0055h
+	LD	XWA, XIZ		; ee 88
+	ADD	XWA, 0000AAAAh		; e8 c8 aa aa 00 00
+	db	0B0h, 002h, 0F0h, 000h	; LD (XWA), 00F0h (word store)
+	db	0D3h, 0F9h, 032h, 032h, 020h	; LD WA, (XIZ+3232h)
+	EI	0			; 06 00
+.done:
+	POP	XIZ			; 5e
+	RET				; 0e
+
+; -----------------------------------------------------------------------------
+; Flash_ReadID_16bit - Read flash manufacturer and device ID
+; Address: 0x9FB888
+;
+; Entry: A = target (0=HDAE5000, 1=Custom Data)
+; Exit:  HL = device ID (or 0xFFFF if not recognized)
+;
+; Validated device IDs: 0x2223 (AM29F040), 0x22AB (AM29F400B),
+;                       0x22D6 (AM29F800B), 0x2258 (AM29LV800B)
+; Manufacturer IDs: 0x01 (AMD), 0x04 (Fujitsu)
+; -----------------------------------------------------------------------------
+Flash_ReadID_16bit:
+	db	0EFh, 068h		; DEC 0, XSP - allocate 1 byte on stack
+	PUSH	XIZ			; 3e
+	db	0BFh, 00Ah, 041h	; LD (XSP+0Ah), A - save target
+	db	0BFh, 008h, 002h, 0FFh, 0FFh	; LD (XSP+08h), 0FFFFh - default return
+	LD	XWA, 00280000h		; 40 00 00 28 00 - HDAE5000 base
+	db	08Fh, 00Ah, 03Fh, 001h	; CP (XSP+0Ah), 01h
+	JR	NZ, .got_base		; 6e 05
+	LD	XWA, 00300000h		; 40 00 00 30 00 - Custom Data base
+.got_base:
+	db	0BFh, 004h, 060h	; LD (XSP+04h), XWA - save base address
+	EI	6			; 06 06
+	; Send unlock and ID command
+	db	0AFh, 004h, 021h	; LD XBC, (XSP+04h)
+	ADD	XBC, 0000AAAAh		; e9 c8 aa aa 00 00
+	db	0B1h, 002h, 0AAh, 000h	; LD (XBC), 00AAh (word store)
+	db	0AFh, 004h, 022h	; LD XDE, (XSP+04h)
+	db	0F3h, 0E9h, 054h, 055h, 002h, 055h, 000h	; LD (XDE+5554h), 0055h
+	db	0B1h, 002h, 090h, 000h	; LD (XBC), 0090h - ID command (word store)
+	; Read manufacturer ID
+	LD	WA, (XDE)		; 92 20
+	db	0D7h, 0FAh, 098h	; LD QIZ, WA - store manufacturer ID
+	; Read device ID at base+2
+	LD	XBC, XDE		; ea 89
+	db	099h, 002h, 026h	; LD IZ, (XBC+02h)
+	EI	0			; 06 00
+	; Validate manufacturer (01=AMD, 04=Fujitsu)
+	db	0D7h, 0FAh, 0D9h	; CP QIZ, 1
+	JR	Z, .valid_mfr		; 66 05
+	db	0D7h, 0FAh, 0DCh	; CP QIZ, 4
+	JR	NZ, .reset_exit		; 6e 23
+.valid_mfr:
+	; Validate device ID
+	db	0DEh, 0CFh, 023h, 022h	; CP IZ, 2223h (AM29F040)
+	JR	Z, .valid_id		; 66 12
+	db	0DEh, 0CFh, 0ABh, 022h	; CP IZ, 22ABh (AM29F400B)
+	JR	Z, .valid_id		; 66 0c
+	db	0DEh, 0CFh, 0D6h, 022h	; CP IZ, 22D6h (AM29F800B)
+	JR	Z, .valid_id		; 66 06
+	db	0DEh, 0CFh, 058h, 022h	; CP IZ, 2258h (AM29LV800B)
+	JR	NZ, .store_return	; 6e 03
+.valid_id:
+	db	0BFh, 008h, 056h	; LD (XSP+08h), IZ - store valid device ID
+.store_return:
+	db	08Fh, 00Ah, 021h	; LD A, (XSP+0Ah) - restore target
+	EXTZ_WA				; d8 12
+	db	01Eh, 016h, 0FFh	; CALR Flash_Reset_16bit (relative call back)
+.reset_exit:
+	db	09Fh, 008h, 023h	; LD HL, (XSP+08h) - return device ID
+	POP	XIZ			; 5e
+	INC_0_XSP			; ef 60 - deallocate stack
+	RET				; 0e
+
+; -----------------------------------------------------------------------------
+; Flash_ProgramWord_16bit - Program a word to flash memory
+; Address: 0x9FB903
+;
+; Entry: A = target (0=HDAE5000, 1=Custom Data)
+;        XBC = destination address
+;        DE = data word to program
+;
+; Skips programming if data = 0xFFFF (erased state)
+; Handles high bank (0x380000+) for Custom Data when region code = 4
+; -----------------------------------------------------------------------------
+Flash_ProgramWord_16bit:
+	DEC_6_XSP			; ef 6e - allocate 6 bytes stack frame
+	PUSH	XIZ			; 3e
+	db	0BFh, 004h, 052h	; LD (XSP+04h), DE - save data
+	db	0BFh, 006h, 061h	; LD (XSP+06h), XBC - save destination
+	db	09Fh, 004h, 03Fh, 0FFh, 0FFh	; CP (XSP+04h), 0FFFFh
+	JR	Z, .exit		; 66 51 - skip if already erased
+	; Wait for flash ready
+.wait_ready:
+	BIT	5, (01Ch)		; f0 1c cd
+	JR	Z, .wait_ready		; 66 fb
+	; Check target
+	CP	A, 1			; c9 d9
+	JR	NZ, .hdae_target	; 6e 20
+	; Custom Data target - check for high bank
+	LDA	XIZ, 300000h		; f2 00 00 30 36
+	db	01Dh, 000h, 0B7h, 0FFh	; CALL Boot_Get_Region_Code (at 0xFFB700)
+	CP	L, 4			; cf dc
+	JR	NZ, .do_program		; 6e 18
+	; Check if address is in high bank (>= 0x380000)
+	db	0AFh, 006h, 020h	; LD XWA, (XSP+06h)
+	CP	XWA, 00380000h		; e8 cf 00 00 38 00
+	JR	C, .do_program		; 67 0d
+	ADD	XIZ, 00080000h		; ee c8 00 00 08 00
+	JR	T, .do_program		; 68 05
+.hdae_target:
+	LDA	XIZ, 280000h		; f2 00 00 28 36
+.do_program:
+	EI	6			; 06 06
+	; Send program command sequence
+	LD	XWA, XIZ		; ee 88
+	ADD	XWA, 0000AAAAh		; e8 c8 aa aa 00 00
+	db	0B0h, 002h, 0AAh, 000h	; LD (XWA), 00AAh (word store)
+	db	0F3h, 0F9h, 054h, 055h, 002h, 055h, 000h	; LD (XIZ+5554h), 0055h
+	db	0B0h, 002h, 0A0h, 000h	; LD (XWA), 00A0h - Program command (word store)
+	; Write data to destination
+	db	0AFh, 006h, 020h	; LD XWA, (XSP+06h) - destination
+	db	09Fh, 004h, 021h	; LD BC, (XSP+04h) - data
+	LD	(XWA), BC		; b0 51
+	EI	0			; 06 00
+.exit:
+	POP	XIZ			; 5e
+	INC_6_XSP			; ef 66 - deallocate stack
+	RET				; 0e
+
+; -----------------------------------------------------------------------------
+; Flash_ChipErase_16bit - Erase entire flash chip
+; Address: 0x9FB968
+;
+; Entry: A = target (0=HDAE5000, 1=Custom Data)
+;
+; Uses 6-byte chip erase sequence: AA-55-80-AA-55-10
+; For Custom Data with region code = 4, also erases high bank
+; -----------------------------------------------------------------------------
+Flash_ChipErase_16bit:
+	db	0EFh, 06Ah		; DEC 2, XSP - allocate 2 bytes
+	PUSH	XIZ			; 3e
+	db	0BFh, 004h, 041h	; LD (XSP+04h), A - save target
+	LD	XWA, 00280000h		; 40 00 00 28 00
+	db	08Fh, 004h, 03Fh, 001h	; CP (XSP+04h), 01h
+	JR	NZ, .got_base		; 6e 05
+	LD	XWA, 00300000h		; 40 00 00 30 00
+.got_base:
+	LD	XIZ, XWA		; e8 8e
+	EI	6			; 06 06
+	; Send chip erase sequence (6 bytes)
+	; Byte 1: base+AAAA = AA
+	LD	XWA, XIZ		; ee 88
+	ADD	XWA, 0000AAAAh		; e8 c8 aa aa 00 00
+	db	0B0h, 002h, 0AAh, 000h	; LD (XWA), 00AAh (word store)
+	; Byte 2: base+5554 = 55
+	db	0F3h, 0F9h, 054h, 055h, 002h, 055h, 000h	; LD (XIZ+5554h), 0055h
+	; Byte 3: base+AAAA = 80
+	LD	XWA, XIZ		; ee 88
+	ADD	XWA, 0000AAAAh		; e8 c8 aa aa 00 00
+	db	0B0h, 002h, 080h, 000h	; LD (XWA), 0080h (word store)
+	; Byte 4: base+AAAA = AA
+	LD	XWA, XIZ		; ee 88
+	ADD	XWA, 0000AAAAh		; e8 c8 aa aa 00 00
+	db	0B0h, 002h, 0AAh, 000h	; LD (XWA), 00AAh (word store)
+	; Byte 5: base+5554 = 55
+	db	0F3h, 0F9h, 054h, 055h, 002h, 055h, 000h	; LD (XIZ+5554h), 0055h
+	; Byte 6: base+AAAA = 10 (chip erase command)
+	LD	XWA, XIZ		; ee 88
+	ADD	XWA, 0000AAAAh		; e8 c8 aa aa 00 00
+	db	0B0h, 002h, 010h, 000h	; LD (XWA), 0010h (word store)
+	; Check region code for high bank
+	db	01Dh, 000h, 0B7h, 0FFh	; CALL Boot_Get_Region_Code (at 0xFFB700)
+	CP	L, 4			; cf dc
+	JR	NZ, .done		; 6e 49
+	db	08Fh, 004h, 03Fh, 001h	; CP (XSP+04h), 01h
+	JR	NZ, .done		; 6e 43
+	; Also erase high bank at 0x380000
+	LDA	XIZ, 380000h		; f2 00 00 38 36
+	LD	XWA, XIZ		; ee 88
+	ADD	XWA, 0000AAAAh		; e8 c8 aa aa 00 00
+	db	0B0h, 002h, 0AAh, 000h	; LD (XWA), 00AAh (word store)
+	db	0F3h, 0F9h, 054h, 055h, 002h, 055h, 000h	; LD (XIZ+5554h), 0055h
+	LD	XWA, XIZ		; ee 88
+	ADD	XWA, 0000AAAAh		; e8 c8 aa aa 00 00
+	db	0B0h, 002h, 080h, 000h	; LD (XWA), 0080h (word store)
+	LD	XWA, XIZ		; ee 88
+	ADD	XWA, 0000AAAAh		; e8 c8 aa aa 00 00
+	db	0B0h, 002h, 0AAh, 000h	; LD (XWA), 00AAh (word store)
+	db	0F3h, 0F9h, 054h, 055h, 002h, 055h, 000h	; LD (XIZ+5554h), 0055h
+	LD	XWA, XIZ		; ee 88
+	ADD	XWA, 0000AAAAh		; e8 c8 aa aa 00 00
+	db	0B0h, 002h, 010h, 000h	; LD (XWA), 0010h (word store)
+.done:
+	EI	0			; 06 00
+	POP	XIZ			; 5e
+	db	0EFh, 062h		; INC 2, XSP - deallocate stack
+	RET				; 0e
+
+; -----------------------------------------------------------------------------
+; Flash_SectorErase_16bit - Erase a single sector
+; Address: 0x9FBA17
+;
+; Entry: A = target (0=HDAE5000, 1=Custom Data)
+;        XBC = sector address
+;
+; Complex sector handling for boot block chips (AM29F400/800)
+; Handles different sector layouts for bottom boot devices
+; -----------------------------------------------------------------------------
+Flash_SectorErase_16bit:
+	db	0BFh, 0F6h, 037h	; LDA XSP, XSP+0F6h - allocate 10 bytes
+	PUSH	XIZ			; 3e
+	db	0BFh, 008h, 061h	; LD (XSP+08h), XBC - save sector address
+	db	0BFh, 00Ch, 041h	; LD (XSP+0Ch), A - save target
+	LD	XWA, 00280000h		; 40 00 00 28 00
+	db	08Fh, 00Ch, 03Fh, 001h	; CP (XSP+0Ch), 01h
+	JR	NZ, .got_base		; 6e 05
+	LD	XWA, 00300000h		; 40 00 00 30 00
+.got_base:
+	LD	XIZ, XWA		; e8 8e
+	; Mask sector address to get bank offset
+	db	0AFh, 008h, 020h	; LD XWA, (XSP+08h)
+	db	0BFh, 004h, 060h	; LD (XSP+04h), XWA
+	LD	XWA, 00FF0000h		; 40 00 00 ff 00
+	db	0AFh, 004h, 0C8h	; AND (XSP+04h), XWA
+	; Check region and bank for Custom Data
+	db	01Dh, 000h, 0B7h, 0FFh	; CALL Boot_Get_Region_Code (at 0xFFB700)
+	CP	L, 4			; cf dc
+	JR	NZ, .do_erase		; 6e 11
+	db	0AFh, 004h, 020h	; LD XWA, (XSP+04h)
+	CP	XWA, 00380000h		; e8 cf 00 00 38 00
+	JR	C, .do_erase		; 67 06
+	ADD	XIZ, 00080000h		; ee c8 00 00 08 00
+.do_erase:
+	EI	6			; 06 06
+	; Send sector erase sequence
+	LD	XWA, XIZ		; ee 88
+	ADD	XWA, 0000AAAAh		; e8 c8 aa aa 00 00
+	db	0B0h, 002h, 0AAh, 000h	; LD (XWA), 00AAh (word store)
+	db	0F3h, 0F9h, 054h, 055h, 002h, 055h, 000h	; LD (XIZ+5554h), 0055h
+	LD	XWA, XIZ		; ee 88
+	ADD	XWA, 0000AAAAh		; e8 c8 aa aa 00 00
+	db	0B0h, 002h, 080h, 000h	; LD (XWA), 0080h (word store)
+	LD	XWA, XIZ		; ee 88
+	ADD	XWA, 0000AAAAh		; e8 c8 aa aa 00 00
+	db	0B0h, 002h, 0AAh, 000h	; LD (XWA), 00AAh (word store)
+	db	0F3h, 0F9h, 054h, 055h, 002h, 055h, 000h	; LD (XIZ+5554h), 0055h
+	; Send 0x30 to sector address
+	db	0AFh, 004h, 020h	; LD XWA, (XSP+04h)
+	db	0B0h, 002h, 030h, 000h	; LD (XWA), 0030h - Sector erase command (word store)
+
+	; The rest of this routine handles special boot block sectors
+	; This is complex sector layout handling for AM29F400B/AM29F800B
+	; Binary include for the remaining complex sector handling
+	binclude "includes/flash_sector_erase_16bit_cont.bin"
 
 
 ; =============================================================================
