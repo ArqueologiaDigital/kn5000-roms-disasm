@@ -36,6 +36,8 @@ https://archive.org/details/technics-kn5000-system-update-disks
 | File | Description |
 |------|-------------|
 | `ppkn50.dll` | **Parallel Port KN5000 DLL** - PE32 Windows DLL containing the PC-side protocol implementation |
+| `ppkn50.disasm` | Full objdump disassembly of ppkn50.dll (~18,000 lines) |
+| `ppkn50-protocol-analysis.md` | **Protocol analysis** - Detailed documentation of the parallel port protocol |
 
 ### Other
 
@@ -97,6 +99,8 @@ wine setup.EXE
 
 The HD-TechManager software communicates with the HD-AE5000 via the PC's parallel
 port. The `ppkn50.dll` contains the complete PC-side protocol implementation.
+
+**See [ppkn50-protocol-analysis.md](ppkn50-protocol-analysis.md) for detailed protocol documentation.**
 
 ### Key Areas for Analysis
 
