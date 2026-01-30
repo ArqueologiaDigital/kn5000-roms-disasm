@@ -24,6 +24,13 @@ PROGRAM_FLASH__BASE_ADDR	EQU 0E00000h
 VGA_IO_BASE			EQU  170000h	; LCD controller (MN89304) I/O base
 VIDEO_RAM_BASE			EQU  1A0000h	; 4Mbit VRAM (IC207 M5M44265CJ8S)
 
+; Display State Variables (in RAM at 0x2xxxxx)
+DISPLAY_DIRTY_FLAGS		EQU  0205E4h	; Bitmap of dirty display regions
+DISPLAY_ENABLE_FLAG		EQU  0205E6h	; Display update enable flag
+DISPLAY_CACHED_VAL1		EQU  0205E8h	; Cached value for comparison
+DISPLAY_CACHED_VAL2		EQU  0205EAh	; Cached value for comparison
+DISPLAY_CACHED_VAL3		EQU  0205ECh	; Cached value for comparison
+
 ; VGA I/O Ports (directly addressable, accent via VGA_IO_BASE)
 VGA_ATTR_ADDR			EQU  3C0h	; Attribute Controller Address/Data
 VGA_MISC_OUTPUT			EQU  3C2h	; Miscellaneous Output Register (write)
@@ -141202,7 +141209,7 @@ LABEL_EF471A:
 	LD WA, IZ
 	LD BC, 00b4h
 	LD DE, 5
-	CALL LABEL_EF50DF
+	CALL VRAM_FillRect
 	LD XWA, 0
 	LD (SYSTEM_TIMESTAMP), XWA
 
@@ -141641,7 +141648,7 @@ LABEL_EF4C17:
 	LD WA, (064Eh)
 	LD BC, (0650h)
 	LD DE, 6
-	CALL LABEL_EF50DF
+	CALL VRAM_FillRect
 	LD IZ, 0
 
 LABEL_EF4C3C:
@@ -141829,7 +141836,7 @@ LABEL_EF4DB1:
 	LD WA, 0032h
 	LD BC, 00b4h
 	LD DE, 6
-	CALL LABEL_EF50DF
+	CALL VRAM_FillRect
 	LD XWA, 000003e8h
 	LD (063Eh), XWA
 	LDW (0652h), 0024h
@@ -142112,25 +142119,41 @@ LABEL_EF50BB:
 	INC 4, XSP
 	RETD 0004h
 
-LABEL_EF50DF:
+;=============================================================================
+; VRAM_FillRect - Fill a rectangular region in video RAM with a color
+;
+; Fills a 12-pixel tall rectangle in video RAM (0x1A0000) with the specified
+; color value. Used for clearing or highlighting UI regions.
+;
+; Input:
+;   BC = Y start coordinate (row)
+;   WA = X start coordinate (column)
+;   E  = Color/pattern value (8-bit, duplicated to 16-bit)
+;
+; Output:
+;   None (VRAM modified)
+;
+; Clobbers: XIZ, XHL, XWA, XDE, IX, IY
+;=============================================================================
+VRAM_FillRect:			; EF50DF
 	DEC 6, XSP
 	PUSH XIZ
-	LD (XSP + 006h), E
-	LD (XSP + 008h), WA
-	LD IX, BC
+	LD (XSP + 006h), E		; Save color value
+	LD (XSP + 008h), WA		; Save X start
+	LD IX, BC			; IX = Y start
 	LD (XSP + 004h), BC
-	ADDW (XSP + 004h), 000ch
+	ADDW (XSP + 004h), 000ch	; End Y = start + 12
 	CP IX, (XSP + 004h)
-	JR NC, LABEL_EF513D
+	JR NC, VRAM_FillRect_Done
 
-LABEL_EF50F7:
-	LD IY, (XSP + 008h)
+VRAM_FillRect_RowLoop:
+	LD IY, (XSP + 008h)		; IY = X start
 	LD BC, IY
-	INC 6, BC
+	INC 6, BC			; BC = X end (start + 6)
 	CP IY, BC
-	JR NC, LABEL_EF5136
+	JR NC, VRAM_FillRect_NextRow
 
-LABEL_EF5102:
+VRAM_FillRect_ColLoop:
 	LD DE, IY
 	EXTZ XDE
 	LD WA, IX
@@ -142150,16 +142173,16 @@ LABEL_EF5102:
 	SLL 8, DE
 	OR WA, DE
 	LD (XIZ), WA
-	INC 2, IY
+	INC 2, IY			; X += 2 (word increment)
 	CP IY, BC
-	JR C, LABEL_EF5102
+	JR C, VRAM_FillRect_ColLoop
 
-LABEL_EF5136:
-	INC 1, IX
+VRAM_FillRect_NextRow:
+	INC 1, IX			; Y++
 	CP IX, (XSP + 004h)
-	JR C, LABEL_EF50F7
+	JR C, VRAM_FillRect_RowLoop
 
-LABEL_EF513D:
+VRAM_FillRect_Done:
 	POP XIZ
 	INC 6, XSP
 	RET
@@ -142532,215 +142555,269 @@ Some_VGA_setup:		; ef55a7
 	RET_VGA_SEQUENCER 01h, 001h  ; Clocking Mode (screen on)
 
 
-LABEL_EF5B27:
-	LDW (0205E6h), 0000h
-	LDW (0205E4h), 0000h
+;=============================================================================
+; Display_ResetDirtyFlags - Reset all display dirty flags
+;
+; Clears both the enable flag (0x205E6) and dirty bitmap (0x205E4) to zero.
+; Call this to initialize display state or force a full refresh.
+;=============================================================================
+Display_ResetDirtyFlags:		; EF5B27
+	LDW (DISPLAY_ENABLE_FLAG), 0000h
+	LDW (DISPLAY_DIRTY_FLAGS), 0000h
 	RET
 
-LABEL_EF5B36:
-	LD (0205E6h), 001h
-	CPW (0205E4h), 0000h
-	JR Z, LABEL_EF5B71
-	CALL LABEL_EF5B8B
-	CALL LABEL_EF5C52
-	CALL LABEL_EF5C84
-	CALL LABEL_EF5C9D
-	CALL LABEL_EF5CB6
-	CALL LABEL_EF5BE9
-	CALL LABEL_EF5CCF
-	CALL LABEL_EF5C6B
-	CALL LABEL_EF5C07
-	CALL LABEL_EF5C39
-	CALL LABEL_EF5C20
+;=============================================================================
+; Display_UpdateDirtyRegions - Update all dirty display regions
+;
+; Sets enable flag and checks each dirty bit. For each dirty region,
+; calls the corresponding update routine. Used during main loop to
+; refresh only changed portions of the display.
+;
+; Uses:
+;   0x205E4 - DISPLAY_DIRTY_FLAGS: Bitmap of dirty regions
+;   0x205E6 - DISPLAY_ENABLE_FLAG: Update enable flag
+;=============================================================================
+Display_UpdateDirtyRegions:		; EF5B36
+	LD (DISPLAY_ENABLE_FLAG), 001h
+	CPW (DISPLAY_DIRTY_FLAGS), 0000h
+	JR Z, Display_MarkClean
+	CALL Display_UpdateRegion0	; Status bar area
+	CALL Display_UpdateRegion5	; Menu area
+	CALL Display_UpdateRegion7	; Parameter display
+	CALL Display_UpdateRegion8	; Value display
+	CALL Display_UpdateRegion9	; Indicator area
+	CALL Display_UpdateRegion1	; Title bar
+	CALL Display_UpdateRegion10	; Footer area
+	CALL Display_UpdateRegion6	; Button labels
+	CALL Display_UpdateRegion3	; Main content area
+	CALL Display_UpdateRegion4	; Side panel
+	CALL Display_UpdateRegion2	; Selection highlight
 
-LABEL_EF5B71:
-	LDW (0205E4h), 0ffffh
+Display_MarkClean:			; EF5B71
+	LDW (DISPLAY_DIRTY_FLAGS), 0ffffh
 	RET
 
-LABEL_EF5B79:
+; Undisassembled data block (18 bytes) - possibly lookup table
+Display_Data_EF5B79:			; EF5B79
 	db 021h, 0FFh, 0F2h, 0EAh, 005h, 002h, 041h, 0F2h
 	db 0E8h, 005h, 002h, 041h, 0F2h, 0ECh, 005h, 002h
 	db 041h, 00Eh
 
-LABEL_EF5B8B:
-	BIT 0, (0205E6h)
-	JR NZ, LABEL_EF5B98
-	SET 0, (0205E4h)
+;-----------------------------------------------------------------------------
+; Display_UpdateRegion0 - Update status bar region (bit 0)
+;
+; Checks if status bar needs refresh by comparing cached values.
+; If changed, calls the status bar redraw routine.
+;-----------------------------------------------------------------------------
+Display_UpdateRegion0:			; EF5B8B
+	BIT 0, (DISPLAY_ENABLE_FLAG)
+	JR NZ, Display_UpdateRegion0_Check
+	SET 0, (DISPLAY_DIRTY_FLAGS)
 	RET
 
-LABEL_EF5B98:
-	BIT 0, (0205E4h)
-	JR Z, LABEL_EF5BE8
+Display_UpdateRegion0_Check:		; EF5B98
+	BIT 0, (DISPLAY_DIRTY_FLAGS)
+	JR Z, Display_UpdateRegion0_Done
 	PUSH WA
 	LD A, (0D65h)
-	CP A, (0205EAh)
-	JR NZ, LABEL_EF5BC1
+	CP A, (DISPLAY_CACHED_VAL2)
+	JR NZ, Display_UpdateRegion0_Changed
 	LD A, (0DEFh)
-	CP A, (0205E8h)
-	JR NZ, LABEL_EF5BC1
+	CP A, (DISPLAY_CACHED_VAL1)
+	JR NZ, Display_UpdateRegion0_Changed
 	LD A, (0D60h)
-	CP A, (0205ECh)
-	JR Z, LABEL_EF5BE7
+	CP A, (DISPLAY_CACHED_VAL3)
+	JR Z, Display_UpdateRegion0_NoChange
 
-LABEL_EF5BC1:
+Display_UpdateRegion0_Changed:		; EF5BC1
 	BIT 0, (0F57h)
-	JRL NZ, LABEL_EF5BE7
-	CALL LABEL_F00999
+	JRL NZ, Display_UpdateRegion0_NoChange
+	CALL Display_RedrawStatusBar
 	LD A, (0D65h)
-	LD (0205EAh), A
+	LD (DISPLAY_CACHED_VAL2), A
 	LD A, (0DEFh)
-	LD (0205E8h), A
+	LD (DISPLAY_CACHED_VAL1), A
 	LD A, (0D60h)
-	LD (0205ECh), A
+	LD (DISPLAY_CACHED_VAL3), A
 
-LABEL_EF5BE7:
+Display_UpdateRegion0_NoChange:		; EF5BE7
 	POP WA
 
-LABEL_EF5BE8:
+Display_UpdateRegion0_Done:		; EF5BE8
 	RET
 
-LABEL_EF5BE9:
-	BIT 0, (0205E6h)
-	JR NZ, LABEL_EF5BF6
-	SET 1, (0205E4h)
+;-----------------------------------------------------------------------------
+; Display_UpdateRegion1 - Update title bar region (bit 1)
+;-----------------------------------------------------------------------------
+Display_UpdateRegion1:			; EF5BE9
+	BIT 0, (DISPLAY_ENABLE_FLAG)
+	JR NZ, Display_UpdateRegion1_Check
+	SET 1, (DISPLAY_DIRTY_FLAGS)
 	RET
 
-LABEL_EF5BF6:
-	BIT 1, (0205E4h)
-	JR Z, LABEL_EF5C01
-	CALL LABEL_F00C89
+Display_UpdateRegion1_Check:		; EF5BF6
+	BIT 1, (DISPLAY_DIRTY_FLAGS)
+	JR Z, Display_UpdateRegion1_Done
+	CALL Display_RedrawTitleBar
 
-LABEL_EF5C01:
+Display_UpdateRegion1_Done:		; EF5C01
 	RET
 
-LABEL_EF5C02:
-	CALL LABEL_F00F3A
+Display_UpdateRegion1_Alt:		; EF5C02
+	CALL Display_RedrawAltContent
 	RET
 
-LABEL_EF5C07:
-	BIT 0, (0205E6h)
-	JR NZ, LABEL_EF5C14
-	SET 3, (0205E4h)
+;-----------------------------------------------------------------------------
+; Display_UpdateRegion3 - Update main content area (bit 3)
+;-----------------------------------------------------------------------------
+Display_UpdateRegion3:			; EF5C07
+	BIT 0, (DISPLAY_ENABLE_FLAG)
+	JR NZ, Display_UpdateRegion3_Check
+	SET 3, (DISPLAY_DIRTY_FLAGS)
 	RET
 
-LABEL_EF5C14:
-	BIT 3, (0205E4h)
-	JR Z, LABEL_EF5C1F
-	CALL LABEL_F00C33
+Display_UpdateRegion3_Check:		; EF5C14
+	BIT 3, (DISPLAY_DIRTY_FLAGS)
+	JR Z, Display_UpdateRegion3_Done
+	CALL Display_RedrawMainContent
 
-LABEL_EF5C1F:
+Display_UpdateRegion3_Done:		; EF5C1F
 	RET
 
-LABEL_EF5C20:
-	BIT 0, (0205E6h)
-	JR NZ, LABEL_EF5C2D
-	SET 4, (0205E4h)
+;-----------------------------------------------------------------------------
+; Display_UpdateRegion2 - Update selection highlight (bit 4)
+;-----------------------------------------------------------------------------
+Display_UpdateRegion2:			; EF5C20
+	BIT 0, (DISPLAY_ENABLE_FLAG)
+	JR NZ, Display_UpdateRegion2_Check
+	SET 4, (DISPLAY_DIRTY_FLAGS)
 	RET
 
-LABEL_EF5C2D:
-	BIT 4, (0205E4h)
-	JR Z, LABEL_EF5C38
-	CALL LABEL_F00DA5
+Display_UpdateRegion2_Check:		; EF5C2D
+	BIT 4, (DISPLAY_DIRTY_FLAGS)
+	JR Z, Display_UpdateRegion2_Done
+	CALL Display_RedrawSelection
 
-LABEL_EF5C38:
+Display_UpdateRegion2_Done:		; EF5C38
 	RET
 
-LABEL_EF5C39:
-	BIT 0, (0205E6h)
-	JR NZ, LABEL_EF5C46
-	SET 5, (0205E4h)
+;-----------------------------------------------------------------------------
+; Display_UpdateRegion4 - Update side panel (bit 5)
+;-----------------------------------------------------------------------------
+Display_UpdateRegion4:			; EF5C39
+	BIT 0, (DISPLAY_ENABLE_FLAG)
+	JR NZ, Display_UpdateRegion4_Check
+	SET 5, (DISPLAY_DIRTY_FLAGS)
 	RET
 
-LABEL_EF5C46:
-	BIT 5, (0205E4h)
-	JR Z, LABEL_EF5C51
-	CALL LABEL_F00E35
+Display_UpdateRegion4_Check:		; EF5C46
+	BIT 5, (DISPLAY_DIRTY_FLAGS)
+	JR Z, Display_UpdateRegion4_Done
+	CALL Display_RedrawSidePanel
 
-LABEL_EF5C51:
+Display_UpdateRegion4_Done:		; EF5C51
 	RET
 
-LABEL_EF5C52:
-	BIT 0, (0205E6h)
-	JR NZ, LABEL_EF5C5F
-	SET 6, (0205E4h)
+;-----------------------------------------------------------------------------
+; Display_UpdateRegion5 - Update menu area (bit 6)
+;-----------------------------------------------------------------------------
+Display_UpdateRegion5:			; EF5C52
+	BIT 0, (DISPLAY_ENABLE_FLAG)
+	JR NZ, Display_UpdateRegion5_Check
+	SET 6, (DISPLAY_DIRTY_FLAGS)
 	RET
 
-LABEL_EF5C5F:
-	BIT 6, (0205E4h)
-	JR Z, LABEL_EF5C6A
-	CALL LABEL_EFF110
+Display_UpdateRegion5_Check:		; EF5C5F
+	BIT 6, (DISPLAY_DIRTY_FLAGS)
+	JR Z, Display_UpdateRegion5_Done
+	CALL Display_RedrawMenu
 
-LABEL_EF5C6A:
+Display_UpdateRegion5_Done:		; EF5C6A
 	RET
 
-LABEL_EF5C6B:
-	BIT 0, (0205E6h)
-	JR NZ, LABEL_EF5C78
-	SET 7, (0205E4h)
+;-----------------------------------------------------------------------------
+; Display_UpdateRegion6 - Update button labels (bit 7)
+;-----------------------------------------------------------------------------
+Display_UpdateRegion6:			; EF5C6B
+	BIT 0, (DISPLAY_ENABLE_FLAG)
+	JR NZ, Display_UpdateRegion6_Check
+	SET 7, (DISPLAY_DIRTY_FLAGS)
 	RET
 
-LABEL_EF5C78:
-	BIT 7, (0205E4h)
-	JR Z, LABEL_EF5C83
-	CALL LABEL_F00FDC
+Display_UpdateRegion6_Check:		; EF5C78
+	BIT 7, (DISPLAY_DIRTY_FLAGS)
+	JR Z, Display_UpdateRegion6_Done
+	CALL Display_RedrawButtonLabels
 
-LABEL_EF5C83:
+Display_UpdateRegion6_Done:		; EF5C83
 	RET
 
-LABEL_EF5C84:
-	BIT 0, (0205E6h)
-	JR NZ, LABEL_EF5C91
+;-----------------------------------------------------------------------------
+; Display_UpdateRegion7 - Update parameter display (bit 0 of 0x205E5)
+;-----------------------------------------------------------------------------
+Display_UpdateRegion7:			; EF5C84
+	BIT 0, (DISPLAY_ENABLE_FLAG)
+	JR NZ, Display_UpdateRegion7_Check
 	SET 0, (0205E5h)
 	RET
 
-LABEL_EF5C91:
+Display_UpdateRegion7_Check:		; EF5C91
 	BIT 0, (0205E5h)
-	JR Z, LABEL_EF5C9C
-	CALL LABEL_EF6F1A
+	JR Z, Display_UpdateRegion7_Done
+	CALL Display_RedrawParameters
 
-LABEL_EF5C9C:
+Display_UpdateRegion7_Done:		; EF5C9C
 	RET
 
-LABEL_EF5C9D:
-	BIT 0, (0205E6h)
-	JR NZ, LABEL_EF5CAA
+;-----------------------------------------------------------------------------
+; Display_UpdateRegion8 - Update value display (bit 1 of 0x205E5)
+;-----------------------------------------------------------------------------
+Display_UpdateRegion8:			; EF5C9D
+	BIT 0, (DISPLAY_ENABLE_FLAG)
+	JR NZ, Display_UpdateRegion8_Check
 	SET 1, (0205E5h)
 	RET
 
-LABEL_EF5CAA:
+Display_UpdateRegion8_Check:		; EF5CAA
 	BIT 1, (0205E5h)
-	JR Z, LABEL_EF5CB5
-	CALL LABEL_EF6FA3
+	JR Z, Display_UpdateRegion8_Done
+	CALL Display_RedrawValues
 
-LABEL_EF5CB5:
+Display_UpdateRegion8_Done:		; EF5CB5
 	RET
 
-LABEL_EF5CB6:
-	BIT 0, (0205E6h)
-	JR NZ, LABEL_EF5CC3
+;-----------------------------------------------------------------------------
+; Display_UpdateRegion9 - Update indicator area (bit 2 of 0x205E5)
+;-----------------------------------------------------------------------------
+Display_UpdateRegion9:			; EF5CB6
+	BIT 0, (DISPLAY_ENABLE_FLAG)
+	JR NZ, Display_UpdateRegion9_Check
 	SET 2, (0205E5h)
 	RET
 
-LABEL_EF5CC3:
+Display_UpdateRegion9_Check:		; EF5CC3
 	BIT 2, (0205E5h)
-	JR Z, LABEL_EF5CCE
-	CALL LABEL_EF704B
+	JR Z, Display_UpdateRegion9_Done
+	CALL Display_RedrawIndicators
 
-LABEL_EF5CCE:
+Display_UpdateRegion9_Done:		; EF5CCE
 	RET
 
-LABEL_EF5CCF:
-	BIT 0, (0205E6h)
-	JR NZ, LABEL_EF5CDC
+;-----------------------------------------------------------------------------
+; Display_UpdateRegion10 - Update footer area (bit 3 of 0x205E5)
+;-----------------------------------------------------------------------------
+Display_UpdateRegion10:			; EF5CCF
+	BIT 0, (DISPLAY_ENABLE_FLAG)
+	JR NZ, Display_UpdateRegion10_Check
 	SET 3, (0205E5h)
 	RET
 
-LABEL_EF5CDC:
+Display_UpdateRegion10_Check:		; EF5CDC
 	BIT 3, (0205E5h)
-	JR Z, LABEL_EF5CE7
-	CALL LABEL_F00C4A
+	JR Z, Display_UpdateRegion10_Done
+	CALL Display_RedrawFooter
 
-LABEL_EF5CE7:
+Display_UpdateRegion10_Done:		; EF5CE7
 	RET
 
 LABEL_EF5CE8:
@@ -143792,7 +143869,7 @@ LABEL_EF608C:
 	db 0EFh, 01Dh, 0E9h, 05Bh, 0EFh, 01Dh, 0CFh, 05Ch
 	db 0EFh, 01Dh, 020h, 05Ch, 0EFh, 00Eh
 
-LABEL_EF6F1A:
+Display_RedrawParameters:		; EF6F1A
 	AND (0F52h), 0fch
 	LDW (0E4Ch), 0000h
 	CALL LABEL_EF736D
@@ -143839,7 +143916,7 @@ LABEL_EF6F82:
 LABEL_EF6FA2:
 	RET
 
-LABEL_EF6FA3:
+Display_RedrawValues:			; EF6FA3
 	AND (0F52h), 0f3h
 	CALL LABEL_EF95BD
 	LD WA, (371Ah)
@@ -143895,7 +143972,7 @@ LABEL_EF702A:
 LABEL_EF704A:
 	RET
 
-LABEL_EF704B:
+Display_RedrawIndicators:		; EF704B
 	AND (0F52h), 0cfh
 	CALL LABEL_EF7381
 	LD WA, (371Ah)
@@ -149171,7 +149248,7 @@ LABEL_EFF077:
 	db 032h, 020h, 020h, 00Eh, 01Dh, 020h, 05Ch, 0EFh
 	db 00Eh
 
-LABEL_EFF110:
+Display_RedrawMenu:			; EFF110
 	LD WA, (371Ah)
 	CP WA, 03e8h
 	JRL C, LABEL_EFF123
@@ -150012,7 +150089,12 @@ LABEL_EFF599:
 	db 0F5h, 0F0h, 041h, 01Bh, 079h, 009h, 0F0h, 0F1h
 	db 078h, 011h, 006h, 0F1h, 07Ah, 011h, 006h, 00Eh
 
-LABEL_F00999:
+;=============================================================================
+; Display_RedrawStatusBar - Redraw the status bar region
+;
+; Updates the top status bar area with current mode, tempo, and status info.
+;=============================================================================
+Display_RedrawStatusBar:		; F00999
 	BIT 0, (0F57h)
 	JRL NZ, LABEL_F00A74
 	CP (8D38h), 08ah
@@ -150191,7 +150273,7 @@ LABEL_F00BED:
 	CALL LABEL_EF5D56
 	RET
 
-LABEL_F00C33:
+Display_RedrawMainContent:		; F00C33
 	CP (8D38h), 08ah
 	JR NZ, LABEL_F00C49
 	LD (03EFA8h), 000h
@@ -150201,7 +150283,7 @@ LABEL_F00C33:
 LABEL_F00C49:
 	RET
 
-LABEL_F00C4A:
+Display_RedrawFooter:			; F00C4A
 	CP (8D38h), 08ah
 	JR NZ, LABEL_F00C88
 	LD (03EFA8h), 000h
@@ -150225,7 +150307,10 @@ LABEL_F00C84:
 LABEL_F00C88:
 	RET
 
-LABEL_F00C89:
+;=============================================================================
+; Display_RedrawTitleBar - Redraw the title bar region
+;=============================================================================
+Display_RedrawTitleBar:			; F00C89
 	CP (8D38h), 08ah
 	JRL NZ, LABEL_F00D30
 	LD (03EFA8h), 002h
@@ -150340,7 +150425,7 @@ LABEL_F00D90:
 LABEL_F00DA4:
 	RET
 
-LABEL_F00DA5:
+Display_RedrawSelection:		; F00DA5
 	CP (8D38h), 08ah
 	JR Z, LABEL_F00DB0
 	JP LABEL_F00E34
@@ -150393,7 +150478,7 @@ LABEL_F00E0F:
 LABEL_F00E34:
 	RET
 
-LABEL_F00E35:
+Display_RedrawSidePanel:		; F00E35
 	BIT 0, (0F57h)
 	JRL NZ, LABEL_F00EEB
 	CP (8D38h), 08ah
@@ -150495,7 +150580,7 @@ LABEL_F00EEC:
 	POP XIY
 	RET
 
-LABEL_F00F3A:
+Display_RedrawAltContent:		; F00F3A
 	CP (0F5Ah), 000h
 	JR Z, LABEL_F00F97
 	LD XIX, 00000820h
@@ -150547,7 +150632,7 @@ LABEL_F00FB0:
 	CALL LABEL_EF5D81
 	RET
 
-LABEL_F00FDC:
+Display_RedrawButtonLabels:		; F00FDC
 	CP (8D38h), 08ah
 	JR NZ, LABEL_F01046
 	LD (03EFA8h), 000h
