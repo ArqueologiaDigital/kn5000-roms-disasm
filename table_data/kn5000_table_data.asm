@@ -1485,15 +1485,235 @@ Flash_ChipErase_32bit:
 	RET
 
 ; -----------------------------------------------------------------------------
-; Remaining 32-bit flash utility routines
-; Address: 0x9FBD7D onwards (boot-time: 0xFFBD7D)
+; Flash_SectorErase_32bit - Erase all Table Data ROM sectors
+; Address: 0x9FBD7D (boot-time: 0xFFBD7D)
 ;
-; Contains:
-;   - Flash_SectorErase_32bit: Multi-sector erase routine
-;   - Flash_WaitReady: Check flash status
-;   - Higher-level flash update routines
+; Purpose: Erase all 18 sectors in the 2MB Table Data ROM
+;          Uses sector erase (0x30) instead of chip erase (0x10)
+;
+; Entry: None
+; Exit: None
+;
+; Sector layout (2MB = 32 x 64KB sectors in each interleaved chip):
+;   0x00000, 0x20000, 0x40000, 0x60000, 0x80000, 0xA0000, 0xC0000, 0xE0000,
+;   0x100000, 0x120000, 0x140000, 0x160000, 0x180000, 0x1A0000, 0x1C0000,
+;   0x1E0000, 0x1F0000, 0x1F4000 (boot sectors at top)
 ; -----------------------------------------------------------------------------
-	binclude "includes/flash_util_32bit.bin"
+Flash_SectorErase_32bit:
+	PUSH	XIZ				; 3e
+	LD	XIZ, 00800000h			; 46 00 00 80 00 - Table Data base
+	EI	6				; 06 06 - disable lower-priority IRQs
+
+	; Send erase setup sequence
+	LD	XBC, XIZ			; ee 89
+	ADD	XBC, 00015554h			; e9 c8 54 55 01 00
+	LD	XWA, 00AA00AAh			; 40 aa 00 aa 00 - Unlock 1
+	LD	(XBC), XWA			; b1 60
+
+	LD	XBC, XIZ			; ee 89
+	ADD	XBC, 0000AAA8h			; e9 c8 a8 aa 00 00
+	LD	XWA, 00550055h			; 40 55 00 55 00 - Unlock 2
+	LD	(XBC), XWA			; b1 60
+
+	LD	XBC, XIZ			; ee 89
+	ADD	XBC, 00015554h			; e9 c8 54 55 01 00
+	LD	XWA, 00800080h			; 40 80 00 80 00 - Erase setup
+	LD	(XBC), XWA			; b1 60
+
+	LD	XBC, XIZ			; ee 89
+	ADD	XBC, 00015554h			; e9 c8 54 55 01 00
+	LD	XWA, 00AA00AAh			; 40 aa 00 aa 00 - Unlock 1
+	LD	(XBC), XWA			; b1 60
+
+	LD	XBC, XIZ			; ee 89
+	ADD	XBC, 0000AAA8h			; e9 c8 a8 aa 00 00
+	LD	XWA, 00550055h			; 40 55 00 55 00 - Unlock 2
+	LD	(XBC), XWA			; b1 60
+
+	; Now send 0x30 sector erase command to each sector
+	LD	XWA, 00300030h			; 40 30 00 30 00 - Sector erase cmd
+	LD	(XIZ), XWA			; b6 60 - Sector 0
+
+	LD	XBC, XIZ			; ee 89
+	ADD	XBC, 00020000h			; e9 c8 00 00 02 00
+	LD	(XBC), XWA			; b1 60 - Sector 0x20000
+
+	LD	XBC, XIZ			; ee 89
+	ADD	XBC, 00040000h			; e9 c8 00 00 04 00
+	LD	(XBC), XWA			; b1 60 - Sector 0x40000
+
+	LD	XBC, XIZ			; ee 89
+	ADD	XBC, 00060000h			; e9 c8 00 00 06 00
+	LD	(XBC), XWA			; b1 60 - Sector 0x60000
+
+	LD	XBC, XIZ			; ee 89
+	ADD	XBC, 00080000h			; e9 c8 00 00 08 00
+	LD	(XBC), XWA			; b1 60 - Sector 0x80000
+
+	LD	XBC, XIZ			; ee 89
+	ADD	XBC, 000A0000h			; e9 c8 00 00 0a 00
+	LD	(XBC), XWA			; b1 60 - Sector 0xA0000
+
+	LD	XBC, XIZ			; ee 89
+	ADD	XBC, 000C0000h			; e9 c8 00 00 0c 00
+	LD	(XBC), XWA			; b1 60 - Sector 0xC0000
+
+	LD	XBC, XIZ			; ee 89
+	ADD	XBC, 000E0000h			; e9 c8 00 00 0e 00
+	LD	(XBC), XWA			; b1 60 - Sector 0xE0000
+
+	LD	XBC, XIZ			; ee 89
+	ADD	XBC, 00100000h			; e9 c8 00 00 10 00
+	LD	(XBC), XWA			; b1 60 - Sector 0x100000
+
+	LD	XBC, XIZ			; ee 89
+	ADD	XBC, 00120000h			; e9 c8 00 00 12 00
+	LD	(XBC), XWA			; b1 60 - Sector 0x120000
+
+	LD	XBC, XIZ			; ee 89
+	ADD	XBC, 00140000h			; e9 c8 00 00 14 00
+	LD	(XBC), XWA			; b1 60 - Sector 0x140000
+
+	LD	XBC, XIZ			; ee 89
+	ADD	XBC, 00160000h			; e9 c8 00 00 16 00
+	LD	(XBC), XWA			; b1 60 - Sector 0x160000
+
+	LD	XBC, XIZ			; ee 89
+	ADD	XBC, 00180000h			; e9 c8 00 00 18 00
+	LD	(XBC), XWA			; b1 60 - Sector 0x180000
+
+	LD	XBC, XIZ			; ee 89
+	ADD	XBC, 001A0000h			; e9 c8 00 00 1a 00
+	LD	(XBC), XWA			; b1 60 - Sector 0x1A0000
+
+	LD	XBC, XIZ			; ee 89
+	ADD	XBC, 001C0000h			; e9 c8 00 00 1c 00
+	LD	(XBC), XWA			; b1 60 - Sector 0x1C0000
+
+	LD	XBC, XIZ			; ee 89
+	ADD	XBC, 001E0000h			; e9 c8 00 00 1e 00
+	LD	(XBC), XWA			; b1 60 - Sector 0x1E0000
+
+	LD	XBC, XIZ			; ee 89
+	ADD	XBC, 001F0000h			; e9 c8 00 00 1f 00
+	LD	(XBC), XWA			; b1 60 - Sector 0x1F0000 (boot area)
+
+	LD	XBC, XIZ			; ee 89
+	ADD	XBC, 001F4000h			; e9 c8 00 40 1f 00
+	LD	(XBC), XWA			; b1 60 - Sector 0x1F4000 (boot area)
+
+	EI	0				; 06 00 - re-enable interrupts
+	POP	XIZ				; 5e
+	RET					; 0e
+
+; -----------------------------------------------------------------------------
+; Flash_WaitComplete_32bit - Wait for flash operation to complete
+; Address: 0x9FBE85 (boot-time: 0xFFBE85)
+;
+; Purpose: Poll bit 5 of port 0x1C until flash operation completes
+;
+; Entry: None
+; Exit: HL = 0 if success, 0xFFFF if still busy
+; -----------------------------------------------------------------------------
+Flash_WaitComplete_32bit:
+	BIT	5, (01Ch)			; f0 1c cd
+	JR	Z, .not_ready			; 66 03
+	LD	HL, 0				; db a8
+	RET					; 0e
+.not_ready:
+	LD	HL, 0FFFFh			; 33 ff ff
+	RET					; 0e
+
+; -----------------------------------------------------------------------------
+; Flash_ChipErase_32bit_Wait - Erase chip and wait for completion
+; Address: 0x9FBE91 (boot-time: 0xFFBE91)
+;
+; Purpose: Call Flash_ChipErase_32bit and poll until complete
+;
+; Entry: None
+; Exit: None
+; -----------------------------------------------------------------------------
+Flash_ChipErase_32bit_Wait:
+	db	01Eh, 083h, 0FEh		; CALR Flash_ChipErase_32bit (0x9FBD17)
+.wait_loop:
+	db	01Eh, 0EEh, 0FFh		; CALR Flash_WaitComplete_32bit (0x9FBE85)
+	CP	HL, 0FFFFh			; db cf ff ff
+	RET	NZ				; b0 fe
+	db	01Eh, 0E5h, 0FFh		; CALR Flash_WaitComplete_32bit (0x9FBE85)
+	CP	HL, 0FFFFh			; db cf ff ff
+	db	066h, 0F7h			; JR Z, .wait_loop (offset -9)
+	RET					; 0e
+
+; -----------------------------------------------------------------------------
+; Flash_Update_TableData - Update Table Data ROM from RAM buffer
+; Address: 0x9FBEA7 (boot-time: 0xFFBEA7)
+;
+; Purpose: High-level routine to update entire Table Data ROM
+;
+; Entry: Source data at RAM 0x080000 (8000 dwords = 32KB)
+; Exit: HL = 0 if success, 0xFFFF if flash not detected
+;
+; Process:
+;   1. Read flash device ID to verify hardware
+;   2. Erase entire Table Data ROM
+;   3. Copy 8000 dwords from RAM 0x080000 to flash 0x800000
+;   4. Wait for completion
+; -----------------------------------------------------------------------------
+Flash_Update_TableData:
+	db	0EFh, 06Ch			; DEC 4, XSP - allocate 4 bytes
+	PUSH	XIZ				; 3e
+
+	LD	XWA, 00080000h			; 40 00 00 08 00 - source RAM addr
+	db	0BFh, 004h, 060h		; LD (XSP+04h), XWA - save src ptr
+
+	; Verify flash is present by reading device ID
+	db	01Eh, 0B5h, 0FDh		; CALR Flash_ReadID_32bit (0x9FBC6A)
+	CP	XHL, 0FFFFFFFFh			; eb cf ff ff ff ff
+	JR	NZ, .flash_detected		; 6e 05
+
+	LD	HL, 0FFFFh			; 33 ff ff - error: no flash
+	JR	T, .done			; 68 41
+
+.flash_detected:
+	; Erase Table Data ROM
+	db	01Eh, 052h, 0FEh		; CALR Flash_ChipErase_32bit (0x9FBD17)
+
+	; Initialize destination and count
+	LD	XWA, 00080000h			; 40 00 00 08 00 - reinit src ptr
+	LD	XBC, 00010000h			; 41 00 00 01 00 - count = 64K dwords
+	db	01Dh, 01Dh, 0BCh, 0FFh		; CALL ClearMemoryBlockWith0 (0xFFBC1D)
+
+	; Wait for erase to complete
+.wait_erase:
+	db	01Eh, 0AFh, 0FFh		; CALR Flash_WaitComplete_32bit (0x9FBE85)
+	CP	HL, 0FFFFh			; db cf ff ff
+	JR	NZ, .program_loop_start		; 6e 09
+.wait_erase_loop:
+	db	01Eh, 0A6h, 0FFh		; CALR Flash_WaitComplete_32bit (0x9FBE85)
+	CP	HL, 0FFFFh			; db cf ff ff
+	db	066h, 0F7h			; JR Z, .wait_erase_loop
+
+.program_loop_start:
+	LD	XIZ, 0				; ee a8 - dest offset counter
+
+.program_loop:
+	db	0AFh, 004h, 020h		; LD XWA, (XSP+04h) - get src ptr
+	db	0F5h, 0E2h, 031h		; LDA XBC, XWA+ - load data, advance ptr
+	db	0BFh, 004h, 060h		; LD (XSP+04h), XWA - save updated ptr
+
+	LD	XWA, XBC			; e9 88 - XWA = data
+	LD	XBC, XIZ			; ee 89 - XBC = dest offset
+	db	01Eh, 0E0h, 0FDh		; CALR Flash_ProgramWord_32bit (0x9FBCD7)
+
+	INC	1, XIZ				; ee 61 - next dword
+	CP	XIZ, 00001F40h			; ee cf 40 1f 00 00 - 8000 dwords
+	JR	C, .program_loop		; 67 e6
+
+	LD	HL, 0				; db a8 - success
+.done:
+	POP	XIZ				; 5e
+	db	0EFh, 064h			; INC 4, XSP - deallocate 4 bytes
+	RET					; 0e
 
 
 ; =============================================================================
