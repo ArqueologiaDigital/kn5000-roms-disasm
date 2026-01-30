@@ -431293,7 +431293,7 @@ LABEL_FDEC9E:
 	JR NZ, LABEL_FDECEA
 
 LABEL_FDECB6:
-	LD C, (8D3Ah:24)
+	db 0C1h, 03Ah, 08Dh, 023h		; LD C, (238D3Ah) - 24-bit addressing mode
 	EXTZ BC
 	LDA XDE, 0EE8E82h
 	LD C, (XDE + BC)
@@ -431366,7 +431366,7 @@ LABEL_FDED58:
 	CP (0C5A8h), C
 	JR Z, LABEL_FDED94
 	LD (0C5A8h), C
-	LD (XSP + 000h), 004h
+	db 0BFh, 000h, 000h, 004h		; LD (XSP + 000h), 004h - explicit displacement encoding
 	LD (XSP + 001h), 0f0h
 	LD (XSP + 002h), 050h
 	LD (XSP + 003h), 091h
