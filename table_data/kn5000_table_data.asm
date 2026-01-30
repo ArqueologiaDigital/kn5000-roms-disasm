@@ -659,14 +659,45 @@ Boot_ClearRAM:
 	db	078h, 042h, 0FEh		; JRL T, Boot_Init+0x14B (return to caller at 0xFFB633)
 	db	00Eh				; RET (never reached)
 
-; -----------------------------------------------------------------------------
-; Boot routines: flash update, hardware init, display, FDC, etc.
-; Addresses 0x9FB7F2 to 0x9FC8C1
+; =============================================================================
+; BOOT FLASH PROGRAMMING AND UTILITY ROUTINES
+; Addresses 0x9FB7F2 to 0x9FC8C1 (4304 bytes)
 ;
-; Interrupt handler addresses within this range:
-;   INTT1_HANDLER  = 0x9FB7F2 (timer 1 interrupt)
-;   NMI_HANDLER    = 0x9FB7FB
-; -----------------------------------------------------------------------------
+; This section contains:
+;
+; INTERRUPT HANDLERS (0x9FB7F2-0x9FB811):
+;   0x9FB7F2: INTT1_Handler - Timer 1 interrupt (tick counter at 0x0C00)
+;   0x9FB7FB: NMI_Handler - Fatal error handler (halt loop)
+;   0x9FB802-0x9FB811: Stub routines (return 0 or 0xFFFF)
+;
+; 16-BIT FLASH ROUTINES (0x9FB812-0x9FBC1C):
+; For HDAE5000 expansion ROM (0x280000) and Custom Data Flash (0x300000)
+;   0x9FB812: Flash_Reset_16bit - Send software reset (0xF0)
+;   0x9FB888: Flash_ReadID_16bit - Read manufacturer/device ID
+;   0x9FB903: Flash_ProgramWord_16bit - Program single word
+;   0x9FB968: Flash_ChipErase_16bit - Chip erase (0x80, 0x10)
+;   0x9FBA17: Flash_SectorErase_16bit - Sector erase (0x30)
+;   0x9FBBCF: Flash_StatusCheck_16bit - Check operation complete
+;   0x9FBBDB: Flash_EraseAndWait_16bit - Erase with status wait
+;   0x9FBBF3: Flash_InitBoth_16bit - Initialize both flash chips
+;
+; 32-BIT FLASH ROUTINES (0x9FBC1D-0xFBD7C):
+; For Table Data ROM (0x800000) - interleaved odd/even chips
+;   0x9FBC1D: Utility routine
+;   0x9FBC2D: Flash_Reset_32bit - Reset both chips simultaneously
+;   0x9FBC6A: Flash_ReadID_32bit - Read ID from interleaved ROM
+;   0x9FBCD7: Flash_ProgramWord_32bit - Program 32-bit word
+;   0x9FBD17: Flash_ChipErase_32bit - Chip erase sequence
+;   0x9FBD7D: Flash_SectorErase_32bit - Sector erase
+;
+; DISK DETECTION (0x9FBFC4-0x9FC0D2):
+;   0x9FBFC4: Detect_Disk_Type - Check floppy header against 8 signatures
+;   0x9FBF07: FDC_Reset - Floppy controller reset
+;   0x9FBF37: FDC_ReadSector - Read sector from floppy
+;   0x9FBF92: FDC_MultiSectorRead - Read multiple sectors
+;
+; See also: ../kn5000-docs/flash-programming.md for detailed protocol analysis
+; =============================================================================
 	binclude "includes/bootcode_pre_lzss.bin"
 
 
@@ -1110,17 +1141,48 @@ LZSS_Decompress:
 	db	0BFh, 010h, 037h		; LDA XSP, XSP+0x10 (deallocate frame)
 	db	00Eh				; RET
 
-; -----------------------------------------------------------------------------
-; Remaining boot routines: flash update, display, FDC, etc.
-; Addresses 0x9FCC2A to 0x9FFEE0
+; =============================================================================
+; BOOT UPDATE AND DISPLAY ROUTINES
+; Addresses 0x9FCC2A to 0x9FFEE0 (12982 bytes)
 ;
-; Interrupt handler addresses within this range:
-;   INTTC3_HANDLER = 0x9FEA9D
-;   INT4_HANDLER   = 0x9FEAB2
-;   INTA_HANDLER   = 0x9FF229
-;   INTTX1_HANDLER = 0x9FF2AE
-;   INTRX1_HANDLER = 0x9FF2D0
-; -----------------------------------------------------------------------------
+; This section contains the main firmware update dispatcher and UI routines:
+;
+; FLASH UPDATE DISPATCHER (0x9FCC2A-0x9FCCFA):
+;   0x9FCC2A: Boot_FlashUpdate_Main - Main update entry point
+;             - Calls 0xFFEC63 to check update conditions
+;             - Calls Detect_Disk_Type (0x9FBFC4)
+;             - Calls Boot_Get_Region_Code (0xFFB700)
+;             - Dispatches to appropriate handler based on disk type
+;             - Displays UI bitmaps during erase/write
+;
+; DISPLAY ROUTINES (0x9FCCFB-0x9FD7FF):
+;   0x9FCCFB: Draw_Bitmap - Render bitmap to screen
+;   0x9FCD9A: Init_Display_Progress - Initialize progress indicator
+;   0x9FCDFC: VGA_WritePort - Write to VGA I/O port
+;   0x9FCE12: VGA_ReadPort - Read from VGA I/O port
+;   0x9FCE1E-0x9FD7BD: VGA_Init - Complete VGA initialization sequence
+;
+; FLASH UPDATE HANDLERS (0x9FD800-0x9FEA9C):
+;   Handlers for different update file types (1-8):
+;   - Program ROM disk 1/2
+;   - Table Data ROM disk 1/2
+;   - Compressed custom data
+;   - HDAE5000 firmware
+;   - Compressed Program/Table ROM
+;
+; INTERRUPT HANDLERS:
+;   0x9FEA9D: INTTC3_HANDLER - Timer counter 3
+;   0x9FEAB2: INT4_HANDLER - External interrupt 4
+;   0x9FF229: INTA_HANDLER - External interrupt A
+;   0x9FF2AE: INTTX1_HANDLER - Serial TX 1
+;   0x9FF2D0: INTRX1_HANDLER - Serial RX 1
+;
+; MEMORY ALLOCATION (0x9FFB00-0x9FFCFF):
+;   0x9FFB56: malloc - Allocate memory from heap
+;   0x9FFCDD: free - Free allocated memory
+;
+; See also: ../kn5000-docs/boot-sequence.md for boot flow documentation
+; =============================================================================
 	binclude "includes/bootcode_post_lzss.bin"
 
 	ORG 09FFEE0h
