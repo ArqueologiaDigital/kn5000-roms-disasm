@@ -161,99 +161,138 @@ Bitmap_1bit_Turn_On_AGAIN:		;
 	binclude "../maincpu/images/Bitmap_1bit_Turn_On_AGAIN.bin"
 
 
+; =============================================================================
+; FIRST-STAGE BOOTLOADER CODE
+; =============================================================================
+; This code runs when the CPU boots, before memory remapping.
+; At boot time, this ROM is mapped at 0xE00000-0xFFFFFF.
+; After remapping, it's at 0x800000-0x9FFFFF.
+;
+; The interrupt vectors contain boot-time addresses (0xFFxxxx), so we define
+; them as constants here.
+; =============================================================================
+
+; Boot-time addresses (CPU sees ROM at 0xE00000-0xFFFFFF at boot)
+BOOT_EMPTY_HANDLER	EQU	0FFB705h
+BOOT_RESET_HANDLER	EQU	0FFFEE0h
+BOOT_NMI_HANDLER	EQU	0FFB7FBh
+BOOT_INT4_HANDLER	EQU	0FFEAB2h
+BOOT_INTA_HANDLER	EQU	0FFF229h
+BOOT_INTT1_HANDLER	EQU	0FFB7F2h
+BOOT_INTRX1_HANDLER	EQU	0FFF2D0h
+BOOT_INTTX1_HANDLER	EQU	0FFF2AEh
+BOOT_INTTC3_HANDLER	EQU	0FFEA9Dh
+BOOT_ENTRY		EQU	0FFB4E8h
+
+
+	ORG 09FB4E8h
+; -----------------------------------------------------------------------------
+; Boot_Init - First-stage bootloader entry point
+; Initializes CPU, memory controller, and hands off to main program ROM
+; See original_ROMs/table_data_bootcode.unidasm for detailed disassembly
+; -----------------------------------------------------------------------------
+Boot_Init:
+	binclude "includes/bootcode_init.bin"
+
 	ORG 09FB705h
 EMPTY_HANDLER:
 	RETI
 
+; After RETI, there's JRL back to Boot_Init for watchdog reset scenarios
+	JRL	T, Boot_Init		; Jump relative long back to boot entry
+
+; -----------------------------------------------------------------------------
+; Boot routines: flash update, hardware init, display, FDC, etc.
+; Addresses 0x9FB709 to 0x9FFEE0 (includes all interrupt handlers)
+;
+; Interrupt handler addresses within this range:
+;   NMI_HANDLER    = 0x9FB7FB (offset 0x0F2 in bootcode_routines.bin)
+;   INTT1_HANDLER  = 0x9FB7F2 (offset 0x0E9)
+;   INTTC3_HANDLER = 0x9FEA9D (offset 0x3394)
+;   INT4_HANDLER   = 0x9FEAB2 (offset 0x33A9)
+;   INTA_HANDLER   = 0x9FF229 (offset 0x3B20)
+;   INTTX1_HANDLER = 0x9FF2AE (offset 0x3BA5)
+;   INTRX1_HANDLER = 0x9FF2D0 (offset 0x3BC7)
+; -----------------------------------------------------------------------------
+	binclude "includes/bootcode_routines.bin"
+
 	ORG 09FFEE0h
 RESET_HANDLER:
-	JP 0FFB4E8h
+	JP BOOT_ENTRY
+	RET			; Dead code (never reached, but present in ROM)
 
-	ORG 09fb7fbh
-NMI_HANDLER:
-
-	ORG 09feab2h
-INT4_HANDLER:
-
-	ORG 09ff229h
-INTA_HANDLER:
-
-	ORG 09fb7f2h
-INTT1_HANDLER:
-
-	ORG 09ff2d0h
-INTRX1_HANDLER:
-
-	ORG 09ff2aeh
-INTTX1_HANDLER:
-
-	ORG 09fea9dh
-INTTC3_HANDLER:
+; Reserved area between RESET_HANDLER and interrupt vector table
+	db 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh	; Padding
+	db 000h, 000h, 000h, 004h, 000h, 000h, 000h		; Reserved entry 1?
+	db 004h, 000h, 000h, 000h				; Reserved entry 2?
+	db 004h, 000h, 000h, 000h				; Reserved entry 3?
+	db 004h, 000h, 000h					; Partial entry
 
 
 
 	ORG 09FFF00h
 
-; TMP94C241C Interrupt Vector Table:
+; TMP94C241F Interrupt Vector Table
+; These addresses are what the CPU sees at boot time (ROM at 0xE00000)
 
-	dd RESET_HANDLER
+	dd BOOT_RESET_HANDLER	; RESET
 
-	dd EMPTY_HANDLER	; "SWI 1" instruction
-	dd EMPTY_HANDLER	; "SWI 2" instruction
-	dd EMPTY_HANDLER	; "SWI 3" instruction
-	dd EMPTY_HANDLER	; "SWI 4" instruction
-	dd EMPTY_HANDLER	; "SWI 5" instruction
-	dd EMPTY_HANDLER	; "SWI 6" instruction
-	dd EMPTY_HANDLER	; "SWI 7" instruction
+	dd BOOT_EMPTY_HANDLER	; SWI 1
+	dd BOOT_EMPTY_HANDLER	; SWI 2
+	dd BOOT_EMPTY_HANDLER	; SWI 3
+	dd BOOT_EMPTY_HANDLER	; SWI 4
+	dd BOOT_EMPTY_HANDLER	; SWI 5
+	dd BOOT_EMPTY_HANDLER	; SWI 6
+	dd BOOT_EMPTY_HANDLER	; SWI 7
 
-	dd NMI_HANDLER
+	dd BOOT_NMI_HANDLER	; NMI
 
-	dd EMPTY_HANDLER	; INTWD (watchdog)
-	dd EMPTY_HANDLER	; INT0 Pin
+	dd BOOT_EMPTY_HANDLER	; INTWD (watchdog)
+	dd BOOT_EMPTY_HANDLER	; INT0 Pin
 
-	dd INT4_HANDLER
+	dd BOOT_INT4_HANDLER	; INT4 Pin
 
-	dd EMPTY_HANDLER	; INT5 Pin
-	dd EMPTY_HANDLER	; INT6 Pin
-	dd EMPTY_HANDLER	; INT7 Pin
-	dd EMPTY_HANDLER	; (RESERVED)
-	dd EMPTY_HANDLER	; INT8 Pin
-	dd EMPTY_HANDLER	; INT9 Pin
+	dd BOOT_EMPTY_HANDLER	; INT5 Pin
+	dd BOOT_EMPTY_HANDLER	; INT6 Pin
+	dd BOOT_EMPTY_HANDLER	; INT7 Pin
+	dd BOOT_EMPTY_HANDLER	; (RESERVED)
+	dd BOOT_EMPTY_HANDLER	; INT8 Pin
+	dd BOOT_EMPTY_HANDLER	; INT9 Pin
 
-	dd INTA_HANDLER
+	dd BOOT_INTA_HANDLER	; INTA Pin
 
-	dd EMPTY_HANDLER	; INTB Pin
-	dd EMPTY_HANDLER	; INTT0
+	dd BOOT_EMPTY_HANDLER	; INTB Pin
+	dd BOOT_EMPTY_HANDLER	; INTT0
 
-	dd INTT1_HANDLER
+	dd BOOT_INTT1_HANDLER	; INTT1
 
-	dd EMPTY_HANDLER	; INTT2_HANDLER
-	dd EMPTY_HANDLER	; INTT3_HANDLER
-	dd EMPTY_HANDLER	; INTTR4_HANDLER
-	dd EMPTY_HANDLER 	; INTTR5
-	dd EMPTY_HANDLER 	; INTTR6
-	dd EMPTY_HANDLER	; INTTR7
-	dd EMPTY_HANDLER 	; INTTR8
-	dd EMPTY_HANDLER 	; INTTR9
-	dd EMPTY_HANDLER 	; INTTRA
-	dd EMPTY_HANDLER 	; INTTRB
-	dd EMPTY_HANDLER	; INTRX0_HANDLER
-	dd EMPTY_HANDLER	; INTTX0_HANDLER
+	dd BOOT_EMPTY_HANDLER	; INTT2
+	dd BOOT_EMPTY_HANDLER	; INTT3
+	dd BOOT_EMPTY_HANDLER	; INTTR4
+	dd BOOT_EMPTY_HANDLER	; INTTR5
+	dd BOOT_EMPTY_HANDLER	; INTTR6
+	dd BOOT_EMPTY_HANDLER	; INTTR7
+	dd BOOT_EMPTY_HANDLER	; INTTR8
+	dd BOOT_EMPTY_HANDLER	; INTTR9
+	dd BOOT_EMPTY_HANDLER	; INTTRA
+	dd BOOT_EMPTY_HANDLER	; INTTRB
+	dd BOOT_EMPTY_HANDLER	; INTRX0
+	dd BOOT_EMPTY_HANDLER	; INTTX0
 
-	dd INTRX1_HANDLER
-	dd INTTX1_HANDLER
+	dd BOOT_INTRX1_HANDLER	; INTRX1
+	dd BOOT_INTTX1_HANDLER	; INTTX1
 
-	dd EMPTY_HANDLER 	; INTAD
-	dd EMPTY_HANDLER	; INTTC0
-	dd EMPTY_HANDLER 	; INTTC1
-	dd EMPTY_HANDLER	; INTTC2
+	dd BOOT_EMPTY_HANDLER	; INTAD
+	dd BOOT_EMPTY_HANDLER	; INTTC0
+	dd BOOT_EMPTY_HANDLER	; INTTC1
+	dd BOOT_EMPTY_HANDLER	; INTTC2
 
-	dd INTTC3_HANDLER
+	dd BOOT_INTTC3_HANDLER	; INTTC3
 
-	dd EMPTY_HANDLER 	; INTTC4
-	dd EMPTY_HANDLER 	; INTTC5
-	dd EMPTY_HANDLER 	; INTTC6
-	dd EMPTY_HANDLER 	; INTTC7
+	dd BOOT_EMPTY_HANDLER	; INTTC4
+	dd BOOT_EMPTY_HANDLER	; INTTC5
+	dd BOOT_EMPTY_HANDLER	; INTTC6
+	dd BOOT_EMPTY_HANDLER	; INTTC7
 
 ; RESERVED:
 	db 12 dup (0FFh)
