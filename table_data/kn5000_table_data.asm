@@ -2044,7 +2044,7 @@ Flash_Write_Sectors:
 	LD	XDE, 000099A4h		; 42 a4 99 00 00 - sector buffer
 	db	01Eh, 07Bh, 0FEh	; CALR FDC_MultiSectorRead
 
-	LDA	XWA, 000099A4h		; f2 a4 99 00 30
+	db	0F2h, 0A4h, 099h, 000h, 030h	; LDA XWA, 000099A4h
 	db	0BFh, 00Ah, 060h	; LD (XSP+0Ah), XWA - buffer ptr
 	db	0D7h, 0FAh, 0A8h	; LD QIZ, 0 - loop counter
 	JR	T, .check_partial_loop	; 68 1b
@@ -2088,7 +2088,7 @@ Flash_Write_Sectors:
 	db	01Eh, 014h, 0FEh	; CALR FDC_MultiSectorRead
 
 	db	09Fh, 006h, 038h, 012h, 000h	; ADD (XSP+06h), 0012h - advance to next track
-	LDA	XWA, 000099A4h		; f2 a4 99 00 30
+	db	0F2h, 0A4h, 099h, 000h, 030h	; LDA XWA, 000099A4h
 	db	0BFh, 00Ah, 060h	; LD (XSP+0Ah), XWA - buffer pointer
 	db	0D7h, 0FAh, 0A8h	; LD QIZ, 0 - dword counter
 
@@ -2126,7 +2126,7 @@ Flash_Write_Sectors:
 	LD	XDE, 000099A4h		; 42 a4 99 00 00
 	db	01Eh, 0B8h, 0FDh	; CALR FDC_MultiSectorRead
 
-	LDA	XWA, 000099A4h		; f2 a4 99 00 30
+	db	0F2h, 0A4h, 099h, 000h, 030h	; LDA XWA, 000099A4h
 	db	0BFh, 00Ah, 060h	; LD (XSP+0Ah), XWA
 	db	0D7h, 0FAh, 0A8h	; LD QIZ, 0
 	JR	T, .check_last_loop	; 68 1b
@@ -2155,30 +2155,179 @@ Flash_Write_Sectors:
 	RET				; 0e
 
 ; -----------------------------------------------------------------------------
+; Flash_Write_Sectors_16bit - Write sectors to 16-bit flash from floppy
+; Address: 0x9FC213 (boot-time: 0xFFC213)
+;
+; Entry: A = flash bank (1 or 2)
+;        BC = starting sector number
+;        XDE = destination flash address
+;        (XSP+1A) = total sectors to write
+; Exit: None
+;
+; Similar to Flash_Write_Sectors but uses Flash_ProgramWord_16bit (0xFFB903)
+; for 16-bit flash chips (Table Data or Custom Data ROMs).
+; Uses 0x100 words per sector (SLA 8 = multiply by 256).
+; Uses 0x1200 words per track (4608 = 18 sectors * 256).
+; -----------------------------------------------------------------------------
+Flash_Write_Sectors_16bit:
+	db	0BFh, 0EEh, 037h	; LDA XSP, XSP+EEh - allocate 18 bytes
+	PUSH	XIZ			; 3e
+	db	0BFh, 00Eh, 062h	; LD (XSP+0Eh), XDE - save dest addr
+	db	0BFh, 012h, 051h	; LD (XSP+12h), BC - save start sector
+	db	0BFh, 014h, 041h	; LD (XSP+14h), A - save flash bank
+	db	09Fh, 012h, 020h	; LD WA, (XSP+12h)
+	db	0BFh, 006h, 050h	; LD (XSP+06h), WA - working sector
+	db	09Fh, 006h, 020h	; LD WA, (XSP+06h)
+	EXTZ	XWA			; e8 12
+	db	0D8h, 00Ah, 012h, 000h	; DIV WA, 0012h - divide by sectors per track
+	db	0D7h, 0E2h, 088h	; LD WA, QWA - get remainder
+	db	0DEh, 0A8h		; LD IZ, 0
+	CP	WA, 0			; d8 d8
+	JR	Z, .skip_partial_first_16	; 66 4d
+	db	036h, 012h, 000h	; LD IZ, 0012h
+	db	0D8h, 0A6h		; SUB IZ, WA - IZ = sectors to read first track
+
+	; Read partial first track
+	db	09Fh, 006h, 020h	; LD WA, (XSP+06h)
+	EXTZ	XWA			; e8 12
+	db	0DEh, 089h		; LD BC, IZ
+	LD	XDE, 000099A4h		; 42 a4 99 00 00 - sector buffer
+	db	01Eh, 046h, 0FDh	; CALR FDC_MultiSectorRead
+
+	db	0F2h, 0A4h, 099h, 000h, 030h	; LDA XWA, 000099A4h
+	db	0BFh, 00Ah, 060h	; LD (XSP+0Ah), XWA - buffer ptr
+	db	0D7h, 0FAh, 0A8h	; LD QIZ, 0 - loop counter
+	JR	T, .check_partial_loop_16	; 68 20
+
+.partial_write_loop_16:
+	db	08Fh, 014h, 021h	; LD A, (XSP+14h) - flash bank
+	EXTZ	WA			; d8 12
+	db	0AFh, 00Eh, 021h	; LD XBC, (XSP+0Eh) - dest addr
+	db	0F5h, 0E5h, 032h	; LDA XDE, XBC+ - advance by 2 (word)
+	db	0BFh, 00Eh, 061h	; LD (XSP+0Eh), XBC
+	LD	XBC, XDE		; ea 89 - XBC = dest address
+	db	0AFh, 00Ah, 023h	; LD XHL, (XSP+0Ah) - buffer ptr
+	db	0D5h, 0EDh, 022h	; LD DE, (XHL+) - get word from buffer
+	db	0BFh, 00Ah, 063h	; LD (XSP+0Ah), XHL
+	db	01Dh, 003h, 0B9h, 0FFh	; CALL Flash_ProgramWord_16bit (0xFFB903)
+	db	0D7h, 0FAh, 061h	; INC 1, QIZ
+
+.check_partial_loop_16:
+	db	0DEh, 089h		; LD BC, IZ
+	db	0D9h, 0ECh, 008h	; SLA 8, BC - BC = IZ * 256 (words per sector)
+	db	0D7h, 0FAh, 088h	; LD WA, QIZ
+	CP	WA, BC			; d9 f0
+	JR	C, .partial_write_loop_16	; 67 d4
+
+.skip_partial_first_16:
+	db	09Fh, 006h, 08Eh	; ADD (XSP+06h), IZ - advance sector count
+	db	0DEh, 088h		; LD WA, IZ
+	db	09Fh, 01Ah, 021h	; LD BC, (XSP+1Ah) - total sectors
+	db	0D8h, 0A1h		; SUB BC, WA - remaining sectors
+	db	0E9h, 012h		; EXTZ XBC
+	db	0D9h, 00Ah, 012h, 000h	; DIV BC, 0012h - full tracks remaining
+	db	0BFh, 008h, 051h	; LD (XSP+08h), BC - track count
+	db	0BFh, 004h, 002h, 000h, 000h	; LD (XSP+04h), 0 - track counter
+	db	09Fh, 008h, 020h	; LD WA, (XSP+08h)
+	CP	WA, 0			; d8 d8
+	JR	ULE, .check_partial_last_16	; 63 52
+
+.full_track_loop_16:
+	db	09Fh, 006h, 020h	; LD WA, (XSP+06h)
+	EXTZ	XWA			; e8 12
+	LD	BC, 0012h		; 31 12 00 - 18 sectors per track
+	LD	XDE, 000099A4h		; 42 a4 99 00 00
+	db	01Eh, 0DEh, 0FCh	; CALR FDC_MultiSectorRead
+
+	db	09Fh, 006h, 038h, 012h, 000h	; ADD (XSP+06h), 0012h
+	db	0F2h, 0A4h, 099h, 000h, 030h	; LDA XWA, 000099A4h
+	db	0BFh, 00Ah, 060h	; LD (XSP+0Ah), XWA
+	db	0D7h, 0FAh, 0A8h	; LD QIZ, 0
+
+.full_track_write_16:
+	db	08Fh, 014h, 021h	; LD A, (XSP+14h) - flash bank
+	EXTZ	WA			; d8 12
+	db	0AFh, 00Eh, 021h	; LD XBC, (XSP+0Eh)
+	db	0F5h, 0E5h, 032h	; LDA XDE, XBC+
+	db	0BFh, 00Eh, 061h	; LD (XSP+0Eh), XBC
+	LD	XBC, XDE		; ea 89
+	db	0AFh, 00Ah, 023h	; LD XHL, (XSP+0Ah)
+	db	0D5h, 0EDh, 022h	; LD DE, (XHL+)
+	db	0BFh, 00Ah, 063h	; LD (XSP+0Ah), XHL
+	db	01Dh, 003h, 0B9h, 0FFh	; CALL Flash_ProgramWord_16bit
+	db	0D7h, 0FAh, 061h	; INC 1, QIZ
+	db	0D7h, 0FAh, 0CFh, 000h, 012h	; CP QIZ, 1200h - 4608 words per track
+	JR	C, .full_track_write_16	; 67 d9
+
+	db	09Fh, 004h, 061h	; INCW 1, (XSP+04h)
+	db	09Fh, 008h, 020h	; LD WA, (XSP+08h)
+	db	09Fh, 004h, 0F8h	; CP (XSP+04h), WA
+	JR	C, .full_track_loop_16	; 67 ae
+
+.check_partial_last_16:
+	db	09Fh, 012h, 020h	; LD WA, (XSP+12h) - original start
+	db	09Fh, 01Ah, 080h	; ADD WA, (XSP+1Ah) - add total sectors
+	db	09Fh, 006h, 0A0h	; SUB WA, (XSP+06h) - subtract current
+	db	0D8h, 08Eh		; LD IZ, WA - remaining sectors
+	db	0DEh, 0D8h		; CP IZ, 0
+	JR	Z, .write_done_16	; 66 48
+
+	; Read partial last track
+	db	09Fh, 006h, 020h	; LD WA, (XSP+06h)
+	EXTZ	XWA			; e8 12
+	db	0DEh, 089h		; LD BC, IZ
+	LD	XDE, 000099A4h		; 42 a4 99 00 00
+	db	01Eh, 07Eh, 0FCh	; CALR FDC_MultiSectorRead
+
+	db	0F2h, 0A4h, 099h, 000h, 030h	; LDA XWA, 000099A4h
+	db	0BFh, 00Ah, 060h	; LD (XSP+0Ah), XWA
+	db	0D7h, 0FAh, 0A8h	; LD QIZ, 0
+	JR	T, .check_last_loop_16	; 68 20
+
+.last_write_loop_16:
+	db	08Fh, 014h, 021h	; LD A, (XSP+14h)
+	EXTZ	WA			; d8 12
+	db	0AFh, 00Eh, 021h	; LD XBC, (XSP+0Eh)
+	db	0F5h, 0E5h, 032h	; LDA XDE, XBC+
+	db	0BFh, 00Eh, 061h	; LD (XSP+0Eh), XBC
+	LD	XBC, XDE		; ea 89
+	db	0AFh, 00Ah, 023h	; LD XHL, (XSP+0Ah)
+	db	0D5h, 0EDh, 022h	; LD DE, (XHL+)
+	db	0BFh, 00Ah, 063h	; LD (XSP+0Ah), XHL
+	db	01Dh, 003h, 0B9h, 0FFh	; CALL Flash_ProgramWord_16bit
+	db	0D7h, 0FAh, 061h	; INC 1, QIZ
+
+.check_last_loop_16:
+	db	0DEh, 089h		; LD BC, IZ
+	db	0D9h, 0ECh, 008h	; SLA 8, BC
+	db	0D7h, 0FAh, 088h	; LD WA, QIZ
+	CP	WA, BC			; d9 f0
+	JR	C, .last_write_loop_16	; 67 d4
+
+.write_done_16:
+	POP	XIZ			; 5e
+	db	0BFh, 012h, 037h	; LDA XSP, XSP+12h - deallocate
+	db	00Fh, 002h, 000h	; RETD 0x0002 - return, pop 2 extra bytes
+
+; -----------------------------------------------------------------------------
 ; Remaining boot code routines
-; Address: 0x9FC213 onwards (boot-time: 0xFFC213)
+; Address: 0x9FC354 onwards (boot-time: 0xFFC354)
 ;
 ; Contains:
-;   - Flash_Verify_Data: Verify written data against buffer
-;   - Display update routines for progress feedback
-;   - Main firmware update state machine
-;   - HDAE5000 and Custom Data flash update handlers
-;
-; Functions identified:
-;   0x9FC213: Flash verification routine
-;   0x9FC36A: Progress display helper
-;   0x9FC3C8: State transition handler
-;   0x9FC40B: Main update loop
-;   0x9FC4E5: Delay routine
-;   0x9FC50B: Key input check
-;   0x9FC57F: Small wrapper
-;   0x9FC58A: Flash copy routine
-;   0x9FC60E: Display init
-;   0x9FC660: Display clear
-;   0x9FC6B2: Main firmware update entry
-;   0x9FC80F: Recovery mode handler
+;   - Boot_Display_Update_Message: Display message during update
+;   - Boot_Wait_For_Key: Wait for key with display refresh
+;   - Boot_Init_Display_Progress: Initialize progress counter
+;   - Boot_Update_Flash_ByType: Main disk type dispatch
+;   - Boot_Show_Unknown_Error: Error for invalid disk type
+;   - Boot_Delay_Loop: Simple delay
+;   - Boot_LED_Animation: Progress LED cycling
+;   - Flash_ScanForErased: Scan for erased blocks
+;   - Flash_CompareRegions: Compare memory regions
+;   - Boot_Copy_RAM_to_Flash: RAM to flash copy routines
+;   - Boot_Main_Entry: Main boot sequence
+;   - Boot_Recovery_Entry: Recovery mode handler
 ; -----------------------------------------------------------------------------
-	binclude "includes/bootcode_post_fdc_part2.bin"
+	binclude "includes/bootcode_post_fdc_part3.bin"
 
 
 ; =============================================================================
