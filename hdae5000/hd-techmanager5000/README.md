@@ -31,12 +31,55 @@ https://archive.org/details/technics-kn5000-system-update-disks
 | `hd-ae5000comparison.pdf` | HD-AE5000 Feature Comparison |
 | `KN5000.pdf` | KN5000 Overview Document |
 
+### Parallel Port DLL (Key for Reverse Engineering)
+
+| File | Description |
+|------|-------------|
+| `ppkn50.dll` | **Parallel Port KN5000 DLL** - PE32 Windows DLL containing the PC-side protocol implementation |
+
 ### Other
 
 | File | Description |
 |------|-------------|
 | `hd-ae5000installed.jpg` | Photo of installed HD-AE5000 |
 | `intro.mid` | Demo MIDI file |
+
+## ppkn50.dll - Parallel Port Protocol DLL
+
+The `ppkn50.dll` is a 32-bit Windows DLL (PE32, Windows 95/NT compatible) that implements
+the PC side of the parallel port communication protocol with the HDAE5000.
+
+### Exported Functions
+
+| Function | Purpose |
+|----------|---------|
+| `InitializeTheDllPP50` | Initialize the DLL |
+| `OpenThePortNumberPP50` | Open/select parallel port |
+| `CloseThePortPP50` | Close the parallel port |
+| `TestTheKNPPPP50` | Test connection to KN5000 |
+| `TestParallelModusPP50` | Test parallel port mode |
+| `ReadFsbFromKnHdToKnMemPP50` | Read FSB from HD to KN memory |
+| `WriteFsbFromKnMemToKnHd...` | Write FSB from KN memory to HD |
+| `SendFsbFromKnMemToPCPP50` | Transfer FSB from KN to PC |
+| `SendFsbFromPCToKnMemPP50` | Transfer FSB from PC to KN |
+| `LoadFileFromKnHdToKnMemPP50` | Load file from HD to KN memory |
+| `LoadFileFromKnHdToPCPP50` | Load file from HD to PC |
+| `LoadFileFromKnHdDirectToPCPP50` | Direct file transfer HD→PC |
+| `SaveFileFromKNMemToKNHdPP50` | Save file from KN memory to HD |
+| `SaveFileFromPCDirectToKNHdPP50` | Direct file transfer PC→HD |
+| `SavePCMemDirectToKNHdPP50` | Save PC memory to HD |
+| `SendFileFromPCToKNHDPP50` | Send file from PC to KN HD |
+| `SendFileFromPCToKNMemPP50` | Send file from PC to KN memory |
+| `SendSeveralFileDirectToKNHDPP50` | Batch file transfer to HD |
+| `DeleteFileOnKnHdPP50` | Delete file from HD |
+| `FormatTheKn50HardDiskPP50` | Format the hard disk |
+| `TurnOffTheKn50HdMotorPP50` | Spin down HD motor |
+| `TestSongInfoFromKnHdPP50` | Read song info from HD |
+| `EscapeKeyboardToPlayPP50` | Release keyboard for playback |
+| `AskTheConvMemOpenThisFilePP50` | Query file conversion |
+
+These functions directly correspond to the protocol commands implemented in the
+HDAE5000 firmware's PPI handler at 0x160000.
 
 ## Extracting the Software
 
@@ -53,15 +96,25 @@ wine setup.EXE
 ## Reverse Engineering Notes
 
 The HD-TechManager software communicates with the HD-AE5000 via the PC's parallel
-port. The software contains routines for:
+port. The `ppkn50.dll` contains the complete PC-side protocol implementation.
 
-- File transfer to/from the HD-AE5000 hard disk
-- FSB (File System Block) manipulation
-- Disk formatting
-- Backup and restore operations
+### Key Areas for Analysis
 
-Any DLL files extracted from the installer may contain the parallel port protocol
-implementation that mirrors the HDAE5000 firmware's PPI handling at 0x160000.
+1. **ppkn50.dll** - The main protocol DLL
+   - Disassemble with IDA Pro, Ghidra, or x64dbg
+   - Focus on exported functions listed above
+   - Look for parallel port I/O (inb/outb at 0x378, 0x379, 0x37A)
+
+2. **Protocol Correlation**
+   - DLL functions map to HDAE5000 firmware commands at PPI (0x160000)
+   - `SendFsbFromPCToKnMemPP50` ↔ Firmware command "05>Rcv FSB from PC"
+   - `ReadFsbFromKnHdToKnMemPP50` ↔ Firmware command "03>Read FSB from HD"
+   - `TurnOffTheKn50HdMotorPP50` ↔ Firmware command "18>Switch HD-motor off"
+
+3. **Parallel Port Signals**
+   - Port A (0x160000): Data byte bidirectional
+   - Port B (0x160002): Status from PC
+   - Port C (0x160004): Control signals
 
 ## Protocol Commands (from HDAE5000 firmware)
 
