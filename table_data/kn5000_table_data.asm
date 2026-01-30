@@ -1273,7 +1273,292 @@ Flash_ChipErase_32bit:
 ;   - Flash_WaitReady: Check flash status
 ;   - Higher-level flash update routines
 ; -----------------------------------------------------------------------------
-	binclude "includes/flash_sector_erase_cont_part3.bin"
+	binclude "includes/flash_util_32bit.bin"
+
+
+; =============================================================================
+; BOOT ROM FDC ROUTINES
+; =============================================================================
+; Simplified FDC routines for firmware update mode. These are used when the
+; bootloader needs to read firmware update data from floppy disk.
+;
+; The boot ROM can read firmware updates from floppy when:
+;   - Power-on with specific key combination
+;   - Flash is erased (version = 0xFF)
+;   - Recovery mode triggered
+; =============================================================================
+
+; -----------------------------------------------------------------------------
+; FDC_Reset - Initialize FDC controller for update mode
+; Address: 0x9FBF07 (boot-time: 0xFFBF07)
+;
+; Purpose: Set up FDC parameters for reading update disks
+;
+; Entry: None
+; Exit: None (FDC initialized)
+;
+; Stack frame (16 bytes at XSP):
+;   +0x00: Drive number (0)
+;   +0x02: Reserved (0)
+;   +0x04: Reserved (0)
+;   +0x06: Data rate (0x00D3 = 500kbps HD)
+;   +0x08: Sectors per track (1)
+;   +0x0A: Heads (1)
+;   +0x0C: Reserved (0)
+; -----------------------------------------------------------------------------
+FDC_Reset:
+	db	0BFh, 0F0h, 037h		; LDA XSP, XSP+F0h - allocate 16 bytes
+	db	0B7h, 031h			; LDA XBC, XSP - XBC points to params
+	db	0B1h, 002h, 000h, 000h		; LD (XBC), 0000h - drive 0
+	db	0B9h, 002h, 002h, 000h, 000h	; LD (XBC+02h), 0000h
+	db	0B9h, 004h, 002h, 000h, 000h	; LD (XBC+04h), 0000h
+	db	0B9h, 006h, 002h, 0D3h, 000h	; LD (XBC+06h), 00D3h - data rate
+	db	0B9h, 008h, 002h, 001h, 000h	; LD (XBC+08h), 0001h - sectors/track
+	db	0B9h, 00Ah, 002h, 001h, 000h	; LD (XBC+0Ah), 0001h - heads
+	LD	XWA, 0				; e8 a8
+	db	0B9h, 00Ch, 060h		; LD (XBC+0Ch), XWA
+	PUSH	XBC				; 39
+	db	01Dh, 044h, 0E9h, 0FFh		; CALL 0xFFE944 (FDC_Init)
+	db	0BFh, 014h, 037h		; LDA XSP, XSP+14h - deallocate
+	RET					; 0e
+
+; -----------------------------------------------------------------------------
+; FDC_ReadSector - Read a single sector from floppy
+; Address: 0x9FBF37 (boot-time: 0xFFBF37)
+;
+; Entry: XWA = sector info (passed to FDC driver)
+;        BC = sector number
+;        XDE = destination buffer
+;
+; Exit: HL = result (0 = success)
+;
+; Calculates head/track from linear sector number:
+;   Track = sector_number / 2
+;   Head = sector_number & 1
+;
+; Uses FDC parameters at RAM 0x0C10
+; -----------------------------------------------------------------------------
+FDC_ReadSector:
+	db	0BFh, 0F2h, 037h		; LDA XSP, XSP+F2h - allocate 14 bytes
+	PUSH	XIZ				; 3e
+	db	0BFh, 008h, 062h		; LD (XSP+08h), XDE - save dest buffer
+	db	0BFh, 00Ch, 051h		; LD (XSP+0Ch), BC - save sector number
+	db	0BFh, 00Eh, 060h		; LD (XSP+0Eh), XWA - save sector info
+	db	0AFh, 00Eh, 020h		; LD XWA, (XSP+0Eh)
+	LD	XBC, 00000012h			; 41 12 00 00 00
+	db	01Dh, 063h, 0FCh, 0FFh		; CALL 0xFFFC63
+	db	0F1h, 010h, 00Ch, 036h		; LDA XIZ, 0C10h - FDC params
+	db	0BEh, 002h, 002h, 000h, 000h	; LD (XIZ+02h), 0000h
+	LD	WA, HL				; db 88
+	db	0D8h, 0EFh, 001h		; SRL 1, WA - track = sector/2
+	db	0BEh, 006h, 050h		; LD (XIZ+06h), WA - store track
+	db	0DBh, 0CCh, 001h, 000h		; AND HL, 0001h - head = sector&1
+	db	0BEh, 004h, 053h		; LD (XIZ+04h), HL - store head
+	db	0BEh, 008h, 030h		; LDA XWA, XIZ+08h
+	db	0BFh, 004h, 060h		; LD (XSP+04h), XWA
+	db	0AFh, 00Eh, 020h		; LD XWA, (XSP+0Eh)
+	LD	XBC, 00000012h			; 41 12 00 00 00
+	db	01Dh, 05Dh, 0FCh, 0FFh		; CALL 0xFFFC5D
+	db	0EBh, 061h			; INC 1, XHL
+	db	0AFh, 004h, 020h		; LD XWA, (XSP+04h)
+	db	0B0h, 053h			; LD (XWA), HL
+	db	09Fh, 00Ch, 020h		; LD WA, (XSP+0Ch)
+	db	0BEh, 00Ah, 050h		; LD (XIZ+0Ah), WA
+	db	0AFh, 008h, 020h		; LD XWA, (XSP+08h)
+	db	0BEh, 00Ch, 060h		; LD (XIZ+0Ch), XWA
+	POP	XIZ				; 5e
+	db	0BFh, 00Eh, 037h		; LDA XSP, XSP+0Eh - deallocate
+	RET					; 0e
+
+; -----------------------------------------------------------------------------
+; FDC_MultiSectorRead - Read multiple sectors with retry
+; Address: 0x9FBF92 (boot-time: 0xFFBF92)
+;
+; Entry: XWA = sector info
+;        BC = starting sector number
+;        XDE = destination buffer
+;
+; Exit: HL = result (0 = success)
+;
+; On read failure:
+;   - Calls FDC_Reset to reinitialize
+;   - Retries the read
+; -----------------------------------------------------------------------------
+FDC_MultiSectorRead:
+	db	0EFh, 06Eh			; DEC 6, XSP - allocate 6 bytes
+	PUSH	XIZ				; 3e
+	db	0BFh, 004h, 062h		; LD (XSP+04h), XDE - save buffer
+	db	0BFh, 008h, 051h		; LD (XSP+08h), BC - save sector
+	LD	XIZ, XWA			; e8 8e
+.retry:
+	LD	XWA, XIZ			; ee 88
+	db	09Fh, 008h, 021h		; LD BC, (XSP+08h)
+	db	0AFh, 004h, 022h		; LD XDE, (XSP+04h)
+	CALR	FDC_ReadSector			; 1e 8f ff
+	db	0F1h, 010h, 00Ch, 030h		; LDA XWA, 0C10h
+	db	0B0h, 002h, 003h, 000h		; LD (XWA), 0003h - read command
+	PUSH	XWA				; 38
+	db	01Dh, 044h, 0E9h, 0FFh		; CALL 0xFFE944 (FDC_Execute)
+	db	0EFh, 064h			; INC 4, XSP
+	CP	HL, 0				; db d8
+	JR	Z, .success			; 66 05
+	CALR	FDC_Reset			; 1e 49 ff
+	JR	T, .retry			; 68 dd
+.success:
+	POP	XIZ				; 5e
+	db	0EFh, 066h			; INC 6, XSP - deallocate
+	RET					; 0e
+
+; -----------------------------------------------------------------------------
+; Detect_Disk_Type - Check floppy disk header for update type
+; Address: 0x9FBFC4 (boot-time: 0xFFBFC4)
+;
+; Entry: None
+;
+; Exit: (XSP+04h) = disk type code:
+;       0x01 = Program ROM disk 1/2
+;       0x02 = Program ROM disk 2/2
+;       0x03 = Table Data disk 1/2
+;       0x04 = Table Data disk 2/2
+;       0x05 = Compressed Custom Data
+;       0x06 = HDAE5000 firmware
+;       0x07 = Compressed Program ROM (PCK)
+;       0x08 = Compressed Table Data (PCK)
+;       0xFF = Unknown/invalid disk
+;
+; Detection algorithm:
+;   1. Allocate 512-byte sector buffer (malloc)
+;   2. Read first sector from floppy (sector 0x21)
+;   3. Compare against each signature string (38 bytes)
+;   4. Return type code on match
+;
+; Signature strings are at ROM offsets (relative to 0x9FA000):
+;   0x0000 = Program 1/2, 0x0028 = Program 2/2
+;   0x0078 = Table 1/2,   0x00A0 = Table 2/2
+;   0x00F0 = Custom,      0x0118 = HDAE5000
+;   0x0050 = Program PCK, 0x00C8 = Table PCK
+; -----------------------------------------------------------------------------
+Detect_Disk_Type:
+	db	0EFh, 06Ah			; DEC 2, XSP - allocate 2 bytes
+	PUSH	XIZ				; 3e
+	db	0BFh, 004h, 000h, 0FFh		; LD (XSP+04h), 0FFh - default: unknown
+
+	; Allocate 512-byte sector buffer
+	db	00Bh, 000h, 002h		; PUSH 0200h (512 bytes)
+	db	01Dh, 056h, 0FBh, 0FFh		; CALL 0xFFFB56 (malloc)
+	db	0EFh, 062h			; INC 2, XSP
+	LD	XIZ, XHL			; eb 8e - XIZ = buffer pointer
+
+	; Read sector 0x21 (first data sector)
+	LD	XWA, 00000021h			; 40 21 00 00 00
+	LD	BC, 1				; d9 a9
+	LD	XDE, XIZ			; ee 8a
+	CALR	FDC_MultiSectorRead		; 1e b0 ff
+
+	; --- Check signature 1: Program DATA FILE 1/2 (offset 0xA000) ---
+	db	00Bh, 026h, 000h		; PUSH 0026h (38 bytes to compare)
+	db	00Bh, 0FFh, 000h		; PUSH 00FFh (compare mask)
+	db	00Bh, 000h, 0A0h		; PUSH A000h (ROM offset for sig 1)
+	PUSH	XIZ				; 3e
+	db	01Dh, 0DCh, 0FBh, 0FFh		; CALL 0xFFFBDC (memcmp)
+	db	0EFh, 0C8h, 00Ah, 000h, 000h, 000h	; ADD XSP, 0Ah (pop 10 bytes)
+	CP	HL, 0				; db d8
+	JR	NZ, .check_type2		; 6e 07
+	db	0BFh, 004h, 000h, 001h		; LD (XSP+04h), 01h - Type 1
+	db	078h, 0D2h, 000h		; JRL T, .done
+.check_type2:
+	; --- Check signature 2: Program DATA FILE 2/2 (offset 0xA028) ---
+	db	00Bh, 026h, 000h		; PUSH 0026h
+	db	00Bh, 0FFh, 000h		; PUSH 00FFh
+	db	00Bh, 028h, 0A0h		; PUSH A028h
+	PUSH	XIZ				; 3e
+	db	01Dh, 0DCh, 0FBh, 0FFh		; CALL 0xFFFBDC
+	db	0EFh, 0C8h, 00Ah, 000h, 000h, 000h
+	CP	HL, 0				; db d8
+	JR	NZ, .check_type3		; 6e 07
+	db	0BFh, 004h, 000h, 002h		; LD (XSP+04h), 02h - Type 2
+	db	078h, 0B3h, 000h		; JRL T, .done
+.check_type3:
+	; --- Check signature 3: Table DATA FILE 1/2 (offset 0xA078) ---
+	db	00Bh, 026h, 000h		; PUSH 0026h
+	db	00Bh, 0FFh, 000h		; PUSH 00FFh
+	db	00Bh, 078h, 0A0h		; PUSH A078h
+	PUSH	XIZ				; 3e
+	db	01Dh, 0DCh, 0FBh, 0FFh		; CALL 0xFFFBDC
+	db	0EFh, 0C8h, 00Ah, 000h, 000h, 000h
+	CP	HL, 0				; db d8
+	JR	NZ, .check_type4		; 6e 07
+	db	0BFh, 004h, 000h, 003h		; LD (XSP+04h), 03h - Type 3
+	db	078h, 094h, 000h		; JRL T, .done
+.check_type4:
+	; --- Check signature 4: Table DATA FILE 2/2 (offset 0xA0A0) ---
+	db	00Bh, 026h, 000h		; PUSH 0026h
+	db	00Bh, 0FFh, 000h		; PUSH 00FFh
+	db	00Bh, 0A0h, 0A0h		; PUSH A0A0h
+	PUSH	XIZ				; 3e
+	db	01Dh, 0DCh, 0FBh, 0FFh		; CALL 0xFFFBDC
+	db	0EFh, 0C8h, 00Ah, 000h, 000h, 000h
+	CP	HL, 0				; db d8
+	JR	NZ, .check_type5		; 6e 06
+	db	0BFh, 004h, 000h, 004h		; LD (XSP+04h), 04h - Type 4
+	JR	T, .done			; 68 76
+.check_type5:
+	; --- Check signature 5: CMPCUSTOMDATA FILE (offset 0xA0F0) ---
+	db	00Bh, 026h, 000h		; PUSH 0026h
+	db	00Bh, 0FFh, 000h		; PUSH 00FFh
+	db	00Bh, 0F0h, 0A0h		; PUSH A0F0h
+	PUSH	XIZ				; 3e
+	db	01Dh, 0DCh, 0FBh, 0FFh		; CALL 0xFFFBDC
+	db	0EFh, 0C8h, 00Ah, 000h, 000h, 000h
+	CP	HL, 0				; db d8
+	JR	NZ, .check_type6		; 6e 06
+	db	0BFh, 004h, 000h, 005h		; LD (XSP+04h), 05h - Type 5
+	JR	T, .done			; 68 58
+.check_type6:
+	; --- Check signature 6: HD-AEPRG DATA FILE (offset 0xA118) ---
+	db	00Bh, 026h, 000h		; PUSH 0026h
+	db	00Bh, 0FFh, 000h		; PUSH 00FFh
+	db	00Bh, 018h, 0A1h		; PUSH A118h
+	PUSH	XIZ				; 3e
+	db	01Dh, 0DCh, 0FBh, 0FFh		; CALL 0xFFFBDC
+	db	0EFh, 0C8h, 00Ah, 000h, 000h, 000h
+	CP	HL, 0				; db d8
+	JR	NZ, .check_type7		; 6e 06
+	db	0BFh, 004h, 000h, 006h		; LD (XSP+04h), 06h - Type 6
+	JR	T, .done			; 68 3a
+.check_type7:
+	; --- Check signature 7: Program DATA FILE PCK (offset 0xA050) ---
+	db	00Bh, 026h, 000h		; PUSH 0026h
+	db	00Bh, 0FFh, 000h		; PUSH 00FFh
+	db	00Bh, 050h, 0A0h		; PUSH A050h
+	PUSH	XIZ				; 3e
+	db	01Dh, 0DCh, 0FBh, 0FFh		; CALL 0xFFFBDC
+	db	0EFh, 0C8h, 00Ah, 000h, 000h, 000h
+	CP	HL, 0				; db d8
+	JR	NZ, .check_type8		; 6e 06
+	db	0BFh, 004h, 000h, 007h		; LD (XSP+04h), 07h - Type 7
+	JR	T, .done			; 68 1c
+.check_type8:
+	; --- Check signature 8: Table DATA FILE PCK (offset 0xA0C8) ---
+	db	00Bh, 026h, 000h		; PUSH 0026h
+	db	00Bh, 0FFh, 000h		; PUSH 00FFh
+	db	00Bh, 0C8h, 0A0h		; PUSH A0C8h
+	PUSH	XIZ				; 3e
+	db	01Dh, 0DCh, 0FBh, 0FFh		; CALL 0xFFFBDC
+	db	0EFh, 0C8h, 00Ah, 000h, 000h, 000h
+	CP	HL, 0				; db d8
+	JR	NZ, .done			; 6e 04
+	db	0BFh, 004h, 000h, 008h		; LD (XSP+04h), 08h - Type 8 (falls through)
+.done:
+
+
+; -----------------------------------------------------------------------------
+; Remaining boot code routines
+; Address: 0x9FC0D3 onwards (boot-time: 0xFFC0D3)
+;
+; Contains higher-level flash update coordination routines
+; -----------------------------------------------------------------------------
+	binclude "includes/bootcode_post_fdc.bin"
 
 
 ; =============================================================================
