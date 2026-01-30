@@ -3,8 +3,8 @@
 ROM Status Visualization Generator
 
 Generates pixel-based images showing the disassembly status of each memory
-address in the KN5000 ROM set. Each pixel represents a memory region,
-colored by its disassembly status.
+address in the KN5000 ROM set. Each pixel represents a fixed number of bytes,
+ensuring ROM sizes are accurately represented by pixel area.
 
 This script is part of the project's mandatory documentation workflow.
 Run after making significant disassembly progress to update the website.
@@ -18,6 +18,7 @@ Output:
 
 import os
 import re
+import math
 from dataclasses import dataclass
 from typing import List, Dict, Tuple
 from enum import Enum
@@ -257,7 +258,8 @@ def calculate_status_stats(regions: List[MemoryRegion], rom_size: int) -> Dict[R
 def create_rom_pixel_map(regions: List[MemoryRegion], base_addr: int, rom_size: int,
                          width: int, bytes_per_pixel: int) -> List[List[Tuple[int, int, int]]]:
     """Create a 2D pixel map for a ROM based on its regions"""
-    height = (rom_size + bytes_per_pixel * width - 1) // (bytes_per_pixel * width)
+    total_pixels = rom_size // bytes_per_pixel
+    height = (total_pixels + width - 1) // width
 
     # Initialize with undetermined color
     pixels = [[STATUS_COLORS[RegionStatus.UNDETERMINED] for _ in range(width)] for _ in range(height)]
@@ -270,7 +272,8 @@ def create_rom_pixel_map(regions: List[MemoryRegion], base_addr: int, rom_size: 
     # Fill pixels
     for y in range(height):
         for x in range(width):
-            byte_offset = (y * width + x) * bytes_per_pixel
+            pixel_index = y * width + x
+            byte_offset = pixel_index * bytes_per_pixel
             addr = base_addr + byte_offset
 
             if byte_offset >= rom_size:
@@ -285,55 +288,59 @@ def create_rom_pixel_map(regions: List[MemoryRegion], base_addr: int, rom_size: 
 
     return pixels
 
+def calculate_dimensions(rom_size: int, bytes_per_pixel: int, target_aspect: float = 1.5) -> Tuple[int, int]:
+    """Calculate width and height for a ROM to maintain aspect ratio"""
+    total_pixels = rom_size // bytes_per_pixel
+    # Target aspect ratio (width/height)
+    # width * height = total_pixels
+    # width / height = target_aspect
+    # width = target_aspect * height
+    # target_aspect * height * height = total_pixels
+    # height = sqrt(total_pixels / target_aspect)
+    height = int(math.sqrt(total_pixels / target_aspect))
+    width = total_pixels // height
+    # Adjust to be divisible by 8 for cleaner display
+    width = ((width + 7) // 8) * 8
+    height = (total_pixels + width - 1) // width
+    return width, height
+
 def generate_rom_status_diagram(output_path: str):
     """Generate the complete ROM status diagram with pixel representation"""
+
+    # Common bytes_per_pixel for all ROMs to ensure accurate proportions
+    BYTES_PER_PIXEL = 8
 
     # Define ROM components
     rom_components = [
         {
-            'name': 'Main CPU (2MB)',
-            'short_name': 'Main CPU',
-            'size': 2 * 1024 * 1024,
+            'name': 'Main CPU',
+            'size': 2 * 1024 * 1024,  # 2MB
             'asm_file': 'maincpu/kn5000_v10_program.asm',
             'base_addr': 0xE00000,
-            'width': 512,  # pixels wide
-            'bytes_per_pixel': 8,  # each pixel = 8 bytes
         },
         {
-            'name': 'Sub CPU Payload (192KB)',
-            'short_name': 'Sub Payload',
-            'size': 192 * 1024,
+            'name': 'Sub CPU Payload',
+            'size': 192 * 1024,  # 192KB
             'asm_file': 'subcpu/kn5000_subprogram_v142.asm',
             'base_addr': 0x000000,
-            'width': 256,
-            'bytes_per_pixel': 4,
         },
         {
-            'name': 'Sub CPU Boot (128KB)',
-            'short_name': 'Sub Boot',
-            'size': 128 * 1024,
+            'name': 'Sub CPU Boot',
+            'size': 128 * 1024,  # 128KB
             'asm_file': 'subcpu_boot/kn5000_subcpu_boot.asm',
             'base_addr': 0xFE0000,
-            'width': 256,
-            'bytes_per_pixel': 4,
         },
         {
-            'name': 'Table Data (2MB)',
-            'short_name': 'Table Data',
-            'size': 2 * 1024 * 1024,
+            'name': 'Table Data',
+            'size': 2 * 1024 * 1024,  # 2MB
             'asm_file': 'table_data/kn5000_table_data.asm',
             'base_addr': 0x800000,
-            'width': 512,
-            'bytes_per_pixel': 8,
         },
         {
-            'name': 'HDAE5000 (512KB)',
-            'short_name': 'HDAE5000',
-            'size': 512 * 1024,
+            'name': 'HDAE5000',
+            'size': 512 * 1024,  # 512KB
             'asm_file': 'hdae5000/hd-ae5000_v2_06i.asm',
             'base_addr': 0x280000,
-            'width': 256,
-            'bytes_per_pixel': 4,
         },
     ]
 
@@ -346,30 +353,40 @@ def generate_rom_status_diagram(output_path: str):
         regions = parse_assembly_file(asm_path, comp['base_addr'], comp['size'])
         regions = merge_adjacent_regions(regions)
 
+        # Calculate dimensions with consistent bytes_per_pixel
+        width, height = calculate_dimensions(comp['size'], BYTES_PER_PIXEL)
+
         pixel_map = create_rom_pixel_map(
             regions, comp['base_addr'], comp['size'],
-            comp['width'], comp['bytes_per_pixel']
+            width, BYTES_PER_PIXEL
         )
 
         stats = calculate_status_stats(regions, comp['size'])
 
+        # Format size string
+        size_kb = comp['size'] // 1024
+        if size_kb >= 1024:
+            size_str = f"{size_kb // 1024}MB"
+        else:
+            size_str = f"{size_kb}KB"
+
         rom_data.append({
             'name': comp['name'],
-            'short_name': comp['short_name'],
             'size': comp['size'],
-            'width': comp['width'],
+            'size_str': size_str,
+            'width': width,
             'height': len(pixel_map),
             'pixels': pixel_map,
             'stats': stats,
-            'bytes_per_pixel': comp['bytes_per_pixel'],
+            'bytes_per_pixel': BYTES_PER_PIXEL,
         })
 
     # Calculate image dimensions
     margin = 20
-    spacing = 30
-    label_height = 60
-    legend_height = 140
-    title_height = 40
+    spacing = 25
+    label_height = 55
+    legend_height = 100
+    title_height = 35
 
     # Find max height among all ROMs
     max_rom_height = max(r['height'] for r in rom_data)
@@ -384,8 +401,8 @@ def generate_rom_status_diagram(output_path: str):
 
     # Try to load fonts
     try:
-        title_font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 16)
-        label_font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 11)
+        title_font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 14)
+        label_font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 10)
         small_font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 9)
     except:
         title_font = ImageFont.load_default()
@@ -395,7 +412,7 @@ def generate_rom_status_diagram(output_path: str):
     draw = ImageDraw.Draw(img)
 
     # Draw title
-    title = "KN5000 ROM Set - Disassembly Status (each pixel = memory region)"
+    title = f"KN5000 ROM Set - Disassembly Status (1 pixel = {BYTES_PER_PIXEL} bytes, area proportional to ROM size)"
     title_bbox = draw.textbbox((0, 0), title, font=title_font)
     title_width = title_bbox[2] - title_bbox[0]
     draw.text(((img_width - title_width) // 2, margin // 2), title, fill=(0, 0, 0), font=title_font)
@@ -420,40 +437,34 @@ def generate_rom_status_diagram(output_path: str):
         label_y = rom_y + max_rom_height + 5
         center_x = x_offset + rom['width'] // 2
 
-        # ROM name
-        name_bbox = draw.textbbox((0, 0), rom['short_name'], font=label_font)
+        # ROM name and size
+        name_size = f"{rom['name']} ({rom['size_str']})"
+        name_bbox = draw.textbbox((0, 0), name_size, font=label_font)
         name_width = name_bbox[2] - name_bbox[0]
-        draw.text((center_x - name_width // 2, label_y), rom['short_name'], fill=(0, 0, 0), font=label_font)
+        draw.text((center_x - name_width // 2, label_y), name_size, fill=(0, 0, 0), font=label_font)
 
-        # Size info
-        size_str = f"{rom['size'] // 1024}KB"
-        if rom['size'] >= 1024 * 1024:
-            size_str = f"{rom['size'] // (1024*1024)}MB"
-        size_bbox = draw.textbbox((0, 0), size_str, font=small_font)
-        size_width = size_bbox[2] - size_bbox[0]
-        draw.text((center_x - size_width // 2, label_y + 14), size_str, fill=(80, 80, 80), font=small_font)
+        # Dimensions
+        dim_str = f"{rom['width']}×{rom['height']} px"
+        dim_bbox = draw.textbbox((0, 0), dim_str, font=small_font)
+        dim_width = dim_bbox[2] - dim_bbox[0]
+        draw.text((center_x - dim_width // 2, label_y + 14), dim_str, fill=(100, 100, 100), font=small_font)
 
         # Code percentage
         code_bytes, code_pct = rom['stats'].get(RegionStatus.DISASSEMBLED_CODE, (0, 0))
         pct_str = f"{code_pct:.1f}% code"
         pct_bbox = draw.textbbox((0, 0), pct_str, font=small_font)
         pct_width = pct_bbox[2] - pct_bbox[0]
-        draw.text((center_x - pct_width // 2, label_y + 28), pct_str, fill=(0, 140, 0), font=small_font)
-
-        # Resolution info
-        res_str = f"1px = {rom['bytes_per_pixel']} bytes"
-        res_bbox = draw.textbbox((0, 0), res_str, font=small_font)
-        res_width = res_bbox[2] - res_bbox[0]
-        draw.text((center_x - res_width // 2, label_y + 42), res_str, fill=(100, 100, 100), font=small_font)
+        color = (0, 140, 0) if code_pct > 50 else (0, 100, 0)
+        draw.text((center_x - pct_width // 2, label_y + 28), pct_str, fill=color, font=small_font)
 
         x_offset += rom['width'] + spacing
 
     # Draw legend
-    legend_y = rom_y + max_rom_height + label_height + 10
+    legend_y = rom_y + max_rom_height + label_height + 5
     legend_x = margin
 
     draw.text((legend_x, legend_y), "Legend:", fill=(0, 0, 0), font=label_font)
-    legend_y += 20
+    legend_y += 18
 
     legend_items = [
         (RegionStatus.DISASSEMBLED_CODE, "Disassembled Code"),
@@ -474,22 +485,37 @@ def generate_rom_status_diagram(output_path: str):
         row = i // items_per_row
         col = i % items_per_row
         lx = legend_x + col * item_width
-        ly = legend_y + row * 22
+        ly = legend_y + row * 20
 
         color = STATUS_COLORS[status]
-        draw.rectangle([lx, ly, lx + 14, ly + 14], fill=color, outline=(0, 0, 0))
-        draw.text((lx + 18, ly + 1), label, fill=(0, 0, 0), font=small_font)
+        draw.rectangle([lx, ly, lx + 12, ly + 12], fill=color, outline=(0, 0, 0))
+        draw.text((lx + 16, ly), label, fill=(0, 0, 0), font=small_font)
 
     # Save image
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
     img.save(output_path, 'PNG')
     print(f"Generated: {output_path}")
+    print(f"Image size: {img_width}x{img_height} pixels")
 
-    # Print statistics
+    # Print statistics and verify proportions
     print("\nROM Status Statistics:")
     print("=" * 70)
+    print(f"\nBytes per pixel: {BYTES_PER_PIXEL} (constant for all ROMs)")
+    print("\nProportions verification:")
     for rom in rom_data:
-        print(f"\n{rom['name']} ({rom['width']}x{rom['height']} pixels, 1px = {rom['bytes_per_pixel']} bytes):")
+        pixel_area = rom['width'] * rom['height']
+        print(f"  {rom['name']}: {rom['size_str']} = {rom['size']:,} bytes → {pixel_area:,} pixels ({rom['width']}×{rom['height']})")
+
+    print("\nSize ratios:")
+    base_rom = rom_data[0]  # Main CPU as reference
+    for rom in rom_data[1:]:
+        size_ratio = base_rom['size'] / rom['size']
+        pixel_ratio = (base_rom['width'] * base_rom['height']) / (rom['width'] * rom['height'])
+        print(f"  Main CPU / {rom['name']}: size={size_ratio:.2f}x, pixels={pixel_ratio:.2f}x")
+
+    print("\n" + "=" * 70)
+    for rom in rom_data:
+        print(f"\n{rom['name']} ({rom['size_str']}):")
         for status, (bytes_count, pct) in sorted(rom['stats'].items(), key=lambda x: -x[1][1]):
             if pct > 0.1:
                 print(f"  {status.value}: {pct:.1f}% ({bytes_count:,} bytes)")
