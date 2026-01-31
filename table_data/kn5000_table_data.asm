@@ -564,10 +564,51 @@ EMPTY_HANDLER:
 	JRL	T, Boot_Init		; Jump relative long back to boot entry
 
 ; -----------------------------------------------------------------------------
-; Various boot handlers and routines before Boot_ClearRAM
-; TODO: Disassemble this section (contains handlers at 0x9FB709-0x9FB73F)
+; Boot_Handler_End - End of a boot exception handler
+; Address: 0x9FB709 (boot-time: 0xFFB709)
+; This appears to be the end of a handler that uses RETI
 ; -----------------------------------------------------------------------------
-	binclude "includes/bootcode_pre_clearram.bin"
+Boot_Handler_End:
+	RETI				; 07
+
+; -----------------------------------------------------------------------------
+; Boot_CallInitHandlers - Call initialization handlers from table
+; Address: 0x9FB70A (boot-time: 0xFFB70A)
+;
+; Purpose: If (0xFFFEEE) != 0xFFFF, calls up to 4 init handlers from a table
+;          at 0xFFFEF0. Each table entry is a 32-bit address.
+;
+; Table at 0xFFFEF0:
+;   [0] = Handler 0 address (32-bit)
+;   [1] = Handler 1 address (32-bit)
+;   [2] = Handler 2 address (32-bit)
+;   [3] = Handler 3 address (32-bit)
+;
+; Entry: None
+; Exit: All handlers called if (0xFFFEEE) was not 0xFFFF
+; -----------------------------------------------------------------------------
+Boot_CallInitHandlers:
+	db	0D7h, 0FAh, 004h		; PUSH QIZ (save register)
+	db	0D2h, 0EEh, 0FEh, 0FFh, 03Fh, 0FFh, 0FFh	; CP (0xFFFEEE), 0xFFFF
+	JR	NZ, .done			; 6e 26 - skip if flag not set
+	db	0C7h, 0FBh, 0A8h		; LD QIZH, 0 - init counter
+
+.handler_loop:
+	db	0C7h, 0FBh, 089h		; LD A, QIZH - get counter
+	EXTZ	WA				; d8 12 - extend to 16-bit
+	db	0C7h, 0FBh, 08Bh		; LD C, QIZH - copy counter to C
+	db	0D9h, 012h			; EXTZ BC - extend to 16-bit
+	db	0D9h, 0ECh, 002h		; SLA 2, BC - BC *= 4 (32-bit table entries)
+	db	0F2h, 0F0h, 0FEh, 0FFh, 032h	; LDA XDE, 0xFFFEF0 - table base
+	db	0E3h, 007h, 0E8h, 0E4h, 021h	; LD XBC, (XDE+BC) - load handler address
+	db	01Dh, 075h, 0FAh, 0FFh		; CALL 0xFFFA75 - indirect call helper?
+	db	0C7h, 0FBh, 061h		; INC 1, QIZH - counter++
+	db	0C7h, 0FBh, 0DCh		; CP QIZH, 4 - check if done
+	JR	C, .handler_loop		; 67 dd - loop if counter < 4
+
+.done:
+	db	0D7h, 0FAh, 005h		; POP QIZ (restore register)
+	RET					; 0e
 
 ; -----------------------------------------------------------------------------
 ; Boot_ClearRAM - Initialize RAM and copy ROM data to RAM
@@ -1715,17 +1756,11 @@ Flash_Update_TableData:
 	db	0EFh, 064h			; INC 4, XSP - deallocate 4 bytes
 	RET					; 0e
 
-
 ; =============================================================================
 ; BOOT ROM FDC ROUTINES
 ; =============================================================================
-; Simplified FDC routines for firmware update mode. These are used when the
-; bootloader needs to read firmware update data from floppy disk.
-;
-; The boot ROM can read firmware updates from floppy when:
-;   - Power-on with specific key combination
-;   - Flash is erased (version = 0xFF)
-;   - Recovery mode triggered
+; FDC routines for reading firmware update data from floppy disk during
+; boot-time recovery mode.
 ; =============================================================================
 
 ; -----------------------------------------------------------------------------
@@ -1733,9 +1768,6 @@ Flash_Update_TableData:
 ; Address: 0x9FBF07 (boot-time: 0xFFBF07)
 ;
 ; Purpose: Set up FDC parameters for reading update disks
-;
-; Entry: None
-; Exit: None (FDC initialized)
 ;
 ; Stack frame (16 bytes at XSP):
 ;   +0x00: Drive number (0)
@@ -1745,6 +1777,9 @@ Flash_Update_TableData:
 ;   +0x08: Sectors per track (1)
 ;   +0x0A: Heads (1)
 ;   +0x0C: Reserved (0)
+;
+; Entry: None
+; Exit: FDC initialized
 ; -----------------------------------------------------------------------------
 FDC_Reset:
 	db	0BFh, 0F0h, 037h		; LDA XSP, XSP+F0h - allocate 16 bytes
@@ -1759,7 +1794,7 @@ FDC_Reset:
 	db	0B9h, 00Ch, 060h		; LD (XBC+0Ch), XWA
 	PUSH	XBC				; 39
 	db	01Dh, 044h, 0E9h, 0FFh		; CALL 0xFFE944 (FDC_Init)
-	db	0BFh, 014h, 037h		; LDA XSP, XSP+14h - deallocate
+	db	0BFh, 014h, 037h		; LDA XSP, XSP+14h - deallocate 20 bytes
 	RET					; 0e
 
 ; -----------------------------------------------------------------------------
@@ -1773,7 +1808,7 @@ FDC_Reset:
 ; Exit: HL = result (0 = success)
 ;
 ; Calculates head/track from linear sector number:
-;   Track = sector_number / 2
+;   Track = sector_number >> 1
 ;   Head = sector_number & 1
 ;
 ; Uses FDC parameters at RAM 0x0C10
@@ -1782,1105 +1817,975 @@ FDC_ReadSector:
 	db	0BFh, 0F2h, 037h		; LDA XSP, XSP+F2h - allocate 14 bytes
 	PUSH	XIZ				; 3e
 	db	0BFh, 008h, 062h		; LD (XSP+08h), XDE - save dest buffer
-	db	0BFh, 00Ch, 051h		; LD (XSP+0Ch), BC - save sector number
+	db	0BFh, 00Ch, 051h		; LD (XSP+0Ch), BC - save sector num
 	db	0BFh, 00Eh, 060h		; LD (XSP+0Eh), XWA - save sector info
 	db	0AFh, 00Eh, 020h		; LD XWA, (XSP+0Eh)
-	LD	XBC, 00000012h			; 41 12 00 00 00
+	LD	XBC, 000000012h			; 41 12 00 00 00 - param size
 	db	01Dh, 063h, 0FCh, 0FFh		; CALL 0xFFFC63
-	db	0F1h, 010h, 00Ch, 036h		; LDA XIZ, 0C10h - FDC params
+	db	0F1h, 010h, 00Ch, 036h		; LDA XIZ, 0x0C10 - FDC params in RAM
 	db	0BEh, 002h, 002h, 000h, 000h	; LD (XIZ+02h), 0000h
-	LD	WA, HL				; db 88
-	db	0D8h, 0EFh, 001h		; SRL 1, WA - track = sector/2
+	db	0DBh, 088h			; LD WA, HL
+	db	0D8h, 0EFh, 001h		; SRL 1, WA - track = sector >> 1
 	db	0BEh, 006h, 050h		; LD (XIZ+06h), WA - store track
-	db	0DBh, 0CCh, 001h, 000h		; AND HL, 0001h - head = sector&1
+	db	0DBh, 0CCh, 001h, 000h		; AND HL, 0001h - head = sector & 1
 	db	0BEh, 004h, 053h		; LD (XIZ+04h), HL - store head
-	db	0BEh, 008h, 030h		; LDA XWA, XIZ+08h
+	db	0BEh, 008h, 030h		; LDA XWA, (XIZ+08h)
 	db	0BFh, 004h, 060h		; LD (XSP+04h), XWA
 	db	0AFh, 00Eh, 020h		; LD XWA, (XSP+0Eh)
-	LD	XBC, 00000012h			; 41 12 00 00 00
+	LD	XBC, 000000012h			; 41 12 00 00 00
 	db	01Dh, 05Dh, 0FCh, 0FFh		; CALL 0xFFFC5D
 	db	0EBh, 061h			; INC 1, XHL
 	db	0AFh, 004h, 020h		; LD XWA, (XSP+04h)
 	db	0B0h, 053h			; LD (XWA), HL
-	db	09Fh, 00Ch, 020h		; LD WA, (XSP+0Ch)
+	db	09Fh, 00Ch, 020h		; LD WA, (XSP+0Ch) - sector num
 	db	0BEh, 00Ah, 050h		; LD (XIZ+0Ah), WA
-	db	0AFh, 008h, 020h		; LD XWA, (XSP+08h)
+	db	0AFh, 008h, 020h		; LD XWA, (XSP+08h) - dest buffer
 	db	0BEh, 00Ch, 060h		; LD (XIZ+0Ch), XWA
 	POP	XIZ				; 5e
 	db	0BFh, 00Eh, 037h		; LDA XSP, XSP+0Eh - deallocate
 	RET					; 0e
 
 ; -----------------------------------------------------------------------------
-; FDC_MultiSectorRead - Read multiple sectors with retry
+; FDC_ReadSectorWrapper - Wrapper for sector read with retry
 ; Address: 0x9FBF92 (boot-time: 0xFFBF92)
 ;
 ; Entry: XWA = sector info
-;        BC = starting sector number
+;        BC = sector number
 ;        XDE = destination buffer
 ;
-; Exit: HL = result (0 = success)
-;
-; On read failure:
-;   - Calls FDC_Reset to reinitialize
-;   - Retries the read
+; Exit: HL = result
 ; -----------------------------------------------------------------------------
-FDC_MultiSectorRead:
+FDC_ReadSectorWrapper:
 	db	0EFh, 06Eh			; DEC 6, XSP - allocate 6 bytes
 	PUSH	XIZ				; 3e
-	db	0BFh, 004h, 062h		; LD (XSP+04h), XDE - save buffer
-	db	0BFh, 008h, 051h		; LD (XSP+08h), BC - save sector
-	LD	XIZ, XWA			; e8 8e
-.retry:
+	db	0BFh, 004h, 062h		; LD (XSP+04h), XDE
+	db	0BFh, 008h, 051h		; LD (XSP+08h), BC
+	LD	XIZ, XWA			; e8 8e - save sector info
 	LD	XWA, XIZ			; ee 88
 	db	09Fh, 008h, 021h		; LD BC, (XSP+08h)
 	db	0AFh, 004h, 022h		; LD XDE, (XSP+04h)
-	CALR	FDC_ReadSector			; 1e 8f ff
-	db	0F1h, 010h, 00Ch, 030h		; LDA XWA, 0C10h
-	db	0B0h, 002h, 003h, 000h		; LD (XWA), 0003h - read command
+	db	01Eh, 08Fh, 0FFh		; CALR FDC_ReadSector
+	db	0F1h, 010h, 00Ch, 030h		; LDA XWA, 0x0C10
+	db	0B0h, 002h, 003h, 000h		; LD (XWA), 0003h
 	PUSH	XWA				; 38
-	db	01Dh, 044h, 0E9h, 0FFh		; CALL 0xFFE944 (FDC_Execute)
-	db	0EFh, 064h			; INC 4, XSP
-	CP	HL, 0				; db d8
-	JR	Z, .success			; 66 05
-	CALR	FDC_Reset			; 1e 49 ff
-	JR	T, .retry			; 68 dd
-.success:
+	db	01Dh, 044h, 0E9h, 0FFh		; CALL 0xFFE944
+	db	0EFh, 064h			; INC 4, XSP - deallocate
+	db	0DBh, 0D8h			; CP HL, 0
+	JR	Z, .read_ok			; 66 05 - skip retry if success
+
+	; Read failed, try FDC reset and retry
+	db	01Eh, 049h, 0FFh		; CALR FDC_Reset (0x9FBF07)
+	db	068h, 0DDh			; JR T, .-35 - retry from start
+
+.read_ok:
 	POP	XIZ				; 5e
 	db	0EFh, 066h			; INC 6, XSP - deallocate
 	RET					; 0e
 
 ; -----------------------------------------------------------------------------
-; Detect_Disk_Type - Check floppy disk header for update type
+; Boot_DetectDiskType - Detect firmware update disk type
 ; Address: 0x9FBFC4 (boot-time: 0xFFBFC4)
 ;
-; Entry: None
+; Purpose: Read boot sector and check for known disk signatures at various
+;          offsets to determine the disk type (1-8) or unknown (0xFF)
 ;
-; Exit: (XSP+04h) = disk type code:
-;       0x01 = Program ROM disk 1/2
-;       0x02 = Program ROM disk 2/2
-;       0x03 = Table Data disk 1/2
-;       0x04 = Table Data disk 2/2
-;       0x05 = Compressed Custom Data
-;       0x06 = HDAE5000 firmware
-;       0x07 = Compressed Program ROM (PCK)
-;       0x08 = Compressed Table Data (PCK)
-;       0xFF = Unknown/invalid disk
-;
-; Detection algorithm:
-;   1. Allocate 512-byte sector buffer (malloc)
-;   2. Read first sector from floppy (sector 0x21)
-;   3. Compare against each signature string (38 bytes)
-;   4. Return type code on match
-;
-; Signature strings are at ROM offsets (relative to 0x9FA000):
-;   0x0000 = Program 1/2, 0x0028 = Program 2/2
-;   0x0078 = Table 1/2,   0x00A0 = Table 2/2
-;   0x00F0 = Custom,      0x0118 = HDAE5000
-;   0x0050 = Program PCK, 0x00C8 = Table PCK
-; -----------------------------------------------------------------------------
-Detect_Disk_Type:
-	db	0EFh, 06Ah			; DEC 2, XSP - allocate 2 bytes
-	PUSH	XIZ				; 3e
-	db	0BFh, 004h, 000h, 0FFh		; LD (XSP+04h), 0FFh - default: unknown
-
-	; Allocate 512-byte sector buffer
-	db	00Bh, 000h, 002h		; PUSH 0200h (512 bytes)
-	db	01Dh, 056h, 0FBh, 0FFh		; CALL 0xFFFB56 (malloc)
-	db	0EFh, 062h			; INC 2, XSP
-	LD	XIZ, XHL			; eb 8e - XIZ = buffer pointer
-
-	; Read sector 0x21 (first data sector)
-	LD	XWA, 00000021h			; 40 21 00 00 00
-	LD	BC, 1				; d9 a9
-	LD	XDE, XIZ			; ee 8a
-	CALR	FDC_MultiSectorRead		; 1e b0 ff
-
-	; --- Check signature 1: Program DATA FILE 1/2 (offset 0xA000) ---
-	db	00Bh, 026h, 000h		; PUSH 0026h (38 bytes to compare)
-	db	00Bh, 0FFh, 000h		; PUSH 00FFh (compare mask)
-	db	00Bh, 000h, 0A0h		; PUSH A000h (ROM offset for sig 1)
-	PUSH	XIZ				; 3e
-	db	01Dh, 0DCh, 0FBh, 0FFh		; CALL 0xFFFBDC (memcmp)
-	db	0EFh, 0C8h, 00Ah, 000h, 000h, 000h	; ADD XSP, 0Ah (pop 10 bytes)
-	CP	HL, 0				; db d8
-	JR	NZ, .check_type2		; 6e 07
-	db	0BFh, 004h, 000h, 001h		; LD (XSP+04h), 01h - Type 1
-	db	078h, 0D2h, 000h		; JRL T, .done
-.check_type2:
-	; --- Check signature 2: Program DATA FILE 2/2 (offset 0xA028) ---
-	db	00Bh, 026h, 000h		; PUSH 0026h
-	db	00Bh, 0FFh, 000h		; PUSH 00FFh
-	db	00Bh, 028h, 0A0h		; PUSH A028h
-	PUSH	XIZ				; 3e
-	db	01Dh, 0DCh, 0FBh, 0FFh		; CALL 0xFFFBDC
-	db	0EFh, 0C8h, 00Ah, 000h, 000h, 000h
-	CP	HL, 0				; db d8
-	JR	NZ, .check_type3		; 6e 07
-	db	0BFh, 004h, 000h, 002h		; LD (XSP+04h), 02h - Type 2
-	db	078h, 0B3h, 000h		; JRL T, .done
-.check_type3:
-	; --- Check signature 3: Table DATA FILE 1/2 (offset 0xA078) ---
-	db	00Bh, 026h, 000h		; PUSH 0026h
-	db	00Bh, 0FFh, 000h		; PUSH 00FFh
-	db	00Bh, 078h, 0A0h		; PUSH A078h
-	PUSH	XIZ				; 3e
-	db	01Dh, 0DCh, 0FBh, 0FFh		; CALL 0xFFFBDC
-	db	0EFh, 0C8h, 00Ah, 000h, 000h, 000h
-	CP	HL, 0				; db d8
-	JR	NZ, .check_type4		; 6e 07
-	db	0BFh, 004h, 000h, 003h		; LD (XSP+04h), 03h - Type 3
-	db	078h, 094h, 000h		; JRL T, .done
-.check_type4:
-	; --- Check signature 4: Table DATA FILE 2/2 (offset 0xA0A0) ---
-	db	00Bh, 026h, 000h		; PUSH 0026h
-	db	00Bh, 0FFh, 000h		; PUSH 00FFh
-	db	00Bh, 0A0h, 0A0h		; PUSH A0A0h
-	PUSH	XIZ				; 3e
-	db	01Dh, 0DCh, 0FBh, 0FFh		; CALL 0xFFFBDC
-	db	0EFh, 0C8h, 00Ah, 000h, 000h, 000h
-	CP	HL, 0				; db d8
-	JR	NZ, .check_type5		; 6e 06
-	db	0BFh, 004h, 000h, 004h		; LD (XSP+04h), 04h - Type 4
-	JR	T, .done			; 68 76
-.check_type5:
-	; --- Check signature 5: CMPCUSTOMDATA FILE (offset 0xA0F0) ---
-	db	00Bh, 026h, 000h		; PUSH 0026h
-	db	00Bh, 0FFh, 000h		; PUSH 00FFh
-	db	00Bh, 0F0h, 0A0h		; PUSH A0F0h
-	PUSH	XIZ				; 3e
-	db	01Dh, 0DCh, 0FBh, 0FFh		; CALL 0xFFFBDC
-	db	0EFh, 0C8h, 00Ah, 000h, 000h, 000h
-	CP	HL, 0				; db d8
-	JR	NZ, .check_type6		; 6e 06
-	db	0BFh, 004h, 000h, 005h		; LD (XSP+04h), 05h - Type 5
-	JR	T, .done			; 68 58
-.check_type6:
-	; --- Check signature 6: HD-AEPRG DATA FILE (offset 0xA118) ---
-	db	00Bh, 026h, 000h		; PUSH 0026h
-	db	00Bh, 0FFh, 000h		; PUSH 00FFh
-	db	00Bh, 018h, 0A1h		; PUSH A118h
-	PUSH	XIZ				; 3e
-	db	01Dh, 0DCh, 0FBh, 0FFh		; CALL 0xFFFBDC
-	db	0EFh, 0C8h, 00Ah, 000h, 000h, 000h
-	CP	HL, 0				; db d8
-	JR	NZ, .check_type7		; 6e 06
-	db	0BFh, 004h, 000h, 006h		; LD (XSP+04h), 06h - Type 6
-	JR	T, .done			; 68 3a
-.check_type7:
-	; --- Check signature 7: Program DATA FILE PCK (offset 0xA050) ---
-	db	00Bh, 026h, 000h		; PUSH 0026h
-	db	00Bh, 0FFh, 000h		; PUSH 00FFh
-	db	00Bh, 050h, 0A0h		; PUSH A050h
-	PUSH	XIZ				; 3e
-	db	01Dh, 0DCh, 0FBh, 0FFh		; CALL 0xFFFBDC
-	db	0EFh, 0C8h, 00Ah, 000h, 000h, 000h
-	CP	HL, 0				; db d8
-	JR	NZ, .check_type8		; 6e 06
-	db	0BFh, 004h, 000h, 007h		; LD (XSP+04h), 07h - Type 7
-	JR	T, .done			; 68 1c
-.check_type8:
-	; --- Check signature 8: Table DATA FILE PCK (offset 0xA0C8) ---
-	db	00Bh, 026h, 000h		; PUSH 0026h
-	db	00Bh, 0FFh, 000h		; PUSH 00FFh
-	db	00Bh, 0C8h, 0A0h		; PUSH A0C8h
-	PUSH	XIZ				; 3e
-	db	01Dh, 0DCh, 0FBh, 0FFh		; CALL 0xFFFBDC
-	db	0EFh, 0C8h, 00Ah, 000h, 000h, 000h
-	CP	HL, 0				; db d8
-	JR	NZ, .done			; 6e 04
-	db	0BFh, 004h, 000h, 008h		; LD (XSP+04h), 08h - Type 8 (falls through)
-.done:
-
-
-; -----------------------------------------------------------------------------
-; Boot_Detect_Disk_Type_Wrapper - Wrapper for disk type detection
-; Address: 0x9FC0D3 (boot-time: 0xFFC0D3)
+; Signature offsets checked:
+;   0xA000 -> type 1    0xA0A0 -> type 4    0xA118 -> type 6
+;   0xA028 -> type 2    0xA0F0 -> type 5    0xA050 -> type 7
+;   0xA078 -> type 3    0xA0C8 -> type 8
 ;
 ; Entry: None
 ; Exit: L = disk type (1-8) or 0xFF if unknown
 ; -----------------------------------------------------------------------------
-Boot_Detect_Disk_Type_Wrapper:
-	PUSH	XIZ			; 3e
-	db	01Dh, 0DDh, 0FCh, 0FFh	; CALL Detect_Disk_Type (0xFFFCDD)
-	db	0EFh, 064h		; INC 4, XSP - deallocate stack
-	db	08Fh, 004h, 027h	; LD L, (XSP+04h) - get return value
-	POP	XIZ			; 5e
-	db	0EFh, 062h		; INC 2, XSP
-	RET				; 0e
+Boot_DetectDiskType:
+	db	0EFh, 06Ah			; DEC 2, XSP - allocate 2 bytes
+	PUSH	XIZ				; 3e
+	db	0BFh, 004h, 000h, 0FFh		; LD (XSP+04h), 0xFF - default type
+	db	00Bh, 000h, 002h		; PUSH 0200h - sector size
+	db	01Dh, 056h, 0FBh, 0FFh		; CALL 0xFFFB56 - allocate buffer
+	db	0EFh, 062h			; INC 2, XSP - pop arg
+	db	0EBh, 08Eh			; LD XIZ, XHL - save buffer ptr
+	LD	XWA, 000000021h			; 40 21 00 00 00 - sector 33 (boot sector)
+	db	0D9h, 0A9h			; LD BC, 1 - read 1 sector
+	LD	XDE, XIZ			; ee 8a - dest buffer
+	db	01Eh, 0B0h, 0FFh		; CALR FDC_ReadSectorWrapper
 
-; -----------------------------------------------------------------------------
-; Flash_Write_Sectors - Write multiple sectors to flash from floppy
-; Address: 0x9FC0E1 (boot-time: 0xFFC0E1)
-;
-; Entry: WA = starting sector number
-;        XBC = destination flash address
-; Exit: None
-;
-; Reads sectors from floppy and writes them to flash memory.
-; Handles partial first sector, full sectors, and partial last sector.
-; Uses 0x0012 (18) sectors per track.
-; -----------------------------------------------------------------------------
-Flash_Write_Sectors:
-	db	0BFh, 0F0h, 037h	; LDA XSP, XSP+F0h - allocate 16 bytes
-	PUSH	XIZ			; 3e
-	db	0BFh, 00Eh, 061h	; LD (XSP+0Eh), XBC - save dest addr
-	db	0BFh, 012h, 050h	; LD (XSP+12h), WA - save start sector
-	db	09Fh, 012h, 020h	; LD WA, (XSP+12h)
-	db	0BFh, 006h, 050h	; LD (XSP+06h), WA - working sector
-	db	09Fh, 006h, 020h	; LD WA, (XSP+06h)
-	EXTZ	XWA			; e8 12
-	db	0D8h, 00Ah, 012h, 000h	; DIV WA, 0012h - divide by sectors per track
-	db	0D7h, 0E2h, 088h	; LD WA, QWA - get remainder
-	db	0DEh, 0A8h		; LD IZ, 0
-	CP	WA, 0			; d8 d8
-	JR	Z, .skip_partial_first	; 66 48
-	db	036h, 012h, 000h	; LD IZ, 0012h
-	db	0D8h, 0A6h		; SUB IZ, WA - IZ = sectors to read first track
+	; Check signature at offset 0xA000 -> type 1
+	db	00Bh, 026h, 000h		; PUSH 0026h - signature length
+	db	00Bh, 0FFh, 000h		; PUSH 00FFh - ???
+	db	00Bh, 000h, 0A0h		; PUSH 0A000h - offset
+	PUSH	XIZ				; 3e - buffer ptr
+	db	01Dh, 0DCh, 0FBh, 0FFh		; CALL 0xFFFBDC - check signature
+	db	0EFh, 0C8h, 00Ah, 000h, 000h, 000h	; ADD XSP, 0Ah - pop 10 bytes
+	db	0DBh, 0D8h			; CP HL, 0
+	JR	NZ, .check_type2		; 6e 07
+	db	0BFh, 004h, 000h, 001h		; LD (XSP+04h), 01h - type 1
+	db	078h, 0D2h, 000h		; JRL T, .done
 
-	; Read partial first track
-	db	09Fh, 006h, 020h	; LD WA, (XSP+06h)
-	EXTZ	XWA			; e8 12
-	db	0DEh, 089h		; LD BC, IZ
-	LD	XDE, 000099A4h		; 42 a4 99 00 00 - sector buffer
-	db	01Eh, 07Bh, 0FEh	; CALR FDC_MultiSectorRead
+.check_type2:
+	db	00Bh, 026h, 000h		; PUSH 0026h
+	db	00Bh, 0FFh, 000h		; PUSH 00FFh
+	db	00Bh, 028h, 0A0h		; PUSH 0A028h - offset
+	PUSH	XIZ				; 3e
+	db	01Dh, 0DCh, 0FBh, 0FFh		; CALL 0xFFFBDC
+	db	0EFh, 0C8h, 00Ah, 000h, 000h, 000h	; ADD XSP, 0Ah
+	db	0DBh, 0D8h			; CP HL, 0
+	JR	NZ, .check_type3		; 6e 07
+	db	0BFh, 004h, 000h, 002h		; LD (XSP+04h), 02h - type 2
+	db	078h, 0B3h, 000h		; JRL T, .done
 
-	db	0F2h, 0A4h, 099h, 000h, 030h	; LDA XWA, 000099A4h
-	db	0BFh, 00Ah, 060h	; LD (XSP+0Ah), XWA - buffer ptr
-	db	0D7h, 0FAh, 0A8h	; LD QIZ, 0 - loop counter
-	JR	T, .check_partial_loop	; 68 1b
+.check_type3:
+	db	00Bh, 026h, 000h		; PUSH 0026h
+	db	00Bh, 0FFh, 000h		; PUSH 00FFh
+	db	00Bh, 078h, 0A0h		; PUSH 0A078h - offset
+	PUSH	XIZ				; 3e
+	db	01Dh, 0DCh, 0FBh, 0FFh		; CALL 0xFFFBDC
+	db	0EFh, 0C8h, 00Ah, 000h, 000h, 000h	; ADD XSP, 0Ah
+	db	0DBh, 0D8h			; CP HL, 0
+	JR	NZ, .check_type4		; 6e 07
+	db	0BFh, 004h, 000h, 003h		; LD (XSP+04h), 03h - type 3
+	db	078h, 094h, 000h		; JRL T, .done
 
-.partial_write_loop:
-	db	0AFh, 00Eh, 020h	; LD XWA, (XSP+0Eh) - dest addr
-	db	0F5h, 0E2h, 031h	; LDA XBC, XWA+ - get addr, advance by 4
-	db	0BFh, 00Eh, 060h	; LD (XSP+0Eh), XWA - save updated dest
-	LD	XWA, XBC		; e9 88 - XWA = dest address
-	db	0AFh, 00Ah, 022h	; LD XDE, (XSP+0Ah) - buffer ptr
-	db	0E5h, 0EAh, 021h	; LD XBC, (XDE+) - get dword from buffer
-	db	0BFh, 00Ah, 062h	; LD (XSP+0Ah), XDE - save updated ptr
-	db	01Dh, 0D7h, 0BCh, 0FFh	; CALL Flash_ProgramWord_32bit (0xFFBCD7)
-	db	0D7h, 0FAh, 061h	; INC 1, QIZ
+.check_type4:
+	db	00Bh, 026h, 000h		; PUSH 0026h
+	db	00Bh, 0FFh, 000h		; PUSH 00FFh
+	db	00Bh, 0A0h, 0A0h		; PUSH 0A0A0h - offset
+	PUSH	XIZ				; 3e
+	db	01Dh, 0DCh, 0FBh, 0FFh		; CALL 0xFFFBDC
+	db	0EFh, 0C8h, 00Ah, 000h, 000h, 000h	; ADD XSP, 0Ah
+	db	0DBh, 0D8h			; CP HL, 0
+	JR	NZ, .check_type5		; 6e 06
+	db	0BFh, 004h, 000h, 004h		; LD (XSP+04h), 04h - type 4
+	db	068h, 076h			; JR T, .done
 
-.check_partial_loop:
-	db	0DEh, 089h		; LD BC, IZ
-	db	0D9h, 0ECh, 007h	; SLA 7, BC - BC = IZ * 128 (dwords per sector)
-	db	0D7h, 0FAh, 088h	; LD WA, QIZ
-	CP	WA, BC			; d9 f0
-	JR	C, .partial_write_loop	; 67 d9
+.check_type5:
+	db	00Bh, 026h, 000h		; PUSH 0026h
+	db	00Bh, 0FFh, 000h		; PUSH 00FFh
+	db	00Bh, 0F0h, 0A0h		; PUSH 0A0F0h - offset
+	PUSH	XIZ				; 3e
+	db	01Dh, 0DCh, 0FBh, 0FFh		; CALL 0xFFFBDC
+	db	0EFh, 0C8h, 00Ah, 000h, 000h, 000h	; ADD XSP, 0Ah
+	db	0DBh, 0D8h			; CP HL, 0
+	JR	NZ, .check_type6		; 6e 06
+	db	0BFh, 004h, 000h, 005h		; LD (XSP+04h), 05h - type 5
+	db	068h, 058h			; JR T, .done
 
-.skip_partial_first:
-	db	09Fh, 006h, 08Eh	; ADD (XSP+06h), IZ - advance sector count
-	db	0BFh, 008h, 002h, 000h, 008h	; LD (XSP+08h), 0800h - 2048 sectors total
-	db	09Fh, 008h, 0AEh	; SUB (XSP+08h), IZ - remaining sectors
-	db	09Fh, 008h, 020h	; LD WA, (XSP+08h)
-	EXTS	XWA			; e8 13
-	db	0D8h, 00Bh, 012h, 000h	; DIVS WA, 0012h - full tracks to write
-	db	0BFh, 008h, 050h	; LD (XSP+08h), WA - track count
-	db	0BFh, 004h, 002h, 000h, 000h	; LD (XSP+04h), 0 - track counter
-	db	09Fh, 008h, 020h	; LD WA, (XSP+08h)
-	CP	WA, 0			; d8 d8
-	JR	ULE, .check_partial_last	; 63 4d
+.check_type6:
+	db	00Bh, 026h, 000h		; PUSH 0026h
+	db	00Bh, 0FFh, 000h		; PUSH 00FFh
+	db	00Bh, 018h, 0A1h		; PUSH 0A118h - offset
+	PUSH	XIZ				; 3e
+	db	01Dh, 0DCh, 0FBh, 0FFh		; CALL 0xFFFBDC
+	db	0EFh, 0C8h, 00Ah, 000h, 000h, 000h	; ADD XSP, 0Ah
+	db	0DBh, 0D8h			; CP HL, 0
+	JR	NZ, .check_type7		; 6e 06
+	db	0BFh, 004h, 000h, 006h		; LD (XSP+04h), 06h - type 6
+	db	068h, 03Ah			; JR T, .done
 
-.full_track_loop:
-	db	09Fh, 006h, 020h	; LD WA, (XSP+06h) - current sector
-	EXTZ	XWA			; e8 12
-	LD	BC, 0012h		; 31 12 00 - 18 sectors per track
-	LD	XDE, 000099A4h		; 42 a4 99 00 00
-	db	01Eh, 014h, 0FEh	; CALR FDC_MultiSectorRead
+.check_type7:
+	db	00Bh, 026h, 000h		; PUSH 0026h
+	db	00Bh, 0FFh, 000h		; PUSH 00FFh
+	db	00Bh, 050h, 0A0h		; PUSH 0A050h - offset
+	PUSH	XIZ				; 3e
+	db	01Dh, 0DCh, 0FBh, 0FFh		; CALL 0xFFFBDC
+	db	0EFh, 0C8h, 00Ah, 000h, 000h, 000h	; ADD XSP, 0Ah
+	db	0DBh, 0D8h			; CP HL, 0
+	JR	NZ, .check_type8		; 6e 06
+	db	0BFh, 004h, 000h, 007h		; LD (XSP+04h), 07h - type 7
+	db	068h, 01Ch			; JR T, .done
 
-	db	09Fh, 006h, 038h, 012h, 000h	; ADD (XSP+06h), 0012h - advance to next track
-	db	0F2h, 0A4h, 099h, 000h, 030h	; LDA XWA, 000099A4h
-	db	0BFh, 00Ah, 060h	; LD (XSP+0Ah), XWA - buffer pointer
-	db	0D7h, 0FAh, 0A8h	; LD QIZ, 0 - dword counter
-
-.full_track_write:
-	db	0AFh, 00Eh, 020h	; LD XWA, (XSP+0Eh) - dest addr
-	db	0F5h, 0E2h, 031h	; LDA XBC, XWA+ - advance dest
-	db	0BFh, 00Eh, 060h	; LD (XSP+0Eh), XWA
-	LD	XWA, XBC		; e9 88 - XWA = dest address
-	db	0AFh, 00Ah, 022h	; LD XDE, (XSP+0Ah) - buffer ptr
-	db	0E5h, 0EAh, 021h	; LD XBC, (XDE+) - get dword
-	db	0BFh, 00Ah, 062h	; LD (XSP+0Ah), XDE
-	db	01Dh, 0D7h, 0BCh, 0FFh	; CALL Flash_ProgramWord_32bit
-	db	0D7h, 0FAh, 061h	; INC 1, QIZ
-	db	0D7h, 0FAh, 0CFh, 000h, 009h	; CP QIZ, 0900h - 2304 dwords per track (18*512/4)
-	JR	C, .full_track_write	; 67 de
-
-	db	09Fh, 004h, 061h	; INCW 1, (XSP+04h) - track counter++
-	db	09Fh, 008h, 020h	; LD WA, (XSP+08h) - total tracks
-	db	09Fh, 004h, 0F8h	; CP (XSP+04h), WA
-	JR	C, .full_track_loop	; 67 b3
-
-.check_partial_last:
-	; Calculate remaining sectors for partial last track
-	db	09Fh, 012h, 020h	; LD WA, (XSP+12h) - original start sector
-	db	0D8h, 0C8h, 000h, 008h	; ADD WA, 0800h - add 2048 sectors
-	db	09Fh, 006h, 0A0h	; SUB WA, (XSP+06h) - subtract current
-	db	0D8h, 08Eh		; LD IZ, WA - remaining sectors
-	db	0DEh, 0D8h		; CP IZ, 0
-	JR	Z, .write_done		; 66 43
-
-	; Read partial last track
-	db	09Fh, 006h, 020h	; LD WA, (XSP+06h) - current sector
-	EXTZ	XWA			; e8 12
-	db	0DEh, 089h		; LD BC, IZ - sector count
-	LD	XDE, 000099A4h		; 42 a4 99 00 00
-	db	01Eh, 0B8h, 0FDh	; CALR FDC_MultiSectorRead
-
-	db	0F2h, 0A4h, 099h, 000h, 030h	; LDA XWA, 000099A4h
-	db	0BFh, 00Ah, 060h	; LD (XSP+0Ah), XWA
-	db	0D7h, 0FAh, 0A8h	; LD QIZ, 0
-	JR	T, .check_last_loop	; 68 1b
-
-.last_write_loop:
-	db	0AFh, 00Eh, 020h	; LD XWA, (XSP+0Eh)
-	db	0F5h, 0E2h, 031h	; LDA XBC, XWA+
-	db	0BFh, 00Eh, 060h	; LD (XSP+0Eh), XWA
-	LD	XWA, XBC		; e9 88
-	db	0AFh, 00Ah, 022h	; LD XDE, (XSP+0Ah)
-	db	0E5h, 0EAh, 021h	; LD XBC, (XDE+)
-	db	0BFh, 00Ah, 062h	; LD (XSP+0Ah), XDE
-	db	01Dh, 0D7h, 0BCh, 0FFh	; CALL Flash_ProgramWord_32bit
-	db	0D7h, 0FAh, 061h	; INC 1, QIZ
-
-.check_last_loop:
-	db	0DEh, 089h		; LD BC, IZ
-	db	0D9h, 0ECh, 007h	; SLA 7, BC - dwords = sectors * 128
-	db	0D7h, 0FAh, 088h	; LD WA, QIZ
-	CP	WA, BC			; d9 f0
-	JR	C, .last_write_loop	; 67 d9
-
-.write_done:
-	POP	XIZ			; 5e
-	db	0BFh, 010h, 037h	; LDA XSP, XSP+10h - deallocate
-	RET				; 0e
-
-; -----------------------------------------------------------------------------
-; Flash_Write_Sectors_16bit - Write sectors to 16-bit flash from floppy
-; Address: 0x9FC213 (boot-time: 0xFFC213)
-;
-; Entry: A = flash bank (1 or 2)
-;        BC = starting sector number
-;        XDE = destination flash address
-;        (XSP+1A) = total sectors to write
-; Exit: None
-;
-; Similar to Flash_Write_Sectors but uses Flash_ProgramWord_16bit (0xFFB903)
-; for 16-bit flash chips (Table Data or Custom Data ROMs).
-; Uses 0x100 words per sector (SLA 8 = multiply by 256).
-; Uses 0x1200 words per track (4608 = 18 sectors * 256).
-; -----------------------------------------------------------------------------
-Flash_Write_Sectors_16bit:
-	db	0BFh, 0EEh, 037h	; LDA XSP, XSP+EEh - allocate 18 bytes
-	PUSH	XIZ			; 3e
-	db	0BFh, 00Eh, 062h	; LD (XSP+0Eh), XDE - save dest addr
-	db	0BFh, 012h, 051h	; LD (XSP+12h), BC - save start sector
-	db	0BFh, 014h, 041h	; LD (XSP+14h), A - save flash bank
-	db	09Fh, 012h, 020h	; LD WA, (XSP+12h)
-	db	0BFh, 006h, 050h	; LD (XSP+06h), WA - working sector
-	db	09Fh, 006h, 020h	; LD WA, (XSP+06h)
-	EXTZ	XWA			; e8 12
-	db	0D8h, 00Ah, 012h, 000h	; DIV WA, 0012h - divide by sectors per track
-	db	0D7h, 0E2h, 088h	; LD WA, QWA - get remainder
-	db	0DEh, 0A8h		; LD IZ, 0
-	CP	WA, 0			; d8 d8
-	JR	Z, .skip_partial_first_16	; 66 4d
-	db	036h, 012h, 000h	; LD IZ, 0012h
-	db	0D8h, 0A6h		; SUB IZ, WA - IZ = sectors to read first track
-
-	; Read partial first track
-	db	09Fh, 006h, 020h	; LD WA, (XSP+06h)
-	EXTZ	XWA			; e8 12
-	db	0DEh, 089h		; LD BC, IZ
-	LD	XDE, 000099A4h		; 42 a4 99 00 00 - sector buffer
-	db	01Eh, 046h, 0FDh	; CALR FDC_MultiSectorRead
-
-	db	0F2h, 0A4h, 099h, 000h, 030h	; LDA XWA, 000099A4h
-	db	0BFh, 00Ah, 060h	; LD (XSP+0Ah), XWA - buffer ptr
-	db	0D7h, 0FAh, 0A8h	; LD QIZ, 0 - loop counter
-	JR	T, .check_partial_loop_16	; 68 20
-
-.partial_write_loop_16:
-	db	08Fh, 014h, 021h	; LD A, (XSP+14h) - flash bank
-	EXTZ	WA			; d8 12
-	db	0AFh, 00Eh, 021h	; LD XBC, (XSP+0Eh) - dest addr
-	db	0F5h, 0E5h, 032h	; LDA XDE, XBC+ - advance by 2 (word)
-	db	0BFh, 00Eh, 061h	; LD (XSP+0Eh), XBC
-	LD	XBC, XDE		; ea 89 - XBC = dest address
-	db	0AFh, 00Ah, 023h	; LD XHL, (XSP+0Ah) - buffer ptr
-	db	0D5h, 0EDh, 022h	; LD DE, (XHL+) - get word from buffer
-	db	0BFh, 00Ah, 063h	; LD (XSP+0Ah), XHL
-	db	01Dh, 003h, 0B9h, 0FFh	; CALL Flash_ProgramWord_16bit (0xFFB903)
-	db	0D7h, 0FAh, 061h	; INC 1, QIZ
-
-.check_partial_loop_16:
-	db	0DEh, 089h		; LD BC, IZ
-	db	0D9h, 0ECh, 008h	; SLA 8, BC - BC = IZ * 256 (words per sector)
-	db	0D7h, 0FAh, 088h	; LD WA, QIZ
-	CP	WA, BC			; d9 f0
-	JR	C, .partial_write_loop_16	; 67 d4
-
-.skip_partial_first_16:
-	db	09Fh, 006h, 08Eh	; ADD (XSP+06h), IZ - advance sector count
-	db	0DEh, 088h		; LD WA, IZ
-	db	09Fh, 01Ah, 021h	; LD BC, (XSP+1Ah) - total sectors
-	db	0D8h, 0A1h		; SUB BC, WA - remaining sectors
-	db	0E9h, 012h		; EXTZ XBC
-	db	0D9h, 00Ah, 012h, 000h	; DIV BC, 0012h - full tracks remaining
-	db	0BFh, 008h, 051h	; LD (XSP+08h), BC - track count
-	db	0BFh, 004h, 002h, 000h, 000h	; LD (XSP+04h), 0 - track counter
-	db	09Fh, 008h, 020h	; LD WA, (XSP+08h)
-	CP	WA, 0			; d8 d8
-	JR	ULE, .check_partial_last_16	; 63 52
-
-.full_track_loop_16:
-	db	09Fh, 006h, 020h	; LD WA, (XSP+06h)
-	EXTZ	XWA			; e8 12
-	LD	BC, 0012h		; 31 12 00 - 18 sectors per track
-	LD	XDE, 000099A4h		; 42 a4 99 00 00
-	db	01Eh, 0DEh, 0FCh	; CALR FDC_MultiSectorRead
-
-	db	09Fh, 006h, 038h, 012h, 000h	; ADD (XSP+06h), 0012h
-	db	0F2h, 0A4h, 099h, 000h, 030h	; LDA XWA, 000099A4h
-	db	0BFh, 00Ah, 060h	; LD (XSP+0Ah), XWA
-	db	0D7h, 0FAh, 0A8h	; LD QIZ, 0
-
-.full_track_write_16:
-	db	08Fh, 014h, 021h	; LD A, (XSP+14h) - flash bank
-	EXTZ	WA			; d8 12
-	db	0AFh, 00Eh, 021h	; LD XBC, (XSP+0Eh)
-	db	0F5h, 0E5h, 032h	; LDA XDE, XBC+
-	db	0BFh, 00Eh, 061h	; LD (XSP+0Eh), XBC
-	LD	XBC, XDE		; ea 89
-	db	0AFh, 00Ah, 023h	; LD XHL, (XSP+0Ah)
-	db	0D5h, 0EDh, 022h	; LD DE, (XHL+)
-	db	0BFh, 00Ah, 063h	; LD (XSP+0Ah), XHL
-	db	01Dh, 003h, 0B9h, 0FFh	; CALL Flash_ProgramWord_16bit
-	db	0D7h, 0FAh, 061h	; INC 1, QIZ
-	db	0D7h, 0FAh, 0CFh, 000h, 012h	; CP QIZ, 1200h - 4608 words per track
-	JR	C, .full_track_write_16	; 67 d9
-
-	db	09Fh, 004h, 061h	; INCW 1, (XSP+04h)
-	db	09Fh, 008h, 020h	; LD WA, (XSP+08h)
-	db	09Fh, 004h, 0F8h	; CP (XSP+04h), WA
-	JR	C, .full_track_loop_16	; 67 ae
-
-.check_partial_last_16:
-	db	09Fh, 012h, 020h	; LD WA, (XSP+12h) - original start
-	db	09Fh, 01Ah, 080h	; ADD WA, (XSP+1Ah) - add total sectors
-	db	09Fh, 006h, 0A0h	; SUB WA, (XSP+06h) - subtract current
-	db	0D8h, 08Eh		; LD IZ, WA - remaining sectors
-	db	0DEh, 0D8h		; CP IZ, 0
-	JR	Z, .write_done_16	; 66 48
-
-	; Read partial last track
-	db	09Fh, 006h, 020h	; LD WA, (XSP+06h)
-	EXTZ	XWA			; e8 12
-	db	0DEh, 089h		; LD BC, IZ
-	LD	XDE, 000099A4h		; 42 a4 99 00 00
-	db	01Eh, 07Eh, 0FCh	; CALR FDC_MultiSectorRead
-
-	db	0F2h, 0A4h, 099h, 000h, 030h	; LDA XWA, 000099A4h
-	db	0BFh, 00Ah, 060h	; LD (XSP+0Ah), XWA
-	db	0D7h, 0FAh, 0A8h	; LD QIZ, 0
-	JR	T, .check_last_loop_16	; 68 20
-
-.last_write_loop_16:
-	db	08Fh, 014h, 021h	; LD A, (XSP+14h)
-	EXTZ	WA			; d8 12
-	db	0AFh, 00Eh, 021h	; LD XBC, (XSP+0Eh)
-	db	0F5h, 0E5h, 032h	; LDA XDE, XBC+
-	db	0BFh, 00Eh, 061h	; LD (XSP+0Eh), XBC
-	LD	XBC, XDE		; ea 89
-	db	0AFh, 00Ah, 023h	; LD XHL, (XSP+0Ah)
-	db	0D5h, 0EDh, 022h	; LD DE, (XHL+)
-	db	0BFh, 00Ah, 063h	; LD (XSP+0Ah), XHL
-	db	01Dh, 003h, 0B9h, 0FFh	; CALL Flash_ProgramWord_16bit
-	db	0D7h, 0FAh, 061h	; INC 1, QIZ
-
-.check_last_loop_16:
-	db	0DEh, 089h		; LD BC, IZ
-	db	0D9h, 0ECh, 008h	; SLA 8, BC
-	db	0D7h, 0FAh, 088h	; LD WA, QIZ
-	CP	WA, BC			; d9 f0
-	JR	C, .last_write_loop_16	; 67 d4
-
-.write_done_16:
-	POP	XIZ			; 5e
-	db	0BFh, 012h, 037h	; LDA XSP, XSP+12h - deallocate
-	db	00Fh, 002h, 000h	; RETD 0x0002 - return, pop 2 extra bytes
-
-; -----------------------------------------------------------------------------
-; Boot_Display_Update_Message - Display "Updating firmware" message
-; Address: 0x9FC354 (boot-time: 0xFFC354)
-;
-; Entry: None
-; Exit: None
-;
-; Displays a message at position (0x30, 0xA0) using the display routine
-; at 0xFFCCFB. Message is located at 0xFFA626.
-; -----------------------------------------------------------------------------
-Boot_Display_Update_Message:
-	db	00Bh, 008h, 000h	; PUSH 0008h - parameter 1
-	db	00Bh, 002h, 000h	; PUSH 0002h - parameter 2
-	LD	XWA, 000FFA626h		; 40 26 a6 ff 00 - message pointer
-	LD	BC, 0030h		; 31 30 00 - X position
-	LD	DE, 00A0h		; 32 a0 00 - Y position
-	db	01Dh, 0FBh, 0CCh, 0FFh	; CALL Display_DrawText (0xFFCCFB)
-	RET				; 0e
-
-; -----------------------------------------------------------------------------
-; Boot_Wait_For_Key - Wait for key press with display refresh
-; Address: 0x9FC36A (boot-time: 0xFFC36A)
-;
-; Entry: A = expected key code
-; Exit: Returns when correct key is pressed
-;
-; Displays a message and waits for the user to press a specific key.
-; Uses delay loops to debounce and avoid false triggers.
-; Calls FDC_CheckKeypress (0x9FBFC4) for key input.
-; -----------------------------------------------------------------------------
-Boot_Wait_For_Key:
-	db	0EFh, 06Ah		; DEC 2, XSP - allocate 2 bytes
-	db	0B7h, 041h		; LD (XSP), A - save expected key
-.display_loop:				; Loop re-entry point (skips stack alloc)
-	db	00Bh, 008h, 000h	; PUSH 0008h
-	db	00Bh, 002h, 000h	; PUSH 0002h
-	LD	XWA, 000FFAD5Eh		; 40 5e ad ff 00 - message pointer
-	LD	BC, 0030h		; 31 30 00
-	LD	DE, 00A0h		; 32 a0 00
-	db	01Dh, 0FBh, 0CCh, 0FFh	; CALL Display_DrawText
-
-	; Wait for key release first
-	db	01Dh, 063h, 0ECh, 0FFh	; CALL Check_Key_State (0xFFEC63)
-	CP	L, 0			; cf d8
-	JR	Z, .delay_loop1		; 66 08
-.wait_release:
-	db	01Dh, 063h, 0ECh, 0FFh	; CALL Check_Key_State
-	CP	L, 0			; cf d8
-	JR	NZ, .wait_release	; 6e f8
-
-.delay_loop1:
-	LD	XWA, 0			; e8 a8
-.delay1:
-	db	0E8h, 061h		; INC 1, XWA
-	db	0E8h, 0CFh, 000h, 000h, 004h, 000h	; CP XWA, 00040000h
-	JR	C, .delay1		; 67 f6
-
-	; Wait for key press
-	db	01Dh, 063h, 0ECh, 0FFh	; CALL Check_Key_State
-	CP	L, 0			; cf d8
-	JR	NZ, .check_key		; 6e 08
-.wait_press:
-	db	01Dh, 063h, 0ECh, 0FFh	; CALL Check_Key_State
-	CP	L, 0			; cf d8
-	JR	Z, .wait_press		; 66 f8
-
-.check_key:
-	LD	XWA, 0			; e8 a8
-.delay2:
-	db	0E8h, 061h		; INC 1, XWA
-	db	0E8h, 0CFh, 000h, 000h, 020h, 000h	; CP XWA, 00200000h
-	JR	C, .delay2		; 67 f6
-
-	db	01Eh, 006h, 0FCh	; CALR FDC_CheckKeypress (0x9FBFC4)
-	db	087h, 0F7h		; CP L, (XSP) - compare with expected
-	JR	NZ, .display_loop	; 6e ac - retry if wrong key
-
-	db	01Eh, 08Fh, 0FFh	; CALR Boot_Display_Update_Message
-	db	0EFh, 062h		; INC 2, XSP - deallocate
-	RET				; 0e
-
-; -----------------------------------------------------------------------------
-; Boot_Init_Progress_Display - Initialize progress counter and display
-; Address: 0x9FC3C8 (boot-time: 0xFFC3C8)
-;
-; Entry: None
-; Exit: None
-;
-; Initializes the progress counter at 0x0C00 and starts flash erase.
-; Updates progress display at position (0xB4, 5) every 500 (0x1F4) ticks.
-; Counter IZ starts at 0x32 (50).
-; -----------------------------------------------------------------------------
-Boot_Init_Progress_Display:
-	PUSH	IZ			; 2e
-	LD	IZ, 0032h		; 36 32 00 - initial counter value
-	LD	XWA, 0			; e8 a8
-	db	0F1h, 000h, 00Ch, 060h	; LD (0C00h), XWA - clear tick counter
-	db	01Dh, 017h, 0BDh, 0FFh	; CALL Flash_Erase_AllSectors_32bit (0xFFBD17)
-
-	; First flash check
-	db	01Dh, 085h, 0BEh, 0FFh	; CALL Flash_WaitComplete_32bit (0xFFBE85)
-	CP	HL, 0FFFFh		; db cf ff ff
-	JR	NZ, .done		; 6e 29
-
-.wait_loop:				; Loop re-entry point
-	db	0E1h, 000h, 00Ch, 020h	; LD XWA, (0C00h) - get tick counter
-	db	0E8h, 0CFh, 0F4h, 001h, 000h, 000h	; CP XWA, 000001F4h (500)
-	JR	ULE, .continue_wait	; 63 13
-
-	; Update progress display
-	db	0DEh, 060h		; INC 0, IZ - increment counter
-	db	0DEh, 088h		; LD WA, IZ
-	LD	BC, 00B4h		; 31 b4 00 - X position
-	LD	DE, 5			; da ad - Y position
-	db	01Dh, 09Ah, 0CDh, 0FFh	; CALL Display_DrawNumber (0xFFCD9A)
-	LD	XWA, 0			; e8 a8
-	db	0F1h, 000h, 00Ch, 060h	; LD (0C00h), XWA - reset tick counter
-
-.continue_wait:
-	db	01Dh, 085h, 0BEh, 0FFh	; CALL Flash_WaitComplete_32bit
-	CP	HL, 0FFFFh		; db cf ff ff
-	JR	Z, .wait_loop		; 66 d7
+.check_type8:
+	db	00Bh, 026h, 000h		; PUSH 0026h
+	db	00Bh, 0FFh, 000h		; PUSH 00FFh
+	db	00Bh, 0C8h, 0A0h		; PUSH 0A0C8h - offset
+	PUSH	XIZ				; 3e
+	db	01Dh, 0DCh, 0FBh, 0FFh		; CALL 0xFFFBDC
+	db	0EFh, 0C8h, 00Ah, 000h, 000h, 000h	; ADD XSP, 0Ah
+	db	0DBh, 0D8h			; CP HL, 0
+	JR	NZ, .done			; 6e 04
+	db	0BFh, 004h, 000h, 008h		; LD (XSP+04h), 08h - type 8
 
 .done:
-	POP	IZ			; 4e
-	RET				; 0e
+	PUSH	XIZ				; 3e - free buffer
+	db	01Dh, 0DDh, 0FCh, 0FFh		; CALL 0xFFFCDD - free memory
+	db	0EFh, 064h			; INC 4, XSP
+	db	08Fh, 004h, 027h		; LD L, (XSP+04h) - return type
+	POP	XIZ				; 5e
+	db	0EFh, 062h			; INC 2, XSP - deallocate
+	RET					; 0e
 
-; -----------------------------------------------------------------------------
-; Boot_Update_Flash_ByType - Main disk type dispatcher
-; Address: 0x9FC40B (boot-time: 0xFFC40B)
-;
-; Entry: A = disk type (1-8)
-; Exit: None
-;
-; Dispatches to appropriate flash update handler based on disk type.
-; Uses jump table at 0xFFA140 with base address 0xFFC44A.
-;
-; Disk types:
-;   1-2: Program ROM update (0x800000, 0x900000)
-;   3-4: Program ROM update (alternate)
-;   5: Custom Data update (0x300000)
-;   6: HDAE5000 update (0x280000)
-;   7: Sector erase mode
-;   8: Invalid (shows error)
-; -----------------------------------------------------------------------------
-Boot_Update_Flash_ByType:
-	db	0EFh, 06Ah		; DEC 2, XSP - allocate 2 bytes
-	db	0B7h, 041h		; LD (XSP), A - save disk type
-	db	00Bh, 008h, 000h	; PUSH 0008h
-	db	00Bh, 002h, 000h	; PUSH 0002h
-	LD	XWA, 000FFA3BEh		; 40 be a3 ff 00 - "Select disk type" message
-	LD	BC, 0030h		; 31 30 00
-	LD	DE, 00A0h		; 32 a0 00
-	db	01Dh, 0FBh, 0CCh, 0FFh	; CALL Display_DrawText
+; =============================================================================
+; BOOT SECTOR COPY ROUTINES (0x9FC0E1-0x9FC212)
+; =============================================================================
+; Boot_CopySectors - Copy sectors from disk to RAM with callback
+; Parameters:
+;   XBC = destination address pointer (address table)
+;   WA  = starting sector number
+; Calls 0xFFBF92 to read sector, 0xFFBCD7 to write with callback
+; =============================================================================
 
-	; Validate disk type and dispatch
-	db	087h, 021h		; LD A, (XSP) - get disk type
-	EXTZ	WA			; d8 12
-	db	0D8h, 069h		; DEC 1, WA - make 0-based
-	CP	WA, 0			; d8 d8
-	db	071h, 0B6h, 000h	; JRL LT, Boot_Show_Unknown_Error
-	db	0D8h, 0DFh		; CP WA, 7
-	db	07Ah, 0B1h, 000h	; JRL GT, Boot_Show_Unknown_Error
+Boot_CopySectors:
+	db	0BFh, 0F0h, 037h		; LDA XSP, XSP+0xF0 - allocate 16 bytes
+	PUSH	XIZ				; 3e
+	db	0BFh, 00Eh, 061h		; LD (XSP+0x0E), XBC - save dest ptr
+	db	0BFh, 012h, 050h		; LD (XSP+0x12), WA - save start sector
+	db	09Fh, 012h, 020h		; LD WA, (XSP+0x12)
+	db	0BFh, 006h, 050h		; LD (XSP+0x06), WA - current sector
+	db	09Fh, 006h, 020h		; LD WA, (XSP+0x06)
+	db	0E8h, 012h			; EXTZ XWA
+	db	0D8h, 00Ah, 012h, 000h		; DIV WA, 0x0012 - sectors per track
+	db	0D7h, 0E2h, 088h		; LD WA, QWA - get remainder
+	db	0DEh, 0A8h			; LD IZ, 0 - offset = 0
+	db	0D8h, 0D8h			; CP WA, 0
+	JR	Z, .cs_skip_partial		; 66 48
 
-	; Jump table dispatch
-	db	0D8h, 080h		; ADD WA, WA - word index
-	db	0F2h, 040h, 0A1h, 0FFh, 034h	; LDA XIX, 0FFA140h - jump table
-	db	0D3h, 007h, 0F0h, 0E0h, 020h	; LD WA, (XIX+WA) - get offset
-	db	0F2h, 04Ah, 0C4h, 0FFh, 034h	; LDA XIX, 0FFC44Ah - base address
-	db	0F3h, 007h, 0F0h, 0E0h, 0D8h	; JP T, XIX+WA - jump to handler
+	; Handle partial first track
+	db	036h, 012h, 000h		; LD IZ, 0x0012 - sectors per track
+	db	0D8h, 0A6h			; SUB IZ, WA - IZ = 18 - remainder
+	db	09Fh, 006h, 020h		; LD WA, (XSP+0x06)
+	db	0E8h, 012h			; EXTZ XWA
+	db	0DEh, 089h			; LD BC, IZ - sectors to read
+	db	042h, 0A4h, 099h, 000h, 000h	; LD XDE, 0x000099A4 - buffer
+	db	01Eh, 07Bh, 0FEh		; CALR 0x9FBF92 (FDC_ReadSectorRange)
+	db	0F2h, 0A4h, 099h, 000h, 030h	; LDA XWA, 0x0099A4
+	db	0BFh, 00Ah, 060h		; LD (XSP+0x0A), XWA - source ptr
+	db	0D7h, 0FAh, 0A8h		; LD QIZ, 0 - counter
 
-; Jump table handlers (embedded at 0x9FC44A = base)
-.handler_type1:				; Type 1: Program ROM bank 1
-	db	01Eh, 07Bh, 0FFh	; CALR Boot_Init_Progress_Display
-	db	01Eh, 004h, 0FFh	; CALR Boot_Display_Update_Message
-	LD	WA, 0024h		; 30 24 00 - starting sector
-	LD	XBC, 000800000h		; 41 00 00 80 00 - dest: Program ROM low
-	db	01Eh, 086h, 0FCh	; CALR Flash_Write_Sectors
-	LD	WA, 2			; d8 aa - key code
-	db	01Eh, 00Ah, 0FFh	; CALR Boot_Wait_For_Key
-	LD	WA, 0024h		; 30 24 00
-	LD	XBC, 000900000h		; 41 00 00 90 00 - dest: Program ROM high
-	JR	T, .common_write	; 68 1e
+	; Loop: write partial track bytes
+	JR	T, .cs_partial_check		; 68 1b
+.cs_partial_loop:
+	db	0AFh, 00Eh, 020h		; LD XWA, (XSP+0x0E) - dest table ptr
+	db	0F5h, 0E2h, 031h		; LDA XBC, XWA+ - get dest addr
+	db	0BFh, 00Eh, 060h		; LD (XSP+0x0E), XWA
+	db	0E9h, 088h			; LD XWA, XBC
+	db	0AFh, 00Ah, 022h		; LD XDE, (XSP+0x0A) - source ptr
+	db	0E5h, 0EAh, 021h		; LD XBC, (XDE+) - get callback addr
+	db	0BFh, 00Ah, 062h		; LD (XSP+0x0A), XDE
+	db	01Dh, 0D7h, 0BCh, 0FFh		; CALL 0xFFBCD7 - write with callback
+	db	0D7h, 0FAh, 061h		; INC 1, QIZ
+.cs_partial_check:
+	db	0DEh, 089h			; LD BC, IZ
+	db	0D9h, 0ECh, 007h		; SLA 7, BC - BC = IZ * 128
+	db	0D7h, 0FAh, 088h		; LD WA, QIZ
+	db	0D9h, 0F0h			; CP WA, BC
+	JR	C, .cs_partial_loop		; 67 d9
 
-.handler_type2:				; Type 2: Program ROM bank 2
-	db	01Eh, 05Bh, 0FFh	; CALR Boot_Init_Progress_Display
-	db	01Eh, 0E4h, 0FEh	; CALR Boot_Display_Update_Message
-	LD	WA, 0024h		; 30 24 00
-	LD	XBC, 000800000h		; 41 00 00 80 00
-	db	01Eh, 066h, 0FCh	; CALR Flash_Write_Sectors
-	LD	WA, 4			; d8 ac - key code
-	db	01Eh, 0EAh, 0FEh	; CALR Boot_Wait_For_Key
-	LD	WA, 0024h		; 30 24 00
-	LD	XBC, 000900000h		; 41 00 00 90 00
+.cs_skip_partial:
+	db	09Fh, 006h, 08Eh		; ADD (XSP+0x06), IZ - advance sector
+	db	0BFh, 008h, 002h, 000h, 008h	; LD (XSP+0x08), 0x0800 - total size
+	db	09Fh, 008h, 0AEh		; SUB (XSP+0x08), IZ
+	db	09Fh, 008h, 020h		; LD WA, (XSP+0x08)
+	db	0E8h, 013h			; EXTS XWA
+	db	0D8h, 00Bh, 012h, 000h		; DIVS WA, 0x0012 - full tracks
+	db	0BFh, 008h, 050h		; LD (XSP+0x08), WA - track count
+	db	0BFh, 004h, 002h, 000h, 000h	; LD (XSP+0x04), 0x0000 - counter
+	db	09Fh, 008h, 020h		; LD WA, (XSP+0x08)
+	db	0D8h, 0D8h			; CP WA, 0
+	JR	ULE, .cs_check_remainder	; 63 4d
 
-.common_write:
-	db	01Eh, 056h, 0FCh	; CALR Flash_Write_Sectors
-	JR	T, .done		; 68 55
+.cs_track_loop:
+	db	09Fh, 006h, 020h		; LD WA, (XSP+0x06)
+	db	0E8h, 012h			; EXTZ XWA
+	db	031h, 012h, 000h		; LD BC, 0x0012 - full track
+	db	042h, 0A4h, 099h, 000h, 000h	; LD XDE, 0x000099A4
+	db	01Eh, 014h, 0FEh		; CALR 0x9FBF92
+	db	09Fh, 006h, 038h, 012h, 000h	; ADD (XSP+0x06), 0x0012
+	db	0F2h, 0A4h, 099h, 000h, 030h	; LDA XWA, 0x0099A4
+	db	0BFh, 00Ah, 060h		; LD (XSP+0x0A), XWA
+	db	0D7h, 0FAh, 0A8h		; LD QIZ, 0
 
-.handler_type5:				; Type 5: Custom Data
-	LD	WA, 1			; d8 a9 - flash bank
-	db	01Dh, 0DBh, 0BBh, 0FFh	; CALL Flash_SetBank_16bit (0xFFBBDB)
-	db	01Eh, 0BEh, 0FEh	; CALR Boot_Display_Update_Message
-	db	00Bh, 000h, 008h	; PUSH 0800h - sector count
-	LD	WA, 1			; d8 a9 - flash bank
-	LD	BC, 0024h		; 31 24 00 - starting sector
-	LD	XDE, 000300000h		; 42 00 00 30 00 - Custom Data flash
-	JR	T, .write_16bit		; 68 16
+.cs_full_loop:
+	db	0AFh, 00Eh, 020h		; LD XWA, (XSP+0x0E)
+	db	0F5h, 0E2h, 031h		; LDA XBC, XWA+
+	db	0BFh, 00Eh, 060h		; LD (XSP+0x0E), XWA
+	db	0E9h, 088h			; LD XWA, XBC
+	db	0AFh, 00Ah, 022h		; LD XDE, (XSP+0x0A)
+	db	0E5h, 0EAh, 021h		; LD XBC, (XDE+)
+	db	0BFh, 00Ah, 062h		; LD (XSP+0x0A), XDE
+	db	01Dh, 0D7h, 0BCh, 0FFh		; CALL 0xFFBCD7
+	db	0D7h, 0FAh, 061h		; INC 1, QIZ
+	db	0D7h, 0FAh, 0CFh, 000h, 009h	; CP QIZ, 0x0900 (18*128)
+	JR	C, .cs_full_loop		; 67 de
+	db	09Fh, 004h, 061h		; INCW 1, (XSP+0x04)
+	db	09Fh, 008h, 020h		; LD WA, (XSP+0x08)
+	db	09Fh, 004h, 0F8h		; CP (XSP+0x04), WA
+	JR	C, .cs_track_loop		; 67 b3
 
-.handler_type6:				; Type 6: HDAE5000
-	LD	WA, 2			; d8 aa - flash bank
-	db	01Dh, 0DBh, 0BBh, 0FFh	; CALL Flash_SetBank_16bit
-	db	01Eh, 0A6h, 0FEh	; CALR Boot_Display_Update_Message
-	db	00Bh, 000h, 004h	; PUSH 0400h - sector count
-	LD	WA, 2			; d8 aa - flash bank
-	LD	BC, 0024h		; 31 24 00
-	LD	XDE, 000280000h		; 42 00 00 28 00 - HDAE5000 flash
+.cs_check_remainder:
+	db	09Fh, 012h, 020h		; LD WA, (XSP+0x12)
+	db	0D8h, 0C8h, 000h, 008h		; ADD WA, 0x0800
+	db	09Fh, 006h, 0A0h		; SUB WA, (XSP+0x06)
+	db	0D8h, 08Eh			; LD IZ, WA
+	db	0DEh, 0D8h			; CP IZ, 0
+	JR	Z, .cs_done			; 66 43
 
-.write_16bit:
-	db	01Eh, 055h, 0FDh	; CALR Flash_Write_Sectors_16bit
-	JR	T, .done		; 68 22
+	; Read remainder
+	db	09Fh, 006h, 020h		; LD WA, (XSP+0x06)
+	db	0E8h, 012h			; EXTZ XWA
+	db	0DEh, 089h			; LD BC, IZ
+	db	042h, 0A4h, 099h, 000h, 000h	; LD XDE, 0x000099A4
+	db	01Eh, 0B8h, 0FDh		; CALR 0x9FBF92
+	db	0F2h, 0A4h, 099h, 000h, 030h	; LDA XWA, 0x0099A4
+	db	0BFh, 00Ah, 060h		; LD (XSP+0x0A), XWA
+	db	0D7h, 0FAh, 0A8h		; LD QIZ, 0
+	JR	T, .cs_rem_check		; 68 1b
 
-.handler_type7:				; Type 7: Sector erase
-	LD	WA, 1			; d8 a9 - flash bank
-	LD	XBC, 0003FFFFFh		; 41 ff ff 3f 00 - end address
-	db	01Dh, 017h, 0BAh, 0FFh	; CALL Flash_SectorErase_16bit (0xFFBA17)
-	db	01Eh, 0FAh, 0FEh	; CALR Boot_Init_Progress_Display
-	db	01Eh, 083h, 0FEh	; CALR Boot_Display_Update_Message
-	db	01Eh, 07Ch, 005h	; CALR 0x9FCA50 (unknown routine)
-	db	01Eh, 0DCh, 004h	; CALR 0x9FC9B3 (unknown routine)
-	JR	T, .done		; 68 09
+.cs_rem_loop:
+	db	0AFh, 00Eh, 020h		; LD XWA, (XSP+0x0E)
+	db	0F5h, 0E2h, 031h		; LDA XBC, XWA+
+	db	0BFh, 00Eh, 060h		; LD (XSP+0x0E), XWA
+	db	0E9h, 088h			; LD XWA, XBC
+	db	0AFh, 00Ah, 022h		; LD XDE, (XSP+0x0A)
+	db	0E5h, 0EAh, 021h		; LD XBC, (XDE+)
+	db	0BFh, 00Ah, 062h		; LD (XSP+0x0A), XDE
+	db	01Dh, 0D7h, 0BCh, 0FFh		; CALL 0xFFBCD7
+	db	0D7h, 0FAh, 061h		; INC 1, QIZ
+.cs_rem_check:
+	db	0DEh, 089h			; LD BC, IZ
+	db	0D9h, 0ECh, 007h		; SLA 7, BC
+	db	0D7h, 0FAh, 088h		; LD WA, QIZ
+	db	0D9h, 0F0h			; CP WA, BC
+	JR	C, .cs_rem_loop			; 67 d9
 
-.handler_type8:				; Type 8: Extended erase
-	db	01Eh, 0ECh, 0FEh	; CALR Boot_Init_Progress_Display
-	db	01Eh, 075h, 0FEh	; CALR Boot_Display_Update_Message
-	db	01Eh, 06Eh, 005h	; CALR 0x9FCA50
+.cs_done:
+	POP	XIZ				; 5e
+	db	0BFh, 010h, 037h		; LDA XSP, XSP+0x10
+	RET					; 0e
 
-.done:
-	db	0EFh, 062h		; INC 2, XSP - deallocate
-	RET				; 0e
+; =============================================================================
+; Boot_CopySectorsEx - Extended sector copy with byte write
+; Address: 0x9FC213
+; Parameters: XDE=dest table, BC=start sector, A=bank number
+; Calls 0xFFB903 (Flash_ProgramWord_16bit) instead of 0xFFBCD7
+; =============================================================================
+Boot_CopySectorsEx:
+	db	0BFh, 0EEh, 037h		; LDA XSP, XSP+0xEE - allocate 18 bytes
+	PUSH	XIZ				; 3e
+	db	0BFh, 00Eh, 062h		; LD (XSP+0x0E), XDE - dest table
+	db	0BFh, 012h, 051h		; LD (XSP+0x12), BC - start sector
+	db	0BFh, 014h, 041h		; LD (XSP+0x14), A - bank number
+	db	09Fh, 012h, 020h		; LD WA, (XSP+0x12)
+	db	0BFh, 006h, 050h		; LD (XSP+0x06), WA
+	db	09Fh, 006h, 020h		; LD WA, (XSP+0x06)
+	db	0E8h, 012h			; EXTZ XWA
+	db	0D8h, 00Ah, 012h, 000h		; DIV WA, 0x0012
+	db	0D7h, 0E2h, 088h		; LD WA, QWA
+	db	0DEh, 0A8h			; LD IZ, 0
+	db	0D8h, 0D8h			; CP WA, 0
+	JR	Z, .cse_skip_partial		; 66 4d
 
-; -----------------------------------------------------------------------------
-; Boot_Show_Unknown_Error - Display error for invalid disk type and halt
-; Address: 0x9FC4E5 (boot-time: 0xFFC4E5)
-;
-; Entry: None
-; Exit: Never returns (infinite loop)
-;
-; Displays an error message and halts the system.
-; -----------------------------------------------------------------------------
-Boot_Show_Unknown_Error:
-	db	00Bh, 008h, 000h	; PUSH 0008h
-	db	00Bh, 002h, 000h	; PUSH 0002h
-	LD	XWA, 000FFAFC6h		; 40 c6 af ff 00 - error message
-	LD	BC, 0030h		; 31 30 00
-	LD	DE, 00A0h		; 32 a0 00
-	db	01Dh, 0FBh, 0CCh, 0FFh	; CALL Display_DrawText
-	db	0EFh, 062h		; INC 2, XSP
-.halt:
-	JR	T, .halt		; 68 fe - infinite loop
+	db	036h, 012h, 000h		; LD IZ, 0x0012
+	db	0D8h, 0A6h			; SUB IZ, WA
+	db	09Fh, 006h, 020h		; LD WA, (XSP+0x06)
+	db	0E8h, 012h			; EXTZ XWA
+	db	0DEh, 089h			; LD BC, IZ
+	db	042h, 0A4h, 099h, 000h, 000h	; LD XDE, 0x000099A4
+	db	01Eh, 046h, 0FDh		; CALR 0x9FBF92
+	db	0F2h, 0A4h, 099h, 000h, 030h	; LDA XWA, 0x0099A4
+	db	0BFh, 00Ah, 060h		; LD (XSP+0x0A), XWA
+	db	0D7h, 0FAh, 0A8h		; LD QIZ, 0
+	JR	T, .cse_partial_check		; 68 20
 
-; -----------------------------------------------------------------------------
-; Boot_Delay_Loop - Simple delay counter
-; Address: 0x9FC4FE (boot-time: 0xFFC4FE)
-;
-; Entry: XWA = delay count
-; Exit: None
-;
-; Counts XBC from 0 to XWA for a simple delay.
-; -----------------------------------------------------------------------------
-Boot_Delay_Loop:
-	LD	XBC, 0			; e9 a8
-	db	0E8h, 0F1h		; CP XBC, XWA
-	db	0B0h, 0FFh		; RET NC - return if XBC >= XWA
-.loop:
-	db	0E9h, 061h		; INC 1, XBC
-	db	0E8h, 0F1h		; CP XBC, XWA
-	JR	C, .loop		; 67 fa
-	RET				; 0e
+.cse_partial_loop:
+	db	08Fh, 014h, 021h		; LD A, (XSP+0x14) - bank
+	db	0D8h, 012h			; EXTZ WA
+	db	0AFh, 00Eh, 021h		; LD XBC, (XSP+0x0E)
+	db	0F5h, 0E5h, 032h		; LDA XDE, XBC+
+	db	0BFh, 00Eh, 061h		; LD (XSP+0x0E), XBC
+	db	0EAh, 089h			; LD XBC, XDE
+	db	0AFh, 00Ah, 023h		; LD XHL, (XSP+0x0A)
+	db	0D5h, 0EDh, 022h		; LD DE, (XHL+)
+	db	0BFh, 00Ah, 063h		; LD (XSP+0x0A), XHL
+	db	01Dh, 003h, 0B9h, 0FFh		; CALL 0xFFB903 (Flash_ProgramWord_16bit)
+	db	0D7h, 0FAh, 061h		; INC 1, QIZ
+.cse_partial_check:
+	db	0DEh, 089h			; LD BC, IZ
+	db	0D9h, 0ECh, 008h		; SLA 8, BC - BC = IZ * 256
+	db	0D7h, 0FAh, 088h		; LD WA, QIZ
+	db	0D9h, 0F0h			; CP WA, BC
+	JR	C, .cse_partial_loop		; 67 d4
 
-; -----------------------------------------------------------------------------
-; Boot_LED_Animation - Cycle progress LEDs
-; Address: 0x9FC50B (boot-time: 0xFFC50B)
-;
-; Entry: None
-; Exit: Never returns (tail calls Boot_Delay_Loop in infinite loop)
-;
-; Cycles through LED patterns 0x01, 0x02, 0x04, 0x08 on port 0x160004.
-; Uses counter at 0x0C08 to track current LED state.
-; Each state has delay of 0x186A0 (100,000) iterations.
-; -----------------------------------------------------------------------------
-Boot_LED_Animation:
-	db	0C1h, 008h, 00Ch, 061h	; INC 1, (0C08h) - increment counter
-	db	0C1h, 008h, 00Ch, 021h	; LD A, (0C08h) - get counter
-	db	0C9h, 0CCh, 003h	; AND A, 03h - mask to 0-3
-	CP	A, 3			; c9 db
-	JR	Z, .led3		; 66 24
-	CP	A, 2			; c9 da
-	JR	Z, .led2		; 66 18
-	CP	A, 1			; c9 d9
-	JR	Z, .led1		; 66 0c
-	CP	A, 0			; c9 d8
-	JR	NZ, .do_delay		; 6e 1e
+.cse_skip_partial:
+	db	09Fh, 006h, 08Eh		; ADD (XSP+0x06), IZ
+	db	0DEh, 088h			; LD WA, IZ
+	db	09Fh, 01Ah, 021h		; LD BC, (XSP+0x1A) - total size
+	db	0D8h, 0A1h			; SUB BC, WA
+	db	0E9h, 012h			; EXTZ XBC
+	db	0D9h, 00Ah, 012h, 000h		; DIV BC, 0x0012
+	db	0BFh, 008h, 051h		; LD (XSP+0x08), BC
+	db	0BFh, 004h, 002h, 000h, 000h	; LD (XSP+0x04), 0x0000
+	db	09Fh, 008h, 020h		; LD WA, (XSP+0x08)
+	db	0D8h, 0D8h			; CP WA, 0
+	JR	ULE, .cse_check_rem		; 63 52
 
-	; LED pattern 0: bit 0
-	db	0F2h, 004h, 000h, 016h, 000h, 001h	; LD (160004h), 01h
-	JR	T, .do_delay		; 68 16
+.cse_track_loop:
+	db	09Fh, 006h, 020h		; LD WA, (XSP+0x06)
+	db	0E8h, 012h			; EXTZ XWA
+	db	031h, 012h, 000h		; LD BC, 0x0012
+	db	042h, 0A4h, 099h, 000h, 000h	; LD XDE, 0x000099A4
+	db	01Eh, 0DEh, 0FCh		; CALR 0x9FBF92
+	db	09Fh, 006h, 038h, 012h, 000h	; ADD (XSP+0x06), 0x0012
+	db	0F2h, 0A4h, 099h, 000h, 030h	; LDA XWA, 0x0099A4
+	db	0BFh, 00Ah, 060h		; LD (XSP+0x0A), XWA
+	db	0D7h, 0FAh, 0A8h		; LD QIZ, 0
 
-.led1:	; LED pattern 1: bit 1
-	db	0F2h, 004h, 000h, 016h, 000h, 002h	; LD (160004h), 02h
-	JR	T, .do_delay		; 68 0e
+.cse_full_loop:
+	db	08Fh, 014h, 021h		; LD A, (XSP+0x14)
+	db	0D8h, 012h			; EXTZ WA
+	db	0AFh, 00Eh, 021h		; LD XBC, (XSP+0x0E)
+	db	0F5h, 0E5h, 032h		; LDA XDE, XBC+
+	db	0BFh, 00Eh, 061h		; LD (XSP+0x0E), XBC
+	db	0EAh, 089h			; LD XBC, XDE
+	db	0AFh, 00Ah, 023h		; LD XHL, (XSP+0x0A)
+	db	0D5h, 0EDh, 022h		; LD DE, (XHL+)
+	db	0BFh, 00Ah, 063h		; LD (XSP+0x0A), XHL
+	db	01Dh, 003h, 0B9h, 0FFh		; CALL 0xFFB903
+	db	0D7h, 0FAh, 061h		; INC 1, QIZ
+	db	0D7h, 0FAh, 0CFh, 000h, 012h	; CP QIZ, 0x1200 (18*256)
+	JR	C, .cse_full_loop		; 67 d9
+	db	09Fh, 004h, 061h		; INCW 1, (XSP+0x04)
+	db	09Fh, 008h, 020h		; LD WA, (XSP+0x08)
+	db	09Fh, 004h, 0F8h		; CP (XSP+0x04), WA
+	JR	C, .cse_track_loop		; 67 ae
 
-.led2:	; LED pattern 2: bit 2
-	db	0F2h, 004h, 000h, 016h, 000h, 004h	; LD (160004h), 04h
-	JR	T, .do_delay		; 68 06
+.cse_check_rem:
+	db	09Fh, 012h, 020h		; LD WA, (XSP+0x12)
+	db	09Fh, 01Ah, 080h		; ADD WA, (XSP+0x1A)
+	db	09Fh, 006h, 0A0h		; SUB WA, (XSP+0x06)
+	db	0D8h, 08Eh			; LD IZ, WA
+	db	0DEh, 0D8h			; CP IZ, 0
+	JR	Z, .cse_done			; 66 48
 
-.led3:	; LED pattern 3: bit 3
-	db	0F2h, 004h, 000h, 016h, 000h, 008h	; LD (160004h), 08h
+	db	09Fh, 006h, 020h		; LD WA, (XSP+0x06)
+	db	0E8h, 012h			; EXTZ XWA
+	db	0DEh, 089h			; LD BC, IZ
+	db	042h, 0A4h, 099h, 000h, 000h	; LD XDE, 0x000099A4
+	db	01Eh, 07Eh, 0FCh		; CALR 0x9FBF92
+	db	0F2h, 0A4h, 099h, 000h, 030h	; LDA XWA, 0x0099A4
+	db	0BFh, 00Ah, 060h		; LD (XSP+0x0A), XWA
+	db	0D7h, 0FAh, 0A8h		; LD QIZ, 0
+	JR	T, .cse_rem_check		; 68 20
 
-.do_delay:
-	LD	XWA, 000186A0h		; 40 a0 86 01 00 - delay count
-	JR	T, Boot_Delay_Loop	; 68 b3 - tail call
+.cse_rem_loop:
+	db	08Fh, 014h, 021h		; LD A, (XSP+0x14)
+	db	0D8h, 012h			; EXTZ WA
+	db	0AFh, 00Eh, 021h		; LD XBC, (XSP+0x0E)
+	db	0F5h, 0E5h, 032h		; LDA XDE, XBC+
+	db	0BFh, 00Eh, 061h		; LD (XSP+0x0E), XBC
+	db	0EAh, 089h			; LD XBC, XDE
+	db	0AFh, 00Ah, 023h		; LD XHL, (XSP+0x0A)
+	db	0D5h, 0EDh, 022h		; LD DE, (XHL+)
+	db	0BFh, 00Ah, 063h		; LD (XSP+0x0A), XHL
+	db	01Dh, 003h, 0B9h, 0FFh		; CALL 0xFFB903
+	db	0D7h, 0FAh, 061h		; INC 1, QIZ
+.cse_rem_check:
+	db	0DEh, 089h			; LD BC, IZ
+	db	0D9h, 0ECh, 008h		; SLA 8, BC
+	db	0D7h, 0FAh, 088h		; LD WA, QIZ
+	db	0D9h, 0F0h			; CP WA, BC
+	JR	C, .cse_rem_loop		; 67 d4
 
-; -----------------------------------------------------------------------------
-; Boot_LED_Blink_Bit2 - Blink LED bit 2 in infinite loop
-; Address: 0x9FC54B (boot-time: 0xFFC54B)
-;
-; Entry: None
-; Exit: Never returns
-;
-; Toggles bit 2 of LED port with delay between toggles.
-; Used for error indication.
-; -----------------------------------------------------------------------------
-Boot_LED_Blink_Bit2:
-	db	0F2h, 004h, 000h, 016h, 0C2h	; CHG 2, (160004h) - toggle bit 2
-	LD	XWA, 000249F0h		; 40 f0 49 02 00 - delay count
-	db	01Eh, 0A6h, 0FFh	; CALR Boot_Delay_Loop
-	JR	T, Boot_LED_Blink_Bit2	; 68 f1
+.cse_done:
+	POP	XIZ				; 5e
+	db	0BFh, 012h, 037h		; LDA XSP, XSP+0x12
+	db	00Fh, 002h, 000h		; RETD 0x0002
 
-; -----------------------------------------------------------------------------
-; Boot_LED_Blink_Bit3 - Blink LED bit 3 in infinite loop
-; Address: 0x9FC55A (boot-time: 0xFFC55A)
-;
-; Entry: None
-; Exit: Never returns
-;
-; Toggles bit 3 of LED port with delay between toggles.
-; Used for error indication.
-; -----------------------------------------------------------------------------
-Boot_LED_Blink_Bit3:
-	db	0F2h, 004h, 000h, 016h, 0C3h	; CHG 3, (160004h) - toggle bit 3
-	LD	XWA, 000249F0h		; 40 f0 49 02 00 - delay count
-	db	01Eh, 097h, 0FFh	; CALR Boot_Delay_Loop
-	JR	T, Boot_LED_Blink_Bit3	; 68 f1
+; =============================================================================
+; Boot_ClearScreen - Clear screen display
+; Address: 0x9FC354
+; =============================================================================
+Boot_ClearScreen:
+	db	00Bh, 008h, 000h		; PUSH 0x0008 - color
+	db	00Bh, 002h, 000h		; PUSH 0x0002 - mode
+	db	040h, 026h, 0A6h, 0FFh, 000h	; LD XWA, 0x00FFA626 - bitmap addr
+	db	031h, 030h, 000h		; LD BC, 0x0030 - X pos
+	db	032h, 0A0h, 000h		; LD DE, 0x00A0 - Y pos
+	db	01Dh, 0FBh, 0CCh, 0FFh		; CALL 0xFFCCFB (Draw_Bitmap)
+	RET					; 0e
 
-; -----------------------------------------------------------------------------
-; Flash_ScanForErased - Scan flash for erased blocks
-; Address: 0x9FC569 (boot-time: 0xFFC569)
-;
-; Entry: XWA = start address
-;        XBC = end address
-; Exit: XHL = 0 if all erased, else address of first non-erased block
-;
-; Scans 64-byte blocks for 0xFFFFFFFF pattern (erased state).
-; -----------------------------------------------------------------------------
-Flash_ScanForErased:
-	LD	XHL, XWA		; e8 8b - start address
-	; First block check (entry point)
-	db	0A3h, 022h		; LD XDE, (XHL) - read dword
-	db	0EAh, 0CFh, 0FFh, 0FFh, 0FFh, 0FFh	; CP XDE, FFFFFFFFh
-	db	0B0h, 0FEh		; RET NZ - not erased, return address
-.advance_block:				; Loop re-entry point
-	db	0BBh, 040h, 033h	; LDA XHL, XHL+40h - advance 64 bytes
-	db	0E9h, 0F3h		; CP XHL, XBC - reached end?
-	JR	NZ, .continue		; 6e 03
-	LD	XHL, 0			; eb a8 - all erased
-	RET				; 0e
-.continue:
-	db	0A3h, 022h		; LD XDE, (XHL) - check next block
-	db	0EAh, 0CFh, 0FFh, 0FFh, 0FFh, 0FFh	; CP XDE, FFFFFFFFh
-	JR	Z, .advance_block	; 66 ec - still erased, continue
-	RET				; 0e - not erased, return current address
+; =============================================================================
+; Boot_WaitDiskInsert - Wait for disk insert and verify type
+; Address: 0x9FC36A
+; Waits for FDC ready, checks disk type matches expected
+; =============================================================================
+Boot_WaitDiskInsert:
+	db	0EFh, 06Ah			; DEC 2, XSP - allocate 2 bytes
+	db	0B7h, 041h			; LD (XSP), A - save expected type
+	db	00Bh, 008h, 000h		; PUSH 0x0008
+	db	00Bh, 002h, 000h		; PUSH 0x0002
+	db	040h, 05Eh, 0ADh, 0FFh, 000h	; LD XWA, 0x00FFAD5E - insert disk msg
+	db	031h, 030h, 000h		; LD BC, 0x0030
+	db	032h, 0A0h, 000h		; LD DE, 0x00A0
+	db	01Dh, 0FBh, 0CCh, 0FFh		; CALL 0xFFCCFB
 
-; -----------------------------------------------------------------------------
-; Flash_CompareRegions - Compare two memory regions
-; Address: 0x9FC58A (boot-time: 0xFFC58A)
-;
-; Entry: XWA = source 1 address
-;        XBC = source 2 address
-;        E = start bank, (XSP+04) = end bank
-; Exit: XHL = 0 if match, non-zero if mismatch
-;
-; Compares memory regions across multiple banks (0-3 for 16-bit flash).
-; Updates LED display at 0x160000 with current bank.
-; Compares up to 0x3FFFF words per bank.
-; -----------------------------------------------------------------------------
-Flash_CompareRegions:
-	LD	XHL, XWA		; e8 8b - source 1
-	db	0CDh, 088h		; LD W, E - start bank
-	db	08Fh, 004h, 021h	; LD A, (XSP+04h) - end bank
-	db	0C9h, 0F0h		; CP W, A
-	JR	UGT, .done		; 6b 22 - start > end, done
+.wdi_wait_remove:
+	db	01Dh, 063h, 0ECh, 0FFh		; CALL 0xFFEC63 - check disk present
+	db	0CFh, 0D8h			; CP L, 0
+	JR	Z, .wdi_check_insert		; 66 08
+	db	01Dh, 063h, 0ECh, 0FFh		; CALL 0xFFEC63
+	db	0CFh, 0D8h			; CP L, 0
+	JR	NZ, .wdi_wait_remove		; 6e f8
 
-.bank_loop:
-	db	0F2h, 000h, 000h, 016h, 040h	; LD (160000h), W - set LED
-	LD	XIX, XBC		; e9 8c - source 2
-	LD	XIY, 0003FFFFh		; 45 ff ff 03 00 - word count
+.wdi_check_insert:
+	db	0E8h, 0A8h			; LD XWA, 0
+.wdi_delay1:
+	db	0E8h, 061h			; INC 1, XWA
+	db	0E8h, 0CFh, 000h, 000h, 004h, 000h	; CP XWA, 0x00040000
+	JR	C, .wdi_delay1			; 67 f6
 
-.compare_loop:
-	db	0D5h, 0F1h, 022h	; LD DE, (XIX+) - get source 2 word
-	db	0D5h, 0EDh, 0F2h	; CP DE, (XHL+) - compare with source 1
-	JR	NZ, .mismatch		; 6e 10
-	LD	XDE, XIY		; ed 8a
-	db	0EDh, 069h		; DEC 1, XIY
-	OR	XDE, XDE		; ea e2
-	JR	NZ, .compare_loop	; 6e f0 - more words
-	db	0C8h, 061h		; INC 1, W - next bank
-	db	0C9h, 0F0h		; CP W, A
-	JR	ULE, .bank_loop		; 63 de
+.wdi_wait_insert:
+	db	01Dh, 063h, 0ECh, 0FFh		; CALL 0xFFEC63
+	db	0CFh, 0D8h			; CP L, 0
+	JR	NZ, .wdi_delay2			; 6e 08
+	db	01Dh, 063h, 0ECh, 0FFh		; CALL 0xFFEC63
+	db	0CFh, 0D8h			; CP L, 0
+	JR	Z, .wdi_wait_insert		; 66 f8
 
-.done:
-	LD	XHL, 0			; eb a8 - match
-.mismatch:
-	db	00Fh, 002h, 000h	; RETD 0002h
+.wdi_delay2:
+	db	0E8h, 0A8h			; LD XWA, 0
+.wdi_delay2_loop:
+	db	0E8h, 061h			; INC 1, XWA
+	db	0E8h, 0CFh, 000h, 000h, 020h, 000h	; CP XWA, 0x00200000
+	JR	C, .wdi_delay2_loop		; 67 f6
 
-; -----------------------------------------------------------------------------
-; Boot_Copy_RAM_to_CustomData - Copy RAM to Custom Data flash
-; Address: 0x9FC5BC (boot-time: 0xFFC5BC)
-;
-; Entry: None
-; Exit: None
-;
-; Copies 0x80000 bytes from RAM (0x200000) to Custom Data flash (0x300000).
-; Uses 16-bit flash programming, 2 banks, 0x40000 words per bank.
-; Updates LED display with bank progress (0-1).
-; -----------------------------------------------------------------------------
-Boot_Copy_RAM_to_CustomData:
-	db	0BFh, 0F6h, 037h	; LDA XSP, XSP+F6h - allocate stack
-	PUSH	XIZ			; 3e
-	db	0F2h, 000h, 000h, 030h, 030h	; LDA XWA, 300000h - dest start
-	db	0BFh, 008h, 060h	; LD (XSP+08h), XWA
-	db	0BFh, 00Ch, 000h, 000h	; LD (XSP+0Ch), 0 - bank counter
+	; Check disk type
+	db	01Eh, 006h, 0FCh		; CALR Boot_DetectDiskType
+	db	087h, 0F7h			; CP L, (XSP) - compare with expected
+	JR	NZ, Boot_WaitDiskInsert		; 6e ac
 
-.bank_loop_cd:
-	db	08Fh, 00Ch, 021h	; LD A, (XSP+0Ch)
-	db	0F2h, 000h, 000h, 016h, 041h	; LD (160000h), A - LED display
-	db	0F2h, 000h, 000h, 020h, 030h	; LDA XWA, 200000h - source
-	db	0BFh, 004h, 060h	; LD (XSP+04h), XWA
-	db	0EEh, 0A8h		; LD XIZ, 0 - word counter
+	; Type matches - clear screen and return
+	db	01Eh, 08Fh, 0FFh		; CALR Boot_ClearScreen
+	db	0EFh, 062h			; INC 2, XSP
+	RET					; 0e
 
-.word_loop_cd:
-	db	0AFh, 008h, 020h	; LD XWA, (XSP+08h) - dest
-	db	0F5h, 0E1h, 031h	; LDA XBC, XWA+ - advance dest
-	db	0BFh, 008h, 060h	; LD (XSP+08h), XWA
-	db	0AFh, 004h, 020h	; LD XWA, (XSP+04h) - source
-	db	0D5h, 0E1h, 022h	; LD DE, (XWA+) - get word
-	db	0BFh, 004h, 060h	; LD (XSP+04h), XWA
-	LD	WA, 1			; d8 a9 - flash bank 1
-	db	01Dh, 003h, 0B9h, 0FFh	; CALL Flash_ProgramWord_16bit
-	db	0EEh, 061h		; INC 1, XIZ
-	db	0EEh, 0CFh, 000h, 000h, 004h, 000h	; CP XIZ, 40000h
-	JR	C, .word_loop_cd	; 67 de
+; =============================================================================
+; Boot_WaitFDCReady - Wait for FDC to become ready
+; Address: 0x9FC3C8
+; Polls FDC status with timeout display
+; =============================================================================
+Boot_WaitFDCReady:
+	PUSH	IZ				; 2e
+	db	036h, 032h, 000h		; LD IZ, 0x0032 - timeout counter
+.wfdc_poll:
+	db	0E8h, 0A8h			; LD XWA, 0
+	db	0F1h, 000h, 00Ch, 060h		; LD (0x0C00), XWA
+	db	01Dh, 017h, 0BDh, 0FFh		; CALL 0xFFBD17 - reset FDC
+	db	01Dh, 085h, 0BEh, 0FFh		; CALL 0xFFBE85 - check FDC ready
+	db	0DBh, 0CFh, 0FFh, 0FFh		; CP HL, 0xFFFF - error?
+	JR	NZ, .wfdc_done			; 6e 29
 
-	db	08Fh, 00Ch, 061h	; INC 1, (XSP+0Ch) - next bank
-	db	08Fh, 00Ch, 03Fh, 002h	; CP (XSP+0Ch), 02h
-	JR	C, .bank_loop_cd	; 67 c3
+	; Timeout handling
+	db	0E1h, 000h, 00Ch, 020h		; LD XWA, (0x0C00)
+	db	0E8h, 0CFh, 0F4h, 001h, 000h, 000h	; CP XWA, 0x000001F4 (500)
+	JR	ULE, .wfdc_continue		; 63 13
 
-	POP	XIZ			; 5e
-	db	0BFh, 00Ah, 037h	; LDA XSP, XSP+0Ah - deallocate
-	RET				; 0e
+	; Update display
+	db	0DEh, 060h			; INC 0, IZ - increment progress
+	db	0DEh, 088h			; LD WA, IZ
+	db	031h, 0B4h, 000h		; LD BC, 0x00B4 - X pos
+	db	0DAh, 0AEh			; LD DE, 5 - mode
+	db	01Dh, 09Ah, 0CDh, 0FFh		; CALL 0xFFCD9A (display progress)
+	db	0E8h, 0A8h			; LD XWA, 0
+	db	0F1h, 000h, 00Ch, 060h		; LD (0x0C00), XWA
 
-; -----------------------------------------------------------------------------
-; Boot_Copy_RAM_to_HDAE_Low - Copy RAM to HDAE flash (banks 0-3)
-; Address: 0x9FC60E (boot-time: 0xFFC60E)
-;
-; Entry: None
-; Exit: None
-;
-; Copies from HDAE RAM (0x280000) to Table Data flash (0x800000).
-; Uses 32-bit flash programming, 4 banks (0-3), 0x20000 dwords per bank.
-; Updates LED display with bank progress (0-3).
-; -----------------------------------------------------------------------------
-Boot_Copy_RAM_to_HDAE_Low:
-	db	0BFh, 0F6h, 037h	; LDA XSP, XSP+F6h
-	PUSH	XIZ			; 3e
-	LD	XWA, 000800000h		; 40 00 00 80 00 - dest start
-	db	0BFh, 008h, 060h	; LD (XSP+08h), XWA
-	db	0BFh, 00Ch, 000h, 000h	; LD (XSP+0Ch), 0 - bank counter
+.wfdc_continue:
+	db	01Dh, 085h, 0BEh, 0FFh		; CALL 0xFFBE85
+	db	0DBh, 0CFh, 0FFh, 0FFh		; CP HL, 0xFFFF
+	JR	Z, .wfdc_poll			; 66 d7
 
-.bank_loop_low:
-	db	08Fh, 00Ch, 021h	; LD A, (XSP+0Ch)
-	db	0F2h, 000h, 000h, 016h, 041h	; LD (160000h), A - LED
-	db	0F2h, 000h, 000h, 028h, 030h	; LDA XWA, 280000h - source
-	db	0BFh, 004h, 060h	; LD (XSP+04h), XWA
-	db	0EEh, 0A8h		; LD XIZ, 0 - dword counter
+.wfdc_done:
+	POP	IZ				; 4e
+	RET					; 0e
 
-.dword_loop_low:
-	db	0AFh, 008h, 020h	; LD XWA, (XSP+08h) - dest
-	db	0F5h, 0E2h, 031h	; LDA XBC, XWA+ - advance 4
-	db	0BFh, 008h, 060h	; LD (XSP+08h), XWA
-	LD	XWA, XBC		; e9 88 - dest address
-	db	0AFh, 004h, 022h	; LD XDE, (XSP+04h) - source
-	db	0E5h, 0EAh, 021h	; LD XBC, (XDE+) - get dword
-	db	0BFh, 004h, 062h	; LD (XSP+04h), XDE
-	db	01Dh, 0D7h, 0BCh, 0FFh	; CALL Flash_ProgramWord_32bit
-	db	0EEh, 061h		; INC 1, XIZ
-	db	0EEh, 0CFh, 000h, 000h, 002h, 000h	; CP XIZ, 20000h
-	JR	C, .dword_loop_low	; 67 de
+; =============================================================================
+; Boot_LoadDiskData - Main disk data loading dispatcher
+; Address: 0x9FC40B
+; Dispatches based on disk type (1-8) to appropriate handler
+; =============================================================================
+Boot_LoadDiskData:
+	db	0EFh, 06Ah			; DEC 2, XSP
+	db	0B7h, 041h			; LD (XSP), A - save disk type
+	db	00Bh, 008h, 000h		; PUSH 0x0008
+	db	00Bh, 002h, 000h		; PUSH 0x0002
+	db	040h, 0BEh, 0A3h, 0FFh, 000h	; LD XWA, 0x00FFA3BE - loading msg
+	db	031h, 030h, 000h		; LD BC, 0x0030
+	db	032h, 0A0h, 000h		; LD DE, 0x00A0
+	db	01Dh, 0FBh, 0CCh, 0FFh		; CALL 0xFFCCFB
 
-	db	08Fh, 00Ch, 061h	; INC 1, (XSP+0Ch)
-	db	08Fh, 00Ch, 03Fh, 004h	; CP (XSP+0Ch), 04h
-	JR	C, .bank_loop_low	; 67 c3
+	; Validate disk type 1-8
+	db	087h, 021h			; LD A, (XSP)
+	db	0D8h, 012h			; EXTZ WA
+	db	0D8h, 069h			; DEC 1, WA
+	db	0D8h, 0D8h			; CP WA, 0
+	db	071h, 0B6h, 000h		; JRL LT, .ldd_error (type < 1)
+	db	0D8h, 0DFh			; CP WA, 7
+	db	07Ah, 0B1h, 000h		; JRL GT, .ldd_error (type > 8)
 
-	POP	XIZ			; 5e
-	db	0BFh, 00Ah, 037h	; LDA XSP, XSP+0Ah
-	RET				; 0e
+	; Dispatch via jump table
+	db	0D8h, 080h			; ADD WA, WA - WA *= 2
+	db	0F2h, 040h, 0A1h, 0FFh, 034h	; LDA XIX, 0xFFA140 - jump table
+	db	0D3h, 007h, 0F0h, 0E0h, 020h	; LD WA, (XIX+WA)
+	db	0F2h, 04Ah, 0C4h, 0FFh, 034h	; LDA XIX, 0xFFC44A - base addr
+	db	0F3h, 007h, 0F0h, 0E0h, 0D8h	; JP T, XIX+WA - dispatch
 
-; -----------------------------------------------------------------------------
-; Boot_Copy_RAM_to_HDAE_High - Copy RAM to HDAE flash (banks 4-7)
-; Address: 0x9FC660 (boot-time: 0xFFC660)
-;
-; Entry: None
-; Exit: None
-;
-; Continues copy from HDAE RAM to Table Data flash.
-; Uses 32-bit flash programming, 4 banks (4-7), 0x20000 dwords per bank.
-; Updates LED display with bank progress (4-7).
-; -----------------------------------------------------------------------------
-Boot_Copy_RAM_to_HDAE_High:
-	db	0BFh, 0F6h, 037h	; LDA XSP, XSP+F6h
-	PUSH	XIZ			; 3e
-	LD	XWA, 000800000h		; 40 00 00 80 00 - dest start
-	db	0BFh, 008h, 060h	; LD (XSP+08h), XWA
-	db	0BFh, 00Ch, 000h, 004h	; LD (XSP+0Ch), 04h - bank 4
+; Type 1 handler (0x9FC44A): Table data disk 1
+.ldd_type1:
+	db	01Eh, 07Bh, 0FFh		; CALR Boot_WaitFDCReady
+	db	01Eh, 004h, 0FFh		; CALR Boot_ClearScreen
+	db	030h, 024h, 000h		; LD WA, 0x0024 - start sector
+	db	041h, 000h, 000h, 080h, 000h	; LD XBC, 0x00800000 - dest
+	db	01Eh, 086h, 0FCh		; CALR Boot_CopySectors
+	db	0D8h, 0AAh			; LD WA, 2 - disk 2
+	db	01Eh, 00Ah, 0FFh		; CALR Boot_WaitDiskInsert
+	db	030h, 024h, 000h		; LD WA, 0x0024
+	db	041h, 000h, 000h, 090h, 000h	; LD XBC, 0x00900000
+	JR	T, .ldd_copy2			; 68 1e
 
-.bank_loop_high:
-	db	08Fh, 00Ch, 021h	; LD A, (XSP+0Ch)
-	db	0F2h, 000h, 000h, 016h, 041h	; LD (160000h), A - LED
-	db	0F2h, 000h, 000h, 028h, 030h	; LDA XWA, 280000h - source
-	db	0BFh, 004h, 060h	; LD (XSP+04h), XWA
-	db	0EEh, 0A8h		; LD XIZ, 0 - dword counter
+; Type 2 handler (0x9FC46A): Table data disk 2 (start from disk 2)
+.ldd_type2:
+	db	01Eh, 05Bh, 0FFh		; CALR Boot_WaitFDCReady
+	db	01Eh, 0E4h, 0FEh		; CALR Boot_ClearScreen
+	db	030h, 024h, 000h		; LD WA, 0x0024
+	db	041h, 000h, 000h, 080h, 000h	; LD XBC, 0x00800000
+	db	01Eh, 066h, 0FCh		; CALR Boot_CopySectors
+	db	0D8h, 0ACh			; LD WA, 4 - next is disk 4
+	db	01Eh, 0EAh, 0FEh		; CALR Boot_WaitDiskInsert
+	db	030h, 024h, 000h		; LD WA, 0x0024
+	db	041h, 000h, 000h, 090h, 000h	; LD XBC, 0x00900000
 
-.dword_loop_high:
-	db	0AFh, 008h, 020h	; LD XWA, (XSP+08h) - dest
-	db	0F5h, 0E2h, 031h	; LDA XBC, XWA+
-	db	0BFh, 008h, 060h	; LD (XSP+08h), XWA
-	LD	XWA, XBC		; e9 88
-	db	0AFh, 004h, 022h	; LD XDE, (XSP+04h)
-	db	0E5h, 0EAh, 021h	; LD XBC, (XDE+)
-	db	0BFh, 004h, 062h	; LD (XSP+04h), XDE
-	db	01Dh, 0D7h, 0BCh, 0FFh	; CALL Flash_ProgramWord_32bit
-	db	0EEh, 061h		; INC 1, XIZ
-	db	0EEh, 0CFh, 000h, 000h, 002h, 000h	; CP XIZ, 20000h
-	JR	C, .dword_loop_high	; 67 de
+.ldd_copy2:
+	db	01Eh, 056h, 0FCh		; CALR Boot_CopySectors
+	JR	T, .ldd_done			; 68 55
 
-	db	08Fh, 00Ch, 061h	; INC 1, (XSP+0Ch)
-	db	08Fh, 00Ch, 03Fh, 008h	; CP (XSP+0Ch), 08h
-	JR	C, .bank_loop_high	; 67 c3
+; Type 3 handler (0x9FC48D): Custom data flash
+.ldd_type3:
+	db	0D8h, 0A9h			; LD WA, 1
+	db	01Dh, 0DBh, 0BBh, 0FFh		; CALL 0xFFBBDB
+	db	01Eh, 0BEh, 0FEh		; CALR Boot_ClearScreen
+	db	00Bh, 000h, 008h		; PUSH 0x0800 - size
+	db	0D8h, 0A9h			; LD WA, 1 - bank 1
+	db	031h, 024h, 000h		; LD BC, 0x0024 - start sector
+	db	042h, 000h, 000h, 030h, 000h	; LD XDE, 0x00300000 - dest
+	JR	T, .ldd_copy_ext		; 68 16
 
-	POP	XIZ			; 5e
-	db	0BFh, 00Ah, 037h	; LDA XSP, XSP+0Ah
-	RET				; 0e
+; Type 4 handler (0x9FC4A5): HDAE5000 firmware
+.ldd_type4:
+	db	0D8h, 0AAh			; LD WA, 2
+	db	01Dh, 0DBh, 0BBh, 0FFh		; CALL 0xFFBBDB
+	db	01Eh, 0A6h, 0FEh		; CALR Boot_ClearScreen
+	db	00Bh, 000h, 004h		; PUSH 0x0400 - size
+	db	0D8h, 0AAh			; LD WA, 2 - bank 2
+	db	031h, 024h, 000h		; LD BC, 0x0024
+	db	042h, 000h, 000h, 028h, 000h	; LD XDE, 0x00280000
 
-; -----------------------------------------------------------------------------
-; Remaining boot code routines
-; Address: 0x9FC6B2 onwards (boot-time: 0xFFC6B2)
-;
-; Contains:
-;   - Boot_Main_Entry: Main boot sequence (349 bytes)
-;   - Boot_Recovery_Entry: Recovery mode handler (179 bytes)
-; -----------------------------------------------------------------------------
-	binclude "includes/bootcode_post_fdc_part7.bin"
+.ldd_copy_ext:
+	db	01Eh, 055h, 0FDh		; CALR Boot_CopySectorsEx
+	JR	T, .ldd_done			; 68 22
+
+; Type 5 handler (0x9FC4C0): Erase and reprogram
+.ldd_type5:
+	db	0D8h, 0A9h			; LD WA, 1
+	db	041h, 0FFh, 0FFh, 03Fh, 000h	; LD XBC, 0x003FFFFF - end addr
+	db	01Dh, 017h, 0BAh, 0FFh		; CALL 0xFFBA17 (Flash_SectorErase)
+	db	01Eh, 0FAh, 0FEh		; CALR Boot_WaitFDCReady
+	db	01Eh, 083h, 0FEh		; CALR Boot_ClearScreen
+	db	01Eh, 07Ch, 005h		; CALR Boot_ProgramHDAE_Part1
+	db	01Eh, 0DCh, 004h		; CALR Boot_ProgramCustomFlash
+	JR	T, .ldd_done			; 68 09
+
+; Type 6/7/8 handlers continue
+.ldd_type678:
+	db	01Eh, 0ECh, 0FEh		; CALR Boot_WaitFDCReady
+	db	01Eh, 075h, 0FEh		; CALR Boot_ClearScreen
+	db	01Eh, 06Eh, 005h		; CALR Boot_ProgramHDAE_Part1
+
+.ldd_done:
+	db	0EFh, 062h			; INC 2, XSP
+	RET					; 0e
+
+.ldd_error:
+	db	00Bh, 008h, 000h		; PUSH 0x0008
+	db	00Bh, 002h, 000h		; PUSH 0x0002
+	db	040h, 0C6h, 0AFh, 0FFh, 000h	; LD XWA, 0x00FFAFC6 - error msg
+	db	031h, 030h, 000h		; LD BC, 0x0030
+	db	032h, 0A0h, 000h		; LD DE, 0x00A0
+	db	01Dh, 0FBh, 0CCh, 0FFh		; CALL 0xFFCCFB
+	db	0EFh, 062h			; INC 2, XSP
+.ldd_halt:
+	JR	T, .ldd_halt			; 68 fe - infinite loop
+
+; =============================================================================
+; Boot_DelayLoop - Simple delay routine
+; Address: 0x9FC4FE
+; =============================================================================
+Boot_DelayLoop:
+	db	0E9h, 0A8h			; LD XBC, 0
+	db	0E8h, 0F1h			; CP XBC, XWA
+	db	0B0h, 0FFh			; RET NC
+.delay_loop:
+	db	0E9h, 061h			; INC 1, XBC
+	db	0E8h, 0F1h			; CP XBC, XWA
+	JR	C, .delay_loop			; 67 fa
+	RET					; 0e
+
+; =============================================================================
+; Boot_BlinkLED - Cycle through LED pattern
+; Address: 0x9FC50B
+; Controls LED at 0x160004 (HDAE5000 PPI port)
+; =============================================================================
+Boot_BlinkLED:
+	db	0C1h, 008h, 00Ch, 061h		; INC 1, (0x0C08) - LED counter
+	db	0C1h, 008h, 00Ch, 021h		; LD A, (0x0C08)
+	db	0C9h, 0CCh, 003h		; AND A, 0x03 - mask to 0-3
+	db	0C9h, 0DBh			; CP A, 3
+	JR	Z, .led_pattern3		; 66 24
+	db	0C9h, 0DAh			; CP A, 2
+	JR	Z, .led_pattern2		; 66 18
+	db	0C9h, 0D9h			; CP A, 1
+	JR	Z, .led_pattern1		; 66 0c
+	db	0C9h, 0D8h			; CP A, 0
+	JR	NZ, .led_delay			; 6e 1e
+
+	; Pattern 0: bit 0
+	db	0F2h, 004h, 000h, 016h, 000h, 001h	; LD (0x160004), 0x01
+	JR	T, .led_delay			; 68 16
+
+.led_pattern1:
+	db	0F2h, 004h, 000h, 016h, 000h, 002h	; LD (0x160004), 0x02
+	JR	T, .led_delay			; 68 0e
+
+.led_pattern2:
+	db	0F2h, 004h, 000h, 016h, 000h, 004h	; LD (0x160004), 0x04
+	JR	T, .led_delay			; 68 06
+
+.led_pattern3:
+	db	0F2h, 004h, 000h, 016h, 000h, 008h	; LD (0x160004), 0x08
+
+.led_delay:
+	db	040h, 0A0h, 086h, 001h, 000h	; LD XWA, 0x000186A0 (100000)
+	JR	T, Boot_DelayLoop		; 68 b3 -> tail call
+
+; =============================================================================
+; LED_ToggleBit2 - Toggle LED bit 2 animation loop
+; Address: 0x9FC54B
+; =============================================================================
+LED_ToggleBit2:
+	db	0F2h, 004h, 000h, 016h, 0C2h	; CHG 2, (0x160004) - toggle bit 2
+	db	040h, 0F0h, 049h, 002h, 000h	; LD XWA, 0x000249F0 (150000)
+	db	01Eh, 0A6h, 0FFh		; CALR Boot_DelayLoop
+	JR	T, LED_ToggleBit2		; 68 f1
+
+; =============================================================================
+; LED_ToggleBit3 - Toggle LED bit 3 animation loop
+; Address: 0x9FC55A
+; =============================================================================
+LED_ToggleBit3:
+	db	0F2h, 004h, 000h, 016h, 0C3h	; CHG 3, (0x160004) - toggle bit 3
+	db	040h, 0F0h, 049h, 002h, 000h	; LD XWA, 0x000249F0
+	db	01Eh, 097h, 0FFh		; CALR Boot_DelayLoop
+	JR	T, LED_ToggleBit3		; 68 f1
+
+; =============================================================================
+; Boot_FindValidBlock - Find first valid (non-empty) 64-byte block
+; Address: 0x9FC569
+; Input: XWA = start address, XBC = end address
+; Returns: XHL = block address or 0 if not found
+; =============================================================================
+Boot_FindValidBlock:
+	db	0E8h, 08Bh			; LD XHL, XWA
+.fvb_check:
+	db	0A3h, 022h			; LD XDE, (XHL)
+	db	0EAh, 0CFh, 0FFh, 0FFh, 0FFh, 0FFh	; CP XDE, 0xFFFFFFFF
+	db	0B0h, 0FEh			; RET NZ - found valid data
+.fvb_next:
+	db	0BBh, 040h, 033h		; LDA XHL, XHL+0x40 - next 64-byte block
+	db	0E9h, 0F3h			; CP XHL, XBC
+	JR	NZ, .fvb_not_end		; 6e 03
+	db	0EBh, 0A8h			; LD XHL, 0 - not found
+	RET					; 0e
+.fvb_not_end:
+	db	0A3h, 022h			; LD XDE, (XHL)
+	db	0EAh, 0CFh, 0FFh, 0FFh, 0FFh, 0FFh	; CP XDE, 0xFFFFFFFF
+	JR	Z, .fvb_next			; 66 ec
+	RET					; 0e - found valid
+
+; =============================================================================
+; Boot_VerifyFlash - Verify flash programming against source
+; Address: 0x9FC58A
+; Input: XWA = flash addr, XBC = source addr, (XSP+4) = bank count
+; Returns: XHL = 0 if match, non-zero if mismatch
+; =============================================================================
+Boot_VerifyFlash:
+	db	0E8h, 08Bh			; LD XHL, XWA - flash addr
+	db	0CDh, 088h			; LD W, E - bank number
+	db	08Fh, 004h, 021h		; LD A, (XSP+0x04) - max bank
+	db	0C9h, 0F0h			; CP W, A
+	JR	UGT, .vf_success		; 6b 22
+
+.vf_bank_loop:
+	db	0F2h, 000h, 000h, 016h, 040h	; LD (0x160000), W - set bank
+	db	0E9h, 08Ch			; LD XIX, XBC - source addr
+	db	045h, 0FFh, 0FFh, 003h, 000h	; LD XIY, 0x0003FFFF - 256KB-1
+
+.vf_compare:
+	db	0D5h, 0F1h, 022h		; LD DE, (XIX+) - read source
+	db	0D5h, 0EDh, 0F2h		; CP DE, (XHL+) - compare with flash
+	JR	NZ, .vf_mismatch		; 6e 10
+	db	0EDh, 08Ah			; LD XDE, XIY
+	db	0EDh, 069h			; DEC 1, XIY
+	db	0EAh, 0E2h			; OR XDE, XDE
+	JR	NZ, .vf_compare			; 6e f0
+	db	0C8h, 061h			; INC 1, W - next bank
+	db	0C9h, 0F0h			; CP W, A
+	JR	ULE, .vf_bank_loop		; 63 de
+
+.vf_success:
+	db	0EBh, 0A8h			; LD XHL, 0 - success
+.vf_mismatch:
+	db	00Fh, 002h, 000h		; RETD 0x0002
+
+; =============================================================================
+; Boot_ProgramCustomFlash - Program custom data flash (0x300000)
+; Address: 0x9FC5BC
+; Copies 256KB from table_data ROM (0x800000) to custom data (0x300000)
+; Uses 2 banks
+; =============================================================================
+Boot_ProgramCustomFlash:
+	db	0BFh, 0F6h, 037h		; LDA XSP, XSP+0xF6 - allocate 10 bytes
+	PUSH	XIZ				; 3e
+	db	0F2h, 000h, 000h, 030h, 030h	; LDA XWA, 0x300000 - dest
+	db	0BFh, 008h, 060h		; LD (XSP+0x08), XWA
+	db	0BFh, 00Ch, 000h, 000h		; LD (XSP+0x0C), 0x00 - bank
+
+.pcf_bank_loop:
+	db	08Fh, 00Ch, 021h		; LD A, (XSP+0x0C)
+	db	0F2h, 000h, 000h, 016h, 041h	; LD (0x160000), A - set bank
+	db	0F2h, 000h, 000h, 020h, 030h	; LDA XWA, 0x200000 - source
+	db	0BFh, 004h, 060h		; LD (XSP+0x04), XWA
+	db	0EEh, 0A8h			; LD XIZ, 0 - counter
+
+.pcf_copy_loop:
+	db	0AFh, 008h, 020h		; LD XWA, (XSP+0x08) - dest ptr
+	db	0F5h, 0E1h, 031h		; LDA XBC, XWA+
+	db	0BFh, 008h, 060h		; LD (XSP+0x08), XWA
+	db	0AFh, 004h, 020h		; LD XWA, (XSP+0x04) - source ptr
+	db	0D5h, 0E1h, 022h		; LD DE, (XWA+)
+	db	0BFh, 004h, 060h		; LD (XSP+0x04), XWA
+	db	0D8h, 0A9h			; LD WA, 1 - bank 1
+	db	01Dh, 003h, 0B9h, 0FFh		; CALL 0xFFB903 (Flash_ProgramWord_16bit)
+	db	0EEh, 061h			; INC 1, XIZ
+	db	0EEh, 0CFh, 000h, 000h, 004h, 000h	; CP XIZ, 0x00040000 (256K)
+	JR	C, .pcf_copy_loop		; 67 de
+
+	db	08Fh, 00Ch, 061h		; INC 1, (XSP+0x0C)
+	db	08Fh, 00Ch, 03Fh, 002h		; CP (XSP+0x0C), 0x02
+	JR	C, .pcf_bank_loop		; 67 c3
+
+	POP	XIZ				; 5e
+	db	0BFh, 00Ah, 037h		; LDA XSP, XSP+0x0A
+	RET					; 0e
+
+; =============================================================================
+; Boot_ProgramHDAE_Part1 - Program HDAE5000 ROM banks 0-3
+; Address: 0x9FC60E
+; Copies from table_data (0x800000) to HDAE5000 (0x280000)
+; =============================================================================
+Boot_ProgramHDAE_Part1:
+	db	0BFh, 0F6h, 037h		; LDA XSP, XSP+0xF6
+	PUSH	XIZ				; 3e
+	db	040h, 000h, 000h, 080h, 000h	; LD XWA, 0x00800000 - source
+	db	0BFh, 008h, 060h		; LD (XSP+0x08), XWA
+	db	0BFh, 00Ch, 000h, 000h		; LD (XSP+0x0C), 0x00 - bank
+
+.phd1_bank_loop:
+	db	08Fh, 00Ch, 021h		; LD A, (XSP+0x0C)
+	db	0F2h, 000h, 000h, 016h, 041h	; LD (0x160000), A - set bank
+	db	0F2h, 000h, 000h, 028h, 030h	; LDA XWA, 0x280000 - dest
+	db	0BFh, 004h, 060h		; LD (XSP+0x04), XWA
+	db	0EEh, 0A8h			; LD XIZ, 0
+
+.phd1_copy_loop:
+	db	0AFh, 008h, 020h		; LD XWA, (XSP+0x08)
+	db	0F5h, 0E2h, 031h		; LDA XBC, XWA+
+	db	0BFh, 008h, 060h		; LD (XSP+0x08), XWA
+	db	0E9h, 088h			; LD XWA, XBC
+	db	0AFh, 004h, 022h		; LD XDE, (XSP+0x04)
+	db	0E5h, 0EAh, 021h		; LD XBC, (XDE+)
+	db	0BFh, 004h, 062h		; LD (XSP+0x04), XDE
+	db	01Dh, 0D7h, 0BCh, 0FFh		; CALL 0xFFBCD7 (write with callback)
+	db	0EEh, 061h			; INC 1, XIZ
+	db	0EEh, 0CFh, 000h, 000h, 002h, 000h	; CP XIZ, 0x00020000 (128K)
+	JR	C, .phd1_copy_loop		; 67 de
+
+	db	08Fh, 00Ch, 061h		; INC 1, (XSP+0x0C)
+	db	08Fh, 00Ch, 03Fh, 004h		; CP (XSP+0x0C), 0x04
+	JR	C, .phd1_bank_loop		; 67 c3
+
+	POP	XIZ				; 5e
+	db	0BFh, 00Ah, 037h		; LDA XSP, XSP+0x0A
+	RET					; 0e
+
+; =============================================================================
+; Boot_ProgramHDAE_Part2 - Program HDAE5000 ROM banks 4-7
+; Address: 0x9FC660
+; =============================================================================
+Boot_ProgramHDAE_Part2:
+	db	0BFh, 0F6h, 037h		; LDA XSP, XSP+0xF6
+	PUSH	XIZ				; 3e
+	db	040h, 000h, 000h, 080h, 000h	; LD XWA, 0x00800000
+	db	0BFh, 008h, 060h		; LD (XSP+0x08), XWA
+	db	0BFh, 00Ch, 000h, 004h		; LD (XSP+0x0C), 0x04 - start at bank 4
+
+.phd2_bank_loop:
+	db	08Fh, 00Ch, 021h		; LD A, (XSP+0x0C)
+	db	0F2h, 000h, 000h, 016h, 041h	; LD (0x160000), A
+	db	0F2h, 000h, 000h, 028h, 030h	; LDA XWA, 0x280000
+	db	0BFh, 004h, 060h		; LD (XSP+0x04), XWA
+	db	0EEh, 0A8h			; LD XIZ, 0
+
+.phd2_copy_loop:
+	db	0AFh, 008h, 020h		; LD XWA, (XSP+0x08)
+	db	0F5h, 0E2h, 031h		; LDA XBC, XWA+
+	db	0BFh, 008h, 060h		; LD (XSP+0x08), XWA
+	db	0E9h, 088h			; LD XWA, XBC
+	db	0AFh, 004h, 022h		; LD XDE, (XSP+0x04)
+	db	0E5h, 0EAh, 021h		; LD XBC, (XDE+)
+	db	0BFh, 004h, 062h		; LD (XSP+0x04), XDE
+	db	01Dh, 0D7h, 0BCh, 0FFh		; CALL 0xFFBCD7
+	db	0EEh, 061h			; INC 1, XIZ
+	db	0EEh, 0CFh, 000h, 000h, 002h, 000h	; CP XIZ, 0x00020000
+	JR	C, .phd2_copy_loop		; 67 de
+
+	db	08Fh, 00Ch, 061h		; INC 1, (XSP+0x0C)
+	db	08Fh, 00Ch, 03Fh, 008h		; CP (XSP+0x0C), 0x08 - end at bank 8
+	JR	C, .phd2_bank_loop		; 67 c3
+
+	POP	XIZ				; 5e
+	db	0BFh, 00Ah, 037h		; LDA XSP, XSP+0x0A
+	RET					; 0e
+
+; =============================================================================
+; Boot_InitHDAE_PPI - Initialize HDAE5000 PPI interface
+; Address: 0x9FC6B2
+; Sets up 8255 PPI at 0x160000-0x160006
+; =============================================================================
+Boot_InitHDAE_PPI:
+	db	0D7h, 0FAh, 004h		; PUSH QIZ
+	db	0C7h, 0FBh, 0A8h		; LD QIZH, 0
+	db	008h, 0E4h, 000h		; LD (0xE4), 0x00 - TMP94C241 SFR init
+	db	008h, 0E0h, 000h		; LD (0xE0), 0x00
+	db	008h, 0EDh, 000h		; LD (0xED), 0x00
+	db	008h, 0E3h, 000h		; LD (0xE3), 0x00
+	db	008h, 0EBh, 000h		; LD (0xEB), 0x00
+	db	0F1h, 054h, 001h, 000h, 066h	; LD (0x0154), 0x66
+	db	0F2h, 006h, 000h, 016h, 000h, 082h	; LD (0x160006), 0x82 - PPI mode
+	db	0F2h, 000h, 000h, 016h, 000h, 000h	; LD (0x160000), 0x00 - Port A
+	db	0F2h, 004h, 000h, 016h, 000h, 000h	; LD (0x160004), 0x00 - Port C
+	db	0F2h, 004h, 000h, 016h, 000h, 00Fh	; LD (0x160004), 0x0F - LED bits on
+	db	040h, 0A0h, 0BBh, 00Dh, 000h	; LD XWA, 0x000DBBA0 (900000)
+	db	01Eh, 012h, 0FEh		; CALR Boot_DelayLoop
+	db	0F2h, 004h, 000h, 016h, 000h, 000h	; LD (0x160004), 0x00 - LEDs off
+	db	0C2h, 002h, 000h, 016h		; LD (0x160002), A - Port B (4 bytes)
 
 
 ; =============================================================================
@@ -3365,7 +3270,655 @@ LZSS_Decompress:
 ;
 ; See also: ../kn5000-docs/boot-sequence.md for boot flow documentation
 ; =============================================================================
-	binclude "includes/bootcode_post_lzss.bin"
+
+; =============================================================================
+; Boot_FlashUpdate_Main - Main flash update entry point
+; Address: 0x9FCC2A
+; Called from boot sequence to check for and perform flash updates
+; =============================================================================
+Boot_FlashUpdate_Main:
+	db	0D7h, 0FAh, 004h		; PUSH QIZ
+	db	01Dh, 063h, 0ECh, 0FFh		; CALL 0xFFEC63 - check disk present
+	db	0CFh, 0D8h			; CP L, 0
+	db	076h, 0C1h, 000h		; JRL Z, .update_done - no disk
+
+	; Initialize FDC and detect disk type
+	db	01Eh, 0CEh, 0F2h		; CALR 0x9FBF07 (FDC_Init)
+	db	01Eh, 088h, 0F3h		; CALR Boot_DetectDiskType
+	db	0C7h, 0FBh, 09Fh		; LD QIZH, L - save disk type
+
+	; Check region code
+	db	01Dh, 000h, 0B7h, 0FFh		; CALL 0xFFB700 (Boot_Get_Region_Code)
+	db	0CFh, 0DCh			; CP L, 4
+	JR	Z, .update_check_flash		; 66 58
+
+	; Check flash ID
+	db	01Dh, 06Ah, 0BCh, 0FFh		; CALL 0xFFBC6A
+	db	0EBh, 0CFh, 0FFh, 0FFh, 0FFh, 0FFh	; CP XHL, 0xFFFFFFFF
+	JR	Z, .update_check_flash		; 66 4c
+
+	; Check disk type 6 (skip for type 6)
+	db	0C7h, 0FBh, 0DEh		; CP QIZH, 6
+	JR	Z, .update_check_flash		; 66 47
+
+	; Display "Flash Memory Update" message
+	db	00Bh, 008h, 000h		; PUSH 0x0008 - color
+	db	00Bh, 002h, 000h		; PUSH 0x0002 - mode
+	db	040h, 056h, 0A1h, 0FFh, 000h	; LD XWA, 0x00FFA156 - bitmap addr
+	db	031h, 030h, 000h		; LD BC, 0x0030 - X
+	db	032h, 050h, 000h		; LD DE, 0x0050 - Y
+	db	01Dh, 0FBh, 0CCh, 0FFh		; CALL Draw_Bitmap
+
+	; Execute disk type handler
+	db	0C7h, 0FBh, 089h		; LD A, QIZH
+	db	0D8h, 012h			; EXTZ WA
+	db	01Eh, 096h, 0F7h		; CALR Boot_LoadDiskData
+
+	; Display "Completed" message
+	db	00Bh, 008h, 000h		; PUSH 0x0008
+	db	00Bh, 001h, 000h		; PUSH 0x0001
+	db	040h, 08Eh, 0A8h, 0FFh, 000h	; LD XWA, 0x00FFA88E
+	db	031h, 030h, 000h		; LD BC, 0x0030
+	db	032h, 0A0h, 000h		; LD DE, 0x00A0
+	db	01Dh, 0FBh, 0CCh, 0FFh		; CALL Draw_Bitmap
+
+	; Display "Turn On Again" message
+	db	00Bh, 008h, 000h		; PUSH 0x0008
+	db	00Bh, 001h, 000h		; PUSH 0x0001
+	db	040h, 02Eh, 0B2h, 0FFh, 000h	; LD XWA, 0x00FFB22E
+	db	031h, 030h, 000h		; LD BC, 0x0030
+	db	032h, 0C8h, 000h		; LD DE, 0x00C8
+	db	01Dh, 0FBh, 0CCh, 0FFh		; CALL Draw_Bitmap
+
+.update_check_flash:
+	; Read flash ID with bank 2
+	db	0D8h, 0AAh			; LD WA, 2
+	db	01Dh, 088h, 0B8h, 0FFh		; CALL 0xFFB888 (Flash_ReadID_16bit)
+	db	0DBh, 0CFh, 0FFh, 0FFh		; CP HL, 0xFFFF
+	JR	Z, .update_done			; 66 4c
+
+	; Only proceed if disk type 6
+	db	0C7h, 0FBh, 0DEh		; CP QIZH, 6
+	JR	NZ, .update_done		; 6e 47
+
+	; Display update messages and perform update
+	db	00Bh, 008h, 000h		; PUSH 0x0008
+	db	00Bh, 002h, 000h		; PUSH 0x0002
+	db	040h, 056h, 0A1h, 0FFh, 000h	; LD XWA, 0x00FFA156
+	db	031h, 030h, 000h		; LD BC, 0x0030
+	db	032h, 050h, 000h		; LD DE, 0x0050
+	db	01Dh, 0FBh, 0CCh, 0FFh		; CALL Draw_Bitmap
+
+	db	0C7h, 0FBh, 089h		; LD A, QIZH
+	db	0D8h, 012h			; EXTZ WA
+	db	01Eh, 03Eh, 0F7h		; CALR Boot_LoadDiskData
+
+	db	00Bh, 008h, 000h		; PUSH 0x0008
+	db	00Bh, 001h, 000h		; PUSH 0x0001
+	db	040h, 08Eh, 0A8h, 0FFh, 000h	; LD XWA, 0x00FFA88E
+	db	031h, 030h, 000h		; LD BC, 0x0030
+	db	032h, 0A0h, 000h		; LD DE, 0x00A0
+	db	01Dh, 0FBh, 0CCh, 0FFh		; CALL Draw_Bitmap
+
+	db	00Bh, 008h, 000h		; PUSH 0x0008
+	db	00Bh, 001h, 000h		; PUSH 0x0001
+	db	040h, 02Eh, 0B2h, 0FFh, 000h	; LD XWA, 0x00FFB22E
+	db	031h, 030h, 000h		; LD BC, 0x0030
+	db	032h, 0C8h, 000h		; LD DE, 0x00C8
+	db	01Dh, 0FBh, 0CCh, 0FFh		; CALL Draw_Bitmap
+
+.update_done:
+	db	0D7h, 0FAh, 005h		; POP QIZ
+	RET					; 0e
+
+; =============================================================================
+; Draw_Bitmap - Render 1-bit bitmap to VGA framebuffer
+; Address: 0x9FCCFB
+; Stack params: XWA=bitmap addr, BC=X pos, DE=Y pos, +4=mode, +6=color
+; VGA framebuffer at 0x1A0000
+; =============================================================================
+Draw_Bitmap:
+	db	0EFh, 06Ch			; DEC 4, XSP - allocate 4 bytes
+	PUSH	IZ				; 2e
+	db	0D9h, 08Bh			; LD HL, BC - save X
+	db	0BFh, 002h, 060h		; LD (XSP+0x02), XWA - bitmap addr
+	db	0DBh, 08Dh			; LD IY, HL - IY = X position
+	db	0DAh, 08Ch			; LD IX, DE - IX = Y position
+	db	0DCh, 061h			; INC 1, IX - Y + 1
+	db	0DEh, 0A8h			; LD IZ, 0 - row counter
+
+.db_row_loop:
+	db	0DEh, 088h			; LD WA, IZ
+	db	0E8h, 012h			; EXTZ XWA
+	db	0D8h, 00Ah, 01Ch, 000h		; DIV WA, 0x001C - 28 bytes per row
+	db	0D7h, 0E2h, 088h		; LD WA, QWA - get remainder
+	db	0D8h, 0D8h			; CP WA, 0
+	JR	NZ, .db_not_row_start		; 6e 04
+	db	0DBh, 08Dh			; LD IY, HL - reset X to start
+	db	0DCh, 069h			; DEC 1, IX - decrement Y
+
+.db_not_row_start:
+	db	0D7h, 0EEh, 0A8h		; LD QHL, 0 - bit counter
+	db	0DEh, 08Ah			; LD DE, IZ
+	db	0EAh, 012h			; EXTZ XDE
+	db	0AFh, 002h, 082h		; ADD XDE, (XSP+0x02) - bitmap offset
+	db	0F1h, 044h, 010h, 030h		; LDA XWA, 0x1044
+	db	0D7h, 0EEh, 089h		; LD BC, QHL
+	db	0E9h, 012h			; EXTZ XBC
+	db	0E8h, 081h			; ADD XBC, XWA
+	db	081h, 021h			; LD A, (XBC) - get bitmask byte
+	db	082h, 0C1h			; AND A, (XDE) - mask with bitmap data
+	db	0C7h, 0F2h, 099h		; LD QIXL, A
+
+.db_calc_addr:
+	db	0DCh, 08Ah			; LD DE, IX - Y position
+	db	0EAh, 012h			; EXTZ XDE
+	db	0F2h, 000h, 03Ch, 004h, 031h	; LDA XBC, 0x043C00 - VGA base
+	db	0EAh, 088h			; LD XWA, XDE
+	db	0E8h, 0EEh, 002h		; SLL 2, XWA - Y * 4
+	db	0EAh, 080h			; ADD XWA, XDE - Y * 5
+	db	0E8h, 0EEh, 006h		; SLL 6, XWA - Y * 320
+
+	; Check if bit set (foreground or background)
+	db	0C7h, 0F2h, 0D8h		; CP QIXL, 0
+	JR	Z, .db_background		; 66 13
+
+	; Foreground pixel
+	db	0DDh, 08Ah			; LD DE, IY
+	db	0DDh, 061h			; INC 1, IY
+	db	0EAh, 012h			; EXTZ XDE
+	db	0EAh, 080h			; ADD XWA, XDE - add X offset
+	db	0E9h, 08Ah			; LD XDE, XBC
+	db	0E8h, 082h			; ADD XDE, XWA - final framebuffer addr
+	db	08Fh, 00Ah, 021h		; LD A, (XSP+0x0A) - foreground color
+	db	0B2h, 041h			; LD (XDE), A
+	JR	T, .db_next_bit			; 68 11
+
+.db_background:
+	db	0DDh, 08Ah			; LD DE, IY
+	db	0DDh, 061h			; INC 1, IY
+	db	0EAh, 012h			; EXTZ XDE
+	db	0EAh, 080h			; ADD XWA, XDE
+	db	0E9h, 08Ah			; LD XDE, XBC
+	db	0E8h, 082h			; ADD XDE, XWA
+	db	08Fh, 00Ch, 021h		; LD A, (XSP+0x0C) - background color
+	db	0B2h, 041h			; LD (XDE), A
+
+.db_next_bit:
+	db	0D7h, 0EEh, 061h		; INC 1, QHL
+	db	0D7h, 0EEh, 0CFh, 008h, 000h	; CP QHL, 0x0008 - 8 bits per byte
+	JR	C, .db_calc_addr		; 67 a1
+
+	; Next row byte
+	db	0DEh, 061h			; INC 1, IZ
+	db	0DEh, 0CFh, 068h, 002h		; CP IZ, 0x0268 - 616 bytes total
+	JR	C, .db_row_loop			; 67 83
+
+	; Flush VGA display
+	db	0F2h, 000h, 000h, 01Ah, 030h	; LDA XWA, 0x1A0000
+	db	032h, 000h, 096h		; LD DE, 0x9600 - framebuffer size
+	db	01Dh, 00Fh, 0FBh, 0FFh		; CALL 0xFFFB0F
+
+	POP	IZ				; 4e
+	db	0EFh, 064h			; INC 4, XSP
+	db	00Fh, 004h, 000h		; RETD 0x0004
+
+; =============================================================================
+; Init_Display_Progress - Initialize progress display bar
+; Address: 0x9FCD9A
+; Stack params: WA=start value, BC=X pos, DE=mode, E=bar width
+; Writes to VGA framebuffer at 0x1A0000
+; =============================================================================
+Init_Display_Progress:
+	db	0EFh, 06Eh			; DEC 6, XSP
+	PUSH	XIZ				; 3e
+	db	0BFh, 006h, 045h		; LD (XSP+0x06), E
+	db	0BFh, 008h, 050h		; LD (XSP+0x08), WA
+	db	0D9h, 08Ch			; LD IX, BC
+	db	0BFh, 004h, 051h		; LD (XSP+0x04), BC
+	db	09Fh, 004h, 038h, 00Ch, 000h	; ADD (XSP+0x04), 0x000C - X + 12
+	db	09Fh, 004h, 0F4h		; CP IX, (XSP+0x04)
+	JR	NC, .idp_done			; 6f 46
+
+.idp_x_loop:
+	db	09Fh, 008h, 025h		; LD IY, (XSP+0x08)
+	db	0DDh, 089h			; LD BC, IY
+	db	0D9h, 066h			; INC 6, BC - IY + 6
+	db	0D9h, 0F5h			; CP IY, BC
+	JR	NC, .idp_next_x			; 6f 34
+
+.idp_y_loop:
+	db	0DDh, 08Ah			; LD DE, IY
+	db	0EAh, 012h			; EXTZ XDE
+	db	0DCh, 088h			; LD WA, IX
+	db	0E8h, 012h			; EXTZ XWA
+	db	0E8h, 08Bh			; LD XHL, XWA
+	db	0EBh, 0EEh, 002h		; SLL 2, XHL
+	db	0E8h, 083h			; ADD XHL, XWA
+	db	0EBh, 0EEh, 006h		; SLL 6, XHL - Y * 320
+	db	0EAh, 083h			; ADD XHL, XDE
+	db	0EBh, 0EFh, 001h		; SRL 1, XHL - word align
+	db	0EBh, 083h			; ADD XHL, XHL
+	db	046h, 000h, 000h, 01Ah, 000h	; LD XIZ, 0x001A0000
+	db	0EBh, 086h			; ADD XIZ, XHL
+	db	08Fh, 006h, 021h		; LD A, (XSP+0x06)
+	db	0D8h, 012h			; EXTZ WA
+	db	0D8h, 08Ah			; LD DE, WA
+	db	0DAh, 0EEh, 008h		; SLL 8, DE
+	db	0DAh, 0E0h			; OR WA, DE - duplicate byte
+	db	0B6h, 050h			; LD (XIZ), WA
+
+	db	0DDh, 062h			; INC 2, IY
+	db	0D9h, 0F5h			; CP IY, BC
+	JR	C, .idp_y_loop			; 67 cc
+
+.idp_next_x:
+	db	0DCh, 061h			; INC 1, IX
+	db	09Fh, 004h, 0F4h		; CP IX, (XSP+0x04)
+	JR	C, .idp_x_loop			; 67 ba
+
+.idp_done:
+	POP	XIZ				; 5e
+	db	0EFh, 066h			; INC 6, XSP
+	RET					; 0e
+
+; =============================================================================
+; VGA_WritePort - Write byte to VGA I/O port
+; Address: 0x9FCDFC
+; Input: WA = port address, C = value to write
+; VGA ports mapped at 0x170000
+; =============================================================================
+VGA_WritePort:
+	db	0DAh, 0A8h			; LD DE, 0 - delay counter
+.vwp_delay:
+	db	0DAh, 061h			; INC 1, DE
+	db	0DAh, 0CFh, 000h, 001h		; CP DE, 0x0100
+	JR	C, .vwp_delay			; 67 f8
+
+	db	0E8h, 012h			; EXTZ XWA
+	db	042h, 000h, 000h, 017h, 000h	; LD XDE, 0x00170000
+	db	0E8h, 082h			; ADD XDE, XWA
+	db	0B2h, 043h			; LD (XDE), C
+	RET					; 0e
+
+; =============================================================================
+; VGA_ReadPort - Read byte from VGA I/O port
+; Address: 0x9FCE12
+; Input: WA = port address
+; Returns: L = value read
+; =============================================================================
+VGA_ReadPort:
+	db	0E8h, 012h			; EXTZ XWA
+	db	041h, 000h, 000h, 017h, 000h	; LD XBC, 0x00170000
+	db	0E8h, 081h			; ADD XBC, XWA
+	db	081h, 027h			; LD L, (XBC)
+	RET					; 0e
+
+; =============================================================================
+; VGA_Init - VGA Register Initialization
+; Address: 0x9FCE1E-0x9FD7E7 (2505 bytes)
+;
+; Extensive initialization of VGA hardware registers:
+;   - CRTC timing registers (ports 0x3D4/0x3D5)
+;   - Sequencer registers (ports 0x3C4/0x3C5)
+;   - Graphics controller (ports 0x3CE/0x3CF)
+;   - Attribute controller (port 0x3C0)
+;   - DAC palette entries (ports 0x3C8/0x3C9)
+;
+; The VGA controller is memory-mapped at 0x170000 for I/O ports.
+; Framebuffer is at 0x1A0000 (320x200, 256 colors).
+; =============================================================================
+	binclude "includes/bootcode_vga_regs.bin"
+
+; =============================================================================
+; FDC HELPER ROUTINES (0x9FD7E8-0x9FD8A4)
+; Low-level FDC register access at 0x110000
+; =============================================================================
+
+; -----------------------------------------------------------------------------
+; FDC_ReadStatus - Read FDC main status register
+; Address: 0x9FD7E8
+; Returns: L = status byte from 0x110008
+; -----------------------------------------------------------------------------
+FDC_ReadStatus:
+	db	0C2h, 008h, 000h, 011h, 027h	; LD L, (0x110008)
+	RET					; 0e
+
+; -----------------------------------------------------------------------------
+; FDC_ReadData - Read FDC data register
+; Address: 0x9FD7EE
+; Returns: L = data byte from 0x11000A
+; -----------------------------------------------------------------------------
+FDC_ReadData:
+	db	0C2h, 00Ah, 000h, 011h, 027h	; LD L, (0x11000A)
+	RET					; 0e
+
+; -----------------------------------------------------------------------------
+; FDC_WriteStatus - Write to FDC status register
+; Address: 0x9FD7F4
+; Input: A = value to write
+; -----------------------------------------------------------------------------
+FDC_WriteStatus:
+	db	0F2h, 008h, 000h, 011h, 041h	; LD (0x110008), A
+	RET					; 0e
+
+; -----------------------------------------------------------------------------
+; FDC_SaveCommand - Save command to history buffer
+; Address: 0x9FD7FA
+; Saves current command at 0x0D50 to 0x0D4E, stores new command
+; -----------------------------------------------------------------------------
+FDC_SaveCommand:
+	db	0C1h, 050h, 00Dh, 019h, 04Eh, 00Dh	; LD (0x0D4E), (0x0D50)
+	db	0F1h, 050h, 00Dh, 041h		; LD (0x0D50), A
+	RET					; 0e
+
+; -----------------------------------------------------------------------------
+; FDC_WriteData - Write to FDC data register
+; Address: 0x9FD805
+; Input: A = value to write
+; -----------------------------------------------------------------------------
+FDC_WriteData:
+	db	0F2h, 00Ah, 000h, 011h, 041h	; LD (0x11000A), A
+	RET					; 0e
+
+; -----------------------------------------------------------------------------
+; FDC_WaitReady - Wait for FDC ready (RQM bit)
+; Address: 0x9FD80B
+; Polls status register until ready or timeout
+; Returns via FDC_Error (0x9FE231) on timeout
+; -----------------------------------------------------------------------------
+FDC_WaitReady:
+	PUSH	XIZ				; 3e
+	db	0D1h, 000h, 00Ch, 026h		; LD IZ, (0x0C00) - get timer
+	db	0D7h, 0FAh, 003h, 080h, 000h	; LD QIZ, 0x0080 - flag = pending
+
+.fwr_check:
+	db	0D7h, 0FAh, 0CFh, 080h, 000h	; CP QIZ, 0x0080
+	JR	NZ, .fwr_check_result		; 6e 29
+.fwr_loop:
+	db	01Eh, 0C9h, 0FFh		; CALR FDC_ReadStatus
+	db	0CFh, 0CCh, 01Fh		; AND L, 0x1F - mask status bits
+	db	0CFh, 089h			; LD A, L
+	db	0D8h, 012h			; EXTZ WA
+	db	0D8h, 0D8h			; CP WA, 0 - check if ready
+	JR	NZ, .fwr_not_ready		; 6e 03
+	db	0D7h, 0FAh, 0A8h		; LD QIZ, 0 - flag = success
+
+.fwr_not_ready:
+	db	0D1h, 000h, 00Ch, 020h		; LD WA, (0x0C00)
+	db	0DEh, 0A0h			; SUB WA, IZ
+	db	0D8h, 0CFh, 0F4h, 001h		; CP WA, 0x01F4 (500) - timeout
+	JR	ULE, .fwr_continue		; 63 05
+	db	0D7h, 0FAh, 003h, 0FFh, 0FFh	; LD QIZ, 0xFFFF - flag = timeout
+
+.fwr_continue:
+	db	0D7h, 0FAh, 0CFh, 080h, 000h	; CP QIZ, 0x0080
+	JR	Z, .fwr_loop			; 66 d7
+
+.fwr_check_result:
+	db	0D7h, 0FAh, 0D8h		; CP QIZ, 0
+	JR	Z, .fwr_done			; 66 05
+	db	0D8h, 0A9h			; LD WA, 1 - error code
+	db	01Eh, 0E2h, 009h		; CALR 0x9FE231 (FDC_Error)
+
+.fwr_done:
+	POP	XIZ				; 5e
+	RET					; 0e
+
+; -----------------------------------------------------------------------------
+; FDC_WaitComplete - Wait for FDC command complete
+; Address: 0x9FD851
+; Polls for DIO and RQM bits set (0x90)
+; -----------------------------------------------------------------------------
+FDC_WaitComplete:
+	PUSH	XIZ				; 3e
+	db	0D1h, 000h, 00Ch, 026h		; LD IZ, (0x0C00)
+	db	0D7h, 0FAh, 003h, 080h, 000h	; LD QIZ, 0x0080
+
+.fwc_check:
+	db	0D7h, 0FAh, 0CFh, 080h, 000h	; CP QIZ, 0x0080
+	JR	NZ, .fwc_check_result		; 6e 26
+.fwc_loop:
+	db	01Eh, 083h, 0FFh		; CALR FDC_ReadStatus
+	db	0CFh, 0CCh, 090h		; AND L, 0x90 - mask DIO+RQM
+	db	0CFh, 0CFh, 090h		; CP L, 0x90 - both set?
+	JR	NZ, .fwc_not_done		; 6e 03
+	db	0D7h, 0FAh, 0A8h		; LD QIZ, 0 - success
+
+.fwc_not_done:
+	db	0D1h, 000h, 00Ch, 020h		; LD WA, (0x0C00)
+	db	0DEh, 0A0h			; SUB WA, IZ
+	db	0D8h, 0CFh, 0F4h, 001h		; CP WA, 0x01F4 - timeout
+	JR	ULE, .fwc_continue		; 63 05
+	db	0D7h, 0FAh, 003h, 0FFh, 0FFh	; LD QIZ, 0xFFFF
+
+.fwc_continue:
+	db	0D7h, 0FAh, 0CFh, 080h, 000h	; CP QIZ, 0x0080
+	JR	Z, .fwc_loop			; 66 da
+
+.fwc_check_result:
+	db	0D7h, 0FAh, 0D8h		; CP QIZ, 0
+	JR	Z, .fwc_done			; 66 05
+	db	0D8h, 0A9h			; LD WA, 1
+	db	01Eh, 09Fh, 009h		; CALR 0x9FE231
+
+.fwc_done:
+	POP	XIZ				; 5e
+	RET					; 0e
+
+; -----------------------------------------------------------------------------
+; FDC_Seek - Send seek command
+; Address: 0x9FD894
+; Sends seek command 0x36 to FDC, delays for motor spinup
+; -----------------------------------------------------------------------------
+FDC_Seek:
+	db	030h, 036h, 000h		; LD WA, 0x0036 - SEEK command
+	db	01Eh, 05Ah, 0FFh		; CALR FDC_WriteStatus
+	db	0D8h, 0AAh			; LD WA, 2 - delay parameter
+	db	01Eh, 0F7h, 009h		; CALR 0x9FE296 (delay routine)
+	db	0F1h, 032h, 00Dh, 000h, 0FFh	; LD (0x0D32), 0xFF - set flag
+	RET					; 0e
+
+; =============================================================================
+; Flash Update Type Handlers
+; Address: 0x9FD8A5-0x9FEA9C (4600 bytes)
+;
+; These handlers process different firmware update disk types:
+;   Type 1: Table Data disk 1 of 2
+;   Type 2: Table Data disk 2 of 2
+;   Type 3: Custom Data flash update
+;   Type 4: HDAE5000 expansion ROM
+;   Type 5: Compressed program ROM
+;   Type 6: Compressed table data ROM
+;   Type 7: Combined update disk 1
+;   Type 8: Combined update disk 2
+;
+; Each handler:
+;   - Validates disk format and checksums
+;   - Erases appropriate flash sectors
+;   - Programs new firmware data
+;   - Updates progress display
+; =============================================================================
+	binclude "includes/bootcode_flash_handlers.bin"
+
+; =============================================================================
+; Handler_INTTC3 - Timer Counter 3 Interrupt Handler
+; Address: 0x9FEA9D (boot-time: 0xFFEA9D)
+;
+; Simple system tick handler:
+;   - Saves all registers
+;   - Calls Boot_TimerTick (0x9FDD17) to increment system timer
+;   - Calls Boot_UpdateDisplay (0x9FDD26) to refresh VGA display
+;   - Restores registers and returns from interrupt
+; =============================================================================
+Handler_INTTC3:
+	PUSH	XIZ				; 3e - save all registers
+	PUSH	XIY				; 3d
+	PUSH	XIX				; 3c
+	PUSH	XHL				; 3b
+	PUSH	XDE				; 3a
+	PUSH	XBC				; 39
+	PUSH	XWA				; 38
+	db	01Eh, 070h, 0F2h		; CALR Boot_TimerTick (0x9FDD17)
+	db	01Eh, 07Ch, 0F2h		; CALR Boot_UpdateDisplay (0x9FDD26)
+	POP	XWA				; 58 - restore all registers
+	POP	XBC				; 59
+	POP	XDE				; 5a
+	POP	XHL				; 5b
+	POP	XIX				; 5c
+	POP	XIY				; 5d
+	POP	XIZ				; 5e
+	RETI					; 07
+
+; =============================================================================
+; Handler_INT4 - FDC (Floppy Disk Controller) Interrupt Handler
+; Address: 0x9FEAB2 (boot-time: 0xFFEAB2)
+;
+; Handles FDC interrupt during firmware update:
+;   - Timeout counter (100 iterations max)
+;   - Polls FDC status for RQM (bit 7) and DIO (bit 6)
+;   - Reads result bytes from FDC data register
+;   - Stores results at 0x0C8E buffer
+;   - Calls FDC_ProcessResults (0x9FDF17) when complete
+; =============================================================================
+Handler_INT4:
+	PUSH	XIZ				; 3e
+	PUSH	XIY				; 3d
+	PUSH	XIX				; 3c
+	PUSH	XHL				; 3b
+	PUSH	XDE				; 3a
+	PUSH	XBC				; 39
+	PUSH	XWA				; 38
+	db	0DEh, 0A8h			; LD IZ, 0 - timeout counter
+
+.int4_check_timeout:
+	db	0DEh, 088h			; LD WA, IZ - get current count
+	db	0DEh, 061h			; INC 1, IZ
+	db	0D8h, 0CFh, 064h, 000h		; CP WA, 0x0064 (100)
+	JR	GT, .int4_done			; 6a 59 - timeout exceeded
+
+	db	01Eh, 020h, 0EDh		; CALR FDC_ReadStatus (0x9FD7E8)
+	db	0CFh, 033h, 007h		; BIT 7, L - check RQM (request for master)
+	JR	Z, .int4_check_timeout		; 66 ee - not ready, keep polling
+
+.int4_wait_rqm:
+	db	01Eh, 018h, 0EDh		; CALR FDC_ReadStatus
+	db	0CFh, 033h, 007h		; BIT 7, L
+	JR	Z, .int4_wait_rqm		; 66 f8
+
+	db	01Eh, 010h, 0EDh		; CALR FDC_ReadStatus
+	db	0CFh, 033h, 006h		; BIT 6, L - check DIO (data direction)
+	JR	NZ, .int4_setup_buffer		; 6e 18 - FDC has data for us
+
+	; FDC needs data from us - send sense interrupt command
+	db	027h, 000h			; LD L, 0x00
+	db	0CFh, 0CFh, 080h		; CP L, 0x80
+	JR	Z, .int4_send_cmd		; 66 0b
+
+.int4_poll_ready:
+	db	01Eh, 001h, 0EDh		; CALR FDC_ReadStatus
+	db	0CFh, 0CCh, 0F0h		; AND L, 0xF0 - mask status bits
+	db	0CFh, 0CFh, 080h		; CP L, 0x80 - RQM set, DIO clear?
+	JR	NZ, .int4_poll_ready		; 6e f5
+
+.int4_send_cmd:
+	db	030h, 008h, 000h		; LD WA, 0x0008 - sense interrupt command
+	db	01Eh, 010h, 0EDh		; CALR FDC_WriteData (0x9FD805)
+
+.int4_setup_buffer:
+	db	0F1h, 08Eh, 00Ch, 036h		; LDA XIZ, 0x0C8E - result buffer
+	db	0EEh, 061h			; INC 1, XIZ
+
+.int4_read_loop:
+	db	01Eh, 0EFh, 0F2h		; CALR Boot_ClearWatchdog (0x9FDDED)
+	db	01Eh, 0EDh, 0ECh		; CALR FDC_ReadData (0x9FD7EE)
+	db	0F5h, 0F8h, 047h		; LD (XIZ+), L - store result byte
+
+.int4_check_more:
+	db	01Eh, 0E1h, 0ECh		; CALR FDC_ReadStatus
+	db	0CFh, 033h, 007h		; BIT 7, L - RQM set?
+	JR	Z, .int4_check_more		; 66 f8 - wait for ready
+
+	db	01Eh, 0D9h, 0ECh		; CALR FDC_ReadStatus
+	db	0CFh, 033h, 006h		; BIT 6, L - DIO set?
+	JR	NZ, .int4_read_loop		; 6e e7 - more data to read
+
+	db	01Eh, 000h, 0F4h		; CALR FDC_ProcessResults (0x9FDF17)
+	db	0C1h, 08Fh, 00Ch, 03Fh, 080h	; CP (0x0C8F), 0x80 - check status
+	JR	NZ, .int4_wait_rqm		; 6e af - not done, continue
+
+.int4_done:
+	db	0F1h, 08Eh, 00Ch, 000h, 000h	; LD (0x0C8E), 0x0000 - clear buffer
+	POP	XWA				; 58
+	POP	XBC				; 59
+	POP	XDE				; 5a
+	POP	XHL				; 5b
+	POP	XIX				; 5c
+	POP	XIY				; 5d
+	POP	XIZ				; 5e
+	RETI					; 07
+
+; =============================================================================
+; Boot ROM Utility Routines
+; Address: 0x9FEB2B-0x9FF228 (1790 bytes)
+;
+; Contains various utility routines:
+;   - Motor control timing
+;   - VGA display routines for update UI
+;   - Disk format detection helpers
+;   - Progress bar updates
+; =============================================================================
+	binclude "includes/bootcode_utils.bin"
+
+; =============================================================================
+; Serial Port Interrupt Handlers
+; Address: 0x9FF229-0x9FF2F1 (201 bytes)
+;
+; Handles UART interrupts for serial communication:
+;   - BOOT_INTA_HANDLER: External interrupt A (serial handshake)
+;   - BOOT_INTTX1_HANDLER: Serial port 1 TX complete
+;   - BOOT_INTRX1_HANDLER: Serial port 1 RX received
+; =============================================================================
+	ORG 09FF229h
+Handler_INTA:
+	binclude "includes/bootcode_serial_handlers.bin"
+
+; =============================================================================
+; Serial Communication State Machine
+; Address: 0x9FF2F2-0x9FFB55 (2148 bytes)
+;
+; State machine for handling serial protocol:
+;   - Baud rate configuration
+;   - Packet framing and checksums
+;   - Error recovery
+; =============================================================================
+	binclude "includes/bootcode_serial_state.bin"
+
+; =============================================================================
+; Memory Allocation, Division, and Debug Routines
+; Address: 0x9FFB56-0x9FFEE0 (906 bytes)
+;
+; MEMORY ALLOCATION (linked-list heap):
+;   0x9FFB56: Boot_malloc - Allocate memory block
+;             - Free list head at 0x0099A0
+;             - Block header: +0x00=next ptr, +0x04=size
+;             - Returns pointer to data area (+0x06)
+;   0x9FFCDD: Boot_free - Free allocated block
+;             - Merges adjacent free blocks
+;   0x9FFD7D: Secondary heap routines (pool at 0x009998)
+;
+; UTILITY FUNCTIONS:
+;   0x9FFBDC: Boot_memcmp - Compare memory blocks
+;   0x9FFC0E: Division/modulo routines (32-bit and 64-bit)
+;
+; DEBUG OUTPUT:
+;   0x9FFE80: Debug_OutputChar - Output single character
+;   0x9FFE86: Debug_OutputHexByte - Output byte as 2-digit hex
+;   0x9FFEA1: Debug_OutputString - Output null-terminated string
+;   0x9FFEB4: Debug_NibbleToHex - Convert nibble to ASCII hex
+;   0x9FFEC1: Debug_SendChar - Send char to debug port (0xFE00)
+; =============================================================================
+	binclude "includes/bootcode_malloc_and_after.bin"
 
 	ORG 09FFEE0h
 RESET_HANDLER:
