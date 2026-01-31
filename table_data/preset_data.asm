@@ -8,15 +8,34 @@
 ; Total size: 32,910 bytes (0x808E)
 ; After LZSS compression: 27,953 bytes
 ;
-; RUNTIME DESTINATION:
-; ====================
+; ===========================================================================
+; *** DISPUTED INTERPRETATION - REQUIRES FURTHER INVESTIGATION ***
+; ===========================================================================
+; The runtime destination interpretation below was concluded by Claude Code
+; (AI assistant) based on code analysis. However, Felipe Sanches believes
+; this interpretation may be INCORRECT due to:
+;
+;   1. Dynamic memory map reconfiguration during boot stages
+;   2. The 0x3E0000 address mapping is not fully understood
+;   3. Transfer sizes (64KB blocks) don't match preset data size (~33KB)
+;   4. The fallback to 0x800000 produces 0xF7 padding, not valid parameters
+;
+; This is documented as an example of AI/Human disagreement requiring
+; additional research. Alternative interpretations should be preserved
+; and investigated.
+;
+; See also: kn5000-docs/lzss-compression.md for related discussion.
+; ===========================================================================
+;
+; RUNTIME DESTINATION (Claude Code's interpretation - DISPUTED):
+; ==============================================================
 ; The SubCPU_Send_Payload routine (maincpu 0xEF0692) handles transfer:
 ;
 ; 1. LZSS data at 0x3E0000 is decompressed to Main CPU RAM at 0x50000
 ; 2. Word at offset 0x100 is copied to Main CPU RAM 0x0404
 ; 3. Bulk E1 transfers send 64KB blocks to Sub CPU (only ~33KB is meaningful)
 ;
-; Transfer layout:
+; Transfer layout (per Claude's analysis):
 ;   Offset 0x000-0x0FF (256 bytes)   -> Main CPU only (not transferred)
 ;   Offset 0x100-0x808D (32,654 bytes) -> Sub CPU address 0xF000+ via E1 bulk
 ;
@@ -25,11 +44,19 @@
 ;
 ; Memory Map Note: The source address 0x3E0000 represents an alternate ROM
 ; mapping. The same LZSS data is at ROM offset 0xE0000 (CPU address 0x8E0000
-; in Stage 2 boot configuration).
+; in Stage 2 boot configuration). This mapping is NOT fully understood.
+;
+; ALTERNATIVE INTERPRETATIONS TO INVESTIGATE:
+; ===========================================
+; - The data may have a different runtime destination entirely
+; - The memory map at 0x3E0000 may point to different physical memory
+; - There may be other ~33KB transfers that are the actual destination
+; - The preset data may be used differently than assumed
 ;
 ; The Sub CPU ROM (kn5000_subprogram_v142) contains DEFAULT values at 0xF000.
-; This preset data OVERWRITES those defaults during boot, allowing factory
-; presets to configure the audio engine parameters.
+; IF the interpretation above is correct, this preset data OVERWRITES those
+; defaults during boot, allowing factory presets to configure the audio
+; engine parameters.
 ;
 ; SUB CPU 0xF000 AREA PURPOSE:
 ; ============================
