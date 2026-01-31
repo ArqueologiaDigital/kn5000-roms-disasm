@@ -34,19 +34,13 @@ ICON_TABLE_BASE = 0x800000    # table_data ROM base address
 COLOR_LUT_OFFSET = 0xAABF2    # CPU address 0xEAABF2
 
 
-def pixel_to_rgb(pixel_value: int) -> tuple:
-    """Convert 8-bit icon pixel value to RGB.
+def nibble_to_gray(nibble: int) -> int:
+    """Convert 4-bit nibble value to 8-bit grayscale.
 
-    Analysis of the DrawIcons routine and color lookup table at 0xEAABF2
-    shows that the icons use a grayscale-based color scheme where:
-    - The 8-bit pixel value directly represents intensity
-    - 0x00 = black, 0x77 = mid-gray (background), 0xFF = white
-
-    The lookup table expands each nibble (0-7 → 0x00-0x07, 8-15 → 0xF8-0xFF)
-    but for display purposes, direct grayscale gives the best results.
+    Icons use 4bpp format with 16 grayscale levels.
+    Scale 0-15 to 0-255.
     """
-    # Direct grayscale interpretation
-    return (pixel_value, pixel_value, pixel_value)
+    return nibble * 17
 
 
 def extract_icons(table_data_rom: bytes, maincpu_rom: bytes, output_dir: Path):
@@ -84,10 +78,10 @@ def extract_icons(table_data_rom: bytes, maincpu_rom: bytes, output_dir: Path):
 
     print(f"Found {len(icons)} icons in table")
 
-    # Standard icon size from code analysis
-    ICON_WIDTH = 12
+    # Standard icon size: 24x24 pixels at 4bpp (2 pixels per byte)
+    ICON_WIDTH = 24
     ICON_HEIGHT = 24
-    ICON_SIZE = ICON_WIDTH * ICON_HEIGHT  # 288 bytes
+    ICON_SIZE = (ICON_WIDTH * ICON_HEIGHT) // 2  # 288 bytes at 4bpp
 
     output_dir.mkdir(parents=True, exist_ok=True)
 
@@ -95,31 +89,27 @@ def extract_icons(table_data_rom: bytes, maincpu_rom: bytes, output_dir: Path):
         icon_id = icon['id']
         data_offset = icon['data_offset']
 
-        # Determine actual dimensions
-        # Most icons are 12x24, but some entries show different dims
         dim1 = icon['dim1']
         dim2 = icon['dim2']
 
-        # The dims appear to be in a special format
-        # 0x0018 = 24, 0x001b = 27, 0x001c = 28
-        width = ICON_WIDTH
-        height = ICON_HEIGHT
-
         # Check if this is a non-standard size icon
-        # Standard icons are 12x24 (dim1=dim2=0x18=24)
+        # Standard icons are 24x24 (dim1=dim2=0x18=24)
         # Non-standard icons (173-175) have larger dimensions
         if dim1 != 0x18 or dim2 != 0x18:
             # For non-standard icons, use the dims as both width and height
-            # dims=(27,27) means 27x27, dims=(28,28) means 28x28
             width = dim1
             height = dim2
+        else:
+            width = ICON_WIDTH
+            height = ICON_HEIGHT
 
-        pixel_count = width * height
+        # 4bpp format: 2 pixels per byte
+        byte_count = (width * height) // 2
 
         # Extract pixel data
-        pixel_data = table_data_rom[data_offset:data_offset + pixel_count]
+        pixel_data = table_data_rom[data_offset:data_offset + byte_count]
 
-        if len(pixel_data) < pixel_count:
+        if len(pixel_data) < byte_count:
             print(f"  Warning: Icon {icon_id} has insufficient data")
             continue
 
@@ -127,12 +117,21 @@ def extract_icons(table_data_rom: bytes, maincpu_rom: bytes, output_dir: Path):
         img = Image.new('RGB', (width, height))
         pixels = img.load()
 
+        # Decode 4bpp: high nibble = first pixel, low nibble = second pixel
+        byte_idx = 0
         for y in range(height):
-            for x in range(width):
-                idx = y * width + x
-                pixel_value = pixel_data[idx]
-                rgb = pixel_to_rgb(pixel_value)
-                pixels[x, y] = rgb
+            for x in range(0, width, 2):
+                if byte_idx < len(pixel_data):
+                    byte_val = pixel_data[byte_idx]
+                    # High nibble = first pixel, low nibble = second pixel
+                    p1 = (byte_val >> 4) & 0x0F
+                    p2 = byte_val & 0x0F
+                    g1 = nibble_to_gray(p1)
+                    g2 = nibble_to_gray(p2)
+                    pixels[x, y] = (g1, g1, g1)
+                    if x + 1 < width:
+                        pixels[x + 1, y] = (g2, g2, g2)
+                    byte_idx += 1
 
         # Save icon
         output_path = output_dir / f"Icon_{icon_id:03d}.png"
