@@ -39,7 +39,7 @@ make clean_subcpu       # Sub CPU only
 make clean_table_data   # Table data only
 
 # Verify rebuilt ROMs against originals (runs automatically after make all)
-python compare_roms.py
+python scripts/compare_roms.py
 
 # Update documentation website
 make gallery            # Convert images to PNG for gallery
@@ -52,11 +52,22 @@ The ASL assembler path is configured in the Makefile at `ASL_PATH`.
 
 ## Project Policies
 
+### Helper Scripts (STRICT POLICY)
+
+**All helper scripts must be placed in the `scripts/` directory and committed to the repo.**
+
+This ensures:
+- Scripts are version-controlled and available to all contributors
+- Consistent location for automation tools
+- Easy discovery of available utilities
+
+When creating new scripts, place them in `scripts/` and add them to git immediately.
+
 ### Image Extraction and Gallery Updates
 
 When new images are discovered and extracted as `.bin` files in `maincpu/images/` or `table_data/images/`:
 
-1. **Add metadata** to `convert_images.py` in the `IMAGE_METADATA` dictionary:
+1. **Add metadata** to `scripts/convert_images.py` in the `IMAGE_METADATA` dictionary:
    - Filename
    - Dimensions (width, height)
    - Bit depth (1, 4, or 8)
@@ -98,7 +109,7 @@ Always commit both repositories together when making website updates.
 
 **The ROM status diagram must be kept in sync with disassembly progress.**
 
-The file `generate_rom_status_diagram.py` generates an SVG visualization showing the disassembly status of each ROM component. This diagram provides an at-a-glance view of project progress.
+The file `scripts/generate_rom_status_diagram.py` generates an SVG visualization showing the disassembly status of each ROM component. This diagram provides an at-a-glance view of project progress.
 
 **Status categories:**
 | Color | Category | Description |
@@ -504,7 +515,7 @@ If code references an address that lies **inside** a `binclude` file's address r
 6. **Verify the build** still produces identical ROM output:
    ```bash
    make all
-   python compare_roms.py
+   python scripts/compare_roms.py
    ```
 
 **Naming convention for split binaries:**
@@ -608,15 +619,15 @@ This is a strict policy to ensure the MAME driver accurately represents the actu
 | table_data | `table_data/kn5000_table_data.asm` | ~33% |
 | hdae5000 | `hdae5000/hd-ae5000_v2_06i.asm` | ~5% |
 
-Run `python compare_roms.py` for current status. See `../kn5000-docs/rom-reconstruction.md` for detailed breakdown.
+Run `python scripts/compare_roms.py` for current status. See `../kn5000-docs/rom-reconstruction.md` for detailed breakdown.
 
 ### Key Files
 
 - **tmp94c241.inc**: Macros for TMP94C241F instructions not natively supported by ASL (which only supports TMP96C141). These encode raw byte sequences for unsupported opcodes like LDI, LDIR, MUL/DIV variants, and shift operations.
 
-- **compare_roms.py**: Post-build verification that compares rebuilt ROMs byte-by-byte against originals in `original_ROMs/` and reports match percentage.
+- **scripts/compare_roms.py**: Post-build verification that compares rebuilt ROMs byte-by-byte against originals in `original_ROMs/` and reports match percentage.
 
-- **extract_include_binaries.py**: Extracts embedded binary data (images, assets) from disassembled code for inclusion via assembly `include()` directives.
+- **scripts/extract_include_binaries.py**: Extracts embedded binary data (images, assets) from disassembled code for inclusion via assembly `include()` directives.
 
 ### Directory Structure
 

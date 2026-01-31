@@ -3,7 +3,7 @@ ASL=$(ASL_PATH)/asl -w
 P2BIN=$(ASL_PATH)/p2bin
 
 all: rebuilt_ROMs/kn5000_v10_program.rebuilt.rom rebuilt_ROMs/kn5000_subprogram_v142.rebuilt.rom rebuilt_ROMs/kn5000_subcpu_boot.rebuilt.rom rebuilt_ROMs/kn5000_table_data.rebuilt.rom rebuilt_ROMs/hd-ae5000_v2_06i.rebuilt.rom
-	python compare_roms.py
+	python scripts/compare_roms.py
 
 rebuilt_ROMs/kn5000_v10_program.rebuilt.p: tmp94c241.inc maincpu/kn5000_v10_program.asm
 	mkdir -p rebuilt_ROMs
@@ -55,13 +55,13 @@ DOCS_DIR=../kn5000-docs
 DOCS_GALLERY=$(DOCS_DIR)/assets/images/gallery
 
 gallery:
-	python convert_images.py $(DOCS_GALLERY)
+	python scripts/convert_images.py $(DOCS_GALLERY)
 
 issues:
-	python export_issues_to_website.py $(DOCS_DIR)/issues.md
+	python scripts/export_issues_to_website.py $(DOCS_DIR)/issues.md
 
 rom-status:
-	python generate_rom_status_diagram.py
+	python scripts/generate_rom_status_diagram.py
 
 # Update all website content (gallery + issues + rom status diagram)
 website: gallery issues rom-status
