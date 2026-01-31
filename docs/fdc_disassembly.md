@@ -73,7 +73,7 @@ Sets up FDC control register to 0xFF.
 ```asm
 FDC_INIT:                   ; F96BBF
     LD WA, 0036h
-    CALR LABEL_F96B1F
+    CALR FDC_Send_Command
     LD WA, 2
     CALR SOME_DELAY
     LD (8B04h), 0FFh
@@ -100,7 +100,7 @@ FDC_CONFIG_L1:              ; F96BEB
     JRL Z, FDC_CONFIG_EXIT
     LD (8A20h), 0FFh
     LD WA, 0036h
-    CALR LABEL_F96B1F
+    CALR FDC_Send_Command
     LD WA, 2
     CALR SOME_DELAY
     CALR LABEL_F97544
@@ -116,7 +116,7 @@ FDC_CONFIG_L1:              ; F96BEB
     LD (8A20h), 0
     JRL T, FDC_CONFIG_EXIT
 FDC_CONFIG_L3:              ; F96C2A
-    CALR LABEL_F96B13
+    CALR FDC_Read_Status
     BIT 7, L
     JR NZ, FDC_CONFIG_L4
     LD WA, 0032h
@@ -126,13 +126,13 @@ FDC_CONFIG_L4:              ; F96C3A
     LD WA, 0031h
     CALR LABEL_F975AD
 FDC_CONFIG_L5:              ; F96C3F
-    CALR LABEL_F96B13
+    CALR FDC_Read_Status
     BIT 6, L
     JR Z, FDC_CONFIG_L6
     LD WA, 002Fh
     CALR LABEL_F975AD
 FDC_CONFIG_L6:              ; F96C4C
-    CALR LABEL_F96B13
+    CALR FDC_Read_Status
     CP L, 0FFh
     JR NZ, FDC_CONFIG_L7
     LD WA, 00FCh
@@ -155,7 +155,7 @@ FDC_CONFIG_L2:              ; F96C7B
     JR T, FDC_CONFIG_EXIT
 FDC_CONFIG_L8:              ; F96C88
     LD WA, 0036h
-    CALR LABEL_F96B1F
+    CALR FDC_Send_Command
     LD WA, 2
     CALR SOME_DELAY
 FDC_CONFIG_EXIT:            ; F96D93
@@ -171,10 +171,10 @@ Called by: FDC_HANDLER_10 (dispatch table entry).
 ```asm
 FDC_CMD_DISPATCH_SUB:       ; F96D95
     LD WA, 0036h
-    CALR LABEL_F96B1F
+    CALR FDC_Send_Command
     LD WA, 2
     CALR SOME_DELAY
-    CALR LABEL_F96B13
+    CALR FDC_Read_Status
     CP L, 0FFh
     JR NZ, FDC_H10_OK
     LD WA, 00FCh
@@ -399,7 +399,7 @@ FDC_INTERRUPT_HANDLER:      ; F97C7C
     CALR LABEL_F970C9
     CP (8A24h), 0
     JR NZ, FDC_IH_EXIT
-    CALR LABEL_F96B19
+    CALR FDC_Read_Data
     LD QIZH, L
     BIT 7, QIZH
     JR Z, FDC_IH_L1
