@@ -438,11 +438,11 @@ RESET_ENTRY:
 	reti				; 0xFF8436: Alternate entry point
 
 ; ==============================================================================
-; SUB_8437 (0xFF8437) - Initialize tone generator channels
+; TONE_GEN_CHANNEL_INIT (0xFF8437) - Initialize tone generator channels
 ; Loops through 4 channels and calls TONE_GEN_WRITE for each
 ; ==============================================================================
 
-SUB_8437:
+TONE_GEN_CHANNEL_INIT:
 	push	QIZ			; Save QIZ (QIZH used as loop counter)
 	CP_MEM24_IMM16 0FFFEEEh, 0FFFFh	; cp (0xFFFEEE), 0xFFFF - check init flag
 	jr	NZ, .done		; Skip if memory not 0xFFFF (already initialized)
@@ -500,7 +500,7 @@ HALT_LOOP:
 ; These are placeholder/unused routines
 ; ==============================================================================
 
-STUB_8496:
+OUTPUT_NOP_RET:
 	ld	HL, 0
 	ret
 
@@ -586,37 +586,37 @@ TONE_GEN_WRITE:
 	ret
 
 ; ==============================================================================
-; SUB_850E (0xFF850E) - Push registers and call SUB_853A multiple times
+; WRITE_TONE_REG_MULTI_CHANNEL (0xFF850E) - Push registers and call WRITE_TONE_REG_SINGLE_CHANNEL multiple times
 ; Appears to write multiple register pairs to tone generator
 ; ==============================================================================
 
-SUB_850E:
+WRITE_TONE_REG_MULTI_CHANNEL:
 	push	XBC
 	push	XDE
 	PUSH_WORD 1			; Push channel 1
-	CALR	SUB_853A
+	CALR	WRITE_TONE_REG_SINGLE_CHANNEL
 	LD_XBC_pXSP_d 0Ah		; ld XBC, (XSP+0x0A)
 	LD_XDE_XIZ			; ld XDE, XIZ
 	PUSH_WORD 0			; Push channel 0
-	CALR	SUB_853A
+	CALR	WRITE_TONE_REG_SINGLE_CHANNEL
 	ld	XBC, XWA
 	ld	XDE, XHL
 	PUSH_WORD 2			; Push channel 2
-	CALR	SUB_853A
+	CALR	WRITE_TONE_REG_SINGLE_CHANNEL
 	ld	XBC, XIX
 	ld	XDE, XIY
 	PUSH_WORD 3			; Push channel 3
-	CALR	SUB_853A
+	CALR	WRITE_TONE_REG_SINGLE_CHANNEL
 	INC_0_XSP			; inc 0, XSP (adjust stack)
 	pop	XDE
 	pop	XBC
 	ret
 
 ; ==============================================================================
-; SUB_853A (0xFF853A) - Write register pair to tone generator channel
+; WRITE_TONE_REG_SINGLE_CHANNEL (0xFF853A) - Write register pair to tone generator channel
 ; ==============================================================================
 
-SUB_853A:
+WRITE_TONE_REG_SINGLE_CHANNEL:
 	push	XIY
 	push	WA
 	push	BC
@@ -1356,7 +1356,7 @@ INIT_MEMORY_TEST:
 	ld	WA, HL
 	CALR	ROM_CHECKSUM		; 0xFF8AB4 (3-byte relative call)
 	ld	(MEMTEST_RESULT), L
-	CALR	SUB_8C80		; 0xFF8C80 (3-byte relative call)
+	CALR	HARDWARE_CALIBRATION_SEQUENCE		; 0xFF8C80 (3-byte relative call)
 	cp	HL, 0FFFFh
 	jr	NZ, .no_error
 	set	3, (MEMTEST_RESULT)
@@ -1586,7 +1586,7 @@ ROM_CHECKSUM:
 SERIAL_INIT:
 	push	QIZ
 	ld	QIZH, 0			; Error accumulator
-	calr	SUB_8B37		; Initialize serial subsystem
+	calr	CONTROL_PANEL_BIT_SET_CLEAR		; Initialize serial subsystem
 	lda	XWA, SERIAL_STATUS
 	ld	XBC, XWA
 	lda	XDE, XWA+8
@@ -1607,7 +1607,7 @@ SERIAL_INIT:
 	ret
 
 ; ==============================================================================
-; SUB_8B37 (0xFF8B37) - LED/Output bit manipulation routine
+; CONTROL_PANEL_BIT_SET_CLEAR (0xFF8B37) - LED/Output bit manipulation routine
 ;
 ; This routine sets or clears bits in an output buffer based on input parameters.
 ; Parameters are passed on stack:
@@ -1619,15 +1619,15 @@ SERIAL_INIT:
 ;   - Bit position = (index - 0x24) & 7 (which bit in byte)
 ;   - Buffer base = 0x0558
 ;
-; Uses SUB_8B89 to send/receive data to hardware.
+; Uses INTER_CPU_LATCH_READ_DISPATCH to send/receive data to hardware.
 ; ==============================================================================
 
 	org	0FF8B37h
 
-SUB_8B37:
+CONTROL_PANEL_BIT_SET_CLEAR:
 	dec	2, XSP			; Reserve 2 bytes on stack for local vars
 	lda	XWA, XSP		; XWA = pointer to stack frame
-	calr	SUB_8B89		; Call to get/send data
+	calr	INTER_CPU_LATCH_READ_DISPATCH		; Call to get/send data
 	cp	HL, 0FFFFh		; Check return value
 	jr	Z, .done		; If -1 (error), skip to done
 
@@ -1659,7 +1659,7 @@ SUB_8B37:
 	and	(XDE), L		; Clear bit: buffer[offset] &= ~mask
 .next:
 	ld	XWA, XBC		; XWA = parameter pointer
-	calr	SUB_8B89		; Call to send/get next item
+	calr	INTER_CPU_LATCH_READ_DISPATCH		; Call to send/get next item
 	cp	HL, 0FFFFh		; Check return value
 	jr	NZ, .loop		; If not -1, continue loop
 
@@ -1668,10 +1668,10 @@ SUB_8B37:
 	ret
 
 ; ==============================================================================
-; SUB_8B89 (0xFF8B89) - Inter-CPU communication handler
+; INTER_CPU_LATCH_READ_DISPATCH (0xFF8B89) - Inter-CPU communication handler
 ;
 ; Reads data from inter-CPU communication latches at 0x110000-0x110002.
-; Checks status bits and dispatches to SUB_8BD2 for processing.
+; Checks status bits and dispatches to NOTE_VELOCITY_LOOKUP_CALCULATE for processing.
 ;
 ; Input: XWA = pointer to parameter buffer
 ; Output: HL = 0 on success, 0xFFFF on error/no data
@@ -1679,7 +1679,7 @@ SUB_8B37:
 
 	org	0FF8B89h
 
-SUB_8B89:
+INTER_CPU_LATCH_READ_DISPATCH:
 	push	XIZ
 	ld	XIZ, XWA		; Save parameter pointer in XIZ
 	ld	HL, (110002h)		; Read status register
@@ -1702,13 +1702,13 @@ SUB_8B89:
 	bit	7, B			; Check bit 7 of low byte
 	jr	NZ, .error		; If set, return error
 	ld	XWA, XIZ		; Restore parameter pointer
-	calr	SUB_8BD2		; Call processing routine
+	calr	NOTE_VELOCITY_LOOKUP_CALCULATE		; Call processing routine
 	ld	(XIZ+1), 0		; Clear byte at param+1
 	jr	T, .success		; Jump to success (always)
 
 .process_normal:
 	ld	XWA, XIZ		; Restore parameter pointer
-	calr	SUB_8BD2		; Call processing routine
+	calr	NOTE_VELOCITY_LOOKUP_CALCULATE		; Call processing routine
 
 .success:
 	ld	HL, 0			; Return success
@@ -1722,7 +1722,7 @@ SUB_8B89:
 	ret
 
 ; ==============================================================================
-; SUB_8BD2 (0xFF8BD2) - Note/velocity calculation routine
+; NOTE_VELOCITY_LOOKUP_CALCULATE (0xFF8BD2) - Note/velocity calculation routine
 ;
 ; Calculates velocity values based on note index and lookup tables.
 ; Uses tables at 0xFF804C, 0xFF8040, 0xFF802A, 0xFF802C, 0xFF814C.
@@ -1734,7 +1734,7 @@ SUB_8B89:
 
 	org	0FF8BD2h
 
-SUB_8BD2:
+NOTE_VELOCITY_LOOKUP_CALCULATE:
 	ld	(0560h), 06h		; Set mode/flag byte
 	ld	L, C			; L = note index
 	res	7, L			; Clear bit 7
@@ -1810,20 +1810,20 @@ SUB_8BD2:
 	ret
 
 ; ==============================================================================
-; SUB_8C75 (0xFF8C75) - Hardware register write helper
+; AUDIO_HW_WRITE_READ (0xFF8C75) - Hardware register write helper
 ;
 ; Writes WA to address 0x100000, reads HL from 0x100004.
 ; ==============================================================================
 
 	org	0FF8C75h
 
-SUB_8C75:
+AUDIO_HW_WRITE_READ:
 	ld	(100000h), WA		; Write WA to hardware register
 	ld	HL, (100004h)		; Read status/result
 	ret
 
 ; ==============================================================================
-; SUB_8C80 (0xFF8C80) - Hardware communication/calibration routine
+; HARDWARE_CALIBRATION_SEQUENCE (0xFF8C80) - Hardware communication/calibration routine
 ;
 ; Complex routine that communicates with hardware at 0x100000.
 ; Performs some kind of calibration or initialization sequence.
@@ -1833,7 +1833,7 @@ SUB_8C75:
 
 	org	0FF8C80h
 
-SUB_8C80:
+HARDWARE_CALIBRATION_SEQUENCE:
 	push	XIZ
 	ld	IZ, 0FFFFh		; Initialize error flag to -1
 
@@ -1855,15 +1855,15 @@ SUB_8C80:
 	nop
 	nop
 
-	; Call SUB_8D0A with parameter block at 0xFF824C
+	; Call HARDWARE_PARAM_BLOCK_WRITE with parameter block at 0xFF824C
 	ld	WA, 0
 	ld	XBC, 00FF824Ch		; Parameter block address
-	calr	SUB_8D0A		; Write parameters to hardware
+	calr	HARDWARE_PARAM_BLOCK_WRITE		; Write parameters to hardware
 
 	; Read back and verify
 	ld	BC, (0FF824Ch)		; Read first word from param block
 	ld	WA, 0
-	calr	SUB_8F57		; Call verification routine
+	calr	HARDWARE_VERIFY_WRITE		; Call verification routine
 
 	; Check timeout counter
 	cp	QIZ, 03E8h		; Compare with 1000
@@ -1871,7 +1871,7 @@ SUB_8C80:
 
 .retry_loop:
 	ld	WA, 0
-	calr	SUB_8C75		; Read hardware status
+	calr	AUDIO_HW_WRITE_READ		; Read hardware status
 	cp	HL, 0			; Check result
 	jr	Z, .success		; If 0, hardware responded
 
@@ -1908,7 +1908,7 @@ SUB_8C80:
 	ret
 
 ; ==============================================================================
-; SUB_8D0A (0xFF8D0A) - Audio hardware parameter write routine
+; HARDWARE_PARAM_BLOCK_WRITE (0xFF8D0A) - Audio hardware parameter write routine
 ;
 ; Writes 21 parameter pairs from memory to AUDIO_HW_BASE (0x100000).
 ; Each pair: address written to 0x100000, data written to 0x100002.
@@ -1922,7 +1922,7 @@ SUB_8C80:
 
 	org	0FF8D0Ah
 
-SUB_8D0A:
+HARDWARE_PARAM_BLOCK_WRITE:
 	dec	4, XSP			; Reserve 4 bytes on stack
 	push	IZ
 	ld	(XSP+2), XBC		; Save XBC to stack
@@ -2209,7 +2209,7 @@ SUB_8D0A:
 	ret
 
 ; ==============================================================================
-; SUB_8F57 (0xFF8F57) - Hardware write routine
+; HARDWARE_VERIFY_WRITE (0xFF8F57) - Hardware write routine
 ;
 ; Writes WA to 0x100000, then IZ (from BC) to 0x100002.
 ; Simple write with timing delays (nops and jr T).
@@ -2220,7 +2220,7 @@ SUB_8D0A:
 
 	org	0FF8F57h
 
-SUB_8F57:
+HARDWARE_VERIFY_WRITE:
 	push	IZ
 	ld	IZ, BC			; Save BC in IZ
 	ld	(100000h), WA		; Write address/command
@@ -2300,37 +2300,37 @@ VECTOR_TRAMPOLINES:
 ; Debug/Utility Routines (0xFFFE80 - 0xFFFED1)
 ;
 ; These appear to be debug or diagnostic routines, possibly for serial output.
-; SUB_FE80: Wrapper that calls SUB_FEC1
-; SUB_FE86: Output hex byte (calls SUB_FEB4 for nibble conversion, SUB_FEC1 for output)
-; SUB_FEA1: Output null-terminated string from (XIX)
-; SUB_FEB4: Convert nibble (0-15) to ASCII hex character ('0'-'9', 'a'-'f')
+; DEBUG_OUTPUT_BYTE_HEX: Wrapper that calls SUB_FEC1
+; HEX_BYTE_TO_ASCII: Output hex byte (calls NIBBLE_TO_HEX_ASCII for nibble conversion, SUB_FEC1 for output)
+; DEBUG_OUTPUT_STRING: Output null-terminated string from (XIX)
+; NIBBLE_TO_HEX_ASCII: Convert nibble (0-15) to ASCII hex character ('0'-'9', 'a'-'f')
 ; SUB_FEC1: Output character (loads IZ with 0xFE00, placeholder NOPs)
 ; ==============================================================================
 
 	org	0FFFE80h
 
-SUB_FE80:
+DEBUG_OUTPUT_BYTE_HEX:
 	push	XIZ
 	calr	SUB_FEC1
 	pop	XIZ
 	ret
 
-SUB_FE86:
+HEX_BYTE_TO_ASCII:
 	push	XIZ
 	ld	W, A			; Save A in W
 	srl	4, A			; A >>= 4 (high nibble)
-	calr	SUB_FEB4		; Convert to hex char
+	calr	NIBBLE_TO_HEX_ASCII		; Convert to hex char
 	push	WA
 	calr	SUB_FEC1		; Output character
 	pop	WA
 	ld	A, W			; Restore original A
 	and	A, 0Fh			; Mask low nibble
-	calr	SUB_FEB4		; Convert to hex char
+	calr	NIBBLE_TO_HEX_ASCII		; Convert to hex char
 	calr	SUB_FEC1		; Output character
 	pop	XIZ
 	ret
 
-SUB_FEA1:
+DEBUG_OUTPUT_STRING:
 	push	XIZ
 	ld	XIX, XWA		; XIX = string pointer
 .loop:
@@ -2345,7 +2345,7 @@ SUB_FEA1:
 	pop	XIZ
 	ret
 
-SUB_FEB4:
+NIBBLE_TO_HEX_ASCII:
 	cp	A, 0Ah			; Compare with 10
 	jr	NC, .letter		; If >= 10, use letter
 	add	A, 30h			; '0' = 0x30

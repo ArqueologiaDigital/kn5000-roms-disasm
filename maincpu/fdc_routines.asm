@@ -141,7 +141,7 @@ FDC_ReturnZero:
 	RET
 
 FDC_ErrorInvalidDrive:
-	CALR LABEL_F9700A
+	CALR FDC_Validate_Drive_Head
 
 FDC_CheckDriveCount:
 	LD WA, (8A42h)
@@ -171,7 +171,7 @@ FDC_NoOpReturn:
 	RET
 
 FDC_Command5Handler:
-	CALR LABEL_F97009
+	CALR FDC_Command5_Epilogue
 	LD L, (8A24h)
 	RET
 
@@ -344,10 +344,10 @@ FDC_CheckHead:
 	CALR FDC_Set_Status
 	RET
 
-LABEL_F97009:
+FDC_Command5_Epilogue:
 	RET
 
-LABEL_F9700A:
+FDC_Validate_Drive_Head:
 	CPW (8A44h), 0000h
 	RET Z
 	CPW (8A44h), 0001h
@@ -363,7 +363,7 @@ FDC_NOP_Delay:
 	LD A, (XSP)
 	DEC 1, (XSP)
 	CP A, 0
-	JR Z, LABEL_F9703F
+	JR Z, FDC_NOP_Delay_Exit
 
 FDC_NOP_Delay_Loop:
 	NOP
@@ -381,7 +381,7 @@ FDC_NOP_Delay_Loop:
 	CP A, 0
 	JR NZ, FDC_NOP_Delay_Loop
 
-LABEL_F9703F:
+FDC_NOP_Delay_Exit:
 	INC 2, XSP
 	RET
 
@@ -394,11 +394,11 @@ FDC_Pulse_PH0:
 	RET
 
 
-LABEL_F9704F:
+FDC_Init_Sequence_1:
 	db 068h, 000h
 
 
-LABEL_F97051:
+FDC_Port_Reset_Or_Noop:
 	RET
 
 
@@ -407,33 +407,33 @@ FDC_Setup_DMA_Mode:
 	LDC_DMAM3_BC
 	LD A, (8a28h)
 	CP A, 04dh
-	JR Z, LABEL_F97091
+	JR Z, FDC_Setup_DMA_Read_Mode
 	CP A, 0c9h
-	JR Z, LABEL_F97091
+	JR Z, FDC_Setup_DMA_Read_Mode
 	CP A, 0c5h
-	JR Z, LABEL_F97091
+	JR Z, FDC_Setup_DMA_Read_Mode
 	CP A, 0ddh
-	JR Z, LABEL_F9708F
+	JR Z, FDC_Setup_DMA_Write_Mode
 	CP A, 0d9h
-	JR Z, LABEL_F9708F
+	JR Z, FDC_Setup_DMA_Write_Mode
 	CP A, 0d1h
-	JR Z, LABEL_F9708F
+	JR Z, FDC_Setup_DMA_Write_Mode
 	CP A, 04ah
-	JR Z, LABEL_F9708F
+	JR Z, FDC_Setup_DMA_Write_Mode
 	CP A, 042h
-	JR Z, LABEL_F9708F
+	JR Z, FDC_Setup_DMA_Write_Mode
 	CP A, 0cch
-	JR Z, LABEL_F9708F
+	JR Z, FDC_Setup_DMA_Write_Mode
 	CP A, 0c6h
 	RET NZ
 
-LABEL_F9708F:
+FDC_Setup_DMA_Write_Mode:
 	JR T, FDC_Setup_DMA_Ack_Dest
 
-LABEL_F97091:
+FDC_Setup_DMA_Read_Mode:
 	CALR FDC_Setup_DMA_Src_Ack
 
-LABEL_F97094:
+FDC_DMA_Setup_Exit:
 	RET
 
 FDC_Setup_DMA_Ack_Dest:
@@ -443,7 +443,7 @@ FDC_Setup_DMA_Ack_Dest:
 	LDC_DMAD3_XHL
 	LD_A 0
 	LDC_DMAC3_A
-	JR T, LABEL_F97051
+	JR T, FDC_Port_Reset_Or_Noop
 
 FDC_Setup_DMA_Src_Ack:
 	LD XHL, (08a4ch)
@@ -452,7 +452,7 @@ FDC_Setup_DMA_Src_Ack:
 	LDC_DMAD3_XHL
 	LD_A 8
 	LDC_DMAC3_A
-	JR T, LABEL_F97051
+	JR T, FDC_Port_Reset_Or_Noop
 	LD BC, (08a1ch)
 	LDC_DMAM3_BC
 	RET
@@ -464,34 +464,34 @@ FDC_Wait_Ready_Timeout:
 	CP QIZ, 0080h
 	JR NZ, 0f97107h
 
-LABEL_F970DA:
+FDC_WaitReady_StatusLoop:
 	CALR FDC_Read_Status
 	RES 4, L
 	LD A, L
 	CP A, 080h
-	JR Z, LABEL_F970EF
+	JR Z, FDC_WaitReady_TimeoutCheck
 	CP A, 0c0h
-	JR NZ, LABEL_F970EF
+	JR NZ, FDC_WaitReady_TimeoutCheck
 	LD QIZ, 0
 
-LABEL_F970EF:
+FDC_WaitReady_TimeoutCheck:
 	LD WA, (SYSTEM_TIMESTAMP)
 	SUB WA, IZ
 	CP WA, 01f4h
-	JR ULE, LABEL_F97100
+	JR ULE, FDC_WaitReady_LoopContinue
 	LD QIZ, 0ffffh
 
-LABEL_F97100:
+FDC_WaitReady_LoopContinue:
 	CP QIZ, 0080h
-	JR Z, LABEL_F970DA
+	JR Z, FDC_WaitReady_StatusLoop
 
 LABEL_F97107:
 	CP QIZ, 0
-	JR Z, LABEL_F97111
+	JR Z, FDC_WaitReady_Complete
 	LD WA,2
 	CALR FDC_Set_Status
 
-LABEL_F97111:
+FDC_WaitReady_Complete:
 	POP XIZ
 	RET
 
@@ -503,7 +503,7 @@ FDC_Wait_Status_Timeout:
 	CP QIZ, 0080h
 	JR NZ, LABEL_F9714F
 
-LABEL_F97124:
+FDC_WaitStatus_StatusLoop:
 	CALR FDC_Read_Status
 	AND L, 0e0h
 	CP L, 080h
@@ -516,12 +516,12 @@ LABEL_F97137:
 	LD WA, (SYSTEM_TIMESTAMP)
 	SUB WA, IZ
 	CP WA, 01f4h
-	JR ULE, LABEL_F97148
+	JR ULE, FDC_WaitStatus_TimeoutCheck
 	LD QIZ, 0ffffh
 
-LABEL_F97148:
+FDC_WaitStatus_TimeoutCheck:
 	CP QIZ, 0080h
-	JR Z, LABEL_F97124
+	JR Z, FDC_WaitStatus_StatusLoop
 
 LABEL_F9714F:
 	CP QIZ, 0
@@ -565,7 +565,7 @@ LABEL_F9715B:
 	db 01Eh, 0E3h, 0F8h, 0F1h, 061h, 08Ah, 047h, 0EFh
 	db 062h, 00Eh
 
-LABEL_F9723D:
+FDC_Exception_Status_Decoder:
 	LDA XDE, 8A60h
 	LD C, (XDE + 001h)
 	LD A, C
@@ -808,7 +808,7 @@ LABEL_F97634:
 	db 030h, 028h, 000h, 068h, 0D9h
 
 LABEL_F97639:
-	CALR LABEL_F9704F
+	CALR FDC_Init_Sequence_1
 	CALR FDC_Pulse_PH0
 	LD (8a6ah), 0
 	LD (8b00h), 0
@@ -1216,7 +1216,7 @@ INTTC3_HANDLER:			; F97E35
 	PUSH XBC
 	PUSH XWA
 	CALR FDC_Pulse_PH0
-	CALR LABEL_F97051
+	CALR FDC_Port_Reset_Or_Noop
 	POP XWA
 	POP XBC
 	POP XDE
@@ -1288,7 +1288,7 @@ LABEL_F97EA2:
 	CALR FDC_Read_Status
 	BIT 6, L
 	JR NZ, LABEL_F97E99
-	CALR LABEL_F9723D
+	CALR FDC_Exception_Status_Decoder
 	CP (8A61h), 80h
 	JR NZ, LABEL_F97E6B
 

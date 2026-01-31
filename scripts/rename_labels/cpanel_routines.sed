@@ -1,0 +1,17 @@
+# Control panel routines label renames
+s/LABEL_FC480F/CPanel_InterruptPoll_MainLoop/g
+s/LABEL_FC4194/CPanel_PanelDetection/g
+s/LABEL_FC40DE/Delay_2_Loops/g
+s/LABEL_FC40E9/Delay_6_Loops/g
+s/LABEL_FC4170/CPanel_SpecialCombo_FirmwareVersion/g
+s/LABEL_FC417B/CPanel_SpecialCombo_SoftVersion/g
+s/LABEL_FC4186/CPanel_SpecialCombo_BuildInfo/g
+s/LABEL_FC4191/CPanel_SpecialCombo_FirmwareUpdate/g
+s/LABEL_FC4945/CPanel_RX_PacketSizeCheck/g
+s/LABEL_FC4963/CPanel_RX_PacketHandlers_Padding/g
+s/LABEL_FC4B83/CPanel_LED_PacketHandlers_Padding/g
+s/LABEL_FC437A/CPanel_WaitTXReady_Poll/g
+s/LABEL_FC4394/CPanel_WaitTXReady_Timeout/g
+s/LABEL_FC43A6/CPanel_WaitTXReady_BufferCheck/g
+s/LABEL_FC44CA/CPanel_INTTX1_Handler_Exit/g
+s/LABEL_FC44EC/CPanel_INTRX1_Handler_Exit/g

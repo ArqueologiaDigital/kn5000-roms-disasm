@@ -43,9 +43,9 @@
 ;
 ; Code Section 1 (0x280020-0x28F575):
 ;   0x280020  HDAE5000_Handler_Registration - Handler registration entry
-;   0x28030E  HDAE5000_Alloc_Check - Memory allocation parameter check
-;   0x28033B  HDAE5000_Util_033B - Utility routine
-;   0x280368  HDAE5000_Util_0368 - Utility routine
+;   0x28030E  HDAE5000_Get_Display_Dimensions_A1 - Memory allocation parameter check
+;   0x28033B  HDAE5000_Get_Display_Width_1 - Utility routine
+;   0x280368  HDAE5000_Get_Display_Width_2 - Utility routine
 ;   0x2803C2  HDAE5000_Register_Frame - Register frame handler callback
 ;   0x28F543  HDAE5000_Alloc_Memory - Display parameter lookup (DISASSEMBLED)
 ;   0x28F570  HDAE5000_Get_Init_Flag - Return HD presence flag (DISASSEMBLED)
@@ -66,15 +66,15 @@
 ;   0x28F90C  HDAE5000_Display_Init - Display/callback initialization
 ;   0x28F97E  HDAE5000_Calc_Offset_16 - Calculate 16-byte offset in table
 ;   0x28F98B  HDAE5000_Copy_To_Table - Copy data to table at 0x201632
-;   0x28F9AD  HDAE5000_Alloc_Check_2F - Memory check routine
-;   0x28F9EB  HDAE5000_Count_Invalid - Count invalid entries
-;   0x28FA1E  HDAE5000_Calc_Addr_4C - Calculate address with 0x4C multiplier
-;   0x28FA56  HDAE5000_Copy_Entry - Copy table entry
-;   0x28FAA0  HDAE5000_Calc_Addr_90 - Calculate address with 0x90 multiplier
-;   0x28FABA  HDAE5000_Copy_Entry_90 - Copy 0x90-stride entry
-;   0x28FAE9  HDAE5000_Check_Entry - Check table entry validity
-;   0x28FB26  HDAE5000_Get_Entry_Addr - Get entry address with validation
-;   0x28FBB1  HDAE5000_Validate_Entry - Validate entry at coordinates
+;   0x28F9AD  HDAE5000_Get_Display_Dimensions_A1_2F - Memory check routine
+;   0x28F9EB  HDAE5000_Count_Invalid_Cells - Count invalid entries
+;   0x28FA1E  HDAE5000_Calculate_Row_Address - Calculate address with 0x4C multiplier
+;   0x28FA56  HDAE5000_Copy_Display_Cell - Copy table entry
+;   0x28FAA0  HDAE5000_Calculate_Tile_Address - Calculate address with 0x90 multiplier
+;   0x28FABA  HDAE5000_Copy_Display_Cell_90 - Copy 0x90-stride entry
+;   0x28FAE9  HDAE5000_Validate_Cell_Coords - Check table entry validity
+;   0x28FB26  HDAE5000_Resolve_Cell_Address - Get entry address with validation
+;   0x28FBB1  HDAE5000_Cell_In_Bounds - Validate entry at coordinates
 ;   0x29501C  HDAE5000_PPORT_Handler - PPORT state machine entry
 ;   0x295009  HDAE5000_PPORT_Util - PPORT utility function
 ;   0x295046  HDAE5000_PPORT_Status - PPORT status check
@@ -92,12 +92,12 @@
 ;   0x295D3C  HDAE5000_Cmd04_SendFSB - Handler: Send FSB to PC
 ;   0x29605A  HDAE5000_Cmd05_RcvFSB - Handler: Receive FSB from PC
 ;   0x296294  HDAE5000_Cmd06_WriteFSB - Handler: Write FSB to HD
-;   0x2967B4  HDAE5000_Display_Util - Display utility
-;   0x2967E4  HDAE5000_Display_Util2 - Display utility 2
+;   0x2967B4  HDAE5000_Render_Display_Region - Display utility
+;   0x2967E4  HDAE5000_Render_Display_Region2 - Display utility 2
 ;   0x29AE9F  HDAE5000_MemCopy - Memory copy utility
-;   0x29AFF0  HDAE5000_MemCopy2 - Memory copy variant
-;   0x29AFBE  HDAE5000_MemCompare - Memory compare
-;   0x29AF71  HDAE5000_MemUtil - Memory utility
+;   0x29AFF0  HDAE5000_MemCopy_Reverse - Memory copy variant
+;   0x29AFBE  HDAE5000_MemCompare_Block - Memory compare
+;   0x29AF71  HDAE5000_Display_Buffer_Validate - Memory utility
 ;   0x29B72D  HDAE5000_Multiply - 32-bit multiply routine
 ;   0x2971A3  HDAE5000_Check_HD_Present - Hard disk presence detection
 ;   0x2999B0  HDAE5000_Version_Info - Version string block:
@@ -449,12 +449,12 @@ HDAE5000_Cmd03_ReadFSB	equ	2959F6h	; Read FSB from HD
 HDAE5000_Cmd04_SendFSB	equ	295D3Ch	; Send FSB to PC
 HDAE5000_Cmd05_RcvFSB	equ	29605Ah	; Receive FSB from PC
 HDAE5000_Cmd06_WriteFSB	equ	296294h	; Write FSB to HD
-HDAE5000_Cmd07_LoadHD	equ	29632Ah	; Load HD to Memory
-HDAE5000_Cmd08_SendData	equ	29633Ch	; Send data to PC
-HDAE5000_Cmd09_SendFiles	equ	2964A6h	; Send files to PC
-HDAE5000_Cmd10_RcvData	equ	296588h	; Receive data from PC
-HDAE5000_Cmd11_SaveMem	equ	29659Ah	; Save memory to HD
-HDAE5000_Cmd12_Nothing	equ	296680h	; (reserved)
+HDAE5000_PPORT_Cmd_LoadHDtoMemory	equ	29632Ah	; Load HD to Memory
+HDAE5000_PPORT_Cmd_SendDataBlock	equ	29633Ch	; Send data to PC
+HDAE5000_PPORT_Cmd_SendFileList	equ	2964A6h	; Send files to PC
+HDAE5000_PPORT_Cmd_ReceiveDataBlock	equ	296588h	; Receive data from PC
+HDAE5000_PPORT_Cmd_WriteMemoryToHD	equ	29659Ah	; Save memory to HD
+HDAE5000_PPORT_Cmd_Reserved	equ	296680h	; (reserved)
 
 HDAE5000_Boot_Init:			; 28F576h
 	push	XIZ
@@ -948,12 +948,12 @@ HDAE5000_PPORT_Cmd_Table:		; 2953E2h
 	dd	HDAE5000_Cmd04_SendFSB		; 3: Send FSB to PC
 	dd	HDAE5000_Cmd05_RcvFSB		; 4: Receive FSB from PC
 	dd	HDAE5000_Cmd06_WriteFSB		; 5: Write FSB to HD
-	dd	HDAE5000_Cmd07_LoadHD		; 6: Load HD to Memory
-	dd	HDAE5000_Cmd08_SendData		; 7: Send data to PC
-	dd	HDAE5000_Cmd09_SendFiles	; 8: Send files to PC
-	dd	HDAE5000_Cmd10_RcvData		; 9: Receive data from PC
-	dd	HDAE5000_Cmd11_SaveMem		; 10: Save memory to HD
-	dd	HDAE5000_Cmd12_Nothing		; 11: (reserved)
+	dd	HDAE5000_PPORT_Cmd_LoadHDtoMemory		; 6: Load HD to Memory
+	dd	HDAE5000_PPORT_Cmd_SendDataBlock		; 7: Send data to PC
+	dd	HDAE5000_PPORT_Cmd_SendFileList	; 8: Send files to PC
+	dd	HDAE5000_PPORT_Cmd_ReceiveDataBlock		; 9: Receive data from PC
+	dd	HDAE5000_PPORT_Cmd_WriteMemoryToHD		; 10: Save memory to HD
+	dd	HDAE5000_PPORT_Cmd_Reserved		; 11: (reserved)
 
 ; ============================================================================
 ; PPORT COMMAND MENU STRINGS (0x295412 - 0x295641)

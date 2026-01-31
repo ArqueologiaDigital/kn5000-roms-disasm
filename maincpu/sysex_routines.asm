@@ -31,7 +31,7 @@
 ExcSendFunc:
 	LD XHL, XDE
 	CP XBC, 01c00007h
-	JR NZ, LABEL_F76647
+	JR NZ, ExcSendFunc_InvalidParam_Exit
 	LD XWA, 00570003h
 	LD XBC, 01e00090h
 	LD XDE, 0
@@ -42,39 +42,39 @@ ExcSendFunc:
 	LD XDE, XHL
 	CALL MainFuncCall
 
-LABEL_F76647:
+ExcSendFunc_InvalidParam_Exit:
 	LD XHL, 0
 	RET
 
 MainExcSend:
 	CP XBC, 01e30001h
-	JR NZ, LABEL_F76669
+	JR NZ, MainExcSend_UnexpectedMessageType_Exit
 	CP XDE, 00000006h
-	JR C, LABEL_F7665C
+	JR C, MainExcSend_ClampIndexToRange
 	LD XDE, 0
 
-LABEL_F7665C:
+MainExcSend_ClampIndexToRange:
 	LD XWA, 00e7fd84h
 	ADD XWA, XDE
 	LD A, (XWA)
 	CALL LABEL_FD8CAE
 
-LABEL_F76669:
+MainExcSend_UnexpectedMessageType_Exit:
 	LD XHL, 0
 	RET
 
 ExcDotFunc:
 	SUB XBC, 01e0003eh
 	CP XBC, 00000000h
-	JR LT, LABEL_F766D0
+	JR LT, ExcDotFunc_InvalidIndex_Exit
 	CP XBC, 00000009h
-	JR GT, LABEL_F766D0
+	JR GT, ExcDotFunc_InvalidIndex_Exit
 	ADD XBC, XBC
 	ADD XBC, 00e7fd8ah
 	LD BC, (XBC)
 	LDA XIX, 0F76696h
 	JP T, XIX + BC
-LABEL_F76696:
+ExcDotFunc_HandlerJumpTable:
 	db 0AAh, 012h, 024h, 0AAh, 00Eh, 021h, 0CBh, 08Fh
 	db 0DAh, 0A8h, 0C2h, 05Ch, 047h, 002h, 023h, 0D9h
 	db 012h, 0D9h, 0D8h, 063h, 016h, 0CFh, 0D8h, 066h
@@ -84,7 +84,7 @@ LABEL_F76696:
 	db 00Eh, 0EBh, 0A9h, 00Eh, 043h, 020h, 000h, 000h
 	db 000h, 00Eh
 
-LABEL_F766D0:
+ExcDotFunc_InvalidIndex_Exit:
 	LD XHL, 0
 	RET
 
@@ -96,9 +96,9 @@ ExcPmemFunc:
 	LD XIZ, XWA
 	SUB XBC, 01e0003eh
 	CP XBC, 00000000h
-	JR LT, LABEL_F7672C
+	JR LT, ExcPmemFunc_InvalidIndex_Exit
 	CP XBC, 00000009h
-	JR GT, LABEL_F7672C
+	JR GT, ExcPmemFunc_InvalidIndex_Exit
 	ADD XBC, XBC
 	ADD XBC, 00e7fdd6h
 	LD BC, (XBC)
@@ -111,12 +111,12 @@ LABEL_F76706:
 	db 0EFh, 060h, 0EEh, 08Bh, 068h, 011h, 0EBh, 0A9h
 	db 068h, 00Dh, 0EBh, 0ABh, 068h, 009h
 
-LABEL_F7672C:
+ExcPmemFunc_InvalidIndex_Exit:
 	LD XHL, 0
-	JR T, LABEL_F76735
+	JR T, ExcPmemFunc_Return
 	LDA XHL, 024760h
 
-LABEL_F76735:
+ExcPmemFunc_Return:
 	POP XIZ
 	RET
 
@@ -125,9 +125,9 @@ ExcSmemFunc:
 	LD XIZ, XWA
 	SUB XBC, 01e0003eh
 	CP XBC, 00000000h
-	JR LT, LABEL_F7678A
+	JR LT, ExcSmemFunc_InvalidIndex_Exit
 	CP XBC, 00000009h
-	JR GT, LABEL_F7678A
+	JR GT, ExcSmemFunc_InvalidIndex_Exit
 	ADD XBC, XBC
 	ADD XBC, 00e7fdeah
 	LD BC, (XBC)
@@ -140,12 +140,12 @@ LABEL_F76764:
 	db 0EFh, 060h, 0EEh, 08Bh, 068h, 011h, 0EBh, 0A9h
 	db 068h, 00Dh, 0EBh, 0ABh, 068h, 009h
 
-LABEL_F7678A:
+ExcSmemFunc_InvalidIndex_Exit:
 	LD XHL, 0
-	JR T, LABEL_F76793
+	JR T, ExcSmemFunc_Return
 	LDA XHL, 024762h
 
-LABEL_F76793:
+ExcSmemFunc_Return:
 	POP XIZ
 	RET
 
@@ -154,9 +154,9 @@ ExcCompFunc:
 	LD XIZ, XWA
 	SUB XBC, 01e0003eh
 	CP XBC, 00000000h
-	JR LT, LABEL_F767E8
+	JR LT, ExcCompFunc_InvalidIndex_Exit
 	CP XBC, 00000009h
-	JR GT, LABEL_F767E8
+	JR GT, ExcCompFunc_InvalidIndex_Exit
 	ADD XBC, XBC
 	ADD XBC, 00e7fdfeh
 	LD BC, (XBC)
@@ -169,12 +169,12 @@ LABEL_F767C2:
 	db 0EFh, 060h, 0EEh, 08Bh, 068h, 011h, 0EBh, 0A9h
 	db 068h, 00Dh, 0EBh, 0ABh, 068h, 009h
 
-LABEL_F767E8:
+ExcCompFunc_InvalidIndex_Exit:
 	LD XHL, 0
-	JR T, LABEL_F767F1
+	JR T, ExcCompFunc_Return
 	LDA XHL, 024764h
 
-LABEL_F767F1:
+ExcCompFunc_Return:
 	POP XIZ
 	RET
 
@@ -183,9 +183,9 @@ ExcSeqFunc:
 	LD XIZ, XWA
 	SUB XBC, 01e0003eh
 	CP XBC, 00000000h
-	JR LT, LABEL_F76846
+	JR LT, ExcSeqFunc_InvalidIndex_Exit
 	CP XBC, 00000009h
-	JR GT, LABEL_F76846
+	JR GT, ExcSeqFunc_InvalidIndex_Exit
 	ADD XBC, XBC
 	ADD XBC, 00e7fe12h
 	LD BC, (XBC)
@@ -198,12 +198,12 @@ LABEL_F76820:
 	db 0EFh, 060h, 0EEh, 08Bh, 068h, 011h, 0EBh, 0A9h
 	db 068h, 00Dh, 0EBh, 0ABh, 068h, 009h
 
-LABEL_F76846:
+ExcSeqFunc_InvalidIndex_Exit:
 	LD XHL, 0
-	JR T, LABEL_F7684F
+	JR T, ExcSeqFunc_Return
 	LDA XHL, 024766h
 
-LABEL_F7684F:
+ExcSeqFunc_Return:
 	POP XIZ
 	RET
 
@@ -212,9 +212,9 @@ ExcMspFunc:
 	LD XIZ, XWA
 	SUB XBC, 01e0003eh
 	CP XBC, 00000000h
-	JR LT, LABEL_F768A4
+	JR LT, ExcMspFunc_InvalidIndex_Exit
 	CP XBC, 00000009h
-	JR GT, LABEL_F768A4
+	JR GT, ExcMspFunc_InvalidIndex_Exit
 	ADD XBC, XBC
 	ADD XBC, 00e7fe26h
 	LD BC, (XBC)
@@ -227,12 +227,12 @@ LABEL_F7687E:
 	db 0EFh, 060h, 0EEh, 08Bh, 068h, 011h, 0EBh, 0A9h
 	db 068h, 00Dh, 0EBh, 0ABh, 068h, 009h
 
-LABEL_F768A4:
+ExcMspFunc_InvalidIndex_Exit:
 	LD XHL, 0
-	JR T, LABEL_F768AD
+	JR T, ExcMspFunc_Return
 	LDA XHL, 024768h
 
-LABEL_F768AD:
+ExcMspFunc_Return:
 	POP XIZ
 	RET
 

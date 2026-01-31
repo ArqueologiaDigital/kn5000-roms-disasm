@@ -48,7 +48,7 @@ AcPcgOutGridBoxProc:
 	CP XWA, 01e0008ah
 	JRL Z, LABEL_F775F5
 	CP XWA, 01c00001h
-	JR Z, LABEL_F7743B
+	JR Z, PcgOutGridBoxEventDispatch
 	SUB XBC, 01c00017h
 	CP XBC, 00000000h
 	JRL LT, LABEL_F77642
@@ -60,7 +60,7 @@ AcPcgOutGridBoxProc:
 	LDA XIX, 0F7743Bh
 	JP T, XIX + BC
 
-LABEL_F7743B:
+PcgOutGridBoxEventDispatch:
 	LD XWA, XIZ
 	LD XBC, (XSP + 010h)
 	LD XDE, (XSP + 00ch)
@@ -96,7 +96,7 @@ LABEL_F7743B:
 	LD XBC, 01c00018h
 	CALL SetDialDown
 	LD WA, 1
-	JRL T, LABEL_F775EF
+	JRL T, PcgOutGridDialConfirm
 	LD XWA, XIZ
 	LD XBC, (XSP + 010h)
 	LD XDE, (XSP + 00ch)
@@ -150,7 +150,7 @@ LABEL_F774F6:
 	LD XDE, (XSP + 00ch)
 	CALL SetDialDown
 	LD WA, 1
-	JRL T, LABEL_F775EF
+	JRL T, PcgOutGridDialConfirm
 	LD XWA, XIZ
 	LD XBC, (XSP + 010h)
 	LD XDE, (XSP + 00ch)
@@ -207,7 +207,7 @@ LABEL_F7759F:
 	CALL SetDialDown
 	LD WA, 1
 
-LABEL_F775EF:
+PcgOutGridDialConfirm:
 	CALL SetDialEnable
 	JR T, LABEL_F7763E
 
@@ -282,20 +282,20 @@ PcgOutGridCheck:
 	LDA XDE, XHL + 004h
 	LD XWA, (XSP + 02ch)
 	CP XWA, 01e0008dh
-	JRL Z, LABEL_F77B46
+	JRL Z, PcgOutCheckGridDataStructure
 	LD XWA, XIX
 	SUB XWA, 01c00017h
 	CP XWA, 00000000h
-	JRL LT, LABEL_F77D83
+	JRL LT, PcgOutGridCheckComplete
 	CP XWA, 00000006h
-	JRL GT, LABEL_F77D83
+	JRL GT, PcgOutGridCheckComplete
 	ADD XWA, XWA
 	ADD XWA, 00e7ffeeh
 	LD WA, (XWA)
-	LDA XIX, LABEL_F776BD
+	LDA XIX, PcgOutGridCheckJumpTable
 	JP T, XIX + WA
 
-LABEL_F776BD:
+PcgOutGridCheckJumpTable:
 	db 01Dh, 0D0h, 044h, 0FAh, 0EBh, 088h, 041h, 08Fh
 	db 000h, 0E0h, 001h, 0EAh, 0A8h, 01Dh, 060h, 096h
 	db 0FAh, 0EBh, 08Eh, 0BFh, 004h, 030h, 0EEh, 089h
@@ -445,7 +445,7 @@ LABEL_F776BD:
 	db 032h, 041h, 08Ch, 000h, 0E0h, 001h, 078h, 039h
 	db 002h
 
-LABEL_F77B46:
+PcgOutCheckGridDataStructure:
 	LD XWA, XIZ
 	SRL_0_XWA
 	LD QWA, 0
@@ -456,7 +456,7 @@ LABEL_F77B46:
 	LD XBC, XIY
 	LD (XDE), XIY
 	CPW (XHL), 0001h
-	JRL NZ, LABEL_F77D83
+	JRL NZ, PcgOutGridCheckComplete
 	LD DE, (XWA)
 	CP DE, 3
 	JRL Z, LABEL_F77C77
@@ -465,7 +465,7 @@ LABEL_F77B46:
 	CP DE, 1
 	JR Z, LABEL_F77B9E
 	CP DE, 0
-	JRL NZ, LABEL_F77D83
+	JRL NZ, PcgOutGridCheckComplete
 	LD A, (02476Ah)
 	INC 1, A
 	EXTZ WA
@@ -647,7 +647,7 @@ LABEL_F77CEF:
 LABEL_F77D7F:
 	CALL SendEvent
 
-LABEL_F77D83:
+PcgOutGridCheckComplete:
 	LD XHL, 0
 	POP XIZ
 	LDA XSP, XSP + 02ch

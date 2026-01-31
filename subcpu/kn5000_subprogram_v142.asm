@@ -560,9 +560,9 @@ LABEL_00F44A:				; Struct do buffer de recepção da serial #1
 
 
 OFFSETS_F460:
-	dw 0000h  ; LABEL_01FB76
-	dw 0008h  ; LABEL_01FB7E
-	dw 000Ch  ; LABEL_01FB82
+	dw 0000h  ; Audio_PlayNote_Variant_1
+	dw 0008h  ; Audio_PlayNote_Variant_2
+	dw 000Ch  ; Audio_PlayNote_Variant_3
 	dw 0010h  ; LABEL_01FB86
 	dw 0018h  ; LABEL_01FB8E
 	dw 0021h  ; LABEL_01FB97
@@ -578,19 +578,19 @@ CMD_DISPATCH_TABLE:
 	dd Audio_CmdHandler_20_3F		; 0x20-0x3F: Handler 1
 	dd Audio_CmdHandler_40_5F		; 0x40-0x5F: Handler 2
 	dd Audio_CmdHandler_60_7F		; 0x60-0x7F: Handler 3
-	dd LABEL_01F890		; 0x80-0x9F: Serial port setup (38400 baud)
+	dd Serial1_DataTransmit_Loop		; 0x80-0x9F: Serial port setup (38400 baud)
 	dd Audio_CmdHandler_A0_BF		; 0xA0-0xBF: Handler 5
 	dd Audio_CmdHandler_C0_FF		; 0xC0-0xDF: Handler 6
 	dd Audio_CmdHandler_C0_FF		; 0xE0-0xFF: Handler 7 (shared with 6)
 
 
-LABEL_00F48C:
+Voice_PolyphonyLimits_Table:
 	db 000h, 000h, 000h, 000h, 001h, 001h, 001h, 001h
 	db 002h, 002h, 002h, 002h, 003h, 000h, 003h, 000h
 	db 001h, 001h, 001h, 001h, 000h, 000h, 000h, 000h
 	db 000h, 000h, 000h, 000h, 000h, 000h, 000h, 000h
 
-LABEL_00F4AC:
+Voice_IndexMapping_Table:
 	db 000h, 001h, 002h, 003h, 004h, 005h, 006h, 007h
 	db 008h, 009h, 00Ah, 00Bh, 00Ch, 00Dh, 00Ch, 00Dh
 	db 00Eh, 00Eh, 00Eh, 00Eh, 000h, 000h, 000h, 000h
@@ -600,18 +600,18 @@ LABEL_00F4AC:
 	db 000h, 000h, 000h, 000h, 000h, 000h, 000h, 000h
 	db 000h, 000h, 000h, 000h, 000h, 000h, 000h, 000h
 
-LABEL_00F4EC:
+Voice_CommandIndexTable:
 	db 000h, 001h, 002h, 003h, 004h, 005h, 006h, 007h
 	db 008h, 009h, 00Ah, 00Bh, 00Ch, 00Dh, 010h, 020h
 	db 021h, 022h, 023h, 024h, 025h, 026h, 027h, 028h
 	db 029h, 02Ah, 02Bh
 
-LABEL_00F507:
+Voice_AttackDecay_Widths:
 	db 020h, 010h, 004h, 00Ch, 000h, 000h, 000h, 000h
 	db 000h, 000h, 000h, 000h, 000h, 000h, 000h, 000h
 	db 040h, 040h
 
-LABEL_00F519:
+Voice_EnvelopeRate_Lookup:
 	db 00Ch, 006h, 006h, 004h, 004h, 004h, 004h, 004h
 	db 002h, 002h, 002h, 002h, 002h, 002h, 002h, 006h
 	db 040h, 040h
@@ -645,7 +645,7 @@ LABEL_00F52b:
 	db 087h, 011h, 000h, 000h
 	db 02Bh, 013h, 000h, 000h
 
-LABEL_00F597:
+Voice_Pitch_Table_High:
 	db 02Dh, 011h, 000h, 000h
 	db 04Bh, 011h, 000h, 000h
 	db 069h, 011h, 000h, 000h
@@ -674,7 +674,7 @@ LABEL_00F597:
 	db 0EFh, 012h, 000h, 000h
 	db 02Bh, 013h, 000h, 000h
 
-LABEL_00F603:
+Voice_KeyTable_Remapping:
 	db 006h, 005h, 002h, 004h, 003h, 001h, 000h, 0FFh
 	db 086h, 085h, 006h, 005h, 084h, 083h, 082h, 004h
 	db 003h, 002h, 081h, 080h, 001h, 000h, 0FFh, 086h
@@ -682,7 +682,7 @@ LABEL_00F603:
 	db 002h, 081h, 080h, 001h, 0FFh, 086h, 085h, 006h
 	db 005h, 084h, 083h, 082h, 004h, 003h, 002h, 0FFh
 
-LABEL_00F633:
+Voice_SFX_ModulationTable:
 	db 00Bh, 0F6h, 000h, 000h, 000h, 003h, 01Ah, 0F6h
 	db 000h, 000h, 001h, 003h, 028h, 0F6h, 000h, 000h
 	db 002h, 004h, 028h, 0F6h, 000h, 000h, 002h, 005h
@@ -2102,7 +2102,7 @@ CALL_TABLE_12159:
 	dd LABEL_0355AD
 	dd LABEL_0355AD
 
-LABEL_012171:
+Audio_DSP_StateTable_Packed:
 	db 000h, 000h, 018h, 0E8h, 000h, 000h, 07Fh
 	db 07Fh, 07Fh, 07Fh, 000h, 05Fh, 000h, 000h, 000h
 	db 020h, 000h, 040h, 000h, 060h, 000h, 000h, 000h
@@ -9145,12 +9145,12 @@ Serial1_Enable_TX_Interrupt:	; 01F801h
 	POP SR
 	RET
 
-LABEL_01F809:
+Serial1_BaudRate_Config_Table:
 	db 002h, 006h, 006h, 008h, 0EBh, 0FDh, 003h, 00Eh
 
-LABEL_01F811:
+Serial1_CommandHandler_RX_F4F5:
 	CP A, 0f5h
-	JR Z, LABEL_01F82C
+	JR Z, Serial1_F5_BaudRate_Switch
 	CP A, 0f4h
 	RET NZ
 	LD (SERIAL_1_VAR_1038), 003h
@@ -9160,12 +9160,12 @@ LABEL_01F811:
 	EI 0
 	RET
 
-LABEL_01F82C:
+Serial1_F5_BaudRate_Switch:
 	LD (SERIAL_1_VAR_1038), 002h
 	SET 2, (SERIAL_1_VAR_1034)
 	RET
 
-LABEL_01F836:
+Audio_CheckQueuedData_Send:
 	LD XWA, (102Ch)
 	LD XBC, (1040h)
 	LD XDE, XBC
@@ -9177,7 +9177,7 @@ LABEL_01F836:
 	CALR Serial1_Enable_TX_Interrupt
 	RET
 
-LABEL_01F856:
+Audio_DMA_RingBuffer_To_Maincpu:
 	PUSH IZ
 	LD IZ, 0
 
@@ -9208,7 +9208,7 @@ LABEL_01F88E:
 	POP IZ
 	RET
 
-LABEL_01F890:
+Serial1_DataTransmit_Loop:
 	LD A, (XSP + 004h)
 	DEC 1, (XSP + 004h)
 	CP A, 0
@@ -9222,7 +9222,7 @@ LABEL_01F89A:
 	LD (XSP + 006h), XWA
 	EXTZ BC
 	LD WA, BC
-	CALR LABEL_01F811
+	CALR Serial1_CommandHandler_RX_F4F5
 	JR T, LABEL_01F8C8
 
 LABEL_01F8B2:
@@ -9247,9 +9247,9 @@ LABEL_01F8D2:
 Audio_Process_Final:
 	PUSH SR
 	EI 6
-	CALR LABEL_01F856
+	CALR Audio_DMA_RingBuffer_To_Maincpu
 	POP SR
-	JRL T, LABEL_01F836
+	JRL T, Audio_CheckQueuedData_Send
 
 INIT_RING_BUFFERS:
 	LD (SERIAL_1_VAR_1034), 000h
@@ -9272,7 +9272,7 @@ INIT_RING_BUFFERS:
 	EI 0
 	RET
 
-LABEL_01F91F:
+Serial1_Config_Constants:
 	db 005h, 00Eh, 068h, 001h, 00Eh
 
 
@@ -9473,16 +9473,16 @@ LABEL_01FB41:
 	JP T, XIX + BC
 
 
-LABEL_01FB76:
+Audio_PlayNote_Variant_1:
 	SET 4, (103Eh)
 	LD_A 001h
 	JR T, LABEL_01FB90
 
-LABEL_01FB7E:
+Audio_PlayNote_Variant_2:
 	LD_A 003h
 	JR T, LABEL_01FB90
 
-LABEL_01FB82:
+Audio_PlayNote_Variant_3:
 	LD_A 002h
 	JR T, LABEL_01FB90
 

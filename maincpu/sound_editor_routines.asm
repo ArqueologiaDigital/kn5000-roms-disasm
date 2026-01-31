@@ -45,13 +45,13 @@ SeMenuModeFunc:
 	CP XBC, 01c00013h
 	RET NZ
 	CP XDE, 00000001h
-	JR Z, LABEL_F03731
+	JR Z, SeMenuModeFunc_Handler
 	OR XDE, XDE
 	RET NZ
-	JP LABEL_F0A110
+	JP InitializeSeMenuDefaults
 
-LABEL_F03731:
-	CALL LABEL_F0A136
+SeMenuModeFunc_Handler:
+	CALL UpdateSeMenuSelection
 	RET
 
 SeMenuTitleFunc:
@@ -67,7 +67,7 @@ SeMenuTitleFunc:
 	LDA XSP, XSP + 010h
 	RET
 
-LABEL_F03753:
+SeMenuTitleFunc_DisplayData:
 	db 01Bh, 062h, 0A1h, 0F0h, 01Bh, 0D6h, 0BBh, 0F0h
 	db 09Fh, 004h, 020h, 09Fh, 006h, 021h, 01Bh, 046h
 	db 0BFh, 0F0h, 01Bh, 0E0h, 0BBh, 0F0h
@@ -85,7 +85,7 @@ SeEasyTitleFunc:
 	LDA XSP, XSP + 010h
 	RET
 
-LABEL_F03786:
+SeEasyTitleFunc_DisplayData:
 	db 01Bh, 0A5h, 0A6h, 0F0h, 01Bh, 00Eh, 0BDh, 0F0h
 	db 09Fh, 004h, 020h, 09Fh, 006h, 021h, 01Bh, 010h
 	db 0D7h, 0F0h, 01Bh, 018h, 0BDh, 0F0h
@@ -103,7 +103,7 @@ SeTonTon1TitleFunc:
 	LDA XSP, XSP + 010h
 	RET
 
-LABEL_F037B9:
+SeTonTon1TitleFunc_DisplayData:
 	db 01Bh, 0DDh, 0B3h, 0F0h, 01Bh, 065h, 0BCh, 0F0h
 	db 09Fh, 004h, 020h, 09Fh, 006h, 021h, 01Bh, 0D9h
 	db 0C6h, 0F0h, 01Bh, 06Fh, 0BCh, 0F0h
@@ -121,7 +121,7 @@ SeTonTon2TitleFunc:
 	LDA XSP, XSP + 010h
 	RET
 
-LABEL_F037EC:
+SeTonTon2TitleFunc_DisplayData:
 	db 01Bh, 054h, 0B5h, 0F0h, 01Bh, 070h, 0BCh, 0F0h
 	db 09Fh, 004h, 020h, 09Fh, 006h, 021h, 01Bh, 007h
 	db 0C7h, 0F0h, 01Bh, 07Ah, 0BCh, 0F0h
@@ -139,7 +139,7 @@ SeTonRan1TitleFunc:
 	LDA XSP, XSP + 010h
 	RET
 
-LABEL_F0381F:
+SeTonRan1TitleFunc_DisplayData:
 	db 01Bh, 030h, 0B6h, 0F0h, 01Bh, 07Bh, 0BCh, 0F0h
 	db 09Fh, 004h, 020h, 09Fh, 006h, 021h, 01Bh, 035h
 	db 0C7h, 0F0h, 01Bh, 085h, 0BCh, 0F0h
@@ -157,7 +157,7 @@ SeTonRan2TitleFunc:
 	LDA XSP, XSP + 010h
 	RET
 
-LABEL_F03852:
+SeTonRan2TitleFunc_DisplayData:
 	db 01Bh, 00Fh, 0B7h, 0F0h, 01Bh, 086h, 0BCh, 0F0h
 	db 09Fh, 004h, 020h, 09Fh, 006h, 021h, 01Bh, 063h
 	db 0C7h, 0F0h, 01Bh, 090h, 0BCh, 0F0h
@@ -175,7 +175,7 @@ SeTonHyb1TitleFunc:
 	LDA XSP, XSP + 010h
 	RET
 
-LABEL_F03885:
+SeTonHyb1TitleFunc_DisplayData:
 	db 01Bh, 0EEh, 0B7h, 0F0h, 01Bh, 091h, 0BCh, 0F0h
 	db 09Fh, 004h, 020h, 09Fh, 006h, 021h, 01Bh, 091h
 	db 0C7h, 0F0h, 01Bh, 09Bh, 0BCh, 0F0h
@@ -193,7 +193,7 @@ SePitPit1TitleFunc:
 	LDA XSP, XSP + 010h
 	RET
 
-LABEL_F038B8:
+SePitPit1TitleFunc_DisplayData:
 	db 01Bh, 086h, 0A7h, 0F0h, 01Bh, 0E1h, 0BBh, 0F0h
 	db 09Fh, 004h, 020h, 09Fh, 006h, 021h, 01Bh, 0D0h
 	db 09Ah, 0F0h, 01Bh, 0EBh, 0BBh, 0F0h
@@ -211,7 +211,7 @@ SePitEnv1TitleFunc:
 	LDA XSP, XSP + 010h
 	RET
 
-LABEL_F038EB:
+SePitEnv1TitleFunc_DisplayData:
 	db 01Bh, 09Bh, 0A8h, 0F0h, 01Bh, 0ECh, 0BBh, 0F0h
 	db 09Fh, 004h, 020h, 09Fh, 006h, 021h, 01Bh, 0FEh
 	db 09Ah, 0F0h, 01Bh, 0F6h, 0BBh, 0F0h
@@ -229,7 +229,7 @@ SePitEnv2TitleFunc:
 	LDA XSP, XSP + 010h
 	RET
 
-LABEL_F0391E:
+SePitEnv2TitleFunc_DisplayData:
 	db 01Bh, 031h, 0A9h, 0F0h, 01Bh, 0F7h, 0BBh, 0F0h
 	db 09Fh, 004h, 020h, 09Fh, 006h, 021h, 01Bh, 02Ch
 	db 09Bh, 0F0h, 01Bh, 001h, 0BCh, 0F0h
@@ -247,7 +247,7 @@ SePitLfo1TitleFunc:
 	LDA XSP, XSP + 010h
 	RET
 
-LABEL_F03951:
+SePitLfo1TitleFunc_DisplayData:
 	db 01Bh, 0DBh, 0A9h, 0F0h, 01Bh, 002h, 0BCh, 0F0h
 	db 09Fh, 004h, 020h, 09Fh, 006h, 021h, 01Bh, 05Ah
 	db 09Bh, 0F0h, 01Bh, 00Ch, 0BCh, 0F0h
@@ -265,7 +265,7 @@ SeAmpAmp1TitleFunc:
 	LDA XSP, XSP + 010h
 	RET
 
-LABEL_F03984:
+SeAmpAmp1TitleFunc_DisplayData:
 	db 01Bh, 0E3h, 0AAh, 0F0h, 01Bh, 00Dh, 0BCh, 0F0h
 	db 09Fh, 004h, 020h, 09Fh, 006h, 021h, 01Bh, 0B3h
 	db 03Dh, 0F0h, 01Bh, 017h, 0BCh, 0F0h

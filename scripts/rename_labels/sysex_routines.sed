@@ -1,0 +1,16 @@
+# SysEx routines label renames
+s/LABEL_F76647/ExcSendFunc_InvalidParam_Exit/g
+s/LABEL_F76669/MainExcSend_UnexpectedMessageType_Exit/g
+s/LABEL_F766D0/ExcDotFunc_InvalidIndex_Exit/g
+s/LABEL_F7672C/ExcPmemFunc_InvalidIndex_Exit/g
+s/LABEL_F7678A/ExcSmemFunc_InvalidIndex_Exit/g
+s/LABEL_F767E8/ExcCompFunc_InvalidIndex_Exit/g
+s/LABEL_F76846/ExcSeqFunc_InvalidIndex_Exit/g
+s/LABEL_F768A4/ExcMspFunc_InvalidIndex_Exit/g
+s/LABEL_F7665C/MainExcSend_ClampIndexToRange/g
+s/LABEL_F76735/ExcPmemFunc_Return/g
+s/LABEL_F76793/ExcSmemFunc_Return/g
+s/LABEL_F767F1/ExcCompFunc_Return/g
+s/LABEL_F7684F/ExcSeqFunc_Return/g
+s/LABEL_F768AD/ExcMspFunc_Return/g
+s/LABEL_F76696/ExcDotFunc_HandlerJumpTable/g

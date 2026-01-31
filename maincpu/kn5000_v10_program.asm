@@ -120425,43 +120425,43 @@ LABEL_ED27E4:
 
 ; ENCODER_HANDLER_TABLE - Jump table for encoder-specific value processing
 ; Indexed by 5-bit encoder ID (0-31). Each entry is a 32-bit address.
-; Most entries point to Encoder_ReturnOne (default/unused).
+; Most entries point to Encoder_ReturnDefaultConstant (default/unused).
 ; Entry 2: Modulation wheel, Entry 5: Volume slider
 ; Entry 25: Breath controller, Entry 26: Foot controller, Entry 27: Expression
 ; Entry 31: Simple passthrough
 ENCODER_HANDLER_TABLE_DATA:
-	dd Encoder_ReturnOne		; ID 0: unused
-	dd Encoder_ReturnOne		; ID 1: unused
+	dd Encoder_ReturnDefaultConstant		; ID 0: unused
+	dd Encoder_ReturnDefaultConstant		; ID 1: unused
 	dd Encoder_ProcessModwheel	; ID 2: Modulation wheel
-	dd Encoder_ReturnOne		; ID 3: unused
-	dd Encoder_ReturnOne		; ID 4: unused
+	dd Encoder_ReturnDefaultConstant		; ID 3: unused
+	dd Encoder_ReturnDefaultConstant		; ID 4: unused
 	dd Encoder_ProcessVolume	; ID 5: Volume slider
-	dd Encoder_ReturnOne		; ID 6: unused
-	dd Encoder_ReturnOne		; ID 7: unused
-	dd Encoder_ReturnOne		; ID 8: unused
-	dd Encoder_ReturnOne		; ID 9: unused
-	dd Encoder_ReturnOne		; ID 10: unused
-	dd Encoder_ReturnOne		; ID 11: unused
-	dd Encoder_ReturnOne		; ID 12: unused
-	dd Encoder_ReturnOne		; ID 13: unused
-	dd Encoder_ReturnOne		; ID 14: unused
-	dd Encoder_ReturnOne		; ID 15: unused
-	dd Encoder_ReturnOne		; ID 16: unused
-	dd Encoder_ReturnOne		; ID 17: unused
-	dd Encoder_ReturnOne		; ID 18: unused
-	dd Encoder_ReturnOne		; ID 19: unused
-	dd Encoder_ReturnOne		; ID 20: unused
-	dd Encoder_ReturnOne		; ID 21: unused
-	dd Encoder_ReturnOne		; ID 22: unused
-	dd Encoder_ReturnOne		; ID 23: unused
-	dd Encoder_ReturnOne		; ID 24: unused
+	dd Encoder_ReturnDefaultConstant		; ID 6: unused
+	dd Encoder_ReturnDefaultConstant		; ID 7: unused
+	dd Encoder_ReturnDefaultConstant		; ID 8: unused
+	dd Encoder_ReturnDefaultConstant		; ID 9: unused
+	dd Encoder_ReturnDefaultConstant		; ID 10: unused
+	dd Encoder_ReturnDefaultConstant		; ID 11: unused
+	dd Encoder_ReturnDefaultConstant		; ID 12: unused
+	dd Encoder_ReturnDefaultConstant		; ID 13: unused
+	dd Encoder_ReturnDefaultConstant		; ID 14: unused
+	dd Encoder_ReturnDefaultConstant		; ID 15: unused
+	dd Encoder_ReturnDefaultConstant		; ID 16: unused
+	dd Encoder_ReturnDefaultConstant		; ID 17: unused
+	dd Encoder_ReturnDefaultConstant		; ID 18: unused
+	dd Encoder_ReturnDefaultConstant		; ID 19: unused
+	dd Encoder_ReturnDefaultConstant		; ID 20: unused
+	dd Encoder_ReturnDefaultConstant		; ID 21: unused
+	dd Encoder_ReturnDefaultConstant		; ID 22: unused
+	dd Encoder_ReturnDefaultConstant		; ID 23: unused
+	dd Encoder_ReturnDefaultConstant		; ID 24: unused
 	dd Encoder_ProcessBreath	; ID 25: Breath controller
 	dd Encoder_ProcessFoot		; ID 26: Foot controller
 	dd Encoder_ProcessExpression	; ID 27: Expression
-	dd Encoder_ReturnOne		; ID 28: unused
-	dd Encoder_ReturnOne		; ID 29: unused
-	dd Encoder_ReturnOne		; ID 30: unused
-	dd Encoder_ReturnValue		; ID 31: Simple passthrough
+	dd Encoder_ReturnDefaultConstant		; ID 28: unused
+	dd Encoder_ReturnDefaultConstant		; ID 29: unused
+	dd Encoder_ReturnDefaultConstant		; ID 30: unused
+	dd Encoder_PassthroughIdentity		; ID 31: Simple passthrough
 	db 000h, 002h, 003h, 004h
 	db 005h, 006h, 006h, 007h, 008h, 009h, 00Ah, 00Bh
 	db 00Ch, 00Dh, 00Eh, 00Eh, 00Fh, 010h, 011h, 012h
@@ -135768,7 +135768,7 @@ LABEL_EF165A:
 	JR Z, LABEL_EF1674
 	CALL LABEL_F43D05
 	CALR LABEL_EF1388
-	CALL LABEL_FCF4F7
+	CALL MIDI_START_PLAYBACK_REQUEST
 	CALL LABEL_FE06E7
 	CALL LABEL_EF150A
 	RET
@@ -156348,7 +156348,7 @@ LABEL_F09AC3:
 	db 02Fh, 069h, 0F0h, 030h, 020h, 000h, 0D9h, 0A8h
 	db 01Dh, 070h, 061h, 0F0h, 00Eh
 
-LABEL_F0A110:
+InitializeSeMenuDefaults:
 	LD WA, 0
 	CALL LABEL_F095CE
 	LD WA, 0
@@ -156362,7 +156362,7 @@ LABEL_F0A110:
 	CALL LABEL_F09900
 	JP LABEL_F066D2
 
-LABEL_F0A136:
+UpdateSeMenuSelection:
 	DEC 2, XSP
 	LD WA, 0
 	CALL LABEL_F095A1
@@ -233371,7 +233371,7 @@ LABEL_F47C8B:
 	LD XHL, (XSP + 004h)
 	CP XHL, 00000000h
 	JRL LT, LABEL_F47E38
-	CALL LABEL_F8953B
+	CALL GetEncodedFreeSpaceData
 	CP XHL, 00000000h
 	JRL LT, LABEL_F47E38
 	CP (XSP + 004h), XHL
@@ -312798,7 +312798,7 @@ LABEL_F87218:
 	PUSH XIZ
 	LD (XSP + 01ch), A
 	LD QIZ, 0
-	CALL LABEL_F895EF
+	CALL GetCurrentFileIndex
 	CP HL, 0
 	JR GE, LABEL_F8722E
 	LD HL, 0
@@ -312892,7 +312892,7 @@ LABEL_F872E5:
 	LDA XSP, XSP - 018h
 	PUSH XIZ
 	LD QIZ, 0
-	CALL LABEL_F895EF
+	CALL GetCurrentFileIndex
 	CP HL, 0
 	JR GE, LABEL_F872F8
 	LD HL, 0
@@ -312956,7 +312956,7 @@ LABEL_F87366:
 	LDA XSP, XSP - 018h
 	PUSH XIZ
 	LD QIZ, 0
-	CALL LABEL_F895EF
+	CALL GetCurrentFileIndex
 	CP HL, 0
 	JR LT, LABEL_F873A9
 	LD A, L
@@ -313024,7 +313024,7 @@ LABEL_F873ED:
 	LDA XSP, XSP - 018h
 	PUSH XIZ
 	LD QIZ, 0
-	CALL LABEL_F895EF
+	CALL GetCurrentFileIndex
 	CP HL, 0
 	JR LT, LABEL_F87430
 	LD A, L
@@ -313346,7 +313346,7 @@ LABEL_F87A08:
 	LDA XSP, XSP - 010h
 	PUSH XIZ
 	LD QIZ, 0
-	CALL LABEL_F895EF
+	CALL GetCurrentFileIndex
 	LD IZ, HL
 	CP IZ, 0
 	JR GE, LABEL_F87A1F
@@ -313574,7 +313574,7 @@ LABEL_F87EAD:
 	LDA XSP, XSP - 01ah
 	PUSH XIZ
 	LDW (XSP + 004h:8), 0000h
-	CALL LABEL_F895EF
+	CALL GetCurrentFileIndex
 	LD IZ, HL
 	CP IZ, 0
 	JR GE, LABEL_F87EC6
@@ -313780,7 +313780,7 @@ LABEL_F880AD:
 	LDA XSP, XSP - 01ch
 	PUSH XIZ
 	LD (XSP + 01eh), WA
-	CALL LABEL_F895EF
+	CALL GetCurrentFileIndex
 	LD (XSP + 004h), HL
 	CPW (XSP + 004h), 0000h
 	JR GE, LABEL_F880C8
@@ -314050,7 +314050,7 @@ LABEL_F8872D:
 	LDA XSP, XSP - 018h
 	PUSH XIZ
 	LD QIZ, 0
-	CALL LABEL_F895EF
+	CALL GetCurrentFileIndex
 	LD IZ, HL
 	CP IZ, 0
 	JR GE, LABEL_F88743
@@ -314102,7 +314102,7 @@ LABEL_F8879E:
 	PUSH XIZ
 	LD (XSP + 034h), XWA
 	LD QIZ, 0
-	CALL LABEL_F895EF
+	CALL GetCurrentFileIndex
 	LD IZ, HL
 	CP IZ, 0
 	JR GE, LABEL_F887B7
@@ -314165,7 +314165,7 @@ LABEL_F88838:
 	PUSH XIZ
 	LD (XSP + 03eh), WA
 	LD QIZ, 0
-	CALL LABEL_F895EF
+	CALL GetCurrentFileIndex
 	LD (XSP + 004h), HL
 	CPW (XSP + 004h), 0000h
 	JR GE, LABEL_F88856
@@ -314314,7 +314314,7 @@ LABEL_F889D9:
 	PUSH XIZ
 	LD (XSP + 03ch), WA
 	LDW (XSP + 006h:8), 0000h
-	CALL LABEL_F895EF
+	CALL GetCurrentFileIndex
 	LD (XSP + 004h), HL
 	CPW (XSP + 004h), 0000h
 	JR GE, LABEL_F889F9
@@ -315632,7 +315632,7 @@ LABEL_F89423:
 	SCC Z, L
 	RET
 
-LABEL_F8943E:
+CheckFileSystemStatus:
 	LD WA, (025EA8h)
 	CP WA, 0
 	JR LT, LABEL_F8944D
@@ -315722,7 +315722,7 @@ LABEL_F894DB:
 	LDW (0272CAh), 0000h
 	RET
 
-LABEL_F89520:
+GetDiskSizeInfo:
 	LD A, (0EA03DAh)
 	CP A, (025DB6h)
 	JR NZ, LABEL_F89535
@@ -315733,7 +315733,7 @@ LABEL_F89535:
 	LD L, (025DB6h)
 	RET
 
-LABEL_F8953B:
+GetEncodedFreeSpaceData:
 	LDA XWA, 025D6Ch
 	LD XBC, (0EA0390h)
 	CP XBC, (XWA)
@@ -315819,7 +315819,7 @@ LABEL_F895EC:
 	LD HL, 0
 	RET
 
-LABEL_F895EF:
+GetCurrentFileIndex:
 	LD WA, (025EA8h)
 	CALR LABEL_F895CD
 	CP HL, 0
@@ -315831,7 +315831,7 @@ LABEL_F895FF:
 	LD HL, (025EA8h)
 	RET
 
-LABEL_F89605:
+NotifyUIOfSelectionChange:
 	PUSH IZ
 	LD IZ, WA
 	LD WA, IZ
@@ -316123,7 +316123,7 @@ LABEL_F89878:
 	LDA XSP, XSP + 00ah
 	RET
 
-LABEL_F8987D:
+GetEncodedFileSizeData:
 	LDA XSP, XSP - 112h
 	PUSH IZ
 	LDA XBC, 025DB8h
@@ -316450,7 +316450,7 @@ LABEL_F89C24:
 	db 02Ah, 0F5h, 0AFh, 014h, 023h, 04Eh, 0F3h, 0FDh
 	db 01Ah, 001h, 037h, 00Eh
 
-LABEL_F89C78:
+GetFileCountEncoded:
 	LDW (0271EEh), 0000h
 	LDW (0271F0h), 003bh
 	CALR LABEL_F89ADD
@@ -318474,7 +318474,7 @@ LABEL_F8B18A:
 	LD (0271F0h), WA
 	RET
 
-LABEL_F8B19C:
+ResetProgressIndication:
 	LDW (8500h), 0ffffh
 	LDW (8502h), 0ffffh
 	LDW (8504h), 0ffffh
@@ -318489,7 +318489,7 @@ LABEL_F8B19C:
 
 LABEL_F8B1D1:
 	LD (84FEh), 000h
-	CALR LABEL_F8B19C
+	CALR ResetProgressIndication
 	JP LABEL_F890AF
 
 LABEL_F8B1DD:
@@ -318500,7 +318500,7 @@ LABEL_F8B1DE:
 
 LABEL_F8B1DF:
 	LD (84FEh), 000h
-	CALR LABEL_F8B19C
+	CALR ResetProgressIndication
 	CALL LABEL_F890AF
 	CALL LABEL_F1E9A3
 	CP L, 0
@@ -318511,7 +318511,7 @@ LABEL_F8B1DF:
 	CALL ApPostEvent
 	RET
 
-LABEL_F8B204:
+InitializeOperationState:
 	DEC 2, XSP
 	LD (XSP), A
 	CALL LABEL_EF2457
@@ -318534,7 +318534,7 @@ LABEL_F8B221:
 	INC 2, XSP
 	RET
 
-LABEL_F8B244:
+CancelOperationCleanup:
 	LD A, (28A7h)
 	BIT 002h, A
 	JR Z, LABEL_F8B254
@@ -318546,7 +318546,7 @@ LABEL_F8B254:
 	CALL LABEL_F393FC
 	JP LABEL_FDBB2D
 
-LABEL_F8B260:
+SignalProgressUpdate:
 	CALL LABEL_FC3ED0
 	JP RefreshSwEvent
 
@@ -318562,13 +318562,13 @@ LABEL_F8B268:
 	BIT 2, (041Fh)
 	JRL NZ, LABEL_F8B335
 	LD WA, 0
-	CALR LABEL_F8B204
+	CALR InitializeOperationState
 	CPW (8500h), 0000h
 	JR GE, LABEL_F8B2A2
-	CALL LABEL_F89520
+	CALL GetDiskSizeInfo
 	EXTZ HL
 	LD (8500h), HL
-	CALR LABEL_F8B260
+	CALR SignalProgressUpdate
 
 LABEL_F8B2A2:
 	LD WA, (8500h)
@@ -318576,15 +318576,15 @@ LABEL_F8B2A2:
 	JR Z, LABEL_F8B2B4
 	CP WA, 3
 	JR Z, LABEL_F8B2B4
-	CALR LABEL_F8B19C
+	CALR ResetProgressIndication
 	JRL T, LABEL_F8B335
 
 LABEL_F8B2B4:
 	CPW (8502h), 0000h
 	JR GE, LABEL_F8B2C7
-	CALL LABEL_F8987D
+	CALL GetEncodedFileSizeData
 	LD (8502h), HL
-	CALR LABEL_F8B260
+	CALR SignalProgressUpdate
 
 LABEL_F8B2C7:
 	CPW (8502h), 0000h
@@ -318596,8 +318596,8 @@ LABEL_F8B2C7:
 	CP IZ, 0013h
 	JR GT, LABEL_F8B335
 	LD WA, IZ
-	CALL LABEL_F89605
-	CALL LABEL_F8943E
+	CALL NotifyUIOfSelectionChange
+	CALL CheckFileSystemStatus
 	CP HL, 0
 	JR Z, LABEL_F8B335
 	LD IZ, 0
@@ -318615,8 +318615,8 @@ LABEL_F8B2F1:
 	CALL LABEL_F87A08
 	LD IZ, HL
 	CALL assswb_out
-	CALR LABEL_F8B260
-	CALR LABEL_F8B244
+	CALR SignalProgressUpdate
+	CALR CancelOperationCleanup
 	CP IZ, 0
 	JR GE, LABEL_F8B329
 	LD (7F42h), 001h
@@ -318663,7 +318663,7 @@ LABEL_F8B36E:
 	LD (XSP + 002h), A
 	CPW (8500h), 0000h
 	JR GE, LABEL_F8B387
-	CALL LABEL_F89520
+	CALL GetDiskSizeInfo
 	EXTZ HL
 	LD (8500h), HL
 
@@ -318705,7 +318705,7 @@ LABEL_F8B3C0:
 	JR T, LABEL_F8B3D5
 
 LABEL_F8B3C6:
-	CALR LABEL_F8B19C
+	CALR ResetProgressIndication
 	LD (7F42h), 002h
 	LD WA, 00eeh
 
@@ -318719,7 +318719,7 @@ LABEL_F8B3D5:
 LABEL_F8B3D8:
 	CPW (8500h), 0000h
 	JR GE, LABEL_F8B3EA
-	CALL LABEL_F89520
+	CALL GetDiskSizeInfo
 	EXTZ HL
 	LD (8500h), HL
 
@@ -318760,7 +318760,7 @@ LABEL_F8B421:
 	JP LABEL_F99490
 
 LABEL_F8B425:
-	CALR LABEL_F8B19C
+	CALR ResetProgressIndication
 	LD (7F42h), 002h
 	LD WA, 00eeh
 	CALL LABEL_F994BD
@@ -318771,7 +318771,7 @@ LABEL_F8B435:
 	LD (XSP), A
 	CPW (8500h), 0000h
 	JR GE, LABEL_F8B44B
-	CALL LABEL_F89520
+	CALL GetDiskSizeInfo
 	EXTZ HL
 	LD (8500h), HL
 
@@ -318796,7 +318796,7 @@ LABEL_F8B46D:
 	JR T, LABEL_F8B487
 
 LABEL_F8B472:
-	CALR LABEL_F8B19C
+	CALR ResetProgressIndication
 	LD (7F42h), 002h
 	LD WA, 00eeh
 
@@ -356745,8 +356745,8 @@ CaptureLcd:
 	LDA XSP, XSP + 014h
 	LD XWA, 1
 	ADD (03044Ah), XWA
-	CALL LABEL_F89520
-	CALL LABEL_F8987D
+	CALL GetDiskSizeInfo
+	CALL GetEncodedFileSizeData
 	LDA XWA, XSP + 002h
 	LD XBC, 00eaae5eh
 	CALL LABEL_F88BC7
@@ -383221,7 +383221,7 @@ LABEL_FC3ECB:
 	RET
 
 LABEL_FC3ECC:
-	CALR LABEL_FC480F
+	CALR CPanel_InterruptPoll_MainLoop
 	RET
 
 LABEL_FC3ED0:
@@ -383238,7 +383238,7 @@ LABEL_FC3ED0:
 
 
 LABEL_FC3EDC:
-	CALR LABEL_FC4194
+	CALR CPanel_PanelDetection
 	RET
 
 
@@ -406657,7 +406657,7 @@ LABEL_FDB7DC:
 	LD XWA, (XSP + 008h)
 	LD A, (XWA)
 	EXTZ WA
-	CALL LABEL_FCF224
+	CALL MIDI_RX_BYTE_DISPATCHER
 	CALL LABEL_EF27B7
 	LD IZ, HL
 	JR T, LABEL_FDB832
@@ -406726,7 +406726,7 @@ LABEL_FDB869:
 	LD XWA, (XSP + 00ah)
 	LD A, (XWA)
 	EXTZ WA
-	CALL LABEL_FCF224
+	CALL MIDI_RX_BYTE_DISPATCHER
 	CALL LABEL_EF2865
 	CP HL, 1
 	JR LT, LABEL_FDB896

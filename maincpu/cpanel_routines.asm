@@ -266,7 +266,7 @@ LABEL_FC40E8:
 	ret
 
 
-LABEL_FC40E9:
+Delay_6_Loops:
 	LD WA, 6
 
 LABEL_FC40EB:
@@ -366,36 +366,36 @@ LABEL_FC4156:
 
 CPanel_CheckSpecialCombos:
 	CP (STATE_OF_CPANEL_BUTTONS_LEFT + 4), 06ch   ;  CPL_SEG4 = 0110 1100 = AUTO PLAY CHORD + SPLIT POINT + VARIATION 4 + VARIATION 3 => display sw internal build numbers
-	JR NZ, LABEL_FC4170
+	JR NZ, CPanel_SpecialCombo_FirmwareVersion
 	LD HL, 3  ; SOFT VERSION SCREEN
 	JR T, LABEL_FC4193
 
-LABEL_FC4170:
+CPanel_SpecialCombo_FirmwareVersion:
 	CP (STATE_OF_CPANEL_BUTTONS_RIGHT + 1), 070h   ; CPR_SEG1 = 0111 0000 = GM SPECIAL + ACCORDION REGISTER + DIGITAL DRAWBAR => display fw version on screen & LEDs
-	JR NZ, LABEL_FC417B
+	JR NZ, CPanel_SpecialCombo_SoftVersion
 	LD HL, 2
 	JR T, LABEL_FC4193
 
-LABEL_FC417B:
+CPanel_SpecialCombo_SoftVersion:
 	CP (STATE_OF_CPANEL_BUTTONS_LEFT + 6), 038h   ; CPL_SEG6 = 0011 1000 = SHOWTIME & TRAD DANCE + PARTY TIME + MARCH & WALTZ => ?
-	JR NZ, LABEL_FC4186
+	JR NZ, CPanel_SpecialCombo_BuildInfo
 	LD HL, 1
 	JR T, LABEL_FC4193
 
-LABEL_FC4186:
+CPanel_SpecialCombo_BuildInfo:
 	CP (STATE_OF_CPANEL_BUTTONS_RIGHT + 6), 00fh   ; CPR_SEG6 = 0000 1111 = 4 panel memory buttons (PM 4 + PM 3 + PM 2 + PM 1) => fw update
-	JR NZ, LABEL_FC4191
+	JR NZ, CPanel_SpecialCombo_FirmwareUpdate
 	LD HL, 4
 	JR T, LABEL_FC4193
 
-LABEL_FC4191:
+CPanel_SpecialCombo_FirmwareUpdate:
 	LD HL, 0
 
 LABEL_FC4193:
 	RET
 
 
-LABEL_FC4194:
+CPanel_PanelDetection:
 	LD (CPANEL_PANEL_DETECT_FLAGS), 000h
 	CALR CPanel_WaitTXReady
 	EI 006h
@@ -576,32 +576,32 @@ CPanel_InitButtonState: ; do that
 CPanel_WaitTXReady:
 	LD (CPANEL_COUNTER_DOWN_FROM_200), 0c8h ; =200
 
-LABEL_FC437A:
+CPanel_WaitTXReady_Poll:
 	EI 006h
 	BIT 6, (PF)		; PF.6 = state of SCLK1 pin == 1, (resting at pull-up)
-	JR Z, LABEL_FC4394
+	JR Z, CPanel_WaitTXReady_Timeout
 	BIT 5, (PE)		; PE.5 = state of INTA pin == 0
-	JR NZ, LABEL_FC4394
+	JR NZ, CPanel_WaitTXReady_Timeout
 	BIT 1, (CPANEL_TX_RX_FLAGS)
-	JR NZ, LABEL_FC4394
+	JR NZ, CPanel_WaitTXReady_Timeout
 	BIT 0, (CPANEL_TX_RX_FLAGS)
-	JR NZ, LABEL_FC4394
-	JR T, LABEL_FC43A6
+	JR NZ, CPanel_WaitTXReady_Timeout
+	JR T, CPanel_WaitTXReady_BufferCheck
 
-LABEL_FC4394:
+CPanel_WaitTXReady_Timeout:
 	DEC 1, (CPANEL_COUNTER_DOWN_FROM_200)
 	CP (CPANEL_COUNTER_DOWN_FROM_200), 000h
 	JR Z, LABEL_FC43B0
 	EI 000h
 	CALR DELAY_1500_LOOPS
-	JR T, LABEL_FC437A
+	JR T, CPanel_WaitTXReady_Poll
 
-LABEL_FC43A6:
+CPanel_WaitTXReady_BufferCheck:
 	; Only reaches here when CP_Flags_A.10 == 00, and I think only CPanel_SM_Idle sets that value...
 
 	LD WA, (CPANEL_LED_WRITE_PTR)
 	CP WA, (CPANEL_LED_READ_PTR)
-	JR NZ, LABEL_FC4394
+	JR NZ, CPanel_WaitTXReady_Timeout
 
 LABEL_FC43B0:
 	EI 006h
@@ -1030,7 +1030,7 @@ CPanel_SM_Idle:       ; FC47E9		; CPANEL_SERIAL_IDLE_STATE (?)
 	RETI
 
 
-LABEL_FC480F:
+CPanel_InterruptPoll_MainLoop:
 	INC 1, (CPANEL_COUNTER_UP_TO_42)
 	CP (CPANEL_COUNTER_UP_TO_42), 02ah     ; =42 ;-)
 	JR ULE, LABEL_FC485B
@@ -1171,13 +1171,13 @@ CPanel_RX_ParseNext:
 
 	LD WA, (CPANEL_RX_WRITE_PTR)
 	SUB WA, (CPANEL_RX_READ_PTR)
-	JR NC, LABEL_FC4945
+	JR NC, CPanel_RX_PacketSizeCheck
 	NEG WA
 	EX A, W
 	LD_A 05ch
 	SUB A, W
 
-LABEL_FC4945:
+CPanel_RX_PacketSizeCheck:
 	CP A, 2
 	JRL C, CPanel_RX_Done
 
@@ -1190,7 +1190,7 @@ LABEL_FC4945:
 	LD XHL, (XHL)
 	JP T, XHL
 
-LABEL_FC4963:
+CPanel_RX_PacketHandlers_Padding:
 	db 0FFh, 0FFh
 
 CPanel_RX_PacketHandlers:
@@ -1428,7 +1428,7 @@ LABEL_FC4B63:
 	LD XHL, (XHL)
 	JP T, XHL
 
-LABEL_FC4B83:
+CPanel_LED_PacketHandlers_Padding:
 	db 0FFh, 0FFh
 
 

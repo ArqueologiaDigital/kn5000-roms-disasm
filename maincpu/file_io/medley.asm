@@ -108,7 +108,7 @@ SeqName_HandlePlayAction:
 	JR T, SeqName_PostAndExit
 
 SeqName_CheckDiskAvail:
-	CALL LABEL_F8943E
+	CALL CheckFileSystemStatus
 	CP HL, 0
 	JR Z, SeqName_LoadAndPlay
 	CP (0340EAh), 000h
@@ -131,7 +131,7 @@ SeqName_LoadAndPlay:
 	LD XDE, 5
 	CALL ApPostEvent
 	LD WA, 0
-	CALR LABEL_F8B204
+	CALR InitializeOperationState
 	LD WA, (82D8h)
 	CALL LABEL_F880AD
 	LD WA, HL
@@ -139,10 +139,10 @@ SeqName_LoadAndPlay:
 	CALR LABEL_F8B48E
 	LD (7F42h), L
 	CALL LABEL_F89568
-	CALL LABEL_F8953B
-	CALL LABEL_F8987D
+	CALL GetEncodedFreeSpaceData
+	CALL GetEncodedFileSizeData
 	LD (8502h), HL
-	CALR LABEL_F8B260
+	CALR SignalProgressUpdate
 	LD XWA, 00600026h
 	LD XBC, 01c00002h
 	LD XDE, 0
@@ -158,7 +158,7 @@ SeqName_HandleAction32:
 	LD XDE, 5
 	CALL ApPostEvent
 	LD WA, 0
-	CALR LABEL_F8B204
+	CALR InitializeOperationState
 	LD WA, (82D8h)
 	CALL LABEL_F880AD
 	LD WA, HL
@@ -166,10 +166,10 @@ SeqName_HandleAction32:
 	CALR LABEL_F8B48E
 	LD (7F42h), L
 	CALL LABEL_F89568
-	CALL LABEL_F8953B
-	CALL LABEL_F8987D
+	CALL GetEncodedFreeSpaceData
+	CALL GetEncodedFileSizeData
 	LD (8502h), HL
-	CALR LABEL_F8B260
+	CALR SignalProgressUpdate
 	LD XWA, 00600026h
 	LD XBC, 01c00002h
 	LD XDE, 0
@@ -1013,7 +1013,7 @@ FmmDiskMedleySelectFunc:
 	CP XWA, 00000002h
 	JRL NZ, DiskSel_Exit
 	LD WA, 0
-	CALR LABEL_F8B204
+	CALR InitializeOperationState
 	CP (8D37h), 078h
 	JRL Z, DiskSel_CheckPlaying
 	LD XWA, 0ffffffffh
@@ -1030,10 +1030,10 @@ FmmDiskMedleySelectFunc:
 	LD XBC, 01c00001h
 	LD XDE, 5
 	CALL ApPostEvent
-	CALL LABEL_F8987D
+	CALL GetEncodedFileSizeData
 	LD (8502h), HL
 	CALL LABEL_F8958D
-	CALL LABEL_F8953B
+	CALL GetEncodedFreeSpaceData
 	LD XWA, 00600026h
 	LD XBC, 01c00002h
 	LD XDE, 0
@@ -1042,7 +1042,7 @@ FmmDiskMedleySelectFunc:
 	LD XBC, 01c0000ah
 	LD XDE, 0
 	CALL ApPostEvent
-	CALR LABEL_F8B260
+	CALR SignalProgressUpdate
 
 DiskSel_InitState:
 	LD (84FEh), 000h
@@ -1133,7 +1133,7 @@ DiskSel_FindSongLoop:
 	JRL NZ, DiskSel_NextSongLoop
 	LD (83DEh), IZ
 	LD WA, IZ
-	CALL LABEL_F89605
+	CALL NotifyUIOfSelectionChange
 	LD DE, (83DEh)
 	EXTS XDE
 	LD XWA, (83DAh)
@@ -1174,10 +1174,10 @@ DiskSel_SendFileInfo:
 	LD XDE, 5
 	CALL ApPostEvent
 	LD WA, 0
-	CALR LABEL_F8B204
+	CALR InitializeOperationState
 	CALL LABEL_F87A08
 	LD QIZ, HL
-	CALR LABEL_F8B260
+	CALR SignalProgressUpdate
 	LD XWA, 00600026h
 	LD XBC, 01c00002h
 	LD XDE, 0
@@ -1245,7 +1245,7 @@ DiskSel_RepeatFindLoop:
 	JRL NZ, DiskSel_RepeatNext
 	LD (83DEh), IZ
 	LD WA, IZ
-	CALL LABEL_F89605
+	CALL NotifyUIOfSelectionChange
 	LD DE, (83DEh)
 	EXTS XDE
 	LD XWA, (83DAh)
@@ -1286,10 +1286,10 @@ DiskSel_RepeatSendInfo:
 	LD XDE, 5
 	CALL ApPostEvent
 	LD WA, 0
-	CALR LABEL_F8B204
+	CALR InitializeOperationState
 	CALL LABEL_F87A08
 	LD QIZ, HL
-	CALR LABEL_F8B260
+	CALR SignalProgressUpdate
 	LD XWA, 00600026h
 	LD XBC, 01c00002h
 	LD XDE, 0
@@ -1365,7 +1365,7 @@ DiskSel_HandleStopEvent:
 	LD (84FEh), 000h
 
 DiskSel_PostStopEvent:
-	CALR LABEL_F8B244
+	CALR CancelOperationCleanup
 	LD XWA, 0ffffffffh
 	LD XBC, 01e0009eh
 	LD XDE, 0
@@ -1374,7 +1374,7 @@ DiskSel_PostStopEvent:
 DiskSel_StoreWindowPtr:
 	LD XWA, (XSP + 006h)
 	LD (83DAh), XWA
-	CALL LABEL_F895EF
+	CALL GetCurrentFileIndex
 	LD (83DEh), HL
 	CP HL, 0
 	JR LT, DiskSel_DefaultIndex
@@ -1649,7 +1649,7 @@ DiskSel_PlayFindLoop:
 	JRL NZ, DiskSel_PlayNextLoop
 	LD (83DEh), IZ
 	LD WA, IZ
-	CALL LABEL_F89605
+	CALL NotifyUIOfSelectionChange
 	LD DE, (83DEh)
 	EXTS XDE
 	LD XWA, (83DAh)
@@ -1661,7 +1661,7 @@ DiskSel_PlayFindLoop:
 	CALL ApPostEvent
 	CALL LABEL_F87A08
 	LD QIZ, HL
-	CALR LABEL_F8B260
+	CALR SignalProgressUpdate
 	LD XWA, 00600026h
 	LD XBC, 01c00002h
 	LD XDE, 0
@@ -1727,7 +1727,7 @@ DiskSel_UpdateDisplay:
 	CP (XSP + 004h), DE
 	JR Z, DiskSel_Exit
 	LD WA, DE
-	CALL LABEL_F89605
+	CALL NotifyUIOfSelectionChange
 	LD DE, (83DEh)
 	EXTS XDE
 	LD XWA, (83DAh)
@@ -1991,7 +1991,7 @@ FmmSmfMedleyFunc:
 	CP XDE, 00000002h
 	JRL NZ, SmfMed_Exit
 	LD WA, 0
-	CALR LABEL_F8B204
+	CALR InitializeOperationState
 	LD A, (8D37h)
 	LD (843Ah), A
 	CP A, 06fh
@@ -2171,10 +2171,10 @@ SmfMed_InitFromDisk:
 	LD XBC, 01c00001h
 	LD XDE, 5
 	CALL ApPostEvent
-	CALL LABEL_F89C78
+	CALL GetFileCountEncoded
 	LD (8504h), HL
 	CALL LABEL_F8958D
-	CALL LABEL_F8953B
+	CALL GetEncodedFreeSpaceData
 	LD XWA, 00600026h
 	LD XBC, 01c00002h
 	LD XDE, 0
@@ -2183,7 +2183,7 @@ SmfMed_InitFromDisk:
 	LD XBC, 01c0000ah
 	LD XDE, 0
 	CALL ApPostEvent
-	CALR LABEL_F8B260
+	CALR SignalProgressUpdate
 
 SmfMed_InitState:
 	LD (84FEh), 000h
@@ -2228,7 +2228,7 @@ SmfMed_HandleStop:
 	CP A, 076h
 	JRL Z, SmfMed_Exit
 	CALL LABEL_F20B70
-	CALR LABEL_F8B244
+	CALR CancelOperationCleanup
 	LD (84FEh), 000h
 	JRL T, SmfMed_Exit
 
@@ -2822,7 +2822,7 @@ FmmPdMedleyFunc:
 	CP XHL, 00000002h
 	JRL NZ, PdMed_Exit
 	LD WA, 0
-	CALL LABEL_F8B204
+	CALL InitializeOperationState
 	LD A, (8D37h)
 	CP A, 071h
 	JR NZ, PdMed_CheckPlayMode
@@ -2951,7 +2951,7 @@ PdMed_InitFromDisk:
 	LD XBC, 01c0000ah
 	LD XDE, 0
 	CALL ApPostEvent
-	CALL LABEL_F8B260
+	CALL SignalProgressUpdate
 
 PdMed_InitState:
 	LD (84FEh), 000h
@@ -2992,7 +2992,7 @@ PdMed_HandleStop:
 	CP A, 075h
 	JRL Z, PdMed_Exit
 	CALL LABEL_F20B70
-	CALL LABEL_F8B244
+	CALL CancelOperationCleanup
 	LD (84FEh), 000h
 	JRL T, PdMed_Exit
 
@@ -3626,7 +3626,7 @@ FmmDocMedleyFunc:
 	CP XHL, 00000002h
 	JRL NZ, DocMed_Exit
 	LD WA, 0
-	CALL LABEL_F8B204
+	CALL InitializeOperationState
 	LD A, (8D37h)
 	CP A, 070h
 	JR NZ, DocMed_CheckPlayMode
@@ -3760,7 +3760,7 @@ DocMed_InitFromDisk:
 	LD XBC, 01c0000ah
 	LD XDE, 0
 	CALL ApPostEvent
-	CALL LABEL_F8B260
+	CALL SignalProgressUpdate
 
 DocMed_InitState:
 	LD (84FEh), 000h
@@ -3801,7 +3801,7 @@ DocMed_HandleStop:
 	CP A, 074h
 	JRL Z, DocMed_Exit
 	CALL LABEL_F20B70
-	CALL LABEL_F8B244
+	CALL CancelOperationCleanup
 	LD (84FEh), 000h
 	JRL T, DocMed_Exit
 

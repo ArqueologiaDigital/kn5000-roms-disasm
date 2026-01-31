@@ -14,13 +14,13 @@
 ;   CPanel_EncoderDispatch    - Dispatch to encoder-specific handler
 ;   Encoder_ProcessModwheel   - Process modulation wheel (ID 2)
 ;   Encoder_ProcessVolume     - Process volume slider (ID 5)
-;   Encoder_ClampToRange      - Clamp value to configured range
+;   Encoder_ClampScaleAndNormalize      - Clamp value to configured range
 ;   Encoder_ProcessBreath     - Process breath controller (ID 25)
 ;   Encoder_ProcessFoot       - Process foot controller (ID 26)
 ;   Encoder_ProcessExpression - Process expression (ID 27)
-;   Encoder_ReturnValue       - Simple passthrough (ID 31)
-;   Encoder_ReturnOne         - Return constant 1 (default/unused)
-;   Encoder_ModeSelect        - Select processing mode based on system state
+;   Encoder_PassthroughIdentity       - Simple passthrough (ID 31)
+;   Encoder_ReturnDefaultConstant         - Return constant 1 (default/unused)
+;   Encoder_ApplySystemModeSettings        - Select processing mode based on system state
 ;
 ; Required includes before this file:
 ;   - midi_encoder_constants.asm (or equivalent EQU definitions)
@@ -82,30 +82,30 @@ Encoder_ProcessVolume:
 	EXTZ WA
 	LDA XBC, ENCODER_LUT_VOLUME	; Lookup table address
 	LD A, (XBC + WA)		; Get processed value
-	CALR Encoder_ClampToRange	; Clamp to valid range
+	CALR Encoder_ClampScaleAndNormalize	; Clamp to valid range
 	LD A, L
 	CP A, (MIDI_CC_VOLUME_VALUE)	; Compare with current
-	JR Z, Encoder_Volume_NoChange
+	JR Z, Encoder_ProcessVolume_NoChange
 	LD (MIDI_CC_VOLUME_VALUE), A	; Store new value
 	LD IZL, A
 	EXTZ IZ				; IZ = new value
 
-Encoder_Volume_NoChange:
+Encoder_ProcessVolume_NoChange:
 	LD HL, IZ			; Return value in HL
 	POP IZ
 	RET
 
-; Encoder_ClampToRange - Clamp value L to minimum in ENCODER_RANGE_LIMIT
+; Encoder_ClampScaleAndNormalize - Clamp value L to minimum in ENCODER_RANGE_LIMIT
 ; Input: L = value to clamp, A = raw lookup value
 ; Output: HL = clamped and scaled value
-Encoder_ClampToRange:
+Encoder_ClampScaleAndNormalize:
 	LD L, A
 	LD C, (ENCODER_RANGE_LIMIT)	; Get minimum limit
 	CP L, C				; Compare with limit
-	JR NC, Encoder_Clamp_OK		; Skip if >= limit
+	JR NC, Encoder_PerformScaling		; Skip if >= limit
 	LD L, C				; Clamp to minimum
 
-Encoder_Clamp_OK:
+Encoder_PerformScaling:
 	SUB L, C			; Subtract minimum
 	LD_H 000h
 	EXTZ XHL
@@ -141,11 +141,11 @@ Encoder_ProcessBreath:
 	LD A, (XBC + WA)		; Get processed value
 	LD C, (0379Bh)			; Get system mode flags
 	AND C, 00Fh			; Mask relevant bits
-	JR NZ, Encoder_Breath_Process	; If mode active, process
+	JR NZ, Encoder_ProcessBreath_WithModeAdjustment	; If mode active, process
 	CP (07F0Bh), 000h		; Check alternate condition
-	JR Z, Encoder_Breath_Simple	; Simple processing if clear
+	JR Z, Encoder_ProcessBreath_SimplePassthrough	; Simple processing if clear
 
-Encoder_Breath_Process:
+Encoder_ProcessBreath_WithModeAdjustment:
 	LD C, (ENCODER_BREATH_MODE)	; Get breath mode
 	CP C, 0
 	RET Z				; Return if disabled
@@ -166,16 +166,16 @@ Encoder_Breath_Process:
 	ADD HL, HL			; Double
 	LD A, L
 	LD (MIDI_CC_BREATH_VALUE), A	; Store result
-	JR T, Encoder_Breath_Done
+	JR T, Encoder_ProcessBreath_Return
 
-Encoder_Breath_Simple:
+Encoder_ProcessBreath_SimplePassthrough:
 	CP (MIDI_CC_BREATH_VALUE), A	; Compare with current
 	RET Z				; Return if unchanged
 	LD (MIDI_CC_BREATH_VALUE), A	; Store new value
 	LD L, A
 	EXTZ HL
 
-Encoder_Breath_Done:
+Encoder_ProcessBreath_Return:
 	RET
 
 ; Encoder_ProcessFoot - Process foot controller input
@@ -213,28 +213,28 @@ Encoder_ProcessExpression:
 	LD HL, WA			; Return value in HL
 	RET
 
-; Encoder_ReturnValue - Simple passthrough: returns input value in HL
+; Encoder_PassthroughIdentity - Simple passthrough: returns input value in HL
 ; Input: A = value
 ; Output: HL = value
-Encoder_ReturnValue:
+Encoder_PassthroughIdentity:
 	LD L, A
 	EXTZ HL
 	RET
 
-; Encoder_ReturnOne - Returns constant 1
+; Encoder_ReturnDefaultConstant - Returns constant 1
 ; Output: HL = 1
-Encoder_ReturnOne:
+Encoder_ReturnDefaultConstant:
 	LD HL, 1
 	RET
 
-; Encoder_ModeSelect - Select processing mode based on system state
+; Encoder_ApplySystemModeSettings - Select processing mode based on system state
 ; Reads mode value from 0xC07D and configures encoder processing accordingly
-Encoder_ModeSelect:
+Encoder_ApplySystemModeSettings:
 	LD A, (0C07Dh)			; Get mode selector
 	CP A, 6
-	JR Z, Encoder_Mode6		; Jump if mode 6
+	JR Z, Encoder_ConfigureRangeLimit		; Jump if mode 6
 	CP A, 5
-	JR Z, Encoder_Mode5		; Jump if mode 5
+	JR Z, Encoder_ConfigureVolumeMode		; Jump if mode 5
 	CP A, 4
 	RET NZ				; Return if not mode 4
 	; Mode 4: Configure breath mode
@@ -246,7 +246,7 @@ Encoder_ModeSelect:
 	LD (ENCODER_BREATH_MODE), A	; Set breath mode
 	RET
 
-Encoder_Mode5:
+Encoder_ConfigureVolumeMode:
 	LD A, (0C07Fh)
 	AND A, 0FFh			; Full byte check
 	RET Z				; Return if zero
@@ -255,7 +255,7 @@ Encoder_Mode5:
 	LD (ENCODER_VOLUME_MODE), A	; Set volume mode
 	RET
 
-Encoder_Mode6:
+Encoder_ConfigureRangeLimit:
 	LD A, (0C07Fh)
 	RES 007h, A			; Clear bit 7
 	CP A, 0

@@ -11,20 +11,20 @@ REGION_CODE_VAR		EQU	00C06h		; RAM address for region code
 BOOT_ENTRY_POINT	EQU	Boot_Init	; Entry point for watchdog reset
 
 	ORG 0800000h
-LABEL_800000:
+TableData_BootRegionReserved:
 	db 0 ;	TODO: figure out what's here.
 
 
 	ORG 87FFF0h
 
-hkst_55:
-	db "hkst_55.ssf", 0
+FeatureDemo_FileMetadata:
+	db "FeatureDemo_FileMetadata.ssf", 0
 	dd 00000000h
-	dd LABEL_88000C
+	dd HKstSSF_Padding
 	dd Feature_Demo_XML
 	dd FeatureDemo_FileEntry1
 
-LABEL_88000C:
+HKstSSF_Padding:
 	dw 0000h
 
 Feature_Demo_XML:	; 88000E
@@ -104,7 +104,7 @@ FeatureDemo_FileEntry6:
 
 	ORG 08E0000h
 
-Compressed_data:
+SubCPU_Payload_Compressed_LZSS:
 	; I think this is probably the subprogram rom compressed using
 	; the LZSS algorithm, as described at
 	; https://github.com/felipesanches/kn5000_homebrew/blob/main/kn5000_extract.py
@@ -182,7 +182,7 @@ IconPixelData:
 
 
 	ORG 9FA000h
-LABEL_9FA000:
+FileIdentifierStringsTable:
 	db "SLIDE", 000h
 	db "Technics KN5000 Program  DATA FILE 1/2", 000h, 0ffh		; 9FA007
 	db "Technics KN5000 Program  DATA FILE 2/2", 000h, 0ffh		; 9FA02F
@@ -208,7 +208,7 @@ LABEL_9FA000:
 
 	ORG 9FA150h
 
-LABEL_9FA150:
+BootscreenSlideMarker:
 	db "SLIDE", 000h
 
 Bitmap_1bit_Flash_Memory_Update:	; 9FA156
@@ -531,19 +531,19 @@ BootCode_NMI_Handler:
 ; Boot stub routines - return 0 in HL
 ; Addresses: 0x9FB802-0x9FB80D
 ; -----------------------------------------------------------------------------
-Boot_Stub_Return0_1:
+BootStub_ReturnSuccessSlot1:
 	LD	HL, 0			; db a8
 	RET				; 0e
 
-Boot_Stub_Return0_2:
+BootStub_ReturnSuccessSlot2:
 	LD	HL, 0			; db a8
 	RET				; 0e
 
-Boot_Stub_Return0_3:
+BootStub_ReturnSuccessSlot3:
 	LD	HL, 0			; db a8
 	RET				; 0e
 
-Boot_Stub_Return0_4:
+BootStub_ReturnSuccessSlot4:
 	LD	HL, 0			; db a8
 	RET				; 0e
 
@@ -551,7 +551,7 @@ Boot_Stub_Return0_4:
 ; Boot stub - return 0xFFFF in HL (error/not found)
 ; Address: 0x9FB80E
 ; -----------------------------------------------------------------------------
-Boot_Stub_ReturnFFFF:
+BootStub_ReturnError:
 	LD	HL, 0FFFFh		; 33 ff ff
 	RET				; 0e
 
@@ -1059,7 +1059,7 @@ Flash_Init_Custom_And_Table:
 	RET				; 0e
 
 ; -----------------------------------------------------------------------------
-; ClearMemoryBlockWith0 - Clear a memory block with zeros
+; MemBlock_FillWithZeros - Clear a memory block with zeros
 ; Address: 0x9FBC1D
 ;
 ; Purpose: Fill memory from XWA for BC dwords with zeros
@@ -1069,7 +1069,7 @@ Flash_Init_Custom_And_Table:
 ; Exit: XWA = address after filled region
 ;       DE = BC (loop counter)
 ; -----------------------------------------------------------------------------
-ClearMemoryBlockWith0:
+MemBlock_FillWithZeros:
 	LD	DE, 0			; da a8
 	CP	BC, 0			; d9 d8
 	RET	ULE			; b0 f3 - return if count <= 0
@@ -1519,7 +1519,7 @@ Flash_Update_TableData:
 	; Initialize destination and count
 	LD	XWA, 00080000h			; 40 00 00 08 00 - reinit src ptr
 	LD	XBC, 00010000h			; 41 00 00 01 00 - count = 64K dwords
-	db	01Dh, 01Dh, 0BCh, 0FFh		; CALL ClearMemoryBlockWith0 (0xFFBC1D)
+	db	01Dh, 01Dh, 0BCh, 0FFh		; CALL MemBlock_FillWithZeros (0xFFBC1D)
 
 	; Wait for erase to complete
 .wait_erase:
@@ -2097,7 +2097,7 @@ Boot_ClearScreen:
 	db	040h, 026h, 0A6h, 0FFh, 000h	; LD XWA, 0x00FFA626 - bitmap addr
 	db	031h, 030h, 000h		; LD BC, 0x0030 - X pos
 	db	032h, 0A0h, 000h		; LD DE, 0x00A0 - Y pos
-	db	01Dh, 0FBh, 0CCh, 0FFh		; CALL 0xFFCCFB (Draw_Bitmap)
+	db	01Dh, 0FBh, 0CCh, 0FFh		; CALL 0xFFCCFB (DrawBitmap_UpdateDisplay)
 	RET					; 0e
 
 ; =============================================================================
@@ -2286,7 +2286,7 @@ Boot_LoadDiskData:
 	db	01Dh, 017h, 0BAh, 0FFh		; CALL 0xFFBA17 (Flash_SectorErase)
 	db	01Eh, 0FAh, 0FEh		; CALR Boot_WaitFDCReady
 	db	01Eh, 083h, 0FEh		; CALR Boot_ClearScreen
-	db	01Eh, 07Ch, 005h		; CALR Boot_ProgramHDAE_Part1
+	db	01Eh, 07Ch, 005h		; CALR Flash_ProgramHDAE_Initialization
 	db	01Eh, 0DCh, 004h		; CALR Boot_ProgramCustomFlash
 	JR	T, .ldd_done			; 68 09
 
@@ -2294,7 +2294,7 @@ Boot_LoadDiskData:
 .ldd_type678:
 	db	01Eh, 0ECh, 0FEh		; CALR Boot_WaitFDCReady
 	db	01Eh, 075h, 0FEh		; CALR Boot_ClearScreen
-	db	01Eh, 06Eh, 005h		; CALR Boot_ProgramHDAE_Part1
+	db	01Eh, 06Eh, 005h		; CALR Flash_ProgramHDAE_Initialization
 
 .ldd_done:
 	db	0EFh, 062h			; INC 2, XSP
@@ -2383,12 +2383,12 @@ LED_ToggleBit3:
 	JR	T, LED_ToggleBit3		; 68 f1
 
 ; =============================================================================
-; Boot_FindValidBlock - Find first valid (non-empty) 64-byte block
+; Flash_SearchFirstNonEmptyBlock - Find first valid (non-empty) 64-byte block
 ; Address: 0x9FC569
 ; Input: XWA = start address, XBC = end address
 ; Returns: XHL = block address or 0 if not found
 ; =============================================================================
-Boot_FindValidBlock:
+Flash_SearchFirstNonEmptyBlock:
 	db	0E8h, 08Bh			; LD XHL, XWA
 .fvb_check:
 	db	0A3h, 022h			; LD XDE, (XHL)
@@ -2483,11 +2483,11 @@ Boot_ProgramCustomFlash:
 	RET					; 0e
 
 ; =============================================================================
-; Boot_ProgramHDAE_Part1 - Program HDAE5000 ROM banks 0-3
+; Flash_ProgramHDAE_Initialization - Program HDAE5000 ROM banks 0-3
 ; Address: 0x9FC60E
 ; Copies from table_data (0x800000) to HDAE5000 (0x280000)
 ; =============================================================================
-Boot_ProgramHDAE_Part1:
+Flash_ProgramHDAE_Initialization:
 	db	0BFh, 0F6h, 037h		; LDA XSP, XSP+0xF6
 	PUSH	XIZ				; 3e
 	db	040h, 000h, 000h, 080h, 000h	; LD XWA, 0x00800000 - source
@@ -2523,10 +2523,10 @@ Boot_ProgramHDAE_Part1:
 	RET					; 0e
 
 ; =============================================================================
-; Boot_ProgramHDAE_Part2 - Program HDAE5000 ROM banks 4-7
+; Flash_ProgramHDAE_Payload - Program HDAE5000 ROM banks 4-7
 ; Address: 0x9FC660
 ; =============================================================================
-Boot_ProgramHDAE_Part2:
+Flash_ProgramHDAE_Payload:
 	db	0BFh, 0F6h, 037h		; LDA XSP, XSP+0xF6
 	PUSH	XIZ				; 3e
 	db	040h, 000h, 000h, 080h, 000h	; LD XWA, 0x00800000
@@ -2562,11 +2562,11 @@ Boot_ProgramHDAE_Part2:
 	RET					; 0e
 
 ; =============================================================================
-; Boot_InitHDAE_PPI - Initialize HDAE5000 PPI interface
+; HDAE5000_InitializeParallelPort - Initialize HDAE5000 PPI interface
 ; Address: 0x9FC6B2
 ; Sets up 8255 PPI at 0x160000-0x160006
 ; =============================================================================
-Boot_InitHDAE_PPI:
+HDAE5000_InitializeParallelPort:
 	db	0D7h, 0FAh, 004h		; PUSH QIZ
 	db	0C7h, 0FBh, 0A8h		; LD QIZH, 0
 	db	008h, 0E4h, 000h		; LD (0xE4), 0x00 - TMP94C241 SFR init
@@ -3040,8 +3040,8 @@ LZSS_Decompress:
 ;             - Displays UI bitmaps during erase/write
 ;
 ; DISPLAY ROUTINES (0x9FCCFB-0x9FD7FF):
-;   0x9FCCFB: Draw_Bitmap - Render bitmap to screen
-;   0x9FCD9A: Init_Display_Progress - Initialize progress indicator
+;   0x9FCCFB: DrawBitmap_UpdateDisplay - Render bitmap to screen
+;   0x9FCD9A: InitProgressDisplay_FillRegion - Initialize progress indicator
 ;   0x9FCDFC: VGA_WritePort - Write to VGA I/O port
 ;   0x9FCE12: VGA_ReadPort - Read from VGA I/O port
 ;   0x9FCE1E-0x9FD7BD: VGA_Init - Complete VGA initialization sequence
@@ -3104,7 +3104,7 @@ Boot_FlashUpdate_Main:
 	db	040h, 056h, 0A1h, 0FFh, 000h	; LD XWA, 0x00FFA156 - bitmap addr
 	db	031h, 030h, 000h		; LD BC, 0x0030 - X
 	db	032h, 050h, 000h		; LD DE, 0x0050 - Y
-	db	01Dh, 0FBh, 0CCh, 0FFh		; CALL Draw_Bitmap
+	db	01Dh, 0FBh, 0CCh, 0FFh		; CALL DrawBitmap_UpdateDisplay
 
 	; Execute disk type handler
 	db	0C7h, 0FBh, 089h		; LD A, QIZH
@@ -3117,7 +3117,7 @@ Boot_FlashUpdate_Main:
 	db	040h, 08Eh, 0A8h, 0FFh, 000h	; LD XWA, 0x00FFA88E
 	db	031h, 030h, 000h		; LD BC, 0x0030
 	db	032h, 0A0h, 000h		; LD DE, 0x00A0
-	db	01Dh, 0FBh, 0CCh, 0FFh		; CALL Draw_Bitmap
+	db	01Dh, 0FBh, 0CCh, 0FFh		; CALL DrawBitmap_UpdateDisplay
 
 	; Display "Turn On Again" message
 	db	00Bh, 008h, 000h		; PUSH 0x0008
@@ -3125,7 +3125,7 @@ Boot_FlashUpdate_Main:
 	db	040h, 02Eh, 0B2h, 0FFh, 000h	; LD XWA, 0x00FFB22E
 	db	031h, 030h, 000h		; LD BC, 0x0030
 	db	032h, 0C8h, 000h		; LD DE, 0x00C8
-	db	01Dh, 0FBh, 0CCh, 0FFh		; CALL Draw_Bitmap
+	db	01Dh, 0FBh, 0CCh, 0FFh		; CALL DrawBitmap_UpdateDisplay
 
 .update_check_flash:
 	; Read flash ID with bank 2
@@ -3144,7 +3144,7 @@ Boot_FlashUpdate_Main:
 	db	040h, 056h, 0A1h, 0FFh, 000h	; LD XWA, 0x00FFA156
 	db	031h, 030h, 000h		; LD BC, 0x0030
 	db	032h, 050h, 000h		; LD DE, 0x0050
-	db	01Dh, 0FBh, 0CCh, 0FFh		; CALL Draw_Bitmap
+	db	01Dh, 0FBh, 0CCh, 0FFh		; CALL DrawBitmap_UpdateDisplay
 
 	db	0C7h, 0FBh, 089h		; LD A, QIZH
 	db	0D8h, 012h			; EXTZ WA
@@ -3155,26 +3155,26 @@ Boot_FlashUpdate_Main:
 	db	040h, 08Eh, 0A8h, 0FFh, 000h	; LD XWA, 0x00FFA88E
 	db	031h, 030h, 000h		; LD BC, 0x0030
 	db	032h, 0A0h, 000h		; LD DE, 0x00A0
-	db	01Dh, 0FBh, 0CCh, 0FFh		; CALL Draw_Bitmap
+	db	01Dh, 0FBh, 0CCh, 0FFh		; CALL DrawBitmap_UpdateDisplay
 
 	db	00Bh, 008h, 000h		; PUSH 0x0008
 	db	00Bh, 001h, 000h		; PUSH 0x0001
 	db	040h, 02Eh, 0B2h, 0FFh, 000h	; LD XWA, 0x00FFB22E
 	db	031h, 030h, 000h		; LD BC, 0x0030
 	db	032h, 0C8h, 000h		; LD DE, 0x00C8
-	db	01Dh, 0FBh, 0CCh, 0FFh		; CALL Draw_Bitmap
+	db	01Dh, 0FBh, 0CCh, 0FFh		; CALL DrawBitmap_UpdateDisplay
 
 .update_done:
 	db	0D7h, 0FAh, 005h		; POP QIZ
 	RET					; 0e
 
 ; =============================================================================
-; Draw_Bitmap - Render 1-bit bitmap to VGA framebuffer
+; DrawBitmap_UpdateDisplay - Render 1-bit bitmap to VGA framebuffer
 ; Address: 0x9FCCFB
 ; Stack params: XWA=bitmap addr, BC=X pos, DE=Y pos, +4=mode, +6=color
 ; VGA framebuffer at 0x1A0000
 ; =============================================================================
-Draw_Bitmap:
+DrawBitmap_UpdateDisplay:
 	db	0EFh, 06Ch			; DEC 4, XSP - allocate 4 bytes
 	PUSH	IZ				; 2e
 	db	0D9h, 08Bh			; LD HL, BC - save X
@@ -3261,12 +3261,12 @@ Draw_Bitmap:
 	db	00Fh, 004h, 000h		; RETD 0x0004
 
 ; =============================================================================
-; Init_Display_Progress - Initialize progress display bar
+; InitProgressDisplay_FillRegion - Initialize progress display bar
 ; Address: 0x9FCD9A
 ; Stack params: WA=start value, BC=X pos, DE=mode, E=bar width
 ; Writes to VGA framebuffer at 0x1A0000
 ; =============================================================================
-Init_Display_Progress:
+InitProgressDisplay_FillRegion:
 	db	0EFh, 06Eh			; DEC 6, XSP
 	PUSH	XIZ				; 3e
 	db	0BFh, 006h, 045h		; LD (XSP+0x06), E
@@ -3365,7 +3365,7 @@ BootRAM_MemoryCopy	EQU 0FFFB0Fh	; Copy memory block
 
 ; Small utility routine at 0x9FD7E2 (table_data specific, not in maincpu)
 ; Purpose unknown - possibly initialization/cleanup
-VGA_Init_Epilogue:
+VGA_FinalizeInitialization:
 	LD (XWA), 000h
 	LDW HL, 0
 	RET
@@ -3542,7 +3542,7 @@ FDC_Seek:
 	binclude "includes/bootcode_flash_handlers.bin"
 
 ; =============================================================================
-; Handler_INTTC3 - Timer Counter 3 Interrupt Handler
+; BootTimer_InterruptHandler - Timer Counter 3 Interrupt Handler
 ; Address: 0x9FEA9D (boot-time: 0xFFEA9D)
 ;
 ; Simple system tick handler:
@@ -3551,7 +3551,7 @@ FDC_Seek:
 ;   - Calls Boot_UpdateDisplay (0x9FDD26) to refresh VGA display
 ;   - Restores registers and returns from interrupt
 ; =============================================================================
-Handler_INTTC3:
+BootTimer_InterruptHandler:
 	PUSH	XIZ				; 3e - save all registers
 	PUSH	XIY				; 3d
 	PUSH	XIX				; 3c
