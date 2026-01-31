@@ -2,6 +2,7 @@
 	page	0
 	maxmode	on
 	include "../tmp94c241.inc"
+	include "../shared/sfr_tmp94c241.asm"
 
 	ORG 0800000h
 LABEL_800000:
@@ -298,130 +299,9 @@ Boot_InitParams:	; Copied to RAM 0x9998 by Boot_ClearRAM (12 bytes)
 ; Initializes CPU, memory controller, and hands off to main program ROM
 ; -----------------------------------------------------------------------------
 Boot_Init:
-	; === Watchdog Timer Disable ===
-	db	0F1h, 010h, 001h, 000h, 000h	; LD (WDMOD), 0x00
-	db	0F1h, 011h, 001h, 000h, 0B1h	; LD (WDCR), 0xB1 - disable watchdog
-
-	; === System Clock Setup ===
-	db	0F1h, 00Ah, 001h, 000h, 004h	; LD (0x010A), 0x04 - clock config
-
-	; === Port 7 Setup (Control Signals: RD/WR/BUSRQ/BUSAK) ===
-	db	008h, 03Ch, 000h		; LD (P7FC), 0x00 - GPIO mode
-	db	008h, 03Fh, 073h		; LD (0x3F), 0x73 - extended config
-	db	008h, 03Eh, 015h		; LD (P7CR), 0x15 - direction
-	db	0C0h, 02Ch, 03Ch, 0F0h		; AND (P5FC), 0xF0 - mask lower nibble
-	db	0F0h, 020h, 0B3h		; RES 3, (P4) - clear bit 3
-	db	0F0h, 03Ch, 0B2h		; RES 2, (P7FC) - clear bit 2
-
-	; === Port 0-3 Setup (Data Bus D0-D31) ===
-	db	008h, 00Bh, 0FFh		; LD (P0FC+7?), 0xFF - Port 0 to data bus
-	db	008h, 00Fh, 0FFh		; LD (P1FC+3?), 0xFF - Port 1 to data bus
-	db	008h, 01Ch, 0FFh		; LD (P3FC), 0xFF - Port 3 to data bus
-	db	008h, 01Fh, 01Fh		; LD (0x1F), 0x1F - extended config
-	db	008h, 01Eh, 000h		; LD (0x1E), 0x00 - extended config
-
-	; === Port 5 Setup (Address Bus A8-A15) ===
-	db	008h, 028h, 0FEh		; LD (P5), 0xFE - data
-	db	008h, 02Bh, 008h		; LD (P5CR+1?), 0x08
-	db	008h, 02Ch, 0FFh		; LD (P5FC), 0xFF - address bus
-	db	008h, 02Fh, 01Fh		; LD (0x2F), 0x1F
-
-	; === Port 6 Setup (Address Bus A16-A23) ===
-	db	008h, 030h, 003h		; LD (P6), 0x03
-	db	008h, 033h, 000h		; LD (P6CR+1?), 0x00
-	db	008h, 032h, 002h		; LD (P6CR), 0x02
-	db	008h, 034h, 000h		; LD (P6FC), 0x00
-	db	008h, 037h, 006h		; LD (0x37), 0x06
-	db	008h, 036h, 011h		; LD (0x36), 0x11
-	db	008h, 038h, 000h		; LD (P7), 0x00
-	db	008h, 03Bh, 042h		; LD (P7CR+1?), 0x42
-	db	008h, 03Ah, 020h		; LD (P7CR), 0x20
-
-	; === Port 8 Setup (Chip Select CS0-CS5) ===
-	db	008h, 044h, 000h		; LD (P8FC), 0x00
-	db	008h, 047h, 01Eh		; LD (P8FC+3?), 0x1E
-	db	008h, 046h, 009h		; LD (P8FC+2?), 0x09
-
-	; === Port E Setup (GPIO) ===
-	db	008h, 068h, 0FFh		; LD (PE), 0xFF - all high
-	db	008h, 06Ah, 003h		; LD (PECR), 0x03
-
-	; === Port H / 8-bit Timer Setup ===
-	db	008h, 084h, 01Dh		; LD (PHFC), 0x1D
-	db	008h, 085h, 01Dh		; LD (PHFC+1), 0x1D
-	db	008h, 082h, 000h		; LD (PHCR), 0x00
-	db	008h, 088h, 00Ah		; LD (T23MOD), 0x0A
-	db	008h, 089h, 010h		; LD (T23MOD+1), 0x10
-	db	008h, 081h, 000h		; LD (T01MOD/TFFCR), 0x00
-	db	0F0h, 080h, 0B9h		; SET 1, (PH) - set bit 1
-
-	; === 16-bit Timer 4 Setup ===
-	db	008h, 098h, 005h		; LD (T4MOD), 0x05
-	db	008h, 099h, 000h		; LD (T4FFCR), 0x00
-	db	008h, 09Fh, 000h		; LD (0x9F), 0x00
-	db	00Ah, 090h, 001h, 000h		; LD (T16RUN), 0x0001 - 16-bit word
-	db	00Ah, 092h, 009h, 03Dh		; LD (0x92), 0x3D09 - timer value
-	db	0F0h, 09Eh, 0BFh		; SET 7, (0x9E)
-	db	0F0h, 09Eh, 0B8h		; SET 0, (0x9E)
-
-	; === Memory Controller: Start Address Registers ===
-	db	0F1h, 043h, 001h, 000h, 01Eh	; LD (MSAR0), 0x1E - Block 0 @ 0x1E0000
-	db	0F1h, 047h, 001h, 000h, 010h	; LD (MSAR1), 0x10 - Block 1 @ 0x100000
-	db	0F1h, 04Bh, 001h, 000h, 0C0h	; LD (MSAR2), 0xC0 - Block 2 @ 0xC00000
-	db	0F1h, 04Fh, 001h, 000h, 000h	; LD (MSAR3), 0x00 - Block 3 @ 0x000000
-	db	0F1h, 053h, 001h, 000h, 080h	; LD (MSAR4), 0x80 - Block 4 @ 0x800000 (TABLE DATA!)
-	db	0F1h, 057h, 001h, 000h, 000h	; LD (MSAR5), 0x00 - Block 5 @ 0x000000
-
-	; === Memory Controller: Address Mask Registers ===
-	db	0F1h, 042h, 001h, 000h, 00Fh	; LD (MAMR0), 0x0F
-	db	0F1h, 046h, 001h, 000h, 03Fh	; LD (MAMR1), 0x3F
-	db	0F1h, 04Ah, 001h, 000h, 07Fh	; LD (MAMR2), 0x7F
-	db	0F1h, 04Eh, 001h, 000h, 01Fh	; LD (MAMR3), 0x1F
-	db	0F1h, 052h, 001h, 000h, 0FFh	; LD (MAMR4), 0xFF
-	db	0F1h, 056h, 001h, 000h, 0FFh	; LD (MAMR5), 0xFF
-
-	; === Port 4 GPIO Setup ===
-	db	008h, 020h, 03Bh		; LD (P4), 0x3B
-	db	008h, 023h, 07Fh		; LD (P4CR+1?), 0x7F
-	db	008h, 022h, 03Fh		; LD (P4CR), 0x3F
-
-	; === Delay Loop 1 (short) ===
-	db	031h, 000h, 004h		; LD BC, 0x0400
-Boot_Delay1:
-	db	0D9h, 01Ch, 0FDh		; DJNZ BC, Boot_Delay1 (offset -3)
-
-	; === DRAM Controller Init ===
-	db	0F1h, 065h, 001h, 000h, 081h	; LD (DRAM1REF), 0x81 - enable refresh
-
-	; === Delay Loop 2 (longer) ===
-	db	031h, 000h, 020h		; LD BC, 0x2000
-Boot_Delay2:
-	db	0D9h, 01Ch, 0FDh		; DJNZ BC, Boot_Delay2
-
-	; === DRAM Controller Final Config ===
-	db	0F1h, 065h, 001h, 000h, 071h	; LD (DRAM1REF), 0x71
-	db	0F1h, 062h, 001h, 000h, 08Bh	; LD (DRAM1CRL), 0x8B
-	db	0F1h, 063h, 001h, 000h, 058h	; LD (DRAM1CRH), 0x58
-	db	0F1h, 066h, 001h, 0B4h		; RES 4, (PMEMCR)
-
-	; === Memory Controller: Wait States (BxCSL) ===
-	db	0F1h, 040h, 001h, 000h, 011h	; LD (B0CSL), 0x11 - 2R/2W waits
-	db	0F1h, 044h, 001h, 000h, 033h	; LD (B1CSL), 0x33 - 3R/3W waits
-	db	0F1h, 048h, 001h, 000h, 011h	; LD (B2CSL), 0x11
-	db	0F1h, 04Ch, 001h, 000h, 022h	; LD (B3CSL), 0x22
-	db	0F1h, 050h, 001h, 000h, 011h	; LD (B4CSL), 0x11
-	db	0F1h, 054h, 001h, 000h, 022h	; LD (B5CSL), 0x22
-
-	; === Memory Controller: Bus Width (BxCSH) ===
-	db	0F1h, 041h, 001h, 000h, 080h	; LD (B0CSH), 0x80 - 8-bit bus
-	db	0F1h, 045h, 001h, 000h, 081h	; LD (B1CSH), 0x81 - 16-bit bus
-	db	0F1h, 049h, 001h, 000h, 0C2h	; LD (B2CSH), 0xC2 - 32-bit bus
-	db	0F1h, 04Dh, 001h, 000h, 08Ah	; LD (B3CSH), 0x8A - 16-bit, DRAM mode
-	db	0F1h, 051h, 001h, 000h, 082h	; LD (B4CSH), 0x82 - 32-bit bus
-	db	0F1h, 055h, 001h, 000h, 081h	; LD (B5CSH), 0x81 - 16-bit bus
-
-	; === Interrupt Setup ===
-	db	008h, 0F6h, 000h		; LD (0xF6), 0x00
+	; Hardware initialization code shared with maincpu ROM
+	include "../shared/boot_hw_init.asm"
+	; End of shared boot code (315 bytes)
 
 	; === Stack Pointer Setup ===
 	db	0F2h, 07Eh, 098h, 000h, 030h	; LDA XWA, 0x00987E

@@ -9,6 +9,18 @@ This is a ROM disassembly project for the Technics KN5000 music keyboard. The go
 **Target CPU:** TMP94C241F (TLCS900 variant)
 **Assembler:** Alfred Arnold's ASL Macro Assembler 1.42 Beta (Build 298)
 
+### Documentation Website
+
+Detailed documentation is at `../kn5000-docs/`. Key pages:
+- **Hardware**: `hardware-architecture.md`, `memory-map.md`, `cpu-subsystem.md`
+- **Protocols**: `control-panel-protocol.md`, `inter-cpu-protocol.md`, `boot-sequence.md`
+- **Progress**: `rom-reconstruction.md`, `issues.md`, `reverse-engineering.md`
+- **Subsystems**: `audio-subsystem.md`, `fdc-subsystem.md`, `hdae5000.md`
+
+### Issue Tracker
+
+Issues are tracked with Beads in `.beads/issues.jsonl`. Use `../tools/bd` commands (see Issue Tracking section below).
+
 ## Build Commands
 
 ```bash
@@ -113,7 +125,7 @@ make rom-status  # Regenerate the diagram
 make website     # Regenerate all website content
 ```
 
-The diagram is displayed on the documentation website at `/rom-reconstruction/`.
+The diagram is displayed on the documentation website at `/rom-reconstruction/`. See `../kn5000-docs/rom-reconstruction.md` for detailed progress tracking.
 
 ### Symbol Name Synchronization (STRICT POLICY)
 
@@ -208,6 +220,8 @@ The issue tracker is:
 - Synced to git for persistence
 - Exported to the website via `make issues`
 - Visible at `/issues/` on the documentation site
+
+**Quick access:** Run `../tools/bd list` for current issues, or see `../kn5000-docs/issues.md` for the web version.
 
 ### Disassembly Quality Standards (MANDATORY)
 
@@ -364,13 +378,7 @@ This is a strict policy to ensure the disassembly is maintainable and understand
 
 This is a strict policy to maintain consistency across all ROM components and ensure complete understanding of inter-component communication:
 
-1. **Memory ranges for each ROM component:**
-   | Component | Code Range | RAM Range |
-   |-----------|------------|-----------|
-   | maincpu | 0xE00000-0xFFFFFF | 0x000000-0x001FFF, 0x200000-0x23FFFF |
-   | subcpu | 0x000000-0x02FFFF | Internal RAM |
-   | hdae5000 | 0x280000-0x2FFFFF | Shared with maincpu |
-   | table_data | 0x800000-0x9FFFFF | N/A (data only) |
+1. **Memory ranges for each ROM component:** See `../kn5000-docs/memory-map.md` for complete address ranges.
 
 2. **When an address falls outside the current ROM's range:**
    - Identify which ROM component owns that address
@@ -543,39 +551,14 @@ echo "XX XX XX XX" | xxd -r -p > /tmp/bytes.bin
 
 **Note:** unidasm provides a linear disassembly without distinguishing code from data. Manual analysis is still required to identify routine boundaries, data tables, and add meaningful labels/comments.
 
-### MAME Driver Development Workflow
+### MAME Driver Development
 
-**The `mame_driver/` directory contains reference copies of MAME source files for driver development.**
+The `mame_driver/` directory contains reference copies of MAME source files (`kn5000.cpp`, `kn5000_cpanel.cpp/.h`) for sketching driver improvements. These are **reference copies** - always sync with upstream MAME before submitting changes.
 
-This is NOT the complete MAME codebase - only the files needed for sketching driver improvements.
-
-**Files included:**
-
-| File | Purpose |
-|------|---------|
-| `mame_driver/src/mame/matsushita/kn5000.cpp` | Main driver (machine config, address maps) |
-| `mame_driver/src/mame/matsushita/kn5000_cpanel.cpp` | Control panel HLE device |
-| `mame_driver/src/mame/matsushita/kn5000_cpanel.h` | Control panel HLE header |
-
-**Workflow for driver improvements:**
-
-1. **Study reverse engineering findings** - Analyze protocol details from disassembly
-2. **Understand current implementation** - Read the existing MAME driver files
-3. **Design improvements** - Plan changes based on protocol understanding
-4. **Draft changes** - Update the reference files with proposed code
-5. **Document the rationale** - Explain why changes are needed
-6. **Submit to MAME** - Create pull request to upstream MAME repository
-
-**Connection to disassembly:**
-
-- Control panel protocol details: See `CPanel_*` routines in `maincpu/kn5000_v10_program.asm`
-- Memory-mapped I/O: Latch at `0x120000`, documented in `../kn5000-docs/memory-map.md`
-- Protocol state machine: See `../kn5000-docs/control-panel-protocol.md`
-
-**Important notes:**
-
-- These are **reference copies** - always sync with upstream MAME before submitting changes
-- Additional reference files may be added as needed
+**Related documentation:**
+- Control panel protocol: `../kn5000-docs/control-panel-protocol.md`
+- Memory-mapped I/O: `../kn5000-docs/memory-map.md`
+- Inter-CPU communication: `../kn5000-docs/inter-cpu-protocol.md`
 
 ### Accurate Hardware Emulation (STRICT POLICY)
 
@@ -596,11 +579,9 @@ This is a strict policy to ensure the MAME driver accurately represents the actu
    - Any other MCU without ROM dump → HLE is acceptable
 
 3. **Sub CPU Boot ROM and Payload Transfer:**
-   - The Sub CPU boot ROM IS dumped (0xFF7800-0xFF9800 and 0xFFFE80-0xFFFFFF regions contain functional code)
-   - The payload transfer protocol MUST be accurately emulated
-   - Main CPU sends payload via inter-CPU latches
-   - Boot ROM receives payload and stores it in RAM
-   - Boot ROM calls payload at 0x000400 when transfer is complete
+   - The Sub CPU boot ROM IS dumped and MUST be accurately emulated
+   - See `../kn5000-docs/boot-sequence.md` for boot ROM details
+   - See `../kn5000-docs/inter-cpu-protocol.md` for payload transfer protocol
    - HLE shortcuts (preloading payload, skipping boot) are NOT acceptable
 
 4. **Rationale:**
@@ -622,10 +603,12 @@ This is a strict policy to ensure the MAME driver accurately represents the actu
 
 | Component | Source | Status |
 |-----------|--------|--------|
-| maincpu | `maincpu/kn5000_v10_program.asm` (461K lines) | 99.99% |
+| maincpu | `maincpu/kn5000_v10_program.asm` | 100% |
 | subcpu payload | `subcpu/kn5000_subprogram_v142.asm` | 100% |
-| table_data | `table_data/kn5000_table_data.asm` | ~32% |
-| hdae5000 | `hdae5000/hd-ae5000_v2_06i.asm` | ~5% (skeleton) |
+| table_data | `table_data/kn5000_table_data.asm` | ~33% |
+| hdae5000 | `hdae5000/hd-ae5000_v2_06i.asm` | ~5% |
+
+Run `python compare_roms.py` for current status. See `../kn5000-docs/rom-reconstruction.md` for detailed breakdown.
 
 ### Key Files
 
@@ -646,33 +629,16 @@ This is a strict policy to ensure the MAME driver accurately represents the actu
 
 ### Original ROM Files
 
-| File | Size | Description |
-|------|------|-------------|
-| `original_ROMs/kn5000_v10_program.rom` | 2MB | Main CPU program ROM |
-| `original_ROMs/kn5000_subprogram_v142.rom` | 192KB | Sub CPU payload (sent by main CPU) |
-| `original_ROMs/kn5000_subcpu_boot.ic30` | 128KB | Sub CPU boot ROM |
-| `original_ROMs/kn5000_table_data_rom_odd.ic1` | 1MB | Table data ROM (odd bytes) |
-| `original_ROMs/kn5000_table_data_rom_even.ic3` | 1MB | Table data ROM (even bytes) |
-| `original_ROMs/kn5000_custom_data.ic19` | 1MB | Custom data flash (user storage) |
-| `original_ROMs/hd-ae5000_v2_06i.ic4` | 512KB | HDAE5000 hard disk expansion ROM |
+ROM dumps are stored in `original_ROMs/`. Reference disassembly files (`.unidasm`) are pre-generated.
 
-Reference disassembly files (`.unidasm`) are generated with MAME's unidasm tool.
+See `../kn5000-docs/rom-reconstruction.md` for the complete ROM inventory and chip locations.
 
-### Main CPU Memory Map (key addresses)
+### Memory Map
 
-```
-0x110000 - Floppy Disk Controller
-0x120000 - Inter-CPU Communication Latches
-0x160000 - HDAE5000 PPI (audio processor interface)
-0x280000 - HDAE5000 ROM
-0x300000 - Custom Data Flash (user storage)
-0x400000 - Rhythm Data ROM
-0x800000 - Table Data ROM
-0xE00000 - Program Flash (main ROM)
-```
+See `../kn5000-docs/memory-map.md` for the complete memory layout including all I/O ports, ROM regions, and RAM areas.
 
 ## Technical Constraints
 
-The main blocking issue is that ASL only supports TMP96C141, not TMP94C241F. Unsupported instructions are currently emitted as raw bytes via macros in `tmp94c241.inc`, with some placeholder zeros where exact encodings are uncertain.
+The main blocking issue is that ASL only supports TMP96C141, not TMP94C241F. Unsupported instructions are emitted as raw bytes via macros in `tmp94c241.inc`.
 
-The sub-CPU ROM build involves splitting output with `dd` to produce the correct binary layout (256 bytes + 60KB segment).
+See `../kn5000-docs/reverse-engineering.md` for detailed toolchain notes and workarounds.

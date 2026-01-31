@@ -134175,93 +134175,9 @@ LABEL_EF03C2:
 	db 00Eh, 068h, 001h, 00Eh
 
 RESET_HANDLER:				; EF03C6
-	LD (WDMOD), 000h
-	LD (WDCR), 0b1h
-	LD (CLKMOD), 004h
-	LD (PF), 000h
-	LD (PFFC), 073h; Control panel enabled / MIDI disabled
-	LD (PFCR), 015h
-	AND (PB), 0f0h
-	RES 3, (P8)
-	RES 2, (PF)
-	LD (P2FC), 0ffh
-	LD (P3FC), 0ffh
-	LD (P7), 0ffh
-	LD (P7FC), 01fh
-	LD (P7CR), 000h
-	LD (PA), 0feh
-	LD (PAFC), 008h
-	LD (PB), 0ffh
-	LD (PBFC), 01fh
-	LD (PC), 003h
-	LD (PCFC), 000h
-	LD (PCCR), 002h
-	LD (PD), 000h
-	LD (PDFC), 006h
-	LD (PDCR), 011h
-	LD (PE), 000h
-	LD (PEFC), 042h
-	LD (PECR), 020h
-	LD (PH), 000h
-	LD (PHFC), 01eh
-	LD (PHCR), 009h
-	LD (PZ), 0ffh
-	LD (PZCR), 003h
-	LD (T01MOD), 01dh
-	LD (T23MOD), 01dh
-	LD (T02FFCR), 000h
-	LD (TREG0), 00ah
-	LD (TREG1), 010h
-	LD (TRDC), 000h
-	SET 1, (T8RUN)
-	LD (T4MOD), 005h
-	LD (T4FFCR), 000h
-	LD (T16CR), 000h
-	db 0Ah, 90h, 01h, 00h ; LDW (TREG4L:24), 0001h		TODO: Fix ASL assembler: opcodes specific to tmp94c241f
-	db 0Ah, 92h, 09h, 3dh ; LDW (TREG5L:24), 3d09h		TODO: Fix ASL assembler: range overflow
-	SET 7, (T16RUN)
-	SET 0, (T16RUN)
-	LD (MSAR0), 01eh
-	LD (MSAR1), 010h
-	LD (MSAR2), 0c0h
-	LD (MSAR3), 000h
-	LD (MSAR4), 080h
-	LD (MSAR5), 000h
-	LD (MAMR0), 00fh
-	LD (MAMR1), 03fh
-	LD (MAMR2), 07fh
-	LD (MAMR3), 01fh
-	LD (MAMR4), 0ffh
-	LD (MAMR5), 0ffh
-	LD (P8), 03bh
-	LD (P8FC), 07fh
-	LD (P8CR), 03fh
-	LD BC, 0400h
-
-DRAM_related_short_pause:			; EF04A1
-	DJNZ BC, DRAM_related_short_pause
-	LD (DRAM1REF), 081h
-	LD BC, 2000h
-
-DRAM_related_short_pause_2:			; EF04AC
-	DJNZ BC, DRAM_related_short_pause_2
-	LD (DRAM1REF), 071h
-	LD (DRAM1CRL), 08bh
-	LD (DRAM1CRH), 058h
-	RES 4, (PMEMCR)
-	LD (B0CSL), 011h
-	LD (B1CSL), 033h
-	LD (B2CSL), 011h
-	LD (B3CSL), 022h
-	LD (B4CSL), 011h
-	LD (B5CSL), 022h
-	LD (B0CSH), 080h
-	LD (B1CSH), 081h
-	LD (B2CSH), 0c2h
-	LD (B3CSH), 08ah
-	LD (B4CSH), 082h
-	LD (B5CSH), 081h
-	LD (IIMC), 000h
+	; Hardware initialization code shared with table_data ROM
+	include "../shared/boot_hw_init.asm"
+	; End of shared boot code (315 bytes)
 	LD (SC0MOD), 029h
 	LD (SC0CR), 000h
 	AND (BR0CR), 0cfh
@@ -335399,7 +335315,7 @@ AcMonoIndexToggleProc:
 	LD XWA, XIZ
 	LD XBC, (XSP + 00ch)
 	LD XDE, (XSP + 008h)
-	JRL T, LABEL_F9601C
+	JRL T, IvFocus_JumpInherited
 
 LABEL_F95F7E:
 	LD XWA, XIZ
@@ -335410,7 +335326,7 @@ LABEL_F95F7E:
 	CALL GetViewInstance
 	LDA XWA, XHL + 028h
 	CPW (XWA), 0000h
-	JR LT, LABEL_F96010
+	JR LT, IvFocus_ReturnZero
 	LD XBC, (XHL + 022h)
 	LD DE, (XWA)
 	EXTS XDE
@@ -335418,12 +335334,12 @@ LABEL_F95F7E:
 	JR Z, LABEL_F95FB2
 	LD XWA, 0ffffffffh
 	LD XBC, 01c00017h
-	JR T, LABEL_F9600C
+	JR T, IvFocus_SendEventReturn
 
 LABEL_F95FB2:
 	LD XWA, 0ffffffffh
 	LD XBC, 01c00018h
-	JR T, LABEL_F9600C
+	JR T, IvFocus_SendEventReturn
 
 LABEL_F95FBE:
 	LD XWA, XIZ
@@ -335434,7 +335350,7 @@ LABEL_F95FBE:
 	LD XDE, (XSP + 008h)
 	CALL SendEvent
 	CP HL, 0
-	JR Z, LABEL_F96014
+	JR Z, IvFocus_CallInherited
 	LD XWA, XIZ
 	LD XBC, 01e0006ch
 	LD XDE, 0
@@ -335442,34 +335358,34 @@ LABEL_F95FBE:
 	LD XWA, (XSP + 004h)
 	LD DE, (XWA + 028h)
 	CP DE, 0
-	JR LT, LABEL_F96010
+	JR LT, IvFocus_ReturnZero
 	EXTS XDE
 	CP HL, 0
-	JR Z, LABEL_F96002
+	JR Z, IvFocus_SendListEmpty
 	LD XWA, 0ffffffffh
 	LD XBC, 01c00017h
-	JR T, LABEL_F9600C
+	JR T, IvFocus_SendEventReturn
 
-LABEL_F96002:
+IvFocus_SendListEmpty:
 	LD XWA, 0ffffffffh
 	LD XBC, 01c00018h
 
-LABEL_F9600C:
+IvFocus_SendEventReturn:
 	CALL SendEvent
 
-LABEL_F96010:
+IvFocus_ReturnZero:
 	LD XHL, 0
-	JR T, LABEL_F96020
+	JR T, IvFocus_Return
 
-LABEL_F96014:
+IvFocus_CallInherited:
 	LD XWA, XIZ
 	LD XBC, (XSP + 00ch)
 	LD XDE, (XSP + 008h)
 
-LABEL_F9601C:
+IvFocus_JumpInherited:
 	CALL InheritedProc
 
-LABEL_F96020:
+IvFocus_Return:
 	POP XIZ
 	LDA XSP, XSP + 00ch
 	RET
@@ -335481,22 +335397,22 @@ IvOneShotTimerProc:
 	LD XIZ, XBC
 	LD (XSP + 00ch), XWA
 	CP XIZ, 01e5000ah
-	JRL Z, LABEL_F960CF
+	JRL Z, IvTimer_HandleEvent0A
 	CP XIZ, 01e50009h
-	JR Z, LABEL_F960B7
+	JR Z, IvTimer_HandleEvent09
 	CP XIZ, 01e0003ah
-	JR Z, LABEL_F960A5
+	JR Z, IvTimer_HandleEvent3A
 	CP XIZ, 01c0000dh
-	JR Z, LABEL_F96089
+	JR Z, IvTimer_HandleDestroy
 	CP XIZ, 01c00001h
-	JR Z, LABEL_F96069
+	JR Z, IvTimer_HandleCreate
 	LD XWA, (XSP + 00ch)
 	LD XBC, XIZ
 	LD XDE, (XSP + 008h)
 	CALL InheritedProc
-	JRL T, LABEL_F960FB
+	JRL T, IvTimer_Cleanup
 
-LABEL_F96069:
+IvTimer_HandleCreate:
 	LD XWA, (XSP + 00ch)
 	LD XBC, XIZ
 	LD XDE, (XSP + 008h)
@@ -335506,9 +335422,9 @@ LABEL_F96069:
 	LD XDE, (XSP + 00ch)
 	LD XWA, (XHL + 016h)
 	LD XBC, 01e50008h
-	JR T, LABEL_F960F5
+	JR T, IvTimer_CallMainFunc
 
-LABEL_F96089:
+IvTimer_HandleDestroy:
 	LD XWA, (XSP + 00ch)
 	LD XBC, XIZ
 	LD XDE, (XSP + 008h)
@@ -335517,18 +335433,18 @@ LABEL_F96089:
 	LD XBC, 01c0000fh
 	LD XDE, 0
 	CALL SendEvent
-	JR T, LABEL_F960F9
+	JR T, IvTimer_ReturnZero
 
-LABEL_F960A5:
+IvTimer_HandleEvent3A:
 	PUSHW 00eah
 	PUSHW 9894h
 	LD XWA, (XSP + 00ch)
 	PUSH XWA
 	CALL LABEL_FF0F4D
 	INC 8, XSP
-	JR T, LABEL_F960F9
+	JR T, IvTimer_ReturnZero
 
-LABEL_F960B7:
+IvTimer_HandleEvent09:
 	LD XWA, 01e5000ah
 	PUSH XWA
 	LD XWA, 0
@@ -335537,9 +335453,9 @@ LABEL_F960B7:
 	LD XBC, (XSP + 014h)
 	LD XDE, (XSP + 014h)
 	CALL SetApTimer
-	JR T, LABEL_F960F9
+	JR T, IvTimer_ReturnZero
 
-LABEL_F960CF:
+IvTimer_HandleEvent0A:
 	LD XWA, (XSP + 00ch)
 	CALL GetViewInstance
 	LD (XSP + 004h), XHL
@@ -335555,13 +335471,13 @@ LABEL_F960CF:
 	LD XBC, XIZ
 	LD XDE, (XSP + 008h)
 
-LABEL_F960F5:
+IvTimer_CallMainFunc:
 	CALL MainFuncCall
 
-LABEL_F960F9:
+IvTimer_ReturnZero:
 	LD XHL, 0
 
-LABEL_F960FB:
+IvTimer_Cleanup:
 	POP XIZ
 	LDA XSP, XSP + 00ch
 	RET
@@ -335571,12 +335487,12 @@ VwScreenTitleProc:
 	PUSH XIZ
 	LD XIZ, XWA
 	CP XBC, 01c0000dh
-	JR Z, LABEL_F96115
+	JR Z, VwTitle_HandleDestroy
 	LD XWA, XIZ
 	CALL InheritedProc
-	JR T, LABEL_F96149
+	JR T, VwTitle_Return
 
-LABEL_F96115:
+VwTitle_HandleDestroy:
 	LD XWA, XIZ
 	CALL InheritedProc
 	LD XWA, XIZ
@@ -335594,16 +335510,16 @@ LABEL_F96115:
 	CALL DrawTitleBar
 	LD XHL, 0
 
-LABEL_F96149:
+VwTitle_Return:
 	POP XIZ
 	INC 8, XSP
 	RET
 
-LABEL_F9614D:
+DrawLineHelper:
 	DEC 8, XSP
 	LD XHL, XBC
 	CPW (XSP + 00ch), 0000h
-	JR Z, LABEL_F96175
+	JR Z, DrawLine_UseBCCoords
 	LDA XIX, XSP + 004h
 	LD BC, (XWA + 002h)
 	LD (XIX), BC
@@ -335615,25 +335531,25 @@ LABEL_F9614D:
 	LD WA, (XHL)
 	LD (XBC + 002h), WA
 	LD XWA, XIX
-	JR T, LABEL_F96177
+	JR T, DrawLine_Execute
 
-LABEL_F96175:
+DrawLine_UseBCCoords:
 	LD XBC, XHL
 
-LABEL_F96177:
+DrawLine_Execute:
 	CALL DrawLine
 	INC 8, XSP
 	RETD 0002h
 
-LABEL_F96180:
+DrawProgressRectH:
 	LDA XSP, XSP - 01eh
 	PUSH XIZ
 	LD (XSP + 020h), BC
 	LD BC, (XSP + 026h)
 	CP BC, 3
-	JR Z, LABEL_F961F8
+	JR Z, DrawProgH_Mode3Setup
 	CP BC, 2
-	JR Z, LABEL_F961F1
+	JR Z, DrawProgH_Mode2Setup
 	CP BC, 1
 	SCC NZ, BC
 	LD (XSP + 008h), BC
@@ -335643,7 +335559,7 @@ LABEL_F96180:
 	LD BC, 4
 	LDIRW_95
 
-LABEL_F961A7:
+DrawProgH_CalcDimensions:
 	LDA XHL, XSP + 018h
 	LD BC, (XHL + 004h)
 	LD WA, BC
@@ -335667,19 +335583,19 @@ LABEL_F961A7:
 	LD (XSP + 004h), WA
 	SUB (XSP + 004h), IZ
 	CPW (XSP + 008h), 0000h
-	JR Z, LABEL_F9621D
+	JR Z, DrawProgH_SetLeftPos
 	LD (XSP + 014h), BC
 	LDW (XSP + 006h), 0ffffh
-	JR T, LABEL_F96227
+	JR T, DrawProgH_SetupCenter
 
-LABEL_F961F1:
+DrawProgH_Mode2Setup:
 	LDW (XSP + 008h:8), 0001h
-	JR T, LABEL_F961FD
+	JR T, DrawProgH_InitFromRect
 
-LABEL_F961F8:
+DrawProgH_Mode3Setup:
 	LDW (XSP + 008h:8), 0000h
 
-LABEL_F961FD:
+DrawProgH_InitFromRect:
 	LDW (XSP + 00ah:8), 0001h
 	LDA XHL, XSP + 018h
 	LD BC, (XWA + 002h)
@@ -335690,14 +335606,14 @@ LABEL_F961FD:
 	LD (XHL + 004h), BC
 	LD WA, (XWA + 004h)
 	LD (XHL + 006h), WA
-	JR T, LABEL_F961A7
+	JR T, DrawProgH_CalcDimensions
 
-LABEL_F9621D:
+DrawProgH_SetLeftPos:
 	LD WA, (XHL)
 	LD (XSP + 014h), WA
 	LDW (XSP + 006h:8), 0001h
 
-LABEL_F96227:
+DrawProgH_SetupCenter:
 	LDA XHL, XSP + 010h
 	LDA XIY, XSP + 014h
 	LD WA, (XIY)
@@ -335724,39 +335640,39 @@ LABEL_F96227:
 	LD (XHL + 002h), BC
 	LDW (XSP + 00eh:8), 0000h
 	CP IZ, 0
-	JR ULE, LABEL_F9628B
+	JR ULE, DrawProgH_AfterLoop1
 
-LABEL_F9626B:
+DrawProgH_Loop1:
 	LDA XWA, XSP + 014h
 	LDA XBC, XSP + 010h
 	PUSHW (XSP + 00ah)
 	LD DE, (XSP + 022h)
-	CALR LABEL_F9614D
+	CALR DrawLineHelper
 	LD WA, (XSP + 006h)
 	ADD (XSP + 014h), WA
 	ADD (XSP + 010h), WA
 	INCW 1, (XSP + 00eh)
 	CP (XSP + 00eh), IZ
-	JR C, LABEL_F9626B
+	JR C, DrawProgH_Loop1
 
-LABEL_F9628B:
+DrawProgH_AfterLoop1:
 	LDA XWA, XSP + 018h
 	LDA XBC, XSP + 014h
 	CPW (XSP + 008h), 0000h
-	JR Z, LABEL_F962A6
+	JR Z, DrawProgH_SkipFill1
 	LD WA, (XWA + 004h)
 	SUB WA, IZ
 	LD (XBC), WA
 	LDW (XSP + 006h), 0ffffh
-	JR T, LABEL_F962B1
+	JR T, DrawProgH_AfterFill1
 
-LABEL_F962A6:
+DrawProgH_SkipFill1:
 	LD WA, (XWA)
 	ADD WA, IZ
 	LD (XBC), WA
 	LDW (XSP + 006h:8), 0001h
 
-LABEL_F962B1:
+DrawProgH_AfterFill1:
 	LDA XIX, XSP + 010h
 	LDA XHL, XSP + 014h
 	LD WA, (XHL)
@@ -335774,22 +335690,22 @@ LABEL_F962B1:
 	LD (XIX + 002h), BC
 	LDW (XSP + 00eh:8), 0000h
 	CPW (XSP + 004h), 0000h
-	JR ULE, LABEL_F96304
+	JR ULE, DrawProgH_AfterLoop2
 
-LABEL_F962E4:
+DrawProgH_Loop2:
 	LDA XWA, XSP + 014h
 	LDA XBC, XSP + 010h
 	PUSHW (XSP + 00ah)
 	LD DE, (XSP + 022h)
-	CALR LABEL_F9614D
+	CALR DrawLineHelper
 	LD WA, (XSP + 006h)
 	ADD (XSP + 010h), WA
 	INCW 1, (XSP + 00eh)
 	LD WA, (XSP + 00eh)
 	CP WA, (XSP + 004h)
-	JR C, LABEL_F962E4
+	JR C, DrawProgH_Loop2
 
-LABEL_F96304:
+DrawProgH_AfterLoop2:
 	LDA XIX, XSP + 010h
 	LDA XHL, XSP + 014h
 	LD WA, (XHL)
@@ -335807,35 +335723,35 @@ LABEL_F96304:
 	LD (XIX + 002h), BC
 	LDW (XSP + 00eh:8), 0000h
 	CPW (XSP + 004h), 0000h
-	JR ULE, LABEL_F96357
+	JR ULE, DrawProgH_AfterLoop3
 
-LABEL_F96337:
+DrawProgH_Loop3:
 	LDA XWA, XSP + 014h
 	LDA XBC, XSP + 010h
 	PUSHW (XSP + 00ah)
 	LD DE, (XSP + 022h)
-	CALR LABEL_F9614D
+	CALR DrawLineHelper
 	LD WA, (XSP + 006h)
 	ADD (XSP + 010h), WA
 	INCW 1, (XSP + 00eh)
 	LD WA, (XSP + 00eh)
 	CP WA, (XSP + 004h)
-	JR C, LABEL_F96337
+	JR C, DrawProgH_Loop3
 
-LABEL_F96357:
+DrawProgH_AfterLoop3:
 	POP XIZ
 	LDA XSP, XSP + 01eh
 	RETD 0004h
 
-LABEL_F9635E:
+DrawProgressRectV:
 	LDA XSP, XSP - 020h
 	PUSH XIZ
 	LD (XSP + 022h), BC
 	LD BC, (XSP + 028h)
 	CP BC, 3
-	JR Z, LABEL_F963DE
+	JR Z, DrawProgV_Mode3Setup
 	CP BC, 2
-	JR Z, LABEL_F963D7
+	JR Z, DrawProgV_Mode2Setup
 	CP BC, 1
 	SCC NZ, BC
 	LD (XSP + 006h), BC
@@ -335845,7 +335761,7 @@ LABEL_F9635E:
 	LD BC, 4
 	LDIRW_95
 
-LABEL_F96385:
+DrawProgV_CalcDimensions:
 	LDA XHL, XSP + 01ah
 	LDA XIX, XHL + 004h
 	LD BC, (XIX)
@@ -335871,21 +335787,21 @@ LABEL_F96385:
 	LD WA, QIZ
 	SUB (XSP + 004h), WA
 	CPW (XSP + 006h), 0000h
-	JR Z, LABEL_F96403
+	JR Z, DrawProgV_SetTopPos
 	LD (XSP + 016h), BC
 	LD WA, (XIX)
 	SUB WA, QIZ
 	LD (XSP + 012h), WA
-	JR T, LABEL_F96410
+	JR T, DrawProgV_SetupCenter
 
-LABEL_F963D7:
+DrawProgV_Mode2Setup:
 	LDW (XSP + 006h:8), 0001h
-	JR T, LABEL_F963E3
+	JR T, DrawProgV_InitFromRect
 
-LABEL_F963DE:
+DrawProgV_Mode3Setup:
 	LDW (XSP + 006h:8), 0000h
 
-LABEL_F963E3:
+DrawProgV_InitFromRect:
 	LDW (XSP + 008h:8), 0001h
 	LDA XHL, XSP + 01ah
 	LD BC, (XWA + 002h)
@@ -335896,16 +335812,16 @@ LABEL_F963E3:
 	LD (XHL + 004h), BC
 	LD WA, (XWA + 004h)
 	LD (XHL + 006h), WA
-	JR T, LABEL_F96385
+	JR T, DrawProgV_CalcDimensions
 
-LABEL_F96403:
+DrawProgV_SetTopPos:
 	LD WA, (XHL)
 	LD (XSP + 016h), WA
 	LD WA, (XHL)
 	ADD WA, QIZ
 	LD (XSP + 012h), WA
 
-LABEL_F96410:
+DrawProgV_SetupCenter:
 	LD BC, (XIY)
 	LD WA, (XDE)
 	SUB WA, BC
@@ -335926,7 +335842,7 @@ LABEL_F96410:
 	PUSHW (XSP + 008h)
 	LD XBC, XDE
 	LD DE, (XSP + 024h)
-	CALR LABEL_F9614D
+	CALR DrawLineHelper
 	LDA XWA, XSP + 016h
 	LDA XBC, XSP + 012h
 	LD DE, (XBC)
@@ -335935,7 +335851,7 @@ LABEL_F96410:
 	LD (XWA + 002h), DE
 	PUSHW (XSP + 008h)
 	LD DE, (XSP + 024h)
-	CALR LABEL_F9614D
+	CALR DrawLineHelper
 	LDA XWA, XSP + 016h
 	LD BC, (XSP + 00eh)
 	LD (XWA), BC
@@ -335959,7 +335875,7 @@ LABEL_F96410:
 	PUSHW (XSP + 008h)
 	LD XBC, XDE
 	LD DE, (XSP + 024h)
-	CALR LABEL_F9614D
+	CALR DrawLineHelper
 	LDA XWA, XSP + 016h
 	LDA XBC, XSP + 012h
 	LD DE, (XBC)
@@ -335968,7 +335884,7 @@ LABEL_F96410:
 	LD (XWA + 002h), DE
 	PUSHW (XSP + 008h)
 	LD DE, (XSP + 024h)
-	CALR LABEL_F9614D
+	CALR DrawLineHelper
 	LDA XIY, XSP + 00eh
 	LDA XIX, XSP + 016h
 	LDIW
@@ -335981,21 +335897,21 @@ LABEL_F96410:
 	LDA XBC, XSP + 012h
 	PUSHW (XSP + 008h)
 	LD DE, (XSP + 024h)
-	CALR LABEL_F9614D
+	CALR DrawLineHelper
 	LDA XWA, XSP + 01ah
 	LDA XBC, XSP + 016h
 	LDA XDE, XSP + 012h
 	CPW (XSP + 006h), 0000h
-	JR Z, LABEL_F964FC
+	JR Z, DrawProgV_SkipFill
 	LD WA, (XWA + 004h)
 	SUB WA, QIZ
 	LD (XBC), WA
 	SUB WA, (XSP + 004h)
 	INC 1, WA
 	LD (XDE), WA
-	JR T, LABEL_F9650A
+	JR T, DrawProgV_AfterFill
 
-LABEL_F964FC:
+DrawProgV_SkipFill:
 	LD WA, (XWA)
 	ADD WA, QIZ
 	LD (XBC), WA
@@ -336003,7 +335919,7 @@ LABEL_F964FC:
 	DEC 1, WA
 	LD (XDE), WA
 
-LABEL_F9650A:
+DrawProgV_AfterFill:
 	LDA XWA, XSP + 016h
 	LDA XHL, XSP + 01ah
 	LDA XDE, XHL + 002h
@@ -336019,7 +335935,7 @@ LABEL_F9650A:
 	LD (XBC + 002h), DE
 	PUSHW (XSP + 008h)
 	LD DE, (XSP + 024h)
-	CALR LABEL_F9614D
+	CALR DrawLineHelper
 	LDA XWA, XSP + 016h
 	LDA XHL, XSP + 01ah
 	LDA XDE, XHL + 006h
@@ -336035,7 +335951,7 @@ LABEL_F9650A:
 	LD (XBC + 002h), DE
 	PUSHW (XSP + 008h)
 	LD DE, (XSP + 024h)
-	CALR LABEL_F9614D
+	CALR DrawLineHelper
 	POP XIZ
 	LDA XSP, XSP + 020h
 	RETD 0004h
@@ -336045,12 +335961,12 @@ ArrowProc:
 	PUSH XIZ
 	LD (XSP + 010h), XWA
 	CP XBC, 01c0000bh
-	JR Z, LABEL_F96581
+	JR Z, DrawDouble_Inner
 	LD XWA, (XSP + 010h)
 	CALL InheritedProc
-	JR T, LABEL_F965C9
+	JR T, DrawDouble_Return
 
-LABEL_F96581:
+DrawDouble_Inner:
 	LD XWA, (XSP + 010h)
 	CALL InheritedProc
 	LD XWA, (XSP + 010h)
@@ -336067,21 +335983,21 @@ LABEL_F96581:
 	LD DE, (XBC + 01ch)
 	LD BC, (XIZ + 016h)
 	CPW (XIZ + 018h), 0000h
-	JR Z, LABEL_F965C0
+	JR Z, DrawDouble_SkipV
 	PUSHW (XIX)
 	PUSHW (XHL)
-	CALR LABEL_F9635E
-	JR T, LABEL_F965C7
+	CALR DrawProgressRectV
+	JR T, DrawDouble_AfterV
 
-LABEL_F965C0:
+DrawDouble_SkipV:
 	PUSHW (XIX)
 	PUSHW (XHL)
-	CALR LABEL_F96180
+	CALR DrawProgressRectH
 
-LABEL_F965C7:
+DrawDouble_AfterV:
 	LD XHL, 0
 
-LABEL_F965C9:
+DrawDouble_Return:
 	POP XIZ
 	LDA XSP, XSP + 010h
 	RET
@@ -336093,37 +336009,37 @@ IvIndexSwCtrlProc:
 	LD XIZ, XBC
 	LD (XSP + 00ch), XWA
 	CP XIZ, 01c50003h
-	JRL Z, LABEL_F9677B
+	JRL Z, Slider_Event1E00068
 	CP XIZ, 01c50002h
-	JRL Z, LABEL_F9677B
+	JRL Z, Slider_Event1E00068
 	CP XIZ, 01c0001ah
-	JRL Z, LABEL_F96722
+	JRL Z, Slider_Event1E00069
 	CP XIZ, 01c00019h
-	JRL Z, LABEL_F96722
+	JRL Z, Slider_Event1E00069
 	CP XIZ, 01c00018h
-	JR Z, LABEL_F96671
+	JR Z, Slider_Case1E0006B
 	CP XIZ, 01c00017h
-	JR Z, LABEL_F96671
+	JR Z, Slider_Case1E0006B
 	CP XIZ, 01e0003ah
-	JR Z, LABEL_F9665E
+	JR Z, Slider_Case1E0006A
 	CP XIZ, 01c0000dh
-	JR Z, LABEL_F96645
+	JR Z, Slider_Case1E00067
 	CP XIZ, 01e0003bh
-	JR Z, LABEL_F96640
+	JR Z, Slider_Case1E00066
 	CP XIZ, 01c00001h
-	JRL NZ, LABEL_F967D7
+	JRL NZ, Slider_Error
 	LD XWA, (XSP + 00ch)
 	LD XBC, XIZ
 	LD XDE, (XSP + 008h)
 	CALL InheritedProc
 	LD WA, 0
-	JRL T, LABEL_F9671B
+	JRL T, Slider_ReturnZero
 
-LABEL_F96640:
+Slider_Case1E00066:
 	LD WA, 0
-	JRL T, LABEL_F9671B
+	JRL T, Slider_ReturnZero
 
-LABEL_F96645:
+Slider_Case1E00067:
 	LD XWA, (XSP + 00ch)
 	LD XBC, XIZ
 	LD XDE, (XSP + 008h)
@@ -336131,18 +336047,18 @@ LABEL_F96645:
 	LD XWA, (XSP + 00ch)
 	LD XBC, 01c0000fh
 	LD XDE, 0
-	JRL T, LABEL_F967CF
+	JRL T, Slider_UpdateDone
 
-LABEL_F9665E:
+Slider_Case1E0006A:
 	PUSHW 00eah
 	PUSHW 989ah
 	LD XWA, (XSP + 00ch)
 	PUSH XWA
 	CALL LABEL_FF0F4D
 	INC 8, XSP
-	JRL T, LABEL_F967D3
+	JRL T, Slider_NoChange
 
-LABEL_F96671:
+Slider_Case1E0006B:
 	LD XWA, (XSP + 00ch)
 	LD XBC, XIZ
 	LD XDE, (XSP + 008h)
@@ -336154,35 +336070,35 @@ LABEL_F96671:
 	LD WA, (XBC + 016h)
 	EXTZ XWA
 	CP (XSP + 008h), XWA
-	JRL C, LABEL_F967D3
+	JRL C, Slider_NoChange
 	LD WA, (XBC + 018h)
 	EXTZ XWA
 	CP (XSP + 008h), XWA
-	JRL UGT, LABEL_F967D3
+	JRL UGT, Slider_NoChange
 	CPW (XBC + 01eh), 0000h
-	JR Z, LABEL_F966CD
+	JR Z, Slider_AtMax
 	LD XWA, XIZ
 	CP XWA, 01c00017h
-	JR NZ, LABEL_F966BE
+	JR NZ, Slider_Increment
 	LD XWA, (XSP + 00ch)
 	LD XBC, 01c00019h
 	LD XDE, (XSP + 008h)
-	JR T, LABEL_F966C9
+	JR T, Slider_IncrDone
 
-LABEL_F966BE:
+Slider_Increment:
 	LD XWA, (XSP + 00ch)
 	LD XBC, 01c0001ah
 	LD XDE, (XSP + 008h)
 
-LABEL_F966C9:
+Slider_IncrDone:
 	CALL SetAutoInc
 
-LABEL_F966CD:
+Slider_AtMax:
 	LD XWA, (XSP + 004h)
 	CPW (XWA + 01ah), 0000h
-	JRL Z, LABEL_F967D3
+	JRL Z, Slider_NoChange
 	CPW (XWA + 01ch), 0000h
-	JR Z, LABEL_F966FB
+	JR Z, Slider_Decrement
 	LD XWA, (XSP + 00ch)
 	LD XBC, 01c50003h
 	LD XDE, (XSP + 008h)
@@ -336190,9 +336106,9 @@ LABEL_F966CD:
 	LD XWA, (XSP + 00ch)
 	LD XBC, 01c50002h
 	LD XDE, (XSP + 008h)
-	JR T, LABEL_F96715
+	JR T, Slider_DecrDone
 
-LABEL_F966FB:
+Slider_Decrement:
 	LD XWA, (XSP + 00ch)
 	LD XBC, 01c50002h
 	LD XDE, (XSP + 008h)
@@ -336201,15 +336117,15 @@ LABEL_F966FB:
 	LD XBC, 01c50003h
 	LD XDE, (XSP + 008h)
 
-LABEL_F96715:
+Slider_DecrDone:
 	CALL SetDialDown
 	LD WA, 1
 
-LABEL_F9671B:
+Slider_ReturnZero:
 	CALL SetDialEnable
-	JRL T, LABEL_F967D3
+	JRL T, Slider_NoChange
 
-LABEL_F96722:
+Slider_Event1E00069:
 	LD XWA, (XSP + 00ch)
 	LD XBC, XIZ
 	LD XDE, (XSP + 008h)
@@ -336219,28 +336135,28 @@ LABEL_F96722:
 	LD WA, (XHL + 016h)
 	EXTZ XWA
 	CP (XSP + 008h), XWA
-	JRL C, LABEL_F967D3
+	JRL C, Slider_NoChange
 	LD WA, (XHL + 018h)
 	EXTZ XWA
 	CP (XSP + 008h), XWA
-	JRL UGT, LABEL_F967D3
+	JRL UGT, Slider_NoChange
 	CPW (XHL + 01eh), 0000h
-	JRL Z, LABEL_F967D3
+	JRL Z, Slider_NoChange
 	LD XWA, XIZ
 	CP XWA, 01c00019h
-	JR NZ, LABEL_F9676C
+	JR NZ, Slider_DragIncr
 	LD XWA, 0ffffffffh
 	LD XBC, 01c00017h
 	LD XDE, (XSP + 008h)
-	JR T, LABEL_F967CF
+	JR T, Slider_UpdateDone
 
-LABEL_F9676C:
+Slider_DragIncr:
 	LD XWA, 0ffffffffh
 	LD XBC, 01c00018h
 	LD XDE, (XSP + 008h)
-	JR T, LABEL_F967CF
+	JR T, Slider_UpdateDone
 
-LABEL_F9677B:
+Slider_Event1E00068:
 	LD XWA, (XSP + 00ch)
 	LD XBC, XIZ
 	LD XDE, (XSP + 008h)
@@ -336250,40 +336166,40 @@ LABEL_F9677B:
 	LD WA, (XHL + 016h)
 	EXTZ XWA
 	CP (XSP + 008h), XWA
-	JR C, LABEL_F967D3
+	JR C, Slider_NoChange
 	LD WA, (XHL + 018h)
 	EXTZ XWA
 	CP (XSP + 008h), XWA
-	JR UGT, LABEL_F967D3
+	JR UGT, Slider_NoChange
 	CPW (XHL + 01ah), 0000h
-	JR Z, LABEL_F967D3
+	JR Z, Slider_NoChange
 	LD XWA, XIZ
 	CP XWA, 01c50002h
-	JR NZ, LABEL_F967C2
+	JR NZ, Slider_SmallIncr
 	LD XWA, 0ffffffffh
 	LD XBC, 01c00017h
 	LD XDE, (XSP + 008h)
-	JR T, LABEL_F967CF
+	JR T, Slider_UpdateDone
 
-LABEL_F967C2:
+Slider_SmallIncr:
 	LD XWA, 0ffffffffh
 	LD XBC, 01c00018h
 	LD XDE, (XSP + 008h)
 
-LABEL_F967CF:
+Slider_UpdateDone:
 	CALL SendEvent
 
-LABEL_F967D3:
+Slider_NoChange:
 	LD XHL, 0
-	JR T, LABEL_F967E3
+	JR T, Slider_Exit
 
-LABEL_F967D7:
+Slider_Error:
 	LD XWA, (XSP + 00ch)
 	LD XBC, XIZ
 	LD XDE, (XSP + 008h)
 	CALL InheritedProc
 
-LABEL_F967E3:
+Slider_Exit:
 	POP XIZ
 	LDA XSP, XSP + 00ch
 	RET
@@ -336296,17 +336212,17 @@ AcRotStrBoxProc:
 	LD (XSP + 010h), XWA
 	LD XWA, (XSP + 00ch)
 	CP XWA, 01c50000h
-	JRL Z, LABEL_F96922
+	JRL Z, Scrollbar_Case1C00001
 	CP XWA, 01c0000fh
-	JRL Z, LABEL_F968C5
+	JRL Z, Scrollbar_Case1E5000A
 	CP XWA, 01e5000ah
-	JRL Z, LABEL_F968AD
+	JRL Z, Scrollbar_Case1E00068
 	CP XWA, 01c0000bh
-	JR Z, LABEL_F9688E
+	JR Z, Scrollbar_Case1E00069
 	CP XWA, 01c00002h
-	JR Z, LABEL_F96856
+	JR Z, Scrollbar_Case1E00067
 	CP XWA, 01c00001h
-	JRL NZ, LABEL_F96948
+	JRL NZ, Scrollbar_Error
 	LD XWA, (XSP + 010h)
 	CALL GetViewInstance
 	LD XIZ, XHL
@@ -336320,9 +336236,9 @@ AcRotStrBoxProc:
 	EXTZ XDE
 	LD XWA, (XIZ + 024h)
 	LD XBC, (XSP + 00ch)
-	JR T, LABEL_F968BF
+	JR T, Scrollbar_Update
 
-LABEL_F96856:
+Scrollbar_Case1E00067:
 	LD XWA, (XSP + 010h)
 	CALL GetViewInstance
 	LD XIZ, XHL
@@ -336341,9 +336257,9 @@ LABEL_F96856:
 	LD XBC, (XSP + 018h)
 	LD XDE, (XSP + 018h)
 	CALL KillApTimer
-	JRL T, LABEL_F9691E
+	JRL T, Scrollbar_Done
 
-LABEL_F9688E:
+Scrollbar_Case1E00069:
 	LD XWA, (XSP + 010h)
 	LD XBC, (XSP + 00ch)
 	LD XDE, (XSP + 008h)
@@ -336353,20 +336269,20 @@ LABEL_F9688E:
 	LD XDE, (XSP + 010h)
 	LD XWA, (XHL + 024h)
 	LD XBC, (XSP + 00ch)
-	JR T, LABEL_F968BF
+	JR T, Scrollbar_Update
 
-LABEL_F968AD:
+Scrollbar_Case1E00068:
 	LD XWA, (XSP + 010h)
 	CALL GetViewInstance
 	LD XDE, (XSP + 010h)
 	LD XWA, (XHL + 024h)
 	LD XBC, 01c0000bh
 
-LABEL_F968BF:
+Scrollbar_Update:
 	CALL ApFuncCall
-	JR T, LABEL_F9691E
+	JR T, Scrollbar_Done
 
-LABEL_F968C5:
+Scrollbar_Case1E5000A:
 	LD XWA, (XSP + 010h)
 	CALL GetViewInstance
 	LD (XSP + 004h), XHL
@@ -336383,7 +336299,7 @@ LABEL_F968C5:
 	LD XWA, (XSP + 004h)
 	LD XWA, (XWA + 02ch)
 	CPW (XWA), 0000h
-	JR Z, LABEL_F9691E
+	JR Z, Scrollbar_Done
 	LD XWA, (XSP + 010h)
 	LD XBC, (XSP + 00ch)
 	LD XDE, (XSP + 008h)
@@ -336399,38 +336315,38 @@ LABEL_F968C5:
 	LD XDE, (XSP + 018h)
 	CALL SetApTimer
 
-LABEL_F9691E:
+Scrollbar_Done:
 	LD XHL, 0
-	JR T, LABEL_F96955
+	JR T, Scrollbar_Return
 
-LABEL_F96922:
+Scrollbar_Case1C00001:
 	LD XWA, (XSP + 010h)
 	CALL GetViewInstance
 	LD XBC, (XHL + 02ch)
 	LD XWA, (XSP + 008h)
 	OR XWA, XWA
-	JR Z, LABEL_F96939
+	JR Z, Scrollbar_SkipInit
 	LDW (XBC), 0000h
-	JR T, LABEL_F9693D
+	JR T, Scrollbar_InitDone
 
-LABEL_F96939:
+Scrollbar_SkipInit:
 	LDW (XBC), 0001h
 
-LABEL_F9693D:
+Scrollbar_InitDone:
 	LD XWA, (XSP + 010h)
 	LD XBC, (XSP + 00ch)
 	LD XDE, (XSP + 008h)
-	JR T, LABEL_F96951
+	JR T, Scrollbar_ErrorExit
 
-LABEL_F96948:
+Scrollbar_Error:
 	LD XWA, (XSP + 010h)
 	LD XBC, (XSP + 00ch)
 	LD XDE, (XSP + 008h)
 
-LABEL_F96951:
+Scrollbar_ErrorExit:
 	CALL InheritedProc
 
-LABEL_F96955:
+Scrollbar_Return:
 	POP XIZ
 	LDA XSP, XSP + 010h
 	RET
@@ -336441,19 +336357,19 @@ IvIndexSwDelayProc:
 	LD (XSP + 004h), XDE
 	LD (XSP + 008h), XWA
 	CP XBC, 01c0001ah
-	JRL Z, LABEL_F96A05
+	JRL Z, Bounds_Default
 	CP XBC, 01c00019h
-	JRL Z, LABEL_F96A05
+	JRL Z, Bounds_Default
 	CP XBC, 01c00018h
-	JRL Z, LABEL_F96A05
+	JRL Z, Bounds_Default
 	CP XBC, 01c00017h
-	JR Z, LABEL_F96A05
+	JR Z, Bounds_Default
 	CP XBC, 01e0003ah
-	JR Z, LABEL_F969F3
+	JR Z, Bounds_Case1E0006A
 	CP XBC, 01c0000dh
-	JR Z, LABEL_F969D9
+	JR Z, Bounds_Case1E0006B
 	CP XBC, 01c00002h
-	JRL NZ, LABEL_F96A72
+	JRL NZ, Bounds_Error
 	LD XWA, (XSP + 008h)
 	LD XDE, (XSP + 004h)
 	CALL InheritedProc
@@ -336461,7 +336377,7 @@ IvIndexSwDelayProc:
 	CALL GetViewInstance
 	LDA XDE, XHL + 01ch
 	CPW (XDE), 0000h
-	JRL LT, LABEL_F96A6E
+	JRL LT, Bounds_Done
 	LD WA, (XHL + 01ah)
 	EXTZ XWA
 	LD XBC, 01c00017h
@@ -336472,9 +336388,9 @@ IvIndexSwDelayProc:
 	LD XBC, (XSP + 010h)
 	LD XDE, 0ffffffffh
 	CALL KillApTimer
-	JRL T, LABEL_F96A6E
+	JRL T, Bounds_Done
 
-LABEL_F969D9:
+Bounds_Case1E0006B:
 	LD XWA, (XSP + 008h)
 	LD XDE, (XSP + 004h)
 	CALL InheritedProc
@@ -336482,18 +336398,18 @@ LABEL_F969D9:
 	LD XBC, 01c0000fh
 	LD XDE, 0
 	CALL SendEvent
-	JR T, LABEL_F96A6E
+	JR T, Bounds_Done
 
-LABEL_F969F3:
+Bounds_Case1E0006A:
 	PUSHW 00eah
 	PUSHW 989eh
 	LD XWA, (XSP + 008h)
 	PUSH XWA
 	CALL LABEL_FF0F4D
 	INC 8, XSP
-	JR T, LABEL_F96A6E
+	JR T, Bounds_Done
 
-LABEL_F96A05:
+Bounds_Default:
 	LD XWA, (XSP + 008h)
 	LD XDE, (XSP + 004h)
 	CALL InheritedProc
@@ -336502,15 +336418,15 @@ LABEL_F96A05:
 	LD XIZ, XHL
 	LDA XDE, XIZ + 01ch
 	CPW (XDE), 0000h
-	JR LT, LABEL_F96A6E
+	JR LT, Bounds_Done
 	LD WA, (XIZ + 016h)
 	EXTZ XWA
 	CP (XSP + 004h), XWA
-	JR C, LABEL_F96A6E
+	JR C, Bounds_Done
 	LD WA, (XIZ + 018h)
 	EXTZ XWA
 	CP (XSP + 004h), XWA
-	JR UGT, LABEL_F96A6E
+	JR UGT, Bounds_Done
 	LD WA, (XIZ + 01ah)
 	EXTZ XWA
 	LD XBC, 01c00017h
@@ -336532,16 +336448,16 @@ LABEL_F96A05:
 	LD XDE, 0ffffffffh
 	CALL SetApTimer
 
-LABEL_F96A6E:
+Bounds_Done:
 	LD XHL, 0
-	JR T, LABEL_F96A7C
+	JR T, Bounds_Return
 
-LABEL_F96A72:
+Bounds_Error:
 	LD XWA, (XSP + 008h)
 	LD XDE, (XSP + 004h)
 	CALL InheritedProc
 
-LABEL_F96A7C:
+Bounds_Return:
 	POP XIZ
 	INC 8, XSP
 	RET
@@ -336550,67 +336466,67 @@ IvWaitWinCtlProc:
 	PUSH XIZ
 	LD XIZ, XWA
 	CP XBC, 01e50006h
-	JR Z, LABEL_F96AE9
+	JR Z, Edit_Default
 	CP XBC, 01e50005h
-	JR Z, LABEL_F96ACB
+	JR Z, Edit_Case1E00068
 	CP XBC, 01e0003ah
-	JR Z, LABEL_F96ABC
+	JR Z, Edit_Case1E00069
 	CP XBC, 01c0000dh
-	JR Z, LABEL_F96AAB
+	JR Z, Edit_Case1E00067
 	LD XWA, XIZ
 	CALL InheritedProc
-	JR T, LABEL_F96B0B
+	JR T, Edit_Return
 
-LABEL_F96AAB:
+Edit_Case1E00067:
 	LD XWA, XIZ
 	CALL InheritedProc
 	LD XWA, XIZ
 	LD XBC, 01c0000fh
 	LD XDE, 0
-	JR T, LABEL_F96B05
+	JR T, Edit_Update
 
-LABEL_F96ABC:
+Edit_Case1E00069:
 	PUSHW 00eah
 	PUSHW 98a2h
 	PUSH XDE
 	CALL LABEL_FF0F4D
 	INC 8, XSP
-	JR T, LABEL_F96B09
+	JR T, Edit_NoChange
 
-LABEL_F96ACB:
+Edit_Case1E00068:
 	LD XWA, XIZ
 	CALL GetViewInstance
 	LDA XBC, XHL + 016h
 	LD XWA, (XBC)
 	CP XWA, 0ffffffffh
-	JR Z, LABEL_F96B09
+	JR Z, Edit_NoChange
 	LD XWA, (XBC)
 	LD XBC, 01c00001h
 	LD XDE, 5
-	JR T, LABEL_F96B05
+	JR T, Edit_Update
 
-LABEL_F96AE9:
+Edit_Default:
 	LD XWA, XIZ
 	CALL GetViewInstance
 	LDA XBC, XHL + 016h
 	LD XWA, (XBC)
 	CP XWA, 0ffffffffh
-	JR Z, LABEL_F96B09
+	JR Z, Edit_NoChange
 	LD XWA, (XBC)
 	LD XBC, 01c00002h
 	LD XDE, 0
 
-LABEL_F96B05:
+Edit_Update:
 	CALL SendEvent
 
-LABEL_F96B09:
+Edit_NoChange:
 	LD XHL, 0
 
-LABEL_F96B0B:
+Edit_Return:
 	POP XIZ
 	RET
 
-LABEL_F96B0D:
+EditControlProc:
 	db 0B0h, 000h, 000h, 0DBh, 0A8h, 00Eh
 
 FDC_Read_Status:
@@ -336719,7 +336635,7 @@ FDC_COMMAND_DISPATCHER:			; F96DB1
 	LD (8A2Ah), 000h
 	LD WA, (8A40h)
 	CP WA, 000bh
-	JR UGT, LABEL_F96DE4
+	JR UGT, FDC_CheckDriveCount
 	ADD WA, WA
 	LDA XIX, 0EA98B2h
 	LD WA, (XIX + WA)
@@ -336727,147 +336643,147 @@ FDC_COMMAND_DISPATCHER:			; F96DB1
 	JP T, XIX + WA
 ; FDC command handler base - entry point for command 0
 FDC_CMD_HANDLER_BASE:			; F96DD6
-	CALR LABEL_F96ED8
+	CALR FDC_SetupFormatParams
 	LD L, (8A24h)
 	RET
 
-LABEL_F96DDE:
+FDC_ReturnZero:
 	LD_L 000h
 	RET
 
-LABEL_F96DE1:
+FDC_ErrorInvalidDrive:
 	CALR LABEL_F9700A
 
-LABEL_F96DE4:
+FDC_CheckDriveCount:
 	LD WA, (8A42h)
 	LD (8A2Ah), A
 	CP (8A2Ah), 001h
-	JR ULE, LABEL_F96DF9
+	JR ULE, FDC_ValidateCommand
 	LD WA, 00feh
 	JRL T, FDC_Set_Status
 
-LABEL_F96DF9:
+FDC_ValidateCommand:
 	LD WA, (8A40h)
 	CP WA, 4
-	JR Z, LABEL_F96E22
+	JR Z, FDC_ValidateTrack
 	CP WA, 3
-	JR Z, LABEL_F96E22
+	JR Z, FDC_ValidateTrack
 	CP WA, 2
-	JR Z, LABEL_F96E22
+	JR Z, FDC_ValidateTrack
 	CP WA, 5
-	JR Z, LABEL_F96E1A
+	JR Z, FDC_Command5Handler
 	CP WA, 000bh
-	JR Z, LABEL_F96E17
+	JR Z, FDC_NoOpReturn
 	CP WA, 1
-	JR NZ, LABEL_F96E22
+	JR NZ, FDC_ValidateTrack
 
-LABEL_F96E17:
+FDC_NoOpReturn:
 	LD_L 000h
 	RET
 
-LABEL_F96E1A:
+FDC_Command5Handler:
 	CALR LABEL_F97009
 	LD L, (8A24h)
 	RET
 
-LABEL_F96E22:
+FDC_ValidateTrack:
 	LD WA, (8A46h)
 	LD (8A2Bh), A
 	LD (8A36h), A
 	EXTZ WA
 	CP WA, (8B08h)
-	JR C, LABEL_F96E3C
+	JR C, FDC_HandleCmd2
 	LD WA, 00feh
 	JRL T, FDC_Set_Status
 
-LABEL_F96E3C:
+FDC_HandleCmd2:
 	CPW (8A40h), 0002h
-	JR NZ, LABEL_F96E4C
-	CALR LABEL_F96FE8
+	JR NZ, FDC_CheckSectorCount
+	CALR FDC_CheckHead
 	LD L, (8A24h)
 	RET
 
-LABEL_F96E4C:
+FDC_CheckSectorCount:
 	CPW (8A4Ah), 0000h
-	JR NZ, LABEL_F96E5A
+	JR NZ, FDC_CheckSectorNum
 	LD WA, 00feh
 	JRL T, FDC_Set_Status
 
-LABEL_F96E5A:
+FDC_CheckSectorNum:
 	LD WA, (8A48h)
 	LD (8A2Dh), A
 	CP (8A2Dh), 000h
-	JR NZ, LABEL_F96E6F
+	JR NZ, FDC_CheckFormatType
 	LD WA, 00feh
 	JRL T, FDC_Set_Status
 
-LABEL_F96E6F:
+FDC_CheckFormatType:
 	LD A, (8A6Ch)
 	CP A, 0
-	JR Z, LABEL_F96EBD
+	JR Z, FDC_FormatDefault
 	CP A, 5
-	JR Z, LABEL_F96EBD
+	JR Z, FDC_FormatDefault
 	CP A, 4
-	JR Z, LABEL_F96EA1
+	JR Z, FDC_FormatType4
 	CP A, 3
-	JR Z, LABEL_F96E94
+	JR Z, FDC_FormatType3
 	CP A, 2
-	JR NZ, LABEL_F96ECA
+	JR NZ, FDC_ErrorInvalid
 	CP (8A2Dh), 008h
-	JR ULE, LABEL_F96ED0
+	JR ULE, FDC_ValidExecute
 	LD WA, 00feh
 	JRL T, FDC_Set_Status
 
-LABEL_F96E94:
+FDC_FormatType3:
 	CP (8A2Dh), 012h
-	JR ULE, LABEL_F96ED0
+	JR ULE, FDC_ValidExecute
 	LD WA, 00feh
 	JRL T, FDC_Set_Status
 
-LABEL_F96EA1:
+FDC_FormatType4:
 	CP (8A2Dh), 0ffh
-	JR NZ, LABEL_F96EB0
-	CALR LABEL_F96FE8
+	JR NZ, FDC_Format4Check
+	CALR FDC_CheckHead
 	LD L, (8A24h)
 	RET
 
-LABEL_F96EB0:
+FDC_Format4Check:
 	CP (8A2Dh), 009h
-	JR ULE, LABEL_F96ED0
+	JR ULE, FDC_ValidExecute
 	LD WA, 00feh
 	JRL T, FDC_Set_Status
 
-LABEL_F96EBD:
+FDC_FormatDefault:
 	CP (8A2Dh), 009h
-	JR ULE, LABEL_F96ED0
+	JR ULE, FDC_ValidExecute
 	LD WA, 00feh
 	JRL T, FDC_Set_Status
 
-LABEL_F96ECA:
+FDC_ErrorInvalid:
 	LD WA, 00feh
 	JRL T, FDC_Set_Status
 
-LABEL_F96ED0:
-	CALR LABEL_F96FE8
+FDC_ValidExecute:
+	CALR FDC_CheckHead
 	LD L, (8A24h)
 	RET
 
-LABEL_F96ED8:
+FDC_SetupFormatParams:
 	LD WA, (8A46h)
 	LD (8A6Eh), A
 	AND A, 00fh
 	CP A, 3
-	JRL Z, LABEL_F96F69
+	JRL Z, FDC_Format1440K
 	CP A, 2
-	JR Z, LABEL_F96F31
+	JR Z, FDC_FormatDD
 	CP A, 5
-	JR Z, LABEL_F96EF9
+	JR Z, FDC_FormatHD
 	CP A, 4
-	JR Z, LABEL_F96EF9
+	JR Z, FDC_FormatHD
 	CP A, 0
-	JRL NZ, LABEL_F96FA1
+	JRL NZ, FDC_FormatUnknown
 
-LABEL_F96EF9:
+FDC_FormatHD:
 	LD (8A2Eh), 002h
 	LD (8A35h), 001h
 	LD (8A2Fh), 009h
@@ -336878,9 +336794,9 @@ LABEL_F96EF9:
 	LDW (8B08h), 0050h
 	LDW (8B0Ah), 0009h
 	LDW (8B0Ch), 000ah
-	JR T, LABEL_F96FA7
+	JR T, FDC_InitStateVars
 
-LABEL_F96F31:
+FDC_FormatDD:
 	LD (8A2Eh), 003h
 	LD (8A35h), 001h
 	LD (8A2Fh), 008h
@@ -336891,9 +336807,9 @@ LABEL_F96F31:
 	LDW (8B08h), 004dh
 	LDW (8B0Ah), 0008h
 	LDW (8B0Ch), 0009h
-	JR T, LABEL_F96FA7
+	JR T, FDC_InitStateVars
 
-LABEL_F96F69:
+FDC_Format1440K:
 	LD (8A2Eh), 002h
 	LD (8A35h), 001h
 	LD (8A2Fh), 012h
@@ -336904,13 +336820,13 @@ LABEL_F96F69:
 	LDW (8B08h), 0050h
 	LDW (8B0Ah), 0012h
 	LDW (8B0Ch), 0013h
-	JR T, LABEL_F96FA7
+	JR T, FDC_InitStateVars
 
-LABEL_F96FA1:
+FDC_FormatUnknown:
 	LD WA, 00feh
 	CALR FDC_Set_Status
 
-LABEL_F96FA7:
+FDC_InitStateVars:
 	LD A, (8A6Eh)
 	SRL 4, A
 	AND A, 00fh
@@ -336927,7 +336843,7 @@ LABEL_F96FA7:
 	LD (8A3Ah), 000h
 	RET
 
-LABEL_F96FE8:
+FDC_CheckHead:
 	LD WA, (8A44h)
 	LD (8A2Ch), A
 	LD (8A29h), A
