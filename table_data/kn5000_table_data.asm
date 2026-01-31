@@ -3386,9 +3386,9 @@ Read_VGA_Register:
 ; Small utility routine at 0x9FD7E2 (table_data specific, not in maincpu)
 ; Purpose unknown - possibly initialization/cleanup
 VGA_Init_Epilogue:
-	db 0B0h, 000h, 000h		; LD (XWA), 0x00
-	db 0DBh, 0A8h			; LD HL, 0
-	RET				; 0e
+	LD (XWA), 000h
+	LDW HL, 0
+	RET
 
 ; =============================================================================
 ; FDC HELPER ROUTINES (0x9FD7E8-0x9FD8A4)
