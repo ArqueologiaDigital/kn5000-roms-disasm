@@ -3874,10 +3874,15 @@ Handler_INT4:
 ; Serial Port Interrupt Handlers
 ; Address: 0x9FF229-0x9FF2F1 (201 bytes)
 ;
-; Handles UART interrupts for serial communication:
-;   - BOOT_INTA_HANDLER: External interrupt A (serial handshake)
-;   - BOOT_INTTX1_HANDLER: Serial port 1 TX complete
-;   - BOOT_INTRX1_HANDLER: Serial port 1 RX received
+; Handler_INTA (0x9FF229): External interrupt A - Serial handshake
+;   - Checks serial state at (0x0F63)
+;   - Initializes receive mode or updates buffer pointer
+;
+; Handler_INTTX1 (0x9FF2AE): Serial TX complete
+;   - Dispatches to state handler via table at 0xFFF282
+;
+; Handler_INTRX1 (0x9FF2D0): Serial RX received
+;   - Dispatches to state handler via same table
 ; =============================================================================
 	ORG 09FF229h
 Handler_INTA:
