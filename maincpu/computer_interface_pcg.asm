@@ -1,0 +1,703 @@
+; =============================================================================
+; computer_interface_pcg.asm - Computer Interface PCG Output
+; =============================================================================
+; This file contains PCG (Program Change) Output routines for the
+; Computer Interface subsystem:
+;   TtMdPcgOut            - PCG Output title handler
+;   AcPcgOutGridBoxProc   - PCG Output grid box action processor
+;   PcgOutGridCheck       - PCG Output grid validation
+;   PcgOutSendFunc        - PCG Output send function handler
+;   MainPcgOutSend        - Main PCG Output send dispatcher
+;
+; =============================================================================
+
+TtMdPcgOut:
+	CP XBC, 01c0000ch
+	JR Z, LABEL_F773D7
+	CP XBC, 01c0000bh
+	JR Z, LABEL_F773D7
+	CP XBC, 01c00002h
+	JR Z, LABEL_F773D7
+	CP XBC, 01c00001h
+	JR NZ, LABEL_F773D7
+	OR XDE, XDE
+	JR NZ, LABEL_F773D7
+	LD XWA, 00590001h
+	CALL GetViewInstance
+	LD XWA, (XHL + 02ah)
+	LDW (XWA), 0000h
+	LD XWA, (XHL + 02eh)
+	LDW (XWA), 0001h
+
+LABEL_F773D7:
+	LD XHL, 0
+	RET
+
+AcPcgOutGridBoxProc:
+	LDA XSP, XSP - 010h
+	PUSH XIZ
+	LD (XSP + 00ch), XDE
+	LD (XSP + 010h), XBC
+	LD XIZ, XWA
+	LD XBC, (XSP + 010h)
+	CP XBC, 01e0008dh
+	JRL Z, LABEL_F7762B
+	LD XWA, (XSP + 010h)
+	CP XWA, 01e0008bh
+	JRL Z, LABEL_F775FE
+	CP XWA, 01e0008ah
+	JRL Z, LABEL_F775F5
+	CP XWA, 01c00001h
+	JR Z, LABEL_F7743B
+	SUB XBC, 01c00017h
+	CP XBC, 00000000h
+	JRL LT, LABEL_F77642
+	CP XBC, 00000006h
+	JRL GT, LABEL_F77642
+	ADD XBC, XBC
+	ADD XBC, 00e7ff20h
+	LD BC, (XBC)
+	LDA XIX, 0F7743Bh
+	JP T, XIX + BC
+
+LABEL_F7743B:
+	LD XWA, XIZ
+	LD XBC, (XSP + 010h)
+	LD XDE, (XSP + 00ch)
+	CALL InheritedProc
+	LD XWA, XIZ
+	CALL GetViewInstance
+	LD (XSP + 008h), XHL
+	LD XWA, XIZ
+	LD XBC, 01e0008fh
+	LD XDE, 0
+	CALL SendEvent
+	LD (XSP + 004h), XHL
+	LD XWA, (XSP + 008h)
+	LD BC, (XWA + 01ah)
+	LD XWA, (XSP + 004h)
+	SRL_0_XWA
+	LD QWA, 0
+	ADD WA, BC
+	LD DE, WA
+	EXTZ XDE
+	LD XWA, XIZ
+	LD XBC, 01c00017h
+	CALL SetDialUp
+	LD XWA, (XSP + 008h)
+	LD BC, (XWA + 01ah)
+	LD XWA, (XSP + 004h)
+	SRL_0_XWA
+	LD QWA, 0
+	ADD WA, BC
+	LD DE, WA
+	EXTZ XDE
+	LD XWA, XIZ
+	LD XBC, 01c00018h
+	CALL SetDialDown
+	LD WA, 1
+	JRL T, LABEL_F775EF
+	LD XWA, XIZ
+	LD XBC, (XSP + 010h)
+	LD XDE, (XSP + 00ch)
+	CALL InheritedProc
+	LD XWA, XIZ
+	LD XBC, 01e00050h
+	LD XDE, (XSP + 00ch)
+	CALL SendEvent
+	OR XHL, XHL
+	JR Z, LABEL_F774F6
+	LD XWA, XIZ
+	LD XBC, 01e0008fh
+	LD XDE, 0
+	CALL SendEvent
+	DEC 1, HL
+	EXTZ XHL
+	ADD XHL, 0ffff0000h
+	LD XWA, XIZ
+	LD XBC, 01c0000eh
+	LD XDE, XHL
+	CALL SendEvent
+	LD XWA, XIZ
+	LD XBC, (XSP + 010h)
+	LD XDE, (XSP + 00ch)
+	CALL SetAutoInc
+	JRL T, LABEL_F7763E
+
+LABEL_F774F6:
+	LD XWA, XIZ
+	LD XBC, 01e00091h
+	LD XDE, (XSP + 00ch)
+	CALL SendEvent
+	OR XHL, XHL
+	JRL Z, LABEL_F7763E
+	LD XWA, XIZ
+	CALL GetViewInstance
+	LD XWA, (XHL + 046h)
+	LD XBC, (XSP + 010h)
+	LD XDE, (XSP + 00ch)
+	CALL ApFuncCall
+	LD XWA, XIZ
+	LD XBC, (XSP + 010h)
+	LD XDE, (XSP + 00ch)
+	CALL SetAutoInc
+	LD XWA, XIZ
+	LD XBC, 01c00017h
+	LD XDE, (XSP + 00ch)
+	CALL SetDialUp
+	LD XWA, XIZ
+	LD XBC, 01c00018h
+	LD XDE, (XSP + 00ch)
+	CALL SetDialDown
+	LD WA, 1
+	JRL T, LABEL_F775EF
+	LD XWA, XIZ
+	LD XBC, (XSP + 010h)
+	LD XDE, (XSP + 00ch)
+	CALL InheritedProc
+	LD XWA, XIZ
+	LD XBC, 01e00050h
+	LD XDE, (XSP + 00ch)
+	CALL SendEvent
+	OR XHL, XHL
+	JR Z, LABEL_F7759F
+	LD XWA, XIZ
+	LD XBC, 01e0008fh
+	LD XDE, 0
+	CALL SendEvent
+	CP HL, 3
+	JRL GE, LABEL_F7763E
+	INC 1, HL
+	EXTZ XHL
+	ADD XHL, 0ffff0000h
+	LD XWA, XIZ
+	LD XBC, 01c0000eh
+	LD XDE, XHL
+	CALL SendEvent
+	LD XWA, XIZ
+	LD XBC, (XSP + 010h)
+	LD XDE, (XSP + 00ch)
+	CALL SetAutoInc
+	JRL T, LABEL_F7763E
+
+LABEL_F7759F:
+	LD XWA, XIZ
+	LD XBC, 01e00091h
+	LD XDE, (XSP + 00ch)
+	CALL SendEvent
+	OR XHL, XHL
+	JRL Z, LABEL_F7763E
+	LD XWA, XIZ
+	CALL GetViewInstance
+	LD XWA, (XHL + 046h)
+	LD XBC, (XSP + 010h)
+	LD XDE, (XSP + 00ch)
+	CALL ApFuncCall
+	LD XWA, XIZ
+	LD XBC, (XSP + 010h)
+	LD XDE, (XSP + 00ch)
+	CALL SetAutoInc
+	LD XWA, XIZ
+	LD XBC, 01c00017h
+	LD XDE, (XSP + 00ch)
+	CALL SetDialUp
+	LD XWA, XIZ
+	LD XBC, 01c00018h
+	LD XDE, (XSP + 00ch)
+	CALL SetDialDown
+	LD WA, 1
+
+LABEL_F775EF:
+	CALL SetDialEnable
+	JR T, LABEL_F7763E
+
+LABEL_F775F5:
+	LD XWA, XIZ
+	LD XIZ, 0000003eh
+	JR T, LABEL_F77605
+
+LABEL_F775FE:
+	LD XWA, XIZ
+	LD XIZ, 00000042h
+
+LABEL_F77605:
+	CALL GetViewInstance
+	ADD XHL, XIZ
+	LD XWA, (XHL)
+	PUSH XWA
+	LD XWA, (XSP + 010h)
+	PUSH XWA
+	CALL LABEL_FF0F4D
+	INC 8, XSP
+	JR T, LABEL_F7763E
+	LD XWA, XIZ
+	CALL GetViewInstance
+	LD XWA, (XHL + 046h)
+	LD XBC, (XSP + 010h)
+	LD XDE, (XSP + 00ch)
+	JR T, LABEL_F7763A
+
+LABEL_F7762B:
+	LD XWA, XIZ
+	CALL GetViewInstance
+	LD XWA, (XHL + 046h)
+	LD XBC, (XSP + 010h)
+	LD XDE, (XSP + 00ch)
+
+LABEL_F7763A:
+	CALL ApFuncCall
+
+LABEL_F7763E:
+	LD XHL, 0
+	JR T, LABEL_F7764E
+
+LABEL_F77642:
+	LD XWA, XIZ
+	LD XBC, (XSP + 010h)
+	LD XDE, (XSP + 00ch)
+	CALL InheritedProc
+
+LABEL_F7764E:
+	POP XIZ
+	LDA XSP, XSP + 010h
+	RET
+
+PcgOutGridCheck:
+	LDA XSP, XSP - 02ch
+	PUSH XIZ
+	LD XIZ, XDE
+	LD (XSP + 02ch), XBC
+	LD XIY, 00e7ff44h
+	LDA XIX, XSP + 00ch
+	LD BC, 5
+	LDIRW_95
+	LD XIY, 00e7ed44h
+	LDA XIX, XSP + 004h
+	LD BC, 4
+	LDIRW_95
+	LD XIX, (XSP + 02ch)
+	LDA XIY, XSP + 00ch
+	LDA XHL, XSP + 004h
+	LDA XBC, XHL + 002h
+	LDA XDE, XHL + 004h
+	LD XWA, (XSP + 02ch)
+	CP XWA, 01e0008dh
+	JRL Z, LABEL_F77B46
+	LD XWA, XIX
+	SUB XWA, 01c00017h
+	CP XWA, 00000000h
+	JRL LT, LABEL_F77D83
+	CP XWA, 00000006h
+	JRL GT, LABEL_F77D83
+	ADD XWA, XWA
+	ADD XWA, 00e7ffeeh
+	LD WA, (XWA)
+	LDA XIX, LABEL_F776BD
+	JP T, XIX + WA
+
+LABEL_F776BD:
+	db 01Dh, 0D0h, 044h, 0FAh, 0EBh, 088h, 041h, 08Fh
+	db 000h, 0E0h, 001h, 0EAh, 0A8h, 01Dh, 060h, 096h
+	db 0FAh, 0EBh, 08Eh, 0BFh, 004h, 030h, 0EEh, 089h
+	db 0E9h, 0EFh, 000h, 0D7h, 0E6h, 0A8h, 0B0h, 051h
+	db 0DEh, 089h, 0B8h, 002h, 051h, 090h, 03Fh, 001h
+	db 000h, 07Eh, 09Ah, 006h, 0AFh, 02Ch, 022h, 0D9h
+	db 0DBh, 076h, 0A3h, 000h, 0D9h, 0DAh, 066h, 067h
+	db 0D9h, 0D9h, 066h, 034h, 0D9h, 0D8h, 07Eh, 085h
+	db 006h, 045h, 02Eh, 0FFh, 0E7h, 000h, 0BFh, 016h
+	db 034h, 031h, 00Bh, 000h, 095h, 011h, 0BFh, 016h
+	db 030h, 0F2h, 06Ah, 047h, 002h, 031h, 0B0h, 061h
+	db 041h, 00Fh, 000h, 000h, 000h, 0B8h, 006h, 061h
+	db 0EAh, 0CFh, 019h, 000h, 0C0h, 001h, 06Eh, 005h
+	db 0E9h, 0ACh, 0B8h, 00Eh, 061h, 078h, 0E1h, 001h
+	db 045h, 02Eh, 0FFh, 0E7h, 000h, 0BFh, 016h, 034h
+	db 031h, 00Bh, 000h, 095h, 011h, 0BFh, 016h, 030h
+	db 0F2h, 06Ch, 047h, 002h, 031h, 0B0h, 061h, 041h
+	db 07Fh, 000h, 000h, 000h, 0B8h, 006h, 061h, 0EAh
+	db 0CFh, 019h, 000h, 0C0h, 001h, 06Eh, 005h, 0E9h
+	db 0ACh, 0B8h, 00Eh, 061h, 078h, 0B2h, 001h, 0C2h
+	db 070h, 047h, 002h, 03Fh, 0FFh, 076h, 01Eh, 006h
+	db 045h, 02Eh, 0FFh, 0E7h, 000h, 0BFh, 016h, 034h
+	db 031h, 00Bh, 000h, 095h, 011h, 0BFh, 016h, 030h
+	db 0F2h, 06Eh, 047h, 002h, 031h, 0B0h, 061h, 041h
+	db 07Fh, 000h, 000h, 000h, 0B8h, 006h, 061h, 0EAh
+	db 0CFh, 019h, 000h, 0C0h, 001h, 06Eh, 005h, 0E9h
+	db 0ACh, 0B8h, 00Eh, 061h, 078h, 07Ah, 001h, 045h
+	dd LABEL_E7FF2E
+	db 0BFh, 016h, 034h, 031h
+	db 00Bh, 000h, 095h, 011h, 0BFh, 016h, 030h, 0F2h
+	db 070h, 047h, 002h, 031h, 0B0h, 061h, 041h, 07Fh
+	db 000h, 000h, 000h, 0B8h, 006h, 061h, 041h, 0FFh
+	db 0FFh, 0FFh, 0FFh, 0B8h, 00Ah, 061h, 0EAh, 0CFh
+	db 019h, 000h, 0C0h, 001h, 06Eh, 005h, 0E9h, 0ACh
+	db 0B8h, 00Eh, 061h, 078h, 043h, 001h, 01Dh, 0D0h
+	db 044h, 0FAh, 0EBh, 088h, 041h, 08Fh, 000h, 0E0h
+	db 001h, 0EAh, 0A8h, 01Dh, 060h, 096h, 0FAh, 0EBh
+	db 08Eh, 0BFh, 004h, 030h, 0EEh, 089h, 0E9h, 0EFh
+	db 000h, 0D7h, 0E6h, 0A8h, 0B0h, 051h, 0DEh, 089h
+	db 0B8h, 002h, 051h, 090h, 03Fh, 001h, 000h, 07Eh
+	db 08Ch, 005h, 0AFh, 02Ch, 022h, 0D9h, 0DBh, 076h
+	db 0CDh, 000h, 0D9h, 0DAh, 076h, 083h, 000h, 0D9h
+	db 0D9h, 066h, 042h, 0D9h, 0D8h, 07Eh, 076h, 005h
+	db 045h, 02Eh, 0FFh, 0E7h, 000h, 0BFh, 016h, 034h
+	db 031h, 00Bh, 000h, 095h, 011h, 0BFh, 016h, 030h
+	db 0F2h, 06Ah, 047h, 002h, 031h, 0B0h, 061h, 041h
+	db 00Fh, 000h, 000h, 000h, 0B8h, 006h, 061h, 0B8h
+	db 00Eh, 033h, 0EAh, 0CFh, 01Ah, 000h, 0C0h, 001h
+	db 06Eh, 009h, 041h, 0FCh, 0FFh, 0FFh, 0FFh, 0B3h
+	db 061h, 068h, 007h, 041h, 0FFh, 0FFh, 0FFh, 0FFh
+	db 0B3h, 061h, 078h, 0C4h, 000h, 045h, 02Eh, 0FFh
+	db 0E7h, 000h, 0BFh, 016h, 034h, 031h, 00Bh, 000h
+	db 095h, 011h, 0BFh, 016h, 030h, 0F2h, 06Ch, 047h
+	db 002h, 031h, 0B0h, 061h, 041h, 07Fh, 000h, 000h
+	db 000h, 0B8h, 006h, 061h, 0B8h, 00Eh, 033h, 0EAh
+	db 0CFh, 01Ah, 000h, 0C0h, 001h, 06Eh, 009h, 041h
+	db 0FCh, 0FFh, 0FFh, 0FFh, 0B3h, 061h, 068h, 007h
+	db 041h, 0FFh, 0FFh, 0FFh, 0FFh, 0B3h, 061h, 078h
+	db 087h, 000h, 0C2h, 070h, 047h, 002h, 03Fh, 0FFh
+	db 076h, 0F3h, 004h, 045h, 02Eh, 0FFh, 0E7h, 000h
+	db 0BFh, 016h, 034h, 031h, 00Bh, 000h, 095h, 011h
+	db 0BFh, 016h, 030h, 0F2h, 06Eh, 047h, 002h, 031h
+	db 0B0h, 061h, 041h, 07Fh, 000h, 000h, 000h, 0B8h
+	db 006h, 061h, 0B8h, 00Eh, 033h, 0EAh, 0CFh, 01Ah
+	db 000h, 0C0h, 001h, 06Eh, 009h, 041h, 0FCh, 0FFh
+	db 0FFh, 0FFh, 0B3h, 061h, 068h, 007h, 041h, 0FFh
+	db 0FFh, 0FFh, 0FFh, 0B3h, "ahBE"
+	dd LABEL_E7FF2E
+	db 0BFh, 016h, 034h, 031h
+	db 00Bh, 000h, 095h, 011h, 0BFh, 016h, 030h, 0F2h
+	db 070h, 047h, 002h, 031h, 0B0h, 061h, 041h, 07Fh
+	db 000h, 000h, 000h, 0B8h, 006h, 061h, 041h, 0FFh
+	db 0FFh, 0FFh, 0FFh, 0B8h, 00Ah, 061h, 0B8h, 00Eh
+	db 033h, 0EAh, 0CFh, 01Ah, 000h, 0C0h, 001h, 06Eh
+	db 009h, 041h, 0FCh, 0FFh, 0FFh, 0FFh, 0B3h, 061h
+	db 068h, 007h, 041h, 0FFh, 0FFh, 0FFh, 0FFh, 0B3h
+	db 061h, 01Dh, 08Ah, 0FEh, 0F9h, 078h, 06Eh, 004h
+	db 0B3h, 002h, 001h, 000h, 0EDh, 08Bh, 0B2h, 065h
+	db 0F2h, 06Ah, 047h, 002h, 032h, 0BEh, 00Eh, 030h
+	db 0A6h, 0F2h, 06Eh, 028h, 0B1h, 002h, 000h, 000h
+	db 0A0h, 020h, 0E8h, 061h, 038h, 00Bh, 0E7h, 000h
+	db 00Bh, 04Eh, 0FFh, 03Bh, 01Dh, 072h, 00Ah, 0FFh
+	db 0BFh, 00Ch, 037h, 01Dh, 0D0h, 044h, 0FAh, 0EBh
+	db 088h, 0BFh, 004h, 032h, 041h, 08Ch, 000h, 0E0h
+	db 001h, 078h, 02Eh, 004h, 0F2h, 06Ch, 047h, 002h
+	db 032h, 0A6h, 0F2h, 06Eh, 028h, 0B1h, 002h, 001h
+	db 000h, 0A0h, 020h, 0E8h, 061h, 038h, 00Bh, 0E7h
+	db 000h, 00Bh, 054h, 0FFh, 03Bh, 01Dh, 072h, 00Ah
+	db 0FFh, 0BFh, 00Ch, 037h, 01Dh, 0D0h, 044h, 0FAh
+	db 0EBh, 088h, 0BFh, 004h, 032h, 041h, 08Ch, 000h
+	db 0E0h, 001h, 078h, 0FDh, 003h, 0F2h, 06Eh, 047h
+	db 002h, 032h, 0A6h, 0F2h, 07Eh, 0ABh, 000h, 0B1h
+	db 002h, 002h, 000h, 0C2h, 070h, 047h, 002h, 03Fh
+	db 0FFh, 06Eh, 045h, 00Bh, 0E7h, 000h, 00Bh, 05Ah
+	db 0FFh, 03Bh, 01Dh, 04Dh, 00Fh, 0FFh, 0EFh, 060h
+	db 01Dh, 0D0h, 044h, 0FAh, 0EBh, 088h, 0BFh, 004h
+	db 032h, 041h, 08Ch, 000h, 0E0h, 001h, 01Dh, 060h
+	db 096h, 0FAh, 0BFh, 006h, 002h, 004h, 000h, 00Bh
+	db 0E7h, 000h, 00Bh, 060h, 0FFh, 0BFh, 010h, 030h
+	db 038h, 01Dh, 04Dh, 00Fh, 0FFh, 0EFh, 060h, 01Dh
+	db 0D0h, 044h, 0FAh, 0EBh, 088h, 0BFh, 004h, 032h
+	db 041h, 08Ch, 000h, 0E0h, 001h, 078h, 0A2h, 003h
+	db 0A0h, 020h, 038h, 00Bh, 0E7h, 000h, 00Bh, 068h
+	db 0FFh, 03Bh, 01Dh, 072h, 00Ah, 0FFh, 0BFh, 00Ch
+	db 037h, 01Dh, 0D0h, 044h, 0FAh, 0EBh, 088h, 0BFh
+	db 004h, 032h, 041h, 08Ch, 000h, 0E0h, 001h, 01Dh
+	db 060h, 096h, 0FAh, 0BFh, 006h, 002h, 004h, 000h
+	db 0C2h, 070h, 047h, 002h, 023h, 0D9h, 013h, 0AEh
+	db 00Eh, 020h, 0D8h, 0EEh, 007h, 0D9h, 080h, 028h
+	db 00Bh, 0E7h, 000h, 00Bh, 06Eh, 0FFh, 0BFh, 012h
+	db 030h, 038h, 01Dh, 072h, 00Ah, 0FFh, 0BFh, 00Ah
+	db 037h, 01Dh, 0D0h, 044h, 0FAh, 0EBh, 088h, 0BFh
+	db 004h, 032h, 041h, 08Ch, 000h, 0E0h, 001h, 078h
+	db 048h, 003h, 0F2h, 070h, 047h, 002h, 032h, 0A6h
+	db 0F2h, 07Eh, 042h, 003h, 0B1h, 002h, 002h, 000h
+	db 0A0h, 020h, 0E8h, 0CFh, 0FFh, 0FFh, 0FFh, 0FFh
+	db 06Eh, 06Ch, 00Bh, 0E7h, 000h, 00Bh, 076h, 0FFh
+	db 03Bh, 01Dh, 04Dh, 00Fh, 0FFh, 0EFh, 060h, 01Dh
+	db 0D0h, 044h, 0FAh, 0EBh, 088h, 0BFh, 004h, 032h
+	db 041h, 08Ch, 000h, 0E0h, 001h, 01Dh, 060h, 096h
+	db 0FAh, 0BFh, 006h, 002h, 003h, 000h, 00Bh, 0E7h
+	db 000h, 00Bh, 07Ch, 0FFh, 0BFh, 010h, 030h, 038h
+	db 01Dh, 04Dh, 00Fh, 0FFh, 0EFh, 060h, 01Dh, 0D0h
+	db 044h, 0FAh, 0EBh, 088h, 0BFh, 004h, 032h, 041h
+	db 08Ch, 000h, 0E0h, 001h, 01Dh, 060h, 096h, 0FAh
+	db 0BFh, 006h, 002h, 004h, 000h, 00Bh, 0E7h, 000h
+	db 00Bh, 082h, 0FFh, 0BFh, 010h, 030h, 038h, 01Dh
+	db 04Dh, 00Fh, 0FFh, 0EFh, 060h, 01Dh, 0D0h, 044h
+	db 0FAh, 0EBh, 088h, 0BFh, 004h, 032h, 041h, 08Ch
+	db 000h, 0E0h, 001h, 078h, 0C4h, 002h, 0C2h, 06Eh
+	db 047h, 002h, 021h, 0D8h, 013h, 028h, 00Bh, 0E7h
+	db 000h, 00Bh, 08Ah, 0FFh, 03Bh, 01Dh, 072h, 00Ah
+	db 0FFh, 0BFh, 00Ah, 037h, 01Dh, 0D0h, 044h, 0FAh
+	db 0EBh, 088h, 0BFh, 004h, 032h, 041h, 08Ch, 000h
+	db 0E0h, 001h, 01Dh, 060h, 096h, 0FAh, 0BFh, 006h
+	db 002h, 003h, 000h, 0AEh, 00Eh, 020h, 038h, 00Bh
+	db 0E7h, 000h, 00Bh, 090h, 0FFh, 0BFh, 014h, 030h
+	db 038h, 01Dh, 072h, 00Ah, 0FFh, 0BFh, 00Ch, 037h
+	db 01Dh, 0D0h, 044h, 0FAh, 0EBh, 088h, 0BFh, 004h
+	db 032h, 041h, 08Ch, 000h, 0E0h, 001h, 01Dh, 060h
+	db 096h, 0FAh, 0BFh, 006h, 002h, 004h, 000h, 0AEh
+	db 00Eh, 021h, 0C2h, 06Eh, 047h, 002h, 021h, 0D8h
+	db 013h, 0D8h, 0EEh, 007h, 0D9h, 080h, 028h, 00Bh
+	db 0E7h, 000h, 00Bh, 096h, 0FFh, 0BFh, 012h, 030h
+	db 038h, 01Dh, 072h, 00Ah, 0FFh, 0BFh, 00Ah, 037h
+	db 01Dh, 0D0h, 044h, 0FAh, 0EBh, 088h, 0BFh, 004h
+	db 032h, 041h, 08Ch, 000h, 0E0h, 001h, 078h, 039h
+	db 002h
+
+LABEL_F77B46:
+	LD XWA, XIZ
+	SRL_0_XWA
+	LD QWA, 0
+	LD (XHL), WA
+	LD XWA, XBC
+	LD IX, IZ
+	LD (XBC), IX
+	LD XBC, XIY
+	LD (XDE), XIY
+	CPW (XHL), 0001h
+	JRL NZ, LABEL_F77D83
+	LD DE, (XWA)
+	CP DE, 3
+	JRL Z, LABEL_F77C77
+	CP DE, 2
+	JR Z, LABEL_F77BC7
+	CP DE, 1
+	JR Z, LABEL_F77B9E
+	CP DE, 0
+	JRL NZ, LABEL_F77D83
+	LD A, (02476Ah)
+	INC 1, A
+	EXTZ WA
+	PUSH WA
+	PUSHW 00e7h
+	PUSHW 0ff9eh
+	PUSH XBC
+	CALL LABEL_FF0A72
+	LDA XSP, XSP + 00ah
+	CALL GetFocusObject
+	LD XWA, XHL
+	LDA XDE, XSP + 004h
+	LD XBC, 01e0008ch
+	JRL T, LABEL_F77D7F
+
+LABEL_F77B9E:
+	LD A, (02476Ch)
+	INC 1, A
+	EXTZ WA
+	PUSH WA
+	PUSHW 00e7h
+	PUSHW 0ffa4h
+	PUSH XBC
+	CALL LABEL_FF0A72
+	LDA XSP, XSP + 00ah
+	CALL GetFocusObject
+	LD XWA, XHL
+	LDA XDE, XSP + 004h
+	LD XBC, 01e0008ch
+	JRL T, LABEL_F77D7F
+
+LABEL_F77BC7:
+	CP (024770h), 0ffh
+	JR NZ, LABEL_F77C14
+	PUSHW 00e7h
+	PUSHW 0ffaah
+	PUSH XBC
+	CALL LABEL_FF0F4D
+	INC 8, XSP
+	CALL GetFocusObject
+	LD XWA, XHL
+	LDA XDE, XSP + 004h
+	LD XBC, 01e0008ch
+	CALL SendEvent
+	LDW (XSP + 006h:8), 0004h
+	PUSHW 00e7h
+	PUSHW 0ffb0h
+	LDA XWA, XSP + 010h
+	PUSH XWA
+	CALL LABEL_FF0F4D
+	INC 8, XSP
+	CALL GetFocusObject
+	LD XWA, XHL
+	LDA XDE, XSP + 004h
+	LD XBC, 01e0008ch
+	JRL T, LABEL_F77D7F
+
+LABEL_F77C14:
+	LD A, (02476Eh)
+	EXTS WA
+	PUSH WA
+	PUSHW 00e7h
+	PUSHW 0ffb8h
+	PUSH XBC
+	CALL LABEL_FF0A72
+	LDA XSP, XSP + 00ah
+	CALL GetFocusObject
+	LD XWA, XHL
+	LDA XDE, XSP + 004h
+	LD XBC, 01e0008ch
+	CALL SendEvent
+	LDW (XSP + 006h:8), 0004h
+	LD C, (024770h)
+	EXTS BC
+	LD A, (02476Eh)
+	EXTS WA
+	SLL 7, WA
+	ADD WA, BC
+	PUSH WA
+	PUSHW 00e7h
+	PUSHW 0ffbeh
+	LDA XWA, XSP + 012h
+	PUSH XWA
+	CALL LABEL_FF0A72
+	LDA XSP, XSP + 00ah
+	CALL GetFocusObject
+	LD XWA, XHL
+	LDA XDE, XSP + 004h
+	LD XBC, 01e0008ch
+	JRL T, LABEL_F77D7F
+
+LABEL_F77C77:
+	LDW (XWA), 0002h
+	CP (024770h), 0ffh
+	JR NZ, LABEL_F77CEF
+	PUSHW 00e7h
+	PUSHW 0ffc6h
+	PUSH XBC
+	CALL LABEL_FF0F4D
+	INC 8, XSP
+	CALL GetFocusObject
+	LD XWA, XHL
+	LDA XDE, XSP + 004h
+	LD XBC, 01e0008ch
+	CALL SendEvent
+	LDW (XSP + 006h:8), 0003h
+	PUSHW 00e7h
+	PUSHW 0ffcch
+	LDA XWA, XSP + 010h
+	PUSH XWA
+	CALL LABEL_FF0F4D
+	INC 8, XSP
+	CALL GetFocusObject
+	LD XWA, XHL
+	LDA XDE, XSP + 004h
+	LD XBC, 01e0008ch
+	CALL SendEvent
+	LDW (XSP + 006h:8), 0004h
+	PUSHW 00e7h
+	PUSHW 0ffd2h
+	LDA XWA, XSP + 010h
+	PUSH XWA
+	CALL LABEL_FF0F4D
+	INC 8, XSP
+	CALL GetFocusObject
+	LD XWA, XHL
+	LDA XDE, XSP + 004h
+	LD XBC, 01e0008ch
+	JRL T, LABEL_F77D7F
+
+LABEL_F77CEF:
+	LD A, (02476Eh)
+	EXTS WA
+	PUSH WA
+	PUSHW 00e7h
+	PUSHW 0ffdah
+	PUSH XBC
+	CALL LABEL_FF0A72
+	LDA XSP, XSP + 00ah
+	CALL GetFocusObject
+	LD XWA, XHL
+	LDA XDE, XSP + 004h
+	LD XBC, 01e0008ch
+	CALL SendEvent
+	LDW (XSP + 006h:8), 0003h
+	LD A, (024770h)
+	EXTS WA
+	PUSH WA
+	PUSHW 00e7h
+	PUSHW 0ffe0h
+	LDA XWA, XSP + 012h
+	PUSH XWA
+	CALL LABEL_FF0A72
+	LDA XSP, XSP + 00ah
+	CALL GetFocusObject
+	LD XWA, XHL
+	LDA XDE, XSP + 004h
+	LD XBC, 01e0008ch
+	CALL SendEvent
+	LDW (XSP + 006h:8), 0004h
+	LD C, (024770h)
+	EXTS BC
+	LD A, (02476Eh)
+	EXTS WA
+	SLL 7, WA
+	ADD WA, BC
+	PUSH WA
+	PUSHW 00e7h
+	PUSHW 0ffe6h
+	LDA XWA, XSP + 012h
+	PUSH XWA
+	CALL LABEL_FF0A72
+	LDA XSP, XSP + 00ah
+	CALL GetFocusObject
+	LD XWA, XHL
+	LDA XDE, XSP + 004h
+	LD XBC, 01e0008ch
+
+LABEL_F77D7F:
+	CALL SendEvent
+
+LABEL_F77D83:
+	LD XHL, 0
+	POP XIZ
+	LDA XSP, XSP + 02ch
+	RET
+
+PcgOutSendFunc:
+	CP XBC, 01c00008h
+	JR NZ, LABEL_F77DD7
+	LDA XDE, 024752h
+	LD A, (02476Ah)
+	LD (XDE), A
+	LD A, (02476Ch)
+	LD (XDE + 001h), A
+	LDA XBC, XDE + 002h
+	LD L, (024770h)
+	CP L, 0ffh
+	JR NZ, LABEL_F77DB9
+	LDW (XBC), 0ffffh
+	JR T, LABEL_F77DC9
+
+LABEL_F77DB9:
+	EXTS HL
+	LD A, (02476Eh)
+	EXTS WA
+	SLA 007h, WA
+	ADD WA, HL
+	LD (XBC), WA
+
+LABEL_F77DC9:
+	LD XWA, 01430000h
+	LD XBC, 01e30000h
+	CALL MainFuncCall
+
+LABEL_F77DD7:
+	LD XHL, 0
+	RET
+
+MainPcgOutSend:
+	CP XBC, 01e30000h
+	JR NZ, LABEL_F77DF2
+	LD A, (XDE)
+	EXTZ WA
+	LD C, (XDE + 001h)
+	EXTZ BC
+	LD DE, (XDE + 002h)
+	CALL LABEL_FDB904
+
+LABEL_F77DF2:
+	LD XHL, 0
+	RET
+
+; End of Computer Interface PCG routines
+

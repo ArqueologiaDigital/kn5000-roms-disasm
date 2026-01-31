@@ -154,6 +154,14 @@ IMAGE_METADATA = {
     "HDAE5000_FilePanel.bin": (320, 240, 8, "File selection UI panel"),
     # ROM offset 0x6198e (CPU: 0x2E198E): Small icon (uses halftone palette)
     "HDAE5000_Icon.bin": (28, 28, 8, "Hard disk with magnetic head icon"),
+
+    # Preset wallpapers from table_data ROM
+    # Discovered via SetWallPaper routine referencing table at 0xEAAE62
+    # Each wallpaper is 320x240 @ 8bpp = 76800 bytes
+    # Entry 0: 0x8ED000-0x8FFC00 in table_data ROM
+    "Wallpaper_0.bin": (320, 240, 8, "Preset wallpaper 0 (gradient)"),
+    # Entry 1: 0x900000-0x912C00 in table_data ROM
+    "Wallpaper_1.bin": (320, 240, 8, "Preset wallpaper 1 (gradient)"),
 }
 
 
@@ -281,25 +289,26 @@ def convert_image(bin_path: Path, output_dir: Path, palette: list = None) -> boo
 def main():
     # Determine paths
     script_dir = Path(__file__).parent
+    project_dir = script_dir.parent  # Project root containing maincpu/, table_data/, etc.
 
     if len(sys.argv) > 1:
         output_dir = Path(sys.argv[1])
     else:
-        output_dir = script_dir.parent / "kn5000-docs" / "assets" / "images" / "gallery"
+        output_dir = project_dir.parent / "kn5000-docs" / "assets" / "images" / "gallery"
 
     output_dir.mkdir(parents=True, exist_ok=True)
 
     # Image directories to process
     image_dirs = [
-        ("Main CPU", script_dir / "maincpu" / "images"),
-        ("Table Data", script_dir / "table_data" / "images"),
-        ("HDAE5000", script_dir / "hdae5000" / "images"),
+        ("Main CPU", project_dir / "maincpu" / "images"),
+        ("Table Data", project_dir / "table_data" / "images"),
+        ("HDAE5000", project_dir / "hdae5000" / "images"),
     ]
 
     print(f"Output directory: {output_dir}")
 
     # Load palette for 8-bit indexed color images (from maincpu)
-    maincpu_images = script_dir / "maincpu" / "images"
+    maincpu_images = project_dir / "maincpu" / "images"
     palette_path = maincpu_images / PALETTE_FILE
     palette = load_palette(palette_path)
     if palette:
@@ -308,7 +317,7 @@ def main():
         print("Warning: No maincpu palette loaded, 8-bit images will be grayscale")
 
     # Load HDAE5000 palettes (discovered from disassembly analysis)
-    hdae5000_images = script_dir / "hdae5000" / "images"
+    hdae5000_images = project_dir / "hdae5000" / "images"
     hdae5000_main_palette = load_palette(hdae5000_images / HDAE5000_MAIN_PALETTE)
     hdae5000_icon_palette = load_palette(hdae5000_images / HDAE5000_ICON_PALETTE)
     if hdae5000_main_palette:
