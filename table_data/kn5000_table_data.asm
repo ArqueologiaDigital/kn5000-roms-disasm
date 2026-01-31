@@ -129,6 +129,33 @@ Wallpaper_1:		; Technics branded texture
 	binclude "images/Wallpaper_1.bin"
 
 
+; =============================================================================
+; UI ICONS
+; =============================================================================
+; These small icons are used in menus and UI elements. Referenced by the
+; DrawIcons routine at 0xFABF9B in Main CPU ROM.
+;
+; Icon table format (8 bytes per entry):
+;   Bytes 0-1: Dimension 1 (0x18 for standard 12x24 icons)
+;   Bytes 2-3: Dimension 2 (0x18 for standard 12x24 icons)
+;   Bytes 4-7: Pointer to pixel data
+;
+; Color lookup table at 0xEAABF2 (Main CPU ROM) maps 8-bit indices to
+; 16-bit framebuffer colors.
+;
+; 176 icons total:
+;   - 173 standard icons: 12x24 pixels (288 bytes each)
+;   - 3 large icons: 27x27 or 28x28 pixels
+; =============================================================================
+
+	ORG 0938000h
+IconTable:
+	binclude "includes/icon_table.bin"
+
+IconPixelData:
+	binclude "includes/icon_pixel_data.bin"
+
+
 	ORG 9FA000h
 LABEL_9FA000:
 	db "SLIDE", 000h
