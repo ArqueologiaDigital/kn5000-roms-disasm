@@ -4,6 +4,12 @@
 	maxmode	on
 	include "../tmp94c241.inc"
 
+; =============================================================================
+; Constants for shared boot routines
+; =============================================================================
+REGION_CODE_VAR		EQU	00408h		; RAM address for region code
+BOOT_ENTRY_POINT	EQU	RESET_HANDLER	; Entry point for watchdog reset
+
 FDC_MAP__BASE_ADDR		EQU 110000h
 FDC__DMA_ACKNOWLEDGE		EQU 120000h
 INTER_CPU_COMM_LATCHES		EQU 140000h ; This is a pair of 8-bit latches
@@ -134497,38 +134503,16 @@ LABEL_EF0839:
 	LD L, (8E6Ah)
 	RET
 
-Detect_Area_Region_Code:		; EF083E
-	BIT 2, (PH)
-	JR Z, LABEL_EF0854
-	BIT 1, (PH)
-	JR Z, LABEL_EF084E
-	LD (0408h), 001h
-	RET
+; =============================================================================
+; Shared boot routines (Detect_Region_Code, Get_Region_Code, handlers)
+; Uses REGION_CODE_VAR and BOOT_ENTRY_POINT defined at top of file
+; =============================================================================
+	include "../shared/boot_routines.asm"
 
-LABEL_EF084E:
-	LD (0408h), 002h
-	RET
-
-LABEL_EF0854:
-	BIT 1, (PH)
-	JR Z, LABEL_EF085F
-	LD (0408h), 003h
-	RET
-
-LABEL_EF085F:
-	LD (0408h), 004h
-	RET
-
-Get_Area_Region_Code:		; EF0865
-	LD L, (0408h)
-	RET
-
-EMPTY_HANDLER:			; EF086A
-	RETI
-
-INTWD_HANDLER:			; EF086B
-	JRL T, RESET_HANDLER
-	RETI
+; Alias labels for backward compatibility with existing code
+Detect_Area_Region_Code	EQU	Detect_Region_Code	; EF083E
+Get_Area_Region_Code	EQU	Get_Region_Code		; EF0865
+INTWD_HANDLER		EQU	Watchdog_Reset_Handler	; EF086B
 
 LABEL_EF086F:
 	PUSH QIZ

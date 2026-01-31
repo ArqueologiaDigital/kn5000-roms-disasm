@@ -4,6 +4,12 @@
 	include "../tmp94c241.inc"
 	include "../shared/sfr_tmp94c241.asm"
 
+; =============================================================================
+; Constants for shared boot routines
+; =============================================================================
+REGION_CODE_VAR		EQU	00C06h		; RAM address for region code
+BOOT_ENTRY_POINT	EQU	Boot_Init	; Entry point for watchdog reset
+
 	ORG 0800000h
 LABEL_800000:
 	db 0 ;	TODO: figure out what's here.
@@ -215,152 +221,121 @@ Boot_Init:
 	; End of shared boot code (315 bytes)
 
 	; === Stack Pointer Setup ===
-	db	0F2h, 07Eh, 098h, 000h, 030h	; LDA XWA, 0x00987E
-	db	0E8h, 08Fh			; LD XSP, XWA
+	LDA_XWA_IMM24	00987Eh
+	LD	XSP, XWA
 
 	; === Clear RAM Variable ===
-	db	0E8h, 0A8h			; LD XWA, 0
+	LD	XWA, 0
 	db	0F1h, 000h, 00Ch, 060h		; LD (0x0C00), XWA
 
 	; === Call Boot_ClearRAM ===
-	db	01Eh, 00Dh, 001h		; CALR Boot_ClearRAM (at 0xFFB740)
+	CALR	Boot_ClearRAM
 
 	; === Reload Stack Pointer ===
-	db	0F2h, 07Eh, 098h, 000h, 030h	; LDA XWA, 0x00987E
-	db	0E8h, 08Fh			; LD XSP, XWA
+	LDA_XWA_IMM24	00987Eh
+	LD	XSP, XWA
 
 	; === Enable Interrupts ===
-	db	006h, 000h			; EI 0
+	EI	0
 
 	; === Detect Boot Mode ===
-	db	01Eh, 09Ah, 000h		; CALR Boot_DetectMode (at 0xFFB6D9)
+	CALR	Boot_DetectMode
 
 	; === Call Main Hardware Init ===
-	db	01Dh, 0F3h, 0BBh, 0FFh		; CALL 0xFFBBF3 (Boot_InitHardware)
+	CALL	0FFBBF3h			; Flash_Init_Custom_And_Table (boot-time address)
 
 	; === Configure Interrupt Enable Register ===
-	db	0F0h, 0E4h, 031h		; LDA XBC, 0xE4
-	db	081h, 021h			; LD A, (XBC)
-	db	0C9h, 0CCh, 08Fh		; AND A, 0x8F
-	db	0C9h, 0CEh, 030h		; OR A, 0x30
-	db	0B1h, 041h			; LD (XBC), A
+	LDA	XBC, 0E4h
+	LD	A, (XBC)
+	AND	A, 08Fh
+	OR	A, 030h
+	LD	(XBC), A
 
 	; === Check Boot Source ===
-	db	068h, 000h			; JR T, +0 (nop-like branch)
-	db	0F0h, 038h, 0C8h		; BIT 0, (P7)
-	db	06Eh, 00Ah			; JR NZ, Boot_SkipFDCCheck
+	JR	T, $+2				; nop-like branch
+	BIT	0, (PE)				; Check Port E bit 0
+	JR	NZ, Boot_SkipFDCCheck
 
 	; === Get Boot Mode and Check FDC ===
-	db	01Eh, 0A6h, 000h		; CALR Boot_GetBootMode (at 0xFFB700)
-	db	0CFh, 0DCh			; CP L, 4
+	CALR	Boot_GetBootMode
+	CP	L, 4
 	db	0F2h, 0B2h, 0C6h, 0FFh, 0EEh	; CALL NZ, 0xFFC6B2 (Boot_FDCRoutine)
 
 Boot_SkipFDCCheck:
-	db	01Dh, 063h, 0ECh, 0FFh		; CALL 0xFFEC63 (Boot_CheckFlash)
-	db	0CFh, 0D8h			; CP L, 0
-	db	066h, 044h			; JR Z, Boot_PrepareJump
+	CALL	0FFEC63h			; Boot_CheckFlash
+	CP	L, 0
+	JR	Z, Boot_PrepareJump
 
 	; === Load and Call Function Pointer ===
-	db	0E2h, 06Eh, 0ECh, 0FFh, 023h	; LD XHL, (0xFFEC6E)
-	db	0B3h, 0E8h			; CALL T, XHL
+	LD	XHL, (0FFEC6Eh)
+	CALL	T, XHL
 
 	; === Validate Boot Image ===
-	db	01Dh, 00Eh, 0EDh, 0FFh		; CALL 0xFFED0E (Boot_ValidateImage)
-	db	0CFh, 0DCh			; CP L, 4
-	db	06Eh, 035h			; JR NZ, Boot_PrepareJump
+	CALL	0FFED0Eh			; Boot_ValidateImage
+	CP	L, 4
+	JR	NZ, Boot_PrepareJump
 
 	; === Flash Update Sequence ===
-	db	01Dh, 007h, 0BFh, 0FFh		; CALL 0xFFBF07 (Boot_InitDisplay)
-	db	01Dh, 062h, 0D2h, 0FFh		; CALL 0xFFD262 (Boot_ShowMessage)
-	db	00Bh, 008h, 000h		; PUSH 0x0008
-	db	00Bh, 003h, 000h		; PUSH 0x0003
-	db	040h, 0F6h, 0AAh, 0FFh, 000h	; LD XWA, 0x00FFAAF6 (message addr)
-	db	031h, 030h, 000h		; LD BC, 0x0030 (width)
-	db	032h, 050h, 000h		; LD DE, 0x0050 (height)
-	db	01Dh, 0FBh, 0CCh, 0FFh		; CALL 0xFFCCFB (Boot_DrawBitmap)
-	db	01Dh, 0C4h, 0BFh, 0FFh		; CALL 0xFFBFC4 (Boot_WaitForInput)
-	db	0CFh, 0DBh			; CP L, 3
-	db	066h, 010h			; JR Z, Boot_PrepareJump
-	db	0CFh, 0CFh, 008h		; CP L, 0x08
-	db	066h, 00Bh			; JR Z, Boot_PrepareJump
-	db	0CFh, 0CFh, 0FFh		; CP L, 0xFF
-	db	066h, 006h			; JR Z, Boot_PrepareJump
-	db	01Dh, 02Ah, 0CCh, 0FFh		; CALL 0xFFCC2A (Boot_PerformUpdate)
+	CALL	0FFBF07h			; Boot_InitDisplay
+	CALL	0FFD262h			; Boot_ShowMessage
+	PUSHW	0008h
+	PUSHW	0003h
+	LD	XWA, 00FFAAF6h			; message addr
+	LD	BC, 0030h			; width
+	LD	DE, 0050h			; height
+	CALL	0FFCCFBh			; Boot_DrawBitmap
+	CALL	0FFBFC4h			; Boot_WaitForInput
+	CP	L, 3
+	JR	Z, Boot_PrepareJump
+	CP	L, 008h
+	JR	Z, Boot_PrepareJump
+	CP	L, 0FFh
+	JR	Z, Boot_PrepareJump
+	CALL	0FFCC2Ah			; Boot_PerformUpdate
 
 Boot_HaltLoop:
-	db	068h, 0FEh			; JR T, Boot_HaltLoop (-2)
+	JR	T, Boot_HaltLoop
 
 Boot_PrepareJump:
 	; === Prepare to Jump to Main Program ROM ===
-	db	006h, 007h			; EI 7 (disable maskable interrupts)
+	EI	7				; disable maskable interrupts
 
 	; === Clear Interrupt Flags ===
-	db	008h, 0E4h, 000h		; LD (0xE4), 0x00
-	db	008h, 0E0h, 000h		; LD (0xE0), 0x00
-	db	008h, 0EDh, 000h		; LD (0xED), 0x00
-	db	008h, 0E3h, 000h		; LD (0xE3), 0x00
-	db	008h, 0EBh, 000h		; LD (0xEB), 0x00
+	LD	(0E4h), 000h
+	LD	(0E0h), 000h
+	LD	(0EDh), 000h
+	LD	(0E3h), 000h
+	LD	(0EBh), 000h
 
 	; === Setup for Jump to Main Program ===
-	db	047h, 000h, 00Ch, 000h, 000h	; LD XSP, 0x00000C00
-	db	040h, 0DCh, 0FEh, 0FFh, 000h	; LD XWA, 0x00FFFEDC (target address)
-	db	034h, 04Bh, 001h		; LD IX, 0x014B (CS2 register)
-	db	0ECh, 012h			; EXTZ XIX
-	db	0E9h, 0EEh, 000h		; SLL 0, XBC (alignment/padding)
-	db	0E9h, 0EEh, 000h		; SLL 0, XBC
-	db	0B4h, 000h, 080h		; LD (XIX), 0x80 (CS2 config)
-	db	0B0h, 0D8h			; JP T, XWA - jump to main program!
+	LD	XSP, 000000C00h
+	LD	XWA, 000FFFEDCh			; target address
+	LD	IX, 014Bh			; CS2 register
+	EXTZ	XIX
+	SLL_0_XBC				; alignment/padding
+	SLL_0_XBC
+	LD	(XIX), 080h			; CS2 config
+	JP	T, XWA				; jump to main program!
 
 Boot_Ret:
-	db	00Eh				; RET
+	RET
+
+; =============================================================================
+; Shared boot routines (Detect_Region_Code, Get_Region_Code, handlers)
+; Uses REGION_CODE_VAR and BOOT_ENTRY_POINT defined at top of file
+; =============================================================================
+	include "../shared/boot_routines.asm"
+
+; Alias labels for backward compatibility with existing code
+Boot_DetectMode		EQU	Detect_Region_Code
+Boot_GetBootMode	EQU	Get_Region_Code
 
 ; -----------------------------------------------------------------------------
-; Boot_DetectMode - Detect boot mode from hardware switches
-; Address: 0xFFB6D9
-; Returns: (0x0C06) = boot mode (1-4)
-; -----------------------------------------------------------------------------
-Boot_DetectMode:
-	db	0F0h, 044h, 0CAh		; BIT 2, (P8FC)
-	db	066h, 011h			; JR Z, .check_bit1_only
-	db	0F0h, 044h, 0C9h		; BIT 1, (P8FC)
-	db	066h, 006h			; JR Z, .mode2
-	db	0F1h, 006h, 00Ch, 000h, 001h	; LD (0x0C06), 0x01 - Mode 1
-	db	00Eh				; RET
-.mode2:
-	db	0F1h, 006h, 00Ch, 000h, 002h	; LD (0x0C06), 0x02 - Mode 2
-	db	00Eh				; RET
-.check_bit1_only:
-	db	0F0h, 044h, 0C9h		; BIT 1, (P8FC)
-	db	066h, 006h			; JR Z, .mode4
-	db	0F1h, 006h, 00Ch, 000h, 003h	; LD (0x0C06), 0x03 - Mode 3
-	db	00Eh				; RET
-.mode4:
-	db	0F1h, 006h, 00Ch, 000h, 004h	; LD (0x0C06), 0x04 - Mode 4
-	db	00Eh				; RET
-
-; -----------------------------------------------------------------------------
-; Boot_GetBootMode - Get stored boot mode value
-; Address: 0xFFB700
-; Returns: L = boot mode
-; -----------------------------------------------------------------------------
-Boot_GetBootMode:
-	db	0C1h, 006h, 00Ch, 027h		; LD L, (0x0C06)
-	db	00Eh				; RET
-
-	ORG 09FB705h
-EMPTY_HANDLER:
-	RETI
-
-; After RETI, there's JRL back to Boot_Init for watchdog reset scenarios
-	JRL	T, Boot_Init		; Jump relative long back to boot entry
-
-; -----------------------------------------------------------------------------
-; Boot_Handler_End - End of a boot exception handler
+; Boot_Handler_End - End of boot exception handlers
 ; Address: 0x9FB709 (boot-time: 0xFFB709)
-; This appears to be the end of a handler that uses RETI
+; This is the RETI at the end of Watchdog_Reset_Handler in shared file
 ; -----------------------------------------------------------------------------
-Boot_Handler_End:
-	RETI				; 07
+Boot_Handler_End	EQU	Watchdog_Reset_Handler + 4
 
 ; -----------------------------------------------------------------------------
 ; Boot_CallInitHandlers - Call initialization handlers from table
@@ -379,27 +354,27 @@ Boot_Handler_End:
 ; Exit: All handlers called if (0xFFFEEE) was not 0xFFFF
 ; -----------------------------------------------------------------------------
 Boot_CallInitHandlers:
-	db	0D7h, 0FAh, 004h		; PUSH QIZ (save register)
-	db	0D2h, 0EEh, 0FEh, 0FFh, 03Fh, 0FFh, 0FFh	; CP (0xFFFEEE), 0xFFFF
-	JR	NZ, .done			; 6e 26 - skip if flag not set
-	db	0C7h, 0FBh, 0A8h		; LD QIZH, 0 - init counter
+	PUSH	QIZ				; save register
+	CP_MEM24_IMM16	0FFFEEEh, 0FFFFh	; CP (0xFFFEEE), 0xFFFF
+	JR	NZ, .done			; skip if flag not set
+	LD_QIZH_0				; init counter
 
 .handler_loop:
-	db	0C7h, 0FBh, 089h		; LD A, QIZH - get counter
-	EXTZ	WA				; d8 12 - extend to 16-bit
-	db	0C7h, 0FBh, 08Bh		; LD C, QIZH - copy counter to C
-	db	0D9h, 012h			; EXTZ BC - extend to 16-bit
-	db	0D9h, 0ECh, 002h		; SLA 2, BC - BC *= 4 (32-bit table entries)
-	db	0F2h, 0F0h, 0FEh, 0FFh, 032h	; LDA XDE, 0xFFFEF0 - table base
-	db	0E3h, 007h, 0E8h, 0E4h, 021h	; LD XBC, (XDE+BC) - load handler address
-	db	01Dh, 075h, 0FAh, 0FFh		; CALL 0xFFFA75 - indirect call helper?
-	db	0C7h, 0FBh, 061h		; INC 1, QIZH - counter++
-	db	0C7h, 0FBh, 0DCh		; CP QIZH, 4 - check if done
-	JR	C, .handler_loop		; 67 dd - loop if counter < 4
+	LD_A_QIZH				; get counter
+	EXTZ_WA					; extend to 16-bit
+	LD_C_QIZH				; copy counter to C
+	EXTZ_BC					; extend to 16-bit
+	SLA_2_BC				; BC *= 4 (32-bit table entries)
+	LDA_XDE_IMM24	0FFFEF0h		; table base
+	LD_XBC_pXDE_BC				; LD XBC, (XDE+BC) - load handler address
+	CALL	0FFFA75h			; indirect call helper
+	INC_1_QIZH				; counter++
+	CP_QIZH_4				; check if done
+	JR	C, .handler_loop		; loop if counter < 4
 
 .done:
-	db	0D7h, 0FAh, 005h		; POP QIZ (restore register)
-	RET					; 0e
+	POP	QIZ				; restore register
+	RET
 
 ; -----------------------------------------------------------------------------
 ; Boot_ClearRAM - Initialize RAM and copy ROM data to RAM
@@ -416,80 +391,80 @@ Boot_CallInitHandlers:
 	ORG 09FB740h
 Boot_ClearRAM:
 	; === Clear RAM block 1: 0x104E for 0x894A bytes ===
-	db	042h, 04Eh, 010h, 000h, 000h	; LD XDE, 0x0000104E (destination)
-	db	041h, 04Ah, 089h, 000h, 000h	; LD XBC, 0x0000894A (count = 35146 bytes)
-	db	0D9h, 08Ch			; LD IX, BC (save original count)
+	LD	XDE, 00000104Eh			; destination
+	LD	XBC, 0000894Ah			; count = 35146 bytes
+	LD	IX, BC				; save original count
 	db	0E9h, 0EFh, 001h		; SRL 1, XBC (divide by 2 for word count)
-	db	066h, 01Ch			; JR Z, .clear1_done (skip if zero)
-	db	0EAh, 08Bh			; LD XHL, XDE (source = dest for fill)
+	JR	Z, .clear1_done			; skip if zero
+	LD	XHL, XDE			; source = dest for fill
 	db	0F5h, 0E9h, 002h, 000h, 000h	; LD (XDE+), 0x0000 (store first zero word)
 	db	0E9h, 069h			; DEC 1, XBC
-	db	0E9h, 0E1h			; OR XBC, XBC (test if zero)
-	db	066h, 00Fh			; JR Z, .clear1_done
-	db	093h, 011h			; LDIRW (word block copy - fills with zeros)
+	OR	XBC, XBC			; test if zero
+	JR	Z, .clear1_done
+	LDIRW_93				; word block copy - fills with zeros
 	db	0D7h, 0E6h, 0D8h		; CP QBC, 0 (check high dword)
-	db	066h, 008h			; JR Z, .clear1_done
+	JR	Z, .clear1_done
 	db	0D7h, 0E6h, 088h		; LD WA, QBC
-	db	093h, 011h			; LDIRW
+	LDIRW_93
 	db	0D8h, 01Ch, 0FBh		; DJNZ WA, -5
 .clear1_done:
 	db	0DCh, 033h, 000h		; BIT 0, IX (check if odd byte)
-	db	066h, 003h			; JR Z, .clear1_aligned
-	db	0B2h, 000h, 000h		; LD (XDE), 0x00 (clear last odd byte)
+	JR	Z, .clear1_aligned
+	LD	(XDE), 000h			; clear last odd byte
 .clear1_aligned:
 
 	; === Clear RAM block 2: 0x0C00 for 0x0443 bytes ===
-	db	042h, 000h, 00Ch, 000h, 000h	; LD XDE, 0x00000C00 (destination)
-	db	041h, 043h, 004h, 000h, 000h	; LD XBC, 0x00000443 (count = 1091 bytes)
-	db	0D9h, 08Ch			; LD IX, BC
+	LD	XDE, 000000C00h			; destination
+	LD	XBC, 000000443h			; count = 1091 bytes
+	LD	IX, BC
 	db	0E9h, 0EFh, 001h		; SRL 1, XBC
-	db	066h, 01Ch			; JR Z, .clear2_done
-	db	0EAh, 08Bh			; LD XHL, XDE
+	JR	Z, .clear2_done
+	LD	XHL, XDE
 	db	0F5h, 0E9h, 002h, 000h, 000h	; LD (XDE+), 0x0000
 	db	0E9h, 069h			; DEC 1, XBC
-	db	0E9h, 0E1h			; OR XBC, XBC
-	db	066h, 00Fh			; JR Z, .clear2_done
-	db	093h, 011h			; LDIRW
+	OR	XBC, XBC
+	JR	Z, .clear2_done
+	LDIRW_93
 	db	0D7h, 0E6h, 0D8h		; CP QBC, 0
-	db	066h, 008h			; JR Z, .clear2_done
+	JR	Z, .clear2_done
 	db	0D7h, 0E6h, 088h		; LD WA, QBC
-	db	093h, 011h			; LDIRW
+	LDIRW_93
 	db	0D8h, 01Ch, 0FBh		; DJNZ WA, -5
 .clear2_done:
 	db	0DCh, 033h, 000h		; BIT 0, IX
-	db	066h, 003h			; JR Z, .clear2_aligned
-	db	0B2h, 000h, 000h		; LD (XDE), 0x00
+	JR	Z, .clear2_aligned
+	LD	(XDE), 000h
 .clear2_aligned:
 
 	; === Copy ROM data 1: 12 bytes from 0xFFB4DC to RAM 0x9998 ===
-	db	042h, 098h, 099h, 000h, 000h	; LD XDE, 0x00009998 (destination)
-	db	043h, 0DCh, 0B4h, 0FFh, 000h	; LD XHL, 0x00FFB4DC (source in boot ROM)
-	db	041h, 00Ch, 000h, 000h, 000h	; LD XBC, 0x0000000C (count = 12 bytes)
-	db	0E9h, 0E1h			; OR XBC, XBC
-	db	066h, 00Fh			; JR Z, .copy1_done
-	db	083h, 011h			; LDIR (byte block copy)
+	LD	XDE, 000009998h			; destination
+	LD	XHL, 000FFB4DCh			; source in boot ROM
+	LD	XBC, 00000000Ch			; count = 12 bytes
+	OR	XBC, XBC
+	JR	Z, .copy1_done
+	LDIR_83					; byte block copy
 	db	0D7h, 0E6h, 0D8h		; CP QBC, 0
-	db	066h, 008h			; JR Z, .copy1_done
+	JR	Z, .copy1_done
 	db	0D7h, 0E6h, 088h		; LD WA, QBC
-	db	083h, 011h			; LDIR
+	LDIR_83
 	db	0D8h, 01Ch, 0FBh		; DJNZ WA, -5
 .copy1_done:
 
 	; === Copy ROM data 2: 10 bytes from 0xFFB4D2 to RAM 0x1044 ===
-	db	042h, 044h, 010h, 000h, 000h	; LD XDE, 0x00001044 (destination)
-	db	043h, 0D2h, 0B4h, 0FFh, 000h	; LD XHL, 0x00FFB4D2 (source in boot ROM)
-	db	041h, 00Ah, 000h, 000h, 000h	; LD XBC, 0x0000000A (count = 10 bytes)
-	db	0E9h, 0E1h			; OR XBC, XBC
-	db	066h, 00Fh			; JR Z, .copy2_done
-	db	083h, 011h			; LDIR
+	LD	XDE, 000001044h			; destination
+	LD	XHL, 000FFB4D2h			; source in boot ROM
+	LD	XBC, 00000000Ah			; count = 10 bytes
+	OR	XBC, XBC
+	JR	Z, .copy2_done
+	LDIR_83
 	db	0D7h, 0E6h, 0D8h		; CP QBC, 0
-	db	066h, 008h			; JR Z, .copy2_done
+	JR	Z, .copy2_done
 	db	0D7h, 0E6h, 088h		; LD WA, QBC
-	db	083h, 011h			; LDIR
+	LDIR_83
 	db	0D8h, 01Ch, 0FBh		; DJNZ WA, -5
 .copy2_done:
-	db	078h, 042h, 0FEh		; JRL T, Boot_Init+0x14B (return to caller at 0xFFB633)
-	db	00Eh				; RET (never reached)
+	JRL_T	Boot_Init+014Bh			; return to caller at 0xFFB633
+	RET					; never reached
 
 ; =============================================================================
 ; BOOT INTERRUPT HANDLERS
@@ -589,9 +564,9 @@ Flash_Reset_16bit:
 	db	0D3h, 0F9h, 032h, 032h, 020h	; LD WA, (XIZ+3232h)
 	EI	0			; 06 00 - Re-enable interrupts
 	; Check if region code = 4 (high bank exists)
-	db	01Dh, 000h, 0B7h, 0FFh	; CALL Boot_Get_Region_Code (at 0xFFB700)
-	CP	L, 4			; cf dc
-	JR	NZ, .done		; 6e 2e
+	CALL	0FFB700h			; Boot_GetBootMode - returns region code in L
+	CP	L, 4
+	JR	NZ, .done
 	; Reset high bank at base+0x80000
 	ADD	XIZ, 00080000h		; ee c8 00 00 08 00
 	EI	6			; 06 06
