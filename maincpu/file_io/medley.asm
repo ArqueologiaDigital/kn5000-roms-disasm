@@ -34,7 +34,7 @@ FmmSeqSongNameFunc:
 	JR NZ, SeqName_ReturnZero
 	LD (82D4h), XDE
 	CP (84FEh), 000h
-	JR NZ, LABEL_F91AA3
+	JR NZ, SeqName_SendCurrentIndex
 	LDW (82D8h), 0000h
 
 SeqName_SendCurrentIndex:

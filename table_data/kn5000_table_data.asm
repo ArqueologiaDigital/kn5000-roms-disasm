@@ -12,13 +12,16 @@ BOOT_ENTRY_POINT	EQU	Boot_Init	; Entry point for watchdog reset
 
 	ORG 0800000h
 TableData_BootRegionReserved:
-	db 0 ;	TODO: figure out what's here.
+	db 088h		; First byte of data region (pointer table starts here)
 
+	; Data region (0x800001 - 0x87FFEF)
+	; Contains waveform samples, lookup tables, and other data
+	binclude "includes/initial_data.bin"
 
 	ORG 87FFF0h
 
 FeatureDemo_FileMetadata:
-	db "FeatureDemo_FileMetadata.ssf", 0
+	db "hkst_55.ssf", 0		; Filename for the feature demo SSF file
 	dd 00000000h
 	dd HKstSSF_Padding
 	dd Feature_Demo_XML
@@ -62,37 +65,37 @@ FeatureDemo_FileEntry1:
 	db "FTBMP01.BMP", 0
 	dd 00000000h
 	dd Feature_Bitmap_1
-	dd 436 + (320 * 240)
+	dd 77878			; Actual BMP file size
 
 FeatureDemo_FileEntry2:
 	db "FTBMP02.BMP", 0
 	dd 00000000h
 	dd Feature_Bitmap_2
-	dd 436 + (320 * 130)
+	dd 42678			; Actual BMP file size
 
 FeatureDemo_FileEntry3:
 	db "FTBMP03.BMP", 0
 	dd 00000000h
 	dd Feature_Bitmap_3
-	dd 436 + (320 * 120)
+	dd 39478			; Actual BMP file size
 
 FeatureDemo_FileEntry4:
 	db "FTBMP04.BMP", 0
 	dd 00000000h
 	dd Feature_Bitmap_4
-	dd 436 + (320 * 120)
+	dd 39478			; Size from ROM metadata
 
 FeatureDemo_FileEntry5:
 	db "FTBMP05.BMP", 0
 	dd 00000000h
 	dd Feature_Bitmap_5
-	dd 436 + (320 * 125)
+	dd 41078			; Actual BMP file size
 
 FeatureDemo_FileEntry6:
 	db "FTBMP06.BMP", 0
 	dd 00000000h
 	dd Feature_Bitmap_6
-	dd 436 + (320 * 240)
+	dd 77878			; Actual BMP file size
 
 	db 30 dup (000h)
 
@@ -105,11 +108,13 @@ FeatureDemo_FileEntry6:
 	ORG 08E0000h
 
 SubCPU_Payload_Compressed_LZSS:
-	; I think this is probably the subprogram rom compressed using
-	; the LZSS algorithm, as described at
-	; https://github.com/felipesanches/kn5000_homebrew/blob/main/kn5000_extract.py
-	db "SLIDE4K", 000h, 000h, 095h, 000h, "}Z", 0EEh, 0F0h
-	; etc...
+	; SubCPU program compressed using LZSS algorithm
+	; See: https://github.com/felipesanches/kn5000_homebrew/blob/main/kn5000_extract.py
+	db "SLIDE4K", 000h, 000h, 095h, 000h, "}Z", 0EEh
+	binclude "includes/subcpu_payload_compressed.bin"
+
+	; Unused space after compressed payload
+	db 25281 dup (0FFh)
 
 
 ; =============================================================================
@@ -124,9 +129,16 @@ SubCPU_Payload_Compressed_LZSS:
 Wallpaper_0:		; Blue textured pattern
 	binclude "images/Wallpaper_0.bin"
 
+	; Gap between wallpapers (0x8FFC00 - 0x8FFFFF)
+	binclude "includes/wallpaper_gap.bin"
+
 	ORG 0900000h
 Wallpaper_1:		; Technics branded texture
 	binclude "images/Wallpaper_1.bin"
+
+	; Gap between Wallpaper_1 and IconTable (0x912C00 - 0x937FFF)
+	; Contains pattern data, likely for additional wallpapers or samples
+	binclude "includes/wallpaper1_to_icons.bin"
 
 
 ; =============================================================================
@@ -180,18 +192,24 @@ IconTable:
 IconPixelData:
 	binclude "includes/icon_pixel_data.bin"
 
+	; Gap between icon data and FileIdentifierStringsTable (0x944D78 - 0x9F9FFF)
+	; Contains various data tables, string data, and padding blocks
+	binclude "includes/icons_to_strings.bin"
 
 	ORG 9FA000h
 FileIdentifierStringsTable:
-	db "SLIDE", 000h
-	db "Technics KN5000 Program  DATA FILE 1/2", 000h, 0ffh		; 9FA007
-	db "Technics KN5000 Program  DATA FILE 2/2", 000h, 0ffh		; 9FA02F
-	db "Technics KN5000 Program  DATA FILE PCK", 000h, 0ffh		; 9FA057
-	db "Technics KN5000 Table    DATA FILE 1/2", 000h, 0ffh		; 9FA07F
-	db "Technics KN5000 Table    DATA FILE 2/2", 000h, 0ffh		; 9FA0A7
-	db "Technics KN5000 Table    DATA FILE PCK", 000h, 0ffh		; 9FA1CF
-	db "Technics KN5000 CMPCUSTOMDATA FILE    ", 000h, 0ffh		; 9FA0F7
-	db "Technics KN5000 HD-AEPRG DATA FILE    ", 000h, 0ffh		; 9FA11F
+	; File type identifier strings used for detecting file formats
+	db "Technics KN5000 Program  DATA FILE 1/2", 000h, 0ffh		; 9FA000
+	db "Technics KN5000 Program  DATA FILE 2/2", 000h, 0ffh		; 9FA028
+	db "Technics KN5000 Program  DATA FILE PCK", 000h, 0ffh		; 9FA050
+	db "Technics KN5000 Table    DATA FILE 1/2", 000h, 0ffh		; 9FA078
+	db "Technics KN5000 Table    DATA FILE 2/2", 000h, 0ffh		; 9FA0A0
+	db "Technics KN5000 Table    DATA FILE PCK", 000h, 0ffh		; 9FA0C8
+	db "Technics KN5000 CMPCUSTOMDATA FILE    ", 000h, 000h		; 9FA0F0
+	db "Technics KN5000 HD-AEPRG DATA FILE    ", 000h, 0F0h		; 9FA118
+	; Data between strings and SLIDE marker (0x9FA140 - 0x9FA14F)
+	db 000h, 000h, 09Bh, 000h, 020h, 000h, 09Bh, 000h
+	db 043h, 000h, 05Bh, 000h, 076h, 000h, 08Fh, 000h
 
 ;HANDLE_UPDATE_BASE_ADDR		EQU HANDLE_UPDATE_FILE_TYPE_ID_001h
 ;
@@ -234,6 +252,13 @@ Bitmap_1bit_Illegal_Disk:		; 9FAFC6
 
 Bitmap_1bit_Turn_On_AGAIN:		; 9FB22E
 	binclude "../maincpu/images/Bitmap_1bit_Turn_On_AGAIN.bin"
+
+; Boot initialization data tables (0x9FB496 - 0x9FB4D1)
+; TODO: determine purpose of these tables
+	db 000h, 000h, 015h, 000h, 02Bh, 000h, 041h, 000h, 057h, 000h, 06Ch, 000h, 000h, 000h, 00Eh, 000h
+	db 00Eh, 000h, 00Eh, 000h, 00Eh, 000h, 00Eh, 000h, 008h, 000h, 008h, 000h, 008h, 000h, 00Bh, 000h
+	db 008h, 000h, 00Eh, 000h, 000h, 000h, 005h, 000h, 00Ah, 000h, 00Fh, 000h, 014h, 000h, 019h, 000h
+	db 01Eh, 000h, 023h, 000h, 028h, 000h, 02Dh, 000h, 032h, 000h, 037h, 000h
 
 
 ; =============================================================================
@@ -2121,7 +2146,7 @@ Boot_WaitDiskInsert:
 	JR	Z, .wdi_check_insert		; 66 08
 	db	01Dh, 063h, 0ECh, 0FFh		; CALL 0xFFEC63
 	db	0CFh, 0D8h			; CP L, 0
-	JR	NZ, .wdi_wait_remove		; 6e f8
+	db	06Eh, 0F8h			; JR NZ, .wdi_wait_remove
 
 .wdi_check_insert:
 	db	0E8h, 0A8h			; LD XWA, 0
@@ -2136,7 +2161,7 @@ Boot_WaitDiskInsert:
 	JR	NZ, .wdi_delay2			; 6e 08
 	db	01Dh, 063h, 0ECh, 0FFh		; CALL 0xFFEC63
 	db	0CFh, 0D8h			; CP L, 0
-	JR	Z, .wdi_wait_insert		; 66 f8
+	db	066h, 0F8h			; JR Z, .wdi_wait_insert
 
 .wdi_delay2:
 	db	0E8h, 0A8h			; LD XWA, 0
@@ -2148,7 +2173,7 @@ Boot_WaitDiskInsert:
 	; Check disk type
 	db	01Eh, 006h, 0FCh		; CALR Boot_DetectDiskType
 	db	087h, 0F7h			; CP L, (XSP) - compare with expected
-	JR	NZ, Boot_WaitDiskInsert		; 6e ac
+	db	06Eh, 0ACh			; JR NZ, Boot_WaitDiskInsert
 
 	; Type matches - clear screen and return
 	db	01Eh, 08Fh, 0FFh		; CALR Boot_ClearScreen
@@ -2180,7 +2205,7 @@ Boot_WaitFDCReady:
 	db	0DEh, 060h			; INC 0, IZ - increment progress
 	db	0DEh, 088h			; LD WA, IZ
 	db	031h, 0B4h, 000h		; LD BC, 0x00B4 - X pos
-	db	0DAh, 0AEh			; LD DE, 5 - mode
+	db	0DAh, 0ADh			; LD DE, 5 - mode
 	db	01Dh, 09Ah, 0CDh, 0FFh		; CALL 0xFFCD9A (display progress)
 	db	0E8h, 0A8h			; LD XWA, 0
 	db	0F1h, 000h, 00Ch, 060h		; LD (0x0C00), XWA
@@ -2188,7 +2213,7 @@ Boot_WaitFDCReady:
 .wfdc_continue:
 	db	01Dh, 085h, 0BEh, 0FFh		; CALL 0xFFBE85
 	db	0DBh, 0CFh, 0FFh, 0FFh		; CP HL, 0xFFFF
-	JR	Z, .wfdc_poll			; 66 d7
+	db	066h, 0D7h			; JR Z, .wfdc_poll
 
 .wfdc_done:
 	POP	IZ				; 4e
@@ -2583,6 +2608,10 @@ HDAE5000_InitializeParallelPort:
 	db	01Eh, 012h, 0FEh		; CALR Boot_DelayLoop
 	db	0F2h, 004h, 000h, 016h, 000h, 000h	; LD (0x160004), 0x00 - LEDs off
 	db	0C2h, 002h, 000h, 016h		; LD (0x160002), A - Port B (4 bytes)
+
+; Gap between HDAE init and LZSS (0x9FC6F6 - 0x9FC8C1)
+; TODO: Disassemble this section
+	binclude "includes/bootcode_hdae_to_lzss.bin"
 
 
 ; =============================================================================
@@ -3244,7 +3273,7 @@ DrawBitmap_UpdateDisplay:
 .db_next_bit:
 	db	0D7h, 0EEh, 061h		; INC 1, QHL
 	db	0D7h, 0EEh, 0CFh, 008h, 000h	; CP QHL, 0x0008 - 8 bits per byte
-	JR	C, .db_calc_addr		; 67 a1
+	db	067h, 0A1h			; JR C, .db_calc_addr
 
 	; Next row byte
 	db	0DEh, 061h			; INC 1, IZ

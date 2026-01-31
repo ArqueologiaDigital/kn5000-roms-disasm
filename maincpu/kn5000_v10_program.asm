@@ -319137,6 +319137,7 @@ LABEL_F8B7DB:
 	include "file_io/wallpaper.asm"
 	include "file_io/single_load.asm"
 	include "file_io/medley.asm"
+	include "password_slot_routines.asm"
 	include "file_io/misc_ui.asm"
 
 
