@@ -154,18 +154,6 @@ IMAGE_METADATA = {
     "HDAE5000_FilePanel.bin": (320, 240, 8, "File selection UI panel"),
     # ROM offset 0x6198e (CPU: 0x2E198E): Small icon (uses halftone palette)
     "HDAE5000_Icon.bin": (28, 28, 8, "Hard disk with magnetic head icon"),
-
-    # Table Data ROM 1-bit status messages (224x22, same content as maincpu but
-    # stored with 16-bit word byte ordering due to 16-bit ROM bus)
-    # These are the system update messages embedded in the table_data ROM
-    "TableData_Bitmap_1bit_Flash_Memory_Update.bin": (224, 22, 1, "Flash Memory Update (Table Data ROM)"),
-    "TableData_Bitmap_1bit_Now_Erasing.bin": (224, 22, 1, "Now Erasing (Table Data ROM)"),
-    "TableData_Bitmap_1bit_FD_to_Flash_Memory.bin": (224, 22, 1, "FD to Flash Memory (Table Data ROM)"),
-    "TableData_Bitmap_1bit_Completed.bin": (224, 22, 1, "Completed (Table Data ROM)"),
-    "TableData_Bitmap_1bit_Please_Wait.bin": (224, 22, 1, "Please Wait (Table Data ROM)"),
-    "TableData_Bitmap_1bit_Change_FD_2_of_2.bin": (224, 22, 1, "Change FD 2 of 2 (Table Data ROM)"),
-    "TableData_Bitmap_1bit_Illegal_Disk.bin": (224, 22, 1, "Illegal Disk (Table Data ROM)"),
-    "TableData_Bitmap_1bit_Turn_On_AGAIN.bin": (224, 22, 1, "Turn On AGAIN (Table Data ROM)"),
 }
 
 

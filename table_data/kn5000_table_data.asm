@@ -137,28 +137,28 @@ LABEL_9FA150:
 	db "SLIDE", 000h
 
 Bitmap_1bit_Flash_Memory_Update:	; 9FA156
-	binclude "images/TableData_Bitmap_1bit_Flash_Memory_Update.bin"
+	binclude "../maincpu/images/Bitmap_1bit_Flash_Memory_Update.bin"
 
 Bitmap_1bit_Now_Erasing:		; 9FA3BE
-	binclude "images/TableData_Bitmap_1bit_Now_Erasing.bin"
+	binclude "../maincpu/images/Bitmap_1bit_Now_Erasing.bin"
 
 Bitmap_1bit_FD_to_Flash_Memory:		; 9FA626
-	binclude "images/TableData_Bitmap_1bit_FD_to_Flash_Memory.bin"
+	binclude "../maincpu/images/Bitmap_1bit_FD_to_Flash_Memory.bin"
 
 Bitmap_1bit_Completed:			; 9FA88E
-	binclude "images/TableData_Bitmap_1bit_Completed.bin"
+	binclude "../maincpu/images/Bitmap_1bit_Completed.bin"
 
 Bitmap_1bit_Please_Wait:		; 9FAAF6
-	binclude "images/TableData_Bitmap_1bit_Please_Wait.bin"
+	binclude "../maincpu/images/Bitmap_1bit_Please_Wait.bin"
 
 Bitmap_1bit_Change_FD_2_of_2:		; 9FAD5E
-	binclude "images/TableData_Bitmap_1bit_Change_FD_2_of_2.bin"
+	binclude "../maincpu/images/Bitmap_1bit_Change_FD_2_of_2.bin"
 
 Bitmap_1bit_Illegal_Disk:		; 9FAFC6
-	binclude "images/TableData_Bitmap_1bit_Illegal_Disk.bin"
+	binclude "../maincpu/images/Bitmap_1bit_Illegal_Disk.bin"
 
 Bitmap_1bit_Turn_On_AGAIN:		; 9FB22E
-	binclude "images/TableData_Bitmap_1bit_Turn_On_AGAIN.bin"
+	binclude "../maincpu/images/Bitmap_1bit_Turn_On_AGAIN.bin"
 
 
 ; =============================================================================
