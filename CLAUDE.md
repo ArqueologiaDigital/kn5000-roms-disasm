@@ -16,7 +16,7 @@ Detailed documentation is at `../kn5000-docs/`. Key pages:
 - **Protocols**: `control-panel-protocol.md`, `inter-cpu-protocol.md`, `boot-sequence.md`
 - **Progress**: `rom-reconstruction.md`, `issues.md`, `reverse-engineering.md`
 - **Subsystems**: `audio-subsystem.md`, `fdc-subsystem.md`, `hdae5000.md`
-- **Data Formats**: `lzss-compression.md` (SLIDE4K compressed regions and decompression routines)
+- **Data Formats**: `lzss-compression.md` ⚠️ (contains disputed interpretations - see [Known Disputed Interpretations](#known-disputed-interpretations))
 
 ### Issue Tracker
 
@@ -577,7 +577,9 @@ The KN5000 firmware uses LZSS compression (SLIDE4K format) for embedded data. Wh
 |-----|-------|---------------|------------|--------------|---------|
 | table_data | `Compressed_Preset_Data_LZSS` | `0x08E0000` - `0x08E6D40` | 27,967 bytes | ~32,910 bytes | Parameter-like data |
 
-**Note:** The compressed data at 0x8E0000 decompresses to ~33KB of parameter data, NOT the ~192KB Sub CPU executable. However, the Sub CPU payload transfer during boot is complex due to memory map reconfiguration between boot stages. The payload source address may differ in Stage 1 (table_data at 0xE00000) vs Stage 2 (table_data at 0x800000). See `SubCPU_Send_Payload` in maincpu and `../kn5000-docs/lzss-compression.md` for details.
+**⚠️ DISPUTED:** The runtime destination of the preset data is disputed. See [Known Disputed Interpretations](#known-disputed-interpretations) below and `../kn5000-docs/lzss-compression.md` for the full discussion.
+
+**Note:** The compressed data at 0x8E0000 decompresses to ~33KB of parameter data, NOT the ~192KB Sub CPU executable. The Sub CPU payload transfer during boot is complex due to memory map reconfiguration between boot stages. See `SubCPU_Send_Payload` in maincpu and the preset data discussion in `table_data/preset_data.asm`.
 
 **Decompression Routines (all in table_data ROM):**
 
@@ -640,6 +642,31 @@ This is a strict policy to ensure the MAME driver accurately represents the actu
    - Never fix emulation by adding shortcuts that bypass real behavior
 
 **This policy exists because the goal of this project is hardware preservation and documentation, not just "making it boot."**
+
+### Known Disputed Interpretations
+
+**This section indexes areas where Claude Code's analysis disagrees with human judgment.** These require additional investigation before being considered resolved.
+
+When encountering disputed interpretations:
+1. **Do not present disputed conclusions as fact** - always note the disagreement
+2. **Preserve alternative interpretations** - do not delete competing theories
+3. **Add investigation items** - document what research would resolve the dispute
+4. **Update when resolved** - move to confirmed findings once agreement is reached
+
+| Topic | Status | Claude's View | Human's Concern | Details |
+|-------|--------|---------------|-----------------|---------|
+| **Preset Data Destination** | 🔴 DISPUTED | LZSS preset data (~33KB) goes to Sub CPU 0xF000+ | Memory map unclear, transfer sizes don't match, fallback produces invalid data | `table_data/preset_data.asm`, `../kn5000-docs/lzss-compression.md` |
+
+**Investigation needed for Preset Data Destination:**
+- [ ] Trace what `0x3E0000` actually maps to during boot (memory bank registers)
+- [ ] Search for other ~33KB data transfers that might be the actual destination
+- [ ] Explain why 64KB bulk transfers are used for ~33KB of data
+- [ ] Determine why fallback to `0x800000` produces `0xF7` padding bytes
+
+**Adding new disputes:** When Claude Code and a human contributor disagree on an interpretation, add it to this table with:
+- Brief summary of both positions
+- Links to detailed documentation
+- Specific investigation items that would resolve the dispute
 
 ## Architecture
 
