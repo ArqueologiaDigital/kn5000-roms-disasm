@@ -327,52 +327,17 @@ Boot_Ret:
 	include "../shared/boot_routines.asm"
 
 ; Alias labels for backward compatibility with existing code
-
-; -----------------------------------------------------------------------------
-; Boot_Handler_End - End of boot exception handlers
-; Address: 0x9FB709 (boot-time: 0xFFB709)
-; This is the RETI at the end of Watchdog_Reset_Handler in shared file
-; -----------------------------------------------------------------------------
 Boot_Handler_End	EQU	Watchdog_Reset_Handler + 4
 
-; -----------------------------------------------------------------------------
-; Boot_CallInitHandlers - Call initialization handlers from table
+; =============================================================================
+; Boot_CallInitHandlers - Call initialization handlers from table (Shared)
 ; Address: 0x9FB70A (boot-time: 0xFFB70A)
-;
-; Purpose: If (0xFFFEEE) != 0xFFFF, calls up to 4 init handlers from a table
-;          at 0xFFFEF0. Each table entry is a 32-bit address.
-;
-; Table at 0xFFFEF0:
-;   [0] = Handler 0 address (32-bit)
-;   [1] = Handler 1 address (32-bit)
-;   [2] = Handler 2 address (32-bit)
-;   [3] = Handler 3 address (32-bit)
-;
-; Entry: None
-; Exit: All handlers called if (0xFFFEEE) was not 0xFFFF
-; -----------------------------------------------------------------------------
-Boot_CallInitHandlers:
-	PUSH	QIZ				; save register
-	CP_MEM24_IMM16	0FFFEEEh, 0FFFFh	; CP (0xFFFEEE), 0xFFFF
-	JR	NZ, .done			; skip if flag not set
-	LD_QIZH_0				; init counter
+; Configuration for table_data: word comparison, boot-time indirect call helper
+; =============================================================================
+INIT_FLAG_COMPARE_WORD	EQU	1		; table_data uses word comparison
+INDIRECT_CALL_HELPER	EQU	0FFFA75h	; indirect call helper (boot-time address)
 
-.handler_loop:
-	LD_A_QIZH				; get counter
-	EXTZ_WA					; extend to 16-bit
-	LD_C_QIZH				; copy counter to C
-	EXTZ_BC					; extend to 16-bit
-	SLA_2_BC				; BC *= 4 (32-bit table entries)
-	LDA_XDE_IMM24	0FFFEF0h		; table base
-	LD_XBC_pXDE_BC				; LD XBC, (XDE+BC) - load handler address
-	CALL	0FFFA75h			; indirect call helper
-	INC_1_QIZH				; counter++
-	CP_QIZH_4				; check if done
-	JR	C, .handler_loop		; loop if counter < 4
-
-.done:
-	POP	QIZ				; restore register
-	RET
+	include "../shared/boot_call_init_handlers.asm"
 
 ; -----------------------------------------------------------------------------
 ; Boot_ClearRAM - Initialize RAM and copy ROM data to RAM

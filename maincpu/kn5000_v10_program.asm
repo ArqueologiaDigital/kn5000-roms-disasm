@@ -134509,30 +134509,17 @@ LABEL_EF0839:
 ; =============================================================================
 	include "../shared/boot_routines.asm"
 
+; =============================================================================
+; Boot_CallInitHandlers - Call initialization handlers from table (Shared)
+; Configuration for maincpu: byte comparison, local indirect call helper
+; =============================================================================
+INIT_FLAG_COMPARE_WORD	EQU	0		; maincpu uses byte comparison
+INDIRECT_CALL_HELPER	EQU	LABEL_EF183D	; indirect call helper in maincpu
+
+	include "../shared/boot_call_init_handlers.asm"
+
 ; Alias labels for backward compatibility with existing code
-
-LABEL_EF086F:
-	PUSH QIZ
-	CP (0FFFEEEh), 0ffh
-	JR NZ, LABEL_EF08A0
-	LD QIZH, 0
-
-LABEL_EF087D:
-	LD A, QIZH
-	EXTZ WA
-	LD C, QIZH
-	EXTZ BC
-	SLA 002h, BC
-	LDA XDE, LABEL_FFFEF0
-	LD XBC, (XDE + BC)
-	CALL LABEL_EF183D
-	INC 1, QIZH
-	CP QIZH, 4
-	JR C, LABEL_EF087D
-
-LABEL_EF08A0:
-	POP QIZ
-	RET
+LABEL_EF086F	EQU	Boot_CallInitHandlers
 
 INTT2_HANDLER:				; EF08A4
 	RETI
