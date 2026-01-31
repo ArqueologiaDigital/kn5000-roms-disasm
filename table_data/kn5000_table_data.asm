@@ -3314,17 +3314,31 @@ Init_Display_Progress:
 	RET					; 0e
 
 ; =============================================================================
-; VGA_WritePort - Write byte to VGA I/O port
+; VGA Helper Routines and Constants
+; =============================================================================
+
+; VGA Constants (shared with maincpu)
+	include "../shared/vga_constants.asm"
+
+; Additional constants for VGA init
+OFFSCREEN_BUFFER_1	EQU 043c00h	; Offscreen video buffer
+
+; Memory routines in high RAM (boot code is copied there during update)
+BootRAM_MemoryFill	EQU 0FFFB18h	; Fill memory with pattern
+BootRAM_MemoryCopy	EQU 0FFFB0Fh	; Copy memory block
+
+; =============================================================================
+; Write_VGA_Register - Write byte to VGA I/O port
 ; Address: 0x9FCDFC
 ; Input: WA = port address, C = value to write
 ; VGA ports mapped at 0x170000
 ; =============================================================================
-VGA_WritePort:
+Write_VGA_Register:
 	db	0DAh, 0A8h			; LD DE, 0 - delay counter
-.vwp_delay:
+.delay:
 	db	0DAh, 061h			; INC 1, DE
 	db	0DAh, 0CFh, 000h, 001h		; CP DE, 0x0100
-	JR	C, .vwp_delay			; 67 f8
+	JR	C, .delay			; 67 f8
 
 	db	0E8h, 012h			; EXTZ XWA
 	db	042h, 000h, 000h, 017h, 000h	; LD XDE, 0x00170000
@@ -3333,12 +3347,12 @@ VGA_WritePort:
 	RET					; 0e
 
 ; =============================================================================
-; VGA_ReadPort - Read byte from VGA I/O port
+; Read_VGA_Register - Read byte from VGA I/O port
 ; Address: 0x9FCE12
 ; Input: WA = port address
 ; Returns: L = value read
 ; =============================================================================
-VGA_ReadPort:
+Read_VGA_Register:
 	db	0E8h, 012h			; EXTZ XWA
 	db	041h, 000h, 000h, 017h, 000h	; LD XBC, 0x00170000
 	db	0E8h, 081h			; ADD XBC, XWA
@@ -3346,20 +3360,35 @@ VGA_ReadPort:
 	RET					; 0e
 
 ; =============================================================================
-; VGA_Init - VGA Register Initialization
-; Address: 0x9FCE1E-0x9FD7E7 (2505 bytes)
+; VGA_Init - VGA Register Initialization (Shared with maincpu)
+; Address: 0x9FCE1E-0x9FD7E7 (2506 bytes)
 ;
-; Extensive initialization of VGA hardware registers:
-;   - CRTC timing registers (ports 0x3D4/0x3D5)
-;   - Sequencer registers (ports 0x3C4/0x3C5)
-;   - Graphics controller (ports 0x3CE/0x3CF)
-;   - Attribute controller (port 0x3C0)
-;   - DAC palette entries (ports 0x3C8/0x3C9)
-;
+; Extensive initialization of VGA hardware registers using shared code.
 ; The VGA controller is memory-mapped at 0x170000 for I/O ports.
-; Framebuffer is at 0x1A0000 (320x200, 256 colors).
+; Framebuffer is at 0x1A0000 (320x240, 8bpp).
 ; =============================================================================
-	binclude "includes/bootcode_vga_regs.bin"
+	include "../shared/vga_init.asm"
+
+	; === ROM-specific ending: initialize video buffers ===
+	; (Boot code runs from high RAM, so these are absolute calls)
+	CALL BootRAM_MemoryFill
+	LDA XWA, VIDEO_RAM_BASE
+	LD XBC, OFFSCREEN_BUFFER_1
+	LD DE, 320 * 240 / 2
+	CALL BootRAM_MemoryCopy
+
+	; Turn screen on (RET_VGA_SEQUENCER 01h, 001h with JRL optimization)
+	VGA_WRITE VGA_SEQ_ADDR, 01h
+	LDW WA, VGA_SEQ_DATA
+	LDW BC, 001h
+	JRL T, Write_VGA_Register
+
+; Small utility routine at 0x9FD7E2 (table_data specific, not in maincpu)
+; Purpose unknown - possibly initialization/cleanup
+VGA_Init_Epilogue:
+	db 0B0h, 000h, 000h		; LD (XWA), 0x00
+	db 0DBh, 0A8h			; LD HL, 0
+	RET				; 0e
 
 ; =============================================================================
 ; FDC HELPER ROUTINES (0x9FD7E8-0x9FD8A4)
