@@ -239,7 +239,7 @@ Boot_Init:
 	EI	0
 
 	; === Detect Boot Mode ===
-	CALR	Boot_DetectMode
+	CALR	Detect_Region_Code
 
 	; === Call Main Hardware Init ===
 	CALL	0FFBBF3h			; Flash_Init_Custom_And_Table (boot-time address)
@@ -257,7 +257,7 @@ Boot_Init:
 	JR	NZ, Boot_SkipFDCCheck
 
 	; === Get Boot Mode and Check FDC ===
-	CALR	Boot_GetBootMode
+	CALR	Get_Region_Code
 	CP	L, 4
 	db	0F2h, 0B2h, 0C6h, 0FFh, 0EEh	; CALL NZ, 0xFFC6B2 (Boot_FDCRoutine)
 
@@ -327,8 +327,6 @@ Boot_Ret:
 	include "../shared/boot_routines.asm"
 
 ; Alias labels for backward compatibility with existing code
-Boot_DetectMode		EQU	Detect_Region_Code
-Boot_GetBootMode	EQU	Get_Region_Code
 
 ; -----------------------------------------------------------------------------
 ; Boot_Handler_End - End of boot exception handlers
@@ -564,7 +562,7 @@ Flash_Reset_16bit:
 	db	0D3h, 0F9h, 032h, 032h, 020h	; LD WA, (XIZ+3232h)
 	EI	0			; 06 00 - Re-enable interrupts
 	; Check if region code = 4 (high bank exists)
-	CALL	0FFB700h			; Boot_GetBootMode - returns region code in L
+	CALL	0FFB700h			; Get_Region_Code - returns region code in L
 	CP	L, 4
 	JR	NZ, .done
 	; Reset high bank at base+0x80000
@@ -3303,36 +3301,10 @@ BootRAM_MemoryFill	EQU 0FFFB18h	; Fill memory with pattern
 BootRAM_MemoryCopy	EQU 0FFFB0Fh	; Copy memory block
 
 ; =============================================================================
-; Write_VGA_Register - Write byte to VGA I/O port
-; Address: 0x9FCDFC
-; Input: WA = port address, C = value to write
-; VGA ports mapped at 0x170000
+; VGA Register I/O Routines - Shared with maincpu ROM
+; Address: 0x9FCDFC-0x9FCE1D (34 bytes)
 ; =============================================================================
-Write_VGA_Register:
-	db	0DAh, 0A8h			; LD DE, 0 - delay counter
-.delay:
-	db	0DAh, 061h			; INC 1, DE
-	db	0DAh, 0CFh, 000h, 001h		; CP DE, 0x0100
-	JR	C, .delay			; 67 f8
-
-	db	0E8h, 012h			; EXTZ XWA
-	db	042h, 000h, 000h, 017h, 000h	; LD XDE, 0x00170000
-	db	0E8h, 082h			; ADD XDE, XWA
-	db	0B2h, 043h			; LD (XDE), C
-	RET					; 0e
-
-; =============================================================================
-; Read_VGA_Register - Read byte from VGA I/O port
-; Address: 0x9FCE12
-; Input: WA = port address
-; Returns: L = value read
-; =============================================================================
-Read_VGA_Register:
-	db	0E8h, 012h			; EXTZ XWA
-	db	041h, 000h, 000h, 017h, 000h	; LD XBC, 0x00170000
-	db	0E8h, 081h			; ADD XBC, XWA
-	db	081h, 027h			; LD L, (XBC)
-	RET					; 0e
+	include "../shared/vga_io.asm"
 
 ; =============================================================================
 ; VGA_Init - VGA Register Initialization (Shared with maincpu)

@@ -134229,7 +134229,7 @@ LABEL_EF054F:
 	AND A, 0f8h
 	OR A, 003h
 	LD (XBC), A
-	CALR Detect_Area_Region_Code
+	CALR Detect_Region_Code
 	CPW (0FFCAh:24), 5aa5h
 	JR Z, LABEL_EF05A2
 	LDA XDE, 066Eh:24
@@ -134242,7 +134242,7 @@ LABEL_EF05A2:
 	CALL LABEL_EF3B05
 	BIT 0, (PE)		;  Is the optional HD-AE5000 board present?
 	JR NZ, LABEL_EF05B5
-	CALR Get_Area_Region_Code
+	CALR Get_Region_Code
 	CP L, 4
 	CALL NZ, HDAE5000_Parport_Setup	; if it is present (and this unit was sold in
 					; a specific market region), then call the
@@ -134510,9 +134510,6 @@ LABEL_EF0839:
 	include "../shared/boot_routines.asm"
 
 ; Alias labels for backward compatibility with existing code
-Detect_Area_Region_Code	EQU	Detect_Region_Code	; EF083E
-Get_Area_Region_Code	EQU	Get_Region_Code		; EF0865
-INTWD_HANDLER		EQU	Watchdog_Reset_Handler	; EF086B
 
 LABEL_EF086F:
 	PUSH QIZ
@@ -139658,7 +139655,7 @@ LABEL_EF3735:
 	LDW (XWA), 00f0h
 	LD WA, (XIZ + 3232h)
 	EI 000h
-	CALL Get_Area_Region_Code
+	CALL Get_Region_Code
 	CP L, 4
 	JR NZ, LABEL_EF3798
 	ADD XIZ, 00080000h
@@ -139744,7 +139741,7 @@ LABEL_EF3825:
 	CP A, 1
 	JR NZ, LABEL_EF384E
 	LDA XIZ, CUSTOM_DATA_FLASH__BASE_ADDR
-	CALL Get_Area_Region_Code
+	CALL Get_Region_Code
 	CP L, 4
 	JR NZ, LABEL_EF3853
 	LD XWA, (XSP + 006h)
@@ -139799,7 +139796,7 @@ LABEL_EF3890:
 	LD XWA, XIZ
 	ADD XWA, 0000aaaah
 	LDW (XWA), 0010h
-	CALL Get_Area_Region_Code
+	CALL Get_Region_Code
 	CP L, 4
 	JR NZ, LABEL_EF3923
 	CP (XSP + 004h), 001h
@@ -139842,7 +139839,7 @@ LABEL_EF3943:
 	LD (XSP + 004h), XWA
 	LD XWA, 00ff0000h
 	AND (XSP + 004h), XWA
-	CALL Get_Area_Region_Code
+	CALL Get_Region_Code
 	CP L, 4
 	JR NZ, LABEL_EF396C
 	LD XWA, (XSP + 004h)
@@ -139865,7 +139862,7 @@ LABEL_EF396C:
 	LDW (XIZ + 5554h), 0055h
 	LD XWA, (XSP + 004h)
 	LDW (XWA), 0030h
-	CALL Get_Area_Region_Code
+	CALL Get_Region_Code
 	CP L, 4
 	JR NZ, LABEL_EF3A0E
 	CP (XSP + 00ch), 001h
@@ -139991,7 +139988,7 @@ LABEL_EF3B05:
 	CALR LABEL_EF3724
 	LD WA, 2
 	CALR LABEL_EF3724
-	CALL Get_Area_Region_Code
+	CALL Get_Region_Code
 	CP L, 4
 	CALL NZ, LABEL_EF3CD1
 	LD WA, 1
@@ -142031,7 +142028,7 @@ FLASH_MEM_UPDATE:  ; EF4F6F
 	CALR LABEL_EF4241
 	CALR Detect_Disk_Type
 	LD QIZH, L
-	CALL Get_Area_Region_Code
+	CALL Get_Region_Code
 	CP L, 4
 	JR Z, LABEL_EF4FE4
 	CALL HDAE5000_Detect
@@ -142241,26 +142238,10 @@ VRAM_FillRect_Done:
 	INC 6, XSP
 	RET
 
-Write_VGA_Register:		; ef5141
-	LD DE, 0
-
-LABEL_EF5143:
-	INC 1, DE
-	CP DE, 0100h
-	JR C, LABEL_EF5143
-	EXTZ XWA
-	LD XDE, VGA_IO_BASE
-	ADD XDE, XWA
-	LD (XDE), C
-	RET
-
-Read_VGA_Register:		; ef5157
-	EXTZ XWA
-	LD XBC, VGA_IO_BASE
-	ADD XBC, XWA
-	LD L, (XBC)
-	RET
-
+; =============================================================================
+; VGA Register I/O Routines - Shared with table_data ROM
+; =============================================================================
+	include "../shared/vga_io.asm"
 
 ; =============================================================================
 ; VGA Initialization Code - Shared with table_data ROM
@@ -234047,7 +234028,7 @@ HelpLangChkMain:
 	JR NZ, LABEL_F4779A
 	CP (8D39h), 0eeh
 	JR Z, LABEL_F4779A
-	CALL Get_Area_Region_Code
+	CALL Get_Region_Code
 	CP L, 3
 	JR NZ, LABEL_F4778A
 	LD XWA, 00e7000ah
@@ -305870,7 +305851,7 @@ AcWelcomScreenProc:
 	JRL NZ, LABEL_F7FA49
 	LD WA, 1
 	CALL ChangePalette
-	CALL Get_Area_Region_Code
+	CALL Get_Region_Code
 	LD XWA, 00e9e806h
 	CP L, 2
 	JR NZ, LABEL_F7F51A
@@ -377130,7 +377111,7 @@ LABEL_FB2B06:
 
 	_VGA_SEQUENCER 08h, 001h
 	_VGA_SEQUENCER 0dh, 003h
-	CALL Get_Area_Region_Code
+	CALL Get_Region_Code
 	CP L, 4
 	JR NZ, LABEL_FB2F12
 
@@ -382809,7 +382790,7 @@ LABEL_FB709F:
 	LD A, H
 	AND A, 007h
 	JR NZ, LABEL_FB70B8
-	CALL Get_Area_Region_Code
+	CALL Get_Region_Code
 	LD_H 00ah
 	CP L, 2
 	JR NZ, LABEL_FB70B8
@@ -404976,7 +404957,7 @@ LABEL_FC819D:
 	LDA XSP, XSP + 014h
 	RES 0, (0FFC2h:24)
 	SET 1, (0FFC0h:24)
-	CALL Get_Area_Region_Code
+	CALL Get_Region_Code
 	CP L, 2
 	JR NZ, LABEL_FC81E0
 	LD (0FFC8h:24), 001h
@@ -413041,7 +413022,7 @@ LABEL_FCF897:
 	RET
 
 LABEL_FCF8B1:
-	CALL Get_Area_Region_Code
+	CALL Get_Region_Code
 	CP L, 4
 	JR Z, LABEL_FCF8D8
 	LDW (0B7D4h), 7a12h
@@ -461875,7 +461856,7 @@ LABEL_FFFEF0:
 	dd EMPTY_HANDLER	; "SWI 7" instruction
 
 	dd NMI_HANDLER
-	dd INTWD_HANDLER
+	dd Watchdog_Reset_Handler
 	dd INT0_HANDLER
 	dd INT4_HANDLER
 	dd INT5_HANDLER
