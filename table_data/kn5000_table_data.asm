@@ -132,20 +132,42 @@ Wallpaper_1:		; Technics branded texture
 ; =============================================================================
 ; UI ICONS
 ; =============================================================================
-; These small icons are used in menus and UI elements. Referenced by the
+; These icons are used in menus and UI elements. Referenced by the
 ; DrawIcons routine at 0xFABF9B in Main CPU ROM.
 ;
+; Format: 24x24 pixels @ 4bpp (16 colors), 288 bytes per icon
+;   - 2 pixels per byte: high nibble = first pixel, low nibble = second
+;   - 176 icons total (173 standard 24x24, 3 larger: 27x27 or 28x28)
+;
 ; Icon table format (8 bytes per entry):
-;   Bytes 0-1: Dimension 1 (0x18 for standard 12x24 icons)
-;   Bytes 2-3: Dimension 2 (0x18 for standard 12x24 icons)
-;   Bytes 4-7: Pointer to pixel data
+;   Bytes 0-1: Width (0x18 = 24 for standard icons)
+;   Bytes 2-3: Height (0x18 = 24 for standard icons)
+;   Bytes 4-7: Pointer to pixel data (absolute address)
 ;
-; Color lookup table at 0xEAABF2 (Main CPU ROM) maps 8-bit indices to
-; 16-bit framebuffer colors.
+; Color Palette (16 colors, CGA/EGA-style):
+;   The color lookup table at 0xEAABF2 (Main CPU ROM) expands 4-bit nibbles
+;   to 8-bit palette indices, which reference the main palette at 0xEB37DE:
 ;
-; 176 icons total:
-;   - 173 standard icons: 12x24 pixels (288 bytes each)
-;   - 3 large icons: 27x27 or 28x28 pixels
+;   Nibble  Palette Index  Color           RGB
+;   ------  -------------  --------------  ---------------
+;      0       0x00        Black           (0, 0, 0)
+;      1       0x01        Dark Red        (128, 0, 0)
+;      2       0x02        Dark Green      (0, 128, 0)
+;      3       0x03        Olive           (128, 128, 0)
+;      4       0x04        Dark Blue       (0, 0, 128)
+;      5       0x05        Dark Magenta    (128, 0, 128)
+;      6       0x06        Dark Cyan       (0, 128, 128)
+;      7       0x07        Light Gray      (136, 136, 136)  <- background
+;      8       0xF8        Dark Gray       (96, 96, 96)
+;      9       0xF9        Bright Red      (255, 0, 0)
+;     10       0xFA        Bright Green    (0, 255, 0)
+;     11       0xFB        Yellow          (255, 255, 0)
+;     12       0xFC        Bright Blue     (0, 0, 255)
+;     13       0xFD        Magenta         (255, 0, 255)
+;     14       0xFE        Cyan            (0, 255, 255)
+;     15       0xFF        White           (255, 255, 255)
+;
+; See scripts/extract_icons.py for extraction tool.
 ; =============================================================================
 
 	ORG 0938000h
