@@ -10,11 +10,22 @@
 ;
 ; RUNTIME DESTINATION:
 ; ====================
-; During boot, the Main CPU decompresses this data to RAM at 0x50000,
-; then transfers it to the Sub CPU:
+; The SubCPU_Send_Payload routine (maincpu 0xEF0692) handles transfer:
 ;
-;   Offset 0x000-0x0FF (256 bytes)  -> Main CPU RAM 0x0404 (just word at 0x100)
-;   Offset 0x100-0x808D (32,654 bytes) -> Sub CPU address 0xF000+
+; 1. LZSS data at 0x3E0000 is decompressed to Main CPU RAM at 0x50000
+; 2. Word at offset 0x100 is copied to Main CPU RAM 0x0404
+; 3. Bulk E1 transfers send 64KB blocks to Sub CPU (only ~33KB is meaningful)
+;
+; Transfer layout:
+;   Offset 0x000-0x0FF (256 bytes)   -> Main CPU only (not transferred)
+;   Offset 0x100-0x808D (32,654 bytes) -> Sub CPU address 0xF000+ via E1 bulk
+;
+; NOTE: The bulk transfer sends 64KB to SubCPU 0xF000, but only the first
+; ~32KB contains meaningful preset data. Bytes beyond 0x808D are uninitialized.
+;
+; Memory Map Note: The source address 0x3E0000 represents an alternate ROM
+; mapping. The same LZSS data is at ROM offset 0xE0000 (CPU address 0x8E0000
+; in Stage 2 boot configuration).
 ;
 ; The Sub CPU ROM (kn5000_subprogram_v142) contains DEFAULT values at 0xF000.
 ; This preset data OVERWRITES those defaults during boot, allowing factory
@@ -50,10 +61,11 @@
     org 0
 
 ; ===========================================================================
-; MAIN CPU HEADER SECTION (0x0000 - 0x00FF)
+; MAIN CPU HEADER SECTION (0x0000 - 0x00AF)
 ; ===========================================================================
-; This section stays on the Main CPU. Only the word at offset 0x100 is
-; explicitly copied to RAM 0x0404 before the bulk transfer.
+; This 176-byte header stays on the Main CPU. The full first 256 bytes
+; (0x000-0x0FF) are NOT transferred to Sub CPU - only the word at offset
+; 0x100 is copied to Main CPU RAM 0x0404 before the bulk transfer begins.
 ;
 ; Structure: Mostly zeros with sparse configuration values.
 ; Non-zero positions suggest a fixed initialization structure.
@@ -125,11 +137,14 @@ MainCPU_Header_End:
 ; ===========================================================================
 ; SUB CPU AUDIO PARAMETERS (0x00B0 - 0x808D)
 ; ===========================================================================
-; This section gets transferred to Sub CPU address 0xF000+ during boot.
-; It overwrites the default audio configuration in the Sub CPU ROM.
+; This section contains audio engine configuration data.
 ;
-; Destination: Sub CPU 0xF000 (after skipping first 0x100 bytes)
-; Transfer size: 32,654 bytes (offset 0x100 to end)
+; Transfer details:
+;   Offset 0x00B0-0x00FF (80 bytes)    -> Main CPU only (padding before transfer)
+;   Offset 0x0100-0x808D (32,654 bytes) -> Sub CPU address 0xF000+
+;
+; The bulk transfer starts at offset 0x100, so the first 80 bytes of this
+; section (0xB0-0xFF) remain on Main CPU along with the header.
 ;
 ; The Sub CPU 0xF000 area contains:
 ;   0xF000-0xF010: System configuration (counters, flags)
