@@ -33,11 +33,11 @@
 
 DemoModeFunc:
 	CP XBC, 01c00013h
-	JR NZ, LABEL_F222FA
+	JR NZ, DemoModeFunc_Exit
 	CP XDE, 00000001h
-	JR Z, LABEL_F222EE
+	JR Z, DemoModeFunc_Initialize
 	OR XDE, XDE
-	JR NZ, LABEL_F222FA
+	JR NZ, DemoModeFunc_Exit
 	PUSH XDE
 	PUSH XHL
 	PUSH XIX
@@ -47,9 +47,9 @@ DemoModeFunc:
 	POP XIX
 	POP XHL
 	POP XDE
-	JR T, LABEL_F222FA
+	JR T, DemoModeFunc_Exit
 
-LABEL_F222EE:
+DemoModeFunc_Initialize:
 	PUSH XDE
 	PUSH XHL
 	PUSH XIX
@@ -60,7 +60,7 @@ LABEL_F222EE:
 	POP XHL
 	POP XDE
 
-LABEL_F222FA:
+DemoModeFunc_Exit:
 	LD XHL, 0
 	RET
 
@@ -70,63 +70,63 @@ DemoMenuTtlFunc:
 
 DemoStyleTtlFunc:
 	CP XBC, 01c00007h
-	JR Z, LABEL_F22348
+	JR Z, DemoStyle_InputHandler
 	CP XBC, 01c00013h
-	JRL NZ, LABEL_F223C8
+	JRL NZ, DemoStyleTtlFunc_Exit
 	DEC 2, XDE
 	CP XDE, 00000000h
-	JRL C, LABEL_F223C8
+	JRL C, DemoStyleTtlFunc_Exit
 	CP XDE, 00000005h
-	JRL UGT, LABEL_F223C8
+	JRL UGT, DemoStyleTtlFunc_Exit
 	ADD XDE, XDE
 	ADD XDE, 00e201c4h
 	LD DE, (XDE)
 	LDA XIX, 0F22339h
 	JP T, XIX + DE
-LABEL_F22339:
+DemoStyle_DispatchTable:
 	db 03Ah, 03Bh, 03Ch, 03Eh, 01Dh, 0D2h, 069h, 0F8h
 	db 05Eh, 05Ch, 05Bh, 05Ah, 078h, 080h, 000h
 
-LABEL_F22348:
+DemoStyle_InputHandler:
 	CP XDE, 0000000fh
-	JR Z, LABEL_F223BC
+	JR Z, DemoStyle_EnterHandler
 	CP XDE, 00000087h
-	JR Z, LABEL_F223A4
+	JR Z, DemoStyle_DirectionHandler
 	CP XDE, 00000007h
-	JR Z, LABEL_F223A4
+	JR Z, DemoStyle_DirectionHandler
 	CP XDE, 00000086h
-	JR Z, LABEL_F223A4
+	JR Z, DemoStyle_DirectionHandler
 	CP XDE, 00000006h
-	JR Z, LABEL_F223A4
+	JR Z, DemoStyle_DirectionHandler
 	CP XDE, 00000084h
-	JR Z, LABEL_F22390
+	JR Z, DemoStyle_EncoderHandler
 	CP XDE, 00000004h
-	JR Z, LABEL_F22390
+	JR Z, DemoStyle_EncoderHandler
 	CP XDE, 00000083h
-	JR Z, LABEL_F22390
+	JR Z, DemoStyle_EncoderHandler
 	CP XDE, 00000003h
-	JR NZ, LABEL_F223C8
+	JR NZ, DemoStyleTtlFunc_Exit
 
-LABEL_F22390:
+DemoStyle_EncoderHandler:
 	CPW (28B4h), 0000h
-	JR NZ, LABEL_F223C8
+	JR NZ, DemoStyleTtlFunc_Exit
 	CP (0D2Fh), 000h
-	JR NZ, LABEL_F223C8
+	JR NZ, DemoStyleTtlFunc_Exit
 	LD WA, 00e2h
-	JR T, LABEL_F223B6
+	JR T, DemoStyle_PostEventCommon
 
-LABEL_F223A4:
+DemoStyle_DirectionHandler:
 	CPW (28B4h), 0000h
-	JR NZ, LABEL_F223C8
+	JR NZ, DemoStyleTtlFunc_Exit
 	CP (0D2Fh), 000h
-	JR NZ, LABEL_F223C8
+	JR NZ, DemoStyleTtlFunc_Exit
 	LD WA, 00e3h
 
-LABEL_F223B6:
+DemoStyle_PostEventCommon:
 	CALL LABEL_F99490
-	JR T, LABEL_F223C8
+	JR T, DemoStyleTtlFunc_Exit
 
-LABEL_F223BC:
+DemoStyle_EnterHandler:
 	PUSH XDE
 	PUSH XHL
 	PUSH XIX
@@ -137,69 +137,69 @@ LABEL_F223BC:
 	POP XHL
 	POP XDE
 
-LABEL_F223C8:
+DemoStyleTtlFunc_Exit:
 	LD XHL, 0
 	RET
 
 DemoSoundTtlFunc:
 	CP XBC, 01c00007h
-	JR Z, LABEL_F22412
+	JR Z, DemoSound_InputHandler
 	CP XBC, 01c00013h
-	JRL NZ, LABEL_F2248E
+	JRL NZ, DemoSoundTtlFunc_Exit
 	DEC 2, XDE
 	CP XDE, 00000000h
-	JRL C, LABEL_F2248E
+	JRL C, DemoSoundTtlFunc_Exit
 	CP XDE, 00000005h
-	JRL UGT, LABEL_F2248E
+	JRL UGT, DemoSoundTtlFunc_Exit
 	ADD XDE, XDE
 	ADD XDE, 00e201d0h
 	LD DE, (XDE)
 	LDA XIX, 0F22404h
 	JP T, XIX + DE
-LABEL_F22404:
+DemoSound_DispatchTable:
 	db 03Ah, 03Bh, 03Ch, 03Eh, 01Dh, 0D2h, 069h, 0F8h
 	db "^", 05Ch, "[Zh|"
 
-LABEL_F22412:
+DemoSound_InputHandler:
 	CP XDE, 0000000fh
-	JR Z, LABEL_F22482
+	JR Z, DemoSound_EnterHandler
 	CP XDE, 00000087h
-	JR Z, LABEL_F2246A
+	JR Z, DemoSound_DirectionHandler
 	CP XDE, 00000007h
-	JR Z, LABEL_F2246A
+	JR Z, DemoSound_DirectionHandler
 	CP XDE, 00000086h
-	JR Z, LABEL_F2246A
+	JR Z, DemoSound_DirectionHandler
 	CP XDE, 00000006h
-	JR Z, LABEL_F2246A
+	JR Z, DemoSound_DirectionHandler
 	CP XDE, 00000081h
-	JR Z, LABEL_F22456
+	JR Z, DemoSound_EncoderHandler
 	CP XDE, 00000001h
-	JR Z, LABEL_F22456
+	JR Z, DemoSound_EncoderHandler
 	CP XDE, 00000080h
-	JR Z, LABEL_F22456
+	JR Z, DemoSound_EncoderHandler
 	OR XDE, XDE
-	JR NZ, LABEL_F2248E
+	JR NZ, DemoSoundTtlFunc_Exit
 
-LABEL_F22456:
+DemoSound_EncoderHandler:
 	CPW (28B4h), 0000h
-	JR NZ, LABEL_F2248E
+	JR NZ, DemoSoundTtlFunc_Exit
 	CP (0D2Fh), 000h
-	JR NZ, LABEL_F2248E
+	JR NZ, DemoSoundTtlFunc_Exit
 	LD WA, 00e1h
-	JR T, LABEL_F2247C
+	JR T, DemoSound_PostEventCommon
 
-LABEL_F2246A:
+DemoSound_DirectionHandler:
 	CPW (28B4h), 0000h
-	JR NZ, LABEL_F2248E
+	JR NZ, DemoSoundTtlFunc_Exit
 	CP (0D2Fh), 000h
-	JR NZ, LABEL_F2248E
+	JR NZ, DemoSoundTtlFunc_Exit
 	LD WA, 00e3h
 
-LABEL_F2247C:
+DemoSound_PostEventCommon:
 	CALL LABEL_F99490
-	JR T, LABEL_F2248E
+	JR T, DemoSoundTtlFunc_Exit
 
-LABEL_F22482:
+DemoSound_EnterHandler:
 	PUSH XDE
 	PUSH XHL
 	PUSH XIX
@@ -210,69 +210,69 @@ LABEL_F22482:
 	POP XHL
 	POP XDE
 
-LABEL_F2248E:
+DemoSoundTtlFunc_Exit:
 	LD XHL, 0
 	RET
 
 DemoRhyTtlFunc:
 	CP XBC, 01c00007h
-	JR Z, LABEL_F224D8
+	JR Z, DemoRhythm_InputHandler
 	CP XBC, 01c00013h
-	JRL NZ, LABEL_F22554
+	JRL NZ, DemoRhyTtlFunc_Exit
 	DEC 2, XDE
 	CP XDE, 00000000h
-	JRL C, LABEL_F22554
+	JRL C, DemoRhyTtlFunc_Exit
 	CP XDE, 00000005h
-	JRL UGT, LABEL_F22554
+	JRL UGT, DemoRhyTtlFunc_Exit
 	ADD XDE, XDE
 	ADD XDE, 00e201dch
 	LD DE, (XDE)
 	LDA XIX, 0F224CAh
 	JP T, XIX + DE
-LABEL_F224CA:
+DemoRhythm_DispatchTable:
 	db 03Ah, 03Bh, 03Ch, 03Eh, 01Dh, 0D2h, 069h, 0F8h
 	db "^", 05Ch, "[Zh|"
 
-LABEL_F224D8:
+DemoRhythm_InputHandler:
 	CP XDE, 0000000fh
-	JR Z, LABEL_F22548
+	JR Z, DemoRhythm_EnterHandler
 	CP XDE, 00000084h
-	JR Z, LABEL_F22530
+	JR Z, DemoRhythm_DirectionHandler
 	CP XDE, 00000004h
-	JR Z, LABEL_F22530
+	JR Z, DemoRhythm_DirectionHandler
 	CP XDE, 00000083h
-	JR Z, LABEL_F22530
+	JR Z, DemoRhythm_DirectionHandler
 	CP XDE, 00000003h
-	JR Z, LABEL_F22530
+	JR Z, DemoRhythm_DirectionHandler
 	CP XDE, 00000081h
-	JR Z, LABEL_F2251C
+	JR Z, DemoRhythm_EncoderHandler
 	CP XDE, 00000001h
-	JR Z, LABEL_F2251C
+	JR Z, DemoRhythm_EncoderHandler
 	CP XDE, 00000080h
-	JR Z, LABEL_F2251C
+	JR Z, DemoRhythm_EncoderHandler
 	OR XDE, XDE
-	JR NZ, LABEL_F22554
+	JR NZ, DemoRhyTtlFunc_Exit
 
-LABEL_F2251C:
+DemoRhythm_EncoderHandler:
 	CPW (28B4h), 0000h
-	JR NZ, LABEL_F22554
+	JR NZ, DemoRhyTtlFunc_Exit
 	CP (0D2Fh), 000h
-	JR NZ, LABEL_F22554
+	JR NZ, DemoRhyTtlFunc_Exit
 	LD WA, 00e1h
-	JR T, LABEL_F22542
+	JR T, DemoRhythm_PostEventCommon
 
-LABEL_F22530:
+DemoRhythm_DirectionHandler:
 	CPW (28B4h), 0000h
-	JR NZ, LABEL_F22554
+	JR NZ, DemoRhyTtlFunc_Exit
 	CP (0D2Fh), 000h
-	JR NZ, LABEL_F22554
+	JR NZ, DemoRhyTtlFunc_Exit
 	LD WA, 00e2h
 
-LABEL_F22542:
+DemoRhythm_PostEventCommon:
 	CALL LABEL_F99490
-	JR T, LABEL_F22554
+	JR T, DemoRhyTtlFunc_Exit
 
-LABEL_F22548:
+DemoRhythm_EnterHandler:
 	PUSH XDE
 	PUSH XHL
 	PUSH XIX
@@ -283,7 +283,7 @@ LABEL_F22548:
 	POP XHL
 	POP XDE
 
-LABEL_F22554:
+DemoRhyTtlFunc_Exit:
 	LD XHL, 0
 	RET
 
