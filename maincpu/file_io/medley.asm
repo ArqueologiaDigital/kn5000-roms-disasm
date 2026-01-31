@@ -20,34 +20,34 @@
 FmmSeqSongNameFunc:
 	PUSH IZ
 	CP XBC, 01e50003h
-	JRL Z, LABEL_F91CC1
+	JRL Z, SeqName_GetIndexReturn
 	LD HL, (82D8h)
 	CP XBC, 01e50002h
-	JRL Z, LABEL_F91C6F
+	JRL Z, SeqName_SetIndexPlaying
 	CP XBC, 01c00018h
-	JR Z, LABEL_F91ADC
+	JR Z, SeqName_HandleNavigation
 	CP XBC, 01c00017h
-	JR Z, LABEL_F91ADC
+	JR Z, SeqName_HandleNavigation
 	CP XBC, 01c0000bh
-	JR Z, LABEL_F91AB5
+	JR Z, SeqName_InitAllSlots
 	CP XBC, 01e50004h
-	JR NZ, LABEL_F91AD7
+	JR NZ, SeqName_ReturnZero
 	LD (82D4h), XDE
 	CP (84FEh), 000h
 	JR NZ, LABEL_F91AA3
 	LDW (82D8h), 0000h
 
-LABEL_F91AA3:
+SeqName_SendCurrentIndex:
 	LD DE, (82D8h)
 	EXTZ XDE
 	LD XWA, (82D4h)
 	LD XBC, 01e50002h
-	JRL T, LABEL_F91CBA
+	JRL T, SeqName_PostEventExit
 
-LABEL_F91AB5:
+SeqName_InitAllSlots:
 	LD IZ, 0
 
-LABEL_F91AB7:
+SeqName_SendSlotLoop:
 	LD BC, IZ
 	LD WA, BC
 	LD DE, 1
@@ -58,61 +58,61 @@ LABEL_F91AB7:
 	CALL ApPostEvent
 	INC 1, IZ
 	CP IZ, 000ah
-	JR LT, LABEL_F91AB7
+	JR LT, SeqName_SendSlotLoop
 
-LABEL_F91AD7:
+SeqName_ReturnZero:
 	LD XHL, 0
-	JRL T, LABEL_F91CC7
+	JRL T, SeqName_Exit
 
-LABEL_F91ADC:
+SeqName_HandleNavigation:
 	LD WA, HL
 	LD IZ, HL
 	OR XDE, XDE
-	JR NZ, LABEL_F91B17
+	JR NZ, SeqName_HandlePlayAction
 	CP (84FEh), 000h
-	JR NZ, LABEL_F91B17
+	JR NZ, SeqName_HandlePlayAction
 	CP XBC, 01c00018h
-	JR NZ, LABEL_F91AFE
+	JR NZ, SeqName_CheckPrevKey
 	CP WA, 0009h
-	JRL NC, LABEL_F91C27
+	JRL NC, SeqName_GetCurrentIndex
 	INC 1, WA
-	JR T, LABEL_F91B0E
+	JR T, SeqName_UpdateIndex
 
-LABEL_F91AFE:
+SeqName_CheckPrevKey:
 	CP XBC, 01c00017h
-	JRL NZ, LABEL_F91C27
+	JRL NZ, SeqName_GetCurrentIndex
 	CP WA, 0
-	JRL Z, LABEL_F91C27
+	JRL Z, SeqName_GetCurrentIndex
 	DEC 1, WA
 
-LABEL_F91B0E:
+SeqName_UpdateIndex:
 	LD (82D8h), WA
 	LD DE, WA
-	JRL T, LABEL_F91C2B
+	JRL T, SeqName_UpdateDisplay
 
-LABEL_F91B17:
+SeqName_HandlePlayAction:
 	CP XDE, 00000004h
-	JRL NZ, LABEL_F91BCD
+	JRL NZ, SeqName_HandleAction32
 	CP (84FEh), 000h
-	JRL NZ, LABEL_F91BCD
-	CALL LABEL_F941E5
+	JRL NZ, SeqName_HandleAction32
+	CALL CheckSongSlotHasData
 	CP L, 0
-	JR Z, LABEL_F91B4A
+	JR Z, SeqName_CheckDiskAvail
 	LDA XWA, 8A0Ch
 	BIT 7, (XWA + 001h)
-	JR NZ, LABEL_F91B4A
+	JR NZ, SeqName_CheckDiskAvail
 	LD (XWA), 001h
 	LD XDE, 1
 	LD XWA, 0ffffffffh
 	LD XBC, 01c50004h
-	JR T, LABEL_F91B76
+	JR T, SeqName_PostAndExit
 
-LABEL_F91B4A:
+SeqName_CheckDiskAvail:
 	CALL LABEL_F8943E
 	CP HL, 0
-	JR Z, LABEL_F91B7D
+	JR Z, SeqName_LoadAndPlay
 	CP (0340EAh), 000h
-	JR Z, LABEL_F91B7D
+	JR Z, SeqName_LoadAndPlay
 	LD XWA, 0ffffffffh
 	LD XBC, 01c50000h
 	LD XDE, 1
@@ -121,11 +121,11 @@ LABEL_F91B4A:
 	LD XBC, 01c00001h
 	LD XDE, 0
 
-LABEL_F91B76:
+SeqName_PostAndExit:
 	CALL ApPostEvent
-	JRL T, LABEL_F91C27
+	JRL T, SeqName_GetCurrentIndex
 
-LABEL_F91B7D:
+SeqName_LoadAndPlay:
 	LD XWA, 00600026h
 	LD XBC, 01c00001h
 	LD XDE, 5
@@ -148,11 +148,11 @@ LABEL_F91B7D:
 	LD XDE, 0
 	CALL ApPostEvent
 	LD WA, 00eeh
-	JR T, LABEL_F91C23
+	JR T, SeqName_ShowAndExit
 
-LABEL_F91BCD:
+SeqName_HandleAction32:
 	CP XDE, 00000032h
-	JR NZ, LABEL_F91C27
+	JR NZ, SeqName_GetCurrentIndex
 	LD XWA, 00600026h
 	LD XBC, 01c00001h
 	LD XDE, 5
@@ -176,15 +176,15 @@ LABEL_F91BCD:
 	CALL ApPostEvent
 	LD WA, 00eeh
 
-LABEL_F91C23:
+SeqName_ShowAndExit:
 	CALL LABEL_F994BD
 
-LABEL_F91C27:
+SeqName_GetCurrentIndex:
 	LD DE, (82D8h)
 
-LABEL_F91C2B:
+SeqName_UpdateDisplay:
 	CP IZ, DE
-	JRL Z, LABEL_F91AD7
+	JRL Z, SeqName_ReturnZero
 	EXTZ XDE
 	LD XWA, (82D4h)
 	LD XBC, 01e50002h
@@ -204,11 +204,11 @@ LABEL_F91C2B:
 	LD XDE, XHL
 	LD XWA, (82D4h)
 	LD XBC, 01c0000fh
-	JR T, LABEL_F91CBA
+	JR T, SeqName_PostEventExit
 
-LABEL_F91C6F:
+SeqName_SetIndexPlaying:
 	CP (84FEh), 000h
-	JRL Z, LABEL_F91AD7
+	JRL Z, SeqName_ReturnZero
 	LD IZ, HL
 	LD (82D8h), DE
 	EXTZ XDE
@@ -231,40 +231,40 @@ LABEL_F91C6F:
 	LD XWA, (82D4h)
 	LD XBC, 01c0000fh
 
-LABEL_F91CBA:
+SeqName_PostEventExit:
 	CALL ApPostEvent
-	JRL T, LABEL_F91AD7
+	JRL T, SeqName_ReturnZero
 
-LABEL_F91CC1:
+SeqName_GetIndexReturn:
 	LD HL, (82D8h)
 	EXTZ XHL
 
-LABEL_F91CC7:
+SeqName_Exit:
 	POP IZ
 	RET
 
-LABEL_F91CC9:
+FormatMedleyNumber:
 	LD (XWA+), E
 	CP C, 0ffh
-	JR NZ, LABEL_F91CD5
+	JR NZ, FmtNum_CheckMarked
 	LD_C 020h
-	JR T, LABEL_F91CDC
+	JR T, FmtNum_WriteSpacePad
 
-LABEL_F91CD5:
+FmtNum_CheckMarked:
 	CP C, 0feh
-	JR NZ, LABEL_F91CE7
+	JR NZ, FmtNum_FormatNumber
 	LD_C 04dh
 
-LABEL_F91CDC:
+FmtNum_WriteSpacePad:
 	LD (XWA+), C
 	LD (XWA+), 020h
 	LD (XWA), 020h
 	RET
 
-LABEL_F91CE7:
+FmtNum_FormatNumber:
 	INC 1, C
 	CP C, 064h
-	JR C, LABEL_F91D06
+	JR C, FmtNum_WriteM
 	LDA_XHL_XWA_plus__e0__
 	LD E, C
 	EXTZ DE
@@ -274,20 +274,20 @@ LABEL_F91CE7:
 	EXTZ BC
 	DIV_C 064h
 	LD C, B
-	JR T, LABEL_F91D0A
+	JR T, FmtNum_WriteTensUnits
 
-LABEL_F91D06:
+FmtNum_WriteM:
 	LD (XWA+), 04dh
 
-LABEL_F91D0A:
+FmtNum_WriteTensUnits:
 	CP C, 00ah
-	JR NC, LABEL_F91D19
+	JR NC, FmtNum_WriteTwoDigits
 	LD (XWA+), 030h
 	ADD C, 030h
 	LD (XWA), C
 	RET
 
-LABEL_F91D19:
+FmtNum_WriteTwoDigits:
 	LDA_XHL_XWA_plus__e0__
 	LD E, C
 	EXTZ DE
@@ -306,78 +306,78 @@ FmmIntMedleyFunc:
 	PUSH IZ
 	LD (XSP + 006h), XWA
 	CP XBC, 01e5000ah
-	JRL Z, LABEL_F921A9
+	JRL Z, IntMed_CheckContinue
 	LD XWA, XDE
 	CP XBC, 01e50008h
-	JRL Z, LABEL_F921A3
+	JRL Z, IntMed_StoreDelayFlag
 	CP XBC, 01c00018h
-	JRL Z, LABEL_F91F32
+	JRL Z, IntMed_HandleNavToggle
 	CP XBC, 01c00017h
-	JRL Z, LABEL_F91F32
+	JRL Z, IntMed_HandleNavToggle
 	CP XBC, 01c0000bh
-	JRL Z, LABEL_F91EEB
+	JRL Z, IntMed_InitSlotDisplay
 	CP XBC, 01e50004h
-	JRL Z, LABEL_F91EE4
+	JRL Z, IntMed_StoreWindowPtr
 	CP XBC, 01c00013h
-	JRL NZ, LABEL_F921C7
+	JRL NZ, IntMed_Exit
 	CP XDE, 00000003h
-	JRL Z, LABEL_F91ED0
+	JRL Z, IntMed_HandleStop
 	CP XDE, 00000002h
-	JRL NZ, LABEL_F921C7
+	JRL NZ, IntMed_Exit
 	CP (8D37h), 07ah
-	JR Z, LABEL_F91DE9
+	JR Z, IntMed_CheckPlaying
 	CALL LABEL_F20ACD
 	LD (84FEh), 000h
 	LD (889Ch), 000h
 	LD (889Ah), 000h
 	LD IZ, 0
 
-LABEL_F91DAA:
+IntMed_CheckSlotLoop:
 	LD A, IZL
 	EXTZ WA
 	CALL LABEL_F2065A
 	CP L, 0
-	JR Z, LABEL_F91DCB
+	JR Z, IntMed_MarkSlotEmpty
 	LDA XWA, 8890h
 	LD BC, IZ
 	EXTZ XBC
 	ADD XBC, XWA
 	LD (XBC), (889Ah)
 	INC 1, (889Ah)
-	JR T, LABEL_F91DD8
+	JR T, IntMed_NextSlot
 
-LABEL_F91DCB:
+IntMed_MarkSlotEmpty:
 	LDA XWA, 8890h
 	LD BC, IZ
 	EXTZ XBC
 	ADD XBC, XWA
 	LD (XBC), 0ffh
 
-LABEL_F91DD8:
+IntMed_NextSlot:
 	INC 1, IZ
 	CP IZ, 000ah
-	JR C, LABEL_F91DAA
+	JR C, IntMed_CheckSlotLoop
 	LD XWA, 0
 	LD (82DEh), XWA
-	JRL T, LABEL_F921C7
+	JRL T, IntMed_Exit
 
-LABEL_F91DE9:
+IntMed_CheckPlaying:
 	CALL LABEL_F2076D
 	CP L, 1
-	JRL NZ, LABEL_F91EB3
+	JRL NZ, IntMed_HandleError
 	LD (84FEh), 001h
 	LD A, (889Ch)
 	CP A, (889Ah)
-	JR NC, LABEL_F91E4D
+	JR NC, IntMed_CheckRepeat
 	LD IZ, 0
 	LDA XBC, 8890h
 
-LABEL_F91E07:
+IntMed_FindCurrentSong:
 	LD DE, IZ
 	EXTZ XDE
 	ADD XDE, XBC
 	CP (XDE), A
-	JR NZ, LABEL_F91E42
+	JR NZ, IntMed_NextSongSearch
 	LD DE, IZ
 	EXTZ XDE
 	LD XWA, (XSP + 006h)
@@ -389,30 +389,30 @@ LABEL_F91E07:
 	INC 1, (889Ch)
 	LD XWA, (82DEh)
 	OR XWA, XWA
-	JRL Z, LABEL_F921C7
+	JRL Z, IntMed_Exit
 	LD XBC, 01e50009h
 	LD XDE, 0000001eh
-	JR T, LABEL_F91E99
+	JR T, IntMed_PostDelayEvent
 
-LABEL_F91E42:
+IntMed_NextSongSearch:
 	INC 1, IZ
 	CP IZ, 000ah
-	JR C, LABEL_F91E07
-	JRL T, LABEL_F921C7
+	JR C, IntMed_FindCurrentSong
+	JRL T, IntMed_Exit
 
-LABEL_F91E4D:
+IntMed_CheckRepeat:
 	CP (889Eh), 000h
-	JR Z, LABEL_F91EAB
+	JR Z, IntMed_ClearPlayFlag
 	LD (889Ch), 000h
 	LD IZ, 0
 	LDA XWA, 8890h
 
-LABEL_F91E5F:
+IntMed_PlayFromStart:
 	LD BC, IZ
 	EXTZ XBC
 	ADD XBC, XWA
 	CP (XBC), 000h
-	JR NZ, LABEL_F91EA0
+	JR NZ, IntMed_NextSongLoop
 	LD DE, IZ
 	EXTZ XDE
 	LD XWA, (XSP + 006h)
@@ -424,49 +424,49 @@ LABEL_F91E5F:
 	INC 1, (889Ch)
 	LD XWA, (82DEh)
 	OR XWA, XWA
-	JRL Z, LABEL_F921C7
+	JRL Z, IntMed_Exit
 	LD XBC, 01e50009h
 	LD XDE, 0000001eh
 
-LABEL_F91E99:
+IntMed_PostDelayEvent:
 	CALL ApPostEvent
-	JRL T, LABEL_F921C7
+	JRL T, IntMed_Exit
 
-LABEL_F91EA0:
+IntMed_NextSongLoop:
 	INC 1, IZ
 	CP IZ, 000ah
-	JR C, LABEL_F91E5F
-	JRL T, LABEL_F921C7
+	JR C, IntMed_PlayFromStart
+	JRL T, IntMed_Exit
 
-LABEL_F91EAB:
+IntMed_ClearPlayFlag:
 	LD (84FEh), 000h
-	JRL T, LABEL_F921C7
+	JRL T, IntMed_Exit
 
-LABEL_F91EB3:
+IntMed_HandleError:
 	CALL LABEL_F2076D
 	LD (84FEh), 000h
 	CP L, 0
-	JRL Z, LABEL_F921C7
+	JRL Z, IntMed_Exit
 	LD (7F42h), 00eh
 	LD WA, 00eeh
 	CALL LABEL_F994BD
-	JRL T, LABEL_F921C7
+	JRL T, IntMed_Exit
 
-LABEL_F91ED0:
+IntMed_HandleStop:
 	CP (8D36h), 07ah
-	JRL Z, LABEL_F921C7
+	JRL Z, IntMed_Exit
 	CALL LABEL_F20B70
 	LD (84FEh), 000h
-	JRL T, LABEL_F921C7
+	JRL T, IntMed_Exit
 
-LABEL_F91EE4:
+IntMed_StoreWindowPtr:
 	LD (82DAh), XWA
-	JRL T, LABEL_F921C7
+	JRL T, IntMed_Exit
 
-LABEL_F91EEB:
+IntMed_InitSlotDisplay:
 	LD IZ, 0
 
-LABEL_F91EED:
+IntMed_FormatSlotLoop:
 	LD WA, IZ
 	SLL 3, WA
 	LDA XBC, 82E2h
@@ -479,7 +479,7 @@ LABEL_F91EED:
 	LD C, (XDE)
 	EXTZ BC
 	LD DE, IZ
-	CALR LABEL_F91CC9
+	CALR FormatMedleyNumber
 	LD DE, IZ
 	SLL 3, DE
 	LDA XWA, 82E2h
@@ -490,40 +490,40 @@ LABEL_F91EED:
 	CALL ApPostEvent
 	INC 1, IZ
 	CP IZ, 000ah
-	JR C, LABEL_F91EED
-	JRL T, LABEL_F921C7
+	JR C, IntMed_FormatSlotLoop
+	JRL T, IntMed_Exit
 
-LABEL_F91F32:
+IntMed_HandleNavToggle:
 	LDA XWA, 8890h
 	CP XDE, 0000000ah
-	JRL NZ, LABEL_F9200F
+	JRL NZ, IntMed_HandleSelectToggle
 	CP (84FEh), 000h
-	JRL NZ, LABEL_F9200F
+	JRL NZ, IntMed_HandleSelectToggle
 	LD IZ, 0
 
-LABEL_F91F49:
+IntMed_FindMarkedSlot:
 	LD BC, IZ
 	EXTZ XBC
 	ADD XBC, XWA
 	CP (XBC), 0feh
-	JR Z, LABEL_F91F5C
+	JR Z, IntMed_CheckAllMarked
 	INC 1, IZ
 	CP IZ, 000ah
-	JR C, LABEL_F91F49
+	JR C, IntMed_FindMarkedSlot
 
-LABEL_F91F5C:
+IntMed_CheckAllMarked:
 	CP IZ, 000ah
-	JR NC, LABEL_F91FBA
+	JR NC, IntMed_RemoveOrderLoop
 	LD IZ, 0
 
-LABEL_F91F64:
+IntMed_AssignOrderLoop:
 	LDA XWA, 8890h
 	LD BC, IZ
 	EXTZ XBC
 	ADD XBC, XWA
 	LD A, (XBC)
 	CP A, 0feh
-	JR NZ, LABEL_F91FAF
+	JR NZ, IntMed_NextAssignSlot
 	LD A, (889Ah)
 	LD (XBC), A
 	INC 1, (889Ah)
@@ -535,7 +535,7 @@ LABEL_F91F64:
 	LD C, (XBC)
 	EXTZ BC
 	LD DE, IZ
-	CALR LABEL_F91CC9
+	CALR FormatMedleyNumber
 	LD DE, IZ
 	SLL 3, DE
 	LDA XWA, 82E2h
@@ -545,23 +545,23 @@ LABEL_F91F64:
 	LD XBC, 01c0000fh
 	CALL ApPostEvent
 
-LABEL_F91FAF:
+IntMed_NextAssignSlot:
 	INC 1, IZ
 	CP IZ, 000ah
-	JR C, LABEL_F91F64
-	JRL T, LABEL_F921C7
+	JR C, IntMed_AssignOrderLoop
+	JRL T, IntMed_Exit
 
-LABEL_F91FBA:
+IntMed_RemoveOrderLoop:
 	LD IZ, 0
 
-LABEL_F91FBC:
+IntMed_UnmarkSlotLoop:
 	LDA XWA, 8890h
 	LD BC, IZ
 	EXTZ XBC
 	ADD XBC, XWA
 	LD A, (XBC)
 	CP A, 0fdh
-	JR UGT, LABEL_F92004
+	JR UGT, IntMed_NextUnmark
 	LD (XBC), 0feh
 	DEC 1, (889Ah)
 	LD WA, IZ
@@ -572,7 +572,7 @@ LABEL_F91FBC:
 	LD C, (XBC)
 	EXTZ BC
 	LD DE, IZ
-	CALR LABEL_F91CC9
+	CALR FormatMedleyNumber
 	LD DE, IZ
 	SLL 3, DE
 	LDA XWA, 82E2h
@@ -582,17 +582,17 @@ LABEL_F91FBC:
 	LD XBC, 01c0000fh
 	CALL ApPostEvent
 
-LABEL_F92004:
+IntMed_NextUnmark:
 	INC 1, IZ
 	CP IZ, 000ah
-	JR C, LABEL_F91FBC
-	JRL T, LABEL_F921C7
+	JR C, IntMed_UnmarkSlotLoop
+	JRL T, IntMed_Exit
 
-LABEL_F9200F:
+IntMed_HandleSelectToggle:
 	CP XDE, 0000000bh
-	JRL NZ, LABEL_F9211D
+	JRL NZ, IntMed_HandleRepeatToggle
 	CP (84FEh), 000h
-	JRL NZ, LABEL_F9211D
+	JRL NZ, IntMed_HandleRepeatToggle
 	LD XWA, (XSP + 006h)
 	LD XBC, 01e50003h
 	LD XDE, 0
@@ -609,14 +609,14 @@ LABEL_F9200F:
 	ADD XWA, XBC
 	LD C, (XDE)
 	CP C, 0feh
-	JR NZ, LABEL_F9207D
+	JR NZ, IntMed_RemoveFromOrder
 	LD C, (889Ah)
 	LD (XDE), C
 	INC 1, (889Ah)
 	LD C, (XDE)
 	EXTZ BC
 	LD DE, IZ
-	CALR LABEL_F91CC9
+	CALR FormatMedleyNumber
 	LD DE, IZ
 	SLL 3, DE
 	LDA XBC, 82E2h
@@ -625,18 +625,18 @@ LABEL_F9200F:
 	LD XWA, (82DAh)
 	LD XBC, 01c0000fh
 	CALL ApPostEvent
-	JRL T, LABEL_F921C7
+	JRL T, IntMed_Exit
 
-LABEL_F9207D:
+IntMed_RemoveFromOrder:
 	CP C, 0fdh
-	JRL UGT, LABEL_F921C7
+	JRL UGT, IntMed_Exit
 	LD (XSP + 004h), C
 	LD (XDE), 0feh
 	DEC 1, (889Ah)
 	LD C, (XDE)
 	EXTZ BC
 	LD DE, IZ
-	CALR LABEL_F91CC9
+	CALR FormatMedleyNumber
 	LD DE, IZ
 	SLL 3, DE
 	LDA XBC, 82E2h
@@ -650,19 +650,19 @@ LABEL_F9207D:
 	LD A, (889Ah)
 	EXTZ WA
 	CP WA, 0
-	JRL ULE, LABEL_F921C7
+	JRL ULE, IntMed_Exit
 
-LABEL_F920C2:
+IntMed_ReorderLoop:
 	LDA XWA, 8890h
 	LD DE, IZ
 	EXTZ XDE
 	ADD XDE, XWA
 	LD C, (XDE)
 	CP C, 0fdh
-	JR UGT, LABEL_F9210D
+	JR UGT, IntMed_NextReorder
 	INCW 1, (XSP + 002h)
 	CP C, (XSP + 004h)
-	JR ULE, LABEL_F9210D
+	JR ULE, IntMed_NextReorder
 	DEC 1, C
 	LD (XDE), C
 	LD WA, IZ
@@ -672,7 +672,7 @@ LABEL_F920C2:
 	ADD XWA, XDE
 	EXTZ BC
 	LD DE, IZ
-	CALR LABEL_F91CC9
+	CALR FormatMedleyNumber
 	LD DE, IZ
 	SLL 3, DE
 	LDA XWA, 82E2h
@@ -682,40 +682,40 @@ LABEL_F920C2:
 	LD XBC, 01c0000fh
 	CALL ApPostEvent
 
-LABEL_F9210D:
+IntMed_NextReorder:
 	INC 1, IZ
 	LD A, (889Ah)
 	EXTZ WA
 	CP (XSP + 002h), WA
-	JR C, LABEL_F920C2
-	JRL T, LABEL_F921C7
+	JR C, IntMed_ReorderLoop
+	JRL T, IntMed_Exit
 
-LABEL_F9211D:
+IntMed_HandleRepeatToggle:
 	CP XDE, 0000000ch
-	JR NZ, LABEL_F9213D
+	JR NZ, IntMed_HandlePlay
 	CP XBC, 01c00017h
-	JR NZ, LABEL_F92135
+	JR NZ, IntMed_SetRepeatOff
 	LD (889Eh), 001h
-	JRL T, LABEL_F921C7
+	JRL T, IntMed_Exit
 
-LABEL_F92135:
+IntMed_SetRepeatOff:
 	LD (889Eh), 000h
-	JRL T, LABEL_F921C7
+	JRL T, IntMed_Exit
 
-LABEL_F9213D:
+IntMed_HandlePlay:
 	CP XDE, 0000000dh
-	JRL NZ, LABEL_F921C7
+	JRL NZ, IntMed_Exit
 	CP (84FEh), 000h
-	JR NZ, LABEL_F921C7
+	JR NZ, IntMed_Exit
 	LD (889Ch), 000h
 	LD IZ, 0
 
-LABEL_F92154:
+IntMed_StartPlayLoop:
 	LD BC, IZ
 	EXTZ XBC
 	ADD XBC, XWA
 	CP (XBC), 000h
-	JR NZ, LABEL_F92199
+	JR NZ, IntMed_NextPlaySlot
 	LD (84FEh), 001h
 	LD DE, IZ
 	EXTZ XDE
@@ -732,21 +732,21 @@ LABEL_F92154:
 	CALL ApPostEvent
 	LD WA, 007ah
 	CALL LABEL_F99490
-	JR T, LABEL_F921C7
+	JR T, IntMed_Exit
 
-LABEL_F92199:
+IntMed_NextPlaySlot:
 	INC 1, IZ
 	CP IZ, 000ah
-	JR C, LABEL_F92154
-	JR T, LABEL_F921C7
+	JR C, IntMed_StartPlayLoop
+	JR T, IntMed_Exit
 
-LABEL_F921A3:
+IntMed_StoreDelayFlag:
 	LD (82DEh), XWA
-	JR T, LABEL_F921C7
+	JR T, IntMed_Exit
 
-LABEL_F921A9:
+IntMed_CheckContinue:
 	CP (84FEh), 000h
-	JR Z, LABEL_F921C7
+	JR Z, IntMed_Exit
 	LD XWA, 0ffffffffh
 	LD XBC, 01e0009ah
 	LD XDE, 0
@@ -754,7 +754,7 @@ LABEL_F921A9:
 	LD WA, 007ah
 	CALL LABEL_F99490
 
-LABEL_F921C7:
+IntMed_Exit:
 	LD XHL, 0
 	POP IZ
 	INC 8, XSP
@@ -763,16 +763,16 @@ LABEL_F921C7:
 FmmDiskMedley1Func:
 	PUSH IZ
 	CP XBC, 01c0000bh
-	JR Z, LABEL_F921E4
+	JR Z, DiskMed1_InitLoop
 	CP XBC, 01e50004h
-	JR NZ, LABEL_F92228
+	JR NZ, DiskMed1_Exit
 	LD (8332h), XDE
-	JR T, LABEL_F92228
+	JR T, DiskMed1_Exit
 
-LABEL_F921E4:
+DiskMed1_InitLoop:
 	LD IZ, 0
 
-LABEL_F921E6:
+DiskMed1_FormatLoop:
 	LD WA, IZ
 	SLL 3, WA
 	LDA XBC, 8336h
@@ -785,7 +785,7 @@ LABEL_F921E6:
 	LD C, (XDE)
 	EXTZ BC
 	LD DE, IZ
-	CALR LABEL_F91CC9
+	CALR FormatMedleyNumber
 	LD DE, IZ
 	SLL 3, DE
 	LDA XWA, 8336h
@@ -796,9 +796,9 @@ LABEL_F921E6:
 	CALL ApPostEvent
 	INC 1, IZ
 	CP IZ, 000ah
-	JR C, LABEL_F921E6
+	JR C, DiskMed1_FormatLoop
 
-LABEL_F92228:
+DiskMed1_Exit:
 	LD XHL, 0
 	POP IZ
 	RET
@@ -806,16 +806,16 @@ LABEL_F92228:
 FmmDiskMedley2Func:
 	PUSH IZ
 	CP XBC, 01c0000bh
-	JR Z, LABEL_F92243
+	JR Z, DiskMed2_InitLoop
 	CP XBC, 01e50004h
-	JR NZ, LABEL_F92290
+	JR NZ, DiskMed2_Exit
 	LD (8386h), XDE
-	JR T, LABEL_F92290
+	JR T, DiskMed2_Exit
 
-LABEL_F92243:
+DiskMed2_InitLoop:
 	LD IZ, 000ah
 
-LABEL_F92246:
+DiskMed2_FormatLoop:
 	LD WA, IZ
 	SLL 3, WA
 	LDA XBC, 00833Ah:24
@@ -829,7 +829,7 @@ LABEL_F92246:
 	EXTZ BC
 	LD DE, IZ
 	SUB DE, 000ah
-	CALR LABEL_F91CC9
+	CALR FormatMedleyNumber
 	LD WA, IZ
 	SLL 3, WA
 	LDA XBC, 00833Ah:24
@@ -841,62 +841,62 @@ LABEL_F92246:
 	CALL ApPostEvent
 	INC 1, IZ
 	CP IZ, 0014h
-	JR C, LABEL_F92246
+	JR C, DiskMed2_FormatLoop
 
-LABEL_F92290:
+DiskMed2_Exit:
 	LD XHL, 0
 	POP IZ
 	RET
 
-LABEL_F92294:
+DiskMed_PlayNextHelper:
 	PUSH IZ
 	CP XBC, 01c00018h
-	JR Z, LABEL_F922FA
+	JR Z, DiskMed_InitPlayOrder
 	CP XBC, 01c00017h
-	JR Z, LABEL_F922FA
+	JR Z, DiskMed_InitPlayOrder
 	CP XBC, 01c00013h
-	JRL NZ, LABEL_F923BB
+	JRL NZ, DiskMed_ReturnZero
 	CP XDE, 00000003h
-	JRL Z, LABEL_F923BB
+	JRL Z, DiskMed_ReturnZero
 	CP XDE, 00000002h
-	JRL NZ, LABEL_F923BB
+	JRL NZ, DiskMed_ReturnZero
 	CP (84FEh), 000h
-	JRL Z, LABEL_F923BB
+	JRL Z, DiskMed_ReturnZero
 	LD A, (889Ch)
 	CP A, (889Ah)
-	JR NC, LABEL_F922F5
+	JR NC, DiskMed_ReturnFinished
 	LD IZ, 0
 	LDA XBC, 8890h
 
-LABEL_F922D8:
+DiskMed_FindSongLoop:
 	LD DE, IZ
 	EXTZ XDE
 	ADD XDE, XBC
 	CP (XDE), A
-	JR NZ, LABEL_F922EA
+	JR NZ, DiskMed_NextSong
 	LD A, IZL
 	EXTZ WA
-	JRL T, LABEL_F923A7
+	JRL T, DiskMed_PlaySong
 
-LABEL_F922EA:
+DiskMed_NextSong:
 	INC 1, IZ
 	CP IZ, 000ah
-	JR C, LABEL_F922D8
-	JRL T, LABEL_F923BB
+	JR C, DiskMed_FindSongLoop
+	JRL T, DiskMed_ReturnZero
 
-LABEL_F922F5:
+DiskMed_ReturnFinished:
 	LD XHL, 2
-	JRL T, LABEL_F923BD
+	JRL T, DiskMed_HelperExit
 
-LABEL_F922FA:
+DiskMed_InitPlayOrder:
 	CP XDE, 0000000dh
-	JRL NZ, LABEL_F923BB
+	JRL NZ, DiskMed_ReturnZero
 	LD (889Ch), 000h
 	LD (889Ah), 000h
 	LD (889Eh), 000h
 	LD IZ, 0
 
-LABEL_F92314:
+DiskMed_CheckSlotLoop:
 	LD A, IZL
 	EXTZ WA
 	CALL LABEL_F2065A
@@ -905,88 +905,88 @@ LABEL_F92314:
 	EXTZ XWA
 	ADD XWA, XBC
 	CP L, 0
-	JR Z, LABEL_F92330
+	JR Z, DiskMed_MarkUnused
 	LD (XWA), 0feh
-	JR T, LABEL_F92333
+	JR T, DiskMed_NextSlotCheck
 
-LABEL_F92330:
+DiskMed_MarkUnused:
 	LD (XWA), 0ffh
 
-LABEL_F92333:
+DiskMed_NextSlotCheck:
 	INC 1, IZ
 	CP IZ, 000ah
-	JR C, LABEL_F92314
+	JR C, DiskMed_CheckSlotLoop
 	CP (8940h), 000h
-	JR Z, LABEL_F92381
+	JR Z, DiskMed_SingleSlotCheck
 	LDA XHL, 8890h
 	LD XBC, XHL
 	LDA XDE, XHL + 00ah
 
-LABEL_F9234B:
+DiskMed_AssignOrder:
 	LD A, (XBC)
 	CP A, 0feh
-	JR NZ, LABEL_F9235A
+	JR NZ, DiskMed_NextAssign
 	LD (XBC), (889Ah)
 	INC 1, (889Ah)
 
-LABEL_F9235A:
+DiskMed_NextAssign:
 	INC 1, XBC
 	CP XBC, XDE
-	JR C, LABEL_F9234B
+	JR C, DiskMed_AssignOrder
 	LD IZ, 0
 
-LABEL_F92362:
+DiskMed_FindFirstSong:
 	LD WA, IZ
 	EXTZ XWA
 	ADD XWA, XHL
 	LD A, (XWA)
 	CP A, (889Ch)
-	JR NZ, LABEL_F92377
+	JR NZ, DiskMed_NextFirst
 	LD A, IZL
 	EXTZ WA
-	JR T, LABEL_F923A7
+	JR T, DiskMed_PlaySong
 
-LABEL_F92377:
+DiskMed_NextFirst:
 	INC 1, IZ
 	CP IZ, 000ah
-	JR C, LABEL_F92362
-	JR T, LABEL_F923BB
+	JR C, DiskMed_FindFirstSong
+	JR T, DiskMed_ReturnZero
 
-LABEL_F92381:
+DiskMed_SingleSlotCheck:
 	LDA XBC, 8890h
 	CP (XBC), 0feh
-	JR NZ, LABEL_F92392
+	JR NZ, DiskMed_SingleSlotInit
 	LD (XBC), (889Ah)
 	INC 1, (889Ah)
 
-LABEL_F92392:
+DiskMed_SingleSlotInit:
 	LD IZ, 0
 
-LABEL_F92394:
+DiskMed_FindFirstLoop:
 	LD WA, IZ
 	EXTZ XWA
 	ADD XWA, XBC
 	LD A, (XWA)
 	CP A, (889Ch)
-	JR NZ, LABEL_F923B3
+	JR NZ, DiskMed_NextFindFirst
 	LD A, IZL
 	EXTZ WA
 
-LABEL_F923A7:
+DiskMed_PlaySong:
 	CALL LABEL_F20BCE
 	INC 1, (889Ch)
 	LD XHL, 1
-	JR T, LABEL_F923BD
+	JR T, DiskMed_HelperExit
 
-LABEL_F923B3:
+DiskMed_NextFindFirst:
 	INC 1, IZ
 	CP IZ, 000ah
-	JR C, LABEL_F92394
+	JR C, DiskMed_FindFirstLoop
 
-LABEL_F923BB:
+DiskMed_ReturnZero:
 	LD XHL, 0
 
-LABEL_F923BD:
+DiskMed_HelperExit:
 	POP IZ
 	RET
 
@@ -998,24 +998,24 @@ FmmDiskMedleySelectFunc:
 	LD (XSP + 00eh), XWA
 	LD XWA, (XSP + 00ah)
 	CP XWA, 01c00018h
-	JRL Z, LABEL_F92907
+	JRL Z, DiskSel_HandleNavigation
 	CP XWA, 01c00017h
-	JRL Z, LABEL_F92907
+	JRL Z, DiskSel_HandleNavigation
 	CP XWA, 01c0000bh
-	JRL Z, LABEL_F92885
+	JRL Z, DiskSel_InitDisplay
 	CP XWA, 01e50004h
-	JRL Z, LABEL_F9284E
+	JRL Z, DiskSel_StoreWindowPtr
 	CP XWA, 01c00013h
-	JRL NZ, LABEL_F92C07
+	JRL NZ, DiskSel_Exit
 	LD XWA, (XSP + 006h)
 	CP XWA, 00000003h
-	JRL Z, LABEL_F9282C
+	JRL Z, DiskSel_HandleStopEvent
 	CP XWA, 00000002h
-	JRL NZ, LABEL_F92C07
+	JRL NZ, DiskSel_Exit
 	LD WA, 0
 	CALR LABEL_F8B204
 	CP (8D37h), 078h
-	JRL Z, LABEL_F924DD
+	JRL Z, DiskSel_CheckPlaying
 	LD XWA, 0ffffffffh
 	LD XBC, 01e0009eh
 	LD XDE, 0
@@ -1025,7 +1025,7 @@ FmmDiskMedleySelectFunc:
 	LD XDE, 0
 	CALL ApPostEvent
 	CPW (8502h), 0000h
-	JR GE, LABEL_F92489
+	JR GE, DiskSel_InitState
 	LD XWA, 00600026h
 	LD XBC, 01c00001h
 	LD XDE, 5
@@ -1044,52 +1044,52 @@ FmmDiskMedleySelectFunc:
 	CALL ApPostEvent
 	CALR LABEL_F8B260
 
-LABEL_F92489:
+DiskSel_InitState:
 	LD (84FEh), 000h
 	LD (893Ch), 000h
 	LD (893Ah), 000h
 	LD IZ, 0
 
-LABEL_F9249A:
+DiskSel_CheckFileLoop:
 	LD WA, IZ
 	LD BC, 2
 	CALL LABEL_F89408
 	CP L, 0
-	JR NZ, LABEL_F924B3
+	JR NZ, DiskSel_FileAvailable
 	LD WA, IZ
 	LD BC, 0008h
 	CALL LABEL_F89408
 	CP L, 0
-	JR Z, LABEL_F924C4
+	JR Z, DiskSel_MarkUnavail
 
-LABEL_F924B3:
+DiskSel_FileAvailable:
 	LDA XWA, 8926h
 	LD (XWA + IZ), (893Ah)
 	INC 1, (893Ah)
-	JR T, LABEL_F924CE
+	JR T, DiskSel_NextFile
 
-LABEL_F924C4:
+DiskSel_MarkUnavail:
 	LDA XWA, 8926h
 	LD (XWA + IZ), 0ffh
 
-LABEL_F924CE:
+DiskSel_NextFile:
 	INC 1, IZ
 	CP IZ, 0014h
-	JR LT, LABEL_F9249A
+	JR LT, DiskSel_CheckFileLoop
 	CALL LABEL_F20ACD
-	JRL T, LABEL_F92C07
+	JRL T, DiskSel_Exit
 
-LABEL_F924DD:
+DiskSel_CheckPlaying:
 	CALL LABEL_F2076D
 	CP L, 1
-	JRL NZ, LABEL_F927E1
+	JRL NZ, DiskSel_HandleError
 	LD (84FEh), 001h
 	LD XWA, (XSP + 00eh)
 	LD XBC, (XSP + 00ah)
 	LD XDE, (XSP + 006h)
-	CALR LABEL_F92294
+	CALR DiskMed_PlayNextHelper
 	CP L, 1
-	JR NZ, LABEL_F92521
+	JR NZ, DiskSel_CheckFinished
 	LD XWA, 0ffffffffh
 	LD XBC, 01e0009eh
 	LD XDE, 0
@@ -1099,11 +1099,11 @@ LABEL_F924DD:
 	LD XDE, 0
 	CALL ApPostEvent
 	LD WA, 0078h
-	JRL T, LABEL_F927CE
+	JRL T, DiskSel_CallPauseMode
 
-LABEL_F92521:
+DiskSel_CheckFinished:
 	CP L, 2
-	JRL NZ, LABEL_F92C07
+	JRL NZ, DiskSel_Exit
 	LD XWA, 0ffffffffh
 	LD XBC, 01e0009eh
 	LD XDE, 0
@@ -1114,23 +1114,23 @@ LABEL_F92521:
 	CALL ApPostEvent
 	LD A, (893Ch)
 	CP A, (893Ah)
-	JRL NC, LABEL_F92695
+	JRL NC, DiskSel_CheckRepeat
 	LD IZ, 0
 
-LABEL_F92553:
+DiskSel_ClearSelections:
 	LD A, IZL
 	EXTZ WA
 	CALL LABEL_F89321
 	INC 1, IZ
 	CP IZ, 0008h
-	JR LT, LABEL_F92553
+	JR LT, DiskSel_ClearSelections
 	LD IZ, 0
 
-LABEL_F92566:
+DiskSel_FindSongLoop:
 	LDA XWA, 8926h
 	LD A, (XWA + IZ)
 	CP A, (893Ch)
-	JRL NZ, LABEL_F92684
+	JRL NZ, DiskSel_NextSongLoop
 	LD (83DEh), IZ
 	LD WA, IZ
 	CALL LABEL_F89605
@@ -1141,7 +1141,7 @@ LABEL_F92566:
 	CALL ApPostEvent
 	LD QIZ, 0
 
-LABEL_F92596:
+DiskSel_SendFileInfo:
 	LD DE, QIZ
 	SLL 5, DE
 	LDA XBC, 850Ch
@@ -1152,7 +1152,7 @@ LABEL_F92596:
 	CALL ApPostEvent
 	INC 1, QIZ
 	CP QIZ, 0014h
-	JR LT, LABEL_F92596
+	JR LT, DiskSel_SendFileInfo
 	LD XWA, 0
 	LD XBC, 01c0000bh
 	LD XDE, 0
@@ -1187,7 +1187,7 @@ LABEL_F92596:
 	LD XDE, 0
 	CALL ApPostEvent
 	CP QIZ, 0
-	JR GE, LABEL_F92653
+	JR GE, DiskSel_PlayNext
 	LD (84FEh), 000h
 	LD WA, 0060h
 	CALL LABEL_F99490
@@ -1196,53 +1196,53 @@ LABEL_F92596:
 	CALR LABEL_F8B48E
 	LD (7F42h), L
 	LD WA, 00eeh
-	JRL T, LABEL_F92B4B
+	JRL T, DiskSel_ShowErrorAndExit
 
-LABEL_F92653:
+DiskSel_PlayNext:
 	INC 1, (893Ch)
 	LD XWA, (XSP + 00eh)
 	LD XBC, 01c00017h
 	LD XDE, 0000000dh
-	CALR LABEL_F92294
+	CALR DiskMed_PlayNextHelper
 	CP L, 1
-	JR NZ, LABEL_F92684
+	JR NZ, DiskSel_NextSongLoop
 	LD XWA, 0ffffffffh
 	LD XBC, 01e0009ah
 	LD XDE, 0
 	CALL ApPostEvent
 	LD WA, 0078h
 	CALL LABEL_F99490
-	JR T, LABEL_F9268D
+	JR T, DiskSel_ClearPlaying
 
-LABEL_F92684:
+DiskSel_NextSongLoop:
 	INC 1, IZ
 	CP IZ, 0014h
-	JRL LT, LABEL_F92566
+	JRL LT, DiskSel_FindSongLoop
 
-LABEL_F9268D:
+DiskSel_ClearPlaying:
 	LD (84FEh), 000h
-	JRL T, LABEL_F92C07
+	JRL T, DiskSel_Exit
 
-LABEL_F92695:
+DiskSel_CheckRepeat:
 	CP (893Eh), 000h
-	JR Z, LABEL_F9268D
+	JR Z, DiskSel_ClearPlaying
 	LD (893Ch), 000h
 	LD IZ, 0
 
-LABEL_F926A3:
+DiskSel_RepeatClear:
 	LD A, IZL
 	EXTZ WA
 	CALL LABEL_F89321
 	INC 1, IZ
 	CP IZ, 0008h
-	JR LT, LABEL_F926A3
+	JR LT, DiskSel_RepeatClear
 	LD IZ, 0
 
-LABEL_F926B6:
+DiskSel_RepeatFindLoop:
 	LDA XWA, 8926h
 	LD A, (XWA + IZ)
 	CP A, (893Ch)
-	JRL NZ, LABEL_F927D5
+	JRL NZ, DiskSel_RepeatNext
 	LD (83DEh), IZ
 	LD WA, IZ
 	CALL LABEL_F89605
@@ -1253,7 +1253,7 @@ LABEL_F926B6:
 	CALL ApPostEvent
 	LD QIZ, 0
 
-LABEL_F926E6:
+DiskSel_RepeatSendInfo:
 	LD DE, QIZ
 	SLL 5, DE
 	LDA XBC, 850Ch
@@ -1264,7 +1264,7 @@ LABEL_F926E6:
 	CALL ApPostEvent
 	INC 1, QIZ
 	CP QIZ, 0014h
-	JR LT, LABEL_F926E6
+	JR LT, DiskSel_RepeatSendInfo
 	LD XWA, 0
 	LD XBC, 01c0000bh
 	LD XDE, 0
@@ -1299,7 +1299,7 @@ LABEL_F926E6:
 	LD XDE, 0
 	CALL ApPostEvent
 	CP QIZ, 0
-	JR GE, LABEL_F927A3
+	JR GE, DiskSel_RepeatPlayNext
 	LD (84FEh), 000h
 	LD WA, 0060h
 	CALL LABEL_F99490
@@ -1308,37 +1308,37 @@ LABEL_F926E6:
 	CALR LABEL_F8B48E
 	LD (7F42h), L
 	LD WA, 00eeh
-	JRL T, LABEL_F92B4B
+	JRL T, DiskSel_ShowErrorAndExit
 
-LABEL_F927A3:
+DiskSel_RepeatPlayNext:
 	INC 1, (893Ch)
 	LD XWA, (XSP + 00eh)
 	LD XBC, 01c00017h
 	LD XDE, 0000000dh
-	CALR LABEL_F92294
+	CALR DiskMed_PlayNextHelper
 	CP L, 1
-	JR NZ, LABEL_F927D5
+	JR NZ, DiskSel_RepeatNext
 	LD XWA, 0ffffffffh
 	LD XBC, 01e0009ah
 	LD XDE, 0
 	CALL ApPostEvent
 	LD WA, 0078h
 
-LABEL_F927CE:
+DiskSel_CallPauseMode:
 	CALL LABEL_F99490
-	JRL T, LABEL_F92C07
+	JRL T, DiskSel_Exit
 
-LABEL_F927D5:
+DiskSel_RepeatNext:
 	INC 1, IZ
 	CP IZ, 0014h
-	JRL LT, LABEL_F926B6
-	JRL T, LABEL_F92C07
+	JRL LT, DiskSel_RepeatFindLoop
+	JRL T, DiskSel_Exit
 
-LABEL_F927E1:
+DiskSel_HandleError:
 	CALL LABEL_F2076D
 	LD (84FEh), 000h
 	CP L, 0
-	JR NZ, LABEL_F92811
+	JR NZ, DiskSel_ShowError
 	LD XWA, 0ffffffffh
 	LD XBC, 01e0009eh
 	LD XDE, 0
@@ -1347,54 +1347,54 @@ LABEL_F927E1:
 	LD XBC, 01c0000ah
 	LD XDE, 0
 	CALL ApPostEvent
-	JRL T, LABEL_F92C07
+	JRL T, DiskSel_Exit
 
-LABEL_F92811:
+DiskSel_ShowError:
 	LD XWA, 0ffffffffh
 	LD XBC, 01e0009eh
 	LD XDE, 0
 	CALL ApPostEvent
 	LD (7F42h), 00eh
 	LD WA, 00eeh
-	JRL T, LABEL_F92B4B
+	JRL T, DiskSel_ShowErrorAndExit
 
-LABEL_F9282C:
+DiskSel_HandleStopEvent:
 	CP (8D36h), 078h
-	JR Z, LABEL_F9283C
+	JR Z, DiskSel_PostStopEvent
 	CALL LABEL_F20B70
 	LD (84FEh), 000h
 
-LABEL_F9283C:
+DiskSel_PostStopEvent:
 	CALR LABEL_F8B244
 	LD XWA, 0ffffffffh
 	LD XBC, 01e0009eh
 	LD XDE, 0
-	JRL T, LABEL_F92C03
+	JRL T, DiskSel_PostEvent
 
-LABEL_F9284E:
+DiskSel_StoreWindowPtr:
 	LD XWA, (XSP + 006h)
 	LD (83DAh), XWA
 	CALL LABEL_F895EF
 	LD (83DEh), HL
 	CP HL, 0
-	JR LT, LABEL_F92871
+	JR LT, DiskSel_DefaultIndex
 	EXTS XHL
 	LD XWA, (83DAh)
 	LD XBC, 01e50002h
 	LD XDE, XHL
-	JRL T, LABEL_F92C03
+	JRL T, DiskSel_PostEvent
 
-LABEL_F92871:
+DiskSel_DefaultIndex:
 	LDW (83DEh), 0000h
 	LD XWA, (83DAh)
 	LD XBC, 01e50002h
 	LD XDE, 0
-	JRL T, LABEL_F92C03
+	JRL T, DiskSel_PostEvent
 
-LABEL_F92885:
+DiskSel_InitDisplay:
 	LD IZ, 0
 
-LABEL_F92887:
+DiskSel_DisplayLoop:
 	LD WA, IZ
 	LD HL, WA
 	SLL 5, HL
@@ -1407,22 +1407,22 @@ LABEL_F92887:
 	CALL LABEL_F89408
 	LD WA, IZ
 	CP L, 0
-	JR NZ, LABEL_F928B4
+	JR NZ, DiskSel_GetFileName
 	LD BC, 0008h
 	CALL LABEL_F89408
 	CP L, 0
-	JR Z, LABEL_F928BC
+	JR Z, DiskSel_EmptyFileName
 	LD WA, IZ
 
-LABEL_F928B4:
+DiskSel_GetFileName:
 	CALL LABEL_F89623
 	LD XBC, XHL
-	JR T, LABEL_F928C1
+	JR T, DiskSel_FormatEntry
 
-LABEL_F928BC:
+DiskSel_EmptyFileName:
 	LDA XBC, 0EA0A54h
 
-LABEL_F928C1:
+DiskSel_FormatEntry:
 	LD DE, IZ
 	LD WA, DE
 	SLL 5, WA
@@ -1446,108 +1446,108 @@ LABEL_F928C1:
 	CALL ApPostEvent
 	INC 1, IZ
 	CP IZ, 0014h
-	JR LT, LABEL_F92887
-	JRL T, LABEL_F92C07
+	JR LT, DiskSel_DisplayLoop
+	JRL T, DiskSel_Exit
 
-LABEL_F92907:
+DiskSel_HandleNavigation:
 	LD DE, (83DEh)
 	LD (XSP + 004h), DE
 	LD XBC, (XSP + 00ah)
 	LD XWA, (XSP + 006h)
 	OR XWA, XWA
-	JR NZ, LABEL_F92946
+	JR NZ, DiskSel_CheckPage
 	CP (84FEh), 000h
-	JR NZ, LABEL_F92946
+	JR NZ, DiskSel_CheckPage
 	LD XWA, XBC
 	CP XBC, 01c00018h
-	JR NZ, LABEL_F92934
+	JR NZ, DiskSel_CheckPrevKey
 	CP DE, 0013h
-	JRL GE, LABEL_F92BAE
+	JRL GE, DiskSel_GetCurrentIndex
 	INC 1, DE
-	JR T, LABEL_F92988
+	JR T, DiskSel_SaveIndex
 
-LABEL_F92934:
+DiskSel_CheckPrevKey:
 	CP XWA, 01c00017h
-	JRL NZ, LABEL_F92BAE
+	JRL NZ, DiskSel_GetCurrentIndex
 	CP DE, 0
-	JRL LE, LABEL_F92BAE
+	JRL LE, DiskSel_GetCurrentIndex
 	DEC 1, DE
-	JR T, LABEL_F92988
+	JR T, DiskSel_SaveIndex
 
-LABEL_F92946:
+DiskSel_CheckPage:
 	LD XWA, (XSP + 006h)
 	CP XWA, 00000001h
-	JR NZ, LABEL_F92965
+	JR NZ, DiskSel_CheckPageDown
 	CP (84FEh), 000h
-	JR NZ, LABEL_F92965
+	JR NZ, DiskSel_CheckPageDown
 	CP DE, 000ah
-	JRL LT, LABEL_F92BAE
+	JRL LT, DiskSel_GetCurrentIndex
 	SUB DE, 000ah
-	JR T, LABEL_F92988
+	JR T, DiskSel_SaveIndex
 
-LABEL_F92965:
+DiskSel_CheckPageDown:
 	LD XWA, (XSP + 006h)
 	CP XWA, 00000002h
-	JR NZ, LABEL_F9298F
+	JR NZ, DiskSel_HandleToggle
 	CP (84FEh), 000h
-	JR NZ, LABEL_F9298F
+	JR NZ, DiskSel_HandleToggle
 	LD WA, DE
 	ADD WA, 000ah
 	CP WA, 0013h
-	JRL GT, LABEL_F92BAE
+	JRL GT, DiskSel_GetCurrentIndex
 	ADD DE, 000ah
 
-LABEL_F92988:
+DiskSel_SaveIndex:
 	LD (83DEh), DE
-	JRL T, LABEL_F92BB2
+	JRL T, DiskSel_UpdateDisplay
 
-LABEL_F9298F:
+DiskSel_HandleToggle:
 	LDA XHL, 8926h
 	LD XWA, (XSP + 006h)
 	CP XWA, 0000000ah
-	JR NZ, LABEL_F92A02
+	JR NZ, DiskSel_HandleSelect
 	CP (84FEh), 000h
-	JR NZ, LABEL_F92A02
+	JR NZ, DiskSel_HandleSelect
 	LD IZ, 0
 
-LABEL_F929A7:
+DiskSel_FindMarkedLoop:
 	CP (XHL + IZ), 0feh
-	JR Z, LABEL_F929B7
+	JR Z, DiskSel_ToggleStart
 	INC 1, IZ
 	CP IZ, 0014h
-	JR LT, LABEL_F929A7
+	JR LT, DiskSel_FindMarkedLoop
 
-LABEL_F929B7:
+DiskSel_ToggleStart:
 	LDA XDE, XHL + 014h
 	CP IZ, 0014h
-	JR GE, LABEL_F929D7
+	JR GE, DiskSel_UnmarkLoop
 
-LABEL_F929C0:
+DiskSel_AssignLoop:
 	LD A, (XHL)
 	CP A, 0feh
-	JR NZ, LABEL_F929CF
+	JR NZ, DiskSel_NextAssign
 	LD (XHL), (893Ah)
 	INC 1, (893Ah)
 
-LABEL_F929CF:
+DiskSel_NextAssign:
 	INC 1, XHL
 	CP XHL, XDE
-	JR C, LABEL_F929C0
-	JR T, LABEL_F929EB
+	JR C, DiskSel_AssignLoop
+	JR T, DiskSel_RefreshDisplay
 
-LABEL_F929D7:
+DiskSel_UnmarkLoop:
 	LD A, (XHL)
 	CP A, 0fdh
-	JR UGT, LABEL_F929E5
+	JR UGT, DiskSel_NextUnmark
 	LD (XHL), 0feh
 	DEC 1, (893Ah)
 
-LABEL_F929E5:
+DiskSel_NextUnmark:
 	INC 1, XHL
 	CP XHL, XDE
-	JR C, LABEL_F929D7
+	JR C, DiskSel_UnmarkLoop
 
-LABEL_F929EB:
+DiskSel_RefreshDisplay:
 	LD XWA, 0
 	LD XBC, 01c0000bh
 	LD XDE, 0
@@ -1555,50 +1555,50 @@ LABEL_F929EB:
 	LD XWA, 0
 	LD XBC, 01c0000bh
 	LD XDE, 0
-	JR T, LABEL_F92A6D
+	JR T, DiskSel_RefreshBoth
 
-LABEL_F92A02:
+DiskSel_HandleSelect:
 	LD XWA, (XSP + 006h)
 	CP XWA, 0000000bh
-	JR NZ, LABEL_F92A73
+	JR NZ, DiskSel_HandleRepeat
 	CP (84FEh), 000h
-	JR NZ, LABEL_F92A73
+	JR NZ, DiskSel_HandleRepeat
 	LD XIX, XHL
 	LDA XBC, XHL + DE
 	LD A, (XBC)
 	CP A, 0feh
-	JR NZ, LABEL_F92A2C
+	JR NZ, DiskSel_RemoveSelect
 	LD (XBC), (893Ah)
 	INC 1, (893Ah)
-	JR T, LABEL_F92A58
+	JR T, DiskSel_RefreshAfterSelect
 
-LABEL_F92A2C:
+DiskSel_RemoveSelect:
 	CP A, 0fdh
-	JR UGT, LABEL_F92A58
+	JR UGT, DiskSel_RefreshAfterSelect
 	CP DE, 0014h
-	JR GE, LABEL_F92A3E
+	JR GE, DiskSel_ReorderSlots
 	LD (XBC), 0feh
 	DEC 1, (893Ah)
 
-LABEL_F92A3E:
+DiskSel_ReorderSlots:
 	LD XDE, XIX
 	LDA XHL, XIX + 014h
 
-LABEL_F92A43:
+DiskSel_ReorderLoop:
 	LD C, (XDE)
 	CP C, 0fdh
-	JR UGT, LABEL_F92A52
+	JR UGT, DiskSel_NextReorder
 	CP C, A
-	JR ULE, LABEL_F92A52
+	JR ULE, DiskSel_NextReorder
 	DEC 1, C
 	LD (XDE), C
 
-LABEL_F92A52:
+DiskSel_NextReorder:
 	INC 1, XDE
 	CP XDE, XHL
-	JR C, LABEL_F92A43
+	JR C, DiskSel_ReorderLoop
 
-LABEL_F92A58:
+DiskSel_RefreshAfterSelect:
 	LD XWA, 0
 	LD XBC, 01c0000bh
 	LD XDE, 0
@@ -1607,46 +1607,46 @@ LABEL_F92A58:
 	LD XBC, 01c0000bh
 	LD XDE, 0
 
-LABEL_F92A6D:
+DiskSel_RefreshBoth:
 	CALR FmmDiskMedley2Func
-	JRL T, LABEL_F92BAE
+	JRL T, DiskSel_GetCurrentIndex
 
-LABEL_F92A73:
+DiskSel_HandleRepeat:
 	LD XWA, (XSP + 006h)
 	CP XWA, 0000000ch
-	JR NZ, LABEL_F92A96
+	JR NZ, DiskSel_HandlePlayStart
 	CP XBC, 01c00017h
-	JR NZ, LABEL_F92A8E
+	JR NZ, DiskSel_SetRepeatOff
 	LD (893Eh), 001h
-	JRL T, LABEL_F92BAE
+	JRL T, DiskSel_GetCurrentIndex
 
-LABEL_F92A8E:
+DiskSel_SetRepeatOff:
 	LD (893Eh), 000h
-	JRL T, LABEL_F92BAE
+	JRL T, DiskSel_GetCurrentIndex
 
-LABEL_F92A96:
+DiskSel_HandlePlayStart:
 	LD XWA, (XSP + 006h)
 	CP XWA, 0000000dh
-	JRL NZ, LABEL_F92B8F
+	JRL NZ, DiskSel_HandleAllCheck
 	CP (84FEh), 000h
-	JRL NZ, LABEL_F92B8F
+	JRL NZ, DiskSel_HandleAllCheck
 	LD (893Ch), 000h
 	LD IZ, 0
 
-LABEL_F92AB1:
+DiskSel_PlayClearLoop:
 	LD A, IZL
 	EXTZ WA
 	CALL LABEL_F89321
 	INC 1, IZ
 	CP IZ, 0008h
-	JR LT, LABEL_F92AB1
+	JR LT, DiskSel_PlayClearLoop
 	LD IZ, 0
 
-LABEL_F92AC4:
+DiskSel_PlayFindLoop:
 	LDA XWA, 8926h
 	LD A, (XWA + IZ)
 	CP A, (893Ch)
-	JRL NZ, LABEL_F92B84
+	JRL NZ, DiskSel_PlayNextLoop
 	LD (83DEh), IZ
 	LD WA, IZ
 	CALL LABEL_F89605
@@ -1671,7 +1671,7 @@ LABEL_F92AC4:
 	LD XDE, 0
 	CALL ApPostEvent
 	CP QIZ, 0
-	JR GE, LABEL_F92B52
+	JR GE, DiskSel_PlayNextSong
 	LD (84FEh), 000h
 	LD WA, 0060h
 	CALL LABEL_F99490
@@ -1681,51 +1681,51 @@ LABEL_F92AC4:
 	LD (7F42h), L
 	LD WA, 00eeh
 
-LABEL_F92B4B:
+DiskSel_ShowErrorAndExit:
 	CALL LABEL_F994BD
-	JRL T, LABEL_F92C07
+	JRL T, DiskSel_Exit
 
-LABEL_F92B52:
+DiskSel_PlayNextSong:
 	LDW (XSP + 004h), (83DEh)
 	INC 1, (893Ch)
 	LD XWA, (XSP + 00eh)
 	LD XBC, (XSP + 00ah)
 	LD XDE, (XSP + 006h)
-	CALR LABEL_F92294
+	CALR DiskMed_PlayNextHelper
 	CP L, 1
-	JR NZ, LABEL_F92B84
+	JR NZ, DiskSel_PlayNextLoop
 	LD XWA, 0ffffffffh
 	LD XBC, 01e0009ah
 	LD XDE, 0
 	CALL ApPostEvent
 	LD WA, 0078h
 	CALL LABEL_F99490
-	JR T, LABEL_F92BAE
+	JR T, DiskSel_GetCurrentIndex
 
-LABEL_F92B84:
+DiskSel_PlayNextLoop:
 	INC 1, IZ
 	CP IZ, 0014h
-	JRL LT, LABEL_F92AC4
-	JR T, LABEL_F92BAE
+	JRL LT, DiskSel_PlayFindLoop
+	JR T, DiskSel_GetCurrentIndex
 
-LABEL_F92B8F:
+DiskSel_HandleAllCheck:
 	LD XWA, (XSP + 006h)
 	CP XWA, 0000000eh
-	JR NZ, LABEL_F92BAE
+	JR NZ, DiskSel_GetCurrentIndex
 	CP XBC, 01c00017h
-	JR NZ, LABEL_F92BA9
+	JR NZ, DiskSel_SetAllOff
 	LD (8940h), 001h
-	JR T, LABEL_F92BAE
+	JR T, DiskSel_GetCurrentIndex
 
-LABEL_F92BA9:
+DiskSel_SetAllOff:
 	LD (8940h), 000h
 
-LABEL_F92BAE:
+DiskSel_GetCurrentIndex:
 	LD DE, (83DEh)
 
-LABEL_F92BB2:
+DiskSel_UpdateDisplay:
 	CP (XSP + 004h), DE
-	JR Z, LABEL_F92C07
+	JR Z, DiskSel_Exit
 	LD WA, DE
 	CALL LABEL_F89605
 	LD DE, (83DEh)
@@ -1749,136 +1749,136 @@ LABEL_F92BB2:
 	LD XWA, (83DAh)
 	LD XBC, 01c0000fh
 
-LABEL_F92C03:
+DiskSel_PostEvent:
 	CALL ApPostEvent
 
-LABEL_F92C07:
+DiskSel_Exit:
 	LD XHL, 0
 	POP XIZ
 	LDA XSP, XSP + 00eh
 	RET
 
-LABEL_F92C0E:
+GetPlayState1:
 	LD L, (8942h)
 	RET
 
-LABEL_F92C13:
+GetPlayState2:
 	LD L, (8944h)
 	RET
 
-LABEL_F92C18:
+SmfMedley_RawData:
 	db 0C9h, 0D8h, 0D8h, 07Eh, 0F1h, 044h, 089h, 041h
 	db 00Eh
 
-LABEL_F92C21:
+NavigateSongList:
 	DEC 2, XSP
 	PUSH IZ
 	LD (XSP + 002h), WA
 	CPW (XSP + 002h), 0001h
-	JR Z, LABEL_F92C35
+	JR Z, NavSong_CheckBounds
 	CPW (XSP + 002h), 0ffffh
-	JR NZ, LABEL_F92C6C
+	JR NZ, NavSong_Exit
 
-LABEL_F92C35:
+NavSong_CheckBounds:
 	CPW (8504h), 0000h
-	JR LE, LABEL_F92C6C
+	JR LE, NavSong_Exit
 	CALL LABEL_F89AC7
 	CP HL, 0
-	JR LT, LABEL_F92C6C
+	JR LT, NavSong_Exit
 	LD IZ, HL
 	ADD IZ, (XSP + 002h)
-	JR GE, LABEL_F92C54
+	JR GE, NavSong_WrapToEnd
 	LD IZ, (8504h)
 	DEC 1, IZ
-	JR T, LABEL_F92C5C
+	JR T, NavSong_CheckEnd
 
-LABEL_F92C54:
+NavSong_WrapToEnd:
 	CP IZ, (8504h)
-	JR LT, LABEL_F92C5C
+	JR LT, NavSong_CheckEnd
 	LD IZ, 0
 
-LABEL_F92C5C:
+NavSong_CheckEnd:
 	CP HL, IZ
-	JR Z, LABEL_F92C6C
+	JR Z, NavSong_Exit
 	LD WA, IZ
 	CALL LABEL_F89BA4
 	LD WA, IZ
 	CALL LABEL_F8A07F
 
-LABEL_F92C6C:
+NavSong_Exit:
 	POP IZ
 	INC 2, XSP
 	RET
 
-LABEL_F92C70:
+NavigateDocList:
 	PUSH IZ
 	LD IZ, WA
 	CP IZ, 1
-	JR Z, LABEL_F92C7D
+	JR Z, NavDoc_CheckBounds
 	CP IZ, 0ffffh
-	JR NZ, LABEL_F92CAA
+	JR NZ, NavDoc_Exit
 
-LABEL_F92C7D:
+NavDoc_CheckBounds:
 	CPW (8508h), 0000h
-	JR LE, LABEL_F92CAA
+	JR LE, NavDoc_Exit
 	CALL LABEL_F8A7CE
 	CP HL, 0
-	JR LT, LABEL_F92CAA
+	JR LT, NavDoc_Exit
 	LD WA, HL
 	ADD WA, IZ
-	JR GE, LABEL_F92C9B
+	JR GE, NavDoc_WrapToEnd
 	LD WA, (8508h)
 	DEC 1, WA
-	JR T, LABEL_F92CA3
+	JR T, NavDoc_CheckEnd
 
-LABEL_F92C9B:
+NavDoc_WrapToEnd:
 	CP WA, (8508h)
-	JR LT, LABEL_F92CA3
+	JR LT, NavDoc_CheckEnd
 	LD WA, 0
 
-LABEL_F92CA3:
+NavDoc_CheckEnd:
 	CP HL, WA
 	CALL NZ, LABEL_F8A956
 
-LABEL_F92CAA:
+NavDoc_Exit:
 	POP IZ
 	RET
 
-LABEL_F92CAC:
+NavigatePdList:
 	PUSH IZ
 	LD IZ, WA
 	CP IZ, 1
-	JR Z, LABEL_F92CB9
+	JR Z, NavPd_CheckBounds
 	CP IZ, 0ffffh
-	JR NZ, LABEL_F92CE6
+	JR NZ, NavPd_Exit
 
-LABEL_F92CB9:
+NavPd_CheckBounds:
 	CPW (8506h), 0000h
-	JR LE, LABEL_F92CE6
+	JR LE, NavPd_Exit
 	CALL LABEL_F8A4C8
 	CP HL, 0
-	JR LT, LABEL_F92CE6
+	JR LT, NavPd_Exit
 	LD WA, HL
 	ADD WA, IZ
-	JR GE, LABEL_F92CD7
+	JR GE, NavPd_WrapToEnd
 	LD WA, (8506h)
 	DEC 1, WA
-	JR T, LABEL_F92CDF
+	JR T, NavPd_CheckEnd
 
-LABEL_F92CD7:
+NavPd_WrapToEnd:
 	CP WA, (8506h)
-	JR LT, LABEL_F92CDF
+	JR LT, NavPd_CheckEnd
 	LD WA, 0
 
-LABEL_F92CDF:
+NavPd_CheckEnd:
 	CP HL, WA
 	CALL NZ, LABEL_F8A5A5
 
-LABEL_F92CE6:
+NavPd_Exit:
 	POP IZ
 	RET
 
-LABEL_F92CE8:
+SmfMed_FormatSlotList:
 	DEC 6, XSP
 	PUSH XIZ
 	LD IZ, BC
@@ -1898,17 +1898,17 @@ LABEL_F92CE8:
 	LD WA, QIZ
 	ADD WA, 000ah
 	CP WA, IZ
-	JR C, LABEL_F92D2B
+	JR C, SmfFmt_CalcVisible
 	LD (XSP + 004h), IZ
 	LD WA, QIZ
 	SUB (XSP + 004h), WA
 
-LABEL_F92D2B:
+SmfFmt_CalcVisible:
 	LD IZ, 0
 	CPW (XSP + 004h), 0000h
-	JR ULE, LABEL_F92D77
+	JR ULE, SmfFmt_FillEmpty
 
-LABEL_F92D34:
+SmfFmt_FormatLoop:
 	LD WA, IZ
 	SLL 3, WA
 	LDA XBC, 83E0h
@@ -1922,7 +1922,7 @@ LABEL_F92D34:
 	LD C, (XBC)
 	EXTZ BC
 	LD DE, IZ
-	CALR LABEL_F91CC9
+	CALR FormatMedleyNumber
 	LD DE, IZ
 	SLL 3, DE
 	LDA XWA, 83E0h
@@ -1933,13 +1933,13 @@ LABEL_F92D34:
 	CALL ApPostEvent
 	INC 1, IZ
 	CP IZ, (XSP + 004h)
-	JR C, LABEL_F92D34
+	JR C, SmfFmt_FormatLoop
 
-LABEL_F92D77:
+SmfFmt_FillEmpty:
 	CP IZ, 000ah
-	JR NC, LABEL_F92DB3
+	JR NC, SmfFmt_Exit
 
-LABEL_F92D7D:
+SmfFmt_EmptyLoop:
 	LD WA, IZ
 	SLL 3, WA
 	LDA XBC, 83E0h
@@ -1947,7 +1947,7 @@ LABEL_F92D7D:
 	ADD XWA, XBC
 	LD BC, 00ffh
 	LD DE, IZ
-	CALR LABEL_F91CC9
+	CALR FormatMedleyNumber
 	LD DE, IZ
 	SLL 3, DE
 	LDA XWA, 83E0h
@@ -1958,9 +1958,9 @@ LABEL_F92D7D:
 	CALL ApPostEvent
 	INC 1, IZ
 	CP IZ, 000ah
-	JR C, LABEL_F92D7D
+	JR C, SmfFmt_EmptyLoop
 
-LABEL_F92DB3:
+SmfFmt_Exit:
 	POP XIZ
 	INC 6, XSP
 	RET
@@ -1971,111 +1971,111 @@ FmmSmfMedleyFunc:
 	LD XHL, XBC
 	LD (XSP + 002h), XWA
 	CP XHL, 01e5000ah
-	JRL Z, LABEL_F9325C
+	JRL Z, SmfMed_CheckContinue
 	LD XWA, XDE
 	CP XHL, 01e50008h
-	JRL Z, LABEL_F93256
+	JRL Z, SmfMed_StoreDelayFlag
 	LD BC, (8438h)
 	CP XHL, 01c00018h
-	JRL Z, LABEL_F9308D
+	JRL Z, SmfMed_HandleNavToggle
 	CP XHL, 01c00017h
-	JRL Z, LABEL_F9308D
+	JRL Z, SmfMed_HandleNavToggle
 	CP XHL, 01c0000bh
-	JRL Z, LABEL_F93083
+	JRL Z, SmfMed_RefreshDisplay
 	CP XHL, 01e50004h
-	JRL Z, LABEL_F9307C
+	JRL Z, SmfMed_StoreWindowPtr
 	CP XHL, 01c00013h
-	JRL NZ, LABEL_F9327D
+	JRL NZ, SmfMed_Exit
 	CP XDE, 00000003h
-	JRL Z, LABEL_F93051
+	JRL Z, SmfMed_HandleStop
 	CP XDE, 00000002h
-	JRL NZ, LABEL_F9327D
+	JRL NZ, SmfMed_Exit
 	LD WA, 0
 	CALR LABEL_F8B204
 	LD A, (8D37h)
 	LD (843Ah), A
 	CP A, 06fh
-	JR Z, LABEL_F92E2D
+	JR Z, SmfMed_CheckNotPlaying
 	CP A, 072h
-	JR NZ, LABEL_F92E66
+	JR NZ, SmfMed_CheckPlayMode
 
-LABEL_F92E2D:
+SmfMed_CheckNotPlaying:
 	LD (84FEh), 000h
 	CALL LABEL_F2076D
 	CP L, 4
-	JR Z, LABEL_F92E57
+	JR Z, SmfMed_Error3F
 	CP L, 3
-	JR Z, LABEL_F92E4D
+	JR Z, SmfMed_Error31
 	CP L, 2
-	JRL NZ, LABEL_F9327D
+	JRL NZ, SmfMed_Exit
 	LD (7F42h), 001h
 	LD WA, 00eeh
-	JR T, LABEL_F92E5F
+	JR T, SmfMed_ShowError
 
-LABEL_F92E4D:
+SmfMed_Error31:
 	LD (7F42h), 031h
 	LD WA, 00eeh
-	JR T, LABEL_F92E5F
+	JR T, SmfMed_ShowError
 
-LABEL_F92E57:
+SmfMed_Error3F:
 	LD (7F42h), 03fh
 	LD WA, 00eeh
 
-LABEL_F92E5F:
+SmfMed_ShowError:
 	CALL LABEL_F994BD
-	JRL T, LABEL_F9327D
+	JRL T, SmfMed_Exit
 
-LABEL_F92E66:
+SmfMed_CheckPlayMode:
 	CP A, 073h
-	JR Z, LABEL_F92E71
+	JR Z, SmfMed_CheckPlaying
 	CP A, 076h
-	JRL NZ, LABEL_F92FA8
+	JRL NZ, SmfMed_InitFromDisk
 
-LABEL_F92E71:
+SmfMed_CheckPlaying:
 	CALL LABEL_F2076D
 	CP L, 1
-	JRL C, LABEL_F92F97
+	JRL C, SmfMed_CheckNotPlayError
 	CALL LABEL_F2076D
 	CP L, 4
-	JR Z, LABEL_F92E9E
+	JR Z, SmfMed_PlayError3F
 	CP L, 3
-	JR Z, LABEL_F92E94
+	JR Z, SmfMed_PlayError31
 	CP L, 2
-	JR NZ, LABEL_F92EAE
+	JR NZ, SmfMed_SetPlaying
 	LD (7F42h), 001h
 	LD WA, 00eeh
-	JR T, LABEL_F92EA6
+	JR T, SmfMed_ShowPlayError
 
-LABEL_F92E94:
+SmfMed_PlayError31:
 	LD (7F42h), 031h
 	LD WA, 00eeh
-	JR T, LABEL_F92EA6
+	JR T, SmfMed_ShowPlayError
 
-LABEL_F92E9E:
+SmfMed_PlayError3F:
 	LD (7F42h), 03fh
 	LD WA, 00eeh
 
-LABEL_F92EA6:
+SmfMed_ShowPlayError:
 	CALL LABEL_F994BD
 	INC 1, (843Ch)
 
-LABEL_F92EAE:
+SmfMed_SetPlaying:
 	LD (84FEh), 001h
 	LD A, (8922h)
 	CP A, (8920h)
-	JR NC, LABEL_F92F18
+	JR NC, SmfMed_CheckRepeat
 	LD IZ, 0
 	LD BC, (8438h)
 	CP BC, 0
-	JRL ULE, LABEL_F9327D
+	JRL ULE, SmfMed_Exit
 	LDA XDE, 88A0h
 
-LABEL_F92ECC:
+SmfMed_FindSongLoop:
 	LD HL, IZ
 	EXTZ XHL
 	ADD XHL, XDE
 	CP (XHL), A
-	JR NZ, LABEL_F92F0F
+	JR NZ, SmfMed_NextSong
 	LD DE, IZ
 	EXTZ XDE
 	LD XWA, (XSP + 002h)
@@ -2083,42 +2083,42 @@ LABEL_F92ECC:
 	CALR FmmSmfFileNameFunc
 	LD XWA, (8430h)
 	LD BC, (8438h)
-	CALR LABEL_F92CE8
+	CALR SmfMed_FormatSlotList
 	INC 1, (8922h)
 	LD WA, IZ
 	CALL LABEL_F8A07F
 	LD XWA, (8434h)
 	OR XWA, XWA
-	JRL Z, LABEL_F9327D
+	JRL Z, SmfMed_Exit
 	LD XBC, 01e50009h
 	LD XDE, 0000001eh
-	JR T, LABEL_F92F80
+	JR T, SmfMed_PostDelayEvent
 
-LABEL_F92F0F:
+SmfMed_NextSong:
 	INC 1, IZ
 	CP IZ, BC
-	JR C, LABEL_F92ECC
-	JRL T, LABEL_F9327D
+	JR C, SmfMed_FindSongLoop
+	JRL T, SmfMed_Exit
 
-LABEL_F92F18:
+SmfMed_CheckRepeat:
 	CP (8924h), 000h
-	JR Z, LABEL_F92F90
+	JR Z, SmfMed_ClearRepeatCount
 	CP (843Ch), A
-	JR NC, LABEL_F92F90
+	JR NC, SmfMed_ClearRepeatCount
 	LD (8922h), 000h
 	LD (843Ch), 000h
 	LD IZ, 0
 	LD WA, (8438h)
 	CP WA, 0
-	JRL ULE, LABEL_F9327D
+	JRL ULE, SmfMed_Exit
 	LDA XBC, 88A0h
 
-LABEL_F92F3E:
+SmfMed_RepeatFindLoop:
 	LD DE, IZ
 	EXTZ XDE
 	ADD XDE, XBC
 	CP (XDE), 000h
-	JR NZ, LABEL_F92F87
+	JR NZ, SmfMed_RepeatNext
 	LD DE, IZ
 	EXTZ XDE
 	LD XWA, (XSP + 002h)
@@ -2126,47 +2126,47 @@ LABEL_F92F3E:
 	CALR FmmSmfFileNameFunc
 	LD XWA, (8430h)
 	LD BC, (8438h)
-	CALR LABEL_F92CE8
+	CALR SmfMed_FormatSlotList
 	INC 1, (8922h)
 	LD WA, IZ
 	CALL LABEL_F8A07F
 	LD XWA, (8434h)
 	OR XWA, XWA
-	JRL Z, LABEL_F9327D
+	JRL Z, SmfMed_Exit
 	LD XBC, 01e50009h
 	LD XDE, 0000001eh
 
-LABEL_F92F80:
+SmfMed_PostDelayEvent:
 	CALL ApPostEvent
-	JRL T, LABEL_F9327D
+	JRL T, SmfMed_Exit
 
-LABEL_F92F87:
+SmfMed_RepeatNext:
 	INC 1, IZ
 	CP IZ, WA
-	JR C, LABEL_F92F3E
-	JRL T, LABEL_F9327D
+	JR C, SmfMed_RepeatFindLoop
+	JRL T, SmfMed_Exit
 
-LABEL_F92F90:
+SmfMed_ClearRepeatCount:
 	LD (843Ch), 000h
-	JR T, LABEL_F92FA0
+	JR T, SmfMed_ClearPlaying
 
-LABEL_F92F97:
+SmfMed_CheckNotPlayError:
 	CALL LABEL_F2076D
 	CP L, 0
-	JRL NZ, LABEL_F9327D
+	JRL NZ, SmfMed_Exit
 
-LABEL_F92FA0:
+SmfMed_ClearPlaying:
 	LD (84FEh), 000h
-	JRL T, LABEL_F9327D
+	JRL T, SmfMed_Exit
 
-LABEL_F92FA8:
+SmfMed_InitFromDisk:
 	LD XDE, 0
 	LD E, (8944h)
 	LD XWA, 006c0018h
 	LD XBC, 01e0003bh
 	CALL ApPostEvent
 	CPW (8504h), 0000h
-	JR GE, LABEL_F93007
+	JR GE, SmfMed_InitState
 	LD XWA, 00600026h
 	LD XBC, 01c00001h
 	LD XDE, 5
@@ -2185,138 +2185,138 @@ LABEL_F92FA8:
 	CALL ApPostEvent
 	CALR LABEL_F8B260
 
-LABEL_F93007:
+SmfMed_InitState:
 	LD (84FEh), 000h
 	LD (8922h), 000h
 	LD (8920h), 000h
 	LD BC, 0080h
 	LD WA, (8504h)
 	CP WA, 0080h
-	JR UGT, LABEL_F93025
+	JR UGT, SmfMed_ClampFileCount
 	LD BC, WA
 
-LABEL_F93025:
+SmfMed_ClampFileCount:
 	LD (8438h), BC
 	LD IZ, 0
 	CP BC, 0
-	JR ULE, LABEL_F93044
+	JR ULE, SmfMed_FinishInit
 	LDA XWA, 88A0h
 
-LABEL_F93033:
+SmfMed_ClearSlotsLoop:
 	LD BC, IZ
 	EXTZ XBC
 	ADD XBC, XWA
 	LD (XBC), 0ffh
 	INC 1, IZ
 	CP IZ, (8438h)
-	JR C, LABEL_F93033
+	JR C, SmfMed_ClearSlotsLoop
 
-LABEL_F93044:
+SmfMed_FinishInit:
 	CALL LABEL_F20ACD
 	LD XWA, 0
 	LD (8434h), XWA
-	JRL T, LABEL_F9327D
+	JRL T, SmfMed_Exit
 
-LABEL_F93051:
+SmfMed_HandleStop:
 	LD A, (8D36h)
 	CP A, 06fh
-	JRL Z, LABEL_F9327D
+	JRL Z, SmfMed_Exit
 	CP A, 072h
-	JRL Z, LABEL_F9327D
+	JRL Z, SmfMed_Exit
 	CP A, 073h
-	JRL Z, LABEL_F9327D
+	JRL Z, SmfMed_Exit
 	CP A, 076h
-	JRL Z, LABEL_F9327D
+	JRL Z, SmfMed_Exit
 	CALL LABEL_F20B70
 	CALR LABEL_F8B244
 	LD (84FEh), 000h
-	JRL T, LABEL_F9327D
+	JRL T, SmfMed_Exit
 
-LABEL_F9307C:
+SmfMed_StoreWindowPtr:
 	LD (8430h), XWA
-	JRL T, LABEL_F9327D
+	JRL T, SmfMed_Exit
 
-LABEL_F93083:
+SmfMed_RefreshDisplay:
 	LD XWA, (8430h)
-	CALR LABEL_F92CE8
-	JRL T, LABEL_F9327D
+	CALR SmfMed_FormatSlotList
+	JRL T, SmfMed_Exit
 
-LABEL_F9308D:
+SmfMed_HandleNavToggle:
 	LDA XWA, 88A0h
 	CP XDE, 0000000ah
-	JR NZ, LABEL_F93116
+	JR NZ, SmfMed_HandleSelectToggle
 	CP (84FEh), 000h
-	JR NZ, LABEL_F93116
+	JR NZ, SmfMed_HandleSelectToggle
 	LD IZ, 0
 	LD DE, BC
 	CP BC, 0
-	JR ULE, LABEL_F930B9
+	JR ULE, SmfMed_CheckAllUnmarked
 
-LABEL_F930A8:
+SmfMed_FindUnmarkedLoop:
 	LD BC, IZ
 	EXTZ XBC
 	ADD XBC, XWA
 	CP (XBC), 0ffh
-	JR Z, LABEL_F930B9
+	JR Z, SmfMed_CheckAllUnmarked
 	INC 1, IZ
 	CP IZ, DE
-	JR C, LABEL_F930A8
+	JR C, SmfMed_FindUnmarkedLoop
 
-LABEL_F930B9:
+SmfMed_CheckAllUnmarked:
 	CP IZ, DE
-	JR NC, LABEL_F930E6
+	JR NC, SmfMed_RemoveOrderLoop
 	LD IZ, 0
 	CP DE, 0
-	JR ULE, LABEL_F9310C
+	JR ULE, SmfMed_RefreshAfterToggle
 	LDA XDE, 88A0h
 
-LABEL_F930C7:
+SmfMed_AssignOrderLoop:
 	LD BC, IZ
 	EXTZ XBC
 	ADD XBC, XDE
 	LD A, (XBC)
 	CP A, 0ffh
-	JR NZ, LABEL_F930DC
+	JR NZ, SmfMed_NextAssign
 	LD (XBC), (8920h)
 	INC 1, (8920h)
 
-LABEL_F930DC:
+SmfMed_NextAssign:
 	INC 1, IZ
 	CP IZ, (8438h)
-	JR C, LABEL_F930C7
-	JR T, LABEL_F9310C
+	JR C, SmfMed_AssignOrderLoop
+	JR T, SmfMed_RefreshAfterToggle
 
-LABEL_F930E6:
+SmfMed_RemoveOrderLoop:
 	LD IZ, 0
 	CP DE, 0
-	JR ULE, LABEL_F9310C
+	JR ULE, SmfMed_RefreshAfterToggle
 	LDA XDE, 88A0h
 
-LABEL_F930F0:
+SmfMed_UnmarkLoop:
 	LD BC, IZ
 	EXTZ XBC
 	ADD XBC, XDE
 	LD A, (XBC)
 	CP A, 0fdh
-	JR UGT, LABEL_F93104
+	JR UGT, SmfMed_NextUnmark
 	LD (XBC), 0ffh
 	DEC 1, (8920h)
 
-LABEL_F93104:
+SmfMed_NextUnmark:
 	INC 1, IZ
 	CP IZ, (8438h)
-	JR C, LABEL_F930F0
+	JR C, SmfMed_UnmarkLoop
 
-LABEL_F9310C:
+SmfMed_RefreshAfterToggle:
 	LD XWA, (8430h)
 	LD BC, (8438h)
-	JR T, LABEL_F93192
+	JR T, SmfMed_CallFormatSlots
 
-LABEL_F93116:
+SmfMed_HandleSelectToggle:
 	CP XDE, 0000000bh
-	JR NZ, LABEL_F93198
+	JR NZ, SmfMed_HandleRepeat
 	CP (84FEh), 000h
-	JR NZ, LABEL_F93198
+	JR NZ, SmfMed_HandleRepeat
 	LD XWA, (XSP + 002h)
 	LD XBC, 01e50003h
 	LD XDE, 0
@@ -2328,14 +2328,14 @@ LABEL_F93116:
 	ADD XWA, XHL
 	LD C, (XWA)
 	CP C, 0ffh
-	JR NZ, LABEL_F9314F
+	JR NZ, SmfMed_RemoveFromOrder
 	LD (XWA), (8920h)
 	INC 1, (8920h)
-	JR T, LABEL_F9318A
+	JR T, SmfMed_RefreshAfterSelect
 
-LABEL_F9314F:
+SmfMed_RemoveFromOrder:
 	CP C, 0fdh
-	JR UGT, LABEL_F9318A
+	JR UGT, SmfMed_RefreshAfterSelect
 	LD (XWA), 0ffh
 	LD A, (8920h)
 	DEC 1, A
@@ -2344,65 +2344,65 @@ LABEL_F9314F:
 	LD IZ, 0
 	EXTZ WA
 	CP WA, 0
-	JR ULE, LABEL_F9318A
+	JR ULE, SmfMed_RefreshAfterSelect
 	LD IX, WA
 
-LABEL_F9316D:
+SmfMed_ReorderLoop:
 	LD DE, IZ
 	EXTZ XDE
 	ADD XDE, XHL
 	LD A, (XDE)
 	CP A, 0fdh
-	JR UGT, LABEL_F93184
+	JR UGT, SmfMed_NextReorder
 	INC 1, IY
 	CP A, C
-	JR ULE, LABEL_F93184
+	JR ULE, SmfMed_NextReorder
 	DEC 1, A
 	LD (XDE), A
 
-LABEL_F93184:
+SmfMed_NextReorder:
 	INC 1, IZ
 	CP IY, IX
-	JR C, LABEL_F9316D
+	JR C, SmfMed_ReorderLoop
 
-LABEL_F9318A:
+SmfMed_RefreshAfterSelect:
 	LD XWA, (8430h)
 	LD BC, (8438h)
 
-LABEL_F93192:
-	CALR LABEL_F92CE8
-	JRL T, LABEL_F9327D
+SmfMed_CallFormatSlots:
+	CALR SmfMed_FormatSlotList
+	JRL T, SmfMed_Exit
 
-LABEL_F93198:
+SmfMed_HandleRepeat:
 	CP XDE, 0000000ch
-	JR NZ, LABEL_F931B8
+	JR NZ, SmfMed_HandlePlay
 	CP XHL, 01c00017h
-	JR NZ, LABEL_F931B0
+	JR NZ, SmfMed_SetRepeatOff
 	LD (8924h), 001h
-	JRL T, LABEL_F9327D
+	JRL T, SmfMed_Exit
 
-LABEL_F931B0:
+SmfMed_SetRepeatOff:
 	LD (8924h), 000h
-	JRL T, LABEL_F9327D
+	JRL T, SmfMed_Exit
 
-LABEL_F931B8:
+SmfMed_HandlePlay:
 	CP XDE, 0000000dh
-	JRL NZ, LABEL_F9327D
+	JRL NZ, SmfMed_Exit
 	CP (84FEh), 000h
-	JRL NZ, LABEL_F9327D
+	JRL NZ, SmfMed_Exit
 	LD (8922h), 000h
 	LD (843Ch), 000h
 	LD IZ, 0
 	LD BC, (8438h)
 	CP BC, 0
-	JR ULE, LABEL_F93225
+	JR ULE, SmfMed_CheckAutoPlay
 
-LABEL_F931DD:
+SmfMed_PlayFindLoop:
 	LD DE, IZ
 	EXTZ XDE
 	ADD XDE, XWA
 	CP (XDE), 000h
-	JR NZ, LABEL_F9321F
+	JR NZ, SmfMed_PlayNextLoop
 	LD (84FEh), 001h
 	LD DE, IZ
 	EXTZ XDE
@@ -2418,16 +2418,16 @@ LABEL_F931DD:
 	CALL ApPostEvent
 	LD WA, 0073h
 	CALL LABEL_F99490
-	JR T, LABEL_F93225
+	JR T, SmfMed_CheckAutoPlay
 
-LABEL_F9321F:
+SmfMed_PlayNextLoop:
 	INC 1, IZ
 	CP IZ, BC
-	JR C, LABEL_F931DD
+	JR C, SmfMed_PlayFindLoop
 
-LABEL_F93225:
+SmfMed_CheckAutoPlay:
 	CP (84FEh), 000h
-	JR NZ, LABEL_F9327D
+	JR NZ, SmfMed_Exit
 	LD XWA, (XSP + 002h)
 	LD XBC, 01e50003h
 	LD XDE, 0
@@ -2440,15 +2440,15 @@ LABEL_F93225:
 	LD XDE, 0
 	CALL ApPostEvent
 	LD WA, 006fh
-	JR T, LABEL_F93279
+	JR T, SmfMed_CallPauseMode
 
-LABEL_F93256:
+SmfMed_StoreDelayFlag:
 	LD (8434h), XWA
-	JR T, LABEL_F9327D
+	JR T, SmfMed_Exit
 
-LABEL_F9325C:
+SmfMed_CheckContinue:
 	CP (84FEh), 000h
-	JR Z, LABEL_F9327D
+	JR Z, SmfMed_Exit
 	LD XWA, 0ffffffffh
 	LD XBC, 01e0009ah
 	LD XDE, 0
@@ -2456,23 +2456,23 @@ LABEL_F9325C:
 	LD A, (843Ah)
 	EXTZ WA
 
-LABEL_F93279:
+SmfMed_CallPauseMode:
 	CALL LABEL_F99490
 
-LABEL_F9327D:
+SmfMed_Exit:
 	LD XHL, 0
 	POP IZ
 	INC 4, XSP
 	RET
 
-LABEL_F93283:
+PdMed_FormatFileList:
 	DEC 6, XSP
 	PUSH IZ
 	LD (XSP + 002h), BC
 	LD (XSP + 004h), XWA
 	LD IZ, 0
 
-LABEL_F9328E:
+PdFmt_FormatLoop:
 	LD DE, IZ
 	SLL 5, DE
 	LDA XBC, 850Ch
@@ -2508,7 +2508,7 @@ LABEL_F9328E:
 	CALL ApPostEvent
 	INC 1, IZ
 	CP IZ, 000ah
-	JR LT, LABEL_F9328E
+	JR LT, PdFmt_FormatLoop
 	POP IZ
 	INC 6, XSP
 	RET
@@ -2518,30 +2518,30 @@ FmmPdFileNameFunc:
 	PUSH IZ
 	LD (XSP + 002h), XWA
 	CP XBC, 01e50003h
-	JRL Z, LABEL_F934E7
+	JRL Z, PdName_GetIndexReturn
 	LD WA, (8442h)
 	LD IZ, WA
 	CP XBC, 01e50002h
-	JRL Z, LABEL_F934B6
+	JRL Z, PdName_SetIndexPlaying
 	LD HL, WA
 	EXTS XHL
 	DIVS_HL 000ah
 	CP XBC, 01c00018h
-	JR Z, LABEL_F9337D
+	JR Z, PdName_HandleNavigation
 	CP XBC, 01c00017h
-	JR Z, LABEL_F9337D
+	JR Z, PdName_HandleNavigation
 	CP XBC, 01c0000bh
-	JR Z, LABEL_F9336B
+	JR Z, PdName_RefreshList
 	CP XBC, 01e50004h
-	JR NZ, LABEL_F93378
+	JR NZ, PdName_ReturnZero
 	LD (843Eh), XDE
 	CALL LABEL_F8A4C8
 	LD (8442h), HL
 	CP HL, 0
-	JR GE, LABEL_F93350
+	JR GE, PdName_UpdateIndex
 	LDW (8442h), 0000h
 
-LABEL_F93350:
+PdName_UpdateIndex:
 	LD WA, (8442h)
 	EXTS XWA
 	DIVS_WA 000ah
@@ -2549,87 +2549,87 @@ LABEL_F93350:
 	EXTS XDE
 	LD XWA, (843Eh)
 	LD XBC, 01e50002h
-	JRL T, LABEL_F934E0
+	JRL T, PdName_PostEvent
 
-LABEL_F9336B:
+PdName_RefreshList:
 	MULS_HL 000ah
 	LD XWA, (843Eh)
 	LD BC, HL
-	CALR LABEL_F93283
+	CALR PdMed_FormatFileList
 
-LABEL_F93378:
+PdName_ReturnZero:
 	LD XHL, 0
-	JRL T, LABEL_F934ED
+	JRL T, PdName_Exit
 
-LABEL_F9337D:
+PdName_HandleNavigation:
 	OR XDE, XDE
-	JR NZ, LABEL_F933AE
+	JR NZ, PdName_CheckPageUp
 	CP (84FEh), 000h
-	JR NZ, LABEL_F933AE
+	JR NZ, PdName_CheckPageUp
 	CP XBC, 01c00018h
-	JR NZ, LABEL_F9339E
+	JR NZ, PdName_CheckPrevKey
 	LD BC, WA
 	INC 1, BC
 	CP BC, (8506h)
-	JR GE, LABEL_F93411
+	JR GE, PdName_GetCurrentIndex
 	INC 1, WA
-	JR T, LABEL_F933EA
+	JR T, PdName_SaveIndex
 
-LABEL_F9339E:
+PdName_CheckPrevKey:
 	CP XBC, 01c00017h
-	JR NZ, LABEL_F93411
+	JR NZ, PdName_GetCurrentIndex
 	CP WA, 0
-	JR LE, LABEL_F93411
+	JR LE, PdName_GetCurrentIndex
 	DEC 1, WA
-	JR T, LABEL_F933EA
+	JR T, PdName_SaveIndex
 
-LABEL_F933AE:
+PdName_CheckPageUp:
 	CP XDE, 00000001h
-	JR NZ, LABEL_F933C9
+	JR NZ, PdName_CheckPageDown
 	CP (84FEh), 000h
-	JR NZ, LABEL_F933C9
+	JR NZ, PdName_CheckPageDown
 	CP WA, 000ah
-	JR LT, LABEL_F93411
+	JR LT, PdName_GetCurrentIndex
 	SUB WA, 000ah
-	JR T, LABEL_F933EA
+	JR T, PdName_SaveIndex
 
-LABEL_F933C9:
+PdName_CheckPageDown:
 	CP XDE, 00000002h
-	JR NZ, LABEL_F93411
+	JR NZ, PdName_GetCurrentIndex
 	CP (84FEh), 000h
-	JR NZ, LABEL_F93411
+	JR NZ, PdName_GetCurrentIndex
 	LD BC, WA
 	ADD BC, 000ah
 	LD DE, (8506h)
 	CP BC, DE
-	JR GE, LABEL_F933F0
+	JR GE, PdName_CheckEndBound
 	ADD WA, 000ah
 
-LABEL_F933EA:
+PdName_SaveIndex:
 	LD (8442h), WA
-	JR T, LABEL_F93415
+	JR T, PdName_UpdateDisplay
 
-LABEL_F933F0:
+PdName_CheckEndBound:
 	LD BC, DE
 	DEC 1, BC
 	LD WA, BC
 	EXTS XWA
 	DIVS_WA 000ah
 	CP HL, WA
-	JR GE, LABEL_F93411
+	JR GE, PdName_GetCurrentIndex
 	EXTS XDE
 	DIVS_DE 000ah
 	LD WA, QDE
 	CP WA, 0
-	JR Z, LABEL_F93411
+	JR Z, PdName_GetCurrentIndex
 	LD (8442h), BC
 
-LABEL_F93411:
+PdName_GetCurrentIndex:
 	LD WA, (8442h)
 
-LABEL_F93415:
+PdName_UpdateDisplay:
 	CP IZ, WA
-	JRL Z, LABEL_F93378
+	JRL Z, PdName_ReturnZero
 	CALL LABEL_F8A5A5
 	LD WA, (8442h)
 	EXTS XWA
@@ -2647,7 +2647,7 @@ LABEL_F93415:
 	DIVS_DE 000ah
 	LD XWA, (843Eh)
 	CP DE, BC
-	JR NZ, LABEL_F9349F
+	JR NZ, PdName_RefreshPage
 	LD BC, IZ
 	EXTS XBC
 	DIVS_BC 000ah
@@ -2671,20 +2671,20 @@ LABEL_F93415:
 	LD XWA, (843Eh)
 	LD XBC, 01c0000fh
 	CALL ApPostEvent
-	JRL T, LABEL_F93378
+	JRL T, PdName_ReturnZero
 
-LABEL_F9349F:
+PdName_RefreshPage:
 	MULS_BC 000ah
-	CALR LABEL_F93283
+	CALR PdMed_FormatFileList
 	LD XWA, (XSP + 002h)
 	LD XBC, 01c0000bh
 	LD XDE, 0
 	CALR FmmPdMedleyFunc
-	JRL T, LABEL_F93378
+	JRL T, PdName_ReturnZero
 
-LABEL_F934B6:
+PdName_SetIndexPlaying:
 	CP (84FEh), 000h
-	JRL Z, LABEL_F93378
+	JRL Z, PdName_ReturnZero
 	LD (8442h), DE
 	LD WA, DE
 	CALL LABEL_F8A5A5
@@ -2696,20 +2696,20 @@ LABEL_F934B6:
 	LD XWA, (843Eh)
 	LD XBC, 01e50002h
 
-LABEL_F934E0:
+PdName_PostEvent:
 	CALL ApPostEvent
-	JRL T, LABEL_F93378
+	JRL T, PdName_ReturnZero
 
-LABEL_F934E7:
+PdName_GetIndexReturn:
 	LD HL, (8442h)
 	EXTS XHL
 
-LABEL_F934ED:
+PdName_Exit:
 	POP IZ
 	INC 4, XSP
 	RET
 
-LABEL_F934F1:
+PdMed_FormatSlotList:
 	DEC 6, XSP
 	PUSH XIZ
 	LD IZ, BC
@@ -2729,17 +2729,17 @@ LABEL_F934F1:
 	LD WA, QIZ
 	ADD WA, 000ah
 	CP WA, IZ
-	JR C, LABEL_F93534
+	JR C, PdFmtSlot_CalcVisible
 	LD (XSP + 004h), IZ
 	LD WA, QIZ
 	SUB (XSP + 004h), WA
 
-LABEL_F93534:
+PdFmtSlot_CalcVisible:
 	LD IZ, 0
 	CPW (XSP + 004h), 0000h
-	JR ULE, LABEL_F93580
+	JR ULE, PdFmtSlot_FillEmpty
 
-LABEL_F9353D:
+PdFmtSlot_FormatLoop:
 	LD WA, IZ
 	SLL 3, WA
 	LDA XBC, 8444h
@@ -2753,7 +2753,7 @@ LABEL_F9353D:
 	LD C, (XBC)
 	EXTZ BC
 	LD DE, IZ
-	CALR LABEL_F91CC9
+	CALR FormatMedleyNumber
 	LD DE, IZ
 	SLL 3, DE
 	LDA XWA, 8444h
@@ -2764,13 +2764,13 @@ LABEL_F9353D:
 	CALL ApPostEvent
 	INC 1, IZ
 	CP IZ, (XSP + 004h)
-	JR C, LABEL_F9353D
+	JR C, PdFmtSlot_FormatLoop
 
-LABEL_F93580:
+PdFmtSlot_FillEmpty:
 	CP IZ, 000ah
-	JR NC, LABEL_F935BC
+	JR NC, PdFmtSlot_Exit
 
-LABEL_F93586:
+PdFmtSlot_EmptyLoop:
 	LD WA, IZ
 	SLL 3, WA
 	LDA XBC, 8444h
@@ -2778,7 +2778,7 @@ LABEL_F93586:
 	ADD XWA, XBC
 	LD BC, 00ffh
 	LD DE, IZ
-	CALR LABEL_F91CC9
+	CALR FormatMedleyNumber
 	LD DE, IZ
 	SLL 3, DE
 	LDA XWA, 8444h
@@ -2789,9 +2789,9 @@ LABEL_F93586:
 	CALL ApPostEvent
 	INC 1, IZ
 	CP IZ, 000ah
-	JR C, LABEL_F93586
+	JR C, PdFmtSlot_EmptyLoop
 
-LABEL_F935BC:
+PdFmtSlot_Exit:
 	POP XIZ
 	INC 6, XSP
 	RET
@@ -2802,60 +2802,60 @@ FmmPdMedleyFunc:
 	LD XDE, XBC
 	LD XIZ, XWA
 	CP XDE, 01e5000ah
-	JRL Z, LABEL_F939AC
+	JRL Z, PdMed_CheckContinue
 	LD XWA, XHL
 	CP XDE, 01e50008h
-	JRL Z, LABEL_F939A6
+	JRL Z, PdMed_StoreDelayFlag
 	LD BC, (849Ch)
 	CP XDE, 01c00018h
-	JRL Z, LABEL_F937FE
+	JRL Z, PdMed_HandleNavToggle
 	CP XDE, 01c00017h
-	JRL Z, LABEL_F937FE
+	JRL Z, PdMed_HandleNavToggle
 	CP XDE, 01c0000bh
-	JRL Z, LABEL_F937F4
+	JRL Z, PdMed_RefreshDisplay
 	CP XDE, 01e50004h
-	JRL Z, LABEL_F937ED
+	JRL Z, PdMed_StoreWindowPtr
 	CP XDE, 01c00013h
-	JRL NZ, LABEL_F939CA
+	JRL NZ, PdMed_Exit
 	CP XHL, 00000003h
-	JRL Z, LABEL_F937CD
+	JRL Z, PdMed_HandleStop
 	CP XHL, 00000002h
-	JRL NZ, LABEL_F939CA
+	JRL NZ, PdMed_Exit
 	LD WA, 0
 	CALL LABEL_F8B204
 	LD A, (8D37h)
 	CP A, 071h
-	JR NZ, LABEL_F93646
+	JR NZ, PdMed_CheckPlayMode
 	LD (84FEh), 000h
 	CALL LABEL_F2076D
 	CP L, 2
-	JRL C, LABEL_F939CA
+	JRL C, PdMed_Exit
 	LD (7F42h), 001h
 	LD WA, 00eeh
-	JRL T, LABEL_F93738
+	JRL T, PdMed_ShowError
 
-LABEL_F93646:
+PdMed_CheckPlayMode:
 	CP A, 075h
-	JRL NZ, LABEL_F9373F
+	JRL NZ, PdMed_InitFromDisk
 	CALL LABEL_F2076D
 	CP L, 1
-	JRL NZ, LABEL_F93722
+	JRL NZ, PdMed_HandleError
 	LD (84FEh), 001h
 	LD C, (8922h)
 	LDA XWA, 88A0h
 	CP C, (8920h)
-	JR NC, LABEL_F936B8
+	JR NC, PdMed_CheckRepeat
 	LD HL, 0
 	LD DE, (849Ch)
 	CP DE, 0
-	JRL ULE, LABEL_F939CA
+	JRL ULE, PdMed_Exit
 
-LABEL_F93673:
+PdMed_FindSongLoop:
 	LD IX, HL
 	EXTZ XIX
 	ADD XIX, XWA
 	CP (XIX), C
-	JR NZ, LABEL_F936AF
+	JR NZ, PdMed_NextSong
 	EXTZ XHL
 	LD XWA, XIZ
 	LD XBC, 01e50002h
@@ -2863,36 +2863,36 @@ LABEL_F93673:
 	CALR FmmPdFileNameFunc
 	LD XWA, (8494h)
 	LD BC, (849Ch)
-	CALR LABEL_F934F1
+	CALR PdMed_FormatSlotList
 	INC 1, (8922h)
 	LD XWA, (8498h)
 	OR XWA, XWA
-	JRL Z, LABEL_F939CA
+	JRL Z, PdMed_Exit
 	LD XBC, 01e50009h
 	LD XDE, 0000001eh
-	JR T, LABEL_F9370A
+	JR T, PdMed_PostDelayEvent
 
-LABEL_F936AF:
+PdMed_NextSong:
 	INC 1, HL
 	CP HL, DE
-	JR C, LABEL_F93673
-	JRL T, LABEL_F939CA
+	JR C, PdMed_FindSongLoop
+	JRL T, PdMed_Exit
 
-LABEL_F936B8:
+PdMed_CheckRepeat:
 	CP (8924h), 000h
-	JR Z, LABEL_F9371A
+	JR Z, PdMed_ClearPlaying
 	LD (8922h), 000h
 	LD HL, 0
 	LD BC, (849Ch)
 	CP BC, 0
-	JRL ULE, LABEL_F939CA
+	JRL ULE, PdMed_Exit
 
-LABEL_F936CF:
+PdMed_RepeatFindLoop:
 	LD DE, HL
 	EXTZ XDE
 	ADD XDE, XWA
 	CP (XDE), 000h
-	JR NZ, LABEL_F93711
+	JR NZ, PdMed_RepeatNext
 	EXTZ XHL
 	LD XWA, XIZ
 	LD XBC, 01e50002h
@@ -2900,43 +2900,43 @@ LABEL_F936CF:
 	CALR FmmPdFileNameFunc
 	LD XWA, (8494h)
 	LD BC, (849Ch)
-	CALR LABEL_F934F1
+	CALR PdMed_FormatSlotList
 	INC 1, (8922h)
 	LD XWA, (8498h)
 	OR XWA, XWA
-	JRL Z, LABEL_F939CA
+	JRL Z, PdMed_Exit
 	LD XBC, 01e50009h
 	LD XDE, 0000001eh
 
-LABEL_F9370A:
+PdMed_PostDelayEvent:
 	CALL ApPostEvent
-	JRL T, LABEL_F939CA
+	JRL T, PdMed_Exit
 
-LABEL_F93711:
+PdMed_RepeatNext:
 	INC 1, HL
 	CP HL, BC
-	JR C, LABEL_F936CF
-	JRL T, LABEL_F939CA
+	JR C, PdMed_RepeatFindLoop
+	JRL T, PdMed_Exit
 
-LABEL_F9371A:
+PdMed_ClearPlaying:
 	LD (84FEh), 000h
-	JRL T, LABEL_F939CA
+	JRL T, PdMed_Exit
 
-LABEL_F93722:
+PdMed_HandleError:
 	CALL LABEL_F2076D
 	LD (84FEh), 000h
 	CP L, 0
-	JRL Z, LABEL_F939CA
+	JRL Z, PdMed_Exit
 	LD (7F42h), 001h
 	LD WA, 00eeh
 
-LABEL_F93738:
+PdMed_ShowError:
 	CALL LABEL_F994BD
-	JRL T, LABEL_F939CA
+	JRL T, PdMed_Exit
 
-LABEL_F9373F:
+PdMed_InitFromDisk:
 	CPW (8506h), 0000h
-	JR GE, LABEL_F93783
+	JR GE, PdMed_InitState
 	LD XWA, 00600026h
 	LD XBC, 01c00001h
 	LD XDE, 5
@@ -2953,134 +2953,134 @@ LABEL_F9373F:
 	CALL ApPostEvent
 	CALL LABEL_F8B260
 
-LABEL_F93783:
+PdMed_InitState:
 	LD (84FEh), 000h
 	LD (8922h), 000h
 	LD (8920h), 000h
 	LD BC, 0080h
 	LD WA, (8506h)
 	CP WA, 0080h
-	JR UGT, LABEL_F937A1
+	JR UGT, PdMed_ClampCount
 	LD BC, WA
 
-LABEL_F937A1:
+PdMed_ClampCount:
 	LD (849Ch), BC
 	LD HL, 0
 	CP BC, 0
-	JR ULE, LABEL_F937C0
+	JR ULE, PdMed_FinishInit
 	LDA XWA, 88A0h
 
-LABEL_F937AF:
+PdMed_ClearSlotsLoop:
 	LD BC, HL
 	EXTZ XBC
 	ADD XBC, XWA
 	LD (XBC), 0ffh
 	INC 1, HL
 	CP HL, (849Ch)
-	JR C, LABEL_F937AF
+	JR C, PdMed_ClearSlotsLoop
 
-LABEL_F937C0:
+PdMed_FinishInit:
 	CALL LABEL_F20ACD
 	LD XWA, 0
 	LD (8498h), XWA
-	JRL T, LABEL_F939CA
+	JRL T, PdMed_Exit
 
-LABEL_F937CD:
+PdMed_HandleStop:
 	LD A, (8D36h)
 	CP A, 071h
-	JRL Z, LABEL_F939CA
+	JRL Z, PdMed_Exit
 	CP A, 075h
-	JRL Z, LABEL_F939CA
+	JRL Z, PdMed_Exit
 	CALL LABEL_F20B70
 	CALL LABEL_F8B244
 	LD (84FEh), 000h
-	JRL T, LABEL_F939CA
+	JRL T, PdMed_Exit
 
-LABEL_F937ED:
+PdMed_StoreWindowPtr:
 	LD (8494h), XWA
-	JRL T, LABEL_F939CA
+	JRL T, PdMed_Exit
 
-LABEL_F937F4:
+PdMed_RefreshDisplay:
 	LD XWA, (8494h)
-	CALR LABEL_F934F1
-	JRL T, LABEL_F939CA
+	CALR PdMed_FormatSlotList
+	JRL T, PdMed_Exit
 
-LABEL_F937FE:
+PdMed_HandleNavToggle:
 	CP XHL, 0000000ah
-	JRL NZ, LABEL_F93888
+	JRL NZ, PdMed_HandleSelectToggle
 	CP (84FEh), 000h
-	JR NZ, LABEL_F93888
+	JR NZ, PdMed_HandleSelectToggle
 	LD HL, 0
 	LD WA, BC
 	CP BC, 0
-	JR ULE, LABEL_F9382B
+	JR ULE, PdMed_CheckAllUnmarked
 	LDA XBC, 88A0h
 
-LABEL_F9381A:
+PdMed_FindUnmarkedLoop:
 	LD DE, HL
 	EXTZ XDE
 	ADD XDE, XBC
 	CP (XDE), 0ffh
-	JR Z, LABEL_F9382B
+	JR Z, PdMed_CheckAllUnmarked
 	INC 1, HL
 	CP HL, WA
-	JR C, LABEL_F9381A
+	JR C, PdMed_FindUnmarkedLoop
 
-LABEL_F9382B:
+PdMed_CheckAllUnmarked:
 	CP HL, WA
-	JR NC, LABEL_F93858
+	JR NC, PdMed_RemoveOrderLoop
 	LD HL, 0
 	CP WA, 0
-	JR ULE, LABEL_F9387E
+	JR ULE, PdMed_RefreshAfterToggle
 	LDA XDE, 88A0h
 
-LABEL_F93839:
+PdMed_AssignOrderLoop:
 	LD BC, HL
 	EXTZ XBC
 	ADD XBC, XDE
 	LD A, (XBC)
 	CP A, 0ffh
-	JR NZ, LABEL_F9384E
+	JR NZ, PdMed_NextAssign
 	LD (XBC), (8920h)
 	INC 1, (8920h)
 
-LABEL_F9384E:
+PdMed_NextAssign:
 	INC 1, HL
 	CP HL, (849Ch)
-	JR C, LABEL_F93839
-	JR T, LABEL_F9387E
+	JR C, PdMed_AssignOrderLoop
+	JR T, PdMed_RefreshAfterToggle
 
-LABEL_F93858:
+PdMed_RemoveOrderLoop:
 	LD HL, 0
 	CP WA, 0
-	JR ULE, LABEL_F9387E
+	JR ULE, PdMed_RefreshAfterToggle
 	LDA XDE, 88A0h
 
-LABEL_F93862:
+PdMed_UnmarkLoop:
 	LD BC, HL
 	EXTZ XBC
 	ADD XBC, XDE
 	LD A, (XBC)
 	CP A, 0fdh
-	JR UGT, LABEL_F93876
+	JR UGT, PdMed_NextUnmark
 	LD (XBC), 0ffh
 	DEC 1, (8920h)
 
-LABEL_F93876:
+PdMed_NextUnmark:
 	INC 1, HL
 	CP HL, (849Ch)
-	JR C, LABEL_F93862
+	JR C, PdMed_UnmarkLoop
 
-LABEL_F9387E:
+PdMed_RefreshAfterToggle:
 	LD XWA, (8494h)
 	LD BC, (849Ch)
-	JR T, LABEL_F938FF
+	JR T, PdMed_CallFormatSlots
 
-LABEL_F93888:
+PdMed_HandleSelectToggle:
 	CP XHL, 0000000bh
-	JR NZ, LABEL_F93905
+	JR NZ, PdMed_HandleRepeat
 	CP (84FEh), 000h
-	JR NZ, LABEL_F93905
+	JR NZ, PdMed_HandleRepeat
 	LD XWA, XIZ
 	LD XBC, 01e50003h
 	LD XDE, 0
@@ -3090,14 +3090,14 @@ LABEL_F93888:
 	ADD XHL, XIX
 	LD C, (XHL)
 	CP C, 0ffh
-	JR NZ, LABEL_F938BC
+	JR NZ, PdMed_RemoveFromOrder
 	LD (XHL), (8920h)
 	INC 1, (8920h)
-	JR T, LABEL_F938F7
+	JR T, PdMed_RefreshAfterSelect
 
-LABEL_F938BC:
+PdMed_RemoveFromOrder:
 	CP C, 0fdh
-	JR UGT, LABEL_F938F7
+	JR UGT, PdMed_RefreshAfterSelect
 	LD (XHL), 0ffh
 	LD A, (8920h)
 	DEC 1, A
@@ -3106,65 +3106,65 @@ LABEL_F938BC:
 	LD HL, 0
 	EXTZ WA
 	CP WA, 0
-	JR ULE, LABEL_F938F7
+	JR ULE, PdMed_RefreshAfterSelect
 	LD IY, WA
 
-LABEL_F938DA:
+PdMed_ReorderLoop:
 	LD DE, HL
 	EXTZ XDE
 	ADD XDE, XIX
 	LD A, (XDE)
 	CP A, 0fdh
-	JR UGT, LABEL_F938F1
+	JR UGT, PdMed_NextReorder
 	INC 1, IZ
 	CP A, C
-	JR ULE, LABEL_F938F1
+	JR ULE, PdMed_NextReorder
 	DEC 1, A
 	LD (XDE), A
 
-LABEL_F938F1:
+PdMed_NextReorder:
 	INC 1, HL
 	CP IZ, IY
-	JR C, LABEL_F938DA
+	JR C, PdMed_ReorderLoop
 
-LABEL_F938F7:
+PdMed_RefreshAfterSelect:
 	LD XWA, (8494h)
 	LD BC, (849Ch)
 
-LABEL_F938FF:
-	CALR LABEL_F934F1
-	JRL T, LABEL_F939CA
+PdMed_CallFormatSlots:
+	CALR PdMed_FormatSlotList
+	JRL T, PdMed_Exit
 
-LABEL_F93905:
+PdMed_HandleRepeat:
 	CP XHL, 0000000ch
-	JR NZ, LABEL_F93925
+	JR NZ, PdMed_HandlePlay
 	CP XDE, 01c00017h
-	JR NZ, LABEL_F9391D
+	JR NZ, PdMed_SetRepeatOff
 	LD (8924h), 001h
-	JRL T, LABEL_F939CA
+	JRL T, PdMed_Exit
 
-LABEL_F9391D:
+PdMed_SetRepeatOff:
 	LD (8924h), 000h
-	JRL T, LABEL_F939CA
+	JRL T, PdMed_Exit
 
-LABEL_F93925:
+PdMed_HandlePlay:
 	CP XHL, 0000000dh
-	JRL NZ, LABEL_F939CA
+	JRL NZ, PdMed_Exit
 	CP (84FEh), 000h
-	JRL NZ, LABEL_F939CA
+	JRL NZ, PdMed_Exit
 	LD (8922h), 000h
 	LD HL, 0
 	LD WA, (849Ch)
 	CP WA, 0
-	JR ULE, LABEL_F9398A
+	JR ULE, PdMed_CheckAutoPlay
 	LDA XBC, 88A0h
 
-LABEL_F93949:
+PdMed_PlayFindLoop:
 	LD DE, HL
 	EXTZ XDE
 	ADD XDE, XBC
 	CP (XDE), 000h
-	JR NZ, LABEL_F93984
+	JR NZ, PdMed_PlayNextLoop
 	LD (84FEh), 001h
 	EXTZ XHL
 	LD XWA, XIZ
@@ -3178,40 +3178,40 @@ LABEL_F93949:
 	CALL ApPostEvent
 	LD WA, 0075h
 	CALL LABEL_F99490
-	JR T, LABEL_F9398A
+	JR T, PdMed_CheckAutoPlay
 
-LABEL_F93984:
+PdMed_PlayNextLoop:
 	INC 1, HL
 	CP HL, WA
-	JR C, LABEL_F93949
+	JR C, PdMed_PlayFindLoop
 
-LABEL_F9398A:
+PdMed_CheckAutoPlay:
 	CP (84FEh), 000h
-	JR NZ, LABEL_F939CA
+	JR NZ, PdMed_Exit
 	LD XWA, 0ffffffffh
 	LD XBC, 01e0009ah
 	LD XDE, 0
 	CALL ApPostEvent
 	LD WA, 0071h
-	JR T, LABEL_F939C6
+	JR T, PdMed_CallPauseMode
 
-LABEL_F939A6:
+PdMed_StoreDelayFlag:
 	LD (8498h), XWA
-	JR T, LABEL_F939CA
+	JR T, PdMed_Exit
 
-LABEL_F939AC:
+PdMed_CheckContinue:
 	CP (84FEh), 000h
-	JR Z, LABEL_F939CA
+	JR Z, PdMed_Exit
 	LD XWA, 0ffffffffh
 	LD XBC, 01e0009ah
 	LD XDE, 0
 	CALL ApPostEvent
 	LD WA, 0075h
 
-LABEL_F939C6:
+PdMed_CallPauseMode:
 	CALL LABEL_F99490
 
-LABEL_F939CA:
+PdMed_Exit:
 	LD XHL, 0
 	POP XIZ
 	RET
@@ -3220,63 +3220,63 @@ DocDiskNameFunc:
 	PUSH XIZ
 	LD XIZ, XDE
 	CP XBC, 01c0000bh
-	JR NZ, LABEL_F93A2A
+	JR NZ, DocDisk_Exit
 	CALL LABEL_F8958D
 	LD IX, 0
-	JR T, LABEL_F939F3
+	JR T, DocDisk_CopyLoop
 
-LABEL_F939E1:
+DocDisk_CopyCharLoop:
 	CP (XHL), 020h
-	JR Z, LABEL_F939F1
+	JR Z, DocDisk_SkipSpace
 	LD DE, IX
 	INC 1, IX
 	LD A, (XHL)
 	LD (XBC + DE), A
 
-LABEL_F939F1:
+DocDisk_SkipSpace:
 	INC 1, XHL
 
-LABEL_F939F3:
+DocDisk_CopyLoop:
 	LDA XBC, 878Ch
 	CP (XHL), 000h
-	JR Z, LABEL_F93A02
+	JR Z, DocDisk_TerminateStr
 	CP IX, 001eh
-	JR LT, LABEL_F939E1
+	JR LT, DocDisk_CopyCharLoop
 
-LABEL_F93A02:
+DocDisk_TerminateStr:
 	LD XDE, XBC
 	LD (XBC + IX), 000h
-	JR T, LABEL_F93A0F
+	JR T, DocDisk_TrimLoop
 
-LABEL_F93A0C:
+DocDisk_ClearTrailing:
 	LD (XWA), 000h
 
-LABEL_F93A0F:
+DocDisk_TrimLoop:
 	DEC 1, IX
 	LDA XWA, XDE + IX
 	CP (XWA), 020h
-	JR NZ, LABEL_F93A1F
+	JR NZ, DocDisk_PostEvent
 	CP IX, 0
-	JR GT, LABEL_F93A0C
+	JR GT, DocDisk_ClearTrailing
 
-LABEL_F93A1F:
+DocDisk_PostEvent:
 	LD XWA, XIZ
 	LD XBC, 01c0000fh
 	CALL ApPostEvent
 
-LABEL_F93A2A:
+DocDisk_Exit:
 	LD XHL, 0
 	POP XIZ
 	RET
 
-LABEL_F93A2E:
+DocMed_FormatFileList:
 	DEC 6, XSP
 	PUSH IZ
 	LD (XSP + 002h), BC
 	LD (XSP + 004h), XWA
 	LD IZ, 0
 
-LABEL_F93A39:
+DocFmt_FormatLoop:
 	LD DE, IZ
 	SLL 5, DE
 	LDA XBC, 850Ch
@@ -3312,7 +3312,7 @@ LABEL_F93A39:
 	CALL ApPostEvent
 	INC 1, IZ
 	CP IZ, 000ah
-	JR LT, LABEL_F93A39
+	JR LT, DocFmt_FormatLoop
 	POP IZ
 	INC 6, XSP
 	RET
@@ -3322,30 +3322,30 @@ FmmDocFileNameFunc:
 	PUSH IZ
 	LD (XSP + 002h), XWA
 	CP XBC, 01e50003h
-	JRL Z, LABEL_F93C92
+	JRL Z, DocName_GetIndexReturn
 	LD WA, (84A2h)
 	LD IZ, WA
 	CP XBC, 01e50002h
-	JRL Z, LABEL_F93C61
+	JRL Z, DocName_SetIndexPlaying
 	LD HL, WA
 	EXTS XHL
 	DIVS_HL 000ah
 	CP XBC, 01c00018h
-	JR Z, LABEL_F93B28
+	JR Z, DocName_HandleNavigation
 	CP XBC, 01c00017h
-	JR Z, LABEL_F93B28
+	JR Z, DocName_HandleNavigation
 	CP XBC, 01c0000bh
-	JR Z, LABEL_F93B16
+	JR Z, DocName_RefreshList
 	CP XBC, 01e50004h
-	JR NZ, LABEL_F93B23
+	JR NZ, DocName_ReturnZero
 	LD (849Eh), XDE
 	CALL LABEL_F8A7CE
 	LD (84A2h), HL
 	CP HL, 0
-	JR GE, LABEL_F93AFB
+	JR GE, DocName_UpdateIndex
 	LDW (84A2h), 0000h
 
-LABEL_F93AFB:
+DocName_UpdateIndex:
 	LD WA, (84A2h)
 	EXTS XWA
 	DIVS_WA 000ah
@@ -3353,87 +3353,87 @@ LABEL_F93AFB:
 	EXTS XDE
 	LD XWA, (849Eh)
 	LD XBC, 01e50002h
-	JRL T, LABEL_F93C8B
+	JRL T, DocName_PostEvent
 
-LABEL_F93B16:
+DocName_RefreshList:
 	MULS_HL 000ah
 	LD XWA, (849Eh)
 	LD BC, HL
-	CALR LABEL_F93A2E
+	CALR DocMed_FormatFileList
 
-LABEL_F93B23:
+DocName_ReturnZero:
 	LD XHL, 0
-	JRL T, LABEL_F93C98
+	JRL T, DocName_Exit
 
-LABEL_F93B28:
+DocName_HandleNavigation:
 	OR XDE, XDE
-	JR NZ, LABEL_F93B59
+	JR NZ, DocName_CheckPageUp
 	CP (84FEh), 000h
-	JR NZ, LABEL_F93B59
+	JR NZ, DocName_CheckPageUp
 	CP XBC, 01c00018h
-	JR NZ, LABEL_F93B49
+	JR NZ, DocName_CheckPrevKey
 	LD BC, WA
 	INC 1, BC
 	CP BC, (8508h)
-	JR GE, LABEL_F93BBC
+	JR GE, DocName_GetCurrentIndex
 	INC 1, WA
-	JR T, LABEL_F93B95
+	JR T, DocName_SaveIndex
 
-LABEL_F93B49:
+DocName_CheckPrevKey:
 	CP XBC, 01c00017h
-	JR NZ, LABEL_F93BBC
+	JR NZ, DocName_GetCurrentIndex
 	CP WA, 0
-	JR LE, LABEL_F93BBC
+	JR LE, DocName_GetCurrentIndex
 	DEC 1, WA
-	JR T, LABEL_F93B95
+	JR T, DocName_SaveIndex
 
-LABEL_F93B59:
+DocName_CheckPageUp:
 	CP XDE, 00000001h
-	JR NZ, LABEL_F93B74
+	JR NZ, DocName_CheckPageDown
 	CP (84FEh), 000h
-	JR NZ, LABEL_F93B74
+	JR NZ, DocName_CheckPageDown
 	CP WA, 000ah
-	JR LT, LABEL_F93BBC
+	JR LT, DocName_GetCurrentIndex
 	SUB WA, 000ah
-	JR T, LABEL_F93B95
+	JR T, DocName_SaveIndex
 
-LABEL_F93B74:
+DocName_CheckPageDown:
 	CP XDE, 00000002h
-	JR NZ, LABEL_F93BBC
+	JR NZ, DocName_GetCurrentIndex
 	CP (84FEh), 000h
-	JR NZ, LABEL_F93BBC
+	JR NZ, DocName_GetCurrentIndex
 	LD BC, WA
 	ADD BC, 000ah
 	LD DE, (8508h)
 	CP BC, DE
-	JR GE, LABEL_F93B9B
+	JR GE, DocName_CheckEndBound
 	ADD WA, 000ah
 
-LABEL_F93B95:
+DocName_SaveIndex:
 	LD (84A2h), WA
-	JR T, LABEL_F93BC0
+	JR T, DocName_UpdateDisplay
 
-LABEL_F93B9B:
+DocName_CheckEndBound:
 	LD BC, DE
 	DEC 1, BC
 	LD WA, BC
 	EXTS XWA
 	DIVS_WA 000ah
 	CP HL, WA
-	JR GE, LABEL_F93BBC
+	JR GE, DocName_GetCurrentIndex
 	EXTS XDE
 	DIVS_DE 000ah
 	LD WA, QDE
 	CP WA, 0
-	JR Z, LABEL_F93BBC
+	JR Z, DocName_GetCurrentIndex
 	LD (84A2h), BC
 
-LABEL_F93BBC:
+DocName_GetCurrentIndex:
 	LD WA, (84A2h)
 
-LABEL_F93BC0:
+DocName_UpdateDisplay:
 	CP IZ, WA
-	JRL Z, LABEL_F93B23
+	JRL Z, DocName_ReturnZero
 	CALL LABEL_F8A956
 	LD WA, (84A2h)
 	EXTS XWA
@@ -3451,7 +3451,7 @@ LABEL_F93BC0:
 	DIVS_DE 000ah
 	LD XWA, (849Eh)
 	CP DE, BC
-	JR NZ, LABEL_F93C4A
+	JR NZ, DocName_RefreshPage
 	LD BC, IZ
 	EXTS XBC
 	DIVS_BC 000ah
@@ -3475,20 +3475,20 @@ LABEL_F93BC0:
 	LD XWA, (849Eh)
 	LD XBC, 01c0000fh
 	CALL ApPostEvent
-	JRL T, LABEL_F93B23
+	JRL T, DocName_ReturnZero
 
-LABEL_F93C4A:
+DocName_RefreshPage:
 	MULS_BC 000ah
-	CALR LABEL_F93A2E
+	CALR DocMed_FormatFileList
 	LD XWA, (XSP + 002h)
 	LD XBC, 01c0000bh
 	LD XDE, 0
 	CALR FmmDocMedleyFunc
-	JRL T, LABEL_F93B23
+	JRL T, DocName_ReturnZero
 
-LABEL_F93C61:
+DocName_SetIndexPlaying:
 	CP (84FEh), 000h
-	JRL Z, LABEL_F93B23
+	JRL Z, DocName_ReturnZero
 	LD (84A2h), DE
 	LD WA, DE
 	CALL LABEL_F8A956
@@ -3500,20 +3500,20 @@ LABEL_F93C61:
 	LD XWA, (849Eh)
 	LD XBC, 01e50002h
 
-LABEL_F93C8B:
+DocName_PostEvent:
 	CALL ApPostEvent
-	JRL T, LABEL_F93B23
+	JRL T, DocName_ReturnZero
 
-LABEL_F93C92:
+DocName_GetIndexReturn:
 	LD HL, (84A2h)
 	EXTS XHL
 
-LABEL_F93C98:
+DocName_Exit:
 	POP IZ
 	INC 4, XSP
 	RET
 
-LABEL_F93C9C:
+DocMed_FormatSlotList:
 	DEC 6, XSP
 	PUSH XIZ
 	LD IZ, BC
@@ -3533,17 +3533,17 @@ LABEL_F93C9C:
 	LD WA, QIZ
 	ADD WA, 000ah
 	CP WA, IZ
-	JR C, LABEL_F93CDF
+	JR C, DocFmtSlot_CalcVisible
 	LD (XSP + 004h), IZ
 	LD WA, QIZ
 	SUB (XSP + 004h), WA
 
-LABEL_F93CDF:
+DocFmtSlot_CalcVisible:
 	LD IZ, 0
 	CPW (XSP + 004h), 0000h
-	JR ULE, LABEL_F93D2B
+	JR ULE, DocFmtSlot_FillEmpty
 
-LABEL_F93CE8:
+DocFmtSlot_FormatLoop:
 	LD WA, IZ
 	SLL 3, WA
 	LDA XBC, 84A4h
@@ -3557,7 +3557,7 @@ LABEL_F93CE8:
 	LD C, (XBC)
 	EXTZ BC
 	LD DE, IZ
-	CALR LABEL_F91CC9
+	CALR FormatMedleyNumber
 	LD DE, IZ
 	SLL 3, DE
 	LDA XWA, 84A4h
@@ -3568,13 +3568,13 @@ LABEL_F93CE8:
 	CALL ApPostEvent
 	INC 1, IZ
 	CP IZ, (XSP + 004h)
-	JR C, LABEL_F93CE8
+	JR C, DocFmtSlot_FormatLoop
 
-LABEL_F93D2B:
+DocFmtSlot_FillEmpty:
 	CP IZ, 000ah
-	JR NC, LABEL_F93D67
+	JR NC, DocFmtSlot_Exit
 
-LABEL_F93D31:
+DocFmtSlot_EmptyLoop:
 	LD WA, IZ
 	SLL 3, WA
 	LDA XBC, 84A4h
@@ -3582,7 +3582,7 @@ LABEL_F93D31:
 	ADD XWA, XBC
 	LD BC, 00ffh
 	LD DE, IZ
-	CALR LABEL_F91CC9
+	CALR FormatMedleyNumber
 	LD DE, IZ
 	SLL 3, DE
 	LDA XWA, 84A4h
@@ -3593,9 +3593,9 @@ LABEL_F93D31:
 	CALL ApPostEvent
 	INC 1, IZ
 	CP IZ, 000ah
-	JR C, LABEL_F93D31
+	JR C, DocFmtSlot_EmptyLoop
 
-LABEL_F93D67:
+DocFmtSlot_Exit:
 	POP XIZ
 	INC 6, XSP
 	RET
@@ -3606,60 +3606,60 @@ FmmDocMedleyFunc:
 	LD XDE, XBC
 	LD XIZ, XWA
 	CP XDE, 01e5000ah
-	JRL Z, LABEL_F94171
+	JRL Z, DocMed_CheckContinue
 	LD XWA, XHL
 	CP XDE, 01e50008h
-	JRL Z, LABEL_F9416B
+	JRL Z, DocMed_StoreDelayFlag
 	LD BC, (84FCh)
 	CP XDE, 01c00018h
-	JRL Z, LABEL_F93FB7
+	JRL Z, DocMed_HandleNavToggle
 	CP XDE, 01c00017h
-	JRL Z, LABEL_F93FB7
+	JRL Z, DocMed_HandleNavToggle
 	CP XDE, 01c0000bh
-	JRL Z, LABEL_F93FAD
+	JRL Z, DocMed_RefreshDisplay
 	CP XDE, 01e50004h
-	JRL Z, LABEL_F93FA6
+	JRL Z, DocMed_StoreWindowPtr
 	CP XDE, 01c00013h
-	JRL NZ, LABEL_F9418F
+	JRL NZ, DocMed_Exit
 	CP XHL, 00000003h
-	JRL Z, LABEL_F93F86
+	JRL Z, DocMed_HandleStop
 	CP XHL, 00000002h
-	JRL NZ, LABEL_F9418F
+	JRL NZ, DocMed_Exit
 	LD WA, 0
 	CALL LABEL_F8B204
 	LD A, (8D37h)
 	CP A, 070h
-	JR NZ, LABEL_F93DF1
+	JR NZ, DocMed_CheckPlayMode
 	LD (84FEh), 000h
 	CALL LABEL_F2076D
 	CP L, 2
-	JRL C, LABEL_F9418F
+	JRL C, DocMed_Exit
 	LD (7F42h), 001h
 	LD WA, 00eeh
-	JRL T, LABEL_F93EE3
+	JRL T, DocMed_ShowError
 
-LABEL_F93DF1:
+DocMed_CheckPlayMode:
 	CP A, 074h
-	JRL NZ, LABEL_F93EEA
+	JRL NZ, DocMed_CheckInit
 	CALL LABEL_F2076D
 	CP L, 1
-	JRL NZ, LABEL_F93ECD
+	JRL NZ, DocMed_HandleError
 	LD (84FEh), 001h
 	LD C, (8922h)
 	LDA XWA, 88A0h
 	CP C, (8920h)
-	JR NC, LABEL_F93E63
+	JR NC, DocMed_CheckRepeat
 	LD HL, 0
 	LD DE, (84FCh)
 	CP DE, 0
-	JRL ULE, LABEL_F9418F
+	JRL ULE, DocMed_Exit
 
-LABEL_F93E1E:
+DocMed_FindSongLoop:
 	LD IX, HL
 	EXTZ XIX
 	ADD XIX, XWA
 	CP (XIX), C
-	JR NZ, LABEL_F93E5A
+	JR NZ, DocMed_NextSong
 	EXTZ XHL
 	LD XWA, XIZ
 	LD XBC, 01e50002h
@@ -3667,36 +3667,36 @@ LABEL_F93E1E:
 	CALR FmmDocFileNameFunc
 	LD XWA, (84F4h)
 	LD BC, (84FCh)
-	CALR LABEL_F93C9C
+	CALR DocMed_FormatSlotList
 	INC 1, (8922h)
 	LD XWA, (84F8h)
 	OR XWA, XWA
-	JRL Z, LABEL_F9418F
+	JRL Z, DocMed_Exit
 	LD XBC, 01e50009h
 	LD XDE, 0000001eh
-	JR T, LABEL_F93EB5
+	JR T, DocMed_PostDelayEvent
 
-LABEL_F93E5A:
+DocMed_NextSong:
 	INC 1, HL
 	CP HL, DE
-	JR C, LABEL_F93E1E
-	JRL T, LABEL_F9418F
+	JR C, DocMed_FindSongLoop
+	JRL T, DocMed_Exit
 
-LABEL_F93E63:
+DocMed_CheckRepeat:
 	CP (8924h), 000h
-	JR Z, LABEL_F93EC5
+	JR Z, DocMed_ClearPlaying
 	LD (8922h), 000h
 	LD HL, 0
 	LD BC, (84FCh)
 	CP BC, 0
-	JRL ULE, LABEL_F9418F
+	JRL ULE, DocMed_Exit
 
-LABEL_F93E7A:
+DocMed_RepeatFindLoop:
 	LD DE, HL
 	EXTZ XDE
 	ADD XDE, XWA
 	CP (XDE), 000h
-	JR NZ, LABEL_F93EBC
+	JR NZ, DocMed_RepeatNext
 	EXTZ XHL
 	LD XWA, XIZ
 	LD XBC, 01e50002h
@@ -3704,47 +3704,47 @@ LABEL_F93E7A:
 	CALR FmmDocFileNameFunc
 	LD XWA, (84F4h)
 	LD BC, (84FCh)
-	CALR LABEL_F93C9C
+	CALR DocMed_FormatSlotList
 	INC 1, (8922h)
 	LD XWA, (84F8h)
 	OR XWA, XWA
-	JRL Z, LABEL_F9418F
+	JRL Z, DocMed_Exit
 	LD XBC, 01e50009h
 	LD XDE, 0000001eh
 
-LABEL_F93EB5:
+DocMed_PostDelayEvent:
 	CALL ApPostEvent
-	JRL T, LABEL_F9418F
+	JRL T, DocMed_Exit
 
-LABEL_F93EBC:
+DocMed_RepeatNext:
 	INC 1, HL
 	CP HL, BC
-	JR C, LABEL_F93E7A
-	JRL T, LABEL_F9418F
+	JR C, DocMed_RepeatFindLoop
+	JRL T, DocMed_Exit
 
-LABEL_F93EC5:
+DocMed_ClearPlaying:
 	LD (84FEh), 000h
-	JRL T, LABEL_F9418F
+	JRL T, DocMed_Exit
 
-LABEL_F93ECD:
+DocMed_HandleError:
 	CALL LABEL_F2076D
 	LD (84FEh), 000h
 	CP L, 0
-	JRL Z, LABEL_F9418F
+	JRL Z, DocMed_Exit
 	LD (7F42h), 001h
 	LD WA, 00eeh
 
-LABEL_F93EE3:
+DocMed_ShowError:
 	CALL LABEL_F994BD
-	JRL T, LABEL_F9418F
+	JRL T, DocMed_Exit
 
-LABEL_F93EEA:
+DocMed_CheckInit:
 	CPW (8508h), 0000h
-	JR LT, LABEL_F93EFA
+	JR LT, DocMed_InitFromDisk
 	CPW (8504h), 0000h
-	JR NZ, LABEL_F93F3C
+	JR NZ, DocMed_InitState
 
-LABEL_F93EFA:
+DocMed_InitFromDisk:
 	LDW (8504h), 0ffffh
 	LD XWA, 00600026h
 	LD XBC, 01c00001h
@@ -3762,134 +3762,134 @@ LABEL_F93EFA:
 	CALL ApPostEvent
 	CALL LABEL_F8B260
 
-LABEL_F93F3C:
+DocMed_InitState:
 	LD (84FEh), 000h
 	LD (8922h), 000h
 	LD (8920h), 000h
 	LD BC, 0080h
 	LD WA, (8508h)
 	CP WA, 0080h
-	JR UGT, LABEL_F93F5A
+	JR UGT, DocMed_ClampCount
 	LD BC, WA
 
-LABEL_F93F5A:
+DocMed_ClampCount:
 	LD (84FCh), BC
 	LD HL, 0
 	CP BC, 0
-	JR ULE, LABEL_F93F79
+	JR ULE, DocMed_FinishInit
 	LDA XWA, 88A0h
 
-LABEL_F93F68:
+DocMed_ClearSlotsLoop:
 	LD BC, HL
 	EXTZ XBC
 	ADD XBC, XWA
 	LD (XBC), 0ffh
 	INC 1, HL
 	CP HL, (84FCh)
-	JR C, LABEL_F93F68
+	JR C, DocMed_ClearSlotsLoop
 
-LABEL_F93F79:
+DocMed_FinishInit:
 	CALL LABEL_F20ACD
 	LD XWA, 0
 	LD (84F8h), XWA
-	JRL T, LABEL_F9418F
+	JRL T, DocMed_Exit
 
-LABEL_F93F86:
+DocMed_HandleStop:
 	LD A, (8D36h)
 	CP A, 070h
-	JRL Z, LABEL_F9418F
+	JRL Z, DocMed_Exit
 	CP A, 074h
-	JRL Z, LABEL_F9418F
+	JRL Z, DocMed_Exit
 	CALL LABEL_F20B70
 	CALL LABEL_F8B244
 	LD (84FEh), 000h
-	JRL T, LABEL_F9418F
+	JRL T, DocMed_Exit
 
-LABEL_F93FA6:
+DocMed_StoreWindowPtr:
 	LD (84F4h), XWA
-	JRL T, LABEL_F9418F
+	JRL T, DocMed_Exit
 
-LABEL_F93FAD:
+DocMed_RefreshDisplay:
 	LD XWA, (84F4h)
-	CALR LABEL_F93C9C
-	JRL T, LABEL_F9418F
+	CALR DocMed_FormatSlotList
+	JRL T, DocMed_Exit
 
-LABEL_F93FB7:
+DocMed_HandleNavToggle:
 	CP XHL, 0000000ah
-	JRL NZ, LABEL_F94041
+	JRL NZ, DocMed_HandleSelectToggle
 	CP (84FEh), 000h
-	JR NZ, LABEL_F94041
+	JR NZ, DocMed_HandleSelectToggle
 	LD HL, 0
 	LD WA, BC
 	CP BC, 0
-	JR ULE, LABEL_F93FE4
+	JR ULE, DocMed_CheckAllUnmarked
 	LDA XBC, 88A0h
 
-LABEL_F93FD3:
+DocMed_FindUnmarkedLoop:
 	LD DE, HL
 	EXTZ XDE
 	ADD XDE, XBC
 	CP (XDE), 0ffh
-	JR Z, LABEL_F93FE4
+	JR Z, DocMed_CheckAllUnmarked
 	INC 1, HL
 	CP HL, WA
-	JR C, LABEL_F93FD3
+	JR C, DocMed_FindUnmarkedLoop
 
-LABEL_F93FE4:
+DocMed_CheckAllUnmarked:
 	CP HL, WA
-	JR NC, LABEL_F94011
+	JR NC, DocMed_RemoveOrderLoop
 	LD HL, 0
 	CP WA, 0
-	JR ULE, LABEL_F94037
+	JR ULE, DocMed_RefreshAfterToggle
 	LDA XDE, 88A0h
 
-LABEL_F93FF2:
+DocMed_AssignOrderLoop:
 	LD BC, HL
 	EXTZ XBC
 	ADD XBC, XDE
 	LD A, (XBC)
 	CP A, 0ffh
-	JR NZ, LABEL_F94007
+	JR NZ, DocMed_NextAssign
 	LD (XBC), (8920h)
 	INC 1, (8920h)
 
-LABEL_F94007:
+DocMed_NextAssign:
 	INC 1, HL
 	CP HL, (84FCh)
-	JR C, LABEL_F93FF2
-	JR T, LABEL_F94037
+	JR C, DocMed_AssignOrderLoop
+	JR T, DocMed_RefreshAfterToggle
 
-LABEL_F94011:
+DocMed_RemoveOrderLoop:
 	LD HL, 0
 	CP WA, 0
-	JR ULE, LABEL_F94037
+	JR ULE, DocMed_RefreshAfterToggle
 	LDA XDE, 88A0h
 
-LABEL_F9401B:
+DocMed_UnmarkLoop:
 	LD BC, HL
 	EXTZ XBC
 	ADD XBC, XDE
 	LD A, (XBC)
 	CP A, 0fdh
-	JR UGT, LABEL_F9402F
+	JR UGT, DocMed_NextUnmark
 	LD (XBC), 0ffh
 	DEC 1, (8920h)
 
-LABEL_F9402F:
+DocMed_NextUnmark:
 	INC 1, HL
 	CP HL, (84FCh)
-	JR C, LABEL_F9401B
+	JR C, DocMed_UnmarkLoop
 
-LABEL_F94037:
+DocMed_RefreshAfterToggle:
 	LD XWA, (84F4h)
 	LD BC, (84FCh)
-	JR T, LABEL_F940B8
+	JR T, DocMed_CallFormatSlots
 
-LABEL_F94041:
+DocMed_HandleSelectToggle:
 	CP XHL, 0000000bh
-	JR NZ, LABEL_F940BE
+	JR NZ, DocMed_HandleRepeat
 	CP (84FEh), 000h
-	JR NZ, LABEL_F940BE
+	JR NZ, DocMed_HandleRepeat
 	LD XWA, XIZ
 	LD XBC, 01e50003h
 	LD XDE, 0
@@ -3899,14 +3899,14 @@ LABEL_F94041:
 	ADD XHL, XIX
 	LD C, (XHL)
 	CP C, 0ffh
-	JR NZ, LABEL_F94075
+	JR NZ, DocMed_RemoveFromOrder
 	LD (XHL), (8920h)
 	INC 1, (8920h)
-	JR T, LABEL_F940B0
+	JR T, DocMed_RefreshAfterSelect
 
-LABEL_F94075:
+DocMed_RemoveFromOrder:
 	CP C, 0fdh
-	JR UGT, LABEL_F940B0
+	JR UGT, DocMed_RefreshAfterSelect
 	LD (XHL), 0ffh
 	LD A, (8920h)
 	DEC 1, A
@@ -3915,65 +3915,65 @@ LABEL_F94075:
 	LD HL, 0
 	EXTZ WA
 	CP WA, 0
-	JR ULE, LABEL_F940B0
+	JR ULE, DocMed_RefreshAfterSelect
 	LD IY, WA
 
-LABEL_F94093:
+DocMed_ReorderLoop:
 	LD DE, HL
 	EXTZ XDE
 	ADD XDE, XIX
 	LD A, (XDE)
 	CP A, 0fdh
-	JR UGT, LABEL_F940AA
+	JR UGT, DocMed_NextReorder
 	INC 1, IZ
 	CP A, C
-	JR ULE, LABEL_F940AA
+	JR ULE, DocMed_NextReorder
 	DEC 1, A
 	LD (XDE), A
 
-LABEL_F940AA:
+DocMed_NextReorder:
 	INC 1, HL
 	CP IZ, IY
-	JR C, LABEL_F94093
+	JR C, DocMed_ReorderLoop
 
-LABEL_F940B0:
+DocMed_RefreshAfterSelect:
 	LD XWA, (84F4h)
 	LD BC, (84FCh)
 
-LABEL_F940B8:
-	CALR LABEL_F93C9C
-	JRL T, LABEL_F9418F
+DocMed_CallFormatSlots:
+	CALR DocMed_FormatSlotList
+	JRL T, DocMed_Exit
 
-LABEL_F940BE:
+DocMed_HandleRepeat:
 	CP XHL, 0000000ch
-	JR NZ, LABEL_F940DE
+	JR NZ, DocMed_HandlePlay
 	CP XDE, 01c00017h
-	JR NZ, LABEL_F940D6
+	JR NZ, DocMed_SetRepeatOff
 	LD (8924h), 001h
-	JRL T, LABEL_F9418F
+	JRL T, DocMed_Exit
 
-LABEL_F940D6:
+DocMed_SetRepeatOff:
 	LD (8924h), 000h
-	JRL T, LABEL_F9418F
+	JRL T, DocMed_Exit
 
-LABEL_F940DE:
+DocMed_HandlePlay:
 	CP XHL, 0000000dh
-	JRL NZ, LABEL_F9418F
+	JRL NZ, DocMed_Exit
 	CP (84FEh), 000h
-	JRL NZ, LABEL_F9418F
+	JRL NZ, DocMed_Exit
 	LD (8922h), 000h
 	LD HL, 0
 	LD WA, (84FCh)
 	CP WA, 0
-	JR ULE, LABEL_F94143
+	JR ULE, DocMed_CheckAutoPlay
 	LDA XBC, 88A0h
 
-LABEL_F94102:
+DocMed_PlayFindLoop:
 	LD DE, HL
 	EXTZ XDE
 	ADD XDE, XBC
 	CP (XDE), 000h
-	JR NZ, LABEL_F9413D
+	JR NZ, DocMed_PlayNextLoop
 	LD (84FEh), 001h
 	EXTZ XHL
 	LD XWA, XIZ
@@ -3987,16 +3987,16 @@ LABEL_F94102:
 	CALL ApPostEvent
 	LD WA, 0074h
 	CALL LABEL_F99490
-	JR T, LABEL_F94143
+	JR T, DocMed_CheckAutoPlay
 
-LABEL_F9413D:
+DocMed_PlayNextLoop:
 	INC 1, HL
 	CP HL, WA
-	JR C, LABEL_F94102
+	JR C, DocMed_PlayFindLoop
 
-LABEL_F94143:
+DocMed_CheckAutoPlay:
 	CP (84FEh), 000h
-	JR NZ, LABEL_F9418F
+	JR NZ, DocMed_Exit
 	LD XWA, XIZ
 	LD XBC, 01e50003h
 	LD XDE, 0
@@ -4006,30 +4006,30 @@ LABEL_F94143:
 	LD XDE, 0
 	CALL ApPostEvent
 	LD WA, 0070h
-	JR T, LABEL_F9418B
+	JR T, DocMed_CallPauseMode
 
-LABEL_F9416B:
+DocMed_StoreDelayFlag:
 	LD (84F8h), XWA
-	JR T, LABEL_F9418F
+	JR T, DocMed_Exit
 
-LABEL_F94171:
+DocMed_CheckContinue:
 	CP (84FEh), 000h
-	JR Z, LABEL_F9418F
+	JR Z, DocMed_Exit
 	LD XWA, 0ffffffffh
 	LD XBC, 01e0009ah
 	LD XDE, 0
 	CALL ApPostEvent
 	LD WA, 0074h
 
-LABEL_F9418B:
+DocMed_CallPauseMode:
 	CALL LABEL_F99490
 
-LABEL_F9418F:
+DocMed_Exit:
 	LD XHL, 0
 	POP XIZ
 	RET
 
-LABEL_F94193:
+SetSongSlotValue:
 	CP WA, 000ah
 	RET NC
 	LDA XHL, 0AB000h
@@ -4048,7 +4048,7 @@ LABEL_F94193:
 	LD (XHL), BC
 	RET
 
-LABEL_F941C8:
+GetSongSlotValue:
 	LD HL, 0
 	CP WA, 000ah
 	RET NC
@@ -4060,90 +4060,90 @@ LABEL_F941C8:
 	LD HL, (XBC)
 	RET
 
-LABEL_F941E5:
-	CALR LABEL_F941C8
+CheckSongSlotHasData:
+	CALR GetSongSlotValue
 	CP HL, 0
 	SCC NZ, HL
 	RET
 
-LABEL_F941ED:
+SongSlot_RawData:
 	db 02Eh, 0D9h, 08Eh, 01Eh, 0D5h, 0FFh, 0DEh, 0F3h
 	db 0DBh, 076h, 04Eh, 00Eh
 
-LABEL_F941F9:
+FindFirstEmptySlot:
 	PUSH IZ
 	LD IZ, 0
 
-LABEL_F941FC:
+FindEmpty_Loop:
 	LD WA, IZ
-	CALR LABEL_F941C8
+	CALR GetSongSlotValue
 	CP HL, 0
-	JR NZ, LABEL_F9420D
+	JR NZ, FindEmpty_Exit
 	INC 1, IZ
 	CP IZ, 000ah
-	JR C, LABEL_F941FC
+	JR C, FindEmpty_Loop
 
-LABEL_F9420D:
+FindEmpty_Exit:
 	POP IZ
 	RET
 
-LABEL_F9420F:
+ClearAllSongSlots:
 	PUSH XIZ
 	LD IZ, WA
 	LD QIZ, 0
 
-LABEL_F94215:
+ClearSlots_Loop:
 	LD WA, QIZ
 	LD BC, IZ
-	CALR LABEL_F94193
+	CALR SetSongSlotValue
 	INC 1, QIZ
 	CP QIZ, 000ah
-	JR C, LABEL_F94215
+	JR C, ClearSlots_Loop
 	POP XIZ
 	RET
 
-LABEL_F94229:
-	CALR LABEL_F941F9
+ResetSlotsIfEmpty:
+	CALR FindFirstEmptySlot
 	LD WA, HL
 	CP WA, 0
 	RET Z
-	CALR LABEL_F9420F
+	CALR ClearAllSongSlots
 	RET
 
-LABEL_F94236:
+CheckSlotIsSelected:
 	PUSH IZ
 	LD IZ, WA
-	CALR LABEL_F941F9
+	CALR FindFirstEmptySlot
 	CP HL, IZ
 	SCC Z, HL
 	POP IZ
 	RET
 
-LABEL_F94242:
-	CALR LABEL_F941F9
+CheckAnySlotHasData:
+	CALR FindFirstEmptySlot
 	CP HL, 0
 	SCC NZ, HL
 	RET
 
-LABEL_F9424A:
+SetCurrentSlotIndex:
 	LD (09480Eh), WA
 	RET
 
-LABEL_F94250:
+GetCurrentSlotIndex:
 	LD HL, (09480Eh)
 	RET
 
-LABEL_F94256:
+CheckIsCurrentSlot:
 	PUSH IZ
 	LD IZ, WA
-	CALR LABEL_F94250
+	CALR GetCurrentSlotIndex
 	CP HL, IZ
 	SCC Z, HL
 	POP IZ
 	RET
 
-LABEL_F94262:
-	CALR LABEL_F94250
+CheckSlotIndexValid:
+	CALR GetCurrentSlotIndex
 	CP HL, 0
 	SCC NZ, HL
 	RET
@@ -4229,36 +4229,36 @@ InitializeCheap:
 
 PasswordText:
 	CP XBC, 01e0009fh
-	JR NZ, LABEL_F94BE6
+	JR NZ, PasswordText_Exit
 	LDA XHL, 0EA85C8h
 	RET
 
-LABEL_F94BE6:
+PasswordText_Exit:
 	LD XHL, 0
 	RET
 
 CheckPasswordText:
 	CP XBC, 01e0009fh
-	JR NZ, LABEL_F94C12
+	JR NZ, CheckPwd_Exit
 	LD A, (02748Eh)
 	CP A, 2
-	JR Z, LABEL_F94C05
+	JR Z, CheckPwd_Type2
 	CP A, 1
-	JR NZ, LABEL_F94C0C
+	JR NZ, CheckPwd_Type0
 	LD XHL, 00ea8832h
-	JR T, LABEL_F94C11
+	JR T, CheckPwd_Return
 
-LABEL_F94C05:
+CheckPwd_Type2:
 	LD XHL, 00ea8a0ch
-	JR T, LABEL_F94C11
+	JR T, CheckPwd_Return
 
-LABEL_F94C0C:
+CheckPwd_Type0:
 	LD XHL, 00ea868eh
 
-LABEL_F94C11:
+CheckPwd_Return:
 	RET
 
-LABEL_F94C12:
+CheckPwd_Exit:
 	LD XHL, 0
 	RET
 
@@ -4268,25 +4268,25 @@ WakeUpPassword:
 	LD (XSP + 004h), XDE
 	LD XIZ, XWA
 	CP XBC, 01c50004h
-	JRL Z, LABEL_F94CEA
+	JRL Z, WakeUp_StoreType
 	CP XBC, 01c00007h
-	JR Z, LABEL_F94C85
+	JR Z, WakeUp_HandleOk
 	CP XBC, 01c00001h
-	JR Z, LABEL_F94C73
+	JR Z, WakeUp_HandleInit
 	CP XBC, 01c0000dh
-	JR Z, LABEL_F94C57
+	JR Z, WakeUp_HandleDirect
 	CP XBC, 01e00085h
-	JR Z, LABEL_F94C52
+	JR Z, WakeUp_Return1
 	LD XWA, XIZ
 	LD XDE, (XSP + 004h)
 	CALL InheritedProc
-	JRL T, LABEL_F94D14
+	JRL T, WakeUp_Exit
 
-LABEL_F94C52:
+WakeUp_Return1:
 	LD XHL, 1
-	JRL T, LABEL_F94D14
+	JRL T, WakeUp_Exit
 
-LABEL_F94C57:
+WakeUp_HandleDirect:
 	LD XWA, XIZ
 	LD XDE, (XSP + 004h)
 	CALL InheritedProc
@@ -4294,16 +4294,16 @@ LABEL_F94C57:
 	LD XBC, 01c0000fh
 	LD XDE, 00ea8bf0h
 	CALL SendEvent
-	JRL T, LABEL_F94D12
+	JRL T, WakeUp_ReturnZero
 
-LABEL_F94C73:
+WakeUp_HandleInit:
 	LD XWA, XIZ
 	LD XDE, (XSP + 004h)
 	CALL InheritedProc
 	LD (02741Ah), 000h
-	JRL T, LABEL_F94D12
+	JRL T, WakeUp_ReturnZero
 
-LABEL_F94C85:
+WakeUp_HandleOk:
 	LD XWA, XIZ
 	LD XDE, (XSP + 004h)
 	CALL InheritedProc
@@ -4312,13 +4312,13 @@ LABEL_F94C85:
 	LD XDE, 0
 	CALL SendEvent
 	CP XHL, 00000003h
-	JR Z, LABEL_F94D12
+	JR Z, WakeUp_ReturnZero
 	LD XWA, (XSP + 004h)
 	CP XWA, 0000008ch
-	JR NZ, LABEL_F94CE2
+	JR NZ, WakeUp_ClearCounter
 	INC 1, (02741Ah)
 	CP (02741Ah), 007h
-	JR NZ, LABEL_F94D12
+	JR NZ, WakeUp_ReturnZero
 	LD (02741Ah), 000h
 	LD XWA, 0ffffffffh
 	LD XBC, 01c50000h
@@ -4327,13 +4327,13 @@ LABEL_F94C85:
 	LD XWA, 00600040h
 	LD XBC, 01c00001h
 	LD XDE, 0
-	JR T, LABEL_F94D0E
+	JR T, WakeUp_PostEvent
 
-LABEL_F94CE2:
+WakeUp_ClearCounter:
 	LD (02741Ah), 000h
-	JR T, LABEL_F94D12
+	JR T, WakeUp_ReturnZero
 
-LABEL_F94CEA:
+WakeUp_StoreType:
 	LD XWA, (XSP + 004h)
 	LD (02748Eh), A
 	LD XWA, 0ffffffffh
@@ -4344,13 +4344,13 @@ LABEL_F94CEA:
 	LD XBC, 01c00001h
 	LD XDE, 0
 
-LABEL_F94D0E:
+WakeUp_PostEvent:
 	CALL PostEvent
 
-LABEL_F94D12:
+WakeUp_ReturnZero:
 	LD XHL, 0
 
-LABEL_F94D14:
+WakeUp_Exit:
 	POP XIZ
 	INC 4, XSP
 	RET
@@ -4359,26 +4359,26 @@ PasswordOk:
 	PUSH XIZ
 	LD XIZ, XWA
 	CP XBC, 01c00007h
-	JR Z, LABEL_F94D50
+	JR Z, PwdOk_HandleConfirm
 	CP XBC, 01e0007ch
-	JR Z, LABEL_F94D4C
+	JR Z, PwdOk_Return2
 	CP XBC, 01e00084h
-	JR Z, LABEL_F94DA9
+	JR Z, PwdOk_ReturnZero
 	CP XBC, 01e0003ah
-	JR NZ, LABEL_F94DA9
+	JR NZ, PwdOk_ReturnZero
 	PUSHW 00eah
 	PUSHW 8bf6h
 	PUSH XDE
 	CALL LABEL_FF0F4D
 	INC 8, XSP
 	LD XHL, XIZ
-	JR T, LABEL_F94DAB
+	JR T, PwdOk_Exit
 
-LABEL_F94D4C:
+PwdOk_Return2:
 	LD XHL, 2
-	JR T, LABEL_F94DAB
+	JR T, PwdOk_Exit
 
-LABEL_F94D50:
+PwdOk_HandleConfirm:
 	CALL GetNamingWindowID
 	LD XWA, XHL
 	LD XBC, 01e0003ah
@@ -4402,10 +4402,10 @@ LABEL_F94D50:
 	LD XBC, 01e5000dh
 	CALL MainFuncCall
 
-LABEL_F94DA9:
+PwdOk_ReturnZero:
 	LD XHL, 0
 
-LABEL_F94DAB:
+PwdOk_Exit:
 	POP XIZ
 	RET
 
@@ -4413,26 +4413,26 @@ CheckPasswordOk:
 	PUSH XIZ
 	LD XIZ, XWA
 	CP XBC, 01c00007h
-	JR Z, LABEL_F94DE9
+	JR Z, CheckOk_HandleConfirm
 	CP XBC, 01e0007ch
-	JR Z, LABEL_F94DE4
+	JR Z, CheckOk_Return2
 	CP XBC, 01e00084h
-	JRL Z, LABEL_F94E80
+	JRL Z, CheckOk_ReturnZero
 	CP XBC, 01e0003ah
-	JRL NZ, LABEL_F94E80
+	JRL NZ, CheckOk_ReturnZero
 	PUSHW 00eah
 	PUSHW 8bfah
 	PUSH XDE
 	CALL LABEL_FF0F4D
 	INC 8, XSP
 	LD XHL, XIZ
-	JRL T, LABEL_F94E82
+	JRL T, CheckOk_Exit
 
-LABEL_F94DE4:
+CheckOk_Return2:
 	LD XHL, 2
-	JRL T, LABEL_F94E82
+	JRL T, CheckOk_Exit
 
-LABEL_F94DE9:
+CheckOk_HandleConfirm:
 	CALL GetNamingWindowID
 	LD XWA, XHL
 	LD XBC, 01e0003ah
@@ -4456,43 +4456,43 @@ LABEL_F94DE9:
 	CALL SendEvent
 	LDA XWA, 027424h
 	CP HL, 1
-	JR NZ, LABEL_F94E56
+	JR NZ, CheckOk_Type2
 	LD DE, (XWA)
 	EXTZ XDE
 	LD XWA, 01450038h
 	LD XBC, 01e5000eh
-	JR T, LABEL_F94E7C
+	JR T, CheckOk_CallFunc
 
-LABEL_F94E56:
+CheckOk_Type2:
 	CP HL, 2
-	JR NZ, LABEL_F94E6A
+	JR NZ, CheckOk_Type3
 	LD DE, (XWA)
 	EXTZ XDE
 	LD XWA, 01450038h
 	LD XBC, 01e5000fh
-	JR T, LABEL_F94E7C
+	JR T, CheckOk_CallFunc
 
-LABEL_F94E6A:
+CheckOk_Type3:
 	CP HL, 3
-	JR NZ, LABEL_F94E80
+	JR NZ, CheckOk_ReturnZero
 	LD DE, (XWA)
 	EXTZ XDE
 	LD XWA, 01450038h
 	LD XBC, 01e50010h
 
-LABEL_F94E7C:
+CheckOk_CallFunc:
 	CALL MainFuncCall
 
-LABEL_F94E80:
+CheckOk_ReturnZero:
 	LD XHL, 0
 
-LABEL_F94E82:
+CheckOk_Exit:
 	POP XIZ
 	RET
 
 PasswordNo:
 	CP XBC, 01c00007h
-	JR NZ, LABEL_F94EBC
+	JR NZ, PwdNo_Exit
 	LD XWA, 00600040h
 	LD XBC, 01c00002h
 	LD XDE, 0
@@ -4506,13 +4506,13 @@ PasswordNo:
 	LD XDE, 0
 	CALL PostEvent
 
-LABEL_F94EBC:
+PwdNo_Exit:
 	LD XHL, 0
 	RET
 
 CheckPasswordNo:
 	CP XBC, 01c00007h
-	JR NZ, LABEL_F94EF7
+	JR NZ, CheckNo_HandleConfirm
 	LD XWA, 00600045h
 	LD XBC, 01c00002h
 	LD XDE, 0
@@ -4526,53 +4526,53 @@ CheckPasswordNo:
 	LD XDE, 0
 	CALL PostEvent
 
-LABEL_F94EF7:
+CheckNo_HandleConfirm:
 	LD XHL, 0
 	RET
 
 DiskAttention:
 	CP XBC, 01e0009fh
-	JR NZ, LABEL_F94F08
+	JR NZ, CheckNo_Type1
 	LDA XHL, 0EA8BFEh
 	RET
 
-LABEL_F94F08:
+CheckNo_Type1:
 	LD XHL, 0
 	RET
 
 DiskSure:
 	CP XBC, 01e0009fh
-	JR NZ, LABEL_F94F19
+	JR NZ, CheckNo_Type2
 	LDA XHL, 0EA8C5Ch
 	RET
 
-LABEL_F94F19:
+CheckNo_Type2:
 	LD XHL, 0
 	RET
 
 FormatText:
 	CP XBC, 01e0009fh
-	JR NZ, LABEL_F94F2A
+	JR NZ, CheckNo_Type3
 	LDA XHL, 0EA8CDCh
 	RET
 
-LABEL_F94F2A:
+CheckNo_Type3:
 	LD XHL, 0
 	RET
 
 DeleteText:
 	CP XBC, 01e0009fh
-	JR NZ, LABEL_F94F3B
+	JR NZ, CheckNo_CallFunc
 	LDA XHL, 0EA8E70h
 	RET
 
-LABEL_F94F3B:
+CheckNo_CallFunc:
 	LD XHL, 0
 	RET
 
 DeleteYes:
 	CP XBC, 01c00007h
-	JR NZ, LABEL_F94F89
+	JR NZ, PwdChange_HandleOk
 	LD XWA, 007b0051h
 	LD XBC, 01c00002h
 	LD XDE, 0
@@ -4590,13 +4590,13 @@ DeleteYes:
 	LD XDE, 00000033h
 	CALL PostEvent
 
-LABEL_F94F89:
+PwdChange_HandleOk:
 	LD XHL, 0
 	RET
 
 DeleteNo:
 	CP XBC, 01c00007h
-	JR NZ, LABEL_F94FC4
+	JR NZ, PwdChange_Type1
 	LD XWA, 007b0051h
 	LD XBC, 01c00002h
 	LD XDE, 0
@@ -4610,23 +4610,23 @@ DeleteNo:
 	LD XDE, 0
 	CALL PostEvent
 
-LABEL_F94FC4:
+PwdChange_Type1:
 	LD XHL, 0
 	RET
 
 SaveText:
 	CP XBC, 01e0009fh
-	JR NZ, LABEL_F94FD5
+	JR NZ, PwdChange_CallFunc
 	LDA XHL, 0EA912Ah
 	RET
 
-LABEL_F94FD5:
+PwdChange_CallFunc:
 	LD XHL, 0
 	RET
 
 SaveYes:
 	CP XBC, 01c00007h
-	JR NZ, LABEL_F95023
+	JR NZ, PwdDel_HandleOk
 	LD XWA, 00600037h
 	LD XBC, 01c00002h
 	LD XDE, 0
@@ -4644,13 +4644,13 @@ SaveYes:
 	LD XDE, 00000032h
 	CALL PostEvent
 
-LABEL_F95023:
+PwdDel_HandleOk:
 	LD XHL, 0
 	RET
 
 SaveNo:
 	CP XBC, 01c00007h
-	JR NZ, LABEL_F9505E
+	JR NZ, PwdDel_Type1
 	LD XWA, 00600037h
 	LD XBC, 01c00002h
 	LD XDE, 0
@@ -4664,27 +4664,27 @@ SaveNo:
 	LD XDE, 0
 	CALL PostEvent
 
-LABEL_F9505E:
+PwdDel_Type1:
 	LD XHL, 0
 	RET
 
 InsertOptionText:
 	CP XBC, 01e0009fh
-	JR NZ, LABEL_F9506F
+	JR NZ, PwdDel_Type2
 	LDA XHL, 0EA943Ch
 	RET
 
-LABEL_F9506F:
+PwdDel_Type2:
 	LD XHL, 0
 	RET
 
 TypePriorityText:
 	CP XBC, 01e0009fh
-	JR NZ, LABEL_F95080
+	JR NZ, PwdDel_CallFunc
 	LDA XHL, 0EA9558h
 	RET
 
-LABEL_F95080:
+PwdDel_CallFunc:
 	LD XHL, 0
 	RET
 
