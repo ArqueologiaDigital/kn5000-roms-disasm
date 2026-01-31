@@ -4,9 +4,13 @@ Extract UI icons from KN5000 Table Data ROM.
 
 Icon data discovered via DrawIcons routine analysis:
 - Icon table at 0x938000 (table_data ROM offset 0x138000)
-- 176 icons, each entry is 8 bytes
+- 176 icons, each entry is 8 bytes:
+  - 2 bytes: bounding box width (for UI hit testing, NOT pixel width)
+  - 2 bytes: bounding box height (for UI hit testing, NOT pixel height)
+  - 4 bytes: pointer to pixel data
 - Color lookup table at 0xEAABF2 (maincpu ROM offset 0xAABF2)
-- Icons are 12x24 pixels at 8bpp
+- ALL icons are 24x24 pixels at 4bpp (288 bytes each)
+  The DrawIcons routine has hardcoded loops: 12 bytes/row × 24 rows
 
 Usage:
     python extract_icons.py [output_dir]
@@ -115,22 +119,16 @@ def extract_icons(table_data_rom: bytes, maincpu_rom: bytes, output_dir: Path):
         icon_id = icon['id']
         data_offset = icon['data_offset']
 
-        dim1 = icon['dim1']
-        dim2 = icon['dim2']
-
-        # Check if this is a non-standard size icon
-        # Standard icons are 24x24 (dim1=dim2=0x18=24)
-        # Non-standard icons (173-175) have larger dimensions
-        if dim1 != 0x18 or dim2 != 0x18:
-            # For non-standard icons, use the dims as both width and height
-            width = dim1
-            height = dim2
-        else:
-            width = ICON_WIDTH
-            height = ICON_HEIGHT
+        # ALL icons are 24x24 pixels - the DrawIcons routine has hardcoded loops:
+        # - Inner loop: IY from 0 to 0x0C (12 bytes = 24 pixels at 4bpp)
+        # - Outer loop: DE from 0 to 0x18 (24 rows)
+        # The dims field in the table is the bounding box for UI hit testing,
+        # NOT the pixel dimensions.
+        width = ICON_WIDTH
+        height = ICON_HEIGHT
 
         # 4bpp format: 2 pixels per byte
-        byte_count = (width * height) // 2
+        byte_count = ICON_SIZE
 
         # Extract pixel data
         pixel_data = table_data_rom[data_offset:data_offset + byte_count]
@@ -165,50 +163,50 @@ def extract_icons(table_data_rom: bytes, maincpu_rom: bytes, output_dir: Path):
 
     # Generate summary
     print("\nIcon summary:")
-    print(f"  Standard size: {ICON_WIDTH}x{ICON_HEIGHT}")
+    print(f"  Pixel size: {ICON_WIDTH}x{ICON_HEIGHT} (all icons)")
     print(f"  Total icons: {len(icons)}")
 
-    # Find non-standard icons
-    non_standard = [i for i in icons if i['dim1'] != 0x18 or i['dim2'] != 0x18]
-    if non_standard:
-        print(f"  Non-standard size icons: {len(non_standard)}")
-        for icon in non_standard:
-            print(f"    Icon {icon['id']}: dims=({icon['dim1']}, {icon['dim2']})")
+    # Find icons with non-standard bounding boxes
+    non_standard_bbox = [i for i in icons if i['dim1'] != 0x18 or i['dim2'] != 0x18]
+    if non_standard_bbox:
+        print(f"  Icons with non-standard bounding boxes: {len(non_standard_bbox)}")
+        for icon in non_standard_bbox:
+            print(f"    Icon {icon['id']}: bbox=({icon['dim1']}, {icon['dim2']})")
 
     # Create sprite sheet for gallery (16 icons per row)
+    # All icons are 24x24, so include all of them
     create_sprite_sheet(icons, output_dir, ICON_WIDTH, ICON_HEIGHT)
 
 
-def create_sprite_sheet(icons, output_dir: Path, std_width: int, std_height: int):
-    """Create a combined sprite sheet of all standard icons for the gallery."""
+def create_sprite_sheet(icons, output_dir: Path, icon_width: int, icon_height: int):
+    """Create a combined sprite sheet of all icons for the gallery.
 
-    # Only include standard size icons in the sprite sheet
-    std_icons = [i for i in icons if i['dim1'] == 0x18 and i['dim2'] == 0x18]
-
-    if not std_icons:
+    All icons are 24x24 pixels regardless of their bounding box settings.
+    """
+    if not icons:
         return
 
     icons_per_row = 16
-    num_rows = (len(std_icons) + icons_per_row - 1) // icons_per_row
+    num_rows = (len(icons) + icons_per_row - 1) // icons_per_row
 
-    sheet_width = icons_per_row * std_width
-    sheet_height = num_rows * std_height
+    sheet_width = icons_per_row * icon_width
+    sheet_height = num_rows * icon_height
 
     sheet = Image.new('RGB', (sheet_width, sheet_height), (128, 128, 128))
 
-    for idx, icon_info in enumerate(std_icons):
+    for idx, icon_info in enumerate(icons):
         icon_id = icon_info['id']
         icon_path = output_dir / f"Icon_{icon_id:03d}.png"
         if icon_path.exists():
             icon_img = Image.open(icon_path)
-            x = (idx % icons_per_row) * std_width
-            y = (idx // icons_per_row) * std_height
+            x = (idx % icons_per_row) * icon_width
+            y = (idx // icons_per_row) * icon_height
             sheet.paste(icon_img, (x, y))
 
     sprite_sheet_path = output_dir / "IconSpriteSheet.png"
     sheet.save(sprite_sheet_path)
     print(f"\nCreated sprite sheet: {sprite_sheet_path}")
-    print(f"  Size: {sheet_width}x{sheet_height} ({len(std_icons)} standard icons)")
+    print(f"  Size: {sheet_width}x{sheet_height} ({len(icons)} icons)")
 
 
 def main():

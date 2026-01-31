@@ -135,14 +135,17 @@ Wallpaper_1:		; Technics branded texture
 ; These icons are used in menus and UI elements. Referenced by the
 ; DrawIcons routine at 0xFABF9B in Main CPU ROM.
 ;
-; Format: 24x24 pixels @ 4bpp (16 colors), 288 bytes per icon
+; Format: ALL 176 icons are 24x24 pixels @ 4bpp (16 colors), 288 bytes each
 ;   - 2 pixels per byte: high nibble = first pixel, low nibble = second
-;   - 176 icons total (173 standard 24x24, 3 larger: 27x27 or 28x28)
+;   - DrawIcons has hardcoded loops: 12 bytes/row × 24 rows
 ;
 ; Icon table format (8 bytes per entry):
-;   Bytes 0-1: Width (0x18 = 24 for standard icons)
-;   Bytes 2-3: Height (0x18 = 24 for standard icons)
+;   Bytes 0-1: Bounding box width (for UI hit-testing, NOT pixel width)
+;   Bytes 2-3: Bounding box height (for UI hit-testing, NOT pixel height)
 ;   Bytes 4-7: Pointer to pixel data (absolute address)
+;
+; Note: Icons 173-175 have larger bounding boxes (27x27 or 28x28) but still
+;       use standard 24x24 pixel data - the dims field is for UI purposes only.
 ;
 ; Color Palette (16 colors, CGA/EGA-style):
 ;   The color lookup table at 0xEAABF2 (Main CPU ROM) expands 4-bit nibbles
