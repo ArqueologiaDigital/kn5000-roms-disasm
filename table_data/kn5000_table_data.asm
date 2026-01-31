@@ -107,13 +107,31 @@ FeatureDemo_FileEntry6:
 
 	ORG 08E0000h
 
-SubCPU_Payload_Compressed_LZSS:
-	; SubCPU program compressed using LZSS algorithm
-	; See: https://github.com/felipesanches/kn5000_homebrew/blob/main/kn5000_extract.py
+Compressed_Preset_Data_LZSS:
+	; LZSS-compressed data (SLIDE4K format)
+	; Decompresses to ~33KB of parameter-like data (MIDI-range values 0-127).
+	; This does NOT appear to be the SubCPU executable (~192KB).
+	;
+	; NOTE: The SubCPU executable payload transfer during boot is complex:
+	; - Memory map reconfiguration changes address visibility between boot stages
+	; - SubCPU_Send_Payload references multiple source addresses (0x830000, 0x3E0000)
+	; - The payload may come from different addresses in Stage 1 vs Stage 2 boot
+	; - Further analysis needed to trace the full SubCPU payload transfer path
+	;
+	; Referenced by LABEL_EF41E3 in maincpu via SubCPU_Send_Payload.
+	; If decompression fails, firmware falls back to data at 0x830000.
+	;
+	; Files:
+	;   includes/preset_data_uncompressed.bin - Decompressed source (32,910 bytes)
+	;   includes/preset_data_compressed.bin   - LZSS compressed (27,953 bytes)
+	;
+	; Tools:
+	;   Decompress: python scripts/decompress_lzss.py
+	;   Compress:   make recompress-lzss (produces valid but not byte-identical output)
 	db "SLIDE4K", 000h, 000h, 095h, 000h, "}Z", 0EEh
-	binclude "includes/subcpu_payload_compressed.bin"
+	binclude "includes/preset_data_compressed.bin"
 
-	; Unused space after compressed payload
+	; Unused space after compressed data
 	db 25281 dup (0FFh)
 
 

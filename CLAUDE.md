@@ -16,6 +16,7 @@ Detailed documentation is at `../kn5000-docs/`. Key pages:
 - **Protocols**: `control-panel-protocol.md`, `inter-cpu-protocol.md`, `boot-sequence.md`
 - **Progress**: `rom-reconstruction.md`, `issues.md`, `reverse-engineering.md`
 - **Subsystems**: `audio-subsystem.md`, `fdc-subsystem.md`, `hdae5000.md`
+- **Data Formats**: `lzss-compression.md` (SLIDE4K compressed regions and decompression routines)
 
 ### Issue Tracker
 
@@ -37,6 +38,10 @@ make clean              # All
 make clean_maincpu      # Main CPU only
 make clean_subcpu       # Sub CPU only
 make clean_table_data   # Table data only
+make clean_preset_data  # Preset data intermediate files
+
+# Rebuild preset data (assemble + LZSS compress)
+make rebuild-preset-data
 
 # Verify rebuilt ROMs against originals (runs automatically after make all)
 python scripts/compare_roms.py
@@ -561,6 +566,34 @@ echo "XX XX XX XX" | xxd -r -p > /tmp/bytes.bin
 - `original_ROMs/hd-ae5000_v2_06i.ic4.unidasm` - HDAE5000 expansion ROM
 
 **Note:** unidasm provides a linear disassembly without distinguishing code from data. Manual analysis is still required to identify routine boundaries, data tables, and add meaningful labels/comments.
+
+### LZSS Compressed Regions
+
+The KN5000 firmware uses LZSS compression (SLIDE4K format) for embedded data. When working with compressed regions, reference `../kn5000-docs/lzss-compression.md` for full details.
+
+**Compressed Data Inventory:**
+
+| ROM | Label | Address Range | Compressed | Decompressed | Content |
+|-----|-------|---------------|------------|--------------|---------|
+| table_data | `Compressed_Preset_Data_LZSS` | `0x08E0000` - `0x08E6D40` | 27,967 bytes | ~32,910 bytes | Parameter-like data |
+
+**Note:** The compressed data at 0x8E0000 decompresses to ~33KB of parameter data, NOT the ~192KB Sub CPU executable. However, the Sub CPU payload transfer during boot is complex due to memory map reconfiguration between boot stages. The payload source address may differ in Stage 1 (table_data at 0xE00000) vs Stage 2 (table_data at 0x800000). See `SubCPU_Send_Payload` in maincpu and `../kn5000-docs/lzss-compression.md` for details.
+
+**Decompression Routines (all in table_data ROM):**
+
+| Label | Address | Purpose |
+|-------|---------|---------|
+| `LZSS_Decompress` | `0xFFCA50` | Main SLIDE4K decompressor |
+| `LZSS_ReadByte` | `0xFFC8C2` | Read byte from compressed stream |
+| `LZSS_OutputByte` | `0xFFC935` | Write decompressed byte to output |
+| `LZSS_OutputByte_Alt` | `0xFFC974` | Alternate output (flash updates) |
+| `LZSS_ParseHeader` | `0xFFC9B3` | Validate SLIDE4K header |
+
+**SLIDE4K Format Parameters:**
+- Window size: 4KB (4,096 bytes)
+- Offset bits: 12 (0x000 - 0xFFF)
+- Length bits: 4 (length + 2, so 2-17 bytes)
+- Window pre-fill: First 0xFEE bytes set to 0x00
 
 ### MAME Driver Development
 

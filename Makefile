@@ -15,7 +15,30 @@ rebuilt_ROMs/kn5000_subprogram_v142.rebuilt.p: tmp94c241.inc subcpu/kn5000_subpr
 	rm -f rebuilt_ROMs/kn5000_subprogram_v142.rebuilt.p
 	$(ASL) subcpu/kn5000_subprogram_v142.asm -o rebuilt_ROMs/kn5000_subprogram_v142.rebuilt.p
 
-rebuilt_ROMs/kn5000_table_data.rebuilt.p: tmp94c241.inc table_data/kn5000_table_data.asm
+# Preset data assembly -> uncompressed binary -> LZSS compressed
+# Uses --reference option to replay original compression decisions for byte-identical output.
+PRESET_DATA_SRC=table_data/preset_data.asm
+PRESET_DATA_DIR=table_data/includes
+
+# Assemble preset_data.asm to produce uncompressed binary
+$(PRESET_DATA_DIR)/preset_data.p: $(PRESET_DATA_SRC) $(PRESET_DATA_DIR)/preset_data_uncompressed.bin
+	$(ASL) $(PRESET_DATA_SRC) -o $(PRESET_DATA_DIR)/preset_data.p
+
+$(PRESET_DATA_DIR)/preset_data.bin: $(PRESET_DATA_DIR)/preset_data.p
+	$(P2BIN) $(PRESET_DATA_DIR)/preset_data.p $(PRESET_DATA_DIR)/preset_data.bin
+
+# LZSS compress the assembled binary
+$(PRESET_DATA_DIR)/preset_data_compressed.bin: $(PRESET_DATA_DIR)/preset_data.bin
+	python scripts/compress_lzss.py $(PRESET_DATA_DIR)/preset_data.bin $(PRESET_DATA_DIR)/preset_data_compressed.bin --reference original_ROMs/preset_data_compressed.original.bin
+
+# Manual target to rebuild preset data from scratch
+rebuild-preset-data: $(PRESET_DATA_DIR)/preset_data_compressed.bin
+
+# Legacy target for recompression only (without reassembly)
+recompress-lzss:
+	python scripts/compress_lzss.py $(PRESET_DATA_DIR)/preset_data_uncompressed.bin $(PRESET_DATA_DIR)/preset_data_compressed.bin --reference original_ROMs/preset_data_compressed.original.bin
+
+rebuilt_ROMs/kn5000_table_data.rebuilt.p: tmp94c241.inc table_data/kn5000_table_data.asm $(PRESET_DATA_DIR)/preset_data_compressed.bin
 	mkdir -p rebuilt_ROMs
 	rm -f rebuilt_ROMs/kn5000_table_data.rebuilt.p
 	$(ASL) table_data/kn5000_table_data.asm -o rebuilt_ROMs/kn5000_table_data.rebuilt.p
@@ -80,6 +103,10 @@ clean_subcpu:
 
 clean_table_data:
 	rm -f rebuilt_ROMs/kn5000_table_data.rebuilt.*
+
+clean_preset_data:
+	rm -f table_data/includes/preset_data.p
+	rm -f table_data/includes/preset_data.bin
 
 clean_subcpu_boot:
 	rm -f rebuilt_ROMs/kn5000_subcpu_boot.rebuilt.*
