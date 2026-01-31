@@ -34,51 +34,23 @@ ICON_TABLE_BASE = 0x800000    # table_data ROM base address
 COLOR_LUT_OFFSET = 0xAABF2    # CPU address 0xEAABF2
 
 
-def load_color_lut(maincpu_rom: bytes) -> list:
-    """Load the 256-entry 16-bit color lookup table."""
-    lut = []
-    for i in range(256):
-        offset = COLOR_LUT_OFFSET + i * 2
-        value = struct.unpack_from('<H', maincpu_rom, offset)[0]
-        lut.append(value)
-    return lut
+def pixel_to_rgb(pixel_value: int) -> tuple:
+    """Convert 8-bit icon pixel value to RGB.
 
+    Analysis of the DrawIcons routine and color lookup table at 0xEAABF2
+    shows that the icons use a grayscale-based color scheme where:
+    - The 8-bit pixel value directly represents intensity
+    - 0x00 = black, 0x77 = mid-gray (background), 0xFF = white
 
-def color16_to_rgb(color16: int) -> tuple:
-    """Convert 16-bit color to RGB.
-
-    The KN5000 uses a custom 16-bit format where:
-    - High byte encodes one color channel
-    - Low byte encodes another color channel
-
-    Based on the LUT structure, it appears to be:
-    - Bits 15-11: Red (5 bits)
-    - Bits 10-8: Green high (3 bits)
-    - Bits 7-3: Green low + Blue high mixed
-    - Bits 2-0: Blue (3 bits)
-
-    Actually examining the pattern more carefully:
-    The table maps palette index to a custom 2-byte value.
-    Let's try interpreting as RGB565 first.
+    The lookup table expands each nibble (0-7 → 0x00-0x07, 8-15 → 0xF8-0xFF)
+    but for display purposes, direct grayscale gives the best results.
     """
-    # Try RGB565: RRRRRGGG GGGBBBBB
-    r = (color16 >> 11) & 0x1F
-    g = (color16 >> 5) & 0x3F
-    b = color16 & 0x1F
-
-    # Scale to 8-bit
-    r = (r << 3) | (r >> 2)
-    g = (g << 2) | (g >> 4)
-    b = (b << 3) | (b >> 2)
-
-    return (r, g, b)
+    # Direct grayscale interpretation
+    return (pixel_value, pixel_value, pixel_value)
 
 
 def extract_icons(table_data_rom: bytes, maincpu_rom: bytes, output_dir: Path):
     """Extract all icons from the table data ROM."""
-
-    # Load color lookup table
-    color_lut = load_color_lut(maincpu_rom)
 
     # Parse icon table
     icons = []
@@ -158,9 +130,8 @@ def extract_icons(table_data_rom: bytes, maincpu_rom: bytes, output_dir: Path):
         for y in range(height):
             for x in range(width):
                 idx = y * width + x
-                color_idx = pixel_data[idx]
-                color16 = color_lut[color_idx]
-                rgb = color16_to_rgb(color16)
+                pixel_value = pixel_data[idx]
+                rgb = pixel_to_rgb(pixel_value)
                 pixels[x, y] = rgb
 
         # Save icon
