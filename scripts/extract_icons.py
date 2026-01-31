@@ -34,13 +34,39 @@ ICON_TABLE_BASE = 0x800000    # table_data ROM base address
 COLOR_LUT_OFFSET = 0xAABF2    # CPU address 0xEAABF2
 
 
-def nibble_to_gray(nibble: int) -> int:
-    """Convert 4-bit nibble value to 8-bit grayscale.
+# 16-color palette for icons
+# Nibble values 0-7 map to palette indices 0-7
+# Nibble values 8-15 map to palette indices 248-255
+# Colors extracted from main palette at 0xEB37DE
+ICON_PALETTE = [
+    # Nibbles 0-7 (palette indices 0-7)
+    (0, 0, 0),        # 0: Black
+    (128, 0, 0),      # 1: Dark Red
+    (0, 128, 0),      # 2: Dark Green
+    (128, 128, 0),    # 3: Dark Yellow/Olive
+    (0, 0, 128),      # 4: Dark Blue
+    (128, 0, 128),    # 5: Dark Magenta
+    (0, 128, 128),    # 6: Dark Cyan
+    (136, 136, 136),  # 7: Light Gray
+    # Nibbles 8-15 (palette indices 248-255)
+    (96, 96, 96),     # 8: Dark Gray
+    (255, 0, 0),      # 9: Bright Red
+    (0, 255, 0),      # 10: Bright Green
+    (255, 255, 0),    # 11: Bright Yellow
+    (0, 0, 255),      # 12: Bright Blue
+    (255, 0, 255),    # 13: Bright Magenta
+    (0, 255, 255),    # 14: Bright Cyan
+    (255, 255, 255),  # 15: White
+]
 
-    Icons use 4bpp format with 16 grayscale levels.
-    Scale 0-15 to 0-255.
+
+def nibble_to_rgb(nibble: int) -> tuple:
+    """Convert 4-bit nibble value to RGB color.
+
+    Icons use 4bpp format with a 16-color CGA/EGA-style palette.
+    The palette is stored in the main ROM at 0xEB37DE.
     """
-    return nibble * 17
+    return ICON_PALETTE[nibble & 0x0F]
 
 
 def extract_icons(table_data_rom: bytes, maincpu_rom: bytes, output_dir: Path):
@@ -126,11 +152,9 @@ def extract_icons(table_data_rom: bytes, maincpu_rom: bytes, output_dir: Path):
                     # High nibble = first pixel, low nibble = second pixel
                     p1 = (byte_val >> 4) & 0x0F
                     p2 = byte_val & 0x0F
-                    g1 = nibble_to_gray(p1)
-                    g2 = nibble_to_gray(p2)
-                    pixels[x, y] = (g1, g1, g1)
+                    pixels[x, y] = nibble_to_rgb(p1)
                     if x + 1 < width:
-                        pixels[x + 1, y] = (g2, g2, g2)
+                        pixels[x + 1, y] = nibble_to_rgb(p2)
                     byte_idx += 1
 
         # Save icon
