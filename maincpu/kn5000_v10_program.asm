@@ -26,85 +26,11 @@ RHYTHM_DATA_ROM__BASE_ADDR	EQU  400000h
 TABLE_DATA_ROM__BASE_ADDR	EQU  800000h
 PROGRAM_FLASH__BASE_ADDR	EQU 0E00000h
 
-; Video Hardware
-VGA_IO_BASE			EQU  170000h	; LCD controller (MN89304) I/O base
-VIDEO_RAM_BASE			EQU  1A0000h	; 4Mbit VRAM (IC207 M5M44265CJ8S)
-
-; Display State Variables (in RAM at 0x2xxxxx)
-DISPLAY_DIRTY_FLAGS		EQU  0205E4h	; Bitmap of dirty display regions
-DISPLAY_ENABLE_FLAG		EQU  0205E6h	; Display update enable flag
-DISPLAY_CACHED_VAL1		EQU  0205E8h	; Cached value for comparison
-DISPLAY_CACHED_VAL2		EQU  0205EAh	; Cached value for comparison
-DISPLAY_CACHED_VAL3		EQU  0205ECh	; Cached value for comparison
-
-; VGA I/O Ports (directly addressable, accent via VGA_IO_BASE)
-VGA_ATTR_ADDR			EQU  3C0h	; Attribute Controller Address/Data
-VGA_MISC_OUTPUT			EQU  3C2h	; Miscellaneous Output Register (write)
-VGA_ENABLE			EQU  3C3h	; VGA Enable
-VGA_SEQ_ADDR			EQU  3C4h	; Sequencer Address
-VGA_SEQ_DATA			EQU  3C5h	; Sequencer Data
-VGA_DAC_MASK			EQU  3C6h	; DAC Mask
-VGA_DAC_ADDR_WRITE		EQU  3C8h	; DAC Write Address
-VGA_DAC_DATA			EQU  3C9h	; DAC Data (R, G, B sequentially)
-VGA_GC_ADDR			EQU  3CEh	; Graphics Controller Address
-VGA_GC_DATA			EQU  3CFh	; Graphics Controller Data
-VGA_CRTC_ADDR			EQU  3D4h	; CRTC Address
-VGA_CRTC_DATA			EQU  3D5h	; CRTC Data
-VGA_INPUT_STATUS		EQU  3DAh	; Input Status 1
-
-; CRTC Register Indices (used with VGA_CRTC_ADDR/VGA_CRTC_DATA)
-CRTC_HORIZ_TOTAL		EQU  00h	; Horizontal Total
-CRTC_HORIZ_DISP_END		EQU  01h	; Horizontal Display End
-CRTC_START_HORIZ_BLANK		EQU  02h	; Start Horizontal Blanking
-CRTC_END_HORIZ_BLANK		EQU  03h	; End Horizontal Blanking
-CRTC_START_HORIZ_RETRACE	EQU  04h	; Start Horizontal Retrace
-CRTC_END_HORIZ_RETRACE		EQU  05h	; End Horizontal Retrace
-CRTC_VERT_TOTAL			EQU  06h	; Vertical Total
-CRTC_OVERFLOW			EQU  07h	; Overflow
-CRTC_PRESET_ROW_SCAN		EQU  08h	; Preset Row Scan
-CRTC_MAX_SCAN_LINE		EQU  09h	; Maximum Scan Line
-CRTC_CURSOR_START		EQU  0Ah	; Cursor Start
-CRTC_CURSOR_END			EQU  0Bh	; Cursor End
-CRTC_START_ADDR_HIGH		EQU  0Ch	; Start Address High
-CRTC_START_ADDR_LOW		EQU  0Dh	; Start Address Low
-CRTC_CURSOR_LOC_HIGH		EQU  0Eh	; Cursor Location High
-CRTC_CURSOR_LOC_LOW		EQU  0Fh	; Cursor Location Low
-CRTC_VERT_RETRACE_START		EQU  10h	; Vertical Retrace Start
-CRTC_VERT_RETRACE_END		EQU  11h	; Vertical Retrace End (+ Protect Regs 0-7 in bit 7)
-CRTC_VERT_DISP_END		EQU  12h	; Vertical Display End
-CRTC_OFFSET			EQU  13h	; Offset (logical line width / 2)
-CRTC_UNDERLINE_LOC		EQU  14h	; Underline Location
-CRTC_START_VERT_BLANK		EQU  15h	; Start Vertical Blanking
-CRTC_END_VERT_BLANK		EQU  16h	; End Vertical Blanking
-CRTC_MODE_CONTROL		EQU  17h	; Mode Control
-CRTC_LINE_COMPARE		EQU  18h	; Line Compare
-
-; Graphics Controller Register Indices (used with VGA_GC_ADDR/VGA_GC_DATA)
-GC_SET_RESET			EQU  00h	; Set/Reset
-GC_ENABLE_SET_RESET		EQU  01h	; Enable Set/Reset
-GC_COLOR_COMPARE		EQU  02h	; Color Compare
-GC_DATA_ROTATE			EQU  03h	; Data Rotate
-GC_READ_MAP_SELECT		EQU  04h	; Read Map Select
-GC_GRAPHICS_MODE		EQU  05h	; Graphics Mode
-GC_MISC_GRAPHICS		EQU  06h	; Miscellaneous Graphics
-GC_COLOR_DONT_CARE		EQU  07h	; Color Don't Care
-GC_BIT_MASK			EQU  08h	; Bit Mask
-
-; Attribute Controller Register Indices (used with VGA_ATTR_ADDR)
-; Registers 00h-0Fh are palette entries (16 colors)
-ATTR_MODE_CONTROL		EQU  10h	; Mode Control
-ATTR_OVERSCAN_COLOR		EQU  11h	; Overscan Color
-ATTR_COLOR_PLANE_ENABLE		EQU  12h	; Color Plane Enable
-ATTR_HORIZ_PIXEL_PAN		EQU  13h	; Horizontal Pixel Panning
-ATTR_COLOR_SELECT		EQU  14h	; Color Select
-
-; Sequencer Register Indices (used with VGA_SEQ_ADDR/VGA_SEQ_DATA)
-SEQ_RESET			EQU  00h	; Reset
-SEQ_CLOCKING_MODE		EQU  01h	; Clocking Mode
-SEQ_MAP_MASK			EQU  02h	; Map Mask
-SEQ_CHAR_MAP_SELECT		EQU  03h	; Character Map Select
-SEQ_MEMORY_MODE			EQU  04h	; Sequencer Memory Mode
-; Registers 05h+ are MN89304-specific extensions
+; =============================================================================
+; VGA and GUI Constants
+; =============================================================================
+	include "../shared/vga_constants.asm"
+	include "gui_constants.asm"
 
 SYSTEM_TIMESTAMP		EQU  0409h
 
@@ -297,10 +223,7 @@ CPANEL_LED_EVENT_QUEUE		EQU 00020137h ; (128 bytes), Also not sure yet here.
 
 SomethingElse			EQU 0201C1h
 
-OFFSCREEN_BUFFER_1		EQU 043c00h
-OFFSCREEN_BUFFER_2		EQU 056800h
-OFFSCREEN_BUFFER_3		EQU 05fe00h
-OFFSCREEN_BUFFER_4		EQU 069400h
+; OFFSCREEN_BUFFER_1-4 now defined in gui_constants.asm
 
 MSP_SETTINGS__BASE_ADDR		EQU 1E8800h
 
