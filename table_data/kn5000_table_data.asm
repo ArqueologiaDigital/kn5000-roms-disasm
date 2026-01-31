@@ -112,6 +112,22 @@ Compressed_data:
 	; etc...
 
 
+; =============================================================================
+; PRESET WALLPAPERS
+; =============================================================================
+; These 320x240 8bpp wallpaper images are referenced by the SetWallPaper
+; routine in the Main CPU ROM via the wallpaper table at 0xEAAE62.
+; Each wallpaper is 76,800 bytes (320 * 240).
+; =============================================================================
+
+	ORG 08ED000h
+Wallpaper_0:		; Blue textured pattern
+	binclude "images/Wallpaper_0.bin"
+
+	ORG 0900000h
+Wallpaper_1:		; Technics branded texture
+	binclude "images/Wallpaper_1.bin"
+
 
 	ORG 9FA000h
 LABEL_9FA000:
