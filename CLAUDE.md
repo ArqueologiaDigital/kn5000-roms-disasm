@@ -65,6 +65,24 @@ The ASL assembler path is configured in the Makefile at `ASL_PATH`.
 
 ## Project Policies
 
+### Clean Working Directory (STRICT POLICY)
+
+**Keep the working directory as clean as possible at all times.**
+
+All files must be either:
+1. **Committed** to version control, or
+2. **Listed in `.gitignore`**
+
+After any work session, `git status` should show a clean working tree. This ensures:
+- No accidental loss of work
+- Clear visibility of actual changes
+- Consistent state across sessions
+
+**When creating new files:**
+- Commit valuable files immediately
+- Add build artifacts/temp files to `.gitignore`
+- Delete files that serve no ongoing purpose
+
 ### Helper Scripts (STRICT POLICY)
 
 **All helper scripts must be placed in the `scripts/` directory and committed to the repo.**
