@@ -72,15 +72,15 @@ When creating new scripts, place them in `scripts/` and add them to git immediat
 
 **The symbol reference files MUST be kept in sync with the source code at all times.**
 
-Symbol reference files provide address-to-name mappings for external tools:
+Symbol reference files in `symbols/` provide address-to-name mappings for external tools:
 
 | File | ROM | Symbols | Address Range |
 |------|-----|---------|---------------|
-| `maincpu_symbols_reference.txt` | Main CPU | 39,125 | 0xE00000 - 0xFFFFFF |
-| `subcpu_symbols_reference.txt` | Sub CPU payload | 3,309 | 0x000400 - 0x03EE75 |
-| `subcpu_boot_symbols_reference.txt` | Sub CPU boot | 53 | 0xFF8000 - 0xFFFFF0 |
-| `table_data_symbols_reference.txt` | Table data | 113 | 0x800000 - 0x9FFEE0 |
-| `hdae5000_symbols_reference.txt` | HDAE5000 expansion | 34 | 0x280000 - 0x29AF2D |
+| `symbols/maincpu_symbols_reference.txt` | Main CPU | 39,125 | 0xE00000 - 0xFFFFFF |
+| `symbols/subcpu_symbols_reference.txt` | Sub CPU payload | 3,309 | 0x000400 - 0x03EE75 |
+| `symbols/subcpu_boot_symbols_reference.txt` | Sub CPU boot | 53 | 0xFF8000 - 0xFFFFF0 |
+| `symbols/table_data_symbols_reference.txt` | Table data | 113 | 0x800000 - 0x9FFEE0 |
+| `symbols/hdae5000_symbols_reference.txt` | HDAE5000 expansion | 34 | 0x280000 - 0x29AF2D |
 
 **Format:**
 ```
@@ -115,11 +115,11 @@ $ASL -w -g map table_data/kn5000_table_data.asm -o /tmp/table_data.p
 $ASL -w -g map hdae5000/hd-ae5000_v2_06i.asm -o /tmp/hdae5000.p
 
 # Extract symbols from map files
-python scripts/extract_symbols_from_map.py maincpu/kn5000_v10_program.map maincpu_symbols_reference.txt
-python scripts/extract_symbols_from_map.py subcpu/kn5000_subprogram_v142.map subcpu_symbols_reference.txt
-python scripts/extract_symbols_from_map.py subcpu/boot/kn5000_subcpu_boot.map subcpu_boot_symbols_reference.txt
-python scripts/extract_symbols_from_map.py table_data/kn5000_table_data.map table_data_symbols_reference.txt
-python scripts/extract_symbols_from_map.py hdae5000/hd-ae5000_v2_06i.map hdae5000_symbols_reference.txt
+python scripts/extract_symbols_from_map.py maincpu/kn5000_v10_program.map symbols/maincpu_symbols_reference.txt
+python scripts/extract_symbols_from_map.py subcpu/kn5000_subprogram_v142.map symbols/subcpu_symbols_reference.txt
+python scripts/extract_symbols_from_map.py subcpu/boot/kn5000_subcpu_boot.map symbols/subcpu_boot_symbols_reference.txt
+python scripts/extract_symbols_from_map.py table_data/kn5000_table_data.map symbols/table_data_symbols_reference.txt
+python scripts/extract_symbols_from_map.py hdae5000/hd-ae5000_v2_06i.map symbols/hdae5000_symbols_reference.txt
 
 # Clean up intermediate files
 rm /tmp/*.p maincpu/*.map subcpu/*.map subcpu/boot/*.map table_data/*.map hdae5000/*.map
