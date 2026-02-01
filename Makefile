@@ -43,10 +43,10 @@ rebuilt_ROMs/kn5000_table_data.rebuilt.p: tmp94c241.inc table_data/kn5000_table_
 	rm -f rebuilt_ROMs/kn5000_table_data.rebuilt.p
 	$(ASL) table_data/kn5000_table_data.asm -o rebuilt_ROMs/kn5000_table_data.rebuilt.p
 
-rebuilt_ROMs/kn5000_subcpu_boot.rebuilt.p: tmp94c241.inc subcpu_boot/kn5000_subcpu_boot.asm subcpu_boot/subcpu_boot_data_8000.bin
+rebuilt_ROMs/kn5000_subcpu_boot.rebuilt.p: tmp94c241.inc subcpu/boot/kn5000_subcpu_boot.asm subcpu/boot/subcpu_boot_data_8000.bin
 	mkdir -p rebuilt_ROMs
 	rm -f rebuilt_ROMs/kn5000_subcpu_boot.rebuilt.p
-	$(ASL) subcpu_boot/kn5000_subcpu_boot.asm -o rebuilt_ROMs/kn5000_subcpu_boot.rebuilt.p
+	$(ASL) subcpu/boot/kn5000_subcpu_boot.asm -o rebuilt_ROMs/kn5000_subcpu_boot.rebuilt.p
 
 
 rebuilt_ROMs/kn5000_v10_program.rebuilt.rom: rebuilt_ROMs/kn5000_v10_program.rebuilt.p

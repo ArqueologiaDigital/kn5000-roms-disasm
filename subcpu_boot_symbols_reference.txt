@@ -1,6 +1,6 @@
 # Symbol Reference File
 # Format: SYMBOL_NAME ADDRESS
-# Generated from: subcpu_boot/kn5000_subcpu_boot.map
+# Generated from: subcpu/boot/kn5000_subcpu_boot.map
 #
 DATA_TABLE_8000 0xFF8000
 BOOT_INIT 0xFF8290

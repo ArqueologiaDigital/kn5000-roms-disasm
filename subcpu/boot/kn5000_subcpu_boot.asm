@@ -29,7 +29,7 @@
 	cpu	96c141		; Actual CPU is TMP94C241F
 	page	0
 	maxmode	on
-	include	"../tmp94c241.inc"
+	include	"../../tmp94c241.inc"
 
 ; ==============================================================================
 ; Constants

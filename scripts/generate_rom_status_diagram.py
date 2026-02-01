@@ -311,7 +311,7 @@ def generate_rom_status_diagram(output_path: str):
         {
             'name': 'Sub CPU Boot',
             'size': 128 * 1024,  # 128KB
-            'asm_file': 'subcpu_boot/kn5000_subcpu_boot.asm',
+            'asm_file': 'subcpu/boot/kn5000_subcpu_boot.asm',
             'base_addr': 0xFE0000,
         },
         {

@@ -10,7 +10,7 @@ This document summarizes the semantic label rename recommendations from comprehe
 | subcpu/kn5000_subprogram_v142.asm | ~500 | 20 |
 | table_data/kn5000_table_data.asm | ~50 | 20 |
 | hdae5000/hd-ae5000_v2_06i.asm | ~100 | 20 |
-| subcpu_boot/kn5000_subcpu_boot.asm | ~50 | 15 |
+| subcpu/boot/kn5000_subcpu_boot.asm | ~50 | 15 |
 | maincpu/fdc_routines.asm | ~47 | 15 |
 | maincpu/cpanel_routines.asm | ~30 | 15 |
 | maincpu/midi_encoder_routines.asm | ~20 | 15 |
