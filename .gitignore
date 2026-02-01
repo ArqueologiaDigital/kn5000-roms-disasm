@@ -22,3 +22,7 @@ test_ROMs/*.bin
 test_ROMs/*.p
 test_ROMs/*.lst
 test_ROMs/*.rom
+
+# Cruft and temporary files
+cruft_please_ignore/
+mame_driver/build_error.txt
