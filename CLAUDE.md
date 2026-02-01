@@ -18,6 +18,14 @@ Detailed documentation is at `../kn5000-docs/`. Key pages:
 - **Subsystems**: `audio-subsystem.md`, `fdc-subsystem.md`, `hdae5000.md`
 - **Data Formats**: `lzss-compression.md` (0x3E0000 address resolved - see [Firmware Update System](../kn5000-docs/lzss-compression.md#firmware-update-system-and-0x3e0000))
 
+### Analysis Documents
+
+In-repo analysis notes are in `analysis/`. Key documents:
+- **[String Analysis](analysis/strings/)** - Extracted strings from ROMs with categorization
+  - [Overview](analysis/strings/README.md) - Executive summary (start here)
+  - [Quick Reference](analysis/strings/quick-reference.md) - Fast offset lookup
+  - [Detailed Analysis](analysis/strings/detailed-analysis.md) - Complete categorized listing
+
 ### Issue Tracker
 
 Issues are tracked with Beads in `.beads/issues.jsonl`. Use `../tools/bd` commands (see Issue Tracking section below).
