@@ -16,7 +16,7 @@ Detailed documentation is at `../kn5000-docs/`. Key pages:
 - **Protocols**: `control-panel-protocol.md`, `inter-cpu-protocol.md`, `boot-sequence.md`
 - **Progress**: `rom-reconstruction.md`, `issues.md`, `reverse-engineering.md`
 - **Subsystems**: `audio-subsystem.md`, `fdc-subsystem.md`, `hdae5000.md`
-- **Data Formats**: `lzss-compression.md` ⚠️ (contains disputed interpretations - see [Known Disputed Interpretations](#known-disputed-interpretations))
+- **Data Formats**: `lzss-compression.md` (0x3E0000 address resolved - see [Firmware Update System](../kn5000-docs/lzss-compression.md#firmware-update-system-and-0x3e0000))
 
 ### Issue Tracker
 
@@ -577,9 +577,15 @@ The KN5000 firmware uses LZSS compression (SLIDE4K format) for embedded data. Wh
 |-----|-------|---------------|------------|--------------|---------|
 | table_data | `Compressed_Preset_Data_LZSS` | `0x08E0000` - `0x08E6D40` | 27,967 bytes | ~32,910 bytes | Parameter-like data |
 
-**⚠️ DISPUTED:** The runtime destination of the preset data is disputed. See [Known Disputed Interpretations](#known-disputed-interpretations) below and `../kn5000-docs/lzss-compression.md` for the full discussion.
+**✅ RESOLVED:** The 0x3E0000 address mystery is now understood:
+- Address `0x3E0000` = **Custom Data Flash** (firmware update staging area)
+- Address `0x8E0000` = **Table Data ROM** (factory preset data)
+- Firmware updates (File Type 007) write compressed payload to 0x3E0000
+- On boot, `SubCPU_Send_Payload` tries to decompress from 0x3E0000; factory units fall back to Table Data ROM
 
-**Note:** The compressed data at 0x8E0000 decompresses to ~33KB of parameter data, NOT the ~192KB Sub CPU executable. The Sub CPU payload transfer during boot is complex due to memory map reconfiguration between boot stages. See `SubCPU_Send_Payload` in maincpu and the preset data discussion in `table_data/preset_data.asm`.
+See `../kn5000-docs/lzss-compression.md` for full details.
+
+**Note:** The compressed data at 0x8E0000 decompresses to ~33KB of parameter data, NOT the ~192KB Sub CPU executable. The Sub CPU executable is stored uncompressed at Table Data ROM offset 0x30000 (address 0x830000).
 
 **Decompression Routines (all in table_data ROM):**
 
@@ -655,13 +661,16 @@ When encountering disputed interpretations:
 
 | Topic | Status | Claude's View | Human's Concern | Details |
 |-------|--------|---------------|-----------------|---------|
-| **Preset Data Destination** | 🔴 DISPUTED | LZSS preset data (~33KB) goes to Sub CPU 0xF000+ | Memory map unclear, transfer sizes don't match, fallback produces invalid data | `table_data/preset_data.asm`, `../kn5000-docs/lzss-compression.md` |
+| **Preset Data Destination** | 🟡 PARTIALLY RESOLVED | LZSS preset data (~33KB) goes to Sub CPU 0xF000+ | Transfer sizes don't match, fallback produces invalid data | `table_data/preset_data.asm`, `../kn5000-docs/lzss-compression.md` |
 
-**Investigation needed for Preset Data Destination:**
-- [ ] Trace what `0x3E0000` actually maps to during boot (memory bank registers)
-- [ ] Search for other ~33KB data transfers that might be the actual destination
+**Resolved: Address 0x3E0000 Mapping**
+- [x] ~~Trace what `0x3E0000` actually maps to during boot~~ → **Custom Data Flash** (not Table Data ROM)
+- [x] ~~Understand when 0x3E0000 contains valid LZSS data~~ → **After firmware update** (File Type 007 writes here)
+
+**Still investigating for Preset Data Destination:**
 - [ ] Explain why 64KB bulk transfers are used for ~33KB of data
 - [ ] Determine why fallback to `0x800000` produces `0xF7` padding bytes
+- [ ] Verify the exact Sub CPU address where preset data is written
 
 **Adding new disputes:** When Claude Code and a human contributor disagree on an interpretation, add it to this table with:
 - Brief summary of both positions
