@@ -83,13 +83,21 @@ Two symbol reference files provide address-to-name mappings for external tools:
 SYMBOL_NAME 0xADDRESS
 ```
 
-**Regeneration triggers - update these files when:**
-- Adding new labels to assembly source
-- Renaming existing labels
-- Removing labels
-- Any commit that modifies symbol definitions
+**Update procedure - directly edit the reference files when modifying assembly:**
 
-**Regeneration procedure:**
+Because regenerating from scratch takes ~70 minutes for maincpu, **always edit the symbol reference files directly** instead of regenerating:
+
+- **Adding a label:** Insert a new line in the appropriate reference file, maintaining address sort order
+- **Renaming a label:** Find and replace the old name with the new name
+- **Removing a label:** Delete the corresponding line
+
+**Example:** When adding `FDC_INIT_ROUTINE` at address `0xE12345` to maincpu:
+```
+# Find the correct position (after 0xE12344, before 0xE12346) and insert:
+FDC_INIT_ROUTINE 0xE12345
+```
+
+**Full regeneration** (only if files become corrupted or majorly out of sync):
 ```bash
 # Generate map files with ASL (takes ~70 minutes for maincpu)
 /mnt/shared/claude_jail/tools/asl/asl -w -g map maincpu/kn5000_v10_program.asm -o /tmp/maincpu.p
