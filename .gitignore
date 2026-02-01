@@ -2,3 +2,23 @@ rebuilt_ROMs/
 part_a.rom
 part_b.rom
 .claude/
+
+# Python bytecode
+__pycache__/
+*.pyc
+
+# ASL assembler intermediate files
+*.p
+*.lst
+
+# Intermediate build artifacts (not in rebuilt_ROMs)
+hdae5000/*.rebuilt.bin
+hdae5000/*.rebuilt.p
+table_data/includes/preset_data.bin
+table_data/includes/preset_data.p
+
+# Test ROM artifacts
+test_ROMs/*.bin
+test_ROMs/*.p
+test_ROMs/*.lst
+test_ROMs/*.rom
