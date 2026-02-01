@@ -68,6 +68,43 @@ This ensures:
 
 When creating new scripts, place them in `scripts/` and add them to git immediately.
 
+### Symbol Reference Files (STRICT POLICY)
+
+**The symbol reference files MUST be kept in sync with the source code at all times.**
+
+Two symbol reference files provide address-to-name mappings for external tools:
+- `maincpu_symbols_reference.txt` - Main CPU symbols (39,125 entries)
+- `subcpu_symbols_reference.txt` - Sub CPU symbols (3,309 entries)
+
+**Format:**
+```
+# Symbol Reference File
+# Format: SYMBOL_NAME ADDRESS
+SYMBOL_NAME 0xADDRESS
+```
+
+**Regeneration triggers - update these files when:**
+- Adding new labels to assembly source
+- Renaming existing labels
+- Removing labels
+- Any commit that modifies symbol definitions
+
+**Regeneration procedure:**
+```bash
+# Generate map files with ASL (takes ~70 minutes for maincpu)
+/mnt/shared/claude_jail/tools/asl/asl -w -g map maincpu/kn5000_v10_program.asm -o /tmp/maincpu.p
+/mnt/shared/claude_jail/tools/asl/asl -w -g map subcpu/kn5000_subprogram_v142.asm -o /tmp/subcpu.p
+
+# Extract symbols from map files
+python scripts/extract_symbols_from_map.py maincpu/kn5000_v10_program.map maincpu_symbols_reference.txt
+python scripts/extract_symbols_from_map.py subcpu/kn5000_subprogram_v142.map subcpu_symbols_reference.txt
+
+# Clean up intermediate files
+rm /tmp/maincpu.p /tmp/subcpu.p maincpu/*.map subcpu/*.map
+```
+
+**This policy exists because** external tools (debuggers, analysis scripts, MAME integration) depend on accurate symbol mappings. Stale symbol files cause confusion and break tooling.
+
 ### Image Extraction and Gallery Updates
 
 When new images are discovered and extracted as `.bin` files in `maincpu/images/` or `table_data/images/`:
