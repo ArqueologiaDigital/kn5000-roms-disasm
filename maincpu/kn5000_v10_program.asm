@@ -27374,11 +27374,33 @@ LABEL_ED661A:
 	ORG 0ED665Ah
 LABEL_ED665A:
 
+; ===========================================================================
+; CPU Data Transmission Error Dialog (Screen Group 7)
+; ===========================================================================
+; This error dialog is displayed during boot when the Sub-CPU payload
+; transfer fails. The dialog consists of multiple text widgets:
+;   - Widget 9: "CAUTION!!" header
+;   - Widget 10 (0x0A): "** ERROR in CPU data transmission **"
+;   - Widget 11 (0x0B): "Please try turning off and on again."
+;   - Widget 12 (0x0C): "If this message appears again,"
+;   - Widget 13 (end): "this unit needs repairing."
+;
+; Triggered from boot sequence when:
+;   - SubCPU_Send_Payload fails
+;   - InterCPU_E1_Bulk_Transfer protocol error occurs
+;   - Payload verification (LABEL_EF092B) detects corruption
+;
+; See also:
+;   - SubCPU_Send_Payload routine
+;   - InterCPU_E1_Bulk_Transfer routine
+;   - Boot sequence in User_didnt_request_flash_mem_update
+; ===========================================================================
+
 	ORG 0ED66BAh
-LABEL_ED66BA:
+LABEL_ED66BA:                           ; Multilingual string reference for CAUTION!!
 
 	ORG 0ED672Ah
-LABEL_ED672A:
+LABEL_ED672A:                           ; Multilingual string reference for error recovery text
 
 	ORG 0ED690Ah
 LABEL_ED690A:
@@ -118156,58 +118178,133 @@ LABEL_ED27E4:
 	db 003h, 000h
 
 
-	db 02Bh, 000h, 060h, 001h, 007h, 000h
-	db 0FFh, 0FFh, 009h, 000h, 0FFh, 0FFh, 008h, 000h
-	db 04Eh, 000h, 080h, 000h, 0E1h, 000h, 092h, 000h
-	dd LABEL_ED66BA
-	db 002h, 000h, 000h, 000h
-	db 0F9h, 000h, "CAUTIO"
-	db 04Eh, 021h, 021h, 000h
+; ===========================================================================
+; CPU Data Transmission Error Dialog Widgets (Screen Group 7)
+; ===========================================================================
+; These widgets form the error dialog displayed when Sub-CPU payload
+; transfer fails during boot. The dialog shows a severe hardware error
+; that typically requires service center attention.
+;
+; Widget format:
+;   Byte 0-1: Entry length (low byte) + 0x00
+;   Byte 2-3: Widget type = 0x0160 (text widget)
+;   Byte 4-5: Screen group ID (0x07 = error dialogs)
+;   Byte 6-7: Flags (0xFFFF = default)
+;   Byte 8-9: Widget index within screen group
+;   Remaining: Widget-specific data (position, font, text)
+; ===========================================================================
+
+; ---------------------------------------------------------------------------
+; Widget 9: CAUTION!! Header
+; Screen group 7, index 9
+; ---------------------------------------------------------------------------
+ErrorDialog_CautionHeader:
+	db 02Bh, 000h                        ; Entry length: 43 bytes
+	db 060h, 001h                        ; Widget type: 0x0160 (text)
+	db 007h, 000h                        ; Screen group: 7 (error dialogs)
+	db 0FFh, 0FFh                        ; Flags: default
+	db 009h, 000h                        ; Widget index: 9
+	db 0FFh, 0FFh                        ; Reserved
+	db 008h, 000h                        ; Font ID
+	db 04Eh, 000h                        ; X position: 78
+	db 080h, 000h                        ; Y position: 128
+	db 0E1h, 000h                        ; Width: 225
+	db 092h, 000h                        ; Height: 146
+	dd LABEL_ED66BA                      ; Multilingual string pointer
+	db 002h, 000h, 000h, 000h            ; String flags
+	db 0F9h, 000h                        ; Text attributes
+	db "CAUTION!!", 000h                 ; English text
 
 
-	db 02Bh, 000h, 060h, 001h
-	db 007h, 000h, 0FFh, 0FFh, 00Ah, 000h, 008h, 000h
-	db 008h, 000h, 00Eh, 000h, 096h, 000h, 031h, 001h
-	db 0A8h, 000h, 0E4h, 066h, 0EDh, 000h, 000h, 000h
-	db 000h, 000h, 002h, 000h, 02Ah, 02Ah, 020h, 045h
-	db "RROR in "
-	db "CPU data"
-	db " transmi"
-	db "ssion **"
-	db 000h, 0FFh
+; ---------------------------------------------------------------------------
+; Widget 10 (0x0A): ERROR Message
+; "** ERROR in CPU data transmission **"
+; Screen group 7, index 10 - Main error message
+; ---------------------------------------------------------------------------
+ErrorDialog_CPUTransmissionError:
+	db 02Bh, 000h                        ; Entry length: 43 bytes
+	db 060h, 001h                        ; Widget type: 0x0160 (text)
+	db 007h, 000h                        ; Screen group: 7 (error dialogs)
+	db 0FFh, 0FFh                        ; Flags: default
+	db 00Ah, 000h                        ; Widget index: 10 (0x0A)
+	db 008h, 000h                        ; Reserved/flags
+	db 008h, 000h                        ; Font ID: 8
+	db 00Eh, 000h                        ; X position: 14
+	db 096h, 000h                        ; Y position: 150
+	db 031h, 001h                        ; Width: 305
+	db 0A8h, 000h                        ; Height: 168
+	db 0E4h, 066h, 0EDh, 000h            ; Multilingual string ptr (0x00ED66E4)
+	db 000h, 000h, 000h, 000h            ; String flags
+	db 002h, 000h                        ; Text attributes
+	db "** ERROR in CPU data transmission **", 000h, 0FFh
 
 
-	db 02Bh, 000h, 060h, 001h, 007h, 000h
-	db 0FFh, 0FFh, 00Bh, 000h, 009h, 000h, 008h, 000h
-	db 02Eh, 000h, 0AEh, 000h, 009h, 001h, 0B8h, 000h
-	dd LABEL_ED672A
-	db 003h, 000h, 000h, 000h
-	db 000h, 000h, "Please"
-	db " try tur"
-	db "ning off"
-	db " and on "
-	db "again.", 000h, 0FFh
+; ---------------------------------------------------------------------------
+; Widget 11 (0x0B): Recovery Instruction Line 1
+; "Please try turning off and on again."
+; Screen group 7, index 11
+; ---------------------------------------------------------------------------
+ErrorDialog_RecoveryLine1:
+	db 02Bh, 000h                        ; Entry length: 43 bytes
+	db 060h, 001h                        ; Widget type: 0x0160 (text)
+	db 007h, 000h                        ; Screen group: 7 (error dialogs)
+	db 0FFh, 0FFh                        ; Flags: default
+	db 00Bh, 000h                        ; Widget index: 11 (0x0B)
+	db 009h, 000h                        ; Reserved/flags
+	db 008h, 000h                        ; Font ID
+	db 02Eh, 000h                        ; X position: 46
+	db 0AEh, 000h                        ; Y position: 174
+	db 009h, 001h                        ; Width: 265
+	db 0B8h, 000h                        ; Height: 184
+	dd LABEL_ED672A                      ; Multilingual string pointer
+	db 003h, 000h, 000h, 000h            ; String flags
+	db 000h, 000h                        ; Text attributes
+	db "Please try turning off and on again.", 000h, 0FFh
 
 
-	db 02Bh, 000h, 060h, 001h, 007h, 000h, 0FFh, 0FFh
-	db 00Ch, 000h, 00Ah, 000h, 008h, 000h, 02Eh, 000h
-	dd LABEL_E500BE
-	db 0C8h, 000h, 070h, 067h
-	db 0EDh, 000h, 003h, 000h, 000h, 000h, 000h, 000h
-	db "If this "
-	db "message "
-	db "appears "
-	db "again,", 000h, 0FFh
+; ---------------------------------------------------------------------------
+; Widget 12 (0x0C): Recovery Instruction Line 2
+; "If this message appears again,"
+; Screen group 7, index 12
+; ---------------------------------------------------------------------------
+ErrorDialog_RecoveryLine2:
+	db 02Bh, 000h                        ; Entry length: 43 bytes
+	db 060h, 001h                        ; Widget type: 0x0160 (text)
+	db 007h, 000h                        ; Screen group: 7 (error dialogs)
+	db 0FFh, 0FFh                        ; Flags: default
+	db 00Ch, 000h                        ; Widget index: 12 (0x0C)
+	db 00Ah, 000h                        ; Reserved/flags
+	db 008h, 000h                        ; Font ID
+	db 02Eh, 000h                        ; X position: 46
+	dd LABEL_E500BE                      ; Y position (uses label)
+	db 0C8h, 000h                        ; Width: 200
+	db 070h, 067h, 0EDh, 000h            ; Multilingual string ptr
+	db 003h, 000h, 000h, 000h            ; String flags
+	db 000h, 000h                        ; Text attributes
+	db "If this message appears again,", 000h, 0FFh
 
 
-	db 02Bh, 000h, 060h, 001h, 007h, 000h, 0FFh, 0FFh
-	db 0FFh, 0FFh, 00Bh, 000h, 008h, 000h, 02Eh, 000h
-	db 0CEh, 000h, 0CDh, 000h, 0D8h, 000h, 0B0h, 067h
-	db 0EDh, 000h, 003h, 000h, 000h, 000h, 000h, 000h
-	db "this uni"
-	db "t needs "
-	db "repairin"
-	db 067h, 02Eh, 000h, 0FFh
+; ---------------------------------------------------------------------------
+; Widget 13 (end marker 0xFFFF): Recovery Instruction Line 3
+; "this unit needs repairing."
+; Screen group 7, final widget
+; ---------------------------------------------------------------------------
+ErrorDialog_RecoveryLine3:
+	db 02Bh, 000h                        ; Entry length: 43 bytes
+	db 060h, 001h                        ; Widget type: 0x0160 (text)
+	db 007h, 000h                        ; Screen group: 7 (error dialogs)
+	db 0FFh, 0FFh                        ; Flags: default
+	db 0FFh, 0FFh                        ; Widget index: end marker
+	db 00Bh, 000h                        ; Reserved/flags
+	db 008h, 000h                        ; Font ID
+	db 02Eh, 000h                        ; X position: 46
+	db 0CEh, 000h                        ; Y position: 206
+	db 0CDh, 000h                        ; Width: 205
+	db 0D8h, 000h                        ; Height: 216
+	db 0B0h, 067h, 0EDh, 000h            ; Multilingual string ptr
+	db 003h, 000h, 000h, 000h            ; String flags
+	db 000h, 000h                        ; Text attributes
+	db "this unit needs repairing.", 000h, 0FFh
 
 
 	db 034h, 000h, 060h, 001h
@@ -134023,41 +134120,67 @@ LABEL_EF05B5:
 LABEL_EF05E6:
 	JR T, LABEL_EF05E6
 
-User_didnt_request_flash_mem_update: ; EF05E8
+; ===========================================================================
+; User_didnt_request_flash_mem_update - Main Boot Sequence
+; ===========================================================================
+; This is the main boot path after power-on self-test and flash update check.
+; Initializes Sub-CPU communication, transfers firmware payload, and verifies
+; the transfer succeeded. On failure, displays the "ERROR in CPU data
+; transmission" dialog (Screen Group 7).
+;
+; Boot flow:
+;   1. Initialize DMA channels for inter-CPU communication
+;   2. Send 192KB Sub-CPU firmware payload
+;   3. Verify payload integrity (checksum validation)
+;   4. Check error flag - if set, display error dialog
+;   5. Continue to main UI initialization
+;
+; Error handling:
+;   - If SubCPU_Payload_Verify returns non-zero in HL, boot with error state
+;   - Error state (WA=2) displays error dialog via ScreenGroup_Dispatch
+;   - Eventually Screen Group 7 "CPU data transmission" error is shown
+;
+; See also:
+;   - SubCPU_Send_Payload - Payload transfer routine
+;   - SubCPU_Payload_Verify - Checksum verification
+;   - ErrorDialog_CPUTransmissionError - Error dialog widget
+; ===========================================================================
+User_didnt_request_flash_mem_update:            ; EF05E8
 	LD A, (0402h)
 	EXTZ WA
 	CALR LABEL_EF07F3
 	LDW (0FFCAh:24), 0000h
-	SET 0, (PA)
-	CALL SubCPU_Init_DMA_Channels
+	SET 0, (PA)                             ; Release Sub-CPU from reset
+	CALL SubCPU_Init_DMA_Channels           ; Initialize DMA for inter-CPU comm
 	EI 000h
-	CALR SubCPU_Send_Payload
-	CALR LABEL_EF092B
+	CALR SubCPU_Send_Payload                ; Transfer 192KB Sub-CPU firmware
+	CALR SubCPU_Payload_Verify              ; Verify payload checksum
 	LD WA, 0
-	CALL LABEL_FDDB46
+	CALL ScreenGroup_Dispatch               ; Display initial boot screen (group 0)
 	EI 000h
 	CALL LABEL_FB76D8
-	CALR LABEL_EF0979
-	CP HL, 0
-	JR NZ, LABEL_EF061E
-	LD WA, 1
-	JR T, LABEL_EF0620
+	CALR SubCPU_Payload_GetErrorFlag        ; Check if payload transfer failed
+	CP HL, 0                                ; HL=0: success, HL!=0: error
+	JR NZ, Boot_PayloadError                ; Branch if error occurred
+	LD WA, 1                                ; Success: use screen group 1
+	JR T, Boot_DisplayScreen
 
-LABEL_EF061E:
-	LD WA, 2
+; Sub-CPU payload transfer or verification failed
+Boot_PayloadError:                              ; EF061E
+	LD WA, 2                                ; Error: use screen group 2
 
-LABEL_EF0620:
-	CALL LABEL_FDDB46
+Boot_DisplayScreen:                             ; EF0620
+	CALL ScreenGroup_Dispatch               ; Display appropriate screen group
 	LD (0400h), 006h
 	LD WA, 3
-	CALL LABEL_FDDB46
+	CALL ScreenGroup_Dispatch
 	LD (0400h), 080h
 	LDW (0FFD4h:24), 0000h
 	LD A, (0402h)
 	EXTZ WA
 	CALR LABEL_EF07A2
 	LD WA, 4
-	CALL LABEL_EF1B9C
+	CALL Show_ScreenGroup                   ; Show screen group 4 (may lead to error dialog)
 	CALR LABEL_EF0792
 	JP LABEL_EF1245
 
@@ -134324,30 +134447,64 @@ LABEL_EF0914:
 	CALL Copy_DE_words_from_XBC_to_XWA
 	RET
 
+; ===========================================================================
+; SubCPU_Payload_Verify - Verify Sub-CPU firmware payload integrity
+; ===========================================================================
+; Entry: Sub-CPU firmware payload has been transferred
+; Exit:  Error flag at 0x01E53E set to indicate result:
+;          0x00 = Both checksums match (success)
+;          0x01 = First checksum mismatch, second matches (partial error)
+;          0xFF = Checksum verification failed (error)
+; Notes: Computes checksums over two memory regions and compares against
+;        expected values stored at boot. On failure, the error flag triggers
+;        the "ERROR in CPU data transmission" dialog during boot.
+;
+; See also:
+;   - SubCPU_Send_Payload - Transfers the firmware payload
+;   - SubCPU_Payload_GetErrorFlag - Reads the error flag
+;   - ErrorDialog_CPUTransmissionError - Error dialog shown on failure
+; ===========================================================================
+SubCPU_Payload_Verify:                          ; EF092B
 LABEL_EF092B:
-	LD XWA, 0000f180h
-	LD BC, 0800h
-	CALL LABEL_EF18E7
+	LD XWA, 0000f180h                       ; Start of payload region 1
+	LD BC, 0800h                            ; Size: 0x800 words
+	CALL LABEL_EF18E7                       ; Compute checksum -> HL
 	LDA XWA, 0F980h:24
-	CP HL, (0FFD4h:24)
-	JR NZ, LABEL_EF095E
-	LD (01E53Eh), 000h
-	LD BC, 0280h
-	CALL LABEL_EF18E7
-	CP HL, (0FFD2h:24)
-	RET Z
-	LD (01E53Eh), 0ffh
+	CP HL, (0FFD4h:24)                      ; Compare with expected checksum
+	JR NZ, SubCPU_Payload_Verify_Fail       ; First region checksum failed
+	LD (01E53Eh), 000h                      ; Mark as success (so far)
+	LD BC, 0280h                            ; Size of second region
+	CALL LABEL_EF18E7                       ; Compute second checksum
+	CP HL, (0FFD2h:24)                      ; Compare with expected
+	RET Z                                   ; Both match -> success
+	LD (01E53Eh), 0ffh                      ; Second region failed
 	RET
 
+SubCPU_Payload_Verify_Fail:                     ; EF095E
 LABEL_EF095E:
-	LD (01E53Eh), 0ffh
+	LD (01E53Eh), 0ffh                      ; Mark as failed
 	LD BC, 0280h
 	CALL LABEL_EF18E7
 	CP HL, (0FFD2h:24)
-	RET NZ
-	LD (01E53Eh), 001h
+	RET NZ                                  ; Both checksums wrong
+	LD (01E53Eh), 001h                      ; First wrong, second correct (partial)
 	RET
 
+; ===========================================================================
+; SubCPU_Payload_GetErrorFlag - Get Sub-CPU payload transfer error status
+; ===========================================================================
+; Entry: None
+; Exit:  HL = Error flag value
+;          0x0000 = Success (payload transferred correctly)
+;          0xFFFF = Error (triggers "ERROR in CPU data transmission" dialog)
+;          0x0001 = Partial error
+; Notes: Called during boot to check if SubCPU_Payload_Verify detected errors.
+;
+; See also:
+;   - SubCPU_Payload_Verify - Sets the error flag
+;   - ErrorDialog_CPUTransmissionError - Error dialog shown when HL != 0
+; ===========================================================================
+SubCPU_Payload_GetErrorFlag:                    ; EF0979
 LABEL_EF0979:
 	LD L, (01E53Eh)
 	EXTS HL
@@ -136331,6 +136488,21 @@ LABEL_EF1B83:
 	PUSH XIZ
 	JRL T, LABEL_EF1AC0
 
+; ===========================================================================
+; Show_ScreenGroup - Display a screen group by ID
+; ===========================================================================
+; Entry: WA = Screen group ID
+; Exit:  Screen group widgets have been initialized for display
+; Notes: Sets up UI state structures and loads widget data from the
+;        screen group table at 0xEF18EB (12 bytes per entry).
+;        Screen Group 7 contains the error dialogs including
+;        "ERROR in CPU data transmission".
+;
+; See also:
+;   - ScreenGroup_Dispatch (LABEL_FDDB46) - Alternative dispatcher
+;   - ErrorDialog_CPUTransmissionError - Error dialog in Screen Group 7
+; ===========================================================================
+Show_ScreenGroup:                               ; EF1B9C
 LABEL_EF1B9C:
 	PUSH SR
 	EI 006h
@@ -410292,12 +410464,32 @@ LABEL_FDDB2E:
 	CALL LABEL_F9800F
 	JP LABEL_F1E9E0
 
+; ===========================================================================
+; ScreenGroup_Dispatch - Display a screen group and process its widgets
+; ===========================================================================
+; Entry: WA = Screen group ID (0-7+)
+;          0 = Initial boot screen
+;          1 = Normal startup screen
+;          2 = Error state screen (leads to error dialogs)
+;          3 = Additional initialization
+;          4 = Main UI / may trigger Screen Group 7 error dialog
+;          7 = Error dialogs including "CPU data transmission" error
+; Exit:  All widgets in the screen group have been rendered
+; Notes: Uses table at 0xEE8C7E to dispatch to widget handlers.
+;        When screen group 2 is selected during boot (error condition),
+;        eventually leads to displaying Screen Group 7 error dialog.
+;
+; See also:
+;   - Show_ScreenGroup (LABEL_EF1B9C) - Alternative screen display routine
+;   - ErrorDialog_CPUTransmissionError - Error dialog in Screen Group 7
+; ===========================================================================
+ScreenGroup_Dispatch:                           ; FDDB46
 LABEL_FDDB46:
 	PUSH XIZ
-	LD IZ, WA
+	LD IZ, WA                               ; Screen group ID
 	CP IZ, 0
 	JR NZ, LABEL_FDDB55
-	CALL LABEL_FDDB9B
+	CALL LABEL_FDDB9B                       ; Initialize screen state
 	CALL LABEL_FF068C
 
 LABEL_FDDB55:
