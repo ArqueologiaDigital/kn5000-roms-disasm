@@ -39756,8 +39756,7 @@ LABEL_E1196E:
 	db 000h, 000h, 0A0h, 001h, 000h, 0D6h, 003h, 000h
 	db 098h, 019h, 0E1h, 000h
 	db 0A3h, 000h, 000h, 000h
-	db "STYLE EX"
-	db "PLORER", 000h, 0FFh
+	db "STYLE EXPLORER", 000h, 0FFh
 
 
 LABEL_E119A8:
@@ -39982,8 +39981,7 @@ LABEL_E11DD6:
 	db 000h, 000h, 0A0h, 001h, 004h, 0D6h, 003h, 000h
 	db 000h, 01Eh, 0E1h, 000h
 	db 0A3h, 000h, 000h, 000h
-	db "STYLE EX"
-	db "PLORER", 000h, 0FFh
+	db "STYLE EXPLORER", 000h, 0FFh
 
 
 LABEL_E11E10:
@@ -45246,7 +45244,7 @@ String_EASY_COMPOSER:		; E17EBA
 	db 000h, 000h, 0FFh, 000h, 000h, 000h, 088h, 000h
 	db 0BEh, 0D6h, 003h, 000h, 038h, 08Fh, 0E1h, 000h
 	db 0B7h, 000h, 0A0h, 001h, 000h, 000h, 000h, 000h
-	db 042h, 041h, 04Ch, 000h
+	db "BAL", 000h
 
 
 	db 01Dh, 000h, 060h, 001h
@@ -45816,9 +45814,8 @@ String_EASY_COMPOSER:		; E17EBA
 	db 02Bh, 000h, 060h, 001h, 000h, 000h, 0FFh, 0FFh, 01Ch, 000h
 	db 01Ah, 000h, 008h, 000h, 08Ch, 000h, 030h, 000h
 	db 007h, 001h, 042h, 000h, 0FEh, 099h, 0E1h, 000h
-	db 000h, 000h, 000h, 000h, 0FFh, 000h, 043h, 04Fh
-	db "MPOSER M"
-	db "EMORY", 000h, 008h, 000h
+	db 000h, 000h, 000h, 000h, 0FFh, 000h
+	db "COMPOSER MEMORY", 000h, 008h, 000h
 	db 064h, 001h, 000h, 000h, 0FFh, 0FFh, 01Eh, 000h
 	db 01Ch, 000h, 008h, 000h, 00Ah, 000h, 059h, 000h
 	db 059h, 000h, 066h, 000h, 0F5h, 000h, 000h, 000h
@@ -46711,9 +46708,8 @@ String_MSP_PHRASE_RECORDING:			; E1AB82
 	db 003h, 000h
 	dd LABEL_E1AE46
 	db 0CCh, 000h
-	db 0A0h, 001h, 0A7h, 000h, 000h, 000h, 043h, 04Fh
-	db "MPILE SE"
-	db 054h, 000h
+	db 0A0h, 001h, 0A7h, 000h, 000h, 000h
+	db "COMPILE SET", 000h
 
 
 	db 01Dh, 000h, 060h, 001h, 000h, 000h
@@ -46723,10 +46719,7 @@ String_MSP_PHRASE_RECORDING:			; E1AB82
 	db 000h, 000h, 0FFh, 000h, 000h, 000h, 08Ah, 000h
 	db 072h, 0D7h, 003h, 000h, 088h, 0AEh, 0E1h, 000h
 	db 0CBh, 000h, 0A0h, 001h, 099h, 000h, 000h, 000h
-	db "Naming f"
-	db "or User&"
-	db "COMPILE "
-	db "Banks", 000h
+	db "Naming for User&COMPILE Banks", 000h
 
 
 	db 048h, 000h, 060h, 001h, 000h, 000h, 0FFh, 0FFh, 004h, 000h
@@ -49667,9 +49660,8 @@ MSG_INSERT_STYLE_CONVERT_ID:	db "Please Insert the Style Convert Disk!", 000h	; 
 	db 02Bh, 000h, 060h, 001h, 00Fh, 000h, 0FFh, 0FFh, 0FFh, 0FFh
 	db 0FFh, 0FFh, 008h, 000h, 086h, 000h, 02Ah, 000h
 	db 0E1h, 000h, 03Ch, 000h, 056h, 0FAh, 0E1h, 000h
-	db 000h, 000h, 000h, 000h, 0FFh, 000h, 04Dh, 045h
-	db "MORY DUM"
-	db 050h, 000h
+	db 000h, 000h, 000h, 000h, 0FFh, 000h
+	db "MEMORY DUMP", 000h
 
 
 	db 05Dh, 000h, 060h, 001h, 00Ah, 000h
@@ -49683,10 +49675,8 @@ MSG_INSERT_STYLE_CONVERT_ID:	db "Please Insert the Style Convert Disk!", 000h	; 
 	db 00Ah, 000h, 000h, 000h, 000h, 000h, 03Fh, 001h
 	db 0EFh, 000h, 0FFh, 000h, 000h, 000h, 000h, 000h
 	db 0A0h, 001h, 0CEh, 0DCh, 003h, 000h, 0A6h, 0FAh
-	db 0E1h, 000h, 083h, 000h, 000h, 000h, 044h, 045h
-	db "BUG SCRE"
-	db "EN for H"
-	db "D-AE", 000h, 0FFh
+	db 0E1h, 000h, 083h, 000h, 000h, 000h
+	db "DEBUG SCREEN for HD-AE", 000h, 0FFh
 
 
 	db 03Eh, 000h, 060h, 001h, 012h, 000h, 0FFh, 0FFh, 014h, 000h
@@ -50607,9 +50597,8 @@ LABEL_E1FFFA:
 	db 003h, 000h
 	dd LABEL_E210BA
 	db 02Eh, 000h
-	db 000h, 000h, "SMF DI"
-	db "RECT PLA"
-	db 059h, 020h, 020h, 000h
+	db 000h, 000h
+	db "SMF DIRECT PLAY  ", 000h
 
 
 	db 014h, 000h, 060h, 001h
@@ -51107,7 +51096,7 @@ LABEL_E1FFFA:
 	db 000h, 000h, 089h, 000h, 052h, 0DDh, 003h, 000h
 	dd LABEL_E21B48
 	db 000h, 000h, 000h, 000h
-	db 04Dh, 049h, 043h, 000h
+	db "MIC", 000h
 
 
 	db 034h, 000h, 060h, 001h
@@ -51164,8 +51153,7 @@ LABEL_E1FFFA:
 	db 06Ch, 000h, 0A0h, 001h, 05Ah, 0DDh, 003h, 000h
 	dd LABEL_E21C70
 	db 02Eh, 000h, 000h, 000h
-	db "SMF MEDL"
-	db 045h, 059h, 000h, 0FFh
+	db "SMF MEDLEY", 000h, 0FFh
 
 
 	db 01Dh, 000h, 060h, 001h
@@ -51493,7 +51481,7 @@ LABEL_E1FFFA:
 	db 000h, 000h, 089h, 000h, 088h, 0DDh, 003h, 000h
 	dd LABEL_E22398
 	db 000h, 000h, 000h, 000h
-	db 04Dh, 049h, 043h, 000h
+	db "MIC", 000h
 
 
 	db 034h, 000h, 060h, 001h
@@ -54364,14 +54352,14 @@ LABEL_E1FFFA:
 	db 013h, 00Ch, 00Dh, 00Eh, 000h, 002h, 001h, 00Bh
 	db 008h, 009h, 00Ah, 003h, 004h, 005h, 006h, 007h
 	db 011h, 012h, 013h, 00Ch, 00Eh, 00Fh, 00Dh, 010h
-	db 04Fh, 04Eh, 020h, 000h, 04Fh, 046h, 046h, 000h
-	db 02Dh, 02Dh, 020h, 000h, 02Dh, 02Dh, 020h, 000h
-	db 04Fh, 04Eh, 020h, 000h, 04Fh, 046h, 046h, 000h
-	db 02Dh, 02Dh, 020h, 000h, 02Dh, 02Dh, 020h, 000h
-	db 04Fh, 04Eh, 020h, 000h, 04Fh, 046h, 046h, 000h
-	db 02Dh, 02Dh, 020h, 000h, 02Dh, 02Dh, 020h, 000h
-	db 04Fh, 04Eh, 020h, 000h, 04Fh, 046h, 046h, 000h
-	db 02Dh, 02Dh, 020h, 000h, 02Dh, 02Dh, 020h, 000h
+	db "ON ", 000h, "OFF", 000h
+	db "-- ", 000h, "-- ", 000h
+	db "ON ", 000h, "OFF", 000h
+	db "-- ", 000h, "-- ", 000h
+	db "ON ", 000h, "OFF", 000h
+	db "-- ", 000h, "-- ", 000h
+	db "ON ", 000h, "OFF", 000h
+	db "-- ", 000h, "-- ", 000h
 	db 000h, 000h, 03Ch, 001h, 000h, 000h, 03Ch, 001h
 	db 0E2h, 004h, 0E2h, 004h, 0E2h, 004h, 000h, 001h
 	db 002h, 003h, 004h, 005h, 006h, 007h, 008h, 009h
@@ -75584,7 +75572,7 @@ String_MIDI_MENU:		; E56994
 	db 0FFh, 0FFh, 008h, 000h, 000h, 000h, 0C6h, 000h
 	db 02Bh, 000h, 0D8h, 000h, 066h, 08Fh, 0E5h, 000h
 	db 000h, 000h, 000h, 000h, 0FFh, 000h, 050h, 02Eh
-	db 04Dh, 045h, 04Dh, 000h
+	db "MEM", 000h
 
 
 	db 02Bh, 000h, 060h, 001h
@@ -82026,7 +82014,7 @@ LABEL_E9529E:
 	db 020h, 02Dh, 02Dh, 000h, 025h, 033h, 064h, 000h
 	db 020h, 02Dh, 02Dh, 000h, 04Fh, 04Eh, 020h, 000h
 	db 04Fh, 046h, 046h, 000h, 020h, 02Dh, 02Dh, 000h
-	db 04Fh, 04Eh, 020h, 000h, 04Fh, 046h, 046h, 000h
+	db "ON ", 000h, "OFF", 000h
 	db 020h, 02Dh, 02Dh, 000h, 025h, 032h, 064h, 000h
 	db 02Dh, 02Dh, 000h, 0FFh, 025h, 02Bh, 033h, 064h
 	db 000h, 0FFh, 020h, 020h, 030h, 000h, 020h, 02Dh
@@ -82035,13 +82023,13 @@ LABEL_E9529E:
 	db 02Dh, 02Dh, 000h, 0FFh, 025h, 033h, 064h, 000h
 	db 020h, 02Dh, 02Dh, 000h, 04Fh, 04Eh, 020h, 000h
 	db 04Fh, 046h, 046h, 000h, 020h, 02Dh, 02Dh, 000h
-	db 04Fh, 04Eh, 020h, 000h, 04Fh, 046h, 046h, 000h
+	db "ON ", 000h, "OFF", 000h
 	db 020h, 02Dh, 02Dh, 000h, 04Fh, 04Eh, 020h, 000h
 	db 04Fh, 046h, 046h, 000h, 020h, 02Dh, 02Dh, 000h
-	db 04Fh, 04Eh, 020h, 000h, 04Fh, 046h, 046h, 000h
+	db "ON ", 000h, "OFF", 000h
 	db 020h, 02Dh, 02Dh, 000h, 04Fh, 04Eh, 020h, 000h
 	db 04Fh, 046h, 046h, 000h, 020h, 02Dh, 02Dh, 000h
-	db 04Fh, 04Eh, 020h, 000h, 04Fh, 046h, 046h, 000h
+	db "ON ", 000h, "OFF", 000h
 	db " --", 000h, "CH%2"
 	db "d", 000h, " OFF", 000h, 0FFh
 	db 020h, 02Dh, 02Dh, 020h, 000h, 0FFh, 0D4h, 056h
