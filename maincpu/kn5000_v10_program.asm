@@ -38662,8 +38662,7 @@ LABEL_E105E0:
 	db 0CFh, 000h, 0CBh, 000h, 008h, 000h, 00Ah, 000h
 	db 046h, 000h, 065h, 000h, 058h, 000h, 000h, 006h
 	db 0E1h, 000h, 000h, 000h, 000h, 000h, 0FFh, 000h
-	db "FADE IN/"
-	db 04Fh, 055h, 054h, 000h
+	db "FADE IN/OUT", 000h
 
 
 LABEL_E1060C:
@@ -38671,8 +38670,7 @@ LABEL_E1060C:
 	db 0CDh, 000h, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh
 	db 008h, 000h, 00Ah, 000h, 052h, 000h, 045h, 000h
 	db 064h, 000h, 02Ch, 006h, 0E1h, 000h, 000h, 000h
-	db 000h, 000h, 0FFh, 000h, "SETT"
-	db 049h, 04Eh, 047h, 000h
+	db 000h, 000h, 0FFh, 000h, "SETTING", 000h
 
 
 LABEL_E10634:
@@ -38680,8 +38678,7 @@ LABEL_E10634:
 	db 0B9h, 000h, 0FFh, 0FFh, 0D0h, 000h, 0CDh, 000h
 	db 008h, 000h, 00Ah, 000h, 076h, 000h, 035h, 000h
 	db 088h, 000h, 054h, 006h, 0E1h, 000h, 000h, 000h
-	db 000h, 000h, 0FFh, 000h, "MIXE"
-	db 052h, 000h
+	db 000h, 000h, 0FFh, 000h, "MIXER", 000h
 
 
 LABEL_E1065A:
@@ -38690,8 +38687,7 @@ LABEL_E1065A:
 	db 00Ah, 000h, 09Eh, 000h, 055h, 000h, 0B0h, 000h
 	db 07Ah, 006h, 0E1h, 000h
 	db 000h, 000h, 000h, 000h
-	db 0FFh, 000h, "DISK L"
-	db 04Fh, 041h, 044h, 000h
+	db 0FFh, 000h, "DISK LOAD", 000h
 
 
 LABEL_E10684:
@@ -38705,9 +38701,8 @@ LABEL_E1069E:
 	db 02Bh, 000h, 060h, 001h, 0D1h, 000h, 0FFh, 0FFh, 0FFh, 0FFh
 	db 0FFh, 0FFh, 008h, 000h, 00Ah, 000h, 0CCh, 000h
 	db 075h, 000h, 0DEh, 000h, 0BEh, 006h, 0E1h, 000h
-	db 000h, 000h, 000h, 000h, 000h, 000h, 04Dh, 055h
-	db "TE KEYS:"
-	db 04Fh, 046h, 046h, 000h
+	db 000h, 000h, 000h, 000h, 000h, 000h
+	db "MUTE KEYS:OFF", 000h
 
 
 LABEL_E106CC:
@@ -38721,8 +38716,7 @@ LABEL_E106E6:
 	db 02Bh, 000h, 060h, 001h, 0D3h, 000h, 0FFh, 0FFh, 0FFh, 0FFh
 	db 0FFh, 0FFh, 008h, 000h, 012h, 000h, 0DFh, 000h
 	db 03Dh, 000h, 0F1h, 000h, 006h, 007h, 0E1h, 000h
-	db 000h, 000h, 000h, 000h, 00Ah, 000h, 050h, 041h
-	db 04Eh, 049h, 043h, 000h
+	db 000h, 000h, 000h, 000h, 00Ah, 000h, "PANIC", 000h
 
 
 LABEL_E1070C:
@@ -39058,9 +39052,8 @@ LABEL_E10C5E:
 	db 02Bh, 000h, 060h, 001h, 0F8h, 000h, 0FFh, 0FFh, 0FFh, 0FFh
 	db 0FFh, 0FFh, 008h, 000h, 050h, 000h, 01Ch, 000h
 	db 0E2h, 000h, 02Eh, 000h, 07Eh, 00Ch, 0E1h, 000h
-	db 004h, 000h, 000h, 000h, 000h, 000h, 04Dh, 075h
-	db "sic Styl"
-	db 069h, 073h, 074h, 000h
+	db 004h, 000h, 000h, 000h, 000h, 000h
+	db "Music Stylist", 000h
 
 
 LABEL_E10C8C:
@@ -39068,11 +39061,8 @@ LABEL_E10C8C:
 	db 0F7h, 000h, 0FFh, 0FFh, 0FBh, 000h, 0F8h, 000h
 	db 008h, 000h, 012h, 000h, 064h, 000h, 02Dh, 001h
 	db 076h, 000h, 0ACh, 00Ch, 0E1h, 000h, 001h, 000h
-	db 000h, 000h, 0FCh, 000h, 03Eh, 020h, 031h, 030h
-	db "00 Style"
-	db "s of Wor"
-	db "ld wide "
-	db "Music !", 000h
+	db 000h, 000h, 0FCh, 000h
+	db "> 1000 Styles of World wide Music !", 000h
 
 
 LABEL_E10CD0:
@@ -39080,10 +39070,7 @@ LABEL_E10CD0:
 	db 0FCh, 000h, 0FAh, 000h, 008h, 000h, 012h, 000h
 	db 08Ch, 000h, 0DDh, 000h, 09Eh, 000h, 0F0h, 00Ch
 	db 0E1h, 000h, 001h, 000h, 000h, 000h, 0FCh, 000h
-	db "> Style "
-	db "explorer"
-	db " by Genr"
-	db 065h, 000h
+	db "> Style explorer by Genre", 000h
 
 
 LABEL_E10D0A:
@@ -39092,10 +39079,7 @@ LABEL_E10D0A:
 	db 012h, 000h, 0B4h, 000h, 0EDh, 000h, 0C6h, 000h
 	db 02Ah, 00Dh, 0E1h, 000h
 	db 001h, 000h, 000h, 000h
-	db 0FCh, 000h, "> Alph"
-	db "abetical"
-	db " style s"
-	db "elect", 000h
+	db 0FCh, 000h, "> Alphabetical style select", 000h
 
 
 LABEL_E10D46:
@@ -39106,8 +39090,7 @@ LABEL_E10D46:
 	db 000h, 000h, 0A0h, 001h, 0F8h, 0D5h, 003h, 000h
 	db 070h, 00Dh, 0E1h, 000h
 	db 0A3h, 000h, 000h, 000h
-	db "STYLE EX"
-	db "PLORER", 000h, 0FFh
+	db "STYLE EXPLORER", 000h, 0FFh
 
 
 LABEL_E10D80:
@@ -39123,9 +39106,7 @@ LABEL_E10D9A:
 	db 006h, 000h, 034h, 000h, 079h, 000h, 040h, 000h
 	db 0BAh, 00Dh, 0E1h, 000h
 	db 006h, 000h, 000h, 000h
-	db 0FFh, 000h, "Easy L"
-	db "istening"
-	db 000h, 0FFh
+	db 0FFh, 000h, "Easy Listening", 000h, 0FFh
 
 
 LABEL_E10DCA:
@@ -39134,17 +39115,15 @@ LABEL_E10DCA:
 	db 006h, 000h, 044h, 000h, 059h, 000h, 050h, 000h
 	db 0EAh, 00Dh, 0E1h, 000h
 	db 006h, 000h, 000h, 000h
-	db 0FFh, 000h, "Rock &"
-	db " Pop", 000h, 0FFh
+	db 0FFh, 000h, "Rock & Pop", 000h, 0FFh
 
 
 LABEL_E10DF6:
 	db 02Bh, 000h, 060h, 001h, 0FEh, 000h, 0FFh, 0FFh, 002h, 001h
 	db 000h, 001h, 008h, 000h, 006h, 000h, 064h, 000h
 	db 061h, 000h, 070h, 000h, 016h, 00Eh, 0E1h, 000h
-	db 006h, 000h, 000h, 000h, 0FFh, 000h, 050h, 061h
-	db "rty Musi"
-	db 063h, 000h
+	db 006h, 000h, 000h, 000h, 0FFh, 000h
+	db "Party Music", 000h
 
 
 LABEL_E10E22:
@@ -39153,8 +39132,7 @@ LABEL_E10E22:
 	db 006h, 000h, 054h, 000h, 051h, 000h, 060h, 000h
 	db 042h, 00Eh, 0E1h, 000h
 	db 006h, 000h, 000h, 000h
-	db 0FFh, 000h, "Dance "
-	db 050h, 06Fh, 070h, 000h
+	db 0FFh, 000h, "Dance Pop", 000h
 
 
 LABEL_E10E4C:
@@ -39162,18 +39140,15 @@ LABEL_E10E4C:
 	db 0FEh, 000h, 0FFh, 0FFh, 004h, 001h, 002h, 001h
 	db 008h, 000h, 006h, 000h, 074h, 000h, 089h, 000h
 	db 080h, 000h, 06Ch, 00Eh, 0E1h, 000h, 006h, 000h
-	db 000h, 000h, 0FFh, 000h, "Gosp"
-	db "el/Blues"
-	db "/R&B", 000h, 0FFh
+	db 000h, 000h, 0FFh, 000h, "Gospel/Blues/R&B", 000h, 0FFh
 
 
 LABEL_E10E7E:
 	db 02Bh, 000h, 060h, 001h, 0FEh, 000h, 0FFh, 0FFh, 005h, 001h
 	db 003h, 001h, 008h, 000h, 006h, 000h, 084h, 000h
 	db 069h, 000h, 090h, 000h, 09Eh, 00Eh, 0E1h, 000h
-	db 006h, 000h, 000h, 000h, 0FFh, 000h, 04Ah, 061h
-	db "zz & Swi"
-	db 06Eh, 067h, 000h, 0FFh
+	db 006h, 000h, 000h, 000h, 0FFh, 000h
+	db "Jazz & Swing", 000h, 0FFh
 
 
 LABEL_E10EAC:
@@ -39181,9 +39156,7 @@ LABEL_E10EAC:
 	db 0FEh, 000h, 0FFh, 0FFh, 006h, 001h, 004h, 001h
 	db 008h, 000h, 006h, 000h, 094h, 000h, 081h, 000h
 	db 0A0h, 000h, 0CCh, 00Eh, 0E1h, 000h, 006h, 000h
-	db 000h, 000h, 0FFh, 000h, "Show"
-	db "/Trad Da"
-	db 06Eh, 063h, 065h, 000h
+	db 000h, 000h, 0FFh, 000h, "Show/Trad Dance", 000h
 
 
 LABEL_E10EDC:
@@ -39191,8 +39164,7 @@ LABEL_E10EDC:
 	db 0FEh, 000h, 0FFh, 0FFh, 007h, 001h, 005h, 001h
 	db 008h, 000h, 006h, 000h, 0A4h, 000h, 061h, 000h
 	db 0B0h, 000h, 0FCh, 00Eh, 0E1h, 000h, 006h, 000h
-	db 000h, 000h, 0FFh, 000h, "Trad"
-	db " / Folk", 000h
+	db 000h, 000h, 0FFh, 000h, "Trad / Folk", 000h
 
 
 LABEL_E10F08:
@@ -39208,8 +39180,7 @@ LABEL_E10F30:
 	db 009h, 001h, 007h, 001h, 008h, 000h, 006h, 000h
 	db 0C4h, 000h, 071h, 000h, 0D0h, 000h, 050h, 00Fh
 	db 0E1h, 000h, 006h, 000h, 000h, 000h, 0FFh, 000h
-	db "Latin / "
-	db "World", 000h
+	db "Latin / World", 000h
 
 
 LABEL_E10F5E:
@@ -39232,7 +39203,7 @@ LABEL_E10FA0:
 	db 0FFh, 0FFh, 0FFh, 0FFh, 008h, 000h, 022h, 001h
 	db 0A1h, 000h, 035h, 001h, 0B3h, 000h, 0C0h, 00Fh
 	db 0E1h, 000h, 000h, 000h, 000h, 000h, 000h, 000h
-	db 04Fh, 04Bh, 000h, 0FFh
+	db "OK", 000h, 0FFh
 
 
 LABEL_E10FC4:
