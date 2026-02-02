@@ -48836,10 +48836,8 @@ LABEL_E1CDDE:
 	db "  ", 000h, 0FFh, "  Ma"
 	db "rch/Polk"
 	db 061h, 020h, 020h, 020h, 000h, 0FFh, 020h, 020h
-	db "Jazz Fus"
-	db "ion   ", 000h, 0FFh
-	db "   Dance"
-	db " Pop    "
+	db "Jazz Fusion   ", 000h, 0FFh
+	db "   Dance Pop    "
 	db 000h, 0FFh, 020h, 020h, 020h, 020h, 031h, 036h
 	db " Beat   "
 	db 020h, 020h, 000h, 0FFh, 020h, 020h, 020h, 020h
@@ -48851,9 +48849,8 @@ LABEL_E1CDDE:
 	dd LABEL_E1DF48
 	dd LABEL_E1DF3E
 	dd LABEL_E1DF34
-	db "COMP"
-	db "ILE2", 000h, 0FFh, "CO"
-	db "MPILE1", 000h, 0FFh
+	db "COMPILE2", 000h, 0FFh
+	db "COMPILE1", 000h, 0FFh
 	db "User2   "
 	db 000h, 0FFh, "User1 "
 	db 020h, 020h, 000h, 0FFh, 01Ch, 000h, 01Ch, 000h
@@ -48863,16 +48860,10 @@ LABEL_E1CDDE:
 	dd LABEL_E1DFA8
 	dd LABEL_E1DF94
 	dd LABEL_E1DF80
-	db "MSP COMP"
-	db "ILE Bank"
-	db "2:", 000h, 0FFh, "MSP "
-	db "COMPILE "
-	db "Bank1:", 000h, 0FFh
-	db "MSP User"
-	db " Bank 2:"
-	db "  ", 000h, 0FFh, "MSP "
-	db "User Ban"
-	db 06Bh, 020h, 031h, 03Ah, 020h, 020h, 000h, 0FFh
+	db "MSP COMPILE Bank2:", 000h, 0FFh
+	db "MSP COMPILE Bank1:", 000h, 0FFh
+	db "MSP User Bank 2:  ", 000h, 0FFh
+	db "MSP User Bank 1:  ", 000h, 0FFh
 	dd LABEL_E1E160
 	dd LABEL_E1E14E
 	dd LABEL_E1E13C
