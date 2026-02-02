@@ -37779,9 +37779,8 @@ LABEL_E0F61A:
 	db 00Ch, 000h, 0C8h, 000h, 0B7h, 000h, 0DAh, 000h
 	db 03Ah, 0F6h, 0E0h, 000h
 	db 000h, 000h, 000h, 000h
-	db 0F9h, 000h, "variou"
-	db "s instru"
-	db "ments !", 000h
+	db 0F9h, 000h
+	db "various instruments !", 000h
 
 
 LABEL_E0F650:
@@ -38065,8 +38064,8 @@ LABEL_E0FAF4:
 	db 00Ah, 000h, 000h, 000h, 000h, 000h, 03Fh, 001h
 	db 0EFh, 000h, 0FFh, 000h, 003h, 000h, 000h, 000h
 	db 0A0h, 001h, 0E0h, 0D5h, 003h, 000h, 01Eh, 0FBh
-	db 0E0h, 000h, 09Ah, 000h, 000h, 000h, 042h, 041h
-	db "NK VIEW", 000h
+	db 0E0h, 000h, 09Ah, 000h, 000h, 000h
+	db "BANK VIEW", 000h
 
 
 LABEL_E0FB28:
@@ -38144,24 +38143,21 @@ LABEL_E0FC66:
 	db 02Bh, 000h, 060h, 001h, 08Ah, 000h, 0FFh, 0FFh, 094h, 000h
 	db 092h, 000h, 008h, 000h, 002h, 001h, 052h, 000h
 	db 035h, 001h, 064h, 000h, 086h, 0FCh, 0E0h, 000h
-	db 000h, 000h, 000h, 000h, 0FFh, 000h, 04Eh, 041h
-	db "MING", 000h, 0FFh
+	db 000h, 000h, 000h, 000h, 0FFh, 000h, "NAMING", 000h, 0FFh
 
 
 LABEL_E0FC8E:
 	db 02Bh, 000h, 060h, 001h, 08Ah, 000h, 0FFh, 0FFh, 095h, 000h
 	db 093h, 000h, 008h, 000h, 002h, 001h, 06Eh, 000h
 	db 035h, 001h, 080h, 000h, 0AEh, 0FCh, 0E0h, 000h
-	db 000h, 000h, 000h, 000h, 0FFh, 000h, 04Dh, 045h
-	db "MORY", 000h, 0FFh
+	db 000h, 000h, 000h, 000h, 0FFh, 000h, "MEMORY", 000h, 0FFh
 
 
 LABEL_E0FCB6:
 	db 02Bh, 000h, 060h, 001h, 08Ah, 000h, 0FFh, 0FFh, 096h, 000h
 	db 094h, 000h, 008h, 000h, 002h, 001h, 07Eh, 000h
 	db 035h, 001h, 090h, 000h, 0D6h, 0FCh, 0E0h, 000h
-	db 000h, 000h, 000h, 000h, 0FFh, 000h, 04Eh, 041h
-	db "MING", 000h, 0FFh
+	db 000h, 000h, 000h, 000h, 0FFh, 000h, "NAMING", 000h, 0FFh
 
 
 LABEL_E0FCDE:
@@ -117834,8 +117830,8 @@ LABEL_ED27E4:
 	db 00Ah, 000h, 000h, 000h, 000h, 000h, 03Fh, 001h
 	db 0EFh, 000h, 0FFh, 000h, 000h, 000h, 001h, 000h
 	db 0A0h, 001h, 0FAh, 0F5h, 003h, 000h, 01Eh, 060h
-	db 0EDh, 000h, 09Ah, 000h, 000h, 000h, 042h, 041h
-	db "NK VIEW", 000h
+	db 0EDh, 000h, 09Ah, 000h, 000h, 000h
+	db "BANK VIEW", 000h
 	db 009h, 000h, 062h, 001h, 000h, 000h, 0FFh, 0FFh
 	db 002h, 000h, 0FFh, 0FFh, 008h, 000h, 005h, 000h
 	db 034h, 000h, 0E1h, 000h
