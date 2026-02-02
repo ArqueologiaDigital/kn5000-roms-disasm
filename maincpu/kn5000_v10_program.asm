@@ -38305,7 +38305,7 @@ LABEL_E0FF6C:
 	db 0A2h, 000h, 0FFh, 0FFh, 0A6h, 000h, 0A4h, 000h
 	db 008h, 000h, 008h, 000h, 022h, 000h, 023h, 000h
 	db 034h, 000h, 08Ch, 0FFh, 0E0h, 000h, 000h, 000h
-	db 000h, 000h, 0FFh, 000h, 04Dh, 049h, 043h, 000h
+	db 000h, 000h, 0FFh, 000h, "MIC", 000h
 
 
 LABEL_E0FF90:
@@ -39529,7 +39529,7 @@ LABEL_E115B4:
 	db 030h, 001h, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh
 	db 008h, 000h, 022h, 001h, 0A1h, 000h, 035h, 001h
 	db 0B3h, 000h, 0D4h, 015h, 0E1h, 000h, 000h, 000h
-	db 000h, 000h, 000h, 000h, 04Fh, 04Bh, 000h, 0FFh
+	db 000h, 000h, 000h, 000h, "OK", 000h, 0FFh
 
 
 LABEL_E115D8:
@@ -40947,7 +40947,7 @@ LABEL_E13094:
 	db 0C5h, 001h, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh
 	db 008h, 000h, 022h, 001h, 0A1h, 000h, 035h, 001h
 	db 0B3h, 000h, 0B4h, 030h, 0E1h, 000h, 000h, 000h
-	db 000h, 000h, 000h, 000h, 04Fh, 04Bh, 000h, 0FFh
+	db 000h, 000h, 000h, 000h, "OK", 000h, 0FFh
 
 
 LABEL_E130B8:
@@ -44269,9 +44269,7 @@ LABEL_E16184:
 	db 00Ah, 000h, 000h, 000h, 000h, 000h, 03Fh, 001h
 	db 0EFh, 000h, 0FFh, 000h, 000h, 000h, 010h, 000h
 	db 0A0h, 001h, 032h, 0D6h, 003h, 000h, 01Eh, 07Bh
-	db 0E1h, 000h, 098h, 000h, 000h, 000h, 053h, 054h
-	db "YLE CONV"
-	db 045h, 052h, 054h, 000h
+	db 0E1h, 000h, 098h, 000h, 000h, 000h, "STYLE CONVERT", 000h
 
 
 	db 011h, 000h, 060h, 001h
@@ -44748,7 +44746,7 @@ String_EASY_COMPOSER:		; E17EBA
 	db 072h, 0D6h, 003h, 000h, 0ECh, 084h, 0E1h, 000h
 	db 09Fh, 000h, 000h, 000h, "RECO"
 	db "RD SETTI"
-	db 04Eh, 047h, 000h, 0FFh
+	db "NG", 000h, 0FFh
 
 
 	db 03Eh, 000h, 060h, 001h
@@ -44757,7 +44755,7 @@ String_EASY_COMPOSER:		; E17EBA
 	db 0EEh, 000h, 007h, 000h, 0C9h, 000h, 0FFh, 0FFh
 	db 000h, 000h, 000h, 000h, 000h, 000h, 000h, 000h
 	db 000h, 000h, 000h, 000h, 028h, 085h, 0E1h, 000h
-	db 044h, 052h, 04Dh, 000h
+	db "DRM", 000h
 
 
 	db 03Eh, 000h, 060h, 001h
@@ -44839,7 +44837,7 @@ String_EASY_COMPOSER:		; E17EBA
 	db 099h, 000h
 	db 000h, 000h, "VARIAT"
 	db "ION NAMI"
-	db 04Eh, 047h, 000h, 0FFh
+	db "NG", 000h, 0FFh
 
 
 	db 03Dh, 000h, 060h, 001h
@@ -45183,7 +45181,7 @@ String_EASY_COMPOSER:		; E17EBA
 	db 007h, 000h, 0C9h, 000h
 	db 0FFh, 0FFh, 000h, 000h, 000h, 000h, 000h, 000h
 	db 000h, 000h, 000h, 000h, 000h, 000h, 01Ah, 08Eh
-	db 0E1h, 000h, 044h, 052h, 04Dh, 000h
+	db 0E1h, 000h, "DRM", 000h
 
 
 	db 03Eh, 000h, 060h, 001h, 000h, 000h, 0FFh, 0FFh, 00Ch, 000h
@@ -45798,7 +45796,7 @@ String_EASY_COMPOSER:		; E17EBA
 	db 01Ah, 001h, 038h, 000h, 035h, 001h, 04Ah, 000h
 	dd LABEL_E199DA
 	db 000h, 000h, 000h, 000h
-	db 0FFh, 000h, 04Dh, 045h, 04Dh, 000h
+	db 0FFh, 000h, "MEM", 000h
 
 
 	db 02Bh, 000h, 060h, 001h, 000h, 000h, 0FFh, 0FFh, 01Ch, 000h
@@ -45910,7 +45908,7 @@ String_EASY_COMPOSER:		; E17EBA
 	db 0B1h, 000h, 007h, 000h, 0C1h, 000h, 0FFh, 0FFh
 	db 000h, 000h, 000h, 000h, 000h, 000h, 000h, 000h
 	db 00Bh, 000h, 000h, 000h, 070h, 09Ch, 0E1h, 000h
-	db 053h, 045h, 054h, 000h
+	db "SET", 000h
 
 
 	db 02Bh, 000h, 060h, 001h
@@ -46743,7 +46741,7 @@ String_MSP_PHRASE_RECORDING:			; E1AB82
 	db 0F9h, 000h, 000h, 000h, 0CAh, 000h, 0A0h, 001h
 	db 07Ah, 0D7h, 003h, 000h, 05Ch, 0AFh, 0E1h, 000h
 	db 099h, 000h, 000h, 000h, "NAMI"
-	db 04Eh, 047h, 000h, 0FFh
+	db "NG", 000h, 0FFh
 
 
 	db 020h, 000h, 060h, 001h
@@ -46773,7 +46771,7 @@ String_MSP_PHRASE_RECORDING:			; E1AB82
 	db 0A7h, 000h, 000h, 000h
 	db "MSP COMP"
 	db "ILE SETT"
-	db 049h, 04Eh, 047h, 000h
+	db "ING", 000h
 
 
 	db 020h, 000h, 060h, 001h
@@ -49787,7 +49785,7 @@ String_CONSOLE:			; E1FBC8
 	db 041h, 045h, 000h, 0FFh, 000h, 0FFh, 000h, 0FFh
 	db "STOP", 000h, 0FFh, 000h, 0FFh
 	db "START", 000h, 000h, 0FFh
-	db 04Fh, 04Bh, 000h, 0FFh, 04Eh, 047h, 000h, 0FFh
+	db "OK", 000h, 0FFh, "NG", 000h, 0FFh
 	db "TOTAL", 000h, "FD"
 	db "D_TEST", 000h, 0FFh
 	db "TT_HDDEX"
@@ -49828,7 +49826,7 @@ String_CONSOLE:			; E1FBC8
 	db 00Ah, "TEST Fi"
 	db "nishd!!", 000h
 	db "init", 000h, 0FFh, "OK"
-	db 000h, 0FFh, 04Eh, 047h, 000h, 0FFh, 041h, 03Ah
+	db 000h, 0FFh, "NG", 000h, 0FFh, 041h, 03Ah
 	db "IMMUNITY"
 	db ".TST", 000h, 0FFh, 00Ah, "F"
 	db "ile remo"
@@ -51124,7 +51122,7 @@ LABEL_E1FFFA:
 	db 003h, 000h
 	dd LABEL_E21C12
 	db 000h, 000h
-	db 000h, 000h, 04Dh, 049h, 043h, 000h
+	db 000h, 000h, "MIC", 000h
 
 
 	db 04Ah, 000h, 060h, 001h, 000h, 000h, 0FFh, 0FFh, 006h, 000h
@@ -51370,7 +51368,7 @@ LABEL_E1FFFA:
 	db 0F5h, 000h, 000h, 000h, 0FFh, 0FFh, 000h, 000h
 	db 000h, 000h, 0FFh, 000h, 000h, 000h, 089h, 000h
 	db 07Ch, 0DDh, 003h, 000h, 074h, 021h, 0E2h, 000h
-	db 000h, 000h, 000h, 000h, 04Dh, 049h, 043h, 000h
+	db 000h, 000h, 000h, 000h, "MIC", 000h
 
 
 	db 034h, 000h, 060h, 001h, 0FFh, 0FFh, 001h, 000h
@@ -51525,7 +51523,7 @@ LABEL_E1FFFA:
 	db 0F5h, 000h, 000h, 000h, 0FFh, 0FFh, 000h, 000h
 	db 000h, 000h, 0FFh, 000h, 000h, 000h, 088h, 000h
 	db 08Eh, 0DDh, 003h, 000h, 0ACh, 024h, 0E2h, 000h
-	db 000h, 000h, 000h, 000h, 04Dh, 049h, 043h, 000h
+	db 000h, 000h, 000h, 000h, "MIC", 000h
 
 
 	db 04Ah, 000h, 060h, 001h, 000h, 000h, 0FFh, 0FFh
@@ -52067,7 +52065,7 @@ LABEL_E1FFFA:
 	db 0FFh, 0FFh, 008h, 000h, 004h, 001h, 0C8h, 000h
 	db 027h, 001h, 0DAh, 000h, 0AEh, 02Fh, 0E2h, 000h
 	db 000h, 000h, 000h, 000h, 0FFh, 000h, 053h, 04Fh
-	db 04Eh, 047h, 000h, 0FFh
+	db "NG", 000h, 0FFh
 
 
 	db 022h, 000h, 060h, 001h
@@ -52108,7 +52106,7 @@ LABEL_E1FFFA:
 	db 002h, 000h, "TECHNI"
 	db "CS MULTI"
 	db " RECORDI"
-	db 04Eh, 047h, 000h, 0FFh, 002h, 000h, 067h, 001h
+	db "NG", 000h, 0FFh, 002h, 000h, 067h, 001h
 	db 000h, 000h, 0FFh, 0FFh, 007h, 000h, 005h, 000h
 	db 008h, 000h, 008h, 000h, 072h, 000h, 0D5h, 000h
 	db 08Bh, 000h, 0F5h, 000h, 000h, 000h, 001h, 000h
@@ -52118,7 +52116,7 @@ LABEL_E1FFFA:
 	db 000h, 000h, 034h, 0DEh, 003h, 000h, 003h, 000h
 	db "GM MULTI"
 	db " RECORDI"
-	db 04Eh, 047h, 000h, 0FFh
+	db "NG", 000h, 0FFh
 
 
 	db 029h, 000h, 060h, 001h
@@ -52152,7 +52150,7 @@ LABEL_E1FFFA:
 	db 039h, 000h, 000h, 000h
 	db "TRACK AS"
 	db "SIGN PRE"
-	db 053h, 045h, 054h, 000h
+	db "SET", 000h
 
 
 	db 029h, 000h, 060h, 001h
@@ -57292,7 +57290,7 @@ String_CREATE:		; E28AAC
 	db 000h, 000h, 000h, 000h, 000h, 000h, 000h, 000h
 	db 00Bh, 000h, 0D4h, 0DFh, 003h, 000h, 062h, 0A5h
 	db 0E2h, 000h, 000h, 000h, 090h, 000h, 000h, 000h
-	db 000h, 000h, 04Eh, 04Fh, 000h, 0FFh
+	db 000h, 000h, "NO", 000h, 0FFh
 
 
 	db 020h, 000h, 060h, 001h, 009h, 000h, 0FFh, 0FFh, 00Dh, 000h
@@ -57434,7 +57432,7 @@ String_CREATE:		; E28AAC
 	db 000h, 000h, 00Bh, 000h, 0E2h, 0DFh, 003h, 000h
 	dd LABEL_E2A85C
 	db 000h, 000h, 091h, 000h
-	db 000h, 000h, 000h, 000h, 04Eh, 04Fh, 000h, 0FFh
+	db 000h, 000h, 000h, 000h, "NO", 000h, 0FFh
 
 
 	db 049h, 000h, 060h, 001h, 00Bh, 000h, 0FFh, 0FFh
@@ -58398,7 +58396,7 @@ String_CREATE:		; E28AAC
 	db 000h, 000h, 000h, 000h, 000h, 000h, 00Ah, 000h
 	db 046h, 0E0h, 003h, 000h, 090h, 0BBh, 0E2h, 000h
 	db 000h, 000h, 09Ah, 000h, 000h, 000h, 000h, 000h
-	db 04Eh, 04Fh, 000h, 0FFh
+	db "NO", 000h, 0FFh
 
 
 	db 011h, 000h, 060h, 001h
@@ -58570,7 +58568,7 @@ String_CREATE:		; E28AAC
 	db 000h, 000h, 000h, 000h, 000h, 000h, 00Bh, 000h
 	db 05Ah, 0E0h, 003h, 000h, 000h, 0BFh, 0E2h, 000h
 	db 000h, 000h, 09Bh, 000h, 000h, 000h, 000h, 000h
-	db 04Eh, 04Fh, 000h, 0FFh
+	db "NO", 000h, 0FFh
 
 
 	db 049h, 000h, 060h, 001h
@@ -58733,7 +58731,7 @@ String_CREATE:		; E28AAC
 	db 000h, 000h, 000h, 000h, 000h, 000h, 00Bh, 000h
 	db 074h, 0E0h, 003h, 000h, 080h, 0C2h, 0E2h, 000h
 	db 000h, 000h, 09Ch, 000h, 000h, 000h, 000h, 000h
-	db 04Eh, 04Fh, 000h, 0FFh
+	db "NO", 000h, 0FFh
 
 
 	db 020h, 000h, 060h, 001h
@@ -59008,7 +59006,7 @@ String_CREATE:		; E28AAC
 	db 000h, 000h, 000h, 000h, 000h, 000h, 00Bh, 000h
 	db 0A0h, 0E0h, 003h, 000h, 048h, 0C8h, 0E2h, 000h
 	db 000h, 000h, 09Eh, 000h, 000h, 000h, 000h, 000h
-	db 04Eh, 04Fh, 000h, 0FFh
+	db "NO", 000h, 0FFh
 
 
 	db 020h, 000h, 060h, 001h
@@ -59475,7 +59473,7 @@ String_CREATE:		; E28AAC
 	db 000h, 000h, 00Bh, 000h, 0E4h, 0E0h, 003h, 000h
 	dd LABEL_E2D1EC
 	db 000h, 000h, 0A1h, 000h
-	db 000h, 000h, 000h, 000h, 04Eh, 04Fh, 000h, 0FFh
+	db 000h, 000h, 000h, 000h, "NO", 000h, 0FFh
 
 
 	db 020h, 000h, 060h, 001h, 00Ah, 000h, 0FFh, 0FFh
@@ -59719,7 +59717,7 @@ String_CREATE:		; E28AAC
 	db 000h, 000h, 00Bh, 000h, 006h, 0E1h, 003h, 000h
 	dd LABEL_E2D6FC
 	db 000h, 000h, 0A3h, 000h
-	db 000h, 000h, 000h, 000h, 04Eh, 04Fh, 000h, 0FFh
+	db 000h, 000h, 000h, 000h, "NO", 000h, 0FFh
 
 
 	db 020h, 000h, 060h, 001h, 009h, 000h, 0FFh, 0FFh
@@ -59870,7 +59868,7 @@ String_CREATE:		; E28AAC
 	db 000h, 000h, 000h, 000h, 000h, 000h, 00Bh, 000h
 	db 014h, 0E1h, 003h, 000h, 000h, 0DAh, 0E2h, 000h
 	db 000h, 000h, 0A4h, 000h, 000h, 000h, 000h, 000h
-	db 04Eh, 04Fh, 000h, 0FFh
+	db "NO", 000h, 0FFh
 
 
 	db 034h, 000h, 060h, 001h
@@ -63864,7 +63862,7 @@ LABEL_E2E624:			; registered from InitializeKubo
 	db "TECHNI-C"
 	db "HORD", 000h, 0FFh, "PA"
 	db "NEL MEMO"
-	db 052h, 059h, 000h, 0FFh, 053h, 045h, 054h, 000h
+	db 052h, 059h, 000h, 0FFh, "SET", 000h
 	db "NEXT BAN"
 	db "K", 000h, "BANK V"
 	db "IEW", 000h, "SEQU"
@@ -73951,7 +73949,7 @@ String_MIDI_MENU:		; E56994
 	db 054h, 000h, 0A0h, 001h
 	db 01Ah, 000h, 000h, 000h, "COMM"
 	db "ON SETTI"
-	db 04Eh, 047h, 000h, 0FFh
+	db "NG", 000h, 0FFh
 
 
 	db 01Dh, 000h, 060h, 001h
@@ -74064,7 +74062,7 @@ String_MIDI_MENU:		; E56994
 	db 0A0h, 001h, 07Ah, 0E4h, 003h, 000h, 0FEh, 06Dh
 	db 0E5h, 000h, 067h, 000h, 000h, 000h, 050h, 041h
 	db "RT SETTI"
-	db 04Eh, 047h, 000h, 0FFh, 00Fh, 000h, 063h, 001h
+	db "NG", 000h, 0FFh, 00Fh, 000h, 063h, 001h
 	db 000h, 000h, 002h, 000h, 006h, 000h, 0FFh, 0FFh
 	db 008h, 000h, 001h, 000h, 01Eh, 000h, 03Fh, 001h
 	db 0EEh, 000h, 0F5h, 000h, 0C1h, 000h, 001h, 000h
@@ -75175,7 +75173,7 @@ String_MIDI_MENU:		; E56994
 	dd LABEL_E58742
 	db 002h, 000h, 000h, 000h
 	db 0FFh, 000h, "RECIEV"
-	db 049h, 04Eh, 047h, 000h
+	db "ING", 000h
 
 
 	db 02Bh, 000h, 060h, 001h
@@ -78747,7 +78745,7 @@ LABEL_E81D06:
 	db 000h, 000h, 008h, 000h, 000h, 000h, 000h, 000h
 	db 0FFh, 000h, 000h, 000h, 001h, 000h, 094h, 0E6h
 	db 003h, 000h, 001h, 000h, 0E0h, 01Eh, 0E8h, 000h
-	db 050h, 041h, 04Eh, 000h
+	db "PAN", 000h
 
 
 	db 051h, 000h, 060h, 001h
@@ -87262,7 +87260,7 @@ LABEL_E9529E:
 	db "F", 000h, "DSP EF"
 	db "F", 000h, "REVERB"
 	db 000h, 0FFh, 000h, 0FFh, "VOLU"
-	db 04Dh, 045h, 000h, 0FFh, 050h, 041h, 04Eh, 000h
+	db 04Dh, 045h, 000h, 0FFh, "PAN", 000h
 	db "SOUND", 000h, 000h, 0FFh
 	db 000h, 000h, 001h, 000h, 002h, 000h, 003h, 000h
 	db 004h, 000h, 005h, 000h, 006h, 000h, 007h, 000h
@@ -87511,7 +87509,7 @@ LABEL_E9529E:
 	dd LABEL_E9FE06
 	dd LABEL_E9FE04
 	db 000h, 0FFh, 04Eh, 041h
-	db 04Dh, 045h, 000h, 0FFh, 053h, 052h, 043h, 000h
+	db 04Dh, 045h, 000h, 0FFh, "SRC", 000h
 	db "SONG", 000h, 0FFh, 000h, 000h
 	db 000h, 000h, 000h, 000h, 000h, 000h, 000h, 000h
 	db 000h, 000h, 000h, 000h, 000h, 000h, 000h, 000h
@@ -87525,7 +87523,7 @@ LABEL_E9529E:
 	db 000h, 000h, 000h, 000h, 000h, 0FFh, 025h, 038h
 	db 073h, 000h, 07Ch, 0FEh, 0E9h, 000h, 078h, 0FEh
 	db 0E9h, 000h, 076h, 0FEh, 0E9h, 000h, 000h, 0FFh
-	db 050h, 041h, 04Eh, 000h, 04Eh, 04Fh, 000h, 0FFh
+	db "PAN", 000h, "NO", 000h, 0FFh
 	dd LABEL_E9FE94
 	dd LABEL_E9FE8E
 	dd LABEL_E9FE8C
@@ -87548,7 +87546,7 @@ LABEL_E9529E:
 	db "H", 000h, "HSPACE"
 	db 000h, 0FFh, "VSPACE"
 	db 000h, 0FFh, "ALIGN", 000h
-	db 041h, 04Ch, 054h, 000h, 053h, 052h, 043h, 000h
+	db "ALT", 000h, "SRC", 000h
 	db 000h, 000h, 000h, 000h, 000h, 000h, 000h, 000h
 	db 000h, 000h, 000h, 000h, 000h, 000h, 000h, 000h
 	db 000h, 000h, 000h, 000h, 000h, 000h, 000h, 000h
@@ -87693,7 +87691,7 @@ LABEL_E9529E:
 	dd LABEL_EA036C
 	dd LABEL_EA0368
 	db 053h, 045h, 051h, 000h, 053h, 051h, 046h, 000h
-	db 04Dh, 044h, 020h, 000h, 052h, 043h, 04Dh, 000h
+	db 04Dh, 044h, 020h, 000h, "RCM", 000h
 	db 04Dh, 053h, 050h, 000h, 054h, 04Dh, 020h, 000h
 	db 043h, 04Dh, 050h, 000h, 053h, 051h, 054h, 000h
 	db 050h, 04Dh, 054h, 000h, 04Ch, 053h, 057h, 000h
@@ -87730,7 +87728,7 @@ LABEL_E9529E:
 	db 000h, 000h, 000h, 000h, 000h, 000h, 000h, 000h
 	db 000h, 000h, 000h, 000h, 000h, 000h, 02Ah, 02Eh
 	db 02Ah, 000h, 02Eh, 02Ah, 000h, 0FFh, 02Ah, 02Eh
-	db 04Dh, 049h, 044h, 000h, 000h, 000h, 000h, 000h
+	db "MID", 000h, 000h, 000h, 000h, 000h
 	db 000h, 000h, 000h, 000h, 000h, 000h, 000h, 000h
 	db 000h, 000h, 000h, 000h, "MThd"
 	db 000h, 0FFh, "MTrk", 000h, 0FFh
@@ -88637,7 +88635,7 @@ LABEL_E9529E:
 	db 003h, 000h, 002h, 01Ch, 0EAh, 000h, 099h, 000h
 	db 000h, 000h, "SAVE F"
 	db "ILE NAMI"
-	db 04Eh, 047h, 000h, 0FFh
+	db "NG", 000h, 0FFh
 
 
 	db 020h, 000h, 060h, 001h
@@ -90591,7 +90589,7 @@ LABEL_E9529E:
 	db 003h, 000h, 089h, 000h, 01Ch, 000h, 06Ch, 000h
 	db 020h, 000h, 06Ch, 000h, 001h, 000h, 045h, 001h
 	db "DISK", 000h, 0FFh, "SO"
-	db 04Eh, 047h, 000h, 0FFh
+	db "NG", 000h, 0FFh
 
 
 	db 01Fh, 000h, 060h, 001h
@@ -91663,7 +91661,7 @@ LABEL_E9529E:
 	db 028h, 000h, 0DDh, 000h, 03Ah, 000h, 098h, 05Fh
 	db 0EAh, 000h, 004h, 000h, 000h, 000h, 0FFh, 000h
 	db "DISK NAM"
-	db 049h, 04Eh, 047h, 000h
+	db "ING", 000h
 
 
 	db 035h, 000h, 060h, 001h
@@ -94086,9 +94084,9 @@ LABEL_EAA160:
 	db 046h, 000h, 07Eh, 039h, 062h, 000h, 07Eh, 039h
 	db 038h, 000h, 07Eh, 038h, 035h, 000h, 07Eh, 038h
 	db 031h, 000h, 04Fh, 04Eh, 000h, 0FFh, 04Fh, 046h
-	db 046h, 000h, 04Fh, 04Bh, 000h, 0FFh, 03Ch, 000h
+	db 046h, 000h, "OK", 000h, 0FFh, 03Ch, 000h
 	db 03Eh, 000h, 07Eh, 037h, 066h, 000h, 07Eh, 038h
-	db 030h, 000h, 059h, 045h, 053h, 000h, 04Eh, 04Fh
+	db 030h, 000h, "YES", 000h, 04Eh, 04Fh
 	db 000h, 0FFh, 000h, 000h, 013h, 000h, 01Ah, 000h
 	db 077h, 000h, 02Fh, 000h, 036h, 000h, 03Dh, 000h
 	db 044h, 000h, 04Bh, 000h, 060h, 000h, 067h, 000h
@@ -94133,7 +94131,7 @@ LABEL_EAA160:
 	db 0EAh, 000h, 092h, 0A4h, 0EAh, 000h, 08Eh, 0A4h
 	db 0EAh, 000h, 08Ah, 0A4h, 0EAh, 000h, 084h, 0A4h
 	db 0EAh, 000h, 07Eh, 0A4h, 0EAh, 000h, 07Ah, 0A4h
-	db 0EAh, 000h, 04Dh, 049h, 043h, 000h, 04Dh, 045h
+	db 0EAh, 000h, "MIC", 000h, 04Dh, 045h
 	db "TR", 000h, 0FFh, "CTRL"
 	db 000h, 0FFh, 04Dh, 053h, 050h, 000h, 04Dh, 053h
 	db "P", 000h, "RTBS", 000h, 0FFh
@@ -94247,7 +94245,7 @@ LABEL_EAA160:
 	db 050h, 031h, 035h, 000h, 050h, 031h, 034h, 000h
 	db 050h, 031h, 033h, 000h, 052h, 048h, 059h, 000h
 	db 043h, 054h, 04Ch, 000h, 041h, 050h, 043h, 000h
-	db 043h, 048h, 044h, 000h, 044h, 052h, 04Dh, 000h
+	db 043h, 048h, 044h, 000h, "DRM", 000h
 	db 050h, 020h, 034h, 000h, 050h, 020h, 037h, 000h
 	db 050h, 020h, 036h, 000h, 050h, 020h, 035h, 000h
 	db 050h, 031h, 032h, 000h, 050h, 031h, 031h, 000h
@@ -116955,7 +116953,7 @@ LABEL_ED27E4:
 	db "/RHYTHM "
 	db "SELECT|E"
 	db "ASY SETT"
-	db 049h, 04Eh, 047h, 000h, 020h, 020h, 07Ch, 020h
+	db "ING", 000h, 020h, 020h, 07Ch, 020h
 	db 000h, 0FFh
 
 
@@ -117844,7 +117842,7 @@ LABEL_ED27E4:
 	db 008h, 000h, 003h, 001h, 054h, 000h, 036h, 001h
 	db 066h, 000h, 044h, 061h, 0EDh, 000h, 000h, 000h
 	db 000h, 000h, 0FFh, 000h, "NAMI"
-	db 04Eh, 047h, 000h, 0FFh
+	db "NG", 000h, 0FFh
 
 
 	db 02Bh, 000h, 060h, 001h
@@ -117860,7 +117858,7 @@ LABEL_ED27E4:
 	db 008h, 000h, 004h, 001h, 07Dh, 000h, 037h, 001h
 	db 08Fh, 000h, 094h, 061h, 0EDh, 000h, 000h, 000h
 	db 000h, 000h, 0FFh, 000h, "NAMI"
-	db 04Eh, 047h, 000h, 0FFh
+	db "NG", 000h, 0FFh
 
 
 	db 030h, 000h, 060h, 001h
@@ -118344,7 +118342,7 @@ ErrorDialog_RecoveryLine3:
 	db 0D6h, 000h, 08Ah, 000h, 0E9h, 000h, 09Ch, 000h
 	dd LABEL_ED6A7A
 	db 000h, 000h, 000h, 000h
-	db 0FAh, 000h, 04Fh, 04Bh, 000h, 0FFh
+	db 0FAh, 000h, "OK", 000h, 0FFh
 
 
 	db 02Bh, 000h, 060h, 001h, 00Bh, 000h, 0FFh, 0FFh, 0FFh, 0FFh
@@ -118373,7 +118371,7 @@ ErrorDialog_RecoveryLine3:
 	db 0D6h, 000h, 09Eh, 000h, 0E9h, 000h, 0B0h, 000h
 	dd LABEL_ED6B0A
 	db 000h, 000h, 000h, 000h
-	db 0F9h, 000h, 04Eh, 04Fh, 000h, 0FFh
+	db 0F9h, 000h, "NO", 000h, 0FFh
 
 
 	db 035h, 000h, 060h, 001h, 0FFh, 0FFh, 012h, 000h, 0FFh, 0FFh
@@ -118388,7 +118386,7 @@ ErrorDialog_RecoveryLine3:
 	db 0D6h, 000h, 08Ah, 000h, 0E9h, 000h, 09Ch, 000h
 	dd LABEL_ED6B52
 	db 000h, 000h, 000h, 000h
-	db 0F9h, 000h, 04Eh, 04Fh, 000h, 0FFh
+	db 0F9h, 000h, "NO", 000h, 0FFh
 
 
 	db 02Bh, 000h, 060h, 001h, 011h, 000h, 0FFh, 0FFh, 0FFh, 0FFh
@@ -118417,7 +118415,7 @@ ErrorDialog_RecoveryLine3:
 	db 0D6h, 000h, 09Eh, 000h, 0E9h, 000h, 0B0h, 000h
 	dd LABEL_ED6BE2
 	db 000h, 000h, 000h, 000h
-	db 0F9h, 000h, 04Eh, 04Fh, 000h, 0FFh, 01Ah, 000h
+	db 0F9h, 000h, "NO", 000h, 0FFh, 01Ah, 000h
 	db 062h, 001h, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh
 	db 0FFh, 0FFh, 00Ah, 000h, 000h, 000h, 000h, 000h
 	dd LABEL_EF013F
@@ -119005,7 +119003,7 @@ ErrorDialog_RecoveryLine3:
 	db 0FFh, 0FFh, 008h, 000h, 0F6h, 000h, 06Eh, 000h
 	db 025h, 001h, 080h, 000h, 0A6h, 077h, 0EDh, 000h
 	db 004h, 000h, 000h, 000h, 0FFh, 000h, 03Dh, 020h
-	db 04Eh, 04Fh, 000h, 0FFh
+	db "NO", 000h, 0FFh
 
 
 	db 06Ah, 000h, 060h, 001h
