@@ -37501,8 +37501,7 @@ LABEL_E0F1D8:
 	db 0FFh, 0FFh, 0FFh, 0FFh, 008h, 000h, 028h, 000h
 	db 038h, 000h, 07Bh, 000h, 04Ah, 000h, 0F8h, 0F1h
 	db 0E0h, 000h, 001h, 000h, 000h, 000h, 0FCh, 000h
-	db "3 Compos"
-	db 065h, 072h, 000h, 0FFh
+	db "3 Composer", 000h, 0FFh
 
 
 LABEL_E0F204:	
@@ -39387,8 +39386,7 @@ LABEL_E11308:
 	db 022h, 001h, 015h, 001h, 008h, 000h, 096h, 000h
 	db 01Eh, 000h, 0F9h, 000h, 030h, 000h, 028h, 013h
 	db 0E1h, 000h, 000h, 000h, 000h, 000h, 0FBh, 000h
-	db "SUB CATE"
-	db "GORY", 000h, 0FFh
+	db "SUB CATEGORY", 000h, 0FFh
 
 
 LABEL_E11336:
@@ -44498,9 +44496,7 @@ String_EASY_COMPOSER:		; E17EBA
 	db 000h, 000h, 0FFh, 000h, 000h, 000h, 00Ch, 000h
 	db 04Eh, 0D6h, 003h, 000h, 0D0h, 07Fh, 0E1h, 000h
 	db 062h, 000h, 0A0h, 001h, 054h, 000h, 000h, 000h
-	db "LOAD SIN"
-	db "GLE COMP"
-	db "OSER", 000h, 0FFh
+	db "LOAD SINGLE COMPOSER", 000h, 0FFh
 
 
 	db 02Eh, 000h, 060h, 001h, 000h, 000h, 0FFh, 0FFh, 008h, 000h
@@ -44848,8 +44844,7 @@ String_EASY_COMPOSER:		; E17EBA
 	db 088h, 000h, 076h, 0D6h, 003h, 000h, 01Eh, 087h
 	db 0E1h, 000h, 000h, 000h, 000h, 000h, 043h, 04Ch
 	db "EAR THE "
-	db "ENTIRE P"
-	db "ATTERN", 000h, 0FFh
+	db "ENTIRE PATTERN", 000h, 0FFh
 
 
 	db 035h, 000h, 060h, 001h, 0FFh, 0FFh, 013h, 000h
@@ -44928,8 +44923,7 @@ String_EASY_COMPOSER:		; E17EBA
 	db 0B2h, 000h, 0A0h, 001h, 084h, 0D6h, 003h, 000h
 	dd LABEL_E188D8
 	db 09Fh, 000h, 000h, 000h
-	db "RECORD S"
-	db "ETTING", 000h, 0FFh
+	db "RECORD SETTING", 000h, 0FFh
 
 
 	db 029h, 000h, 060h, 001h, 000h, 000h, 0FFh, 0FFh
