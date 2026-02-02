@@ -57081,9 +57081,8 @@ String_CREATE:		; E28AAC
 	db 00Ah, 000h, 000h, 000h, 000h, 000h, 03Fh, 001h
 	db 0EFh, 000h, 0F9h, 000h, 000h, 000h, 087h, 000h
 	db 0A0h, 001h, 0B4h, 0DFh, 003h, 000h, 0C6h, 0A0h
-	db 0E2h, 000h, 035h, 000h, 000h, 000h, 041h, 055h
-	db "TO PUNCH"
-	db " RECORD", 000h
+	db 0E2h, 000h, 035h, 000h, 000h, 000h
+	db "AUTO PUNCH RECORD", 000h
 
 
 	db 022h, 000h, 060h, 001h, 000h, 000h, 0FFh, 0FFh
@@ -57615,8 +57614,7 @@ String_CREATE:		; E28AAC
 	db 000h, 000h, 000h, 000h, 0FFh, 000h, 000h, 000h
 	db 00Bh, 000h, 002h, 0E0h, 003h, 000h, 0FAh, 0ABh
 	db 0E2h, 000h, 09Fh, 000h, 0A0h, 001h, 041h, 000h
-	db 000h, 000h, "NOTE C"
-	db "HANGE", 000h
+	db 000h, 000h, "NOTE CHANGE", 000h
 
 
 	db 01Dh, 000h, 060h, 001h, 006h, 000h, 0FFh, 0FFh, 0FFh, 0FFh
@@ -57626,9 +57624,8 @@ String_CREATE:		; E28AAC
 	db 000h, 000h, 00Ch, 000h, 004h, 0E0h, 003h, 000h
 	dd LABEL_E2AC3C
 	db 0A0h, 000h, 0A0h, 001h
-	db "B", 000h, 000h, 000h, "ADVA"
-	db "NCE/DELA"
-	db 059h, 000h
+	db "B", 000h, 000h, 000h
+	db "ADVANCE/DELAY", 000h
 
 
 	db 035h, 000h, 060h, 001h, 0FFh, 0FFh
@@ -57850,7 +57847,7 @@ String_CREATE:		; E28AAC
 	dd LABEL_E800CA
 	db 0DCh, 000h, 078h, 0B0h
 	db 0E2h, 000h, 000h, 000h, 000h, 000h, 0FFh, 000h
-	db 049h, 04Eh, 043h, 000h
+	db "INC", 000h
 
 
 	db 02Bh, 000h, 060h, 001h
@@ -57859,8 +57856,7 @@ String_CREATE:		; E28AAC
 	db 0DCh, 000h
 	dd LABEL_E2B09C
 	db 000h, 000h
-	db 000h, 000h, 0FFh, 000h, "CURS"
-	db 04Fh, 052h, 000h, 0FFh
+	db 000h, 000h, 0FFh, 000h, "CURSOR", 000h, 0FFh
 
 
 	db 01Fh, 000h, 060h, 001h
