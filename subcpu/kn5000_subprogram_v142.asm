@@ -11051,9 +11051,9 @@ InterCPU_DMA_Send_Chunk:
 	LD IX, 0
 
 DMA_Chunk_Start:
-	BIT 4, (PD)  ; MSTAT1
+	BIT 4, (PD)  ; MSTAT1 - test if Main CPU is requesting handshake
 	JR Z, InterCPU_Wait_MSTAT1_Clear
-	RES 0, (PD)  ; SSTAT0
+	RES 0, (PD)  ; SSTAT0 - clear to acknowledge Main CPU handshake request
 	LD (DMA_XFER_STATE), 001h
 	LD L, C
 	DEC 1, L
@@ -11063,9 +11063,9 @@ DMA_Chunk_Start:
 	LD IX, 0
 
 DMA_Chunk_Transfer:
-	BIT 4, (PD)  ; MSTAT1
+	BIT 4, (PD)  ; MSTAT1 - wait for Main CPU to clear (data ready to receive)
 	JR NZ, InterCPU_Wait_MSTAT1_Set
-	SET 0, (PD)  ; SSTAT0
+	SET 0, (PD)  ; SSTAT0 - set to signal ready to receive DMA data
 	LDC_DMAS2_XDE
 	EXTZ BC
 	LDC_DMAM2_BC
@@ -11091,7 +11091,7 @@ InterCPU_Wait_MSTAT1_Set:
 	INC 1, IX
 	CP WA, 0ea60h
 	JR ULE, DMA_Chunk_Transfer
-	SET 0, (PD)  ; SSTAT0
+	SET 0, (PD)  ; SSTAT0 - timeout recovery: force ready state before exit
 	RET
 
 LABEL_020D13:
@@ -11147,17 +11147,17 @@ E1_DMA_Ready:
 	LD IZ, 0
 
 E1_Check_MSTAT1:
-	BIT 4, (PD)  ; MSTAT1
+	BIT 4, (PD)  ; MSTAT1 - test if Main CPU is initiating E1 transfer
 	JRL Z, E1_Timeout_Retry
-	RES 0, (PD)  ; SSTAT0
+	RES 0, (PD)  ; SSTAT0 - clear to acknowledge E1 command from Main CPU
 	LD (DMA_XFER_STATE), 002h
 	LD (INTER_CPU_COMM_LATCHES), 0e1h
 	LD IZ, 0
 
 E1_Start_Transfer:
-	BIT 4, (PD)  ; MSTAT1
+	BIT 4, (PD)  ; MSTAT1 - wait for Main CPU to clear (header data ready)
 	JRL NZ, E1_Busy_Wait
-	SET 0, (PD)  ; SSTAT0
+	SET 0, (PD)  ; SSTAT0 - set to signal ready to receive DMA header
 	LDA XHL, 1110h
 	LD (XHL), XWA
 	LDA XWA, 10DEh
@@ -11228,7 +11228,7 @@ E1_Busy_Wait:
 	INC 1, IZ
 	CP HL, 0ea60h
 	JRL ULE, E1_Start_Transfer
-	SET 0, (PD)  ; SSTAT0
+	SET 0, (PD)  ; SSTAT0 - timeout recovery: force ready state before exit
 
 E1_Exit:
 	POP IZ
@@ -11246,7 +11246,7 @@ E1_Exit:
 ; ----------------------------------------------------------------------------
 INT0_HANDLER:				; 20E86
 	PUSH XWA
-	BIT 2, (PD)  ; MSTAT0 - check if busy
+	BIT 2, (PD)  ; MSTAT0 - test if Main CPU is currently sending data
 	JR NZ, INT0_Exit
 	LD A, (INTER_CPU_COMM_LATCHES)
 	LD (BYTE_FROM_MAINCPU_LATCH), A
@@ -11292,7 +11292,7 @@ INT0_Start_DMA:				; 020EF7h
 	LD (DMA0V), 00ah		; Start DMA channel 0
 
 INT0_Ack:				; 020EFCh
-	RES 1, (PD)  ; SSTAT1 - acknowledge interrupt
+	RES 1, (PD)  ; SSTAT1 - clear to acknowledge command received from Main CPU
 
 INT0_Exit:				; 020EFFh
 	POP XWA
@@ -11386,7 +11386,7 @@ CH0_State2_E1:				; 020F6Dh - E1 command phase 1 complete, start phase 2
 CH0_State3_E2:				; 020F88h - E2 command complete
 	LD (10EEh), 0ffh
 	LD (CMD_PROCESSING_STATE), 000h
-	SET 1, (PD)  ; SSTAT1 - signal ready
+	SET 1, (PD)  ; SSTAT1 - set to signal ready for next command from Main CPU
 	SET 7, (1126h)			; Set E2 pending flag
 	JR T, CH0_Timer_Reset
 
@@ -11395,7 +11395,7 @@ CH0_State4_E1_Done:			; 020F9Bh - E1 two-phase transfer complete
 	RES 7, (PAYLOAD_LOADED_FLAG)
 
 CH0_Ack:				; 020FA4h
-	SET 1, (PD)  ; SSTAT1 - acknowledge ready for next command
+	SET 1, (PD)  ; SSTAT1 - set to signal E1 transfer complete, ready for next
 
 CH0_Timer_Reset:			; 020FA7h - reset Timer 8 if running
 	BIT 2, (T8RUN)
@@ -11437,7 +11437,7 @@ Cmd_Check_E2_Pending:		; 020FBCh
 ; Check for DMA timeout (stuck transfer detection)
 Cmd_Check_DMA_Timeout:		; 020FD9h
 	EI 0
-	BIT 1, (PD)  ; SSTAT1 - check if idle
+	BIT 1, (PD)  ; SSTAT1 - test own status: if set, no DMA transfer in progress
 	JR NZ, Cmd_DMA_Idle
 	LDC_WA_DMAM0		; Get current DMA byte count
 	CP (0F01Ch), WA		; Compare with previous
@@ -11463,7 +11463,7 @@ Cmd_DMA_Check_Stuck:		; 021001h
 	LDW (0F01Ah), 0000h
 	LD (DMA0V), 000h	; Stop DMA
 	LD (CMD_PROCESSING_STATE), 000h
-	SET 1, (PD)  ; SSTAT1
+	SET 1, (PD)  ; SSTAT1 - timeout recovery: force ready state after DMA abort
 	INC 1, (0F018h)		; Increment error counter
 	RET
 

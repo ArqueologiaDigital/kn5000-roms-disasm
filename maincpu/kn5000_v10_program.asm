@@ -139099,9 +139099,9 @@ InterCPU_Send_Data_Block:
 	LD IX, 0
 
 LABEL_EF334B:
-	BIT 3, (PZ)
+	BIT 3, (PZ)			; SSTAT1 - test if Sub CPU is ready
 	JR Z, LABEL_EF3391
-	RES 0, (PZ)
+	RES 0, (PZ)			; MSTAT0 - clear to initiate handshake with Sub CPU
 	LD (05E0h), 001h
 	LD L, C
 	DEC 1, L
@@ -139111,9 +139111,9 @@ LABEL_EF334B:
 	LD IX, 0
 
 LABEL_EF3368:
-	BIT 3, (PZ)
+	BIT 3, (PZ)			; SSTAT1 - wait for Sub CPU to acknowledge (goes low)
 	JR NZ, LABEL_EF339C
-	SET 0, (PZ)
+	SET 0, (PZ)			; MSTAT0 - set to signal DMA data transfer starting
 	LD (05DAh), XDE
 	EXTZ BC
 	LD (05DEh), BC
@@ -139139,7 +139139,7 @@ LABEL_EF339C:
 	INC 1, IX
 	CP WA, 0ea60h
 	JR ULE, LABEL_EF3368
-	SET 0, (PZ)
+	SET 0, (PZ)			; MSTAT0 - timeout recovery: force ready state
 	RET
 
 ; ===========================================================================
@@ -139170,15 +139170,15 @@ LABEL_EF33B3:
 	JR NZ, LABEL_EF33B3
 
 LABEL_EF33C4:
-	RES 0, (PZ)
+	RES 0, (PZ)			; MSTAT0 - clear to initiate E2 command handshake
 	LD (05E0h), 001h
 	LD (INTER_CPU_COMM_LATCHES), 0e2h
 	LD IX, 0
 
 LABEL_EF33D4:
-	BIT 3, (PZ)
+	BIT 3, (PZ)			; SSTAT1 - wait for Sub CPU to acknowledge (goes low)
 	JR NZ, LABEL_EF340D
-	SET 0, (PZ)
+	SET 0, (PZ)			; MSTAT0 - set to signal E2 header data ready
 	LDA XHL, 05C6h
 	LD (XHL), XWA
 	LD (XHL + 004h), XDE
@@ -139201,7 +139201,7 @@ LABEL_EF340D:
 	INC 1, IX
 	CP HL, 0ea60h
 	JR ULE, LABEL_EF33D4
-	SET 0, (PZ)
+	SET 0, (PZ)			; MSTAT0 - timeout recovery: force ready state
 	RET
 
 ; ===========================================================================
@@ -139282,17 +139282,17 @@ LABEL_EF3473:
 	LD IZ, 0
 
 LABEL_EF3475:
-	BIT 3, (PZ)
+	BIT 3, (PZ)			; SSTAT1 - test if Sub CPU is ready for E1 transfer
 	JRL Z, LABEL_EF3508
-	RES 0, (PZ)
+	RES 0, (PZ)			; MSTAT0 - clear to initiate E1 bulk transfer
 	LD (05E0h), 002h
 	LD (INTER_CPU_COMM_LATCHES), 0e1h
 	LD IZ, 0
 
 LABEL_EF348B:
-	BIT 3, (PZ)
+	BIT 3, (PZ)			; SSTAT1 - wait for Sub CPU to acknowledge E1 (goes low)
 	JRL NZ, LABEL_EF3515
-	SET 0, (PZ)
+	SET 0, (PZ)			; MSTAT0 - set to signal 6-byte header data ready
 	LDA XHL, 0608h
 	LD (XHL), XWA
 	LDA XWA, 05D0h
@@ -139356,14 +139356,14 @@ LABEL_EF3515:
 	INC 1, IZ
 	CP HL, 0ea60h
 	JRL ULE, LABEL_EF348B
-	SET 0, (PZ)
+	SET 0, (PZ)			; MSTAT0 - timeout recovery: force ready state
 
 LABEL_EF3523:
 	POP IZ
 	RET
 
 INT0_HANDLER:			; EF3525
-	BIT 1, (PZ)
+	BIT 1, (PZ)			; MSTAT1 - test own status (check if transfer in progress)
 	JR NZ, LABEL_EF3532
 	LD (DMAR), 001h
 	RETI
@@ -139375,7 +139375,7 @@ LABEL_EF3532:
 	RETI
 
 LABEL_EF3536:
-	BIT 2, (PZ)
+	BIT 2, (PZ)			; SSTAT0 - test Sub CPU handshake status
 	RET NZ
 	PUSH XWA
 	PUSH XBC
@@ -139429,7 +139429,7 @@ LABEL_EF3599:
 	LD (XBC), A
 
 LABEL_EF35C4:
-	RES 1, (PZ)
+	RES 1, (PZ)			; MSTAT1 - clear to acknowledge command from Sub CPU
 	POP XBC
 	POP XWA
 	RET
@@ -139504,7 +139504,7 @@ LABEL_EF363F:
 LABEL_EF3662:
 	LD (05E6h), 0ffh
 	LD (05E2h), 000h
-	SET 1, (PZ)
+	SET 1, (PZ)			; MSTAT1 - set to signal E2 command complete
 	SET 7, (061Eh)
 	JR T, LABEL_EF3681
 
@@ -139513,7 +139513,7 @@ LABEL_EF3675:
 	RES 7, (0620h)
 
 LABEL_EF367E:
-	SET 1, (PZ)
+	SET 1, (PZ)			; MSTAT1 - set to signal E1 transfer complete
 
 LABEL_EF3681:
 	POP XWA
