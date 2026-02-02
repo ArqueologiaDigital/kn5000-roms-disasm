@@ -38184,8 +38184,8 @@ LABEL_E0FD2A:
 	db 02Ah, 000h, 070h, 000h, 095h, 000h, 082h, 000h
 	db 04Ah, 0FDh, 0E0h, 000h
 	db 000h, 000h, 000h, 000h
-	db 0FFh, 000h, "3:Hote"
-	db "l Combo", 000h
+	db 0FFh, 000h
+	db "3:Hotel Combo", 000h
 
 
 LABEL_E0FD58:
@@ -38193,8 +38193,7 @@ LABEL_E0FD58:
 	db 09Ah, 000h, 098h, 000h, 008h, 000h, 02Ah, 000h
 	db 0B0h, 000h, 0ADh, 000h, 0C2h, 000h, 078h, 0FDh
 	db 0E0h, 000h, 000h, 000h, 000h, 000h, 0FFh, 000h
-	db "7:Pub Si"
-	db "ng Along"
+	db "7:Pub Sing Along"
 	db 000h, 0FFh
 
 
@@ -38204,8 +38203,8 @@ LABEL_E0FD8A:
 	db 02Ah, 000h, 0A0h, 000h, 09Dh, 000h, 0B2h, 000h
 	db 0AAh, 0FDh, 0E0h, 000h
 	db 000h, 000h, 000h, 000h
-	db 0FFh, 000h, "6:Solo"
-	db " Romance"
+	db 0FFh, 000h
+	db "6:Solo Romance"
 	db 000h, 0FFh
 
 
@@ -38215,9 +38214,8 @@ LABEL_E0FDBA:
 	db 02Ah, 000h, 090h, 000h, 0A5h, 000h, 0A2h, 000h
 	db 0DAh, 0FDh, 0E0h, 000h
 	db 000h, 000h, 000h, 000h
-	db 0FFh, 000h, "5:Casi"
-	db "no Light"
-	db 073h, 000h
+	db 0FFh, 000h
+	db "5:Casino Lights", 000h
 
 
 LABEL_E0FDEA:
@@ -38226,17 +38224,16 @@ LABEL_E0FDEA:
 	db 02Ah, 000h, 080h, 000h, 0BDh, 000h, 092h, 000h
 	db 00Ah, 0FEh, 0E0h, 000h
 	db 000h, 000h, 000h, 000h
-	db 009h, 000h, "4:Laid"
-	db " Back Oc"
-	db "tave", 000h, 0FFh
+	db 009h, 000h
+	db "4:Laid Back Octave", 000h, 0FFh
 
 
 LABEL_E0FE1E:
 	db 02Bh, 000h, 060h, 001h, 08Ah, 000h, 0FFh, 0FFh, 09Eh, 000h
 	db 09Ch, 000h, 008h, 000h, 02Ah, 000h, 050h, 000h
 	db 07Dh, 000h, 062h, 000h, 03Eh, 0FEh, 0E0h, 000h
-	db 000h, 000h, 000h, 000h, 0FFh, 000h, 031h, 03Ah
-	db "Overture"
+	db 000h, 000h, 000h, 000h, 0FFh, 000h
+	db "1:Overture"
 	db 000h, 0FFh
 
 
@@ -38246,9 +38243,8 @@ LABEL_E0FE4A:
 	db 02Ah, 000h, 060h, 000h, 0A5h, 000h, 072h, 000h
 	db 06Ah, 0FEh, 0E0h, 000h
 	db 000h, 000h, 000h, 000h
-	db 0FFh, 000h, "2:Late"
-	db " At Nigh"
-	db 074h, 000h
+	db 0FFh, 000h
+	db "2:Late At Night", 000h
 
 
 LABEL_E0FE7A:
@@ -38273,8 +38269,8 @@ LABEL_E0FEBA:
 	db 0F5h, 000h, 005h, 000h, 038h, 001h, 017h, 000h
 	db 0DAh, 0FEh, 0E0h, 000h
 	db 000h, 000h, 000h, 000h
-	db 000h, 000h, "PAGE 2"
-	db 02Fh, 032h, 000h, 0FFh
+	db 000h, 000h
+	db "PAGE 2/2", 000h, 0FFh
 
 
 LABEL_E0FEE4:
@@ -38362,8 +38358,7 @@ LABEL_E10080:
 	db 0FFh, 0FFh, 0AAh, 000h, 008h, 000h, 01Eh, 000h
 	db 076h, 000h, 091h, 000h, 088h, 000h, 0A0h, 000h
 	db 0E1h, 000h, 000h, 000h, 000h, 000h, 000h, 000h
-	db "go march"
-	db "in'in.", 000h, 0FFh
+	db "go marchin'in.", 000h, 0FFh
 
 
 LABEL_E100B0:
@@ -38371,8 +38366,7 @@ LABEL_E100B0:
 	db 0ADh, 000h, 0A6h, 000h, 008h, 000h, 04Eh, 000h
 	db 02Bh, 000h, 0F6h, 000h, 03Dh, 000h, 0D0h, 000h
 	db 0E1h, 000h, 009h, 000h, 000h, 000h, 0FBh, 000h
-	db "When The"
-	db " Saints", 000h
+	db "When The Saints", 000h
 
 
 LABEL_E100E0:
@@ -38480,8 +38474,8 @@ LABEL_E10280:
 	db 000h, 000h, 03Fh, 001h, 0EFh, 000h, 0FFh, 000h
 	db 003h, 000h, 000h, 000h, 0A0h, 001h, 0E8h, 0D5h
 	db 003h, 000h, 0AAh, 002h, 0E1h, 000h, 09Bh, 000h
-	db 000h, 000h, "ENTERT"
-	db "AINER", 000h
+	db 000h, 000h
+	db "ENTERTAINER", 000h
 
 
 LABEL_E102B6:
@@ -48431,37 +48425,36 @@ LABEL_E1CDDE:
 	dd LABEL_E1D4A4
 	dd LABEL_E1D49C
 	dd LABEL_E1D494
-	db "C-EN"
-	db "D2 ", 000h, "C-EN"
-	db "D1 ", 000h, "C-FI"
-	db "LL2", 000h, "C-FI"
-	db "LL1", 000h, "C-IN"
-	db "T2 ", 000h, "C-IN"
-	db "T1 ", 000h, "B-EN"
-	db "D2 ", 000h, "B-EN"
-	db "D1 ", 000h, "B-FI"
-	db "LL2", 000h, "B-FI"
-	db "LL1", 000h, "B-IN"
-	db "T2 ", 000h, "B-IN"
-	db "T1 ", 000h, "A-EN"
-	db "D2 ", 000h, "A-EN"
-	db "D1 ", 000h, "A-FI"
-	db "LL2", 000h, "A-FI"
-	db "LL1", 000h, "A-IN"
-	db "T2 ", 000h, "A-IN"
-	db "T1 ", 000h, "C-va"
-	db "ri4", 000h, "C-va"
-	db "ri3", 000h, "C-va"
-	db "ri2", 000h, "C-va"
-	db "ri1", 000h, "B-va"
-	db "ri4", 000h, "B-va"
-	db "ri3", 000h, "B-va"
-	db "ri2", 000h, "B-va"
-	db "ri1", 000h, "A-va"
-	db "ri4", 000h, "A-va"
-	db "ri3", 000h, "A-va"
-	db "ri2", 000h, "A-va"
-	db 072h, 069h, 031h, 000h, 025h, 033h, 064h, 000h
+	db "C-END2 ", 000h
+	db "C-END1 ", 000h
+	db "C-FILL2", 000h
+	db "C-FILL1", 000h
+	db "C-INT2 ", 000h
+	db "C-INT1 ", 000h
+	db "B-END2 ", 000h
+	db "B-END1 ", 000h
+	db "B-FILL2", 000h
+	db "B-FILL1", 000h
+	db "B-INT2 ", 000h
+	db "B-INT1 ", 000h
+	db "A-END2 ", 000h
+	db "A-END1 ", 000h
+	db "A-FILL2", 000h
+	db "A-FILL1", 000h
+	db "A-INT2 ", 000h
+	db "A-INT1 ", 000h
+	db "C-vari4", 000h
+	db "C-vari3", 000h
+	db "C-vari2", 000h
+	db "C-vari1", 000h
+	db "B-vari4", 000h
+	db "B-vari3", 000h
+	db "B-vari2", 000h
+	db "B-vari1", 000h
+	db "A-vari4", 000h
+	db "A-vari3", 000h
+	db "A-vari2", 000h
+	db "A-vari1", 000h, 025h, 033h, 064h, 000h
 	db "%3d", 000h, "(SON"
 	db "G:%2d)", 000h, 0FFh
 	dd LABEL_E1D724
@@ -59907,8 +59900,8 @@ String_CREATE:		; E28AAC
 	db 003h, 000h
 	dd LABEL_E2DA8A
 	db 09Bh, 000h
-	db 000h, 000h, "ENTERT"
-	db "AINER", 000h, 009h, 000h
+	db 000h, 000h
+	db "ENTERTAINER", 000h, 009h, 000h
 	db 068h, 001h, 000h, 000h, 002h, 000h, 003h, 000h
 	db 0FFh, 0FFh, 008h, 000h, 06Eh, 000h, 01Eh, 000h
 	db 03Dh, 001h, 0C7h, 000h, 0F5h, 000h, 0C1h, 000h
@@ -73475,9 +73468,7 @@ LABEL_E44478:
 	db 000h, 000h, 0FFh, 000h, 000h, 000h, 009h, 000h
 	db 0F8h, 0E3h, 003h, 000h, 048h, 060h, 0E5h, 000h
 	db 019h, 000h, 0A0h, 001h, 000h, 000h, 000h, 000h
-	db "EQUALIZE"
-	db "R PRESET"
-	db 053h, 000h
+	db "EQUALIZER PRESETS", 000h
 
 
 	db 01Dh, 000h, 060h, 001h, 000h, 000h
@@ -73487,10 +73478,7 @@ LABEL_E44478:
 	db 000h, 000h, 0FFh, 000h, 000h, 000h, 08Bh, 000h
 	db 0FAh, 0E3h, 003h, 000h, 090h, 060h, 0E5h, 000h
 	db 01Ah, 000h, 0A0h, 001h, 000h, 000h, 000h, 000h
-	db "REVERB +"
-	db " EQUALIZ"
-	db "ER PRESE"
-	db 054h, 053h, 000h, 0FFh
+	db "REVERB + EQUALIZER PRESETS", 000h, 0FFh
 
 
 	db 034h, 000h, 060h, 001h
@@ -73567,8 +73555,7 @@ LABEL_E44478:
 	db 000h, 000h, 000h, 000h, 0FFh, 000h, 000h, 000h
 	db 08Ah, 000h, 00Ch, 0E4h, 003h, 000h, 002h, 000h
 	dd LABEL_E56254
-	db "Smal"
-	db "l Plate", 000h
+	db "Small Plate", 000h
 
 
 	db 051h, 000h, 060h, 001h, 000h, 000h, 0FFh, 0FFh
@@ -73577,8 +73564,7 @@ LABEL_E44478:
 	db 000h, 000h, 001h, 000h, 000h, 000h, 000h, 000h
 	db 0FFh, 000h, 000h, 000h, 08Bh, 000h, 00Eh, 0E4h
 	db 003h, 000h, 003h, 000h, 090h, 062h, 0E5h, 000h
-	db "Sports H"
-	db 061h, 06Ch, 06Ch, 000h
+	db "Sports Hall", 000h
 
 
 	db 051h, 000h, 060h, 001h
@@ -73588,8 +73574,7 @@ LABEL_E44478:
 	db 000h, 000h, 000h, 000h, 0FFh, 000h, 000h, 000h
 	db 08Ch, 000h, 010h, 0E4h, 003h, 000h, 004h, 000h
 	dd LABEL_E562CC
-	db "Brig"
-	db "ht Hall", 000h
+	db "Bright Hall", 000h
 
 
 	db 051h, 000h, 060h, 001h, 000h, 000h, 0FFh, 0FFh
@@ -73598,8 +73583,7 @@ LABEL_E44478:
 	db 000h, 000h, 001h, 000h, 000h, 000h, 000h, 000h
 	db 0FFh, 000h, 000h, 000h, 008h, 000h, 012h, 0E4h
 	db 003h, 000h, 005h, 000h, 008h, 063h, 0E5h, 000h
-	db "Dark Con"
-	db "fines", 000h
+	db "Dark Confines", 000h
 
 
 	db 051h, 000h, 060h, 001h, 000h, 000h, 0FFh, 0FFh, 009h, 000h
@@ -73607,8 +73591,8 @@ LABEL_E44478:
 	db 037h, 001h, 061h, 000h, 0F5h, 000h, 000h, 000h
 	db 001h, 000h, 000h, 000h, 000h, 000h, 0FFh, 000h
 	db 000h, 000h, 009h, 000h, 014h, 0E4h, 003h, 000h
-	db 006h, 000h, 046h, 063h, 0E5h, 000h, 052h, 065h
-	db "flection"
+	db 006h, 000h, 046h, 063h, 0E5h, 000h
+	db "Reflection"
 	db 000h, 0FFh
 
 
@@ -73618,8 +73602,8 @@ LABEL_E44478:
 	db 0F5h, 000h, 000h, 000h, 001h, 000h, 000h, 000h
 	db 000h, 000h, 0FFh, 000h, 000h, 000h, 00Ah, 000h
 	db 016h, 0E4h, 003h, 000h, 007h, 000h, 082h, 063h
-	db 0E5h, 000h, "High &"
-	db " Open", 000h
+	db 0E5h, 000h
+	db "High & Open", 000h
 
 
 	db 051h, 000h, 060h, 001h, 000h, 000h, 0FFh, 0FFh, 00Bh, 000h
@@ -73627,9 +73611,8 @@ LABEL_E44478:
 	db 037h, 001h, 0B5h, 000h, 0F5h, 000h, 000h, 000h
 	db 001h, 000h, 000h, 000h, 000h, 000h, 0FFh, 000h
 	db 000h, 000h, 00Bh, 000h, 018h, 0E4h, 003h, 000h
-	db 008h, 000h, 0BEh, 063h, 0E5h, 000h, 04Ch, 065h
-	db "ft To Ri"
-	db 067h, 068h, 074h, 000h
+	db 008h, 000h, 0BEh, 063h, 0E5h, 000h
+	db "Left To Right", 000h
 
 
 	db 051h, 000h, 060h, 001h
@@ -73639,8 +73622,7 @@ LABEL_E44478:
 	db 000h, 000h, 000h, 000h, 0FFh, 000h, 000h, 000h
 	db 00Ch, 000h, 01Ah, 0E4h, 003h, 000h, 009h, 000h
 	dd LABEL_E563FC
-	db "Cave"
-	db "rnous", 000h
+	db "Cavernous", 000h
 
 
 	db 034h, 000h, 060h, 001h, 0FFh, 0FFh, 001h, 000h, 0FFh, 0FFh
@@ -73650,9 +73632,7 @@ LABEL_E44478:
 	db 009h, 000h, 0A0h, 001h, 01Ch, 0E4h, 003h, 000h
 	dd LABEL_E56430
 	db 091h, 000h, 000h, 000h
-	db "EQUALIZE"
-	db "R PRESET"
-	db 053h, 000h
+	db "EQUALIZER PRESETS", 000h
 
 
 	db 051h, 000h, 060h, 001h, 000h, 000h
@@ -73661,8 +73641,8 @@ LABEL_E44478:
 	db 0F5h, 000h, 000h, 000h, 002h, 000h, 000h, 000h
 	db 000h, 000h, 0FFh, 000h, 000h, 000h, 088h, 000h
 	db 020h, 0E4h, 003h, 000h, 000h, 000h, 072h, 064h
-	db 0E5h, 000h, "Make U"
-	db 070h, 000h
+	db 0E5h, 000h
+	db "Make Up", 000h
 
 
 	db 051h, 000h, 060h, 001h, 000h, 000h
@@ -73671,8 +73651,8 @@ LABEL_E44478:
 	db 0F5h, 000h, 000h, 000h, 002h, 000h, 000h, 000h
 	db 000h, 000h, 0FFh, 000h, 000h, 000h, 089h, 000h
 	db 022h, 0E4h, 003h, 000h, 001h, 000h, 0AAh, 064h
-	db 0E5h, 000h, "Middle"
-	db " Cut", 000h, 0FFh
+	db 0E5h, 000h
+	db "Middle Cut", 000h, 0FFh
 
 
 	db 051h, 000h, 060h, 001h, 000h, 000h, 0FFh, 0FFh, 004h, 000h
@@ -73680,9 +73660,8 @@ LABEL_E44478:
 	db 09Ch, 000h, 08Bh, 000h, 0F5h, 000h, 000h, 000h
 	db 002h, 000h, 000h, 000h, 000h, 000h, 0FFh, 000h
 	db 000h, 000h, 08Ah, 000h, 024h, 0E4h, 003h, 000h
-	db 002h, 000h, 0E6h, 064h, 0E5h, 000h, 054h, 072h
-	db "ansistor"
-	db " Radio", 000h, 0FFh
+	db 002h, 000h, 0E6h, 064h, 0E5h, 000h
+	db "Transistor Radio", 000h, 0FFh
 
 
 	db 051h, 000h, 060h, 001h, 000h, 000h, 0FFh, 0FFh
@@ -73691,8 +73670,7 @@ LABEL_E44478:
 	db 000h, 000h, 002h, 000h, 000h, 000h, 000h, 000h
 	db 0FFh, 000h, 000h, 000h, 08Bh, 000h, 026h, 0E4h
 	db 003h, 000h, 003h, 000h, 028h, 065h, 0E5h, 000h
-	db "Treble B"
-	db "oost", 000h, 0FFh
+	db "Treble Boost", 000h, 0FFh
 
 
 	db 051h, 000h, 060h, 001h, 000h, 000h, 0FFh, 0FFh, 006h, 000h
@@ -73711,8 +73689,8 @@ LABEL_E44478:
 	db 0F5h, 000h, 000h, 000h, 002h, 000h, 000h, 000h
 	db 000h, 000h, 0FFh, 000h, 000h, 000h, 008h, 000h
 	db 02Ah, 0E4h, 003h, 000h, 005h, 000h, 0A2h, 065h
-	db 0E5h, 000h, "No Hi "
-	db 048h, 061h, 074h, 000h
+	db 0E5h, 000h
+	db "No Hi Hat", 000h
 
 
 	db 051h, 000h, 060h, 001h
@@ -73722,8 +73700,7 @@ LABEL_E44478:
 	db 000h, 000h, 000h, 000h, 0FFh, 000h, 000h, 000h
 	db 009h, 000h, 02Ch, 0E4h, 003h, 000h, 006h, 000h
 	dd LABEL_E565DC
-	db "Tubb"
-	db "y Bass", 000h, 0FFh
+	db "Tubby Bass", 000h, 0FFh
 
 
 	db 051h, 000h, 060h, 001h, 000h, 000h, 0FFh, 0FFh
@@ -73732,8 +73709,7 @@ LABEL_E44478:
 	db 000h, 000h, 002h, 000h, 000h, 000h, 000h, 000h
 	db 0FFh, 000h, 000h, 000h, 00Ah, 000h, 02Eh, 0E4h
 	db 003h, 000h, 007h, 000h, 018h, 066h, 0E5h, 000h
-	db "Bass Cut"
-	db 000h, 0FFh
+	db "Bass Cut", 000h, 0FFh
 
 
 	db 051h, 000h, 060h, 001h, 000h, 000h
@@ -73742,8 +73718,8 @@ LABEL_E44478:
 	db 0F5h, 000h, 000h, 000h, 002h, 000h, 000h, 000h
 	db 000h, 000h, 0FFh, 000h, 000h, 000h, 00Bh, 000h
 	db 030h, 0E4h, 003h, 000h, 008h, 000h, 052h, 066h
-	db 0E5h, 000h, "Too Br"
-	db "ight", 000h, 0FFh
+	db 0E5h, 000h
+	db "Too Bright", 000h, 0FFh
 
 
 	db 052h, 000h, 060h, 001h, 000h, 000h, 0FFh, 0FFh, 00Bh, 000h
@@ -73768,10 +73744,7 @@ LABEL_E44478:
 	db 009h, 000h, 0A0h, 001h, 034h, 0E4h, 003h, 000h
 	dd LABEL_E566E0
 	db 091h, 000h, 000h, 000h
-	db "REVERB +"
-	db " EQUALIZ"
-	db "ER PRESE"
-	db 054h, 053h, 000h, 0FFh
+	db "REVERB + EQUALIZER PRESETS", 000h, 0FFh
 
 
 	db 051h, 000h, 060h, 001h
@@ -73781,8 +73754,7 @@ LABEL_E44478:
 	db 000h, 000h, 000h, 000h, 0FFh, 000h, 000h, 000h
 	db 088h, 000h, 038h, 0E4h, 003h, 000h, 000h, 000h
 	dd LABEL_E5672C
-	db "Warm"
-	db " & Wide", 000h
+	db "Warm & Wide", 000h
 
 
 	db 051h, 000h, 060h, 001h, 000h, 000h, 0FFh, 0FFh
@@ -82030,10 +82002,8 @@ LABEL_E9529E:
 	db 0E9h, 000h, 086h, 056h, 0E9h, 000h, 049h, 06Eh
 	db "donesian"
 	db " Header", 000h
-	db "Italian "
-	db "Header", 000h, 0FFh
-	db "Spanish "
-	db "Header", 000h, 0FFh
+	db "Italian Header", 000h, 0FFh
+	db "Spanish Header", 000h, 0FFh
 	db "French H"
 	db "eader", 000h, "Ge"
 	db "rman Hea"
@@ -82054,8 +82024,7 @@ LABEL_E9529E:
 	db "French T"
 	db "ext", 000h, "Germ"
 	db "an Text", 000h
-	db "English "
-	db "Text", 000h, 0FFh, 086h, "W"
+	db "English Text", 000h, 0FFh, 086h, "W"
 	db 0E9h, 000h, 080h, 057h, 0E9h, 000h, 078h, 057h
 	db 0E9h, 000h, 072h, 057h, 0E9h, 000h, 06Ch, 057h
 	db 0E9h, 000h, 066h, 057h, 0E9h, 000h, 045h, 052h
@@ -82069,16 +82038,14 @@ LABEL_E9529E:
 	dd LABEL_E957BC
 	dd LABEL_E957B0
 	dd LABEL_E957A4
-	db "REMI"
-	db "NDER !", 000h, 0FFh
+	db "REMINDER !", 000h, 0FFh
 	db "REMINDER"
 	db 021h, 020h, 000h, 0FFh, 0A1h, 052h, 045h, 043h
 	db "UERDE!", 000h, 0FFh
-	db "RAPPEL! "
-	db 000h, 0FFh, "HINWEI"
+	db "RAPPEL! ", 000h, 0FFh
+	db "HINWEI"
 	db 053h, 020h, 021h, 020h, 000h, 0FFh, 052h, 045h
-	db "MINDER! "
-	db 000h, 0FFh, 046h, 058h, 0E9h, 000h, 034h, 058h
+	db "MINDER! ", 000h, 0FFh, 046h, 058h, 0E9h, 000h, 034h, 058h
 	db 0E9h, 000h, 02Ah, 058h, 0E9h, 000h, 01Ch, 058h
 	db 0E9h, 000h, 010h, 058h, 0E9h, 000h, 002h, 058h
 	db 0E9h, 000h, "LENGKA"
@@ -82103,10 +82070,9 @@ LABEL_E9529E:
 	db "PERE!", 000h, "VE"
 	db "UILLEZ P"
 	db "ATIENTER"
-	db "!", 000h, "BITTE "
-	db "WARTEN!", 000h
-	db "PLEASE W"
-	db "AIT!", 000h, 0FFh, 016h, "["
+	db "!", 000h
+	db "BITTE WARTEN!", 000h
+	db "PLEASE WAIT!", 000h, 0FFh, 016h, "["
 	db 0E9h, 000h, 094h, 05Ah, 0E9h, 000h, 0ECh, 059h
 	db 0E9h, 000h, 06Ah, 059h, 0E9h, 000h, 060h, 059h
 	db 0E9h, 000h, 0E6h, 058h, 0E9h, 000h, 04Dh, 065h
@@ -86288,10 +86254,9 @@ LABEL_E9529E:
 	db "PERE!", 000h, "VE"
 	db "UILLEZ P"
 	db "ATIENTER"
-	db "!", 000h, "BITTE "
-	db "WARTEN!", 000h
-	db "PLEASE W"
-	db "AIT!", 000h, 0FFh, 08Ah, 0D8h
+	db "!", 000h
+	db "BITTE WARTEN!", 000h
+	db "PLEASE WAIT!", 000h, 0FFh, 08Ah, 0D8h
 	db 0E9h, 000h, 082h, 0D8h, 0E9h, 000h, 07Ah, 0D8h
 	db 0E9h, 000h, 072h, 0D8h, 0E9h, 000h, 06Ah, 0D8h
 	db 0E9h, 000h, 05Eh, 0D8h, 0E9h, 000h, 049h, 06Eh
