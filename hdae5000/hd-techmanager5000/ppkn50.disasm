@@ -1,5 +1,5 @@
 
-/mnt/shared/claude_jail/kn5000-roms-disasm/hdae5000/hd-techmanager5000/ppkn50.dll:     file format pei-i386
+hdae5000/hd-techmanager5000/ppkn50.dll:     file format pei-i386
 
 
 Disassembly of section .text:

@@ -421,7 +421,7 @@ LABEL_MAP = {
 }
 
 def main():
-    filepath = "/mnt/shared/claude_jail/kn5000-roms-disasm/maincpu/file_io/medley.asm"
+    filepath = "maincpu/file_io/medley.asm"
 
     with open(filepath, 'r') as f:
         content = f.read()

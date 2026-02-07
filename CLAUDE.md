@@ -132,7 +132,7 @@ FDC_INIT_ROUTINE 0xE12345
 **Full regeneration** (only if files become corrupted or majorly out of sync):
 ```bash
 # Generate map files with ASL (maincpu takes ~70 minutes, others are fast)
-ASL=/mnt/shared/claude_jail/tools/asl/asl
+ASL=../tools/asl/asl
 
 $ASL -w -g map maincpu/kn5000_v10_program.asm -o /tmp/maincpu.p
 $ASL -w -g map subcpu/kn5000_subprogram_v142.asm -o /tmp/subcpu.p

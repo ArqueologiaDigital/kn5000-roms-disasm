@@ -1,4 +1,4 @@
-ASL_PATH=/mnt/shared/claude_jail/tools/asl
+ASL_PATH=../tools/asl
 ASL=$(ASL_PATH)/asl -w
 P2BIN=$(ASL_PATH)/p2bin
 
