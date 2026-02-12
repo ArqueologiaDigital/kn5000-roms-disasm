@@ -692,6 +692,8 @@ See `../kn5000-docs/lzss-compression.md` for full details.
 
 The `mame_driver/` directory contains reference copies of MAME source files (`kn5000.cpp`, `kn5000_cpanel.cpp/.h`) for sketching driver improvements. These are **reference copies** - always sync with upstream MAME before submitting changes.
 
+**Driver architecture documentation:** [`docs/mame-driver/`](docs/mame-driver/README.md) — summarizes the MAME source code (memory maps, SFR registers, serial protocol, timer quirks, wiring). Start with the README for quick reference, then drill into per-component docs.
+
 **Related documentation:**
 - Control panel protocol: `../kn5000-docs/control-panel-protocol.md`
 - Memory-mapped I/O: `../kn5000-docs/memory-map.md`
