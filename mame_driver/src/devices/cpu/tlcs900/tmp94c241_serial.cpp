@@ -92,20 +92,23 @@ void tmp94c241_serial_device::sioclk(int state)
 
 	m_sioclk_state = state;
 
-	// Always forward the clock to the slave device - this was missing!
-	// The slave needs clock pulses for both RX and TX directions.
-	m_sclk_out_cb(state);
-
-	logerror("sioclk state=%d rxd=%d m_rx_clock_count=%d m_tx_clock_count=%d\n", m_sioclk_state, m_rxd, m_rx_clock_count, m_tx_clock_count);
-
 	if (state)
 	{
-		// Rising edge: Sample RXD from slave device
+		// Rising edge: Sample RXD BEFORE forwarding clock to slave.
+		// The slave's rising-edge handler may complete an RX byte and call
+		// send_byte(), which pre-outputs bit 0 via m_txd_cb — changing our
+		// m_rxd before we can sample it. Capture the value first.
+		uint8_t rxd_sample = m_rxd;
+
+		m_sclk_out_cb(state);
+
+		logerror("sioclk state=%d rxd=%d m_rx_clock_count=%d m_tx_clock_count=%d\n", m_sioclk_state, rxd_sample, m_rx_clock_count, m_tx_clock_count);
+
 		if (m_rx_clock_count){
 			m_rx_clock_count--;
 
 			m_rx_shift_register >>= 1;
-			m_rx_shift_register |= (m_rxd << 7);
+			m_rx_shift_register |= (rxd_sample << 7);
 
 			if (m_rx_clock_count == 0)
 			{
@@ -119,7 +122,13 @@ void tmp94c241_serial_device::sioclk(int state)
 	}
 	else
 	{
-		// Falling edge: Output TXD for slave to sample on next rising edge
+		// Falling edge: Forward clock to slave, then output our TXD.
+		// Order doesn't matter for data correctness here — both sides
+		// output on falling edges and sample on rising edges.
+		m_sclk_out_cb(state);
+
+		logerror("sioclk state=%d rxd=%d m_rx_clock_count=%d m_tx_clock_count=%d\n", m_sioclk_state, m_rxd, m_rx_clock_count, m_tx_clock_count);
+
 		if (m_tx_clock_count){
 			if (m_tx_skip_first_falling) {
 				// Skip this falling edge - bit 0 was pre-output in scNbuf_w
@@ -279,10 +288,12 @@ fc4619: f0 3f 41              ld (0x3f),A
 
 TIMER_CALLBACK_MEMBER(tmp94c241_serial_device::timer_callback)
 {
-
-	if (m_hz && m_tx_clock_count && (m_cpu->m_port_function[PORT_F] & (1 << (m_channel==0 ? 2: 6))))
+	// Keep clocking while TX is in progress OR RX hasn't completed its byte.
+	// Without the RX check, the timer stops after TX's last falling edge,
+	// leaving RX one rising edge short of completing the byte.
+	bool need_clock = (m_tx_clock_count > 0) || m_tx_skip_first_falling || (m_rx_clock_count != 8);
+	if (m_hz && need_clock && (m_cpu->m_port_function[PORT_F] & (1 << (m_channel==0 ? 2: 6))))
 	{
-		//logerror("m_tx_clock_count=%d and we'll call sioclk(%d).\n", m_tx_clock_count, m_sioclk_state ^ 1);
 		sioclk(m_sioclk_state ^ 1);
 	}
 }

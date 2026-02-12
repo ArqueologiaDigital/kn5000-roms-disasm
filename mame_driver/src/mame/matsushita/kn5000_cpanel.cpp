@@ -173,13 +173,23 @@ void kn5000_cpanel_device::sioclk(int state)
 		}
 		else if (m_tx_clock_count > 0)
 		{
-			// Normal operation: shift out the next bit
-			m_tx_shift_register >>= 1;
-			LOGMASKED(LOG_SERIAL, "cpanel TX bit: %d, shift_reg=%02X, count=%d\n",
-				m_tx_shift_register & 1, m_tx_shift_register, m_tx_clock_count);
-
-			m_txd_cb(m_tx_shift_register & 1);
-			m_tx_clock_count--;
+			if (m_tx_clock_count == 8)
+			{
+				// First bit of a chained byte (loaded from queue) — output bit 0 without shifting
+				LOGMASKED(LOG_SERIAL, "cpanel TX bit 0 (chained): %d, shift_reg=%02X\n",
+					m_tx_shift_register & 1, m_tx_shift_register);
+				m_txd_cb(m_tx_shift_register & 1);
+				m_tx_clock_count--;
+			}
+			else
+			{
+				// Normal operation: shift out the next bit
+				m_tx_shift_register >>= 1;
+				LOGMASKED(LOG_SERIAL, "cpanel TX bit: %d, shift_reg=%02X, count=%d\n",
+					m_tx_shift_register & 1, m_tx_shift_register, m_tx_clock_count);
+				m_txd_cb(m_tx_shift_register & 1);
+				m_tx_clock_count--;
+			}
 
 			if (m_tx_clock_count == 0)
 			{
@@ -188,22 +198,23 @@ void kn5000_cpanel_device::sioclk(int state)
 				{
 					m_tx_shift_register = m_tx_queue.front();
 					m_tx_queue.pop();
-					m_tx_clock_count = 7;  // 7 more bits after pre-outputting bit 0
+					m_tx_clock_count = 8;  // Full 8 bits — don't pre-output yet
 
-					LOGMASKED(LOG_SERIAL, "cpanel TX next byte: %02X\n", m_tx_shift_register);
+					LOGMASKED(LOG_SERIAL, "cpanel TX next byte queued: %02X (no pre-output)\n",
+						m_tx_shift_register);
 
-					// Pre-output first bit of next byte
-					m_txd_cb(m_tx_shift_register & 1);
-
-					// We're in the falling edge handler, so clock is LOW.
-					// Next edge will be rising (CPU samples bit 0), so no skip needed.
-					m_tx_skip_first_falling = false;
+					// Don't pre-output: bit 7 of previous byte is still on the line
+					// and needs to be sampled by CPU on the next rising edge.
+					// Bit 0 of new byte will be output on the next falling edge.
 				}
 				else
 				{
-					// Return to idle
-					LOGMASKED(LOG_SERIAL, "cpanel TX done, returning to idle\n");
-					m_txd_cb(1);
+					// Transmission complete — leave the last bit on the line.
+					// Do NOT call m_txd_cb(1) here: that would overwrite bit 7
+					// of the last byte before the CPU samples it on the next
+					// rising edge. The line will be updated when send_byte()
+					// pre-outputs the next byte's bit 0.
+					LOGMASKED(LOG_SERIAL, "cpanel TX done, holding last bit\n");
 				}
 			}
 		}
@@ -243,6 +254,18 @@ void kn5000_cpanel_device::send_byte(uint8_t data)
 void kn5000_cpanel_device::process_received_byte(uint8_t data)
 {
 	LOGMASKED(LOG_SERIAL, "RX byte: %02X (cmd_index=%d)\n", data, m_cmd_index);
+
+	// Ignore 0xFF when it appears as a command byte (first byte of pair).
+	// In synchronous serial mode, the CPU must send dummy bytes to clock in
+	// response data. These dummy 0xFF bytes are not valid commands — without
+	// this filter they would be paired with the next real command byte,
+	// misaligning the 2-byte command parser and potentially triggering
+	// unintended LED commands or sync responses.
+	if (m_cmd_index == 0 && data == 0xFF)
+	{
+		LOGMASKED(LOG_SERIAL, "cpanel: ignoring dummy byte 0xFF as command\n");
+		return;
+	}
 
 	m_cmd_buffer[m_cmd_index++] = data;
 
