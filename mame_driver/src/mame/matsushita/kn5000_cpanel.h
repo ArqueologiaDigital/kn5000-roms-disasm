@@ -96,6 +96,8 @@ private:
 	bool m_inta_asserted;
 	bool m_accept_next_byte;   // false = next received byte is phantom (PFFC-off), skip it
 	bool m_tx_output_enabled;  // false = suppress TX output during phantom byte clock edges
+	bool m_next_accept;        // Deferred accept_next_byte (applied at next byte boundary)
+	bool m_next_tx_output_enabled;  // Deferred tx_output_enabled (applied at next byte boundary)
 	uint8_t m_last_button_state[22];  // 11 segments * 2 panels
 
 	// Callbacks

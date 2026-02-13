@@ -52,6 +52,8 @@ kn5000_cpanel_device::kn5000_cpanel_device(const machine_config &mconfig, const 
 	m_inta_asserted(false),
 	m_accept_next_byte(false),
 	m_tx_output_enabled(true),
+	m_next_accept(false),
+	m_next_tx_output_enabled(true),
 	m_txd_cb(*this),
 	m_sclk_out_cb(*this),
 	m_inta_cb(*this),
@@ -90,6 +92,8 @@ void kn5000_cpanel_device::device_start()
 	save_item(NAME(m_inta_asserted));
 	save_item(NAME(m_accept_next_byte));
 	save_item(NAME(m_tx_output_enabled));
+	save_item(NAME(m_next_accept));
+	save_item(NAME(m_next_tx_output_enabled));
 	save_item(NAME(m_last_button_state));
 
 	// Initial state - line idle high
@@ -108,6 +112,8 @@ void kn5000_cpanel_device::device_reset()
 	m_inta_asserted = false;
 	m_accept_next_byte = false;
 	m_tx_output_enabled = true;
+	m_next_accept = false;
+	m_next_tx_output_enabled = true;
 
 	// Clear TX queue
 	while (!m_tx_queue.empty())
@@ -147,19 +153,28 @@ void kn5000_cpanel_device::tx_start(int state)
 	//
 	// Reset RX counter to sync byte boundaries.  Track whether to accept
 	// or skip the byte once it's fully received.
-	LOGMASKED(LOG_SERIAL, "cpanel tx_start: state=%d (%s byte)\n",
-		state, state ? "real" : "phantom");
+	LOGMASKED(LOG_SERIAL, "cpanel tx_start: state=%d (%s byte) rx_count=%d\n",
+		state, state ? "real" : "phantom", m_rx_clock_count);
 
-	// Do NOT reset m_rx_clock_count or m_rx_shift_register here.
-	// In MAME's synchronous execution model, INTTX1 fires on falling
-	// edge 7 and the ISR writes the next SC1BUF (triggering tx_start)
-	// BEFORE rising edge 8 completes the current byte's RX.  Resetting
-	// the RX counter mid-byte destroys the nearly-complete byte.
-	// On real hardware, rising edge 8 arrives first (~4µs) before the
-	// ISR completes (~5-10µs).  Byte boundaries stay synchronized
-	// naturally because each SC1BUF write produces exactly 8 rising edges.
-	m_accept_next_byte = (state != 0);
-	m_tx_output_enabled = (state != 0);
+	// Store the new accept/output state as PENDING.  In MAME's synchronous
+	// execution model, tx_start fires one edge too early: INTTX1 sets the
+	// flag for byte N+1 BEFORE rising edge 8 completes byte N's reception.
+	// If we applied immediately, byte N would see byte N+1's accept state
+	// (e.g., byte 2 would be rejected because phantom 1's tx_start(0)
+	// fires before byte 2's last rising edge).
+	//
+	// The pending values are applied at the next byte boundary — when
+	// rx_clock_count returns to 8 after process_received_byte.  If we're
+	// already at a boundary (rx_count==8, between bytes), apply immediately.
+	m_next_accept = (state != 0);
+	m_next_tx_output_enabled = (state != 0);
+
+	if (m_rx_clock_count == 8)
+	{
+		// At byte boundary — apply immediately (no mid-byte race)
+		m_accept_next_byte = m_next_accept;
+		m_tx_output_enabled = m_next_tx_output_enabled;
+	}
 
 	// Cancel pending idle detection only for REAL bytes — this means the
 	// CPU is actively clocking and will drive the response out directly
@@ -222,6 +237,13 @@ void kn5000_cpanel_device::sioclk(int state)
 				// Full byte received
 				m_rx_clock_count = 8;
 				process_received_byte(m_rx_shift_register);
+
+				// Apply deferred tx_start flags now that we're at a byte
+				// boundary.  This compensates for the MAME timing race:
+				// tx_start for byte N+1 fires before byte N's last rising
+				// edge, so we defer its effects until byte N is processed.
+				m_accept_next_byte = m_next_accept;
+				m_tx_output_enabled = m_next_tx_output_enabled;
 			}
 		}
 	}
@@ -330,17 +352,20 @@ void kn5000_cpanel_device::process_received_byte(uint8_t data)
 		data, m_cmd_index, m_accept_next_byte);
 
 	// Skip bytes that weren't signaled as "real" via tx_start(1).  This
-	// rejects both phantom bytes (PFFC-off phases in firmware TX state
-	// machine) and stale bytes assembled from continuous clock edges
-	// (TO2 at 12.5kHz or baud rate timer) when no actual transmission
-	// is in progress.  The flag is one-shot: tx_start(1) sets it true,
-	// and we consume it here after accepting one byte.
+	// rejects phantom bytes (PFFC-off phases in firmware TX state machine)
+	// and stale bytes assembled from continuous clock edges when no actual
+	// transmission is in progress.
+	//
+	// Note: we do NOT consume (clear) accept_next_byte here.  The flag is
+	// managed exclusively by tx_start via the deferred mechanism — pending
+	// values are applied at byte boundaries in sioclk().  This avoids the
+	// MAME timing race where tx_start for byte N+1 fires before byte N is
+	// consumed (which would cause byte N to eat byte N+1's accept state).
 	if (!m_accept_next_byte)
 	{
 		LOGMASKED(LOG_SERIAL, "cpanel: skipping unsolicited/phantom byte %02X\n", data);
-		return;  // Don't reset to true — only tx_start(1) can enable acceptance
+		return;
 	}
-	m_accept_next_byte = false;  // One-shot: consumed after accepting this byte
 
 	// Ignore 0xFF when it appears as a command byte (first byte of pair).
 	// In synchronous serial mode, the CPU must send dummy bytes to clock in
