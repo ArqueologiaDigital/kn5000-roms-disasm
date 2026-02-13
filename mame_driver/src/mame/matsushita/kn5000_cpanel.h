@@ -33,6 +33,7 @@ public:
 	// Callbacks to main CPU
 	auto txd() { return m_txd_cb.bind(); }
 	auto sclk_out() { return m_sclk_out_cb.bind(); }
+	auto inta() { return m_inta_cb.bind(); }
 
 	// Configuration
 	void set_baudrate(uint16_t br);
@@ -47,6 +48,8 @@ protected:
 	virtual void device_reset() override ATTR_COLD;
 
 	TIMER_CALLBACK_MEMBER(timer_callback);
+	TIMER_CALLBACK_MEMBER(idle_detect_callback);
+	TIMER_CALLBACK_MEMBER(self_clock_callback);
 
 private:
 	// Serial communication
@@ -65,8 +68,10 @@ private:
 	// Read button state from input ports
 	uint8_t read_button_segment(int segment, bool is_left_panel);
 
-	// Timer
+	// Timers
 	emu_timer *m_timer;
+	emu_timer *m_idle_detect_timer;
+	emu_timer *m_self_clock_timer;
 	uint16_t m_baud_rate;
 
 	// Serial RX state
@@ -87,11 +92,14 @@ private:
 
 	// Protocol state
 	bool m_initialized;
+	bool m_self_clocking;
+	bool m_inta_asserted;
 	uint8_t m_last_button_state[22];  // 11 segments * 2 panels
 
 	// Callbacks
 	devcb_write_line m_txd_cb;
 	devcb_write_line m_sclk_out_cb;
+	devcb_write_line m_inta_cb;
 
 	// Input port pointers (set by main driver)
 	ioport_port *m_cpl_ports[11];  // Left panel segments 0-10

@@ -108,6 +108,7 @@ public:
 		, m_checking_device_led_cn12(*this, "checking_device_led_cn12")
 		, m_mstat(0)
 		, m_sstat(0)
+		, m_cpanel_inta(0)
 	{ }
 
 	void kn5000(machine_config &config);
@@ -128,6 +129,7 @@ private:
 	output_finder<> m_checking_device_led_cn12;
 	uint8_t m_mstat;
 	uint8_t m_sstat;
+	uint8_t m_cpanel_inta;
 	virtual void machine_start() override ATTR_COLD;
 	virtual void machine_reset() override ATTR_COLD;
 
@@ -448,6 +450,7 @@ void kn5000_state::machine_start()
 {
 	save_item(NAME(m_mstat));
 	save_item(NAME(m_sstat));
+	save_item(NAME(m_cpanel_inta));
 
 	m_extension->program_map(m_maincpu->space(AS_PROGRAM));
 
@@ -520,9 +523,12 @@ void kn5000_state::kn5000(machine_config &config)
 	//   bit 0 (input) = +5v
 	//   bit 2 (input) = HDDRDY
 	//   bit 4 (?) = MICSNS
-	m_maincpu->porte_read().set_constant(1); //checked at EF05A6 (v10 ROM)
-	// FIXME: Bit 0 should only be 1 if the
-	// optional hard-drive extension board is disabled;
+	//   bit 5 (input) = INTA (control panel interrupt)
+	m_maincpu->porte_read().set([this] {
+		// Bit 0: +5v (always 1 when no HDD extension)
+		// Bit 5: INTA from control panel (active HIGH — firmware checks BIT 5,(PE); JR NZ)
+		return 0x01 | (m_cpanel_inta ? 0x20 : 0x00);
+	});
 
 
 	// MAINCPU PORT F:
@@ -575,8 +581,12 @@ void kn5000_state::kn5000(machine_config &config)
 	m_maincpu->m_serial[1].lookup()->sclk_out().set(m_cpanel, FUNC(kn5000_cpanel_device::sioclk));
 	m_maincpu->m_serial[1].lookup()->tx_start().set(m_cpanel, FUNC(kn5000_cpanel_device::tx_start));
 	m_cpanel.txd().set(m_maincpu->m_serial[1], FUNC(tmp94c241_serial_device::rxd));
-	//m_cpanel.sclk_out().set_inputline(m_maincpu, TLCS900_INTA);
-	// .set(m_maincpu->m_serial[1], FUNC(tmp94c241_serial_device::sioclk));
+	m_cpanel.sclk_out().set(m_maincpu->m_serial[1], FUNC(tmp94c241_serial_device::sioclk));
+	m_cpanel.inta().set([this] (int state) {
+		m_cpanel_inta = state;
+		// Assert/deassert INTA interrupt on the CPU (active on rising edge)
+		m_maincpu->set_input_line(TLCS900_INTA, state ? ASSERT_LINE : CLEAR_LINE);
+	});
 
 
 	// AN0 = EXP (expression pedal?)

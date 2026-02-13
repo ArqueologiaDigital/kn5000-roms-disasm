@@ -36,6 +36,8 @@ DEFINE_DEVICE_TYPE(KN5000_CPANEL, kn5000_cpanel_device, "kn5000_cpanel", "KN5000
 kn5000_cpanel_device::kn5000_cpanel_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
 	device_t(mconfig, KN5000_CPANEL, tag, owner, clock),
 	m_timer(nullptr),
+	m_idle_detect_timer(nullptr),
+	m_self_clock_timer(nullptr),
 	m_baud_rate(0),
 	m_rx_clock_count(8),
 	m_rx_shift_register(0),
@@ -46,8 +48,11 @@ kn5000_cpanel_device::kn5000_cpanel_device(const machine_config &mconfig, const 
 	m_tx_skip_first_falling(false),
 	m_cmd_index(0),
 	m_initialized(false),
+	m_self_clocking(false),
+	m_inta_asserted(false),
 	m_txd_cb(*this),
 	m_sclk_out_cb(*this),
+	m_inta_cb(*this),
 	m_cpl_leds(*this, "cpl_led_%u", 0U),
 	m_cpr_leds(*this, "cpr_led_%u", 0U)
 {
@@ -60,6 +65,8 @@ kn5000_cpanel_device::kn5000_cpanel_device(const machine_config &mconfig, const 
 void kn5000_cpanel_device::device_start()
 {
 	m_timer = timer_alloc(FUNC(kn5000_cpanel_device::timer_callback), this);
+	m_idle_detect_timer = timer_alloc(FUNC(kn5000_cpanel_device::idle_detect_callback), this);
+	m_self_clock_timer = timer_alloc(FUNC(kn5000_cpanel_device::self_clock_callback), this);
 
 	// Resolve LED outputs
 	m_cpl_leds.resolve();
@@ -77,6 +84,8 @@ void kn5000_cpanel_device::device_start()
 	save_item(NAME(m_cmd_buffer));
 	save_item(NAME(m_cmd_index));
 	save_item(NAME(m_initialized));
+	save_item(NAME(m_self_clocking));
+	save_item(NAME(m_inta_asserted));
 	save_item(NAME(m_last_button_state));
 
 	// Initial state - line idle high
@@ -91,10 +100,15 @@ void kn5000_cpanel_device::device_reset()
 	m_tx_skip_first_falling = false;
 	m_cmd_index = 0;
 	m_initialized = false;
+	m_self_clocking = false;
+	m_inta_asserted = false;
 
 	// Clear TX queue
 	while (!m_tx_queue.empty())
 		m_tx_queue.pop();
+
+	m_idle_detect_timer->reset(attotime::never);
+	m_self_clock_timer->reset(attotime::never);
 
 	std::fill(std::begin(m_last_button_state), std::end(m_last_button_state), 0);
 }
@@ -136,6 +150,14 @@ void kn5000_cpanel_device::sioclk(int state)
 		return;
 
 	m_sioclk_state = state;
+
+	// If we're not self-clocking, this is an external clock edge from the CPU.
+	// Retrigger the idle detect timer — if it expires, we know the CPU has
+	// stopped driving SCLK and we should self-clock to send pending responses.
+	if (!m_self_clocking)
+	{
+		m_idle_detect_timer->adjust(attotime::from_usec(250));
+	}
 
 	LOGMASKED(LOG_SERIAL, "cpanel sioclk state=%d rxd=%d rx_count=%d tx_count=%d\n",
 		state, m_rxd, m_rx_clock_count, m_tx_clock_count);
@@ -302,7 +324,7 @@ void kn5000_cpanel_device::process_command()
 
 	// Query commands
 	case 0x20:  // Query left panel
-	case 0xe0:  // Query right panel
+	case 0x25:  // Query left panel (variant used in CPanel_ReadAllButtons)
 		if (param == 0x00)
 		{
 			// Ping - respond with sync
@@ -311,19 +333,33 @@ void kn5000_cpanel_device::process_command()
 		else if (param <= 0x0a)
 		{
 			// Button segment query
-			send_button_packet(param, !is_right_panel);
+			send_button_packet(param, true);  // left panel
 		}
-		else if (param == 0x0b || param == 0x10)
+		else
 		{
-			// Status query
+			// Status/encoder query (0x0b-0x10+) - respond with sync
 			send_sync_packet();
 		}
 		break;
 
-	case 0x25:  // Left panel data command
-	case 0xe2:  // Right panel query
-	case 0xe3:  // Right panel extended query
-		send_sync_packet();
+	case 0xe0:  // Query right panel
+	case 0xe2:  // Query right panel (variant used in CPanel_ReadAllButtons)
+	case 0xe3:  // Query right panel (variant used in CPanel_InitButtonState)
+		if (param == 0x00)
+		{
+			// Ping - respond with sync
+			send_sync_packet();
+		}
+		else if (param <= 0x0a)
+		{
+			// Button segment query
+			send_button_packet(param, false);  // right panel
+		}
+		else
+		{
+			// Status/encoder query (0x0b-0x11+) - respond with sync
+			send_sync_packet();
+		}
 		break;
 
 	case 0x2b:  // Init button state array (left)
@@ -364,6 +400,17 @@ void kn5000_cpanel_device::process_command()
 		LOGMASKED(LOG_COMMANDS, "Unknown command %02X %02X\n", cmd, param);
 		send_sync_packet();
 		break;
+	}
+
+	// Start idle detection for INTA-based response delivery.
+	// If the CPU doesn't send dummy bytes within 250µs (i.e., the external
+	// clock goes idle), idle_detect_callback will assert INTA and start
+	// self-clocking to deliver the response. If the CPU does send dummy
+	// bytes (as the AW VM does), the response gets clocked out on the CPU's
+	// clock and idle detection is continuously retriggered, never firing.
+	if (!m_self_clocking && (m_tx_clock_count > 0 || !m_tx_queue.empty()))
+	{
+		m_idle_detect_timer->adjust(attotime::from_usec(250));
 	}
 }
 
@@ -580,5 +627,55 @@ TIMER_CALLBACK_MEMBER(kn5000_cpanel_device::timer_callback)
 		// Toggle clock to shift out data
 		m_sclk_out_cb(1);
 		m_sclk_out_cb(0);
+	}
+}
+
+TIMER_CALLBACK_MEMBER(kn5000_cpanel_device::idle_detect_callback)
+{
+	// The external serial clock (from CPU) has been idle for 250µs.
+	// If we have pending response data, the CPU is not going to send
+	// dummy bytes to clock it out — switch to self-clocking mode and
+	// assert INTA so the CPU's firmware can enable receive mode.
+
+	if (m_tx_clock_count > 0 || !m_tx_queue.empty())
+	{
+		LOGMASKED(LOG_SERIAL, "cpanel: external clock idle, asserting INTA and starting self-clock\n");
+
+		// Assert INTA to notify the CPU that we have data
+		if (!m_inta_asserted)
+		{
+			m_inta_asserted = true;
+			m_inta_cb(1);
+		}
+
+		// Start self-clocking after a brief delay to let the CPU process
+		// the INTA interrupt and enable receive mode.
+		// 50µs ≈ 800 CPU cycles at 16 MHz — plenty for the ISR.
+		m_self_clocking = true;
+		m_self_clock_timer->adjust(attotime::from_usec(50), 0, attotime::from_hz(250000));
+	}
+}
+
+TIMER_CALLBACK_MEMBER(kn5000_cpanel_device::self_clock_callback)
+{
+	// Drive one clock edge per callback (toggle), matching the CPU serial
+	// timer's behavior. At 250 kHz, this gives 125 kHz SCLK = one bit
+	// every 8µs, one byte every 64µs.
+	m_sclk_out_cb(m_sioclk_state ^ 1);
+	// The edge propagates: cpanel sclk_out → CPU serial sioclk → CPU serial
+	// sclk_out → cpanel sioclk. Both sides process the edge.
+
+	// Check if we're done transmitting
+	if (m_tx_clock_count == 0 && m_tx_queue.empty())
+	{
+		LOGMASKED(LOG_SERIAL, "cpanel: self-clock TX complete, deasserting INTA\n");
+		m_self_clocking = false;
+		m_self_clock_timer->reset(attotime::never);
+
+		if (m_inta_asserted)
+		{
+			m_inta_asserted = false;
+			m_inta_cb(0);
+		}
 	}
 }
