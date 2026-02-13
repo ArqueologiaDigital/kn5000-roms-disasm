@@ -165,7 +165,11 @@ void kn5000_cpanel_device::sioclk(int state)
 	if (state)
 	{
 		// Rising edge: Sample RXD (receive bit from CPU)
-		if (m_rx_clock_count > 0)
+		// Skip RX during self-clocking: the CPU serial's TXD line holds
+		// the MSB of the last transmitted byte (often 0), so we'd assemble
+		// 0x00 bytes and misinterpret them as LED commands, queuing infinite
+		// sync responses that prevent self-clocking from ever completing.
+		if (!m_self_clocking && m_rx_clock_count > 0)
 		{
 			m_rx_shift_register >>= 1;
 			m_rx_shift_register |= (m_rxd << 7);
