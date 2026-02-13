@@ -50,6 +50,7 @@ kn5000_cpanel_device::kn5000_cpanel_device(const machine_config &mconfig, const 
 	m_initialized(false),
 	m_self_clocking(false),
 	m_inta_asserted(false),
+	m_accept_next_byte(true),
 	m_txd_cb(*this),
 	m_sclk_out_cb(*this),
 	m_inta_cb(*this),
@@ -86,6 +87,7 @@ void kn5000_cpanel_device::device_start()
 	save_item(NAME(m_initialized));
 	save_item(NAME(m_self_clocking));
 	save_item(NAME(m_inta_asserted));
+	save_item(NAME(m_accept_next_byte));
 	save_item(NAME(m_last_button_state));
 
 	// Initial state - line idle high
@@ -102,6 +104,7 @@ void kn5000_cpanel_device::device_reset()
 	m_initialized = false;
 	m_self_clocking = false;
 	m_inta_asserted = false;
+	m_accept_next_byte = true;
 
 	// Clear TX queue
 	while (!m_tx_queue.empty())
@@ -135,20 +138,17 @@ void kn5000_cpanel_device::rxd(int state)
 
 void kn5000_cpanel_device::tx_start(int state)
 {
-	// Called when CPU starts transmitting a new byte - reset RX to sync byte boundaries.
-	// Also reset the clock state to LOW so the first forwarded rising edge
-	// is always accepted.  With PFFC gating, phantom bytes toggle the CPU
-	// serial's internal clock state without forwarding edges to us, so our
-	// m_sioclk_state becomes stale.  Setting it to 0 here guarantees the
-	// next rising edge (which carries the first data bit) won't be filtered
-	// by the same-state check in sioclk().
-	if (state)
-	{
-		LOGMASKED(LOG_SERIAL, "cpanel tx_start: resetting RX counter and clock state for sync\n");
-		m_rx_clock_count = 8;
-		m_rx_shift_register = 0;
-		m_sioclk_state = 0;
-	}
+	// Called when CPU starts transmitting a new byte.
+	// state=1: real byte (PFFC enabled — SCLK pin driven on real hardware)
+	// state=0: phantom byte (PFFC disabled — pin high-Z, data wouldn't reach us)
+	//
+	// Reset RX counter to sync byte boundaries.  Track whether to accept
+	// or skip the byte once it's fully received.
+	LOGMASKED(LOG_SERIAL, "cpanel tx_start: state=%d (%s byte)\n",
+		state, state ? "real" : "phantom");
+	m_rx_clock_count = 8;
+	m_rx_shift_register = 0;
+	m_accept_next_byte = (state != 0);
 }
 
 void kn5000_cpanel_device::sioclk(int state)
@@ -286,7 +286,19 @@ void kn5000_cpanel_device::send_byte(uint8_t data)
 
 void kn5000_cpanel_device::process_received_byte(uint8_t data)
 {
-	LOGMASKED(LOG_SERIAL, "RX byte: %02X (cmd_index=%d)\n", data, m_cmd_index);
+	LOGMASKED(LOG_SERIAL, "RX byte: %02X (cmd_index=%d, accept=%d)\n",
+		data, m_cmd_index, m_accept_next_byte);
+
+	// Skip phantom bytes — sent during PFFC-off phases of the firmware's
+	// TX state machine.  On real hardware, SCLK is high-impedance so data
+	// never reaches the panel; in MAME we still forward clock edges (to
+	// avoid desync) but mark the byte as phantom via tx_start(0).
+	if (!m_accept_next_byte)
+	{
+		LOGMASKED(LOG_SERIAL, "cpanel: skipping phantom byte %02X\n", data);
+		m_accept_next_byte = true;  // Reset for next byte
+		return;
+	}
 
 	// Ignore 0xFF when it appears as a command byte (first byte of pair).
 	// In synchronous serial mode, the CPU must send dummy bytes to clock in

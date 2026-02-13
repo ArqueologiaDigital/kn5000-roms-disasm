@@ -94,6 +94,7 @@ private:
 	bool m_initialized;
 	bool m_self_clocking;
 	bool m_inta_asserted;
+	bool m_accept_next_byte;   // false = next received byte is phantom (PFFC-off), skip it
 	uint8_t m_last_button_state[22];  // 11 segments * 2 panels
 
 	// Callbacks

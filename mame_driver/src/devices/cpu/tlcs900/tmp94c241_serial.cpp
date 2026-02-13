@@ -92,16 +92,12 @@ void tmp94c241_serial_device::sioclk(int state)
 
 	m_sioclk_state = state;
 
-	// Only forward SCLK to the connected device (cpanel) when the pin is
-	// actually driven.  On real hardware, PFFC controls whether PF.6 is the
-	// serial SCLK output or a GPIO pin.  When PFFC disables SCLK, phantom
-	// bytes (written to SC1BUF during firmware init phases) are shifted out
-	// internally but don't reach the panel — the pin is high-impedance.
-	// In slave mode (IOC=1), the SCLK pin is an input driven by the cpanel's
-	// self-clock, so we always forward those edges.
-	bool ioc = BIT(m_serial_control, 0);
-	bool pffc_sclk = (m_cpu->m_port_function[PORT_F] & (1 << (m_channel == 0 ? 2 : 6))) != 0;
-	bool forward_sclk = ioc || pffc_sclk;
+	// Always forward SCLK to the connected device.  We do NOT gate on PFFC
+	// here because that causes clock desync: during PFFC-off phases, TO2
+	// toggles our internal m_sioclk_state without forwarding to the slave,
+	// so the slave's state becomes stale and it misses edges when PFFC is
+	// re-enabled.  Instead, phantom bytes (written with PFFC disabled) are
+	// signaled via tx_start_cb so the slave can skip them at the byte level.
 
 	if (state)
 	{
@@ -111,8 +107,7 @@ void tmp94c241_serial_device::sioclk(int state)
 		// m_rxd before we can sample it. Capture the value first.
 		uint8_t rxd_sample = m_rxd;
 
-		if (forward_sclk)
-			m_sclk_out_cb(state);
+		m_sclk_out_cb(state);
 
 		logerror("sioclk state=%d rxd=%d m_rx_clock_count=%d m_tx_clock_count=%d\n", m_sioclk_state, rxd_sample, m_rx_clock_count, m_tx_clock_count);
 
@@ -135,10 +130,7 @@ void tmp94c241_serial_device::sioclk(int state)
 	else
 	{
 		// Falling edge: Forward clock to slave, then output our TXD.
-		// Order doesn't matter for data correctness here — both sides
-		// output on falling edges and sample on rising edges.
-		if (forward_sclk)
-			m_sclk_out_cb(state);
+		m_sclk_out_cb(state);
 
 		logerror("sioclk state=%d rxd=%d m_rx_clock_count=%d m_tx_clock_count=%d\n", m_sioclk_state, m_rxd, m_rx_clock_count, m_tx_clock_count);
 
@@ -186,12 +178,15 @@ void tmp94c241_serial_device::scNbuf_w(uint8_t data)
 	m_tx_shift_register = data;
 	m_tx_clock_count = 7;  // 7 more bits to send (bits 1-7) after pre-outputting bit 0
 
-	// Only signal start of new transmission if we were idle.
-	// If transmission was in progress, the slave should continue receiving
-	// (the CPU is replacing the current byte, but byte boundary stays the same)
+	// Signal start of new transmission when we were idle.
+	// Pass the PFFC state so the slave knows whether this byte is "real"
+	// (PFFC enabled, SCLK pin driven → data reaches panel on real hardware)
+	// or "phantom" (PFFC disabled, pin is high-impedance → data never
+	// reaches the panel on real hardware, but MAME still forwards SCLK).
 	if (was_idle)
 	{
-		m_tx_start_cb(1);
+		bool pffc_sclk = (m_cpu->m_port_function[PORT_F] & (1 << (m_channel == 0 ? 2 : 6))) != 0;
+		m_tx_start_cb(pffc_sclk ? 1 : 0);
 	}
 
 	// Pre-output first bit immediately so slave can sample it on the first rising edge
@@ -301,6 +296,13 @@ fc4619: f0 3f 41              ld (0x3f),A
 
 TIMER_CALLBACK_MEMBER(tmp94c241_serial_device::timer_callback)
 {
+	// Only drive SCLK when clock source is baud rate generator (SC1MOD bits 1:0 = 1).
+	// The firmware uses TO2 trigger mode (bits 1:0 = 0) where SCLK is driven by
+	// TO2_trigger(), not this timer.  Without this check, writing BR1CR in TO2 mode
+	// starts the timer which double-clocks alongside TO2.
+	if ((m_serial_mode & 3) != 1)
+		return;
+
 	// Keep clocking while TX is in progress OR RX hasn't completed its byte.
 	// Without the RX check, the timer stops after TX's last falling edge,
 	// leaving RX one rising edge short of completing the byte.
