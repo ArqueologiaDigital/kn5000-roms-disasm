@@ -51,6 +51,7 @@ kn5000_cpanel_device::kn5000_cpanel_device(const machine_config &mconfig, const 
 	m_self_clocking(false),
 	m_inta_asserted(false),
 	m_accept_next_byte(false),
+	m_tx_output_enabled(true),
 	m_txd_cb(*this),
 	m_sclk_out_cb(*this),
 	m_inta_cb(*this),
@@ -88,6 +89,7 @@ void kn5000_cpanel_device::device_start()
 	save_item(NAME(m_self_clocking));
 	save_item(NAME(m_inta_asserted));
 	save_item(NAME(m_accept_next_byte));
+	save_item(NAME(m_tx_output_enabled));
 	save_item(NAME(m_last_button_state));
 
 	// Initial state - line idle high
@@ -105,6 +107,7 @@ void kn5000_cpanel_device::device_reset()
 	m_self_clocking = false;
 	m_inta_asserted = false;
 	m_accept_next_byte = false;
+	m_tx_output_enabled = true;
 
 	// Clear TX queue
 	while (!m_tx_queue.empty())
@@ -149,6 +152,7 @@ void kn5000_cpanel_device::tx_start(int state)
 	m_rx_clock_count = 8;
 	m_rx_shift_register = 0;
 	m_accept_next_byte = (state != 0);
+	m_tx_output_enabled = (state != 0);
 
 	// Cancel pending idle detection only for REAL bytes — this means the
 	// CPU is actively clocking and will drive the response out directly
@@ -169,10 +173,23 @@ void kn5000_cpanel_device::sioclk(int state)
 
 	m_sioclk_state = state;
 
-	// Note: we do NOT retrigger idle_detect_timer here.  The timer is started
-	// only from process_command() after a complete 2-byte command is received.
-	// Retriggering on every clock edge (including continuous TO2 at 12.5kHz)
-	// would prevent the 250µs timeout from ever firing, blocking INTA.
+	// Retrigger idle_detect on every clock edge while we have pending response
+	// data and aren't already self-clocking.  This creates a sliding 250µs
+	// window that fires INTA after the LAST external clock edge — which is
+	// when the CPU's baud rate timer stops (need_clock=false after SM_TXComplete).
+	//
+	// Previous approach used a fixed 5ms timeout from process_command(), but
+	// that was either too early (during phantom bytes) or too late (after
+	// the firmware sent the next command).  Edge-based retrigger adapts to
+	// the actual clock activity.
+	//
+	// The previous concern about TO2 at 12.5kHz preventing the timeout no
+	// longer applies: TO2_trigger is now a no-op, so only the baud rate
+	// timer drives edges (and it stops after SM_TXComplete).
+	if (!m_self_clocking && (m_tx_clock_count > 0 || !m_tx_queue.empty()))
+	{
+		m_idle_detect_timer->adjust(attotime::from_usec(250));
+	}
 
 	LOGMASKED(LOG_SERIAL, "cpanel sioclk state=%d rxd=%d rx_count=%d tx_count=%d\n",
 		state, m_rxd, m_rx_clock_count, m_tx_clock_count);
@@ -204,8 +221,16 @@ void kn5000_cpanel_device::sioclk(int state)
 	else
 	{
 		// Falling edge: Output TXD (transmit bit to CPU)
-		// This prepares the bit for the CPU to sample on the next rising edge
-		if (m_tx_skip_first_falling)
+		// This prepares the bit for the CPU to sample on the next rising edge.
+		// Gate on m_tx_output_enabled: during phantom byte clock edges
+		// (PFFC off, tx_start(0)), we must NOT output response bits.
+		// The response data must remain frozen in the shift register and
+		// queue until self-clocking delivers it after INTA.
+		if (!m_tx_output_enabled)
+		{
+			// Phantom byte edge — suppress TX, keep response data intact
+		}
+		else if (m_tx_skip_first_falling)
 		{
 			// Skip this falling edge - bit 0 was pre-output and we need to give
 			// CPU a rising edge to sample it before we output bit 1
@@ -436,28 +461,21 @@ void kn5000_cpanel_device::process_command()
 	}
 
 	// Start idle detection for INTA-based response delivery.
-	// This is the SOLE place that starts the idle detect timer.
-	// If the CPU doesn't send more REAL bytes within the timeout
-	// (no tx_start(1)), idle_detect_callback will assert INTA and
-	// start self-clocking to deliver the response (firmware path).
+	// This is the initial trigger; sioclk() retriggers it on every
+	// clock edge, creating a sliding 250µs window that fires INTA
+	// after the LAST clock edge (when the baud rate timer stops).
+	//
 	// If the CPU sends dummy bytes (AW VM path), tx_start(1) cancels
 	// this timer and the response gets clocked out on the CPU's edges.
 	//
-	// Timeout must be long enough for the firmware's TX state machine
-	// to complete its phantom bytes (SM_TXDelay1/2/3 → SM_TXComplete).
-	// Phantom bytes are clocked by TO2 at 12.5 kHz (baud rate timer is
-	// blocked by the PFFC check in timer_callback when PFFC is off).
-	// At 12.5 kHz, 16 edges (8 bits) take 1.28 ms, and the firmware
-	// does ~4 phantom bytes total.  SM_TXComplete clears TX_RX_FLAGS
-	// bit 1 — this MUST happen before INTA fires, otherwise the INTA
-	// handler overrides the state machine and SM_TXComplete never runs,
-	// leaving bit 1 set → CPanel_WaitTXReady fails → ERROR dialog.
-	//
-	// 5 ms gives ample margin for all phantom bytes to complete
-	// (~5.12 ms worst case for 4 phantom bytes at 12.5 kHz).
+	// The sliding window ensures phantom bytes complete before INTA:
+	// each phantom byte's clock edges retrigger the timer, so it never
+	// fires during active clocking.  Only after SM_TXComplete (which
+	// clears TX_RX_FLAGS bit 1 and stops the baud rate timer) does
+	// the 250µs countdown expire and INTA fire.
 	if (!m_self_clocking && (m_tx_clock_count > 0 || !m_tx_queue.empty()))
 	{
-		m_idle_detect_timer->adjust(attotime::from_usec(5000));
+		m_idle_detect_timer->adjust(attotime::from_usec(250));
 	}
 }
 
@@ -679,16 +697,22 @@ TIMER_CALLBACK_MEMBER(kn5000_cpanel_device::timer_callback)
 
 TIMER_CALLBACK_MEMBER(kn5000_cpanel_device::idle_detect_callback)
 {
-	// The external serial clock (from CPU) has been idle for 5 ms.
+	// The external serial clock (from CPU) has been idle for 250µs.
 	// If we have pending response data, the CPU is not going to send
 	// dummy bytes to clock it out — switch to self-clocking mode and
 	// assert INTA so the CPU's firmware can enable receive mode.
-	// The 5 ms timeout allows the firmware's phantom bytes to complete
-	// (SM_TXComplete clears TX_RX_FLAGS bit 1) before we assert INTA.
+	//
+	// The sliding 250µs window (retriggered on every sioclk edge) ensures
+	// this fires AFTER the firmware's phantom bytes complete: SM_TXComplete
+	// clears TX_RX_FLAGS bit 1 and the baud rate timer stops, so no more
+	// edges arrive.  250µs after the last edge, we fire INTA.
 
 	if (m_tx_clock_count > 0 || !m_tx_queue.empty())
 	{
-		LOGMASKED(LOG_SERIAL, "cpanel: external clock idle, asserting INTA and starting self-clock\n");
+		LOGMASKED(LOG_SERIAL, "cpanel: external clock idle for 250us, asserting INTA and starting self-clock\n");
+
+		// Enable TX output — response data was frozen during phantom bytes
+		m_tx_output_enabled = true;
 
 		// Assert INTA to notify the CPU that we have data
 		if (!m_inta_asserted)

@@ -304,11 +304,15 @@ fc4619: f0 3f 41              ld (0x3f),A
 
 TIMER_CALLBACK_MEMBER(tmp94c241_serial_device::timer_callback)
 {
-	// In slave mode (IOC=1), the clock comes from the external device
-	// (cpanel's self-clock via the SCLK pin).  Don't drive from the baud
-	// rate timer — that would inject extra edges and corrupt data during
-	// INTA-driven reception.
-	if (BIT(m_serial_control, 0))
+	// In TO2 trigger mode (mode 0), IOC=1 means the clock comes from an
+	// external device (cpanel's self-clock via SCLK pin after INTA).
+	// Don't drive from the baud rate timer — that would inject extra
+	// edges and corrupt data during INTA-driven reception.
+	//
+	// In baud rate generator mode (mode 1), the baud rate timer is the
+	// clock source regardless of IOC.  The AW VM uses mode=1 with IOC=1,
+	// so we must NOT block the timer in that combination.
+	if ((m_serial_mode & 3) == 0 && BIT(m_serial_control, 0))
 		return;
 
 	// Keep clocking while TX is in progress OR RX hasn't completed its byte.
