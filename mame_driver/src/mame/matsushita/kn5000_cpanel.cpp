@@ -437,14 +437,27 @@ void kn5000_cpanel_device::process_command()
 
 	// Start idle detection for INTA-based response delivery.
 	// This is the SOLE place that starts the idle detect timer.
-	// If the CPU doesn't send more bytes within 250µs (no tx_start),
-	// idle_detect_callback will assert INTA and start self-clocking
-	// to deliver the response (firmware path).  If the CPU sends dummy
-	// bytes (AW VM path), tx_start() cancels this timer and the response
-	// gets clocked out directly on the CPU's clock edges.
+	// If the CPU doesn't send more REAL bytes within the timeout
+	// (no tx_start(1)), idle_detect_callback will assert INTA and
+	// start self-clocking to deliver the response (firmware path).
+	// If the CPU sends dummy bytes (AW VM path), tx_start(1) cancels
+	// this timer and the response gets clocked out on the CPU's edges.
+	//
+	// Timeout must be long enough for the firmware's TX state machine
+	// to complete its phantom bytes (SM_TXDelay1/2/3 → SM_TXComplete).
+	// Phantom bytes are clocked by TO2 at 12.5 kHz (baud rate timer is
+	// blocked by the PFFC check in timer_callback when PFFC is off).
+	// At 12.5 kHz, 16 edges (8 bits) take 1.28 ms, and the firmware
+	// does ~4 phantom bytes total.  SM_TXComplete clears TX_RX_FLAGS
+	// bit 1 — this MUST happen before INTA fires, otherwise the INTA
+	// handler overrides the state machine and SM_TXComplete never runs,
+	// leaving bit 1 set → CPanel_WaitTXReady fails → ERROR dialog.
+	//
+	// 5 ms gives ample margin for all phantom bytes to complete
+	// (~5.12 ms worst case for 4 phantom bytes at 12.5 kHz).
 	if (!m_self_clocking && (m_tx_clock_count > 0 || !m_tx_queue.empty()))
 	{
-		m_idle_detect_timer->adjust(attotime::from_usec(250));
+		m_idle_detect_timer->adjust(attotime::from_usec(5000));
 	}
 }
 
@@ -666,10 +679,12 @@ TIMER_CALLBACK_MEMBER(kn5000_cpanel_device::timer_callback)
 
 TIMER_CALLBACK_MEMBER(kn5000_cpanel_device::idle_detect_callback)
 {
-	// The external serial clock (from CPU) has been idle for 250µs.
+	// The external serial clock (from CPU) has been idle for 5 ms.
 	// If we have pending response data, the CPU is not going to send
 	// dummy bytes to clock it out — switch to self-clocking mode and
 	// assert INTA so the CPU's firmware can enable receive mode.
+	// The 5 ms timeout allows the firmware's phantom bytes to complete
+	// (SM_TXComplete clears TX_RX_FLAGS bit 1) before we assert INTA.
 
 	if (m_tx_clock_count > 0 || !m_tx_queue.empty())
 	{
