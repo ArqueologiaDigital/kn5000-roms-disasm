@@ -135,12 +135,19 @@ void kn5000_cpanel_device::rxd(int state)
 
 void kn5000_cpanel_device::tx_start(int state)
 {
-	// Called when CPU starts transmitting a new byte - reset RX to sync byte boundaries
+	// Called when CPU starts transmitting a new byte - reset RX to sync byte boundaries.
+	// Also reset the clock state to LOW so the first forwarded rising edge
+	// is always accepted.  With PFFC gating, phantom bytes toggle the CPU
+	// serial's internal clock state without forwarding edges to us, so our
+	// m_sioclk_state becomes stale.  Setting it to 0 here guarantees the
+	// next rising edge (which carries the first data bit) won't be filtered
+	// by the same-state check in sioclk().
 	if (state)
 	{
-		LOGMASKED(LOG_SERIAL, "cpanel tx_start: resetting RX counter for sync\n");
+		LOGMASKED(LOG_SERIAL, "cpanel tx_start: resetting RX counter and clock state for sync\n");
 		m_rx_clock_count = 8;
 		m_rx_shift_register = 0;
+		m_sioclk_state = 0;
 	}
 }
 
