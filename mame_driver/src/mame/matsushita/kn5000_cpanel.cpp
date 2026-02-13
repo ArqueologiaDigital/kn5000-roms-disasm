@@ -50,7 +50,7 @@ kn5000_cpanel_device::kn5000_cpanel_device(const machine_config &mconfig, const 
 	m_initialized(false),
 	m_self_clocking(false),
 	m_inta_asserted(false),
-	m_accept_next_byte(true),
+	m_accept_next_byte(false),
 	m_txd_cb(*this),
 	m_sclk_out_cb(*this),
 	m_inta_cb(*this),
@@ -104,7 +104,7 @@ void kn5000_cpanel_device::device_reset()
 	m_initialized = false;
 	m_self_clocking = false;
 	m_inta_asserted = false;
-	m_accept_next_byte = true;
+	m_accept_next_byte = false;
 
 	// Clear TX queue
 	while (!m_tx_queue.empty())
@@ -149,6 +149,11 @@ void kn5000_cpanel_device::tx_start(int state)
 	m_rx_clock_count = 8;
 	m_rx_shift_register = 0;
 	m_accept_next_byte = (state != 0);
+
+	// Cancel pending idle detection — the CPU is actively sending, so we
+	// shouldn't assert INTA yet.  If no more bytes follow, process_command
+	// will restart the timer after the complete command is received.
+	m_idle_detect_timer->reset(attotime::never);
 }
 
 void kn5000_cpanel_device::sioclk(int state)
@@ -158,13 +163,10 @@ void kn5000_cpanel_device::sioclk(int state)
 
 	m_sioclk_state = state;
 
-	// If we're not self-clocking, this is an external clock edge from the CPU.
-	// Retrigger the idle detect timer — if it expires, we know the CPU has
-	// stopped driving SCLK and we should self-clock to send pending responses.
-	if (!m_self_clocking)
-	{
-		m_idle_detect_timer->adjust(attotime::from_usec(250));
-	}
+	// Note: we do NOT retrigger idle_detect_timer here.  The timer is started
+	// only from process_command() after a complete 2-byte command is received.
+	// Retriggering on every clock edge (including continuous TO2 at 12.5kHz)
+	// would prevent the 250µs timeout from ever firing, blocking INTA.
 
 	LOGMASKED(LOG_SERIAL, "cpanel sioclk state=%d rxd=%d rx_count=%d tx_count=%d\n",
 		state, m_rxd, m_rx_clock_count, m_tx_clock_count);
@@ -289,16 +291,18 @@ void kn5000_cpanel_device::process_received_byte(uint8_t data)
 	LOGMASKED(LOG_SERIAL, "RX byte: %02X (cmd_index=%d, accept=%d)\n",
 		data, m_cmd_index, m_accept_next_byte);
 
-	// Skip phantom bytes — sent during PFFC-off phases of the firmware's
-	// TX state machine.  On real hardware, SCLK is high-impedance so data
-	// never reaches the panel; in MAME we still forward clock edges (to
-	// avoid desync) but mark the byte as phantom via tx_start(0).
+	// Skip bytes that weren't signaled as "real" via tx_start(1).  This
+	// rejects both phantom bytes (PFFC-off phases in firmware TX state
+	// machine) and stale bytes assembled from continuous clock edges
+	// (TO2 at 12.5kHz or baud rate timer) when no actual transmission
+	// is in progress.  The flag is one-shot: tx_start(1) sets it true,
+	// and we consume it here after accepting one byte.
 	if (!m_accept_next_byte)
 	{
-		LOGMASKED(LOG_SERIAL, "cpanel: skipping phantom byte %02X\n", data);
-		m_accept_next_byte = true;  // Reset for next byte
-		return;
+		LOGMASKED(LOG_SERIAL, "cpanel: skipping unsolicited/phantom byte %02X\n", data);
+		return;  // Don't reset to true — only tx_start(1) can enable acceptance
 	}
+	m_accept_next_byte = false;  // One-shot: consumed after accepting this byte
 
 	// Ignore 0xFF when it appears as a command byte (first byte of pair).
 	// In synchronous serial mode, the CPU must send dummy bytes to clock in
@@ -426,11 +430,12 @@ void kn5000_cpanel_device::process_command()
 	}
 
 	// Start idle detection for INTA-based response delivery.
-	// If the CPU doesn't send dummy bytes within 250µs (i.e., the external
-	// clock goes idle), idle_detect_callback will assert INTA and start
-	// self-clocking to deliver the response. If the CPU does send dummy
-	// bytes (as the AW VM does), the response gets clocked out on the CPU's
-	// clock and idle detection is continuously retriggered, never firing.
+	// This is the SOLE place that starts the idle detect timer.
+	// If the CPU doesn't send more bytes within 250µs (no tx_start),
+	// idle_detect_callback will assert INTA and start self-clocking
+	// to deliver the response (firmware path).  If the CPU sends dummy
+	// bytes (AW VM path), tx_start() cancels this timer and the response
+	// gets clocked out directly on the CPU's clock edges.
 	if (!m_self_clocking && (m_tx_clock_count > 0 || !m_tx_queue.empty()))
 	{
 		m_idle_detect_timer->adjust(attotime::from_usec(250));
