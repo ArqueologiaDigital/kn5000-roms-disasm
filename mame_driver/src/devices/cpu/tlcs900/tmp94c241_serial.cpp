@@ -303,17 +303,23 @@ fc4619: f0 3f 41              ld (0x3f),A
 
 TIMER_CALLBACK_MEMBER(tmp94c241_serial_device::timer_callback)
 {
-	// In TO2 trigger mode (SC1MOD bits 1:0 = 0), don't drive SCLK when
-	// IOC=1 (slave mode).  In slave mode, the clock comes from the SCLK1
-	// pin (cpanel's self-clock); driving here would inject extra edges
-	// and corrupt data.
+	// Only drive SCLK from the baud rate timer when the clock source is
+	// actually the baud rate generator (SC1MOD bits 1:0 = 1).
 	//
-	// In baud rate generator mode (bits 1:0 = 1), the baud rate timer
-	// always provides the clock regardless of IOC.  Both the AW VM
-	// and the original firmware configure BR1CR to start this timer.
-	// The AW VM uses baud rate mode with IOC=1 (SC1CR=0x01), so we
-	// must NOT check IOC in baud rate mode.
-	if ((m_serial_mode & 3) == 0 && BIT(m_serial_control, 0))
+	// In TO2 trigger mode (bits 1:0 = 0), the serial clock comes from
+	// TO2_trigger() — the baud rate timer must NOT also drive SCLK or
+	// the serial channel gets double-clocked.  The original firmware
+	// uses TO2 trigger mode and writes BR1CR at each TX state machine
+	// step (starting this timer), but on real hardware the baud rate
+	// generator output only reaches SCLK when the clock source selects
+	// it.  Without this gate, both TO2 (12.5 kHz) and the baud rate
+	// timer (~62.5 kHz) drive SCLK simultaneously during real-byte
+	// phases (PFFC on), causing the cpanel to receive garbled data
+	// that gets misinterpreted as LED commands.
+	//
+	// The AW VM uses baud rate generator mode (SC1MOD = 0x01), so this
+	// check correctly allows the timer to drive in that case.
+	if ((m_serial_mode & 3) != 1)
 		return;
 
 	// Keep clocking while TX is in progress OR RX hasn't completed its byte.
