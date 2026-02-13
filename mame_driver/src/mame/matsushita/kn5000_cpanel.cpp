@@ -405,13 +405,15 @@ void kn5000_cpanel_device::process_command()
 
 	switch (cmd)
 	{
-	// Initialization commands
+	// Initialization commands — no response needed.
+	// The firmware doesn't wait for or require a response to init commands.
+	// Sending sync responses would accumulate in the TX queue and cause
+	// INTA conflicts with subsequent commands (see comment below).
 	case 0x1f:  // Init sequence (left)
 	case 0x1d:
 	case 0x1e:
 	case 0xdd:  // Setup mode
 		LOGMASKED(LOG_COMMANDS, "Init command\n");
-		send_sync_packet();
 		m_initialized = true;
 		break;
 
@@ -464,6 +466,13 @@ void kn5000_cpanel_device::process_command()
 		break;
 
 	// LED control commands - right panel
+	// No response needed.  The firmware sends LED commands in rapid batches
+	// (SM_TXComplete chains directly to SM_StartTX when more data exists).
+	// If we queued sync responses, they'd accumulate because idle_detect
+	// never fires during continuous clocking.  When finally delivered via
+	// INTA, they'd conflict with the firmware's next TX command: INTA sets
+	// IOC=1, blocking the baud rate timer and deadlocking the TX state
+	// machine.  Real hardware panels process LED commands silently.
 	case 0x00:
 	case 0x01:
 	case 0x02:
@@ -474,10 +483,9 @@ void kn5000_cpanel_device::process_command()
 	case 0x0b:
 	case 0x0c:
 		process_led_command(cmd, param);
-		send_sync_packet();
 		break;
 
-	// LED control commands - left panel
+	// LED control commands - left panel (same reasoning — no response)
 	case 0xc0:
 	case 0xc1:
 	case 0xc2:
@@ -485,13 +493,13 @@ void kn5000_cpanel_device::process_command()
 	case 0xc4:
 	case 0xc8:
 		process_led_command(cmd, param);
-		send_sync_packet();
 		break;
 
 	default:
-		// Unknown command - send sync as acknowledgment
+		// Unknown command - silently ignore (no response).
+		// Sending responses for unknown commands would cause the same
+		// accumulation/INTA conflict as LED commands.
 		LOGMASKED(LOG_COMMANDS, "Unknown command %02X %02X\n", cmd, param);
-		send_sync_packet();
 		break;
 	}
 
