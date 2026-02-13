@@ -102,7 +102,6 @@ void kn5000_cpanel_device::device_reset()
 	m_initialized = false;
 	m_self_clocking = false;
 	m_inta_asserted = false;
-	m_last_sclk_rising = attotime::zero;
 
 	// Clear TX queue
 	while (!m_tx_queue.empty())
@@ -165,30 +164,8 @@ void kn5000_cpanel_device::sioclk(int state)
 
 	if (state)
 	{
-		// Rising edge: detect phantom (slow-clocked) bytes by measuring the
-		// time since the previous rising edge.  The firmware clocks real data
-		// bytes at 250 kHz (8µs between rising edges) but phantom/init bytes
-		// are clocked by TO2 at ~12.5 kHz (160µs between rising edges) or by
-		// a slow baud rate (≥32µs).  A gap >20µs means this edge belongs to a
-		// phantom byte — reset the RX shift register so it never assembles a
-		// complete byte from slow-clocked garbage data.
-		attotime now = machine().time();
-		attotime elapsed = now - m_last_sclk_rising;
-		m_last_sclk_rising = now;
-
-		if (elapsed > attotime::from_usec(20))
-		{
-			// Slow clock edge — discard any partial byte in progress
-			m_rx_clock_count = 8;
-			m_rx_shift_register = 0;
-		}
-
-		// Skip RX during self-clocking: we are transmitting a response and
-		// the CPU serial may still have a stale byte in its TX shift register.
-		// Those bits arrive on our RXD and would be misinterpreted as new
-		// commands, queuing infinite responses that prevent self-clocking
-		// from ever completing.
-		if (!m_self_clocking && m_rx_clock_count > 0)
+		// Rising edge: Sample RXD (receive bit from CPU)
+		if (m_rx_clock_count > 0)
 		{
 			m_rx_shift_register >>= 1;
 			m_rx_shift_register |= (m_rxd << 7);
