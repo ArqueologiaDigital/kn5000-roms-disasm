@@ -92,6 +92,17 @@ void tmp94c241_serial_device::sioclk(int state)
 
 	m_sioclk_state = state;
 
+	// Only forward SCLK to the connected device (cpanel) when the pin is
+	// actually driven.  On real hardware, PFFC controls whether PF.6 is the
+	// serial SCLK output or a GPIO pin.  When PFFC disables SCLK, phantom
+	// bytes (written to SC1BUF during firmware init phases) are shifted out
+	// internally but don't reach the panel — the pin is high-impedance.
+	// In slave mode (IOC=1), the SCLK pin is an input driven by the cpanel's
+	// self-clock, so we always forward those edges.
+	bool ioc = BIT(m_serial_control, 0);
+	bool pffc_sclk = (m_cpu->m_port_function[PORT_F] & (1 << (m_channel == 0 ? 2 : 6))) != 0;
+	bool forward_sclk = ioc || pffc_sclk;
+
 	if (state)
 	{
 		// Rising edge: Sample RXD BEFORE forwarding clock to slave.
@@ -100,7 +111,8 @@ void tmp94c241_serial_device::sioclk(int state)
 		// m_rxd before we can sample it. Capture the value first.
 		uint8_t rxd_sample = m_rxd;
 
-		m_sclk_out_cb(state);
+		if (forward_sclk)
+			m_sclk_out_cb(state);
 
 		logerror("sioclk state=%d rxd=%d m_rx_clock_count=%d m_tx_clock_count=%d\n", m_sioclk_state, rxd_sample, m_rx_clock_count, m_tx_clock_count);
 
@@ -125,7 +137,8 @@ void tmp94c241_serial_device::sioclk(int state)
 		// Falling edge: Forward clock to slave, then output our TXD.
 		// Order doesn't matter for data correctness here — both sides
 		// output on falling edges and sample on rising edges.
-		m_sclk_out_cb(state);
+		if (forward_sclk)
+			m_sclk_out_cb(state);
 
 		logerror("sioclk state=%d rxd=%d m_rx_clock_count=%d m_tx_clock_count=%d\n", m_sioclk_state, m_rxd, m_rx_clock_count, m_tx_clock_count);
 
