@@ -76,10 +76,9 @@ void tmp94c241_serial_device::TO2_trigger(int state)
 {
 	logerror("TO2_trigger state=%d serial_mode=%02X serial_control=%02X\n", state, m_serial_mode, m_serial_control);
 	// serial_mode & 3 == 0: TO2 trigger clock source
-	// SC_CR bit 0 = IOC: 0=internal clock (master), 1=SCLK pin input (slave)
-	// SC_CR bit 1 = SCLKS: clock polarity
-	// For master mode with TO2 trigger, IOC (bit 0) should be 0
-	if ((m_serial_mode & 3) == 0 && !BIT(m_serial_control, 0))
+	// BIT(serial_control, 1) == IOC: 0=SCLK output (master), 1=SCLK input (slave)
+	// For master mode with TO2 trigger, IOC should be 0 (NOT set)
+	if ((m_serial_mode & 3) == 0 && !BIT(m_serial_control, 1))
 	{
 		/* Clock source: TO2 output compare trigger, master mode */
 		sioclk(state);
