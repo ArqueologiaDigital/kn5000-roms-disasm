@@ -54,6 +54,7 @@ kn5000_cpanel_device::kn5000_cpanel_device(const machine_config &mconfig, const 
 	m_tx_output_enabled(true),
 	m_next_accept(false),
 	m_next_tx_output_enabled(true),
+	m_self_clock_bytes_sent(0),
 	m_txd_cb(*this),
 	m_sclk_out_cb(*this),
 	m_inta_cb(*this),
@@ -94,6 +95,7 @@ void kn5000_cpanel_device::device_start()
 	save_item(NAME(m_tx_output_enabled));
 	save_item(NAME(m_next_accept));
 	save_item(NAME(m_next_tx_output_enabled));
+	save_item(NAME(m_self_clock_bytes_sent));
 	save_item(NAME(m_last_button_state));
 
 	// Initial state - line idle high
@@ -114,6 +116,7 @@ void kn5000_cpanel_device::device_reset()
 	m_tx_output_enabled = true;
 	m_next_accept = false;
 	m_next_tx_output_enabled = true;
+	m_self_clock_bytes_sent = 0;
 
 	// Clear TX queue
 	while (!m_tx_queue.empty())
@@ -753,6 +756,9 @@ TIMER_CALLBACK_MEMBER(kn5000_cpanel_device::idle_detect_callback)
 			m_inta_cb(1);
 		}
 
+		// Reset byte counter for this INTA cycle
+		m_self_clock_bytes_sent = 0;
+
 		// Start self-clocking after a brief delay to let the CPU process
 		// the INTA interrupt and enable receive mode.
 		// 50µs ≈ 800 CPU cycles at 16 MHz — plenty for the ISR.
@@ -776,16 +782,54 @@ TIMER_CALLBACK_MEMBER(kn5000_cpanel_device::self_clock_callback)
 	// still needs the subsequent rising edge to sample that bit and
 	// complete RX (triggering INTRX1).  Stopping on the falling edge
 	// would leave the CPU's rx_clock_count at 1 forever.
-	if (new_state == 1 && m_tx_clock_count == 0 && m_tx_queue.empty())
+	if (new_state == 1 && m_tx_clock_count == 0)
 	{
-		LOGMASKED(LOG_SERIAL, "cpanel: self-clock TX complete, deasserting INTA\n");
-		m_self_clocking = false;
-		m_self_clock_timer->reset(attotime::never);
+		// A byte just completed (last falling edge output bit 7, this
+		// rising edge let the CPU sample it).
+		m_self_clock_bytes_sent++;
 
-		if (m_inta_asserted)
+		if (m_tx_queue.empty())
 		{
-			m_inta_asserted = false;
-			m_inta_cb(0);
+			// All response data sent — stop self-clocking and deassert INTA.
+			LOGMASKED(LOG_SERIAL, "cpanel: self-clock TX complete (%d bytes), deasserting INTA\n",
+				m_self_clock_bytes_sent);
+			m_self_clocking = false;
+			m_self_clock_timer->reset(attotime::never);
+
+			if (m_inta_asserted)
+			{
+				m_inta_asserted = false;
+				m_inta_cb(0);
+			}
+		}
+		else if (m_self_clock_bytes_sent >= 2)
+		{
+			// Pause after each 2-byte packet.  The firmware processes
+			// responses in 2-byte packets: after SM_RXByteN finishes a
+			// packet (PACKET_BYTE_COUNT→0), INTA re-fires and the INTA
+			// handler writes SC1CR (scNcr_w) which resets rx_clock_count=8.
+			// If we keep clocking continuously, the reset destroys bits
+			// of the next byte that were already received, causing bit
+			// misalignment and garbled data.
+			//
+			// Real hardware panels deliver one packet per INTA cycle.
+			// Emulate this: deassert INTA, pause, then re-assert for
+			// the next packet.
+			LOGMASKED(LOG_SERIAL, "cpanel: self-clock pausing after 2-byte packet, %zu bytes queued\n",
+				m_tx_queue.size());
+			m_self_clocking = false;
+			m_self_clock_timer->reset(attotime::never);
+
+			if (m_inta_asserted)
+			{
+				m_inta_asserted = false;
+				m_inta_cb(0);
+			}
+
+			// Schedule re-INTA after a delay to let the firmware finish
+			// processing the current packet and return to idle state.
+			// 200µs is enough for SM_RXByteN → idle → main loop.
+			m_idle_detect_timer->adjust(attotime::from_usec(200));
 		}
 	}
 }
