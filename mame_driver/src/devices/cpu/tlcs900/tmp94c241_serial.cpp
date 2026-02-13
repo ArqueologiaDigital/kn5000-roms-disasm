@@ -304,24 +304,28 @@ fc4619: f0 3f 41              ld (0x3f),A
 
 TIMER_CALLBACK_MEMBER(tmp94c241_serial_device::timer_callback)
 {
-	// In TO2 trigger mode (SC1MOD bits 1:0 = 0) with IOC=1 (slave mode),
-	// the clock comes from the external device (cpanel's self-clock via
-	// the SCLK pin).  Don't drive from the baud rate timer — that would
-	// inject extra edges and corrupt data during INTA-driven reception.
-	//
-	// In all other cases (mode 0 with IOC=0, or mode 1), the baud rate
-	// timer provides the serial clock.  Mode 0 ("TO2 trigger") uses the
-	// baud rate generator as the actual SCLK source — TO2 is a transfer
-	// trigger, not a clock (see TO2_trigger comments).  The firmware
-	// writes BR1CR at each TX state machine step to set the clock rate.
-	if ((m_serial_mode & 3) == 0 && BIT(m_serial_control, 0))
+	// In slave mode (IOC=1), the clock comes from the external device
+	// (cpanel's self-clock via the SCLK pin).  Don't drive from the baud
+	// rate timer — that would inject extra edges and corrupt data during
+	// INTA-driven reception.
+	if (BIT(m_serial_control, 0))
 		return;
 
 	// Keep clocking while TX is in progress OR RX hasn't completed its byte.
 	// Without the RX check, the timer stops after TX's last falling edge,
 	// leaving RX one rising edge short of completing the byte.
+	//
+	// Note: we do NOT gate on PFFC here.  On real TMP94C241 hardware,
+	// PFFC controls whether the SCLK pin is driven externally, but the
+	// internal serial clock (baud rate generator) always runs.  The shift
+	// register must complete even during "phantom" bytes (PFFC off) so
+	// that INTTX1 fires and the firmware's TX state machine advances.
+	// Phantom bytes are filtered at the cpanel level via tx_start_cb:
+	// tx_start(0) sets accept_next_byte=false, so the cpanel assembles
+	// but rejects phantom bytes.  See sioclk() comments for why we also
+	// don't gate sclk_out_cb on PFFC (clock desync issues).
 	bool need_clock = (m_tx_clock_count > 0) || m_tx_skip_first_falling || (m_rx_clock_count != 8);
-	if (m_hz && need_clock && (m_cpu->m_port_function[PORT_F] & (1 << (m_channel==0 ? 2: 6))))
+	if (m_hz && need_clock)
 	{
 		sioclk(m_sioclk_state ^ 1);
 	}
