@@ -76,12 +76,19 @@ void tmp94c241_serial_device::TO2_trigger(int state)
 {
 	logerror("TO2_trigger state=%d serial_mode=%02X serial_control=%02X\n", state, m_serial_mode, m_serial_control);
 	// serial_mode & 3 == 0: TO2 trigger clock source
-	// BIT(serial_control, 1) == IOC: 0=SCLK output (master), 1=SCLK input (slave)
-	// For master mode with TO2 trigger, IOC should be 0 (NOT set)
-	if ((m_serial_mode & 3) == 0 && !BIT(m_serial_control, 1))
+	// BIT(serial_control, 0) == IOC: 0=SCLK output (master), 1=SCLK input (slave)
+	// Note: IOC is bit 0, not bit 1 (bit 1 = SCLKS, edge select)
+	if ((m_serial_mode & 3) == 0 && !BIT(m_serial_control, 0))
 	{
-		/* Clock source: TO2 output compare trigger, master mode */
-		sioclk(state);
+		// Only drive SCLK when the serial channel is actively transferring.
+		// On real hardware, the serial controller gates the SCLK output —
+		// when no TX/RX is in progress, the pin stays at its idle state
+		// even though TO2 continues firing internally.  Without this gate,
+		// continuous SCLK prevents the cpanel's idle detection from firing,
+		// so INTA is never asserted and the firmware never receives responses.
+		bool active = (m_tx_clock_count > 0) || m_tx_skip_first_falling || (m_rx_clock_count != 8);
+		if (active)
+			sioclk(state);
 	}
 }
 
