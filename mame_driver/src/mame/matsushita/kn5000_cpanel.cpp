@@ -151,10 +151,18 @@ void kn5000_cpanel_device::sioclk(int state)
 
 	m_sioclk_state = state;
 
-	// If we're not self-clocking, this is an external clock edge from the CPU.
-	// Retrigger the idle detect timer — if it expires, we know the CPU has
-	// stopped driving SCLK and we should self-clock to send pending responses.
-	if (!m_self_clocking)
+	// If we're not self-clocking and we have a pending response, retrigger
+	// the idle detect timer.  When it expires (250µs of no SCLK edges), we
+	// know the CPU has stopped driving SCLK and we should self-clock to
+	// deliver the response via INTA.
+	//
+	// Only retrigger when response data is pending (m_tx_clock_count > 0 or
+	// queue non-empty).  During the firmware's TX init phases (phantom bytes
+	// with PFFC disabled), the CPU serial doesn't forward SCLK to us, so we
+	// don't see edges.  Without this guard, idle_detect could fire prematurely
+	// between the real command bytes (the inter-byte gap exceeds 250µs because
+	// phantom bytes are clocked slowly by TO2_trigger at ~12.5kHz).
+	if (!m_self_clocking && (m_tx_clock_count > 0 || !m_tx_queue.empty()))
 	{
 		m_idle_detect_timer->adjust(attotime::from_usec(250));
 	}
@@ -237,6 +245,13 @@ void kn5000_cpanel_device::sioclk(int state)
 					// rising edge. The line will be updated when send_byte()
 					// pre-outputs the next byte's bit 0.
 					LOGMASKED(LOG_SERIAL, "cpanel TX done, holding last bit\n");
+
+					// Cancel idle detect — the response has been fully delivered
+					// (clocked out by the CPU's dummy bytes or external clock).
+					// Without this, idle_detect would fire 250us later and
+					// assert INTA unnecessarily, potentially crashing firmware
+					// that doesn't have an INTA handler (e.g., the AW VM).
+					m_idle_detect_timer->reset(attotime::never);
 				}
 			}
 		}

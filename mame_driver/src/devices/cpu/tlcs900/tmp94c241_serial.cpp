@@ -76,9 +76,10 @@ void tmp94c241_serial_device::TO2_trigger(int state)
 {
 	logerror("TO2_trigger state=%d serial_mode=%02X serial_control=%02X\n", state, m_serial_mode, m_serial_control);
 	// serial_mode & 3 == 0: TO2 trigger clock source
-	// BIT(serial_control, 1) == IOC: 0=SCLK output (master), 1=SCLK input (slave)
-	// For master mode with TO2 trigger, IOC should be 0 (NOT set)
-	if ((m_serial_mode & 3) == 0 && !BIT(m_serial_control, 1))
+	// SC_CR bit 0 = IOC: 0=internal clock (master), 1=SCLK pin input (slave)
+	// SC_CR bit 1 = SCLKS: clock polarity
+	// For master mode with TO2 trigger, IOC (bit 0) should be 0
+	if ((m_serial_mode & 3) == 0 && !BIT(m_serial_control, 0))
 	{
 		/* Clock source: TO2 output compare trigger, master mode */
 		sioclk(state);
@@ -92,6 +93,16 @@ void tmp94c241_serial_device::sioclk(int state)
 
 	m_sioclk_state = state;
 
+	// Determine whether to forward clock externally (via SCLK pin).
+	// On real hardware, PFFC controls whether the SCLK pin is in serial
+	// function mode.  In master mode (IOC=0), the SCLK pin is an output
+	// and PFFC gates whether the internal clock drives the pin.  In slave
+	// mode (IOC=1), the SCLK pin is an input — the external device drives
+	// it — so we always forward (reflecting the external clock back).
+	bool ioc = BIT(m_serial_control, 0);  // IOC: 0=master, 1=slave
+	bool pffc_enabled = m_cpu->m_port_function[PORT_F] & (1 << (m_channel == 0 ? 2 : 6));
+	bool forward_clock = ioc || pffc_enabled;
+
 	if (state)
 	{
 		// Rising edge: Sample RXD BEFORE forwarding clock to slave.
@@ -100,7 +111,8 @@ void tmp94c241_serial_device::sioclk(int state)
 		// m_rxd before we can sample it. Capture the value first.
 		uint8_t rxd_sample = m_rxd;
 
-		m_sclk_out_cb(state);
+		if (forward_clock)
+			m_sclk_out_cb(state);
 
 		logerror("sioclk state=%d rxd=%d m_rx_clock_count=%d m_tx_clock_count=%d\n", m_sioclk_state, rxd_sample, m_rx_clock_count, m_tx_clock_count);
 
@@ -125,7 +137,8 @@ void tmp94c241_serial_device::sioclk(int state)
 		// Falling edge: Forward clock to slave, then output our TXD.
 		// Order doesn't matter for data correctness here — both sides
 		// output on falling edges and sample on rising edges.
-		m_sclk_out_cb(state);
+		if (forward_clock)
+			m_sclk_out_cb(state);
 
 		logerror("sioclk state=%d rxd=%d m_rx_clock_count=%d m_tx_clock_count=%d\n", m_sioclk_state, m_rxd, m_rx_clock_count, m_tx_clock_count);
 
