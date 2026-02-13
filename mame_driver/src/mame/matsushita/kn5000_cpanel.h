@@ -94,6 +94,7 @@ private:
 	bool m_initialized;
 	bool m_self_clocking;
 	bool m_inta_asserted;
+	attotime m_last_sclk_rising;  // Timestamp of last rising SCLK edge (phantom byte detection)
 	uint8_t m_last_button_state[22];  // 11 segments * 2 panels
 
 	// Callbacks

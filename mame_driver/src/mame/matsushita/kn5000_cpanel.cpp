@@ -102,6 +102,7 @@ void kn5000_cpanel_device::device_reset()
 	m_initialized = false;
 	m_self_clocking = false;
 	m_inta_asserted = false;
+	m_last_sclk_rising = attotime::zero;
 
 	// Clear TX queue
 	while (!m_tx_queue.empty())
@@ -151,20 +152,12 @@ void kn5000_cpanel_device::sioclk(int state)
 
 	m_sioclk_state = state;
 
-	// If we're not self-clocking and we have a pending response, retrigger
-	// the idle detect timer.  When it expires (10ms of no SCLK edges), we
-	// know the CPU has stopped driving SCLK and we should self-clock to
-	// deliver the response via INTA.
-	//
-	// Only retrigger when response data is pending (m_tx_clock_count > 0 or
-	// queue non-empty).  During the firmware's TX init phases (phantom bytes
-	// with PFFC disabled), the CPU serial doesn't forward SCLK to us, so we
-	// don't see edges.  The 10ms timeout is conservative: it spans the worst
-	// case of 3 phantom bytes between chained commands (~4ms at 12.5kHz TO2),
-	// while remaining fast enough for responsive button input.
-	if (!m_self_clocking && (m_tx_clock_count > 0 || !m_tx_queue.empty()))
+	// If we're not self-clocking, this is an external clock edge from the CPU.
+	// Retrigger the idle detect timer — if it expires, we know the CPU has
+	// stopped driving SCLK and we should self-clock to send pending responses.
+	if (!m_self_clocking)
 	{
-		m_idle_detect_timer->adjust(attotime::from_msec(10));
+		m_idle_detect_timer->adjust(attotime::from_usec(250));
 	}
 
 	LOGMASKED(LOG_SERIAL, "cpanel sioclk state=%d rxd=%d rx_count=%d tx_count=%d\n",
@@ -172,13 +165,29 @@ void kn5000_cpanel_device::sioclk(int state)
 
 	if (state)
 	{
-		// Rising edge: Sample RXD (receive bit from CPU)
+		// Rising edge: detect phantom (slow-clocked) bytes by measuring the
+		// time since the previous rising edge.  The firmware clocks real data
+		// bytes at 250 kHz (8µs between rising edges) but phantom/init bytes
+		// are clocked by TO2 at ~12.5 kHz (160µs between rising edges) or by
+		// a slow baud rate (≥32µs).  A gap >20µs means this edge belongs to a
+		// phantom byte — reset the RX shift register so it never assembles a
+		// complete byte from slow-clocked garbage data.
+		attotime now = machine().time();
+		attotime elapsed = now - m_last_sclk_rising;
+		m_last_sclk_rising = now;
+
+		if (elapsed > attotime::from_usec(20))
+		{
+			// Slow clock edge — discard any partial byte in progress
+			m_rx_clock_count = 8;
+			m_rx_shift_register = 0;
+		}
+
 		// Skip RX during self-clocking: we are transmitting a response and
-		// the CPU serial may still be shifting out a phantom byte from a
-		// previous TX phase.  Those bits arrive on our RXD line and would
-		// be misinterpreted as new commands, queuing additional responses
-		// that prevent self-clocking from ever completing (INTA stays
-		// asserted, breaking the next command exchange).
+		// the CPU serial may still have a stale byte in its TX shift register.
+		// Those bits arrive on our RXD and would be misinterpreted as new
+		// commands, queuing infinite responses that prevent self-clocking
+		// from ever completing.
 		if (!m_self_clocking && m_rx_clock_count > 0)
 		{
 			m_rx_shift_register >>= 1;
@@ -251,13 +260,6 @@ void kn5000_cpanel_device::sioclk(int state)
 					// rising edge. The line will be updated when send_byte()
 					// pre-outputs the next byte's bit 0.
 					LOGMASKED(LOG_SERIAL, "cpanel TX done, holding last bit\n");
-
-					// Cancel idle detect — the response has been fully delivered
-					// (clocked out by the CPU's dummy bytes or external clock).
-					// Without this, idle_detect would fire 250us later and
-					// assert INTA unnecessarily, potentially crashing firmware
-					// that doesn't have an INTA handler (e.g., the AW VM).
-					m_idle_detect_timer->reset(attotime::never);
 				}
 			}
 		}
@@ -424,17 +426,14 @@ void kn5000_cpanel_device::process_command()
 	}
 
 	// Start idle detection for INTA-based response delivery.
-	// If the CPU doesn't send dummy bytes within 10ms (i.e., the external
+	// If the CPU doesn't send dummy bytes within 250µs (i.e., the external
 	// clock goes idle), idle_detect_callback will assert INTA and start
 	// self-clocking to deliver the response. If the CPU does send dummy
 	// bytes (as the AW VM does), the response gets clocked out on the CPU's
 	// clock and idle detection is continuously retriggered, never firing.
-	// The 10ms timeout must be long enough to span all phantom bytes
-	// (PFFC-disabled TX phases) between chained commands, so INTA doesn't
-	// fire while the firmware's TX state machine is still in progress.
 	if (!m_self_clocking && (m_tx_clock_count > 0 || !m_tx_queue.empty()))
 	{
-		m_idle_detect_timer->adjust(attotime::from_msec(10));
+		m_idle_detect_timer->adjust(attotime::from_usec(250));
 	}
 }
 
@@ -656,7 +655,7 @@ TIMER_CALLBACK_MEMBER(kn5000_cpanel_device::timer_callback)
 
 TIMER_CALLBACK_MEMBER(kn5000_cpanel_device::idle_detect_callback)
 {
-	// The external serial clock (from CPU) has been idle for 10ms.
+	// The external serial clock (from CPU) has been idle for 250µs.
 	// If we have pending response data, the CPU is not going to send
 	// dummy bytes to clock it out — switch to self-clocking mode and
 	// assert INTA so the CPU's firmware can enable receive mode.
