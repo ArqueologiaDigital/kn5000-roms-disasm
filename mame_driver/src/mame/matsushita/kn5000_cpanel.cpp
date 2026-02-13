@@ -498,10 +498,11 @@ void kn5000_cpanel_device::process_command()
 		break;
 
 	default:
-		// Unknown command - silently ignore (no response).
-		// Sending responses for unknown commands would cause the same
-		// accumulation/INTA conflict as LED commands.
+		// Unknown command - respond with sync as acknowledgment.
+		// The firmware may send commands we don't explicitly handle;
+		// without a response, it would timeout and show an ERROR dialog.
 		LOGMASKED(LOG_COMMANDS, "Unknown command %02X %02X\n", cmd, param);
+		send_sync_packet();
 		break;
 	}
 
