@@ -173,7 +173,13 @@ void kn5000_cpanel_device::sioclk(int state)
 	if (state)
 	{
 		// Rising edge: Sample RXD (receive bit from CPU)
-		if (m_rx_clock_count > 0)
+		// Skip RX during self-clocking: we are transmitting a response and
+		// the CPU serial may still be shifting out a phantom byte from a
+		// previous TX phase.  Those bits arrive on our RXD line and would
+		// be misinterpreted as new commands, queuing additional responses
+		// that prevent self-clocking from ever completing (INTA stays
+		// asserted, breaking the next command exchange).
+		if (!m_self_clocking && m_rx_clock_count > 0)
 		{
 			m_rx_shift_register >>= 1;
 			m_rx_shift_register |= (m_rxd << 7);
