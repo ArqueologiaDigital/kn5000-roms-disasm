@@ -766,12 +766,17 @@ TIMER_CALLBACK_MEMBER(kn5000_cpanel_device::self_clock_callback)
 	// Drive one clock edge per callback (toggle), matching the CPU serial
 	// timer's behavior. At 250 kHz, this gives 125 kHz SCLK = one bit
 	// every 8µs, one byte every 64µs.
-	m_sclk_out_cb(m_sioclk_state ^ 1);
+	int new_state = m_sioclk_state ^ 1;
+	m_sclk_out_cb(new_state);
 	// The edge propagates: cpanel sclk_out → CPU serial sioclk → CPU serial
 	// sclk_out → cpanel sioclk. Both sides process the edge.
 
-	// Check if we're done transmitting
-	if (m_tx_clock_count == 0 && m_tx_queue.empty())
+	// Only check completion after RISING edges.  The last falling edge
+	// outputs bit 7 and decrements tx_clock_count to 0 — but the CPU
+	// still needs the subsequent rising edge to sample that bit and
+	// complete RX (triggering INTRX1).  Stopping on the falling edge
+	// would leave the CPU's rx_clock_count at 1 forever.
+	if (new_state == 1 && m_tx_clock_count == 0 && m_tx_queue.empty())
 	{
 		LOGMASKED(LOG_SERIAL, "cpanel: self-clock TX complete, deasserting INTA\n");
 		m_self_clocking = false;
