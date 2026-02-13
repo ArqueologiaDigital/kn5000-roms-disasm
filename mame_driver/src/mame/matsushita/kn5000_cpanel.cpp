@@ -405,15 +405,17 @@ void kn5000_cpanel_device::process_command()
 
 	switch (cmd)
 	{
-	// Initialization commands — no response needed.
-	// The firmware doesn't wait for or require a response to init commands.
-	// Sending sync responses would accumulate in the TX queue and cause
-	// INTA conflicts with subsequent commands (see comment below).
+	// Initialization commands — respond with sync.
+	// These are sent one at a time during boot (not in rapid batches
+	// like LED commands), so response accumulation isn't an issue.
+	// The firmware checks for the sync response; without it, the
+	// "ERROR in CPU data transmission" dialog appears.
 	case 0x1f:  // Init sequence (left)
 	case 0x1d:
 	case 0x1e:
 	case 0xdd:  // Setup mode
 		LOGMASKED(LOG_COMMANDS, "Init command\n");
+		send_sync_packet();
 		m_initialized = true;
 		break;
 
