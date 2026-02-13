@@ -149,8 +149,15 @@ void kn5000_cpanel_device::tx_start(int state)
 	// or skip the byte once it's fully received.
 	LOGMASKED(LOG_SERIAL, "cpanel tx_start: state=%d (%s byte)\n",
 		state, state ? "real" : "phantom");
-	m_rx_clock_count = 8;
-	m_rx_shift_register = 0;
+
+	// Do NOT reset m_rx_clock_count or m_rx_shift_register here.
+	// In MAME's synchronous execution model, INTTX1 fires on falling
+	// edge 7 and the ISR writes the next SC1BUF (triggering tx_start)
+	// BEFORE rising edge 8 completes the current byte's RX.  Resetting
+	// the RX counter mid-byte destroys the nearly-complete byte.
+	// On real hardware, rising edge 8 arrives first (~4µs) before the
+	// ISR completes (~5-10µs).  Byte boundaries stay synchronized
+	// naturally because each SC1BUF write produces exactly 8 rising edges.
 	m_accept_next_byte = (state != 0);
 	m_tx_output_enabled = (state != 0);
 
