@@ -150,10 +150,16 @@ void kn5000_cpanel_device::tx_start(int state)
 	m_rx_shift_register = 0;
 	m_accept_next_byte = (state != 0);
 
-	// Cancel pending idle detection — the CPU is actively sending, so we
-	// shouldn't assert INTA yet.  If no more bytes follow, process_command
-	// will restart the timer after the complete command is received.
-	m_idle_detect_timer->reset(attotime::never);
+	// Cancel pending idle detection only for REAL bytes — this means the
+	// CPU is actively clocking and will drive the response out directly
+	// (AW VM sends dummy 0xFF bytes to clock responses).
+	//
+	// Do NOT cancel for phantom bytes (state=0): the firmware's TX state
+	// machine sends phantom bytes AFTER the real command bytes.  If we
+	// cancelled here, SM_TXDelay2's phantom byte would kill the timer
+	// that process_command() just started, and INTA would never fire.
+	if (state != 0)
+		m_idle_detect_timer->reset(attotime::never);
 }
 
 void kn5000_cpanel_device::sioclk(int state)
