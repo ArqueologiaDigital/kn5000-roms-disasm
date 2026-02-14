@@ -179,16 +179,24 @@ void kn5000_cpanel_device::tx_start(int state)
 		m_tx_output_enabled = m_next_tx_output_enabled;
 	}
 
-	// Cancel pending idle detection only for REAL bytes — this means the
-	// CPU is actively clocking and will drive the response out directly
-	// (AW VM sends dummy 0xFF bytes to clock responses).
+	// Do NOT cancel idle_detect here for any byte type.
 	//
-	// Do NOT cancel for phantom bytes (state=0): the firmware's TX state
-	// machine sends phantom bytes AFTER the real command bytes.  If we
-	// cancelled here, SM_TXDelay2's phantom byte would kill the timer
-	// that process_command() just started, and INTA would never fire.
-	if (state != 0)
-		m_idle_detect_timer->reset(attotime::never);
+	// Previously, real bytes (state=1) cancelled idle_detect under the
+	// assumption that the CPU would clock out the response directly.
+	// But the original firmware's TX state machine chains commands
+	// (SM_TXComplete → SM_StartTX), so the next command's real bytes
+	// cancel the idle_detect that would deliver the PREVIOUS command's
+	// response.  This prevents INTA from ever firing during active
+	// command sequences → "buttons and LEDs do not work."
+	//
+	// The sliding window in sioclk() (line ~214) handles this correctly:
+	// it re-arms idle_detect on every edge if we have pending data,
+	// and fires 250µs after the LAST edge when the baud rate timer
+	// stops.  No cancellation needed here.
+	//
+	// For the AW VM: dummy 0xFF bytes drain the TX queue before
+	// idle_detect fires, so the guard (tx_count > 0 || !queue.empty())
+	// in sioclk prevents spurious INTA.
 }
 
 void kn5000_cpanel_device::sioclk(int state)
