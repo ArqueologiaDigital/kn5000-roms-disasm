@@ -764,14 +764,27 @@ TIMER_CALLBACK_MEMBER(kn5000_cpanel_device::idle_detect_callback)
 
 	if (m_tx_clock_count > 0 || !m_tx_queue.empty())
 	{
-		LOGMASKED(LOG_SERIAL, "cpanel: external clock idle for 50us, asserting INTA and starting self-clock\n");
-
 		// Enable TX output — response data was frozen during phantom bytes
 		m_tx_output_enabled = true;
 
-		// Assert INTA to notify the CPU that we have data
-		if (!m_inta_asserted)
+		if (m_inta_asserted)
 		{
+			// Multi-packet continuation: INTA is already asserted (PE.5 HIGH)
+			// from the previous packet.  Do an atomic pulse (deassert then
+			// reassert within this same timer callback) to re-trigger the
+			// INTA interrupt.  Since the CPU doesn't execute between timer
+			// callback calls, it never observes PE.5=LOW — WaitTXReady
+			// stays blocked throughout the multi-packet delivery.
+			LOGMASKED(LOG_SERIAL, "cpanel: re-triggering INTA for next packet (%zu bytes queued)\n",
+				m_tx_queue.size());
+			m_inta_cb(0);  // deassert — clears INTEAB flag, updates m_level
+			m_inta_cb(1);  // reassert — sets INTEAB flag, triggers interrupt
+			// m_inta_asserted stays true throughout
+		}
+		else
+		{
+			// First response packet: assert INTA for the first time
+			LOGMASKED(LOG_SERIAL, "cpanel: external clock idle, asserting INTA and starting self-clock\n");
 			m_inta_asserted = true;
 			m_inta_cb(1);
 		}
@@ -831,13 +844,14 @@ TIMER_CALLBACK_MEMBER(kn5000_cpanel_device::self_clock_callback)
 			m_self_clocking = false;
 			m_self_clock_timer->reset(attotime::never);
 
-			if (m_inta_asserted)
-			{
-				m_inta_asserted = false;
-				m_inta_cb(0);
-			}
+			// Keep INTA asserted during the gap.  PE.5 stays HIGH, which
+			// prevents the firmware's WaitTXReady from passing and starting
+			// the next command while multi-packet response data is still
+			// queued.  idle_detect_callback will re-trigger the interrupt
+			// via an atomic pulse (deassert+reassert in same callback, so
+			// the CPU never observes PE.5=LOW between packets).
 
-			// Re-INTA after firmware processes the current packet
+			// Schedule re-trigger for next packet after 200µs
 			m_idle_detect_timer->adjust(attotime::from_usec(200));
 		}
 	}
