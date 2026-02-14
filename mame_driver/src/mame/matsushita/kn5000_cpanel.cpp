@@ -473,11 +473,17 @@ void kn5000_cpanel_device::process_command()
 		break;
 
 	case 0x2b:  // Init button state array (left)
-		send_all_button_states(true);
+		// Respond with sync instead of full 22-byte button dump.
+		// All button ports default to 0x00 (no presses), so the firmware's
+		// button state array stays at its initialized default — same net
+		// result.  Individual button queries (0x20/0x25) provide real-time
+		// data later.  This avoids multi-packet self-clocking delivery
+		// which may interact poorly with the firmware's RX state machine.
+		send_sync_packet();
 		break;
 
 	case 0xeb:  // Init button state array (right)
-		send_all_button_states(false);
+		send_sync_packet();
 		break;
 
 	// LED control commands - right panel
