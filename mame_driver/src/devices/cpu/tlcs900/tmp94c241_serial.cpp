@@ -264,8 +264,14 @@ void tmp94c241_serial_device::scNmod_w(uint8_t data)
 		case 3: logerror("clk source: external clock (SCLK%d) (Not implemented yet)\n", m_channel); break;
 	}
 	m_serial_mode = data;
-	m_cpu->m_int_reg[(m_channel == 0) ? INTES0 : INTES1] |= 0x80;
-	m_cpu->m_check_irqs = 1;
+
+	// Do NOT fire INTTX here.  On real TMP94C241 hardware, writing SC1MOD
+	// configures the serial mode — it does not trigger a transmit-complete
+	// interrupt.  The firmware writes SC1MOD at the start of every TX
+	// sequence (SM_StartTX).  A spurious INTTX would cause the TX state
+	// machine to advance prematurely (thinking byte 1 finished before it
+	// started), corrupting specific command bytes and causing wrong LED
+	// states.
 }
 
 uint8_t tmp94c241_serial_device::brNcr_r()
