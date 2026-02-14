@@ -65,6 +65,7 @@ protected:
 	uint8_t m_txd;
 	uint8_t m_sclk_out;
 	bool m_tx_skip_first_falling;  // Skip first falling edge after buf write to let receiver sample bit 0
+	bool m_tx_needs_trailing_edge; // Defer INTTX to trailing rising edge so receiver samples bit 7 first
 
 	devcb_write_line m_txd_cb;
 	devcb_write_line m_sclk_in_cb;

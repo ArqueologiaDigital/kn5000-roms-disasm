@@ -32,6 +32,7 @@ tmp94c241_serial_device::tmp94c241_serial_device(const machine_config &mconfig, 
 	m_txd(1),  // Idle state is HIGH for serial lines
 	m_sclk_out(0),
 	m_tx_skip_first_falling(false),
+	m_tx_needs_trailing_edge(false),
 	m_txd_cb(*this),
 	m_sclk_in_cb(*this),
 	m_sclk_out_cb(*this),
@@ -59,6 +60,7 @@ void tmp94c241_serial_device::device_start()
 	save_item(NAME(m_txd));
 	save_item(NAME(m_sclk_out));
 	save_item(NAME(m_tx_skip_first_falling));
+	save_item(NAME(m_tx_needs_trailing_edge));
 
 	m_sclk_out_cb(m_sclk_out);
 	m_txd_cb(m_txd);
@@ -70,6 +72,7 @@ void tmp94c241_serial_device::device_reset()
 	m_serial_mode &= 0x80;
 	m_baud_rate = 0x00;
 	m_tx_skip_first_falling = false;
+	m_tx_needs_trailing_edge = false;
 }
 
 void tmp94c241_serial_device::TO2_trigger(int state)
@@ -119,6 +122,24 @@ void tmp94c241_serial_device::sioclk(int state)
 
 		logerror("sioclk state=%d rxd=%d m_rx_clock_count=%d m_tx_clock_count=%d\n", m_sioclk_state, rxd_sample, m_rx_clock_count, m_tx_clock_count);
 
+		// Handle deferred INTTX from the last falling edge.  The receiver
+		// (cpanel) just sampled bit 7 on this rising edge via sclk_out_cb.
+		// Now it's safe to fire INTTX — the ISR may write SC1BUF which
+		// pre-outputs bit 0 of the next byte, but bit 7 has already been
+		// sampled.  On real TMP94C241 hardware, the 8th rising edge occurs
+		// 4µs after the last falling edge (at 250 kHz SCLK), well before
+		// the ISR can write SC1BUF.  In MAME's event-driven scheduler,
+		// CPU instructions run between timer ticks, so without this deferral
+		// the ISR would write SC1BUF (pre-outputting bit 0) BEFORE the
+		// trailing rising edge — corrupting bit 7 of every byte.
+		if (m_tx_needs_trailing_edge)
+		{
+			m_tx_needs_trailing_edge = false;
+			logerror("Trailing rising edge: firing INTTX\n");
+			m_cpu->m_int_reg[(m_channel == 0) ? INTES0 : INTES1] |= 0x80;
+			m_cpu->m_check_irqs = 1;
+		}
+
 		if (m_rx_clock_count){
 			m_rx_clock_count--;
 
@@ -155,10 +176,11 @@ void tmp94c241_serial_device::sioclk(int state)
 
 				m_txd_cb(m_tx_shift_register & 1);
 				if (--m_tx_clock_count == 0) {
-					logerror("Finished sending byte.\n");
-					// We finished sending the data:
-					m_cpu->m_int_reg[(m_channel == 0) ? INTES0 : INTES1] |= 0x80;
-					m_cpu->m_check_irqs = 1;
+					// Byte shift-out complete.  Defer INTTX to the next
+					// rising edge so the receiver can sample bit 7 before
+					// the ISR writes the next byte (which pre-outputs bit 0).
+					logerror("Finished sending byte (deferring INTTX to trailing edge).\n");
+					m_tx_needs_trailing_edge = true;
 				}
 			}
 		}
@@ -315,9 +337,16 @@ TIMER_CALLBACK_MEMBER(tmp94c241_serial_device::timer_callback)
 	if ((m_serial_mode & 3) == 0 && BIT(m_serial_control, 0))
 		return;
 
-	// Keep clocking while TX is in progress OR RX hasn't completed its byte.
-	// Without the RX check, the timer stops after TX's last falling edge,
-	// leaving RX one rising edge short of completing the byte.
+	// Keep clocking while TX is in progress, RX hasn't completed its byte,
+	// or we need a trailing rising edge for the receiver to sample bit 7.
+	//
+	// The trailing edge is critical: without it, the baud rate timer stops
+	// after TX's last falling edge (tx_clock_count=0).  Between timer ticks,
+	// the CPU processes the INTTX1 interrupt and writes the next byte to
+	// SC1BUF, pre-outputting bit 0 on TXD.  The next rising edge (from the
+	// new byte's timer) would then sample bit 0 of the NEW byte as bit 7
+	// of the OLD byte — corrupting every byte's MSB.  The trailing edge
+	// ensures bit 7 is sampled correctly before INTTX1 fires.
 	//
 	// Note: we do NOT gate on PFFC here.  On real TMP94C241 hardware,
 	// PFFC controls whether the SCLK pin is driven externally, but the
@@ -328,7 +357,7 @@ TIMER_CALLBACK_MEMBER(tmp94c241_serial_device::timer_callback)
 	// tx_start(0) sets accept_next_byte=false, so the cpanel assembles
 	// but rejects phantom bytes.  See sioclk() comments for why we also
 	// don't gate sclk_out_cb on PFFC (clock desync issues).
-	bool need_clock = (m_tx_clock_count > 0) || m_tx_skip_first_falling || (m_rx_clock_count != 8);
+	bool need_clock = (m_tx_clock_count > 0) || m_tx_skip_first_falling || (m_rx_clock_count != 8) || m_tx_needs_trailing_edge;
 	if (m_hz && need_clock)
 	{
 		sioclk(m_sioclk_state ^ 1);
