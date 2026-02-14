@@ -54,6 +54,7 @@ kn5000_cpanel_device::kn5000_cpanel_device(const machine_config &mconfig, const 
 	m_tx_output_enabled(true),
 	m_next_accept(false),
 	m_next_tx_output_enabled(true),
+	m_firmware_uses_inta(false),
 	m_self_clock_bytes_sent(0),
 	m_txd_cb(*this),
 	m_sclk_out_cb(*this),
@@ -95,6 +96,7 @@ void kn5000_cpanel_device::device_start()
 	save_item(NAME(m_tx_output_enabled));
 	save_item(NAME(m_next_accept));
 	save_item(NAME(m_next_tx_output_enabled));
+	save_item(NAME(m_firmware_uses_inta));
 	save_item(NAME(m_self_clock_bytes_sent));
 	save_item(NAME(m_last_button_state));
 
@@ -116,6 +118,7 @@ void kn5000_cpanel_device::device_reset()
 	m_tx_output_enabled = true;
 	m_next_accept = false;
 	m_next_tx_output_enabled = true;
+	m_firmware_uses_inta = false;
 	m_self_clock_bytes_sent = 0;
 
 	// Clear TX queue
@@ -158,6 +161,13 @@ void kn5000_cpanel_device::tx_start(int state)
 	// or skip the byte once it's fully received.
 	LOGMASKED(LOG_SERIAL, "cpanel tx_start: state=%d (%s byte) rx_count=%d\n",
 		state, state ? "real" : "phantom", m_rx_clock_count);
+
+	// Detect original firmware protocol: only the original firmware sends
+	// phantom bytes (PFFC disabled).  The AW VM always has PFFC enabled.
+	// This determines response delivery: INTA-based (original firmware)
+	// vs dummy-byte-based (AW VM).
+	if (state == 0)
+		m_firmware_uses_inta = true;
 
 	// Store the new accept/output state as PENDING.  In MAME's synchronous
 	// execution model, tx_start fires one edge too early: INTTX1 sets the
@@ -206,20 +216,17 @@ void kn5000_cpanel_device::sioclk(int state)
 
 	m_sioclk_state = state;
 
-	// Retrigger idle_detect on every clock edge while we have pending response
-	// data and aren't already self-clocking.  This creates a sliding 250µs
-	// window that fires INTA after the LAST external clock edge — which is
-	// when the CPU's baud rate timer stops (need_clock=false after SM_TXComplete).
+	// For AW VM (dummy-byte protocol): retrigger idle_detect on every clock
+	// edge while we have pending response data.  This creates a sliding 250µs
+	// window — dummy byte edges keep pushing it forward, so the response is
+	// naturally clocked out via CPU edges and idle_detect never fires.
 	//
-	// Previous approach used a fixed 5ms timeout from process_command(), but
-	// that was either too early (during phantom bytes) or too late (after
-	// the firmware sent the next command).  Edge-based retrigger adapts to
-	// the actual clock activity.
-	//
-	// The previous concern about TO2 at 12.5kHz preventing the timeout no
-	// longer applies: TO2_trigger is now a no-op, so only the baud rate
-	// timer drives edges (and it stops after SM_TXComplete).
-	if (!m_self_clocking && (m_tx_clock_count > 0 || !m_tx_queue.empty()))
+	// For original firmware (INTA protocol): do NOT retrigger.  The firmware
+	// starts the next command within ~3-8µs of SM_TXComplete, so retriggering
+	// would push idle_detect past the inter-command gap.  Instead,
+	// process_command() sets a short fixed timeout (20µs) that fires INTA
+	// before the next command starts.
+	if (!m_self_clocking && !m_firmware_uses_inta && (m_tx_clock_count > 0 || !m_tx_queue.empty()))
 	{
 		m_idle_detect_timer->adjust(attotime::from_usec(250));
 	}
@@ -514,22 +521,28 @@ void kn5000_cpanel_device::process_command()
 		break;
 	}
 
-	// Start idle detection for INTA-based response delivery.
-	// This is the initial trigger; sioclk() retriggers it on every
-	// clock edge, creating a sliding 250µs window that fires INTA
-	// after the LAST clock edge (when the baud rate timer stops).
-	//
-	// If the CPU sends dummy bytes (AW VM path), tx_start(1) cancels
-	// this timer and the response gets clocked out on the CPU's edges.
-	//
-	// The sliding window ensures phantom bytes complete before INTA:
-	// each phantom byte's clock edges retrigger the timer, so it never
-	// fires during active clocking.  Only after SM_TXComplete (which
-	// clears TX_RX_FLAGS bit 1 and stops the baud rate timer) does
-	// the 250µs countdown expire and INTA fire.
+	// Schedule INTA-based response delivery.
 	if (!m_self_clocking && (m_tx_clock_count > 0 || !m_tx_queue.empty()))
 	{
-		m_idle_detect_timer->adjust(attotime::from_usec(250));
+		if (m_firmware_uses_inta)
+		{
+			// Original firmware protocol: assert INTA quickly after TX
+			// completes.  The firmware's WaitTXReady returns within ~3-8µs
+			// of SM_TXComplete and starts the next command immediately.
+			// 20µs is enough for the last falling edge (~4µs) and
+			// SM_TXComplete ISR (~3µs) to finish, with margin.
+			// sioclk() does NOT retrigger this (m_firmware_uses_inta guard),
+			// so it fires reliably before the next command starts.
+			m_idle_detect_timer->adjust(attotime::from_usec(20));
+		}
+		else
+		{
+			// AW VM protocol: long timeout as fallback.  Normally the
+			// response is clocked out by dummy bytes (CPU edges) before
+			// this fires.  sioclk() retriggers on every edge, creating a
+			// sliding window that fires only after SCLK goes idle.
+			m_idle_detect_timer->adjust(attotime::from_usec(250));
+		}
 	}
 }
 

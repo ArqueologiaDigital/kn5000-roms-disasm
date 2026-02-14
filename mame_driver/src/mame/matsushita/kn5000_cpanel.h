@@ -98,6 +98,7 @@ private:
 	bool m_tx_output_enabled;  // false = suppress TX output during phantom byte clock edges
 	bool m_next_accept;        // Deferred accept_next_byte (applied at next byte boundary)
 	bool m_next_tx_output_enabled;  // Deferred tx_output_enabled (applied at next byte boundary)
+	bool m_firmware_uses_inta;  // true if phantom bytes seen (original firmware INTA protocol)
 	uint8_t m_self_clock_bytes_sent;  // Bytes sent in current INTA cycle (pause after 2)
 	uint8_t m_last_button_state[22];  // 11 segments * 2 panels
 
