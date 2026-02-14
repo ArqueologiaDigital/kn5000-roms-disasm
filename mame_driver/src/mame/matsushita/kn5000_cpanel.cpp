@@ -54,7 +54,6 @@ kn5000_cpanel_device::kn5000_cpanel_device(const machine_config &mconfig, const 
 	m_tx_output_enabled(true),
 	m_next_accept(false),
 	m_next_tx_output_enabled(true),
-	m_firmware_uses_inta(false),
 	m_self_clock_bytes_sent(0),
 	m_txd_cb(*this),
 	m_sclk_out_cb(*this),
@@ -96,7 +95,6 @@ void kn5000_cpanel_device::device_start()
 	save_item(NAME(m_tx_output_enabled));
 	save_item(NAME(m_next_accept));
 	save_item(NAME(m_next_tx_output_enabled));
-	save_item(NAME(m_firmware_uses_inta));
 	save_item(NAME(m_self_clock_bytes_sent));
 	save_item(NAME(m_last_button_state));
 
@@ -118,7 +116,6 @@ void kn5000_cpanel_device::device_reset()
 	m_tx_output_enabled = true;
 	m_next_accept = false;
 	m_next_tx_output_enabled = true;
-	m_firmware_uses_inta = false;
 	m_self_clock_bytes_sent = 0;
 
 	// Clear TX queue
@@ -161,13 +158,6 @@ void kn5000_cpanel_device::tx_start(int state)
 	// or skip the byte once it's fully received.
 	LOGMASKED(LOG_SERIAL, "cpanel tx_start: state=%d (%s byte) rx_count=%d\n",
 		state, state ? "real" : "phantom", m_rx_clock_count);
-
-	// Detect original firmware protocol: only the original firmware sends
-	// phantom bytes (PFFC disabled).  The AW VM always has PFFC enabled.
-	// This determines response delivery: INTA-based (original firmware)
-	// vs dummy-byte-based (AW VM).
-	if (state == 0)
-		m_firmware_uses_inta = true;
 
 	// Store the new accept/output state as PENDING.  In MAME's synchronous
 	// execution model, tx_start fires one edge too early: INTTX1 sets the
@@ -216,19 +206,20 @@ void kn5000_cpanel_device::sioclk(int state)
 
 	m_sioclk_state = state;
 
-	// For AW VM (dummy-byte protocol): retrigger idle_detect on every clock
-	// edge while we have pending response data.  This creates a sliding 250µs
-	// window — dummy byte edges keep pushing it forward, so the response is
-	// naturally clocked out via CPU edges and idle_detect never fires.
+	// Retrigger idle_detect on every clock edge while we have pending
+	// response data and aren't already self-clocking.  This creates a
+	// sliding window that fires after the LAST external clock edge —
+	// including phantom bytes from the firmware's TX state machine
+	// (SM_TXComplete writes a phantom byte after each real command).
 	//
-	// For original firmware (INTA protocol): do NOT retrigger.  The firmware
-	// starts the next command within ~3-8µs of SM_TXComplete, so retriggering
-	// would push idle_detect past the inter-command gap.  Instead,
-	// process_command() sets a short fixed timeout (20µs) that fires INTA
-	// before the next command starts.
-	if (!m_self_clocking && !m_firmware_uses_inta && (m_tx_clock_count > 0 || !m_tx_queue.empty()))
+	// 50µs timeout chosen so that INTA fires and self-clocking completes
+	// (~140µs for 2 bytes) before the firmware's WaitTXReady delay loop
+	// (~375µs) checks PE.5.  The phantom bytes' edges (4µs apart at
+	// 250kHz SCLK) retrigger within 50µs, so the timeout fires only
+	// after the last phantom byte finishes.
+	if (!m_self_clocking && (m_tx_clock_count > 0 || !m_tx_queue.empty()))
 	{
-		m_idle_detect_timer->adjust(attotime::from_usec(250));
+		m_idle_detect_timer->adjust(attotime::from_usec(50));
 	}
 
 	LOGMASKED(LOG_SERIAL, "cpanel sioclk state=%d rxd=%d rx_count=%d tx_count=%d\n",
@@ -306,6 +297,13 @@ void kn5000_cpanel_device::sioclk(int state)
 
 			if (m_tx_clock_count == 0)
 			{
+				// Track bytes sent during self-clocking for packet-pause.
+				// Must count HERE (tx_clock_count==0, before queue refill
+				// sets it to 8) — self_clock_callback's rising-edge check
+				// would never see 0 for intermediate bytes.
+				if (m_self_clocking)
+					m_self_clock_bytes_sent++;
+
 				// Byte sent, check for more
 				if (!m_tx_queue.empty())
 				{
@@ -521,28 +519,18 @@ void kn5000_cpanel_device::process_command()
 		break;
 	}
 
-	// Schedule INTA-based response delivery.
+	// Start idle detection for INTA-based response delivery.
+	// sioclk() retriggers on every edge, creating a sliding 50µs window
+	// that fires after the LAST clock edge (including SM_TXComplete's
+	// phantom byte).  50µs ensures INTA + self-clocking (~140µs for 2
+	// bytes) completes before WaitTXReady's ~375µs delay ends.
+	//
+	// For AW VM: dummy bytes clock out the response via CPU edges;
+	// the retrigger keeps pushing the window forward, so idle_detect
+	// only fires after SCLK goes idle (response already delivered).
 	if (!m_self_clocking && (m_tx_clock_count > 0 || !m_tx_queue.empty()))
 	{
-		if (m_firmware_uses_inta)
-		{
-			// Original firmware protocol: assert INTA quickly after TX
-			// completes.  The firmware's WaitTXReady returns within ~3-8µs
-			// of SM_TXComplete and starts the next command immediately.
-			// 20µs is enough for the last falling edge (~4µs) and
-			// SM_TXComplete ISR (~3µs) to finish, with margin.
-			// sioclk() does NOT retrigger this (m_firmware_uses_inta guard),
-			// so it fires reliably before the next command starts.
-			m_idle_detect_timer->adjust(attotime::from_usec(20));
-		}
-		else
-		{
-			// AW VM protocol: long timeout as fallback.  Normally the
-			// response is clocked out by dummy bytes (CPU edges) before
-			// this fires.  sioclk() retriggers on every edge, creating a
-			// sliding window that fires only after SCLK goes idle.
-			m_idle_detect_timer->adjust(attotime::from_usec(250));
-		}
+		m_idle_detect_timer->adjust(attotime::from_usec(50));
 	}
 }
 
@@ -769,14 +757,14 @@ TIMER_CALLBACK_MEMBER(kn5000_cpanel_device::idle_detect_callback)
 	// dummy bytes to clock it out — switch to self-clocking mode and
 	// assert INTA so the CPU's firmware can enable receive mode.
 	//
-	// The sliding 250µs window (retriggered on every sioclk edge) ensures
-	// this fires AFTER the firmware's phantom bytes complete: SM_TXComplete
-	// clears TX_RX_FLAGS bit 1 and the baud rate timer stops, so no more
-	// edges arrive.  250µs after the last edge, we fire INTA.
+	// The sliding 50µs window (retriggered on every sioclk edge) ensures
+	// this fires AFTER the firmware's phantom bytes complete: the phantom
+	// byte edges are 4µs apart (well within 50µs), so the window slides
+	// past them.  Only after the last edge does the 50µs expire.
 
 	if (m_tx_clock_count > 0 || !m_tx_queue.empty())
 	{
-		LOGMASKED(LOG_SERIAL, "cpanel: external clock idle for 250us, asserting INTA and starting self-clock\n");
+		LOGMASKED(LOG_SERIAL, "cpanel: external clock idle for 50us, asserting INTA and starting self-clock\n");
 
 		// Enable TX output — response data was frozen during phantom bytes
 		m_tx_output_enabled = true;
@@ -792,10 +780,12 @@ TIMER_CALLBACK_MEMBER(kn5000_cpanel_device::idle_detect_callback)
 		m_self_clock_bytes_sent = 0;
 
 		// Start self-clocking after a brief delay to let the CPU process
-		// the INTA interrupt and enable receive mode.
-		// 50µs ≈ 800 CPU cycles at 16 MHz — plenty for the ISR.
+		// the INTA interrupt and enable receive mode (set IOC=1).
+		// 20µs ≈ 320 CPU cycles at 16 MHz — plenty for the ISR.
+		// Shorter delay means self-clocking finishes sooner, well before
+		// WaitTXReady's ~375µs delay loop checks PE.5.
 		m_self_clocking = true;
-		m_self_clock_timer->adjust(attotime::from_usec(50), 0, attotime::from_hz(250000));
+		m_self_clock_timer->adjust(attotime::from_usec(20), 0, attotime::from_hz(250000));
 	}
 }
 
@@ -809,18 +799,13 @@ TIMER_CALLBACK_MEMBER(kn5000_cpanel_device::self_clock_callback)
 	// The edge propagates: cpanel sclk_out → CPU serial sioclk → CPU serial
 	// sclk_out → cpanel sioclk. Both sides process the edge.
 
-	// Only check completion after RISING edges.  The last falling edge
-	// outputs bit 7 and decrements tx_clock_count to 0 — but the CPU
-	// still needs the subsequent rising edge to sample that bit and
-	// complete RX (triggering INTRX1).  Stopping on the falling edge
-	// would leave the CPU's rx_clock_count at 1 forever.
-	if (new_state == 1 && m_tx_clock_count == 0)
+	// Check completion and packet-pause after RISING edges.  The preceding
+	// falling edge output bit 7 and decremented tx_clock_count to 0 (and
+	// incremented m_self_clock_bytes_sent).  This rising edge lets the CPU
+	// sample that last bit before we stop.
+	if (new_state == 1)
 	{
-		// A byte just completed (last falling edge output bit 7, this
-		// rising edge let the CPU sample it).
-		m_self_clock_bytes_sent++;
-
-		if (m_tx_queue.empty())
+		if (m_tx_queue.empty() && m_tx_clock_count == 0)
 		{
 			// All response data sent — stop self-clocking and deassert INTA.
 			LOGMASKED(LOG_SERIAL, "cpanel: self-clock TX complete (%d bytes), deasserting INTA\n",
@@ -836,17 +821,11 @@ TIMER_CALLBACK_MEMBER(kn5000_cpanel_device::self_clock_callback)
 		}
 		else if (m_self_clock_bytes_sent >= 2)
 		{
-			// Pause after each 2-byte packet.  The firmware processes
-			// responses in 2-byte packets: after SM_RXByteN finishes a
-			// packet (PACKET_BYTE_COUNT→0), INTA re-fires and the INTA
-			// handler writes SC1CR (scNcr_w) which resets rx_clock_count=8.
-			// If we keep clocking continuously, the reset destroys bits
-			// of the next byte that were already received, causing bit
-			// misalignment and garbled data.
-			//
-			// Real hardware panels deliver one packet per INTA cycle.
-			// Emulate this: deassert INTA, pause, then re-assert for
-			// the next packet.
+			// Pause after 2-byte packet.  The firmware processes responses
+			// in 2-byte packets; after SM_RXByteN finishes, the INTA handler
+			// writes SC1CR (resetting rx_clock_count=8).  Continuous clocking
+			// would corrupt the next byte mid-reception.  Real hardware
+			// delivers one packet per INTA cycle.
 			LOGMASKED(LOG_SERIAL, "cpanel: self-clock pausing after 2-byte packet, %zu bytes queued\n",
 				m_tx_queue.size());
 			m_self_clocking = false;
@@ -858,9 +837,7 @@ TIMER_CALLBACK_MEMBER(kn5000_cpanel_device::self_clock_callback)
 				m_inta_cb(0);
 			}
 
-			// Schedule re-INTA after a delay to let the firmware finish
-			// processing the current packet and return to idle state.
-			// 200µs is enough for SM_RXByteN → idle → main loop.
+			// Re-INTA after firmware processes the current packet
 			m_idle_detect_timer->adjust(attotime::from_usec(200));
 		}
 	}
