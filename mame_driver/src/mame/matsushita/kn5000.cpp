@@ -208,14 +208,15 @@ void kn5000_state::maincpu_mem(address_map &map)
 void kn5000_state::subcpu_mem(address_map &map)
 {
 	map(0x000000, 0x0fffff).ram(); // 1Mbyte = 2 * 4Mbit DRAMs @ IC28, IC29
+	map(0x100000, 0x100003).noprw(); // DAC interface (stub - not yet emulated)
 	map(0x110000, 0x110003).noprw(); // Tone generator @ IC303 (stub - not yet emulated)
 	map(0x120000, 0x12ffff).r(m_subcpu_latch, FUNC(generic_latch_8_device::read)); // @ IC22
 	map(0x120000, 0x12ffff).w(FUNC(kn5000_state::maincpu_latch_w)); // @ IC23 (logged wrapper)
 	map(0x130000, 0x130003).noprw(); // DSP1 @ IC311 (stub - not yet emulated)
+	map(0x1e0000, 0x1effff).noprw(); // Waveform/sample RAM (stub - not yet emulated)
 	map(0xfe0000, 0xffffff).rom().region("subcpu", 0); // 1Mbit MASK ROM @ IC30
 
-	//Note:
-	// DSP2 @ IC302 uses a serial #0 pins but I think it is bitbanging those pins.
+	// DSP2 @ IC302 uses serial #0 pins (bitbanging)
 }
 
 static void kn5000_floppies(device_slot_interface &device)

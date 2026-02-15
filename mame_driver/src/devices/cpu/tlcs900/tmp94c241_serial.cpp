@@ -126,8 +126,6 @@ void tmp94c241_serial_device::sioclk(int state)
 
 		m_sclk_out_cb(state);
 
-		logerror("sioclk state=%d rxd=%d m_rx_clock_count=%d m_tx_clock_count=%d\n", m_sioclk_state, rxd_sample, m_rx_clock_count, m_tx_clock_count);
-
 		// Handle deferred INTTX from the last falling edge.  The receiver
 		// (cpanel) just sampled bit 7 on this rising edge via sclk_out_cb.
 		// Now it's safe to fire INTTX — the ISR may write SC1BUF which
@@ -141,7 +139,6 @@ void tmp94c241_serial_device::sioclk(int state)
 		if (m_tx_needs_trailing_edge)
 		{
 			m_tx_needs_trailing_edge = false;
-			logerror("Trailing rising edge: firing INTTX\n");
 			m_cpu->m_int_reg[(m_channel == 0) ? INTES0 : INTES1] |= 0x80;
 			m_cpu->m_check_irqs = 1;
 
@@ -159,7 +156,6 @@ void tmp94c241_serial_device::sioclk(int state)
 				m_tx_start_cb(pffc_sclk ? 1 : 0);
 
 				// Pre-output bit 0 — receiver will sample it on the next rising edge
-				logerror("Auto-load from buffer: %02X, pre-output bit 0: %d\n", m_tx_shift_register, m_tx_shift_register & 1);
 				m_txd_cb(m_tx_shift_register & 1);
 
 				// Skip next falling edge — bit 0 is on TXD and must stay until
@@ -178,15 +174,9 @@ void tmp94c241_serial_device::sioclk(int state)
 			{
 				m_rx_clock_count = 8;
 				m_rx_buffer = m_rx_shift_register;
-				logerror("RX byte received: %02X\n", m_rx_buffer);
 				uint8_t int_reg_idx = (m_channel == 0) ? INTES0 : INTES1;
-				uint8_t old_val = m_cpu->m_int_reg[int_reg_idx];
 				m_cpu->m_int_reg[int_reg_idx] |= 0x08;
 				m_cpu->m_check_irqs = 1;
-				logerror("INTRX%d pending set: INTES%d %02X→%02X, SR=%04X (level=%d), IOC=%d\n",
-					m_channel, m_channel, old_val, m_cpu->m_int_reg[int_reg_idx],
-					m_cpu->m_sr.w.l, (m_cpu->m_sr.b.h & 0x70) >> 4,
-					m_serial_control & 1);
 			}
 		}
 	}
@@ -195,25 +185,19 @@ void tmp94c241_serial_device::sioclk(int state)
 		// Falling edge: Forward clock to slave, then output our TXD.
 		m_sclk_out_cb(state);
 
-		logerror("sioclk state=%d rxd=%d m_rx_clock_count=%d m_tx_clock_count=%d\n", m_sioclk_state, m_rxd, m_rx_clock_count, m_tx_clock_count);
-
 		if (m_tx_clock_count){
 			if (m_tx_skip_first_falling) {
 				// Skip this falling edge - bit 0 was pre-output in scNbuf_w
 				// and we need to give the receiver a rising edge to sample it
-				logerror("skipping first falling edge (bit 0 already on line)\n");
 				m_tx_skip_first_falling = false;
 			} else {
 				// Normal operation: shift out the next bit
 				m_tx_shift_register >>= 1;
-				logerror("send bit #%d: %d\n", 8-m_tx_clock_count, m_tx_shift_register & 1);
-
 				m_txd_cb(m_tx_shift_register & 1);
 				if (--m_tx_clock_count == 0) {
 					// Byte shift-out complete.  Defer INTTX to the next
 					// rising edge so the receiver can sample bit 7 before
 					// the ISR writes the next byte (which pre-outputs bit 0).
-					logerror("Finished sending byte (deferring INTTX to trailing edge).\n");
 					m_tx_needs_trailing_edge = true;
 				}
 			}
@@ -243,14 +227,11 @@ void tmp94c241_serial_device::scNbuf_w(uint8_t data)
 	// the current byte finishes, then auto-loads (see sioclk() trailing
 	// rising edge handler).
 	bool was_idle = (m_tx_clock_count == 0 && !m_tx_needs_trailing_edge && !m_tx_skip_first_falling);
-	logerror("buf write: %02X (sioclk_state=%d, was_idle=%d, buffer_full=%d)\n", data, m_sioclk_state, was_idle, m_tx_buffer_full);
-
 	if (!was_idle)
 	{
 		// TX is busy — store in buffer (overwrites any previous buffered byte)
 		m_tx_buffer = data;
 		m_tx_buffer_full = true;
-		logerror("TX busy, buffered byte %02X\n", data);
 		return;
 	}
 
@@ -267,14 +248,12 @@ void tmp94c241_serial_device::scNbuf_w(uint8_t data)
 	m_tx_start_cb(pffc_sclk ? 1 : 0);
 
 	// Pre-output first bit immediately so slave can sample it on the first rising edge
-	logerror("pre-output bit #0: %d\n", m_tx_shift_register & 1);
 	m_txd_cb(m_tx_shift_register & 1);
 
 	// Only skip the first falling edge if clock is currently HIGH.
 	// If clock is HIGH: next edge = falling (skip it to avoid outputting bit 1 before receiver samples bit 0)
 	// If clock is LOW: next edge = rising (receiver samples bit 0), then falling outputs bit 1 (no skip needed)
 	m_tx_skip_first_falling = (m_sioclk_state == 1);
-	logerror("skip_first_falling = %d\n", m_tx_skip_first_falling);
 }
 
 uint8_t tmp94c241_serial_device::scNcr_r()
