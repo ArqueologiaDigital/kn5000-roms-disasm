@@ -151,6 +151,7 @@ protected:
 
 private:
 	int tlcs900_process_hdma(int channel);
+	void tlcs900_process_software_dma(int channel);
 	void change_timer_flipflop(uint8_t flipflop, uint8_t operation);
 
 	// Ports
