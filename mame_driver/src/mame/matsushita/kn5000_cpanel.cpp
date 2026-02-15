@@ -28,7 +28,7 @@
 #define LOG_BUTTONS  (1U << 3)
 #define LOG_LEDS     (1U << 4)
 
-#define VERBOSE (LOG_COMMANDS | LOG_SERIAL | LOG_LEDS)
+#define VERBOSE (LOG_COMMANDS | LOG_SERIAL | LOG_BUTTONS | LOG_LEDS)
 #include "logmacro.h"
 
 DEFINE_DEVICE_TYPE(KN5000_CPANEL, kn5000_cpanel_device, "kn5000_cpanel", "KN5000 Control Panel HLE")
@@ -54,7 +54,9 @@ kn5000_cpanel_device::kn5000_cpanel_device(const machine_config &mconfig, const 
 	m_tx_output_enabled(true),
 	m_next_accept(false),
 	m_next_tx_output_enabled(true),
+	m_rx_waiting_for_start(true),
 	m_self_clock_bytes_sent(0),
+	m_scan_retry_count(0),
 	m_txd_cb(*this),
 	m_sclk_out_cb(*this),
 	m_inta_cb(*this),
@@ -72,6 +74,7 @@ void kn5000_cpanel_device::device_start()
 	m_timer = timer_alloc(FUNC(kn5000_cpanel_device::timer_callback), this);
 	m_idle_detect_timer = timer_alloc(FUNC(kn5000_cpanel_device::idle_detect_callback), this);
 	m_self_clock_timer = timer_alloc(FUNC(kn5000_cpanel_device::self_clock_callback), this);
+	m_button_scan_timer = timer_alloc(FUNC(kn5000_cpanel_device::button_scan_callback), this);
 
 	// Resolve LED outputs
 	m_cpl_leds.resolve();
@@ -95,8 +98,11 @@ void kn5000_cpanel_device::device_start()
 	save_item(NAME(m_tx_output_enabled));
 	save_item(NAME(m_next_accept));
 	save_item(NAME(m_next_tx_output_enabled));
+	save_item(NAME(m_rx_waiting_for_start));
 	save_item(NAME(m_self_clock_bytes_sent));
+	save_item(NAME(m_scan_retry_count));
 	save_item(NAME(m_last_button_state));
+	save_item(NAME(m_debounce_until));
 
 	// Initial state - line idle high
 	m_txd_cb(1);
@@ -116,7 +122,9 @@ void kn5000_cpanel_device::device_reset()
 	m_tx_output_enabled = true;
 	m_next_accept = false;
 	m_next_tx_output_enabled = true;
+	m_rx_waiting_for_start = true;
 	m_self_clock_bytes_sent = 0;
+	m_scan_retry_count = 0;
 
 	// Clear TX queue
 	while (!m_tx_queue.empty())
@@ -125,7 +133,16 @@ void kn5000_cpanel_device::device_reset()
 	m_idle_detect_timer->reset(attotime::never);
 	m_self_clock_timer->reset(attotime::never);
 
+	// Proactive button scan: real panel MCUs continuously monitor their
+	// button matrices and push change notifications via INTA.  The
+	// firmware's steady-state polling only queries one segment (E0 13 =
+	// right panel segment 3), relying on MCU-initiated INTA for changes
+	// on other segments.  7ms (~143 Hz) is responsive enough for UI use
+	// and coprime with likely command cycle times to avoid phase-lock.
+	m_button_scan_timer->adjust(attotime::from_msec(7), 0, attotime::from_msec(7));
+
 	std::fill(std::begin(m_last_button_state), std::end(m_last_button_state), 0);
+	m_debounce_until = attotime::zero;
 }
 
 void kn5000_cpanel_device::set_baudrate(uint16_t br)
@@ -171,6 +188,14 @@ void kn5000_cpanel_device::tx_start(int state)
 	// already at a boundary (rx_count==8, between bytes), apply immediately.
 	m_next_accept = (state != 0);
 	m_next_tx_output_enabled = (state != 0);
+
+	// Allow RX counting to begin for the new byte.  This prevents
+	// "orphan" clock edges (driven by the CPU's baud rate timer for
+	// internal RX completion after TX finishes) from being counted as
+	// data bits.  The cpanel waits at rx_clock_count=8 with this flag
+	// set after completing each byte, ignoring edges until the CPU
+	// signals a new byte via tx_start.
+	m_rx_waiting_for_start = false;
 
 	if (m_rx_clock_count == 8)
 	{
@@ -232,7 +257,14 @@ void kn5000_cpanel_device::sioclk(int state)
 		// the MSB of the last transmitted byte (often 0), so we'd assemble
 		// 0x00 bytes and misinterpret them as LED commands, queuing infinite
 		// sync responses that prevent self-clocking from ever completing.
-		if (!m_self_clocking && m_rx_clock_count > 0)
+		//
+		// Skip RX while waiting for tx_start: after completing a byte, the
+		// CPU's baud rate timer may drive "orphan" edges for internal RX
+		// completion.  On real hardware, PFFC is disabled so these edges
+		// don't reach the panel.  In MAME, they reach us but must not be
+		// counted — otherwise they shift byte boundaries and garble all
+		// subsequent commands.
+		if (!m_self_clocking && !m_rx_waiting_for_start && m_rx_clock_count > 0)
 		{
 			m_rx_shift_register >>= 1;
 			m_rx_shift_register |= (m_rxd << 7);
@@ -253,6 +285,10 @@ void kn5000_cpanel_device::sioclk(int state)
 				// edge, so we defer its effects until byte N is processed.
 				m_accept_next_byte = m_next_accept;
 				m_tx_output_enabled = m_next_tx_output_enabled;
+
+				// Wait for next tx_start before counting another byte.
+				// This prevents orphan edges from starting a new byte.
+				m_rx_waiting_for_start = true;
 			}
 		}
 	}
@@ -433,57 +469,60 @@ void kn5000_cpanel_device::process_command()
 		break;
 
 	// Query commands
+	// The param byte encodes a segment index in bits 3-0.  Bit 4 is a mode
+	// flag used by the panel MCUs (e.g., 0x10 = segment 0 scan mode, 0x13 =
+	// segment 3 scan mode).  The HLE extracts the segment via param & 0x0F.
+	// Param 0x00 (no flag, segment 0) is a sync/ping — everything else with
+	// a valid segment (0-11) returns button data.
 	case 0x20:  // Query left panel
 	case 0x25:  // Query left panel (variant used in CPanel_ReadAllButtons)
+	{
+		int segment = param & 0x0f;
 		if (param == 0x00)
 		{
-			// Ping - respond with sync
 			send_sync_packet();
 		}
-		else if (param <= 0x0a)
+		else if (segment <= 0x0b)
 		{
-			// Button segment query
-			send_button_packet(param, true);  // left panel
+			// Segment 0x0B is a hardware status register — return
+			// WITHOUT panel flag so firmware stores at offset 11.
+			send_button_packet(segment, (segment <= 0x0a));
+			queue_button_changes();
 		}
 		else
 		{
-			// Status/encoder query (0x0b-0x10+) - respond with sync
 			send_sync_packet();
 		}
 		break;
+	}
 
 	case 0xe0:  // Query right panel
 	case 0xe2:  // Query right panel (variant used in CPanel_ReadAllButtons)
 	case 0xe3:  // Query right panel (variant used in CPanel_InitButtonState)
+	{
+		int segment = param & 0x0f;
 		if (param == 0x00)
 		{
-			// Ping - respond with sync
 			send_sync_packet();
 		}
-		else if (param <= 0x0a)
+		else if (segment <= 0x0b)
 		{
-			// Button segment query
-			send_button_packet(param, false);  // right panel
+			send_button_packet(segment, false);  // right panel
+			queue_button_changes();
 		}
 		else
 		{
-			// Status/encoder query (0x0b-0x11+) - respond with sync
 			send_sync_packet();
 		}
 		break;
+	}
 
 	case 0x2b:  // Init button state array (left)
-		// Respond with sync instead of full 22-byte button dump.
-		// All button ports default to 0x00 (no presses), so the firmware's
-		// button state array stays at its initialized default — same net
-		// result.  Individual button queries (0x20/0x25) provide real-time
-		// data later.  This avoids multi-packet self-clocking delivery
-		// which may interact poorly with the firmware's RX state machine.
-		send_sync_packet();
+		send_all_button_states(true);
 		break;
 
 	case 0xeb:  // Init button state array (right)
-		send_sync_packet();
+		send_all_button_states(false);
 		break;
 
 	// LED control commands - right panel
@@ -517,11 +556,15 @@ void kn5000_cpanel_device::process_command()
 		break;
 
 	default:
-		// Unknown command - respond with sync as acknowledgment.
-		// The firmware may send commands we don't explicitly handle;
-		// without a response, it would timeout and show an ERROR dialog.
-		LOGMASKED(LOG_COMMANDS, "Unknown command %02X %02X\n", cmd, param);
-		send_sync_packet();
+		// Unknown command — do not respond.
+		// Many panel commands (LCD display, encoder config, 7-segment
+		// updates, etc.) are "fire and forget" — the real panel MCU
+		// processes them silently without sending a response.  Sending
+		// spurious sync responses here triggers INTA delivery, which
+		// disrupts the firmware's serial state machine and can cause
+		// wrong LED initialization (firmware skips LED commands or
+		// takes different code paths due to unexpected RX data).
+		LOGMASKED(LOG_COMMANDS, "Unknown command %02X %02X (no response)\n", cmd, param);
 		break;
 	}
 
@@ -594,6 +637,57 @@ void kn5000_cpanel_device::send_all_button_states(bool is_left_panel)
 	for (int seg = 0; seg <= 10; seg++)
 	{
 		send_button_packet(seg, is_left_panel);
+	}
+}
+
+void kn5000_cpanel_device::queue_button_changes()
+{
+	// Scan all segments for button state changes and queue packets for
+	// any that differ from the last known state.  Called from query
+	// command handlers so that change packets ride the same INTA delivery
+	// cycle as the command response — this avoids the WaitTXReady race
+	// condition that occurs when INTA fires at arbitrary times (the
+	// firmware's WaitTXReady checks PE.5, and if HIGH, times out and
+	// increments a retry counter that causes the main loop to reset the
+	// ring buffer and discard all received data).
+	//
+	// send_button_packet() updates m_last_button_state, so segments that
+	// were just queried (e.g., segment 3 for E0 13) won't be double-
+	// reported — their current state already matches last_button_state.
+
+	// Suppress piggyback changes during debounce period.  Without this,
+	// the firmware's frequent E0 13 polling (~every 1.7ms) detects key
+	// releases immediately, bypassing the periodic timer's debounce and
+	// delivering press+release INTAs within ~250µs of each other.
+	if (machine().time() < m_debounce_until)
+		return;
+
+	// Right panel segments 0-10
+	for (int seg = 0; seg <= 10; seg++)
+	{
+		if (!m_cpr_ports[seg])
+			continue;
+		uint8_t state = m_cpr_ports[seg]->read() & 0xff;
+		if (state != m_last_button_state[seg])
+		{
+			LOGMASKED(LOG_BUTTONS, "cpanel: piggybacking right seg %d change (%02X->%02X)\n",
+				seg, m_last_button_state[seg], state);
+			send_button_packet(seg, false);
+		}
+	}
+
+	// Left panel segments 0-10
+	for (int seg = 0; seg <= 10; seg++)
+	{
+		if (!m_cpl_ports[seg])
+			continue;
+		uint8_t state = m_cpl_ports[seg]->read() & 0xff;
+		if (state != m_last_button_state[seg + 11])
+		{
+			LOGMASKED(LOG_BUTTONS, "cpanel: piggybacking left seg %d change (%02X->%02X)\n",
+				seg, m_last_button_state[seg + 11], state);
+			send_button_packet(seg, true);
+		}
 	}
 }
 
@@ -837,6 +931,9 @@ TIMER_CALLBACK_MEMBER(kn5000_cpanel_device::self_clock_callback)
 				m_inta_asserted = false;
 				m_inta_cb(0);
 			}
+
+			// Button scan timer runs periodically (set in device_reset),
+			// no need to reschedule from here.
 		}
 		else if (m_self_clock_bytes_sent >= 2)
 		{
@@ -857,8 +954,108 @@ TIMER_CALLBACK_MEMBER(kn5000_cpanel_device::self_clock_callback)
 			// via an atomic pulse (deassert+reassert in same callback, so
 			// the CPU never observes PE.5=LOW between packets).
 
-			// Schedule re-trigger for next packet after 200µs
-			m_idle_detect_timer->adjust(attotime::from_usec(200));
+			// Schedule re-trigger for next packet after 20µs.
+			// On real hardware, the panel MCU responds continuously (no
+			// inter-packet gap), delivering 22 bytes in ~704µs at 250kHz.
+			// The firmware's CPanel_InitButtonState waits only ~1.44ms
+			// (3×DELAY_6_TICKS) before calling CPanel_RX_ProcessWithFlag,
+			// which processes all available data WITH flag bit 2 set.
+			// A 200µs gap inflates delivery to ~3ms, causing partial
+			// processing (only ~5 of 11 segments processed with the flag).
+			// 20µs is enough for the CPU's INTA ISR (~10 instructions)
+			// while keeping total delivery ~1.2ms (within the 1.44ms window).
+			m_idle_detect_timer->adjust(attotime::from_usec(20));
 		}
+	}
+}
+
+TIMER_CALLBACK_MEMBER(kn5000_cpanel_device::button_scan_callback)
+{
+	// Proactive button change detection (periodic, 7ms / ~143 Hz).
+	// On real hardware, the panel MCUs continuously scan their button
+	// matrices and push change notifications via INTA to the CPU —
+	// independent of any query from the CPU.  The firmware's steady-state
+	// polling only queries segment 3 (E0 13 every ~42 iterations).
+
+	if (!m_initialized)
+		return;
+
+	// Suppress scanning during debounce period.  After detecting a button
+	// change, we delay further scanning for 100ms to give the firmware
+	// time to fully process the press event (RX, button dispatch, LED
+	// commands, display updates) before the release is detected.
+	// On real hardware, physical buttons have 50-100ms minimum hold time.
+	if (machine().time() < m_debounce_until)
+	{
+		LOGMASKED(LOG_BUTTONS, "cpanel: button_scan skipped (debounce active)\n");
+		return;
+	}
+
+	// Don't queue changes while actively self-clocking or while INTA is
+	// asserted — the firmware's serial state machine is busy processing
+	// a previous response.  Wait for the current delivery to complete.
+	if (m_self_clocking || m_inta_asserted)
+	{
+		LOGMASKED(LOG_BUTTONS, "cpanel: button_scan skipped (self_clocking=%d inta=%d)\n",
+			m_self_clocking, m_inta_asserted);
+		return;
+	}
+
+	// Don't queue changes while the CPU is actively transmitting (TX data
+	// pending in our RX path).  Wait for the current command to complete.
+	if (!m_rx_waiting_for_start)
+	{
+		LOGMASKED(LOG_BUTTONS, "cpanel: button_scan skipped (TX active)\n");
+		return;
+	}
+
+	bool changed = false;
+
+	// Scan right panel segments 0-10
+	for (int seg = 0; seg <= 10; seg++)
+	{
+		if (!m_cpr_ports[seg])
+			continue;
+		uint8_t state = m_cpr_ports[seg]->read() & 0xff;
+		if (state != m_last_button_state[seg])
+		{
+			LOGMASKED(LOG_BUTTONS, "cpanel: proactive right seg %d change (%02X->%02X)\n",
+				seg, m_last_button_state[seg], state);
+			send_button_packet(seg, false);
+			changed = true;
+		}
+	}
+
+	// Scan left panel segments 0-10
+	for (int seg = 0; seg <= 10; seg++)
+	{
+		if (!m_cpl_ports[seg])
+			continue;
+		uint8_t state = m_cpl_ports[seg]->read() & 0xff;
+		if (state != m_last_button_state[seg + 11])
+		{
+			LOGMASKED(LOG_BUTTONS, "cpanel: proactive left seg %d change (%02X->%02X)\n",
+				seg, m_last_button_state[seg + 11], state);
+			send_button_packet(seg, true);
+			changed = true;
+		}
+	}
+
+	if (changed)
+	{
+		LOGMASKED(LOG_BUTTONS, "cpanel: proactive button change, triggering INTA delivery\n");
+		m_idle_detect_timer->adjust(attotime::from_usec(50));
+
+		// Debounce: suppress all change detection (both periodic scans and
+		// piggyback scans in query handlers) for 100ms.  This gives the
+		// firmware time to fully process the press event (CPanel_RX_Process,
+		// button dispatch, LED commands, display updates) before the release
+		// is detected.  Without this, keyboard key taps produce press-and-
+		// release INTAs ~250µs apart — the release INTA fires during the
+		// firmware's response to the press (e.g., mid-WaitTXReady for LED
+		// commands), causing ring buffer resets and lost data.
+		// On real hardware, physical buttons have a minimum press duration
+		// of ~50ms (human finger).  100ms is conservative.
+		m_debounce_until = machine().time() + attotime::from_msec(100);
 	}
 }

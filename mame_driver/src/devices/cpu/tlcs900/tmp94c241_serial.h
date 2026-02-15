@@ -67,6 +67,9 @@ protected:
 	bool m_tx_skip_first_falling;  // Skip first falling edge after buf write to let receiver sample bit 0
 	bool m_tx_needs_trailing_edge; // Defer INTTX to trailing rising edge so receiver samples bit 7 first
 
+	uint8_t m_tx_buffer;           // TX double buffer (holds next byte while shift register is busy)
+	bool m_tx_buffer_full;         // True when m_tx_buffer contains data waiting to be loaded
+
 	devcb_write_line m_txd_cb;
 	devcb_write_line m_sclk_in_cb;
 	devcb_write_line m_sclk_out_cb;

@@ -283,10 +283,19 @@ uint8_t tmp94c241_device::inte_r(offs_t offset)
 
 void tmp94c241_device::inte_w(offs_t offset, uint8_t data)
 {
+	uint8_t orig_data = data;
 	if (data & 0x80)
 		data = (data & 0x7f) | (m_int_reg[offset] & 0x80);
 	if (data & 0x08)
 		data = (data & 0xf7) | (m_int_reg[offset] & 0x08);
+
+	// Log serial-related interrupt enable register writes
+	if (offset == INTES1 || offset == INTEAB)
+	{
+		const char *name = (offset == INTES1) ? "INTES1" : "INTEAB";
+		logerror("%s write: data=%02X (orig=%02X), old=%02X→new=%02X from PC=%06X\n",
+			name, data, orig_data, m_int_reg[offset], data, m_pc.d);
+	}
 
 	m_int_reg[offset] = data;
 	m_check_irqs = 1;
@@ -320,6 +329,14 @@ void tmp94c241_device::intclr_w(uint8_t data)
 	{
 		if (data == tmp94c241_irq_vector_map[i].dma_start_vector)
 		{
+			// Log clearing of serial-related interrupts
+			if (data == 0x12 || data == 0x22 || data == 0x23)
+			{
+				static const char *names[] = { "INTA", "INTRX1", "INTTX1" };
+				const char *name = (data == 0x12) ? names[0] : (data == 0x22) ? names[1] : names[2];
+				logerror("INTCLR: %s cleared (vec=%02X), reg before=%02X\n",
+					name, data, m_int_reg[tmp94c241_irq_vector_map[i].reg]);
+			}
 			// clear interrupt request
 			m_int_reg[tmp94c241_irq_vector_map[i].reg] &= ~ tmp94c241_irq_vector_map[i].iff;
 			return;
@@ -1104,6 +1121,16 @@ void tmp94c241_device::tlcs900_check_irqs()
 	{
 		uint8_t vector = tmp94c241_irq_vector_map[irq].vector;
 
+		// Log serial-related interrupts: INTA(0x48), INTRX1(0x88), INTTX1(0x8c)
+		if (vector == 0x48 || vector == 0x88 || vector == 0x8c)
+		{
+			static const char *names[] = { "INTA", "INTRX1", "INTTX1" };
+			const char *name = (vector == 0x48) ? names[0] : (vector == 0x88) ? names[1] : names[2];
+			logerror("IRQ dispatch: %s (vec=%02X) level=%d from PC=%06X, INTES1=%02X INTEAB=%02X\n",
+				name, vector, level, m_pc.d,
+				m_int_reg[INTES1], m_int_reg[INTEAB]);
+		}
+
 		m_xssp.d -= 4;
 		WRMEML(m_xssp.d, m_pc.d);
 		m_xssp.d -= 2;
@@ -1392,7 +1419,12 @@ void tmp94c241_device::execute_set_input(int input, int level)
 		case TLCS900_INT7: update_int_reg(INTE67, 0x80); break;
 		case TLCS900_INT8: update_int_reg(INTE89, 0x08); break;
 		case TLCS900_INT9: update_int_reg(INTE89, 0x80); break;
-		case TLCS900_INTA: update_int_reg(INTEAB, 0x08); break;
+		case TLCS900_INTA:
+			logerror("INTA input: %s, INTEAB before=%02X\n",
+				level == ASSERT_LINE ? "ASSERT" : "CLEAR", m_int_reg[INTEAB]);
+			update_int_reg(INTEAB, 0x08);
+			logerror("INTA input: INTEAB after=%02X\n", m_int_reg[INTEAB]);
+			break;
 		case TLCS900_INTB: update_int_reg(INTEAB, 0x80); break;
 
 		default:

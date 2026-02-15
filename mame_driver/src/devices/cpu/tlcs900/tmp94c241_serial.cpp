@@ -33,6 +33,8 @@ tmp94c241_serial_device::tmp94c241_serial_device(const machine_config &mconfig, 
 	m_sclk_out(0),
 	m_tx_skip_first_falling(false),
 	m_tx_needs_trailing_edge(false),
+	m_tx_buffer(0),
+	m_tx_buffer_full(false),
 	m_txd_cb(*this),
 	m_sclk_in_cb(*this),
 	m_sclk_out_cb(*this),
@@ -61,6 +63,8 @@ void tmp94c241_serial_device::device_start()
 	save_item(NAME(m_sclk_out));
 	save_item(NAME(m_tx_skip_first_falling));
 	save_item(NAME(m_tx_needs_trailing_edge));
+	save_item(NAME(m_tx_buffer));
+	save_item(NAME(m_tx_buffer_full));
 
 	m_sclk_out_cb(m_sclk_out);
 	m_txd_cb(m_txd);
@@ -73,6 +77,7 @@ void tmp94c241_serial_device::device_reset()
 	m_baud_rate = 0x00;
 	m_tx_skip_first_falling = false;
 	m_tx_needs_trailing_edge = false;
+	m_tx_buffer_full = false;
 }
 
 void tmp94c241_serial_device::TO2_trigger(int state)
@@ -103,12 +108,14 @@ void tmp94c241_serial_device::sioclk(int state)
 
 	m_sioclk_state = state;
 
-	// Always forward SCLK to the connected device.  We do NOT gate on PFFC
-	// here because that causes clock desync: during PFFC-off phases, TO2
-	// toggles our internal m_sioclk_state without forwarding to the slave,
-	// so the slave's state becomes stale and it misses edges when PFFC is
-	// re-enabled.  Instead, phantom bytes (written with PFFC disabled) are
-	// signaled via tx_start_cb so the slave can skip them at the byte level.
+	// Always forward SCLK to the connected device.  We cannot gate on PFFC
+	// or TX activity here because that causes clock state desync: the
+	// internal m_sioclk_state keeps toggling during gated-off phases, so
+	// the slave's state becomes stale and it misses edges when forwarding
+	// resumes (same-state → no transition detected).  Instead, "orphan"
+	// edges (driven by the timer for CPU RX completion after TX finishes)
+	// are filtered at the cpanel level: the cpanel only counts RX bits
+	// between tx_start signals, ignoring edges that arrive between bytes.
 
 	if (state)
 	{
@@ -138,6 +145,28 @@ void tmp94c241_serial_device::sioclk(int state)
 			logerror("Trailing rising edge: firing INTTX\n");
 			m_cpu->m_int_reg[(m_channel == 0) ? INTES0 : INTES1] |= 0x80;
 			m_cpu->m_check_irqs = 1;
+
+			// Auto-load from TX buffer if data is pending (TX double buffering).
+			// On real TMP94C241, when the shift register finishes and the buffer
+			// has data, the buffer auto-transfers to the shift register.
+			if (m_tx_buffer_full)
+			{
+				m_tx_buffer_full = false;
+				m_tx_shift_register = m_tx_buffer;
+				m_tx_clock_count = 7;
+
+				// Signal start of new byte transmission with current PFFC state
+				bool pffc_sclk = (m_cpu->m_port_function[PORT_F] & (1 << (m_channel == 0 ? 2 : 6))) != 0;
+				m_tx_start_cb(pffc_sclk ? 1 : 0);
+
+				// Pre-output bit 0 — receiver will sample it on the next rising edge
+				logerror("Auto-load from buffer: %02X, pre-output bit 0: %d\n", m_tx_shift_register, m_tx_shift_register & 1);
+				m_txd_cb(m_tx_shift_register & 1);
+
+				// Skip next falling edge — bit 0 is on TXD and must stay until
+				// the receiver samples it on the following rising edge
+				m_tx_skip_first_falling = true;
+			}
 		}
 
 		if (m_rx_clock_count){
@@ -151,8 +180,14 @@ void tmp94c241_serial_device::sioclk(int state)
 				m_rx_clock_count = 8;
 				m_rx_buffer = m_rx_shift_register;
 				logerror("RX byte received: %02X\n", m_rx_buffer);
-				m_cpu->m_int_reg[(m_channel == 0) ? INTES0 : INTES1] |= 0x08;
+				uint8_t int_reg_idx = (m_channel == 0) ? INTES0 : INTES1;
+				uint8_t old_val = m_cpu->m_int_reg[int_reg_idx];
+				m_cpu->m_int_reg[int_reg_idx] |= 0x08;
 				m_cpu->m_check_irqs = 1;
+				logerror("INTRX%d pending set: INTES%d %02X→%02X, SR=%04X (level=%d), IOC=%d\n",
+					m_channel, m_channel, old_val, m_cpu->m_int_reg[int_reg_idx],
+					m_cpu->m_sr.w.l, (m_cpu->m_sr.b.h & 0x70) >> 4,
+					m_serial_control & 1);
 			}
 		}
 	}
@@ -202,32 +237,44 @@ uint8_t tmp94c241_serial_device::scNbuf_r()
 
 void tmp94c241_serial_device::scNbuf_w(uint8_t data)
 {
-	bool was_idle = (m_tx_clock_count == 0);
-	logerror("buf write: %02X (sioclk_state=%d, was_idle=%d)\n", data, m_sioclk_state, was_idle);
+	// TX double buffering: real TMP94C241 has a TX buffer register and
+	// a TX shift register.  CPU writes always go to the buffer.  If the
+	// shift register is idle, the buffer auto-transfers immediately.
+	// If the shift register is busy, the buffer holds the data until
+	// the current byte finishes, then auto-loads (see sioclk() trailing
+	// rising edge handler).
+	bool was_idle = (m_tx_clock_count == 0 && !m_tx_needs_trailing_edge && !m_tx_skip_first_falling);
+	logerror("buf write: %02X (sioclk_state=%d, was_idle=%d, buffer_full=%d)\n", data, m_sioclk_state, was_idle, m_tx_buffer_full);
 
+	if (!was_idle)
+	{
+		// TX is busy — store in buffer (overwrites any previous buffered byte)
+		m_tx_buffer = data;
+		m_tx_buffer_full = true;
+		logerror("TX busy, buffered byte %02X\n", data);
+		return;
+	}
+
+	// TX is idle — load shift register directly
 	m_tx_shift_register = data;
 	m_tx_clock_count = 7;  // 7 more bits to send (bits 1-7) after pre-outputting bit 0
 
-	// Signal start of new transmission when we were idle.
+	// Signal start of new transmission.
 	// Pass the PFFC state so the slave knows whether this byte is "real"
 	// (PFFC enabled, SCLK pin driven → data reaches panel on real hardware)
 	// or "phantom" (PFFC disabled, pin is high-impedance → data never
 	// reaches the panel on real hardware, but MAME still forwards SCLK).
-	if (was_idle)
-	{
-		bool pffc_sclk = (m_cpu->m_port_function[PORT_F] & (1 << (m_channel == 0 ? 2 : 6))) != 0;
-		m_tx_start_cb(pffc_sclk ? 1 : 0);
-	}
+	bool pffc_sclk = (m_cpu->m_port_function[PORT_F] & (1 << (m_channel == 0 ? 2 : 6))) != 0;
+	m_tx_start_cb(pffc_sclk ? 1 : 0);
 
 	// Pre-output first bit immediately so slave can sample it on the first rising edge
 	logerror("pre-output bit #0: %d\n", m_tx_shift_register & 1);
 	m_txd_cb(m_tx_shift_register & 1);
 
-	// Only skip the first falling edge if clock is currently HIGH AND we were idle.
+	// Only skip the first falling edge if clock is currently HIGH.
 	// If clock is HIGH: next edge = falling (skip it to avoid outputting bit 1 before receiver samples bit 0)
 	// If clock is LOW: next edge = rising (receiver samples bit 0), then falling outputs bit 1 (no skip needed)
-	// If we weren't idle: the slave is mid-byte, don't disrupt its counting
-	m_tx_skip_first_falling = was_idle && (m_sioclk_state == 1);
+	m_tx_skip_first_falling = (m_sioclk_state == 1);
 	logerror("skip_first_falling = %d\n", m_tx_skip_first_falling);
 }
 
@@ -238,7 +285,21 @@ uint8_t tmp94c241_serial_device::scNcr_r()
 
 void tmp94c241_serial_device::scNcr_w(uint8_t data)
 {
-	m_rx_clock_count = 8;
+	// Do NOT reset m_rx_clock_count here.  On real TMP94C241 hardware,
+	// writing SCxCR configures the serial control register (IOC, SCLKS,
+	// parity, error flags) but does NOT abort an in-progress RX byte
+	// reception.  The RX shift register has its own bit counter that
+	// completes independently of SCxCR writes.
+	//
+	// The firmware writes SC1CR in the INTRX1 ISR (CPanel_SM_RXByte1,
+	// CPanel_SM_RXByteN) to maintain IOC=1 / SCLKS=0 between received
+	// bytes.  If this ISR fires between rising edges of the NEXT byte
+	// (which happens nondeterministically when the CPU processes the
+	// interrupt between self-clock timer callbacks), resetting
+	// rx_clock_count=8 causes data loss: the current byte completes
+	// 1 bit short, and the residual bits produce a corrupted "phantom
+	// byte" at the next INTA session boundary, causing segment header
+	// misinterpretation and button identity swapping.
 	m_serial_control = data;
 }
 

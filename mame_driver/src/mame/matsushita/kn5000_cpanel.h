@@ -50,6 +50,7 @@ protected:
 	TIMER_CALLBACK_MEMBER(timer_callback);
 	TIMER_CALLBACK_MEMBER(idle_detect_callback);
 	TIMER_CALLBACK_MEMBER(self_clock_callback);
+	TIMER_CALLBACK_MEMBER(button_scan_callback);
 
 private:
 	// Serial communication
@@ -61,6 +62,7 @@ private:
 	void send_sync_packet();
 	void send_button_packet(int segment, bool is_left_panel);
 	void send_all_button_states(bool is_left_panel);
+	void queue_button_changes();
 
 	// LED control
 	void process_led_command(uint8_t row, uint8_t data);
@@ -72,6 +74,7 @@ private:
 	emu_timer *m_timer;
 	emu_timer *m_idle_detect_timer;
 	emu_timer *m_self_clock_timer;
+	emu_timer *m_button_scan_timer;
 	uint16_t m_baud_rate;
 
 	// Serial RX state
@@ -98,8 +101,11 @@ private:
 	bool m_tx_output_enabled;  // false = suppress TX output during phantom byte clock edges
 	bool m_next_accept;        // Deferred accept_next_byte (applied at next byte boundary)
 	bool m_next_tx_output_enabled;  // Deferred tx_output_enabled (applied at next byte boundary)
+	bool m_rx_waiting_for_start;    // Ignore RX edges until next tx_start (prevents orphan edge desync)
 	uint8_t m_self_clock_bytes_sent;  // Bytes sent in current INTA cycle (pause after 2)
+	uint8_t m_scan_retry_count;        // Button scan retries since last INTA deassertion
 	uint8_t m_last_button_state[22];  // 11 segments * 2 panels
+	attotime m_debounce_until;         // Suppress change detection until this time
 
 	// Callbacks
 	devcb_write_line m_txd_cb;
