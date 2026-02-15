@@ -11,7 +11,7 @@
 	- Commands are 2-byte sequences from main CPU
 	- Bits 7-5 of command byte select panel (0-3=left, 4-7=right)
 	- Response packets have type encoded in bits 5-3:
-	    Type 0,1: Button state (bits 7:6 select panel: 00=left, 11=right)
+	    Type 0,1: Button state (bits 7:6 select panel: 00=right, 11=left)
 	    Type 2: Encoder delta
 	    Type 3-5: Sync/ACK
 	    Type 6,7: Multi-byte data
@@ -608,23 +608,28 @@ void kn5000_cpanel_device::send_button_packet(int segment, bool is_left_panel)
 {
 	// Button packet format (matching real panel MCU encoding):
 	// Byte 0: [ Panel | Type | Segment ]
-	//   - Bits 7:6: Panel select (00=left, 11=right)
+	//   - Bits 7:6: Panel select (00=right, 11=left)
 	//   - Bits 5-3: Type (000/001 for button packets)
 	//   - Bits 3-0: Segment index
 	// Byte 1: Button state bitmap
 	//
 	// The firmware's event dispatcher translates headers via a ROM
 	// lookup table at 0xEDA03C.  The table maps:
-	//   Left  (bits 7:6=00): segment 0-10 → event indices 0x0B-0x15
-	//   Right (bits 7:6=11): segment 0-10 → event indices 0x00-0x0A
-	// Headers with bits 7:6=01 (our old encoding) fall in a dead zone
+	//   Right (bits 7:6=00): segment 0-10 → event indices 0x0B-0x15
+	//   Left  (bits 7:6=11): segment 0-10 → event indices 0x00-0x0A
+	// Headers with bits 7:6=01 (old encoding) fall in a dead zone
 	// (all map to 0x1F), causing left panel events to bypass LED dispatch.
+	//
+	// Note: the firmware's CPanel_RX_ButtonPacket internally uses bit 6
+	// to route packets through different STATE_OF_CPANEL_BUTTONS paths.
+	// Right (bit 6=0) → indices 0-10, Left (bit 6=1) → indices 16-26.
+	// This internal naming is reversed from physical panels but correct.
 
 	uint8_t state = read_button_segment(segment, is_left_panel);
 
 	uint8_t header = (segment & 0x0f);
-	if (!is_left_panel)
-		header |= 0xC0;  // Right panel: bits 7:6 = 11
+	if (is_left_panel)
+		header |= 0xC0;  // Left panel: bits 7:6 = 11
 
 	send_byte(header);
 	send_byte(state);
