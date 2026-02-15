@@ -107,7 +107,6 @@ tmp94c241_device::tmp94c241_device(const machine_config &mconfig, const char *ta
 	m_int_reg{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 	m_iimc(0),
 	m_dma_vector{ 0, 0, 0, 0 },
-	m_int0_dispatch_count(0),
 	m_block_cs{ 0, 0, 0, 0 },
 	m_external_cs(0),
 	m_msar{ 0, 0, 0, 0, 0, 0 },
@@ -259,7 +258,6 @@ void tmp94c241_device::device_reset()
 	std::fill_n(&m_int_reg[0], 18, 0x00);
 	m_iimc = 0x00;
 	std::fill_n(&m_dma_vector[0], 4, 0x00);
-	m_int0_dispatch_count = 0;
 	m_block_cs[0] = 0x0000;
 	m_block_cs[1] = 0x0000;
 	m_block_cs[2] = 0x1000; //FIXME!
@@ -285,19 +283,10 @@ uint8_t tmp94c241_device::inte_r(offs_t offset)
 
 void tmp94c241_device::inte_w(offs_t offset, uint8_t data)
 {
-	uint8_t orig_data = data;
 	if (data & 0x80)
 		data = (data & 0x7f) | (m_int_reg[offset] & 0x80);
 	if (data & 0x08)
 		data = (data & 0xf7) | (m_int_reg[offset] & 0x08);
-
-	// Log serial-related interrupt enable register writes
-	if (offset == INTES1 || offset == INTEAB)
-	{
-		const char *name = (offset == INTES1) ? "INTES1" : "INTEAB";
-		logerror("%s write: data=%02X (orig=%02X), old=%02X→new=%02X from PC=%06X\n",
-			name, data, orig_data, m_int_reg[offset], data, m_pc.d);
-	}
 
 	m_int_reg[offset] = data;
 	m_check_irqs = 1;
@@ -331,14 +320,6 @@ void tmp94c241_device::intclr_w(uint8_t data)
 	{
 		if (data == tmp94c241_irq_vector_map[i].dma_start_vector)
 		{
-			// Log clearing of serial-related interrupts
-			if (data == 0x12 || data == 0x22 || data == 0x23)
-			{
-				static const char *names[] = { "INTA", "INTRX1", "INTTX1" };
-				const char *name = (data == 0x12) ? names[0] : (data == 0x22) ? names[1] : names[2];
-				logerror("INTCLR: %s cleared (vec=%02X), reg before=%02X\n",
-					name, data, m_int_reg[tmp94c241_irq_vector_map[i].reg]);
-			}
 			// clear interrupt request
 			m_int_reg[tmp94c241_irq_vector_map[i].reg] &= ~ tmp94c241_irq_vector_map[i].iff;
 			return;
@@ -348,8 +329,6 @@ void tmp94c241_device::intclr_w(uint8_t data)
 
 void tmp94c241_device::dmav_w(offs_t offset, uint8_t data)
 {
-	logerror("DMA%dV write: 0x%02X (was 0x%02X) from PC=%06X\n",
-		offset, data, m_dma_vector[offset], m_pc.d);
 	m_dma_vector[offset] = data;
 }
 
@@ -360,7 +339,6 @@ void tmp94c241_device::dmar_w(uint8_t data)
 	// Unlike HDMA (interrupt-triggered, one unit per trigger), software DMA
 	// transfers the entire block (all DMAC units) immediately without checking
 	// interrupt flags. Used by KN5000 for inter-CPU communication.
-	logerror("DMAR write: 0x%02X from PC=%06X\n", data, m_pc.d);
 	for (int channel = 0; channel < 4; channel++)
 	{
 		if (data & (1 << channel))
@@ -802,10 +780,6 @@ void tmp94c241_device::port_cr_w(uint8_t data)
 template <uint8_t P>
 void tmp94c241_device::port_fc_w(uint8_t data)
 {
-	if (P == PORT_F)
-	{
-		logerror("PORT FUNCTION F: %02X\n", data);
-	}
 	m_port_function[P] = data;
 }
 
@@ -986,12 +960,6 @@ int tmp94c241_device::tlcs900_process_hdma(int channel)
 	if (!(m_int_reg[tmp94c241_irq_vector_map[irq].reg] & tmp94c241_irq_vector_map[irq].iff))
 		return 0;  // Interrupt not pending
 
-	// Log only the first transfer per HDMA session (when count matches initial value)
-	// to avoid flooding logs with per-byte entries during bulk transfers
-	if (m_dmac[channel].w.l > 0 && !(m_dmac[channel].w.l & 0xFF))
-		logerror("HDMA ch%d xfer: src=%06X dst=%06X count=%d mode=%02X vec=%02X PC=%06X\n",
-			channel, m_dmas[channel].d, m_dmad[channel].d, m_dmac[channel].w.l, m_dmam[channel].b.l, start_vector, m_pc.d);
-
 	// Decode DMAM mode register
 	// TMP94C241 DMAM format (same as TMP95C061):
 	// Bits 4-0 encode transfer mode:
@@ -1133,9 +1101,6 @@ void tmp94c241_device::tlcs900_process_software_dma(int channel)
 	uint16_t count = m_dmac[channel].w.l;
 	if (count == 0)
 		return;  // No transfer to do
-
-	logerror("Software DMA ch%d burst: src=%06X dst=%06X count=%d mode=%02X PC=%06X\n",
-		channel, m_dmas[channel].d, m_dmad[channel].d, count, m_dmam[channel].b.l, m_pc.d);
 
 	uint8_t dmam = m_dmam[channel].b.l;
 
@@ -1306,30 +1271,11 @@ void tmp94c241_device::tlcs900_check_irqs()
 	{
 		uint8_t vector = tmp94c241_irq_vector_map[irq].vector;
 
-		// Log non-INT0 key interrupts always; log INT0 only every 1000th dispatch
-		// to avoid flooding logs during bulk DMA transfers
-		if (vector == 0x48 || vector == 0x88 || vector == 0x8c || vector == 0x94 || vector == 0x9c)
-		{
-			const char *name;
-			switch (vector) {
-				case 0x48: name = "INTA"; break;
-				case 0x88: name = "INTRX1"; break;
-				case 0x8c: name = "INTTX1"; break;
-				case 0x94: name = "INTTC0"; break;
-				case 0x9c: name = "INTTC2"; break;
-				default: name = "???"; break;
-			}
-			logerror("IRQ dispatch: %s (vec=%02X) level=%d from PC=%06X, INTE0AD=%02X INTES1=%02X INTEAB=%02X\n",
-				name, vector, level, m_pc.d,
-				m_int_reg[INTE0AD], m_int_reg[INTES1], m_int_reg[INTEAB]);
-		}
-		else if (vector == 0x28)
-		{
-			m_int0_dispatch_count++;
-			if ((m_int0_dispatch_count % 1000) == 1)
-				logerror("IRQ dispatch: INT0 (vec=28) #%u level=%d from PC=%06X\n",
-					m_int0_dispatch_count, level, m_pc.d);
-		}
+		// Log only DMA completion interrupts (INTTC0/INTTC2) — key milestones
+		if (vector == 0x94)
+			logerror("IRQ: INTTC0 (DMA ch0 done) level=%d PC=%06X\n", level, m_pc.d);
+		else if (vector == 0x9c)
+			logerror("IRQ: INTTC2 (DMA ch2 done) level=%d PC=%06X\n", level, m_pc.d);
 
 		m_xssp.d -= 4;
 		WRMEML(m_xssp.d, m_pc.d);
@@ -1608,8 +1554,6 @@ void tmp94c241_device::execute_set_input(int input, int level)
 			break;
 
 		case TLCS900_INT0:
-			logerror("INT0 input: %s, IIMC=%02X, INTE0AD before=%02X, PC=%06X\n",
-				level == ASSERT_LINE ? "ASSERT" : "CLEAR", m_iimc, m_int_reg[INTE0AD], m_pc.d);
 			if (m_iimc & 0x02)
 			{
 				// Rising edge detect
@@ -1626,7 +1570,6 @@ void tmp94c241_device::execute_set_input(int input, int level)
 				// Level detect
 				update_int_reg(INTE0AD, 0x08);
 			}
-			logerror("INT0 input: INTE0AD after=%02X\n", m_int_reg[INTE0AD]);
 			break;
 
 		case TLCS900_INT4: update_int_reg(INTE45, 0x08); break;
@@ -1636,10 +1579,7 @@ void tmp94c241_device::execute_set_input(int input, int level)
 		case TLCS900_INT8: update_int_reg(INTE89, 0x08); break;
 		case TLCS900_INT9: update_int_reg(INTE89, 0x80); break;
 		case TLCS900_INTA:
-			logerror("INTA input: %s, INTEAB before=%02X\n",
-				level == ASSERT_LINE ? "ASSERT" : "CLEAR", m_int_reg[INTEAB]);
 			update_int_reg(INTEAB, 0x08);
-			logerror("INTA input: INTEAB after=%02X\n", m_int_reg[INTEAB]);
 			break;
 		case TLCS900_INTB: update_int_reg(INTEAB, 0x80); break;
 

@@ -96,7 +96,7 @@ namespace {
 #define LOG_RESET    (1U << 4)  // Sub CPU reset control
 #define LOG_ALL_LATCH (LOG_LATCH | LOG_LATCH_DATA)
 
-#define VERBOSE (LOG_LATCH | LOG_HANDSHAKE | LOG_RESET)
+#define VERBOSE (LOG_LATCH | LOG_RESET)
 #include "logmacro.h"
 
 class kn5000_state : public driver_device
