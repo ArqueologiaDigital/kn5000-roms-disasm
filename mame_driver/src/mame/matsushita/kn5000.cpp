@@ -207,13 +207,11 @@ void kn5000_state::maincpu_mem(address_map &map)
 
 void kn5000_state::subcpu_mem(address_map &map)
 {
-	// There seems to also be devices at 110000, 130000 and 1e0000
-
 	map(0x000000, 0x0fffff).ram(); // 1Mbyte = 2 * 4Mbit DRAMs @ IC28, IC29
-	//map(0x110000, 0x11????).rw(FUNC(kn5000_state::tone_generator_r), FUNC(kn5000_state::tone_generator_w)); // @ IC303
+	map(0x110000, 0x110003).noprw(); // Tone generator @ IC303 (stub - not yet emulated)
 	map(0x120000, 0x12ffff).r(m_subcpu_latch, FUNC(generic_latch_8_device::read)); // @ IC22
 	map(0x120000, 0x12ffff).w(FUNC(kn5000_state::maincpu_latch_w)); // @ IC23 (logged wrapper)
-	//map(0x130000, 0x13????).rw(FUNC(kn5000_state::dsp1_r), FUNC(kn5000_state::dsp1_w)); // @ IC311
+	map(0x130000, 0x130003).noprw(); // DSP1 @ IC311 (stub - not yet emulated)
 	map(0xfe0000, 0xffffff).rom().region("subcpu", 0); // 1Mbit MASK ROM @ IC30
 
 	//Note:
