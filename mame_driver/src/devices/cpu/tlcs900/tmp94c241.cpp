@@ -1154,6 +1154,21 @@ void tmp94c241_device::tlcs900_check_irqs()
 	{
 		if (m_int_reg[tmp94c241_irq_vector_map[i].reg] & tmp94c241_irq_vector_map[i].iff)
 		{
+			// HDMA priority: skip interrupts targeted by active HDMA channels.
+			// On real hardware, HDMA consumes the interrupt trigger instead of
+			// dispatching to the interrupt handler.
+			bool hdma_targeted = false;
+			for (int ch = 0; ch < 4; ch++)
+			{
+				if (m_dma_vector[ch] == tmp94c241_irq_vector_map[i].dma_start_vector)
+				{
+					hdma_targeted = true;
+					break;
+				}
+			}
+			if (hdma_targeted)
+				continue;
+
 			switch (tmp94c241_irq_vector_map[i].iff)
 			{
 				case 0x80:

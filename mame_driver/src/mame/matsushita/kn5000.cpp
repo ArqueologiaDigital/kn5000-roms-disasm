@@ -166,6 +166,12 @@ void kn5000_state::subcpu_latch_w(uint8_t data)
 	else
 		LOGMASKED(LOG_LATCH_DATA, "MainCPU -> SubCPU latch: 0x%02X (write #%u)\n",
 			data, m_subcpu_latch_write_count);
+
+	// Force tight CPU interleaving so subcpu HDMA can process each byte
+	// before the next one is written. On real hardware, HDMA steals cycles
+	// between main CPU instructions.
+	machine().scheduler().perfect_quantum(attotime::from_usec(100));
+
 	m_subcpu_latch->write(data);
 }
 
