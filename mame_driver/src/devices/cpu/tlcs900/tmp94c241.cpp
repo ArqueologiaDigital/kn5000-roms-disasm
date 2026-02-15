@@ -107,6 +107,7 @@ tmp94c241_device::tmp94c241_device(const machine_config &mconfig, const char *ta
 	m_int_reg{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 	m_iimc(0),
 	m_dma_vector{ 0, 0, 0, 0 },
+	m_int0_dispatch_count(0),
 	m_block_cs{ 0, 0, 0, 0 },
 	m_external_cs(0),
 	m_msar{ 0, 0, 0, 0, 0, 0 },
@@ -258,6 +259,7 @@ void tmp94c241_device::device_reset()
 	std::fill_n(&m_int_reg[0], 18, 0x00);
 	m_iimc = 0x00;
 	std::fill_n(&m_dma_vector[0], 4, 0x00);
+	m_int0_dispatch_count = 0;
 	m_block_cs[0] = 0x0000;
 	m_block_cs[1] = 0x0000;
 	m_block_cs[2] = 0x1000; //FIXME!
@@ -984,8 +986,11 @@ int tmp94c241_device::tlcs900_process_hdma(int channel)
 	if (!(m_int_reg[tmp94c241_irq_vector_map[irq].reg] & tmp94c241_irq_vector_map[irq].iff))
 		return 0;  // Interrupt not pending
 
-	logerror("HDMA ch%d xfer: src=%06X dst=%06X count=%d mode=%02X vec=%02X PC=%06X\n",
-		channel, m_dmas[channel].d, m_dmad[channel].d, m_dmac[channel].w.l, m_dmam[channel].b.l, start_vector, m_pc.d);
+	// Log only the first transfer per HDMA session (when count matches initial value)
+	// to avoid flooding logs with per-byte entries during bulk transfers
+	if (m_dmac[channel].w.l > 0 && !(m_dmac[channel].w.l & 0xFF))
+		logerror("HDMA ch%d xfer: src=%06X dst=%06X count=%d mode=%02X vec=%02X PC=%06X\n",
+			channel, m_dmas[channel].d, m_dmad[channel].d, m_dmac[channel].w.l, m_dmam[channel].b.l, start_vector, m_pc.d);
 
 	// Decode DMAM mode register
 	// TMP94C241 DMAM format (same as TMP95C061):
@@ -1301,12 +1306,12 @@ void tmp94c241_device::tlcs900_check_irqs()
 	{
 		uint8_t vector = tmp94c241_irq_vector_map[irq].vector;
 
-		// Log key interrupts: INT0(0x28), INTA(0x48), INTRX1(0x88), INTTX1(0x8c), INTTC0(0x94), INTTC2(0x9c)
-		if (vector == 0x28 || vector == 0x48 || vector == 0x88 || vector == 0x8c || vector == 0x94 || vector == 0x9c)
+		// Log non-INT0 key interrupts always; log INT0 only every 1000th dispatch
+		// to avoid flooding logs during bulk DMA transfers
+		if (vector == 0x48 || vector == 0x88 || vector == 0x8c || vector == 0x94 || vector == 0x9c)
 		{
 			const char *name;
 			switch (vector) {
-				case 0x28: name = "INT0"; break;
 				case 0x48: name = "INTA"; break;
 				case 0x88: name = "INTRX1"; break;
 				case 0x8c: name = "INTTX1"; break;
@@ -1317,6 +1322,13 @@ void tmp94c241_device::tlcs900_check_irqs()
 			logerror("IRQ dispatch: %s (vec=%02X) level=%d from PC=%06X, INTE0AD=%02X INTES1=%02X INTEAB=%02X\n",
 				name, vector, level, m_pc.d,
 				m_int_reg[INTE0AD], m_int_reg[INTES1], m_int_reg[INTEAB]);
+		}
+		else if (vector == 0x28)
+		{
+			m_int0_dispatch_count++;
+			if ((m_int0_dispatch_count % 1000) == 1)
+				logerror("IRQ dispatch: INT0 (vec=28) #%u level=%d from PC=%06X\n",
+					m_int0_dispatch_count, level, m_pc.d);
 		}
 
 		m_xssp.d -= 4;

@@ -283,6 +283,7 @@ private:
 	uint8_t m_int_reg[18];
 	uint8_t m_iimc;
 	uint8_t m_dma_vector[4];
+	uint32_t m_int0_dispatch_count;
 
 	// Chip Select/Wait Control
 	uint16_t m_block_cs[6];
