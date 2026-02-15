@@ -1296,14 +1296,22 @@ void tmp94c241_device::tlcs900_check_irqs()
 	{
 		uint8_t vector = tmp94c241_irq_vector_map[irq].vector;
 
-		// Log serial-related interrupts: INTA(0x48), INTRX1(0x88), INTTX1(0x8c)
-		if (vector == 0x48 || vector == 0x88 || vector == 0x8c)
+		// Log key interrupts: INT0(0x28), INTA(0x48), INTRX1(0x88), INTTX1(0x8c), INTTC0(0x94), INTTC2(0x9c)
+		if (vector == 0x28 || vector == 0x48 || vector == 0x88 || vector == 0x8c || vector == 0x94 || vector == 0x9c)
 		{
-			static const char *names[] = { "INTA", "INTRX1", "INTTX1" };
-			const char *name = (vector == 0x48) ? names[0] : (vector == 0x88) ? names[1] : names[2];
-			logerror("IRQ dispatch: %s (vec=%02X) level=%d from PC=%06X, INTES1=%02X INTEAB=%02X\n",
+			const char *name;
+			switch (vector) {
+				case 0x28: name = "INT0"; break;
+				case 0x48: name = "INTA"; break;
+				case 0x88: name = "INTRX1"; break;
+				case 0x8c: name = "INTTX1"; break;
+				case 0x94: name = "INTTC0"; break;
+				case 0x9c: name = "INTTC2"; break;
+				default: name = "???"; break;
+			}
+			logerror("IRQ dispatch: %s (vec=%02X) level=%d from PC=%06X, INTE0AD=%02X INTES1=%02X INTEAB=%02X\n",
 				name, vector, level, m_pc.d,
-				m_int_reg[INTES1], m_int_reg[INTEAB]);
+				m_int_reg[INTE0AD], m_int_reg[INTES1], m_int_reg[INTEAB]);
 		}
 
 		m_xssp.d -= 4;
@@ -1321,8 +1329,21 @@ void tmp94c241_device::tlcs900_check_irqs()
 
 		m_halted = 0;
 
-		// Clear taken IRQ
+		// Clear taken IRQ flag
 		m_int_reg[tmp94c241_irq_vector_map[irq].reg] &= ~ tmp94c241_irq_vector_map[irq].iff;
+
+		// Level-detect re-assertion: On real hardware, level-triggered interrupt
+		// flags are continuously driven by the input level. Clearing the flag
+		// during dispatch has no lasting effect if the input is still asserted.
+		// Re-assert INT0 flag if input is still active in level-detect mode.
+		if (tmp94c241_irq_vector_map[irq].reg == INTE0AD &&
+			tmp94c241_irq_vector_map[irq].iff == 0x08 &&
+			!(m_iimc & 0x02) &&
+			m_level[TLCS900_INT0] == ASSERT_LINE)
+		{
+			m_int_reg[INTE0AD] |= 0x08;
+			m_check_irqs = 1;
+		}
 
 		// notify the debugger
 		if (machine().debug_enabled())
@@ -1570,6 +1591,8 @@ void tmp94c241_device::execute_set_input(int input, int level)
 			break;
 
 		case TLCS900_INT0:
+			logerror("INT0 input: %s, IIMC=%02X, INTE0AD before=%02X, PC=%06X\n",
+				level == ASSERT_LINE ? "ASSERT" : "CLEAR", m_iimc, m_int_reg[INTE0AD], m_pc.d);
 			if (m_iimc & 0x02)
 			{
 				// Rising edge detect
@@ -1586,6 +1609,7 @@ void tmp94c241_device::execute_set_input(int input, int level)
 				// Level detect
 				update_int_reg(INTE0AD, 0x08);
 			}
+			logerror("INT0 input: INTE0AD after=%02X\n", m_int_reg[INTE0AD]);
 			break;
 
 		case TLCS900_INT4: update_int_reg(INTE45, 0x08); break;
