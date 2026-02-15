@@ -739,11 +739,11 @@ INIT_DMA_SERIAL:
 	lda	XWA, INTER_CPU_LATCH
 	LDC_DMAD2_XWA			; DMA channel 2 destination = 0x120000
 	ld	A, 08h
-	LDC_DMAC2_A			; DMA channel 2 count = 8
+	LDC_DMAM2_A			; DMA channel 2 mode = 8 (byte, src inc, dest fixed)
 	lda	XWA, INTER_CPU_LATCH
 	LDC_DMAS0_XWA			; DMA channel 0 source = 0x120000
 	LD_A	0			; TMP94C241 encoding (21 00)
-	LDC_DMAC0_A			; DMA channel 0 mode = 0
+	LDC_DMAM0_A			; DMA channel 0 mode = 0 (byte, dest inc, src fixed)
 
 	; Clear variables
 	ld	(DMA_XFER_STATE), 00h

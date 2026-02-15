@@ -10983,11 +10983,11 @@ InterCPU_Latch_Setup:
 	LDA XWA, INTER_CPU_COMM_LATCHES
 	LDC_DMAD2_XWA
 	LD_A 8
-	LDC_DMAC2_XWA
+	LDC_DMAM2_A			; DMA channel 2 mode = 8 (byte, src inc, dest fixed)
 	LDA XWA, INTER_CPU_COMM_LATCHES
 	LDC DMAS0, XWA
 	LD_A 0
-	LDC_DMAC0_A
+	LDC_DMAM0_A			; DMA channel 0 mode = 0 (byte, dest inc, src fixed)
 	LD (DMA_XFER_STATE), 0
 	LD (CMD_PROCESSING_STATE), 0
 	RET
@@ -11068,7 +11068,7 @@ DMA_Chunk_Transfer:
 	SET 0, (PD)  ; SSTAT0 - set to signal ready to receive DMA data
 	LDC_DMAS2_XDE
 	EXTZ BC
-	LDC_DMAM2_BC
+	LDC_DMAC2_BC			; DMA channel 2 count
 	LD (DMA2V), 016h
 	SET 2, (T8RUN)
 	CP (DMA_XFER_STATE), 000h
@@ -11166,7 +11166,7 @@ E1_Start_Transfer:
 	LD (XWA + 004h), BC
 	LDC_DMAS2_XWA
 	LD WA, 6
-	LDC_DMAM2_WA
+	LDC_DMAC2_WA			; DMA channel 2 count = 6
 	LD (DMA2V), 016h
 	SET 2, (T8RUN)
 	CP (DMA_XFER_STATE), 001h
@@ -11192,7 +11192,7 @@ E1_Phase2_Setup:
 	LD XBC, (XWA)
 	LDC_DMAS2_XBC
 	LD WA, (XWA + 004h)
-	LDC_DMAM2_WA
+	LDC_DMAC2_WA			; DMA channel 2 count
 	LD (DMA2V), 016h
 	SET 2, (T8RUN)
 	CP (DMA_XFER_STATE), 000h
@@ -11257,7 +11257,7 @@ INT0_HANDLER:				; 20E86
 	LD (10E4h), XWA			; Save DMA target
 	LDC_DMAD0_XWA
 	LD WA, 6			; 6 bytes for E1
-	LDC_DMAM0_WA
+	LDC_DMAC0_WA			; DMA channel 0 count
 	JR T, INT0_Start_DMA
 
 INT0_Check_E2:				; 020EB1h
@@ -11268,7 +11268,7 @@ INT0_Check_E2:				; 020EB1h
 	LD (10E4h), XWA
 	LDC_DMAD0_XWA
 	LD WA, 000ah			; 10 bytes for E2
-	LDC_DMAM0_WA
+	LDC_DMAC0_WA			; DMA channel 0 count
 	JR T, INT0_Start_DMA
 
 INT0_Check_E3:				; 020ECEh
@@ -11286,7 +11286,7 @@ INT0_Standard_Cmd:			; 020ED9h - standard variable-length command
 	AND A, 01fh			; Bits 4-0 = length - 1
 	INC 1, A			; Add 1 for actual length
 	EXTZ WA
-	LDC_DMAM0_WA
+	LDC_DMAC0_WA			; DMA channel 0 count
 
 INT0_Start_DMA:				; 020EF7h
 	LD (DMA0V), 00ah		; Start DMA channel 0
@@ -11378,7 +11378,7 @@ CH0_State2_E1:				; 020F6Dh - E1 command phase 1 complete, start phase 2
 	LD XBC, (XWA)			; Get DMA destination address
 	LDC_DMAD0_XBC
 	LD WA, (XWA + 004h)		; Get DMA byte count
-	LDC_DMAM0_WA
+	LDC_DMAC0_WA			; DMA channel 0 count
 	LD (DMA0V), 00ah		; Start DMA
 	LD (CMD_PROCESSING_STATE), 004h	; Move to state 4
 	JR T, CH0_Timer_Reset
@@ -11439,7 +11439,7 @@ Cmd_Check_DMA_Timeout:		; 020FD9h
 	EI 0
 	BIT 1, (PD)  ; SSTAT1 - test own status: if set, no DMA transfer in progress
 	JR NZ, Cmd_DMA_Idle
-	LDC_WA_DMAM0		; Get current DMA byte count
+	LDC_WA_DMAC0		; Get current DMA channel 0 count
 	CP (0F01Ch), WA		; Compare with previous
 	JR NZ, Cmd_DMA_Reset_Counter
 	INCW 1, (0F01Ah)	; Increment stuck counter

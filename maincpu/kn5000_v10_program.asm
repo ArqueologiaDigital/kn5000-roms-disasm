@@ -138927,11 +138927,11 @@ SubCPU_Init_DMA_Channels:
 	LDA XWA, INTER_CPU_COMM_LATCHES
 	LDC_DMAD2_XWA
 	LD_A 008h
-	LDC_DMAC2_A
+	LDC_DMAM2_A			; DMA channel 2 mode = 8 (byte, src inc, dest fixed)
 	LDA XWA, INTER_CPU_COMM_LATCHES
 	LDC_DMAS0_XWA
 	LD_A 000h
-	LDC_DMAC0_A
+	LDC_DMAM0_A			; DMA channel 0 mode = 0 (byte, dest inc, src fixed)
 	LD (05E0h), 000h
 	LD (05E2h), 000h
 	RET
@@ -139287,7 +139287,7 @@ LABEL_EF3536:
 	LD (05D6h), XWA
 	LDC_DMAD0_XWA
 	LD WA, 6
-	LDC_DMAM0_WA
+	LDC_DMAC0_WA			; DMA channel 0 count
 	LDA XBC, INTE0AD
 	LD A, (XBC)
 	AND A, 0f8h
@@ -139303,7 +139303,7 @@ LABEL_EF356F:
 	LD (05D6h), XWA
 	LDC_DMAD0_XWA
 	LD WA, 000ah
-	LDC_DMAM0_WA
+	LDC_DMAC0_WA			; DMA channel 0 count
 	LDA XBC, INTE0AD
 	LD A, (XBC)
 	AND A, 0f8h
@@ -139320,7 +139320,7 @@ LABEL_EF3599:
 	AND A, 01fh
 	INC 1, A
 	EXTZ WA
-	LDC_DMAM0_WA
+	LDC_DMAC0_WA			; DMA channel 0 count
 	LDA XBC, INTE0AD
 	LD A, (XBC)
 	AND A, 0f8h
