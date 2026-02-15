@@ -221,6 +221,7 @@ private:
 	void iimc_w(uint8_t data);
 	void intclr_w(uint8_t data);
 	void dmav_w(offs_t offset, uint8_t data);
+	void dmar_w(uint8_t data);
 	uint8_t drefcr1_r();
 	void drefcr1_w(uint8_t data);
 	uint8_t dmemcr1_r();

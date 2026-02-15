@@ -346,7 +346,25 @@ void tmp94c241_device::intclr_w(uint8_t data)
 
 void tmp94c241_device::dmav_w(offs_t offset, uint8_t data)
 {
+	logerror("DMA%dV write: 0x%02X (was 0x%02X) from PC=%06X\n",
+		offset, data, m_dma_vector[offset], m_pc.d);
 	m_dma_vector[offset] = data;
+}
+
+void tmp94c241_device::dmar_w(uint8_t data)
+{
+	// DMAR register (0x109) - DMA software request trigger
+	// Writing bit N triggers an immediate DMA transfer on channel N
+	// This is used by the KN5000 main CPU INT0 handler: LD (DMAR), 001h
+	logerror("DMAR write: 0x%02X from PC=%06X\n", data, m_pc.d);
+	for (int channel = 0; channel < 4; channel++)
+	{
+		if (data & (1 << channel))
+		{
+			// Software-trigger DMA on this channel by processing it immediately
+			tlcs900_process_hdma(channel);
+		}
+	}
 }
 
 template <uint8_t N>
@@ -896,6 +914,7 @@ void tmp94c241_device::internal_mem(address_map &map)
 	map(0x0000f7, 0x0000f7).rw(FUNC(tmp94c241_device::intnmwdt_r), FUNC(tmp94c241_device::intnmwdt_w));
 	map(0x0000f8, 0x0000f8).w(FUNC(tmp94c241_device::intclr_w));
 	map(0x000100, 0x000103).w(FUNC(tmp94c241_device::dmav_w));
+	map(0x000109, 0x000109).w(FUNC(tmp94c241_device::dmar_w));
 	map(0x000110, 0x000110).rw(FUNC(tmp94c241_device::wdmod_r), FUNC(tmp94c241_device::wdmod_w));
 	map(0x000111, 0x000111).w(FUNC(tmp94c241_device::wdcr_w));
 	map(0x000120, 0x000127).r(FUNC(tmp94c241_device::adreg_r));
@@ -1024,6 +1043,9 @@ int tmp94c241_device::tlcs900_process_hdma(int channel)
 	// Check for transfer completion
 	if (m_dmac[channel].w.l == 0)
 	{
+		logerror("HDMA ch%d complete: src=%06X dst=%06X (vec=%02X)\n",
+			channel, src, dst, start_vector);
+
 		// Clear DMA vector to disable channel
 		m_dma_vector[channel] = 0;
 

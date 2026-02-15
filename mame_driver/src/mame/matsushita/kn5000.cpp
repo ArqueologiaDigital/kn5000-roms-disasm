@@ -89,6 +89,16 @@ uint16_t mn89304_vga_device::offset()
 
 namespace {
 
+// Logging macros for inter-CPU communication debugging
+#define LOG_LATCH    (1U << 1)  // Latch read/write (command bytes only)
+#define LOG_LATCH_DATA (1U << 2) // Latch read/write (all data bytes - very verbose)
+#define LOG_HANDSHAKE (1U << 3) // MSTAT/SSTAT handshake changes
+#define LOG_RESET    (1U << 4)  // Sub CPU reset control
+#define LOG_ALL_LATCH (LOG_LATCH | LOG_LATCH_DATA)
+
+#define VERBOSE (LOG_LATCH | LOG_HANDSHAKE | LOG_RESET)
+#include "logmacro.h"
+
 class kn5000_state : public driver_device
 {
 public:
@@ -109,6 +119,8 @@ public:
 		, m_mstat(0)
 		, m_sstat(0)
 		, m_cpanel_inta(0)
+		, m_subcpu_latch_write_count(0)
+		, m_maincpu_latch_write_count(0)
 	{ }
 
 	void kn5000(machine_config &config);
@@ -130,13 +142,44 @@ private:
 	uint8_t m_mstat;
 	uint8_t m_sstat;
 	uint8_t m_cpanel_inta;
+	uint32_t m_subcpu_latch_write_count;
+	uint32_t m_maincpu_latch_write_count;
 	virtual void machine_start() override ATTR_COLD;
 	virtual void machine_reset() override ATTR_COLD;
+
+	// Latch logging wrappers
+	void subcpu_latch_w(uint8_t data);
+	void maincpu_latch_w(uint8_t data);
 
 	void nvram2_init(nvram_device &device, void *data, size_t size);
 	void maincpu_mem(address_map &map) ATTR_COLD;
 	void subcpu_mem(address_map &map) ATTR_COLD;
 };
+
+void kn5000_state::subcpu_latch_w(uint8_t data)
+{
+	m_subcpu_latch_write_count++;
+	// Log command bytes (E1, E2, E3) and first few data bytes
+	if (data == 0xe1 || data == 0xe2 || data == 0xe3)
+		LOGMASKED(LOG_LATCH, "MainCPU -> SubCPU latch: cmd 0x%02X (write #%u) PC=%06X\n",
+			data, m_subcpu_latch_write_count, m_maincpu->pc());
+	else
+		LOGMASKED(LOG_LATCH_DATA, "MainCPU -> SubCPU latch: 0x%02X (write #%u)\n",
+			data, m_subcpu_latch_write_count);
+	m_subcpu_latch->write(data);
+}
+
+void kn5000_state::maincpu_latch_w(uint8_t data)
+{
+	m_maincpu_latch_write_count++;
+	if (data == 0xe1 || data == 0xe2 || data == 0xe3)
+		LOGMASKED(LOG_LATCH, "SubCPU -> MainCPU latch: cmd 0x%02X (write #%u) PC=%06X\n",
+			data, m_maincpu_latch_write_count, m_subcpu->pc());
+	else
+		LOGMASKED(LOG_LATCH_DATA, "SubCPU -> MainCPU latch: 0x%02X (write #%u)\n",
+			data, m_maincpu_latch_write_count);
+	m_maincpu_latch->write(data);
+}
 
 void kn5000_state::maincpu_mem(address_map &map)
 {
@@ -145,7 +188,7 @@ void kn5000_state::maincpu_mem(address_map &map)
 	//FIXME: map(0x110000, 0x11ffff).m(m_fdc, FUNC(upd765a_device::map)); // Floppy Controller @ IC208
 	//FIXME: map(0x120000, 0x12ffff).w(m_fdc, FUNC(upd765a_device::dack_w)); // Floppy DMA Acknowledge
 	map(0x140000, 0x14ffff).r(m_maincpu_latch, FUNC(generic_latch_8_device::read)); // @ IC23
-	map(0x140000, 0x14ffff).w(m_subcpu_latch, FUNC(generic_latch_8_device::write)); // @ IC22
+	map(0x140000, 0x14ffff).w(FUNC(kn5000_state::subcpu_latch_w)); // @ IC22 (logged wrapper)
 	map(0x1703b0, 0x1703df).m("vga", FUNC(mn89304_vga_device::io_map)); // LCD controller @ IC206
 	map(0x1a0000, 0x1dffff).rw("vga", FUNC(mn89304_vga_device::mem_linear_r), FUNC(mn89304_vga_device::mem_linear_w));
 	map(0x1e0000, 0x1fffff).ram().share("nvram2"); // 1Mbit SRAM @ IC21 (CS0)  Note: I think this is the message "ERROR in back-up SRAM"
@@ -163,7 +206,7 @@ void kn5000_state::subcpu_mem(address_map &map)
 	map(0x000000, 0x0fffff).ram(); // 1Mbyte = 2 * 4Mbit DRAMs @ IC28, IC29
 	//map(0x110000, 0x11????).rw(FUNC(kn5000_state::tone_generator_r), FUNC(kn5000_state::tone_generator_w)); // @ IC303
 	map(0x120000, 0x12ffff).r(m_subcpu_latch, FUNC(generic_latch_8_device::read)); // @ IC22
-	map(0x120000, 0x12ffff).w(m_maincpu_latch, FUNC(generic_latch_8_device::write)); // @ IC23
+	map(0x120000, 0x12ffff).w(FUNC(kn5000_state::maincpu_latch_w)); // @ IC23 (logged wrapper)
 	//map(0x130000, 0x13????).rw(FUNC(kn5000_state::dsp1_r), FUNC(kn5000_state::dsp1_w)); // @ IC311
 	map(0xfe0000, 0xffffff).rom().region("subcpu", 0); // 1Mbit MASK ROM @ IC30
 
@@ -452,6 +495,8 @@ void kn5000_state::machine_start()
 	save_item(NAME(m_mstat));
 	save_item(NAME(m_sstat));
 	save_item(NAME(m_cpanel_inta));
+	save_item(NAME(m_subcpu_latch_write_count));
+	save_item(NAME(m_maincpu_latch_write_count));
 
 	m_extension->program_map(m_maincpu->space(AS_PROGRAM));
 
@@ -538,7 +583,10 @@ void kn5000_state::kn5000(machine_config &config)
 	// MAINCPU PORT A:
 	//   bit 0 (output) = sub_cpu ~RESET / SRST
 	m_maincpu->porta_write().set([this] (u8 data) {
-		m_subcpu->set_input_line(INPUT_LINE_RESET, BIT(data, 0) ? CLEAR_LINE : ASSERT_LINE);
+		bool reset_released = BIT(data, 0);
+		LOGMASKED(LOG_RESET, "SubCPU reset: %s (PA=0x%02X) PC=%06X\n",
+			reset_released ? "RELEASED" : "ASSERTED", data, m_maincpu->pc());
+		m_subcpu->set_input_line(INPUT_LINE_RESET, reset_released ? CLEAR_LINE : ASSERT_LINE);
 	});
 
 	// MAINCPU PORT C:
@@ -600,7 +648,11 @@ void kn5000_state::kn5000(machine_config &config)
 		return m_com_select->read() | (m_sstat << 2);
 	});
 	m_maincpu->portz_write().set([this] (u8 data) {
-		m_mstat = data & 3;
+		uint8_t new_mstat = data & 3;
+		if (new_mstat != m_mstat)
+			LOGMASKED(LOG_HANDSHAKE, "MSTAT: %d -> %d (PZ=0x%02X) PC=%06X\n",
+				m_mstat, new_mstat, data, m_maincpu->pc());
+		m_mstat = new_mstat;
 	});
 
 
@@ -654,7 +706,11 @@ void kn5000_state::kn5000(machine_config &config)
 		return (BIT(m_mstat, 0) << 2) | (BIT(m_mstat, 1) << 4);
 	});
 	m_subcpu->portd_write().set([this] (u8 data) {
-		m_sstat = data & 3;
+		uint8_t new_sstat = data & 3;
+		if (new_sstat != m_sstat)
+			LOGMASKED(LOG_HANDSHAKE, "SSTAT: %d -> %d (PD=0x%02X) PC=%06X\n",
+				m_sstat, new_sstat, data, m_subcpu->pc());
+		m_sstat = new_sstat;
 	});
 
 
