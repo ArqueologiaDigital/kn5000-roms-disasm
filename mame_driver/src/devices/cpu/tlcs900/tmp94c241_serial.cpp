@@ -88,14 +88,13 @@ void tmp94c241_serial_device::TO2_trigger(int state)
 	// SCLK, which is why the firmware writes BR1CR at each TX state machine
 	// step even in mode 0.
 	//
-	// Previously this function called sioclk(state) directly, which made
-	// TO2 act as a second clock source alongside the baud rate timer,
-	// causing double-clocking and data corruption (garbled LED commands).
+	// TO2 must NOT drive sioclk() directly — that would create a second
+	// clock source alongside the baud rate timer, causing double-clocking.
 	//
 	// The TO2 trigger mechanism (starting transfers on TO2 events) is not
 	// currently emulated — transfers start immediately on SC1BUF writes,
-	// matching mode 1 behavior.  This simplification works because the
-	// firmware always writes SC1BUF before the clock edges are needed.
+	// matching mode 1 behavior.  This works because the firmware always
+	// writes SC1BUF before the clock edges are needed.
 	//
 	// For SC0 (UART mode), this function is already a no-op because
 	// (serial_mode & 3) != 0.
@@ -399,8 +398,7 @@ TIMER_CALLBACK_MEMBER(tmp94c241_serial_device::timer_callback)
 	// edges and corrupt data during INTA-driven reception.
 	//
 	// In baud rate generator mode (mode 1), the baud rate timer is the
-	// clock source regardless of IOC.  The AW VM uses mode=1 with IOC=1,
-	// so we must NOT block the timer in that combination.
+	// clock source regardless of IOC, so only gate on mode 0.
 	if ((m_serial_mode & 3) == 0 && BIT(m_serial_control, 0))
 		return;
 

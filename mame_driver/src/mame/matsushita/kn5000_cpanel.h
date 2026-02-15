@@ -62,7 +62,6 @@ private:
 	void send_sync_packet();
 	void send_button_packet(int segment, bool is_left_panel);
 	void send_all_button_states(bool is_left_panel);
-	void queue_button_changes();
 
 	// LED control
 	void process_led_command(uint8_t row, uint8_t data);
@@ -101,12 +100,10 @@ private:
 	bool m_tx_output_enabled;  // false = suppress TX output during phantom byte clock edges
 	bool m_next_accept;        // Deferred accept_next_byte (applied at next byte boundary)
 	bool m_next_tx_output_enabled;  // Deferred tx_output_enabled (applied at next byte boundary)
-	bool m_rx_waiting_for_start;    // Ignore RX edges until next tx_start (prevents orphan edge desync)
-	uint8_t m_self_clock_bytes_sent;  // Bytes sent in current INTA cycle (pause after 2)
-	uint8_t m_scan_retry_count;        // Button scan retries since last INTA deassertion
-	uint8_t m_last_button_state[22];  // 11 segments * 2 panels
+	bool m_rx_waiting_for_start;    // Ignore RX edges until next tx_start
+	uint8_t m_self_clock_bytes_sent;  // Bytes sent in current INTA cycle
+	uint8_t m_last_button_state[22];  // 11 segments * 2 panels (confirmed)
 	uint8_t m_pending_button_state[22];  // Per-segment confirmation buffer
-	attotime m_debounce_until;         // Suppress change detection until this time
 
 	// Callbacks
 	devcb_write_line m_txd_cb;

@@ -28,7 +28,7 @@
 #define LOG_BUTTONS  (1U << 3)
 #define LOG_LEDS     (1U << 4)
 
-#define VERBOSE (LOG_COMMANDS | LOG_SERIAL | LOG_BUTTONS | LOG_LEDS)
+#define VERBOSE 0
 #include "logmacro.h"
 
 DEFINE_DEVICE_TYPE(KN5000_CPANEL, kn5000_cpanel_device, "kn5000_cpanel", "KN5000 Control Panel HLE")
@@ -56,7 +56,6 @@ kn5000_cpanel_device::kn5000_cpanel_device(const machine_config &mconfig, const 
 	m_next_tx_output_enabled(true),
 	m_rx_waiting_for_start(true),
 	m_self_clock_bytes_sent(0),
-	m_scan_retry_count(0),
 	m_txd_cb(*this),
 	m_sclk_out_cb(*this),
 	m_inta_cb(*this),
@@ -101,10 +100,8 @@ void kn5000_cpanel_device::device_start()
 	save_item(NAME(m_next_tx_output_enabled));
 	save_item(NAME(m_rx_waiting_for_start));
 	save_item(NAME(m_self_clock_bytes_sent));
-	save_item(NAME(m_scan_retry_count));
 	save_item(NAME(m_last_button_state));
 	save_item(NAME(m_pending_button_state));
-	save_item(NAME(m_debounce_until));
 
 	// Initial state - line idle high
 	m_txd_cb(1);
@@ -126,7 +123,6 @@ void kn5000_cpanel_device::device_reset()
 	m_next_tx_output_enabled = true;
 	m_rx_waiting_for_start = true;
 	m_self_clock_bytes_sent = 0;
-	m_scan_retry_count = 0;
 
 	// Clear TX queue
 	while (!m_tx_queue.empty())
@@ -145,7 +141,6 @@ void kn5000_cpanel_device::device_reset()
 
 	std::fill(std::begin(m_last_button_state), std::end(m_last_button_state), 0);
 	std::fill(std::begin(m_pending_button_state), std::end(m_pending_button_state), 0);
-	m_debounce_until = attotime::zero;
 }
 
 void kn5000_cpanel_device::set_baudrate(uint16_t br)
@@ -171,60 +166,35 @@ void kn5000_cpanel_device::rxd(int state)
 void kn5000_cpanel_device::tx_start(int state)
 {
 	// Called when CPU starts transmitting a new byte.
-	// state=1: real byte (PFFC enabled — SCLK pin driven on real hardware)
-	// state=0: phantom byte (PFFC disabled — pin high-Z, data wouldn't reach us)
-	//
-	// Reset RX counter to sync byte boundaries.  Track whether to accept
-	// or skip the byte once it's fully received.
-	LOGMASKED(LOG_SERIAL, "cpanel tx_start: state=%d (%s byte) rx_count=%d\n",
+	// state=1: real byte (PFFC enabled, SCLK pin driven)
+	// state=0: phantom byte (PFFC disabled, pin high-Z)
+	LOGMASKED(LOG_SERIAL, "tx_start: state=%d (%s byte) rx_count=%d\n",
 		state, state ? "real" : "phantom", m_rx_clock_count);
 
-	// Store the new accept/output state as PENDING.  In MAME's synchronous
-	// execution model, tx_start fires one edge too early: INTTX1 sets the
-	// flag for byte N+1 BEFORE rising edge 8 completes byte N's reception.
-	// If we applied immediately, byte N would see byte N+1's accept state
-	// (e.g., byte 2 would be rejected because phantom 1's tx_start(0)
-	// fires before byte 2's last rising edge).
-	//
-	// The pending values are applied at the next byte boundary — when
-	// rx_clock_count returns to 8 after process_received_byte.  If we're
-	// already at a boundary (rx_count==8, between bytes), apply immediately.
+	// Defer the new accept/output state to the next byte boundary.
+	// INTTX1 fires for byte N+1 before rising edge 8 completes byte N's
+	// reception, so applying immediately would use the wrong accept state
+	// for the byte currently being received.
 	m_next_accept = (state != 0);
 	m_next_tx_output_enabled = (state != 0);
 
-	// Allow RX counting to begin for the new byte.  This prevents
-	// "orphan" clock edges (driven by the CPU's baud rate timer for
-	// internal RX completion after TX finishes) from being counted as
-	// data bits.  The cpanel waits at rx_clock_count=8 with this flag
-	// set after completing each byte, ignoring edges until the CPU
-	// signals a new byte via tx_start.
+	// Allow RX counting to begin.  Between bytes, the baud rate timer may
+	// drive extra edges for internal RX completion; m_rx_waiting_for_start
+	// prevents those from being counted as data bits.
 	m_rx_waiting_for_start = false;
 
 	if (m_rx_clock_count == 8)
 	{
-		// At byte boundary — apply immediately (no mid-byte race)
+		// At byte boundary — safe to apply immediately
 		m_accept_next_byte = m_next_accept;
 		m_tx_output_enabled = m_next_tx_output_enabled;
 	}
 
-	// Do NOT cancel idle_detect here for any byte type.
-	//
-	// Previously, real bytes (state=1) cancelled idle_detect under the
-	// assumption that the CPU would clock out the response directly.
-	// But the original firmware's TX state machine chains commands
-	// (SM_TXComplete → SM_StartTX), so the next command's real bytes
-	// cancel the idle_detect that would deliver the PREVIOUS command's
-	// response.  This prevents INTA from ever firing during active
-	// command sequences → "buttons and LEDs do not work."
-	//
-	// The sliding window in sioclk() (line ~214) handles this correctly:
-	// it re-arms idle_detect on every edge if we have pending data,
-	// and fires 250µs after the LAST edge when the baud rate timer
-	// stops.  No cancellation needed here.
-	//
-	// For the AW VM: dummy 0xFF bytes drain the TX queue before
-	// idle_detect fires, so the guard (tx_count > 0 || !queue.empty())
-	// in sioclk prevents spurious INTA.
+	// idle_detect is not cancelled here.  The sliding window in sioclk()
+	// re-arms on every edge and fires after the LAST edge, which correctly
+	// handles both the firmware's chained TX state machine (phantom bytes
+	// after real commands) and polled serial modes (dummy bytes drain the
+	// TX queue before idle_detect fires).
 }
 
 void kn5000_cpanel_device::sioclk(int state)
@@ -234,46 +204,31 @@ void kn5000_cpanel_device::sioclk(int state)
 
 	m_sioclk_state = state;
 
-	// Retrigger idle_detect on every clock edge while we have pending
-	// response data and aren't already self-clocking.  This creates a
-	// sliding window that fires after the LAST external clock edge —
-	// including phantom bytes from the firmware's TX state machine
-	// (SM_TXComplete writes a phantom byte after each real command).
-	//
-	// 50µs timeout chosen so that INTA fires and self-clocking completes
-	// (~140µs for 2 bytes) before the firmware's WaitTXReady delay loop
-	// (~375µs) checks PE.5.  The phantom bytes' edges (4µs apart at
-	// 250kHz SCLK) retrigger within 50µs, so the timeout fires only
-	// after the last phantom byte finishes.
+	// Sliding idle_detect window: retrigger on every edge while response
+	// data is pending.  Fires 50µs after the last external clock edge,
+	// which is after the firmware's phantom bytes complete but before
+	// its WaitTXReady delay (~375µs) checks the INTA line.
 	if (!m_self_clocking && (m_tx_clock_count > 0 || !m_tx_queue.empty()))
 	{
 		m_idle_detect_timer->adjust(attotime::from_usec(50));
 	}
 
-	LOGMASKED(LOG_SERIAL, "cpanel sioclk state=%d rxd=%d rx_count=%d tx_count=%d\n",
+	LOGMASKED(LOG_SERIAL, "sioclk state=%d rxd=%d rx_count=%d tx_count=%d\n",
 		state, m_rxd, m_rx_clock_count, m_tx_clock_count);
 
 	if (state)
 	{
-		// Rising edge: Sample RXD (receive bit from CPU)
-		// Skip RX during self-clocking: the CPU serial's TXD line holds
-		// the MSB of the last transmitted byte (often 0), so we'd assemble
-		// 0x00 bytes and misinterpret them as LED commands, queuing infinite
-		// sync responses that prevent self-clocking from ever completing.
-		//
-		// Skip RX while waiting for tx_start: after completing a byte, the
-		// CPU's baud rate timer may drive "orphan" edges for internal RX
-		// completion.  On real hardware, PFFC is disabled so these edges
-		// don't reach the panel.  In MAME, they reach us but must not be
-		// counted — otherwise they shift byte boundaries and garble all
-		// subsequent commands.
+		// Rising edge: sample RXD bit from CPU.
+		// Skip during self-clocking (CPU's TXD holds stale data) and
+		// while waiting for tx_start (baud rate timer drives extra edges
+		// between bytes that would desync byte boundaries).
 		if (!m_self_clocking && !m_rx_waiting_for_start && m_rx_clock_count > 0)
 		{
 			m_rx_shift_register >>= 1;
 			m_rx_shift_register |= (m_rxd << 7);
 			m_rx_clock_count--;
 
-			LOGMASKED(LOG_SERIAL, "cpanel RX bit: %d, shift_reg=%02X, count=%d\n",
+			LOGMASKED(LOG_SERIAL, "RX bit: %d, shift_reg=%02X, count=%d\n",
 				m_rxd, m_rx_shift_register, m_rx_clock_count);
 
 			if (m_rx_clock_count == 0)
@@ -282,10 +237,7 @@ void kn5000_cpanel_device::sioclk(int state)
 				m_rx_clock_count = 8;
 				process_received_byte(m_rx_shift_register);
 
-				// Apply deferred tx_start flags now that we're at a byte
-				// boundary.  This compensates for the MAME timing race:
-				// tx_start for byte N+1 fires before byte N's last rising
-				// edge, so we defer its effects until byte N is processed.
+				// Apply deferred tx_start flags at byte boundary
 				m_accept_next_byte = m_next_accept;
 				m_tx_output_enabled = m_next_tx_output_enabled;
 
@@ -297,21 +249,18 @@ void kn5000_cpanel_device::sioclk(int state)
 	}
 	else
 	{
-		// Falling edge: Output TXD (transmit bit to CPU)
-		// This prepares the bit for the CPU to sample on the next rising edge.
-		// Gate on m_tx_output_enabled: during phantom byte clock edges
-		// (PFFC off, tx_start(0)), we must NOT output response bits.
-		// The response data must remain frozen in the shift register and
-		// queue until self-clocking delivers it after INTA.
+		// Falling edge: output TXD bit for CPU to sample on next rising edge.
+		// Suppress output during phantom byte edges (PFFC off) to keep
+		// response data intact for later INTA-driven delivery.
 		if (!m_tx_output_enabled)
 		{
-			// Phantom byte edge — suppress TX, keep response data intact
+			// Phantom byte edge — hold response data
 		}
 		else if (m_tx_skip_first_falling)
 		{
 			// Skip this falling edge - bit 0 was pre-output and we need to give
 			// CPU a rising edge to sample it before we output bit 1
-			LOGMASKED(LOG_SERIAL, "cpanel skipping first falling edge (bit 0 already on line)\n");
+			LOGMASKED(LOG_SERIAL, "skipping first falling edge (bit 0 already on line)\n");
 			m_tx_skip_first_falling = false;
 		}
 		else if (m_tx_clock_count > 0)
@@ -319,7 +268,7 @@ void kn5000_cpanel_device::sioclk(int state)
 			if (m_tx_clock_count == 8)
 			{
 				// First bit of a chained byte (loaded from queue) — output bit 0 without shifting
-				LOGMASKED(LOG_SERIAL, "cpanel TX bit 0 (chained): %d, shift_reg=%02X\n",
+				LOGMASKED(LOG_SERIAL, "TX bit 0 (chained): %d, shift_reg=%02X\n",
 					m_tx_shift_register & 1, m_tx_shift_register);
 				m_txd_cb(m_tx_shift_register & 1);
 				m_tx_clock_count--;
@@ -328,7 +277,7 @@ void kn5000_cpanel_device::sioclk(int state)
 			{
 				// Normal operation: shift out the next bit
 				m_tx_shift_register >>= 1;
-				LOGMASKED(LOG_SERIAL, "cpanel TX bit: %d, shift_reg=%02X, count=%d\n",
+				LOGMASKED(LOG_SERIAL, "TX bit: %d, shift_reg=%02X, count=%d\n",
 					m_tx_shift_register & 1, m_tx_shift_register, m_tx_clock_count);
 				m_txd_cb(m_tx_shift_register & 1);
 				m_tx_clock_count--;
@@ -350,7 +299,7 @@ void kn5000_cpanel_device::sioclk(int state)
 					m_tx_queue.pop();
 					m_tx_clock_count = 8;  // Full 8 bits — don't pre-output yet
 
-					LOGMASKED(LOG_SERIAL, "cpanel TX next byte queued: %02X (no pre-output)\n",
+					LOGMASKED(LOG_SERIAL, "TX next byte queued: %02X (no pre-output)\n",
 						m_tx_shift_register);
 
 					// Don't pre-output: bit 7 of previous byte is still on the line
@@ -364,7 +313,7 @@ void kn5000_cpanel_device::sioclk(int state)
 					// of the last byte before the CPU samples it on the next
 					// rising edge. The line will be updated when send_byte()
 					// pre-outputs the next byte's bit 0.
-					LOGMASKED(LOG_SERIAL, "cpanel TX done, holding last bit\n");
+					LOGMASKED(LOG_SERIAL, "TX done, holding last bit\n");
 				}
 			}
 		}
@@ -373,7 +322,7 @@ void kn5000_cpanel_device::sioclk(int state)
 
 void kn5000_cpanel_device::send_byte(uint8_t data)
 {
-	LOGMASKED(LOG_SERIAL, "cpanel send_byte(%02X) tx_count=%d queue_size=%zu sioclk_state=%d\n",
+	LOGMASKED(LOG_SERIAL, "send_byte(%02X) tx_count=%d queue_size=%zu sioclk_state=%d\n",
 		data, m_tx_clock_count, m_tx_queue.size(), m_sioclk_state);
 
 	if (m_tx_clock_count == 0 && !m_tx_skip_first_falling)
@@ -384,20 +333,20 @@ void kn5000_cpanel_device::send_byte(uint8_t data)
 
 		// Pre-output first bit immediately so CPU can sample it on the first rising edge
 		m_txd_cb(m_tx_shift_register & 1);
-		LOGMASKED(LOG_SERIAL, "cpanel TX start: byte=%02X, pre-output bit=%d\n",
+		LOGMASKED(LOG_SERIAL, "TX start: byte=%02X, pre-output bit=%d\n",
 			data, data & 1);
 
 		// Only skip the first falling edge if clock is currently HIGH.
 		// If clock is HIGH: next edge = falling (skip it)
 		// If clock is LOW: next edge = rising (CPU samples), then falling outputs bit 1 (no skip)
 		m_tx_skip_first_falling = (m_sioclk_state == 1);
-		LOGMASKED(LOG_SERIAL, "cpanel TX skip_first_falling=%d\n", m_tx_skip_first_falling);
+		LOGMASKED(LOG_SERIAL, "TX skip_first_falling=%d\n", m_tx_skip_first_falling);
 	}
 	else
 	{
 		// Queue for later
 		m_tx_queue.push(data);
-		LOGMASKED(LOG_SERIAL, "cpanel TX queued: byte=%02X\n", data);
+		LOGMASKED(LOG_SERIAL, "TX queued: byte=%02X\n", data);
 	}
 }
 
@@ -406,19 +355,12 @@ void kn5000_cpanel_device::process_received_byte(uint8_t data)
 	LOGMASKED(LOG_SERIAL, "RX byte: %02X (cmd_index=%d, accept=%d)\n",
 		data, m_cmd_index, m_accept_next_byte);
 
-	// Skip bytes that weren't signaled as "real" via tx_start(1).  This
-	// rejects phantom bytes (PFFC-off phases in firmware TX state machine)
-	// and stale bytes assembled from continuous clock edges when no actual
-	// transmission is in progress.
-	//
-	// Note: we do NOT consume (clear) accept_next_byte here.  The flag is
-	// managed exclusively by tx_start via the deferred mechanism — pending
-	// values are applied at byte boundaries in sioclk().  This avoids the
-	// MAME timing race where tx_start for byte N+1 fires before byte N is
-	// consumed (which would cause byte N to eat byte N+1's accept state).
+	// Reject phantom bytes (PFFC-off phases in firmware TX state machine).
+	// The accept flag is managed by tx_start's deferred mechanism, not
+	// consumed here.
 	if (!m_accept_next_byte)
 	{
-		LOGMASKED(LOG_SERIAL, "cpanel: skipping unsolicited/phantom byte %02X\n", data);
+		LOGMASKED(LOG_SERIAL, "skipping unsolicited/phantom byte %02X\n", data);
 		return;
 	}
 
@@ -430,7 +372,7 @@ void kn5000_cpanel_device::process_received_byte(uint8_t data)
 	// unintended LED commands or sync responses.
 	if (m_cmd_index == 0 && data == 0xFF)
 	{
-		LOGMASKED(LOG_SERIAL, "cpanel: ignoring dummy byte 0xFF as command\n");
+		LOGMASKED(LOG_SERIAL, "ignoring dummy byte 0xFF as command\n");
 		return;
 	}
 
@@ -526,14 +468,7 @@ void kn5000_cpanel_device::process_command()
 		send_all_button_states(false);
 		break;
 
-	// LED control commands - right panel
-	// No response needed.  The firmware sends LED commands in rapid batches
-	// (SM_TXComplete chains directly to SM_StartTX when more data exists).
-	// If we queued sync responses, they'd accumulate because idle_detect
-	// never fires during continuous clocking.  When finally delivered via
-	// INTA, they'd conflict with the firmware's next TX command: INTA sets
-	// IOC=1, blocking the baud rate timer and deadlocking the TX state
-	// machine.  Real hardware panels process LED commands silently.
+	// LED control commands - right panel (no response — real MCUs process silently)
 	case 0x00:
 	case 0x01:
 	case 0x02:
@@ -546,7 +481,7 @@ void kn5000_cpanel_device::process_command()
 		process_led_command(cmd, param);
 		break;
 
-	// LED control commands - left panel (same reasoning — no response)
+	// LED control commands - left panel (no response)
 	case 0xc0:
 	case 0xc1:
 	case 0xc2:
@@ -557,27 +492,15 @@ void kn5000_cpanel_device::process_command()
 		break;
 
 	default:
-		// Unknown command — do not respond.
-		// Many panel commands (LCD display, encoder config, 7-segment
-		// updates, etc.) are "fire and forget" — the real panel MCU
-		// processes them silently without sending a response.  Sending
-		// spurious sync responses here triggers INTA delivery, which
-		// disrupts the firmware's serial state machine and can cause
-		// wrong LED initialization (firmware skips LED commands or
-		// takes different code paths due to unexpected RX data).
+		// Unknown command — do not respond.  Real panel MCUs process
+		// many commands (LCD, encoders, etc.) silently.
 		LOGMASKED(LOG_COMMANDS, "Unknown command %02X %02X (no response)\n", cmd, param);
 		break;
 	}
 
-	// Start idle detection for INTA-based response delivery.
-	// sioclk() retriggers on every edge, creating a sliding 50µs window
-	// that fires after the LAST clock edge (including SM_TXComplete's
-	// phantom byte).  50µs ensures INTA + self-clocking (~140µs for 2
-	// bytes) completes before WaitTXReady's ~375µs delay ends.
-	//
-	// For AW VM: dummy bytes clock out the response via CPU edges;
-	// the retrigger keeps pushing the window forward, so idle_detect
-	// only fires after SCLK goes idle (response already delivered).
+	// Arm idle detection for INTA-based response delivery.  The sliding
+	// window in sioclk() retriggers on every edge and fires 50µs after
+	// the last edge, handling both firmware phantom bytes and polled modes.
 	if (!m_self_clocking && (m_tx_clock_count > 0 || !m_tx_queue.empty()))
 	{
 		m_idle_detect_timer->adjust(attotime::from_usec(50));
@@ -606,24 +529,10 @@ uint8_t kn5000_cpanel_device::read_button_segment(int segment, bool is_left_pane
 
 void kn5000_cpanel_device::send_button_packet(int segment, bool is_left_panel)
 {
-	// Button packet format (matching real panel MCU encoding):
-	// Byte 0: [ Panel | Type | Segment ]
-	//   - Bits 7:6: Panel select (00=right, 11=left)
-	//   - Bits 5-3: Type (000/001 for button packets)
-	//   - Bits 3-0: Segment index
-	// Byte 1: Button state bitmap
-	//
-	// The firmware's event dispatcher translates headers via a ROM
-	// lookup table at 0xEDA03C.  The table maps:
-	//   Right (bits 7:6=00): segment 0-10 → event indices 0x0B-0x15
-	//   Left  (bits 7:6=11): segment 0-10 → event indices 0x00-0x0A
-	// Headers with bits 7:6=01 (old encoding) fall in a dead zone
-	// (all map to 0x1F), causing left panel events to bypass LED dispatch.
-	//
-	// Note: the firmware's CPanel_RX_ButtonPacket internally uses bit 6
-	// to route packets through different STATE_OF_CPANEL_BUTTONS paths.
-	// Right (bit 6=0) → indices 0-10, Left (bit 6=1) → indices 16-26.
-	// This internal naming is reversed from physical panels but correct.
+	// Button packet header: bits 7:6 = panel (00=right, 11=left),
+	// bits 5:3 = type (0/1 for buttons), bits 3:0 = segment index.
+	// The firmware dispatches via a ROM lookup table that only maps
+	// bits 7:6=00 and bits 7:6=11 to valid event indices.
 
 	uint8_t state = read_button_segment(segment, is_left_panel);
 
@@ -652,16 +561,6 @@ void kn5000_cpanel_device::send_all_button_states(bool is_left_panel)
 	}
 }
 
-void kn5000_cpanel_device::queue_button_changes()
-{
-	// Currently unused — piggybacking removed in favor of per-segment
-	// confirmation in button_scan_callback.  Kept for potential future use.
-	//
-	// Previously, this scanned all segments during command handlers to
-	// piggyback change packets on the same INTA delivery.  This was
-	// removed because it bypassed the per-segment confirmation logic,
-	// allowing single-scan ghost toggles to be reported as real changes.
-}
 
 void kn5000_cpanel_device::process_led_command(uint8_t row, uint8_t data)
 {
@@ -824,15 +723,8 @@ TIMER_CALLBACK_MEMBER(kn5000_cpanel_device::timer_callback)
 
 TIMER_CALLBACK_MEMBER(kn5000_cpanel_device::idle_detect_callback)
 {
-	// The external serial clock (from CPU) has been idle for 250µs.
-	// If we have pending response data, the CPU is not going to send
-	// dummy bytes to clock it out — switch to self-clocking mode and
-	// assert INTA so the CPU's firmware can enable receive mode.
-	//
-	// The sliding 50µs window (retriggered on every sioclk edge) ensures
-	// this fires AFTER the firmware's phantom bytes complete: the phantom
-	// byte edges are 4µs apart (well within 50µs), so the window slides
-	// past them.  Only after the last edge does the 50µs expire.
+	// External SCLK has been idle — assert INTA and self-clock the response.
+	// On real hardware, the panel MCU drives SCLK after detecting idle.
 
 	if (m_tx_clock_count > 0 || !m_tx_queue.empty())
 	{
@@ -841,22 +733,15 @@ TIMER_CALLBACK_MEMBER(kn5000_cpanel_device::idle_detect_callback)
 
 		if (m_inta_asserted)
 		{
-			// Multi-packet continuation: INTA is already asserted (PE.5 HIGH)
-			// from the previous packet.  Do an atomic pulse (deassert then
-			// reassert within this same timer callback) to re-trigger the
-			// INTA interrupt.  Since the CPU doesn't execute between timer
-			// callback calls, it never observes PE.5=LOW — WaitTXReady
-			// stays blocked throughout the multi-packet delivery.
-			LOGMASKED(LOG_SERIAL, "cpanel: re-triggering INTA for next packet (%zu bytes queued)\n",
+			// Multi-packet: pulse INTA to re-trigger the interrupt
+			LOGMASKED(LOG_SERIAL, "re-triggering INTA for next packet (%zu bytes queued)\n",
 				m_tx_queue.size());
-			m_inta_cb(0);  // deassert — clears INTEAB flag, updates m_level
-			m_inta_cb(1);  // reassert — sets INTEAB flag, triggers interrupt
-			// m_inta_asserted stays true throughout
+			m_inta_cb(0);
+			m_inta_cb(1);
 		}
 		else
 		{
-			// First response packet: assert INTA for the first time
-			LOGMASKED(LOG_SERIAL, "cpanel: external clock idle, asserting INTA and starting self-clock\n");
+			LOGMASKED(LOG_SERIAL, "SCLK idle, asserting INTA\n");
 			m_inta_asserted = true;
 			m_inta_cb(1);
 		}
@@ -864,11 +749,7 @@ TIMER_CALLBACK_MEMBER(kn5000_cpanel_device::idle_detect_callback)
 		// Reset byte counter for this INTA cycle
 		m_self_clock_bytes_sent = 0;
 
-		// Start self-clocking after a brief delay to let the CPU process
-		// the INTA interrupt and enable receive mode (set IOC=1).
-		// 20µs ≈ 320 CPU cycles at 16 MHz — plenty for the ISR.
-		// Shorter delay means self-clocking finishes sooner, well before
-		// WaitTXReady's ~375µs delay loop checks PE.5.
+		// Brief delay lets the CPU's INTA ISR enable receive mode
 		m_self_clocking = true;
 		m_self_clock_timer->adjust(attotime::from_usec(20), 0, attotime::from_hz(250000));
 	}
@@ -876,24 +757,17 @@ TIMER_CALLBACK_MEMBER(kn5000_cpanel_device::idle_detect_callback)
 
 TIMER_CALLBACK_MEMBER(kn5000_cpanel_device::self_clock_callback)
 {
-	// Drive one clock edge per callback (toggle), matching the CPU serial
-	// timer's behavior. At 250 kHz, this gives 125 kHz SCLK = one bit
-	// every 8µs, one byte every 64µs.
+	// Toggle SCLK to shift out response data
 	int new_state = m_sioclk_state ^ 1;
 	m_sclk_out_cb(new_state);
-	// The edge propagates: cpanel sclk_out → CPU serial sioclk → CPU serial
-	// sclk_out → cpanel sioclk. Both sides process the edge.
 
-	// Check completion and packet-pause after RISING edges.  The preceding
-	// falling edge output bit 7 and decremented tx_clock_count to 0 (and
-	// incremented m_self_clock_bytes_sent).  This rising edge lets the CPU
-	// sample that last bit before we stop.
+	// Check completion after rising edges (CPU samples last bit)
 	if (new_state == 1)
 	{
 		if (m_tx_queue.empty() && m_tx_clock_count == 0)
 		{
 			// All response data sent — stop self-clocking and deassert INTA.
-			LOGMASKED(LOG_SERIAL, "cpanel: self-clock TX complete (%d bytes), deasserting INTA\n",
+			LOGMASKED(LOG_SERIAL, "self-clock TX complete (%d bytes), deasserting INTA\n",
 				m_self_clock_bytes_sent);
 			m_self_clocking = false;
 			m_self_clock_timer->reset(attotime::never);
@@ -909,33 +783,15 @@ TIMER_CALLBACK_MEMBER(kn5000_cpanel_device::self_clock_callback)
 		}
 		else if (m_self_clock_bytes_sent >= 2)
 		{
-			// Pause after 2-byte packet.  The firmware processes responses
-			// in 2-byte packets; after SM_RXByteN finishes, the INTA handler
-			// writes SC1CR (resetting rx_clock_count=8).  Continuous clocking
-			// would corrupt the next byte mid-reception.  Real hardware
-			// delivers one packet per INTA cycle.
-			LOGMASKED(LOG_SERIAL, "cpanel: self-clock pausing after 2-byte packet, %zu bytes queued\n",
+			// Pause after each 2-byte packet — firmware processes one
+			// packet per INTA cycle.  Keep INTA asserted to block
+			// WaitTXReady while more data is queued.
+			LOGMASKED(LOG_SERIAL, "self-clock pausing after 2-byte packet, %zu bytes queued\n",
 				m_tx_queue.size());
 			m_self_clocking = false;
 			m_self_clock_timer->reset(attotime::never);
 
-			// Keep INTA asserted during the gap.  PE.5 stays HIGH, which
-			// prevents the firmware's WaitTXReady from passing and starting
-			// the next command while multi-packet response data is still
-			// queued.  idle_detect_callback will re-trigger the interrupt
-			// via an atomic pulse (deassert+reassert in same callback, so
-			// the CPU never observes PE.5=LOW between packets).
-
-			// Schedule re-trigger for next packet after 20µs.
-			// On real hardware, the panel MCU responds continuously (no
-			// inter-packet gap), delivering 22 bytes in ~704µs at 250kHz.
-			// The firmware's CPanel_InitButtonState waits only ~1.44ms
-			// (3×DELAY_6_TICKS) before calling CPanel_RX_ProcessWithFlag,
-			// which processes all available data WITH flag bit 2 set.
-			// A 200µs gap inflates delivery to ~3ms, causing partial
-			// processing (only ~5 of 11 segments processed with the flag).
-			// 20µs is enough for the CPU's INTA ISR (~10 instructions)
-			// while keeping total delivery ~1.2ms (within the 1.44ms window).
+			// Schedule next packet after 20µs (enough for INTA ISR)
 			m_idle_detect_timer->adjust(attotime::from_usec(20));
 		}
 	}
@@ -943,30 +799,17 @@ TIMER_CALLBACK_MEMBER(kn5000_cpanel_device::self_clock_callback)
 
 TIMER_CALLBACK_MEMBER(kn5000_cpanel_device::button_scan_callback)
 {
-	// Proactive button change detection (periodic, 7ms / ~143 Hz).
-	// On real hardware, the panel MCUs continuously scan their button
-	// matrices and push change notifications via INTA to the CPU —
-	// independent of any query from the CPU.  The firmware's steady-state
-	// polling only queries segment 3 (E0 13 every ~42 iterations).
-	//
-	// Per-segment confirmation: a state change must be stable for 2
-	// consecutive scans (14ms) before being reported.  This filters
-	// single-scan glitches (ghost toggles) where MAME input ports
-	// momentarily return non-zero values that revert on the next read.
-	// On real hardware, physical button presses last 50-100ms minimum,
-	// so 14ms confirmation is well within tolerance.
+	// Periodic button matrix scan (~143 Hz).  Real panel MCUs continuously
+	// scan and push change notifications via INTA, independent of polling.
+	// Per-segment confirmation: changes must be stable for 2 consecutive
+	// scans (14ms) before being reported, filtering transient glitches.
 
 	if (!m_initialized)
 		return;
 
-	// Don't queue changes while actively self-clocking or while INTA is
-	// asserted — the firmware's serial state machine is busy processing
-	// a previous response.  Wait for the current delivery to complete.
+	// Don't queue changes while a serial transaction is in progress
 	if (m_self_clocking || m_inta_asserted)
 		return;
-
-	// Don't queue changes while the CPU is actively transmitting (TX data
-	// pending in our RX path).  Wait for the current command to complete.
 	if (!m_rx_waiting_for_start)
 		return;
 
@@ -984,7 +827,7 @@ TIMER_CALLBACK_MEMBER(kn5000_cpanel_device::button_scan_callback)
 			if (state == m_pending_button_state[seg])
 			{
 				// Stable for 2 scans: confirmed change
-				LOGMASKED(LOG_BUTTONS, "cpanel: confirmed right seg %d change (%02X->%02X)\n",
+				LOGMASKED(LOG_BUTTONS, "confirmed right seg %d change (%02X->%02X)\n",
 					seg, m_last_button_state[seg], state);
 				send_button_packet(seg, false);
 				changed = true;
@@ -992,7 +835,7 @@ TIMER_CALLBACK_MEMBER(kn5000_cpanel_device::button_scan_callback)
 			else
 			{
 				// First observation — record as pending, wait for confirmation
-				LOGMASKED(LOG_BUTTONS, "cpanel: pending right seg %d change (%02X->%02X)\n",
+				LOGMASKED(LOG_BUTTONS, "pending right seg %d change (%02X->%02X)\n",
 					seg, m_last_button_state[seg], state);
 				m_pending_button_state[seg] = state;
 			}
@@ -1015,14 +858,14 @@ TIMER_CALLBACK_MEMBER(kn5000_cpanel_device::button_scan_callback)
 		{
 			if (state == m_pending_button_state[idx])
 			{
-				LOGMASKED(LOG_BUTTONS, "cpanel: confirmed left seg %d change (%02X->%02X)\n",
+				LOGMASKED(LOG_BUTTONS, "confirmed left seg %d change (%02X->%02X)\n",
 					seg, m_last_button_state[idx], state);
 				send_button_packet(seg, true);
 				changed = true;
 			}
 			else
 			{
-				LOGMASKED(LOG_BUTTONS, "cpanel: pending left seg %d change (%02X->%02X)\n",
+				LOGMASKED(LOG_BUTTONS, "pending left seg %d change (%02X->%02X)\n",
 					seg, m_last_button_state[idx], state);
 				m_pending_button_state[idx] = state;
 			}
@@ -1035,7 +878,7 @@ TIMER_CALLBACK_MEMBER(kn5000_cpanel_device::button_scan_callback)
 
 	if (changed)
 	{
-		LOGMASKED(LOG_BUTTONS, "cpanel: confirmed button change, triggering INTA delivery\n");
+		LOGMASKED(LOG_BUTTONS, "confirmed button change, triggering INTA delivery\n");
 		m_idle_detect_timer->adjust(attotime::from_usec(50));
 	}
 }
