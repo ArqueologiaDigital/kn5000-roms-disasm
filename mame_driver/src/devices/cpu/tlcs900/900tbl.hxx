@@ -3930,7 +3930,7 @@ void tlcs900_device::prepare_operands(const tlcs900inst *inst)
 		m_imm1.d = RDOP();
 		switch( m_imm1.d )
 		{
-		case 0x22:
+		case 0x22:	// TMP96C141/TMP95C063
 			m_p1_reg8 = &m_dmam[0].b.l;
 			break;
 		case 0x26:
@@ -3942,6 +3942,18 @@ void tlcs900_device::prepare_operands(const tlcs900inst *inst)
 		case 0x2e:
 			m_p1_reg8 = &m_dmam[3].b.l;
 			break;
+		case 0x42:	// TMP94C241
+			m_p1_reg8 = &m_dmam[0].b.l;
+			break;
+		case 0x46:
+			m_p1_reg8 = &m_dmam[1].b.l;
+			break;
+		case 0x4a:
+			m_p1_reg8 = &m_dmam[2].b.l;
+			break;
+		case 0x4e:
+			m_p1_reg8 = &m_dmam[3].b.l;
+			break;
 		default:
 			m_p1_reg8 = &m_dummy.b.l;
 			break;
@@ -3951,7 +3963,7 @@ void tlcs900_device::prepare_operands(const tlcs900inst *inst)
 		m_imm1.d = RDOP();
 		switch( m_imm1.d )
 		{
-		case 0x20:
+		case 0x20:	// TMP96C141/TMP95C063
 			m_p1_reg16 = &m_dmac[0].w.l;
 			break;
 		case 0x24:
@@ -3961,6 +3973,18 @@ void tlcs900_device::prepare_operands(const tlcs900inst *inst)
 			m_p1_reg16 = &m_dmac[2].w.l;
 			break;
 		case 0x2c:
+			m_p1_reg16 = &m_dmac[3].w.l;
+			break;
+		case 0x40:	// TMP94C241
+			m_p1_reg16 = &m_dmac[0].w.l;
+			break;
+		case 0x44:
+			m_p1_reg16 = &m_dmac[1].w.l;
+			break;
+		case 0x48:
+			m_p1_reg16 = &m_dmac[2].w.l;
+			break;
+		case 0x4c:
 			m_p1_reg16 = &m_dmac[3].w.l;
 			break;
 		default:
@@ -3984,7 +4008,7 @@ void tlcs900_device::prepare_operands(const tlcs900inst *inst)
 		case 0x0c:
 			m_p1_reg32 = &m_dmas[3].d;
 			break;
-		case 0x10:
+		case 0x10:	// TMP96C141/TMP95C063
 			m_p1_reg32 = &m_dmad[0].d;
 			break;
 		case 0x14:
@@ -3994,6 +4018,18 @@ void tlcs900_device::prepare_operands(const tlcs900inst *inst)
 			m_p1_reg32 = &m_dmad[2].d;
 			break;
 		case 0x1c:
+			m_p1_reg32 = &m_dmad[3].d;
+			break;
+		case 0x20:	// TMP94C241
+			m_p1_reg32 = &m_dmad[0].d;
+			break;
+		case 0x24:
+			m_p1_reg32 = &m_dmad[1].d;
+			break;
+		case 0x28:
+			m_p1_reg32 = &m_dmad[2].d;
+			break;
+		case 0x2c:
 			m_p1_reg32 = &m_dmad[3].d;
 			break;
 		default:
@@ -4072,7 +4108,7 @@ void tlcs900_device::prepare_operands(const tlcs900inst *inst)
 		m_imm1.d = RDOP();
 		switch( m_imm1.d )
 		{
-		case 0x22:
+		case 0x22:	// TMP96C141/TMP95C063
 			m_p2_reg8 = &m_dmam[0].b.l;
 			break;
 		case 0x26:
@@ -4084,6 +4120,18 @@ void tlcs900_device::prepare_operands(const tlcs900inst *inst)
 		case 0x2e:
 			m_p2_reg8 = &m_dmam[3].b.l;
 			break;
+		case 0x42:	// TMP94C241
+			m_p2_reg8 = &m_dmam[0].b.l;
+			break;
+		case 0x46:
+			m_p2_reg8 = &m_dmam[1].b.l;
+			break;
+		case 0x4a:
+			m_p2_reg8 = &m_dmam[2].b.l;
+			break;
+		case 0x4e:
+			m_p2_reg8 = &m_dmam[3].b.l;
+			break;
 		default:
 			m_p2_reg8 = &m_dummy.b.l;
 			break;
@@ -4093,7 +4141,7 @@ void tlcs900_device::prepare_operands(const tlcs900inst *inst)
 		m_imm1.d = RDOP();
 		switch( m_imm1.d )
 		{
-		case 0x20:
+		case 0x20:	// TMP96C141/TMP95C063
 			m_p2_reg16 = &m_dmac[0].w.l;
 			break;
 		case 0x24:
@@ -4103,6 +4151,18 @@ void tlcs900_device::prepare_operands(const tlcs900inst *inst)
 			m_p2_reg16 = &m_dmac[2].w.l;
 			break;
 		case 0x2c:
+			m_p2_reg16 = &m_dmac[3].w.l;
+			break;
+		case 0x40:	// TMP94C241
+			m_p2_reg16 = &m_dmac[0].w.l;
+			break;
+		case 0x44:
+			m_p2_reg16 = &m_dmac[1].w.l;
+			break;
+		case 0x48:
+			m_p2_reg16 = &m_dmac[2].w.l;
+			break;
+		case 0x4c:
 			m_p2_reg16 = &m_dmac[3].w.l;
 			break;
 		default:
@@ -4126,7 +4186,7 @@ void tlcs900_device::prepare_operands(const tlcs900inst *inst)
 		case 0x0c:
 			m_p2_reg32 = &m_dmas[3].d;
 			break;
-		case 0x10:
+		case 0x10:	// TMP96C141/TMP95C063
 			m_p2_reg32 = &m_dmad[0].d;
 			break;
 		case 0x14:
@@ -4136,6 +4196,18 @@ void tlcs900_device::prepare_operands(const tlcs900inst *inst)
 			m_p2_reg32 = &m_dmad[2].d;
 			break;
 		case 0x1c:
+			m_p2_reg32 = &m_dmad[3].d;
+			break;
+		case 0x20:	// TMP94C241
+			m_p2_reg32 = &m_dmad[0].d;
+			break;
+		case 0x24:
+			m_p2_reg32 = &m_dmad[1].d;
+			break;
+		case 0x28:
+			m_p2_reg32 = &m_dmad[2].d;
+			break;
+		case 0x2c:
 			m_p2_reg32 = &m_dmad[3].d;
 			break;
 		default:

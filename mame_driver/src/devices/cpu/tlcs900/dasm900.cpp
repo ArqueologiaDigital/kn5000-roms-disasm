@@ -1927,7 +1927,7 @@ offs_t tlcs900_disassembler::disassemble(std::ostream &stream, offs_t pc, const 
 		imm = opcodes.r8( pos++ );
 		switch( imm )
 		{
-		case 0x22:
+		case 0x22:	// TMP96C141/TMP95C063
 			util::stream_format(stream, " DMAM0");
 			break;
 		case 0x26:
@@ -1937,6 +1937,18 @@ offs_t tlcs900_disassembler::disassemble(std::ostream &stream, offs_t pc, const 
 			util::stream_format(stream, " DMAM2");
 			break;
 		case 0x2e:
+			util::stream_format(stream, " DMAM3");
+			break;
+		case 0x42:	// TMP94C241
+			util::stream_format(stream, " DMAM0");
+			break;
+		case 0x46:
+			util::stream_format(stream, " DMAM1");
+			break;
+		case 0x4a:
+			util::stream_format(stream, " DMAM2");
+			break;
+		case 0x4e:
 			util::stream_format(stream, " DMAM3");
 			break;
 		default:
@@ -1949,7 +1961,7 @@ offs_t tlcs900_disassembler::disassemble(std::ostream &stream, offs_t pc, const 
 		imm = opcodes.r8( pos++ );
 		switch( imm )
 		{
-		case 0x20:
+		case 0x20:	// TMP96C141/TMP95C063
 			util::stream_format(stream, " DMAC0");
 			break;
 		case 0x24:
@@ -1959,6 +1971,18 @@ offs_t tlcs900_disassembler::disassemble(std::ostream &stream, offs_t pc, const 
 			util::stream_format(stream, " DMAC2");
 			break;
 		case 0x2c:
+			util::stream_format(stream, " DMAC3");
+			break;
+		case 0x40:	// TMP94C241
+			util::stream_format(stream, " DMAC0");
+			break;
+		case 0x44:
+			util::stream_format(stream, " DMAC1");
+			break;
+		case 0x48:
+			util::stream_format(stream, " DMAC2");
+			break;
+		case 0x4c:
 			util::stream_format(stream, " DMAC3");
 			break;
 		default:
@@ -1983,7 +2007,7 @@ offs_t tlcs900_disassembler::disassemble(std::ostream &stream, offs_t pc, const 
 		case 0x0c:
 			util::stream_format(stream, " DMAS3");
 			break;
-		case 0x10:
+		case 0x10:	// TMP96C141/TMP95C063
 			util::stream_format(stream, " DMAD0");
 			break;
 		case 0x14:
@@ -1993,6 +2017,18 @@ offs_t tlcs900_disassembler::disassemble(std::ostream &stream, offs_t pc, const 
 			util::stream_format(stream, " DMAD2");
 			break;
 		case 0x1c:
+			util::stream_format(stream, " DMAD3");
+			break;
+		case 0x20:	// TMP94C241
+			util::stream_format(stream, " DMAD0");
+			break;
+		case 0x24:
+			util::stream_format(stream, " DMAD1");
+			break;
+		case 0x28:
+			util::stream_format(stream, " DMAD2");
+			break;
+		case 0x2c:
 			util::stream_format(stream, " DMAD3");
 			break;
 		default:
@@ -2115,7 +2151,7 @@ offs_t tlcs900_disassembler::disassemble(std::ostream &stream, offs_t pc, const 
 		imm = opcodes.r8( pos++ );
 		switch( imm )
 		{
-		case 0x22:
+		case 0x22:	// TMP96C141/TMP95C063
 			util::stream_format(stream, ",DMAM0");
 			break;
 		case 0x26:
@@ -2125,6 +2161,18 @@ offs_t tlcs900_disassembler::disassemble(std::ostream &stream, offs_t pc, const 
 			util::stream_format(stream, ",DMAM2");
 			break;
 		case 0x2e:
+			util::stream_format(stream, ",DMAM3");
+			break;
+		case 0x42:	// TMP94C241
+			util::stream_format(stream, ",DMAM0");
+			break;
+		case 0x46:
+			util::stream_format(stream, ",DMAM1");
+			break;
+		case 0x4a:
+			util::stream_format(stream, ",DMAM2");
+			break;
+		case 0x4e:
 			util::stream_format(stream, ",DMAM3");
 			break;
 		default:
@@ -2137,7 +2185,7 @@ offs_t tlcs900_disassembler::disassemble(std::ostream &stream, offs_t pc, const 
 		imm = opcodes.r8( pos++ );
 		switch( imm )
 		{
-		case 0x20:
+		case 0x20:	// TMP96C141/TMP95C063
 			util::stream_format(stream, ",DMAC0");
 			break;
 		case 0x24:
@@ -2147,6 +2195,18 @@ offs_t tlcs900_disassembler::disassemble(std::ostream &stream, offs_t pc, const 
 			util::stream_format(stream, ",DMAC2");
 			break;
 		case 0x2c:
+			util::stream_format(stream, ",DMAC3");
+			break;
+		case 0x40:	// TMP94C241
+			util::stream_format(stream, ",DMAC0");
+			break;
+		case 0x44:
+			util::stream_format(stream, ",DMAC1");
+			break;
+		case 0x48:
+			util::stream_format(stream, ",DMAC2");
+			break;
+		case 0x4c:
 			util::stream_format(stream, ",DMAC3");
 			break;
 		default:
@@ -2171,7 +2231,7 @@ offs_t tlcs900_disassembler::disassemble(std::ostream &stream, offs_t pc, const 
 		case 0x0c:
 			util::stream_format(stream, ",DMAS3");
 			break;
-		case 0x10:
+		case 0x10:	// TMP96C141/TMP95C063
 			util::stream_format(stream, ",DMAD0");
 			break;
 		case 0x14:
@@ -2181,6 +2241,18 @@ offs_t tlcs900_disassembler::disassemble(std::ostream &stream, offs_t pc, const 
 			util::stream_format(stream, ",DMAD2");
 			break;
 		case 0x1c:
+			util::stream_format(stream, ",DMAD3");
+			break;
+		case 0x20:	// TMP94C241
+			util::stream_format(stream, ",DMAD0");
+			break;
+		case 0x24:
+			util::stream_format(stream, ",DMAD1");
+			break;
+		case 0x28:
+			util::stream_format(stream, ",DMAD2");
+			break;
+		case 0x2c:
 			util::stream_format(stream, ",DMAD3");
 			break;
 		default:

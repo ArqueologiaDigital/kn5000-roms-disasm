@@ -977,65 +977,105 @@ int tmp94c241_device::tlcs900_process_hdma(int channel)
 	if (!(m_int_reg[tmp94c241_irq_vector_map[irq].reg] & tmp94c241_irq_vector_map[irq].iff))
 		return 0;  // Interrupt not pending
 
+	logerror("HDMA ch%d xfer: src=%06X dst=%06X count=%d mode=%02X vec=%02X PC=%06X\n",
+		channel, m_dmas[channel].d, m_dmad[channel].d, m_dmac[channel].w.l, m_dmam[channel].b.l, start_vector, m_pc.d);
+
 	// Decode DMAM mode register
-	// TMP94C241 DMAM format:
-	// Bits 7-6: Transfer mode (unused in cycle-steal implementation)
-	// Bits 5-4: Source addressing (00=fixed, 01=increment, 10=decrement)
-	// Bits 3-2: Dest addressing (00=fixed, 01=increment, 10=decrement)
-	// Bits 1-0: Data size (00=byte, 01=word, 10=long)
+	// TMP94C241 DMAM format (same as TMP95C061):
+	// Bits 4-0 encode transfer mode:
+	//   Bits 1-0: Transfer size (00=byte, 01=word, 10=long)
+	//   Bits 3-2: Direction mode:
+	//     00 = dest increment, src fixed (I/O -> memory)
+	//     01 = dest decrement, src fixed
+	//     10 = dest fixed, src increment (memory -> I/O)
+	//     11 = dest fixed, src decrement
+	//   Bit 4: Counter mode / both fixed
 	uint8_t dmam = m_dmam[channel].b.l;
 
-	// Data size (bits 1-0)
-	int data_size;
-	switch (dmam & 0x03)
+	// Use switch-based decoding matching TMP95C061 proven implementation
+	switch (dmam & 0x1f)
 	{
-		case 0x00: data_size = 1; break;  // byte
-		case 0x01: data_size = 2; break;  // word
-		case 0x02: data_size = 4; break;  // long
-		default:   data_size = 1; break;  // reserved -> byte
+	case 0x00:
+		WRMEM(m_dmad[channel].d, RDMEM(m_dmas[channel].d));
+		m_dmad[channel].d += 1;
+		m_cycles += 8;
+		break;
+	case 0x01:
+		WRMEMW(m_dmad[channel].d, RDMEMW(m_dmas[channel].d));
+		m_dmad[channel].d += 2;
+		m_cycles += 8;
+		break;
+	case 0x02:
+		WRMEML(m_dmad[channel].d, RDMEML(m_dmas[channel].d));
+		m_dmad[channel].d += 4;
+		m_cycles += 12;
+		break;
+	case 0x04:
+		WRMEM(m_dmad[channel].d, RDMEM(m_dmas[channel].d));
+		m_dmad[channel].d -= 1;
+		m_cycles += 8;
+		break;
+	case 0x05:
+		WRMEMW(m_dmad[channel].d, RDMEMW(m_dmas[channel].d));
+		m_dmad[channel].d -= 2;
+		m_cycles += 8;
+		break;
+	case 0x06:
+		WRMEML(m_dmad[channel].d, RDMEML(m_dmas[channel].d));
+		m_dmad[channel].d -= 4;
+		m_cycles += 12;
+		break;
+	case 0x08:
+		WRMEM(m_dmad[channel].d, RDMEM(m_dmas[channel].d));
+		m_dmas[channel].d += 1;
+		m_cycles += 8;
+		break;
+	case 0x09:
+		WRMEMW(m_dmad[channel].d, RDMEMW(m_dmas[channel].d));
+		m_dmas[channel].d += 2;
+		m_cycles += 8;
+		break;
+	case 0x0a:
+		WRMEML(m_dmad[channel].d, RDMEML(m_dmas[channel].d));
+		m_dmas[channel].d += 4;
+		m_cycles += 12;
+		break;
+	case 0x0c:
+		WRMEM(m_dmad[channel].d, RDMEM(m_dmas[channel].d));
+		m_dmas[channel].d -= 1;
+		m_cycles += 8;
+		break;
+	case 0x0d:
+		WRMEMW(m_dmad[channel].d, RDMEMW(m_dmas[channel].d));
+		m_dmas[channel].d -= 2;
+		m_cycles += 8;
+		break;
+	case 0x0e:
+		WRMEML(m_dmad[channel].d, RDMEML(m_dmas[channel].d));
+		m_dmas[channel].d -= 4;
+		m_cycles += 12;
+		break;
+	case 0x10:
+		WRMEM(m_dmad[channel].d, RDMEM(m_dmas[channel].d));
+		m_cycles += 8;
+		break;
+	case 0x11:
+		WRMEMW(m_dmad[channel].d, RDMEMW(m_dmas[channel].d));
+		m_cycles += 8;
+		break;
+	case 0x12:
+		WRMEML(m_dmad[channel].d, RDMEML(m_dmas[channel].d));
+		m_cycles += 12;
+		break;
+	case 0x14:
+		m_dmas[channel].d += 1;
+		m_cycles += 5;
+		break;
+	default:
+		logerror("HDMA ch%d: unknown DMAM mode 0x%02X\n", channel, dmam);
+		m_cycles += 8;
+		break;
 	}
-
-	// Destination addressing (bits 3-2)
-	int dst_dir;
-	switch ((dmam >> 2) & 0x03)
-	{
-		case 0x01: dst_dir = 1; break;   // increment
-		case 0x02: dst_dir = -1; break;  // decrement
-		default:   dst_dir = 0; break;   // fixed
-	}
-
-	// Source addressing (bits 5-4)
-	int src_dir;
-	switch ((dmam >> 4) & 0x03)
-	{
-		case 0x01: src_dir = 1; break;   // increment
-		case 0x02: src_dir = -1; break;  // decrement
-		default:   src_dir = 0; break;   // fixed
-	}
-
-	// Perform the DMA transfer
-	uint32_t src = m_dmas[channel].d;
-	uint32_t dst = m_dmad[channel].d;
-
-	switch (data_size)
-	{
-		case 1:
-			WRMEM(dst, RDMEM(src));
-			m_cycles += 8;
-			break;
-		case 2:
-			WRMEMW(dst, RDMEMW(src));
-			m_cycles += 8;
-			break;
-		case 4:
-			WRMEML(dst, RDMEML(src));
-			m_cycles += 12;
-			break;
-	}
-
-	// Update source and destination addresses
-	m_dmas[channel].d += src_dir * data_size;
-	m_dmad[channel].d += dst_dir * data_size;
 
 	// Decrement transfer count
 	m_dmac[channel].w.l -= 1;
@@ -1044,7 +1084,7 @@ int tmp94c241_device::tlcs900_process_hdma(int channel)
 	if (m_dmac[channel].w.l == 0)
 	{
 		logerror("HDMA ch%d complete: src=%06X dst=%06X (vec=%02X)\n",
-			channel, src, dst, start_vector);
+			channel, m_dmas[channel].d, m_dmad[channel].d, start_vector);
 
 		// Clear DMA vector to disable channel
 		m_dma_vector[channel] = 0;
