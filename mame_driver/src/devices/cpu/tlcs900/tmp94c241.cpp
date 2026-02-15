@@ -335,15 +335,14 @@ void tmp94c241_device::dmav_w(offs_t offset, uint8_t data)
 void tmp94c241_device::dmar_w(uint8_t data)
 {
 	// DMAR register (0x109) - DMA software request trigger
-	// Writing bit N triggers a burst DMA transfer on channel N.
-	// Unlike HDMA (interrupt-triggered, one unit per trigger), software DMA
-	// transfers the entire block (all DMAC units) immediately without checking
-	// interrupt flags. Used by KN5000 for inter-CPU communication.
+	// Writing bit N triggers ONE DMA transfer on channel N (same as HDMA).
+	// The KN5000 firmware writes DMAR once per INT0 to transfer a single
+	// byte from the inter-CPU latch, relying on the DMA count to track
+	// how many bytes remain in the current transfer block.
 	for (int channel = 0; channel < 4; channel++)
 	{
 		if (data & (1 << channel))
 		{
-			// Software-trigger burst DMA: transfer all DMAC units at once
 			tlcs900_process_software_dma(channel);
 		}
 	}
@@ -1089,94 +1088,94 @@ int tmp94c241_device::tlcs900_process_hdma(int channel)
 
 //-------------------------------------------------
 //  tlcs900_process_software_dma - process a
-//  software-triggered DMA burst transfer.
-//  Unlike HDMA (one unit per interrupt trigger),
-//  software DMA transfers all remaining units
-//  in a single burst, without checking interrupt
-//  flags. Fires INTTC on completion.
+//  software-triggered DMA transfer (one unit).
+//  Each DMAR write transfers ONE unit, same as
+//  HDMA. The firmware writes DMAR once per INT0
+//  to receive one byte from the inter-CPU latch.
+//  Fires INTTC when the count reaches zero.
 //-------------------------------------------------
 
 void tmp94c241_device::tlcs900_process_software_dma(int channel)
 {
-	uint16_t count = m_dmac[channel].w.l;
-	if (count == 0)
+	if (m_dmac[channel].w.l == 0)
 		return;  // No transfer to do
 
 	uint8_t dmam = m_dmam[channel].b.l;
 
-	while (m_dmac[channel].w.l > 0)
+	switch (dmam & 0x1f)
 	{
-		switch (dmam & 0x1f)
+	case 0x00:
+		WRMEM(m_dmad[channel].d, RDMEM(m_dmas[channel].d));
+		m_dmad[channel].d += 1;
+		m_cycles += 8;
+		break;
+	case 0x01:
+		WRMEMW(m_dmad[channel].d, RDMEMW(m_dmas[channel].d));
+		m_dmad[channel].d += 2;
+		m_cycles += 8;
+		break;
+	case 0x02:
+		WRMEML(m_dmad[channel].d, RDMEML(m_dmas[channel].d));
+		m_dmad[channel].d += 4;
+		m_cycles += 12;
+		break;
+	case 0x04:
+		WRMEM(m_dmad[channel].d, RDMEM(m_dmas[channel].d));
+		m_dmad[channel].d -= 1;
+		m_cycles += 8;
+		break;
+	case 0x08:
+		WRMEM(m_dmad[channel].d, RDMEM(m_dmas[channel].d));
+		m_dmas[channel].d += 1;
+		m_cycles += 8;
+		break;
+	case 0x09:
+		WRMEMW(m_dmad[channel].d, RDMEMW(m_dmas[channel].d));
+		m_dmas[channel].d += 2;
+		m_cycles += 8;
+		break;
+	case 0x0a:
+		WRMEML(m_dmad[channel].d, RDMEML(m_dmas[channel].d));
+		m_dmas[channel].d += 4;
+		m_cycles += 12;
+		break;
+	case 0x0c:
+		WRMEM(m_dmad[channel].d, RDMEM(m_dmas[channel].d));
+		m_dmas[channel].d -= 1;
+		m_cycles += 8;
+		break;
+	case 0x10:
+		WRMEM(m_dmad[channel].d, RDMEM(m_dmas[channel].d));
+		m_cycles += 8;
+		break;
+	case 0x14:
+		m_dmas[channel].d += 1;
+		m_cycles += 5;
+		break;
+	default:
+		logerror("Software DMA ch%d: unknown DMAM mode 0x%02X\n", channel, dmam);
+		m_cycles += 8;
+		break;
+	}
+
+	m_dmac[channel].w.l -= 1;
+
+	// Check for transfer completion
+	if (m_dmac[channel].w.l == 0)
+	{
+		logerror("Software DMA ch%d complete: src=%06X dst=%06X\n",
+			channel, m_dmas[channel].d, m_dmad[channel].d);
+
+		// Set transfer completion interrupt flag (INTTC0-3)
+		switch (channel)
 		{
-		case 0x00:
-			WRMEM(m_dmad[channel].d, RDMEM(m_dmas[channel].d));
-			m_dmad[channel].d += 1;
-			m_cycles += 8;
-			break;
-		case 0x01:
-			WRMEMW(m_dmad[channel].d, RDMEMW(m_dmas[channel].d));
-			m_dmad[channel].d += 2;
-			m_cycles += 8;
-			break;
-		case 0x02:
-			WRMEML(m_dmad[channel].d, RDMEML(m_dmas[channel].d));
-			m_dmad[channel].d += 4;
-			m_cycles += 12;
-			break;
-		case 0x04:
-			WRMEM(m_dmad[channel].d, RDMEM(m_dmas[channel].d));
-			m_dmad[channel].d -= 1;
-			m_cycles += 8;
-			break;
-		case 0x08:
-			WRMEM(m_dmad[channel].d, RDMEM(m_dmas[channel].d));
-			m_dmas[channel].d += 1;
-			m_cycles += 8;
-			break;
-		case 0x09:
-			WRMEMW(m_dmad[channel].d, RDMEMW(m_dmas[channel].d));
-			m_dmas[channel].d += 2;
-			m_cycles += 8;
-			break;
-		case 0x0a:
-			WRMEML(m_dmad[channel].d, RDMEML(m_dmas[channel].d));
-			m_dmas[channel].d += 4;
-			m_cycles += 12;
-			break;
-		case 0x0c:
-			WRMEM(m_dmad[channel].d, RDMEM(m_dmas[channel].d));
-			m_dmas[channel].d -= 1;
-			m_cycles += 8;
-			break;
-		case 0x10:
-			WRMEM(m_dmad[channel].d, RDMEM(m_dmas[channel].d));
-			m_cycles += 8;
-			break;
-		case 0x14:
-			m_dmas[channel].d += 1;
-			m_cycles += 5;
-			break;
-		default:
-			logerror("Software DMA ch%d: unknown DMAM mode 0x%02X\n", channel, dmam);
-			m_cycles += 8;
-			break;
+			case 0: m_int_reg[INTETC01] |= 0x08; break;
+			case 1: m_int_reg[INTETC01] |= 0x80; break;
+			case 2: m_int_reg[INTETC23] |= 0x08; break;
+			case 3: m_int_reg[INTETC23] |= 0x80; break;
 		}
-
-		m_dmac[channel].w.l -= 1;
+		m_check_irqs = 1;
 	}
-
-	logerror("Software DMA ch%d complete: src=%06X dst=%06X\n",
-		channel, m_dmas[channel].d, m_dmad[channel].d);
-
-	// Set transfer completion interrupt flag (INTTC0-3)
-	switch (channel)
-	{
-		case 0: m_int_reg[INTETC01] |= 0x08; break;
-		case 1: m_int_reg[INTETC01] |= 0x80; break;
-		case 2: m_int_reg[INTETC23] |= 0x08; break;
-		case 3: m_int_reg[INTETC23] |= 0x80; break;
-	}
-	m_check_irqs = 1;
 }
 
 
