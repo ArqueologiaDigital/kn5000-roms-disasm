@@ -105,6 +105,7 @@ private:
 	uint8_t m_self_clock_bytes_sent;  // Bytes sent in current INTA cycle (pause after 2)
 	uint8_t m_scan_retry_count;        // Button scan retries since last INTA deassertion
 	uint8_t m_last_button_state[22];  // 11 segments * 2 panels
+	uint8_t m_pending_button_state[22];  // Per-segment confirmation buffer
 	attotime m_debounce_until;         // Suppress change detection until this time
 
 	// Callbacks
