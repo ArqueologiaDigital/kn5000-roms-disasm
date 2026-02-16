@@ -65,7 +65,13 @@ The ASL assembler path is configured in the Makefile at `ASL_PATH`.
 
 ## Project Policies
 
-### Clean Working Directory (STRICT POLICY)
+### Policy Storage (STRICT POLICY)
+
+**When the user defines or updates any policy, it MUST be saved in CLAUDE.md.** Saving to MEMORY.md alone is not sufficient. CLAUDE.md is the canonical, version-controlled source of truth for all project policies.
+
+### Frequent Commits & Clean Working Directory (STRICT POLICY)
+
+**Commit immediately after completing each logical change.** Do not continue to the next task or respond to the user with uncommitted work.
 
 **Keep the working directory as clean as possible at all times.**
 
@@ -77,6 +83,8 @@ After any work session, `git status` should show a clean working tree. This ensu
 - No accidental loss of work
 - Clear visibility of actual changes
 - Consistent state across sessions
+
+**This applies to ALL repos:** MAME (`/mnt/shared/mame/`), roms-disasm, kn5000-docs.
 
 **When creating new files:**
 - Commit valuable files immediately
