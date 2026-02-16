@@ -39623,7 +39623,7 @@ LABEL_035A79:
 	LDA XSP, XSP + 00ah
 	RET
 
-LABEL_035A7E:
+DSP_RingBuf_ReadAndCompare:
 	DEC 8, XSP
 	PUSH XIZ
 	LD (XSP + 004h), XBC
@@ -39722,7 +39722,7 @@ LABEL_035B1B:
 	LDA XWA, 4370h
 	LD XBC, XWA
 	LD XWA, (XSP + 004h)
-	CALR LABEL_035A7E
+	CALR DSP_RingBuf_ReadAndCompare
 	LD A, (4369h)
 	LD QIZH, A
 	CP QIZH, 030h
@@ -39949,7 +39949,7 @@ LABEL_035D78:
 	LDA XWA, 4370h
 	LD XBC, XWA
 	LD XWA, (XSP + 004h)
-	CALR LABEL_035A7E
+	CALR DSP_RingBuf_ReadAndCompare
 	LD A, (4369h)
 	LD QIZH, A
 	CP QIZH, 0
@@ -40117,14 +40117,14 @@ LABEL_035F66:
 	JR UGT, LABEL_035FC3
 	LD XWA, (XSP + 004h)
 	LD XBC, (XSP + 00ah)
-	CALR LABEL_035A7E	; Read 56 bytes from ring buffer into 4370h, compare with slot buffer
+	CALR DSP_RingBuf_ReadAndCompare	; Read 56 bytes from ring buffer into 4370h, compare with slot buffer
 	LD A, QIZH
 	SUB A, 00ah		; A = EFF slot index again
 	LD IXL, A
 	EXTZ IX
 	LDA XWA, 4370h		; XWA = received EFF parameter data (28 words)
 	LD XBC, XWA
-	LD E, L			; E = number of changed parameters (from LABEL_035A7E return)
+	LD E, L			; E = number of changed parameters (from DSP_RingBuf_ReadAndCompare return)
 	EXTZ DE
 	LD WA, IX		; WA = EFF slot index
 	CALL DSP_ApplyConfig	; Apply DSP configuration (→ LABEL_038E31 → LABEL_036E3D → DSP_State_Dispatcher)
@@ -40149,7 +40149,7 @@ LABEL_035FD3:
 	LD XBC, 0
 	LD C, A
 	LD XWA, (XSP + 004h)
-	CALR LABEL_035A7E
+	CALR DSP_RingBuf_ReadAndCompare
 	CP (436Ah), 07fh
 	JR Z, LABEL_036001
 	LD A, QIZH
@@ -40170,7 +40170,7 @@ LABEL_036009:
 	LD XBC, 0
 	LD C, A
 	LD XWA, (XSP + 004h)
-	CALR LABEL_035A7E
+	CALR DSP_RingBuf_ReadAndCompare
 	LD XWA, (XSP + 004h)
 	CALR DSP_RingBuf_Skip
 	JR T, LABEL_036033
