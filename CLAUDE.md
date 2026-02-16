@@ -503,6 +503,15 @@ This is a strict policy to ensure that analysis work directly improves the codeb
 
 **Rationale:** The project's goal is not just emulation but also documentation. Every conversation about the code should leave the disassembly more readable than before. Address-based labels represent lost knowledge — if we understand what something does, that understanding must be captured in the source.
 
+### Sed-Based Assembly Symbol Renaming (STRICT POLICY)
+
+**When renaming symbols in assembly source files, ALWAYS write a sed script first and then run it.** Never use interactive editing tools (Edit tool) for batch symbol renames, as large files can hang the system.
+
+1. **Procedure:** Write a `scripts/rename_symbols.sed` file with all `s/OLD_NAME/NEW_NAME/g` rules, then run: `sed -i -f scripts/rename_symbols.sed <assembly_file>`
+2. **Scope:** Apply the sed script to all files that reference the symbols (assembly, symbol reference files, etc.)
+3. **Verification:** After running, follow Assembly Edit Verification policy (build + compare_roms.py)
+4. **Cleanup:** The sed script may be deleted after successful commit, or kept for reference
+
 ### Inter-ROM Cross-References (STRICT POLICY)
 
 **When code references an address outside its own ROM's memory range, the target ROM's assembly file must be inspected for cross-reference labels.**
