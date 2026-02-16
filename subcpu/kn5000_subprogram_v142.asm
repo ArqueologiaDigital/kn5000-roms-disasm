@@ -42680,6 +42680,13 @@ LABEL_036E12:
 	db 066h, 006h, 0DBh, 089h, 0E9h, 012h, 0E9h, 080h
 	db 0E8h, 08Bh, 00Eh
 
+; =====================================================
+; DSP_State_Apply_Orchestrator
+; Orchestrates the full DSP state application sequence.
+; Called from LABEL_038E6E during DSP_Reset and runtime
+; DSP reconfiguration (command 0x2D path).
+; Calls LABEL_037D6E (master DSP state dispatcher).
+; =====================================================
 LABEL_036E3D:
 	PUSH XIZ
 	LD XIZ, XWA
@@ -42689,7 +42696,7 @@ LABEL_036E3D:
 	LD XWA, XIZ
 	CALR LABEL_036D94
 	LD XWA, XIZ
-	CALR LABEL_037D6E
+	CALR LABEL_037D6E		; -> Master DSP state dispatcher
 	LD XWA, XIZ
 	CALR LABEL_036A70
 	LD HL, (45C8h)
@@ -43592,6 +43599,8 @@ LABEL_03774E:
 	POP XIZ
 	RET
 
+; EFF mute loop: iterates EFF 0-4, prints "EFF %d mute."
+; Called from LABEL_037D6E (master DSP state dispatcher)
 LABEL_037760:
 	PUSH IZ
 	LD DE, 0
@@ -43652,6 +43661,9 @@ LABEL_0377D6:
 	POP IZ
 	RET
 
+; DSP reset loop: iterates DSP 0,1, prints "DSP %d reset."
+; Toggles DSP1/DSP2 reset lines via LABEL_037E62
+; Called from LABEL_037D6E when (XIZ+004h) == 1
 LABEL_0377D8:
 	PUSH IZ
 	LD IZ, 0
@@ -43669,6 +43681,9 @@ LABEL_0377EB:
 	POP IZ
 	RET
 
+; DSP mute loop: iterates DSP 0,1, prints "DSP %d mute."
+; Checks mute flag at (493Ah + IZ*2), calls LABEL_037EE9
+; Called from LABEL_037D6E
 LABEL_0377ED:
 	PUSH IZ
 	LD IZ, 0
@@ -43695,6 +43710,9 @@ LABEL_037812:
 	POP IZ
 	RET
 
+; DSP antimute loop: iterates DSP 0,1, prints "DSP %d antimute."
+; Checks flag at (493Ah + IZ*2), calls LABEL_037F1C
+; Called from LABEL_037D6E
 LABEL_037814:
 	PUSH IZ
 	LD IZ, 0
@@ -43721,10 +43739,13 @@ LABEL_037839:
 	POP IZ
 	RET
 
+; Argo change check: if flag (493Eh) is set, calls LABEL_03800D
+; which prints "argo change %d" and reconfigures DSP routing
+; Called from LABEL_037D6E
 LABEL_03783B:
 	CPW (493Eh), 0001h
 	RET NZ
-	CALL LABEL_03800D
+	CALL LABEL_03800D		; -> "argo change %d"
 	RET
 
 LABEL_037848:
@@ -43736,6 +43757,9 @@ LABEL_03784E:
 	LD HL, WA
 	RET
 
+; EFF parameter iterator: iterates through EFF parameters
+; Calls LABEL_038200 ("EFF %d para%d edit %d") for each dirty param
+; Called from LABEL_037C25 (volume path) and LABEL_03798B (change path)
 LABEL_037851:
 	DEC 6, XSP
 	PUSH XIZ
@@ -43884,6 +43908,12 @@ LABEL_03798B:
 	CALR LABEL_037851
 	RET
 
+; EFF change routine: handles disconnect, config change, and data change
+; for a single EFF channel. Calls:
+;   LABEL_037F4F ("EFF %d disconnect.")
+;   LABEL_0380EC ("EFF %d change %d")
+;   LABEL_0381BC ("EFF %d data change %d")
+; Called from LABEL_037A67 (EFF header+change loop)
 LABEL_0379A7:
 	DEC 4, XSP
 	PUSH IZ
@@ -43973,6 +44003,11 @@ LABEL_037A5B:
 	INC 4, XSP
 	RET
 
+; EFF header + change + data change loop: iterates EFF 4..0
+; For each EFF, calls:
+;   LABEL_0380AB ("EFF %d headder")
+;   LABEL_0379A7 (EFF change routine -> disconnect/change/data)
+; Called from LABEL_037D6E
 LABEL_037A67:
 	DEC 4, XSP
 	PUSH XIZ
@@ -44034,6 +44069,9 @@ LABEL_037AE2:
 	INC 4, XSP
 	RET
 
+; EFF link loop: iterates EFF 4..0
+; Calls LABEL_037FAE ("EFF %d link.") for channels with link flag set
+; Called from LABEL_037D6E
 LABEL_037AE6:
 	DEC 4, XSP
 	PUSH IZ
@@ -44074,6 +44112,9 @@ LABEL_037B39:
 	INC 4, XSP
 	RET
 
+; Secondary EFF link path: iterates QIZ=4..0
+; Calls LABEL_037F4F ("EFF %d disconnect.") for channels
+; Called from LABEL_037D6E
 LABEL_037B3D:
 	DEC 4, XSP
 	PUSH XIZ
@@ -44174,6 +44215,9 @@ LABEL_037C21:
 	INC 4, XSP
 	RET
 
+; EFF volume loop: iterates EFF 0-4
+; Calls LABEL_03826E ("EFF %d vol %d") and LABEL_037851 (param edit)
+; Called from LABEL_037D6E
 LABEL_037C25:
 	DEC 4, XSP
 	PUSH IZ
@@ -44297,6 +44341,9 @@ LABEL_037D3C:
 	INC 4, XSP
 	RET
 
+; EFF disconnect loop: iterates EFF 4..0 (skips EFF 2,3)
+; Calls LABEL_037F4F ("EFF %d disconnect.") for EFF 0,1,4
+; Called from LABEL_037D6E
 LABEL_037D40:
 	DEC 4, XSP
 	PUSH IZ
@@ -44325,22 +44372,40 @@ LABEL_037D6A:
 	INC 4, XSP
 	RET
 
+; =====================================================
+; Master DSP state dispatcher
+; Sequentially calls all DSP state sub-routines:
+;   1. LABEL_0377D8 - DSP reset loop (DSP 0,1)
+;   2. LABEL_037760 - EFF mute loop (EFF 0-4)
+;   3. LABEL_0377ED - DSP mute loop (DSP 0,1)
+;   4. LABEL_03783B - "argo change" check
+;   5. LABEL_0380AB - EFF header (for EFF 0)
+;   6. LABEL_037D40 - EFF disconnect loop
+;   7. LABEL_037814 - DSP antimute loop
+;   8. LABEL_037A67 - EFF header + change + data loop
+;   9. LABEL_037AE6 - EFF link loop
+;  10. LABEL_037C25 - EFF volume loop
+;  11. LABEL_037B3D - Secondary EFF link path
+; All 13 debug format strings are triggered through this dispatcher.
+; Entry: XWA = pointer to DSP config structure
+; Called from LABEL_036E3D (DSP state apply orchestrator)
+; =====================================================
 LABEL_037D6E:
 	PUSH XIZ
 	LD XIZ, XWA
 	CPW (XIZ + 004h), 0001h
 	JR NZ, LABEL_037D7D
-	CALR LABEL_0377D8
+	CALR LABEL_0377D8		; 1. DSP reset loop
 	JR T, LABEL_037D82
 
 LABEL_037D7D:
 	LD XWA, XIZ
-	CALR LABEL_037760
+	CALR LABEL_037760		; 2. EFF mute loop
 
 LABEL_037D82:
-	CALR LABEL_0377ED
+	CALR LABEL_0377ED		; 3. DSP mute loop
 	LD XWA, XIZ
-	CALR LABEL_03783B
+	CALR LABEL_03783B		; 4. Argo change check
 	CPW (XIZ + 004h), 0001h
 	JR Z, LABEL_037D98
 	CPW (XIZ + 002h), 0001h
@@ -44348,20 +44413,20 @@ LABEL_037D82:
 
 LABEL_037D98:
 	LD WA, 0
-	CALL LABEL_0380AB
+	CALL LABEL_0380AB		; 5. EFF 0 header
 	LD XWA, XIZ
-	CALR LABEL_037D40
+	CALR LABEL_037D40		; 6. EFF disconnect loop
 
 LABEL_037DA3:
-	CALR LABEL_037814
+	CALR LABEL_037814		; 7. DSP antimute loop
 	LD XWA, XIZ
-	CALR LABEL_037A67
+	CALR LABEL_037A67		; 8. EFF header+change+data loop
 	LD XWA, XIZ
-	CALR LABEL_037AE6
+	CALR LABEL_037AE6		; 9. EFF link loop
 	LD XWA, XIZ
-	CALR LABEL_037C25
+	CALR LABEL_037C25		; 10. EFF volume loop
 	LD XWA, XIZ
-	CALR LABEL_037B3D
+	CALR LABEL_037B3D		; 11. Secondary EFF link path
 	LD DE, 4
 	CP DE, 0ffffh
 	JR LE, LABEL_037E2E
@@ -44432,10 +44497,13 @@ LABEL_037E3E:
 	db 0ECh, 046h, 000h, 000h, 031h, 091h, 000h, 095h
 	db 011h, 0DBh, 0A8h, 00Eh
 
+; Debug: prints "DSP %d reset." and toggles DSP1/DSP2 reset lines
+; Entry: WA = DSP index (0 or 1)
+; Called from LABEL_0377D8 (DSP reset loop)
 LABEL_037E62:
 	PUSH IZ
 	LD IZ, WA
-	LDA XWA, 0122CCh
+	LDA XWA, 0122CCh		; "DSP "
 	CALL Debug_Print_String
 	LD WA, IZ
 	CALL Debug_Print_Byte
@@ -44449,10 +44517,13 @@ LABEL_037E62:
 	POP IZ
 	RET
 
+; Debug: prints "DSP %d anti reset." and deasserts DSP2 reset
+; Entry: WA = DSP index
+; Called from LABEL_03800D (argo change) when (XWA+004h) == 1
 LABEL_037E93:
 	PUSH IZ
 	LD IZ, WA
-	LDA XWA, 0122DAh
+	LDA XWA, 0122DAh		; "DSP "
 	CALL Debug_Print_String
 	LD WA, IZ
 	CALL Debug_Print_Byte
@@ -44462,10 +44533,14 @@ LABEL_037E93:
 	POP IZ
 	RET
 
+; Debug: prints "EFF %d mute." and writes mute config to DSP
+; Entry: WA = EFF index (0-4)
+; Uses mute table at 0x1F3BC, writes via LABEL_03C161
+; Called from LABEL_037760 (EFF mute loop)
 LABEL_037EB4:
 	PUSH IZ
 	LD IZ, WA
-	LDA XWA, 0122EDh
+	LDA XWA, 0122EDh		; "EFF "
 	CALL Debug_Print_String
 	LD WA, IZ
 	INC 1, WA
@@ -44483,10 +44558,14 @@ LABEL_037EB4:
 	POP IZ
 	RET
 
+; Debug: prints "DSP %d mute." and writes mute config to DSP
+; Entry: WA = DSP index (0 or 1)
+; Uses mute table at 0x1F3D0, writes via LABEL_03C181
+; Called from LABEL_0377ED (DSP mute loop)
 LABEL_037EE9:
 	PUSH IZ
 	LD IZ, WA
-	LDA XWA, 0122FAh
+	LDA XWA, 0122FAh		; "DSP "
 	CALL Debug_Print_String
 	LD WA, IZ
 	CALL Debug_Print_Byte
@@ -44503,10 +44582,14 @@ LABEL_037EE9:
 	POP IZ
 	RET
 
+; Debug: prints "DSP %d antimute." and writes unmute config to DSP
+; Entry: WA = DSP index (0 or 1)
+; Uses unmute table at 0x1F3E0, writes via LABEL_03C181
+; Called from LABEL_037814 (DSP antimute loop)
 LABEL_037F1C:
 	PUSH IZ
 	LD IZ, WA
-	LDA XWA, 012307h
+	LDA XWA, 012307h		; "DSP "
 	CALL Debug_Print_String
 	LD WA, IZ
 	CALL Debug_Print_Byte
@@ -44523,12 +44606,16 @@ LABEL_037F1C:
 	POP IZ
 	RET
 
+; Debug: prints "EFF %d disconnect." and writes disconnect config to DSP
+; Entry: WA = EFF index (0-4), BC = sub-index
+; Reads EFF type from 0x1ED6D+EFF, uses disconnect table at 0x1F3F0
+; Called from LABEL_037D40, LABEL_0379A7, LABEL_037B3D
 LABEL_037F4F:
 	DEC 2, XSP
 	PUSH IZ
 	LD (XSP + 002h), BC
 	LD IZ, WA
-	LDA XWA, 012318h
+	LDA XWA, 012318h		; "EFF "
 	CALL Debug_Print_String
 	LD WA, IZ
 	INC 1, WA
@@ -44562,12 +44649,16 @@ LABEL_037F4F:
 	INC 2, XSP
 	RET
 
+; Debug: prints "EFF %d link." and writes link config to DSP
+; Entry: WA = EFF index (0-4), BC = sub-index
+; Reads EFF type from 0x1ED6D+EFF, uses link table at 0x1F404
+; Called from LABEL_037AE6 (EFF link loop)
 LABEL_037FAE:
 	DEC 2, XSP
 	PUSH IZ
 	LD (XSP + 002h), BC
 	LD IZ, WA
-	LDA XWA, 01232Bh
+	LDA XWA, 01232Bh		; "EFF "
 	CALL Debug_Print_String
 	LD WA, IZ
 	INC 1, WA
@@ -44601,11 +44692,15 @@ LABEL_037FAE:
 	INC 2, XSP
 	RET
 
+; Debug: prints "argo change %d" and performs full DSP reconfiguration
+; Conditionally calls LABEL_037E93 ("DSP anti reset"), writes
+; multiple DSP configs via LABEL_03C181 using tables at 0x1E63C+
+; Called from LABEL_03783B when argo change flag (493Eh) is set
 LABEL_03800D:
 	DEC 4, XSP
 	PUSH IZ
 	LD (XSP + 002h), XWA
-	LDA XWA, 012338h
+	LDA XWA, 012338h		; "argo change "
 	CALL Debug_Print_String
 	LD XWA, (XSP + 002h)
 	LD WA, (XWA + 006h)
@@ -44657,10 +44752,14 @@ LABEL_038044:
 	INC 4, XSP
 	RET
 
+; Debug: prints "EFF %d headder" and writes header config to DSP
+; Entry: WA = EFF index (0-4)
+; Reads EFF type from 0x1ED6D+EFF, uses header table at 0x1E496
+; Called from LABEL_037D6E (for EFF 0) and LABEL_037A67 (for EFF 4..0)
 LABEL_0380AB:
 	PUSH IZ
 	LD IZ, WA
-	LDA XWA, 012346h
+	LDA XWA, 012346h		; "EFF "
 	CALL Debug_Print_String
 	LD WA, IZ
 	INC 1, WA
@@ -44685,12 +44784,16 @@ LABEL_0380EA:
 	POP IZ
 	RET
 
+; Debug: prints "EFF %d change %d" and dispatches DSP config writes
+; Entry: WA = EFF index, BC = sub-change index
+; Uses tables at 0x1ED7C and 0x1EF0C; special handling for changes 9,10
+; Called from LABEL_0379A7 (EFF change routine)
 LABEL_0380EC:
 	DEC 2, XSP
 	PUSH IZ
 	LD (XSP + 002h), BC
 	LD IZ, WA
-	LDA XWA, 012355h
+	LDA XWA, 012355h		; "EFF "
 	CALL Debug_Print_String
 	LD WA, IZ
 	INC 1, WA
@@ -44766,12 +44869,16 @@ LABEL_0381B8:
 	INC 2, XSP
 	RET
 
+; Debug: prints "EFF %d data change %d" and writes data to DSP
+; Entry: WA = EFF index, BC = data change index
+; Uses table at 0x1EF0C, writes via LABEL_03C161
+; Called from LABEL_0379A7 (EFF change routine, data change path)
 LABEL_0381BC:
 	DEC 2, XSP
 	PUSH IZ
 	LD IZ, BC
 	LD (XSP + 002h), WA
-	LDA XWA, 012364h
+	LDA XWA, 012364h		; "EFF "
 	CALL Debug_Print_String
 	LD WA, (XSP + 002h)
 	INC 1, WA
@@ -44792,13 +44899,17 @@ LABEL_0381BC:
 	INC 2, XSP
 	RET
 
+; Debug: prints "EFF %d para%d edit %d" and writes parameter to DSP
+; Entry: WA = EFF index, DE = param index, BC = param sub-index
+; Writes via LABEL_03C190 (DSP parameter write)
+; Called from LABEL_037851 (EFF parameter iterator)
 LABEL_038200:
 	DEC 4, XSP
 	PUSH IZ
 	LD (XSP + 002h), DE
 	LD (XSP + 004h), BC
 	LD IZ, WA
-	LDA XWA, 012378h
+	LDA XWA, 012378h		; "EFF "
 	CALL Debug_Print_String
 	LD WA, IZ
 	INC 1, WA
@@ -44833,6 +44944,11 @@ LABEL_038200:
 	INC 4, XSP
 	RETD 0004h
 
+; Debug: prints "EFF %d vol %d" and writes volume to DSP
+; Entry: WA = EFF index, DE = volume value, BC = param sub-index
+; Skips entirely if volume == 0x63 (99 decimal, meaning "no change")
+; Writes via LABEL_03C190 (DSP parameter write)
+; Called from LABEL_037C25 (EFF volume loop)
 LABEL_03826E:
 	DEC 6, XSP
 	PUSH IZ
@@ -44841,7 +44957,7 @@ LABEL_03826E:
 	LD IZ, WA
 	CPW (XSP + 004h), 0063h
 	JRL Z, LABEL_03835F
-	LDA XWA, 01238Bh
+	LDA XWA, 01238Bh		; "EFF "
 	CALL Debug_Print_String
 	LD WA, IZ
 	INC 1, WA
