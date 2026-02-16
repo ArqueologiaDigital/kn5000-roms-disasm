@@ -39468,7 +39468,7 @@ LABEL_03590A:
 	CP IX, DE
 	JR NC, LABEL_035933
 
-LABEL_035910:
+DSP_RingBuf_Enqueue:
 	LDA XWA, 3B60h
 	LD BC, (XWA)
 	INCW 1, (XWA)
@@ -39481,13 +39481,13 @@ LABEL_035910:
 	INCW 1, (3B64h)
 	INC 1, IX
 	CP IX, DE
-	JR C, LABEL_035910
+	JR C, DSP_RingBuf_Enqueue
 
 LABEL_035933:
 	LD HL, 0
 	RET
 
-LABEL_035936:
+Extract_14Bit_PayloadSize:
 	LD C, (XWA + 006h)
 	EXTZ BC
 	AND BC, 007fh
@@ -39507,7 +39507,7 @@ LABEL_035950:
 	db 021h, 0C9h, 030h, 007h, 020h, 000h, 0E8h, 012h
 	db 0E8h, 08Bh, 0E9h, 0E3h, 00Eh
 
-LABEL_03597D:
+Extract_14Bit_VoiceParam:
 	LD C, (XWA + 003h)
 	EXTZ BC
 	AND BC, 007fh
@@ -39519,7 +39519,7 @@ LABEL_03597D:
 	OR HL, BC
 	RET
 
-LABEL_035997:
+DSP_Cmd_DequeueHeader:
 	PUSH XIZ
 	LD XIZ, XWA
 	LD XWA, XIZ
@@ -39546,7 +39546,7 @@ LABEL_035997:
 	POP XIZ
 	RET
 
-LABEL_0359DB:
+DSP_Cmd_LoadEffectPreset:
 	LDA XSP, XSP - 10
 	PUSH XIZ
 	LD (XSP + 00ah), XWA
@@ -39559,7 +39559,7 @@ LABEL_0359DB:
 	ADD WA, BC
 	CP WA, 0122h
 	JR NZ, LABEL_035A70
-	CALL LABEL_0361D4
+	CALL DSP_GetConfigBuffer
 	LD (XSP + 006h), XHL
 	LDW (XSP + 004h), 0008h
 	LD IZ, 0
@@ -39584,7 +39584,7 @@ LABEL_035A24:
 
 LABEL_035A31:
 	LD WA, QIZ
-	CALL LABEL_0361D9
+	CALL EFF_GetSlotBuffer
 	LD (XSP + 006h), XHL
 	LD IZ, 0
 	CP IZ, (XSP + 004h)
@@ -39710,7 +39710,7 @@ LABEL_035AE5:
 
 LABEL_035B1B:
 	LD XWA, (XSP + 004h)
-	CALR LABEL_035997
+	CALR DSP_Cmd_DequeueHeader
 	LD WA, (XSP + 00ch)
 	LD (4368h), A
 	CP A, 02dh
@@ -39912,10 +39912,10 @@ LABEL_035D1E:
 	LD IZ, WA
 	AND IZ, 000fh
 	LDA XWA, 4368h
-	CALR LABEL_03597D
+	CALR Extract_14Bit_VoiceParam
 	LD QIZ, HL
 	LDA XWA, 4368h
-	CALR LABEL_035936
+	CALR Extract_14Bit_PayloadSize
 	LDA XWA, 4370h
 	PUSH XWA
 	LD WA, IZ
@@ -40088,12 +40088,12 @@ LABEL_035F32:
 	CP QIZH, 009h		; 0x09 = special config (full reconfig)
 	JR NZ, LABEL_035F66
 	LD XWA, (XSP + 004h)
-	CALR LABEL_0359DB
+	CALR DSP_Cmd_LoadEffectPreset
 	LD WA, HL
 	EXTS XWA
 	CP XWA, 0ffffffffh
 	JRL Z, LABEL_036033
-	CALL LABEL_0361C5
+	CALL DSP_ReconfigAndStatus
 	JRL T, LABEL_036033
 
 LABEL_035F66:
@@ -40104,7 +40104,7 @@ LABEL_035F66:
 	LD A, QIZH
 	SUB A, 00ah		; A = EFF slot index (0-4)
 	EXTZ WA
-	CALL LABEL_0361D9	; Get EFF slot buffer ptr (4496h + slot*0x38)
+	CALL EFF_GetSlotBuffer	; Get EFF slot buffer ptr (4496h + slot*0x38)
 	LD (XSP + 00ah), XHL
 	LD XWA, (XSP + 00ah)
 	CP XWA, 0ffffffffh
@@ -40127,7 +40127,7 @@ LABEL_035F66:
 	LD E, L			; E = number of changed parameters (from LABEL_035A7E return)
 	EXTZ DE
 	LD WA, IX		; WA = EFF slot index
-	CALL LABEL_03616A	; Apply DSP configuration (→ LABEL_038E31 → LABEL_036E3D → LABEL_037D6E)
+	CALL DSP_ApplyConfig	; Apply DSP configuration (→ LABEL_038E31 → LABEL_036E3D → DSP_State_Dispatcher)
 	JR T, LABEL_036033
 
 LABEL_035FC3:
@@ -40198,7 +40198,7 @@ LABEL_036044:
 	RET
 
 LABEL_036049:
-	CALL LABEL_037E30
+	CALL DSP_State_LookupAlgoIndex
 	LD WA, HL
 	CP WA, 2
 	JR NZ, LABEL_036064
@@ -40309,7 +40309,7 @@ LABEL_036152:
 	CALL MIDI_Dispatch
 	RET
 
-LABEL_03616A:
+DSP_ApplyConfig:
 	CP E, 0ffh
 	JR NZ, LABEL_036177
 	LDW (448Eh), 0001h
@@ -40351,17 +40351,17 @@ LABEL_0361BA:
 	CALL LABEL_038E31
 	RET
 
-LABEL_0361C5:
+DSP_ReconfigAndStatus:
 	LDA XWA, 448Eh
 	CALL LABEL_038E31
 	LD WA, (4496h)
 	JRL T, LABEL_03608C
 
-LABEL_0361D4:
+DSP_GetConfigBuffer:
 	LDA XHL, 448Eh
 	RET
 
-LABEL_0361D9:
+EFF_GetSlotBuffer:
 	LD BC, WA
 	CP BC, 4
 	JR Z, LABEL_0361EF
@@ -40422,7 +40422,7 @@ LABEL_036205:
 	db 000h, 000h, 0D8h, 012h, 0F1h, 0ACh, 045h, 050h
 	db 0F1h, 08Eh, 044h, 030h, 01Bh, 031h, 08Eh, 003h
 
-LABEL_036305:
+DSP_WaitForDelay:
 	PUSH XIZ
 	EXTZ XWA
 	INC 1, XWA
@@ -41311,7 +41311,7 @@ LABEL_036661:
 	LDA XWA, 012215h
 	JP Debug_Print_String
 
-LABEL_03666B:
+DSP2_Send_Command:
 	DEC 6, XSP
 	PUSH XIZ
 	LD (XSP + 006h), BC
@@ -41800,7 +41800,7 @@ DSP_Send_Data_Cleanup:
 	INC 8, XSP
 	RET
 
-LABEL_0368BA:
+DSP2_Send_Data:
 	DEC 6, XSP
 	PUSH XIZ
 	LD (XSP + 006h), BC
@@ -42199,7 +42199,7 @@ LABEL_036A12:
 	INC 6, XSP
 	RET
 
-LABEL_036A2E:
+DSP_DispatchCommand:
 	PUSH IZ
 	LD IZ, 0
 	LD DE, BC
@@ -42213,7 +42213,7 @@ LABEL_036A2E:
 
 LABEL_036A42:
 	EXTZ WA
-	CALR LABEL_03666B
+	CALR DSP2_Send_Command
 	JR T, LABEL_036A4B
 
 LABEL_036A49:
@@ -42224,7 +42224,7 @@ LABEL_036A4B:
 	POP IZ
 	RET
 
-LABEL_036A4F:
+DSP_DispatchData:
 	PUSH IZ
 	LD IZ, 0
 	LD DE, BC
@@ -42238,7 +42238,7 @@ LABEL_036A4F:
 
 LABEL_036A63:
 	EXTZ WA
-	CALR LABEL_0368BA
+	CALR DSP2_Send_Data
 	JR T, LABEL_036A6C
 
 LABEL_036A6A:
@@ -42615,7 +42615,7 @@ LABEL_036D94:
 	LD XWA, XIZ
 	CALR LABEL_036D80
 	LD XWA, XIZ
-	CALR LABEL_03774E
+	CALR EFF_StateLoad_Prepare
 	POP XIZ
 	RET
 
@@ -42687,7 +42687,7 @@ LABEL_036E12:
 ; Orchestrates the full DSP state application sequence.
 ; Called from LABEL_038E6E during DSP_Reset and runtime
 ; DSP reconfiguration (command 0x2D path).
-; Calls LABEL_037D6E (master DSP state dispatcher).
+; Calls DSP_State_Dispatcher (master DSP state dispatcher).
 ; =====================================================
 LABEL_036E3D:
 	PUSH XIZ
@@ -42698,7 +42698,7 @@ LABEL_036E3D:
 	LD XWA, XIZ
 	CALR LABEL_036D94
 	LD XWA, XIZ
-	CALR LABEL_037D6E		; -> Master DSP state dispatcher
+	CALR DSP_State_Dispatcher		; -> Master DSP state dispatcher
 	LD XWA, XIZ
 	CALR LABEL_036A70
 	LD HL, (45C8h)
@@ -43590,7 +43590,7 @@ LABEL_037746:
 	JRL C, LABEL_037020
 	RET
 
-LABEL_03774E:
+EFF_StateLoad_Prepare:
 	PUSH XIZ
 	LD XIZ, XWA
 	LD XWA, XIZ
@@ -43602,8 +43602,8 @@ LABEL_03774E:
 	RET
 
 ; EFF mute loop: iterates EFF 0-4, prints "EFF %d mute."
-; Called from LABEL_037D6E (master DSP state dispatcher)
-LABEL_037760:
+; Called from DSP_State_Dispatcher (master DSP state dispatcher)
+EFF_MuteLoop:
 	PUSH IZ
 	LD DE, 0
 	LD IZ, 0
@@ -43645,7 +43645,7 @@ LABEL_037769:
 
 LABEL_0377BD:
 	LD WA, IZ
-	CALL LABEL_037EB4
+	CALL EFF_Mute_WithDebug
 	LD DE, 1
 
 LABEL_0377C5:
@@ -43657,16 +43657,16 @@ LABEL_0377CB:
 	CP DE, 1
 	JR NZ, LABEL_0377D6
 	LD WA, 0014h
-	CALL LABEL_038392
+	CALL DSP_ScheduleDelay
 
 LABEL_0377D6:
 	POP IZ
 	RET
 
 ; DSP reset loop: iterates DSP 0,1, prints "DSP %d reset."
-; Toggles DSP1/DSP2 reset lines via LABEL_037E62
-; Called from LABEL_037D6E when (XIZ+004h) == 1
-LABEL_0377D8:
+; Toggles DSP1/DSP2 reset lines via DSP_Reset_WithDebug
+; Called from DSP_State_Dispatcher when (XIZ+004h) == 1
+DSP_ResetLoop:
 	PUSH IZ
 	LD IZ, 0
 	CP IZ, 2
@@ -43674,7 +43674,7 @@ LABEL_0377D8:
 
 LABEL_0377DF:
 	LD WA, IZ
-	CALL LABEL_037E62
+	CALL DSP_Reset_WithDebug
 	INC 1, IZ
 	CP IZ, 2
 	JR C, LABEL_0377DF
@@ -43684,9 +43684,9 @@ LABEL_0377EB:
 	RET
 
 ; DSP mute loop: iterates DSP 0,1, prints "DSP %d mute."
-; Checks mute flag at (493Ah + IZ*2), calls LABEL_037EE9
-; Called from LABEL_037D6E
-LABEL_0377ED:
+; Checks mute flag at (493Ah + IZ*2), calls DSP_Mute_WithDebug
+; Called from DSP_State_Dispatcher
+DSP_MuteLoop:
 	PUSH IZ
 	LD IZ, 0
 	CP IZ, 2
@@ -43701,7 +43701,7 @@ LABEL_0377F4:
 	CPW (XWA), 0001h
 	JR NZ, LABEL_03780C
 	LD WA, IZ
-	CALL LABEL_037EE9
+	CALL DSP_Mute_WithDebug
 
 LABEL_03780C:
 	INC 1, IZ
@@ -43713,9 +43713,9 @@ LABEL_037812:
 	RET
 
 ; DSP antimute loop: iterates DSP 0,1, prints "DSP %d antimute."
-; Checks flag at (493Ah + IZ*2), calls LABEL_037F1C
-; Called from LABEL_037D6E
-LABEL_037814:
+; Checks flag at (493Ah + IZ*2), calls DSP_Unmute_WithDebug
+; Called from DSP_State_Dispatcher
+DSP_UnmuteLoop:
 	PUSH IZ
 	LD IZ, 0
 	CP IZ, 2
@@ -43730,7 +43730,7 @@ LABEL_03781B:
 	CPW (XWA), 0001h
 	JR NZ, LABEL_037833
 	LD WA, IZ
-	CALL LABEL_037F1C
+	CALL DSP_Unmute_WithDebug
 
 LABEL_037833:
 	INC 1, IZ
@@ -43741,16 +43741,16 @@ LABEL_037839:
 	POP IZ
 	RET
 
-; Argo change check: if flag (493Eh) is set, calls LABEL_03800D
+; Argo change check: if flag (493Eh) is set, calls DSP_AlgorithmChange
 ; which prints "argo change %d" and reconfigures DSP routing
-; Called from LABEL_037D6E
-LABEL_03783B:
+; Called from DSP_State_Dispatcher
+DSP_AlgorithmChangeCheck:
 	CPW (493Eh), 0001h
 	RET NZ
-	CALL LABEL_03800D		; -> "argo change %d"
+	CALL DSP_AlgorithmChange		; -> "argo change %d"
 	RET
 
-LABEL_037848:
+Unsigned_Max_Select:
 	CP BC, WA
 	JR ULE, LABEL_03784E
 	LD WA, BC
@@ -43760,9 +43760,9 @@ LABEL_03784E:
 	RET
 
 ; EFF parameter iterator: iterates through EFF parameters
-; Calls LABEL_038200 ("EFF %d para%d edit %d") for each dirty param
-; Called from LABEL_037C25 (volume path) and LABEL_03798B (change path)
-LABEL_037851:
+; Calls EFF_ParamEdit_WithDebug ("EFF %d para%d edit %d") for each dirty param
+; Called from EFF_VolumeLoop (volume path) and EFF_VolumeChange_Check (change path)
+EFF_ParamIterator_Process:
 	DEC 6, XSP
 	PUSH XIZ
 	LD (XSP + 004h), XBC
@@ -43833,7 +43833,7 @@ LABEL_0378AC:
 	LD WA, (XSP + 00ch)
 	LD BC, (XBC)
 	LD DE, IZ
-	CALL LABEL_038200
+	CALL EFF_ParamEdit_WithDebug
 
 LABEL_037903:
 	INC 1, IZ
@@ -43886,7 +43886,7 @@ LABEL_03793A:
 	PUSH XWA
 	LD WA, (XSP + 00ch)
 	LD BC, (XBC)
-	CALL LABEL_038200
+	CALL EFF_ParamEdit_WithDebug
 
 LABEL_037980:
 	INC 1, XIZ
@@ -43898,7 +43898,7 @@ LABEL_037987:
 	INC 6, XSP
 	RET
 
-LABEL_03798B:
+EFF_VolumeChange_Check:
 	LD DE, WA
 	MUL_DE 0032h
 	ADD DE, 0010h
@@ -43907,16 +43907,16 @@ LABEL_03798B:
 	ADD XDE, XHL
 	CPW (XDE), 0001h
 	RET NZ
-	CALR LABEL_037851
+	CALR EFF_ParamIterator_Process
 	RET
 
 ; EFF change routine: handles disconnect, config change, and data change
 ; for a single EFF channel. Calls:
-;   LABEL_037F4F ("EFF %d disconnect.")
-;   LABEL_0380EC ("EFF %d change %d")
-;   LABEL_0381BC ("EFF %d data change %d")
-; Called from LABEL_037A67 (EFF header+change loop)
-LABEL_0379A7:
+;   EFF_Disconnect ("EFF %d disconnect.")
+;   EFF_Change_WithDebug ("EFF %d change %d")
+;   EFF_DataChange_WithDebug ("EFF %d data change %d")
+; Called from EFF_HeaderChangeDataLoop (EFF header+change loop)
+EFF_Change_Handler:
 	DEC 4, XSP
 	PUSH IZ
 	LD (XSP + 002h), XBC
@@ -43937,14 +43937,14 @@ LABEL_0379A7:
 	LD WA, IZ
 	LD XBC, (XSP + 002h)
 	LD BC, (XBC + 006h)
-	CALL LABEL_037F4F
+	CALL EFF_Disconnect
 	JR T, LABEL_0379EE
 
 LABEL_0379E2:
 	LD WA, IZ
 	LD XBC, (XSP + 002h)
 	LD BC, (XBC + 006h)
-	CALL LABEL_037F4F
+	CALL EFF_Disconnect
 
 LABEL_0379EE:
 	LD WA, IZ
@@ -43964,7 +43964,7 @@ LABEL_0379EE:
 	ADD XBC, (XSP + 002h)
 	LD WA, IZ
 	LD BC, (XBC)
-	CALL LABEL_0380EC
+	CALL EFF_Change_WithDebug
 	JR T, LABEL_037A5B
 
 LABEL_037A19:
@@ -43981,7 +43981,7 @@ LABEL_037A19:
 	ADD XBC, (XSP + 002h)
 	LD WA, IZ
 	LD BC, (XBC)
-	CALL LABEL_0380EC
+	CALL EFF_Change_WithDebug
 	JR T, LABEL_037A5B
 
 LABEL_037A40:
@@ -43995,22 +43995,22 @@ LABEL_037A40:
 	ADD XBC, (XSP + 002h)
 	LD WA, IZ
 	LD BC, (XBC)
-	CALL LABEL_0381BC
+	CALL EFF_DataChange_WithDebug
 
 LABEL_037A5B:
 	LD WA, IZ
 	LD XBC, (XSP + 002h)
-	CALR LABEL_03798B
+	CALR EFF_VolumeChange_Check
 	POP IZ
 	INC 4, XSP
 	RET
 
 ; EFF header + change + data change loop: iterates EFF 4..0
 ; For each EFF, calls:
-;   LABEL_0380AB ("EFF %d headder")
-;   LABEL_0379A7 (EFF change routine -> disconnect/change/data)
-; Called from LABEL_037D6E
-LABEL_037A67:
+;   EFF_WriteHeader ("EFF %d headder")
+;   EFF_Change_Handler (EFF change routine -> disconnect/change/data)
+; Called from DSP_State_Dispatcher
+EFF_HeaderChangeDataLoop:
 	DEC 4, XSP
 	PUSH XIZ
 	LD (XSP + 004h), XWA
@@ -44029,7 +44029,7 @@ LABEL_037A78:
 
 LABEL_037A8C:
 	LD WA, IZ
-	CALL LABEL_0380AB
+	CALL EFF_WriteHeader
 
 LABEL_037A92:
 	LD WA, IZ
@@ -44049,13 +44049,13 @@ LABEL_037AAF:
 	LD C, A
 	EXTZ BC
 	LD WA, QIZ
-	CALR LABEL_037848
+	CALR Unsigned_Max_Select
 	LD QIZ, HL
 
 LABEL_037AC6:
 	LD WA, IZ
 	LD XBC, (XSP + 004h)
-	CALR LABEL_0379A7
+	CALR EFF_Change_Handler
 	DEC 1, IZ
 	CP IZ, 0ffffh
 	JR GT, LABEL_037A78
@@ -44064,7 +44064,7 @@ LABEL_037AD6:
 	CP QIZ, 0
 	JR Z, LABEL_037AE2
 	LD WA, QIZ
-	CALL LABEL_038392
+	CALL DSP_ScheduleDelay
 
 LABEL_037AE2:
 	POP XIZ
@@ -44072,9 +44072,9 @@ LABEL_037AE2:
 	RET
 
 ; EFF link loop: iterates EFF 4..0
-; Calls LABEL_037FAE ("EFF %d link.") for channels with link flag set
-; Called from LABEL_037D6E
-LABEL_037AE6:
+; Calls EFF_Link ("EFF %d link.") for channels with link flag set
+; Called from DSP_State_Dispatcher
+EFF_LinkLoop:
 	DEC 4, XSP
 	PUSH IZ
 	LD (XSP + 002h), XWA
@@ -44102,7 +44102,7 @@ LABEL_037AF4:
 	LD WA, IZ
 	LD XBC, (XSP + 002h)
 	LD BC, (XBC + 006h)
-	CALL LABEL_037FAE
+	CALL EFF_Link
 
 LABEL_037B31:
 	DEC 1, IZ
@@ -44115,9 +44115,9 @@ LABEL_037B39:
 	RET
 
 ; Secondary EFF link path: iterates QIZ=4..0
-; Calls LABEL_037F4F ("EFF %d disconnect.") for channels
-; Called from LABEL_037D6E
-LABEL_037B3D:
+; Calls EFF_Disconnect ("EFF %d disconnect.") for channels
+; Called from DSP_State_Dispatcher
+EFF_SecondaryLinkPath:
 	DEC 4, XSP
 	PUSH XIZ
 	LD (XSP + 004h), XWA
@@ -44145,7 +44145,7 @@ LABEL_037B4F:
 	JR NZ, LABEL_037B8C
 	LD WA, IZ
 	LD BC, 0014h
-	CALR LABEL_037848
+	CALR Unsigned_Max_Select
 	LD IZ, HL
 
 LABEL_037B8C:
@@ -44157,7 +44157,7 @@ LABEL_037B96:
 	CP IZ, 0
 	JR Z, LABEL_037BA0
 	LD WA, IZ
-	CALL LABEL_038392
+	CALL DSP_ScheduleDelay
 
 LABEL_037BA0:
 	LD IZ, 0
@@ -44189,7 +44189,7 @@ LABEL_037BAC:
 	LD WA, QIZ
 	LD XBC, (XSP + 004h)
 	LD BC, (XBC + 006h)
-	CALL LABEL_037F4F
+	CALL EFF_Disconnect
 
 LABEL_037BF6:
 	LD DE, IZ
@@ -44198,7 +44198,7 @@ LABEL_037BF6:
 	LD C, A
 	EXTZ BC
 	LD WA, DE
-	CALR LABEL_037848
+	CALR Unsigned_Max_Select
 	LD IZ, HL
 
 LABEL_037C0D:
@@ -44210,7 +44210,7 @@ LABEL_037C17:
 	CP IZ, 0
 	JR Z, LABEL_037C21
 	LD WA, IZ
-	CALL LABEL_038392
+	CALL DSP_ScheduleDelay
 
 LABEL_037C21:
 	POP XIZ
@@ -44218,9 +44218,9 @@ LABEL_037C21:
 	RET
 
 ; EFF volume loop: iterates EFF 0-4
-; Calls LABEL_03826E ("EFF %d vol %d") and LABEL_037851 (param edit)
-; Called from LABEL_037D6E
-LABEL_037C25:
+; Calls EFF_VolumeUpdate_WithDebug ("EFF %d vol %d") and EFF_ParamIterator_Process (param edit)
+; Called from DSP_State_Dispatcher
+EFF_VolumeLoop:
 	DEC 4, XSP
 	PUSH IZ
 	LD (XSP + 002h), XWA
@@ -44331,7 +44331,7 @@ LABEL_037D16:
 	PUSH XWA
 	LD WA, IZ
 	LD BC, (XBC)
-	CALL LABEL_03826E
+	CALL EFF_VolumeUpdate_WithDebug
 
 LABEL_037D35:
 	INC 1, IZ
@@ -44344,9 +44344,9 @@ LABEL_037D3C:
 	RET
 
 ; EFF disconnect loop: iterates EFF 4..0 (skips EFF 2,3)
-; Calls LABEL_037F4F ("EFF %d disconnect.") for EFF 0,1,4
-; Called from LABEL_037D6E
-LABEL_037D40:
+; Calls EFF_Disconnect ("EFF %d disconnect.") for EFF 0,1,4
+; Called from DSP_State_Dispatcher
+EFF_DisconnectLoop:
 	DEC 4, XSP
 	PUSH IZ
 	LD (XSP + 002h), XWA
@@ -44362,7 +44362,7 @@ LABEL_037D4E:
 	LD WA, IZ
 	LD XBC, (XSP + 002h)
 	LD BC, (XBC + 006h)
-	CALL LABEL_037F4F
+	CALL EFF_Disconnect
 
 LABEL_037D62:
 	DEC 1, IZ
@@ -44377,37 +44377,37 @@ LABEL_037D6A:
 ; =====================================================
 ; Master DSP state dispatcher
 ; Sequentially calls all DSP state sub-routines:
-;   1. LABEL_0377D8 - DSP reset loop (DSP 0,1)
-;   2. LABEL_037760 - EFF mute loop (EFF 0-4)
-;   3. LABEL_0377ED - DSP mute loop (DSP 0,1)
-;   4. LABEL_03783B - "argo change" check
-;   5. LABEL_0380AB - EFF header (for EFF 0)
-;   6. LABEL_037D40 - EFF disconnect loop
-;   7. LABEL_037814 - DSP antimute loop
-;   8. LABEL_037A67 - EFF header + change + data loop
-;   9. LABEL_037AE6 - EFF link loop
-;  10. LABEL_037C25 - EFF volume loop
-;  11. LABEL_037B3D - Secondary EFF link path
+;   1. DSP_ResetLoop - DSP reset loop (DSP 0,1)
+;   2. EFF_MuteLoop - EFF mute loop (EFF 0-4)
+;   3. DSP_MuteLoop - DSP mute loop (DSP 0,1)
+;   4. DSP_AlgorithmChangeCheck - "argo change" check
+;   5. EFF_WriteHeader - EFF header (for EFF 0)
+;   6. EFF_DisconnectLoop - EFF disconnect loop
+;   7. DSP_UnmuteLoop - DSP antimute loop
+;   8. EFF_HeaderChangeDataLoop - EFF header + change + data loop
+;   9. EFF_LinkLoop - EFF link loop
+;  10. EFF_VolumeLoop - EFF volume loop
+;  11. EFF_SecondaryLinkPath - Secondary EFF link path
 ; All 13 debug format strings are triggered through this dispatcher.
 ; Entry: XWA = pointer to DSP config structure
 ; Called from LABEL_036E3D (DSP state apply orchestrator)
 ; =====================================================
-LABEL_037D6E:
+DSP_State_Dispatcher:
 	PUSH XIZ
 	LD XIZ, XWA
 	CPW (XIZ + 004h), 0001h
 	JR NZ, LABEL_037D7D
-	CALR LABEL_0377D8		; 1. DSP reset loop
+	CALR DSP_ResetLoop		; 1. DSP reset loop
 	JR T, LABEL_037D82
 
 LABEL_037D7D:
 	LD XWA, XIZ
-	CALR LABEL_037760		; 2. EFF mute loop
+	CALR EFF_MuteLoop		; 2. EFF mute loop
 
 LABEL_037D82:
-	CALR LABEL_0377ED		; 3. DSP mute loop
+	CALR DSP_MuteLoop		; 3. DSP mute loop
 	LD XWA, XIZ
-	CALR LABEL_03783B		; 4. Argo change check
+	CALR DSP_AlgorithmChangeCheck		; 4. Argo change check
 	CPW (XIZ + 004h), 0001h
 	JR Z, LABEL_037D98
 	CPW (XIZ + 002h), 0001h
@@ -44415,20 +44415,20 @@ LABEL_037D82:
 
 LABEL_037D98:
 	LD WA, 0
-	CALL LABEL_0380AB		; 5. EFF 0 header
+	CALL EFF_WriteHeader		; 5. EFF 0 header
 	LD XWA, XIZ
-	CALR LABEL_037D40		; 6. EFF disconnect loop
+	CALR EFF_DisconnectLoop		; 6. EFF disconnect loop
 
 LABEL_037DA3:
-	CALR LABEL_037814		; 7. DSP antimute loop
+	CALR DSP_UnmuteLoop		; 7. DSP antimute loop
 	LD XWA, XIZ
-	CALR LABEL_037A67		; 8. EFF header+change+data loop
+	CALR EFF_HeaderChangeDataLoop		; 8. EFF header+change+data loop
 	LD XWA, XIZ
-	CALR LABEL_037AE6		; 9. EFF link loop
+	CALR EFF_LinkLoop		; 9. EFF link loop
 	LD XWA, XIZ
-	CALR LABEL_037C25		; 10. EFF volume loop
+	CALR EFF_VolumeLoop		; 10. EFF volume loop
 	LD XWA, XIZ
-	CALR LABEL_037B3D		; 11. Secondary EFF link path
+	CALR EFF_SecondaryLinkPath		; 11. Secondary EFF link path
 	LD DE, 4
 	CP DE, 0ffffh
 	JR LE, LABEL_037E2E
@@ -44484,7 +44484,7 @@ LABEL_037E2E:
 	POP XIZ
 	RET
 
-LABEL_037E30:
+DSP_State_LookupAlgoIndex:
 	EXTZ XWA
 	LD XBC, 00012226h
 	ADD XBC, XWA
@@ -44492,7 +44492,7 @@ LABEL_037E30:
 	EXTZ HL
 	RET
 
-LABEL_037E3E:
+DSP_State_Dispatcher_Data:
 	db 045h, 0ECh, 046h, 000h, 000h, 044h, 00Eh, 048h
 	db 000h, 000h, 031h, 091h, 000h, 095h, 011h, 0DBh
 	db 0A8h, 00Eh, 045h, 00Eh, 048h, 000h, 000h, 044h
@@ -44501,8 +44501,8 @@ LABEL_037E3E:
 
 ; Debug: prints "DSP %d reset." and toggles DSP1/DSP2 reset lines
 ; Entry: WA = DSP index (0 or 1)
-; Called from LABEL_0377D8 (DSP reset loop)
-LABEL_037E62:
+; Called from DSP_ResetLoop (DSP reset loop)
+DSP_Reset_WithDebug:
 	PUSH IZ
 	LD IZ, WA
 	LDA XWA, 0122CCh		; "DSP "
@@ -44521,8 +44521,8 @@ LABEL_037E62:
 
 ; Debug: prints "DSP %d anti reset." and deasserts DSP2 reset
 ; Entry: WA = DSP index
-; Called from LABEL_03800D (argo change) when (XWA+004h) == 1
-LABEL_037E93:
+; Called from DSP_AlgorithmChange (argo change) when (XWA+004h) == 1
+DSP_AntiReset_WithDebug:
 	PUSH IZ
 	LD IZ, WA
 	LDA XWA, 0122DAh		; "DSP "
@@ -44537,9 +44537,9 @@ LABEL_037E93:
 
 ; Debug: prints "EFF %d mute." and writes mute config to DSP
 ; Entry: WA = EFF index (0-4)
-; Uses mute table at 0x1F3BC, writes via LABEL_03C161
-; Called from LABEL_037760 (EFF mute loop)
-LABEL_037EB4:
+; Uses mute table at 0x1F3BC, writes via DSP_WriteEFFConfig
+; Called from EFF_MuteLoop (EFF mute loop)
+EFF_Mute_WithDebug:
 	PUSH IZ
 	LD IZ, WA
 	LDA XWA, 0122EDh		; "EFF "
@@ -44556,15 +44556,15 @@ LABEL_037EB4:
 	ADD XBC, XWA
 	LD WA, IZ
 	LD XBC, (XBC)
-	CALL LABEL_03C161
+	CALL DSP_WriteEFFConfig
 	POP IZ
 	RET
 
 ; Debug: prints "DSP %d mute." and writes mute config to DSP
 ; Entry: WA = DSP index (0 or 1)
-; Uses mute table at 0x1F3D0, writes via LABEL_03C181
-; Called from LABEL_0377ED (DSP mute loop)
-LABEL_037EE9:
+; Uses mute table at 0x1F3D0, writes via DSP_WriteGlobalConfig
+; Called from DSP_MuteLoop (DSP mute loop)
+DSP_Mute_WithDebug:
 	PUSH IZ
 	LD IZ, WA
 	LDA XWA, 0122FAh		; "DSP "
@@ -44580,15 +44580,15 @@ LABEL_037EE9:
 	ADD XBC, XWA
 	LD WA, IZ
 	LD XBC, (XBC)
-	CALL LABEL_03C181
+	CALL DSP_WriteGlobalConfig
 	POP IZ
 	RET
 
 ; Debug: prints "DSP %d antimute." and writes unmute config to DSP
 ; Entry: WA = DSP index (0 or 1)
-; Uses unmute table at 0x1F3E0, writes via LABEL_03C181
-; Called from LABEL_037814 (DSP antimute loop)
-LABEL_037F1C:
+; Uses unmute table at 0x1F3E0, writes via DSP_WriteGlobalConfig
+; Called from DSP_UnmuteLoop (DSP antimute loop)
+DSP_Unmute_WithDebug:
 	PUSH IZ
 	LD IZ, WA
 	LDA XWA, 012307h		; "DSP "
@@ -44604,15 +44604,15 @@ LABEL_037F1C:
 	ADD XBC, XWA
 	LD WA, IZ
 	LD XBC, (XBC)
-	CALL LABEL_03C181
+	CALL DSP_WriteGlobalConfig
 	POP IZ
 	RET
 
 ; Debug: prints "EFF %d disconnect." and writes disconnect config to DSP
 ; Entry: WA = EFF index (0-4), BC = sub-index
 ; Reads EFF type from 0x1ED6D+EFF, uses disconnect table at 0x1F3F0
-; Called from LABEL_037D40, LABEL_0379A7, LABEL_037B3D
-LABEL_037F4F:
+; Called from EFF_DisconnectLoop, EFF_Change_Handler, EFF_SecondaryLinkPath
+EFF_Disconnect:
 	DEC 2, XSP
 	PUSH IZ
 	LD (XSP + 002h), BC
@@ -44646,7 +44646,7 @@ LABEL_037F4F:
 	ADD XBC, XDE
 	LD WA, HL
 	LD XBC, (XBC)
-	CALL LABEL_03C181
+	CALL DSP_WriteGlobalConfig
 	POP IZ
 	INC 2, XSP
 	RET
@@ -44654,8 +44654,8 @@ LABEL_037F4F:
 ; Debug: prints "EFF %d link." and writes link config to DSP
 ; Entry: WA = EFF index (0-4), BC = sub-index
 ; Reads EFF type from 0x1ED6D+EFF, uses link table at 0x1F404
-; Called from LABEL_037AE6 (EFF link loop)
-LABEL_037FAE:
+; Called from EFF_LinkLoop (EFF link loop)
+EFF_Link:
 	DEC 2, XSP
 	PUSH IZ
 	LD (XSP + 002h), BC
@@ -44689,16 +44689,16 @@ LABEL_037FAE:
 	ADD XBC, XDE
 	LD WA, HL
 	LD XBC, (XBC)
-	CALL LABEL_03C181
+	CALL DSP_WriteGlobalConfig
 	POP IZ
 	INC 2, XSP
 	RET
 
 ; Debug: prints "argo change %d" and performs full DSP reconfiguration
-; Conditionally calls LABEL_037E93 ("DSP anti reset"), writes
-; multiple DSP configs via LABEL_03C181 using tables at 0x1E63C+
-; Called from LABEL_03783B when argo change flag (493Eh) is set
-LABEL_03800D:
+; Conditionally calls DSP_AntiReset_WithDebug ("DSP anti reset"), writes
+; multiple DSP configs via DSP_WriteGlobalConfig using tables at 0x1E63C+
+; Called from DSP_AlgorithmChangeCheck when argo change flag (493Eh) is set
+DSP_AlgorithmChange:
 	DEC 4, XSP
 	PUSH IZ
 	LD (XSP + 002h), XWA
@@ -44711,45 +44711,45 @@ LABEL_03800D:
 	LDA XWA, 01E63Ch
 	LD XBC, XWA
 	LD WA, IZ
-	CALL LABEL_03C181
+	CALL DSP_WriteGlobalConfig
 	LD XWA, (XSP + 002h)
 	CPW (XWA + 004h), 0001h
 	JR NZ, LABEL_038044
 	LD WA, IZ
-	CALR LABEL_037E93
+	CALR DSP_AntiReset_WithDebug
 
 LABEL_038044:
 	LDA XWA, 01E6BEh
 	LD XBC, XWA
 	LD WA, IZ
-	CALL LABEL_03C181
+	CALL DSP_WriteGlobalConfig
 	LD IZ, 1
 	LDA XWA, 01E996h
 	LD XBC, XWA
 	LD WA, IZ
-	CALL LABEL_03C181
+	CALL DSP_WriteGlobalConfig
 	LDA XWA, 01EA12h
 	LD XBC, XWA
 	LD WA, IZ
-	CALL LABEL_03C181
+	CALL DSP_WriteGlobalConfig
 	LD WA, 1
-	CALL LABEL_036305
+	CALL DSP_WaitForDelay
 	LDA XWA, 01E7C5h
 	LD XBC, XWA
 	LD WA, IZ
-	CALL LABEL_03C181
+	CALL DSP_WriteGlobalConfig
 	LDA XWA, 01E8A7h
 	LD XBC, XWA
 	LD WA, IZ
-	CALL LABEL_03C181
+	CALL DSP_WriteGlobalConfig
 	LDA XWA, 01E891h
 	LD XBC, XWA
 	LD WA, IZ
-	CALL LABEL_03C181
+	CALL DSP_WriteGlobalConfig
 	LDA XWA, 01E947h
 	LD XBC, XWA
 	LD WA, IZ
-	CALL LABEL_03C181
+	CALL DSP_WriteGlobalConfig
 	POP IZ
 	INC 4, XSP
 	RET
@@ -44757,8 +44757,8 @@ LABEL_038044:
 ; Debug: prints "EFF %d headder" and writes header config to DSP
 ; Entry: WA = EFF index (0-4)
 ; Reads EFF type from 0x1ED6D+EFF, uses header table at 0x1E496
-; Called from LABEL_037D6E (for EFF 0) and LABEL_037A67 (for EFF 4..0)
-LABEL_0380AB:
+; Called from DSP_State_Dispatcher (for EFF 0) and EFF_HeaderChangeDataLoop (for EFF 4..0)
+EFF_WriteHeader:
 	PUSH IZ
 	LD IZ, WA
 	LDA XWA, 012346h		; "EFF "
@@ -44780,7 +44780,7 @@ LABEL_0380AB:
 	LDA XWA, 01E496h
 	LD XBC, XWA
 	LD WA, DE
-	CALL LABEL_03C181
+	CALL DSP_WriteGlobalConfig
 
 LABEL_0380EA:
 	POP IZ
@@ -44789,8 +44789,8 @@ LABEL_0380EA:
 ; Debug: prints "EFF %d change %d" and dispatches DSP config writes
 ; Entry: WA = EFF index, BC = sub-change index
 ; Uses tables at 0x1ED7C and 0x1EF0C; special handling for changes 9,10
-; Called from LABEL_0379A7 (EFF change routine)
-LABEL_0380EC:
+; Called from EFF_Change_Handler (EFF change routine)
+EFF_Change_WithDebug:
 	DEC 2, XSP
 	PUSH IZ
 	LD (XSP + 002h), BC
@@ -44814,19 +44814,19 @@ LABEL_0380EC:
 	JR NZ, LABEL_03815A
 	LD WA, IZ
 	LDA XBC, 01DFA5h
-	CALL LABEL_03C161
+	CALL DSP_WriteEFFConfig
 	LD WA, IZ
 	LDA XBC, 01E0B9h
-	CALL LABEL_03C161
+	CALL DSP_WriteEFFConfig
 	JR T, LABEL_0381B8
 
 LABEL_038142:
 	LD WA, IZ
 	LDA XBC, 01E1DEh
-	CALL LABEL_03C161
+	CALL DSP_WriteEFFConfig
 	LD WA, IZ
 	LDA XBC, 01E342h
-	CALL LABEL_03C161
+	CALL DSP_WriteEFFConfig
 	JR T, LABEL_0381B8
 
 LABEL_03815A:
@@ -44837,7 +44837,7 @@ LABEL_03815A:
 	ADD XBC, XWA
 	LD WA, IZ
 	LD XBC, (XBC)
-	CALL LABEL_03C161
+	CALL DSP_WriteEFFConfig
 	LD WA, (XSP + 002h)
 	EXTZ XWA
 	SLL 2, XWA
@@ -44845,7 +44845,7 @@ LABEL_03815A:
 	ADD XBC, XWA
 	LD WA, IZ
 	LD XBC, (XBC)
-	CALL LABEL_03C161
+	CALL DSP_WriteEFFConfig
 	JR T, LABEL_0381B8
 
 LABEL_03818A:
@@ -44856,7 +44856,7 @@ LABEL_03818A:
 	ADD XBC, XWA
 	LD WA, IZ
 	LD XBC, (XBC)
-	CALL LABEL_03C161
+	CALL DSP_WriteEFFConfig
 	LD WA, (XSP + 002h)
 	EXTZ XWA
 	SLL 2, XWA
@@ -44864,7 +44864,7 @@ LABEL_03818A:
 	ADD XBC, XWA
 	LD WA, IZ
 	LD XBC, (XBC)
-	CALL LABEL_03C161
+	CALL DSP_WriteEFFConfig
 
 LABEL_0381B8:
 	POP IZ
@@ -44873,9 +44873,9 @@ LABEL_0381B8:
 
 ; Debug: prints "EFF %d data change %d" and writes data to DSP
 ; Entry: WA = EFF index, BC = data change index
-; Uses table at 0x1EF0C, writes via LABEL_03C161
-; Called from LABEL_0379A7 (EFF change routine, data change path)
-LABEL_0381BC:
+; Uses table at 0x1EF0C, writes via DSP_WriteEFFConfig
+; Called from EFF_Change_Handler (EFF change routine, data change path)
+EFF_DataChange_WithDebug:
 	DEC 2, XSP
 	PUSH IZ
 	LD IZ, BC
@@ -44896,16 +44896,16 @@ LABEL_0381BC:
 	ADD XBC, XWA
 	LD WA, (XSP + 002h)
 	LD XBC, (XBC)
-	CALL LABEL_03C161
+	CALL DSP_WriteEFFConfig
 	POP IZ
 	INC 2, XSP
 	RET
 
 ; Debug: prints "EFF %d para%d edit %d" and writes parameter to DSP
 ; Entry: WA = EFF index, DE = param index, BC = param sub-index
-; Writes via LABEL_03C190 (DSP parameter write)
-; Called from LABEL_037851 (EFF parameter iterator)
-LABEL_038200:
+; Writes via DSP_WriteParameter (DSP parameter write)
+; Called from EFF_ParamIterator_Process (EFF parameter iterator)
+EFF_ParamEdit_WithDebug:
 	DEC 4, XSP
 	PUSH IZ
 	LD (XSP + 002h), DE
@@ -44941,7 +44941,7 @@ LABEL_038200:
 	LD WA, IZ
 	LD BC, (XSP + 008h)
 	LD DE, (XSP + 006h)
-	CALL LABEL_03C190
+	CALL DSP_WriteParameter
 	POP IZ
 	INC 4, XSP
 	RETD 0004h
@@ -44949,9 +44949,9 @@ LABEL_038200:
 ; Debug: prints "EFF %d vol %d" and writes volume to DSP
 ; Entry: WA = EFF index, DE = volume value, BC = param sub-index
 ; Skips entirely if volume == 0x63 (99 decimal, meaning "no change")
-; Writes via LABEL_03C190 (DSP parameter write)
-; Called from LABEL_037C25 (EFF volume loop)
-LABEL_03826E:
+; Writes via DSP_WriteParameter (DSP parameter write)
+; Called from EFF_VolumeLoop (EFF volume loop)
+EFF_VolumeUpdate_WithDebug:
 	DEC 6, XSP
 	PUSH IZ
 	LD (XSP + 004h), DE
@@ -44996,7 +44996,7 @@ LABEL_03826E:
 	LD WA, IZ
 	LD BC, (XSP + 00ah)
 	LD DE, (XSP + 008h)
-	CALL LABEL_03C190
+	CALL DSP_WriteParameter
 	JR T, LABEL_03835F
 
 LABEL_0382EA:
@@ -45032,7 +45032,7 @@ LABEL_0382EA:
 	LD WA, IZ
 	LD BC, (XSP + 00ah)
 	LD DE, (XSP + 008h)
-	CALL LABEL_03C190
+	CALL DSP_WriteParameter
 	LD WA, (XSP + 004h)
 	EXTZ XWA
 	LD XBC, XWA
@@ -45097,8 +45097,8 @@ Debug_Print_Word:		; 038375h
 	POP IZ
 	RET
 
-LABEL_038392:
-	JP LABEL_036305
+DSP_ScheduleDelay:
+	JP DSP_WaitForDelay
 
 ; ============================================================================
 ; DSP CONTROL ROUTINES
@@ -45227,13 +45227,13 @@ LABEL_038405:
 	AND XWA, 000000ffh
 	EXTZ WA
 	LD BC, (XSP + 004h)
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD XWA, XIZ
 	SRA_8_XWA
 	AND XWA, 000000ffh
 	EXTZ WA
 	LD BC, (XSP + 004h)
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	POP XIZ
 	INC 2, XSP
 	RET
@@ -45246,14 +45246,14 @@ LABEL_038439:
 	LD IZ, WA
 	LD BC, IZ
 	LD WA, 0030h
-	CALL LABEL_036A2E
+	CALL DSP_DispatchCommand
 	LD BC, IZ
 	LD WA, 0
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD WA, (XSP + 006h)
 	EXTZ WA
 	LD BC, IZ
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD XWA, (XSP + 002h)
 	LD BC, IZ
 	CALR LABEL_038405
@@ -45272,10 +45272,10 @@ LABEL_03846C:
 	JRL Z, LABEL_038528
 	LD BC, IZ
 	LD WA, 0
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD BC, IZ
 	LD WA, 0
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD WA, (XSP + 00ch)
 	ADD WA, (XSP + 006h)
 	SRL 4, WA
@@ -45283,46 +45283,46 @@ LABEL_03846C:
 	ADD WA, 0010h
 	EXTZ WA
 	LD BC, IZ
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD WA, (XSP + 00ch)
 	ADD WA, (XSP + 006h)
 	SLL 4, WA
 	AND WA, 00f0h
 	EXTZ WA
 	LD BC, IZ
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD BC, IZ
 	LD WA, 0
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD BC, IZ
 	LD WA, 000ah
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD XWA, (XSP + 002h)
 	SRA 1, XWA
 	SRA_0_XWA
 	AND XWA, 0000007fh
 	EXTZ WA
 	LD BC, IZ
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD XWA, (XSP + 002h)
 	SRA 9, XWA
 	AND XWA, 000000ffh
 	EXTZ WA
 	LD BC, IZ
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD XWA, (XSP + 002h)
 	SRA 1, XWA
 	AND XWA, 000000ffh
 	EXTZ WA
 	LD BC, IZ
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD XWA, (XSP + 002h)
 	SLA 7, XWA
 	AND XWA, 00000080h
 	ADD XWA, 00000015h
 	EXTZ WA
 	LD BC, IZ
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	JR T, LABEL_038533
 
 LABEL_038528:
@@ -45347,10 +45347,10 @@ LABEL_038539:
 	JRL Z, LABEL_0385F5
 	LD BC, IZ
 	LD WA, 0
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD BC, IZ
 	LD WA, 0
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD WA, (XSP + 00ch)
 	ADD WA, (XSP + 006h)
 	SRL 4, WA
@@ -45358,46 +45358,46 @@ LABEL_038539:
 	ADD WA, 0010h
 	EXTZ WA
 	LD BC, IZ
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD WA, (XSP + 00ch)
 	ADD WA, (XSP + 006h)
 	SLL 4, WA
 	AND WA, 00f0h
 	EXTZ WA
 	LD BC, IZ
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD BC, IZ
 	LD WA, 0
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD BC, IZ
 	LD WA, 000ah
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD XWA, (XSP + 002h)
 	SRA 1, XWA
 	SRA_0_XWA
 	AND XWA, 0000007fh
 	EXTZ WA
 	LD BC, IZ
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD XWA, (XSP + 002h)
 	SRA 9, XWA
 	AND XWA, 000000ffh
 	EXTZ WA
 	LD BC, IZ
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD XWA, (XSP + 002h)
 	SRA 1, XWA
 	AND XWA, 000000ffh
 	EXTZ WA
 	LD BC, IZ
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD XWA, (XSP + 002h)
 	SLA 7, XWA
 	AND XWA, 00000080h
 	ADD XWA, 00000015h
 	EXTZ WA
 	LD BC, IZ
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	JR T, LABEL_038600
 
 LABEL_0385F5:
@@ -45418,33 +45418,33 @@ LABEL_038606:
 	LD XIZ, XWA
 	LD BC, (XSP + 004h)
 	LD WA, 000ah
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD XWA, XIZ
 	SRA 1, XWA
 	SRA_0_XWA
 	AND XWA, 0000007fh
 	EXTZ WA
 	LD BC, (XSP + 004h)
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD XWA, XIZ
 	SRA 9, XWA
 	AND XWA, 000000ffh
 	EXTZ WA
 	LD BC, (XSP + 004h)
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD XWA, XIZ
 	SRA 1, XWA
 	AND XWA, 000000ffh
 	EXTZ WA
 	LD BC, (XSP + 004h)
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD XWA, XIZ
 	SLA 7, XWA
 	AND XWA, 00000080h
 	ADD XWA, 00000015h
 	EXTZ WA
 	LD BC, (XSP + 004h)
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	POP XIZ
 	INC 2, XSP
 	RET
@@ -45536,15 +45536,15 @@ LABEL_03873B:
 	JR Z, LABEL_038764
 	LD BC, (XSP + 01ah)
 	LD WA, 1
-	CALL LABEL_036A2E
+	CALL DSP_DispatchCommand
 	LD IZ, HL
 	LD BC, (XSP + 01ah)
 	LD WA, 1
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD IZ, HL
 	LD BC, (XSP + 01ah)
 	LD WA, 0060h
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD IZ, HL
 
 LABEL_038764:
@@ -45583,7 +45583,7 @@ LABEL_038764:
 	LD IZ, HL
 	LD BC, (XSP + 01ah)
 	LD WA, 3
-	CALL LABEL_036A2E
+	CALL DSP_DispatchCommand
 	INCW 1, (XSP + 004h)
 	LD WA, (XSP + 002h)
 	SRL 2, WA
@@ -45610,17 +45610,17 @@ LABEL_0387E6:
 	JRL Z, LABEL_0388A2
 	LD BC, IZ
 	LD WA, 0008h
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD BC, IZ
 	LD WA, 1
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD WA, (XSP + 00ch)
 	ADD WA, (XSP + 006h)
 	SRL 4, WA
 	AND WA, 000fh
 	EXTZ WA
 	LD BC, IZ
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD WA, (XSP + 00ch)
 	ADD WA, (XSP + 006h)
 	SLL 4, WA
@@ -45628,39 +45628,39 @@ LABEL_0387E6:
 	INC 8, WA
 	EXTZ WA
 	LD BC, IZ
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD BC, IZ
 	LD WA, 0021h
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD BC, IZ
 	LD WA, 000ah
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD XWA, (XSP + 002h)
 	SRA 1, XWA
 	SRA_0_XWA
 	AND XWA, 0000007fh
 	EXTZ WA
 	LD BC, IZ
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD XWA, (XSP + 002h)
 	SRA 9, XWA
 	AND XWA, 000000ffh
 	EXTZ WA
 	LD BC, IZ
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD XWA, (XSP + 002h)
 	SRA 1, XWA
 	AND XWA, 000000ffh
 	EXTZ WA
 	LD BC, IZ
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD XWA, (XSP + 002h)
 	SLA 7, XWA
 	AND XWA, 00000080h
 	ADD XWA, 00000026h
 	EXTZ WA
 	LD BC, IZ
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	JR T, LABEL_0388AD
 
 LABEL_0388A2:
@@ -45681,33 +45681,33 @@ LABEL_0388B3:
 	LD XIZ, XWA
 	LD BC, (XSP + 004h)
 	LD WA, 000ah
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD XWA, XIZ
 	SRA 1, XWA
 	SRA_0_XWA
 	AND XWA, 0000007fh
 	EXTZ WA
 	LD BC, (XSP + 004h)
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD XWA, XIZ
 	SRA 9, XWA
 	AND XWA, 000000ffh
 	EXTZ WA
 	LD BC, (XSP + 004h)
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD XWA, XIZ
 	SRA 1, XWA
 	AND XWA, 000000ffh
 	EXTZ WA
 	LD BC, (XSP + 004h)
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD XWA, XIZ
 	SLA 7, XWA
 	AND XWA, 00000080h
 	ADD XWA, 00000026h
 	EXTZ WA
 	LD BC, (XSP + 004h)
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	POP XIZ
 	INC 2, XSP
 	RET
@@ -45720,17 +45720,17 @@ LABEL_038922:
 	LD (XSP + 006h), WA
 	LD BC, IZ
 	LD WA, 0008h
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD BC, IZ
 	LD WA, 1
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD WA, (XSP + 010h)
 	ADD WA, (XSP + 006h)
 	SRL 4, WA
 	AND WA, 000fh
 	EXTZ WA
 	LD BC, IZ
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD WA, (XSP + 010h)
 	ADD WA, (XSP + 006h)
 	SLL 4, WA
@@ -45738,41 +45738,41 @@ LABEL_038922:
 	INC 8, WA
 	EXTZ WA
 	LD BC, IZ
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD BC, IZ
 	LD WA, 0025h
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD XWA, (XSP + 00ch)
 	ADD (XSP + 002h), XWA
 	LD BC, IZ
 	LD WA, 000ah
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD XWA, (XSP + 002h)
 	SRA 1, XWA
 	SRA_0_XWA
 	AND XWA, 0000007fh
 	EXTZ WA
 	LD BC, IZ
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD XWA, (XSP + 002h)
 	SRA 9, XWA
 	AND XWA, 000000ffh
 	EXTZ WA
 	LD BC, IZ
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD XWA, (XSP + 002h)
 	SRA 1, XWA
 	AND XWA, 000000ffh
 	EXTZ WA
 	LD BC, IZ
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD XWA, (XSP + 002h)
 	SLA 7, XWA
 	AND XWA, 00000080h
 	ADD XWA, 0000004ch
 	EXTZ WA
 	LD BC, IZ
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	POP IZ
 	INC 6, XSP
 	RETD 0006h
@@ -45798,27 +45798,27 @@ LABEL_038922:
 	LD (XSP + 002h), WA
 	LD BC, IZ
 	LD WA, 1
-	CALL LABEL_036A2E
+	CALL DSP_DispatchCommand
 	LD (XSP + 004h), HL
 	LD BC, IZ
 	LD WA, 0
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD (XSP + 004h), HL
 	LD WA, (XSP + 002h)
 	INCW 1, (XSP + 002h)
 	EXTZ WA
 	LD BC, IZ
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD (XSP + 004h), HL
 	CPW (XSP + 012h), 0063h
 	JR Z, LABEL_038A95
 	LD BC, IZ
 	LD WA, 0
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD (XSP + 004h), HL
 	LD BC, IZ
 	LD WA, 0
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD (XSP + 004h), HL
 	LD WA, (XSP + 010h)
 	ADD WA, (XSP + 008h)
@@ -45826,7 +45826,7 @@ LABEL_038922:
 	AND WA, 000fh
 	EXTZ WA
 	LD BC, IZ
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD (XSP + 004h), HL
 	LD WA, (XSP + 010h)
 	ADD WA, (XSP + 008h)
@@ -45834,34 +45834,34 @@ LABEL_038922:
 	AND WA, 00f0h
 	EXTZ WA
 	LD BC, IZ
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD (XSP + 004h), HL
 	LD BC, IZ
 	LD WA, 0
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD (XSP + 004h), HL
 	JR T, LABEL_038ACD
 
 LABEL_038A95:
 	LD BC, IZ
 	LD WA, 0
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD (XSP + 004h), HL
 	LD BC, IZ
 	LD WA, 0
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD (XSP + 004h), HL
 	LD BC, IZ
 	LD WA, 0020h
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD (XSP + 004h), HL
 	LD BC, IZ
 	LD WA, 0
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD (XSP + 004h), HL
 	LD BC, IZ
 	LD WA, 0
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD (XSP + 004h), HL
 
 LABEL_038ACD:
@@ -45869,23 +45869,23 @@ LABEL_038ACD:
 	JR NZ, LABEL_038B10
 	LD BC, IZ
 	LD WA, 0008h
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD (XSP + 004h), HL
 	LD BC, IZ
 	LD WA, 0
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD (XSP + 004h), HL
 	LD BC, IZ
 	LD WA, 0080h
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD (XSP + 004h), HL
 	LD BC, IZ
 	LD WA, 00b4h
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD (XSP + 004h), HL
 	LD BC, IZ
 	LD WA, 7
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD (XSP + 004h), HL
 	JR T, LABEL_038B64
 
@@ -45896,28 +45896,28 @@ LABEL_038B10:
 	ADD WA, 000ch
 	EXTZ WA
 	LD BC, IZ
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD (XSP + 004h), HL
 	LD WA, (XSP + 002h)
 	SRL 7, WA
 	AND WA, 0001h
 	EXTZ WA
 	LD BC, IZ
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD (XSP + 004h), HL
 	LD WA, (XSP + 002h)
 	ADD WA, WA
 	EXTZ WA
 	LD BC, IZ
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD (XSP + 004h), HL
 	LD BC, IZ
 	LD WA, 4
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD (XSP + 004h), HL
 	LD BC, IZ
 	LD WA, 7
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD (XSP + 004h), HL
 
 LABEL_038B64:
@@ -45947,25 +45947,25 @@ LABEL_038B64:
 	LD (XSP + 002h), WA
 	LD BC, IZ
 	LD WA, 1
-	CALL LABEL_036A2E
+	CALL DSP_DispatchCommand
 	LD (XSP + 004h), HL
 	LD BC, IZ
 	LD WA, 0
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD (XSP + 004h), HL
 	LD WA, (XSP + 002h)
 	INCW 1, (XSP + 002h)
 	EXTZ WA
 	LD BC, IZ
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD (XSP + 004h), HL
 	LD BC, IZ
 	LD WA, 0008h
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD (XSP + 004h), HL
 	LD BC, IZ
 	LD WA, 1
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD (XSP + 004h), HL
 	LD WA, (XSP + 012h)
 	ADD WA, (XSP + 008h)
@@ -45973,7 +45973,7 @@ LABEL_038B64:
 	AND WA, 000fh
 	EXTZ WA
 	LD BC, IZ
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD (XSP + 004h), HL
 	LD WA, (XSP + 010h)
 	ADD WA, (XSP + 008h)
@@ -45982,33 +45982,33 @@ LABEL_038B64:
 	INC 8, WA
 	EXTZ WA
 	LD BC, IZ
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD (XSP + 004h), HL
 	LD BC, IZ
 	LD WA, 0021h
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD (XSP + 004h), HL
 	CPW (XSP + 006h), 0000h
 	JR NZ, LABEL_038C60
 	LD BC, IZ
 	LD WA, 0008h
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD (XSP + 004h), HL
 	LD BC, IZ
 	LD WA, 0
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD (XSP + 004h), HL
 	LD BC, IZ
 	LD WA, 0080h
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD (XSP + 004h), HL
 	LD BC, IZ
 	LD WA, 00b4h
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD (XSP + 004h), HL
 	LD BC, IZ
 	LD WA, 0008h
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD (XSP + 004h), HL
 	JR T, LABEL_038CB5
 
@@ -46019,28 +46019,28 @@ LABEL_038C60:
 	ADD WA, 000ch
 	EXTZ WA
 	LD BC, IZ
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD (XSP + 004h), HL
 	LD WA, (XSP + 002h)
 	SRL 7, WA
 	AND WA, 0001h
 	EXTZ WA
 	LD BC, IZ
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD (XSP + 004h), HL
 	LD WA, (XSP + 002h)
 	ADD WA, WA
 	EXTZ WA
 	LD BC, IZ
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD (XSP + 004h), HL
 	LD BC, IZ
 	LD WA, 4
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD (XSP + 004h), HL
 	LD BC, IZ
 	LD WA, 0008h
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD (XSP + 004h), HL
 
 LABEL_038CB5:
@@ -46078,23 +46078,23 @@ LABEL_038CF6:
 LABEL_038CF9:
 	LD BC, IZ
 	LD WA, 1
-	CALL LABEL_036A2E
+	CALL DSP_DispatchCommand
 	LD (XSP + 004h), HL
 	LD BC, IZ
 	LD WA, 1
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD (XSP + 004h), HL
 	LD BC, IZ
 	LD WA, 0060h
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD (XSP + 004h), HL
 	LD BC, IZ
 	LD WA, 0
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD (XSP + 004h), HL
 	LD BC, IZ
 	LD WA, 0
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD (XSP + 004h), HL
 	LD WA, (XSP + 002h)
 	SRL 4, WA
@@ -46102,22 +46102,22 @@ LABEL_038CF9:
 	ADD WA, 0010h
 	EXTZ WA
 	LD BC, IZ
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD (XSP + 004h), HL
 	LD WA, (XSP + 002h)
 	SLL 4, WA
 	AND WA, 00f0h
 	EXTZ WA
 	LD BC, IZ
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD (XSP + 004h), HL
 	LD BC, IZ
 	LD WA, 0
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD (XSP + 004h), HL
 	LD BC, IZ
 	LD WA, 000ah
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD (XSP + 004h), HL
 	LD XWA, (XSP + 006h)
 	SRA 1, XWA
@@ -46125,21 +46125,21 @@ LABEL_038CF9:
 	AND XWA, 0000007fh
 	EXTZ WA
 	LD BC, IZ
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD (XSP + 004h), HL
 	LD XWA, (XSP + 006h)
 	SRA 9, XWA
 	AND XWA, 000000ffh
 	EXTZ WA
 	LD BC, IZ
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD (XSP + 004h), HL
 	LD XWA, (XSP + 006h)
 	SRA 1, XWA
 	AND XWA, 000000ffh
 	EXTZ WA
 	LD BC, IZ
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD (XSP + 004h), HL
 	LD XWA, (XSP + 006h)
 	SLA 7, XWA
@@ -46147,11 +46147,11 @@ LABEL_038CF9:
 	ADD XWA, 00000015h
 	EXTZ WA
 	LD BC, IZ
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD (XSP + 004h), HL
 	LD BC, IZ
 	LD WA, 3
-	CALL LABEL_036A2E
+	CALL DSP_DispatchCommand
 	LD (XSP + 004h), HL
 	LD HL, (XSP + 004h)
 	POP IZ
@@ -50388,50 +50388,50 @@ LABEL_03C067:
 	CALL LABEL_03D44C
 	LD WA, 0030h
 	LD BC, 1
-	CALL LABEL_036A2E
+	CALL DSP_DispatchCommand
 	LD WA, 0
 	LD BC, 1
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD WA, 00d0h
 	LD BC, 1
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD XWA, (XSP + 008h)
 	SRL 8, XWA
 	SRL_0_XWA
 	LD BC, 1
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD XWA, (XSP + 008h)
 	SRL_0_XWA
 	LD BC, 1
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	CALL LABEL_0364C4
-	CALL LABEL_03C253
+	CALL DSP_Bytecode_NotifyStateChange
 	LD WA, 0030h
 	LD BC, 1
-	CALL LABEL_036A2E
+	CALL DSP_DispatchCommand
 	LD WA, 0
 	LD BC, 1
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD WA, 00d3h
 	LD BC, 1
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD XWA, (XSP + 010h)
 	SRL 9, XWA
 	SRL_0_XWA
 	LD BC, 1
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD XWA, (XSP + 010h)
 	SRL 1, XWA
 	SRL_0_XWA
 	LD BC, 1
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	CALL LABEL_0364C4
-	CALL LABEL_03C253
+	CALL DSP_Bytecode_NotifyStateChange
 	POP XIZ
 	LDA XSP, XSP + 014h
 	RET
 
-LABEL_03C161:
+DSP_WriteEFFConfig:
 	LD DE, WA
 	EXTZ XDE
 	LD XHL, 0001ed6dh
@@ -50443,18 +50443,18 @@ LABEL_03C161:
 	LD BC, WA
 	LDA XDE, 014777h
 	LD WA, HL
-	CALL LABEL_03C259
+	CALL DSP_BytecodeInterpreter_Init
 	RET
 
-LABEL_03C181:
+DSP_WriteGlobalConfig:
 	LD DE, 0
 	PUSH XBC
 	LD BC, DE
 	LDA XDE, 0147B3h
-	CALL LABEL_03C259
+	CALL DSP_BytecodeInterpreter_Init
 	RET
 
-LABEL_03C190:
+DSP_WriteParameter:
 	LD XIX, (XSP + 004h)
 	CP WA, 1
 	JR NZ, LABEL_03C20E
@@ -50484,7 +50484,7 @@ LABEL_03C1A3:
 	PUSH XBC
 	LDA XBC, 014777h
 	LD XDE, XHL
-	CALL LABEL_03C9E6
+	CALL DSP_ParameterWriteEngine
 	JR T, LABEL_03C24F
 
 LABEL_03C1DF:
@@ -50504,7 +50504,7 @@ LABEL_03C1DF:
 	PUSH XBC
 	LDA XBC, 014777h
 	LD XDE, XHL
-	CALL LABEL_03C9E6
+	CALL DSP_ParameterWriteEngine
 	JR T, LABEL_03C24F
 
 LABEL_03C20E:
@@ -50533,17 +50533,17 @@ LABEL_03C20E:
 	PUSH XBC
 	LDA XBC, 014777h
 	LD XDE, XHL
-	CALL LABEL_03C9E6
+	CALL DSP_ParameterWriteEngine
 
 LABEL_03C24F:
 	RETD 0004h
 	RET
 
-LABEL_03C253:
+DSP_Bytecode_NotifyStateChange:
 	LD WA, 1
 	JP LABEL_020370
 
-LABEL_03C259:
+DSP_BytecodeInterpreter_Init:
 	LDA XSP, XSP - 012h
 	PUSH XIZ
 	LD (XSP + 014h), WA
@@ -50592,9 +50592,9 @@ LABEL_03C259:
 	ADD XBC, XDE
 	LD XWA, (XBC + 008h)
 	LD (XSP + 010h), XWA
-	JRL T, LABEL_03C9CE
+	JRL T, DSP_BytecodeInterpreter_CheckEnd
 
-LABEL_03C2CB:
+DSP_BytecodeInterpreter_Loop:
 	LD XWA, (XSP + 01ah)
 	LD A, (XWA)
 	AND A, 0f0h
@@ -50619,11 +50619,11 @@ LABEL_03C2CB:
 	LD WA, DE
 	SRL 4, WA
 	CP WA, 000eh
-	JRL Z, LABEL_03C984
+	JRL Z, DSP_Bytecode_Op0E_SendCommand
 	CP WA, 000dh
-	JRL Z, LABEL_03C97B
+	JRL Z, DSP_Bytecode_Op0D_StateChange
 	CP WA, 5
-	JRL UGT, LABEL_03C9CE
+	JRL UGT, DSP_BytecodeInterpreter_CheckEnd
 	ADD WA, WA
 	LDA XIX, OFFSETS_14739
 	LD WA, (XIX + WA)
@@ -50631,7 +50631,7 @@ LABEL_03C2CB:
 	JP T, XIX + WA
 
 
-LABEL_03C32E:
+DSP_Bytecode_Programs:
 	db 0AFh, 01Ah, 020h, 0C5h, 0E0h, 023h, 0BFh, 01Ah
 	db 060h, 0CBh, 089h, 0D8h, 012h, 09Fh, 014h, 021h
 	db 01Dh, 02Eh, 06Ah, 003h, 0D7h, 0FAh, 09Bh, 0AFh
@@ -50835,53 +50835,53 @@ LABEL_03C32E:
 	db 012h, 0D8h, 00Ah, 005h, 000h, 09Fh, 004h, 0F8h
 	db 073h, 08Fh, 0FEh, 068h, 053h
 
-LABEL_03C97B:
+DSP_Bytecode_Op0D_StateChange:
 	CALL LABEL_0364C4
-	CALR LABEL_03C253
-	JR T, LABEL_03C9CE
+	CALR DSP_Bytecode_NotifyStateChange
+	JR T, DSP_BytecodeInterpreter_CheckEnd
 
-LABEL_03C984:
+DSP_Bytecode_Op0E_SendCommand:
 	LD XWA, (XSP + 01ah)
 	LD C, (XWA+)
 	LD (XSP + 01ah), XWA
 	LD A, C
 	EXTZ WA
 	LD BC, (XSP + 014h)
-	CALL LABEL_036A2E
+	CALL DSP_DispatchCommand
 	LD QIZ, HL
 	LDW (XSP + 004h), 0001h
 	LD WA, (XSP + 006h)
 	DEC 1, WA
 	CP (XSP + 004h), WA
-	JR UGT, LABEL_03C9CE
+	JR UGT, DSP_BytecodeInterpreter_CheckEnd
 
-LABEL_03C9AA:
+DSP_Bytecode_Op0E_DataLoop:
 	LD XWA, (XSP + 01ah)
 	LD C, (XWA+)
 	LD (XSP + 01ah), XWA
 	LD A, C
 	EXTZ WA
 	LD BC, (XSP + 014h)
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD QIZ, HL
 	INCW 1, (XSP + 004h)
 	LD WA, (XSP + 006h)
 	DEC 1, WA
 	CP (XSP + 004h), WA
-	JR ULE, LABEL_03C9AA
+	JR ULE, DSP_Bytecode_Op0E_DataLoop
 
-LABEL_03C9CE:
+DSP_BytecodeInterpreter_CheckEnd:
 	LD XWA, (XSP + 01ah)
 	LD A, (XWA)
 	AND A, 0f0h
 	CP A, 0f0h
-	JRL NZ, LABEL_03C2CB
+	JRL NZ, DSP_BytecodeInterpreter_Loop
 	LD HL, QIZ
 	POP XIZ
 	LDA XSP, XSP + 012h
 	RETD 0004h
 
-LABEL_03C9E6:
+DSP_ParameterWriteEngine:
 	LDA XSP, XSP - 012h
 	PUSH XIZ
 	LD (XSP + 00ch), XDE
@@ -50919,15 +50919,15 @@ LABEL_03CA35:
 	JR NZ, LABEL_03CA61
 	LD BC, (XSP + 004h)
 	LD WA, 1
-	CALL LABEL_036A2E
+	CALL DSP_DispatchCommand
 	LD (XSP + 00ah), HL
 	LD BC, (XSP + 004h)
 	LD WA, 1
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD (XSP + 00ah), HL
 	LD BC, (XSP + 004h)
 	LD WA, 0060h
-	CALL LABEL_036A4F
+	CALL DSP_DispatchData
 	LD (XSP + 00ah), HL
 
 LABEL_03CA61:
@@ -50943,7 +50943,7 @@ LABEL_03CA61:
 	LD WA, (XSP + 018h)
 	LD BC, (XSP + 028h)
 	LD DE, (XSP + 032h)
-	CALR LABEL_03CAAE
+	CALR DSP_PerParameterTranslator
 	LD XIZ, XHL
 	CPW (XSP + 00ah), 0000h
 	JR Z, LABEL_03CA8F
@@ -50956,7 +50956,7 @@ LABEL_03CA8F:
 	JR NZ, LABEL_03CAA2
 	LD BC, (XSP + 004h)
 	LD WA, 3
-	CALL LABEL_036A2E
+	CALL DSP_DispatchCommand
 	LD (XSP + 00ah), HL
 
 LABEL_03CAA2:
@@ -50968,7 +50968,7 @@ LABEL_03CAA7:
 	LDA XSP, XSP + 012h
 	RETD 000ah
 
-LABEL_03CAAE:
+DSP_PerParameterTranslator:
 	LDA XSP, XSP - 012h
 	PUSH XIZ
 	LD (XSP + 010h), DE
@@ -51063,7 +51063,7 @@ LABEL_03CBA8:
 	CPW (XSP + 014h), 0001h
 	JR NZ, LABEL_03CBB6
 	CALL LABEL_0364C4
-	CALR LABEL_03C253
+	CALR DSP_Bytecode_NotifyStateChange
 
 LABEL_03CBB6:
 	LD XBC, (XSP + 02ah)
