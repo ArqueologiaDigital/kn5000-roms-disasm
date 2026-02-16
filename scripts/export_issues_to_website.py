@@ -242,7 +242,8 @@ def generate_markdown(issues: list) -> str:
 
 def main():
     script_dir = Path(__file__).parent
-    jsonl_path = script_dir / ".beads" / "issues.jsonl"
+    repo_root = script_dir.parent
+    jsonl_path = repo_root / ".beads" / "issues.jsonl"
 
     if len(sys.argv) > 1:
         output_path = Path(sys.argv[1])
