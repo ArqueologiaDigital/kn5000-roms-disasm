@@ -69,6 +69,10 @@ The ASL assembler path is configured in the Makefile at `ASL_PATH`.
 
 **When the user defines or updates any policy, it MUST be saved in CLAUDE.md.** Saving to MEMORY.md alone is not sufficient. CLAUDE.md is the canonical, version-controlled source of truth for all project policies.
 
+### CLAUDE.md Editing Principles (STRICT POLICY)
+
+**When modifying CLAUDE.md, store information efficiently using progressive disclosure.** Keep top-level sections as concise summaries. Push details into sub-sections, linked documents, or inline comments that are only needed when working on that specific topic. Avoid repetition across sections. If the same information appears in multiple places, consolidate it into one authoritative location and reference it elsewhere.
+
 ### Frequent Commits & Clean Working Directory (STRICT POLICY)
 
 **Commit immediately after completing each logical change.** Do not continue to the next task or respond to the user with uncommitted work.
