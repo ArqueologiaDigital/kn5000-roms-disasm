@@ -7,6 +7,7 @@
 ******************************************************************************/
 
 #include "emu.h"
+#include <queue>
 #include "bus/technics/kn5000/hdae5000.h"
 #include "bus/midi/midi.h"
 #include "cpu/tlcs900/tmp94c241.h"
@@ -94,6 +95,7 @@ namespace {
 #define LOG_LATCH_DATA (1U << 2) // Latch read/write (all data bytes - very verbose)
 #define LOG_HANDSHAKE (1U << 3) // MSTAT/SSTAT handshake changes
 #define LOG_RESET    (1U << 4)  // Sub CPU reset control
+#define LOG_KEYBED   (1U << 5)  // Tone generator keybed HLE events
 #define LOG_ALL_LATCH (LOG_LATCH | LOG_LATCH_DATA)
 
 #define VERBOSE (LOG_LATCH | LOG_RESET)
@@ -114,6 +116,7 @@ public:
 		, m_extension(*this, "extension")
 		, m_CPL_SEG(*this, "CPL_SEG%u", 0U)
 		, m_CPR_SEG(*this, "CPR_SEG%u", 0U)
+		, m_keybed(*this, "KEY%u", 0U)
 		, m_checking_device_led_cn11(*this, "checking_device_led_cn11")
 		, m_checking_device_led_cn12(*this, "checking_device_led_cn12")
 		, m_mstat(0)
@@ -137,6 +140,7 @@ private:
 
 	required_ioport_array<11> m_CPL_SEG; // buttons on "Control Panel Left" PCB
 	required_ioport_array<11> m_CPR_SEG; // buttons on "Control Panel Right" PCB
+	required_ioport_array<6> m_keybed;   // 61-key keyboard (6 ports x 12 bits, last port 1 key)
 	output_finder<> m_checking_device_led_cn11;
 	output_finder<> m_checking_device_led_cn12;
 	uint8_t m_mstat;
@@ -150,6 +154,16 @@ private:
 	// Latch logging wrappers
 	void subcpu_latch_w(uint8_t data);
 	void maincpu_latch_w(uint8_t data);
+
+	// Tone generator keybed HLE
+	uint16_t tonegen_status_r();
+	uint16_t tonegen_data_r();
+	struct keybed_event { uint16_t data; };
+	std::queue<keybed_event> m_keybed_queue;
+	uint8_t m_keybed_prev[61];
+	emu_timer *m_keybed_timer;
+	TIMER_CALLBACK_MEMBER(keybed_scan);
+	static constexpr uint8_t KEYBED_VELOCITY = 100; // fixed velocity for PC keyboard
 
 	void nvram2_init(nvram_device &device, void *data, size_t size);
 	void maincpu_mem(address_map &map) ATTR_COLD;
@@ -187,6 +201,61 @@ void kn5000_state::maincpu_latch_w(uint8_t data)
 	m_maincpu_latch->write(data);
 }
 
+// Tone generator keybed HLE: status register at 0x110002
+// Bit 0 = data ready (queue non-empty), Bit 1 = 0 (note-on context)
+uint16_t kn5000_state::tonegen_status_r()
+{
+	return m_keybed_queue.empty() ? 0x0000 : 0x0001;
+}
+
+// Tone generator keybed HLE: data register at 0x110000
+// Returns 16-bit word: low byte = raw note (bit 7 = has velocity), high byte = velocity
+uint16_t kn5000_state::tonegen_data_r()
+{
+	if (m_keybed_queue.empty())
+		return 0x0000;
+
+	keybed_event ev = m_keybed_queue.front();
+	m_keybed_queue.pop();
+	return ev.data;
+}
+
+// Scan PC keyboard input ports and generate note-on/note-off events
+// Called every 1ms by timer, matching real IC303 hardware scan rate
+TIMER_CALLBACK_MEMBER(kn5000_state::keybed_scan)
+{
+	for (int port = 0; port < 6; port++)
+	{
+		uint16_t keys = m_keybed[port]->read();
+		int num_keys = (port < 5) ? 12 : 1; // last port has only 1 key (C7)
+
+		for (int bit = 0; bit < num_keys; bit++)
+		{
+			int raw_note = port * 12 + bit;
+			uint8_t pressed = (keys >> bit) & 1;
+			uint8_t prev = m_keybed_prev[raw_note];
+
+			if (pressed && !prev)
+			{
+				// Key pressed: data = (velocity << 8) | (raw_note | 0x80)
+				uint16_t data = (uint16_t(KEYBED_VELOCITY) << 8) | (raw_note | 0x80);
+				m_keybed_queue.push({data});
+				LOGMASKED(LOG_KEYBED, "Keybed: note ON raw=%d MIDI=%d vel=%d data=0x%04X\n",
+					raw_note, raw_note + 0x24, KEYBED_VELOCITY, data);
+			}
+			else if (!pressed && prev)
+			{
+				// Key released: data = (0xFF << 8) | raw_note
+				uint16_t data = (0xFF00) | raw_note;
+				m_keybed_queue.push({data});
+				LOGMASKED(LOG_KEYBED, "Keybed: note OFF raw=%d MIDI=%d data=0x%04X\n",
+					raw_note, raw_note + 0x24, data);
+			}
+			m_keybed_prev[raw_note] = pressed;
+		}
+	}
+}
+
 void kn5000_state::maincpu_mem(address_map &map)
 {
 	map(0x000000, 0x0fffff).ram().share("nvram1"); // 1Mbyte = 2 * 4Mbit DRAMs @ IC9, IC10 (CS3)
@@ -208,8 +277,9 @@ void kn5000_state::maincpu_mem(address_map &map)
 void kn5000_state::subcpu_mem(address_map &map)
 {
 	map(0x000000, 0x0fffff).ram(); // 1Mbyte = 2 * 4Mbit DRAMs @ IC28, IC29
-	map(0x100000, 0x100003).noprw(); // DAC interface (stub - not yet emulated)
-	map(0x110000, 0x110003).noprw(); // Tone generator @ IC303 (stub - not yet emulated)
+	map(0x100000, 0x100003).noprw(); // Tone gen register config (write-only; writes harmlessly discarded)
+	map(0x110000, 0x110001).r(FUNC(kn5000_state::tonegen_data_r));   // Tone gen keybed data (HLE)
+	map(0x110002, 0x110003).r(FUNC(kn5000_state::tonegen_status_r)); // Tone gen keybed status (HLE)
 	map(0x120000, 0x12ffff).r(m_subcpu_latch, FUNC(generic_latch_8_device::read)); // @ IC22
 	map(0x120000, 0x12ffff).w(FUNC(kn5000_state::maincpu_latch_w)); // @ IC23 (logged wrapper)
 	map(0x130000, 0x130003).noprw(); // DSP1 @ IC311 (stub - not yet emulated)
@@ -492,6 +562,90 @@ static INPUT_PORTS_START(kn5000)
 	PORT_BIT( 0x20, IP_ACTIVE_HIGH, IPT_KEYBOARD ) PORT_NAME("UP 1") PORT_CODE(KEYCODE_Q)
 	PORT_BIT( 0x40, IP_ACTIVE_HIGH, IPT_KEYBOARD ) PORT_NAME("DOWN 2") PORT_CODE(KEYCODE_S)
 	PORT_BIT( 0x80, IP_ACTIVE_HIGH, IPT_KEYBOARD ) PORT_NAME("UP 2") PORT_CODE(KEYCODE_W)
+
+	// 61-key keyboard (C2-C7) — directly connected to tone generator IC303
+	// IC303 does hardware key scanning; this HLE injects events at 0x110000
+	// PC keyboard mapping: Z-row = lower octave, Q-row = upper octave (piano layout)
+	// Base octave = C4 (raw notes 24-47 for the two mapped octaves)
+
+	PORT_START("KEY0")  // C2-B2 (raw notes 0-11, MIDI 36-47)
+	PORT_BIT( 0x001, IP_ACTIVE_HIGH, IPT_OTHER ) PORT_NAME("C2")
+	PORT_BIT( 0x002, IP_ACTIVE_HIGH, IPT_OTHER ) PORT_NAME("C#2")
+	PORT_BIT( 0x004, IP_ACTIVE_HIGH, IPT_OTHER ) PORT_NAME("D2")
+	PORT_BIT( 0x008, IP_ACTIVE_HIGH, IPT_OTHER ) PORT_NAME("D#2")
+	PORT_BIT( 0x010, IP_ACTIVE_HIGH, IPT_OTHER ) PORT_NAME("E2")
+	PORT_BIT( 0x020, IP_ACTIVE_HIGH, IPT_OTHER ) PORT_NAME("F2")
+	PORT_BIT( 0x040, IP_ACTIVE_HIGH, IPT_OTHER ) PORT_NAME("F#2")
+	PORT_BIT( 0x080, IP_ACTIVE_HIGH, IPT_OTHER ) PORT_NAME("G2")
+	PORT_BIT( 0x100, IP_ACTIVE_HIGH, IPT_OTHER ) PORT_NAME("G#2")
+	PORT_BIT( 0x200, IP_ACTIVE_HIGH, IPT_OTHER ) PORT_NAME("A2")
+	PORT_BIT( 0x400, IP_ACTIVE_HIGH, IPT_OTHER ) PORT_NAME("A#2")
+	PORT_BIT( 0x800, IP_ACTIVE_HIGH, IPT_OTHER ) PORT_NAME("B2")
+
+	PORT_START("KEY1")  // C3-B3 (raw notes 12-23, MIDI 48-59)
+	PORT_BIT( 0x001, IP_ACTIVE_HIGH, IPT_OTHER ) PORT_NAME("C3")
+	PORT_BIT( 0x002, IP_ACTIVE_HIGH, IPT_OTHER ) PORT_NAME("C#3")
+	PORT_BIT( 0x004, IP_ACTIVE_HIGH, IPT_OTHER ) PORT_NAME("D3")
+	PORT_BIT( 0x008, IP_ACTIVE_HIGH, IPT_OTHER ) PORT_NAME("D#3")
+	PORT_BIT( 0x010, IP_ACTIVE_HIGH, IPT_OTHER ) PORT_NAME("E3")
+	PORT_BIT( 0x020, IP_ACTIVE_HIGH, IPT_OTHER ) PORT_NAME("F3")
+	PORT_BIT( 0x040, IP_ACTIVE_HIGH, IPT_OTHER ) PORT_NAME("F#3")
+	PORT_BIT( 0x080, IP_ACTIVE_HIGH, IPT_OTHER ) PORT_NAME("G3")
+	PORT_BIT( 0x100, IP_ACTIVE_HIGH, IPT_OTHER ) PORT_NAME("G#3")
+	PORT_BIT( 0x200, IP_ACTIVE_HIGH, IPT_OTHER ) PORT_NAME("A3")
+	PORT_BIT( 0x400, IP_ACTIVE_HIGH, IPT_OTHER ) PORT_NAME("A#3")
+	PORT_BIT( 0x800, IP_ACTIVE_HIGH, IPT_OTHER ) PORT_NAME("B3")
+
+	// KEY2 and KEY3 have no default PORT_CODE assignments because all candidate
+	// keys (Z/S/X/D/C/V/G/B/H/N/J/M, Q/2/W/3/E/R/5/T/6/Y/7/U) conflict with
+	// control panel button mappings above. Use MAME's input configuration UI
+	// (Tab menu) to assign keyboard keys to these notes.
+
+	PORT_START("KEY2")  // C4-B4 (raw notes 24-35, MIDI 60-71) — Middle C octave
+	PORT_BIT( 0x001, IP_ACTIVE_HIGH, IPT_OTHER ) PORT_NAME("C4")
+	PORT_BIT( 0x002, IP_ACTIVE_HIGH, IPT_OTHER ) PORT_NAME("C#4")
+	PORT_BIT( 0x004, IP_ACTIVE_HIGH, IPT_OTHER ) PORT_NAME("D4")
+	PORT_BIT( 0x008, IP_ACTIVE_HIGH, IPT_OTHER ) PORT_NAME("D#4")
+	PORT_BIT( 0x010, IP_ACTIVE_HIGH, IPT_OTHER ) PORT_NAME("E4")
+	PORT_BIT( 0x020, IP_ACTIVE_HIGH, IPT_OTHER ) PORT_NAME("F4")
+	PORT_BIT( 0x040, IP_ACTIVE_HIGH, IPT_OTHER ) PORT_NAME("F#4")
+	PORT_BIT( 0x080, IP_ACTIVE_HIGH, IPT_OTHER ) PORT_NAME("G4")
+	PORT_BIT( 0x100, IP_ACTIVE_HIGH, IPT_OTHER ) PORT_NAME("G#4")
+	PORT_BIT( 0x200, IP_ACTIVE_HIGH, IPT_OTHER ) PORT_NAME("A4")
+	PORT_BIT( 0x400, IP_ACTIVE_HIGH, IPT_OTHER ) PORT_NAME("A#4")
+	PORT_BIT( 0x800, IP_ACTIVE_HIGH, IPT_OTHER ) PORT_NAME("B4")
+
+	PORT_START("KEY3")  // C5-B5 (raw notes 36-47, MIDI 72-83)
+	PORT_BIT( 0x001, IP_ACTIVE_HIGH, IPT_OTHER ) PORT_NAME("C5")
+	PORT_BIT( 0x002, IP_ACTIVE_HIGH, IPT_OTHER ) PORT_NAME("C#5")
+	PORT_BIT( 0x004, IP_ACTIVE_HIGH, IPT_OTHER ) PORT_NAME("D5")
+	PORT_BIT( 0x008, IP_ACTIVE_HIGH, IPT_OTHER ) PORT_NAME("D#5")
+	PORT_BIT( 0x010, IP_ACTIVE_HIGH, IPT_OTHER ) PORT_NAME("E5")
+	PORT_BIT( 0x020, IP_ACTIVE_HIGH, IPT_OTHER ) PORT_NAME("F5")
+	PORT_BIT( 0x040, IP_ACTIVE_HIGH, IPT_OTHER ) PORT_NAME("F#5")
+	PORT_BIT( 0x080, IP_ACTIVE_HIGH, IPT_OTHER ) PORT_NAME("G5")
+	PORT_BIT( 0x100, IP_ACTIVE_HIGH, IPT_OTHER ) PORT_NAME("G#5")
+	PORT_BIT( 0x200, IP_ACTIVE_HIGH, IPT_OTHER ) PORT_NAME("A5")
+	PORT_BIT( 0x400, IP_ACTIVE_HIGH, IPT_OTHER ) PORT_NAME("A#5")
+	PORT_BIT( 0x800, IP_ACTIVE_HIGH, IPT_OTHER ) PORT_NAME("B5")
+
+	PORT_START("KEY4")  // C6-B6 (raw notes 48-59, MIDI 84-95)
+	PORT_BIT( 0x001, IP_ACTIVE_HIGH, IPT_OTHER ) PORT_NAME("C6")
+	PORT_BIT( 0x002, IP_ACTIVE_HIGH, IPT_OTHER ) PORT_NAME("C#6")
+	PORT_BIT( 0x004, IP_ACTIVE_HIGH, IPT_OTHER ) PORT_NAME("D6")
+	PORT_BIT( 0x008, IP_ACTIVE_HIGH, IPT_OTHER ) PORT_NAME("D#6")
+	PORT_BIT( 0x010, IP_ACTIVE_HIGH, IPT_OTHER ) PORT_NAME("E6")
+	PORT_BIT( 0x020, IP_ACTIVE_HIGH, IPT_OTHER ) PORT_NAME("F6")
+	PORT_BIT( 0x040, IP_ACTIVE_HIGH, IPT_OTHER ) PORT_NAME("F#6")
+	PORT_BIT( 0x080, IP_ACTIVE_HIGH, IPT_OTHER ) PORT_NAME("G6")
+	PORT_BIT( 0x100, IP_ACTIVE_HIGH, IPT_OTHER ) PORT_NAME("G#6")
+	PORT_BIT( 0x200, IP_ACTIVE_HIGH, IPT_OTHER ) PORT_NAME("A6")
+	PORT_BIT( 0x400, IP_ACTIVE_HIGH, IPT_OTHER ) PORT_NAME("A#6")
+	PORT_BIT( 0x800, IP_ACTIVE_HIGH, IPT_OTHER ) PORT_NAME("B6")
+
+	PORT_START("KEY5")  // C7 (raw note 60, MIDI 96) — highest key
+	PORT_BIT( 0x001, IP_ACTIVE_HIGH, IPT_OTHER ) PORT_NAME("C7")
+	PORT_BIT( 0xffe, IP_ACTIVE_HIGH, IPT_UNUSED )
 INPUT_PORTS_END
 
 
@@ -502,6 +656,7 @@ void kn5000_state::machine_start()
 	save_item(NAME(m_cpanel_inta));
 	save_item(NAME(m_subcpu_latch_write_count));
 	save_item(NAME(m_maincpu_latch_write_count));
+	save_item(NAME(m_keybed_prev));
 
 	m_extension->program_map(m_maincpu->space(AS_PROGRAM));
 
@@ -514,12 +669,22 @@ void kn5000_state::machine_start()
 		m_cpanel->set_cpl_port(i, m_CPL_SEG[i].target());
 		m_cpanel->set_cpr_port(i, m_CPR_SEG[i].target());
 	}
+
+	// Keybed scan timer: poll keyboard input ports every 1ms
+	memset(m_keybed_prev, 0, sizeof(m_keybed_prev));
+	m_keybed_timer = timer_alloc(FUNC(kn5000_state::keybed_scan), this);
+	m_keybed_timer->adjust(attotime::from_msec(1), 0, attotime::from_msec(1));
 }
 
 void kn5000_state::machine_reset()
 {
 	m_checking_device_led_cn11 = 0;
 	m_checking_device_led_cn12 = 0;
+
+	// Clear keybed state
+	memset(m_keybed_prev, 0, sizeof(m_keybed_prev));
+	while (!m_keybed_queue.empty())
+		m_keybed_queue.pop();
 }
 
 void kn5000_state::nvram2_init(nvram_device &device, void *data, size_t size)
