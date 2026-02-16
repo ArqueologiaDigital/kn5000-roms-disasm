@@ -40076,14 +40076,16 @@ LABEL_035F29:
 	CALR DSP_RingBuf_Skip
 	JRL T, LABEL_036033
 
+; Command 0x2D handler: DSP configuration change
+; Ring buffer header: [0x2D] [sub_cmd@4369] [slot@436A] [?] [?] [?] [len@436E] [mode@436F]
 LABEL_035F32:
-	LD A, (4369h)
+	LD A, (4369h)		; byte[1] = sub-command
 	LD QIZH, A
-	CP QIZH, 0
-	JRL NZ, LABEL_035FD3
-	LD A, (436Ah)
+	CP QIZH, 0		; sub_cmd 0 = normal config update
+	JRL NZ, LABEL_035FD3	; other sub-commands (0x30+, 0x09+)
+	LD A, (436Ah)		; byte[2] = EFF slot selector
 	LD QIZH, A
-	CP QIZH, 009h
+	CP QIZH, 009h		; 0x09 = special config (full reconfig)
 	JR NZ, LABEL_035F66
 	LD XWA, (XSP + 004h)
 	CALR LABEL_0359DB
@@ -40095,37 +40097,37 @@ LABEL_035F32:
 	JRL T, LABEL_036033
 
 LABEL_035F66:
-	CP QIZH, 00ah
-	JR C, LABEL_035FCB
+	CP QIZH, 00ah		; EFF slot selectors: 0x0A=slot0, 0x0B=slot1, ..., 0x0E=slot4
+	JR C, LABEL_035FCB	; < 0x0A: invalid, skip data
 	CP QIZH, 00eh
-	JR UGT, LABEL_035FCB
+	JR UGT, LABEL_035FCB	; > 0x0E: invalid, skip data
 	LD A, QIZH
-	SUB A, 00ah
+	SUB A, 00ah		; A = EFF slot index (0-4)
 	EXTZ WA
-	CALL LABEL_0361D9
+	CALL LABEL_0361D9	; Get EFF slot buffer ptr (4496h + slot*0x38)
 	LD (XSP + 00ah), XHL
 	LD XWA, (XSP + 00ah)
 	CP XWA, 0ffffffffh
 	JRL Z, LABEL_036033
-	LD A, (436Eh)
+	LD A, (436Eh)		; byte[6] = data length (normally 0x38 = 56 bytes)
 	LD C, A
 	EXTZ BC
 	LD XWA, (XSP + 004h)
-	CP BC, (XWA + 004h)
+	CP BC, (XWA + 004h)	; Check length doesn't exceed buffer
 	JR UGT, LABEL_035FC3
 	LD XWA, (XSP + 004h)
 	LD XBC, (XSP + 00ah)
-	CALR LABEL_035A7E
+	CALR LABEL_035A7E	; Read 56 bytes from ring buffer into 4370h, compare with slot buffer
 	LD A, QIZH
-	SUB A, 00ah
+	SUB A, 00ah		; A = EFF slot index again
 	LD IXL, A
 	EXTZ IX
-	LDA XWA, 4370h
+	LDA XWA, 4370h		; XWA = received EFF parameter data (28 words)
 	LD XBC, XWA
-	LD E, L
+	LD E, L			; E = number of changed parameters (from LABEL_035A7E return)
 	EXTZ DE
-	LD WA, IX
-	CALL LABEL_03616A
+	LD WA, IX		; WA = EFF slot index
+	CALL LABEL_03616A	; Apply DSP configuration (→ LABEL_038E31 → LABEL_036E3D → LABEL_037D6E)
 	JR T, LABEL_036033
 
 LABEL_035FC3:
