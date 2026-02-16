@@ -485,6 +485,24 @@ This is a strict policy to ensure the disassembly is maintainable and understand
 
 **This policy applies to ALL references:** CALL, JP, JR, LD, LDA, and any other instruction that references a memory address.
 
+### Proactive Semantic Renaming (STRICT POLICY)
+
+**Whenever Claude discusses a routine, data structure, or label using a numeric address or an address-based placeholder name (e.g., `LABEL_037D6E`), Claude MUST rename it to a meaningful semantic label in the disassembly source code.**
+
+This is a strict policy to ensure that analysis work directly improves the codebase:
+
+1. **Trigger:** Any time Claude identifies the purpose of a routine or data structure during investigation or discussion, it must immediately rename the label in the assembly source.
+
+2. **No address-based names in conversation:** If Claude can explain what something does, it can name it. `LABEL_037D6E` described as "DSP state dispatcher" should become `DSP_State_Dispatcher` in the source.
+
+3. **Batch renaming is acceptable:** When investigating a subsystem, collect all discovered names and rename them together, then verify the build.
+
+4. **Verification required:** After renaming, follow the Assembly Edit Verification policy (build + compare_roms.py).
+
+5. **Symbol reference files:** Update the corresponding symbol reference file when renaming labels (see Symbol Reference Files policy).
+
+**Rationale:** The project's goal is not just emulation but also documentation. Every conversation about the code should leave the disassembly more readable than before. Address-based labels represent lost knowledge — if we understand what something does, that understanding must be captured in the source.
+
 ### Inter-ROM Cross-References (STRICT POLICY)
 
 **When code references an address outside its own ROM's memory range, the target ROM's assembly file must be inspected for cross-reference labels.**
