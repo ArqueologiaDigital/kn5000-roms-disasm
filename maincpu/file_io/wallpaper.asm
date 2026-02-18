@@ -78,7 +78,7 @@ LABEL_F8E9F7:
 	LD XDE, 1
 	CALL ApPostEvent
 	LD WA, 0048h
-	CALL LABEL_F99490
+	CALL UI_PostModeChangeEvent
 	LD XWA, 0ffffffffh
 	LD XBC, 01e0009eh
 	LD XDE, 0
@@ -93,7 +93,7 @@ LABEL_F8EA38:
 	LD XDE, 0
 	CALL ApPostEvent
 	LD WA, 007dh
-	CALL LABEL_F99490
+	CALL UI_PostModeChangeEvent
 	JRL T, LABEL_F8ECAD
 
 LABEL_F8EA52:
@@ -107,7 +107,7 @@ LABEL_F8EA52:
 	LD XDE, 1
 	CALL ApPostEvent
 	LD WA, 0048h
-	CALL LABEL_F99490
+	CALL UI_PostModeChangeEvent
 	LD XWA, 0ffffffffh
 	LD XBC, 01e0009eh
 	LD XDE, 0
@@ -245,7 +245,7 @@ LABEL_F8EB95:
 	LD XDE, 1
 	CALL ApPostEvent
 	LD WA, 0048h
-	CALL LABEL_F99490
+	CALL UI_PostModeChangeEvent
 	LD XWA, 0ffffffffh
 	LD XBC, 01e0009eh
 	LD XDE, 0

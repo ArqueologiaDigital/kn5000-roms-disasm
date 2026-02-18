@@ -42,7 +42,7 @@ DemoModeFunc:
 	PUSH XHL
 	PUSH XIX
 	PUSH XIZ
-	CALL LABEL_F8696F
+	CALL DemoMode_Main_Operation
 	POP XIZ
 	POP XIX
 	POP XHL
@@ -54,7 +54,7 @@ DemoModeFunc_Initialize:
 	PUSH XHL
 	PUSH XIX
 	PUSH XIZ
-	CALL LABEL_F869E3
+	CALL DemoMode_Initialize
 	POP XIZ
 	POP XIX
 	POP XHL
@@ -123,7 +123,7 @@ DemoStyle_DirectionHandler:
 	LD WA, 00e3h
 
 DemoStyle_PostEventCommon:
-	CALL LABEL_F99490
+	CALL UI_PostModeChangeEvent
 	JR T, DemoStyleTtlFunc_Exit
 
 DemoStyle_EnterHandler:
@@ -131,7 +131,7 @@ DemoStyle_EnterHandler:
 	PUSH XHL
 	PUSH XIX
 	PUSH XIZ
-	CALL LABEL_F86A47
+	CALL Demo_SelectionEntryHandler
 	POP XIZ
 	POP XIX
 	POP XHL
@@ -196,7 +196,7 @@ DemoSound_DirectionHandler:
 	LD WA, 00e3h
 
 DemoSound_PostEventCommon:
-	CALL LABEL_F99490
+	CALL UI_PostModeChangeEvent
 	JR T, DemoSoundTtlFunc_Exit
 
 DemoSound_EnterHandler:
@@ -204,7 +204,7 @@ DemoSound_EnterHandler:
 	PUSH XHL
 	PUSH XIX
 	PUSH XIZ
-	CALL LABEL_F86A47
+	CALL Demo_SelectionEntryHandler
 	POP XIZ
 	POP XIX
 	POP XHL
@@ -269,7 +269,7 @@ DemoRhythm_DirectionHandler:
 	LD WA, 00e2h
 
 DemoRhythm_PostEventCommon:
-	CALL LABEL_F99490
+	CALL UI_PostModeChangeEvent
 	JR T, DemoRhyTtlFunc_Exit
 
 DemoRhythm_EnterHandler:
@@ -277,7 +277,7 @@ DemoRhythm_EnterHandler:
 	PUSH XHL
 	PUSH XIX
 	PUSH XIZ
-	CALL LABEL_F86A47
+	CALL Demo_SelectionEntryHandler
 	POP XIZ
 	POP XIX
 	POP XHL
