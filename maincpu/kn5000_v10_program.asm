@@ -134291,7 +134291,7 @@ LABEL_EF0839:
 ; Configuration for maincpu: byte comparison, local indirect call helper
 ; =============================================================================
 INIT_FLAG_COMPARE_WORD	EQU	0		; maincpu uses byte comparison
-INDIRECT_CALL_HELPER	EQU	LABEL_EF183D	; indirect call helper in maincpu
+INDIRECT_CALL_HELPER	EQU	AudioMix_WriteChannelGroup	; indirect call helper in maincpu
 
 	include "../shared/boot_call_init_handlers.asm"
 
@@ -135971,7 +135971,7 @@ LABEL_EF17A1:
 	LD (0413h), A
 	LD (0422h), A
 	LD (0473h), A
-	CALL LABEL_EF17F4
+	CALL AudioMix_Init
 	CALL LABEL_EF2457
 	CALL LABEL_EF2505
 	CALL SeqMain_InitBuffer
@@ -135998,7 +135998,7 @@ LABEL_EF17F2:
 LABEL_EF17F3:
 	RET
 
-LABEL_EF17F4:
+AudioMix_Init:
 	LINK XIZ, 0fff8h
 	XOR XWA, XWA
 	LD XWA, 5a5a5a5ah
@@ -136007,45 +136007,45 @@ LABEL_EF17F4:
 	LDA XWA, XIZ - 8
 	PUSH XWA
 	LD BC, 0
-	CALR LABEL_EF183D
+	CALR AudioMix_WriteChannelGroup
 	POP XWA
 	PUSH XWA
 	LD BC, 1
-	CALR LABEL_EF183D
+	CALR AudioMix_WriteChannelGroup
 	POP XWA
 	PUSH XWA
 	LD BC, 2
-	CALR LABEL_EF183D
+	CALR AudioMix_WriteChannelGroup
 	POP XWA
 	PUSH XWA
 	LD BC, 3
-	CALR LABEL_EF183D
+	CALR AudioMix_WriteChannelGroup
 	POP XWA
 	LD XBC, 00150000h
 	LD XWA, 0101001fh
 	LD_D 004h
 
-LABEL_EF1830:
+AudioMix_EnableChannels_Loop:
 	LD W, A
 	LD (XBC), XWA
 	ADD A, 020h
-	DJNZ D, LABEL_EF1830
+	DJNZ D, AudioMix_EnableChannels_Loop
 	UNLK XIZ
 	RET
 
-LABEL_EF183D:
+AudioMix_WriteChannelGroup:
 	PUSH DE
 	SLL 5, A
 	SET 004h, A
 	LD XHL, 00150000h
 	LD_D 008h
 
-LABEL_EF184B:
+AudioMix_WriteChannelGroup_Loop:
 	LD (XHL), A
 	LD E, (XBC+)
 	LD (XHL + 002h), E
 	INC 1, A
-	DJNZ D, LABEL_EF184B
+	DJNZ D, AudioMix_WriteChannelGroup_Loop
 	POP DE
 	RET
 
