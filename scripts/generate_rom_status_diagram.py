@@ -331,12 +331,13 @@ def generate_rom_status_diagram(output_path: str):
     # Parse all ROMs and create pixel maps
     rom_data = {}
     script_dir = os.path.dirname(os.path.abspath(__file__))
+    project_root = os.path.dirname(script_dir)
 
     # Target width for large ROMs (Main CPU, Table Data)
     large_rom_width = 512
 
     for comp in rom_components:
-        asm_path = os.path.join(script_dir, comp['asm_file'])
+        asm_path = os.path.join(project_root, comp['asm_file'])
         regions = parse_assembly_file(asm_path, comp['base_addr'], comp['size'])
         regions = merge_adjacent_regions(regions)
 
