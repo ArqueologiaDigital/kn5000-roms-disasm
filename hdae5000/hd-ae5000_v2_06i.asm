@@ -249,7 +249,7 @@ HDAE5000_ENTRY_4:			; 28001Ch
 ;
 ; Handler Registration Table:
 ;   ID     Port        TableOff  Size   DataPtr    Description
-;   0x016A 0x01600004  0x0168    var    0x29C0AA   UI config strings
+;   0x016A 0x01600004  0x0168    13     0x29C0AA   DISK MENU / UI (13 sub-objects, ClassProc)
 ;   0x01CA 0x0160000C  0x013C    var    0x2397EA   RAM data area
 ;   0x01EA 0x0160000D  0x0140    var    0x239824   RAM data area
 ;   0x012A 0x01600002  0x0248    0x45   0x23952A   Init data copy dest
@@ -271,16 +271,19 @@ HDAE5000_Handler_Registration:		; 280020h
 	; Allocate 14-byte parameter block on stack
 	db	0BFh, 0F2h, 37h		; lda XSP, XSP - 0Eh  (allocate 14 bytes)
 
-	; === Handler 1: UI config strings (ID=0x016A, port=0x01600004) ===
+	; === Handler 1: DISK MENU / UI components (ID=0x016A, port=0x01600004) ===
+	; Record count = 13 (from ROM at 0x29D97E)
+	; Data table = 0x29C0AA (13 records x 24 bytes each)
+	; Handler function = ClassProc (0xFA44E2) via workspace[0x0E0A][0x0168]
 	ld	XWA, 01600004h		; PPI port address
 	db	0BFh, 00h, 60h		; ld (XSP+0x00), XWA  ; port address
 	ld	XWA, (HDAE5000_WORKSPACE_PTR)
 	ld	XWA, (XWA + 0E0Ah)	; Handler dispatch table
 	ld	XWA, (XWA + 0168h)	; Handler function via table offset 0x0168
 	db	0BFh, 04h, 60h		; ld (XSP+0x04), XWA  ; handler function ptr
-	ld	WA, (HDAE5000_UI_CONFIG_SIZE)
-	db	0BFh, 08h, 50h		; ld (XSP+0x08), WA   ; data size (variable)
-	lda	XWA, HDAE5000_UI_CONFIG_DATA
+	ld	WA, (HDAE5000_RECORD_COUNT)
+	db	0BFh, 08h, 50h		; ld (XSP+0x08), WA   ; record count (= 13)
+	lda	XWA, HDAE5000_RECORD_TABLE
 	db	0BFh, 0Ah, 60h		; ld (XSP+0x0A), XWA  ; data pointer
 	db	0B7h, 30h		; lda XWA, XSP  ; XWA = param block ptr
 	ld	XBC, XWA		; XBC = param block ptr
@@ -654,8 +657,11 @@ HDAE5000_HANDLER_3	equ	230ED6h
 HDAE5000_INIT_FLAG	equ	230EDAh
 
 ; Handler registration data addresses (used by HDAE5000_Handler_Registration)
-HDAE5000_UI_CONFIG_SIZE	equ	29D97Eh	; Size word for UI config handler (variable)
-HDAE5000_UI_CONFIG_DATA	equ	29C0AAh	; UI config strings data
+HDAE5000_RECORD_COUNT	equ	29D97Eh	; Record count for handler 0x016A (= 0x000D = 13 sub-objects)
+HDAE5000_RECORD_TABLE	equ	29C0AAh	; Data record table (13 x 24 bytes = 312 bytes)
+					; Records: SelectList, DbMemoCl, TtlScreenR, AcHddNamingWindow,
+					; IvHddNaming, HDTitleMenu, TtlScreenR2, TtlScreenR3,
+					; AcWindowPage1, IvScreenR2, AcLanguageText1, LyricBox, FDFileSelect
 HDAE5000_RAM_DATA_A_SIZE equ	239822h	; Size word for RAM data area A (variable)
 HDAE5000_RAM_DATA_A	equ	2397EAh	; RAM data area A
 HDAE5000_RAM_DATA_B_SIZE equ	239870h	; Size word for RAM data area B (variable)
@@ -732,37 +738,54 @@ HDAE5000_Boot_Init:			; 28F576h
 
 	lda	XSP, XSP + 14h		; Clean stack (5 pushes × 4 bytes = 20)
 
-	; Register callback handler 1
+	; === Create DISK MENU slot ===
+	; Call workspace[0x0E0A][0x02C4] to register a DISK MENU entry.
+	; Returns XHL = pointer to menu slot structure.
 	ld	XWA, (HDAE5000_WORKSPACE_PTR)
 	ld	XWA, (XWA + 0E0Ah)	; Handler table A
-	ld	XIX, (XWA + 02C4h)	; Registration function
-	ld	XWA, 00600002h		; Handler ID
-	call	T, XIX			; Call registration
-	ld	XWA, 016A0005h		; Handler flags
-	ld	(XHL), XWA		; Store at returned address
+	ld	XIX, (XWA + 02C4h)	; DISK MENU slot registration function
+	ld	XWA, 00600002h		; Menu group ID
+	call	T, XIX			; Returns XHL = slot pointer
+	;
+	; Set slot+0x00 = 0x016A0005
+	;   0x016A = handler ID (registered above via RegisterObjectTable)
+	;   0x0005 = sub-object index (Record 5 = "HDTitleMenu" in data table)
+	ld	XWA, 016A0005h
+	ld	(XHL), XWA		; Link DISK MENU entry to handler 0x016A, record 5
+	;
+	; Set slot+0x2A = display name string pointer
+	;   Points to "HD-AE5000\0" at ROM address 0x2F8DCE
 	lda	XWA, HDAE5000_Display_Params
-	ld	(XHL + 2Ah), XWA	; Store display params pointer
+	ld	(XHL + 2Ah), XWA	; Display name shown in DISK MENU
+	;
+	; NOTE: slot+0x32 (icon ID) is NOT set here.
+	; The firmware uses a default icon for HDAE5000.
 
-	; Initialize handler 1 pointer
+	; === Initialize callback pointers via Handler Table B ===
+	; Table B is at workspace[+0x0E88].
+	; Each call returns a callback pointer stored in local RAM.
+	; These pointers are used by Frame_Handler to monitor state changes.
+	;
+	; Handler 1: status monitor (used to check bit 2 for display init)
 	ld	XWA, (HDAE5000_WORKSPACE_PTR)
 	ld	XWA, (XWA + 0E88h)	; Handler table B
-	ld	XHL, (XWA + 0108h)	; Init function
+	ld	XHL, (XWA + 0108h)	; Get callback via table B offset +0x0108
 	call	T, XHL
-	ld	(HDAE5000_HANDLER_1), XHL
+	ld	(HDAE5000_HANDLER_1), XHL  ; Store at 0x230ECC
 
-	; Initialize handler 2 pointer
+	; Handler 2: display offset calculator (state value read for display offset)
 	ld	XWA, (HDAE5000_WORKSPACE_PTR)
 	ld	XWA, (XWA + 0E88h)
-	ld	XHL, (XWA + 0100h)
+	ld	XHL, (XWA + 0100h)	; Table B offset +0x0100
 	call	T, XHL
-	ld	(HDAE5000_HANDLER_2), XHL
+	ld	(HDAE5000_HANDLER_2), XHL  ; Store at 0x230ED2
 
-	; Initialize handler 3 pointer
+	; Handler 3: display state reader (state byte shifted for offset calc)
 	ld	XWA, (HDAE5000_WORKSPACE_PTR)
 	ld	XWA, (XWA + 0E88h)
-	ld	XHL, (XWA + 0104h)
+	ld	XHL, (XWA + 0104h)	; Table B offset +0x0104
 	call	T, XHL
-	ld	(HDAE5000_HANDLER_3), XHL
+	ld	(HDAE5000_HANDLER_3), XHL  ; Store at 0x230ED6
 
 	; Check for hard disk presence
 	call	HDAE5000_Check_HD_Present
