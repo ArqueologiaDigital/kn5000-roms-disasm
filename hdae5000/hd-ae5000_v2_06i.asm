@@ -42,7 +42,7 @@
 ; Key Routine Addresses (within code sections):
 ;
 ; Code Section 1 (0x280020-0x28F575):
-;   0x280020  HDAE5000_Handler_Registration - Handler registration entry
+;   0x280020  HDAE5000_Handler_Registration - Handler registration entry (DISASSEMBLED)
 ;   0x28030E  HDAE5000_Get_Display_Dimensions_A1 - Memory allocation parameter check
 ;   0x28033B  HDAE5000_Get_Display_Width_1 - Utility routine
 ;   0x280368  HDAE5000_Get_Display_Width_2 - Utility routine
@@ -221,7 +221,7 @@ HDAE5000_ENTRY_4:			; 28001Ch
 ; CODE SECTION 1 (0x280020 - 0x28F575)
 ;
 ; Key routines:
-;   0x280020  Handler_Registration - Register 12 handlers with main CPU workspace
+;   0x280020  Handler_Registration - Register 11 handlers with main CPU workspace
 ;   0x28030E  Alloc_Memory_1 - Memory lookup (palette at 0x2A898E)
 ;   0x28033B  Alloc_Memory_2 - Memory lookup (palette at 0x2BB98E)
 ;   0x280368  Alloc_Memory_3 - Memory lookup (palette at 0x2CE98E)
@@ -233,7 +233,8 @@ HDAE5000_ENTRY_4:			; 28001Ch
 ; ----------------------------------------------------------------------------
 ; HDAE5000_Handler_Registration (0x280020 - 0x28030D)
 ;
-; Registers 12 callback handlers with the main CPU workspace dispatch system.
+; Registers 11 callback handlers with the main CPU workspace dispatch system,
+; plus a final special dispatch call via offset 0x0270.
 ; Called from HDAE5000_Boot_Init after workspace pointer is stored.
 ;
 ; The workspace dispatch system works via function tables:
@@ -267,7 +268,226 @@ HDAE5000_ENTRY_4:			; 28001Ch
 ; ----------------------------------------------------------------------------
 
 HDAE5000_Handler_Registration:		; 280020h
-	binclude "includes/code_280020_28030d.bin"
+	; Allocate 14-byte parameter block on stack
+	db	0BFh, 0F2h, 37h		; lda XSP, XSP - 0Eh  (allocate 14 bytes)
+
+	; === Handler 1: UI config strings (ID=0x016A, port=0x01600004) ===
+	ld	XWA, 01600004h		; PPI port address
+	db	0BFh, 00h, 60h		; ld (XSP+0x00), XWA  ; port address
+	ld	XWA, (HDAE5000_WORKSPACE_PTR)
+	ld	XWA, (XWA + 0E0Ah)	; Handler dispatch table
+	ld	XWA, (XWA + 0168h)	; Handler function via table offset 0x0168
+	db	0BFh, 04h, 60h		; ld (XSP+0x04), XWA  ; handler function ptr
+	ld	WA, (HDAE5000_UI_CONFIG_SIZE)
+	db	0BFh, 08h, 50h		; ld (XSP+0x08), WA   ; data size (variable)
+	lda	XWA, HDAE5000_UI_CONFIG_DATA
+	db	0BFh, 0Ah, 60h		; ld (XSP+0x0A), XWA  ; data pointer
+	db	0B7h, 30h		; lda XWA, XSP  ; XWA = param block ptr
+	ld	XBC, XWA		; XBC = param block ptr
+	ld	XWA, (HDAE5000_WORKSPACE_PTR)
+	ld	XWA, (XWA + 0E0Ah)
+	ld	XHL, (XWA + 00E4h)	; RegisterObjectTable function
+	ld	WA, 016Ah		; Handler ID
+	call	T, XHL			; Register handler
+
+	; === Handler 2: RAM data area A (ID=0x01CA, port=0x0160000C) ===
+	ld	XWA, 0160000Ch		; PPI port address
+	db	0BFh, 00h, 60h		; ld (XSP+0x00), XWA
+	ld	XWA, (HDAE5000_WORKSPACE_PTR)
+	ld	XWA, (XWA + 0E0Ah)
+	ld	XWA, (XWA + 013Ch)	; Handler function via table offset 0x013C
+	db	0BFh, 04h, 60h		; ld (XSP+0x04), XWA
+	ld	WA, (HDAE5000_RAM_DATA_A_SIZE)
+	db	0BFh, 08h, 50h		; ld (XSP+0x08), WA   ; data size (variable)
+	lda	XWA, HDAE5000_RAM_DATA_A
+	db	0BFh, 0Ah, 60h		; ld (XSP+0x0A), XWA
+	db	0B7h, 30h		; lda XWA, XSP
+	ld	XBC, XWA
+	ld	XWA, (HDAE5000_WORKSPACE_PTR)
+	ld	XWA, (XWA + 0E0Ah)
+	ld	XHL, (XWA + 00E4h)	; RegisterObjectTable
+	ld	WA, 01CAh		; Handler ID
+	call	T, XHL
+
+	; === Handler 3: RAM data area B (ID=0x01EA, port=0x0160000D) ===
+	ld	XWA, 0160000Dh		; PPI port address
+	db	0BFh, 00h, 60h		; ld (XSP+0x00), XWA
+	ld	XWA, (HDAE5000_WORKSPACE_PTR)
+	ld	XWA, (XWA + 0E0Ah)
+	ld	XWA, (XWA + 0140h)	; Handler function via table offset 0x0140
+	db	0BFh, 04h, 60h		; ld (XSP+0x04), XWA
+	ld	WA, (HDAE5000_RAM_DATA_B_SIZE)
+	db	0BFh, 08h, 50h		; ld (XSP+0x08), WA   ; data size (variable)
+	lda	XWA, HDAE5000_RAM_DATA_B
+	db	0BFh, 0Ah, 60h		; ld (XSP+0x0A), XWA
+	db	0B7h, 30h		; lda XWA, XSP
+	ld	XBC, XWA
+	ld	XWA, (HDAE5000_WORKSPACE_PTR)
+	ld	XWA, (XWA + 0E0Ah)
+	ld	XHL, (XWA + 00E4h)	; RegisterObjectTable
+	ld	WA, 01EAh		; Handler ID
+	call	T, XHL
+
+	; === Handler 4: Init data primary (ID=0x012A, port=0x01600002) ===
+	ld	XWA, 01600002h		; PPI port address
+	db	0BFh, 00h, 60h		; ld (XSP+0x00), XWA
+	ld	XWA, (HDAE5000_WORKSPACE_PTR)
+	ld	XWA, (XWA + 0E0Ah)
+	ld	XWA, (XWA + 0248h)	; Handler function via table offset 0x0248
+	db	0BFh, 04h, 60h		; ld (XSP+0x04), XWA
+	db	0BFh, 08h, 02h, 45h, 00h	; ld (XSP+0x08), 0045h  ; size = 69 bytes
+	lda	XWA, HDAE5000_DATA_COPY_DEST
+	db	0BFh, 0Ah, 60h		; ld (XSP+0x0A), XWA
+	db	0B7h, 30h		; lda XWA, XSP
+	ld	XBC, XWA
+	ld	XWA, (HDAE5000_WORKSPACE_PTR)
+	ld	XWA, (XWA + 0E0Ah)
+	ld	XHL, (XWA + 00E4h)	; RegisterObjectTable
+	ld	WA, 012Ah		; Handler ID
+	call	T, XHL
+
+	; === Handler 5: Init data secondary (ID=0x042A, port=0x01600002) ===
+	ld	XWA, 01600002h		; PPI port address
+	db	0BFh, 00h, 60h		; ld (XSP+0x00), XWA
+	ld	XWA, (HDAE5000_WORKSPACE_PTR)
+	ld	XWA, (XWA + 0E0Ah)
+	ld	XWA, (XWA + 0248h)	; Handler function via table offset 0x0248
+	db	0BFh, 04h, 60h		; ld (XSP+0x04), XWA
+	db	0BFh, 08h, 02h, 45h, 00h	; ld (XSP+0x08), 0045h  ; size = 69 bytes
+	lda	XWA, HDAE5000_INIT_DATA_2
+	db	0BFh, 0Ah, 60h		; ld (XSP+0x0A), XWA
+	db	0B7h, 30h		; lda XWA, XSP
+	ld	XBC, XWA
+	ld	XWA, (HDAE5000_WORKSPACE_PTR)
+	ld	XWA, (XWA + 0E0Ah)
+	ld	XHL, (XWA + 00E4h)	; RegisterObjectTable
+	ld	WA, 042Ah		; Handler ID
+	call	T, XHL
+
+	; === Handler 6: Serial data primary (ID=0x010A, port=0x01600001) ===
+	ld	XWA, 01600001h		; PPI port address
+	db	0BFh, 00h, 60h		; ld (XSP+0x00), XWA
+	ld	XWA, (HDAE5000_WORKSPACE_PTR)
+	ld	XWA, (XWA + 0E0Ah)
+	ld	XWA, (XWA + 0244h)	; Handler function via table offset 0x0244
+	db	0BFh, 04h, 60h		; ld (XSP+0x04), XWA
+	db	0BFh, 08h, 02h, 0Dh, 00h	; ld (XSP+0x08), 000Dh  ; size = 13 bytes
+	lda	XWA, HDAE5000_SERIAL_DATA_1
+	db	0BFh, 0Ah, 60h		; ld (XSP+0x0A), XWA
+	db	0B7h, 30h		; lda XWA, XSP
+	ld	XBC, XWA
+	ld	XWA, (HDAE5000_WORKSPACE_PTR)
+	ld	XWA, (XWA + 0E0Ah)
+	ld	XHL, (XWA + 00E4h)	; RegisterObjectTable
+	ld	WA, 010Ah		; Handler ID
+	call	T, XHL
+
+	; === Handler 7: Serial data secondary (ID=0x040A, port=0x01600001) ===
+	ld	XWA, 01600001h		; PPI port address
+	db	0BFh, 00h, 60h		; ld (XSP+0x00), XWA
+	ld	XWA, (HDAE5000_WORKSPACE_PTR)
+	ld	XWA, (XWA + 0E0Ah)
+	ld	XWA, (XWA + 0244h)	; Handler function via table offset 0x0244
+	db	0BFh, 04h, 60h		; ld (XSP+0x04), XWA
+	db	0BFh, 08h, 02h, 0Dh, 00h	; ld (XSP+0x08), 000Dh  ; size = 13 bytes
+	lda	XWA, HDAE5000_SERIAL_DATA_2
+	db	0BFh, 0Ah, 60h		; ld (XSP+0x0A), XWA
+	db	0B7h, 30h		; lda XWA, XSP
+	ld	XBC, XWA
+	ld	XWA, (HDAE5000_WORKSPACE_PTR)
+	ld	XWA, (XWA + 0E0Ah)
+	ld	XHL, (XWA + 00E4h)	; RegisterObjectTable
+	ld	WA, 040Ah		; Handler ID
+	call	T, XHL
+
+	; === Handler 8: Parallel data primary (ID=0x014A, port=0x01600003) ===
+	ld	XWA, 01600003h		; PPI port address
+	db	0BFh, 00h, 60h		; ld (XSP+0x00), XWA
+	ld	XWA, (HDAE5000_WORKSPACE_PTR)
+	ld	XWA, (XWA + 0E0Ah)
+	ld	XWA, (XWA + 024Ch)	; Handler function via table offset 0x024C
+	db	0BFh, 04h, 60h		; ld (XSP+0x04), XWA
+	db	0BFh, 08h, 02h, 0Eh, 00h	; ld (XSP+0x08), 000Eh  ; size = 14 bytes
+	lda	XWA, HDAE5000_PARALLEL_DATA_1
+	db	0BFh, 0Ah, 60h		; ld (XSP+0x0A), XWA
+	db	0B7h, 30h		; lda XWA, XSP
+	ld	XBC, XWA
+	ld	XWA, (HDAE5000_WORKSPACE_PTR)
+	ld	XWA, (XWA + 0E0Ah)
+	ld	XHL, (XWA + 00E4h)	; RegisterObjectTable
+	ld	WA, 014Ah		; Handler ID
+	call	T, XHL
+
+	; === Handler 9: Parallel data secondary (ID=0x044A, port=0x01600003) ===
+	ld	XWA, 01600003h		; PPI port address
+	db	0BFh, 00h, 60h		; ld (XSP+0x00), XWA
+	ld	XWA, (HDAE5000_WORKSPACE_PTR)
+	ld	XWA, (XWA + 0E0Ah)
+	ld	XWA, (XWA + 024Ch)	; Handler function via table offset 0x024C
+	db	0BFh, 04h, 60h		; ld (XSP+0x04), XWA
+	db	0BFh, 08h, 02h, 0Eh, 00h	; ld (XSP+0x08), 000Eh  ; size = 14 bytes
+	lda	XWA, HDAE5000_PARALLEL_DATA_2
+	db	0BFh, 0Ah, 60h		; ld (XSP+0x0A), XWA
+	db	0B7h, 30h		; lda XWA, XSP
+	ld	XBC, XWA
+	ld	XWA, (HDAE5000_WORKSPACE_PTR)
+	ld	XWA, (XWA + 0E0Ah)
+	ld	XHL, (XWA + 00E4h)	; RegisterObjectTable
+	ld	WA, 044Ah		; Handler ID
+	call	T, XHL
+
+	; === Handler 10: Graphics data primary (ID=0x007F, port=0x01600010) ===
+	ld	XWA, 01600010h		; PPI port address
+	db	0BFh, 00h, 60h		; ld (XSP+0x00), XWA
+	ld	XWA, (HDAE5000_WORKSPACE_PTR)
+	ld	XWA, (XWA + 0E0Ah)
+	ld	XWA, (XWA + 0280h)	; Handler function via table offset 0x0280
+	db	0BFh, 04h, 60h		; ld (XSP+0x04), XWA
+	db	0BFh, 08h, 02h, 15h, 03h	; ld (XSP+0x08), 0315h  ; size = 789 bytes
+	lda	XWA, HDAE5000_GFX_DATA_1
+	db	0BFh, 0Ah, 60h		; ld (XSP+0x0A), XWA
+	db	0B7h, 30h		; lda XWA, XSP
+	ld	XBC, XWA
+	ld	XWA, (HDAE5000_WORKSPACE_PTR)
+	ld	XWA, (XWA + 0E0Ah)
+	ld	XHL, (XWA + 00E4h)	; RegisterObjectTable
+	ld	WA, 007Fh		; Handler ID
+	call	T, XHL
+
+	; === Handler 11: Graphics data secondary (ID=0x037F, port=0x0160000F) ===
+	ld	XWA, 0160000Fh		; PPI port address
+	db	0BFh, 00h, 60h		; ld (XSP+0x00), XWA
+	ld	XWA, (HDAE5000_WORKSPACE_PTR)
+	ld	XWA, (XWA + 0E0Ah)
+	ld	XWA, (XWA + 0148h)	; Handler function via table offset 0x0148
+	db	0BFh, 04h, 60h		; ld (XSP+0x04), XWA
+	db	0BFh, 08h, 02h, 15h, 03h	; ld (XSP+0x08), 0315h  ; size = 789 bytes
+	lda	XWA, HDAE5000_GFX_DATA_2
+	db	0BFh, 0Ah, 60h		; ld (XSP+0x0A), XWA
+	db	0B7h, 30h		; lda XWA, XSP
+	ld	XBC, XWA
+	ld	XWA, (HDAE5000_WORKSPACE_PTR)
+	ld	XWA, (XWA + 0E0Ah)
+	ld	XHL, (XWA + 00E4h)	; RegisterObjectTable
+	ld	WA, 037Fh		; Handler ID
+	call	T, XHL
+
+	; === Final special call via workspace dispatch offset 0x0270 ===
+	; Passes additional parameters for graphics initialization
+	PUSH_WORD 000Ah			; push 10 bytes (param size)
+	lda	XWA, HDAE5000_GFX_INIT_PARAMS
+	push	XWA			; push pointer to init params
+	ld	XWA, (HDAE5000_WORKSPACE_PTR)
+	ld	XWA, (XWA + 0E0Ah)
+	ld	XHL, (XWA + 0270h)	; Special dispatch function
+	ld	XWA, 0000007Fh		; Graphics handler ID
+	ld	XBC, 014A0000h		; Parallel data handler ref
+	ld	XDE, 007F01EEh		; Combined handler ID + flags
+	call	T, XHL
+
+	; Deallocate parameter block + final call stack (14 bytes)
+	db	0BFh, 0Eh, 37h		; lda XSP, XSP + 0Eh  (deallocate 14 bytes)
+	ret
 
 ; ----------------------------------------------------------------------------
 ; Memory Allocation Parameter Lookup Routines (0x28030E - 0x2803C1)
@@ -432,6 +652,23 @@ HDAE5000_HANDLER_1	equ	230ECCh
 HDAE5000_HANDLER_2	equ	230ED2h
 HDAE5000_HANDLER_3	equ	230ED6h
 HDAE5000_INIT_FLAG	equ	230EDAh
+
+; Handler registration data addresses (used by HDAE5000_Handler_Registration)
+HDAE5000_UI_CONFIG_SIZE	equ	29D97Eh	; Size word for UI config handler (variable)
+HDAE5000_UI_CONFIG_DATA	equ	29C0AAh	; UI config strings data
+HDAE5000_RAM_DATA_A_SIZE equ	239822h	; Size word for RAM data area A (variable)
+HDAE5000_RAM_DATA_A	equ	2397EAh	; RAM data area A
+HDAE5000_RAM_DATA_B_SIZE equ	239870h	; Size word for RAM data area B (variable)
+HDAE5000_RAM_DATA_B	equ	239824h	; RAM data area B
+HDAE5000_DATA_COPY_DEST	equ	23952Ah	; Init data copy destination
+HDAE5000_INIT_DATA_2	equ	239642h	; Init data area (secondary)
+HDAE5000_SERIAL_DATA_1	equ	239872h	; Serial port data (primary)
+HDAE5000_SERIAL_DATA_2	equ	2398AAh	; Serial port data (secondary)
+HDAE5000_PARALLEL_DATA_1 equ	239FD2h	; Parallel port data (primary)
+HDAE5000_PARALLEL_DATA_2 equ	23A00Eh	; Parallel port data (secondary)
+HDAE5000_GFX_DATA_1	equ	2A5D2Ch	; ROM graphics data (primary)
+HDAE5000_GFX_DATA_2	equ	2A6984h	; ROM graphics data (secondary)
+HDAE5000_GFX_INIT_PARAMS equ	2A849Ah	; Graphics initialization parameters
 
 ; ROM data addresses
 HDAE5000_Palette_Data	equ	2E5DCEh
