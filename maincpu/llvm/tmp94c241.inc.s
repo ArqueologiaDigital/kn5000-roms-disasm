@@ -24,30 +24,37 @@
 	.byte 0xd8, 0x2e, 0x40	; LDC DMAC0, WA (DMA channel 0 count)
 .endm
 
+
 .macro LDC_WA_DMAC0
 	.byte 0xd8, 0x2f, 0x40	; LDC WA, DMAC0 (read DMA channel 0 count)
 .endm
+
 
 .macro LDC_DMAC2_BC
 	.byte 0xd9, 0x2e, 0x48	; LDC DMAC2, BC (DMA channel 2 count)
 .endm
 
+
 .macro LDC_DMAC2_WA
 	.byte 0xd8, 0x2e, 0x48	; LDC DMAC2, WA (DMA channel 2 count)
 .endm
 
+
 .macro LDC_DMAC3_BC
 	.byte 0xd9, 0x2e, 0x4c	; LDC DMAC3, BC (DMA channel 3 count)
 .endm
+
 
 ; DMA Mode registers (DMAM) - 8-bit, CR offsets 0x42/0x46/0x4A/0x4E
 .macro LDC_DMAM0_A
 	.byte 0xc9, 0x2e, 0x42	; LDC DMAM0, A (DMA channel 0 mode)
 .endm
 
+
 .macro LDC_DMAM2_A
 	.byte 0xc9, 0x2e, 0x4a	; LDC DMAM2, A (DMA channel 2 mode)
 .endm
+
 
 .macro LDC_DMAM3_A
 	.byte 0xc9, 0x2e, 0x4e	; LDC DMAM3, A (DMA channel 3 mode)

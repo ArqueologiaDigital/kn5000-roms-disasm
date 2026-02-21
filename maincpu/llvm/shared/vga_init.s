@@ -34,8 +34,8 @@
 ; These macros generate CALR instructions to Write_VGA_Register
 
 .macro VGA_WRITE regnum,value
-	ldw WA, regnum
-	ldw BC, value
+	; (no addr) LDW WA, regnum
+	; (no addr) LDW BC, value
 	CALR Write_VGA_Register
 .endm
 
@@ -61,9 +61,9 @@
 
 ; This macro is used at the end - uses JRL for a tail-call optimization
 .macro RET_VGA_WRITE regnum,value
-	ldw WA, regnum
-	ldw BC, value
-	jrl Write_VGA_Register
+	; (no addr) LDW WA, regnum
+	; (no addr) LDW BC, value
+	; (no addr) JRL T, Write_VGA_Register
 .endm
 
 .macro RET_VGA_SEQUENCER field,value
@@ -220,7 +220,7 @@ VGA_Setup:
 	VGA_COLOR_CRTC CRTC_LINE_COMPARE, 0xff
 
 	; Read VGA_INPUT_STATUS - reuses BC=0FFh from previous write
-	ldw WA, VGA_INPUT_STATUS
+	; (no addr) LDW WA, VGA_INPUT_STATUS
 	CALR Read_VGA_Register
 
 	; EGA default palette (16 entries)
@@ -278,102 +278,102 @@ VGA_Setup:
 	VGA_WRITE 0x3c8, 0	; Start at palette index 0
 
 	; Color 0: Black (0, 0, 0)
-	ld WA, 0x3c9
-	ldw BC, 0
+	; (no addr) LD WA, 3c9h
+	; (no addr) LDW BC, 0
 	CALR Write_VGA_Register
-	ld WA, 0x3c9
-	ldw BC, 0
+	; (no addr) LD WA, 3c9h
+	; (no addr) LDW BC, 0
 	CALR Write_VGA_Register
-	ld WA, 0x3c9
-	ldw BC, 0
+	; (no addr) LD WA, 3c9h
+	; (no addr) LDW BC, 0
 	CALR Write_VGA_Register
 
 	; Color 1: White (F, F, F)
-	ld WA, 0x3c9
-	ldw BC, 0xf
+	; (no addr) LD WA, 3c9h
+	; (no addr) LDW BC, 0fh
 	CALR Write_VGA_Register
-	ld WA, 0x3c9
-	ldw BC, 0xf
+	; (no addr) LD WA, 3c9h
+	; (no addr) LDW BC, 0fh
 	CALR Write_VGA_Register
-	ld WA, 0x3c9
-	ldw BC, 0xf
+	; (no addr) LD WA, 3c9h
+	; (no addr) LDW BC, 0fh
 	CALR Write_VGA_Register
 
 	; Color 2: Red (F, 0, 0)
-	ld WA, 0x3c9
-	ldw BC, 0xf
+	; (no addr) LD WA, 3c9h
+	; (no addr) LDW BC, 0fh
 	CALR Write_VGA_Register
-	ld WA, 0x3c9
-	ldw BC, 0
+	; (no addr) LD WA, 3c9h
+	; (no addr) LDW BC, 0
 	CALR Write_VGA_Register
-	ld WA, 0x3c9
-	ldw BC, 0
+	; (no addr) LD WA, 3c9h
+	; (no addr) LDW BC, 0
 	CALR Write_VGA_Register
 
 	; Color 3: Green (0, F, 0)
-	ld WA, 0x3c9
-	ldw BC, 0
+	; (no addr) LD WA, 3c9h
+	; (no addr) LDW BC, 0
 	CALR Write_VGA_Register
-	ld WA, 0x3c9
-	ldw BC, 0xf
+	; (no addr) LD WA, 3c9h
+	; (no addr) LDW BC, 0fh
 	CALR Write_VGA_Register
-	ld WA, 0x3c9
-	ldw BC, 0
+	; (no addr) LD WA, 3c9h
+	; (no addr) LDW BC, 0
 	CALR Write_VGA_Register
 
 	; Color 4: Blue (0, 0, F)
-	ld WA, 0x3c9
-	ldw BC, 0
+	; (no addr) LD WA, 3c9h
+	; (no addr) LDW BC, 0
 	CALR Write_VGA_Register
-	ld WA, 0x3c9
-	ldw BC, 0
+	; (no addr) LD WA, 3c9h
+	; (no addr) LDW BC, 0
 	CALR Write_VGA_Register
-	ld WA, 0x3c9
-	ldw BC, 0xf
+	; (no addr) LD WA, 3c9h
+	; (no addr) LDW BC, 0fh
 	CALR Write_VGA_Register
 
 	; Color 5: Cyan (0, F, F)
-	ld WA, 0x3c9
-	ldw BC, 0
+	; (no addr) LD WA, 3c9h
+	; (no addr) LDW BC, 0
 	CALR Write_VGA_Register
-	ld WA, 0x3c9
-	ldw BC, 0xf
+	; (no addr) LD WA, 3c9h
+	; (no addr) LDW BC, 0fh
 	CALR Write_VGA_Register
-	ld WA, 0x3c9
-	ldw BC, 0xf
+	; (no addr) LD WA, 3c9h
+	; (no addr) LDW BC, 0fh
 	CALR Write_VGA_Register
 
 	; Color 6: Yellow (F, F, 0)
-	ld WA, 0x3c9
-	ldw BC, 0xf
+	; (no addr) LD WA, 3c9h
+	; (no addr) LDW BC, 0fh
 	CALR Write_VGA_Register
-	ld WA, 0x3c9
-	ldw BC, 0xf
+	; (no addr) LD WA, 3c9h
+	; (no addr) LDW BC, 0fh
 	CALR Write_VGA_Register
-	ld WA, 0x3c9
-	ldw BC, 0
+	; (no addr) LD WA, 3c9h
+	; (no addr) LDW BC, 0
 	CALR Write_VGA_Register
 
 	; Color 7: Magenta (F, 0, F)
-	ld WA, 0x3c9
-	ldw BC, 0xf
+	; (no addr) LD WA, 3c9h
+	; (no addr) LDW BC, 0fh
 	CALR Write_VGA_Register
-	ld WA, 0x3c9
-	ldw BC, 0
+	; (no addr) LD WA, 3c9h
+	; (no addr) LDW BC, 0
 	CALR Write_VGA_Register
-	ld WA, 0x3c9
-	ldw BC, 0xf
+	; (no addr) LD WA, 3c9h
+	; (no addr) LDW BC, 0fh
 	CALR Write_VGA_Register
 
 	; Color 8: Dark Blue (0, 0, 4)
-	ld WA, 0x3c9
-	ldw BC, 0
+	; (no addr) LD WA, 3c9h
+	; (no addr) LDW BC, 0
 	CALR Write_VGA_Register
-	ld WA, 0x3c9
-	ldw BC, 0
+	; (no addr) LD WA, 3c9h
+	; (no addr) LDW BC, 0
 	CALR Write_VGA_Register
-	ld WA, 0x3c9
-	ldw BC, 4
+	; (no addr) LD WA, 3c9h
+	; (no addr) LDW BC, 4
 	CALR Write_VGA_Register
 
 	; Call extended sequencer init
@@ -381,9 +381,9 @@ VGA_Setup:
 
 	; Set up parameters for video buffer initialization
 	; These are loaded here; caller provides the actual CALL to fill/copy routines
-	ld XWA, OFFSCREEN_BUFFER_1
-	ld BC, 0x808	; Fill pattern
-	ld DE, 320 * 240 / 2	; Size in words (38400 = 0x9600)
+	; (no addr) LD XWA, OFFSCREEN_BUFFER_1
+	; (no addr) LD BC, 0808h	; Fill pattern
+	; (no addr) LD DE, 320 * 240 / 2	; Size in words (38400 = 0x9600)
 
 	; === End of shared VGA init code ===
 	; Each ROM must now:

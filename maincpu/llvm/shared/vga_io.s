@@ -22,18 +22,18 @@
 ; Notes: Includes 256-iteration delay loop before write for bus timing
 ; -----------------------------------------------------------------------------
 Write_VGA_Register:
-	ld DE, 0	; Initialize delay counter
+	; (no addr) LD DE, 0	; Initialize delay counter
 
 	.delay:
-	inc 1, DE	; Increment counter
-	cp DE, 0x100	; Compare to 256
-	jr C, .delay	; Loop until DE >= 256
+	; (no addr) INC 1, DE	; Increment counter
+	; (no addr) CP DE, 0100h	; Compare to 256
+	; (no addr) JR C, .delay	; Loop until DE >= 256
 
-	extz XWA	; Zero-extend WA to XWA
-	ld XDE, VGA_IO_BASE	; Load VGA I/O base address
-	add XDE, XWA	; Add port offset
-	ld (XDE), C	; Write value to port
-	ret
+	; (no addr) EXTZ XWA	; Zero-extend WA to XWA
+	; (no addr) LD XDE, VGA_IO_BASE	; Load VGA I/O base address
+	; (no addr) ADD XDE, XWA	; Add port offset
+	; (no addr) LD (XDE), C	; Write value to port
+	; (no addr) RET
 
 ; -----------------------------------------------------------------------------
 ; Read_VGA_Register - Read byte from VGA I/O port
@@ -42,10 +42,10 @@ Write_VGA_Register:
 ; Exit:  L = value read
 ; -----------------------------------------------------------------------------
 Read_VGA_Register:
-	extz XWA	; Zero-extend WA to XWA
-	ld XBC, VGA_IO_BASE	; Load VGA I/O base address
-	add XBC, XWA	; Add port offset
-	ld L, (XBC)	; Read value from port
-	ret
+	; (no addr) EXTZ XWA	; Zero-extend WA to XWA
+	; (no addr) LD XBC, VGA_IO_BASE	; Load VGA I/O base address
+	; (no addr) ADD XBC, XWA	; Add port offset
+	; (no addr) LD L, (XBC)	; Read value from port
+	; (no addr) RET
 
 ; End of shared VGA I/O routines

@@ -188,6 +188,16 @@ ADDR_TRACKER = AddressTracker()
 # Pending .org corrections from self-correction at labels
 PENDING_ORG_CORRECTIONS = []
 
+# Macro expansion sizes: maps macro name (upper) → number of leaf instructions.
+# Inline macros (defined in source) may expand to multiple instructions.
+# tmp94c241.inc macros are all single-instruction (verified).
+# Used to emit the correct number of ROM bytes at invocation sites.
+MACRO_INSTR_COUNT = {}
+
+# Current macro being defined (for counting instructions during definition)
+CURRENT_MACRO_DEF_NAME = None
+CURRENT_MACRO_INSTR_COUNT = 0
+
 # Macro definition depth: when > 0, we're inside a .macro/.endm block.
 # Lines in macro bodies are converted but must NOT advance ADDR_TRACKER
 # because the LLVM assembler stores them without emitting bytes.
@@ -498,7 +508,7 @@ def convert_line(line, in_file_path):
 
     Returns the converted line string.
     """
-    global IN_MACRO_DEF
+    global IN_MACRO_DEF, CURRENT_MACRO_DEF_NAME, CURRENT_MACRO_INSTR_COUNT
 
     stripped = line.rstrip()
     if not stripped:
@@ -656,6 +666,9 @@ def convert_line(line, in_file_path):
         ADDR_TRACKER.freeze()
         macro_name = first_word
         KNOWN_MACROS.add(macro_name.upper())
+        if IN_MACRO_DEF == 1:
+            CURRENT_MACRO_DEF_NAME = macro_name.upper()
+            CURRENT_MACRO_INSTR_COUNT = 0
         macro_match = re.match(r'MACRO\s*(.*)', remainder.strip(), re.IGNORECASE)
         args_str = macro_match.group(1).strip() if macro_match else ""
         if args_str:
@@ -668,10 +681,22 @@ def convert_line(line, in_file_path):
 
     if first_upper == 'ENDM':
         if IN_MACRO_DEF > 0:
+            if IN_MACRO_DEF == 1 and CURRENT_MACRO_DEF_NAME:
+                MACRO_INSTR_COUNT[CURRENT_MACRO_DEF_NAME] = CURRENT_MACRO_INSTR_COUNT
+                CURRENT_MACRO_DEF_NAME = None
             IN_MACRO_DEF -= 1
             if IN_MACRO_DEF == 0:
                 ADDR_TRACKER.unfreeze()
         return ".endm"
+
+    # Count instructions/macros in macro body for expansion size tracking
+    if IN_MACRO_DEF > 0 and IN_MACRO_DEF == 1:
+        if is_instruction(first_word):
+            CURRENT_MACRO_INSTR_COUNT += 1
+        elif is_macro_invocation(first_word):
+            # Nested macro: add its leaf instruction count
+            nested_count = MACRO_INSTR_COUNT.get(first_word.upper(), 1)
+            CURRENT_MACRO_INSTR_COUNT += nested_count
 
     # ---- Data directives ----
 
@@ -745,9 +770,23 @@ def convert_line(line, in_file_path):
 
     # ---- Macro invocations ----
     if is_macro_invocation(first_word):
-        # Emit as .byte fallback from ROM, like instructions
+        # Emit as .byte fallback from ROM.
+        # Inline macros may expand to multiple instructions — decode the right count.
         addr = ADDR_TRACKER.get_addr()
-        nbytes = get_instruction_size_from_rom(addr) if addr is not None else None
+        instr_count = MACRO_INSTR_COUNT.get(first_word.upper(), 1)
+
+        # Decode instr_count consecutive instructions from ROM
+        nbytes = 0
+        if addr is not None:
+            cur = addr
+            for _ in range(instr_count):
+                sz = get_instruction_size_from_rom(cur)
+                if sz is None:
+                    break
+                nbytes += sz
+                cur += sz
+            if nbytes == 0:
+                nbytes = None
 
         result = ""
         if label:

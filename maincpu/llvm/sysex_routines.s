@@ -29,51 +29,51 @@
 ; =============================================================================
 
 ExcSendFunc:
-	ld XHL, XDE
-	cp XBC, 0x1c00007
-	jr NZ, ExcSendFunc_InvalidParam_Exit
-	ld XWA, 0x570003
-	ld XBC, 0x1e00090
-	ld XDE, 0
-	call SendEvent
-	exts XHL
-	ld XWA, 0x1430001
-	ld XBC, 0x1e30001
-	ld XDE, XHL
-	call MainFuncCall
+	; (no addr) LD XHL, XDE
+	; (no addr) CP XBC, 01c00007h
+	; (no addr) JR NZ, ExcSendFunc_InvalidParam_Exit
+	; (no addr) LD XWA, 00570003h
+	; (no addr) LD XBC, 01e00090h
+	; (no addr) LD XDE, 0
+	; (no addr) CALL SendEvent
+	; (no addr) EXTS XHL
+	; (no addr) LD XWA, 01430001h
+	; (no addr) LD XBC, 01e30001h
+	; (no addr) LD XDE, XHL
+	; (no addr) CALL MainFuncCall
 
 ExcSendFunc_InvalidParam_Exit:
-	ld XHL, 0
-	ret
+	; (no addr) LD XHL, 0
+	; (no addr) RET
 
 MainExcSend:
-	cp XBC, 0x1e30001
-	jr NZ, MainExcSend_UnexpectedMessageType_Exit
-	cp XDE, 0x6
-	jr C, MainExcSend_ClampIndexToRange
-	ld XDE, 0
+	; (no addr) CP XBC, 01e30001h
+	; (no addr) JR NZ, MainExcSend_UnexpectedMessageType_Exit
+	; (no addr) CP XDE, 00000006h
+	; (no addr) JR C, MainExcSend_ClampIndexToRange
+	; (no addr) LD XDE, 0
 
 MainExcSend_ClampIndexToRange:
-	ld XWA, 0xe7fd84
-	add XWA, XDE
-	ld A, (XWA)
-	call LABEL_FD8CAE
+	; (no addr) LD XWA, 00e7fd84h
+	; (no addr) ADD XWA, XDE
+	; (no addr) LD A, (XWA)
+	; (no addr) CALL LABEL_FD8CAE
 
 MainExcSend_UnexpectedMessageType_Exit:
-	ld XHL, 0
-	ret
+	; (no addr) LD XHL, 0
+	; (no addr) RET
 
 ExcDotFunc:
-	sub XBC, 0x1e0003e
-	cp XBC, 0x0
-	jr LT, ExcDotFunc_InvalidIndex_Exit
-	cp XBC, 0x9
-	jr GT, ExcDotFunc_InvalidIndex_Exit
-	add XBC, XBC
-	add XBC, 0xe7fd8a
-	ld BC, (XBC)
-	lda XIX, 0xF76696
-	jp XIX + BC
+	; (no addr) SUB XBC, 01e0003eh
+	; (no addr) CP XBC, 00000000h
+	; (no addr) JR LT, ExcDotFunc_InvalidIndex_Exit
+	; (no addr) CP XBC, 00000009h
+	; (no addr) JR GT, ExcDotFunc_InvalidIndex_Exit
+	; (no addr) ADD XBC, XBC
+	; (no addr) ADD XBC, 00e7fd8ah
+	; (no addr) LD BC, (XBC)
+	; (no addr) LDA XIX, 0F76696h
+	; (no addr) JP T, XIX + BC
 ExcDotFunc_HandlerJumpTable:
 	.byte 0xAA, 0x12, 0x24, 0xAA, 0xE, 0x21, 0xCB, 0x8F
 	.byte 0xDA, 0xA8, 0xC2, 0x5C, 0x47, 0x2, 0x23, 0xD9
@@ -85,25 +85,25 @@ ExcDotFunc_HandlerJumpTable:
 	.byte 0x0, 0xE
 
 ExcDotFunc_InvalidIndex_Exit:
-	ld XHL, 0
-	ret
+	; (no addr) LD XHL, 0
+	; (no addr) RET
 
 LABEL_F766D3:
 	.byte 0xF2, 0x5E, 0x47, 0x2, 0x33, 0xE
 
 ExcPmemFunc:
-	push XIZ
-	ld XIZ, XWA
-	sub XBC, 0x1e0003e
-	cp XBC, 0x0
-	jr LT, ExcPmemFunc_InvalidIndex_Exit
-	cp XBC, 0x9
-	jr GT, ExcPmemFunc_InvalidIndex_Exit
-	add XBC, XBC
-	add XBC, 0xe7fdd6
-	ld BC, (XBC)
-	lda XIX, 0xF76706
-	jp XIX + BC
+	; (no addr) PUSH XIZ
+	; (no addr) LD XIZ, XWA
+	; (no addr) SUB XBC, 01e0003eh
+	; (no addr) CP XBC, 00000000h
+	; (no addr) JR LT, ExcPmemFunc_InvalidIndex_Exit
+	; (no addr) CP XBC, 00000009h
+	; (no addr) JR GT, ExcPmemFunc_InvalidIndex_Exit
+	; (no addr) ADD XBC, XBC
+	; (no addr) ADD XBC, 00e7fdd6h
+	; (no addr) LD BC, (XBC)
+	; (no addr) LDA XIX, 0F76706h
+	; (no addr) JP T, XIX + BC
 LABEL_F76706:
 	.byte 0xAA, 0xE, 0x20, 0xE8, 0xEE, 0x2, 0x41, 0x9E
 	.byte 0xFD, 0xE7, 0x0, 0xE8, 0x81, 0xA1, 0x20, 0x38
@@ -112,27 +112,27 @@ LABEL_F76706:
 	.byte 0x68, 0xD, 0xEB, 0xAB, 0x68, 0x9
 
 ExcPmemFunc_InvalidIndex_Exit:
-	ld XHL, 0
-	jr ExcPmemFunc_Return
-	lda XHL, 0x24760
+	; (no addr) LD XHL, 0
+	; (no addr) JR T, ExcPmemFunc_Return
+	; (no addr) LDA XHL, 024760h
 
 ExcPmemFunc_Return:
-	pop XIZ
-	ret
+	; (no addr) POP XIZ
+	; (no addr) RET
 
 ExcSmemFunc:
-	push XIZ
-	ld XIZ, XWA
-	sub XBC, 0x1e0003e
-	cp XBC, 0x0
-	jr LT, ExcSmemFunc_InvalidIndex_Exit
-	cp XBC, 0x9
-	jr GT, ExcSmemFunc_InvalidIndex_Exit
-	add XBC, XBC
-	add XBC, 0xe7fdea
-	ld BC, (XBC)
-	lda XIX, 0xF76764
-	jp XIX + BC
+	; (no addr) PUSH XIZ
+	; (no addr) LD XIZ, XWA
+	; (no addr) SUB XBC, 01e0003eh
+	; (no addr) CP XBC, 00000000h
+	; (no addr) JR LT, ExcSmemFunc_InvalidIndex_Exit
+	; (no addr) CP XBC, 00000009h
+	; (no addr) JR GT, ExcSmemFunc_InvalidIndex_Exit
+	; (no addr) ADD XBC, XBC
+	; (no addr) ADD XBC, 00e7fdeah
+	; (no addr) LD BC, (XBC)
+	; (no addr) LDA XIX, 0F76764h
+	; (no addr) JP T, XIX + BC
 LABEL_F76764:
 	.byte 0xAA, 0xE, 0x20, 0xE8, 0xEE, 0x2, 0x41, 0x9E
 	.byte 0xFD, 0xE7, 0x0, 0xE8, 0x81, 0xA1, 0x20, 0x38
@@ -141,27 +141,27 @@ LABEL_F76764:
 	.byte 0x68, 0xD, 0xEB, 0xAB, 0x68, 0x9
 
 ExcSmemFunc_InvalidIndex_Exit:
-	ld XHL, 0
-	jr ExcSmemFunc_Return
-	lda XHL, 0x24762
+	; (no addr) LD XHL, 0
+	; (no addr) JR T, ExcSmemFunc_Return
+	; (no addr) LDA XHL, 024762h
 
 ExcSmemFunc_Return:
-	pop XIZ
-	ret
+	; (no addr) POP XIZ
+	; (no addr) RET
 
 ExcCompFunc:
-	push XIZ
-	ld XIZ, XWA
-	sub XBC, 0x1e0003e
-	cp XBC, 0x0
-	jr LT, ExcCompFunc_InvalidIndex_Exit
-	cp XBC, 0x9
-	jr GT, ExcCompFunc_InvalidIndex_Exit
-	add XBC, XBC
-	add XBC, 0xe7fdfe
-	ld BC, (XBC)
-	lda XIX, 0xF767C2
-	jp XIX + BC
+	; (no addr) PUSH XIZ
+	; (no addr) LD XIZ, XWA
+	; (no addr) SUB XBC, 01e0003eh
+	; (no addr) CP XBC, 00000000h
+	; (no addr) JR LT, ExcCompFunc_InvalidIndex_Exit
+	; (no addr) CP XBC, 00000009h
+	; (no addr) JR GT, ExcCompFunc_InvalidIndex_Exit
+	; (no addr) ADD XBC, XBC
+	; (no addr) ADD XBC, 00e7fdfeh
+	; (no addr) LD BC, (XBC)
+	; (no addr) LDA XIX, 0F767C2h
+	; (no addr) JP T, XIX + BC
 LABEL_F767C2:
 	.byte 0xAA, 0xE, 0x20, 0xE8, 0xEE, 0x2, 0x41, 0x9E
 	.byte 0xFD, 0xE7, 0x0, 0xE8, 0x81, 0xA1, 0x20, 0x38
@@ -170,27 +170,27 @@ LABEL_F767C2:
 	.byte 0x68, 0xD, 0xEB, 0xAB, 0x68, 0x9
 
 ExcCompFunc_InvalidIndex_Exit:
-	ld XHL, 0
-	jr ExcCompFunc_Return
-	lda XHL, 0x24764
+	; (no addr) LD XHL, 0
+	; (no addr) JR T, ExcCompFunc_Return
+	; (no addr) LDA XHL, 024764h
 
 ExcCompFunc_Return:
-	pop XIZ
-	ret
+	; (no addr) POP XIZ
+	; (no addr) RET
 
 ExcSeqFunc:
-	push XIZ
-	ld XIZ, XWA
-	sub XBC, 0x1e0003e
-	cp XBC, 0x0
-	jr LT, ExcSeqFunc_InvalidIndex_Exit
-	cp XBC, 0x9
-	jr GT, ExcSeqFunc_InvalidIndex_Exit
-	add XBC, XBC
-	add XBC, 0xe7fe12
-	ld BC, (XBC)
-	lda XIX, 0xF76820
-	jp XIX + BC
+	; (no addr) PUSH XIZ
+	; (no addr) LD XIZ, XWA
+	; (no addr) SUB XBC, 01e0003eh
+	; (no addr) CP XBC, 00000000h
+	; (no addr) JR LT, ExcSeqFunc_InvalidIndex_Exit
+	; (no addr) CP XBC, 00000009h
+	; (no addr) JR GT, ExcSeqFunc_InvalidIndex_Exit
+	; (no addr) ADD XBC, XBC
+	; (no addr) ADD XBC, 00e7fe12h
+	; (no addr) LD BC, (XBC)
+	; (no addr) LDA XIX, 0F76820h
+	; (no addr) JP T, XIX + BC
 LABEL_F76820:
 	.byte 0xAA, 0xE, 0x20, 0xE8, 0xEE, 0x2, 0x41, 0x9E
 	.byte 0xFD, 0xE7, 0x0, 0xE8, 0x81, 0xA1, 0x20, 0x38
@@ -199,27 +199,27 @@ LABEL_F76820:
 	.byte 0x68, 0xD, 0xEB, 0xAB, 0x68, 0x9
 
 ExcSeqFunc_InvalidIndex_Exit:
-	ld XHL, 0
-	jr ExcSeqFunc_Return
-	lda XHL, 0x24766
+	; (no addr) LD XHL, 0
+	; (no addr) JR T, ExcSeqFunc_Return
+	; (no addr) LDA XHL, 024766h
 
 ExcSeqFunc_Return:
-	pop XIZ
-	ret
+	; (no addr) POP XIZ
+	; (no addr) RET
 
 ExcMspFunc:
-	push XIZ
-	ld XIZ, XWA
-	sub XBC, 0x1e0003e
-	cp XBC, 0x0
-	jr LT, ExcMspFunc_InvalidIndex_Exit
-	cp XBC, 0x9
-	jr GT, ExcMspFunc_InvalidIndex_Exit
-	add XBC, XBC
-	add XBC, 0xe7fe26
-	ld BC, (XBC)
-	lda XIX, 0xF7687E
-	jp XIX + BC
+	; (no addr) PUSH XIZ
+	; (no addr) LD XIZ, XWA
+	; (no addr) SUB XBC, 01e0003eh
+	; (no addr) CP XBC, 00000000h
+	; (no addr) JR LT, ExcMspFunc_InvalidIndex_Exit
+	; (no addr) CP XBC, 00000009h
+	; (no addr) JR GT, ExcMspFunc_InvalidIndex_Exit
+	; (no addr) ADD XBC, XBC
+	; (no addr) ADD XBC, 00e7fe26h
+	; (no addr) LD BC, (XBC)
+	; (no addr) LDA XIX, 0F7687Eh
+	; (no addr) JP T, XIX + BC
 LABEL_F7687E:
 	.byte 0xAA, 0xE, 0x20, 0xE8, 0xEE, 0x2, 0x41, 0x9E
 	.byte 0xFD, 0xE7, 0x0, 0xE8, 0x81, 0xA1, 0x20, 0x38
@@ -228,12 +228,12 @@ LABEL_F7687E:
 	.byte 0x68, 0xD, 0xEB, 0xAB, 0x68, 0x9
 
 ExcMspFunc_InvalidIndex_Exit:
-	ld XHL, 0
-	jr ExcMspFunc_Return
-	lda XHL, 0x24768
+	; (no addr) LD XHL, 0
+	; (no addr) JR T, ExcMspFunc_Return
+	; (no addr) LDA XHL, 024768h
 
 ExcMspFunc_Return:
-	pop XIZ
-	ret
+	; (no addr) POP XIZ
+	; (no addr) RET
 
 ; End of SysEx routines

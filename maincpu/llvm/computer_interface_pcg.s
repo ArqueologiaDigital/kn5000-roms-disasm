@@ -12,288 +12,288 @@
 ; =============================================================================
 
 TtMdPcgOut:
-	cp XBC, 0x1c0000c
-	jr Z, LABEL_F773D7
-	cp XBC, 0x1c0000b
-	jr Z, LABEL_F773D7
-	cp XBC, 0x1c00002
-	jr Z, LABEL_F773D7
-	cp XBC, 0x1c00001
-	jr NZ, LABEL_F773D7
-	or XDE, XDE
-	jr NZ, LABEL_F773D7
-	ld XWA, 0x590001
-	call GetViewInstance
-	ld XWA, (XHL + 0x2a)
-	ldw (XWA), 0x0
-	ld XWA, (XHL + 0x2e)
-	ldw (XWA), 0x1
+	; (no addr) CP XBC, 01c0000ch
+	; (no addr) JR Z, LABEL_F773D7
+	; (no addr) CP XBC, 01c0000bh
+	; (no addr) JR Z, LABEL_F773D7
+	; (no addr) CP XBC, 01c00002h
+	; (no addr) JR Z, LABEL_F773D7
+	; (no addr) CP XBC, 01c00001h
+	; (no addr) JR NZ, LABEL_F773D7
+	; (no addr) OR XDE, XDE
+	; (no addr) JR NZ, LABEL_F773D7
+	; (no addr) LD XWA, 00590001h
+	; (no addr) CALL GetViewInstance
+	; (no addr) LD XWA, (XHL + 02ah)
+	; (no addr) LDW (XWA), 0000h
+	; (no addr) LD XWA, (XHL + 02eh)
+	; (no addr) LDW (XWA), 0001h
 
 LABEL_F773D7:
-	ld XHL, 0
-	ret
+	; (no addr) LD XHL, 0
+	; (no addr) RET
 
 AcPcgOutGridBoxProc:
-	lda XSP, XSP - 0x10
-	push XIZ
-	ld (XSP + 0xc), XDE
-	ld (XSP + 0x10), XBC
-	ld XIZ, XWA
-	ld XBC, (XSP + 0x10)
-	cp XBC, 0x1e0008d
-	jrl Z, LABEL_F7762B
-	ld XWA, (XSP + 0x10)
-	cp XWA, 0x1e0008b
-	jrl Z, LABEL_F775FE
-	cp XWA, 0x1e0008a
-	jrl Z, LABEL_F775F5
-	cp XWA, 0x1c00001
-	jr Z, PcgOutGridBoxEventDispatch
-	sub XBC, 0x1c00017
-	cp XBC, 0x0
-	jrl LT, LABEL_F77642
-	cp XBC, 0x6
-	jrl GT, LABEL_F77642
-	add XBC, XBC
-	add XBC, 0xe7ff20
-	ld BC, (XBC)
-	lda XIX, 0xF7743B
-	jp XIX + BC
+	; (no addr) LDA XSP, XSP - 010h
+	; (no addr) PUSH XIZ
+	; (no addr) LD (XSP + 00ch), XDE
+	; (no addr) LD (XSP + 010h), XBC
+	; (no addr) LD XIZ, XWA
+	; (no addr) LD XBC, (XSP + 010h)
+	; (no addr) CP XBC, 01e0008dh
+	; (no addr) JRL Z, LABEL_F7762B
+	; (no addr) LD XWA, (XSP + 010h)
+	; (no addr) CP XWA, 01e0008bh
+	; (no addr) JRL Z, LABEL_F775FE
+	; (no addr) CP XWA, 01e0008ah
+	; (no addr) JRL Z, LABEL_F775F5
+	; (no addr) CP XWA, 01c00001h
+	; (no addr) JR Z, PcgOutGridBoxEventDispatch
+	; (no addr) SUB XBC, 01c00017h
+	; (no addr) CP XBC, 00000000h
+	; (no addr) JRL LT, LABEL_F77642
+	; (no addr) CP XBC, 00000006h
+	; (no addr) JRL GT, LABEL_F77642
+	; (no addr) ADD XBC, XBC
+	; (no addr) ADD XBC, 00e7ff20h
+	; (no addr) LD BC, (XBC)
+	; (no addr) LDA XIX, 0F7743Bh
+	; (no addr) JP T, XIX + BC
 
 PcgOutGridBoxEventDispatch:
-	ld XWA, XIZ
-	ld XBC, (XSP + 0x10)
-	ld XDE, (XSP + 0xc)
-	call InheritedProc
-	ld XWA, XIZ
-	call GetViewInstance
-	ld (XSP + 0x8), XHL
-	ld XWA, XIZ
-	ld XBC, 0x1e0008f
-	ld XDE, 0
-	call SendEvent
-	ld (XSP + 0x4), XHL
-	ld XWA, (XSP + 0x8)
-	ld BC, (XWA + 0x1a)
-	ld XWA, (XSP + 0x4)
+	; (no addr) LD XWA, XIZ
+	; (no addr) LD XBC, (XSP + 010h)
+	; (no addr) LD XDE, (XSP + 00ch)
+	; (no addr) CALL InheritedProc
+	; (no addr) LD XWA, XIZ
+	; (no addr) CALL GetViewInstance
+	; (no addr) LD (XSP + 008h), XHL
+	; (no addr) LD XWA, XIZ
+	; (no addr) LD XBC, 01e0008fh
+	; (no addr) LD XDE, 0
+	; (no addr) CALL SendEvent
+	; (no addr) LD (XSP + 004h), XHL
+	; (no addr) LD XWA, (XSP + 008h)
+	; (no addr) LD BC, (XWA + 01ah)
+	; (no addr) LD XWA, (XSP + 004h)
 	SRL_0_XWA
-	ld QWA, 0
-	add WA, BC
-	ld DE, WA
-	extz XDE
-	ld XWA, XIZ
-	ld XBC, 0x1c00017
-	call SetDialUp
-	ld XWA, (XSP + 0x8)
-	ld BC, (XWA + 0x1a)
-	ld XWA, (XSP + 0x4)
+	; (no addr) LD QWA, 0
+	; (no addr) ADD WA, BC
+	; (no addr) LD DE, WA
+	; (no addr) EXTZ XDE
+	; (no addr) LD XWA, XIZ
+	; (no addr) LD XBC, 01c00017h
+	; (no addr) CALL SetDialUp
+	; (no addr) LD XWA, (XSP + 008h)
+	; (no addr) LD BC, (XWA + 01ah)
+	; (no addr) LD XWA, (XSP + 004h)
 	SRL_0_XWA
-	ld QWA, 0
-	add WA, BC
-	ld DE, WA
-	extz XDE
-	ld XWA, XIZ
-	ld XBC, 0x1c00018
-	call SetDialDown
-	ld WA, 1
-	jrl PcgOutGridDialConfirm
-	ld XWA, XIZ
-	ld XBC, (XSP + 0x10)
-	ld XDE, (XSP + 0xc)
-	call InheritedProc
-	ld XWA, XIZ
-	ld XBC, 0x1e00050
-	ld XDE, (XSP + 0xc)
-	call SendEvent
-	or XHL, XHL
-	jr Z, LABEL_F774F6
-	ld XWA, XIZ
-	ld XBC, 0x1e0008f
-	ld XDE, 0
-	call SendEvent
-	dec 1, HL
-	extz XHL
-	add XHL, 0xffff0000
-	ld XWA, XIZ
-	ld XBC, 0x1c0000e
-	ld XDE, XHL
-	call SendEvent
-	ld XWA, XIZ
-	ld XBC, (XSP + 0x10)
-	ld XDE, (XSP + 0xc)
-	call SetAutoInc
-	jrl LABEL_F7763E
+	; (no addr) LD QWA, 0
+	; (no addr) ADD WA, BC
+	; (no addr) LD DE, WA
+	; (no addr) EXTZ XDE
+	; (no addr) LD XWA, XIZ
+	; (no addr) LD XBC, 01c00018h
+	; (no addr) CALL SetDialDown
+	; (no addr) LD WA, 1
+	; (no addr) JRL T, PcgOutGridDialConfirm
+	; (no addr) LD XWA, XIZ
+	; (no addr) LD XBC, (XSP + 010h)
+	; (no addr) LD XDE, (XSP + 00ch)
+	; (no addr) CALL InheritedProc
+	; (no addr) LD XWA, XIZ
+	; (no addr) LD XBC, 01e00050h
+	; (no addr) LD XDE, (XSP + 00ch)
+	; (no addr) CALL SendEvent
+	; (no addr) OR XHL, XHL
+	; (no addr) JR Z, LABEL_F774F6
+	; (no addr) LD XWA, XIZ
+	; (no addr) LD XBC, 01e0008fh
+	; (no addr) LD XDE, 0
+	; (no addr) CALL SendEvent
+	; (no addr) DEC 1, HL
+	; (no addr) EXTZ XHL
+	; (no addr) ADD XHL, 0ffff0000h
+	; (no addr) LD XWA, XIZ
+	; (no addr) LD XBC, 01c0000eh
+	; (no addr) LD XDE, XHL
+	; (no addr) CALL SendEvent
+	; (no addr) LD XWA, XIZ
+	; (no addr) LD XBC, (XSP + 010h)
+	; (no addr) LD XDE, (XSP + 00ch)
+	; (no addr) CALL SetAutoInc
+	; (no addr) JRL T, LABEL_F7763E
 
 LABEL_F774F6:
-	ld XWA, XIZ
-	ld XBC, 0x1e00091
-	ld XDE, (XSP + 0xc)
-	call SendEvent
-	or XHL, XHL
-	jrl Z, LABEL_F7763E
-	ld XWA, XIZ
-	call GetViewInstance
-	ld XWA, (XHL + 0x46)
-	ld XBC, (XSP + 0x10)
-	ld XDE, (XSP + 0xc)
-	call ApFuncCall
-	ld XWA, XIZ
-	ld XBC, (XSP + 0x10)
-	ld XDE, (XSP + 0xc)
-	call SetAutoInc
-	ld XWA, XIZ
-	ld XBC, 0x1c00017
-	ld XDE, (XSP + 0xc)
-	call SetDialUp
-	ld XWA, XIZ
-	ld XBC, 0x1c00018
-	ld XDE, (XSP + 0xc)
-	call SetDialDown
-	ld WA, 1
-	jrl PcgOutGridDialConfirm
-	ld XWA, XIZ
-	ld XBC, (XSP + 0x10)
-	ld XDE, (XSP + 0xc)
-	call InheritedProc
-	ld XWA, XIZ
-	ld XBC, 0x1e00050
-	ld XDE, (XSP + 0xc)
-	call SendEvent
-	or XHL, XHL
-	jr Z, LABEL_F7759F
-	ld XWA, XIZ
-	ld XBC, 0x1e0008f
-	ld XDE, 0
-	call SendEvent
-	cp HL, 3
-	jrl GE, LABEL_F7763E
-	inc 1, HL
-	extz XHL
-	add XHL, 0xffff0000
-	ld XWA, XIZ
-	ld XBC, 0x1c0000e
-	ld XDE, XHL
-	call SendEvent
-	ld XWA, XIZ
-	ld XBC, (XSP + 0x10)
-	ld XDE, (XSP + 0xc)
-	call SetAutoInc
-	jrl LABEL_F7763E
+	; (no addr) LD XWA, XIZ
+	; (no addr) LD XBC, 01e00091h
+	; (no addr) LD XDE, (XSP + 00ch)
+	; (no addr) CALL SendEvent
+	; (no addr) OR XHL, XHL
+	; (no addr) JRL Z, LABEL_F7763E
+	; (no addr) LD XWA, XIZ
+	; (no addr) CALL GetViewInstance
+	; (no addr) LD XWA, (XHL + 046h)
+	; (no addr) LD XBC, (XSP + 010h)
+	; (no addr) LD XDE, (XSP + 00ch)
+	; (no addr) CALL ApFuncCall
+	; (no addr) LD XWA, XIZ
+	; (no addr) LD XBC, (XSP + 010h)
+	; (no addr) LD XDE, (XSP + 00ch)
+	; (no addr) CALL SetAutoInc
+	; (no addr) LD XWA, XIZ
+	; (no addr) LD XBC, 01c00017h
+	; (no addr) LD XDE, (XSP + 00ch)
+	; (no addr) CALL SetDialUp
+	; (no addr) LD XWA, XIZ
+	; (no addr) LD XBC, 01c00018h
+	; (no addr) LD XDE, (XSP + 00ch)
+	; (no addr) CALL SetDialDown
+	; (no addr) LD WA, 1
+	; (no addr) JRL T, PcgOutGridDialConfirm
+	; (no addr) LD XWA, XIZ
+	; (no addr) LD XBC, (XSP + 010h)
+	; (no addr) LD XDE, (XSP + 00ch)
+	; (no addr) CALL InheritedProc
+	; (no addr) LD XWA, XIZ
+	; (no addr) LD XBC, 01e00050h
+	; (no addr) LD XDE, (XSP + 00ch)
+	; (no addr) CALL SendEvent
+	; (no addr) OR XHL, XHL
+	; (no addr) JR Z, LABEL_F7759F
+	; (no addr) LD XWA, XIZ
+	; (no addr) LD XBC, 01e0008fh
+	; (no addr) LD XDE, 0
+	; (no addr) CALL SendEvent
+	; (no addr) CP HL, 3
+	; (no addr) JRL GE, LABEL_F7763E
+	; (no addr) INC 1, HL
+	; (no addr) EXTZ XHL
+	; (no addr) ADD XHL, 0ffff0000h
+	; (no addr) LD XWA, XIZ
+	; (no addr) LD XBC, 01c0000eh
+	; (no addr) LD XDE, XHL
+	; (no addr) CALL SendEvent
+	; (no addr) LD XWA, XIZ
+	; (no addr) LD XBC, (XSP + 010h)
+	; (no addr) LD XDE, (XSP + 00ch)
+	; (no addr) CALL SetAutoInc
+	; (no addr) JRL T, LABEL_F7763E
 
 LABEL_F7759F:
-	ld XWA, XIZ
-	ld XBC, 0x1e00091
-	ld XDE, (XSP + 0xc)
-	call SendEvent
-	or XHL, XHL
-	jrl Z, LABEL_F7763E
-	ld XWA, XIZ
-	call GetViewInstance
-	ld XWA, (XHL + 0x46)
-	ld XBC, (XSP + 0x10)
-	ld XDE, (XSP + 0xc)
-	call ApFuncCall
-	ld XWA, XIZ
-	ld XBC, (XSP + 0x10)
-	ld XDE, (XSP + 0xc)
-	call SetAutoInc
-	ld XWA, XIZ
-	ld XBC, 0x1c00017
-	ld XDE, (XSP + 0xc)
-	call SetDialUp
-	ld XWA, XIZ
-	ld XBC, 0x1c00018
-	ld XDE, (XSP + 0xc)
-	call SetDialDown
-	ld WA, 1
+	; (no addr) LD XWA, XIZ
+	; (no addr) LD XBC, 01e00091h
+	; (no addr) LD XDE, (XSP + 00ch)
+	; (no addr) CALL SendEvent
+	; (no addr) OR XHL, XHL
+	; (no addr) JRL Z, LABEL_F7763E
+	; (no addr) LD XWA, XIZ
+	; (no addr) CALL GetViewInstance
+	; (no addr) LD XWA, (XHL + 046h)
+	; (no addr) LD XBC, (XSP + 010h)
+	; (no addr) LD XDE, (XSP + 00ch)
+	; (no addr) CALL ApFuncCall
+	; (no addr) LD XWA, XIZ
+	; (no addr) LD XBC, (XSP + 010h)
+	; (no addr) LD XDE, (XSP + 00ch)
+	; (no addr) CALL SetAutoInc
+	; (no addr) LD XWA, XIZ
+	; (no addr) LD XBC, 01c00017h
+	; (no addr) LD XDE, (XSP + 00ch)
+	; (no addr) CALL SetDialUp
+	; (no addr) LD XWA, XIZ
+	; (no addr) LD XBC, 01c00018h
+	; (no addr) LD XDE, (XSP + 00ch)
+	; (no addr) CALL SetDialDown
+	; (no addr) LD WA, 1
 
 PcgOutGridDialConfirm:
-	call SetDialEnable
-	jr LABEL_F7763E
+	; (no addr) CALL SetDialEnable
+	; (no addr) JR T, LABEL_F7763E
 
 LABEL_F775F5:
-	ld XWA, XIZ
-	ld XIZ, 0x3e
-	jr LABEL_F77605
+	; (no addr) LD XWA, XIZ
+	; (no addr) LD XIZ, 0000003eh
+	; (no addr) JR T, LABEL_F77605
 
 LABEL_F775FE:
-	ld XWA, XIZ
-	ld XIZ, 0x42
+	; (no addr) LD XWA, XIZ
+	; (no addr) LD XIZ, 00000042h
 
 LABEL_F77605:
-	call GetViewInstance
-	add XHL, XIZ
-	ld XWA, (XHL)
-	push XWA
-	ld XWA, (XSP + 0x10)
-	push XWA
-	call LABEL_FF0F4D
-	inc 8, XSP
-	jr LABEL_F7763E
-	ld XWA, XIZ
-	call GetViewInstance
-	ld XWA, (XHL + 0x46)
-	ld XBC, (XSP + 0x10)
-	ld XDE, (XSP + 0xc)
-	jr LABEL_F7763A
+	; (no addr) CALL GetViewInstance
+	; (no addr) ADD XHL, XIZ
+	; (no addr) LD XWA, (XHL)
+	; (no addr) PUSH XWA
+	; (no addr) LD XWA, (XSP + 010h)
+	; (no addr) PUSH XWA
+	; (no addr) CALL LABEL_FF0F4D
+	; (no addr) INC 8, XSP
+	; (no addr) JR T, LABEL_F7763E
+	; (no addr) LD XWA, XIZ
+	; (no addr) CALL GetViewInstance
+	; (no addr) LD XWA, (XHL + 046h)
+	; (no addr) LD XBC, (XSP + 010h)
+	; (no addr) LD XDE, (XSP + 00ch)
+	; (no addr) JR T, LABEL_F7763A
 
 LABEL_F7762B:
-	ld XWA, XIZ
-	call GetViewInstance
-	ld XWA, (XHL + 0x46)
-	ld XBC, (XSP + 0x10)
-	ld XDE, (XSP + 0xc)
+	; (no addr) LD XWA, XIZ
+	; (no addr) CALL GetViewInstance
+	; (no addr) LD XWA, (XHL + 046h)
+	; (no addr) LD XBC, (XSP + 010h)
+	; (no addr) LD XDE, (XSP + 00ch)
 
 LABEL_F7763A:
-	call ApFuncCall
+	; (no addr) CALL ApFuncCall
 
 LABEL_F7763E:
-	ld XHL, 0
-	jr LABEL_F7764E
+	; (no addr) LD XHL, 0
+	; (no addr) JR T, LABEL_F7764E
 
 LABEL_F77642:
-	ld XWA, XIZ
-	ld XBC, (XSP + 0x10)
-	ld XDE, (XSP + 0xc)
-	call InheritedProc
+	; (no addr) LD XWA, XIZ
+	; (no addr) LD XBC, (XSP + 010h)
+	; (no addr) LD XDE, (XSP + 00ch)
+	; (no addr) CALL InheritedProc
 
 LABEL_F7764E:
-	pop XIZ
-	lda XSP, XSP + 0x10
-	ret
+	; (no addr) POP XIZ
+	; (no addr) LDA XSP, XSP + 010h
+	; (no addr) RET
 
 PcgOutGridCheck:
-	lda XSP, XSP - 0x2c
-	push XIZ
-	ld XIZ, XDE
-	ld (XSP + 0x2c), XBC
-	ld XIY, 0xe7ff44
-	lda XIX, XSP + 0xc
-	ld BC, 5
+	; (no addr) LDA XSP, XSP - 02ch
+	; (no addr) PUSH XIZ
+	; (no addr) LD XIZ, XDE
+	; (no addr) LD (XSP + 02ch), XBC
+	; (no addr) LD XIY, 00e7ff44h
+	; (no addr) LDA XIX, XSP + 00ch
+	; (no addr) LD BC, 5
 	LDIRW_95
-	ld XIY, 0xe7ed44
-	lda XIX, XSP + 0x4
-	ld BC, 4
+	; (no addr) LD XIY, 00e7ed44h
+	; (no addr) LDA XIX, XSP + 004h
+	; (no addr) LD BC, 4
 	LDIRW_95
-	ld XIX, (XSP + 0x2c)
-	lda XIY, XSP + 0xc
-	lda XHL, XSP + 0x4
-	lda XBC, XHL + 0x2
-	lda XDE, XHL + 0x4
-	ld XWA, (XSP + 0x2c)
-	cp XWA, 0x1e0008d
-	jrl Z, PcgOutCheckGridDataStructure
-	ld XWA, XIX
-	sub XWA, 0x1c00017
-	cp XWA, 0x0
-	jrl LT, PcgOutGridCheckComplete
-	cp XWA, 0x6
-	jrl GT, PcgOutGridCheckComplete
-	add XWA, XWA
-	add XWA, 0xe7ffee
-	ld WA, (XWA)
-	lda XIX, PcgOutGridCheckJumpTable
-	jp XIX + WA
+	; (no addr) LD XIX, (XSP + 02ch)
+	; (no addr) LDA XIY, XSP + 00ch
+	; (no addr) LDA XHL, XSP + 004h
+	; (no addr) LDA XBC, XHL + 002h
+	; (no addr) LDA XDE, XHL + 004h
+	; (no addr) LD XWA, (XSP + 02ch)
+	; (no addr) CP XWA, 01e0008dh
+	; (no addr) JRL Z, PcgOutCheckGridDataStructure
+	; (no addr) LD XWA, XIX
+	; (no addr) SUB XWA, 01c00017h
+	; (no addr) CP XWA, 00000000h
+	; (no addr) JRL LT, PcgOutGridCheckComplete
+	; (no addr) CP XWA, 00000006h
+	; (no addr) JRL GT, PcgOutGridCheckComplete
+	; (no addr) ADD XWA, XWA
+	; (no addr) ADD XWA, 00e7ffeeh
+	; (no addr) LD WA, (XWA)
+	; (no addr) LDA XIX, PcgOutGridCheckJumpTable
+	; (no addr) JP T, XIX + WA
 
 PcgOutGridCheckJumpTable:
 	.byte 0x1D, 0xD0, 0x44, 0xFA, 0xEB, 0x88, 0x41, 0x8F
@@ -447,258 +447,258 @@ PcgOutGridCheckJumpTable:
 	.byte 0x2
 
 PcgOutCheckGridDataStructure:
-	ld XWA, XIZ
+	; (no addr) LD XWA, XIZ
 	SRL_0_XWA
-	ld QWA, 0
-	ld (XHL), WA
-	ld XWA, XBC
-	ld IX, IZ
-	ld (XBC), IX
-	ld XBC, XIY
-	ld (XDE), XIY
-	cpw (XHL), 0x1
-	jrl NZ, PcgOutGridCheckComplete
-	ld DE, (XWA)
-	cp DE, 3
-	jrl Z, LABEL_F77C77
-	cp DE, 2
-	jr Z, LABEL_F77BC7
-	cp DE, 1
-	jr Z, LABEL_F77B9E
-	cp DE, 0
-	jrl NZ, PcgOutGridCheckComplete
-	ld A, (0x2476A)
-	inc 1, A
-	extz WA
-	push WA
-	pushw 0xe7
-	pushw 0xff9e
-	push XBC
-	call LABEL_FF0A72
-	lda XSP, XSP + 0xa
-	call GetFocusObject
-	ld XWA, XHL
-	lda XDE, XSP + 0x4
-	ld XBC, 0x1e0008c
-	jrl LABEL_F77D7F
+	; (no addr) LD QWA, 0
+	; (no addr) LD (XHL), WA
+	; (no addr) LD XWA, XBC
+	; (no addr) LD IX, IZ
+	; (no addr) LD (XBC), IX
+	; (no addr) LD XBC, XIY
+	; (no addr) LD (XDE), XIY
+	; (no addr) CPW (XHL), 0001h
+	; (no addr) JRL NZ, PcgOutGridCheckComplete
+	; (no addr) LD DE, (XWA)
+	; (no addr) CP DE, 3
+	; (no addr) JRL Z, LABEL_F77C77
+	; (no addr) CP DE, 2
+	; (no addr) JR Z, LABEL_F77BC7
+	; (no addr) CP DE, 1
+	; (no addr) JR Z, LABEL_F77B9E
+	; (no addr) CP DE, 0
+	; (no addr) JRL NZ, PcgOutGridCheckComplete
+	; (no addr) LD A, (02476Ah)
+	; (no addr) INC 1, A
+	; (no addr) EXTZ WA
+	; (no addr) PUSH WA
+	; (no addr) PUSHW 00e7h
+	; (no addr) PUSHW 0ff9eh
+	; (no addr) PUSH XBC
+	; (no addr) CALL LABEL_FF0A72
+	; (no addr) LDA XSP, XSP + 00ah
+	; (no addr) CALL GetFocusObject
+	; (no addr) LD XWA, XHL
+	; (no addr) LDA XDE, XSP + 004h
+	; (no addr) LD XBC, 01e0008ch
+	; (no addr) JRL T, LABEL_F77D7F
 
 LABEL_F77B9E:
-	ld A, (0x2476C)
-	inc 1, A
-	extz WA
-	push WA
-	pushw 0xe7
-	pushw 0xffa4
-	push XBC
-	call LABEL_FF0A72
-	lda XSP, XSP + 0xa
-	call GetFocusObject
-	ld XWA, XHL
-	lda XDE, XSP + 0x4
-	ld XBC, 0x1e0008c
-	jrl LABEL_F77D7F
+	; (no addr) LD A, (02476Ch)
+	; (no addr) INC 1, A
+	; (no addr) EXTZ WA
+	; (no addr) PUSH WA
+	; (no addr) PUSHW 00e7h
+	; (no addr) PUSHW 0ffa4h
+	; (no addr) PUSH XBC
+	; (no addr) CALL LABEL_FF0A72
+	; (no addr) LDA XSP, XSP + 00ah
+	; (no addr) CALL GetFocusObject
+	; (no addr) LD XWA, XHL
+	; (no addr) LDA XDE, XSP + 004h
+	; (no addr) LD XBC, 01e0008ch
+	; (no addr) JRL T, LABEL_F77D7F
 
 LABEL_F77BC7:
-	cp (0x24770), 0xff
-	jr NZ, LABEL_F77C14
-	pushw 0xe7
-	pushw 0xffaa
-	push XBC
-	call LABEL_FF0F4D
-	inc 8, XSP
-	call GetFocusObject
-	ld XWA, XHL
-	lda XDE, XSP + 0x4
-	ld XBC, 0x1e0008c
-	call SendEvent
-	ldw (XSP + 0x6), 0x4
-	pushw 0xe7
-	pushw 0xffb0
-	lda XWA, XSP + 0x10
-	push XWA
-	call LABEL_FF0F4D
-	inc 8, XSP
-	call GetFocusObject
-	ld XWA, XHL
-	lda XDE, XSP + 0x4
-	ld XBC, 0x1e0008c
-	jrl LABEL_F77D7F
+	; (no addr) CP (024770h), 0ffh
+	; (no addr) JR NZ, LABEL_F77C14
+	; (no addr) PUSHW 00e7h
+	; (no addr) PUSHW 0ffaah
+	; (no addr) PUSH XBC
+	; (no addr) CALL LABEL_FF0F4D
+	; (no addr) INC 8, XSP
+	; (no addr) CALL GetFocusObject
+	; (no addr) LD XWA, XHL
+	; (no addr) LDA XDE, XSP + 004h
+	; (no addr) LD XBC, 01e0008ch
+	; (no addr) CALL SendEvent
+	; (no addr) LDW (XSP + 006h:8), 0004h
+	; (no addr) PUSHW 00e7h
+	; (no addr) PUSHW 0ffb0h
+	; (no addr) LDA XWA, XSP + 010h
+	; (no addr) PUSH XWA
+	; (no addr) CALL LABEL_FF0F4D
+	; (no addr) INC 8, XSP
+	; (no addr) CALL GetFocusObject
+	; (no addr) LD XWA, XHL
+	; (no addr) LDA XDE, XSP + 004h
+	; (no addr) LD XBC, 01e0008ch
+	; (no addr) JRL T, LABEL_F77D7F
 
 LABEL_F77C14:
-	ld A, (0x2476E)
-	exts WA
-	push WA
-	pushw 0xe7
-	pushw 0xffb8
-	push XBC
-	call LABEL_FF0A72
-	lda XSP, XSP + 0xa
-	call GetFocusObject
-	ld XWA, XHL
-	lda XDE, XSP + 0x4
-	ld XBC, 0x1e0008c
-	call SendEvent
-	ldw (XSP + 0x6), 0x4
-	ld C, (0x24770)
-	exts BC
-	ld A, (0x2476E)
-	exts WA
-	sll WA, 7
-	add WA, BC
-	push WA
-	pushw 0xe7
-	pushw 0xffbe
-	lda XWA, XSP + 0x12
-	push XWA
-	call LABEL_FF0A72
-	lda XSP, XSP + 0xa
-	call GetFocusObject
-	ld XWA, XHL
-	lda XDE, XSP + 0x4
-	ld XBC, 0x1e0008c
-	jrl LABEL_F77D7F
+	; (no addr) LD A, (02476Eh)
+	; (no addr) EXTS WA
+	; (no addr) PUSH WA
+	; (no addr) PUSHW 00e7h
+	; (no addr) PUSHW 0ffb8h
+	; (no addr) PUSH XBC
+	; (no addr) CALL LABEL_FF0A72
+	; (no addr) LDA XSP, XSP + 00ah
+	; (no addr) CALL GetFocusObject
+	; (no addr) LD XWA, XHL
+	; (no addr) LDA XDE, XSP + 004h
+	; (no addr) LD XBC, 01e0008ch
+	; (no addr) CALL SendEvent
+	; (no addr) LDW (XSP + 006h:8), 0004h
+	; (no addr) LD C, (024770h)
+	; (no addr) EXTS BC
+	; (no addr) LD A, (02476Eh)
+	; (no addr) EXTS WA
+	; (no addr) SLL 7, WA
+	; (no addr) ADD WA, BC
+	; (no addr) PUSH WA
+	; (no addr) PUSHW 00e7h
+	; (no addr) PUSHW 0ffbeh
+	; (no addr) LDA XWA, XSP + 012h
+	; (no addr) PUSH XWA
+	; (no addr) CALL LABEL_FF0A72
+	; (no addr) LDA XSP, XSP + 00ah
+	; (no addr) CALL GetFocusObject
+	; (no addr) LD XWA, XHL
+	; (no addr) LDA XDE, XSP + 004h
+	; (no addr) LD XBC, 01e0008ch
+	; (no addr) JRL T, LABEL_F77D7F
 
 LABEL_F77C77:
-	ldw (XWA), 0x2
-	cp (0x24770), 0xff
-	jr NZ, LABEL_F77CEF
-	pushw 0xe7
-	pushw 0xffc6
-	push XBC
-	call LABEL_FF0F4D
-	inc 8, XSP
-	call GetFocusObject
-	ld XWA, XHL
-	lda XDE, XSP + 0x4
-	ld XBC, 0x1e0008c
-	call SendEvent
-	ldw (XSP + 0x6), 0x3
-	pushw 0xe7
-	pushw 0xffcc
-	lda XWA, XSP + 0x10
-	push XWA
-	call LABEL_FF0F4D
-	inc 8, XSP
-	call GetFocusObject
-	ld XWA, XHL
-	lda XDE, XSP + 0x4
-	ld XBC, 0x1e0008c
-	call SendEvent
-	ldw (XSP + 0x6), 0x4
-	pushw 0xe7
-	pushw 0xffd2
-	lda XWA, XSP + 0x10
-	push XWA
-	call LABEL_FF0F4D
-	inc 8, XSP
-	call GetFocusObject
-	ld XWA, XHL
-	lda XDE, XSP + 0x4
-	ld XBC, 0x1e0008c
-	jrl LABEL_F77D7F
+	; (no addr) LDW (XWA), 0002h
+	; (no addr) CP (024770h), 0ffh
+	; (no addr) JR NZ, LABEL_F77CEF
+	; (no addr) PUSHW 00e7h
+	; (no addr) PUSHW 0ffc6h
+	; (no addr) PUSH XBC
+	; (no addr) CALL LABEL_FF0F4D
+	; (no addr) INC 8, XSP
+	; (no addr) CALL GetFocusObject
+	; (no addr) LD XWA, XHL
+	; (no addr) LDA XDE, XSP + 004h
+	; (no addr) LD XBC, 01e0008ch
+	; (no addr) CALL SendEvent
+	; (no addr) LDW (XSP + 006h:8), 0003h
+	; (no addr) PUSHW 00e7h
+	; (no addr) PUSHW 0ffcch
+	; (no addr) LDA XWA, XSP + 010h
+	; (no addr) PUSH XWA
+	; (no addr) CALL LABEL_FF0F4D
+	; (no addr) INC 8, XSP
+	; (no addr) CALL GetFocusObject
+	; (no addr) LD XWA, XHL
+	; (no addr) LDA XDE, XSP + 004h
+	; (no addr) LD XBC, 01e0008ch
+	; (no addr) CALL SendEvent
+	; (no addr) LDW (XSP + 006h:8), 0004h
+	; (no addr) PUSHW 00e7h
+	; (no addr) PUSHW 0ffd2h
+	; (no addr) LDA XWA, XSP + 010h
+	; (no addr) PUSH XWA
+	; (no addr) CALL LABEL_FF0F4D
+	; (no addr) INC 8, XSP
+	; (no addr) CALL GetFocusObject
+	; (no addr) LD XWA, XHL
+	; (no addr) LDA XDE, XSP + 004h
+	; (no addr) LD XBC, 01e0008ch
+	; (no addr) JRL T, LABEL_F77D7F
 
 LABEL_F77CEF:
-	ld A, (0x2476E)
-	exts WA
-	push WA
-	pushw 0xe7
-	pushw 0xffda
-	push XBC
-	call LABEL_FF0A72
-	lda XSP, XSP + 0xa
-	call GetFocusObject
-	ld XWA, XHL
-	lda XDE, XSP + 0x4
-	ld XBC, 0x1e0008c
-	call SendEvent
-	ldw (XSP + 0x6), 0x3
-	ld A, (0x24770)
-	exts WA
-	push WA
-	pushw 0xe7
-	pushw 0xffe0
-	lda XWA, XSP + 0x12
-	push XWA
-	call LABEL_FF0A72
-	lda XSP, XSP + 0xa
-	call GetFocusObject
-	ld XWA, XHL
-	lda XDE, XSP + 0x4
-	ld XBC, 0x1e0008c
-	call SendEvent
-	ldw (XSP + 0x6), 0x4
-	ld C, (0x24770)
-	exts BC
-	ld A, (0x2476E)
-	exts WA
-	sll WA, 7
-	add WA, BC
-	push WA
-	pushw 0xe7
-	pushw 0xffe6
-	lda XWA, XSP + 0x12
-	push XWA
-	call LABEL_FF0A72
-	lda XSP, XSP + 0xa
-	call GetFocusObject
-	ld XWA, XHL
-	lda XDE, XSP + 0x4
-	ld XBC, 0x1e0008c
+	; (no addr) LD A, (02476Eh)
+	; (no addr) EXTS WA
+	; (no addr) PUSH WA
+	; (no addr) PUSHW 00e7h
+	; (no addr) PUSHW 0ffdah
+	; (no addr) PUSH XBC
+	; (no addr) CALL LABEL_FF0A72
+	; (no addr) LDA XSP, XSP + 00ah
+	; (no addr) CALL GetFocusObject
+	; (no addr) LD XWA, XHL
+	; (no addr) LDA XDE, XSP + 004h
+	; (no addr) LD XBC, 01e0008ch
+	; (no addr) CALL SendEvent
+	; (no addr) LDW (XSP + 006h:8), 0003h
+	; (no addr) LD A, (024770h)
+	; (no addr) EXTS WA
+	; (no addr) PUSH WA
+	; (no addr) PUSHW 00e7h
+	; (no addr) PUSHW 0ffe0h
+	; (no addr) LDA XWA, XSP + 012h
+	; (no addr) PUSH XWA
+	; (no addr) CALL LABEL_FF0A72
+	; (no addr) LDA XSP, XSP + 00ah
+	; (no addr) CALL GetFocusObject
+	; (no addr) LD XWA, XHL
+	; (no addr) LDA XDE, XSP + 004h
+	; (no addr) LD XBC, 01e0008ch
+	; (no addr) CALL SendEvent
+	; (no addr) LDW (XSP + 006h:8), 0004h
+	; (no addr) LD C, (024770h)
+	; (no addr) EXTS BC
+	; (no addr) LD A, (02476Eh)
+	; (no addr) EXTS WA
+	; (no addr) SLL 7, WA
+	; (no addr) ADD WA, BC
+	; (no addr) PUSH WA
+	; (no addr) PUSHW 00e7h
+	; (no addr) PUSHW 0ffe6h
+	; (no addr) LDA XWA, XSP + 012h
+	; (no addr) PUSH XWA
+	; (no addr) CALL LABEL_FF0A72
+	; (no addr) LDA XSP, XSP + 00ah
+	; (no addr) CALL GetFocusObject
+	; (no addr) LD XWA, XHL
+	; (no addr) LDA XDE, XSP + 004h
+	; (no addr) LD XBC, 01e0008ch
 
 LABEL_F77D7F:
-	call SendEvent
+	; (no addr) CALL SendEvent
 
 PcgOutGridCheckComplete:
-	ld XHL, 0
-	pop XIZ
-	lda XSP, XSP + 0x2c
-	ret
+	; (no addr) LD XHL, 0
+	; (no addr) POP XIZ
+	; (no addr) LDA XSP, XSP + 02ch
+	; (no addr) RET
 
 PcgOutSendFunc:
-	cp XBC, 0x1c00008
-	jr NZ, LABEL_F77DD7
-	lda XDE, 0x24752
-	ld A, (0x2476A)
-	ld (XDE), A
-	ld A, (0x2476C)
-	ld (XDE + 0x1), A
-	lda XBC, XDE + 0x2
-	ld L, (0x24770)
-	cp L, 0xff
-	jr NZ, LABEL_F77DB9
-	ldw (XBC), 0xffff
-	jr LABEL_F77DC9
+	; (no addr) CP XBC, 01c00008h
+	; (no addr) JR NZ, LABEL_F77DD7
+	; (no addr) LDA XDE, 024752h
+	; (no addr) LD A, (02476Ah)
+	; (no addr) LD (XDE), A
+	; (no addr) LD A, (02476Ch)
+	; (no addr) LD (XDE + 001h), A
+	; (no addr) LDA XBC, XDE + 002h
+	; (no addr) LD L, (024770h)
+	; (no addr) CP L, 0ffh
+	; (no addr) JR NZ, LABEL_F77DB9
+	; (no addr) LDW (XBC), 0ffffh
+	; (no addr) JR T, LABEL_F77DC9
 
 LABEL_F77DB9:
-	exts HL
-	ld A, (0x2476E)
-	exts WA
-	sla WA, 0x7
-	add WA, HL
-	ld (XBC), WA
+	; (no addr) EXTS HL
+	; (no addr) LD A, (02476Eh)
+	; (no addr) EXTS WA
+	; (no addr) SLA 007h, WA
+	; (no addr) ADD WA, HL
+	; (no addr) LD (XBC), WA
 
 LABEL_F77DC9:
-	ld XWA, 0x1430000
-	ld XBC, 0x1e30000
-	call MainFuncCall
+	; (no addr) LD XWA, 01430000h
+	; (no addr) LD XBC, 01e30000h
+	; (no addr) CALL MainFuncCall
 
 LABEL_F77DD7:
-	ld XHL, 0
-	ret
+	; (no addr) LD XHL, 0
+	; (no addr) RET
 
 MainPcgOutSend:
-	cp XBC, 0x1e30000
-	jr NZ, LABEL_F77DF2
-	ld A, (XDE)
-	extz WA
-	ld C, (XDE + 0x1)
-	extz BC
-	ld DE, (XDE + 0x2)
-	call LABEL_FDB904
+	; (no addr) CP XBC, 01e30000h
+	; (no addr) JR NZ, LABEL_F77DF2
+	; (no addr) LD A, (XDE)
+	; (no addr) EXTZ WA
+	; (no addr) LD C, (XDE + 001h)
+	; (no addr) EXTZ BC
+	; (no addr) LD DE, (XDE + 002h)
+	; (no addr) CALL LABEL_FDB904
 
 LABEL_F77DF2:
-	ld XHL, 0
-	ret
+	; (no addr) LD XHL, 0
+	; (no addr) RET
 
 ; End of Computer Interface PCG routines
 

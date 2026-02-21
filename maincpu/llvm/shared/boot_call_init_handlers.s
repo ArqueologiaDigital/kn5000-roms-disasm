@@ -38,18 +38,16 @@
 ; Exit: All handlers called if init flag was set
 ; -----------------------------------------------------------------------------
 Boot_CallInitHandlers:
-	push QIZ	; d7 fa 04
+	; (no addr) PUSH QIZ	; d7 fa 04
 
 	; Compare init flag - encoding differs between ROMs
-	IF INIT_FLAG_COMPARE_WORD
-	; table_data: CP (0xFFFEEE), 0xFFFF (7 bytes)
-	.byte 0xD2, 0xEE, 0xFE, 0xFF, 0x3F, 0xFF, 0xFF
-	ELSE
+	; IF INIT_FLAG_COMPARE_WORD (evaluated to false for maincpu)
+	; ELSE
 	; maincpu: CP (0xFFFEEE), 0xFF (6 bytes)
 	.byte 0xC2, 0xEE, 0xFE, 0xFF, 0x3F, 0xFF
-	ENDIF
+	; ENDIF
 
-	jr NZ, .done	; 6e xx (offset computed by assembler)
+	; (no addr) JR NZ, .done	; 6e xx (offset computed by assembler)
 
 	; LD QIZH, 0
 	.byte 0xC7, 0xFB, 0xA8
@@ -71,17 +69,17 @@ Boot_CallInitHandlers:
 	.byte 0xE3, 0x7, 0xE8, 0xE4, 0x21
 
 	; Call indirect call helper (address differs between ROMs)
-	call INDIRECT_CALL_HELPER
+	; (no addr) CALL INDIRECT_CALL_HELPER
 
 	; INC 1, QIZH
 	.byte 0xC7, 0xFB, 0x61
 	; CP QIZH, 4
 	.byte 0xC7, 0xFB, 0xDC
 
-	jr C, .handler_loop	; 67 xx (offset computed by assembler)
+	; (no addr) JR C, .handler_loop	; 67 xx (offset computed by assembler)
 
 	.done:
-	pop QIZ	; d7 fa 05
-	ret	; 0e
+	; (no addr) POP QIZ	; d7 fa 05
+	; (no addr) RET	; 0e
 
 ; End of shared Boot_CallInitHandlers

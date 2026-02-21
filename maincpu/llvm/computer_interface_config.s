@@ -19,273 +19,273 @@
 ; =============================================================================
 
 TtComputerConnection:
-	cp XBC, 0x1c0000c
-	jr Z, ComputerConnectionTitleExit
-	cp XBC, 0x1c0000b
-	jr Z, ComputerConnectionTitleExit
-	cp XBC, 0x1c00002
-	jr Z, ComputerConnectionTitleExit
-	cp XBC, 0x1c00001
-	jr NZ, ComputerConnectionTitleExit
-	or XDE, XDE
-	jr NZ, ComputerConnectionTitleExit
-	call GET_COMPUTER_INTERFACE_SELECTION
-	cp L, 0	;  MIDI
-	jr NZ, ComputerConnectionTitleExit
-	ld (0x7F42), 0x46
-	ld XWA, 0xffffffff
-	ld XBC, 0x1c00016
-	ld XDE, 0x1a000ee
-	call PostEvent
+	; (no addr) CP XBC, 01c0000ch
+	; (no addr) JR Z, ComputerConnectionTitleExit
+	; (no addr) CP XBC, 01c0000bh
+	; (no addr) JR Z, ComputerConnectionTitleExit
+	; (no addr) CP XBC, 01c00002h
+	; (no addr) JR Z, ComputerConnectionTitleExit
+	; (no addr) CP XBC, 01c00001h
+	; (no addr) JR NZ, ComputerConnectionTitleExit
+	; (no addr) OR XDE, XDE
+	; (no addr) JR NZ, ComputerConnectionTitleExit
+	; (no addr) CALL GET_COMPUTER_INTERFACE_SELECTION
+	; (no addr) CP L, 0	;  MIDI
+	; (no addr) JR NZ, ComputerConnectionTitleExit
+	; (no addr) LD (7F42h), 046h
+	; (no addr) LD XWA, 0ffffffffh
+	; (no addr) LD XBC, 01c00016h
+	; (no addr) LD XDE, 01a000eeh
+	; (no addr) CALL PostEvent
 
 ComputerConnectionTitleExit:
-	ld XHL, 0
-	ret
+	; (no addr) LD XHL, 0
+	; (no addr) RET
 
 MdCmptCnctFunc:
-	dec 4, XSP
-	push XIZ
-	ld XHL, XDE
-	ld XDE, XBC
-	ld XIZ, XWA
-	ld XIY, 0xe7f844
-	lda XIX, XSP + 0x4
+	; (no addr) DEC 4, XSP
+	; (no addr) PUSH XIZ
+	; (no addr) LD XHL, XDE
+	; (no addr) LD XDE, XBC
+	; (no addr) LD XIZ, XWA
+	; (no addr) LD XIY, 00e7f844h
+	; (no addr) LDA XIX, XSP + 004h
 	LDIW
 	LDIW
-	cp XDE, 0x1e0003f
-	jrl Z, CmptCnctBlockingReturn
-	cp XDE, 0x1e0003e
-	jrl Z, CmptCnctBlockingReturn
-	cp XDE, 0x1e00041
-	jrl Z, CmptCnctBlockingReturn
-	cp XDE, 0x1e00040
-	jrl Z, CmptCnctInvalidInputReturn
-	cp XDE, 0x1e00042
-	jr Z, CmptCnctDrawConnectionDiagram
-	ld XHL, 0
-	jrl LABEL_F74C1B
+	; (no addr) CP XDE, 01e0003fh
+	; (no addr) JRL Z, CmptCnctBlockingReturn
+	; (no addr) CP XDE, 01e0003eh
+	; (no addr) JRL Z, CmptCnctBlockingReturn
+	; (no addr) CP XDE, 01e00041h
+	; (no addr) JRL Z, CmptCnctBlockingReturn
+	; (no addr) CP XDE, 01e00040h
+	; (no addr) JRL Z, CmptCnctInvalidInputReturn
+	; (no addr) CP XDE, 01e00042h
+	; (no addr) JR Z, CmptCnctDrawConnectionDiagram
+	; (no addr) LD XHL, 0
+	; (no addr) JRL T, LABEL_F74C1B
 
 CmptCnctDrawConnectionDiagram:
-	ld BC, (XHL + 0x4)
-	ld XWA, (XHL + 0x8)
-	cp BC, 2
-	jr Z, LABEL_F74BD2
-	cp BC, 1
-	jr Z, LABEL_F74BB5
-	cp BC, 0
-	jr NZ, LABEL_F74BEF
-	pushw 0xe7
-	pushw 0xf848
-	push XWA
-	call LABEL_FF0F4D
-	inc 8, XSP
-	lda XWA, XSP + 0x4
-	pushw 0x6c
-	ld XBC, Bitmap_MIDIConnections_1
-	ld DE, 0x128
-	jr CmptCnctBitmapDrawComplete
+	; (no addr) LD BC, (XHL + 004h)
+	; (no addr) LD XWA, (XHL + 008h)
+	; (no addr) CP BC, 2
+	; (no addr) JR Z, LABEL_F74BD2
+	; (no addr) CP BC, 1
+	; (no addr) JR Z, LABEL_F74BB5
+	; (no addr) CP BC, 0
+	; (no addr) JR NZ, LABEL_F74BEF
+	; (no addr) PUSHW 00e7h
+	; (no addr) PUSHW 0f848h
+	; (no addr) PUSH XWA
+	; (no addr) CALL LABEL_FF0F4D
+	; (no addr) INC 8, XSP
+	; (no addr) LDA XWA, XSP + 004h
+	; (no addr) PUSHW 006ch
+	; (no addr) LD XBC, Bitmap_MIDIConnections_1
+	; (no addr) LD DE, 0128h
+	; (no addr) JR T, CmptCnctBitmapDrawComplete
 
 LABEL_F74BB5:
-	pushw 0xe7
-	pushw 0xf862
-	push XWA
-	call LABEL_FF0F4D
-	inc 8, XSP
-	lda XWA, XSP + 0x4
-	pushw 0x6c
-	ld XBC, Bitmap_MIDIConnections_2
-	ld DE, 0x128
-	jr CmptCnctBitmapDrawComplete
+	; (no addr) PUSHW 00e7h
+	; (no addr) PUSHW 0f862h
+	; (no addr) PUSH XWA
+	; (no addr) CALL LABEL_FF0F4D
+	; (no addr) INC 8, XSP
+	; (no addr) LDA XWA, XSP + 004h
+	; (no addr) PUSHW 006ch
+	; (no addr) LD XBC, Bitmap_MIDIConnections_2
+	; (no addr) LD DE, 0128h
+	; (no addr) JR T, CmptCnctBitmapDrawComplete
 
 LABEL_F74BD2:
-	pushw 0xe7
-	pushw 0xf87c
-	push XWA
-	call LABEL_FF0F4D
-	inc 8, XSP
-	lda XWA, XSP + 0x4
-	pushw 0x6c
-	ld XBC, Bitmap_MIDIConnections_3
-	ld DE, 0x128
-	jr CmptCnctBitmapDrawComplete
+	; (no addr) PUSHW 00e7h
+	; (no addr) PUSHW 0f87ch
+	; (no addr) PUSH XWA
+	; (no addr) CALL LABEL_FF0F4D
+	; (no addr) INC 8, XSP
+	; (no addr) LDA XWA, XSP + 004h
+	; (no addr) PUSHW 006ch
+	; (no addr) LD XBC, Bitmap_MIDIConnections_3
+	; (no addr) LD DE, 0128h
+	; (no addr) JR T, CmptCnctBitmapDrawComplete
 
 LABEL_F74BEF:
-	pushw 0xe7
-	pushw 0xf896
-	push XWA
-	call LABEL_FF0F4D
-	inc 8, XSP
-	lda XWA, XSP + 0x4
-	pushw 0x6c
-	ld XBC, Bitmap_MIDIConnections_1
-	ld DE, 0x128
+	; (no addr) PUSHW 00e7h
+	; (no addr) PUSHW 0f896h
+	; (no addr) PUSH XWA
+	; (no addr) CALL LABEL_FF0F4D
+	; (no addr) INC 8, XSP
+	; (no addr) LDA XWA, XSP + 004h
+	; (no addr) PUSHW 006ch
+	; (no addr) LD XBC, Bitmap_MIDIConnections_1
+	; (no addr) LD DE, 0128h
 
 CmptCnctBitmapDrawComplete:
-	call DrawBitmapSPFast
-	ld XHL, XIZ
-	jr LABEL_F74C1B
+	; (no addr) CALL DrawBitmapSPFast
+	; (no addr) LD XHL, XIZ
+	; (no addr) JR T, LABEL_F74C1B
 
 CmptCnctInvalidInputReturn:
-	ld XHL, 0x2c00
-	jr LABEL_F74C1B
+	; (no addr) LD XHL, 00002c00h
+	; (no addr) JR T, LABEL_F74C1B
 
 CmptCnctBlockingReturn:
-	ld XHL, 1
+	; (no addr) LD XHL, 1
 
 LABEL_F74C1B:
-	pop XIZ
-	inc 4, XSP
-	ret
+	; (no addr) POP XIZ
+	; (no addr) INC 4, XSP
+	; (no addr) RET
 
 MdPcgModeFunc:
-	push XIZ
-	ld XIZ, XWA
-	cp XBC, 0x1e0003f
-	jr Z, LABEL_F74C94
-	cp XBC, 0x1e0003e
-	jr Z, LABEL_F74C94
-	cp XBC, 0x1e00041
-	jr Z, LABEL_F74C94
-	cp XBC, 0x1e00040
-	jr Z, LABEL_F74C8D
-	cp XBC, 0x1e00042
-	jr Z, PcgModeGridEventStart
-	ld XHL, 0
-	jr LABEL_F74C96
+	; (no addr) PUSH XIZ
+	; (no addr) LD XIZ, XWA
+	; (no addr) CP XBC, 01e0003fh
+	; (no addr) JR Z, LABEL_F74C94
+	; (no addr) CP XBC, 01e0003eh
+	; (no addr) JR Z, LABEL_F74C94
+	; (no addr) CP XBC, 01e00041h
+	; (no addr) JR Z, LABEL_F74C94
+	; (no addr) CP XBC, 01e00040h
+	; (no addr) JR Z, LABEL_F74C8D
+	; (no addr) CP XBC, 01e00042h
+	; (no addr) JR Z, PcgModeGridEventStart
+	; (no addr) LD XHL, 0
+	; (no addr) JR T, LABEL_F74C96
 
 PcgModeGridEventStart:
-	ld XWA, XDE
-	ld DE, (XWA + 0x4)
-	inc 8, XWA
-	cp DE, 3
-	jr Z, LABEL_F74C71
-	ld XBC, (XWA)
-	cp DE, 1
-	jr Z, PcgModeDisplayString_Bank1
-	cp DE, 0
-	jr NZ, PcgModeDefaultCase
-	ld XWA, 0xe7f8b0
-	jr LABEL_F74C81
+	; (no addr) LD XWA, XDE
+	; (no addr) LD DE, (XWA + 004h)
+	; (no addr) INC 8, XWA
+	; (no addr) CP DE, 3
+	; (no addr) JR Z, LABEL_F74C71
+	; (no addr) LD XBC, (XWA)
+	; (no addr) CP DE, 1
+	; (no addr) JR Z, PcgModeDisplayString_Bank1
+	; (no addr) CP DE, 0
+	; (no addr) JR NZ, PcgModeDefaultCase
+	; (no addr) LD XWA, 00e7f8b0h
+	; (no addr) JR T, LABEL_F74C81
 
 PcgModeDisplayString_Bank1:
-	ld XWA, 0xe7f8ba
-	jr LABEL_F74C81
+	; (no addr) LD XWA, 00e7f8bah
+	; (no addr) JR T, LABEL_F74C81
 
 LABEL_F74C71:
-	pushw 0xe7
-	pushw 0xf8c4
-	ld XWA, (XWA)
-	push XWA
-	jr LABEL_F74C83
+	; (no addr) PUSHW 00e7h
+	; (no addr) PUSHW 0f8c4h
+	; (no addr) LD XWA, (XWA)
+	; (no addr) PUSH XWA
+	; (no addr) JR T, LABEL_F74C83
 
 PcgModeDefaultCase:
-	ld XWA, 0xe7f8ce
+	; (no addr) LD XWA, 00e7f8ceh
 
 LABEL_F74C81:
-	push XWA
-	push XBC
+	; (no addr) PUSH XWA
+	; (no addr) PUSH XBC
 
 LABEL_F74C83:
-	call LABEL_FF0F4D
-	inc 8, XSP
-	ld XHL, XIZ
-	jr LABEL_F74C96
+	; (no addr) CALL LABEL_FF0F4D
+	; (no addr) INC 8, XSP
+	; (no addr) LD XHL, XIZ
+	; (no addr) JR T, LABEL_F74C96
 
 LABEL_F74C8D:
-	ld XHL, 0x2201
-	jr LABEL_F74C96
+	; (no addr) LD XHL, 00002201h
+	; (no addr) JR T, LABEL_F74C96
 
 LABEL_F74C94:
-	ld XHL, 1
+	; (no addr) LD XHL, 1
 
 LABEL_F74C96:
-	pop XIZ
-	ret
+	; (no addr) POP XIZ
+	; (no addr) RET
 
 MdDrumTypeFunc:
-	push XIZ
-	ld XIZ, XWA
-	cp XBC, 0x1e0003f
-	jr Z, LABEL_F74D0D
-	cp XBC, 0x1e0003e
-	jr Z, LABEL_F74D0D
-	cp XBC, 0x1e00041
-	jr Z, LABEL_F74D0D
-	cp XBC, 0x1e00040
-	jr Z, LABEL_F74D06
-	cp XBC, 0x1e00042
-	jr Z, LABEL_F74CC7
-	ld XHL, 0
-	jr LABEL_F74D0F
+	; (no addr) PUSH XIZ
+	; (no addr) LD XIZ, XWA
+	; (no addr) CP XBC, 01e0003fh
+	; (no addr) JR Z, LABEL_F74D0D
+	; (no addr) CP XBC, 01e0003eh
+	; (no addr) JR Z, LABEL_F74D0D
+	; (no addr) CP XBC, 01e00041h
+	; (no addr) JR Z, LABEL_F74D0D
+	; (no addr) CP XBC, 01e00040h
+	; (no addr) JR Z, LABEL_F74D06
+	; (no addr) CP XBC, 01e00042h
+	; (no addr) JR Z, LABEL_F74CC7
+	; (no addr) LD XHL, 0
+	; (no addr) JR T, LABEL_F74D0F
 
 LABEL_F74CC7:
-	ld XWA, XDE
-	ld DE, (XWA + 0x4)
-	inc 8, XWA
-	cp DE, 3
-	jr Z, LABEL_F74CEA
-	ld XBC, (XWA)
-	cp DE, 1
-	jr Z, LABEL_F74CE3
-	cp DE, 0
-	jr NZ, LABEL_F74CF5
-	ld XWA, 0xe7f8d8
-	jr LABEL_F74CFA
+	; (no addr) LD XWA, XDE
+	; (no addr) LD DE, (XWA + 004h)
+	; (no addr) INC 8, XWA
+	; (no addr) CP DE, 3
+	; (no addr) JR Z, LABEL_F74CEA
+	; (no addr) LD XBC, (XWA)
+	; (no addr) CP DE, 1
+	; (no addr) JR Z, LABEL_F74CE3
+	; (no addr) CP DE, 0
+	; (no addr) JR NZ, LABEL_F74CF5
+	; (no addr) LD XWA, 00e7f8d8h
+	; (no addr) JR T, LABEL_F74CFA
 
 LABEL_F74CE3:
-	ld XWA, 0xe7f8e2
-	jr LABEL_F74CFA
+	; (no addr) LD XWA, 00e7f8e2h
+	; (no addr) JR T, LABEL_F74CFA
 
 LABEL_F74CEA:
-	pushw 0xe7
-	pushw 0xf8ec
-	ld XWA, (XWA)
-	push XWA
-	jr LABEL_F74CFC
+	; (no addr) PUSHW 00e7h
+	; (no addr) PUSHW 0f8ech
+	; (no addr) LD XWA, (XWA)
+	; (no addr) PUSH XWA
+	; (no addr) JR T, LABEL_F74CFC
 
 LABEL_F74CF5:
-	ld XWA, 0xe7f8f6
+	; (no addr) LD XWA, 00e7f8f6h
 
 LABEL_F74CFA:
-	push XWA
-	push XBC
+	; (no addr) PUSH XWA
+	; (no addr) PUSH XBC
 
 LABEL_F74CFC:
-	call LABEL_FF0F4D
-	inc 8, XSP
-	ld XHL, XIZ
-	jr LABEL_F74D0F
+	; (no addr) CALL LABEL_FF0F4D
+	; (no addr) INC 8, XSP
+	; (no addr) LD XHL, XIZ
+	; (no addr) JR T, LABEL_F74D0F
 
 LABEL_F74D06:
-	ld XHL, 0x2205
-	jr LABEL_F74D0F
+	; (no addr) LD XHL, 00002205h
+	; (no addr) JR T, LABEL_F74D0F
 
 LABEL_F74D0D:
-	ld XHL, 1
+	; (no addr) LD XHL, 1
 
 LABEL_F74D0F:
-	pop XIZ
-	ret
+	; (no addr) POP XIZ
+	; (no addr) RET
 
 MdSetupLoadFunc:
-	lda XSP, XSP - 0x10
-	push XIZ
-	ld XHL, XBC
-	ld XIZ, XWA
-	ld XIY, 0xe7f900
-	lda XIX, XSP + 0x4
-	ld BC, 0x8
+	; (no addr) LDA XSP, XSP - 010h
+	; (no addr) PUSH XIZ
+	; (no addr) LD XHL, XBC
+	; (no addr) LD XIZ, XWA
+	; (no addr) LD XIY, 00e7f900h
+	; (no addr) LDA XIX, XSP + 004h
+	; (no addr) LD BC, 0008h
 	LDIRW_95
-	sub XHL, 0x1e0003e
-	cp XHL, 0x0
-	jr LT, SetupLoadInvalidIndex
-	cp XHL, 0x9
-	jr GT, SetupLoadInvalidIndex
-	add XHL, XHL
-	add XHL, 0xe7f928
-	ld HL, (XHL)
-	lda XIX, 0xF74D50
-	jp XIX + HL
+	; (no addr) SUB XHL, 01e0003eh
+	; (no addr) CP XHL, 00000000h
+	; (no addr) JR LT, SetupLoadInvalidIndex
+	; (no addr) CP XHL, 00000009h
+	; (no addr) JR GT, SetupLoadInvalidIndex
+	; (no addr) ADD XHL, XHL
+	; (no addr) ADD XHL, 00e7f928h
+	; (no addr) LD HL, (XHL)
+	; (no addr) LDA XIX, 0F74D50h
+	; (no addr) JP T, XIX + HL
 SetupLoadOptionJumpTable:
 	.byte 0xAA, 0xE, 0x20, 0xE8, 0xCC, 0x2, 0x0, 0x0
 	.byte 0x0, 0xE8, 0xEE, 0x2, 0xBF, 0x4, 0x31, 0xE8
@@ -295,16 +295,16 @@ SetupLoadOptionJumpTable:
 	.byte 0x68, 0xD
 
 SetupLoadInvalidIndex:
-	ld XHL, 0
-	jr LABEL_F74D87
-	lda XHL, 0xFFC0
-	jr LABEL_F74D87
-	ld XHL, 1
+	; (no addr) LD XHL, 0
+	; (no addr) JR T, LABEL_F74D87
+	; (no addr) LDA XHL, 0FFC0h:24
+	; (no addr) JR T, LABEL_F74D87
+	; (no addr) LD XHL, 1
 
 LABEL_F74D87:
-	pop XIZ
-	lda XSP, XSP + 0x10
-	ret
+	; (no addr) POP XIZ
+	; (no addr) LDA XSP, XSP + 010h
+	; (no addr) RET
 
 ; End of Computer Interface Config routines
 

@@ -32,130 +32,130 @@
 ; =============================================================================
 
 DemoModeFunc:
-	cp XBC, 0x1c00013
-	jr NZ, DemoModeFunc_Exit
-	cp XDE, 0x1
-	jr Z, DemoModeFunc_Initialize
-	or XDE, XDE
-	jr NZ, DemoModeFunc_Exit
-	push XDE
-	push XHL
-	push XIX
-	push XIZ
-	call DemoMode_Main_Operation
-	pop XIZ
-	pop XIX
-	pop XHL
-	pop XDE
-	jr DemoModeFunc_Exit
+	; (no addr) CP XBC, 01c00013h
+	; (no addr) JR NZ, DemoModeFunc_Exit
+	; (no addr) CP XDE, 00000001h
+	; (no addr) JR Z, DemoModeFunc_Initialize
+	; (no addr) OR XDE, XDE
+	; (no addr) JR NZ, DemoModeFunc_Exit
+	; (no addr) PUSH XDE
+	; (no addr) PUSH XHL
+	; (no addr) PUSH XIX
+	; (no addr) PUSH XIZ
+	; (no addr) CALL DemoMode_Main_Operation
+	; (no addr) POP XIZ
+	; (no addr) POP XIX
+	; (no addr) POP XHL
+	; (no addr) POP XDE
+	; (no addr) JR T, DemoModeFunc_Exit
 
 DemoModeFunc_Initialize:
-	push XDE
-	push XHL
-	push XIX
-	push XIZ
-	call DemoMode_Initialize
-	pop XIZ
-	pop XIX
-	pop XHL
-	pop XDE
+	; (no addr) PUSH XDE
+	; (no addr) PUSH XHL
+	; (no addr) PUSH XIX
+	; (no addr) PUSH XIZ
+	; (no addr) CALL DemoMode_Initialize
+	; (no addr) POP XIZ
+	; (no addr) POP XIX
+	; (no addr) POP XHL
+	; (no addr) POP XDE
 
 DemoModeFunc_Exit:
-	ld XHL, 0
-	ret
+	; (no addr) LD XHL, 0
+	; (no addr) RET
 
 DemoMenuTtlFunc:
-	ld XHL, 0
-	ret
+	; (no addr) LD XHL, 0
+	; (no addr) RET
 
 DemoStyleTtlFunc:
-	cp XBC, 0x1c00007
-	jr Z, DemoStyle_InputHandler
-	cp XBC, 0x1c00013
-	jrl NZ, DemoStyleTtlFunc_Exit
-	dec 2, XDE
-	cp XDE, 0x0
-	jrl C, DemoStyleTtlFunc_Exit
-	cp XDE, 0x5
-	jrl UGT, DemoStyleTtlFunc_Exit
-	add XDE, XDE
-	add XDE, 0xe201c4
-	ld DE, (XDE)
-	lda XIX, 0xF22339
-	jp XIX + DE
+	; (no addr) CP XBC, 01c00007h
+	; (no addr) JR Z, DemoStyle_InputHandler
+	; (no addr) CP XBC, 01c00013h
+	; (no addr) JRL NZ, DemoStyleTtlFunc_Exit
+	; (no addr) DEC 2, XDE
+	; (no addr) CP XDE, 00000000h
+	; (no addr) JRL C, DemoStyleTtlFunc_Exit
+	; (no addr) CP XDE, 00000005h
+	; (no addr) JRL UGT, DemoStyleTtlFunc_Exit
+	; (no addr) ADD XDE, XDE
+	; (no addr) ADD XDE, 00e201c4h
+	; (no addr) LD DE, (XDE)
+	; (no addr) LDA XIX, 0F22339h
+	; (no addr) JP T, XIX + DE
 DemoStyle_DispatchTable:
 	.byte 0x3A, 0x3B, 0x3C, 0x3E, 0x1D, 0xD2, 0x69, 0xF8
 	.byte 0x5E, 0x5C, 0x5B, 0x5A, 0x78, 0x80, 0x0
 
 DemoStyle_InputHandler:
-	cp XDE, 0xf
-	jr Z, DemoStyle_EnterHandler
-	cp XDE, 0x87
-	jr Z, DemoStyle_DirectionHandler
-	cp XDE, 0x7
-	jr Z, DemoStyle_DirectionHandler
-	cp XDE, 0x86
-	jr Z, DemoStyle_DirectionHandler
-	cp XDE, 0x6
-	jr Z, DemoStyle_DirectionHandler
-	cp XDE, 0x84
-	jr Z, DemoStyle_EncoderHandler
-	cp XDE, 0x4
-	jr Z, DemoStyle_EncoderHandler
-	cp XDE, 0x83
-	jr Z, DemoStyle_EncoderHandler
-	cp XDE, 0x3
-	jr NZ, DemoStyleTtlFunc_Exit
+	; (no addr) CP XDE, 0000000fh
+	; (no addr) JR Z, DemoStyle_EnterHandler
+	; (no addr) CP XDE, 00000087h
+	; (no addr) JR Z, DemoStyle_DirectionHandler
+	; (no addr) CP XDE, 00000007h
+	; (no addr) JR Z, DemoStyle_DirectionHandler
+	; (no addr) CP XDE, 00000086h
+	; (no addr) JR Z, DemoStyle_DirectionHandler
+	; (no addr) CP XDE, 00000006h
+	; (no addr) JR Z, DemoStyle_DirectionHandler
+	; (no addr) CP XDE, 00000084h
+	; (no addr) JR Z, DemoStyle_EncoderHandler
+	; (no addr) CP XDE, 00000004h
+	; (no addr) JR Z, DemoStyle_EncoderHandler
+	; (no addr) CP XDE, 00000083h
+	; (no addr) JR Z, DemoStyle_EncoderHandler
+	; (no addr) CP XDE, 00000003h
+	; (no addr) JR NZ, DemoStyleTtlFunc_Exit
 
 DemoStyle_EncoderHandler:
-	cpw (0x28B4), 0x0
-	jr NZ, DemoStyleTtlFunc_Exit
-	cp (0xD2F), 0x0
-	jr NZ, DemoStyleTtlFunc_Exit
-	ld WA, 0xe2
-	jr DemoStyle_PostEventCommon
+	; (no addr) CPW (28B4h), 0000h
+	; (no addr) JR NZ, DemoStyleTtlFunc_Exit
+	; (no addr) CP (0D2Fh), 000h
+	; (no addr) JR NZ, DemoStyleTtlFunc_Exit
+	; (no addr) LD WA, 00e2h
+	; (no addr) JR T, DemoStyle_PostEventCommon
 
 DemoStyle_DirectionHandler:
-	cpw (0x28B4), 0x0
-	jr NZ, DemoStyleTtlFunc_Exit
-	cp (0xD2F), 0x0
-	jr NZ, DemoStyleTtlFunc_Exit
-	ld WA, 0xe3
+	; (no addr) CPW (28B4h), 0000h
+	; (no addr) JR NZ, DemoStyleTtlFunc_Exit
+	; (no addr) CP (0D2Fh), 000h
+	; (no addr) JR NZ, DemoStyleTtlFunc_Exit
+	; (no addr) LD WA, 00e3h
 
 DemoStyle_PostEventCommon:
-	call UI_PostModeChangeEvent
-	jr DemoStyleTtlFunc_Exit
+	; (no addr) CALL UI_PostModeChangeEvent
+	; (no addr) JR T, DemoStyleTtlFunc_Exit
 
 DemoStyle_EnterHandler:
-	push XDE
-	push XHL
-	push XIX
-	push XIZ
-	call Demo_SelectionEntryHandler
-	pop XIZ
-	pop XIX
-	pop XHL
-	pop XDE
+	; (no addr) PUSH XDE
+	; (no addr) PUSH XHL
+	; (no addr) PUSH XIX
+	; (no addr) PUSH XIZ
+	; (no addr) CALL Demo_SelectionEntryHandler
+	; (no addr) POP XIZ
+	; (no addr) POP XIX
+	; (no addr) POP XHL
+	; (no addr) POP XDE
 
 DemoStyleTtlFunc_Exit:
-	ld XHL, 0
-	ret
+	; (no addr) LD XHL, 0
+	; (no addr) RET
 
 DemoSoundTtlFunc:
-	cp XBC, 0x1c00007
-	jr Z, DemoSound_InputHandler
-	cp XBC, 0x1c00013
-	jrl NZ, DemoSoundTtlFunc_Exit
-	dec 2, XDE
-	cp XDE, 0x0
-	jrl C, DemoSoundTtlFunc_Exit
-	cp XDE, 0x5
-	jrl UGT, DemoSoundTtlFunc_Exit
-	add XDE, XDE
-	add XDE, 0xe201d0
-	ld DE, (XDE)
-	lda XIX, 0xF22404
-	jp XIX + DE
+	; (no addr) CP XBC, 01c00007h
+	; (no addr) JR Z, DemoSound_InputHandler
+	; (no addr) CP XBC, 01c00013h
+	; (no addr) JRL NZ, DemoSoundTtlFunc_Exit
+	; (no addr) DEC 2, XDE
+	; (no addr) CP XDE, 00000000h
+	; (no addr) JRL C, DemoSoundTtlFunc_Exit
+	; (no addr) CP XDE, 00000005h
+	; (no addr) JRL UGT, DemoSoundTtlFunc_Exit
+	; (no addr) ADD XDE, XDE
+	; (no addr) ADD XDE, 00e201d0h
+	; (no addr) LD DE, (XDE)
+	; (no addr) LDA XIX, 0F22404h
+	; (no addr) JP T, XIX + DE
 DemoSound_DispatchTable:
 	.byte 0x3A, 0x3B, 0x3C, 0x3E, 0x1D, 0xD2, 0x69, 0xF8
 	.ascii "^"
@@ -163,74 +163,74 @@ DemoSound_DispatchTable:
 	.ascii "[Zh|"
 
 DemoSound_InputHandler:
-	cp XDE, 0xf
-	jr Z, DemoSound_EnterHandler
-	cp XDE, 0x87
-	jr Z, DemoSound_DirectionHandler
-	cp XDE, 0x7
-	jr Z, DemoSound_DirectionHandler
-	cp XDE, 0x86
-	jr Z, DemoSound_DirectionHandler
-	cp XDE, 0x6
-	jr Z, DemoSound_DirectionHandler
-	cp XDE, 0x81
-	jr Z, DemoSound_EncoderHandler
-	cp XDE, 0x1
-	jr Z, DemoSound_EncoderHandler
-	cp XDE, 0x80
-	jr Z, DemoSound_EncoderHandler
-	or XDE, XDE
-	jr NZ, DemoSoundTtlFunc_Exit
+	; (no addr) CP XDE, 0000000fh
+	; (no addr) JR Z, DemoSound_EnterHandler
+	; (no addr) CP XDE, 00000087h
+	; (no addr) JR Z, DemoSound_DirectionHandler
+	; (no addr) CP XDE, 00000007h
+	; (no addr) JR Z, DemoSound_DirectionHandler
+	; (no addr) CP XDE, 00000086h
+	; (no addr) JR Z, DemoSound_DirectionHandler
+	; (no addr) CP XDE, 00000006h
+	; (no addr) JR Z, DemoSound_DirectionHandler
+	; (no addr) CP XDE, 00000081h
+	; (no addr) JR Z, DemoSound_EncoderHandler
+	; (no addr) CP XDE, 00000001h
+	; (no addr) JR Z, DemoSound_EncoderHandler
+	; (no addr) CP XDE, 00000080h
+	; (no addr) JR Z, DemoSound_EncoderHandler
+	; (no addr) OR XDE, XDE
+	; (no addr) JR NZ, DemoSoundTtlFunc_Exit
 
 DemoSound_EncoderHandler:
-	cpw (0x28B4), 0x0
-	jr NZ, DemoSoundTtlFunc_Exit
-	cp (0xD2F), 0x0
-	jr NZ, DemoSoundTtlFunc_Exit
-	ld WA, 0xe1
-	jr DemoSound_PostEventCommon
+	; (no addr) CPW (28B4h), 0000h
+	; (no addr) JR NZ, DemoSoundTtlFunc_Exit
+	; (no addr) CP (0D2Fh), 000h
+	; (no addr) JR NZ, DemoSoundTtlFunc_Exit
+	; (no addr) LD WA, 00e1h
+	; (no addr) JR T, DemoSound_PostEventCommon
 
 DemoSound_DirectionHandler:
-	cpw (0x28B4), 0x0
-	jr NZ, DemoSoundTtlFunc_Exit
-	cp (0xD2F), 0x0
-	jr NZ, DemoSoundTtlFunc_Exit
-	ld WA, 0xe3
+	; (no addr) CPW (28B4h), 0000h
+	; (no addr) JR NZ, DemoSoundTtlFunc_Exit
+	; (no addr) CP (0D2Fh), 000h
+	; (no addr) JR NZ, DemoSoundTtlFunc_Exit
+	; (no addr) LD WA, 00e3h
 
 DemoSound_PostEventCommon:
-	call UI_PostModeChangeEvent
-	jr DemoSoundTtlFunc_Exit
+	; (no addr) CALL UI_PostModeChangeEvent
+	; (no addr) JR T, DemoSoundTtlFunc_Exit
 
 DemoSound_EnterHandler:
-	push XDE
-	push XHL
-	push XIX
-	push XIZ
-	call Demo_SelectionEntryHandler
-	pop XIZ
-	pop XIX
-	pop XHL
-	pop XDE
+	; (no addr) PUSH XDE
+	; (no addr) PUSH XHL
+	; (no addr) PUSH XIX
+	; (no addr) PUSH XIZ
+	; (no addr) CALL Demo_SelectionEntryHandler
+	; (no addr) POP XIZ
+	; (no addr) POP XIX
+	; (no addr) POP XHL
+	; (no addr) POP XDE
 
 DemoSoundTtlFunc_Exit:
-	ld XHL, 0
-	ret
+	; (no addr) LD XHL, 0
+	; (no addr) RET
 
 DemoRhyTtlFunc:
-	cp XBC, 0x1c00007
-	jr Z, DemoRhythm_InputHandler
-	cp XBC, 0x1c00013
-	jrl NZ, DemoRhyTtlFunc_Exit
-	dec 2, XDE
-	cp XDE, 0x0
-	jrl C, DemoRhyTtlFunc_Exit
-	cp XDE, 0x5
-	jrl UGT, DemoRhyTtlFunc_Exit
-	add XDE, XDE
-	add XDE, 0xe201dc
-	ld DE, (XDE)
-	lda XIX, 0xF224CA
-	jp XIX + DE
+	; (no addr) CP XBC, 01c00007h
+	; (no addr) JR Z, DemoRhythm_InputHandler
+	; (no addr) CP XBC, 01c00013h
+	; (no addr) JRL NZ, DemoRhyTtlFunc_Exit
+	; (no addr) DEC 2, XDE
+	; (no addr) CP XDE, 00000000h
+	; (no addr) JRL C, DemoRhyTtlFunc_Exit
+	; (no addr) CP XDE, 00000005h
+	; (no addr) JRL UGT, DemoRhyTtlFunc_Exit
+	; (no addr) ADD XDE, XDE
+	; (no addr) ADD XDE, 00e201dch
+	; (no addr) LD DE, (XDE)
+	; (no addr) LDA XIX, 0F224CAh
+	; (no addr) JP T, XIX + DE
 DemoRhythm_DispatchTable:
 	.byte 0x3A, 0x3B, 0x3C, 0x3E, 0x1D, 0xD2, 0x69, 0xF8
 	.ascii "^"
@@ -238,57 +238,57 @@ DemoRhythm_DispatchTable:
 	.ascii "[Zh|"
 
 DemoRhythm_InputHandler:
-	cp XDE, 0xf
-	jr Z, DemoRhythm_EnterHandler
-	cp XDE, 0x84
-	jr Z, DemoRhythm_DirectionHandler
-	cp XDE, 0x4
-	jr Z, DemoRhythm_DirectionHandler
-	cp XDE, 0x83
-	jr Z, DemoRhythm_DirectionHandler
-	cp XDE, 0x3
-	jr Z, DemoRhythm_DirectionHandler
-	cp XDE, 0x81
-	jr Z, DemoRhythm_EncoderHandler
-	cp XDE, 0x1
-	jr Z, DemoRhythm_EncoderHandler
-	cp XDE, 0x80
-	jr Z, DemoRhythm_EncoderHandler
-	or XDE, XDE
-	jr NZ, DemoRhyTtlFunc_Exit
+	; (no addr) CP XDE, 0000000fh
+	; (no addr) JR Z, DemoRhythm_EnterHandler
+	; (no addr) CP XDE, 00000084h
+	; (no addr) JR Z, DemoRhythm_DirectionHandler
+	; (no addr) CP XDE, 00000004h
+	; (no addr) JR Z, DemoRhythm_DirectionHandler
+	; (no addr) CP XDE, 00000083h
+	; (no addr) JR Z, DemoRhythm_DirectionHandler
+	; (no addr) CP XDE, 00000003h
+	; (no addr) JR Z, DemoRhythm_DirectionHandler
+	; (no addr) CP XDE, 00000081h
+	; (no addr) JR Z, DemoRhythm_EncoderHandler
+	; (no addr) CP XDE, 00000001h
+	; (no addr) JR Z, DemoRhythm_EncoderHandler
+	; (no addr) CP XDE, 00000080h
+	; (no addr) JR Z, DemoRhythm_EncoderHandler
+	; (no addr) OR XDE, XDE
+	; (no addr) JR NZ, DemoRhyTtlFunc_Exit
 
 DemoRhythm_EncoderHandler:
-	cpw (0x28B4), 0x0
-	jr NZ, DemoRhyTtlFunc_Exit
-	cp (0xD2F), 0x0
-	jr NZ, DemoRhyTtlFunc_Exit
-	ld WA, 0xe1
-	jr DemoRhythm_PostEventCommon
+	; (no addr) CPW (28B4h), 0000h
+	; (no addr) JR NZ, DemoRhyTtlFunc_Exit
+	; (no addr) CP (0D2Fh), 000h
+	; (no addr) JR NZ, DemoRhyTtlFunc_Exit
+	; (no addr) LD WA, 00e1h
+	; (no addr) JR T, DemoRhythm_PostEventCommon
 
 DemoRhythm_DirectionHandler:
-	cpw (0x28B4), 0x0
-	jr NZ, DemoRhyTtlFunc_Exit
-	cp (0xD2F), 0x0
-	jr NZ, DemoRhyTtlFunc_Exit
-	ld WA, 0xe2
+	; (no addr) CPW (28B4h), 0000h
+	; (no addr) JR NZ, DemoRhyTtlFunc_Exit
+	; (no addr) CP (0D2Fh), 000h
+	; (no addr) JR NZ, DemoRhyTtlFunc_Exit
+	; (no addr) LD WA, 00e2h
 
 DemoRhythm_PostEventCommon:
-	call UI_PostModeChangeEvent
-	jr DemoRhyTtlFunc_Exit
+	; (no addr) CALL UI_PostModeChangeEvent
+	; (no addr) JR T, DemoRhyTtlFunc_Exit
 
 DemoRhythm_EnterHandler:
-	push XDE
-	push XHL
-	push XIX
-	push XIZ
-	call Demo_SelectionEntryHandler
-	pop XIZ
-	pop XIX
-	pop XHL
-	pop XDE
+	; (no addr) PUSH XDE
+	; (no addr) PUSH XHL
+	; (no addr) PUSH XIX
+	; (no addr) PUSH XIZ
+	; (no addr) CALL Demo_SelectionEntryHandler
+	; (no addr) POP XIZ
+	; (no addr) POP XIX
+	; (no addr) POP XHL
+	; (no addr) POP XDE
 
 DemoRhyTtlFunc_Exit:
-	ld XHL, 0
-	ret
+	; (no addr) LD XHL, 0
+	; (no addr) RET
 
 ; End of Feature Demo routines

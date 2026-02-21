@@ -37,23 +37,23 @@
 ; Exit:  (REGION_CODE_VAR) = 1-4
 ; -----------------------------------------------------------------------------
 Detect_Region_Code:
-	bit 2, (PH)
-	jr Z, .check_bit1_only
-	bit 1, (PH)
-	jr Z, .mode2
-	ld (REGION_CODE_VAR), 0x1	; Region 1
-	ret
+	; (no addr) BIT 2, (PH)
+	; (no addr) JR Z, .check_bit1_only
+	; (no addr) BIT 1, (PH)
+	; (no addr) JR Z, .mode2
+	; (no addr) LD (REGION_CODE_VAR), 001h	; Region 1
+	; (no addr) RET
 	.mode2:
-	ld (REGION_CODE_VAR), 0x2	; Region 2
-	ret
+	; (no addr) LD (REGION_CODE_VAR), 002h	; Region 2
+	; (no addr) RET
 	.check_bit1_only:
-	bit 1, (PH)
-	jr Z, .mode4
-	ld (REGION_CODE_VAR), 0x3	; Region 3
-	ret
+	; (no addr) BIT 1, (PH)
+	; (no addr) JR Z, .mode4
+	; (no addr) LD (REGION_CODE_VAR), 003h	; Region 3
+	; (no addr) RET
 	.mode4:
-	ld (REGION_CODE_VAR), 0x4	; Region 4
-	ret
+	; (no addr) LD (REGION_CODE_VAR), 004h	; Region 4
+	; (no addr) RET
 
 ; -----------------------------------------------------------------------------
 ; Get_Region_Code - Get stored region code value
@@ -62,8 +62,8 @@ Detect_Region_Code:
 ; Exit:  L = region code (1-4)
 ; -----------------------------------------------------------------------------
 Get_Region_Code:
-	ld L, (REGION_CODE_VAR)
-	ret
+	; (no addr) LD L, (REGION_CODE_VAR)
+	; (no addr) RET
 
 ; -----------------------------------------------------------------------------
 ; Empty_Handler - Empty interrupt handler
@@ -72,7 +72,7 @@ Get_Region_Code:
 ; Used for unused interrupt vectors.
 ; -----------------------------------------------------------------------------
 Empty_Handler:
-	reti
+	; (no addr) RETI
 
 ; -----------------------------------------------------------------------------
 ; Watchdog_Reset_Handler - Watchdog interrupt handler
@@ -81,7 +81,7 @@ Empty_Handler:
 ; This handles the case where the watchdog timer triggers during boot.
 ; -----------------------------------------------------------------------------
 Watchdog_Reset_Handler:
-	jrl BOOT_ENTRY_POINT
-	reti	; Never reached
+	; (no addr) JRL T, BOOT_ENTRY_POINT
+	; (no addr) RETI	; Never reached
 
 ; End of shared boot routines
