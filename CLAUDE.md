@@ -174,6 +174,17 @@ When new images are discovered and extracted as `.bin` files in `maincpu/images/
 
 This ensures the documentation website always reflects the latest extracted images.
 
+### Event Code Freshness (STRICT POLICY)
+
+**When new firmware event codes are discovered or existing codes are better understood, ALL of the following must be updated:**
+
+1. **Assembly source** -- Add/update `EVT_*` EQU constants in `hdae5000/hd-ae5000_v2_06i.asm` and `maincpu/kn5000_v10_program.asm`; replace raw hex values (e.g., `01C0000Fh`) with symbolic names (e.g., `EVT_INIT_HOOK`)
+2. **Event codes reference page** -- Update `../kn5000-docs/event-codes.md` with new codes, dispatch paths, and descriptions
+3. **HDAE5000 homebrew page** -- Update `../kn5000-docs/hdae5000-homebrew.md` if the discovery affects handler registration or activation flow
+4. **Mines project** -- Update `../../Mines/CLAUDE.md` if applicable
+
+**This policy exists because** event codes are the primary interface between the firmware and extension ROMs. Inconsistent documentation across the disassembly, website, and homebrew project causes confusion. The canonical event code reference is `../kn5000-docs/event-codes.md`.
+
 ### Website Synchronization
 
 The documentation website at `../kn5000-docs/` must be kept in sync with project progress. **Run these commands regularly:**

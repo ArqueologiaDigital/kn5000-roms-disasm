@@ -124,7 +124,7 @@ HDAE5000_Boot_Init:
 	ld	XWA, (XWA + WS_OFFSET_HANDLERS_A)
 	ld	XHL, (XWA + WS_HANDLER_A_FUNC2)	; Get HD init function
 	ld	XWA, 0FFFFFFFFh		; Full initialization
-	ld	XBC, 01C00016h		; HD parameters
+	ld	XBC, EVT_HD_INIT_PARAMS	; HD initialization parameters
 	ld	XDE, 01A0007Fh		; HD buffer address
 	call	T, XHL			; Initialize hard disk
 

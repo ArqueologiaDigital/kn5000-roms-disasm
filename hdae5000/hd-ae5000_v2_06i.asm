@@ -507,11 +507,11 @@ HDAE5000_Handler_Registration:		; 280020h
 
 HDAE5000_Alloc_Memory_1:		; 28030Eh
 	; Returns 0x2A898E for A1, 0x140 for A2, 0xF0 for A3
-	cp	XBC, 01E000A3h
+	cp	XBC, EVT_ALLOC_HEIGHT
 	jr	Z, .type_A3
-	cp	XBC, 01E000A2h
+	cp	XBC, EVT_ALLOC_WIDTH
 	jr	Z, .type_A2
-	cp	XBC, 01E000A1h
+	cp	XBC, EVT_ALLOC_DATA_PTR
 	jr	Z, .type_A1
 	ld	XHL, 0
 	ret
@@ -527,11 +527,11 @@ HDAE5000_Alloc_Memory_1:		; 28030Eh
 
 HDAE5000_Alloc_Memory_2:		; 28033Bh
 	; Returns 0x2BB98E for A1, 0x140 for A2, 0xF0 for A3
-	cp	XBC, 01E000A3h
+	cp	XBC, EVT_ALLOC_HEIGHT
 	jr	Z, .type_A3
-	cp	XBC, 01E000A2h
+	cp	XBC, EVT_ALLOC_WIDTH
 	jr	Z, .type_A2
-	cp	XBC, 01E000A1h
+	cp	XBC, EVT_ALLOC_DATA_PTR
 	jr	Z, .type_A1
 	ld	XHL, 0
 	ret
@@ -547,11 +547,11 @@ HDAE5000_Alloc_Memory_2:		; 28033Bh
 
 HDAE5000_Alloc_Memory_3:		; 280368h
 	; Returns 0x2CE98E for A1, 0x140 for A2, 0xF0 for A3
-	cp	XBC, 01E000A3h
+	cp	XBC, EVT_ALLOC_HEIGHT
 	jr	Z, .type_A3
-	cp	XBC, 01E000A2h
+	cp	XBC, EVT_ALLOC_WIDTH
 	jr	Z, .type_A2
-	cp	XBC, 01E000A1h
+	cp	XBC, EVT_ALLOC_DATA_PTR
 	jr	Z, .type_A1
 	ld	XHL, 0
 	ret
@@ -567,11 +567,11 @@ HDAE5000_Alloc_Memory_3:		; 280368h
 
 HDAE5000_Alloc_Memory_4:		; 280395h
 	; Returns 0x2E198E for A1, 0x1B for A2 and A3 (small display mode)
-	cp	XBC, 01E000A3h
+	cp	XBC, EVT_ALLOC_HEIGHT
 	jr	Z, .type_A3
-	cp	XBC, 01E000A2h
+	cp	XBC, EVT_ALLOC_WIDTH
 	jr	Z, .type_A2
-	cp	XBC, 01E000A1h
+	cp	XBC, EVT_ALLOC_DATA_PTR
 	jr	Z, .type_A1
 	ld	XHL, 0
 	ret
@@ -598,11 +598,11 @@ HDAE5000_Alloc_Memory:			; 28F543h
 	;   A2 -> 0x140 (320 decimal - display width)
 	;   A3 -> 0xF0 (240 decimal - display height)
 	;   else -> 0 (invalid type)
-	cp	XBC, 01E000A3h		; Check for type A3
+	cp	XBC, EVT_ALLOC_HEIGHT		; Check for type A3
 	jr	Z, .type_A3
-	cp	XBC, 01E000A2h		; Check for type A2
+	cp	XBC, EVT_ALLOC_WIDTH		; Check for type A2
 	jr	Z, .type_A2
-	cp	XBC, 01E000A1h		; Check for type A1
+	cp	XBC, EVT_ALLOC_DATA_PTR		; Check for type A1
 	jr	Z, .type_A1
 	ld	XHL, 0			; Invalid type - return 0
 	ret
@@ -648,6 +648,53 @@ HDAE5000_Get_Init_Flag:			; 28F570h
 ;   0x28F90B - Finalize init
 ;   0x2803C2 - Register frame handler (code section 1)
 ; ============================================================================
+
+; ============================================================================
+; Event Code Constants
+; See https://arqueologiadigital.github.io/KN5000-docs/event-codes/ for details
+; ============================================================================
+
+; ClassProc getter events (handled by jump table at 0xEAA8F8)
+EVT_IDENTITY		equ	01E00000h	; Identity query — returns XWA unchanged
+EVT_GET_HL		equ	01E00001h	; Returns *(XHL)
+EVT_GET_IZ		equ	01E00002h	; Returns *(XIZ)
+EVT_GET_CONFIG		equ	01E00003h	; Returns *(XHL+0x0C)
+
+; ClassProc special events
+EVT_KEYPRESS		equ	01E0000Dh	; Keypress handling
+EVT_INPUT		equ	01E0000Eh	; Other input event
+EVT_RETURN_ZERO		equ	01E0000Fh	; Returns immediately (no-op)
+EVT_GET_CONFIG_2	equ	01E00015h	; Returns *(XHL+0x0C)
+
+; ObjectProc lifecycle events (handled by jump table at 0xEAA8A4)
+EVT_REDRAW		equ	01E00014h	; UI redraw / refresh
+
+; Request/action events (reach record function directly)
+EVT_MENU_OPEN		equ	01C00001h	; DISK MENU screen displayed
+EVT_SELECT_CONFIRM	equ	01C00002h	; Selection confirmed after button press
+EVT_ACTIVATE		equ	01C00008h	; DISK MENU entry selected via button press
+EVT_POST_INIT		equ	01C0000Dh	; Posted after custom init
+EVT_INIT_HOOK		equ	01C0000Fh	; Custom initialization hook
+EVT_CPANEL_EVENT	equ	01C00013h	; Control panel event
+EVT_HD_INIT_PARAMS	equ	01C00016h	; Hard disk initialization parameters
+EVT_BUTTON_FOCUS	equ	01C00039h	; Button focus during selection
+
+; Activation events
+EVT_POST_ACTIVATE	equ	01E0009Ch	; Programmatic activation via PostEvent
+
+; Display/memory allocation events
+EVT_ALLOC_DATA_PTR	equ	01E000A1h	; Returns palette/graphics data pointer
+EVT_ALLOC_WIDTH		equ	01E000A2h	; Returns display width (320)
+EVT_ALLOC_HEIGHT	equ	01E000A3h	; Returns display height (240)
+
+; Display callback identifiers
+EVT_DISPLAY_CALLBACK	equ	01CA0000h	; Display callback
+EVT_DISPLAY_UPDATE	equ	01CA0004h	; Display state update
+
+; Grid/Check widget events
+EVT_GRIDCHECK_RESP_A	equ	01E40008h	; Grid/Check response A
+EVT_GRIDCHECK_RESP_B	equ	01E4000Ah	; Grid/Check response B
+EVT_OBJECT_STATE_QUERY	equ	01E0008Fh	; Object state query
 
 ; RAM variable addresses
 HDAE5000_WORKSPACE_PTR	equ	23A1A2h
@@ -799,7 +846,7 @@ HDAE5000_Boot_Init:			; 28F576h
 	ld	XWA, (XWA + 0E0Ah)
 	ld	XHL, (XWA + 0124h)	; HD init function
 	ld	XWA, 0FFFFFFFFh		; Full init
-	ld	XBC, 01C00016h		; HD params
+	ld	XBC, EVT_HD_INIT_PARAMS	; HD initialization parameters
 	ld	XDE, 01A0007Fh		; Buffer
 	call	T, XHL
 
@@ -877,7 +924,7 @@ HDAE5000_Frame_Handler:			; 28F662h
 	ld	XBC, (23A1A2h)		; Main workspace pointer
 	ld	XBC, (XBC + 0E0Ah)	; Handler table A
 	ld	XHL, (XBC + 0124h)	; Get callback function
-	ld	XBC, 01CA0004h		; Callback parameter
+	ld	XBC, EVT_DISPLAY_UPDATE	; Display state update callback
 	call	T, XHL			; Call callback if valid
 
 HDAE5000_Frame_Handler_Status:		; 28F6E0h
@@ -921,7 +968,7 @@ HDAE5000_Frame_Handler_Status:		; 28F6E0h
 	ld	XWA, (XWA + 0E0Ah)
 	ld	XHL, (XWA + 0124h)	; Init callback 1
 	ld	XWA, 007F013Eh		; Display params
-	ld	XBC, 01C00001h		; Init flags
+	ld	XBC, EVT_MENU_OPEN	; Display initialization flags
 	ld	XDE, 0
 	call	T, XHL
 	;
@@ -929,14 +976,14 @@ HDAE5000_Frame_Handler_Status:		; 28F6E0h
 	ld	XWA, (XWA + 0E0Ah)
 	ld	XHL, (XWA + 0534h)	; Init callback 2
 	ld	XWA, 007F013Eh
-	ld	XBC, 01CA0000h
+	ld	XBC, EVT_DISPLAY_CALLBACK
 	call	T, XHL
 	;
 	ld	XWA, (23A1A2h)
 	ld	XWA, (XWA + 0E0Ah)
 	ld	XHL, (XWA + 0124h)	; Init callback 3
 	ld	XWA, 007F013Eh
-	ld	XBC, 01CA0000h
+	ld	XBC, EVT_DISPLAY_CALLBACK
 	ld	XDE, 0
 	call	T, XHL
 
