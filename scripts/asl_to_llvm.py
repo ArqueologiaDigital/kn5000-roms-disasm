@@ -939,6 +939,84 @@ NATIVE_LD_32BIT_REGS = {
     'XWA', 'XBC', 'XDE', 'XHL', 'XIX', 'XIY', 'XIZ', 'XSP',
 }
 
+# Tier 3: Register-register operations (2-byte encoding)
+# All TLCS-900 registers
+ALL_REGISTERS = {
+    # 8-bit
+    'W', 'A', 'B', 'C', 'D', 'E', 'H', 'L',
+    # 16-bit
+    'WA', 'BC', 'DE', 'HL', 'IX', 'IY', 'IZ', 'SP',
+    # 32-bit
+    'XWA', 'XBC', 'XDE', 'XHL', 'XIX', 'XIY', 'XIZ', 'XSP',
+}
+
+# Two-operand reg-reg ALU mnemonics (ASL → LLVM)
+# ASL may use size suffixes (LDW, ADDW) but LLVM always uses base mnemonic
+REGREG_ALU_OPS = {
+    'LD', 'LDW', 'ADD', 'ADDW', 'SUB', 'SUBW',
+    'CP', 'CPW', 'AND', 'ANDW', 'OR', 'ORW', 'XOR', 'XORW',
+    'ADC', 'ADCW', 'SBC', 'SBCW',
+}
+
+# Single-operand register operations (2-byte)
+SINGLE_REG_OPS = {'EXTZ', 'EXTS', 'CPL', 'NEG'}
+
+# Register index within its size class (0-7)
+REG_INDEX = {
+    # 8-bit
+    'W': 0, 'A': 1, 'B': 2, 'C': 3, 'D': 4, 'E': 5, 'H': 6, 'L': 7,
+    # 16-bit
+    'WA': 0, 'BC': 1, 'DE': 2, 'HL': 3, 'IX': 4, 'IY': 5, 'IZ': 6, 'SP': 7,
+    # 32-bit
+    'XWA': 0, 'XBC': 1, 'XDE': 2, 'XHL': 3, 'XIX': 4, 'XIY': 5, 'XIZ': 6, 'XSP': 7,
+}
+
+# Register prefix byte (first byte of 2-byte encoding)
+REG_PREFIX = {
+    'W': 0xC8, 'A': 0xC9, 'B': 0xCA, 'C': 0xCB,
+    'D': 0xCC, 'E': 0xCD, 'H': 0xCE, 'L': 0xCF,
+    'WA': 0xD8, 'BC': 0xD9, 'DE': 0xDA, 'HL': 0xDB,
+    'IX': 0xDC, 'IY': 0xDD, 'IZ': 0xDE, 'SP': 0xDF,
+    'XWA': 0xE8, 'XBC': 0xE9, 'XDE': 0xEA, 'XHL': 0xEB,
+    'XIX': 0xEC, 'XIY': 0xED, 'XIZ': 0xEE, 'XSP': 0xEF,
+}
+
+# ALU operation opcode base (second byte = base + dst_index)
+ALU_OP_BASE = {
+    'ADD': 0x80, 'LD': 0x88, 'ADC': 0x90, 'SUB': 0xA0,
+    'SBC': 0xB0, 'AND': 0xC0, 'XOR': 0xD0, 'OR': 0xE0, 'CP': 0xF0,
+}
+
+# Single-reg operation opcode (second byte, fixed)
+SINGLE_REG_OPCODE = {'EXTZ': 0x12, 'EXTS': 0x13, 'CPL': 0x06, 'NEG': 0x07}
+
+
+def verify_regreg_encoding(rom_bytes, src_reg, dst_reg, op_base):
+    """Verify ROM bytes match expected 2-byte reg-reg encoding."""
+    expected_b0 = REG_PREFIX.get(src_reg)
+    expected_b1 = op_base + REG_INDEX.get(dst_reg, 99)
+    if expected_b0 is None or expected_b1 > 0xFF:
+        return False
+    return rom_bytes[0] == expected_b0 and rom_bytes[1] == expected_b1
+
+
+def verify_singlereg_encoding(rom_bytes, reg, opcode):
+    """Verify ROM bytes match expected 2-byte single-reg encoding."""
+    expected_b0 = REG_PREFIX.get(reg)
+    if expected_b0 is None:
+        return False
+    return rom_bytes[0] == expected_b0 and rom_bytes[1] == opcode
+
+
+# Strip size suffix from ASL mnemonic to get LLVM mnemonic
+def strip_size_suffix(mnem_upper):
+    """Strip W/B/L size suffix from ASL mnemonic for LLVM."""
+    if len(mnem_upper) > 2 and mnem_upper.endswith('W'):
+        base = mnem_upper[:-1]
+        if base in ('LD', 'ADD', 'SUB', 'CP', 'AND', 'OR', 'XOR', 'ADC', 'SBC'):
+            return base
+    return mnem_upper
+
 
 def parse_asl_immediate(value_str):
     """Parse an ASL immediate value string to an integer.
@@ -981,6 +1059,47 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes):
                 if imm_val is not None:
                     native_asm = f"ld {reg.lower()}, 0x{imm_val:X}"
                     return native_asm, 5
+
+    # Tier 3: Register-register operations (2-byte encoding)
+    # Verify ROM bytes match expected encoding to catch ASL disassembly errors.
+    if nbytes == 2 and operands_str and rom_bytes is not None:
+        # 3a: Two-operand reg-reg ALU (LD/ADD/SUB/CP/AND/OR/XOR reg, reg)
+        if mnem_upper in REGREG_ALU_OPS:
+            parts = operands_str.split(',', 1)
+            if len(parts) == 2:
+                dst = parts[0].strip().upper()
+                src = parts[1].strip().upper()
+                base_mnem = strip_size_suffix(mnem_upper)
+                op_base = ALU_OP_BASE.get(base_mnem)
+                if (dst in ALL_REGISTERS and src in ALL_REGISTERS
+                        and op_base is not None
+                        and verify_regreg_encoding(rom_bytes, src, dst, op_base)):
+                    native_asm = f"{base_mnem.lower()} {dst.lower()}, {src.lower()}"
+                    return native_asm, 2
+
+        # 3b: Single-operand register ops (EXTZ/EXTS/CPL/NEG reg)
+        if mnem_upper in SINGLE_REG_OPS and ',' not in operands_str:
+            reg = operands_str.strip().upper()
+            opcode = SINGLE_REG_OPCODE.get(mnem_upper)
+            if (reg in ALL_REGISTERS and opcode is not None
+                    and verify_singlereg_encoding(rom_bytes, reg, opcode)):
+                native_asm = f"{mnem_upper.lower()} {reg.lower()}"
+                return native_asm, 2
+
+        # 3c: INC/DEC count, reg (2-byte encoding, register only)
+        if mnem_upper in ('INC', 'DEC'):
+            parts = operands_str.split(',', 1)
+            if len(parts) == 2:
+                count_str = parts[0].strip()
+                reg = parts[1].strip().upper()
+                if reg in ALL_REGISTERS and '(' not in operands_str:
+                    count = parse_asl_immediate(count_str)
+                    if count is not None and 1 <= count <= 8:
+                        inc_base = 0x60 if mnem_upper == 'INC' else 0x68
+                        expected_opcode = inc_base + count
+                        if verify_singlereg_encoding(rom_bytes, reg, expected_opcode):
+                            native_asm = f"{mnem_upper.lower()} {count}, {reg.lower()}"
+                            return native_asm, 2
 
     return None
 
