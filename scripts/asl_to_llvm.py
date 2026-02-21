@@ -931,6 +931,30 @@ NATIVE_ZERO_OPS = {
     'HALT': ('halt', 1),  # 0x05
 }
 
+# Tier 2: 32-bit register immediate loads (5-byte encoding only)
+# LLVM encodes: prefix_byte + imm32_LE (5 bytes)
+# ROM also uses this encoding for non-short-form 32-bit loads.
+# Short forms (2-byte, values 0-7) and 16-bit loads (3-byte) don't match LLVM.
+NATIVE_LD_32BIT_REGS = {
+    'XWA', 'XBC', 'XDE', 'XHL', 'XIX', 'XIY', 'XIZ', 'XSP',
+}
+
+
+def parse_asl_immediate(value_str):
+    """Parse an ASL immediate value string to an integer.
+
+    Handles: decimal (0, 42), hex with h suffix (0FFh, 00830000h).
+    Returns int or None if not a simple immediate.
+    """
+    value_str = value_str.strip()
+    # Hex with h/H suffix
+    if re.match(r'^[0-9][0-9A-Fa-f]*[hH]$', value_str):
+        return int(value_str[:-1], 16)
+    # Plain decimal
+    if re.match(r'^[0-9]+$', value_str):
+        return int(value_str)
+    return None
+
 
 def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes):
     """Try to convert an instruction to native LLVM syntax.
@@ -945,6 +969,18 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes):
         native_asm, expected_size = NATIVE_ZERO_OPS[mnem_upper]
         if nbytes == expected_size:
             return native_asm, expected_size
+
+    # Tier 2: 32-bit register immediate loads (5-byte form only)
+    if mnem_upper in ('LD', 'LDW') and operands_str and nbytes == 5:
+        parts = operands_str.split(',', 1)
+        if len(parts) == 2:
+            reg = parts[0].strip().upper()
+            imm_str = parts[1].strip()
+            if reg in NATIVE_LD_32BIT_REGS:
+                imm_val = parse_asl_immediate(imm_str)
+                if imm_val is not None:
+                    native_asm = f"ld {reg.lower()}, 0x{imm_val:X}"
+                    return native_asm, 5
 
     return None
 
@@ -1693,12 +1729,11 @@ def convert_all(main_file, output_path):
     # Count statistics
     total_byte_lines = 0
     total_native_lines = 0
-    native_mnemonics = set(v[0] for v in NATIVE_ZERO_OPS.values())
     for line in output_lines:
         stripped = line.strip()
         if stripped.startswith('.byte') and '\t;' in stripped:
             total_byte_lines += 1
-        elif any(stripped.startswith(m) and '\t;' in stripped for m in native_mnemonics):
+        elif not stripped.startswith('.') and not stripped.startswith(';') and '\t;' in stripped and not stripped.endswith(':'):
             total_native_lines += 1
     print(f"  Output: {output_path}")
     print(f"  ROM bytes covered: {total_rom_bytes} / {ROM_SIZE} ({100*total_rom_bytes/ROM_SIZE:.1f}%)")
