@@ -1155,6 +1155,48 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes):
                 native_asm = f"pop {reg.lower()}"
                 return native_asm, 1
 
+    # Tier 7: Simple register-indirect LD (2-byte encoding)
+    # LD reg, (Xreg): prefix = 0x80/0x90/0xA0 + xreg_idx
+    # LD (Xreg), reg: prefix = 0xB0 + xreg_idx
+    # Only supports LD (not ALU ops, which LLVM doesn't accept with (Xreg)).
+    if nbytes == 2 and operands_str and rom_bytes is not None and mnem_upper in ('LD', 'LDW'):
+        # Parse operands for register-indirect forms
+        parts = operands_str.split(',', 1)
+        if len(parts) == 2:
+            op1 = parts[0].strip()
+            op2 = parts[1].strip()
+
+            # LD reg, (Xreg) — load from indirect
+            indirect_match = re.match(r'^\((\w+)\)$', op2)
+            if indirect_match:
+                mem_reg = indirect_match.group(1).upper()
+                dst_reg = op1.upper()
+                if mem_reg in NATIVE_LD_32BIT_REGS and dst_reg in ALL_REGISTERS:
+                    mem_idx = REG_INDEX.get(mem_reg, 99)
+                    # Determine prefix base from destination register size
+                    if dst_reg in ('W','A','B','C','D','E','H','L'):
+                        prefix_base = 0x80  # 8-bit dest
+                    elif dst_reg in ('WA','BC','DE','HL','IX','IY','IZ','SP'):
+                        prefix_base = 0x90  # 16-bit dest
+                    else:
+                        prefix_base = 0xA0  # 32-bit dest
+                    expected_prefix = prefix_base + mem_idx
+                    if rom_bytes[0] == expected_prefix:
+                        native_asm = f"ld {dst_reg.lower()}, ({mem_reg.lower()})"
+                        return native_asm, 2
+
+            # LD (Xreg), reg — store to indirect
+            indirect_match = re.match(r'^\((\w+)\)$', op1)
+            if indirect_match:
+                mem_reg = indirect_match.group(1).upper()
+                src_reg = op2.upper()
+                if mem_reg in NATIVE_LD_32BIT_REGS and src_reg in ALL_REGISTERS:
+                    mem_idx = REG_INDEX.get(mem_reg, 99)
+                    expected_prefix = 0xB0 + mem_idx
+                    if rom_bytes[0] == expected_prefix:
+                        native_asm = f"ld ({mem_reg.lower()}), {src_reg.lower()}"
+                        return native_asm, 2
+
     return None
 
 
