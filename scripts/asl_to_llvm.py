@@ -1101,6 +1101,33 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes):
                             native_asm = f"{mnem_upper.lower()} {count}, {reg.lower()}"
                             return native_asm, 2
 
+    # Tier 4: Register-immediate ALU (ADD/SUB/CP/AND/OR/XOR/ADC/SBC reg, #imm)
+    # Encoding: prefix_byte + alu_imm_opcode + immediate_bytes
+    # 8-bit reg: 3 bytes (prefix + opcode + imm8)
+    # 16-bit reg: 4 bytes (prefix + opcode + imm16_LE)
+    # 32-bit reg: 6 bytes (prefix + opcode + imm32_LE)
+    # Short forms (2-byte, values 0-7) don't match LLVM.
+    ALU_IMM_OPCODE = {
+        'ADD': 0xC8, 'ADC': 0xC9, 'SUB': 0xCA, 'SBC': 0xCB,
+        'AND': 0xCC, 'XOR': 0xCD, 'OR': 0xCE, 'CP': 0xCF,
+    }
+    if operands_str and nbytes in (3, 4, 6) and rom_bytes is not None:
+        base_mnem = strip_size_suffix(mnem_upper)
+        alu_opcode = ALU_IMM_OPCODE.get(base_mnem)
+        if alu_opcode is not None:
+            parts = operands_str.split(',', 1)
+            if len(parts) == 2:
+                reg = parts[0].strip().upper()
+                imm_str = parts[1].strip()
+                prefix = REG_PREFIX.get(reg)
+                if prefix is not None and '(' not in imm_str:
+                    imm_val = parse_asl_immediate(imm_str)
+                    if imm_val is not None:
+                        # Verify ROM bytes: prefix + alu_opcode + imm_LE
+                        if rom_bytes[0] == prefix and rom_bytes[1] == alu_opcode:
+                            native_asm = f"{base_mnem.lower()} {reg.lower()}, 0x{imm_val:X}"
+                            return native_asm, nbytes
+
     return None
 
 
