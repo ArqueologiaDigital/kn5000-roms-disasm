@@ -731,7 +731,7 @@ IntMed_StartPlayLoop:
 	LD XDE, 0
 	CALL ApPostEvent
 	LD WA, 007ah
-	CALL LABEL_F99490
+	CALL UI_PostModeChangeEvent
 	JR T, IntMed_Exit
 
 IntMed_NextPlaySlot:
@@ -752,7 +752,7 @@ IntMed_CheckContinue:
 	LD XDE, 0
 	CALL ApPostEvent
 	LD WA, 007ah
-	CALL LABEL_F99490
+	CALL UI_PostModeChangeEvent
 
 IntMed_Exit:
 	LD XHL, 0
@@ -1190,7 +1190,7 @@ DiskSel_SendFileInfo:
 	JR GE, DiskSel_PlayNext
 	LD (84FEh), 000h
 	LD WA, 0060h
-	CALL LABEL_F99490
+	CALL UI_PostModeChangeEvent
 	LD WA, QIZ
 	LD BC, 1
 	CALR LABEL_F8B48E
@@ -1211,7 +1211,7 @@ DiskSel_PlayNext:
 	LD XDE, 0
 	CALL ApPostEvent
 	LD WA, 0078h
-	CALL LABEL_F99490
+	CALL UI_PostModeChangeEvent
 	JR T, DiskSel_ClearPlaying
 
 DiskSel_NextSongLoop:
@@ -1302,7 +1302,7 @@ DiskSel_RepeatSendInfo:
 	JR GE, DiskSel_RepeatPlayNext
 	LD (84FEh), 000h
 	LD WA, 0060h
-	CALL LABEL_F99490
+	CALL UI_PostModeChangeEvent
 	LD WA, QIZ
 	LD BC, 1
 	CALR LABEL_F8B48E
@@ -1325,7 +1325,7 @@ DiskSel_RepeatPlayNext:
 	LD WA, 0078h
 
 DiskSel_CallPauseMode:
-	CALL LABEL_F99490
+	CALL UI_PostModeChangeEvent
 	JRL T, DiskSel_Exit
 
 DiskSel_RepeatNext:
@@ -1674,7 +1674,7 @@ DiskSel_PlayFindLoop:
 	JR GE, DiskSel_PlayNextSong
 	LD (84FEh), 000h
 	LD WA, 0060h
-	CALL LABEL_F99490
+	CALL UI_PostModeChangeEvent
 	LD WA, QIZ
 	LD BC, 1
 	CALR LABEL_F8B48E
@@ -1699,7 +1699,7 @@ DiskSel_PlayNextSong:
 	LD XDE, 0
 	CALL ApPostEvent
 	LD WA, 0078h
-	CALL LABEL_F99490
+	CALL UI_PostModeChangeEvent
 	JR T, DiskSel_GetCurrentIndex
 
 DiskSel_PlayNextLoop:
@@ -2417,7 +2417,7 @@ SmfMed_PlayFindLoop:
 	LD XDE, 0
 	CALL ApPostEvent
 	LD WA, 0073h
-	CALL LABEL_F99490
+	CALL UI_PostModeChangeEvent
 	JR T, SmfMed_CheckAutoPlay
 
 SmfMed_PlayNextLoop:
@@ -2457,7 +2457,7 @@ SmfMed_CheckContinue:
 	EXTZ WA
 
 SmfMed_CallPauseMode:
-	CALL LABEL_F99490
+	CALL UI_PostModeChangeEvent
 
 SmfMed_Exit:
 	LD XHL, 0
@@ -3177,7 +3177,7 @@ PdMed_PlayFindLoop:
 	LD XDE, 0
 	CALL ApPostEvent
 	LD WA, 0075h
-	CALL LABEL_F99490
+	CALL UI_PostModeChangeEvent
 	JR T, PdMed_CheckAutoPlay
 
 PdMed_PlayNextLoop:
@@ -3209,7 +3209,7 @@ PdMed_CheckContinue:
 	LD WA, 0075h
 
 PdMed_CallPauseMode:
-	CALL LABEL_F99490
+	CALL UI_PostModeChangeEvent
 
 PdMed_Exit:
 	LD XHL, 0
@@ -3986,7 +3986,7 @@ DocMed_PlayFindLoop:
 	LD XDE, 0
 	CALL ApPostEvent
 	LD WA, 0074h
-	CALL LABEL_F99490
+	CALL UI_PostModeChangeEvent
 	JR T, DocMed_CheckAutoPlay
 
 DocMed_PlayNextLoop:
@@ -4022,7 +4022,7 @@ DocMed_CheckContinue:
 	LD WA, 0074h
 
 DocMed_CallPauseMode:
-	CALL LABEL_F99490
+	CALL UI_PostModeChangeEvent
 
 DocMed_Exit:
 	LD XHL, 0

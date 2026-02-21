@@ -86,7 +86,7 @@ LABEL_F8DC16:
 	CALL ApPostEvent
 	LD A, (808Ah)
 	EXTZ WA
-	CALL LABEL_F99490
+	CALL UI_PostModeChangeEvent
 	LD XWA, 0ffffffffh
 	LD XBC, 01e0009eh
 	LD XDE, 0
@@ -115,7 +115,7 @@ LABEL_F8DC70:
 	CALL ApPostEvent
 	LD A, (808Ah)
 	EXTZ WA
-	CALL LABEL_F99490
+	CALL UI_PostModeChangeEvent
 	LD XWA, 0ffffffffh
 	LD XBC, 01e0009eh
 	LD XDE, 0
@@ -154,7 +154,7 @@ LABEL_F8DCF6:
 	LD WA, 0060h
 
 LABEL_F8DCF9:
-	CALL LABEL_F99490
+	CALL UI_PostModeChangeEvent
 
 LABEL_F8DCFD:
 	LD XHL, 0
