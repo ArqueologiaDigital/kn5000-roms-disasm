@@ -1,0 +1,13 @@
+s/LABEL_F86239/Seq_InitVoiceStructures/g
+s/LABEL_F86258/Seq_InitVoiceLoop/g
+s/LABEL_F8630D/Seq_InitializeAndStart/g
+s/LABEL_F866F9/Seq_PostMelodyEvent/g
+s/LABEL_F86700/Seq_DispatchMainFunc/g
+s/LABEL_F86704/ApPreControl_ReturnNull/g
+s/LABEL_F86709/Seq_StartWithFullInit/g
+s/LABEL_F867E0/Seq_PostMelodyEventAlt/g
+s/LABEL_F867EA/Seq_ReadStartFlag/g
+s/LABEL_F867F3/Seq_GetControlBlock/g
+s/LABEL_F867F8/ApPreControl_Exit/g
+s/LABEL_F846DF/Seq_IsMelodyActive/g
+s/LABEL_F8662C/MainPreControl_ReturnNull/g
