@@ -44,6 +44,10 @@ KNOWN_EQUS = {}
 # Address → label name mapping for symbolic references in JP/CALL
 ADDR_TO_LABEL = {}
 
+# Address → label name mapping restricted to .set labels only (for .long data).
+# Inline labels may have position drift, but .set labels have exact addresses.
+ADDR_TO_LABEL_SET = {}
+
 # Statistics counters for native vs fallback instructions
 NATIVE_INSTR_COUNT = 0
 BYTE_FALLBACK_COUNT = 0
@@ -782,11 +786,15 @@ def convert_line(line, in_file_path):
                         # Partial word at end — emit as .byte
                         byte_str = ', '.join(f'0x{b:02x}' for b in chunk)
                         longs.append(None)
-                        result += f"\t.long {', '.join(l for l in longs if l)}\t; {original}" if any(longs) else ""
+                        valid = [l for l in longs if l]
+                        if valid:
+                            long_str = ', '.join(valid)
+                            result += f"\t.long {long_str}\t; {original}"
                         result += f"\n\t.byte {byte_str}"
                         break
                 else:
-                    result += f"\t.long {', '.join(longs)}\t; {original}"
+                    long_str = ', '.join(longs)
+                    result += f"\t.long {long_str}\t; {original}"
                 BLOCK_CURSOR += nbytes
                 ADDR_TRACKER.advance(nbytes)
                 if comment:
@@ -808,7 +816,8 @@ def convert_line(line, in_file_path):
                         val = chunk[0] | (chunk[1] << 8) | (chunk[2] << 16) | (chunk[3] << 24)
                         longs.append(f'0x{val:08X}')
                 if longs:
-                    result += f"\t.long {', '.join(longs)}\t; {original}"
+                    long_str = ', '.join(longs)
+                    result += f"\t.long {long_str}\t; {original}"
                 ADDR_TRACKER.advance(nbytes)
                 if comment:
                     result += f"\t{comment}"
@@ -1361,6 +1370,36 @@ def _count_db_bytes(args):
     return total
 
 
+def _db_args_all_numeric(args):
+    """Check if all DB arguments are literal numeric values (hex/decimal).
+
+    Returns True if the comment is redundant (just restates hex bytes).
+    """
+    parts = split_db_args(args)
+    for part in parts:
+        part = part.strip()
+        if part.startswith('"') and part.endswith('"'):
+            return False  # String literal — comment might add context
+        # Check if it's a simple hex or decimal literal
+        if not re.match(r'^[0-9][0-9A-Fa-f]*[hH]$', part) and \
+           not re.match(r'^0x[0-9A-Fa-f]+$', part) and \
+           not re.match(r'^[0-9]+$', part):
+            return False  # Contains label/expression
+    return True
+
+
+def _dw_args_all_numeric(args):
+    """Check if all DW arguments are literal numeric values."""
+    parts = split_operands(args)
+    for part in parts:
+        part = part.strip()
+        if not re.match(r'^[0-9][0-9A-Fa-f]*[hH]$', part) and \
+           not re.match(r'^0x[0-9A-Fa-f]+$', part) and \
+           not re.match(r'^[0-9]+$', part):
+            return False
+    return True
+
+
 def convert_db(label, args, comment, in_file_path):
     """Convert db directive - handle strings, bytes, and dup patterns."""
     global BLOCK_CURSOR
@@ -1378,13 +1417,15 @@ def convert_db(label, args, comment, in_file_path):
             nbytes = remaining
         if nbytes > 0:
             rom_bytes = BLOCK_BUFFER[BLOCK_CURSOR:BLOCK_CURSOR + nbytes]
-            original = f"DB {args}"
             string_form = _try_emit_as_string(rom_bytes)
             if string_form is not None:
                 result += f"\t{string_form}"
             else:
                 byte_str = ', '.join(f'0x{b:02x}' for b in rom_bytes)
-                result += f"\t.byte {byte_str}\t; {original}"
+                if _db_args_all_numeric(args):
+                    result += f"\t.byte {byte_str}"
+                else:
+                    result += f"\t.byte {byte_str}\t; DB {args}"
             BLOCK_CURSOR += nbytes
             ADDR_TRACKER.advance(nbytes)
         if comment:
@@ -1490,7 +1531,6 @@ def convert_dw(label, args, comment):
             nbytes = remaining
         if nbytes > 0:
             rom_bytes = BLOCK_BUFFER[BLOCK_CURSOR:BLOCK_CURSOR + nbytes]
-            original = f"DW {args}"
             shorts = []
             for i in range(0, nbytes, 2):
                 chunk = rom_bytes[i:i+2]
@@ -1498,7 +1538,11 @@ def convert_dw(label, args, comment):
                     val = chunk[0] | (chunk[1] << 8)
                     shorts.append(f'0x{val:04X}')
             if shorts:
-                result += f"\t.short {', '.join(shorts)}\t; {original}"
+                short_str = ', '.join(shorts)
+                if _dw_args_all_numeric(args):
+                    result += f"\t.short {short_str}"
+                else:
+                    result += f"\t.short {short_str}\t; DW {args}"
             BLOCK_CURSOR += nbytes
             ADDR_TRACKER.advance(nbytes)
         if comment:
@@ -1737,8 +1781,13 @@ def _build_addr_to_label_map(sorted_content, seg_end_map, label_only_labels):
     For content segments, only LABEL_XXXXXX names are used (address encoded
     in name). Named labels in content segments are recorded only at segment
     start or at a LABEL_XXXXXX boundary to avoid address drift issues.
+
+    Returns (addr_to_label, addr_to_label_set) where the second map contains
+    only labels from label-only segments (used for .long data references where
+    inline label position drift would produce wrong values).
     """
     addr_to_label = {}
+    addr_to_label_set = {}  # Populated later by post-processing (after main loop)
 
     # 1. Label-only segments (explicit ORG addresses — always reliable)
     for addr, names in label_only_labels.items():
@@ -1790,7 +1839,7 @@ def _build_addr_to_label_map(sorted_content, seg_end_map, label_only_labels):
                         reliable_addr = hint_addr
                         at_reliable_boundary = True
 
-    return addr_to_label
+    return addr_to_label, addr_to_label_set
 
 
 def convert_all(main_file, output_path):
@@ -1952,10 +2001,10 @@ def convert_all(main_file, output_path):
             label_only_labels[seg_addr].extend(labels)
 
     # Build address → label map for symbolic JP/CALL targets
-    global ADDR_TO_LABEL
+    global ADDR_TO_LABEL, ADDR_TO_LABEL_SET
     print("  Building address-to-label map...")
-    ADDR_TO_LABEL = _build_addr_to_label_map(sorted_content, seg_end_map, label_only_labels)
-    print(f"  Labels mapped: {len(ADDR_TO_LABEL)}")
+    ADDR_TO_LABEL, ADDR_TO_LABEL_SET = _build_addr_to_label_map(sorted_content, seg_end_map, label_only_labels)
+    print(f"  Labels mapped: {len(ADDR_TO_LABEL)} (JP/CALL), {len(ADDR_TO_LABEL_SET)} (.long data)")
 
     # Build output
     output_lines = []
@@ -2120,6 +2169,32 @@ def convert_all(main_file, output_path):
         output_lines.append("; Label-only forward references (emitted as .set for JP/CALL targets)")
         for addr, lbl_name in remaining_labels:
             output_lines.append(f"\t.set {lbl_name}, 0x{addr:06X}")
+
+    # Post-process: symbolize .long values for labels emitted as .set
+    # Only .set labels have guaranteed correct addresses; inline labels may drift.
+    set_label_map = {}  # addr -> name for labels that became .set
+    for addr, lbl_name in remaining_labels:
+        _record_label(set_label_map, addr, lbl_name)
+    if set_label_map:
+        long_re = re.compile(r'0x([0-9A-Fa-f]{8})')
+        symbolic_long_count = 0
+        for i, line in enumerate(output_lines):
+            if '\t.long ' not in line:
+                continue
+            # Split off any existing comment
+            code_part, cmt_part = line.split('\t; ', 1) if '\t; ' in line else (line, '')
+            new_code = code_part
+            changed = False
+            for m in long_re.finditer(code_part):
+                val = int(m.group(1), 16)
+                sym = set_label_map.get(val)
+                if sym:
+                    new_code = new_code.replace(m.group(0), sym, 1)
+                    changed = True
+            if changed:
+                output_lines[i] = new_code  # Drop comment when symbolic
+                symbolic_long_count += 1
+        print(f"  Symbolic .long replacements: {symbolic_long_count}")
 
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
     with open(output_path, 'w') as f:
