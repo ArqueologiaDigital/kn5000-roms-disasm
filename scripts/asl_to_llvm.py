@@ -158,22 +158,48 @@ class AddressTracker:
 
     def __init__(self):
         self.current_addr = None
+        self.frozen = False
 
     def set_org(self, addr):
         """Set address from ORG directive."""
-        self.current_addr = addr
+        if not self.frozen:
+            self.current_addr = addr
 
     def advance(self, nbytes):
         """Advance address by N bytes."""
-        if self.current_addr is not None:
+        if self.current_addr is not None and not self.frozen:
             self.current_addr += nbytes
 
     def get_addr(self):
         return self.current_addr
 
+    def freeze(self):
+        """Freeze: advance/set_org become no-ops. Used inside macro defs."""
+        self.frozen = True
+
+    def unfreeze(self):
+        """Unfreeze: resume normal tracking."""
+        self.frozen = False
+
 
 # Global address tracker
 ADDR_TRACKER = AddressTracker()
+
+# Pending .org corrections from self-correction at labels
+PENDING_ORG_CORRECTIONS = []
+
+# Macro definition depth: when > 0, we're inside a .macro/.endm block.
+# Lines in macro bodies are converted but must NOT advance ADDR_TRACKER
+# because the LLVM assembler stores them without emitting bytes.
+IN_MACRO_DEF = 0
+
+# Conditional assembly state: tracks IF/ELSE/ENDIF
+# For maincpu, INIT_FLAG_COMPARE_WORD=0, so IF evaluates to false
+COND_STATE = {
+    'active': True,     # Whether we're currently in an active (emitting) branch
+    'depth': 0,         # Nesting depth
+    'seen_else': False, # Whether we've seen ELSE at current depth
+}
 
 # TLCS-900 instruction encoding sizes (for common instructions)
 # Maps (mnemonic_lower, operand_pattern) → byte_count
@@ -201,11 +227,121 @@ ADDR_TRACKER = AddressTracker()
 # Instruction size table for TLCS-900/H2
 # ============================================================================
 
+def _extended_addr_overhead(data, pos):
+    """Get prefix overhead bytes for extended addressing modes (x0-x5).
+
+    The low 3 bits of the first byte select the sub-mode:
+      0: (imm8) = 1 byte
+      1: (imm16) = 2 bytes
+      2: (imm24) = 3 bytes
+      3: register-based (variable, sub-decoded)
+      4: (-R32) = 1 byte
+      5: (R32+) = 1 byte
+    """
+    mode = data[pos - 1] & 0x07
+    if mode == 0: return 1
+    if mode == 1: return 2
+    if mode == 2: return 3
+    if mode == 4: return 1
+    if mode == 5: return 1
+    # mode == 3: register-based, read next byte
+    if pos >= len(data):
+        return 1
+    imm = data[pos]
+    low2 = imm & 0x03
+    if low2 == 0: return 1    # (R32)
+    if low2 == 1: return 3    # (R32+d16)
+    if low2 == 2: return 1    # reserved
+    # low2 == 3: further sub-decode
+    if imm in (0x03, 0x07): return 3  # (R32+R8), (R32+R16)
+    if imm == 0x13: return 3          # (PC+d16)
+    return 1  # unknown variant
+
+
+# Sub-opcode operand byte tables for prefixed instructions.
+# Each table maps sub-opcode (0x00-0xFF) to extra operand bytes
+# consumed AFTER the sub-opcode byte itself.
+
+# Byte-size memory operations (mnemonic_80/88/c0)
+_SUB_BYTES_80 = [0] * 256
+for _i in range(0x38, 0x40): _SUB_BYTES_80[_i] = 1   # ALU M,I8
+_SUB_BYTES_80[0x19] = 2  # LD (M16),M
+
+# Word-size memory operations (mnemonic_90/98/d0)
+_SUB_BYTES_90 = [0] * 256
+for _i in range(0x38, 0x40): _SUB_BYTES_90[_i] = 2   # ALU M,I16
+_SUB_BYTES_90[0x19] = 2  # LD (M16),M
+
+# Long-word memory operations (mnemonic_a0)
+_SUB_BYTES_A0 = [0] * 256
+
+# Mixed-size memory operations (mnemonic_b0/b8/f0)
+_SUB_BYTES_B0 = [0] * 256
+_SUB_BYTES_B0[0x00] = 1  # LD M,I8
+_SUB_BYTES_B0[0x02] = 2  # LD M,I16
+_SUB_BYTES_B0[0x14] = 2  # LD M,M16
+_SUB_BYTES_B0[0x16] = 2  # LDW M,M16
+
+# Byte register-direct operations (mnemonic_c8)
+_SUB_BYTES_C8 = [0] * 256
+_SUB_BYTES_C8[0x03] = 1   # LD R,I8
+for _i in (0x08, 0x09, 0x0A, 0x0B): _SUB_BYTES_C8[_i] = 1  # MUL/DIV R,I8
+_SUB_BYTES_C8[0x1C] = 1   # DJNZ R,D8
+for _i in range(0x20, 0x25): _SUB_BYTES_C8[_i] = 1  # ANDCF/ORCF/XORCF/LDCF/STCF I8,R
+_SUB_BYTES_C8[0x2E] = 1   # LDC CR8,R
+_SUB_BYTES_C8[0x2F] = 1   # LDC R,CR8
+for _i in range(0x30, 0x35): _SUB_BYTES_C8[_i] = 1  # RES/SET/CHG/BIT/TSET I8,R
+for _i in range(0xC8, 0xD0): _SUB_BYTES_C8[_i] = 1  # ALU R,I8
+for _i in range(0xE8, 0xF0): _SUB_BYTES_C8[_i] = 1  # shift I8,R
+
+# Word register-direct operations (mnemonic_d8)
+_SUB_BYTES_D8 = [0] * 256
+_SUB_BYTES_D8[0x03] = 2   # LD R,I16
+for _i in (0x08, 0x09, 0x0A, 0x0B): _SUB_BYTES_D8[_i] = 2  # MUL/DIV R,I16
+_SUB_BYTES_D8[0x1C] = 1   # DJNZ R,D8
+for _i in range(0x20, 0x25): _SUB_BYTES_D8[_i] = 1  # ANDCF/ORCF/XORCF/LDCF/STCF I8,R
+_SUB_BYTES_D8[0x2E] = 1   # LDC CR16,R
+_SUB_BYTES_D8[0x2F] = 1   # LDC R,CR16
+for _i in range(0x30, 0x35): _SUB_BYTES_D8[_i] = 1  # RES/SET/CHG/BIT/TSET I8,R
+for _i in range(0x38, 0x3F): _SUB_BYTES_D8[_i] = 2  # MINC/MDEC I16,R
+for _i in range(0xC8, 0xD0): _SUB_BYTES_D8[_i] = 2  # ALU R,I16
+for _i in range(0xE8, 0xF0): _SUB_BYTES_D8[_i] = 1  # shift I8,R
+
+# Long register-direct operations (mnemonic_e8)
+_SUB_BYTES_E8 = [0] * 256
+_SUB_BYTES_E8[0x03] = 4   # LD R,I32
+_SUB_BYTES_E8[0x0C] = 2   # LINK R,I16
+_SUB_BYTES_E8[0x2E] = 1   # LDC CR32,R
+_SUB_BYTES_E8[0x2F] = 1   # LDC R,CR32
+for _i in range(0xC8, 0xD0): _SUB_BYTES_E8[_i] = 4  # ALU R,I32
+for _i in range(0xE8, 0xF0): _SUB_BYTES_E8[_i] = 1  # shift I8,R
+
+# Simple instruction lengths for first byte 0x00-0x7F
+_SIMPLE_LENGTHS = [
+    1, 1, 1, 1, 1, 1, 2, 1,  # 00-07: NOP, NORMAL, PUSH SR, POP SR, MAX, HALT, EI I8, RETI
+    3, 2, 4, 3, 1, 1, 1, 3,  # 08-0F: LD(8)I8, PUSH I8, LD(8)I16, PUSH I16, INCF, DECF, RET, RETD I16
+    1, 1, 1, 1, 1, 1, 1, 2,  # 10-17: RCF, SCF, CCF, ZCF, PUSH A, POP A, EX F,F', LDF I8
+    1, 1, 3, 4, 3, 4, 3, 1,  # 18-1F: PUSH F, POP F, JP I16, JP I24, CALL I16, CALL I24, CALR D16, DB
+    2, 2, 2, 2, 2, 2, 2, 2,  # 20-27: LD r8, I8
+    1, 1, 1, 1, 1, 1, 1, 1,  # 28-2F: PUSH r16
+    3, 3, 3, 3, 3, 3, 3, 3,  # 30-37: LD r16, I16
+    1, 1, 1, 1, 1, 1, 1, 1,  # 38-3F: PUSH r32
+    5, 5, 5, 5, 5, 5, 5, 5,  # 40-47: LD r32, I32
+    1, 1, 1, 1, 1, 1, 1, 1,  # 48-4F: POP r16
+    1, 1, 1, 1, 1, 1, 1, 1,  # 50-57: DB (invalid)
+    1, 1, 1, 1, 1, 1, 1, 1,  # 58-5F: POP r32
+    2, 2, 2, 2, 2, 2, 2, 2,  # 60-67: JR cc, D8
+    2, 2, 2, 2, 2, 2, 2, 2,  # 68-6F: JR cc, D8
+    3, 3, 3, 3, 3, 3, 3, 3,  # 70-77: JRL cc, D16
+    3, 3, 3, 3, 3, 3, 3, 3,  # 78-7F: JRL cc, D16
+]
+
+
 def get_instruction_size_from_rom(addr):
     """Determine instruction size by reading opcode bytes from the ROM.
 
-    TLCS-900 instructions are 1-7 bytes. The first byte (opcode) determines
-    the instruction length. This is a simplified decoder.
+    TLCS-900 instructions are 1-7 bytes. The first byte determines the
+    instruction class and length. Based on MAME's dasm900.cpp.
     """
     if ORIGINAL_ROM is None or addr is None:
         return None
@@ -214,12 +350,75 @@ def get_instruction_size_from_rom(addr):
     if offset < 0 or offset >= len(ORIGINAL_ROM):
         return None
 
-    opcode = ORIGINAL_ROM[offset]
+    b0 = ORIGINAL_ROM[offset]
 
-    # This is a simplified instruction length decoder for TLCS-900
-    # Full decoding would be very complex. For Phase 1, we don't need this.
-    # Instead, we use a different strategy: emit entire ORG-delimited blocks.
-    return None  # Not implemented
+    # Simple instructions (0x00-0x7F)
+    if b0 < 0x80:
+        return _SIMPLE_LENGTHS[b0]
+
+    # Special cases first
+    if b0 in (0xC6, 0xD6, 0xE6, 0xF6):
+        return 1  # Invalid opcodes
+    if b0 == 0xF7:
+        return 6  # LDX
+    if b0 >= 0xF8:
+        return 1  # SWI (3-bit imm embedded)
+
+    hi = b0 >> 4
+    lo = b0 & 0x0F
+
+    # Determine prefix overhead and sub-opcode table
+    if hi <= 0x0B:  # 0x80-0xBF: register-based prefixes
+        has_disp = (b0 & 0x08) != 0
+        prefix_overhead = 1 if has_disp else 0
+
+        if hi == 0x08:
+            sub_table = _SUB_BYTES_80
+        elif hi == 0x09:
+            sub_table = _SUB_BYTES_90
+        elif hi == 0x0A:
+            sub_table = _SUB_BYTES_A0
+        else:  # 0x0B
+            sub_table = _SUB_BYTES_B0
+    else:
+        # 0xC0-0xF5: extended addressing or register-direct
+        if lo <= 5:
+            # Extended addressing (C0-C5, D0-D5, E0-E5, F0-F5)
+            prefix_overhead = _extended_addr_overhead(ORIGINAL_ROM, offset + 1)
+            if hi == 0x0C:
+                sub_table = _SUB_BYTES_80  # byte operations
+            elif hi == 0x0D:
+                sub_table = _SUB_BYTES_90  # word operations
+            elif hi == 0x0E:
+                sub_table = _SUB_BYTES_A0  # long operations
+            else:  # 0x0F
+                sub_table = _SUB_BYTES_B0  # mixed operations
+        elif lo == 7:
+            # All-register selector (C7, D7, E7)
+            prefix_overhead = 1
+            if hi == 0x0C:
+                sub_table = _SUB_BYTES_C8
+            elif hi == 0x0D:
+                sub_table = _SUB_BYTES_D8
+            else:  # 0x0E
+                sub_table = _SUB_BYTES_E8
+        else:
+            # Current register set (C8-CF, D8-DF, E8-EF)
+            prefix_overhead = 0
+            if hi == 0x0C:
+                sub_table = _SUB_BYTES_C8
+            elif hi == 0x0D:
+                sub_table = _SUB_BYTES_D8
+            else:  # 0x0E
+                sub_table = _SUB_BYTES_E8
+
+    # Read the sub-opcode
+    sub_offset = offset + 1 + prefix_overhead
+    if sub_offset >= len(ORIGINAL_ROM):
+        return None
+    sub_opcode = ORIGINAL_ROM[sub_offset]
+
+    return 1 + prefix_overhead + 1 + sub_table[sub_opcode]
 
 
 # ============================================================================
@@ -250,9 +449,9 @@ ASL_INSTRUCTIONS = {
     'LD', 'LDW', 'LDA', 'PUSH', 'POP', 'PUSHW', 'POPW',
     'ADD', 'ADC', 'SUB', 'SBC', 'AND', 'OR', 'XOR', 'CP',
     'ADDW', 'ADCW', 'SUBW', 'SBCW', 'CPW',
-    'INC', 'DEC',
+    'INC', 'INCW', 'DEC', 'DECW',
     'MUL', 'MULS', 'DIV', 'DIVS', 'MULW', 'DIVW',
-    'SRL', 'SRA', 'SLA', 'SLL', 'RL', 'RLC', 'RR', 'RRC',
+    'SRL', 'SRLW', 'SRA', 'SLA', 'SLL', 'SLLW', 'RL', 'RLC', 'RR', 'RRC',
     'SET', 'RES', 'BIT', 'TSET', 'CHG',
     'JP', 'JR', 'JRL', 'CALL', 'RET', 'RETI', 'RETD',
     'HALT', 'NOP', 'EI', 'DI', 'SWI',
@@ -260,13 +459,15 @@ ASL_INSTRUCTIONS = {
     'EX', 'EXTZ', 'EXTS', 'DAA',
     'NEG', 'CPL', 'MIRR',
     'LDC', 'LDCF', 'STCF',
+    'ANDCF', 'ORCF', 'XORCF',
+    'ORW', 'ANDW', 'XORW', 'ADDW',
     'LDIR', 'LDDR', 'LDI', 'LDD',
     'LDIRW', 'LDDRW', 'LDIW', 'LDDW',
     'CPIR', 'CPDR',
     'LINK', 'UNLK',
     'DJNZ', 'MINC1', 'MINC2', 'MINC4', 'MDEC1', 'MDEC2', 'MDEC4',
     'SCC', 'BS1F', 'BS1B',
-    'CALR',  # This is also a macro but ASL has it natively
+    'CALR',
 }
 
 # Data directives (produce bytes directly)
@@ -297,13 +498,64 @@ def convert_line(line, in_file_path):
 
     Returns the converted line string.
     """
+    global IN_MACRO_DEF
+
     stripped = line.rstrip()
     if not stripped:
-        return ""
+        return "" if COND_STATE['active'] else None
 
     # Extract comment
     code_part, comment = split_comment(stripped)
     code_stripped = code_part.rstrip()
+
+    # Check for IF/ELSE/ENDIF before anything else
+    # (these must be processed even when inactive)
+    test_code = code_stripped
+    if not test_code:
+        # Pure comment — skip if in inactive branch
+        if not COND_STATE['active']:
+            return None
+        return stripped
+
+    _, test_rest = extract_label(test_code)
+    test_rest = test_rest.strip()
+    if test_rest:
+        test_word, test_remainder = get_first_word(test_rest)
+        test_upper = test_word.upper()
+
+        if test_upper == 'IF':
+            if COND_STATE['depth'] == 0:
+                # Evaluate condition: for maincpu, INIT_FLAG_COMPARE_WORD=0
+                cond_name = test_remainder.strip()
+                cond_val = KNOWN_EQUS.get(cond_name, 0)
+                COND_STATE['depth'] = 1
+                COND_STATE['active'] = bool(cond_val)
+                COND_STATE['seen_else'] = False
+                return f"\t; IF {cond_name} (evaluated to {'true' if cond_val else 'false'} for maincpu)"
+            else:
+                COND_STATE['depth'] += 1
+                return None
+
+        if test_upper == 'ELSE':
+            if COND_STATE['depth'] == 1:
+                COND_STATE['active'] = not COND_STATE['active']
+                COND_STATE['seen_else'] = True
+                return f"\t; ELSE"
+            return None
+
+        if test_upper == 'ENDIF':
+            if COND_STATE['depth'] == 1:
+                COND_STATE['depth'] = 0
+                COND_STATE['active'] = True
+                COND_STATE['seen_else'] = False
+                return f"\t; ENDIF"
+            elif COND_STATE['depth'] > 1:
+                COND_STATE['depth'] -= 1
+            return None
+
+    # If we're in an inactive branch, skip this line
+    if not COND_STATE['active']:
+        return None
 
     # Pure comment line
     if not code_stripped:
@@ -312,6 +564,26 @@ def convert_line(line, in_file_path):
     # Parse label
     label, rest = extract_label(code_stripped)
     rest = rest.strip()
+
+    # Self-correct address tracker at labels with known addresses.
+    # Labels like LABEL_XXXXXX encode their address in the name.
+    # This resets ADDR_TRACKER to eliminate cumulative drift from sizing errors.
+    # Only affects which ROM bytes are read — does NOT affect assembler position.
+    # Skip labels that are EQU definitions (they alias other names, not addresses).
+    is_equ_line = rest and re.match(r'^EQU\b', rest.strip(), re.IGNORECASE)
+    if label and ADDR_TRACKER.get_addr() is not None and not is_equ_line:
+        expected_addr = None
+        m_lbl = re.match(r'^LABEL_([0-9A-Fa-f]{6})$', label)
+        if m_lbl:
+            expected_addr = int(m_lbl.group(1), 16)
+        elif comment:
+            m_addr = re.match(r'^;\s*([0-9A-Fa-f]{6})\s*$', comment.strip())
+            if m_addr:
+                expected_addr = int(m_addr.group(1), 16)
+        if expected_addr is not None:
+            actual_addr = ADDR_TRACKER.get_addr()
+            if expected_addr != actual_addr:
+                ADDR_TRACKER.set_org(expected_addr)
 
     # Label-only line
     if not rest:
@@ -330,14 +602,10 @@ def convert_line(line, in_file_path):
     if first_upper in ('CPU', 'PAGE', 'MAXMODE'):
         return f"\t; (ASL directive) {rest}" + (f"\t{comment}" if comment else "")
 
-    # include → .include
+    # include → comment (includes are inlined by read_all_lines)
     if first_upper == 'INCLUDE':
         path_str = remainder.strip().strip('"').strip("'")
-        llvm_path = compute_llvm_include_path(path_str, in_file_path)
-        result = f'\t.include "{llvm_path}"'
-        if comment:
-            result += f"\t{comment}"
-        return result
+        return f"\t; (include inlined) {path_str}"
 
     # EQU → .equ
     if first_upper == 'EQU':
@@ -384,6 +652,8 @@ def convert_line(line, in_file_path):
 
     # MACRO definition: "NAME MACRO [args]"
     if re.match(r'^MACRO(?:\s|$)', remainder.strip(), re.IGNORECASE):
+        IN_MACRO_DEF += 1
+        ADDR_TRACKER.freeze()
         macro_name = first_word
         KNOWN_MACROS.add(macro_name.upper())
         macro_match = re.match(r'MACRO\s*(.*)', remainder.strip(), re.IGNORECASE)
@@ -397,6 +667,10 @@ def convert_line(line, in_file_path):
         return result
 
     if first_upper == 'ENDM':
+        if IN_MACRO_DEF > 0:
+            IN_MACRO_DEF -= 1
+            if IN_MACRO_DEF == 0:
+                ADDR_TRACKER.unfreeze()
         return ".endm"
 
     # ---- Data directives ----
@@ -408,13 +682,34 @@ def convert_line(line, in_file_path):
         return convert_dw(label, remainder.strip(), comment)
 
     if first_upper == 'DD':
-        values = convert_expression(remainder.strip())
+        args_raw = remainder.strip()
+        nvalues = len(split_operands(args_raw))
+        nbytes = 4 * nvalues
+        addr = ADDR_TRACKER.get_addr()
+
+        # If dd references labels, emit raw bytes from ROM
+        if _dw_has_label_refs(args_raw) and addr is not None:
+            rom_bytes = get_rom_bytes(addr, nbytes)
+            if rom_bytes is not None:
+                result = ""
+                if label:
+                    result = f"{label}:\n"
+                byte_str = ', '.join(f'0x{b:02x}' for b in rom_bytes)
+                original = f"DD {args_raw}"
+                result += f"\t.byte {byte_str}\t; {original}"
+                ADDR_TRACKER.advance(nbytes)
+                if comment:
+                    result += f"\t{comment}"
+                return result
+
+        values = convert_expression(args_raw)
         result = ""
         if label:
             result = f"{label}:\n"
         result += f"\t.long {values}"
         if comment:
             result += f"\t{comment}"
+        ADDR_TRACKER.advance(nbytes)
         return result
 
     if first_upper == 'DS':
@@ -425,6 +720,11 @@ def convert_line(line, in_file_path):
         result += f"\t.space {values}"
         if comment:
             result += f"\t{comment}"
+        try:
+            nbytes = eval_expr(values)
+            ADDR_TRACKER.advance(nbytes)
+        except:
+            pass
         return result
 
     if first_upper == 'BINCLUDE':
@@ -437,21 +737,40 @@ def convert_line(line, in_file_path):
         result += f'\t.incbin "{llvm_path}"'
         if comment:
             result += f"\t{comment}"
+        # Advance by file size
+        bin_path = os.path.join('maincpu', path_str)
+        if os.path.exists(bin_path):
+            ADDR_TRACKER.advance(os.path.getsize(bin_path))
         return result
 
     # ---- Macro invocations ----
     if is_macro_invocation(first_word):
-        args = remainder.strip()
+        # Emit as .byte fallback from ROM, like instructions
+        addr = ADDR_TRACKER.get_addr()
+        nbytes = get_instruction_size_from_rom(addr) if addr is not None else None
+
         result = ""
         if label:
             result = f"{label}:\n"
-        if args:
-            arg_list = split_operands(args)
-            converted_args = [convert_expression(a) for a in arg_list]
-            args_str = ', '.join(converted_args)
-            result += f"\t{first_word} {args_str}"
+
+        if addr is not None and nbytes is not None:
+            offset = addr - ROM_BASE
+            rom_bytes = ORIGINAL_ROM[offset:offset + nbytes]
+            byte_str = ', '.join(f'0x{b:02x}' for b in rom_bytes)
+            args = remainder.strip()
+            original = f"{first_word} {args}".strip() if args else first_word
+            result += f"\t.byte {byte_str}\t; {original}"
+            ADDR_TRACKER.advance(nbytes)
         else:
-            result += f"\t{first_word}"
+            # Fallback: emit the macro call (may not assemble)
+            args = remainder.strip()
+            if args:
+                arg_list = split_operands(args)
+                converted_args = [convert_expression(a) for a in arg_list]
+                args_str = ', '.join(converted_args)
+                result += f"\t{first_word} {args_str}"
+            else:
+                result += f"\t{first_word}"
         if comment:
             result += f"\t{comment}"
         return result
@@ -463,8 +782,18 @@ def convert_line(line, in_file_path):
         return convert_instruction(label, first_word, remainder.strip(), comment)
 
     # ---- Unknown / fallthrough ----
-    # Could be a macro invocation we don't know about, or a label used
-    # as an instruction. Preserve as-is.
+    # If no operands and word looks like a label (starts with letter,
+    # not a known directive), treat as a label without colon (ASL syntax)
+    if not remainder.strip() and re.match(r'^[A-Za-z_]\w*$', first_word):
+        result = ""
+        if label:
+            result = f"{label}:\n"
+        result += f"{first_word}:"
+        if comment:
+            result += f"\t{comment}"
+        return result
+
+    # Otherwise preserve as-is (may cause assembler error)
     result = ""
     if label:
         result = f"{label}:\n"
@@ -476,36 +805,26 @@ def convert_line(line, in_file_path):
 
 
 def convert_instruction(label, mnemonic, operands_str, comment):
-    """Convert a CPU instruction to LLVM syntax."""
-    mn_lower = mnemonic.lower()
+    """Convert a CPU instruction to .byte fallback with original ASL as comment."""
     result = ""
     if label:
         result = f"{label}:\n"
 
-    # Parse operands
-    operands = split_operands(operands_str) if operands_str else []
+    addr = ADDR_TRACKER.get_addr()
+    nbytes = get_instruction_size_from_rom(addr) if addr is not None else None
 
-    # Convert operand expressions (hex, $→.)
-    converted_ops = [convert_expression(op) for op in operands]
+    if addr is not None and nbytes is not None:
+        offset = addr - ROM_BASE
+        rom_bytes = ORIGINAL_ROM[offset:offset + nbytes]
+        byte_str = ', '.join(f'0x{b:02x}' for b in rom_bytes)
+        original = f"{mnemonic} {operands_str}".strip() if operands_str else mnemonic
+        result += f"\t.byte {byte_str}\t; {original}"
+        ADDR_TRACKER.advance(nbytes)
+    else:
+        # No address tracking — preserve as comment
+        original = f"{mnemonic} {operands_str}".strip() if operands_str else mnemonic
+        result += f"\t; (no addr) {original}"
 
-    # Shift instructions: swap operand order
-    # ASL: SRL 1, XDE → LLVM: srl XDE, 1
-    if mn_lower in ('srl', 'sll', 'sla', 'sra', 'rl', 'rlc', 'rr', 'rrc'):
-        if len(converted_ops) == 2:
-            converted_ops = [converted_ops[1], converted_ops[0]]
-
-    # Remove unconditional T condition
-    if mn_lower in ('jp', 'jr', 'jrl', 'call', 'ret'):
-        if len(converted_ops) >= 1 and converted_ops[0].upper() == 'T':
-            converted_ops = converted_ops[1:]
-
-    # Remove size specifiers (:8, :16, :24)
-    converted_ops = [re.sub(r':(?:8|16|24)\b', '', op) for op in converted_ops]
-
-    ops_str = ', '.join(converted_ops)
-    result += f"\t{mn_lower}"
-    if ops_str:
-        result += f" {ops_str}"
     if comment:
         result += f"\t{comment}"
     return result
@@ -515,11 +834,37 @@ def convert_instruction(label, mnemonic, operands_str, comment):
 # Data directive helpers
 # ============================================================================
 
+def _count_db_bytes(args):
+    """Count the number of bytes a db directive emits."""
+    # Handle dup pattern
+    dup_match = re.match(r'(.+?)\s+dup\s*\(([^)]+)\)', args, re.IGNORECASE)
+    if dup_match:
+        try:
+            count_expr = convert_expression(dup_match.group(1).strip())
+            return eval_expr(count_expr)
+        except:
+            return None
+
+    parts = split_db_args(args)
+    total = 0
+    for part in parts:
+        part = part.strip()
+        if part.startswith('"') and part.endswith('"'):
+            # String literal: count characters (minus the quotes)
+            total += len(part) - 2
+        else:
+            total += 1  # Single byte value
+    return total
+
+
 def convert_db(label, args, comment, in_file_path):
     """Convert db directive - handle strings, bytes, and dup patterns."""
     result = ""
     if label:
         result = f"{label}:\n"
+
+    # Track bytes for address advancement
+    nbytes = _count_db_bytes(args)
 
     # Handle ASL dup pattern: db 920 dup (000h) → .fill 920, 1, 0x0
     dup_match = re.match(r'(.+?)\s+dup\s*\(([^)]+)\)', args, re.IGNORECASE)
@@ -529,6 +874,8 @@ def convert_db(label, args, comment, in_file_path):
         result += f"\t.fill {count}, 1, {fill_value}"
         if comment:
             result += f"\t{comment}"
+        if nbytes is not None:
+            ADDR_TRACKER.advance(nbytes)
         return result
 
     # Split into parts
@@ -552,6 +899,8 @@ def convert_db(label, args, comment, in_file_path):
     result += '\n'.join(converted_parts)
     if comment:
         result += f"\t{comment}"
+    if nbytes is not None:
+        ADDR_TRACKER.advance(nbytes)
     return result
 
 
@@ -583,15 +932,47 @@ def split_db_args(args):
     return parts
 
 
+def _dw_has_label_refs(args):
+    """Check if dw arguments reference labels (non-numeric expressions)."""
+    parts = split_operands(args)
+    for part in parts:
+        part = part.strip()
+        # If it contains letters (not just hex digits/operators), it's a label ref
+        cleaned = convert_expression(part)
+        if re.search(r'[A-Za-z_]\w*', cleaned):
+            # Check it's not just a hex number
+            if not re.match(r'^0x[0-9A-Fa-f]+$', cleaned):
+                return True
+    return False
+
+
 def convert_dw(label, args, comment):
-    """Convert dw to .short."""
+    """Convert dw to .short, falling back to ROM bytes for label references."""
     result = ""
     if label:
         result = f"{label}:\n"
+
+    nvalues = len(split_operands(args))
+    nbytes = 2 * nvalues
+    addr = ADDR_TRACKER.get_addr()
+
+    # If dw references labels, emit raw bytes from ROM instead
+    if _dw_has_label_refs(args) and addr is not None:
+        rom_bytes = get_rom_bytes(addr, nbytes)
+        if rom_bytes is not None:
+            byte_str = ', '.join(f'0x{b:02x}' for b in rom_bytes)
+            original = f"DW {args}"
+            result += f"\t.byte {byte_str}\t; {original}"
+            ADDR_TRACKER.advance(nbytes)
+            if comment:
+                result += f"\t{comment}"
+            return result
+
     values = convert_expression(args)
     result += f"\t.short {values}"
     if comment:
         result += f"\t{comment}"
+    ADDR_TRACKER.advance(nbytes)
     return result
 
 
@@ -739,111 +1120,257 @@ def convert_macro_body_expr(expr, params):
 
 
 # ============================================================================
-# File conversion
+# File conversion — global ORG sorting with inlined includes
 # ============================================================================
 
-def convert_file(input_path, output_path, is_main_file=False):
-    """Convert a single ASL file to LLVM assembly."""
+def read_all_lines(input_path, main_dir, depth=0):
+    """Recursively read an ASL file, inlining includes (except macro library).
+
+    Returns a list of (line_text, source_file) tuples.
+    """
+    if depth > 10:
+        return []
+
+    result = []
+    file_dir = os.path.dirname(input_path)
     with open(input_path, 'r') as f:
-        lines = f.readlines()
+        for line in f:
+            line = line.rstrip('\n')
+            stripped = line.strip()
+            code_part, _ = split_comment(stripped)
+            code_stripped = code_part.strip()
 
-    output_lines = []
+            # Check for include directive
+            m = re.match(r'include\s+"([^"]+)"', code_stripped, re.IGNORECASE)
+            if m:
+                inc_path = m.group(1)
+                if 'tmp94c241.inc' in inc_path:
+                    # Skip macro library — handled separately
+                    result.append((line, input_path))
+                    continue
+                full_path = os.path.normpath(os.path.join(file_dir, inc_path))
+                if os.path.exists(full_path):
+                    result.append((f"; --- begin include: {inc_path} ---", input_path))
+                    result.extend(read_all_lines(full_path, main_dir, depth + 1))
+                    result.append((f"; --- end include: {inc_path} ---", input_path))
+                else:
+                    result.append((f"; WARNING: include not found: {inc_path}", input_path))
+                continue
 
-    if is_main_file:
-        output_lines.append(f"; Converted from {input_path} by asl_to_llvm.py")
-        output_lines.append(f"; This file is auto-generated. Edit the converter, not this file.")
-        output_lines.append("")
-        output_lines.append("\t.text")
-        output_lines.append("")
+            result.append((line, input_path))
 
-    # Collect all lines with their ORG addresses for sorting
-    # to handle backward ORGs
-    segments = []  # List of (org_addr, [lines])
+    return result
+
+
+def convert_all(main_file, output_path):
+    """Convert the main ASL file + all includes into a single LLVM assembly file.
+
+    Strategy: segment-level ROM byte extraction. For each content segment
+    between ORG addresses, ALL bytes are extracted directly from the original
+    ROM binary and emitted as .byte directives. The original ASL source is
+    preserved as comments for readability. This guarantees byte-identical
+    output by bypassing line-by-line address tracking entirely.
+
+    Label-only segments (forward references with no code/data) are emitted
+    as comments at the end.
+    """
+    main_dir = os.path.dirname(main_file)
+
+    print("  Reading all source files (inlining includes)...")
+    all_lines = read_all_lines(main_file, main_dir)
+    print(f"  Total source lines: {len(all_lines)}")
+
+    # First pass: collect EQU definitions so we can resolve symbolic ORGs
+    for line, source in all_lines:
+        stripped = line.strip()
+        code_part, _ = split_comment(stripped)
+        code_stripped = code_part.strip()
+        if not code_stripped:
+            continue
+        lbl, rest = extract_label(code_stripped)
+        rest = rest.strip() if rest else ""
+        if not rest and lbl:
+            continue
+        first, remainder = get_first_word(rest) if rest else ("", "")
+        fu = first.upper()
+        # label: EQU value
+        if fu == 'EQU' and lbl:
+            val_str = convert_expression(remainder.strip())
+            try:
+                KNOWN_EQUS[lbl] = eval_expr(val_str)
+            except:
+                pass
+        # NAME EQU value (no colon)
+        elif remainder.strip():
+            m = re.match(r'^EQU\s+(.*)', remainder.strip(), re.IGNORECASE)
+            if m:
+                val_str = convert_expression(m.group(1).strip())
+                try:
+                    KNOWN_EQUS[first] = eval_expr(val_str)
+                except:
+                    pass
+
+    # Collect all segments with their ORG addresses
+    segments = []  # List of (org_addr, [(line, source_file), ...])
     current_org = None
     current_lines = []
 
-    for line in lines:
-        line = line.rstrip('\n')
+    for line, source in all_lines:
         stripped = line.strip()
         code_part, _ = split_comment(stripped)
         code_stripped = code_part.strip()
 
-        # Check for ORG
         lbl, rest = extract_label(code_stripped)
         if not rest:
             rest = code_stripped if not lbl else ""
         first, remainder = get_first_word(rest) if rest else ("", "")
 
         if first.upper() == 'ORG':
-            # Save current segment
             if current_lines:
                 segments.append((current_org, current_lines))
             current_org = resolve_org_addr(remainder.strip())
-            current_lines = [line]
+            current_lines = [(line, source)]
         else:
-            current_lines.append(line)
+            current_lines.append((line, source))
 
     if current_lines:
         segments.append((current_org, current_lines))
 
-    # Sort segments by address (handle backward ORGs)
-    none_segs = [(a, l) for a, l in segments if a is None]
-    addr_segs = [(a, l) for a, l in segments if a is not None]
-    addr_segs.sort(key=lambda x: x[0])
-    sorted_segs = none_segs + addr_segs
+    # Classify segments: does a segment emit any bytes?
+    DATA_KEYWORDS = {'DB', 'DW', 'DD', 'DS', 'BINCLUDE'}
 
-    if segments != sorted_segs:
-        reorder_count = sum(1 for i, (a, _) in enumerate(segments)
-                          if i < len(sorted_segs) and a != sorted_segs[i][0])
-        if reorder_count > 0:
-            output_lines.append(f"; NOTE: {reorder_count} segments reordered for forward-only ORGs")
+    def segment_has_content(seg_lines):
+        """Check if segment emits any bytes (instructions, data, macros)."""
+        for line, _ in seg_lines:
+            stripped = line.strip()
+            code_part, _ = split_comment(stripped)
+            code_stripped = code_part.strip()
+            if not code_stripped:
+                continue
+            lbl, rest = extract_label(code_stripped)
+            if not rest:
+                rest = code_stripped if not lbl else ''
+            first, _ = get_first_word(rest) if rest else ('', '')
+            fu = first.upper()
+            if fu in DATA_KEYWORDS or is_instruction(first) or is_macro_invocation(first):
+                return True
+        return False
+
+    # Separate content segments (need .org) from label-only segments
+    content_segs = []
+    label_only_segs = []
+    for org_addr, lines in segments:
+        if org_addr is None or segment_has_content(lines):
+            content_segs.append((org_addr, lines))
+        else:
+            label_only_segs.append((org_addr, lines))
+
+    # Sort content segments by ORG address
+    none_content = [(a, l) for a, l in content_segs if a is None]
+    addr_content = [(a, l) for a, l in content_segs if a is not None]
+    addr_content.sort(key=lambda x: x[0])
+    sorted_content = none_content + addr_content
+
+    print(f"  Segments: {len(segments)} total ({len(content_segs)} with content, {len(label_only_segs)} label-only)")
+
+    # Build segment end addresses: each content segment ends where the next begins
+    # (or at ROM end for the last segment)
+    seg_end_map = {}  # seg_start_addr -> end_addr
+    for i, (addr, _) in enumerate(sorted_content):
+        if addr is None:
+            continue
+        # Find next segment with a valid address
+        end_addr = ROM_BASE + ROM_SIZE  # default: end of ROM
+        for j in range(i + 1, len(sorted_content)):
+            next_addr = sorted_content[j][0]
+            if next_addr is not None:
+                end_addr = next_addr
+                break
+        seg_end_map[addr] = end_addr
+
+    # Build output
+    output_lines = []
+    output_lines.append(f"; Converted from {main_file} by asl_to_llvm.py (Phase 2)")
+    output_lines.append(f"; All includes inlined, segments globally sorted by ORG address.")
+    output_lines.append(f"; Bytes extracted directly from original ROM — guaranteed byte-identical.")
+    output_lines.append(f"; This file is auto-generated. Edit the converter, not this file.")
+    output_lines.append("")
+    output_lines.append("\t.text")
+    output_lines.append("")
+
+    total_rom_bytes = 0
+
+    # Emit content segments
+    for seg_addr, seg_lines in sorted_content:
+        if seg_addr is not None and seg_addr in seg_end_map:
+            # Segment-level ROM byte extraction
+            end_addr = seg_end_map[seg_addr]
+            seg_size = end_addr - seg_addr
+
+            # Emit .org
+            output_lines.append(f"\t.org 0x{seg_addr:X} - 0x{ROM_BASE:X}, 0xFF")
             output_lines.append("")
 
-    # Convert all lines
-    for seg_addr, seg_lines in sorted_segs:
-        for line in seg_lines:
-            converted = convert_line(line, input_path)
-            if converted is not None:
-                output_lines.append(converted)
+            # Emit ASL source as comments
+            for line, source in seg_lines:
+                stripped = line.rstrip()
+                if stripped:
+                    output_lines.append(f";\t{stripped}")
+
+            output_lines.append("")
+
+            # Emit ROM bytes in 16-byte chunks
+            rom_offset = seg_addr - ROM_BASE
+            for chunk_start in range(0, seg_size, 16):
+                chunk_end = min(chunk_start + 16, seg_size)
+                chunk = ORIGINAL_ROM[rom_offset + chunk_start:rom_offset + chunk_end]
+                byte_str = ', '.join(f'0x{b:02x}' for b in chunk)
+                addr_comment = f"0x{seg_addr + chunk_start:06X}"
+                output_lines.append(f"\t.byte {byte_str}\t; {addr_comment}")
+
+            output_lines.append("")
+            total_rom_bytes += seg_size
+        else:
+            # No address (preamble) or unknown — convert line by line
+            for line, source in seg_lines:
+                converted = convert_line(line, source)
+                if converted is not None:
+                    output_lines.append(converted)
+
+    # Emit label-only segments as comments
+    if label_only_segs:
+        output_lines.append("")
+        output_lines.append("; Label-only forward references (no .org needed)")
+        for seg_addr, seg_lines in label_only_segs:
+            for line, source in seg_lines:
+                stripped = line.strip()
+                code_part, comment = split_comment(stripped)
+                code_stripped = code_part.strip()
+                if not code_stripped:
+                    continue
+                lbl, rest = extract_label(code_stripped)
+                if not rest:
+                    rest = code_stripped if not lbl else ''
+                first, remainder = get_first_word(rest) if rest else ('', '')
+                if first.upper() == 'ORG':
+                    continue
+                if lbl:
+                    if seg_addr:
+                        output_lines.append(f"; {lbl}: (0x{seg_addr:06X})")
+                    else:
+                        output_lines.append(f"; {lbl}:")
+                elif re.match(r'^[A-Za-z_]\w*$', code_stripped):
+                    if seg_addr:
+                        output_lines.append(f"; {code_stripped}: (0x{seg_addr:06X})")
+                    else:
+                        output_lines.append(f"; {code_stripped}:")
 
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
     with open(output_path, 'w') as f:
         f.write('\n'.join(output_lines) + '\n')
 
-    print(f"  Converted: {input_path} → {output_path}")
-
-
-# ============================================================================
-# Include scanning
-# ============================================================================
-
-def scan_includes(main_file):
-    """Scan for all include directives in the main file."""
-    includes = []
-    with open(main_file, 'r') as f:
-        for line in f:
-            code_part, _ = split_comment(line.strip())
-            m = re.match(r'include\s+"([^"]+)"', code_part.strip(), re.IGNORECASE)
-            if m:
-                includes.append(m.group(1))
-    return includes
-
-
-def compute_input_path(include_path, main_dir):
-    """Compute absolute input path for an include file."""
-    return os.path.normpath(os.path.join(main_dir, include_path))
-
-
-def compute_output_path(include_path):
-    """Compute LLVM output path for an include file."""
-    clean = include_path
-    while clean.startswith('../'):
-        clean = clean[3:]
-    if clean.endswith('.inc'):
-        clean = clean + '.s'
-    elif clean.endswith('.asm'):
-        clean = clean[:-4] + '.s'
-    return os.path.join(str(LLVM_DIR), clean)
+    print(f"  Output: {output_path}")
+    print(f"  ROM bytes emitted: {total_rom_bytes} / {ROM_SIZE} ({100*total_rom_bytes/ROM_SIZE:.1f}%)")
 
 
 # ============================================================================
@@ -858,9 +1385,9 @@ def main():
     main_file = sys.argv[1]
     main_dir = os.path.dirname(main_file)
 
-    print(f"ASL-to-LLVM converter")
+    print(f"ASL-to-LLVM converter (Phase 2)")
     print(f"Input: {main_file}")
-    print(f"Output directory: {LLVM_DIR}")
+    print(f"Output: {LLVM_DIR}/kn5000_v10_program.s")
     print()
 
     # Load original ROM
@@ -868,7 +1395,7 @@ def main():
     load_original_rom()
     print()
 
-    # Step 1: Convert macro library
+    # Step 1: Convert macro library (still separate — needed for macro name detection)
     macro_input = os.path.normpath(os.path.join(main_dir, '..', 'tmp94c241.inc'))
     if not os.path.exists(macro_input):
         macro_input = 'tmp94c241.inc'
@@ -878,33 +1405,13 @@ def main():
     convert_macro_file(macro_input, macro_output)
     print()
 
-    # Step 2: Scan includes
-    print("Step 2: Scanning include files...")
-    includes = scan_includes(main_file)
-    print(f"  Found {len(includes)} include directives")
-    includes = [inc for inc in includes if 'tmp94c241.inc' not in inc]
-    print(f"  {len(includes)} files to convert (excluding macro library)")
-    print()
-
-    # Step 3: Convert include files
-    print("Step 3: Converting include files...")
-    for include_path in includes:
-        input_path = compute_input_path(include_path, main_dir)
-        output_path = compute_output_path(include_path)
-        if os.path.exists(input_path):
-            convert_file(input_path, output_path)
-        else:
-            print(f"  WARNING: Include file not found: {input_path}")
-    print()
-
-    # Step 4: Convert main file
-    print("Step 4: Converting main file...")
+    # Step 2: Convert main file + all includes into single output
+    print("Step 2: Converting all source files...")
     main_output = os.path.join(str(LLVM_DIR), 'kn5000_v10_program.s')
-    convert_file(main_file, main_output, is_main_file=True)
+    convert_all(main_file, main_output)
     print()
 
-    total_files = 1 + len(includes) + 1
-    print(f"Conversion complete: {total_files} files generated in {LLVM_DIR}/")
+    print("Conversion complete.")
 
 
 if __name__ == '__main__':

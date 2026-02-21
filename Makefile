@@ -90,10 +90,10 @@ rebuilt_ROMs/hd-ae5000_v2_06i.rebuilt.rom: rebuilt_ROMs/hd-ae5000_v2_06i.rebuilt
 # LLVM parallel build (maincpu only)
 # ============================================================================
 
-# Phase 1: Binary include (100% byte-match, validates toolchain pipeline)
-# Phase 2: Will progressively replace with converted assembly source.
+# Phase 2: All instructions emitted as .byte from ROM, preserving ASL as comments.
+# Future: progressively replace .byte with native LLVM instructions.
 
-LLVM_SRC=maincpu/llvm/kn5000_v10_program_incbin.s
+LLVM_SRC=maincpu/llvm/kn5000_v10_program.s
 
 # Assemble → object file
 rebuilt_ROMs/kn5000_v10_program.llvm.o: $(LLVM_SRC) original_ROMs/kn5000_v10_program.rom
