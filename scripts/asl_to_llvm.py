@@ -1142,6 +1142,19 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes):
             native_asm = f"call 0x{target_addr:X}"
             return native_asm, 4
 
+    # Tier 6: PUSH/POP 32-bit registers (1-byte encoding)
+    # PUSH Xreg: 0x38 + reg_index, POP Xreg: 0x58 + reg_index
+    if nbytes == 1 and operands_str and rom_bytes is not None:
+        reg = operands_str.strip().upper()
+        if reg in NATIVE_LD_32BIT_REGS:
+            reg_idx = REG_INDEX.get(reg, 99)
+            if mnem_upper == 'PUSH' and rom_bytes[0] == 0x38 + reg_idx:
+                native_asm = f"push {reg.lower()}"
+                return native_asm, 1
+            elif mnem_upper == 'POP' and rom_bytes[0] == 0x58 + reg_idx:
+                native_asm = f"pop {reg.lower()}"
+                return native_asm, 1
+
     return None
 
 
