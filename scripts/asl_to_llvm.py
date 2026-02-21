@@ -1128,6 +1128,20 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes):
                             native_asm = f"{base_mnem.lower()} {reg.lower()}, 0x{imm_val:X}"
                             return native_asm, nbytes
 
+    # Tier 5: Unconditional JP and CALL (4-byte absolute address encoding)
+    # JP: 0x1b + addr24_LE (4 bytes)
+    # CALL: 0x1d + addr24_LE (4 bytes)
+    # Use hardcoded target address from ROM bytes (avoids label position errors).
+    if nbytes == 4 and rom_bytes is not None:
+        if mnem_upper == 'JP' and rom_bytes[0] == 0x1b:
+            target_addr = rom_bytes[1] | (rom_bytes[2] << 8) | (rom_bytes[3] << 16)
+            native_asm = f"jp 0x{target_addr:X}"
+            return native_asm, 4
+        elif mnem_upper == 'CALL' and rom_bytes[0] == 0x1d:
+            target_addr = rom_bytes[1] | (rom_bytes[2] << 8) | (rom_bytes[3] << 16)
+            native_asm = f"call 0x{target_addr:X}"
+            return native_asm, 4
+
     return None
 
 
@@ -1855,7 +1869,7 @@ def convert_all(main_file, output_path):
     # Clear block buffer
     BLOCK_BUFFER = None
 
-    # Emit remaining label-only labels that weren't emitted inline as comments
+    # Emit remaining label-only labels as .set directives (needed for JP/CALL targets)
     remaining_labels = []
     for addr in sorted(label_only_labels.keys()):
         if addr not in emitted_label_addrs:
@@ -1864,9 +1878,9 @@ def convert_all(main_file, output_path):
 
     if remaining_labels:
         output_lines.append("")
-        output_lines.append("; Label-only forward references (not emitted inline)")
+        output_lines.append("; Label-only forward references (emitted as .set for JP/CALL targets)")
         for addr, lbl_name in remaining_labels:
-            output_lines.append(f"; {lbl_name}: (0x{addr:06X})")
+            output_lines.append(f"\t.set {lbl_name}, 0x{addr:06X}")
 
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
     with open(output_path, 'w') as f:
