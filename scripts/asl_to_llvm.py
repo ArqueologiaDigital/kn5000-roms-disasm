@@ -760,12 +760,26 @@ def convert_line(line, in_file_path):
                 nbytes = remaining
             if nbytes > 0:
                 rom_bytes = BLOCK_BUFFER[BLOCK_CURSOR:BLOCK_CURSOR + nbytes]
-                byte_str = ', '.join(f'0x{b:02x}' for b in rom_bytes)
                 original = f"DD {args_raw}"
                 result = ""
                 if label:
                     result = f"{label}:\n"
-                result += f"\t.byte {byte_str}\t; {original}"
+                # Emit as .long values (4 bytes each, little-endian)
+                longs = []
+                for i in range(0, nbytes, 4):
+                    chunk = rom_bytes[i:i+4]
+                    if len(chunk) == 4:
+                        val = chunk[0] | (chunk[1] << 8) | (chunk[2] << 16) | (chunk[3] << 24)
+                        longs.append(f'0x{val:08X}')
+                    else:
+                        # Partial word at end — emit as .byte
+                        byte_str = ', '.join(f'0x{b:02x}' for b in chunk)
+                        longs.append(None)
+                        result += f"\t.long {', '.join(l for l in longs if l)}\t; {original}" if any(longs) else ""
+                        result += f"\n\t.byte {byte_str}"
+                        break
+                else:
+                    result += f"\t.long {', '.join(longs)}\t; {original}"
                 BLOCK_CURSOR += nbytes
                 ADDR_TRACKER.advance(nbytes)
                 if comment:
@@ -779,9 +793,15 @@ def convert_line(line, in_file_path):
                 result = ""
                 if label:
                     result = f"{label}:\n"
-                byte_str = ', '.join(f'0x{b:02x}' for b in rom_bytes)
                 original = f"DD {args_raw}"
-                result += f"\t.byte {byte_str}\t; {original}"
+                longs = []
+                for i in range(0, nbytes, 4):
+                    chunk = rom_bytes[i:i+4]
+                    if len(chunk) == 4:
+                        val = chunk[0] | (chunk[1] << 8) | (chunk[2] << 16) | (chunk[3] << 24)
+                        longs.append(f'0x{val:08X}')
+                if longs:
+                    result += f"\t.long {', '.join(longs)}\t; {original}"
                 ADDR_TRACKER.advance(nbytes)
                 if comment:
                     result += f"\t{comment}"
@@ -1460,9 +1480,15 @@ def convert_dw(label, args, comment):
             nbytes = remaining
         if nbytes > 0:
             rom_bytes = BLOCK_BUFFER[BLOCK_CURSOR:BLOCK_CURSOR + nbytes]
-            byte_str = ', '.join(f'0x{b:02x}' for b in rom_bytes)
             original = f"DW {args}"
-            result += f"\t.byte {byte_str}\t; {original}"
+            shorts = []
+            for i in range(0, nbytes, 2):
+                chunk = rom_bytes[i:i+2]
+                if len(chunk) == 2:
+                    val = chunk[0] | (chunk[1] << 8)
+                    shorts.append(f'0x{val:04X}')
+            if shorts:
+                result += f"\t.short {', '.join(shorts)}\t; {original}"
             BLOCK_CURSOR += nbytes
             ADDR_TRACKER.advance(nbytes)
         if comment:
@@ -1474,9 +1500,15 @@ def convert_dw(label, args, comment):
     if _dw_has_label_refs(args) and addr is not None:
         rom_bytes = get_rom_bytes(addr, nbytes)
         if rom_bytes is not None:
-            byte_str = ', '.join(f'0x{b:02x}' for b in rom_bytes)
             original = f"DW {args}"
-            result += f"\t.byte {byte_str}\t; {original}"
+            shorts = []
+            for i in range(0, nbytes, 2):
+                chunk = rom_bytes[i:i+2]
+                if len(chunk) == 2:
+                    val = chunk[0] | (chunk[1] << 8)
+                    shorts.append(f'0x{val:04X}')
+            if shorts:
+                result += f"\t.short {', '.join(shorts)}\t; {original}"
             ADDR_TRACKER.advance(nbytes)
             if comment:
                 result += f"\t{comment}"
