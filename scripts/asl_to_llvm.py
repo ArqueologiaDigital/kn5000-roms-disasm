@@ -923,8 +923,34 @@ def convert_line(line, in_file_path):
     return result
 
 
+# Tier 1: Zero-operand instructions with verified encoding match
+NATIVE_ZERO_OPS = {
+    'NOP': ('nop', 1),    # 0x00
+    'RET': ('ret', 1),    # 0x0E
+    'RETI': ('reti', 1),  # 0x07
+    'HALT': ('halt', 1),  # 0x05
+}
+
+
+def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes):
+    """Try to convert an instruction to native LLVM syntax.
+
+    Returns (native_asm_str, expected_nbytes) or None if not supported.
+    The caller must verify nbytes matches expected_nbytes for safety.
+    """
+    mnem_upper = mnemonic.upper()
+
+    # Tier 1: Zero-operand instructions
+    if not operands_str and mnem_upper in NATIVE_ZERO_OPS:
+        native_asm, expected_size = NATIVE_ZERO_OPS[mnem_upper]
+        if nbytes == expected_size:
+            return native_asm, expected_size
+
+    return None
+
+
 def convert_instruction(label, mnemonic, operands_str, comment):
-    """Convert a CPU instruction to .byte fallback with original ASL as comment."""
+    """Convert a CPU instruction to native LLVM or .byte fallback."""
     global BLOCK_CURSOR
 
     result = ""
@@ -941,9 +967,16 @@ def convert_instruction(label, mnemonic, operands_str, comment):
             nbytes = remaining  # Clamp to block boundary
         if nbytes > 0:
             rom_bytes = BLOCK_BUFFER[BLOCK_CURSOR:BLOCK_CURSOR + nbytes]
-            byte_str = ', '.join(f'0x{b:02x}' for b in rom_bytes)
-            original = f"{mnemonic} {operands_str}".strip() if operands_str else mnemonic
-            result += f"\t.byte {byte_str}\t; {original}"
+            # Try native conversion first
+            native = try_convert_native(mnemonic, operands_str, rom_bytes, nbytes)
+            if native is not None:
+                native_asm, _ = native
+                original = f"{mnemonic} {operands_str}".strip() if operands_str else mnemonic
+                result += f"\t{native_asm}\t; {original}"
+            else:
+                byte_str = ', '.join(f'0x{b:02x}' for b in rom_bytes)
+                original = f"{mnemonic} {operands_str}".strip() if operands_str else mnemonic
+                result += f"\t.byte {byte_str}\t; {original}"
             BLOCK_CURSOR += nbytes
             ADDR_TRACKER.advance(nbytes)
         else:
@@ -1660,10 +1693,13 @@ def convert_all(main_file, output_path):
     # Count statistics
     total_byte_lines = 0
     total_native_lines = 0
+    native_mnemonics = set(v[0] for v in NATIVE_ZERO_OPS.values())
     for line in output_lines:
         stripped = line.strip()
         if stripped.startswith('.byte') and '\t;' in stripped:
             total_byte_lines += 1
+        elif any(stripped.startswith(m) and '\t;' in stripped for m in native_mnemonics):
+            total_native_lines += 1
     print(f"  Output: {output_path}")
     print(f"  ROM bytes covered: {total_rom_bytes} / {ROM_SIZE} ({100*total_rom_bytes/ROM_SIZE:.1f}%)")
     print(f"  .byte fallback lines: {total_byte_lines}")
