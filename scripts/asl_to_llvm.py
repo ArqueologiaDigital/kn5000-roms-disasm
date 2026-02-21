@@ -41,6 +41,13 @@ KNOWN_MACROS = set()
 # Known EQU values (for resolving symbol addresses in ORG and data directives)
 KNOWN_EQUS = {}
 
+# Address → label name mapping for symbolic references in JP/CALL
+ADDR_TO_LABEL = {}
+
+# Statistics counters for native vs fallback instructions
+NATIVE_INSTR_COUNT = 0
+BYTE_FALLBACK_COUNT = 0
+
 
 def load_original_rom():
     """Load the original ROM binary for byte extraction."""
@@ -1155,11 +1162,13 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes):
     if nbytes == 4 and rom_bytes is not None:
         if mnem_upper == 'JP' and rom_bytes[0] == 0x1b:
             target_addr = rom_bytes[1] | (rom_bytes[2] << 8) | (rom_bytes[3] << 16)
-            native_asm = f"jp 0x{target_addr:X}"
+            label = ADDR_TO_LABEL.get(target_addr)
+            native_asm = f"jp {label}" if label else f"jp 0x{target_addr:X}"
             return native_asm, 4
         elif mnem_upper == 'CALL' and rom_bytes[0] == 0x1d:
             target_addr = rom_bytes[1] | (rom_bytes[2] << 8) | (rom_bytes[3] << 16)
-            native_asm = f"call 0x{target_addr:X}"
+            label = ADDR_TO_LABEL.get(target_addr)
+            native_asm = f"call {label}" if label else f"call 0x{target_addr:X}"
             return native_asm, 4
 
     # Tier 6: PUSH/POP 32-bit registers (1-byte encoding)
@@ -1222,7 +1231,7 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes):
 
 def convert_instruction(label, mnemonic, operands_str, comment):
     """Convert a CPU instruction to native LLVM or .byte fallback."""
-    global BLOCK_CURSOR
+    global BLOCK_CURSOR, NATIVE_INSTR_COUNT, BYTE_FALLBACK_COUNT
 
     result = ""
     if label:
@@ -1242,12 +1251,13 @@ def convert_instruction(label, mnemonic, operands_str, comment):
             native = try_convert_native(mnemonic, operands_str, rom_bytes, nbytes)
             if native is not None:
                 native_asm, _ = native
-                original = f"{mnemonic} {operands_str}".strip() if operands_str else mnemonic
-                result += f"\t{native_asm}\t; {original}"
+                result += f"\t{native_asm}"
+                NATIVE_INSTR_COUNT += 1
             else:
                 byte_str = ', '.join(f'0x{b:02x}' for b in rom_bytes)
                 original = f"{mnemonic} {operands_str}".strip() if operands_str else mnemonic
                 result += f"\t.byte {byte_str}\t; {original}"
+                BYTE_FALLBACK_COUNT += 1
             BLOCK_CURSOR += nbytes
             ADDR_TRACKER.advance(nbytes)
         else:
@@ -1371,7 +1381,7 @@ def convert_db(label, args, comment, in_file_path):
             original = f"DB {args}"
             string_form = _try_emit_as_string(rom_bytes)
             if string_form is not None:
-                result += f"\t{string_form}\t; {original}"
+                result += f"\t{string_form}"
             else:
                 byte_str = ', '.join(f'0x{b:02x}' for b in rom_bytes)
                 result += f"\t.byte {byte_str}\t; {original}"
@@ -1708,6 +1718,81 @@ def read_all_lines(input_path, main_dir, depth=0):
     return result
 
 
+def _record_label(mapping, addr, name):
+    """Record label, preferring named labels over LABEL_XXXXXX."""
+    is_auto = bool(re.match(r'^LABEL_[0-9A-Fa-f]{6}$', name))
+    existing = mapping.get(addr)
+    if existing is None:
+        mapping[addr] = name
+    elif is_auto:
+        pass  # Don't overwrite a named label with LABEL_XXXXXX
+    else:
+        mapping[addr] = name  # Named label takes priority
+
+
+def _build_addr_to_label_map(sorted_content, seg_end_map, label_only_labels):
+    """Pre-pass: build address -> label_name map from all segments.
+
+    For label-only segments, addresses come from ORG directives (reliable).
+    For content segments, only LABEL_XXXXXX names are used (address encoded
+    in name). Named labels in content segments are recorded only at segment
+    start or at a LABEL_XXXXXX boundary to avoid address drift issues.
+    """
+    addr_to_label = {}
+
+    # 1. Label-only segments (explicit ORG addresses — always reliable)
+    for addr, names in label_only_labels.items():
+        for name in names:
+            _record_label(addr_to_label, addr, name)
+
+    # 2. Content segments: extract LABEL_XXXXXX addresses from names,
+    #    and named labels at segment start or LABEL_ boundaries.
+    for seg_addr, seg_lines in sorted_content:
+        if seg_addr is None:
+            continue
+        # Track address from most recent reliable source (segment start or LABEL_)
+        reliable_addr = seg_addr
+        at_reliable_boundary = True  # True at segment start and after LABEL_
+        for line, source in seg_lines:
+            code_part, cmt = split_comment(line.strip())
+            code_stripped = code_part.strip()
+            if not code_stripped:
+                continue
+            label, rest = extract_label(code_stripped)
+            if not label:
+                # Any non-label line means we've moved past the boundary
+                if not rest:
+                    rest = code_stripped
+                rest = rest.strip()
+                if rest:
+                    first, _ = get_first_word(rest)
+                    fu = first.upper()
+                    if fu in ASL_INSTRUCTIONS or fu in KNOWN_MACROS or fu in DATA_DIRECTIVES or fu == 'BINCLUDE':
+                        at_reliable_boundary = False
+                continue
+
+            # Check if this is LABEL_XXXXXX (address from name)
+            m_lbl = re.match(r'^LABEL_([0-9A-Fa-f]{6})$', label)
+            if m_lbl:
+                reliable_addr = int(m_lbl.group(1), 16)
+                _record_label(addr_to_label, reliable_addr, label)
+                at_reliable_boundary = True
+            elif at_reliable_boundary:
+                # Named label right at segment start or after LABEL_XXXXXX
+                _record_label(addr_to_label, reliable_addr, label)
+            else:
+                # Named label with address hint in comment ("; XXXXXX")
+                if cmt:
+                    m_addr = re.match(r'^;\s*([0-9A-Fa-f]{6})\s*$', cmt.strip())
+                    if m_addr:
+                        hint_addr = int(m_addr.group(1), 16)
+                        _record_label(addr_to_label, hint_addr, label)
+                        reliable_addr = hint_addr
+                        at_reliable_boundary = True
+
+    return addr_to_label
+
+
 def convert_all(main_file, output_path):
     """Convert the main ASL file + all includes into a single LLVM assembly file.
 
@@ -1722,6 +1807,10 @@ def convert_all(main_file, output_path):
     """
     global ADDR_TRACKER, BLOCK_BUFFER, BLOCK_CURSOR, BLOCK_SIZE, BLOCK_START_ADDR
     global SEG_START_ADDR, SEG_END_ADDR, SELF_CORRECTION_TRIGGERED, SELF_CORRECTION_ADDR
+    global NATIVE_INSTR_COUNT, BYTE_FALLBACK_COUNT
+
+    NATIVE_INSTR_COUNT = 0
+    BYTE_FALLBACK_COUNT = 0
 
     main_dir = os.path.dirname(main_file)
 
@@ -1861,6 +1950,12 @@ def convert_all(main_file, output_path):
             if seg_addr not in label_only_labels:
                 label_only_labels[seg_addr] = []
             label_only_labels[seg_addr].extend(labels)
+
+    # Build address → label map for symbolic JP/CALL targets
+    global ADDR_TO_LABEL
+    print("  Building address-to-label map...")
+    ADDR_TO_LABEL = _build_addr_to_label_map(sorted_content, seg_end_map, label_only_labels)
+    print(f"  Labels mapped: {len(ADDR_TO_LABEL)}")
 
     # Build output
     output_lines = []
@@ -2030,21 +2125,13 @@ def convert_all(main_file, output_path):
     with open(output_path, 'w') as f:
         f.write('\n'.join(output_lines) + '\n')
 
-    # Count statistics
-    total_byte_lines = 0
-    total_native_lines = 0
-    for line in output_lines:
-        stripped = line.strip()
-        if stripped.startswith('.byte') and '\t;' in stripped:
-            total_byte_lines += 1
-        elif not stripped.startswith('.') and not stripped.startswith(';') and '\t;' in stripped and not stripped.endswith(':'):
-            total_native_lines += 1
+    # Print statistics
     print(f"  Output: {output_path}")
     print(f"  ROM bytes covered: {total_rom_bytes} / {ROM_SIZE} ({100*total_rom_bytes/ROM_SIZE:.1f}%)")
-    print(f"  .byte fallback lines: {total_byte_lines}")
+    print(f"  .byte fallback lines: {BYTE_FALLBACK_COUNT}")
     print(f"  Padding bytes: {total_padding_bytes}")
     print(f"  Block corrections: {total_block_corrections}")
-    print(f"  Native instruction lines: {total_native_lines}")
+    print(f"  Native instruction lines: {NATIVE_INSTR_COUNT}")
     print(f"  Label-only labels emitted inline: {len(emitted_label_addrs)}")
     print(f"  Label-only labels as comments: {len(remaining_labels)}")
 
