@@ -1255,6 +1255,59 @@ def convert_instruction(label, mnemonic, operands_str, comment):
 # Data directive helpers
 # ============================================================================
 
+def _escape_string_bytes(byte_seq):
+    """Escape bytes for use in .ascii/.asciz string literal."""
+    result = []
+    for b in byte_seq:
+        ch = chr(b)
+        if ch == '"':
+            result.append('\\"')
+        elif ch == '\\':
+            result.append('\\\\')
+        else:
+            result.append(ch)
+    return ''.join(result)
+
+
+def _try_emit_as_string(rom_bytes):
+    """Try to emit rom_bytes as .ascii/.asciz instead of .byte.
+
+    Returns a string directive or None if the bytes aren't a clean string.
+    Only converts if the printable prefix is at least 4 chars.
+    """
+    if len(rom_bytes) < 4:
+        return None
+
+    # Find the longest initial run of printable ASCII bytes
+    printable_end = 0
+    for i, b in enumerate(rom_bytes):
+        if 0x20 <= b <= 0x7E:
+            printable_end = i + 1
+        else:
+            break
+
+    if printable_end < 4:
+        return None
+
+    remaining = rom_bytes[printable_end:]
+
+    if len(remaining) == 0:
+        # All printable — use .ascii
+        s = _escape_string_bytes(rom_bytes[:printable_end])
+        return f'.ascii "{s}"'
+    elif remaining[0] == 0x00:
+        # Null-terminated string
+        s = _escape_string_bytes(rom_bytes[:printable_end])
+        trailing = remaining[1:]
+        if len(trailing) == 0:
+            return f'.asciz "{s}"'
+        else:
+            byte_str = ', '.join(f'0x{b:02x}' for b in trailing)
+            return f'.asciz "{s}"\n\t.byte {byte_str}'
+    else:
+        return None
+
+
 def _count_db_bytes(args):
     """Count the number of bytes a db directive emits."""
     # Handle dup pattern
@@ -1295,9 +1348,13 @@ def convert_db(label, args, comment, in_file_path):
             nbytes = remaining
         if nbytes > 0:
             rom_bytes = BLOCK_BUFFER[BLOCK_CURSOR:BLOCK_CURSOR + nbytes]
-            byte_str = ', '.join(f'0x{b:02x}' for b in rom_bytes)
             original = f"DB {args}"
-            result += f"\t.byte {byte_str}\t; {original}"
+            string_form = _try_emit_as_string(rom_bytes)
+            if string_form is not None:
+                result += f"\t{string_form}\t; {original}"
+            else:
+                byte_str = ', '.join(f'0x{b:02x}' for b in rom_bytes)
+                result += f"\t.byte {byte_str}\t; {original}"
             BLOCK_CURSOR += nbytes
             ADDR_TRACKER.advance(nbytes)
         if comment:
