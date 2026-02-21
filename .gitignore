@@ -23,10 +23,9 @@ test_ROMs/*.p
 test_ROMs/*.lst
 test_ROMs/*.rom
 
-# LLVM build (generated assembly files from converter)
-maincpu/llvm/*.s
-maincpu/llvm/**/*.s
-!maincpu/llvm/kn5000_v10_program_incbin.s
+# LLVM build artifacts (object files, linked binaries)
+maincpu/llvm/*.o
+maincpu/llvm/*.elf
 
 # Cruft and temporary files
 cruft_please_ignore/

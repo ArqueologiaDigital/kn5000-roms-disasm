@@ -1,0 +1,239 @@
+; =============================================================================
+; sysex_routines.asm - MIDI System Exclusive (SysEx) Routines
+; =============================================================================
+; This file contains all MIDI System Exclusive message handling routines
+; for the KN5000 Main CPU.
+;
+; System Exclusive messages are used for:
+;   - Bulk data dumps (panel memory, sound memory, composer, sequences, MSP)
+;   - Parameter transfers between devices
+;   - Manufacturer-specific commands
+;
+; Routines included:
+;   ExcSendFunc    - Main SysEx send handler
+;   MainExcSend    - SysEx send dispatch
+;   ExcDotFunc     - DOT (Data Object Transfer) handler
+;   ExcPmemFunc    - Panel Memory SysEx handler
+;   ExcSmemFunc    - Sound Memory SysEx handler
+;   ExcCompFunc    - Composer SysEx handler
+;   ExcSeqFunc     - Sequence SysEx handler
+;   ExcMspFunc     - MSP (Music Style Programmer) SysEx handler
+;
+; Each Exc*Func handles SysEx messages for a specific data type:
+;   - PMEM: Panel Memory settings (PM1-PM8)
+;   - SMEM: Sound Memory banks
+;   - COMP: Composer/arranger data
+;   - SEQ:  Sequencer song data
+;   - MSP:  Music Style Programmer data
+;
+; =============================================================================
+
+ExcSendFunc:
+	ld XHL, XDE
+	cp XBC, 0x1c00007
+	jr NZ, ExcSendFunc_InvalidParam_Exit
+	ld XWA, 0x570003
+	ld XBC, 0x1e00090
+	ld XDE, 0
+	call SendEvent
+	exts XHL
+	ld XWA, 0x1430001
+	ld XBC, 0x1e30001
+	ld XDE, XHL
+	call MainFuncCall
+
+ExcSendFunc_InvalidParam_Exit:
+	ld XHL, 0
+	ret
+
+MainExcSend:
+	cp XBC, 0x1e30001
+	jr NZ, MainExcSend_UnexpectedMessageType_Exit
+	cp XDE, 0x6
+	jr C, MainExcSend_ClampIndexToRange
+	ld XDE, 0
+
+MainExcSend_ClampIndexToRange:
+	ld XWA, 0xe7fd84
+	add XWA, XDE
+	ld A, (XWA)
+	call LABEL_FD8CAE
+
+MainExcSend_UnexpectedMessageType_Exit:
+	ld XHL, 0
+	ret
+
+ExcDotFunc:
+	sub XBC, 0x1e0003e
+	cp XBC, 0x0
+	jr LT, ExcDotFunc_InvalidIndex_Exit
+	cp XBC, 0x9
+	jr GT, ExcDotFunc_InvalidIndex_Exit
+	add XBC, XBC
+	add XBC, 0xe7fd8a
+	ld BC, (XBC)
+	lda XIX, 0xF76696
+	jp XIX + BC
+ExcDotFunc_HandlerJumpTable:
+	.byte 0xAA, 0x12, 0x24, 0xAA, 0xE, 0x21, 0xCB, 0x8F
+	.byte 0xDA, 0xA8, 0xC2, 0x5C, 0x47, 0x2, 0x23, 0xD9
+	.byte 0x12, 0xD9, 0xD8, 0x63, 0x16, 0xCF, 0xD8, 0x66
+	.byte 0x8, 0xF5, 0xF0, 0x0, 0x9D, 0xCF, 0x69, 0x68
+	.byte 0x4, 0xF5, 0xF0, 0x0, 0x2E, 0xDA, 0x61, 0xD9
+	.byte 0xF2, 0x67, 0xEA, 0xB4, 0x0, 0x0, 0xE8, 0x8B
+	.byte 0xE, 0xEB, 0xA9, 0xE, 0x43, 0x20, 0x0, 0x0
+	.byte 0x0, 0xE
+
+ExcDotFunc_InvalidIndex_Exit:
+	ld XHL, 0
+	ret
+
+LABEL_F766D3:
+	.byte 0xF2, 0x5E, 0x47, 0x2, 0x33, 0xE
+
+ExcPmemFunc:
+	push XIZ
+	ld XIZ, XWA
+	sub XBC, 0x1e0003e
+	cp XBC, 0x0
+	jr LT, ExcPmemFunc_InvalidIndex_Exit
+	cp XBC, 0x9
+	jr GT, ExcPmemFunc_InvalidIndex_Exit
+	add XBC, XBC
+	add XBC, 0xe7fdd6
+	ld BC, (XBC)
+	lda XIX, 0xF76706
+	jp XIX + BC
+LABEL_F76706:
+	.byte 0xAA, 0xE, 0x20, 0xE8, 0xEE, 0x2, 0x41, 0x9E
+	.byte 0xFD, 0xE7, 0x0, 0xE8, 0x81, 0xA1, 0x20, 0x38
+	.byte 0xAA, 0x12, 0x20, 0x38, 0x1D, 0x4D, 0xF, 0xFF
+	.byte 0xEF, 0x60, 0xEE, 0x8B, 0x68, 0x11, 0xEB, 0xA9
+	.byte 0x68, 0xD, 0xEB, 0xAB, 0x68, 0x9
+
+ExcPmemFunc_InvalidIndex_Exit:
+	ld XHL, 0
+	jr ExcPmemFunc_Return
+	lda XHL, 0x24760
+
+ExcPmemFunc_Return:
+	pop XIZ
+	ret
+
+ExcSmemFunc:
+	push XIZ
+	ld XIZ, XWA
+	sub XBC, 0x1e0003e
+	cp XBC, 0x0
+	jr LT, ExcSmemFunc_InvalidIndex_Exit
+	cp XBC, 0x9
+	jr GT, ExcSmemFunc_InvalidIndex_Exit
+	add XBC, XBC
+	add XBC, 0xe7fdea
+	ld BC, (XBC)
+	lda XIX, 0xF76764
+	jp XIX + BC
+LABEL_F76764:
+	.byte 0xAA, 0xE, 0x20, 0xE8, 0xEE, 0x2, 0x41, 0x9E
+	.byte 0xFD, 0xE7, 0x0, 0xE8, 0x81, 0xA1, 0x20, 0x38
+	.byte 0xAA, 0x12, 0x20, 0x38, 0x1D, 0x4D, 0xF, 0xFF
+	.byte 0xEF, 0x60, 0xEE, 0x8B, 0x68, 0x11, 0xEB, 0xA9
+	.byte 0x68, 0xD, 0xEB, 0xAB, 0x68, 0x9
+
+ExcSmemFunc_InvalidIndex_Exit:
+	ld XHL, 0
+	jr ExcSmemFunc_Return
+	lda XHL, 0x24762
+
+ExcSmemFunc_Return:
+	pop XIZ
+	ret
+
+ExcCompFunc:
+	push XIZ
+	ld XIZ, XWA
+	sub XBC, 0x1e0003e
+	cp XBC, 0x0
+	jr LT, ExcCompFunc_InvalidIndex_Exit
+	cp XBC, 0x9
+	jr GT, ExcCompFunc_InvalidIndex_Exit
+	add XBC, XBC
+	add XBC, 0xe7fdfe
+	ld BC, (XBC)
+	lda XIX, 0xF767C2
+	jp XIX + BC
+LABEL_F767C2:
+	.byte 0xAA, 0xE, 0x20, 0xE8, 0xEE, 0x2, 0x41, 0x9E
+	.byte 0xFD, 0xE7, 0x0, 0xE8, 0x81, 0xA1, 0x20, 0x38
+	.byte 0xAA, 0x12, 0x20, 0x38, 0x1D, 0x4D, 0xF, 0xFF
+	.byte 0xEF, 0x60, 0xEE, 0x8B, 0x68, 0x11, 0xEB, 0xA9
+	.byte 0x68, 0xD, 0xEB, 0xAB, 0x68, 0x9
+
+ExcCompFunc_InvalidIndex_Exit:
+	ld XHL, 0
+	jr ExcCompFunc_Return
+	lda XHL, 0x24764
+
+ExcCompFunc_Return:
+	pop XIZ
+	ret
+
+ExcSeqFunc:
+	push XIZ
+	ld XIZ, XWA
+	sub XBC, 0x1e0003e
+	cp XBC, 0x0
+	jr LT, ExcSeqFunc_InvalidIndex_Exit
+	cp XBC, 0x9
+	jr GT, ExcSeqFunc_InvalidIndex_Exit
+	add XBC, XBC
+	add XBC, 0xe7fe12
+	ld BC, (XBC)
+	lda XIX, 0xF76820
+	jp XIX + BC
+LABEL_F76820:
+	.byte 0xAA, 0xE, 0x20, 0xE8, 0xEE, 0x2, 0x41, 0x9E
+	.byte 0xFD, 0xE7, 0x0, 0xE8, 0x81, 0xA1, 0x20, 0x38
+	.byte 0xAA, 0x12, 0x20, 0x38, 0x1D, 0x4D, 0xF, 0xFF
+	.byte 0xEF, 0x60, 0xEE, 0x8B, 0x68, 0x11, 0xEB, 0xA9
+	.byte 0x68, 0xD, 0xEB, 0xAB, 0x68, 0x9
+
+ExcSeqFunc_InvalidIndex_Exit:
+	ld XHL, 0
+	jr ExcSeqFunc_Return
+	lda XHL, 0x24766
+
+ExcSeqFunc_Return:
+	pop XIZ
+	ret
+
+ExcMspFunc:
+	push XIZ
+	ld XIZ, XWA
+	sub XBC, 0x1e0003e
+	cp XBC, 0x0
+	jr LT, ExcMspFunc_InvalidIndex_Exit
+	cp XBC, 0x9
+	jr GT, ExcMspFunc_InvalidIndex_Exit
+	add XBC, XBC
+	add XBC, 0xe7fe26
+	ld BC, (XBC)
+	lda XIX, 0xF7687E
+	jp XIX + BC
+LABEL_F7687E:
+	.byte 0xAA, 0xE, 0x20, 0xE8, 0xEE, 0x2, 0x41, 0x9E
+	.byte 0xFD, 0xE7, 0x0, 0xE8, 0x81, 0xA1, 0x20, 0x38
+	.byte 0xAA, 0x12, 0x20, 0x38, 0x1D, 0x4D, 0xF, 0xFF
+	.byte 0xEF, 0x60, 0xEE, 0x8B, 0x68, 0x11, 0xEB, 0xA9
+	.byte 0x68, 0xD, 0xEB, 0xAB, 0x68, 0x9
+
+ExcMspFunc_InvalidIndex_Exit:
+	ld XHL, 0
+	jr ExcMspFunc_Return
+	lda XHL, 0x24768
+
+ExcMspFunc_Return:
+	pop XIZ
+	ret
+
+; End of SysEx routines
