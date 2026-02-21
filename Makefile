@@ -123,7 +123,7 @@ gallery:
 	python scripts/convert_images.py $(DOCS_GALLERY)
 
 issues:
-	python scripts/export_issues_to_website.py $(DOCS_DIR)/issues.md
+	cd /mnt/shared/kn5000_project && python scripts/export_issues_to_website.py $(DOCS_DIR)/issues.md
 
 rom-status:
 	python scripts/generate_rom_status_diagram.py
