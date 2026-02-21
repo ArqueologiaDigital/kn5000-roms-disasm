@@ -46,7 +46,7 @@ for entry in [
 	if badbytes:
 		msg += f"Similarity: {percentage}  ({badbytes} incorrect bytes)\n\n"
 	else:
-		msg += f"Similarity: {percentage}\n\n"		
+		msg += f"Similarity: {percentage}\n\n"
 
 
 total_badbytes = total_length - total_score
@@ -58,3 +58,43 @@ else:
 	print(f"romset bytematch: {total_percentage}\n")
 
 print (msg)
+
+# LLVM build comparison (optional - only if LLVM ROM exists)
+llvm_rom = "rebuilt_ROMs/kn5000_v10_program.llvm.rom"
+original_rom = "original_ROMs/kn5000_v10_program.rom"
+
+if os.path.exists(llvm_rom):
+	print("==== LLVM build (maincpu) ====")
+	original = open(original_rom, "rb").read()
+	llvm = open(llvm_rom, "rb").read()
+
+	if len(llvm) > len(original):
+		print(f"LLVM ROM is too big! ({len(llvm)} vs {len(original)} expected)")
+	elif len(llvm) < len(original):
+		print(f"LLVM ROM is too small ({len(llvm)} vs {len(original)} expected)")
+
+	compare_len = min(len(original), len(llvm))
+	score = 0
+	first_mismatches = []
+	for i in range(compare_len):
+		if original[i] == llvm[i]:
+			score += 1
+		elif len(first_mismatches) < 20:
+			first_mismatches.append((i, original[i], llvm[i]))
+
+	percentage = f"{100*score/len(original):0.2f}%"
+	badbytes = len(original) - score + max(0, len(original) - len(llvm))
+
+	if badbytes:
+		print(f"Similarity: {percentage}  ({badbytes} incorrect bytes)")
+	else:
+		print(f"Similarity: {percentage}")
+
+	if first_mismatches:
+		print(f"\nFirst {len(first_mismatches)} mismatches:")
+		print(f"  {'Address':>10s}  {'Original':>8s}  {'LLVM':>8s}")
+		for addr, orig_byte, llvm_byte in first_mismatches:
+			rom_addr = 0xE00000 + addr
+			print(f"  0x{rom_addr:06X}  0x{orig_byte:02X}       0x{llvm_byte:02X}")
+
+	print()

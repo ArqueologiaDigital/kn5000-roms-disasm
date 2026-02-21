@@ -2,7 +2,12 @@ ASL_PATH=../tools/asl
 ASL=$(ASL_PATH)/asl -w
 P2BIN=$(ASL_PATH)/p2bin
 
-all: rebuilt_ROMs/kn5000_v10_program.rebuilt.rom rebuilt_ROMs/kn5000_subprogram_v142.rebuilt.rom rebuilt_ROMs/kn5000_subcpu_boot.rebuilt.rom rebuilt_ROMs/kn5000_table_data.rebuilt.rom rebuilt_ROMs/kn5000_custom_data.rebuilt.rom rebuilt_ROMs/hd-ae5000_v2_06i.rebuilt.rom
+LLVM_BIN=/mnt/shared/llvm-project/build/bin
+LLVM_MC=$(LLVM_BIN)/llvm-mc
+LLVM_LLD=$(LLVM_BIN)/ld.lld
+LLVM_OBJCOPY=$(LLVM_BIN)/llvm-objcopy
+
+all: rebuilt_ROMs/kn5000_v10_program.rebuilt.rom rebuilt_ROMs/kn5000_subprogram_v142.rebuilt.rom rebuilt_ROMs/kn5000_subcpu_boot.rebuilt.rom rebuilt_ROMs/kn5000_table_data.rebuilt.rom rebuilt_ROMs/kn5000_custom_data.rebuilt.rom rebuilt_ROMs/hd-ae5000_v2_06i.rebuilt.rom rebuilt_ROMs/kn5000_v10_program.llvm.rom
 	python scripts/compare_roms.py
 
 rebuilt_ROMs/kn5000_v10_program.rebuilt.p: tmp94c241.inc maincpu/kn5000_v10_program.asm
@@ -81,6 +86,35 @@ rebuilt_ROMs/hd-ae5000_v2_06i.rebuilt.rom: rebuilt_ROMs/hd-ae5000_v2_06i.rebuilt
 	$(P2BIN) rebuilt_ROMs/hd-ae5000_v2_06i.rebuilt.p rebuilt_ROMs/hd-ae5000_v2_06i.rebuilt.rom
 
 
+# ============================================================================
+# LLVM parallel build (maincpu only)
+# ============================================================================
+
+# Phase 1: Binary include (100% byte-match, validates toolchain pipeline)
+# Phase 2: Will progressively replace with converted assembly source.
+
+LLVM_SRC=maincpu/llvm/kn5000_v10_program_incbin.s
+
+# Assemble → object file
+rebuilt_ROMs/kn5000_v10_program.llvm.o: $(LLVM_SRC) original_ROMs/kn5000_v10_program.rom
+	mkdir -p rebuilt_ROMs
+	$(LLVM_MC) -triple=tlcs900 -filetype=obj -I maincpu/llvm -o $@ $<
+
+# Link → ELF
+rebuilt_ROMs/kn5000_v10_program.llvm.elf: rebuilt_ROMs/kn5000_v10_program.llvm.o maincpu/llvm/maincpu.ld
+	$(LLVM_LLD) -T maincpu/llvm/maincpu.ld -o $@ $<
+
+# Extract → raw binary ROM
+rebuilt_ROMs/kn5000_v10_program.llvm.rom: rebuilt_ROMs/kn5000_v10_program.llvm.elf
+	$(LLVM_OBJCOPY) -O binary $< $@
+
+# Convert ASL → LLVM assembly (for development; not yet used in build)
+llvm-convert: scripts/asl_to_llvm.py maincpu/kn5000_v10_program.asm tmp94c241.inc
+	python scripts/asl_to_llvm.py maincpu/kn5000_v10_program.asm
+
+clean_llvm:
+	rm -f rebuilt_ROMs/kn5000_v10_program.llvm.*
+
 # Documentation website targets
 DOCS_DIR=../kn5000-docs
 DOCS_GALLERY=$(DOCS_DIR)/assets/images/gallery
@@ -98,7 +132,7 @@ rom-status:
 website: gallery issues rom-status
 	@echo "Website content updated. Don't forget to commit kn5000-docs."
 
-clean: clean_subcpu clean_subcpu_boot clean_maincpu clean_table_data clean_custom_data clean_hdae5000
+clean: clean_subcpu clean_subcpu_boot clean_maincpu clean_table_data clean_custom_data clean_hdae5000 clean_llvm
 
 clean_maincpu:
 	rm -f rebuilt_ROMs/kn5000_v10_program.rebuilt.*

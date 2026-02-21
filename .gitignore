@@ -23,6 +23,11 @@ test_ROMs/*.p
 test_ROMs/*.lst
 test_ROMs/*.rom
 
+# LLVM build (generated assembly files from converter)
+maincpu/llvm/*.s
+maincpu/llvm/**/*.s
+!maincpu/llvm/kn5000_v10_program_incbin.s
+
 # Cruft and temporary files
 cruft_please_ignore/
 mame_driver/build_error.txt
