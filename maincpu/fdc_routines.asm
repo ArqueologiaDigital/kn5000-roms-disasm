@@ -404,7 +404,7 @@ FDC_Port_Reset_Or_Noop:
 
 FDC_Setup_DMA_Mode:
 	LD BC, (8a1ch)
-	LDC_DMAM3_BC
+	LDC_DMAC3_BC
 	LD A, (8a28h)
 	CP A, 04dh
 	JR Z, FDC_Setup_DMA_Read_Mode
@@ -442,7 +442,7 @@ FDC_Setup_DMA_Ack_Dest:
 	LD XHL, (08a4ch)
 	LDC_DMAD3_XHL
 	LD_A 0
-	LDC_DMAC3_A
+	LDC_DMAM3_A
 	JR T, FDC_Port_Reset_Or_Noop
 
 FDC_Setup_DMA_Src_Ack:
@@ -451,10 +451,10 @@ FDC_Setup_DMA_Src_Ack:
 	LD XHL, FDC__DMA_ACKNOWLEDGE
 	LDC_DMAD3_XHL
 	LD_A 8
-	LDC_DMAC3_A
+	LDC_DMAM3_A
 	JR T, FDC_Port_Reset_Or_Noop
 	LD BC, (08a1ch)
-	LDC_DMAM3_BC
+	LDC_DMAC3_BC
 	RET
 
 FDC_Wait_Ready_Timeout:

@@ -16,20 +16,13 @@ LDC_DMAD2_XWA MACRO
 	db 0e8h, 2eh, 28h	; LDC DMAD2, XWA
 	ENDM
 
-LDC_DMAC0_A MACRO
-	db 0c9h, 2eh, 42h	; LDC DMAC0, A
-	ENDM
-
+; DMA Count registers (DMAC) - 16-bit, CR offsets 0x40/0x44/0x48/0x4C
 LDC_DMAC0_WA MACRO
-	db 0d8h, 2eh, 40h	; LDC DMAC0, WA
+	db 0d8h, 2eh, 40h	; LDC DMAC0, WA (DMA channel 0 count)
 	ENDM
 
-LDC_DMAC2_XWA MACRO
-	db 0c9h, 2eh, 4ah	; LDC DMAC2, WA
-	ENDM
-
-LDC_DMAC2_A MACRO
-	db 0c9h, 2eh, 4ah	; LDC DMAC2, A
+LDC_WA_DMAC0 MACRO
+	db 0d8h, 2fh, 40h	; LDC WA, DMAC0 (read DMA channel 0 count)
 	ENDM
 
 LDC_DMAC2_BC MACRO
@@ -37,31 +30,24 @@ LDC_DMAC2_BC MACRO
 	ENDM
 
 LDC_DMAC2_WA MACRO
-	db 0d8h, 2eh, 48h	; LDC DMAC2, WA (DMA channel 2 count, 16-bit)
+	db 0d8h, 2eh, 48h	; LDC DMAC2, WA (DMA channel 2 count)
 	ENDM
 
-LDC_DMAC3_A MACRO
-	db 0c9h, 2eh, 4eh	; LDC DMAC3, A
+LDC_DMAC3_BC MACRO
+	db 0d9h, 2eh, 4ch	; LDC DMAC3, BC (DMA channel 3 count)
 	ENDM
 
-LDC_DMAM0_WA MACRO
-	db 0d8h, 2eh, 40h	; LDC DMAM0, WA
+; DMA Mode registers (DMAM) - 8-bit, CR offsets 0x42/0x46/0x4A/0x4E
+LDC_DMAM0_A MACRO
+	db 0c9h, 2eh, 42h	; LDC DMAM0, A (DMA channel 0 mode)
 	ENDM
 
-LDC_WA_DMAM0 MACRO
-	db 0d8h, 2fh, 40h	; LDC WA, DMAM0
+LDC_DMAM2_A MACRO
+	db 0c9h, 2eh, 4ah	; LDC DMAM2, A (DMA channel 2 mode)
 	ENDM
 
-LDC_DMAM2_WA MACRO
-	db 0d8h, 2eh, 48h	; LDC DMAM2, WA
-	ENDM
-
-LDC_DMAM2_BC MACRO
-	db 0d9h, 2eh, 48h	; LDC DMAM2, BC
-	ENDM
-
-LDC_DMAM3_BC MACRO
-	db 0d9h, 2eh, 4ch	; LDC DMAM3, BC
+LDC_DMAM3_A MACRO
+	db 0c9h, 2eh, 4eh	; LDC DMAM3, A (DMA channel 3 mode)
 	ENDM
 
 LDC_DMAD3_XHL MACRO

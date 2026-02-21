@@ -10983,11 +10983,11 @@ InterCPU_Latch_Setup:
 	LDA XWA, INTER_CPU_COMM_LATCHES
 	LDC_DMAD2_XWA
 	LD_A 8
-	LDC_DMAC2_XWA
+	LDC_DMAM2_A
 	LDA XWA, INTER_CPU_COMM_LATCHES
 	LDC DMAS0, XWA
 	LD_A 0
-	LDC_DMAC0_A
+	LDC_DMAM0_A
 	LD (DMA_XFER_STATE), 0
 	LD (CMD_PROCESSING_STATE), 0
 	RET
@@ -11439,7 +11439,7 @@ Cmd_Check_DMA_Timeout:		; 020FD9h
 	EI 0
 	BIT 1, (PD)  ; SSTAT1 - test own status: if set, no DMA transfer in progress
 	JR NZ, Cmd_DMA_Idle
-	LDC_WA_DMAM0		; Get current DMA byte count
+	LDC_WA_DMAC0		; Get current DMA byte count
 	CP (0F01Ch), WA		; Compare with previous
 	JR NZ, Cmd_DMA_Reset_Counter
 	INCW 1, (0F01Ah)	; Increment stuck counter
