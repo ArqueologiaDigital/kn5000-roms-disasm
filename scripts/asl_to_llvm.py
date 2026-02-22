@@ -2734,6 +2734,137 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
                     byte_args = ', '.join(f'0x{b:02X}' for b in all_bytes)
                     return f"{cat}{nbytes} {byte_args}", nbytes
 
+            # Standard register prefix (C8-EF) sub-opcode decode
+            if 0xC8 <= first <= 0xEF and nbytes >= 2:
+                prefix = first
+                sub_opc = rom_bytes[1]
+                if first <= 0xCF:
+                    size_idx = 0  # 8-bit
+                    reg_idx = first - 0xC8
+                elif first <= 0xDF:
+                    size_idx = 1  # 16-bit
+                    reg_idx = first - 0xD8
+                else:
+                    size_idx = 2  # 32-bit
+                    reg_idx = first - 0xE8
+                REG8 = ['w','a','b','c','d','e','h','l']
+                REG16 = ['wa','bc','de','hl','ix','iy','iz','sp']
+                REG32 = ['xwa','xbc','xde','xhl','xix','xiy','xiz','xsp']
+                REG_ALL = [REG8, REG16, REG32]
+                reg_name = REG_ALL[size_idx][reg_idx]
+                sz_suffix = ['8', '16', '32'][size_idx]
+
+                # UNLK r32 (sub=0x0D, 32-bit only, 2 bytes)
+                if sub_opc == 0x0D and size_idx == 2 and nbytes == 2:
+                    return f"unlk32 {reg_name}", 2
+
+                # LINK r32,d16 (sub=0x0C, 32-bit only, 4 bytes) — ExtPrefix
+                if sub_opc == 0x0C and size_idx == 2 and nbytes == 4:
+                    b = rom_bytes
+                    return (f"link32 0x{b[0]:02X}, 0x{b[1]:02X}, "
+                            f"0x{b[2]:02X}, 0x{b[3]:02X}"), 4
+
+                # XORCF A,r (sub=0x2A, 8/16-bit, 2 bytes)
+                if sub_opc == 0x2A and size_idx < 2 and nbytes == 2:
+                    return f"xorcf_a_{sz_suffix} {reg_name}", 2
+
+                # STCF A,r (sub=0x2C, 8/16-bit, 2 bytes)
+                if sub_opc == 0x2C and size_idx < 2 and nbytes == 2:
+                    return f"stcf_a_{sz_suffix} {reg_name}", 2
+
+                # LDC cr,r (sub=0x2E) / LDC r,cr (sub=0x2F), 3 bytes
+                if sub_opc in (0x2E, 0x2F) and nbytes == 3:
+                    cr_num = rom_bytes[2]
+                    if sub_opc == 0x2E:
+                        return f"ldc_cr{sz_suffix} {reg_name}, 0x{cr_num:02X}", 3
+                    else:
+                        return f"ldc_{sz_suffix}_cr {reg_name}, 0x{cr_num:02X}", 3
+
+                # MINC1 (sub=0x38) / MINC4 (sub=0x3A), 16-bit, 4 bytes
+                if sub_opc in (0x38, 0x3A) and size_idx == 1 and nbytes == 4:
+                    imm16 = rom_bytes[2] | (rom_bytes[3] << 8)
+                    name = 'minc1_16' if sub_opc == 0x38 else 'minc4_16'
+                    return f"{name} {reg_name}, 0x{imm16:X}", 4
+
+                # MUL/MULS/DIV/DIVS rr,r8 (sub=0x40-0x5F, 8-bit, 2 bytes)
+                if 0x40 <= sub_opc <= 0x5F and size_idx == 0 and nbytes == 2:
+                    other_idx = sub_opc & 0x07
+                    other_reg = REG8[other_idx]
+                    op_idx = (sub_opc >> 3) & 0x03
+                    op_name = ['mul8rr','muls8rr','div8rr','divs8rr'][op_idx]
+                    return f"{op_name} {other_reg}, {reg_name}", 2
+
+                # INC/DEC register (sub=0x60-0x6F, 2 bytes)
+                if 0x60 <= sub_opc <= 0x6F and nbytes == 2:
+                    count = sub_opc & 0x07
+                    if count == 0:
+                        count = 8
+                    is_inc = sub_opc < 0x68
+                    name = 'inc' if is_inc else 'dec'
+                    return f"{name} {count}, {reg_name}", 2
+
+                # SCC cc,r (sub=0x70-0x7F, 2 bytes)
+                if 0x70 <= sub_opc <= 0x7F and nbytes == 2:
+                    cc = sub_opc & 0x0F
+                    CC_NAMES = ['f','lt','le','ule','ov','mi','z','c',
+                                't','ge','gt','ugt','nov','pl','nz','nc']
+                    cc_name = CC_NAMES[cc]
+                    mnem = ['scc8', 'scc16', 'scc32'][size_idx]
+                    return f"{mnem} {cc_name}, {reg_name}", 2
+
+                # LD r2,r (sub=0x88-0x8F, 2 bytes)
+                if 0x88 <= sub_opc <= 0x8F and nbytes == 2:
+                    other_idx = sub_opc & 0x07
+                    other_reg = REG_ALL[size_idx][other_idx]
+                    return f"ld {other_reg}, {reg_name}", 2
+
+                # LD r,r2 (sub=0x98-0x9F, 2 bytes)
+                if 0x98 <= sub_opc <= 0x9F and nbytes == 2:
+                    other_idx = sub_opc & 0x07
+                    other_reg = REG_ALL[size_idx][other_idx]
+                    return f"ld {reg_name}, {other_reg}", 2
+
+                # LD r,I3 (sub=0xA8-0xAF, 2 bytes)
+                if 0xA8 <= sub_opc <= 0xAF and nbytes == 2:
+                    imm3 = sub_opc & 0x07
+                    mnem = ['lds8', 'lds', 'lds32'][size_idx]
+                    return f"{mnem} {reg_name}, {imm3}", 2
+
+                # EX r2,r (sub=0xB8-0xBF, 8/16-bit, 2 bytes)
+                if 0xB8 <= sub_opc <= 0xBF and size_idx < 2 and nbytes == 2:
+                    other_idx = sub_opc & 0x07
+                    other_reg = REG_ALL[size_idx][other_idx]
+                    return f"ex{sz_suffix} {other_reg}, {reg_name}", 2
+
+                # CP r,I3 (sub=0xD8-0xDF, 2 bytes)
+                if 0xD8 <= sub_opc <= 0xDF and nbytes == 2:
+                    imm3 = sub_opc & 0x07
+                    return f"cps {reg_name}, {imm3}", 2
+
+                # RLC/RRC with immediate count (sub=0xE8/0xE9, 3 bytes)
+                if sub_opc in (0xE8, 0xE9) and nbytes == 3:
+                    count = rom_bytes[2]
+                    name = 'rlc_i' if sub_opc == 0xE8 else 'rrc_i'
+                    return f"{name}_{sz_suffix} {reg_name}, {count}", 3
+
+                # DJNZ r,d8 (sub=0x1C, 3 bytes)
+                if sub_opc == 0x1C and size_idx == 1 and nbytes == 3:
+                    d8 = rom_bytes[2]
+                    if d8 > 127:
+                        d8 -= 256
+                    return f"djnz16 {reg_name}, {d8}", 3
+
+                # ADD/ADC/SUB/SBC/AND/XOR/OR/CP r,#imm (sub=0xC8-0xCF)
+                if 0xC8 <= sub_opc <= 0xCF and nbytes >= 3:
+                    ALU_NAMES = {0xC8:'add',0xC9:'adc',0xCA:'sub',0xCB:'sbc',
+                                 0xCC:'and',0xCD:'xor',0xCE:'or',0xCF:'cp'}
+                    alu_name = ALU_NAMES[sub_opc]
+                    imm_bytes = nbytes - 2
+                    imm_val = 0
+                    for i in range(imm_bytes):
+                        imm_val |= rom_bytes[2 + i] << (8 * i)
+                    return f"{alu_name} {reg_name}, 0x{imm_val:X}", nbytes
+
             # Fallback: generic extpfx for remaining patterns
             # (C8-CF, D8-DF, E8-EF register prefix with unhandled sub-opcodes)
             byte_args = ', '.join(f'0x{b:02X}' for b in rom_bytes[:nbytes])
