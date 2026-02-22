@@ -1420,6 +1420,45 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
                 mnem = ROTATE_SUBOPC[sub_opc]
                 return f"{mnem} {reg_name}", 3
 
+    # Tier 16: CP short-form (2-byte: prefix + 0xD8+N, compare with 0-7)
+    if nbytes == 2 and rom_bytes is not None and mnem_upper == 'CP':
+        prefix = rom_bytes[0]
+        sub_opc = rom_bytes[1]
+        if 0xD8 <= sub_opc <= 0xDF:
+            val = sub_opc & 0x07
+            reg_name = None
+            if 0xC8 <= prefix <= 0xCF:
+                reg_name = REG8_BY_INDEX[prefix & 0x07]
+            elif 0xD8 <= prefix <= 0xDF:
+                r_idx = prefix & 0x07
+                if r_idx != 7:  # Skip SP
+                    reg_name = REG16_BY_INDEX[r_idx]
+            elif 0xE8 <= prefix <= 0xEF:
+                reg_name = REG32_BY_INDEX[prefix & 0x07]
+            if reg_name is not None:
+                return f"cps {reg_name}, {val}", 2
+
+    # Tier 17: BIT/SET/RES register form (3-byte: prefix + sub_opcode + bit_number)
+    BIT_SET_RES_MNEMONICS = {'BIT', 'SET', 'RES'}
+    BIT_SET_RES_SUBOPC = {0x33: 'bit', 0x31: 'set', 0x30: 'res'}
+    if nbytes == 3 and rom_bytes is not None and mnem_upper in BIT_SET_RES_MNEMONICS:
+        prefix = rom_bytes[0]
+        sub_opc = rom_bytes[1]
+        bit_num = rom_bytes[2]
+        if sub_opc in BIT_SET_RES_SUBOPC and 0 <= bit_num <= 15:
+            reg_name = None
+            if 0xC8 <= prefix <= 0xCF:
+                reg_name = REG8_BY_INDEX[prefix & 0x07]
+            elif 0xD8 <= prefix <= 0xDF:
+                r_idx = prefix & 0x07
+                if r_idx != 7:  # Skip SP
+                    reg_name = REG16_BY_INDEX[r_idx]
+            elif 0xE8 <= prefix <= 0xEF:
+                reg_name = REG32_BY_INDEX[prefix & 0x07]
+            if reg_name is not None:
+                mnem = BIT_SET_RES_SUBOPC[sub_opc]
+                return f"{mnem} {bit_num}, {reg_name}", 3
+
     return None
 
 

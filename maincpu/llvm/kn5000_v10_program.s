@@ -113316,7 +113316,7 @@ LABEL_EF05A2:
 	.byte 0xf0, 0x38, 0xc8	; BIT 0, (PE)	;  Is the optional HD-AE5000 board present?
 	jr nz, LABEL_EF05B5
 	.byte 0x1e, 0xb7, 0x02	; CALR Get_Region_Code
-	.byte 0xcf, 0xdc	; CP L, 4
+	cps l, 4
 	.byte 0xf2, 0xcc, 0x4b, 0xef, 0xee	; CALL NZ, HDAE5000_Parport_Setup	; if it is present (and this unit was sold in
 					; a specific market region), then call the
 					; HDAE5000 PPI init code
@@ -113332,7 +113332,7 @@ LABEL_EF05B5:
 	cp l, 0xFF
 	jr nz, User_didnt_request_flash_mem_update
 	call Check_for_Floppy_Disk_Change
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, User_didnt_request_flash_mem_update
 	.byte 0xc1, 0x02, 0x04, 0x3f, 0x04	; CP (0402h), 004h
 	jr nz, User_didnt_request_flash_mem_update
@@ -113381,7 +113381,7 @@ User_didnt_request_flash_mem_update:	; EF05E8
 	.byte 0x06, 0x00	; EI 000h
 	call LABEL_FB76D8
 	calr SubCPU_Payload_GetErrorFlag	; Check if payload transfer failed
-	.byte 0xdb, 0xd8	; CP HL, 0	; HL=0: success, HL!=0: error
+	cps hl, 0	; HL=0: success, HL!=0: error
 	jr nz, Boot_PayloadError	; Branch if error occurred
 	lds wa, 1	; Success: use screen group 1
 	jr Boot_DisplayScreen
@@ -113526,12 +113526,12 @@ LABEL_EF0792:
 LABEL_EF0797:
 	.byte 0xf1, 0x06, 0x04, 0x9f	; LDCF 7, (0406h)
 	.byte 0xc9, 0x77	; SCC C, A
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	.byte 0xdb, 0x76	; SCC Z, HL
 	ret
 
 LABEL_EF07A2:
-	.byte 0xc9, 0xda	; CP A, 2
+	cps a, 2
 	jr nz, LABEL_EF07C8
 	call 0xFFFEE5
 	and l, 0xF
@@ -113547,7 +113547,7 @@ LABEL_EF07A2:
 	ret
 
 LABEL_EF07C8:
-	.byte 0xc9, 0xdb	; CP A, 3
+	cps a, 3
 	.byte 0xb0, 0xfe	; RET NZ
 	ldw wa, 0xF0
 	call LABEL_F994BD
@@ -113574,7 +113574,7 @@ LABEL_EF07E6:
 LABEL_EF07F3:
 	.byte 0xd2, 0xca, 0xff, 0x00, 0x3f, 0xa5, 0x5a	; CPW (0FFCAh:24), 5aa5h
 	.byte 0xb0, 0xf6	; RET Z
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	.byte 0xb0, 0xfe	; RET NZ
 	call LABEL_FC54B2
 	.byte 0x06, 0x07	; EI 007h
@@ -113830,7 +113830,7 @@ LABEL_EF08D4:
 	call LABEL_EF18E7
 	.byte 0xf2, 0xd2, 0xff, 0x00, 0x53	; LD (0FFD2h:24), HL
 	call 0xF846DF
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_EF0914
 	.byte 0xd2, 0xd4, 0xff, 0x00, 0x38, 0xe8, 0x03	; ADDW (0FFD4h:24), 03e8h
 
@@ -113941,7 +113941,7 @@ LABEL_EF09A8:
 	calr LABEL_EF0992
 	ld a, (xsp)
 	sll a, 4
-	.byte 0xc9, 0x31, 0x00	; SET 000h, A
+	set 0, a
 	ld c, a
 	extz bc
 	ldw wa, 0x3C5
@@ -114070,7 +114070,7 @@ LABEL_EF0B6E:
 	.byte 0xd8, 0x1c, 0xfb	; DJNZ WA, LABEL_EF0B6E
 
 LABEL_EF0B73:
-	.byte 0xdc, 0x33, 0x00	; BIT 000h, IX
+	bit 0, ix
 	jr z, LABEL_EF0B7B
 	.byte 0xb2, 0x00, 0x00	; LD (XDE), 000h
 
@@ -114095,7 +114095,7 @@ LABEL_EF0BA3:
 	.byte 0xd8, 0x1c, 0xfb	; DJNZ WA, LABEL_EF0BA3
 
 LABEL_EF0BA8:
-	.byte 0xdc, 0x33, 0x00	; BIT 000h, IX
+	bit 0, ix
 	jr z, LABEL_EF0BB0
 	.byte 0xb2, 0x00, 0x00	; LD (XDE), 000h
 
@@ -114148,7 +114148,7 @@ INTT1_HANDLER:	; EF0BF9
 	.byte 0x06, 0x06	; EI 006h
 	.byte 0xc1, 0x27, 0x04, 0x21	; LD A, (0427h)
 	.byte 0xc1, 0x26, 0x04, 0x20	; LD W, (0426h)
-	.byte 0xc9, 0x33, 0x07	; BIT 007h, A
+	bit 7, a
 	jr z, LABEL_EF0C2C
 	.byte 0xc1, 0x25, 0x04, 0x61	; INC 1, (0425h)
 	.byte 0xc1, 0x25, 0x04, 0x3f, 0xa5	; CP (0425h), 0a5h
@@ -114259,13 +114259,13 @@ LABEL_EF0D1D:
 	ld a, (xhl)
 	.byte 0xf1, 0x50, 0xfd, 0xca	; BIT 2, (0FD50h)
 	jr nz, LABEL_EF0D35
-	.byte 0xc9, 0x33, 0x00	; BIT 000h, A
+	bit 0, a
 	jr z, LABEL_EF0D35
 	.byte 0xb3, 0x00, 0x06	; LD (XHL), 006h
 	.byte 0xf1, 0x73, 0x04, 0xb0	; RES 0, (0473h)
 
 LABEL_EF0D35:
-	.byte 0xc9, 0x33, 0x03	; BIT 003h, A
+	bit 3, a
 	jr z, LABEL_EF0D3D
 	.byte 0xb3, 0x00, 0x10	; LD (XHL), 010h
 
@@ -114273,7 +114273,7 @@ LABEL_EF0D3D:
 	.byte 0xf1, 0x13, 0x04, 0xb2	; RES 2, (0413h)
 	.byte 0xc1, 0x11, 0x04, 0x21	; LD A, (0411h)
 	inc 1, a
-	.byte 0xc9, 0xda	; CP A, 2
+	cps a, 2
 	jr ule, LABEL_EF0D51
 	sub a, a
 	.byte 0xc1, 0x12, 0x04, 0x61	; INC 1, (0412h)
@@ -114523,7 +114523,7 @@ LABEL_EF0F81:
 	.byte 0xf1, 0x20, 0x04, 0xcb	; BIT 3, (0420h)
 	jr z, LABEL_EF0FC5
 	.byte 0xc1, 0x17, 0x04, 0x21	; LD A, (0417h)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_EF0FA0
 	cp a, 0x18
 	jr z, LABEL_EF0FA0
@@ -115046,9 +115046,9 @@ LABEL_EF145A:
 	and b, 0xFD
 
 LABEL_EF145D:
-	.byte 0xca, 0xd9	; CP B, 1
+	cps b, 1
 	jr z, LABEL_EF1474
-	.byte 0xca, 0xda	; CP B, 2
+	cps b, 2
 	jr z, LABEL_EF147E
 
 LABEL_EF1465:
@@ -115058,7 +115058,7 @@ LABEL_EF1465:
 	jr nz, LABEL_EF141D
 
 LABEL_EF146F:
-	.byte 0xca, 0x33, 0x00	; BIT 000h, B
+	bit 0, b
 	jr z, LABEL_EF147E
 
 LABEL_EF1474:
@@ -115535,7 +115535,7 @@ AudioMix_EnableChannels_Loop:
 AudioMix_WriteChannelGroup:
 	pushw de
 	sll a, 5
-	.byte 0xc9, 0x31, 0x04	; SET 004h, A
+	set 4, a
 	ld xhl, 0x150000
 	ldb d, 0x8
 
@@ -115862,7 +115862,7 @@ LABEL_EF1B5E:
 LABEL_EF1B6F:
 	pushw wa
 	.byte 0xd1, 0xc3, 0x05, 0x20	; LD WA, (05C3h)
-	.byte 0xd8, 0xd9	; CP WA, 1
+	cps wa, 1
 	jr z, LABEL_EF1B83
 	dec 1, wa
 	.byte 0xf1, 0xc3, 0x05, 0x50	; LD (05C3h), WA
@@ -115923,7 +115923,7 @@ LABEL_EF1B9C:
 	extz xbc
 	ld xix, xbc
 	.byte 0x8c, 0x09, 0x21	; LD A, (XIX + 009h)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jrl nz, LABEL_EF1B11
 	.byte 0xbc, 0x0b, 0x40	; LD (XIX + 00bh), W
 	.byte 0xab, 0x04, 0x25	; LD XIY, (XHL + 004h)
@@ -116068,7 +116068,7 @@ LABEL_EF1CEC:
 	.byte 0xd1, 0x87, 0x04, 0x24	; LD IX, (0487h)
 	extz xix
 	.byte 0x8c, 0x0a, 0x21	; LD A, (XIX + 00ah)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_EF1D1C
 	extz xix
 	xor xwa, xwa
@@ -118258,7 +118258,7 @@ LABEL_EF31A6:
 	lds iz, 0
 	.byte 0x8f, 0x06, 0x21	; LD A,(XSP + 006h)
 	extz wa
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr ule, LABEL_EF31D7
 
 LABEL_EF31BA:
@@ -118289,7 +118289,7 @@ LABEL_EF31DB:
 	lds iz, 0
 	.byte 0x8f, 0x06, 0x21	; LD A, (XSP + 006h)
 	extz wa
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr ule, LABEL_EF320C
 
 LABEL_EF31EF:
@@ -118319,7 +118319,7 @@ LABEL_EF3210:
 	lds iz, 0
 	.byte 0x8f, 0x06, 0x21	; LD A, (XSP + 006h)
 	extz wa
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr ule, LABEL_EF3241
 
 LABEL_EF3224:
@@ -118350,7 +118350,7 @@ LABEL_EF3245:
 	lds iz, 0
 	.byte 0x8f, 0x06, 0x21	; LD A, (XSP + 006h)
 	extz wa
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr ule, LABEL_EF3276
 
 LABEL_EF3259:
@@ -118424,7 +118424,7 @@ SubCPU_Init_DMA_Channels:
 	.byte 0xf0, 0xf0, 0x31	; LDA XBC, INTE0AD
 	ld a, (xbc)
 	and a, 0xF8
-	.byte 0xc9, 0x31, 0x00	; SET 000h, A
+	set 0, a
 	ld (xbc), a
 	.byte 0x08, 0x8a, 0x07	; LD (TREG2), 007h
 	.byte 0xf2, 0x00, 0x00, 0x14, 0x30	; LDA XWA, INTER_CPU_COMM_LATCHES
@@ -118497,7 +118497,7 @@ LABEL_EF332B:
 ;        Called by sendCOMM for chunked audio data transfers
 ; ===========================================================================
 InterCPU_Send_Data_Block:
-	.byte 0xcb, 0xd8	; CP C, 0
+	cps c, 0
 	.byte 0xb0, 0xf6	; RET Z
 	lds ix, 0
 
@@ -118620,7 +118620,7 @@ Audio_DMA_Transfer:
 	.byte 0xd1, 0xde, 0x05, 0x20	; LD WA, (05DEh)
 	ld de, wa
 	extz xde
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr nz, LABEL_EF342C
 	ld xde, 0x10000
 
@@ -118639,7 +118639,7 @@ LABEL_EF3436:
 
 LABEL_EF344A:
 	inc 1, a
-	.byte 0xc9, 0xdb	; CP A, 3
+	cps a, 3
 	jr c, LABEL_EF344A
 	inc 1, xhl
 	cp xhl, xde
@@ -118863,16 +118863,16 @@ INTTC0_HANDLER:	; EF35E8
 	.byte 0xf0, 0xf0, 0x31	; LDA XBC, INTE0AD
 	ld a, (xbc)
 	and a, 0xF8
-	.byte 0xc9, 0x31, 0x00	; SET 000h, A
+	set 0, a
 	ld (xbc), a
 	.byte 0xc1, 0xe2, 0x05, 0x21	; LD A, (05E2h)
-	.byte 0xc9, 0xdc	; CP A, 4
+	cps a, 4
 	jr z, LABEL_EF3675
-	.byte 0xc9, 0xdb	; CP A, 3
+	cps a, 3
 	jr z, LABEL_EF3662
-	.byte 0xc9, 0xda	; CP A, 2
+	cps a, 2
 	jr z, LABEL_EF363F
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	jr nz, LABEL_EF3681
 	.byte 0xc1, 0xe4, 0x05, 0x23	; LD C, (05E4h)
 	ld a, c
@@ -118952,7 +118952,7 @@ LABEL_EF3689:
 LABEL_EF3724:
 	push xiz
 	.byte 0x41, 0x00, 0x00, 0x28, 0x00	; LD XBC, HDAE5000_ROM__BASE_ADDR
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	jr nz, LABEL_EF3733
 	.byte 0x41, 0x00, 0x00, 0x30, 0x00	; LD XBC, CUSTOM_DATA_FLASH__BASE_ADDR
 
@@ -118973,7 +118973,7 @@ LABEL_EF3735:
 	.byte 0xd3, 0xf9, 0x32, 0x32, 0x20	; LD WA, (XIZ + 3232h)
 	.byte 0x06, 0x00	; EI 000h
 	call 0xEF0865
-	.byte 0xcf, 0xdc	; CP L, 4
+	cps l, 4
 	jr nz, LABEL_EF3798
 	add xiz, 0x80000
 	.byte 0x06, 0x06	; EI 006h
@@ -119055,11 +119055,11 @@ LABEL_EF3815:
 LABEL_EF3825:
 	.byte 0xf0, 0x1c, 0xcd	; BIT 5, (P7)
 	jr z, LABEL_EF3825
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	jr nz, LABEL_EF384E
 	.byte 0xf2, 0x00, 0x00, 0x30, 0x36	; LDA XIZ, CUSTOM_DATA_FLASH__BASE_ADDR
 	call 0xEF0865
-	.byte 0xcf, 0xdc	; CP L, 4
+	cps l, 4
 	jr nz, LABEL_EF3853
 	.byte 0xaf, 0x06, 0x20	; LD XWA, (XSP + 006h)
 	cp xwa, 0x380000
@@ -119114,7 +119114,7 @@ LABEL_EF3890:
 	add xwa, 0xAAAA
 	.byte 0xb0, 0x02, 0x10, 0x00	; LDW (XWA), 0010h
 	call 0xEF0865
-	.byte 0xcf, 0xdc	; CP L, 4
+	cps l, 4
 	jr nz, LABEL_EF3923
 	.byte 0x8f, 0x04, 0x3f, 0x01	; CP (XSP + 004h), 001h
 	jr nz, LABEL_EF3923
@@ -119157,7 +119157,7 @@ LABEL_EF3943:
 	ld xwa, 0xFF0000
 	.byte 0xaf, 0x04, 0xc8	; AND (XSP + 004h), XWA
 	call 0xEF0865
-	.byte 0xcf, 0xdc	; CP L, 4
+	cps l, 4
 	jr nz, LABEL_EF396C
 	.byte 0xaf, 0x04, 0x20	; LD XWA, (XSP + 004h)
 	cp xwa, 0x380000
@@ -119180,7 +119180,7 @@ LABEL_EF396C:
 	.byte 0xaf, 0x04, 0x20	; LD XWA, (XSP + 004h)
 	.byte 0xb0, 0x02, 0x30, 0x00	; LDW (XWA), 0030h
 	call 0xEF0865
-	.byte 0xcf, 0xdc	; CP L, 4
+	cps l, 4
 	jr nz, LABEL_EF3A0E
 	.byte 0x8f, 0x0c, 0x3f, 0x01	; CP (XSP + 00ch), 001h
 	jrl nz, LABEL_EF3ADA
@@ -119306,7 +119306,7 @@ LABEL_EF3B05:
 	lds wa, 2
 	calr LABEL_EF3724
 	call 0xEF0865
-	.byte 0xcf, 0xdc	; CP L, 4
+	cps l, 4
 	.byte 0xf2, 0xd1, 0x3c, 0xef, 0xee	; CALL NZ, LABEL_EF3CD1
 	lds wa, 1
 	calr LABEL_EF379A
@@ -119318,7 +119318,7 @@ LABEL_EF3B05:
 
 LABEL_EF3B2F:
 	lds de, 0
-	.byte 0xd9, 0xd8	; CP BC, 0
+	cps bc, 0
 	.byte 0xb0, 0xf3	; RET ULE
 
 LABEL_EF3B35:
@@ -119789,7 +119789,7 @@ LABEL_EF4002:
 
 LABEL_EF4020:
 	.byte 0xd7, 0x30, 0x88	; LD WA, RWA3
-	.byte 0xd8, 0x33, 0x00	; BIT 000h, WA
+	bit 0, wa
 	jr z, LABEL_EF404D
 	cp xhl, xix
 	jrl nc, LABEL_EF40B8
@@ -119827,7 +119827,7 @@ LABEL_EF404D:
 	and iz, 0xF
 	inc 2, iz
 	lds iy, 0
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr c, LABEL_EF40B3
 
 LABEL_EF4083:
@@ -119912,7 +119912,7 @@ LABEL_EF4120:
 
 LABEL_EF413E:
 	.byte 0xd7, 0x30, 0x88	; LD WA, RWA3
-	.byte 0xd8, 0x33, 0x00	; BIT 000h, WA
+	bit 0, wa
 	jr z, LABEL_EF416B
 	cp xhl, xix
 	jrl nc, LABEL_EF41D6
@@ -119950,7 +119950,7 @@ LABEL_EF416B:
 	and iz, 0x7
 	inc 2, iz
 	lds iy, 0
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr c, LABEL_EF41D1
 
 LABEL_EF41A1:
@@ -120001,7 +120001,7 @@ LABEL_EF41E3:
 	push xiz
 	call 0xFF0CC1
 	add xsp, 0xA
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_EF4239
 	.byte 0xbe, 0x05, 0x30	; LDA XWA, XIZ + 005h
 	ld xiz, xwa
@@ -120099,7 +120099,7 @@ LABEL_EF42D7:
 	push xwa
 	call LABEL_F97CCA
 	inc 4, xsp
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_EF42FA
 	calr LABEL_EF4241
 	jr LABEL_EF42D7
@@ -120127,7 +120127,7 @@ Detect_Disk_Type:	; EF42FE
 	push xiz
 	call 0xFF0CC1
 	add xsp, 0xA
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_EF433B
 	.byte 0xbf, 0x04, 0x00, 0x01	; LD (XSP + 004h), 001h
 	jrl LABEL_EF440D
@@ -120139,7 +120139,7 @@ LABEL_EF433B:
 	push xiz
 	call 0xFF0CC1
 	add xsp, 0xA
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_EF435A
 	.byte 0xbf, 0x04, 0x00, 0x02	; LD (XSP + 004h), 002h
 	jrl LABEL_EF440D
@@ -120151,7 +120151,7 @@ LABEL_EF435A:
 	push xiz
 	call 0xFF0CC1
 	add xsp, 0xA
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_EF4379
 	.byte 0xbf, 0x04, 0x00, 0x03	; LD (XSP + 004h), 003h
 	jrl LABEL_EF440D
@@ -120163,7 +120163,7 @@ LABEL_EF4379:
 	push xiz
 	call 0xFF0CC1
 	add xsp, 0xA
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_EF4397
 	.byte 0xbf, 0x04, 0x00, 0x04	; LD (XSP + 004h), 004h
 	jr LABEL_EF440D
@@ -120175,7 +120175,7 @@ LABEL_EF4397:
 	push xiz
 	call 0xFF0CC1
 	add xsp, 0xA
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_EF43B5
 	.byte 0xbf, 0x04, 0x00, 0x05	; LD (XSP + 004h), 005h
 	jr LABEL_EF440D
@@ -120187,7 +120187,7 @@ LABEL_EF43B5:
 	push xiz
 	call 0xFF0CC1
 	add xsp, 0xA
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_EF43D3
 	.byte 0xbf, 0x04, 0x00, 0x06	; LD (XSP + 004h), 006h
 	jr LABEL_EF440D
@@ -120199,7 +120199,7 @@ LABEL_EF43D3:
 	push xiz
 	call 0xFF0CC1
 	add xsp, 0xA
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_EF43F1
 	.byte 0xbf, 0x04, 0x00, 0x07	; LD (XSP + 004h), 007h
 	jr LABEL_EF440D
@@ -120211,7 +120211,7 @@ LABEL_EF43F1:
 	push xiz
 	call 0xFF0CC1
 	add xsp, 0xA
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_EF440D
 	.byte 0xbf, 0x04, 0x00, 0x08	; LD (XSP + 004h), 008h
 
@@ -120236,7 +120236,7 @@ LABEL_EF441B:
 	.byte 0xd8, 0x0a, 0x12, 0x00	; DIVW_WA 0012h
 	.byte 0xd7, 0xe2, 0x88	; LD WA, QWA
 	lds iz, 0
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr z, LABEL_EF4485
 	ldw iz, 0x12
 	sub iz, wa
@@ -120278,7 +120278,7 @@ LABEL_EF4485:
 	.byte 0xbf, 0x08, 0x50	; LD (XSP + 008h), WA
 	.byte 0xbf, 0x04, 0x02, 0x00, 0x00	; LDW (XSP + 004h:8), 0000h
 	.byte 0x9f, 0x08, 0x20	; LD WA, (XSP + 008h)
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr ule, LABEL_EF44F5
 
 LABEL_EF44A8:
@@ -120314,7 +120314,7 @@ LABEL_EF44F5:
 	add wa, 0x800
 	.byte 0x9f, 0x06, 0xa0	; SUB WA, (XSP + 006h)
 	ld iz, wa
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr z, LABEL_EF4548
 	.byte 0x9f, 0x06, 0x20	; LD WA, (XSP + 006h)
 	extz xwa
@@ -120362,7 +120362,7 @@ LABEL_EF454D:
 	.byte 0xd8, 0x0a, 0x12, 0x00	; DIVW_WA 0012h
 	.byte 0xd7, 0xe2, 0x88	; LD WA, QWA
 	lds iz, 0
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr z, LABEL_EF45BF
 	ldw iz, 0x12
 	sub iz, wa
@@ -120406,7 +120406,7 @@ LABEL_EF45BF:
 	.byte 0xbf, 0x08, 0x51	; LD (XSP + 008h), BC
 	.byte 0xbf, 0x04, 0x02, 0x00, 0x00	; LDW (XSP + 004h:8), 0000h
 	.byte 0x9f, 0x08, 0x20	; LD WA, (XSP + 008h)
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr ule, LABEL_EF4630
 
 LABEL_EF45DE:
@@ -120444,7 +120444,7 @@ LABEL_EF4630:
 	.byte 0x9f, 0x1a, 0x80	; ADD WA, (XSP + 01ah)
 	.byte 0x9f, 0x06, 0xa0	; SUB WA, (XSP + 006h)
 	ld iz, wa
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr z, LABEL_EF4687
 	.byte 0x9f, 0x06, 0x20	; LD WA, (XSP + 006h)
 	extz xwa
@@ -120502,12 +120502,12 @@ SHOW_CHANGE_FLOPPY_2_OF_2_MESSAGE:	; EF46A8
 	ldw de, 0xA0
 	call Draw_FlashMemUpdate_message_bitmap
 	call Check_for_Floppy_Disk_Change
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_EF46CD
 
 LABEL_EF46C5:
 	call Check_for_Floppy_Disk_Change
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_EF46C5
 
 LABEL_EF46CD:
@@ -120518,12 +120518,12 @@ LABEL_EF46CF:
 	cp xwa, 0x40000
 	jr c, LABEL_EF46CF
 	call Check_for_Floppy_Disk_Change
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_EF46E9
 
 LABEL_EF46E1:
 	call Check_for_Floppy_Disk_Change
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_EF46E1
 
 LABEL_EF46E9:
@@ -120583,9 +120583,9 @@ Erase_and_Burn____when_disk_is_valid:	; EF4745
 	ld a, (xsp)
 	extz wa
 	dec 1, wa
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jrl lt, SHOW_ILLEGAL_DISK_MESSAGE
-	.byte 0xd8, 0xdf	; CP WA, 7
+	cps wa, 7
 	jrl gt, SHOW_ILLEGAL_DISK_MESSAGE
 	add wa, wa
 	.byte 0xf2, 0x78, 0x01, 0xe0, 0x34	; LDA XIX, HANDLE_UPDATE_OFFSETS
@@ -120706,13 +120706,13 @@ LABEL_EF4850:
 	.byte 0xc1, 0x26, 0x06, 0x61	; INC 1, (0626h)
 	.byte 0xc1, 0x26, 0x06, 0x21	; LD A, (0626h)
 	and a, 0x3
-	.byte 0xc9, 0xdb	; CP A, 3
+	cps a, 3
 	jr z, LABEL_EF4883
-	.byte 0xc9, 0xda	; CP A, 2
+	cps a, 2
 	jr z, LABEL_EF487B
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	jr z, LABEL_EF4873
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_EF4889
 	.byte 0xf2, 0x04, 0x00, 0x16, 0x00, 0x01	; LD (HDAE5000_PPI__PORT_C), 001h
 	jr LABEL_EF4889
@@ -120996,7 +120996,7 @@ HDAE5000_Parport_Setup:	; EF4BCC
 LABEL_EF4BF7:
 	.byte 0xc2, 0x02, 0x00, 0x16, 0x21	; LD A, (HDAE5000_PPI__PORT_B)
 	extz wa
-	.byte 0xd8, 0x33, 0x00	; BIT 000h, WA
+	bit 0, wa
 	jr nz, LABEL_EF4BF7
 	jrl LABEL_EF4B54
 	ret
@@ -121032,7 +121032,7 @@ LABEL_EF4C3C:
 	calr LABEL_EF42CC
 	.byte 0xd1, 0x52, 0x06, 0x38, 0x12, 0x00	; ADDW (0652h), 0012h
 	inc 1, iz
-	.byte 0xde, 0xdc	; CP IZ, 4
+	cps iz, 4
 	jr c, LABEL_EF4C3C
 	.byte 0xf2, 0x00, 0x98, 0x06, 0x30	; LDA XWA, 069800h
 	.byte 0xf1, 0x4a, 0x06, 0x60	; LD (064Ah), XWA
@@ -121059,7 +121059,7 @@ LABEL_EF4C7A:
 	ld e, a
 	inc 1, a
 	.byte 0xf1, 0x54, 0x06, 0x41	; LD (0654h), A
-	.byte 0xcd, 0xdb	; CP E, 3
+	cps e, 3
 	jr nz, LABEL_EF4CB2
 	.byte 0xe1, 0x46, 0x06, 0x20	; LD XWA, (0646h)
 	.byte 0xf5, 0xe2, 0x32	; LDA XDE, XWA+
@@ -121085,7 +121085,7 @@ LABEL_EF4CB9:
 	ld c, a
 	inc 1, a
 	.byte 0xf1, 0x54, 0x06, 0x41	; LD (0654h), A
-	.byte 0xcb, 0xd9	; CP C, 1
+	cps c, 1
 	jr nz, LABEL_EF4CF1
 	.byte 0xe1, 0x56, 0x06, 0x20	; LD XWA, (0656h)
 	.byte 0xf5, 0xe1, 0x31	; LDA_XBC_XWA_plus__e1__
@@ -121120,7 +121120,7 @@ LABEL_EF4D1A:
 	add xde, xbc
 	ld (xde), l
 	inc 1, iz
-	.byte 0xde, 0xde	; CP IZ, 6
+	cps iz, 6
 	jr c, LABEL_EF4D1A
 	.byte 0x0b, 0x05, 0x00	; PUSHW 0005h	; lenght: 5 bytes
 	.byte 0x0b, 0xe0, 0x00	; PUSHW 00e0h
@@ -121128,7 +121128,7 @@ LABEL_EF4D1A:
 	push xwa
 	call 0xFF0CC1
 	add xsp, 0xA
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_EF4D4D
 	ldw hl, 0xFFFF
 	jr LABEL_EF4D91
@@ -121145,7 +121145,7 @@ LABEL_EF4D4F:
 	extz wa
 	calr LABEL_EF4CB9
 	inc 1, iz
-	.byte 0xde, 0xde	; CP IZ, 6
+	cps iz, 6
 	jr c, LABEL_EF4D4F
 	.byte 0xf1, 0x4e, 0x06, 0x02, 0x2a, 0x00	; LDW (064Eh), 002ah
 	.byte 0xf1, 0x50, 0x06, 0x02, 0xc8, 0x00	; LDW (0650h), 00c8h
@@ -121251,7 +121251,7 @@ LABEL_EF4E4A:
 LABEL_EF4E85:
 	.byte 0x9f, 0x04, 0x7f	; SRLW (XSP + 004h)
 	.byte 0x9f, 0x04, 0x20	; LD WA, (XSP + 004h)
-	.byte 0xd8, 0x33, 0x08	; BIT 008h, WA
+	bit 8, wa
 	jr nz, LABEL_EF4EA4
 	calr LABEL_EF4C07
 	ld iz, hl
@@ -121262,7 +121262,7 @@ LABEL_EF4E85:
 
 LABEL_EF4EA4:
 	.byte 0x9f, 0x04, 0x20	; LD WA, (XSP + 004h)
-	.byte 0xd8, 0x33, 0x00	; BIT 000h, WA
+	bit 0, wa
 	jr z, LABEL_EF4ED7
 	calr LABEL_EF4C07
 	ld iz, hl
@@ -121342,13 +121342,13 @@ LABEL_EF4F60:
 FLASH_MEM_UPDATE:	; EF4F6F
 	.byte 0xd7, 0xfa, 0x04	; PUSH QIZ
 	call Check_for_Floppy_Disk_Change
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jrl z, flash_update__not_today
 	calr LABEL_EF4241
 	calr Detect_Disk_Type
 	.byte 0xc7, 0xfb, 0x9f	; LD QIZH, L
 	call 0xEF0865
-	.byte 0xcf, 0xdc	; CP L, 4
+	cps l, 4
 	jr z, LABEL_EF4FE4
 	call 0xEF3D0E
 	cp xhl, 0xFFFFFFFF
@@ -121425,7 +121425,7 @@ LABEL_EF5050:
 	extz xwa
 	.byte 0xd8, 0x0a, 0x1c, 0x00	; DIVW_WA 001ch	; 28 bytes = 224 pixels de largura da imagem a ser desenhada
 	.byte 0xd7, 0xe2, 0x88	; LD WA, QWA
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr nz, LABEL_EF5063
 	ld iy, hl	; IY = coordanada X do canto esquerdo da imagem a ser desenhada
 	dec 1, ix
@@ -122482,7 +122482,7 @@ LABEL_EF5E84:
 	.byte 0xc1, 0x85, 0x11, 0x3c, 0xfc	; AND (1185h), 0fch
 	.byte 0xf1, 0x81, 0x11, 0x00, 0x00	; LD (1181h), 000h
 	.byte 0xf1, 0x82, 0x11, 0x02, 0x00, 0x00	; LDW (1182h), 0000h
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr z, LABEL_EF5EE0
 	xor c, c
 
@@ -122491,7 +122491,7 @@ LABEL_EF5E9C:
 	jr c, LABEL_EF5EB3
 	inc 1, c
 	.byte 0xc1, 0x85, 0x11, 0x3e, 0x02	; OR (1185h), 002h
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr nz, LABEL_EF5E9C
 	.byte 0xf1, 0x81, 0x11, 0x43	; LD (1181h), C
 	jr LABEL_EF5EE0
@@ -122506,7 +122506,7 @@ LABEL_EF5EBD:
 	jr c, LABEL_EF5ED4
 	inc 1, c
 	.byte 0xc1, 0x85, 0x11, 0x3e, 0x01	; OR (1185h), 001h
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr nz, LABEL_EF5EBD
 	.byte 0xf1, 0x82, 0x11, 0x43	; LD (1182h), C
 	jr LABEL_EF5EE0
@@ -123379,7 +123379,7 @@ Display_RedrawParameters:	; EF6F1A
 	.byte 0xf1, 0x4c, 0x0e, 0x02, 0x00, 0x00	; LDW (0E4Ch), 0000h
 	call LABEL_EF736D
 	.byte 0xd1, 0x1a, 0x37, 0x20	; LD WA, (371Ah)
-	.byte 0xd8, 0xd9	; CP WA, 1
+	cps wa, 1
 	jrl z, LABEL_EF6FA2
 	dec 1, wa
 	.byte 0xf1, 0x7f, 0x28, 0x50	; LD (287Fh), WA
@@ -123403,13 +123403,13 @@ LABEL_EF6F42:
 	call LABEL_EF70E7
 	.byte 0xc1, 0xec, 0x0e, 0x21	; LD A, (0EECh)
 	ld l, a
-	.byte 0xc9, 0xdc	; CP A, 4
+	cps a, 4
 	jrl ule, LABEL_EF6F82
 	ldb a, 0x4
 
 LABEL_EF6F82:
 	.byte 0xf1, 0x52, 0x0e, 0x41	; LD (0E52h), A
-	.byte 0xcf, 0xdc	; CP L, 4
+	cps l, 4
 	jrl ule, LABEL_EF6FA2
 	add l, 0x30
 	ld xix, 0xF07
@@ -123459,13 +123459,13 @@ LABEL_EF6FBA:
 	call LABEL_EF70E7
 	.byte 0xc1, 0xec, 0x0e, 0x21	; LD A, (0EECh)
 	ld l, a
-	.byte 0xc9, 0xdc	; CP A, 4
+	cps a, 4
 	jrl ule, LABEL_EF702A
 	ldb a, 0x4
 
 LABEL_EF702A:
 	.byte 0xf1, 0x53, 0x0e, 0x41	; LD (0E53h), A
-	.byte 0xcf, 0xdc	; CP L, 4
+	cps l, 4
 	jrl ule, LABEL_EF704A
 	add l, 0x30
 	ld xix, 0xF25
@@ -123512,13 +123512,13 @@ LABEL_EF708C:
 LABEL_EF70AF:
 	.byte 0xc1, 0xec, 0x0e, 0x21	; LD A, (0EECh)
 	ld l, a
-	.byte 0xc9, 0xdc	; CP A, 4
+	cps a, 4
 	jrl ule, LABEL_EF70BC
 	ldb a, 0x4
 
 LABEL_EF70BC:
 	.byte 0xf1, 0x54, 0x0e, 0x41	; LD (0E54h), A
-	.byte 0xcf, 0xdc	; CP L, 4
+	cps l, 4
 	jrl ule, LABEL_EF70DC
 	add l, 0x30
 	ld xix, 0xF43
@@ -123652,11 +123652,11 @@ LABEL_EF71F8:
 	.byte 0xc1, 0xb7, 0x0e, 0x3f, 0x48	; CP (0EB7h), 048h
 	jrl nz, LABEL_EF72AA
 	.byte 0xc1, 0xb8, 0x0e, 0x21	; LD A, (0EB8h)
-	.byte 0xc9, 0xdd	; CP A, 5
+	cps a, 5
 	jrl z, LABEL_EF7241
-	.byte 0xc9, 0xde	; CP A, 6
+	cps a, 6
 	jrl z, LABEL_EF7241
-	.byte 0xc9, 0xdf	; CP A, 7
+	cps a, 7
 	jrl nz, LABEL_EF72AA
 	.byte 0xf1, 0xba, 0x0e, 0xcc	; BIT 4, (0EBAh)
 	jrl z, LABEL_EF72AA
@@ -123696,7 +123696,7 @@ LABEL_EF7263:
 	.byte 0xc7, 0x3c, 0x89	; LD A, RL3
 	jrl nc, LABEL_EF7280
 	inc 1, c
-	.byte 0xcb, 0xdf	; CP C, 7
+	cps c, 7
 	jrl ule, LABEL_EF7263
 	jp LABEL_EF72AA
 
@@ -125591,7 +125591,7 @@ LABEL_EFA336:
 	.byte 0xc1, 0x65, 0x0d, 0x3f, 0x00	; CP (0D65h), 000h
 	jrl nz, LABEL_EFA360
 	.byte 0xc1, 0x68, 0x0d, 0x21	; LD A, (0D68h)
-	.byte 0xc9, 0xdc	; CP A, 4
+	cps a, 4
 	jrl ule, LABEL_EFA349
 	xor a, a
 
@@ -126000,7 +126000,7 @@ LABEL_EFAA84:
 	.byte 0x85, 0x3f, 0x00	; CP (XIY), 000h
 	jrl z, LABEL_EFAAA0
 	call LABEL_F9951A
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl nz, LABEL_EFAAA0
 	.byte 0x85, 0x69	; DEC 1, (XIY)
 	.byte 0x85, 0x3f, 0x00	; CP (XIY), 000h
@@ -126796,7 +126796,7 @@ LABEL_EFB7DB:
 	.byte 0x0e
 
 LABEL_EFBFDC:
-	.byte 0xd9, 0xd8	; CP BC, 0
+	cps bc, 0
 	jrl nz, LABEL_EFBFE5
 	jp LABEL_EFC0C5
 
@@ -126869,7 +126869,7 @@ LABEL_EFC040:
 	ld xix, xhl
 	add xix, 0x5
 	.byte 0xe1, 0x01, 0x11, 0x25	; LD XIY, (1101h)
-	.byte 0xd9, 0xd8	; CP BC, 0
+	cps bc, 0
 	jrl z, LABEL_EFC0C4
 	.byte 0x85, 0x11	; LDIR
 
@@ -126964,7 +126964,7 @@ LABEL_EFC207:
 	pop xde
 	and ix, 0xFF
 	sla iz, 1
-	.byte 0xca, 0xd8	; CP B, 0
+	cps b, 0
 	jrl nz, LABEL_EFC2DA
 
 LABEL_EFC241:
@@ -127034,7 +127034,7 @@ LABEL_EFC2AE:
 
 LABEL_EFC2DA:
 	dec 1, ix
-	.byte 0xdc, 0xdc	; CP IX, 4
+	cps ix, 4
 	jrl le, LABEL_EFC329
 	.byte 0xc3, 0x07, 0xec, 0xf0, 0x21	; LD A, (XHL + IX)
 	inc 1, c
@@ -127071,7 +127071,7 @@ LABEL_EFC329:
 	call LABEL_EFC6A0
 	.byte 0xe1, 0xfd, 0x10, 0x23	; LD XHL, (10FDh)
 	.byte 0x9b, 0x01, 0x25	; LD IY, (XHL + 001h)
-	.byte 0xdd, 0xd8	; CP IY, 0
+	cps iy, 0
 	jrl z, LABEL_EFC354
 	call LABEL_EFC6A0
 	.byte 0xe1, 0xfd, 0x10, 0x23	; LD XHL, (10FDh)
@@ -127307,7 +127307,7 @@ LABEL_EFC6DC:
 	.byte 0x78, 0xf0, 0xef, 0x0e
 
 LABEL_EFC780:
-	.byte 0xc9, 0x33, 0x07	; BIT 007h, A
+	bit 7, a
 	jrl z, LABEL_EFC7AF
 	cp a, 0x83
 	jrl z, LABEL_EFC7AF
@@ -128565,7 +128565,7 @@ LABEL_EFEA73:
 LABEL_EFEA7B:
 	call LABEL_EFEAC1
 	call LABEL_EFEA91
-	.byte 0xc9, 0x33, 0x07	; BIT 007h, A
+	bit 7, a
 	jrl nz, LABEL_EFEA90
 	.byte 0xf5, 0xf0, 0x41	; LD (XIX+), A
 	jp LABEL_EFEA7B
@@ -129855,7 +129855,7 @@ LABEL_F00A37:
 	call LABEL_EF5CF9
 	call LABEL_F00A75
 	pop xhl
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_F00A57
 	ld xiy, 0xE0C8CF
 	ld xix, 0xE0C95B
@@ -130083,7 +130083,7 @@ LABEL_F00D31:
 	.byte 0xc1, 0x54, 0x0e, 0x23	; LD C, (0E54h)
 
 LABEL_F00D41:
-	.byte 0xcb, 0xdc	; CP C, 4
+	cps c, 4
 	jr ule, LABEL_F00D47
 	lds bc, 4
 
@@ -130097,26 +130097,26 @@ LABEL_F00D47:
 
 LABEL_F00D59:
 	ld xiy, 0xE0BC44
-	.byte 0xd9, 0xd9	; CP BC, 1
+	cps bc, 1
 	jr ge, LABEL_F00D6C
 	.byte 0xc1, 0x52, 0x0e, 0x21	; LD A, (0E52h)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_F00D90
 	jr LABEL_F00DA4
 
 LABEL_F00D6C:
-	.byte 0xd9, 0xda	; CP BC, 2
+	cps bc, 2
 	jr ge, LABEL_F00D80
 	add xiy, 0x5A
 	.byte 0xc1, 0x53, 0x0e, 0x21	; LD A, (0E53h)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_F00D90
 	jr LABEL_F00DA4
 
 LABEL_F00D80:
 	add xiy, 0xB4
 	.byte 0xc1, 0x54, 0x0e, 0x21	; LD A, (0E54h)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_F00D90
 	jr LABEL_F00DA4
 
@@ -130139,7 +130139,7 @@ Display_RedrawSelection:	; F00DA5
 LABEL_F00DB0:
 	.byte 0xf2, 0xa8, 0xef, 0x03, 0x00, 0x01	; LD (03EFA8h), 001h
 	.byte 0xc1, 0x65, 0x0d, 0x21	; LD A, (0D65h)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_F00DE3
 	pushw wa
 	ld xiy, 0xE0C50E
@@ -130153,7 +130153,7 @@ LABEL_F00DB0:
 	jp LABEL_F00E34
 
 LABEL_F00DE3:
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	jr nz, LABEL_F00E0F
 
 LABEL_F00DE7:
@@ -130169,7 +130169,7 @@ LABEL_F00DE7:
 	jr LABEL_F00E34
 
 LABEL_F00E0F:
-	.byte 0xc9, 0xda	; CP A, 2
+	cps a, 2
 	jr z, LABEL_F00DE7
 	ld xiy, 0xE0C50E
 	ld xix, 0xE0C516
@@ -130200,7 +130200,7 @@ LABEL_F00E50:
 	ld a, e
 	add xiz, xwa
 	ld d, (xiz)
-	.byte 0xcc, 0xd8	; CP D, 0
+	cps d, 0
 	jr z, LABEL_F00E96
 
 LABEL_F00E63:
@@ -130223,7 +130223,7 @@ LABEL_F00E63:
 
 LABEL_F00E96:
 	inc 1, e
-	.byte 0xcd, 0xdb	; CP E, 3
+	cps e, 3
 	jr ge, LABEL_F00EB2
 	add xiy, 0x4
 	ldb a, 0x8
@@ -130297,7 +130297,7 @@ Display_RedrawAltContent:	; F00F3A
 	add xix, xwa
 	xor xwa, xwa
 	.byte 0xc1, 0x5b, 0x0f, 0x21	; LD A, (0F5Bh)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F00F97
 	add xix, xwa
 	.byte 0xf2, 0xa8, 0xef, 0x03, 0x00, 0x02	; LD (03EFA8h), 002h
@@ -130509,7 +130509,7 @@ LABEL_F01158:
 	push xix
 	inc 2, xix
 	ld a, (xix)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F011B8
 	pushw bc
 	push xiy
@@ -130520,13 +130520,13 @@ LABEL_F01158:
 	popw bc
 	inc 1, xix
 	ld a, (xix)
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	jr nz, LABEL_F0117A
 	.byte 0xf1, 0xb3, 0x11, 0x00, 0x00	; LD (11B3h), 000h
 	jr LABEL_F01195
 
 LABEL_F0117A:
-	.byte 0xc9, 0xda	; CP A, 2
+	cps a, 2
 	jr nz, LABEL_F01184
 	.byte 0xf1, 0xb3, 0x11, 0x41	; LD (11B3h), A
 	jr LABEL_F01195
@@ -130546,7 +130546,7 @@ LABEL_F01195:
 	dec 1, xix
 	ld a, (xix)
 	push xiy
-	.byte 0xc9, 0x33, 0x07	; BIT 007h, A
+	bit 7, a
 	jr nz, LABEL_F011AB
 	add xiy, 0xF
 	jr LABEL_F011B1
@@ -130565,7 +130565,7 @@ LABEL_F011B8:
 	add xix, 0x4
 	add xiy, 0x2D
 	inc 1, bc
-	.byte 0xd9, 0xdf	; CP BC, 7
+	cps bc, 7
 	jr ule, LABEL_F01158
 
 LABEL_F011CB:
@@ -130884,7 +130884,7 @@ LABEL_F0168E:
 	pushw wa
 	push xde
 	push xhl
-	.byte 0xd9, 0xd8	; CP BC, 0
+	cps bc, 0
 	jr z, LABEL_F016B3
 	.byte 0xe1, 0x7e, 0x26, 0x23	; LD XHL, (267Eh)
 	.byte 0xe1, 0x7a, 0x26, 0x22	; LD XDE, (267Ah)
@@ -130977,7 +130977,7 @@ LABEL_F01725:
 
 LABEL_F017BA:
 	.byte 0xc1, 0x77, 0x28, 0x21	; LD A, (2877h)
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	jr c, LABEL_F017CC
 	cp a, 0x10
 	jr ule, LABEL_F017C9
@@ -131038,7 +131038,7 @@ LABEL_F0184F:
 	.byte 0xe1, 0xfd, 0x10, 0x23	; LD XHL, (10FDh)
 	.byte 0x9b, 0x01, 0x24	; LD IX, (XHL + 001h)
 	ld de, ix
-	.byte 0xdc, 0xd8	; CP IX, 0
+	cps ix, 0
 	jr z, LABEL_F018EC
 	ld iy, ix
 	.byte 0xbb, 0x01, 0x02, 0x00, 0x00	; LDW (XHL + 001h), 0000h
@@ -131069,7 +131069,7 @@ LABEL_F018A6:
 	.byte 0xbb, 0x01, 0x52	; LD (XHL + 001h), DE
 
 LABEL_F018B1:
-	.byte 0xda, 0xd8	; CP DE, 0
+	cps de, 0
 	jr z, LABEL_F018C4
 	pushw iy
 	ld iy, de
@@ -131649,9 +131649,9 @@ LABEL_F023CF:
 	.byte 0xf3, 0xfd, 0x06, 0x01, 0x51	; LD (XSP + 0106h), BC
 	.byte 0xd3, 0xfd, 0x08, 0x01, 0x6a	; DECW 2, (XSP + 0108h)
 	ld wa, hl
-	.byte 0xd8, 0xda	; CP WA, 2
+	cps wa, 2
 	jr z, LABEL_F0244A
-	.byte 0xd8, 0xd9	; CP WA, 1
+	cps wa, 1
 	jr nz, LABEL_F0245F
 	.byte 0x92, 0x04	; PUSHW (XDE)
 	.byte 0x0b, 0xe0, 0x00	; PUSHW 00e0h
@@ -133940,7 +133940,7 @@ LABEL_F061ED:
 	.byte 0xb7, 0x31	; LDA XBC, XSP
 	ldb a, 0x80
 	ld (xbc), a
-	.byte 0xc9, 0x31, 0x03	; SET 003h, A
+	set 3, a
 	ld (xbc), a
 	.byte 0x8f, 0x0a, 0x21	; LD A, (XSP + 00ah)
 	.byte 0xb9, 0x01, 0x41	; LD (XBC + 001h), A
@@ -134174,7 +134174,7 @@ LABEL_F06420:
 	jr nz, LABEL_F06432
 	.byte 0xb0, 0x00, 0x87	; LD (XWA), 087h
 	ld c, (xde)
-	.byte 0xcb, 0x31, 0x06	; SET 006h, C
+	set 6, c
 	ld (xde), c
 	jr LABEL_F06435
 
@@ -134327,7 +134327,7 @@ LABEL_F0665D:
 	jr nz, LABEL_F0666F
 	.byte 0xb0, 0x00, 0x8f	; LD (XWA), 08fh
 	ld c, (xde)
-	.byte 0xcb, 0x31, 0x06	; SET 006h, C
+	set 6, c
 	ld (xde), c
 	jr LABEL_F06672
 
@@ -134548,15 +134548,15 @@ LABEL_F06898:
 	jr z, LABEL_F06916
 	cp a, 0x11
 	jr z, LABEL_F06916
-	.byte 0xc9, 0xdc	; CP A, 4
+	cps a, 4
 	jr z, LABEL_F06911
-	.byte 0xc9, 0xdb	; CP A, 3
+	cps a, 3
 	jr z, LABEL_F0690D
-	.byte 0xc9, 0xda	; CP A, 2
+	cps a, 2
 	jr z, LABEL_F06909
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	jr z, LABEL_F06905
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	.byte 0xb0, 0xfe	; RET NZ
 	ldb a, 0x0
 	jr LABEL_F06918
@@ -134734,9 +134734,9 @@ LABEL_F06A3A:
 	.byte 0xd7, 0xfa, 0x04	; PUSH QIZ
 	.byte 0xbf, 0x02, 0x60	; LD (XSP + 002h), XWA
 	.byte 0xc1, 0x5d, 0x06, 0x23	; LD C, (065Dh)
-	.byte 0xcb, 0xd9	; CP C, 1
+	cps c, 1
 	jr c, LABEL_F06A55
-	.byte 0xcb, 0xdc	; CP C, 4
+	cps c, 4
 	jr ugt, LABEL_F06A55
 	.byte 0xaf, 0x02, 0x20	; LD XWA, (XSP + 002h)
 	ld (xwa), c
@@ -134752,7 +134752,7 @@ LABEL_F06A60:
 	ld a, (xwa)
 	extz wa
 	calr LABEL_F06B0B
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_F06A95
 	.byte 0xc7, 0xfb, 0xa9	; LD QIZH, 1
 
@@ -134760,7 +134760,7 @@ LABEL_F06A71:
 	.byte 0xc7, 0xfb, 0x89	; LD A, QIZH
 	extz wa
 	calr LABEL_F06B0B
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F06A82
 	.byte 0xc7, 0xfb, 0x8b	; LD C, QIZH
 	jr LABEL_F06A8C
@@ -134802,9 +134802,9 @@ LABEL_F06AA0:
 	.byte 0xef, 0x60, 0x0e
 
 LABEL_F06B0B:
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	jr c, LABEL_F06B13
-	.byte 0xc9, 0xdc	; CP A, 4
+	cps a, 4
 	jr ule, LABEL_F06B16
 
 LABEL_F06B13:
@@ -134820,7 +134820,7 @@ LABEL_F06B16:
 	calr LABEL_F06B4B
 	.byte 0xc1, 0x5e, 0x06, 0x21	; LD A, (065Eh)
 	and a, l
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	.byte 0xdb, 0x7e	; SCC NZ, HL
 	ret
 
@@ -134848,7 +134848,7 @@ LABEL_F06B4B:
 	ld l, a
 	lds de, 0
 	extz bc
-	.byte 0xd9, 0xd8	; CP BC, 0
+	cps bc, 0
 	.byte 0xb0, 0xf3	; RET ULE
 
 LABEL_F06B55:
@@ -134928,9 +134928,9 @@ LABEL_F06B5E:
 	.byte 0xef, 0x66, 0x0e
 
 LABEL_F06D71:
-	.byte 0xcb, 0xd8	; CP C, 0
+	cps c, 0
 	jr z, LABEL_F06D79
-	.byte 0xcb, 0xdc	; CP C, 4
+	cps c, 4
 	jr ule, LABEL_F06D7D
 
 LABEL_F06D79:
@@ -134941,7 +134941,7 @@ LABEL_F06D7D:
 	dec 1, c
 	extz bc
 	sla bc, 2
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_F06D92
 	extz xbc
 	.byte 0xb9, 0x3b, 0x31	; LDA XBC, XBC + 03bh
@@ -134952,13 +134952,13 @@ LABEL_F06D8F:
 	ret
 
 LABEL_F06D92:
-	.byte 0xc9, 0xda	; CP A, 2
+	cps a, 2
 	jr nz, LABEL_F06D9D
 	ld xwa, 0x4B
 	jr LABEL_F06DA6
 
 LABEL_F06D9D:
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	jr nz, LABEL_F06D79
 	ld xwa, 0x2B
 
@@ -134966,7 +134966,7 @@ LABEL_F06DA6:
 	.byte 0xf3, 0x07, 0xe0, 0xe4, 0x30	; LDA XWA, XWA + BC
 	ld (xde), a
 	jr LABEL_F06D8F
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	jr nz, LABEL_F06DBA
 	ldb a, 0x6
 
@@ -134976,13 +134976,13 @@ LABEL_F06DB5:
 	ret
 
 LABEL_F06DBA:
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_F06DC2
 	ldb a, 0x26
 	jr LABEL_F06DB5
 
 LABEL_F06DC2:
-	.byte 0xc9, 0xda	; CP A, 2
+	cps a, 2
 	jr nz, LABEL_F06DCA
 	ldb a, 0x38
 	jr LABEL_F06DB5
@@ -135200,10 +135200,10 @@ LABEL_F07208:
 	ret
 
 LABEL_F07213:
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	jr nz, LABEL_F07237
 	ldb w, 0x0
-	.byte 0xcd, 0xd8	; CP E, 0
+	cps e, 0
 	.byte 0xb0, 0xf3	; RET ULE
 	.byte 0xf2, 0xf3, 0x0b, 0x02, 0x34	; LDA XIX, 020BF3h
 	lds hl, 0
@@ -135218,10 +135218,10 @@ LABEL_F07224:
 	ret
 
 LABEL_F07237:
-	.byte 0xc9, 0xda	; CP A, 2
+	cps a, 2
 	jr nz, LABEL_F0725B
 	ldb w, 0x0
-	.byte 0xcd, 0xd8	; CP E, 0
+	cps e, 0
 	.byte 0xb0, 0xf3	; RET ULE
 	.byte 0xf2, 0x03, 0x0c, 0x02, 0x34	; LDA XIX, 020C03h
 	lds hl, 0
@@ -135236,10 +135236,10 @@ LABEL_F07248:
 	ret
 
 LABEL_F0725B:
-	.byte 0xc9, 0xdb	; CP A, 3
+	cps a, 3
 	jr nz, LABEL_F0727F
 	ldb w, 0x0
-	.byte 0xcd, 0xd8	; CP E, 0
+	cps e, 0
 	.byte 0xb0, 0xf3	; RET ULE
 	.byte 0xf2, 0x13, 0x0c, 0x02, 0x34	; LDA XIX, 020C13h
 	lds hl, 0
@@ -135254,10 +135254,10 @@ LABEL_F0726C:
 	ret
 
 LABEL_F0727F:
-	.byte 0xc9, 0xdc	; CP A, 4
+	cps a, 4
 	.byte 0xb0, 0xfe	; RET NZ
 	ldb w, 0x0
-	.byte 0xcd, 0xd8	; CP E, 0
+	cps e, 0
 	.byte 0xb0, 0xf3	; RET ULE
 	.byte 0xf2, 0x23, 0x0c, 0x02, 0x34	; LDA XIX, 020C23h
 	lds hl, 0
@@ -135400,7 +135400,7 @@ LABEL_F075C6:
 	.byte 0xbf, 0x08, 0x33	; LDA XHL, XSP + 008h
 	ld a, (xhl)
 	ld c, a
-	.byte 0xcb, 0x30, 0x07	; RES 007h, C
+	res 7, c
 	ld a, c
 	ld (xhl), c
 	.byte 0xbb, 0x01, 0x32	; LDA XDE, XHL + 001h
@@ -136933,7 +136933,7 @@ LABEL_F09773:
 	.byte 0x02, 0x00
 
 LABEL_F098BD:
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	jr nz, LABEL_F098C6
 	.byte 0xf1, 0xa7, 0x28, 0xba	; SET 2, (28A7h)
 	ret
@@ -137344,11 +137344,11 @@ LABEL_F0A18F:
 	jr nz, LABEL_F0A202
 	ldw wa, 0x81
 	call LABEL_F071AC
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_F0A1AB
 	ldw wa, 0x10
 	call LABEL_F071B9
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F0A1B6
 
 LABEL_F0A1AB:
@@ -137534,7 +137534,7 @@ LABEL_F0A338:
 	extz bc
 	call LABEL_F098E0
 	call LABEL_F07197
-	.byte 0xcf, 0xdc	; CP L, 4
+	cps l, 4
 	jr ule, LABEL_F0A375
 	.byte 0x0b, 0x20, 0x00	; PUSHW 0020h
 	call LABEL_F0EE6A
@@ -137603,7 +137603,7 @@ LABEL_F0A3E3:
 
 LABEL_F0A406:
 	call LABEL_F0990A
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F0A420
 	lds wa, 1
 	call LABEL_F09900
@@ -137631,11 +137631,11 @@ LABEL_F0A444:
 	call LABEL_F0718C
 	ldw wa, 0x86
 	call LABEL_F071AC
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_F0A460
 	ldw wa, 0x12
 	call LABEL_F071B9
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F0A46C
 
 LABEL_F0A460:
@@ -138378,7 +138378,7 @@ LABEL_F0B49A:
 	extz wa
 	call LABEL_F09419
 	call LABEL_F07197
-	.byte 0xcf, 0xdc	; CP L, 4
+	cps l, 4
 	jr ugt, LABEL_F0B4CB
 	.byte 0xbf, 0x02, 0x30	; LDA XWA, XSP + 002h
 	call LABEL_F071A7
@@ -138593,7 +138593,7 @@ LABEL_F0B86C:
 	extz bc
 	call LABEL_F06B2E
 	call LABEL_F07197
-	.byte 0xcf, 0xdb	; CP L, 3
+	cps l, 3
 	jrl ule, LABEL_F0B93A
 	call LABEL_F07191
 	call LABEL_F07197
@@ -138616,7 +138616,7 @@ LABEL_F0B8BB:
 	extz wa
 	call LABEL_F094C0
 	call LABEL_F07197
-	.byte 0xcf, 0xdc	; CP L, 4
+	cps l, 4
 	jr ugt, LABEL_F0B8F0
 	.byte 0xbf, 0x04, 0x30	; LDA XWA, XSP + 004h
 	call LABEL_F071A7
@@ -140299,7 +140299,7 @@ LABEL_F0E935:
 
 LABEL_F0E94B:
 	call 0xEF2E2C
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr ge, LABEL_F0E935
 
 LABEL_F0E953:
@@ -140312,7 +140312,7 @@ LABEL_F0E953:
 
 LABEL_F0E964:
 	call 0xEF2E2C
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr ge, LABEL_F0E964
 	jrl LABEL_F0EB65
 
@@ -140322,7 +140322,7 @@ LABEL_F0E96F:
 	cp c, 0x80
 	jrl nz, LABEL_F0EADA
 	.byte 0x8a, 0x02, 0x21	; LD A, (XDE + 002h)
-	.byte 0xc9, 0xdc	; CP A, 4
+	cps a, 4
 	jr nz, LABEL_F0E9B3
 	lds iz, 0
 	jr LABEL_F0E9A8
@@ -140342,7 +140342,7 @@ LABEL_F0E986:
 
 LABEL_F0E9A8:
 	call 0xEF2E2C
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr ge, LABEL_F0E986
 	jrl LABEL_F0EB61
 
@@ -140358,12 +140358,12 @@ LABEL_F0E9C3:
 	jr z, LABEL_F0E9D1
 	cp a, 0xC
 	jr z, LABEL_F0E9D1
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_F0EA31
 
 LABEL_F0E9D1:
 	call 0xEF2E2C
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr lt, LABEL_F0E9F1
 	.byte 0xd7, 0xfa, 0x88	; LD WA, QIZ
 	.byte 0xd7, 0xfa, 0x61	; INC 1, QIZ
@@ -140400,7 +140400,7 @@ LABEL_F0EA1A:
 LABEL_F0EA31:
 	call 0xEF2E2C
 	.byte 0xf2, 0x33, 0x0c, 0x02, 0x30	; LDA XWA, 020C33h
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr lt, LABEL_F0EA53
 	.byte 0xd7, 0xfa, 0x89	; LD BC, QIZ
 	.byte 0xd7, 0xfa, 0x61	; INC 1, QIZ
@@ -140499,10 +140499,10 @@ LABEL_F0EAE4:
 	dec 1, iz
 
 LABEL_F0EAFE:
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr z, LABEL_F0EB0A
 	call 0xEF2E2C
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr ge, LABEL_F0EAE4
 
 LABEL_F0EB0A:
@@ -140553,13 +140553,13 @@ LABEL_F0EB65:
 
 LABEL_F0EB67:
 	call 0xEF2E71
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	.byte 0xb0, 0xf6	; RET Z
 
 LABEL_F0EB6F:
 	calr LABEL_F0E92F
 	call 0xEF2E71
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_F0EB6F
 	ret
 
@@ -145595,9 +145595,9 @@ LABEL_F16DF3:
 	extz wa
 	.byte 0xc9, 0x0a, 0x03	; DIV_A 003h
 	extz wa
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr mi, LABEL_F16E57
-	.byte 0xd8, 0xde	; CP WA, 6
+	cps wa, 6
 	jr gt, LABEL_F16E57
 	add wa, wa
 	.byte 0xf2, 0x1a, 0x61, 0xe1, 0x34	; LDA XIX, 0E1611Ah
@@ -145659,13 +145659,13 @@ LABEL_F16E91:
 	ld xwa, (xsp)
 	exts xbc
 	add xbc, xwa
-	.byte 0xcd, 0xdb	; CP E, 3
+	cps e, 3
 	jr z, LABEL_F16EF4
-	.byte 0xcd, 0xda	; CP E, 2
+	cps e, 2
 	jr z, LABEL_F16EEA
-	.byte 0xcd, 0xd9	; CP E, 1
+	cps e, 1
 	jr z, LABEL_F16EE0
-	.byte 0xcd, 0xd8	; CP E, 0
+	cps e, 0
 	jr nz, LABEL_F16F1B
 	.byte 0x89, 0x18, 0x27	; LD L, (XBC + 018h)
 	ld xwa, 0x19
@@ -145808,7 +145808,7 @@ LABEL_F1704A:
 	.byte 0xe1, 0x72, 0x0c, 0x83	; ADD XHL, (0C72h)
 	.byte 0xbb, 0x60, 0x50	; LD (XHL + 060h), WA
 	inc 1, iz
-	.byte 0xde, 0xdd	; CP IZ, 5
+	cps iz, 5
 	jr ule, LABEL_F1704A
 	.byte 0xd7, 0xfa, 0x61	; INC 1, QIZ
 	.byte 0xd7, 0xfa, 0xcf, 0x1d, 0x00	; CP QIZ, 001dh
@@ -145873,9 +145873,9 @@ LABEL_F1712D:
 	.byte 0xe1, 0x72, 0x0c, 0x20	; LD XWA, (0C72h)
 	extz bc
 	dec 1, bc
-	.byte 0xd9, 0xd8	; CP BC, 0
+	cps bc, 0
 	jr lt, LABEL_F17186
-	.byte 0xd9, 0xde	; CP BC, 6
+	cps bc, 6
 	jr gt, LABEL_F17186
 	add bc, bc
 	.byte 0xf2, 0x28, 0x61, 0xe1, 0x34	; LDA XIX, 0E16128h
@@ -145919,9 +145919,9 @@ LABEL_F17189:
 	.byte 0x8f, 0x08, 0x21	; LD A, (XSP + 008h)
 	extz wa
 	dec 1, wa
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jrl lt, LABEL_F17255
-	.byte 0xd8, 0xde	; CP WA, 6
+	cps wa, 6
 	jrl gt, LABEL_F17255
 	add wa, wa
 	.byte 0xf2, 0x36, 0x61, 0xe1, 0x34	; LDA XIX, 0E16136h
@@ -145984,7 +145984,7 @@ LABEL_F17203:
 	jr LABEL_F1725A
 
 LABEL_F17255:
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jrl nz, LABEL_F171D5
 
 LABEL_F1725A:
@@ -147020,7 +147020,7 @@ LABEL_F18A74:
 	.byte 0xe3, 0xfd, 0x02, 0x04, 0x23	; LD XHL, (XSP + 0402h)
 	.byte 0xb3, 0xe8	; CALL T, XHL
 	ld iz, hl
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jrl lt, LABEL_F18BF1
 	.byte 0xbf, 0x02, 0x30	; LDA XWA, XSP + 002h
 	.byte 0x80, 0x3f, 0x48	; CP (XWA), 048h
@@ -147037,7 +147037,7 @@ LABEL_F18A74:
 	.byte 0xe3, 0xfd, 0x02, 0x04, 0x23	; LD XHL, (XSP + 0402h)
 	.byte 0xb3, 0xe8	; CALL T, XHL
 	ld iz, hl
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jrl lt, LABEL_F18BF1
 	lds wa, 1
 	calr LABEL_F17189
@@ -147049,7 +147049,7 @@ LABEL_F18A74:
 	.byte 0xe3, 0xfd, 0x02, 0x04, 0x23	; LD XHL, (XSP + 0402h)
 	.byte 0xb3, 0xe8	; CALL T, XHL
 	ld iz, hl
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jrl lt, LABEL_F18BF1
 	lds wa, 2
 	calr LABEL_F17189
@@ -147061,7 +147061,7 @@ LABEL_F18A74:
 	.byte 0xe3, 0xfd, 0x02, 0x04, 0x23	; LD XHL, (XSP + 0402h)
 	.byte 0xb3, 0xe8	; CALL T, XHL
 	ld iz, hl
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jrl lt, LABEL_F18BF1
 	lds wa, 3
 	calr LABEL_F17189
@@ -147073,7 +147073,7 @@ LABEL_F18A74:
 	.byte 0xe3, 0xfd, 0x02, 0x04, 0x23	; LD XHL, (XSP + 0402h)
 	.byte 0xb3, 0xe8	; CALL T, XHL
 	ld iz, hl
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jrl lt, LABEL_F18BF1
 	lds wa, 4
 	calr LABEL_F17189
@@ -147085,7 +147085,7 @@ LABEL_F18A74:
 	.byte 0xe3, 0xfd, 0x02, 0x04, 0x23	; LD XHL, (XSP + 0402h)
 	.byte 0xb3, 0xe8	; CALL T, XHL
 	ld iz, hl
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jrl lt, LABEL_F18BF1
 	lds wa, 5
 	calr LABEL_F17189
@@ -147097,7 +147097,7 @@ LABEL_F18A74:
 	.byte 0xe3, 0xfd, 0x02, 0x04, 0x23	; LD XHL, (XSP + 0402h)
 	.byte 0xb3, 0xe8	; CALL T, XHL
 	ld iz, hl
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr lt, LABEL_F18BF1
 	lds wa, 6
 	calr LABEL_F17189
@@ -147109,7 +147109,7 @@ LABEL_F18A74:
 	.byte 0xe3, 0xfd, 0x02, 0x04, 0x23	; LD XHL, (XSP + 0402h)
 	.byte 0xb3, 0xe8	; CALL T, XHL
 	ld iz, hl
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr lt, LABEL_F18BF1
 	lds wa, 7
 	calr LABEL_F17189
@@ -147124,7 +147124,7 @@ LABEL_F18A74:
 	.byte 0xe3, 0xfd, 0x02, 0x04, 0x23	; LD XHL, (XSP + 0402h)
 	.byte 0xb3, 0xe8	; CALL T, XHL
 	ld iz, hl
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr lt, LABEL_F18BF1
 	.byte 0xe1, 0x96, 0x0c, 0x21	; LD XBC, (0C96h)
 	.byte 0xe1, 0x92, 0x0c, 0x22	; LD XDE, (0C92h)
@@ -147273,7 +147273,7 @@ LABEL_F18D4A:
 	.byte 0xb4, 0xe8	; CALL T, XIX
 	.byte 0xe3, 0xfd, 0x10, 0x04, 0x24	; LD XIX, (XSP + 0410h)
 	.byte 0xb4, 0xe8	; CALL T, XIX
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl lt, LABEL_F18EC1
 	lds wa, 1
 	calr LABEL_F1712D
@@ -147289,7 +147289,7 @@ LABEL_F18D4A:
 	.byte 0xb4, 0xe8	; CALL T, XIX
 	.byte 0xe3, 0xfd, 0x10, 0x04, 0x24	; LD XIX, (XSP + 0410h)
 	.byte 0xb4, 0xe8	; CALL T, XIX
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl lt, LABEL_F18EC1
 	lds wa, 2
 	calr LABEL_F1712D
@@ -147305,7 +147305,7 @@ LABEL_F18D4A:
 	.byte 0xb4, 0xe8	; CALL T, XIX
 	.byte 0xe3, 0xfd, 0x10, 0x04, 0x24	; LD XIX, (XSP + 0410h)
 	.byte 0xb4, 0xe8	; CALL T, XIX
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl lt, LABEL_F18EC1
 	lds wa, 3
 	calr LABEL_F1712D
@@ -147321,7 +147321,7 @@ LABEL_F18D4A:
 	.byte 0xb4, 0xe8	; CALL T, XIX
 	.byte 0xe3, 0xfd, 0x10, 0x04, 0x24	; LD XIX, (XSP + 0410h)
 	.byte 0xb4, 0xe8	; CALL T, XIX
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl lt, LABEL_F18EC1
 	lds wa, 4
 	calr LABEL_F1712D
@@ -147337,7 +147337,7 @@ LABEL_F18D4A:
 	.byte 0xb4, 0xe8	; CALL T, XIX
 	.byte 0xe3, 0xfd, 0x10, 0x04, 0x24	; LD XIX, (XSP + 0410h)
 	.byte 0xb4, 0xe8	; CALL T, XIX
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl lt, LABEL_F18EC1
 	lds wa, 5
 	calr LABEL_F1712D
@@ -147354,7 +147354,7 @@ LABEL_F18D4A:
 	.byte 0xb4, 0xe8	; CALL T, XIX
 	.byte 0xe3, 0xfd, 0x10, 0x04, 0x24	; LD XIX, (XSP + 0410h)
 	.byte 0xb4, 0xe8	; CALL T, XIX
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr lt, LABEL_F18EC1
 	lds wa, 6
 	calr LABEL_F1712D
@@ -147371,7 +147371,7 @@ LABEL_F18D4A:
 	.byte 0xb4, 0xe8	; CALL T, XIX
 	.byte 0xe3, 0xfd, 0x10, 0x04, 0x24	; LD XIX, (XSP + 0410h)
 	.byte 0xb4, 0xe8	; CALL T, XIX
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr lt, LABEL_F18EC1
 	lds wa, 7
 	calr LABEL_F1712D
@@ -147388,7 +147388,7 @@ LABEL_F18D4A:
 	.byte 0xb4, 0xe8	; CALL T, XIX
 	.byte 0xe3, 0xfd, 0x10, 0x04, 0x24	; LD XIX, (XSP + 0410h)
 	.byte 0xb4, 0xe8	; CALL T, XIX
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr lt, LABEL_F18EC1
 	.byte 0xe1, 0x92, 0x0c, 0x20	; LD XWA, (0C92h)
 	.byte 0xe3, 0xfd, 0x14, 0x04, 0x24	; LD XIX, (XSP + 0414h)
@@ -147633,7 +147633,7 @@ LABEL_F1944E:
 	call LABEL_F6323F
 	.byte 0xc1, 0xb0, 0x35, 0x21	; LD A, (35B0h)
 	extz wa
-	.byte 0xd8, 0x33, 0x00	; BIT 000h, WA
+	bit 0, wa
 	jr z, LABEL_F19499
 	.byte 0xbf, 0x0a, 0x00, 0x01	; LD (XSP + 00ah), 001h
 
@@ -147689,7 +147689,7 @@ LABEL_F194F3:
 	.byte 0x88, 0x02, 0x23	; LD C, (XWA + 002h)
 	cp l, 0x47
 	jr nz, LABEL_F19510
-	.byte 0xcd, 0xd8	; CP E, 0
+	cps e, 0
 	jr nz, LABEL_F19510
 	cp c, 0x4B
 	jr z, LABEL_F1952E
@@ -147947,7 +147947,7 @@ CmpBndRngFunc:
 LABEL_F1A35A:
 	.byte 0x9a, 0x04, 0x21	; LD BC, (XDE + 004h)
 	.byte 0xaa, 0x08, 0x20	; LD XWA, (XDE + 008h)
-	.byte 0xd9, 0xd8	; CP BC, 0
+	cps bc, 0
 	jr lt, LABEL_F1A37A
 	cp bc, 0xC
 	jr gt, LABEL_F1A37A
@@ -148340,9 +148340,9 @@ LABEL_F1A78B:
 	ld wa, (xwa)
 	.byte 0xf2, 0x06, 0xda, 0x03, 0x33	; LDA XHL, 03DA06h
 	dec 1, wa
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jrl lt, LABEL_F1A86F
-	.byte 0xd8, 0xdf	; CP WA, 7
+	cps wa, 7
 	jrl gt, LABEL_F1A86F
 	add wa, wa
 	.byte 0xf2, 0xf0, 0xce, 0xe1, 0x34	; LDA XIX, 0E1CEF0h
@@ -148470,9 +148470,9 @@ GridCheck_Handler0:
 	.byte 0xb8, 0x02, 0x52	; LD (XWA + 002h), DE	; Store high word
 	ld wa, (xwa)	; Load state value
 	exts xde	; Sign extend DE
-	.byte 0xd8, 0xda	; CP WA, 2	; Check if state == 2
+	cps wa, 2	; Check if state == 2
 	.byte 0x66, 0x11	; JR Z, GridCheck_Handler0_State2
-	.byte 0xd8, 0xd9	; CP WA, 1	; Check if state == 1
+	cps wa, 1	; Check if state == 1
 	jrl nz, LABEL_F1A9BC	; If neither, exit
 	ld xwa, 0x144000D	; Widget ID
 	ld xbc, 0x1E40008	; Event: grid check state 1 (case 0)
@@ -148502,9 +148502,9 @@ GridCheck_Handler1:
 	.byte 0xb8, 0x02, 0x52	; LD (XWA + 002h), DE	; Store high word
 	ld wa, (xwa)	; Load state value
 	exts xde	; Sign extend DE
-	.byte 0xd8, 0xda	; CP WA, 2	; Check if state == 2
+	cps wa, 2	; Check if state == 2
 	.byte 0x66, 0x10	; JR Z, GridCheck_Handler1_State2
-	.byte 0xd8, 0xd9	; CP WA, 1	; Check if state == 1
+	cps wa, 1	; Check if state == 1
 	jr nz, LABEL_F1A9BC	; If neither, exit
 	ld xwa, 0x144000D	; Widget ID
 	ld xbc, 0x1E40009	; Event: grid check state 1 (case 1)
@@ -148535,9 +148535,9 @@ LABEL_F1A95C:
 	ld de, (xbc)
 	ld bc, (xwa)
 	exts xbc
-	.byte 0xda, 0xda	; CP DE, 2
+	cps de, 2
 	jr z, LABEL_F1A98B
-	.byte 0xda, 0xd9	; CP DE, 1
+	cps de, 1
 	jr nz, LABEL_F1A9AA
 	lds wa, 0
 	ld xiz, 0x3DA4E
@@ -148581,7 +148581,7 @@ LABEL_F1A9C3:
 	sll xbc, 3
 	add xbc, 0x10
 	add xbc, xix
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_F1A9F6
 	.byte 0x89, 0x02, 0x27	; LD L, (XBC + 002h)
 	cp l, 0x7F
@@ -148648,7 +148648,7 @@ LABEL_F1AA7A:
 	ld xbc, 0x1E00053
 	.byte 0xaf, 0x08, 0x22	; LD XDE, (XSP + 008h)
 	call 0xFA9660
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F1AABE
 	.byte 0xaf, 0x0c, 0x20	; LD XWA, (XSP + 00ch)
 	ld xbc, 0x1E0006C
@@ -148695,7 +148695,7 @@ LABEL_F1AAFD:
 	call LABEL_FCD437
 	.byte 0xbe, 0x22, 0x31	; LDA XBC, XIZ + 022h
 	ld xwa, (xbc)
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_F1AB10
 	.byte 0xb0, 0x02, 0x00, 0x00	; LDW (XWA), 0000h
 	jr LABEL_F1AB14
@@ -150020,9 +150020,9 @@ LABEL_F1B8BD:
 	ld xwa, xiz
 	call 0xFA6266
 	.byte 0x8b, 0x24, 0x21	; LD A, (XHL + 024h)
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	jr z, LABEL_F1B8EF
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_F1B955
 	ld xwa, 0x144001A
 	ld xbc, 0x1E4002B
@@ -151025,9 +151025,9 @@ LABEL_F1C372:
 	ld wa, (xwa)
 	dec 2, a
 	extz wa
-	.byte 0xd9, 0xda	; CP BC, 2
+	cps bc, 2
 	jr z, LABEL_F1C3B5
-	.byte 0xd9, 0xd9	; CP BC, 1
+	cps bc, 1
 	jr nz, LABEL_F1C3E3
 	.byte 0xf1, 0xab, 0x37, 0x31	; LDA XBC, 37ABh
 	extz xwa
@@ -151045,7 +151045,7 @@ LABEL_F1C3B5:
 	extz xwa
 	add xwa, xbc
 	ld a, (xwa)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_F1C3D2
 	ld xwa, 0xE1DF0E
 	push xwa
@@ -151823,13 +151823,13 @@ LABEL_F1CBFF:
 	ld xwa, xiz
 	call 0xFA6266
 	.byte 0x8b, 0x24, 0x21	; LD A, (XHL + 024h)
-	.byte 0xc9, 0xdb	; CP A, 3
+	cps a, 3
 	jr z, LABEL_F1CC4E
-	.byte 0xc9, 0xda	; CP A, 2
+	cps a, 2
 	jr z, LABEL_F1CC40
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	jr z, LABEL_F1CC32
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jrl nz, LABEL_F1CCEB
 	ld xwa, 0x1440010
 	ld xbc, 0x1E40017
@@ -151988,9 +151988,9 @@ LABEL_F1CDD0:
 	dec 4, wa
 	exts xwa
 	add xwa, xix
-	.byte 0xdb, 0xda	; CP HL, 2
+	cps hl, 2
 	jr z, LABEL_F1CE54
-	.byte 0xdb, 0xd9	; CP HL, 1
+	cps hl, 1
 	jr nz, LABEL_F1CE6A
 	ld xbc, xwa
 	ld l, (xwa)
@@ -152165,9 +152165,9 @@ MspRgpShowHideFunc:
 	or xde, xde
 	jr nz, LABEL_F1CFC6
 	.byte 0xc1, 0x3d, 0x7f, 0x21	; LD A, (7F3Dh)
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	jr z, LABEL_F1CFB8
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_F1CFC6
 	ld xwa, 0x28800
 	ldw bc, 0xF
@@ -152396,7 +152396,7 @@ LABEL_F1D187:
 	ld xwa, xiz
 	call 0xFA6266
 	.byte 0xc1, 0x14, 0x7f, 0x21	; LD A, (7F14h)
-	.byte 0xc9, 0xdd	; CP A, 5
+	cps a, 5
 	jr ule, LABEL_F1D19D
 	dec 6, a
 
@@ -152866,9 +152866,9 @@ LABEL_F1D6FD:
 	ld wa, (xix)
 	ld de, (xde)
 	exts xde
-	.byte 0xd8, 0xda	; CP WA, 2
+	cps wa, 2
 	jr z, LABEL_F1D721
-	.byte 0xd8, 0xd9	; CP WA, 1
+	cps wa, 1
 	jrl nz, LABEL_F1D7E2
 	ld xwa, 0x144001B
 	ld xbc, 0x1E40020
@@ -152890,15 +152890,15 @@ LABEL_F1D732:
 	ld (xhl), xiz
 	ld wa, (xde)
 	dec 2, wa
-	.byte 0xd8, 0xdc	; CP WA, 4
+	cps wa, 4
 	jr z, LABEL_F1D76D
-	.byte 0xd8, 0xdb	; CP WA, 3
+	cps wa, 3
 	jr z, LABEL_F1D767
-	.byte 0xd8, 0xda	; CP WA, 2
+	cps wa, 2
 	jr z, LABEL_F1D761
-	.byte 0xd8, 0xd9	; CP WA, 1
+	cps wa, 1
 	jr z, LABEL_F1D75B
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr nz, LABEL_F1D779
 	.byte 0xf1, 0xf8, 0x39, 0x30	; LDA XWA, 39F8h
 	jr LABEL_F1D771
@@ -152939,15 +152939,15 @@ LABEL_F1D789:
 	ld (xhl), xiz
 	ld wa, (xde)
 	dec 2, wa
-	.byte 0xd8, 0xdc	; CP WA, 4
+	cps wa, 4
 	jr z, LABEL_F1D7C4
-	.byte 0xd8, 0xdb	; CP WA, 3
+	cps wa, 3
 	jr z, LABEL_F1D7BE
-	.byte 0xd8, 0xda	; CP WA, 2
+	cps wa, 2
 	jr z, LABEL_F1D7B8
-	.byte 0xd8, 0xd9	; CP WA, 1
+	cps wa, 1
 	jr z, LABEL_F1D7B2
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr nz, LABEL_F1D7D0
 	.byte 0xf1, 0xe4, 0x39, 0x30	; LDA XWA, 39E4h
 	jr LABEL_F1D7C8
@@ -153847,7 +153847,7 @@ FDLoadSaveTest:
 	push xwa
 	call LABEL_F4F21F
 	inc 4, xsp
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F1E5FF
 	.byte 0xf2, 0x66, 0xfe, 0xe1, 0x30	; LDA XWA, 0E1FE66h
 	calr LABEL_F1E396
@@ -154001,7 +154001,7 @@ LABEL_F1E757:
 LABEL_F1E75F:
 	.byte 0xf2, 0xf4, 0xfe, 0xe1, 0x30	; LDA XWA, 0E1FEF4h
 	calr LABEL_F1E396
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr z, LABEL_F1E782
 	.byte 0xf2, 0x06, 0xff, 0xe1, 0x30	; LDA XWA, 0E1FF06h
 	calr LABEL_F1E396
@@ -154129,7 +154129,7 @@ LABEL_F1E9A9:
 	push xwa
 	call 0xFF0CC1
 	add xsp, 0xA
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	.byte 0xb0, 0xfe	; RET NZ
 	.byte 0xf2, 0x04, 0xdd, 0x03, 0x00, 0x01	; LD (03DD04h), 001h
 	ret
@@ -154158,7 +154158,7 @@ LABEL_F1E9E0:
 	push xwa
 	call 0xFF0CC1
 	add xsp, 0xA
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_F1EA05
 	.byte 0xf2, 0x04, 0xdd, 0x03, 0x00, 0x01	; LD (03DD04h), 001h
 	jr LABEL_F1EA0B
@@ -154313,13 +154313,13 @@ SetSepaOutMode:
 	ld xix, xsp
 	.byte 0x95, 0x10	; LDIW
 	.byte 0x95, 0x10	; LDIW
-	.byte 0xd8, 0xdb	; CP WA, 3
+	cps wa, 3
 	jrl z, LABEL_F1ECBB
-	.byte 0xd8, 0xda	; CP WA, 2
+	cps wa, 2
 	jrl z, LABEL_F1EC53
-	.byte 0xd8, 0xd9	; CP WA, 1
+	cps wa, 1
 	jr z, LABEL_F1EBEA
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jrl nz, LABEL_F1ED20
 	.byte 0xbf, 0x11, 0x00, 0x14	; LD (XSP + 011h), 014h
 	.byte 0xbf, 0x10, 0x30	; LDA XWA, XSP + 010h
@@ -154780,7 +154780,7 @@ LABEL_F1EFF7:
 	.byte 0xc3, 0x07, 0xe8, 0xf4, 0x21	; LD A, (XDE + IY)
 	pop xde
 	and a, c
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F1F033
 	jr LABEL_F1F065
 
@@ -155357,14 +155357,14 @@ LABEL_F1F63A:
 	.byte 0xe7, 0x38, 0x8e	; LD XIZ, XDE3
 	.byte 0xf1, 0xfd, 0x10, 0x66	; LD (10FDh), XIZ
 	pop xiz
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jrl nz, LABEL_F1F5E8
 
 LABEL_F1F67C:
 	xor c, c
 
 LABEL_F1F67E:
-	.byte 0xcb, 0xda	; CP C, 2
+	cps c, 2
 	jr nz, LABEL_F1F686
 	.byte 0xc1, 0x7c, 0x28, 0x21	; LD A, (287Ch)
 
@@ -155440,7 +155440,7 @@ LABEL_F1F730:
 	xor c, c
 
 LABEL_F1F732:
-	.byte 0xcb, 0xd8	; CP C, 0
+	cps c, 0
 	jr nz, LABEL_F1F741
 	.byte 0xf1, 0x3d, 0x0d, 0xc8	; BIT 0, (0D3Dh)
 	jr z, LABEL_F1F783
@@ -155448,7 +155448,7 @@ LABEL_F1F732:
 	jr LABEL_F1F783
 
 LABEL_F1F741:
-	.byte 0xcb, 0xda	; CP C, 2
+	cps c, 2
 	jr nz, LABEL_F1F75E
 	.byte 0xc1, 0xf4, 0x10, 0x3f, 0xb5	; CP (10F4h), 0b5h
 	jr z, LABEL_F1F783
@@ -155459,7 +155459,7 @@ LABEL_F1F741:
 	.byte 0xc1, 0x7c, 0x28, 0x21	; LD A, (287Ch)
 
 LABEL_F1F75E:
-	.byte 0xcb, 0xdb	; CP C, 3
+	cps c, 3
 	jr nz, LABEL_F1F76E
 	.byte 0xf1, 0x29, 0x11, 0xc9	; BIT 1, (1129h)
 	jr nz, LABEL_F1F783
@@ -155467,7 +155467,7 @@ LABEL_F1F75E:
 	jr LABEL_F1F783
 
 LABEL_F1F76E:
-	.byte 0xcb, 0xdc	; CP C, 4
+	cps c, 4
 	jr nz, LABEL_F1F783
 	.byte 0xc1, 0x3b, 0x0d, 0x3f, 0xff	; CP (0D3Bh), 0ffh
 	jr z, LABEL_F1F783
@@ -155596,7 +155596,7 @@ LABEL_F1F871:
 	.byte 0xc3, 0x07, 0xe8, 0xf4, 0x21	; LD A, (XDE + IY)
 	pop xde
 	xor l, l
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr ule, LABEL_F1F8B2
 	ldb l, 0x1
 
@@ -155638,11 +155638,11 @@ LABEL_F1F8B3:
 	.byte 0xe1, 0xfd, 0x10, 0x22	; LD XDE, (10FDh)
 	.byte 0xc3, 0x07, 0xe8, 0xf4, 0x21	; LD A, (XDE + IY)
 	pop xde
-	.byte 0xc9, 0xdb	; CP A, 3
+	cps a, 3
 	jr c, LABEL_F1F958
 	cp a, 0xB
 	jr ugt, LABEL_F1F958
-	.byte 0xc9, 0xde	; CP A, 6
+	cps a, 6
 	jr z, LABEL_F1F958
 	.byte 0xc7, 0x3c, 0x99	; LD RL3, A
 	.byte 0xc1, 0x79, 0x28, 0x21	; LD A, (2879h)
@@ -155672,7 +155672,7 @@ LABEL_F1F963:
 	.byte 0xe1, 0xfd, 0x10, 0x22	; LD XDE, (10FDh)
 	.byte 0xc3, 0x07, 0xe8, 0xf4, 0x21	; LD A, (XDE + IY)
 	pop xde
-	.byte 0xc9, 0xdd	; CP A, 5
+	cps a, 5
 	jr nz, LABEL_F1F9C4
 	.byte 0xc1, 0x9d, 0x28, 0x3c, 0xfe	; AND (289Dh), 0feh
 	call LABEL_F1F805
@@ -155706,7 +155706,7 @@ LABEL_F1F9C4:
 	.byte 0xe1, 0xfd, 0x10, 0x22	; LD XDE, (10FDh)
 	.byte 0xc3, 0x07, 0xe8, 0xf4, 0x21	; LD A, (XDE + IY)
 	pop xde
-	.byte 0xc9, 0xdb	; CP A, 3
+	cps a, 3
 	jrl nz, LABEL_F1F958
 	jrl LABEL_F1F947
 
@@ -156496,7 +156496,7 @@ LABEL_F2021A:
 	.byte 0xd1, 0x9e, 0xf1, 0x20	; LD WA, (0F19Eh)
 	.byte 0xf2, 0xec, 0xff, 0x00, 0x50	; LD (0FFECh:24), WA
 	.byte 0xc1, 0xa5, 0x28, 0x3c, 0xfe	; AND (28A5h), 0feh
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr z, LABEL_F2026C
 	.byte 0xc1, 0xa5, 0x28, 0x3e, 0x01	; OR (28A5h), 001h
 
@@ -157131,10 +157131,10 @@ LABEL_F20A09:
 
 LABEL_F20A0A:
 	.byte 0xc1, 0x44, 0x11, 0x20	; LD W, (1144h)
-	.byte 0xc8, 0xd8	; CP W, 0
+	cps w, 0
 	jr z, LABEL_F20A8C
 	dec 1, w
-	.byte 0xc8, 0xdd	; CP W, 5
+	cps w, 5
 	jr nz, LABEL_F20A3A
 	.byte 0xc1, 0x36, 0x8d, 0x3f, 0x7a	; CP (8D36h), 07ah
 	jr z, LABEL_F20A28
@@ -157151,7 +157151,7 @@ LABEL_F20A28:
 	jr LABEL_F20A88
 
 LABEL_F20A3A:
-	.byte 0xc8, 0xd8	; CP W, 0
+	cps w, 0
 	jr nz, LABEL_F20A88
 	.byte 0xc1, 0x36, 0x8d, 0x3f, 0x7a	; CP (8D36h), 07ah
 	jr z, LABEL_F20A82
@@ -157894,9 +157894,9 @@ LABEL_F21159:
 	.byte 0xc1, 0x36, 0x8d, 0x21	; LD A, (8D36h)
 	extz wa
 	sub wa, 0x6F
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	.byte 0xb0, 0xf1	; RET LT
-	.byte 0xd8, 0xde	; CP WA, 6
+	cps wa, 6
 	.byte 0xb0, 0xfa	; RET GT
 	add wa, wa
 	.byte 0xf2, 0xb4, 0x00, 0xe2, 0x34	; LDA XIX, 0E200B4h
@@ -158360,7 +158360,7 @@ LABEL_F21864:
 
 LABEL_F21867:
 	call LABEL_FEBF7A
-	.byte 0xdb, 0x33, 0x00	; BIT 000h, HL
+	bit 0, hl
 	.byte 0xb0, 0xfe	; RET NZ
 	ld xwa, 0x720006
 	ld xbc, 0x1C70010
@@ -158380,7 +158380,7 @@ LABEL_F21867:
 	lds wa, 1
 	call LABEL_FEC04E
 	ld wa, hl
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	.byte 0xf2, 0xf4, 0x07, 0xf2, 0xde	; JP NZ, LABEL_F207F4
 	calr LABEL_F22A5D
 	.byte 0xf1, 0x55, 0x11, 0x00, 0x00	; LD (1155h), 000h
@@ -158388,7 +158388,7 @@ LABEL_F21867:
 
 LABEL_F218BB:
 	call LABEL_FEBF7A
-	.byte 0xdb, 0x33, 0x00	; BIT 000h, HL
+	bit 0, hl
 	.byte 0xb0, 0xfe	; RET NZ
 	.byte 0x0b, 0x0c, 0x00	; PUSHW 000ch
 	call LABEL_F8A7CE
@@ -158404,7 +158404,7 @@ LABEL_F218BB:
 	lds wa, 2
 	call LABEL_FEC04E
 	ld wa, hl
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	.byte 0xf2, 0xf4, 0x07, 0xf2, 0xde	; JP NZ, LABEL_F207F4
 	calr LABEL_F22A5D
 	.byte 0xf1, 0x55, 0x11, 0x00, 0x00	; LD (1155h), 000h
@@ -158412,7 +158412,7 @@ LABEL_F218BB:
 
 LABEL_F218FF:
 	call LABEL_FEBF7A
-	.byte 0xdb, 0x33, 0x00	; BIT 000h, HL
+	bit 0, hl
 	.byte 0xb0, 0xfe	; RET NZ
 	.byte 0x0b, 0x14, 0x00	; PUSHW 0014h
 	call LABEL_F8A4C8
@@ -158428,7 +158428,7 @@ LABEL_F218FF:
 	lds wa, 4
 	call LABEL_FEC04E
 	ld wa, hl
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	.byte 0xf2, 0xf4, 0x07, 0xf2, 0xde	; JP NZ, LABEL_F207F4
 	calr LABEL_F22A5D
 	.byte 0xf1, 0x55, 0x11, 0x00, 0x00	; LD (1155h), 000h
@@ -158436,7 +158436,7 @@ LABEL_F218FF:
 
 LABEL_F21943:
 	call LABEL_FEBF7A
-	.byte 0xdb, 0x33, 0x01	; BIT 001h, HL
+	bit 1, hl
 	jr z, LABEL_F21961
 	calr LABEL_F22ABF
 	call LABEL_FEC11C
@@ -158447,7 +158447,7 @@ LABEL_F21943:
 
 LABEL_F21961:
 	call LABEL_FEBF7A
-	.byte 0xdb, 0x33, 0x00	; BIT 000h, HL
+	bit 0, hl
 	jrl z, LABEL_F21867
 	calr LABEL_F22ABF
 	call LABEL_FEC11C
@@ -158460,10 +158460,10 @@ LABEL_F2197E:
 
 LABEL_F21982:
 	call LABEL_FEBF7A
-	.byte 0xdb, 0x33, 0x01	; BIT 001h, HL
+	bit 1, hl
 	jr nz, LABEL_F21995
 	call LABEL_FEBF7A
-	.byte 0xdb, 0x33, 0x00	; BIT 000h, HL
+	bit 0, hl
 	jrl z, LABEL_F218BB
 
 LABEL_F21995:
@@ -158472,10 +158472,10 @@ LABEL_F21995:
 
 LABEL_F2199C:
 	call LABEL_FEBF7A
-	.byte 0xdb, 0x33, 0x01	; BIT 001h, HL
+	bit 1, hl
 	jr nz, LABEL_F219AF
 	call LABEL_FEBF7A
-	.byte 0xdb, 0x33, 0x00	; BIT 000h, HL
+	bit 0, hl
 	jrl z, LABEL_F218FF
 
 LABEL_F219AF:
@@ -158484,14 +158484,14 @@ LABEL_F219AF:
 
 LABEL_F219B6:
 	call LABEL_FEBF7A
-	.byte 0xdb, 0x33, 0x01	; BIT 001h, HL
+	bit 1, hl
 	jr z, LABEL_F219C6
 	.byte 0xf1, 0x4a, 0x1d, 0x00, 0x03	; LD (1D4Ah), 003h
 	jr LABEL_F219E1
 
 LABEL_F219C6:
 	call LABEL_FEBF7A
-	.byte 0xdb, 0x33, 0x00	; BIT 000h, HL
+	bit 0, hl
 	jr z, LABEL_F219D6
 	.byte 0xf1, 0x4a, 0x1d, 0x00, 0x02	; LD (1D4Ah), 002h
 	jr LABEL_F219E1
@@ -158506,11 +158506,11 @@ LABEL_F219E1:
 
 LABEL_F219E5:
 	.byte 0xc1, 0x4a, 0x1d, 0x21	; LD A, (1D4Ah)
-	.byte 0xc9, 0xda	; CP A, 2
+	cps a, 2
 	jr z, LABEL_F219FC
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	jr z, LABEL_F219F5
-	.byte 0xc9, 0xdb	; CP A, 3
+	cps a, 3
 	.byte 0xb0, 0xfe	; RET NZ
 
 LABEL_F219F5:
@@ -158523,14 +158523,14 @@ LABEL_F219FC:
 
 LABEL_F21A03:
 	call LABEL_FEBF7A
-	.byte 0xdb, 0x33, 0x01	; BIT 001h, HL
+	bit 1, hl
 	jr z, LABEL_F21A13
 	.byte 0xf1, 0x4a, 0x1d, 0x00, 0x03	; LD (1D4Ah), 003h
 	jr LABEL_F21A2E
 
 LABEL_F21A13:
 	call LABEL_FEBF7A
-	.byte 0xdb, 0x33, 0x00	; BIT 000h, HL
+	bit 0, hl
 	jr z, LABEL_F21A23
 	.byte 0xf1, 0x4a, 0x1d, 0x00, 0x02	; LD (1D4Ah), 002h
 	jr LABEL_F21A2E
@@ -158545,14 +158545,14 @@ LABEL_F21A2E:
 
 LABEL_F21A32:
 	call LABEL_FEBF7A
-	.byte 0xdb, 0x33, 0x01	; BIT 001h, HL
+	bit 1, hl
 	jr z, LABEL_F21A42
 	.byte 0xf1, 0x4a, 0x1d, 0x00, 0x03	; LD (1D4Ah), 003h
 	jr LABEL_F21A5D
 
 LABEL_F21A42:
 	call LABEL_FEBF7A
-	.byte 0xdb, 0x33, 0x00	; BIT 000h, HL
+	bit 0, hl
 	jr z, LABEL_F21A52
 	.byte 0xf1, 0x4a, 0x1d, 0x00, 0x02	; LD (1D4Ah), 002h
 	jr LABEL_F21A5D
@@ -158569,7 +158569,7 @@ LABEL_F21A61:
 	pushw iz
 	ld iz, wa
 	call LABEL_FEBF7A
-	.byte 0xdb, 0x33, 0x01	; BIT 001h, HL
+	bit 1, hl
 	jr z, LABEL_F21AD5
 	call LABEL_FEC11C
 	ld xwa, 0x6F0026
@@ -158601,7 +158601,7 @@ LABEL_F21A61:
 
 LABEL_F21AD5:
 	call LABEL_FEBF7A
-	.byte 0xdb, 0x33, 0x00	; BIT 000h, HL
+	bit 0, hl
 	jr z, LABEL_F21B4C
 	call LABEL_FEC11C
 	ld xwa, 0x6F0026
@@ -158667,7 +158667,7 @@ LABEL_F21BA3:
 	pushw iz
 	ld iz, wa
 	call LABEL_FEBF7A
-	.byte 0xdb, 0x33, 0x01	; BIT 001h, HL
+	bit 1, hl
 	jr z, LABEL_F21BE3
 	call LABEL_FEC11C
 	ld wa, iz
@@ -158686,7 +158686,7 @@ LABEL_F21BA3:
 
 LABEL_F21BE3:
 	call LABEL_FEBF7A
-	.byte 0xdb, 0x33, 0x00	; BIT 000h, HL
+	bit 0, hl
 	jr z, LABEL_F21C26
 	call LABEL_FEC11C
 	ld wa, iz
@@ -158730,7 +158730,7 @@ LABEL_F21C59:
 	pushw iz
 	ld iz, wa
 	call LABEL_FEBF7A
-	.byte 0xdb, 0x33, 0x01	; BIT 001h, HL
+	bit 1, hl
 	jr z, LABEL_F21C99
 	call LABEL_FEC11C
 	ld wa, iz
@@ -158749,7 +158749,7 @@ LABEL_F21C59:
 
 LABEL_F21C99:
 	call LABEL_FEBF7A
-	.byte 0xdb, 0x33, 0x00	; BIT 000h, HL
+	bit 0, hl
 	jr z, LABEL_F21CDC
 	call LABEL_FEC11C
 	ld wa, iz
@@ -158843,7 +158843,7 @@ LABEL_F21DD0:
 
 LABEL_F21DD5:
 	call LABEL_FEBF7A
-	.byte 0xdb, 0x33, 0x01	; BIT 001h, HL
+	bit 1, hl
 	jr z, LABEL_F21DE7
 	calr LABEL_F22A5D
 	call LABEL_FEC1E1
@@ -158851,7 +158851,7 @@ LABEL_F21DD5:
 
 LABEL_F21DE7:
 	call LABEL_FEBF7A
-	.byte 0xdb, 0x33, 0x00	; BIT 000h, HL
+	bit 0, hl
 	jr z, LABEL_F21E3B
 	calr LABEL_F22A8E
 	call LABEL_FEC1C3
@@ -158952,7 +158952,7 @@ LABEL_F21EFF:
 
 LABEL_F21F04:
 	call LABEL_FEBF7A
-	.byte 0xdb, 0x33, 0x01	; BIT 001h, HL
+	bit 1, hl
 	jr z, LABEL_F21F16
 	calr LABEL_F22A5D
 	call LABEL_FEC1E1
@@ -158960,7 +158960,7 @@ LABEL_F21F04:
 
 LABEL_F21F16:
 	call LABEL_FEBF7A
-	.byte 0xdb, 0x33, 0x00	; BIT 000h, HL
+	bit 0, hl
 	jr z, LABEL_F21F6A
 	calr LABEL_F22A8E
 	call LABEL_FEC1C3
@@ -159065,7 +159065,7 @@ LABEL_F22055:
 
 LABEL_F2205A:
 	call LABEL_FEBF7A
-	.byte 0xdb, 0x33, 0x01	; BIT 001h, HL
+	bit 1, hl
 	jr z, LABEL_F2206C
 	calr LABEL_F22A5D
 	call LABEL_FEC1E1
@@ -159073,7 +159073,7 @@ LABEL_F2205A:
 
 LABEL_F2206C:
 	call LABEL_FEBF7A
-	.byte 0xdb, 0x33, 0x00	; BIT 000h, HL
+	bit 0, hl
 	jr z, LABEL_F220C0
 	calr LABEL_F22A8E
 	call LABEL_FEC1C3
@@ -159172,7 +159172,7 @@ LABEL_F2217D:
 
 LABEL_F22182:
 	call LABEL_FEBF7A
-	.byte 0xdb, 0x33, 0x01	; BIT 001h, HL
+	bit 1, hl
 	jr z, LABEL_F22194
 	calr LABEL_F22A5D
 	call LABEL_FEC1E1
@@ -159180,7 +159180,7 @@ LABEL_F22182:
 
 LABEL_F22194:
 	call LABEL_FEBF7A
-	.byte 0xdb, 0x33, 0x00	; BIT 000h, HL
+	bit 0, hl
 	jr z, LABEL_F221E3
 	calr LABEL_F22A8E
 	call LABEL_FEC1C3
@@ -159685,7 +159685,7 @@ LABEL_F22628:
 	extz xiz
 	add xiz, xix
 	.byte 0xf5, 0xf8, 0x47	; LD (XIZ+), L
-	.byte 0xcd, 0xd8	; CP E, 0
+	cps e, 0
 	jr z, LABEL_F2267E
 	.byte 0x9f, 0x04, 0x3f, 0x09, 0x00	; CPW (XSP + 004h), 0009h
 	jr nz, LABEL_F2266C
@@ -159771,7 +159771,7 @@ LABEL_F22713:
 LABEL_F2272B:
 	cp xbc, 0x1C00017
 	jr nz, LABEL_F2273D
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr z, LABEL_F2273D
 	dec 1, wa
 
@@ -159836,7 +159836,7 @@ LABEL_F227A5:
 	extz xiz
 	add xiz, xhl
 	.byte 0xf5, 0xf8, 0x43	; LD (XIZ+), C
-	.byte 0xcd, 0xd8	; CP E, 0
+	cps e, 0
 	jr z, LABEL_F227EC
 	.byte 0x9f, 0x04, 0x3f, 0x09, 0x00	; CPW (XSP + 004h), 0009h
 	jr nz, LABEL_F227DE
@@ -159926,7 +159926,7 @@ LABEL_F2288A:
 LABEL_F228A2:
 	cp xbc, 0x1C00017
 	jr nz, LABEL_F228B4
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr z, LABEL_F228B4
 	dec 1, wa
 
@@ -160138,9 +160138,9 @@ LABEL_F22B37:
 	.byte 0xc1, 0x36, 0x8d, 0x21	; LD A, (8D36h)
 	extz wa
 	sub wa, 0x6F
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	.byte 0xb0, 0xf1	; RET LT
-	.byte 0xd8, 0xdf	; CP WA, 7
+	cps wa, 7
 	.byte 0xb0, 0xfa	; RET GT
 	add wa, wa
 	.byte 0xf2, 0x50, 0x02, 0xe2, 0x34	; LDA XIX, 0E20250h
@@ -160172,7 +160172,7 @@ LABEL_F22B9C:
 	.byte 0xc1, 0x36, 0x8d, 0x3f, 0x72	; CP (8D36h), 072h
 	.byte 0xb0, 0xf6	; RET Z
 	call LABEL_FEBF7A
-	.byte 0xdb, 0x33, 0x00	; BIT 000h, HL
+	bit 0, hl
 	.byte 0xb0, 0xf6	; RET Z
 	calr LABEL_F22ABF
 	call LABEL_FEC11C
@@ -160353,7 +160353,7 @@ LABEL_F22D34:
 	.byte 0xe1, 0xfd, 0x10, 0x23	; LD XHL, (10FDh)
 	.byte 0x9b, 0x01, 0x24	; LD IX, (XHL + 001h)
 	ld de, ix
-	.byte 0xdc, 0xd8	; CP IX, 0
+	cps ix, 0
 	jr z, LABEL_F22DDE
 	ld iy, ix
 	.byte 0xbb, 0x01, 0x02, 0x00, 0x00	; LDW (XHL + 001h), 0000h
@@ -160384,7 +160384,7 @@ LABEL_F22D98:
 	.byte 0xbb, 0x01, 0x52	; LD (XHL + 001h), DE
 
 LABEL_F22DA3:
-	.byte 0xda, 0xd8	; CP DE, 0
+	cps de, 0
 	jr z, LABEL_F22DB6
 	pushw iy
 	ld iy, de
@@ -160730,7 +160730,7 @@ LABEL_F230C4:
 	.byte 0xc3, 0x07, 0xf0, 0xf4, 0x21	; LD A, (XIX + IY)
 	.byte 0xf3, 0x07, 0xec, 0xf4, 0x41	; LD (XHL + IY), A
 	inc 1, iy
-	.byte 0xdd, 0xdf	; CP IY, 7
+	cps iy, 7
 	jr ule, LABEL_F230C4
 	.byte 0xc1, 0x6a, 0x8e, 0x21	; LD A, (8E6Ah)
 	.byte 0xf3, 0x07, 0xec, 0xf4, 0x41	; LD (XHL + IY), A
@@ -160944,11 +160944,11 @@ LABEL_F23284:
 	pop xix
 	pop xiz
 	.byte 0xd1, 0x2b, 0x1a, 0x23	; LD HL, (1A2Bh)
-	.byte 0xdb, 0x33, 0x0f	; BIT 00fh, HL
+	bit 15, hl
 	jr nz, LABEL_F232A0
-	.byte 0xdb, 0xd9	; CP HL, 1
+	cps hl, 1
 	jr z, LABEL_F232A0
-	.byte 0xdb, 0x31, 0x0f	; SET 00fh, HL
+	set 15, hl
 
 LABEL_F232A0:
 	ret
@@ -161072,7 +161072,7 @@ LABEL_F233A9:
 	.byte 0xf1, 0x5e, 0x0f, 0x41	; LD (0F5Eh), A
 	call LABEL_F23713
 	.byte 0xf1, 0x61, 0x0f, 0x41	; LD (0F61h), A
-	.byte 0xc9, 0x33, 0x07	; BIT 007h, A
+	bit 7, a
 	jrl nz, LABEL_F2366B
 	call LABEL_F23713
 	.byte 0xf1, 0x60, 0x0f, 0x41	; LD (0F60h), A
@@ -161274,7 +161274,7 @@ LABEL_F235C3:
 	jrl LABEL_F23504
 
 LABEL_F235C6:
-	.byte 0xc9, 0x33, 0x07	; BIT 007h, A
+	bit 7, a
 	jrl z, LABEL_F235F3
 	call LABEL_F23D29
 	push xwa
@@ -161442,7 +161442,7 @@ LABEL_F23713:
 	.byte 0xd7, 0xe2, 0x9a	; LD QWA, DE
 	.byte 0xdb, 0x50	; DIV XWA, HL
 	.byte 0xd7, 0xe2, 0x8a	; LD DE, QWA
-	.byte 0xda, 0xd8	; CP DE, 0
+	cps de, 0
 	jrl nz, LABEL_F2374A
 
 LABEL_F2374A:
@@ -161618,7 +161618,7 @@ LABEL_F238CD:
 	.byte 0xd1, 0x6d, 0x28, 0x21	; LD BC, (286Dh)
 	cp wa, bc
 	jrl ugt, LABEL_F23958
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jrl z, LABEL_F23958
 	pushw wa
 	ld hl, wa
@@ -161682,7 +161682,7 @@ LABEL_F23980:
 
 LABEL_F23986:
 	.byte 0xf5, 0xf0, 0x41	; LD (XIX+), A
-	.byte 0xc9, 0x33, 0x07	; BIT 007h, A
+	bit 7, a
 	jrl nz, LABEL_F23968
 	sub xix, 0x106E
 
@@ -161691,9 +161691,9 @@ LABEL_F23995:
 
 LABEL_F23996:
 	call LABEL_F24391
-	.byte 0xdc, 0xd9	; CP IX, 1
+	cps ix, 1
 	jrl z, LABEL_F239A7
-	.byte 0xdc, 0xda	; CP IX, 2
+	cps ix, 2
 	jrl z, LABEL_F239B5
 	jrl LABEL_F239DB
 
@@ -161752,7 +161752,7 @@ LABEL_F23A17:
 	.byte 0xd1, 0x73, 0x10, 0x21	; LD BC, (1073h)
 	.byte 0xc1, 0x75, 0x10, 0x25	; LD E, (1075h)
 	xor d, d
-	.byte 0xda, 0xd8	; CP DE, 0
+	cps de, 0
 	jrl z, LABEL_F23AE7
 	pushw wa
 	xor wa, wa
@@ -161937,9 +161937,9 @@ LABEL_F23BB6:
 
 LABEL_F23BBC:
 	.byte 0xf1, 0xa9, 0x0f, 0x00, 0x00	; LD (0FA9h), 000h
-	.byte 0xc9, 0xda	; CP A, 2
+	cps a, 2
 	jrl z, LABEL_F23C00
-	.byte 0xc9, 0xdb	; CP A, 3
+	cps a, 3
 	jrl z, LABEL_F23C23
 	cp a, 0x2F
 	jrl z, LABEL_F23C46
@@ -162335,7 +162335,7 @@ LABEL_F23E8D:
 	.byte 0xd1, 0x6d, 0x28, 0x21	; LD BC, (286Dh)
 	cp wa, bc
 	jrl ugt, LABEL_F23F12
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jrl z, LABEL_F23F12
 	pushw wa
 	ld hl, wa
@@ -162578,7 +162578,7 @@ LABEL_F240B7:
 	jrl LABEL_F23FB7
 
 LABEL_F240BA:
-	.byte 0xc9, 0x33, 0x07	; BIT 007h, A
+	bit 7, a
 	jrl z, LABEL_F240E8
 	call LABEL_F247EB
 	.byte 0xc1, 0xe3, 0x10, 0x3f, 0x00	; CP (10E3h), 000h
@@ -162735,7 +162735,7 @@ LABEL_F241F3:
 	jrl LABEL_F2417E
 
 LABEL_F24217:
-	.byte 0xdb, 0xdb	; CP HL, 3
+	cps hl, 3
 	jrl z, LABEL_F24240
 	.byte 0xd1, 0x73, 0x10, 0x25	; LD IY, (1073h)
 	and iy, 0xF
@@ -162913,7 +162913,7 @@ LABEL_F243CC:
 	jrl z, LABEL_F24433
 	.byte 0xc1, 0x75, 0x10, 0x25	; LD E, (1075h)
 	.byte 0xd1, 0x73, 0x10, 0x20	; LD WA, (1073h)
-	.byte 0xcd, 0xd8	; CP E, 0
+	cps e, 0
 	jrl z, LABEL_F24418
 	ldw hl, 0x60
 	.byte 0xdb, 0x40	; MUL XWA, HL
@@ -162994,7 +162994,7 @@ LABEL_F24463:
 	.byte 0xd7, 0xe2, 0x9a	; LD QWA, DE
 	.byte 0xdb, 0x50	; DIV XWA, HL
 	.byte 0xd7, 0xe2, 0x8a	; LD DE, QWA
-	.byte 0xda, 0xd8	; CP DE, 0
+	cps de, 0
 	jrl nz, LABEL_F24496
 
 LABEL_F24496:
@@ -163255,7 +163255,7 @@ LABEL_F246F7:
 
 LABEL_F246FE:
 	.byte 0x8c, 0x02, 0x20	; LD W, (XIX + 002h)
-	.byte 0xc8, 0xd8	; CP W, 0
+	cps w, 0
 	jrl z, LABEL_F2470D
 	call LABEL_F24CBF
 	jrl LABEL_F24726
@@ -163317,7 +163317,7 @@ LABEL_F24776:
 
 LABEL_F2477D:
 	.byte 0x8c, 0x02, 0x20	; LD W, (XIX + 002h)
-	.byte 0xc8, 0xd8	; CP W, 0
+	cps w, 0
 	jrl z, LABEL_F2478C
 	call LABEL_F253D2
 	jrl LABEL_F247A5
@@ -163427,19 +163427,19 @@ LABEL_F24841:
 	.byte 0xf1, 0xd2, 0x27, 0x00, 0x00	; LD (27D2h), 000h
 	call LABEL_F1F7E2
 	.byte 0xc1, 0x77, 0x28, 0x21	; LD A, (2877h)
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	jrl c, LABEL_F24881
 	.byte 0xc1, 0xa1, 0x28, 0xf1	; CP A, (28A1h)
 	jrl ugt, LABEL_F24881
 	.byte 0xc1, 0x82, 0x26, 0xf1	; CP A, (2682h)
 	jrl z, LABEL_F24881
 	.byte 0xc1, 0x82, 0x26, 0x21	; LD A, (2682h)
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	jrl c, LABEL_F24881
 	.byte 0xc1, 0xa1, 0x28, 0xf1	; CP A, (28A1h)
 	jrl ugt, LABEL_F24881
 	.byte 0xc1, 0x84, 0x26, 0x21	; LD A, (2684h)
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	jrl c, LABEL_F24881
 	.byte 0xc1, 0xa1, 0x28, 0xf1	; CP A, (28A1h)
 	jrl ule, LABEL_F24889
@@ -163656,7 +163656,7 @@ LABEL_F24AAA:
 	ld xix, 0x17FA
 	.byte 0xc3, 0x07, 0xf0, 0xf4, 0x21	; LD A, (XIX + IY)
 	pop xix
-	.byte 0xc9, 0x33, 0x07	; BIT 007h, A
+	bit 7, a
 	jrl nz, LABEL_F24AD7
 	push xix
 	ld xix, 0x1073
@@ -163836,7 +163836,7 @@ LABEL_F24C25:
 
 LABEL_F24C2B:
 	.byte 0xf5, 0xf0, 0x41	; LD (XIX+), A
-	.byte 0xc9, 0x33, 0x07	; BIT 007h, A
+	bit 7, a
 	jrl nz, LABEL_F24C0D
 	sub xix, 0x106E
 
@@ -164083,9 +164083,9 @@ LABEL_F24E40:
 	.byte 0x9d, 0x05, 0x20	; LD WA, (XIY + 005h)
 	ldb l, 0x60
 	.byte 0xcf, 0x59	; DIVS WA, L
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jrl nz, LABEL_F24E89
-	.byte 0xc8, 0xdc	; CP W, 4
+	cps w, 4
 	jrl ugt, LABEL_F24E89
 	ldb w, 0x5
 
@@ -164795,9 +164795,9 @@ LABEL_F25565:
 	.byte 0x9d, 0x05, 0x20	; LD WA, (XIY + 005h)
 	ldb l, 0x60
 	.byte 0xcf, 0x59	; DIVS WA, L
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jrl nz, LABEL_F255AC
-	.byte 0xc8, 0xdc	; CP W, 4
+	cps w, 4
 	jrl ugt, LABEL_F255AC
 	ldb w, 0x5
 
@@ -165297,7 +165297,7 @@ LABEL_F25AB4:
 
 LABEL_F25AE3:
 	push xix
-	.byte 0xdb, 0xd9	; CP HL, 1
+	cps hl, 1
 	jr ule, LABEL_F25AEA
 	lds hl, 1
 
@@ -165692,7 +165692,7 @@ LABEL_F25E4C:
 	ld a, e
 
 LABEL_F25E96:
-	.byte 0xcb, 0xd9	; CP C, 1
+	cps c, 1
 	jr nz, LABEL_F25EAB
 	push xhl
 	push xiy
@@ -165819,7 +165819,7 @@ LABEL_F25F8C:
 	.byte 0xe3, 0x07, 0xf0, 0xec, 0x23	; LD XHL, (XIX + HL)
 	pop xix
 	.byte 0xc3, 0x07, 0xec, 0xf4, 0x21	; LD A, (XHL + IY)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F25FC3
 	dec 1, a
 
@@ -166138,7 +166138,7 @@ LABEL_F262BE:
 	ld a, e
 
 LABEL_F26304:
-	.byte 0xcb, 0xd9	; CP C, 1
+	cps c, 1
 	jr nz, LABEL_F26319
 	push xhl
 	push xiy
@@ -166743,11 +166743,11 @@ LABEL_F26BA7:
 	ld xix, 0x10A3
 	.byte 0xc3, 0x07, 0xf0, 0xf4, 0x20	; LD W, (XIX + IY)
 	pop xix
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_F26BDF
-	.byte 0xc8, 0xd8	; CP W, 0
+	cps w, 0
 	jr c, LABEL_F26BDF
-	.byte 0xc8, 0xda	; CP W, 2
+	cps w, 2
 	jr ugt, LABEL_F26BDF
 	push xix
 	ld xix, 0x10B3
@@ -166825,7 +166825,7 @@ LABEL_F26CC5:
 	popw bc
 	pop xiy
 	ldb a, 0xB0
-	.byte 0xcb, 0xd9	; CP C, 1
+	cps c, 1
 	jr nz, LABEL_F26CDF
 	or a, 0x2
 	.byte 0xf1, 0x8a, 0x10, 0xcf	; BIT 7, (108Ah)
@@ -167009,7 +167009,7 @@ LABEL_F26E29:
 	call LABEL_F24B67
 	pop xiy
 	inc 1, iy
-	.byte 0xdd, 0xda	; CP IY, 2
+	cps iy, 2
 	jr ule, LABEL_F26E29
 	pop xiy
 	pop xix
@@ -167176,7 +167176,7 @@ LABEL_F26FB7:
 	ld xiy, 0x1A61
 
 LABEL_F26FBE:
-	.byte 0xcb, 0xd8	; CP C, 0
+	cps c, 0
 	jr ule, LABEL_F26FCD
 	.byte 0xb5, 0x00, 0x00	; LD (XIY), 000h
 	dec 1, c
@@ -167209,14 +167209,14 @@ LABEL_F26FFD:
 	pop xix
 	pop xiz
 	.byte 0xd1, 0x2b, 0x1a, 0x23	; LD HL, (1A2Bh)
-	.byte 0xdb, 0x33, 0x0f	; BIT 00fh, HL
+	bit 15, hl
 	jr nz, LABEL_F27018
-	.byte 0xdb, 0xda	; CP HL, 2
+	cps hl, 2
 	jr z, LABEL_F27018
-	.byte 0xdb, 0x31, 0x0f	; SET 00fh, HL
+	set 15, hl
 
 LABEL_F27018:
-	.byte 0xdb, 0x33, 0x0f	; BIT 00fh, HL
+	bit 15, hl
 	jr nz, LABEL_F27057
 	.byte 0xc1, 0x88, 0x8d, 0x3c, 0xfe	; AND (8D88h), 0feh
 	call LABEL_F28E19
@@ -167399,7 +167399,7 @@ LABEL_F27170:
 LABEL_F271F2:
 	.byte 0xc5, 0xf4, 0x21	; LD A, (XIY+)
 	.byte 0xf5, 0xf0, 0x41	; LD (XIX+), A
-	.byte 0xc9, 0x33, 0x07	; BIT 007h, A
+	bit 7, a
 	jr nz, LABEL_F271F2
 	ldw wa, 0x58FF
 	.byte 0xf5, 0xf1, 0x50	; LD (XIX+), WA
@@ -167502,7 +167502,7 @@ LABEL_F272A9:
 	pop xix
 	cp hl, 0xFFFF
 	jrl z, LABEL_F277B1
-	.byte 0xcb, 0xd8	; CP C, 0
+	cps c, 0
 	jr z, LABEL_F272F8
 	push xhl
 	xor hl, hl
@@ -167753,7 +167753,7 @@ LABEL_F274BF:
 LABEL_F274C5:
 	ldb w, 0x40
 	ldb l, 0x7F
-	.byte 0xcd, 0x33, 0x03	; BIT 003h, E
+	bit 3, e
 	jr nz, LABEL_F274D0
 	ldb l, 0x0
 
@@ -168188,7 +168188,7 @@ LABEL_F2781E:
 	call LABEL_F28679
 	pop xhl
 	inc 1, hl
-	.byte 0xc9, 0x33, 0x07	; BIT 007h, A
+	bit 7, a
 	jr z, LABEL_F2781E
 	.byte 0xc1, 0x73, 0x10, 0x21	; LD A, (1073h)
 	cp a, 0x82
@@ -168241,9 +168241,9 @@ LABEL_F278A5:
 	jrl LABEL_F2780C
 
 LABEL_F278C2:
-	.byte 0xdb, 0xdb	; CP HL, 3
+	cps hl, 3
 	jr z, LABEL_F2791E
-	.byte 0xdb, 0xdc	; CP HL, 4
+	cps hl, 4
 	jrl nz, LABEL_F2780C
 	.byte 0xc1, 0x74, 0x10, 0x23	; LD C, (1074h)
 	call LABEL_F286B7
@@ -168328,7 +168328,7 @@ LABEL_F2796C:
 	jrl LABEL_F2780C
 
 LABEL_F2796F:
-	.byte 0xdb, 0xdb	; CP HL, 3
+	cps hl, 3
 	jrl nz, LABEL_F2780C
 	.byte 0xc1, 0x74, 0x10, 0x23	; LD C, (1074h)
 	pushw wa
@@ -168375,7 +168375,7 @@ LABEL_F279C2:
 	jrl LABEL_F2780C
 
 LABEL_F279C5:
-	.byte 0xdb, 0xdc	; CP HL, 4
+	cps hl, 4
 	jrl nz, LABEL_F2780C
 	.byte 0xc1, 0x74, 0x10, 0x23	; LD C, (1074h)
 	pushw wa
@@ -168420,7 +168420,7 @@ LABEL_F27A14:
 	jrl LABEL_F2780C
 
 LABEL_F27A17:
-	.byte 0xdb, 0xdb	; CP HL, 3
+	cps hl, 3
 	jrl nz, LABEL_F2780C
 	ld l, a
 	and l, 0xF
@@ -168475,7 +168475,7 @@ LABEL_F27A81:
 	jrl LABEL_F2780C
 
 LABEL_F27A84:
-	.byte 0xdb, 0xde	; CP HL, 6
+	cps hl, 6
 	jrl nz, LABEL_F2780C
 	xor xhl, xhl
 
@@ -168570,12 +168570,12 @@ LABEL_F27B15:
 	jrl LABEL_F2780C
 
 LABEL_F27B48:
-	.byte 0xdb, 0xde	; CP HL, 6
+	cps hl, 6
 	jrl nz, LABEL_F2780C
 	.byte 0xc1, 0x75, 0x10, 0x3f, 0x7f	; CP (1075h), 07fh
 	jrl z, LABEL_F2780C
 	.byte 0xc1, 0x76, 0x10, 0x21	; LD A, (1076h)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jrl nz, LABEL_F2780C
 	.byte 0xc1, 0x35, 0x1a, 0x3f, 0x00	; CP (1A35h), 000h
 	jr z, LABEL_F27B6C
@@ -168779,7 +168779,7 @@ LABEL_F27D17:
 	jrl LABEL_F2780C
 
 LABEL_F27D1A:
-	.byte 0xdb, 0xde	; CP HL, 6
+	cps hl, 6
 	jrl nz, LABEL_F2780C
 	.byte 0xc1, 0x75, 0x10, 0x3f, 0x7f	; CP (1075h), 07fh
 	jrl z, LABEL_F28152
@@ -168790,7 +168790,7 @@ LABEL_F27D1A:
 	cp l, 0x7F
 	jrl z, LABEL_F28152
 	and l, 0x1F
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jrl c, LABEL_F28152
 	cp l, 0xF
 	jrl ugt, LABEL_F28152
@@ -168802,7 +168802,7 @@ LABEL_F27D1A:
 	jrl LABEL_F2780C
 
 LABEL_F27D5C:
-	.byte 0xcf, 0xdb	; CP L, 3
+	cps l, 3
 	jrl c, LABEL_F2780C
 	cp l, 0xB
 	jrl ugt, LABEL_F2780C
@@ -168811,13 +168811,13 @@ LABEL_F27D5C:
 	and w, 0xF
 	or a, w
 	ldb w, 0x7
-	.byte 0xcf, 0xdb	; CP L, 3
+	cps l, 3
 	jrl z, LABEL_F280F9
-	.byte 0xcf, 0xdc	; CP L, 4
+	cps l, 4
 	jrl z, LABEL_F28097
-	.byte 0xcf, 0xdd	; CP L, 5
+	cps l, 5
 	jrl z, LABEL_F280A3
-	.byte 0xcf, 0xdf	; CP L, 7
+	cps l, 7
 	jrl z, LABEL_F280DE
 	cp l, 0x8
 	jrl z, LABEL_F28031
@@ -169252,7 +169252,7 @@ LABEL_F28094:
 
 LABEL_F28097:
 	.byte 0xd1, 0x77, 0x10, 0x21	; LD BC, (1077h)
-	.byte 0xca, 0x33, 0x03	; BIT 003h, B
+	bit 3, b
 	jr nz, LABEL_F280B9
 	jrl LABEL_F2780C
 
@@ -169269,7 +169269,7 @@ LABEL_F280B1:
 
 LABEL_F280B9:
 	.byte 0xd1, 0x77, 0x10, 0x21	; LD BC, (1077h)
-	.byte 0xca, 0x33, 0x03	; BIT 003h, B
+	bit 3, b
 	jrl z, LABEL_F2780C
 	.byte 0xc1, 0x35, 0x1a, 0x3f, 0x00	; CP (1A35h), 000h
 	jr z, LABEL_F280D1
@@ -169279,7 +169279,7 @@ LABEL_F280B9:
 LABEL_F280D1:
 	ldb w, 0x40
 	ldb l, 0x0
-	.byte 0xcb, 0x33, 0x03	; BIT 003h, C
+	bit 3, c
 	jr z, LABEL_F2810B
 	ldb l, 0x7F
 	jr LABEL_F2810B
@@ -169553,7 +169553,7 @@ LABEL_F28333:
 	inc 1, c
 	cp c, 0xF
 	jr ule, LABEL_F2830C
-	.byte 0xcf, 0xda	; CP L, 2
+	cps l, 2
 	jrl c, LABEL_F283C6
 	xor bc, bc
 
@@ -169681,7 +169681,7 @@ LABEL_F2842A:
 
 LABEL_F28430:
 	.byte 0xe1, 0x18, 0x11, 0x24	; LD XIX, (1118h)
-	.byte 0xc9, 0x33, 0x07	; BIT 007h, A
+	bit 7, a
 	jr nz, LABEL_F2840A
 	ldb a, 0xFF
 	.byte 0xf5, 0xf0, 0x41	; LD (XIX+), A
@@ -169858,7 +169858,7 @@ LABEL_F28562:
 	.byte 0xd7, 0xe2, 0x9a	; LD QWA, DE
 	.byte 0xdb, 0x50	; DIV XWA, HL
 	.byte 0xd7, 0xe2, 0x8a	; LD DE, QWA
-	.byte 0xda, 0xd8	; CP DE, 0
+	cps de, 0
 	jr nz, LABEL_F28580
 
 LABEL_F28580:
@@ -169930,7 +169930,7 @@ LABEL_F285E3:
 
 LABEL_F285EA:
 	.byte 0xe1, 0x18, 0x11, 0x24	; LD XIX, (1118h)
-	.byte 0xc9, 0x33, 0x07	; BIT 007h, A
+	bit 7, a
 	jr nz, LABEL_F285C1
 	popw wa
 	ld h, a
@@ -170123,7 +170123,7 @@ LABEL_F28779:
 	cp c, 0x20
 	jr c, LABEL_F28718
 	srl iy, 1
-	.byte 0xdd, 0xd8	; CP IY, 0
+	cps iy, 0
 	jr z, LABEL_F2878F
 	call LABEL_F28BBA
 
@@ -170363,7 +170363,7 @@ LABEL_F28999:
 	calr LABEL_F28679
 	.byte 0xf1, 0x66, 0x26, 0x06	; POPW (2666h)
 	.byte 0xf1, 0xaf, 0x28, 0x06	; POPW (28AFh)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jrl nz, LABEL_F28AC0
 	.byte 0xf1, 0xeb, 0x10, 0xc8	; BIT 0, (10EBh)
 	jr z, LABEL_F28A23
@@ -170374,11 +170374,11 @@ LABEL_F28999:
 	.byte 0xc1, 0x77, 0x28, 0x25	; LD E, (2877h)
 	xor d, d
 	ld iy, de
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr c, LABEL_F28A00
 	cp a, 0xF
 	jr ugt, LABEL_F28A00
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr ugt, LABEL_F28A00
 	ld l, a
 	xor h, h
@@ -170438,15 +170438,15 @@ LABEL_F28A2D:
 	calr LABEL_F28679
 	pop xhl
 	.byte 0xf1, 0xf4, 0x10, 0x41	; LD (10F4h), A
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr c, LABEL_F28A96
 	cp a, 0xF
 	jr ugt, LABEL_F28A96
-	.byte 0xcf, 0xdb	; CP L, 3
+	cps l, 3
 	jr c, LABEL_F28A96
 	cp l, 0xB
 	jr ugt, LABEL_F28A96
-	.byte 0xcf, 0xde	; CP L, 6
+	cps l, 6
 	jr z, LABEL_F28A96
 	jr LABEL_F28AB9
 	.byte 0xf1, 0xeb, 0x10, 0xc8	; BIT 0, (10EBh)
@@ -170498,7 +170498,7 @@ LABEL_F28ABD:
 LABEL_F28AC0:
 	calr LABEL_F2868F
 	calr LABEL_F28679
-	.byte 0xc9, 0x33, 0x07	; BIT 007h, A
+	bit 7, a
 	jr z, LABEL_F28AC0
 	jrl LABEL_F2891C
 
@@ -170598,7 +170598,7 @@ LABEL_F28BB2:
 	ret
 
 LABEL_F28BBA:
-	.byte 0xdd, 0xd8	; CP IY, 0
+	cps iy, 0
 	jr z, LABEL_F28C24
 	xor de, de
 	.byte 0xc1, 0xae, 0x0f, 0x3f, 0xff	; CP (0FAEh), 0ffh
@@ -170819,7 +170819,7 @@ LABEL_F28D77:
 	add xde, xix
 	.byte 0x9a, 0x03, 0x20	; LD WA, (XDE + 003h)
 	pop xde
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_F28DA2
 	.byte 0xf1, 0x85, 0x10, 0x50	; LD (1085h), WA
 	jr LABEL_F28DB2
@@ -170827,7 +170827,7 @@ LABEL_F28D77:
 LABEL_F28DA2:
 	ld de, wa
 	.byte 0xd1, 0x66, 0x0f, 0xa2	; SUB DE, (0F66h)
-	.byte 0xda, 0xd8	; CP DE, 0
+	cps de, 0
 	jr ge, LABEL_F28DAE
 	lds de, 0
 
@@ -170986,7 +170986,7 @@ LABEL_F28F0F:
 LABEL_F28F15:
 	call LABEL_F294C1
 	.byte 0xc1, 0x2a, 0x11, 0x21	; LD A, (112Ah)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F28F7E
 	ld xde, 0xAB000
 	.byte 0xf3, 0xe9, 0xc7, 0x00, 0x32	; LDA XDE, XDE + 00c7h
@@ -171042,7 +171042,7 @@ LABEL_F28F94:
 	.byte 0xf1, 0xe5, 0x0c, 0x41	; LD (0CE5h), A
 	calr LABEL_F294C1
 	.byte 0xc1, 0x2a, 0x11, 0x21	; LD A, (112Ah)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F2902B
 
 LABEL_F28FC8:
@@ -171263,15 +171263,15 @@ LABEL_F291E0:
 	.byte 0xc1, 0x3b, 0x11, 0x3c, 0xfe	; AND (113Bh), 0feh
 	.byte 0xc1, 0x3b, 0x11, 0x3c, 0xfd	; AND (113Bh), 0fdh
 	.byte 0xc1, 0x2a, 0x11, 0x21	; LD A, (112Ah)
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	jr z, LABEL_F29243
-	.byte 0xc9, 0xda	; CP A, 2
+	cps a, 2
 	jr z, LABEL_F29259
-	.byte 0xc9, 0xdb	; CP A, 3
+	cps a, 3
 	jr z, LABEL_F2926C
-	.byte 0xc9, 0xdc	; CP A, 4
+	cps a, 4
 	.byte 0xf2, 0x06, 0x93, 0xf2, 0xd6	; JP Z, LABEL_F29306
-	.byte 0xc9, 0xdd	; CP A, 5
+	cps a, 5
 	.byte 0xf2, 0x06, 0x93, 0xf2, 0xd6	; JP Z, LABEL_F29306
 	jrl LABEL_F29474
 
@@ -171467,7 +171467,7 @@ LABEL_F29395:
 LABEL_F293E5:
 	.byte 0xf3, 0x07, 0xe8, 0xec, 0x43	; LD (XDE + HL), C
 	pop xde
-	.byte 0xc9, 0xdb	; CP A, 3
+	cps a, 3
 	jr nz, LABEL_F293F0
 	nop
 
@@ -171540,13 +171540,13 @@ LABEL_F294C1:
 	.byte 0xba, 0x04, 0x32	; LDA XDE, XDE + 004h
 	.byte 0x8a, 0x01, 0x21	; LD A, (XDE + 001h)
 	.byte 0x8a, 0x02, 0x20	; LD W, (XDE + 002h)
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	jr nz, LABEL_F294F9
-	.byte 0xc8, 0xdb	; CP W, 3
+	cps w, 3
 	jr z, LABEL_F294F4
-	.byte 0xc8, 0xde	; CP W, 6
+	cps w, 6
 	jr z, LABEL_F294ED
-	.byte 0xc8, 0xdf	; CP W, 7
+	cps w, 7
 	jr z, LABEL_F294E6
 	jr LABEL_F294F9
 
@@ -171644,7 +171644,7 @@ LABEL_F2959E:
 	jr nz, LABEL_F295C1
 	.byte 0x8d, 0x02, 0x21	; LD A, (XIY + 002h)
 	calr LABEL_F2905E
-	.byte 0xc9, 0x33, 0x07	; BIT 007h, A
+	bit 7, a
 	jr z, LABEL_F295B5
 	and a, 0x7F
 	.byte 0x85, 0x3e, 0x04	; OR (XIY), 004h
@@ -171681,7 +171681,7 @@ LABEL_F295F2:
 	jr nz, LABEL_F29618
 	.byte 0x8d, 0x02, 0x21	; LD A, (XIY + 002h)
 	calr LABEL_F2905E
-	.byte 0xc9, 0x33, 0x07	; BIT 007h, A
+	bit 7, a
 	jr z, LABEL_F29609
 	and a, 0x7F
 	.byte 0x85, 0x3e, 0x04	; OR (XIY), 004h
@@ -171706,7 +171706,7 @@ LABEL_F29619:
 	.byte 0xc1, 0x2b, 0x11, 0xe0	; OR W, (112Bh)
 	and a, w
 	and a, 0x20
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F29658
 	xor hl, hl
 	.byte 0x8d, 0x02, 0x27	; LD L, (XIY + 002h)
@@ -171730,7 +171730,7 @@ LABEL_F29665:
 
 LABEL_F29666:
 	.byte 0xc1, 0x2a, 0x11, 0x21	; LD A, (112Ah)
-	.byte 0xc9, 0xdb	; CP A, 3
+	cps a, 3
 	jr nz, LABEL_F296BB
 	.byte 0xc1, 0x73, 0x28, 0x3f, 0x0f	; CP (2873h), 00fh
 	jr z, LABEL_F296BB
@@ -171753,7 +171753,7 @@ LABEL_F29698:
 	jr nz, LABEL_F296BB
 	.byte 0x8d, 0x02, 0x21	; LD A, (XIY + 002h)
 	calr LABEL_F2905E
-	.byte 0xc9, 0x33, 0x07	; BIT 007h, A
+	bit 7, a
 	jr z, LABEL_F296AF
 	and a, 0x7F
 	.byte 0x85, 0x3e, 0x04	; OR (XIY), 004h
@@ -171788,7 +171788,7 @@ LABEL_F296EA:
 	jrl nz, LABEL_F29787
 	.byte 0x8d, 0x02, 0x21	; LD A, (XIY + 002h)
 	calr LABEL_F2905E
-	.byte 0xc9, 0x33, 0x07	; BIT 007h, A
+	bit 7, a
 	jr z, LABEL_F29702
 	and a, 0x7F
 	.byte 0x85, 0x3e, 0x04	; OR (XIY), 004h
@@ -171798,7 +171798,7 @@ LABEL_F29702:
 	.byte 0xbd, 0x03, 0x00, 0x07	; LD (XIY + 003h), 007h
 	.byte 0xc1, 0x2b, 0x11, 0x21	; LD A, (112Bh)
 	.byte 0xc1, 0xee, 0x0c, 0xc1	; AND A, (0CEEh)
-	.byte 0xc9, 0x33, 0x07	; BIT 007h, A
+	bit 7, a
 	jr nz, LABEL_F2971D
 	xor w, w
 	.byte 0xbd, 0x04, 0x40	; LD (XIY + 004h), W
@@ -171838,7 +171838,7 @@ LABEL_F29764:
 	jr nz, LABEL_F29787
 	.byte 0x8d, 0x02, 0x21	; LD A, (XIY + 002h)
 	calr LABEL_F2905E
-	.byte 0xc9, 0x33, 0x07	; BIT 007h, A
+	bit 7, a
 	jr z, LABEL_F2977B
 	and a, 0x7F
 	.byte 0x85, 0x3e, 0x04	; OR (XIY), 004h
@@ -171938,7 +171938,7 @@ LABEL_F29852:
 	jr nz, LABEL_F298A8
 	.byte 0x8d, 0x02, 0x21	; LD A, (XIY + 002h)
 	calr LABEL_F2905E
-	.byte 0xc9, 0x33, 0x07	; BIT 007h, A
+	bit 7, a
 	jr z, LABEL_F2986F
 	and a, 0x7F
 	.byte 0x85, 0x3e, 0x04	; OR (XIY), 004h
@@ -171951,9 +171951,9 @@ LABEL_F2986F:
 	.byte 0xc1, 0x2b, 0x11, 0xe1	; OR A, (112Bh)
 	.byte 0x8d, 0x05, 0x20	; LD W, (XIY + 005h)
 	.byte 0xc1, 0xee, 0x0c, 0xe0	; OR W, (0CEEh)
-	.byte 0xc8, 0xdc	; CP W, 4
+	cps w, 4
 	jr z, LABEL_F2989B
-	.byte 0xc8, 0xdb	; CP W, 3
+	cps w, 3
 	jr nz, LABEL_F298A8
 	.byte 0x8d, 0x04, 0x3c, 0xfb	; AND (XIY + 004h), 0fbh
 	.byte 0xbd, 0x05, 0x00, 0x07	; LD (XIY + 005h), 007h
@@ -171961,7 +171961,7 @@ LABEL_F2986F:
 
 LABEL_F2989B:
 	.byte 0xbd, 0x05, 0x00, 0x08	; LD (XIY + 005h), 008h
-	.byte 0xc9, 0x33, 0x02	; BIT 002h, A
+	bit 2, a
 	jr z, LABEL_F298A8
 	.byte 0xbd, 0x04, 0x00, 0x08	; LD (XIY + 004h), 008h
 
@@ -171987,7 +171987,7 @@ LABEL_F298CB:
 	jr nz, LABEL_F2991C
 	.byte 0x8d, 0x02, 0x21	; LD A, (XIY + 002h)
 	calr LABEL_F2905E
-	.byte 0xc9, 0x33, 0x07	; BIT 007h, A
+	bit 7, a
 	jr z, LABEL_F298E8
 	and a, 0x7F
 	.byte 0x85, 0x3e, 0x04	; OR (XIY), 004h
@@ -171998,7 +171998,7 @@ LABEL_F298E8:
 	.byte 0xc1, 0x3b, 0x11, 0x3e, 0x01	; OR (113Bh), 001h
 	.byte 0x8d, 0x04, 0x21	; LD A, (XIY + 004h)
 	and a, 0x10
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F29902
 	ldb a, 0x20
 	jr LABEL_F29904
@@ -172116,11 +172116,11 @@ LABEL_F29A22:
 	jr nz, LABEL_F29A63
 	.byte 0x8d, 0x05, 0x21	; LD A, (XIY + 005h)
 	.byte 0xc1, 0xee, 0x0c, 0xe1	; OR A, (0CEEh)
-	.byte 0xc9, 0xdb	; CP A, 3
+	cps a, 3
 	jr nz, LABEL_F29A63
 	.byte 0x8d, 0x02, 0x21	; LD A, (XIY + 002h)
 	calr LABEL_F2905E
-	.byte 0xc9, 0x33, 0x07	; BIT 007h, A
+	bit 7, a
 	jr z, LABEL_F29A57
 	and a, 0x7F
 	.byte 0x85, 0x3e, 0x04	; OR (XIY), 004h
@@ -172144,7 +172144,7 @@ LABEL_F29A64:
 	jr nz, LABEL_F29A9A
 	.byte 0x8d, 0x02, 0x21	; LD A, (XIY + 002h)
 	calr LABEL_F2905E
-	.byte 0xc9, 0x33, 0x07	; BIT 007h, A
+	bit 7, a
 	jr z, LABEL_F29A8E
 	and a, 0x7F
 	.byte 0x85, 0x3e, 0x04	; OR (XIY), 004h
@@ -172168,7 +172168,7 @@ LABEL_F29A9B:
 	jr nz, LABEL_F29AD1
 	.byte 0x8d, 0x02, 0x21	; LD A, (XIY + 002h)
 	calr LABEL_F2905E
-	.byte 0xc9, 0x33, 0x07	; BIT 007h, A
+	bit 7, a
 	jr z, LABEL_F29AC5
 	and a, 0x7F
 	.byte 0x85, 0x3e, 0x04	; OR (XIY), 004h
@@ -172256,7 +172256,7 @@ LABEL_F29B75:
 LABEL_F29B84:
 	.byte 0x8d, 0x02, 0x21	; LD A, (XIY + 002h)
 	calr LABEL_F2905E
-	.byte 0xc9, 0x33, 0x07	; BIT 007h, A
+	bit 7, a
 	jr z, LABEL_F29B95
 	and a, 0x7F
 	.byte 0x85, 0x3e, 0x04	; OR (XIY), 004h
@@ -172281,7 +172281,7 @@ LABEL_F29B9E:
 	jr z, LABEL_F29BDC
 	.byte 0x8d, 0x02, 0x21	; LD A, (XIY + 002h)
 	calr LABEL_F2905E
-	.byte 0xc9, 0x33, 0x07	; BIT 007h, A
+	bit 7, a
 	jr z, LABEL_F29BCE
 	and a, 0x7F
 	.byte 0x85, 0x3e, 0x04	; OR (XIY), 004h
@@ -172338,7 +172338,7 @@ LABEL_F29C3A:
 	jr nz, LABEL_F29C70
 	.byte 0x8d, 0x02, 0x21	; LD A, (XIY + 002h)
 	calr LABEL_F2905E
-	.byte 0xc9, 0x33, 0x07	; BIT 007h, A
+	bit 7, a
 	jr z, LABEL_F29C64
 	and a, 0x7F
 	.byte 0x85, 0x3e, 0x04	; OR (XIY), 004h
@@ -172366,7 +172366,7 @@ LABEL_F29C8C:
 	jr nz, LABEL_F29CBE
 	.byte 0x8d, 0x02, 0x21	; LD A, (XIY + 002h)
 	calr LABEL_F2905E
-	.byte 0xc9, 0x33, 0x07	; BIT 007h, A
+	bit 7, a
 	jr z, LABEL_F29CA3
 	and a, 0x7F
 	.byte 0x85, 0x3e, 0x04	; OR (XIY), 004h
@@ -172431,7 +172431,7 @@ LABEL_F29D49:
 	jr nz, LABEL_F29D63
 	.byte 0x8d, 0x02, 0x21	; LD A, (XIY + 002h)
 	calr LABEL_F2905E
-	.byte 0xc9, 0x33, 0x07	; BIT 007h, A
+	bit 7, a
 	jr z, LABEL_F29D60
 	and a, 0x7F
 	.byte 0x85, 0x3e, 0x04	; OR (XIY), 004h
@@ -173212,7 +173212,7 @@ LABEL_F2AE87:
 LABEL_F2AEE6:
 	ld xhl, xde
 	ld wa, (xde)
-	.byte 0xd8, 0xdc	; CP WA, 4
+	cps wa, 4
 	jrl ge, LABEL_F2AF94
 	sla wa, 6
 	.byte 0x94, 0x80	; ADD WA, (XIX)
@@ -173312,7 +173312,7 @@ LABEL_F2AFBA:
 LABEL_F2AFE6:
 	call LABEL_FF0FA0
 	inc 4, xsp
-	.byte 0xcf, 0xd9	; CP L, 1
+	cps l, 1
 	jr z, LABEL_F2B002
 	.byte 0x0b, 0x02, 0x00	; PUSHW 0002h
 	.byte 0x0b, 0x4e, 0x0e	; PUSHW 0e4eh
@@ -173326,7 +173326,7 @@ LABEL_F2B002:
 	.byte 0xf2, 0x4a, 0x0e, 0x02, 0x32	; LDA XDE, 020E4Ah
 	.byte 0xba, 0x02, 0x31	; LDA XBC, XDE + 002h
 	ld wa, (xbc)
-	.byte 0xd8, 0xdc	; CP WA, 4
+	cps wa, 4
 	.byte 0xb0, 0xf9	; RET GE
 	sla wa, 6
 	.byte 0x92, 0x80	; ADD WA, (XDE)
@@ -173403,7 +173403,7 @@ LABEL_F2B0BC:
 	inc 1, iz
 	ld wa, iz
 	inc 1, wa
-	.byte 0xd8, 0xdc	; CP WA, 4
+	cps wa, 4
 	jr le, LABEL_F2B084
 	.byte 0xf2, 0x3e, 0x0e, 0x02, 0x30	; LDA XWA, 020E3Eh
 	.byte 0xb8, 0x02, 0x02, 0x02, 0x00	; LDW (XWA + 002h:8), 0002h
@@ -173444,7 +173444,7 @@ LABEL_F2B122:
 
 LABEL_F2B144:
 	.byte 0xc2, 0x4e, 0x0f, 0x02, 0x25	; LD E, (020F4Eh)
-	.byte 0xcd, 0xd8	; CP E, 0
+	cps e, 0
 	jrl z, LABEL_F2B208
 	.byte 0xf2, 0xbe, 0x0c, 0x02, 0x33	; LDA XHL, 020CBEh
 	cp e, 0xD
@@ -173592,7 +173592,7 @@ LABEL_F2B2BD:
 LABEL_F2B2E7:
 	call LABEL_FF0FA0
 	inc 4, xsp
-	.byte 0xcf, 0xd9	; CP L, 1
+	cps l, 1
 	jr z, LABEL_F2B319
 	.byte 0x0b, 0x02, 0x00	; PUSHW 0002h
 	.byte 0x0b, 0x4e, 0x0e	; PUSHW 0e4eh
@@ -173612,7 +173612,7 @@ LABEL_F2B319:
 	.byte 0xf2, 0x4a, 0x0e, 0x02, 0x32	; LDA XDE, 020E4Ah
 	.byte 0xba, 0x02, 0x31	; LDA XBC, XDE + 002h
 	ld wa, (xbc)
-	.byte 0xd8, 0xdc	; CP WA, 4
+	cps wa, 4
 	jrl ge, LABEL_F2B3B9
 	sla wa, 6
 	.byte 0x92, 0x80	; ADD WA, (XDE)
@@ -174698,7 +174698,7 @@ AcTrAsGridBoxProc:
 LABEL_F2BF89:
 	ld xwa, 0xC0
 	call LABEL_FCD437
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F2BF9F
 	ld xwa, 0x8B0009
 	lds bc, 0
@@ -174785,15 +174785,15 @@ LABEL_F2C060:
 	.byte 0xc1, 0xe0, 0x0c, 0x23	; LD C, (0CE0h)
 	ld e, c
 	and e, 0x1
-	.byte 0xcd, 0xd8	; CP E, 0
+	cps e, 0
 	.byte 0xdc, 0x7e	; SCC NZ, IX
 	.byte 0x9f, 0x06, 0x20	; LD WA, (XSP + 006h)
 	sub wa, 0x2
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	.byte 0xdb, 0x76	; SCC Z, HL
 	and hl, ix
 	jr z, LABEL_F2C0B9
-	.byte 0xcb, 0x30, 0x00	; RES 000h, C
+	res 0, c
 	.byte 0xf1, 0xe0, 0x0c, 0x43	; LD (0CE0h), C
 	.byte 0xaf, 0x10, 0x20	; LD XWA, (XSP + 010h)
 	ld xbc, 0x1E0008E
@@ -174805,9 +174805,9 @@ LABEL_F2C060:
 	jr LABEL_F2C0EA
 
 LABEL_F2C0B9:
-	.byte 0xcd, 0xd8	; CP E, 0
+	cps e, 0
 	.byte 0xd9, 0x76	; SCC Z, BC
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	.byte 0xd8, 0x76	; SCC Z, WA
 	and wa, bc
 	jrl nz, LABEL_F2C3F5
@@ -174909,15 +174909,15 @@ LABEL_F2C1CD:
 	.byte 0xc1, 0xe0, 0x0c, 0x23	; LD C, (0CE0h)
 	ld e, c
 	and e, 0x1
-	.byte 0xcd, 0xd8	; CP E, 0
+	cps e, 0
 	.byte 0xdc, 0x76	; SCC Z, IX
 	.byte 0x9f, 0x06, 0x20	; LD WA, (XSP + 006h)
 	dec 2, wa
-	.byte 0xd8, 0xdf	; CP WA, 7
+	cps wa, 7
 	.byte 0xdb, 0x76	; SCC Z, HL
 	and hl, ix
 	jr z, LABEL_F2C224
-	.byte 0xcb, 0x31, 0x00	; SET 000h, C
+	set 0, c
 	.byte 0xf1, 0xe0, 0x0c, 0x43	; LD (0CE0h), C
 	.byte 0xaf, 0x10, 0x20	; LD XWA, (XSP + 010h)
 	ld xbc, 0x1E0008E
@@ -174929,9 +174929,9 @@ LABEL_F2C1CD:
 	jr LABEL_F2C255
 
 LABEL_F2C224:
-	.byte 0xcd, 0xd8	; CP E, 0
+	cps e, 0
 	.byte 0xd9, 0x7e	; SCC NZ, BC
-	.byte 0xd8, 0xdf	; CP WA, 7
+	cps wa, 7
 	.byte 0xd8, 0x76	; SCC Z, WA
 	and wa, bc
 	jrl nz, LABEL_F2C3F5
@@ -175122,7 +175122,7 @@ LABEL_F2C41A:
 	.byte 0xe4, 0xe0, 0x27, 0x0e
 
 LABEL_F2C446:
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_F2C465
 	ld a, c
 	extz wa
@@ -175264,11 +175264,11 @@ LABEL_F2C735:
 	.byte 0xb9, 0x04, 0x62	; LD (XBC + 004h), XDE
 	ld bc, (xbc)
 	ld wa, (xwa)
-	.byte 0xd9, 0xdb	; CP BC, 3
+	cps bc, 3
 	jrl z, LABEL_F2C8AC
-	.byte 0xd9, 0xda	; CP BC, 2
+	cps bc, 2
 	jr z, LABEL_F2C7C3
-	.byte 0xd9, 0xd9	; CP BC, 1
+	cps bc, 1
 	jrl nz, LABEL_F2C996
 	call 0xFA44D0
 	ld xwa, xhl
@@ -175320,7 +175320,7 @@ LABEL_F2C7C3:
 	.byte 0xd1, 0xd0, 0xf1, 0xc3	; AND HL, (0F1D0h)
 	.byte 0xbf, 0x04, 0x31	; LDA XBC, XSP + 004h
 	ld xwa, 0xE26494
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F2C7E5
 	ld xwa, 0xE26490
 
@@ -175343,7 +175343,7 @@ LABEL_F2C7E5:
 	jr nz, LABEL_F2C81E
 	lds wa, 1
 	calr LABEL_F2C446
-	.byte 0xcf, 0xd9	; CP L, 1
+	cps l, 1
 	jrl nz, LABEL_F2C89B
 	ld xwa, 0xE26498
 	jr LABEL_F2C890
@@ -175351,7 +175351,7 @@ LABEL_F2C7E5:
 LABEL_F2C81E:
 	lds wa, 0
 	calr LABEL_F2C446
-	.byte 0xcf, 0xd9	; CP L, 1
+	cps l, 1
 	jr nz, LABEL_F2C89B
 	ld xwa, 0xE2649C
 	jr LABEL_F2C890
@@ -175363,7 +175363,7 @@ LABEL_F2C82E:
 	.byte 0xd1, 0xd0, 0xf1, 0xc3	; AND HL, (0F1D0h)
 	.byte 0xbf, 0x04, 0x31	; LDA XBC, XSP + 004h
 	ld xwa, 0xE264A4
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F2C84A
 	ld xwa, 0xE264A0
 
@@ -175386,7 +175386,7 @@ LABEL_F2C84A:
 	jr nz, LABEL_F2C882
 	lds wa, 1
 	calr LABEL_F2C446
-	.byte 0xcf, 0xd9	; CP L, 1
+	cps l, 1
 	jr nz, LABEL_F2C89B
 	ld xwa, 0xE264A8
 	jr LABEL_F2C890
@@ -175394,7 +175394,7 @@ LABEL_F2C84A:
 LABEL_F2C882:
 	lds wa, 0
 	calr LABEL_F2C446
-	.byte 0xcf, 0xd9	; CP L, 1
+	cps l, 1
 	jr nz, LABEL_F2C89B
 	ld xwa, 0xE264AC
 
@@ -175420,7 +175420,7 @@ LABEL_F2C8AC:
 	calr LABEL_F2C40B
 	.byte 0xd1, 0x90, 0xf2, 0xc3	; AND HL, (0F290h)
 	ld xwa, 0xE264B4
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F2C8CB
 	ld xwa, 0xE264B0
 
@@ -175444,7 +175444,7 @@ LABEL_F2C8CB:
 	jr nz, LABEL_F2C907
 	lds wa, 1
 	calr LABEL_F2C446
-	.byte 0xcf, 0xd9	; CP L, 1
+	cps l, 1
 	jrl nz, LABEL_F2C984
 	ld xwa, 0xE264B8
 	jr LABEL_F2C979
@@ -175452,7 +175452,7 @@ LABEL_F2C8CB:
 LABEL_F2C907:
 	lds wa, 0
 	calr LABEL_F2C446
-	.byte 0xcf, 0xd9	; CP L, 1
+	cps l, 1
 	jr nz, LABEL_F2C984
 	ld xwa, 0xE264BC
 	jr LABEL_F2C979
@@ -175463,7 +175463,7 @@ LABEL_F2C917:
 	calr LABEL_F2C40B
 	.byte 0xd1, 0x90, 0xf2, 0xc3	; AND HL, (0F290h)
 	ld xwa, 0xE264C4
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F2C930
 	ld xwa, 0xE264C0
 
@@ -175487,7 +175487,7 @@ LABEL_F2C930:
 	jr nz, LABEL_F2C96B
 	lds wa, 1
 	calr LABEL_F2C446
-	.byte 0xcf, 0xd9	; CP L, 1
+	cps l, 1
 	jr nz, LABEL_F2C984
 	ld xwa, 0xE264C8
 	jr LABEL_F2C979
@@ -175495,7 +175495,7 @@ LABEL_F2C930:
 LABEL_F2C96B:
 	lds wa, 0
 	calr LABEL_F2C446
-	.byte 0xcf, 0xd9	; CP L, 1
+	cps l, 1
 	jr nz, LABEL_F2C984
 	ld xwa, 0xE264CC
 
@@ -176063,7 +176063,7 @@ LABEL_F2CEA4:
 
 LABEL_F2CEB0:
 	.byte 0xd2, 0x86, 0x10, 0x02, 0x23	; LD HL, (021086h)
-	.byte 0xdb, 0x30, 0x00	; RES 000h, HL
+	res 0, hl
 	extz xhl
 	ret
 
@@ -176885,7 +176885,7 @@ LABEL_F2E749:
 	jr z, LABEL_F2E7AB
 	lds wa, 4
 	call LABEL_FC56A1
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F2E7AB
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
@@ -176958,7 +176958,7 @@ LABEL_F2E825:
 	jr z, LABEL_F2E887
 	lds wa, 4
 	call LABEL_FC56A1
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F2E887
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
@@ -177066,7 +177066,7 @@ LABEL_F2E94D:
 	.byte 0xc1, 0x6e, 0x29, 0x21	; LD A, (296Eh)
 	extz wa
 	dec 1, wa
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr lt, LABEL_F2E95F
 	cp wa, 0x30
 	jr le, LABEL_F2E962
@@ -177115,7 +177115,7 @@ LABEL_F2E9AF:
 	jr nz, LABEL_F2E9DD
 	ld xwa, 0x4002
 	call LABEL_FCD437
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_F2E9DD
 	ld xwa, 0x4002
 	ldw bc, 0x7F
@@ -177186,7 +177186,7 @@ LABEL_F2EA55:
 	ld wa, iz
 	ldw bc, 0x5D
 	call LABEL_FCD4F7
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_F2EA95
 	.byte 0xf1, 0x8d, 0x91, 0x30	; LDA XWA, 918Dh
 	ld bc, iz
@@ -177259,7 +177259,7 @@ LABEL_F2EB09:
 	jr nz, LABEL_F2EB36
 	ld xwa, 0x4004
 	call LABEL_FCD437
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_F2EB36
 	ld xwa, 0x4004
 	lds bc, 1
@@ -177517,13 +177517,13 @@ LABEL_F2ED71:
 	.byte 0xbf, 0x04, 0x63	; LD (XSP + 004h), XHL
 	.byte 0xaf, 0x0c, 0x20	; LD XWA, (XSP + 00ch)
 	call 0xFA5EA5
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F2EDFF
 	.byte 0xaf, 0x0c, 0x20	; LD XWA, (XSP + 00ch)
 	ld xbc, 0x1E8006E
 	.byte 0xaf, 0x08, 0x22	; LD XDE, (XSP + 008h)
 	call 0xFA9660
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F2EDFF
 	.byte 0xaf, 0x04, 0x20	; LD XWA, (XSP + 004h)
 	.byte 0x98, 0x2c, 0x22	; LD DE, (XWA + 02ch)
@@ -177821,7 +177821,7 @@ MsgToTtlProc:
 	cp xhl, 0x1A000EE
 	jr nz, LABEL_F2F071
 	call 0xFA589F
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F2F071
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
@@ -179377,7 +179377,7 @@ LABEL_F305C9:
 LABEL_F30678:
 	call LABEL_FCD437
 	ld xwa, 0xE347B0
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F3068A
 	ld xwa, 0xE347A6
 
@@ -182078,7 +182078,7 @@ LABEL_F32634:
 	.byte 0xaf, 0x42, 0x20	; LD XWA, (XSP + 042h)
 	and xwa, 0xFF
 	.byte 0xc7, 0xfb, 0x99	; LD QIZH, A
-	.byte 0xcb, 0xd8	; CP C, 0
+	cps c, 0
 	jr nz, LABEL_F326DB
 	.byte 0xbf, 0x3a, 0x34	; LDA XIX, XSP + 03ah
 	.byte 0xbc, 0x02, 0x31	; LDA XBC, XIX + 002h
@@ -182175,7 +182175,7 @@ LABEL_F32743:
 	.byte 0xaf, 0x42, 0x20	; LD XWA, (XSP + 042h)
 	srl xwa, 8
 	and xwa, 0xFF
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	jr nz, LABEL_F3275F
 	.byte 0xbf, 0x3a, 0x30	; LDA XWA, XSP + 03ah
 	.byte 0x0b, 0xf2, 0x00	; PUSHW 00f2h
@@ -184749,7 +184749,7 @@ LABEL_F345FF:
 	call 0xFA4409
 	ld xwa, 0x4006
 	call LABEL_FCD437
-	.byte 0xdb, 0xd9	; CP HL, 1
+	cps hl, 1
 	jr nz, LABEL_F3461D
 	ld xwa, xiz
 	ld xbc, 0x1E0003B
@@ -185009,11 +185009,11 @@ LABEL_F34920:
 
 LABEL_F34931:
 	ld c, a
-	.byte 0xc9, 0xdb	; CP A, 3
+	cps a, 3
 	jr z, LABEL_F34947
-	.byte 0xcb, 0xda	; CP C, 2
+	cps c, 2
 	jr z, LABEL_F34943
-	.byte 0xcb, 0xd9	; CP C, 1
+	cps c, 1
 	jr nz, LABEL_F34986
 	ldb l, 0x4
 	jr LABEL_F34988
@@ -185030,11 +185030,11 @@ LABEL_F3494B:
 	cp l, 0x88
 	jr nz, LABEL_F3496A
 	ld c, a
-	.byte 0xc9, 0xdb	; CP A, 3
+	cps a, 3
 	jr z, LABEL_F34966
-	.byte 0xcb, 0xda	; CP C, 2
+	cps c, 2
 	jr z, LABEL_F34962
-	.byte 0xcb, 0xd9	; CP C, 1
+	cps c, 1
 	jr nz, LABEL_F34986
 	ldb l, 0x8
 	jr LABEL_F34988
@@ -185055,11 +185055,11 @@ LABEL_F3496A:
 
 LABEL_F34974:
 	ld c, a
-	.byte 0xc9, 0xdb	; CP A, 3
+	cps a, 3
 	jr z, LABEL_F34947
-	.byte 0xcb, 0xda	; CP C, 2
+	cps c, 2
 	jr z, LABEL_F34943
-	.byte 0xcb, 0xd9	; CP C, 1
+	cps c, 1
 	jr nz, LABEL_F34986
 	ldb l, 0xB
 	jr LABEL_F34988
@@ -185075,9 +185075,9 @@ LABEL_F34988:
 LABEL_F3498E:
 	extz wa
 	dec 4, wa
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr lt, LABEL_F3491B
-	.byte 0xd8, 0xdf	; CP WA, 7
+	cps wa, 7
 	jr gt, LABEL_F3491B
 	add wa, wa
 	.byte 0xf2, 0x12, 0x4b, 0xe3, 0x34	; LDA XIX, 0E34B12h
@@ -185416,9 +185416,9 @@ LABEL_F35005:
 	.byte 0xeb, 0xa8	; LD XHL, 0
 	jrl LABEL_F35239
 	extz wa
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jrl mi, LABEL_F350F5
-	.byte 0xd8, 0xde	; CP WA, 6
+	cps wa, 6
 	jrl gt, LABEL_F350F5
 	add wa, wa
 	.byte 0xf2, 0xe2, 0x4c, 0xe3, 0x34	; LDA XIX, 0E34CE2h
@@ -185478,7 +185478,7 @@ LABEL_F35115:
 	ldb l, 0xE
 	jr LABEL_F350F7
 	extz wa
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jrl mi, LABEL_F35005
 	cp wa, 0xE
 	jrl gt, LABEL_F35005
@@ -185542,7 +185542,7 @@ LABEL_F3523E:
 	jr z, LABEL_F3527A
 	extz wa
 	sub wa, 0x9B
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jrl lt, LABEL_F354F7
 	cp wa, 0xD
 	jrl gt, LABEL_F354F7
@@ -186379,7 +186379,7 @@ LABEL_F35B02:
 	.byte 0xbe, 0x01, 0x33	; LDA XHL, XIZ + 001h
 	cp w, 0x55
 	jrl z, LABEL_F35C6F
-	.byte 0xc8, 0xd8	; CP W, 0
+	cps w, 0
 	jrl z, LABEL_F35C6F
 	ld c, a
 	extz bc
@@ -186395,7 +186395,7 @@ LABEL_F35B02:
 	ld a, w
 	extz wa
 	.byte 0xd8, 0x68	; DEC 8, WA
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jrl lt, LABEL_F35C7E
 	cp wa, 0x11
 	jr le, LABEL_F35B62
@@ -186460,7 +186460,7 @@ LABEL_F35BC7:
 	jr LABEL_F35C52
 	add bc, bc
 	.byte 0xd3, 0x07, 0xe8, 0xe4, 0x20	; LD WA, (XDE + BC)
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr ge, LABEL_F35C2D
 	neg wa
 	pushw wa
@@ -186469,7 +186469,7 @@ LABEL_F35BC7:
 
 LABEL_F35C2D:
 	pushw wa
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr le, LABEL_F35C39
 	ld xwa, 0xE34E12
 	jr LABEL_F35C8A
@@ -186756,7 +186756,7 @@ LABEL_F35E60:
 	lds iz, 0
 	.byte 0xc1, 0x74, 0x27, 0x21	; LD A, (2774h)
 	extz wa
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jrl ule, LABEL_F35F87
 
 LABEL_F35EB8:
@@ -186826,7 +186826,7 @@ LABEL_F35F56:
 	ld xbc, 0xB0000
 	add xbc, xwa
 	ld a, (xbc)
-	.byte 0xc9, 0x33, 0x07	; BIT 007h, A
+	bit 7, a
 	jr z, LABEL_F35F56
 	.byte 0xc1, 0x74, 0x27, 0x21	; LD A, (2774h)
 	extz wa
@@ -186852,7 +186852,7 @@ LABEL_F35F89:
 	lds iz, 0
 	.byte 0xc1, 0x74, 0x27, 0x21	; LD A, (2774h)
 	extz wa
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jrl ule, LABEL_F360BA
 
 LABEL_F35FD9:
@@ -186930,7 +186930,7 @@ LABEL_F36089:
 	ld xbc, 0xB0000
 	add xbc, xwa
 	ld a, (xbc)
-	.byte 0xc9, 0x33, 0x07	; BIT 007h, A
+	bit 7, a
 	jr z, LABEL_F36089
 	.byte 0xc1, 0x74, 0x27, 0x21	; LD A, (2774h)
 	extz wa
@@ -187015,7 +187015,7 @@ LABEL_F36142:
 	add xbc, xwa
 	ld c, (xbc)
 	.byte 0xc7, 0xfb, 0x30, 0x07	; RES 007h, QIZH
-	.byte 0xcb, 0x30, 0x07	; RES 007h, C
+	res 7, c
 	extz bc
 	.byte 0xd9, 0x08, 0x60, 0x00	; MUL_BC 0060h
 	.byte 0xc7, 0xfb, 0x89	; LD A, QIZH
@@ -187207,7 +187207,7 @@ LABEL_F363AC:
 
 LABEL_F363C3:
 	call LABEL_EF24ED
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	.byte 0xb0, 0xf6	; RET Z
 	.byte 0xc1, 0x38, 0x8d, 0x21	; LD A, (8D38h)
 	cp a, 0x95
@@ -187221,12 +187221,12 @@ LABEL_F363D9:
 	.byte 0xd1, 0x31, 0xf2, 0x3f, 0x00, 0x00	; CPW (0F231h), 0000h
 	jr z, LABEL_F3644E
 	call LABEL_EF24ED
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	.byte 0xb0, 0xf6	; RET Z
 
 LABEL_F363EF:
 	call LABEL_EF24A8
-	.byte 0xcf, 0x33, 0x07	; BIT 007h, L
+	bit 7, l
 	jr z, LABEL_F3645B
 	and l, 0xF0
 	cp l, 0x90
@@ -187247,7 +187247,7 @@ LABEL_F36424:
 	cp hl, 0xFF
 	jr z, LABEL_F3645B
 	calr LABEL_F36C48
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_F3645B
 	.byte 0xf1, 0x5f, 0x29, 0xb0	; RES 0, (295Fh)
 	.byte 0xc1, 0x60, 0x29, 0x19, 0x62, 0x29	; LD_8_8 02962h, 02960h
@@ -187267,13 +187267,13 @@ LABEL_F36455:
 
 LABEL_F3645B:
 	call LABEL_EF24ED
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_F363EF
 	ret
 
 LABEL_F36464:
 	.byte 0xc1, 0x5c, 0x29, 0x21	; LD A, (295Ch)
-	.byte 0xc9, 0x33, 0x07	; BIT 007h, A
+	bit 7, a
 	.byte 0xb0, 0xf6	; RET Z
 	cp a, 0x80
 	.byte 0xb0, 0xf6	; RET Z
@@ -187286,21 +187286,21 @@ LABEL_F36479:
 	.byte 0xb0, 0xfe	; RET NZ
 	.byte 0xf1, 0x5c, 0x29, 0x00, 0x00	; LD (295Ch), 000h
 	.byte 0xc1, 0x5d, 0x29, 0x21	; LD A, (295Dh)
-	.byte 0xc9, 0xdd	; CP A, 5
+	cps a, 5
 	jrl z, LABEL_F37B1C
-	.byte 0xc9, 0xdc	; CP A, 4
+	cps a, 4
 	jrl z, LABEL_F37511
-	.byte 0xc9, 0xdb	; CP A, 3
+	cps a, 3
 	jrl z, LABEL_F374F4
-	.byte 0xc9, 0xda	; CP A, 2
+	cps a, 2
 	jrl z, LABEL_F374EB
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	jrl nz, LABEL_F3726E
 	jrl LABEL_F374C6
 
 LABEL_F364A5:
 	.byte 0xc1, 0x5e, 0x29, 0x21	; LD A, (295Eh)
-	.byte 0xc9, 0x33, 0x07	; BIT 007h, A
+	bit 7, a
 	.byte 0xb0, 0xf6	; RET Z
 	cp a, 0x80
 	.byte 0xb0, 0xf6	; RET Z
@@ -187325,7 +187325,7 @@ LABEL_F364CA:
 
 LABEL_F364D5:
 	lds iy, 0
-	.byte 0xdc, 0xd8	; CP IX, 0
+	cps ix, 0
 	.byte 0xb0, 0xf3	; RET ULE
 	.byte 0xf1, 0x46, 0x27, 0x32	; LDA XDE, 2746h
 
@@ -187336,9 +187336,9 @@ LABEL_F364DF:
 	extz xbc
 	add xbc, xde
 	ld a, (xbc)
-	.byte 0xc9, 0x33, 0x07	; BIT 007h, A
+	bit 7, a
 	jr nz, LABEL_F36510
-	.byte 0xc9, 0x31, 0x07	; SET 007h, A
+	set 7, a
 	ld (xbc), a
 	lds wa, 1
 	add wa, hl
@@ -187431,7 +187431,7 @@ LABEL_F36591:
 
 LABEL_F365A2:
 	.byte 0xd1, 0x44, 0x27, 0x20	; LD WA, (2744h)
-	.byte 0xd8, 0xd9	; CP WA, 1
+	cps wa, 1
 	jr ule, LABEL_F365B3
 	dec 1, wa
 	.byte 0xf1, 0x44, 0x27, 0x50	; LD (2744h), WA
@@ -187475,7 +187475,7 @@ LABEL_F36600:
 
 LABEL_F3660D:
 	.byte 0xc1, 0x84, 0x27, 0x21	; LD A, (2784h)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jrl z, LABEL_F36D5A
 	dec 1, a
 	.byte 0xf1, 0x84, 0x27, 0x41	; LD (2784h), A
@@ -187527,7 +187527,7 @@ LABEL_F3665F:
 
 LABEL_F3668C:
 	.byte 0xc1, 0x86, 0x27, 0x21	; LD A, (2786h)
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	.byte 0xb0, 0xf6	; RET Z
 	dec 1, a
 	.byte 0xf1, 0x86, 0x27, 0x41	; LD (2786h), A
@@ -187571,7 +187571,7 @@ LABEL_F366E4:
 
 LABEL_F366FA:
 	.byte 0xc1, 0x88, 0x27, 0x21	; LD A, (2788h)
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	.byte 0xb0, 0xf6	; RET Z
 	dec 1, a
 	.byte 0xf1, 0x88, 0x27, 0x41	; LD (2788h), A
@@ -187588,7 +187588,7 @@ LABEL_F3670F:
 
 LABEL_F36722:
 	.byte 0xc1, 0x8a, 0x27, 0x21	; LD A, (278Ah)
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	.byte 0xb0, 0xf6	; RET Z
 	dec 1, a
 	.byte 0xf1, 0x8a, 0x27, 0x41	; LD (278Ah), A
@@ -187639,13 +187639,13 @@ LABEL_F36791:
 	.byte 0xf1, 0x5f, 0x29, 0xc8	; BIT 0, (295Fh)
 	jr z, LABEL_F367C6
 	.byte 0xd1, 0x8c, 0x27, 0x20	; LD WA, (278Ch)
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr nz, LABEL_F367A7
 	.byte 0xf1, 0x8c, 0x27, 0x02, 0x01, 0x00	; LDW (278Ch), 0001h
 	jr LABEL_F367B1
 
 LABEL_F367A7:
-	.byte 0xd8, 0xd9	; CP WA, 1
+	cps wa, 1
 	.byte 0xb0, 0xf3	; RET ULE
 	dec 1, wa
 	.byte 0xf1, 0x8c, 0x27, 0x50	; LD (278Ch), WA
@@ -187660,13 +187660,13 @@ LABEL_F367B1:
 
 LABEL_F367C6:
 	.byte 0xd1, 0x8e, 0x27, 0x20	; LD WA, (278Eh)
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr nz, LABEL_F367D6
 	.byte 0xf1, 0x8e, 0x27, 0x02, 0x01, 0x00	; LDW (278Eh), 0001h
 	jr LABEL_F367E0
 
 LABEL_F367D6:
-	.byte 0xd8, 0xd9	; CP WA, 1
+	cps wa, 1
 	.byte 0xb0, 0xf6	; RET Z
 	dec 1, wa
 	.byte 0xf1, 0x8e, 0x27, 0x50	; LD (278Eh), WA
@@ -187688,13 +187688,13 @@ LABEL_F367FE:
 	.byte 0xf1, 0x5c, 0x29, 0xcf	; BIT 7, (295Ch)
 	.byte 0xb0, 0xfe	; RET NZ
 	.byte 0xd1, 0x92, 0x27, 0x20	; LD WA, (2792h)
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr nz, LABEL_F36814
 	.byte 0xf1, 0x92, 0x27, 0x02, 0x30, 0x00	; LDW (2792h), 0030h
 	jr LABEL_F3681E
 
 LABEL_F36814:
-	.byte 0xd8, 0xd9	; CP WA, 1
+	cps wa, 1
 	.byte 0xb0, 0xf3	; RET ULE
 	dec 1, wa
 	.byte 0xf1, 0x92, 0x27, 0x50	; LD (2792h), WA
@@ -187726,7 +187726,7 @@ LABEL_F3685F:
 
 LABEL_F36864:
 	.byte 0xd1, 0x66, 0x26, 0x20	; LD WA, (2666h)
-	.byte 0xd8, 0xdd	; CP WA, 5
+	cps wa, 5
 	jr ule, LABEL_F36874
 	dec 1, wa
 	.byte 0xf1, 0x66, 0x26, 0x50	; LD (2666h), WA
@@ -187735,7 +187735,7 @@ LABEL_F36864:
 LABEL_F36874:
 	.byte 0xd1, 0xaf, 0x28, 0x20	; LD WA, (28AFh)
 	call LABEL_F41C39
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_F36886
 	.byte 0xf1, 0x7a, 0x28, 0x00, 0xff	; LD (287Ah), 0ffh
 	ret
@@ -187746,7 +187746,7 @@ LABEL_F36886:
 
 LABEL_F36890:
 	call LABEL_F421A6
-	.byte 0xcf, 0x33, 0x07	; BIT 007h, L
+	bit 7, l
 	jr z, LABEL_F36864
 	ret
 
@@ -187843,7 +187843,7 @@ LABEL_F36949:
 	extz bc
 	lds wa, 0
 	call LABEL_F4178A
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F36988
 	.byte 0xc7, 0xfb, 0x89	; LD A, QIZH
 	inc 1, a
@@ -187871,7 +187871,7 @@ LABEL_F36992:
 LABEL_F36996:
 	lds de, 0
 	.byte 0xd1, 0x9a, 0x27, 0x20	; LD WA, (279Ah)
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr c, LABEL_F369AA
 	.byte 0xd1, 0x92, 0x27, 0x21	; LD BC, (2792h)
 
@@ -187945,14 +187945,14 @@ LABEL_F36A30:
 	cp l, 0x90
 	.byte 0xb0, 0xfe	; RET NZ
 	calr LABEL_F369AF
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	.byte 0xb0, 0xfe	; RET NZ
 	jr LABEL_F36A0B
 
 LABEL_F36A45:
 	.byte 0xc1, 0x5f, 0x29, 0x21	; LD A, (295Fh)
-	.byte 0xc9, 0x30, 0x01	; RES 001h, A
-	.byte 0xc9, 0x30, 0x04	; RES 004h, A
+	res 1, a
+	res 4, a
 	.byte 0xf1, 0x5f, 0x29, 0x41	; LD (295Fh), A
 	call LABEL_F421A6
 	cp l, 0x82
@@ -188004,7 +188004,7 @@ LABEL_F36ABC:
 	cp l, 0x90
 	jr nz, LABEL_F36A7E
 	calr LABEL_F369AF
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_F36A7E
 	jrl LABEL_F36A0B
 
@@ -188045,7 +188045,7 @@ LABEL_F36AFD:
 	cp l, 0x90
 	jr nz, LABEL_F36B8C
 	calr LABEL_F369AF
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_F36B8C
 	.byte 0xf1, 0x5f, 0x29, 0xb8	; SET 0, (295Fh)
 	call LABEL_F40052
@@ -188060,7 +188060,7 @@ LABEL_F36AFD:
 	.byte 0xc7, 0xfb, 0x9f	; LD QIZH, L
 	call LABEL_F40052
 	call LABEL_F421A6
-	.byte 0xcf, 0x30, 0x07	; RES 007h, L
+	res 7, l
 	.byte 0xc7, 0xfb, 0x30, 0x07	; RES 007h, QIZH
 	extz hl
 	ld bc, hl
@@ -188094,11 +188094,11 @@ LABEL_F36B95:
 	cp l, 0x90
 	jr nz, LABEL_F36BC7
 	calr LABEL_F369AF
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_F36BC7
 	call LABEL_F40052
 	call LABEL_F421A6
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jrl z, LABEL_F3685F
 
 LABEL_F36BC4:
@@ -188133,7 +188133,7 @@ LABEL_F36BE6:
 
 LABEL_F36BF2:
 	lds iz, 0
-	.byte 0xdd, 0xd8	; CP IY, 0
+	cps iy, 0
 	jr ule, LABEL_F36C30
 	.byte 0xf1, 0x46, 0x27, 0x34	; LDA XIX, 2746h
 
@@ -188144,7 +188144,7 @@ LABEL_F36BFC:
 	extz xhl
 	add xhl, xix
 	ld a, (xhl)
-	.byte 0xc9, 0x33, 0x07	; BIT 007h, A
+	bit 7, a
 	jr z, LABEL_F36C2A
 	lds de, 1
 	add de, bc
@@ -188153,7 +188153,7 @@ LABEL_F36BFC:
 	ld c, (xde)
 	.byte 0xc1, 0x60, 0x29, 0xf3	; CP C, (2960h)
 	jr nz, LABEL_F36C2A
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
+	res 7, a
 	ld (xhl), a
 	ld l, (xde)
 	extz hl
@@ -188260,7 +188260,7 @@ LABEL_F36D2F:
 
 LABEL_F36D3C:
 	.byte 0xc1, 0x98, 0x27, 0x21	; LD A, (2798h)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	.byte 0xb0, 0xf6	; RET Z
 	dec 1, a
 	.byte 0xf1, 0x98, 0x27, 0x41	; LD (2798h), A
@@ -188274,7 +188274,7 @@ LABEL_F36D59:
 
 LABEL_F36D5A:
 	.byte 0xd1, 0x82, 0x27, 0x20	; LD WA, (2782h)
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr z, LABEL_F36D73
 	.byte 0xf1, 0x84, 0x27, 0x00, 0x5f	; LD (2784h), 05fh
 	.byte 0xd1, 0x82, 0x27, 0x20	; LD WA, (2782h)
@@ -188300,7 +188300,7 @@ LABEL_F36D8D:
 LABEL_F36D9B:
 	.byte 0xf1, 0x5f, 0x29, 0xc8	; BIT 0, (295Fh)
 	jrl z, LABEL_F36E85
-	.byte 0xd8, 0xd9	; CP WA, 1
+	cps wa, 1
 	.byte 0xb0, 0xf6	; RET Z
 	.byte 0xf1, 0x5c, 0x29, 0x00, 0x00	; LD (295Ch), 000h
 	calr LABEL_F383CB
@@ -188381,7 +188381,7 @@ LABEL_F36E7B:
 
 LABEL_F36E85:
 	.byte 0xd1, 0x44, 0x27, 0x20	; LD WA, (2744h)
-	.byte 0xd8, 0xd9	; CP WA, 1
+	cps wa, 1
 	.byte 0xb0, 0xf3	; RET ULE
 	dec 1, wa
 	.byte 0xf1, 0x44, 0x27, 0x50	; LD (2744h), WA
@@ -188522,9 +188522,9 @@ LABEL_F37022:
 	.byte 0xf1, 0x42, 0x27, 0xc8	; BIT 0, (2742h)
 	jrl z, LABEL_F3712A
 	.byte 0xc1, 0x5b, 0x29, 0x21	; LD A, (295Bh)
-	.byte 0xc9, 0x33, 0x00	; BIT 000h, A
+	bit 0, a
 	jrl z, LABEL_F3712A
-	.byte 0xc9, 0x30, 0x00	; RES 000h, A
+	res 0, a
 	.byte 0xf1, 0x5b, 0x29, 0x41	; LD (295Bh), A
 
 LABEL_F3703A:
@@ -188533,7 +188533,7 @@ LABEL_F3703A:
 	extz bc
 	lds wa, 0
 	call LABEL_F4178A
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F37055
 
 LABEL_F3704C:
@@ -188681,7 +188681,7 @@ LABEL_F371BF:
 	extz xwa
 	add xwa, xbc
 	ld a, (xwa)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F371F9
 	.byte 0xf1, 0x60, 0x29, 0x41	; LD (2960h), A
 	lds wa, 2
@@ -188807,7 +188807,7 @@ LABEL_F372DB:
 	.byte 0xd1, 0x72, 0x27, 0x20	; LD WA, (2772h)
 	dec 1, wa
 	.byte 0xf1, 0x72, 0x27, 0x50	; LD (2772h), WA
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr nz, LABEL_F372DB
 
 LABEL_F372F6:
@@ -188836,7 +188836,7 @@ LABEL_F37325:
 	.byte 0xd1, 0x82, 0x27, 0x20	; LD WA, (2782h)
 	inc 2, wa
 	.byte 0xf1, 0x72, 0x27, 0x50	; LD (2772h), WA
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	.byte 0xb0, 0xf6	; RET Z
 
 LABEL_F37340:
@@ -188852,7 +188852,7 @@ LABEL_F37350:
 	.byte 0xd1, 0x72, 0x27, 0x20	; LD WA, (2772h)
 	dec 1, wa
 	.byte 0xf1, 0x72, 0x27, 0x50	; LD (2772h), WA
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr nz, LABEL_F37340
 	ret
 
@@ -188942,10 +188942,10 @@ LABEL_F373FF:
 LABEL_F37428:
 	.byte 0xf1, 0x7a, 0x28, 0x00, 0x00	; LD (287Ah), 000h
 	.byte 0xd1, 0x82, 0x27, 0x20	; LD WA, (2782h)
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	.byte 0xb0, 0xf6	; RET Z
 	.byte 0xf1, 0x72, 0x27, 0x50	; LD (2772h), WA
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	.byte 0xb0, 0xf6	; RET Z
 
 LABEL_F3743D:
@@ -188968,7 +188968,7 @@ LABEL_F37457:
 
 LABEL_F37462:
 	.byte 0xd1, 0x44, 0x27, 0x20	; LD WA, (2744h)
-	.byte 0xd8, 0xd9	; CP WA, 1
+	cps wa, 1
 	.byte 0xb0, 0xf3	; RET ULE
 	dec 1, wa
 	.byte 0xf1, 0x44, 0x27, 0x50	; LD (2744h), WA
@@ -189138,7 +189138,7 @@ LABEL_F375D7:
 	cp l, 0x90
 	jr nz, LABEL_F3763C
 	calr LABEL_F369AF
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_F3763C
 	.byte 0xbf, 0x02, 0x30	; LDA XWA, XSP + 002h
 	.byte 0xb7, 0x31	; LDA XBC, XSP
@@ -189157,9 +189157,9 @@ LABEL_F375D7:
 LABEL_F3763C:
 	calr LABEL_F36A45
 	.byte 0xc1, 0x5f, 0x29, 0x21	; LD A, (295Fh)
-	.byte 0xc9, 0x33, 0x04	; BIT 004h, A
+	bit 4, a
 	jr nz, LABEL_F37670
-	.byte 0xc9, 0x33, 0x01	; BIT 001h, A
+	bit 1, a
 	jr z, LABEL_F3765B
 	calr LABEL_F377A1
 	.byte 0xf1, 0x5f, 0x29, 0xca	; BIT 2, (295Fh)
@@ -189199,7 +189199,7 @@ LABEL_F3767B:
 	cp l, 0x90
 	jr nz, LABEL_F376A1
 	calr LABEL_F369AF
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F376AA
 	calr LABEL_F36A45
 	.byte 0xf1, 0x5f, 0x29, 0xc9	; BIT 1, (295Fh)
@@ -189349,7 +189349,7 @@ LABEL_F377EB:
 	.byte 0xd1, 0x72, 0x27, 0x20	; LD WA, (2772h)
 	dec 1, wa
 	.byte 0xf1, 0x72, 0x27, 0x50	; LD (2772h), WA
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr nz, LABEL_F377DB
 
 LABEL_F377F9:
@@ -189377,7 +189377,7 @@ LABEL_F37806:
 
 LABEL_F3782A:
 	calr LABEL_F369AF
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_F3785C
 	.byte 0xc1, 0x60, 0x27, 0x3f, 0x00	; CP (2760h), 000h
 	jr nz, LABEL_F3785C
@@ -189408,10 +189408,10 @@ LABEL_F37860:
 
 LABEL_F37863:
 	.byte 0xd1, 0x9a, 0x27, 0x20	; LD WA, (279Ah)
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	.byte 0xb0, 0xf6	; RET Z
 	lds de, 0
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr ule, LABEL_F3787B
 	.byte 0xd1, 0x92, 0x27, 0x21	; LD BC, (2792h)
 
@@ -189513,7 +189513,7 @@ LABEL_F37943:
 	cp l, 0x90
 	jr nz, LABEL_F37969
 	calr LABEL_F369AF
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_F37969
 	.byte 0xbf, 0x02, 0x30	; LDA XWA, XSP + 002h
 	.byte 0xb7, 0x31	; LDA XBC, XSP
@@ -189560,7 +189560,7 @@ LABEL_F379A8:
 	cp l, 0x81
 	jr nz, LABEL_F379D4
 	.byte 0xd1, 0x5e, 0x27, 0x20	; LD WA, (275Eh)
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr z, LABEL_F37A32
 	dec 1, wa
 	.byte 0xf1, 0x5e, 0x27, 0x50	; LD (275Eh), WA
@@ -189584,7 +189584,7 @@ LABEL_F379E9:
 	cp l, 0x81
 	jr nz, LABEL_F37A11
 	.byte 0xd1, 0x5e, 0x27, 0x20	; LD WA, (275Eh)
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr z, LABEL_F37A32
 	dec 1, wa
 	.byte 0xf1, 0x5e, 0x27, 0x50	; LD (275Eh), WA
@@ -189601,7 +189601,7 @@ LABEL_F37A11:
 	cp l, 0x90
 	jr nz, LABEL_F379D4
 	calr LABEL_F369AF
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_F379D4
 	calr LABEL_F36A0B
 	.byte 0xbf, 0x02, 0x30	; LDA XWA, XSP + 002h
@@ -189676,10 +189676,10 @@ LABEL_F37AB6:
 	.byte 0xf1, 0x46, 0x27, 0xcf	; BIT 7, (2746h)
 	.byte 0xb0, 0xfe	; RET NZ
 	.byte 0xd1, 0xa0, 0x27, 0x20	; LD WA, (27A0h)
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr nz, LABEL_F37AD4
 	.byte 0xd1, 0x9e, 0x27, 0x20	; LD WA, (279Eh)
-	.byte 0xd8, 0xd9	; CP WA, 1
+	cps wa, 1
 	.byte 0xb0, 0xf6	; RET Z
 	dec 1, wa
 	.byte 0xf1, 0x9e, 0x27, 0x50	; LD (279Eh), WA
@@ -189760,7 +189760,7 @@ LABEL_F37B2B:
 	.byte 0x9f, 0x0c, 0x20	; LD WA, (XSP + 00ch)
 	call LABEL_F41FEC
 	.byte 0xbf, 0x08, 0x53	; LD (XSP + 008h), HL
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr ge, LABEL_F37BAF
 	ldw wa, 0xBB
 	call LABEL_F439AB
@@ -189940,12 +189940,12 @@ LABEL_F37CE8:
 	extz xwa
 	.byte 0xd8, 0x0a, 0x60, 0x00	; DIVW_WA 0060h
 	.byte 0xd7, 0xe2, 0x88	; LD WA, QWA
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
+	res 7, a
 	.byte 0xf1, 0x6b, 0x29, 0x41	; LD (296Bh), A
 	.byte 0xd1, 0x8e, 0x27, 0x20	; LD WA, (278Eh)
 	extz xwa
 	.byte 0xd8, 0x0a, 0x60, 0x00	; DIVW_WA 0060h
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
+	res 7, a
 	.byte 0xf1, 0x6c, 0x29, 0x41	; LD (296Ch), A
 	calr LABEL_F369E6
 	.byte 0xc1, 0x65, 0x29, 0x21	; LD A, (2965h)
@@ -190200,7 +190200,7 @@ LABEL_F37FA8:
 	inc 1, iz
 	cp iz, ix
 	jr nc, LABEL_F37FDB
-	.byte 0xcf, 0xd9	; CP L, 1
+	cps l, 1
 	jr z, LABEL_F37F97
 	ld de, iz
 	extz xde
@@ -190233,7 +190233,7 @@ LABEL_F37FDB:
 	ret
 
 LABEL_F37FE7:
-	.byte 0xcf, 0xd9	; CP L, 1
+	cps l, 1
 	jr nz, LABEL_F37FF2
 	.byte 0xd1, 0x7f, 0x28, 0x61	; INCW 1, (287Fh)
 	jrl LABEL_F37F61
@@ -190345,7 +190345,7 @@ LABEL_F380A2:
 	.byte 0x8f, 0x02, 0xf3	; CP C, (XSP + 002h)
 	jr nc, LABEL_F380C5
 	ld c, a
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F380E6
 	dec 1, c
 	.byte 0xf1, 0x98, 0x27, 0x43	; LD (2798h), C
@@ -190397,7 +190397,7 @@ LABEL_F3810B:
 	.byte 0xc7, 0xfb, 0x99	; LD QIZH, A
 	extz wa
 	.byte 0xf1, 0x72, 0x27, 0x50	; LD (2772h), WA
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr z, LABEL_F3815B
 
 LABEL_F38132:
@@ -190414,7 +190414,7 @@ LABEL_F3814D:
 	.byte 0xd1, 0x72, 0x27, 0x20	; LD WA, (2772h)
 	dec 1, wa
 	.byte 0xf1, 0x72, 0x27, 0x50	; LD (2772h), WA
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr nz, LABEL_F38132
 
 LABEL_F3815B:
@@ -190537,7 +190537,7 @@ LABEL_F38256:
 	.byte 0xd1, 0x72, 0x27, 0x20	; LD WA, (2772h)
 	dec 1, wa
 	.byte 0xf1, 0x72, 0x27, 0x50	; LD (2772h), WA
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr nz, LABEL_F38256
 	.byte 0xd1, 0x5e, 0x27, 0x19, 0xe3, 0x0c	; LDW_16_16 00CE3h, 0275Eh
 	jr LABEL_F3822E
@@ -190679,7 +190679,7 @@ LABEL_F38445:
 	.byte 0xd8, 0x0a, 0x60, 0x00	; DIVW_WA 0060h
 	.byte 0xf1, 0xd8, 0x25, 0x00, 0x00	; LD (25D8h), 000h
 	.byte 0xf1, 0x72, 0x27, 0x50	; LD (2772h), WA
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr z, LABEL_F3848D
 	lds de, 1
 	.byte 0xf1, 0xd8, 0x25, 0x00, 0x01	; LD (25D8h), 001h
@@ -190698,7 +190698,7 @@ LABEL_F38477:
 	.byte 0xd1, 0x72, 0x27, 0x20	; LD WA, (2772h)
 	dec 1, wa
 	.byte 0xf1, 0x72, 0x27, 0x50	; LD (2772h), WA
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr z, LABEL_F3848D
 	.byte 0xc1, 0xd8, 0x25, 0x61	; INC 1, (25D8h)
 	jr LABEL_F38467
@@ -190720,7 +190720,7 @@ LABEL_F384AA:
 	.byte 0xd9, 0x0a, 0x60, 0x00	; DIVW_BC 0060h
 	.byte 0xf1, 0xd8, 0x25, 0x00, 0x00	; LD (25D8h), 000h
 	.byte 0xf1, 0x72, 0x27, 0x51	; LD (2772h), BC
-	.byte 0xd9, 0xd8	; CP BC, 0
+	cps bc, 0
 	jr z, LABEL_F384EB
 	lds de, 1
 	.byte 0xf1, 0xd8, 0x25, 0x00, 0x00	; LD (25D8h), 000h
@@ -190739,7 +190739,7 @@ LABEL_F384DB:
 	.byte 0xd1, 0x72, 0x27, 0x20	; LD WA, (2772h)
 	dec 1, wa
 	.byte 0xf1, 0x72, 0x27, 0x50	; LD (2772h), WA
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr nz, LABEL_F384CC
 
 LABEL_F384EB:
@@ -191236,7 +191236,7 @@ LABEL_F38956:
 	.byte 0xd1, 0x68, 0x26, 0x21	; LD BC, (2668h)
 	ld wa, bc
 	extz xwa
-	.byte 0xd8, 0x33, 0x0f	; BIT 00fh, WA
+	bit 15, wa
 	jr nz, LABEL_F3899E
 	.byte 0xd1, 0x38, 0xf2, 0x20	; LD WA, (0F238h)
 	cp bc, wa
@@ -191292,7 +191292,7 @@ LABEL_F389D8:
 LABEL_F389F4:
 	.byte 0xd1, 0x68, 0x26, 0x20	; LD WA, (2668h)
 	extz xwa
-	.byte 0xd8, 0x33, 0x0f	; BIT 00fh, WA
+	bit 15, wa
 	jr z, LABEL_F38A0D
 	.byte 0xd1, 0x38, 0xf2, 0x3f, 0x01, 0x00	; CPW (0F238h), 0001h
 	jr nz, LABEL_F38A0D
@@ -191300,15 +191300,15 @@ LABEL_F389F4:
 
 LABEL_F38A0D:
 	.byte 0xc1, 0xa7, 0x28, 0x21	; LD A, (28A7h)
-	.byte 0xc9, 0x30, 0x03	; RES 003h, A
+	res 3, a
 	.byte 0xf1, 0xa7, 0x28, 0x41	; LD (28A7h), A
 	.byte 0xd1, 0x68, 0x26, 0x21	; LD BC, (2668h)
-	.byte 0xd9, 0xd9	; CP BC, 1
+	cps bc, 1
 	jr z, LABEL_F38A2E
 	extz xbc
-	.byte 0xd9, 0x33, 0x0f	; BIT 00fh, BC
+	bit 15, bc
 	jr nz, LABEL_F38A2E
-	.byte 0xc9, 0x31, 0x03	; SET 003h, A
+	set 3, a
 	.byte 0xf1, 0xa7, 0x28, 0x41	; LD (28A7h), A
 
 LABEL_F38A2E:
@@ -191317,7 +191317,7 @@ LABEL_F38A2E:
 LABEL_F38A32:
 	dec 4, xsp
 	.byte 0xc1, 0xc5, 0x28, 0x21	; LD A, (28C5h)
-	.byte 0xc9, 0x33, 0x05	; BIT 005h, A
+	bit 5, a
 	jr nz, LABEL_F38A4B
 	.byte 0xf1, 0x21, 0x04, 0xca	; BIT 2, (0421h)
 	jr z, LABEL_F38A4B
@@ -191329,7 +191329,7 @@ LABEL_F38A4B:
 	jr LABEL_F38A87
 
 LABEL_F38A50:
-	.byte 0xc9, 0x33, 0x06	; BIT 006h, A
+	bit 6, a
 	jr nz, LABEL_F38A75
 	.byte 0x06, 0x06	; EI 006h
 	.byte 0xc1, 0x1b, 0x04, 0x19, 0xc8, 0x28	; LD_8_8 028C8h, 0041Bh
@@ -191434,9 +191434,9 @@ LABEL_F38B45:
 	.byte 0xf1, 0xc5, 0x28, 0x00, 0x00	; LD (28C5h), 000h
 	.byte 0xf1, 0xc6, 0x28, 0x02, 0x00, 0x00	; LDW (28C6h), 0000h
 	.byte 0xc1, 0xb2, 0x28, 0x21	; LD A, (28B2h)
-	.byte 0xc9, 0x30, 0x02	; RES 002h, A
-	.byte 0xc9, 0x30, 0x01	; RES 001h, A
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
+	res 2, a
+	res 1, a
+	res 7, a
 	.byte 0xf1, 0xb2, 0x28, 0x41	; LD (28B2h), A
 	.byte 0xf1, 0x3c, 0xf2, 0xc8	; BIT 0, (0F23Ch)
 	jr z, LABEL_F38B77
@@ -191448,16 +191448,16 @@ LABEL_F38B45:
 LABEL_F38B77:
 	call LABEL_EF2505
 	.byte 0xd1, 0xa8, 0x28, 0x20	; LD WA, (28A8h)
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr z, LABEL_F38BA9
 	.byte 0xd1, 0x9e, 0xf1, 0xe8	; OR (0F19Eh), WA
 	.byte 0xf1, 0xb3, 0x28, 0xbb	; SET 3, (28B3h)
 	call 0xFDDE6F
 	.byte 0xf1, 0xc5, 0x28, 0xb8	; SET 0, (28C5h)
 	.byte 0xc1, 0xb2, 0x28, 0x21	; LD A, (28B2h)
-	.byte 0xc9, 0x33, 0x00	; BIT 000h, A
+	bit 0, a
 	jr z, LABEL_F38BA9
-	.byte 0xc9, 0x31, 0x01	; SET 001h, A
+	set 1, a
 	.byte 0xf1, 0xb2, 0x28, 0x41	; LD (28B2h), A
 	.byte 0xd1, 0x68, 0x26, 0x19, 0x36, 0x23	; LDW_16_16 (2336h), (2668h)
 
@@ -191616,7 +191616,7 @@ LABEL_F38E44:
 	jrl z, LABEL_F38F7E
 	.byte 0xbf, 0x02, 0x30	; LDA XWA, XSP + 002h
 	call LABEL_F3A3D1
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F38E71
 
 LABEL_F38E5F:
@@ -191624,7 +191624,7 @@ LABEL_F38E5F:
 	call LABEL_F3A43E
 	.byte 0xbf, 0x02, 0x30	; LDA XWA, XSP + 002h
 	call LABEL_F3A3D1
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_F38E5F
 
 LABEL_F38E71:
@@ -191654,7 +191654,7 @@ LABEL_F38EA2:
 	ld a, c
 	and a, 0x90
 	jr nz, LABEL_F38EE9
-	.byte 0xcb, 0x33, 0x05	; BIT 005h, C
+	bit 5, c
 	jr z, LABEL_F38EE9
 	.byte 0xf1, 0xe0, 0x25, 0x00, 0x00	; LD (25E0h), 000h
 
@@ -191781,9 +191781,9 @@ LABEL_F3900C:
 	call 0xFDDE6F
 	.byte 0xf1, 0xc5, 0x28, 0x00, 0x00	; LD (28C5h), 000h
 	.byte 0xc1, 0xb2, 0x28, 0x21	; LD A, (28B2h)
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
-	.byte 0xc9, 0x30, 0x01	; RES 001h, A
-	.byte 0xc9, 0x30, 0x02	; RES 002h, A
+	res 7, a
+	res 1, a
+	res 2, a
 	.byte 0xf1, 0xb2, 0x28, 0x41	; LD (28B2h), A
 	ret
 
@@ -191890,7 +191890,7 @@ LABEL_F39123:
 LABEL_F39125:
 	call LABEL_F40052
 	call LABEL_F421A6
-	.byte 0xcf, 0x33, 0x07	; BIT 007h, L
+	bit 7, l
 	jr z, LABEL_F39125
 	cp l, 0x81
 	jr nz, LABEL_F390F5
@@ -191942,7 +191942,7 @@ LABEL_F39171:
 LABEL_F391A1:
 	call LABEL_F40052
 	call LABEL_F421A6
-	.byte 0xcf, 0x33, 0x07	; BIT 007h, L
+	bit 7, l
 	jr z, LABEL_F391A1
 	cp l, 0x81
 	jr nz, LABEL_F39171
@@ -191951,7 +191951,7 @@ LABEL_F391B3:
 	cp l, 0x82
 	jr nz, LABEL_F391DA
 	.byte 0xd1, 0x66, 0x26, 0x20	; LD WA, (2666h)
-	.byte 0xd8, 0xdd	; CP WA, 5
+	cps wa, 5
 	jr z, LABEL_F391C8
 	dec 1, wa
 	.byte 0xf1, 0x66, 0x26, 0x50	; LD (2666h), WA
@@ -191970,9 +191970,9 @@ LABEL_F391DA:
 LABEL_F391DC:
 	.byte 0xbf, 0xf6, 0x37	; LDA XSP, XSP - 10
 	.byte 0xc1, 0xc5, 0x28, 0x21	; LD A, (28C5h)
-	.byte 0xc9, 0x33, 0x05	; BIT 005h, A
+	bit 5, a
 	jr nz, LABEL_F3923A
-	.byte 0xc9, 0x33, 0x06	; BIT 006h, A
+	bit 6, a
 	jr nz, LABEL_F3923A
 	.byte 0xf1, 0x21, 0x04, 0xca	; BIT 2, (0421h)
 	jr z, LABEL_F3923A
@@ -192024,10 +192024,10 @@ LABEL_F3923E:
 	jr LABEL_F39287
 
 LABEL_F3926C:
-	.byte 0xd8, 0xd9	; CP WA, 1
+	cps wa, 1
 	.byte 0xb0, 0xfe	; RET NZ
 	extz xbc
-	.byte 0xd9, 0x33, 0x0f	; BIT 00fh, BC
+	bit 15, bc
 	.byte 0xb0, 0xf6	; RET Z
 	.byte 0xf1, 0x59, 0x29, 0x52	; LD (2959h), DE
 	.byte 0xd1, 0xa8, 0x28, 0x20	; LD WA, (28A8h)
@@ -192044,7 +192044,7 @@ LABEL_F39290:
 	.byte 0xf1, 0x21, 0x04, 0xca	; BIT 2, (0421h)
 	jrl z, LABEL_F39394
 	.byte 0xc1, 0xc5, 0x28, 0x21	; LD A, (28C5h)
-	.byte 0xc9, 0x33, 0x00	; BIT 000h, A
+	bit 0, a
 	jrl z, LABEL_F39394
 	.byte 0xf1, 0x3c, 0xf2, 0xc8	; BIT 0, (0F23Ch)
 	jrl z, LABEL_F39394
@@ -192066,7 +192066,7 @@ LABEL_F39290:
 	.byte 0xd1, 0x68, 0x26, 0x21	; LD BC, (2668h)
 	.byte 0xd7, 0xe6, 0x8a	; LD DE, QBC
 	cpl de
-	.byte 0xcf, 0x33, 0x06	; BIT 006h, L
+	bit 6, l
 	jr nz, LABEL_F39327
 	.byte 0xd1, 0x38, 0xf2, 0x20	; LD WA, (0F238h)
 	ld hl, bc
@@ -192114,8 +192114,8 @@ LABEL_F39342:
 	jr nz, LABEL_F39394
 
 LABEL_F39346:
-	.byte 0xcf, 0x30, 0x06	; RES 006h, L
-	.byte 0xcf, 0x31, 0x05	; SET 005h, L
+	res 6, l
+	set 5, l
 	.byte 0xf1, 0xc5, 0x28, 0x47	; LD (28C5h), L
 	.byte 0xf1, 0xa8, 0x28, 0x02, 0x00, 0x00	; LDW (28A8h), 0000h
 	.byte 0xf1, 0xaa, 0x28, 0x02, 0x00, 0x00	; LDW (28AAh), 0000h
@@ -192189,8 +192189,8 @@ LABEL_F393FC:
 	.byte 0xd1, 0xa8, 0x28, 0x3f, 0x00, 0x00	; CPW (28A8h), 0000h
 	jrl nz, LABEL_F394B5
 	.byte 0xc1, 0xa7, 0x28, 0x21	; LD A, (28A7h)
-	.byte 0xc9, 0x30, 0x00	; RES 000h, A
-	.byte 0xc9, 0x31, 0x01	; SET 001h, A
+	res 0, a
+	set 1, a
 	.byte 0xf1, 0xa7, 0x28, 0x41	; LD (28A7h), A
 	jr LABEL_F394B0
 
@@ -192284,8 +192284,8 @@ LABEL_F394E1:
 	call LABEL_EF2457
 	.byte 0xf1, 0x31, 0x04, 0x00, 0x00	; LD (0431h), 000h
 	.byte 0xc1, 0xa7, 0x28, 0x21	; LD A, (28A7h)
-	.byte 0xc9, 0x31, 0x00	; SET 000h, A
-	.byte 0xc9, 0x30, 0x01	; RES 001h, A
+	set 0, a
+	res 1, a
 	.byte 0xf1, 0xa7, 0x28, 0x41	; LD (28A7h), A
 	.byte 0xc1, 0x92, 0x1d, 0x3f, 0x01	; CP (1D92h), 001h
 	jr nz, LABEL_F39552
@@ -192329,7 +192329,7 @@ LABEL_F39593:
 	lds wa, 0
 	ld bc, hl
 	call LABEL_F4178A
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F395AB
 	.byte 0xf1, 0xa7, 0x28, 0xb9	; SET 1, (28A7h)
 
@@ -192343,8 +192343,8 @@ LABEL_F395AF:
 	.byte 0xf1, 0x88, 0x1d, 0x00, 0x00	; LD (1D88h), 000h
 	.byte 0xf1, 0x8a, 0x1d, 0x00, 0x00	; LD (1D8Ah), 000h
 	.byte 0xc1, 0xa7, 0x28, 0x21	; LD A, (28A7h)
-	.byte 0xc9, 0x31, 0x00	; SET 000h, A
-	.byte 0xc9, 0x30, 0x01	; RES 001h, A
+	set 0, a
+	res 1, a
 	.byte 0xf1, 0xa7, 0x28, 0x41	; LD (28A7h), A
 	call LABEL_EF2457
 	.byte 0xc1, 0x92, 0x1d, 0x3f, 0x01	; CP (1D92h), 001h
@@ -192417,7 +192417,7 @@ LABEL_F39688:
 	lds wa, 0
 	ld bc, hl
 	call LABEL_F4178A
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F396A0
 	.byte 0xf1, 0xa7, 0x28, 0xb9	; SET 1, (28A7h)
 
@@ -192472,7 +192472,7 @@ LABEL_F3970D:
 	extz bc
 	lds wa, 0
 	call LABEL_F4178A
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jrl z, LABEL_F397AD
 	.byte 0xc7, 0xfa, 0x89	; LD A, QIZL
 	dec 1, a
@@ -192573,7 +192573,7 @@ LABEL_F397E1:
 
 LABEL_F3981C:
 	call LABEL_F421A6
-	.byte 0xcf, 0x33, 0x07	; BIT 007h, L
+	bit 7, l
 	jr z, LABEL_F39883
 	cp l, 0x82
 	jr z, LABEL_F39895
@@ -192601,7 +192601,7 @@ LABEL_F39860:
 	jr nz, LABEL_F39883
 	.byte 0xbf, 0x08, 0x30	; LDA XWA, XSP + 008h
 	calr LABEL_F398B8
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr lt, LABEL_F398AB
 	.byte 0x9f, 0x08, 0x3f, 0x00, 0x00	; CPW (XSP + 008h), 0000h
 	jr lt, LABEL_F39883
@@ -192654,7 +192654,7 @@ LABEL_F398B8:
 	.byte 0xc1, 0x7a, 0x28, 0x3f, 0x00	; CP (287Ah), 000h
 	jr nz, LABEL_F39916
 	call LABEL_F421A6
-	.byte 0xcf, 0xdb	; CP L, 3
+	cps l, 3
 	jr nz, LABEL_F39933
 	call LABEL_F40052
 	.byte 0xc1, 0x7a, 0x28, 0x3f, 0x00	; CP (287Ah), 000h
@@ -192672,7 +192672,7 @@ LABEL_F39916:
 LABEL_F3991B:
 	call LABEL_F421A6
 	and l, 0x7
-	.byte 0xcf, 0xdf	; CP L, 7
+	cps l, 7
 	jr nz, LABEL_F39933
 	.byte 0xc7, 0xfb, 0x8b	; LD C, QIZH
 	and c, 0x7
@@ -192756,7 +192756,7 @@ LABEL_F399A8:
 	.byte 0xbc, 0x02, 0x43	; LD (XIX + 002h), C
 	.byte 0x94, 0x3f, 0x00, 0x00	; CPW (XIX), 0000h
 	jrl nz, LABEL_F39B8F
-	.byte 0xcb, 0xd8	; CP C, 0
+	cps c, 0
 	jrl nz, LABEL_F39B8F
 	.byte 0xbf, 0x10, 0x34	; LDA XIX, XSP + 010h
 	.byte 0xbf, 0x04, 0x47	; LD (XSP + 004h), L
@@ -192833,7 +192833,7 @@ LABEL_F39A7E:
 	.byte 0x8c, 0x02, 0x3f, 0x48	; CP (XIX + 002h), 048h
 	jr nz, LABEL_F39B15
 	.byte 0x8c, 0x03, 0x21	; LD A, (XIX + 003h)
-	.byte 0xc9, 0xde	; CP A, 6
+	cps a, 6
 	jr nz, LABEL_F39AC0
 	.byte 0xb1, 0xca	; BIT 2, (XBC)
 	jr z, LABEL_F39B15
@@ -192848,10 +192848,10 @@ LABEL_F39A7E:
 	jr LABEL_F39B02
 
 LABEL_F39AC0:
-	.byte 0xc9, 0xdd	; CP A, 5
+	cps a, 5
 	jr nz, LABEL_F39B15
 	ld a, (xbc)
-	.byte 0xc9, 0x33, 0x02	; BIT 002h, A
+	bit 2, a
 	jr z, LABEL_F39AE5
 	.byte 0xb3, 0xca	; BIT 2, (XHL)
 	jr z, LABEL_F39B15
@@ -192864,7 +192864,7 @@ LABEL_F39AC0:
 	jr LABEL_F39B02
 
 LABEL_F39AE5:
-	.byte 0xc9, 0x33, 0x03	; BIT 003h, A
+	bit 3, a
 	jr z, LABEL_F39B15
 	.byte 0xb3, 0xcb	; BIT 3, (XHL)
 	jr z, LABEL_F39B15
@@ -192897,7 +192897,7 @@ LABEL_F39B26:
 	calr LABEL_F3B2FF
 
 LABEL_F39B29:
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_F39B8F
 	.byte 0xc7, 0xfb, 0xcf, 0xc0	; CP QIZH, 0c0h
 	jr nz, LABEL_F39B5F
@@ -192974,7 +192974,7 @@ LABEL_F39BA0:
 	.byte 0xc1, 0xa4, 0x28, 0x21	; LD A, (28A4h)
 	extz wa
 	call LABEL_F86FFF
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F39BF8
 	.byte 0xf1, 0xa7, 0x28, 0xb9	; SET 1, (28A7h)
 	jr LABEL_F39BFC
@@ -193089,9 +193089,9 @@ LABEL_F39CE9:
 LABEL_F39CF3:
 	calr LABEL_F393FC
 	.byte 0xc1, 0xb2, 0x28, 0x21	; LD A, (28B2h)
-	.byte 0xc9, 0x30, 0x02	; RES 002h, A
-	.byte 0xc9, 0x30, 0x01	; RES 001h, A
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
+	res 2, a
+	res 1, a
+	res 7, a
 	.byte 0xf1, 0xb2, 0x28, 0x41	; LD (28B2h), A
 	.byte 0xf1, 0xb3, 0x28, 0xb3	; RES 3, (28B3h)
 	call 0xFDDE6F
@@ -193131,9 +193131,9 @@ LABEL_F39D52:
 	cp l, 0x10
 	jr ule, LABEL_F39D2C
 	.byte 0xc1, 0xb2, 0x28, 0x21	; LD A, (28B2h)
-	.byte 0xc9, 0x33, 0x00	; BIT 000h, A
+	bit 0, a
 	jr z, LABEL_F39D7B
-	.byte 0xc9, 0x31, 0x01	; SET 001h, A
+	set 1, a
 	.byte 0xf1, 0xb2, 0x28, 0x41	; LD (28B2h), A
 	.byte 0xd1, 0x68, 0x26, 0x20	; LD WA, (2668h)
 	.byte 0xf1, 0x36, 0x23, 0x50	; LD (2336h), WA
@@ -193159,8 +193159,8 @@ LABEL_F39D7B:
 LABEL_F39DB2:
 	.byte 0xf1, 0x14, 0x23, 0x02, 0x00, 0x00	; LDW (2314h), 0000h
 	.byte 0xc1, 0xa7, 0x28, 0x21	; LD A, (28A7h)
-	.byte 0xc9, 0x31, 0x00	; SET 000h, A
-	.byte 0xc9, 0x31, 0x01	; SET 001h, A
+	set 0, a
+	set 1, a
 	.byte 0xf1, 0xa7, 0x28, 0x41	; LD (28A7h), A
 	call LABEL_EF2457
 
@@ -193196,9 +193196,9 @@ LABEL_F39DFF:
 	push xiz
 	calr LABEL_F393FC
 	.byte 0xc1, 0xb2, 0x28, 0x21	; LD A, (28B2h)
-	.byte 0xc9, 0x30, 0x02	; RES 002h, A
-	.byte 0xc9, 0x30, 0x01	; RES 001h, A
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
+	res 2, a
+	res 1, a
+	res 7, a
 	.byte 0xf1, 0xb2, 0x28, 0x41	; LD (28B2h), A
 	.byte 0xd1, 0xa8, 0x28, 0x3f, 0x00, 0x00	; CPW (28A8h), 0000h
 	jrl z, LABEL_F39EEC
@@ -193231,12 +193231,12 @@ LABEL_F39E56:
 	jr ule, LABEL_F39E30
 	.byte 0xc1, 0xb2, 0x28, 0x21	; LD A, (28B2h)
 	ld c, a
-	.byte 0xcb, 0x30, 0x01	; RES 001h, C
+	res 1, c
 	ld a, c
 	.byte 0xf1, 0xb2, 0x28, 0x43	; LD (28B2h), C
-	.byte 0xcb, 0x33, 0x00	; BIT 000h, C
+	bit 0, c
 	jr z, LABEL_F39E82
-	.byte 0xc9, 0x31, 0x01	; SET 001h, A
+	set 1, a
 	.byte 0xf1, 0xb2, 0x28, 0x41	; LD (28B2h), A
 	.byte 0xd1, 0x68, 0x26, 0x20	; LD WA, (2668h)
 	.byte 0xf1, 0x36, 0x23, 0x50	; LD (2336h), WA
@@ -193265,7 +193265,7 @@ LABEL_F39E82:
 	call LABEL_F41462
 	.byte 0xf1, 0xb2, 0x28, 0xc8	; BIT 0, (28B2h)
 	jr nz, LABEL_F39EE0
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr z, LABEL_F39EDC
 	ldb a, 0x13
 	jr LABEL_F39EE8
@@ -193276,7 +193276,7 @@ LABEL_F39EDC:
 
 LABEL_F39EE0:
 	ldb a, 0x10
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr z, LABEL_F39EE8
 	ldb a, 0x14
 
@@ -193371,17 +193371,17 @@ LABEL_F39FB7:
 	.byte 0xf2, 0xe2, 0x44, 0xe4, 0x31	; LDA XBC, 0E444E2h
 	.byte 0xc3, 0x07, 0xe4, 0xe0, 0x19, 0xfc, 0x22	; LD (22FCh), (XBC + WA)
 	.byte 0xc1, 0x0a, 0x23, 0x23	; LD C, (230Ah)
-	.byte 0xcb, 0x31, 0x00	; SET 000h, C
+	set 0, c
 	.byte 0xf1, 0x0a, 0x23, 0x43	; LD (230Ah), C
 	.byte 0xc1, 0xb3, 0x28, 0x21	; LD A, (28B3h)
-	.byte 0xc9, 0x33, 0x01	; BIT 001h, A
+	bit 1, a
 	jr z, LABEL_F39FEF
-	.byte 0xc9, 0x30, 0x01	; RES 001h, A
+	res 1, a
 	.byte 0xf1, 0xb3, 0x28, 0x41	; LD (28B3h), A
 	jrl LABEL_F3A094
 
 LABEL_F39FEF:
-	.byte 0xcb, 0x30, 0x01	; RES 001h, C
+	res 1, c
 	.byte 0xf1, 0x0a, 0x23, 0x43	; LD (230Ah), C
 	.byte 0xd1, 0x9e, 0xf1, 0x3f, 0x00, 0x00	; CPW (0F19Eh), 0000h
 	jr z, LABEL_F3A005
@@ -193463,12 +193463,12 @@ LABEL_F3A09A:
 	call LABEL_F98971
 	.byte 0xf1, 0x7a, 0x34, 0xb2	; RES 2, (347Ah)
 	.byte 0xc1, 0x86, 0x1d, 0x21	; LD A, (1D86h)
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	.byte 0xf2, 0x8e, 0xda, 0xf3, 0xe6	; CALL Z, LABEL_F3DA8E
 	lds wa, 0
 	call LABEL_F99525
 	.byte 0xd1, 0x14, 0x23, 0x20	; LD WA, (2314h)
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr z, LABEL_F3A11E
 	.byte 0xf1, 0xb4, 0x28, 0x50	; LD (28B4h), WA
 	.byte 0xf1, 0xc5, 0x28, 0xc8	; BIT 0, (28C5h)
@@ -193524,9 +193524,9 @@ LABEL_F3A133:
 
 LABEL_F3A13A:
 	.byte 0xc1, 0x0a, 0x23, 0x21	; LD A, (230Ah)
-	.byte 0xc9, 0x33, 0x01	; BIT 001h, A
+	bit 1, a
 	jr z, LABEL_F3A14D
-	.byte 0xc9, 0x30, 0x01	; RES 001h, A
+	res 1, a
 	.byte 0xf1, 0x0a, 0x23, 0x41	; LD (230Ah), A
 	jrl LABEL_F3A1F7
 
@@ -193557,16 +193557,16 @@ LABEL_F3A19E:
 	.byte 0xf1, 0x31, 0x04, 0x00, 0x00	; LD (0431h), 000h
 	call 0xFDDE6F
 	.byte 0xc1, 0x7a, 0x34, 0x21	; LD A, (347Ah)
-	.byte 0xc9, 0x33, 0x02	; BIT 002h, A
+	bit 2, a
 	jr z, LABEL_F3A1E5
 	.byte 0xc1, 0x14, 0x33, 0x25	; LD E, (3314h)
 	.byte 0xc1, 0x15, 0x33, 0x23	; LD C, (3315h)
 	.byte 0xc1, 0x28, 0x33, 0x21	; LD A, (3328h)
-	.byte 0xcd, 0xd8	; CP E, 0
+	cps e, 0
 	jr nz, LABEL_F3A1D0
-	.byte 0xcb, 0xd8	; CP C, 0
+	cps c, 0
 	jr nz, LABEL_F3A1D0
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F3A1D6
 
 LABEL_F3A1D0:
@@ -193576,7 +193576,7 @@ LABEL_F3A1D0:
 LABEL_F3A1D6:
 	.byte 0xf1, 0xa6, 0x28, 0xb8	; SET 0, (28A6h)
 	.byte 0xc1, 0x7a, 0x34, 0x21	; LD A, (347Ah)
-	.byte 0xc9, 0x31, 0x01	; SET 001h, A
+	set 1, a
 	.byte 0xf1, 0x7a, 0x34, 0x41	; LD (347Ah), A
 
 LABEL_F3A1E5:
@@ -193630,8 +193630,8 @@ LABEL_F3A239:
 	call LABEL_F6E63A
 	call LABEL_F59AB9
 	.byte 0xc1, 0xb2, 0x28, 0x21	; LD A, (28B2h)
-	.byte 0xc9, 0x30, 0x02	; RES 002h, A
-	.byte 0xc9, 0x30, 0x01	; RES 001h, A
+	res 2, a
+	res 1, a
 	.byte 0xf1, 0xb2, 0x28, 0x41	; LD (28B2h), A
 	.byte 0xf1, 0xa8, 0x28, 0x02, 0x00, 0x00	; LDW (28A8h), 0000h
 	call 0xFDDE6F
@@ -193647,7 +193647,7 @@ LABEL_F3A289:
 	.byte 0xf1, 0x68, 0x26, 0x50	; LD (2668h), WA
 	.byte 0xbf, 0x08, 0x30	; LDA XWA, XSP + 008h
 	calr LABEL_F3A3D1
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F3A2AB
 
 LABEL_F3A29B:
@@ -193655,7 +193655,7 @@ LABEL_F3A29B:
 	calr LABEL_F3A43E
 	.byte 0xbf, 0x08, 0x30	; LDA XWA, XSP + 008h
 	calr LABEL_F3A3D1
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_F3A29B
 
 LABEL_F3A2AB:
@@ -193683,8 +193683,8 @@ LABEL_F3A2DD:
 	.byte 0xf1, 0x62, 0x1d, 0x00, 0x00	; LD (1D62h), 000h
 	.byte 0xf1, 0xb4, 0x28, 0x02, 0x00, 0x00	; LDW (28B4h), 0000h
 	.byte 0xc1, 0xb2, 0x28, 0x21	; LD A, (28B2h)
-	.byte 0xc9, 0x30, 0x02	; RES 002h, A
-	.byte 0xc9, 0x30, 0x01	; RES 001h, A
+	res 2, a
+	res 1, a
 	.byte 0xf1, 0xb2, 0x28, 0x41	; LD (28B2h), A
 	call LABEL_F6E63A
 	call LABEL_F59AB9
@@ -193720,20 +193720,20 @@ LABEL_F3A342:
 	push xiz
 	.byte 0xbf, 0x04, 0x02, 0x00, 0x00	; LDW (XSP + 004h:8), 0000h
 	calr LABEL_F3A867
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_F3A3CC
 	.byte 0xd1, 0xa8, 0x28, 0x3f, 0x00, 0x00	; CPW (28A8h), 0000h
 	jr z, LABEL_F3A3CA
 	.byte 0xc1, 0xc5, 0x28, 0x21	; LD A, (28C5h)
-	.byte 0xc9, 0x33, 0x00	; BIT 000h, A
+	bit 0, a
 	jr z, LABEL_F3A368
-	.byte 0xc9, 0x33, 0x06	; BIT 006h, A
+	bit 6, a
 	jr z, LABEL_F3A3CA
 
 LABEL_F3A368:
 	.byte 0xbf, 0x06, 0x30	; LDA XWA, XSP + 006h
 	calr LABEL_F3A3D1
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_F3A384
 	.byte 0xc1, 0x92, 0x1d, 0x3f, 0x01	; CP (1D92h), 001h
 	jr nz, LABEL_F3A3CA
@@ -193805,7 +193805,7 @@ LABEL_F3A3DC:
 LABEL_F3A3FA:
 	call LABEL_EF24A8
 	ld iz, hl
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr ge, LABEL_F3A3DC
 
 LABEL_F3A404:
@@ -193816,7 +193816,7 @@ LABEL_F3A404:
 LABEL_F3A40C:
 	call LABEL_EF24A8
 	ld iz, hl
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr ge, LABEL_F3A41C
 	lds wa, 2
 	call LABEL_F439AB
@@ -193903,7 +193903,7 @@ LABEL_F3A4B6:
 LABEL_F3A4C5:
 	ld xwa, xiz
 	call LABEL_F3EB82
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr ge, LABEL_F3A4D4
 	ldb l, 0xFF
 	jrl LABEL_F3A567
@@ -194033,7 +194033,7 @@ LABEL_F3A5A5:
 	call LABEL_F3E37B
 	ld e, l
 	extz de
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr lt, LABEL_F3A5F9
 	.byte 0xb7, 0x31	; LDA XBC, XSP
 	.byte 0xc1, 0x62, 0x1d, 0x3f, 0x01	; CP (1D62h), 001h
@@ -194121,7 +194121,7 @@ LABEL_F3A63D:
 	ld a, (xbc)
 	extz wa
 	call LABEL_F3E37B
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr ge, LABEL_F3A677
 	lds wa, 4
 	call LABEL_F439AB
@@ -194177,7 +194177,7 @@ LABEL_F3A6BB:
 LABEL_F3A6CE:
 	.byte 0xf1, 0xa2, 0x1d, 0x02, 0x00, 0x00	; LDW (1DA2h), 0000h
 	.byte 0xd1, 0x16, 0x23, 0x20	; LD WA, (2316h)
-	.byte 0xd8, 0x33, 0x00	; BIT 000h, WA
+	bit 0, wa
 	jr z, LABEL_F3A6ED
 	.byte 0xd1, 0x1c, 0x04, 0x20	; LD WA, (041Ch)
 	.byte 0xd1, 0x38, 0x23, 0xf0	; CP WA, (2338h)
@@ -194186,7 +194186,7 @@ LABEL_F3A6CE:
 
 LABEL_F3A6ED:
 	.byte 0xd1, 0x16, 0x23, 0x20	; LD WA, (2316h)
-	.byte 0xd8, 0x33, 0x01	; BIT 001h, WA
+	bit 1, wa
 	jr z, LABEL_F3A706
 	.byte 0xd1, 0x1c, 0x04, 0x20	; LD WA, (041Ch)
 	.byte 0xd1, 0x40, 0x23, 0xf0	; CP WA, (2340h)
@@ -194195,7 +194195,7 @@ LABEL_F3A6ED:
 
 LABEL_F3A706:
 	.byte 0xd1, 0x16, 0x23, 0x20	; LD WA, (2316h)
-	.byte 0xd8, 0x33, 0x02	; BIT 002h, WA
+	bit 2, wa
 	jr z, LABEL_F3A71F
 	.byte 0xd1, 0x1c, 0x04, 0x20	; LD WA, (041Ch)
 	.byte 0xd1, 0x48, 0x23, 0xf0	; CP WA, (2348h)
@@ -194204,7 +194204,7 @@ LABEL_F3A706:
 
 LABEL_F3A71F:
 	.byte 0xd1, 0x16, 0x23, 0x20	; LD WA, (2316h)
-	.byte 0xd8, 0x33, 0x03	; BIT 003h, WA
+	bit 3, wa
 	jr z, LABEL_F3A738
 	.byte 0xd1, 0x1c, 0x04, 0x20	; LD WA, (041Ch)
 	.byte 0xd1, 0x50, 0x23, 0xf0	; CP WA, (2350h)
@@ -194213,7 +194213,7 @@ LABEL_F3A71F:
 
 LABEL_F3A738:
 	.byte 0xd1, 0x16, 0x23, 0x20	; LD WA, (2316h)
-	.byte 0xd8, 0x33, 0x04	; BIT 004h, WA
+	bit 4, wa
 	jr z, LABEL_F3A751
 	.byte 0xd1, 0x1c, 0x04, 0x20	; LD WA, (041Ch)
 	.byte 0xd1, 0x58, 0x23, 0xf0	; CP WA, (2358h)
@@ -194222,7 +194222,7 @@ LABEL_F3A738:
 
 LABEL_F3A751:
 	.byte 0xd1, 0x16, 0x23, 0x20	; LD WA, (2316h)
-	.byte 0xd8, 0x33, 0x05	; BIT 005h, WA
+	bit 5, wa
 	jr z, LABEL_F3A76A
 	.byte 0xd1, 0x1c, 0x04, 0x20	; LD WA, (041Ch)
 	.byte 0xd1, 0x60, 0x23, 0xf0	; CP WA, (2360h)
@@ -194231,7 +194231,7 @@ LABEL_F3A751:
 
 LABEL_F3A76A:
 	.byte 0xd1, 0x16, 0x23, 0x20	; LD WA, (2316h)
-	.byte 0xd8, 0x33, 0x06	; BIT 006h, WA
+	bit 6, wa
 	jr z, LABEL_F3A783
 	.byte 0xd1, 0x1c, 0x04, 0x20	; LD WA, (041Ch)
 	.byte 0xd1, 0x68, 0x23, 0xf0	; CP WA, (2368h)
@@ -194240,7 +194240,7 @@ LABEL_F3A76A:
 
 LABEL_F3A783:
 	.byte 0xd1, 0x16, 0x23, 0x20	; LD WA, (2316h)
-	.byte 0xd8, 0x33, 0x07	; BIT 007h, WA
+	bit 7, wa
 	jr z, LABEL_F3A79C
 	.byte 0xd1, 0x1c, 0x04, 0x20	; LD WA, (041Ch)
 	.byte 0xd1, 0x70, 0x23, 0xf0	; CP WA, (2370h)
@@ -194249,7 +194249,7 @@ LABEL_F3A783:
 
 LABEL_F3A79C:
 	.byte 0xd1, 0x16, 0x23, 0x20	; LD WA, (2316h)
-	.byte 0xd8, 0x33, 0x08	; BIT 008h, WA
+	bit 8, wa
 	jr z, LABEL_F3A7B5
 	.byte 0xd1, 0x1c, 0x04, 0x20	; LD WA, (041Ch)
 	.byte 0xd1, 0x78, 0x23, 0xf0	; CP WA, (2378h)
@@ -194258,7 +194258,7 @@ LABEL_F3A79C:
 
 LABEL_F3A7B5:
 	.byte 0xd1, 0x16, 0x23, 0x20	; LD WA, (2316h)
-	.byte 0xd8, 0x33, 0x09	; BIT 009h, WA
+	bit 9, wa
 	jr z, LABEL_F3A7CE
 	.byte 0xd1, 0x1c, 0x04, 0x20	; LD WA, (041Ch)
 	.byte 0xd1, 0x80, 0x23, 0xf0	; CP WA, (2380h)
@@ -194267,7 +194267,7 @@ LABEL_F3A7B5:
 
 LABEL_F3A7CE:
 	.byte 0xd1, 0x16, 0x23, 0x20	; LD WA, (2316h)
-	.byte 0xd8, 0x33, 0x0a	; BIT 00ah, WA
+	bit 10, wa
 	jr z, LABEL_F3A7E7
 	.byte 0xd1, 0x1c, 0x04, 0x20	; LD WA, (041Ch)
 	.byte 0xd1, 0x88, 0x23, 0xf0	; CP WA, (2388h)
@@ -194276,7 +194276,7 @@ LABEL_F3A7CE:
 
 LABEL_F3A7E7:
 	.byte 0xd1, 0x16, 0x23, 0x20	; LD WA, (2316h)
-	.byte 0xd8, 0x33, 0x0b	; BIT 00bh, WA
+	bit 11, wa
 	jr z, LABEL_F3A800
 	.byte 0xd1, 0x1c, 0x04, 0x20	; LD WA, (041Ch)
 	.byte 0xd1, 0x90, 0x23, 0xf0	; CP WA, (2390h)
@@ -194285,7 +194285,7 @@ LABEL_F3A7E7:
 
 LABEL_F3A800:
 	.byte 0xd1, 0x16, 0x23, 0x20	; LD WA, (2316h)
-	.byte 0xd8, 0x33, 0x0c	; BIT 00ch, WA
+	bit 12, wa
 	jr z, LABEL_F3A819
 	.byte 0xd1, 0x1c, 0x04, 0x20	; LD WA, (041Ch)
 	.byte 0xd1, 0x98, 0x23, 0xf0	; CP WA, (2398h)
@@ -194294,7 +194294,7 @@ LABEL_F3A800:
 
 LABEL_F3A819:
 	.byte 0xd1, 0x16, 0x23, 0x20	; LD WA, (2316h)
-	.byte 0xd8, 0x33, 0x0d	; BIT 00dh, WA
+	bit 13, wa
 	jr z, LABEL_F3A832
 	.byte 0xd1, 0x1c, 0x04, 0x20	; LD WA, (041Ch)
 	.byte 0xd1, 0xa0, 0x23, 0xf0	; CP WA, (23A0h)
@@ -194303,7 +194303,7 @@ LABEL_F3A819:
 
 LABEL_F3A832:
 	.byte 0xd1, 0x16, 0x23, 0x20	; LD WA, (2316h)
-	.byte 0xd8, 0x33, 0x0e	; BIT 00eh, WA
+	bit 14, wa
 	jr z, LABEL_F3A84B
 	.byte 0xd1, 0x1c, 0x04, 0x20	; LD WA, (041Ch)
 	.byte 0xd1, 0xa8, 0x23, 0xf0	; CP WA, (23A8h)
@@ -194313,7 +194313,7 @@ LABEL_F3A832:
 LABEL_F3A84B:
 	.byte 0xd1, 0x16, 0x23, 0x20	; LD WA, (2316h)
 	extz xwa
-	.byte 0xd8, 0x33, 0x0f	; BIT 00fh, WA
+	bit 15, wa
 	.byte 0xb0, 0xf6	; RET Z
 	.byte 0xd1, 0x1c, 0x04, 0x20	; LD WA, (041Ch)
 	.byte 0xd1, 0xb0, 0x23, 0xf0	; CP WA, (23B0h)
@@ -194720,11 +194720,11 @@ LABEL_F3AC38:
 LABEL_F3AC49:
 	.byte 0xd1, 0xa2, 0x1d, 0x26	; LD IZ, (1DA2h)
 	.byte 0xc7, 0xfb, 0xa9	; LD QIZH, 1
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr z, LABEL_F3ACD1
 
 LABEL_F3AC54:
-	.byte 0xde, 0x33, 0x00	; BIT 000h, IZ
+	bit 0, iz
 	jr z, LABEL_F3ACC7
 
 LABEL_F3AC59:
@@ -194775,13 +194775,13 @@ LABEL_F3ACB0:
 	.byte 0xbf, 0x06, 0x47	; LD (XSP + 006h), L
 	.byte 0x8f, 0x06, 0x3f, 0x00	; CP (XSP + 006h), 000h
 	jr nz, LABEL_F3ACC7
-	.byte 0xde, 0x33, 0x00	; BIT 000h, IZ
+	bit 0, iz
 	jr nz, LABEL_F3AC59
 
 LABEL_F3ACC7:
 	srl iz, 1
 	.byte 0xc7, 0xfb, 0x61	; INC 1, QIZH
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr nz, LABEL_F3AC54
 
 LABEL_F3ACD1:
@@ -194874,11 +194874,11 @@ LABEL_F3AD80:
 LABEL_F3AD94:
 	.byte 0xd1, 0xa2, 0x1d, 0x26	; LD IZ, (1DA2h)
 	.byte 0xc7, 0xfb, 0xa9	; LD QIZH, 1
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr z, LABEL_F3AE13
 
 LABEL_F3AD9F:
-	.byte 0xde, 0x33, 0x00	; BIT 000h, IZ
+	bit 0, iz
 	jr z, LABEL_F3AE09
 
 LABEL_F3ADA4:
@@ -194926,13 +194926,13 @@ LABEL_F3ADFB:
 	.byte 0xc7, 0xfb, 0x89	; LD A, QIZH
 	extz wa
 	call LABEL_F43A75
-	.byte 0xde, 0x33, 0x00	; BIT 000h, IZ
+	bit 0, iz
 	jr nz, LABEL_F3ADA4
 
 LABEL_F3AE09:
 	srl iz, 1
 	.byte 0xc7, 0xfb, 0x61	; INC 1, QIZH
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr nz, LABEL_F3AD9F
 
 LABEL_F3AE13:
@@ -195007,7 +195007,7 @@ LABEL_F3AEAA:
 	.byte 0x8f, 0x0a, 0x21	; LD A, (XSP + 00ah)
 	extz wa
 	call LABEL_F3E37B
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr lt, LABEL_F3AEF5
 	.byte 0x8f, 0x12, 0x23	; LD C, (XSP + 012h)
 	extz bc
@@ -195052,7 +195052,7 @@ LABEL_F3AF07:
 	.byte 0xc7, 0xfb, 0x89	; LD A, QIZH
 	extz wa
 	calr LABEL_F3B458
-	.byte 0xcf, 0xd9	; CP L, 1
+	cps l, 1
 	jr nz, LABEL_F3AF3D
 	lds wa, 1
 	call LABEL_F3DCEF
@@ -195076,7 +195076,7 @@ LABEL_F3AF58:
 	.byte 0xc7, 0xfb, 0x89	; LD A, QIZH
 	extz wa
 	calr LABEL_F3B458
-	.byte 0xcf, 0xd9	; CP L, 1
+	cps l, 1
 	jrl nz, LABEL_F3B0D2
 	lds wa, 0
 	call LABEL_F3DCEF
@@ -195118,7 +195118,7 @@ LABEL_F3AF9A:
 	ld a, (xiz)
 	.byte 0xf3, 0x07, 0xf4, 0xe8, 0x41	; LD (XIY + DE), A
 	inc 1, l
-	.byte 0xcf, 0xde	; CP L, 6
+	cps l, 6
 	jr c, LABEL_F3AF9A
 	.byte 0x8f, 0x14, 0x3f, 0x11	; CP (XSP + 014h), 011h
 	jr nz, LABEL_F3AFE1
@@ -195222,7 +195222,7 @@ LABEL_F3B0A5:
 	.byte 0x8f, 0x14, 0x21	; LD A, (XSP + 014h)
 	extz wa
 	calr LABEL_F3B2AE
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_F3B0D2
 	.byte 0x8f, 0x14, 0x3f, 0x15	; CP (XSP + 014h), 015h
 	jr nz, LABEL_F3B0D7
@@ -195258,12 +195258,12 @@ LABEL_F3B0DC:
 	.byte 0x8f, 0x08, 0x21	; LD A, (XSP + 008h)
 	extz wa
 	calr LABEL_F3BF84
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_F3B11B
 	.byte 0x8f, 0x14, 0x21	; LD A, (XSP + 014h)
 	extz wa
 	calr LABEL_F3B458
-	.byte 0xcf, 0xd9	; CP L, 1
+	cps l, 1
 	jrl z, LABEL_F3B225
 	jrl LABEL_F3B294
 
@@ -195275,7 +195275,7 @@ LABEL_F3B122:
 	.byte 0x8f, 0x14, 0x21	; LD A, (XSP + 014h)
 	extz wa
 	calr LABEL_F3B458
-	.byte 0xcf, 0xd9	; CP L, 1
+	cps l, 1
 	jrl nz, LABEL_F3B294
 	.byte 0x8f, 0x14, 0x21	; LD A, (XSP + 014h)
 	extz wa
@@ -195288,7 +195288,7 @@ LABEL_F3B140:
 	.byte 0x8f, 0x14, 0x21	; LD A, (XSP + 014h)
 	extz wa
 	calr LABEL_F3B458
-	.byte 0xcf, 0xd9	; CP L, 1
+	cps l, 1
 	jrl nz, LABEL_F3B294
 	.byte 0x8f, 0x14, 0x21	; LD A, (XSP + 014h)
 	extz wa
@@ -195346,21 +195346,21 @@ LABEL_F3B1CA:
 LABEL_F3B1D1:
 	ld wa, bc
 	calr LABEL_F3B458
-	.byte 0xcf, 0xd9	; CP L, 1
+	cps l, 1
 	jr z, LABEL_F3B1F3
 	jrl LABEL_F3B294
 
 LABEL_F3B1DD:
 	ld wa, bc
 	calr LABEL_F3B458
-	.byte 0xcf, 0xd9	; CP L, 1
+	cps l, 1
 	jr z, LABEL_F3B1F3
 	jrl LABEL_F3B294
 
 LABEL_F3B1E9:
 	ld wa, bc
 	calr LABEL_F3B458
-	.byte 0xcf, 0xd9	; CP L, 1
+	cps l, 1
 	jrl nz, LABEL_F3B294
 
 LABEL_F3B1F3:
@@ -195373,7 +195373,7 @@ LABEL_F3B1F3:
 LABEL_F3B202:
 	ld wa, bc
 	calr LABEL_F3B458
-	.byte 0xcf, 0xd9	; CP L, 1
+	cps l, 1
 	jrl nz, LABEL_F3B294
 	.byte 0x8f, 0x14, 0x21	; LD A, (XSP + 014h)
 	extz wa
@@ -195385,7 +195385,7 @@ LABEL_F3B202:
 LABEL_F3B21C:
 	ld wa, bc
 	calr LABEL_F3B458
-	.byte 0xcf, 0xd9	; CP L, 1
+	cps l, 1
 	jr nz, LABEL_F3B294
 
 LABEL_F3B225:
@@ -195399,7 +195399,7 @@ LABEL_F3B233:
 	.byte 0x8f, 0x14, 0x21	; LD A, (XSP + 014h)
 	extz wa
 	calr LABEL_F3B458
-	.byte 0xcf, 0xd9	; CP L, 1
+	cps l, 1
 	jr nz, LABEL_F3B294
 	.byte 0xbf, 0x0a, 0x30	; LDA XWA, XSP + 00ah
 	.byte 0x8f, 0x14, 0x23	; LD C, (XSP + 014h)
@@ -195411,7 +195411,7 @@ LABEL_F3B24C:
 	.byte 0x8f, 0x14, 0x21	; LD A, (XSP + 014h)
 	extz wa
 	calr LABEL_F3B458
-	.byte 0xcf, 0xd9	; CP L, 1
+	cps l, 1
 	jr nz, LABEL_F3B294
 	.byte 0xbf, 0x0a, 0x30	; LDA XWA, XSP + 00ah
 	.byte 0x8f, 0x14, 0x23	; LD C, (XSP + 014h)
@@ -195422,12 +195422,12 @@ LABEL_F3B24C:
 LABEL_F3B265:
 	ld wa, bc
 	calr LABEL_F3B458
-	.byte 0xcf, 0xd9	; CP L, 1
+	cps l, 1
 	jr nz, LABEL_F3B27E
 	.byte 0x8f, 0x14, 0x21	; LD A, (XSP + 014h)
 	extz wa
 	calr LABEL_F3AE73
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F3B294
 	ldb l, 0x4
 	jr LABEL_F3B2A9
@@ -195559,7 +195559,7 @@ LABEL_F3B31C:
 	ld wa, bc
 	ld xbc, xde
 	calr LABEL_F3BF84
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_F3B38E
 	.byte 0x8f, 0x0e, 0x21	; LD A, (XSP + 00eh)
 	dec 1, a
@@ -195672,7 +195672,7 @@ LABEL_F3B43E:
 	.byte 0x8f, 0x0e, 0x21	; LD A, (XSP + 00eh)
 	extz wa
 	calr LABEL_F3AE73
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jrl z, LABEL_F3B38E
 	ldb l, 0x4
 
@@ -195682,7 +195682,7 @@ LABEL_F3B453:
 	ret
 
 LABEL_F3B458:
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	jr c, LABEL_F3B477
 	cp a, 0x10
 	jr ugt, LABEL_F3B477
@@ -195713,11 +195713,11 @@ LABEL_F3B47A:
 	.byte 0x89, 0x02, 0x3f, 0x48	; CP (XBC + 002h), 048h
 	jrl nz, LABEL_F3B6E3
 	.byte 0x89, 0x03, 0x24	; LD D, (XBC + 003h)
-	.byte 0xcc, 0xdd	; CP D, 5
+	cps d, 5
 	jr z, LABEL_F3B4A1
-	.byte 0xcc, 0xde	; CP D, 6
+	cps d, 6
 	jr z, LABEL_F3B4A1
-	.byte 0xcc, 0xdf	; CP D, 7
+	cps d, 7
 	jrl nz, LABEL_F3B6E3
 
 LABEL_F3B4A1:
@@ -195735,7 +195735,7 @@ LABEL_F3B4B5:
 	.byte 0xc7, 0xfb, 0x31, 0x07	; SET 007h, QIZH
 
 LABEL_F3B4BD:
-	.byte 0xcc, 0xdf	; CP D, 7
+	cps d, 7
 	jr nz, LABEL_F3B513
 	.byte 0xc7, 0xfa, 0x8d	; LD E, QIZL
 	extz de
@@ -195775,7 +195775,7 @@ LABEL_F3B513:
 	.byte 0xf1, 0x1e, 0x04, 0xca	; BIT 2, (041Eh)
 	jrl z, LABEL_F3B679
 	.byte 0xc7, 0xf4, 0x8d	; LD E, IYL
-	.byte 0xcc, 0xde	; CP D, 6
+	cps d, 6
 	jr nz, LABEL_F3B575
 	.byte 0xc7, 0xfb, 0x33, 0x02	; BIT 002h, QIZH
 	jr z, LABEL_F3B561
@@ -195920,7 +195920,7 @@ LABEL_F3B690:
 	extz wa
 	.byte 0xc7, 0xf0, 0x8b	; LD C, IXL
 	ld e, a
-	.byte 0xcc, 0xde	; CP D, 6
+	cps d, 6
 	jr nz, LABEL_F3B6C2
 	.byte 0xc7, 0xfb, 0x33, 0x02	; BIT 002h, QIZH
 	jr z, LABEL_F3B6C2
@@ -195971,7 +195971,7 @@ LABEL_F3B6EB:
 	.byte 0x8e, 0x02, 0x3f, 0x48	; CP (XIZ + 002h), 048h
 	jr nz, LABEL_F3B774
 	.byte 0x8e, 0x03, 0x23	; LD C, (XIZ + 003h)
-	.byte 0xcb, 0xd8	; CP C, 0
+	cps c, 0
 	jr nz, LABEL_F3B774
 	.byte 0x8e, 0x04, 0x21	; LD A, (XIZ + 004h)
 	.byte 0xbf, 0x04, 0x41	; LD (XSP + 004h), A
@@ -196032,7 +196032,7 @@ LABEL_F3B782:
 	.byte 0xc7, 0xfb, 0x99	; LD QIZH, A
 	.byte 0xc7, 0xfb, 0x33, 0x00	; BIT 000h, QIZH
 	jr z, LABEL_F3B797
-	.byte 0xcd, 0x31, 0x07	; SET 007h, E
+	set 7, e
 
 LABEL_F3B797:
 	.byte 0xc7, 0xfb, 0xef, 0x01	; SRL 1, QIZH
@@ -197216,7 +197216,7 @@ LABEL_F3C1F6:
 	extz bc
 	lds wa, 0
 	call LABEL_F4178A
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F3C22B
 	.byte 0xc7, 0xfb, 0x89	; LD A, QIZH
 	extz wa
@@ -197447,7 +197447,7 @@ LABEL_F3C425:
 	.byte 0x8c, 0x02, 0x3f, 0x48	; CP (XIX + 002h), 048h
 	jr nz, LABEL_F3C470
 	.byte 0x8c, 0x03, 0x21	; LD A, (XIX + 003h)
-	.byte 0xc9, 0xdd	; CP A, 5
+	cps a, 5
 	jrl nz, LABEL_F3C508
 	ld xix, xde
 	ld a, (xde)
@@ -197524,7 +197524,7 @@ LABEL_F3C4D7:
 	.byte 0xc3, 0x07, 0xf0, 0xe0, 0x21	; LD A, (XIX + WA)
 	ld (xde), a
 	inc 1, l
-	.byte 0xcf, 0xde	; CP L, 6
+	cps l, 6
 	jr c, LABEL_F3C4D7
 
 LABEL_F3C4F2:
@@ -197539,7 +197539,7 @@ LABEL_F3C506:
 	jr LABEL_F3C560
 
 LABEL_F3C508:
-	.byte 0xc9, 0xde	; CP A, 6
+	cps a, 6
 	jrl nz, LABEL_F3C470
 	ld xix, xde
 	.byte 0xb2, 0xca	; BIT 2, (XDE)
@@ -197952,14 +197952,14 @@ LABEL_F3C890:
 
 LABEL_F3C903:
 	.byte 0xc1, 0xfe, 0x22, 0x21	; LD A, (22FEh)
-	.byte 0xc9, 0x33, 0x07	; BIT 007h, A
+	bit 7, a
 	.byte 0xb0, 0xfe	; RET NZ
-	.byte 0xc9, 0x31, 0x07	; SET 007h, A
+	set 7, a
 	.byte 0xf1, 0xfe, 0x22, 0x41	; LD (22FEh), A
 	.byte 0xd1, 0x9e, 0xf1, 0x3f, 0x00, 0x00	; CPW (0F19Eh), 0000h
 	jr nz, LABEL_F3C927
 	.byte 0xc1, 0xfe, 0x22, 0x21	; LD A, (22FEh)
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
+	res 7, a
 	.byte 0xf1, 0xfe, 0x22, 0x41	; LD (22FEh), A
 	ret
 
@@ -197967,14 +197967,14 @@ LABEL_F3C927:
 	.byte 0xc1, 0xfe, 0x22, 0x21	; LD A, (22FEh)
 	.byte 0xf1, 0x21, 0x04, 0xca	; BIT 2, (0421h)
 	jr z, LABEL_F3C939
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
+	res 7, a
 	.byte 0xf1, 0xfe, 0x22, 0x41	; LD (22FEh), A
 	ret
 
 LABEL_F3C939:
 	.byte 0xf1, 0xb3, 0x28, 0xcd	; BIT 5, (28B3h)
 	jr z, LABEL_F3C947
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
+	res 7, a
 	.byte 0xf1, 0xfe, 0x22, 0x41	; LD (22FEh), A
 	ret
 
@@ -197982,14 +197982,14 @@ LABEL_F3C947:
 	.byte 0xc1, 0xfe, 0x22, 0x21	; LD A, (22FEh)
 	.byte 0xd1, 0xa8, 0x28, 0x3f, 0x00, 0x00	; CPW (28A8h), 0000h
 	jr z, LABEL_F3C95B
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
+	res 7, a
 	.byte 0xf1, 0xfe, 0x22, 0x41	; LD (22FEh), A
 	ret
 
 LABEL_F3C95B:
 	.byte 0xf1, 0x1e, 0x04, 0xca	; BIT 2, (041Eh)
 	jr z, LABEL_F3C969
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
+	res 7, a
 	.byte 0xf1, 0xfe, 0x22, 0x41	; LD (22FEh), A
 	ret
 
@@ -198079,7 +198079,7 @@ LABEL_F3CA35:
 
 LABEL_F3CA4E:
 	.byte 0xc1, 0x10, 0x23, 0x21	; LD A, (2310h)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	.byte 0xb0, 0xfe	; RET NZ
 	.byte 0xf1, 0x10, 0x23, 0x00, 0x01	; LD (2310h), 001h
 	.byte 0xf1, 0x9e, 0xf1, 0x02, 0x00, 0x00	; LDW (0F19Eh), 0000h
@@ -198125,9 +198125,9 @@ LABEL_F3CAC1:
 
 LABEL_F3CAD5:
 	.byte 0xc1, 0x1e, 0x04, 0x21	; LD A, (041Eh)
-	.byte 0xc9, 0x33, 0x03	; BIT 003h, A
+	bit 3, a
 	jr nz, LABEL_F3CAF4
-	.byte 0xc9, 0x33, 0x02	; BIT 002h, A
+	bit 2, a
 	jr z, LABEL_F3CAF4
 	.byte 0xf1, 0x21, 0x04, 0xca	; BIT 2, (0421h)
 	.byte 0xb0, 0xf6	; RET Z
@@ -198152,8 +198152,8 @@ LABEL_F3CAF8:
 	.byte 0xf1, 0x68, 0x26, 0x02, 0x01, 0x00	; LDW (2668h), 0001h
 	.byte 0xf1, 0xb4, 0x28, 0x02, 0x00, 0x00	; LDW (28B4h), 0000h
 	.byte 0xc1, 0xb3, 0x28, 0x21	; LD A, (28B3h)
-	.byte 0xc9, 0x31, 0x04	; SET 004h, A
-	.byte 0xc9, 0x31, 0x02	; SET 002h, A
+	set 4, a
+	set 2, a
 	.byte 0xf1, 0xb3, 0x28, 0x41	; LD (28B3h), A
 	.byte 0xf1, 0xfc, 0x22, 0x00, 0x00	; LD (22FCh), 000h
 	.byte 0xc1, 0x34, 0x8d, 0x3f, 0x13	; CP (8D34h), 013h
@@ -198175,7 +198175,7 @@ LABEL_F3CB5E:
 	extz bc
 	lds wa, 0
 	call LABEL_F4178A
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_F3CB82
 	ldw hl, 0xFFFF
 	jr LABEL_F3CBC9
@@ -198428,7 +198428,7 @@ LABEL_F3CDC5:
 	ld a, (xix)
 	extz wa
 	call LABEL_F3E37B
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr ge, LABEL_F3CDE3
 	lds wa, 6
 	call LABEL_F439AB
@@ -198530,7 +198530,7 @@ LABEL_F3CE9A:
 	ld a, (xix)
 	extz wa
 	call LABEL_F3E37B
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr ge, LABEL_F3CEB9
 	ldw wa, 0x1A
 	call LABEL_F439AB
@@ -198686,7 +198686,7 @@ LABEL_F3D008:
 	ld a, (xix)
 	extz wa
 	call LABEL_F3E37B
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr ge, LABEL_F3D027
 	ldw wa, 0x1B
 	call LABEL_F439AB
@@ -198778,7 +198778,7 @@ LABEL_F3D0C6:
 	jr z, LABEL_F3D0FB
 	extz wa
 	call LABEL_F3E37B
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr ge, LABEL_F3D0E8
 	lds wa, 7
 	call LABEL_F439AB
@@ -199138,7 +199138,7 @@ LABEL_F3D41E:
 LABEL_F3D451:
 	extz wa
 	call LABEL_F3E37B
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr le, LABEL_F3D46C
 	.byte 0x8f, 0x04, 0x21	; LD A, (XSP + 004h)
 	extz wa
@@ -199248,7 +199248,7 @@ LABEL_F3D53E:
 LABEL_F3D547:
 	extz wa
 	call LABEL_F3E37B
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr le, LABEL_F3D562
 	.byte 0x8f, 0x04, 0x21	; LD A, (XSP + 004h)
 	extz wa
@@ -199311,7 +199311,7 @@ LABEL_F3D5CA:
 	ld wa, ix
 	.byte 0x9b, 0x04, 0xa0	; SUB WA, (XHL + 004h)
 	.byte 0xba, 0x01, 0x41	; LD (XDE + 001h), A
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_F3D5E5
 	.byte 0x82, 0x3f, 0x02	; CP (XDE), 002h
 	jr nc, LABEL_F3D5E5
@@ -199404,7 +199404,7 @@ LABEL_F3D6A0:
 	.byte 0xb9, 0x02, 0x32	; LDA XDE, XBC + 002h
 	.byte 0xc1, 0xe4, 0x8e, 0x21	; LD A, (MIDI_CC_MODWHEEL_VALUE)
 	ld (xde), a
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
+	res 7, a
 	ld (xde), a
 	.byte 0xc7, 0xfb, 0x89	; LD A, QIZH
 	extz wa
@@ -199416,7 +199416,7 @@ LABEL_F3D6A0:
 	.byte 0xf1, 0x5a, 0xfc, 0x30	; LDA XWA, 0FC5Ah
 	.byte 0x88, 0x08, 0x24	; LD D, (XWA + 008h)
 	ld e, d
-	.byte 0xcd, 0x30, 0x07	; RES 007h, E
+	res 7, e
 	.byte 0xb9, 0x02, 0x45	; LD (XBC + 002h), E
 	.byte 0xb9, 0x03, 0x33	; LDA XHL, XBC + 003h
 	.byte 0x88, 0x09, 0x25	; LD E, (XWA + 009h)
@@ -199425,7 +199425,7 @@ LABEL_F3D6A0:
 	add e, e
 	ld a, e
 	ld (xhl), e
-	.byte 0xcc, 0x33, 0x07	; BIT 007h, D
+	bit 7, d
 	jr z, LABEL_F3D6FA
 	inc 1, a
 	ld (xhl), a
@@ -199457,11 +199457,11 @@ LABEL_F3D71E:
 	extz bc
 	lds wa, 0
 	call LABEL_F41783
-	.byte 0xcf, 0xd9	; CP L, 1
+	cps l, 1
 	jr z, LABEL_F3D73B
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F3D73B
-	.byte 0xcf, 0xda	; CP L, 2
+	cps l, 2
 	jr nz, LABEL_F3D773
 
 LABEL_F3D73B:
@@ -199710,27 +199710,27 @@ LABEL_F3D973:
 LABEL_F3D978:
 	.byte 0xb8, 0x02, 0x32	; LDA XDE, XWA + 002h
 	ld c, (xde)
-	.byte 0xcb, 0x33, 0x07	; BIT 007h, C
+	bit 7, c
 	jr z, LABEL_F3D989
-	.byte 0xcb, 0x30, 0x07	; RES 007h, C
+	res 7, c
 	ld (xde), c
 	.byte 0xb0, 0xba	; SET 2, (XWA)
 
 LABEL_F3D989:
 	.byte 0xb8, 0x04, 0x32	; LDA XDE, XWA + 004h
 	ld c, (xde)
-	.byte 0xcb, 0x33, 0x07	; BIT 007h, C
+	bit 7, c
 	jr z, LABEL_F3D99A
-	.byte 0xcb, 0x30, 0x07	; RES 007h, C
+	res 7, c
 	ld (xde), c
 	.byte 0xb0, 0xb8	; SET 0, (XWA)
 
 LABEL_F3D99A:
 	.byte 0xb8, 0x05, 0x32	; LDA XDE, XWA + 005h
 	ld c, (xde)
-	.byte 0xcb, 0x33, 0x07	; BIT 007h, C
+	bit 7, c
 	.byte 0xb0, 0xf6	; RET Z
-	.byte 0xcb, 0x30, 0x07	; RES 007h, C
+	res 7, c
 	ld (xde), c
 	.byte 0xb0, 0xb9	; SET 1, (XWA)
 	ret
@@ -199839,18 +199839,18 @@ LABEL_F3DAA4:
 	.byte 0xf1, 0x20, 0x04, 0xb9	; SET 1, (0420h)
 	.byte 0xf1, 0x20, 0x04, 0xba	; SET 2, (0420h)
 	.byte 0xc1, 0x1e, 0x04, 0x21	; LD A, (041Eh)
-	.byte 0xc9, 0x33, 0x00	; BIT 000h, A
+	bit 0, a
 	jr z, LABEL_F3DAC1
-	.byte 0xc9, 0x31, 0x01	; SET 001h, A
-	.byte 0xc9, 0x31, 0x02	; SET 002h, A
+	set 1, a
+	set 2, a
 	.byte 0xf1, 0x1e, 0x04, 0x41	; LD (041Eh), A
 
 LABEL_F3DAC1:
 	.byte 0xc1, 0x21, 0x04, 0x21	; LD A, (0421h)
-	.byte 0xc9, 0x33, 0x00	; BIT 000h, A
+	bit 0, a
 	jr z, LABEL_F3DAD4
-	.byte 0xc9, 0x31, 0x01	; SET 001h, A
-	.byte 0xc9, 0x31, 0x02	; SET 002h, A
+	set 1, a
+	set 2, a
 	.byte 0xf1, 0x21, 0x04, 0x41	; LD (0421h), A
 
 LABEL_F3DAD4:
@@ -199931,7 +199931,7 @@ LABEL_F3DB59:
 	.byte 0x80, 0x3f, 0x0d	; CP (XWA), 00dh
 	jr z, LABEL_F3DB88
 	.byte 0xc1, 0x67, 0x0d, 0x21	; LD A, (0D67h)
-	.byte 0xc9, 0xdc	; CP A, 4
+	cps a, 4
 	.byte 0xf2, 0x7c, 0xda, 0xf3, 0xee	; CALL NZ, LABEL_F3DA7C
 	jrl LABEL_F3DCEA
 
@@ -199945,7 +199945,7 @@ LABEL_F3DB88:
 
 LABEL_F3DB8C:
 	call LABEL_EF23FA
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr ge, LABEL_F3DBAC
 
 LABEL_F3DB94:
@@ -199965,7 +199965,7 @@ LABEL_F3DBAC:
 LABEL_F3DBB3:
 	call LABEL_EF23FA
 	.byte 0xbf, 0x1e, 0x31	; LDA XBC, XSP + 01eh
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr lt, LABEL_F3DBD1
 	.byte 0x8f, 0x04, 0x21	; LD A, (XSP + 004h)
 	extz wa
@@ -200057,7 +200057,7 @@ LABEL_F3DC65:
 	.byte 0x88, 0x02, 0x19, 0xe1, 0xce	; LD (0CEE1h), (XWA + 002h)
 	.byte 0x88, 0x03, 0x19, 0xde, 0xce	; LD (0CEDEh), (XWA + 003h)
 	.byte 0xc1, 0x67, 0x0d, 0x21	; LD A, (0D67h)
-	.byte 0xc9, 0xdc	; CP A, 4
+	cps a, 4
 	jr z, LABEL_F3DCD0
 	.byte 0xf1, 0xe5, 0xce, 0x34	; LDA XIX, 0CEE5h
 	.byte 0xbf, 0x0e, 0x33	; LDA XHL, XSP + 00eh
@@ -200483,14 +200483,14 @@ LABEL_F3E067:
 	ld e, d
 
 LABEL_F3E071:
-	.byte 0xcf, 0xd9	; CP L, 1
+	cps l, 1
 	jr ugt, LABEL_F3E07C
 	inc 1, d
 	cp d, 0x10
 	jr ule, LABEL_F3E05A
 
 LABEL_F3E07C:
-	.byte 0xcf, 0xd9	; CP L, 1
+	cps l, 1
 	.byte 0xf2, 0x82, 0x87, 0xf9, 0xde	; JP NZ, LABEL_F98782
 	extz de
 	lds wa, 0
@@ -200627,7 +200627,7 @@ LABEL_F3E1AE:
 	lds wa, 0
 	ld bc, hl
 	calr LABEL_F4178A
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_F3E1BE
 	.byte 0xc7, 0xfb, 0xa8	; LD QIZH, 0
 
@@ -200656,7 +200656,7 @@ LABEL_F3E1E6:
 	jr nz, LABEL_F3E24C
 	lds wa, 4
 	calr LABEL_F439BF
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F3E24C
 	.byte 0xf1, 0x24, 0x04, 0x00, 0xf2	; LD (0424h), 0f2h
 	.byte 0xbf, 0x08, 0x36	; LDA XIZ, XSP + 008h
@@ -201147,7 +201147,7 @@ LABEL_F3E649:
 	.byte 0xc3, 0x07, 0xf4, 0xe0, 0x21	; LD A, (XIY + WA)
 	ld (xiz), a
 	inc 1, h
-	.byte 0xce, 0xdc	; CP H, 4
+	cps h, 4
 	jr c, LABEL_F3E649
 	.byte 0xd9, 0x09, 0x0c, 0x00	; MULS_BC 000ch
 	exts xbc
@@ -201345,7 +201345,7 @@ LABEL_F3E816:
 	.byte 0xf1, 0x28, 0x23, 0x53	; LD (2328h), HL
 	.byte 0xf1, 0x1c, 0x04, 0x53	; LD (041Ch), HL
 	.byte 0xf1, 0x1b, 0x04, 0x00, 0x00	; LD (041Bh), 000h
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_F3E834
 	.byte 0xf1, 0xa7, 0x28, 0xb3	; RES 3, (28A7h)
 	jr LABEL_F3E838
@@ -201583,7 +201583,7 @@ LABEL_F3EA04:
 LABEL_F3EA3F:
 	.byte 0xd1, 0x16, 0x23, 0xc1	; AND BC, (2316h)
 	.byte 0xf1, 0x72, 0x1d, 0x30	; LDA XWA, 1D72h
-	.byte 0xd9, 0xd8	; CP BC, 0
+	cps bc, 0
 	jr z, LABEL_F3EA50
 	.byte 0xb0, 0x00, 0x01	; LD (XWA), 001h
 	jr LABEL_F3EA53
@@ -201607,7 +201607,7 @@ LABEL_F3EA53:
 LABEL_F3EA6D:
 	.byte 0xd1, 0x16, 0x23, 0xc1	; AND BC, (2316h)
 	.byte 0xf1, 0x73, 0x1d, 0x30	; LDA XWA, 1D73h
-	.byte 0xd9, 0xd8	; CP BC, 0
+	cps bc, 0
 	jr z, LABEL_F3EA7E
 	.byte 0xb0, 0x00, 0x01	; LD (XWA), 001h
 	jr LABEL_F3EA81
@@ -201866,14 +201866,14 @@ LABEL_F3EC5E:
 	ld e, d
 
 LABEL_F3EC68:
-	.byte 0xcf, 0xd9	; CP L, 1
+	cps l, 1
 	jr ugt, LABEL_F3EC73
 	inc 1, d
 	cp d, 0x10
 	jr ule, LABEL_F3EC51
 
 LABEL_F3EC73:
-	.byte 0xcf, 0xd9	; CP L, 1
+	cps l, 1
 	.byte 0xf2, 0x82, 0x87, 0xf9, 0xde	; JP NZ, LABEL_F98782
 	extz de
 	lds wa, 0
@@ -201924,8 +201924,8 @@ LABEL_F3ECE5:
 	.byte 0xf1, 0x20, 0x04, 0xb4	; RES 4, (0420h)
 	.byte 0xf1, 0x20, 0x04, 0xb1	; RES 1, (0420h)
 	.byte 0xc1, 0x1e, 0x04, 0x21	; LD A, (041Eh)
-	.byte 0xc9, 0x30, 0x04	; RES 004h, A
-	.byte 0xc9, 0x30, 0x01	; RES 001h, A
+	res 4, a
+	res 1, a
 	.byte 0xf1, 0x1e, 0x04, 0x41	; LD (041Eh), A
 	.byte 0xc1, 0x34, 0x8d, 0x3f, 0x13	; CP (8D34h), 013h
 	jr nz, LABEL_F3ED07
@@ -201937,7 +201937,7 @@ LABEL_F3ED07:
 	jr nz, LABEL_F3ED18
 	.byte 0xf1, 0x21, 0x04, 0xca	; BIT 2, (0421h)
 	jr nz, LABEL_F3ED1B
-	.byte 0xc9, 0x33, 0x02	; BIT 002h, A
+	bit 2, a
 	jr nz, LABEL_F3ED1B
 
 LABEL_F3ED18:
@@ -201959,7 +201959,7 @@ LABEL_F3ED2A:
 
 LABEL_F3ED34:
 	.byte 0xd1, 0x9e, 0xf1, 0x20	; LD WA, (0F19Eh)
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr z, LABEL_F3ED5E
 	.byte 0xd1, 0x38, 0x28, 0xf0	; CP WA, (2838h)
 	.byte 0xf2, 0xfc, 0x93, 0xf3, 0xee	; CALL NZ, LABEL_F393FC
@@ -201974,11 +201974,11 @@ LABEL_F3ED34:
 LABEL_F3ED5E:
 	.byte 0xf1, 0x14, 0x23, 0x02, 0x00, 0x00	; LDW (2314h), 0000h
 	.byte 0xc1, 0xa7, 0x28, 0x21	; LD A, (28A7h)
-	.byte 0xc9, 0x30, 0x00	; RES 000h, A
+	res 0, a
 	.byte 0xf1, 0xa7, 0x28, 0x41	; LD (28A7h), A
 	.byte 0xd1, 0xa8, 0x28, 0x3f, 0x00, 0x00	; CPW (28A8h), 0000h
 	jr z, LABEL_F3ED7E
-	.byte 0xc9, 0x31, 0x00	; SET 000h, A
+	set 0, a
 	.byte 0xf1, 0xa7, 0x28, 0x41	; LD (28A7h), A
 
 LABEL_F3ED7E:
@@ -202306,7 +202306,7 @@ LABEL_F3F05A:
 LABEL_F3F08A:
 	.byte 0xd7, 0xfa, 0x04	; PUSH QIZ
 	.byte 0xd1, 0xa8, 0x28, 0x21	; LD BC, (28A8h)
-	.byte 0xd9, 0xd8	; CP BC, 0
+	cps bc, 0
 	jrl z, LABEL_F3F175
 	.byte 0xc7, 0xfb, 0xa9	; LD QIZH, 1
 
@@ -202444,7 +202444,7 @@ LABEL_F3F1A8:
 	.byte 0x8f, 0x06, 0x23	; LD C, (XSP + 006h)
 	extz bc
 	calr LABEL_F4178A
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jrl z, LABEL_F3F2E9
 	.byte 0x8f, 0x04, 0x21	; LD A, (XSP + 004h)
 	extz wa
@@ -202516,7 +202516,7 @@ LABEL_F3F242:
 	.byte 0x9f, 0x0a, 0x20	; LD WA, (XSP + 00ah)
 	calr LABEL_F41C39
 	ld wa, hl
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr z, LABEL_F3F270
 	.byte 0x9f, 0x0c, 0x21	; LD BC, (XSP + 00ch)
 	calr LABEL_F41C72
@@ -202843,7 +202843,7 @@ LABEL_F3F4B4:
 	ret
 
 LABEL_F3F604:
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	jr c, LABEL_F3F60E
 	.byte 0xc1, 0xa1, 0x28, 0xf1	; CP A, (28A1h)
 	jr ule, LABEL_F3F612
@@ -202857,7 +202857,7 @@ LABEL_F3F612:
 	ret
 
 LABEL_F3F615:
-	.byte 0xd8, 0xd9	; CP WA, 1
+	cps wa, 1
 	jr c, LABEL_F3F61F
 	cp wa, 0x3E7
 	jr ule, LABEL_F3F623
@@ -202887,26 +202887,26 @@ LABEL_F3F66D:
 	jr z, LABEL_F3F68C
 	extz wa
 	calr LABEL_F3F604
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_F3F6AD
 	.byte 0xc1, 0x82, 0x26, 0x21	; LD A, (2682h)
 	extz wa
 	calr LABEL_F3F604
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_F3F6AD
 
 LABEL_F3F68C:
 	.byte 0xd1, 0x32, 0x26, 0x20	; LD WA, (2632h)
 	calr LABEL_F3F615
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_F3F6AD
 	.byte 0xd1, 0xde, 0x25, 0x20	; LD WA, (25DEh)
 	calr LABEL_F3F615
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_F3F6AD
 	.byte 0xd1, 0x86, 0x26, 0x20	; LD WA, (2686h)
 	calr LABEL_F3F615
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F3F6B1
 
 LABEL_F3F6AD:
@@ -202923,21 +202923,21 @@ LABEL_F3F6B4:
 	jr z, LABEL_F3F6C6
 	extz wa
 	calr LABEL_F3F604
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	.byte 0xb0, 0xfe	; RET NZ
 
 LABEL_F3F6C6:
 	.byte 0xd1, 0x32, 0x26, 0x20	; LD WA, (2632h)
 	calr LABEL_F3F615
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	.byte 0xb0, 0xfe	; RET NZ
 	.byte 0xd1, 0xde, 0x25, 0x20	; LD WA, (25DEh)
 	calr LABEL_F3F615
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	.byte 0xb0, 0xfe	; RET NZ
 	.byte 0xc1, 0xfe, 0x25, 0x21	; LD A, (25FEh)
 	extz wa
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr mi, LABEL_F3F6EC
 	cp wa, 0xC
 	jr le, LABEL_F3F6EF
@@ -202957,24 +202957,24 @@ LABEL_F3F6FC:
 	jr z, LABEL_F3F70E
 	extz wa
 	calr LABEL_F3F604
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_F3F734
 
 LABEL_F3F70E:
 	.byte 0xd1, 0x32, 0x26, 0x20	; LD WA, (2632h)
 	calr LABEL_F3F615
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_F3F734
 	.byte 0xd1, 0xde, 0x25, 0x20	; LD WA, (25DEh)
 	calr LABEL_F3F615
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_F3F734
 	.byte 0xc1, 0x50, 0x26, 0x21	; LD A, (2650h)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F3F738
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	jr z, LABEL_F3F738
-	.byte 0xc9, 0xda	; CP A, 2
+	cps a, 2
 	jr z, LABEL_F3F738
 
 LABEL_F3F734:
@@ -202991,17 +202991,17 @@ LABEL_F3F73B:
 	jr z, LABEL_F3F74D
 	extz wa
 	calr LABEL_F3F604
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_F3F763
 
 LABEL_F3F74D:
 	.byte 0xd1, 0x32, 0x26, 0x20	; LD WA, (2632h)
 	calr LABEL_F3F615
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_F3F763
 	.byte 0xd1, 0xde, 0x25, 0x20	; LD WA, (25DEh)
 	calr LABEL_F3F615
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F3F767
 
 LABEL_F3F763:
@@ -203029,12 +203029,12 @@ LABEL_F3F799:
 	.byte 0xbf, 0x04, 0x50	; LD (XSP + 004h), WA
 	dec 1, wa
 	.byte 0xf1, 0x66, 0x26, 0x50	; LD (2666h), WA
-	.byte 0xd8, 0xdd	; CP WA, 5
+	cps wa, 5
 	jr nc, LABEL_F3F809
 	.byte 0xd1, 0xaf, 0x28, 0x20	; LD WA, (28AFh)
 	calr LABEL_F41C39
 	ld iz, hl
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr z, LABEL_F3F7C7
 	cp iz, 0x4D8
 	jr ule, LABEL_F3F7DD
@@ -203050,7 +203050,7 @@ LABEL_F3F7C7:
 LABEL_F3F7DD:
 	ld wa, iz
 	calr LABEL_F41C85
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_F3F7FF
 	.byte 0xf1, 0x7a, 0x28, 0x00, 0x0b	; LD (287Ah), 00bh
 	.byte 0xd7, 0xfa, 0x88	; LD WA, QIZ
@@ -203088,17 +203088,17 @@ LABEL_F3F854:
 	jr z, LABEL_F3F866
 	extz wa
 	calr LABEL_F3F604
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_F3F88A
 
 LABEL_F3F866:
 	.byte 0xd1, 0x32, 0x26, 0x20	; LD WA, (2632h)
 	calr LABEL_F3F615
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_F3F88A
 	.byte 0xd1, 0xde, 0x25, 0x20	; LD WA, (25DEh)
 	calr LABEL_F3F615
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_F3F88A
 	.byte 0xc1, 0x16, 0x26, 0x3f, 0x7f	; CP (2616h), 07fh
 	jr ugt, LABEL_F3F88A
@@ -203144,7 +203144,7 @@ LABEL_F3F8D7:
 	.byte 0xc7, 0xf9, 0x8b	; LD C, IZH
 	extz bc
 	calr LABEL_F4178A
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F3F900
 	.byte 0xc7, 0xfb, 0x89	; LD A, QIZH
 	extz wa
@@ -203331,19 +203331,19 @@ LABEL_F3FABF:
 	.byte 0xc1, 0x77, 0x28, 0x21	; LD A, (2877h)
 	extz wa
 	calr LABEL_F3F604
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_F3FAEC
 	.byte 0xc1, 0x82, 0x26, 0x21	; LD A, (2682h)
 	.byte 0xc1, 0x77, 0x28, 0xf9	; CP (2877h), A
 	jr z, LABEL_F3FAEC
 	extz wa
 	calr LABEL_F3F604
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_F3FAEC
 	.byte 0xc1, 0x84, 0x26, 0x21	; LD A, (2684h)
 	extz wa
 	calr LABEL_F3F604
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F3FAF0
 
 LABEL_F3FAEC:
@@ -203369,7 +203369,7 @@ LABEL_F3FB06:
 	ld iz, hl
 	ld wa, iz
 	calr LABEL_F41C85
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_F3FB1F
 	.byte 0xf1, 0x7a, 0x28, 0x00, 0x02	; LD (287Ah), 002h
 	jr LABEL_F3FB29
@@ -203385,7 +203385,7 @@ LABEL_F3FB29:
 LABEL_F3FB2B:
 	pushw iz
 	.byte 0xd1, 0x89, 0x28, 0x20	; LD WA, (2889h)
-	.byte 0xd8, 0xdd	; CP WA, 5
+	cps wa, 5
 	jr z, LABEL_F3FB3C
 	dec 1, wa
 	.byte 0xf1, 0x89, 0x28, 0x50	; LD (2889h), WA
@@ -203397,7 +203397,7 @@ LABEL_F3FB3C:
 	ld iz, hl
 	ld wa, iz
 	calr LABEL_F41C85
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_F3FB5B
 	ldw wa, 0x47
 	calr LABEL_F439AB
@@ -203405,7 +203405,7 @@ LABEL_F3FB3C:
 	jr LABEL_F3FB76
 
 LABEL_F3FB5B:
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr z, LABEL_F3FB65
 	cp iz, 0xFFFF
 	jr nz, LABEL_F3FB6C
@@ -203441,14 +203441,14 @@ LABEL_F3FB8B:
 	.byte 0xd1, 0x87, 0x28, 0x20	; LD WA, (2887h)
 	calr LABEL_F41FEC
 	ld iz, hl
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr ge, LABEL_F3FBBE
 	.byte 0xf1, 0x7a, 0x28, 0x00, 0x05	; LD (287Ah), 005h
 	jr LABEL_F3FBC8
 
 LABEL_F3FBB0:
 	calr LABEL_F41C85
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_F3FBBE
 	.byte 0xf1, 0x7a, 0x28, 0x00, 0x02	; LD (287Ah), 002h
 	jr LABEL_F3FBC8
@@ -203464,7 +203464,7 @@ LABEL_F3FBC8:
 LABEL_F3FBCA:
 	pushw iz
 	.byte 0xd1, 0x85, 0x28, 0x20	; LD WA, (2885h)
-	.byte 0xd8, 0xdd	; CP WA, 5
+	cps wa, 5
 	jr z, LABEL_F3FBDB
 	dec 1, wa
 	.byte 0xf1, 0x85, 0x28, 0x50	; LD (2885h), WA
@@ -203476,7 +203476,7 @@ LABEL_F3FBDB:
 	ld iz, hl
 	ld wa, iz
 	calr LABEL_F41C85
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_F3FBFA
 	ldw wa, 0x48
 	calr LABEL_F439AB
@@ -203484,7 +203484,7 @@ LABEL_F3FBDB:
 	jr LABEL_F3FC15
 
 LABEL_F3FBFA:
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr z, LABEL_F3FC04
 	cp iz, 0xFFFF
 	jr nz, LABEL_F3FC0B
@@ -203539,7 +203539,7 @@ LABEL_F3FC57:
 	extz bc
 	lds wa, 0
 	calr LABEL_F4178A
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_F3FC72
 	.byte 0xf1, 0x7a, 0x28, 0x00, 0x01	; LD (287Ah), 001h
 	jr LABEL_F3FCB7
@@ -203564,7 +203564,7 @@ LABEL_F3FC8B:
 LABEL_F3FC98:
 	ld wa, iz
 	calr LABEL_F41C85
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_F3FCA8
 	.byte 0xf1, 0x7a, 0x28, 0x00, 0x0b	; LD (287Ah), 00bh
 	jr LABEL_F3FCB7
@@ -203596,7 +203596,7 @@ LABEL_F3FCBB:
 	add xde, xwa
 	ld e, (xde)
 	extz de
-	.byte 0xda, 0xdd	; CP DE, 5
+	cps de, 5
 	jr c, LABEL_F3FD19
 	cp de, 0xFF
 	jr ugt, LABEL_F3FD19
@@ -203642,7 +203642,7 @@ LABEL_F3FD28:
 LABEL_F3FD60:
 	.byte 0xd7, 0xfa, 0x04	; PUSH QIZ
 	.byte 0xc1, 0x2a, 0x26, 0x21	; LD A, (262Ah)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F3FDD2
 	.byte 0xf1, 0x7b, 0x28, 0xcb	; BIT 3, (287Bh)
 	jr nz, LABEL_F3FDD2
@@ -203660,7 +203660,7 @@ LABEL_F3FD7C:
 	.byte 0xf1, 0x86, 0x26, 0x50	; LD (2686h), WA
 	.byte 0xc7, 0xfb, 0xa8	; LD QIZH, 0
 	.byte 0xc1, 0x2a, 0x26, 0x21	; LD A, (262Ah)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr ule, LABEL_F3FDD2
 
 LABEL_F3FD9F:
@@ -203830,9 +203830,9 @@ LABEL_F3FF57:
 	extz wa
 	calr LABEL_F3FC57
 	.byte 0xc1, 0x7a, 0x28, 0x21	; LD A, (287Ah)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F3FF78
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	jr nz, LABEL_F3FF76
 	.byte 0xf1, 0x7a, 0x28, 0x00, 0x00	; LD (287Ah), 000h
 
@@ -203865,7 +203865,7 @@ LABEL_F3FF78:
 LABEL_F3FFB2:
 	ld wa, iz
 	calr LABEL_F41C85
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_F3FFC2
 
 LABEL_F3FFBB:
@@ -203900,7 +203900,7 @@ LABEL_F3FFF5:
 	.byte 0xd7, 0xfa, 0xa8	; LD QIZ, 0
 	.byte 0xc1, 0x8e, 0x28, 0x21	; LD A, (288Eh)
 	extz wa
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr z, LABEL_F4003E
 
 LABEL_F40002:
@@ -203967,7 +203967,7 @@ LABEL_F40079:
 LABEL_F40086:
 	ld wa, iz
 	calr LABEL_F41C85
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_F40096
 	.byte 0xf1, 0x7a, 0x28, 0x00, 0x0b	; LD (287Ah), 00bh
 	jr LABEL_F400A5
@@ -203983,7 +203983,7 @@ LABEL_F400A5:
 
 LABEL_F400A7:
 	.byte 0xc1, 0x7b, 0x28, 0x21	; LD A, (287Bh)
-	.byte 0xc9, 0x30, 0x02	; RES 002h, A
+	res 2, a
 	.byte 0xf1, 0x7b, 0x28, 0x41	; LD (287Bh), A
 	ldb l, 0x0
 	.byte 0xf1, 0xa0, 0xf1, 0x32	; LDA XDE, 0F1A0h
@@ -203995,7 +203995,7 @@ LABEL_F400B8:
 	add xbc, xde
 	.byte 0x81, 0x3f, 0x10	; CP (XBC), 010h
 	jr nz, LABEL_F400CF
-	.byte 0xc9, 0x31, 0x02	; SET 002h, A
+	set 2, a
 	.byte 0xf1, 0x7b, 0x28, 0x41	; LD (287Bh), A
 	inc 1, l
 	ret
@@ -204023,7 +204023,7 @@ LABEL_F400ED:
 	extz wa
 	calr LABEL_F3FC57
 	.byte 0xc1, 0x7a, 0x28, 0x21	; LD A, (287Ah)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F40118
 	.byte 0xf1, 0x7b, 0x28, 0xb2	; RES 2, (287Bh)
 	.byte 0xf1, 0x7a, 0x28, 0x00, 0x00	; LD (287Ah), 000h
@@ -204094,9 +204094,9 @@ LABEL_F401A4:
 	push xiz
 	.byte 0xf1, 0x7a, 0x28, 0x00, 0x00	; LD (287Ah), 000h
 	.byte 0xc1, 0x7b, 0x28, 0x21	; LD A, (287Bh)
-	.byte 0xc9, 0x33, 0x02	; BIT 002h, A
+	bit 2, a
 	jrl z, LABEL_F4023B
-	.byte 0xc9, 0x33, 0x05	; BIT 005h, A
+	bit 5, a
 	jrl nz, LABEL_F4023B
 	.byte 0xd1, 0xaf, 0x28, 0x20	; LD WA, (28AFh)
 	.byte 0xd7, 0xfa, 0x98	; LD QIZ, WA
@@ -204163,7 +204163,7 @@ LABEL_F4023D:
 	lds iz, 0
 	.byte 0xc1, 0x8e, 0x28, 0x21	; LD A, (288Eh)
 	extz wa
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr z, LABEL_F40284
 
 LABEL_F4024A:
@@ -204239,7 +204239,7 @@ LABEL_F402DF:
 	.byte 0xc1, 0x7a, 0x28, 0x3f, 0x00	; CP (287Ah), 000h
 	jr nz, LABEL_F40308
 	calr LABEL_F421A6
-	.byte 0xcf, 0x33, 0x07	; BIT 007h, L
+	bit 7, l
 	jr nz, LABEL_F40308
 	ld bc, iz
 	.byte 0xf1, 0x87, 0x25, 0x30	; LDA XWA, 2587h
@@ -204247,7 +204247,7 @@ LABEL_F402DF:
 	add xbc, xwa
 	ld (xbc), l
 	inc 1, iz
-	.byte 0xde, 0xdf	; CP IZ, 7
+	cps iz, 7
 	jr ule, LABEL_F402DF
 
 LABEL_F40303:
@@ -204271,7 +204271,7 @@ LABEL_F4031C:
 	extz wa
 	calr LABEL_F3FCBB
 	.byte 0xc1, 0x7a, 0x28, 0x21	; LD A, (287Ah)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_F4035C
 	calr LABEL_F400A7
 	.byte 0xd1, 0x32, 0x26, 0x19, 0x7f, 0x28	; LDW_16_16 (287Fh), (2632h)
@@ -204281,16 +204281,16 @@ LABEL_F4031C:
 	ld bc, hl
 	calr LABEL_F3FE4C
 	.byte 0xc1, 0x7a, 0x28, 0x21	; LD A, (287Ah)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F4036A
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	jr z, LABEL_F40365
 	cp a, 0x8
 	jr z, LABEL_F40365
 	jr LABEL_F40376
 
 LABEL_F4035C:
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	jr z, LABEL_F40365
 	cp a, 0x8
 	jr nz, LABEL_F40376
@@ -204651,8 +204651,8 @@ LABEL_F40779:
 LABEL_F4077D:
 	.byte 0xd7, 0xfa, 0x04	; PUSH QIZ
 	.byte 0xc1, 0x7b, 0x28, 0x21	; LD A, (287Bh)
-	.byte 0xc9, 0x30, 0x03	; RES 003h, A
-	.byte 0xc9, 0x30, 0x04	; RES 004h, A
+	res 3, a
+	res 4, a
 	.byte 0xf1, 0x7b, 0x28, 0x41	; LD (287Bh), A
 	.byte 0xd1, 0x31, 0xf2, 0x19, 0xcc, 0x26	; LDW_16_16 026CCh, 00F231h
 	.byte 0xf1, 0x7a, 0x28, 0x00, 0x00	; LD (287Ah), 000h
@@ -204667,9 +204667,9 @@ LABEL_F407A4:
 	extz wa
 	calr LABEL_F3FCBB
 	.byte 0xc1, 0x7a, 0x28, 0x21	; LD A, (287Ah)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F407C9
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	jrl z, LABEL_F4084A
 	cp a, 0x8
 	jrl z, LABEL_F4084A
@@ -204685,9 +204685,9 @@ LABEL_F407C9:
 	ld bc, hl
 	calr LABEL_F3FE4C
 	.byte 0xc1, 0x7a, 0x28, 0x21	; LD A, (287Ah)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F40803
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	jr z, LABEL_F4084A
 	cp a, 0x8
 	jr nz, LABEL_F40852
@@ -204699,9 +204699,9 @@ LABEL_F407C9:
 LABEL_F40803:
 	calr LABEL_F3FFE0
 	.byte 0xc1, 0x7a, 0x28, 0x21	; LD A, (287Ah)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F4081B
-	.byte 0xc9, 0xdf	; CP A, 7
+	cps a, 7
 	jr nz, LABEL_F40852
 	.byte 0xf1, 0x7b, 0x28, 0xbc	; SET 4, (287Bh)
 	.byte 0xf1, 0x7a, 0x28, 0x00, 0x00	; LD (287Ah), 000h
@@ -204718,7 +204718,7 @@ LABEL_F4081B:
 	ld bc, hl
 	calr LABEL_F3FE4C
 	.byte 0xc1, 0x7a, 0x28, 0x21	; LD A, (287Ah)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F40855
 	cp a, 0x8
 	jr nz, LABEL_F40852
@@ -204733,9 +204733,9 @@ LABEL_F40852:
 LABEL_F40855:
 	calr LABEL_F3FFE0
 	.byte 0xc1, 0x7a, 0x28, 0x21	; LD A, (287Ah)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F4086E
-	.byte 0xc9, 0xdf	; CP A, 7
+	cps a, 7
 	jrl nz, LABEL_F408F8
 	.byte 0xf1, 0x7b, 0x28, 0xbb	; SET 3, (287Bh)
 	.byte 0xf1, 0x7a, 0x28, 0x00, 0x00	; LD (287Ah), 000h
@@ -204748,9 +204748,9 @@ LABEL_F4086E:
 	sub xwa, xbc
 	.byte 0xf1, 0xce, 0x26, 0x60	; LD (26CEh), XWA
 	.byte 0xc1, 0x7b, 0x28, 0x21	; LD A, (287Bh)
-	.byte 0xc9, 0x33, 0x04	; BIT 004h, A
+	bit 4, a
 	jr z, LABEL_F40898
-	.byte 0xc9, 0x33, 0x03	; BIT 003h, A
+	bit 3, a
 	jr nz, LABEL_F40898
 	.byte 0xe1, 0xce, 0x26, 0x20	; LD XWA, (26CEh)
 	dec 1, xwa
@@ -204770,9 +204770,9 @@ LABEL_F408AD:
 	sub xbc, xwa
 	.byte 0xf1, 0xda, 0x25, 0x61	; LD (25DAh), XBC
 	.byte 0xc1, 0x7b, 0x28, 0x21	; LD A, (287Bh)
-	.byte 0xc9, 0x33, 0x04	; BIT 004h, A
+	bit 4, a
 	jr z, LABEL_F408CF
-	.byte 0xc9, 0x33, 0x03	; BIT 003h, A
+	bit 3, a
 	jr nz, LABEL_F408CF
 	.byte 0xe1, 0xda, 0x25, 0x20	; LD XWA, (25DAh)
 	inc 1, xwa
@@ -204822,7 +204822,7 @@ LABEL_F40913:
 	.byte 0xc7, 0xfa, 0x8b	; LD C, QIZL
 	extz bc
 	calr LABEL_F4178A
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F40933
 	.byte 0xc7, 0xfb, 0x89	; LD A, QIZH
 	extz wa
@@ -204835,7 +204835,7 @@ LABEL_F40933:
 	.byte 0xc7, 0xfa, 0x61	; INC 1, QIZL
 	.byte 0xc7, 0xfa, 0xcf, 0x10	; CP QIZL, 010h
 	jr ule, LABEL_F40913
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr nz, LABEL_F4094D
 	.byte 0xf1, 0x6c, 0x28, 0x00, 0x00	; LD (286Ch), 000h
 	.byte 0xf1, 0x28, 0x27, 0x02, 0x00, 0x00	; LDW (2728h), 0000h
@@ -204864,7 +204864,7 @@ LABEL_F4095B:
 	jr LABEL_F4097F
 
 LABEL_F40979:
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr nz, LABEL_F4097F
 	inc 1, iz
 
@@ -204901,7 +204901,7 @@ LABEL_F40995:
 	.byte 0x8f, 0x04, 0x23	; LD C, (XSP + 004h)
 	extz bc
 	calr LABEL_F4178A
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_F409C8
 
 LABEL_F409C4:
@@ -204916,7 +204916,7 @@ LABEL_F409C8:
 LABEL_F409D3:
 	ld wa, iz
 	calr LABEL_F41C85
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F409EC
 	ld wa, iz
 	calr LABEL_F41C5F
@@ -205038,7 +205038,7 @@ LABEL_F40B36:
 	lds iz, 0
 	.byte 0xc1, 0x8e, 0x28, 0x21	; LD A, (288Eh)
 	extz wa
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr z, LABEL_F40BAF
 
 LABEL_F40B42:
@@ -205058,7 +205058,7 @@ LABEL_F40B58:
 	and a, 0xF0
 	cp a, 0xC0
 	jr nz, LABEL_F40BA2
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr nz, LABEL_F40BA2
 	.byte 0xc7, 0xfb, 0xa8	; LD QIZH, 0
 
@@ -205071,7 +205071,7 @@ LABEL_F40B6E:
 	.byte 0xc1, 0x7a, 0x28, 0x3f, 0x00	; CP (287Ah), 000h
 	jr nz, LABEL_F40BBF
 	calr LABEL_F3FC17
-	.byte 0xcf, 0x33, 0x07	; BIT 007h, L
+	bit 7, l
 	jr z, LABEL_F40B9A
 	.byte 0xc7, 0xfb, 0xdd	; CP QIZH, 5
 	jr z, LABEL_F40B9A
@@ -205122,17 +205122,17 @@ LABEL_F40BD3:
 	jr z, LABEL_F40BE5
 	extz wa
 	calr LABEL_F3F604
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_F40BFB
 
 LABEL_F40BE5:
 	.byte 0xd1, 0x32, 0x26, 0x20	; LD WA, (2632h)
 	calr LABEL_F3F615
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_F40BFB
 	.byte 0xd1, 0xde, 0x25, 0x20	; LD WA, (25DEh)
 	calr LABEL_F3F615
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F40BFF
 
 LABEL_F40BFB:
@@ -205305,7 +205305,7 @@ LABEL_F40D30:
 	extz bc
 	ld wa, bc
 	ld (xde), bc
-	.byte 0xd9, 0xdd	; CP BC, 5
+	cps bc, 5
 	jr nz, LABEL_F40D73
 	ld wa, (xhl)
 	calr LABEL_F41C39
@@ -205321,7 +205321,7 @@ LABEL_F40D73:
 LABEL_F40D77:
 	.byte 0xbf, 0x20, 0x30	; LDA XWA, XSP + 020h
 	calr LABEL_F40C8C
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl nz, LABEL_F40E1B
 	.byte 0xf1, 0x2c, 0x28, 0x31	; LDA XBC, 282Ch
 	.byte 0x8f, 0x24, 0x27	; LD L, (XSP + 024h)
@@ -205339,7 +205339,7 @@ LABEL_F40D77:
 	extz xbc
 	add xbc, xhl
 	ld a, (xbc)
-	.byte 0xc9, 0xdd	; CP A, 5
+	cps a, 5
 	jr nz, LABEL_F40DE2
 	.byte 0xf1, 0xee, 0x28, 0x30	; LDA XWA, 28EEh
 	.byte 0xd3, 0x07, 0xe0, 0xe8, 0x20	; LD WA, (XWA + DE)
@@ -205381,7 +205381,7 @@ LABEL_F40DE6:
 	.byte 0xb9, 0x02, 0x50	; LD (XBC + 002h), WA
 	.byte 0xbf, 0x1c, 0x30	; LDA XWA, XSP + 01ch
 	calr LABEL_F40C8C
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F40E21
 
 LABEL_F40E1B:
@@ -205474,7 +205474,7 @@ LABEL_F40E21:
 	.byte 0xf1, 0x34, 0x28, 0x32	; LDA XDE, 2834h
 	.byte 0xba, 0x02, 0x31	; LDA XBC, XDE + 002h
 	ld wa, (xbc)
-	.byte 0xd8, 0xdd	; CP WA, 5
+	cps wa, 5
 	jr nz, LABEL_F40F40
 	ld wa, (xde)
 	calr LABEL_F41C39
@@ -205622,7 +205622,7 @@ LABEL_F41076:
 	ld (xwa), hl
 	ld wa, hl
 	calr LABEL_F41C85
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_F4108B
 	.byte 0xf1, 0x7a, 0x28, 0x00, 0x0b	; LD (287Ah), 00bh
 	jr LABEL_F4109C
@@ -205756,7 +205756,7 @@ LABEL_F411F8:
 	.byte 0xe1, 0xba, 0x26, 0x20	; LD XWA, (26BAh)
 	ld iz, wa
 	dec 6, iz
-	.byte 0xde, 0xdd	; CP IZ, 5
+	cps iz, 5
 	jr nc, LABEL_F41234
 	.byte 0xd7, 0xfa, 0x88	; LD WA, QIZ
 	calr LABEL_F41C39
@@ -205908,7 +205908,7 @@ LABEL_F41396:
 	ld (xwa), hl
 	ld wa, hl
 	calr LABEL_F41C85
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_F413AB
 	.byte 0xf1, 0x7a, 0x28, 0x00, 0x0b	; LD (287Ah), 00bh
 	jr LABEL_F413C7
@@ -205953,7 +205953,7 @@ LABEL_F413E8:
 	.byte 0xb0, 0xf6	; RET Z
 	cp l, 0x84
 	.byte 0xb0, 0xf6	; RET Z
-	.byte 0xcf, 0x33, 0x07	; BIT 007h, L
+	bit 7, l
 	.byte 0xb0, 0xfe	; RET NZ
 	calr LABEL_F40052
 	.byte 0xc1, 0x7a, 0x28, 0x3f, 0x00	; CP (287Ah), 000h
@@ -206013,7 +206013,7 @@ LABEL_F41462:
 	.byte 0xda, 0xfc	; SLA A, DE
 
 LABEL_F4146D:
-	.byte 0xcb, 0xd8	; CP C, 0
+	cps c, 0
 	jr z, LABEL_F41477
 	.byte 0xd1, 0x9e, 0xf1, 0xea	; OR (0F19Eh), DE
 	jr LABEL_F4147D
@@ -206033,7 +206033,7 @@ LABEL_F41481:
 	.byte 0xda, 0xfc	; SLA A, DE
 
 LABEL_F4148C:
-	.byte 0xcb, 0xd8	; CP C, 0
+	cps c, 0
 	jr z, LABEL_F41496
 	.byte 0xd1, 0xa8, 0x28, 0xea	; OR (28A8h), DE
 	jr LABEL_F4149C
@@ -206046,7 +206046,7 @@ LABEL_F4149C:
 	jp 0xFDDE6F
 
 LABEL_F414A0:
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_F414AA
 	.byte 0xf1, 0x80, 0xf2, 0x33	; LDA XHL, 0F280h
 	jr LABEL_F414BF
@@ -206072,7 +206072,7 @@ LABEL_F414C4:
 	ret
 
 LABEL_F414CF:
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_F414D9
 	.byte 0xf1, 0x60, 0xf4, 0x32	; LDA XDE, 0F460h
 	jr LABEL_F414EE
@@ -206087,7 +206087,7 @@ LABEL_F414D9:
 	add xde, xwa
 
 LABEL_F414EE:
-	.byte 0xcb, 0xd8	; CP C, 0
+	cps c, 0
 	jr nz, LABEL_F414F8
 	.byte 0xf1, 0x60, 0xf4, 0x31	; LDA XBC, 0F460h
 	jr LABEL_F4150D
@@ -206113,7 +206113,7 @@ LABEL_F4150F:
 	ret
 
 LABEL_F4151E:
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_F4152C
 	.byte 0xf1, 0x80, 0xf1, 0x30	; LDA XWA, 0F180h
 	extz xbc
@@ -206135,7 +206135,7 @@ LABEL_F41540:
 	ret
 
 LABEL_F41543:
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_F41551
 	.byte 0xf1, 0x80, 0xf1, 0x30	; LDA XWA, 0F180h
 	extz xbc
@@ -206157,7 +206157,7 @@ LABEL_F41565:
 	ret
 
 LABEL_F41568:
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_F41576
 	.byte 0xf1, 0x80, 0xf1, 0x30	; LDA XWA, 0F180h
 	extz xbc
@@ -206179,7 +206179,7 @@ LABEL_F4158A:
 	ret
 
 LABEL_F4158D:
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_F4159B
 	.byte 0xf1, 0x80, 0xf1, 0x30	; LDA XWA, 0F180h
 	extz xbc
@@ -206303,7 +206303,7 @@ LABEL_F41669:
 	ldw bc, 0xB1
 	calr LABEL_F4158D
 	ld iz, hl
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr nz, LABEL_F4167D
 	ldw hl, 0xFFFF
 	jr LABEL_F416A5
@@ -206331,7 +206331,7 @@ LABEL_F416A5:
 	ret
 
 LABEL_F416A7:
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_F416B1
 	.byte 0xf1, 0xa0, 0xf1, 0x33	; LDA XHL, 0F1A0h
 	jr LABEL_F416C4
@@ -206352,7 +206352,7 @@ LABEL_F416C4:
 	jp 0xFDDE6F
 
 LABEL_F416D2:
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_F416DC
 	.byte 0xf1, 0xa0, 0xf1, 0x32	; LDA XDE, 0F1A0h
 	jr LABEL_F416EF
@@ -206373,7 +206373,7 @@ LABEL_F416EF:
 	ret
 
 LABEL_F416FA:
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_F41704
 	.byte 0xf1, 0xb0, 0xf1, 0x33	; LDA XHL, 0F1B0h
 	jr LABEL_F41717
@@ -206458,11 +206458,11 @@ LABEL_F4179D:
 	calr LABEL_F41568
 	.byte 0x87, 0x3f, 0x00	; CP (XSP), 000h
 	jr z, LABEL_F417C6
-	.byte 0xcf, 0x31, 0x07	; SET 007h, L
+	set 7, l
 	jr LABEL_F417C9
 
 LABEL_F417C6:
-	.byte 0xcf, 0x30, 0x07	; RES 007h, L
+	res 7, l
 
 LABEL_F417C9:
 	.byte 0x8f, 0x04, 0x21	; LD A, (XSP + 004h)
@@ -206580,7 +206580,7 @@ LABEL_F418BA:
 	calr LABEL_F439B7
 	.byte 0x8f, 0x02, 0x21	; LD A, (XSP + 002h)
 	extz wa
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_F418E5
 	ldw bc, 0xBD
 	lds de, 0
@@ -206707,7 +206707,7 @@ LABEL_F419F1:
 	ret
 
 LABEL_F419F5:
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_F419FF
 	.byte 0xf1, 0x80, 0xf2, 0x33	; LDA XHL, 0F280h
 	jr LABEL_F41A14
@@ -206797,7 +206797,7 @@ LABEL_F41A95:
 	ld c, (xwa)
 	.byte 0xaf, 0x06, 0x20	; LD XWA, (XSP + 006h)
 	.byte 0xf3, 0x07, 0xe0, 0xec, 0x43	; LD (XWA + HL), C
-	.byte 0xcb, 0x33, 0x07	; BIT 007h, C
+	bit 7, c
 	jr nz, LABEL_F41AEF
 	.byte 0x8f, 0x04, 0x61	; INC 1, (XSP + 004h)
 	ld wa, (xix)
@@ -206856,7 +206856,7 @@ LABEL_F41AF8:
 	.byte 0xbf, 0x04, 0x02, 0x00, 0x00	; LDW (XSP + 004h:8), 0000h
 	.byte 0x8f, 0x06, 0x21	; LD A, (XSP + 006h)
 	extz wa
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jrl ule, LABEL_F41BE7
 
 LABEL_F41B27:
@@ -207044,7 +207044,7 @@ LABEL_F41C99:
 	sll xwa, 8
 	.byte 0xf2, 0x00, 0x00, 0x0b, 0x32	; LDA XDE, 0B0000h
 	add xde, xwa
-	.byte 0xcb, 0xd8	; CP C, 0
+	cps c, 0
 	jr z, LABEL_F41CAE
 	.byte 0xb2, 0xbf	; SET 7, (XDE)
 	ret
@@ -207200,7 +207200,7 @@ LABEL_F41E36:
 	push xiz
 	lds wa, 1
 	calr LABEL_F41C85
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_F41E9F
 	lds wa, 1
 	lds bc, 1
@@ -207251,7 +207251,7 @@ LABEL_F41E90:
 LABEL_F41E9F:
 	lds wa, 2
 	calr LABEL_F41C85
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_F41F07
 	lds wa, 2
 	lds bc, 1
@@ -207359,7 +207359,7 @@ LABEL_F41F7C:
 LABEL_F41F85:
 	ld wa, iz
 	calr LABEL_F41C85
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_F41F96
 	ldw wa, 0x28
 	calr LABEL_F439AB
@@ -207654,7 +207654,7 @@ LABEL_F42215:
 	extz bc
 	lds wa, 0
 	calr LABEL_F4178A
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_F42235
 	lds bc, 1
 	.byte 0xc1, 0xe0, 0x25, 0x21	; LD A, (25E0h)
@@ -207722,7 +207722,7 @@ LABEL_F42298:
 	cp a, 0xB0
 	jr nz, LABEL_F42298
 	.byte 0x8b, 0x03, 0x21	; LD A, (XHL + 003h)
-	.byte 0xc9, 0xde	; CP A, 6
+	cps a, 6
 	jr nz, LABEL_F422EC
 	.byte 0xb1, 0xca	; BIT 2, (XBC)
 	jr z, LABEL_F42298
@@ -207737,10 +207737,10 @@ LABEL_F42298:
 	jr LABEL_F4232F
 
 LABEL_F422EC:
-	.byte 0xc9, 0xdd	; CP A, 5
+	cps a, 5
 	jr nz, LABEL_F42298
 	ld a, (xbc)
-	.byte 0xc9, 0x33, 0x02	; BIT 002h, A
+	bit 2, a
 	jr z, LABEL_F42311
 	.byte 0xb2, 0xca	; BIT 2, (XDE)
 	jr z, LABEL_F42298
@@ -207753,7 +207753,7 @@ LABEL_F422EC:
 	jr LABEL_F4232F
 
 LABEL_F42311:
-	.byte 0xc9, 0x33, 0x03	; BIT 003h, A
+	bit 3, a
 	jr z, LABEL_F42298
 	.byte 0xb2, 0xcb	; BIT 3, (XDE)
 	jrl z, LABEL_F42298
@@ -207989,7 +207989,7 @@ LABEL_F42525:
 	.byte 0xbf, 0x04, 0x32	; LDA XDE, XSP + 004h
 	.byte 0xf1, 0xe0, 0x23, 0x33	; LDA XHL, 23E0h
 	.byte 0xba, 0x02, 0x31	; LDA XBC, XDE + 002h
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jrl z, LABEL_F425CE
 	.byte 0xc7, 0xf0, 0x89	; LD A, IXL
 	extz wa
@@ -208186,7 +208186,7 @@ LABEL_F427AB:
 	.byte 0xbf, 0x06, 0x00, 0x00	; LD (XSP + 006h), 000h
 	.byte 0xbf, 0x04, 0x00, 0x00	; LD (XSP + 004h), 000h
 	calr LABEL_F42828
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F427D3
 	calr LABEL_F42835
 	.byte 0xd1, 0x9e, 0xf1, 0x3f, 0x00, 0x00	; CPW (0F19Eh), 0000h
@@ -208243,10 +208243,10 @@ LABEL_F42835:
 
 LABEL_F4283A:
 	.byte 0xc1, 0x2d, 0x04, 0x27	; LD L, (042Dh)
-	.byte 0xcf, 0x30, 0x07	; RES 007h, L
+	res 7, l
 	extz hl
 	.byte 0xc1, 0x2e, 0x04, 0x21	; LD A, (042Eh)
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
+	res 7, a
 	extz wa
 	sll wa, 7
 	add hl, wa
@@ -208567,7 +208567,7 @@ LABEL_F42AFB:
 	extz bc
 	lds wa, 0
 	calr LABEL_F4178A
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_F42B1E
 
 LABEL_F42B0F:
@@ -208706,7 +208706,7 @@ LABEL_F42BEF:
 	jr nz, LABEL_F42C6A
 	ld a, (xix)
 	.byte 0x83, 0xc1	; AND A, (XHL)
-	.byte 0xc9, 0x33, 0x02	; BIT 002h, A
+	bit 2, a
 	jr z, LABEL_F42C6A
 	.byte 0xb5, 0x00, 0xb0	; LD (XIY), 0b0h
 	.byte 0xf1, 0x08, 0x11, 0x02, 0x04, 0x00	; LDW (1108h), 0004h
@@ -208725,7 +208725,7 @@ LABEL_F42C6A:
 	jr nz, LABEL_F42CA1
 	.byte 0x89, 0x05, 0x21	; LD A, (XBC + 005h)
 	.byte 0x89, 0x04, 0xc1	; AND A, (XBC + 004h)
-	.byte 0xc9, 0x33, 0x02	; BIT 002h, A
+	bit 2, a
 	jr z, LABEL_F42CA1
 	.byte 0xb1, 0x00, 0xb0	; LD (XBC), 0b0h
 	.byte 0xf1, 0x08, 0x11, 0x02, 0x00, 0x04	; LDW (1108h), 0400h
@@ -208744,7 +208744,7 @@ LABEL_F42CA1:
 	jr nz, LABEL_F42CFB
 	.byte 0x89, 0x05, 0x21	; LD A, (XBC + 005h)
 	.byte 0x89, 0x04, 0xc1	; AND A, (XBC + 004h)
-	.byte 0xc9, 0x33, 0x03	; BIT 003h, A
+	bit 3, a
 	jr z, LABEL_F42CFB
 	.byte 0xb1, 0x00, 0xb1	; LD (XBC), 0b1h
 	.byte 0xf1, 0x08, 0x11, 0x02, 0x08, 0x00	; LDW (1108h), 0008h
@@ -208862,7 +208862,7 @@ LABEL_F42E5A:
 	extz wa
 	ldw bc, 0x1C
 	calr LABEL_F4158D
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F42E74
 	.byte 0xc7, 0xfb, 0x89	; LD A, QIZH
 	extz wa
@@ -208918,7 +208918,7 @@ LABEL_F42ECD:
 	calr LABEL_F439B7
 	.byte 0xc7, 0xfb, 0x89	; LD A, QIZH
 	extz wa
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_F42F00
 	calr LABEL_F418F2
 	jr LABEL_F42F03
@@ -209131,7 +209131,7 @@ LABEL_F42F03:
 	extz wa
 	ldw bc, 0xBE
 	calr LABEL_F41568
-	.byte 0xcf, 0x31, 0x00	; SET 000h, L
+	set 0, l
 	.byte 0xc7, 0xfb, 0x89	; LD A, QIZH
 	extz wa
 	extz hl
@@ -209203,9 +209203,9 @@ LABEL_F43138:
 
 LABEL_F431F5:
 	.byte 0xc1, 0xa7, 0x28, 0x21	; LD A, (28A7h)
-	.byte 0xc9, 0x30, 0x03	; RES 003h, A
-	.byte 0xc9, 0x30, 0x01	; RES 001h, A
-	.byte 0xc9, 0x30, 0x00	; RES 000h, A
+	res 3, a
+	res 1, a
+	res 0, a
 	.byte 0xf1, 0xa7, 0x28, 0x41	; LD (28A7h), A
 	jp LABEL_F393FC
 
@@ -209225,14 +209225,14 @@ LABEL_F4321B:
 	extz wa
 	.byte 0xf1, 0x21, 0x04, 0xca	; BIT 2, (0421h)
 	jr z, LABEL_F43242
-	.byte 0xd9, 0xd8	; CP BC, 0
+	cps bc, 0
 	jr z, LABEL_F43232
 	calr LABEL_F43374
 	jr LABEL_F4325C
 
 LABEL_F43232:
 	calr LABEL_F43A01
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F4325C
 	ld a, (xsp)
 	extz wa
@@ -209240,14 +209240,14 @@ LABEL_F43232:
 	jr LABEL_F4325C
 
 LABEL_F43242:
-	.byte 0xd9, 0xd8	; CP BC, 0
+	cps bc, 0
 	jr z, LABEL_F4324B
 	calr LABEL_F43410
 	jr LABEL_F43259
 
 LABEL_F4324B:
 	calr LABEL_F43A01
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F4325C
 	ld a, (xsp)
 	extz wa
@@ -209280,7 +209280,7 @@ LABEL_F43285:
 	.byte 0xd1, 0xa8, 0x28, 0xc2	; AND DE, (28A8h)
 	ld a, (xsp)
 	extz wa
-	.byte 0xda, 0xd8	; CP DE, 0
+	cps de, 0
 	jr nz, LABEL_F432AA
 	.byte 0xd1, 0x9e, 0xf1, 0xc1	; AND BC, (0F19Eh)
 	jr nz, LABEL_F4329E
@@ -209301,7 +209301,7 @@ LABEL_F432AA:
 	calr LABEL_F43A01
 	ld a, (xsp)
 	extz wa
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F432C1
 	calr LABEL_F433B7
 	jr LABEL_F432C4
@@ -209487,7 +209487,7 @@ LABEL_F4342B:
 	ld a, (xsp)
 	extz wa
 	calr LABEL_F43A01
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F4344F
 	ld a, (xsp)
 	extz wa
@@ -209509,7 +209509,7 @@ LABEL_F43452:
 	extz bc
 	lds wa, 0
 	calr LABEL_F4178A
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_F434EF
 
 LABEL_F43471:
@@ -209732,7 +209732,7 @@ LABEL_F43679:
 	and a, 0x5
 	.byte 0xb0, 0xfe	; RET NZ
 	call LABEL_EF24ED
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	.byte 0xb0, 0xf6	; RET Z
 	.byte 0xd1, 0x9e, 0xf1, 0x3f, 0x00, 0x00	; CPW (0F19Eh), 0000h
 	.byte 0xb0, 0xfe	; RET NZ
@@ -209743,7 +209743,7 @@ LABEL_F43679:
 	.byte 0xf1, 0xb2, 0x28, 0xc9	; BIT 1, (28B2h)
 	.byte 0xb0, 0xfe	; RET NZ
 	call LABEL_F3C1D1
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jrl nz, LABEL_F4382A
 	.byte 0xd1, 0xaa, 0x28, 0x3f, 0x00, 0x00	; CPW (28AAh), 0000h
 	.byte 0xb0, 0xf6	; RET Z
@@ -209771,7 +209771,7 @@ LABEL_F43704:
 	.byte 0xd1, 0x75, 0x28, 0x26	; LD IZ, (2875h)
 	.byte 0xf1, 0x9e, 0xf1, 0x56	; LD (0F19Eh), IZ
 	call 0xFDDE6F
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr z, LABEL_F43727
 	.byte 0xf1, 0xa7, 0x28, 0xb3	; RES 3, (28A7h)
 	call LABEL_F393FC
@@ -209803,8 +209803,8 @@ LABEL_F43741:
 	jr nz, LABEL_F43762
 	call LABEL_F20712
 	.byte 0xc1, 0xb3, 0x28, 0x21	; LD A, (28B3h)
-	.byte 0xc9, 0x30, 0x02	; RES 002h, A
-	.byte 0xc9, 0x31, 0x04	; SET 004h, A
+	res 2, a
+	set 4, a
 	.byte 0xf1, 0xb3, 0x28, 0x41	; LD (28B3h), A
 
 LABEL_F43762:
@@ -209847,7 +209847,7 @@ LABEL_F437B1:
 
 LABEL_F437CB:
 	calr LABEL_F427AB
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	.byte 0xb0, 0xfe	; RET NZ
 	.byte 0xd1, 0x1c, 0x04, 0x3f, 0x00, 0x00	; CPW (041Ch), 0000h
 	jr nz, LABEL_F437E1
@@ -209946,13 +209946,13 @@ LABEL_F4398F:
 	call LABEL_F59AB9
 	ldw bc, 0xFFFF
 	.byte 0xc1, 0x20, 0x04, 0x21	; LD A, (0420h)
-	.byte 0xc9, 0x33, 0x02	; BIT 002h, A
+	bit 2, a
 	.byte 0xb0, 0xf6	; RET Z
 
 LABEL_F4399F:
 	sub bc, 0x1
 	.byte 0xb0, 0xf6	; RET Z
-	.byte 0xc9, 0x33, 0x02	; BIT 002h, A
+	bit 2, a
 	jr nz, LABEL_F4399F
 	ret
 
@@ -209996,7 +209996,7 @@ LABEL_F439DF:
 
 LABEL_F439F1:
 	.byte 0xf1, 0xad, 0xfd, 0x32	; LDA XDE, 0FDADh
-	.byte 0xcb, 0xd8	; CP C, 0
+	cps c, 0
 	jr z, LABEL_F439FC
 	.byte 0x82, 0xe9	; OR (XDE), A
 	ret
@@ -210013,7 +210013,7 @@ LABEL_F43A01:
 	extz bc
 	lds wa, 0
 	calr LABEL_F4178A
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F43A2E
 	ld c, (xsp)
 	extz bc
@@ -210023,7 +210023,7 @@ LABEL_F43A01:
 	cp wa, 0xFFFF
 	jr z, LABEL_F43A2E
 	calr LABEL_F41C85
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F43A2E
 	lds hl, 1
 	jr LABEL_F43A30
@@ -210314,7 +210314,7 @@ LABEL_F43CA9:
 	.byte 0xc1, 0x34, 0x8d, 0x3f, 0x13	; CP (8D34h), 013h
 	jr nz, LABEL_F43CFF
 	.byte 0xc1, 0x66, 0x29, 0x21	; LD A, (2966h)
-	.byte 0xc9, 0x33, 0x07	; BIT 007h, A
+	bit 7, a
 	.byte 0xb0, 0xf6	; RET Z
 	dec 1, a
 	.byte 0xf1, 0x66, 0x29, 0x41	; LD (2966h), A
@@ -210326,7 +210326,7 @@ LABEL_F43CA9:
 	.byte 0xc1, 0xa4, 0x28, 0x21	; LD A, (28A4h)
 	extz wa
 	call LABEL_F86FFF
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F43CF3
 	.byte 0xf1, 0x1e, 0x04, 0x00, 0x01	; LD (041Eh), 001h
 	.byte 0xf1, 0x15, 0x04, 0x00, 0x00	; LD (0415h), 000h
@@ -210384,7 +210384,7 @@ LABEL_F43D4C:
 	jr z, LABEL_F43D83
 	extz wa
 	sub wa, 0x9B
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jrl lt, LABEL_F4410B
 	cp wa, 0xD
 	jrl gt, LABEL_F4410B
@@ -210660,9 +210660,9 @@ APP_EVENT_HANDLER_TABLE:	; F44169
 	.byte 0xc1, 0x36, 0x8d, 0x21	; LD A, (08D36h)
 	extz wa
 	sub wa, 0x9C
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	.byte 0x61, 0x04	; JR LT, APP_EVENT_HANDLER_F4417B
-	.byte 0xd8, 0xdf	; CP WA, 7
+	cps wa, 7
 	.byte 0x62, 0x03	; JR LE, APP_EVENT_HANDLER_F4417E
 APP_EVENT_HANDLER_F4417B:
 	ldw wa, 0x8
@@ -210680,9 +210680,9 @@ APP_EVENT_HANDLER_F4417E:
 	.byte 0xc1, 0x36, 0x8d, 0x21	; LD A, (08D36h)
 	extz wa
 	sub wa, 0x9C
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	.byte 0x61, 0x56	; JR LT, APP_EVENT_HANDLER_F44205
-	.byte 0xd8, 0xdf	; CP WA, 7
+	cps wa, 7
 	.byte 0x6a, 0x52	; JR GT, APP_EVENT_HANDLER_F44205
 	add wa, wa
 	.byte 0xf2, 0xc2, 0x48, 0xe4, 0x34	; LDA XIX, 0E448C2h
@@ -210740,9 +210740,9 @@ APP_EVENT_HANDLER_F44243:
 	.byte 0xc1, 0x36, 0x8d, 0x21	; LD A, (08D36h)
 	extz wa
 	sub wa, 0x9C
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	.byte 0x61, 0x56	; JR LT, APP_EVENT_HANDLER_F442BA
-	.byte 0xd8, 0xdf	; CP WA, 7
+	cps wa, 7
 	.byte 0x6a, 0x52	; JR GT, APP_EVENT_HANDLER_F442BA
 	add wa, wa
 	.byte 0xf2, 0xb2, 0x48, 0xe4, 0x34	; LDA XIX, 0E448B2h
@@ -210838,7 +210838,7 @@ APP_EVENT_HANDLER_F4431B:
 	.byte 0xea, 0xad	; LD XDE, 5
 	.byte 0x78, 0xf4, 0x04	; JRL T, APP_EVENT_HANDLER_F4487A
 	.byte 0xc1, 0xe0, 0xf1, 0x21	; LD A, (0F1E0h)
-	.byte 0xc9, 0xda	; CP A, 2
+	cps a, 2
 	jrl nc, LABEL_F4487E
 	inc 1, a
 	.byte 0xf1, 0xe0, 0xf1, 0x41	; LD (0F1E0h), A
@@ -210847,7 +210847,7 @@ APP_EVENT_HANDLER_F4431B:
 	.byte 0xea, 0xae	; LD XDE, 6
 	.byte 0x78, 0xd7, 0x04	; JRL T, APP_EVENT_HANDLER_F4487A
 	.byte 0xc1, 0xf6, 0xf1, 0x21	; LD A, (0F1F6h)
-	.byte 0xc9, 0xde	; CP A, 6
+	cps a, 6
 	jrl nc, LABEL_F4487E
 	inc 1, a
 	.byte 0xf1, 0xf6, 0xf1, 0x41	; LD (0F1F6h), A
@@ -211585,7 +211585,7 @@ LABEL_F45049:
 	.byte 0xd1, 0x9e, 0xf1, 0xc1	; AND BC, (0F19Eh)
 	jr z, LABEL_F45057
 	call LABEL_F43A01
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_F45093
 
 LABEL_F45057:
@@ -211616,7 +211616,7 @@ LABEL_F45085:
 	.byte 0xd1, 0x9e, 0xf1, 0xc2	; AND DE, (0F19Eh)
 	jr z, LABEL_F45057
 	call LABEL_F43A01
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F45057
 
 LABEL_F45093:
@@ -211673,7 +211673,7 @@ LABEL_F450EB:
 LABEL_F45107:
 	and de, bc
 	ldb l, 0x0
-	.byte 0xda, 0xd8	; CP DE, 0
+	cps de, 0
 	jr z, LABEL_F45111
 	ldb l, 0x2
 
@@ -211719,7 +211719,7 @@ LABEL_F4515C:
 LABEL_F45168:
 	and wa, bc
 	ldb l, 0x0
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr z, LABEL_F45172
 	ldb l, 0x2
 
@@ -211744,7 +211744,7 @@ LABEL_F45195:
 LABEL_F4519B:
 	extz bc
 	dec 1, bc
-	.byte 0xd9, 0xd8	; CP BC, 0
+	cps bc, 0
 	jrl lt, LABEL_F452BD
 	cp bc, 0xF
 	jrl gt, LABEL_F452BD
@@ -211773,7 +211773,7 @@ LABEL_F451C1:
 LABEL_F45231:
 	extz bc
 	dec 2, bc
-	.byte 0xd9, 0xd8	; CP BC, 0
+	cps bc, 0
 	jr lt, LABEL_F4523F
 	cp bc, 0xE
 	jr le, LABEL_F45242
@@ -211788,7 +211788,7 @@ LABEL_F45242:
 	inc 1, a
 	extz wa
 	call LABEL_F36527
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_F452BD
 	.byte 0x8f, 0x04, 0x19, 0x65, 0x29	; LD (2965h), (XSP + 004h)
 	.byte 0x8f, 0x04, 0x21	; LD A, (XSP + 004h)
@@ -211852,7 +211852,7 @@ EffEditMain:
 	.byte 0xaf, 0x02, 0x20	; LD XWA, (XSP + 002h)
 	.byte 0xf1, 0x72, 0x29, 0x60	; LD (2972h), XWA
 	calr LABEL_F457CF
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl nz, LABEL_F454EB
 	.byte 0xaf, 0x02, 0x20	; LD XWA, (XSP + 002h)
 	ld xbc, 0x1E8000E
@@ -211899,7 +211899,7 @@ LABEL_F4534C:
 	ld xbc, 0x1E8000F
 	call 0xFA9E07
 	inc 1, iz
-	.byte 0xde, 0xdc	; CP IZ, 4
+	cps iz, 4
 	jr c, LABEL_F4534C
 	jrl LABEL_F454EB
 
@@ -211929,7 +211929,7 @@ LABEL_F45398:
 	.byte 0xf2, 0xdc, 0x47, 0xe4, 0x32	; LDA XDE, 0E447DCh
 	.byte 0xc3, 0x07, 0xe8, 0xe0, 0x25	; LD E, (XDE + WA)
 	.byte 0xf2, 0x5c, 0x47, 0xe4, 0x30	; LDA XWA, 0E4475Ch
-	.byte 0xcd, 0xd8	; CP E, 0
+	cps e, 0
 	jr ge, LABEL_F453C2
 	ld c, (xwa)
 	exts bc
@@ -211937,20 +211937,20 @@ LABEL_F45398:
 	jrl LABEL_F45467
 
 LABEL_F453C2:
-	.byte 0xd9, 0xd8	; CP BC, 0
+	cps bc, 0
 	jr le, LABEL_F453DB
 	inc 1, e
 	.byte 0xc3, 0x03, 0xe0, 0xe8, 0x23	; LD C, (XWA + E)
-	.byte 0xcb, 0xd8	; CP C, 0
+	cps c, 0
 	jr lt, LABEL_F453F3
 	exts bc
 	ld xwa, 0x4B00
 	jrl LABEL_F45467
 
 LABEL_F453DB:
-	.byte 0xd9, 0xd8	; CP BC, 0
+	cps bc, 0
 	jr ge, LABEL_F453F3
-	.byte 0xcd, 0xd8	; CP E, 0
+	cps e, 0
 	jr z, LABEL_F453F3
 	dec 1, e
 	.byte 0xc3, 0x03, 0xe0, 0xe8, 0x23	; LD C, (XWA + E)
@@ -211979,7 +211979,7 @@ LABEL_F45410:
 	.byte 0xf2, 0xdc, 0x46, 0xe4, 0x32	; LDA XDE, 0E446DCh
 	.byte 0xc3, 0x07, 0xe8, 0xe0, 0x25	; LD E, (XDE + WA)
 	.byte 0xf2, 0x5c, 0x46, 0xe4, 0x30	; LDA XWA, 0E4465Ch
-	.byte 0xcd, 0xd8	; CP E, 0
+	cps e, 0
 	jr ge, LABEL_F45439
 	ld c, (xwa)
 	exts bc
@@ -211987,20 +211987,20 @@ LABEL_F45410:
 	jr LABEL_F45467
 
 LABEL_F45439:
-	.byte 0xd9, 0xd8	; CP BC, 0
+	cps bc, 0
 	jr le, LABEL_F45451
 	inc 1, e
 	.byte 0xc3, 0x03, 0xe0, 0xe8, 0x23	; LD C, (XWA + E)
-	.byte 0xcb, 0xd8	; CP C, 0
+	cps c, 0
 	jr lt, LABEL_F4546D
 	exts bc
 	ld xwa, 0x4900
 	jr LABEL_F45467
 
 LABEL_F45451:
-	.byte 0xd9, 0xd8	; CP BC, 0
+	cps bc, 0
 	jr ge, LABEL_F4546D
-	.byte 0xcd, 0xd8	; CP E, 0
+	cps e, 0
 	jr z, LABEL_F4546D
 	dec 1, e
 	.byte 0xc3, 0x03, 0xe0, 0xe8, 0x23	; LD C, (XWA + E)
@@ -212245,7 +212245,7 @@ LABEL_F45884:
 	extz xbc
 	add xbc, xwa
 	ld a, (xbc)
-	.byte 0xc9, 0xdb	; CP A, 3
+	cps a, 3
 	jr nz, LABEL_F458A2
 	.byte 0xb1, 0x00, 0x00	; LD (XBC), 000h
 	.byte 0xd1, 0xaa, 0x29, 0x20	; LD WA, (29AAh)
@@ -212399,7 +212399,7 @@ LABEL_F459E9:
 	jr nz, LABEL_F45A3C
 	.byte 0x9f, 0x06, 0x3f, 0x00, 0x00	; CPW (XSP + 006h), 0000h
 	jr le, LABEL_F45A7D
-	.byte 0xd9, 0xd9	; CP BC, 1
+	cps bc, 1
 	jr gt, LABEL_F45A7D
 	jr LABEL_F45A9F
 
@@ -212411,12 +212411,12 @@ LABEL_F45A3C:
 	jr nz, LABEL_F45A5F
 	.byte 0x9f, 0x06, 0x3f, 0x00, 0x00	; CPW (XSP + 006h), 0000h
 	jr ge, LABEL_F45A59
-	.byte 0xd9, 0xd9	; CP BC, 1
+	cps bc, 1
 	jr gt, LABEL_F45A7D
 	jr LABEL_F45A9F
 
 LABEL_F45A59:
-	.byte 0xda, 0xd9	; CP DE, 1
+	cps de, 1
 	jr gt, LABEL_F45A7D
 	jr LABEL_F45A9F
 
@@ -212427,12 +212427,12 @@ LABEL_F45A5F:
 	jr nz, LABEL_F45A89
 	.byte 0x9f, 0x06, 0x3f, 0x00, 0x00	; CPW (XSP + 006h), 0000h
 	jr ge, LABEL_F45A79
-	.byte 0xda, 0xd9	; CP DE, 1
+	cps de, 1
 	jr gt, LABEL_F45A7D
 	jr LABEL_F45A9F
 
 LABEL_F45A79:
-	.byte 0xdb, 0xd9	; CP HL, 1
+	cps hl, 1
 	jr le, LABEL_F45A9F
 
 LABEL_F45A7D:
@@ -212447,7 +212447,7 @@ LABEL_F45A89:
 	jr nz, LABEL_F45A7D
 	.byte 0x9f, 0x06, 0x3f, 0x00, 0x00	; CPW (XSP + 006h), 0000h
 	jr ge, LABEL_F45A7D
-	.byte 0xdb, 0xd9	; CP HL, 1
+	cps hl, 1
 	jr gt, LABEL_F45A7D
 
 LABEL_F45A9F:
@@ -212507,9 +212507,9 @@ ApPlaySyori:
 	jr z, LABEL_F45B95
 	extz bc
 	sub bc, 0x81
-	.byte 0xd9, 0xd8	; CP BC, 0
+	cps bc, 0
 	jrl lt, LABEL_F4637B
-	.byte 0xd9, 0xdf	; CP BC, 7
+	cps bc, 7
 	jrl gt, LABEL_F4637B
 	add bc, bc
 	.byte 0xf2, 0x32, 0x4a, 0xe4, 0x34	; LDA XIX, 0E44A32h
@@ -212572,7 +212572,7 @@ LABEL_F45C10:
 	calr LABEL_F46494
 	.byte 0xc1, 0xb2, 0x28, 0x21	; LD A, (28B2h)
 	and a, 0x1
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	.byte 0xde, 0x7e	; SCC NZ, IZ
 	ld wa, iz
 	exts xwa
@@ -212593,7 +212593,7 @@ LABEL_F45C10:
 	call 0xFA9E07
 	.byte 0xc1, 0xb2, 0x28, 0x21	; LD A, (28B2h)
 	and a, 0x1
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	.byte 0xde, 0x7e	; SCC NZ, IZ
 	ld de, iz
 	exts xde
@@ -212609,7 +212609,7 @@ LABEL_F45C10:
 	.byte 0xd1, 0x68, 0x26, 0x21	; LD BC, (2668h)
 	ld wa, bc
 	extz xwa
-	.byte 0xd8, 0x33, 0x0f	; BIT 00fh, WA
+	bit 15, wa
 	jr nz, LABEL_F45CD1
 	.byte 0xd1, 0x38, 0xf2, 0x20	; LD WA, (0F238h)
 	cp bc, wa
@@ -212647,7 +212647,7 @@ LABEL_F45CD1:
 	call 0xFA9E07
 	.byte 0xc1, 0xb2, 0x28, 0x21	; LD A, (28B2h)
 	and a, 0x1
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	.byte 0xde, 0x7e	; SCC NZ, IZ
 	ld de, iz
 	exts xde
@@ -212656,7 +212656,7 @@ LABEL_F45CD1:
 	jrl LABEL_F461CD
 	.byte 0xc1, 0xb2, 0x28, 0x21	; LD A, (28B2h)
 	and a, 0x1
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	.byte 0xde, 0x7e	; SCC NZ, IZ
 	ld wa, iz
 	exts xwa
@@ -212945,7 +212945,7 @@ LABEL_F46298:
 	.byte 0xf1, 0x21, 0x04, 0xca	; BIT 2, (0421h)
 	jr z, LABEL_F462B1
 	calr LABEL_F46381
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl z, LABEL_F4637B
 	.byte 0xe8, 0xa9	; LD XWA, 1
 	jr LABEL_F462C0
@@ -212975,7 +212975,7 @@ LABEL_F462D3:
 	.byte 0xf1, 0x21, 0x04, 0xca	; BIT 2, (0421h)
 	jr nz, LABEL_F462E2
 	.byte 0xc1, 0xb2, 0x28, 0x23	; LD C, (28B2h)
-	.byte 0xcb, 0x33, 0x02	; BIT 002h, C
+	bit 2, c
 	jr z, LABEL_F4632D
 
 LABEL_F462E2:
@@ -213025,12 +213025,12 @@ LABEL_F4632D:
 	.byte 0xaf, 0x02, 0x20	; LD XWA, (XSP + 002h)
 	or xwa, xwa
 	jr nz, LABEL_F4633D
-	.byte 0xcb, 0x30, 0x00	; RES 000h, C
+	res 0, c
 	.byte 0xf1, 0xb2, 0x28, 0x43	; LD (28B2h), C
 	jr LABEL_F46352
 
 LABEL_F4633D:
-	.byte 0xcb, 0x31, 0x00	; SET 000h, C
+	set 0, c
 	.byte 0xf1, 0xb2, 0x28, 0x43	; LD (28B2h), C
 	.byte 0xc1, 0x38, 0x8d, 0x3f, 0x85	; CP (8D38h), 085h
 	jr nz, LABEL_F46352
@@ -213043,7 +213043,7 @@ LABEL_F46352:
 
 LABEL_F46358:
 	call LABEL_F38A32
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F4637B
 	.byte 0xaf, 0x02, 0x20	; LD XWA, (XSP + 002h)
 	or xwa, xwa
@@ -213166,7 +213166,7 @@ LABEL_F4646B:
 	ret
 
 LABEL_F46470:
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	.byte 0xda, 0x7e	; SCC NZ, DE
 	extz xde
 	ld xwa, 0x87000E
@@ -213222,9 +213222,9 @@ LABEL_F464E4:
 	jr z, LABEL_F4654E
 	extz bc
 	sub bc, 0x81
-	.byte 0xd9, 0xd8	; CP BC, 0
+	cps bc, 0
 	.byte 0xb0, 0xf1	; RET LT
-	.byte 0xd9, 0xdf	; CP BC, 7
+	cps bc, 7
 	.byte 0xb0, 0xfa	; RET GT
 	add bc, bc
 	.byte 0xf2, 0x42, 0x4a, 0xe4, 0x34	; LDA XIX, 0E44A42h
@@ -213868,7 +213868,7 @@ LABEL_F46B39:
 	.byte 0xf1, 0xfc, 0x26, 0x00, 0x00	; LD (26FCh), 000h
 	.byte 0xf1, 0xe2, 0x26, 0xb0	; RES 0, (26E2h)
 	.byte 0xc1, 0xb1, 0x28, 0x21	; LD A, (28B1h)
-	.byte 0xc9, 0x33, 0x00	; BIT 000h, A
+	bit 0, a
 	jr z, LABEL_F46BA9
 	call LABEL_F4398F
 	.byte 0xd1, 0x1c, 0x25, 0x20	; LD WA, (251Ch)
@@ -213891,7 +213891,7 @@ LABEL_F46BA3:
 	jr LABEL_F46BB2
 
 LABEL_F46BA9:
-	.byte 0xc9, 0x33, 0x01	; BIT 001h, A
+	bit 1, a
 	jr z, LABEL_F46BC5
 	.byte 0xf1, 0xa7, 0x28, 0xb3	; RES 3, (28A7h)
 
@@ -214437,7 +214437,7 @@ MainExeCall:
 	jr z, LABEL_F470F7
 	extz wa
 	sub wa, 0x9A
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jrl lt, LABEL_F47518
 	cp wa, 0x10
 	jrl gt, LABEL_F47518
@@ -214882,7 +214882,7 @@ LABEL_F475E8:
 	call LABEL_FC793D
 	.byte 0xf1, 0xb1, 0x28, 0xb1	; RES 1, (28B1h)
 	call LABEL_F439B7
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_F4760C
 	lds wa, 0
 	call LABEL_F418F2
@@ -214964,7 +214964,7 @@ HelpLangChkMain:
 	.byte 0xc1, 0x39, 0x8d, 0x3f, 0xee	; CP (8D39h), 0eeh
 	jr z, LABEL_F4779A
 	call 0xEF0865
-	.byte 0xcf, 0xdb	; CP L, 3
+	cps l, 3
 	jr nz, LABEL_F4778A
 	ld xwa, 0xE7000A
 	ld xbc, 0x1C00001
@@ -215037,7 +215037,7 @@ LABEL_F47807:
 
 LABEL_F4781D:
 	pushw iz
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	.byte 0xde, 0x7e	; SCC NZ, IZ
 	ld xwa, 0xD60003
 	ld bc, iz
@@ -215059,7 +215059,7 @@ SeqLoadPre:
 	jp LABEL_F41E36
 
 SeqLoadPost:
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr ge, LABEL_F47864
 	call LABEL_F41F09
 	jp LABEL_F41E36
@@ -215098,7 +215098,7 @@ LABEL_F478BA:
 	jp LABEL_F42EA4
 
 LABEL_F478BE:
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr ge, LABEL_F478CA
 	call LABEL_F41F09
 	jp LABEL_F41E36
@@ -215155,7 +215155,7 @@ SeqSavePost:
 	lds bc, 4
 	lds de, 0
 	call LABEL_F4151E
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr lt, LABEL_F47958
 	.byte 0xf1, 0x88, 0x8d, 0xb0	; RES 0, (8D88h)
 
@@ -215290,7 +215290,7 @@ LABEL_F47BC4:
 LABEL_F47BC8:
 	.byte 0xeb, 0xa8	; LD XHL, 0
 	.byte 0xd1, 0xf6, 0x29, 0x21	; LD BC, (29F6h)
-	.byte 0xd9, 0xd8	; CP BC, 0
+	cps bc, 0
 	.byte 0xb0, 0xf6	; RET Z
 	.byte 0xe1, 0xee, 0x29, 0x20	; LD XWA, (29EEh)
 	sll bc, 8
@@ -215315,7 +215315,7 @@ LABEL_F47BFB:
 	.byte 0x8f, 0x04, 0x23	; LD C, (XSP + 004h)
 	extz bc
 	call LABEL_F4178A
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F47C5D
 	.byte 0x8f, 0x08, 0x21	; LD A, (XSP + 008h)
 	inc 1, a
@@ -215532,11 +215532,11 @@ LABEL_F47E3C:
 	.byte 0x88, 0x05, 0x3f, 0x01	; CP (XWA + 005h), 001h
 	jr nz, LABEL_F47E56
 	.byte 0x88, 0x06, 0x27	; LD L, (XWA + 006h)
-	.byte 0xcf, 0xdb	; CP L, 3
+	cps l, 3
 	jr z, LABEL_F47E5A
-	.byte 0xcf, 0xde	; CP L, 6
+	cps l, 6
 	jr z, LABEL_F47E5A
-	.byte 0xcf, 0xdf	; CP L, 7
+	cps l, 7
 	jr z, LABEL_F47E5A
 	cp l, 0x8
 	jr z, LABEL_F47E5A
@@ -215590,7 +215590,7 @@ LABEL_F47E9D:
 	.byte 0xd1, 0x31, 0xf2, 0x20	; LD WA, (0F231h)
 
 LABEL_F47EAC:
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr z, LABEL_F47EFF
 	.byte 0xd1, 0x2f, 0xf2, 0x26	; LD IZ, (0F22Fh)
 	cp iz, wa
@@ -215604,7 +215604,7 @@ LABEL_F47EB8:
 	lds bc, 5
 	ldw de, 0x82
 	call LABEL_F41CC9
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr z, LABEL_F47ED9
 	ld bc, iz
 	dec 1, bc
@@ -215702,7 +215702,7 @@ LABEL_F47FFE:
 	.byte 0xc7, 0xfb, 0x8b	; LD C, QIZH
 	extz bc
 	call LABEL_F4178A
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F4805F
 	.byte 0x8f, 0x04, 0x21	; LD A, (XSP + 004h)
 	inc 1, a
@@ -215834,18 +215834,18 @@ LABEL_F481E3:
 	lds wa, 0
 	lds bc, 6
 	call LABEL_F41568
-	.byte 0xcf, 0xdb	; CP L, 3
+	cps l, 3
 	jr nc, LABEL_F4820F
 	.byte 0xf1, 0x3e, 0xf2, 0xb8	; SET 0, (0F23Eh)
 	lds wa, 0
 	lds bc, 5
 	call LABEL_F41568
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_F4820F
 	lds wa, 0
 	lds bc, 6
 	call LABEL_F41568
-	.byte 0xcf, 0xdb	; CP L, 3
+	cps l, 3
 	jr nc, LABEL_F4820F
 	.byte 0xf1, 0x3e, 0xf2, 0xb0	; RES 0, (0F23Eh)
 
@@ -215870,7 +215870,7 @@ LABEL_F48221:
 	.byte 0x8f, 0x06, 0x23	; LD C, (XSP + 006h)
 	extz bc
 	call LABEL_F4178A
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jrl z, LABEL_F4834F
 	.byte 0x8f, 0x04, 0x21	; LD A, (XSP + 004h)
 	extz wa
@@ -215927,7 +215927,7 @@ LABEL_F4829F:
 	.byte 0x9f, 0x08, 0x20	; LD WA, (XSP + 008h)
 	call LABEL_F41C39
 	ld wa, hl
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr z, LABEL_F482CF
 	.byte 0x9f, 0x0a, 0x21	; LD BC, (XSP + 00ah)
 	call LABEL_F41C72
@@ -216032,7 +216032,7 @@ LABEL_F483B5:
 	extz wa
 	ldw bc, 0x112
 	call LABEL_F41568
-	.byte 0xcf, 0xd9	; CP L, 1
+	cps l, 1
 	jr z, LABEL_F483F6
 	.byte 0xc7, 0xfb, 0x89	; LD A, QIZH
 	extz wa
@@ -216043,7 +216043,7 @@ LABEL_F483B5:
 	extz wa
 	ldw bc, 0x110
 	call LABEL_F4158D
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_F483F6
 	.byte 0xc7, 0xfb, 0x89	; LD A, QIZH
 	extz wa
@@ -216060,9 +216060,9 @@ LABEL_F483F6:
 	ret
 
 LABEL_F48403:
-	.byte 0xd9, 0xd8	; CP BC, 0
+	cps bc, 0
 	.byte 0xb0, 0xf1	; RET LT
-	.byte 0xc9, 0xda	; CP A, 2
+	cps a, 2
 	jr z, LABEL_F4840D
 	jr LABEL_F4840E
 
@@ -216108,7 +216108,7 @@ LABEL_F48440:
 	extz wa
 	.byte 0x8f, 0x0a, 0x23	; LD C, (XSP + 00ah)
 	extz bc
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_F48471
 	calr LABEL_F486F1
 	jrl LABEL_F48563
@@ -216118,7 +216118,7 @@ LABEL_F48471:
 	.byte 0xbf, 0x04, 0x53	; LD (XSP + 004h), HL
 	.byte 0x9f, 0x04, 0x20	; LD WA, (XSP + 004h)
 	calr LABEL_F4868A
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F48492
 	.byte 0x8f, 0x0c, 0x23	; LD C, (XSP + 00ch)
 	extz bc
@@ -216139,7 +216139,7 @@ LABEL_F4849A:
 	jr nz, LABEL_F484B4
 	ld wa, iz
 	calr LABEL_F487BE
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F484B4
 	.byte 0xbf, 0x06, 0xbc	; SET 4, (XSP + 006h)
 	jr LABEL_F484C1
@@ -216155,7 +216155,7 @@ LABEL_F484C1:
 	.byte 0x9f, 0x06, 0x3f, 0x00, 0x00	; CPW (XSP + 006h), 0000h
 	jr z, LABEL_F484EA
 	.byte 0x9f, 0x06, 0x20	; LD WA, (XSP + 006h)
-	.byte 0xd8, 0x33, 0x04	; BIT 004h, WA
+	bit 4, wa
 	jr z, LABEL_F484E0
 	.byte 0x8f, 0x0c, 0x23	; LD C, (XSP + 00ch)
 	extz bc
@@ -216275,7 +216275,7 @@ LABEL_F485B5:
 LABEL_F485C2:
 	ld wa, iz
 	calr LABEL_F487BE
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_F485DC
 	ld wa, iz
 	calr LABEL_F485EB
@@ -216287,7 +216287,7 @@ LABEL_F485C2:
 
 LABEL_F485DC:
 	dec 1, iz
-	.byte 0xde, 0xda	; CP IZ, 2
+	cps iz, 2
 	jr ugt, LABEL_F485C2
 	.byte 0xd7, 0xfa, 0x88	; LD WA, QIZ
 	call LABEL_F41600
@@ -216343,7 +216343,7 @@ LABEL_F48649:
 	jr nz, LABEL_F48667
 	ld wa, iz
 	call LABEL_F41C85
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F48667
 	ld wa, iz
 	lds bc, 0
@@ -216356,7 +216356,7 @@ LABEL_F48667:
 	jr nz, LABEL_F48683
 	ld wa, iz
 	call LABEL_F41C85
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_F48683
 	ld wa, iz
 	lds bc, 1
@@ -216372,10 +216372,10 @@ LABEL_F48683:
 LABEL_F4868A:
 	cp wa, 0x4D8
 	jr ugt, LABEL_F4869C
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr z, LABEL_F4869C
 	call LABEL_F41C85
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_F486A0
 
 LABEL_F4869C:
@@ -216664,7 +216664,7 @@ LABEL_F488F7:
 	extz bc
 	lds wa, 0
 	call LABEL_F4178A
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F48959
 	.byte 0xf1, 0x8e, 0x25, 0x02, 0x00, 0x00	; LDW (258Eh), 0000h
 	call LABEL_F4218E
@@ -216678,7 +216678,7 @@ LABEL_F488F7:
 	.byte 0xf1, 0x87, 0x25, 0x00, 0x00	; LD (2587h), 000h
 	.byte 0xf1, 0x8e, 0x25, 0x02, 0x00, 0x00	; LDW (258Eh), 0000h
 	calr LABEL_F48AA9
-	.byte 0xcf, 0xd9	; CP L, 1
+	cps l, 1
 	jr z, LABEL_F48959
 
 LABEL_F4893A:
@@ -216694,7 +216694,7 @@ LABEL_F4894D:
 	cp l, 0x81
 	jr nz, LABEL_F48969
 	calr LABEL_F489E0
-	.byte 0xcf, 0xd9	; CP L, 1
+	cps l, 1
 	jr nz, LABEL_F4893A
 
 LABEL_F48959:
@@ -216709,7 +216709,7 @@ LABEL_F48969:
 	cp a, 0xB0
 	jr nz, LABEL_F48977
 	calr LABEL_F489F3
-	.byte 0xcf, 0xd9	; CP L, 1
+	cps l, 1
 	jr z, LABEL_F48959
 	jr LABEL_F4893A
 
@@ -216717,7 +216717,7 @@ LABEL_F48977:
 	cp l, 0x85
 	jr nz, LABEL_F48985
 	calr LABEL_F48A97
-	.byte 0xcf, 0xd9	; CP L, 1
+	cps l, 1
 	jr z, LABEL_F48959
 	jr LABEL_F4893A
 
@@ -216725,7 +216725,7 @@ LABEL_F48985:
 	cp l, 0x86
 	jr nz, LABEL_F48993
 	calr LABEL_F48AD1
-	.byte 0xcf, 0xd9	; CP L, 1
+	cps l, 1
 	jr z, LABEL_F48959
 	jr LABEL_F4893A
 
@@ -216735,19 +216735,19 @@ LABEL_F48993:
 	cp l, 0x84
 	jr nz, LABEL_F489A6
 	calr LABEL_F48B07
-	.byte 0xcf, 0xd9	; CP L, 1
+	cps l, 1
 	jr z, LABEL_F48959
 	jr LABEL_F4893A
 
 LABEL_F489A6:
-	.byte 0xcf, 0x33, 0x07	; BIT 007h, L
+	bit 7, l
 	jr nz, LABEL_F489B0
 	calr LABEL_F4988B
 	jr LABEL_F4893A
 
 LABEL_F489B0:
 	calr LABEL_F48B24
-	.byte 0xcf, 0xd9	; CP L, 1
+	cps l, 1
 	jr z, LABEL_F48959
 	jr LABEL_F4893A
 
@@ -216786,7 +216786,7 @@ LABEL_F48A02:
 	jrl nz, LABEL_F48A8B
 	.byte 0x8b, 0x03, 0x21	; LD A, (XHL + 003h)
 	and a, 0x1F
-	.byte 0xc9, 0xdd	; CP A, 5
+	cps a, 5
 	jr nz, LABEL_F48A8B
 	.byte 0xbb, 0x04, 0x31	; LDA XBC, XHL + 004h
 	.byte 0xb3, 0xc8	; BIT 0, (XHL)
@@ -216806,7 +216806,7 @@ LABEL_F48A23:
 	.byte 0xd1, 0x8e, 0x25, 0x21	; LD BC, (258Eh)
 	ld iz, bc
 	.byte 0xbb, 0x01, 0x30	; LDA XWA, XHL + 001h
-	.byte 0xd9, 0xd8	; CP BC, 0
+	cps bc, 0
 	jr z, LABEL_F48A55
 	ld xde, xwa
 	ld a, (xwa)
@@ -217041,7 +217041,7 @@ LABEL_F48C33:
 	extz bc
 	lds wa, 0
 	call LABEL_F4178A
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F48C91
 	call LABEL_F4218E
 	.byte 0xc1, 0xe0, 0x25, 0x21	; LD A, (25E0h)
@@ -217078,7 +217078,7 @@ LABEL_F48C91:
 	ld de, wa
 	or de, bc
 	.byte 0xb0, 0xf6	; RET Z
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr nz, LABEL_F48CBF
 	.byte 0xf1, 0xaf, 0x28, 0x51	; LD (28AFh), BC
 	.byte 0xd1, 0x9e, 0x25, 0x19, 0x66, 0x26	; LDW_16_16 (2666h), (259Eh)
@@ -217088,7 +217088,7 @@ LABEL_F48CBF:
 	.byte 0xf1, 0xaf, 0x28, 0x50	; LD (28AFh), WA
 	.byte 0xd1, 0x9c, 0x25, 0x19, 0x66, 0x26	; LDW_16_16 (2666h), (259Ch)
 	.byte 0xd1, 0x9a, 0x25, 0x20	; LD WA, (259Ah)
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jrl nz, LABEL_F48F97
 	jr LABEL_F48CD4
 
@@ -217097,7 +217097,7 @@ LABEL_F48CD4:
 
 LABEL_F48CDA:
 	calr LABEL_F4988B
-	.byte 0xdb, 0xdf	; CP HL, 7
+	cps hl, 7
 	jr c, LABEL_F48CEA
 	.byte 0xc1, 0xc0, 0x25, 0x21	; LD A, (25C0h)
 	extz wa
@@ -217173,7 +217173,7 @@ LABEL_F48D85:
 	.byte 0x8c, 0x04, 0x20	; LD W, (XIX + 004h)
 	.byte 0xc7, 0xe2, 0x33, 0x00	; BIT 000h, QA
 	jr z, LABEL_F48D91
-	.byte 0xc8, 0x31, 0x07	; SET 007h, W
+	set 7, w
 
 LABEL_F48D91:
 	.byte 0x8c, 0x05, 0x23	; LD C, (XIX + 005h)
@@ -217203,11 +217203,11 @@ LABEL_F48DCF:
 	jrl nz, LABEL_F48CDA
 	.byte 0x8c, 0x03, 0x20	; LD W, (XIX + 003h)
 	and w, 0x1F
-	.byte 0xc8, 0xd9	; CP W, 1
+	cps w, 1
 	jrl nz, LABEL_F48CDA
 	.byte 0x8c, 0x04, 0x20	; LD W, (XIX + 004h)
-	.byte 0xc8, 0x30, 0x07	; RES 007h, W
-	.byte 0xc8, 0xd8	; CP W, 0
+	res 7, w
+	cps w, 0
 	jrl z, LABEL_F48CDA
 	cp w, 0x50
 	jrl ugt, LABEL_F48CDA
@@ -217281,7 +217281,7 @@ LABEL_F48E97:
 	calr LABEL_F4988B
 	.byte 0xc1, 0xc2, 0x25, 0x21	; LD A, (25C2h)
 	extz wa
-	.byte 0xdb, 0xdf	; CP HL, 7
+	cps hl, 7
 	jrl nc, LABEL_F4938D
 	.byte 0xf1, 0x86, 0x25, 0x35	; LDA XIY, 2586h
 	ld c, (xiy)
@@ -217390,7 +217390,7 @@ LABEL_F48F97:
 
 LABEL_F48F9D:
 	calr LABEL_F4988B
-	.byte 0xdb, 0xdf	; CP HL, 7
+	cps hl, 7
 	jr c, LABEL_F48FBD
 	.byte 0xc7, 0xfb, 0xd8	; CP QIZH, 0
 	jr nz, LABEL_F48FB1
@@ -217490,7 +217490,7 @@ LABEL_F49079:
 	.byte 0x88, 0x04, 0x27	; LD L, (XWA + 004h)
 	.byte 0xb0, 0xc8	; BIT 0, (XWA)
 	jr z, LABEL_F4909E
-	.byte 0xcf, 0x31, 0x07	; SET 007h, L
+	set 7, l
 
 LABEL_F4909E:
 	.byte 0x88, 0x05, 0x21	; LD A, (XWA + 005h)
@@ -217507,20 +217507,20 @@ LABEL_F490B1:
 	cp l, 0xB0
 	jrl nz, LABEL_F48F9D
 	ld l, (xbc)
-	.byte 0xc9, 0x33, 0x02	; BIT 002h, A
+	bit 2, a
 	jr z, LABEL_F490C6
-	.byte 0xcf, 0x31, 0x07	; SET 007h, L
+	set 7, l
 
 LABEL_F490C6:
 	cp l, 0x98
 	jrl nz, LABEL_F48F9D
 	.byte 0x8a, 0x03, 0x27	; LD L, (XDE + 003h)
 	and l, 0x1F
-	.byte 0xcf, 0xd9	; CP L, 1
+	cps l, 1
 	jrl nz, LABEL_F48F9D
 	.byte 0x8a, 0x04, 0x27	; LD L, (XDE + 004h)
-	.byte 0xcf, 0x30, 0x07	; RES 007h, L
-	.byte 0xcf, 0xd8	; CP L, 0
+	res 7, l
+	cps l, 0
 	jrl z, LABEL_F48F9D
 	cp l, 0x50
 	jrl ugt, LABEL_F48F9D
@@ -217668,7 +217668,7 @@ LABEL_F49249:
 	.byte 0x88, 0x04, 0x27	; LD L, (XWA + 004h)
 	.byte 0xb0, 0xc8	; BIT 0, (XWA)
 	jr z, LABEL_F4926E
-	.byte 0xcf, 0x31, 0x07	; SET 007h, L
+	set 7, l
 
 LABEL_F4926E:
 	.byte 0x88, 0x05, 0x21	; LD A, (XWA + 005h)
@@ -217744,9 +217744,9 @@ LABEL_F49310:
 	jr LABEL_F4937B
 
 LABEL_F49328:
-	.byte 0xd9, 0xd8	; CP BC, 0
+	cps bc, 0
 	jr nz, LABEL_F49330
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F49338
 
 LABEL_F49330:
@@ -217840,7 +217840,7 @@ LABEL_F49416:
 
 LABEL_F4942A:
 	.byte 0xd1, 0xa0, 0x25, 0x21	; LD BC, (25A0h)
-	.byte 0xd9, 0xd8	; CP BC, 0
+	cps bc, 0
 	jr z, LABEL_F49453
 	.byte 0xc1, 0xa2, 0x25, 0x21	; LD A, (25A2h)
 	cp a, 0x28
@@ -217885,9 +217885,9 @@ LABEL_F4946A:
 	.byte 0xd7, 0xe6, 0x88	; LD WA, QBC
 	.byte 0xc1, 0xb2, 0x25, 0x25	; LD E, (25B2h)
 	.byte 0xf1, 0xae, 0x25, 0x45	; LD (25AEh), E
-	.byte 0xcf, 0xd9	; CP L, 1
+	cps l, 1
 	jr z, LABEL_F494B5
-	.byte 0xd8, 0xd9	; CP WA, 1
+	cps wa, 1
 	jr nc, LABEL_F494B5
 	.byte 0xdc, 0x45	; MUL XIY, IX
 	.byte 0xd1, 0xb0, 0x25, 0x20	; LD WA, (25B0h)
@@ -218028,7 +218028,7 @@ LABEL_F495ED:
 	extz bc
 	lds wa, 0
 	call LABEL_F4178A
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F49631
 	call LABEL_F4218E
 	.byte 0xc1, 0xe0, 0x25, 0x21	; LD A, (25E0h)
@@ -218061,7 +218061,7 @@ LABEL_F49642:
 LABEL_F49648:
 	.byte 0xf1, 0xc8, 0x25, 0x00, 0x01	; LD (25C8h), 001h
 	calr LABEL_F4988B
-	.byte 0xdb, 0xdf	; CP HL, 7
+	cps hl, 7
 	jr c, LABEL_F4965D
 	.byte 0xc1, 0xe0, 0x25, 0x21	; LD A, (25E0h)
 	extz wa
@@ -218120,9 +218120,9 @@ LABEL_F496BD:
 
 LABEL_F496CD:
 	.byte 0x8d, 0x04, 0x26	; LD H, (XIY + 004h)
-	.byte 0xcf, 0x33, 0x00	; BIT 000h, L
+	bit 0, l
 	jr z, LABEL_F496D8
-	.byte 0xce, 0x31, 0x07	; SET 007h, H
+	set 7, h
 
 LABEL_F496D8:
 	.byte 0x8d, 0x05, 0x21	; LD A, (XIY + 005h)
@@ -218141,7 +218141,7 @@ LABEL_F496F9:
 
 LABEL_F496FF:
 	calr LABEL_F4988B
-	.byte 0xdb, 0xdf	; CP HL, 7
+	cps hl, 7
 	jr c, LABEL_F4970F
 	.byte 0xc1, 0xe0, 0x25, 0x21	; LD A, (25E0h)
 	extz wa
@@ -218198,9 +218198,9 @@ LABEL_F4976F:
 	jr nz, LABEL_F4978E
 	.byte 0xc1, 0xc8, 0x25, 0x3f, 0x01	; CP (25C8h), 001h
 	jr nz, LABEL_F4978E
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_F4978E
-	.byte 0xcd, 0xd8	; CP E, 0
+	cps e, 0
 	jrl z, LABEL_F496FF
 
 LABEL_F4978E:
@@ -218214,9 +218214,9 @@ LABEL_F4978E:
 
 LABEL_F4979E:
 	.byte 0x8d, 0x04, 0x25	; LD E, (XIY + 004h)
-	.byte 0xcc, 0x33, 0x00	; BIT 000h, D
+	bit 0, d
 	jr z, LABEL_F497A9
-	.byte 0xcd, 0x31, 0x07	; SET 007h, E
+	set 7, e
 
 LABEL_F497A9:
 	.byte 0x8d, 0x05, 0x21	; LD A, (XIY + 005h)
@@ -218235,20 +218235,20 @@ LABEL_F497C7:
 	cp e, 0xB0
 	jrl nz, LABEL_F496FF
 	ld e, (xwa)
-	.byte 0xcc, 0x33, 0x02	; BIT 002h, D
+	bit 2, d
 	jr z, LABEL_F497DC
-	.byte 0xcd, 0x31, 0x07	; SET 007h, E
+	set 7, e
 
 LABEL_F497DC:
 	cp e, 0x98
 	jrl nz, LABEL_F496FF
 	.byte 0x8d, 0x03, 0x25	; LD E, (XIY + 003h)
 	and e, 0x1F
-	.byte 0xcd, 0xd9	; CP E, 1
+	cps e, 1
 	jrl nz, LABEL_F496FF
 	.byte 0x8d, 0x04, 0x25	; LD E, (XIY + 004h)
-	.byte 0xcd, 0x30, 0x07	; RES 007h, E
-	.byte 0xcd, 0xd8	; CP E, 0
+	res 7, e
+	cps e, 0
 	jrl z, LABEL_F496FF
 	cp e, 0x50
 	jrl ugt, LABEL_F496FF
@@ -218323,9 +218323,9 @@ LABEL_F498A0:
 LABEL_F498A4:
 	call LABEL_F421C6
 	call LABEL_F421A6
-	.byte 0xcf, 0x33, 0x07	; BIT 007h, L
+	bit 7, l
 	jr nz, LABEL_F498D5
-	.byte 0xde, 0xdd	; CP IZ, 5
+	cps iz, 5
 	jr nc, LABEL_F498A4
 	ld bc, iz
 	.byte 0xf1, 0x87, 0x25, 0x30	; LDA XWA, 2587h
@@ -218333,7 +218333,7 @@ LABEL_F498A4:
 	add xbc, xwa
 	ld (xbc), l
 	inc 1, iz
-	.byte 0xde, 0xdf	; CP IZ, 7
+	cps iz, 7
 	jr c, LABEL_F498A4
 	.byte 0xf1, 0xa6, 0x28, 0xb0	; RES 0, (28A6h)
 	.byte 0xf1, 0x37, 0x04, 0x00, 0x00	; LD (0437h), 000h
@@ -218634,7 +218634,7 @@ LABEL_F49B31:
 	.byte 0xc1, 0x77, 0x28, 0x21	; LD A, (2877h)
 	extz wa
 	call LABEL_F3F604
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F49B4B
 	.byte 0xf1, 0x7a, 0x28, 0x00, 0x03	; LD (287Ah), 003h
 	jr LABEL_F49BAF
@@ -218654,7 +218654,7 @@ LABEL_F49B4B:
 	extz bc
 	lds wa, 0
 	call LABEL_F4178A
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F49BAF
 	.byte 0xc1, 0x77, 0x28, 0x23	; LD C, (2877h)
 	extz bc
@@ -218713,29 +218713,29 @@ LABEL_F49C0B:
 	dec 6, xsp
 	push xiz
 	calr LABEL_F4A056
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl nz, LABEL_F49D13
 	.byte 0xc1, 0x77, 0x28, 0x21	; LD A, (2877h)
 	extz wa
 	calr LABEL_F4A07F
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jrl lt, LABEL_F49D13
 	.byte 0xc7, 0xfb, 0x9f	; LD QIZH, L
 	.byte 0xc1, 0x82, 0x26, 0x21	; LD A, (2682h)
 	extz wa
 	calr LABEL_F4A07F
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jrl lt, LABEL_F49D13
 	.byte 0xf1, 0xd2, 0x27, 0x00, 0x00	; LD (27D2h), 000h
 	calr LABEL_F4A0AC
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl nz, LABEL_F49D13
 	calr LABEL_F4A119
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl nz, LABEL_F49D13
 	.byte 0xbf, 0x04, 0x16, 0xd4, 0x27	; LDW (XSP + 004h), (27D4h)
 	calr LABEL_F4A145
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl nz, LABEL_F49D13
 	.byte 0xd1, 0xd8, 0x27, 0x26	; LD IZ, (27D8h)
 	calr LABEL_F4A171
@@ -218748,7 +218748,7 @@ LABEL_F49C0B:
 	.byte 0xc7, 0xfb, 0x89	; LD A, QIZH
 	extz wa
 	calr LABEL_F4A19C
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl nz, LABEL_F49D13
 	calr LABEL_F49EA0
 	.byte 0xbf, 0x08, 0x47	; LD (XSP + 008h), L
@@ -218763,7 +218763,7 @@ LABEL_F49C90:
 	.byte 0x8f, 0x06, 0x23	; LD C, (XSP + 006h)
 	extz bc
 	.byte 0xc1, 0xd2, 0x27, 0x25	; LD E, (27D2h)
-	.byte 0xcd, 0xdb	; CP E, 3
+	cps e, 3
 	jr nz, LABEL_F49CC1
 	.byte 0x8f, 0x08, 0x25	; LD E, (XSP + 008h)
 	.byte 0x8f, 0x06, 0xf5	; CP E, (XSP + 006h)
@@ -218781,7 +218781,7 @@ LABEL_F49CBD:
 	jr LABEL_F49CC8
 
 LABEL_F49CC1:
-	.byte 0xcd, 0x33, 0x00	; BIT 000h, E
+	bit 0, e
 	jr z, LABEL_F49CD0
 	ld wa, bc
 
@@ -218791,7 +218791,7 @@ LABEL_F49CC8:
 	jr LABEL_F49CF7
 
 LABEL_F49CD0:
-	.byte 0xcd, 0x33, 0x01	; BIT 001h, E
+	bit 1, e
 	jr z, LABEL_F49CDD
 
 LABEL_F49CD5:
@@ -218832,8 +218832,8 @@ LABEL_F49D13:
 LABEL_F49D17:
 	.byte 0xf1, 0x7a, 0x28, 0x00, 0x00	; LD (287Ah), 000h
 	.byte 0xc1, 0x79, 0x28, 0x21	; LD A, (2879h)
-	.byte 0xc9, 0x30, 0x00	; RES 000h, A
-	.byte 0xc9, 0x30, 0x01	; RES 001h, A
+	res 0, a
+	res 1, a
 	.byte 0xf1, 0x79, 0x28, 0x41	; LD (2879h), A
 	call LABEL_F3FEFB
 	.byte 0xc1, 0xe5, 0x0c, 0x3f, 0x0f	; CP (0CE5h), 00fh
@@ -218865,8 +218865,8 @@ LABEL_F49D66:
 	calr LABEL_F49D84
 	call LABEL_F3FF1A
 	.byte 0xc1, 0x79, 0x28, 0x21	; LD A, (2879h)
-	.byte 0xc9, 0x30, 0x00	; RES 000h, A
-	.byte 0xc9, 0x30, 0x01	; RES 001h, A
+	res 0, a
+	res 1, a
 	.byte 0xf1, 0x79, 0x28, 0x41	; LD (2879h), A
 	ret
 
@@ -218913,13 +218913,13 @@ LABEL_F49DC8:
 
 LABEL_F49DFB:
 	calr LABEL_F4E1E7
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F49DC8
 	ret
 
 LABEL_F49E03:
 	calr LABEL_F4E183
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F49DC8
 	ret
 
@@ -218932,19 +218932,19 @@ LABEL_F49E0B:
 	cp l, 0x90
 	jr nz, LABEL_F49E35
 	calr LABEL_F4E1E7
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F49DC8
 	ret
 
 LABEL_F49E25:
 	calr LABEL_F4E4C1
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F49DC8
 	ret
 
 LABEL_F49E2D:
 	calr LABEL_F4E54A
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F49DC8
 	ret
 
@@ -219142,7 +219142,7 @@ LABEL_F49FE4:
 	.byte 0xd1, 0xd8, 0x27, 0x20	; LD WA, (27D8h)
 	.byte 0xd1, 0xda, 0x27, 0x21	; LD BC, (27DAh)
 	call LABEL_F37CBB
-	.byte 0xcf, 0x33, 0x07	; BIT 007h, L
+	bit 7, l
 	jrl nz, LABEL_F49EED
 	extz hl
 	ld wa, hl
@@ -219170,7 +219170,7 @@ LABEL_F4A02C:
 	.byte 0xd1, 0xd4, 0x27, 0x20	; LD WA, (27D4h)
 	.byte 0xd1, 0xd6, 0x27, 0x21	; LD BC, (27D6h)
 	call LABEL_F37CBB
-	.byte 0xcf, 0x33, 0x07	; BIT 007h, L
+	bit 7, l
 	jrl nz, LABEL_F49EA0
 	extz hl
 	ld wa, hl
@@ -219179,7 +219179,7 @@ LABEL_F4A02C:
 LABEL_F4A056:
 	call LABEL_F3FEFB
 	call LABEL_F3FABF
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F4A073
 	.byte 0xf1, 0x7a, 0x28, 0x00, 0x03	; LD (287Ah), 003h
 	call LABEL_F3FF34
@@ -219456,7 +219456,7 @@ LABEL_F4A4EA:
 	.byte 0xd7, 0xfa, 0x04	; PUSH QIZ
 	call LABEL_F3FEFB
 	call LABEL_F3F6FC
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F4A501
 	.byte 0xf1, 0x7a, 0x28, 0x00, 0x03	; LD (287Ah), 003h
 	jrl LABEL_F4A5EE
@@ -219464,7 +219464,7 @@ LABEL_F4A4EA:
 LABEL_F4A501:
 	.byte 0xf1, 0x7a, 0x28, 0x00, 0x00	; LD (287Ah), 000h
 	.byte 0xc1, 0x7b, 0x28, 0x23	; LD C, (287Bh)
-	.byte 0xcb, 0x30, 0x06	; RES 006h, C
+	res 6, c
 	.byte 0xf1, 0x7b, 0x28, 0x43	; LD (287Bh), C
 	.byte 0xc1, 0x77, 0x28, 0x21	; LD A, (2877h)
 	cp a, 0x7F
@@ -219483,7 +219483,7 @@ LABEL_F4A501:
 LABEL_F4A532:
 	cp a, 0x10
 	jr nz, LABEL_F4A53E
-	.byte 0xcb, 0x31, 0x06	; SET 006h, C
+	set 6, c
 	.byte 0xf1, 0x7b, 0x28, 0x43	; LD (287Bh), C
 
 LABEL_F4A53E:
@@ -219543,9 +219543,9 @@ LABEL_F4A5B6:
 	.byte 0xf1, 0x34, 0x26, 0x41	; LD (2634h), A
 	calr LABEL_F4A5FA
 	.byte 0xc1, 0x7a, 0x28, 0x21	; LD A, (287Ah)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F4A5DC
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	jr z, LABEL_F4A5DC
 	cp a, 0x8
 	jr z, LABEL_F4A5DC
@@ -219599,7 +219599,7 @@ LABEL_F4A5FA:
 	.byte 0xd1, 0xaf, 0x28, 0x19, 0x8b, 0x28	; LDW_16_16 (288Bh), (28AFh)
 	.byte 0xc1, 0x50, 0x26, 0x21	; LD A, (2650h)
 	.byte 0xbf, 0x04, 0x02, 0x00, 0x00	; LDW (XSP + 004h:8), 0000h
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jrl nz, LABEL_F4A747
 	.byte 0xd1, 0xde, 0x25, 0x3f, 0x00, 0x00	; CPW (25DEh), 0000h
 	jrl z, LABEL_F4A8E3
@@ -219609,7 +219609,7 @@ LABEL_F4A67D:
 	.byte 0xc7, 0xfb, 0xa8	; LD QIZH, 0
 	.byte 0xc1, 0x8e, 0x28, 0x21	; LD A, (288Eh)
 	extz wa
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr z, LABEL_F4A6D2
 
 LABEL_F4A68C:
@@ -219685,7 +219685,7 @@ LABEL_F4A739:
 	jrl LABEL_F4A956
 
 LABEL_F4A747:
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	jrl nz, LABEL_F4A807
 	.byte 0xd1, 0xde, 0x25, 0x3f, 0x00, 0x00	; CPW (25DEh), 0000h
 	jrl z, LABEL_F4A8E3
@@ -219695,7 +219695,7 @@ LABEL_F4A755:
 	.byte 0xc7, 0xfb, 0xa8	; LD QIZH, 0
 	.byte 0xc1, 0x8e, 0x28, 0x21	; LD A, (288Eh)
 	extz wa
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr z, LABEL_F4A7AA
 
 LABEL_F4A764:
@@ -219771,7 +219771,7 @@ LABEL_F4A810:
 	.byte 0xc7, 0xfb, 0xa8	; LD QIZH, 0
 	.byte 0xc1, 0x8e, 0x28, 0x21	; LD A, (288Eh)
 	extz wa
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jrl z, LABEL_F4A8CD
 
 LABEL_F4A820:
@@ -219864,7 +219864,7 @@ LABEL_F4A8E3:
 	.byte 0xf1, 0x34, 0x28, 0x32	; LDA XDE, 2834h
 	.byte 0xba, 0x02, 0x31	; LDA XBC, XDE + 002h
 	ld wa, (xbc)
-	.byte 0xd8, 0xdd	; CP WA, 5
+	cps wa, 5
 	jr z, LABEL_F4A928
 	dec 1, wa
 	ld (xbc), wa
@@ -219873,7 +219873,7 @@ LABEL_F4A8E3:
 LABEL_F4A928:
 	ld wa, (xde)
 	call LABEL_F41C39
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F4A956
 	.byte 0xf1, 0x34, 0x28, 0x30	; LDA XWA, 2834h
 	ld (xwa), hl
@@ -220025,9 +220025,9 @@ LABEL_F4AC5C:
 	.byte 0xd1, 0xaf, 0x28, 0x19, 0xb0, 0x26	; LDW_16_16 (26B0h), (28AFh)
 	call LABEL_F3FFE0
 	.byte 0xc1, 0x7a, 0x28, 0x21	; LD A, (287Ah)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F4AC87
-	.byte 0xc9, 0xdf	; CP A, 7
+	cps a, 7
 	jr z, LABEL_F4AC7E
 	ldw wa, 0x43
 	jrl LABEL_F4AD70
@@ -220076,7 +220076,7 @@ LABEL_F4AD01:
 	.byte 0xf1, 0x34, 0x28, 0x32	; LDA XDE, 2834h
 	.byte 0xba, 0x02, 0x31	; LDA XBC, XDE + 002h
 	ld wa, (xbc)
-	.byte 0xd8, 0xdd	; CP WA, 5
+	cps wa, 5
 	jr ugt, LABEL_F4AD2D
 	ld wa, (xde)
 	call LABEL_F41C39
@@ -220214,7 +220214,7 @@ LABEL_F4AFB0:
 	.byte 0xd7, 0xfa, 0xa8	; LD QIZ, 0
 	.byte 0xc1, 0x8e, 0x28, 0x21	; LD A, (288Eh)
 	extz wa
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr z, LABEL_F4AFE5
 
 LABEL_F4AFBD:
@@ -220226,7 +220226,7 @@ LABEL_F4AFBD:
 	cp l, 0x81
 	jr nz, LABEL_F4B039
 	calr LABEL_F4E1C4
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl nz, LABEL_F4B0DC
 	.byte 0xd7, 0xfa, 0x61	; INC 1, QIZ
 
@@ -220272,7 +220272,7 @@ LABEL_F4B039:
 
 LABEL_F4B043:
 	calr LABEL_F4E183
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F4AFDA
 	jrl LABEL_F4B0DC
 
@@ -220284,7 +220284,7 @@ LABEL_F4B04D:
 
 LABEL_F4B057:
 	calr LABEL_F4E1A4
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl z, LABEL_F4AFDA
 	jr LABEL_F4B0DC
 
@@ -220293,7 +220293,7 @@ LABEL_F4B061:
 	cp l, 0x90
 	jr nz, LABEL_F4B073
 	calr LABEL_F4E1B4
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl z, LABEL_F4AFDA
 	jr LABEL_F4B0DC
 
@@ -220301,7 +220301,7 @@ LABEL_F4B073:
 	cp l, 0xB0
 	jr nz, LABEL_F4B082
 	calr LABEL_F4E2B5
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl z, LABEL_F4AFDA
 	jr LABEL_F4B0DC
 
@@ -220309,7 +220309,7 @@ LABEL_F4B082:
 	cp l, 0xC0
 	jr nz, LABEL_F4B091
 	calr LABEL_F4E232
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl z, LABEL_F4AFDA
 	jr LABEL_F4B0DC
 
@@ -220323,7 +220323,7 @@ LABEL_F4B09F:
 	.byte 0xf1, 0x34, 0x28, 0x32	; LDA XDE, 2834h
 	.byte 0xba, 0x02, 0x31	; LDA XBC, XDE + 002h
 	ld wa, (xbc)
-	.byte 0xd8, 0xdd	; CP WA, 5
+	cps wa, 5
 	jr ugt, LABEL_F4B0BF
 	ld wa, (xde)
 	call LABEL_F41C39
@@ -220386,14 +220386,14 @@ LABEL_F4B0DE:
 LABEL_F4B1D1:
 	.byte 0xd7, 0xfa, 0x04	; PUSH QIZ
 	.byte 0xc1, 0x79, 0x28, 0x21	; LD A, (2879h)
-	.byte 0xc9, 0x30, 0x00	; RES 000h, A
-	.byte 0xc9, 0x30, 0x01	; RES 001h, A
+	res 0, a
+	res 1, a
 	.byte 0xf1, 0x79, 0x28, 0x41	; LD (2879h), A
 	.byte 0xf1, 0x9d, 0x28, 0xb0	; RES 0, (289Dh)
 	.byte 0xf1, 0x9d, 0x28, 0xb2	; RES 2, (289Dh)
 	call LABEL_F3FEFB
 	call LABEL_F3F66D
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F4B1FE
 	.byte 0xf1, 0x7a, 0x28, 0x00, 0x03	; LD (287Ah), 003h
 	jrl LABEL_F4B3F4
@@ -220401,7 +220401,7 @@ LABEL_F4B1D1:
 LABEL_F4B1FE:
 	.byte 0xf1, 0x7a, 0x28, 0x00, 0x00	; LD (287Ah), 000h
 	.byte 0xc1, 0x7b, 0x28, 0x27	; LD L, (287Bh)
-	.byte 0xcf, 0x30, 0x06	; RES 006h, L
+	res 6, l
 	.byte 0xf1, 0x7b, 0x28, 0x47	; LD (287Bh), L
 	.byte 0xc1, 0x77, 0x28, 0x25	; LD E, (2877h)
 	cp e, 0x7F
@@ -220466,9 +220466,9 @@ LABEL_F4B274:
 LABEL_F4B2A4:
 	calr LABEL_F4BA1E
 	.byte 0xc1, 0x7a, 0x28, 0x21	; LD A, (287Ah)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F4B2C3
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	jr z, LABEL_F4B2C3
 	cp a, 0x8
 	jr z, LABEL_F4B2C3
@@ -220576,7 +220576,7 @@ LABEL_F4B397:
 LABEL_F4B3A3:
 	cp e, 0x10
 	jr nz, LABEL_F4B3AF
-	.byte 0xcf, 0x31, 0x06	; SET 006h, L
+	set 6, l
 	.byte 0xf1, 0x7b, 0x28, 0x47	; LD (287Bh), L
 
 LABEL_F4B3AF:
@@ -220615,7 +220615,7 @@ LABEL_F4B3F4:
 LABEL_F4B400:
 	call LABEL_F40AE4
 	call LABEL_F400A7
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jrl z, LABEL_F4B51E
 	.byte 0xf1, 0x40, 0x27, 0x47	; LD (2740h), L
 	ld a, l
@@ -220666,7 +220666,7 @@ LABEL_F4B400:
 	ld bc, hl
 	call LABEL_F3FE4C
 	.byte 0xc1, 0x7a, 0x28, 0x21	; LD A, (287Ah)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F4B4E5
 	cp a, 0x8
 	jr nz, LABEL_F4B51E
@@ -220702,9 +220702,9 @@ LABEL_F4B51E:
 LABEL_F4B522:
 	pushw iz
 	.byte 0xc1, 0x7b, 0x28, 0x21	; LD A, (287Bh)
-	.byte 0xc9, 0x30, 0x03	; RES 003h, A
-	.byte 0xc9, 0x30, 0x04	; RES 004h, A
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
+	res 3, a
+	res 4, a
+	res 7, a
 	.byte 0xf1, 0x7b, 0x28, 0x41	; LD (287Bh), A
 	.byte 0xf1, 0x7a, 0x28, 0x00, 0x00	; LD (287Ah), 000h
 	.byte 0xc1, 0x52, 0x26, 0x21	; LD A, (2652h)
@@ -220713,9 +220713,9 @@ LABEL_F4B522:
 	extz wa
 	call LABEL_F3FC57
 	.byte 0xc1, 0x7a, 0x28, 0x21	; LD A, (287Ah)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F4B5BD
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	jrl nz, LABEL_F4B75F
 	.byte 0xf1, 0x7a, 0x28, 0x00, 0x00	; LD (287Ah), 000h
 	.byte 0xc1, 0x68, 0x1d, 0x3f, 0x01	; CP (1D68h), 001h
@@ -220792,9 +220792,9 @@ LABEL_F4B5BD:
 	.byte 0xd1, 0xaf, 0x28, 0x19, 0xb0, 0x26	; LDW_16_16 (26B0h), (28AFh)
 	call LABEL_F3FFE0
 	.byte 0xc1, 0x7a, 0x28, 0x21	; LD A, (287Ah)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F4B659
-	.byte 0xc9, 0xdf	; CP A, 7
+	cps a, 7
 	jrl nz, LABEL_F4B75F
 	.byte 0xf1, 0x7b, 0x28, 0xbb	; SET 3, (287Bh)
 	.byte 0xf1, 0x7a, 0x28, 0x00, 0x00	; LD (287Ah), 000h
@@ -220813,7 +220813,7 @@ LABEL_F4B659:
 	ld bc, hl
 	call LABEL_F3FE4C
 	.byte 0xc1, 0x7a, 0x28, 0x21	; LD A, (287Ah)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F4B6D7
 	cp a, 0x8
 	jrl nz, LABEL_F4B75F
@@ -220843,9 +220843,9 @@ LABEL_F4B6D7:
 	.byte 0xd1, 0xaf, 0x28, 0x19, 0x87, 0x28	; LDW_16_16 (2887h), (28AFh)
 	call LABEL_F3FFE0
 	.byte 0xc1, 0x7a, 0x28, 0x21	; LD A, (287Ah)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F4B6FC
-	.byte 0xc9, 0xdf	; CP A, 7
+	cps a, 7
 	jr nz, LABEL_F4B75F
 	.byte 0xf1, 0x7b, 0x28, 0xbc	; SET 4, (287Bh)
 	.byte 0xf1, 0x7a, 0x28, 0x00, 0x00	; LD (287Ah), 000h
@@ -220898,9 +220898,9 @@ LABEL_F4B764:
 	.byte 0xd1, 0x5c, 0x26, 0x19, 0x9c, 0x26	; LDW_16_16 (269Ch), (265Ch)
 	.byte 0xd1, 0x5e, 0x26, 0x19, 0xa2, 0x26	; LDW_16_16 (26A2h), (265Eh)
 	.byte 0xc1, 0x7b, 0x28, 0x21	; LD A, (287Bh)
-	.byte 0xc9, 0x33, 0x04	; BIT 004h, A
+	bit 4, a
 	jr z, LABEL_F4B78C
-	.byte 0xc9, 0x33, 0x03	; BIT 003h, A
+	bit 3, a
 	jr nz, LABEL_F4B78C
 	.byte 0xe8, 0xa9	; LD XWA, 1
 	.byte 0xe1, 0xda, 0x25, 0x88	; ADD (25DAh), XWA
@@ -220939,19 +220939,19 @@ LABEL_F4B7A4:
 	.byte 0x98, 0x02, 0x21	; LD BC, (XWA + 002h)
 	.byte 0xf1, 0xee, 0x27, 0x51	; LD (27EEh), BC
 	.byte 0xc1, 0x7b, 0x28, 0x25	; LD E, (287Bh)
-	.byte 0xcd, 0x33, 0x04	; BIT 004h, E
+	bit 4, e
 	.byte 0xb0, 0xf6	; RET Z
-	.byte 0xcd, 0x33, 0x03	; BIT 003h, E
+	bit 3, e
 	jr nz, LABEL_F4B833
 	dec 1, bc
 	.byte 0xf1, 0xee, 0x27, 0x51	; LD (27EEh), BC
-	.byte 0xd9, 0xdc	; CP BC, 4
+	cps bc, 4
 	.byte 0xb0, 0xfb	; RET UGT
 	.byte 0xd1, 0xec, 0x27, 0x20	; LD WA, (27ECh)
 	call LABEL_F41C39
 	.byte 0xf1, 0xec, 0x27, 0x53	; LD (27ECh), HL
 	.byte 0xd1, 0xec, 0x27, 0x20	; LD WA, (27ECh)
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr z, LABEL_F4B893
 	.byte 0xf1, 0xee, 0x27, 0x02, 0xff, 0x00	; LDW (27EEh), 00ffh
 	ret
@@ -220966,17 +220966,17 @@ LABEL_F4B833:
 LABEL_F4B842:
 	.byte 0xf1, 0x2a, 0x28, 0xc8	; BIT 0, (282Ah)
 	.byte 0xb0, 0xf6	; RET Z
-	.byte 0xcd, 0x33, 0x03	; BIT 003h, E
+	bit 3, e
 	.byte 0xb0, 0xf6	; RET Z
 	dec 1, bc
 	.byte 0xf1, 0xee, 0x27, 0x51	; LD (27EEh), BC
-	.byte 0xd9, 0xdc	; CP BC, 4
+	cps bc, 4
 	jr ugt, LABEL_F4B871
 	.byte 0xd1, 0xec, 0x27, 0x20	; LD WA, (27ECh)
 	call LABEL_F41C39
 	.byte 0xf1, 0xec, 0x27, 0x53	; LD (27ECh), HL
 	.byte 0xd1, 0xec, 0x27, 0x20	; LD WA, (27ECh)
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr z, LABEL_F4B893
 	.byte 0xf1, 0xee, 0x27, 0x02, 0xff, 0x00	; LDW (27EEh), 00ffh
 
@@ -220984,13 +220984,13 @@ LABEL_F4B871:
 	.byte 0xd1, 0xaa, 0x26, 0x20	; LD WA, (26AAh)
 	dec 1, wa
 	.byte 0xf1, 0xaa, 0x26, 0x50	; LD (26AAh), WA
-	.byte 0xd8, 0xdc	; CP WA, 4
+	cps wa, 4
 	.byte 0xb0, 0xfb	; RET UGT
 	.byte 0xd1, 0xa8, 0x26, 0x20	; LD WA, (26A8h)
 	call LABEL_F41C39
 	.byte 0xf1, 0xa8, 0x26, 0x53	; LD (26A8h), HL
 	.byte 0xd1, 0xa8, 0x26, 0x20	; LD WA, (26A8h)
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr nz, LABEL_F4B89B
 
 LABEL_F4B893:
@@ -221008,9 +221008,9 @@ LABEL_F4B8A2:
 	.byte 0xe1, 0xe4, 0x27, 0x21	; LD XBC, (27E4h)
 	sub xbc, xwa
 	.byte 0xc1, 0x7b, 0x28, 0x21	; LD A, (287Bh)
-	.byte 0xc9, 0x33, 0x04	; BIT 004h, A
+	bit 4, a
 	jr z, LABEL_F4B8BC
-	.byte 0xc9, 0x33, 0x03	; BIT 003h, A
+	bit 3, a
 	jr nz, LABEL_F4B8BC
 	dec 1, xbc
 
@@ -221038,7 +221038,7 @@ LABEL_F4B8BC:
 	.byte 0xf1, 0x34, 0x28, 0x32	; LDA XDE, 2834h
 	.byte 0xba, 0x02, 0x31	; LDA XBC, XDE + 002h
 	ld wa, (xbc)
-	.byte 0xd8, 0xdd	; CP WA, 5
+	cps wa, 5
 	jr nz, LABEL_F4B93C
 	ld wa, (xde)
 	call LABEL_F41C39
@@ -221070,27 +221070,27 @@ LABEL_F4B952:
 	.byte 0xc1, 0x7a, 0x28, 0x3f, 0x00	; CP (287Ah), 000h
 	jr nz, LABEL_F4B9B5
 	.byte 0xc1, 0x7b, 0x28, 0x21	; LD A, (287Bh)
-	.byte 0xc9, 0x33, 0x04	; BIT 004h, A
+	bit 4, a
 	.byte 0xb0, 0xf6	; RET Z
-	.byte 0xc9, 0x33, 0x03	; BIT 003h, A
+	bit 3, a
 	.byte 0xb0, 0xfe	; RET NZ
 	.byte 0xd1, 0xee, 0x27, 0x20	; LD WA, (27EEh)
 	dec 1, wa
 	.byte 0xf1, 0xee, 0x27, 0x50	; LD (27EEh), WA
-	.byte 0xd8, 0xdd	; CP WA, 5
+	cps wa, 5
 	.byte 0xb0, 0xff	; RET NC
 	.byte 0xd1, 0xec, 0x27, 0x20	; LD WA, (27ECh)
 	call LABEL_F41C39
 	.byte 0xf1, 0xec, 0x27, 0x53	; LD (27ECh), HL
 	.byte 0xd1, 0xec, 0x27, 0x20	; LD WA, (27ECh)
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr nz, LABEL_F4B9A8
 	.byte 0xf1, 0x7a, 0x28, 0x00, 0x0a	; LD (287Ah), 00ah
 	jr LABEL_F4B9B5
 
 LABEL_F4B9A8:
 	call LABEL_F41C85
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	.byte 0xb0, 0xfe	; RET NZ
 	.byte 0xf1, 0x7a, 0x28, 0x00, 0x0b	; LD (287Ah), 00bh
 
@@ -221112,13 +221112,13 @@ LABEL_F4B9CC:
 	.byte 0xf1, 0x7b, 0x28, 0xcb	; BIT 3, (287Bh)
 	jr z, LABEL_F4B9FC
 	dec 1, bc
-	.byte 0xd9, 0xdc	; CP BC, 4
+	cps bc, 4
 	jr ugt, LABEL_F4B9FC
 	.byte 0xd1, 0xe8, 0x27, 0x20	; LD WA, (27E8h)
 	call LABEL_F41C39
 	.byte 0xf1, 0xe8, 0x27, 0x53	; LD (27E8h), HL
 	.byte 0xd1, 0xe8, 0x27, 0x20	; LD WA, (27E8h)
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr nz, LABEL_F4B9F9
 	.byte 0xf1, 0x7a, 0x28, 0x00, 0x0b	; LD (287Ah), 00bh
 	jr LABEL_F4BA07
@@ -221150,7 +221150,7 @@ LABEL_F4BA1E:
 	extz bc
 	lds wa, 0
 	call LABEL_F4178A
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jrl z, LABEL_F4BE81
 	call LABEL_F400A7
 	.byte 0xc1, 0x34, 0x26, 0x21	; LD A, (2634h)
@@ -221169,9 +221169,9 @@ LABEL_F4BA58:
 
 LABEL_F4BA62:
 	.byte 0xc1, 0x7b, 0x28, 0x21	; LD A, (287Bh)
-	.byte 0xc9, 0x30, 0x03	; RES 003h, A
-	.byte 0xc9, 0x30, 0x04	; RES 004h, A
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
+	res 3, a
+	res 4, a
+	res 7, a
 	.byte 0xf1, 0x7b, 0x28, 0x41	; LD (287Bh), A
 	.byte 0xf1, 0x7a, 0x28, 0x00, 0x00	; LD (287Ah), 000h
 	.byte 0xc1, 0x52, 0x26, 0x21	; LD A, (2652h)
@@ -221197,9 +221197,9 @@ LABEL_F4BA62:
 	.byte 0xd1, 0xaf, 0x28, 0x19, 0xb0, 0x26	; LDW_16_16 (26B0h), (28AFh)
 	call LABEL_F3FFE0
 	.byte 0xc1, 0x7a, 0x28, 0x21	; LD A, (287Ah)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F4BAE6
-	.byte 0xc9, 0xdf	; CP A, 7
+	cps a, 7
 	jrl nz, LABEL_F4BE81
 	.byte 0xf1, 0x7b, 0x28, 0xbb	; SET 3, (287Bh)
 	.byte 0xf1, 0x7a, 0x28, 0x00, 0x00	; LD (287Ah), 000h
@@ -221250,7 +221250,7 @@ LABEL_F4BB3A:
 	.byte 0xf1, 0x34, 0x28, 0x32	; LDA XDE, 2834h
 	.byte 0xba, 0x02, 0x31	; LDA XBC, XDE + 002h
 	ld wa, (xbc)
-	.byte 0xd8, 0xdd	; CP WA, 5
+	cps wa, 5
 	jr nz, LABEL_F4BBB6
 	ld wa, (xde)
 	call LABEL_F41C39
@@ -221431,7 +221431,7 @@ LABEL_F4BD94:
 	.byte 0xf1, 0x34, 0x28, 0x32	; LDA XDE, 2834h
 	.byte 0xba, 0x02, 0x31	; LDA XBC, XDE + 002h
 	ld wa, (xbc)
-	.byte 0xd8, 0xdd	; CP WA, 5
+	cps wa, 5
 	jr nz, LABEL_F4BE26
 	ld wa, (xde)
 	call LABEL_F41C39
@@ -221686,7 +221686,7 @@ LABEL_F4C084:
 	extz bc
 	lds wa, 0
 	call LABEL_F4178A
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	.byte 0xb0, 0xf6	; RET Z
 	.byte 0xc1, 0x52, 0x26, 0x21	; LD A, (2652h)
 	dec 1, a
@@ -221723,17 +221723,17 @@ LABEL_F4C0F3:
 	jr z, LABEL_F4C10D
 	extz wa
 	call LABEL_F3F604
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_F4C12E
 
 LABEL_F4C10D:
 	.byte 0xd1, 0x32, 0x26, 0x20	; LD WA, (2632h)
 	call LABEL_F3F615
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_F4C12E
 	.byte 0xd1, 0xde, 0x25, 0x20	; LD WA, (25DEh)
 	call LABEL_F3F615
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_F4C12E
 	.byte 0xc1, 0x54, 0x26, 0x21	; LD A, (2654h)
 	cp a, 0x80
@@ -221794,9 +221794,9 @@ LABEL_F4C17A:
 
 LABEL_F4C1A4:
 	.byte 0xc1, 0x7a, 0x28, 0x21	; LD A, (287Ah)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F4C1BB
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	jr z, LABEL_F4C1BB
 	.byte 0xc1, 0x36, 0x26, 0x3f, 0x00	; CP (2636h), 000h
 	jr nz, LABEL_F4C1BB
@@ -221833,7 +221833,7 @@ LABEL_F4C202:
 	.byte 0xd7, 0xfa, 0xa8	; LD QIZ, 0
 	.byte 0xc1, 0x8e, 0x28, 0x21	; LD A, (288Eh)
 	extz wa
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr z, LABEL_F4C230
 
 LABEL_F4C20F:
@@ -221908,7 +221908,7 @@ LABEL_F4C2A3:
 	.byte 0xd7, 0xfa, 0x04	; PUSH QIZ
 	call LABEL_F3FEFB
 	call LABEL_F3F6B4
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F4C2BA
 	.byte 0xf1, 0x7a, 0x28, 0x00, 0x03	; LD (287Ah), 003h
 	jrl LABEL_F4C354
@@ -221965,9 +221965,9 @@ LABEL_F4C301:
 
 LABEL_F4C32E:
 	.byte 0xc1, 0x7a, 0x28, 0x21	; LD A, (287Ah)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F4C345
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	jr z, LABEL_F4C345
 	.byte 0xc1, 0x36, 0x26, 0x3f, 0x00	; CP (2636h), 000h
 	jr nz, LABEL_F4C345
@@ -221989,7 +221989,7 @@ LABEL_F4C360:
 	.byte 0xc1, 0xfe, 0x25, 0x21	; LD A, (25FEh)
 	.byte 0xc1, 0x38, 0x26, 0x23	; LD C, (2638h)
 	extz wa
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jrl mi, LABEL_F4C4FE
 	cp wa, 0xA
 	jrl gt, LABEL_F4C4FE
@@ -222051,7 +222051,7 @@ LABEL_F4C38C:
 
 LABEL_F4C4FE:
 	.byte 0xc1, 0x38, 0x26, 0x21	; LD A, (2638h)
-	.byte 0xc9, 0xdc	; CP A, 4
+	cps a, 4
 	jr nc, LABEL_F4C50A
 	ldb e, 0x0
 	jr LABEL_F4C56D
@@ -222139,7 +222139,7 @@ LABEL_F4C598:
 	sub l, e
 	.byte 0xc1, 0x02, 0x26, 0x21	; LD A, (2602h)
 	ld e, a
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr ge, LABEL_F4C5A9
 	ld e, a
 	add e, 0x64
@@ -222157,7 +222157,7 @@ LABEL_F4C5A9:
 LABEL_F4C5BB:
 	add e, l
 	.byte 0xf1, 0x3e, 0x26, 0x45	; LD (263Eh), E
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F4C5CA
 	cp a, 0x7F
 	jr nz, LABEL_F4C5CC
@@ -222204,7 +222204,7 @@ LABEL_F4C629:
 	.byte 0xd1, 0xaf, 0x28, 0x19, 0x3c, 0x27	; LDW_16_16 (273Ch), (28AFh)
 	.byte 0xc1, 0x8e, 0x28, 0x21	; LD A, (288Eh)
 	extz wa
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr z, LABEL_F4C685
 
 LABEL_F4C646:
@@ -222241,7 +222241,7 @@ LABEL_F4C698:
 	jrl LABEL_F4C829
 
 LABEL_F4C69B:
-	.byte 0xcf, 0x33, 0x07	; BIT 007h, L
+	bit 7, l
 	jr nz, LABEL_F4C6AE
 	call LABEL_F402CB
 	.byte 0xc1, 0x7a, 0x28, 0x3f, 0x00	; CP (287Ah), 000h
@@ -222275,10 +222275,10 @@ LABEL_F4C6C4:
 	.byte 0xc1, 0x02, 0x26, 0x25	; LD E, (2602h)
 	.byte 0xc1, 0x3a, 0x26, 0x21	; LD A, (263Ah)
 	.byte 0xc1, 0x38, 0x26, 0x23	; LD C, (2638h)
-	.byte 0xcd, 0x33, 0x07	; BIT 007h, E
+	bit 7, e
 	jrl nz, LABEL_F4C788
 	ld e, a
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_F4C726
 	.byte 0xc1, 0x38, 0x26, 0x21	; LD A, (2638h)
 	.byte 0xc1, 0x3e, 0x26, 0xf1	; CP A, (263Eh)
@@ -222333,7 +222333,7 @@ LABEL_F4C77A:
 
 LABEL_F4C788:
 	ld e, a
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_F4C7A7
 	.byte 0xc1, 0x38, 0x26, 0x21	; LD A, (2638h)
 	.byte 0xc1, 0x3e, 0x26, 0xf1	; CP A, (263Eh)
@@ -222466,7 +222466,7 @@ LABEL_F4C8CD:
 	.byte 0xd7, 0xfa, 0x04	; PUSH QIZ
 	call LABEL_F3FEFB
 	call LABEL_F40BD3
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F4C8E4
 	.byte 0xf1, 0x7a, 0x28, 0x00, 0x03	; LD (287Ah), 003h
 	jrl LABEL_F4C97E
@@ -222523,9 +222523,9 @@ LABEL_F4C929:
 
 LABEL_F4C953:
 	.byte 0xc1, 0x7a, 0x28, 0x21	; LD A, (287Ah)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F4C96F
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	jr z, LABEL_F4C96F
 	cp a, 0x8
 	jr z, LABEL_F4C96F
@@ -222575,7 +222575,7 @@ LABEL_F4C9DF:
 	.byte 0xd7, 0xfa, 0xa8	; LD QIZ, 0
 	.byte 0xc1, 0x8e, 0x28, 0x21	; LD A, (288Eh)
 	extz wa
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr z, LABEL_F4CA14
 
 LABEL_F4C9EC:
@@ -222614,7 +222614,7 @@ LABEL_F4CA23:
 	jr nz, LABEL_F4CA7F
 	call LABEL_F421A6
 	.byte 0xc1, 0x22, 0x26, 0x23	; LD C, (2622h)
-	.byte 0xcb, 0xd8	; CP C, 0
+	cps c, 0
 	jr le, LABEL_F4CA5F
 	ldb e, 0x7F
 	sub e, l
@@ -222655,7 +222655,7 @@ LABEL_F4CA81:
 	.byte 0xd7, 0xfa, 0x04	; PUSH QIZ
 	call LABEL_F3FEFB
 	call LABEL_F3F854
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F4CA98
 	.byte 0xf1, 0x7a, 0x28, 0x00, 0x03	; LD (287Ah), 003h
 	jrl LABEL_F4CB3E
@@ -222715,14 +222715,14 @@ LABEL_F4CAE8:
 
 LABEL_F4CB12:
 	.byte 0xc1, 0x7a, 0x28, 0x21	; LD A, (287Ah)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F4CB2F
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	jr z, LABEL_F4CB2F
 	cp a, 0x8
 	jr z, LABEL_F4CB2F
 	.byte 0xc1, 0x36, 0x26, 0x21	; LD A, (2636h)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_F4CB2F
 	.byte 0xf1, 0x7a, 0x28, 0x41	; LD (287Ah), A
 
@@ -222777,7 +222777,7 @@ LABEL_F4CBC9:
 	.byte 0xd7, 0xfa, 0xa8	; LD QIZ, 0
 	.byte 0xc1, 0x8e, 0x28, 0x21	; LD A, (288Eh)
 	extz wa
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr z, LABEL_F4CBFD
 
 LABEL_F4CBD6:
@@ -222837,7 +222837,7 @@ LABEL_F4CC4A:
 	call LABEL_F3FEFB
 	.byte 0xf1, 0x7a, 0x28, 0x00, 0x00	; LD (287Ah), 000h
 	call LABEL_F3F73B
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F4CC66
 	.byte 0xf1, 0x7a, 0x28, 0x00, 0x03	; LD (287Ah), 003h
 	jrl LABEL_F4CCFA
@@ -222893,9 +222893,9 @@ LABEL_F4CCAA:
 
 LABEL_F4CCD4:
 	.byte 0xc1, 0x7a, 0x28, 0x21	; LD A, (287Ah)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F4CCEB
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	jr z, LABEL_F4CCEB
 	.byte 0xc1, 0x36, 0x26, 0x3f, 0x00	; CP (2636h), 000h
 	jr nz, LABEL_F4CCEB
@@ -222939,7 +222939,7 @@ LABEL_F4CD37:
 	.byte 0xbf, 0x06, 0x00, 0x00	; LD (XSP + 006h), 000h
 	.byte 0xc1, 0x8e, 0x28, 0x21	; LD A, (288Eh)
 	extz wa
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr z, LABEL_F4CDAF
 
 LABEL_F4CD61:
@@ -222990,7 +222990,7 @@ LABEL_F4CDD4:
 	jr LABEL_F4CE37
 
 LABEL_F4CDD6:
-	.byte 0xcf, 0x33, 0x07	; BIT 007h, L
+	bit 7, l
 	jr z, LABEL_F4CE0D
 	call LABEL_F40052
 	.byte 0xc1, 0x7a, 0x28, 0x3f, 0x00	; CP (287Ah), 000h
@@ -223022,7 +223022,7 @@ LABEL_F4CE18:
 
 LABEL_F4CE23:
 	.byte 0xc1, 0x0c, 0x26, 0x21	; LD A, (260Ch)
-	.byte 0xc9, 0x33, 0x07	; BIT 007h, A
+	bit 7, a
 	jr z, LABEL_F4CE31
 	calr LABEL_F4D230
 	jr LABEL_F4CE37
@@ -223040,7 +223040,7 @@ LABEL_F4CE3B:
 	.byte 0xf1, 0x7b, 0x28, 0xc8	; BIT 0, (287Bh)
 	.byte 0xb0, 0xf6	; RET Z
 	.byte 0xc1, 0x0c, 0x26, 0x25	; LD E, (260Ch)
-	.byte 0xcd, 0x33, 0x07	; BIT 007h, E
+	bit 7, e
 	jrl nz, LABEL_F4CFDA
 	jr LABEL_F4CE4D
 
@@ -223067,9 +223067,9 @@ LABEL_F4CE61:
 	jr z, LABEL_F4CF03
 	extz wa
 	sub wa, 0x80
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr lt, LABEL_F4CF0D
-	.byte 0xd8, 0xde	; CP WA, 6
+	cps wa, 6
 	jr gt, LABEL_F4CF0D
 	add wa, wa
 	.byte 0xf2, 0xd6, 0x4e, 0xe4, 0x34	; LDA XIX, 0E44ED6h
@@ -223130,7 +223130,7 @@ LABEL_F4CF4C:
 	cp l, 0x5F
 	jr ule, LABEL_F4CFA2
 	.byte 0xc1, 0x60, 0x26, 0x21	; LD A, (2660h)
-	.byte 0xc9, 0x33, 0x00	; BIT 000h, A
+	bit 0, a
 	jr nz, LABEL_F4CF82
 	.byte 0xd1, 0x3e, 0x27, 0x20	; LD WA, (273Eh)
 	ldb w, 0x0
@@ -223139,7 +223139,7 @@ LABEL_F4CF4C:
 	extz xwa
 	.byte 0xf1, 0x22, 0x27, 0x60	; LD (2722h), XWA
 	.byte 0xc1, 0x60, 0x26, 0x21	; LD A, (2660h)
-	.byte 0xc9, 0x31, 0x00	; SET 000h, A
+	set 0, a
 	.byte 0xf1, 0x60, 0x26, 0x41	; LD (2660h), A
 
 LABEL_F4CF82:
@@ -223201,14 +223201,14 @@ LABEL_F4CFDA:
 	.byte 0xd1, 0x3c, 0x27, 0x19, 0xaf, 0x28	; LDW_16_16 (28AFh), (273Ch)
 	.byte 0xd1, 0x3e, 0x27, 0x19, 0x66, 0x26	; LDW_16_16 (2666h), (273Eh)
 	.byte 0xc1, 0x7a, 0x28, 0x21	; LD A, (287Ah)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F4D047
 	cp a, 0xA
 	jrl nz, LABEL_F4D1B2
 	.byte 0xf1, 0x7a, 0x28, 0x00, 0x00	; LD (287Ah), 000h
 	.byte 0xd1, 0x32, 0x26, 0x3f, 0x01, 0x00	; CPW (2632h), 0001h
 	jr nz, LABEL_F4D047
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr nz, LABEL_F4D047
 	.byte 0x9f, 0x08, 0x3f, 0x00, 0x00	; CPW (XSP + 008h), 0000h
 	jr nz, LABEL_F4D047
@@ -223314,9 +223314,9 @@ LABEL_F4D127:
 	jr z, LABEL_F4D0F0
 	extz wa
 	sub wa, 0x80
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr lt, LABEL_F4D0FA
-	.byte 0xd8, 0xde	; CP WA, 6
+	cps wa, 6
 	jr gt, LABEL_F4D0FA
 	add wa, wa
 	.byte 0xf2, 0xe4, 0x4e, 0xe4, 0x34	; LDA XIX, 0E44EE4h
@@ -223335,7 +223335,7 @@ LABEL_F4D17D:
 	.byte 0xc7, 0xf9, 0xd9	; CP IZH, 1
 	jr nz, LABEL_F4D1A7
 	call LABEL_F421A6
-	.byte 0xcf, 0x33, 0x07	; BIT 007h, L
+	bit 7, l
 	jr nz, LABEL_F4D1E1
 	cp l, 0x5F
 	jr ugt, LABEL_F4D1E1
@@ -223378,7 +223378,7 @@ LABEL_F4D1E1:
 	.byte 0xc7, 0xfb, 0xd9	; CP QIZH, 1
 	jrl z, LABEL_F4D127
 	.byte 0xc1, 0x60, 0x26, 0x21	; LD A, (2660h)
-	.byte 0xc9, 0x33, 0x00	; BIT 000h, A
+	bit 0, a
 	jr nz, LABEL_F4D20D
 	.byte 0xd1, 0x3e, 0x27, 0x20	; LD WA, (273Eh)
 	.byte 0xf1, 0x1c, 0x27, 0x41	; LD (271Ch), A
@@ -223386,7 +223386,7 @@ LABEL_F4D1E1:
 	extz xwa
 	.byte 0xf1, 0x22, 0x27, 0x60	; LD (2722h), XWA
 	.byte 0xc1, 0x60, 0x26, 0x21	; LD A, (2660h)
-	.byte 0xc9, 0x31, 0x00	; SET 000h, A
+	set 0, a
 	.byte 0xf1, 0x60, 0x26, 0x41	; LD (2660h), A
 
 LABEL_F4D20D:
@@ -223407,7 +223407,7 @@ LABEL_F4D21C:
 
 LABEL_F4D230:
 	.byte 0xd1, 0x32, 0x26, 0x20	; LD WA, (2632h)
-	.byte 0xd8, 0xd9	; CP WA, 1
+	cps wa, 1
 	.byte 0xb0, 0xf6	; RET Z
 	.byte 0xc1, 0x34, 0x26, 0x23	; LD C, (2634h)
 	.byte 0xf1, 0x7f, 0x28, 0x50	; LD (287Fh), WA
@@ -223418,7 +223418,7 @@ LABEL_F4D230:
 	.byte 0xc1, 0x7a, 0x28, 0x3f, 0x00	; CP (287Ah), 000h
 	.byte 0xb0, 0xfe	; RET NZ
 	calr LABEL_F4DD80
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_F4D268
 	.byte 0xd1, 0xbf, 0x28, 0x19, 0xaf, 0x28	; LDW_16_16 (28AFh), (28BFh)
 	.byte 0xd1, 0xc1, 0x28, 0x19, 0x66, 0x26	; LDW_16_16 (2666h), (28C1h)
@@ -223449,7 +223449,7 @@ LABEL_F4D2A1:
 	.byte 0xbf, 0x04, 0x16, 0xaf, 0x28	; LDW (XSP + 004h), (28AFh)
 	.byte 0xbf, 0x06, 0x16, 0x66, 0x26	; LDW (XSP + 006h), (2666h)
 	.byte 0xc1, 0x0c, 0x26, 0x21	; LD A, (260Ch)
-	.byte 0xc9, 0x33, 0x07	; BIT 007h, A
+	bit 7, a
 	jrl nz, LABEL_F4D3D7
 	.byte 0xf1, 0x7b, 0x28, 0xc8	; BIT 0, (287Bh)
 	jrl nz, LABEL_F4D37D
@@ -223486,13 +223486,13 @@ LABEL_F4D2DE:
 	.byte 0xc7, 0xfb, 0xa8	; LD QIZH, 0
 
 LABEL_F4D2F8:
-	.byte 0xde, 0xd9	; CP IZ, 1
+	cps iz, 1
 	jr nz, LABEL_F4D34C
 	call LABEL_F421A6
 	cp l, 0x5F
 	jr ule, LABEL_F4D33D
 	.byte 0xc1, 0x60, 0x26, 0x21	; LD A, (2660h)
-	.byte 0xc9, 0x33, 0x00	; BIT 000h, A
+	bit 0, a
 	jr nz, LABEL_F4D32D
 	.byte 0xd1, 0x3e, 0x27, 0x20	; LD WA, (273Eh)
 	ldb w, 0x0
@@ -223501,7 +223501,7 @@ LABEL_F4D2F8:
 	extz xwa
 	.byte 0xf1, 0x22, 0x27, 0x60	; LD (2722h), XWA
 	.byte 0xc1, 0x60, 0x26, 0x21	; LD A, (2660h)
-	.byte 0xc9, 0x31, 0x00	; SET 000h, A
+	set 0, a
 	.byte 0xf1, 0x60, 0x26, 0x41	; LD (2660h), A
 
 LABEL_F4D32D:
@@ -223556,9 +223556,9 @@ LABEL_F4D37D:
 	jrl z, LABEL_F4D2CF
 	extz wa
 	sub wa, 0x80
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jrl lt, LABEL_F4D2D9
-	.byte 0xd8, 0xde	; CP WA, 6
+	cps wa, 6
 	jrl gt, LABEL_F4D2D9
 	add wa, wa
 	.byte 0xf2, 0xf2, 0x4e, 0xe4, 0x34	; LDA XIX, 0E44EF2h
@@ -223751,7 +223751,7 @@ LABEL_F4D558:
 	.byte 0xc1, 0x0c, 0x27, 0x23	; LD C, (270Ch)
 	extz bc
 	call LABEL_F4178A
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jrl z, LABEL_F4D713
 	.byte 0x9f, 0x04, 0x3f, 0x00, 0x00	; CPW (XSP + 004h), 0000h
 	jrl z, LABEL_F4D713
@@ -224007,7 +224007,7 @@ LABEL_F4D7EA:
 	inc 1, c
 	extz bc
 	call LABEL_F4178A
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jrl z, LABEL_F4D99D
 	.byte 0xc7, 0xf9, 0x89	; LD A, IZH
 	extz wa
@@ -224016,7 +224016,7 @@ LABEL_F4D7EA:
 	extz bc
 	call LABEL_F417E5
 	ld iz, hl
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jrl z, LABEL_F4D99D
 	cp iz, 0xFFFF
 	jrl z, LABEL_F4D99D
@@ -224353,7 +224353,7 @@ LABEL_F4DB40:
 	.byte 0xc1, 0x7a, 0x28, 0x3f, 0x00	; CP (287Ah), 000h
 	jr nz, LABEL_F4DB2A
 	call LABEL_F421A6
-	.byte 0xcf, 0x33, 0x07	; BIT 007h, L
+	bit 7, l
 	jr z, LABEL_F4DB40
 	.byte 0xd1, 0xaf, 0x28, 0x19, 0x3c, 0x27	; LDW_16_16 (273Ch), (28AFh)
 	.byte 0xd1, 0x66, 0x26, 0x19, 0x3e, 0x27	; LDW_16_16 (273Eh), (2666h)
@@ -224474,7 +224474,7 @@ LABEL_F4DC99:
 
 LABEL_F4DCB0:
 	call LABEL_F421A6
-	.byte 0xcf, 0x33, 0x07	; BIT 007h, L
+	bit 7, l
 	jr nz, LABEL_F4DCC5
 	call LABEL_F40052
 	.byte 0xc1, 0x7a, 0x28, 0x3f, 0x00	; CP (287Ah), 000h
@@ -224508,7 +224508,7 @@ LABEL_F4DCF4:
 
 LABEL_F4DD0B:
 	call LABEL_F421A6
-	.byte 0xcf, 0x33, 0x07	; BIT 007h, L
+	bit 7, l
 	jr nz, LABEL_F4DD20
 	call LABEL_F40052
 	.byte 0xc1, 0x7a, 0x28, 0x3f, 0x00	; CP (287Ah), 000h
@@ -224535,7 +224535,7 @@ LABEL_F4DD2F:
 
 LABEL_F4DD4F:
 	.byte 0xd1, 0x3e, 0x27, 0x20	; LD WA, (273Eh)
-	.byte 0xd8, 0xdd	; CP WA, 5
+	cps wa, 5
 	jr z, LABEL_F4DD65
 	dec 1, wa
 	.byte 0xf1, 0x20, 0x27, 0x41	; LD (2720h), A
@@ -224545,7 +224545,7 @@ LABEL_F4DD4F:
 LABEL_F4DD65:
 	.byte 0xd1, 0x3c, 0x27, 0x20	; LD WA, (273Ch)
 	call LABEL_F41C39
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	.byte 0xb0, 0xf6	; RET Z
 	.byte 0xf1, 0x26, 0x27, 0x53	; LD (2726h), HL
 	.byte 0xf1, 0x20, 0x27, 0x00, 0xff	; LD (2720h), 0ffh
@@ -224564,7 +224564,7 @@ LABEL_F4DD80:
 LABEL_F4DD94:
 	.byte 0xbf, 0x02, 0x30	; LDA XWA, XSP + 002h
 	calr LABEL_F4DDB9
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F4DDA3
 	ldw hl, 0xFFFF
 	jr LABEL_F4DDB3
@@ -224590,7 +224590,7 @@ LABEL_F4DDB9:
 
 LABEL_F4DDBC:
 	calr LABEL_F4DDD5
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F4DDC8
 	ldw hl, 0xFFFF
 	jr LABEL_F4DDD3
@@ -224608,11 +224608,11 @@ LABEL_F4DDD3:
 
 LABEL_F4DDD5:
 	.byte 0xd1, 0xc1, 0x28, 0x20	; LD WA, (28C1h)
-	.byte 0xd8, 0xdd	; CP WA, 5
+	cps wa, 5
 	jr nz, LABEL_F4DDF9
 	.byte 0xd1, 0xbf, 0x28, 0x20	; LD WA, (28BFh)
 	call LABEL_F41C39
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_F4DDED
 	ldw hl, 0xFFFF
 	ret
@@ -224709,7 +224709,7 @@ LABEL_F4DEBC:
 	.byte 0xd7, 0xfa, 0x98	; LD QIZ, WA
 	.byte 0xf1, 0xc1, 0x28, 0x50	; LD (28C1h), WA
 	.byte 0xd1, 0x66, 0x26, 0x20	; LD WA, (2666h)
-	.byte 0xd8, 0xdd	; CP WA, 5
+	cps wa, 5
 	jr nz, LABEL_F4DEE8
 	.byte 0xd1, 0xaf, 0x28, 0x20	; LD WA, (28AFh)
 	call LABEL_F41C39
@@ -224759,7 +224759,7 @@ LABEL_F4DF3A:
 	.byte 0xbf, 0x04, 0x31	; LDA XBC, XSP + 004h
 	add xbc, xwa
 	ld (xbc), l
-	.byte 0xcf, 0x33, 0x07	; BIT 007h, L
+	bit 7, l
 	jr z, LABEL_F4DF2E
 	.byte 0xd7, 0xfa, 0x69	; DEC 1, QIZ
 	call LABEL_F3FB2B
@@ -224898,7 +224898,7 @@ LABEL_F4E093:
 	inc 1, c
 	extz bc
 	call LABEL_F4178A
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jrl z, LABEL_F4E17F
 	.byte 0xc7, 0xfb, 0x89	; LD A, QIZH
 	extz wa
@@ -224907,7 +224907,7 @@ LABEL_F4E093:
 	extz bc
 	call LABEL_F417E5
 	ld wa, hl
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr z, LABEL_F4E0C6
 	cp wa, 0xFFFF
 	jr nz, LABEL_F4E0C9
@@ -225000,7 +225000,7 @@ LABEL_F4E194:
 LABEL_F4E197:
 	extz wa
 	calr LABEL_F4E1E7
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F4E194
 
 LABEL_F4E1A0:
@@ -225010,7 +225010,7 @@ LABEL_F4E1A0:
 LABEL_F4E1A4:
 	extz wa
 	calr LABEL_F4E1E7
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F4E1B1
 	ldw hl, 0xFFFF
 	ret
@@ -225022,7 +225022,7 @@ LABEL_F4E1B1:
 LABEL_F4E1B4:
 	extz wa
 	calr LABEL_F4E1E7
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F4E1C1
 	ldw hl, 0xFFFF
 	ret
@@ -225052,7 +225052,7 @@ LABEL_F4E1E4:
 LABEL_F4E1E7:
 	extz wa
 	calr LABEL_F4E1C4
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F4E1F4
 	ldw hl, 0xFFFF
 	ret
@@ -225060,7 +225060,7 @@ LABEL_F4E1E7:
 LABEL_F4E1F4:
 	call LABEL_F3FC17
 	ld a, l
-	.byte 0xc9, 0x33, 0x07	; BIT 007h, A
+	bit 7, a
 	jr z, LABEL_F4E1E7
 	lds hl, 0
 	ret
@@ -225076,7 +225076,7 @@ LABEL_F4E202:
 	.byte 0xc1, 0x7a, 0x28, 0x3f, 0x00	; CP (287Ah), 000h
 	jr nz, LABEL_F4E22B
 	call LABEL_F3FC17
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F4E22F
 
 LABEL_F4E22B:
@@ -225104,7 +225104,7 @@ LABEL_F4E24E:
 	.byte 0xd7, 0xfa, 0x98	; LD QIZ, WA
 	.byte 0xd1, 0x89, 0x28, 0x26	; LD IZ, (2889h)
 	calr LABEL_F4E202
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_F4E2AF
 	.byte 0xd7, 0xfa, 0x88	; LD WA, QIZ
 	.byte 0xf1, 0x8b, 0x28, 0x50	; LD (288Bh), WA
@@ -225169,14 +225169,14 @@ LABEL_F4E2B5:
 	.byte 0xc1, 0x7a, 0x28, 0x3f, 0x00	; CP (287Ah), 000h
 	jr nz, LABEL_F4E358
 	.byte 0xc1, 0x9d, 0x28, 0x21	; LD A, (289Dh)
-	.byte 0xc9, 0x33, 0x00	; BIT 000h, A
+	bit 0, a
 	jr nz, LABEL_F4E31E
-	.byte 0xc9, 0x33, 0x02	; BIT 002h, A
+	bit 2, a
 	jr z, LABEL_F4E311
 	.byte 0x8f, 0x06, 0x21	; LD A, (XSP + 006h)
 	extz wa
 	calr LABEL_F4E1E7
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_F4E358
 	jr LABEL_F4E36C
 
@@ -225212,7 +225212,7 @@ LABEL_F4E34C:
 	.byte 0x8f, 0x06, 0x21	; LD A, (XSP + 006h)
 	extz wa
 	calr LABEL_F4E1C4
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F4E35D
 
 LABEL_F4E358:
@@ -225243,14 +225243,14 @@ LABEL_F4E372:
 	jr nz, LABEL_F4E3DC
 	.byte 0xf1, 0x3b, 0x0d, 0x00, 0xff	; LD (0D3Bh), 0ffh
 	call LABEL_F3FC17
-	.byte 0xcf, 0x30, 0x07	; RES 007h, L
+	res 7, l
 	.byte 0xc1, 0xf4, 0x10, 0x21	; LD A, (10F4h)
 	or a, l
 	.byte 0xf1, 0xf4, 0x10, 0x41	; LD (10F4h), A
 	cp a, 0x48
 	jr z, LABEL_F4E421
 	.byte 0xc1, 0x9d, 0x28, 0x23	; LD C, (289Dh)
-	.byte 0xcb, 0x30, 0x02	; RES 002h, C
+	res 2, c
 	.byte 0xf1, 0x9d, 0x28, 0x43	; LD (289Dh), C
 	.byte 0xc1, 0x73, 0x28, 0x25	; LD E, (2873h)
 	extz de
@@ -225258,8 +225258,8 @@ LABEL_F4E372:
 	.byte 0xc1, 0xf4, 0x10, 0x21	; LD A, (10F4h)
 	.byte 0xc3, 0x07, 0xec, 0xe8, 0xf1	; CP A, (XHL + DE)
 	jr z, LABEL_F4E3D1
-	.byte 0xcb, 0x30, 0x00	; RES 000h, C
-	.byte 0xcb, 0x30, 0x02	; RES 002h, C
+	res 0, c
+	res 2, c
 	.byte 0xf1, 0x9d, 0x28, 0x43	; LD (289Dh), C
 	jrl LABEL_F4E4A0
 
@@ -225275,16 +225275,16 @@ LABEL_F4E3DC:
 LABEL_F4E3E0:
 	call LABEL_F3FC17
 	.byte 0xc1, 0x9d, 0x28, 0x23	; LD C, (289Dh)
-	.byte 0xcf, 0xdb	; CP L, 3
+	cps l, 3
 	jr c, LABEL_F4E3F5
 	cp l, 0xB
 	jr ugt, LABEL_F4E3F5
-	.byte 0xcf, 0xde	; CP L, 6
+	cps l, 6
 	jr nz, LABEL_F4E402
 
 LABEL_F4E3F5:
-	.byte 0xcb, 0x30, 0x00	; RES 000h, C
-	.byte 0xcb, 0x30, 0x02	; RES 002h, C
+	res 0, c
+	res 2, c
 	.byte 0xf1, 0x9d, 0x28, 0x43	; LD (289Dh), C
 	jrl LABEL_F4E4A0
 
@@ -225298,10 +225298,10 @@ LABEL_F4E40B:
 	jr LABEL_F4E45D
 
 LABEL_F4E411:
-	.byte 0xcf, 0xdb	; CP L, 3
+	cps l, 3
 	jr z, LABEL_F4E40B
-	.byte 0xcb, 0x30, 0x00	; RES 000h, C
-	.byte 0xcb, 0x30, 0x02	; RES 002h, C
+	res 0, c
+	res 2, c
 	.byte 0xf1, 0x9d, 0x28, 0x43	; LD (289Dh), C
 	jr LABEL_F4E4A0
 
@@ -225310,22 +225310,22 @@ LABEL_F4E421:
 	.byte 0xc1, 0x7a, 0x28, 0x3f, 0x00	; CP (287Ah), 000h
 	jr nz, LABEL_F4E4A0
 	call LABEL_F3FC17
-	.byte 0xcf, 0xdd	; CP L, 5
+	cps l, 5
 	jr z, LABEL_F4E46F
 	.byte 0xc1, 0x9d, 0x28, 0x21	; LD A, (289Dh)
-	.byte 0xc9, 0x30, 0x02	; RES 002h, A
+	res 2, a
 	.byte 0xf1, 0x9d, 0x28, 0x41	; LD (289Dh), A
 	.byte 0xc1, 0x73, 0x28, 0x3f, 0x0c	; CP (2873h), 00ch
 	jr z, LABEL_F4E452
-	.byte 0xc9, 0x30, 0x00	; RES 000h, A
-	.byte 0xc9, 0x30, 0x02	; RES 002h, A
+	res 0, a
+	res 2, a
 	.byte 0xf1, 0x9d, 0x28, 0x41	; LD (289Dh), A
 	jr LABEL_F4E4A0
 
 LABEL_F4E452:
-	.byte 0xcf, 0xdb	; CP L, 3
+	cps l, 3
 	jr nz, LABEL_F4E463
-	.byte 0xc9, 0x31, 0x00	; SET 000h, A
+	set 0, a
 	.byte 0xf1, 0x9d, 0x28, 0x41	; LD (289Dh), A
 
 LABEL_F4E45D:
@@ -225333,8 +225333,8 @@ LABEL_F4E45D:
 	jr LABEL_F4E4A0
 
 LABEL_F4E463:
-	.byte 0xc9, 0x30, 0x00	; RES 000h, A
-	.byte 0xc9, 0x30, 0x02	; RES 002h, A
+	res 0, a
+	res 2, a
 	.byte 0xf1, 0x9d, 0x28, 0x41	; LD (289Dh), A
 	jr LABEL_F4E4A0
 
@@ -225390,7 +225390,7 @@ LABEL_F4E4DD:
 	.byte 0xd7, 0xfa, 0x98	; LD QIZ, WA
 	.byte 0xd1, 0x89, 0x28, 0x26	; LD IZ, (2889h)
 	calr LABEL_F4E202
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_F4E544
 	.byte 0xd7, 0xfa, 0x88	; LD WA, QIZ
 	.byte 0xf1, 0x8b, 0x28, 0x50	; LD (288Bh), WA
@@ -225459,14 +225459,14 @@ LABEL_F4E54A:
 	.byte 0xc1, 0x7a, 0x28, 0x3f, 0x00	; CP (287Ah), 000h
 	jr nz, LABEL_F4E5F8
 	.byte 0xc1, 0x9d, 0x28, 0x21	; LD A, (289Dh)
-	.byte 0xc9, 0x33, 0x00	; BIT 000h, A
+	bit 0, a
 	jr nz, LABEL_F4E5BB
-	.byte 0xc9, 0x33, 0x02	; BIT 002h, A
+	bit 2, a
 	jr z, LABEL_F4E5AC
 	.byte 0x8f, 0x06, 0x21	; LD A, (XSP + 006h)
 	extz wa
 	calr LABEL_F4E1E7
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F4E5B7
 	jr LABEL_F4E5F8
 
@@ -225572,7 +225572,7 @@ LABEL_F4E684:
 LABEL_F4E699:
 	.byte 0xd7, 0xfa, 0x04	; PUSH QIZ
 	.byte 0xc1, 0x5e, 0x1d, 0x21	; LD A, (1D5Eh)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F4E6AA
 	dec 1, a
 	.byte 0xf1, 0x5e, 0x1d, 0x41	; LD (1D5Eh), A
@@ -225581,8 +225581,8 @@ LABEL_F4E6AA:
 	.byte 0x06, 0x06	; EI 006h
 	.byte 0xc1, 0x21, 0x04, 0x21	; LD A, (0421h)
 	.byte 0xc7, 0xfb, 0x99	; LD QIZH, A
-	.byte 0xc9, 0x30, 0x01	; RES 001h, A
-	.byte 0xc9, 0x30, 0x04	; RES 004h, A
+	res 1, a
+	res 4, a
 	.byte 0xf1, 0x21, 0x04, 0x41	; LD (0421h), A
 	.byte 0x06, 0x00	; EI 000h
 	.byte 0xd1, 0xa8, 0x28, 0x3f, 0x00, 0x00	; CPW (28A8h), 0000h
@@ -225634,13 +225634,13 @@ LABEL_F4E71F:
 	call LABEL_F3A1FA
 
 LABEL_F4E723:
-	.byte 0xcf, 0xdb	; CP L, 3
+	cps l, 3
 	jr z, LABEL_F4E76F
-	.byte 0xcf, 0xda	; CP L, 2
+	cps l, 2
 	jr z, LABEL_F4E769
-	.byte 0xcf, 0xdc	; CP L, 4
+	cps l, 4
 	jr z, LABEL_F4E763
-	.byte 0xcf, 0xd9	; CP L, 1
+	cps l, 1
 	jr z, LABEL_F4E75D
 	jr LABEL_F4E773
 
@@ -225765,7 +225765,7 @@ LABEL_F4E80D:
 LABEL_F4E810:
 	ld wa, iz
 	call LABEL_F41C85
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_F4E81D
 	.byte 0xde, 0x1c, 0xf3	; DJNZ IZ, LABEL_F4E810
 
@@ -225781,7 +225781,7 @@ LABEL_F4E821:
 LABEL_F4E824:
 	ld wa, iz
 	call LABEL_F41C85
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F4E836
 	inc 1, iz
 	cp iz, 0x4D8
@@ -225864,7 +225864,7 @@ LABEL_F4E8BD:
 	ld wa, iz
 	call LABEL_F41C39
 	ld wa, hl
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr z, LABEL_F4E8D9
 	ld bc, iz
 	call LABEL_F41C72
@@ -225882,7 +225882,7 @@ LABEL_F4E8DF:
 	.byte 0xc7, 0xfb, 0x8b	; LD C, QIZH
 	extz bc
 	call LABEL_F4178A
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F4E914
 	.byte 0xc7, 0xfa, 0x89	; LD A, QIZL
 	extz wa
@@ -226226,7 +226226,7 @@ LABEL_F4EC45:
 	extz wa
 	.byte 0xf2, 0x78, 0xd7, 0xee, 0x31	; LDA XBC, 0EED778h
 	.byte 0xc3, 0x07, 0xe4, 0xe0, 0x21	; LD A, (XBC + WA)
-	.byte 0xc9, 0x33, 0x01	; BIT 001h, A
+	bit 1, a
 	jr z, LABEL_F4EC89
 	.byte 0xaf, 0x10, 0x20	; LD XWA, (XSP + 010h)
 	ld a, (xwa)
@@ -226254,7 +226254,7 @@ LABEL_F4EC89:
 
 LABEL_F4EC90:
 	ld (xde), a
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_F4EC6A
 
 LABEL_F4EC96:
@@ -226289,7 +226289,7 @@ LABEL_F4ECD4:
 	push xwa
 	call LABEL_FF0F35
 	.byte 0xef, 0x60	; INC 8, XSP
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F4ED00
 	.byte 0x8f, 0x06, 0x61	; INC 1, (XSP + 006h)
 	ld xwa, 0x22
@@ -226418,7 +226418,7 @@ LABEL_F4EDD4:
 	ld xwa, (xwa)
 	.byte 0xb0, 0xe8	; CALL T, XWA
 	.byte 0xef, 0x60	; INC 8, XSP
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F4EE69
 	.byte 0x8f, 0x0e, 0x21	; LD A, (XSP + 00eh)
 	extz wa
@@ -226548,7 +226548,7 @@ LABEL_F4EF2E:
 	.byte 0xa8, 0x04, 0x20	; LD XWA, (XWA + 004h)
 	.byte 0xb0, 0xe8	; CALL T, XWA
 	add xsp, 0xA
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F4EF50
 	ld l, (xsp)
 	extz hl
@@ -226606,7 +226606,7 @@ LABEL_F4EFD5:
 	.byte 0xa8, 0x0c, 0x20	; LD XWA, (XWA + 00ch)
 	.byte 0xb0, 0xe8	; CALL T, XWA
 	add xsp, 0xA
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F4EFFC
 	ld l, (xsp)
 	extz hl
@@ -226690,7 +226690,7 @@ LABEL_F4F0B9:
 	call LABEL_F4F207
 	inc 4, xsp
 	ld iz, hl
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr z, LABEL_F4F0F9
 	.byte 0x9f, 0x04, 0x3f, 0x00, 0x00	; CPW (XSP + 004h), 0000h
 	jr nz, LABEL_F4F0F9
@@ -226705,7 +226705,7 @@ LABEL_F4F0F9:
 	call LABEL_F4F206
 	.byte 0x9f, 0x04, 0x3f, 0x00, 0x00	; CPW (XSP + 004h), 0000h
 	jr nz, LABEL_F4F116
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr z, LABEL_F4F11B
 
 LABEL_F4F116:
@@ -226842,11 +226842,11 @@ LABEL_F4F34E:
 
 LABEL_F4F359:
 	.byte 0x9f, 0x0c, 0x20	; LD WA, (XSP + 00ch)
-	.byte 0xd8, 0xda	; CP WA, 2
+	cps wa, 2
 	jr z, LABEL_F4F3AA
-	.byte 0xd8, 0xd9	; CP WA, 1
+	cps wa, 1
 	jr z, LABEL_F4F386
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr nz, LABEL_F4F3BF
 	ld xwa, xde
 	.byte 0xa9, 0x47, 0xf0	; CP XWA, (XBC + 047h)
@@ -226901,7 +226901,7 @@ LABEL_F4F3BF:
 	ldw hl, 0x13
 
 LABEL_F4F3C2:
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	.byte 0xb0, 0xf6	; RET Z
 	ld a, l
 	exts wa
@@ -227102,14 +227102,14 @@ LABEL_F4F5FD:
 	or xhl, xhl
 	jr z, LABEL_F4F657
 	.byte 0x9f, 0x16, 0x20	; LD WA, (XSP + 016h)
-	.byte 0xc9, 0x33, 0x06	; BIT 006h, A
+	bit 6, a
 	jr z, LABEL_F4F639
 	ld xiz, xhl
 
 LABEL_F4F611:
 	.byte 0x8e, 0x16, 0x21	; LD A, (XIZ + 016h)
 	and a, 0x3
-	.byte 0xc9, 0xdb	; CP A, 3
+	cps a, 3
 	jrl nz, LABEL_F4F711
 	push xiz
 	calr LABEL_F4F83A
@@ -227117,7 +227117,7 @@ LABEL_F4F611:
 	.byte 0xbe, 0x14, 0x53	; LD (XIZ + 014h), HL
 	.byte 0xaf, 0x0a, 0x20	; LD XWA, (XSP + 00ah)
 	.byte 0xb8, 0x06, 0x53	; LD (XWA + 006h), HL
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl z, LABEL_F4F711
 	.byte 0xbe, 0x16, 0x00, 0x00	; LD (XIZ + 016h), 000h
 	ld xhl, xiz
@@ -227195,7 +227195,7 @@ LABEL_F4F6D0:
 	jr z, LABEL_F4F6FF
 	.byte 0x9b, 0x12, 0x38, 0x14, 0x00	; ADDW (XHL + 012h), 0014h
 	.byte 0x9b, 0x12, 0x20	; LD WA, (XHL + 012h)
-	.byte 0xd8, 0x33, 0x0f	; BIT 00fh, WA
+	bit 15, wa
 	jr z, LABEL_F4F6ED
 	.byte 0xf2, 0xe0, 0xe3, 0x03, 0x00, 0x01	; LD (03E3E0h), 001h
 
@@ -227231,7 +227231,7 @@ LABEL_F4F711:
 	.byte 0xbe, 0x18, 0x41	; LD (XIZ + 018h), A
 	.byte 0xbe, 0x14, 0x02, 0x00, 0x00	; LDW (XIZ + 014h:8), 0000h
 	.byte 0x9f, 0x16, 0x20	; LD WA, (XSP + 016h)
-	.byte 0xc9, 0x33, 0x05	; BIT 005h, A
+	bit 5, a
 	jrl nz, LABEL_F4F7EF
 	ld xwa, xiz
 	push xwa
@@ -227295,7 +227295,7 @@ LABEL_F4F7C8:
 	.byte 0x9e, 0x14, 0x3f, 0x00, 0x00	; CPW (XIZ + 014h), 0000h
 	jr z, LABEL_F4F7EF
 	.byte 0x9f, 0x16, 0x20	; LD WA, (XSP + 016h)
-	.byte 0xc9, 0x33, 0x02	; BIT 002h, A
+	bit 2, a
 	jr z, LABEL_F4F7EF
 	.byte 0xaf, 0x0a, 0x20	; LD XWA, (XSP + 00ah)
 	.byte 0xa8, 0x12, 0x20	; LD XWA, (XWA + 012h)
@@ -227316,12 +227316,12 @@ LABEL_F4F7EF:
 	.byte 0x9e, 0x14, 0x3f, 0x00, 0x00	; CPW (XIZ + 014h), 0000h
 	jr nz, LABEL_F4F82A
 	.byte 0x9f, 0x16, 0x20	; LD WA, (XSP + 016h)
-	.byte 0xd8, 0x30, 0x05	; RES 005h, WA
-	.byte 0xd8, 0x31, 0x00	; SET 000h, WA
+	res 5, wa
+	set 0, wa
 	.byte 0xbe, 0x16, 0x41	; LD (XIZ + 016h), A
 	.byte 0xbe, 0x12, 0x02, 0x14, 0x00	; LDW (XIZ + 012h:8), 0014h
 	ldw wa, 0x14
-	.byte 0xd8, 0x33, 0x0f	; BIT 00fh, WA
+	bit 15, wa
 	jr z, LABEL_F4F824
 	.byte 0xf2, 0xe0, 0xe3, 0x03, 0x00, 0x01	; LD (03E3E0h), 001h
 
@@ -227703,7 +227703,7 @@ LABEL_F4FC85:
 
 LABEL_F4FC91:
 	.byte 0x9f, 0x16, 0x20	; LD WA, (XSP + 016h)
-	.byte 0xc9, 0x33, 0x00	; BIT 000h, A
+	bit 0, a
 	jr z, LABEL_F4FCA1
 	.byte 0x9f, 0x0a, 0x23	; LD HL, (XSP + 00ah)
 	srl hl, 4
@@ -228637,7 +228637,7 @@ LABEL_F518B2:
 	push xwa
 	calr LABEL_F4FBA5
 	inc 6, xsp
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_F518C3
 	.byte 0xd7, 0xfa, 0x61	; INC 1, QIZ
 
@@ -228890,9 +228890,9 @@ LABEL_F51E49:
 
 format_FD:
 	extz wa
-	.byte 0xd8, 0xdb	; CP WA, 3
+	cps wa, 3
 	jrl z, LABEL_F52291
-	.byte 0xd8, 0xda	; CP WA, 2
+	cps wa, 2
 	jr nz, LABEL_F51E5C
 	jr LABEL_F51EAB
 
@@ -228906,7 +228906,7 @@ LABEL_F51E5F:
 	jr z, LABEL_F51E9B
 	cp wa, 0x30
 	jr z, LABEL_F51E9B
-	.byte 0xd8, 0xde	; CP WA, 6
+	cps wa, 6
 	jr z, LABEL_F51E93
 	cp wa, 0x33
 	jr z, LABEL_F51E8B
@@ -229674,7 +229674,7 @@ LABEL_F5261C:
 	.byte 0xf1, 0x10, 0x8a, 0x02, 0xff, 0xff	; LDW (8A10h), 0ffffh
 	.byte 0xc7, 0xfb, 0xa8	; LD QIZH, 0
 	call Check_for_Floppy_Disk_Change
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_F52657
 	.byte 0xc7, 0xfb, 0xa9	; LD QIZH, 1
 	jrl LABEL_F5272E
@@ -229684,7 +229684,7 @@ LABEL_F52657:
 	push xwa
 	call LABEL_F97CCA
 	inc 4, xsp
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F5266D
 	.byte 0xc7, 0xfb, 0xa8	; LD QIZH, 0
 	jrl LABEL_F5272E
@@ -229694,7 +229694,7 @@ LABEL_F5266D:
 	push xwa
 	call LABEL_F97CCA
 	inc 4, xsp
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F52683
 	.byte 0xc7, 0xfb, 0xa8	; LD QIZH, 0
 	jrl LABEL_F5272E
@@ -229704,7 +229704,7 @@ LABEL_F52683:
 	push xwa
 	call LABEL_F97CCA
 	inc 4, xsp
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_F526D4
 	.byte 0xaf, 0x02, 0x20	; LD XWA, (XSP + 002h)
 	.byte 0x80, 0x3f, 0xf0	; CP (XWA), 0f0h
@@ -229740,7 +229740,7 @@ LABEL_F526D4:
 	push xwa
 	call LABEL_F97CCA
 	inc 4, xsp
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F526E9
 	.byte 0xc7, 0xfb, 0xa8	; LD QIZH, 0
 	jr LABEL_F5272E
@@ -229750,7 +229750,7 @@ LABEL_F526E9:
 	push xwa
 	call LABEL_F97CCA
 	inc 4, xsp
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_F5272E
 	.byte 0xaf, 0x02, 0x20	; LD XWA, (XSP + 002h)
 	.byte 0x80, 0x3f, 0x00	; CP (XWA), 000h
@@ -229773,7 +229773,7 @@ LABEL_F52716:
 
 LABEL_F52723:
 	call LABEL_F53136
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_F5272E
 	.byte 0xc7, 0xfb, 0xad	; LD QIZH, 5
 
@@ -229802,9 +229802,9 @@ GetDiskFreeSpace:	; f52751
 	calr LABEL_F51E49
 	ld a, l
 	extz wa
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr mi, LABEL_F5279B
-	.byte 0xd8, 0xde	; CP WA, 6
+	cps wa, 6
 	jr gt, LABEL_F5279B
 	add wa, wa
 	.byte 0xf2, 0x04, 0x51, 0xe4, 0x34	; LDA XIX, 0E45104h
@@ -229852,9 +229852,9 @@ GetVolumeLabel:
 	calr LABEL_F51E49
 	ld a, l
 	extz wa
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr mi, LABEL_F527FC
-	.byte 0xd8, 0xde	; CP WA, 6
+	cps wa, 6
 	jr gt, LABEL_F527FC
 	add wa, wa
 	.byte 0xf2, 0x18, 0x51, 0xe4, 0x34	; LDA XIX, 0E45118h
@@ -229886,7 +229886,7 @@ LABEL_F52818:
 	push xwa
 	call LABEL_F4EE70
 	.byte 0xbf, 0x0c, 0x37	; LDA XSP, XSP + 00ch
-	.byte 0xdb, 0xd9	; CP HL, 1
+	cps hl, 1
 	jr nz, LABEL_F5288E
 
 LABEL_F5282E:
@@ -229925,7 +229925,7 @@ LABEL_F52878:
 	push xwa
 	call LABEL_F4EE70
 	.byte 0xbf, 0x0c, 0x37	; LDA XSP, XSP + 00ch
-	.byte 0xdb, 0xd9	; CP HL, 1
+	cps hl, 1
 	jr z, LABEL_F5282E
 
 LABEL_F5288E:
@@ -230102,7 +230102,7 @@ LABEL_F529E3:
 	ld xwa, xiz
 	.byte 0xbf, 0x0c, 0x31	; LDA XBC, XSP + 00ch
 	calr LABEL_F5290A
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F52A0E
 	.byte 0xaf, 0x08, 0x20	; LD XWA, (XSP + 008h)
 	push xwa
@@ -230170,7 +230170,7 @@ LABEL_F52A6F:
 	.byte 0xaf, 0x08, 0x20	; LD XWA, (XSP + 008h)
 	.byte 0xaf, 0x10, 0x21	; LD XBC, (XSP + 010h)
 	.byte 0x1e, 0x57, 0x00	; CALR _findnext
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_F52A9A
 	.byte 0xaf, 0x08, 0x23	; LD XHL, (XSP + 008h)
 	jr LABEL_F52AA5
@@ -230248,7 +230248,7 @@ LABEL_F52B0A:
 	push xwa
 	call LABEL_F4EE70
 	.byte 0xbf, 0x0c, 0x37	; LDA XSP, XSP + 00ch
-	.byte 0xdb, 0xd9	; CP HL, 1
+	cps hl, 1
 	jrl nz, LABEL_F52BA9
 
 LABEL_F52B29:
@@ -230268,7 +230268,7 @@ LABEL_F52B29:
 	.byte 0xaf, 0x08, 0x21	; LD XBC, (XSP + 008h)
 	.byte 0xa9, 0x04, 0x21	; LD XBC, (XBC + 004h)
 	calr LABEL_F52BB1
-	.byte 0xdb, 0xd9	; CP HL, 1
+	cps hl, 1
 	jr nz, LABEL_F52B90
 	.byte 0x0b, 0x08, 0x00	; PUSHW 0008h
 	.byte 0xbf, 0x2e, 0x30	; LDA XWA, XSP + 02eh
@@ -230301,7 +230301,7 @@ LABEL_F52B90:
 	push xwa
 	call LABEL_F4EE70
 	.byte 0xbf, 0x0c, 0x37	; LDA XSP, XSP + 00ch
-	.byte 0xdb, 0xd9	; CP HL, 1
+	cps hl, 1
 	jr z, LABEL_F52B29
 
 LABEL_F52BA9:
@@ -230439,7 +230439,7 @@ LABEL_F52C8E:
 	ld xwa, xiz
 	.byte 0xaf, 0x04, 0x21	; LD XBC, (XSP + 004h)
 	calr LABEL_F52CCF
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_F52CB6
 	ld xhl, xiz
 	jr LABEL_F52CC0
@@ -230798,7 +230798,7 @@ LABEL_F530F9:
 	.byte 0xf2, 0x72, 0x2d, 0x02, 0x31	; LDA XBC, 022D72h
 	.byte 0xf2, 0xee, 0xe3, 0x03, 0x61	; LD (03E3EEh), XBC
 	calr LABEL_F530BF
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F5312D
 	.byte 0xf2, 0x8a, 0x35, 0x02, 0x00, 0x02	; LD (02358Ah), 002h
 	.byte 0xf2, 0xec, 0xe3, 0x03, 0x00, 0x00	; LD (03E3ECh), 000h
@@ -230813,7 +230813,7 @@ LABEL_F5312D:
 
 LABEL_F53136:
 	calr LABEL_F531B0
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F53158
 	cp hl, 0x31
 	jr z, LABEL_F53155
@@ -230841,7 +230841,7 @@ LABEL_F53158:
 	jr z, LABEL_F53187
 	cp hl, 0xFC
 	jr z, LABEL_F53184
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F5318D
 	cp hl, 0x31
 	jr z, LABEL_F53181
@@ -230872,7 +230872,7 @@ LABEL_F5318D:
 	push xwa
 	call 0xFF0CC1
 	add xsp, 0xA
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_F531AD
 	lds hl, 0
 	ret
@@ -230905,7 +230905,7 @@ LABEL_F531CF:
 LABEL_F531E2:
 	push xiz
 	lds iz, 0
-	.byte 0xde, 0xdf	; CP IZ, 7
+	cps iz, 7
 	jr ge, LABEL_F5321F
 
 LABEL_F531E9:
@@ -230930,7 +230930,7 @@ LABEL_F531E9:
 
 LABEL_F53219:
 	inc 1, iz
-	.byte 0xde, 0xdf	; CP IZ, 7
+	cps iz, 7
 	jr lt, LABEL_F531E9
 
 LABEL_F5321F:
@@ -231005,7 +231005,7 @@ LABEL_F532B2:
 LABEL_F532BB:
 	call LABEL_F54422
 	call SubCPU_Payload_GetErrorFlag
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F532CB
 	call LABEL_F5CE20
 
@@ -231066,7 +231066,7 @@ Seq_DispatcherTick:
 
 Seq_DispatcherTick_Process:
 	call 0xF5452F
-	.byte 0xcb, 0xd8	; CP C, 0
+	cps c, 0
 	jr nz, LABEL_F53366
 	calr LABEL_F53367
 	call LABEL_F534F4
@@ -231104,42 +231104,42 @@ LABEL_F53367:
 	.byte 0xf1, 0xf9, 0x32, 0x41	; LD (32F9h), A
 	.byte 0xc1, 0x5f, 0xfc, 0x20	; LD W, (0FC5Fh)
 	xor a, a
-	.byte 0xc8, 0x33, 0x06	; BIT 006h, W
+	bit 6, w
 	jr z, LABEL_F533A0
 	or a, 0x1
 
 LABEL_F533A0:
-	.byte 0xc8, 0x33, 0x07	; BIT 007h, W
+	bit 7, w
 	jr z, LABEL_F533A8
 	or a, 0x2
 
 LABEL_F533A8:
 	.byte 0xf1, 0xfb, 0x32, 0x41	; LD (32FBh), A
 	xor a, a
-	.byte 0xc8, 0x33, 0x04	; BIT 004h, W
+	bit 4, w
 	jr z, LABEL_F533B6
 	or a, 0x1
 
 LABEL_F533B6:
-	.byte 0xc8, 0x33, 0x05	; BIT 005h, W
+	bit 5, w
 	jr z, LABEL_F533BE
 	or a, 0x2
 
 LABEL_F533BE:
 	.byte 0xf1, 0xfd, 0x32, 0x41	; LD (32FDh), A
 	xor a, a
-	.byte 0xc8, 0x33, 0x02	; BIT 002h, W
+	bit 2, w
 	jr z, LABEL_F533CC
 	or a, 0x1
 
 LABEL_F533CC:
-	.byte 0xc8, 0x33, 0x03	; BIT 003h, W
+	bit 3, w
 	jr z, LABEL_F533D4
 	or a, 0x2
 
 LABEL_F533D4:
 	.byte 0xc1, 0x60, 0xfc, 0x20	; LD W, (0FC60h)
-	.byte 0xc8, 0x33, 0x02	; BIT 002h, W
+	bit 2, w
 	jr z, LABEL_F533E0
 	or a, 0x4
 
@@ -231187,7 +231187,7 @@ LABEL_F53437:
 	jr LABEL_F5346D
 
 LABEL_F5344B:
-	.byte 0xce, 0xdf	; CP H, 7
+	cps h, 7
 	jr ule, LABEL_F53451
 	xor h, h
 
@@ -231395,7 +231395,7 @@ LABEL_F5368E:
 	and a, 0x3F
 	jrl z, LABEL_F53720
 	.byte 0xc1, 0xd8, 0x32, 0x21	; LD A, (32D8h)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_F53720
 	.byte 0xc1, 0xdc, 0x32, 0x21	; LD A, (32DCh)
 	.byte 0xc1, 0xd8, 0x32, 0xf1	; CP A, (32D8h)
@@ -231427,7 +231427,7 @@ LABEL_F536F1:
 	call LABEL_FE1CB9
 	.byte 0xc1, 0x5d, 0xfc, 0x21	; LD A, (0FC5Dh)
 	and a, 0x7
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F53720
 	.byte 0xf1, 0x84, 0x32, 0xc9	; BIT 1, (3284h)
 	jr z, LABEL_F53720
@@ -231441,7 +231441,7 @@ LABEL_F53721:
 	push xwa
 	.byte 0xc1, 0x5d, 0xfc, 0x21	; LD A, (0FC5Dh)
 	and a, 0x7
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F53731
 	call LABEL_FB4277
 
@@ -231559,7 +231559,7 @@ LABEL_F53832:
 	or a, 0x8
 
 LABEL_F5383B:
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F53853
 	ld w, a
 	xor w, 0xFF
@@ -231648,7 +231648,7 @@ LABEL_F538EC:
 LABEL_F5392A:
 	.byte 0xd1, 0xe3, 0x32, 0x20	; LD WA, (32E3h)
 	and w, 0x7
-	.byte 0xc8, 0xd8	; CP W, 0
+	cps w, 0
 	jr z, LABEL_F5393A
 	.byte 0xc1, 0x26, 0x33, 0x3e, 0x3f	; OR (3326h), 03fh
 
@@ -231672,7 +231672,7 @@ LABEL_F53960:
 
 LABEL_F53961:
 	.byte 0xc1, 0x33, 0x04, 0x21	; LD A, (0433h)
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	jr nz, LABEL_F5396E
 	.byte 0xc1, 0x26, 0x33, 0x3e, 0x3f	; OR (3326h), 03fh
 
@@ -231944,7 +231944,7 @@ LABEL_F53C0B:
 	.byte 0xc1, 0x27, 0x33, 0x3c, 0xc0	; AND (3327h), 0c0h
 
 LABEL_F53C2F:
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F53C45
 	ldb w, 0x0
 	xor a, 0xFF
@@ -232458,7 +232458,7 @@ LABEL_F54116:
 	ret
 
 LABEL_F54131:
-	.byte 0xcd, 0x33, 0x07	; BIT 007h, E
+	bit 7, e
 	jr z, LABEL_F5413C
 	or d, 0x10
 	and e, 0x7F
@@ -232795,7 +232795,7 @@ LABEL_F5453E:
 	.byte 0xd1, 0x54, 0x34, 0x20	; LD WA, (3454h)
 	add wa, 0x1
 	.byte 0xf1, 0x54, 0x34, 0x50	; LD (3454h), WA
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr nz, LABEL_F5455B
 	ldb a, 0xEE
 	.byte 0xf1, 0xdc, 0xe3, 0x41	; LD (0E3DCh), A
@@ -232927,7 +232927,7 @@ LABEL_F54688:
 	srl l, 2
 	.byte 0xc1, 0xe6, 0x32, 0x3f, 0x00	; CP (32E6h), 000h
 	jrl nz, LABEL_F5474D
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_F546D7
 	ldb a, 0xC
 	calr LABEL_F53DF1
@@ -232950,7 +232950,7 @@ LABEL_F54688:
 	jrl LABEL_F54C21
 
 LABEL_F546D7:
-	.byte 0xcf, 0xd9	; CP L, 1
+	cps l, 1
 	jr nz, LABEL_F54714
 	ldb a, 0x12
 	calr LABEL_F53DF1
@@ -232996,7 +232996,7 @@ LABEL_F54714:
 LABEL_F5474D:
 	.byte 0xc1, 0xe6, 0x32, 0x3f, 0x01	; CP (32E6h), 001h
 	jrl nz, LABEL_F54808
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_F54792
 	ldb a, 0xC
 	calr LABEL_F53DF1
@@ -233019,7 +233019,7 @@ LABEL_F5474D:
 	jrl LABEL_F54C21
 
 LABEL_F54792:
-	.byte 0xcf, 0xd9	; CP L, 1
+	cps l, 1
 	jr nz, LABEL_F547CF
 	ldb a, 0x12
 	calr LABEL_F53DF1
@@ -233065,7 +233065,7 @@ LABEL_F547CF:
 LABEL_F54808:
 	.byte 0xc1, 0xe6, 0x32, 0x3f, 0x02	; CP (32E6h), 002h
 	jrl nz, LABEL_F548C3
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_F5484D
 	ldb a, 0xC
 	calr LABEL_F53DF1
@@ -233088,7 +233088,7 @@ LABEL_F54808:
 	jrl LABEL_F54C21
 
 LABEL_F5484D:
-	.byte 0xcf, 0xd9	; CP L, 1
+	cps l, 1
 	jr nz, LABEL_F5488A
 	ldb a, 0x12
 	calr LABEL_F53DF1
@@ -233134,7 +233134,7 @@ LABEL_F5488A:
 LABEL_F548C3:
 	.byte 0xc1, 0xe6, 0x32, 0x3f, 0x03	; CP (32E6h), 003h
 	jrl nz, LABEL_F5497E
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_F54908
 	ldb a, 0xC
 	calr LABEL_F53DF1
@@ -233157,7 +233157,7 @@ LABEL_F548C3:
 	jrl LABEL_F54C21
 
 LABEL_F54908:
-	.byte 0xcf, 0xd9	; CP L, 1
+	cps l, 1
 	jr nz, LABEL_F54945
 	ldb a, 0x12
 	calr LABEL_F53DF1
@@ -233203,7 +233203,7 @@ LABEL_F54945:
 LABEL_F5497E:
 	.byte 0xc1, 0xe6, 0x32, 0x3f, 0x04	; CP (32E6h), 004h
 	jrl nz, LABEL_F54A39
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_F549C3
 	ldb a, 0xC
 	calr LABEL_F53DF1
@@ -233226,7 +233226,7 @@ LABEL_F5497E:
 	jrl LABEL_F54C21
 
 LABEL_F549C3:
-	.byte 0xcf, 0xd9	; CP L, 1
+	cps l, 1
 	jr nz, LABEL_F54A00
 	ldb a, 0x12
 	calr LABEL_F53DF1
@@ -233272,7 +233272,7 @@ LABEL_F54A00:
 LABEL_F54A39:
 	.byte 0xc1, 0xe6, 0x32, 0x3f, 0x05	; CP (32E6h), 005h
 	jrl nz, LABEL_F54AF4
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_F54A7E
 	ldb a, 0xC
 	calr LABEL_F53DF1
@@ -233295,7 +233295,7 @@ LABEL_F54A39:
 	jrl LABEL_F54C21
 
 LABEL_F54A7E:
-	.byte 0xcf, 0xd9	; CP L, 1
+	cps l, 1
 	jr nz, LABEL_F54ABB
 	ldb a, 0x12
 	calr LABEL_F53DF1
@@ -233341,7 +233341,7 @@ LABEL_F54ABB:
 LABEL_F54AF4:
 	.byte 0xc1, 0xe6, 0x32, 0x3f, 0x06	; CP (32E6h), 006h
 	jrl nz, LABEL_F54BAF
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_F54B39
 	ldb a, 0xC
 	calr LABEL_F53DF1
@@ -233364,7 +233364,7 @@ LABEL_F54AF4:
 	jrl LABEL_F54C21
 
 LABEL_F54B39:
-	.byte 0xcf, 0xd9	; CP L, 1
+	cps l, 1
 	jr nz, LABEL_F54B76
 	ldb a, 0x12
 	calr LABEL_F53DF1
@@ -233408,7 +233408,7 @@ LABEL_F54B76:
 	jrl LABEL_F54C21
 
 LABEL_F54BAF:
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_F54BEB
 	ldb a, 0xC
 	calr LABEL_F53DF1
@@ -233968,7 +233968,7 @@ LABEL_F5515D:
 	.byte 0xc1, 0xda, 0x32, 0x21	; LD A, (32DAh)
 
 LABEL_F5516B:
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_F55173
 	ldb a, 0x0
 	jr LABEL_F551B7
@@ -233978,7 +233978,7 @@ LABEL_F55173:
 	.byte 0xc1, 0xcb, 0x32, 0xf1	; CP A, (32CBh)
 	jr ugt, LABEL_F55187
 	add w, a
-	.byte 0xc8, 0x33, 0x07	; BIT 007h, W
+	bit 7, w
 	jr z, LABEL_F55185
 	sub w, 0xC
 
@@ -233988,7 +233988,7 @@ LABEL_F55185:
 LABEL_F55187:
 	sub a, 0xC
 	add w, a
-	.byte 0xc8, 0x33, 0x07	; BIT 007h, W
+	bit 7, w
 	jr z, LABEL_F55194
 	add w, 0xC
 
@@ -234042,21 +234042,21 @@ LABEL_F551E4:
 
 LABEL_F551F4:
 	.byte 0xc3, 0x03, 0xf4, 0xec, 0x27	; LD L, (XIY + L)
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F55223
 	.byte 0xc1, 0x33, 0x34, 0x26	; LD H, (3433h)
-	.byte 0xcf, 0xd9	; CP L, 1
+	cps l, 1
 	jr z, LABEL_F55209
 	.byte 0xc1, 0x34, 0x34, 0x26	; LD H, (3434h)
 
 LABEL_F55209:
-	.byte 0xce, 0x33, 0x05	; BIT 005h, H
+	bit 5, h
 	jr z, LABEL_F55212
 	ldb a, 0x0
 	jr LABEL_F5526C
 
 LABEL_F55212:
-	.byte 0xce, 0x33, 0x04	; BIT 004h, H
+	bit 4, h
 	jr nz, LABEL_F5521E
 	and h, 0xF
 	add a, h
@@ -234253,7 +234253,7 @@ LABEL_F5545C:
 
 LABEL_F55473:
 	ld a, (xix)
-	.byte 0xc9, 0x33, 0x07	; BIT 007h, A
+	bit 7, a
 	jr z, LABEL_F5549A
 	ld a, w
 	call 0xF5549B
@@ -234262,7 +234262,7 @@ LABEL_F55473:
 	call 0xF5549B
 	.byte 0x8c, 0x03, 0x21	; LD A, (XIX + 003h)
 	sub a, 0x10
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr gt, LABEL_F55496
 	ldb a, 0x1
 
@@ -234641,7 +234641,7 @@ LABEL_F5570C:
 	.byte 0xf1, 0xe9, 0x33, 0x41	; LD (33E9h), A
 	.byte 0xc1, 0x83, 0x32, 0x21	; LD A, (3283h)
 	and a, 0xFD
-	.byte 0xc9, 0x33, 0x00	; BIT 000h, A
+	bit 0, a
 	jr z, LABEL_F5578B
 	or a, 0x2
 
@@ -234904,7 +234904,7 @@ LABEL_F55A47:
 LABEL_F55A78:
 	.byte 0xc1, 0xcf, 0x34, 0x21	; LD A, (34CFh)
 	and a, 0xEF
-	.byte 0xc9, 0x33, 0x02	; BIT 002h, A
+	bit 2, a
 	jr z, LABEL_F55A87
 	or a, 0x10
 
@@ -234953,22 +234953,22 @@ LABEL_F55AFA:
 LABEL_F55B0A:
 	ld xiy, 0xF5526F
 	.byte 0xc3, 0x03, 0xf4, 0xec, 0x27	; LD L, (XIY + L)
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F55B43
 	.byte 0xc1, 0xe6, 0x33, 0x26	; LD H, (33E6h)
-	.byte 0xcf, 0xd9	; CP L, 1
+	cps l, 1
 	jr z, LABEL_F55B24
 	.byte 0xc1, 0xe7, 0x33, 0x26	; LD H, (33E7h)
 
 LABEL_F55B24:
-	.byte 0xce, 0x33, 0x05	; BIT 005h, H
+	bit 5, h
 	jr z, LABEL_F55B32
 	ldb a, 0x0
 	.byte 0xc1, 0xe5, 0x33, 0x3e, 0x01	; OR (33E5h), 001h
 	jr LABEL_F55B43
 
 LABEL_F55B32:
-	.byte 0xce, 0x33, 0x04	; BIT 004h, H
+	bit 4, h
 	jr nz, LABEL_F55B3E
 	and h, 0xF
 	add a, h
@@ -235005,10 +235005,10 @@ LABEL_F55B5B:
 LABEL_F55B7E:
 	.byte 0xc1, 0xd9, 0x32, 0x21	; LD A, (32D9h)
 	dec 1, a
-	.byte 0xc9, 0xdf	; CP A, 7
+	cps a, 7
 	jr nc, LABEL_F55B94
 	add w, a
-	.byte 0xc8, 0x33, 0x07	; BIT 007h, W
+	bit 7, w
 	jr z, LABEL_F55B92
 	sub w, 0xC
 
@@ -235018,7 +235018,7 @@ LABEL_F55B92:
 LABEL_F55B94:
 	sub a, 0xC
 	add w, a
-	.byte 0xc8, 0x33, 0x07	; BIT 007h, W
+	bit 7, w
 	jr z, LABEL_F55BA1
 	add w, 0xC
 
@@ -235143,7 +235143,7 @@ LABEL_F55CAB:
 	xor xhl, xhl
 	.byte 0xc1, 0xea, 0x90, 0x27	; LD L, (90EAh)
 	and l, 0xF
-	.byte 0xcf, 0xdc	; CP L, 4
+	cps l, 4
 	jr ule, LABEL_F55CBA
 	xor l, l
 
@@ -235268,7 +235268,7 @@ LABEL_F55E05:
 	.byte 0xc1, 0x35, 0x33, 0x21	; LD A, (3335h)
 	.byte 0xc1, 0xf2, 0x32, 0xd1	; XOR A, (32F2h)
 	and a, 0x2
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F55E1B
 	.byte 0xc1, 0x3b, 0x33, 0x3e, 0x01	; OR (333Bh), 001h
 	jr LABEL_F55E6D
@@ -235300,7 +235300,7 @@ LABEL_F55E48:
 LABEL_F55E57:
 	.byte 0xc1, 0xe8, 0x33, 0x21	; LD A, (33E8h)
 	.byte 0xc1, 0xe9, 0x33, 0xd1	; XOR A, (33E9h)
-	.byte 0xc9, 0x33, 0x00	; BIT 000h, A
+	bit 0, a
 	jr z, LABEL_F55E69
 	.byte 0xc1, 0x3b, 0x33, 0x3e, 0x01	; OR (333Bh), 001h
 
@@ -236765,7 +236765,7 @@ LABEL_F56EAD:
 	ret
 
 LABEL_F56EAE:
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_F56EB4
 	ldb a, 0x1
 
@@ -236939,7 +236939,7 @@ LABEL_F57040:
 	.byte 0xf3, 0x07, 0xec, 0xf4, 0x41	; LD (XHL + IY), A
 	call LABEL_F54059
 	.byte 0xc1, 0x31, 0x34, 0x21	; LD A, (3431h)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_F57075
 	ldb a, 0x1
 
@@ -236988,7 +236988,7 @@ LABEL_F570BB:
 LABEL_F570C9:
 	sub de, bc
 	ld a, e
-	.byte 0xcc, 0xd8	; CP D, 0
+	cps d, 0
 	jr z, LABEL_F57113
 	ldb a, 0x60
 	jr LABEL_F57113
@@ -237003,7 +237003,7 @@ LABEL_F570D5:
 	jr LABEL_F570F8
 
 LABEL_F570E9:
-	.byte 0xc8, 0xd8	; CP W, 0
+	cps w, 0
 	jr nz, LABEL_F570F4
 	.byte 0xc1, 0xb4, 0x32, 0x3f, 0xff	; CP (32B4h), 0ffh
 	jr z, LABEL_F570F8
@@ -237020,7 +237020,7 @@ LABEL_F570F8:
 	.byte 0x90, 0x82	; ADD DE, (XWA)
 	sub de, bc
 	ld a, e
-	.byte 0xcc, 0xd8	; CP D, 0
+	cps d, 0
 	jr z, LABEL_F57113
 	ldb a, 0x60
 
@@ -237092,7 +237092,7 @@ LABEL_F5719B:
 	.byte 0xd1, 0x60, 0x04, 0x80	; ADD WA, (0460h)
 	.byte 0xc1, 0x64, 0x04, 0xa1	; SUB A, (0464h)
 	jr pl, LABEL_F571C1
-	.byte 0xc8, 0xd8	; CP W, 0
+	cps w, 0
 	jr z, LABEL_F571BF
 	dec 1, w
 	add a, 0x60
@@ -237405,7 +237405,7 @@ LABEL_F574A2:
 	ret
 
 LABEL_F574B4:
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_F574BA
 	ldb a, 0x1
 
@@ -237438,7 +237438,7 @@ LABEL_F574BA:
 
 LABEL_F57506:
 	.byte 0xc1, 0x35, 0x33, 0x21	; LD A, (3335h)
-	.byte 0xc9, 0xdb	; CP A, 3
+	cps a, 3
 	jr nz, LABEL_F57514
 	.byte 0xf1, 0x7a, 0x34, 0xc8	; BIT 0, (347Ah)
 	jr z, LABEL_F5751A
@@ -237616,7 +237616,7 @@ LABEL_F576B8:
 	.byte 0xf1, 0xa0, 0xc5, 0xcb	; BIT 3, (0C5A0h)
 	jr z, LABEL_F57703
 	calr LABEL_F57884
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_F57703
 	.byte 0xf1, 0x35, 0x33, 0xc9	; BIT 1, (3335h)
 	jr nz, LABEL_F57703
@@ -237655,7 +237655,7 @@ LABEL_F57704:
 	.byte 0xf3, 0x07, 0xec, 0xf4, 0x41	; LD (XHL + IY), A
 	call LABEL_F54059
 	.byte 0xc1, 0x31, 0x34, 0x21	; LD A, (3431h)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_F57750
 	ldb a, 0x1
 
@@ -237964,7 +237964,7 @@ LABEL_F57A45:
 	.byte 0xf1, 0xa0, 0xc5, 0xc8	; BIT 0, (0C5A0h)
 	jr z, LABEL_F57A9C
 	calr LABEL_F57AB5
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_F57A9C
 	.byte 0xf1, 0x35, 0x33, 0xc9	; BIT 1, (3335h)
 	jr nz, LABEL_F57A9C
@@ -238139,7 +238139,7 @@ LABEL_F57C02:
 	.byte 0xf1, 0xa0, 0xc5, 0xc9	; BIT 1, (0C5A0h)
 	jr z, LABEL_F57C59
 	calr LABEL_F57C72
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_F57C59
 	.byte 0xf1, 0x35, 0x33, 0xc9	; BIT 1, (3335h)
 	jr nz, LABEL_F57C59
@@ -238314,7 +238314,7 @@ LABEL_F57DBF:
 	.byte 0xf1, 0xa0, 0xc5, 0xca	; BIT 2, (0C5A0h)
 	jr z, LABEL_F57E16
 	calr LABEL_F57E2F
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_F57E16
 	.byte 0xf1, 0x35, 0x33, 0xc9	; BIT 1, (3335h)
 	jr nz, LABEL_F57E16
@@ -238854,7 +238854,7 @@ LABEL_F5837F:
 	jr ugt, LABEL_F583AE
 
 LABEL_F5838D:
-	.byte 0xc8, 0xd8	; CP W, 0
+	cps w, 0
 	jr nz, LABEL_F583BA
 	.byte 0xc1, 0xb4, 0x32, 0x3f, 0xff	; CP (32B4h), 0ffh
 	jr nz, LABEL_F583BA
@@ -239944,7 +239944,7 @@ LABEL_F58F7A:
 	call LABEL_F54059
 	call LABEL_F54059
 	.byte 0xc3, 0x07, 0xec, 0xf4, 0x21	; LD A, (XHL + IY)
-	.byte 0xc9, 0xda	; CP A, 2
+	cps a, 2
 	jr nz, LABEL_F58F9B
 	call LABEL_F54059
 	.byte 0xf3, 0x07, 0xec, 0xf4, 0x00, 0x40	; LD (XHL + IY), 040h
@@ -239952,7 +239952,7 @@ LABEL_F58F7A:
 	jr LABEL_F58F65
 
 LABEL_F58F9B:
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	jr nz, LABEL_F58FAF
 	call LABEL_F54059
 	.byte 0xf3, 0x07, 0xec, 0xf4, 0x00, 0x00	; LD (XHL + IY), 000h
@@ -239960,7 +239960,7 @@ LABEL_F58F9B:
 	jr LABEL_F58F65
 
 LABEL_F58FAF:
-	.byte 0xc9, 0xdb	; CP A, 3
+	cps a, 3
 	jr nz, LABEL_F58FC3
 	call LABEL_F54059
 	.byte 0xf3, 0x07, 0xec, 0xf4, 0x00, 0x00	; LD (XHL + IY), 000h
@@ -239968,7 +239968,7 @@ LABEL_F58FAF:
 	jr LABEL_F58F65
 
 LABEL_F58FC3:
-	.byte 0xc9, 0xdd	; CP A, 5
+	cps a, 5
 	jr nz, LABEL_F58FD7
 	call LABEL_F54059
 	.byte 0xf3, 0x07, 0xec, 0xf4, 0x00, 0x7f	; LD (XHL + IY), 07fh
@@ -240169,7 +240169,7 @@ LABEL_F59259:
 	add iy, 0x9
 	cp iy, 0x48
 	jr c, LABEL_F59259
-	.byte 0xc9, 0x33, 0x07	; BIT 007h, A
+	bit 7, a
 	jr nz, LABEL_F592CC
 	.byte 0xd1, 0xb4, 0x28, 0x3f, 0x00, 0x00	; CPW (28B4h), 0000h
 	jr nz, LABEL_F59283
@@ -240535,7 +240535,7 @@ LABEL_F5979A:
 	jr nc, LABEL_F597B3
 	.byte 0xc1, 0x91, 0x33, 0x21	; LD A, (3391h)
 	.byte 0xc1, 0x92, 0x33, 0xd1	; XOR A, (3392h)
-	.byte 0xc9, 0x33, 0x00	; BIT 000h, A
+	bit 0, a
 	jr z, LABEL_F597B3
 	.byte 0xc1, 0x93, 0x33, 0x3e, 0x01	; OR (3393h), 001h
 
@@ -240762,7 +240762,7 @@ LABEL_F599BF:
 	jr nc, LABEL_F59A06
 	.byte 0xc1, 0x91, 0x33, 0x21	; LD A, (3391h)
 	.byte 0xc1, 0x92, 0x33, 0xd1	; XOR A, (3392h)
-	.byte 0xc9, 0x33, 0x00	; BIT 000h, A
+	bit 0, a
 	jr z, LABEL_F599F4
 	call LABEL_F5CDE1
 	add xhl, 0x1E7810
@@ -240943,9 +240943,9 @@ LABEL_F59B10:
 LABEL_F59B20:
 	.byte 0xc1, 0x7d, 0xc0, 0x21	; LD A, (0C07Dh)
 	.byte 0xf1, 0x8a, 0x34, 0x41	; LD (348Ah), A
-	.byte 0xc9, 0xdd	; CP A, 5
+	cps a, 5
 	jr z, LABEL_F59B32
-	.byte 0xc9, 0xde	; CP A, 6
+	cps a, 6
 	jr z, LABEL_F59B32
 	jr LABEL_F59B52
 
@@ -240965,13 +240965,13 @@ LABEL_F59B45:
 
 LABEL_F59B52:
 	.byte 0xc1, 0x7d, 0xc0, 0x21	; LD A, (0C07Dh)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F59B69
-	.byte 0xc9, 0xdf	; CP A, 7
+	cps a, 7
 	jr nz, LABEL_F59B6C
 	.byte 0xc1, 0x7f, 0xc0, 0x21	; LD A, (0C07Fh)
 	and a, 0x30
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F59B6C
 
 LABEL_F59B69:
@@ -240992,7 +240992,7 @@ LABEL_F59B95:
 	jrl nz, LABEL_F59CA6
 	.byte 0xc1, 0x7e, 0x34, 0x21	; LD A, (347Eh)
 	.byte 0xc1, 0x7f, 0x34, 0xc1	; AND A, (347Fh)
-	.byte 0xc9, 0x33, 0x00	; BIT 000h, A
+	bit 0, a
 	jr nz, LABEL_F59BAE
 	jp LABEL_F59CA6
 
@@ -241084,14 +241084,14 @@ LABEL_F59C70:
 	jr nz, LABEL_F59CA6
 	pushw wa
 	calr LABEL_F59CA9
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	popw wa
 	jr z, LABEL_F59CA6
 	.byte 0x06, 0x06	; EI 006h
 	.byte 0xc1, 0x20, 0x04, 0x21	; LD A, (0420h)
-	.byte 0xc9, 0x33, 0x02	; BIT 002h, A
+	bit 2, a
 	jr nz, LABEL_F59CA1
-	.byte 0xc9, 0x33, 0x00	; BIT 000h, A
+	bit 0, a
 	jr z, LABEL_F59CA1
 	xor a, a
 	.byte 0xf1, 0x20, 0x04, 0x41	; LD (0420h), A
@@ -241144,7 +241144,7 @@ LABEL_F59CD9:
 	jr nz, LABEL_F59D22
 	.byte 0xc1, 0x7e, 0x34, 0x21	; LD A, (347Eh)
 	.byte 0xc1, 0x7f, 0x34, 0xc1	; AND A, (347Fh)
-	.byte 0xc9, 0x33, 0x01	; BIT 001h, A
+	bit 1, a
 	jr z, LABEL_F59D22
 	ldb a, 0x2
 	.byte 0xc1, 0x5f, 0xfc, 0xd9	; XOR (0FC5Fh), A
@@ -241221,7 +241221,7 @@ LABEL_F59DA5:
 	.byte 0xc1, 0x80, 0x34, 0x21	; LD A, (3480h)
 	xor a, 0xFF
 	.byte 0xc1, 0x81, 0x34, 0xc1	; AND A, (3481h)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F59DC2
 	ldb b, 0x5
 	ldb c, 0x48
@@ -241233,7 +241233,7 @@ LABEL_F59DC2:
 	.byte 0xc1, 0x84, 0x34, 0x21	; LD A, (3484h)
 	xor a, 0xFF
 	.byte 0xc1, 0x85, 0x34, 0xc1	; AND A, (3485h)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F59DDF
 	ldb b, 0x6
 	ldb c, 0x48
@@ -241244,7 +241244,7 @@ LABEL_F59DC2:
 LABEL_F59DDF:
 	.byte 0xc1, 0x80, 0x34, 0x21	; LD A, (3480h)
 	.byte 0xc1, 0x81, 0x34, 0xc1	; AND A, (3481h)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F59DF9
 	ldb b, 0x5
 	ldb c, 0x48
@@ -241255,7 +241255,7 @@ LABEL_F59DDF:
 LABEL_F59DF9:
 	.byte 0xc1, 0x84, 0x34, 0x21	; LD A, (3484h)
 	.byte 0xc1, 0x85, 0x34, 0xc1	; AND A, (3485h)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F59E13
 	ldb b, 0x6
 	ldb c, 0x48
@@ -241284,7 +241284,7 @@ LABEL_F59E2C:
 	jr nz, LABEL_F59E86
 	.byte 0xc1, 0x7e, 0x34, 0x21	; LD A, (347Eh)
 	.byte 0xc1, 0x7f, 0x34, 0xc1	; AND A, (347Fh)
-	.byte 0xc9, 0x33, 0x02	; BIT 002h, A
+	bit 2, a
 	jr z, LABEL_F59E60
 	.byte 0xd1, 0x08, 0x11, 0x3e, 0x04, 0x00	; ORW (1108h), 0004h
 	.byte 0xc1, 0xf8, 0x90, 0x3f, 0x7f	; CP (90F8h), 07fh
@@ -241328,7 +241328,7 @@ LABEL_F59E87:
 	jr nz, LABEL_F59EE4
 	.byte 0xc1, 0x7e, 0x34, 0x21	; LD A, (347Eh)
 	.byte 0xc1, 0x7f, 0x34, 0xc1	; AND A, (347Fh)
-	.byte 0xc9, 0x33, 0x02	; BIT 002h, A
+	bit 2, a
 	jr z, LABEL_F59EBE
 	lds de, 4
 	sla de, 8
@@ -241374,7 +241374,7 @@ LABEL_F59EE5:
 	jr nz, LABEL_F59F27
 	.byte 0xc1, 0x7e, 0x34, 0x21	; LD A, (347Eh)
 	.byte 0xc1, 0x7f, 0x34, 0xc1	; AND A, (347Fh)
-	.byte 0xc9, 0x33, 0x07	; BIT 007h, A
+	bit 7, a
 	jr z, LABEL_F59F0D
 	.byte 0xd1, 0x08, 0x11, 0x3e, 0x80, 0x00	; ORW (1108h), 0080h
 	.byte 0xf1, 0x1e, 0x04, 0xca	; BIT 2, (041Eh)
@@ -241406,7 +241406,7 @@ LABEL_F59F28:
 	jr nz, LABEL_F59F64
 	.byte 0xc1, 0x7e, 0x34, 0x21	; LD A, (347Eh)
 	.byte 0xc1, 0x7f, 0x34, 0xc1	; AND A, (347Fh)
-	.byte 0xc9, 0x33, 0x06	; BIT 006h, A
+	bit 6, a
 	jr z, LABEL_F59F4D
 	.byte 0xd1, 0x08, 0x11, 0x3e, 0x40, 0x00	; ORW (1108h), 0040h
 	.byte 0xf1, 0x1e, 0x04, 0xca	; BIT 2, (041Eh)
@@ -241432,7 +241432,7 @@ LABEL_F59F65:
 	jr nz, LABEL_F59F97
 	.byte 0xc1, 0x7e, 0x34, 0x21	; LD A, (347Eh)
 	.byte 0xc1, 0x7f, 0x34, 0xc1	; AND A, (347Fh)
-	.byte 0xc9, 0x33, 0x04	; BIT 004h, A
+	bit 4, a
 	jr z, LABEL_F59F82
 	.byte 0xf1, 0x1e, 0x04, 0xca	; BIT 2, (041Eh)
 	jr z, LABEL_F59F82
@@ -241455,7 +241455,7 @@ LABEL_F59F98:
 	jr nz, LABEL_F59FCA
 	.byte 0xc1, 0x7e, 0x34, 0x21	; LD A, (347Eh)
 	.byte 0xc1, 0x7f, 0x34, 0xc1	; AND A, (347Fh)
-	.byte 0xc9, 0x33, 0x05	; BIT 005h, A
+	bit 5, a
 	jr z, LABEL_F59FB5
 	.byte 0xf1, 0x1e, 0x04, 0xca	; BIT 2, (041Eh)
 	jr z, LABEL_F59FB5
@@ -241478,7 +241478,7 @@ LABEL_F59FCB:
 	jr nz, LABEL_F59FF1
 	.byte 0xc1, 0x7e, 0x34, 0x21	; LD A, (347Eh)
 	.byte 0xc1, 0x7f, 0x34, 0xc1	; AND A, (347Fh)
-	.byte 0xc9, 0x33, 0x03	; BIT 003h, A
+	bit 3, a
 	jr z, LABEL_F59FE2
 	calr LABEL_F5A68C
 
@@ -241516,7 +241516,7 @@ LABEL_F5A01B:
 	.byte 0xc1, 0x82, 0x34, 0x21	; LD A, (3482h)
 	xor a, 0xFF
 	.byte 0xc1, 0x83, 0x34, 0xc1	; AND A, (3483h)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F5A087
 	.byte 0xf1, 0x56, 0xfd, 0xcb	; BIT 3, (0FD56h)
 	jr z, LABEL_F5A051
@@ -241559,7 +241559,7 @@ LABEL_F5A088:
 	.byte 0xc1, 0x86, 0x34, 0x21	; LD A, (3486h)
 	xor a, 0xFF
 	.byte 0xc1, 0x87, 0x34, 0xc1	; AND A, (3487h)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F5A0F4
 	.byte 0xf1, 0x56, 0xfd, 0xcb	; BIT 3, (0FD56h)
 	jr z, LABEL_F5A0BE
@@ -241601,7 +241601,7 @@ LABEL_F5A0F4:
 LABEL_F5A0F5:
 	.byte 0xc1, 0x82, 0x34, 0x21	; LD A, (3482h)
 	.byte 0xc1, 0x83, 0x34, 0xc1	; AND A, (3483h)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F5A15B
 	.byte 0xf1, 0x56, 0xfd, 0xcb	; BIT 3, (0FD56h)
 	jr z, LABEL_F5A128
@@ -241642,7 +241642,7 @@ LABEL_F5A15B:
 LABEL_F5A15C:
 	.byte 0xc1, 0x86, 0x34, 0x21	; LD A, (3486h)
 	.byte 0xc1, 0x87, 0x34, 0xc1	; AND A, (3487h)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F5A1C2
 	.byte 0xf1, 0x56, 0xfd, 0xcb	; BIT 3, (0FD56h)
 	jr z, LABEL_F5A18F
@@ -241685,7 +241685,7 @@ LABEL_F5A1C3:
 	jr nz, LABEL_F5A1EB
 	.byte 0xc1, 0x7e, 0x34, 0x21	; LD A, (347Eh)
 	.byte 0xc1, 0x7f, 0x34, 0xc1	; AND A, (347Fh)
-	.byte 0xc9, 0x33, 0x06	; BIT 006h, A
+	bit 6, a
 	jr z, LABEL_F5A1EB
 	call LABEL_EF9626
 	.byte 0xf1, 0x53, 0x0d, 0xc9	; BIT 1, (0D53h)
@@ -241698,7 +241698,7 @@ LABEL_F5A1EB:
 	jr nz, LABEL_F5A21F
 	.byte 0xc1, 0x7e, 0x34, 0x21	; LD A, (347Eh)
 	.byte 0xc1, 0x7f, 0x34, 0xc1	; AND A, (347Fh)
-	.byte 0xc9, 0x33, 0x07	; BIT 007h, A
+	bit 7, a
 	jr z, LABEL_F5A21F
 	call LABEL_EF9626
 	.byte 0xf1, 0x53, 0x0d, 0xc9	; BIT 1, (0D53h)
@@ -241716,7 +241716,7 @@ LABEL_F5A21F:
 	jr nz, LABEL_F5A253
 	.byte 0xc1, 0x7e, 0x34, 0x21	; LD A, (347Eh)
 	.byte 0xc1, 0x7f, 0x34, 0xc1	; AND A, (347Fh)
-	.byte 0xc9, 0x33, 0x02	; BIT 002h, A
+	bit 2, a
 	jr z, LABEL_F5A253
 	call LABEL_EF9626
 	.byte 0xf1, 0x53, 0x0d, 0xc9	; BIT 1, (0D53h)
@@ -241734,7 +241734,7 @@ LABEL_F5A253:
 	jr nz, LABEL_F5A287
 	.byte 0xc1, 0x7e, 0x34, 0x21	; LD A, (347Eh)
 	.byte 0xc1, 0x7f, 0x34, 0xc1	; AND A, (347Fh)
-	.byte 0xc9, 0x33, 0x02	; BIT 002h, A
+	bit 2, a
 	jr z, LABEL_F5A287
 	call LABEL_EF9626
 	.byte 0xf1, 0x53, 0x0d, 0xc9	; BIT 1, (0D53h)
@@ -241752,7 +241752,7 @@ LABEL_F5A287:
 	jr nz, LABEL_F5A2B1
 	.byte 0xc1, 0x7e, 0x34, 0x21	; LD A, (347Eh)
 	.byte 0xc1, 0x7f, 0x34, 0xc1	; AND A, (347Fh)
-	.byte 0xc9, 0x33, 0x05	; BIT 005h, A
+	bit 5, a
 	jr z, LABEL_F5A2B1
 	call LABEL_EF9626
 	.byte 0xf1, 0x53, 0x0d, 0xc9	; BIT 1, (0D53h)
@@ -242293,7 +242293,7 @@ LABEL_F5A82A:
 	jr nz, LABEL_F5A867
 	pushw wa
 	calr LABEL_F59CA9
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	popw wa
 	jr z, LABEL_F5A867
 	.byte 0xf1, 0xa7, 0x28, 0xca	; BIT 2, (28A7h)
@@ -242314,7 +242314,7 @@ LABEL_F5A82A:
 	pop xhl
 	pop xwa
 	calr LABEL_F5A89D
-	.byte 0xcb, 0xd8	; CP C, 0
+	cps c, 0
 	jr z, LABEL_F5A862
 	.byte 0xc1, 0x98, 0x34, 0x3e, 0x01	; OR (3498h), 001h
 
@@ -242354,7 +242354,7 @@ LABEL_F5A89D:
 	jr nz, LABEL_F5A931
 
 LABEL_F5A8B9:
-	.byte 0xc8, 0x33, 0x07	; BIT 007h, W
+	bit 7, w
 	jr z, LABEL_F5A8CF
 	.byte 0x14	; PUSH A
 	calr LABEL_F5AA96
@@ -242377,7 +242377,7 @@ LABEL_F5A8CF:
 	cp l, w
 	jr z, LABEL_F5A8F7
 	.byte 0xc1, 0xe5, 0xfb, 0x27	; LD L, (0FBE5h)
-	.byte 0xcf, 0x33, 0x07	; BIT 007h, L
+	bit 7, l
 	jr nz, LABEL_F5A904
 	and l, 0xF
 	cp l, w
@@ -242401,7 +242401,7 @@ LABEL_F5A904:
 LABEL_F5A908:
 	and w, 0xF
 	.byte 0xc1, 0xf7, 0xf9, 0x27	; LD L, (0F9F7h)
-	.byte 0xcf, 0x33, 0x07	; BIT 007h, L
+	bit 7, l
 	jr nz, LABEL_F5A91F
 	and l, 0xF
 	cp l, w
@@ -242411,7 +242411,7 @@ LABEL_F5A908:
 
 LABEL_F5A91F:
 	.byte 0xc1, 0xe5, 0xfb, 0x27	; LD L, (0FBE5h)
-	.byte 0xcf, 0x33, 0x07	; BIT 007h, L
+	bit 7, l
 	jr nz, LABEL_F5A931
 	and l, 0xF
 	cp l, w
@@ -242426,7 +242426,7 @@ LABEL_F5A932:
 	jr nz, LABEL_F5A957
 	pushw wa
 	calr LABEL_F59CA9
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	popw wa
 	jr z, LABEL_F5A957
 	.byte 0xf1, 0xa7, 0x28, 0xca	; BIT 2, (28A7h)
@@ -242442,13 +242442,13 @@ LABEL_F5A957:
 LABEL_F5A958:
 	ld xix, 0xCEFF
 	.byte 0x9c, 0x02, 0x20	; LD WA, (XIX + 002h)
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr nz, LABEL_F5A968
 	ldb l, 0x80
 	jr LABEL_F5A972
 
 LABEL_F5A968:
-	.byte 0xd8, 0xd9	; CP WA, 1
+	cps wa, 1
 	jr nz, LABEL_F5A970
 	ldb l, 0x0
 	jr LABEL_F5A972
@@ -242464,7 +242464,7 @@ LABEL_F5A972:
 	ldb e, 0x5
 
 LABEL_F5A982:
-	.byte 0xd9, 0xd8	; CP BC, 0
+	cps bc, 0
 	jr z, LABEL_F5A999
 	.byte 0xc3, 0x03, 0xf0, 0xe8, 0x21	; LD A, (XIX + E)
 	cp l, a
@@ -242482,7 +242482,7 @@ LABEL_F5A999:
 
 LABEL_F5A99E:
 	ldb c, 0x0
-	.byte 0xc8, 0x33, 0x07	; BIT 007h, W
+	bit 7, w
 	jr z, LABEL_F5A9AA
 	calr LABEL_F5AA96
 	jr LABEL_F5A9B7
@@ -242596,7 +242596,7 @@ LABEL_F5AA94:
 LABEL_F5AA96:
 	.byte 0xc1, 0x02, 0xfd, 0x27	; LD L, (0FD02h)
 	and l, 0x3
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_F5AAB3
 	.byte 0xc1, 0x03, 0xfd, 0x27	; LD L, (0FD03h)
 	and l, 0x7F
@@ -242641,10 +242641,10 @@ LABEL_F5AAFB:
 	.byte 0xc1, 0x9b, 0x37, 0x3f, 0x00	; CP (379Bh), 000h
 	jr nz, LABEL_F5AB2F
 	.byte 0xc1, 0x5d, 0xfc, 0x21	; LD A, (0FC5Dh)
-	.byte 0xc9, 0x33, 0x03	; BIT 003h, A
+	bit 3, a
 	jr nz, LABEL_F5AB2F
 	and a, 0x7
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F5AB2F
 	.byte 0xf1, 0x5f, 0xfc, 0xc9	; BIT 1, (0FC5Fh)
 	jr z, LABEL_F5AB2F
@@ -242766,9 +242766,9 @@ LABEL_F5AC2B:
 
 LABEL_F5AC37:
 	.byte 0xc1, 0x20, 0x04, 0x21	; LD A, (0420h)
-	.byte 0xc9, 0x33, 0x02	; BIT 002h, A
+	bit 2, a
 	jr z, LABEL_F5AC59
-	.byte 0xc9, 0x33, 0x03	; BIT 003h, A
+	bit 3, a
 	jr z, LABEL_F5AC59
 	.byte 0xc1, 0x20, 0x04, 0x3c, 0xf7	; AND (0420h), 0f7h
 	.byte 0xc1, 0x1e, 0x04, 0x3c, 0xf7	; AND (041Eh), 0f7h
@@ -242801,9 +242801,9 @@ LABEL_F5AC80:
 
 LABEL_F5AC8C:
 	.byte 0xc1, 0x20, 0x04, 0x21	; LD A, (0420h)
-	.byte 0xc9, 0x33, 0x02	; BIT 002h, A
+	bit 2, a
 	jr z, LABEL_F5ACB3
-	.byte 0xc9, 0x33, 0x03	; BIT 003h, A
+	bit 3, a
 	jr z, LABEL_F5ACB3
 	.byte 0xc1, 0x20, 0x04, 0x3c, 0xf7	; AND (0420h), 0f7h
 	.byte 0xc1, 0x1e, 0x04, 0x3c, 0xf7	; AND (041Eh), 0f7h
@@ -242859,19 +242859,19 @@ LABEL_F5AD09:
 LABEL_F5AD0B:
 	.byte 0xc1, 0xa7, 0x28, 0x21	; LD A, (28A7h)
 	and a, 0x3
-	.byte 0xc9, 0xda	; CP A, 2
+	cps a, 2
 	jr nz, LABEL_F5AD1D
 	.byte 0xc1, 0x6e, 0x34, 0x3e, 0xa0	; OR (346Eh), 0a0h
 	jr LABEL_F5AD31
 
 LABEL_F5AD1D:
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	jr nz, LABEL_F5AD28
 	.byte 0xc1, 0x6e, 0x34, 0x3e, 0x60	; OR (346Eh), 060h
 	jr LABEL_F5AD31
 
 LABEL_F5AD28:
-	.byte 0xc9, 0xdb	; CP A, 3
+	cps a, 3
 	jr nz, LABEL_F5AD31
 	.byte 0xc1, 0x6e, 0x34, 0x3e, 0xe0	; OR (346Eh), 0e0h
 
@@ -242883,7 +242883,7 @@ LABEL_F5AD32:
 
 LABEL_F5AD34:
 	.byte 0xc1, 0x6d, 0x34, 0x21	; LD A, (346Dh)
-	.byte 0xc9, 0x33, 0x07	; BIT 007h, A
+	bit 7, a
 	jr z, LABEL_F5AD4D
 	.byte 0xf1, 0x6d, 0x34, 0xca	; BIT 2, (346Dh)
 	jr z, LABEL_F5AD83
@@ -242895,18 +242895,18 @@ LABEL_F5AD4D:
 	.byte 0xc1, 0x6e, 0x34, 0x21	; LD A, (346Eh)
 	ld b, a
 	and a, 0xE0
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	ld a, b
 	jr z, LABEL_F5AD88
-	.byte 0xc9, 0x33, 0x07	; BIT 007h, A
+	bit 7, a
 	jr z, LABEL_F5AD75
-	.byte 0xc9, 0x33, 0x05	; BIT 005h, A
+	bit 5, a
 	jr nz, LABEL_F5AD6B
 	calr LABEL_F5AF27
 	jr LABEL_F5AD7D
 
 LABEL_F5AD6B:
-	.byte 0xc9, 0x33, 0x06	; BIT 006h, A
+	bit 6, a
 	jr z, LABEL_F5AD7A
 	calr LABEL_F5AEEC
 	jr LABEL_F5AD7D
@@ -243365,7 +243365,7 @@ LABEL_F5B0B5:
 	pushw bc
 	call 0xEF259B
 	popw bc
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr nz, LABEL_F5B0D1
 	inc 1, bc
 	cp bc, 0x200
@@ -243376,7 +243376,7 @@ LABEL_F5B0D1:
 	call LABEL_EF149F
 	xor wa, wa
 	call 0xEF259B
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr z, LABEL_F5B0FD
 	call LABEL_EF149F
 	calr LABEL_F5B105
@@ -243386,7 +243386,7 @@ LABEL_F5B0D1:
 LABEL_F5B0ED:
 	xor wa, wa
 	call 0xEF259B
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr z, LABEL_F5B0FD
 	call LABEL_EF149F
 	jr LABEL_F5B0ED
@@ -243407,7 +243407,7 @@ LABEL_F5B105:
 LABEL_F5B10F:
 	ld hl, wa
 	.byte 0xd1, 0x09, 0x04, 0xa3	; SUB HL, (SYSTEM_TIMESTAMP)
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr le, LABEL_F5B11B
 	jr LABEL_F5B10F
 
@@ -243508,7 +243508,7 @@ LABEL_F5B1D0:
 	.byte 0xc1, 0x7e, 0xc0, 0x20	; LD W, (0C07Eh)
 	.byte 0xc1, 0x7f, 0xc0, 0x21	; LD A, (0C07Fh)
 	pushw wa
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_F5B1F5
 	.byte 0xf1, 0x7d, 0xc0, 0x00, 0x05	; LD (0C07Dh), 005h
 	.byte 0xf1, 0x7e, 0xc0, 0x00, 0x04	; LD (0C07Eh), 004h
@@ -243596,7 +243596,7 @@ LABEL_F5B2C6:
 	.byte 0xc1, 0x60, 0xfc, 0x23	; LD C, (0FC60h)
 	and c, 0x4
 	or a, c
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F5B2F8
 	.byte 0xc1, 0x5f, 0xfc, 0x3c, 0xf3	; AND (0FC5Fh), 0f3h
 	lds wa, 0
@@ -243635,7 +243635,7 @@ LABEL_F5B32F:
 	.byte 0xc1, 0x7a, 0x34, 0x3e, 0x01	; OR (347Ah), 001h
 	.byte 0xc1, 0x36, 0x04, 0x25	; LD E, (0436h)
 	.byte 0xc1, 0x37, 0x04, 0x24	; LD D, (0437h)
-	.byte 0xda, 0xd8	; CP DE, 0
+	cps de, 0
 	jr z, LABEL_F5B39A
 	sub e, 0x18
 	jr nc, LABEL_F5B360
@@ -243688,7 +243688,7 @@ LABEL_F5B3B4:
 
 LABEL_F5B3B6:
 	.byte 0xc1, 0x7f, 0xc0, 0x21	; LD A, (0C07Fh)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F5B3E5
 	.byte 0xf1, 0xa6, 0x28, 0xc8	; BIT 0, (28A6h)
 	jr z, LABEL_F5B3E5
@@ -243738,14 +243738,14 @@ LABEL_F5B412:
 LABEL_F5B448:
 	.byte 0xc1, 0x20, 0x04, 0x25	; LD E, (0420h)
 	.byte 0xc1, 0x5f, 0xfc, 0x3c, 0xfe	; AND (0FC5Fh), 0feh
-	.byte 0xcd, 0x33, 0x02	; BIT 002h, E
+	bit 2, e
 	jr z, LABEL_F5B45B
 	.byte 0xc1, 0x5f, 0xfc, 0x3e, 0x01	; OR (0FC5Fh), 001h
 
 LABEL_F5B45B:
 	ld a, e
 	.byte 0xc1, 0x7b, 0x34, 0xd1	; XOR A, (347Bh)
-	.byte 0xc9, 0x33, 0x02	; BIT 002h, A
+	bit 2, a
 	jr z, LABEL_F5B46C
 	ldb a, 0x22
 	call LABEL_FC793D
@@ -244243,7 +244243,7 @@ LABEL_F5B90D:
 
 LABEL_F5B96B:
 	.byte 0xd1, 0x5e, 0x04, 0xa0	; SUB WA, (045Eh)
-	.byte 0xc9, 0x33, 0x07	; BIT 007h, A
+	bit 7, a
 	jr z, LABEL_F5B977
 	add a, 0x60
 
@@ -244652,7 +244652,7 @@ LABEL_F5BCB4:
 
 LABEL_F5BD13:
 	.byte 0xd1, 0x5e, 0x04, 0xa0	; SUB WA, (045Eh)
-	.byte 0xc9, 0x33, 0x07	; BIT 007h, A
+	bit 7, a
 	jr z, LABEL_F5BD1F
 	add a, 0x60
 
@@ -244702,9 +244702,9 @@ LABEL_F5BD94:
 
 LABEL_F5BDA7:
 	.byte 0xc1, 0xa5, 0x34, 0x21	; LD A, (34A5h)
-	.byte 0xc9, 0x33, 0x00	; BIT 000h, A
+	bit 0, a
 	jr nz, LABEL_F5BDBF
-	.byte 0xc9, 0x33, 0x01	; BIT 001h, A
+	bit 1, a
 	jr z, LABEL_F5BDBF
 	.byte 0xc1, 0x9f, 0x34, 0x3c, 0xf6	; AND (349Fh), 0f6h
 	.byte 0xf1, 0xa6, 0x34, 0x00, 0x00	; LD (34A6h), 000h
@@ -244737,7 +244737,7 @@ LABEL_F5BDC8:
 LABEL_F5BDFE:
 	.byte 0xf1, 0xa5, 0x34, 0x41	; LD (34A5h), A
 	.byte 0xc1, 0x99, 0xfd, 0x21	; LD A, (0FD99h)
-	.byte 0xc9, 0x33, 0x00	; BIT 000h, A
+	bit 0, a
 	jr nz, LABEL_F5BE10
 	.byte 0xc1, 0x9f, 0x34, 0x3c, 0xf6	; AND (349Fh), 0f6h
 
@@ -244754,7 +244754,7 @@ LABEL_F5BE13:
 	.byte 0xf1, 0xaa, 0x34, 0x41	; LD (34AAh), A
 	.byte 0xc1, 0xa5, 0x34, 0x21	; LD A, (34A5h)
 	and a, 0xFD
-	.byte 0xc9, 0x33, 0x00	; BIT 000h, A
+	bit 0, a
 	jr z, LABEL_F5BE32
 	or a, 0x2
 
@@ -244768,7 +244768,7 @@ LABEL_F5BE37:
 LABEL_F5BE39:
 	.byte 0xc1, 0x9f, 0x34, 0x21	; LD A, (349Fh)
 	and a, 0x9
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	.byte 0xf2, 0xc9, 0xbe, 0xf5, 0xd6	; JP Z, LABEL_F5BEC9
 	.byte 0xf1, 0x9f, 0x34, 0xc8	; BIT 0, (349Fh)
 	jr z, LABEL_F5BE86
@@ -244780,7 +244780,7 @@ LABEL_F5BE39:
 	.byte 0xc1, 0x61, 0xfc, 0x21	; LD A, (0FC61h)
 	and a, 0x30
 	srl a, 4
-	.byte 0xc8, 0xd8	; CP W, 0
+	cps w, 0
 	jr z, LABEL_F5BE86
 	dec 1, a
 	cp a, 0xFF
@@ -244804,10 +244804,10 @@ LABEL_F5BE86:
 	.byte 0xc1, 0x61, 0xfc, 0x21	; LD A, (0FC61h)
 	and a, 0x30
 	srl a, 4
-	.byte 0xc8, 0xd8	; CP W, 0
+	cps w, 0
 	jr z, LABEL_F5BEC4
 	inc 1, a
-	.byte 0xc9, 0xdc	; CP A, 4
+	cps a, 4
 	jr c, LABEL_F5BEB5
 	ldb a, 0x3
 
@@ -244829,7 +244829,7 @@ LABEL_F5BECA:
 LABEL_F5BECC:
 	.byte 0xc1, 0x99, 0xfd, 0x20	; LD W, (0FD99h)
 	and w, 0x1
-	.byte 0xc8, 0xd8	; CP W, 0
+	cps w, 0
 	jr z, LABEL_F5BF0A
 	.byte 0xc1, 0xa4, 0x34, 0x3f, 0x80	; CP (34A4h), 080h
 	jr nc, LABEL_F5BF0A
@@ -245441,7 +245441,7 @@ LABEL_F5C8D4:
 	jr nz, LABEL_F5C91F
 	.byte 0xc1, 0x1e, 0x32, 0x21	; LD A, (321Eh)
 	.byte 0xc1, 0x1f, 0x32, 0x20	; LD W, (321Fh)
-	.byte 0xc8, 0x33, 0x04	; BIT 004h, W
+	bit 4, w
 	jr z, LABEL_F5C8F7
 	or a, 0x80
 	and w, 0xEF
@@ -245470,7 +245470,7 @@ LABEL_F5C920:
 	jr nz, LABEL_F5C96B
 	.byte 0xc1, 0x23, 0x32, 0x21	; LD A, (3223h)
 	.byte 0xc1, 0x24, 0x32, 0x20	; LD W, (3224h)
-	.byte 0xc8, 0x33, 0x04	; BIT 004h, W
+	bit 4, w
 	jr z, LABEL_F5C943
 	or a, 0x80
 	and w, 0xEF
@@ -245499,7 +245499,7 @@ LABEL_F5C96C:
 	jr nz, LABEL_F5C9B7
 	.byte 0xc1, 0x28, 0x32, 0x21	; LD A, (3228h)
 	.byte 0xc1, 0x29, 0x32, 0x20	; LD W, (3229h)
-	.byte 0xc8, 0x33, 0x04	; BIT 004h, W
+	bit 4, w
 	jr z, LABEL_F5C98F
 	or a, 0x80
 	and w, 0xEF
@@ -245528,7 +245528,7 @@ LABEL_F5C9B8:
 	jr nz, LABEL_F5CA03
 	.byte 0xc1, 0x19, 0x32, 0x21	; LD A, (3219h)
 	.byte 0xc1, 0x1a, 0x32, 0x20	; LD W, (321Ah)
-	.byte 0xc8, 0x33, 0x04	; BIT 004h, W
+	bit 4, w
 	jr z, LABEL_F5C9DB
 	or a, 0x80
 	and w, 0xEF
@@ -245983,10 +245983,10 @@ Demo_LoadVariationData_Inner:
 	ldw bc, 0x100
 	.byte 0x85, 0x11	; LDIR
 	dec 1, l
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	.byte 0x6a, 0xf0	; JR GT, Demo_LoadVariationData_Inner
 	dec 1, a
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	.byte 0x6e, 0xde	; JR NZ, Demo_LoadVariationData
 	ret
 
@@ -246000,7 +246000,7 @@ Demo_LoadVariationC_Loop:
 	ldw bc, 0x100
 	.byte 0x85, 0x11	; LDIR
 	dec 1, a
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	.byte 0x6e, 0xf0	; JR NZ, Demo_LoadVariationC_Loop
 	ret
 
@@ -246249,7 +246249,7 @@ LABEL_F5D678:
 	.byte 0xbf, 0x02, 0x30	; LDA XWA, XSP + 002h
 	ld (xwa), e
 	.byte 0x89, 0x01, 0x25	; LD E, (XBC + 001h)
-	.byte 0xcd, 0x30, 0x07	; RES 007h, E
+	res 7, e
 	.byte 0xb8, 0x01, 0x45	; LD (XWA + 001h), E
 	call LABEL_F5E6EB
 	.byte 0xb7, 0x30	; LDA XWA, XSP
@@ -246270,7 +246270,7 @@ LABEL_F5D6B6:
 	.byte 0x80, 0x3f, 0xf0	; CP (XWA), 0f0h
 	jr nc, LABEL_F5D6CB
 	ld e, (xwa)
-	.byte 0xcd, 0x30, 0x07	; RES 007h, E
+	res 7, e
 	.byte 0x88, 0x01, 0x23	; LD C, (XWA + 001h)
 	extz de
 	extz bc
@@ -246310,7 +246310,7 @@ LABEL_F5D6ED:
 	extz bc
 	ld wa, iy
 	add wa, bc
-	.byte 0xdc, 0xdc	; CP IX, 4
+	cps ix, 4
 	jr z, LABEL_F5D723
 	ld bc, de
 	and bc, 0x400
@@ -246365,7 +246365,7 @@ LABEL_F5D740:
 	ld de, wa
 	and de, 0x4
 	extz bc
-	.byte 0xda, 0xdc	; CP DE, 4
+	cps de, 4
 	jr nz, LABEL_F5D7C3
 	.byte 0xf2, 0x3c, 0xa0, 0xe4, 0x32	; LDA XDE, 0E4A03Ch
 	.byte 0xc3, 0x07, 0xe8, 0xe4, 0x21	; LD A, (XDE + BC)
@@ -246460,9 +246460,9 @@ LABEL_F5D7FB:
 
 LABEL_F5D88E:
 	.byte 0xc1, 0xff, 0x32, 0x21	; LD A, (32FFh)
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	jr z, LABEL_F5D89A
-	.byte 0xc9, 0xda	; CP A, 2
+	cps a, 2
 	jr z, LABEL_F5D89E
 
 LABEL_F5D89A:
@@ -247280,7 +247280,7 @@ LABEL_F5EAEE:
 	ld xiy, 0x94800
 	add xiy, 0xE
 	ld wa, (xiy)
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr z, LABEL_F5EB03
 	call LABEL_F5CE20
 
@@ -247406,11 +247406,11 @@ LABEL_F5ECDB:
 	.byte 0xc1, 0xcf, 0x34, 0x3c, 0xfd	; AND (34CFh), 0fdh
 	.byte 0xc1, 0xcf, 0x34, 0x21	; LD A, (34CFh)
 	and a, 0xC
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_F5ED11
 	.byte 0xc1, 0xfc, 0x35, 0x21	; LD A, (35FCh)
 	and a, 0xC
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_F5ED11
 	calr LABEL_F5F1B7
 	push xwa
@@ -247594,7 +247594,7 @@ LABEL_F5EE4A:
 	popw wa
 	ld bc, wa
 	popw wa
-	.byte 0xc9, 0xdf	; CP A, 7
+	cps a, 7
 	jr nz, LABEL_F5EE78
 	.byte 0xbd, 0x10, 0x51	; LD (XIY + 010h), BC
 
@@ -247717,7 +247717,7 @@ LABEL_F5EF63:
 	ld (xix), l
 	dec 1, wa
 	inc 1, xix
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr nz, LABEL_F5EF63
 	.byte 0xb4, 0x00, 0x83	; LD (XIX), 083h
 	pop xiy
@@ -247744,7 +247744,7 @@ LABEL_F5EF72:
 	popw wa
 	ld bc, wa
 	popw wa
-	.byte 0xc9, 0xdf	; CP A, 7
+	cps a, 7
 	jr nz, LABEL_F5EFA0
 	.byte 0xbd, 0x10, 0x51	; LD (XIY + 010h), BC
 
@@ -247879,7 +247879,7 @@ LABEL_F5F0F8:
 	.byte 0xb4, 0x00, 0x81	; LD (XIX), 081h
 	inc 1, xix
 	dec 1, b
-	.byte 0xca, 0xd8	; CP B, 0
+	cps b, 0
 	jr nz, LABEL_F5F0F8
 	.byte 0xb4, 0x00, 0x83	; LD (XIX), 083h
 	pop xiy
@@ -247967,7 +247967,7 @@ LABEL_F5F1B6:
 LABEL_F5F1B7:
 	.byte 0xc1, 0x9b, 0x37, 0x21	; LD A, (379Bh)
 	and a, 0x1F
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F5F21C
 	calr LABEL_F5F21D
 	.byte 0xf1, 0x2e, 0x34, 0x40	; LD (342Eh), W
@@ -248003,16 +248003,16 @@ LABEL_F5F21C:
 
 LABEL_F5F21D:
 	ldb w, 0x0
-	.byte 0xc9, 0x33, 0x04	; BIT 004h, A
+	bit 4, a
 	jr nz, LABEL_F5F23B
 	ldb w, 0x4
-	.byte 0xc9, 0x33, 0x03	; BIT 003h, A
+	bit 3, a
 	jr nz, LABEL_F5F23B
 	ldb w, 0x6
-	.byte 0xc9, 0x33, 0x00	; BIT 000h, A
+	bit 0, a
 	jr nz, LABEL_F5F23B
 	ldb w, 0x8
-	.byte 0xc9, 0x33, 0x01	; BIT 001h, A
+	bit 1, a
 	jr nz, LABEL_F5F23B
 	ldb w, 0xA
 
@@ -248071,7 +248071,7 @@ LABEL_F5F2A7:
 
 LABEL_F5F2D7:
 	.byte 0xc1, 0x2e, 0x34, 0x27	; LD L, (342Eh)
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F5F30F
 	.byte 0xeb, 0xa8	; LD XHL, 0
 	.byte 0xc1, 0x2e, 0x34, 0x27	; LD L, (342Eh)
@@ -248106,7 +248106,7 @@ LABEL_F5F338:
 	ldb c, 0x0
 
 LABEL_F5F341:
-	.byte 0xcb, 0xde	; CP C, 6
+	cps c, 6
 	jr z, LABEL_F5F38D
 	.byte 0xcb, 0x04	; PUSH C
 	push xwa
@@ -248126,7 +248126,7 @@ LABEL_F5F341:
 	inc 1, c
 	ld xwa, 0xF5F38E
 	.byte 0xc3, 0x03, 0xe0, 0xe4, 0x21	; LD A, (XWA + C)
-	.byte 0xcb, 0xdf	; CP C, 7
+	cps c, 7
 	jr nz, LABEL_F5F37F
 	.byte 0xc1, 0x4d, 0x34, 0x21	; LD A, (344Dh)
 
@@ -248285,11 +248285,11 @@ LABEL_F5F49B:
 LABEL_F5F4B5:
 	.byte 0xc1, 0x9b, 0x37, 0x21	; LD A, (379Bh)
 	and a, 0x1F
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_F5F4DF
 	.byte 0xc1, 0x10, 0x35, 0x20	; LD W, (3510h)
 	and w, 0x1F
-	.byte 0xc8, 0xd8	; CP W, 0
+	cps w, 0
 	jr z, LABEL_F5F4DD
 	push xwa
 	push xhl
@@ -248336,10 +248336,10 @@ LABEL_F5F516:
 
 LABEL_F5F519:
 	.byte 0xc1, 0x10, 0x35, 0x21	; LD A, (3510h)
-	.byte 0xc9, 0x33, 0x06	; BIT 006h, A
+	bit 6, a
 	jr z, LABEL_F5F532
 	.byte 0xc1, 0x9b, 0x37, 0x20	; LD W, (379Bh)
-	.byte 0xc8, 0x33, 0x05	; BIT 005h, W
+	bit 5, w
 	jr z, LABEL_F5F532
 	call LABEL_F5F533
 	calr LABEL_F5F578
@@ -248352,7 +248352,7 @@ LABEL_F5F533:
 	add xix, 0x0
 	add xix, 0x10
 	ld a, (xix)
-	.byte 0xc9, 0x33, 0x00	; BIT 000h, A
+	bit 0, a
 	jr nz, LABEL_F5F552
 	.byte 0xc1, 0xd3, 0x34, 0x3c, 0xfe	; AND (34D3h), 0feh
 	jr LABEL_F5F557
@@ -248882,7 +248882,7 @@ LABEL_F5FA7E:
 	.byte 0xf1, 0x2f, 0x34, 0x04	; POP (342Fh)
 	popw de
 	pop xix
-	.byte 0xcd, 0x33, 0x07	; BIT 007h, E
+	bit 7, e
 	jr z, LABEL_F5FAA9
 	or d, 0x10
 	and e, 0x7F
@@ -249046,7 +249046,7 @@ LABEL_F5FD51:
 	ld (xix), l
 	dec 1, wa
 	inc 1, xix
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr nz, LABEL_F5FD51
 	.byte 0xb4, 0x00, 0x83	; LD (XIX), 083h
 	pop xiy
@@ -249190,7 +249190,7 @@ LABEL_F5FE68:
 LABEL_F5FE78:
 	.byte 0xc1, 0x9b, 0x37, 0x21	; LD A, (379Bh)
 	and a, 0x1F
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_F5FE86
 	jrl LABEL_F5FF1B
 
@@ -249214,11 +249214,11 @@ LABEL_F5FEAF:
 	calr LABEL_F5FF36
 	.byte 0xc1, 0xcf, 0x34, 0x21	; LD A, (34CFh)
 	and a, 0xC
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_F5FEC8
 	.byte 0xc1, 0xfc, 0x35, 0x21	; LD A, (35FCh)
 	and a, 0xC
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F5FECD
 
 LABEL_F5FEC8:
@@ -249227,7 +249227,7 @@ LABEL_F5FEC8:
 
 LABEL_F5FECD:
 	call LABEL_F61372
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr z, LABEL_F5FF1B
 	.byte 0xf1, 0x0a, 0x36, 0x02, 0x00, 0x00	; LDW (360Ah), 0000h
 	.byte 0xf1, 0x0e, 0x36, 0x02, 0x00, 0x00	; LDW (360Eh), 0000h
@@ -249351,7 +249351,7 @@ LABEL_F60009:
 	pushw bc
 	calr LABEL_F5EB82
 	popw bc
-	.byte 0xd9, 0xd8	; CP BC, 0
+	cps bc, 0
 	jr z, LABEL_F60033
 
 LABEL_F6002B:
@@ -249386,7 +249386,7 @@ LABEL_F6003E:
 	pushw bc
 	call LABEL_F5EB82
 	popw bc
-	.byte 0xd9, 0xd8	; CP BC, 0
+	cps bc, 0
 	jr z, LABEL_F60076
 
 LABEL_F6006E:
@@ -249453,9 +249453,9 @@ LABEL_F600C2:
 	.byte 0x06, 0x00	; EI 000h
 	.byte 0xc1, 0xcf, 0x34, 0x21	; LD A, (34CFh)
 	.byte 0xc1, 0xfc, 0x35, 0x20	; LD W, (35FCh)
-	.byte 0xc9, 0x33, 0x02	; BIT 002h, A
+	bit 2, a
 	jr nz, LABEL_F600FA
-	.byte 0xc8, 0x33, 0x02	; BIT 002h, W
+	bit 2, w
 	jr nz, LABEL_F600FA
 	jr LABEL_F6011E
 
@@ -249463,7 +249463,7 @@ LABEL_F600FA:
 	ld c, a
 	xor c, w
 	and a, c
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F6010E
 	calr LABEL_F60230
 	.byte 0xc1, 0xfd, 0x35, 0x3e, 0x01	; OR (35FDh), 001h
@@ -249471,7 +249471,7 @@ LABEL_F600FA:
 
 LABEL_F6010E:
 	and w, c
-	.byte 0xc8, 0xd8	; CP W, 0
+	cps w, 0
 	jr z, LABEL_F60119
 	calr LABEL_F5FFEA
 	jr LABEL_F6017B
@@ -249504,15 +249504,15 @@ LABEL_F60142:
 LABEL_F60147:
 	.byte 0xc1, 0x58, 0x35, 0x21	; LD A, (3558h)
 	.byte 0xc1, 0xfb, 0x35, 0x23	; LD C, (35FBh)
-	.byte 0xc9, 0x33, 0x07	; BIT 007h, A
+	bit 7, a
 	jr z, LABEL_F6015E
-	.byte 0xcb, 0x33, 0x07	; BIT 007h, C
+	bit 7, c
 	jr nz, LABEL_F60168
 	calr LABEL_F60230
 	jr LABEL_F6016B
 
 LABEL_F6015E:
-	.byte 0xcb, 0x33, 0x07	; BIT 007h, C
+	bit 7, c
 	jr z, LABEL_F6016B
 	calr LABEL_F5FFEA
 	jr LABEL_F6017B
@@ -249552,7 +249552,7 @@ LABEL_F601A5:
 
 LABEL_F601AA:
 	call LABEL_F61372
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr z, LABEL_F601E2
 	lds bc, 1
 	calr LABEL_F601E3
@@ -249567,7 +249567,7 @@ LABEL_F601AA:
 	lds bc, 1
 	calr LABEL_F601E3
 	.byte 0xcf, 0x05	; POP L
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F601E0
 	or l, 0x80
 	.byte 0xf1, 0x58, 0x35, 0x47	; LD (3558h), L
@@ -249580,7 +249580,7 @@ LABEL_F601E2:
 	ret
 
 LABEL_F601E3:
-	.byte 0xd9, 0xd8	; CP BC, 0
+	cps bc, 0
 	jr z, LABEL_F601F1
 	pushw bc
 	call LABEL_F61379
@@ -249593,7 +249593,7 @@ LABEL_F601F1:
 
 LABEL_F601F2:
 	call LABEL_F61372
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr z, LABEL_F6022F
 	lds bc, 1
 	calr LABEL_F601E3
@@ -249610,7 +249610,7 @@ LABEL_F601F2:
 	jr nz, LABEL_F6022D
 	lds bc, 1
 	calr LABEL_F601E3
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_F6022D
 	.byte 0xc1, 0x58, 0x35, 0x3c, 0x7f	; AND (3558h), 07fh
 	call LABEL_F61380
@@ -249642,7 +249642,7 @@ LABEL_F6024F:
 	pushw bc
 	calr LABEL_F5EB82
 	popw bc
-	.byte 0xd9, 0xd8	; CP BC, 0
+	cps bc, 0
 	jr z, LABEL_F60272
 
 LABEL_F6026A:
@@ -249684,7 +249684,7 @@ LABEL_F602A5:
 	jr LABEL_F602CA
 
 LABEL_F602B3:
-	.byte 0xc9, 0x33, 0x07	; BIT 007h, A
+	bit 7, a
 	jr z, LABEL_F602A5
 	jr LABEL_F60275
 
@@ -249888,7 +249888,7 @@ LABEL_F60486:
 
 LABEL_F6048E:
 	.byte 0xd1, 0x0a, 0x36, 0xa2	; SUB DE, (360Ah)
-	.byte 0xda, 0xde	; CP DE, 6
+	cps de, 6
 	jr z, LABEL_F604B3
 	jr ugt, LABEL_F604B3
 	lds hl, 6
@@ -250074,7 +250074,7 @@ LABEL_F60611:
 
 LABEL_F60612:
 	call LABEL_F61372
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr nz, LABEL_F6061D
 	jrl LABEL_F60698
 
@@ -250258,7 +250258,7 @@ LABEL_F60766:
 	xor w, w
 	ld iy, wa
 	.byte 0xc1, 0xdb, 0x34, 0x21	; LD A, (34DBh)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F607A9
 	ld wa, iy
 	.byte 0xc1, 0xdb, 0x34, 0x20	; LD W, (34DBh)
@@ -250350,7 +250350,7 @@ LABEL_F60839:
 LABEL_F6084A:
 	.byte 0xc1, 0xe9, 0x34, 0x21	; LD A, (34E9h)
 	and a, 0xF
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F60874
 	calr LABEL_F60939
 	.byte 0xc1, 0x4e, 0x3a, 0xf1	; CP A, (3A4Eh)
@@ -250380,7 +250380,7 @@ LABEL_F60874:
 	ld l, a
 	add xhl, 0xF60909
 	ld l, (xhl)
-	.byte 0xcf, 0x33, 0x00	; BIT 000h, L
+	bit 0, l
 	jr z, LABEL_F608A9
 	inc 1, w
 	.byte 0xc1, 0xec, 0x36, 0x21	; LD A, (36ECh)
@@ -250402,7 +250402,7 @@ LABEL_F608B7:
 	jr nz, LABEL_F608D8
 
 LABEL_F608C3:
-	.byte 0xc9, 0xdf	; CP A, 7
+	cps a, 7
 	jr nz, LABEL_F608D8
 	.byte 0xf1, 0x31, 0x34, 0x00, 0x01	; LD (3431h), 001h
 	.byte 0xf1, 0xf0, 0x36, 0x00, 0x03	; LD (36F0h), 003h
@@ -250450,13 +250450,13 @@ LABEL_F60939:
 	call LABEL_F5ED8A
 	.byte 0xc1, 0x9b, 0x37, 0x21	; LD A, (379Bh)
 	ld xix, 0x25
-	.byte 0xc9, 0x33, 0x03	; BIT 003h, A
+	bit 3, a
 	jr nz, LABEL_F6096B
 	ld xix, 0x2D
-	.byte 0xc9, 0x33, 0x00	; BIT 000h, A
+	bit 0, a
 	jr nz, LABEL_F6096B
 	ld xix, 0x35
-	.byte 0xc9, 0x33, 0x01	; BIT 001h, A
+	bit 1, a
 	jr nz, LABEL_F6096B
 	ld xix, 0x3D
 
@@ -250606,7 +250606,7 @@ LABEL_F60A95:
 
 LABEL_F60A97:
 	call LABEL_F61379
-	.byte 0xc9, 0x33, 0x07	; BIT 007h, A
+	bit 7, a
 	jr z, LABEL_F60A97
 	ret
 
@@ -250696,7 +250696,7 @@ LABEL_F60B9A:
 	.byte 0x9c, 0x03, 0x23	; LD HL, (XIX + 003h)
 	calr LABEL_F5EDCC
 	add xix, 0x6
-	.byte 0xd9, 0xd8	; CP BC, 0
+	cps bc, 0
 	jr z, LABEL_F60BBF
 	.byte 0x85, 0x11	; LDIR
 
@@ -250889,7 +250889,7 @@ LABEL_F60D62:
 	cp c, a
 	jr nc, LABEL_F60DA0
 	add c, 0x60
-	.byte 0xcc, 0xd8	; CP D, 0
+	cps d, 0
 	jr z, LABEL_F60DA0
 	dec 1, d
 
@@ -250901,7 +250901,7 @@ LABEL_F60DA0:
 
 LABEL_F60DA9:
 	sub iy, 0x6
-	.byte 0xdd, 0xd8	; CP IY, 0
+	cps iy, 0
 	jr lt, LABEL_F60DB3
 	jr LABEL_F60D62
 
@@ -251596,7 +251596,7 @@ LABEL_F61390:
 	.byte 0xc1, 0x10, 0x35, 0xf1	; CP A, (3510h)
 	jr z, LABEL_F613AE
 	and a, 0x1F
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F613AE
 	.byte 0xc1, 0xd0, 0x34, 0x3e, 0x10	; OR (34D0h), 010h
 
@@ -251645,7 +251645,7 @@ LABEL_F61422:
 	.byte 0xc1, 0xd0, 0x34, 0x3c, 0xfe	; AND (34D0h), 0feh
 	.byte 0xc1, 0x13, 0x37, 0x21	; LD A, (3713h)
 	and a, 0xC0
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F61449
 	.byte 0xc1, 0xd0, 0x34, 0x3e, 0x01	; OR (34D0h), 001h
 	calr LABEL_F6152F
@@ -251672,7 +251672,7 @@ LABEL_F6145E:
 LABEL_F61470:
 	.byte 0xc1, 0x13, 0x37, 0x21	; LD A, (3713h)
 	and a, 0x3
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F61483
 	calr LABEL_F6171D
 	.byte 0xc1, 0x13, 0x37, 0x3c, 0xfc	; AND (3713h), 0fch
@@ -251680,7 +251680,7 @@ LABEL_F61470:
 LABEL_F61483:
 	.byte 0xc1, 0x2d, 0x37, 0x21	; LD A, (372Dh)
 	and a, 0x3F
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F61496
 	calr LABEL_F62661
 	.byte 0xc1, 0x2d, 0x37, 0x3c, 0xc0	; AND (372Dh), 0c0h
@@ -251841,7 +251841,7 @@ LABEL_F615C5:
 	popw bc
 
 LABEL_F615D3:
-	.byte 0xcb, 0xd8	; CP C, 0
+	cps c, 0
 	jr z, LABEL_F615E5
 	ld a, (xix)
 	cp a, 0x81
@@ -251895,7 +251895,7 @@ LABEL_F61636:
 	.byte 0xf1, 0x0f, 0x35, 0x00, 0x00	; LD (350Fh), 000h
 
 LABEL_F6163B:
-	.byte 0xcb, 0xd8	; CP C, 0
+	cps c, 0
 	jr nz, LABEL_F61642
 	jrl LABEL_F616D4
 
@@ -252073,7 +252073,7 @@ LABEL_F61760:
 
 LABEL_F617C7:
 	calr LABEL_F62C40
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_F6175A
 	.byte 0xd1, 0x6b, 0x34, 0x20	; LD WA, (346Bh)
 	.byte 0xf1, 0x14, 0x35, 0x50	; LD (3514h), WA
@@ -252132,7 +252132,7 @@ LABEL_F61842:
 	jr LABEL_F6188C
 
 LABEL_F61857:
-	.byte 0xd9, 0xd8	; CP BC, 0
+	cps bc, 0
 	jr nz, LABEL_F61863
 	.byte 0xf1, 0x22, 0x35, 0xcb	; BIT 3, (3522h)
 	jr z, LABEL_F61863
@@ -252147,7 +252147,7 @@ LABEL_F61868:
 	xor w, w
 	ldb l, 0xC
 	.byte 0xcf, 0x51	; DIV WA, L
-	.byte 0xc8, 0xd8	; CP W, 0
+	cps w, 0
 	jr nz, LABEL_F6187A
 	ldb w, 0xC
 
@@ -252234,7 +252234,7 @@ LABEL_F6193B:
 	calr LABEL_F614B1
 	.byte 0xd1, 0x49, 0x34, 0x20	; LD WA, (3449h)
 	.byte 0xc3, 0x07, 0xec, 0xe0, 0x21	; LD A, (XHL + WA)
-	.byte 0xc9, 0x33, 0x07	; BIT 007h, A
+	bit 7, a
 	jr z, LABEL_F6193B
 	cp a, 0x81
 	jrl z, LABEL_F619DA
@@ -252339,7 +252339,7 @@ LABEL_F61A1E:
 	.byte 0xc8, 0x49	; MULS WA, W
 	add d, a
 	ld wa, bc
-	.byte 0xc8, 0xd8	; CP W, 0
+	cps w, 0
 	jr nz, LABEL_F61A44
 	ldb w, 0xC
 
@@ -252475,7 +252475,7 @@ LABEL_F61B56:
 LABEL_F61B58:
 	.byte 0xc1, 0x9b, 0x37, 0x21	; LD A, (379Bh)
 	and a, 0x1F
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_F61B6A
 	or a, 0x10
 	.byte 0xf1, 0x9b, 0x37, 0x41	; LD (379Bh), A
@@ -252651,7 +252651,7 @@ LABEL_F61C9A:
 	ld de, wa
 	.byte 0xc1, 0x9b, 0x37, 0x21	; LD A, (379Bh)
 	and a, 0x1F
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_F61CE6
 	or a, 0x10
 	.byte 0xf1, 0x9b, 0x37, 0x41	; LD (379Bh), A
@@ -252734,7 +252734,7 @@ LABEL_F61D78:
 
 LABEL_F61D7D:
 	call LABEL_F61372
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr z, LABEL_F61D99
 	.byte 0xf1, 0xd0, 0x34, 0xcf	; BIT 7, (34D0h)
 	jr nz, LABEL_F61D99
@@ -252803,7 +252803,7 @@ LABEL_F61E09:
 
 LABEL_F61E2A:
 	.byte 0xc1, 0xfd, 0x34, 0x27	; LD L, (34FDh)
-	.byte 0xcf, 0xdd	; CP L, 5
+	cps l, 5
 	jr ugt, LABEL_F61E61
 	xor h, h
 	ld xiy, 0x3500
@@ -252829,7 +252829,7 @@ LABEL_F61E63:
 	cp a, 0xFF
 	jr z, LABEL_F61E7B
 	.byte 0xf1, 0xfd, 0x34, 0x41	; LD (34FDh), A
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_F61E7B
 	.byte 0xc1, 0xd0, 0x34, 0x3e, 0x80	; OR (34D0h), 080h
 
@@ -252848,7 +252848,7 @@ LABEL_F61E7E:
 	ld xiy, 0x366A
 
 LABEL_F61E94:
-	.byte 0xcd, 0xd8	; CP E, 0
+	cps e, 0
 	jr z, LABEL_F61EAE
 	ld l, e
 	dec 1, l
@@ -252898,7 +252898,7 @@ LABEL_F61EE4:
 	ld xiy, 0x366A
 
 LABEL_F61EFA:
-	.byte 0xcd, 0xd8	; CP E, 0
+	cps e, 0
 	jr z, LABEL_F61F3D
 	ld l, e
 	dec 1, l
@@ -252936,7 +252936,7 @@ LABEL_F61F3E:
 LABEL_F61F40:
 	.byte 0xc1, 0xe9, 0x34, 0x21	; LD A, (34E9h)
 	and a, 0xF
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F61F6E
 	call LABEL_F60939
 	.byte 0xc1, 0x4e, 0x3a, 0xf1	; CP A, (3A4Eh)
@@ -252969,7 +252969,7 @@ LABEL_F61F6E:
 	ld xix, 0xF62004
 	.byte 0xc3, 0x07, 0xf0, 0xe0, 0x21	; LD A, (XIX + WA)
 	pop xix
-	.byte 0xc9, 0x33, 0x00	; BIT 000h, A
+	bit 0, a
 	jr z, LABEL_F61FAA
 	inc 1, c
 	.byte 0xc3, 0x07, 0xf0, 0xec, 0x21	; LD A, (XIX + HL)
@@ -252993,7 +252993,7 @@ LABEL_F61FBA:
 	jr nz, LABEL_F61FDB
 
 LABEL_F61FC6:
-	.byte 0xc9, 0xdf	; CP A, 7
+	cps a, 7
 	jr nz, LABEL_F61FDB
 	.byte 0xf1, 0x31, 0x34, 0x00, 0x01	; LD (3431h), 001h
 	.byte 0xf1, 0x32, 0x34, 0x00, 0x03	; LD (3432h), 003h
@@ -253270,7 +253270,7 @@ LABEL_F622BA:
 	call LABEL_F5ED8A
 	.byte 0xc1, 0x9b, 0x37, 0x21	; LD A, (379Bh)
 	and a, 0x1F
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_F622D0
 	or a, 0x10
 	.byte 0xf1, 0x9b, 0x37, 0x41	; LD (379Bh), A
@@ -253426,7 +253426,7 @@ LABEL_F62424:
 LABEL_F62429:
 	.byte 0xc1, 0x23, 0x35, 0x21	; LD A, (3523h)
 	and a, 0x3
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F62497
 	.byte 0xf1, 0x23, 0x35, 0xc9	; BIT 1, (3523h)
 	jr nz, LABEL_F62450
@@ -253444,7 +253444,7 @@ LABEL_F62450:
 	ld wa, iy
 	sub c, a
 	jr c, LABEL_F62478
-	.byte 0xcb, 0xde	; CP C, 6
+	cps c, 6
 	jr c, LABEL_F62478
 	.byte 0xf1, 0x35, 0x34, 0x43	; LD (3435h), C
 	.byte 0xe1, 0x4c, 0x35, 0x24	; LD XIX, (354Ch)
@@ -253478,7 +253478,7 @@ LABEL_F6249A:
 	.byte 0xc1, 0xd0, 0x34, 0x3c, 0xbf	; AND (34D0h), 0bfh
 	.byte 0xc1, 0x9b, 0x37, 0x21	; LD A, (379Bh)
 	and a, 0x1F
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_F624B1
 	or a, 0x10
 	.byte 0xf1, 0x9b, 0x37, 0x41	; LD (379Bh), A
@@ -253544,7 +253544,7 @@ LABEL_F62534:
 
 LABEL_F62536:
 	.byte 0xc1, 0x14, 0x37, 0x27	; LD L, (3714h)
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_F62540
 	ldb l, 0x6
 
@@ -253565,7 +253565,7 @@ LABEL_F62540:
 	.byte 0xf1, 0x2f, 0x34, 0x40	; LD (342Fh), W
 	.byte 0xf1, 0x30, 0x34, 0x41	; LD (3430h), A
 	.byte 0xc1, 0x16, 0x37, 0x21	; LD A, (3716h)
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	jr nz, LABEL_F62585
 	sla de, 2
 	ld wa, de
@@ -253576,7 +253576,7 @@ LABEL_F62540:
 	jr LABEL_F625B0
 
 LABEL_F62585:
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_F625A0
 	ld wa, de
 	sla wa, 4
@@ -253590,7 +253590,7 @@ LABEL_F62585:
 	jr LABEL_F625B0
 
 LABEL_F625A0:
-	.byte 0xc9, 0xda	; CP A, 2
+	cps a, 2
 	jr nz, LABEL_F625AB
 	srl de, 1
 	ld wa, de
@@ -253652,11 +253652,11 @@ LABEL_F62627:
 
 LABEL_F62629:
 	.byte 0xc1, 0x18, 0x35, 0x21	; LD A, (3518h)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F6265E
 	dec 1, a
 	.byte 0xf1, 0x18, 0x35, 0x41	; LD (3518h), A
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_F6265E
 	.byte 0xc1, 0x16, 0x35, 0x21	; LD A, (3516h)
 	.byte 0xc1, 0x17, 0x35, 0x25	; LD E, (3517h)
@@ -253686,14 +253686,14 @@ LABEL_F62661:
 	jr nz, LABEL_F6268A
 	.byte 0xc1, 0x2d, 0x37, 0x21	; LD A, (372Dh)
 	and a, 0xC
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F6267C
 	calr LABEL_F626A8
 
 LABEL_F6267C:
 	.byte 0xc1, 0x2d, 0x37, 0x21	; LD A, (372Dh)
 	and a, 0x3
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F6268A
 	calr LABEL_F62778
 
@@ -253704,7 +253704,7 @@ LABEL_F6268A:
 	jr nz, LABEL_F626A5
 	.byte 0xc1, 0x2d, 0x37, 0x21	; LD A, (372Dh)
 	and a, 0x30
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F626A5
 	calr LABEL_F627F6
 
@@ -253805,7 +253805,7 @@ LABEL_F6274B:
 	pop xde
 	.byte 0xc1, 0x9b, 0x37, 0x21	; LD A, (379Bh)
 	and a, 0xF
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F62775
 	calr LABEL_F62986
 
@@ -253846,7 +253846,7 @@ LABEL_F627CA:
 
 LABEL_F627CC:
 	dec 1, a
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F627D7
 	cp a, 0xFF
 	jr nz, LABEL_F627D9
@@ -254001,7 +254001,7 @@ LABEL_F629B6:
 	jr nz, LABEL_F629CA
 
 LABEL_F629C2:
-	.byte 0xc9, 0xdf	; CP A, 7
+	cps a, 7
 	jr nz, LABEL_F629CA
 	ldb e, 0x91
 	jr LABEL_F629E4
@@ -254016,7 +254016,7 @@ LABEL_F629CA:
 	add xix, xhl
 	ld a, (xix)
 	pop xix
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F629E4
 	ldb e, 0x91
 
@@ -254171,7 +254171,7 @@ LABEL_F62B79:
 	jr nz, LABEL_F62B96
 
 LABEL_F62B85:
-	.byte 0xc9, 0xdf	; CP A, 7
+	cps a, 7
 	jr nz, LABEL_F62B96
 	.byte 0xb5, 0x00, 0x91	; LD (XIY), 091h
 	.byte 0xbd, 0x06, 0x00, 0x03	; LD (XIY + 006h), 003h
@@ -254188,7 +254188,7 @@ LABEL_F62B96:
 	add xix, xhl
 	ld a, (xix)
 	.byte 0xb5, 0x00, 0x90	; LD (XIY), 090h
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F62BBF
 	.byte 0xb5, 0x00, 0x91	; LD (XIY), 091h
 	.byte 0x8c, 0x01, 0x21	; LD A, (XIX + 001h)
@@ -254429,7 +254429,7 @@ LABEL_F62DB0:
 	.byte 0xc1, 0xd7, 0x34, 0x22	; LD B, (34D7h)
 	.byte 0xc1, 0xd9, 0x34, 0x3f, 0x04	; CP (34D9h), 004h
 	jr ugt, LABEL_F62DDD
-	.byte 0xca, 0xdb	; CP B, 3
+	cps b, 3
 	jr ugt, LABEL_F62DCF
 	ldb c, 0x0
 	jr LABEL_F62DDB
@@ -254444,7 +254444,7 @@ LABEL_F62DDB:
 	jr LABEL_F62DF1
 
 LABEL_F62DDD:
-	.byte 0xca, 0xd9	; CP B, 1
+	cps b, 1
 	jr ugt, LABEL_F62DE5
 	ldb c, 0x0
 	jr LABEL_F62DF1
@@ -254486,7 +254486,7 @@ LABEL_F62E1B:
 	.byte 0x00, 0x00
 
 LABEL_F62E1D:
-	.byte 0xcb, 0xd8	; CP C, 0
+	cps c, 0
 	jr z, LABEL_F62E3C
 	ld a, c
 	add a, 0x2
@@ -254509,9 +254509,9 @@ LABEL_F62E3D:
 	.byte 0x00, 0x00
 
 LABEL_F62E3F:
-	.byte 0xcb, 0xd8	; CP C, 0
+	cps c, 0
 	jr nz, LABEL_F62E56
-	.byte 0xcc, 0xd9	; CP D, 1
+	cps d, 1
 	jr nz, LABEL_F62E56
 	ld a, b
 	inc 1, a
@@ -254536,7 +254536,7 @@ LABEL_F62E59:
 	inc 1, a
 	cp d, a
 	jr nz, LABEL_F62E70
-	.byte 0xcd, 0xd9	; CP E, 1
+	cps e, 1
 	jr nz, LABEL_F62E70
 	ldb c, 0x0
 
@@ -254567,7 +254567,7 @@ LABEL_F62E8D:
 	.byte 0x00, 0x00
 
 LABEL_F62E8F:
-	.byte 0xcb, 0xd8	; CP C, 0
+	cps c, 0
 	jr z, LABEL_F62EAB
 	ld a, c
 	cp b, a
@@ -254589,9 +254589,9 @@ LABEL_F62EAC:
 	.byte 0x00, 0x00
 
 LABEL_F62EAE:
-	.byte 0xcb, 0xd8	; CP C, 0
+	cps c, 0
 	jr nz, LABEL_F62EC4
-	.byte 0xcc, 0xd9	; CP D, 1
+	cps d, 1
 	jr nz, LABEL_F62EC4
 	ld a, b
 	inc 1, a
@@ -254616,7 +254616,7 @@ LABEL_F62EC7:
 	inc 1, a
 	cp d, a
 	jr nz, LABEL_F62EDD
-	.byte 0xcd, 0xd9	; CP E, 1
+	cps e, 1
 	jr nz, LABEL_F62EDD
 	ldb c, 0x0
 
@@ -254685,7 +254685,7 @@ LABEL_F62F34:
 	.byte 0xf1, 0x44, 0x37, 0x50	; LD (3744h), WA
 	jr LABEL_F62F65
 	.byte 0xc1, 0xd9, 0x34, 0x21	; LD A, (34D9h)
-	.byte 0xc9, 0xdc	; CP A, 4
+	cps a, 4
 	jr ule, LABEL_F62F5E
 	.byte 0xc1, 0xfb, 0x34, 0x3f, 0x04	; CP (34FBh), 004h
 	jr nc, LABEL_F62F5B
@@ -254729,7 +254729,7 @@ LABEL_F62FAB:
 LABEL_F62FAE:
 	.byte 0xc1, 0xd7, 0x34, 0x21	; LD A, (34D7h)
 	.byte 0xc1, 0x46, 0x37, 0xa1	; SUB A, (3746h)
-	.byte 0xc9, 0xda	; CP A, 2
+	cps a, 2
 	jr gt, LABEL_F62FBD
 	jrl LABEL_F63049
 
@@ -254765,7 +254765,7 @@ LABEL_F62FEF:
 LABEL_F63014:
 	.byte 0xc1, 0xd7, 0x34, 0x21	; LD A, (34D7h)
 	.byte 0xc1, 0x46, 0x37, 0xa1	; SUB A, (3746h)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr le, LABEL_F63049
 	.byte 0xf1, 0x3e, 0x37, 0x00, 0x04	; LD (373Eh), 004h
 	.byte 0xc1, 0xd9, 0x34, 0x21	; LD A, (34D9h)
@@ -255304,7 +255304,7 @@ LABEL_F63675:
 	.byte 0x85, 0x11	; LDIR
 	inc 1, xix
 	dec 1, a
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_F63675
 	.byte 0xe1, 0x60, 0x35, 0x24	; LD XIX, (3560h)
 	ld xiy, 0x22
@@ -255354,13 +255354,13 @@ LABEL_F636FB:
 	calr LABEL_F637DB
 	.byte 0xf1, 0xb3, 0x35, 0x45	; LD (35B3h), E
 	.byte 0xc1, 0xef, 0x34, 0x21	; LD A, (34EFh)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F63722
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	jr z, LABEL_F63722
-	.byte 0xc9, 0xda	; CP A, 2
+	cps a, 2
 	jr z, LABEL_F63722
-	.byte 0xc9, 0xdb	; CP A, 3
+	cps a, 3
 	jr z, LABEL_F63722
 	jr LABEL_F63748
 
@@ -255382,19 +255382,19 @@ LABEL_F63744:
 LABEL_F63748:
 	.byte 0xe1, 0x64, 0x35, 0x23	; LD XHL, (3564h)
 	add xhl, 0x138
-	.byte 0xc9, 0xdc	; CP A, 4
+	cps a, 4
 	jr z, LABEL_F63782
 	.byte 0xe1, 0x64, 0x35, 0x23	; LD XHL, (3564h)
 	add xhl, 0x13C
-	.byte 0xc9, 0xde	; CP A, 6
+	cps a, 6
 	jr z, LABEL_F63782
 	.byte 0xe1, 0x64, 0x35, 0x23	; LD XHL, (3564h)
 	add xhl, 0x538
-	.byte 0xc9, 0xdd	; CP A, 5
+	cps a, 5
 	jr z, LABEL_F63782
 	.byte 0xe1, 0x64, 0x35, 0x23	; LD XHL, (3564h)
 	add xhl, 0x53C
-	.byte 0xc9, 0xdf	; CP A, 7
+	cps a, 7
 	jr z, LABEL_F63782
 	jr LABEL_F637AC
 
@@ -255409,7 +255409,7 @@ LABEL_F63782:
 	xor w, w
 	.byte 0xcd, 0x51	; DIV WA, E
 	dec 1, a
-	.byte 0xc8, 0xd8	; CP W, 0
+	cps w, 0
 	jr z, LABEL_F637D8
 	ldb a, 0x8
 	call LABEL_FEBDA1
@@ -256071,7 +256071,7 @@ LABEL_F63F0A:
 	ld (xhl), a
 	inc 1, xhl
 	dec 1, e
-	.byte 0xcd, 0xd8	; CP E, 0
+	cps e, 0
 	jr nz, LABEL_F63F0A
 	.byte 0xb3, 0x00, 0x83	; LD (XHL), 083h
 	ret
@@ -256986,30 +256986,30 @@ LABEL_F64C24:
 LABEL_F64C62:
 	.byte 0xc1, 0xf1, 0x34, 0x20	; LD W, (34F1h)
 	and w, 0xC2
-	.byte 0xc8, 0x33, 0x07	; BIT 007h, W
+	bit 7, w
 	jr z, LABEL_F64C9A
 	.byte 0xc1, 0x9b, 0x37, 0x21	; LD A, (379Bh)
-	.byte 0xc9, 0x33, 0x04	; BIT 004h, A
+	bit 4, a
 	jr z, LABEL_F64C7A
 	or w, 0x3C
 
 LABEL_F64C7A:
-	.byte 0xc9, 0x33, 0x03	; BIT 003h, A
+	bit 3, a
 	jr z, LABEL_F64C82
 	or w, 0x39
 
 LABEL_F64C82:
-	.byte 0xc9, 0x33, 0x00	; BIT 000h, A
+	bit 0, a
 	jr z, LABEL_F64C8A
 	or w, 0x35
 
 LABEL_F64C8A:
-	.byte 0xc9, 0x33, 0x01	; BIT 001h, A
+	bit 1, a
 	jr z, LABEL_F64C92
 	or w, 0x2D
 
 LABEL_F64C92:
-	.byte 0xc9, 0x33, 0x02	; BIT 002h, A
+	bit 2, a
 	jr z, LABEL_F64C9A
 	or w, 0x1D
 
@@ -257098,7 +257098,7 @@ LABEL_F64E14:
 	.byte 0xf1, 0xd7, 0x34, 0x41	; LD (34D7h), A
 	.byte 0xc1, 0xce, 0x34, 0x3c, 0x7f	; AND (34CEh), 07fh
 	.byte 0x8d, 0x0f, 0x21	; LD A, (XIY + 00fh)
-	.byte 0xc9, 0x33, 0x07	; BIT 007h, A
+	bit 7, a
 	jr z, LABEL_F64E48
 	.byte 0xc1, 0xce, 0x34, 0x3e, 0x80	; OR (34CEh), 080h
 
@@ -257108,17 +257108,17 @@ LABEL_F64E48:
 	and a, 0xF
 	.byte 0xf1, 0xe9, 0x34, 0x41	; LD (34E9h), A
 	.byte 0xc1, 0xea, 0x34, 0x3c, 0x8f	; AND (34EAh), 08fh
-	.byte 0xc8, 0x33, 0x04	; BIT 004h, W
+	bit 4, w
 	jr z, LABEL_F64E63
 	.byte 0xc1, 0xea, 0x34, 0x3e, 0x10	; OR (34EAh), 010h
 
 LABEL_F64E63:
-	.byte 0xc8, 0x33, 0x05	; BIT 005h, W
+	bit 5, w
 	jr z, LABEL_F64E6D
 	.byte 0xc1, 0xea, 0x34, 0x3e, 0x20	; OR (34EAh), 020h
 
 LABEL_F64E6D:
-	.byte 0xc8, 0x33, 0x06	; BIT 006h, W
+	bit 6, w
 	jr z, LABEL_F64E77
 	.byte 0xc1, 0xea, 0x34, 0x3e, 0x40	; OR (34EAh), 040h
 
@@ -257161,7 +257161,7 @@ LABEL_F64F1F:
 LABEL_F64F26:
 	.byte 0xc1, 0xe2, 0xe3, 0x3c, 0xf7	; AND (0E3E2h), 0f7h
 	ld xwa, 0xF64F4D
-	.byte 0xdb, 0xdc	; CP HL, 4
+	cps hl, 4
 	jr c, LABEL_F64F38
 	sub hl, 0x4
 
@@ -257262,11 +257262,11 @@ LABEL_F6504C:
 LABEL_F65052:
 	.byte 0xc1, 0xcf, 0x34, 0x21	; LD A, (34CFh)
 	and a, 0xC
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_F65090
 	.byte 0xc1, 0xfc, 0x35, 0x21	; LD A, (35FCh)
 	and a, 0xC
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_F65090
 	and hl, 0xF
 	ld xwa, 0xF64F4D
@@ -257351,7 +257351,7 @@ LABEL_F6524C:
 	push xiz
 	push xix
 	.byte 0xc1, 0x40, 0x35, 0x21	; LD A, (3540h)
-	.byte 0xc8, 0x33, 0x07	; BIT 007h, W
+	bit 7, w
 	jr nz, LABEL_F65279
 	ldb l, 0x6
 	ld xix, 0x94800
@@ -257369,7 +257369,7 @@ LABEL_F65271:
 	jr LABEL_F6527F
 
 LABEL_F65279:
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	jr z, LABEL_F65283
 	dec 1, a
 
@@ -257385,7 +257385,7 @@ LABEL_F65286:
 	push xiz
 	xor hl, hl
 	.byte 0xc1, 0x40, 0x35, 0x27	; LD L, (3540h)
-	.byte 0xcf, 0xd9	; CP L, 1
+	cps l, 1
 	jr nc, LABEL_F65293
 	ldb l, 0x1
 
@@ -257984,7 +257984,7 @@ LABEL_F66263:
 
 LABEL_F66288:
 	ld bc, wa
-	.byte 0xd8, 0xd9	; CP WA, 1
+	cps wa, 1
 	jr ule, LABEL_F662B4
 	dec 1, bc
 	.byte 0xf1, 0x8a, 0x39, 0x51	; LD (398Ah), BC
@@ -258029,7 +258029,7 @@ LABEL_F662B7:
 
 LABEL_F662DE:
 	ld bc, wa
-	.byte 0xd8, 0xd9	; CP WA, 1
+	cps wa, 1
 	jr ule, LABEL_F6630C
 	dec 1, bc
 	.byte 0xf1, 0x8c, 0x39, 0x51	; LD (398Ch), BC
@@ -258074,7 +258074,7 @@ LABEL_F6630F:
 
 LABEL_F66333:
 	ld c, a
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	jr ule, LABEL_F66343
 	dec 1, c
 	.byte 0xf1, 0x8e, 0x39, 0x43	; LD (398Eh), C
@@ -258106,7 +258106,7 @@ LABEL_F66346:
 	jr LABEL_F6637B
 
 LABEL_F66375:
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F66381
 	dec 1, a
 
@@ -258119,7 +258119,7 @@ LABEL_F66381:
 	ret
 
 LABEL_F66384:
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	.byte 0xb0, 0xfe	; RET NZ
 	ldw wa, 0x9
 	ldw bc, 0x8
@@ -258133,13 +258133,13 @@ LABEL_F66384:
 	ret
 
 LABEL_F663A5:
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	.byte 0xb0, 0xfe	; RET NZ
 	ldw wa, 0x9
 	ldw bc, 0x8
 	calr LABEL_F66559
 	.byte 0xc1, 0x8f, 0x39, 0x21	; LD A, (398Fh)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	.byte 0xb0, 0xf6	; RET Z
 	dec 1, a
 	.byte 0xf1, 0x8f, 0x39, 0x41	; LD (398Fh), A
@@ -258160,14 +258160,14 @@ LABEL_F663C5:
 	.byte 0xe0, 0xe3, 0xbc, 0xef, 0x62, 0x0e
 
 LABEL_F6641B:
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	.byte 0xb0, 0xfe	; RET NZ
 	.byte 0xf1, 0x88, 0x8d, 0xb8	; SET 0, (8D88h)
 	calr LABEL_F6657D
 	.byte 0xf1, 0x88, 0x39, 0x47	; LD (3988h), L
-	.byte 0xcf, 0xd9	; CP L, 1
+	cps l, 1
 	jr z, LABEL_F6643A
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_F66447
 	ldw wa, 0x23
 	calr LABEL_F66567
@@ -258244,11 +258244,11 @@ LABEL_F6657D:
 	lds wa, 0
 	calr LABEL_F669D3
 	.byte 0xc1, 0x91, 0x39, 0x21	; LD A, (3991h)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F665C9
 	extz wa
 	calr LABEL_F66B18
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_F665C9
 	.byte 0xc1, 0x91, 0x39, 0x23	; LD C, (3991h)
 	extz bc
@@ -258268,11 +258268,11 @@ LABEL_F665C9:
 	lds wa, 1
 	calr LABEL_F669D3
 	.byte 0xc1, 0x92, 0x39, 0x21	; LD A, (3992h)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F66606
 	extz wa
 	calr LABEL_F66B18
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_F66606
 	.byte 0xc1, 0x92, 0x39, 0x23	; LD C, (3992h)
 	extz bc
@@ -258292,11 +258292,11 @@ LABEL_F66606:
 	lds wa, 2
 	calr LABEL_F669D3
 	.byte 0xc1, 0x93, 0x39, 0x21	; LD A, (3993h)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F66642
 	extz wa
 	calr LABEL_F66B18
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_F66642
 	.byte 0xc1, 0x93, 0x39, 0x23	; LD C, (3993h)
 	extz bc
@@ -258316,11 +258316,11 @@ LABEL_F66642:
 	lds wa, 3
 	calr LABEL_F669D3
 	.byte 0xc1, 0x94, 0x39, 0x21	; LD A, (3994h)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F6667E
 	extz wa
 	calr LABEL_F66B18
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_F6667E
 	.byte 0xc1, 0x94, 0x39, 0x23	; LD C, (3994h)
 	extz bc
@@ -258340,11 +258340,11 @@ LABEL_F6667E:
 	lds wa, 4
 	calr LABEL_F669D3
 	.byte 0xc1, 0x95, 0x39, 0x21	; LD A, (3995h)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F666BD
 	extz wa
 	calr LABEL_F66B18
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_F666BD
 	.byte 0xc1, 0x95, 0x39, 0x23	; LD C, (3995h)
 	extz bc
@@ -258390,7 +258390,7 @@ LABEL_F666E9:
 	.byte 0xf5, 0xe4, 0x00, 0x00	; LD (XBC+), 000h
 	cp xbc, xde
 	jr c, LABEL_F666E9
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_F666FB
 	.byte 0xf1, 0x97, 0x39, 0xb8	; SET 0, (3997h)
 	jr LABEL_F666FF
@@ -258399,7 +258399,7 @@ LABEL_F666FB:
 	.byte 0xf1, 0x97, 0x39, 0xb0	; RES 0, (3997h)
 
 LABEL_F666FF:
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	jr nz, LABEL_F66709
 	.byte 0xf1, 0x97, 0x39, 0xb9	; SET 1, (3997h)
 	jr LABEL_F6670D
@@ -258432,7 +258432,7 @@ LABEL_F6673A:
 
 LABEL_F6673F:
 	calr LABEL_F66B9F
-	.byte 0xcf, 0xd9	; CP L, 1
+	cps l, 1
 	jr nz, LABEL_F66721
 	jr LABEL_F66775
 
@@ -258444,7 +258444,7 @@ LABEL_F66748:
 LABEL_F66750:
 	.byte 0xf1, 0x98, 0x39, 0x00, 0x81	; LD (3998h), 081h
 	calr LABEL_F66B9F
-	.byte 0xcf, 0xd9	; CP L, 1
+	cps l, 1
 	jr z, LABEL_F66775
 	.byte 0xc7, 0xfb, 0x61	; INC 1, QIZH
 	.byte 0xc7, 0xfb, 0x89	; LD A, QIZH
@@ -258454,7 +258454,7 @@ LABEL_F66750:
 LABEL_F66767:
 	.byte 0xf1, 0x98, 0x39, 0x00, 0x83	; LD (3998h), 083h
 	calr LABEL_F66B9F
-	.byte 0xcf, 0xd9	; CP L, 1
+	cps l, 1
 	jr z, LABEL_F66775
 	ldb l, 0x0
 
@@ -258679,9 +258679,9 @@ LABEL_F66956:
 	and c, 0x1
 	sll c, 7
 	.byte 0x8b, 0x05, 0x25	; LD E, (XHL + 005h)
-	.byte 0xcd, 0x30, 0x07	; RES 007h, E
+	res 7, e
 	.byte 0x8b, 0x04, 0x27	; LD L, (XHL + 004h)
-	.byte 0xcf, 0x30, 0x07	; RES 007h, L
+	res 7, l
 	extz de
 	or c, l
 	extz bc
@@ -258720,7 +258720,7 @@ LABEL_F669A9:
 	jr nc, LABEL_F669BE
 	cp c, 0x80
 	jr c, LABEL_F669BE
-	.byte 0xcd, 0xdf	; CP E, 7
+	cps e, 7
 	jr nz, LABEL_F669BE
 	ldb c, 0x58
 	jr LABEL_F669C5
@@ -258737,7 +258737,7 @@ LABEL_F669C5:
 
 LABEL_F669CB:
 	ld (xwa), c
-	.byte 0xcd, 0x30, 0x07	; RES 007h, E
+	res 7, e
 	ld (xhl), e
 	ret
 
@@ -258747,15 +258747,15 @@ LABEL_F669D3:
 	.byte 0xc7, 0xfa, 0x9b	; LD QIZL, C
 	.byte 0xc1, 0x9b, 0x37, 0x23	; LD C, (379Bh)
 	.byte 0xc7, 0xfb, 0x9b	; LD QIZH, C
-	.byte 0xc9, 0xdc	; CP A, 4
+	cps a, 4
 	jr z, LABEL_F66A14
-	.byte 0xc9, 0xdb	; CP A, 3
+	cps a, 3
 	jr z, LABEL_F66A0D
-	.byte 0xc9, 0xda	; CP A, 2
+	cps a, 2
 	jr z, LABEL_F66A06
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	jr z, LABEL_F669FF
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_F66A19
 	.byte 0xf1, 0x9b, 0x37, 0x00, 0x10	; LD (379Bh), 010h
 	jr LABEL_F66A19
@@ -258860,35 +258860,35 @@ LABEL_F66AC9:
 	call LABEL_F400D9
 	.byte 0xd1, 0x8a, 0x39, 0x19, 0x7f, 0x28	; LDW_16_16 0287Fh, 0398Ah
 	.byte 0xc1, 0x93, 0x39, 0x21	; LD A, (3993h)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F66ADF
 	extz wa
 	jr LABEL_F66B0D
 
 LABEL_F66ADF:
 	.byte 0xc1, 0x94, 0x39, 0x21	; LD A, (3994h)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F66AEB
 	extz wa
 	jr LABEL_F66B0D
 
 LABEL_F66AEB:
 	.byte 0xc1, 0x95, 0x39, 0x21	; LD A, (3995h)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F66AF7
 	extz wa
 	jr LABEL_F66B0D
 
 LABEL_F66AF7:
 	.byte 0xc1, 0x92, 0x39, 0x21	; LD A, (3992h)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F66B03
 	extz wa
 	jr LABEL_F66B0D
 
 LABEL_F66B03:
 	.byte 0xc1, 0x91, 0x39, 0x21	; LD A, (3991h)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F66B11
 	extz wa
 
@@ -259097,7 +259097,7 @@ LABEL_F66C7C:
 	cp wa, 0xFF
 	jr c, LABEL_F66CF7
 	.byte 0xd1, 0xd4, 0x34, 0x20	; LD WA, (34D4h)
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr nz, LABEL_F66C9D
 	ld xhl, 0xFFFFFFFF
 	jr LABEL_F66CFA
@@ -259171,9 +259171,9 @@ LABEL_F66D15:
 LABEL_F66D36:
 	extz bc
 	sub bc, 0x80
-	.byte 0xd9, 0xd8	; CP BC, 0
+	cps bc, 0
 	jr lt, LABEL_F66D5A
-	.byte 0xd9, 0xde	; CP BC, 6
+	cps bc, 6
 	jr gt, LABEL_F66D5A
 	add bc, bc
 	.byte 0xf2, 0x26, 0xa1, 0xe4, 0x34	; LDA XIX, 0E4A126h
@@ -259226,7 +259226,7 @@ LABEL_F66DA7:
 	ld a, (xbc)
 	sub a, e
 	ld (xbc), a
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr ge, LABEL_F66DC1
 	.byte 0xb4, 0x00, 0x00	; LD (XIX), 000h
 
@@ -259249,11 +259249,11 @@ LABEL_F66DD6:
 	.byte 0xbb, 0x07, 0x31	; LDA XBC, XHL + 007h
 	cp e, 0xB
 	jr z, LABEL_F66E09
-	.byte 0xcd, 0xdf	; CP E, 7
+	cps e, 7
 	jr z, LABEL_F66DFF
-	.byte 0xcd, 0xdc	; CP E, 4
+	cps e, 4
 	jr z, LABEL_F66DF7
-	.byte 0xcd, 0xdb	; CP E, 3
+	cps e, 3
 	jr nz, LABEL_F66E13
 
 LABEL_F66DF7:
@@ -259282,7 +259282,7 @@ LABEL_F66E13:
 LABEL_F66E17:
 	ld xde, xbc
 	ld c, (xbc)
-	.byte 0xcb, 0x30, 0x07	; RES 007h, C
+	res 7, c
 	cp c, 0x16
 	jr ule, LABEL_F66E29
 	cp c, 0x19
@@ -259293,7 +259293,7 @@ LABEL_F66E29:
 	and a, 0x1F
 	.byte 0xbb, 0x04, 0x31	; LDA XBC, XHL + 004h
 	.byte 0xbb, 0x05, 0x34	; LDA XIX, XHL + 005h
-	.byte 0xc9, 0xdc	; CP A, 4
+	cps a, 4
 	jr nz, LABEL_F66E4B
 	.byte 0xb4, 0xcb	; BIT 3, (XIX)
 	jr z, LABEL_F66E4B
@@ -259311,12 +259311,12 @@ LABEL_F66E4B:
 	cp a, 0x8
 	jr nz, LABEL_F66EBD
 	ld a, (xix)
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
-	.byte 0xc9, 0xd8	; CP A, 0
+	res 7, a
+	cps a, 0
 	jr z, LABEL_F66EBD
 	.byte 0xb3, 0x00, 0xd4	; LD (XHL), 0d4h
 	ld a, (xbc)
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
+	res 7, a
 	ld (xde), a
 	ret
 
@@ -259353,9 +259353,9 @@ LABEL_F66E90:
 LABEL_F66E99:
 	extz de
 	sub de, 0x80
-	.byte 0xda, 0xd8	; CP DE, 0
+	cps de, 0
 	jr lt, LABEL_F66EBD
-	.byte 0xda, 0xde	; CP DE, 6
+	cps de, 6
 	jr gt, LABEL_F66EBD
 	add de, de
 	.byte 0xf2, 0x18, 0xa1, 0xe4, 0x34	; LDA XIX, 0E4A118h
@@ -259392,7 +259392,7 @@ LABEL_F66EFD:
 	ldb c, 0x0
 
 LABEL_F66F0B:
-	.byte 0xcb, 0xdf	; CP C, 7
+	cps c, 7
 	jr z, LABEL_F66F43
 	ld xwa, 0x37AB
 	ldb e, 0x0
@@ -259474,7 +259474,7 @@ LABEL_F67013:
 	.byte 0x15	; POP A
 	ld xiy, 0x37AB
 	add xiy, xbc
-	.byte 0xc9, 0x33, 0x07	; BIT 007h, A
+	bit 7, a
 	jr nz, LABEL_F6703B
 	.byte 0x85, 0x3f, 0x09	; CP (XIY), 009h
 	jr ge, LABEL_F67036
@@ -259525,7 +259525,7 @@ LABEL_F67076:
 LABEL_F67082:
 	sll w, 1
 	inc 1, bc
-	.byte 0xd9, 0xdf	; CP BC, 7
+	cps bc, 7
 	jr lt, LABEL_F67076
 	xor bc, bc
 	ldb w, 0x1
@@ -259541,7 +259541,7 @@ LABEL_F67099:
 LABEL_F670A5:
 	sll w, 1
 	inc 1, bc
-	.byte 0xd9, 0xdf	; CP BC, 7
+	cps bc, 7
 	jr lt, LABEL_F67099
 	.byte 0xc1, 0xd6, 0x34, 0x21	; LD A, (34D6h)
 	.byte 0xc1, 0xc7, 0x37, 0xf1	; CP A, (37C7h)
@@ -259558,7 +259558,7 @@ LABEL_F670BF:
 	srl c, 1
 	add xbc, 0xF670DD
 	ld c, (xbc)
-	.byte 0xcb, 0xde	; CP C, 6
+	cps c, 6
 	jr le, LABEL_F670D6
 	ldb c, 0x0
 
@@ -259743,7 +259743,7 @@ LABEL_F67299:
 	.byte 0xe9, 0xa8	; LD XBC, 0
 
 LABEL_F6729B:
-	.byte 0xcb, 0xdc	; CP C, 4
+	cps c, 4
 	jr z, LABEL_F672B1
 	push xbc
 	pushw wa
@@ -259773,7 +259773,7 @@ LABEL_F672B2:
 	pop xix
 	.byte 0xcb, 0x08, 0x26	; MUL_C 026h
 	add bc, de
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_F672D4
 	add bc, 0x118
 	jr LABEL_F672D8
@@ -260016,7 +260016,7 @@ LABEL_F6748C:
 	ld xix, 0x37B2
 	add xix, xbc
 	ld c, (xix)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_F674A9
 	cp c, w
 	jr ge, LABEL_F674BB
@@ -260024,19 +260024,19 @@ LABEL_F6748C:
 	jr LABEL_F674BB
 
 LABEL_F674A9:
-	.byte 0xcb, 0xd8	; CP C, 0
+	cps c, 0
 	jr z, LABEL_F674BB
 	dec 1, c
 	.byte 0xf1, 0xc9, 0x37, 0xc8	; BIT 0, (37C9h)
 	jr z, LABEL_F674BB
-	.byte 0xcb, 0xd9	; CP C, 1
+	cps c, 1
 	jr ge, LABEL_F674BB
 	ldb c, 0x1
 
 LABEL_F674BB:
 	cp c, w
 	jr gt, LABEL_F674C5
-	.byte 0xcb, 0xd8	; CP C, 0
+	cps c, 0
 	jr lt, LABEL_F674C9
 	jr LABEL_F674CB
 
@@ -260160,7 +260160,7 @@ LABEL_F676A5:
 	ld xbc, 0xF9
 
 LABEL_F676B2:
-	.byte 0xd9, 0xd8	; CP BC, 0
+	cps bc, 0
 	jr z, LABEL_F676C0
 	ldb a, 0x0
 	ld (xix), a
@@ -260179,7 +260179,7 @@ LABEL_F676C1:
 	.byte 0xc1, 0xd9, 0x34, 0x43	; MUL BC, (34D9h)
 
 LABEL_F676D3:
-	.byte 0xd9, 0xd8	; CP BC, 0
+	cps bc, 0
 	jr z, LABEL_F676E1
 	ldb e, 0x81
 	ld (xwa), e
@@ -260528,14 +260528,14 @@ LABEL_F67E10:
 
 LABEL_F67E36:
 	and a, 0xCF
-	.byte 0xc9, 0x31, 0x05	; SET 005h, A
+	set 5, a
 	.byte 0xf1, 0xcd, 0x34, 0x41	; LD (34CDh), A
 	ldw wa, 0xB1
 	jr LABEL_F67E52
 
 LABEL_F67E45:
 	and a, 0xCF
-	.byte 0xc9, 0x31, 0x04	; SET 4, A
+	set 4, a
 	.byte 0xf1, 0xcd, 0x34, 0x41	; LD (34CDh), A
 	ldw wa, 0xB1
 
@@ -262264,7 +262264,7 @@ LABEL_F697B5:
 	.byte 0xc1, 0x3e, 0x7f, 0x23	; LD C, (7F3Eh)
 	ld a, c
 	sll a, 4
-	.byte 0xcb, 0xda	; CP C, 2
+	cps c, 2
 	jr nc, LABEL_F697D6
 	ldb w, 0x0
 	extz xwa
@@ -262399,8 +262399,8 @@ LABEL_F698E8:
 	jr c, LABEL_F69969
 	.byte 0x89, 0x04, 0x3f, 0x00	; CP (XBC + 004h), 000h
 	jr nz, LABEL_F69969
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
-	.byte 0xc9, 0xdc	; CP A, 4
+	res 7, a
+	cps a, 4
 	jr nc, LABEL_F6994B
 	ldb a, 0x0
 	jr LABEL_F69956
@@ -262773,7 +262773,7 @@ LABEL_F69DBE:
 	jr nz, LABEL_F69E1F
 	ld xbc, xix
 	ld a, (xix)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F69E1F
 	dec 1, a
 	ld (xbc), a
@@ -262787,7 +262787,7 @@ LABEL_F69DDF:
 	jr nz, LABEL_F69E1F
 	ld xbc, xwa
 	ld a, (xwa)
-	.byte 0xc9, 0xdd	; CP A, 5
+	cps a, 5
 	jr nc, LABEL_F69E1F
 	inc 1, a
 	ld (xbc), a
@@ -262800,7 +262800,7 @@ LABEL_F69DFE:
 	jr nz, LABEL_F69E1F
 	ld xbc, xwa
 	ld a, (xwa)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F69E1F
 	dec 1, a
 	ld (xbc), a
@@ -263112,7 +263112,7 @@ LABEL_F6A1B3:
 	.byte 0xc7, 0xfb, 0x89	; LD A, QIZH
 	ld (xde), a
 	.byte 0x8c, 0x01, 0x21	; LD A, (XIX + 001h)
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
+	res 7, a
 	.byte 0xc7, 0xfb, 0x99	; LD QIZH, A
 	.byte 0xb9, 0x04, 0x33	; LDA XHL, XBC + 004h
 	.byte 0xc7, 0xfb, 0x89	; LD A, QIZH
@@ -263563,7 +263563,7 @@ LABEL_F6A996:
 	.byte 0xc1, 0x20, 0x37, 0x3f, 0x03	; CP (3720h), 003h
 	jr nz, LABEL_F6A9CE
 	.byte 0xc1, 0x21, 0x37, 0x21	; LD A, (3721h)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F6A9C4
 	.byte 0xf1, 0xba, 0x39, 0x00, 0x01	; LD (39BAh), 001h
 
@@ -264336,7 +264336,7 @@ cmp_ld_ato:
 	ret
 
 LABEL_F6BC35:
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr lt, LABEL_F6BC3F
 	call LABEL_F5E97F
 	jr LABEL_F6BC43
@@ -264388,7 +264388,7 @@ msp_ld_ato:
 	ret
 
 LABEL_F6BC77:
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr lt, LABEL_F6BC7D
 	jr LABEL_F6BC81
 
@@ -264528,7 +264528,7 @@ LABEL_F6BD8E:
 	call LABEL_F6323F
 	.byte 0xc1, 0xb0, 0x35, 0x21	; LD A, (35B0h)
 	extz wa
-	.byte 0xd8, 0x33, 0x00	; BIT 000h, WA
+	bit 0, wa
 	jr z, LABEL_F6BDD7
 	.byte 0xf1, 0xd6, 0x48, 0x00, 0x01	; LD (48D6h), 001h
 	jr LABEL_F6BDE7
@@ -264621,7 +264621,7 @@ LABEL_F6BEA7:
 	.byte 0xe1, 0xdc, 0x55, 0x20	; LD XWA, (55DCh)
 	.byte 0xf3, 0x07, 0xe0, 0xe8, 0x30	; LDA XWA, XWA + DE
 	ld e, (xwa)
-	.byte 0xcd, 0xd8	; CP E, 0
+	cps e, 0
 	jr nz, LABEL_F6BEBE
 	ldb e, 0x20
 
@@ -264679,7 +264679,7 @@ LABEL_F6BEFD:
 	call LABEL_F6323F
 	.byte 0xc1, 0xb0, 0x35, 0x21	; LD A, (35B0h)
 	extz wa
-	.byte 0xd8, 0x33, 0x00	; BIT 000h, WA
+	bit 0, wa
 	jr z, LABEL_F6BF74
 	.byte 0xf1, 0xd6, 0x48, 0x00, 0x01	; LD (48D6h), 001h
 	jr LABEL_F6BF84
@@ -264873,7 +264873,7 @@ LABEL_F6C0F3:
 	.byte 0xde, 0x42	; MUL XDE, IZ
 	.byte 0xbf, 0x04, 0x52	; LD (XSP + 004h), DE
 	.byte 0xd7, 0xfa, 0xa8	; LD QIZ, 0
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr ule, LABEL_F6C15C
 
 LABEL_F6C108:
@@ -264934,7 +264934,7 @@ StylCnvWaitTtlFunc:
 	.byte 0xf1, 0x06, 0x3d, 0x00, 0x00	; LD (3D06h), 000h
 	calr LABEL_F6BCA0
 	call LABEL_F8AC14
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_F6C1A9
 	ldw wa, 0x11
 	call 0xF99490
@@ -265030,7 +265030,7 @@ LABEL_F6C291:
 	.byte 0xb9, 0x01, 0x30	; LDA XWA, XBC + 001h
 	.byte 0xb9, 0x21, 0x31	; LDA XBC, XBC + 021h
 	call LABEL_F8AED5
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_F6C2B9
 	.byte 0xd1, 0x82, 0x3a, 0x61	; INCW 1, (3A82h)
 	inc 1, iz
@@ -265094,7 +265094,7 @@ LABEL_F6C323:
 	ld xwa, 0x3F68
 	call LABEL_F8AED5
 	.byte 0xf1, 0x68, 0x3f, 0x30	; LDA XWA, 3F68h
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_F6C387
 	.byte 0x0b, 0x2e, 0x00	; PUSHW 002eh
 	push xwa
@@ -265113,7 +265113,7 @@ LABEL_F6C35F:
 	extz xbc
 	add xbc, xde
 	ld a, (xbc)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F6C394
 	cp a, 0x5F
 	jr nz, LABEL_F6C375
@@ -265146,20 +265146,20 @@ LABEL_F6C394:
 	.byte 0xbf, 0x04, 0x30	; LDA XWA, XSP + 004h
 	.byte 0xbf, 0x24, 0x31	; LDA XBC, XSP + 024h
 	call LABEL_F8AED5
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl nz, LABEL_F6C67A
 
 LABEL_F6C3B3:
 	.byte 0xbf, 0x04, 0x30	; LDA XWA, XSP + 004h
 	.byte 0xbf, 0x24, 0x31	; LDA XBC, XSP + 024h
 	call LABEL_F8AED5
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F6C3B3
 	jrl LABEL_F6C67A
 
 LABEL_F6C3C4:
 	ld bc, wa
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jrl z, LABEL_F6C67A
 	ldw wa, 0x14
 	jrl LABEL_F6C677
@@ -265260,7 +265260,7 @@ LABEL_F6C4CA:
 	lds wa, 1
 	call LABEL_F99545
 	.byte 0xd1, 0x04, 0x3d, 0x20	; LD WA, (3D04h)
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jrl z, LABEL_F6C452
 	dec 1, wa
 	.byte 0xf1, 0x04, 0x3d, 0x50	; LD (3D04h), WA
@@ -265302,7 +265302,7 @@ LABEL_F6C517:
 	extz xhl
 	.byte 0xdb, 0x0a, 0x14, 0x00	; DIVW_HL 0014h
 	.byte 0xd7, 0xee, 0x88	; LD WA, QHL
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jrl z, LABEL_F6C452
 	.byte 0xf1, 0x04, 0x3d, 0x51	; LD (3D04h), BC
 	jrl LABEL_F6C456
@@ -265315,7 +265315,7 @@ LABEL_F6C543:
 	ld xwa, xde
 	ld xbc, 0xE4C14A
 	call LABEL_F8AC27
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr ge, LABEL_F6C563
 	ldw wa, 0x10
 	jr LABEL_F6C5A2
@@ -265462,7 +265462,7 @@ LABEL_F6C6DB:
 	.byte 0xb9, 0x01, 0x30	; LDA XWA, XBC + 001h
 	.byte 0xb9, 0x21, 0x31	; LDA XBC, XBC + 021h
 	call LABEL_F8AED5
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_F6C703
 	.byte 0xd1, 0x82, 0x3a, 0x61	; INCW 1, (3A82h)
 	inc 1, iz
@@ -265603,7 +265603,7 @@ LABEL_F6C855:
 	lds wa, 1
 	call LABEL_F99545
 	.byte 0xd1, 0x04, 0x3d, 0x20	; LD WA, (3D04h)
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jrl z, LABEL_F6C7DD
 	dec 1, wa
 	.byte 0xf1, 0x04, 0x3d, 0x50	; LD (3D04h), WA
@@ -265645,21 +265645,21 @@ LABEL_F6C8A2:
 	extz xde
 	.byte 0xda, 0x0a, 0x14, 0x00	; DIVW_DE 0014h
 	.byte 0xd7, 0xea, 0x88	; LD WA, QDE
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jrl z, LABEL_F6C7DD
 	.byte 0xf1, 0x04, 0x3d, 0x51	; LD (3D04h), BC
 	jrl LABEL_F6C7E1
 
 LABEL_F6C8CE:
 	.byte 0xc1, 0x06, 0x3d, 0x21	; LD A, (3D06h)
-	.byte 0xc9, 0xda	; CP A, 2
+	cps a, 2
 	jr z, LABEL_F6C8E8
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	jr nz, LABEL_F6C922
 	.byte 0xd1, 0xac, 0x48, 0x20	; LD WA, (48ACh)
-	.byte 0xd8, 0xd9	; CP WA, 1
+	cps wa, 1
 	jr z, LABEL_F6C90A
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr z, LABEL_F6C90A
 	jr LABEL_F6C922
 
@@ -265817,7 +265817,7 @@ LABEL_F6CA85:
 	lds wa, 1
 	call LABEL_F99545
 	.byte 0xd1, 0x04, 0x3d, 0x20	; LD WA, (3D04h)
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jrl z, LABEL_F6CA0B
 	dec 1, wa
 	.byte 0xf1, 0x04, 0x3d, 0x50	; LD (3D04h), WA
@@ -265860,7 +265860,7 @@ LABEL_F6CAD2:
 	extz xde
 	.byte 0xda, 0x0a, 0x14, 0x00	; DIVW_DE 0014h
 	.byte 0xd7, 0xea, 0x88	; LD WA, QDE
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jrl z, LABEL_F6CA0B
 	.byte 0xf1, 0x04, 0x3d, 0x51	; LD (3D04h), BC
 	jrl LABEL_F6CA0F
@@ -265985,7 +265985,7 @@ LABEL_F6CC14:
 
 LABEL_F6CC18:
 	.byte 0xc2, 0x00, 0xfc, 0x0f, 0x21	; LD A, (0FFC00h)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_F6CC3B
 	.byte 0xd1, 0xac, 0x48, 0x3f, 0x01, 0x00	; CPW (48ACh), 0001h
 	jr nz, LABEL_F6CC35
@@ -266006,16 +266006,16 @@ LABEL_F6CC3B:
 	jrl LABEL_F6D83D
 
 LABEL_F6CC4B:
-	.byte 0xc9, 0xdb	; CP A, 3
+	cps a, 3
 	jrl z, LABEL_F6D77E
-	.byte 0xc9, 0xdc	; CP A, 4
+	cps a, 4
 	jrl z, LABEL_F6CF47
-	.byte 0xc9, 0xda	; CP A, 2
+	cps a, 2
 	jr z, LABEL_F6CC87
 	.byte 0xf1, 0x68, 0x3d, 0x31	; LDA XBC, 3D68h
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	jr z, LABEL_F6CC7E
-	.byte 0xc9, 0xdd	; CP A, 5
+	cps a, 5
 	jrl nz, LABEL_F6D1E8
 	ld xwa, 0xFFC01
 	push xwa
@@ -266040,7 +266040,7 @@ LABEL_F6CC87:
 	jr z, LABEL_F6CCE8
 	cp a, 0x10
 	jr z, LABEL_F6CCC6
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jrl nz, LABEL_F6CC18
 	.byte 0xf1, 0x06, 0x3d, 0x00, 0x01	; LD (3D06h), 001h
 	ld xwa, 0xFFC00
@@ -266088,7 +266088,7 @@ LABEL_F6CD07:
 	push xwa
 	call 0xFF0CC1
 	add xsp, 0xA
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F6CD94
 	.byte 0x9f, 0x04, 0x20	; LD WA, (XSP + 004h)
 	inc 2, wa
@@ -266191,7 +266191,7 @@ LABEL_F6CE1C:
 	extz xwa
 	add xwa, 0xFFC00
 	ld c, (xwa)
-	.byte 0xcb, 0xd8	; CP C, 0
+	cps c, 0
 	jr z, LABEL_F6CE44
 	.byte 0x9f, 0x06, 0x20	; LD WA, (XSP + 006h)
 	.byte 0xf3, 0x07, 0xe8, 0xe0, 0x43	; LD (XDE + WA), C
@@ -266229,7 +266229,7 @@ LABEL_F6CE7B:
 	.byte 0xd8, 0x0b, 0x02, 0x00	; DIVS_WA 0002h
 	.byte 0xd7, 0xe2, 0x88	; LD WA, QWA
 	.byte 0xd7, 0xfa, 0xa9	; LD QIZ, 1
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr nz, LABEL_F6CE91
 	.byte 0xd7, 0xfa, 0xaa	; LD QIZ, 2
 
@@ -266308,15 +266308,15 @@ LABEL_F6CF3E:
 
 LABEL_F6CF47:
 	.byte 0xc1, 0x06, 0x3d, 0x21	; LD A, (3D06h)
-	.byte 0xc9, 0xde	; CP A, 6
+	cps a, 6
 	jrl z, LABEL_F6D247
-	.byte 0xc9, 0xdc	; CP A, 4
+	cps a, 4
 	jrl z, LABEL_F6D198
-	.byte 0xc9, 0xdb	; CP A, 3
+	cps a, 3
 	jr z, LABEL_F6CF7E
-	.byte 0xc9, 0xda	; CP A, 2
+	cps a, 2
 	jr z, LABEL_F6CF70
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	jrl nz, LABEL_F6CC18
 	.byte 0xc1, 0x36, 0x8d, 0x3f, 0x16	; CP (8D36h), 016h
 	jrl nz, LABEL_F6D841
@@ -266338,7 +266338,7 @@ LABEL_F6CF7E:
 	ld xwa, 0x488C
 	ld xbc, 0x4888
 	call LABEL_F8AED5
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr lt, LABEL_F6D014
 
 LABEL_F6CFA2:
@@ -266380,7 +266380,7 @@ LABEL_F6D002:
 	ld xwa, 0x488C
 	ld xbc, 0x4888
 	call LABEL_F8AED5
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr ge, LABEL_F6CFA2
 
 LABEL_F6D014:
@@ -266404,7 +266404,7 @@ LABEL_F6D029:
 	.byte 0xbf, 0x12, 0x30	; LDA XWA, XSP + 012h
 	ld xbc, 0xE4C152
 	call LABEL_F8AC27
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl lt, LABEL_F6D1E8
 	.byte 0x9f, 0x08, 0x20	; LD WA, (XSP + 008h)
 	sll wa, 2
@@ -266493,7 +266493,7 @@ LABEL_F6D12A:
 	extz xwa
 	add xwa, xde
 	ld a, (xwa)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F6D154
 	.byte 0xd7, 0xfa, 0x8b	; LD HL, QIZ
 	inc 2, hl
@@ -266516,7 +266516,7 @@ LABEL_F6D154:
 	exts xwa
 	.byte 0xd8, 0x0b, 0x02, 0x00	; DIVS_WA 0002h
 	.byte 0xd7, 0xe2, 0x88	; LD WA, QWA
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr nz, LABEL_F6D189
 	.byte 0xd7, 0xfa, 0x88	; LD WA, QIZ
 	inc 2, wa
@@ -266536,12 +266536,12 @@ LABEL_F6D198:
 	ld xwa, 0x488C
 	ld xbc, 0xE4C156
 	call LABEL_F88BC7
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr lt, LABEL_F6D1E8
 	.byte 0xe8, 0xa8	; LD XWA, 0
 	lds bc, 2
 	call LABEL_F88EE0
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr lt, LABEL_F6D1E4
 	call LABEL_F88F39
 	.byte 0xf1, 0x64, 0x3d, 0x63	; LD (3D64h), XHL
@@ -266549,7 +266549,7 @@ LABEL_F6D198:
 	.byte 0xe1, 0xae, 0x48, 0x20	; LD XWA, (48AEh)
 	lds bc, 0
 	call LABEL_F88EE0
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr lt, LABEL_F6D1E4
 	.byte 0xe1, 0x5c, 0x3d, 0x20	; LD XWA, (3D5Ch)
 	.byte 0xe1, 0xb2, 0x48, 0x21	; LD XBC, (48B2h)
@@ -266587,7 +266587,7 @@ LABEL_F6D21C:
 	inc 1, wa
 	.byte 0xc3, 0x07, 0xe8, 0xe0, 0x21	; LD A, (XDE + WA)
 	ld (xbc), a
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jrl z, LABEL_F6D778
 	.byte 0x9f, 0x04, 0x61	; INCW 1, (XSP + 004h)
 	.byte 0x9f, 0x04, 0x3f, 0x20, 0x00	; CPW (XSP + 004h), 0020h
@@ -266596,9 +266596,9 @@ LABEL_F6D21C:
 
 LABEL_F6D247:
 	.byte 0xd1, 0xac, 0x48, 0x20	; LD WA, (48ACh)
-	.byte 0xd8, 0xd9	; CP WA, 1
+	cps wa, 1
 	jrl z, LABEL_F6D431
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jrl nz, LABEL_F6CC18
 	.byte 0xf1, 0x88, 0x47, 0x30	; LDA XWA, 4788h
 	ld xbc, xwa
@@ -266649,12 +266649,12 @@ LABEL_F6D2A9:
 	ld xwa, 0x488C
 	ld xbc, 0xE4C15A
 	call LABEL_F88BC7
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl lt, LABEL_F6D414
 	.byte 0xe8, 0xa8	; LD XWA, 0
 	lds bc, 2
 	call LABEL_F88EE0
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl lt, LABEL_F6D3F7
 	call LABEL_F88F39
 	.byte 0xf1, 0x64, 0x3d, 0x63	; LD (3D64h), XHL
@@ -266721,7 +266721,7 @@ LABEL_F6D38A:
 	extz xwa
 	add xwa, xde
 	ld a, (xwa)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F6D3B5
 	ld hl, iz
 	inc 2, hl
@@ -266744,7 +266744,7 @@ LABEL_F6D3B5:
 	exts xwa
 	.byte 0xd8, 0x0b, 0x02, 0x00	; DIVS_WA 0002h
 	.byte 0xd7, 0xe2, 0x88	; LD WA, QWA
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr nz, LABEL_F6D3E7
 	ld wa, iz
 	inc 2, wa
@@ -266799,12 +266799,12 @@ LABEL_F6D431:
 	.byte 0xbf, 0x12, 0x30	; LDA XWA, XSP + 012h
 	ld xbc, 0xE4C15E
 	call LABEL_F88BC7
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl lt, LABEL_F6D1E8
 	.byte 0xe8, 0xa8	; LD XWA, 0
 	lds bc, 2
 	call LABEL_F88EE0
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl lt, LABEL_F6D841
 	call LABEL_F88F39
 	.byte 0xbf, 0x0e, 0x63	; LD (XSP + 00eh), XHL
@@ -266843,7 +266843,7 @@ LABEL_F6D4CB:
 	.byte 0x9f, 0x04, 0x21	; LD BC, (XSP + 004h)
 	.byte 0xc3, 0x07, 0xe0, 0xe4, 0x23	; LD C, (XWA + BC)
 	ld (xde), c
-	.byte 0xcb, 0xd8	; CP C, 0
+	cps c, 0
 	jr z, LABEL_F6D4EF
 	.byte 0x9f, 0x04, 0x61	; INCW 1, (XSP + 004h)
 	inc 1, iz
@@ -266874,12 +266874,12 @@ LABEL_F6D50A:
 	.byte 0xf3, 0x07, 0xe0, 0xe4, 0x00, 0x00	; LD (XWA + BC), 000h
 	ld xbc, 0xE4C162
 	call LABEL_F88BC7
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl lt, LABEL_F6D5C6
 	.byte 0xe8, 0xa8	; LD XWA, 0
 	lds bc, 2
 	call LABEL_F88EE0
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl lt, LABEL_F6D5C6
 	.byte 0xbf, 0x08, 0x02, 0x01, 0x00	; LDW (XSP + 008h:8), 0001h
 	call LABEL_F88F39
@@ -266920,7 +266920,7 @@ LABEL_F6D59E:
 	.byte 0x9f, 0x04, 0x20	; LD WA, (XSP + 004h)
 	.byte 0xc3, 0x07, 0xe4, 0xe0, 0x21	; LD A, (XBC + WA)
 	ld (xde), a
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F6D5C6
 	.byte 0x9f, 0x04, 0x61	; INCW 1, (XSP + 004h)
 	inc 1, iz
@@ -266955,12 +266955,12 @@ LABEL_F6D5E4:
 	.byte 0xf3, 0x07, 0xe0, 0xe4, 0x00, 0x00	; LD (XWA + BC), 000h
 	ld xbc, 0xE4C166
 	call LABEL_F88BC7
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl lt, LABEL_F6D6B6
 	.byte 0xe8, 0xa8	; LD XWA, 0
 	lds bc, 2
 	call LABEL_F88EE0
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl lt, LABEL_F6D6B6
 	.byte 0x9f, 0x08, 0x61	; INCW 1, (XSP + 008h)
 	call LABEL_F88F39
@@ -267007,7 +267007,7 @@ LABEL_F6D68A:
 	.byte 0x9f, 0x04, 0x20	; LD WA, (XSP + 004h)
 	.byte 0xc3, 0x07, 0xe4, 0xe0, 0x21	; LD A, (XBC + WA)
 	ld (xde), a
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F6D6B6
 	.byte 0x9f, 0x04, 0x61	; INCW 1, (XSP + 004h)
 	inc 1, iz
@@ -267052,7 +267052,7 @@ LABEL_F6D70D:
 	extz xwa
 	add xwa, xde
 	ld a, (xwa)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F6D738
 	ld hl, iz
 	inc 2, hl
@@ -267075,7 +267075,7 @@ LABEL_F6D738:
 	exts xwa
 	.byte 0xd8, 0x0b, 0x02, 0x00	; DIVS_WA 0002h
 	.byte 0xd7, 0xe2, 0x88	; LD WA, QWA
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr nz, LABEL_F6D76A
 	ld wa, iz
 	inc 2, wa
@@ -267117,9 +267117,9 @@ LABEL_F6D79E:
 	.byte 0xbf, 0x12, 0x31	; LDA XBC, XSP + 012h
 	.byte 0xf1, 0xe4, 0x55, 0x30	; LDA XWA, 55E4h
 	.byte 0xbf, 0x0e, 0x60	; LD (XSP + 00eh), XWA
-	.byte 0xcd, 0xd8	; CP E, 0
+	cps e, 0
 	jr nz, LABEL_F6D7DB
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr le, LABEL_F6D83A
 	push xbc
 	ld wa, iz
@@ -267140,7 +267140,7 @@ LABEL_F6D7DB:
 	.byte 0xb3, 0x00, 0x00	; LD (XHL), 000h
 	.byte 0xbf, 0x06, 0x02, 0x00, 0x00	; LDW (XSP + 006h:8), 0000h
 	inc 1, iz
-	.byte 0xde, 0xd9	; CP IZ, 1
+	cps iz, 1
 	jr le, LABEL_F6D82D
 	push xbc
 	ld wa, iz
@@ -267164,7 +267164,7 @@ LABEL_F6D80D:
 	jr LABEL_F6D82D
 
 LABEL_F6D81B:
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr le, LABEL_F6D82D
 	.byte 0x9f, 0x06, 0x20	; LD WA, (XSP + 006h)
 	.byte 0xf3, 0x07, 0xe4, 0xe0, 0x45	; LD (XBC + WA), E
@@ -267555,7 +267555,7 @@ LABEL_F6DEE0:
 	.byte 0xd1, 0x44, 0x7e, 0x20	; LD WA, (7E44h)
 	inc 1, wa
 	.byte 0xf1, 0x44, 0x7e, 0x50	; LD (7E44h), WA
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr nz, LABEL_F6DEFA
 	pushw wa
 	.byte 0xd1, 0x42, 0x7e, 0x20	; LD WA, (7E42h)
@@ -267673,7 +267673,7 @@ LABEL_F6E020:
 	.byte 0xc1, 0x53, 0x7e, 0x3e, 0x01	; OR (7E53h), 001h
 	.byte 0xc1, 0x24, 0x7e, 0x21	; LD A, (7E24h)
 	and a, 0x3
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_F6E039
 	.byte 0xc1, 0x24, 0x7e, 0x3e, 0x01	; OR (7E24h), 001h
 	call LABEL_F6E63A
@@ -267702,7 +267702,7 @@ LABEL_F6E058:
 	cp hl, wa
 	jr ugt, LABEL_F6E077
 	sub wa, hl
-	.byte 0xd8, 0xd9	; CP WA, 1
+	cps wa, 1
 	jr z, LABEL_F6E06A
 	ldb a, 0x60
 	jr LABEL_F6E079
@@ -267721,7 +267721,7 @@ LABEL_F6E079:
 	ret
 
 LABEL_F6E07A:
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_F6E080
 	ldb a, 0x1
 
@@ -267899,7 +267899,7 @@ LABEL_F6E1F0:
 	.byte 0xf3, 0x07, 0xec, 0xf4, 0x41	; LD (XHL + IY), A
 	calr LABEL_F6E416
 	.byte 0xc1, 0x58, 0x7e, 0x21	; LD A, (7E58h)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_F6E227
 	ldb a, 0x1
 
@@ -267928,7 +267928,7 @@ LABEL_F6E247:
 	.byte 0xf3, 0x07, 0xec, 0xf4, 0x41	; LD (XHL + IY), A
 	calr LABEL_F6E416
 	.byte 0xc1, 0x58, 0x7e, 0x21	; LD A, (7E58h)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_F6E27D
 	ldb a, 0x1
 
@@ -267966,7 +267966,7 @@ LABEL_F6E2B5:
 	cp a, 0xD0
 	jr nz, LABEL_F6E2FF
 	.byte 0xc1, 0x55, 0x7e, 0x21	; LD A, (7E55h)
-	.byte 0xc9, 0xdd	; CP A, 5
+	cps a, 5
 	jr nz, LABEL_F6E2FF
 	.byte 0xc1, 0x57, 0x7e, 0x21	; LD A, (7E57h)
 	push xiy
@@ -268128,7 +268128,7 @@ LABEL_F6E428:
 
 LABEL_F6E449:
 	and wa, 0x7
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr nz, LABEL_F6E455
 	call LABEL_F6E456
 
@@ -268179,7 +268179,7 @@ LABEL_F6E4AB:
 	cp w, 0xD0
 	jr nz, LABEL_F6E4E0
 	.byte 0xc1, 0x55, 0x7e, 0x20	; LD W, (7E55h)
-	.byte 0xc8, 0xdd	; CP W, 5
+	cps w, 5
 	jr nz, LABEL_F6E4E0
 	push xhl
 	push xde
@@ -268208,7 +268208,7 @@ LABEL_F6E4E8:
 LABEL_F6E4ED:
 	cp l, 0x7F
 	jr nz, LABEL_F6E4FC
-	.byte 0xce, 0xdb	; CP H, 3
+	cps h, 3
 	jr nz, LABEL_F6E4FC
 	call LABEL_F6E645
 	jr LABEL_F6E52B
@@ -268220,10 +268220,10 @@ LABEL_F6E4FC:
 	call LABEL_F719F4
 	call LABEL_F71018
 	.byte 0xf1, 0x7e, 0xc0, 0x00, 0x01	; LD (0C07Eh), 001h
-	.byte 0xce, 0xd8	; CP H, 0
+	cps h, 0
 	jr z, LABEL_F6E521
 	.byte 0xf1, 0x7e, 0xc0, 0x00, 0x02	; LD (0C07Eh), 002h
-	.byte 0xce, 0xd9	; CP H, 1
+	cps h, 1
 	jr z, LABEL_F6E521
 	.byte 0xf1, 0x7e, 0xc0, 0x00, 0x04	; LD (0C07Eh), 004h
 
@@ -268327,7 +268327,7 @@ LABEL_F6E64D:
 	.byte 0x03, 0x03, 0x1d, 0x7a, 0xec, 0xf6, 0x0e
 
 LABEL_F6E6FC:
-	.byte 0xce, 0xd8	; CP H, 0
+	cps h, 0
 	jr z, LABEL_F6E70E
 	.byte 0xc1, 0x0b, 0x7f, 0x3f, 0x00	; CP (7F0Bh), 000h
 	jr nz, LABEL_F6E70E
@@ -268397,7 +268397,7 @@ LABEL_F6E770:
 	.byte 0xd7, 0xe2, 0x88	; LD WA, QWA
 	.byte 0xf1, 0x34, 0x7e, 0x50	; LD (7E34h), WA
 	.byte 0x8d, 0x10, 0x21	; LD A, (XIY + 010h)
-	.byte 0xc9, 0x33, 0x00	; BIT 000h, A
+	bit 0, a
 	jr z, LABEL_F6E7BD
 	.byte 0xc1, 0x27, 0x7e, 0x3e, 0x02	; OR (7E27h), 002h
 
@@ -268469,7 +268469,7 @@ LABEL_F6E84E:
 	ldb a, 0xC1
 	.byte 0xf1, 0x40, 0x7e, 0x40	; LD (7E40h), W
 	and e, 0xF
-	.byte 0xc8, 0x33, 0x07	; BIT 007h, W
+	bit 7, w
 	jr z, LABEL_F6E88F
 	or e, 0x10
 	and w, 0x7F
@@ -268483,7 +268483,7 @@ LABEL_F6E88F:
 	calr LABEL_F6EA37
 	.byte 0x8d, 0x0d, 0x21	; LD A, (XIY + 00dh)
 	ldb e, 0x0
-	.byte 0xc9, 0x33, 0x00	; BIT 000h, A
+	bit 0, a
 	jr z, LABEL_F6E8AA
 	ldb e, 0x7F
 
@@ -268493,7 +268493,7 @@ LABEL_F6E8AA:
 	calr LABEL_F6EA37
 	.byte 0x8d, 0x0e, 0x21	; LD A, (XIY + 00eh)
 	ldb e, 0x0
-	.byte 0xc9, 0x33, 0x00	; BIT 000h, A
+	bit 0, a
 	jr z, LABEL_F6E8BD
 	ldb e, 0x7F
 
@@ -268511,7 +268511,7 @@ LABEL_F6E8C4:
 	ldb a, 0xC2
 	.byte 0xf1, 0x41, 0x7e, 0x40	; LD (7E41h), W
 	and e, 0xF
-	.byte 0xc8, 0x33, 0x07	; BIT 007h, W
+	bit 7, w
 	jr z, LABEL_F6E8E5
 	or e, 0x10
 	and w, 0x7F
@@ -268525,7 +268525,7 @@ LABEL_F6E8E5:
 	calr LABEL_F6EA37
 	.byte 0x8d, 0x1d, 0x21	; LD A, (XIY + 01dh)
 	ldb e, 0x0
-	.byte 0xc9, 0x33, 0x00	; BIT 000h, A
+	bit 0, a
 	jr z, LABEL_F6E900
 	ldb e, 0x7F
 
@@ -268535,7 +268535,7 @@ LABEL_F6E900:
 	calr LABEL_F6EA37
 	.byte 0x8d, 0x1e, 0x21	; LD A, (XIY + 01eh)
 	ldb e, 0x0
-	.byte 0xc9, 0x33, 0x00	; BIT 000h, A
+	bit 0, a
 	jr z, LABEL_F6E913
 	ldb e, 0x7F
 
@@ -268564,12 +268564,12 @@ LABEL_F6E93B:
 	.byte 0xf1, 0x3e, 0x7e, 0x50	; LD (7E3Eh), WA
 	.byte 0xc1, 0x24, 0x7e, 0x21	; LD A, (7E24h)
 	.byte 0xc1, 0x27, 0x7e, 0x20	; LD W, (7E27h)
-	.byte 0xc8, 0x33, 0x00	; BIT 000h, W
+	bit 0, w
 	jr z, LABEL_F6E955
 	or a, 0x1
 
 LABEL_F6E955:
-	.byte 0xc8, 0x33, 0x01	; BIT 001h, W
+	bit 1, w
 	jr z, LABEL_F6E95D
 	or a, 0x2
 
@@ -268577,10 +268577,10 @@ LABEL_F6E95D:
 	.byte 0xf1, 0x24, 0x7e, 0x41	; LD (7E24h), A
 	.byte 0xc1, 0x7e, 0xc0, 0x20	; LD W, (0C07Eh)
 	ldb a, 0x1
-	.byte 0xc8, 0x33, 0x00	; BIT 000h, W
+	bit 0, w
 	jr nz, LABEL_F6E975
 	ldb a, 0x2
-	.byte 0xc8, 0x33, 0x01	; BIT 001h, W
+	bit 1, w
 	jr nz, LABEL_F6E975
 	ldb a, 0x4
 
@@ -268686,7 +268686,7 @@ LABEL_F6EA57:
 LABEL_F6EAAE:
 	.byte 0xc1, 0x24, 0x7e, 0x21	; LD A, (7E24h)
 	and a, 0x3
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F6EAD5
 	.byte 0xf1, 0x27, 0x7e, 0xca	; BIT 2, (7E27h)
 	jr z, LABEL_F6EAD2
@@ -268722,7 +268722,7 @@ LABEL_F6EADD:
 LABEL_F6EB29:
 	.byte 0xc1, 0x24, 0x7e, 0x21	; LD A, (7E24h)
 	and a, 0x3
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F6EB4C
 	.byte 0xc1, 0x24, 0x7e, 0x3c, 0x7f	; AND (7E24h), 07fh
 	.byte 0xc1, 0x1f, 0x04, 0x3e, 0x08	; OR (041Fh), 008h
@@ -268765,7 +268765,7 @@ LABEL_F6EB9E:
 	ld (xhl), w
 	add hl, 0x9
 	dec 1, a
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_F6EB9E
 	ldb a, 0x8
 	xor w, w
@@ -268775,7 +268775,7 @@ LABEL_F6EBB3:
 	ld (xhl), w
 	add hl, 0x9
 	dec 1, a
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_F6EBB3
 	ret
 
@@ -268815,7 +268815,7 @@ LABEL_F6EC7A:
 	popw hl
 	.byte 0xc1, 0x24, 0x7e, 0x21	; LD A, (7E24h)
 	and a, 0x3
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_F6ECB0
 	push xwa
 	push xhl
@@ -268886,7 +268886,7 @@ LABEL_F6ECE5:
 	.byte 0xd1, 0x2a, 0x7e, 0x20	; LD WA, (7E2Ah)
 	ld xiy, xwa
 	.byte 0x8d, 0x00, 0x21	; LD A, (XIY + 000h:8)
-	.byte 0xc9, 0x33, 0x04	; BIT 004h, A
+	bit 4, a
 	jr z, LABEL_F6ED38
 	.byte 0xc1, 0x33, 0x04, 0x21	; LD A, (0433h)
 	.byte 0xc1, 0x16, 0x04, 0x20	; LD W, (0416h)
@@ -269138,7 +269138,7 @@ LABEL_F6EF88:
 	and a, 0xF0
 	cp a, 0xD0
 	jr nz, LABEL_F6EFC9
-	.byte 0xc8, 0xdd	; CP W, 5
+	cps w, 5
 	jr nz, LABEL_F6EFC9
 	.byte 0xc1, 0x56, 0x7e, 0x21	; LD A, (7E56h)
 	push xiy
@@ -269336,7 +269336,7 @@ LABEL_F6F385:
 	.byte 0x45, 0x00, 0x88, 0x1e, 0x00	; LD XIY, MSP_SETTINGS__BASE_ADDR
 	add xiy, 0xE
 	ld wa, (xiy)
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr z, LABEL_F6F399
 	calr LABEL_F6F309
 
@@ -269347,7 +269347,7 @@ LABEL_F6F39A:
 	.byte 0x45, 0x00, 0x88, 0x1e, 0x00	; LD XIY, MSP_SETTINGS__BASE_ADDR
 	add xiy, 0xA
 	ld a, (xiy)
-	.byte 0xc9, 0x33, 0x00	; BIT 000h, A
+	bit 0, a
 	jr z, LABEL_F6F3AF
 	calr LABEL_F6F309
 
@@ -269389,10 +269389,10 @@ LABEL_F6F3E0:
 	ldb c, 0x39
 
 LABEL_F6F3F8:
-	.byte 0xcb, 0xd8	; CP C, 0
+	cps c, 0
 	jr z, LABEL_F6F413
 	ld a, (xiy)
-	.byte 0xc9, 0x33, 0x07	; BIT 007h, A
+	bit 7, a
 	jr nz, LABEL_F6F413
 	sub xhl, 0x100
 	sub xiy, 0x100
@@ -270495,7 +270495,7 @@ LABEL_F70E90:
 	.byte 0xc3, 0x07, 0xec, 0xf0, 0x21	; LD A, (XHL + IX)
 	calr LABEL_F70F37
 	and a, 0xF
-	.byte 0xcb, 0x33, 0x00	; BIT 000h, C
+	bit 0, c
 	jr z, LABEL_F70EB7
 	or a, 0x10
 
@@ -270510,7 +270510,7 @@ LABEL_F70EB7:
 	.byte 0xc3, 0x07, 0xec, 0xf0, 0x20	; LD W, (XHL + IX)
 	calr LABEL_F70F37
 	ldb a, 0x0
-	.byte 0xc8, 0x33, 0x00	; BIT 000h, W
+	bit 0, w
 	jr z, LABEL_F70EDA
 	ldb a, 0x7F
 
@@ -270645,7 +270645,7 @@ LABEL_F70F9E:
 
 LABEL_F70FF4:
 	.byte 0xd1, 0x6e, 0x04, 0xa0	; SUB WA, (046Eh)
-	.byte 0xc9, 0x33, 0x07	; BIT 007h, A
+	bit 7, a
 	jr z, LABEL_F71000
 	add a, 0x60
 
@@ -271371,7 +271371,7 @@ LABEL_F71F98:
 
 LABEL_F71FB1:
 	call LABEL_EF24ED
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_F71FBD
 	jp LABEL_F7208A
 
@@ -271393,7 +271393,7 @@ LABEL_F71FBD:
 	and w, 0xE0
 	dec 1, a
 	or w, a
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_F71FF9
 	and w, 0x7F
 	calr LABEL_F72221
@@ -271403,11 +271403,11 @@ LABEL_F71FF9:
 	jr LABEL_F72029
 
 LABEL_F71FFF:
-	.byte 0xc9, 0x33, 0x07	; BIT 007h, A
+	bit 7, a
 	jr z, LABEL_F72029
 	.byte 0xc1, 0x16, 0x7f, 0x21	; LD A, (7F16h)
 	and a, 0x1F
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	jr nz, LABEL_F72029
 	call LABEL_EF252E
 	ld a, l
@@ -271498,7 +271498,7 @@ LABEL_F720B4:
 LABEL_F720B5:
 	calr LABEL_F720C7
 	.byte 0x8d, 0x00, 0x21	; LD A, (XIY + 000h:8)
-	.byte 0xc9, 0x33, 0x00	; BIT 000h, A
+	bit 0, a
 	jr z, LABEL_F720C6
 	calr LABEL_F720E4
 	calr LABEL_F7210D
@@ -271621,7 +271621,7 @@ LABEL_F721C3:
 	.byte 0xbd, 0x09, 0x50	; LD (XIY + 009h), WA
 	xor a, a
 	.byte 0xc1, 0x66, 0xfd, 0x20	; LD W, (0FD66h)
-	.byte 0xc8, 0x33, 0x06	; BIT 006h, W
+	bit 6, w
 	jr z, LABEL_F72202
 	or a, 0x1
 
@@ -271629,7 +271629,7 @@ LABEL_F72202:
 	.byte 0xbd, 0x0d, 0x41	; LD (XIY + 00dh), A
 	xor a, a
 	.byte 0xc1, 0x66, 0xfd, 0x20	; LD W, (0FD66h)
-	.byte 0xc8, 0x33, 0x03	; BIT 003h, W
+	bit 3, w
 	jr z, LABEL_F72213
 	or a, 0x1
 
@@ -271650,7 +271650,7 @@ LABEL_F72221:
 	.byte 0xbd, 0x09, 0x50	; LD (XIY + 009h), WA
 	xor a, a
 	.byte 0xc1, 0x66, 0xfd, 0x20	; LD W, (0FD66h)
-	.byte 0xc8, 0x33, 0x06	; BIT 006h, W
+	bit 6, w
 	jr z, LABEL_F72240
 	or a, 0x1
 
@@ -271658,7 +271658,7 @@ LABEL_F72240:
 	.byte 0xbd, 0x0d, 0x41	; LD (XIY + 00dh), A
 	xor a, a
 	.byte 0xc1, 0x66, 0xfd, 0x20	; LD W, (0FD66h)
-	.byte 0xc8, 0x33, 0x03	; BIT 003h, W
+	bit 3, w
 	jr z, LABEL_F72251
 	or a, 0x1
 
@@ -271688,7 +271688,7 @@ LABEL_F7227E:
 	lds bc, 5
 	calr LABEL_F72A42
 	.byte 0xc1, 0x39, 0x7f, 0x21	; LD A, (7F39h)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F72290
 	calr LABEL_F72294
 	jr LABEL_F72293
@@ -271789,7 +271789,7 @@ LABEL_F72398:
 
 LABEL_F7239D:
 	ld a, (xhl)
-	.byte 0xc9, 0x33, 0x07	; BIT 007h, A
+	bit 7, a
 	jr z, LABEL_F723B9
 	add xhl, 0x9
 	cp xhl, 0x7F0B
@@ -271828,16 +271828,16 @@ LABEL_F723DC:
 	cp c, a
 	jr nc, LABEL_F723F7
 	add c, 0x60
-	.byte 0xcc, 0xd8	; CP D, 0
+	cps d, 0
 	jr z, LABEL_F723F7
 	dec 1, d
 
 LABEL_F723F7:
 	sub c, a
 	ld e, c
-	.byte 0xcc, 0xd8	; CP D, 0
+	cps d, 0
 	jr nz, LABEL_F72405
-	.byte 0xcd, 0xda	; CP E, 2
+	cps e, 2
 	jr nc, LABEL_F72405
 	ldb e, 0x2
 
@@ -271881,7 +271881,7 @@ LABEL_F72447:
 
 LABEL_F72456:
 	ld a, (xhl)
-	.byte 0xc9, 0x33, 0x07	; BIT 007h, A
+	bit 7, a
 	jr z, LABEL_F7246A
 	.byte 0x8b, 0x01, 0x21	; LD A, (XHL + 001h)
 	cp a, 0x7F
@@ -271936,7 +271936,7 @@ LABEL_F724AA:
 	ld (xhl), a
 	xor w, w
 	.byte 0xc1, 0x66, 0xfd, 0x21	; LD A, (0FD66h)
-	.byte 0xc9, 0x33, 0x06	; BIT 006h, A
+	bit 6, a
 	jr z, LABEL_F724DD
 	or w, 0x1
 
@@ -271952,7 +271952,7 @@ LABEL_F724E6:
 	ld xhl, 0x7F36
 	.byte 0x8b, 0x02, 0x21	; LD A, (XHL + 002h)
 	ld w, (xhl)
-	.byte 0xc8, 0x33, 0x02	; BIT 002h, W
+	bit 2, w
 	jr z, LABEL_F724FD
 	or a, 0x80
 
@@ -271976,14 +271976,14 @@ LABEL_F724FD:
 LABEL_F72524:
 	cp a, 0x17
 	jr nz, LABEL_F72549
-	.byte 0xc8, 0xdc	; CP W, 4
+	cps w, 4
 	jr nz, LABEL_F72549
-	.byte 0xcc, 0x33, 0x06	; BIT 006h, D
+	bit 6, d
 	jr z, LABEL_F72549
 	ldb a, 0xD7
 	ld (xhl), a
 	ldb a, 0x0
-	.byte 0xcd, 0x33, 0x06	; BIT 006h, E
+	bit 6, e
 	jr z, LABEL_F7253F
 	ldb a, 0x7F
 
@@ -271996,14 +271996,14 @@ LABEL_F7253F:
 LABEL_F72549:
 	cp a, 0x17
 	jr nz, LABEL_F7256E
-	.byte 0xc8, 0xdc	; CP W, 4
+	cps w, 4
 	jr nz, LABEL_F7256E
-	.byte 0xcc, 0x33, 0x03	; BIT 003h, D
+	bit 3, d
 	jr z, LABEL_F7256E
 	ldb a, 0xD3
 	ld (xhl), a
 	ldb a, 0x0
-	.byte 0xcd, 0x33, 0x03	; BIT 003h, E
+	bit 3, e
 	jr z, LABEL_F72564
 	ldb a, 0x7F
 
@@ -272023,7 +272023,7 @@ LABEL_F7256F:
 	jr z, LABEL_F725A8
 	.byte 0xd1, 0x0e, 0x7f, 0x23	; LD HL, (7F0Eh)
 	inc 1, hl
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_F72587
 	inc 1, hl
 
@@ -272116,7 +272116,7 @@ LABEL_F72606:
 	ldb a, 0xC1
 	.byte 0xf1, 0x40, 0x7e, 0x40	; LD (7E40h), W
 	and e, 0xF
-	.byte 0xc8, 0x33, 0x07	; BIT 007h, W
+	bit 7, w
 	jr z, LABEL_F72631
 	or e, 0x10
 	and w, 0x7F
@@ -272133,7 +272133,7 @@ LABEL_F72635:
 	cp wa, hl
 	jr z, LABEL_F72659
 	ldb e, 0x0
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F72651
 	ldb e, 0x7F
 
@@ -272152,7 +272152,7 @@ LABEL_F72659:
 	cp wa, hl
 	jr z, LABEL_F7267F
 	ldb e, 0x0
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F72677
 	ldb e, 0x7F
 
@@ -272172,7 +272172,7 @@ LABEL_F72680:
 	ldb a, 0xC1
 	.byte 0xf1, 0x40, 0x7e, 0x40	; LD (7E40h), W
 	and e, 0xF
-	.byte 0xc8, 0x33, 0x07	; BIT 007h, W
+	bit 7, w
 	jr z, LABEL_F7269E
 	or e, 0x10
 	and w, 0x7F
@@ -272205,7 +272205,7 @@ LABEL_F7269E:
 	call LABEL_FDB3F1
 	.byte 0x8d, 0x0d, 0x21	; LD A, (XIY + 00dh)
 	ldb e, 0x0
-	.byte 0xc9, 0x33, 0x00	; BIT 000h, A
+	bit 0, a
 	jr z, LABEL_F726F0
 	ldb e, 0x7F
 
@@ -272216,7 +272216,7 @@ LABEL_F726F0:
 	.byte 0x8d, 0x0d, 0x21	; LD A, (XIY + 00dh)
 	.byte 0xc1, 0x66, 0xfd, 0x20	; LD W, (0FD66h)
 	and w, 0xBF
-	.byte 0xc9, 0x33, 0x00	; BIT 000h, A
+	bit 0, a
 	jr z, LABEL_F7270A
 	or w, 0x40
 
@@ -272229,7 +272229,7 @@ LABEL_F7270A:
 	call LABEL_FDB3F1
 	.byte 0x8d, 0x0e, 0x21	; LD A, (XIY + 00eh)
 	ldb e, 0x0
-	.byte 0xc9, 0x33, 0x00	; BIT 000h, A
+	bit 0, a
 	jr z, LABEL_F72726
 	ldb e, 0x7F
 
@@ -272240,7 +272240,7 @@ LABEL_F72726:
 	.byte 0x8d, 0x0e, 0x21	; LD A, (XIY + 00eh)
 	.byte 0xc1, 0x66, 0xfd, 0x20	; LD W, (0FD66h)
 	and w, 0xF7
-	.byte 0xc9, 0x33, 0x00	; BIT 000h, A
+	bit 0, a
 	jr z, LABEL_F72740
 	or w, 0x8
 
@@ -272485,7 +272485,7 @@ LABEL_F72A1C:
 	ld hl, bc
 	calr LABEL_F72A04
 	ld a, (xix)
-	.byte 0xc9, 0x33, 0x07	; BIT 007h, A
+	bit 7, a
 	jr z, LABEL_F72A38
 	inc 1, bc
 	cp bc, 0x39
@@ -272513,7 +272513,7 @@ LABEL_F72A44:
 	.byte 0xf3, 0x07, 0xec, 0xf0, 0x41	; LD (XHL + IX), A
 	inc 1, ix
 	dec 1, bc
-	.byte 0xd9, 0xd8	; CP BC, 0
+	cps bc, 0
 	jr nz, LABEL_F72A44
 	.byte 0xf1, 0x15, 0x7f, 0xcc	; BIT 4, (7F15h)
 	jr z, LABEL_F72A68
@@ -273574,7 +273574,7 @@ MainVocalistPage1OKFunc:
 	ld de, wa
 	extz wa
 	ld bc, wa
-	.byte 0xda, 0xdd	; CP DE, 5
+	cps de, 5
 	jr ugt, LABEL_F7428A
 	add de, de
 	.byte 0xf2, 0xda, 0xf0, 0xe7, 0x34	; LDA XIX, 0E7F0DAh
@@ -273709,7 +273709,7 @@ LABEL_F7441E:
 	.byte 0xaf, 0x04, 0x20	; LD XWA, (XSP + 004h)
 	.byte 0xe8, 0xef, 0x00	; SRL_0_XWA
 	.byte 0xd7, 0xe2, 0xa8	; LD QWA, 0
-	.byte 0xd8, 0xd9	; CP WA, 1
+	cps wa, 1
 	jr nz, LABEL_F74449
 	.byte 0xaf, 0x04, 0x20	; LD XWA, (XSP + 004h)
 	ld de, wa
@@ -273796,7 +273796,7 @@ LABEL_F744FE:
 	.byte 0xaf, 0x04, 0x20	; LD XWA, (XSP + 004h)
 	.byte 0xe8, 0xef, 0x00	; SRL_0_XWA
 	.byte 0xd7, 0xe2, 0xa8	; LD QWA, 0
-	.byte 0xd8, 0xda	; CP WA, 2
+	cps wa, 2
 	jr nz, LABEL_F7456F
 	ld xwa, 0x19000B
 	ld xbc, 0x1E0006B
@@ -273908,7 +273908,7 @@ LABEL_F74624:
 	.byte 0xaf, 0x04, 0x20	; LD XWA, (XSP + 004h)
 	.byte 0xe8, 0xef, 0x00	; SRL_0_XWA
 	.byte 0xd7, 0xe2, 0xa8	; LD QWA, 0
-	.byte 0xd8, 0xdb	; CP WA, 3
+	cps wa, 3
 	jr nz, LABEL_F74695
 	ld xwa, 0x1A000A
 	ld xbc, 0x1E0006B
@@ -274081,11 +274081,11 @@ LABEL_F747A3:
 
 GMOKFunc:
 	.byte 0xc2, 0xea, 0x40, 0x03, 0x27	; LD L, (0340EAh)
-	.byte 0xcf, 0xda	; CP L, 2
+	cps l, 2
 	jr z, LABEL_F747BC
-	.byte 0xcf, 0xd9	; CP L, 1
+	cps l, 1
 	jr z, LABEL_F747BC
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_F747EE
 	.byte 0x1e, 0x5a, 0x00	; CALR GMYesFunc
 	jr LABEL_F747EE
@@ -274253,7 +274253,7 @@ Draw_keybed_maybe_for_indicating_split_point:
 	call 0xFAC3DB
 	.byte 0x9f, 0x04, 0x38, 0x38, 0x00	; ADDW (XSP + 004h), 0038h
 	inc 1, iz
-	.byte 0xde, 0xdd	; CP IZ, 5
+	cps iz, 5
 	jr nc, LABEL_F749A8
 
 LABEL_F7498B:
@@ -274264,7 +274264,7 @@ LABEL_F7498B:
 	call 0xFAC3DB
 	.byte 0x9f, 0x04, 0x38, 0x38, 0x00	; ADDW (XSP + 004h), 0038h
 	inc 1, iz
-	.byte 0xde, 0xdd	; CP IZ, 5
+	cps iz, 5
 	jr c, LABEL_F7498B
 
 LABEL_F749A8:
@@ -274451,7 +274451,7 @@ TtComputerConnection:
 	or xde, xde
 	.byte 0x6e, 0x20	; JR NZ, ComputerConnectionTitleExit
 	call GET_COMPUTER_INTERFACE_SELECTION
-	.byte 0xcf, 0xd8	; CP L, 0	;  MIDI
+	cps l, 0	;  MIDI
 	.byte 0x6e, 0x18	; JR NZ, ComputerConnectionTitleExit
 	.byte 0xf1, 0x42, 0x7f, 0x00, 0x46	; LD (7F42h), 046h
 	ld xwa, 0xFFFFFFFF
@@ -274489,11 +274489,11 @@ MdCmptCnctFunc:
 CmptCnctDrawConnectionDiagram:
 	.byte 0x9b, 0x04, 0x21	; LD BC, (XHL + 004h)
 	.byte 0xab, 0x08, 0x20	; LD XWA, (XHL + 008h)
-	.byte 0xd9, 0xda	; CP BC, 2
+	cps bc, 2
 	jr z, LABEL_F74BD2
-	.byte 0xd9, 0xd9	; CP BC, 1
+	cps bc, 1
 	jr z, LABEL_F74BB5
-	.byte 0xd9, 0xd8	; CP BC, 0
+	cps bc, 0
 	jr nz, LABEL_F74BEF
 	.byte 0x0b, 0xe7, 0x00	; PUSHW 00e7h
 	.byte 0x0b, 0x48, 0xf8	; PUSHW 0f848h
@@ -274578,12 +274578,12 @@ PcgModeGridEventStart:
 	ld xwa, xde
 	.byte 0x98, 0x04, 0x22	; LD DE, (XWA + 004h)
 	.byte 0xe8, 0x60	; INC 8, XWA
-	.byte 0xda, 0xdb	; CP DE, 3
+	cps de, 3
 	jr z, LABEL_F74C71
 	ld xbc, (xwa)
-	.byte 0xda, 0xd9	; CP DE, 1
+	cps de, 1
 	.byte 0x66, 0x0b	; JR Z, PcgModeDisplayString_Bank1
-	.byte 0xda, 0xd8	; CP DE, 0
+	cps de, 0
 	.byte 0x6e, 0x19	; JR NZ, PcgModeDefaultCase
 	ld xwa, 0xE7F8B0
 	jr LABEL_F74C81
@@ -274643,12 +274643,12 @@ LABEL_F74CC7:
 	ld xwa, xde
 	.byte 0x98, 0x04, 0x22	; LD DE, (XWA + 004h)
 	.byte 0xe8, 0x60	; INC 8, XWA
-	.byte 0xda, 0xdb	; CP DE, 3
+	cps de, 3
 	jr z, LABEL_F74CEA
 	ld xbc, (xwa)
-	.byte 0xda, 0xd9	; CP DE, 1
+	cps de, 1
 	jr z, LABEL_F74CE3
-	.byte 0xda, 0xd8	; CP DE, 0
+	cps de, 0
 	jr nz, LABEL_F74CF5
 	ld xwa, 0xE7F8D8
 	jr LABEL_F74CFA
@@ -275266,7 +275266,7 @@ LABEL_F7528A:
 	ld xbc, 0x1E0008F
 	.byte 0xea, 0xa8	; LD XDE, 0
 	call 0xFA9660
-	.byte 0xdb, 0xd9	; CP HL, 1
+	cps hl, 1
 	jrl le, LABEL_F754A9
 	ld wa, hl
 	add wa, wa
@@ -275545,7 +275545,7 @@ LABEL_F756E6:
 	call LABEL_FCD437
 	.byte 0xbf, 0x0c, 0x31	; LDA XBC, XSP + 00ch
 	ld xwa, 0xE7F9CC
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F756FB
 	ld xwa, 0xE7F9C6
 
@@ -275673,7 +275673,7 @@ LABEL_F757BC:
 	call LABEL_FCD437
 	ld wa, iz
 	add wa, wa
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_F7588B
 	.byte 0xf2, 0xe0, 0xf9, 0xe7, 0x31	; LDA XBC, 0E7F9E0h
 	.byte 0xd3, 0x07, 0xe4, 0xe0, 0x20	; LD WA, (XBC + WA)
@@ -275751,7 +275751,7 @@ LABEL_F758BF:
 	call LABEL_FCD437
 	ld wa, iz
 	add wa, wa
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_F75978
 	.byte 0xf2, 0x04, 0xfa, 0xe7, 0x31	; LDA XBC, 0E7FA04h
 	.byte 0xd3, 0x07, 0xe4, 0xe0, 0x20	; LD WA, (XBC + WA)
@@ -275822,11 +275822,11 @@ LABEL_F75A05:
 LABEL_F75A12:
 	ld xwa, 0x5000
 	call LABEL_FCD437
-	.byte 0xdb, 0xda	; CP HL, 2
+	cps hl, 2
 	jr z, LABEL_F75A35
-	.byte 0xdb, 0xd9	; CP HL, 1
+	cps hl, 1
 	jr z, LABEL_F75A2E
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_F75A6D
 	ld xwa, 0xE7FA28
 	jr LABEL_F75A3A
@@ -276060,7 +276060,7 @@ LABEL_F75F26:
 	.byte 0x92, 0x3f, 0x01, 0x00	; CPW (XDE), 0001h
 	jrl nz, LABEL_F761F8
 	ld wa, (xwa)
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jrl mi, LABEL_F761F8
 	cp wa, 0x8
 	jrl gt, LABEL_F761F8
@@ -276288,9 +276288,9 @@ MdPresetWithoutFunc:
 	ld xbc, 0x1E00056
 	.byte 0xea, 0xa8	; LD XDE, 0
 	call 0xFA9660
-	.byte 0xcf, 0xda	; CP L, 2
+	cps l, 2
 	jr z, LABEL_F76378
-	.byte 0xcf, 0xd9	; CP L, 1
+	cps l, 1
 	jr nz, LABEL_F7639F
 	ld xwa, 0x560004
 	call 0xFA6266
@@ -276335,9 +276335,9 @@ MdPresetWithFunc:
 	ld xbc, 0x1E00056
 	.byte 0xea, 0xa8	; LD XDE, 0
 	call 0xFA9660
-	.byte 0xcf, 0xda	; CP L, 2
+	cps l, 2
 	jr z, LABEL_F763F7
-	.byte 0xcf, 0xd9	; CP L, 1
+	cps l, 1
 	jr nz, LABEL_F7641E
 	ld xwa, 0x560004
 	call 0xFA6266
@@ -276379,18 +276379,18 @@ MdPresetOKFunc:
 	ld xbc, 0x1E00056
 	.byte 0xea, 0xa8	; LD XDE, 0
 	call 0xFA9660
-	.byte 0xcf, 0xdc	; CP L, 4
+	cps l, 4
 	jrl z, LABEL_F76523
-	.byte 0xcf, 0xdb	; CP L, 3
+	cps l, 3
 	jrl z, LABEL_F764FE
 	.byte 0xc2, 0x56, 0x47, 0x02, 0x21	; LD A, (024756h)
-	.byte 0xcf, 0xda	; CP L, 2
+	cps l, 2
 	jr z, LABEL_F764AA
-	.byte 0xcf, 0xd9	; CP L, 1
+	cps l, 1
 	jrl nz, LABEL_F7655C
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	jr z, LABEL_F76484
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jrl nz, LABEL_F7655C
 	ld xwa, 0x56000C
 	ld xbc, 0x1E00090
@@ -276418,9 +276418,9 @@ LABEL_F76484:
 	jrl LABEL_F76558
 
 LABEL_F764AA:
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	jr z, LABEL_F764D9
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jrl nz, LABEL_F7655C
 	ld xwa, 0x56002D
 	ld xbc, 0x1E00090
@@ -276801,9 +276801,9 @@ LABEL_F768AF:
 	.byte 0xbf, 0x02, 0x43	; LD (XSP + 002h), C
 	.byte 0xbf, 0x04, 0x41	; LD (XSP + 004h), A
 	.byte 0xc1, 0x36, 0xbd, 0x21	; LD A, (0BD36h)
-	.byte 0xc9, 0x33, 0x00	; BIT 000h, A
+	bit 0, a
 	jr z, LABEL_F768D9
-	.byte 0xc9, 0x30, 0x00	; RES 000h, A
+	res 0, a
 	.byte 0xf1, 0x36, 0xbd, 0x41	; LD (0BD36h), A
 	ld xwa, 0x570006
 	ld xbc, 0x1C00001
@@ -276840,7 +276840,7 @@ LABEL_F7691B:
 	.byte 0xf2, 0x5a, 0x47, 0x02, 0x41	; LD (02475Ah), A
 	.byte 0x8f, 0x04, 0x21	; LD A, (XSP + 004h)
 	extz wa
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jrl mi, LABEL_F76A4F
 	cp wa, 0xC
 	jrl gt, LABEL_F76A4F
@@ -276894,9 +276894,9 @@ LABEL_F76A52:
 	.byte 0xbf, 0x02, 0x43	; LD (XSP + 002h), C
 	.byte 0xbf, 0x04, 0x41	; LD (XSP + 004h), A
 	.byte 0xc1, 0x36, 0xbd, 0x21	; LD A, (0BD36h)
-	.byte 0xc9, 0x33, 0x01	; BIT 001h, A
+	bit 1, a
 	jr z, LABEL_F76A7C
-	.byte 0xc9, 0x30, 0x01	; RES 001h, A
+	res 1, a
 	.byte 0xf1, 0x36, 0xbd, 0x41	; LD (0BD36h), A
 	ld xwa, 0x570011
 	ld xbc, 0x1C00001
@@ -276905,9 +276905,9 @@ LABEL_F76A52:
 
 LABEL_F76A7C:
 	.byte 0xc1, 0x10, 0xbd, 0x21	; LD A, (0BD10h)
-	.byte 0xc9, 0x33, 0x07	; BIT 007h, A
+	bit 7, a
 	jr z, LABEL_F76AA4
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
+	res 7, a
 	.byte 0xf1, 0x10, 0xbd, 0x41	; LD (0BD10h), A
 	.byte 0x8f, 0x02, 0x21	; LD A, (XSP + 002h)
 	.byte 0xf2, 0x5c, 0x47, 0x02, 0x41	; LD (02475Ch), A
@@ -276918,9 +276918,9 @@ LABEL_F76A7C:
 
 LABEL_F76AA4:
 	.byte 0xc1, 0x14, 0xbd, 0x21	; LD A, (0BD14h)
-	.byte 0xc9, 0x33, 0x07	; BIT 007h, A
+	bit 7, a
 	jr z, LABEL_F76ACB
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
+	res 7, a
 	.byte 0xf1, 0x14, 0xbd, 0x41	; LD (0BD14h), A
 	ld a, (xsp)
 	.byte 0xf2, 0x5e, 0x47, 0x02, 0x41	; LD (02475Eh), A
@@ -276931,13 +276931,13 @@ LABEL_F76AA4:
 
 LABEL_F76ACB:
 	.byte 0xc1, 0x0c, 0xbd, 0x21	; LD A, (0BD0Ch)
-	.byte 0xc9, 0x33, 0x07	; BIT 007h, A
+	bit 7, a
 	jrl z, LABEL_F76BFD
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
+	res 7, a
 	.byte 0xf1, 0x0c, 0xbd, 0x41	; LD (0BD0Ch), A
 	.byte 0x8f, 0x04, 0x21	; LD A, (XSP + 004h)
 	extz wa
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jrl mi, LABEL_F76BFD
 	cp wa, 0xC
 	jrl gt, LABEL_F76BFD
@@ -277090,7 +277090,7 @@ LABEL_F76D32:
 	jrl nz, LABEL_F76F4D
 	lds wa, 7
 	call LABEL_FC56A1
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl z, LABEL_F76F4D
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
@@ -277417,12 +277417,12 @@ LABEL_F7724E:
 	ld wa, (xde)
 	cp wa, 0x8
 	jrl z, LABEL_F772FE
-	.byte 0xd8, 0xdf	; CP WA, 7
+	cps wa, 7
 	jr z, LABEL_F772D3
 	.byte 0xaf, 0x08, 0x21	; LD XBC, (XSP + 008h)
-	.byte 0xd8, 0xdb	; CP WA, 3
+	cps wa, 3
 	jr z, LABEL_F772AB
-	.byte 0xd8, 0xda	; CP WA, 2
+	cps wa, 2
 	jrl nz, LABEL_F7732B
 	ld a, (xiz)
 	extz wa
@@ -277706,7 +277706,7 @@ LABEL_F774F6:
 	ld xbc, 0x1E0008F
 	.byte 0xea, 0xa8	; LD XDE, 0
 	call 0xFA9660
-	.byte 0xdb, 0xdb	; CP HL, 3
+	cps hl, 3
 	jrl ge, LABEL_F7763E
 	inc 1, hl
 	extz xhl
@@ -278000,13 +278000,13 @@ PcgOutCheckGridDataStructure:
 	.byte 0x93, 0x3f, 0x01, 0x00	; CPW (XHL), 0001h
 	.byte 0x7e, 0x22, 0x02	; JRL NZ, PcgOutGridCheckComplete
 	ld de, (xwa)
-	.byte 0xda, 0xdb	; CP DE, 3
+	cps de, 3
 	jrl z, LABEL_F77C77
-	.byte 0xda, 0xda	; CP DE, 2
+	cps de, 2
 	jr z, LABEL_F77BC7
-	.byte 0xda, 0xd9	; CP DE, 1
+	cps de, 1
 	jr z, LABEL_F77B9E
-	.byte 0xda, 0xd8	; CP DE, 0
+	cps de, 0
 	.byte 0x7e, 0x0e, 0x02	; JRL NZ, PcgOutGridCheckComplete
 	.byte 0xc2, 0x6a, 0x47, 0x02, 0x21	; LD A, (02476Ah)
 	inc 1, a
@@ -278529,7 +278529,7 @@ LABEL_F7823C:
 	call LABEL_FCD437
 	.byte 0xbf, 0x0c, 0x31	; LDA XBC, XSP + 00ch
 	ld xwa, 0xE80088
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F78251
 	ld xwa, 0xE80082
 
@@ -278547,7 +278547,7 @@ LABEL_F78251:
 LABEL_F78269:
 	ld xwa, 0xC0
 	call LABEL_FCD437
-	.byte 0xdb, 0xd9	; CP HL, 1
+	cps hl, 1
 	jr nz, LABEL_F7827D
 	ld xwa, 0xE8008E
 	jr LABEL_F782B7
@@ -278558,11 +278558,11 @@ LABEL_F7827D:
 	.byte 0xf2, 0x16, 0x00, 0xe8, 0x30	; LDA XWA, 0E80016h
 	.byte 0xe3, 0x07, 0xe0, 0xe4, 0x20	; LD XWA, (XWA + BC)
 	call LABEL_FCD437
-	.byte 0xdb, 0xdb	; CP HL, 3
+	cps hl, 3
 	jr z, LABEL_F782AB
-	.byte 0xdb, 0xd9	; CP HL, 1
+	cps hl, 1
 	jr z, LABEL_F782A4
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_F782B2
 	ld xwa, 0xE80098
 	jr LABEL_F782B7
@@ -278658,11 +278658,11 @@ LABEL_F7838B:
 	call 0xFA9660
 	ld xiz, xhl
 	ld wa, iz
-	.byte 0xd8, 0xdb	; CP WA, 3
+	cps wa, 3
 	jr z, LABEL_F783E8
-	.byte 0xd8, 0xd9	; CP WA, 1
+	cps wa, 1
 	jr z, LABEL_F783AA
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jrl nz, LABEL_F78430
 
 LABEL_F783AA:
@@ -278723,11 +278723,11 @@ LABEL_F78430:
 	.byte 0xaf, 0x08, 0x22	; LD XDE, (XSP + 008h)
 	jrl LABEL_F78613
 	.byte 0xaf, 0x08, 0x20	; LD XWA, (XSP + 008h)
-	.byte 0xd8, 0xdb	; CP WA, 3
+	cps wa, 3
 	jrl z, LABEL_F78574
-	.byte 0xd8, 0xda	; CP WA, 2
+	cps wa, 2
 	jrl z, LABEL_F784E1
-	.byte 0xd8, 0xd9	; CP WA, 1
+	cps wa, 1
 	jrl nz, LABEL_F7860A
 	.byte 0xaf, 0x10, 0x20	; LD XWA, (XSP + 010h)
 	.byte 0xaf, 0x0c, 0x21	; LD XBC, (XSP + 00ch)
@@ -278748,7 +278748,7 @@ LABEL_F78430:
 	.byte 0xea, 0xa8	; LD XDE, 0
 	call 0xFA9660
 	ld xiz, xhl
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr z, LABEL_F784CE
 	.byte 0xaf, 0x10, 0x20	; LD XWA, (XSP + 010h)
 	ld xbc, 0x1E0008E
@@ -278795,7 +278795,7 @@ LABEL_F784E1:
 	.byte 0xea, 0xa8	; LD XDE, 0
 	call 0xFA9660
 	ld xiz, xhl
-	.byte 0xde, 0xd9	; CP IZ, 1
+	cps iz, 1
 	jr z, LABEL_F78561
 	.byte 0xaf, 0x10, 0x20	; LD XWA, (XSP + 010h)
 	ld xbc, 0x1E0008E
@@ -278842,7 +278842,7 @@ LABEL_F78574:
 	.byte 0xea, 0xa8	; LD XDE, 0
 	call 0xFA9660
 	ld xiz, xhl
-	.byte 0xde, 0xdb	; CP IZ, 3
+	cps iz, 3
 	jr z, LABEL_F785F6
 	.byte 0xaf, 0x10, 0x20	; LD XWA, (XSP + 010h)
 	ld xbc, 0x1E0008E
@@ -278968,11 +278968,11 @@ LABEL_F786DE:
 	call 0xFA9660
 	ld xiz, xhl
 	ld wa, iz
-	.byte 0xd8, 0xdf	; CP WA, 7
+	cps wa, 7
 	jr z, LABEL_F786FC
-	.byte 0xd8, 0xde	; CP WA, 6
+	cps wa, 6
 	jr z, LABEL_F786FC
-	.byte 0xd8, 0xdd	; CP WA, 5
+	cps wa, 5
 	jr nz, LABEL_F7873C
 
 LABEL_F786FC:
@@ -279004,11 +279004,11 @@ LABEL_F7873C:
 	.byte 0xaf, 0x08, 0x22	; LD XDE, (XSP + 008h)
 	jrl LABEL_F7891F
 	.byte 0xaf, 0x08, 0x20	; LD XWA, (XSP + 008h)
-	.byte 0xd8, 0xdf	; CP WA, 7
+	cps wa, 7
 	jrl z, LABEL_F78880
-	.byte 0xd8, 0xde	; CP WA, 6
+	cps wa, 6
 	jrl z, LABEL_F787ED
-	.byte 0xd8, 0xdd	; CP WA, 5
+	cps wa, 5
 	jrl nz, LABEL_F78916
 	.byte 0xaf, 0x10, 0x20	; LD XWA, (XSP + 010h)
 	.byte 0xaf, 0x0c, 0x21	; LD XBC, (XSP + 00ch)
@@ -279029,7 +279029,7 @@ LABEL_F7873C:
 	.byte 0xea, 0xa8	; LD XDE, 0
 	call 0xFA9660
 	ld xiz, xhl
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr z, LABEL_F787DA
 	.byte 0xaf, 0x10, 0x20	; LD XWA, (XSP + 010h)
 	ld xbc, 0x1E0008E
@@ -279076,7 +279076,7 @@ LABEL_F787ED:
 	.byte 0xea, 0xa8	; LD XDE, 0
 	call 0xFA9660
 	ld xiz, xhl
-	.byte 0xde, 0xd9	; CP IZ, 1
+	cps iz, 1
 	jr z, LABEL_F7886D
 	.byte 0xaf, 0x10, 0x20	; LD XWA, (XSP + 010h)
 	ld xbc, 0x1E0008E
@@ -279123,7 +279123,7 @@ LABEL_F78880:
 	.byte 0xea, 0xa8	; LD XDE, 0
 	call 0xFA9660
 	ld xiz, xhl
-	.byte 0xde, 0xda	; CP IZ, 2
+	cps iz, 2
 	jr z, LABEL_F78902
 	.byte 0xaf, 0x10, 0x20	; LD XWA, (XSP + 010h)
 	ld xbc, 0x1E0008E
@@ -279505,11 +279505,11 @@ LABEL_F79102:
 	.byte 0x91, 0x3f, 0x01, 0x00	; CPW (XBC), 0001h
 	jrl nz, LABEL_F791DD
 	ld wa, (xix)
-	.byte 0xd8, 0xdb	; CP WA, 3
+	cps wa, 3
 	jrl z, LABEL_F791AE
-	.byte 0xd8, 0xd9	; CP WA, 1
+	cps wa, 1
 	jr z, LABEL_F7916A
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jrl nz, LABEL_F791DD
 	.byte 0xc2, 0x72, 0x47, 0x02, 0x23	; LD C, (024772h)
 	ld a, c
@@ -279875,7 +279875,7 @@ LABEL_F79957:
 	.byte 0xc2, 0x74, 0x47, 0x02, 0x21	; LD A, (024774h)
 	ld xbc, 0x1A
 	call LABEL_FF0A5C
-	.byte 0xde, 0xda	; CP IZ, 2
+	cps iz, 2
 	jrl z, LABEL_F79A2D
 	.byte 0xe9, 0xa8	; LD XBC, 0
 	.byte 0xc2, 0x72, 0x47, 0x02, 0x23	; LD C, (024772h)
@@ -279886,9 +279886,9 @@ LABEL_F79957:
 	.byte 0xaf, 0x10, 0x21	; LD XBC, (XSP + 010h)
 	add xbc, xwa
 	add xbc, xhl
-	.byte 0xde, 0xd9	; CP IZ, 1
+	cps iz, 1
 	jr z, LABEL_F799F9
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jrl nz, LABEL_F79A91
 	.byte 0xaf, 0x1c, 0x20	; LD XWA, (XSP + 01ch)
 	sub xwa, 0xF9A0
@@ -280142,7 +280142,7 @@ LABEL_F79C37:
 	ld wa, (xbc)
 	inc 1, wa
 	ld (xbc), wa
-	.byte 0xd8, 0xd9	; CP WA, 1
+	cps wa, 1
 	jr le, LABEL_F79C76
 	ld xwa, (xde)
 	.byte 0xb0, 0x02, 0x00, 0x00	; LDW (XWA), 0000h
@@ -280166,7 +280166,7 @@ LABEL_F79C9C:
 	ld wa, (xbc)
 	dec 1, wa
 	ld (xbc), wa
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr ge, LABEL_F79CB0
 	ld xwa, (xde)
 	.byte 0xb0, 0x02, 0x01, 0x00	; LDW (XWA), 0001h
@@ -280204,7 +280204,7 @@ LABEL_F79CD4:
 	.byte 0xea, 0xa8	; LD XDE, 0
 	call 0xFA9660
 	ld ix, hl
-	.byte 0xdc, 0xda	; CP IX, 2
+	cps ix, 2
 	jr nz, LABEL_F79D7F
 	.byte 0xaf, 0x04, 0x20	; LD XWA, (XSP + 004h)
 	.byte 0xb8, 0x4a, 0x31	; LDA XBC, XWA + 04ah
@@ -280212,7 +280212,7 @@ LABEL_F79CD4:
 	ld wa, (xde)
 	dec 1, wa
 	ld (xde), wa
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr ge, LABEL_F79D32
 	ld xwa, (xbc)
 	.byte 0xb0, 0x02, 0x01, 0x00	; LDW (XWA), 0001h
@@ -280312,7 +280312,7 @@ LABEL_F79DA5:
 	ld wa, (xbc)
 	inc 1, wa
 	ld (xbc), wa
-	.byte 0xd8, 0xd9	; CP WA, 1
+	cps wa, 1
 	jr le, LABEL_F79E5E
 	ld xwa, (xde)
 	.byte 0xb0, 0x02, 0x00, 0x00	; LDW (XWA), 0000h
@@ -280393,9 +280393,9 @@ LABEL_F79F1F:
 	call 0xFA6266
 	.byte 0xab, 0x4a, 0x20	; LD XWA, (XHL + 04ah)
 	ld wa, (xwa)
-	.byte 0xd8, 0xd9	; CP WA, 1
+	cps wa, 1
 	jr z, LABEL_F79F3A
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr nz, LABEL_F79F72
 	ld xwa, 0xE80292
 	jr LABEL_F79F3F
@@ -280542,7 +280542,7 @@ LABEL_F7A113:
 	call LABEL_FCD437
 	.byte 0xbf, 0x14, 0x31	; LDA XBC, XSP + 014h
 	ld xwa, 0xE803EA
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F7A16A
 	ld xwa, 0xE803E4
 
@@ -280728,7 +280728,7 @@ LABEL_F7A34F:
 	ld wa, (xbc)
 	inc 1, wa
 	ld (xbc), wa
-	.byte 0xd8, 0xda	; CP WA, 2
+	cps wa, 2
 	jr le, LABEL_F7A38E
 	ld xwa, (xde)
 	.byte 0xb0, 0x02, 0x00, 0x00	; LDW (XWA), 0000h
@@ -280761,7 +280761,7 @@ LABEL_F7A3D9:
 	ld wa, (xbc)
 	dec 1, wa
 	ld (xbc), wa
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr ge, LABEL_F7A3ED
 	ld xwa, (xde)
 	.byte 0xb0, 0x02, 0x02, 0x00	; LDW (XWA), 0002h
@@ -280808,7 +280808,7 @@ LABEL_F7A436:
 	.byte 0xea, 0xa8	; LD XDE, 0
 	call 0xFA9660
 	ld iz, hl
-	.byte 0xde, 0xda	; CP IZ, 2
+	cps iz, 2
 	jrl nz, LABEL_F7A51D
 	.byte 0xaf, 0x04, 0x20	; LD XWA, (XSP + 004h)
 	.byte 0xb8, 0x4a, 0x31	; LDA XBC, XWA + 04ah
@@ -280816,7 +280816,7 @@ LABEL_F7A436:
 	ld wa, (xde)
 	dec 1, wa
 	ld (xde), wa
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr ge, LABEL_F7A495
 	ld xwa, (xbc)
 	.byte 0xb0, 0x02, 0x02, 0x00	; LDW (XWA), 0002h
@@ -280976,7 +280976,7 @@ LABEL_F7A628:
 	ld wa, (xde)
 	inc 1, wa
 	ld (xde), wa
-	.byte 0xd8, 0xda	; CP WA, 2
+	cps wa, 2
 	jr le, LABEL_F7A681
 	ld xwa, (xbc)
 	.byte 0xb0, 0x02, 0x00, 0x00	; LDW (XWA), 0000h
@@ -281110,11 +281110,11 @@ LABEL_F7A7F5:
 	call 0xFA6266
 	.byte 0xab, 0x4a, 0x20	; LD XWA, (XHL + 04ah)
 	ld wa, (xwa)
-	.byte 0xd8, 0xda	; CP WA, 2
+	cps wa, 2
 	jr z, LABEL_F7A81B
-	.byte 0xd8, 0xd9	; CP WA, 1
+	cps wa, 1
 	jr z, LABEL_F7A814
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr nz, LABEL_F7A853
 	ld xwa, 0xE80456
 	jr LABEL_F7A820
@@ -281325,12 +281325,12 @@ LABEL_F7AC20:
 	extz wa
 	.byte 0xd8, 0x09, 0x60, 0x00	; MULS_WA 0060h
 	add wa, bc
-	.byte 0xda, 0xdb	; CP DE, 3
+	cps de, 3
 	jrl z, LABEL_F7ACFB
 	.byte 0xf2, 0x20, 0x05, 0xe8, 0x31	; LDA XBC, 0E80520h
-	.byte 0xda, 0xda	; CP DE, 2
+	cps de, 2
 	jr z, LABEL_F7ACBA
-	.byte 0xda, 0xd9	; CP DE, 1
+	cps de, 1
 	jrl nz, LABEL_F7AD42
 	.byte 0xe3, 0x07, 0xe4, 0xe0, 0x20	; LD XWA, (XBC + WA)
 	.byte 0xbf, 0x0c, 0x60	; LD (XSP + 00ch), XWA
@@ -281339,7 +281339,7 @@ LABEL_F7AC20:
 	.byte 0xaf, 0x0c, 0x20	; LD XWA, (XSP + 00ch)
 	inc 1, xwa
 	call LABEL_FCD437
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_F7AC8E
 	.byte 0x0b, 0xe8, 0x00	; PUSHW 00e8h
 	.byte 0x0b, 0xe2, 0x06	; PUSHW 06e2h
@@ -281399,7 +281399,7 @@ LABEL_F7ACFB:
 	.byte 0xaf, 0x0c, 0x20	; LD XWA, (XSP + 00ch)
 	call LABEL_FCD437
 	ld xwa, 0xE806F6
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F7AD25
 	ld xwa, 0xE806F0
 
@@ -281705,11 +281705,11 @@ LABEL_F7B685:
 	ld xbc, 0x1E00053
 	.byte 0xaf, 0x04, 0x22	; LD XDE, (XSP + 004h)
 	call 0xFA9660
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F7B6A8
 	ld xwa, 0xC0
 	call LABEL_FCD437
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F7B6A8
 	.byte 0xeb, 0xa8	; LD XHL, 0
 	jr LABEL_F7B6B4
@@ -281746,9 +281746,9 @@ LswLeftHold:
 LABEL_F7B6E7:
 	.byte 0x9a, 0x04, 0x21	; LD BC, (XDE + 004h)
 	.byte 0xaa, 0x08, 0x20	; LD XWA, (XDE + 008h)
-	.byte 0xd9, 0xd8	; CP BC, 0
+	cps bc, 0
 	jr lt, LABEL_F7B705
-	.byte 0xd9, 0xd9	; CP BC, 1
+	cps bc, 1
 	jr gt, LABEL_F7B705
 	sla bc, 2
 	.byte 0xf2, 0x1c, 0xe9, 0x03, 0x32	; LDA XDE, 03E91Ch
@@ -281976,7 +281976,7 @@ LABEL_F7B913:
 	lds bc, 1
 	lds de, 1
 	calr LABEL_F7CB32
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl z, LABEL_F7BB5B
 	.byte 0xd2, 0x9e, 0xe9, 0x03, 0x20	; LD WA, (03E99Eh)
 	ld bc, wa
@@ -282981,7 +282981,7 @@ LABEL_F7C527:
 	.byte 0xaf, 0x1e, 0x20	; LD XWA, (XSP + 01eh)
 	.byte 0xb8, 0x04, 0x32	; LDA XDE, XWA + 004h
 	ld wa, (xbc)
-	.byte 0xd8, 0x33, 0x07	; BIT 007h, WA
+	bit 7, wa
 	jr z, LABEL_F7C5AC
 	ld wa, (xde)
 	add wa, 0x80
@@ -283039,7 +283039,7 @@ LABEL_F7C606:
 	.byte 0xa8, 0x3a, 0x22	; LD XDE, (XWA + 03ah)
 	inc 4, xbc
 	ld wa, (xde)
-	.byte 0xd8, 0x33, 0x07	; BIT 007h, WA
+	bit 7, wa
 	jr z, LABEL_F7C638
 	ld wa, (xbc)
 	add wa, 0x80
@@ -283197,7 +283197,7 @@ LABEL_F7C7BB:
 	call 0xFA6266
 	.byte 0xab, 0x3a, 0x20	; LD XWA, (XHL + 03ah)
 	ld de, (xwa)
-	.byte 0xda, 0x31, 0x07	; SET 007h, DE
+	set 7, de
 	exts xde
 	.byte 0xaf, 0x26, 0x20	; LD XWA, (XSP + 026h)
 	ld xbc, 0x1E0003B
@@ -283698,7 +283698,7 @@ LswVolume:
 	add xhl, xwa
 	.byte 0xaa, 0x08, 0x21	; LD XBC, (XDE + 008h)
 	ld xwa, (xhl)
-	.byte 0xd8, 0x33, 0x0f	; BIT 00fh, WA
+	bit 15, wa
 	jr z, LABEL_F7CD0B
 	.byte 0x9a, 0x04, 0x20	; LD WA, (XDE + 004h)
 	cp wa, 0x80
@@ -283761,7 +283761,7 @@ LABEL_F7CD4D:
 
 LABEL_F7CD59:
 	ld xwa, (xwa)
-	.byte 0xd8, 0x33, 0x0f	; BIT 00fh, WA
+	bit 15, wa
 	jr z, LABEL_F7CD84
 
 LABEL_F7CD60:
@@ -283823,7 +283823,7 @@ LswMute:
 	add xhl, xwa
 	.byte 0xaa, 0x08, 0x21	; LD XBC, (XDE + 008h)
 	ld xwa, (xhl)
-	.byte 0xd8, 0x33, 0x0f	; BIT 00fh, WA
+	bit 15, wa
 	jr z, LABEL_F7CE19
 	.byte 0x9a, 0x04, 0x20	; LD WA, (XDE + 004h)
 	cp wa, 0x80
@@ -283884,7 +283884,7 @@ LABEL_F7CE5E:
 
 LABEL_F7CE62:
 	ld xwa, (xwa)
-	.byte 0xd8, 0x33, 0x0f	; BIT 00fh, WA
+	bit 15, wa
 	jr z, LABEL_F7CE8D
 	.byte 0xeb, 0xac	; LD XHL, 4
 	jr LABEL_F7CE8F
@@ -283951,7 +283951,7 @@ LswPan:
 	add xix, xwa
 	.byte 0xaa, 0x08, 0x21	; LD XBC, (XDE + 008h)
 	ld xwa, (xix)
-	.byte 0xd8, 0x33, 0x0e	; BIT 00eh, WA
+	bit 14, wa
 	jr z, LABEL_F7CF56
 	.byte 0x9a, 0x04, 0x20	; LD WA, (XDE + 004h)
 	cp wa, 0x40
@@ -284006,7 +284006,7 @@ LABEL_F7CF76:
 	jr LABEL_F7CFA3
 
 LABEL_F7CF7D:
-	.byte 0xd8, 0x33, 0x0e	; BIT 00eh, WA
+	bit 14, wa
 	jr z, LABEL_F7CF96
 
 LABEL_F7CF82:
@@ -284072,7 +284072,7 @@ LswReverb:
 	add xhl, xwa
 	.byte 0xaa, 0x08, 0x21	; LD XBC, (XDE + 008h)
 	ld xwa, (xhl)
-	.byte 0xd8, 0x33, 0x0d	; BIT 00dh, WA
+	bit 13, wa
 	jr z, LABEL_F7D028
 	.byte 0x9a, 0x04, 0x04	; PUSHW (XDE + 004h)
 	.byte 0x0b, 0xe9, 0x00	; PUSHW 00e9h
@@ -284126,7 +284126,7 @@ LABEL_F7D06D:
 
 LABEL_F7D079:
 	ld xwa, (xwa)
-	.byte 0xd8, 0x33, 0x0d	; BIT 00dh, WA
+	bit 13, wa
 	jr z, LABEL_F7D0A4
 
 LABEL_F7D080:
@@ -284188,7 +284188,7 @@ LswDSPEffect:
 	add xhl, xwa
 	.byte 0xaa, 0x08, 0x21	; LD XBC, (XDE + 008h)
 	ld xwa, (xhl)
-	.byte 0xd8, 0x33, 0x0c	; BIT 00ch, WA
+	bit 12, wa
 	jr z, LABEL_F7D128
 	.byte 0x9a, 0x04, 0x04	; PUSHW (XDE + 004h)
 	.byte 0x0b, 0xe9, 0x00	; PUSHW 00e9h
@@ -284223,7 +284223,7 @@ LABEL_F7D148:
 
 LABEL_F7D14F:
 	ld xwa, (xwa)
-	.byte 0xd8, 0x33, 0x0c	; BIT 00ch, WA
+	bit 12, wa
 	jr z, LABEL_F7D17A
 
 LABEL_F7D156:
@@ -284285,7 +284285,7 @@ LswDigitalEffect:
 	add xhl, xwa
 	.byte 0xaa, 0x08, 0x21	; LD XBC, (XDE + 008h)
 	ld xwa, (xhl)
-	.byte 0xd8, 0x33, 0x03	; BIT 003h, WA
+	bit 3, wa
 	jr z, LABEL_F7D201
 	.byte 0x9a, 0x04, 0x3f, 0x00, 0x00	; CPW (XDE + 004h), 0000h
 	jr z, LABEL_F7D1FA
@@ -284321,7 +284321,7 @@ LABEL_F7D221:
 
 LABEL_F7D228:
 	ld xwa, (xwa)
-	.byte 0xd8, 0x33, 0x03	; BIT 003h, WA
+	bit 3, wa
 	jr z, LABEL_F7D253
 
 LABEL_F7D22F:
@@ -284383,7 +284383,7 @@ LswSustain:
 	add xhl, xwa
 	.byte 0xaa, 0x08, 0x21	; LD XBC, (XDE + 008h)
 	ld xwa, (xhl)
-	.byte 0xd8, 0x33, 0x0b	; BIT 00bh, WA
+	bit 11, wa
 	jr z, LABEL_F7D2DA
 	.byte 0x9a, 0x04, 0x3f, 0x00, 0x00	; CPW (XDE + 004h), 0000h
 	jr z, LABEL_F7D2D3
@@ -284419,7 +284419,7 @@ LABEL_F7D2FA:
 
 LABEL_F7D301:
 	ld xwa, (xwa)
-	.byte 0xd8, 0x33, 0x0b	; BIT 00bh, WA
+	bit 11, wa
 	jr z, LABEL_F7D32C
 
 LABEL_F7D308:
@@ -284481,7 +284481,7 @@ LswSustainLength:
 	add xhl, xwa
 	.byte 0xaa, 0x08, 0x21	; LD XBC, (XDE + 008h)
 	ld xwa, (xhl)
-	.byte 0xd8, 0x33, 0x0a	; BIT 00ah, WA
+	bit 10, wa
 	jr z, LABEL_F7D3B4
 	.byte 0x9a, 0x04, 0x20	; LD WA, (XDE + 004h)
 	inc 1, wa
@@ -284518,7 +284518,7 @@ LABEL_F7D3D4:
 
 LABEL_F7D3DB:
 	ld xwa, (xwa)
-	.byte 0xd8, 0x33, 0x0a	; BIT 00ah, WA
+	bit 10, wa
 	jr z, LABEL_F7D406
 
 LABEL_F7D3E2:
@@ -284584,7 +284584,7 @@ LswKeyShift:
 	add xhl, xwa
 	.byte 0xaa, 0x08, 0x21	; LD XBC, (XDE + 008h)
 	ld xwa, (xhl)
-	.byte 0xd8, 0x33, 0x09	; BIT 009h, WA
+	bit 9, wa
 	jr z, LABEL_F7D4AD
 	.byte 0x9a, 0x04, 0x20	; LD WA, (XDE + 004h)
 	sub wa, 0x40
@@ -284628,7 +284628,7 @@ LABEL_F7D4CD:
 
 LABEL_F7D4D4:
 	ld xwa, (xwa)
-	.byte 0xd8, 0x33, 0x09	; BIT 009h, WA
+	bit 9, wa
 	jr z, LABEL_F7D4FF
 
 LABEL_F7D4DB:
@@ -284702,7 +284702,7 @@ LswTuning:
 	add xhl, xwa
 	.byte 0xaa, 0x08, 0x21	; LD XBC, (XDE + 008h)
 	ld xwa, (xhl)
-	.byte 0xd8, 0x33, 0x08	; BIT 008h, WA
+	bit 8, wa
 	jr z, LABEL_F7D5B1
 	.byte 0x9a, 0x04, 0x20	; LD WA, (XDE + 004h)
 	sub wa, 0x80
@@ -284746,7 +284746,7 @@ LABEL_F7D5D1:
 
 LABEL_F7D5D8:
 	ld xwa, (xwa)
-	.byte 0xd8, 0x33, 0x08	; BIT 008h, WA
+	bit 8, wa
 	jr z, LABEL_F7D603
 
 LABEL_F7D5DF:
@@ -284816,7 +284816,7 @@ LswBendRange:
 	add xhl, xwa
 	.byte 0xaa, 0x08, 0x21	; LD XBC, (XDE + 008h)
 	ld xwa, (xhl)
-	.byte 0xd8, 0x33, 0x07	; BIT 007h, WA
+	bit 7, wa
 	jr z, LABEL_F7D692
 	.byte 0x9a, 0x04, 0x04	; PUSHW (XDE + 004h)
 	.byte 0x0b, 0xe9, 0x00	; PUSHW 00e9h
@@ -284851,7 +284851,7 @@ LABEL_F7D6B2:
 
 LABEL_F7D6B9:
 	ld xwa, (xwa)
-	.byte 0xd8, 0x33, 0x07	; BIT 007h, WA
+	bit 7, wa
 	jr z, LABEL_F7D6E4
 
 LABEL_F7D6C0:
@@ -284913,7 +284913,7 @@ LswGlidePedal:
 	add xhl, xwa
 	.byte 0xaa, 0x08, 0x21	; LD XBC, (XDE + 008h)
 	ld xwa, (xhl)
-	.byte 0xd8, 0x33, 0x06	; BIT 006h, WA
+	bit 6, wa
 	jr z, LABEL_F7D76B
 	.byte 0x9a, 0x04, 0x3f, 0x00, 0x00	; CPW (XDE + 004h), 0000h
 	jr z, LABEL_F7D764
@@ -284953,7 +284953,7 @@ LABEL_F7D792:
 
 LABEL_F7D796:
 	ld xwa, (xwa)
-	.byte 0xd8, 0x33, 0x06	; BIT 006h, WA
+	bit 6, wa
 	jr z, LABEL_F7D7C1
 	.byte 0xeb, 0xac	; LD XHL, 4
 	jr LABEL_F7D7C3
@@ -285013,7 +285013,7 @@ LswSustainPedal:
 	add xhl, xwa
 	.byte 0xaa, 0x08, 0x21	; LD XBC, (XDE + 008h)
 	ld xwa, (xhl)
-	.byte 0xd8, 0x33, 0x05	; BIT 005h, WA
+	bit 5, wa
 	jr z, LABEL_F7D848
 	.byte 0x9a, 0x04, 0x3f, 0x00, 0x00	; CPW (XDE + 004h), 0000h
 	jr z, LABEL_F7D841
@@ -285053,7 +285053,7 @@ LABEL_F7D86F:
 
 LABEL_F7D873:
 	ld xwa, (xwa)
-	.byte 0xd8, 0x33, 0x05	; BIT 005h, WA
+	bit 5, wa
 	jr z, LABEL_F7D89E
 	.byte 0xeb, 0xac	; LD XHL, 4
 	jr LABEL_F7D8A0
@@ -285113,7 +285113,7 @@ LswKeyScaling:
 	add xhl, xwa
 	.byte 0xaa, 0x08, 0x21	; LD XBC, (XDE + 008h)
 	ld xwa, (xhl)
-	.byte 0xd8, 0x33, 0x04	; BIT 004h, WA
+	bit 4, wa
 	jr z, LABEL_F7D925
 	.byte 0x9a, 0x04, 0x3f, 0x00, 0x00	; CPW (XDE + 004h), 0000h
 	jr z, LABEL_F7D91E
@@ -285153,7 +285153,7 @@ LABEL_F7D94C:
 
 LABEL_F7D950:
 	ld xwa, (xwa)
-	.byte 0xd8, 0x33, 0x04	; BIT 004h, WA
+	bit 4, wa
 	jr z, LABEL_F7D97B
 	.byte 0xeb, 0xac	; LD XHL, 4
 	jr LABEL_F7D97D
@@ -285213,7 +285213,7 @@ LswAfterTouch:
 	add xhl, xwa
 	.byte 0xaa, 0x08, 0x21	; LD XBC, (XDE + 008h)
 	ld xwa, (xhl)
-	.byte 0xd8, 0x33, 0x02	; BIT 002h, WA
+	bit 2, wa
 	jr z, LABEL_F7DA02
 	.byte 0x9a, 0x04, 0x3f, 0x00, 0x00	; CPW (XDE + 004h), 0000h
 	jr z, LABEL_F7D9FB
@@ -285253,7 +285253,7 @@ LABEL_F7DA29:
 
 LABEL_F7DA2D:
 	ld xwa, (xwa)
-	.byte 0xd8, 0x33, 0x02	; BIT 002h, WA
+	bit 2, wa
 	jr z, LABEL_F7DA58
 	.byte 0xeb, 0xac	; LD XHL, 4
 	jr LABEL_F7DA5A
@@ -285413,7 +285413,7 @@ LswLocalControl:
 	add xhl, xwa
 	.byte 0xaa, 0x08, 0x21	; LD XBC, (XDE + 008h)
 	ld xwa, (xhl)
-	.byte 0xd8, 0x33, 0x00	; BIT 000h, WA
+	bit 0, wa
 	jr z, LABEL_F7DBBD
 	.byte 0x9a, 0x04, 0x3f, 0x00, 0x00	; CPW (XDE + 004h), 0000h
 	jr z, LABEL_F7DBB6
@@ -285453,7 +285453,7 @@ LABEL_F7DBE4:
 
 LABEL_F7DBE8:
 	ld xwa, (xwa)
-	.byte 0xd8, 0x33, 0x00	; BIT 000h, WA
+	bit 0, wa
 	jr nz, LABEL_F7DBFA
 
 LABEL_F7DBEF:
@@ -285462,7 +285462,7 @@ LABEL_F7DBEF:
 
 LABEL_F7DBF3:
 	ld xwa, (xwa)
-	.byte 0xd8, 0x33, 0x00	; BIT 000h, WA
+	bit 0, wa
 	jr z, LABEL_F7DBEF
 
 LABEL_F7DBFA:
@@ -285514,7 +285514,7 @@ LswMidiChannel:
 	sll xwa, 2
 	add xhl, xwa
 	ld xwa, (xhl)
-	.byte 0xd8, 0x33, 0x01	; BIT 001h, WA
+	bit 1, wa
 	jr z, LABEL_F7DCC6
 	ld xwa, (xiz)
 	.byte 0xe8, 0xef, 0x00	; SRL_0_XWA
@@ -285526,7 +285526,7 @@ LswMidiChannel:
 	ldw bc, 0x402
 	call LABEL_FCD4F7
 	.byte 0xae, 0x08, 0x21	; LD XBC, (XIZ + 008h)
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F7DCBD
 	.byte 0x9e, 0x04, 0x20	; LD WA, (XIZ + 004h)
 	inc 1, wa
@@ -285576,7 +285576,7 @@ LABEL_F7DCEE:
 
 LABEL_F7DCF2:
 	ld xwa, (xwa)
-	.byte 0xd8, 0x33, 0x01	; BIT 001h, WA
+	bit 1, wa
 	jr z, LABEL_F7DD1D
 	.byte 0xeb, 0xac	; LD XHL, 4
 	jr LABEL_F7DD1F
@@ -285792,7 +285792,7 @@ LABEL_F7DF0D:
 	inc 4, xsp
 	ld de, hl
 	lds hl, 0
-	.byte 0xda, 0xd8	; CP DE, 0
+	cps de, 0
 	jr le, LABEL_F7DF45
 
 LABEL_F7DF36:
@@ -285858,17 +285858,17 @@ CheckLanguage:
 	cp xbc, 0x1C00007
 	jr nz, LABEL_F7E03C
 	.byte 0xc2, 0xe4, 0x40, 0x03, 0x21	; LD A, (0340E4h)
-	.byte 0xda, 0x33, 0x07	; BIT 007h, DE
+	bit 7, de
 	jr z, LABEL_F7DFEE
 	ld c, a
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F7DFDC
 	dec 1, c
 	.byte 0xf2, 0xe4, 0x40, 0x03, 0x43	; LD (0340E4h), C
 
 LABEL_F7DFDC:
 	.byte 0xc2, 0xe4, 0x40, 0x03, 0x21	; LD A, (0340E4h)
-	.byte 0xc9, 0xdc	; CP A, 4
+	cps a, 4
 	jr nz, LABEL_F7E00B
 	dec 1, a
 	.byte 0xf2, 0xe4, 0x40, 0x03, 0x41	; LD (0340E4h), A
@@ -285876,14 +285876,14 @@ LABEL_F7DFDC:
 
 LABEL_F7DFEE:
 	ld c, a
-	.byte 0xc9, 0xdd	; CP A, 5
+	cps a, 5
 	jr nc, LABEL_F7DFFB
 	inc 1, c
 	.byte 0xf2, 0xe4, 0x40, 0x03, 0x43	; LD (0340E4h), C
 
 LABEL_F7DFFB:
 	.byte 0xc2, 0xe4, 0x40, 0x03, 0x21	; LD A, (0340E4h)
-	.byte 0xc9, 0xdc	; CP A, 4
+	cps a, 4
 	jr nz, LABEL_F7E00B
 	inc 1, a
 	.byte 0xf2, 0xe4, 0x40, 0x03, 0x41	; LD (0340E4h), A
@@ -285941,10 +285941,10 @@ CheckMessage:
 	.byte 0xea, 0xa8	; LD XDE, 0
 	call 0xFA9660
 	.byte 0xd2, 0x8c, 0x47, 0x02, 0x20	; LD WA, (02478Ch)
-	.byte 0xde, 0x33, 0x07	; BIT 007h, IZ
+	bit 7, iz
 	jr z, LABEL_F7E0B3
 	ld bc, wa
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr le, LABEL_F7E0D2
 	dec 1, bc
 	.byte 0xf2, 0x8c, 0x47, 0x02, 0x51	; LD (02478Ch), BC
@@ -286015,11 +286015,11 @@ LABEL_F7E12F:
 
 LABEL_F7E149:
 	.byte 0xc1, 0xe2, 0x0c, 0x21	; LD A, (0CE2h)
-	.byte 0xc9, 0xdb	; CP A, 3
+	cps a, 3
 	jr z, LABEL_F7E16D
-	.byte 0xc9, 0xda	; CP A, 2
+	cps a, 2
 	jr z, LABEL_F7E166
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	jr z, LABEL_F7E15F
 	.byte 0xf2, 0xec, 0x7f, 0xe9, 0x33	; LDA XHL, 0E97FECh
 	ret
@@ -286292,7 +286292,7 @@ LABEL_F7E4AA:
 	ld xwa, xiz
 	.byte 0xe8, 0xef, 0x00	; SRL_0_XWA
 	.byte 0xd7, 0xe2, 0xa8	; LD QWA, 0
-	.byte 0xd8, 0xd9	; CP WA, 1
+	cps wa, 1
 	jrl nz, LABEL_F7E643
 	.byte 0xd2, 0x7e, 0x47, 0x02, 0x21	; LD BC, (02477Eh)
 	extz xbc
@@ -286465,7 +286465,7 @@ LABEL_F7E67F:
 	.byte 0xaf, 0x04, 0x20	; LD XWA, (XSP + 004h)
 	.byte 0xe8, 0xef, 0x00	; SRL_0_XWA
 	.byte 0xd7, 0xe2, 0xa8	; LD QWA, 0
-	.byte 0xd8, 0xd9	; CP WA, 1
+	cps wa, 1
 	jr nz, LABEL_F7E6D0
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C10000
@@ -286648,7 +286648,7 @@ LABEL_F7E837:
 	call 0xFA9660
 	ld xwa, 0x4200
 	call LABEL_FCD437
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_F7E861
 	ld xwa, 0x4200
 	lds bc, 1
@@ -287054,7 +287054,7 @@ LABEL_F7EC9F:
 	.byte 0xe3, 0xfd, 0x10, 0x01, 0xf0	; CP XWA, (XSP + 0110h)
 	jrl z, LABEL_F7ED57
 	.byte 0xe3, 0xfd, 0x10, 0x01, 0x20	; LD XWA, (XSP + 0110h)
-	.byte 0xd8, 0xd9	; CP WA, 1
+	cps wa, 1
 	jr nz, LABEL_F7ECD5
 	.byte 0x9e, 0x1a, 0x22	; LD DE, (XIZ + 01ah)
 	exts xde
@@ -287081,7 +287081,7 @@ LABEL_F7ECED:
 	.byte 0xe3, 0xfd, 0x10, 0x01, 0xf0	; CP XWA, (XSP + 0110h)
 	jr z, LABEL_F7ED57
 	.byte 0xe3, 0xfd, 0x10, 0x01, 0x20	; LD XWA, (XSP + 0110h)
-	.byte 0xd8, 0xd9	; CP WA, 1
+	cps wa, 1
 	jr nz, LABEL_F7ED22
 	.byte 0x9e, 0x1a, 0x22	; LD DE, (XIZ + 01ah)
 	exts xde
@@ -287181,11 +287181,11 @@ LABEL_F7EDDD:
 	.byte 0xd8, 0x0a, 0x03, 0x00	; DIVW_WA 0003h
 	.byte 0xd7, 0xe2, 0x89	; LD BC, QWA
 	.byte 0xbf, 0x06, 0x30	; LDA XWA, XSP + 006h
-	.byte 0xd9, 0xda	; CP BC, 2
+	cps bc, 2
 	jr z, LABEL_F7EE2F
-	.byte 0xd9, 0xd9	; CP BC, 1
+	cps bc, 1
 	jr z, LABEL_F7EE2A
-	.byte 0xd9, 0xd8	; CP BC, 0
+	cps bc, 0
 	jr nz, LABEL_F7EE3C
 	.byte 0xb0, 0x00, 0x30	; LD (XWA), 030h
 	jr LABEL_F7EE3C
@@ -287348,7 +287348,7 @@ LABEL_F7EFD3:
 	or xwa, xwa
 	jrl nz, LABEL_F7F071
 	.byte 0xd2, 0x8e, 0x47, 0x02, 0x20	; LD WA, (02478Eh)
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr le, LABEL_F7F034
 	dec 1, wa
 	.byte 0xf2, 0x8e, 0x47, 0x02, 0x50	; LD (02478Eh), WA
@@ -287895,7 +287895,7 @@ AcWelcomScreenProc:
 	call 0xFAF2C7
 	call 0xEF0865
 	ld xwa, 0xE9E806
-	.byte 0xcf, 0xda	; CP L, 2
+	cps l, 2
 	jr nz, LABEL_F7F51A
 	ld xwa, 0xE9DF4E
 
@@ -287906,7 +287906,7 @@ LABEL_F7F51A:
 	.byte 0xaf, 0x10, 0x22	; LD XDE, (XSP + 010h)
 	call 0xFA4409
 	call LABEL_EF0651
-	.byte 0xcf, 0xda	; CP L, 2
+	cps l, 2
 	jr nz, LABEL_F7F541
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C10009
@@ -287915,7 +287915,7 @@ LABEL_F7F51A:
 
 LABEL_F7F541:
 	call SubCPU_Payload_GetErrorFlag
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr ge, LABEL_F7F55C
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C10004
@@ -287950,7 +287950,7 @@ LABEL_F7F56B:
 
 LABEL_F7F595:
 	call 0xFA589F
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F7F5C0
 	call LcdOff
 	ld xwa, 0xE9F0FA
@@ -287969,7 +287969,7 @@ LABEL_F7F5C0:
 	.byte 0xaf, 0x10, 0x22	; LD XDE, (XSP + 010h)
 	call 0xFA4409
 	call 0xFA589F
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl z, LABEL_F7FA45
 	call LABEL_FAF346
 	.byte 0xf2, 0x84, 0x47, 0x02, 0x02, 0x01, 0x00	; LDW (024784h), 0001h
@@ -288002,7 +288002,7 @@ LABEL_F7F605:
 	.byte 0x98, 0x08, 0x23	; LD HL, (XWA + 008h)
 	.byte 0xb8, 0x04, 0x35	; LDA XIY, XWA + 004h
 	.byte 0xb8, 0x0a, 0x32	; LDA XDE, XWA + 00ah
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl mi, LABEL_F7F9C9
 	cp hl, 0xC
 	jrl gt, LABEL_F7F9C9
@@ -288507,7 +288507,7 @@ LABEL_F7FDFE:
 	.byte 0xaf, 0x52, 0x22	; LD XDE, (XSP + 052h)
 	call 0xFA9660
 	ld iz, hl
-	.byte 0xde, 0xdf	; CP IZ, 7
+	cps iz, 7
 	jrl gt, LABEL_F7FF08
 	.byte 0xd2, 0x94, 0x47, 0x02, 0x20	; LD WA, (024794h)
 	sla wa, 3
@@ -288574,7 +288574,7 @@ LABEL_F7FEC6:
 	ld xde, xwa
 	add xde, xbc
 	.byte 0xaf, 0x52, 0x20	; LD XWA, (XSP + 052h)
-	.byte 0xd8, 0x33, 0x07	; BIT 007h, WA
+	bit 7, wa
 	jr z, LABEL_F7FEEA
 	.byte 0xaf, 0x5a, 0x20	; LD XWA, (XSP + 05ah)
 	ld xbc, 0x1C00018
@@ -288680,7 +288680,7 @@ LABEL_F7FFFB:
 	jr z, LABEL_F8003D
 	ld xwa, 0xC0
 	call LABEL_FCD437
-	.byte 0xdb, 0xd9	; CP HL, 1
+	cps hl, 1
 	.byte 0xd9, 0x76	; SCC Z, BC
 	.byte 0xd2, 0x94, 0x47, 0x02, 0x3f, 0x02, 0x00	; CPW (024794h), 0002h
 	.byte 0xd8, 0x76	; SCC Z, WA
@@ -288802,7 +288802,7 @@ LABEL_F80196:
 	.byte 0xaf, 0x52, 0x22	; LD XDE, (XSP + 052h)
 	call 0xFA9660
 	ld iz, hl
-	.byte 0xde, 0xdf	; CP IZ, 7
+	cps iz, 7
 	jr gt, LABEL_F801F9
 	.byte 0xd2, 0x94, 0x47, 0x02, 0x20	; LD WA, (024794h)
 	sla wa, 3
@@ -288815,7 +288815,7 @@ LABEL_F80196:
 	ld xde, xwa
 	add xde, xbc
 	.byte 0xaf, 0x52, 0x20	; LD XWA, (XSP + 052h)
-	.byte 0xd8, 0x33, 0x07	; BIT 007h, WA
+	bit 7, wa
 	jr z, LABEL_F801DB
 	.byte 0xaf, 0x5a, 0x20	; LD XWA, (XSP + 05ah)
 	ld xbc, 0x1C0001A
@@ -288845,14 +288845,14 @@ LABEL_F80205:
 	.byte 0xaf, 0x52, 0x22	; LD XDE, (XSP + 052h)
 	call 0xFA9660
 	ld iz, hl
-	.byte 0xde, 0xdf	; CP IZ, 7
+	cps iz, 7
 	jr gt, LABEL_F80268
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00009
 	.byte 0xaf, 0x52, 0x22	; LD XDE, (XSP + 052h)
 	call 0xFA9660
 	.byte 0xaf, 0x52, 0x22	; LD XDE, (XSP + 052h)
-	.byte 0xda, 0x31, 0x07	; SET 007h, DE
+	set 7, de
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00009
 	call 0xFA9660
@@ -290452,9 +290452,9 @@ LABEL_F82553:
 
 LABEL_F82582:
 	.byte 0xc2, 0xf2, 0x05, 0x02, 0x21	; LD A, (0205F2h)
-	.byte 0xc9, 0x33, 0x00	; BIT 000h, A
+	bit 0, a
 	jr z, LABEL_F825A2
-	.byte 0xc9, 0x30, 0x00	; RES 000h, A
+	res 0, a
 	.byte 0xf2, 0xf2, 0x05, 0x02, 0x41	; LD (0205F2h), A
 	.byte 0xaf, 0x08, 0x20	; LD XWA, (XSP + 008h)
 	ld xbc, 0x1E10008
@@ -290909,13 +290909,13 @@ LABEL_F82A8F:
 	.byte 0xbf, 0x04, 0x63	; LD (XSP + 004h), XHL
 	ld xwa, xiz
 	call 0xFA5EA5
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F82AD4
 	ld xwa, xiz
 	ld xbc, 0x1E00053
 	.byte 0xaf, 0x08, 0x22	; LD XDE, (XSP + 008h)
 	call 0xFA9660
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F82AD4
 	.byte 0xaf, 0x04, 0x20	; LD XWA, (XSP + 004h)
 	.byte 0x98, 0x28, 0x22	; LD DE, (XWA + 028h)
@@ -291056,7 +291056,7 @@ LABEL_F82C01:
 	jrl z, LABEL_F82DC9
 	exts xde
 	.byte 0xaf, 0x08, 0x20	; LD XWA, (XSP + 008h)
-	.byte 0xd8, 0x33, 0x07	; BIT 007h, WA
+	bit 7, wa
 	jr z, LABEL_F82C33
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00018
@@ -291161,7 +291161,7 @@ LABEL_F82D0B:
 	cp bc, de
 	jrl nz, LABEL_F82DC9
 	.byte 0xaf, 0x08, 0x20	; LD XWA, (XSP + 008h)
-	.byte 0xd8, 0xd9	; CP WA, 1
+	cps wa, 1
 	jrl nz, LABEL_F82DC9
 	extz xde
 	ld xwa, 0x1400004
@@ -291176,7 +291176,7 @@ LABEL_F82D4D:
 	cp wa, hl
 	jr nz, LABEL_F82DC9
 	.byte 0xaf, 0x08, 0x20	; LD XWA, (XSP + 008h)
-	.byte 0xd8, 0xd9	; CP WA, 1
+	cps wa, 1
 	jr nz, LABEL_F82DC9
 	call 0xF99457
 	extz xhl
@@ -291511,12 +291511,12 @@ LABEL_F8307C:
 
 LABEL_F8307E:
 	ld hl, wa
-	.byte 0xd8, 0xdf	; CP WA, 7
+	cps wa, 7
 	jr le, LABEL_F83088
 	sub wa, 0x10
 
 LABEL_F83088:
-	.byte 0xd8, 0xdd	; CP WA, 5
+	cps wa, 5
 	jr gt, LABEL_F83092
 	cp wa, 0xFFFB
 	jr ge, LABEL_F83095
@@ -291527,11 +291527,11 @@ LABEL_F83092:
 
 LABEL_F83095:
 	add wa, bc
-	.byte 0xd8, 0xdd	; CP WA, 5
+	cps wa, 5
 	.byte 0xb0, 0xfa	; RET GT
 	cp wa, 0xFFFB
 	.byte 0xb0, 0xf1	; RET LT
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr ge, LABEL_F830A9
 	add wa, 0x10
 
@@ -291989,7 +291989,7 @@ LABEL_F8354B:
 	.byte 0xf2, 0xb0, 0x47, 0x02, 0x30	; LDA XWA, 0247B0h
 	.byte 0xd3, 0x07, 0xe0, 0xe4, 0x26	; LD IZ, (XWA + BC)
 	.byte 0xaf, 0x04, 0x20	; LD XWA, (XSP + 004h)
-	.byte 0xd8, 0x33, 0x07	; BIT 007h, WA
+	bit 7, wa
 	jr z, LABEL_F835D6
 	inc 1, iz
 	cp iz, 0x8
@@ -292051,7 +292051,7 @@ LABEL_F835D6:
 LABEL_F83608:
 	.byte 0xf2, 0xb0, 0x47, 0x02, 0x30	; LDA XWA, 0247B0h
 	.byte 0xd3, 0x07, 0xe0, 0xe4, 0x20	; LD WA, (XWA + BC)
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr le, LABEL_F83636
 	dec 1, wa
 	ld bc, wa
@@ -292781,9 +292781,9 @@ LABEL_F83CEA:
 LABEL_F83D37:
 	.byte 0x9f, 0x06, 0x20	; LD WA, (XSP + 006h)
 	sub wa, 0x9
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr c, LABEL_F83D8D
-	.byte 0xd8, 0xdd	; CP WA, 5
+	cps wa, 5
 	jr ugt, LABEL_F83D8D
 	add wa, wa
 	.byte 0xf2, 0x84, 0xf9, 0xe9, 0x34	; LDA XIX, 0E9F984h
@@ -292825,9 +292825,9 @@ LABEL_F83DB3:
 
 LABEL_F83DC7:
 	sub wa, 0x9
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr c, LABEL_F83E0D
-	.byte 0xd8, 0xdd	; CP WA, 5
+	cps wa, 5
 	jr ugt, LABEL_F83E0D
 	add wa, wa
 	.byte 0xf2, 0x90, 0xf9, 0xe9, 0x34	; LDA XIX, 0E9F990h
@@ -293715,22 +293715,22 @@ LABEL_F84710:
 LABEL_F847DF:
 	.byte 0xd7, 0xfa, 0x04	; PUSH QIZ
 	.byte 0xc1, 0x46, 0x8d, 0x21	; LD A, (8D46h)
-	.byte 0xc9, 0x33, 0x06	; BIT 006h, A
+	bit 6, a
 	jr z, LABEL_F847FB
 	.byte 0xf2, 0xee, 0x47, 0x02, 0xbe	; SET 6, (0247EEh)
 	.byte 0xc1, 0x46, 0x8d, 0x21	; LD A, (8D46h)
-	.byte 0xc9, 0x30, 0x06	; RES 006h, A
+	res 6, a
 	.byte 0xf1, 0x46, 0x8d, 0x41	; LD (8D46h), A
 
 LABEL_F847FB:
 	call LABEL_EF0797
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl z, LABEL_F84965
 	.byte 0xc2, 0xee, 0x47, 0x02, 0x21	; LD A, (0247EEh)
-	.byte 0xc9, 0x33, 0x06	; BIT 006h, A
+	bit 6, a
 	jr z, LABEL_F8482B
-	.byte 0xc9, 0x31, 0x07	; SET 007h, A
-	.byte 0xc9, 0x30, 0x06	; RES 006h, A
+	set 7, a
+	res 6, a
 	.byte 0xf2, 0xee, 0x47, 0x02, 0x41	; LD (0247EEh), A
 	.byte 0x0b, 0x00, 0x00	; PUSHW 0000h
 	ldw wa, 0x44
@@ -293754,7 +293754,7 @@ LABEL_F84843:
 	.byte 0xc3, 0x07, 0xe4, 0xe0, 0x23	; LD C, (XBC + WA)
 	.byte 0xc7, 0xfa, 0x9b	; LD QIZL, C
 	calr LABEL_F84F82
-	.byte 0xcf, 0xd9	; CP L, 1
+	cps l, 1
 	jr z, LABEL_F84868
 	.byte 0xc7, 0xfa, 0x89	; LD A, QIZL
 	cpl a
@@ -293786,7 +293786,7 @@ LABEL_F8487B:
 	and c, e
 	jr z, LABEL_F848BC
 	calr LABEL_F84F82
-	.byte 0xcf, 0xd9	; CP L, 1
+	cps l, 1
 	jr nz, LABEL_F848B2
 	.byte 0xc7, 0xfb, 0x89	; LD A, QIZH
 	extz wa
@@ -293803,7 +293803,7 @@ LABEL_F848BC:
 	calr LABEL_F84F82
 	.byte 0xc7, 0xfb, 0x89	; LD A, QIZH
 	extz wa
-	.byte 0xcf, 0xd9	; CP L, 1
+	cps l, 1
 	jr nz, LABEL_F848CD
 	calr LABEL_F849AC
 	jr LABEL_F848D0
@@ -293826,7 +293826,7 @@ LABEL_F848D0:
 LABEL_F848F4:
 	.byte 0xf2, 0xd0, 0xfc, 0xe9, 0x33	; LDA XHL, 0E9FCD0h
 	.byte 0xc2, 0xec, 0x47, 0x02, 0x23	; LD C, (0247ECh)
-	.byte 0xcb, 0x33, 0x06	; BIT 006h, C
+	bit 6, c
 	jr z, LABEL_F84923
 	.byte 0xc7, 0xfb, 0x8d	; LD E, QIZH
 	extz de
@@ -293977,7 +293977,7 @@ LABEL_F84A57:
 	calr LABEL_F84F82
 	.byte 0xc7, 0xfb, 0x89	; LD A, QIZH
 	extz wa
-	.byte 0xcf, 0xd9	; CP L, 1
+	cps l, 1
 	jr nz, LABEL_F84A7D
 	ld bc, wa
 	.byte 0xf2, 0xc4, 0xfc, 0xe9, 0x32	; LDA XDE, 0E9FCC4h
@@ -294040,7 +294040,7 @@ LABEL_F84ACA:
 	calr LABEL_F84F82
 	.byte 0x8f, 0x04, 0x21	; LD A, (XSP + 004h)
 	extz wa
-	.byte 0xcf, 0xd9	; CP L, 1
+	cps l, 1
 	jr z, LABEL_F84AF9
 	.byte 0xb6, 0x00, 0x00	; LD (XIZ), 000h
 	.byte 0x0b, 0x7f, 0x00	; PUSHW 007fh
@@ -294086,7 +294086,7 @@ LABEL_F84B2C:
 	.byte 0x8f, 0x04, 0x21	; LD A, (XSP + 004h)
 	extz wa
 	calr LABEL_F84F82
-	.byte 0xcf, 0xd9	; CP L, 1
+	cps l, 1
 	jr nz, LABEL_F84B6B
 	.byte 0x86, 0x3f, 0x00	; CP (XIZ), 000h
 	jr nz, LABEL_F84B6B
@@ -294124,7 +294124,7 @@ LABEL_F84B6F:
 	extz bc
 	cp e, 0x82
 	jr z, LABEL_F84BCD
-	.byte 0xcd, 0xda	; CP E, 2
+	cps e, 2
 	jr nz, LABEL_F84BF9
 	lds wa, 6
 	call LABEL_F83CEA
@@ -294164,7 +294164,7 @@ LABEL_F84BF9:
 	.byte 0x88, 0x02, 0x23	; LD C, (XWA + 002h)
 	cp c, 0x82
 	jr z, LABEL_F84C3B
-	.byte 0xcb, 0xda	; CP C, 2
+	cps c, 2
 	.byte 0xb0, 0xfe	; RET NZ
 	.byte 0x88, 0x07, 0x23	; LD C, (XWA + 007h)
 	and c, 0xF
@@ -294564,7 +294564,7 @@ LABEL_F84FC3:
 	call sendCOMM
 	.byte 0xbf, 0x06, 0x02, 0x00, 0x00	; LDW (XSP + 006h:8), 0000h
 	call 0xEF2E71
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_F85026
 
 LABEL_F85014:
@@ -294572,7 +294572,7 @@ LABEL_F85014:
 	.byte 0x9f, 0x06, 0x3f, 0x10, 0x27	; CPW (XSP + 006h), 2710h
 	jr ugt, LABEL_F85026
 	call 0xEF2E71
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F85014
 
 LABEL_F85026:
@@ -294602,10 +294602,10 @@ LABEL_F85047:
 	inc 1, iz
 
 LABEL_F85054:
-	.byte 0xde, 0xde	; CP IZ, 6
+	cps iz, 6
 	jr nc, LABEL_F85060
 	call LABEL_EF2EB2
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr ge, LABEL_F85047
 
 LABEL_F85060:
@@ -294632,7 +294632,7 @@ LABEL_F85081:
 	cp iz, wa
 	jr nc, LABEL_F85094
 	call LABEL_EF2EB2
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr ge, LABEL_F8506E
 
 LABEL_F85094:
@@ -294663,7 +294663,7 @@ LABEL_F850C7:
 
 LABEL_F850CD:
 	call LABEL_EF2EB2
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl ge, LABEL_F85040
 
 LABEL_F850D6:
@@ -294722,7 +294722,7 @@ LABEL_F85129:
 	.byte 0xc3, 0x07, 0xe4, 0xe0, 0x23	; LD C, (XBC + WA)
 	.byte 0xc7, 0xfa, 0x9b	; LD QIZL, C
 	calr LABEL_F84F82
-	.byte 0xcf, 0xd9	; CP L, 1
+	cps l, 1
 	jr z, LABEL_F8514E
 	.byte 0xc7, 0xfa, 0x89	; LD A, QIZL
 	cpl a
@@ -294913,7 +294913,7 @@ LABEL_F8544B:
 	push xwa
 	call 0xFF0CC1
 	add xsp, 0xE
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl nz, LABEL_F85595
 	.byte 0x9f, 0x10, 0x21	; LD BC, (XSP + 010h)
 	sla bc, 3
@@ -294932,7 +294932,7 @@ LABEL_F8549D:
 
 LABEL_F854A1:
 	ld a, (xbc)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_F854AC
 	cp a, 0x3E
 	jr nz, LABEL_F8549D
@@ -295161,9 +295161,9 @@ LABEL_F85634:
 	.byte 0x4e, 0xbf, 0x0c, 0x37, 0x0f, 0x04, 0x00
 
 LABEL_F8571B:
-	.byte 0xd9, 0xd9	; CP BC, 1
+	cps bc, 1
 	jr z, LABEL_F85726
-	.byte 0xd9, 0xd8	; CP BC, 0
+	cps bc, 0
 	.byte 0xf2, 0x8c, 0x5f, 0xf8, 0xe6	; CALL Z, LABEL_F85F8C
 
 LABEL_F85726:
@@ -295501,7 +295501,7 @@ LABEL_F85ECA:
 	.byte 0xf2, 0xda, 0x51, 0x02, 0x34	; LDA XIX, 0251DAh
 	.byte 0xd9, 0x09, 0x28, 0x00	; MULS_BC 0028h
 	ld hl, bc
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr le, LABEL_F85F4E
 	ld bc, iz
 	ld de, hl
@@ -295513,7 +295513,7 @@ LABEL_F85F3C:
 	.byte 0xc3, 0x07, 0xf0, 0xe8, 0x3f, 0x54	; CP (XIX + DE), 054h
 	jr nz, LABEL_F85F4E
 	ld iy, iz
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr gt, LABEL_F85F3C
 
 LABEL_F85F4E:
@@ -295627,7 +295627,7 @@ LABEL_F85FED:
 	.byte 0xbf, 0x0a, 0x60	; LD (XSP + 00ah), XWA
 	.byte 0xe8, 0xa9	; LD XWA, 1
 	.byte 0xaf, 0x0a, 0xa8	; SUB (XSP + 00ah), XWA
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr z, LABEL_F8607B
 	.byte 0xaf, 0x0a, 0x20	; LD XWA, (XSP + 00ah)
 	.byte 0xb0, 0x00, 0x00	; LD (XWA), 000h
@@ -295644,17 +295644,17 @@ LABEL_F8607B:
 	.byte 0xaf, 0x06, 0x20	; LD XWA, (XSP + 006h)
 	call 0xFB26D1
 	.byte 0xbf, 0x08, 0x53	; LD (XSP + 008h), HL
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr z, LABEL_F86112
 	.byte 0xf2, 0x74, 0x5b, 0x02, 0x31	; LDA XBC, 025B74h
 	.byte 0xd2, 0x72, 0x5b, 0x02, 0x20	; LD WA, (025B72h)
 	.byte 0xc3, 0x07, 0xe4, 0xe0, 0x21	; LD A, (XBC + WA)
 	.byte 0xbf, 0x14, 0x31	; LDA XBC, XSP + 014h
-	.byte 0xc9, 0xda	; CP A, 2
+	cps a, 2
 	jr z, LABEL_F860D3
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	jr z, LABEL_F860DD
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_F860DD
 	.byte 0x9f, 0x04, 0x22	; LD DE, (XSP + 004h)
 	exts xde
@@ -295696,7 +295696,7 @@ LABEL_F86112:
 	.byte 0x9f, 0x0e, 0x3f, 0x00, 0x00	; CPW (XSP + 00eh), 0000h
 	jr z, LABEL_F86133
 	calr LABEL_F85ECA
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F86133
 	.byte 0xaf, 0x0a, 0x20	; LD XWA, (XSP + 00ah)
 	inc 1, xwa
@@ -296033,14 +296033,14 @@ Seq_StartWithFullInit:
 	.byte 0x1e, 0xff, 0xfb	; CALR Seq_InitializeAndStart
 	.byte 0x68, 0xf4	; JR T, ApPreControl_ReturnNull
 	.byte 0xf2, 0x7c, 0x5b, 0x02, 0x52	; LD (025B7Ch), DE
-	.byte 0xda, 0xd8	; CP DE, 0
+	cps de, 0
 	.byte 0x61, 0xeb	; JR LT, ApPreControl_ReturnNull
 	.byte 0xe2, 0xc4, 0x48, 0x02, 0x20	; LD XWA, (0248C4h)
 	lds bc, 0
 	calr LABEL_F8541D
 	.byte 0x68, 0xdf	; JR T, ApPreControl_ReturnNull
 	.byte 0xf2, 0x7c, 0x5b, 0x02, 0x52	; LD (025B7Ch), DE
-	.byte 0xda, 0xd8	; CP DE, 0
+	cps de, 0
 	.byte 0x61, 0xd6	; JR LT, ApPreControl_ReturnNull
 	.byte 0x0b, 0x02, 0x00	; PUSHW 0002h
 	.byte 0x0b, 0x78, 0x48	; PUSHW 4878h
@@ -296063,7 +296063,7 @@ Seq_StartWithFullInit:
 	ld xde, xiz
 	.byte 0x68, 0x93	; JR T, Seq_DispatchMainFunc
 	.byte 0xf2, 0x7c, 0x5b, 0x02, 0x52	; LD (025B7Ch), DE
-	.byte 0xda, 0xd8	; CP DE, 0
+	cps de, 0
 	.byte 0x61, 0x8e	; JR LT, ApPreControl_ReturnNull
 	ld xwa, 0x1410000
 	ld xbc, 0x1E10006
@@ -296084,7 +296084,7 @@ Seq_StartWithFullInit:
 	.byte 0x78, 0x52, 0xff	; JRL T, ApPreControl_ReturnNull
 
 LABEL_F867B2:
-	.byte 0xda, 0xd8	; CP DE, 0
+	cps de, 0
 	.byte 0x71, 0x4d, 0xff	; JRL LT, ApPreControl_ReturnNull
 	cp de, 0x7F
 	.byte 0x7a, 0x46, 0xff	; JRL GT, ApPreControl_ReturnNull
@@ -296143,7 +296143,7 @@ LABEL_F86841:
 	push xwa
 	call LABEL_FF0F35
 	.byte 0xef, 0x60	; INC 8, XSP
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F8685A
 	.byte 0xbe, 0x18, 0x36	; LDA XIZ, XIZ + 018h
 	.byte 0xae, 0x10, 0x20	; LD XWA, (XIZ + 010h)
@@ -296407,7 +296407,7 @@ LABEL_F86BE4:
 	.byte 0xd2, 0x84, 0x5b, 0x02, 0x3f, 0x00, 0x00	; CPW (025B84h), 0000h
 	.byte 0xf2, 0x17, 0x6e, 0xf8, 0xee	; CALL NZ, LABEL_F86E17
 	.byte 0xc1, 0x2f, 0x0d, 0x21	; LD A, (0D2Fh)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	.byte 0xb0, 0xf6	; RET Z
 	dec 1, a
 	.byte 0xf1, 0x2f, 0x0d, 0x41	; LD (0D2Fh), A
@@ -296420,9 +296420,9 @@ LABEL_F86BE4:
 
 LABEL_F86C12:
 	.byte 0xc1, 0x2f, 0x0d, 0x21	; LD A, (0D2Fh)
-	.byte 0xc9, 0xdb	; CP A, 3
+	cps a, 3
 	jrl z, LABEL_F86D3D
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	.byte 0xb0, 0xfe	; RET NZ
 	.byte 0xf1, 0x66, 0x29, 0x00, 0x85	; LD (2966h), 085h
 	ret
@@ -296435,11 +296435,11 @@ LABEL_F86C25:
 
 LABEL_F86C30:
 	.byte 0xc1, 0x33, 0x0d, 0x21	; LD A, (0D33h)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	.byte 0xb0, 0xf6	; RET Z
 	dec 1, a
 	.byte 0xf1, 0x33, 0x0d, 0x41	; LD (0D33h), A
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	.byte 0xb0, 0xfe	; RET NZ
 	.byte 0xf1, 0xad, 0x28, 0xbb	; SET 3, (28ADh)
 	.byte 0xc1, 0x38, 0x8d, 0x3f, 0xe4	; CP (8D38h), 0e4h
@@ -296469,7 +296469,7 @@ LABEL_F86C5F:
 
 LABEL_F86C93:
 	call 0xF846DF
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F86CA4
 	.byte 0xc1, 0x58, 0x11, 0x3f, 0x13	; CP (1158h), 013h
 	jr ugt, LABEL_F86CAB
@@ -296555,7 +296555,7 @@ Audio_WaitForReady:
 	.byte 0xc1, 0x20, 0x04, 0x21	; LD A, (0420h)
 
 LABEL_F86D67:
-	.byte 0xc9, 0x33, 0x02	; BIT 002h, A
+	bit 2, a
 	jr z, LABEL_F86D74
 	sub xbc, 0x1
 	jr nz, LABEL_F86D67
@@ -296580,7 +296580,7 @@ LABEL_F86D86:
 Timer7_DisableInterrupt:
 	.byte 0xf1, 0x98, 0xfd, 0x31	; LDA XBC, 0FD98h
 	ld e, (xbc)
-	.byte 0xcd, 0x30, 0x07	; RES 007h, E
+	res 7, e
 	ld (xbc), e
 	extz de
 	.byte 0x0b, 0x80, 0x00	; PUSHW 0080h
@@ -296936,7 +296936,7 @@ LABEL_F870AF:
 	cp hl, 0x80
 	jr nz, LABEL_F870BE
 	calr LABEL_F8712B
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F870F6
 	jr LABEL_F87101
 
@@ -296952,7 +296952,7 @@ LABEL_F870BE:
 
 LABEL_F870D2:
 	calr LABEL_F8712B
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F870F6
 	jr LABEL_F87101
 
@@ -296960,7 +296960,7 @@ LABEL_F870DB:
 	cp hl, 0xD2
 	jr nz, LABEL_F870EA
 	calr LABEL_F8712B
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F870F6
 	jr LABEL_F87101
 
@@ -296968,7 +296968,7 @@ LABEL_F870EA:
 	cp a, 0xD0
 	jr nz, LABEL_F870F6
 	calr LABEL_F8712B
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_F87101
 
 LABEL_F870F6:
@@ -297031,7 +297031,7 @@ LABEL_F87178:
 	jr LABEL_F8717F
 
 LABEL_F8717A:
-	.byte 0xdb, 0x33, 0x07	; BIT 007h, HL
+	bit 7, hl
 	.byte 0xb0, 0xfe	; RET NZ
 
 LABEL_F8717F:
@@ -297070,7 +297070,7 @@ LABEL_F871A6:
 
 LABEL_F871CD:
 	call LABEL_F88CFC
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr lt, LABEL_F871F0
 	.byte 0x8f, 0x04, 0x21	; LD A, (XSP + 004h)
 	extz wa
@@ -297110,7 +297110,7 @@ LABEL_F87218:
 	.byte 0xbf, 0x1c, 0x41	; LD (XSP + 01ch), A
 	.byte 0xd7, 0xfa, 0xa8	; LD QIZ, 0
 	call 0xF895EF
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr ge, LABEL_F8722E
 	lds hl, 0
 	jr LABEL_F87277
@@ -297133,7 +297133,7 @@ LABEL_F8722E:
 	.byte 0xbf, 0x04, 0x30	; LDA XWA, XSP + 004h
 	ld xbc, 0xEA0172
 	call LABEL_F88BC7
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr lt, LABEL_F87274
 	.byte 0x8f, 0x1c, 0x21	; LD A, (XSP + 01ch)
 	extz wa
@@ -297159,7 +297159,7 @@ LABEL_F8727C:
 
 LABEL_F87289:
 	call LABEL_F88CFC
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr ge, LABEL_F87293
 	lds hl, 0
 
@@ -297167,27 +297167,27 @@ LABEL_F87293:
 	.byte 0xbf, 0x02, 0x30	; LDA XWA, XSP + 002h
 	.byte 0xf3, 0x07, 0xe0, 0xf8, 0x47	; LD (XWA + IZ), L
 	inc 1, iz
-	.byte 0xde, 0xdb	; CP IZ, 3
+	cps iz, 3
 	jr lt, LABEL_F87289
 	call LABEL_F88F10
 	.byte 0xbf, 0x02, 0x30	; LDA XWA, XSP + 002h
 	ld xbc, 0xEA017E
 	lds de, 3
 	call LABEL_F89153
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F872DD
 	.byte 0xbf, 0x02, 0x30	; LDA XWA, XSP + 002h
 	ld xbc, 0xEA0176
 	lds de, 3
 	call LABEL_F89153
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F872DD
 	.byte 0xbf, 0x02, 0x30	; LDA XWA, XSP + 002h
 	ld xbc, 0xEA017A
 	lds de, 3
 	call LABEL_F89153
 	lds wa, 0
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_F872DF
 
 LABEL_F872DD:
@@ -297204,7 +297204,7 @@ LABEL_F872E5:
 	push xiz
 	.byte 0xd7, 0xfa, 0xa8	; LD QIZ, 0
 	call 0xF895EF
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr ge, LABEL_F872F8
 	lds hl, 0
 	jr LABEL_F87339
@@ -297226,7 +297226,7 @@ LABEL_F872F8:
 	.byte 0xbf, 0x04, 0x30	; LDA XWA, XSP + 004h
 	ld xbc, 0xEA0182
 	call LABEL_F88BC7
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr lt, LABEL_F87336
 	calr LABEL_F8727C
 	.byte 0xd7, 0xfa, 0x9b	; LD QIZ, HL
@@ -297247,7 +297247,7 @@ LABEL_F8733E:
 	lds bc, 0
 	call LABEL_F88EE0
 	call LABEL_F88CFC
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr lt, LABEL_F8735C
 	.byte 0xe2, 0x86, 0x01, 0xea, 0x20	; LD XWA, (0EA0186h)
 	ld a, (xwa)
@@ -297268,7 +297268,7 @@ LABEL_F87366:
 	push xiz
 	.byte 0xd7, 0xfa, 0xa8	; LD QIZ, 0
 	call 0xF895EF
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr lt, LABEL_F873A9
 	ld a, l
 	.byte 0xc7, 0xf8, 0x99	; LD IZL, A
@@ -297286,7 +297286,7 @@ LABEL_F87366:
 	.byte 0xbf, 0x04, 0x30	; LDA XWA, XSP + 004h
 	ld xbc, 0xEA018C
 	call LABEL_F88BC7
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr ge, LABEL_F873AD
 
 LABEL_F873A9:
@@ -297296,7 +297296,7 @@ LABEL_F873A9:
 LABEL_F873AD:
 	lds wa, 2
 	calr LABEL_F871A6
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F873BC
 	calr LABEL_F8733E
 	.byte 0xd7, 0xfa, 0x9b	; LD QIZ, HL
@@ -297317,7 +297317,7 @@ LABEL_F873C8:
 	lds bc, 0
 	call LABEL_F88EE0
 	call LABEL_F88CFC
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr lt, LABEL_F873E3
 	cp l, 0x8
 	jr z, LABEL_F873E5
@@ -297336,7 +297336,7 @@ LABEL_F873ED:
 	push xiz
 	.byte 0xd7, 0xfa, 0xa8	; LD QIZ, 0
 	call 0xF895EF
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr lt, LABEL_F87430
 	ld a, l
 	.byte 0xc7, 0xf8, 0x99	; LD IZL, A
@@ -297354,7 +297354,7 @@ LABEL_F873ED:
 	.byte 0xbf, 0x04, 0x30	; LDA XWA, XSP + 004h
 	ld xbc, 0xEA0190
 	call LABEL_F88BC7
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr ge, LABEL_F87434
 
 LABEL_F87430:
@@ -297364,7 +297364,7 @@ LABEL_F87430:
 LABEL_F87434:
 	lds wa, 1
 	calr LABEL_F871A6
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F87443
 	calr LABEL_F873C8
 	.byte 0xd7, 0xfa, 0x9b	; LD QIZ, HL
@@ -297471,7 +297471,7 @@ LABEL_F876CB:
 	.byte 0xbf, 0x0c, 0x30	; LDA XWA, XSP + 00ch
 	ld xbc, 0xEA01A4
 	call LABEL_F88BC7
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr ge, LABEL_F876F6
 	call LABEL_F88BC2
 	jrl LABEL_F87848
@@ -297481,7 +297481,7 @@ LABEL_F876F6:
 
 LABEL_F876F8:
 	call LABEL_F88CFC
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr lt, LABEL_F87710
 	.byte 0xbf, 0x04, 0x30	; LDA XWA, XSP + 004h
 	.byte 0xf3, 0x07, 0xe0, 0xf8, 0x47	; LD (XWA + IZ), L
@@ -297497,9 +297497,9 @@ LABEL_F87710:
 	call LABEL_F88F10
 	.byte 0xbf, 0x04, 0x30	; LDA XWA, XSP + 004h
 	call LABEL_F47E3C
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl z, LABEL_F877CC
-	.byte 0xdb, 0xd9	; CP HL, 1
+	cps hl, 1
 	jrl nz, LABEL_F87841
 	call LABEL_F47E60
 	ld xwa, 0xAB000
@@ -297659,7 +297659,7 @@ LABEL_F87A08:
 	.byte 0xd7, 0xfa, 0xa8	; LD QIZ, 0
 	call 0xF895EF
 	ld iz, hl
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr ge, LABEL_F87A1F
 	ldw hl, 0xFF98
 	jrl LABEL_F87AF1
@@ -297682,14 +297682,14 @@ LABEL_F87A3E:
 	.byte 0xf2, 0xc0, 0x01, 0xea, 0x31	; LDA XBC, 0EA01C0h
 	.byte 0xc3, 0x07, 0xe4, 0xe0, 0x21	; LD A, (XBC + WA)
 	call LABEL_F892F5
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F87A95
 	ld wa, iz
 	.byte 0xd8, 0x09, 0x06, 0x00	; MULS_WA 0006h
 	.byte 0xf2, 0xc0, 0x01, 0xea, 0x31	; LDA XBC, 0EA01C0h
 	.byte 0xc3, 0x07, 0xe4, 0xe0, 0x21	; LD A, (XBC + WA)
 	call LABEL_F893D1
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F87A95
 	.byte 0xbf, 0x0a, 0x30	; LDA XWA, XSP + 00ah
 	ld bc, iz
@@ -297699,7 +297699,7 @@ LABEL_F87A3E:
 	add xbc, xde
 	ld xix, (xbc)
 	.byte 0xb4, 0xe8	; CALL T, XIX
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr ge, LABEL_F87A92
 	.byte 0xd7, 0xfa, 0xd8	; CP QIZ, 0
 	jr lt, LABEL_F87A95
@@ -297715,19 +297715,19 @@ LABEL_F87A95:
 	jr lt, LABEL_F87A3E
 	lds wa, 2
 	call LABEL_F892F5
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F87AD4
 	ldw wa, 0x8
 	call LABEL_F893D1
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F87AD4
 	ldw wa, 0x9
 	call LABEL_F893D1
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F87AD4
 	.byte 0xbf, 0x0a, 0x30	; LDA XWA, XSP + 00ah
 	calr LABEL_F876CB
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr ge, LABEL_F87AD1
 	.byte 0xd7, 0xfa, 0xd8	; CP QIZ, 0
 	jr lt, LABEL_F87AD4
@@ -297889,7 +297889,7 @@ LABEL_F87EAD:
 	.byte 0xbf, 0x04, 0x02, 0x00, 0x00	; LDW (XSP + 004h:8), 0000h
 	call 0xF895EF
 	ld iz, hl
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr ge, LABEL_F87EC6
 	ldw hl, 0xFF98
 	jrl LABEL_F88000
@@ -297910,7 +297910,7 @@ LABEL_F87EDD:
 	.byte 0xf2, 0x10, 0x02, 0xea, 0x31	; LDA XBC, 0EA0210h
 	.byte 0xc3, 0x07, 0xe4, 0xe0, 0x21	; LD A, (XBC + WA)
 	call LABEL_F893D1
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F87F23
 	.byte 0xbf, 0x14, 0x31	; LDA XBC, XSP + 014h
 	.byte 0xd7, 0xfa, 0x88	; LD WA, QIZ
@@ -297955,7 +297955,7 @@ LABEL_F87F6A:
 	.byte 0xf2, 0x10, 0x02, 0xea, 0x31	; LDA XBC, 0EA0210h
 	.byte 0xc3, 0x07, 0xe4, 0xe0, 0x21	; LD A, (XBC + WA)
 	call LABEL_F89353
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F87FA4
 	.byte 0xbf, 0x14, 0x30	; LDA XWA, XSP + 014h
 	.byte 0xd7, 0xfa, 0x89	; LD BC, QIZ
@@ -297985,7 +297985,7 @@ LABEL_F87FB8:
 	.byte 0xf2, 0x10, 0x02, 0xea, 0x31	; LDA XBC, 0EA0210h
 	.byte 0xc3, 0x07, 0xe4, 0xe0, 0x21	; LD A, (XBC + WA)
 	call LABEL_F89353
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F87FF3
 	.byte 0xbf, 0x14, 0x31	; LDA XBC, XSP + 014h
 	.byte 0xd7, 0xfa, 0x88	; LD WA, QIZ
@@ -298016,7 +298016,7 @@ LoadFileSMF:
 	.byte 0xbf, 0x06, 0x43	; LD (XSP + 006h), C
 	.byte 0xbf, 0x08, 0x50	; LD (XSP + 008h), WA
 	call LABEL_F89AC7
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr ge, LABEL_F8801B
 	ldw hl, 0xFF98
 	jr LABEL_F88057
@@ -298028,7 +298028,7 @@ LABEL_F8801B:
 	.byte 0xaf, 0x02, 0x20	; LD XWA, (XSP + 002h)
 	ld xbc, 0xEA0240
 	call LABEL_F88BC7
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr ge, LABEL_F8803A
 	call LABEL_F88BC2
 	jr LABEL_F88057
@@ -298061,7 +298061,7 @@ LABEL_F8805B:
 	.byte 0xaf, 0x02, 0x20	; LD XWA, (XSP + 002h)
 	ld xbc, 0xEA0244
 	call LABEL_F88BC7
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr ge, LABEL_F88083
 	call LABEL_F88BC2
 	jr LABEL_F880A9
@@ -298076,7 +298076,7 @@ LABEL_F88083:
 	call LABEL_F26FCE
 	ld iz, hl
 	call LABEL_F88C48
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr ge, LABEL_F880A7
 	.byte 0xaf, 0x02, 0x20	; LD XWA, (XSP + 002h)
 	call LABEL_F88C60
@@ -298116,7 +298116,7 @@ LABEL_F880E4:
 	.byte 0xf2, 0xfa, 0x00, 0xea, 0x30	; LDA XWA, 0EA00FAh
 	.byte 0xc3, 0x07, 0xe0, 0xf8, 0x21	; LD A, (XWA + IZ)
 	call LABEL_F893D1
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F88119
 	.byte 0xbf, 0x14, 0x31	; LDA XBC, XSP + 014h
 	.byte 0xf2, 0xfa, 0x00, 0xea, 0x30	; LDA XWA, 0EA00FAh
@@ -298148,7 +298148,7 @@ LABEL_F88119:
 	.byte 0xbf, 0x06, 0x30	; LDA XWA, XSP + 006h
 	ld xbc, 0xEA0248
 	call LABEL_F88BC7
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr ge, LABEL_F8815A
 	call LABEL_F88BC2
 	jr LABEL_F88179
@@ -298365,7 +298365,7 @@ LABEL_F8872D:
 	.byte 0xd7, 0xfa, 0xa8	; LD QIZ, 0
 	call 0xF895EF
 	ld iz, hl
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr ge, LABEL_F88743
 	ldw hl, 0xFF98
 	jr LABEL_F88799
@@ -298384,7 +298384,7 @@ LABEL_F88759:
 	.byte 0xf2, 0xfa, 0x00, 0xea, 0x30	; LDA XWA, 0EA00FAh
 	.byte 0xc3, 0x07, 0xe0, 0xf8, 0x21	; LD A, (XWA + IZ)
 	call LABEL_F893D1
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F8878E
 	.byte 0xbf, 0x12, 0x31	; LDA XBC, XSP + 012h
 	.byte 0xf2, 0xfa, 0x00, 0xea, 0x30	; LDA XWA, 0EA00FAh
@@ -298417,7 +298417,7 @@ LABEL_F8879E:
 	.byte 0xd7, 0xfa, 0xa8	; LD QIZ, 0
 	call 0xF895EF
 	ld iz, hl
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr ge, LABEL_F887B7
 	ldw hl, 0xFF98
 	jr LABEL_F88833
@@ -298441,7 +298441,7 @@ LABEL_F887DC:
 	.byte 0xf2, 0xfa, 0x00, 0xea, 0x30	; LDA XWA, 0EA00FAh
 	.byte 0xc3, 0x07, 0xe0, 0xf8, 0x21	; LD A, (XWA + IZ)
 	call LABEL_F893D1
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F88828
 	.byte 0xbf, 0x20, 0x31	; LDA XBC, XSP + 020h
 	.byte 0xf2, 0xfa, 0x00, 0xea, 0x30	; LDA XWA, 0EA00FAh
@@ -298509,7 +298509,7 @@ LABEL_F8888A:
 	.byte 0xc3, 0x07, 0xe0, 0xf8, 0x23	; LD C, (XWA + IZ)
 	.byte 0x9f, 0x3e, 0x20	; LD WA, (XSP + 03eh)
 	call LABEL_F89408
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F888DA
 	.byte 0xbf, 0x34, 0x31	; LDA XBC, XSP + 034h
 	.byte 0xf2, 0xfa, 0x00, 0xea, 0x30	; LDA XWA, 0EA00FAh
@@ -298550,7 +298550,7 @@ LABEL_F88906:
 	.byte 0xf2, 0xfa, 0x00, 0xea, 0x30	; LDA XWA, 0EA00FAh
 	.byte 0xc3, 0x07, 0xe0, 0xf8, 0x21	; LD A, (XWA + IZ)
 	call LABEL_F893D1
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F88952
 	.byte 0xbf, 0x34, 0x31	; LDA XBC, XSP + 034h
 	.byte 0xf2, 0xfa, 0x00, 0xea, 0x30	; LDA XWA, 0EA00FAh
@@ -298590,7 +298590,7 @@ LABEL_F8897A:
 	.byte 0xc3, 0x07, 0xe0, 0xf8, 0x23	; LD C, (XWA + IZ)
 	.byte 0x9f, 0x3e, 0x20	; LD WA, (XSP + 03eh)
 	call LABEL_F89408
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F889C9
 	.byte 0xbf, 0x34, 0x31	; LDA XBC, XSP + 034h
 	.byte 0xf2, 0xfa, 0x00, 0xea, 0x30	; LDA XWA, 0EA00FAh
@@ -298643,7 +298643,7 @@ LABEL_F88A00:
 	.byte 0xf2, 0xfa, 0x00, 0xea, 0x30	; LDA XWA, 0EA00FAh
 	.byte 0xc3, 0x07, 0xe0, 0xf8, 0x21	; LD A, (XWA + IZ)
 	call LABEL_F893D1
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F88A26
 	.byte 0x9f, 0x04, 0x20	; LD WA, (XSP + 004h)
 	.byte 0xf2, 0xfa, 0x00, 0xea, 0x31	; LDA XBC, 0EA00FAh
@@ -298677,7 +298677,7 @@ LABEL_F88A56:
 	.byte 0xc3, 0x07, 0xe0, 0xf8, 0x23	; LD C, (XWA + IZ)
 	.byte 0x9f, 0x3c, 0x20	; LD WA, (XSP + 03ch)
 	call LABEL_F89408
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F88A91
 	.byte 0xbf, 0x32, 0x31	; LDA XBC, XSP + 032h
 	.byte 0xf2, 0xfa, 0x00, 0xea, 0x30	; LDA XWA, 0EA00FAh
@@ -298715,7 +298715,7 @@ LABEL_F88AC4:
 	.byte 0xf2, 0xfa, 0x00, 0xea, 0x30	; LDA XWA, 0EA00FAh
 	.byte 0xc3, 0x07, 0xe0, 0xf8, 0x21	; LD A, (XWA + IZ)
 	call LABEL_F893D1
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F88B12
 	.byte 0xbf, 0x32, 0x31	; LDA XBC, XSP + 032h
 	.byte 0xf2, 0xfa, 0x00, 0xea, 0x30	; LDA XWA, 0EA00FAh
@@ -298749,7 +298749,7 @@ LABEL_F88B1D:
 
 LABEL_F88B22:
 	call LABEL_F89AC7
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr ge, LABEL_F88B2E
 	ldw hl, 0xFF98
 	ret
@@ -298766,7 +298766,7 @@ LABEL_F88B3A:
 	.byte 0xf3, 0xfd, 0x0c, 0x01, 0x60	; LD (XSP + 010ch), XWA
 	call LABEL_F89AC7
 	ld iz, hl
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr ge, LABEL_F88B54
 	ldw hl, 0xFF98
 	jr LABEL_F88B84
@@ -298797,7 +298797,7 @@ LABEL_F88B84:
 LABEL_F88B8B:
 	pushw iz
 	call LABEL_F8B015
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr ge, LABEL_F88B99
 	ldw hl, 0xFF98
 	jr LABEL_F88BC0
@@ -298808,7 +298808,7 @@ LABEL_F88B99:
 	ld xwa, xhl
 	ld xbc, 0xEA0264
 	call LABEL_F88BC7
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr ge, LABEL_F88BB4
 	call LABEL_F88BC2
 	jr LABEL_F88BC0
@@ -298909,7 +298909,7 @@ LABEL_F88C60:
 	push xwa
 	call LABEL_F4F21F
 	inc 4, xsp
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_F88C8A
 	lds hl, 0
 	jr LABEL_F88C98
@@ -298952,7 +298952,7 @@ LABEL_F88C9C:
 	push xwa
 	call LABEL_F4F421
 	.byte 0xef, 0x60	; INC 8, XSP
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_F88CE6
 	lds hl, 0
 	jr LABEL_F88CF7
@@ -298978,7 +298978,7 @@ LABEL_F88CFC:
 	push xwa
 	call LABEL_F4EF02
 	inc 4, xsp
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr ge, LABEL_F88D19
 	ldw hl, 0xFFFE
 	jr LABEL_F88D1D
@@ -298988,12 +298988,12 @@ LABEL_F88D14:
 	jr LABEL_F88D1D
 
 LABEL_F88D19:
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	.byte 0xb0, 0xf9	; RET GE
 
 LABEL_F88D1D:
 	.byte 0xd1, 0x48, 0x7f, 0x20	; LD WA, (7F48h)
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr lt, LABEL_F88D27
 	ld wa, hl
 
@@ -299012,11 +299012,11 @@ LABEL_F88D2C:
 	pushw wa
 	call LABEL_F4EFA9
 	inc 6, xsp
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr ge, LABEL_F88D62
 	.byte 0xe1, 0x44, 0x7f, 0x20	; LD XWA, (7F44h)
 	.byte 0x98, 0x06, 0x20	; LD WA, (XWA + 006h)
-	.byte 0xd8, 0x30, 0x0f	; RES 00fh, WA
+	res 15, wa
 	cp wa, 0x1F
 	jr nz, LABEL_F88D5A
 	ldw iz, 0xFFF5
@@ -299031,7 +299031,7 @@ LABEL_F88D5F:
 
 LABEL_F88D62:
 	.byte 0xd1, 0x48, 0x7f, 0x20	; LD WA, (7F48h)
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr lt, LABEL_F88D6C
 	ld wa, iz
 
@@ -299088,7 +299088,7 @@ LABEL_F88DAB:
 LABEL_F88DE3:
 	.byte 0xe1, 0x44, 0x7f, 0x20	; LD XWA, (7F44h)
 	.byte 0x98, 0x06, 0x20	; LD WA, (XWA + 006h)
-	.byte 0xd8, 0x33, 0x0f	; BIT 00fh, WA
+	bit 15, wa
 	jr z, LABEL_F88DF4
 	.byte 0xaf, 0x06, 0x8b	; ADD (XSP + 006h), XHL
 	jr LABEL_F88E02
@@ -299107,7 +299107,7 @@ LABEL_F88E02:
 
 LABEL_F88E09:
 	.byte 0xd1, 0x48, 0x7f, 0x20	; LD WA, (7F48h)
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr lt, LABEL_F88E14
 	.byte 0x9f, 0x04, 0x20	; LD WA, (XSP + 004h)
 
@@ -299160,7 +299160,7 @@ LABEL_F88E60:
 	jr ge, LABEL_F88E9D
 	.byte 0xe1, 0x44, 0x7f, 0x20	; LD XWA, (7F44h)
 	.byte 0x98, 0x06, 0x20	; LD WA, (XWA + 006h)
-	.byte 0xd8, 0x30, 0x0f	; RES 00fh, WA
+	res 15, wa
 	cp wa, 0x1F
 	jr nz, LABEL_F88E96
 	.byte 0xbf, 0x04, 0x02, 0xf5, 0xff	; LDW (XSP + 004h), 0fff5h
@@ -299189,7 +299189,7 @@ LABEL_F88EBA:
 
 LABEL_F88EC1:
 	.byte 0xd1, 0x48, 0x7f, 0x20	; LD WA, (7F48h)
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr lt, LABEL_F88ECC
 	.byte 0x9f, 0x04, 0x20	; LD WA, (XSP + 004h)
 
@@ -299214,7 +299214,7 @@ LABEL_F88EE0:
 	push xde
 	call LABEL_F4F33E
 	add xsp, 0xA
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F88F01
 	ldw hl, 0xFFFB
 	jr LABEL_F88F01
@@ -299224,7 +299224,7 @@ LABEL_F88EFE:
 
 LABEL_F88F01:
 	.byte 0xd1, 0x48, 0x7f, 0x20	; LD WA, (7F48h)
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr lt, LABEL_F88F0B
 	ld wa, hl
 
@@ -299248,7 +299248,7 @@ LABEL_F88F24:
 
 LABEL_F88F27:
 	.byte 0xd1, 0x48, 0x7f, 0x20	; LD WA, (7F48h)
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr lt, LABEL_F88F31
 	ld wa, iz
 
@@ -299280,7 +299280,7 @@ LABEL_F88F5E:
 
 LABEL_F88F66:
 	.byte 0xd1, 0x48, 0x7f, 0x20	; LD WA, (7F48h)
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr lt, LABEL_F88F70
 	ld wa, hl
 
@@ -299359,13 +299359,13 @@ LABEL_F89010:
 	call LABEL_F4EE70
 	.byte 0xbf, 0x0c, 0x37	; LDA XSP, XSP + 00ch
 	ld iz, hl
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr gt, LABEL_F8905C
 	.byte 0x9f, 0x0a, 0x3f, 0x00, 0x00	; CPW (XSP + 00ah), 0000h
 	jr lt, LABEL_F89042
 	.byte 0xaf, 0x02, 0x20	; LD XWA, (XSP + 002h)
 	.byte 0x98, 0x06, 0x20	; LD WA, (XWA + 006h)
-	.byte 0xd8, 0x33, 0x0f	; BIT 00fh, WA
+	bit 15, wa
 	jr nz, LABEL_F89042
 	.byte 0xbf, 0x0a, 0x02, 0xfe, 0xff	; LDW (XSP + 00ah), 0fffeh
 
@@ -299397,7 +299397,7 @@ LABEL_F8905C:
 	jr z, LABEL_F89010
 	.byte 0xe1, 0x44, 0x7f, 0x20	; LD XWA, (7F44h)
 	.byte 0x98, 0x06, 0x20	; LD WA, (XWA + 006h)
-	.byte 0xd8, 0x30, 0x0f	; RES 00fh, WA
+	res 15, wa
 	cp wa, 0x1F
 	jr nz, LABEL_F8908A
 	.byte 0xbf, 0x0a, 0x02, 0xf5, 0xff	; LDW (XSP + 00ah), 0fff5h
@@ -299410,7 +299410,7 @@ LABEL_F8908A:
 LABEL_F89091:
 	extz wa
 	call 0xF51E4F
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F8909E
 	lds hl, 0
 	ret
@@ -299461,13 +299461,13 @@ LABEL_F890F6:
 	dec 1, de
 
 LABEL_F890FE:
-	.byte 0xda, 0xd8	; CP DE, 0
+	cps de, 0
 	jr z, LABEL_F89107
 	.byte 0x83, 0x3f, 0x00	; CP (XHL), 000h
 	jr nz, LABEL_F890F6
 
 LABEL_F89107:
-	.byte 0xda, 0xd8	; CP DE, 0
+	cps de, 0
 	.byte 0xb0, 0xf6	; RET Z
 
 LABEL_F8910B:
@@ -299504,7 +299504,7 @@ LABEL_F89135:
 	jr LABEL_F89146
 
 LABEL_F89139:
-	.byte 0xcd, 0xd8	; CP E, 0
+	cps e, 0
 	jr nz, LABEL_F89140
 	lds hl, 0
 	ret
@@ -299539,7 +299539,7 @@ LABEL_F8915F:
 	dec 1, de
 
 LABEL_F89165:
-	.byte 0xda, 0xd8	; CP DE, 0
+	cps de, 0
 	jr z, LABEL_F8916F
 	ld a, (xbc)
 	.byte 0x83, 0xf1	; CP A, (XHL)
@@ -299547,7 +299547,7 @@ LABEL_F89165:
 
 LABEL_F8916F:
 	ldb a, 0x0
-	.byte 0xda, 0xd8	; CP DE, 0
+	cps de, 0
 	jr z, LABEL_F89179
 	ld a, (xhl)
 	.byte 0x81, 0xa1	; SUB A, (XBC)
@@ -299677,7 +299677,7 @@ LABEL_F89266:
 	ld l, (xde)
 	ld de, iy
 	extz xde
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F8927D
 	cp iy, ix
 	jr c, LABEL_F89248
@@ -299757,7 +299757,7 @@ LABEL_F892EF:
 
 LABEL_F892F5:
 	.byte 0xd2, 0xa8, 0x5e, 0x02, 0x21	; LD BC, (025EA8h)
-	.byte 0xd9, 0xd8	; CP BC, 0
+	cps bc, 0
 	jr lt, LABEL_F89309
 	cp bc, 0x14
 	jr ge, LABEL_F89309
@@ -299812,7 +299812,7 @@ LABEL_F8934D:
 
 LABEL_F89353:
 	.byte 0xd2, 0xa8, 0x5e, 0x02, 0x21	; LD BC, (025EA8h)
-	.byte 0xd9, 0xd8	; CP BC, 0
+	cps bc, 0
 	jr lt, LABEL_F89367
 	cp bc, 0x14
 	jr ge, LABEL_F89367
@@ -299863,7 +299863,7 @@ LABEL_F893A1:
 
 LABEL_F893AB:
 	.byte 0xd2, 0xa8, 0x5e, 0x02, 0x20	; LD WA, (025EA8h)
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr lt, LABEL_F893BA
 	cp wa, 0x14
 	jr lt, LABEL_F893BD
@@ -299886,7 +299886,7 @@ LABEL_F893CA:
 
 LABEL_F893D1:
 	.byte 0xd2, 0xa8, 0x5e, 0x02, 0x21	; LD BC, (025EA8h)
-	.byte 0xd9, 0xd8	; CP BC, 0
+	cps bc, 0
 	jr lt, LABEL_F893E5
 	cp bc, 0x14
 	jr ge, LABEL_F893E5
@@ -299947,7 +299947,7 @@ LABEL_F89423:
 
 CheckFileSystemStatus:
 	.byte 0xd2, 0xa8, 0x5e, 0x02, 0x20	; LD WA, (025EA8h)
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr lt, LABEL_F8944D
 	cp wa, 0x14
 	jr lt, LABEL_F89450
@@ -300084,7 +300084,7 @@ LABEL_F8958D:
 	.byte 0xf2, 0x74, 0x5d, 0x02, 0x30	; LDA XWA, 025D74h
 	.byte 0xf2, 0x98, 0x03, 0xea, 0x31	; LDA XBC, 0EA0398h
 	calr LABEL_F89135
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_F895C6
 	call 0xF527CE
 	ld xwa, xhl
@@ -300093,7 +300093,7 @@ LABEL_F8958D:
 	jr z, LABEL_F895B7
 	.byte 0xf2, 0x98, 0x03, 0xea, 0x31	; LDA XBC, 0EA0398h
 	calr LABEL_F89135
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_F895BC
 
 LABEL_F895B7:
@@ -300111,15 +300111,15 @@ LABEL_F895C6:
 
 LABEL_F895CD:
 	.byte 0xc2, 0xb6, 0x5d, 0x02, 0x23	; LD C, (025DB6h)
-	.byte 0xcb, 0xda	; CP C, 2
+	cps c, 2
 	jr z, LABEL_F895DE
-	.byte 0xcb, 0xdb	; CP C, 3
+	cps c, 3
 	jr z, LABEL_F895DE
-	.byte 0xcb, 0xdc	; CP C, 4
+	cps c, 4
 	jr nz, LABEL_F895E8
 
 LABEL_F895DE:
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr lt, LABEL_F895E8
 	cp wa, 0x14
 	jr lt, LABEL_F895EC
@@ -300135,7 +300135,7 @@ LABEL_F895EC:
 GetCurrentFileIndex:
 	.byte 0xd2, 0xa8, 0x5e, 0x02, 0x20	; LD WA, (025EA8h)
 	calr LABEL_F895CD
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F895FF
 	ldw hl, 0xFF98
 	ret
@@ -300167,7 +300167,7 @@ LABEL_F89623:
 	ld iz, wa
 	ld wa, iz
 	calr LABEL_F895CD
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F89636
 	.byte 0xf2, 0x48, 0x04, 0xea, 0x33	; LDA XHL, 0EA0448h
 	jr LABEL_F8964A
@@ -300189,7 +300189,7 @@ LABEL_F8964A:
 LABEL_F8964C:
 	.byte 0xd2, 0xa8, 0x5e, 0x02, 0x20	; LD WA, (025EA8h)
 	calr LABEL_F895CD
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F8965B
 	ldb l, 0x0
 	ret
@@ -300216,7 +300216,7 @@ LABEL_F8966F:
 	.byte 0x95, 0x11	; LDIRW_95
 	ld wa, iz
 	calr LABEL_F895CD
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_F896DB
 	.byte 0xc7, 0xf8, 0x89	; LD A, IZL
 	extz wa
@@ -300289,7 +300289,7 @@ LABEL_F89721:
 	extz xbc
 	.byte 0xaf, 0x04, 0x81	; ADD XBC, (XSP + 004h)
 	calr LABEL_F89135
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F8974A
 	.byte 0xc7, 0xfb, 0x61	; INC 1, QIZH
 	.byte 0xc7, 0xfb, 0xcf, 0x0a	; CP QIZH, 00ah
@@ -300343,7 +300343,7 @@ LABEL_F89781:
 	add a, c
 	sub a, 0x10
 	exts wa
-	.byte 0xd8, 0xd9	; CP WA, 1
+	cps wa, 1
 	jr lt, LABEL_F897AE
 	cp wa, 0x14
 	jr le, LABEL_F897B2
@@ -300409,12 +300409,12 @@ LABEL_F89839:
 	inc 2, xbc
 	lds de, 6
 	calr LABEL_F89153
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_F89876
 	ld wa, iz
 	.byte 0xaf, 0x0a, 0x21	; LD XBC, (XSP + 00ah)
 	calr LABEL_F896F0
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_F89876
 	.byte 0xf2, 0xc2, 0x5d, 0x02, 0x31	; LDA XBC, 025DC2h
 	.byte 0xde, 0x09, 0x0c, 0x00	; MULS_IZ 000ch
@@ -300464,7 +300464,7 @@ LABEL_F8988F:
 	.byte 0xbf, 0x06, 0x61	; LD (XSP + 006h), XBC
 	calr LABEL_F89781
 	ld wa, hl
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr lt, LABEL_F898D9
 	.byte 0xaf, 0x0c, 0x22	; LD XDE, (XSP + 00ch)
 	.byte 0xaf, 0x06, 0x21	; LD XBC, (XSP + 006h)
@@ -300475,14 +300475,14 @@ LABEL_F898D9:
 	.byte 0xbf, 0x0a, 0x31	; LDA XBC, XSP + 00ah
 	.byte 0xaf, 0x02, 0x20	; LD XWA, (XSP + 002h)
 	call 0xF52AE8
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_F8990C
 
 LABEL_F898E7:
 	.byte 0xaf, 0x06, 0x20	; LD XWA, (XSP + 006h)
 	calr LABEL_F89781
 	ld wa, hl
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr lt, LABEL_F898FE
 	.byte 0xaf, 0x0c, 0x22	; LD XDE, (XSP + 00ch)
 	.byte 0xaf, 0x06, 0x21	; LD XBC, (XSP + 006h)
@@ -300493,7 +300493,7 @@ LABEL_F898FE:
 	.byte 0xbf, 0x0a, 0x31	; LDA XBC, XSP + 00ah
 	.byte 0xaf, 0x02, 0x20	; LD XWA, (XSP + 002h)
 	call 0xF52AE8
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F898E7
 
 LABEL_F8990C:
@@ -300554,15 +300554,15 @@ LABEL_F8991C:
 
 LABEL_F89A7B:
 	.byte 0xc2, 0xb6, 0x5d, 0x02, 0x23	; LD C, (025DB6h)
-	.byte 0xcb, 0xda	; CP C, 2
+	cps c, 2
 	jr z, LABEL_F89A8C
-	.byte 0xcb, 0xdb	; CP C, 3
+	cps c, 3
 	jr z, LABEL_F89A8C
-	.byte 0xcb, 0xdc	; CP C, 4
+	cps c, 4
 	jr nz, LABEL_F89A97
 
 LABEL_F89A8C:
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr lt, LABEL_F89A97
 	.byte 0xd2, 0xec, 0x71, 0x02, 0xf0	; CP WA, (0271ECh)
 	jr le, LABEL_F89A9B
@@ -300598,7 +300598,7 @@ LABEL_F89AC4:
 LABEL_F89AC7:
 	.byte 0xd2, 0xea, 0x71, 0x02, 0x20	; LD WA, (0271EAh)
 	calr LABEL_F89A7B
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F89AD7
 	ldw hl, 0xFF98
 	ret
@@ -300633,7 +300633,7 @@ LABEL_F89AEF:
 	.byte 0xbf, 0x10, 0x30	; LDA XWA, XSP + 010h
 	.byte 0xbf, 0x06, 0x60	; LD (XSP + 006h), XWA
 	.byte 0xd2, 0xee, 0x71, 0x02, 0x20	; LD WA, (0271EEh)
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr gt, LABEL_F89B4B
 	.byte 0xd2, 0xf0, 0x71, 0x02, 0x3f, 0x00, 0x00	; CPW (0271F0h), 0000h
 	jr lt, LABEL_F89B4B
@@ -300650,7 +300650,7 @@ LABEL_F89B4B:
 	.byte 0xbf, 0x0a, 0x31	; LDA XBC, XSP + 00ah
 	.byte 0xaf, 0x02, 0x20	; LD XWA, (XSP + 002h)
 	call 0xF52AE8
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_F89B94
 
 LABEL_F89B5B:
@@ -300674,7 +300674,7 @@ LABEL_F89B84:
 	.byte 0xbf, 0x0a, 0x31	; LDA XBC, XSP + 00ah
 	.byte 0xaf, 0x02, 0x20	; LD XWA, (XSP + 002h)
 	call 0xF52AE8
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F89B5B
 
 LABEL_F89B94:
@@ -300698,7 +300698,7 @@ LABEL_F89BA4:
 	jr LABEL_F89BEE
 
 LABEL_F89BB9:
-	.byte 0xdb, 0xd9	; CP HL, 1
+	cps hl, 1
 	jr nz, LABEL_F89BE7
 	ld wa, iz
 	extz xwa
@@ -300729,7 +300729,7 @@ LABEL_F89BF0:
 	ld iz, wa
 	ld wa, iz
 	calr LABEL_F89A7B
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F89C03
 	.byte 0xf2, 0x48, 0x04, 0xea, 0x33	; LDA XHL, 0EA0448h
 	jr LABEL_F89C22
@@ -300768,7 +300768,7 @@ GetFileCountEncoded:
 	.byte 0xf2, 0xf0, 0x71, 0x02, 0x02, 0x3b, 0x00	; LDW (0271F0h), 003bh
 	calr LABEL_F89ADD
 	lds wa, 0
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr le, LABEL_F89C93
 	ld wa, hl
 	dec 1, wa
@@ -300795,7 +300795,7 @@ LABEL_F89CB5:
 	call LABEL_F88CFC
 	cp hl, 0x7F
 	jr gt, LABEL_F89CAA
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr ge, LABEL_F89CC8
 	ldw hl, 0xFFFF
 	jr LABEL_F89CDB
@@ -300828,7 +300828,7 @@ LABEL_F89CDD:
 
 LABEL_F89CFF:
 	call LABEL_F88CFC
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr ge, LABEL_F89D09
 	lds hl, 0
 
@@ -300846,7 +300846,7 @@ LABEL_F89D1F:
 
 LABEL_F89D24:
 	call LABEL_F88CFC
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr lt, LABEL_F89D55
 	ld c, l
 	.byte 0xaf, 0x04, 0x20	; LD XWA, (XSP + 004h)
@@ -300890,7 +300890,7 @@ LABEL_F89D78:
 	.byte 0xf3, 0x07, 0xe0, 0xf8, 0x30	; LDA XWA, XWA + IZ
 	.byte 0x80, 0x3f, 0x20	; CP (XWA), 020h
 	jr nz, LABEL_F89D8B
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr gt, LABEL_F89D75
 
 LABEL_F89D8B:
@@ -300904,7 +300904,7 @@ LABEL_F89D8F:
 	.byte 0xf2, 0x90, 0x5b, 0x02, 0x00, 0x00	; LD (025B90h), 000h
 	.byte 0xd7, 0xfa, 0xa8	; LD QIZ, 0
 	calr LABEL_F89CA5
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl nz, LABEL_F89E41
 
 LABEL_F89DA3:
@@ -300937,7 +300937,7 @@ LABEL_F89DDD:
 	.byte 0xd7, 0xfa, 0xa8	; LD QIZ, 0
 
 LABEL_F89DE0:
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr le, LABEL_F89DEE
 
 LABEL_F89DE4:
@@ -300948,7 +300948,7 @@ LABEL_F89DE4:
 
 LABEL_F89DEE:
 	call LABEL_F88BC2
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr ge, LABEL_F89E39
 	.byte 0xeb, 0xa8	; LD XHL, 0
 	jr LABEL_F89E46
@@ -300988,7 +300988,7 @@ LABEL_F89E35:
 
 LABEL_F89E39:
 	calr LABEL_F89CA5
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl z, LABEL_F89DA3
 
 LABEL_F89E41:
@@ -301012,7 +301012,7 @@ LABEL_F89E48:
 	add xwa, xhl
 	ld xbc, 0xEA04BE
 	call LABEL_F88BC7
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl lt, LABEL_F89FF3
 	lds iz, 0
 
@@ -301040,7 +301040,7 @@ LABEL_F89E7B:
 
 LABEL_F89EB7:
 	inc 1, iz
-	.byte 0xde, 0xdc	; CP IZ, 4
+	cps iz, 4
 	jr c, LABEL_F89E7B
 
 LABEL_F89EBD:
@@ -301080,7 +301080,7 @@ LABEL_F89EE3:
 
 LABEL_F89F1D:
 	inc 1, iz
-	.byte 0xde, 0xdd	; CP IZ, 5
+	cps iz, 5
 	jr c, LABEL_F89EE3
 	.byte 0x9f, 0x0a, 0x20	; LD WA, (XSP + 00ah)
 	extz xwa
@@ -301137,7 +301137,7 @@ LABEL_F89F76:
 	jr LABEL_F89FEC
 
 LABEL_F89FAF:
-	.byte 0xde, 0xd9	; CP IZ, 1
+	cps iz, 1
 	jr nz, LABEL_F89FCC
 	.byte 0x9f, 0x0a, 0x20	; LD WA, (XSP + 00ah)
 	extz xwa
@@ -301169,7 +301169,7 @@ LABEL_F89FF3:
 
 LABEL_F89FF9:
 	inc 1, iz
-	.byte 0xde, 0xdc	; CP IZ, 4
+	cps iz, 4
 	jrl c, LABEL_F89F76
 	.byte 0xe8, 0xac	; LD XWA, 4
 	lds bc, 1
@@ -301180,7 +301180,7 @@ LABEL_F89FF9:
 	or xwa, xwa
 	jr z, LABEL_F8A01D
 	call LABEL_F88BC2
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr ge, LABEL_F8A039
 
 LABEL_F8A01D:
@@ -301229,7 +301229,7 @@ LABEL_F8A07F:
 	ld iz, wa
 	ld wa, iz
 	calr LABEL_F89A7B
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F8A092
 	.byte 0xf2, 0x48, 0x04, 0xea, 0x33	; LDA XHL, 0EA0448h
 	jr LABEL_F8A0DF
@@ -301246,7 +301246,7 @@ LABEL_F8A092:
 	add xwa, xhl
 	.byte 0xf2, 0xf6, 0x03, 0xea, 0x31	; LDA XBC, 0EA03F6h
 	calr LABEL_F89135
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_F8A0C0
 	ld wa, iz
 	calr LABEL_F89E48
@@ -301392,7 +301392,7 @@ LABEL_F8A0E1:
 LABEL_F8A485:
 	.byte 0xc2, 0xb6, 0x5d, 0x02, 0x3f, 0x05	; CP (025DB6h), 005h
 	jr nz, LABEL_F8A498
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr lt, LABEL_F8A498
 	.byte 0xd2, 0xec, 0x71, 0x02, 0xf0	; CP WA, (0271ECh)
 	jr le, LABEL_F8A49C
@@ -301428,7 +301428,7 @@ LABEL_F8A4C5:
 LABEL_F8A4C8:
 	.byte 0xd2, 0xea, 0x71, 0x02, 0x20	; LD WA, (0271EAh)
 	calr LABEL_F8A485
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F8A4D8
 	ldw hl, 0xFF98
 	ret
@@ -301463,7 +301463,7 @@ LABEL_F8A4F0:
 	.byte 0xbf, 0x10, 0x30	; LDA XWA, XSP + 010h
 	.byte 0xbf, 0x06, 0x60	; LD (XSP + 006h), XWA
 	.byte 0xd2, 0xee, 0x71, 0x02, 0x20	; LD WA, (0271EEh)
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr gt, LABEL_F8A54C
 	.byte 0xd2, 0xf0, 0x71, 0x02, 0x3f, 0x00, 0x00	; CPW (0271F0h), 0000h
 	jr lt, LABEL_F8A54C
@@ -301480,7 +301480,7 @@ LABEL_F8A54C:
 	.byte 0xbf, 0x0a, 0x31	; LDA XBC, XSP + 00ah
 	.byte 0xaf, 0x02, 0x20	; LD XWA, (XSP + 002h)
 	call 0xF52AE8
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_F8A595
 
 LABEL_F8A55C:
@@ -301504,7 +301504,7 @@ LABEL_F8A585:
 	.byte 0xbf, 0x0a, 0x31	; LDA XBC, XSP + 00ah
 	.byte 0xaf, 0x02, 0x20	; LD XWA, (XSP + 002h)
 	call 0xF52AE8
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F8A55C
 
 LABEL_F8A595:
@@ -301528,7 +301528,7 @@ LABEL_F8A5A5:
 	jr LABEL_F8A5EF
 
 LABEL_F8A5BA:
-	.byte 0xdb, 0xd9	; CP HL, 1
+	cps hl, 1
 	jr nz, LABEL_F8A5E8
 	ld wa, iz
 	extz xwa
@@ -301559,7 +301559,7 @@ LABEL_F8A5F1:
 	ld iz, wa
 	ld wa, iz
 	calr LABEL_F8A485
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F8A604
 	.byte 0xf2, 0x48, 0x04, 0xea, 0x33	; LDA XHL, 0EA0448h
 	jr LABEL_F8A623
@@ -301585,7 +301585,7 @@ LABEL_F8A625:
 	.byte 0xf2, 0xf0, 0x71, 0x02, 0x02, 0x3b, 0x00	; LDW (0271F0h), 003bh
 	calr LABEL_F8A4DE
 	lds wa, 0
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr le, LABEL_F8A640
 	ld wa, hl
 	dec 1, wa
@@ -301603,7 +301603,7 @@ LABEL_F8A652:
 	ld xiz, xbc
 	.byte 0xf3, 0x07, 0xf8, 0xe0, 0x00, 0x00	; LD (XIZ + WA), 000h
 	lds ix, 0
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr le, LABEL_F8A679
 
 LABEL_F8A664:
@@ -301664,9 +301664,9 @@ LABEL_F8A6C0:
 
 LABEL_F8A6C9:
 	.byte 0xc2, 0xb6, 0x5d, 0x02, 0x27	; LD L, (025DB6h)
-	.byte 0xcf, 0xde	; CP L, 6
+	cps l, 6
 	jr z, LABEL_F8A6D6
-	.byte 0xcf, 0xdf	; CP L, 7
+	cps l, 7
 	jr nz, LABEL_F8A6D9
 
 LABEL_F8A6D6:
@@ -301674,12 +301674,12 @@ LABEL_F8A6D6:
 	ret
 
 LABEL_F8A6D9:
-	.byte 0xcf, 0xda	; CP L, 2
+	cps l, 2
 	jrl nz, LABEL_F8A782
 	ld xwa, 0xEA04E4
 	ld xbc, 0xEA04E0
 	call LABEL_F88BC7
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr lt, LABEL_F8A741
 	.byte 0xf2, 0xb6, 0x5d, 0x02, 0x00, 0x06	; LD (025DB6h), 006h
 	ld xwa, 0x10
@@ -301709,7 +301709,7 @@ LABEL_F8A741:
 	ld xwa, 0xEA04F2
 	ld xbc, 0xEA04EE
 	call LABEL_F88BC7
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr lt, LABEL_F8A782
 	.byte 0xf2, 0xb6, 0x5d, 0x02, 0x00, 0x07	; LD (025DB6h), 007h
 	ld xwa, 0x12D8
@@ -301730,13 +301730,13 @@ LABEL_F8A782:
 
 LABEL_F8A786:
 	.byte 0xc2, 0xb6, 0x5d, 0x02, 0x23	; LD C, (025DB6h)
-	.byte 0xcb, 0xde	; CP C, 6
+	cps c, 6
 	jr z, LABEL_F8A793
-	.byte 0xcb, 0xdf	; CP C, 7
+	cps c, 7
 	jr nz, LABEL_F8A79E
 
 LABEL_F8A793:
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr lt, LABEL_F8A79E
 	.byte 0xd2, 0xec, 0x71, 0x02, 0xf0	; CP WA, (0271ECh)
 	jr le, LABEL_F8A7A2
@@ -301772,7 +301772,7 @@ LABEL_F8A7CB:
 LABEL_F8A7CE:
 	.byte 0xd2, 0xea, 0x71, 0x02, 0x20	; LD WA, (0271EAh)
 	calr LABEL_F8A786
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F8A7DE
 	ldw hl, 0xFF98
 	ret
@@ -301818,7 +301818,7 @@ LABEL_F8A817:
 	ld xwa, 0xEA0504
 	ld xbc, 0xEA0500
 	call LABEL_F88BC7
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr lt, LABEL_F8A8C3
 	ld xwa, 0x51
 	lds bc, 0
@@ -301870,7 +301870,7 @@ LABEL_F8A8CB:
 	ld xwa, 0xEA0512
 	ld xbc, 0xEA050E
 	call LABEL_F88BC7
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr lt, LABEL_F8A8C3
 	ld xwa, 0x10
 	lds bc, 0
@@ -301881,7 +301881,7 @@ LABEL_F8A8E4:
 	ld xbc, 0xB
 	call LABEL_F88D74
 	call LABEL_F88BC2
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr lt, LABEL_F8A8BF
 	.byte 0xbf, 0x04, 0x31	; LDA XBC, XSP + 004h
 	.byte 0x81, 0x3f, 0x20	; CP (XBC), 020h
@@ -301926,7 +301926,7 @@ LABEL_F8A956:
 	jr LABEL_F8A9A0
 
 LABEL_F8A96B:
-	.byte 0xdb, 0xd9	; CP HL, 1
+	cps hl, 1
 	jr nz, LABEL_F8A999
 	ld wa, iz
 	extz xwa
@@ -301957,7 +301957,7 @@ LABEL_F8A9A2:
 	ld iz, wa
 	ld wa, iz
 	calr LABEL_F8A786
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F8A9B5
 	.byte 0xf2, 0x48, 0x04, 0xea, 0x33	; LDA XHL, 0EA0448h
 	jr LABEL_F8A9D4
@@ -301983,7 +301983,7 @@ LABEL_F8A9D6:
 	.byte 0xf2, 0xf0, 0x71, 0x02, 0x02, 0x3b, 0x00	; LDW (0271F0h), 003bh
 	calr LABEL_F8A807
 	lds wa, 0
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr le, LABEL_F8A9F1
 	ld wa, hl
 	dec 1, wa
@@ -302004,7 +302004,7 @@ LABEL_F8AA03:
 	call LABEL_F88BC7
 	.byte 0xd2, 0xee, 0x71, 0x02, 0x20	; LD WA, (0271EEh)
 	ld iz, wa
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr ge, LABEL_F8AA55
 	.byte 0xd2, 0xf0, 0x71, 0x02, 0xf0	; CP WA, (0271F0h)
 	jrl gt, LABEL_F8ABB7
@@ -302054,7 +302054,7 @@ LABEL_F8AA5D:
 	ldw wa, 0x30
 	ldw de, 0x40
 	calr LABEL_F8A652
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr ge, LABEL_F8AADA
 	ld wa, iz
 	.byte 0xd2, 0xee, 0x71, 0x02, 0xa0	; SUB WA, (0271EEh)
@@ -302075,7 +302075,7 @@ LABEL_F8AAE7:
 	ld xbc, 0xEA052E
 	call LABEL_F88BC7
 	.byte 0xd2, 0xee, 0x71, 0x02, 0x20	; LD WA, (0271EEh)
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr ge, LABEL_F8AB2F
 	ld iz, wa
 	.byte 0xd2, 0xf0, 0x71, 0x02, 0xf0	; CP WA, (0271F0h)
@@ -302123,7 +302123,7 @@ LABEL_F8AB3D:
 	ldw wa, 0x10
 	lds de, 0
 	calr LABEL_F8A652
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr ge, LABEL_F8ABA5
 	ld wa, iz
 	.byte 0xd2, 0xee, 0x71, 0x02, 0xa0	; SUB WA, (0271EEh)
@@ -302152,7 +302152,7 @@ LABEL_F8ABBB:
 	ld iz, wa
 	ld wa, iz
 	calr LABEL_F8A786
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F8ABCE
 	.byte 0xf2, 0x48, 0x04, 0xea, 0x33	; LDA XHL, 0EA0448h
 	jr LABEL_F8AC12
@@ -302186,9 +302186,9 @@ LABEL_F8AC12:
 
 LABEL_F8AC14:
 	call 0xF525EC
-	.byte 0xcf, 0xda	; CP L, 2
+	cps l, 2
 	jr z, LABEL_F8AC24
-	.byte 0xcf, 0xdb	; CP L, 3
+	cps l, 3
 	jr z, LABEL_F8AC24
 	ldw hl, 0xFFFF
 	ret
@@ -302232,7 +302232,7 @@ LABEL_F8AC79:
 	ld xbc, 0xEA0540
 	lds de, 3
 	calr LABEL_F89153
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F8ACFE
 	.byte 0xd7, 0xfa, 0xa8	; LD QIZ, 0
 	jr LABEL_F8ACBE
@@ -302247,7 +302247,7 @@ LABEL_F8AC94:
 	ld xbc, 0xEA0544
 	lds de, 3
 	calr LABEL_F89153
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F8ACD8
 	.byte 0xd7, 0xfa, 0x61	; INC 1, QIZ
 	inc 1, iz
@@ -302258,7 +302258,7 @@ LABEL_F8ACBE:
 	ld e, (xwa)
 	cp e, 0x2C
 	jr z, LABEL_F8ACD8
-	.byte 0xcd, 0xd8	; CP E, 0
+	cps e, 0
 	jr z, LABEL_F8ACD8
 	.byte 0xd7, 0xfa, 0xcf, 0x20, 0x00	; CP QIZ, 0020h
 	jr lt, LABEL_F8AC94
@@ -302319,7 +302319,7 @@ LABEL_F8AD25:
 	jr z, LABEL_F8AD73
 	cp e, 0x10
 	jr z, LABEL_F8AD66
-	.byte 0xcd, 0xd8	; CP E, 0
+	cps e, 0
 	jr nz, LABEL_F8AD76
 	.byte 0xf2, 0xd2, 0x72, 0x02, 0x00, 0x00	; LD (0272D2h), 000h
 	.byte 0xb1, 0x00, 0x00	; LD (XBC), 000h
@@ -302426,7 +302426,7 @@ LABEL_F8AE64:
 	.byte 0xe2, 0x16, 0x74, 0x02, 0x20	; LD XWA, (027416h)
 	.byte 0xbf, 0x04, 0x31	; LDA XBC, XSP + 004h
 	call 0xF52AE8
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F8AEA5
 	.byte 0xb6, 0x00, 0x00	; LD (XIZ), 000h
 	.byte 0xe3, 0xfd, 0x0e, 0x01, 0x20	; LD XWA, (XSP + 010eh)
@@ -302484,7 +302484,7 @@ LABEL_F8AEF4:
 	ld xwa, xiz
 	.byte 0xaf, 0x04, 0x21	; LD XBC, (XSP + 004h)
 	calr LABEL_F8AE64
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr ge, LABEL_F8AF19
 	.byte 0xc2, 0x14, 0x74, 0x02, 0x61	; INC 1, (027414h)
 	ld xwa, xiz
@@ -302505,7 +302505,7 @@ LABEL_F8AF1D:
 	cp xwa, 0x0
 	.byte 0xb0, 0xf1	; RET LT
 	.byte 0xc2, 0x12, 0x74, 0x02, 0x23	; LD C, (027412h)
-	.byte 0xcb, 0xd8	; CP C, 0
+	cps c, 0
 	.byte 0xb0, 0xf2	; RET LE
 	.byte 0xc2, 0x14, 0x74, 0x02, 0x21	; LD A, (027414h)
 	cp a, c
@@ -302532,7 +302532,7 @@ LABEL_F8AF6E:
 	jr nz, LABEL_F8AF5D
 
 LABEL_F8AF78:
-	.byte 0xda, 0xd8	; CP DE, 0
+	cps de, 0
 	jr le, LABEL_F8AF86
 	inc 1, de
 	.byte 0xf3, 0x07, 0xec, 0xe8, 0x00, 0x00	; LD (XHL + DE), 000h
@@ -302563,7 +302563,7 @@ LABEL_F8AFA7:
 	jr nz, LABEL_F8AFA5
 	cp de, 0x20
 	.byte 0xb0, 0xf9	; RET GE
-	.byte 0xda, 0xd8	; CP DE, 0
+	cps de, 0
 	.byte 0xb0, 0xf2	; RET LE
 	dec 1, de
 	.byte 0xc3, 0x07, 0xe4, 0xe8, 0x3f, 0x5c	; CP (XBC + DE), 05ch
@@ -302573,15 +302573,15 @@ LABEL_F8AFA7:
 
 LABEL_F8AFC9:
 	.byte 0xc2, 0xb6, 0x5d, 0x02, 0x23	; LD C, (025DB6h)
-	.byte 0xcb, 0xda	; CP C, 2
+	cps c, 2
 	jr z, LABEL_F8AFDA
-	.byte 0xcb, 0xdb	; CP C, 3
+	cps c, 3
 	jr z, LABEL_F8AFDA
-	.byte 0xcb, 0xdc	; CP C, 4
+	cps c, 4
 	jr nz, LABEL_F8AFE5
 
 LABEL_F8AFDA:
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr lt, LABEL_F8AFE5
 	.byte 0xd2, 0xca, 0x72, 0x02, 0xf0	; CP WA, (0272CAh)
 	jr le, LABEL_F8AFE9
@@ -302617,7 +302617,7 @@ LABEL_F8B012:
 LABEL_F8B015:
 	.byte 0xd2, 0xc8, 0x72, 0x02, 0x20	; LD WA, (0272C8h)
 	calr LABEL_F8AFC9
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F8B025
 	ldw hl, 0xFF98
 	ret
@@ -302652,7 +302652,7 @@ LABEL_F8B03D:
 	.byte 0xbf, 0x10, 0x30	; LDA XWA, XSP + 010h
 	.byte 0xbf, 0x06, 0x60	; LD (XSP + 006h), XWA
 	.byte 0xd2, 0xee, 0x71, 0x02, 0x20	; LD WA, (0271EEh)
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr gt, LABEL_F8B098
 	.byte 0xd2, 0xf0, 0x71, 0x02, 0x3f, 0x00, 0x00	; CPW (0271F0h), 0000h
 	jr lt, LABEL_F8B098
@@ -302669,7 +302669,7 @@ LABEL_F8B098:
 	.byte 0xbf, 0x0a, 0x31	; LDA XBC, XSP + 00ah
 	.byte 0xaf, 0x02, 0x20	; LD XWA, (XSP + 002h)
 	call 0xF52AE8
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_F8B0E1
 
 LABEL_F8B0A8:
@@ -302693,7 +302693,7 @@ LABEL_F8B0D1:
 	.byte 0xbf, 0x0a, 0x31	; LDA XBC, XSP + 00ah
 	.byte 0xaf, 0x02, 0x20	; LD XWA, (XSP + 002h)
 	call 0xF52AE8
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F8B0A8
 
 LABEL_F8B0E1:
@@ -302717,7 +302717,7 @@ LABEL_F8B0F1:
 	jr LABEL_F8B13B
 
 LABEL_F8B106:
-	.byte 0xdb, 0xd9	; CP HL, 1
+	cps hl, 1
 	jr nz, LABEL_F8B134
 	ld wa, iz
 	extz xwa
@@ -302748,7 +302748,7 @@ LABEL_F8B13D:
 	ld iz, wa
 	ld wa, iz
 	calr LABEL_F8AFC9
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F8B150
 	.byte 0xf2, 0x48, 0x04, 0xea, 0x33	; LDA XHL, 0EA0448h
 	jr LABEL_F8B16D
@@ -302775,7 +302775,7 @@ LABEL_F8B16F:
 	.byte 0xf2, 0xf0, 0x71, 0x02, 0x02, 0x09, 0x00	; LDW (0271F0h), 0009h
 	calr LABEL_F8B02B
 	lds wa, 0
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr le, LABEL_F8B18A
 	ld wa, hl
 	dec 1, wa
@@ -302816,7 +302816,7 @@ LABEL_F8B1DF:
 	.byte 0x1e, 0xb5, 0xff	; CALR ResetProgressIndication
 	call LABEL_F890AF
 	call LABEL_F1E9A3
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	.byte 0xb0, 0xfe	; RET NZ
 	ld xwa, 0x600002
 	ld xbc, 0x1E0009C
@@ -302849,9 +302849,9 @@ LABEL_F8B221:
 
 CancelOperationCleanup:
 	.byte 0xc1, 0xa7, 0x28, 0x21	; LD A, (28A7h)
-	.byte 0xc9, 0x33, 0x02	; BIT 002h, A
+	bit 2, a
 	jr z, LABEL_F8B254
-	.byte 0xc9, 0x30, 0x02	; RES 002h, A
+	res 2, a
 	.byte 0xf1, 0xa7, 0x28, 0x41	; LD (28A7h), A
 
 LABEL_F8B254:
@@ -302866,9 +302866,9 @@ SignalProgressUpdate:
 LABEL_F8B268:
 	pushw iz
 	.byte 0xc1, 0x2c, 0x04, 0x21	; LD A, (042Ch)
-	.byte 0xc9, 0x33, 0x07	; BIT 007h, A
+	bit 7, a
 	jrl z, LABEL_F8B335
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
+	res 7, a
 	.byte 0xf1, 0x2c, 0x04, 0x41	; LD (042Ch), A
 	.byte 0xf1, 0x20, 0x04, 0xca	; BIT 2, (0420h)
 	jrl nz, LABEL_F8B335
@@ -302885,9 +302885,9 @@ LABEL_F8B268:
 
 LABEL_F8B2A2:
 	.byte 0xd1, 0x00, 0x85, 0x20	; LD WA, (8500h)
-	.byte 0xd8, 0xda	; CP WA, 2
+	cps wa, 2
 	jr z, LABEL_F8B2B4
-	.byte 0xd8, 0xdb	; CP WA, 3
+	cps wa, 3
 	jr z, LABEL_F8B2B4
 	.byte 0x1e, 0xeb, 0xfe	; CALR ResetProgressIndication
 	jrl LABEL_F8B335
@@ -302903,7 +302903,7 @@ LABEL_F8B2C7:
 	.byte 0xd1, 0x02, 0x85, 0x3f, 0x00, 0x00	; CPW (8502h), 0000h
 	jr z, LABEL_F8B335
 	.byte 0xc1, 0x2c, 0x04, 0x21	; LD A, (042Ch)
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
+	res 7, a
 	.byte 0xc7, 0xf8, 0x99	; LD IZL, A
 	extz iz
 	cp iz, 0x13
@@ -302911,7 +302911,7 @@ LABEL_F8B2C7:
 	ld wa, iz
 	call 0xF89605
 	call 0xF8943E
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F8B335
 	lds iz, 0
 
@@ -302930,7 +302930,7 @@ LABEL_F8B2F1:
 	call LABEL_EF14F3
 	.byte 0x1e, 0x45, 0xff	; CALR SignalProgressUpdate
 	.byte 0x1e, 0x26, 0xff	; CALR CancelOperationCleanup
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr ge, LABEL_F8B329
 	.byte 0xf1, 0x42, 0x7f, 0x00, 0x01	; LD (7F42h), 001h
 	jr LABEL_F8B32E
@@ -302951,14 +302951,14 @@ LABEL_F8B337:
 	ld (xsp), a
 	ld xwa, 0x2280
 	call LABEL_FCD437
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F8B36B
 	.byte 0xf1, 0x24, 0x04, 0x00, 0xf3	; LD (0424h), 0f3h
 	.byte 0x06, 0x06	; EI 006h
 	.byte 0x0b, 0xf3, 0x00	; PUSHW 00f3h
 	call LABEL_EF281B
 	.byte 0x8f, 0x02, 0x21	; LD A, (XSP + 002h)
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
+	res 7, a
 	extz wa
 	pushw wa
 	call LABEL_EF281B
@@ -302982,15 +302982,15 @@ LABEL_F8B36E:
 
 LABEL_F8B387:
 	.byte 0xd1, 0x00, 0x85, 0x20	; LD WA, (8500h)
-	.byte 0xd8, 0xd9	; CP WA, 1
+	cps wa, 1
 	jr z, LABEL_F8B3C6
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr z, LABEL_F8B3BD
-	.byte 0xd8, 0xdd	; CP WA, 5
+	cps wa, 5
 	jr z, LABEL_F8B3B3
-	.byte 0xd8, 0xda	; CP WA, 2
+	cps wa, 2
 	jr z, LABEL_F8B39F
-	.byte 0xd8, 0xdb	; CP WA, 3
+	cps wa, 3
 	jr nz, LABEL_F8B3D5
 
 LABEL_F8B39F:
@@ -303038,22 +303038,22 @@ LABEL_F8B3D8:
 
 LABEL_F8B3EA:
 	.byte 0xd1, 0x00, 0x85, 0x20	; LD WA, (8500h)
-	.byte 0xd8, 0xd9	; CP WA, 1
+	cps wa, 1
 	jr z, LABEL_F8B425
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr z, LABEL_F8B41E
-	.byte 0xd8, 0xdd	; CP WA, 5
+	cps wa, 5
 	jr z, LABEL_F8B419
-	.byte 0xd8, 0xda	; CP WA, 2
+	cps wa, 2
 	jr z, LABEL_F8B407
-	.byte 0xd8, 0xdb	; CP WA, 3
+	cps wa, 3
 	.byte 0xb0, 0xfe	; RET NZ
 	ldw wa, 0x6C
 	jr LABEL_F8B421
 
 LABEL_F8B407:
 	call LABEL_F8A6C9
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr ge, LABEL_F8B414
 	ldw wa, 0x6C
 	jr LABEL_F8B421
@@ -303090,15 +303090,15 @@ LABEL_F8B435:
 
 LABEL_F8B44B:
 	.byte 0xd1, 0x00, 0x85, 0x20	; LD WA, (8500h)
-	.byte 0xd8, 0xdb	; CP WA, 3
+	cps wa, 3
 	jr z, LABEL_F8B483
-	.byte 0xd8, 0xda	; CP WA, 2
+	cps wa, 2
 	jr z, LABEL_F8B483
-	.byte 0xd8, 0xd9	; CP WA, 1
+	cps wa, 1
 	jr z, LABEL_F8B472
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr z, LABEL_F8B46D
-	.byte 0xd8, 0xdd	; CP WA, 5
+	cps wa, 5
 	jr nz, LABEL_F8B48B
 	.byte 0xf1, 0x42, 0x7f, 0x00, 0x00	; LD (7F42h), 000h
 	ldw wa, 0xEE
@@ -303129,10 +303129,10 @@ LABEL_F8B48B:
 	ret
 
 LABEL_F8B48E:
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr ge, LABEL_F8B4C9
 	ld de, wa
-	.byte 0xda, 0x30, 0x0f	; RES 00fh, DE
+	res 15, de
 	cp de, 0xFF
 	jr ge, LABEL_F8B4A0
 	ld l, a
@@ -303264,7 +303264,7 @@ LABEL_F8B67F:
 	jr LABEL_F8B68F
 
 LABEL_F8B68B:
-	.byte 0xcb, 0xdd	; CP C, 5
+	cps c, 5
 	jr ule, LABEL_F8B6A4
 
 LABEL_F8B68F:
@@ -303277,7 +303277,7 @@ LABEL_F8B693:
 	add xhl, xde
 	.byte 0xb3, 0x00, 0x20	; LD (XHL), 020h
 	dec 1, c
-	.byte 0xcb, 0xdd	; CP C, 5
+	cps c, 5
 	jr ugt, LABEL_F8B693
 
 LABEL_F8B6A4:
@@ -303300,7 +303300,7 @@ LABEL_F8B6A4:
 	jr LABEL_F8B6E5
 
 LABEL_F8B6D0:
-	.byte 0xcb, 0xdd	; CP C, 5
+	cps c, 5
 	jr c, LABEL_F8B6E5
 	ld hl, ix
 	inc 1, ix
@@ -303340,7 +303340,7 @@ LABEL_F8B70F:
 	jr LABEL_F8B739
 
 LABEL_F8B724:
-	.byte 0xcb, 0xdc	; CP C, 4
+	cps c, 4
 	jr c, LABEL_F8B739
 	ld hl, ix
 	inc 1, ix
@@ -303380,7 +303380,7 @@ LABEL_F8B763:
 	jr LABEL_F8B78D
 
 LABEL_F8B778:
-	.byte 0xcb, 0xdb	; CP C, 3
+	cps c, 3
 	jr c, LABEL_F8B78D
 	ld hl, ix
 	inc 1, ix
@@ -303420,7 +303420,7 @@ LABEL_F8B7B7:
 	jr LABEL_F8B7DB
 
 LABEL_F8B7CC:
-	.byte 0xcb, 0xda	; CP C, 2
+	cps c, 2
 	jr c, LABEL_F8B7DB
 	ld bc, ix
 	inc 1, ix
@@ -303555,11 +303555,11 @@ FmmUtilityTitleFunc:
 
 LABEL_F8B8D5:
 	.byte 0xd1, 0x00, 0x85, 0x20	; LD WA, (8500h)
-	.byte 0xd8, 0xd9	; CP WA, 1
+	cps wa, 1
 	jrl z, LABEL_F8B9A1
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jrl z, LABEL_F8B988
-	.byte 0xd8, 0xdd	; CP WA, 5
+	cps wa, 5
 	jr z, LABEL_F8B944
 	.byte 0xd1, 0x02, 0x85, 0x3f, 0x00, 0x00	; CPW (8502h), 0000h
 	jr ge, LABEL_F8B902
@@ -303687,11 +303687,11 @@ FmmSmfUtilityTitleFunc:
 
 LABEL_F8BA64:
 	.byte 0xd1, 0x00, 0x85, 0x20	; LD WA, (8500h)
-	.byte 0xd8, 0xd9	; CP WA, 1
+	cps wa, 1
 	jrl z, LABEL_F8BB30
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jrl z, LABEL_F8BB17
-	.byte 0xd8, 0xdd	; CP WA, 5
+	cps wa, 5
 	jr z, LABEL_F8BAD3
 	.byte 0xd1, 0x04, 0x85, 0x3f, 0x00, 0x00	; CPW (8504h), 0000h
 	jr ge, LABEL_F8BA91
@@ -303828,7 +303828,7 @@ FileCopyFunc:
 	.byte 0xf1, 0x60, 0x7f, 0x66	; LD (7F60h), XIZ
 	call 0xF895EF
 	.byte 0xf1, 0x64, 0x7f, 0x53	; LD (7F64h), HL
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr lt, LABEL_F8BBF1
 	cp hl, 0x13
 	jr ge, LABEL_F8BBE8
@@ -303870,7 +303870,7 @@ LABEL_F8BC38:
 	ld de, wa
 	cp xbc, 0x1C00018
 	jr nz, LABEL_F8BCAB
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr le, LABEL_F8BC55
 	dec 1, wa
 	.byte 0xf1, 0x66, 0x7f, 0x50	; LD (7F66h), WA
@@ -303879,7 +303879,7 @@ LABEL_F8BC55:
 	.byte 0xd1, 0x66, 0x7f, 0x20	; LD WA, (7F66h)
 	.byte 0xd1, 0x64, 0x7f, 0xf0	; CP WA, (7F64h)
 	jr nz, LABEL_F8BC6F
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr le, LABEL_F8BC6B
 	dec 1, wa
 	.byte 0xf1, 0x66, 0x7f, 0x50	; LD (7F66h), WA
@@ -303931,11 +303931,11 @@ LABEL_F8BCD7:
 	cp xiz, 0x8
 	jrl nz, LABEL_F8BD97
 	call 0xF8943E
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl z, LABEL_F8BD97
 	.byte 0xd1, 0x66, 0x7f, 0x20	; LD WA, (7F66h)
 	call LABEL_F8945F
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F8BD20
 	.byte 0xc2, 0xea, 0x40, 0x03, 0x3f, 0x00	; CP (0340EAh), 000h
 	jr z, LABEL_F8BD20
@@ -304039,7 +304039,7 @@ FileRenameFunc:
 	cp xbc, 0x1E0003A
 	jrl nz, LABEL_F8BF15
 	call 0xF895EF
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr lt, LABEL_F8BE95
 	.byte 0xf1, 0x70, 0x88, 0x36	; LDA XIZ, 8870h
 	ld wa, hl
@@ -304064,22 +304064,22 @@ LABEL_F8BE6C:
 	inc 1, iy
 
 LABEL_F8BE6E:
-	.byte 0xdd, 0xde	; CP IY, 6
+	cps iy, 6
 	jr ge, LABEL_F8BE7D
 	.byte 0xf3, 0x07, 0xec, 0xf4, 0x32	; LDA XDE, XHL + IY
 	ld c, (xde)
-	.byte 0xcb, 0xd8	; CP C, 0
+	cps c, 0
 	jr nz, LABEL_F8BE5D
 
 LABEL_F8BE7D:
-	.byte 0xdd, 0xde	; CP IY, 6
+	cps iy, 6
 	jr ge, LABEL_F8BE8F
 	ld xbc, xwa
 
 LABEL_F8BE83:
 	.byte 0xf3, 0x07, 0xe4, 0xf4, 0x00, 0x5f	; LD (XBC + IY), 05fh
 	inc 1, iy
-	.byte 0xdd, 0xde	; CP IY, 6
+	cps iy, 6
 	jr lt, LABEL_F8BE83
 
 LABEL_F8BE8F:
@@ -304100,7 +304100,7 @@ LABEL_F8BEA3:
 
 LABEL_F8BEB6:
 	call 0xF8943E
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F8BF15
 	ld xwa, 0x8870
 	.byte 0xaf, 0x04, 0x21	; LD XBC, (XSP + 004h)
@@ -304142,7 +304142,7 @@ FileRenameSmfFunc:
 	cp xbc, 0x1E0003A
 	jrl nz, LABEL_F8C020
 	call LABEL_F89AC7
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr lt, LABEL_F8BF9A
 	.byte 0xf1, 0x70, 0x88, 0x36	; LDA XIZ, 8870h
 	ld wa, hl
@@ -304171,7 +304171,7 @@ LABEL_F8BF6D:
 	jr ge, LABEL_F8BF7E
 	.byte 0xf3, 0x07, 0xec, 0xf4, 0x32	; LDA XDE, XHL + IY
 	ld c, (xde)
-	.byte 0xcb, 0xd8	; CP C, 0
+	cps c, 0
 	jr nz, LABEL_F8BF5C
 
 LABEL_F8BF7E:
@@ -304258,9 +304258,9 @@ FmmFormatFunc:
 
 LABEL_F8C06A:
 	.byte 0xd1, 0x00, 0x85, 0x20	; LD WA, (8500h)
-	.byte 0xd8, 0xda	; CP WA, 2
+	cps wa, 2
 	jr z, LABEL_F8C076
-	.byte 0xd8, 0xdb	; CP WA, 3
+	cps wa, 3
 	jr nz, LABEL_F8C091
 
 LABEL_F8C076:
@@ -304302,7 +304302,7 @@ LABEL_F8C0BE:
 	cp xde, 0xA
 	jrl nz, LABEL_F8C20A
 	ld a, c
-	.byte 0xcb, 0xd8	; CP C, 0
+	cps c, 0
 	jrl nz, LABEL_F8C199
 	ld xwa, 0x600026
 	ld xbc, 0x1C00001
@@ -304320,7 +304320,7 @@ LABEL_F8C0BE:
 	ld xbc, 0x1C00002
 	.byte 0xea, 0xa8	; LD XDE, 0
 	call 0xFA9D58
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr ge, LABEL_F8C172
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
@@ -304355,7 +304355,7 @@ LABEL_F8C172:
 	jr LABEL_F8C20A
 
 LABEL_F8C199:
-	.byte 0xc9, 0xda	; CP A, 2
+	cps a, 2
 	jr nz, LABEL_F8C20A
 	.byte 0xf1, 0x68, 0x7f, 0x00, 0x03	; LD (7F68h), 003h
 	ld xwa, 0x7B003F
@@ -304369,14 +304369,14 @@ LABEL_F8C199:
 
 LABEL_F8C1C0:
 	ld e, c
-	.byte 0xcb, 0xd8	; CP C, 0
+	cps c, 0
 	jr nz, LABEL_F8C1D1
 	call 0xF99490
 	.byte 0xf1, 0x6c, 0x7f, 0x00, 0x00	; LD (7F6Ch), 000h
 	jr LABEL_F8C20A
 
 LABEL_F8C1D1:
-	.byte 0xcd, 0xda	; CP E, 2
+	cps e, 2
 	jr nz, LABEL_F8C20A
 	.byte 0xf1, 0x68, 0x7f, 0x00, 0x02	; LD (7F68h), 002h
 	ld xwa, 0x7B003F
@@ -304444,11 +304444,11 @@ FmmLoadTitleFunc:
 
 LABEL_F8C28B:
 	.byte 0xd1, 0x00, 0x85, 0x20	; LD WA, (8500h)
-	.byte 0xd8, 0xd9	; CP WA, 1
+	cps wa, 1
 	jrl z, LABEL_F8C355
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jrl z, LABEL_F8C33F
-	.byte 0xd8, 0xdd	; CP WA, 5
+	cps wa, 5
 	jr z, LABEL_F8C2FB
 	.byte 0xd1, 0x02, 0x85, 0x3f, 0x00, 0x00	; CPW (8502h), 0000h
 	jr ge, LABEL_F8C2B8
@@ -304564,7 +304564,7 @@ LABEL_F8C3FE:
 	jr lt, LABEL_F8C450
 	call 0xF895EF
 	ld iz, hl
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr lt, LABEL_F8C450
 	cp iz, 0x13
 	jr ge, LABEL_F8C450
@@ -304635,7 +304635,7 @@ LABEL_F8C4B7:
 	extz wa
 	call LABEL_F8937F
 	inc 1, iz
-	.byte 0xde, 0xde	; CP IZ, 6
+	cps iz, 6
 	jr lt, LABEL_F8C4B7
 	lds wa, 6
 	call LABEL_F89393
@@ -304787,13 +304787,13 @@ DiskInfoFunc:
 
 LABEL_F8C636:
 	.byte 0xd1, 0x00, 0x85, 0x20	; LD WA, (8500h)
-	.byte 0xd8, 0xd9	; CP WA, 1
+	cps wa, 1
 	jr z, LABEL_F8C65A
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr z, LABEL_F8C65A
-	.byte 0xd8, 0xda	; CP WA, 2
+	cps wa, 2
 	jr z, LABEL_F8C64A
-	.byte 0xd8, 0xdb	; CP WA, 3
+	cps wa, 3
 	jr nz, LABEL_F8C65D
 
 LABEL_F8C64A:
@@ -304890,7 +304890,7 @@ SongNameFunc:
 	jr nz, LABEL_F8C7AD
 	call LABEL_F89AC7
 	ld iz, hl
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr lt, LABEL_F8C797
 	lds wa, 0
 	.byte 0x1e, 0xab, 0xea	; CALR InitializeOperationState
@@ -304946,7 +304946,7 @@ SaveFileNameNumFunc:
 	jr nz, LABEL_F8C7FC
 	call 0xF895EF
 	ld iz, hl
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr lt, LABEL_F8C7E6
 	call LABEL_F892BC
 	ld xbc, xhl
@@ -305018,22 +305018,22 @@ LABEL_F8C878:
 	inc 1, iy
 
 LABEL_F8C87A:
-	.byte 0xdd, 0xde	; CP IY, 6
+	cps iy, 6
 	jr ge, LABEL_F8C889
 	.byte 0xf3, 0x07, 0xec, 0xf4, 0x31	; LDA XBC, XHL + IY
 	ld a, (xbc)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_F8C869
 
 LABEL_F8C889:
-	.byte 0xdd, 0xde	; CP IY, 6
+	cps iy, 6
 	jr ge, LABEL_F8C89B
 	ld xwa, xde
 
 LABEL_F8C88F:
 	.byte 0xf3, 0x07, 0xe0, 0xf4, 0x00, 0x5f	; LD (XWA + IY), 05fh
 	inc 1, iy
-	.byte 0xdd, 0xde	; CP IY, 6
+	cps iy, 6
 	jr lt, LABEL_F8C88F
 
 LABEL_F8C89B:
@@ -305066,7 +305066,7 @@ CurFileNameFunc:
 	jr nz, LABEL_F8C913
 	call 0xF895EF
 	ld iz, hl
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr lt, LABEL_F8C8FD
 	ld wa, iz
 	call LABEL_F89623
@@ -305122,10 +305122,10 @@ FmmPasswordFunc:
 	cp xbc, 0x1E5000D
 	jrl nz, LABEL_F8CAA6
 	call LABEL_F94242
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_F8C95A
 	call LABEL_F94262
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F8C969
 
 LABEL_F8C95A:
@@ -305148,11 +305148,11 @@ LABEL_F8C980:
 	.byte 0x82, 0x3f, 0x03	; CP (XDE), 003h
 	jr nz, LABEL_F8C9AB
 	call LABEL_F94236
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F8C9AB
 	ld wa, iz
 	call LABEL_F94256
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F8C9AB
 	.byte 0xf1, 0x0d, 0x8a, 0x30	; LDA XWA, 8A0Dh
 	.byte 0xb0, 0xbf	; SET 7, (XWA)
@@ -305167,7 +305167,7 @@ LABEL_F8C9AB:
 	jr nz, LABEL_F8C9CC
 	ld wa, iz
 	call LABEL_F94236
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F8C9CC
 	.byte 0xf1, 0x0d, 0x8a, 0xbf	; SET 7, (8A0Dh)
 	.byte 0xaf, 0x04, 0x20	; LD XWA, (XSP + 004h)
@@ -305180,7 +305180,7 @@ LABEL_F8C9CC:
 	jr nz, LABEL_F8C9F1
 	ld wa, iz
 	call LABEL_F94256
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F8C9F1
 	.byte 0xf1, 0x0d, 0x8a, 0xbe	; SET 6, (8A0Dh)
 	.byte 0xaf, 0x04, 0x20	; LD XWA, (XSP + 004h)
@@ -305200,11 +305200,11 @@ LABEL_F8C9FC:
 	.byte 0x82, 0x3f, 0x03	; CP (XDE), 003h
 	jr nz, LABEL_F8CA2A
 	call LABEL_F94236
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F8CA2A
 	ld wa, iz
 	call LABEL_F94256
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F8CA2A
 	.byte 0xf1, 0x0d, 0x8a, 0x30	; LDA XWA, 8A0Dh
 	.byte 0xb0, 0xbf	; SET 7, (XWA)
@@ -305219,7 +305219,7 @@ LABEL_F8CA2A:
 	jr nz, LABEL_F8CA4E
 	ld wa, iz
 	call LABEL_F94236
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F8CA4E
 	.byte 0xf1, 0x0d, 0x8a, 0xbf	; SET 7, (8A0Dh)
 	.byte 0xaf, 0x04, 0x20	; LD XWA, (XSP + 004h)
@@ -305232,7 +305232,7 @@ LABEL_F8CA4E:
 	jr nz, LABEL_F8CA75
 	ld wa, iz
 	call LABEL_F94256
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F8CA75
 	.byte 0xf1, 0x0d, 0x8a, 0xbe	; SET 6, (8A0Dh)
 	.byte 0xaf, 0x04, 0x20	; LD XWA, (XSP + 004h)
@@ -305250,7 +305250,7 @@ LABEL_F8CA75:
 
 LABEL_F8CA7F:
 	call LABEL_F94236
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F8CA9A
 	.byte 0xf1, 0x0d, 0x8a, 0xbf	; SET 7, (8A0Dh)
 	.byte 0xaf, 0x04, 0x20	; LD XWA, (XSP + 004h)
@@ -305278,10 +305278,10 @@ SelectPasswordMode:
 	.byte 0xc7, 0xfa, 0xa8	; LD QIZL, 0
 	lds wa, 2
 	call LABEL_F89353
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F8CACE
 	call LABEL_F94242
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F8CACE
 	.byte 0xf1, 0x0d, 0x8a, 0xcf	; BIT 7, (8A0Dh)
 	jr nz, LABEL_F8CACE
@@ -305290,10 +305290,10 @@ SelectPasswordMode:
 LABEL_F8CACE:
 	lds wa, 3
 	call LABEL_F89353
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F8CAE9
 	call LABEL_F94262
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F8CAE9
 	.byte 0xf1, 0x0d, 0x8a, 0xce	; BIT 6, (8A0Dh)
 	jr nz, LABEL_F8CAE9
@@ -305358,7 +305358,7 @@ FmmFileNameFunc:
 	.byte 0xf1, 0x72, 0x7f, 0x61	; LD (7F72h), XBC
 	call 0xF895EF
 	.byte 0xf1, 0x7a, 0x7f, 0x53	; LD (7F7Ah), HL
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr lt, LABEL_F8CB84
 	exts xhl
 	.byte 0xe1, 0x72, 0x7f, 0x20	; LD XWA, (7F72h)
@@ -305466,10 +305466,10 @@ LABEL_F8CC86:
 	cp xiz, 0x3
 	jrl nz, LABEL_F8CD39
 	call 0xF8943E
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl z, LABEL_F8CD39
 	call LABEL_F892EF
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl z, LABEL_F8CD39
 	ld xwa, 0x600026
 	ld xbc, 0x1C00001
@@ -305498,15 +305498,15 @@ LABEL_F8CC86:
 	jr z, LABEL_F8CD1D
 	lds wa, 2
 	call LABEL_F892F5
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F8CD1D
 	lds wa, 2
 	call LABEL_F893D1
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_F8CD18
 	ldw wa, 0x8
 	call LABEL_F893D1
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F8CD1D
 
 LABEL_F8CD18:
@@ -305529,10 +305529,10 @@ LABEL_F8CD39:
 	cp xiz, 0x4
 	jrl nz, LABEL_F8CE07
 	call LABEL_F8934D
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl z, LABEL_F8CE07
 	.byte 0x1e, 0x5e, 0xfd	; CALR SelectPasswordMode
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F8CD65
 	.byte 0xea, 0xa8	; LD XDE, 0
 	.byte 0xc1, 0x0c, 0x8a, 0x25	; LD E, (8A0Ch)
@@ -305542,7 +305542,7 @@ LABEL_F8CD39:
 
 LABEL_F8CD65:
 	call 0xF8943E
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F8CD94
 	.byte 0xc2, 0xea, 0x40, 0x03, 0x3f, 0x00	; CP (0340EAh), 000h
 	jr z, LABEL_F8CD94
@@ -305629,7 +305629,7 @@ LABEL_F8CE82:
 	cp xiz, 0x5
 	jrl nz, LABEL_F8CF0B
 	call 0xF8943E
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F8CF0B
 	.byte 0xc2, 0xea, 0x40, 0x03, 0x3f, 0x00	; CP (0340EAh), 000h
 	jr z, LABEL_F8CEBE
@@ -305699,7 +305699,7 @@ LABEL_F8CF60:
 	cp xiz, 0x6
 	jrl nz, LABEL_F8CFF8
 	call 0xF8943E
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl z, LABEL_F8CFF8
 	.byte 0xaf, 0x08, 0x21	; LD XBC, (XSP + 008h)
 	.byte 0xd1, 0x7a, 0x7f, 0x20	; LD WA, (7F7Ah)
@@ -305716,7 +305716,7 @@ LABEL_F8CF91:
 	cp xbc, 0x1C00017
 	jr nz, LABEL_F8CFA5
 	ld bc, wa
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr le, LABEL_F8CFA5
 	dec 1, bc
 	.byte 0xf1, 0x7a, 0x7f, 0x51	; LD (7F7Ah), BC
@@ -305786,7 +305786,7 @@ LABEL_F8D05A:
 	call LABEL_F893D1
 	.byte 0x9f, 0x06, 0x20	; LD WA, (XSP + 006h)
 	extz wa
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F8D072
 	call LABEL_F89321
 	jr LABEL_F8D076
@@ -305800,11 +305800,11 @@ LABEL_F8D076:
 	jr lt, LABEL_F8D05A
 	ldw wa, 0x8
 	call LABEL_F893D1
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F8D09C
 	ldw wa, 0x9
 	call LABEL_F893D1
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F8D09C
 	lds wa, 2
 	call LABEL_F89321
@@ -305819,24 +305819,24 @@ LABEL_F8D09C:
 	ld iz, hl
 	ldw wa, 0x8
 	call LABEL_F893D1
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F8D0CB
 	ldw wa, 0x9
 	call LABEL_F893D1
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F8D0CB
-	.byte 0xde, 0x31, 0x02	; SET 002h, IZ
+	set 2, iz
 
 LABEL_F8D0CB:
 	call LABEL_F892EF
 	and iz, hl
-	.byte 0xde, 0x33, 0x00	; BIT 000h, IZ
+	bit 0, iz
 	jr z, LABEL_F8D0E4
 	call LABEL_F8964C
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F8D0E4
-	.byte 0xde, 0x30, 0x00	; RES 000h, IZ
-	.byte 0xde, 0x31, 0x01	; SET 001h, IZ
+	res 0, iz
+	set 1, iz
 
 LABEL_F8D0E4:
 	ld de, iz
@@ -305861,24 +305861,24 @@ LABEL_F8D106:
 	ld iz, hl
 	ldw wa, 0x8
 	call LABEL_F893D1
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F8D130
 	ldw wa, 0x9
 	call LABEL_F893D1
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F8D130
-	.byte 0xde, 0x31, 0x02	; SET 002h, IZ
+	set 2, iz
 
 LABEL_F8D130:
 	call LABEL_F892EF
 	and iz, hl
-	.byte 0xde, 0x33, 0x00	; BIT 000h, IZ
+	bit 0, iz
 	jr z, LABEL_F8D149
 	call LABEL_F8964C
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F8D149
-	.byte 0xde, 0x30, 0x00	; RES 000h, IZ
-	.byte 0xde, 0x31, 0x01	; SET 001h, IZ
+	res 0, iz
+	set 1, iz
 
 LABEL_F8D149:
 	ld de, iz
@@ -305949,11 +305949,11 @@ FmmComposerLoadFunc:
 
 LABEL_F8D1E4:
 	.byte 0xd1, 0x00, 0x85, 0x20	; LD WA, (8500h)
-	.byte 0xd8, 0xd9	; CP WA, 1
+	cps wa, 1
 	jrl z, LABEL_F8D289
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr z, LABEL_F8D26F
-	.byte 0xd8, 0xdd	; CP WA, 5
+	cps wa, 5
 	jr z, LABEL_F8D22F
 	.byte 0xd1, 0x02, 0x85, 0x3f, 0x00, 0x00	; CPW (8502h), 0000h
 	jr ge, LABEL_F8D210
@@ -306032,7 +306032,7 @@ LABEL_F8D2D7:
 	.byte 0xf1, 0x7c, 0x7f, 0x62	; LD (7F7Ch), XDE
 	call 0xF895EF
 	.byte 0xf1, 0x80, 0x7f, 0x53	; LD (7F80h), HL
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr lt, LABEL_F8D2F7
 	exts xhl
 	.byte 0xe1, 0x7c, 0x7f, 0x20	; LD XWA, (7F7Ch)
@@ -306061,7 +306061,7 @@ LABEL_F8D30D:
 	ld (xhl), c
 	lds bc, 3
 	call LABEL_F89408
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F8D335
 	ld wa, iz
 	call LABEL_F89623
@@ -306113,7 +306113,7 @@ LABEL_F8D380:
 LABEL_F8D39E:
 	cp xbc, 0x1C00017
 	jrl nz, LABEL_F8D473
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jrl le, LABEL_F8D473
 	dec 1, wa
 	jr LABEL_F8D3DE
@@ -306143,7 +306143,7 @@ LABEL_F8D3E5:
 	cp xde, 0x3
 	jrl nz, LABEL_F8D473
 	call 0xF8943E
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F8D473
 	ld xwa, 0x600026
 	ld xbc, 0x1C00001
@@ -306233,7 +306233,7 @@ RenderFilterDisplay:
 	.byte 0x87, 0x3f, 0x00	; CP (XSP), 000h
 	jr nz, LABEL_F8D4FA
 	call LABEL_F8964C
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F8D4FA
 	.byte 0xaf, 0x02, 0x20	; LD XWA, (XSP + 002h)
 	ld xbc, 0xEA06EE
@@ -306243,15 +306243,15 @@ LABEL_F8D4FA:
 	.byte 0x87, 0x3f, 0x01	; CP (XSP), 001h
 	jr nz, LABEL_F8D53A
 	call LABEL_F8964C
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F8D53A
 	lds wa, 0
 	call LABEL_F893D1
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F8D530
 	lds wa, 0
 	call LABEL_F892F5
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F8D526
 	.byte 0xaf, 0x02, 0x20	; LD XWA, (XSP + 002h)
 	ld xbc, 0xEA06F4
@@ -306271,12 +306271,12 @@ LABEL_F8D53A:
 	ld a, (xsp)
 	extz wa
 	call LABEL_F893D1
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F8D566
 	ld a, (xsp)
 	extz wa
 	call LABEL_F892F5
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F8D55C
 	.byte 0xaf, 0x02, 0x20	; LD XWA, (XSP + 002h)
 	ld xbc, 0xEA0706
@@ -306292,16 +306292,16 @@ LABEL_F8D566:
 	jr nz, LABEL_F8D5A1
 	ldw wa, 0x8
 	call LABEL_F893D1
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F8D5A1
 	ldw wa, 0x9
 	call LABEL_F893D1
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F8D5A1
 	ld a, (xsp)
 	extz wa
 	call LABEL_F892F5
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F8D597
 	.byte 0xaf, 0x02, 0x20	; LD XWA, (XSP + 002h)
 	ld xbc, 0xEA0712
@@ -306370,7 +306370,7 @@ LABEL_F8D61D:
 	cp xwa, 0x1
 	jr nz, LABEL_F8D645
 	call LABEL_F8964C
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F8D645
 	lds wa, 0
 	jr LABEL_F8D659
@@ -306380,7 +306380,7 @@ LABEL_F8D645:
 	or xwa, xwa
 	jr nz, LABEL_F8D654
 	call LABEL_F8964C
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_F8D68E
 
 LABEL_F8D654:
@@ -306396,7 +306396,7 @@ LABEL_F8D65F:
 	cp xwa, 0x1
 	jr nz, LABEL_F8D676
 	call LABEL_F8964C
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F8D676
 	lds wa, 0
 	jr LABEL_F8D68A
@@ -306406,7 +306406,7 @@ LABEL_F8D676:
 	or xwa, xwa
 	jr nz, LABEL_F8D685
 	call LABEL_F8964C
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_F8D68E
 
 LABEL_F8D685:
@@ -306441,10 +306441,10 @@ LABEL_F8D6C6:
 	cp xwa, 0xA
 	jrl nz, LABEL_F8D77F
 	call 0xF8943E
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl z, LABEL_F8D77F
 	call LABEL_F892EF
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl z, LABEL_F8D77F
 	ld xwa, 0x600026
 	ld xbc, 0x1C00001
@@ -306474,15 +306474,15 @@ LABEL_F8D6C6:
 	jr z, LABEL_F8D762
 	lds wa, 2
 	call LABEL_F892F5
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F8D762
 	lds wa, 2
 	call LABEL_F893D1
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_F8D75D
 	ldw wa, 0x8
 	call LABEL_F893D1
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F8D762
 
 LABEL_F8D75D:
@@ -306517,12 +306517,12 @@ RenderSaveFilterDisplay:
 	ld a, c
 	extz wa
 	call LABEL_F89353
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F8D7C3
 	.byte 0x87, 0x3f, 0x01	; CP (XSP), 001h
 	jr nz, LABEL_F8D7B9
 	call LABEL_F893AB
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F8D7B9
 	.byte 0xaf, 0x02, 0x20	; LD XWA, (XSP + 002h)
 	ld xbc, 0xEA0724
@@ -306591,7 +306591,7 @@ LABEL_F8D83F:
 	cp xbc, 0x1C00017
 	jr nz, LABEL_F8D875
 	call LABEL_F893AB
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F8D86E
 	call LABEL_F893CA
 	.byte 0xaf, 0x02, 0x20	; LD XWA, (XSP + 002h)
@@ -306607,10 +306607,10 @@ LABEL_F8D875:
 	.byte 0xaf, 0x02, 0x20	; LD XWA, (XSP + 002h)
 	extz wa
 	call LABEL_F89353
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F8D891
 	call LABEL_F893AB
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_F8D8BB
 	.byte 0xaf, 0x02, 0x20	; LD XWA, (XSP + 002h)
 	extz wa
@@ -306618,7 +306618,7 @@ LABEL_F8D875:
 
 LABEL_F8D891:
 	call LABEL_F893AB
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_F8D8BB
 	call LABEL_F893C3
 	.byte 0xaf, 0x02, 0x20	; LD XWA, (XSP + 002h)
@@ -306734,10 +306734,10 @@ LABEL_F8D9A3:
 	cp xwa, 0xA
 	jrl nz, LABEL_F8DA76
 	call LABEL_F8934D
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl z, LABEL_F8DA76
 	.byte 0x1e, 0xf1, 0xf0	; CALR SelectPasswordMode
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F8D9D1
 	.byte 0xea, 0xa8	; LD XDE, 0
 	.byte 0xc1, 0x0c, 0x8a, 0x25	; LD E, (8A0Ch)
@@ -306747,7 +306747,7 @@ LABEL_F8D9A3:
 
 LABEL_F8D9D1:
 	call 0xF8943E
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F8DA04
 	.byte 0xc2, 0xea, 0x40, 0x03, 0x3f, 0x00	; CP (0340EAh), 000h
 	jr z, LABEL_F8DA04
@@ -306917,11 +306917,11 @@ FmmSmfLoadTitleFunc:
 
 LABEL_F8DBA6:
 	.byte 0xd1, 0x00, 0x85, 0x20	; LD WA, (8500h)
-	.byte 0xd8, 0xd9	; CP WA, 1
+	cps wa, 1
 	jrl z, LABEL_F8DC70
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jrl z, LABEL_F8DC5A
-	.byte 0xd8, 0xdd	; CP WA, 5
+	cps wa, 5
 	jr z, LABEL_F8DC16
 	.byte 0xd1, 0x04, 0x85, 0x3f, 0x00, 0x00	; CPW (8504h), 0000h
 	jr ge, LABEL_F8DBD3
@@ -307099,7 +307099,7 @@ LABEL_F8DD97:
 	jr ge, LABEL_F8DDA8
 	.byte 0xf3, 0x07, 0xe0, 0xf0, 0x32	; LDA XDE, XWA + IX
 	ld c, (xde)
-	.byte 0xcb, 0xd8	; CP C, 0
+	cps c, 0
 	jr nz, LABEL_F8DD86
 
 LABEL_F8DDA8:
@@ -307320,7 +307320,7 @@ LABEL_F8DFB6:
 	cp ix, bc
 	jr nc, LABEL_F8DFC0
 	ld e, (xhl)
-	.byte 0xcd, 0xd8	; CP E, 0
+	cps e, 0
 	jr nz, LABEL_F8DF9C
 
 LABEL_F8DFC0:
@@ -307404,7 +307404,7 @@ LABEL_F8E056:
 
 LABEL_F8E05A:
 	.byte 0xc3, 0x07, 0xe0, 0xf4, 0x25	; LD E, (XWA + IY)
-	.byte 0xcd, 0xd8	; CP E, 0
+	cps e, 0
 	jr z, LABEL_F8E067
 	cp hl, bc
 	jr c, LABEL_F8E04E
@@ -307497,7 +307497,7 @@ LABEL_F8E17B:
 LABEL_F8E180:
 	cp xwa, 0x1C00017
 	jrl nz, LABEL_F8E75D
-	.byte 0xdc, 0xd8	; CP IX, 0
+	cps ix, 0
 	jrl le, LABEL_F8E75D
 	dec 1, ix
 	jr LABEL_F8E211
@@ -307538,7 +307538,7 @@ LABEL_F8E1AE:
 	exts xhl
 	.byte 0xdb, 0x0b, 0x0a, 0x00	; DIVS_HL 000ah
 	.byte 0xd7, 0xee, 0x88	; LD WA, QHL
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jrl z, LABEL_F8E75D
 	.byte 0xf1, 0xac, 0x81, 0x51	; LD (81ACh), BC
 	ld hl, bc
@@ -307567,7 +307567,7 @@ LABEL_F8E21A:
 	exts xbc
 	.byte 0xd9, 0x0b, 0x0a, 0x00	; DIVS_BC 000ah
 	.byte 0xd7, 0xe6, 0x88	; LD WA, QBC
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jrl z, LABEL_F8E75D
 	.byte 0xf1, 0xac, 0x81, 0x53	; LD (81ACh), HL
 	jrl LABEL_F8E761
@@ -307599,7 +307599,7 @@ LABEL_F8E23C:
 	.byte 0xbf, 0x08, 0x30	; LDA XWA, XSP + 008h
 	ldw bc, 0x10
 	.byte 0x1e, 0xb4, 0xfd	; CALR ValidateSmfFilename
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F8E2AC
 	.byte 0xd1, 0xac, 0x81, 0x20	; LD WA, (81ACh)
 	call LABEL_F89BF0
@@ -307670,7 +307670,7 @@ LABEL_F8E348:
 	call LABEL_F892D5
 	ld xwa, xhl
 	call LABEL_F8947D
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F8E3A6
 	.byte 0xc2, 0xea, 0x40, 0x03, 0x3f, 0x00	; CP (0340EAh), 000h
 	jr z, LABEL_F8E3A6
@@ -307803,7 +307803,7 @@ LABEL_F8E4D9:
 	.byte 0xd1, 0xac, 0x81, 0x20	; LD WA, (81ACh)
 	.byte 0xd1, 0x04, 0x85, 0xf0	; CP WA, (8504h)
 	jr lt, LABEL_F8E537
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr le, LABEL_F8E537
 	dec 1, wa
 	.byte 0xf1, 0xac, 0x81, 0x50	; LD (81ACh), WA
@@ -307839,7 +307839,7 @@ LABEL_F8E53C:
 	.byte 0xd1, 0xac, 0x81, 0x20	; LD WA, (81ACh)
 	.byte 0xd1, 0x04, 0x85, 0xf0	; CP WA, (8504h)
 	jr lt, LABEL_F8E5A2
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr le, LABEL_F8E5A2
 	dec 1, wa
 	.byte 0xf1, 0xac, 0x81, 0x50	; LD (81ACh), WA
@@ -307881,7 +307881,7 @@ LABEL_F8E5FA:
 	.byte 0xc1, 0x46, 0x89, 0x23	; LD C, (8946h)
 	ld a, c
 	inc 1, a
-	.byte 0xc9, 0xdb	; CP A, 3
+	cps a, 3
 	jr nc, LABEL_F8E620
 	inc 1, c
 	.byte 0xf1, 0x46, 0x89, 0x43	; LD (8946h), C
@@ -308079,7 +308079,7 @@ LABEL_F8E80A:
 	.byte 0xd1, 0xac, 0x81, 0x20	; LD WA, (81ACh)
 	.byte 0xd1, 0x04, 0x85, 0xf0	; CP WA, (8504h)
 	jr lt, LABEL_F8E830
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr le, LABEL_F8E830
 	ld xwa, xiz
 	ld xbc, 0xEA0790
@@ -308235,11 +308235,11 @@ FmmWallpaperLoadFunc:
 
 LABEL_F8E9AC:
 	.byte 0xd1, 0x00, 0x85, 0x20	; LD WA, (8500h)
-	.byte 0xd8, 0xd9	; CP WA, 1
+	cps wa, 1
 	jrl z, LABEL_F8EA52
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr z, LABEL_F8EA38
-	.byte 0xd8, 0xdd	; CP WA, 5
+	cps wa, 5
 	jr z, LABEL_F8E9F7
 	.byte 0xd1, 0x0a, 0x85, 0x3f, 0x00, 0x00	; CPW (850Ah), 0000h
 	jr ge, LABEL_F8E9D8
@@ -308319,7 +308319,7 @@ LABEL_F8EAA1:
 	.byte 0xf1, 0xb0, 0x81, 0x60	; LD (81B0h), XWA
 	call LABEL_F8B015
 	.byte 0xf1, 0xb4, 0x81, 0x53	; LD (81B4h), HL
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr ge, LABEL_F8EABA
 	.byte 0xf1, 0xb4, 0x81, 0x02, 0x00, 0x00	; LDW (81B4h), 0000h
 
@@ -308363,7 +308363,7 @@ LABEL_F8EAE9:
 LABEL_F8EB1B:
 	cp xwa, 0x1C00017
 	jrl nz, LABEL_F8EC05
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl le, LABEL_F8EC05
 	dec 1, hl
 	jr LABEL_F8EB62
@@ -308406,7 +308406,7 @@ LABEL_F8EB6B:
 	exts xde
 	.byte 0xda, 0x0b, 0x0a, 0x00	; DIVS_DE 000ah
 	.byte 0xd7, 0xea, 0x88	; LD WA, QDE
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr z, LABEL_F8EC05
 	.byte 0xf1, 0xb4, 0x81, 0x51	; LD (81B4h), BC
 	jr LABEL_F8EC09
@@ -308534,10 +308534,10 @@ LABEL_F8ECC3:
 LABEL_F8ECDB:
 	.byte 0xd7, 0xfa, 0xc2	; AND DE, QIZ
 	jrl z, LABEL_F8ED7A
-	.byte 0xcb, 0xdb	; CP C, 3
+	cps c, 3
 	jr nz, LABEL_F8ED11
 	call LABEL_F872E5
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl z, LABEL_F8ED7A
 	ld wa, iz
 	extz xwa
@@ -308557,13 +308557,13 @@ LABEL_F8ED04:
 
 LABEL_F8ED11:
 	ld a, c
-	.byte 0xcb, 0xda	; CP C, 2
+	cps c, 2
 	jr nz, LABEL_F8ED4A
 	call LABEL_F87218
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F8ED7A
 	call LABEL_F87366
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_F8ED7A
 	ld wa, iz
 	extz xwa
@@ -308583,7 +308583,7 @@ LABEL_F8ED3D:
 
 LABEL_F8ED4A:
 	call LABEL_F87218
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F8ED7A
 	ld wa, iz
 	extz xwa
@@ -308606,7 +308606,7 @@ LABEL_F8ED73:
 
 LABEL_F8ED7A:
 	inc 1, iz
-	.byte 0xde, 0xdc	; CP IZ, 4
+	cps iz, 4
 	jrl c, LABEL_F8ECC3
 	pop xiz
 	ret
@@ -308614,10 +308614,10 @@ LABEL_F8ED7A:
 LABEL_F8ED83:
 	pushw iz
 	.byte 0xc1, 0xf8, 0x89, 0x21	; LD A, (89F8h)
-	.byte 0xc9, 0xdc	; CP A, 4
+	cps a, 4
 	jr nc, LABEL_F8EDCE
 	.byte 0xd1, 0xf6, 0x89, 0x21	; LD BC, (89F6h)
-	.byte 0xd9, 0xd8	; CP BC, 0
+	cps bc, 0
 	jr z, LABEL_F8EDCE
 	lds iz, 1
 	extz wa
@@ -308647,7 +308647,7 @@ LABEL_F8EDBC:
 
 LABEL_F8EDC8:
 	inc 1, iz
-	.byte 0xde, 0xdc	; CP IZ, 4
+	cps iz, 4
 	jr c, LABEL_F8EDA0
 
 LABEL_F8EDCE:
@@ -308754,7 +308754,7 @@ WP_GetBankMemName:
 	.byte 0xf5, 0xf8, 0x31	; LDA XBC, XIZ+
 	.byte 0x9f, 0x08, 0x20	; LD WA, (XSP + 008h)
 	ld (xbc), a	; Store type marker
-	.byte 0xda, 0xdc	; CP DE, 4
+	cps de, 4
 	.byte 0x6f, 0x1f	; JR NC, WP_GetBankMemName_FromROM
 	; From RAM at 0x0948A0
 	.byte 0xf2, 0xa0, 0x48, 0x09, 0x31	; LDA XBC, 0948A0h
@@ -308972,7 +308972,7 @@ LABEL_F8F033:
 	.byte 0xe1, 0xc2, 0x81, 0x20	; LD XWA, (81C2h)
 	.byte 0xf2, 0xf2, 0x05, 0xea, 0x32	; LDA XDE, 0EA05F2h
 	.byte 0xc1, 0xf8, 0x89, 0x23	; LD C, (89F8h)
-	.byte 0xcb, 0xd8	; CP C, 0
+	cps c, 0
 	jr nz, LABEL_F8F055
 	.byte 0xc1, 0x0a, 0x8a, 0x3f, 0x00	; CP (8A0Ah), 000h
 	jr z, LABEL_F8F055
@@ -309005,7 +309005,7 @@ LABEL_F8F081:
 	.byte 0xe1, 0xc6, 0x81, 0x20	; LD XWA, (81C6h)
 	.byte 0xf2, 0x24, 0x06, 0xea, 0x32	; LDA XDE, 0EA0624h
 	.byte 0xc1, 0xf8, 0x89, 0x23	; LD C, (89F8h)
-	.byte 0xcb, 0xd9	; CP C, 1
+	cps c, 1
 	jr z, LABEL_F8F099
 	.byte 0xc1, 0xfa, 0x89, 0x3f, 0x00	; CP (89FAh), 000h
 	jr z, LABEL_F8F0A3
@@ -310119,7 +310119,7 @@ LABEL_F90E37:
 	.byte 0xc1, 0xf8, 0x89, 0x3f, 0x00	; CP (89F8h), 000h
 	jr nz, LABEL_F90E63
 	call LABEL_F873ED
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F90E63
 	.byte 0xf1, 0x0a, 0x8a, 0x00, 0x01	; LD (8A0Ah), 001h
 	jr LABEL_F90E68
@@ -310235,7 +310235,7 @@ LABEL_F90FAA:
 	cp xwa, 0x4
 	jrl nz, LABEL_F91072
 	calr LABEL_F8ED83
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jrl z, LABEL_F90E68
 	.byte 0xc1, 0xf8, 0x89, 0x3f, 0x01	; CP (89F8h), 001h
 	jr z, LABEL_F90FD3
@@ -310896,7 +310896,7 @@ CmpSingleLoadFileFunc:
 	.byte 0xf1, 0xfc, 0x81, 0x62	; LD (81FCh), XDE
 	call 0xF895EF
 	.byte 0xf1, 0x00, 0x82, 0x53	; LD (8200h), HL
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr ge, LABEL_F917A8
 	.byte 0xf1, 0x00, 0x82, 0x02, 0x00, 0x00	; LDW (8200h), 0000h
 
@@ -310949,7 +310949,7 @@ LABEL_F91800:
 LABEL_F91818:
 	cp xde, 0x1
 	jr nz, LABEL_F9182A
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr le, LABEL_F9182A
 	dec 1, wa
 
@@ -310966,10 +310966,10 @@ LABEL_F9182A:
 	.byte 0xf1, 0xf8, 0x89, 0x00, 0x04	; LD (89F8h), 004h
 	lds wa, 3
 	call LABEL_F893D1
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F91866
 	call LABEL_F872E5
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F91866
 	.byte 0xf1, 0xf8, 0x89, 0x00, 0x02	; LD (89F8h), 002h
 	.byte 0xd1, 0x00, 0x82, 0x20	; LD WA, (8200h)
@@ -311029,11 +311029,11 @@ FmmCmpSingleLoadFunc:
 
 LABEL_F91903:
 	.byte 0xd1, 0x00, 0x85, 0x20	; LD WA, (8500h)
-	.byte 0xd8, 0xd9	; CP WA, 1
+	cps wa, 1
 	jrl z, LABEL_F919B5
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jrl z, LABEL_F9199C
-	.byte 0xd8, 0xdd	; CP WA, 5
+	cps wa, 5
 	jr z, LABEL_F9197B
 	.byte 0xd1, 0x02, 0x85, 0x3f, 0x00, 0x00	; CPW (8502h), 0000h
 	jr ge, LABEL_F91930
@@ -311047,10 +311047,10 @@ LABEL_F91930:
 	.byte 0xf1, 0xf8, 0x89, 0x00, 0x04	; LD (89F8h), 004h
 	lds wa, 3
 	call LABEL_F893D1
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F9194F
 	call LABEL_F872E5
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F9194C
 	.byte 0xf1, 0xf8, 0x89, 0x00, 0x02	; LD (89F8h), 002h
 
@@ -311130,7 +311130,7 @@ LABEL_F919E3:
 	extz xiz
 	add xiz, xix
 	.byte 0xf5, 0xf8, 0x47	; LD (XIZ+), L
-	.byte 0xcd, 0xd8	; CP E, 0
+	cps e, 0
 	jr z, LABEL_F91A39
 	.byte 0x9f, 0x04, 0x3f, 0x09, 0x00	; CPW (XSP + 004h), 0009h
 	jr nz, LABEL_F91A27
@@ -311248,7 +311248,7 @@ SeqName_HandleNavigation:
 SeqName_CheckPrevKey:
 	cp xbc, 0x1C00017
 	.byte 0x7e, 0x20, 0x01	; JRL NZ, SeqName_GetCurrentIndex
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	.byte 0x76, 0x1b, 0x01	; JRL Z, SeqName_GetCurrentIndex
 	dec 1, wa
 
@@ -311263,7 +311263,7 @@ SeqName_HandlePlayAction:
 	.byte 0xc1, 0xfe, 0x84, 0x3f, 0x00	; CP (84FEh), 000h
 	.byte 0x7e, 0xa5, 0x00	; JRL NZ, SeqName_HandleAction32
 	call LABEL_F941E5
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	.byte 0x66, 0x1a	; JR Z, SeqName_CheckDiskAvail
 	.byte 0xf1, 0x0c, 0x8a, 0x30	; LDA XWA, 8A0Ch
 	.byte 0xb8, 0x01, 0xcf	; BIT 7, (XWA + 001h)
@@ -311276,7 +311276,7 @@ SeqName_HandlePlayAction:
 
 SeqName_CheckDiskAvail:
 	call 0xF8943E
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	.byte 0x66, 0x2b	; JR Z, SeqName_LoadAndPlay
 	.byte 0xc2, 0xea, 0x40, 0x03, 0x3f, 0x00	; CP (0340EAh), 000h
 	.byte 0x66, 0x23	; JR Z, SeqName_LoadAndPlay
@@ -311503,7 +311503,7 @@ IntMed_CheckSlotLoop:
 	.byte 0xc7, 0xf8, 0x89	; LD A, IZL
 	extz wa
 	call LABEL_F2065A
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	.byte 0x66, 0x14	; JR Z, IntMed_MarkSlotEmpty
 	.byte 0xf1, 0x90, 0x88, 0x30	; LDA XWA, 8890h
 	ld bc, iz
@@ -311530,7 +311530,7 @@ IntMed_NextSlot:
 
 IntMed_CheckPlaying:
 	call LABEL_F2076D
-	.byte 0xcf, 0xd9	; CP L, 1
+	cps l, 1
 	.byte 0x7e, 0xc1, 0x00	; JRL NZ, IntMed_HandleError
 	.byte 0xf1, 0xfe, 0x84, 0x00, 0x01	; LD (84FEh), 001h
 	.byte 0xc1, 0x9c, 0x88, 0x21	; LD A, (889Ch)
@@ -311612,7 +311612,7 @@ IntMed_ClearPlayFlag:
 IntMed_HandleError:
 	call LABEL_F2076D
 	.byte 0xf1, 0xfe, 0x84, 0x00, 0x00	; LD (84FEh), 000h
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	.byte 0x76, 0x06, 0x03	; JRL Z, IntMed_Exit
 	.byte 0xf1, 0x42, 0x7f, 0x00, 0x0e	; LD (7F42h), 00eh
 	ldw wa, 0xEE
@@ -311816,7 +311816,7 @@ IntMed_RemoveFromOrder:
 	lds iz, 0
 	.byte 0xc1, 0x9a, 0x88, 0x21	; LD A, (889Ah)
 	extz wa
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	.byte 0x73, 0x05, 0x01	; JRL ULE, IntMed_Exit
 
 IntMed_ReorderLoop:
@@ -312071,7 +312071,7 @@ DiskMed_CheckSlotLoop:
 	ld wa, iz
 	extz xwa
 	add xwa, xbc
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	.byte 0x66, 0x05	; JR Z, DiskMed_MarkUnused
 	.byte 0xb0, 0x00, 0xfe	; LD (XWA), 0feh
 	.byte 0x68, 0x03	; JR T, DiskMed_NextSlotCheck
@@ -312221,12 +312221,12 @@ DiskSel_CheckFileLoop:
 	ld wa, iz
 	lds bc, 2
 	call LABEL_F89408
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	.byte 0x6e, 0x0d	; JR NZ, DiskSel_FileAvailable
 	ld wa, iz
 	ldw bc, 0x8
 	call LABEL_F89408
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	.byte 0x66, 0x11	; JR Z, DiskSel_MarkUnavail
 
 DiskSel_FileAvailable:
@@ -312248,14 +312248,14 @@ DiskSel_NextFile:
 
 DiskSel_CheckPlaying:
 	call LABEL_F2076D
-	.byte 0xcf, 0xd9	; CP L, 1
+	cps l, 1
 	.byte 0x7e, 0xfb, 0x02	; JRL NZ, DiskSel_HandleError
 	.byte 0xf1, 0xfe, 0x84, 0x00, 0x01	; LD (84FEh), 001h
 	.byte 0xaf, 0x0e, 0x20	; LD XWA, (XSP + 00eh)
 	.byte 0xaf, 0x0a, 0x21	; LD XBC, (XSP + 00ah)
 	.byte 0xaf, 0x06, 0x22	; LD XDE, (XSP + 006h)
 	.byte 0x1e, 0x9d, 0xfd	; CALR DiskMed_PlayNextHelper
-	.byte 0xcf, 0xd9	; CP L, 1
+	cps l, 1
 	.byte 0x6e, 0x26	; JR NZ, DiskSel_CheckFinished
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
@@ -312269,7 +312269,7 @@ DiskSel_CheckPlaying:
 	.byte 0x78, 0xad, 0x02	; JRL T, DiskSel_CallPauseMode
 
 DiskSel_CheckFinished:
-	.byte 0xcf, 0xda	; CP L, 2
+	cps l, 2
 	.byte 0x7e, 0xe1, 0x06	; JRL NZ, DiskSel_Exit
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
@@ -312371,7 +312371,7 @@ DiskSel_PlayNext:
 	ld xbc, 0x1C00017
 	ld xde, 0xD
 	.byte 0x1e, 0x2d, 0xfc	; CALR DiskMed_PlayNextHelper
-	.byte 0xcf, 0xd9	; CP L, 1
+	cps l, 1
 	.byte 0x6e, 0x19	; JR NZ, DiskSel_NextSongLoop
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009A
@@ -312483,7 +312483,7 @@ DiskSel_RepeatPlayNext:
 	ld xbc, 0x1C00017
 	ld xde, 0xD
 	.byte 0x1e, 0xdd, 0xfa	; CALR DiskMed_PlayNextHelper
-	.byte 0xcf, 0xd9	; CP L, 1
+	cps l, 1
 	.byte 0x6e, 0x1a	; JR NZ, DiskSel_RepeatNext
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009A
@@ -312504,7 +312504,7 @@ DiskSel_RepeatNext:
 DiskSel_HandleError:
 	call LABEL_F2076D
 	.byte 0xf1, 0xfe, 0x84, 0x00, 0x00	; LD (84FEh), 000h
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	.byte 0x6e, 0x23	; JR NZ, DiskSel_ShowError
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
@@ -312543,7 +312543,7 @@ DiskSel_StoreWindowPtr:
 	.byte 0xf1, 0xda, 0x83, 0x60	; LD (83DAh), XWA
 	call 0xF895EF
 	.byte 0xf1, 0xde, 0x83, 0x53	; LD (83DEh), HL
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	.byte 0x61, 0x10	; JR LT, DiskSel_DefaultIndex
 	exts xhl
 	.byte 0xe1, 0xda, 0x83, 0x20	; LD XWA, (83DAh)
@@ -312573,11 +312573,11 @@ DiskSel_DisplayLoop:
 	lds bc, 2
 	call LABEL_F89408
 	ld wa, iz
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	.byte 0x6e, 0x0d	; JR NZ, DiskSel_GetFileName
 	ldw bc, 0x8
 	call LABEL_F89408
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	.byte 0x66, 0x0a	; JR Z, DiskSel_EmptyFileName
 	ld wa, iz
 
@@ -312636,7 +312636,7 @@ DiskSel_HandleNavigation:
 DiskSel_CheckPrevKey:
 	cp xwa, 0x1C00017
 	.byte 0x7e, 0x71, 0x02	; JRL NZ, DiskSel_GetCurrentIndex
-	.byte 0xda, 0xd8	; CP DE, 0
+	cps de, 0
 	.byte 0x72, 0x6c, 0x02	; JRL LE, DiskSel_GetCurrentIndex
 	dec 1, de
 	.byte 0x68, 0x42	; JR T, DiskSel_SaveIndex
@@ -312859,7 +312859,7 @@ DiskSel_PlayNextSong:
 	.byte 0xaf, 0x0a, 0x21	; LD XBC, (XSP + 00ah)
 	.byte 0xaf, 0x06, 0x22	; LD XDE, (XSP + 006h)
 	.byte 0x1e, 0x2d, 0xf7	; CALR DiskMed_PlayNextHelper
-	.byte 0xcf, 0xd9	; CP L, 1
+	cps l, 1
 	.byte 0x6e, 0x19	; JR NZ, DiskSel_PlayNextLoop
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009A
@@ -316352,7 +316352,7 @@ SetupExitFunc:
 	jr nz, LABEL_F951B6
 	lds wa, 6
 	call LABEL_FC56A1
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F951B6
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
@@ -316930,7 +316930,7 @@ LABEL_F95777:
 	.byte 0xb8, 0x26, 0x33	; LDA XHL, XWA + 026h
 	.byte 0x98, 0x28, 0x22	; LD DE, (XWA + 028h)
 	.byte 0xf3, 0xfd, 0x92, 0x00, 0x31	; LDA XBC, XSP + 0092h
-	.byte 0xda, 0xd9	; CP DE, 1
+	cps de, 1
 	jrl nz, LABEL_F95844
 	.byte 0x93, 0x3f, 0x01, 0x00	; CPW (XHL), 0001h
 	jr nz, LABEL_F95844
@@ -317241,7 +317241,7 @@ LABEL_F95AEB:
 	ld xbc, 0x1E00053
 	.byte 0xaf, 0x08, 0x22	; LD XDE, (XSP + 008h)
 	call 0xFA9660
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F95B19
 	ld xde, xiz
 	.byte 0xaf, 0x04, 0x20	; LD XWA, (XSP + 004h)
@@ -317437,7 +317437,7 @@ LABEL_F95CC1:
 	ld xbc, 0x1E00053
 	.byte 0xaf, 0x0a, 0x22	; LD XDE, (XSP + 00ah)
 	call 0xFA9660
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl z, LABEL_F95D6A
 	.byte 0xaf, 0x06, 0x21	; LD XBC, (XSP + 006h)
 	.byte 0xa9, 0x28, 0x20	; LD XWA, (XBC + 028h)
@@ -317622,7 +317622,7 @@ LABEL_F95EB4:
 	.byte 0xbf, 0x10, 0x30	; LDA XWA, XSP + 010h
 	.byte 0xbf, 0x0c, 0x31	; LDA XBC, XSP + 00ch
 	.byte 0xaf, 0x18, 0x22	; LD XDE, (XSP + 018h)
-	.byte 0xda, 0x33, 0x00	; BIT 000h, DE
+	bit 0, de
 	jr z, LABEL_F95EE4
 	.byte 0x9f, 0x04, 0x22	; LD DE, (XSP + 004h)
 	extz xde
@@ -317741,7 +317741,7 @@ LABEL_F95FBE:
 	ld xbc, 0x1E00053
 	.byte 0xaf, 0x08, 0x22	; LD XDE, (XSP + 008h)
 	call 0xFA9660
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	.byte 0x66, 0x3b	; JR Z, IvFocus_CallInherited
 	ld xwa, xiz
 	ld xbc, 0x1E0006C
@@ -317749,10 +317749,10 @@ LABEL_F95FBE:
 	call 0xFA9660
 	.byte 0xaf, 0x04, 0x20	; LD XWA, (XSP + 004h)
 	.byte 0x98, 0x28, 0x22	; LD DE, (XWA + 028h)
-	.byte 0xda, 0xd8	; CP DE, 0
+	cps de, 0
 	.byte 0x61, 0x20	; JR LT, IvFocus_ReturnZero
 	exts xde
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	.byte 0x66, 0x0c	; JR Z, IvFocus_SendListEmpty
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00017
@@ -317938,11 +317938,11 @@ DrawProgressRectH:
 	push xiz
 	.byte 0xbf, 0x20, 0x51	; LD (XSP + 020h), BC
 	.byte 0x9f, 0x26, 0x21	; LD BC, (XSP + 026h)
-	.byte 0xd9, 0xdb	; CP BC, 3
+	cps bc, 3
 	.byte 0x66, 0x6a	; JR Z, DrawProgH_Mode3Setup
-	.byte 0xd9, 0xda	; CP BC, 2
+	cps bc, 2
 	.byte 0x66, 0x5f	; JR Z, DrawProgH_Mode2Setup
-	.byte 0xd9, 0xd9	; CP BC, 1
+	cps bc, 1
 	.byte 0xd9, 0x7e	; SCC NZ, BC
 	.byte 0xbf, 0x08, 0x51	; LD (XSP + 008h), BC
 	.byte 0xbf, 0x0a, 0x02, 0x00, 0x00	; LDW (XSP + 00ah:8), 0000h
@@ -318031,7 +318031,7 @@ DrawProgH_SetupCenter:
 	sub bc, ix
 	.byte 0xbb, 0x02, 0x51	; LD (XHL + 002h), BC
 	.byte 0xbf, 0x0e, 0x02, 0x00, 0x00	; LDW (XSP + 00eh:8), 0000h
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	.byte 0x63, 0x20	; JR ULE, DrawProgH_AfterLoop1
 
 DrawProgH_Loop1:
@@ -318140,11 +318140,11 @@ DrawProgressRectV:
 	push xiz
 	.byte 0xbf, 0x22, 0x51	; LD (XSP + 022h), BC
 	.byte 0x9f, 0x28, 0x21	; LD BC, (XSP + 028h)
-	.byte 0xd9, 0xdb	; CP BC, 3
+	cps bc, 3
 	.byte 0x66, 0x72	; JR Z, DrawProgV_Mode3Setup
-	.byte 0xd9, 0xda	; CP BC, 2
+	cps bc, 2
 	.byte 0x66, 0x67	; JR Z, DrawProgV_Mode2Setup
-	.byte 0xd9, 0xd9	; CP BC, 1
+	cps bc, 1
 	.byte 0xd9, 0x7e	; SCC NZ, BC
 	.byte 0xbf, 0x06, 0x51	; LD (XSP + 006h), BC
 	.byte 0xbf, 0x08, 0x02, 0x00, 0x00	; LDW (XSP + 008h:8), 0000h
@@ -319080,17 +319080,17 @@ FDC_CheckDriveCount:
 
 FDC_ValidateCommand:
 	.byte 0xd1, 0x40, 0x8a, 0x20	; LD WA, (8A40h)
-	.byte 0xd8, 0xdc	; CP WA, 4
+	cps wa, 4
 	.byte 0x66, 0x21	; JR Z, FDC_ValidateTrack
-	.byte 0xd8, 0xdb	; CP WA, 3
+	cps wa, 3
 	.byte 0x66, 0x1d	; JR Z, FDC_ValidateTrack
-	.byte 0xd8, 0xda	; CP WA, 2
+	cps wa, 2
 	.byte 0x66, 0x19	; JR Z, FDC_ValidateTrack
-	.byte 0xd8, 0xdd	; CP WA, 5
+	cps wa, 5
 	.byte 0x66, 0x0d	; JR Z, FDC_Command5Handler
 	cp wa, 0xB
 	.byte 0x66, 0x04	; JR Z, FDC_NoOpReturn
-	.byte 0xd8, 0xd9	; CP WA, 1
+	cps wa, 1
 	.byte 0x6e, 0x0b	; JR NZ, FDC_ValidateTrack
 
 FDC_NoOpReturn:
@@ -319135,15 +319135,15 @@ FDC_CheckSectorNum:
 
 FDC_CheckFormatType:
 	.byte 0xc1, 0x6c, 0x8a, 0x21	; LD A, (8A6Ch)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	.byte 0x66, 0x46	; JR Z, FDC_FormatDefault
-	.byte 0xc9, 0xdd	; CP A, 5
+	cps a, 5
 	.byte 0x66, 0x42	; JR Z, FDC_FormatDefault
-	.byte 0xc9, 0xdc	; CP A, 4
+	cps a, 4
 	.byte 0x66, 0x22	; JR Z, FDC_FormatType4
-	.byte 0xc9, 0xdb	; CP A, 3
+	cps a, 3
 	.byte 0x66, 0x11	; JR Z, FDC_FormatType3
-	.byte 0xc9, 0xda	; CP A, 2
+	cps a, 2
 	.byte 0x6e, 0x43	; JR NZ, FDC_ErrorInvalid
 	.byte 0xc1, 0x2d, 0x8a, 0x3f, 0x08	; CP (8A2Dh), 008h
 	.byte 0x63, 0x42	; JR ULE, FDC_ValidExecute
@@ -319188,15 +319188,15 @@ FDC_SetupFormatParams:
 	.byte 0xd1, 0x46, 0x8a, 0x20	; LD WA, (8A46h)
 	.byte 0xf1, 0x6e, 0x8a, 0x41	; LD (8A6Eh), A
 	and a, 0xF
-	.byte 0xc9, 0xdb	; CP A, 3
+	cps a, 3
 	.byte 0x76, 0x81, 0x00	; JRL Z, FDC_Format1440K
-	.byte 0xc9, 0xda	; CP A, 2
+	cps a, 2
 	.byte 0x66, 0x45	; JR Z, FDC_FormatDD
-	.byte 0xc9, 0xdd	; CP A, 5
+	cps a, 5
 	.byte 0x66, 0x09	; JR Z, FDC_FormatHD
-	.byte 0xc9, 0xdc	; CP A, 4
+	cps a, 4
 	.byte 0x66, 0x05	; JR Z, FDC_FormatHD
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	.byte 0x7e, 0xa8, 0x00	; JRL NZ, FDC_FormatUnknown
 
 FDC_FormatHD:
@@ -319289,7 +319289,7 @@ FDC_NOP_Delay:
 	ld (xsp), a
 	ld a, (xsp)
 	.byte 0x87, 0x69	; DEC 1, (XSP)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	.byte 0x66, 0x12	; JR Z, FDC_NOP_Delay_Exit
 
 FDC_NOP_Delay_Loop:
@@ -319305,7 +319305,7 @@ FDC_NOP_Delay_Loop:
 	nop
 	ld a, (xsp)
 	.byte 0x87, 0x69	; DEC 1, (XSP)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	.byte 0x6e, 0xee	; JR NZ, FDC_NOP_Delay_Loop
 
 FDC_NOP_Delay_Exit:
@@ -319393,7 +319393,7 @@ FDC_Wait_Ready_Timeout:
 
 FDC_WaitReady_StatusLoop:
 	.byte 0x1e, 0x36, 0xfa	; CALR FDC_Read_Status
-	.byte 0xcf, 0x30, 0x04	; RES 4, L
+	res 4, l
 	ld a, l
 	cp a, 0x80
 	.byte 0x66, 0x08	; JR Z, FDC_WaitReady_TimeoutCheck
@@ -319503,7 +319503,7 @@ FDC_Exception_Status_Decoder:
 	jr z, LABEL_F97267
 	cp a, 0xC0
 	jr z, LABEL_F9725F
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_F972C5
 	ldb l, 0x0
 	ret
@@ -319518,50 +319518,50 @@ LABEL_F97267:
 	ret
 
 LABEL_F9726A:
-	.byte 0xcb, 0x33, 0x03	; BIT 003h, C
+	bit 3, c
 	jr z, LABEL_F97272
 	ldb l, 0x31
 	ret
 
 LABEL_F97272:
-	.byte 0xcb, 0x33, 0x04	; BIT 004h, C
+	bit 4, c
 	jr z, LABEL_F9727A
 	ldb l, 0x32
 	ret
 
 LABEL_F9727A:
 	.byte 0x8a, 0x02, 0x23	; LD C, (XDE + 002h)
-	.byte 0xcb, 0x33, 0x00	; BIT 000h, C
+	bit 0, c
 	jr z, LABEL_F97288
 	ldw wa, 0x35
 	.byte 0x78, 0x25, 0x03	; JRL T, FDC_Set_Status
 
 LABEL_F97288:
-	.byte 0xcb, 0x33, 0x01	; BIT 001h, C
+	bit 1, c
 	jr z, LABEL_F97293
 	ldw wa, 0x2F
 	.byte 0x78, 0x1a, 0x03	; JRL T, FDC_Set_Status
 
 LABEL_F97293:
-	.byte 0xcb, 0x33, 0x02	; BIT 002h, C
+	bit 2, c
 	jr z, LABEL_F9729E
 	ldw wa, 0x33
 	.byte 0x78, 0x0f, 0x03	; JRL T, FDC_Set_Status
 
 LABEL_F9729E:
-	.byte 0xcb, 0x33, 0x04	; BIT 004h, C
+	bit 4, c
 	jr z, LABEL_F972A9
 	ldw wa, 0x34
 	.byte 0x78, 0x04, 0x03	; JRL T, FDC_Set_Status
 
 LABEL_F972A9:
-	.byte 0xcb, 0x33, 0x05	; BIT 005h, C
+	bit 5, c
 	jr z, LABEL_F972B4
 	ldw wa, 0x36
 	.byte 0x78, 0xf9, 0x02	; JRL T, FDC_Set_Status
 
 LABEL_F972B4:
-	.byte 0xcb, 0x33, 0x07	; BIT 007h, C
+	bit 7, c
 	jr z, LABEL_F972BF
 	ldw wa, 0x37
 	.byte 0x78, 0xee, 0x02	; JRL T, FDC_Set_Status
@@ -320005,7 +320005,7 @@ LABEL_F97CEF:
 	.byte 0xc1, 0x24, 0x8a, 0x19, 0x26, 0x8a	; LD_8_8 08A26h, 08A24h
 	.byte 0xf1, 0x24, 0x8a, 0x00, 0x00	; LD (8A24h), 000h
 	calr FDC_COMMAND_DISPATCHER
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	.byte 0x6e, 0x74	; JR NZ, LABEL_F97DE1 (original encoding)
 	.byte 0xd1, 0x40, 0x8a, 0x20	; LD WA, (8A40h)
 	cp wa, 0xB
@@ -320175,15 +320175,15 @@ LABEL_F97E59:
 	cp wa, 0x64
 	jr gt, LABEL_F97EBC
 	.byte 0x1e, 0xad, 0xec	; CALR FDC_Read_Status
-	.byte 0xcf, 0x33, 0x07	; BIT 7, L
+	bit 7, l
 	jr z, LABEL_F97E59
 
 LABEL_F97E6B:
 	.byte 0x1e, 0xa5, 0xec	; CALR FDC_Read_Status
-	.byte 0xcf, 0x33, 0x07	; BIT 7, L
+	bit 7, l
 	jr z, LABEL_F97E6B
 	.byte 0x1e, 0x9d, 0xec	; CALR FDC_Read_Status
-	.byte 0xcf, 0x33, 0x06	; BIT 6, L
+	bit 6, l
 	jr nz, LABEL_F97E93
 	ldb l, 0x0
 	cp l, 0x80
@@ -320210,10 +320210,10 @@ LABEL_F97E99:
 
 LABEL_F97EA2:
 	.byte 0x1e, 0x6e, 0xec	; CALR FDC_Read_Status
-	.byte 0xcf, 0x33, 0x07	; BIT 7, L
+	bit 7, l
 	jr z, LABEL_F97EA2
 	.byte 0x1e, 0x66, 0xec	; CALR FDC_Read_Status
-	.byte 0xcf, 0x33, 0x06	; BIT 6, L
+	bit 6, l
 	jr nz, LABEL_F97E99
 	.byte 0x1e, 0x88, 0xf3	; CALR FDC_Exception_Status_Decoder
 	.byte 0xc1, 0x61, 0x8a, 0x3f, 0x80	; CP (8A61h), 80h
@@ -320251,7 +320251,7 @@ Reset_Floppy_Disk_Controller:	; F97EC9
 	.byte 0xf1, 0x24, 0x8b, 0x02, 0x00, 0x00	; LDW (8B24h), 0000h
 	.byte 0xf1, 0x26, 0x8b, 0x02, 0x00, 0x00	; LDW (8B26h), 0000h
 	.byte 0xf1, 0x28, 0x8b, 0x02, 0x00, 0x00	; LDW (8B28h), 0000h
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_F97F03
 	.byte 0xf1, 0x2a, 0x8b, 0x02, 0xe0, 0x00	; LDW (8B2Ah), 00e0h
 	jr LABEL_F97F09
@@ -320392,13 +320392,13 @@ LABEL_F980A0:
 	lds wa, 0
 	call LABEL_FAA761
 	call LABEL_EF122A
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F980A0
 
 	call LABEL_FA9F45
 	call 0xFA9585
 	call LABEL_F9ADF0
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F980EA
 
 	calr LABEL_F9883C
@@ -320444,7 +320444,7 @@ LABEL_F980EE:
 	.byte 0xc1, 0x7e, 0xc0, 0x23	; LD C, (0C07Eh)
 	ld a, c
 	and a, 0x3
-	.byte 0xc9, 0xdb	; CP A, 3
+	cps a, 3
 	jr nz, LABEL_F98150
 	.byte 0xe8, 0xab	; LD XWA, 3
 	lds bc, 5
@@ -320454,7 +320454,7 @@ LABEL_F980EE:
 
 LABEL_F98150:
 	and e, c
-	.byte 0xcd, 0x33, 0x01	; BIT 001h, E
+	bit 1, e
 	jr z, LABEL_F9815F
 	.byte 0xe8, 0xab	; LD XWA, 3
 	lds bc, 1
@@ -320462,7 +320462,7 @@ LABEL_F98150:
 	jr LABEL_F9816B
 
 LABEL_F9815F:
-	.byte 0xcd, 0x33, 0x00	; BIT 000h, E
+	bit 0, e
 	jr z, LABEL_F9816F
 	.byte 0xe8, 0xab	; LD XWA, 3
 	ldw bc, 0xFFFF
@@ -320476,7 +320476,7 @@ LABEL_F9816F:
 	.byte 0xc1, 0x7e, 0xc0, 0x21	; LD A, (0C07Eh)
 	and a, c
 	ld xde, xiz
-	.byte 0xc9, 0x33, 0x01	; BIT 001h, A
+	bit 1, a
 	jr z, LABEL_F981DC
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00008
@@ -320505,7 +320505,7 @@ LABEL_F9816F:
 	jr LABEL_F98207
 
 LABEL_F981DC:
-	.byte 0xcb, 0x33, 0x01	; BIT 001h, C
+	bit 1, c
 	jr z, LABEL_F98207
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00009
@@ -320524,19 +320524,19 @@ LABEL_F98207:
 	.byte 0xc1, 0x7e, 0xc0, 0x21	; LD A, (0C07Eh)
 	and a, c
 	ld xde, xiz
-	.byte 0xda, 0x31, 0x07	; SET 007h, DE
-	.byte 0xc9, 0x33, 0x00	; BIT 000h, A
+	set 7, de
+	bit 0, a
 	jr z, LABEL_F9827D
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00008
 	call 0xFA9D58
 	ld xde, xiz
-	.byte 0xda, 0x31, 0x07	; SET 007h, DE
+	set 7, de
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00007
 	call 0xFA98D1
 	ld xde, xiz
-	.byte 0xda, 0x31, 0x07	; SET 007h, DE
+	set 7, de
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00007
 	call 0xFA9D58
@@ -320556,7 +320556,7 @@ LABEL_F98207:
 	jr LABEL_F982A8
 
 LABEL_F9827D:
-	.byte 0xcb, 0x33, 0x00	; BIT 000h, C
+	bit 0, c
 	jr z, LABEL_F982A8
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00009
@@ -320641,12 +320641,12 @@ LABEL_F9834A:
 	jrl LABEL_F98691
 
 LABEL_F9838B:
-	.byte 0xcd, 0xdb	; CP E, 3
+	cps e, 3
 	jrl nz, LABEL_F9842B
 	.byte 0xc1, 0x7f, 0xc0, 0x23	; LD C, (0C07Fh)
 	ld a, c
 	.byte 0xc1, 0x7e, 0xc0, 0xc1	; AND A, (0C07Eh)
-	.byte 0xc9, 0x33, 0x00	; BIT 000h, A
+	bit 0, a
 	jr z, LABEL_F983B9
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009B
@@ -320657,7 +320657,7 @@ LABEL_F9838B:
 	jrl LABEL_F98695
 
 LABEL_F983B9:
-	.byte 0xcb, 0x33, 0x00	; BIT 000h, C
+	bit 0, c
 	jr nz, LABEL_F98424
 	jrl LABEL_F98695
 
@@ -320667,11 +320667,11 @@ LABEL_F983C1:
 	.byte 0xc1, 0x7f, 0xc0, 0x23	; LD C, (0C07Fh)
 	ld a, c
 	.byte 0xc1, 0x7e, 0xc0, 0xc1	; AND A, (0C07Eh)
-	.byte 0xcd, 0xd9	; CP E, 1
+	cps e, 1
 	jrl z, LABEL_F985CB
 	cp e, 0x15
 	jrl z, LABEL_F9856E
-	.byte 0xcd, 0xdc	; CP E, 4
+	cps e, 4
 	jrl z, LABEL_F98513
 	cp e, 0xE
 	jrl z, LABEL_F98480
@@ -320679,13 +320679,13 @@ LABEL_F983C1:
 	jr z, LABEL_F98457
 	cp e, 0xF
 	jr z, LABEL_F9842E
-	.byte 0xcd, 0xdd	; CP E, 5
+	cps e, 5
 	jrl nz, LABEL_F98695
 	.byte 0xc1, 0x7f, 0xc0, 0x21	; LD A, (0C07Fh)
 	.byte 0xc1, 0x7e, 0xc0, 0xc1	; AND A, (0C07Eh)
-	.byte 0xc9, 0x33, 0x00	; BIT 000h, A
+	bit 0, a
 	jrl z, LABEL_F98695
-	.byte 0xc9, 0x33, 0x01	; BIT 001h, A
+	bit 1, a
 	jrl z, LABEL_F98695
 	.byte 0xe2, 0x90, 0x74, 0x02, 0x20	; LD XWA, (027490h)
 	cp xwa, 0x1
@@ -320702,7 +320702,7 @@ LABEL_F9842B:
 	jrl LABEL_F98695
 
 LABEL_F9842E:
-	.byte 0xc9, 0x33, 0x07	; BIT 007h, A
+	bit 7, a
 	jr z, LABEL_F98442
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E000A5
@@ -320710,7 +320710,7 @@ LABEL_F9842E:
 	jrl LABEL_F98691
 
 LABEL_F98442:
-	.byte 0xcb, 0x33, 0x07	; BIT 007h, C
+	bit 7, c
 	jrl z, LABEL_F98695
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E000A6
@@ -320718,7 +320718,7 @@ LABEL_F98442:
 	jrl LABEL_F98691
 
 LABEL_F98457:
-	.byte 0xc9, 0x33, 0x00	; BIT 000h, A
+	bit 0, a
 	jr z, LABEL_F9846B
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E000A5
@@ -320726,7 +320726,7 @@ LABEL_F98457:
 	jrl LABEL_F98691
 
 LABEL_F9846B:
-	.byte 0xcb, 0x33, 0x00	; BIT 000h, C
+	bit 0, c
 	jrl z, LABEL_F98695
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E000A6
@@ -320734,7 +320734,7 @@ LABEL_F9846B:
 	jrl LABEL_F98691
 
 LABEL_F98480:
-	.byte 0xc9, 0x33, 0x03	; BIT 003h, A
+	bit 3, a
 	jr z, LABEL_F98493
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E000A5
@@ -320742,7 +320742,7 @@ LABEL_F98480:
 	jr LABEL_F984A4
 
 LABEL_F98493:
-	.byte 0xcb, 0x33, 0x03	; BIT 003h, C
+	bit 3, c
 	jr z, LABEL_F984A8
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E000A6
@@ -320755,7 +320755,7 @@ LABEL_F984A8:
 	.byte 0xc1, 0x7f, 0xc0, 0x23	; LD C, (0C07Fh)
 	ld a, c
 	.byte 0xc1, 0x7e, 0xc0, 0xc1	; AND A, (0C07Eh)
-	.byte 0xc9, 0x33, 0x02	; BIT 002h, A
+	bit 2, a
 	jr z, LABEL_F984C5
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E000A5
@@ -320763,7 +320763,7 @@ LABEL_F984A8:
 	jr LABEL_F984D6
 
 LABEL_F984C5:
-	.byte 0xcb, 0x33, 0x02	; BIT 002h, C
+	bit 2, c
 	jr z, LABEL_F984DA
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E000A6
@@ -320776,7 +320776,7 @@ LABEL_F984DA:
 	.byte 0xc1, 0x7f, 0xc0, 0x23	; LD C, (0C07Fh)
 	ld a, c
 	.byte 0xc1, 0x7e, 0xc0, 0xc1	; AND A, (0C07Eh)
-	.byte 0xc9, 0x33, 0x04	; BIT 004h, A
+	bit 4, a
 	jr z, LABEL_F984FB
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E000A5
@@ -320784,7 +320784,7 @@ LABEL_F984DA:
 	jrl LABEL_F98691
 
 LABEL_F984FB:
-	.byte 0xcb, 0x33, 0x04	; BIT 004h, C
+	bit 4, c
 	jrl z, LABEL_F98695
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E000A6
@@ -320792,7 +320792,7 @@ LABEL_F984FB:
 	jrl LABEL_F98691
 
 LABEL_F98513:
-	.byte 0xc9, 0x33, 0x04	; BIT 004h, A
+	bit 4, a
 	jr z, LABEL_F98526
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E000A5
@@ -320800,7 +320800,7 @@ LABEL_F98513:
 	jr LABEL_F98537
 
 LABEL_F98526:
-	.byte 0xcb, 0x33, 0x04	; BIT 004h, C
+	bit 4, c
 	jr z, LABEL_F9853B
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E000A6
@@ -320813,7 +320813,7 @@ LABEL_F9853B:
 	.byte 0xc1, 0x7f, 0xc0, 0x23	; LD C, (0C07Fh)
 	ld a, c
 	.byte 0xc1, 0x7e, 0xc0, 0xc1	; AND A, (0C07Eh)
-	.byte 0xc9, 0x33, 0x05	; BIT 005h, A
+	bit 5, a
 	jr z, LABEL_F98559
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E000A5
@@ -320821,7 +320821,7 @@ LABEL_F9853B:
 	jrl LABEL_F98691
 
 LABEL_F98559:
-	.byte 0xcb, 0x33, 0x05	; BIT 005h, C
+	bit 5, c
 	jrl z, LABEL_F98695
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E000A6
@@ -320829,10 +320829,10 @@ LABEL_F98559:
 	jrl LABEL_F98691
 
 LABEL_F9856E:
-	.byte 0xc9, 0x33, 0x05	; BIT 005h, A
+	bit 5, a
 	jr z, LABEL_F9859C
 	call LABEL_F1E9A3
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F9858D
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E000A5
@@ -320846,10 +320846,10 @@ LABEL_F9858D:
 	jrl LABEL_F98691
 
 LABEL_F9859C:
-	.byte 0xcb, 0x33, 0x05	; BIT 005h, C
+	bit 5, c
 	jrl z, LABEL_F98695
 	call LABEL_F1E9A3
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_F985BC
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E000A6
@@ -320863,7 +320863,7 @@ LABEL_F985BC:
 	jrl LABEL_F98691
 
 LABEL_F985CB:
-	.byte 0xc9, 0x33, 0x01	; BIT 001h, A
+	bit 1, a
 	jr z, LABEL_F985DE
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E000A5
@@ -320871,7 +320871,7 @@ LABEL_F985CB:
 	jr LABEL_F985EF
 
 LABEL_F985DE:
-	.byte 0xcb, 0x33, 0x01	; BIT 001h, C
+	bit 1, c
 	jr z, LABEL_F985F3
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E000A6
@@ -320884,7 +320884,7 @@ LABEL_F985F3:
 	.byte 0xc1, 0x7f, 0xc0, 0x23	; LD C, (0C07Fh)
 	ld a, c
 	.byte 0xc1, 0x7e, 0xc0, 0xc1	; AND A, (0C07Eh)
-	.byte 0xc9, 0x33, 0x05	; BIT 005h, A
+	bit 5, a
 	jr z, LABEL_F98613
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E000A5
@@ -320892,7 +320892,7 @@ LABEL_F985F3:
 	jr LABEL_F98627
 
 LABEL_F98613:
-	.byte 0xcb, 0x33, 0x05	; BIT 005h, C
+	bit 5, c
 	jr z, LABEL_F9862B
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E000A6
@@ -320905,7 +320905,7 @@ LABEL_F9862B:
 	.byte 0xc1, 0x7f, 0xc0, 0x23	; LD C, (0C07Fh)
 	ld a, c
 	.byte 0xc1, 0x7e, 0xc0, 0xc1	; AND A, (0C07Eh)
-	.byte 0xc9, 0x33, 0x06	; BIT 006h, A
+	bit 6, a
 	jr z, LABEL_F9864B
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E000A5
@@ -320913,7 +320913,7 @@ LABEL_F9862B:
 	jr LABEL_F98691
 
 LABEL_F9864B:
-	.byte 0xcb, 0x33, 0x06	; BIT 006h, C
+	bit 6, c
 	jr z, LABEL_F98695
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E000A6
@@ -320931,7 +320931,7 @@ LABEL_F98661:
 	jr LABEL_F98691
 
 LABEL_F9867E:
-	.byte 0xcb, 0xd8	; CP C, 0
+	cps c, 0
 	jr z, LABEL_F98695
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E000A6
@@ -320979,7 +320979,7 @@ LABEL_F98697:
 LABEL_F98782:
 	.byte 0xc1, 0x66, 0xfc, 0x21	; LD A, (0FC66h)
 	and a, 0x1
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	.byte 0xcd, 0x76	; SCC Z, E
 	.byte 0xf1, 0x3a, 0x8d, 0x45	; LD (8D3Ah), E
 	extz de
@@ -321177,11 +321177,11 @@ MainRamControl:
 	ldw bc, 0xB
 	.byte 0x95, 0x11	; LDIRW_95
 	.byte 0x9b, 0x04, 0x20	; LD WA, (XHL + 004h)
-	.byte 0xd8, 0xdc	; CP WA, 4
+	cps wa, 4
 	jr z, LABEL_F98A05
-	.byte 0xd8, 0xda	; CP WA, 2
+	cps wa, 2
 	jr z, LABEL_F989F0
-	.byte 0xd8, 0xd9	; CP WA, 1
+	cps wa, 1
 	jr nz, LABEL_F98A11
 	ld xbc, xhl
 	.byte 0xb9, 0x0e, 0x31	; LDA XBC, XBC + 00eh
@@ -321231,13 +321231,13 @@ LABEL_F98A39:
 	.byte 0xbf, 0x04, 0x60	; LD (XSP + 004h), XWA
 	ld xwa, (xsp)
 	.byte 0x98, 0x04, 0x22	; LD DE, (XWA + 004h)
-	.byte 0xda, 0xdc	; CP DE, 4
+	cps de, 4
 	jr z, LABEL_F98A9A
 	.byte 0xa8, 0x0a, 0x21	; LD XBC, (XWA + 00ah)
 	.byte 0xa8, 0x06, 0x20	; LD XWA, (XWA + 006h)
-	.byte 0xda, 0xda	; CP DE, 2
+	cps de, 2
 	jr z, LABEL_F98A76
-	.byte 0xda, 0xd9	; CP DE, 1
+	cps de, 1
 	jr nz, LABEL_F98AA4
 	cp xwa, xbc
 	jr ule, LABEL_F98A62
@@ -321325,11 +321325,11 @@ LABEL_F98ADD:
 	.byte 0xaf, 0x08, 0x21	; LD XBC, (XSP + 008h)
 	.byte 0xb8, 0x0e, 0x61	; LD (XWA + 00eh), XBC
 	.byte 0x9b, 0x04, 0x20	; LD WA, (XHL + 004h)
-	.byte 0xd8, 0xdc	; CP WA, 4
+	cps wa, 4
 	jr z, LABEL_F98B1D
-	.byte 0xd8, 0xda	; CP WA, 2
+	cps wa, 2
 	jr z, LABEL_F98B13
-	.byte 0xd8, 0xd9	; CP WA, 1
+	cps wa, 1
 	jr nz, LABEL_F98B27
 	.byte 0xaf, 0x04, 0x20	; LD XWA, (XSP + 004h)
 	ld (xwa), c
@@ -321368,12 +321368,12 @@ LABEL_F98B4E:
 	.byte 0xbf, 0x04, 0x60	; LD (XSP + 004h), XWA
 	ld xwa, (xsp)
 	.byte 0x98, 0x04, 0x21	; LD BC, (XWA + 004h)
-	.byte 0xd9, 0xdc	; CP BC, 4
+	cps bc, 4
 	jr z, LABEL_F98B80
 	.byte 0xb8, 0x0e, 0x32	; LDA XDE, XWA + 00eh
-	.byte 0xd9, 0xda	; CP BC, 2
+	cps bc, 2
 	jr z, LABEL_F98B70
-	.byte 0xd9, 0xd9	; CP BC, 1
+	cps bc, 1
 	jr nz, LABEL_F98B8C
 	ld xbc, 0xFF
 	jr LABEL_F98B75
@@ -321687,7 +321687,7 @@ LABEL_F98E2D:
 	.byte 0x9f, 0x0a, 0x86	; ADD IZ, (XSP + 00ah)
 
 LABEL_F98E85:
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr ge, LABEL_F98EE2
 	.byte 0x9f, 0x08, 0x3f, 0x00, 0x00	; CPW (XSP + 008h), 0000h
 	jr le, LABEL_F98EDD
@@ -321827,11 +321827,11 @@ LABEL_F98FAA:
 	extz wa
 	cp hl, 0xF
 	jr z, LABEL_F98FCA
-	.byte 0xdb, 0xda	; CP HL, 2
+	cps hl, 2
 	jr z, LABEL_F98FC8
-	.byte 0xdb, 0xd9	; CP HL, 1
+	cps hl, 1
 	jr z, LABEL_F98FC8
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_F98FD4
 
 LABEL_F98FC8:
@@ -321948,7 +321948,7 @@ MainGetPmemName:
 	cp wa, de
 	jr nz, LABEL_F990F0
 	call LABEL_FB6023
-	.byte 0xcf, 0x33, 0x07	; BIT 007h, L
+	bit 7, l
 	jr z, LABEL_F990EC
 	lds bc, 0
 	jr LABEL_F990FE
@@ -322076,9 +322076,9 @@ LABEL_F992B2:
 LABEL_F992B8:
 	ld xwa, 0x4100
 	call LABEL_FCD437
-	.byte 0xcf, 0xd9	; CP L, 1
+	cps l, 1
 	jr z, LABEL_F992C9
-	.byte 0xcf, 0xdd	; CP L, 5
+	cps l, 5
 	jr nz, LABEL_F992D2
 
 LABEL_F992C9:
@@ -322184,22 +322184,22 @@ LABEL_F993DC:
 
 LABEL_F993EA:
 	.byte 0xd2, 0xaa, 0x74, 0x02, 0x20	; LD WA, (0274AAh)
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr z, LABEL_F99408
 	dec 1, wa
 	.byte 0xf2, 0xaa, 0x74, 0x02, 0x50	; LD (0274AAh), WA
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr nz, LABEL_F99408
 	.byte 0xd2, 0xa8, 0x74, 0x02, 0x20	; LD WA, (0274A8h)
 	.byte 0xf2, 0xa6, 0x74, 0x02, 0x50	; LD (0274A6h), WA
 
 LABEL_F99408:
 	.byte 0xd2, 0xae, 0x74, 0x02, 0x20	; LD WA, (0274AEh)
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr z, LABEL_F99436
 	dec 1, wa
 	.byte 0xf2, 0xae, 0x74, 0x02, 0x50	; LD (0274AEh), WA
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr nz, LABEL_F99436
 	.byte 0xd2, 0xac, 0x74, 0x02, 0x3f, 0x00, 0x00	; CPW (0274ACh), 0000h
 	jr z, LABEL_F9942B
@@ -322219,13 +322219,13 @@ LABEL_F99436:
 
 LABEL_F99439:
 	.byte 0xd2, 0xa6, 0x74, 0x02, 0x20	; LD WA, (0274A6h)
-	.byte 0xd8, 0x33, 0x00	; BIT 000h, WA
+	bit 0, wa
 	jr z, LABEL_F99446
 	lds hl, 1
 	ret
 
 LABEL_F99446:
-	.byte 0xd8, 0x33, 0x01	; BIT 001h, WA
+	bit 1, wa
 	jr z, LABEL_F99454
 	and wa, 0x18
 	jr nz, LABEL_F99454
@@ -322417,7 +322417,7 @@ GetClientBox2:
 	ld xix, xiz
 	lds bc, 4
 	.byte 0x95, 0x11	; LDIRW_95
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr mi, LABEL_F99670
 	cp wa, 0xB
 	jr le, LABEL_F99648
@@ -322744,7 +322744,7 @@ LABEL_F99961:
 	.byte 0x9f, 0x02, 0x3f, 0x00, 0x00	; CPW (XSP + 002h), 0000h
 	jrl nz, LABEL_F9A526
 	call 0xFA589F
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	.byte 0xd8, 0x76	; SCC Z, WA
 	.byte 0xbf, 0x06, 0x50	; LD (XSP + 006h), WA
 	call 0xFA5867
@@ -322834,7 +322834,7 @@ LABEL_F99A71:
 	.byte 0x9f, 0x02, 0x3f, 0x00, 0x00	; CPW (XSP + 002h), 0000h
 	jrl nz, LABEL_F9A526
 	call 0xFA589F
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	.byte 0xd8, 0x76	; SCC Z, WA
 	.byte 0xbf, 0x06, 0x50	; LD (XSP + 006h), WA
 	call 0xFA5867
@@ -322923,7 +322923,7 @@ LABEL_F99B7A:
 	.byte 0x9f, 0x04, 0x20	; LD WA, (XSP + 004h)
 	.byte 0xbf, 0x02, 0x50	; LD (XSP + 002h), WA
 	call 0xFA589F
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	.byte 0xd8, 0x76	; SCC Z, WA
 	.byte 0xbf, 0x06, 0x50	; LD (XSP + 006h), WA
 	.byte 0xaf, 0x1e, 0x20	; LD XWA, (XSP + 01eh)
@@ -323186,7 +323186,7 @@ LABEL_F99E9D:
 	.byte 0xaf, 0x26, 0xf3	; CP XHL, (XSP + 026h)
 	jrl nz, LABEL_F9A526
 	call 0xFA589F
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl z, LABEL_F9A526
 	.byte 0xaf, 0x1e, 0x20	; LD XWA, (XSP + 01eh)
 	cp xwa, 0x5
@@ -323493,7 +323493,7 @@ LABEL_F9A21E:
 	ld xbc, 0x1C00009
 	call 0xFA9660
 	.byte 0xaf, 0x1e, 0x22	; LD XDE, (XSP + 01eh)
-	.byte 0xda, 0x31, 0x07	; SET 007h, DE
+	set 7, de
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00009
 	call 0xFA9660
@@ -324014,7 +324014,7 @@ LABEL_F9A79E:
 
 LABEL_F9A7AB:
 	calr LABEL_F9ADF0
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	.byte 0xf2, 0x3c, 0x88, 0xf9, 0xee	; CALL NZ, SleepMainTask
 	.byte 0xaf, 0x0c, 0x20	; LD XWA, (XSP + 00ch)
 	ld xbc, 0x1E000B1
@@ -324029,7 +324029,7 @@ LABEL_F9A7AB:
 	ld wa, hl
 	.byte 0x1e, 0x5b, 0x02	; CALR SetWallColor
 	calr LABEL_F9ADF0
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	.byte 0xf2, 0x4b, 0x88, 0xf9, 0xee	; CALL NZ, WakeUpMainTask
 	call 0xFA5867
 	ld xwa, xhl
@@ -324253,9 +324253,9 @@ LABEL_F9A9E6:
 	ret
 
 SetWallPaper:
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr mi, LABEL_F9AA16
-	.byte 0xd8, 0xdd	; CP WA, 5
+	cps wa, 5
 	jr gt, LABEL_F9AA16
 	add wa, wa
 	.byte 0xf2, 0x36, 0x9b, 0xea, 0x34	; LDA XIX, 0EA9B36h
@@ -324277,11 +324277,11 @@ LABEL_F9AA1C:
 	.byte 0x68, 0xe2
 
 SetWallColor:
-	.byte 0xd8, 0xd9	; CP WA, 1
+	cps wa, 1
 	jr z, LABEL_F9AA5A
 	cp wa, 0xF9
 	jr z, LABEL_F9AA56
-	.byte 0xd8, 0xda	; CP WA, 2
+	cps wa, 2
 	jr z, LABEL_F9AA52
 	cp wa, 0xF8
 	jr z, LABEL_F9AA4E
@@ -324402,9 +324402,9 @@ LABEL_F9AB10:
 	.byte 0xbf, 0x0c, 0x31	; LDA XBC, XSP + 00ch
 	.byte 0x8f, 0x28, 0x3f, 0x02	; CP (XSP + 028h), 002h
 	jrl z, LABEL_F9ABF6
-	.byte 0xcd, 0xd9	; CP E, 1
+	cps e, 1
 	jrl z, LABEL_F9ABE5
-	.byte 0xcd, 0xd8	; CP E, 0
+	cps e, 0
 	jrl nz, LABEL_F9AC05
 	ld xhl, xbc
 	.byte 0x9f, 0x08, 0x22	; LD DE, (XSP + 008h)
@@ -325155,7 +325155,7 @@ LABEL_F9B4EE:
 	add xbc, xwa
 	ld xwa, (xbc)
 	.byte 0xf2, 0xe4, 0x74, 0x02, 0x60	; LD (0274E4h), XWA
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_F9B53B
 	ld xwa, 0x17
 	lds bc, 0
@@ -325707,21 +325707,21 @@ LABEL_F9BEC6:
 	extz bc
 	.byte 0xf2, 0x78, 0xd7, 0xee, 0x33	; LDA XHL, 0EED778h
 	.byte 0xc3, 0x07, 0xec, 0xe4, 0x23	; LD C, (XHL + BC)
-	.byte 0xcb, 0x33, 0x00	; BIT 000h, C
+	bit 0, c
 	jr z, LABEL_F9BF23
 	.byte 0xf2, 0xda, 0x74, 0x02, 0x02, 0x00, 0x00	; LDW (0274DAh), 0000h
 	ldb c, 0x41
 	jr LABEL_F9BF4A
 
 LABEL_F9BF23:
-	.byte 0xcb, 0x33, 0x01	; BIT 001h, C
+	bit 1, c
 	jr z, LABEL_F9BF33
 	.byte 0xf2, 0xda, 0x74, 0x02, 0x02, 0x01, 0x00	; LDW (0274DAh), 0001h
 	ldb c, 0x61
 	jr LABEL_F9BF4A
 
 LABEL_F9BF33:
-	.byte 0xcb, 0x33, 0x02	; BIT 002h, C
+	bit 2, c
 	jr z, LABEL_F9BF61
 	.byte 0xd2, 0xda, 0x74, 0x02, 0x3f, 0x02, 0x00	; CPW (0274DAh), 0002h
 	jr nz, LABEL_F9BF48
@@ -325835,7 +325835,7 @@ LABEL_F9C04D:
 	.byte 0xaf, 0x2a, 0x20	; LD XWA, (XSP + 02ah)
 	.byte 0xe8, 0xef, 0x00	; SRL_0_XWA
 	.byte 0xd7, 0xe2, 0xa8	; LD QWA, 0
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jrl nz, LABEL_F9C115
 	.byte 0xaf, 0x2a, 0x20	; LD XWA, (XSP + 02ah)
 	ld de, wa
@@ -326579,7 +326579,7 @@ FrameProc:
 LABEL_F9C7C9:
 	ld xwa, xiz
 	call 0xFA5EA5
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_F9C7D7
 	.byte 0xeb, 0xa9	; LD XHL, 1
 	jr LABEL_F9C7FA
@@ -326631,9 +326631,9 @@ GetClientFrame2:
 	ld xix, xiz
 	lds bc, 4
 	.byte 0x95, 0x11	; LDIRW_95
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr z, LABEL_F9C869
-	.byte 0xd8, 0xd9	; CP WA, 1
+	cps wa, 1
 	jr nz, LABEL_F9C842
 	.byte 0x9f, 0x04, 0x23	; LD HL, (XSP + 004h)
 	exts xhl
@@ -326672,7 +326672,7 @@ DrawDesignFrame:
 	.byte 0xbf, 0x04, 0x34	; LDA XIX, XSP + 004h
 	lds bc, 4
 	.byte 0x95, 0x11	; LDIRW_95
-	.byte 0xda, 0xd9	; CP DE, 1
+	cps de, 1
 	jr nz, LABEL_F9C8B7
 	.byte 0xee, 0xa8	; LD XIZ, 0
 	.byte 0x9f, 0x0c, 0x20	; LD WA, (XSP + 00ch)
@@ -326737,7 +326737,7 @@ LABEL_F9C8DF:
 	jr z, LABEL_F9C942
 	exts xde
 	.byte 0xaf, 0x08, 0x20	; LD XWA, (XSP + 008h)
-	.byte 0xd8, 0x33, 0x07	; BIT 007h, WA
+	bit 7, wa
 	jr z, LABEL_F9C934
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00018
@@ -326981,7 +326981,7 @@ LABEL_F9CBD7:
 	.byte 0xd9, 0x52	; DIV XDE, BC
 	.byte 0xbf, 0x08, 0x52	; LD (XSP + 008h), DE
 	.byte 0xbf, 0x10, 0x02, 0x00, 0x00	; LDW (XSP + 010h:8), 0000h
-	.byte 0xd9, 0xd8	; CP BC, 0
+	cps bc, 0
 	jrl ule, LABEL_F9CCD5
 
 LABEL_F9CC2A:
@@ -327099,7 +327099,7 @@ LABEL_F9CD40:
 	call 0xFA6266
 	.byte 0xaf, 0x0c, 0x21	; LD XBC, (XSP + 00ch)
 	.byte 0xbf, 0x04, 0x30	; LDA XWA, XSP + 004h
-	.byte 0xd9, 0xd8	; CP BC, 0
+	cps bc, 0
 	jr z, LABEL_F9CD61
 	.byte 0x0b, 0xf2, 0x00	; PUSHW 00f2h
 	lds bc, 1
@@ -327644,7 +327644,7 @@ LABEL_F9D2BE:
 LABEL_F9D2DC:
 	ld xwa, 0x2200
 	call LABEL_FCD437
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_F9D303
 	.byte 0xe8, 0xac	; LD XWA, 4
 	call LABEL_FCD437
@@ -327933,7 +327933,7 @@ LABEL_F9D63B:
 	.byte 0xe3, 0xfd, 0x1c, 0x01, 0xf0	; CP XWA, (XSP + 011ch)
 	jr z, LABEL_F9D6BD
 	.byte 0xe3, 0xfd, 0x1c, 0x01, 0x20	; LD XWA, (XSP + 011ch)
-	.byte 0xd8, 0xd9	; CP WA, 1
+	cps wa, 1
 	jr nz, LABEL_F9D696
 	.byte 0x99, 0x1a, 0x22	; LD DE, (XBC + 01ah)
 	exts xde
@@ -328131,7 +328131,7 @@ LABEL_F9D860:
 	ld xbc, xde
 	add xbc, xwa
 	ld a, (xbc)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_F9D850
 
 LABEL_F9D86F:
@@ -328267,7 +328267,7 @@ LABEL_F9D9BB:
 	ld xbc, xde
 	add xbc, xwa
 	ld a, (xbc)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_F9D9AB
 
 LABEL_F9D9CA:
@@ -328368,7 +328368,7 @@ LABEL_F9DAB7:
 	ld xbc, xde
 	add xbc, xwa
 	ld a, (xbc)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_F9DAA7
 
 LABEL_F9DAC6:
@@ -328784,7 +328784,7 @@ LABEL_F9DF32:
 	.byte 0xbf, 0x2a, 0x30	; LDA XWA, XSP + 02ah
 	add xwa, xbc
 	ld a, (xwa)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_F9DF27
 	.byte 0xf3, 0xfd, 0x3e, 0x01, 0x31	; LDA XBC, XSP + 013eh
 	.byte 0xe3, 0xfd, 0x4e, 0x01, 0x20	; LD XWA, (XSP + 014eh)
@@ -328836,7 +328836,7 @@ LABEL_F9DFB4:
 	ld xbc, xde
 	add xbc, xwa
 	ld a, (xbc)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_F9DFA4
 
 LABEL_F9DFC3:
@@ -328912,7 +328912,7 @@ LABEL_F9E064:
 	ld xbc, xde
 	add xbc, xwa
 	ld a, (xbc)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_F9E054
 
 LABEL_F9E073:
@@ -329119,7 +329119,7 @@ LABEL_F9E251:
 	ld xbc, xde
 	add xbc, xwa
 	ld a, (xbc)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_F9E241
 
 LABEL_F9E260:
@@ -329210,7 +329210,7 @@ LABEL_F9E330:
 	ld xbc, xde
 	add xbc, xwa
 	ld a, (xbc)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_F9E320
 
 LABEL_F9E33F:
@@ -332180,7 +332180,7 @@ LABEL_FA02C4:
 LABEL_FA02EF:
 	ld xwa, xiz
 	call 0xFA5EA5
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl z, LABEL_FA025B
 	ld xwa, xiz
 	call 0xFA6266
@@ -332497,7 +332497,7 @@ LABEL_FA063C:
 	ld xbc, 0x1E00053
 	.byte 0xe3, 0xfd, 0x30, 0x01, 0x22	; LD XDE, (XSP + 0130h)
 	call 0xFA9660
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl z, LABEL_FA0711
 	.byte 0xaf, 0x08, 0x20	; LD XWA, (XSP + 008h)
 	.byte 0xa8, 0x2e, 0x20	; LD XWA, (XWA + 02eh)
@@ -332882,7 +332882,7 @@ LABEL_FA0A4E:
 	.byte 0xbf, 0x04, 0x63	; LD (XSP + 004h), XHL
 	ld xwa, xiz
 	call 0xFA5EA5
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl z, LABEL_FA0AEA
 	ld xwa, 0x2600024
 	ld xbc, 0x1E00029
@@ -332902,7 +332902,7 @@ LABEL_FA0A83:
 	.byte 0x1e, 0x5b, 0xc2	; CALR VwBoxProc
 	ld xwa, xiz
 	call 0xFA5EA5
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_FA0AA4
 	ld xwa, xiz
 	ld xbc, 0x1C0000C
@@ -333152,7 +333152,7 @@ LABEL_FA0E0E:
 LABEL_FA0E15:
 	.byte 0xc3, 0xfd, 0x28, 0x01, 0x21	; LD A, (XSP + 0128h)
 	extz wa
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jrl mi, LABEL_FA0EB5
 	cp wa, 0x10
 	jrl gt, LABEL_FA0EB5
@@ -333340,13 +333340,13 @@ LABEL_FA1020:
 LABEL_FA1035:
 	ld xwa, xiz
 	call 0xFA5EA5
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl z, LABEL_FA1112
 	ld xwa, xiz
 	ld xbc, 0x1E00053
 	.byte 0xaf, 0x06, 0x22	; LD XDE, (XSP + 006h)
 	call 0xFA9660
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl z, LABEL_FA1112
 	ld xwa, xiz
 	ld xbc, 0x1E00051
@@ -333374,7 +333374,7 @@ LABEL_FA108F:
 	add xhl, xiz
 	ld a, (xhl)
 	extz wa
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jrl mi, LABEL_FA1187
 	cp wa, 0x10
 	jrl gt, LABEL_FA1187
@@ -333408,13 +333408,13 @@ LABEL_FA1112:
 LABEL_FA111C:
 	ld xwa, xiz
 	call 0xFA5EA5
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_FA118B
 	ld xwa, xiz
 	ld xbc, 0x1E00053
 	.byte 0xaf, 0x06, 0x22	; LD XDE, (XSP + 006h)
 	call 0xFA9660
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_FA118B
 	ld xwa, xiz
 	ld xbc, 0x1E00051
@@ -333428,7 +333428,7 @@ LABEL_FA111C:
 	.byte 0xaf, 0x06, 0x22	; LD XDE, (XSP + 006h)
 	call 0xFA9660
 	.byte 0xaf, 0x06, 0x22	; LD XDE, (XSP + 006h)
-	.byte 0xda, 0x31, 0x07	; SET 007h, DE
+	set 7, de
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00009
 	call 0xFA9660
@@ -333507,13 +333507,13 @@ LABEL_FA120B:
 LABEL_FA1211:
 	ld xwa, xiz
 	call 0xFA5EA5
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_FA1269
 	ld xwa, xiz
 	ld xbc, 0x1E00053
 	.byte 0xaf, 0x04, 0x22	; LD XDE, (XSP + 004h)
 	call 0xFA9660
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_FA1269
 	ld xwa, xiz
 	ld xbc, 0x1E00014
@@ -333821,7 +333821,7 @@ LABEL_FA150E:
 	ld xbc, 0x1E00053
 	.byte 0xaf, 0x08, 0x22	; LD XDE, (XSP + 008h)
 	call 0xFA9660
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_FA1580
 	.byte 0xaf, 0x0c, 0x20	; LD XWA, (XSP + 00ch)
 	ld xbc, 0x1E00056
@@ -333831,7 +333831,7 @@ LABEL_FA150E:
 	.byte 0xb8, 0x20, 0x31	; LDA XBC, XWA + 020h
 	.byte 0xb8, 0x22, 0x32	; LDA XDE, XWA + 022h
 	.byte 0xaf, 0x08, 0x20	; LD XWA, (XSP + 008h)
-	.byte 0xd8, 0x33, 0x07	; BIT 007h, WA
+	bit 7, wa
 	jr z, LABEL_FA1562
 	.byte 0x91, 0xf3	; CP HL, (XBC)
 	jr le, LABEL_FA1552
@@ -334007,7 +334007,7 @@ LABEL_FA16C7:
 	.byte 0xbf, 0x04, 0x63	; LD (XSP + 004h), XHL
 	.byte 0xaf, 0x1c, 0x20	; LD XWA, (XSP + 01ch)
 	call 0xFA5EA5
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl z, LABEL_FA17D5
 	ld xwa, 0x2600024
 	ld xbc, 0x1E00029
@@ -334075,7 +334075,7 @@ LABEL_FA1768:
 	call 0xFA5995
 	.byte 0xaf, 0x1c, 0x20	; LD XWA, (XSP + 01ch)
 	call 0xFA5EA5
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_FA178D
 	.byte 0xaf, 0x1c, 0x20	; LD XWA, (XSP + 01ch)
 	ld xbc, 0x1C0000C
@@ -334147,7 +334147,7 @@ LABEL_FA1809:
 	ld xbc, 0x1E00053
 	.byte 0xaf, 0x08, 0x22	; LD XDE, (XSP + 008h)
 	call 0xFA9660
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_FA184B
 	ld xwa, xiz
 	ld xbc, 0x1E0006C
@@ -334203,13 +334203,13 @@ LABEL_FA189D:
 	.byte 0xbf, 0x04, 0x63	; LD (XSP + 004h), XHL
 	.byte 0xaf, 0x0c, 0x20	; LD XWA, (XSP + 00ch)
 	call 0xFA5EA5
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_FA1910
 	.byte 0xaf, 0x0c, 0x20	; LD XWA, (XSP + 00ch)
 	ld xbc, 0x1E00053
 	.byte 0xaf, 0x08, 0x22	; LD XDE, (XSP + 008h)
 	call 0xFA9660
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_FA1910
 	.byte 0xaf, 0x04, 0x20	; LD XWA, (XSP + 004h)
 	.byte 0x98, 0x28, 0x22	; LD DE, (XWA + 028h)
@@ -335178,7 +335178,7 @@ LABEL_FA218A:
 	ld xbc, 0x1E0009D
 	.byte 0xea, 0xa8	; LD XDE, 0
 	call 0xFA9660
-	.byte 0xdb, 0xd9	; CP HL, 1
+	cps hl, 1
 	jr nz, LABEL_FA21A6
 	.byte 0xaf, 0x08, 0x20	; LD XWA, (XSP + 008h)
 	call 0xFA6266
@@ -335228,7 +335228,7 @@ LABEL_FA21F6:
 	ld xbc, 0x1E0009D
 	.byte 0xea, 0xa8	; LD XDE, 0
 	call 0xFA9660
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	.byte 0xdb, 0x76	; SCC Z, HL
 	extz xhl
 
@@ -336232,7 +336232,7 @@ LABEL_FA2B81:
 	add xbc, xwa
 	.byte 0x99, 0x08, 0x22	; LD DE, (XBC + 008h)
 	.byte 0xaf, 0x24, 0x20	; LD XWA, (XSP + 024h)
-	.byte 0xd8, 0x33, 0x07	; BIT 007h, WA
+	bit 7, wa
 	jr z, LABEL_FA2BA7
 	ld xwa, (xbc)
 	ldw bc, 0xFFFF
@@ -336277,7 +336277,7 @@ LABEL_FA2BCC:
 	add xbc, xwa
 	add xbc, xbc
 	.byte 0xaf, 0x24, 0x20	; LD XWA, (XSP + 024h)
-	.byte 0xd8, 0x33, 0x07	; BIT 007h, WA
+	bit 7, wa
 	jr z, LABEL_FA2C16
 	ld xde, 0xEAA50C
 	add xde, xbc
@@ -336321,7 +336321,7 @@ LABEL_FA2C36:
 	.byte 0xaf, 0x24, 0x22	; LD XDE, (XSP + 024h)
 	call 0xFA9660
 	.byte 0xaf, 0x24, 0x22	; LD XDE, (XSP + 024h)
-	.byte 0xda, 0x31, 0x07	; SET 007h, DE
+	set 7, de
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00009
 	call 0xFA9660
@@ -336792,7 +336792,7 @@ LABEL_FA3127:
 	.byte 0xbb, 0x16, 0x32	; LDA XDE, XHL + 016h
 	ld xbc, (xde)
 	.byte 0xaf, 0x70, 0x20	; LD XWA, (XSP + 070h)
-	.byte 0xd8, 0x33, 0x07	; BIT 007h, WA
+	bit 7, wa
 	jr z, LABEL_FA3155
 	.byte 0xa1, 0xae	; SUB (XBC), XIZ
 	jr LABEL_FA3157
@@ -336953,11 +336953,11 @@ LABEL_FA3243:
 	.byte 0xaf, 0x0e, 0x20	; LD XWA, (XSP + 00eh)
 	.byte 0x88, 0x22, 0x23	; LD C, (XWA + 022h)
 	.byte 0xf3, 0xfd, 0x22, 0x02, 0x30	; LDA XWA, XSP + 0222h
-	.byte 0xcb, 0xda	; CP C, 2
+	cps c, 2
 	jr z, LABEL_FA3300
-	.byte 0xcb, 0xd9	; CP C, 1
+	cps c, 1
 	jr z, LABEL_FA32F8
-	.byte 0xcb, 0xd8	; CP C, 0
+	cps c, 0
 	jr nz, LABEL_FA330A
 	.byte 0x9f, 0x04, 0x20	; LD WA, (XSP + 004h)
 	exts xwa
@@ -337168,7 +337168,7 @@ LABEL_FA351C:
 	ld xbc, 0x1E00053
 	.byte 0xaf, 0x14, 0x22	; LD XDE, (XSP + 014h)
 	call 0xFA9660
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl z, LABEL_FA35C8
 	ld xwa, xiz
 	call 0xFA6266
@@ -337811,7 +337811,7 @@ LABEL_FA3BC7:
 	.byte 0xd9, 0x52	; DIV XDE, BC
 	.byte 0xbf, 0x08, 0x52	; LD (XSP + 008h), DE
 	.byte 0xbf, 0x12, 0x02, 0x00, 0x00	; LDW (XSP + 012h:8), 0000h
-	.byte 0xd9, 0xd8	; CP BC, 0
+	cps bc, 0
 	jrl ule, LABEL_FA3CFC
 
 LABEL_FA3C46:
@@ -338663,7 +338663,7 @@ LABEL_FA463F:
 	ld xwa, xde
 	.byte 0xaf, 0x0a, 0x80	; ADD XWA, (XSP + 00ah)
 	ld a, (xwa)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_FA4624
 	.byte 0xe3, 0xfd, 0x12, 0x01, 0x20	; LD XWA, (XSP + 0112h)
 	push xwa
@@ -338743,7 +338743,7 @@ LABEL_FA4720:
 	ld xwa, xde
 	.byte 0xaf, 0x0a, 0x80	; ADD XWA, (XSP + 00ah)
 	ld a, (xwa)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_FA4705
 	.byte 0xe8, 0xa8	; LD XWA, 0
 	.byte 0xbf, 0x0e, 0x60	; LD (XSP + 00eh), XWA
@@ -339961,7 +339961,7 @@ LABEL_FA5464:
 	.byte 0xaf, 0x2a, 0x21	; LD XBC, (XSP + 02ah)
 	ld xde, 0xFFFFFFFF
 	call 0xFAA214
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl nz, LABEL_FA5853
 	ld xwa, 0x1C00028
 	push xwa
@@ -340031,7 +340031,7 @@ LABEL_FA5508:
 	.byte 0xaf, 0x2a, 0x21	; LD XBC, (XSP + 02ah)
 	ld xde, 0xFFFFFFFF
 	call 0xFAA214
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_FA5552
 	ld xwa, 0x1C00028
 	push xwa
@@ -340049,7 +340049,7 @@ LABEL_FA5552:
 LABEL_FA5558:
 	.byte 0xd2, 0x30, 0xbc, 0x02, 0x20	; LD WA, (02BC30h)
 	and wa, 0x1
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	.byte 0xdb, 0x7e	; SCC NZ, HL
 	exts xhl
 	jrl LABEL_FA5862
@@ -340095,7 +340095,7 @@ LABEL_FA55A8:
 	.byte 0xaf, 0x2a, 0x21	; LD XBC, (XSP + 02ah)
 	ld xde, 0xFFFFFFFF
 	call 0xFAA214
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_FA55F2
 	ld xwa, 0x1C00028
 	push xwa
@@ -340112,7 +340112,7 @@ LABEL_FA55F2:
 
 LABEL_FA55F7:
 	.byte 0xd2, 0x30, 0xbc, 0x02, 0x20	; LD WA, (02BC30h)
-	.byte 0xd8, 0x33, 0x00	; BIT 000h, WA
+	bit 0, wa
 	jr z, LABEL_FA564D
 	.byte 0x9f, 0x16, 0x20	; LD WA, (XSP + 016h)
 	extz xwa
@@ -340129,7 +340129,7 @@ LABEL_FA55F7:
 	.byte 0xaf, 0x2a, 0x21	; LD XBC, (XSP + 02ah)
 	ld xde, 0xFFFFFFFF
 	call 0xFAA214
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_FA567C
 	ld xwa, 0x1C00028
 	push xwa
@@ -340213,7 +340213,7 @@ LABEL_FA56E5:
 	push xde
 	ld xde, 0xFFFFFFFF
 	call 0xFAA257
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl z, LABEL_FA5853
 
 LABEL_FA56FF:
@@ -340231,7 +340231,7 @@ LABEL_FA56FF:
 	push xde
 	ld xde, 0xFFFFFFFF
 	call 0xFAA257
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_FA56FF
 	jrl LABEL_FA5853
 
@@ -340311,7 +340311,7 @@ LABEL_FA580A:
 	.byte 0xea, 0xa8	; LD XDE, 0
 	call 0xFA9660
 	.byte 0xd2, 0x30, 0xbc, 0x02, 0x20	; LD WA, (02BC30h)
-	.byte 0xd8, 0x33, 0x05	; BIT 005h, WA
+	bit 5, wa
 	jr z, LABEL_FA5853
 	.byte 0x9f, 0x16, 0x20	; LD WA, (XSP + 016h)
 	extz xwa
@@ -340357,9 +340357,9 @@ SetInterruptTime:
 	pushw iz
 	ld iz, wa
 	.byte 0xd2, 0x30, 0xbc, 0x02, 0x20	; LD WA, (02BC30h)
-	.byte 0xd8, 0x33, 0x01	; BIT 001h, WA
+	bit 1, wa
 	jr z, LABEL_FA5889
-	.byte 0xde, 0xda	; CP IZ, 2
+	cps iz, 2
 	jr nz, LABEL_FA5889
 	lds wa, 1
 	calr LABEL_FA58C7
@@ -340378,12 +340378,12 @@ LABEL_FA5889:
 CheckNotDrawFlag:
 	.byte 0xd2, 0x30, 0xbc, 0x02, 0x20	; LD WA, (02BC30h)
 	and wa, 0x4
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	.byte 0xdb, 0x76	; SCC Z, HL
 	ret
 
 SetVariFlag:
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr z, LABEL_FA58B6
 	ldw wa, 0x8
 	jr LABEL_FA58C7
@@ -340393,7 +340393,7 @@ LABEL_FA58B6:
 	jr LABEL_FA58E0
 
 SetNotDrawFlag:
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr z, LABEL_FA58C3
 	lds wa, 4
 	jr LABEL_FA58C7
@@ -340593,7 +340593,7 @@ LABEL_FA5AD7:
 	jr LABEL_FA5B61
 	ld xwa, xiz
 	.byte 0x1e, 0xb2, 0x03	; CALR GetVisible
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_FA5B1D
 	ld xwa, xiz
 	ld xbc, 0x1C0000D
@@ -340619,7 +340619,7 @@ LABEL_FA5B1D:
 	jr LABEL_FA5B61
 	ld xwa, xiz
 	.byte 0x1e, 0x6c, 0x03	; CALR GetVisible
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_FA5B65
 	ld xwa, xiz
 	ld xbc, 0x1C0000D
@@ -340951,7 +340951,7 @@ SetChange:
 	ld iz, bc
 	.byte 0x1e, 0x24, 0x04	; CALR GetViewInstance
 	.byte 0xbb, 0x0c, 0x30	; LDA XWA, XHL + 00ch
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr z, LABEL_FA5E4F
 	.byte 0x90, 0x3e, 0x04, 0x00	; ORW (XWA), 0004h
 	jr LABEL_FA5E53
@@ -340967,7 +340967,7 @@ GetChange:
 	.byte 0x1e, 0x0e, 0x04	; CALR GetViewInstance
 	.byte 0x9b, 0x0c, 0x20	; LD WA, (XHL + 00ch)
 	and wa, 0x4
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	.byte 0xdb, 0x7e	; SCC NZ, HL
 	ret
 
@@ -340976,7 +340976,7 @@ SetConst:
 	ld iz, bc
 	.byte 0x1e, 0xfc, 0x03	; CALR GetViewInstance
 	.byte 0xbb, 0x0c, 0x30	; LDA XWA, XHL + 00ch
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr z, LABEL_FA5E77
 	.byte 0x90, 0x3e, 0x08, 0x00	; ORW (XWA), 0008h
 	jr LABEL_FA5E7B
@@ -340992,7 +340992,7 @@ GetConst:
 	.byte 0x1e, 0xe6, 0x03	; CALR GetViewInstance
 	.byte 0x9b, 0x0c, 0x20	; LD WA, (XHL + 00ch)
 	and wa, 0x8
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	.byte 0xdb, 0x7e	; SCC NZ, HL
 	ret
 
@@ -341001,7 +341001,7 @@ SetVisible:
 	ld iz, bc
 	.byte 0x1e, 0xd4, 0x03	; CALR GetViewInstance
 	.byte 0xbb, 0x0c, 0x30	; LDA XWA, XHL + 00ch
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr z, LABEL_FA5E9F
 	.byte 0x90, 0x3c, 0xfe, 0xff	; ANDW (XWA), 0fffeh
 	jr LABEL_FA5EA3
@@ -341017,7 +341017,7 @@ GetVisible:
 	.byte 0x1e, 0xbe, 0x03	; CALR GetViewInstance
 	.byte 0x9b, 0x0c, 0x20	; LD WA, (XHL + 00ch)
 	and wa, 0x1
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	.byte 0xdb, 0x76	; SCC Z, HL
 	ret
 
@@ -341026,7 +341026,7 @@ SetMovable:
 	ld iz, bc
 	.byte 0x1e, 0xac, 0x03	; CALR GetViewInstance
 	.byte 0xbb, 0x0c, 0x30	; LDA XWA, XHL + 00ch
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr z, LABEL_FA5EC7
 	.byte 0x90, 0x3c, 0xfd, 0xff	; ANDW (XWA), 0fffdh
 	jr LABEL_FA5ECB
@@ -341042,7 +341042,7 @@ GetMovable:
 	.byte 0x1e, 0x96, 0x03	; CALR GetViewInstance
 	.byte 0x9b, 0x0c, 0x20	; LD WA, (XHL + 00ch)
 	and wa, 0x2
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	.byte 0xdb, 0x76	; SCC Z, HL
 	ret
 
@@ -342828,7 +342828,7 @@ LABEL_FA6EAA:
 	extz xwa
 	ld c, (xbc)
 	add xwa, xiz
-	.byte 0xcb, 0xd8	; CP C, 0
+	cps c, 0
 	jr nz, LABEL_FA6E77
 	.byte 0xb0, 0x00, 0x00	; LD (XWA), 000h
 	.byte 0xeb, 0xa8	; LD XHL, 0
@@ -343247,7 +343247,7 @@ LABEL_FA7241:
 	extz xde
 	.byte 0xe3, 0xfd, 0x82, 0x00, 0x82	; ADD XDE, (XSP + 0082h)
 	ld a, (xhl)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_FA7221
 	.byte 0xb2, 0x00, 0x00	; LD (XDE), 000h
 	.byte 0xeb, 0xa8	; LD XHL, 0
@@ -343565,7 +343565,7 @@ LABEL_FA752A:
 	push xhl
 	call LABEL_FF0F35
 	.byte 0xef, 0x60	; INC 8, XSP
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_FA756C
 	.byte 0xaf, 0x08, 0x20	; LD XWA, (XSP + 008h)
 	sll xwa, 2
@@ -344458,7 +344458,7 @@ LABEL_FA7C97:
 	push xwa
 	call LABEL_FF0F35
 	.byte 0xef, 0x60	; INC 8, XSP
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_FA7CB2
 	.byte 0xe8, 0xa8	; LD XWA, 0
 	.byte 0xbf, 0x04, 0x60	; LD (XSP + 004h), XWA
@@ -344583,7 +344583,7 @@ LABEL_FA7DB7:
 	push xwa
 	call LABEL_FF0F35
 	.byte 0xef, 0x60	; INC 8, XSP
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_FA7DD2
 	.byte 0xe8, 0xa8	; LD XWA, 0
 	.byte 0xbf, 0x04, 0x60	; LD (XSP + 004h), XWA
@@ -344707,7 +344707,7 @@ LABEL_FA7ED7:
 	push xwa
 	call LABEL_FF0F35
 	.byte 0xef, 0x60	; INC 8, XSP
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_FA7EF2
 	.byte 0xe8, 0xa8	; LD XWA, 0
 	.byte 0xbf, 0x04, 0x60	; LD (XSP + 004h), XWA
@@ -344894,7 +344894,7 @@ LABEL_FA8087:
 	push xhl
 	call LABEL_FF0F35
 	.byte 0xef, 0x60	; INC 8, XSP
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_FA80CF
 	.byte 0xaf, 0x0c, 0x20	; LD XWA, (XSP + 00ch)
 	sll xwa, 2
@@ -345090,7 +345090,7 @@ LABEL_FA826E:
 	push xhl
 	call LABEL_FF0F35
 	.byte 0xef, 0x60	; INC 8, XSP
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_FA82B6
 	.byte 0xaf, 0x0c, 0x20	; LD XWA, (XSP + 00ch)
 	sll xwa, 2
@@ -345395,7 +345395,7 @@ LABEL_FA857A:
 	push xhl
 	call LABEL_FF0F35
 	.byte 0xef, 0x60	; INC 8, XSP
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_FA85C2
 	.byte 0xaf, 0x08, 0x20	; LD XWA, (XSP + 008h)
 	sll xwa, 2
@@ -345727,7 +345727,7 @@ LABEL_FA88F0:
 	push xwa
 	call LABEL_FF0F35
 	.byte 0xef, 0x60	; INC 8, XSP
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_FA8921
 	.byte 0xaf, 0x08, 0x20	; LD XWA, (XSP + 008h)
 	sll xwa, 2
@@ -345758,7 +345758,7 @@ LABEL_FA892F:
 	.byte 0x0b, 0x2a, 0xab	; PUSHW 0ab2ah
 	call LABEL_FF0F35
 	.byte 0xef, 0x60	; INC 8, XSP
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_FA895F
 	.byte 0xaf, 0x04, 0x20	; LD XWA, (XSP + 004h)
 	ld xbc, 0xFFFFFFFF
@@ -346079,7 +346079,7 @@ LABEL_FA8C80:
 	push xwa
 	call LABEL_FF0F35
 	.byte 0xef, 0x60	; INC 8, XSP
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_FA8CB1
 	.byte 0xaf, 0x08, 0x20	; LD XWA, (XSP + 008h)
 	sll xwa, 2
@@ -346110,7 +346110,7 @@ LABEL_FA8CBF:
 	.byte 0x0b, 0x6c, 0xab	; PUSHW 0ab6ch
 	call LABEL_FF0F35
 	.byte 0xef, 0x60	; INC 8, XSP
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_FA8CEF
 	.byte 0xaf, 0x04, 0x20	; LD XWA, (XSP + 004h)
 	ld xbc, 0xFFFFFFFF
@@ -346355,7 +346355,7 @@ LABEL_FA8F14:
 	push xwa
 	call LABEL_FF0F35
 	.byte 0xef, 0x60	; INC 8, XSP
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_FA8F3F
 	.byte 0xaf, 0x08, 0x20	; LD XWA, (XSP + 008h)
 	sll xwa, 2
@@ -346600,7 +346600,7 @@ LABEL_FA915A:
 	push xwa
 	call LABEL_FF0F35
 	.byte 0xef, 0x60	; INC 8, XSP
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_FA9185
 	.byte 0xaf, 0x08, 0x20	; LD XWA, (XSP + 008h)
 	sll xwa, 2
@@ -346926,7 +346926,7 @@ LABEL_FA941F:
 	push xwa
 	call LABEL_FF0F35
 	.byte 0xef, 0x60	; INC 8, XSP
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_FA944B
 	ld bc, iz
 	extz xbc
@@ -347081,7 +347081,7 @@ DispatchEvent:	; LABEL_FA9585
 	.byte 0xbf, 0x04, 0x31	; LDA XBC, XSP + 004h
 	.byte 0xb7, 0x32	; LDA XDE, XSP
 	.byte 0x1e, 0x3d, 0x02	; CALR GetEvent
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl z, LABEL_FA965C
 
 LABEL_FA9598:
@@ -347149,7 +347149,7 @@ LABEL_FA964C:
 	.byte 0xbf, 0x04, 0x31	; LDA XBC, XSP + 004h
 	.byte 0xb7, 0x32	; LDA XDE, XSP
 	.byte 0x1e, 0x79, 0x01	; CALR GetEvent
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl nz, LABEL_FA9598
 
 LABEL_FA965C:
@@ -347533,7 +347533,7 @@ MainDispatchEvent:
 	.byte 0xbf, 0x04, 0x31	; LDA XBC, XSP + 004h
 	.byte 0xb7, 0x32	; LDA XDE, XSP
 	.byte 0x1e, 0x6d, 0x01	; CALR MainGetEvent
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_FA9AF0
 
 LABEL_FA9A9D:
@@ -347567,7 +347567,7 @@ LABEL_FA9AE1:
 	.byte 0xbf, 0x04, 0x31	; LDA XBC, XSP + 004h
 	.byte 0xb7, 0x32	; LDA XDE, XSP
 	.byte 0x1e, 0x1a, 0x01	; CALR MainGetEvent
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_FA9A9D
 
 LABEL_FA9AF0:
@@ -347636,7 +347636,7 @@ LABEL_FA9B6C:
 	lds wa, 7
 	call LABEL_EF1DD4
 	call LABEL_EF0797
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl z, LABEL_FA9C02
 	lds wa, 3
 	call LABEL_EF1C5F
@@ -347867,7 +347867,7 @@ LABEL_FA9D67:
 	lds wa, 4
 	call LABEL_EF1DD4
 	call LABEL_EF0797
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl z, LABEL_FA9E03
 	lds wa, 3
 	call LABEL_EF1C5F
@@ -347933,7 +347933,7 @@ LABEL_FA9E17:
 	lds wa, 4
 	call LABEL_EF1DD4
 	call LABEL_EF0797
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl z, LABEL_FA9F03
 	lds wa, 3
 	call LABEL_EF1C5F
@@ -348316,7 +348316,7 @@ ResetApTimer:
 	.byte 0xaf, 0x10, 0x21	; LD XBC, (XSP + 010h)
 	.byte 0xaf, 0x0c, 0x22	; LD XDE, (XSP + 00ch)
 	.byte 0x1e, 0x22, 0x00	; CALR KillApTimer
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_FAA24E
 	.byte 0xaf, 0x18, 0x20	; LD XWA, (XSP + 018h)
 	push xwa
@@ -348600,7 +348600,7 @@ DrawFunc:
 	push xiz
 	ld xiz, xwa
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_FAA49E
 	push xiz
 	ld xhl, xiz
@@ -348650,7 +348650,7 @@ LABEL_FAA4EC:
 	push xiz
 	ld xiz, xwa
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_FAA503
 	push xiz
 	ld xhl, xiz
@@ -348728,7 +348728,7 @@ InitializeGraphics:
 
 LcdOn:
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_FAA5D0
 	lds wa, 4
 	calr LABEL_FAA444
@@ -348746,7 +348746,7 @@ LABEL_FAA5D0:
 
 LcdOff:	; faa5db
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_FAA5F5
 	lds wa, 4
 	calr LABEL_FAA444
@@ -348783,11 +348783,11 @@ LABEL_FAA61D:
 
 UpdateScreen:	; FAA61D
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_FAA636
 	calr LABEL_FAA65A
 	.byte 0xd2, 0x50, 0x04, 0x03, 0x20	; LD WA, (030450h)
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	.byte 0xb0, 0xfe	; RET NZ
 	.byte 0xf2, 0x4e, 0x04, 0x03, 0x50	; LD (03044Eh), WA
 	ret
@@ -348816,11 +348816,11 @@ LABEL_FAA65A:
 	.byte 0xd2, 0x60, 0x04, 0x03, 0x3f, 0x00, 0x00	; CPW (030460h), 0000h
 	jr z, LABEL_FAA6BA
 	.byte 0xd2, 0x9e, 0xef, 0x03, 0x20	; LD WA, (03EF9Eh)
-	.byte 0xd8, 0xdc	; CP WA, 4
+	cps wa, 4
 	jr nz, LABEL_FAA690
 	.byte 0xd2, 0xa0, 0xef, 0x03, 0x3f, 0x04, 0x00	; CPW (03EFA0h), 0004h
 	jr z, LABEL_FAA6E9
-	.byte 0xd8, 0xdc	; CP WA, 4
+	cps wa, 4
 	jr nz, LABEL_FAA6E9
 
 LABEL_FAA690:
@@ -348958,7 +348958,7 @@ ReadPixel:
 	ld xiz, xwa
 	ld xwa, xiz
 	calr LABEL_FAD1D8
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_FAA7E0
 	.byte 0x9e, 0x02, 0x20	; LD WA, (XIZ + 002h)
 	exts xwa
@@ -348989,7 +348989,7 @@ ModifyPixel:
 	.byte 0xbf, 0x02, 0x60	; LD (XSP + 002h), XWA
 	.byte 0xaf, 0x02, 0x20	; LD XWA, (XSP + 002h)
 	calr LABEL_FAD1D8
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_FAA840
 	cp iz, 0xF7
 	jr z, LABEL_FAA840
@@ -349034,11 +349034,11 @@ ModifyPixelEx:
 	.byte 0xbf, 0x04, 0x60	; LD (XSP + 004h), XWA
 	.byte 0xaf, 0x04, 0x20	; LD XWA, (XSP + 004h)
 	calr LABEL_FAD1D8
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl z, LABEL_FAA986
 	ld wa, iz
 	calr LABEL_FAD1F7
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl z, LABEL_FAA986
 	.byte 0xaf, 0x04, 0x20	; LD XWA, (XSP + 004h)
 	ld bc, iz
@@ -349175,7 +349175,7 @@ DrawLine:
 	.byte 0xbf, 0x06, 0x61	; LD (XSP + 006h), XBC
 	ld xiz, xwa
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_FAA9B2
 	.byte 0xd2, 0x4e, 0x04, 0x03, 0x3f, 0x00, 0x00	; CPW (03044Eh), 0000h
 	jr z, LABEL_FAA9DF
@@ -349222,11 +349222,11 @@ LABEL_FAA9FB:
 	.byte 0xbf, 0x42, 0x60	; LD (XSP + 042h), XWA
 	.byte 0xaf, 0x42, 0x20	; LD XWA, (XSP + 042h)
 	calr LABEL_FAD1D8
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl z, LABEL_FAAF0D
 	.byte 0xaf, 0x3e, 0x20	; LD XWA, (XSP + 03eh)
 	calr LABEL_FAD1D8
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl z, LABEL_FAAF0D
 	ld xde, 0xFFFFFFFF
 	.byte 0xaf, 0x3e, 0x20	; LD XWA, (XSP + 03eh)
@@ -349750,11 +349750,11 @@ DrawLineEx:
 	.byte 0xbf, 0x32, 0x60	; LD (XSP + 032h), XWA
 	.byte 0xaf, 0x32, 0x20	; LD XWA, (XSP + 032h)
 	calr LABEL_FAD1D8
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl z, LABEL_FAB26C
 	.byte 0xaf, 0x2e, 0x20	; LD XWA, (XSP + 02eh)
 	calr LABEL_FAD1D8
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl z, LABEL_FAB26C
 	ld xde, 0xFFFFFFFF
 	.byte 0xaf, 0x2e, 0x20	; LD XWA, (XSP + 02eh)
@@ -350115,7 +350115,7 @@ DrawBox:
 	.byte 0xbf, 0x04, 0x51	; LD (XSP + 004h), BC
 	ld xiz, xwa
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_FAB295
 	.byte 0xd2, 0x4e, 0x04, 0x03, 0x3f, 0x00, 0x00	; CPW (03044Eh), 0000h
 	jr z, LABEL_FAB2B6
@@ -350164,7 +350164,7 @@ LABEL_FAB2CF:
 	ld wa, (xhl)
 	.byte 0x92, 0xf0	; CP WA, (XDE)
 	jrl gt, LABEL_FAB3D9
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr ge, LABEL_FAB2FE
 	.byte 0xb3, 0x02, 0x00, 0x00	; LDW (XHL), 0000h
 
@@ -350273,7 +350273,7 @@ DrawFrame:
 	.byte 0xbf, 0x04, 0x51	; LD (XSP + 004h), BC
 	ld xiz, xwa
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_FAB400
 	.byte 0xd2, 0x4e, 0x04, 0x03, 0x3f, 0x00, 0x00	; CPW (03044Eh), 0000h
 	jr z, LABEL_FAB421
@@ -350995,7 +350995,7 @@ MovePixels:
 	.byte 0xbf, 0x04, 0x61	; LD (XSP + 004h), XBC
 	ld xiz, xwa
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_FABA75
 	.byte 0xd2, 0x4e, 0x04, 0x03, 0x3f, 0x00, 0x00	; CPW (03044Eh), 0000h
 	jr z, LABEL_FABA9C
@@ -351119,7 +351119,7 @@ LABEL_FABB6E:
 
 DrawWall:
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_FABB8A
 	.byte 0xf2, 0x50, 0x04, 0x03, 0x02, 0x01, 0x00	; LDW (030450h), 0001h
 	.byte 0xf2, 0x4e, 0x04, 0x03, 0x02, 0x01, 0x00	; LDW (03044Eh), 0001h
@@ -351195,7 +351195,7 @@ DrawBitmap:
 	.byte 0xbf, 0x04, 0x61	; LD (XSP + 004h), XBC
 	ld xiz, xwa
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_FABC5E
 	.byte 0xd2, 0x4e, 0x04, 0x03, 0x3f, 0x00, 0x00	; CPW (03044Eh), 0000h
 	jr z, LABEL_FABC7F
@@ -351237,7 +351237,7 @@ LABEL_FABC98:
 	jrl z, LABEL_FABE0E
 	.byte 0xaf, 0x1a, 0x20	; LD XWA, (XSP + 01ah)
 	calr LABEL_FAD1D8
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl z, LABEL_FABE0E
 	ld xhl, xiz
 	sll xhl, 3
@@ -351350,7 +351350,7 @@ LABEL_FABD90:
 	exts xwa
 	.byte 0xd8, 0x0b, 0x02, 0x00	; DIVS_WA 0002h
 	.byte 0xd7, 0xe2, 0x88	; LD WA, QWA
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr z, LABEL_FABDDD
 	.byte 0x84, 0x3f, 0xf7	; CP (XIX), 0f7h
 	jr z, LABEL_FABDDB
@@ -351411,7 +351411,7 @@ DrawBitmapFast:
 	.byte 0xbf, 0x04, 0x61	; LD (XSP + 004h), XBC
 	ld xiz, xwa
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_FABE35
 	.byte 0xd2, 0x4e, 0x04, 0x03, 0x3f, 0x00, 0x00	; CPW (03044Eh), 0000h
 	jr z, LABEL_FABE56
@@ -351453,7 +351453,7 @@ LABEL_FABE6F:
 	jrl z, LABEL_FABF3A
 	.byte 0xaf, 0x18, 0x20	; LD XWA, (XSP + 018h)
 	calr LABEL_FAD1D8
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl z, LABEL_FABF3A
 	.byte 0xaf, 0x18, 0x23	; LD XHL, (XSP + 018h)
 	.byte 0x9b, 0x02, 0x21	; LD BC, (XHL + 002h)
@@ -351537,7 +351537,7 @@ DrawIcons:
 	.byte 0xbf, 0x04, 0x61	; LD (XSP + 004h), XBC
 	ld xiz, xwa
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_FABF61
 	.byte 0xd2, 0x4e, 0x04, 0x03, 0x3f, 0x00, 0x00	; CPW (03044Eh), 0000h
 	jr z, LABEL_FABF82
@@ -351581,7 +351581,7 @@ LABEL_FABF9B:
 
 	.byte 0xaf, 0x24, 0x20	; LD XWA, (XSP + 024h)
 	calr LABEL_FAD1D8
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl z, LABEL_FAC077
 	.byte 0xaf, 0x20, 0x20	; LD XWA, (XSP + 020h)	; ICON ID
 	.byte 0xbf, 0x04, 0x60	; LD (XSP + 004h), XWA
@@ -351673,7 +351673,7 @@ DrawFrameSP:
 	.byte 0xbf, 0x06, 0x51	; LD (XSP + 006h), BC
 	ld xiz, xwa
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_FAC0A4
 	.byte 0xd2, 0x4e, 0x04, 0x03, 0x3f, 0x00, 0x00	; CPW (03044Eh), 0000h
 	jr z, LABEL_FAC0CB
@@ -351716,7 +351716,7 @@ LABEL_FAC0E7:
 	.byte 0xbf, 0x1e, 0x60	; LD (XSP + 01eh), XWA
 	.byte 0xaf, 0x1e, 0x20	; LD XWA, (XSP + 01eh)
 	calr LABEL_FAD1D8
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl z, LABEL_FAC1E8
 	.byte 0x9f, 0x1c, 0x21	; LD BC, (XSP + 01ch)
 	extz xbc
@@ -351834,7 +351834,7 @@ DrawBitmapSP:
 	.byte 0xbf, 0x06, 0x61	; LD (XSP + 006h), XBC
 	ld xiz, xwa
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_FAC217
 	.byte 0xd2, 0x4e, 0x04, 0x03, 0x3f, 0x00, 0x00	; CPW (03044Eh), 0000h
 	jr z, LABEL_FAC244
@@ -351887,7 +351887,7 @@ LABEL_FAC268:
 	.byte 0xbf, 0x1a, 0x60	; LD (XSP + 01ah), XWA
 	.byte 0xaf, 0x1a, 0x20	; LD XWA, (XSP + 01ah)
 	calr LABEL_FAD1D8
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl z, LABEL_FAC3D4
 	.byte 0xbf, 0x04, 0x02, 0x00, 0x00	; LDW (XSP + 004h:8), 0000h
 	.byte 0x9f, 0x22, 0x20	; LD WA, (XSP + 022h)
@@ -351996,7 +351996,7 @@ LABEL_FAC351:
 	exts xwa
 	.byte 0xd8, 0x0b, 0x02, 0x00	; DIVS_WA 0002h
 	.byte 0xd7, 0xe2, 0x88	; LD WA, QWA
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr z, LABEL_FAC3A3
 	.byte 0xaf, 0x16, 0x24	; LD XIX, (XSP + 016h)
 	.byte 0x84, 0x3f, 0xf7	; CP (XIX), 0f7h
@@ -352056,7 +352056,7 @@ DrawBitmapSPFast:
 	.byte 0xbf, 0x06, 0x61	; LD (XSP + 006h), XBC
 	ld xiz, xwa
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_FAC406
 	.byte 0xd2, 0x4e, 0x04, 0x03, 0x3f, 0x00, 0x00	; CPW (03044Eh), 0000h
 	jr z, LABEL_FAC433
@@ -352109,7 +352109,7 @@ LABEL_FAC457:
 	.byte 0xbf, 0x16, 0x60	; LD (XSP + 016h), XWA
 	.byte 0xaf, 0x16, 0x20	; LD XWA, (XSP + 016h)
 	calr LABEL_FAD1D8
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl z, LABEL_FAC502
 	.byte 0xaf, 0x16, 0x23	; LD XHL, (XSP + 016h)
 	.byte 0x9b, 0x02, 0x21	; LD BC, (XHL + 002h)
@@ -352128,7 +352128,7 @@ LABEL_FAC457:
 	.byte 0xbf, 0x06, 0x51	; LD (XSP + 006h), BC
 	.byte 0xbf, 0x04, 0x02, 0x00, 0x00	; LDW (XSP + 004h:8), 0000h
 	.byte 0x9f, 0x1e, 0x20	; LD WA, (XSP + 01eh)
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr ule, LABEL_FAC4DD
 
 LABEL_FAC4A1:
@@ -352183,7 +352183,7 @@ DrawBitmapSP2:
 	.byte 0xbf, 0x06, 0x61	; LD (XSP + 006h), XBC
 	ld xiz, xwa
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_FAC53A
 	.byte 0xd2, 0x4e, 0x04, 0x03, 0x3f, 0x00, 0x00	; CPW (03044Eh), 0000h
 	jr z, LABEL_FAC573
@@ -352245,12 +352245,12 @@ LABEL_FAC59D:
 	.byte 0xbf, 0x14, 0x60	; LD (XSP + 014h), XWA
 	.byte 0xaf, 0x14, 0x20	; LD XWA, (XSP + 014h)
 	calr LABEL_FAD1D8
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl z, LABEL_FAC690
 	lds hl, 0
 	.byte 0x9f, 0x20, 0x21	; LD BC, (XSP + 020h)
 	ld de, bc
-	.byte 0xda, 0xd8	; CP DE, 0
+	cps de, 0
 	jrl ule, LABEL_FAC66C
 
 LABEL_FAC5C1:
@@ -352359,7 +352359,7 @@ DrawBitmapFile:
 	.byte 0xbf, 0x04, 0x61	; LD (XSP + 004h), XBC
 	ld xiz, xwa
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_FAC6B9
 	.byte 0xd2, 0x4e, 0x04, 0x03, 0x3f, 0x00, 0x00	; CPW (03044Eh), 0000h
 	jr z, LABEL_FAC6DA
@@ -352404,7 +352404,7 @@ LABEL_FAC6F3:
 	push xwa
 	call 0xFF0CC1
 	add xsp, 0xA
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl nz, LABEL_FACAC3
 	.byte 0xe3, 0xfd, 0x34, 0x04, 0x20	; LD XWA, (XSP + 0434h)
 	.byte 0xb8, 0x0e, 0x30	; LDA XWA, XWA + 00eh
@@ -352678,7 +352678,7 @@ LABEL_FACA00:
 	calr LABEL_FAED27
 	.byte 0xe3, 0xfd, 0x38, 0x04, 0x20	; LD XWA, (XSP + 0438h)
 	calr LABEL_FAD1D8
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl z, LABEL_FACAC3
 	.byte 0xaf, 0x24, 0x21	; LD XBC, (XSP + 024h)
 	.byte 0xa9, 0x04, 0x20	; LD XWA, (XBC + 004h)
@@ -352704,7 +352704,7 @@ LABEL_FACA00:
 	.byte 0xbf, 0x22, 0x51	; LD (XSP + 022h), BC
 	.byte 0xbf, 0x20, 0x02, 0x00, 0x00	; LDW (XSP + 020h:8), 0000h
 	.byte 0x9f, 0x2a, 0x20	; LD WA, (XSP + 02ah)
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr ule, LABEL_FACA97
 
 LABEL_FACA65:
@@ -352756,7 +352756,7 @@ DrawString:
 	.byte 0xbf, 0x0c, 0x61	; LD (XSP + 00ch), XBC
 	.byte 0xbf, 0x10, 0x60	; LD (XSP + 010h), XWA
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_FACAFF
 	.byte 0xd2, 0x4e, 0x04, 0x03, 0x3f, 0x00, 0x00	; CPW (03044Eh), 0000h
 	jr z, LABEL_FACB62
@@ -353107,7 +353107,7 @@ LABEL_FACDF5:
 	.byte 0x98, 0x06, 0xf5	; CP IY, (XWA + 006h)
 	jr gt, LABEL_FACE7C
 	lds iy, 0
-	.byte 0xd9, 0xd8	; CP BC, 0
+	cps bc, 0
 	jr ule, LABEL_FACE63
 
 LABEL_FACE26:
@@ -353320,11 +353320,11 @@ DrawStringAlignment:
 	.byte 0x9f, 0x0c, 0x24	; LD IX, (XSP + 00ch)
 	.byte 0xaf, 0x0e, 0x26	; LD XIZ, (XSP + 00eh)
 	.byte 0x8f, 0x08, 0x23	; LD C, (XSP + 008h)
-	.byte 0xcb, 0xda	; CP C, 2
+	cps c, 2
 	jr z, LABEL_FAD078
-	.byte 0xcb, 0xd9	; CP C, 1
+	cps c, 1
 	jr z, LABEL_FAD06E
-	.byte 0xcb, 0xd8	; CP C, 0
+	cps c, 0
 	jr nz, LABEL_FAD080
 	push xiz
 	pushw ix
@@ -353386,11 +353386,11 @@ DrawStringReverse:
 	add wa, hl
 	ld (xbc), wa
 	.byte 0x8f, 0x22, 0x21	; LD A, (XSP + 022h)
-	.byte 0xc9, 0xda	; CP A, 2
+	cps a, 2
 	jr z, LABEL_FAD102
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	jr z, LABEL_FAD0F7
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_FAD10F
 	.byte 0x9f, 0x04, 0x20	; LD WA, (XSP + 004h)
 	exts xwa
@@ -353519,7 +353519,7 @@ LABEL_FAD1D8:
 	.byte 0x90, 0x3f, 0x40, 0x01	; CPW (XWA), 0140h
 	jr ge, LABEL_FAD1F1
 	.byte 0x98, 0x02, 0x20	; LD WA, (XWA + 002h)
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr lt, LABEL_FAD1F1
 	cp wa, 0xF0
 	jr lt, LABEL_FAD1F4
@@ -353533,7 +353533,7 @@ LABEL_FAD1F4:
 	ret
 
 LABEL_FAD1F7:
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr lt, LABEL_FAD201
 	cp wa, 0xFF
 	jr le, LABEL_FAD20D
@@ -353554,7 +353554,7 @@ LABEL_FAD210:
 
 LABEL_FAD213:
 	ld hl, bc
-	.byte 0xd9, 0xd8	; CP BC, 0
+	cps bc, 0
 	.byte 0xb0, 0xf1	; RET LT
 	cp bc, 0xFF
 	.byte 0xb0, 0xfa	; RET GT
@@ -353673,7 +353673,7 @@ DrawDesignBox:	; LABEL_FAD559
 	.byte 0xbf, 0x06, 0x51	; LD (XSP + 006h), BC
 	ld xiz, xwa
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_FAD581
 	.byte 0xd2, 0x4e, 0x04, 0x03, 0x3f, 0x00, 0x00	; CPW (03044Eh), 0000h
 	jr z, LABEL_FAD5A8
@@ -353743,7 +353743,7 @@ LABEL_FAD608:
 	ld xhl, xbc
 	.byte 0xbf, 0x1c, 0x32	; LDA XDE, XSP + 01ch
 	ld xiy, xde
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr mi, LABEL_FAD649
 	cp wa, 0xB
 	jr le, LABEL_FAD633
@@ -354236,9 +354236,9 @@ LABEL_FADAD6:
 	.byte 0x9f, 0x48, 0x3f, 0x07, 0x00	; CPW (XSP + 048h), 0007h
 	jr z, LABEL_FADB3A
 	sub wa, 0x81
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr lt, LABEL_FADB3A
-	.byte 0xd8, 0xdf	; CP WA, 7
+	cps wa, 7
 	jr le, LABEL_FADB24
 	sub wa, 0x18
 	cp wa, 0x8
@@ -355467,7 +355467,7 @@ LABEL_FAE86D:
 	push xwa
 	call 0xFF0CC1
 	add xsp, 0xA
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_FAE901
 	.byte 0xf3, 0xfd, 0x22, 0x04, 0x30	; LDA XWA, XSP + 0422h
 	ld xbc, 0x28
@@ -356282,7 +356282,7 @@ CaptureLcd:
 	.byte 0xbf, 0x02, 0x30	; LDA XWA, XSP + 002h
 	ld xbc, 0xEAAE5E
 	call LABEL_F88BC7
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl nz, LABEL_FAF1F4
 	.byte 0xf3, 0xfd, 0x3a, 0x04, 0x30	; LDA XWA, XSP + 043ah
 	ld xbc, 0xE
@@ -356392,7 +356392,7 @@ ChangeWall:
 	pushw iz
 	ld iz, wa
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_FAF21C
 	ld wa, iz
 	calr LABEL_FAF237
@@ -356432,7 +356432,7 @@ ChangeWallPalette:
 	pushw iz
 	ld iz, wa
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_FAF26C
 	ld wa, iz
 	calr LABEL_FAF287
@@ -356458,9 +356458,9 @@ LABEL_FAF287:
 	push xiz
 	ld iz, wa
 	.byte 0xd2, 0x9c, 0xef, 0x03, 0x20	; LD WA, (03EF9Ch)
-	.byte 0xd8, 0xda	; CP WA, 2
+	cps wa, 2
 	jr z, LABEL_FAF2C5
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr nz, LABEL_FAF299
 	inc 1, iz
 
@@ -356488,7 +356488,7 @@ ChangePalette:
 	pushw iz
 	ld iz, wa
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_FAF2D8
 	ld wa, iz
 	calr LABEL_FAF2F3
@@ -356549,7 +356549,7 @@ LABEL_FAF345:
 
 LABEL_FAF346:
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_FAF360
 	lds wa, 4
 	calr LABEL_FAA444
@@ -356706,7 +356706,7 @@ LABEL_FAF674:
 	.byte 0xbf, 0x04, 0x51	; LD (XSP + 004h), BC
 	ld xiz, xwa
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_FAF6A0
 	.byte 0xc2, 0xa8, 0xef, 0x03, 0x21	; LD A, (03EFA8h)
 	.byte 0xf2, 0xaa, 0xef, 0x03, 0x41	; LD (03EFAAh), A
@@ -356778,11 +356778,11 @@ LABEL_FAF72C:
 	cp bc, 0xF7
 	jrl z, LABEL_FAF8BC
 	.byte 0xc2, 0xaa, 0xef, 0x03, 0x25	; LD E, (03EFAAh)
-	.byte 0xcd, 0xda	; CP E, 2
+	cps e, 2
 	jrl z, LABEL_FAF86E
-	.byte 0xcd, 0xd9	; CP E, 1
+	cps e, 1
 	jrl z, LABEL_FAF820
-	.byte 0xcd, 0xd8	; CP E, 0
+	cps e, 0
 	jrl nz, LABEL_FAF8B9
 	ld hl, ix
 	cp bc, 0xF5
@@ -356996,7 +356996,7 @@ LABEL_FAF8C0:
 	.byte 0xbf, 0x04, 0x51	; LD (XSP + 004h), BC
 	ld xiz, xwa
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_FAF8EC
 	.byte 0xc2, 0xa8, 0xef, 0x03, 0x21	; LD A, (03EFA8h)
 	.byte 0xf2, 0xaa, 0xef, 0x03, 0x41	; LD (03EFAAh), A
@@ -357068,11 +357068,11 @@ LABEL_FAF978:
 	cp bc, 0xF7
 	jrl z, LABEL_FAFB44
 	.byte 0xc2, 0xaa, 0xef, 0x03, 0x25	; LD E, (03EFAAh)
-	.byte 0xcd, 0xda	; CP E, 2
+	cps e, 2
 	jrl z, LABEL_FAFABC
-	.byte 0xcd, 0xd9	; CP E, 1
+	cps e, 1
 	jrl z, LABEL_FAFA6C
-	.byte 0xcd, 0xd8	; CP E, 0
+	cps e, 0
 	jrl nz, LABEL_FAFB41
 	ld hl, ix
 	cp bc, 0xF5
@@ -357940,7 +357940,7 @@ LABEL_FB0E7F:
 	.byte 0xbf, 0x0c, 0x61	; LD (XSP + 00ch), XBC
 	.byte 0xbf, 0x10, 0x60	; LD (XSP + 010h), XWA
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_FB0EBF
 	.byte 0xc2, 0xa8, 0xef, 0x03, 0x21	; LD A, (03EFA8h)
 	.byte 0xf2, 0xaa, 0xef, 0x03, 0x41	; LD (03EFAAh), A
@@ -358290,11 +358290,11 @@ LABEL_FB11B5:
 
 LABEL_FB11CF:
 	.byte 0xc2, 0xaa, 0xef, 0x03, 0x21	; LD A, (03EFAAh)
-	.byte 0xc9, 0xda	; CP A, 2
+	cps a, 2
 	jrl z, LABEL_FB1369
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	jrl z, LABEL_FB12B7
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jrl nz, LABEL_FB1417
 	.byte 0xbf, 0x1c, 0x02, 0x00, 0x00	; LDW (XSP + 01ch:8), 0000h
 	jrl LABEL_FB12A8
@@ -358612,7 +358612,7 @@ LABEL_FB1450:
 
 LABEL_FB1536:
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_FB1550
 	lds wa, 4
 	calr LABEL_FAA444
@@ -358630,7 +358630,7 @@ LABEL_FB1550:
 
 LABEL_FB155F:
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_FB1579
 	lds wa, 4
 	calr LABEL_FAA444
@@ -359226,9 +359226,9 @@ LABEL_FB2072:
 	extz hl
 	.byte 0xbf, 0x04, 0x31	; LDA XBC, XSP + 004h
 	pushw hl
-	.byte 0xdc, 0xda	; CP IX, 2
+	cps ix, 2
 	jr z, LABEL_FB20AD
-	.byte 0xdc, 0xd9	; CP IX, 1
+	cps ix, 1
 	jr nz, LABEL_FB20B4
 	ld xwa, 0xEAB12C
 	jr LABEL_FB20B9
@@ -359624,7 +359624,7 @@ LABEL_FB271C:
 	lds iz, 0
 	ld xix, xbc
 	lds de, 0
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr le, LABEL_FB2749
 
 LABEL_FB2726:
@@ -359954,7 +359954,7 @@ LABEL_FB2B06:
 	.byte 0x30, 0xc4, 0x03, 0x31, 0x08, 0x00, 0x1e, 0xa6, 0x01, 0x30, 0xc5, 0x03, 0xd9, 0xa9, 0x1e, 0x9e, 0x01	; _VGA_SEQUENCER 08h, 001h
 	.byte 0x30, 0xc4, 0x03, 0x31, 0x0d, 0x00, 0x1e, 0x95, 0x01, 0x30, 0xc5, 0x03, 0xd9, 0xab, 0x1e, 0x8d, 0x01	; _VGA_SEQUENCER 0dh, 003h
 	call 0xEF0865
-	.byte 0xcf, 0xdc	; CP L, 4
+	cps l, 4
 	jr nz, LABEL_FB2F12
 
 	; For byte-matching purposes, the following instructions
@@ -360025,7 +360025,7 @@ LABEL_FB2FE0:
 	srl a, 4
 	ld c, a
 	extz bc
-	.byte 0xcd, 0x33, 0x03	; BIT 003h, E
+	bit 3, e
 	jr z, LABEL_FB3009
 	cp e, 0xF0
 	jr nc, LABEL_FB3004
@@ -360049,7 +360049,7 @@ LABEL_FB300C:
 	srl a, 4
 	ld c, a
 	extz bc
-	.byte 0xcd, 0x33, 0x03	; BIT 003h, E
+	bit 3, e
 	jr z, LABEL_FB3035
 	cp e, 0xF0
 	jr nc, LABEL_FB3030
@@ -360286,7 +360286,7 @@ LABEL_FB31E7:
 	srl a, 4
 	ld c, a
 	extz bc
-	.byte 0xcd, 0x33, 0x03	; BIT 003h, E
+	bit 3, e
 	jr z, LABEL_FB3210
 	cp e, 0xF0
 	jr nc, LABEL_FB320B
@@ -360310,7 +360310,7 @@ LABEL_FB3213:
 	srl a, 4
 	ld c, a
 	extz bc
-	.byte 0xcd, 0x33, 0x03	; BIT 003h, E
+	bit 3, e
 	jr z, LABEL_FB323C
 	cp e, 0xF0
 	jr nc, LABEL_FB3237
@@ -360850,11 +360850,11 @@ LABEL_FB42A1:
 	cp xhl, 0x1A000EF
 	jr z, LABEL_FB429B
 	.byte 0xc1, 0x3c, 0x8d, 0x21	; LD A, (8D3Ch)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	.byte 0xb0, 0xf6	; RET Z
 	dec 1, a
 	.byte 0xf1, 0x3c, 0x8d, 0x41	; LD (8D3Ch), A
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	.byte 0xb0, 0xfe	; RET NZ
 	.byte 0xe8, 0xab	; LD XWA, 3
 	call LABEL_FCD437
@@ -361134,15 +361134,15 @@ LABEL_FB45C5:
 	cp xbc, xhl
 	jr nz, LABEL_FB461C
 	.byte 0xc1, 0x52, 0x8d, 0x23	; LD C, (8D52h)
-	.byte 0xcb, 0x33, 0x02	; BIT 002h, C
+	bit 2, c
 	jr nz, LABEL_FB4619
-	.byte 0xcb, 0x33, 0x01	; BIT 001h, C
+	bit 1, c
 	jr nz, LABEL_FB4614
 	ld xwa, 0x302
 	call LABEL_FCD437
 	ld a, (xsp)
 	extz wa
-	.byte 0xdb, 0xd9	; CP HL, 1
+	cps hl, 1
 	jr nz, LABEL_FB4619
 	calr LABEL_FB4661
 	jr LABEL_FB461C
@@ -361173,14 +361173,14 @@ LABEL_FB461C:
 LABEL_FB463A:
 	ld xwa, 0x302
 	call LABEL_FCD437
-	.byte 0xdb, 0xd9	; CP HL, 1
+	cps hl, 1
 	jr nz, LABEL_FB4650
 	.byte 0xf1, 0x9e, 0xfd, 0xce	; BIT 6, (0FD9Eh)
 	.byte 0xf2, 0xf2, 0x57, 0xfd, 0xe6	; CALL Z, LABEL_FD57F2
 
 LABEL_FB4650:
 	.byte 0xc1, 0x52, 0x8d, 0x21	; LD A, (8D52h)
-	.byte 0xc9, 0x31, 0x04	; SET 004h, A
+	set 4, a
 	and a, 0xF9
 	.byte 0xf1, 0x52, 0x8d, 0x41	; LD (8D52h), A
 	inc 2, xsp
@@ -361344,7 +361344,7 @@ LABEL_FB4661:
 	sub xwa, xbc
 	add xwa, xix
 	ld w, (xwa)
-	.byte 0xc8, 0x30, 0x07	; RES 007h, W
+	res 7, w
 	.byte 0xc7, 0xf4, 0x89	; LD A, IYL
 	or a, w
 	.byte 0xc7, 0xf4, 0x99	; LD IYL, A
@@ -361360,7 +361360,7 @@ LABEL_FB4661:
 	sub xwa, xbc
 	add xwa, xix
 	ld w, (xwa)
-	.byte 0xc8, 0x30, 0x07	; RES 007h, W
+	res 7, w
 	.byte 0xc7, 0xf4, 0x89	; LD A, IYL
 	or a, w
 	.byte 0xc7, 0xf4, 0x99	; LD IYL, A
@@ -361373,7 +361373,7 @@ LABEL_FB4661:
 	sub xwa, xbc
 	add xwa, xix
 	ld a, (xwa)
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
+	res 7, a
 	or e, a
 	ld (xiy), e
 	.byte 0xeb, 0x60	; INC 8, XHL
@@ -361384,7 +361384,7 @@ LABEL_FB4661:
 	sub xwa, xbc
 	add xwa, xix
 	ld a, (xwa)
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
+	res 7, a
 	or e, a
 	ld (xhl), e
 	.byte 0xaf, 0x0c, 0x20	; LD XWA, (XSP + 00ch)
@@ -361396,7 +361396,7 @@ LABEL_FB4661:
 	sub xwa, xbc
 	add xwa, xix
 	ld a, (xwa)
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
+	res 7, a
 	or e, a
 	ld (xhl), e
 	.byte 0xf1, 0x5e, 0xfc, 0x35	; LDA XIY, 0FC5Eh
@@ -361417,7 +361417,7 @@ LABEL_FB4661:
 	.byte 0xf1, 0x52, 0x8d, 0xcb	; BIT 3, (8D52h)
 	jr z, LABEL_FB48A8
 	ld c, (xiy)
-	.byte 0xcb, 0x30, 0x04	; RES 004h, C
+	res 4, c
 	ld (xiy), c
 	ld a, (xhl)
 	and a, 0x10
@@ -361467,7 +361467,7 @@ LABEL_FB48EC:
 	lds bc, 0
 	.byte 0xc7, 0xe6, 0x8d	; LD E, QC
 	extz de
-	.byte 0xda, 0xd8	; CP DE, 0
+	cps de, 0
 	jr ule, LABEL_FB4947
 
 LABEL_FB4903:
@@ -361561,7 +361561,7 @@ LABEL_FB494D:
 	ld xwa, (xix)
 	add xhl, xwa
 	ld a, (xhl)
-	.byte 0xc9, 0x30, 0x01	; RES 001h, A
+	res 1, a
 	or c, a
 	ld (xde), c
 	.byte 0xf1, 0x02, 0xfd, 0x31	; LDA XBC, 0FD02h
@@ -361588,7 +361588,7 @@ LABEL_FB494D:
 	ld xwa, (xix)
 	add xhl, xwa
 	ld a, (xhl)
-	.byte 0xc9, 0x30, 0x05	; RES 005h, A
+	res 5, a
 	or c, a
 	ld (xde), c
 	lds bc, 0
@@ -361844,7 +361844,7 @@ LABEL_FB4A83:
 	.byte 0xaf, 0x0c, 0xa0	; SUB XWA, (XSP + 00ch)
 	add xwa, xde
 	ld a, (xwa)
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
+	res 7, a
 	or c, a
 	ld (xhl), c
 	.byte 0xaf, 0x10, 0x20	; LD XWA, (XSP + 010h)
@@ -361856,7 +361856,7 @@ LABEL_FB4A83:
 	.byte 0xaf, 0x0c, 0xa0	; SUB XWA, (XSP + 00ch)
 	add xwa, xde
 	ld a, (xwa)
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
+	res 7, a
 	or c, a
 	ld (xhl), c
 	.byte 0xaf, 0x08, 0x20	; LD XWA, (XSP + 008h)
@@ -361868,7 +361868,7 @@ LABEL_FB4A83:
 	.byte 0xaf, 0x0c, 0xa0	; SUB XWA, (XSP + 00ch)
 	add xwa, xde
 	ld a, (xwa)
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
+	res 7, a
 	or c, a
 	ld (xhl), c
 	.byte 0xbd, 0x08, 0x33	; LDA XHL, XIY + 008h
@@ -361879,7 +361879,7 @@ LABEL_FB4A83:
 	.byte 0xaf, 0x0c, 0xa0	; SUB XWA, (XSP + 00ch)
 	add xwa, xde
 	ld a, (xwa)
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
+	res 7, a
 	or c, a
 	ld (xhl), c
 	.byte 0xbc, 0x08, 0x33	; LDA XHL, XIX + 008h
@@ -361890,7 +361890,7 @@ LABEL_FB4A83:
 	.byte 0xaf, 0x0c, 0xa0	; SUB XWA, (XSP + 00ch)
 	add xwa, xde
 	ld a, (xwa)
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
+	res 7, a
 	or c, a
 	ld (xhl), c
 	pop xiz
@@ -362029,7 +362029,7 @@ LABEL_FB4D71:
 	ld (xiy), a
 	.byte 0xb9, 0x05, 0x34	; LDA XIX, XBC + 005h
 	ld c, (xix)
-	.byte 0xcb, 0x30, 0x01	; RES 001h, C
+	res 1, c
 	ld (xix), c
 	ld xwa, xix
 	sub xwa, xde
@@ -362825,7 +362825,7 @@ LABEL_FB54FF:
 	jr z, LABEL_FB5541
 	.byte 0xf1, 0x6f, 0xfc, 0x32	; LDA XDE, 0FC6Fh
 	ld c, (xde)
-	.byte 0xcb, 0x30, 0x06	; RES 006h, C
+	res 6, c
 	ld (xde), c
 	.byte 0xf1, 0xa0, 0xf9, 0x33	; LDA XHL, 0F9A0h
 	ld xwa, xde
@@ -362855,7 +362855,7 @@ LABEL_FB5541:
 	jr z, LABEL_FB5583
 	.byte 0xf1, 0x6f, 0xfc, 0x32	; LDA XDE, 0FC6Fh
 	ld c, (xde)
-	.byte 0xcb, 0x30, 0x05	; RES 005h, C
+	res 5, c
 	ld (xde), c
 	.byte 0xf1, 0xa0, 0xf9, 0x33	; LDA XHL, 0F9A0h
 	ld xwa, xde
@@ -362899,7 +362899,7 @@ LABEL_FB559F:
 	pushw iz
 	call LABEL_FC4CED
 	calr LABEL_FB6023
-	.byte 0xcf, 0x33, 0x00	; BIT 000h, L
+	bit 0, l
 	jr nz, LABEL_FB55E7
 	.byte 0xc1, 0x34, 0x8d, 0x3f, 0x13	; CP (8D34h), 013h
 	jr z, LABEL_FB55E7
@@ -362911,7 +362911,7 @@ LABEL_FB559F:
 	.byte 0xf2, 0xe4, 0xc8, 0x03, 0x34	; LDA XIX, 03C8E4h
 	add xwa, xix
 	ld w, (xwa)
-	.byte 0xc8, 0x30, 0x01	; RES 001h, W
+	res 1, w
 	ld a, (xbc)
 	and a, 0x2
 	or a, w
@@ -362927,7 +362927,7 @@ LABEL_FB55E7:
 	.byte 0xf1, 0x76, 0x8e, 0xcd	; BIT 5, (8E76h)
 	jr nz, LABEL_FB55F5
 	calr LABEL_FB6023
-	.byte 0xcf, 0x33, 0x00	; BIT 000h, L
+	bit 0, l
 	jr z, LABEL_FB5606
 
 LABEL_FB55F5:
@@ -362984,7 +362984,7 @@ LABEL_FB564B:
 	extz xbc
 	.byte 0xaf, 0x08, 0x81	; ADD XBC, (XSP + 008h)
 	.byte 0xc1, 0x46, 0x8d, 0x21	; LD A, (8D46h)
-	.byte 0xc9, 0x33, 0x02	; BIT 002h, A
+	bit 2, a
 	jr nz, LABEL_FB56AE
 	inc 1, xde
 	.byte 0xf1, 0xa2, 0xfb, 0x30	; LDA XWA, 0FBA2h
@@ -363003,7 +363003,7 @@ LABEL_FB568F:
 	.byte 0xbf, 0x08, 0x60	; LD (XSP + 008h), XWA
 	.byte 0xd1, 0xde, 0x90, 0x23	; LD HL, (90DEh)
 	.byte 0xc1, 0x46, 0x8d, 0x21	; LD A, (8D46h)
-	.byte 0xc9, 0x31, 0x02	; SET 002h, A
+	set 2, a
 	.byte 0xf1, 0x46, 0x8d, 0x41	; LD (8D46h), A
 	jr LABEL_FB56C5
 
@@ -363162,7 +363162,7 @@ LABEL_FB57C8:
 	.byte 0xf1, 0x4c, 0x8d, 0x00, 0x00	; LD (8D4Ch), 000h
 	.byte 0xc1, 0x4c, 0x8d, 0x22	; LD B, (8D4Ch)
 	.byte 0xc1, 0xc4, 0xf9, 0x21	; LD A, (0F9C4h)
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
+	res 7, a
 	.byte 0xf1, 0x4c, 0x8d, 0x41	; LD (8D4Ch), A
 	.byte 0xc1, 0x4c, 0x8d, 0x25	; LD E, (8D4Ch)
 	.byte 0xf1, 0x4c, 0x8d, 0x00, 0x7f	; LD (8D4Ch), 07fh
@@ -363195,7 +363195,7 @@ LABEL_FB582D:
 	.byte 0xf1, 0x4c, 0x8d, 0x00, 0x00	; LD (8D4Ch), 000h
 	.byte 0xc1, 0x4c, 0x8d, 0x22	; LD B, (8D4Ch)
 	.byte 0xc1, 0xde, 0xf9, 0x21	; LD A, (0F9DEh)
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
+	res 7, a
 	.byte 0xf1, 0x4c, 0x8d, 0x41	; LD (8D4Ch), A
 	.byte 0xc1, 0x4c, 0x8d, 0x25	; LD E, (8D4Ch)
 	.byte 0xf1, 0x4c, 0x8d, 0x00, 0x7f	; LD (8D4Ch), 07fh
@@ -363228,7 +363228,7 @@ LABEL_FB5892:
 	.byte 0xf1, 0x4c, 0x8d, 0x00, 0x00	; LD (8D4Ch), 000h
 	.byte 0xc1, 0x4c, 0x8d, 0x22	; LD B, (8D4Ch)
 	.byte 0xc1, 0xf8, 0xf9, 0x21	; LD A, (0F9F8h)
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
+	res 7, a
 	.byte 0xf1, 0x4c, 0x8d, 0x41	; LD (8D4Ch), A
 	.byte 0xc1, 0x4c, 0x8d, 0x25	; LD E, (8D4Ch)
 	.byte 0xf1, 0x4c, 0x8d, 0x00, 0x7f	; LD (8D4Ch), 07fh
@@ -363250,7 +363250,7 @@ LABEL_FB58F7:
 	.byte 0xf1, 0x4c, 0x8d, 0x00, 0x03	; LD (8D4Ch), 003h
 	.byte 0xc1, 0x4c, 0x8d, 0x22	; LD B, (8D4Ch)
 	.byte 0xc1, 0xc7, 0xf9, 0x21	; LD A, (0F9C7h)
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
+	res 7, a
 	.byte 0xf1, 0x4c, 0x8d, 0x41	; LD (8D4Ch), A
 	.byte 0xc1, 0x4c, 0x8d, 0x25	; LD E, (8D4Ch)
 	.byte 0xf1, 0x4c, 0x8d, 0x00, 0x7f	; LD (8D4Ch), 07fh
@@ -363272,7 +363272,7 @@ LABEL_FB592E:
 	.byte 0xf1, 0x4c, 0x8d, 0x00, 0x03	; LD (8D4Ch), 003h
 	.byte 0xc1, 0x4c, 0x8d, 0x22	; LD B, (8D4Ch)
 	.byte 0xc1, 0xe1, 0xf9, 0x21	; LD A, (0F9E1h)
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
+	res 7, a
 	.byte 0xf1, 0x4c, 0x8d, 0x41	; LD (8D4Ch), A
 	.byte 0xc1, 0x4c, 0x8d, 0x25	; LD E, (8D4Ch)
 	.byte 0xf1, 0x4c, 0x8d, 0x00, 0x7f	; LD (8D4Ch), 07fh
@@ -363294,7 +363294,7 @@ LABEL_FB5965:
 	.byte 0xf1, 0x4c, 0x8d, 0x00, 0x03	; LD (8D4Ch), 003h
 	.byte 0xc1, 0x4c, 0x8d, 0x22	; LD B, (8D4Ch)
 	.byte 0xc1, 0xfb, 0xf9, 0x21	; LD A, (0F9FBh)
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
+	res 7, a
 	.byte 0xf1, 0x4c, 0x8d, 0x41	; LD (8D4Ch), A
 	.byte 0xc1, 0x4c, 0x8d, 0x25	; LD E, (8D4Ch)
 	.byte 0xf1, 0x4c, 0x8d, 0x00, 0x7f	; LD (8D4Ch), 07fh
@@ -363317,13 +363317,13 @@ LABEL_FB599C:
 	.byte 0x9f, 0x08, 0x22	; LD DE, (XSP + 008h)
 	extz xde
 	add xde, xix
-	.byte 0xcb, 0xd8	; CP C, 0
+	cps c, 0
 	jrl z, LABEL_FB5A80
 	.byte 0x9f, 0x08, 0x20	; LD WA, (XSP + 008h)
 	extz xwa
 	ld xiz, 0x3C8E4
 	add xiz, xwa
-	.byte 0xcb, 0xd9	; CP C, 1
+	cps c, 1
 	jr z, LABEL_FB5A01
 	ld wa, hl
 	inc 1, hl
@@ -363354,11 +363354,11 @@ LABEL_FB599C:
 
 LABEL_FB5A01:
 	ld w, (xiz)
-	.byte 0xc8, 0x30, 0x07	; RES 007h, W
+	res 7, w
 	.byte 0xbf, 0x04, 0x64	; LD (XSP + 004h), XIX
 	ld xbc, xde
 	ld a, (xde)
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
+	res 7, a
 	cp a, w
 	jrl z, LABEL_FB5AEB
 	.byte 0xf1, 0x46, 0x8d, 0xc8	; BIT 0, (8D46h)
@@ -363481,14 +363481,14 @@ LABEL_FB5AF5:
 	extz xwa
 	add xwa, xix
 	.byte 0xbf, 0x0c, 0x60	; LD (XSP + 00ch), XWA
-	.byte 0xcb, 0xd8	; CP C, 0
+	cps c, 0
 	jrl z, LABEL_FB5C2E
 	.byte 0x9f, 0x10, 0x25	; LD IY, (XSP + 010h)
 	extz xiy
 	ld xwa, 0x3C8E4
 	add xwa, xiy
 	.byte 0xbf, 0x08, 0x60	; LD (XSP + 008h), XWA
-	.byte 0xcb, 0xd9	; CP C, 1
+	cps c, 1
 	jr z, LABEL_FB5BA5
 	ld wa, hl
 	inc 1, hl
@@ -363553,12 +363553,12 @@ LABEL_FB5B7A:
 LABEL_FB5BA5:
 	.byte 0xaf, 0x08, 0x20	; LD XWA, (XSP + 008h)
 	ld c, (xwa)
-	.byte 0xcb, 0x30, 0x07	; RES 007h, C
+	res 7, c
 	.byte 0xbf, 0x04, 0x64	; LD (XSP + 004h), XIX
 	.byte 0xaf, 0x0c, 0x20	; LD XWA, (XSP + 00ch)
 	.byte 0xbf, 0x08, 0x60	; LD (XSP + 008h), XWA
 	ld a, (xwa)
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
+	res 7, a
 	cp a, c
 	jrl z, LABEL_FB5C9C
 	.byte 0xf1, 0x46, 0x8d, 0xc8	; BIT 0, (8D46h)
@@ -363681,9 +363681,9 @@ LABEL_FB5CA3:
 	ld ix, de
 	extz xix
 	.byte 0xaf, 0x04, 0x84	; ADD XIX, (XSP + 004h)
-	.byte 0xcb, 0xd8	; CP C, 0
+	cps c, 0
 	jrl z, LABEL_FB5D74
-	.byte 0xcb, 0xd9	; CP C, 1
+	cps c, 1
 	jr z, LABEL_FB5D01
 	ld iz, hl
 	inc 1, hl
@@ -363715,9 +363715,9 @@ LABEL_FB5CA3:
 
 LABEL_FB5D01:
 	ld b, w
-	.byte 0xc8, 0x33, 0x01	; BIT 001h, W
+	bit 1, w
 	jrl nz, LABEL_FB5DE1
-	.byte 0xca, 0x31, 0x01	; SET 001h, B
+	set 1, b
 	.byte 0xf1, 0x46, 0x8d, 0x42	; LD (8D46h), B
 	ld iz, hl
 	inc 1, hl
@@ -363770,9 +363770,9 @@ LABEL_FB5D01:
 
 LABEL_FB5D74:
 	ld b, w
-	.byte 0xc8, 0x33, 0x01	; BIT 001h, W
+	bit 1, w
 	jr nz, LABEL_FB5DE1
-	.byte 0xca, 0x31, 0x01	; SET 001h, B
+	set 1, b
 	.byte 0xf1, 0x46, 0x8d, 0x42	; LD (8D46h), B
 	ld iz, hl
 	inc 1, hl
@@ -363847,7 +363847,7 @@ LABEL_FB5DEC:
 	.byte 0xb8, 0x03, 0x43	; LD (XWA + 003h), C
 	.byte 0xaa, 0x04, 0x21	; LD XBC, (XDE + 004h)
 	ld c, (xbc)
-	.byte 0xcb, 0x30, 0x07	; RES 007h, C
+	res 7, c
 	.byte 0xb8, 0x04, 0x43	; LD (XWA + 004h), C
 	.byte 0x8a, 0x08, 0x23	; LD C, (XDE + 008h)
 	.byte 0xb8, 0x02, 0x43	; LD (XWA + 002h), C
@@ -364070,7 +364070,7 @@ LABEL_FB5FFA:
 	.byte 0xb0, 0x00, 0xff	; LD (XWA), 0ffh
 	.byte 0xf1, 0xe2, 0x90, 0x55	; LD (90E2h), IY
 	ld c, (xde)
-	.byte 0xcb, 0x30, 0x06	; RES 006h, C
+	res 6, c
 	ld (xde), c
 	ld a, (xhl)
 	and a, 0x40
@@ -364151,7 +364151,7 @@ LABEL_FB603E:
 LABEL_FB6172:
 	push xiz
 	ld xiz, xbc
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_FB6184
 	.byte 0x0b, 0x10, 0x00	; PUSHW 0010h
 	.byte 0x0b, 0xeb, 0x00	; PUSHW 00ebh
@@ -364180,7 +364180,7 @@ LABEL_FB61AB:
 	ret
 
 LABEL_FB61B9:
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	.byte 0xb0, 0xf6	; RET Z
 	dec 1, a
 	extz wa
@@ -364294,7 +364294,7 @@ LABEL_FB6349:
 LABEL_FB635E:
 	lds iz, 0
 	.byte 0xc7, 0xfb, 0xa8	; LD QIZH, 0
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr ule, LABEL_FB6382
 
 LABEL_FB6367:
@@ -364738,7 +364738,7 @@ LABEL_FB63DC:
 	sub xhl, xix
 	add xhl, xde
 	ld c, (xhl)
-	.byte 0xcb, 0x30, 0x06	; RES 006h, C
+	res 6, c
 	ld (xhl), c
 	.byte 0xc7, 0xf4, 0xe3	; OR C, IYL
 	ld (xhl), c
@@ -364780,7 +364780,7 @@ LABEL_FB63DC:
 	sub xhl, xix
 	add xhl, xde
 	ld c, (xhl)
-	.byte 0xcb, 0x30, 0x00	; RES 000h, C
+	res 0, c
 	ld (xhl), c
 	.byte 0xc7, 0xf4, 0xe3	; OR C, IYL
 	ld (xhl), c
@@ -364978,7 +364978,7 @@ LABEL_FB63DC:
 	ld xiz, xbc
 	add xiz, xde
 	ld c, (xiz)
-	.byte 0xcb, 0x30, 0x02	; RES 002h, C
+	res 2, c
 	ld (xiz), c
 	.byte 0xc7, 0xf4, 0xe3	; OR C, IYL
 	ld (xiz), c
@@ -365133,7 +365133,7 @@ LABEL_FB6C4A:
 LABEL_FB6C51:
 	ld xwa, 0x28000
 	call LABEL_FCD437
-	.byte 0xdb, 0x33, 0x07	; BIT 007h, HL
+	bit 7, hl
 	.byte 0xb0, 0xfe	; RET NZ
 	calr LABEL_FB6C67
 	.byte 0xf1, 0x58, 0x8d, 0x53	; LD (8D58h), HL
@@ -365169,11 +365169,11 @@ LABEL_FB6C67:
 
 LABEL_FB6CA9:
 	.byte 0xc1, 0x4e, 0x8d, 0x21	; LD A, (8D4Eh)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	.byte 0xb0, 0xf6	; RET Z
 	dec 1, a
 	.byte 0xf1, 0x4e, 0x8d, 0x41	; LD (8D4Eh), A
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	.byte 0xb0, 0xfe	; RET NZ
 	.byte 0xd1, 0x56, 0x8d, 0x3f, 0x00, 0x00	; CPW (8D56h), 0000h
 	jr z, LABEL_FB6CCE
@@ -365207,7 +365207,7 @@ LABEL_FB6CE6:
 LABEL_FB6CEB:
 	ld xwa, 0x28000
 	call LABEL_FCD437
-	.byte 0xdb, 0x33, 0x07	; BIT 007h, HL
+	bit 7, hl
 	jr nz, LABEL_FB6D09
 	calr LABEL_FB6C67
 	.byte 0xd1, 0x58, 0x8d, 0xf3	; CP HL, (8D58h)
@@ -365225,7 +365225,7 @@ LABEL_FB6D16:
 	push xiz
 	.byte 0xd1, 0x56, 0x8d, 0x21	; LD BC, (8D56h)
 	ld wa, bc
-	.byte 0xd9, 0xd8	; CP BC, 0
+	cps bc, 0
 	jr z, LABEL_FB6D27
 	dec 1, wa
 	jr LABEL_FB6D2D
@@ -365316,7 +365316,7 @@ LABEL_FB6DDC:
 LABEL_FB6DF0:
 	.byte 0xd1, 0x56, 0x8d, 0x20	; LD WA, (8D56h)
 	ld iz, wa
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr z, LABEL_FB6DFC
 	dec 1, iz
 
@@ -365422,7 +365422,7 @@ LABEL_FB6E9E:
 
 LABEL_FB6EB7:
 	inc 1, ix
-	.byte 0xdc, 0xdd	; CP IX, 5
+	cps ix, 5
 	jr c, LABEL_FB6E9E
 	ld xhl, 0xFFFFFFFF
 	ret
@@ -365432,9 +365432,9 @@ LABEL_FB6EC3:
 	ld xiz, xwa
 	calr LABEL_FB704E
 	.byte 0xc1, 0x52, 0x8d, 0x21	; LD A, (8D52h)
-	.byte 0xc9, 0x33, 0x05	; BIT 005h, A
+	bit 5, a
 	jr z, LABEL_FB6EE0
-	.byte 0xc9, 0x30, 0x05	; RES 005h, A
+	res 5, a
 	.byte 0xf1, 0x52, 0x8d, 0x41	; LD (8D52h), A
 	ld xwa, xiz
 	calr LABEL_FB63DC
@@ -365554,28 +365554,28 @@ LABEL_FB6FCD:
 	jr nz, LABEL_FB6FA5
 	.byte 0xaf, 0x20, 0x22	; LD XDE, (XSP + 020h)
 	ld c, (xde)
-	.byte 0xcb, 0x30, 0x05	; RES 005h, C
+	res 5, c
 	ld (xde), c
 	.byte 0xaf, 0x0c, 0x20	; LD XWA, (XSP + 00ch)
 	.byte 0x80, 0xe3	; OR C, (XWA)
 	ld (xde), c
 	.byte 0xaf, 0x24, 0x22	; LD XDE, (XSP + 024h)
 	ld c, (xde)
-	.byte 0xcb, 0x30, 0x05	; RES 005h, C
+	res 5, c
 	ld (xde), c
 	.byte 0xaf, 0x18, 0x20	; LD XWA, (XSP + 018h)
 	.byte 0x80, 0xe3	; OR C, (XWA)
 	ld (xde), c
 	.byte 0xaf, 0x28, 0x22	; LD XDE, (XSP + 028h)
 	ld c, (xde)
-	.byte 0xcb, 0x30, 0x05	; RES 005h, C
+	res 5, c
 	ld (xde), c
 	.byte 0xaf, 0x14, 0x20	; LD XWA, (XSP + 014h)
 	.byte 0x80, 0xe3	; OR C, (XWA)
 	ld (xde), c
 	.byte 0xaf, 0x2c, 0x22	; LD XDE, (XSP + 02ch)
 	ld c, (xde)
-	.byte 0xcb, 0x30, 0x05	; RES 005h, C
+	res 5, c
 	ld (xde), c
 	.byte 0xaf, 0x10, 0x20	; LD XWA, (XSP + 010h)
 	.byte 0x80, 0xe3	; OR C, (XWA)
@@ -365587,7 +365587,7 @@ LABEL_FB6FCD:
 	.byte 0x8f, 0x04, 0xe3	; OR C, (XSP + 004h)
 	ld (xwa), c
 	ld a, (xhl)
-	.byte 0xc9, 0x30, 0x05	; RES 005h, A
+	res 5, a
 	ld (xhl), a
 	.byte 0x8f, 0x06, 0xe1	; OR A, (XSP + 006h)
 	ld (xhl), a
@@ -365639,7 +365639,7 @@ LABEL_FB709F:
 	jr nz, LABEL_FB70B8
 	call 0xEF0865
 	ldb h, 0xA
-	.byte 0xcf, 0xda	; CP L, 2
+	cps l, 2
 	jr nz, LABEL_FB70B8
 	ldb h, 0x9
 
@@ -365672,11 +365672,11 @@ LABEL_FB70F8:
 	.byte 0xf1, 0x1e, 0x04, 0xca	; BIT 2, (041Eh)
 	jr nz, LABEL_FB713F
 	.byte 0xd1, 0x56, 0x8d, 0x20	; LD WA, (8D56h)
-	.byte 0xd8, 0x33, 0x00	; BIT 000h, WA
+	bit 0, wa
 	jr z, LABEL_FB7124
 	ld xwa, 0x28101
 	call LABEL_FCD437
-	.byte 0xdb, 0xda	; CP HL, 2
+	cps hl, 2
 	jr z, LABEL_FB713F
 	push xde
 	push xhl
@@ -365693,7 +365693,7 @@ LABEL_FB70F8:
 LABEL_FB7124:
 	ld xwa, 0x28101
 	call LABEL_FCD437
-	.byte 0xdb, 0xdb	; CP HL, 3
+	cps hl, 3
 	jr z, LABEL_FB713F
 	push xde
 	push xhl
@@ -365720,7 +365720,7 @@ LABEL_FB7142:
 	ld c, (xwa)
 	ld (xde), c
 	.byte 0x88, 0x01, 0x23	; LD C, (XWA + 001h)
-	.byte 0xcb, 0x30, 0x07	; RES 007h, C
+	res 7, c
 	.byte 0xc7, 0xf0, 0x9b	; LD IXL, C
 	.byte 0xba, 0x01, 0x33	; LDA XHL, XDE + 001h
 	ld c, (xhl)
@@ -365783,9 +365783,9 @@ LABEL_FB71E2:
 	cp c, 0x7A
 	jr z, LABEL_FB7214
 	.byte 0xc1, 0x34, 0x8d, 0x21	; LD A, (8D34h)
-	.byte 0xc9, 0xda	; CP A, 2
+	cps a, 2
 	jr z, LABEL_FB7214
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	jr z, LABEL_FB7214
 	cp c, 0x85
 	jr z, LABEL_FB7214
@@ -365795,15 +365795,15 @@ LABEL_FB71E2:
 	jr z, LABEL_FB7214
 	cp c, 0x60
 	jr z, LABEL_FB7214
-	.byte 0xc9, 0xdf	; CP A, 7
+	cps a, 7
 	.byte 0xb0, 0xfe	; RET NZ
 
 LABEL_FB7214:
 	ld xwa, 0x401
 	call LABEL_FCD437
-	.byte 0xdb, 0xdb	; CP HL, 3
+	cps hl, 3
 	jr z, LABEL_FB7227
-	.byte 0xdb, 0xda	; CP HL, 2
+	cps hl, 2
 	.byte 0xb0, 0xfe	; RET NZ
 	jr LABEL_FB722B
 
@@ -365819,7 +365819,7 @@ LABEL_FB722B:
 	.byte 0xf1, 0x58, 0x8d, 0x02, 0xff, 0xff	; LDW (8D58h), 0ffffh
 	calr LABEL_FB6CEB
 	.byte 0xd1, 0x56, 0x8d, 0x21	; LD BC, (8D56h)
-	.byte 0xd9, 0xd8	; CP BC, 0
+	cps bc, 0
 	jr z, LABEL_FB725D
 	dec 1, bc
 	.byte 0xc1, 0x54, 0x8d, 0x21	; LD A, (8D54h)
@@ -365844,16 +365844,16 @@ LABEL_FB726A:
 	lds de, 3
 	call LABEL_FCD201
 	.byte 0xc1, 0x52, 0x8d, 0x21	; LD A, (8D52h)
-	.byte 0xc9, 0x33, 0x05	; BIT 005h, A
+	bit 5, a
 	jr z, LABEL_FB728D
-	.byte 0xc9, 0x31, 0x02	; SET 002h, A
+	set 2, a
 	.byte 0xf1, 0x52, 0x8d, 0x41	; LD (8D52h), A
 
 LABEL_FB728D:
 	.byte 0xc1, 0x52, 0x8d, 0x21	; LD A, (8D52h)
-	.byte 0xc9, 0x33, 0x03	; BIT 003h, A
+	bit 3, a
 	.byte 0xb0, 0xf6	; RET Z
-	.byte 0xc9, 0x31, 0x01	; SET 001h, A
+	set 1, a
 	.byte 0xf1, 0x52, 0x8d, 0x41	; LD (8D52h), A
 	ret
 
@@ -365899,13 +365899,13 @@ Report_test_result_by_blinking_LED:	; FB72EA
 LABEL_FB72EC:
 	.byte 0xf0, 0x30, 0xb1	; RES 1, (PC)
 	ldw bc, 0x4000
-	.byte 0xc9, 0x33, 0x00	; BIT 000h, A
+	bit 0, a
 	jr z, LABEL_FB72FC
 	ldw bc, 0xC000
 	jr LABEL_FB7300
 
 LABEL_FB72FC:
-	.byte 0xd9, 0xd8	; CP BC, 0
+	cps bc, 0
 	jr z, LABEL_FB730C
 
 LABEL_FB7300:
@@ -365931,7 +365931,7 @@ LABEL_FB7314:
 	.byte 0xd9, 0x1c, 0xf4	; DJNZ BC, LABEL_FB7312
 	srl a, 1
 	inc 1, l
-	.byte 0xcf, 0xdb	; CP L, 3
+	cps l, 3
 	jr ule, LABEL_FB72EC
 	ret
 
@@ -366081,7 +366081,7 @@ LABEL_FB7440:
 
 LABEL_FB744B:
 	inc 1, l
-	.byte 0xcf, 0xd9	; CP L, 1
+	cps l, 1
 	jr nz, LABEL_FB7402
 	ld l, a
 	extz hl
@@ -366231,12 +366231,12 @@ LABEL_FB757B:
 	cp xiz, 0x100000
 	jr c, LABEL_FB757B
 	inc 1, w
-	.byte 0xc8, 0xda	; CP W, 2
+	cps w, 2
 	jr c, LABEL_FB7574
 	ld bc, (xhl)
 	.byte 0x94, 0xf1	; CP BC, (XIX)
 	jr z, LABEL_FB75AC
-	.byte 0xc9, 0x31, 0x00	; SET 000h, A
+	set 0, a
 
 LABEL_FB75AC:
 	.byte 0xf2, 0x0c, 0x80, 0xeb, 0x34	; LDA XIX, 0EB800Ch
@@ -366323,7 +366323,7 @@ Test_LCD_Controller_IC206:
 	ldw wa, 0x3C3
 	call 0xFB309D
 
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FB7654
 	.byte 0xb7, 0xba	; SET 2, (XSP)
 
@@ -366337,7 +366337,7 @@ LABEL_FB7654:
 	ldw wa, 0x3C3
 	call 0xFB309D
 
-	.byte 0xcf, 0xd9	; CP L, 1
+	cps l, 1
 	jr z, LABEL_FB766A
 	.byte 0xb7, 0xba	; SET 2, (XSP)
 
@@ -366351,7 +366351,7 @@ LABEL_FB766A:
 	ldw wa, 0x3C3
 	call 0xFB309D
 
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FB7680
 	.byte 0xb7, 0xba	; SET 2, (XSP)
 
@@ -366446,13 +366446,13 @@ LABEL_FB772F:
 	.byte 0xf1, 0x64, 0x8d, 0x32	; LDA XDE, 8D64h
 	.byte 0x8a, 0x03, 0x23	; LD C, (XDE + 003h)
 	.byte 0xba, 0x04, 0x30	; LDA XWA, XDE + 004h
-	.byte 0xcb, 0x33, 0x00	; BIT 000h, C
+	bit 0, c
 	jr z, LABEL_FB776C
 	.byte 0xb0, 0xcc	; BIT 4, (XWA)
 	jr nz, LABEL_FB77D1
 
 LABEL_FB776C:
-	.byte 0xcb, 0x33, 0x02	; BIT 002h, C
+	bit 2, c
 	jr z, LABEL_FB777A
 	.byte 0xb0, 0xce	; BIT 6, (XWA)
 	jr z, LABEL_FB777A
@@ -366461,7 +366461,7 @@ LABEL_FB776C:
 
 LABEL_FB777A:
 	inc 5, xde
-	.byte 0xcb, 0x33, 0x04	; BIT 004h, C
+	bit 4, c
 	jr z, LABEL_FB7793
 	.byte 0xb2, 0xc8	; BIT 0, (XDE)
 	jr z, LABEL_FB7793
@@ -366471,7 +366471,7 @@ LABEL_FB777A:
 	jrl LABEL_FB788B
 
 LABEL_FB7793:
-	.byte 0xcb, 0x33, 0x05	; BIT 005h, C
+	bit 5, c
 	jr z, LABEL_FB77A1
 	.byte 0xb2, 0xc9	; BIT 1, (XDE)
 	jr z, LABEL_FB77A1
@@ -366479,7 +366479,7 @@ LABEL_FB7793:
 	jr LABEL_FB77CD
 
 LABEL_FB77A1:
-	.byte 0xcb, 0x33, 0x07	; BIT 007h, C
+	bit 7, c
 	jr z, LABEL_FB77AF
 	.byte 0xb2, 0xcb	; BIT 3, (XDE)
 	jr z, LABEL_FB77AF
@@ -366488,7 +366488,7 @@ LABEL_FB77A1:
 
 LABEL_FB77AF:
 	ld a, (xwa)
-	.byte 0xc9, 0x33, 0x01	; BIT 001h, A
+	bit 1, a
 	jr z, LABEL_FB77BF
 	.byte 0xb2, 0xcd	; BIT 5, (XDE)
 	jr z, LABEL_FB77BF
@@ -366496,7 +366496,7 @@ LABEL_FB77AF:
 	jr LABEL_FB77CD
 
 LABEL_FB77BF:
-	.byte 0xc9, 0x33, 0x03	; BIT 003h, A
+	bit 3, a
 	jrl z, LABEL_FB788B
 	.byte 0xb2, 0xcf	; BIT 7, (XDE)
 	jrl z, LABEL_FB788B
@@ -366512,7 +366512,7 @@ LABEL_FB77D4:
 	.byte 0xc7, 0xfa, 0xa8	; LD QIZL, 0
 	lds wa, 0
 	calr Test_SRAM_IC21
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_FB7824
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00016
@@ -366546,7 +366546,7 @@ LABEL_FB7824:
 	cpl a
 	and a, 0x9
 	.byte 0xf1, 0x7c, 0x8d, 0x41	; LD (8D7Ch), A
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_FB788B
 	.byte 0xc7, 0xfa, 0xd8	; CP QIZL, 0
 	jr nz, LABEL_FB786B
@@ -366577,7 +366577,7 @@ LABEL_FB788F:
 	ldb c, 0x0
 
 LABEL_FB7893:
-	.byte 0xc9, 0x33, 0x00	; BIT 000h, A
+	bit 0, a
 	jr z, LABEL_FB789A
 	inc 1, l
 
@@ -366592,17 +366592,17 @@ LABEL_FB78A5:
 	.byte 0xc1, 0x36, 0x8d, 0x3f, 0xfb	; CP (8D36h), 0fbh
 	jr nz, LABEL_FB790F
 	.byte 0xc1, 0x82, 0x8d, 0x21	; LD A, (8D82h)
-	.byte 0xc9, 0xda	; CP A, 2
+	cps a, 2
 	jr z, LABEL_FB7904
 	.byte 0xc1, 0x80, 0x8d, 0x21	; LD A, (8D80h)
-	.byte 0xc9, 0x33, 0x00	; BIT 000h, A
+	bit 0, a
 	jr z, LABEL_FB78DE
-	.byte 0xc9, 0x33, 0x04	; BIT 004h, A
+	bit 4, a
 	jr nz, LABEL_FB790F
-	.byte 0xc9, 0x31, 0x04	; SET 004h, A
+	set 4, a
 	.byte 0xf1, 0x80, 0x8d, 0x41	; LD (8D80h), A
 	.byte 0xc1, 0x82, 0x8d, 0x21	; LD A, (8D82h)
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	jr z, LABEL_FB790F
 	.byte 0xf1, 0x82, 0x8d, 0x00, 0x01	; LD (8D82h), 001h
 	calr LABEL_FB792E
@@ -366610,12 +366610,12 @@ LABEL_FB78A5:
 	jr LABEL_FB790F
 
 LABEL_FB78DE:
-	.byte 0xc9, 0x33, 0x04	; BIT 004h, A
+	bit 4, a
 	jr z, LABEL_FB790F
-	.byte 0xc9, 0x30, 0x04	; RES 004h, A
+	res 4, a
 	.byte 0xf1, 0x80, 0x8d, 0x41	; LD (8D80h), A
 	.byte 0xc1, 0x82, 0x8d, 0x21	; LD A, (8D82h)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_FB790F
 	.byte 0xf1, 0x82, 0x8d, 0x00, 0x00	; LD (8D82h), 000h
 	calr LABEL_FB796E
@@ -366688,7 +366688,7 @@ LABEL_FB796E:
 
 LABEL_FB79AA:
 	call LABEL_F99439
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	.byte 0xb0, 0xfe	; RET NZ
 	.byte 0xc1, 0x7a, 0x8d, 0x21	; LD A, (8D7Ah)
 	cp a, 0x96
@@ -366701,7 +366701,7 @@ LABEL_FB79AA:
 	jr z, LABEL_FB7A10
 	cp a, 0x1E
 	jr z, LABEL_FB79F3
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jrl nz, LABEL_FB7A7D
 	ld xwa, 0xF8000C
 	ld xbc, 0x1C00001
@@ -366773,7 +366773,7 @@ LABEL_FB7A7D:
 
 LABEL_FB7A86:
 	.byte 0xc1, 0x7a, 0x8d, 0x21	; LD A, (8D7Ah)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_FB7B01
 	ld xwa, 0xF80006
 	ld xbc, 0x1C00001
@@ -366810,7 +366810,7 @@ LABEL_FB7A86:
 
 LABEL_FB7B01:
 	.byte 0xc1, 0x78, 0x8d, 0x23	; LD C, (8D78h)
-	.byte 0xcb, 0xd8	; CP C, 0
+	cps c, 0
 	jr nz, LABEL_FB7B46
 	extz wa
 	.byte 0xf2, 0x86, 0x7e, 0xeb, 0x31	; LDA XBC, 0EB7E86h
@@ -366821,7 +366821,7 @@ LABEL_FB7B01:
 	ld xbc, 0x1C00016
 	call 0xFA9D58
 	.byte 0xc1, 0x7a, 0x8d, 0x21	; LD A, (8D7Ah)
-	.byte 0xc9, 0xdd	; CP A, 5
+	cps a, 5
 	jr nz, LABEL_FB7B3A
 	.byte 0xf1, 0x7a, 0x8d, 0x00, 0x01	; LD (8D7Ah), 001h
 	jr LABEL_FB7B40
@@ -367483,7 +367483,7 @@ LABEL_FB81DF:
 	ld (xbc), wa
 	.byte 0xaa, 0x4e, 0x20	; LD XWA, (XDE + 04eh)
 	ld iz, (xwa)
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr z, LABEL_FB8223
 
 LABEL_FB81F5:
@@ -367502,12 +367502,12 @@ LABEL_FB81F5:
 	push xwa
 	call 0xFF0CC1
 	add xsp, 0xA
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_FB8223
 	.byte 0xde, 0x1c, 0xd2	; DJNZ IZ, LABEL_FB81F5
 
 LABEL_FB8223:
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr z, LABEL_FB8229
 	inc 1, iz
 
@@ -367609,7 +367609,7 @@ LABEL_FB82F4:
 	push xwa
 	call 0xFF0CC1
 	add xsp, 0xA
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_FB8332
 	inc 1, iz
 
@@ -367671,7 +367671,7 @@ LABEL_FB8332:
 	ld xbc, 0x1E0008F
 	.byte 0xea, 0xa8	; LD XDE, 0
 	call 0xFA9660
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl nz, LABEL_FB8529
 	.byte 0xaf, 0x08, 0x21	; LD XBC, (XSP + 008h)
 	.byte 0xa9, 0x5a, 0x20	; LD XWA, (XBC + 05ah)
@@ -367711,7 +367711,7 @@ LABEL_FB841D:
 	ld (xbc), wa
 	.byte 0xaa, 0x4e, 0x20	; LD XWA, (XDE + 04eh)
 	ld iz, (xwa)
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr z, LABEL_FB8461
 
 LABEL_FB8433:
@@ -367730,12 +367730,12 @@ LABEL_FB8433:
 	push xwa
 	call 0xFF0CC1
 	add xsp, 0xA
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_FB8461
 	.byte 0xde, 0x1c, 0xd2	; DJNZ IZ, LABEL_FB8433
 
 LABEL_FB8461:
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr z, LABEL_FB8467
 	inc 1, iz
 
@@ -367948,7 +367948,7 @@ LABEL_FB8682:
 	push xwa
 	call 0xFF0CC1
 	add xsp, 0xA
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_FB86C0
 	inc 1, iz
 
@@ -368346,7 +368346,7 @@ LABEL_FB8AAC:
 
 LABEL_FB8AEB:
 	.byte 0x9f, 0x32, 0x20	; LD WA, (XSP + 032h)
-	.byte 0xd8, 0xd9	; CP WA, 1
+	cps wa, 1
 	jr nz, LABEL_FB8B04
 	call 0xFA44D0
 	ld xwa, xhl
@@ -368434,7 +368434,7 @@ LABEL_FB8B6D:
 	.byte 0xea, 0xa8	; LD XDE, 0
 	call 0xFA9660
 	ld iy, hl
-	.byte 0xdd, 0xd8	; CP IY, 0
+	cps iy, 0
 	jr nz, LABEL_FB8C5F
 	.byte 0xaf, 0x04, 0x20	; LD XWA, (XSP + 004h)
 	.byte 0xb8, 0x52, 0x31	; LDA XBC, XWA + 052h
@@ -368825,7 +368825,7 @@ LABEL_FB8FE8:
 
 LABEL_FB901D:
 	.byte 0x9f, 0x1e, 0x20	; LD WA, (XSP + 01eh)
-	.byte 0xd8, 0xd9	; CP WA, 1
+	cps wa, 1
 	jr nz, LABEL_FB9036
 	call 0xFA44D0
 	ld xwa, xhl
@@ -368934,7 +368934,7 @@ LABEL_FB9143:
 	jr c, LABEL_FB9143
 
 LABEL_FB915A:
-	.byte 0xcb, 0xd8	; CP C, 0
+	cps c, 0
 	jr z, LABEL_FB9160
 	dec 1, c
 
@@ -369012,7 +369012,7 @@ LABEL_FB920F:
 	jr c, LABEL_FB920F
 
 LABEL_FB9226:
-	.byte 0xcb, 0xd8	; CP C, 0
+	cps c, 0
 	jr z, LABEL_FB922C
 	dec 1, c
 
@@ -369063,7 +369063,7 @@ LABEL_FB922C:
 	.byte 0xea, 0xa8	; LD XDE, 0
 	call 0xFA9660
 	.byte 0xf2, 0xc8, 0x40, 0x03, 0x31	; LDA XBC, 0340C8h
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_FB9314
 	.byte 0xaf, 0x08, 0x20	; LD XWA, (XSP + 008h)
 	.byte 0xb8, 0x52, 0x32	; LDA XDE, XWA + 052h
@@ -369512,7 +369512,7 @@ LABEL_FB9739:
 
 LABEL_FB976D:
 	.byte 0x9f, 0x1a, 0x20	; LD WA, (XSP + 01ah)
-	.byte 0xd8, 0xd9	; CP WA, 1
+	cps wa, 1
 	jr nz, LABEL_FB9786
 	call 0xFA44D0
 	ld xwa, xhl
@@ -369627,7 +369627,7 @@ LABEL_FB98A8:
 	jr c, LABEL_FB98A8
 
 LABEL_FB98BF:
-	.byte 0xcb, 0xd8	; CP C, 0
+	cps c, 0
 	jr z, LABEL_FB98C5
 	dec 1, c
 
@@ -369655,7 +369655,7 @@ LABEL_FB98C5:
 	.byte 0xab, 0x5a, 0x20	; LD XWA, (XHL + 05ah)
 	.byte 0xb0, 0x02, 0x01, 0x00	; LDW (XWA), 0001h
 	.byte 0xd2, 0xc6, 0x40, 0x03, 0x20	; LD WA, (0340C6h)
-	.byte 0xd8, 0x33, 0x00	; BIT 000h, WA
+	bit 0, wa
 	jrl nz, LABEL_FB99B0
 	extz xwa
 	sll xwa, 3
@@ -369672,11 +369672,11 @@ LABEL_FB9921:
 	or xwa, xwa
 	jr z, LABEL_FB9938
 	inc 1, c
-	.byte 0xcb, 0xdc	; CP C, 4
+	cps c, 4
 	jr c, LABEL_FB9921
 
 LABEL_FB9938:
-	.byte 0xcb, 0xd8	; CP C, 0
+	cps c, 0
 	jr z, LABEL_FB993E
 	dec 1, c
 
@@ -369706,11 +369706,11 @@ LABEL_FB996B:
 	or xwa, xwa
 	jr z, LABEL_FB9982
 	inc 1, c
-	.byte 0xcb, 0xdc	; CP C, 4
+	cps c, 4
 	jr c, LABEL_FB996B
 
 LABEL_FB9982:
-	.byte 0xcb, 0xd8	; CP C, 0
+	cps c, 0
 	jr z, LABEL_FB9988
 	dec 1, c
 
@@ -369747,11 +369747,11 @@ LABEL_FB99C6:
 	or xwa, xwa
 	jr z, LABEL_FB99DD
 	inc 1, c
-	.byte 0xcb, 0xdc	; CP C, 4
+	cps c, 4
 	jr c, LABEL_FB99C6
 
 LABEL_FB99DD:
-	.byte 0xcb, 0xd8	; CP C, 0
+	cps c, 0
 	jr z, LABEL_FB99E3
 	dec 1, c
 
@@ -369776,11 +369776,11 @@ LABEL_FB9A06:
 	or xwa, xwa
 	jr z, LABEL_FB9A1D
 	inc 1, c
-	.byte 0xcb, 0xdc	; CP C, 4
+	cps c, 4
 	jr c, LABEL_FB9A06
 
 LABEL_FB9A1D:
-	.byte 0xcb, 0xd8	; CP C, 0
+	cps c, 0
 	jr z, LABEL_FB9A23
 	dec 1, c
 
@@ -369857,7 +369857,7 @@ LABEL_FB9AAB:
 	exts xwa
 	.byte 0xd8, 0x0b, 0x02, 0x00	; DIVS_WA 0002h
 	.byte 0xd7, 0xe2, 0x88	; LD WA, QWA
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr z, LABEL_FB9B31
 	.byte 0x94, 0x69	; DECW 1, (XIX)
 	.byte 0xd2, 0xc4, 0x40, 0x03, 0x20	; LD WA, (0340C4h)
@@ -369899,11 +369899,11 @@ LABEL_FB9B54:
 	or xwa, xwa
 	jr z, LABEL_FB9B6B
 	inc 1, c
-	.byte 0xcb, 0xdc	; CP C, 4
+	cps c, 4
 	jr c, LABEL_FB9B54
 
 LABEL_FB9B6B:
-	.byte 0xcb, 0xd8	; CP C, 0
+	cps c, 0
 	jr z, LABEL_FB9B71
 	dec 1, c
 
@@ -369936,11 +369936,11 @@ LABEL_FB9BA3:
 	or xwa, xwa
 	jr z, LABEL_FB9BBA
 	inc 1, c
-	.byte 0xcb, 0xdc	; CP C, 4
+	cps c, 4
 	jr c, LABEL_FB9BA3
 
 LABEL_FB9BBA:
-	.byte 0xcb, 0xd8	; CP C, 0
+	cps c, 0
 	jr z, LABEL_FB9BC0
 	dec 1, c
 
@@ -369987,7 +369987,7 @@ LABEL_FB9C12:
 	exts xwa
 	.byte 0xd8, 0x0b, 0x02, 0x00	; DIVS_WA 0002h
 	.byte 0xd7, 0xe2, 0x88	; LD WA, QWA
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr nz, LABEL_FB9C67
 	.byte 0x95, 0x61	; INCW 1, (XIY)
 	.byte 0xd2, 0xc4, 0x40, 0x03, 0x20	; LD WA, (0340C4h)
@@ -370029,11 +370029,11 @@ LABEL_FB9C8A:
 	or xwa, xwa
 	jr z, LABEL_FB9CA1
 	inc 1, c
-	.byte 0xcb, 0xdc	; CP C, 4
+	cps c, 4
 	jr c, LABEL_FB9C8A
 
 LABEL_FB9CA1:
-	.byte 0xcb, 0xd8	; CP C, 0
+	cps c, 0
 	jr z, LABEL_FB9CA7
 	dec 1, c
 
@@ -370071,11 +370071,11 @@ LABEL_FB9CEC:
 	or xwa, xwa
 	jr z, LABEL_FB9D03
 	inc 1, c
-	.byte 0xcb, 0xdc	; CP C, 4
+	cps c, 4
 	jr c, LABEL_FB9CEC
 
 LABEL_FB9D03:
-	.byte 0xcb, 0xd8	; CP C, 0
+	cps c, 0
 	jr z, LABEL_FB9D09
 	dec 1, c
 
@@ -370129,14 +370129,14 @@ LABEL_FB9D13:
 	call 0xFA9660
 	ld ix, hl
 	.byte 0xf2, 0xc8, 0x40, 0x03, 0x31	; LDA XBC, 0340C8h
-	.byte 0xdc, 0xd8	; CP IX, 0
+	cps ix, 0
 	jrl nz, LABEL_FB9EA5
 	.byte 0xaf, 0x08, 0x23	; LD XHL, (XSP + 008h)
 	.byte 0xbb, 0x52, 0x32	; LDA XDE, XHL + 052h
 	ld xwa, (xde)
 	ld wa, (xwa)
 	.byte 0xf2, 0xbc, 0x40, 0x03, 0x50	; LD (0340BCh), WA
-	.byte 0xd8, 0xd9	; CP WA, 1
+	cps wa, 1
 	jrl le, LABEL_FB9F03
 	.byte 0xbb, 0x56, 0x33	; LDA XHL, XHL + 056h
 	ld xwa, (xhl)
@@ -370168,11 +370168,11 @@ LABEL_FB9DF1:
 	or xwa, xwa
 	jr z, LABEL_FB9E08
 	inc 1, c
-	.byte 0xcb, 0xdc	; CP C, 4
+	cps c, 4
 	jr c, LABEL_FB9DF1
 
 LABEL_FB9E08:
-	.byte 0xcb, 0xd8	; CP C, 0
+	cps c, 0
 	jr z, LABEL_FB9E0E
 	dec 1, c
 
@@ -370205,11 +370205,11 @@ LABEL_FB9E40:
 	or xwa, xwa
 	jr z, LABEL_FB9E57
 	inc 1, c
-	.byte 0xcb, 0xdc	; CP C, 4
+	cps c, 4
 	jr c, LABEL_FB9E40
 
 LABEL_FB9E57:
-	.byte 0xcb, 0xd8	; CP C, 0
+	cps c, 0
 	jr z, LABEL_FB9E5D
 	dec 1, c
 
@@ -370241,7 +370241,7 @@ LABEL_FB9E67:
 	jr LABEL_FB9EFF
 
 LABEL_FB9EA5:
-	.byte 0xdc, 0xdd	; CP IX, 5
+	cps ix, 5
 	jr nz, LABEL_FB9ED9
 	.byte 0xaf, 0x04, 0x23	; LD XHL, (XSP + 004h)
 	.byte 0xbb, 0x56, 0x32	; LDA XDE, XHL + 056h
@@ -370400,11 +370400,11 @@ LABEL_FBA04D:
 	or xwa, xwa
 	jr z, LABEL_FBA064
 	inc 1, c
-	.byte 0xcb, 0xdc	; CP C, 4
+	cps c, 4
 	jr c, LABEL_FBA04D
 
 LABEL_FBA064:
-	.byte 0xcb, 0xd8	; CP C, 0
+	cps c, 0
 	jr z, LABEL_FBA06A
 	dec 1, c
 
@@ -370437,11 +370437,11 @@ LABEL_FBA09B:
 	or xwa, xwa
 	jr z, LABEL_FBA0B2
 	inc 1, c
-	.byte 0xcb, 0xdc	; CP C, 4
+	cps c, 4
 	jr c, LABEL_FBA09B
 
 LABEL_FBA0B2:
-	.byte 0xcb, 0xd8	; CP C, 0
+	cps c, 0
 	jr z, LABEL_FBA0B8
 	dec 1, c
 
@@ -370832,7 +370832,7 @@ LABEL_FBA486:
 	ld wa, (xhl)
 	.byte 0x94, 0xf0	; CP WA, (XIX)
 	jrl ge, LABEL_FBA5CF
-	.byte 0xda, 0xdc	; CP DE, 4
+	cps de, 4
 	jr ge, LABEL_FBA568
 	.byte 0x96, 0xf2	; CP DE, (XIZ)
 	jr gt, LABEL_FBA560
@@ -370928,7 +370928,7 @@ LABEL_FBA5C7:
 	jrl LABEL_FBA6B6
 
 LABEL_FBA5CF:
-	.byte 0xda, 0xdc	; CP DE, 4
+	cps de, 4
 	jr ge, LABEL_FBA635
 	.byte 0x96, 0xf2	; CP DE, (XIZ)
 	jr gt, LABEL_FBA62D
@@ -371044,7 +371044,7 @@ LABEL_FBA6B6:
 
 LABEL_FBA6C1:
 	.byte 0x9f, 0x36, 0x20	; LD WA, (XSP + 036h)
-	.byte 0xd8, 0xd9	; CP WA, 1
+	cps wa, 1
 	jr nz, LABEL_FBA6DA
 	call 0xFA44D0
 	ld xwa, xhl
@@ -371237,7 +371237,7 @@ LABEL_FBA81C:
 	ld xbc, 0x1E0008F
 	.byte 0xea, 0xa8	; LD XDE, 0
 	call 0xFA9660
-	.byte 0xdb, 0xdc	; CP HL, 4
+	cps hl, 4
 	jr nz, LABEL_FBA8CA
 	dec 3, hl
 	extz xhl
@@ -371304,7 +371304,7 @@ LABEL_FBA8F0:
 	ld xbc, 0x1E0008F
 	.byte 0xea, 0xa8	; LD XDE, 0
 	call 0xFA9660
-	.byte 0xdb, 0xd9	; CP HL, 1
+	cps hl, 1
 	jr nz, LABEL_FBA987
 	inc 3, hl
 	extz xhl
@@ -371532,7 +371532,7 @@ LABEL_FBACE6:
 	ld xwa, 0x104
 	call LABEL_FCD437
 	ld xwa, 0xED0EFC
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_FBAD09
 	ld xwa, 0xED0EF8
 
@@ -372360,9 +372360,9 @@ LABEL_FBBA41:
 	jr nz, LABEL_FBBAC4
 	ld xwa, (xwa)
 	ld bc, (xwa)
-	.byte 0xd9, 0xda	; CP BC, 2
+	cps bc, 2
 	jr z, LABEL_FBBA86
-	.byte 0xd9, 0xd9	; CP BC, 1
+	cps bc, 1
 	jrl nz, LABEL_FBBB46
 	.byte 0x90, 0x61	; INCW 1, (XWA)
 	.byte 0xf2, 0xe2, 0x40, 0x03, 0x00, 0x01	; LD (0340E2h), 001h
@@ -372400,9 +372400,9 @@ LABEL_FBBAC4:
 	jr nz, LABEL_FBBB46
 	ld xwa, (xwa)
 	ld bc, (xwa)
-	.byte 0xd9, 0xda	; CP BC, 2
+	cps bc, 2
 	jr z, LABEL_FBBB04
-	.byte 0xd9, 0xd9	; CP BC, 1
+	cps bc, 1
 	jr nz, LABEL_FBBB46
 	.byte 0xb0, 0x02, 0x02, 0x00	; LDW (XWA), 0002h
 	.byte 0xf2, 0xe2, 0x40, 0x03, 0x00, 0x02	; LD (0340E2h), 002h
@@ -372735,7 +372735,7 @@ LABEL_FBBE89:
 	call 0xFA9660
 	.byte 0xc2, 0xe2, 0x40, 0x03, 0x3f, 0x02	; CP (0340E2h), 002h
 	jr nz, LABEL_FBBEEE
-	.byte 0xdb, 0xda	; CP HL, 2
+	cps hl, 2
 	jr nz, LABEL_FBBEEE
 	.byte 0xf2, 0xe2, 0x40, 0x03, 0x00, 0x01	; LD (0340E2h), 001h
 	ld xwa, xiz
@@ -372805,13 +372805,13 @@ LABEL_FBBF18:
 	.byte 0xea, 0xa8	; LD XDE, 0
 	call 0xFA9660
 	.byte 0xc2, 0xe2, 0x40, 0x03, 0x21	; LD A, (0340E2h)
-	.byte 0xc9, 0xda	; CP A, 2
+	cps a, 2
 	jr nz, LABEL_FBBFBA
 	cp hl, 0xA
 	jrl z, LABEL_FBC0C6
 
 LABEL_FBBFBA:
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	jr nz, LABEL_FBBFE5
 	cp hl, 0xA
 	jr nz, LABEL_FBBFE5
@@ -373049,11 +373049,11 @@ LABEL_FBC33F:
 	jrl nz, LABEL_FBC40A
 	.byte 0xc2, 0xe2, 0x40, 0x03, 0x27	; LD L, (0340E2h)
 	.byte 0xd9, 0x68	; DEC 8, BC
-	.byte 0xcf, 0xda	; CP L, 2
+	cps l, 2
 	jr z, LABEL_FBC3BD
-	.byte 0xcf, 0xd9	; CP L, 1
+	cps l, 1
 	jrl nz, LABEL_FBC40A
-	.byte 0xd8, 0xda	; CP WA, 2
+	cps wa, 2
 	jrl lt, LABEL_FBC40A
 	cp wa, 0xA
 	jrl gt, LABEL_FBC40A
@@ -373061,7 +373061,7 @@ LABEL_FBC33F:
 	.byte 0xe3, 0x07, 0xe0, 0xe4, 0x20	; LD XWA, (XWA + BC)
 	call LABEL_FCD437
 	ld xwa, 0xED148A
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_FBC3A0
 	ld xwa, 0xED1486
 
@@ -373078,7 +373078,7 @@ LABEL_FBC3A0:
 	jr LABEL_FBC406
 
 LABEL_FBC3BD:
-	.byte 0xd8, 0xda	; CP WA, 2
+	cps wa, 2
 	jr lt, LABEL_FBC3E9
 	cp wa, 0xA
 	jr gt, LABEL_FBC3E9
@@ -373087,7 +373087,7 @@ LABEL_FBC3BD:
 	call LABEL_FCD437
 	.byte 0xb7, 0x31	; LDA XBC, XSP
 	ld xwa, 0xED1492
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_FBC3E5
 	ld xwa, 0xED148E
 
@@ -373195,7 +373195,7 @@ LABEL_FBC4E6:
 	jrl nz, LABEL_FBC6E5
 	lds wa, 5
 	call LABEL_FC56A1
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl z, LABEL_FBC6E5
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
@@ -373741,7 +373741,7 @@ LABEL_FBCD86:
 	jr z, LABEL_FBCDDB
 	.byte 0xc1, 0x88, 0x8d, 0x21	; LD A, (8D88h)
 	extz wa
-	.byte 0xd8, 0x33, 0x00	; BIT 000h, WA
+	bit 0, wa
 	jr z, LABEL_FBCDDB
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
@@ -373801,7 +373801,7 @@ LABEL_FBCE27:
 	call LABEL_FCD437
 	.byte 0xbe, 0x16, 0x31	; LDA XBC, XIZ + 016h
 	lds wa, 1
-	.byte 0xdb, 0xd9	; CP HL, 1
+	cps hl, 1
 	jr nz, LABEL_FBCE4C
 	lds wa, 3
 
@@ -373898,7 +373898,7 @@ LABEL_FBCF43:
 	.byte 0xaf, 0x04, 0x20	; LD XWA, (XSP + 004h)
 	.byte 0xb8, 0x16, 0x31	; LDA XBC, XWA + 016h
 	lds wa, 1
-	.byte 0xdb, 0xd9	; CP HL, 1
+	cps hl, 1
 	jr nz, LABEL_FBCF60
 	lds wa, 2
 
@@ -373932,7 +373932,7 @@ LABEL_FBCF9B:
 LABEL_FBCFA1:
 	ld xwa, 0xC0
 	call LABEL_FCD437
-	.byte 0xdb, 0xd9	; CP HL, 1
+	cps hl, 1
 	jr nz, LABEL_FBCFE4
 	.byte 0xaf, 0x04, 0x20	; LD XWA, (XSP + 004h)
 	.byte 0xa8, 0x16, 0x20	; LD XWA, (XWA + 016h)
@@ -374120,7 +374120,7 @@ LABEL_FBD17D:
 	jr nz, LABEL_FBD200
 	ld xwa, 0x300
 	call LABEL_FCD437
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FBD200
 	call 0xFA1FC7
 	ld xwa, xhl
@@ -374343,7 +374343,7 @@ LABEL_FBD47C:
 	jr nz, LABEL_FBD4E2
 	.byte 0xbf, 0x04, 0x32	; LDA XDE, XSP + 004h
 	.byte 0x9e, 0x04, 0x21	; LD BC, (XIZ + 004h)
-	.byte 0xd9, 0xd8	; CP BC, 0
+	cps bc, 0
 	jr nz, LABEL_FBD4AA
 	.byte 0x0b, 0xed, 0x00	; PUSHW 00edh
 	.byte 0x0b, 0xc0, 0x15	; PUSHW 15c0h
@@ -374487,7 +374487,7 @@ MsaModeScreenProc:
 	jr nz, LABEL_FBD630
 	ld xwa, 0x400
 	call LABEL_FCD437
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_FBD630
 	ld xwa, 0x400
 	lds bc, 1
@@ -375354,7 +375354,7 @@ LABEL_FBDFC5:
 LABEL_FBE026:
 	ld xwa, 0x300
 	call LABEL_FCD437
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FBE058
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00016
@@ -375384,7 +375384,7 @@ LABEL_FBE072:
 	ld xbc, 0x1E000AA
 	.byte 0xea, 0xa8	; LD XDE, 0
 	call 0xFA9660
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_FBE0AA
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009A
@@ -376920,7 +376920,7 @@ LABEL_FBF0CD:
 	jrl nz, LABEL_FBF432
 	lds bc, 0
 	calr LABEL_FBF510
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jrl z, LABEL_FBF42D
 	.byte 0xaf, 0x10, 0x20	; LD XWA, (XSP + 010h)
 	.byte 0xa8, 0x40, 0x22	; LD XDE, (XWA + 040h)
@@ -376945,7 +376945,7 @@ LABEL_FBF0CD:
 LABEL_FBF175:
 	lds bc, 1
 	calr LABEL_FBF510
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jrl z, LABEL_FBF42D
 	.byte 0xaf, 0x10, 0x23	; LD XHL, (XSP + 010h)
 	.byte 0xab, 0x40, 0x22	; LD XDE, (XHL + 040h)
@@ -376969,7 +376969,7 @@ LABEL_FBF175:
 LABEL_FBF1B7:
 	lds bc, 2
 	calr LABEL_FBF510
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jrl z, LABEL_FBF42D
 	.byte 0xaf, 0x10, 0x23	; LD XHL, (XSP + 010h)
 	.byte 0xab, 0x40, 0x22	; LD XDE, (XHL + 040h)
@@ -376993,7 +376993,7 @@ LABEL_FBF1B7:
 LABEL_FBF1F7:
 	lds bc, 3
 	calr LABEL_FBF510
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jrl z, LABEL_FBF42D
 	.byte 0xaf, 0x10, 0x23	; LD XHL, (XSP + 010h)
 	.byte 0xab, 0x40, 0x22	; LD XDE, (XHL + 040h)
@@ -377017,7 +377017,7 @@ LABEL_FBF1F7:
 LABEL_FBF237:
 	lds bc, 4
 	calr LABEL_FBF510
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jrl z, LABEL_FBF42D
 	.byte 0xaf, 0x10, 0x23	; LD XHL, (XSP + 010h)
 	.byte 0xab, 0x40, 0x22	; LD XDE, (XHL + 040h)
@@ -377041,7 +377041,7 @@ LABEL_FBF237:
 LABEL_FBF277:
 	lds bc, 0
 	calr LABEL_FBF4F9
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jrl z, LABEL_FBF42D
 	.byte 0xaf, 0x10, 0x20	; LD XWA, (XSP + 010h)
 	.byte 0xa8, 0x40, 0x21	; LD XBC, (XWA + 040h)
@@ -377074,7 +377074,7 @@ LABEL_FBF2CB:
 	extz wa
 	lds bc, 1
 	calr LABEL_FBF4F9
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jrl z, LABEL_FBF42D
 	.byte 0xaf, 0x10, 0x20	; LD XWA, (XSP + 010h)
 	.byte 0xa8, 0x40, 0x21	; LD XBC, (XWA + 040h)
@@ -377107,7 +377107,7 @@ LABEL_FBF324:
 	extz wa
 	lds bc, 2
 	calr LABEL_FBF4F9
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jrl z, LABEL_FBF42D
 	.byte 0xaf, 0x10, 0x20	; LD XWA, (XSP + 010h)
 	.byte 0xa8, 0x40, 0x21	; LD XBC, (XWA + 040h)
@@ -377140,7 +377140,7 @@ LABEL_FBF37D:
 	extz wa
 	lds bc, 3
 	calr LABEL_FBF4F9
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jrl z, LABEL_FBF42D
 	.byte 0xaf, 0x10, 0x20	; LD XWA, (XSP + 010h)
 	.byte 0xa8, 0x40, 0x21	; LD XBC, (XWA + 040h)
@@ -377173,7 +377173,7 @@ LABEL_FBF3D5:
 	extz wa
 	lds bc, 4
 	calr LABEL_FBF4F9
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FBF42D
 	.byte 0xaf, 0x10, 0x20	; LD XWA, (XSP + 010h)
 	.byte 0xa8, 0x40, 0x21	; LD XBC, (XWA + 040h)
@@ -377228,7 +377228,7 @@ LABEL_FBF432:
 	jr LABEL_FBF47B
 
 LABEL_FBF467:
-	.byte 0xd8, 0xd9	; CP WA, 1
+	cps wa, 1
 	jr le, LABEL_FBF47F
 	.byte 0xb1, 0x02, 0x01, 0x00	; LDW (XBC), 0001h
 	.byte 0xe3, 0xfd, 0x36, 0x02, 0x20	; LD XWA, (XSP + 0236h)
@@ -377259,7 +377259,7 @@ LABEL_FBF4A8:
 	exts xwa
 	.byte 0xd8, 0x0b, 0x0a, 0x00	; DIVS_WA 000ah
 	inc 1, wa
-	.byte 0xd8, 0xd9	; CP WA, 1
+	cps wa, 1
 	jr le, LABEL_FBF4CE
 	ld (xbc), wa
 	.byte 0xe3, 0xfd, 0x36, 0x02, 0x20	; LD XWA, (XSP + 0236h)
@@ -379784,7 +379784,7 @@ LABEL_FC114B:
 	extz wa
 	lds bc, 0
 	calr LABEL_FBF510
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FC1208
 	.byte 0xae, 0x40, 0x22	; LD XDE, (XIZ + 040h)
 	.byte 0xbe, 0x3c, 0x31	; LDA XBC, XIZ + 03ch
@@ -379819,7 +379819,7 @@ LABEL_FC120D:
 	extz wa
 	lds bc, 1
 	calr LABEL_FBF510
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FC1260
 	.byte 0xae, 0x40, 0x22	; LD XDE, (XIZ + 040h)
 	.byte 0xbe, 0x3c, 0x31	; LDA XBC, XIZ + 03ch
@@ -379854,7 +379854,7 @@ LABEL_FC1265:
 	extz wa
 	lds bc, 2
 	calr LABEL_FBF510
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FC12B8
 	.byte 0xae, 0x40, 0x22	; LD XDE, (XIZ + 040h)
 	.byte 0xbe, 0x3c, 0x31	; LDA XBC, XIZ + 03ch
@@ -379889,7 +379889,7 @@ LABEL_FC12BD:
 	extz wa
 	lds bc, 3
 	calr LABEL_FBF510
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FC1310
 	.byte 0xae, 0x40, 0x22	; LD XDE, (XIZ + 040h)
 	.byte 0xbe, 0x3c, 0x31	; LDA XBC, XIZ + 03ch
@@ -379924,7 +379924,7 @@ LABEL_FC1315:
 	extz wa
 	lds bc, 4
 	calr LABEL_FBF510
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FC1368
 	.byte 0xae, 0x40, 0x22	; LD XDE, (XIZ + 040h)
 	.byte 0xbe, 0x3c, 0x31	; LDA XBC, XIZ + 03ch
@@ -379959,7 +379959,7 @@ LABEL_FC136D:
 	extz wa
 	lds bc, 0
 	calr LABEL_FBF4F9
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FC13D2
 	.byte 0xae, 0x40, 0x21	; LD XBC, (XIZ + 040h)
 	.byte 0xae, 0x3c, 0x20	; LD XWA, (XIZ + 03ch)
@@ -380001,7 +380001,7 @@ LABEL_FC13D7:
 	extz wa
 	lds bc, 1
 	calr LABEL_FBF510
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FC143C
 	.byte 0xae, 0x40, 0x21	; LD XBC, (XIZ + 040h)
 	.byte 0xae, 0x3c, 0x20	; LD XWA, (XIZ + 03ch)
@@ -380043,7 +380043,7 @@ LABEL_FC1441:
 	extz wa
 	lds bc, 2
 	calr LABEL_FBF510
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FC14A6
 	.byte 0xae, 0x40, 0x21	; LD XBC, (XIZ + 040h)
 	.byte 0xae, 0x3c, 0x20	; LD XWA, (XIZ + 03ch)
@@ -380085,7 +380085,7 @@ LABEL_FC14AB:
 	extz wa
 	lds bc, 3
 	calr LABEL_FBF510
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FC1510
 	.byte 0xae, 0x40, 0x21	; LD XBC, (XIZ + 040h)
 	.byte 0xae, 0x3c, 0x20	; LD XWA, (XIZ + 03ch)
@@ -380127,7 +380127,7 @@ LABEL_FC1515:
 	extz wa
 	lds bc, 4
 	calr LABEL_FBF510
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FC157A
 	.byte 0xae, 0x40, 0x21	; LD XBC, (XIZ + 040h)
 	.byte 0xae, 0x3c, 0x20	; LD XWA, (XIZ + 03ch)
@@ -380191,7 +380191,7 @@ LABEL_FC157F:
 	extz wa
 	lds bc, 0
 	calr LABEL_FBF510
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FC1622
 	.byte 0xae, 0x40, 0x22	; LD XDE, (XIZ + 040h)
 	.byte 0xbe, 0x3c, 0x31	; LDA XBC, XIZ + 03ch
@@ -380220,7 +380220,7 @@ LABEL_FC1627:
 	extz wa
 	lds bc, 1
 	calr LABEL_FBF510
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FC166A
 	.byte 0xae, 0x40, 0x22	; LD XDE, (XIZ + 040h)
 	.byte 0xbe, 0x3c, 0x31	; LDA XBC, XIZ + 03ch
@@ -380249,7 +380249,7 @@ LABEL_FC166F:
 	extz wa
 	lds bc, 2
 	calr LABEL_FBF510
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FC16B0
 	.byte 0xae, 0x40, 0x22	; LD XDE, (XIZ + 040h)
 	.byte 0xbe, 0x3c, 0x31	; LDA XBC, XIZ + 03ch
@@ -380278,7 +380278,7 @@ LABEL_FC16B5:
 	extz wa
 	lds bc, 3
 	calr LABEL_FBF510
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FC16F6
 	.byte 0xae, 0x40, 0x22	; LD XDE, (XIZ + 040h)
 	.byte 0xbe, 0x3c, 0x31	; LDA XBC, XIZ + 03ch
@@ -380307,7 +380307,7 @@ LABEL_FC16FB:
 	extz wa
 	lds bc, 4
 	calr LABEL_FBF510
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FC173C
 	.byte 0xae, 0x40, 0x22	; LD XDE, (XIZ + 040h)
 	.byte 0xbe, 0x3c, 0x31	; LDA XBC, XIZ + 03ch
@@ -380336,7 +380336,7 @@ LABEL_FC1741:
 	extz wa
 	lds bc, 0
 	calr LABEL_FBF4F9
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FC1791
 	.byte 0xae, 0x40, 0x21	; LD XBC, (XIZ + 040h)
 	.byte 0xae, 0x3c, 0x20	; LD XWA, (XIZ + 03ch)
@@ -380370,7 +380370,7 @@ LABEL_FC1796:
 	extz wa
 	lds bc, 1
 	calr LABEL_FBF4F9
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FC17E6
 	.byte 0xae, 0x40, 0x21	; LD XBC, (XIZ + 040h)
 	.byte 0xae, 0x3c, 0x20	; LD XWA, (XIZ + 03ch)
@@ -380404,7 +380404,7 @@ LABEL_FC17EB:
 	extz wa
 	lds bc, 2
 	calr LABEL_FBF4F9
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FC183B
 	.byte 0xae, 0x40, 0x21	; LD XBC, (XIZ + 040h)
 	.byte 0xae, 0x3c, 0x20	; LD XWA, (XIZ + 03ch)
@@ -380438,7 +380438,7 @@ LABEL_FC1840:
 	extz wa
 	lds bc, 3
 	calr LABEL_FBF4F9
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FC1890
 	.byte 0xae, 0x40, 0x21	; LD XBC, (XIZ + 040h)
 	.byte 0xae, 0x3c, 0x20	; LD XWA, (XIZ + 03ch)
@@ -380472,7 +380472,7 @@ LABEL_FC1895:
 	extz wa
 	lds bc, 4
 	calr LABEL_FBF4F9
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FC18E5
 	.byte 0xae, 0x40, 0x21	; LD XBC, (XIZ + 040h)
 	.byte 0xae, 0x3c, 0x20	; LD XWA, (XIZ + 03ch)
@@ -380952,7 +380952,7 @@ LABEL_FC1E2F:
 	ld xbc, 0x1E000AA
 	.byte 0xea, 0xa8	; LD XDE, 0
 	call 0xFA9660
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_FC1E67
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009A
@@ -381360,7 +381360,7 @@ LABEL_FC22AD:
 	ld bc, wa
 	ld wa, iz
 	.byte 0xf2, 0x7e, 0x16, 0xed, 0x35	; LDA XIY, 0ED167Eh
-	.byte 0xd9, 0xdd	; CP BC, 5
+	cps bc, 5
 	jrl ugt, LABEL_FC2440
 	add bc, bc
 	.byte 0xf2, 0xa2, 0x18, 0xed, 0x34	; LDA XIX, 0ED18A2h
@@ -381449,7 +381449,7 @@ LABEL_FC248A:
 	jr nz, LABEL_FC24EA
 	ldw wa, 0x8
 	call LABEL_FC56A1
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_FC24EA
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
@@ -381701,7 +381701,7 @@ WallUsrShowHideFunc:
 	jr nz, LABEL_FC27D5
 	ldw wa, 0x8
 	call LABEL_FC56A1
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_FC27D5
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
@@ -382111,7 +382111,7 @@ MainSysControl:	; fc2bbf
 	pop xde
 	.byte 0xc7, 0xfb, 0x89	; LD A, QIZH
 	extz wa
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr mi, LABEL_FC2C48
 	cp wa, 0x8
 	jr gt, LABEL_FC2C48
@@ -382303,7 +382303,7 @@ LABEL_FC2E2E:
 	jr nz, LABEL_FC2EB4
 	ld xwa, 0x4180
 	call LABEL_FCD437
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_FC2E55
 	.byte 0x0b, 0xed, 0x00	; PUSHW 00edh
 	.byte 0x0b, 0x04, 0x1c	; PUSHW 1c04h
@@ -382413,7 +382413,7 @@ LABEL_FC2F4A:
 	jr nz, LABEL_FC2FAC
 	.byte 0xbf, 0x04, 0x31	; LDA XBC, XSP + 004h
 	.byte 0x9e, 0x04, 0x20	; LD WA, (XIZ + 004h)
-	.byte 0xd8, 0xdd	; CP WA, 5
+	cps wa, 5
 	jr nz, LABEL_FC2F7F
 	.byte 0xc1, 0x3c, 0x8d, 0x3f, 0x00	; CP (8D3Ch), 000h
 	jr nz, LABEL_FC2F7F
@@ -382492,7 +382492,7 @@ LABEL_FC300A:
 	.byte 0xbf, 0x0c, 0x37	; LDA XSP, XSP + 00ch
 	ld xwa, 0xC0
 	call LABEL_FCD437
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_FC3045
 	.byte 0xbf, 0x04, 0x32	; LDA XDE, XSP + 004h
 	.byte 0xe3, 0xfd, 0x04, 0x01, 0x20	; LD XWA, (XSP + 0104h)
@@ -383095,7 +383095,7 @@ LABEL_FC0DE:
 
 LABEL_FC40E0:
 	dec 1, wa
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr z, LABEL_FC40E8
 	jr LABEL_FC40E0
 
@@ -383108,7 +383108,7 @@ Delay_6_Loops:
 
 LABEL_FC40EB:
 	dec 1, wa
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr z, LABEL_FC40F3
 	jr LABEL_FC40EB
 
@@ -383121,7 +383121,7 @@ DELAY_10_LOOPS:	; FC40F4
 
 LABEL_FC40F7:
 	dec 1, wa
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr z, LABEL_FC40FF
 	jr LABEL_FC40F7
 
@@ -383134,7 +383134,7 @@ DELAY_300_LOOPS:	; FC4100
 
 LABEL_FC4103:
 	dec 1, wa
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr z, LABEL_FC410B
 	jr LABEL_FC4103
 
@@ -383147,7 +383147,7 @@ DELAY_1500_LOOPS:	; FC410C
 
 LABEL_FC410F:
 	dec 1, wa
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr z, LABEL_FC4117
 	jr LABEL_FC410F
 
@@ -383160,7 +383160,7 @@ DELAY_3000_LOOPS:	; FC4118
 
 LABEL_FC411B:
 	dec 1, wa
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr z, LABEL_FC4123
 	jr LABEL_FC411B
 
@@ -383181,7 +383181,7 @@ DELAY_6_TICKS:
 LABEL_FC4141:
 	.byte 0xd1, 0x09, 0x04, 0x20	; LD WA, (SYSTEM_TIMESTAMP)
 	.byte 0xd1, 0x9b, 0x8d, 0xa0	; SUB WA, (TIMESTAMP_FOR_DELAY)
-	.byte 0xd8, 0xde	; CP WA, 6
+	cps wa, 6
 	jr lt, LABEL_FC4141
 	ret
 
@@ -383336,10 +383336,10 @@ CPanel_ButtonPollLoop:
 
 	.byte 0xc1, 0x55, 0x8e, 0x21	; LD A, (STATE_OF_CPANEL_BUTTONS + 11)	; Byte 11 is in gap between CPR (0-10) and CPL (16-26), possibly status/mode
 	ldb w, 0xD	; Default encoder check mode
-	.byte 0xc9, 0x33, 0x07	; BIT 7, A	; Test bit 7 of status byte
+	bit 7, a	; Test bit 7 of status byte
 	.byte 0x6e, 0x09	; JR NZ, CPanel_EncoderCheck
 	ldb w, 0xE	; Alternate mode if bit 7 set
-	.byte 0xc9, 0x33, 0x06	; BIT 6, A	; Test bit 6 of status byte
+	bit 6, a	; Test bit 6 of status byte
 	.byte 0x6e, 0x02	; JR NZ, CPanel_EncoderCheck
 	ldb w, 0xC	; Third mode if bit 6 set
 
@@ -383724,7 +383724,7 @@ CPanel_SM_TXComplete:	; FC4672
 	.byte 0xf1, 0x8a, 0x8d, 0x00, 0x00	; LD (CPANEL_STATE_MACHINE_INDEX), 000h	; ROUTINE_0
 	.byte 0xd1, 0xff, 0x8d, 0x20	; LD WA, (CPANEL_LED_WRITE_PTR)
 	.byte 0xd1, 0xfd, 0x8d, 0xa0	; SUB WA, (CPANEL_LED_READ_PTR)
-	.byte 0xd8, 0xda	; CP WA, 2
+	cps wa, 2
 	jr c, LABEL_FC46C1
 	.byte 0xf1, 0x8a, 0x8d, 0x00, 0x04	; LD (CPANEL_STATE_MACHINE_INDEX), 004h	; ROUTINE_1
 	.byte 0xc1, 0x8f, 0x8d, 0x3c, 0xbf	; AND (PFFC_VALUE), 0bfh	; disable CPanel serial clk
@@ -383784,7 +383784,7 @@ LABEL_FC4722:
 	sub iy, hl
 
 LABEL_FC4727:
-	.byte 0xdd, 0xdb	; CP IY, 3
+	cps iy, 3
 	jr nc, LABEL_FC4732
 	.byte 0xc1, 0x92, 0x8d, 0x3e, 0x01	; OR (CPANEL_PROTOCOL_FLAGS), 001h	; CP_Flags_B.0 = 1
 	jr LABEL_FC4749
@@ -383884,7 +383884,7 @@ LABEL_FC482C:
 	sub hl, wa
 
 LABEL_FC4831:
-	.byte 0xdb, 0xdb	; CP HL, 3
+	cps hl, 3
 	jr c, LABEL_FC485B
 	.byte 0xf1, 0x9a, 0x8d, 0x00, 0x00	; LD (CPANEL_COUNTER_UP_TO_42), 000h
 	ldb w, 0xE0
@@ -383907,7 +383907,7 @@ LABEL_FC485B:
 	.byte 0x06, 0x00	; EI 000h
 	.byte 0xc1, 0x8c, 0x8d, 0x21	; LD A, (CPANEL_TX_RX_FLAGS)
 	and a, 0xC0
-	.byte 0xc9, 0xd8	; CP A, 0	; if (CP_Flags_A.76 == 0) {
+	cps a, 0	; if (CP_Flags_A.76 == 0) {
 	jr z, LABEL_FC4877	; 	goto LABEL_FC4877; ; do this
 						; }
 
@@ -383945,7 +383945,7 @@ LABEL_FC487A:
 	sub a, w
 
 LABEL_FC48A4:
-	.byte 0xc9, 0xda	; CP A, 2
+	cps a, 2
 	jr c, LABEL_FC48E8
 	.byte 0xc1, 0x8c, 0x8d, 0x3e, 0x02	; OR (CPANEL_TX_RX_FLAGS), 002h	; CP_Flags_A.1 = 1
 	.byte 0xf1, 0x8a, 0x8d, 0x00, 0x04	; LD (CPANEL_STATE_MACHINE_INDEX), 004h	; ROUTINE_1
@@ -384015,7 +384015,7 @@ CPanel_RX_ParseNext:
 	sub a, w
 
 CPanel_RX_PacketSizeCheck:
-	.byte 0xc9, 0xda	; CP A, 2
+	cps a, 2
 	.byte 0x77, 0xe2, 0x01	; JRL C, CPanel_RX_Done
 
 	.byte 0xc3, 0x07, 0xe8, 0xf4, 0x27	; LD L, (XDE + IY)
@@ -384055,7 +384055,7 @@ CPanel_RX_ButtonPacket:
 
 	and w, 0x4F
 	.byte 0x43, 0x4a, 0x8e, 0x00, 0x00	; LD XHL, STATE_OF_CPANEL_BUTTONS
-	.byte 0xc8, 0x33, 0x06	; BIT 006h, W
+	bit 6, w
 	jr z, LABEL_FC49BD
 	sub w, 0x30
 
@@ -384135,10 +384135,10 @@ CPanel_RX_MultiBytePacket:
 	and c, 0xC0
 	or c, a
 	ld w, c
-	.byte 0xc8, 0x33, 0x04	; BIT 004h, W
+	bit 4, w
 	jr nz, LABEL_FC4A8B
 	and c, 0x40
-	.byte 0xcb, 0x33, 0x06	; BIT 006h, C
+	bit 6, c
 	jr z, LABEL_FC4A7D
 	sub c, 0x30
 
@@ -384154,7 +384154,7 @@ LABEL_FC4A8B:
 	calr CPanel_IncEventPtr
 	.byte 0xc3, 0x07, 0xe8, 0xf4, 0x21	; LD A, (XDE + IY)
 	calr CPanel_IncRXPtr
-	.byte 0xc8, 0x33, 0x04	; BIT 004h, W
+	bit 4, w
 	jr z, LABEL_FC4AC5
 	pushw bc
 	ld c, w
@@ -384181,14 +384181,14 @@ LABEL_FC4AC5:
 c:
 	.byte 0xf3, 0x07, 0xf8, 0xf0, 0x41	; LD (XIZ + IX), A
 	calr CPanel_IncEventPtr
-	.byte 0xc8, 0x33, 0x04	; BIT 004h, W
+	bit 4, w
 	jr nz, LABEL_FC4AEA
 	.byte 0x83, 0x31	; EX (XHL), A
 	.byte 0x83, 0xd1	; XOR A, (XHL)
 	inc 1, hl
 	.byte 0xf1, 0x8c, 0x8d, 0xcc	; BIT 4, (CPANEL_TX_RX_FLAGS)	; This is never set ?!
 	jr z, LABEL_FC4AEC
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_FC4AEC
 					; if CP_Flags_A.4 != 0 && A == 0:
 	calr CPanel_DecEventPtr
@@ -384213,7 +384213,7 @@ LABEL_FC4B00:
 LABEL_FC4B04:
 	inc 1, w
 	dec 1, b
-	.byte 0xca, 0xd8	; CP B, 0
+	cps b, 0
 	jrl nz, LABEL_FC4A8B
 	.byte 0x78, 0x1b, 0xfe	; JRL T, CPanel_RX_ParseNext
 
@@ -384254,7 +384254,7 @@ LABEL_FC4B5E:
 	sub hl, wa
 
 LABEL_FC4B63:
-	.byte 0xdb, 0xdb	; CP HL, 3
+	cps hl, 3
 	jrl c, LABEL_FC4C07
 	.byte 0xc3, 0x07, 0xf8, 0xf0, 0x21	; LD A, (XIZ + IX)
 	and a, 0x30
@@ -384332,7 +384332,7 @@ LABEL_FC4C28:
 
 
 CPanel_DecEventPtr:	; FC4C29
-	.byte 0xdc, 0xd8	; CP IX, 0
+	cps ix, 0
 	jr nz, LABEL_FC4C31
 	ldw ix, 0x7F
 	ret
@@ -384623,7 +384623,7 @@ LABEL_FC4EC2:
 LABEL_FC4EC6:
 	ld e, (xbc)
 	extz de
-	.byte 0xda, 0xd8	; CP DE, 0
+	cps de, 0
 	jr mi, LABEL_FC4F17
 	cp de, 0x8
 	jr gt, LABEL_FC4F17
@@ -384993,7 +384993,7 @@ LABEL_FC53DA:
 	.byte 0xc5, 0xe8, 0xf1	; CP A, (XDE+)
 	jr nz, LABEL_FC53E9
 	inc 1, bc
-	.byte 0xd9, 0xdb	; CP BC, 3
+	cps bc, 3
 	jr c, LABEL_FC53DA
 	ret
 
@@ -385167,7 +385167,7 @@ LABEL_FC5543:
 
 LABEL_FC55A9:
 	extz wa
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	.byte 0xb0, 0xf5	; RET MI
 	cp wa, 0x8
 	.byte 0xb0, 0xfa	; RET GT
@@ -385195,7 +385195,7 @@ LABEL_FC55CB:
 
 LABEL_FC5625:
 	extz wa
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	.byte 0xb0, 0xf5	; RET MI
 	cp wa, 0x8
 	.byte 0xb0, 0xfa	; RET GT
@@ -385222,7 +385222,7 @@ LABEL_FC5647:
 
 LABEL_FC56A1:
 	extz wa
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jrl mi, LABEL_FC5754
 	cp wa, 0x8
 	jrl gt, LABEL_FC5754
@@ -385346,9 +385346,9 @@ LABEL_FC580A:
 	.byte 0x8b, 0x02, 0xc5	; AND E, (XHL + 002h)
 	ld l, e
 	.byte 0x8e, 0x02, 0x25	; LD E, (XIZ + 002h)
-	.byte 0xcd, 0x33, 0x04	; BIT 004h, E
+	bit 4, e
 	jr z, LABEL_FC583A
-	.byte 0xcd, 0x30, 0x04	; RES 004h, E
+	res 4, e
 	ld a, e
 	and a, 0xF
 	jr z, LABEL_FC582F
@@ -385376,7 +385376,7 @@ LABEL_FC5843:
 	.byte 0xcf, 0xff	; SRL A, L
 
 LABEL_FC584C:
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FC5863
 	.byte 0x8e, 0x01, 0x21	; LD A, (XIZ + 001h)
 	.byte 0xb9, 0x01, 0x41	; LD (XBC + 001h), A
@@ -386013,7 +386013,7 @@ LABEL_FC6996:
 LABEL_FC6997:
 	.byte 0xc1, 0xc6, 0x8e, 0x61	; INC 1, (8EC6h)
 	.byte 0xd1, 0xc8, 0x8e, 0x20	; LD WA, (8EC8h)
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr z, LABEL_FC69A9
 	dec 1, wa
 	.byte 0xf1, 0xc8, 0x8e, 0x50	; LD (8EC8h), WA
@@ -386151,7 +386151,7 @@ LABEL_FC6ABE:
 	.byte 0xb8, 0x01, 0x31	; LDA XBC, XWA + 001h
 	.byte 0xbf, 0x08, 0x61	; LD (XSP + 008h), XBC
 	ld b, (xbc)
-	.byte 0xca, 0xd8	; CP B, 0
+	cps b, 0
 	jr nz, LABEL_FC6AD7
 	.byte 0x88, 0x03, 0x3f, 0x00	; CP (XWA + 003h), 000h
 	jr z, LABEL_FC6B17
@@ -386253,14 +386253,14 @@ LABEL_FC6B87:
 	.byte 0x8e, 0x02, 0x3f, 0x01	; CP (XIZ + 002h), 001h
 	jr nz, LABEL_FC6BD3
 	.byte 0xc1, 0x80, 0x8d, 0x23	; LD C, (8D80h)
-	.byte 0xcb, 0x30, 0x00	; RES 000h, C
+	res 0, c
 	.byte 0xf1, 0x80, 0x8d, 0x43	; LD (8D80h), C
 	.byte 0x8e, 0x02, 0x21	; LD A, (XIZ + 002h)
 	and a, 0x1
 	.byte 0x8e, 0x01, 0xc1	; AND A, (XIZ + 001h)
-	.byte 0xc9, 0x33, 0x00	; BIT 000h, A
+	bit 0, a
 	jr z, LABEL_FC6C29
-	.byte 0xcb, 0x31, 0x00	; SET 000h, C
+	set 0, c
 	.byte 0xf1, 0x80, 0x8d, 0x43	; LD (8D80h), C
 	jr LABEL_FC6C4D
 
@@ -386270,7 +386270,7 @@ LABEL_FC6BD3:
 	.byte 0x8e, 0x02, 0x21	; LD A, (XIZ + 002h)
 	and a, 0x1
 	.byte 0x8e, 0x01, 0xc1	; AND A, (XIZ + 001h)
-	.byte 0xc9, 0x33, 0x00	; BIT 000h, A
+	bit 0, a
 	jr z, LABEL_FC6C29
 	ldw wa, 0x10
 	call LABEL_FEBDA1
@@ -386399,7 +386399,7 @@ Encoder_ProcessModwheel:
 	.byte 0xf2, 0x3c, 0xa1, 0xed, 0x31	; LDA XBC, ENCODER_LUT_MODWHEEL	; Lookup table address
 	.byte 0xc3, 0x07, 0xe4, 0xe0, 0x21	; LD A, (XBC + WA)	; Get processed value from table
 	.byte 0xc1, 0xe4, 0x8e, 0x23	; LD C, (MIDI_CC_MODWHEEL_VALUE)	; Get current value
-	.byte 0xcb, 0x30, 0x07	; RES 007h, C	; Clear change flag
+	res 7, c	; Clear change flag
 	cp c, a	; Compare with new value
 	.byte 0xb0, 0xf6	; RET Z	; Return if unchanged
 	.byte 0xf1, 0xe4, 0x8e, 0x41	; LD (MIDI_CC_MODWHEEL_VALUE), A	; Store new value
@@ -386484,7 +386484,7 @@ Encoder_ProcessBreath:
 
 Encoder_ProcessBreath_WithModeAdjustment:
 	.byte 0xc1, 0xda, 0x8e, 0x23	; LD C, (ENCODER_BREATH_MODE)	; Get breath mode
-	.byte 0xcb, 0xd8	; CP C, 0
+	cps c, 0
 	.byte 0xb0, 0xf6	; RET Z	; Return if disabled
 	srl a, 1	; Divide by 2
 	ld l, a
@@ -386527,7 +386527,7 @@ Encoder_ProcessFoot:
 	.byte 0xf2, 0x02, 0xa4, 0xed, 0x31	; LDA XBC, ENCODER_LUT_FOOT	; Lookup table
 	.byte 0xc3, 0x07, 0xe4, 0xe0, 0x21	; LD A, (XBC + WA)	; Get processed value
 	.byte 0xc1, 0xea, 0x8e, 0x23	; LD C, (MIDI_CC_FOOT_VALUE)	; Get current value
-	.byte 0xcb, 0x30, 0x07	; RES 007h, C	; Clear change flag
+	res 7, c	; Clear change flag
 	cp c, a	; Compare
 	.byte 0xb0, 0xf6	; RET Z	; Return if unchanged
 	.byte 0xf1, 0xea, 0x8e, 0x41	; LD (MIDI_CC_FOOT_VALUE), A	; Store new value
@@ -386573,11 +386573,11 @@ LABEL_FC6DF1:
 ; Reads mode value from 0xC07D and configures encoder processing accordingly
 Encoder_ApplySystemModeSettings:
 	.byte 0xc1, 0x7d, 0xc0, 0x21	; LD A, (0C07Dh)	; Get mode selector
-	.byte 0xc9, 0xde	; CP A, 6
+	cps a, 6
 	.byte 0x66, 0x32	; JR Z, Encoder_ConfigureRangeLimit	; Jump if mode 6
-	.byte 0xc9, 0xdd	; CP A, 5
+	cps a, 5
 	.byte 0x66, 0x19	; JR Z, Encoder_ConfigureVolumeMode	; Jump if mode 5
-	.byte 0xc9, 0xdc	; CP A, 4
+	cps a, 4
 	.byte 0xb0, 0xfe	; RET NZ	; Return if not mode 4
 	; Mode 4: Configure breath mode
 	.byte 0xc1, 0x7f, 0xc0, 0x21	; LD A, (0C07Fh)
@@ -386599,11 +386599,11 @@ Encoder_ConfigureVolumeMode:
 
 Encoder_ConfigureRangeLimit:
 	.byte 0xc1, 0x7f, 0xc0, 0x21	; LD A, (0C07Fh)
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A	; Clear bit 7
-	.byte 0xc9, 0xd8	; CP A, 0
+	res 7, a	; Clear bit 7
+	cps a, 0
 	.byte 0xb0, 0xf6	; RET Z	; Return if zero
 	.byte 0xc1, 0x7e, 0xc0, 0x21	; LD A, (0C07Eh)
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A	; Clear bit 7
+	res 7, a	; Clear bit 7
 	.byte 0xf1, 0xde, 0x8e, 0x41	; LD (ENCODER_RANGE_LIMIT), A	; Set range limit
 	ret
 
@@ -386648,13 +386648,13 @@ LABEL_FC6E42:
 	ret
 
 LABEL_FC6EA7:
-	.byte 0xc9, 0xdb	; CP A, 3
+	cps a, 3
 	jr z, LABEL_FC6EC9
-	.byte 0xc9, 0xda	; CP A, 2
+	cps a, 2
 	jr z, LABEL_FC6EC3
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	jr z, LABEL_FC6EBD
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_FC6ECD
 	.byte 0xf1, 0x20, 0x01, 0x31	; LDA XBC, 0120h
 	jr LABEL_FC6ECD
@@ -386761,7 +386761,7 @@ LABEL_FC6F86:
 	pushw wa
 	call LABEL_FF103E
 	inc 2, xsp
-	.byte 0xdb, 0xda	; CP HL, 2
+	cps hl, 2
 	jr le, LABEL_FC6FF4
 	.byte 0x8f, 0x04, 0x23	; LD C, (XSP + 004h)
 	extz bc
@@ -386771,7 +386771,7 @@ LABEL_FC6F86:
 	pushw wa
 	call LABEL_FF103E
 	inc 2, xsp
-	.byte 0xdb, 0xde	; CP HL, 6
+	cps hl, 6
 	jr le, LABEL_FC6FDD
 	ld xwa, (xsp)
 	ld a, (xwa)
@@ -386865,28 +386865,28 @@ LABEL_FC707D:
 	.byte 0xc1, 0x36, 0x8d, 0x3f, 0xfb	; CP (8D36h), 0fbh
 	.byte 0xb0, 0xf6	; RET Z
 	.byte 0xd1, 0x3c, 0x8f, 0x20	; LD WA, (8F3Ch)
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr z, LABEL_FC7094
 	ld xbc, 0xEDA5DA
 	calr LABEL_FC712B
 
 LABEL_FC7094:
 	.byte 0xd1, 0x40, 0x8f, 0x20	; LD WA, (8F40h)
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr z, LABEL_FC70A4
 	ld xbc, 0xEDA5E0
 	calr LABEL_FC712B
 
 LABEL_FC70A4:
 	.byte 0xd1, 0x44, 0x8f, 0x20	; LD WA, (8F44h)
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr z, LABEL_FC70B4
 	ld xbc, 0xEDA5F8
 	calr LABEL_FC712B
 
 LABEL_FC70B4:
 	.byte 0xd1, 0x48, 0x8f, 0x20	; LD WA, (8F48h)
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr z, LABEL_FC70C4
 	ld xbc, 0xEDA610
 	calr LABEL_FC712B
@@ -386918,7 +386918,7 @@ LABEL_FC70FF:
 	call LABEL_F99439
 	.byte 0xc1, 0x60, 0x8f, 0xf7	; CP L, (8F60h)
 	.byte 0xb0, 0xf6	; RET Z
-	.byte 0xcf, 0xda	; CP L, 2
+	cps l, 2
 	jr nz, LABEL_FC7113
 	.byte 0xd1, 0x44, 0x8f, 0x3e, 0x04, 0x00	; ORW (8F44h), 0004h
 
@@ -387411,9 +387411,9 @@ LABEL_FC7A10:
 	.byte 0xf1, 0x1e, 0x04, 0xca	; BIT 2, (041Eh)
 	jr nz, LABEL_FC7A35
 	ld a, c
-	.byte 0xcb, 0x33, 0x01	; BIT 001h, C
+	bit 1, c
 	jr z, LABEL_FC7A86
-	.byte 0xc9, 0x30, 0x01	; RES 001h, A
+	res 1, a
 	.byte 0xf1, 0x76, 0x8e, 0x41	; LD (8E76h), A
 	jr LABEL_FC7A83
 
@@ -387424,9 +387424,9 @@ LABEL_FC7A35:
 	jr nz, LABEL_FC7A75
 	.byte 0xf1, 0x76, 0x8e, 0xb9	; SET 1, (8E76h)
 	.byte 0xc1, 0x33, 0x04, 0x21	; LD A, (0433h)
-	.byte 0xc9, 0xde	; CP A, 6
+	cps a, 6
 	jr z, LABEL_FC7A52
-	.byte 0xc9, 0xdb	; CP A, 3
+	cps a, 3
 	jr nz, LABEL_FC7A5C
 
 LABEL_FC7A52:
@@ -387448,9 +387448,9 @@ LABEL_FC7A64:
 
 LABEL_FC7A75:
 	ld a, c
-	.byte 0xcb, 0x33, 0x01	; BIT 001h, C
+	bit 1, c
 	jr z, LABEL_FC7A86
-	.byte 0xc9, 0x30, 0x01	; RES 001h, A
+	res 1, a
 	.byte 0xf1, 0x76, 0x8e, 0x41	; LD (8E76h), A
 
 LABEL_FC7A83:
@@ -387465,7 +387465,7 @@ LABEL_FC7A88:
 	.byte 0xb0, 0xfe	; RET NZ
 	.byte 0xc1, 0x20, 0x04, 0x21	; LD A, (0420h)
 	.byte 0xc1, 0x7b, 0x34, 0xd1	; XOR A, (347Bh)
-	.byte 0xc9, 0x33, 0x02	; BIT 002h, A
+	bit 2, a
 	.byte 0xb0, 0xf6	; RET Z
 	.byte 0xd1, 0x3e, 0x8f, 0x3e, 0x04, 0x00	; ORW (8F3Eh), 0004h
 	.byte 0xc1, 0x20, 0x04, 0x19, 0x7b, 0x34	; LD_8_8 0347Bh, 00420h
@@ -387475,7 +387475,7 @@ LABEL_FC7AA8:
 	push xiz
 	.byte 0xf1, 0x18, 0x8f, 0x36	; LDA XIZ, ENCODER_STATE_BASE
 	.byte 0xd1, 0x40, 0x8f, 0x20	; LD WA, (8F40h)
-	.byte 0xd8, 0x33, 0x02	; BIT 002h, WA
+	bit 2, wa
 	jr nz, LABEL_FC7B05
 	.byte 0xc1, 0x4a, 0x8f, 0x21	; LD A, (8F4Ah)
 	and a, 0x3
@@ -387487,14 +387487,14 @@ LABEL_FC7AA8:
 	ld xwa, 0x28103
 	call LABEL_FCD437
 	.byte 0xbe, 0x0e, 0x31	; LDA XBC, XIZ + 00eh
-	.byte 0xdb, 0xd9	; CP HL, 1
+	cps hl, 1
 	jr nz, LABEL_FC7AF0
 	.byte 0xd1, 0x0f, 0x04, 0x20	; LD WA, (040Fh)
-	.byte 0xd8, 0x33, 0x06	; BIT 006h, WA
+	bit 6, wa
 	jr nz, LABEL_FC7AF6
 	ld a, (xbc)
 	and a, 0xF0
-	.byte 0xc9, 0x31, 0x00	; SET 000h, A
+	set 0, a
 	ld (xbc), a
 	jr LABEL_FC7B05
 
@@ -387564,13 +387564,13 @@ LABEL_FC7C33:
 	lds hl, 0
 	or xwa, xwa
 	.byte 0xb0, 0xf6	; RET Z
-	.byte 0xd8, 0x33, 0x00	; BIT 000h, WA
+	bit 0, wa
 	.byte 0xb0, 0xfe	; RET NZ
 
 LABEL_FC7C3E:
 	srl xwa, 1
 	inc 1, hl
-	.byte 0xd8, 0x33, 0x00	; BIT 000h, WA
+	bit 0, wa
 	jr z, LABEL_FC7C3E
 	ret
 
@@ -387611,7 +387611,7 @@ LABEL_FC7CB9:
 	jr nz, LABEL_FC7CF0
 	ld xwa, 0xC0
 	call LABEL_FCD437
-	.byte 0xdb, 0xd9	; CP HL, 1
+	cps hl, 1
 	jr nz, LABEL_FC7CF0
 	ld xwa, 0xC0
 	lds bc, 0
@@ -387706,7 +387706,7 @@ LABEL_FC7D7B:
 	.byte 0xf2, 0x64, 0xb2, 0xed, 0x30	; LDA XWA, 0EDB264h
 	.byte 0xf1, 0x82, 0x91, 0x60	; LD (9182h), XWA
 	call LABEL_EF0988
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_FC7DAE
 	ld xwa, 0xC0
 	lds bc, 0
@@ -387966,7 +387966,7 @@ LABEL_FC819D:
 	.byte 0xf2, 0xc2, 0xff, 0x00, 0xb0	; RES 0, (0FFC2h:24)
 	.byte 0xf2, 0xc0, 0xff, 0x00, 0xb9	; SET 1, (0FFC0h:24)
 	call 0xEF0865
-	.byte 0xcf, 0xda	; CP L, 2
+	cps l, 2
 	jr nz, LABEL_FC81E0
 	.byte 0xf2, 0xc8, 0xff, 0x00, 0x00, 0x01	; LD (0FFC8h:24), 001h
 	jr LABEL_FC81E6
@@ -388507,7 +388507,7 @@ LABEL_FC876A:
 
 LABEL_FC8A97:
 	.byte 0xc1, 0xf9, 0x90, 0x21	; LD A, (90F9h)
-	.byte 0xc9, 0x33, 0x00	; BIT 000h, A
+	bit 0, a
 	.byte 0xb0, 0xf6	; RET Z
 	.byte 0xd1, 0xde, 0x90, 0x20	; LD WA, (90DEh)
 	ld de, wa
@@ -388570,7 +388570,7 @@ LABEL_FC8A97:
 	add xde, xbc
 	.byte 0xb2, 0x00, 0x1f	; LD (XDE), 01fh
 	.byte 0xc1, 0xf9, 0x90, 0x21	; LD A, (90F9h)
-	.byte 0xc9, 0x30, 0x00	; RES 000h, A
+	res 0, a
 	.byte 0xf1, 0xf9, 0x90, 0x41	; LD (90F9h), A
 	ret
 
@@ -388661,7 +388661,7 @@ LABEL_FC8BAF:
 LABEL_FC8DCE:
 	.byte 0xf1, 0xae, 0x28, 0xb7	; RES 7, (28AEh)
 	.byte 0xc1, 0xe4, 0x8e, 0x21	; LD A, (MIDI_CC_MODWHEEL_VALUE)
-	.byte 0xc9, 0x31, 0x07	; SET 007h, A
+	set 7, a
 	.byte 0xf1, 0xe0, 0x8e, 0x41	; LD (MIDI_CC_MODWHEEL_PENDING), A
 	.byte 0xf1, 0xe4, 0x8e, 0xcf	; BIT 7, (MIDI_CC_MODWHEEL_VALUE)
 	.byte 0xb0, 0xf6	; RET Z
@@ -388669,7 +388669,7 @@ LABEL_FC8DCE:
 	.byte 0xf1, 0x27, 0x91, 0x00, 0xb0	; LD (9127h), 0b0h
 	.byte 0xf1, 0x28, 0x91, 0x00, 0x01	; LD (9128h), 001h
 	.byte 0xc1, 0xe4, 0x8e, 0x21	; LD A, (MIDI_CC_MODWHEEL_VALUE)
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
+	res 7, a
 	.byte 0xf1, 0x29, 0x91, 0x41	; LD (9129h), A
 	.byte 0xf1, 0x2a, 0x91, 0x00, 0x7f	; LD (912Ah), 07fh
 	.byte 0xc1, 0x29, 0x91, 0x25	; LD E, (9129h)
@@ -388839,7 +388839,7 @@ LABEL_FC916D:
 	extz bc
 	calr LABEL_FC933D
 	.byte 0xc1, 0xea, 0x8e, 0x21	; LD A, (MIDI_CC_FOOT_VALUE)
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
+	res 7, a
 	extz wa
 	.byte 0xe3, 0xfd, 0x72, 0x01, 0x21	; LD XBC, (XSP + 0172h)
 	.byte 0x89, 0x01, 0x23	; LD C, (XBC + 001h)
@@ -388861,7 +388861,7 @@ LABEL_FC916D:
 
 LABEL_FC91CC:
 	.byte 0xc1, 0xe4, 0x8e, 0x21	; LD A, (MIDI_CC_MODWHEEL_VALUE)
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
+	res 7, a
 	extz wa
 	ld c, (xbc)
 	extz bc
@@ -388896,7 +388896,7 @@ LABEL_FC91DC:
 	.byte 0xaf, 0x04, 0xc0	; AND XWA, (XSP + 004h)
 	calr LABEL_FC928A
 	.byte 0xc1, 0xe4, 0x8e, 0x21	; LD A, (MIDI_CC_MODWHEEL_VALUE)
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
+	res 7, a
 	extz wa
 	.byte 0xe3, 0xfd, 0x72, 0x01, 0x21	; LD XBC, (XSP + 0172h)
 	.byte 0x89, 0x01, 0x23	; LD C, (XBC + 001h)
@@ -388948,7 +388948,7 @@ LABEL_FC928A:
 LABEL_FC9295:
 	or xwa, xwa
 	jr z, LABEL_FC92B7
-	.byte 0xd8, 0x33, 0x00	; BIT 000h, WA
+	bit 0, wa
 	jr z, LABEL_FC92AC
 	ld bc, iy
 	inc 1, iy
@@ -388986,7 +388986,7 @@ LABEL_FC92CC:
 	ld a, (xbc)
 	cp a, 0xFF
 	jr z, LABEL_FC9339
-	.byte 0xc9, 0xda	; CP A, 2
+	cps a, 2
 	jr nz, LABEL_FC92E7
 	.byte 0x8f, 0x02, 0x3f, 0x02	; CP (XSP + 002h), 002h
 	jr nz, LABEL_FC9331
@@ -389060,7 +389060,7 @@ LABEL_FC9377:
 	ld a, (xbc)
 	cp a, 0xFF
 	jr z, LABEL_FC93E8
-	.byte 0xc9, 0xda	; CP A, 2
+	cps a, 2
 	jr nz, LABEL_FC9392
 	.byte 0x8f, 0x04, 0x3f, 0x02	; CP (XSP + 004h), 002h
 	jr nz, LABEL_FC93E0
@@ -389118,7 +389118,7 @@ LABEL_FC93F7:
 	ld a, (xwa)
 	cp a, 0xFF
 	jr z, LABEL_FC9479
-	.byte 0xc9, 0xda	; CP A, 2
+	cps a, 2
 	jr nz, LABEL_FC9412
 	.byte 0x8f, 0x02, 0x3f, 0x02	; CP (XSP + 002h), 002h
 	jr nz, LABEL_FC9470
@@ -389503,7 +389503,7 @@ LABEL_FC997E:
 	jr z, LABEL_FC99EC
 	.byte 0x8f, 0x06, 0x23	; LD C, (XSP + 006h)
 	.byte 0x88, 0x01, 0xd3	; XOR C, (XWA + 001h)
-	.byte 0xcb, 0x33, 0x01	; BIT 001h, C
+	bit 1, c
 	jr z, LABEL_FC99EC
 	ld e, (xwa)
 	extz de
@@ -389529,9 +389529,9 @@ LABEL_FC99F2:
 
 LABEL_FC99F3:
 	.byte 0xc1, 0xe2, 0x8e, 0x21	; LD A, (MIDI_CC_EXPRESSION_PENDING)
-	.byte 0xc9, 0x33, 0x07	; BIT 007h, A
+	bit 7, a
 	jr z, LABEL_FC9A19
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
+	res 7, a
 	.byte 0xf1, 0xe2, 0x8e, 0x41	; LD (MIDI_CC_EXPRESSION_PENDING), A
 	.byte 0xf1, 0x27, 0x91, 0x00, 0xb0	; LD (9127h), 0b0h
 	.byte 0xf1, 0x28, 0x91, 0x00, 0x00	; LD (9128h), 000h
@@ -389541,9 +389541,9 @@ LABEL_FC99F3:
 
 LABEL_FC9A19:
 	.byte 0xc1, 0xe0, 0x8e, 0x21	; LD A, (MIDI_CC_MODWHEEL_PENDING)
-	.byte 0xc9, 0x33, 0x07	; BIT 007h, A
+	bit 7, a
 	.byte 0xb0, 0xf6	; RET Z
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
+	res 7, a
 	.byte 0xf1, 0xe0, 0x8e, 0x41	; LD (MIDI_CC_MODWHEEL_PENDING), A
 	.byte 0xf1, 0x27, 0x91, 0x00, 0xb0	; LD (9127h), 0b0h
 	.byte 0xf1, 0x28, 0x91, 0x00, 0x01	; LD (9128h), 001h
@@ -389712,7 +389712,7 @@ LABEL_FC9C84:
 	extz bc
 	call LABEL_FEE6B1
 	.byte 0xc7, 0xfb, 0xa8	; LD QIZH, 0
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FC9CB1
 	.byte 0xc7, 0xfb, 0x03, 0x40	; LD QIZH, 040h
 
@@ -389725,7 +389725,7 @@ LABEL_FC9CB1:
 	extz wa
 	add wa, bc
 	call LABEL_FCA450
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_FC9CD2
 	.byte 0xc7, 0xfb, 0xa8	; LD QIZH, 0
 	.byte 0xbf, 0x02, 0xbb	; SET 3, (XSP + 002h)
@@ -389871,7 +389871,7 @@ LABEL_FC9E31:
 	extz xbc
 	add xbc, xwa
 	.byte 0xb1, 0x00, 0x10	; LD (XBC), 010h
-	.byte 0xde, 0x33, 0x00	; BIT 000h, IZ
+	bit 0, iz
 	jr z, LABEL_FC9E82
 	.byte 0xf1, 0xa0, 0xf1, 0x30	; LDA XWA, 0F1A0h
 	.byte 0xd7, 0xfa, 0x89	; LD BC, QIZ
@@ -389904,11 +389904,11 @@ LABEL_FC9E82:
 	ret
 
 LABEL_FC9E91:
-	.byte 0xc9, 0xda	; CP A, 2
+	cps a, 2
 	jrl z, LABEL_FC9F1A
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	jr z, LABEL_FC9EDE
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_FC9EA2
 	ldw hl, 0xFFFF
 	ret
@@ -389930,7 +389930,7 @@ LABEL_FC9EA5:
 	push xwa
 	call LABEL_FF0D1E
 	add xsp, 0xA
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_FC9ED1
 	ld hl, iz
 	jr LABEL_FC9EDC
@@ -389962,7 +389962,7 @@ LABEL_FC9EE1:
 	push xwa
 	call LABEL_FF0D1E
 	add xsp, 0xA
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_FC9F0D
 	ld hl, iz
 	jr LABEL_FC9F18
@@ -389994,7 +389994,7 @@ LABEL_FC9F1D:
 	push xwa
 	call LABEL_FF0D1E
 	add xsp, 0xA
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_FC9F74
 	.byte 0x0b, 0x18, 0x00	; PUSHW 0018h
 	.byte 0x0b, 0x00, 0x00	; PUSHW 0000h
@@ -390009,7 +390009,7 @@ LABEL_FC9F1D:
 	push xwa
 	call LABEL_FF0D1E
 	add xsp, 0xA
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_FC9F74
 	ld hl, iz
 	jr LABEL_FC9F7F
@@ -390027,11 +390027,11 @@ LABEL_FC9F7F:
 LABEL_FC9F81:
 	ld e, a
 	extz bc
-	.byte 0xcd, 0xda	; CP E, 2
+	cps e, 2
 	jr z, LABEL_FC9F99
-	.byte 0xcd, 0xd9	; CP E, 1
+	cps e, 1
 	jr z, LABEL_FC9F95
-	.byte 0xcd, 0xd8	; CP E, 0
+	cps e, 0
 	.byte 0xb0, 0xfe	; RET NZ
 	ld wa, bc
 	jr LABEL_FC9F9F
@@ -390347,7 +390347,7 @@ LABEL_FCA222:
 	push xix
 	pushw wa
 	push xhl
-	.byte 0xcc, 0xd8	; CP D, 0
+	cps d, 0
 	jr z, LABEL_FCA262
 	xor h, h
 	ld l, c
@@ -390384,7 +390384,7 @@ LABEL_FCA276:
 	push xix
 	pushw wa
 	pushw hl
-	.byte 0xcc, 0xd8	; CP D, 0
+	cps d, 0
 	jr z, LABEL_FCA2B6
 	xor h, h
 	ld l, c
@@ -390487,7 +390487,7 @@ LABEL_FCA346:
 	.byte 0xda, 0x40	; MUL XWA, DE
 	ld xde, 0x4C4B400
 	call LABEL_EF0839
-	.byte 0xcf, 0xdc	; CP L, 4
+	cps l, 4
 	jr nz, LABEL_FCA361
 	ld xde, 0x3938700
 
@@ -390525,7 +390525,7 @@ LABEL_FCA390:
 	push xix
 	.byte 0xd1, 0x66, 0xfc, 0x20	; LD WA, (0FC66h)
 	and wa, 0x203
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_FCA3A1
 	ldb a, 0x1
 
@@ -390817,15 +390817,15 @@ LABEL_FCA6FD:
 	.byte 0xf5, 0xf1, 0x50	; LD (XIX+), WA
 	.byte 0xf5, 0xf1, 0x02, 0x17, 0x00	; LDW (XIX+), 0017h
 	ld wa, (xsp)
-	.byte 0xc9, 0x33, 0x07	; BIT 007h, A
+	bit 7, a
 	jr z, LABEL_FCA732
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
+	res 7, a
 	.byte 0xf1, 0xad, 0x91, 0xb8	; SET 0, (91ADh)
 
 LABEL_FCA732:
-	.byte 0xc8, 0x33, 0x07	; BIT 007h, W
+	bit 7, w
 	jr z, LABEL_FCA73E
-	.byte 0xc8, 0x30, 0x07	; RES 007h, W
+	res 7, w
 	.byte 0xf1, 0xad, 0x91, 0xb9	; SET 1, (91ADh)
 
 LABEL_FCA73E:
@@ -391011,7 +391011,7 @@ LABEL_FCA8FA:
 	.byte 0xd1, 0xbd, 0x91, 0x21	; LD BC, (91BDh)
 	cp c, 0x1F
 	jr ugt, LABEL_FCA923
-	.byte 0xca, 0xdc	; CP B, 4
+	cps b, 4
 	jr nz, LABEL_FCA923
 	.byte 0x8c, 0xf8, 0xf3	; CP C, (XIX - 8)
 	jr nz, LABEL_FCA923
@@ -391089,15 +391089,15 @@ LABEL_FCAA9C:
 	.byte 0xd1, 0xbd, 0x91, 0x20	; LD WA, (91BDh)
 	.byte 0xf5, 0xf1, 0x50	; LD (XIX+), WA
 	.byte 0xd1, 0xbf, 0x91, 0x20	; LD WA, (91BFh)
-	.byte 0xc9, 0x33, 0x07	; BIT 007h, A
+	bit 7, a
 	jr z, LABEL_FCAAE4
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
+	res 7, a
 	.byte 0xf1, 0xad, 0x91, 0xb8	; SET 0, (91ADh)
 
 LABEL_FCAAE4:
-	.byte 0xc8, 0x33, 0x07	; BIT 007h, W
+	bit 7, w
 	jr z, LABEL_FCAAF0
-	.byte 0xc8, 0x30, 0x07	; RES 007h, W
+	res 7, w
 	.byte 0xf1, 0xad, 0x91, 0xb9	; SET 1, (91ADh)
 
 LABEL_FCAAF0:
@@ -391191,11 +391191,11 @@ LABEL_FCABBA:
 	ld l, c
 	ld xix, 0xF1A0
 	.byte 0xc3, 0x03, 0xf0, 0xec, 0x21	; LD A, (XIX + L)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_FCABDF
-	.byte 0xc9, 0xda	; CP A, 2
+	cps a, 2
 	jr z, LABEL_FCABDF
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	jr nz, LABEL_FCAC29
 
 LABEL_FCABDF:
@@ -391204,20 +391204,20 @@ LABEL_FCABDF:
 	.byte 0xc1, 0xc9, 0x91, 0x20	; LD W, (91C9h)
 	.byte 0xf5, 0xf1, 0x50	; LD (XIX+), WA
 	ldb a, 0x9A
-	.byte 0xc9, 0x33, 0x07	; BIT 007h, A
+	bit 7, a
 	jr z, LABEL_FCABFB
 	.byte 0xf1, 0xad, 0x91, 0xba	; SET 2, (91ADh)
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
+	res 7, a
 
 LABEL_FCABFB:
 	ld w, c
 	add w, 0x4
 	.byte 0xf5, 0xf1, 0x50	; LD (XIX+), WA
 	.byte 0xc1, 0xa8, 0xc5, 0x21	; LD A, (0C5A8h)
-	.byte 0xc9, 0x33, 0x07	; BIT 007h, A
+	bit 7, a
 	jr z, LABEL_FCAC13
 	.byte 0xf1, 0xad, 0x91, 0xb8	; SET 0, (91ADh)
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
+	res 7, a
 
 LABEL_FCAC13:
 	ldb w, 0x7F
@@ -391370,7 +391370,7 @@ LABEL_FCAD62:
 	.byte 0x9c, 0xfa, 0xf3	; CP HL, (XIX - 6)
 	jr z, LABEL_FCAD7D
 	.byte 0xc3, 0x07, 0xf0, 0xec, 0x21	; LD A, (XIX + HL)
-	.byte 0xc9, 0x33, 0x07	; BIT 007h, A
+	bit 7, a
 	jr z, LABEL_FCAD62
 
 LABEL_FCAD7D:
@@ -391486,7 +391486,7 @@ LABEL_FCAE92:
 	.byte 0xc3, 0x07, 0xf0, 0xec, 0x21	; LD A, (XIX + HL)
 	cp a, 0x10
 	jrl z, LABEL_FCAFD1
-	.byte 0xc9, 0x31, 0x07	; SET 007h, A
+	set 7, a
 	.byte 0xf1, 0xe5, 0x90, 0x41	; LD (90E5h), A
 	extz hl
 	.byte 0xc1, 0x50, 0xfd, 0x27	; LD L, (0FD50h)
@@ -391654,7 +391654,7 @@ LABEL_FCB1ED:
 	.byte 0xc3, 0x07, 0xf0, 0xec, 0x21	; LD A, (XIX + HL)
 	cp a, 0x10
 	jr z, LABEL_FCB229
-	.byte 0xc9, 0x31, 0x07	; SET 007h, A
+	set 7, a
 	.byte 0xf1, 0xe5, 0x90, 0x41	; LD (90E5h), A
 	.byte 0xd1, 0x5b, 0x91, 0x21	; LD BC, (915Bh)
 	.byte 0xd1, 0x5d, 0x91, 0x22	; LD DE, (915Dh)
@@ -391715,19 +391715,19 @@ LABEL_FCB369:
 	ld bc, (xix)
 	.byte 0x9c, 0x02, 0x22	; LD DE, (XIX + 002h)
 	.byte 0x8c, 0xfe, 0x21	; LD A, (XIX - 2)
-	.byte 0xc9, 0x33, 0x02	; BIT 002h, A
+	bit 2, a
 	jr z, LABEL_FCB390
-	.byte 0xcb, 0x31, 0x07	; SET 007h, C
+	set 7, c
 
 LABEL_FCB390:
-	.byte 0xc9, 0x33, 0x00	; BIT 000h, A
+	bit 0, a
 	jr z, LABEL_FCB398
-	.byte 0xcd, 0x31, 0x07	; SET 007h, E
+	set 7, e
 
 LABEL_FCB398:
-	.byte 0xc9, 0x33, 0x01	; BIT 001h, A
+	bit 1, a
 	jr z, LABEL_FCB3A0
-	.byte 0xcc, 0x31, 0x07	; SET 007h, D
+	set 7, d
 
 LABEL_FCB3A0:
 	ld (xix), bc
@@ -391792,7 +391792,7 @@ LABEL_FCB40B:
 	.byte 0xd1, 0xb7, 0x91, 0x20	; LD WA, (91B7h)
 	srl w, 1
 	jr nc, LABEL_FCB42C
-	.byte 0xc9, 0x31, 0x07	; SET 007h, A
+	set 7, a
 
 LABEL_FCB42C:
 	.byte 0xe1, 0x62, 0xfc, 0x24	; LD XIX, (0FC62h)
@@ -391831,7 +391831,7 @@ LABEL_FCB47F:
 	.byte 0xc1, 0xc8, 0x91, 0x27	; LD L, (91C8h)
 	ld xix, 0x94D2
 	.byte 0xc1, 0xb7, 0x91, 0x21	; LD A, (91B7h)
-	.byte 0xc9, 0x31, 0x07	; SET 007h, A
+	set 7, a
 	.byte 0xf3, 0x07, 0xf0, 0xec, 0x41	; LD (XIX + HL), A
 	ret
 
@@ -391862,7 +391862,7 @@ LABEL_FCB4D5:
 	.byte 0xc3, 0x03, 0xf0, 0xec, 0x21	; LD A, (XIX + L)
 	cp a, 0x10
 	jr z, LABEL_FCB508
-	.byte 0xc9, 0x31, 0x07	; SET 007h, A
+	set 7, a
 	.byte 0xf1, 0xe5, 0x90, 0x41	; LD (90E5h), A
 	.byte 0xd1, 0x5b, 0x91, 0x21	; LD BC, (915Bh)
 	.byte 0xd1, 0x5d, 0x91, 0x22	; LD DE, (915Dh)
@@ -391876,7 +391876,7 @@ LABEL_FCB509:
 	.byte 0xc1, 0xc8, 0x91, 0x27	; LD L, (91C8h)
 	ld xix, 0x9452
 	.byte 0xc1, 0xb7, 0x91, 0x21	; LD A, (91B7h)
-	.byte 0xc9, 0x31, 0x07	; SET 007h, A
+	set 7, a
 	.byte 0xf3, 0x07, 0xf0, 0xec, 0x41	; LD (XIX + HL), A
 	ret
 
@@ -391907,7 +391907,7 @@ LABEL_FCB55F:
 	.byte 0xc3, 0x03, 0xf0, 0xec, 0x21	; LD A, (XIX + L)
 	cp a, 0x10
 	jr z, LABEL_FCB592
-	.byte 0xc9, 0x31, 0x07	; SET 007h, A
+	set 7, a
 	.byte 0xf1, 0xe5, 0x90, 0x41	; LD (90E5h), A
 	.byte 0xd1, 0x5b, 0x91, 0x21	; LD BC, (915Bh)
 	.byte 0xd1, 0x5d, 0x91, 0x22	; LD DE, (915Dh)
@@ -391923,7 +391923,7 @@ LABEL_FCB593:
 	ld xix, 0x9472
 	.byte 0xd1, 0xb7, 0x91, 0x20	; LD WA, (91B7h)
 	and wa, 0x7F7F
-	.byte 0xc9, 0x31, 0x07	; SET 007h, A
+	set 7, a
 	.byte 0xf3, 0x07, 0xf0, 0xec, 0x50	; LD (XIX + HL), WA
 	ret
 
@@ -391954,7 +391954,7 @@ LABEL_FCB5F2:
 	.byte 0xc3, 0x03, 0xf0, 0xec, 0x21	; LD A, (XIX + L)
 	cp a, 0x10
 	jr z, LABEL_FCB625
-	.byte 0xc9, 0x31, 0x07	; SET 007h, A
+	set 7, a
 	.byte 0xf1, 0xe5, 0x90, 0x41	; LD (90E5h), A
 	.byte 0xd1, 0x5b, 0x91, 0x21	; LD BC, (915Bh)
 	.byte 0xd1, 0x5d, 0x91, 0x22	; LD DE, (915Dh)
@@ -391976,7 +391976,7 @@ LABEL_FCB626:
 	; BIT 7, (28ADh)
 
 	jr nz, LABEL_FCB644
-	.byte 0xcd, 0x31, 0x07	; SET 007h, E
+	set 7, e
 	ld xix, 0x9432
 	.byte 0xf3, 0x07, 0xf0, 0xec, 0x45	; LD (XIX + HL), E
 	ret
@@ -392016,7 +392016,7 @@ LABEL_FCB695:
 
 LABEL_FCB6A1:
 	.byte 0xc1, 0x5d, 0x91, 0x21	; LD A, (915Dh)
-	.byte 0xc9, 0x31, 0x07	; SET 007h, A
+	set 7, a
 	.byte 0xf1, 0xe0, 0x8e, 0x41	; LD (MIDI_CC_MODWHEEL_PENDING), A
 	call LABEL_FCA2D9
 	.byte 0xf1, 0xad, 0x28, 0xcf	; BIT 7, (28ADh)
@@ -392030,7 +392030,7 @@ LABEL_FCB6BA:
 	.byte 0xc3, 0x07, 0xf0, 0xec, 0x21	; LD A, (XIX + HL)
 	cp a, 0x10
 	jr z, LABEL_FCB6E2
-	.byte 0xc9, 0x31, 0x07	; SET 007h, A
+	set 7, a
 	.byte 0xf1, 0xe5, 0x90, 0x41	; LD (90E5h), A
 	.byte 0xd1, 0x5b, 0x91, 0x21	; LD BC, (915Bh)
 	.byte 0xd1, 0x5d, 0x91, 0x22	; LD DE, (915Dh)
@@ -392132,7 +392132,7 @@ LABEL_FCB7CA:
 	.byte 0xc3, 0x07, 0xf0, 0xec, 0x21	; LD A, (XIX + HL)
 	cp a, 0x10
 	jrl nz, LABEL_FCB896
-	.byte 0xc9, 0x31, 0x07	; SET 007h, A
+	set 7, a
 	.byte 0xf1, 0xe5, 0x90, 0x41	; LD (90E5h), A
 	xor h, h
 	.byte 0xc1, 0x50, 0xfd, 0x27	; LD L, (0FD50h)
@@ -392794,9 +392794,9 @@ LABEL_FCC77C:
 
 LABEL_FCC77E:
 	.byte 0xc3, 0x07, 0xf4, 0xec, 0x21	; LD A, (XIY + HL)
-	.byte 0xc9, 0x33, 0x07	; BIT 007h, A
+	bit 7, a
 	jr z, LABEL_FCC7AA
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
+	res 7, a
 	.byte 0xf3, 0x07, 0xf4, 0xec, 0x41	; LD (XIY + HL), A
 	.byte 0xf1, 0xf8, 0x90, 0x00, 0xff	; LD (90F8h), 0ffh
 	.byte 0xf1, 0x27, 0x91, 0x40	; LD (9127h), W
@@ -392814,9 +392814,9 @@ LABEL_FCC7AA:
 LABEL_FCC7B2:
 	ld xiy, 0x94F2
 	ld a, (xiy)
-	.byte 0xc9, 0x33, 0x07	; BIT 007h, A
+	bit 7, a
 	jr z, LABEL_FCC7E7
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
+	res 7, a
 	ld (xiy), a
 	.byte 0xf1, 0xe0, 0x8e, 0x41	; LD (MIDI_CC_MODWHEEL_PENDING), A
 	call LABEL_FCA2D9
@@ -392837,9 +392837,9 @@ LABEL_FCC7E8:
 
 LABEL_FCC7F1:
 	.byte 0xd3, 0x07, 0xf4, 0xec, 0x20	; LD WA, (XIY + HL)
-	.byte 0xc9, 0x33, 0x07	; BIT 007h, A
+	bit 7, a
 	jr z, LABEL_FCC816
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
+	res 7, a
 	.byte 0xf3, 0x07, 0xf4, 0xec, 0x50	; LD (XIY + HL), WA
 	.byte 0xf1, 0xf8, 0x90, 0x00, 0xff	; LD (90F8h), 0ffh
 	ldb c, 0xB1
@@ -392860,9 +392860,9 @@ LABEL_FCC820:
 
 LABEL_FCC827:
 	.byte 0xc3, 0x07, 0xf4, 0xec, 0x21	; LD A, (XIY + HL)
-	.byte 0xc9, 0x33, 0x07	; BIT 007h, A
+	bit 7, a
 	jr z, LABEL_FCC84E
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
+	res 7, a
 	.byte 0xf3, 0x07, 0xf4, 0xec, 0x41	; LD (XIY + HL), A
 	.byte 0xf1, 0xf8, 0x90, 0x00, 0xff	; LD (90F8h), 0ffh
 	ld c, l
@@ -393329,9 +393329,9 @@ LABEL_FCD29A:
 	.byte 0x91, 0x3f, 0xff, 0xff	; CPW (XBC), 0ffffh
 	jr z, LABEL_FCD2EC
 	.byte 0x99, 0x02, 0x20	; LD WA, (XBC + 002h)
-	.byte 0xd8, 0xd9	; CP WA, 1
+	cps wa, 1
 	jr z, LABEL_FCD2E4
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr nz, LABEL_FCD2F1
 	.byte 0x9f, 0x0a, 0x20	; LD WA, (XSP + 00ah)
 	calr LABEL_FCEC75
@@ -393353,7 +393353,7 @@ LABEL_FCD2F1:
 
 LABEL_FCD2F9:
 	.byte 0x88, 0x10, 0x23	; LD C, (XWA + 010h)
-	.byte 0xcb, 0xde	; CP C, 6
+	cps c, 6
 	jr nc, LABEL_FCD2F1
 	extz bc
 	sla bc, 2
@@ -393460,9 +393460,9 @@ LABEL_FCD3C8:
 	.byte 0x91, 0x3f, 0xff, 0xff	; CPW (XBC), 0ffffh
 	jr z, LABEL_FCD416
 	.byte 0x99, 0x02, 0x20	; LD WA, (XBC + 002h)
-	.byte 0xd8, 0xd9	; CP WA, 1
+	cps wa, 1
 	jr z, LABEL_FCD40E
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr nz, LABEL_FCD41B
 	.byte 0x9f, 0x0a, 0x20	; LD WA, (XSP + 00ah)
 	calr LABEL_FCEC75
@@ -393554,7 +393554,7 @@ LABEL_FCD4C9:
 	or xwa, xwa
 	jr z, LABEL_FCD4F0
 	.byte 0x88, 0x0c, 0x21	; LD A, (XWA + 00ch)
-	.byte 0xc9, 0xdf	; CP A, 7
+	cps a, 7
 	jr nc, LABEL_FCD4F0
 	extz wa
 	sla wa, 2
@@ -393744,11 +393744,11 @@ LABEL_FCD63F:
 LABEL_FCD683:
 	.byte 0xaf, 0x0a, 0x20	; LD XWA, (XSP + 00ah)
 	ld c, (xwa)
-	.byte 0xcb, 0x30, 0x07	; RES 007h, C
+	res 7, c
 	extz bc
 	.byte 0xaf, 0x06, 0x20	; LD XWA, (XSP + 006h)
 	ld a, (xwa)
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
+	res 7, a
 	extz wa
 	sla wa, 7
 	ld de, wa
@@ -393986,7 +393986,7 @@ LABEL_FCD9FF:
 	.byte 0xf2, 0x80, 0x01, 0xee, 0x33	; LDA XHL, 0EE0180h
 	.byte 0xe3, 0x03, 0xec, 0xe4, 0x21	; LD XBC, (XHL + C)
 	ld c, (xbc)
-	.byte 0xcd, 0xda	; CP E, 2
+	cps e, 2
 	jr nz, LABEL_FCDA3B
 	ld a, c
 	sll a, 6
@@ -393994,7 +393994,7 @@ LABEL_FCD9FF:
 	ld l, a
 	extz hl
 	srl c, 1
-	.byte 0xcb, 0x30, 0x07	; RES 007h, C
+	res 7, c
 	sll c, 7
 	extz bc
 	add hl, bc
@@ -394081,7 +394081,7 @@ LABEL_FCDADD:
 	.byte 0xd5, 0xe1, 0xf2	; CP DE, (XWA+)
 	.byte 0xb0, 0xf6	; RET Z
 	inc 1, hl
-	.byte 0xdb, 0xdd	; CP HL, 5
+	cps hl, 5
 	jr le, LABEL_FCDADD
 	lds hl, 0
 	ret
@@ -394713,7 +394713,7 @@ LABEL_FCEC75:
 	jr nz, LABEL_FCEC85
 	.byte 0x89, 0x05, 0x3f, 0x08	; CP (XBC + 005h), 008h
 	jr nz, LABEL_FCEC85
-	.byte 0xd8, 0xdc	; CP WA, 4
+	cps wa, 4
 	jr z, LABEL_FCEC8B
 
 LABEL_FCEC85:
@@ -394737,13 +394737,13 @@ LABEL_FCEC8F:
 	extz bc
 	.byte 0x8e, 0x04, 0x21	; LD A, (XIZ + 004h)
 	extz wa
-	.byte 0xdb, 0xdc	; CP HL, 4
+	cps hl, 4
 	jr z, LABEL_FCED2B
-	.byte 0xdb, 0xdb	; CP HL, 3
+	cps hl, 3
 	jr z, LABEL_FCED24
-	.byte 0xdb, 0xda	; CP HL, 2
+	cps hl, 2
 	jr z, LABEL_FCECEC
-	.byte 0xdb, 0xd9	; CP HL, 1
+	cps hl, 1
 	jr nz, LABEL_FCED30
 	.byte 0xd1, 0xde, 0x90, 0x3f, 0xfc, 0x01	; CPW (90DEh), 01fch
 	.byte 0xf2, 0xd8, 0x14, 0xef, 0xef	; CALL NC, assswb_op
@@ -394799,7 +394799,7 @@ LABEL_FCED32:
 	push xiz
 	ld xiz, xbc
 	.byte 0x8e, 0x07, 0x25	; LD E, (XIZ + 007h)
-	.byte 0xcd, 0xd8	; CP E, 0
+	cps e, 0
 	jrl z, LABEL_FCEE47
 	.byte 0xbe, 0x06, 0x35	; LDA XIY, XIZ + 006h
 	.byte 0xc7, 0xf0, 0x9d	; LD IXL, E
@@ -394808,13 +394808,13 @@ LABEL_FCED32:
 	extz bc
 	.byte 0x8e, 0x04, 0x27	; LD L, (XIZ + 004h)
 	extz hl
-	.byte 0xd8, 0xdc	; CP WA, 4
+	cps wa, 4
 	jrl z, LABEL_FCEE21
-	.byte 0xd8, 0xdb	; CP WA, 3
+	cps wa, 3
 	jrl z, LABEL_FCEDFB
-	.byte 0xd8, 0xda	; CP WA, 2
+	cps wa, 2
 	jr z, LABEL_FCEDAB
-	.byte 0xd8, 0xd9	; CP WA, 1
+	cps wa, 1
 	jrl nz, LABEL_FCEE47
 	.byte 0xd1, 0xde, 0x90, 0x3f, 0xf8, 0x01	; CPW (90DEh), 01f8h
 	.byte 0xf2, 0xd8, 0x14, 0xef, 0xef	; CALL NC, assswb_op
@@ -395200,7 +395200,7 @@ LABEL_FCF0EF:
 	.byte 0x0f, 0x04, 0x00	; RETD 0004h
 
 LABEL_FCF0F8:
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr z, LABEL_FCF10B
 	.byte 0xf2, 0xf8, 0x80, 0x03, 0x31	; LDA XBC, 0380F8h
 	ld de, (xbc)
@@ -395290,15 +395290,15 @@ INTTX0_HANDLER:	; FCF15B
 	pushw wa
 	pushw hl
 	.byte 0xc1, 0x29, 0x04, 0x21	; LD A, (0429h)
-	.byte 0xc9, 0x33, 0x00	; BIT 000h, A
+	bit 0, a
 	jr nz, LABEL_FCF18B
-	.byte 0xc9, 0x33, 0x04	; BIT 004h, A
+	bit 4, a
 	jr nz, LABEL_FCF19C
-	.byte 0xc9, 0x33, 0x01	; BIT 001h, A
+	bit 1, a
 	jr nz, LABEL_FCF1A7
-	.byte 0xc9, 0x33, 0x02	; BIT 002h, A
+	bit 2, a
 	jr nz, LABEL_FCF1B8
-	.byte 0xc9, 0x33, 0x03	; BIT 003h, A
+	bit 3, a
 	jr z, LABEL_FCF1C9
 	.byte 0xf1, 0x29, 0x04, 0xb3	; RES 3, (0429h)
 	.byte 0xf1, 0x50, 0xfd, 0xcc	; BIT 4, (0FD50h)
@@ -395397,7 +395397,7 @@ MIDI_RX_BYTE_DISPATCHER:
 	push xiz
 	.byte 0x1e, 0x2b, 0x06	; CALR MIDI_RX_CONTEXT_RESTORE
 	.byte 0xc1, 0xdf, 0xb7, 0x21	; LD A, (0B7DFh)
-	.byte 0xc9, 0x33, 0x07	; BIT 007h, A
+	bit 7, a
 	jr z, LABEL_FCF289
 	cp a, 0xF7
 	jr ule, LABEL_FCF245
@@ -395485,7 +395485,7 @@ LABEL_FCF2E4:
 	.byte 0xc1, 0x2a, 0x04, 0x21	; LD A, (042Ah)
 	cp a, 0x70
 	jr ugt, LABEL_FCF301
-	.byte 0xc9, 0xdc	; CP A, 4
+	cps a, 4
 	jr ugt, LABEL_FCF2F7
 	.byte 0xd1, 0xd8, 0xb7, 0x20	; LD WA, (0B7D8h)
 	jr LABEL_FCF305
@@ -395527,7 +395527,7 @@ LABEL_FCF342:
 	jrl z, LABEL_FCF4DF
 	cp d, 0xF8
 	jrl nz, LABEL_FCF48F
-	.byte 0xc9, 0x33, 0x00	; BIT 000h, A
+	bit 0, a
 	jr z, LABEL_FCF377
 	.byte 0xf1, 0x20, 0x04, 0x00, 0x06	; LD (0420h), 006h
 	.byte 0xf1, 0x1e, 0x04, 0xc8	; BIT 0, (041Eh)
@@ -395543,7 +395543,7 @@ LABEL_FCF374:
 	jrl LABEL_FCF48F
 
 LABEL_FCF377:
-	.byte 0xc9, 0x33, 0x02	; BIT 002h, A
+	bit 2, a
 	jr z, LABEL_FCF395
 	.byte 0xc1, 0x17, 0x04, 0x3c, 0xfc	; AND (0417h), 0fch
 	.byte 0xc1, 0x17, 0x04, 0x64	; INC 4, (0417h)
@@ -395921,7 +395921,7 @@ MIDI_CHANNEL_MESSAGE_DISPATCHER:
 	jrl nz, LABEL_FCF849
 	.byte 0xf1, 0x27, 0x04, 0xce	; BIT 6, (0427h)
 	jr nz, LABEL_FCF7AF
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_FCF781
 	and a, 0x70
 	srl a, 2
@@ -395976,7 +395976,7 @@ LABEL_FCF7B7:
 	cp d, 0x90
 	popw de
 	jr nz, LABEL_FCF7D1
-	.byte 0xcd, 0xd8	; CP E, 0
+	cps e, 0
 	jr nz, LABEL_FCF7F6
 
 LABEL_FCF7D1:
@@ -396087,7 +396087,7 @@ LABEL_FCF897:
 
 LABEL_FCF8B1:
 	call 0xEF0865
-	.byte 0xcf, 0xdc	; CP L, 4
+	cps l, 4
 	jr z, LABEL_FCF8D8
 	.byte 0xf1, 0xd4, 0xb7, 0x02, 0x12, 0x7a	; LDW (0B7D4h), 7a12h
 	.byte 0xf1, 0xd6, 0xb7, 0x02, 0xb0, 0x28	; LDW (0B7D6h), 28b0h
@@ -396275,7 +396275,7 @@ LABEL_FCFA33:
 	.byte 0x9e, 0xfa, 0xf3	; CP HL, (XIZ - 6)
 	jr z, LABEL_FCFA4C
 	.byte 0xc3, 0x07, 0xf8, 0xec, 0x21	; LD A, (XIZ + HL)
-	.byte 0xc9, 0x33, 0x07	; BIT 007h, A
+	bit 7, a
 	jr z, LABEL_FCFA33
 
 LABEL_FCFA4C:
@@ -396958,7 +396958,7 @@ LABEL_FD0A9B:
 
 LABEL_FD0A9C:
 	.byte 0xc1, 0x4d, 0x96, 0x27	; LD L, (964Dh)
-	.byte 0xcf, 0xd9	; CP L, 1
+	cps l, 1
 	jr nz, LABEL_FD0AB8
 	ld xix, 0xFC19
 	.byte 0xf1, 0x58, 0xfd, 0xcb	; BIT 3, (0FD58h)
@@ -396986,7 +396986,7 @@ LABEL_FD0AB9:
 	.byte 0xf1, 0xe5, 0x90, 0xcf	; BIT 7, (90E5h)
 	jr nz, LABEL_FD0AF0
 	ld a, (xix)
-	.byte 0xc9, 0x33, 0x06	; BIT 006h, A
+	bit 6, a
 	jr nz, LABEL_FD0B10
 
 LABEL_FD0AF0:
@@ -397057,7 +397057,7 @@ LABEL_FD0B71:
 	.byte 0xf1, 0xe5, 0x90, 0xcf	; BIT 7, (90E5h)
 	jr nz, LABEL_FD0BA8
 	ld a, (xix)
-	.byte 0xc9, 0x33, 0x06	; BIT 006h, A
+	bit 6, a
 	jr nz, LABEL_FD0BC0
 
 LABEL_FD0BA8:
@@ -397136,7 +397136,7 @@ LABEL_FD0D13:
 	.byte 0xf1, 0xe5, 0x90, 0xcf	; BIT 7, (90E5h)
 	jr nz, LABEL_FD0D25
 	ld a, (xix)
-	.byte 0xc9, 0x33, 0x06	; BIT 006h, A
+	bit 6, a
 	jr nz, LABEL_FD0D53
 
 LABEL_FD0D25:
@@ -397180,7 +397180,7 @@ LABEL_FD0DA3:
 	.byte 0xf1, 0xe5, 0x90, 0xcf	; BIT 7, (90E5h)
 	jr nz, LABEL_FD0DC0
 	ld a, (xix)
-	.byte 0xc9, 0x33, 0x06	; BIT 006h, A
+	bit 6, a
 	jr nz, LABEL_FD0DED
 
 LABEL_FD0DC0:
@@ -397191,12 +397191,12 @@ LABEL_FD0DC0:
 	or a, 0xB0
 	ldb w, 0x0
 	.byte 0xbd, 0x00, 0x50	; LD (XIY + 000h:8), WA
-	.byte 0xcc, 0x30, 0x07	; RES 007h, D
+	res 7, d
 	.byte 0xbd, 0x02, 0x44	; LD (XIY + 002h), D
 	calr LABEL_FD0DEE
 	ldb w, 0x20
 	.byte 0xbd, 0x01, 0x40	; LD (XIY + 001h), W
-	.byte 0xcd, 0x30, 0x07	; RES 007h, E
+	res 7, e
 	.byte 0xbd, 0x02, 0x45	; LD (XIY + 002h), E
 	calr LABEL_FD0DEE
 
@@ -398100,11 +398100,11 @@ LABEL_FD2732:
 	.byte 0xf1, 0xea, 0xb7, 0x53	; LD (0B7EAh), HL
 	ld a, (xsp)
 	extz wa
-	.byte 0xdb, 0xdb	; CP HL, 3
+	cps hl, 3
 	jr z, LABEL_FD2763
-	.byte 0xdb, 0xda	; CP HL, 2
+	cps hl, 2
 	jr z, LABEL_FD275E
-	.byte 0xdb, 0xd9	; CP HL, 1
+	cps hl, 1
 	jr nz, LABEL_FD2768
 
 LABEL_FD275E:
@@ -398719,7 +398719,7 @@ LABEL_FD3055:
 	.byte 0x89, 0x03, 0x3c, 0x80	; AND (XBC + 003h), 080h
 	.byte 0x89, 0x03, 0xe9	; OR (XBC + 003h), A
 	.byte 0x8a, 0x04, 0x21	; LD A, (XDE + 004h)
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
+	res 7, a
 	.byte 0xb9, 0x04, 0x41	; LD (XBC + 004h), A
 	.byte 0xb9, 0x05, 0x34	; LDA XIX, XBC + 005h
 	.byte 0xba, 0x05, 0x33	; LDA XHL, XDE + 005h
@@ -398932,9 +398932,9 @@ LABEL_FD3260:
 	.byte 0xb8, 0x02, 0x32	; LDA XDE, XWA + 002h
 	.byte 0x88, 0x01, 0x21	; LD A, (XWA + 001h)
 	extz wa
-	.byte 0xdb, 0xda	; CP HL, 2
+	cps hl, 2
 	jrl z, LABEL_FD33A7
-	.byte 0xdb, 0xd9	; CP HL, 1
+	cps hl, 1
 	jrl nz, LABEL_FD34D7
 	pushw wa
 	push xbc
@@ -398944,7 +398944,7 @@ LABEL_FD3260:
 	.byte 0xaf, 0x06, 0x20	; LD XWA, (XSP + 006h)
 	inc 2, xwa
 	call LABEL_FDD00A
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl ge, LABEL_FD34D7
 	.byte 0xaf, 0x06, 0x20	; LD XWA, (XSP + 006h)
 	ld c, (xwa)
@@ -399059,7 +399059,7 @@ LABEL_FD33A7:
 	.byte 0xaf, 0x06, 0x20	; LD XWA, (XSP + 006h)
 	inc 2, xwa
 	call LABEL_FDD1B9
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl ge, LABEL_FD34D7
 	.byte 0xaf, 0x06, 0x21	; LD XBC, (XSP + 006h)
 	ld a, (xbc)
@@ -399228,7 +399228,7 @@ LABEL_FD354D:
 	.byte 0x89, 0x03, 0x3c, 0x80	; AND (XBC + 003h), 080h
 	.byte 0x89, 0x03, 0xed	; OR (XBC + 003h), E
 	.byte 0x88, 0x04, 0x25	; LD E, (XWA + 004h)
-	.byte 0xcd, 0x30, 0x07	; RES 007h, E
+	res 7, e
 	.byte 0xb9, 0x04, 0x45	; LD (XBC + 004h), E
 	.byte 0x88, 0x05, 0x25	; LD E, (XWA + 005h)
 	and e, 0x7F
@@ -400265,8 +400265,8 @@ LABEL_FD47F5:
 	.byte 0xba, 0x10, 0x35	; LDA XIY, XDE + 010h
 	.byte 0xb8, 0x08, 0x33	; LDA XHL, XWA + 008h
 	ld c, (xhl)
-	.byte 0xcb, 0x30, 0x07	; RES 007h, C
-	.byte 0xcb, 0x30, 0x07	; RES 007h, C
+	res 7, c
+	res 7, c
 	.byte 0x85, 0x3c, 0x80	; AND (XIY), 080h
 	.byte 0x85, 0xeb	; OR (XIY), C
 	.byte 0xb3, 0x9f	; LDCF 7, (XHL)
@@ -400357,7 +400357,7 @@ LABEL_FD4824:
 	jr z, LABEL_FD48EC
 	ld l, (xbc)
 	and l, 0xCF
-	.byte 0xcf, 0x31, 0x05	; SET 005h, L
+	set 5, l
 	ld (xbc), l
 	jr LABEL_FD48EF
 
@@ -400414,7 +400414,7 @@ LABEL_FD4941:
 	.byte 0x89, 0x06, 0x3c, 0xf0	; AND (XBC + 006h), 0f0h
 	.byte 0x89, 0x06, 0xed	; OR (XBC + 006h), E
 	.byte 0x88, 0x11, 0x21	; LD A, (XWA + 011h)
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
+	res 7, a
 	.byte 0x89, 0x03, 0x3c, 0x80	; AND (XBC + 003h), 080h
 	.byte 0x89, 0x03, 0xe9	; OR (XBC + 003h), A
 	ret
@@ -400549,7 +400549,7 @@ LABEL_FD4C0C:
 	.byte 0xf3, 0xe9, 0xf4, 0x02, 0x32	; LDA XDE, XDE + 02f4h
 	ld xwa, 0x4900
 	call LABEL_FDCA17
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr lt, LABEL_FD4CD7
 	.byte 0xaf, 0x06, 0x21	; LD XBC, (XSP + 006h)
 	.byte 0xc3, 0xe5, 0xf3, 0x02, 0x21	; LD A, (XBC + 02f3h)
@@ -400608,7 +400608,7 @@ LABEL_FD4CD7:
 	.byte 0xf3, 0xe1, 0x0e, 0x03, 0x32	; LDA XDE, XWA + 030eh
 	ld xwa, 0x4B00
 	call LABEL_FDCA17
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl lt, LABEL_FD4DBD
 	.byte 0xaf, 0x06, 0x21	; LD XBC, (XSP + 006h)
 	.byte 0xc3, 0xe5, 0x0d, 0x03, 0x21	; LD A, (XBC + 030dh)
@@ -400643,9 +400643,9 @@ LABEL_FD4D4D:
 	ld wa, iz
 	exts xwa
 	add xwa, 0x4B10
-	.byte 0xdb, 0xd9	; CP HL, 1
+	cps hl, 1
 	jr z, LABEL_FD4D6D
-	.byte 0xdb, 0xda	; CP HL, 2
+	cps hl, 2
 	jr nz, LABEL_FD4D93
 
 LABEL_FD4D6D:
@@ -400842,18 +400842,18 @@ LABEL_FD522E:
 
 LABEL_FD5250:
 	.byte 0x8b, 0xfe, 0x23	; LD C, (XHL - 2)
-	.byte 0xcb, 0x30, 0x07	; RES 007h, C
-	.byte 0xcb, 0x30, 0x07	; RES 007h, C
+	res 7, c
+	res 7, c
 	.byte 0x8c, 0xfe, 0x3c, 0x80	; AND (XIX - 2), 080h
 	.byte 0x8c, 0xfe, 0xeb	; OR (XIX - 2), C
 	.byte 0x8b, 0x01, 0x23	; LD C, (XHL + 001h)
-	.byte 0xcb, 0x30, 0x07	; RES 007h, C
-	.byte 0xcb, 0x30, 0x07	; RES 007h, C
+	res 7, c
+	res 7, c
 	.byte 0x8c, 0x01, 0x3c, 0x80	; AND (XIX + 001h), 080h
 	.byte 0x8c, 0x01, 0xeb	; OR (XIX + 001h), C
 	.byte 0x8b, 0xff, 0x23	; LD C, (XHL - 1)
-	.byte 0xcb, 0x30, 0x07	; RES 007h, C
-	.byte 0xcb, 0x30, 0x07	; RES 007h, C
+	res 7, c
+	res 7, c
 	.byte 0x8c, 0xff, 0x3c, 0x80	; AND (XIX - 1), 080h
 	.byte 0x8c, 0xff, 0xeb	; OR (XIX - 1), C
 	ld c, (xhl)
@@ -400880,7 +400880,7 @@ LABEL_FD52A2:
 LABEL_FD52D6:
 	.byte 0xb8, 0x06, 0x31	; LDA XBC, XWA + 006h
 	.byte 0x88, 0x05, 0x21	; LD A, (XWA + 005h)
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	jr nz, LABEL_FD52E8
 	.byte 0x81, 0x3f, 0x06	; CP (XBC), 006h
 	jr nz, LABEL_FD52E8
@@ -400888,7 +400888,7 @@ LABEL_FD52D6:
 	ret
 
 LABEL_FD52E8:
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	jr nz, LABEL_FD52F4
 	.byte 0x81, 0x3f, 0x07	; CP (XBC), 007h
 	jr nz, LABEL_FD52F4
@@ -400896,7 +400896,7 @@ LABEL_FD52E8:
 	ret
 
 LABEL_FD52F4:
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	jr nz, LABEL_FD5300
 	.byte 0x81, 0x3f, 0x03	; CP (XBC), 003h
 	jr nz, LABEL_FD5300
@@ -400934,7 +400934,7 @@ LABEL_FD53AA:
 	pushw iz
 	ld iz, wa
 	.byte 0xf2, 0xdc, 0xb3, 0xed, 0x30	; LDA XWA, 0EDB3DCh
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr nz, LABEL_FD53F0
 	.byte 0xf2, 0x80, 0xf1, 0x00, 0x31	; LDA XBC, 0F180h:24
 	add xbc, 0x2E0
@@ -400998,13 +400998,13 @@ LABEL_FD5440:
 LABEL_FD5476:
 	.byte 0xd7, 0xfa, 0x04	; PUSH QIZ
 	.byte 0xc1, 0xec, 0xb7, 0x21	; LD A, (0B7ECh)
-	.byte 0xc9, 0x33, 0x07	; BIT 007h, A
+	bit 7, a
 	jr z, LABEL_FD5489
 	.byte 0xf1, 0xf0, 0xb7, 0x00, 0x01	; LD (0B7F0h), 001h
 	jr LABEL_FD549A
 
 LABEL_FD5489:
-	.byte 0xc9, 0x33, 0x06	; BIT 006h, A
+	bit 6, a
 	jr z, LABEL_FD5495
 	.byte 0xf1, 0xf0, 0xb7, 0x00, 0x00	; LD (0B7F0h), 000h
 	jr LABEL_FD549A
@@ -401046,7 +401046,7 @@ LABEL_FD54D3:
 	jr ugt, LABEL_FD5535
 
 LABEL_FD54E6:
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_FD54F6
 	push xde
 	push xhl
@@ -401145,17 +401145,17 @@ LABEL_FD5593:
 
 LABEL_FD559A:
 	.byte 0xc1, 0xf0, 0xb7, 0x23	; LD C, (0B7F0h)
-	.byte 0xcb, 0xda	; CP C, 2
+	cps c, 2
 	.byte 0xb0, 0xf6	; RET Z
 	.byte 0xf1, 0xad, 0xfd, 0x30	; LDA XWA, 0FDADh
-	.byte 0xcb, 0xd8	; CP C, 0
+	cps c, 0
 	jr z, LABEL_FD55BB
-	.byte 0xcb, 0xd9	; CP C, 1
+	cps c, 1
 	.byte 0xb0, 0xfe	; RET NZ
 	ld c, (xwa)
 	and c, 0xF8
 	ld (xwa), c
-	.byte 0xcb, 0x31, 0x02	; SET 002h, C
+	set 2, c
 	ld (xwa), c
 	ret
 
@@ -401208,7 +401208,7 @@ LABEL_FD5617:
 	cp xbc, xde
 	jr c, LABEL_FD5617
 	call LABEL_F765D0
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_FD5636
 	.byte 0xe8, 0xa8	; LD XWA, 0
 	.byte 0xf3, 0xf9, 0xd8, 0x00, 0x60	; LD (XIZ + 00d8h), XWA
@@ -401444,7 +401444,7 @@ LABEL_FD57F2:
 	push xiz
 	ld xwa, 0x2203
 	call LABEL_FCD437
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl nz, LABEL_FD5BD9
 	.byte 0x0b, 0x0e, 0x00	; PUSHW 000eh
 	call LABEL_FF0E80
@@ -401456,7 +401456,7 @@ LABEL_FD57F2:
 	.byte 0xbf, 0x04, 0x47	; LD (XSP + 004h), L
 	ld xwa, 0x2D03
 	call LABEL_FCD437
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_FD5869
 	.byte 0x0b, 0x0e, 0x00	; PUSHW 000eh
 	.byte 0x0b, 0xee, 0x00	; PUSHW 00eeh
@@ -401486,7 +401486,7 @@ LABEL_FD585E:
 LABEL_FD5869:
 	ld xwa, 0x2D01
 	call LABEL_FCD437
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_FD58DF
 	.byte 0x0b, 0x0e, 0x00	; PUSHW 000eh
 	.byte 0x0b, 0xee, 0x00	; PUSHW 00eeh
@@ -401535,7 +401535,7 @@ LABEL_FD58DA:
 LABEL_FD58DF:
 	ld xwa, 0x2D03
 	call LABEL_FCD437
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_FD5936
 	.byte 0x0b, 0x02, 0x00	; PUSHW 0002h
 	.byte 0x0b, 0xee, 0x00	; PUSHW 00eeh
@@ -401570,7 +401570,7 @@ LABEL_FD592C:
 LABEL_FD5936:
 	ld xwa, 0x2D05
 	call LABEL_FCD437
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_FD598D
 	.byte 0x0b, 0x03, 0x00	; PUSHW 0003h
 	.byte 0x0b, 0xee, 0x00	; PUSHW 00eeh
@@ -401605,7 +401605,7 @@ LABEL_FD5983:
 LABEL_FD598D:
 	ld xwa, 0x2D07
 	call LABEL_FCD437
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_FD59E8
 	.byte 0x0b, 0x03, 0x00	; PUSHW 0003h
 	.byte 0x0b, 0xee, 0x00	; PUSHW 00eeh
@@ -401640,7 +401640,7 @@ LABEL_FD59DE:
 
 LABEL_FD59E8:
 	call LABEL_F7438C
-	.byte 0xcf, 0xd9	; CP L, 1
+	cps l, 1
 	jr nz, LABEL_FD59F7
 	ldw wa, 0x32
 	call LABEL_EF23DA
@@ -401648,7 +401648,7 @@ LABEL_FD59E8:
 LABEL_FD59F7:
 	ld xwa, 0x2D09
 	call LABEL_FCD437
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_FD5A4E
 	.byte 0x0b, 0x0e, 0x00	; PUSHW 000eh
 	.byte 0x0b, 0xee, 0x00	; PUSHW 00eeh
@@ -401680,7 +401680,7 @@ LABEL_FD5A43:
 LABEL_FD5A4E:
 	ld xwa, 0x2D0B
 	call LABEL_FCD437
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_FD5ACA
 	.byte 0x0b, 0x0e, 0x00	; PUSHW 000eh
 	.byte 0x0b, 0xee, 0x00	; PUSHW 00eeh
@@ -401729,7 +401729,7 @@ LABEL_FD5ABF:
 LABEL_FD5ACA:
 	ld xwa, 0x2D0F
 	call LABEL_FCD437
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_FD5B4E
 	.byte 0x0b, 0x0e, 0x00	; PUSHW 000eh
 	.byte 0x0b, 0xee, 0x00	; PUSHW 00eeh
@@ -401780,7 +401780,7 @@ LABEL_FD5B43:
 LABEL_FD5B4E:
 	ld xwa, 0x2D13
 	call LABEL_FCD437
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_FD5BD2
 	.byte 0x0b, 0x0e, 0x00	; PUSHW 000eh
 	.byte 0x0b, 0xee, 0x00	; PUSHW 00eeh
@@ -401944,11 +401944,11 @@ LABEL_FD5D0C:
 
 LABEL_FD5D10:
 	call LABEL_EF2853
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_FD5D20
 	ld wa, iz
 	dec 1, iz
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr nz, LABEL_FD5D10
 
 LABEL_FD5D20:
@@ -401966,7 +401966,7 @@ LABEL_FD5D31:
 	.byte 0xe1, 0xac, 0xbc, 0x20	; LD XWA, (0BCACh)
 	lds bc, 4
 	calr LABEL_FD5EB6
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jrl nz, LABEL_FD5DCF
 	call LABEL_EF28BC
 	cp hl, 0xFFFF
@@ -402003,7 +402003,7 @@ LABEL_FD5D7D:
 	jr LABEL_FD5DB9
 
 LABEL_FD5D83:
-	.byte 0xcf, 0x33, 0x07	; BIT 007h, L
+	bit 7, l
 	jr nz, LABEL_FD5DA2
 	.byte 0xe1, 0x54, 0xbc, 0x22	; LD XDE, (0BC54h)
 	.byte 0x92, 0x3f, 0xff, 0x00	; CPW (XDE), 00ffh
@@ -402091,7 +402091,7 @@ LABEL_FD5E10:
 
 LABEL_FD5E3A:
 	extz bc
-	.byte 0xd9, 0xd8	; CP BC, 0
+	cps bc, 0
 	.byte 0xb0, 0xf5	; RET MI
 	cp bc, 0xF
 	.byte 0xb0, 0xfa	; RET GT
@@ -402116,7 +402116,7 @@ LABEL_FD5E5C:
 
 LABEL_FD5EB6:
 	extz bc
-	.byte 0xd9, 0xd8	; CP BC, 0
+	cps bc, 0
 	jr mi, LABEL_FD5F34
 	cp bc, 0xF
 	jr gt, LABEL_FD5F34
@@ -402147,7 +402147,7 @@ LABEL_FD5F37:
 	.byte 0xe1, 0xac, 0xbc, 0x20	; LD XWA, (0BCACh)
 	lds bc, 4
 	calr LABEL_FD5EB6
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	.byte 0xb0, 0xfe	; RET NZ
 	calr LABEL_FD5F57
 	calr LABEL_FD5CAF
@@ -402200,7 +402200,7 @@ LABEL_FD5F9A:
 	exts xwa
 	add xwa, xbc
 	.byte 0x88, 0x01, 0x25	; LD E, (XWA + 001h)
-	.byte 0xcd, 0xd8	; CP E, 0
+	cps e, 0
 	jr z, LABEL_FD600A
 	.byte 0xe1, 0xac, 0xbc, 0x20	; LD XWA, (0BCACh)
 	lds bc, 0
@@ -402284,7 +402284,7 @@ LABEL_FD6054:
 	.byte 0xaf, 0x02, 0x20	; LD XWA, (XSP + 002h)
 	.byte 0xf3, 0x07, 0xe0, 0xe4, 0x30	; LDA XWA, XWA + BC
 	.byte 0x88, 0x01, 0x25	; LD E, (XWA + 001h)
-	.byte 0xcd, 0xd8	; CP E, 0
+	cps e, 0
 	jr z, LABEL_FD60E6
 	.byte 0xe1, 0xac, 0xbc, 0x20	; LD XWA, (0BCACh)
 	lds bc, 0
@@ -402366,7 +402366,7 @@ LABEL_FD612A:
 	.byte 0xaf, 0x02, 0x20	; LD XWA, (XSP + 002h)
 	.byte 0xf3, 0x07, 0xe0, 0xe4, 0x30	; LDA XWA, XWA + BC
 	.byte 0x88, 0x01, 0x25	; LD E, (XWA + 001h)
-	.byte 0xcd, 0xd8	; CP E, 0
+	cps e, 0
 	jr z, LABEL_FD61BC
 	.byte 0xe1, 0xac, 0xbc, 0x20	; LD XWA, (0BCACh)
 	lds bc, 0
@@ -402448,7 +402448,7 @@ LABEL_FD6200:
 	.byte 0xaf, 0x02, 0x20	; LD XWA, (XSP + 002h)
 	.byte 0xf3, 0x07, 0xe0, 0xe4, 0x30	; LDA XWA, XWA + BC
 	.byte 0x88, 0x01, 0x25	; LD E, (XWA + 001h)
-	.byte 0xcd, 0xd8	; CP E, 0
+	cps e, 0
 	jr z, LABEL_FD6293
 	.byte 0xe1, 0xac, 0xbc, 0x20	; LD XWA, (0BCACh)
 	lds bc, 0
@@ -402530,7 +402530,7 @@ LABEL_FD62D7:
 	.byte 0xaf, 0x02, 0x20	; LD XWA, (XSP + 002h)
 	.byte 0xf3, 0x07, 0xe0, 0xe4, 0x30	; LDA XWA, XWA + BC
 	.byte 0x88, 0x01, 0x25	; LD E, (XWA + 001h)
-	.byte 0xcd, 0xd8	; CP E, 0
+	cps e, 0
 	jr z, LABEL_FD636A
 	.byte 0xe1, 0xac, 0xbc, 0x20	; LD XWA, (0BCACh)
 	lds bc, 0
@@ -402612,7 +402612,7 @@ LABEL_FD63AE:
 	.byte 0xaf, 0x02, 0x20	; LD XWA, (XSP + 002h)
 	.byte 0xf3, 0x07, 0xe0, 0xe4, 0x30	; LDA XWA, XWA + BC
 	.byte 0x88, 0x01, 0x25	; LD E, (XWA + 001h)
-	.byte 0xcd, 0xd8	; CP E, 0
+	cps e, 0
 	jr z, LABEL_FD6441
 	.byte 0xe1, 0xac, 0xbc, 0x20	; LD XWA, (0BCACh)
 	lds bc, 0
@@ -402694,7 +402694,7 @@ LABEL_FD6485:
 	.byte 0xaf, 0x02, 0x20	; LD XWA, (XSP + 002h)
 	.byte 0xf3, 0x07, 0xe0, 0xe4, 0x30	; LDA XWA, XWA + BC
 	.byte 0x88, 0x01, 0x25	; LD E, (XWA + 001h)
-	.byte 0xcd, 0xd8	; CP E, 0
+	cps e, 0
 	jr z, LABEL_FD6518
 	.byte 0xe1, 0xac, 0xbc, 0x20	; LD XWA, (0BCACh)
 	lds bc, 0
@@ -402776,7 +402776,7 @@ LABEL_FD655C:
 	.byte 0xaf, 0x02, 0x20	; LD XWA, (XSP + 002h)
 	.byte 0xf3, 0x07, 0xe0, 0xe4, 0x30	; LDA XWA, XWA + BC
 	.byte 0x88, 0x01, 0x25	; LD E, (XWA + 001h)
-	.byte 0xcd, 0xd8	; CP E, 0
+	cps e, 0
 	jr z, LABEL_FD65EF
 	.byte 0xe1, 0xac, 0xbc, 0x20	; LD XWA, (0BCACh)
 	lds bc, 0
@@ -402858,7 +402858,7 @@ LABEL_FD6632:
 	.byte 0xaf, 0x02, 0x20	; LD XWA, (XSP + 002h)
 	.byte 0xf3, 0x07, 0xe0, 0xe4, 0x30	; LDA XWA, XWA + BC
 	.byte 0x88, 0x01, 0x25	; LD E, (XWA + 001h)
-	.byte 0xcd, 0xd8	; CP E, 0
+	cps e, 0
 	jr z, LABEL_FD66C1
 	.byte 0xe1, 0xac, 0xbc, 0x20	; LD XWA, (0BCACh)
 	lds bc, 0
@@ -402939,7 +402939,7 @@ LABEL_FD6705:
 	.byte 0xaf, 0x02, 0x20	; LD XWA, (XSP + 002h)
 	.byte 0xf3, 0x07, 0xe0, 0xe4, 0x30	; LDA XWA, XWA + BC
 	.byte 0x88, 0x01, 0x25	; LD E, (XWA + 001h)
-	.byte 0xcd, 0xd8	; CP E, 0
+	cps e, 0
 	jr z, LABEL_FD6794
 	.byte 0xe1, 0xac, 0xbc, 0x20	; LD XWA, (0BCACh)
 	lds bc, 0
@@ -402986,7 +402986,7 @@ LABEL_FD67A1:
 	.byte 0xe1, 0xac, 0xbc, 0x20	; LD XWA, (0BCACh)
 	lds bc, 4
 	calr LABEL_FD5EB6
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jrl nz, LABEL_FD68B6
 	.byte 0xe1, 0xac, 0xbc, 0x20	; LD XWA, (0BCACh)
 	lds bc, 0
@@ -403102,7 +403102,7 @@ LABEL_FD68B8:
 	.byte 0xe1, 0xac, 0xbc, 0x20	; LD XWA, (0BCACh)
 	lds bc, 4
 	calr LABEL_FD5EB6
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jrl nz, LABEL_FD6955
 	.byte 0xe1, 0xac, 0xbc, 0x20	; LD XWA, (0BCACh)
 	ldw bc, 0xC
@@ -403170,7 +403170,7 @@ LABEL_FD6959:
 	.byte 0xe1, 0xac, 0xbc, 0x20	; LD XWA, (0BCACh)
 	lds bc, 4
 	calr LABEL_FD5EB6
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_FD69EA
 	.byte 0xe1, 0xac, 0xbc, 0x20	; LD XWA, (0BCACh)
 	lds bc, 5
@@ -403188,9 +403188,9 @@ LABEL_FD6989:
 	.byte 0xe1, 0x54, 0xbc, 0x20	; LD XWA, (0BC54h)
 	calr LABEL_FD5DFC
 	.byte 0xe1, 0xac, 0xbc, 0x20	; LD XWA, (0BCACh)
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FD699C
-	.byte 0xcf, 0xd9	; CP L, 1
+	cps l, 1
 	jr nz, LABEL_FD69E2
 
 LABEL_FD699C:
@@ -403239,7 +403239,7 @@ LABEL_FD69EA:
 LABEL_FD69EE:
 	ld de, bc
 	dec 1, bc
-	.byte 0xda, 0xd8	; CP DE, 0
+	cps de, 0
 	jr z, LABEL_FD6A13
 	.byte 0xe1, 0x5c, 0xbc, 0x23	; LD XHL, (0BC5Ch)
 	.byte 0xbb, 0x0a, 0x34	; LDA XIX, XHL + 00ah
@@ -403253,7 +403253,7 @@ LABEL_FD69FD:
 	.byte 0x93, 0x61	; INCW 1, (XHL)
 	ld de, bc
 	dec 1, bc
-	.byte 0xda, 0xd8	; CP DE, 0
+	cps de, 0
 	jr nz, LABEL_FD69FD
 
 LABEL_FD6A13:
@@ -403281,7 +403281,7 @@ LABEL_FD6A36:
 LABEL_FD6A63:
 	ld de, bc
 	dec 1, bc
-	.byte 0xda, 0xd8	; CP DE, 0
+	cps de, 0
 	jr z, LABEL_FD6A88
 	.byte 0xe1, 0x5c, 0xbc, 0x23	; LD XHL, (0BC5Ch)
 	.byte 0xbb, 0x0a, 0x34	; LDA XIX, XHL + 00ah
@@ -403295,7 +403295,7 @@ LABEL_FD6A72:
 	.byte 0x93, 0x61	; INCW 1, (XHL)
 	ld de, bc
 	dec 1, bc
-	.byte 0xda, 0xd8	; CP DE, 0
+	cps de, 0
 	jr nz, LABEL_FD6A72
 
 LABEL_FD6A88:
@@ -403356,7 +403356,7 @@ LABEL_FD6B97:
 LABEL_FD6B9E:
 	.byte 0xb7, 0x30	; LDA XWA, XSP
 	neg e
-	.byte 0xcd, 0x30, 0x07	; RES 007h, E
+	res 7, e
 	ld (xwa), e
 	lds bc, 2
 	calr LABEL_FD6A63
@@ -403853,7 +403853,7 @@ LABEL_FD73A1:
 	.byte 0xe1, 0xac, 0xbc, 0x20	; LD XWA, (0BCACh)
 	lds bc, 4
 	call LABEL_FD5EB6
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	.byte 0xb0, 0xfe	; RET NZ
 	calr LABEL_FD73C6
 	calr LABEL_FD740A
@@ -403897,7 +403897,7 @@ LABEL_FD740A:
 	.byte 0xf1, 0x00, 0xbd, 0x43	; LD (0BD00h), C
 	.byte 0xc1, 0x02, 0xbd, 0xf3	; CP C, (0BD02h)
 	.byte 0xb0, 0xf6	; RET Z
-	.byte 0xc9, 0x31, 0x07	; SET 007h, A
+	set 7, a
 	.byte 0xf1, 0x00, 0xbd, 0x41	; LD (0BD00h), A
 	ret
 
@@ -403912,7 +403912,7 @@ LABEL_FD743A:
 	.byte 0xf1, 0x0c, 0xbd, 0x43	; LD (0BD0Ch), C
 	.byte 0xc1, 0x0e, 0xbd, 0xf3	; CP C, (0BD0Eh)
 	.byte 0xb0, 0xf6	; RET Z
-	.byte 0xc9, 0x31, 0x07	; SET 007h, A
+	set 7, a
 	.byte 0xf1, 0x0c, 0xbd, 0x41	; LD (0BD0Ch), A
 	ret
 
@@ -403962,7 +403962,7 @@ LABEL_FD749F:
 	.byte 0xf1, 0x08, 0xbd, 0x47	; LD (0BD08h), L
 	.byte 0xc1, 0x0a, 0xbd, 0xf7	; CP L, (0BD0Ah)
 	.byte 0xb0, 0xf6	; RET Z
-	.byte 0xc9, 0x31, 0x07	; SET 007h, A
+	set 7, a
 	.byte 0xf1, 0x08, 0xbd, 0x41	; LD (0BD08h), A
 	ret
 
@@ -403984,7 +403984,7 @@ LABEL_FD74DE:
 	.byte 0xf1, 0x14, 0xbd, 0x47	; LD (0BD14h), L
 	.byte 0xc1, 0x16, 0xbd, 0xf7	; CP L, (0BD16h)
 	.byte 0xb0, 0xf6	; RET Z
-	.byte 0xc9, 0x31, 0x07	; SET 007h, A
+	set 7, a
 	.byte 0xf1, 0x14, 0xbd, 0x41	; LD (0BD14h), A
 	ret
 
@@ -404038,26 +404038,26 @@ LABEL_FD75BE:
 	.byte 0xf1, 0x18, 0xbd, 0xce	; BIT 6, (0BD18h)
 	jr z, LABEL_FD75EB
 	.byte 0xc1, 0x00, 0xbd, 0x21	; LD A, (0BD00h)
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
+	res 7, a
 	extz wa
 	.byte 0xc1, 0x04, 0xbd, 0x23	; LD C, (0BD04h)
-	.byte 0xcb, 0x30, 0x07	; RES 007h, C
+	res 7, c
 	extz bc
 	.byte 0xc1, 0x08, 0xbd, 0x25	; LD E, (0BD08h)
-	.byte 0xcd, 0x30, 0x07	; RES 007h, E
+	res 7, e
 	extz de
 	call LABEL_F768AF
 	jr LABEL_FD760A
 
 LABEL_FD75EB:
 	.byte 0xc1, 0x0c, 0xbd, 0x21	; LD A, (0BD0Ch)
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
+	res 7, a
 	extz wa
 	.byte 0xc1, 0x10, 0xbd, 0x23	; LD C, (0BD10h)
-	.byte 0xcb, 0x30, 0x07	; RES 007h, C
+	res 7, c
 	extz bc
 	.byte 0xc1, 0x14, 0xbd, 0x25	; LD E, (0BD14h)
-	.byte 0xcd, 0x30, 0x07	; RES 007h, E
+	res 7, e
 	extz de
 	call LABEL_F76A52
 
@@ -404132,7 +404132,7 @@ LABEL_FD76DA:
 	.byte 0xe1, 0xac, 0xbc, 0x20	; LD XWA, (0BCACh)
 	lds bc, 0
 	call LABEL_FD5EB6
-	.byte 0xcf, 0xd9	; CP L, 1
+	cps l, 1
 	jr nz, LABEL_FD7701
 	.byte 0xf1, 0x18, 0xbd, 0xbf	; SET 7, (0BD18h)
 	jr LABEL_FD7709
@@ -404942,15 +404942,15 @@ LABEL_FD86AC:
 	.byte 0xc1, 0x7d, 0xc0, 0x3f, 0x03	; CP (0C07Dh), 003h
 	.byte 0xb0, 0xfe	; RET NZ
 	.byte 0xc1, 0x7f, 0xc0, 0x21	; LD A, (0C07Fh)
-	.byte 0xc9, 0x33, 0x02	; BIT 002h, A
+	bit 2, a
 	jr z, LABEL_FD86FF
 	.byte 0xc1, 0xee, 0xb7, 0x21	; LD A, (0B7EEh)
-	.byte 0xc9, 0x33, 0x00	; BIT 000h, A
+	bit 0, a
 	.byte 0xb0, 0xfe	; RET NZ
-	.byte 0xc9, 0x31, 0x00	; SET 000h, A
+	set 0, a
 	.byte 0xf1, 0xee, 0xb7, 0x41	; LD (0B7EEh), A
 	.byte 0xd1, 0xf5, 0x11, 0x20	; LD WA, (11F5h)
-	.byte 0xd8, 0x33, 0x0f	; BIT 00fh, WA
+	bit 15, wa
 	jr nz, LABEL_FD86E5
 	push xde
 	push xhl
@@ -404977,7 +404977,7 @@ LABEL_FD86E5:
 LABEL_FD86FF:
 	.byte 0xc1, 0x7e, 0xc0, 0x3f, 0x04	; CP (0C07Eh), 004h
 	.byte 0xb0, 0xfe	; RET NZ
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	.byte 0xb0, 0xfe	; RET NZ
 	calr LABEL_FD8B29
 	ret
@@ -405051,7 +405051,7 @@ LABEL_FD8754:
 	calr LABEL_FD8BA9
 	.byte 0xf1, 0x5f, 0xfc, 0x32	; LDA XDE, 0FC5Fh
 	ld c, (xde)
-	.byte 0xcb, 0x30, 0x00	; RES 000h, C
+	res 0, c
 	ld (xde), c
 	.byte 0xc7, 0xfb, 0x89	; LD A, QIZH
 	and a, 0x1
@@ -405329,11 +405329,11 @@ LABEL_FD89ED:
 
 LABEL_FD89F7:
 	.byte 0xc2, 0xf8, 0x40, 0x03, 0x21	; LD A, (0340F8h)
-	.byte 0xc9, 0xdb	; CP A, 3
+	cps a, 3
 	jr z, LABEL_FD8A1D
-	.byte 0xc9, 0xda	; CP A, 2
+	cps a, 2
 	jr z, LABEL_FD8A16
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	jr z, LABEL_FD8A0F
 	.byte 0xf1, 0xec, 0xb7, 0x00, 0x80	; LD (0B7ECh), 080h
 	jr LABEL_FD8A22
@@ -405354,11 +405354,11 @@ LABEL_FD8A22:
 
 LABEL_FD8A26:
 	.byte 0xc2, 0xf9, 0x40, 0x03, 0x21	; LD A, (0340F9h)
-	.byte 0xc9, 0xdb	; CP A, 3
+	cps a, 3
 	jr z, LABEL_FD8A45
-	.byte 0xc9, 0xda	; CP A, 2
+	cps a, 2
 	jr z, LABEL_FD8A3E
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	.byte 0xb0, 0xfe	; RET NZ
 	.byte 0xf1, 0xec, 0xb7, 0x00, 0x5b	; LD (0B7ECh), 05bh
 	jr LABEL_FD8A4A
@@ -405383,14 +405383,14 @@ LABEL_FD8A58:
 	.byte 0x8b, 0xff, 0x24	; LD D, (XHL - 1)
 	ld e, d
 	dec 1, d
-	.byte 0xcd, 0xd8	; CP E, 0
+	cps e, 0
 	jr z, LABEL_FD8A71
 
 LABEL_FD8A65:
 	.byte 0xf5, 0xec, 0x00, 0x00	; LD (XHL+), 000h
 	ld e, d
 	dec 1, d
-	.byte 0xcd, 0xd8	; CP E, 0
+	cps e, 0
 	jr nz, LABEL_FD8A65
 
 LABEL_FD8A71:
@@ -405401,13 +405401,13 @@ LABEL_FD8A71:
 
 LABEL_FD8A78:
 	.byte 0xd1, 0xf5, 0x11, 0x20	; LD WA, (11F5h)
-	.byte 0xd8, 0x33, 0x0f	; BIT 00fh, WA
+	bit 15, wa
 	.byte 0xb0, 0xf6	; RET Z
 	.byte 0xf1, 0x5a, 0xfc, 0x31	; LDA XBC, 0FC5Ah
 	.byte 0xb9, 0x08, 0x41	; LD (XBC + 008h), A
 	.byte 0xb9, 0x09, 0x32	; LDA XDE, XBC + 009h
 	ld c, (xde)
-	.byte 0xcb, 0x30, 0x00	; RES 000h, C
+	res 0, c
 	ld (xde), c
 	.byte 0xd1, 0xf5, 0x11, 0x20	; LD WA, (11F5h)
 	srl wa, 8
@@ -405523,7 +405523,7 @@ LABEL_FD8B5C:
 	.byte 0xf1, 0x27, 0x91, 0x00, 0xb0	; LD (9127h), 0b0h
 	.byte 0xf1, 0x28, 0x91, 0x00, 0x00	; LD (9128h), 000h
 	.byte 0xc1, 0xe6, 0x8e, 0x21	; LD A, (MIDI_CC_EXPRESSION_VALUE)
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
+	res 7, a
 	.byte 0xf1, 0x29, 0x91, 0x41	; LD (9129h), A
 	.byte 0xf1, 0x2a, 0x91, 0x00, 0x7f	; LD (912Ah), 07fh
 	push xde
@@ -405538,7 +405538,7 @@ LABEL_FD8B5C:
 	.byte 0xf1, 0x27, 0x91, 0x00, 0xb0	; LD (9127h), 0b0h
 	.byte 0xf1, 0x28, 0x91, 0x00, 0x01	; LD (9128h), 001h
 	.byte 0xc1, 0xe4, 0x8e, 0x21	; LD A, (MIDI_CC_MODWHEEL_VALUE)
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
+	res 7, a
 	.byte 0xf1, 0x29, 0x91, 0x41	; LD (9129h), A
 	.byte 0xf1, 0x2a, 0x91, 0x00, 0x7f	; LD (912Ah), 07fh
 	push xde
@@ -405560,14 +405560,14 @@ LABEL_FD8BA9:
 	inc 1, xwa
 	ld c, a
 	dec 1, c
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	.byte 0xb0, 0xf6	; RET Z
 
 LABEL_FD8BBF:
 	.byte 0xf5, 0xe8, 0x00, 0x7f	; LD (XDE+), 07fh
 	ld a, c
 	dec 1, c
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_FD8BBF
 	ret
 
@@ -405579,7 +405579,7 @@ LABEL_FD8BCC:
 
 LABEL_FD8BE9:
 	ldb c, 0x0
-	.byte 0xc9, 0x33, 0x02	; BIT 002h, A
+	bit 2, a
 	jr z, LABEL_FD8BF2
 	ldb c, 0x1
 
@@ -405592,7 +405592,7 @@ LABEL_FD8BFA:
 	dec 4, xsp
 	ld c, a
 	.byte 0xc1, 0xf9, 0x90, 0x21	; LD A, (90F9h)
-	.byte 0xc9, 0x33, 0x07	; BIT 007h, A
+	bit 7, a
 	jr nz, LABEL_FD8C28
 	.byte 0xb7, 0x30	; LDA XWA, XSP
 	.byte 0xb0, 0x00, 0xb0	; LD (XWA), 0b0h
@@ -405600,7 +405600,7 @@ LABEL_FD8BFA:
 	.byte 0xb8, 0x03, 0x00, 0x7f	; LD (XWA + 003h), 07fh
 	.byte 0xb8, 0x01, 0x32	; LDA XDE, XWA + 001h
 	.byte 0xb2, 0x00, 0x11	; LD (XDE), 011h
-	.byte 0xcb, 0x33, 0x02	; BIT 002h, C
+	bit 2, c
 	jr nz, LABEL_FD8C22
 	.byte 0xb2, 0x00, 0x10	; LD (XDE), 010h
 
@@ -405609,7 +405609,7 @@ LABEL_FD8C22:
 	jr LABEL_FD8C2F
 
 LABEL_FD8C28:
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
+	res 7, a
 	.byte 0xf1, 0xf9, 0x90, 0x41	; LD (90F9h), A
 
 LABEL_FD8C2F:
@@ -405639,14 +405639,14 @@ LABEL_FD8C35:
 	call 0xFF0D99
 	.byte 0xbf, 0x0a, 0x37	; LDA XSP, XSP + 00ah
 	inc 1, iz
-	.byte 0xde, 0xdf	; CP IZ, 7
+	cps iz, 7
 	jr c, LABEL_FD8C35
 	.byte 0xf1, 0x97, 0xfd, 0x31	; LDA XBC, 0FD97h
 	ld a, (xbc)
 	and a, 0x80
 	ld (xbc), a
 	.byte 0xc1, 0x72, 0x8e, 0x25	; LD E, (8E72h)
-	.byte 0xcd, 0x30, 0x07	; RES 007h, E
+	res 7, e
 	or a, e
 	ld (xbc), a
 	.byte 0xf1, 0x6f, 0xfc, 0x30	; LDA XWA, 0FC6Fh
@@ -405674,9 +405674,9 @@ LABEL_FD8C93:
 	jrl LABEL_FD8BA9
 
 LABEL_FD8CAE:
-	.byte 0xc9, 0x31, 0x07	; SET 007h, A
+	set 7, a
 	.byte 0xf1, 0xfc, 0xbc, 0x41	; LD (0BCFCh), A
-	.byte 0xc9, 0x33, 0x07	; BIT 007h, A
+	bit 7, a
 	jr z, LABEL_FD8CFD
 	.byte 0xf1, 0x18, 0xbd, 0xbe	; SET 6, (0BD18h)
 	call LABEL_FD832E
@@ -405685,9 +405685,9 @@ LABEL_FD8CAE:
 	.byte 0xc1, 0xfc, 0xbc, 0x21	; LD A, (0BCFCh)
 	and a, 0x7
 	extz wa
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	.byte 0xb0, 0xf5	; RET MI
-	.byte 0xd8, 0xde	; CP WA, 6
+	cps wa, 6
 	.byte 0xb0, 0xfa	; RET GT
 	add wa, wa
 	.byte 0xf2, 0x7e, 0x2f, 0xee, 0x34	; LDA XIX, 0EE2F7Eh
@@ -405722,9 +405722,9 @@ LABEL_FD8D33:
 	.byte 0xc1, 0x1e, 0xbd, 0x23	; LD C, (0BD1Eh)
 	.byte 0xc7, 0xfb, 0x89	; LD A, QIZH
 	extz wa
-	.byte 0xcb, 0xd9	; CP C, 1
+	cps c, 1
 	jr z, LABEL_FD8D62
-	.byte 0xcb, 0xd8	; CP C, 0
+	cps c, 0
 	jr nz, LABEL_FD8D86
 	.byte 0xc7, 0xfb, 0xcf, 0xf0	; CP QIZH, 0f0h
 	jr nz, LABEL_FD8D33
@@ -405778,7 +405778,7 @@ LABEL_FD8DB4:
 	.byte 0xe1, 0xac, 0xbc, 0x20	; LD XWA, (0BCACh)
 	lds bc, 4
 	call LABEL_FD5EB6
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_FD8DF0
 	.byte 0xe1, 0xac, 0xbc, 0x20	; LD XWA, (0BCACh)
 	lds bc, 0
@@ -405970,7 +405970,7 @@ LABEL_FD91C4:
 LABEL_FD91C5:
 	ld hl, de
 	dec 1, de
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_FD91DD
 
 LABEL_FD91CD:
@@ -405982,7 +405982,7 @@ LABEL_FD91CD:
 LABEL_FD91D5:
 	ld hl, de
 	dec 1, de
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_FD91CD
 
 LABEL_FD91DD:
@@ -406005,7 +406005,7 @@ LABEL_FD91E1:
 	.byte 0x8e, 0x0e, 0x21	; LD A, (XIZ + 00eh)
 	cp a, 0xFF
 	jr z, LABEL_FD925D
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	jr nc, LABEL_FD9287
 	extz wa
 	.byte 0xd8, 0x09, 0x06, 0x00	; MULS_WA 0006h
@@ -406085,7 +406085,7 @@ LABEL_FD928B:
 	.byte 0x8e, 0x0e, 0x21	; LD A, (XIZ + 00eh)
 	cp a, 0xFF
 	jr z, LABEL_FD930B
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	jr nc, LABEL_FD9335
 	extz wa
 	.byte 0xd8, 0x09, 0x06, 0x00	; MULS_WA 0006h
@@ -406443,7 +406443,7 @@ LABEL_FD9829:
 	extz hl
 	ld bc, hl
 	call LABEL_FDC901
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr lt, LABEL_FD989B
 	.byte 0xaf, 0x04, 0x20	; LD XWA, (XSP + 004h)
 	add xwa, 0x4904
@@ -406494,9 +406494,9 @@ LABEL_FD98B5:
 	.byte 0xc7, 0xfb, 0x9f	; LD QIZH, L
 	.byte 0xe1, 0x54, 0xbc, 0x20	; LD XWA, (0BC54h)
 	call LABEL_FD7116
-	.byte 0xcf, 0x33, 0x07	; BIT 007h, L
+	bit 7, l
 	jr z, LABEL_FD98D4
-	.byte 0xcf, 0x30, 0x07	; RES 007h, L
+	res 7, l
 	.byte 0xc7, 0xfb, 0x31, 0x07	; SET 007h, QIZH
 
 LABEL_FD98D4:
@@ -406594,11 +406594,11 @@ LABEL_FD998E:
 	jr ugt, LABEL_FD9A09
 	.byte 0xbe, 0x08, 0x31	; LDA XBC, XIZ + 008h
 	.byte 0xbe, 0x0b, 0x30	; LDA XWA, XIZ + 00bh
-	.byte 0xcf, 0xda	; CP L, 2
+	cps l, 2
 	jr z, LABEL_FD99ED
-	.byte 0xcf, 0xd9	; CP L, 1
+	cps l, 1
 	jr z, LABEL_FD99D9
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_FD9A09
 	.byte 0xf1, 0x89, 0x34, 0x00, 0x05	; LD (3489h), 005h
 	.byte 0xf1, 0x7c, 0x34, 0x00, 0x00	; LD (347Ch), 000h
@@ -407125,7 +407125,7 @@ LABEL_FDA173:
 	ld a, (xde)
 	and a, c
 	ld (xde), a
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_FDA1E9
 	ld xwa, xiz
 	ld xbc, 0xEE4DAE
@@ -407399,12 +407399,12 @@ LABEL_FDA40F:
 	and c, 0x7
 	ld (xde), c
 	ld c, (xwa)
-	.byte 0xcb, 0x33, 0x07	; BIT 007h, C
+	bit 7, c
 	jr z, LABEL_FDA4B6
-	.byte 0xcb, 0x30, 0x07	; RES 007h, C
+	res 7, c
 	ld (xwa), c
 	ld c, (xde)
-	.byte 0xcb, 0x31, 0x07	; SET 007h, C
+	set 7, c
 	ld (xde), c
 
 LABEL_FDA4B6:
@@ -407461,12 +407461,12 @@ LABEL_FDA4EE:
 	.byte 0x8e, 0x01, 0x23	; LD C, (XIZ + 001h)
 	ld (xde), c
 	ld c, (xwa)
-	.byte 0xcb, 0x33, 0x07	; BIT 007h, C
+	bit 7, c
 	jr z, LABEL_FDA54E
-	.byte 0xcb, 0x30, 0x07	; RES 007h, C
+	res 7, c
 	ld (xwa), c
 	ld c, (xde)
-	.byte 0xcb, 0x31, 0x07	; SET 007h, C
+	set 7, c
 	ld (xde), c
 
 LABEL_FDA54E:
@@ -407521,7 +407521,7 @@ LABEL_FDA587:
 	.byte 0xae, 0x04, 0x22	; LD XDE, (XIZ + 004h)
 	.byte 0x8a, 0x08, 0x21	; LD A, (XDE + 008h)
 	.byte 0x89, 0x02, 0xc1	; AND A, (XBC + 002h)
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	jr nz, LABEL_FDA5EA
 	.byte 0xc1, 0x61, 0xfc, 0x23	; LD C, (0FC61h)
 	and c, 0x30
@@ -407576,7 +407576,7 @@ LABEL_FDA616:
 	call LABEL_FD6A63
 	.byte 0xc1, 0x99, 0xfd, 0x21	; LD A, (0FD99h)
 	and a, 0x1
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	jr nz, LABEL_FDA67E
 	ld xwa, 0xEE4AC2
 	lds bc, 6
@@ -407657,7 +407657,7 @@ LABEL_FDA6CD:
 
 LABEL_FDA777:
 	.byte 0x88, 0x0c, 0x23	; LD C, (XWA + 00ch)
-	.byte 0xcb, 0xd8	; CP C, 0
+	cps c, 0
 	jr z, LABEL_FDA79A
 	extz bc
 	.byte 0xd9, 0x09, 0x06, 0x00	; MULS_BC 0006h
@@ -407671,7 +407671,7 @@ LABEL_FDA777:
 
 LABEL_FDA79A:
 	.byte 0x88, 0x0d, 0x21	; LD A, (XWA + 00dh)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_FDA7C1
 	extz wa
 	.byte 0xd8, 0x09, 0x06, 0x00	; MULS_WA 0006h
@@ -407738,7 +407738,7 @@ LABEL_FDA85C:
 	.byte 0xe1, 0xac, 0xbc, 0x20	; LD XWA, (0BCACh)
 	lds bc, 4
 	call LABEL_FD5EB6
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	.byte 0xb0, 0xf6	; RET Z
 	.byte 0xe1, 0xac, 0xbc, 0x20	; LD XWA, (0BCACh)
 	lds bc, 5
@@ -407952,9 +407952,9 @@ LABEL_FDACEA:
 	extz de
 	add de, de
 	extz wa
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	.byte 0xb0, 0xf5	; RET MI
-	.byte 0xd8, 0xdf	; CP WA, 7
+	cps wa, 7
 	.byte 0xb0, 0xfa	; RET GT
 	add wa, wa
 	.byte 0xf2, 0x20, 0x35, 0xee, 0x34	; LDA XIX, 0EE3520h
@@ -407983,9 +407983,9 @@ LABEL_FDAD71:
 	extz de
 	add de, de
 	extz wa
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	.byte 0xb0, 0xf5	; RET MI
-	.byte 0xd8, 0xdf	; CP WA, 7
+	cps wa, 7
 	.byte 0xb0, 0xfa	; RET GT
 	add wa, wa
 	.byte 0xf2, 0x84, 0x35, 0xee, 0x34	; LDA XIX, 0EE3584h
@@ -408025,7 +408025,7 @@ LABEL_FDADF6:
 	.byte 0xb0, 0xfe	; RET NZ
 	.byte 0xc5, 0xe0, 0x3f, 0x01	; CP (XWA+), 001h
 	.byte 0xb0, 0xfe	; RET NZ
-	.byte 0xcb, 0xd8	; CP C, 0
+	cps c, 0
 	jr nz, LABEL_FDAE34
 	.byte 0xf2, 0x80, 0xf1, 0x00, 0x31	; LDA XBC, 0F180h:24
 	add xbc, 0x2E0
@@ -408087,7 +408087,7 @@ LABEL_FDAE7F:
 	ld bc, hl
 	.byte 0xaf, 0x06, 0x22	; LD XDE, (XSP + 006h)
 	call LABEL_FDCA17
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr lt, LABEL_FDAF2E
 	.byte 0xf1, 0x8e, 0xfc, 0x30	; LDA XWA, 0FC8Eh
 	.byte 0xaf, 0x06, 0xf0	; CP XWA, (XSP + 006h)
@@ -408197,9 +408197,9 @@ LABEL_FDAF90:
 	exts xwa
 	add xwa, 0x4B10
 	call LABEL_FDC6E7
-	.byte 0xdb, 0xd9	; CP HL, 1
+	cps hl, 1
 	jr z, LABEL_FDAFA6
-	.byte 0xdb, 0xda	; CP HL, 2
+	cps hl, 2
 	jr nz, LABEL_FDAFBE
 
 LABEL_FDAFA6:
@@ -408245,7 +408245,7 @@ LABEL_FDAFD7:
 	ld bc, hl
 	.byte 0xaf, 0x06, 0x22	; LD XDE, (XSP + 006h)
 	call LABEL_FDCA17
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr lt, LABEL_FDB086
 	.byte 0xf1, 0x74, 0xfc, 0x30	; LDA XWA, 0FC74h
 	.byte 0xaf, 0x06, 0xf0	; CP XWA, (XSP + 006h)
@@ -408355,9 +408355,9 @@ LABEL_FDB0E8:
 	exts xwa
 	add xwa, 0x4910
 	call LABEL_FDC6E7
-	.byte 0xdb, 0xd9	; CP HL, 1
+	cps hl, 1
 	jr z, LABEL_FDB0FE
-	.byte 0xdb, 0xda	; CP HL, 2
+	cps hl, 2
 	jr nz, LABEL_FDB116
 
 LABEL_FDB0FE:
@@ -408401,7 +408401,7 @@ LABEL_FDB142:
 	ld xwa, 0x4900
 	ld xde, 0xFC74
 	call LABEL_FDCA17
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl lt, LABEL_FDB1EF
 	ld xwa, 0x4904
 	call LABEL_FDC7F9
@@ -408432,7 +408432,7 @@ LABEL_FDB19B:
 	ld xwa, 0x4B00
 	ld xde, 0xFC8E
 	call LABEL_FDCA17
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr lt, LABEL_FDB1EF
 	ld xwa, 0x4B04
 	call LABEL_FDC7F9
@@ -408547,7 +408547,7 @@ LABEL_FDB29B:
 	ld xix, 0xBD3C
 	.byte 0xd1, 0xe2, 0x90, 0x21	; LD BC, (90E2h)
 	srl bc, 1
-	.byte 0xd9, 0xd8	; CP BC, 0
+	cps bc, 0
 	jr z, LABEL_FDB2B2
 	.byte 0x95, 0x11	; LDIRW_95
 
@@ -408702,7 +408702,7 @@ PreLswLoad:
 	jp LABEL_FC5185
 
 PostLswLoad:
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	.byte 0xf2, 0x67, 0x4d, 0xfc, 0xd1	; JP LT, LABEL_FC4D67
 	.byte 0xc2, 0xf6, 0x40, 0x03, 0x3f, 0x00	; CP (0340F6h), 000h
 	.byte 0xf2, 0xf9, 0xb4, 0xfd, 0xe6	; CALL Z, LABEL_FDB4F9
@@ -408747,7 +408747,7 @@ PrePmLoad:
 	ret
 
 PostPmLoad:
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	.byte 0xb0, 0xf1	; RET LT
 	call LABEL_FC4C63
 	call LABEL_FC4D8E
@@ -408904,7 +408904,7 @@ LABEL_FDB57F:
 	ld de, wa
 	srl de, 1
 	lds bc, 0
-	.byte 0xda, 0xd8	; CP DE, 0
+	cps de, 0
 	jr ule, LABEL_FDB603
 
 LABEL_FDB5F5:
@@ -408947,7 +408947,7 @@ LABEL_FDB63A:
 	ld xiy, xde
 	add xiy, xwa
 	ld w, (xiy)
-	.byte 0xc8, 0x30, 0x07	; RES 007h, W
+	res 7, w
 	ld a, (xbc)
 	and a, 0x80
 	.byte 0xc7, 0xe2, 0x99	; LD QA, A
@@ -408998,7 +408998,7 @@ LABEL_FDB63A:
 	and w, 0x80
 	.byte 0xf1, 0x97, 0xfd, 0x31	; LDA XBC, 0FD97h
 	ld a, (xbc)
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
+	res 7, a
 	ld (xbc), a
 	or a, w
 	ld (xbc), a
@@ -409088,11 +409088,11 @@ LABEL_FDB79C:
 
 LABEL_FDB7A3:
 	.byte 0xc1, 0xe4, 0xc1, 0x21	; LD A, (0C1E4h)
-	.byte 0xc9, 0xda	; CP A, 2
+	cps a, 2
 	jr z, LABEL_FDB7CE
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	jr z, LABEL_FDB7B3
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_FDB7D5
 
 LABEL_FDB7B3:
@@ -409134,11 +409134,11 @@ LABEL_FDB7DC:
 
 LABEL_FDB7FC:
 	.byte 0xc1, 0xe4, 0xc1, 0x21	; LD A, (0C1E4h)
-	.byte 0xc9, 0xda	; CP A, 2
+	cps a, 2
 	jr z, LABEL_FDB814
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	jr z, LABEL_FDB80C
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_FDB832
 
 LABEL_FDB80C:
@@ -409179,17 +409179,17 @@ LABEL_FDB838:
 LABEL_FDB84E:
 	.byte 0xc1, 0xe4, 0xc1, 0x21	; LD A, (0C1E4h)
 	.byte 0x9f, 0x08, 0x26	; LD IZ, (XSP + 008h)
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	jr z, LABEL_FDB8A5
-	.byte 0xc9, 0xda	; CP A, 2
+	cps a, 2
 	jr z, LABEL_FDB861
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_FDB8DC
 
 LABEL_FDB861:
 	ld wa, iz
 	dec 1, iz
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr z, LABEL_FDB8DC
 
 LABEL_FDB869:
@@ -409198,7 +409198,7 @@ LABEL_FDB869:
 	extz wa
 	call 0xFCF224
 	call LABEL_EF2865
-	.byte 0xdb, 0xd9	; CP HL, 1
+	cps hl, 1
 	jr lt, LABEL_FDB896
 	.byte 0xaf, 0x0a, 0x20	; LD XWA, (XSP + 00ah)
 	.byte 0x80, 0x3f, 0xfe	; CP (XWA), 0feh
@@ -409216,19 +409216,19 @@ LABEL_FDB896:
 	.byte 0xaf, 0x0a, 0x88	; ADD (XSP + 00ah), XWA
 	ld wa, iz
 	dec 1, iz
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr nz, LABEL_FDB869
 	jr LABEL_FDB8DC
 
 LABEL_FDB8A5:
 	ld wa, iz
 	dec 1, iz
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr z, LABEL_FDB8DC
 
 LABEL_FDB8AD:
 	call LABEL_EF2865
-	.byte 0xdb, 0xd9	; CP HL, 1
+	cps hl, 1
 	jr lt, LABEL_FDB8CF
 	.byte 0xaf, 0x0a, 0x20	; LD XWA, (XSP + 00ah)
 	.byte 0x80, 0x3f, 0xfe	; CP (XWA), 0feh
@@ -409246,7 +409246,7 @@ LABEL_FDB8CF:
 	.byte 0xaf, 0x0a, 0x88	; ADD (XSP + 00ah), XWA
 	ld wa, iz
 	dec 1, iz
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr nz, LABEL_FDB8AD
 
 LABEL_FDB8DC:
@@ -409320,7 +409320,7 @@ LABEL_FDB96B:
 	and a, 0xF
 	.byte 0x81, 0xe9	; OR (XBC), A
 	.byte 0x8f, 0x0c, 0x23	; LD C, (XSP + 00ch)
-	.byte 0xcb, 0x30, 0x07	; RES 007h, C
+	res 7, c
 	.byte 0xaf, 0x04, 0x20	; LD XWA, (XSP + 004h)
 	.byte 0xb8, 0x06, 0x43	; LD (XWA + 006h), C
 	push xde
@@ -409382,13 +409382,13 @@ LABEL_FDB9DB:
 
 LABEL_FDBA02:
 	.byte 0xc1, 0xe0, 0xb7, 0x21	; LD A, (COM_SELECT)
-	.byte 0xc9, 0xd8	; CP A, 0	; MIDI
+	cps a, 0	; MIDI
 	.byte 0xb0, 0xf6	; RET Z
-	.byte 0xc9, 0xdb	; CP A, 3	;  PC2
+	cps a, 3	;  PC2
 	jr z, LABEL_FDBA28
-	.byte 0xc9, 0xda	; CP A, 2	;  PC1
+	cps a, 2	;  PC1
 	jr z, LABEL_FDBA16
-	.byte 0xc9, 0xd9	; CP A, 1	;  MAC
+	cps a, 1	;  MAC
 	.byte 0xb0, 0xfe	; RET NZ
 
 LABEL_FDBA16:
@@ -409498,7 +409498,7 @@ LABEL_FDBAFA:
 	jrl nz, LABEL_FDBA68
 
 LABEL_FDBB18:
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr z, LABEL_FDBB2B
 	.byte 0x06, 0x00	; EI 000h
 	lds wa, 4
@@ -409776,7 +409776,7 @@ LABEL_FDBD89:
 	.byte 0xb0, 0xf6	; RET Z
 	.byte 0xf1, 0xf0, 0xc1, 0xc8	; BIT 0, (0C1F0h)
 	jr z, LABEL_FDBDDC
-	.byte 0xcb, 0x33, 0x07	; BIT 007h, C
+	bit 7, c
 	jr z, LABEL_FDBDC7
 	.byte 0xf1, 0x7e, 0xc0, 0xcf	; BIT 7, (0C07Eh)
 	jr nz, LABEL_FDBDC7
@@ -409793,7 +409793,7 @@ LABEL_FDBDC7:
 LABEL_FDBDDC:
 	.byte 0xf1, 0xf0, 0xc1, 0xca	; BIT 2, (0C1F0h)
 	jr z, LABEL_FDBE1E
-	.byte 0xcb, 0x33, 0x07	; BIT 007h, C
+	bit 7, c
 	jr z, LABEL_FDBDF8
 	.byte 0xf1, 0x7e, 0xc0, 0xcf	; BIT 7, (0C07Eh)
 	jr nz, LABEL_FDBDF8
@@ -409817,7 +409817,7 @@ LABEL_FDBDF8:
 LABEL_FDBE1E:
 	.byte 0xf1, 0xf0, 0xc1, 0xc9	; BIT 1, (0C1F0h)
 	jr z, LABEL_FDBE49
-	.byte 0xcb, 0x33, 0x07	; BIT 007h, C
+	bit 7, c
 	jr z, LABEL_FDBE37
 	.byte 0xf1, 0x7e, 0xc0, 0xcf	; BIT 7, (0C07Eh)
 	jr z, LABEL_FDBE37
@@ -409835,7 +409835,7 @@ LABEL_FDBE37:
 LABEL_FDBE49:
 	.byte 0xf1, 0xf0, 0xc1, 0xcb	; BIT 3, (0C1F0h)
 	jr z, LABEL_FDBE82
-	.byte 0xcb, 0x33, 0x07	; BIT 007h, C
+	bit 7, c
 	jr z, LABEL_FDBE69
 	.byte 0xf1, 0x7e, 0xc0, 0xcf	; BIT 7, (0C07Eh)
 	jr z, LABEL_FDBE69
@@ -409855,7 +409855,7 @@ LABEL_FDBE69:
 	jr LABEL_FDBEB1
 
 LABEL_FDBE82:
-	.byte 0xcb, 0x33, 0x07	; BIT 007h, C
+	bit 7, c
 	jr z, LABEL_FDBEA1
 	.byte 0xf1, 0x7e, 0xc0, 0xcf	; BIT 7, (0C07Eh)
 	jr z, LABEL_FDBEA1
@@ -409893,13 +409893,13 @@ LABEL_FDBEC0:
 LABEL_FDBECC:
 	ld c, a
 	and a, 0xFF
-	.byte 0xcd, 0xdf	; CP E, 7
+	cps e, 7
 	jr z, LABEL_FDBF27
-	.byte 0xcd, 0xde	; CP E, 6
+	cps e, 6
 	jr z, LABEL_FDBEFE
-	.byte 0xcd, 0xdd	; CP E, 5
+	cps e, 5
 	.byte 0xb0, 0xfe	; RET NZ
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	.byte 0xb0, 0xf6	; RET Z
 	ld xwa, 0x2A00
 	call LABEL_FCD437
@@ -409912,7 +409912,7 @@ LABEL_FDBECC:
 	ret
 
 LABEL_FDBEFE:
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	.byte 0xb0, 0xf6	; RET Z
 	ld xwa, 0x2A01
 	call LABEL_FCD437
@@ -409927,7 +409927,7 @@ LABEL_FDBEFE:
 	jrl LABEL_FDBFBE
 
 LABEL_FDBF27:
-	.byte 0xcb, 0x33, 0x00	; BIT 000h, C
+	bit 0, c
 	jr z, LABEL_FDBF45
 	ld xwa, 0x2A10
 	call LABEL_FCD437
@@ -410003,7 +410003,7 @@ LABEL_FDBFD5:
 	and w, 0xF
 	ld a, w
 	extz wa
-	.byte 0xd8, 0xda	; CP WA, 2
+	cps wa, 2
 	jr nz, LABEL_FDBFF7
 	.byte 0x8c, 0x05, 0x27	; LD L, (XIX + 005h)
 	and l, 0x1F
@@ -410796,7 +410796,7 @@ LABEL_FDC6E7:
 	push xbc
 	.byte 0xbf, 0x14, 0x31	; LDA XBC, XSP + 014h
 	calr LABEL_FDC5AB
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_FDC70C
 	.byte 0x9f, 0x02, 0x20	; LD WA, (XSP + 002h)
 	.byte 0x9f, 0x06, 0x21	; LD BC, (XSP + 006h)
@@ -410822,7 +410822,7 @@ LABEL_FDC710:
 	.byte 0xaf, 0x1c, 0x20	; LD XWA, (XSP + 01ch)
 	calr LABEL_FDC5AB
 	.byte 0xbf, 0x02, 0x53	; LD (XSP + 002h), HL
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr z, LABEL_FDC77A
 	.byte 0x9f, 0x0a, 0x20	; LD WA, (XSP + 00ah)
 	extz xwa
@@ -410859,9 +410859,9 @@ LABEL_FDC77A:
 	jr z, LABEL_FDC7E4
 	cp bc, 0x8
 	jr z, LABEL_FDC7D9
-	.byte 0xd9, 0xd9	; CP BC, 1
+	cps bc, 1
 	jr z, LABEL_FDC7A0
-	.byte 0xd9, 0xd8	; CP BC, 0
+	cps bc, 0
 	jr nz, LABEL_FDC7EC
 	.byte 0xbf, 0x02, 0x50	; LD (XSP + 002h), WA
 	jr LABEL_FDC7F1
@@ -410986,15 +410986,15 @@ LABEL_FDC883:
 	ld xde, (xhl)
 	or xde, xde
 	jr z, LABEL_FDC8BD
-	.byte 0xd9, 0xdc	; CP BC, 4
+	cps bc, 4
 	jr z, LABEL_FDC8F7
-	.byte 0xd9, 0xdb	; CP BC, 3
+	cps bc, 3
 	jr z, LABEL_FDC8E9
-	.byte 0xd9, 0xda	; CP BC, 2
+	cps bc, 2
 	jr z, LABEL_FDC8DB
-	.byte 0xd9, 0xd9	; CP BC, 1
+	cps bc, 1
 	jr z, LABEL_FDC8C1
-	.byte 0xd9, 0xd8	; CP BC, 0
+	cps bc, 0
 	jr nz, LABEL_FDC8BD
 	cp wa, 0x10
 	jr c, LABEL_FDC8FD
@@ -411056,12 +411056,12 @@ LABEL_FDC901:
 	.byte 0xaf, 0x20, 0x20	; LD XWA, (XSP + 020h)
 	calr LABEL_FDC5AB
 	ld iz, hl
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jrl nz, LABEL_FDCA10
 	.byte 0x9f, 0x02, 0x20	; LD WA, (XSP + 002h)
-	.byte 0xd8, 0xd9	; CP WA, 1
+	cps wa, 1
 	jr z, LABEL_FDC978
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jrl nz, LABEL_FDCA0D
 	.byte 0x9f, 0x12, 0x20	; LD WA, (XSP + 012h)
 	.byte 0x9f, 0x06, 0x21	; LD BC, (XSP + 006h)
@@ -411098,7 +411098,7 @@ LABEL_FDC978:
 	jr z, LABEL_FDC9DE
 	.byte 0xbf, 0x0c, 0x30	; LDA XWA, XSP + 00ch
 	.byte 0xbf, 0x0a, 0x31	; LDA XBC, XSP + 00ah
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr nz, LABEL_FDC9A8
 	push xwa
 	push xbc
@@ -411179,12 +411179,12 @@ LABEL_FDCA17:
 	.byte 0xaf, 0x24, 0x20	; LD XWA, (XSP + 024h)
 	calr LABEL_FDC5AB
 	ld iz, hl
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jrl nz, LABEL_FDCADD
 	.byte 0x9f, 0x02, 0x20	; LD WA, (XSP + 002h)
-	.byte 0xd8, 0xd9	; CP WA, 1
+	cps wa, 1
 	jr z, LABEL_FDCA6D
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jrl nz, LABEL_FDCADA
 	.byte 0x9f, 0x16, 0x20	; LD WA, (XSP + 016h)
 	.byte 0x9f, 0x06, 0x21	; LD BC, (XSP + 006h)
@@ -411208,7 +411208,7 @@ LABEL_FDCA6D:
 	jr z, LABEL_FDCAAB
 	.byte 0xbf, 0x0c, 0x30	; LDA XWA, XSP + 00ch
 	.byte 0xbf, 0x0a, 0x31	; LDA XBC, XSP + 00ah
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr nz, LABEL_FDCA9D
 	push xwa
 	push xbc
@@ -411269,12 +411269,12 @@ LABEL_FDCAE4:
 	.byte 0xbf, 0x16, 0x31	; LDA XBC, XSP + 016h
 	.byte 0xaf, 0x1a, 0x20	; LD XWA, (XSP + 01ah)
 	calr LABEL_FDC5AB
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_FDCB3B
 	.byte 0x9f, 0x02, 0x20	; LD WA, (XSP + 002h)
-	.byte 0xd8, 0xd9	; CP WA, 1
+	cps wa, 1
 	jr z, LABEL_FDCB23
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr nz, LABEL_FDCB38
 	.byte 0xaf, 0x0a, 0x20	; LD XWA, (XSP + 00ah)
 	calr LABEL_FDC35F
@@ -411408,7 +411408,7 @@ LABEL_FDCC2B:
 	.byte 0xbf, 0x0e, 0x32	; LDA XDE, XSP + 00eh
 	ld bc, iz
 	calr LABEL_FDC803
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_FDCC90
 	ld wa, iz
 	.byte 0xaf, 0x06, 0x21	; LD XBC, (XSP + 006h)
@@ -411468,7 +411468,7 @@ LABEL_FDCCA4:
 	.byte 0xd7, 0xfa, 0x88	; LD WA, QIZ
 	add wa, hl
 	.byte 0xd7, 0xfa, 0xa8	; LD QIZ, 0
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr z, LABEL_FDCCD0
 	.byte 0xd7, 0xfa, 0x03, 0xff, 0xff	; LD QIZ, 0ffffh
 
@@ -411696,7 +411696,7 @@ LABEL_FDD06F:
 	.byte 0xbf, 0x0e, 0x60	; LD (XSP + 00eh), XWA
 	.byte 0xbf, 0x0c, 0x02, 0x00, 0x00	; LDW (XSP + 00ch:8), 0000h
 	.byte 0x9f, 0x06, 0x20	; LD WA, (XSP + 006h)
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr ule, LABEL_FDD0E2
 
 LABEL_FDD0A7:
@@ -411775,7 +411775,7 @@ LABEL_FDD12B:
 	.byte 0xbf, 0x0e, 0x60	; LD (XSP + 00eh), XWA
 	.byte 0xbf, 0x0c, 0x02, 0x00, 0x00	; LDW (XSP + 00ch:8), 0000h
 	.byte 0x9f, 0x06, 0x20	; LD WA, (XSP + 006h)
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr ule, LABEL_FDD1B1
 
 LABEL_FDD161:
@@ -411889,7 +411889,7 @@ LABEL_FDD1B9:
 LABEL_FDD27E:
 	.byte 0x9f, 0x1e, 0x21	; LD BC, (XSP + 01eh)
 	dec 1, bc
-	.byte 0xd9, 0xd8	; CP BC, 0
+	cps bc, 0
 	jr lt, LABEL_FDD2B3
 	cp bc, 0x8
 	jr le, LABEL_FDD29D
@@ -412788,7 +412788,7 @@ ScreenGroup_Dispatch:	; FDDB46
 LABEL_FDDB46:
 	push xiz
 	ld iz, wa	; Screen group ID
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr nz, LABEL_FDDB55
 	call LABEL_FDDB9B	; Initialize screen state
 	call LABEL_FF068C
@@ -412823,7 +412823,7 @@ LABEL_FDDB7D:
 	ld xwa, (xbc)
 	or xwa, xwa
 	jr nz, LABEL_FDDB5A
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	.byte 0xf2, 0x2e, 0xdb, 0xfd, 0xe6	; CALL Z, LABEL_FDDB2E
 	pop xiz
 	ret
@@ -413022,14 +413022,14 @@ LABEL_FDDDCB:
 
 LABEL_FDDDED:
 	.byte 0xd1, 0x94, 0xc5, 0x20	; LD WA, (0C594h)
-	.byte 0xd8, 0x33, 0x02	; BIT 002h, WA
+	bit 2, wa
 	.byte 0xb0, 0xf6	; RET Z
 	call 0xFDF08A
 	.byte 0xd1, 0x94, 0xc5, 0x3c, 0xfb, 0xff	; ANDW (0C594h:16), 0fffbh
 	.byte 0xf1, 0x67, 0xfc, 0xc9	; BIT 1, (0FC67h)
 	jr z, LABEL_FDDE1A
 	.byte 0xd1, 0x94, 0xc5, 0x20	; LD WA, (0C594h)
-	.byte 0xd8, 0x33, 0x04	; BIT 004h, WA
+	bit 4, wa
 	jr nz, LABEL_FDDE15
 	.byte 0xf1, 0xfe, 0xc1, 0xba	; SET 2, (0C1FEh)
 	jr LABEL_FDDE1A
@@ -413070,7 +413070,7 @@ Audio_CheckSubsystemReady:
 	.byte 0xf1, 0x67, 0xfc, 0xc9	; BIT 1, (0FC67h)
 	jr z, LABEL_FDDE9A
 	.byte 0xd1, 0x94, 0xc5, 0x20	; LD WA, (0C594h)
-	.byte 0xd8, 0x33, 0x04	; BIT 004h, WA
+	bit 4, wa
 	jr nz, LABEL_FDDE95
 	.byte 0xf1, 0xfe, 0xc1, 0xba	; SET 2, (0C1FEh)
 	jr LABEL_FDDE9A
@@ -413112,10 +413112,10 @@ LABEL_FDDEF7:
 	jp LABEL_FDFA0F
 
 LABEL_FDDEFF:
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_FDDF12
 	.byte 0xd1, 0x98, 0xc5, 0x20	; LD WA, (0C598h)
-	.byte 0xd8, 0x33, 0x02	; BIT 002h, WA
+	bit 2, wa
 	jr z, LABEL_FDDF27
 	.byte 0xf1, 0xb2, 0x28, 0xc8	; BIT 0, (28B2h)
 	jr z, LABEL_FDDF27
@@ -413143,7 +413143,7 @@ LABEL_FDDF47:
 	.byte 0xf1, 0x67, 0xfc, 0xc9	; BIT 1, (0FC67h)
 	jr z, LABEL_FDDF67
 	.byte 0xd1, 0x94, 0xc5, 0x20	; LD WA, (0C594h)
-	.byte 0xd8, 0x33, 0x04	; BIT 004h, WA
+	bit 4, wa
 	jr nz, LABEL_FDDF5C
 	.byte 0xf1, 0xfe, 0xc1, 0xba	; SET 2, (0C1FEh)
 	jr LABEL_FDDF61
@@ -413183,7 +413183,7 @@ LABEL_FDDFA7:
 	.byte 0xf1, 0x67, 0xfc, 0xc9	; BIT 1, (0FC67h)
 	jr z, LABEL_FDDFC1
 	.byte 0xd1, 0x94, 0xc5, 0x20	; LD WA, (0C594h)
-	.byte 0xd8, 0x33, 0x04	; BIT 004h, WA
+	bit 4, wa
 	jr nz, LABEL_FDDFBC
 	.byte 0xf1, 0xfe, 0xc1, 0xba	; SET 2, (0C1FEh)
 	jr LABEL_FDDFC1
@@ -413219,7 +413219,7 @@ LABEL_FDDFC1:
 
 LABEL_FDE01C:
 	.byte 0xf1, 0xfe, 0xc1, 0x00, 0x00	; LD (0C1FEh), 000h
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_FDE02D
 	.byte 0xd1, 0x94, 0xc5, 0x3e, 0x10, 0x00	; ORW (0C594h), 0010h
 	jr LABEL_FDE07B
@@ -413277,7 +413277,7 @@ LABEL_FDE084:
 	jr z, LABEL_FDE11C
 	cp a, 0xC
 	jr z, LABEL_FDE0D0
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	.byte 0xb0, 0xfe	; RET NZ
 	ld a, e
 	and a, 0xFF
@@ -413314,7 +413314,7 @@ LABEL_FDE11C:
 	ld a, e
 	and a, 0xF
 	jr z, LABEL_FDE172
-	.byte 0xcc, 0x33, 0x06	; BIT 006h, D
+	bit 6, d
 	jr nz, LABEL_FDE14B
 	ld a, l
 	extz wa
@@ -413346,9 +413346,9 @@ LABEL_FDE166:
 	.byte 0xd1, 0x94, 0xc5, 0x3e, 0x04, 0x00	; ORW (0C594h), 0004h
 
 LABEL_FDE172:
-	.byte 0xcd, 0x33, 0x05	; BIT 005h, E
+	bit 5, e
 	jr z, LABEL_FDE1E3
-	.byte 0xcc, 0x33, 0x05	; BIT 005h, D
+	bit 5, d
 	jr z, LABEL_FDE1A3
 	ld a, l
 	extz wa
@@ -413388,9 +413388,9 @@ LABEL_FDE1D7:
 	.byte 0xd1, 0x94, 0xc5, 0x3e, 0x04, 0x00	; ORW (0C594h), 0004h
 
 LABEL_FDE1E3:
-	.byte 0xcd, 0x33, 0x06	; BIT 006h, E
+	bit 6, e
 	.byte 0xb0, 0xf6	; RET Z
-	.byte 0xcc, 0x33, 0x06	; BIT 006h, D
+	bit 6, d
 	jr z, LABEL_FDE20A
 	ld a, l
 	extz wa
@@ -413428,9 +413428,9 @@ LABEL_FDE23D:
 	ret
 
 LABEL_FDE24A:
-	.byte 0xcd, 0x33, 0x00	; BIT 000h, E
+	bit 0, e
 	.byte 0xb0, 0xf6	; RET Z
-	.byte 0xcc, 0x33, 0x00	; BIT 000h, D
+	bit 0, d
 	jr z, LABEL_FDE281
 	ld a, l
 	extz wa
@@ -413719,7 +413719,7 @@ LABEL_FDE9F7:
 	and wa, 0x7
 	jr z, LABEL_FDEA1B
 	.byte 0xd1, 0x94, 0xc5, 0x20	; LD WA, (0C594h)
-	.byte 0xd8, 0x33, 0x04	; BIT 004h, WA
+	bit 4, wa
 	jr nz, LABEL_FDEA10
 	.byte 0xf1, 0xfe, 0xc1, 0xbb	; SET 3, (0C1FEh)
 	jr LABEL_FDEA15
@@ -413765,7 +413765,7 @@ LABEL_FDEA64:
 
 LABEL_FDEA74:
 	.byte 0xd1, 0x94, 0xc5, 0x20	; LD WA, (0C594h)
-	.byte 0xd8, 0x33, 0x04	; BIT 004h, WA
+	bit 4, wa
 	jr nz, LABEL_FDEA83
 	.byte 0xf1, 0xfe, 0xc1, 0xbb	; SET 3, (0C1FEh)
 	jr LABEL_FDEA88
@@ -413783,7 +413783,7 @@ LABEL_FDEA8E:
 
 LABEL_FDEA9A:
 	.byte 0xd1, 0x98, 0xc5, 0x21	; LD BC, (0C598h)
-	.byte 0xd9, 0x33, 0x00	; BIT 000h, BC
+	bit 0, bc
 	jr z, LABEL_FDEADF
 	.byte 0xc1, 0x9e, 0xc5, 0x19, 0xff, 0xc1	; LD_8_8 00C1FFh, 00C59Eh
 	.byte 0xd1, 0x9c, 0xc5, 0x3e, 0x02, 0x00	; ORW (0C59Ch), 0002h
@@ -413794,7 +413794,7 @@ LABEL_FDEA9A:
 	and wa, 0xE
 	jr z, LABEL_FDEAD7
 	.byte 0xd1, 0x94, 0xc5, 0x20	; LD WA, (0C594h)
-	.byte 0xd8, 0x33, 0x04	; BIT 004h, WA
+	bit 4, wa
 	jr nz, LABEL_FDEAD2
 	.byte 0xf1, 0xfe, 0xc1, 0xbb	; SET 3, (0C1FEh)
 	jr LABEL_FDEAD7
@@ -413818,11 +413818,11 @@ LABEL_FDEAE4:
 	jr z, LABEL_FDEB33
 	cp a, 0x8
 	jr z, LABEL_FDEB27
-	.byte 0xc9, 0xdc	; CP A, 4
+	cps a, 4
 	jr z, LABEL_FDEB1B
-	.byte 0xc9, 0xda	; CP A, 2
+	cps a, 2
 	jr z, LABEL_FDEB0F
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	jr nz, LABEL_FDEB33
 	.byte 0xf1, 0xff, 0xc1, 0x00, 0x10	; LD (0C1FFh), 010h
 	.byte 0xd1, 0x9c, 0xc5, 0x3e, 0x02, 0x00	; ORW (0C59Ch), 0002h
@@ -413903,7 +413903,7 @@ LABEL_FDEB95:
 	and wa, 0x7
 	jr z, LABEL_FDEBE2
 	.byte 0xd1, 0x94, 0xc5, 0x20	; LD WA, (0C594h)
-	.byte 0xd8, 0x33, 0x04	; BIT 004h, WA
+	bit 4, wa
 	jr nz, LABEL_FDEBD7
 	.byte 0xf1, 0xfe, 0xc1, 0xbb	; SET 3, (0C1FEh)
 	jr LABEL_FDEBDC
@@ -413956,7 +413956,7 @@ LABEL_FDEC16:
 	and wa, 0x7
 	jr z, LABEL_FDEC6A
 	.byte 0xd1, 0x94, 0xc5, 0x20	; LD WA, (0C594h)
-	.byte 0xd8, 0x33, 0x04	; BIT 004h, WA
+	bit 4, wa
 	jr nz, LABEL_FDEC5F
 	.byte 0xf1, 0xfe, 0xc1, 0xbb	; SET 3, (0C1FEh)
 	jr LABEL_FDEC64
@@ -414012,7 +414012,7 @@ LABEL_FDECB6:
 	jr z, LABEL_FDECE4
 	.byte 0xd1, 0x9c, 0xc5, 0x3e, 0x02, 0x00	; ORW (0C59Ch), 0002h
 	.byte 0xd1, 0x94, 0xc5, 0x20	; LD WA, (0C594h)
-	.byte 0xd8, 0x33, 0x04	; BIT 004h, WA
+	bit 4, wa
 	.byte 0xb0, 0xf6	; RET Z
 	.byte 0xf1, 0xff, 0xc1, 0x00, 0xff	; LD (0C1FFh), 0ffh
 	ret
@@ -414048,14 +414048,14 @@ LABEL_FDED11:
 	ldb c, 0x0
 	.byte 0xf1, 0x53, 0xfd, 0xc8	; BIT 0, (0FD53h)
 	jr z, LABEL_FDED1E
-	.byte 0xcb, 0x31, 0x01	; SET 001h, C
+	set 1, c
 
 LABEL_FDED1E:
 	.byte 0xc1, 0xff, 0xc1, 0x3f, 0xff	; CP (0C1FFh), 0ffh
 	jr nz, LABEL_FDED58
 	.byte 0xc1, 0xc8, 0xc5, 0x3f, 0xff	; CP (0C5C8h), 0ffh
 	jr z, LABEL_FDED4C
-	.byte 0xcb, 0x31, 0x00	; SET 000h, C
+	set 0, c
 	.byte 0xd1, 0x96, 0xc5, 0x20	; LD WA, (0C596h)
 	and wa, 0x80
 	cp wa, 0x80
@@ -414063,12 +414063,12 @@ LABEL_FDED1E:
 	.byte 0xd1, 0x96, 0xc5, 0x20	; LD WA, (0C596h)
 	and wa, 0x3
 	jr z, LABEL_FDED58
-	.byte 0xcb, 0x31, 0x04	; SET 004h, C
+	set 4, c
 	jr LABEL_FDED58
 
 LABEL_FDED4C:
 	.byte 0xd1, 0x96, 0xc5, 0x20	; LD WA, (0C596h)
-	.byte 0xd8, 0x33, 0x02	; BIT 002h, WA
+	bit 2, wa
 	jr z, LABEL_FDED58
 	or c, 0x18
 
@@ -414108,7 +414108,7 @@ LABEL_FDED97:
 	and wa, 0x6
 	jr z, LABEL_FDEDBC
 	.byte 0xd1, 0x98, 0xc5, 0x20	; LD WA, (0C598h)
-	.byte 0xd8, 0x33, 0x00	; BIT 000h, WA
+	bit 0, wa
 	jr nz, LABEL_FDEDBC
 	.byte 0xd1, 0x96, 0xc5, 0x20	; LD WA, (0C596h)
 	and wa, 0x3
@@ -414125,14 +414125,14 @@ LABEL_FDEDBC:
 LABEL_FDEDD2:
 	.byte 0xc1, 0xff, 0xc1, 0x3f, 0xff	; CP (0C1FFh), 0ffh
 	jr nz, LABEL_FDEDE4
-	.byte 0xda, 0x31, 0x03	; SET 003h, DE
+	set 3, de
 	.byte 0xc1, 0xa2, 0xc5, 0x19, 0xc8, 0xc5	; LD_8_8 00C5C8h, 00C5A2h
 	jr LABEL_FDEDF3
 
 LABEL_FDEDE4:
 	.byte 0xc1, 0xc8, 0xc5, 0x3f, 0xff	; CP (0C5C8h), 0ffh
 	jr z, LABEL_FDEDEE
-	.byte 0xda, 0x31, 0x03	; SET 003h, DE
+	set 3, de
 
 LABEL_FDEDEE:
 	.byte 0xf1, 0xc8, 0xc5, 0x00, 0xff	; LD (0C5C8h), 0ffh
@@ -414144,7 +414144,7 @@ LABEL_FDEDF3:
 	jr z, LABEL_FDEE1D
 	.byte 0xf1, 0xc2, 0xc2, 0xbf	; SET 7, (0C2C2h)
 	.byte 0xc1, 0xa2, 0xc5, 0x21	; LD A, (0C5A2h)
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
+	res 7, a
 	sla a, 1
 	.byte 0xc1, 0xc3, 0xc2, 0x3c, 0x01	; AND (0C2C3h), 001h
 	.byte 0xc1, 0xc3, 0xc2, 0xe9	; OR (0C2C3h), A
@@ -414157,7 +414157,7 @@ LABEL_FDEE1D:
 	jr z, LABEL_FDEE47
 	.byte 0xf1, 0xc6, 0xc2, 0xbf	; SET 7, (0C2C6h)
 	.byte 0xc1, 0xa2, 0xc5, 0x21	; LD A, (0C5A2h)
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
+	res 7, a
 	sla a, 1
 	.byte 0xc1, 0xc7, 0xc2, 0x3c, 0x01	; AND (0C2C7h), 001h
 	.byte 0xc1, 0xc7, 0xc2, 0xe9	; OR (0C2C7h), A
@@ -414167,13 +414167,13 @@ LABEL_FDEE47:
 	.byte 0xc1, 0xa2, 0xc5, 0x21	; LD A, (0C5A2h)
 	dec 1, a
 	.byte 0xc1, 0xca, 0xc2, 0x23	; LD C, (0C2CAh)
-	.byte 0xcb, 0x30, 0x07	; RES 007h, C
+	res 7, c
 	cp c, a
 	jr z, LABEL_FDEE74
 	.byte 0xf1, 0xca, 0xc2, 0xbf	; SET 7, (0C2CAh)
 	.byte 0xc1, 0xa2, 0xc5, 0x21	; LD A, (0C5A2h)
 	dec 1, a
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
+	res 7, a
 	.byte 0xc1, 0xca, 0xc2, 0x3c, 0x80	; AND (0C2CAh), 080h
 	.byte 0xc1, 0xca, 0xc2, 0xe9	; OR (0C2CAh), A
 	.byte 0xd1, 0x9a, 0xc5, 0x3e, 0x00, 0x02	; ORW (0C59Ah), 0200h
@@ -414184,13 +414184,13 @@ LABEL_FDEE74:
 	.byte 0xc1, 0xa2, 0xc5, 0x21	; LD A, (0C5A2h)
 	dec 1, a
 	.byte 0xc1, 0xce, 0xc2, 0x23	; LD C, (0C2CEh)
-	.byte 0xcb, 0x30, 0x07	; RES 007h, C
+	res 7, c
 	cp c, a
 	jr z, LABEL_FDEEC3
 	.byte 0xf1, 0xce, 0xc2, 0xbf	; SET 7, (0C2CEh)
 	.byte 0xc1, 0xa2, 0xc5, 0x21	; LD A, (0C5A2h)
 	dec 1, a
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
+	res 7, a
 	.byte 0xc1, 0xce, 0xc2, 0x3c, 0x80	; AND (0C2CEh), 080h
 	.byte 0xc1, 0xce, 0xc2, 0xe9	; OR (0C2CEh), A
 	.byte 0xd1, 0x9a, 0xc5, 0x3e, 0x00, 0x02	; ORW (0C59Ah), 0200h
@@ -414198,8 +414198,8 @@ LABEL_FDEE74:
 
 LABEL_FDEEA9:
 	.byte 0xc1, 0xce, 0xc2, 0x21	; LD A, (0C2CEh)
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
-	.byte 0xc9, 0xd8	; CP A, 0
+	res 7, a
+	cps a, 0
 	jr z, LABEL_FDEEC3
 	.byte 0xf1, 0xce, 0xc2, 0xbf	; SET 7, (0C2CEh)
 	.byte 0xc1, 0xce, 0xc2, 0x3c, 0x80	; AND (0C2CEh), 080h
@@ -414212,7 +414212,7 @@ LABEL_FDEEC3:
 	jrl z, LABEL_FDEF8E
 	.byte 0xf1, 0xd2, 0xc2, 0xbf	; SET 7, (0C2D2h)
 	.byte 0xc1, 0xa2, 0xc5, 0x21	; LD A, (0C5A2h)
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
+	res 7, a
 	sla a, 1
 	.byte 0xc1, 0xd3, 0xc2, 0x3c, 0x01	; AND (0C2D3h), 001h
 	.byte 0xc1, 0xd3, 0xc2, 0xe9	; OR (0C2D3h), A
@@ -414222,13 +414222,13 @@ LABEL_FDEEC3:
 LABEL_FDEEF1:
 	.byte 0xc1, 0xc8, 0xc5, 0x3f, 0xff	; CP (0C5C8h), 0ffh
 	jr z, LABEL_FDEEFB
-	.byte 0xda, 0x31, 0x03	; SET 003h, DE
+	set 3, de
 
 LABEL_FDEEFB:
 	.byte 0xf1, 0xc8, 0xc5, 0x00, 0xff	; LD (0C5C8h), 0ffh
 	.byte 0xc1, 0xc3, 0xc2, 0x21	; LD A, (0C2C3h)
-	.byte 0xc9, 0x30, 0x00	; RES 000h, A
-	.byte 0xc9, 0xd8	; CP A, 0
+	res 0, a
+	cps a, 0
 	jr z, LABEL_FDEF1A
 	.byte 0xf1, 0xc2, 0xc2, 0xbf	; SET 7, (0C2C2h)
 	.byte 0xc1, 0xc3, 0xc2, 0x3c, 0x01	; AND (0C2C3h), 001h
@@ -414236,8 +414236,8 @@ LABEL_FDEEFB:
 
 LABEL_FDEF1A:
 	.byte 0xc1, 0xc7, 0xc2, 0x21	; LD A, (0C2C7h)
-	.byte 0xc9, 0x30, 0x00	; RES 000h, A
-	.byte 0xc9, 0xd8	; CP A, 0
+	res 0, a
+	cps a, 0
 	jr z, LABEL_FDEF34
 	.byte 0xf1, 0xc6, 0xc2, 0xbf	; SET 7, (0C2C6h)
 	.byte 0xc1, 0xc7, 0xc2, 0x3c, 0x01	; AND (0C2C7h), 001h
@@ -414245,8 +414245,8 @@ LABEL_FDEF1A:
 
 LABEL_FDEF34:
 	.byte 0xc1, 0xca, 0xc2, 0x21	; LD A, (0C2CAh)
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
-	.byte 0xc9, 0xd8	; CP A, 0
+	res 7, a
+	cps a, 0
 	jr z, LABEL_FDEF4E
 	.byte 0xf1, 0xca, 0xc2, 0xbf	; SET 7, (0C2CAh)
 	.byte 0xc1, 0xca, 0xc2, 0x3c, 0x80	; AND (0C2CAh), 080h
@@ -414254,10 +414254,10 @@ LABEL_FDEF34:
 
 LABEL_FDEF4E:
 	.byte 0xd1, 0x96, 0xc5, 0x20	; LD WA, (0C596h)
-	.byte 0xd8, 0x33, 0x02	; BIT 002h, WA
+	bit 2, wa
 	jr z, LABEL_FDEF74
 	.byte 0xc1, 0xce, 0xc2, 0x21	; LD A, (0C2CEh)
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
+	res 7, a
 	cp a, 0x7F
 	jr z, LABEL_FDEF8E
 	.byte 0xf1, 0xce, 0xc2, 0xbf	; SET 7, (0C2CEh)
@@ -414267,15 +414267,15 @@ LABEL_FDEF4E:
 
 LABEL_FDEF74:
 	.byte 0xc1, 0xce, 0xc2, 0x21	; LD A, (0C2CEh)
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
-	.byte 0xc9, 0xd8	; CP A, 0
+	res 7, a
+	cps a, 0
 	jr z, LABEL_FDEF8E
 	.byte 0xf1, 0xce, 0xc2, 0xbf	; SET 7, (0C2CEh)
 	.byte 0xc1, 0xce, 0xc2, 0x3c, 0x80	; AND (0C2CEh), 080h
 	.byte 0xd1, 0x9a, 0xc5, 0x3e, 0x00, 0x02	; ORW (0C59Ah), 0200h
 
 LABEL_FDEF8E:
-	.byte 0xda, 0x33, 0x03	; BIT 003h, DE
+	bit 3, de
 	.byte 0xb0, 0xf6	; RET Z
 	ldw wa, 0x45
 	call LABEL_FC793D
@@ -414394,7 +414394,7 @@ Audio_CheckInitStatus:
 	.byte 0xd1, 0x9e, 0xf1, 0x23	; LD HL, (0F19Eh)
 	.byte 0xd1, 0x51, 0x0d, 0xe3	; OR HL, (0D51h)
 	ld wa, hl
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr z, LABEL_FDF0B1
 	.byte 0xd1, 0x98, 0xc5, 0x3e, 0x00, 0x01	; ORW (0C598h), 0100h
 	jr LABEL_FDF0B7
@@ -414406,7 +414406,7 @@ LABEL_FDF0B7:
 	.byte 0xd1, 0xa8, 0x28, 0x21	; LD BC, (28A8h)
 	.byte 0xd1, 0x4f, 0x0d, 0xe1	; OR BC, (0D4Fh)
 	ld wa, bc
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr z, LABEL_FDF0CD
 	.byte 0xd1, 0x98, 0xc5, 0x3e, 0x00, 0x02	; ORW (0C598h), 0200h
 	jr LABEL_FDF0D3
@@ -414487,7 +414487,7 @@ LABEL_FDF159:
 
 LABEL_FDF17A:
 	.byte 0xd1, 0x98, 0xc5, 0x20	; LD WA, (0C598h)
-	.byte 0xd8, 0x33, 0x08	; BIT 008h, WA
+	bit 8, wa
 	jrl z, LABEL_FDF316
 	ld a, e
 	extz wa
@@ -414649,7 +414649,7 @@ LABEL_FDF303:
 
 LABEL_FDF316:
 	.byte 0xd1, 0x98, 0xc5, 0x20	; LD WA, (0C598h)
-	.byte 0xd8, 0x33, 0x09	; BIT 009h, WA
+	bit 9, wa
 	jrl z, LABEL_FDF44C
 	ld a, e
 	extz wa
@@ -414783,7 +414783,7 @@ LABEL_FDF466:
 
 LABEL_FDF472:
 	.byte 0xd1, 0x98, 0xc5, 0x20	; LD WA, (0C598h)
-	.byte 0xd8, 0x33, 0x06	; BIT 006h, WA
+	bit 6, wa
 	jr z, LABEL_FDF4A7
 	.byte 0xc1, 0x5e, 0xfc, 0x21	; LD A, (0FC5Eh)
 	and a, 0x7
@@ -414833,11 +414833,11 @@ LABEL_FDF4F0:
 	jrl z, LABEL_FDF58C
 	cp a, 0x8
 	jr z, LABEL_FDF56C
-	.byte 0xc9, 0xdc	; CP A, 4
+	cps a, 4
 	jr z, LABEL_FDF54C
-	.byte 0xc9, 0xda	; CP A, 2
+	cps a, 2
 	jr z, LABEL_FDF52C
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	jrl nz, LABEL_FDF5AC
 	.byte 0xf1, 0x52, 0xc2, 0x00, 0x00	; LD (0C252h), 000h
 	.byte 0xf1, 0x53, 0xc2, 0x00, 0xff	; LD (0C253h), 0ffh
@@ -414969,7 +414969,7 @@ LABEL_FDF716:
 	.byte 0xf1, 0x04, 0xc2, 0x00, 0xff	; LD (0C204h), 0ffh
 	.byte 0xf1, 0x18, 0xc2, 0x00, 0xff	; LD (0C218h), 0ffh
 	.byte 0xd1, 0x96, 0xc5, 0x20	; LD WA, (0C596h)
-	.byte 0xd8, 0x33, 0x09	; BIT 009h, WA
+	bit 9, wa
 	jr z, LABEL_FDF787
 	.byte 0xc1, 0x5f, 0xfc, 0x21	; LD A, (0FC5Fh)
 	and a, 0xFC
@@ -415068,7 +415068,7 @@ LABEL_FDF84F:
 
 LABEL_FDF85C:
 	.byte 0xd1, 0x96, 0xc5, 0x20	; LD WA, (0C596h)
-	.byte 0xd8, 0x33, 0x09	; BIT 009h, WA
+	bit 9, wa
 	jrl nz, LABEL_FDF8EB
 	.byte 0xf1, 0x5f, 0xfc, 0xc9	; BIT 1, (0FC5Fh)
 	jr nz, LABEL_FDF8EB
@@ -415106,7 +415106,7 @@ LABEL_FDF8B6:
 
 LABEL_FDF8B8:
 	.byte 0xd1, 0x96, 0xc5, 0x20	; LD WA, (0C596h)
-	.byte 0xd8, 0x33, 0x02	; BIT 002h, WA
+	bit 2, wa
 	jr z, LABEL_FDF8D7
 	.byte 0xf1, 0xba, 0xc2, 0x00, 0x15	; LD (0C2BAh), 015h
 	.byte 0xf1, 0xbb, 0xc2, 0x00, 0x16	; LD (0C2BBh), 016h
@@ -415130,7 +415130,7 @@ LABEL_FDF8F2:
 	cp wa, 0x400
 	.byte 0xb0, 0xfe	; RET NZ
 	.byte 0xd1, 0x96, 0xc5, 0x20	; LD WA, (0C596h)
-	.byte 0xd8, 0x33, 0x02	; BIT 002h, WA
+	bit 2, wa
 	.byte 0xb0, 0xfe	; RET NZ
 	.byte 0xc1, 0xff, 0xc1, 0x3f, 0xff	; CP (0C1FFh), 0ffh
 	jr nz, LABEL_FDF916
@@ -415165,7 +415165,7 @@ LABEL_FDF93F:
 	jr z, LABEL_FDF962
 	.byte 0xc1, 0x66, 0xfc, 0x21	; LD A, (0FC66h)
 	and a, 0x3
-	.byte 0xc9, 0xda	; CP A, 2
+	cps a, 2
 	jr nz, LABEL_FDF95B
 	.byte 0xf1, 0xb4, 0xc2, 0x00, 0x01	; LD (0C2B4h), 001h
 	jr LABEL_FDF967
@@ -415213,7 +415213,7 @@ LABEL_FDF9A4:
 	jr z, LABEL_FDF9C7
 	.byte 0xc1, 0x66, 0xfc, 0x21	; LD A, (0FC66h)
 	and a, 0x3
-	.byte 0xc9, 0xda	; CP A, 2
+	cps a, 2
 	jr nz, LABEL_FDF9C0
 	.byte 0xf1, 0xbc, 0xc2, 0x00, 0x01	; LD (0C2BCh), 001h
 	jr LABEL_FDF9D4
@@ -415235,7 +415235,7 @@ LABEL_FDF9D4:
 
 LABEL_FDF9DB:
 	.byte 0xd1, 0x96, 0xc5, 0x20	; LD WA, (0C596h)
-	.byte 0xd8, 0x33, 0x0b	; BIT 00bh, WA
+	bit 11, wa
 	.byte 0xb0, 0xf6	; RET Z
 	.byte 0xf1, 0xfe, 0xc1, 0xc8	; BIT 0, (0C1FEh)
 	jr z, LABEL_FDF9F1
@@ -415273,10 +415273,10 @@ LABEL_FDFA0F:
 
 LABEL_FDFA3E:
 	.byte 0xd1, 0x9c, 0xc5, 0x20	; LD WA, (0C59Ch)
-	.byte 0xd8, 0x33, 0x00	; BIT 000h, WA
+	bit 0, wa
 	jr nz, LABEL_FDFA50
 	.byte 0xd1, 0x9a, 0xc5, 0x20	; LD WA, (0C59Ah)
-	.byte 0xd8, 0x33, 0x09	; BIT 009h, WA
+	bit 9, wa
 	jr z, LABEL_FDFA53
 
 LABEL_FDFA50:
@@ -415284,7 +415284,7 @@ LABEL_FDFA50:
 
 LABEL_FDFA53:
 	.byte 0xd1, 0x9c, 0xc5, 0x20	; LD WA, (0C59Ch)
-	.byte 0xd8, 0x33, 0x08	; BIT 008h, WA
+	bit 8, wa
 	jr nz, LABEL_FDFA66
 	.byte 0xd1, 0x9a, 0xc5, 0x20	; LD WA, (0C59Ah)
 	and wa, 0x7000
@@ -415295,27 +415295,27 @@ LABEL_FDFA66:
 
 LABEL_FDFA69:
 	.byte 0xd1, 0x9c, 0xc5, 0x20	; LD WA, (0C59Ch)
-	.byte 0xd8, 0x33, 0x02	; BIT 002h, WA
+	bit 2, wa
 	.byte 0xf2, 0x5d, 0xff, 0xfd, 0xee	; CALL NZ, LABEL_FDFF5D
 	.byte 0xd1, 0x9c, 0xc5, 0x20	; LD WA, (0C59Ch)
-	.byte 0xd8, 0x33, 0x03	; BIT 003h, WA
+	bit 3, wa
 	.byte 0xf2, 0x23, 0x00, 0xfe, 0xee	; CALL NZ, LABEL_FE0023
 	.byte 0xd1, 0x9c, 0xc5, 0x20	; LD WA, (0C59Ch)
-	.byte 0xd8, 0x33, 0x06	; BIT 006h, WA
+	bit 6, wa
 	.byte 0xf2, 0x3e, 0x01, 0xfe, 0xee	; CALL NZ, LABEL_FE013E
 	.byte 0xd1, 0x9c, 0xc5, 0x20	; LD WA, (0C59Ch)
-	.byte 0xd8, 0x33, 0x04	; BIT 004h, WA
+	bit 4, wa
 	.byte 0xf2, 0x9b, 0x01, 0xfe, 0xee	; CALL NZ, LABEL_FE019B
 	.byte 0xd1, 0x9a, 0xc5, 0x20	; LD WA, (0C59Ah)
-	.byte 0xd8, 0x33, 0x0d	; BIT 00dh, WA
+	bit 13, wa
 	jr z, LABEL_FDFAAB
 	.byte 0xd1, 0x96, 0xc5, 0x20	; LD WA, (0C596h)
-	.byte 0xd8, 0x33, 0x04	; BIT 004h, WA
+	bit 4, wa
 	jr z, LABEL_FDFAB4
 
 LABEL_FDFAAB:
 	.byte 0xd1, 0x9a, 0xc5, 0x20	; LD WA, (0C59Ah)
-	.byte 0xd8, 0x33, 0x0c	; BIT 00ch, WA
+	bit 12, wa
 	jr z, LABEL_FDFAC0
 
 LABEL_FDFAB4:
@@ -415325,7 +415325,7 @@ LABEL_FDFAB4:
 
 LABEL_FDFAC0:
 	.byte 0xd1, 0x9a, 0xc5, 0x20	; LD WA, (0C59Ah)
-	.byte 0xd8, 0x33, 0x0e	; BIT 00eh, WA
+	bit 14, wa
 	jr z, LABEL_FDFAD5
 	call LABEL_FE8AFC
 	cp l, 0xFF
@@ -415391,7 +415391,7 @@ LABEL_FDFB11:
 LABEL_FDFB71:
 	pushw iz
 	.byte 0xd1, 0x9c, 0xc5, 0x20	; LD WA, (0C59Ch)
-	.byte 0xd8, 0x33, 0x03	; BIT 003h, WA
+	bit 3, wa
 	jrl z, LABEL_FDFC4D
 	lds iz, 0
 	cp iz, 0x1A
@@ -415492,7 +415492,7 @@ LABEL_FDFC2C:
 
 LABEL_FDFC4D:
 	.byte 0xd1, 0x9c, 0xc5, 0x20	; LD WA, (0C59Ch)
-	.byte 0xd8, 0x33, 0x08	; BIT 008h, WA
+	bit 8, wa
 	jr z, LABEL_FDFC78
 	.byte 0xc1, 0x1a, 0xc4, 0x21	; LD A, (0C41Ah)
 	.byte 0xc1, 0xb4, 0xc2, 0xf1	; CP A, (0C2B4h)
@@ -415517,7 +415517,7 @@ LABEL_FDFC7A:
 	ldb l, 0x0
 	ldb d, 0x1
 	.byte 0xd1, 0x9c, 0xc5, 0x20	; LD WA, (0C59Ch)
-	.byte 0xd8, 0x33, 0x01	; BIT 001h, WA
+	bit 1, wa
 	jr z, LABEL_FDFCC4
 	.byte 0xc1, 0x65, 0xc3, 0x21	; LD A, (0C365h)
 	.byte 0xc1, 0xff, 0xc1, 0xf1	; CP A, (0C1FFh)
@@ -415561,7 +415561,7 @@ LABEL_FDFCC4:
 	and a, c
 	ld l, a
 	lds ix, 0
-	.byte 0xdc, 0xde	; CP IX, 6
+	cps ix, 6
 	jrl nc, LABEL_FDFDEB
 
 LABEL_FDFCFF:
@@ -415578,14 +415578,14 @@ LABEL_FDFCFF:
 	extz xwa
 	add xwa, xbc
 	ld h, (xwa)
-	.byte 0xce, 0x30, 0x07	; RES 007h, H
+	res 7, h
 	ld wa, ix
 	sll wa, 2
 	.byte 0xf1, 0xc2, 0xc2, 0x31	; LDA XBC, 0C2C2h
 	extz xwa
 	add xwa, xbc
 	ld a, (xwa)
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
+	res 7, a
 	cp a, h
 	jr nz, LABEL_FDFD68
 	ld wa, ix
@@ -415618,7 +415618,7 @@ LABEL_FDFD68:
 LABEL_FDFD78:
 	add d, d
 	inc 1, ix
-	.byte 0xdc, 0xde	; CP IX, 6
+	cps ix, 6
 	jrl c, LABEL_FDFCFF
 	jr LABEL_FDFDEB
 
@@ -415644,9 +415644,9 @@ LABEL_FDFD83:
 	.byte 0xf1, 0xce, 0xc2, 0xcf	; BIT 7, (0C2CEh)
 	jr z, LABEL_FDFDEB
 	.byte 0xc1, 0x34, 0xc4, 0x21	; LD A, (0C434h)
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
+	res 7, a
 	.byte 0xc1, 0xce, 0xc2, 0x23	; LD C, (0C2CEh)
-	.byte 0xcb, 0x30, 0x07	; RES 007h, C
+	res 7, c
 	cp c, a
 	jr nz, LABEL_FDFDE5
 	.byte 0xc1, 0x35, 0xc4, 0x21	; LD A, (0C435h)
@@ -415657,13 +415657,13 @@ LABEL_FDFD83:
 	jr z, LABEL_FDFDEB
 
 LABEL_FDFDE5:
-	.byte 0xcd, 0x31, 0x03	; SET 003h, E
-	.byte 0xcf, 0x31, 0x03	; SET 003h, L
+	set 3, e
+	set 3, l
 
 LABEL_FDFDEB:
-	.byte 0xcd, 0xd8	; CP E, 0
+	cps e, 0
 	jr nz, LABEL_FDFDF3
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FDFE05
 
 LABEL_FDFDF3:
@@ -415777,7 +415777,7 @@ LABEL_FDFECF:
 
 LABEL_FDFED8:
 	.byte 0xd1, 0x9c, 0xc5, 0x20	; LD WA, (0C59Ch)
-	.byte 0xd8, 0x33, 0x08	; BIT 008h, WA
+	bit 8, wa
 	jr z, LABEL_FDFF03
 	.byte 0xc1, 0x1a, 0xc4, 0x21	; LD A, (0C41Ah)
 	.byte 0xc1, 0xb4, 0xc2, 0xf1	; CP A, (0C2B4h)
@@ -415800,7 +415800,7 @@ LABEL_FDFF03:
 LABEL_FDFF05:
 	pushw iz
 	lds iz, 0
-	.byte 0xde, 0xdb	; CP IZ, 3
+	cps iz, 3
 	jr nc, LABEL_FDFF5B
 
 LABEL_FDFF0C:
@@ -415839,7 +415839,7 @@ LABEL_FDFF0C:
 
 LABEL_FDFF55:
 	inc 1, iz
-	.byte 0xde, 0xdb	; CP IZ, 3
+	cps iz, 3
 	jr c, LABEL_FDFF0C
 
 LABEL_FDFF5B:
@@ -415865,7 +415865,7 @@ LABEL_FDFF67:
 	ld a, (xwa)
 	.byte 0x82, 0xf1	; CP A, (XDE)
 	jrl z, LABEL_FE0018
-	.byte 0xde, 0xda	; CP IZ, 2
+	cps iz, 2
 	jr nz, LABEL_FDFFA5
 	ld wa, iz
 	.byte 0xf1, 0x02, 0xc2, 0x31	; LDA XBC, 0C202h
@@ -416192,7 +416192,7 @@ LABEL_FE0245:
 	ld xbc, xwa
 	ld xwa, xde
 	call LABEL_FE1F45
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jrl z, LABEL_FE06E0
 
 LABEL_FE0275:
@@ -416308,7 +416308,7 @@ LABEL_FE0354:
 	ld xde, xwa
 	ld xwa, xhl
 	call LABEL_FE5C2C
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE03B5
 	.byte 0xbf, 0x08, 0x30	; LDA XWA, XSP + 008h
 	.byte 0xaf, 0x02, 0x21	; LD XBC, (XSP + 002h)
@@ -416328,7 +416328,7 @@ LABEL_FE03B5:
 	ld xde, xwa
 	ld xwa, xhl
 	call LABEL_FE5C2C
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE03E8
 	.byte 0xbf, 0x08, 0x30	; LDA XWA, XSP + 008h
 	.byte 0xaf, 0x02, 0x21	; LD XBC, (XSP + 002h)
@@ -416348,7 +416348,7 @@ LABEL_FE03E8:
 	ld xde, xwa
 	ld xwa, xhl
 	call LABEL_FE5C2C
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE041B
 	.byte 0xbf, 0x08, 0x30	; LDA XWA, XSP + 008h
 	.byte 0xaf, 0x02, 0x21	; LD XBC, (XSP + 002h)
@@ -416368,7 +416368,7 @@ LABEL_FE041B:
 	ld xde, xwa
 	ld xwa, xhl
 	call LABEL_FE5C2C
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jrl z, LABEL_FE04CE
 	.byte 0xbf, 0x08, 0x30	; LDA XWA, XSP + 008h
 	.byte 0xaf, 0x02, 0x21	; LD XBC, (XSP + 002h)
@@ -416406,7 +416406,7 @@ LABEL_FE0480:
 	ld xde, xwa
 	ld xwa, xhl
 	call LABEL_FE5C2C
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE04B4
 	.byte 0xbf, 0x08, 0x30	; LDA XWA, XSP + 008h
 	.byte 0xaf, 0x02, 0x21	; LD XBC, (XSP + 002h)
@@ -416476,7 +416476,7 @@ LABEL_FE0544:
 	.byte 0xf3, 0xfd, 0xaf, 0x00, 0x00, 0x01	; LD (XSP + 00afh), 001h
 	.byte 0xf3, 0xfd, 0xac, 0x00, 0x30	; LDA XWA, XSP + 00ach
 	call LABEL_FE433E
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jrl z, LABEL_FE06BC
 	.byte 0xf3, 0xfd, 0xac, 0x00, 0x30	; LDA XWA, XSP + 00ach
 	call LABEL_FE1D3C
@@ -416495,7 +416495,7 @@ LABEL_FE0544:
 	ld xde, xwa
 	ld xwa, xhl
 	call LABEL_FE5C2C
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE05A4
 	.byte 0xbf, 0x08, 0x30	; LDA XWA, XSP + 008h
 	.byte 0xaf, 0x02, 0x21	; LD XBC, (XSP + 002h)
@@ -416515,7 +416515,7 @@ LABEL_FE05A4:
 	ld xde, xwa
 	ld xwa, xhl
 	call LABEL_FE5C2C
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE05D7
 	.byte 0xbf, 0x08, 0x30	; LDA XWA, XSP + 008h
 	.byte 0xaf, 0x02, 0x21	; LD XBC, (XSP + 002h)
@@ -416535,7 +416535,7 @@ LABEL_FE05D7:
 	ld xde, xwa
 	ld xwa, xhl
 	call LABEL_FE5C2C
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE060A
 	.byte 0xbf, 0x08, 0x30	; LDA XWA, XSP + 008h
 	.byte 0xaf, 0x02, 0x21	; LD XBC, (XSP + 002h)
@@ -416555,7 +416555,7 @@ LABEL_FE060A:
 	ld xde, xwa
 	ld xwa, xhl
 	call LABEL_FE5C2C
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jrl z, LABEL_FE06BC
 	.byte 0xbf, 0x08, 0x30	; LDA XWA, XSP + 008h
 	.byte 0xaf, 0x02, 0x21	; LD XBC, (XSP + 002h)
@@ -416568,7 +416568,7 @@ LABEL_FE0642:
 	.byte 0x88, 0x01, 0x3f, 0x15	; CP (XWA + 001h), 015h
 	jr nz, LABEL_FE066E
 	.byte 0xd1, 0x98, 0xc5, 0x20	; LD WA, (0C598h)
-	.byte 0xd8, 0x33, 0x01	; BIT 001h, WA
+	bit 1, wa
 	jr z, LABEL_FE065D
 	.byte 0xf3, 0xfd, 0xac, 0x00, 0x30	; LDA XWA, XSP + 00ach
 	call LABEL_FE592A
@@ -416593,7 +416593,7 @@ LABEL_FE066E:
 	ld xde, xwa
 	ld xwa, xhl
 	call LABEL_FE5C2C
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE06A2
 	.byte 0xbf, 0x08, 0x30	; LDA XWA, XSP + 008h
 	.byte 0xaf, 0x02, 0x21	; LD XBC, (XSP + 002h)
@@ -416623,7 +416623,7 @@ LABEL_FE06C7:
 	ld xbc, xwa
 	ld xwa, xde
 	call LABEL_FE1F45
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jrl nz, LABEL_FE0275
 
 LABEL_FE06E0:
@@ -416649,7 +416649,7 @@ LABEL_FE06E7:
 	.byte 0xbf, 0x0e, 0x30	; LDA XWA, XSP + 00eh
 	ld xbc, 0xCC1E
 	call LABEL_FE1E8C
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jrl z, LABEL_FE09BB
 
 LABEL_FE0721:
@@ -416782,7 +416782,7 @@ LABEL_FE0808:
 	ld xde, xwa
 	ld xwa, xhl
 	call LABEL_FE5C2C
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE084F
 	ld xwa, 0xCB7A
 	.byte 0xaf, 0x02, 0x21	; LD XBC, (XSP + 002h)
@@ -416800,7 +416800,7 @@ LABEL_FE084F:
 	ld xde, xwa
 	ld xwa, xhl
 	call LABEL_FE5C2C
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE0882
 	ld xwa, 0xCB7A
 	.byte 0xaf, 0x02, 0x21	; LD XBC, (XSP + 002h)
@@ -416818,7 +416818,7 @@ LABEL_FE0882:
 	ld xde, xwa
 	ld xwa, xhl
 	call LABEL_FE5C2C
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE08B5
 	ld xwa, 0xCB7A
 	.byte 0xaf, 0x02, 0x21	; LD XBC, (XSP + 002h)
@@ -416836,7 +416836,7 @@ LABEL_FE08B5:
 	ld xde, xwa
 	ld xwa, xhl
 	call LABEL_FE5C2C
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jrl z, LABEL_FE09AA
 	ld xwa, 0xCB7A
 	.byte 0xaf, 0x02, 0x21	; LD XBC, (XSP + 002h)
@@ -416857,7 +416857,7 @@ LABEL_FE08EE:
 	ld xde, xwa
 	ld xwa, xhl
 	call LABEL_FE5C2C
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE0923
 	ld xwa, 0xCB7A
 	call LABEL_FE592A
@@ -416869,7 +416869,7 @@ LABEL_FE0923:
 	ld xde, xwa
 	ld xwa, xhl
 	call LABEL_FE5C2C
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE09AA
 	ld xwa, 0xCB7A
 	.byte 0xaf, 0x02, 0x21	; LD XBC, (XSP + 002h)
@@ -416895,7 +416895,7 @@ LABEL_FE095E:
 	ld xde, xwa
 	ld xwa, xhl
 	call LABEL_FE5C2C
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE0992
 	ld xwa, 0xCB7A
 	.byte 0xaf, 0x02, 0x21	; LD XBC, (XSP + 002h)
@@ -416916,7 +416916,7 @@ LABEL_FE09AA:
 	.byte 0xbf, 0x0e, 0x30	; LDA XWA, XSP + 00eh
 	ld xbc, 0xCC1E
 	call LABEL_FE1E8C
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jrl nz, LABEL_FE0721
 
 LABEL_FE09BB:
@@ -416938,7 +416938,7 @@ LABEL_FE09C4:
 	ld xbc, xwa
 	ld xwa, xde
 	call LABEL_FE21DB
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jrl z, LABEL_FE0AFD
 
 LABEL_FE09F0:
@@ -417047,7 +417047,7 @@ LABEL_FE0AE8:
 	ld xbc, xwa
 	ld xwa, xde
 	call LABEL_FE21DB
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jrl nz, LABEL_FE09F0
 
 LABEL_FE0AFD:
@@ -417073,7 +417073,7 @@ RhythmMidi_Dispatcher:
 	ld xbc, xwa
 	ld xwa, xde
 	call LABEL_FE24B1
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jrl z, LABEL_FE0CFD
 
 LABEL_FE0B40:
@@ -417241,7 +417241,7 @@ LABEL_FE0CE8:
 	ld xbc, xwa
 	ld xwa, xde
 	call LABEL_FE24B1
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jrl nz, LABEL_FE0B40
 
 LABEL_FE0CFD:
@@ -417294,7 +417294,7 @@ LABEL_FE0D53:
 	ld xbc, xwa
 	ld xwa, xde
 	call LABEL_FE273A
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jrl z, LABEL_FE0E6C
 
 LABEL_FE0D7F:
@@ -417393,7 +417393,7 @@ LABEL_FE0E57:
 	ld xbc, xwa
 	ld xwa, xde
 	call LABEL_FE273A
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jrl nz, LABEL_FE0D7F
 
 LABEL_FE0E6C:
@@ -417456,7 +417456,7 @@ LABEL_FE0F00:
 	.byte 0xf3, 0xfd, 0xaf, 0x00, 0x00, 0x01	; LD (XSP + 00afh), 001h
 	.byte 0xf3, 0xfd, 0xac, 0x00, 0x30	; LDA XWA, XSP + 00ach
 	call LABEL_FE433E
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jrl z, LABEL_FE104F
 	.byte 0xf3, 0xfd, 0xac, 0x00, 0x30	; LDA XWA, XSP + 00ach
 	call LABEL_FE1D3C
@@ -417472,7 +417472,7 @@ LABEL_FE0F00:
 	ld xde, xwa
 	ld xwa, xhl
 	call LABEL_FE5C2C
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE0F5C
 	.byte 0xbf, 0x08, 0x30	; LDA XWA, XSP + 008h
 	ld xbc, xiz
@@ -417490,7 +417490,7 @@ LABEL_FE0F5C:
 	ld xde, xwa
 	ld xwa, xhl
 	call LABEL_FE5C2C
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE0F88
 	.byte 0xbf, 0x08, 0x30	; LDA XWA, XSP + 008h
 	ld xbc, xiz
@@ -417508,7 +417508,7 @@ LABEL_FE0F88:
 	ld xde, xwa
 	ld xwa, xhl
 	call LABEL_FE5C2C
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE0FB4
 	.byte 0xbf, 0x08, 0x30	; LDA XWA, XSP + 008h
 	ld xbc, xiz
@@ -417526,7 +417526,7 @@ LABEL_FE0FB4:
 	ld xde, xwa
 	ld xwa, xhl
 	call LABEL_FE5C2C
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE104F
 	.byte 0xbf, 0x08, 0x30	; LDA XWA, XSP + 008h
 	ld xbc, xiz
@@ -417538,7 +417538,7 @@ LABEL_FE0FE4:
 	.byte 0x8e, 0x01, 0x3f, 0x15	; CP (XIZ + 001h), 015h
 	jr nz, LABEL_FE100C
 	.byte 0xd1, 0x98, 0xc5, 0x20	; LD WA, (0C598h)
-	.byte 0xd8, 0x33, 0x01	; BIT 001h, WA
+	bit 1, wa
 	jr z, LABEL_FE0FFC
 	.byte 0xf3, 0xfd, 0xac, 0x00, 0x30	; LDA XWA, XSP + 00ach
 	call LABEL_FE592A
@@ -417561,7 +417561,7 @@ LABEL_FE100C:
 	ld xde, xwa
 	ld xwa, xhl
 	call LABEL_FE5C2C
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE1039
 	.byte 0xbf, 0x08, 0x30	; LDA XWA, XSP + 008h
 	ld xbc, xiz
@@ -417602,7 +417602,7 @@ LABEL_FE106A:
 	.byte 0xf3, 0xfd, 0xab, 0x00, 0x00, 0x00	; LD (XSP + 00abh), 000h
 	.byte 0xf3, 0xfd, 0xa8, 0x00, 0x30	; LDA XWA, XSP + 00a8h
 	call LABEL_FE433E
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jrl z, LABEL_FE1186
 	.byte 0xf3, 0xfd, 0xa8, 0x00, 0x30	; LDA XWA, XSP + 00a8h
 	call LABEL_FE1D3C
@@ -417616,7 +417616,7 @@ LABEL_FE106A:
 	ld xde, xwa
 	ld xwa, xhl
 	call LABEL_FE5C2C
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE10CC
 	.byte 0xbf, 0x04, 0x30	; LDA XWA, XSP + 004h
 	ld xbc, xiz
@@ -417632,7 +417632,7 @@ LABEL_FE10CC:
 	ld xde, xwa
 	ld xwa, xhl
 	call LABEL_FE5C2C
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE10F4
 	.byte 0xbf, 0x04, 0x30	; LDA XWA, XSP + 004h
 	ld xbc, xiz
@@ -417648,7 +417648,7 @@ LABEL_FE10F4:
 	ld xde, xwa
 	ld xwa, xhl
 	call LABEL_FE5C2C
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE111C
 	.byte 0xbf, 0x04, 0x30	; LDA XWA, XSP + 004h
 	ld xbc, xiz
@@ -417664,7 +417664,7 @@ LABEL_FE111C:
 	ld xde, xwa
 	ld xwa, xhl
 	call LABEL_FE5C2C
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE1186
 	.byte 0xbf, 0x04, 0x30	; LDA XWA, XSP + 004h
 	ld xbc, xiz
@@ -417681,7 +417681,7 @@ LABEL_FE1147:
 	ld xde, xwa
 	ld xwa, xhl
 	call LABEL_FE5C2C
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE1170
 	.byte 0xbf, 0x04, 0x30	; LDA XWA, XSP + 004h
 	ld xbc, xiz
@@ -417889,7 +417889,7 @@ LABEL_FE131B:
 	ld e, (xwa)
 	ld a, h
 	extz wa
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jrl mi, LABEL_FE1434
 	cp wa, 0xD
 	jrl gt, LABEL_FE1434
@@ -418027,7 +418027,7 @@ LABEL_FE1445:
 	ld xwa, xde
 	lds de, 0
 	call LABEL_FE448E
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jrl z, LABEL_FE1BA3
 	.byte 0xbf, 0x00, 0x00, 0x04	; LD (XSP + 000h:8), 004h
 	.byte 0xbf, 0x00, 0x00, 0xb0	; LD (XSP + 000h:8), 0b0h
@@ -418088,7 +418088,7 @@ LABEL_FE14F8:
 	ld xwa, xde
 	lds de, 0
 	call LABEL_FE448E
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jrl z, LABEL_FE1728
 	.byte 0xbf, 0x00, 0x00, 0x04	; LD (XSP + 000h:8), 004h
 	.byte 0xbf, 0x01, 0x00, 0xb0	; LD (XSP + 001h), 0b0h
@@ -418147,7 +418147,7 @@ LABEL_FE1598:
 	ld xwa, xde
 	lds de, 0
 	call LABEL_FE448E
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE15FB
 	lds de, 0
 	jr LABEL_FE15DE
@@ -418190,7 +418190,7 @@ LABEL_FE15FB:
 	ld xwa, xde
 	lds de, 0
 	call LABEL_FE448E
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE165E
 	lds de, 0
 	jr LABEL_FE1641
@@ -418233,7 +418233,7 @@ LABEL_FE165E:
 	ld xwa, xde
 	lds de, 0
 	call LABEL_FE448E
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE16C1
 	lds de, 0
 	jr LABEL_FE16A4
@@ -418276,7 +418276,7 @@ LABEL_FE16C1:
 	ld xwa, xde
 	lds de, 0
 	call LABEL_FE448E
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jrl z, LABEL_FE1BA3
 	lds de, 0
 	jr LABEL_FE1708
@@ -418321,7 +418321,7 @@ LABEL_FE1728:
 	ld xwa, xde
 	lds de, 0
 	call LABEL_FE448E
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jrl z, LABEL_FE18E1
 	.byte 0xbf, 0x00, 0x00, 0x04	; LD (XSP + 000h:8), 004h
 	.byte 0xbf, 0x01, 0x00, 0xb0	; LD (XSP + 001h), 0b0h
@@ -418371,7 +418371,7 @@ LABEL_FE1797:
 	ld xwa, xde
 	lds de, 0
 	call LABEL_FE448E
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE1817
 	lds de, 0
 	jr LABEL_FE17FA
@@ -418414,7 +418414,7 @@ LABEL_FE1817:
 	ld xwa, xde
 	lds de, 0
 	call LABEL_FE448E
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE187A
 	lds de, 0
 	jr LABEL_FE185D
@@ -418457,7 +418457,7 @@ LABEL_FE187A:
 	ld xwa, xde
 	lds de, 0
 	call LABEL_FE448E
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jrl z, LABEL_FE1BA3
 	lds de, 0
 	jr LABEL_FE18C1
@@ -418501,7 +418501,7 @@ LABEL_FE18E1:
 	ld xwa, xde
 	lds de, 0
 	call LABEL_FE448E
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jrl z, LABEL_FE1A31
 	.byte 0xbf, 0x00, 0x00, 0x04	; LD (XSP + 000h:8), 004h
 	.byte 0xbf, 0x01, 0x00, 0xb0	; LD (XSP + 001h), 0b0h
@@ -418551,7 +418551,7 @@ LABEL_FE194A:
 	ld xwa, xde
 	lds de, 0
 	call LABEL_FE448E
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE19CA
 	lds de, 0
 	jr LABEL_FE19AD
@@ -418594,7 +418594,7 @@ LABEL_FE19CA:
 	ld xwa, xde
 	lds de, 0
 	call LABEL_FE448E
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jrl z, LABEL_FE1BA3
 	lds de, 0
 	jr LABEL_FE1A11
@@ -418638,7 +418638,7 @@ LABEL_FE1A31:
 	ld xwa, xde
 	lds de, 0
 	call LABEL_FE448E
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jrl z, LABEL_FE1B1E
 	.byte 0xbf, 0x00, 0x00, 0x04	; LD (XSP + 000h:8), 004h
 	.byte 0xbf, 0x01, 0x00, 0xb0	; LD (XSP + 001h), 0b0h
@@ -418688,7 +418688,7 @@ LABEL_FE1A9A:
 	ld xwa, xde
 	lds de, 0
 	call LABEL_FE448E
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jrl z, LABEL_FE1BA3
 	lds de, 0
 	jr LABEL_FE1AFE
@@ -418732,7 +418732,7 @@ LABEL_FE1B1E:
 	ld xwa, xde
 	lds de, 0
 	call LABEL_FE448E
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE1BA3
 	.byte 0xbf, 0x00, 0x00, 0x04	; LD (XSP + 000h:8), 004h
 	.byte 0xbf, 0x01, 0x00, 0xb0	; LD (XSP + 001h), 0b0h
@@ -418793,7 +418793,7 @@ LABEL_FE1BA9:
 	ld xwa, xde
 	lds de, 0
 	call LABEL_FE448E
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jrl z, LABEL_FE1CB3
 	.byte 0xbf, 0x00, 0x00, 0x04	; LD (XSP + 000h:8), 004h
 	.byte 0xbf, 0x00, 0x00, 0xb0	; LD (XSP + 000h:8), 0b0h
@@ -418834,7 +418834,7 @@ LABEL_FE1C37:
 	ld xwa, xde
 	lds de, 0
 	call LABEL_FE448E
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE1CB3
 	.byte 0xbf, 0x00, 0x00, 0x04	; LD (XSP + 000h:8), 004h
 	.byte 0xbf, 0x01, 0x00, 0xb0	; LD (XSP + 001h), 0b0h
@@ -419144,7 +419144,7 @@ LABEL_FE1F45:
 	ld a, (xiz)
 	cp a, 0xFF
 	jrl z, LABEL_FE2062
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_FE1F92
 	.byte 0xaf, 0x0a, 0x20	; LD XWA, (XSP + 00ah)
 	ld c, (xiz)
@@ -419195,7 +419195,7 @@ LABEL_FE1FC4:
 	jrl LABEL_FE2062
 
 LABEL_FE1FD6:
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_FE2024
 	.byte 0xc1, 0x63, 0xc3, 0x3f, 0xff	; CP (0C363h), 0ffh
 	jr z, LABEL_FE1FE9
@@ -419224,7 +419224,7 @@ LABEL_FE200C:
 	.byte 0xc1, 0x62, 0xc3, 0x21	; LD A, (0C362h)
 	exts wa
 	add wa, hl
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr ge, LABEL_FE201C
 	lds hl, 1
 	jr LABEL_FE2024
@@ -419431,11 +419431,11 @@ LABEL_FE21DB:
 	ld a, (xwa)
 	cp a, 0xFF
 	jrl z, LABEL_FE232B
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_FE224B
 	.byte 0xaf, 0x0e, 0x20	; LD XWA, (XSP + 00eh)
 	ld c, (xwa)
-	.byte 0xcb, 0x30, 0x03	; RES 003h, C
+	res 3, c
 	.byte 0xaf, 0x0a, 0x20	; LD XWA, (XSP + 00ah)
 	ld (xwa), c
 	.byte 0xaf, 0x0e, 0x20	; LD XWA, (XSP + 00eh)
@@ -419536,7 +419536,7 @@ LABEL_FE22C9:
 	.byte 0xb8, 0x01, 0x47	; LD (XWA + 001h), L
 	.byte 0xaf, 0x0e, 0x20	; LD XWA, (XSP + 00eh)
 	ld c, (xwa)
-	.byte 0xcb, 0x30, 0x03	; RES 003h, C
+	res 3, c
 	.byte 0xaf, 0x0a, 0x20	; LD XWA, (XSP + 00ah)
 	ld (xwa), c
 	.byte 0xaf, 0x0e, 0x20	; LD XWA, (XSP + 00eh)
@@ -419603,7 +419603,7 @@ LABEL_FE236F:
 	.byte 0xb8, 0x01, 0x47	; LD (XWA + 001h), L
 	.byte 0xaf, 0x0e, 0x20	; LD XWA, (XSP + 00eh)
 	ld c, (xwa)
-	.byte 0xcb, 0x30, 0x03	; RES 003h, C
+	res 3, c
 	.byte 0xaf, 0x0a, 0x20	; LD XWA, (XSP + 00ah)
 	ld (xwa), c
 	.byte 0xaf, 0x0e, 0x20	; LD XWA, (XSP + 00eh)
@@ -419736,7 +419736,7 @@ LABEL_FE24B1:
 	ld a, (xwa)
 	cp a, 0xFF
 	jrl z, LABEL_FE25A6
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_FE250E
 	.byte 0xaf, 0x0a, 0x20	; LD XWA, (XSP + 00ah)
 	.byte 0xaf, 0x06, 0x21	; LD XBC, (XSP + 006h)
@@ -419856,7 +419856,7 @@ LABEL_FE25E1:
 	.byte 0xc7, 0xf8, 0xcf, 0x98	; CP IZL, 098h
 	jr ugt, LABEL_FE259D
 	.byte 0x9f, 0x04, 0x20	; LD WA, (XSP + 004h)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_FE259D
 	.byte 0xc7, 0xf8, 0xcf, 0x98	; CP IZL, 098h
 	jr nz, LABEL_FE2619
@@ -420003,7 +420003,7 @@ LABEL_FE273A:
 	ld a, (xwa)
 	cp a, 0xFF
 	jrl z, LABEL_FE2824
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_FE2797
 	.byte 0xaf, 0x0a, 0x20	; LD XWA, (XSP + 00ah)
 	.byte 0xaf, 0x06, 0x21	; LD XBC, (XSP + 006h)
@@ -420116,7 +420116,7 @@ LABEL_FE285B:
 	.byte 0xc7, 0xf8, 0xcf, 0x92	; CP IZL, 092h
 	jr ugt, LABEL_FE281B
 	.byte 0x9f, 0x04, 0x20	; LD WA, (XSP + 004h)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_FE281B
 	.byte 0x9f, 0x02, 0x3f, 0x00, 0x00	; CPW (XSP + 002h), 0000h
 	jr nz, LABEL_FE28ED
@@ -420256,7 +420256,7 @@ LABEL_FE298F:
 	call LABEL_FE5567
 	.byte 0xaf, 0x08, 0x20	; LD XWA, (XSP + 008h)
 	call LABEL_FE5824
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_FE29F3
 	.byte 0xaf, 0x04, 0x20	; LD XWA, (XSP + 004h)
 	lds bc, 0
@@ -420275,7 +420275,7 @@ LABEL_FE298F:
 
 LABEL_FE29F3:
 	.byte 0xd1, 0x98, 0xc5, 0x20	; LD WA, (0C598h)
-	.byte 0xd8, 0x33, 0x09	; BIT 009h, WA
+	bit 9, wa
 	jr z, LABEL_FE2A2F
 	.byte 0xc7, 0xfb, 0xa8	; LD QIZH, 0
 	.byte 0xc7, 0xfb, 0xcf, 0x10	; CP QIZH, 010h
@@ -420325,7 +420325,7 @@ LABEL_FE2A45:
 	call LABEL_FE5567
 	.byte 0xaf, 0x08, 0x20	; LD XWA, (XSP + 008h)
 	call LABEL_FE5A40
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_FE2A90
 	call LABEL_FE8A81
 	cp l, 0xFF
@@ -420388,7 +420388,7 @@ LABEL_FE2AD0:
 
 LABEL_FE2B09:
 	.byte 0xd1, 0x98, 0xc5, 0x20	; LD WA, (0C598h)
-	.byte 0xd8, 0x33, 0x09	; BIT 009h, WA
+	bit 9, wa
 	jr z, LABEL_FE2B47
 	.byte 0xc7, 0xfb, 0xa8	; LD QIZH, 0
 	.byte 0xc7, 0xfb, 0xcf, 0x10	; CP QIZH, 010h
@@ -420532,7 +420532,7 @@ LABEL_FE2D74:
 	.byte 0xe3, 0xfd, 0xae, 0x00, 0x21	; LD XBC, (XSP + 00aeh)
 	lds de, 4
 	call LABEL_FE4962
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jrl z, LABEL_FE3011
 	.byte 0xc3, 0xfd, 0xa6, 0x00, 0x21	; LD A, (XSP + 00a6h)
 	ld e, a
@@ -420545,7 +420545,7 @@ LABEL_FE2D74:
 	call LABEL_FE5567
 	.byte 0xbf, 0x02, 0x30	; LDA XWA, XSP + 002h
 	call LABEL_FE5824
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_FE2E04
 	.byte 0xe3, 0xfd, 0xa8, 0x00, 0x20	; LD XWA, (XSP + 00a8h)
 	lds bc, 0
@@ -420564,7 +420564,7 @@ LABEL_FE2D74:
 
 LABEL_FE2E04:
 	.byte 0xd1, 0x98, 0xc5, 0x20	; LD WA, (0C598h)
-	.byte 0xd8, 0x33, 0x09	; BIT 009h, WA
+	bit 9, wa
 	jrl z, LABEL_FE3011
 	.byte 0xc7, 0xfb, 0xa8	; LD QIZH, 0
 	.byte 0xc7, 0xfb, 0xcf, 0x10	; CP QIZH, 010h
@@ -420602,7 +420602,7 @@ LABEL_FE2E4B:
 	.byte 0xe3, 0xfd, 0xae, 0x00, 0x21	; LD XBC, (XSP + 00aeh)
 	lds de, 4
 	call LABEL_FE4962
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE2EB9
 	.byte 0xc3, 0xfd, 0xa6, 0x00, 0x21	; LD A, (XSP + 00a6h)
 	ld e, a
@@ -420615,7 +420615,7 @@ LABEL_FE2E4B:
 	call LABEL_FE5567
 	.byte 0xbf, 0x02, 0x30	; LDA XWA, XSP + 002h
 	call LABEL_FE5A40
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_FE2EB9
 	call LABEL_FE8A81
 	cp l, 0xFF
@@ -420637,7 +420637,7 @@ LABEL_FE2EB9:
 	.byte 0xe3, 0xfd, 0xae, 0x00, 0x21	; LD XBC, (XSP + 00aeh)
 	lds de, 0
 	call LABEL_FE4962
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jrl z, LABEL_FE3011
 	.byte 0xbf, 0x02, 0x30	; LDA XWA, XSP + 002h
 	ld xbc, xwa
@@ -420695,7 +420695,7 @@ LABEL_FE2F32:
 
 LABEL_FE2F73:
 	.byte 0xd1, 0x98, 0xc5, 0x20	; LD WA, (0C598h)
-	.byte 0xd8, 0x33, 0x09	; BIT 009h, WA
+	bit 9, wa
 	jr z, LABEL_FE2FB9
 	.byte 0xc7, 0xfb, 0xa8	; LD QIZH, 0
 	.byte 0xc7, 0xfb, 0xcf, 0x10	; CP QIZH, 010h
@@ -420773,7 +420773,7 @@ LABEL_FE301A:
 	call LABEL_FE5567
 	.byte 0xaf, 0x08, 0x20	; LD XWA, (XSP + 008h)
 	call LABEL_FE5824
-	.byte 0xcf, 0xd9	; CP L, 1
+	cps l, 1
 	jr nz, LABEL_FE306D
 	.byte 0xaf, 0x04, 0x20	; LD XWA, (XSP + 004h)
 	lds bc, 0
@@ -420792,7 +420792,7 @@ LABEL_FE301A:
 
 LABEL_FE306D:
 	.byte 0xd1, 0x98, 0xc5, 0x20	; LD WA, (0C598h)
-	.byte 0xd8, 0x33, 0x09	; BIT 009h, WA
+	bit 9, wa
 	jr z, LABEL_FE30AB
 	.byte 0xc7, 0xfb, 0xa8	; LD QIZH, 0
 	.byte 0xc7, 0xfb, 0xcf, 0x10	; CP QIZH, 010h
@@ -420837,7 +420837,7 @@ LABEL_FE30C1:
 	call LABEL_FE5567
 	.byte 0xaf, 0x08, 0x20	; LD XWA, (XSP + 008h)
 	call LABEL_FE5A40
-	.byte 0xcf, 0xd9	; CP L, 1
+	cps l, 1
 	jr nz, LABEL_FE30FB
 	call LABEL_FE8A81
 	cp l, 0xFF
@@ -420861,7 +420861,7 @@ LABEL_FE30FB:
 	.byte 0xaf, 0x08, 0x20	; LD XWA, (XSP + 008h)
 	call LABEL_FE4EF9
 	.byte 0xd1, 0x98, 0xc5, 0x20	; LD WA, (0C598h)
-	.byte 0xd8, 0x33, 0x09	; BIT 009h, WA
+	bit 9, wa
 	jr z, LABEL_FE3155
 	.byte 0xc7, 0xfb, 0xa8	; LD QIZH, 0
 	.byte 0xc7, 0xfb, 0xcf, 0x10	; CP QIZH, 010h
@@ -420945,14 +420945,14 @@ LABEL_FE31BA:
 	.byte 0xe3, 0xfd, 0xae, 0x00, 0x21	; LD XBC, (XSP + 00aeh)
 	lds de, 4
 	call LABEL_FE4726
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jrl z, LABEL_FE33BA
 	.byte 0xbf, 0x02, 0x30	; LDA XWA, XSP + 002h
 	lds bc, 0
 	call LABEL_FE5567
 	.byte 0xbf, 0x02, 0x30	; LDA XWA, XSP + 002h
 	call LABEL_FE5824
-	.byte 0xcf, 0xd9	; CP L, 1
+	cps l, 1
 	jr nz, LABEL_FE3233
 	.byte 0xe3, 0xfd, 0xa8, 0x00, 0x20	; LD XWA, (XSP + 00a8h)
 	lds bc, 0
@@ -420971,7 +420971,7 @@ LABEL_FE31BA:
 
 LABEL_FE3233:
 	.byte 0xd1, 0x98, 0xc5, 0x20	; LD WA, (0C598h)
-	.byte 0xd8, 0x33, 0x09	; BIT 009h, WA
+	bit 9, wa
 	jrl z, LABEL_FE33BA
 	.byte 0xc7, 0xfb, 0xa8	; LD QIZH, 0
 	.byte 0xc7, 0xfb, 0xcf, 0x10	; CP QIZH, 010h
@@ -421010,14 +421010,14 @@ LABEL_FE327E:
 	.byte 0xe3, 0xfd, 0xae, 0x00, 0x21	; LD XBC, (XSP + 00aeh)
 	lds de, 4
 	call LABEL_FE4726
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE32D5
 	.byte 0xbf, 0x02, 0x30	; LDA XWA, XSP + 002h
 	lds bc, 2
 	call LABEL_FE5567
 	.byte 0xbf, 0x02, 0x30	; LDA XWA, XSP + 002h
 	call LABEL_FE5A40
-	.byte 0xcf, 0xd9	; CP L, 1
+	cps l, 1
 	jr nz, LABEL_FE32D5
 	call LABEL_FE8A81
 	cp l, 0xFF
@@ -421039,7 +421039,7 @@ LABEL_FE32D5:
 	.byte 0xe3, 0xfd, 0xae, 0x00, 0x21	; LD XBC, (XSP + 00aeh)
 	lds de, 0
 	call LABEL_FE4726
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jrl z, LABEL_FE33BA
 	.byte 0xbf, 0x02, 0x30	; LDA XWA, XSP + 002h
 	ld xde, xwa
@@ -421056,7 +421056,7 @@ LABEL_FE32D5:
 	ld xwa, xde
 	call LABEL_FE4EF9
 	.byte 0xd1, 0x98, 0xc5, 0x20	; LD WA, (0C598h)
-	.byte 0xd8, 0x33, 0x09	; BIT 009h, WA
+	bit 9, wa
 	jr z, LABEL_FE3362
 	.byte 0xc7, 0xfb, 0xa8	; LD QIZH, 0
 	.byte 0xc7, 0xfb, 0xcf, 0x10	; CP QIZH, 010h
@@ -421134,7 +421134,7 @@ LABEL_FE33C3:
 	call LABEL_FE5567
 	.byte 0xaf, 0x08, 0x20	; LD XWA, (XSP + 008h)
 	call LABEL_FE5824
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_FE3416
 	.byte 0xaf, 0x04, 0x20	; LD XWA, (XSP + 004h)
 	lds bc, 0
@@ -421153,7 +421153,7 @@ LABEL_FE33C3:
 
 LABEL_FE3416:
 	.byte 0xd1, 0x98, 0xc5, 0x20	; LD WA, (0C598h)
-	.byte 0xd8, 0x33, 0x09	; BIT 009h, WA
+	bit 9, wa
 	jr z, LABEL_FE3454
 	.byte 0xc7, 0xfb, 0xa8	; LD QIZH, 0
 	.byte 0xc7, 0xfb, 0xcf, 0x10	; CP QIZH, 010h
@@ -421198,7 +421198,7 @@ LABEL_FE346A:
 	call LABEL_FE5567
 	.byte 0xaf, 0x08, 0x20	; LD XWA, (XSP + 008h)
 	call LABEL_FE5A40
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_FE34A4
 	call LABEL_FE8A81
 	cp l, 0xFF
@@ -421222,7 +421222,7 @@ LABEL_FE34A4:
 	.byte 0xaf, 0x08, 0x20	; LD XWA, (XSP + 008h)
 	call LABEL_FE4EF9
 	.byte 0xd1, 0x98, 0xc5, 0x20	; LD WA, (0C598h)
-	.byte 0xd8, 0x33, 0x09	; BIT 009h, WA
+	bit 9, wa
 	jr z, LABEL_FE34FE
 	.byte 0xc7, 0xfb, 0xa8	; LD QIZH, 0
 	.byte 0xc7, 0xfb, 0xcf, 0x10	; CP QIZH, 010h
@@ -421306,14 +421306,14 @@ LABEL_FE3563:
 	.byte 0xe3, 0xfd, 0xae, 0x00, 0x21	; LD XBC, (XSP + 00aeh)
 	lds de, 4
 	call LABEL_FE4962
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jrl z, LABEL_FE3763
 	.byte 0xbf, 0x02, 0x30	; LDA XWA, XSP + 002h
 	lds bc, 0
 	call LABEL_FE5567
 	.byte 0xbf, 0x02, 0x30	; LDA XWA, XSP + 002h
 	call LABEL_FE5824
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_FE35DC
 	.byte 0xe3, 0xfd, 0xa8, 0x00, 0x20	; LD XWA, (XSP + 00a8h)
 	lds bc, 0
@@ -421332,7 +421332,7 @@ LABEL_FE3563:
 
 LABEL_FE35DC:
 	.byte 0xd1, 0x98, 0xc5, 0x20	; LD WA, (0C598h)
-	.byte 0xd8, 0x33, 0x09	; BIT 009h, WA
+	bit 9, wa
 	jrl z, LABEL_FE3763
 	.byte 0xc7, 0xfb, 0xa8	; LD QIZH, 0
 	.byte 0xc7, 0xfb, 0xcf, 0x10	; CP QIZH, 010h
@@ -421371,14 +421371,14 @@ LABEL_FE3627:
 	.byte 0xe3, 0xfd, 0xae, 0x00, 0x21	; LD XBC, (XSP + 00aeh)
 	lds de, 4
 	call LABEL_FE4962
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE367E
 	.byte 0xbf, 0x02, 0x30	; LDA XWA, XSP + 002h
 	lds bc, 2
 	call LABEL_FE5567
 	.byte 0xbf, 0x02, 0x30	; LDA XWA, XSP + 002h
 	call LABEL_FE5A40
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_FE367E
 	call LABEL_FE8A81
 	cp l, 0xFF
@@ -421400,7 +421400,7 @@ LABEL_FE367E:
 	.byte 0xe3, 0xfd, 0xae, 0x00, 0x21	; LD XBC, (XSP + 00aeh)
 	lds de, 0
 	call LABEL_FE4962
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jrl z, LABEL_FE3763
 	.byte 0xbf, 0x02, 0x30	; LDA XWA, XSP + 002h
 	ld xde, xwa
@@ -421417,7 +421417,7 @@ LABEL_FE367E:
 	ld xwa, xde
 	call LABEL_FE4EF9
 	.byte 0xd1, 0x98, 0xc5, 0x20	; LD WA, (0C598h)
-	.byte 0xd8, 0x33, 0x09	; BIT 009h, WA
+	bit 9, wa
 	jr z, LABEL_FE370B
 	.byte 0xc7, 0xfb, 0xa8	; LD QIZH, 0
 	.byte 0xc7, 0xfb, 0xcf, 0x10	; CP QIZH, 010h
@@ -421501,9 +421501,9 @@ LABEL_FE376C:
 	call LABEL_FE5567
 	.byte 0xaf, 0x06, 0x20	; LD XWA, (XSP + 006h)
 	call LABEL_FE5824
-	.byte 0xcf, 0xda	; CP L, 2
+	cps l, 2
 	jr z, LABEL_FE37A5
-	.byte 0xcf, 0xdb	; CP L, 3
+	cps l, 3
 	jr nz, LABEL_FE37CB
 
 LABEL_FE37A5:
@@ -421545,9 +421545,9 @@ LABEL_FE37DE:
 	call LABEL_FE5567
 	.byte 0xaf, 0x06, 0x20	; LD XWA, (XSP + 006h)
 	call LABEL_FE5A40
-	.byte 0xcf, 0xda	; CP L, 2
+	cps l, 2
 	jr z, LABEL_FE3810
-	.byte 0xcf, 0xdb	; CP L, 3
+	cps l, 3
 	jr nz, LABEL_FE3829
 
 LABEL_FE3810:
@@ -421642,16 +421642,16 @@ LABEL_FE38C7:
 	.byte 0xe3, 0xfd, 0xac, 0x00, 0x21	; LD XBC, (XSP + 00ach)
 	lds de, 4
 	call LABEL_FE4726
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jrl z, LABEL_FE3A4C
 	.byte 0xb7, 0x30	; LDA XWA, XSP
 	lds bc, 0
 	call LABEL_FE5567
 	.byte 0xb7, 0x30	; LDA XWA, XSP
 	call LABEL_FE5824
-	.byte 0xcf, 0xda	; CP L, 2
+	cps l, 2
 	jr z, LABEL_FE390F
-	.byte 0xcf, 0xdb	; CP L, 3
+	cps l, 3
 	jrl nz, LABEL_FE3A4C
 
 LABEL_FE390F:
@@ -421681,16 +421681,16 @@ LABEL_FE3943:
 	.byte 0xe3, 0xfd, 0xac, 0x00, 0x21	; LD XBC, (XSP + 00ach)
 	lds de, 4
 	call LABEL_FE4726
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE39B2
 	.byte 0xb7, 0x30	; LDA XWA, XSP
 	lds bc, 2
 	call LABEL_FE5567
 	.byte 0xb7, 0x30	; LDA XWA, XSP
 	call LABEL_FE5A40
-	.byte 0xcf, 0xda	; CP L, 2
+	cps l, 2
 	jr z, LABEL_FE397E
-	.byte 0xcf, 0xdb	; CP L, 3
+	cps l, 3
 	jr nz, LABEL_FE399D
 
 LABEL_FE397E:
@@ -421722,7 +421722,7 @@ LABEL_FE39B2:
 	.byte 0xe3, 0xfd, 0xac, 0x00, 0x21	; LD XBC, (XSP + 00ach)
 	lds de, 0
 	call LABEL_FE4726
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE3A4C
 	.byte 0xb7, 0x30	; LDA XWA, XSP
 	ld xde, xwa
@@ -421846,7 +421846,7 @@ LABEL_FE3AD3:
 	ld xbc, xde
 	lds de, 0
 	call LABEL_FE4726
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jrl z, LABEL_FE3B82
 	.byte 0xb7, 0x30	; LDA XWA, XSP
 	ld xde, xwa
@@ -421929,7 +421929,7 @@ LABEL_FE3BB4:
 	ld xwa, xde
 	lds de, 0
 	call LABEL_FE4962
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jrl z, LABEL_FE3C75
 	.byte 0xb7, 0x30	; LDA XWA, XSP
 	ld xbc, xwa
@@ -422032,7 +422032,7 @@ LABEL_FE3CBC:
 	ld xwa, xde
 	lds de, 0
 	call LABEL_FE4726
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE3D24
 	.byte 0xb7, 0x30	; LDA XWA, XSP
 	ld xde, xwa
@@ -422244,7 +422244,7 @@ LABEL_FE3EA1:
 	ld xwa, xde
 	lds de, 0
 	call LABEL_FE4726
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jrl z, LABEL_FE3FB0
 	.byte 0xbf, 0x06, 0x30	; LDA XWA, XSP + 006h
 	ld xde, xwa
@@ -422429,7 +422429,7 @@ LABEL_FE40BD:
 	ld xwa, xde
 	lds de, 0
 	call LABEL_FE4962
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jrl z, LABEL_FE4187
 	.byte 0xbf, 0x06, 0x30	; LDA XWA, XSP + 006h
 	ld xbc, xwa
@@ -422835,7 +422835,7 @@ LABEL_FE448E:
 	push xiz
 	ld l, e
 	ld xde, xbc
-	.byte 0xcf, 0xdc	; CP L, 4
+	cps l, 4
 	jr ugt, LABEL_FE449F
 	.byte 0x8f, 0x0c, 0x3f, 0x20	; CP (XSP + 00ch), 020h
 	jr ule, LABEL_FE44A8
@@ -422934,7 +422934,7 @@ LABEL_FE4513:
 	exts xiy
 	add xiy, xix
 	.byte 0x8d, 0x05, 0x23	; LD C, (XIY + 005h)
-	.byte 0xcb, 0x30, 0x07	; RES 007h, C
+	res 7, c
 	.byte 0xbe, 0x02, 0x43	; LD (XIZ + 002h), C
 	ld iy, hl
 	extz xiy
@@ -423050,7 +423050,7 @@ LABEL_FE4613:
 	exts xiy
 	add xiy, xix
 	.byte 0x8d, 0x05, 0x23	; LD C, (XIY + 005h)
-	.byte 0xcb, 0x30, 0x07	; RES 007h, C
+	res 7, c
 	.byte 0xbe, 0x02, 0x43	; LD (XIZ + 002h), C
 	ld iy, hl
 	extz xiy
@@ -423108,7 +423108,7 @@ LABEL_FE4726:
 	dec 4, xsp
 	push xiz
 	ld xix, xbc
-	.byte 0xcd, 0xdc	; CP E, 4
+	cps e, 4
 	jr ugt, LABEL_FE4735
 	.byte 0x8f, 0x0c, 0x3f, 0x20	; CP (XSP + 00ch), 020h
 	jr ule, LABEL_FE473E
@@ -423197,7 +423197,7 @@ LABEL_FE47A4:
 	exts xbc
 	add xbc, xiy
 	.byte 0x89, 0x05, 0x23	; LD C, (XBC + 005h)
-	.byte 0xcb, 0x30, 0x07	; RES 007h, C
+	res 7, c
 	.byte 0xbe, 0x02, 0x43	; LD (XIZ + 002h), C
 	ld bc, hl
 	extz xbc
@@ -423297,7 +423297,7 @@ LABEL_FE4878:
 	exts xbc
 	add xbc, xiy
 	.byte 0x89, 0x05, 0x23	; LD C, (XBC + 005h)
-	.byte 0xcb, 0x30, 0x07	; RES 007h, C
+	res 7, c
 	.byte 0xbe, 0x02, 0x43	; LD (XIZ + 002h), C
 	ld bc, hl
 	extz xbc
@@ -423354,7 +423354,7 @@ LABEL_FE4962:
 	ld l, e
 	.byte 0xf3, 0xfd, 0xac, 0x00, 0x61	; LD (XSP + 00ach), XBC
 	.byte 0xf3, 0xfd, 0xb0, 0x00, 0x60	; LD (XSP + 00b0h), XWA
-	.byte 0xcf, 0xdc	; CP L, 4
+	cps l, 4
 	jr ugt, LABEL_FE4980
 	.byte 0xc3, 0xfd, 0xb8, 0x00, 0x3f, 0x20	; CP (XSP + 00b8h), 020h
 	jr ule, LABEL_FE498E
@@ -423526,7 +423526,7 @@ LABEL_FE4AB3:
 	exts xwa
 	add xwa, xde
 	.byte 0x88, 0x05, 0x21	; LD A, (XWA + 005h)
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
+	res 7, a
 	.byte 0xbc, 0x02, 0x41	; LD (XIX + 002h), A
 	ld wa, hl
 	extz xwa
@@ -423741,7 +423741,7 @@ LABEL_FE4C41:
 	inc 4, xbc
 	.byte 0xaf, 0x0c, 0x81	; ADD XBC, (XSP + 00ch)
 	.byte 0x89, 0x02, 0x21	; LD A, (XBC + 002h)
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
+	res 7, a
 	.byte 0xf3, 0x07, 0xec, 0xe8, 0x41	; LD (XHL + DE), A
 	.byte 0xc7, 0xfb, 0x89	; LD A, QIZH
 	extz wa
@@ -423837,7 +423837,7 @@ LABEL_FE4DFC:
 	sla wa, 3
 	.byte 0xf1, 0x6f, 0xc6, 0x31	; LDA XBC, 0C66Fh
 	.byte 0xc3, 0x07, 0xe4, 0xe0, 0x21	; LD A, (XBC + WA)
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
+	res 7, a
 	.byte 0xba, 0x02, 0x41	; LD (XDE + 002h), A
 	.byte 0x9f, 0x02, 0x20	; LD WA, (XSP + 002h)
 	extz xwa
@@ -423872,7 +423872,7 @@ LABEL_FE4DFC:
 	extz bc
 	ld xwa, xde
 	calr LABEL_FE421B
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_FE4EE1
 	.byte 0x9f, 0x02, 0x20	; LD WA, (XSP + 002h)
 	extz xwa
@@ -423942,11 +423942,11 @@ LABEL_FE4F49:
 	jr nz, LABEL_FE4FA7
 	.byte 0xaf, 0x1a, 0x20	; LD XWA, (XSP + 01ah)
 	.byte 0x88, 0x03, 0x21	; LD A, (XWA + 003h)
-	.byte 0xc9, 0xda	; CP A, 2
+	cps a, 2
 	jr z, LABEL_FE4F8D
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	jr z, LABEL_FE4F79
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_FE4FA1
 	.byte 0xd1, 0x01, 0xcf, 0x20	; LD WA, (0CF01h)
 	extz xwa
@@ -423990,7 +423990,7 @@ LABEL_FE4FA7:
 	extz wa
 	.byte 0xf2, 0x70, 0x8f, 0xee, 0x31	; LDA XBC, 0EE8F70h
 	.byte 0xc3, 0x07, 0xe4, 0xe0, 0x21	; LD A, (XBC + WA)
-	.byte 0xc9, 0x31, 0x03	; SET 003h, A
+	set 3, a
 	.byte 0xbf, 0x02, 0x41	; LD (XSP + 002h), A
 	jr LABEL_FE4FFD
 
@@ -424045,7 +424045,7 @@ LABEL_FE5002:
 	.byte 0xaf, 0x1a, 0x20	; LD XWA, (XSP + 01ah)
 	.byte 0xf3, 0x07, 0xe0, 0xe4, 0x30	; LDA XWA, XWA + BC
 	.byte 0x88, 0x02, 0x21	; LD A, (XWA + 002h)
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
+	res 7, a
 	.byte 0xbf, 0x07, 0x41	; LD (XSP + 007h), A
 	ld wa, iz
 	.byte 0xd8, 0x09, 0x05, 0x00	; MULS_WA 0005h
@@ -424083,7 +424083,7 @@ LABEL_FE50B6:
 	extz wa
 	cp iz, wa
 	jrl lt, LABEL_FE5002
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	.byte 0xf2, 0x79, 0xbf, 0xfe, 0xea	; CALL GT, LABEL_FEBF79
 
 LABEL_FE50CA:
@@ -424123,7 +424123,7 @@ LABEL_FE50E0:
 	or a, 0x90
 	extz wa
 	call LABEL_FD268F
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr ge, LABEL_FE5180
 	ld wa, iz
 	extz xwa
@@ -424198,7 +424198,7 @@ LABEL_FE5180:
 	inc 2, iz
 
 LABEL_FE51CA:
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr z, LABEL_FE51F2
 	cp iz, 0xF
 	jr ugt, LABEL_FE51E3
@@ -424299,7 +424299,7 @@ LABEL_FE5228:
 	inc 4, xde
 	.byte 0xaf, 0x06, 0x82	; ADD XDE, (XSP + 006h)
 	.byte 0x8a, 0x02, 0x21	; LD A, (XDE + 002h)
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
+	res 7, a
 	ld (xhl), a
 	ld wa, bc
 	.byte 0xd8, 0x08, 0x05, 0x00	; MULW_WA 0005h
@@ -424327,9 +424327,9 @@ LABEL_FE5228:
 	inc 1, bc
 
 LABEL_FE52F5:
-	.byte 0xd9, 0xd8	; CP BC, 0
+	cps bc, 0
 	jr z, LABEL_FE5320
-	.byte 0xd9, 0xde	; CP BC, 6
+	cps bc, 6
 	jr z, LABEL_FE530B
 	.byte 0xaf, 0x06, 0x20	; LD XWA, (XSP + 006h)
 	.byte 0x88, 0x01, 0x21	; LD A, (XWA + 001h)
@@ -424423,7 +424423,7 @@ LABEL_FE5358:
 	inc 4, xde
 	.byte 0xaf, 0x06, 0x82	; ADD XDE, (XSP + 006h)
 	.byte 0x8a, 0x02, 0x21	; LD A, (XDE + 002h)
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
+	res 7, a
 	ld (xhl), a
 	ld wa, bc
 	.byte 0xd8, 0x08, 0x05, 0x00	; MULW_WA 0005h
@@ -424451,9 +424451,9 @@ LABEL_FE5358:
 	inc 1, bc
 
 LABEL_FE540F:
-	.byte 0xd9, 0xd8	; CP BC, 0
+	cps bc, 0
 	jr z, LABEL_FE543A
-	.byte 0xd9, 0xde	; CP BC, 6
+	cps bc, 6
 	jr z, LABEL_FE5425
 	.byte 0xaf, 0x06, 0x20	; LD XWA, (XSP + 006h)
 	.byte 0x88, 0x01, 0x21	; LD A, (XWA + 001h)
@@ -424546,7 +424546,7 @@ LABEL_FE546E:
 	inc 4, xde
 	.byte 0xaf, 0x06, 0x82	; ADD XDE, (XSP + 006h)
 	.byte 0x8a, 0x02, 0x21	; LD A, (XDE + 002h)
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
+	res 7, a
 	ld (xhl), a
 	ld wa, bc
 	.byte 0xd8, 0x08, 0x05, 0x00	; MULW_WA 0005h
@@ -424574,9 +424574,9 @@ LABEL_FE546E:
 	inc 1, bc
 
 LABEL_FE5525:
-	.byte 0xd9, 0xd8	; CP BC, 0
+	cps bc, 0
 	jr z, LABEL_FE5550
-	.byte 0xd9, 0xde	; CP BC, 6
+	cps bc, 6
 	jr z, LABEL_FE553B
 	.byte 0xaf, 0x06, 0x20	; LD XWA, (XSP + 006h)
 	.byte 0x88, 0x01, 0x21	; LD A, (XWA + 001h)
@@ -424722,7 +424722,7 @@ LABEL_FE5594:
 	inc 4, xbc
 	.byte 0xaf, 0x0c, 0x81	; ADD XBC, (XSP + 00ch)
 	.byte 0x89, 0x02, 0x21	; LD A, (XBC + 002h)
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
+	res 7, a
 	.byte 0xf3, 0x07, 0xec, 0xe8, 0x41	; LD (XHL + DE), A
 	.byte 0xc7, 0xfb, 0x89	; LD A, QIZH
 	extz wa
@@ -424818,7 +424818,7 @@ LABEL_FE574F:
 	sla wa, 3
 	.byte 0xf1, 0x7f, 0xca, 0x31	; LDA XBC, 0CA7Fh
 	.byte 0xc3, 0x07, 0xe4, 0xe0, 0x21	; LD A, (XBC + WA)
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
+	res 7, a
 	.byte 0xba, 0x02, 0x41	; LD (XDE + 002h), A
 	.byte 0x9f, 0x02, 0x20	; LD WA, (XSP + 002h)
 	extz xwa
@@ -424885,37 +424885,37 @@ LABEL_FE582E:
 	sla bc, 3
 	.byte 0xf1, 0x7a, 0xca, 0x34	; LDA XIX, 0CA7Ah
 	.byte 0xc3, 0x07, 0xf0, 0xe4, 0x23	; LD C, (XIX + BC)
-	.byte 0xcb, 0xd8	; CP C, 0
+	cps c, 0
 	jr z, LABEL_FE5866
-	.byte 0xcb, 0xd9	; CP C, 1
+	cps c, 1
 	jr z, LABEL_FE585A
-	.byte 0xcb, 0xda	; CP C, 2
+	cps c, 2
 	jr z, LABEL_FE5852
-	.byte 0xcb, 0xdb	; CP C, 3
+	cps c, 3
 	jr nz, LABEL_FE5876
 	ldb e, 0x3
 	jr LABEL_FE5878
 
 LABEL_FE5852:
-	.byte 0xcd, 0xdb	; CP E, 3
+	cps e, 3
 	jr z, LABEL_FE5878
 	ldb e, 0x2
 	jr LABEL_FE5878
 
 LABEL_FE585A:
-	.byte 0xcd, 0xdb	; CP E, 3
+	cps e, 3
 	jr z, LABEL_FE5878
-	.byte 0xcd, 0xda	; CP E, 2
+	cps e, 2
 	jr z, LABEL_FE5878
 	ldb e, 0x1
 	jr LABEL_FE5878
 
 LABEL_FE5866:
-	.byte 0xcd, 0xdb	; CP E, 3
+	cps e, 3
 	jr z, LABEL_FE5878
-	.byte 0xcd, 0xda	; CP E, 2
+	cps e, 2
 	jr z, LABEL_FE5878
-	.byte 0xcd, 0xd9	; CP E, 1
+	cps e, 1
 	jr z, LABEL_FE5878
 	ldb e, 0x0
 	jr LABEL_FE5878
@@ -424956,7 +424956,7 @@ LABEL_FE5897:
 	sla wa, 3
 	.byte 0xf1, 0x7f, 0xca, 0x31	; LDA XBC, 0CA7Fh
 	.byte 0xc3, 0x07, 0xe4, 0xe0, 0x21	; LD A, (XBC + WA)
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
+	res 7, a
 	ld (xix), a
 	ld wa, hl
 	add wa, wa
@@ -425073,7 +425073,7 @@ LABEL_FE59D0:
 	.byte 0xc7, 0xf9, 0x89	; LD A, IZH
 	.byte 0xc1, 0x2f, 0xcd, 0xd1	; XOR A, (0CD2Fh)
 	.byte 0xc7, 0xfb, 0x99	; LD QIZH, A
-	.byte 0xcd, 0xd8	; CP E, 0
+	cps e, 0
 	jr z, LABEL_FE59FF
 	.byte 0xc7, 0xfa, 0x89	; LD A, QIZL
 	ld c, a
@@ -425131,37 +425131,37 @@ LABEL_FE5A48:
 	sla bc, 3
 	.byte 0xf1, 0x7a, 0xca, 0x34	; LDA XIX, 0CA7Ah
 	.byte 0xc3, 0x07, 0xf0, 0xe4, 0x23	; LD C, (XIX + BC)
-	.byte 0xcb, 0xd8	; CP C, 0
+	cps c, 0
 	jr z, LABEL_FE5A80
-	.byte 0xcb, 0xd9	; CP C, 1
+	cps c, 1
 	jr z, LABEL_FE5A74
-	.byte 0xcb, 0xda	; CP C, 2
+	cps c, 2
 	jr z, LABEL_FE5A6C
-	.byte 0xcb, 0xdb	; CP C, 3
+	cps c, 3
 	jr nz, LABEL_FE5A8E
 	ldb l, 0x2
 	jr LABEL_FE5A8E
 
 LABEL_FE5A6C:
-	.byte 0xcf, 0xdb	; CP L, 3
+	cps l, 3
 	jr z, LABEL_FE5A8E
 	ldb l, 0x2
 	jr LABEL_FE5A8E
 
 LABEL_FE5A74:
-	.byte 0xcf, 0xdb	; CP L, 3
+	cps l, 3
 	jr z, LABEL_FE5A8E
-	.byte 0xcf, 0xda	; CP L, 2
+	cps l, 2
 	jr z, LABEL_FE5A8E
 	ldb l, 0x1
 	jr LABEL_FE5A8E
 
 LABEL_FE5A80:
-	.byte 0xcf, 0xdb	; CP L, 3
+	cps l, 3
 	jr z, LABEL_FE5A8E
-	.byte 0xcf, 0xda	; CP L, 2
+	cps l, 2
 	jr z, LABEL_FE5A8E
-	.byte 0xcf, 0xd9	; CP L, 1
+	cps l, 1
 	jr z, LABEL_FE5A8E
 	ldb l, 0x0
 
@@ -425198,7 +425198,7 @@ LABEL_FE5AAD:
 	sla wa, 3
 	.byte 0xf1, 0x7f, 0xca, 0x31	; LDA XBC, 0CA7Fh
 	.byte 0xc3, 0x07, 0xe4, 0xe0, 0x21	; LD A, (XBC + WA)
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
+	res 7, a
 	ld (xix), a
 	ld wa, de
 	add wa, wa
@@ -425297,7 +425297,7 @@ LABEL_FE5B45:
 	inc 4, xde
 	.byte 0xaf, 0x04, 0x82	; ADD XDE, (XSP + 004h)
 	.byte 0x8a, 0x02, 0x21	; LD A, (XDE + 002h)
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
+	res 7, a
 	ld (xhl), a
 	ld wa, bc
 	.byte 0xd8, 0x08, 0x03, 0x00	; MULW_WA 0003h
@@ -425317,9 +425317,9 @@ LABEL_FE5B45:
 	inc 1, bc
 
 LABEL_FE5BEE:
-	.byte 0xd9, 0xd8	; CP BC, 0
+	cps bc, 0
 	jr z, LABEL_FE5C19
-	.byte 0xd9, 0xde	; CP BC, 6
+	cps bc, 6
 	jr z, LABEL_FE5C04
 	.byte 0xaf, 0x04, 0x20	; LD XWA, (XSP + 004h)
 	.byte 0x88, 0x01, 0x21	; LD A, (XWA + 001h)
@@ -425391,7 +425391,7 @@ LABEL_FE5C4C:
 	add xix, xde
 	.byte 0xaf, 0x04, 0x21	; LD XBC, (XSP + 004h)
 	ld c, (xbc)
-	.byte 0xcb, 0x30, 0x07	; RES 007h, C
+	res 7, c
 	.byte 0x84, 0xfb	; CP (XIX), C
 	jr ugt, LABEL_FE5CA9
 	ld bc, wa
@@ -425548,11 +425548,11 @@ LABEL_FE5DCA:
 	.byte 0xbf, 0x08, 0x00, 0x02	; LD (XSP + 008h), 002h
 	ld xwa, 0x2205
 	call LABEL_FCD437
-	.byte 0xdb, 0xdb	; CP HL, 3
+	cps hl, 3
 	jr z, LABEL_FE5E10
-	.byte 0xdb, 0xd9	; CP HL, 1
+	cps hl, 1
 	jr z, LABEL_FE5E08
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_FE5E16
 	.byte 0xbf, 0x0a, 0x00, 0x01	; LD (XSP + 00ah), 001h
 	ldb a, 0x2
@@ -425606,7 +425606,7 @@ LABEL_FE5E1E:
 	extz bc
 	ld wa, de
 	calr LABEL_FE66F8
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_FE5EBC
 	.byte 0x8f, 0x04, 0x3f, 0x00	; CP (XSP + 004h), 000h
 	jr z, LABEL_FE5EE6
@@ -425630,13 +425630,13 @@ LABEL_FE5E9A:
 
 LABEL_FE5EA8:
 	.byte 0xc7, 0xfb, 0x89	; LD A, QIZH
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr ge, LABEL_FE5EE6
 
 LABEL_FE5EAF:
 	.byte 0xc7, 0xfb, 0xc8, 0x0c	; ADD QIZH, 00ch
 	.byte 0xc7, 0xfb, 0x89	; LD A, QIZH
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr lt, LABEL_FE5EAF
 	jr LABEL_FE5EE6
 
@@ -425677,7 +425677,7 @@ LABEL_FE5EE6:
 	extz bc
 	ld wa, de
 	calr LABEL_FE66F8
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_FE5F62
 	.byte 0x8f, 0x06, 0x3f, 0x00	; CP (XSP + 006h), 000h
 	jr z, LABEL_FE5F56
@@ -425701,13 +425701,13 @@ LABEL_FE5F36:
 
 LABEL_FE5F44:
 	.byte 0xc7, 0xfb, 0x89	; LD A, QIZH
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr ge, LABEL_FE5F56
 
 LABEL_FE5F4B:
 	.byte 0xc7, 0xfb, 0xc8, 0x0c	; ADD QIZH, 00ch
 	.byte 0xc7, 0xfb, 0x89	; LD A, QIZH
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr lt, LABEL_FE5F4B
 
 LABEL_FE5F56:
@@ -425791,11 +425791,11 @@ LABEL_FE5FC1:
 	ldb a, 0x2
 	ld xwa, 0x2205
 	call LABEL_FCD437
-	.byte 0xdb, 0xdb	; CP HL, 3
+	cps hl, 3
 	jr z, LABEL_FE6033
-	.byte 0xdb, 0xd9	; CP HL, 1
+	cps hl, 1
 	jr z, LABEL_FE6029
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_FE603B
 	.byte 0xbf, 0x08, 0x00, 0x01	; LD (XSP + 008h), 001h
 	.byte 0xbf, 0x06, 0x00, 0x02	; LD (XSP + 006h), 002h
@@ -425872,13 +425872,13 @@ LABEL_FE60BF:
 
 LABEL_FE60CD:
 	.byte 0xc7, 0xfb, 0x89	; LD A, QIZH
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr ge, LABEL_FE60DF
 
 LABEL_FE60D4:
 	.byte 0xc7, 0xfb, 0xc8, 0x0c	; ADD QIZH, 00ch
 	.byte 0xc7, 0xfb, 0x89	; LD A, QIZH
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr lt, LABEL_FE60D4
 
 LABEL_FE60DF:
@@ -425890,7 +425890,7 @@ LABEL_FE60DF:
 	extz bc
 	ld wa, de
 	calr LABEL_FE66F8
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE6120
 	.byte 0x8f, 0x08, 0x3f, 0xff	; CP (XSP + 008h), 0ffh
 	jr z, LABEL_FE6120
@@ -425970,11 +425970,11 @@ LABEL_FE614F:
 	ldb a, 0x2
 	ld xwa, 0x2205
 	call LABEL_FCD437
-	.byte 0xdb, 0xdb	; CP HL, 3
+	cps hl, 3
 	jr z, LABEL_FE61D3
-	.byte 0xdb, 0xd9	; CP HL, 1
+	cps hl, 1
 	jr z, LABEL_FE61CB
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_FE61D9
 	.byte 0xbf, 0x06, 0x00, 0x01	; LD (XSP + 006h), 001h
 	ldb a, 0x2
@@ -426037,7 +426037,7 @@ LABEL_FE61E1:
 	extz bc
 	ld wa, de
 	calr LABEL_FE66F8
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_FE62A0
 	.byte 0x8f, 0x04, 0x3f, 0x00	; CP (XSP + 004h), 000h
 	jr z, LABEL_FE6294
@@ -426061,13 +426061,13 @@ LABEL_FE6274:
 
 LABEL_FE6282:
 	.byte 0xc7, 0xfb, 0x89	; LD A, QIZH
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr ge, LABEL_FE6294
 
 LABEL_FE6289:
 	.byte 0xc7, 0xfb, 0xc8, 0x0c	; ADD QIZH, 00ch
 	.byte 0xc7, 0xfb, 0x89	; LD A, QIZH
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr lt, LABEL_FE6289
 
 LABEL_FE6294:
@@ -426155,11 +426155,11 @@ LABEL_FE62F9:
 	ldb a, 0x2
 	ld xwa, 0x2205
 	call LABEL_FCD437
-	.byte 0xdb, 0xdb	; CP HL, 3
+	cps hl, 3
 	jr z, LABEL_FE637D
-	.byte 0xdb, 0xd9	; CP HL, 1
+	cps hl, 1
 	jr z, LABEL_FE6375
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_FE6383
 	.byte 0xbf, 0x06, 0x00, 0x01	; LD (XSP + 006h), 001h
 	ldb a, 0x2
@@ -426222,7 +426222,7 @@ LABEL_FE638B:
 	extz bc
 	ld wa, de
 	calr LABEL_FE66F8
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_FE644A
 	.byte 0x8f, 0x04, 0x3f, 0x00	; CP (XSP + 004h), 000h
 	jr z, LABEL_FE643E
@@ -426246,13 +426246,13 @@ LABEL_FE641E:
 
 LABEL_FE642C:
 	.byte 0xc7, 0xfb, 0x89	; LD A, QIZH
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr ge, LABEL_FE643E
 
 LABEL_FE6433:
 	.byte 0xc7, 0xfb, 0xc8, 0x0c	; ADD QIZH, 00ch
 	.byte 0xc7, 0xfb, 0x89	; LD A, QIZH
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr lt, LABEL_FE6433
 
 LABEL_FE643E:
@@ -426426,13 +426426,13 @@ LABEL_FE6558:
 	inc 4, xde
 	add xde, xwa
 	.byte 0xba, 0x02, 0x46	; LD (XDE + 002h), H
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE65D6
 	add h, l
 	ld c, h
 	cp c, 0x7F
 	jr ule, LABEL_FE65D6
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr le, LABEL_FE65C7
 	ld c, h
 	cp c, 0x7F
@@ -426447,13 +426447,13 @@ LABEL_FE65BB:
 
 LABEL_FE65C7:
 	ld c, h
-	.byte 0xcb, 0xd8	; CP C, 0
+	cps c, 0
 	jr ge, LABEL_FE65D6
 
 LABEL_FE65CD:
 	add h, 0xC
 	ld c, h
-	.byte 0xcb, 0xd8	; CP C, 0
+	cps c, 0
 	jr lt, LABEL_FE65CD
 
 LABEL_FE65D6:
@@ -426503,11 +426503,11 @@ LABEL_FE6622:
 	.byte 0xf1, 0x6a, 0xc6, 0x33	; LDA XHL, 0C66Ah
 	.byte 0xc3, 0x07, 0xec, 0xe0, 0xfb	; CP (XHL + WA), C
 	jr nz, LABEL_FE669F
-	.byte 0xcd, 0xda	; CP E, 2
+	cps e, 2
 	jr z, LABEL_FE6674
-	.byte 0xcd, 0xd9	; CP E, 1
+	cps e, 1
 	jr z, LABEL_FE6660
-	.byte 0xcd, 0xd8	; CP E, 0
+	cps e, 0
 	jr nz, LABEL_FE6688
 	.byte 0xc1, 0x42, 0xcd, 0x21	; LD A, (0CD42h)
 	extz wa
@@ -426592,7 +426592,7 @@ LABEL_FE66F8:
 	ldb l, 0x0
 	ld xwa, 0xC0
 	call LABEL_FCD437
-	.byte 0xdb, 0xd9	; CP HL, 1
+	cps hl, 1
 	jr nz, LABEL_FE671B
 	.byte 0x87, 0x3f, 0x78	; CP (XSP), 078h
 	jr nz, LABEL_FE6717
@@ -426628,7 +426628,7 @@ LABEL_FE672F:
 	.byte 0xf3, 0xfd, 0x4d, 0x01, 0x00, 0x00	; LD (XSP + 014dh), 000h
 	.byte 0xf3, 0xfd, 0x4a, 0x01, 0x30	; LDA XWA, XSP + 014ah
 	call LABEL_FE4289
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jrl z, LABEL_FE6DE0
 	.byte 0xf3, 0xfd, 0x4a, 0x01, 0x35	; LDA XIY, XSP + 014ah
 	.byte 0xf3, 0xfd, 0xa6, 0x00, 0x34	; LDA XIX, XSP + 00a6h
@@ -426655,17 +426655,17 @@ LABEL_FE678C:
 	cp de, wa
 	jr c, LABEL_FE6773
 	.byte 0xc3, 0xfd, 0xf2, 0x01, 0x21	; LD A, (XSP + 01f2h)
-	.byte 0xc9, 0xda	; CP A, 2
+	cps a, 2
 	jrl z, LABEL_FE6BDB
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	jrl z, LABEL_FE6A1A
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jrl nz, LABEL_FE6DE0
 	.byte 0xc3, 0xfd, 0xf0, 0x01, 0x21	; LD A, (XSP + 01f0h)
 	.byte 0xc3, 0xfd, 0xee, 0x01, 0xd1	; XOR A, (XSP + 01eeh)
 	.byte 0xc3, 0xfd, 0xee, 0x01, 0xc1	; AND A, (XSP + 01eeh)
 	.byte 0xc7, 0xfb, 0x99	; LD QIZH, A
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jrl z, LABEL_FE6883
 	.byte 0xc7, 0xfb, 0x33, 0x00	; BIT 000h, QIZH
 	jr z, LABEL_FE67F1
@@ -426677,7 +426677,7 @@ LABEL_FE678C:
 	ld xde, xwa
 	ld xwa, xhl
 	call LABEL_FE5C2C
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE67F1
 	.byte 0xbf, 0x02, 0x30	; LDA XWA, XSP + 002h
 	.byte 0xf1, 0x64, 0xc3, 0x31	; LDA XBC, 0C364h
@@ -426695,7 +426695,7 @@ LABEL_FE67F1:
 	ld xde, xwa
 	ld xwa, xhl
 	call LABEL_FE5C2C
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE6820
 	.byte 0xbf, 0x02, 0x30	; LDA XWA, XSP + 002h
 	.byte 0xf1, 0x64, 0xc3, 0x31	; LDA XBC, 0C364h
@@ -426713,7 +426713,7 @@ LABEL_FE6820:
 	ld xde, xwa
 	ld xwa, xhl
 	call LABEL_FE5C2C
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE684F
 	.byte 0xbf, 0x02, 0x30	; LDA XWA, XSP + 002h
 	.byte 0xf1, 0x64, 0xc3, 0x31	; LDA XBC, 0C364h
@@ -426731,7 +426731,7 @@ LABEL_FE684F:
 	ld xde, xwa
 	ld xwa, xhl
 	call LABEL_FE5C2C
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE6883
 	.byte 0xbf, 0x02, 0x30	; LDA XWA, XSP + 002h
 	.byte 0xf1, 0x64, 0xc3, 0x31	; LDA XBC, 0C364h
@@ -426744,7 +426744,7 @@ LABEL_FE6883:
 	.byte 0xc3, 0xfd, 0xee, 0x01, 0xd1	; XOR A, (XSP + 01eeh)
 	.byte 0xc3, 0xfd, 0xf0, 0x01, 0xc1	; AND A, (XSP + 01f0h)
 	.byte 0xc7, 0xfb, 0x99	; LD QIZH, A
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jrl z, LABEL_FE6957
 	.byte 0xc7, 0xfb, 0x33, 0x00	; BIT 000h, QIZH
 	jr z, LABEL_FE68C9
@@ -426756,7 +426756,7 @@ LABEL_FE6883:
 	ld xde, xwa
 	ld xwa, xhl
 	call LABEL_FE5C2C
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE68C9
 	.byte 0xbf, 0x02, 0x30	; LDA XWA, XSP + 002h
 	.byte 0xf1, 0xfe, 0xc1, 0x31	; LDA XBC, 0C1FEh
@@ -426774,7 +426774,7 @@ LABEL_FE68C9:
 	ld xde, xwa
 	ld xwa, xhl
 	call LABEL_FE5C2C
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE68F8
 	.byte 0xbf, 0x02, 0x30	; LDA XWA, XSP + 002h
 	.byte 0xf1, 0xfe, 0xc1, 0x31	; LDA XBC, 0C1FEh
@@ -426792,7 +426792,7 @@ LABEL_FE68F8:
 	ld xde, xwa
 	ld xwa, xhl
 	call LABEL_FE5C2C
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE6927
 	.byte 0xbf, 0x02, 0x30	; LDA XWA, XSP + 002h
 	.byte 0xf1, 0xfe, 0xc1, 0x31	; LDA XBC, 0C1FEh
@@ -426810,7 +426810,7 @@ LABEL_FE6927:
 	ld xde, xwa
 	ld xwa, xhl
 	call LABEL_FE5C2C
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE6957
 	.byte 0xbf, 0x02, 0x30	; LDA XWA, XSP + 002h
 	.byte 0xf1, 0xfe, 0xc1, 0x31	; LDA XBC, 0C1FEh
@@ -426821,7 +426821,7 @@ LABEL_FE6957:
 	.byte 0xc3, 0xfd, 0xf0, 0x01, 0x21	; LD A, (XSP + 01f0h)
 	.byte 0xc3, 0xfd, 0xee, 0x01, 0xc1	; AND A, (XSP + 01eeh)
 	.byte 0xc7, 0xfb, 0x99	; LD QIZH, A
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jrl z, LABEL_FE6DE0
 	.byte 0xc7, 0xfb, 0x33, 0x00	; BIT 000h, QIZH
 	jr z, LABEL_FE6994
@@ -426933,7 +426933,7 @@ LABEL_FE6A61:
 	ld xde, xwa
 	ld xwa, xhl
 	call LABEL_FE5C2C
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE6ABC
 	.byte 0xbf, 0x02, 0x30	; LDA XWA, XSP + 002h
 	.byte 0xf1, 0xfe, 0xc1, 0x31	; LDA XBC, 0C1FEh
@@ -426951,7 +426951,7 @@ LABEL_FE6ABC:
 	ld xde, xwa
 	ld xwa, xhl
 	call LABEL_FE5C2C
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE6AEB
 	.byte 0xbf, 0x02, 0x30	; LDA XWA, XSP + 002h
 	.byte 0xf1, 0xfe, 0xc1, 0x31	; LDA XBC, 0C1FEh
@@ -426969,7 +426969,7 @@ LABEL_FE6AEB:
 	ld xde, xwa
 	ld xwa, xhl
 	call LABEL_FE5C2C
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jrl z, LABEL_FE6DE0
 	.byte 0xbf, 0x02, 0x30	; LDA XWA, XSP + 002h
 	.byte 0xf1, 0xfe, 0xc1, 0x31	; LDA XBC, 0C1FEh
@@ -426992,7 +426992,7 @@ LABEL_FE6B1F:
 	ld xde, xwa
 	ld xwa, xhl
 	call LABEL_FE5C2C
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE6B60
 	.byte 0xbf, 0x02, 0x30	; LDA XWA, XSP + 002h
 	.byte 0xf1, 0x64, 0xc3, 0x31	; LDA XBC, 0C364h
@@ -427010,7 +427010,7 @@ LABEL_FE6B60:
 	ld xde, xwa
 	ld xwa, xhl
 	call LABEL_FE5C2C
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE6B8F
 	.byte 0xbf, 0x02, 0x30	; LDA XWA, XSP + 002h
 	.byte 0xf1, 0x64, 0xc3, 0x31	; LDA XBC, 0C364h
@@ -427028,7 +427028,7 @@ LABEL_FE6B8F:
 	ld xde, xwa
 	ld xwa, xhl
 	call LABEL_FE5C2C
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE6BBE
 	.byte 0xbf, 0x02, 0x30	; LDA XWA, XSP + 002h
 	.byte 0xf1, 0x64, 0xc3, 0x31	; LDA XBC, 0C364h
@@ -427066,7 +427066,7 @@ LABEL_FE6BFF:
 	ld xwa, xde
 	lds de, 4
 	call LABEL_FE4726
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE6C49
 
 LABEL_FE6C1A:
@@ -427084,7 +427084,7 @@ LABEL_FE6C1A:
 	ld xwa, xde
 	lds de, 4
 	call LABEL_FE4726
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_FE6C1A
 
 LABEL_FE6C49:
@@ -427101,7 +427101,7 @@ LABEL_FE6C49:
 	ld xwa, xix
 	ld xbc, xhl
 	call LABEL_FE5C2C
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jrl z, LABEL_FE6DE0
 	.byte 0xbf, 0x02, 0x30	; LDA XWA, XSP + 002h
 	ld xde, xwa
@@ -427111,7 +427111,7 @@ LABEL_FE6C49:
 	ld xwa, xde
 	lds de, 4
 	call LABEL_FE4962
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jrl z, LABEL_FE6DE0
 	.byte 0xbf, 0x02, 0x30	; LDA XWA, XSP + 002h
 	ld xhl, xwa
@@ -427126,7 +427126,7 @@ LABEL_FE6C49:
 	call LABEL_FE5567
 	.byte 0xbf, 0x02, 0x30	; LDA XWA, XSP + 002h
 	call LABEL_FE5A40
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jrl nz, LABEL_FE6DE0
 	call LABEL_FE8AFC
 	cp l, 0xFF
@@ -427156,7 +427156,7 @@ LABEL_FE6CF9:
 	ld xwa, xde
 	lds de, 4
 	call LABEL_FE4726
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jrl z, LABEL_FE6DE0
 
 LABEL_FE6D15:
@@ -427174,7 +427174,7 @@ LABEL_FE6D15:
 	ld xwa, xde
 	lds de, 4
 	call LABEL_FE4726
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_FE6D15
 	jrl LABEL_FE6DE0
 
@@ -427196,7 +427196,7 @@ LABEL_FE6D47:
 	ld xwa, xix
 	ld xbc, xhl
 	call LABEL_FE5C2C
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE6DE0
 	.byte 0xbf, 0x02, 0x30	; LDA XWA, XSP + 002h
 	ld xde, xwa
@@ -427206,7 +427206,7 @@ LABEL_FE6D47:
 	ld xwa, xde
 	lds de, 4
 	call LABEL_FE4962
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE6DE0
 	.byte 0xbf, 0x02, 0x30	; LDA XWA, XSP + 002h
 	ld xhl, xwa
@@ -427221,7 +427221,7 @@ LABEL_FE6D47:
 	call LABEL_FE5567
 	.byte 0xbf, 0x02, 0x30	; LDA XWA, XSP + 002h
 	call LABEL_FE5A40
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_FE6DE0
 	call LABEL_FE8AFC
 	cp l, 0xFF
@@ -427235,7 +427235,7 @@ LABEL_FE6DE0:
 	.byte 0xf3, 0xfd, 0x4d, 0x01, 0x00, 0x01	; LD (XSP + 014dh), 001h
 	.byte 0xf3, 0xfd, 0x4a, 0x01, 0x30	; LDA XWA, XSP + 014ah
 	call LABEL_FE4289
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jrl z, LABEL_FE7456
 	.byte 0xf3, 0xfd, 0x4a, 0x01, 0x30	; LDA XWA, XSP + 014ah
 	.byte 0xf1, 0xfe, 0xc1, 0x31	; LDA XBC, 0C1FEh
@@ -427266,17 +427266,17 @@ LABEL_FE6E35:
 	cp de, wa
 	jr c, LABEL_FE6E1C
 	.byte 0xc3, 0xfd, 0xf2, 0x01, 0x21	; LD A, (XSP + 01f2h)
-	.byte 0xc9, 0xda	; CP A, 2
+	cps a, 2
 	jrl z, LABEL_FE7284
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	jrl z, LABEL_FE70C3
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jrl nz, LABEL_FE7456
 	.byte 0xc3, 0xfd, 0xf0, 0x01, 0x21	; LD A, (XSP + 01f0h)
 	.byte 0xc3, 0xfd, 0xee, 0x01, 0xd1	; XOR A, (XSP + 01eeh)
 	.byte 0xc3, 0xfd, 0xee, 0x01, 0xc1	; AND A, (XSP + 01eeh)
 	.byte 0xc7, 0xfb, 0x99	; LD QIZH, A
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jrl z, LABEL_FE6F2C
 	.byte 0xc7, 0xfb, 0x33, 0x00	; BIT 000h, QIZH
 	jr z, LABEL_FE6E9A
@@ -427288,7 +427288,7 @@ LABEL_FE6E35:
 	ld xde, xwa
 	ld xwa, xhl
 	call LABEL_FE5C2C
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE6E9A
 	.byte 0xbf, 0x02, 0x30	; LDA XWA, XSP + 002h
 	.byte 0xf1, 0x64, 0xc3, 0x31	; LDA XBC, 0C364h
@@ -427306,7 +427306,7 @@ LABEL_FE6E9A:
 	ld xde, xwa
 	ld xwa, xhl
 	call LABEL_FE5C2C
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE6EC9
 	.byte 0xbf, 0x02, 0x30	; LDA XWA, XSP + 002h
 	.byte 0xf1, 0x64, 0xc3, 0x31	; LDA XBC, 0C364h
@@ -427324,7 +427324,7 @@ LABEL_FE6EC9:
 	ld xde, xwa
 	ld xwa, xhl
 	call LABEL_FE5C2C
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE6EF8
 	.byte 0xbf, 0x02, 0x30	; LDA XWA, XSP + 002h
 	.byte 0xf1, 0x64, 0xc3, 0x31	; LDA XBC, 0C364h
@@ -427342,7 +427342,7 @@ LABEL_FE6EF8:
 	ld xde, xwa
 	ld xwa, xhl
 	call LABEL_FE5C2C
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE6F2C
 	.byte 0xbf, 0x02, 0x30	; LDA XWA, XSP + 002h
 	.byte 0xf1, 0x64, 0xc3, 0x31	; LDA XBC, 0C364h
@@ -427355,7 +427355,7 @@ LABEL_FE6F2C:
 	.byte 0xc3, 0xfd, 0xee, 0x01, 0xd1	; XOR A, (XSP + 01eeh)
 	.byte 0xc3, 0xfd, 0xf0, 0x01, 0xc1	; AND A, (XSP + 01f0h)
 	.byte 0xc7, 0xfb, 0x99	; LD QIZH, A
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jrl z, LABEL_FE7000
 	.byte 0xc7, 0xfb, 0x33, 0x00	; BIT 000h, QIZH
 	jr z, LABEL_FE6F72
@@ -427367,7 +427367,7 @@ LABEL_FE6F2C:
 	ld xde, xwa
 	ld xwa, xhl
 	call LABEL_FE5C2C
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE6F72
 	.byte 0xbf, 0x02, 0x30	; LDA XWA, XSP + 002h
 	.byte 0xf1, 0xfe, 0xc1, 0x31	; LDA XBC, 0C1FEh
@@ -427385,7 +427385,7 @@ LABEL_FE6F72:
 	ld xde, xwa
 	ld xwa, xhl
 	call LABEL_FE5C2C
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE6FA1
 	.byte 0xbf, 0x02, 0x30	; LDA XWA, XSP + 002h
 	.byte 0xf1, 0xfe, 0xc1, 0x31	; LDA XBC, 0C1FEh
@@ -427403,7 +427403,7 @@ LABEL_FE6FA1:
 	ld xde, xwa
 	ld xwa, xhl
 	call LABEL_FE5C2C
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE6FD0
 	.byte 0xbf, 0x02, 0x30	; LDA XWA, XSP + 002h
 	.byte 0xf1, 0xfe, 0xc1, 0x31	; LDA XBC, 0C1FEh
@@ -427421,7 +427421,7 @@ LABEL_FE6FD0:
 	ld xde, xwa
 	ld xwa, xhl
 	call LABEL_FE5C2C
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE7000
 	.byte 0xbf, 0x02, 0x30	; LDA XWA, XSP + 002h
 	.byte 0xf1, 0xfe, 0xc1, 0x31	; LDA XBC, 0C1FEh
@@ -427432,7 +427432,7 @@ LABEL_FE7000:
 	.byte 0xc3, 0xfd, 0xf0, 0x01, 0x21	; LD A, (XSP + 01f0h)
 	.byte 0xc3, 0xfd, 0xee, 0x01, 0xc1	; AND A, (XSP + 01eeh)
 	.byte 0xc7, 0xfb, 0x99	; LD QIZH, A
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jrl z, LABEL_FE7456
 	.byte 0xc7, 0xfb, 0x33, 0x00	; BIT 000h, QIZH
 	jr z, LABEL_FE703D
@@ -427544,7 +427544,7 @@ LABEL_FE710A:
 	ld xde, xwa
 	ld xwa, xhl
 	call LABEL_FE5C2C
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE7165
 	.byte 0xbf, 0x02, 0x30	; LDA XWA, XSP + 002h
 	.byte 0xf1, 0xfe, 0xc1, 0x31	; LDA XBC, 0C1FEh
@@ -427562,7 +427562,7 @@ LABEL_FE7165:
 	ld xde, xwa
 	ld xwa, xhl
 	call LABEL_FE5C2C
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE7194
 	.byte 0xbf, 0x02, 0x30	; LDA XWA, XSP + 002h
 	.byte 0xf1, 0xfe, 0xc1, 0x31	; LDA XBC, 0C1FEh
@@ -427580,7 +427580,7 @@ LABEL_FE7194:
 	ld xde, xwa
 	ld xwa, xhl
 	call LABEL_FE5C2C
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jrl z, LABEL_FE7281
 	.byte 0xbf, 0x02, 0x30	; LDA XWA, XSP + 002h
 	.byte 0xf1, 0xfe, 0xc1, 0x31	; LDA XBC, 0C1FEh
@@ -427603,7 +427603,7 @@ LABEL_FE71C8:
 	ld xde, xwa
 	ld xwa, xhl
 	call LABEL_FE5C2C
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE7209
 	.byte 0xbf, 0x02, 0x30	; LDA XWA, XSP + 002h
 	.byte 0xf1, 0x64, 0xc3, 0x31	; LDA XBC, 0C364h
@@ -427621,7 +427621,7 @@ LABEL_FE7209:
 	ld xde, xwa
 	ld xwa, xhl
 	call LABEL_FE5C2C
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE7238
 	.byte 0xbf, 0x02, 0x30	; LDA XWA, XSP + 002h
 	.byte 0xf1, 0x64, 0xc3, 0x31	; LDA XBC, 0C364h
@@ -427639,7 +427639,7 @@ LABEL_FE7238:
 	ld xde, xwa
 	ld xwa, xhl
 	call LABEL_FE5C2C
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE7267
 	.byte 0xbf, 0x02, 0x30	; LDA XWA, XSP + 002h
 	.byte 0xf1, 0x64, 0xc3, 0x31	; LDA XBC, 0C364h
@@ -427679,7 +427679,7 @@ LABEL_FE72A8:
 	ld xwa, xde
 	lds de, 4
 	call LABEL_FE4726
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE72F2
 
 LABEL_FE72C3:
@@ -427697,7 +427697,7 @@ LABEL_FE72C3:
 	ld xwa, xde
 	lds de, 4
 	call LABEL_FE4726
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_FE72C3
 
 LABEL_FE72F2:
@@ -427764,7 +427764,7 @@ LABEL_FE738A:
 	ld xwa, xde
 	lds de, 4
 	call LABEL_FE4726
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jrl z, LABEL_FE7456
 
 LABEL_FE73A6:
@@ -427782,7 +427782,7 @@ LABEL_FE73A6:
 	ld xwa, xde
 	lds de, 4
 	call LABEL_FE4726
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_FE73A6
 	jr LABEL_FE7456
 
@@ -427804,7 +427804,7 @@ LABEL_FE73D7:
 	ld xwa, xix
 	ld xbc, xhl
 	call LABEL_FE5C2C
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE7456
 	.byte 0xbf, 0x02, 0x30	; LDA XWA, XSP + 002h
 	ld xde, xwa
@@ -427814,14 +427814,14 @@ LABEL_FE73D7:
 	ld xwa, xde
 	lds de, 4
 	call LABEL_FE4962
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE7456
 	.byte 0xbf, 0x02, 0x30	; LDA XWA, XSP + 002h
 	lds bc, 2
 	call LABEL_FE5567
 	.byte 0xbf, 0x02, 0x30	; LDA XWA, XSP + 002h
 	call LABEL_FE5A40
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr nz, LABEL_FE7456
 	call LABEL_FE8AFC
 	cp l, 0xFF
@@ -427849,7 +427849,7 @@ LABEL_FE746E:
 	jrl z, LABEL_FE7607
 
 LABEL_FE747A:
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jrl nz, LABEL_FE75E7
 	.byte 0xf1, 0x88, 0xc4, 0xcc	; BIT 4, (0C488h)
 	jrl z, LABEL_FE75E7
@@ -427857,7 +427857,7 @@ LABEL_FE747A:
 	.byte 0xf3, 0xfd, 0xa7, 0x00, 0x00, 0x01	; LD (XSP + 00a7h), 001h
 	.byte 0xf3, 0xfd, 0xa4, 0x00, 0x30	; LDA XWA, XSP + 00a4h
 	call LABEL_FE433E
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jrl z, LABEL_FE7607
 	.byte 0xf3, 0xfd, 0xa4, 0x00, 0x30	; LDA XWA, XSP + 00a4h
 	call LABEL_FE1D3C
@@ -427873,7 +427873,7 @@ LABEL_FE747A:
 	ld xde, xwa
 	ld xwa, xhl
 	call LABEL_FE5C2C
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE74DE
 	.byte 0xb7, 0x30	; LDA XWA, XSP
 	.byte 0xf1, 0x64, 0xc3, 0x31	; LDA XBC, 0C364h
@@ -427891,7 +427891,7 @@ LABEL_FE74DE:
 	ld xde, xwa
 	ld xwa, xhl
 	call LABEL_FE5C2C
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE750B
 	.byte 0xb7, 0x30	; LDA XWA, XSP
 	.byte 0xf1, 0x64, 0xc3, 0x31	; LDA XBC, 0C364h
@@ -427909,7 +427909,7 @@ LABEL_FE750B:
 	ld xde, xwa
 	ld xwa, xhl
 	call LABEL_FE5C2C
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE7538
 	.byte 0xb7, 0x30	; LDA XWA, XSP
 	.byte 0xf1, 0x64, 0xc3, 0x31	; LDA XBC, 0C364h
@@ -427927,7 +427927,7 @@ LABEL_FE7538:
 	ld xde, xwa
 	ld xwa, xhl
 	call LABEL_FE5C2C
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jrl z, LABEL_FE75E5
 	.byte 0xb7, 0x30	; LDA XWA, XSP
 	.byte 0xf1, 0x64, 0xc3, 0x31	; LDA XBC, 0C364h
@@ -427940,7 +427940,7 @@ LABEL_FE756F:
 	.byte 0xc1, 0x65, 0xc3, 0x3f, 0x15	; CP (0C365h), 015h
 	jr nz, LABEL_FE759A
 	.byte 0xd1, 0x98, 0xc5, 0x20	; LD WA, (0C598h)
-	.byte 0xd8, 0x33, 0x01	; BIT 001h, WA
+	bit 1, wa
 	jr z, LABEL_FE7588
 	.byte 0xf3, 0xfd, 0xa4, 0x00, 0x30	; LDA XWA, XSP + 00a4h
 	call LABEL_FE592A
@@ -427963,7 +427963,7 @@ LABEL_FE759A:
 	ld xde, xwa
 	ld xwa, xhl
 	call LABEL_FE5C2C
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE75CC
 	.byte 0xb7, 0x30	; LDA XWA, XSP
 	.byte 0xf1, 0x64, 0xc3, 0x31	; LDA XBC, 0C364h
@@ -428032,7 +428032,7 @@ LABEL_FE7640:
 	ld xwa, xde
 	lds de, 0
 	call LABEL_FE4726
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE768D
 	.byte 0xb7, 0x30	; LDA XWA, XSP
 	lds bc, 2
@@ -428060,7 +428060,7 @@ LABEL_FE768D:
 	ld xwa, xde
 	lds de, 0
 	call LABEL_FE448E
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jrl z, LABEL_FE7804
 	.byte 0xb7, 0x30	; LDA XWA, XSP
 	ld xhl, xwa
@@ -428075,7 +428075,7 @@ LABEL_FE768D:
 	call LABEL_FE5567
 	.byte 0xb7, 0x30	; LDA XWA, XSP
 	call LABEL_FE5A40
-	.byte 0xcf, 0xd9	; CP L, 1
+	cps l, 1
 	jrl nz, LABEL_FE7804
 	call LABEL_FE8AFC
 	cp l, 0xFF
@@ -428115,7 +428115,7 @@ LABEL_FE772C:
 	ld xwa, xde
 	lds de, 0
 	call LABEL_FE4726
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jrl z, LABEL_FE7804
 	.byte 0xb7, 0x30	; LDA XWA, XSP
 	lds bc, 2
@@ -428148,7 +428148,7 @@ LABEL_FE777D:
 	ld xwa, xde
 	lds de, 0
 	call LABEL_FE448E
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE7804
 	.byte 0xb7, 0x30	; LDA XWA, XSP
 	ld xhl, xwa
@@ -428163,7 +428163,7 @@ LABEL_FE777D:
 	call LABEL_FE5567
 	.byte 0xb7, 0x30	; LDA XWA, XSP
 	call LABEL_FE5A40
-	.byte 0xcf, 0xd9	; CP L, 1
+	cps l, 1
 	jr nz, LABEL_FE7804
 	call LABEL_FE8AFC
 	cp l, 0xFF
@@ -428267,7 +428267,7 @@ LABEL_FE78C7:
 	ld xbc, xde
 	lds de, 0
 	call LABEL_FE4726
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE7935
 	.byte 0xb7, 0x30	; LDA XWA, XSP
 	ld xde, xwa
@@ -428297,7 +428297,7 @@ LABEL_FE7935:
 	ld xbc, xde
 	lds de, 0
 	call LABEL_FE4726
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jrl z, LABEL_FE7A38
 	.byte 0xb7, 0x30	; LDA XWA, XSP
 	ld xde, xwa
@@ -428332,7 +428332,7 @@ LABEL_FE7989:
 	ld xbc, xde
 	lds de, 0
 	call LABEL_FE4726
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE79E8
 	.byte 0xb7, 0x30	; LDA XWA, XSP
 	ld xde, xwa
@@ -428362,7 +428362,7 @@ LABEL_FE79E8:
 	ld xbc, xde
 	lds de, 0
 	call LABEL_FE4726
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE7A38
 	.byte 0xb7, 0x30	; LDA XWA, XSP
 	ld xde, xwa
@@ -428417,7 +428417,7 @@ LABEL_FE7A83:
 	ld xwa, xde
 	lds de, 4
 	call LABEL_FE4726
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE7AD3
 	.byte 0xbf, 0x02, 0x30	; LDA XWA, XSP + 002h
 	lds bc, 2
@@ -428438,7 +428438,7 @@ LABEL_FE7AD3:
 	ld xwa, xde
 	lds de, 4
 	call LABEL_FE4726
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE7B10
 	.byte 0xbf, 0x02, 0x30	; LDA XWA, XSP + 002h
 	lds bc, 2
@@ -428478,7 +428478,7 @@ LABEL_FE7B22:
 	ld xwa, xde
 	lds de, 0
 	call LABEL_FE448E
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE7BA3
 	.byte 0xbf, 0x02, 0x30	; LDA XWA, XSP + 002h
 	ld xhl, xwa
@@ -428493,7 +428493,7 @@ LABEL_FE7B22:
 	call LABEL_FE5567
 	.byte 0xbf, 0x02, 0x30	; LDA XWA, XSP + 002h
 	call LABEL_FE5A40
-	.byte 0xcf, 0xdb	; CP L, 3
+	cps l, 3
 	jr nz, LABEL_FE7BA3
 	call LABEL_FE8AFC
 	cp l, 0xFF
@@ -428516,7 +428516,7 @@ LABEL_FE7BA3:
 	ld xwa, xde
 	lds de, 0
 	call LABEL_FE448E
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE7C10
 	.byte 0xbf, 0x02, 0x30	; LDA XWA, XSP + 002h
 	ld xhl, xwa
@@ -428531,7 +428531,7 @@ LABEL_FE7BA3:
 	call LABEL_FE5567
 	.byte 0xbf, 0x02, 0x30	; LDA XWA, XSP + 002h
 	call LABEL_FE5A40
-	.byte 0xcf, 0xda	; CP L, 2
+	cps l, 2
 	jr nz, LABEL_FE7C10
 	call LABEL_FE8AFC
 	cp l, 0xFF
@@ -428583,7 +428583,7 @@ LABEL_FE7C51:
 	ld xwa, xde
 	lds de, 4
 	call LABEL_FE4726
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE7CA1
 	.byte 0xbf, 0x02, 0x30	; LDA XWA, XSP + 002h
 	lds bc, 2
@@ -428604,7 +428604,7 @@ LABEL_FE7CA1:
 	ld xwa, xde
 	lds de, 4
 	call LABEL_FE4726
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE7CDE
 	.byte 0xbf, 0x02, 0x30	; LDA XWA, XSP + 002h
 	lds bc, 2
@@ -428649,7 +428649,7 @@ LABEL_FE7D05:
 	ld xwa, xde
 	lds de, 0
 	call LABEL_FE448E
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE7D86
 	.byte 0xbf, 0x02, 0x30	; LDA XWA, XSP + 002h
 	ld xhl, xwa
@@ -428664,7 +428664,7 @@ LABEL_FE7D05:
 	call LABEL_FE5567
 	.byte 0xbf, 0x02, 0x30	; LDA XWA, XSP + 002h
 	call LABEL_FE5A40
-	.byte 0xcf, 0xdb	; CP L, 3
+	cps l, 3
 	jr nz, LABEL_FE7D86
 	call LABEL_FE8AFC
 	cp l, 0xFF
@@ -428687,7 +428687,7 @@ LABEL_FE7D86:
 	ld xwa, xde
 	lds de, 0
 	call LABEL_FE448E
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE7DF3
 	.byte 0xbf, 0x02, 0x30	; LDA XWA, XSP + 002h
 	ld xhl, xwa
@@ -428702,7 +428702,7 @@ LABEL_FE7D86:
 	call LABEL_FE5567
 	.byte 0xbf, 0x02, 0x30	; LDA XWA, XSP + 002h
 	call LABEL_FE5A40
-	.byte 0xcf, 0xda	; CP L, 2
+	cps l, 2
 	jr nz, LABEL_FE7DF3
 	call LABEL_FE8AFC
 	cp l, 0xFF
@@ -428788,7 +428788,7 @@ LABEL_FE7E62:
 	ld xwa, xde
 	lds de, 0
 	call LABEL_FE4726
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE7EC6
 	.byte 0xb7, 0x30	; LDA XWA, XSP
 	ld xde, xwa
@@ -428811,7 +428811,7 @@ LABEL_FE7EC6:
 	ld xwa, xde
 	lds de, 0
 	call LABEL_FE4726
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE7F04
 	.byte 0xb7, 0x30	; LDA XWA, XSP
 	ld xde, xwa
@@ -428834,7 +428834,7 @@ LABEL_FE7F04:
 	ld xwa, xde
 	lds de, 0
 	call LABEL_FE4726
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE7F42
 	.byte 0xb7, 0x30	; LDA XWA, XSP
 	ld xde, xwa
@@ -428868,7 +428868,7 @@ LABEL_FE7F66:
 	ld xwa, xde
 	lds de, 0
 	call LABEL_FE448E
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE7FA4
 	.byte 0xb7, 0x30	; LDA XWA, XSP
 	ld xde, xwa
@@ -428902,7 +428902,7 @@ LABEL_FE7FAA:
 	ld xwa, xde
 	lds de, 0
 	call LABEL_FE4726
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE8006
 	.byte 0xb7, 0x30	; LDA XWA, XSP
 	ld xde, xwa
@@ -428925,7 +428925,7 @@ LABEL_FE8006:
 	ld xwa, xde
 	lds de, 0
 	call LABEL_FE4726
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE8044
 	.byte 0xb7, 0x30	; LDA XWA, XSP
 	ld xde, xwa
@@ -428954,7 +428954,7 @@ LABEL_FE8061:
 	ld xwa, xde
 	lds de, 0
 	call LABEL_FE4726
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jrl z, LABEL_FE8171
 	.byte 0xb7, 0x30	; LDA XWA, XSP
 	ld xde, xwa
@@ -428982,7 +428982,7 @@ LABEL_FE8097:
 	ld xwa, xde
 	lds de, 0
 	call LABEL_FE4726
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE80E4
 	.byte 0xb7, 0x30	; LDA XWA, XSP
 	ld xde, xwa
@@ -429005,7 +429005,7 @@ LABEL_FE80E4:
 	ld xwa, xde
 	lds de, 0
 	call LABEL_FE4726
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE8122
 	.byte 0xb7, 0x30	; LDA XWA, XSP
 	ld xde, xwa
@@ -429034,7 +429034,7 @@ LABEL_FE813F:
 	ld xwa, xde
 	lds de, 0
 	call LABEL_FE4726
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE8171
 	.byte 0xb7, 0x30	; LDA XWA, XSP
 	ld xde, xwa
@@ -429068,7 +429068,7 @@ LABEL_FE8177:
 	ld xwa, xde
 	lds de, 0
 	call LABEL_FE4726
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE81D3
 	.byte 0xb7, 0x30	; LDA XWA, XSP
 	ld xde, xwa
@@ -429091,7 +429091,7 @@ LABEL_FE81D3:
 	ld xwa, xde
 	lds de, 0
 	call LABEL_FE4726
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jrl z, LABEL_FE829F
 	.byte 0xb7, 0x30	; LDA XWA, XSP
 	ld xde, xwa
@@ -429119,7 +429119,7 @@ LABEL_FE8215:
 	ld xwa, xde
 	lds de, 0
 	call LABEL_FE4726
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE8261
 	.byte 0xb7, 0x30	; LDA XWA, XSP
 	ld xde, xwa
@@ -429142,7 +429142,7 @@ LABEL_FE8261:
 	ld xwa, xde
 	lds de, 0
 	call LABEL_FE4726
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE829F
 	.byte 0xb7, 0x30	; LDA XWA, XSP
 	ld xde, xwa
@@ -429176,7 +429176,7 @@ LABEL_FE82A5:
 	ld xwa, xde
 	lds de, 0
 	call LABEL_FE4726
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE8301
 	.byte 0xb7, 0x30	; LDA XWA, XSP
 	ld xde, xwa
@@ -429199,7 +429199,7 @@ LABEL_FE8301:
 	ld xwa, xde
 	lds de, 0
 	call LABEL_FE4726
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jrl z, LABEL_FE83CD
 	.byte 0xb7, 0x30	; LDA XWA, XSP
 	ld xde, xwa
@@ -429227,7 +429227,7 @@ LABEL_FE8343:
 	ld xwa, xde
 	lds de, 0
 	call LABEL_FE4726
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE838F
 	.byte 0xb7, 0x30	; LDA XWA, XSP
 	ld xde, xwa
@@ -429250,7 +429250,7 @@ LABEL_FE838F:
 	ld xwa, xde
 	lds de, 0
 	call LABEL_FE4726
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE83CD
 	.byte 0xb7, 0x30	; LDA XWA, XSP
 	ld xde, xwa
@@ -429288,7 +429288,7 @@ LABEL_FE83DD:
 	cp wa, 0xC4
 	jr z, LABEL_FE8433
 	sub wa, 0xD0
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr lt, LABEL_FE83DD
 	cp wa, 0x8
 	jr gt, LABEL_FE83DD
@@ -429331,7 +429331,7 @@ LABEL_FE8433:
 	extz wa
 	.byte 0xbf, 0x04, 0x50	; LD (XSP + 004h), WA
 	.byte 0x9f, 0x08, 0x20	; LD WA, (XSP + 008h)
-	.byte 0xd8, 0x33, 0x04	; BIT 004h, WA
+	bit 4, wa
 	jr z, LABEL_FE84AA
 	.byte 0xbf, 0x08, 0xb4	; RES 4, (XSP + 008h)
 	.byte 0xbf, 0x06, 0xbf	; SET 7, (XSP + 006h)
@@ -429450,7 +429450,7 @@ LABEL_FE859F:
 	jrl z, LABEL_FE83DD
 	.byte 0xd7, 0xfa, 0xdb	; CP QIZ, 3
 	jrl nz, LABEL_FE83DD
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jrl nz, LABEL_FE83DD
 	ldw iz, 0x10
 	cp iz, 0x14
@@ -429521,15 +429521,15 @@ LABEL_FE8607:
 	.byte 0xd7, 0xfa, 0x88	; LD WA, QIZ
 	cp wa, 0x10
 	jrl z, LABEL_FE87AA
-	.byte 0xd8, 0xdd	; CP WA, 5
+	cps wa, 5
 	jrl z, LABEL_FE878C
-	.byte 0xd8, 0xdc	; CP WA, 4
+	cps wa, 4
 	jrl z, LABEL_FE875F
-	.byte 0xd8, 0xdb	; CP WA, 3
+	cps wa, 3
 	jr z, LABEL_FE8732
-	.byte 0xd8, 0xda	; CP WA, 2
+	cps wa, 2
 	jr z, LABEL_FE86F9
-	.byte 0xd8, 0xd9	; CP WA, 1
+	cps wa, 1
 	jrl nz, LABEL_FE87B6
 	.byte 0x9f, 0x04, 0x20	; LD WA, (XSP + 004h)
 	ld de, iz
@@ -429670,7 +429670,7 @@ LABEL_FE8800:
 	extz wa
 	.byte 0xbf, 0x04, 0x50	; LD (XSP + 004h), WA
 	.byte 0x9f, 0x08, 0x20	; LD WA, (XSP + 008h)
-	.byte 0xd8, 0x33, 0x04	; BIT 004h, WA
+	bit 4, wa
 	jr z, LABEL_FE8844
 	.byte 0xbf, 0x08, 0xb4	; RES 4, (XSP + 008h)
 	.byte 0xbf, 0x06, 0xbf	; SET 7, (XSP + 006h)
@@ -429718,7 +429718,7 @@ LABEL_FE889A:
 	jrl z, LABEL_FE87CB
 	.byte 0xd7, 0xfa, 0xdb	; CP QIZ, 3
 	jrl nz, LABEL_FE87CB
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jrl nz, LABEL_FE87CB
 	.byte 0xbf, 0x08, 0x02, 0x17, 0x00	; LDW (XSP + 008h:8), 0017h
 	.byte 0x9f, 0x08, 0x3f, 0x18, 0x00	; CPW (XSP + 008h), 0018h
@@ -429785,9 +429785,9 @@ LABEL_FE894D:
 	.byte 0xbf, 0x04, 0x50	; LD (XSP + 004h), WA
 	.byte 0xd7, 0xfa, 0x88	; LD WA, QIZ
 	dec 1, wa
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jrl lt, LABEL_FE8A75
-	.byte 0xd8, 0xde	; CP WA, 6
+	cps wa, 6
 	jrl gt, LABEL_FE8A75
 	add wa, wa
 	.byte 0xf2, 0xc0, 0x8f, 0xee, 0x34	; LDA XIX, 0EE8FC0h
@@ -430023,7 +430023,7 @@ LABEL_FE8C1B:
 	add xbc, xde
 	ld xix, (xbc)
 	.byte 0xb4, 0xe8	; CALL T, XIX
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE8C79
 	lds hl, 0
 	jr LABEL_FE8C74
@@ -430076,7 +430076,7 @@ LABEL_FE8C8F:
 	jr LABEL_FE8D18
 
 LABEL_FE8C9E:
-	.byte 0xda, 0xdc	; CP DE, 4
+	cps de, 4
 	jr z, LABEL_FE8D1E
 	ld bc, hl
 	add bc, bc
@@ -430122,7 +430122,7 @@ LABEL_FE8CE7:
 LABEL_FE8CF7:
 	.byte 0xc1, 0xaa, 0xce, 0x23	; LD C, (0CEAAh)
 	.byte 0xc7, 0xea, 0xa3	; SUB C, QE
-	.byte 0xcb, 0xda	; CP C, 2
+	cps c, 2
 	jr ule, LABEL_FE8D16
 	ld bc, de
 	extz xbc
@@ -430228,7 +430228,7 @@ LABEL_FE8DB1:
 	ld xiz, xwa
 	ld xwa, xiz
 	calr LABEL_FE8C8F
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE8DC1
 	.byte 0xb6, 0x02, 0x01, 0x00	; LDW (XIZ), 0001h
 
@@ -430242,7 +430242,7 @@ LABEL_FE8DC5:
 	ld xiz, xwa
 	ld xwa, xiz
 	calr LABEL_FE8C8F
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE8DD5
 	.byte 0x8e, 0x05, 0x3a, 0x0c	; SUB (XIZ + 005h), 00ch
 
@@ -430256,7 +430256,7 @@ LABEL_FE8DD9:
 	ld xiz, xwa
 	ld xwa, xiz
 	calr LABEL_FE8C8F
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FE8E34
 	.byte 0x96, 0x3f, 0x01, 0x00	; CPW (XIZ), 0001h
 	jr nz, LABEL_FE8DFD
@@ -430849,18 +430849,18 @@ LABEL_FE9383:
 
 LABEL_FE93A6:
 	ldb l, 0xFF
-	.byte 0xc9, 0xdf	; CP A, 7
+	cps a, 7
 	jr z, LABEL_FE93DD
-	.byte 0xc9, 0xdc	; CP A, 4
+	cps a, 4
 	jr z, LABEL_FE93B6
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_FE9410
 	jr LABEL_FE9412
 
 LABEL_FE93B6:
-	.byte 0xcb, 0xd9	; CP C, 1
+	cps c, 1
 	jr nc, LABEL_FE93BE
-	.byte 0xcb, 0xdc	; CP C, 4
+	cps c, 4
 	jr ugt, LABEL_FE93C2
 
 LABEL_FE93BE:
@@ -430868,7 +430868,7 @@ LABEL_FE93BE:
 	jr LABEL_FE9412
 
 LABEL_FE93C2:
-	.byte 0xcb, 0xdd	; CP C, 5
+	cps c, 5
 	jr nc, LABEL_FE93CB
 	cp c, 0x8
 	jr ugt, LABEL_FE93CF
@@ -430888,9 +430888,9 @@ LABEL_FE93D9:
 	jr LABEL_FE9412
 
 LABEL_FE93DD:
-	.byte 0xcb, 0xd9	; CP C, 1
+	cps c, 1
 	jr nc, LABEL_FE93E5
-	.byte 0xcb, 0xdb	; CP C, 3
+	cps c, 3
 	jr ugt, LABEL_FE93E9
 
 LABEL_FE93E5:
@@ -430898,9 +430898,9 @@ LABEL_FE93E5:
 	jr LABEL_FE9412
 
 LABEL_FE93E9:
-	.byte 0xcb, 0xdc	; CP C, 4
+	cps c, 4
 	jr nc, LABEL_FE93F1
-	.byte 0xcb, 0xde	; CP C, 6
+	cps c, 6
 	jr ugt, LABEL_FE93F5
 
 LABEL_FE93F1:
@@ -430908,7 +430908,7 @@ LABEL_FE93F1:
 	jr LABEL_FE9412
 
 LABEL_FE93F5:
-	.byte 0xcb, 0xdf	; CP C, 7
+	cps c, 7
 	jr nc, LABEL_FE93FE
 	cp c, 0x9
 	jr ugt, LABEL_FE9402
@@ -431057,7 +431057,7 @@ LABEL_FE9524:
 
 LABEL_FE9528:
 	.byte 0xd2, 0xff, 0xce, 0x00, 0x21	; LD BC, (0CEFFh:24)
-	.byte 0xd9, 0xd8	; CP BC, 0
+	cps bc, 0
 	jr z, LABEL_FE953A
 	.byte 0xf2, 0xde, 0xce, 0x00, 0xc8	; BIT 0, (0CEDEh:24)
 	jr nz, LABEL_FE953A
@@ -431138,7 +431138,7 @@ LABEL_FE95C5:
 	.byte 0xd1, 0x96, 0xc5, 0x22	; LD DE, (0C596h)
 	and de, 0x2
 	jr z, LABEL_FE95D3
-	.byte 0xd9, 0xda	; CP BC, 2
+	cps bc, 2
 	jr ule, LABEL_FE95DA
 
 LABEL_FE95D3:
@@ -431180,7 +431180,7 @@ LABEL_FE9609:
 	.byte 0xd2, 0xff, 0xce, 0x00, 0x21	; LD BC, (0CEFFh:24)
 	.byte 0xf1, 0xb3, 0xce, 0x00, 0x00	; LD (0CEB3h), 000h
 	.byte 0xf1, 0xb4, 0xce, 0x00, 0x00	; LD (0CEB4h), 000h
-	.byte 0xd9, 0xd8	; CP BC, 0
+	cps bc, 0
 	jr z, LABEL_FE9621
 	calr LABEL_FE96B4
 	jr LABEL_FE9670
@@ -431289,7 +431289,7 @@ LABEL_FE9720:
 	dec 1, hl
 	sla hl, 1
 	add iy, hl
-	.byte 0xda, 0xd8	; CP DE, 0
+	cps de, 0
 	jr nz, LABEL_FE9746
 	.byte 0xf2, 0xe5, 0xce, 0x00, 0x00, 0x00	; LD (0CEE5h:24), 000h
 	jr LABEL_FE97AC
@@ -431320,7 +431320,7 @@ LABEL_FE9780:
 	dec 1, iy
 	dec 1, iy
 	dec 1, de
-	.byte 0xda, 0xd8	; CP DE, 0
+	cps de, 0
 	jr nz, LABEL_FE974F
 
 LABEL_FE978A:
@@ -431347,7 +431347,7 @@ LABEL_FE97AD:
 	.byte 0xd2, 0xff, 0xce, 0x00, 0x21	; LD BC, (0CEFFh:24)
 	xor a, a
 	xor h, h
-	.byte 0xd9, 0xd8	; CP BC, 0
+	cps bc, 0
 	jr z, LABEL_FE97E4
 
 LABEL_FE97BF:
@@ -431439,11 +431439,11 @@ LABEL_FE98C3:
 	and hl, 0x1FF
 	ld xiz, 0xEEBE44
 	.byte 0xc3, 0x07, 0xf8, 0xec, 0x21	; LD A, (XIZ + HL)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_FE992E
 
 LABEL_FE98E3:
-	.byte 0xda, 0x33, 0x09	; BIT 009h, DE
+	bit 9, de
 	jr z, LABEL_FE990F
 	.byte 0xc2, 0xe5, 0xce, 0x00, 0xf3	; CP C, (0CEE5h:24)
 	jr nz, LABEL_FE990F
@@ -431451,31 +431451,31 @@ LABEL_FE98E3:
 	and hl, 0x1FF
 	ld xiz, 0xEEBE44
 	.byte 0xc3, 0x07, 0xf8, 0xec, 0x21	; LD A, (XIZ + HL)
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	jr nz, LABEL_FE9907
 	ldb a, 0x28
 	jr LABEL_FE992E
 
 LABEL_FE9907:
-	.byte 0xc9, 0xdd	; CP A, 5
+	cps a, 5
 	jr nz, LABEL_FE990F
 	ldb a, 0x29
 	jr LABEL_FE992E
 
 LABEL_FE990F:
 	dec 1, c
-	.byte 0xcb, 0xd8	; CP C, 0
+	cps c, 0
 	jr z, LABEL_FE994F
 	jr LABEL_FE9917
 
 LABEL_FE9917:
 	inc 1, b
 	sla de, 1
-	.byte 0xda, 0x33, 0x0c	; BIT 00ch, DE
+	bit 12, de
 	jr nz, LABEL_FE9928
 
 LABEL_FE9921:
-	.byte 0xda, 0x33, 0x0b	; BIT 00bh, DE
+	bit 11, de
 	jr z, LABEL_FE9917
 	jr LABEL_FE98C3
 
@@ -431512,7 +431512,7 @@ LABEL_FE9956:
 
 LABEL_FE996E:
 	calr LABEL_FE99DE
-	.byte 0xc8, 0xd8	; CP W, 0
+	cps w, 0
 	jr nz, LABEL_FE9989
 	.byte 0xc2, 0xe5, 0xce, 0x00, 0x69	; DEC 1, (0CEE5h:24)
 	calr LABEL_FE99DE
@@ -431524,7 +431524,7 @@ LABEL_FE9984:
 	jr LABEL_FE9989
 
 LABEL_FE9989:
-	.byte 0xc8, 0xd8	; CP W, 0
+	cps w, 0
 	jr nz, LABEL_FE9999
 	.byte 0xc2, 0xe2, 0xce, 0x00, 0x21	; LD A, (0CEE2h:24)
 	.byte 0xc2, 0xe3, 0xce, 0x00, 0x20	; LD W, (0CEE3h:24)
@@ -431574,7 +431574,7 @@ LABEL_FE99DE:
 	calr LABEL_FE981C
 	ld xiy, 0xEEBE44
 	calr LABEL_FE98B8
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_FE9A04
 	.byte 0xc2, 0xde, 0xce, 0x00, 0x3e, 0x10	; OR (0CEDEh:24), 010h
 	.byte 0xc2, 0xde, 0xce, 0x00, 0x3c, 0x7f	; AND (0CEDEh:24), 07fh
@@ -431632,7 +431632,7 @@ LABEL_FE9A9C:
 	calr LABEL_FE9B49
 	.byte 0xd2, 0x2f, 0xcf, 0x00, 0x20	; LD WA, (0CF2Fh:24)
 	.byte 0xc2, 0xe5, 0xce, 0x00, 0x81	; ADD A, (0CEE5h:24)
-	.byte 0xc9, 0xda	; CP A, 2
+	cps a, 2
 	jr ugt, LABEL_FE9AB0
 	jrl LABEL_FE9B48
 
@@ -431640,7 +431640,7 @@ LABEL_FE9AB0:
 	.byte 0xf2, 0xde, 0xce, 0x00, 0xc9	; BIT 1, (0CEDEh:24)
 	jr nz, LABEL_FE9B2B
 	calr LABEL_FE9D91
-	.byte 0xc8, 0xd8	; CP W, 0
+	cps w, 0
 	jr nz, LABEL_FE9AFA
 	.byte 0xc2, 0xe5, 0xce, 0x00, 0x27	; LD L, (0CEE5h:24)
 	xor h, h
@@ -431653,7 +431653,7 @@ LABEL_FE9AB0:
 	.byte 0xc7, 0x34, 0x9b	; LD RC3, C
 	.byte 0xc2, 0xe5, 0xce, 0x00, 0x21	; LD A, (0CEE5h:24)
 	dec 1, a
-	.byte 0xc9, 0xda	; CP A, 2
+	cps a, 2
 	jr ugt, LABEL_FE9AE5
 	jr LABEL_FE9B48
 
@@ -431666,7 +431666,7 @@ LABEL_FE9AE5:
 	ld (xiz), c
 
 LABEL_FE9AFA:
-	.byte 0xc8, 0xd8	; CP W, 0
+	cps w, 0
 	jr nz, LABEL_FE9B0A
 	.byte 0xc2, 0xe2, 0xce, 0x00, 0x21	; LD A, (0CEE2h:24)
 	.byte 0xc2, 0xe3, 0xce, 0x00, 0x20	; LD W, (0CEE3h:24)
@@ -431694,14 +431694,14 @@ LABEL_FE9B26:
 
 LABEL_FE9B2B:
 	calr LABEL_FE9E91
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_FE9B37
 	calr LABEL_FEA016
 	jr LABEL_FE9B48
 
 LABEL_FE9B37:
 	calr LABEL_FE9D91
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_FE9B43
 	calr LABEL_FE9F51
 	jr LABEL_FE9B48
@@ -431732,7 +431732,7 @@ LABEL_FE9B49:
 
 LABEL_FE9B71:
 	.byte 0xd2, 0xff, 0xce, 0x00, 0x22	; LD DE, (0CEFFh:24)
-	.byte 0xda, 0xdc	; CP DE, 4
+	cps de, 4
 	jr c, LABEL_FE9BE1
 	.byte 0xf2, 0x2f, 0xcf, 0x00, 0x02, 0x01, 0x00	; LDW (0CF2Fh:24), 0001h
 	ld xiz, xiy
@@ -431753,7 +431753,7 @@ LABEL_FE9BA1:
 	cp a, 0x8
 	jr c, LABEL_FE9B71
 	.byte 0xd2, 0xff, 0xce, 0x00, 0x22	; LD DE, (0CEFFh:24)
-	.byte 0xda, 0xdd	; CP DE, 5
+	cps de, 5
 	jr c, LABEL_FE9BE1
 	.byte 0xf2, 0x2f, 0xcf, 0x00, 0x02, 0x01, 0x00	; LDW (0CF2Fh:24), 0001h
 	ld xiz, xiy
@@ -431769,7 +431769,7 @@ LABEL_FE9BA1:
 
 LABEL_FE9BE1:
 	.byte 0xd2, 0xff, 0xce, 0x00, 0x22	; LD DE, (0CEFFh:24)
-	.byte 0xda, 0xdb	; CP DE, 3
+	cps de, 3
 	jr c, LABEL_FE9C40
 	.byte 0xd7, 0x3e, 0x9a	; LD QHL3, DE
 	.byte 0xd1, 0x96, 0xc5, 0x22	; LD DE, (0C596h)
@@ -431803,7 +431803,7 @@ LABEL_FE9C46:
 
 LABEL_FE9C48:
 	push xiz
-	.byte 0xda, 0xd8	; CP DE, 0
+	cps de, 0
 	jr nz, LABEL_FE9C56
 	.byte 0xf2, 0xe5, 0xce, 0x00, 0x00, 0x00	; LD (0CEE5h:24), 000h
 	jrl LABEL_FE9D1C
@@ -431812,7 +431812,7 @@ LABEL_FE9C56:
 	ld xiy, 0xCEFF
 	xor xhl, xhl
 	lds bc, 1
-	.byte 0xda, 0xdb	; CP DE, 3
+	cps de, 3
 	jr ule, LABEL_FE9C81
 	ld bc, de
 	sub bc, 0x3
@@ -431829,20 +431829,20 @@ LABEL_FE9C69:
 	xor hl, hl
 
 LABEL_FE9C81:
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_FE9C8D
 	.byte 0xc2, 0xde, 0xce, 0x00, 0x3c, 0xdf	; AND (0CEDEh:24), 0dfh
 	jr LABEL_FE9CC4
 
 LABEL_FE9C8D:
-	.byte 0xdb, 0xda	; CP HL, 2
+	cps hl, 2
 	jr nz, LABEL_FE9C9E
 	.byte 0xf1, 0xb5, 0xce, 0x00, 0x02	; LD (0CEB5h:16), 002h
 	.byte 0xc2, 0xde, 0xce, 0x00, 0x3e, 0x20	; OR (0CEDEh:24), 020h
 	jr LABEL_FE9CC4
 
 LABEL_FE9C9E:
-	.byte 0xdb, 0xdc	; CP HL, 4
+	cps hl, 4
 	jr nz, LABEL_FE9CBA
 	.byte 0xf2, 0xde, 0xce, 0x00, 0xcd	; BIT 5, (0CEDEh:24)
 	jr z, LABEL_FE9CB0
@@ -431881,7 +431881,7 @@ LABEL_FE9CE0:
 	dec 1, iy
 	dec 1, iy
 	dec 1, de
-	.byte 0xda, 0xd8	; CP DE, 0
+	cps de, 0
 	jr nz, LABEL_FE9CE0
 
 LABEL_FE9CFA:
@@ -431934,7 +431934,7 @@ LABEL_FE9D60:
 	.byte 0xc3, 0x07, 0xf8, 0xec, 0x21	; LD A, (XIZ + HL)
 	.byte 0xc2, 0x34, 0xcf, 0x00, 0x20	; LD W, (0CF34h:24)
 	sub a, w
-	.byte 0xc9, 0xdf	; CP A, 7
+	cps a, 7
 	jr c, LABEL_FE9D90
 	.byte 0xf2, 0x2f, 0xcf, 0x00, 0x02, 0x01, 0x00	; LDW (0CF2Fh:24), 0001h
 	.byte 0xc2, 0xde, 0xce, 0x00, 0x3e, 0x02	; OR (0CEDEh:24), 002h
@@ -431954,7 +431954,7 @@ LABEL_FE9D91:
 	add xiz, xhl
 	ld a, (xiz)
 	.byte 0x8e, 0x01, 0x20	; LD W, (XIZ + 001h)
-	.byte 0xc8, 0x33, 0x07	; BIT 007h, W
+	bit 7, w
 	jr z, LABEL_FE9DBE
 	and w, 0x7F
 	jrl LABEL_FE9E63
@@ -431977,7 +431977,7 @@ LABEL_FE9DCE:
 	.byte 0x8e, 0x01, 0x20	; LD W, (XIZ + 001h)
 	and w, 0x7F
 	popw bc
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_FE9DFA
 	.byte 0xc2, 0xe5, 0xce, 0x00, 0xf2	; CP B, (0CEE5h:24)
 	jr nc, LABEL_FE9E2F
@@ -432017,10 +432017,10 @@ LABEL_FE9E36:
 	.byte 0x8e, 0x01, 0x20	; LD W, (XIZ + 001h)
 	and w, 0x7F
 	pop xhl
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_FE9E63
 	dec 1, h
-	.byte 0xce, 0xdc	; CP H, 4
+	cps h, 4
 	jr c, LABEL_FE9E84
 	jr LABEL_FE9E36
 
@@ -432060,15 +432060,15 @@ LABEL_FE9E91:
 	sla hl, 1
 	ld xiz, 0xEEAE44
 	.byte 0xc3, 0x07, 0xf8, 0xec, 0x21	; LD A, (XIZ + HL)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_FE9EF2
 	ld xiz, 0xEEAE44
 	add xiz, xhl
 	.byte 0x8e, 0x01, 0x20	; LD W, (XIZ + 001h)
 	and w, 0x7F
-	.byte 0xc8, 0x33, 0x05	; BIT 005h, W
+	bit 5, w
 	jr nz, LABEL_FE9EF2
-	.byte 0xc8, 0xd8	; CP W, 0
+	cps w, 0
 	jr nz, LABEL_FE9EF2
 	.byte 0xc2, 0x34, 0xcf, 0x00, 0x27	; LD L, (0CF34h:24)
 	add l, w
@@ -432419,7 +432419,7 @@ LABEL_FEA243:
 LABEL_FEA29E:
 	.byte 0xd2, 0xff, 0xce, 0x00, 0x21	; LD BC, (0CEFFh:24)
 	.byte 0xf2, 0x5f, 0xcf, 0x00, 0x51	; LD (0CF5Fh:24), BC
-	.byte 0xd9, 0xd8	; CP BC, 0
+	cps bc, 0
 	jr z, LABEL_FEA2C9
 	ld xiy, 0xCF03
 	ld xix, 0xCF63
@@ -432670,13 +432670,13 @@ LABEL_FEA6D8:
 	lds bc, 5
 	.byte 0x95, 0x11	; LDIRW_95
 	.byte 0x85, 0x10	; LDI
-	.byte 0xcd, 0xdb	; CP E, 3
+	cps e, 3
 	jrl z, LABEL_FEA7B5
-	.byte 0xcd, 0xda	; CP E, 2
+	cps e, 2
 	jr z, LABEL_FEA738
-	.byte 0xcd, 0xd9	; CP E, 1
+	cps e, 1
 	jr z, LABEL_FEA726
-	.byte 0xcd, 0xd8	; CP E, 0
+	cps e, 0
 	jrl nz, LABEL_FEA7C4
 	.byte 0xb6, 0x00, 0x00	; LD (XIZ), 000h
 	.byte 0xbe, 0x01, 0x00, 0x00	; LD (XIZ + 001h), 000h
@@ -432718,7 +432718,7 @@ LABEL_FEA761:
 	cp a, 0xC
 	jr ule, LABEL_FEA798
 	call LABEL_FE99DE
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_FEA792
 	.byte 0xc1, 0xe5, 0xce, 0x69	; DEC 1, (0CEE5h:16)
 	call LABEL_FE99DE
@@ -433099,13 +433099,13 @@ LABEL_FEB0E5:
 	jr z, LABEL_FEB1C9
 	cp bc, 0xA
 	jr z, LABEL_FEB1B9
-	.byte 0xd9, 0xdf	; CP BC, 7
+	cps bc, 7
 	jr z, LABEL_FEB19A
-	.byte 0xd9, 0xd9	; CP BC, 1
+	cps bc, 1
 	jr z, LABEL_FEB18B
 	cp bc, 0x20
 	jr z, LABEL_FEB179
-	.byte 0xd9, 0xd8	; CP BC, 0
+	cps bc, 0
 	jrl nz, LABEL_FEB2BB
 	.byte 0x9f, 0x02, 0x20	; LD WA, (XSP + 002h)
 	add wa, wa
@@ -433136,7 +433136,7 @@ LABEL_FEB19A:
 	.byte 0x9f, 0x02, 0x20	; LD WA, (XSP + 002h)
 	ldw bc, 0x8
 	call LABEL_FCD4F7
-	.byte 0xdb, 0xd9	; CP HL, 1
+	cps hl, 1
 	jr nz, LABEL_FEB1AA
 	lds iz, 0
 
@@ -433166,7 +433166,7 @@ LABEL_FEB1C9:
 
 LABEL_FEB1D9:
 	ldw wa, 0x7F
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr nz, LABEL_FEB1E2
 	lds wa, 0
 
@@ -433246,7 +433246,7 @@ LABEL_FEB268:
 
 LABEL_FEB272:
 	ldw wa, 0x7F
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr nz, LABEL_FEB27B
 	lds wa, 0
 
@@ -433261,7 +433261,7 @@ LABEL_FEB27B:
 
 LABEL_FEB28C:
 	ldw wa, 0x7F
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr nz, LABEL_FEB295
 	lds wa, 0
 
@@ -433716,7 +433716,7 @@ LABEL_FEBB37:
 	.byte 0xbf, 0x01, 0x00, 0xe0	; LD (XSP + 001h), 0e0h
 	.byte 0xbf, 0x02, 0x41	; LD (XSP + 002h), A
 	ld a, c
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
+	res 7, a
 	.byte 0xbf, 0x03, 0x41	; LD (XSP + 003h), A
 	and bc, 0x3FFF
 	srl bc, 7
@@ -433753,7 +433753,7 @@ LABEL_FEBB86:
 
 LABEL_FEBB9A:
 	lds wa, 0
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr z, LABEL_FEBBA3
 	ldw wa, 0x7F
 
@@ -433789,7 +433789,7 @@ LABEL_FEBBA5:
 	cp wa, 0x80
 	jr nz, LABEL_FEBC0D
 	.byte 0xd1, 0x96, 0xc5, 0x20	; LD WA, (0C596h)
-	.byte 0xd8, 0x33, 0x08	; BIT 008h, WA
+	bit 8, wa
 	jr nz, LABEL_FEBC0D
 	ldw wa, 0xFF
 	lds bc, 2
@@ -433914,7 +433914,7 @@ LABEL_FEBDFB:
 	ld wa, (xsp)
 	ldw bc, 0x8
 	call LABEL_FCD4F7
-	.byte 0xdb, 0xd9	; CP HL, 1
+	cps hl, 1
 	jr nz, LABEL_FEBE0E
 	.byte 0xbf, 0x02, 0x00, 0x00	; LD (XSP + 002h), 000h
 	jr LABEL_FEBE19
@@ -433941,7 +433941,7 @@ LABEL_FEBE19:
 LABEL_FEBE33:
 	ld xwa, 0x2880B
 	call LABEL_FCD437
-	.byte 0xdb, 0xd9	; CP HL, 1
+	cps hl, 1
 	jr nz, LABEL_FEBE46
 	.byte 0xbf, 0x02, 0x00, 0x00	; LD (XSP + 002h), 000h
 	jr LABEL_FEBE52
@@ -434121,10 +434121,10 @@ LABEL_FEBFB1:
 LABEL_FEBFBE:
 	.byte 0xd1, 0xe5, 0xe9, 0x20	; LD WA, (0E9E5h)
 	and wa, 0x2
-	.byte 0xd8, 0xda	; CP WA, 2
+	cps wa, 2
 	jr nz, LABEL_FEBFD7
 	.byte 0xd1, 0xe5, 0xe9, 0x20	; LD WA, (0E9E5h)
-	.byte 0xd8, 0x33, 0x02	; BIT 002h, WA
+	bit 2, wa
 	jr nz, LABEL_FEBFD7
 	lds hl, 0
 	jr LABEL_FEC04C
@@ -434146,26 +434146,26 @@ LABEL_FEBFF5:
 	jr ugt, LABEL_FEC04A
 	calr LABEL_FEDFBC
 	ld wa, hl
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr ge, LABEL_FEC009
 	ldw hl, 0xFFFF
 	jr LABEL_FEC04C
 
 LABEL_FEC009:
 	.byte 0xc1, 0xe4, 0xe9, 0x21	; LD A, (0E9E4h)
-	.byte 0xc9, 0xdc	; CP A, 4
+	cps a, 4
 	jr z, LABEL_FEC03B
-	.byte 0xc9, 0xdb	; CP A, 3
+	cps a, 3
 	jr z, LABEL_FEC02C
-	.byte 0xc9, 0xda	; CP A, 2
+	cps a, 2
 	jr z, LABEL_FEC02C
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	jr nz, LABEL_FEBFF5
 	ld a, l
 	extz wa
 	calr LABEL_FEC89A
 	ld wa, hl
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr ge, LABEL_FEBFF5
 	jr LABEL_FEC04C
 
@@ -434174,7 +434174,7 @@ LABEL_FEC02C:
 	extz wa
 	calr LABEL_FED63B
 	ld wa, hl
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr ge, LABEL_FEBFF5
 	jr LABEL_FEC04C
 
@@ -434183,7 +434183,7 @@ LABEL_FEC03B:
 	extz wa
 	calr LABEL_FEDA34
 	ld wa, hl
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr ge, LABEL_FEBFF5
 	jr LABEL_FEC04C
 
@@ -434208,7 +434208,7 @@ LABEL_FEC04E:
 	calr LABEL_FEDF6D
 	ld iz, hl
 	ld wa, iz
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr ge, LABEL_FEC07D
 	calr LABEL_FEC11C
 	ld hl, iz
@@ -434219,7 +434219,7 @@ LABEL_FEC07D:
 	calr LABEL_FEC0E1
 	ld iz, hl
 	ld wa, iz
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr ge, LABEL_FEC092
 	calr LABEL_FEC11C
 	ld hl, iz
@@ -434230,7 +434230,7 @@ LABEL_FEC092:
 	calr LABEL_FEC0C7
 	ld iz, hl
 	ld wa, iz
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr ge, LABEL_FEC0A7
 	calr LABEL_FEC11C
 	ld hl, iz
@@ -434254,11 +434254,11 @@ LABEL_FEC0C3:
 	ret
 
 LABEL_FEC0C7:
-	.byte 0xc9, 0xdc	; CP A, 4
+	cps a, 4
 	jr z, LABEL_FEC0DD
-	.byte 0xc9, 0xda	; CP A, 2
+	cps a, 2
 	jr z, LABEL_FEC0D8
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	.byte 0xb0, 0xfe	; RET NZ
 	calr LABEL_FEC5D6
 	jr LABEL_FEC0E0
@@ -434275,13 +434275,13 @@ LABEL_FEC0E0:
 
 LABEL_FEC0E1:
 	pushw iz
-	.byte 0xc9, 0xdc	; CP A, 4
+	cps a, 4
 	jr z, LABEL_FEC107
-	.byte 0xc9, 0xda	; CP A, 2
+	cps a, 2
 	jr z, LABEL_FEC100
-	.byte 0xc9, 0xdb	; CP A, 3
+	cps a, 3
 	jr z, LABEL_FEC0F9
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	jr nz, LABEL_FEC10C
 	calr LABEL_FEC83A
 	ld iz, hl
@@ -434386,7 +434386,7 @@ LABEL_FEC1BE:
 
 LABEL_FEC1C3:
 	.byte 0xd1, 0xe5, 0xe9, 0x20	; LD WA, (0E9E5h)
-	.byte 0xd8, 0x33, 0x00	; BIT 000h, WA
+	bit 0, wa
 	jr z, LABEL_FEC1DA
 	lds wa, 4
 	calr LABEL_FEC318
@@ -434406,7 +434406,7 @@ LABEL_FEC1E1:
 
 LABEL_FEC1F3:
 	.byte 0xd1, 0xe5, 0xe9, 0x20	; LD WA, (0E9E5h)
-	.byte 0xd8, 0x33, 0x02	; BIT 002h, WA
+	bit 2, wa
 	.byte 0xb0, 0xfe	; RET NZ
 	.byte 0xd1, 0xe5, 0xe9, 0x3e, 0x04, 0x00	; ORW (0E9E5h), 0004h
 	lds wa, 4
@@ -434428,14 +434428,14 @@ LABEL_FEC20F:
 	jr LABEL_FEC257
 
 LABEL_FEC228:
-	.byte 0xde, 0x33, 0x07	; BIT 007h, IZ
+	bit 7, iz
 	jr z, LABEL_FEC255
 	and xiz, 0x7F
 
 LABEL_FEC233:
 	calr LABEL_FEDFBC
 	ld wa, hl
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr ge, LABEL_FEC243
 	ld xhl, 0xFFFFFFFF
 	jr LABEL_FEC257
@@ -434446,7 +434446,7 @@ LABEL_FEC243:
 	exts xwa
 	sla xiz, 7
 	add xiz, xwa
-	.byte 0xdb, 0x33, 0x07	; BIT 007h, HL
+	bit 7, hl
 	jr nz, LABEL_FEC233
 
 LABEL_FEC255:
@@ -434480,7 +434480,7 @@ LABEL_FEC27B:
 	ld xwa, (xsp)
 	ld (xbc), a
 	ld xwa, (xsp)
-	.byte 0xd8, 0x33, 0x07	; BIT 007h, WA
+	bit 7, wa
 	jr z, LABEL_FEC2DA
 	ld xwa, 0x7F
 	.byte 0xa7, 0xc8	; AND (XSP), XWA
@@ -434488,7 +434488,7 @@ LABEL_FEC27B:
 LABEL_FEC29D:
 	call LABEL_F52E8F
 	ld wa, hl
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr ge, LABEL_FEC2AE
 	ld xhl, 0xFFFFFFFF
 	jr LABEL_FEC2DC
@@ -434511,7 +434511,7 @@ LABEL_FEC2AE:
 	sla xwa, 7
 	add xwa, xbc
 	ld (xsp), xwa
-	.byte 0xdb, 0x33, 0x07	; BIT 007h, HL
+	bit 7, hl
 	jr nz, LABEL_FEC29D
 
 LABEL_FEC2DA:
@@ -434534,7 +434534,7 @@ LABEL_FEC2E0:
 LABEL_FEC2F2:
 	call LABEL_F52E8F
 	ld wa, hl
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr ge, LABEL_FEC301
 	ldw hl, 0xFFFF
 	jr LABEL_FEC314
@@ -434556,15 +434556,15 @@ LABEL_FEC314:
 	ret
 
 LABEL_FEC318:
-	.byte 0xd8, 0xdc	; CP WA, 4
+	cps wa, 4
 	jrl z, LABEL_FEC3C9
-	.byte 0xd8, 0xdb	; CP WA, 3
+	cps wa, 3
 	jrl z, LABEL_FEC3B0
-	.byte 0xd8, 0xda	; CP WA, 2
+	cps wa, 2
 	jr z, LABEL_FEC373
-	.byte 0xd8, 0xd9	; CP WA, 1
+	cps wa, 1
 	jr z, LABEL_FEC344
-	.byte 0xd8, 0xde	; CP WA, 6
+	cps wa, 6
 	.byte 0xb0, 0xfe	; RET NZ
 	.byte 0xf1, 0x9a, 0xd0, 0x02, 0x1e, 0x00	; LDW (0D09Ah), 001eh
 	.byte 0x06, 0x06	; EI 006h
@@ -434664,11 +434664,11 @@ LABEL_FEC405:
 	add xiz, xbc
 	.byte 0x06, 0x00	; EI 000h
 	.byte 0x9f, 0x06, 0x20	; LD WA, (XSP + 006h)
-	.byte 0xd8, 0x33, 0x02	; BIT 002h, WA
+	bit 2, wa
 	jr z, LABEL_FEC478
 	.byte 0xd1, 0x0e, 0xec, 0x20	; LD WA, (0EC0Eh)
 	.byte 0xd1, 0x0e, 0xec, 0x69	; DECW 1, (0EC0Eh)
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr ge, LABEL_FEC478
 	.byte 0xf1, 0x0e, 0xec, 0x02, 0x06, 0x00	; LDW (0EC0Eh), 0006h
 	inc 1, xiz
@@ -434792,7 +434792,7 @@ LABEL_FEC537:
 
 LABEL_FEC55C:
 	call LABEL_F92C13
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FEC575
 	.byte 0xc1, 0xe4, 0xe9, 0x3f, 0x01	; CP (0E9E4h), 001h
 	jr nz, LABEL_FEC575
@@ -434840,7 +434840,7 @@ LABEL_FEC5D6:
 LABEL_FEC60C:
 	call LABEL_F52E8F
 	ld wa, hl
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr ge, LABEL_FEC61C
 	ldw hl, 0xFFFF
 	jrl LABEL_FEC833
@@ -434867,7 +434867,7 @@ LABEL_FEC63C:
 
 LABEL_FEC653:
 	call LABEL_F52E8F
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr ge, LABEL_FEC661
 	ldw hl, 0xFFFF
 	jrl LABEL_FEC833
@@ -434886,7 +434886,7 @@ LABEL_FEC66E:
 
 LABEL_FEC67E:
 	call LABEL_F52E8F
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr ge, LABEL_FEC68C
 	ldw hl, 0xFFFF
 	jrl LABEL_FEC833
@@ -434904,7 +434904,7 @@ LABEL_FEC69A:
 LABEL_FEC6AA:
 	call LABEL_F52E8F
 	ld wa, hl
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr ge, LABEL_FEC6BA
 	ldw hl, 0xFFFF
 	jrl LABEL_FEC833
@@ -434933,7 +434933,7 @@ LABEL_FEC6E9:
 
 LABEL_FEC6F9:
 	call LABEL_F52E8F
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr ge, LABEL_FEC707
 	ldw hl, 0xFFFF
 	jrl LABEL_FEC833
@@ -434946,13 +434946,13 @@ LABEL_FEC707:
 LABEL_FEC715:
 	call LABEL_F52E8F
 	ld wa, hl
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr ge, LABEL_FEC725
 	ldw hl, 0xFFFF
 	jrl LABEL_FEC833
 
 LABEL_FEC725:
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_FEC72F
 	ldw hl, 0xFFFC
 	jrl LABEL_FEC833
@@ -434960,7 +434960,7 @@ LABEL_FEC725:
 LABEL_FEC72F:
 	call LABEL_F52E8F
 	ld wa, hl
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr ge, LABEL_FEC73F
 	ldw hl, 0xFFFF
 	jrl LABEL_FEC833
@@ -434972,7 +434972,7 @@ LABEL_FEC73F:
 	.byte 0xf1, 0xf1, 0xe9, 0x50	; LD (0E9F1h), WA
 	call LABEL_F52E8F
 	ld wa, hl
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr ge, LABEL_FEC75A
 	ldw hl, 0xFFFF
 	jrl LABEL_FEC833
@@ -434983,7 +434983,7 @@ LABEL_FEC75A:
 	.byte 0xd1, 0xf1, 0xe9, 0x88	; ADD (0E9F1h), WA
 	call LABEL_F52E8F
 	ld wa, hl
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr ge, LABEL_FEC772
 	ldw hl, 0xFFFF
 	jrl LABEL_FEC833
@@ -434995,7 +434995,7 @@ LABEL_FEC772:
 	.byte 0xf1, 0xef, 0xe9, 0x50	; LD (0E9EFh), WA
 	call LABEL_F52E8F
 	ld wa, hl
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr ge, LABEL_FEC78D
 	ldw hl, 0xFFFF
 	jrl LABEL_FEC833
@@ -435011,7 +435011,7 @@ LABEL_FEC78D:
 LABEL_FEC7A5:
 	call LABEL_F52E8F
 	ld wa, hl
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr ge, LABEL_FEC7B4
 	ldw hl, 0xFFFF
 	jr LABEL_FEC833
@@ -435040,7 +435040,7 @@ LABEL_FEC7E2:
 
 LABEL_FEC7F2:
 	call LABEL_F52E8F
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr ge, LABEL_FEC7FF
 	ldw hl, 0xFFFF
 	jr LABEL_FEC833
@@ -435075,7 +435075,7 @@ LABEL_FEC833:
 LABEL_FEC83A:
 	calr LABEL_FEC49B
 	call LABEL_F92C0E
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FEC84C
 	lds wa, 1
 	calr LABEL_FEDDA2
@@ -435090,11 +435090,11 @@ LABEL_FEC851:
 	call LABEL_FCD437
 	ld wa, hl
 	exts xwa
-	.byte 0xd8, 0x31, 0x0f	; SET 00fh, WA
+	set 15, wa
 	.byte 0xf1, 0xf5, 0x11, 0x50	; LD (11F5h), WA
 	ld xwa, 0xC0
 	call LABEL_FCD437
-	.byte 0xdb, 0xd9	; CP HL, 1
+	cps hl, 1
 	jr nz, LABEL_FEC887
 	.byte 0xf1, 0xea, 0x10, 0x00, 0x01	; LD (10EAh), 001h
 	ld xwa, 0xC0
@@ -435122,7 +435122,7 @@ LABEL_FEC89A:
 	jr nz, LABEL_FEC8EB
 	calr LABEL_FEC90A
 	ld wa, hl
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	.byte 0xb0, 0xf1	; RET LT
 	calr LABEL_FEC20F
 	ld xwa, xhl
@@ -435138,7 +435138,7 @@ LABEL_FEC8C5:
 LABEL_FEC8CB:
 	calr LABEL_FECA8A
 	ld wa, hl
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	.byte 0xb0, 0xf1	; RET LT
 	calr LABEL_FEC20F
 	ld xwa, xhl
@@ -435155,7 +435155,7 @@ LABEL_FEC8EB:
 	extz wa
 	calr LABEL_FECB8F
 	ld wa, hl
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	.byte 0xb0, 0xf1	; RET LT
 	calr LABEL_FEC20F
 	ld xwa, xhl
@@ -435172,7 +435172,7 @@ LABEL_FEC90A:
 	push xiz
 	calr LABEL_FEDFBC
 	ld wa, hl
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr ge, LABEL_FEC91F
 	ldw hl, 0xFFFF
 	jrl LABEL_FECA83
@@ -435183,7 +435183,7 @@ LABEL_FEC91F:
 	jrl z, LABEL_FEC9B6
 	cp a, 0x2F
 	jr z, LABEL_FEC9A3
-	.byte 0xc9, 0xdd	; CP A, 5
+	cps a, 5
 	jrl nz, LABEL_FECA51
 	calr LABEL_FEDFBC
 	ld wa, hl
@@ -435202,7 +435202,7 @@ LABEL_FEC949:
 LABEL_FEC950:
 	calr LABEL_FEDFBC
 	ld wa, hl
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr ge, LABEL_FEC95F
 	ldw hl, 0xFFFF
 	jrl LABEL_FECA83
@@ -435239,7 +435239,7 @@ LABEL_FEC96F:
 
 LABEL_FEC9A3:
 	calr LABEL_FEDFBC
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr ge, LABEL_FEC9B0
 	ldw hl, 0xFFFF
 	jrl LABEL_FECA83
@@ -435266,7 +435266,7 @@ LABEL_FEC9CE:
 LABEL_FEC9D5:
 	calr LABEL_FEDFBC
 	ld wa, hl
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr ge, LABEL_FEC9E4
 	ldw hl, 0xFFFF
 	jrl LABEL_FECA83
@@ -435307,7 +435307,7 @@ LABEL_FECA23:
 
 LABEL_FECA34:
 	ld xiz, xwa
-	.byte 0xd8, 0x31, 0x0f	; SET 00fh, WA
+	set 15, wa
 	.byte 0xf1, 0xf5, 0x11, 0x50	; LD (11F5h), WA
 	ld bc, iz
 	.byte 0xe8, 0xac	; LD XWA, 4
@@ -435333,7 +435333,7 @@ LABEL_FECA67:
 
 LABEL_FECA6E:
 	calr LABEL_FEDFBC
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr ge, LABEL_FECA7A
 	ldw hl, 0xFFFF
 	jr LABEL_FECA83
@@ -435357,7 +435357,7 @@ LABEL_FECA8A:
 	calr LABEL_FEDFBC
 	.byte 0xd7, 0xfa, 0x9b	; LD QIZ, HL
 	.byte 0xd7, 0xfa, 0x88	; LD WA, QIZ
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr ge, LABEL_FECAA1
 	ldw hl, 0xFFFF
 	jrl LABEL_FECB88
@@ -435372,7 +435372,7 @@ LABEL_FECAA1:
 
 LABEL_FECAB2:
 	calr LABEL_FEDFBC
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr ge, LABEL_FECABF
 	ldw hl, 0xFFFF
 	jrl LABEL_FECB88
@@ -435394,7 +435394,7 @@ LABEL_FECACB:
 LABEL_FECAD8:
 	calr LABEL_FEDFBC
 	ld wa, hl
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr ge, LABEL_FECAE7
 	ldw hl, 0xFFFF
 	jrl LABEL_FECB88
@@ -435422,7 +435422,7 @@ LABEL_FECAFD:
 	jr nz, LABEL_FECB72
 	ld xwa, 0xC0
 	call LABEL_FCD437
-	.byte 0xdb, 0xd9	; CP HL, 1
+	cps hl, 1
 	jr nz, LABEL_FECB28
 	.byte 0x8f, 0x08, 0x3f, 0x01	; CP (XSP + 008h), 001h
 	jr nz, LABEL_FECB3B
@@ -435430,7 +435430,7 @@ LABEL_FECAFD:
 LABEL_FECB28:
 	ld xwa, 0xC0
 	call LABEL_FCD437
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr nz, LABEL_FECB51
 	.byte 0x8f, 0x08, 0x3f, 0x02	; CP (XSP + 008h), 002h
 	jr z, LABEL_FECB51
@@ -435448,7 +435448,7 @@ LABEL_FECB3B:
 
 LABEL_FECB51:
 	call LABEL_F92C13
-	.byte 0xcf, 0xd8	; CP L, 0
+	cps l, 0
 	jr z, LABEL_FECB86
 	.byte 0xc1, 0xe4, 0xe9, 0x3f, 0x01	; CP (0E9E4h), 001h
 	jr nz, LABEL_FECB86
@@ -435486,7 +435486,7 @@ LABEL_FECB8F:
 	.byte 0xbf, 0x04, 0x34	; LDA XIX, XSP + 004h
 	lds bc, 5
 	.byte 0x95, 0x11	; LDIRW_95
-	.byte 0xc9, 0x33, 0x07	; BIT 007h, A
+	bit 7, a
 	jr z, LABEL_FECBAF
 	.byte 0xf1, 0x9c, 0xd0, 0x41	; LD (0D09Ch), A
 	.byte 0xbf, 0x04, 0x41	; LD (XSP + 004h), A
@@ -435520,7 +435520,7 @@ LABEL_FECBD2:
 LABEL_FECBD7:
 	calr LABEL_FEDFBC
 	ld wa, hl
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr ge, LABEL_FECBE5
 	ldw hl, 0xFFFF
 	jr LABEL_FECC04
@@ -435573,12 +435573,12 @@ LABEL_FECC35:
 	calr LABEL_FECCDF
 	ld iz, hl
 	ld wa, iz
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr z, LABEL_FECC1A
 
 LABEL_FECC40:
 	calr LABEL_FEE246
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	.byte 0xf2, 0x02, 0xaa, 0xf2, 0xea	; CALL GT, LABEL_F2AA02
 	ld wa, iz
 	cp wa, 0xFFFD
@@ -435607,7 +435607,7 @@ LABEL_FECC6B:
 	calr LABEL_FEE20E
 	ld iz, hl
 	ld wa, iz
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr ge, LABEL_FECC84
 	.byte 0xaf, 0x02, 0x20	; LD XWA, (XSP + 002h)
 	.byte 0xb0, 0x00, 0x00	; LD (XWA), 000h
@@ -435617,7 +435617,7 @@ LABEL_FECC84:
 	ld wa, iz
 	.byte 0xaf, 0x02, 0x21	; LD XBC, (XSP + 002h)
 	calr LABEL_FEE24E
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr ge, LABEL_FECC98
 	.byte 0xaf, 0x02, 0x20	; LD XWA, (XSP + 002h)
 	.byte 0xb0, 0x00, 0x00	; LD (XWA), 000h
@@ -435639,7 +435639,7 @@ LABEL_FECCA5:
 	calr LABEL_FEE32E
 	ld iz, hl
 	ld wa, iz
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr ge, LABEL_FECCBE
 	.byte 0xaf, 0x02, 0x20	; LD XWA, (XSP + 002h)
 	.byte 0xb0, 0x00, 0x00	; LD (XWA), 000h
@@ -435649,7 +435649,7 @@ LABEL_FECCBE:
 	ld wa, iz
 	.byte 0xaf, 0x02, 0x21	; LD XBC, (XSP + 002h)
 	calr LABEL_FEE366
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr ge, LABEL_FECCD2
 	.byte 0xaf, 0x02, 0x20	; LD XWA, (XSP + 002h)
 	.byte 0xb0, 0x00, 0x00	; LD (XWA), 000h
@@ -435678,7 +435678,7 @@ LABEL_FECCDF:
 	ld xbc, xwa
 	ld wa, de
 	calr LABEL_FEE158
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr ge, LABEL_FECD12
 	ldw hl, 0xFFFD
 	jrl LABEL_FED0A1
@@ -435694,7 +435694,7 @@ LABEL_FECD18:
 	ld xbc, xwa
 	ld wa, de
 	calr LABEL_FEE285
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr ge, LABEL_FECD39
 	ldw hl, 0xFFFD
 	jrl LABEL_FED0A1
@@ -435705,7 +435705,7 @@ LABEL_FECD39:
 
 LABEL_FECD43:
 	.byte 0xd1, 0xe5, 0xe9, 0x20	; LD WA, (0E9E5h)
-	.byte 0xd8, 0x33, 0x04	; BIT 004h, WA
+	bit 4, wa
 	jr z, LABEL_FECD52
 	ldw hl, 0xFFFD
 	jrl LABEL_FED0A1
@@ -435713,7 +435713,7 @@ LABEL_FECD43:
 LABEL_FECD52:
 	call LABEL_F52E8F
 	ld wa, hl
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr ge, LABEL_FECD62
 	ldw hl, 0xFFFF
 	jrl LABEL_FED0A1
@@ -435734,7 +435734,7 @@ LABEL_FECD62:
 	jrl nz, LABEL_FECF08
 	call LABEL_F52E8F
 	ld wa, hl
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr ge, LABEL_FECD9D
 	ldw hl, 0xFFFF
 	jrl LABEL_FED0A1
@@ -435751,7 +435751,7 @@ LABEL_FECD9D:
 	jr nz, LABEL_FECDE2
 	call LABEL_F52E8F
 	ld wa, hl
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr ge, LABEL_FECDCB
 	ldw hl, 0xFFFF
 	jrl LABEL_FED0A1
@@ -435790,7 +435790,7 @@ LABEL_FECE05:
 
 LABEL_FECE1B:
 	call LABEL_F52E8F
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr ge, LABEL_FECE29
 	ldw hl, 0xFFFF
 	jrl LABEL_FED0A1
@@ -435817,7 +435817,7 @@ LABEL_FECE4C:
 	ld xbc, xwa
 	ld wa, de
 	calr LABEL_FEC2E0
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr ge, LABEL_FECE67
 	ldw hl, 0xFFFF
 	jrl LABEL_FED0A1
@@ -435841,7 +435841,7 @@ LABEL_FECE67:
 LABEL_FECE8C:
 	call LABEL_F52E8F
 	ld wa, hl
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr ge, LABEL_FECE9C
 	ldw hl, 0xFFFF
 	jrl LABEL_FED0A1
@@ -435860,7 +435860,7 @@ LABEL_FECE9C:
 	ld xbc, xwa
 	ld wa, de
 	calr LABEL_FEC2E0
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr ge, LABEL_FECECF
 	ldw hl, 0xFFFF
 	jrl LABEL_FED0A1
@@ -435933,7 +435933,7 @@ LABEL_FECF58:
 LABEL_FECF62:
 	call LABEL_F52E8F
 	ld wa, hl
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr ge, LABEL_FECF72
 	ldw hl, 0xFFFF
 	jrl LABEL_FED0A1
@@ -435955,7 +435955,7 @@ LABEL_FECF8B:
 	.byte 0xe1, 0xf5, 0xe9, 0x20	; LD XWA, (0E9F5h)
 	.byte 0xbf, 0x06, 0x60	; LD (XSP + 006h), XWA
 	.byte 0xd1, 0xe5, 0xe9, 0x20	; LD WA, (0E9E5h)
-	.byte 0xd8, 0x33, 0x04	; BIT 004h, WA
+	bit 4, wa
 	jr nz, LABEL_FECFD0
 	.byte 0xf3, 0xfd, 0x0e, 0x01, 0x30	; LDA XWA, XSP + 010eh
 	ld xde, xwa
@@ -436030,7 +436030,7 @@ LABEL_FED006:
 	ld xbc, xwa
 	ld wa, de
 	calr LABEL_FEE285
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr ge, LABEL_FED06F
 	ldw hl, 0xFFFD
 	jr LABEL_FED0A1
@@ -436047,7 +436047,7 @@ LABEL_FED079:
 	ld xbc, xwa
 	ld wa, de
 	calr LABEL_FEE158
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr ge, LABEL_FED099
 	ldw hl, 0xFFFD
 	jr LABEL_FED0A1
@@ -436075,7 +436075,7 @@ LABEL_FED0A8:
 	.byte 0xbf, 0x02, 0x60	; LD (XSP + 002h), XWA
 	calr LABEL_FEDFBC
 	ld wa, hl
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr ge, LABEL_FED0CE
 	ldw hl, 0xFFFF
 	jrl LABEL_FED32F
@@ -436090,19 +436090,19 @@ LABEL_FED0D9:
 	.byte 0xe8, 0xa8	; LD XWA, 0
 	.byte 0xf1, 0xeb, 0xe9, 0x60	; LD (0E9EBh), XWA
 	lds iz, 0
-	.byte 0xde, 0xde	; CP IZ, 6
+	cps iz, 6
 	jr nc, LABEL_FED0F8
 
 LABEL_FED0E5:
 	calr LABEL_FEDFBC
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr ge, LABEL_FED0F2
 	ldw hl, 0xFFFF
 	jrl LABEL_FED32F
 
 LABEL_FED0F2:
 	inc 1, iz
-	.byte 0xde, 0xde	; CP IZ, 6
+	cps iz, 6
 	jr c, LABEL_FED0E5
 
 LABEL_FED0F8:
@@ -436113,7 +436113,7 @@ LABEL_FED0F8:
 LABEL_FED100:
 	calr LABEL_FEDFBC
 	ld wa, hl
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr ge, LABEL_FED10F
 	ldw hl, 0xFFFF
 	jrl LABEL_FED32F
@@ -436140,7 +436140,7 @@ LABEL_FED12A:
 
 LABEL_FED132:
 	calr LABEL_FEDFBC
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr ge, LABEL_FED13F
 	ldw hl, 0xFFFF
 	jrl LABEL_FED32F
@@ -436153,7 +436153,7 @@ LABEL_FED13F:
 LABEL_FED147:
 	calr LABEL_FEDFBC
 	ld wa, hl
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr ge, LABEL_FED156
 	ldw hl, 0xFFFF
 	jrl LABEL_FED32F
@@ -436168,12 +436168,12 @@ LABEL_FED156:
 
 LABEL_FED167:
 	lds iz, 0
-	.byte 0xde, 0xd9	; CP IZ, 1
+	cps iz, 1
 	jr nc, LABEL_FED18D
 
 LABEL_FED16D:
 	calr LABEL_FEDFBC
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr ge, LABEL_FED187
 	ldw hl, 0xFFFF
 	jrl LABEL_FED32F
@@ -436188,18 +436188,18 @@ LABEL_FED181:
 
 LABEL_FED187:
 	inc 1, iz
-	.byte 0xde, 0xd9	; CP IZ, 1
+	cps iz, 1
 	jr c, LABEL_FED16D
 
 LABEL_FED18D:
 	lds iz, 0
-	.byte 0xde, 0xdb	; CP IZ, 3
+	cps iz, 3
 	jr ugt, LABEL_FED1BD
 
 LABEL_FED193:
 	calr LABEL_FEDFBC
 	ld wa, hl
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr ge, LABEL_FED1A2
 	ldw hl, 0xFFFF
 	jrl LABEL_FED32F
@@ -436217,31 +436217,31 @@ LABEL_FED1B0:
 	ld a, c
 	.byte 0xaf, 0x02, 0x88	; ADD (XSP + 002h), XWA
 	inc 1, iz
-	.byte 0xde, 0xdb	; CP IZ, 3
+	cps iz, 3
 	jr ule, LABEL_FED193
 
 LABEL_FED1BD:
 	lds iz, 0
-	.byte 0xde, 0xdb	; CP IZ, 3
+	cps iz, 3
 	jr ugt, LABEL_FED1D6
 
 LABEL_FED1C3:
 	calr LABEL_FEDFBC
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr ge, LABEL_FED1D0
 	ldw hl, 0xFFFF
 	jrl LABEL_FED32F
 
 LABEL_FED1D0:
 	inc 1, iz
-	.byte 0xde, 0xdb	; CP IZ, 3
+	cps iz, 3
 	jr ule, LABEL_FED1C3
 
 LABEL_FED1D6:
 	.byte 0xf1, 0xef, 0xe9, 0x02, 0x80, 0x01	; LDW (0E9EFh), 0180h
 	calr LABEL_FEDFBC
 	ld wa, hl
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr ge, LABEL_FED1EB
 	ldw hl, 0xFFFF
 	jrl LABEL_FED32F
@@ -436252,7 +436252,7 @@ LABEL_FED1EB:
 	.byte 0xf1, 0xf1, 0xe9, 0x50	; LD (0E9F1h), WA
 	calr LABEL_FEDFBC
 	ld wa, hl
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr ge, LABEL_FED202
 	ldw hl, 0xFFFF
 	jrl LABEL_FED32F
@@ -436264,19 +436264,19 @@ LABEL_FED202:
 	extz xwa
 	.byte 0xf1, 0xeb, 0xe9, 0x60	; LD (0E9EBh), XWA
 	lds iz, 0
-	.byte 0xde, 0xd9	; CP IZ, 1
+	cps iz, 1
 	jr ugt, LABEL_FED228
 
 LABEL_FED215:
 	calr LABEL_FEDFBC
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr ge, LABEL_FED222
 	ldw hl, 0xFFFF
 	jrl LABEL_FED32F
 
 LABEL_FED222:
 	inc 1, iz
-	.byte 0xde, 0xd9	; CP IZ, 1
+	cps iz, 1
 	jr ule, LABEL_FED215
 
 LABEL_FED228:
@@ -436291,7 +436291,7 @@ LABEL_FED228:
 
 LABEL_FED242:
 	calr LABEL_FEDFBC
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr ge, LABEL_FED24F
 	ldw hl, 0xFFFF
 	jrl LABEL_FED32F
@@ -436304,7 +436304,7 @@ LABEL_FED24F:
 LABEL_FED257:
 	calr LABEL_FEDFBC
 	ld wa, hl
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr ge, LABEL_FED266
 	ldw hl, 0xFFFF
 	jrl LABEL_FED32F
@@ -436320,7 +436320,7 @@ LABEL_FED266:
 
 LABEL_FED277:
 	calr LABEL_FEDFBC
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr ge, LABEL_FED284
 	ldw hl, 0xFFFF
 	jrl LABEL_FED32F
@@ -436346,7 +436346,7 @@ LABEL_FED299:
 
 LABEL_FED2A4:
 	calr LABEL_FEDFBC
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr ge, LABEL_FED2B0
 	ldw hl, 0xFFFF
 	jr LABEL_FED32F
@@ -436361,7 +436361,7 @@ LABEL_FED2B0:
 LABEL_FED2BB:
 	calr LABEL_FEDFBC
 	ld wa, hl
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr ge, LABEL_FED2C9
 	ldw hl, 0xFFFF
 	jr LABEL_FED32F
@@ -436374,7 +436374,7 @@ LABEL_FED2C9:
 
 LABEL_FED2D3:
 	calr LABEL_FEDFBC
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr ge, LABEL_FED2DF
 	ldw hl, 0xFFFF
 	jr LABEL_FED32F
@@ -436422,7 +436422,7 @@ LABEL_FED334:
 	call LABEL_FCD437
 	ld wa, hl
 	exts xwa
-	.byte 0xd8, 0x31, 0x0f	; SET 00fh, WA
+	set 15, wa
 	.byte 0xf1, 0xf5, 0x11, 0x50	; LD (11F5h), WA
 	.byte 0x0b, 0x02, 0x00	; PUSHW 0002h
 	lds wa, 0
@@ -436507,7 +436507,7 @@ LABEL_FED406:
 	call LABEL_FCD437
 	ld wa, hl
 	exts xwa
-	.byte 0xd8, 0x31, 0x0f	; SET 00fh, WA
+	set 15, wa
 	.byte 0xf1, 0xf5, 0x11, 0x50	; LD (11F5h), WA
 	.byte 0x0b, 0x02, 0x00	; PUSHW 0002h
 	lds wa, 0
@@ -436719,7 +436719,7 @@ LABEL_FED63B:
 	jrl nz, LABEL_FED78D
 	extz wa
 	sub wa, 0xF0
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jrl lt, LABEL_FED7CF
 	cp wa, 0xF
 	jrl gt, LABEL_FED7CF
@@ -436790,7 +436790,7 @@ LABEL_FED7A5:
 LABEL_FED7AC:
 	calr LABEL_FEDFBC
 	ld wa, hl
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr ge, LABEL_FED7BA
 	ldw hl, 0xFFFF
 	jr LABEL_FED7D1
@@ -436887,7 +436887,7 @@ LABEL_FED8AB:
 	or a, 0xC0
 	.byte 0xbf, 0x04, 0x41	; LD (XSP + 004h), A
 	.byte 0x8f, 0x0c, 0x21	; LD A, (XSP + 00ch)
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
+	res 7, a
 	.byte 0xbf, 0x05, 0x41	; LD (XSP + 005h), A
 	.byte 0xbf, 0x04, 0x30	; LDA XWA, XSP + 004h
 	ld xbc, xwa
@@ -436922,14 +436922,14 @@ LABEL_FED962:
 
 LABEL_FED969:
 	lds wa, 0
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr z, LABEL_FED975
 	.byte 0x8e, 0x02, 0x3f, 0x00	; CP (XIZ + 002h), 000h
 	jr z, LABEL_FED97B
 
 LABEL_FED975:
 	lds wa, 0
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr z, LABEL_FED98B
 
 LABEL_FED97B:
@@ -436953,7 +436953,7 @@ LABEL_FED990:
 	.byte 0xf1, 0xef, 0xe9, 0x02, 0xe0, 0x01	; LDW (0E9EFh), 01e0h
 	calr LABEL_FEDFBC
 	ld wa, hl
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr ge, LABEL_FED9A5
 	ldw hl, 0xFFFF
 	jr LABEL_FED9E4
@@ -436964,7 +436964,7 @@ LABEL_FED9A5:
 	jr nz, LABEL_FED9DA
 	calr LABEL_FEDFBC
 	ld wa, hl
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr ge, LABEL_FED9BA
 	ldw hl, 0xFFFF
 	jr LABEL_FED9E4
@@ -436974,7 +436974,7 @@ LABEL_FED9BA:
 	.byte 0xc7, 0xf8, 0x9f	; LD IZL, L
 	calr LABEL_FEDFBC
 	ld wa, hl
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr ge, LABEL_FED9CD
 	ldw hl, 0xFFFF
 	jr LABEL_FED9E4
@@ -437034,7 +437034,7 @@ LABEL_FEDA34:
 	lds iz, 0
 	lds iz, 0
 	.byte 0xd1, 0xe5, 0xe9, 0x21	; LD BC, (0E9E5h)
-	.byte 0xd9, 0x33, 0x04	; BIT 004h, BC
+	bit 4, bc
 	jr z, LABEL_FEDA4B
 	ldw hl, 0xFFFD
 	jrl LABEL_FEDB50
@@ -437056,7 +437056,7 @@ LABEL_FEDA61:
 LABEL_FEDA6B:
 	calr LABEL_FEDFBC
 	ld wa, hl
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr ge, LABEL_FEDA7A
 	ldw hl, 0xFFFF
 	jrl LABEL_FEDB50
@@ -437083,7 +437083,7 @@ LABEL_FEDA8C:
 LABEL_FEDAA4:
 	calr LABEL_FEDFBC
 	ld wa, hl
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr ge, LABEL_FEDAB3
 	ldw hl, 0xFFFF
 	jrl LABEL_FEDB50
@@ -437094,7 +437094,7 @@ LABEL_FEDAB3:
 	jr nz, LABEL_FEDAE0
 	calr LABEL_FEDFBC
 	ld wa, hl
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr ge, LABEL_FEDAC9
 	ldw hl, 0xFFFF
 	jrl LABEL_FEDB50
@@ -437103,7 +437103,7 @@ LABEL_FEDAC9:
 	ld iz, hl
 	calr LABEL_FEDFBC
 	ld wa, hl
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr ge, LABEL_FEDAD9
 	ldw hl, 0xFFFF
 	jr LABEL_FEDB50
@@ -437126,11 +437126,11 @@ LABEL_FEDAEC:
 	extz wa
 	calr LABEL_FEDCA6
 	ld wa, hl
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr lt, LABEL_FEDB50
 	calr LABEL_FEDFBC
 	ld wa, hl
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr ge, LABEL_FEDB05
 	ldw hl, 0xFFFF
 	jr LABEL_FEDB50
@@ -437140,7 +437140,7 @@ LABEL_FEDB05:
 	jr nz, LABEL_FEDB18
 	calr LABEL_FEDFBC
 	ld wa, hl
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr ge, LABEL_FEDB18
 	ldw hl, 0xFFFF
 	jr LABEL_FEDB50
@@ -437151,7 +437151,7 @@ LABEL_FEDB18:
 	jr nz, LABEL_FEDB44
 	calr LABEL_FEDFBC
 	ld wa, hl
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr ge, LABEL_FEDB2D
 	ldw hl, 0xFFFF
 	jr LABEL_FEDB50
@@ -437160,7 +437160,7 @@ LABEL_FEDB2D:
 	ld iz, hl
 	calr LABEL_FEDFBC
 	ld wa, hl
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr ge, LABEL_FEDB3D
 	ldw hl, 0xFFFF
 	jr LABEL_FEDB50
@@ -437205,7 +437205,7 @@ LABEL_FEDB5D:
 LABEL_FEDB7C:
 	calr LABEL_FEE0E1
 	ld wa, hl
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jrl lt, LABEL_FEDC96
 	.byte 0xe8, 0xa8	; LD XWA, 0
 	ld a, l
@@ -437213,7 +437213,7 @@ LABEL_FEDB7C:
 	.byte 0xf1, 0xfd, 0xeb, 0x60	; LD (0EBFDh), XWA
 	calr LABEL_FEE0E1
 	ld wa, hl
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jrl lt, LABEL_FEDC96
 	.byte 0xe8, 0xa8	; LD XWA, 0
 	ld a, l
@@ -437222,7 +437222,7 @@ LABEL_FEDB7C:
 	.byte 0xe1, 0xfd, 0xeb, 0x88	; ADD (0EBFDh), XWA
 	calr LABEL_FEE0E1
 	ld wa, hl
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jrl lt, LABEL_FEDC96
 	.byte 0xe8, 0xa8	; LD XWA, 0
 	ld a, l
@@ -437231,7 +437231,7 @@ LABEL_FEDB7C:
 	.byte 0xe1, 0xfd, 0xeb, 0x88	; ADD (0EBFDh), XWA
 	calr LABEL_FEE0E1
 	ld wa, hl
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jrl lt, LABEL_FEDC96
 	.byte 0xe8, 0xa8	; LD XWA, 0
 	ld a, l
@@ -437241,7 +437241,7 @@ LABEL_FEDB7C:
 	.byte 0xe1, 0xfd, 0xeb, 0x88	; ADD (0EBFDh), XWA
 	calr LABEL_FEE0E1
 	ld wa, hl
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jrl lt, LABEL_FEDC96
 	lds iz, 0
 	ld wa, iz
@@ -437272,7 +437272,7 @@ LABEL_FEDC21:
 LABEL_FEDC25:
 	calr LABEL_FEE0E1
 	ld wa, hl
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr lt, LABEL_FEDC42
 	ld wa, iz
 	.byte 0xf1, 0x03, 0xec, 0x31	; LDA XBC, 0EC03h
@@ -437326,7 +437326,7 @@ LABEL_FEDCA2:
 LABEL_FEDCA6:
 	.byte 0xbf, 0xf6, 0x37	; LDA XSP, XSP - 10
 	push xiz
-	.byte 0xc9, 0x33, 0x07	; BIT 007h, A
+	bit 7, a
 	jr z, LABEL_FEDCBA
 	.byte 0xf1, 0x9e, 0xd0, 0x41	; LD (0D09Eh), A
 	.byte 0xbf, 0x04, 0x41	; LD (XSP + 004h), A
@@ -437360,7 +437360,7 @@ LABEL_FEDCDD:
 LABEL_FEDCE2:
 	calr LABEL_FEDFBC
 	ld wa, hl
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr ge, LABEL_FEDCF1
 	ldw hl, 0xFFFF
 	jrl LABEL_FEDD9D
@@ -437480,11 +437480,11 @@ LABEL_FEDDA2:
 	.byte 0xbf, 0x02, 0x34	; LDA XIX, XSP + 002h
 	ldw bc, 0x8
 	.byte 0x95, 0x11	; LDIRW_95
-	.byte 0xc9, 0xda	; CP A, 2
+	cps a, 2
 	jrl z, LABEL_FEDEE2
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	jr z, LABEL_FEDE72
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jrl nz, LABEL_FEDF68
 	.byte 0xf1, 0xea, 0x10, 0x00, 0x01	; LD (10EAh), 001h
 	ld xwa, 0xC1
@@ -437629,13 +437629,13 @@ LABEL_FEDF6D:
 	ldw bc, 0x10
 	.byte 0x95, 0x11	; LDIRW_95
 	.byte 0xc1, 0xe4, 0xe9, 0x23	; LD C, (0E9E4h)
-	.byte 0xcb, 0xdc	; CP C, 4
+	cps c, 4
 	jr z, LABEL_FEDFA3
-	.byte 0xcb, 0xdb	; CP C, 3
+	cps c, 3
 	jr z, LABEL_FEDF90
-	.byte 0xcb, 0xda	; CP C, 2
+	cps c, 2
 	jr z, LABEL_FEDF90
-	.byte 0xcb, 0xd9	; CP C, 1
+	cps c, 1
 	jr nz, LABEL_FEDFB5
 
 LABEL_FEDF90:
@@ -437651,7 +437651,7 @@ LABEL_FEDF90:
 LABEL_FEDFA3:
 	call LABEL_F8A4C8
 	ld wa, hl
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr lt, LABEL_FEDFB8
 	ld wa, hl
 	call LABEL_F530F9
@@ -437666,13 +437666,13 @@ LABEL_FEDFB8:
 
 LABEL_FEDFBC:
 	.byte 0xc1, 0xe4, 0xe9, 0x21	; LD A, (0E9E4h)
-	.byte 0xc9, 0xdc	; CP A, 4
+	cps a, 4
 	jr z, LABEL_FEDFFE
-	.byte 0xc9, 0xdb	; CP A, 3
+	cps a, 3
 	jr z, LABEL_FEDFF8
-	.byte 0xc9, 0xda	; CP A, 2
+	cps a, 2
 	jr z, LABEL_FEDFF8
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	jr nz, LABEL_FEE004
 	calr LABEL_FEE119
 	cp hl, 0x780
@@ -437686,7 +437686,7 @@ LABEL_FEDFDB:
 
 LABEL_FEDFE4:
 	calr LABEL_FECCDF
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr z, LABEL_FEDFDB
 
 LABEL_FEDFEB:
@@ -437712,13 +437712,13 @@ LABEL_FEE007:
 
 LABEL_FEE008:
 	.byte 0xc1, 0xe4, 0xe9, 0x21	; LD A, (0E9E4h)
-	.byte 0xc9, 0xdc	; CP A, 4
+	cps a, 4
 	jr z, LABEL_FEE02B
-	.byte 0xc9, 0xdb	; CP A, 3
+	cps a, 3
 	jr z, LABEL_FEE025
-	.byte 0xc9, 0xda	; CP A, 2
+	cps a, 2
 	jr z, LABEL_FEE025
-	.byte 0xc9, 0xd9	; CP A, 1
+	cps a, 1
 	jr nz, LABEL_FEE032
 	call LABEL_F52F35
 	calr LABEL_FEE07C
@@ -437847,7 +437847,7 @@ LABEL_FEE158:
 	pushw iz
 	.byte 0xbf, 0x04, 0x61	; LD (XSP + 004h), XBC
 	ld iz, wa
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr nz, LABEL_FEE168
 	lds hl, 0
 	jr LABEL_FEE1A5
@@ -437980,7 +437980,7 @@ LABEL_FEE24E:
 LABEL_FEE260:
 	calr LABEL_FEE20E
 	ld wa, hl
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr ge, LABEL_FEE26E
 	ldw hl, 0xFFFF
 	jr LABEL_FEE281
@@ -438006,7 +438006,7 @@ LABEL_FEE285:
 	pushw iz
 	.byte 0xbf, 0x04, 0x61	; LD (XSP + 004h), XBC
 	ld iz, wa
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr nz, LABEL_FEE295
 	lds hl, 0
 	jr LABEL_FEE2C5
@@ -438124,7 +438124,7 @@ LABEL_FEE366:
 LABEL_FEE378:
 	calr LABEL_FEE32E
 	ld wa, hl
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr ge, LABEL_FEE386
 	ldw hl, 0xFFFF
 	jr LABEL_FEE399
@@ -438150,7 +438150,7 @@ LABEL_FEE39D:
 	pushw iz
 	.byte 0xbf, 0x04, 0x61	; LD (XSP + 004h), XBC
 	ld iz, wa
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr nz, LABEL_FEE3AD
 	lds hl, 0
 	jr LABEL_FEE3DD
@@ -438219,7 +438219,7 @@ LABEL_FEE43F:
 	call LABEL_FCD437
 	ld c, (xsp)
 	extz bc
-	.byte 0xdb, 0xd9	; CP HL, 1
+	cps hl, 1
 	jr nz, LABEL_FEE475
 	ld xwa, 0x48
 	.byte 0x8f, 0x02, 0x3f, 0x0f	; CP (XSP + 002h), 00fh
@@ -438281,7 +438281,7 @@ LABEL_FEE4BD:
 	ld xiz, xwa
 	ld xwa, 0xC0
 	call LABEL_FCD437
-	.byte 0xdb, 0xd9	; CP HL, 1
+	cps hl, 1
 	jrl z, LABEL_FEE556
 	.byte 0xaf, 0x04, 0x20	; LD XWA, (XSP + 004h)
 	.byte 0x80, 0x3f, 0x78	; CP (XWA), 078h
@@ -438325,7 +438325,7 @@ LABEL_FEE517:
 	.byte 0x86, 0x3c, 0x0f	; AND (XIZ), 00fh
 	ld c, (xwa)
 	and c, 0x1
-	.byte 0xcb, 0x31, 0x06	; SET 006h, C
+	set 6, c
 	ld (xwa), c
 	jr LABEL_FEE556
 
@@ -438385,7 +438385,7 @@ LABEL_FEE591:
 	.byte 0xf5, 0xe0, 0x47	; LD (XWA+), L
 	.byte 0xbf, 0x08, 0x60	; LD (XSP + 008h), XWA
 	inc 1, iz
-	.byte 0xde, 0xdf	; CP IZ, 7
+	cps iz, 7
 	jr c, LABEL_FEE591
 	.byte 0xbf, 0x0c, 0x31	; LDA XBC, XSP + 00ch
 	.byte 0x89, 0x07, 0x21	; LD A, (XBC + 007h)
@@ -438596,7 +438596,7 @@ LABEL_FEE76A:
 LABEL_FEE770:
 	ld xwa, 0xC0
 	call LABEL_FCD437
-	.byte 0xdb, 0xd9	; CP HL, 1
+	cps hl, 1
 	jr nz, LABEL_FEE78E
 	call LABEL_F9945E
 	cp l, 0xF
@@ -438659,7 +438659,7 @@ LABEL_FEE7EA:
 	ld xiz, xwa
 	ld xwa, 0xC0
 	call LABEL_FCD437
-	.byte 0xdb, 0xd9	; CP HL, 1
+	cps hl, 1
 	jr nz, LABEL_FEE801
 	ld xwa, xiz
 	calr LABEL_FEE7DE
@@ -438728,7 +438728,7 @@ LABEL_FEE861:
 	ld xiz, xwa
 	ld xwa, 0xC0
 	call LABEL_FCD437
-	.byte 0xdb, 0xd9	; CP HL, 1
+	cps hl, 1
 	jr nz, LABEL_FEE878
 	ld xwa, xiz
 	calr LABEL_FEE85A
@@ -438785,7 +438785,7 @@ LABEL_FEE8D3:
 	ld xiz, xwa
 	ld xwa, 0xC0
 	call LABEL_FCD437
-	.byte 0xdb, 0xd9	; CP HL, 1
+	cps hl, 1
 	jr nz, LABEL_FEE8EA
 	ld xwa, xiz
 	calr LABEL_FEE8C9
@@ -438949,7 +438949,7 @@ LABEL_FEEA24:
 	.byte 0xbf, 0x02, 0x00, 0xff	; LD (XSP + 002h), 0ffh
 	ld xwa, 0xC0
 	call LABEL_FCD437
-	.byte 0xdb, 0xd9	; CP HL, 1
+	cps hl, 1
 	jr z, LABEL_FEEABE
 	.byte 0x8f, 0x04, 0x3f, 0x78	; CP (XSP + 004h), 078h
 	jr nz, LABEL_FEEA63
@@ -439026,9 +439026,9 @@ LABEL_FEEAC7:
 	extz de
 	extz wa
 	dec 1, wa
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr lt, LABEL_FEEB52
-	.byte 0xd8, 0xdd	; CP WA, 5
+	cps wa, 5
 	jr gt, LABEL_FEEB52
 	add wa, wa
 	.byte 0xf2, 0xc6, 0xd3, 0xee, 0x34	; LDA XIX, 0EED3C6h
@@ -439100,9 +439100,9 @@ LABEL_FEEB59:
 	extz bc
 	extz de
 	dec 1, de
-	.byte 0xda, 0xd8	; CP DE, 0
+	cps de, 0
 	jr lt, LABEL_FEEBD7
-	.byte 0xda, 0xdd	; CP DE, 5
+	cps de, 5
 	jr gt, LABEL_FEEBD7
 	add de, de
 	.byte 0xf2, 0xd2, 0xd3, 0xee, 0x34	; LDA XIX, 0EED3D2h
@@ -439172,17 +439172,17 @@ LABEL_FEEBE6:
 LABEL_FEEBF0:
 	jr LABEL_FEEBE6
 	.byte 0x88, 0x09, 0x27	; LD L, (XWA + 009h)
-	.byte 0xcf, 0x30, 0x07	; RES 007h, L
+	res 7, l
 	ldb h, 0x0
 	extz xhl
 	sll xhl, 14
 	.byte 0x88, 0x0a, 0x25	; LD E, (XWA + 00ah)
-	.byte 0xcd, 0x30, 0x07	; RES 007h, E
+	res 7, e
 	ldb d, 0x0
 	extz xde
 	sll xde, 7
 	.byte 0x88, 0x0b, 0x23	; LD C, (XWA + 00bh)
-	.byte 0xcb, 0x30, 0x07	; RES 007h, C
+	res 7, c
 	ldb b, 0x0
 	extz xbc
 	or xhl, xde
@@ -439403,7 +439403,7 @@ LABEL_FEF252:
 	.byte 0xba, 0x06, 0x00, 0x02	; LD (XDE + 006h), 002h
 	.byte 0xc1, 0x97, 0xe1, 0x61	; INC 1, (0E197h)
 	.byte 0xc1, 0x97, 0xe1, 0x27	; LD L, (0E197h)
-	.byte 0xcf, 0x30, 0x07	; RES 007h, L
+	res 7, l
 	.byte 0xba, 0x07, 0x47	; LD (XDE + 007h), L
 	.byte 0xba, 0x08, 0x41	; LD (XDE + 008h), A
 	.byte 0xba, 0x09, 0x43	; LD (XDE + 009h), C
@@ -439424,7 +439424,7 @@ LABEL_FEF293:
 	.byte 0xba, 0x06, 0x00, 0x02	; LD (XDE + 006h), 002h
 	.byte 0xc1, 0x97, 0xe1, 0x61	; INC 1, (0E197h)
 	.byte 0xc1, 0x97, 0xe1, 0x27	; LD L, (0E197h)
-	.byte 0xcf, 0x30, 0x07	; RES 007h, L
+	res 7, l
 	.byte 0xba, 0x07, 0x47	; LD (XDE + 007h), L
 	.byte 0xba, 0x08, 0x41	; LD (XDE + 008h), A
 	.byte 0xba, 0x09, 0x43	; LD (XDE + 009h), C
@@ -439445,7 +439445,7 @@ LABEL_FEF2D4:
 	.byte 0xba, 0x06, 0x00, 0x02	; LD (XDE + 006h), 002h
 	.byte 0xc1, 0x97, 0xe1, 0x61	; INC 1, (0E197h)
 	.byte 0xc1, 0x97, 0xe1, 0x27	; LD L, (0E197h)
-	.byte 0xcf, 0x30, 0x07	; RES 007h, L
+	res 7, l
 	.byte 0xba, 0x07, 0x47	; LD (XDE + 007h), L
 	.byte 0xba, 0x08, 0x41	; LD (XDE + 008h), A
 	.byte 0xba, 0x09, 0x43	; LD (XDE + 009h), C
@@ -439466,7 +439466,7 @@ LABEL_FEF315:
 	.byte 0xba, 0x06, 0x00, 0x02	; LD (XDE + 006h), 002h
 	.byte 0xc1, 0x97, 0xe1, 0x61	; INC 1, (0E197h)
 	.byte 0xc1, 0x97, 0xe1, 0x27	; LD L, (0E197h)
-	.byte 0xcf, 0x30, 0x07	; RES 007h, L
+	res 7, l
 	.byte 0xba, 0x07, 0x47	; LD (XDE + 007h), L
 	.byte 0xba, 0x08, 0x41	; LD (XDE + 008h), A
 	.byte 0xba, 0x09, 0x43	; LD (XDE + 009h), C
@@ -439477,7 +439477,7 @@ LABEL_FEF315:
 	ret
 
 LABEL_FEF356:
-	.byte 0xd8, 0xdc	; CP WA, 4
+	cps wa, 4
 	jrl ugt, LABEL_FEF3DD
 	.byte 0xf1, 0xe0, 0xe2, 0x32	; LDA XDE, 0E2E0h
 	.byte 0xb2, 0x00, 0x2d	; LD (XDE), 02dh
@@ -439489,15 +439489,15 @@ LABEL_FEF356:
 	.byte 0xb3, 0x00, 0x38	; LD (XHL), 038h
 	.byte 0xba, 0x07, 0x43	; LD (XDE + 007h), C
 	.byte 0xba, 0x02, 0x31	; LDA XBC, XDE + 002h
-	.byte 0xd8, 0xdc	; CP WA, 4
+	cps wa, 4
 	jr z, LABEL_FEF3A6
-	.byte 0xd8, 0xdb	; CP WA, 3
+	cps wa, 3
 	jr z, LABEL_FEF3A1
-	.byte 0xd8, 0xda	; CP WA, 2
+	cps wa, 2
 	jr z, LABEL_FEF39C
-	.byte 0xd8, 0xd9	; CP WA, 1
+	cps wa, 1
 	jr z, LABEL_FEF397
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr nz, LABEL_FEF3AB
 	.byte 0xb1, 0x00, 0x0a	; LD (XBC), 00ah
 	jr LABEL_FEF3AE
@@ -439523,7 +439523,7 @@ LABEL_FEF3AB:
 
 LABEL_FEF3AE:
 	ld c, (xhl)
-	.byte 0xcb, 0xd8	; CP C, 0
+	cps c, 0
 	jr z, LABEL_FEF3DD
 	extz xwa
 	ld xbc, xwa
@@ -439545,7 +439545,7 @@ LABEL_FEF3AE:
 LABEL_FEF3DD:
 	.byte 0xc1, 0x97, 0xe1, 0x61	; INC 1, (0E197h)
 	.byte 0xc1, 0x97, 0xe1, 0x27	; LD L, (0E197h)
-	.byte 0xcf, 0x30, 0x07	; RES 007h, L
+	res 7, l
 	ret
 
 LABEL_FEF3E9:
@@ -439561,12 +439561,12 @@ LABEL_FEF3E9:
 	.byte 0xc1, 0x97, 0xe1, 0x23	; LD C, (0E197h)
 	inc 1, c
 	.byte 0xf1, 0x97, 0xe1, 0x43	; LD (0E197h), C
-	.byte 0xcb, 0x30, 0x07	; RES 007h, C
+	res 7, c
 	.byte 0xbb, 0x07, 0x43	; LD (XHL + 007h), C
 	.byte 0xd7, 0xe6, 0xa8	; LD QBC, 0
 	.byte 0xc7, 0xf0, 0x9d	; LD IXL, E
 	extz ix
-	.byte 0xdc, 0xd8	; CP IX, 0
+	cps ix, 0
 	jr ule, LABEL_FEF43E
 	ld xiy, xwa
 	ldw bc, 0x8
@@ -439591,7 +439591,7 @@ LABEL_FEF43E:
 	ld xde, xhl
 	call sendCOMM
 	.byte 0xc1, 0x97, 0xe1, 0x27	; LD L, (0E197h)
-	.byte 0xcf, 0x30, 0x07	; RES 007h, L
+	res 7, l
 	pop xiz
 	ret
 
@@ -439606,7 +439606,7 @@ LABEL_FEF455:
 	.byte 0xba, 0x06, 0x00, 0x02	; LD (XDE + 006h), 002h
 	.byte 0xc1, 0x97, 0xe1, 0x61	; INC 1, (0E197h)
 	.byte 0xc1, 0x97, 0xe1, 0x27	; LD L, (0E197h)
-	.byte 0xcf, 0x30, 0x07	; RES 007h, L
+	res 7, l
 	.byte 0xba, 0x07, 0x47	; LD (XDE + 007h), L
 	.byte 0xba, 0x08, 0x41	; LD (XDE + 008h), A
 	.byte 0xba, 0x09, 0x43	; LD (XDE + 009h), C
@@ -439625,7 +439625,7 @@ LABEL_FEF491:
 	.byte 0xba, 0x06, 0x00, 0x02	; LD (XDE + 006h), 002h
 	.byte 0xc1, 0x97, 0xe1, 0x61	; INC 1, (0E197h)
 	.byte 0xc1, 0x97, 0xe1, 0x27	; LD L, (0E197h)
-	.byte 0xcf, 0x30, 0x07	; RES 007h, L
+	res 7, l
 	.byte 0xba, 0x07, 0x47	; LD (XDE + 007h), L
 	.byte 0xba, 0x08, 0x41	; LD (XDE + 008h), A
 	.byte 0xba, 0x09, 0x43	; LD (XDE + 009h), C
@@ -439644,7 +439644,7 @@ LABEL_FEF4CD:
 	.byte 0xba, 0x06, 0x00, 0x01	; LD (XDE + 006h), 001h
 	.byte 0xc1, 0x97, 0xe1, 0x61	; INC 1, (0E197h)
 	.byte 0xc1, 0x97, 0xe1, 0x21	; LD A, (0E197h)
-	.byte 0xc9, 0x30, 0x07	; RES 007h, A
+	res 7, a
 	.byte 0xba, 0x07, 0x41	; LD (XDE + 007h), A
 	.byte 0xba, 0x08, 0x00, 0x00	; LD (XDE + 008h), 000h
 	lds wa, 3
@@ -439915,7 +439915,7 @@ LABEL_FEF76E:
 
 LABEL_FEF7CE:
 	ldb c, 0x0
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_FEF7D6
 	ldb c, 0x1
 
@@ -439931,7 +439931,7 @@ LABEL_FEF7D6:
 
 LABEL_FEF7EF:
 	ldb c, 0x0
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_FEF7F7
 	ldb c, 0x1
 
@@ -439949,7 +439949,7 @@ LABEL_FEF810:
 	.byte 0xc1, 0x5b, 0xe3, 0xf9	; CP (0E35Bh), A
 	.byte 0xb0, 0xf6	; RET Z
 	ldb c, 0x1
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr nz, LABEL_FEF81E
 	ldb c, 0x0
 
@@ -439963,7 +439963,7 @@ LABEL_FEF81E:
 
 LABEL_FEF831:
 	ldb c, 0x0
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_FEF839
 	ldb c, 0x1
 
@@ -439990,7 +439990,7 @@ LABEL_FEF852:
 
 LABEL_FEF893:
 	lds hl, 0
-	.byte 0xd8, 0xdd	; CP WA, 5
+	cps wa, 5
 	jr nc, LABEL_FEF8B8
 	cp bc, 0x63
 	jr ugt, LABEL_FEF8B8
@@ -440014,7 +440014,7 @@ LABEL_FEF8BB:
 LABEL_FEF8BC:
 	push xiz
 	lds hl, 0
-	.byte 0xd8, 0xdd	; CP WA, 5
+	cps wa, 5
 	jr nc, LABEL_FEF8F0
 	ld ix, wa
 	extz xix
@@ -440045,7 +440045,7 @@ LABEL_FEF8F3:
 
 LABEL_FEF8F5:
 	lds hl, 0
-	.byte 0xd8, 0xdd	; CP WA, 5
+	cps wa, 5
 	jr nc, LABEL_FEF914
 	extz xwa
 	ld xde, xwa
@@ -440066,7 +440066,7 @@ LABEL_FEF917:
 
 LABEL_FEF918:
 	lds hl, 0
-	.byte 0xd8, 0xdd	; CP WA, 5
+	cps wa, 5
 	jr nc, LABEL_FEF937
 	extz xwa
 	ld xde, xwa
@@ -440476,11 +440476,11 @@ LABEL_FF01B3:
 	.byte 0x85, 0xf3	; CP C, (XIY)
 	jr nz, LABEL_FF01D1
 	inc 1, de
-	.byte 0xda, 0xde	; CP DE, 6
+	cps de, 6
 	jr c, LABEL_FF01B3
 
 LABEL_FF01D1:
-	.byte 0xda, 0xde	; CP DE, 6
+	cps de, 6
 	jr nz, LABEL_FF01D8
 	ldb l, 0x1
 	ret
@@ -440503,11 +440503,11 @@ LABEL_FF01DF:
 	.byte 0x85, 0xf3	; CP C, (XIY)
 	jr nz, LABEL_FF01FD
 	inc 1, de
-	.byte 0xda, 0xdb	; CP DE, 3
+	cps de, 3
 	jr c, LABEL_FF01DF
 
 LABEL_FF01FD:
-	.byte 0xda, 0xdb	; CP DE, 3
+	cps de, 3
 	jr nz, LABEL_FF0204
 	ldb l, 0x2
 	ret
@@ -440530,11 +440530,11 @@ LABEL_FF020B:
 	.byte 0x85, 0xf3	; CP C, (XIY)
 	jr nz, LABEL_FF0229
 	inc 1, de
-	.byte 0xda, 0xdb	; CP DE, 3
+	cps de, 3
 	jr c, LABEL_FF020B
 
 LABEL_FF0229:
-	.byte 0xda, 0xdb	; CP DE, 3
+	cps de, 3
 	jr nz, LABEL_FF0230
 	ldb l, 0x3
 	ret
@@ -440566,9 +440566,9 @@ LABEL_FF024E:
 	.byte 0xf2, 0x00, 0x00, 0x1e, 0x31	; LDA XBC, 1E0000h
 	extz hl
 	dec 1, hl
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jrl lt, LABEL_FF03D2
-	.byte 0xdb, 0xdd	; CP HL, 5
+	cps hl, 5
 	jrl gt, LABEL_FF03D2
 	add hl, hl
 	.byte 0xf2, 0x47, 0xd7, 0xee, 0x34	; LDA XIX, 0EED747h
@@ -440657,9 +440657,9 @@ LABEL_FF0445:
 	calr LABEL_FF012E
 	extz hl
 	dec 1, hl
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr lt, LABEL_FF047C
-	.byte 0xdb, 0xdd	; CP HL, 5
+	cps hl, 5
 	jr gt, LABEL_FF047C
 	add hl, hl
 	.byte 0xf2, 0x53, 0xd7, 0xee, 0x34	; LDA XIX, 0EED753h
@@ -440691,7 +440691,7 @@ PreTmLoad:
 	ret
 
 PostTmLoad:
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr lt, LABEL_FF04D6
 	ldw wa, 0xFF
 	ldw bc, 0xFF
@@ -440721,7 +440721,7 @@ PreTmSave:
 	ret
 
 PostTmSave:
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	.byte 0xb0, 0xf9	; RET GE
 	ldw wa, 0xFF
 	ldw bc, 0xFF
@@ -440734,7 +440734,7 @@ LABEL_FF04F4:
 	.byte 0xff, 0x0e
 
 LABEL_FF0506:
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr lt, LABEL_FF053C
 	ldw wa, 0xFF
 	ldw bc, 0xFF
@@ -440974,7 +440974,7 @@ LABEL_FF09CB:
 	jr LABEL_FF09CB
 
 LABEL_FF09E7:
-	.byte 0xdc, 0xd8	; CP IX, 0
+	cps ix, 0
 	jr z, LABEL_FF09F3
 	ld wa, iy
 	neg wa
@@ -441033,7 +441033,7 @@ LABEL_FF0A21:
 	jr LABEL_FF0A21
 
 LABEL_FF0A48:
-	.byte 0xdc, 0xd8	; CP IX, 0
+	cps ix, 0
 	jr z, LABEL_FF0A59
 	ld xwa, xiy
 	cpl wa
@@ -441223,21 +441223,21 @@ LABEL_FF0BE4:
 	pushw de
 	calr LABEL_FF0C18
 	popw wa
-	.byte 0xc8, 0xd9	; CP W, 1
+	cps w, 1
 	jr z, LABEL_FF0BF6
 	ld xhl, xde
-	.byte 0xc9, 0x33, 0x00	; BIT 000h, A
+	bit 0, a
 	.byte 0xc9, 0x7e	; SCC NZ, A
 	jr LABEL_FF0BFA
 
 LABEL_FF0BF6:
-	.byte 0xc9, 0xdb	; CP A, 3
+	cps a, 3
 	.byte 0xb0, 0xf6	; RET Z
 
 LABEL_FF0BFA:
 	or xhl, xhl
 	.byte 0xb0, 0xf6	; RET Z
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	.byte 0xb0, 0xf6	; RET Z
 	.byte 0xd7, 0xee, 0x06	; CPL QHL
 	cpl hl
@@ -441328,7 +441328,7 @@ LABEL_FF0C7E:
 	add xhl, xhl
 	cp xwa, xbc
 	jr c, LABEL_FF0C89
-	.byte 0xcf, 0x31, 0x00	; SET 000h, L
+	set 0, l
 	sub xwa, xbc
 
 LABEL_FF0C89:
@@ -441363,7 +441363,7 @@ LABEL_FF0CA8:
 LABEL_FF0CB5:
 	ld wa, bc
 	dec 1, bc
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr nz, LABEL_FF0CA8
 	.byte 0xb4, 0x00, 0x00	; LD (XIX), 000h
 	ret
@@ -441386,7 +441386,7 @@ LABEL_FF0CD4:
 	dec 1, bc
 
 LABEL_FF0CDA:
-	.byte 0xd9, 0xd8	; CP BC, 0
+	cps bc, 0
 	jr z, LABEL_FF0CE4
 	ld a, (xde)
 	.byte 0x84, 0xf1	; CP A, (XIX)
@@ -441394,7 +441394,7 @@ LABEL_FF0CDA:
 
 LABEL_FF0CE4:
 	ldb l, 0x0
-	.byte 0xd9, 0xd8	; CP BC, 0
+	cps bc, 0
 	jr z, LABEL_FF0CF0
 	ld a, (xix)
 	.byte 0x82, 0xa1	; SUB A, (XDE)
@@ -441417,7 +441417,7 @@ LABEL_FF0D00:
 	dec 1, bc
 
 LABEL_FF0D08:
-	.byte 0xd9, 0xd8	; CP BC, 0
+	cps bc, 0
 	jr z, LABEL_FF0D11
 	.byte 0x82, 0x3f, 0x00	; CP (XDE), 000h
 	jr nz, LABEL_FF0D00
@@ -441430,14 +441430,14 @@ LABEL_FF0D13:
 	dec 1, bc
 
 LABEL_FF0D19:
-	.byte 0xd9, 0xd8	; CP BC, 0
+	cps bc, 0
 	jr nz, LABEL_FF0D13
 	ret
 
 LABEL_FF0D1E:
 	.byte 0x9f, 0x0c, 0x21	; LD BC, (XSP + 00ch)
 	lds hl, 0
-	.byte 0xd9, 0xd8	; CP BC, 0
+	cps bc, 0
 	.byte 0xb0, 0xf6	; RET Z
 	.byte 0xaf, 0x04, 0x24	; LD XIX, (XSP + 004h)
 	.byte 0xaf, 0x08, 0x25	; LD XIY, (XSP + 008h)
@@ -441507,13 +441507,13 @@ LABEL_FF0D87:
 Mem_Copy:
 	.byte 0x9f, 0x0c, 0x21	; LD BC, (XSP + 00ch)
 	.byte 0xaf, 0x04, 0x23	; LD XHL, (XSP + 004h)
-	.byte 0xd9, 0xd8	; CP BC, 0
+	cps bc, 0
 	.byte 0xb0, 0xf6	; RET Z
 	ld xix, xhl
 	.byte 0xaf, 0x08, 0x25	; LD XIY, (XSP + 008h)
 	cp xix, xiy
 	.byte 0xb0, 0xf6	; RET Z
-	.byte 0xdc, 0x33, 0x00	; BIT 000h, IX
+	bit 0, ix
 	jr z, LABEL_FF0DB5
 	.byte 0x85, 0x10	; LDI
 	.byte 0xb0, 0xfc	; RET NOV
@@ -441558,7 +441558,7 @@ LABEL_FF0DE3:
 	.byte 0xaf, 0x1c, 0x23	; LD XHL, (XSP + 01ch)
 	lds ix, 0
 	.byte 0x9f, 0x20, 0x21	; LD BC, (XSP + 020h)
-	.byte 0xd9, 0xda	; CP BC, 2
+	cps bc, 2
 	jr lt, LABEL_FF0DF9
 	cp bc, 0x24
 	jr le, LABEL_FF0DFE
@@ -441576,7 +441576,7 @@ LABEL_FF0DFE:
 	cp bc, 0xA
 	jr nz, LABEL_FF0E25
 	.byte 0xd7, 0xe6, 0x88	; LD WA, QBC
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr ge, LABEL_FF0E25
 	lds ix, 1
 	.byte 0xd7, 0xe6, 0x88	; LD WA, QBC
@@ -441606,7 +441606,7 @@ LABEL_FF0E3E:
 	jr LABEL_FF0E25
 
 LABEL_FF0E51:
-	.byte 0xdc, 0xd8	; CP IX, 0
+	cps ix, 0
 	jr z, LABEL_FF0E59
 	.byte 0xf4, 0xf4, 0x00, 0x2d	; LD (-XIY), 02dh
 
@@ -441823,7 +441823,7 @@ LABEL_FF0FEF:
 LABEL_FF0FFA:
 	.byte 0x9f, 0x0a, 0x21	; LD BC, (XSP + 00ah)
 	.byte 0xaf, 0x04, 0x23	; LD XHL, (XSP + 004h)
-	.byte 0xd9, 0xd8	; CP BC, 0
+	cps bc, 0
 	.byte 0xb0, 0xf6	; RET Z
 	ld xix, xhl
 	.byte 0x9f, 0x08, 0x20	; LD WA, (XSP + 008h)
@@ -441860,7 +441860,7 @@ LABEL_FF1037:
 
 LABEL_FF103E:
 	.byte 0x9f, 0x04, 0x23	; LD HL, (XSP + 004h)
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	.byte 0xb0, 0xf9	; RET GE
 	neg hl
 	ret
@@ -442059,7 +442059,7 @@ LABEL_FF11F4:
 	cp wa, 0x25
 	jr z, LABEL_FF1237
 	sub wa, 0x63
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jrl lt, LABEL_FF1918
 	cp wa, 0x15
 	jrl gt, LABEL_FF1918
@@ -442071,7 +442071,7 @@ LABEL_FF11F4:
 
 LABEL_FF1237:
 	.byte 0x9f, 0x06, 0x20	; LD WA, (XSP + 006h)
-	.byte 0xd8, 0x33, 0x01	; BIT 001h, WA
+	bit 1, wa
 	jr z, LABEL_FF1250
 	jr LABEL_FF125A
 
@@ -442106,7 +442106,7 @@ LABEL_FF1274:
 	.byte 0xb0, 0xe8	; CALL T, XWA
 	inc 2, xsp
 	.byte 0x9f, 0x06, 0x20	; LD WA, (XSP + 006h)
-	.byte 0xd8, 0x33, 0x01	; BIT 001h, WA
+	bit 1, wa
 	jr nz, LABEL_FF1293
 	jrl LABEL_FF1918
 
@@ -442132,7 +442132,7 @@ LABEL_FF1293:
 	call LABEL_FF0FA0
 	inc 4, xsp
 	.byte 0x9f, 0x06, 0x20	; LD WA, (XSP + 006h)
-	.byte 0xd8, 0x33, 0x04	; BIT 004h, WA
+	bit 4, wa
 	jr z, LABEL_FF12C3
 	.byte 0x9f, 0x0a, 0xfb	; CP (XSP + 00ah), HL
 	jr lt, LABEL_FF12C8
@@ -442158,7 +442158,7 @@ LABEL_FF12DA:
 
 LABEL_FF12E3:
 	.byte 0x9f, 0x06, 0x20	; LD WA, (XSP + 006h)
-	.byte 0xd8, 0x33, 0x01	; BIT 001h, WA
+	bit 1, wa
 	jr z, LABEL_FF12F9
 	jr LABEL_FF1318
 
@@ -442171,7 +442171,7 @@ LABEL_FF12ED:
 LABEL_FF12F9:
 	.byte 0x9f, 0x08, 0x20	; LD WA, (XSP + 008h)
 	.byte 0x9f, 0x08, 0x69	; DECW 1, (XSP + 008h)
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr nz, LABEL_FF12ED
 	jr LABEL_FF1318
 
@@ -442188,10 +442188,10 @@ LABEL_FF1305:
 LABEL_FF1318:
 	.byte 0x9f, 0x0a, 0x20	; LD WA, (XSP + 00ah)
 	.byte 0x9f, 0x0a, 0x69	; DECW 1, (XSP + 00ah)
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr nz, LABEL_FF1305
 	.byte 0x9f, 0x06, 0x20	; LD WA, (XSP + 006h)
-	.byte 0xd8, 0x33, 0x01	; BIT 001h, WA
+	bit 1, wa
 	jr nz, LABEL_FF1337
 	jrl LABEL_FF1918
 
@@ -442204,11 +442204,11 @@ LABEL_FF132D:
 LABEL_FF1337:
 	.byte 0x9f, 0x08, 0x20	; LD WA, (XSP + 008h)
 	.byte 0x9f, 0x08, 0x69	; DECW 1, (XSP + 008h)
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr nz, LABEL_FF132D
 	jrl LABEL_FF1918
 	.byte 0x9f, 0x06, 0x20	; LD WA, (XSP + 006h)
-	.byte 0xd8, 0x33, 0x06	; BIT 006h, WA
+	bit 6, wa
 	jr z, LABEL_FF135D
 	.byte 0xaf, 0x56, 0x21	; LD XBC, (XSP + 056h)
 	.byte 0xe8, 0xac	; LD XWA, 4
@@ -442231,7 +442231,7 @@ LABEL_FF136E:
 	.byte 0xbf, 0x0e, 0x02, 0x00, 0x00	; LDW (XSP + 00eh:8), 0000h
 	.byte 0xbf, 0x38, 0x31	; LDA XBC, XSP + 038h
 	.byte 0x9f, 0x06, 0x20	; LD WA, (XSP + 006h)
-	.byte 0xd8, 0x33, 0x04	; BIT 004h, WA
+	bit 4, wa
 	jr z, LABEL_FF1396
 	.byte 0x9f, 0x0a, 0x3f, 0x00, 0x00	; CPW (XSP + 00ah), 0000h
 	jr nz, LABEL_FF1396
@@ -442259,7 +442259,7 @@ LABEL_FF1396:
 
 LABEL_FF13BC:
 	.byte 0x9f, 0x06, 0x20	; LD WA, (XSP + 006h)
-	.byte 0xd8, 0x33, 0x04	; BIT 004h, WA
+	bit 4, wa
 	jr z, LABEL_FF13CC
 	.byte 0x9f, 0x0a, 0x20	; LD WA, (XSP + 00ah)
 	.byte 0x9f, 0x0c, 0xf0	; CP WA, (XSP + 00ch)
@@ -442296,11 +442296,11 @@ LABEL_FF13FA:
 	.byte 0x9f, 0x08, 0x3f, 0x00, 0x00	; CPW (XSP + 008h), 0000h
 	jr z, LABEL_FF1441
 	.byte 0x9f, 0x06, 0x20	; LD WA, (XSP + 006h)
-	.byte 0xd8, 0x33, 0x01	; BIT 001h, WA
+	bit 1, wa
 	jr nz, LABEL_FF1441
 	.byte 0xd2, 0x20, 0xc2, 0x03, 0x3f, 0x20, 0x00	; CPW (03C220h), 0020h
 	jr z, LABEL_FF1432
-	.byte 0xd8, 0x33, 0x04	; BIT 004h, WA
+	bit 4, wa
 	jr nz, LABEL_FF1432
 	jr LABEL_FF1441
 
@@ -442313,7 +442313,7 @@ LABEL_FF1428:
 LABEL_FF1432:
 	.byte 0x9f, 0x08, 0x20	; LD WA, (XSP + 008h)
 	.byte 0x9f, 0x08, 0x69	; DECW 1, (XSP + 008h)
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr nz, LABEL_FF1428
 	.byte 0xbf, 0x08, 0x02, 0x00, 0x00	; LDW (XSP + 008h:8), 0000h
 
@@ -442326,14 +442326,14 @@ LABEL_FF1441:
 
 LABEL_FF1451:
 	.byte 0x9f, 0x06, 0x20	; LD WA, (XSP + 006h)
-	.byte 0xd8, 0x33, 0x00	; BIT 000h, WA
+	bit 0, wa
 	jr z, LABEL_FF145E
 	.byte 0x0b, 0x2b, 0x00	; PUSHW 002bh
 	jr LABEL_FF1469
 
 LABEL_FF145E:
 	.byte 0x9f, 0x06, 0x20	; LD WA, (XSP + 006h)
-	.byte 0xd8, 0x33, 0x02	; BIT 002h, WA
+	bit 2, wa
 	jr z, LABEL_FF1470
 	.byte 0x0b, 0x20, 0x00	; PUSHW 0020h
 
@@ -442344,7 +442344,7 @@ LABEL_FF1469:
 
 LABEL_FF1470:
 	.byte 0x9f, 0x06, 0x20	; LD WA, (XSP + 006h)
-	.byte 0xd8, 0x33, 0x01	; BIT 001h, WA
+	bit 1, wa
 	jr nz, LABEL_FF14A3
 	.byte 0xd2, 0x20, 0xc2, 0x03, 0x3f, 0x30, 0x00	; CPW (03C220h), 0030h
 	jr z, LABEL_FF148D
@@ -442359,7 +442359,7 @@ LABEL_FF1483:
 LABEL_FF148D:
 	.byte 0x9f, 0x08, 0x20	; LD WA, (XSP + 008h)
 	.byte 0x9f, 0x08, 0x69	; DECW 1, (XSP + 008h)
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr nz, LABEL_FF1483
 	jr LABEL_FF14A3
 
@@ -442372,7 +442372,7 @@ LABEL_FF1499:
 LABEL_FF14A3:
 	.byte 0x9f, 0x0a, 0x20	; LD WA, (XSP + 00ah)
 	.byte 0x9f, 0x0a, 0x69	; DECW 1, (XSP + 00ah)
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr nz, LABEL_FF1499
 	jr LABEL_FF14C7
 
@@ -442391,7 +442391,7 @@ LABEL_FF14C7:
 	.byte 0x9f, 0x0c, 0x3f, 0x00, 0x00	; CPW (XSP + 00ch), 0000h
 	jr nz, LABEL_FF14AF
 	.byte 0x9f, 0x06, 0x20	; LD WA, (XSP + 006h)
-	.byte 0xd8, 0x33, 0x01	; BIT 001h, WA
+	bit 1, wa
 	jr nz, LABEL_FF14E3
 	jrl LABEL_FF1918
 
@@ -442404,11 +442404,11 @@ LABEL_FF14D9:
 LABEL_FF14E3:
 	.byte 0x9f, 0x08, 0x20	; LD WA, (XSP + 008h)
 	.byte 0x9f, 0x08, 0x69	; DECW 1, (XSP + 008h)
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr nz, LABEL_FF14D9
 	jrl LABEL_FF1918
 	.byte 0x9f, 0x06, 0x20	; LD WA, (XSP + 006h)
-	.byte 0xd8, 0x33, 0x06	; BIT 006h, WA
+	bit 6, wa
 	jr z, LABEL_FF1506
 	.byte 0xaf, 0x56, 0x21	; LD XBC, (XSP + 056h)
 	.byte 0xe8, 0xac	; LD XWA, 4
@@ -442428,7 +442428,7 @@ LABEL_FF1506:
 LABEL_FF1514:
 	.byte 0xbf, 0x2c, 0x31	; LDA XBC, XSP + 02ch
 	.byte 0x9f, 0x06, 0x20	; LD WA, (XSP + 006h)
-	.byte 0xd8, 0x33, 0x04	; BIT 004h, WA
+	bit 4, wa
 	jr z, LABEL_FF1531
 	.byte 0x9f, 0x0a, 0x3f, 0x00, 0x00	; CPW (XSP + 00ah), 0000h
 	jr nz, LABEL_FF1531
@@ -442450,7 +442450,7 @@ LABEL_FF1531:
 
 LABEL_FF1543:
 	.byte 0x9f, 0x06, 0x20	; LD WA, (XSP + 006h)
-	.byte 0xd8, 0x33, 0x04	; BIT 004h, WA
+	bit 4, wa
 	jr z, LABEL_FF1550
 	.byte 0x9f, 0x0a, 0xfe	; CP (XSP + 00ah), IZ
 	jr ge, LABEL_FF1557
@@ -442475,7 +442475,7 @@ LABEL_FF1569:
 	.byte 0x9f, 0x0a, 0x80	; ADD WA, (XSP + 00ah)
 	.byte 0x9f, 0x04, 0x88	; ADD (XSP + 004h), WA
 	.byte 0x9f, 0x06, 0x20	; LD WA, (XSP + 006h)
-	.byte 0xd8, 0x33, 0x01	; BIT 001h, WA
+	bit 1, wa
 	jr z, LABEL_FF158A
 	jr LABEL_FF15A0
 
@@ -442488,7 +442488,7 @@ LABEL_FF157E:
 LABEL_FF158A:
 	.byte 0x9f, 0x08, 0x20	; LD WA, (XSP + 008h)
 	.byte 0x9f, 0x08, 0x69	; DECW 1, (XSP + 008h)
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr nz, LABEL_FF157E
 	jr LABEL_FF15A0
 
@@ -442501,7 +442501,7 @@ LABEL_FF1596:
 LABEL_FF15A0:
 	.byte 0x9f, 0x0a, 0x20	; LD WA, (XSP + 00ah)
 	.byte 0x9f, 0x0a, 0x69	; DECW 1, (XSP + 00ah)
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr nz, LABEL_FF1596
 	jr LABEL_FF15C0
 
@@ -442516,10 +442516,10 @@ LABEL_FF15AC:
 	inc 2, xsp
 
 LABEL_FF15C0:
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr nz, LABEL_FF15AC
 	.byte 0x9f, 0x06, 0x20	; LD WA, (XSP + 006h)
-	.byte 0xd8, 0x33, 0x01	; BIT 001h, WA
+	bit 1, wa
 	jr nz, LABEL_FF15D9
 	jrl LABEL_FF1918
 
@@ -442532,14 +442532,14 @@ LABEL_FF15CF:
 LABEL_FF15D9:
 	.byte 0x9f, 0x08, 0x20	; LD WA, (XSP + 008h)
 	.byte 0x9f, 0x08, 0x69	; DECW 1, (XSP + 008h)
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr nz, LABEL_FF15CF
 	jrl LABEL_FF1918
 	.byte 0xbf, 0x06, 0xbe	; SET 6, (XSP + 006h)
 
 LABEL_FF15E9:
 	.byte 0x9f, 0x06, 0x20	; LD WA, (XSP + 006h)
-	.byte 0xd8, 0x33, 0x06	; BIT 006h, WA
+	bit 6, wa
 	jr z, LABEL_FF15FF
 	.byte 0xaf, 0x56, 0x21	; LD XBC, (XSP + 056h)
 	.byte 0xe8, 0xac	; LD XWA, 4
@@ -442559,7 +442559,7 @@ LABEL_FF15FF:
 LABEL_FF160D:
 	.byte 0xbf, 0x20, 0x31	; LDA XBC, XSP + 020h
 	.byte 0x9f, 0x06, 0x20	; LD WA, (XSP + 006h)
-	.byte 0xd8, 0x33, 0x04	; BIT 004h, WA
+	bit 4, wa
 	jr z, LABEL_FF162D
 	.byte 0x9f, 0x0a, 0x3f, 0x00, 0x00	; CPW (XSP + 00ah), 0000h
 	jr nz, LABEL_FF162D
@@ -442582,7 +442582,7 @@ LABEL_FF162D:
 
 LABEL_FF1641:
 	.byte 0x9f, 0x06, 0x20	; LD WA, (XSP + 006h)
-	.byte 0xd8, 0x33, 0x04	; BIT 004h, WA
+	bit 4, wa
 	jr z, LABEL_FF1651
 	.byte 0x9f, 0x0a, 0x20	; LD WA, (XSP + 00ah)
 	.byte 0x9f, 0x12, 0xf0	; CP WA, (XSP + 012h)
@@ -442599,7 +442599,7 @@ LABEL_FF1658:
 LABEL_FF165E:
 	.byte 0xd7, 0xfa, 0xa8	; LD QIZ, 0
 	.byte 0x9f, 0x06, 0x20	; LD WA, (XSP + 006h)
-	.byte 0xd8, 0x33, 0x03	; BIT 003h, WA
+	bit 3, wa
 	jr z, LABEL_FF166C
 	.byte 0xd7, 0xfa, 0xaa	; LD QIZ, 2
 
@@ -442618,7 +442618,7 @@ LABEL_FF167F:
 	.byte 0xd7, 0xfa, 0x80	; ADD WA, QIZ
 	.byte 0x9f, 0x04, 0x88	; ADD (XSP + 004h), WA
 	.byte 0x9f, 0x06, 0x20	; LD WA, (XSP + 006h)
-	.byte 0xd8, 0x33, 0x01	; BIT 001h, WA
+	bit 1, wa
 	jr nz, LABEL_FF16B5
 	.byte 0xd2, 0x20, 0xc2, 0x03, 0x3f, 0x20, 0x00	; CPW (03C220h), 0020h
 	jr z, LABEL_FF16AB
@@ -442633,7 +442633,7 @@ LABEL_FF16A1:
 LABEL_FF16AB:
 	.byte 0x9f, 0x08, 0x20	; LD WA, (XSP + 008h)
 	.byte 0x9f, 0x08, 0x69	; DECW 1, (XSP + 008h)
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr nz, LABEL_FF16A1
 
 LABEL_FF16B5:
@@ -442651,7 +442651,7 @@ LABEL_FF16B5:
 
 LABEL_FF16D1:
 	.byte 0x9f, 0x06, 0x20	; LD WA, (XSP + 006h)
-	.byte 0xd8, 0x33, 0x01	; BIT 001h, WA
+	bit 1, wa
 	jr nz, LABEL_FF1704
 	.byte 0xd2, 0x20, 0xc2, 0x03, 0x3f, 0x30, 0x00	; CPW (03C220h), 0030h
 	jr z, LABEL_FF16EE
@@ -442666,7 +442666,7 @@ LABEL_FF16E4:
 LABEL_FF16EE:
 	.byte 0x9f, 0x08, 0x20	; LD WA, (XSP + 008h)
 	.byte 0x9f, 0x08, 0x69	; DECW 1, (XSP + 008h)
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr nz, LABEL_FF16E4
 	jr LABEL_FF1704
 
@@ -442679,7 +442679,7 @@ LABEL_FF16FA:
 LABEL_FF1704:
 	.byte 0x9f, 0x0a, 0x20	; LD WA, (XSP + 00ah)
 	.byte 0x9f, 0x0a, 0x69	; DECW 1, (XSP + 00ah)
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr nz, LABEL_FF16FA
 	jr LABEL_FF1728
 
@@ -442698,7 +442698,7 @@ LABEL_FF1728:
 	.byte 0x9f, 0x12, 0x3f, 0x00, 0x00	; CPW (XSP + 012h), 0000h
 	jr nz, LABEL_FF1710
 	.byte 0x9f, 0x06, 0x20	; LD WA, (XSP + 006h)
-	.byte 0xd8, 0x33, 0x01	; BIT 001h, WA
+	bit 1, wa
 	jr nz, LABEL_FF1744
 	jrl LABEL_FF1918
 
@@ -442711,11 +442711,11 @@ LABEL_FF173A:
 LABEL_FF1744:
 	.byte 0x9f, 0x08, 0x20	; LD WA, (XSP + 008h)
 	.byte 0x9f, 0x08, 0x69	; DECW 1, (XSP + 008h)
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr nz, LABEL_FF173A
 	jrl LABEL_FF1918
 	.byte 0x9f, 0x06, 0x20	; LD WA, (XSP + 006h)
-	.byte 0xd8, 0x33, 0x06	; BIT 006h, WA
+	bit 6, wa
 	jr z, LABEL_FF1767
 	.byte 0xaf, 0x56, 0x21	; LD XBC, (XSP + 056h)
 	.byte 0xe8, 0xac	; LD XWA, 4
@@ -442735,7 +442735,7 @@ LABEL_FF1767:
 LABEL_FF1775:
 	.byte 0xbf, 0x14, 0x31	; LDA XBC, XSP + 014h
 	.byte 0x9f, 0x06, 0x20	; LD WA, (XSP + 006h)
-	.byte 0xd8, 0x33, 0x04	; BIT 004h, WA
+	bit 4, wa
 	jr z, LABEL_FF1792
 	.byte 0x9f, 0x0a, 0x3f, 0x00, 0x00	; CPW (XSP + 00ah), 0000h
 	jr nz, LABEL_FF1792
@@ -442757,7 +442757,7 @@ LABEL_FF1792:
 
 LABEL_FF17A4:
 	.byte 0x9f, 0x06, 0x20	; LD WA, (XSP + 006h)
-	.byte 0xd8, 0x33, 0x04	; BIT 004h, WA
+	bit 4, wa
 	jr z, LABEL_FF17B1
 	.byte 0x9f, 0x0a, 0xfe	; CP (XSP + 00ah), IZ
 	jr ge, LABEL_FF17B8
@@ -442772,7 +442772,7 @@ LABEL_FF17B8:
 LABEL_FF17BB:
 	.byte 0x9f, 0x06, 0x20	; LD WA, (XSP + 006h)
 	and wa, 0x8
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	.byte 0xd8, 0x7e	; SCC NZ, WA
 	.byte 0xbf, 0x12, 0x50	; LD (XSP + 012h), WA
 	ld wa, iz
@@ -442789,7 +442789,7 @@ LABEL_FF17DB:
 	.byte 0x9f, 0x12, 0x80	; ADD WA, (XSP + 012h)
 	.byte 0x9f, 0x04, 0x88	; ADD (XSP + 004h), WA
 	.byte 0x9f, 0x06, 0x20	; LD WA, (XSP + 006h)
-	.byte 0xd8, 0x33, 0x01	; BIT 001h, WA
+	bit 1, wa
 	jr nz, LABEL_FF1810
 	.byte 0xd2, 0x20, 0xc2, 0x03, 0x3f, 0x20, 0x00	; CPW (03C220h), 0020h
 	jr z, LABEL_FF1806
@@ -442804,13 +442804,13 @@ LABEL_FF17FC:
 LABEL_FF1806:
 	.byte 0x9f, 0x08, 0x20	; LD WA, (XSP + 008h)
 	.byte 0x9f, 0x08, 0x69	; DECW 1, (XSP + 008h)
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr nz, LABEL_FF17FC
 
 LABEL_FF1810:
 	.byte 0x9f, 0x12, 0x3f, 0x00, 0x00	; CPW (XSP + 012h), 0000h
 	jr z, LABEL_FF1825
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr z, LABEL_FF1825
 	.byte 0x0b, 0x30, 0x00	; PUSHW 0030h
 	.byte 0xaf, 0x5c, 0x20	; LD XWA, (XSP + 05ch)
@@ -442819,7 +442819,7 @@ LABEL_FF1810:
 
 LABEL_FF1825:
 	.byte 0x9f, 0x06, 0x20	; LD WA, (XSP + 006h)
-	.byte 0xd8, 0x33, 0x01	; BIT 001h, WA
+	bit 1, wa
 	jr nz, LABEL_FF1858
 	.byte 0xd2, 0x20, 0xc2, 0x03, 0x3f, 0x30, 0x00	; CPW (03C220h), 0030h
 	jr z, LABEL_FF1842
@@ -442834,7 +442834,7 @@ LABEL_FF1838:
 LABEL_FF1842:
 	.byte 0x9f, 0x08, 0x20	; LD WA, (XSP + 008h)
 	.byte 0x9f, 0x08, 0x69	; DECW 1, (XSP + 008h)
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr nz, LABEL_FF1838
 	jr LABEL_FF1858
 
@@ -442847,7 +442847,7 @@ LABEL_FF184E:
 LABEL_FF1858:
 	.byte 0x9f, 0x0a, 0x20	; LD WA, (XSP + 00ah)
 	.byte 0x9f, 0x0a, 0x69	; DECW 1, (XSP + 00ah)
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr nz, LABEL_FF184E
 	jr LABEL_FF1878
 
@@ -442862,10 +442862,10 @@ LABEL_FF1864:
 	inc 2, xsp
 
 LABEL_FF1878:
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr nz, LABEL_FF1864
 	.byte 0x9f, 0x06, 0x20	; LD WA, (XSP + 006h)
-	.byte 0xd8, 0x33, 0x01	; BIT 001h, WA
+	bit 1, wa
 	jr nz, LABEL_FF1891
 	jrl LABEL_FF1918
 
@@ -442878,7 +442878,7 @@ LABEL_FF1887:
 LABEL_FF1891:
 	.byte 0x9f, 0x08, 0x20	; LD WA, (XSP + 008h)
 	.byte 0x9f, 0x08, 0x69	; DECW 1, (XSP + 008h)
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr nz, LABEL_FF1887
 	jr LABEL_FF1918
 	.byte 0xaf, 0x56, 0x21	; LD XBC, (XSP + 056h)
@@ -442887,7 +442887,7 @@ LABEL_FF1891:
 	ld xwa, (xbc)
 	.byte 0xa8, 0xfc, 0x21	; LD XBC, (XWA - 4)
 	.byte 0x9f, 0x06, 0x20	; LD WA, (XSP + 006h)
-	.byte 0xd8, 0x33, 0x06	; BIT 006h, WA
+	bit 6, wa
 	jr z, LABEL_FF18BA
 	.byte 0x9f, 0x04, 0x20	; LD WA, (XSP + 004h)
 	exts xwa
@@ -442902,7 +442902,7 @@ LABEL_FF18BA:
 LABEL_FF18C1:
 	.byte 0xbf, 0x44, 0x31	; LDA XBC, XSP + 044h
 	.byte 0x9f, 0x06, 0x20	; LD WA, (XSP + 006h)
-	.byte 0xd8, 0x33, 0x07	; BIT 007h, WA
+	bit 7, wa
 	jr z, LABEL_FF18E1
 	ld xwa, xbc
 	.byte 0xaf, 0x56, 0x22	; LD XDE, (XSP + 056h)
@@ -442944,7 +442944,7 @@ LABEL_FF1918:
 	.byte 0xbf, 0x52, 0x60	; LD (XSP + 052h), XWA
 	.byte 0xc7, 0xf8, 0x9b	; LD IZL, C
 	exts iz
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jrl nz, LABEL_FF1054
 	.byte 0x9f, 0x04, 0x23	; LD HL, (XSP + 004h)
 	pop xiz
@@ -443116,7 +443116,7 @@ LABEL_FF1A88:
 
 LABEL_FF1A90:
 	.byte 0x9f, 0x2c, 0x20	; LD WA, (XSP + 02ch)
-	.byte 0xd8, 0x33, 0x04	; BIT 004h, WA
+	bit 4, wa
 	jr nz, LABEL_FF1A9D
 	lds hl, 6
 	.byte 0xbf, 0x2c, 0xbc	; SET 4, (XSP + 02ch)
@@ -443160,13 +443160,13 @@ LABEL_FF1ADA:
 
 LABEL_FF1AE0:
 	.byte 0x9f, 0x10, 0x20	; LD WA, (XSP + 010h)
-	.byte 0xd8, 0x33, 0x04	; BIT 004h, WA
+	bit 4, wa
 	jr nz, LABEL_FF1AED
 	.byte 0xbf, 0x14, 0x02, 0x06, 0x00	; LDW (XSP + 014h:8), 0006h
 
 LABEL_FF1AED:
 	.byte 0x9f, 0x10, 0x20	; LD WA, (XSP + 010h)
-	.byte 0xd8, 0x33, 0x07	; BIT 007h, WA
+	bit 7, wa
 	jr z, LABEL_FF1AFA
 	.byte 0xbf, 0x04, 0x02, 0x12, 0x00	; LDW (XSP + 004h:8), 0012h
 
@@ -443203,7 +443203,7 @@ LABEL_FF1B28:
 	.byte 0xaf, 0x16, 0x20	; LD XWA, (XSP + 016h)
 	.byte 0xc3, 0x07, 0xe0, 0xf8, 0x3f, 0x34	; CP (XWA + IZ), 034h
 	jr le, LABEL_FF1B61
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr ge, LABEL_FF1B4B
 	jr LABEL_FF1B61
 
@@ -443215,14 +443215,14 @@ LABEL_FF1B4B:
 	dec 1, iz
 	.byte 0xaf, 0x16, 0x20	; LD XWA, (XSP + 016h)
 	.byte 0xc3, 0x07, 0xe0, 0xf8, 0x61	; INC 1, (XWA + IZ)
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr le, LABEL_FF1B61
 	.byte 0xc3, 0x07, 0xe0, 0xf8, 0x3f, 0x39	; CP (XWA + IZ), 039h
 	jr gt, LABEL_FF1B42
 
 LABEL_FF1B61:
 	ld e, (xde)
-	.byte 0xcd, 0x33, 0x01	; BIT 001h, E
+	bit 1, e
 	jr z, LABEL_FF1B6F
 	ld a, c
 	sub a, 0x20
@@ -443241,7 +443241,7 @@ LABEL_FF1B71:
 	.byte 0x9f, 0x14, 0x88	; ADD (XSP + 014h), WA
 
 LABEL_FF1B83:
-	.byte 0xcd, 0x33, 0x01	; BIT 001h, E
+	bit 1, e
 	jr z, LABEL_FF1B8B
 	sub c, 0x20
 
@@ -443249,7 +443249,7 @@ LABEL_FF1B8B:
 	cp c, 0x47
 	jr nz, LABEL_FF1BAA
 	.byte 0x9f, 0x10, 0x20	; LD WA, (XSP + 010h)
-	.byte 0xd8, 0x33, 0x03	; BIT 003h, WA
+	bit 3, wa
 	jr z, LABEL_FF1B9F
 	jr LABEL_FF1BAA
 
@@ -443264,7 +443264,7 @@ LABEL_FF1B9F:
 
 LABEL_FF1BAA:
 	.byte 0x9f, 0x10, 0x20	; LD WA, (XSP + 010h)
-	.byte 0xd8, 0x33, 0x04	; BIT 004h, WA
+	bit 4, wa
 	jr z, LABEL_FF1BB9
 	.byte 0x9f, 0x14, 0x3f, 0x00, 0x00	; CPW (XSP + 014h), 0000h
 	jr z, LABEL_FF1BBC
@@ -443274,7 +443274,7 @@ LABEL_FF1BB9:
 
 LABEL_FF1BBC:
 	.byte 0x9f, 0x1c, 0x26	; LD IZ, (XSP + 01ch)
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr nz, LABEL_FF1BCC
 	.byte 0x9f, 0x10, 0x20	; LD WA, (XSP + 010h)
 	and wa, 0x5
@@ -443299,7 +443299,7 @@ LABEL_FF1BE3:
 
 LABEL_FF1BEF:
 	.byte 0x9f, 0x10, 0x20	; LD WA, (XSP + 010h)
-	.byte 0xd8, 0x33, 0x01	; BIT 001h, WA
+	bit 1, wa
 	jr nz, LABEL_FF1C1B
 	.byte 0xd2, 0x20, 0xc2, 0x03, 0x3f, 0x20, 0x00	; CPW (03C220h), 0020h
 	jr z, LABEL_FF1C11
@@ -443315,25 +443315,25 @@ LABEL_FF1C02:
 LABEL_FF1C11:
 	.byte 0x9f, 0x12, 0x20	; LD WA, (XSP + 012h)
 	.byte 0x9f, 0x12, 0x69	; DECW 1, (XSP + 012h)
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr gt, LABEL_FF1C02
 
 LABEL_FF1C1B:
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr z, LABEL_FF1C24
 	.byte 0x0b, 0x2d, 0x00	; PUSHW 002dh
 	jr LABEL_FF1C3C
 
 LABEL_FF1C24:
 	.byte 0x9f, 0x10, 0x20	; LD WA, (XSP + 010h)
-	.byte 0xd8, 0x33, 0x00	; BIT 000h, WA
+	bit 0, wa
 	jr z, LABEL_FF1C31
 	.byte 0x0b, 0x2b, 0x00	; PUSHW 002bh
 	jr LABEL_FF1C3C
 
 LABEL_FF1C31:
 	.byte 0x9f, 0x10, 0x20	; LD WA, (XSP + 010h)
-	.byte 0xd8, 0x33, 0x02	; BIT 002h, WA
+	bit 2, wa
 	jr z, LABEL_FF1C48
 	.byte 0x0b, 0x20, 0x00	; PUSHW 0020h
 
@@ -443345,7 +443345,7 @@ LABEL_FF1C3C:
 
 LABEL_FF1C48:
 	.byte 0x9f, 0x10, 0x20	; LD WA, (XSP + 010h)
-	.byte 0xd8, 0x33, 0x01	; BIT 001h, WA
+	bit 1, wa
 	jr nz, LABEL_FF1C74
 	.byte 0xd2, 0x20, 0xc2, 0x03, 0x3f, 0x30, 0x00	; CPW (03C220h), 0030h
 	jr z, LABEL_FF1C6A
@@ -443361,7 +443361,7 @@ LABEL_FF1C5B:
 LABEL_FF1C6A:
 	.byte 0x9f, 0x12, 0x20	; LD WA, (XSP + 012h)
 	.byte 0x9f, 0x12, 0x69	; DECW 1, (XSP + 012h)
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr gt, LABEL_FF1C5B
 
 LABEL_FF1C74:
@@ -443411,7 +443411,7 @@ LABEL_FF1CC8:
 	jr ge, LABEL_FF1CEC
 	.byte 0x9f, 0x02, 0x20	; LD WA, (XSP + 002h)
 	.byte 0x9f, 0x02, 0x69	; DECW 1, (XSP + 002h)
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr gt, LABEL_FF1CAF
 	jr LABEL_FF1CEC
 
@@ -443425,10 +443425,10 @@ LABEL_FF1CDD:
 LABEL_FF1CEC:
 	.byte 0x9f, 0x02, 0x20	; LD WA, (XSP + 002h)
 	.byte 0x9f, 0x02, 0x69	; DECW 1, (XSP + 002h)
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr gt, LABEL_FF1CDD
 	.byte 0x9f, 0x10, 0x20	; LD WA, (XSP + 010h)
-	.byte 0xd8, 0x33, 0x03	; BIT 003h, WA
+	bit 3, wa
 	jr nz, LABEL_FF1D05
 	.byte 0x9f, 0x14, 0x3f, 0x00, 0x00	; CPW (XSP + 014h), 0000h
 	jr z, LABEL_FF1D4B
@@ -443471,7 +443471,7 @@ LABEL_FF1D4B:
 	jr ge, LABEL_FF1D5C
 	.byte 0x9f, 0x14, 0x20	; LD WA, (XSP + 014h)
 	.byte 0x9f, 0x14, 0x69	; DECW 1, (XSP + 014h)
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr nz, LABEL_FF1D16
 
 LABEL_FF1D5C:
@@ -443499,7 +443499,7 @@ LABEL_FF1D80:
 	jr ge, LABEL_FF1DA4
 	.byte 0x9f, 0x14, 0x20	; LD WA, (XSP + 014h)
 	.byte 0x9f, 0x14, 0x69	; DECW 1, (XSP + 014h)
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr gt, LABEL_FF1D67
 	jr LABEL_FF1DA4
 
@@ -443513,10 +443513,10 @@ LABEL_FF1D95:
 LABEL_FF1DA4:
 	.byte 0x9f, 0x14, 0x20	; LD WA, (XSP + 014h)
 	.byte 0x9f, 0x14, 0x69	; DECW 1, (XSP + 014h)
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr gt, LABEL_FF1D95
 	.byte 0x9f, 0x10, 0x20	; LD WA, (XSP + 010h)
-	.byte 0xd8, 0x33, 0x01	; BIT 001h, WA
+	bit 1, wa
 	jr nz, LABEL_FF1DC7
 	jr LABEL_FF1DD1
 
@@ -443530,7 +443530,7 @@ LABEL_FF1DB8:
 LABEL_FF1DC7:
 	.byte 0x9f, 0x12, 0x20	; LD WA, (XSP + 012h)
 	.byte 0x9f, 0x12, 0x69	; DECW 1, (XSP + 012h)
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr gt, LABEL_FF1DB8
 
 LABEL_FF1DD1:
@@ -443548,7 +443548,7 @@ LABEL_FF1DE9:
 	push xiz
 	.byte 0xbf, 0x04, 0x02, 0x0f, 0x00	; LDW (XSP + 004h:8), 000fh
 	.byte 0x9f, 0x10, 0x20	; LD WA, (XSP + 010h)
-	.byte 0xd8, 0x33, 0x04	; BIT 004h, WA
+	bit 4, wa
 	jr nz, LABEL_FF1DFE
 	.byte 0xbf, 0x14, 0x02, 0x06, 0x00	; LDW (XSP + 014h:8), 0006h
 
@@ -443578,7 +443578,7 @@ LABEL_FF1E2B:
 	inc 1, wa
 	.byte 0xd7, 0xfa, 0x98	; LD QIZ, WA
 	.byte 0x9f, 0x10, 0x20	; LD WA, (XSP + 010h)
-	.byte 0xd8, 0x33, 0x07	; BIT 007h, WA
+	bit 7, wa
 	jr z, LABEL_FF1E40
 	.byte 0xbf, 0x04, 0x02, 0x12, 0x00	; LDW (XSP + 004h:8), 0012h
 
@@ -443622,7 +443622,7 @@ LABEL_FF1E8F:
 	cp a, 0x47
 	jr nz, LABEL_FF1EBA
 	.byte 0x9f, 0x10, 0x20	; LD WA, (XSP + 010h)
-	.byte 0xd8, 0x33, 0x03	; BIT 003h, WA
+	bit 3, wa
 	jr nz, LABEL_FF1EBA
 	.byte 0x9f, 0x14, 0x20	; LD WA, (XSP + 014h)
 	.byte 0xd7, 0xfa, 0x98	; LD QIZ, WA
@@ -443642,7 +443642,7 @@ LABEL_FF1EAA:
 LABEL_FF1EBA:
 	.byte 0x9f, 0x12, 0x6d	; DECW 5, (XSP + 012h)
 	.byte 0x9f, 0x10, 0x20	; LD WA, (XSP + 010h)
-	.byte 0xd8, 0x33, 0x04	; BIT 004h, WA
+	bit 4, wa
 	jr z, LABEL_FF1ECC
 	.byte 0x9f, 0x14, 0x3f, 0x00, 0x00	; CPW (XSP + 014h), 0000h
 	jr z, LABEL_FF1ECF
@@ -443652,7 +443652,7 @@ LABEL_FF1ECC:
 
 LABEL_FF1ECF:
 	.byte 0x9f, 0x1c, 0x26	; LD IZ, (XSP + 01ch)
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr nz, LABEL_FF1EDF
 	.byte 0x9f, 0x10, 0x20	; LD WA, (XSP + 010h)
 	and wa, 0x5
@@ -443669,7 +443669,7 @@ LABEL_FF1EE2:
 
 LABEL_FF1EEF:
 	.byte 0x9f, 0x10, 0x20	; LD WA, (XSP + 010h)
-	.byte 0xd8, 0x33, 0x01	; BIT 001h, WA
+	bit 1, wa
 	jr nz, LABEL_FF1F1B
 	.byte 0xd2, 0x20, 0xc2, 0x03, 0x3f, 0x20, 0x00	; CPW (03C220h), 0020h
 	jr z, LABEL_FF1F11
@@ -443688,21 +443688,21 @@ LABEL_FF1F11:
 	jr gt, LABEL_FF1F02
 
 LABEL_FF1F1B:
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr z, LABEL_FF1F24
 	.byte 0x0b, 0x2d, 0x00	; PUSHW 002dh
 	jr LABEL_FF1F3C
 
 LABEL_FF1F24:
 	.byte 0x9f, 0x10, 0x20	; LD WA, (XSP + 010h)
-	.byte 0xd8, 0x33, 0x00	; BIT 000h, WA
+	bit 0, wa
 	jr z, LABEL_FF1F31
 	.byte 0x0b, 0x2b, 0x00	; PUSHW 002bh
 	jr LABEL_FF1F3C
 
 LABEL_FF1F31:
 	.byte 0x9f, 0x10, 0x20	; LD WA, (XSP + 010h)
-	.byte 0xd8, 0x33, 0x02	; BIT 002h, WA
+	bit 2, wa
 	jr z, LABEL_FF1F48
 	.byte 0x0b, 0x20, 0x00	; PUSHW 0020h
 
@@ -443714,7 +443714,7 @@ LABEL_FF1F3C:
 
 LABEL_FF1F48:
 	.byte 0x9f, 0x10, 0x20	; LD WA, (XSP + 010h)
-	.byte 0xd8, 0x33, 0x01	; BIT 001h, WA
+	bit 1, wa
 	jr nz, LABEL_FF1F74
 	.byte 0xd2, 0x20, 0xc2, 0x03, 0x3f, 0x30, 0x00	; CPW (03C220h), 0030h
 	jr z, LABEL_FF1F6A
@@ -443768,7 +443768,7 @@ LABEL_FF1FBC:
 	.byte 0x9f, 0x14, 0x3f, 0x00, 0x00	; CPW (XSP + 014h), 0000h
 	jr nz, LABEL_FF1FCB
 	.byte 0x9f, 0x10, 0x20	; LD WA, (XSP + 010h)
-	.byte 0xd8, 0x33, 0x03	; BIT 003h, WA
+	bit 3, wa
 	jr z, LABEL_FF1FDA
 
 LABEL_FF1FCB:
@@ -443826,7 +443826,7 @@ LABEL_FF2032:
 	jr ge, LABEL_FF2059
 	.byte 0x9f, 0x14, 0x20	; LD WA, (XSP + 014h)
 	.byte 0x9f, 0x14, 0x69	; DECW 1, (XSP + 014h)
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr gt, LABEL_FF2018
 	jr LABEL_FF2059
 
@@ -443840,7 +443840,7 @@ LABEL_FF204A:
 LABEL_FF2059:
 	.byte 0x9f, 0x14, 0x20	; LD WA, (XSP + 014h)
 	.byte 0x9f, 0x14, 0x69	; DECW 1, (XSP + 014h)
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr gt, LABEL_FF204A
 	.byte 0x9f, 0x1a, 0x69	; DECW 1, (XSP + 01ah)
 	.byte 0x9f, 0x1a, 0x20	; LD WA, (XSP + 01ah)
@@ -443909,7 +443909,7 @@ LABEL_FF20DA:
 LABEL_FF20E9:
 	.byte 0xd7, 0xfa, 0x88	; LD WA, QIZ
 	.byte 0xd7, 0xfa, 0x61	; INC 1, QIZ
-	.byte 0xd8, 0xdb	; CP WA, 3
+	cps wa, 3
 	jr lt, LABEL_FF20DA
 	jr LABEL_FF210E
 
@@ -443925,10 +443925,10 @@ LABEL_FF20F5:
 	.byte 0xd2, 0x22, 0xc2, 0x03, 0x61	; INCW 1, (03C222h)
 
 LABEL_FF210E:
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr nz, LABEL_FF20F5
 	.byte 0x9f, 0x10, 0x20	; LD WA, (XSP + 010h)
-	.byte 0xd8, 0x33, 0x01	; BIT 001h, WA
+	bit 1, wa
 	jr nz, LABEL_FF212B
 	jr LABEL_FF2135
 
@@ -443974,7 +443974,7 @@ LABEL_FF215E:
 	.byte 0xd7, 0xfa, 0xcf, 0x20, 0x00	; CP QIZ, 0020h
 	jr lt, LABEL_FF215E
 	.byte 0x9f, 0x20, 0x20	; LD WA, (XSP + 020h)
-	.byte 0xd8, 0x33, 0x07	; BIT 007h, WA
+	bit 7, wa
 	jr z, LABEL_FF2197
 	.byte 0xbf, 0x06, 0x02, 0x12, 0x00	; LDW (XSP + 006h:8), 0012h
 	.byte 0xbf, 0x08, 0x02, 0x0a, 0x00	; LDW (XSP + 008h:8), 000ah
@@ -444013,7 +444013,7 @@ LABEL_FF21D0:
 	ld (xbc), wa
 	.byte 0xba, 0x01, 0x31	; LDA XBC, XDE + 001h
 	.byte 0x9f, 0x20, 0x20	; LD WA, (XSP + 020h)
-	.byte 0xd8, 0x33, 0x07	; BIT 007h, WA
+	bit 7, wa
 	jr z, LABEL_FF21F6
 	.byte 0x82, 0x3f, 0x00	; CP (XDE), 000h
 	jr nz, LABEL_FF21EA
@@ -444043,7 +444043,7 @@ LABEL_FF2200:
 
 LABEL_FF220F:
 	ld e, (xde)
-	.byte 0xcd, 0x30, 0x07	; RES 007h, E
+	res 7, e
 	extz de
 	and a, 0xF
 	jr z, LABEL_FF221D
@@ -444059,13 +444059,13 @@ LABEL_FF2223:
 	calr LABEL_FF2768
 	inc 2, xsp
 	.byte 0xbf, 0x04, 0x53	; LD (XSP + 004h), HL
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr ge, LABEL_FF2233
 	.byte 0x9f, 0x04, 0x69	; DECW 1, (XSP + 004h)
 
 LABEL_FF2233:
 	.byte 0x9f, 0x20, 0x20	; LD WA, (XSP + 020h)
-	.byte 0xd8, 0x33, 0x07	; BIT 007h, WA
+	bit 7, wa
 	jr z, LABEL_FF2266
 	.byte 0xd7, 0xfa, 0xaa	; LD QIZ, 2
 
@@ -444115,7 +444115,7 @@ LABEL_FF228B:
 	.byte 0xd7, 0xfa, 0x61	; INC 1, QIZ
 	.byte 0xd7, 0xfa, 0xcf, 0x08, 0x00	; CP QIZ, 0008h
 	jr lt, LABEL_FF228B
-	.byte 0xdc, 0xd8	; CP IX, 0
+	cps ix, 0
 	jr z, LABEL_FF22B8
 	.byte 0x92, 0x3e, 0x10, 0x00	; ORW (XDE), 0010h
 
@@ -444126,7 +444126,7 @@ LABEL_FF22B8:
 	calr LABEL_FF26A4
 	inc 6, xsp
 	.byte 0xd7, 0xfa, 0xa8	; LD QIZ, 0
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr le, LABEL_FF2321
 	.byte 0x9f, 0x04, 0x3f, 0x00, 0x00	; CPW (XSP + 004h), 0000h
 	jr le, LABEL_FF22F9
@@ -444286,12 +444286,12 @@ LABEL_FF2424:
 	lds iz, 0
 	lds wa, 0
 	.byte 0x9f, 0x12, 0x23	; LD HL, (XSP + 012h)
-	.byte 0xdb, 0xd8	; CP HL, 0
+	cps hl, 0
 	jr le, LABEL_FF243D
 
 LABEL_FF2432:
 	add wa, wa
-	.byte 0xd8, 0x31, 0x00	; SET 000h, WA
+	set 0, wa
 	inc 1, iz
 	cp iz, hl
 	jr lt, LABEL_FF2432
@@ -444300,7 +444300,7 @@ LABEL_FF243D:
 	.byte 0x9f, 0x14, 0x26	; LD IZ, (XSP + 014h)
 	dec 1, iz
 	.byte 0xaf, 0x0e, 0x25	; LD XIY, (XSP + 00eh)
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr le, LABEL_FF2498
 	.byte 0xbf, 0x04, 0x50	; LD (XSP + 004h), WA
 	.byte 0xbf, 0x02, 0x02, 0x08, 0x00	; LDW (XSP + 002h:8), 0008h
@@ -444339,7 +444339,7 @@ LABEL_FF248B:
 	.byte 0x90, 0xe9	; OR (XWA), BC
 	dec 1, iz
 	dec 2, xix
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr gt, LABEL_FF245C
 
 LABEL_FF2498:
@@ -444439,7 +444439,7 @@ LABEL_FF2553:
 	add wa, wa
 	.byte 0xf2, 0x84, 0xc2, 0x03, 0x31	; LDA XBC, 03C284h
 	.byte 0xd3, 0x07, 0xe4, 0xe0, 0x20	; LD WA, (XBC + WA)
-	.byte 0xd8, 0xd8	; CP WA, 0
+	cps wa, 0
 	jr z, LABEL_FF254E
 	pushw iz
 	pushw wa
@@ -444488,7 +444488,7 @@ LABEL_FF25B4:
 LABEL_FF25C7:
 	.byte 0xc3, 0x07, 0xe0, 0xe8, 0x3f, 0x0a	; CP (XWA + DE), 00ah
 	.byte 0xb0, 0xf1	; RET LT
-	.byte 0xda, 0xd8	; CP DE, 0
+	cps de, 0
 	jr gt, LABEL_FF25B4
 	ret
 
@@ -444524,7 +444524,7 @@ LABEL_FF2602:
 	ld wa, (xde)
 	.byte 0xd8, 0x08, 0x0a, 0x00	; MULW_WA 000ah
 	ld (xde), wa
-	.byte 0xdc, 0xd8	; CP IX, 0
+	cps ix, 0
 	jr z, LABEL_FF2642
 	ld iz, ix
 	jr LABEL_FF262E
@@ -444541,7 +444541,7 @@ LABEL_FF2619:
 	dec 1, iz
 
 LABEL_FF262E:
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr le, LABEL_FF2642
 	ld de, iz
 	exts xde
@@ -444558,7 +444558,7 @@ LABEL_FF2642:
 	jr lt, LABEL_FF2602
 	.byte 0xbb, 0x1e, 0x31	; LDA XBC, XHL + 01eh
 	ld wa, (xbc)
-	.byte 0xd8, 0x33, 0x07	; BIT 007h, WA
+	bit 7, wa
 	jr z, LABEL_FF2659
 	.byte 0x9b, 0x1c, 0x61	; INCW 1, (XHL + 01ch)
 
@@ -444599,7 +444599,7 @@ LABEL_FF2683:
 LABEL_FF269B:
 	dec 2, de
 	dec 2, xbc
-	.byte 0xda, 0xd8	; CP DE, 0
+	cps de, 0
 	jr gt, LABEL_FF2683
 	ret
 
@@ -444643,13 +444643,13 @@ LABEL_FF26DD:
 
 LABEL_FF26E4:
 	ld wa, (xbc)
-	.byte 0xd8, 0x33, 0x07	; BIT 007h, WA
+	bit 7, wa
 	jr nz, LABEL_FF26F1
 	cp iz, 0x8
 	jr lt, LABEL_FF26DD
 
 LABEL_FF26F1:
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr z, LABEL_FF2702
 	pushw iz
 	.byte 0x9f, 0x0e, 0x04	; PUSHW (XSP + 00eh)
@@ -444664,7 +444664,7 @@ LABEL_FF2702:
 LABEL_FF2705:
 	.byte 0xaf, 0x08, 0x20	; LD XWA, (XSP + 008h)
 	ld wa, (xwa)
-	.byte 0xd8, 0x33, 0x07	; BIT 007h, WA
+	bit 7, wa
 	jr z, LABEL_FF26D6
 	.byte 0x9f, 0x02, 0x23	; LD HL, (XSP + 002h)
 
@@ -444678,7 +444678,7 @@ LABEL_FF2716:
 	.byte 0xaf, 0x06, 0x22	; LD XDE, (XSP + 006h)
 	lds iz, 0
 	.byte 0x9f, 0x0a, 0x21	; LD BC, (XSP + 00ah)
-	.byte 0xd9, 0xd8	; CP BC, 0
+	cps bc, 0
 	jr le, LABEL_FF2737
 
 LABEL_FF2723:
@@ -444715,7 +444715,7 @@ LABEL_FF274A:
 	jr lt, LABEL_FF2745
 
 LABEL_FF2758:
-	.byte 0xde, 0xd8	; CP IZ, 0
+	cps iz, 0
 	jr z, LABEL_FF2764
 	pushw bc
 	pushw iz
@@ -444915,7 +444915,7 @@ LABEL_FF28BB:
 LABEL_FF28D1:
 	.byte 0xeb, 0xa8	; LD XHL, 0
 	.byte 0x9f, 0x0a, 0x21	; LD BC, (XSP + 00ah)
-	.byte 0xd9, 0xd8	; CP BC, 0
+	cps bc, 0
 	.byte 0xb0, 0xf6	; RET Z
 	.byte 0xaf, 0x04, 0x23	; LD XHL, (XSP + 004h)
 	.byte 0x9f, 0x08, 0x20	; LD WA, (XSP + 008h)
@@ -444940,7 +444940,7 @@ LABEL_FF2909:
 	inc 1, hl
 	ld bc, hl
 	.byte 0xf3, 0x07, 0xf8, 0xe4, 0x33	; LDA XHL, XIZ + BC
-	.byte 0xd9, 0xd8	; CP BC, 0
+	cps bc, 0
 	jr z, LABEL_FF292C
 	.byte 0x9f, 0x0c, 0x20	; LD WA, (XSP + 00ch)
 
@@ -444972,7 +444972,7 @@ LABEL_FFFEA1:
 
 LABEL_FFFEA4:
 	.byte 0xc5, 0xf0, 0x21	; LD A, (XIX+)
-	.byte 0xc9, 0xd8	; CP A, 0
+	cps a, 0
 	jr z, LABEL_FFFEB2
 	push xix
 	calr LABEL_FFFEC1
