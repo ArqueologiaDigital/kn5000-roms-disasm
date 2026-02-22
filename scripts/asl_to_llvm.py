@@ -1459,6 +1459,78 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
                 mnem = BIT_SET_RES_SUBOPC[sub_opc]
                 return f"{mnem} {bit_num}, {reg_name}", 3
 
+    # Tier 18: Register-indirect memory ALU (2 or 3 bytes)
+    # No displacement: prefix(1) + sub_opcode(1)
+    # d8 displacement: prefix(1) + d8(1) + sub_opcode(1)
+    # Memory prefix ranges: 0x80-0x87/0x88-0x8F (8-bit src), 0x90-0x97/0x98-0x9F (16-bit src),
+    #                        0xA0-0xA7/0xA8-0xAF (32-bit src)
+    # Sub-opcodes: 0x80+r=ADD rm, 0x88+r=ADD mr, 0x90+r=ADC rm, 0x98+r=ADC mr,
+    #              0xA0+r=SUB rm, 0xA8+r=SUB mr, 0xB0+r=SBC rm, 0xB8+r=SBC mr,
+    #              0xC0+r=AND rm, 0xC8+r=AND mr, 0xD0+r=XOR rm, 0xD8+r=XOR mr,
+    #              0xE0+r=OR rm, 0xE8+r=OR mr, 0xF0+r=CP rm, 0xF8+r=CP mr
+    MEM_ALU_MNEMONICS = {'ADD', 'ADC', 'SUB', 'SBC', 'AND', 'XOR', 'OR', 'CP'}
+    # Sub-opcode base -> (mnemonic, direction: 'rm'=reg,mem or 'mr'=mem,reg)
+    MEM_ALU_SUBOPC = {
+        0x80: ('add', 'rm'), 0x88: ('add', 'mr'),
+        0x90: ('adc', 'rm'), 0x98: ('adc', 'mr'),
+        0xA0: ('sub', 'rm'), 0xA8: ('sub', 'mr'),
+        0xB0: ('sbc', 'rm'), 0xB8: ('sbc', 'mr'),
+        0xC0: ('and', 'rm'), 0xC8: ('and', 'mr'),
+        0xD0: ('xor', 'rm'), 0xD8: ('xor', 'mr'),
+        0xE0: ('or', 'rm'),  0xE8: ('or', 'mr'),
+        0xF0: ('cp', 'rm'),  0xF8: ('cp', 'mr'),
+    }
+    if rom_bytes is not None and mnem_upper in MEM_ALU_MNEMONICS:
+        prefix = rom_bytes[0]
+        # Determine if this is a source memory prefix and extract base reg + size
+        has_disp = False
+        data_size = None
+        base_idx = None
+        if 0x80 <= prefix <= 0xAF:
+            base_idx = prefix & 0x07
+            has_disp = (prefix & 0x08) != 0
+            if prefix < 0x90:
+                data_size = 8
+            elif prefix < 0xA0:
+                data_size = 16
+            else:
+                data_size = 32
+        if base_idx is not None and data_size is not None:
+            expected_nbytes = 3 if has_disp else 2
+            if nbytes == expected_nbytes:
+                disp_byte = rom_bytes[1] if has_disp else None
+                sub_opc_byte = rom_bytes[2] if has_disp else rom_bytes[1]
+                sub_opc_base = sub_opc_byte & 0xF8
+                operand_reg_idx = sub_opc_byte & 0x07
+                if sub_opc_base in MEM_ALU_SUBOPC:
+                    alu_mnem, direction = MEM_ALU_SUBOPC[sub_opc_base]
+                    base_name = REG32_BY_INDEX.get(base_idx)
+                    # Get operand register name based on data size
+                    if data_size == 8:
+                        op_reg = REG8_BY_INDEX.get(operand_reg_idx)
+                    elif data_size == 16:
+                        op_reg = REG16_BY_INDEX.get(operand_reg_idx)
+                    else:
+                        op_reg = REG32_BY_INDEX.get(operand_reg_idx)
+                    if base_name and op_reg:
+                        # Format memory operand
+                        if has_disp:
+                            d8 = disp_byte
+                            if d8 > 127:
+                                d8 -= 256  # sign-extend
+                            if d8 < 0:
+                                mem_str = f"({base_name} - {-d8})"
+                            elif d8 > 0:
+                                mem_str = f"({base_name} + {d8})"
+                            else:
+                                mem_str = f"({base_name})"
+                        else:
+                            mem_str = f"({base_name})"
+                        if direction == 'rm':
+                            return f"{alu_mnem} {op_reg}, {mem_str}", expected_nbytes
+                        else:
+                            return f"{alu_mnem} {mem_str}, {op_reg}", expected_nbytes
+
     return None
 
 
