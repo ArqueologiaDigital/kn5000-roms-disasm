@@ -1222,8 +1222,11 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
             native_asm = f"call {label}" if label else f"call 0x{target_addr:X}"
             return native_asm, 4
 
-    # Tier 6: PUSH/POP 32-bit registers (1-byte encoding)
-    # PUSH Xreg: 0x38 + reg_index, POP Xreg: 0x58 + reg_index
+    # Tier 6: PUSH/POP (1-byte encoding)
+    # PUSH r16: 0x28+r, POP r16: 0x48+r
+    # PUSH r32: 0x38+r, POP r32: 0x58+r
+    # PUSH SR: 0x02, POP SR: 0x03
+    NATIVE_R16_REGS = {'WA', 'BC', 'DE', 'HL', 'IX', 'IY', 'IZ'}  # SP excluded (not in GR16)
     if nbytes == 1 and operands_str and rom_bytes is not None:
         reg = operands_str.strip().upper()
         if reg in NATIVE_LD_32BIT_REGS:
@@ -1234,6 +1237,17 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
             elif mnem_upper == 'POP' and rom_bytes[0] == 0x58 + reg_idx:
                 native_asm = f"pop {reg.lower()}"
                 return native_asm, 1
+        elif reg in NATIVE_R16_REGS:
+            reg_idx = REG_INDEX.get(reg, 99)
+            if mnem_upper == 'PUSH' and rom_bytes[0] == 0x28 + reg_idx:
+                return f"pushw {reg.lower()}", 1
+            elif mnem_upper == 'POP' and rom_bytes[0] == 0x48 + reg_idx:
+                return f"popw {reg.lower()}", 1
+        elif reg == 'SR':
+            if mnem_upper == 'PUSH' and rom_bytes[0] == 0x02:
+                return "push_sr", 1
+            elif mnem_upper == 'POP' and rom_bytes[0] == 0x03:
+                return "pop_sr", 1
 
     # Tier 7: Simple register-indirect LD (2-byte encoding)
     # LD reg, (Xreg): prefix = 0x80/0x90/0xA0 + xreg_idx
