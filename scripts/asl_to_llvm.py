@@ -2110,6 +2110,12 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
                 mnem = ('decdi' if is_dec else 'incdi') + sz_suffix
                 return f"{mnem} {count}, {addr16}", nbytes
 
+            # LD (dst_addr), (src_addr): sub-opc 0x19, + dst_addr16 (6 bytes)
+            if sub_opc == 0x19 and nbytes == 6 and opsize in (8, 16):
+                dst_addr = rom_bytes[4] | (rom_bytes[5] << 8)
+                mnem = 'ldmm8' if opsize == 8 else 'ldmm16'
+                return f"{mnem} {dst_addr}, {addr16}", nbytes
+
     # =========================================================================
     # Tier 36: Direct addressing (C2/D2/E2 + addr24 + sub-opcode)
     # Source memory with 24-bit direct address. Same sub-opcode table as Tier 35.
