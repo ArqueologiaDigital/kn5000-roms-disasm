@@ -1622,6 +1622,48 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
                         if op_reg:
                             return f"lda {op_reg}, {mem_str}", expected_nbytes
 
+    # Tier 20: EI (enable interrupts) — 2-byte: 0x06, level
+    if nbytes == 2 and rom_bytes is not None and mnem_upper == 'EI':
+        if rom_bytes[0] == 0x06:
+            level = rom_bytes[1]
+            return f"ei {level}", 2
+
+    # Tier 21: RETD (return and deallocate) — 3-byte: 0x0F, imm16_LE
+    if nbytes == 3 and rom_bytes is not None and mnem_upper == 'RETD':
+        if rom_bytes[0] == 0x0F:
+            imm16 = rom_bytes[1] | (rom_bytes[2] << 8)
+            return f"retd 0x{imm16:X}", 3
+
+    # Tier 22: MUL/MULS/DIV/DIVS register-register (D8 prefix, 2-byte)
+    # Encoding: D8+src_idx, base_opc+dst_idx
+    MULDIV_MNEMONICS = {'MUL', 'MULS', 'DIV', 'DIVS'}
+    MULDIV_SUBOPC = {0x40: 'mul', 0x48: 'muls', 0x50: 'div', 0x58: 'divs'}
+    if nbytes == 2 and rom_bytes is not None and mnem_upper in MULDIV_MNEMONICS:
+        prefix = rom_bytes[0]
+        if 0xD8 <= prefix <= 0xDF:
+            src_idx = prefix & 0x07
+            sub_opc = rom_bytes[1]
+            sub_base = sub_opc & 0xF8
+            dst_idx = sub_opc & 0x07
+            if sub_base in MULDIV_SUBOPC and src_idx != 7 and dst_idx != 7:
+                src_reg = REG32_BY_INDEX.get(src_idx)
+                dst_reg = REG32_BY_INDEX.get(dst_idx)
+                if src_reg and dst_reg:
+                    mnem = MULDIV_SUBOPC[sub_base]
+                    return f"{mnem} {dst_reg}, {src_reg}", 2
+
+    # Tier 23: PUSHW immediate — 3-byte: 0x0B, imm16_LE
+    if nbytes == 3 and rom_bytes is not None and mnem_upper == 'PUSHW':
+        if rom_bytes[0] == 0x0B:
+            imm16 = rom_bytes[1] | (rom_bytes[2] << 8)
+            return f"pushw 0x{imm16:X}", 3
+
+    # Tier 24: Conditional RET (RETcc) — 2-byte: 0xB0, 0xF0+cc
+    if nbytes == 2 and rom_bytes is not None and mnem_upper == 'RET':
+        if rom_bytes[0] == 0xB0 and 0xF0 <= rom_bytes[1] <= 0xFF:
+            cc = rom_bytes[1] & 0x0F
+            return f"ret {TLCS900_CC_NAMES[cc]}", 2
+
     return None
 
 
