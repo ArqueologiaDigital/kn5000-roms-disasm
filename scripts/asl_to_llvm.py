@@ -1664,6 +1664,28 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
             cc = rom_bytes[1] & 0x0F
             return f"ret {TLCS900_CC_NAMES[cc]}", 2
 
+    # Tier 25: SCC (set condition code) — 2-byte: prefix + 0x70+cc
+    # C8+r → 8-bit register, D8+r → 16-bit register
+    if nbytes == 2 and rom_bytes is not None and mnem_upper == 'SCC':
+        prefix = rom_bytes[0]
+        sub_opc = rom_bytes[1]
+        if 0x70 <= sub_opc <= 0x7F:
+            cc = sub_opc & 0x0F
+            r_idx = prefix & 0x07
+            if 0xC8 <= prefix <= 0xCF:
+                reg_name = REG8_BY_INDEX.get(r_idx)
+                if reg_name and r_idx != 7:  # skip SP-mapped index
+                    return f"scc8 {TLCS900_CC_NAMES[cc]}, {reg_name}", 2
+            elif 0xD8 <= prefix <= 0xDF:
+                reg_name = REG16_BY_INDEX.get(r_idx)
+                if reg_name and r_idx != 7:  # skip SP
+                    return f"scc16 {TLCS900_CC_NAMES[cc]}, {reg_name}", 2
+
+    # Tier 26: EX F,F' — 1-byte: 0x16
+    if nbytes == 1 and rom_bytes is not None and mnem_upper == 'EX':
+        if rom_bytes[0] == 0x16:
+            return "ex_ff", 1
+
     return None
 
 
