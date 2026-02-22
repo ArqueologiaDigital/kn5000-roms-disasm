@@ -2567,6 +2567,62 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
                                 byte_args = ', '.join(f'0x{b:02X}' for b in addr_bytes)
                                 return f"ld_{reg_name}_sri{size_char}{addr_len} {byte_args}", nbytes
 
+                # For erp (C7/D7/E7): extract sub-opcode for known operations
+                # Format: [reg_idx, sub_opc] — nop==2 means trail=0 (sub_opc is last byte)
+                if low_nibble == 7 and nop == 2:
+                    reg_idx = operand_bytes[0]
+                    sub_opc = operand_bytes[1]
+                    # ERP suffix mapping: (size_char, sub_opc) → mnemonic
+                    ERP_SUFFIX_MAP = {
+                        ('b', 0x2A): 'xorcf_a_berp', ('b', 0x61): 'inc1_berp', ('b', 0x69): 'dec1_berp',
+                        ('b', 0x81): 'add_a_berp', ('b', 0x83): 'add_c_berp',
+                        ('b', 0x88): 'ldto_w_berp', ('b', 0x89): 'ldto_a_berp', ('b', 0x8A): 'ldto_b_berp',
+                        ('b', 0x8B): 'ldto_c_berp', ('b', 0x8D): 'ldto_e_berp', ('b', 0x8F): 'ldto_l_berp',
+                        ('b', 0x98): 'ldfr_w_berp', ('b', 0x99): 'ldfr_a_berp', ('b', 0x9B): 'ldfr_c_berp',
+                        ('b', 0x9C): 'ldfr_d_berp', ('b', 0x9D): 'ldfr_e_berp', ('b', 0x9E): 'ldfr_h_berp',
+                        ('b', 0x9F): 'ldfr_l_berp', ('b', 0xA1): 'sub_a_berp', ('b', 0xA3): 'sub_c_berp',
+                        ('b', 0xA8): 'ldi0_berp', ('b', 0xA9): 'ldi1_berp', ('b', 0xAA): 'ldi2_berp',
+                        ('b', 0xAB): 'ldi3_berp', ('b', 0xAC): 'ldi4_berp', ('b', 0xAD): 'ldi5_berp',
+                        ('b', 0xAE): 'ldi6_berp', ('b', 0xAF): 'ldi7_berp', ('b', 0xC1): 'and_a_berp',
+                        ('b', 0xD8): 'cpi0_berp', ('b', 0xD9): 'cpi1_berp', ('b', 0xDA): 'cpi2_berp',
+                        ('b', 0xDB): 'cpi3_berp', ('b', 0xDC): 'cpi4_berp', ('b', 0xDD): 'cpi5_berp',
+                        ('b', 0xDE): 'cpi6_berp', ('b', 0xDF): 'cpi7_berp',
+                        ('b', 0xE0): 'or_w_berp', ('b', 0xE1): 'or_a_berp', ('b', 0xE3): 'or_c_berp',
+                        ('b', 0xF1): 'cp_a_berp', ('b', 0xF3): 'cp_c_berp', ('b', 0xF7): 'cp_l_berp',
+                        ('b', 0xFE): 'sll_a_berp',
+                        ('w', 0x04): 'push_werp', ('w', 0x05): 'pop_werp', ('w', 0x06): 'cpl_werp',
+                        ('w', 0x2A): 'xorcf_a_werp', ('w', 0x2C): 'stcf_a_werp',
+                        ('w', 0x40): 'mul_xwa_werp', ('w', 0x41): 'mul_xbc_werp',
+                        ('w', 0x61): 'inc1_werp', ('w', 0x64): 'inc4_werp', ('w', 0x69): 'dec1_werp',
+                        ('w', 0x80): 'add_wa_werp', ('w', 0x81): 'add_bc_werp',
+                        ('w', 0x88): 'ldto_wa_werp', ('w', 0x89): 'ldto_bc_werp',
+                        ('w', 0x8A): 'ldto_de_werp', ('w', 0x8B): 'ldto_hl_werp',
+                        ('w', 0x8C): 'ldto_ix_werp', ('w', 0x8D): 'ldto_iy_werp',
+                        ('w', 0x8E): 'ldto_iz_werp', ('w', 0x98): 'ldfr_wa_werp',
+                        ('w', 0x99): 'ldfr_bc_werp', ('w', 0x9A): 'ldfr_de_werp',
+                        ('w', 0x9B): 'ldfr_hl_werp', ('w', 0x9D): 'ldfr_iy_werp',
+                        ('w', 0x9E): 'ldfr_iz_werp', ('w', 0xA0): 'sub_wa_werp',
+                        ('w', 0xA1): 'sub_bc_werp', ('w', 0xA2): 'sub_de_werp',
+                        ('w', 0xA8): 'ldi0_werp', ('w', 0xA9): 'ldi1_werp', ('w', 0xAA): 'ldi2_werp',
+                        ('w', 0xAB): 'ldi3_werp', ('w', 0xAC): 'ldi4_werp', ('w', 0xAE): 'ldi6_werp',
+                        ('w', 0xAF): 'ldi7_werp', ('w', 0xB8): 'ex_wa_werp', ('w', 0xBE): 'ex_iz_werp',
+                        ('w', 0xC0): 'and_wa_werp', ('w', 0xC2): 'and_de_werp',
+                        ('w', 0xD8): 'cpi0_werp', ('w', 0xD9): 'cpi1_werp', ('w', 0xDB): 'cpi3_werp',
+                        ('w', 0xDC): 'cpi4_werp', ('w', 0xDE): 'cpi6_werp', ('w', 0xDF): 'cpi7_werp',
+                        ('w', 0xE0): 'or_wa_werp', ('w', 0xF0): 'cp_wa_werp', ('w', 0xF1): 'cp_bc_werp',
+                        ('w', 0xF3): 'cp_hl_werp', ('w', 0xF6): 'cp_iz_werp', ('w', 0xFC): 'sla_a_werp',
+                        ('l', 0x04): 'push_lerp', ('l', 0x05): 'pop_lerp', ('l', 0x64): 'inc4_lerp',
+                        ('l', 0x88): 'ldto_xwa_lerp', ('l', 0x8B): 'ldto_xhl_lerp',
+                        ('l', 0x8C): 'ldto_xix_lerp', ('l', 0x8D): 'ldto_xiy_lerp',
+                        ('l', 0x8E): 'ldto_xiz_lerp', ('l', 0x98): 'ldfr_xwa_lerp',
+                        ('l', 0x99): 'ldfr_xbc_lerp', ('l', 0x9B): 'ldfr_xhl_lerp',
+                        ('l', 0x9C): 'ldfr_xix_lerp', ('l', 0x9D): 'ldfr_xiy_lerp',
+                        ('l', 0x9E): 'ldfr_xiz_lerp',
+                    }
+                    mnem = ERP_SUFFIX_MAP.get((size_char, sub_opc))
+                    if mnem:
+                        return f"{mnem} 0x{reg_idx:02X}", nbytes
+
                 # Map low nibble to category mnemonic
                 CATEGORY_MAP = {
                     0: 'sd8',   # 8-bit direct address
