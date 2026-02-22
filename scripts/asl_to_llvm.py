@@ -1402,6 +1402,32 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
             if label and label.lower() not in RESERVED_LABEL_NAMES:
                 return f"calr {label}", 3
 
+    # Tier 10b: DJNZ (3-byte: prefix + 0x1C + d8)
+    # 16-bit: D8+reg, 0x1C, d8 (decrement 16-bit register, jump if not zero)
+    # 8-bit:  C8+reg, 0x1C, d8 (decrement 8-bit register, jump if not zero)
+    if nbytes == 3 and rom_bytes is not None and addr is not None:
+        if mnem_upper == 'DJNZ' and rom_bytes[1] == 0x1C:
+            prefix = rom_bytes[0]
+            d8 = rom_bytes[2]
+            if d8 > 127:
+                d8 -= 256  # sign-extend
+            target = addr + 3 + d8
+            label = ADDR_TO_LABEL.get(target)
+            if not label:
+                lbl_all = ADDR_TO_LABEL_ALL.get(target)
+                if lbl_all and lbl_all.startswith('LABEL_'):
+                    label = lbl_all
+            if label and label.lower() not in RESERVED_LABEL_NAMES:
+                if 0xD8 <= prefix <= 0xDF:
+                    # 16-bit DJNZ uses GPR (32-bit names) with D8 prefix
+                    reg_name = REG32_BY_INDEX[prefix & 0x07]
+                    if reg_name:
+                        return f"djnz {reg_name}, {label}", 3
+                elif 0xC8 <= prefix <= 0xCF:
+                    reg_name = REG8_BY_INDEX[prefix & 0x07]
+                    if reg_name:
+                        return f"djnz8 {reg_name}, {label}", 3
+
     # Tier 11: Short-form LD r8, #imm8 (2-byte: 0x20+r, imm8)
     # ASL uses macros LD_A, LD_W, etc. for these, so check startswith('LD').
     if nbytes == 2 and rom_bytes is not None and mnem_upper.startswith('LD'):
@@ -1469,12 +1495,15 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
     # Tier 15: Shift/Rotate instructions (3-byte: prefix + sub_opcode + count)
     # Shifts: prefix_r + {0xEC=SLA, 0xED=SRA, 0xEE=SLL, 0xEF=SRL} + count
     # Rotates: prefix_r + {0xE8=RLC, 0xE9=RRC, 0xEA=RL, 0xEB=RR} + 0x01
+    # Also handles macro names like SRL_0_XWA, SLL_0_XBC, etc.
     SHIFT_ROTATE_MNEMONICS = {
         'SLL', 'SLA', 'SRL', 'SRA', 'RL', 'RLC', 'RR', 'RRC',
     }
     SHIFT_SUBOPC = {0xEC: 'sla', 0xED: 'sra', 0xEE: 'sll', 0xEF: 'srl'}
     ROTATE_SUBOPC = {0xE8: 'rlc', 0xE9: 'rrc', 0xEA: 'rl', 0xEB: 'rr'}
-    if nbytes == 3 and rom_bytes is not None and mnem_upper in SHIFT_ROTATE_MNEMONICS:
+    _is_shift_mnem = (mnem_upper in SHIFT_ROTATE_MNEMONICS or
+                      any(mnem_upper.startswith(m + '_') for m in SHIFT_ROTATE_MNEMONICS))
+    if nbytes == 3 and rom_bytes is not None and _is_shift_mnem:
         prefix = rom_bytes[0]
         sub_opc = rom_bytes[1]
         count = rom_bytes[2]
@@ -1493,6 +1522,24 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
             elif sub_opc in ROTATE_SUBOPC and count == 1:
                 mnem = ROTATE_SUBOPC[sub_opc]
                 return f"{mnem} {reg_name}", 3
+
+    # Tier 15b: Shift-by-A instructions (2-byte: prefix + sub_opcode)
+    # Sub-opcodes: 0xFC=SLA, 0xFD=SRA, 0xFE=SLL, 0xFF=SRL (shift count from A)
+    SHIFT_BY_A_SUBOPC = {0xFC: 'slaa', 0xFD: 'sraa', 0xFE: 'slla', 0xFF: 'srla'}
+    if nbytes == 2 and rom_bytes is not None and _is_shift_mnem:
+        prefix = rom_bytes[0]
+        sub_opc = rom_bytes[1]
+        if sub_opc in SHIFT_BY_A_SUBOPC:
+            reg_name = None
+            if 0xC8 <= prefix <= 0xCF:
+                reg_name = REG8_BY_INDEX[prefix & 0x07]
+            elif 0xD8 <= prefix <= 0xDF:
+                reg_name = REG16_BY_INDEX[prefix & 0x07]
+            elif 0xE8 <= prefix <= 0xEF:
+                reg_name = REG32_BY_INDEX[prefix & 0x07]
+            if reg_name is not None:
+                mnem = SHIFT_BY_A_SUBOPC[sub_opc]
+                return f"{mnem} {reg_name}", 2
 
     # Tier 16: CP short-form (2-byte: prefix + 0xD8+N, compare with 0-7)
     if nbytes == 2 and rom_bytes is not None and mnem_upper == 'CP':
