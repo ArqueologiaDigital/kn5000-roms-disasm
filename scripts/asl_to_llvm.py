@@ -2502,6 +2502,22 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
             imm8 = rom_bytes[2]
             return f"ldio 0x{addr8:02X}, 0x{imm8:02X}", 3
 
+    # Tier 43: Extended prefix instructions (C3/C5/C7/D3/D5/D7/E3/E5/E7/F0/F3/F5)
+    # Generic byte-literal encoding for addressing modes not yet fully modeled.
+    # Handles register-indirect, indexed, previous bank, and 8-bit direct dest.
+    EXTPFX_PREFIXES = {
+        0xC3, 0xC5, 0xC7,  # 8-bit source: reg-indirect, indexed, prev-bank
+        0xD3, 0xD5, 0xD7,  # 16-bit source: reg-indirect, indexed, prev-bank
+        0xE3, 0xE5, 0xE7,  # 32-bit source: reg-indirect, indexed, prev-bank
+        0xF0,               # 8-bit destination direct (I/O registers)
+        0xF3, 0xF5,         # destination: reg-indirect, indexed
+    }
+    if rom_bytes is not None and nbytes >= 3 and nbytes <= 7:
+        first = rom_bytes[0]
+        if first in EXTPFX_PREFIXES:
+            byte_args = ', '.join(f'0x{b:02X}' for b in rom_bytes[:nbytes])
+            return f"extpfx{nbytes} {byte_args}", nbytes
+
     return None  # No native conversion available
 
 
