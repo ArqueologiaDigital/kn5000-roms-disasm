@@ -43,6 +43,7 @@ KNOWN_EQUS = {}
 
 # Address → label name mapping for symbolic references in JP/CALL
 ADDR_TO_LABEL = {}
+ADDR_TO_LABEL_ALL = {}
 
 # LABEL_XXXXXX collected for .set emission (suppressed from inline).
 # Inline labels may have position drift; .set has exact ORG addresses.
@@ -1827,71 +1828,107 @@ def _record_label(mapping, addr, name):
 
 
 def _build_addr_to_label_map(sorted_content, seg_end_map, label_only_labels):
-    """Pre-pass: build address -> label_name map from all segments.
+    """Pre-pass: build address -> label_name maps from all segments.
 
-    For label-only segments, addresses come from ORG directives (reliable).
-    For content segments, only LABEL_XXXXXX names are used (address encoded
-    in name). Named labels in content segments are recorded only at segment
-    start or at a LABEL_XXXXXX boundary to avoid address drift issues.
-
-    Returns (addr_to_label, addr_to_label_set) where the second map contains
-    only labels from label-only segments (used for .long data references where
-    inline label position drift would produce wrong values).
+    Returns (addr_to_label, addr_to_label_all):
+    - addr_to_label: reliable addresses only (LABEL_XXXXXX, label-only segments,
+      named labels at segment start / LABEL_ boundaries / address comments).
+      Used for JP/CALL symbolization where wrong addresses break byte-matching.
+    - addr_to_label_all: includes all labels with address-tracked positions
+      (via data directive sizes, binclude ranges, instruction sizes).
+      Used for .long symbolization with additional address verification.
     """
     addr_to_label = {}
-    addr_to_label_set = {}  # Populated later by post-processing (after main loop)
+    addr_to_label_all = {}
 
     # 1. Label-only segments (explicit ORG addresses — always reliable)
     for addr, names in label_only_labels.items():
         for name in names:
             _record_label(addr_to_label, addr, name)
+            _record_label(addr_to_label_all, addr, name)
 
-    # 2. Content segments: extract LABEL_XXXXXX addresses from names,
-    #    and named labels at segment start or LABEL_ boundaries.
+    # 2. Content segments: extract label addresses using address tracking.
     for seg_addr, seg_lines in sorted_content:
         if seg_addr is None:
             continue
-        # Track address from most recent reliable source (segment start or LABEL_)
-        reliable_addr = seg_addr
-        at_reliable_boundary = True  # True at segment start and after LABEL_
+        cur_addr = seg_addr
+        at_reliable_boundary = True
         for line, source in seg_lines:
             code_part, cmt = split_comment(line.strip())
             code_stripped = code_part.strip()
             if not code_stripped:
                 continue
             label, rest = extract_label(code_stripped)
-            if not label:
-                # Any non-label line means we've moved past the boundary
-                if not rest:
-                    rest = code_stripped
-                rest = rest.strip()
-                if rest:
-                    first, _ = get_first_word(rest)
-                    fu = first.upper()
-                    if fu in ASL_INSTRUCTIONS or fu in KNOWN_MACROS or fu in DATA_DIRECTIVES or fu == 'BINCLUDE':
-                        at_reliable_boundary = False
+
+            if label:
+                m_lbl = re.match(r'^LABEL_([0-9A-Fa-f]{6})$', label)
+                if m_lbl:
+                    cur_addr = int(m_lbl.group(1), 16)
+                    _record_label(addr_to_label, cur_addr, label)
+                    _record_label(addr_to_label_all, cur_addr, label)
+                    at_reliable_boundary = True
+                else:
+                    # Named label — check for address hint in comment
+                    if cmt:
+                        m_addr = re.match(r'^;\s*([0-9A-Fa-f]{6})\s*$', cmt.strip())
+                        if m_addr:
+                            cur_addr = int(m_addr.group(1), 16)
+                            at_reliable_boundary = True
+                    # Reliable: record in both maps
+                    if at_reliable_boundary:
+                        _record_label(addr_to_label, cur_addr, label)
+                    # All: always record with tracked address
+                    _record_label(addr_to_label_all, cur_addr, label)
+
+            # Advance cur_addr by the size of the directive/instruction
+            directive = rest.strip() if rest else code_stripped if not label else ''
+            if not directive:
                 continue
+            first, remainder = get_first_word(directive)
+            fu = first.upper()
+            if fu == 'EQU' or fu == 'SECTION' or fu == 'ENDS' or fu == 'ORG':
+                continue  # No bytes emitted
+            if fu == 'BINCLUDE':
+                bm = re.search(r'([0-9a-fA-F]{5,6})_([0-9a-fA-F]{5,6})\.bin', remainder)
+                if bm:
+                    bstart = int(bm.group(1), 16)
+                    bend = int(bm.group(2), 16)
+                    cur_addr += (bend - bstart + 1)
+                continue
+            at_reliable_boundary = False  # Past data/instructions
+            if fu == 'DB':
+                nbytes = _count_db_bytes(remainder.strip()) if remainder else 0
+                if nbytes:
+                    cur_addr += nbytes
+            elif fu == 'DW':
+                nvalues = len(split_operands(remainder.strip())) if remainder else 0
+                cur_addr += 2 * nvalues
+            elif fu == 'DD':
+                nvalues = len(split_operands(remainder.strip())) if remainder else 0
+                cur_addr += 4 * nvalues
+            elif fu == 'DS':
+                ds_m = re.match(r'\s*(\d+)', remainder) if remainder else None
+                if ds_m:
+                    cur_addr += int(ds_m.group(1))
+            elif fu in ASL_INSTRUCTIONS or fu in KNOWN_MACROS:
+                size = get_instruction_size_from_rom(cur_addr)
+                if size:
+                    if fu in KNOWN_MACROS and fu in MACRO_INSTR_COUNT:
+                        total = 0
+                        tmp_addr = cur_addr
+                        for _ in range(MACRO_INSTR_COUNT[fu]):
+                            s = get_instruction_size_from_rom(tmp_addr)
+                            if s:
+                                total += s
+                                tmp_addr += s
+                            else:
+                                break
+                        if total:
+                            cur_addr += total
+                    else:
+                        cur_addr += size
 
-            # Check if this is LABEL_XXXXXX (address from name)
-            m_lbl = re.match(r'^LABEL_([0-9A-Fa-f]{6})$', label)
-            if m_lbl:
-                reliable_addr = int(m_lbl.group(1), 16)
-                _record_label(addr_to_label, reliable_addr, label)
-                at_reliable_boundary = True
-            elif at_reliable_boundary:
-                # Named label right at segment start or after LABEL_XXXXXX
-                _record_label(addr_to_label, reliable_addr, label)
-            else:
-                # Named label with address hint in comment ("; XXXXXX")
-                if cmt:
-                    m_addr = re.match(r'^;\s*([0-9A-Fa-f]{6})\s*$', cmt.strip())
-                    if m_addr:
-                        hint_addr = int(m_addr.group(1), 16)
-                        _record_label(addr_to_label, hint_addr, label)
-                        reliable_addr = hint_addr
-                        at_reliable_boundary = True
-
-    return addr_to_label, addr_to_label_set
+    return addr_to_label, addr_to_label_all
 
 
 def convert_all(main_file, output_path):
@@ -2053,11 +2090,13 @@ def convert_all(main_file, output_path):
                 label_only_labels[seg_addr] = []
             label_only_labels[seg_addr].extend(labels)
 
-    # Build address → label map for symbolic JP/CALL targets
-    global ADDR_TO_LABEL, ADDR_TO_LABEL_SET
+    # Build address → label maps:
+    # ADDR_TO_LABEL: reliable addresses only (for JP/CALL symbolization)
+    # ADDR_TO_LABEL_ALL: all labels with tracked addresses (for .long)
+    global ADDR_TO_LABEL, ADDR_TO_LABEL_ALL
     print("  Building address-to-label map...")
-    ADDR_TO_LABEL, ADDR_TO_LABEL_SET = _build_addr_to_label_map(sorted_content, seg_end_map, label_only_labels)
-    print(f"  Labels mapped: {len(ADDR_TO_LABEL)} (JP/CALL), {len(ADDR_TO_LABEL_SET)} (.long data)")
+    ADDR_TO_LABEL, ADDR_TO_LABEL_ALL = _build_addr_to_label_map(sorted_content, seg_end_map, label_only_labels)
+    print(f"  Labels mapped: {len(ADDR_TO_LABEL)} (JP/CALL), {len(ADDR_TO_LABEL_ALL)} (all)")
 
     # Build output
     output_lines = []
@@ -2245,17 +2284,26 @@ def convert_all(main_file, output_path):
             output_lines.append(f"\t.set {lbl_name}, 0x{addr:06X}")
 
     # Post-process: symbolize .long values.
-    # Only use .set labels (guaranteed correct addresses) and content-segment
-    # named labels at reliable boundaries. Skip inline labels (may have drift).
-    set_label_map = {}
+    # Use ADDR_TO_LABEL_ALL (all labels with tracked addresses) for
+    # address-based lookup, plus .set labels (exact addresses).
+    # For comment-based symbolization ("; DD LABEL_NAME"), verify the
+    # .long value matches the label's known address to avoid wrong
+    # symbolizations from address drift in block buffer regions.
+    long_label_map = {}
     for addr, lbl_name in all_set_labels:
-        _record_label(set_label_map, addr, lbl_name)
-    # Add content-segment named labels not in emitted_label_addrs or .set
-    for addr, lbl_name in ADDR_TO_LABEL.items():
-        if addr not in set_label_map and addr not in emitted_label_addrs:
-            set_label_map[addr] = lbl_name
-    if set_label_map:
+        _record_label(long_label_map, addr, lbl_name)
+    for addr, lbl_name in ADDR_TO_LABEL_ALL.items():
+        if addr not in long_label_map:
+            long_label_map[addr] = lbl_name
+
+    # Build label_name -> address reverse map for comment-based verification
+    label_to_addr = {}
+    for addr, lbl_name in long_label_map.items():
+        label_to_addr[lbl_name] = addr
+
+    if long_label_map:
         long_re = re.compile(r'0x([0-9A-Fa-f]{8})')
+        dd_label_re = re.compile(r'DD\s+(\w+)')
         symbolic_long_count = 0
         for i, line in enumerate(output_lines):
             if '\t.long ' not in line:
@@ -2266,7 +2314,17 @@ def convert_all(main_file, output_path):
             changed = False
             for m in long_re.finditer(code_part):
                 val = int(m.group(1), 16)
-                sym = set_label_map.get(val)
+                sym = long_label_map.get(val)
+                if not sym and cmt_part:
+                    # Try extracting label name from "; DD LABEL_NAME" comment.
+                    # Verify the .long value matches the label's known address
+                    # to avoid wrong symbolizations from block buffer drift.
+                    dd_m = dd_label_re.search(cmt_part)
+                    if dd_m:
+                        dd_label = dd_m.group(1)
+                        dd_addr = label_to_addr.get(dd_label)
+                        if dd_addr is not None and dd_addr == val:
+                            sym = dd_label
                 if sym:
                     new_code = new_code.replace(m.group(0), sym, 1)
                     changed = True
