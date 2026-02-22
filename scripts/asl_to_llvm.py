@@ -71,6 +71,7 @@ TLCS900_CC_NAMES = {
 # Register index-to-name tables (for decoding opcodes with embedded register index)
 REG8_BY_INDEX = {0: 'w', 1: 'a', 2: 'b', 3: 'c', 4: 'd', 5: 'e', 6: 'h', 7: 'l'}
 REG16_BY_INDEX = {0: 'wa', 1: 'bc', 2: 'de', 3: 'hl', 4: 'ix', 5: 'iy', 6: 'iz', 7: 'sp'}
+REG32_BY_INDEX = {0: 'xwa', 1: 'xbc', 2: 'xde', 3: 'xhl', 4: 'xix', 5: 'xiy', 6: 'xiz', 7: 'xsp'}
 
 # Statistics counters for native vs fallback instructions
 NATIVE_INSTR_COUNT = 0
@@ -1185,7 +1186,8 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
                     count = parse_asl_immediate(count_str)
                     if count is not None and 1 <= count <= 8:
                         inc_base = 0x60 if mnem_upper == 'INC' else 0x68
-                        expected_opcode = inc_base + count
+                        # Count encoded as (count % 8): 1→1, 2→2, ..., 7→7, 8→0
+                        expected_opcode = inc_base + (count % 8)
                         if verify_singlereg_encoding(rom_bytes, reg, expected_opcode):
                             native_asm = f"{mnem_upper.lower()} {count}, {reg.lower()}"
                             return native_asm, 2
@@ -1259,6 +1261,21 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
                 return "push_sr", 1
             elif mnem_upper == 'POP' and rom_bytes[0] == 0x03:
                 return "pop_sr", 1
+
+    # Tier 6b: Prefix PUSH/POP (2-byte encoding)
+    # PUSH r8: C8+r, 0x04; POP r8: C8+r, 0x05
+    # PUSH r16: D8+r, 0x04; POP r16: D8+r, 0x05 (for SP which isn't in 1-byte form)
+    if nbytes == 2 and operands_str and rom_bytes is not None and mnem_upper in ('PUSH', 'POP'):
+        reg = operands_str.strip().upper()
+        opc = 0x04 if mnem_upper == 'PUSH' else 0x05
+        if rom_bytes[1] == opc:
+            prefix = rom_bytes[0]
+            if reg in ALL_REGISTERS:
+                r_idx = REG_INDEX.get(reg, 99)
+                if 0xC8 <= prefix <= 0xCF and prefix == 0xC8 + r_idx:
+                    return f"{mnem_upper.lower()} {reg.lower()}", 2
+                elif 0xD8 <= prefix <= 0xDF and prefix == 0xD8 + r_idx:
+                    return f"{mnem_upper.lower()} {reg.lower()}", 2
 
     # Tier 7: Simple register-indirect LD (2-byte encoding)
     # LD reg, (Xreg): prefix = 0x80/0x90/0xA0 + xreg_idx
@@ -1382,18 +1399,26 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
                 imm16 = rom_bytes[1] | (rom_bytes[2] << 8)
                 return f"ldw {reg_name}, 0x{imm16:X}", 3
 
-    # Tier 12b: Small-immediate LD r16, #(0-7) (2-byte: D8+r, 0xA8+val)
+    # Tier 12b: Small-immediate LD r, #(0-7) (2-byte: prefix+r, 0xA8+val)
+    # 8-bit: C8+r, 16-bit: D8+r, 32-bit: E8+r
     if nbytes == 2 and rom_bytes is not None and mnem_upper.startswith('LD'):
         opcode = rom_bytes[0]
-        if 0xD8 <= opcode <= 0xDF:
+        sub_opc = rom_bytes[1]
+        if 0xA8 <= sub_opc <= 0xAF:
+            val = sub_opc & 0x07
             r_idx = opcode & 0x07
-            sub_opc = rom_bytes[1]
-            if 0xA8 <= sub_opc <= 0xAF:
-                val = sub_opc & 0x07
+            if 0xC8 <= opcode <= 0xCF:
+                reg_name = REG8_BY_INDEX[r_idx]
+                return f"lds8 {reg_name}, {val}", 2
+            elif 0xD8 <= opcode <= 0xDF:
                 reg_name = REG16_BY_INDEX[r_idx]
                 # SP (index 7) is not in GR16 — skip
                 if r_idx != 7:
                     return f"lds {reg_name}, {val}", 2
+            elif 0xE8 <= opcode <= 0xEF:
+                reg_name = REG32_BY_INDEX.get(r_idx)
+                if reg_name:
+                    return f"lds32 {reg_name}, {val}", 2
 
     # Tier 13: Prefix-form LD r8, #imm8 (3-byte: C8+r, 0x03, imm8)
     if nbytes == 3 and rom_bytes is not None and mnem_upper in ('LD', 'LDB'):
@@ -1423,8 +1448,6 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
     }
     SHIFT_SUBOPC = {0xEC: 'sla', 0xED: 'sra', 0xEE: 'sll', 0xEF: 'srl'}
     ROTATE_SUBOPC = {0xE8: 'rlc', 0xE9: 'rrc', 0xEA: 'rl', 0xEB: 'rr'}
-    REG32_BY_INDEX = {0: 'xwa', 1: 'xbc', 2: 'xde', 3: 'xhl',
-                      4: 'xix', 5: 'xiy', 6: 'xiz', 7: 'xsp'}
     if nbytes == 3 and rom_bytes is not None and mnem_upper in SHIFT_ROTATE_MNEMONICS:
         prefix = rom_bytes[0]
         sub_opc = rom_bytes[1]
