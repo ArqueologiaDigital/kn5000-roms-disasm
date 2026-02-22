@@ -49,6 +49,17 @@ ADDR_TO_LABEL_ALL = {}
 # Inline labels may have position drift; .set has exact ORG addresses.
 SET_ONLY_LABELS = {}  # label_name -> addr
 
+# Labels that conflict with register or condition code names (case-insensitive).
+# These cannot be used as branch targets in native JR/JRL/CALR instructions.
+RESERVED_LABEL_NAMES = {
+    'a', 'w', 'b', 'c', 'e', 'l',                # 8-bit registers
+    'wa', 'bc', 'de', 'hl', 'ix', 'iy', 'iz', 'sp',  # 16-bit registers
+    'xwa', 'xbc', 'xde', 'xhl', 'xix', 'xiy', 'xiz', 'xsp',  # 32-bit registers
+    'sr', 'f',                                      # special registers
+    'z', 'nz', 'c', 'nc', 'ov', 'nov', 'mi', 'pl',   # condition codes
+    'lt', 'le', 'ge', 'gt', 'ule', 'ugt', 't',
+}
+
 # TLCS-900 condition code names for JR/JRL/JPcc instructions
 TLCS900_CC_NAMES = {
     0x0: 'f', 0x1: 'lt', 0x2: 'le', 0x3: 'ule',
@@ -1292,6 +1303,8 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
                         return native_asm, 2
 
     # Tier 8: JR/JRcc (2-byte relative jump: 0x60+cc, d8)
+    # Use ADDR_TO_LABEL (reliable) first, then ADDR_TO_LABEL_ALL for LABEL_XXXXXX only.
+    # Named labels in ADDR_TO_LABEL_ALL may have drifted positions.
     if nbytes == 2 and rom_bytes is not None and addr is not None:
         opcode = rom_bytes[0]
         if 0x60 <= opcode <= 0x6F and mnem_upper == 'JR':
@@ -1301,7 +1314,11 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
                 d8 -= 256  # sign-extend
             target = addr + 2 + d8
             label = ADDR_TO_LABEL.get(target)
-            if label:
+            if not label:
+                lbl_all = ADDR_TO_LABEL_ALL.get(target)
+                if lbl_all and lbl_all.startswith('LABEL_'):
+                    label = lbl_all
+            if label and label.lower() not in RESERVED_LABEL_NAMES:
                 if cc == 8:  # T (always/unconditional)
                     return f"jr {label}", 2
                 else:
@@ -1317,7 +1334,11 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
                 d16 -= 65536  # sign-extend
             target = addr + 3 + d16
             label = ADDR_TO_LABEL.get(target)
-            if label:
+            if not label:
+                lbl_all = ADDR_TO_LABEL_ALL.get(target)
+                if lbl_all and lbl_all.startswith('LABEL_'):
+                    label = lbl_all
+            if label and label.lower() not in RESERVED_LABEL_NAMES:
                 if cc == 8:  # T (unconditional)
                     return f"jrl {label}", 3
                 else:
@@ -1331,7 +1352,11 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
                 d16 -= 65536
             target = addr + 3 + d16
             label = ADDR_TO_LABEL.get(target)
-            if label:
+            if not label:
+                lbl_all = ADDR_TO_LABEL_ALL.get(target)
+                if lbl_all and lbl_all.startswith('LABEL_'):
+                    label = lbl_all
+            if label and label.lower() not in RESERVED_LABEL_NAMES:
                 return f"calr {label}", 3
 
     # Tier 11: Short-form LD r8, #imm8 (2-byte: 0x20+r, imm8)
