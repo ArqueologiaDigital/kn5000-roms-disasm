@@ -1959,7 +1959,52 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
                         else:
                             return f"{mnem} {count}, ({reg_name} - {-disp})", 3
 
-    # Tier 32: Memory PUSHW (16-bit, register-indirect)
+    # Tier 32: Indirect JP via B0 prefix (2-byte: B0+r, 0xD8)
+    # ASL: "JP T, XHL" → LLVM: "jp (xhl)"
+    if nbytes == 2 and rom_bytes is not None and mnem_upper == 'JP':
+        prefix = rom_bytes[0]
+        if 0xB0 <= prefix <= 0xB7 and rom_bytes[1] == 0xD8:
+            r_idx = prefix & 0x07
+            reg_name = REG32_BY_INDEX.get(r_idx)
+            if reg_name:
+                return f"jp ({reg_name})", 2
+
+    # Tier 33: Memory BIT/SET/RES/LDCF/STCF (B0/B8 destination memory prefix)
+    # No-disp (2B): B0+r, (base_opc + bit)
+    # d8 (3B): B8+r, d8, (base_opc + bit)
+    MEM_BIT_OPS = {
+        'BIT': (0xC8, 'bitm'), 'SET': (0xB8, 'setm'), 'RES': (0xB0, 'resm'),
+        'LDCF': (0x98, 'ldcfm'), 'STCF': (0xA0, 'stcfm'),
+    }
+    if rom_bytes is not None and mnem_upper in MEM_BIT_OPS:
+        prefix = rom_bytes[0]
+        if 0xB0 <= prefix <= 0xBF:
+            base_opc, native_mnem = MEM_BIT_OPS[mnem_upper]
+            base_idx = prefix & 0x07
+            has_disp = (prefix & 0x08) != 0
+            expected_nbytes = 3 if has_disp else 2
+            if nbytes == expected_nbytes:
+                sub_opc = rom_bytes[2] if has_disp else rom_bytes[1]
+                if base_opc <= sub_opc <= base_opc + 7:
+                    bit_num = sub_opc - base_opc
+                    base_name = REG32_BY_INDEX.get(base_idx)
+                    if base_name:
+                        mem_str = None
+                        if has_disp:
+                            d8 = rom_bytes[1]
+                            if d8 > 127:
+                                d8 -= 256
+                            if d8 < 0:
+                                mem_str = f"({base_name} - {-d8})"
+                            elif d8 > 0:
+                                mem_str = f"({base_name} + {d8})"
+                            # d8 == 0: skip
+                        else:
+                            mem_str = f"({base_name})"
+                        if mem_str is not None:
+                            return f"{native_mnem} {bit_num}, {mem_str}", expected_nbytes
+
+    # Tier 34: Memory PUSHW (16-bit, register-indirect)
     # No-disp (2B): 0x90+r, 0x04
     # d8 (3B): 0x98+r, d8, 0x04
     if rom_bytes is not None and mnem_upper == 'PUSHW':
