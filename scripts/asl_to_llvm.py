@@ -957,20 +957,54 @@ def convert_line(line, in_file_path):
                 nbytes = remaining
             if nbytes > 0:
                 rom_bytes = BLOCK_BUFFER[BLOCK_CURSOR:BLOCK_CURSOR + nbytes]
-                # Try native conversion for single-instruction macros
-                native = None
                 if instr_count == 1:
+                    # Single-instruction macro: try native conversion
                     native = try_convert_native(first_word, remainder.strip(), rom_bytes, nbytes, addr)
-                if native is not None:
-                    native_asm, _ = native
-                    result += f"\t{native_asm}"
-                    NATIVE_INSTR_COUNT += 1
+                    if native is not None:
+                        native_asm, _ = native
+                        result += f"\t{native_asm}"
+                        NATIVE_INSTR_COUNT += 1
+                    else:
+                        byte_str = ', '.join(f'0x{b:02x}' for b in rom_bytes)
+                        args = remainder.strip()
+                        original = f"{first_word} {args}".strip() if args else first_word
+                        result += f"\t.byte {byte_str}\t; {original}"
+                        BYTE_FALLBACK_COUNT += 1
                 else:
-                    byte_str = ', '.join(f'0x{b:02x}' for b in rom_bytes)
+                    # Multi-instruction macro: split and convert each sub-instruction
                     args = remainder.strip()
                     original = f"{first_word} {args}".strip() if args else first_word
-                    result += f"\t.byte {byte_str}\t; {original}"
-                    BYTE_FALLBACK_COUNT += 1
+                    result += f"\t; {original}"
+                    cur_offset = 0
+                    cur_addr = addr
+                    for i in range(instr_count):
+                        if cur_offset >= nbytes:
+                            break
+                        sz = get_instruction_size_from_rom(cur_addr)
+                        if sz is None or cur_offset + sz > nbytes:
+                            # Can't decode — emit remaining bytes as .byte
+                            rem = rom_bytes[cur_offset:]
+                            byte_str = ', '.join(f'0x{b:02x}' for b in rem)
+                            result += f"\n\t.byte {byte_str}"
+                            BYTE_FALLBACK_COUNT += 1
+                            break
+                        sub_bytes = bytes(rom_bytes[cur_offset:cur_offset + sz])
+                        # Try native conversion with guessed mnemonics
+                        converted = False
+                        for mnem in guess_mnemonics_from_opcode(sub_bytes[0]):
+                            native = try_convert_native(mnem, '', sub_bytes, sz, cur_addr)
+                            if native is not None:
+                                native_asm, _ = native
+                                result += f"\n\t{native_asm}"
+                                NATIVE_INSTR_COUNT += 1
+                                converted = True
+                                break
+                        if not converted:
+                            byte_str = ', '.join(f'0x{b:02x}' for b in sub_bytes)
+                            result += f"\n\t.byte {byte_str}"
+                            BYTE_FALLBACK_COUNT += 1
+                        cur_offset += sz
+                        cur_addr += sz
                 BLOCK_CURSOR += nbytes
                 ADDR_TRACKER.advance(nbytes)
             else:
@@ -1137,6 +1171,44 @@ def parse_asl_immediate(value_str):
     if re.match(r'^[0-9]+$', value_str):
         return int(value_str)
     return None
+
+
+def guess_mnemonics_from_opcode(first_byte):
+    """Return candidate ASL mnemonics for an instruction based on its first opcode byte.
+    Used when converting individual instructions within macro expansions where the
+    original ASL mnemonic is unknown."""
+    b = first_byte
+    if b == 0x00: return ['NOP']
+    if b == 0x06: return ['EI']
+    if b == 0x07: return ['RETI']
+    if b == 0x08: return ['LD']
+    if b in (0x09, 0x0A): return ['LDW']
+    if b == 0x0B: return ['PUSHW']
+    if b == 0x0E: return ['RET']
+    if b == 0x0F: return ['RETD']
+    if b == 0x16: return ['EX']
+    if b == 0x1B: return ['JP']
+    if b == 0x1D: return ['CALL']
+    if b == 0x1E: return ['CALR']
+    if 0x20 <= b <= 0x27: return ['LD']
+    if 0x28 <= b <= 0x2F: return ['PUSH']
+    if 0x30 <= b <= 0x37: return ['LDW']
+    if 0x40 <= b <= 0x47: return ['LD']
+    if 0x58 <= b <= 0x5F: return ['POP']
+    if 0x60 <= b <= 0x6F: return ['JR']
+    if 0x70 <= b <= 0x7F: return ['JRL']
+    if 0x80 <= b <= 0xBF:
+        return ['LD', 'LDW', 'LDA', 'ADD', 'ADC', 'SUB', 'SBC',
+                'AND', 'OR', 'XOR', 'CP', 'INC', 'INCW', 'DEC', 'DECW',
+                'PUSHW', 'BIT', 'SET', 'RES', 'LDCF', 'STCF', 'CALL', 'JP']
+    if 0xC0 <= b <= 0xFF:
+        return ['LD', 'LDW', 'ADD', 'ADC', 'SUB', 'SBC', 'AND', 'OR', 'XOR', 'CP',
+                'NEG', 'CPL', 'EXTS', 'EXTZ', 'INC', 'INCW', 'DEC', 'DECW',
+                'SLA', 'SRA', 'SRL', 'RLC', 'RRC', 'RL', 'RR',
+                'SET', 'RES', 'BIT', 'CHG', 'TSET',
+                'PUSH', 'POP', 'SCC', 'DJNZ', 'MUL', 'MULS', 'DIV', 'DIVS',
+                'EX', 'UNLK', 'XORCF', 'STCF', 'LDC']
+    return ['LD', 'NOP']
 
 
 def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
@@ -1710,7 +1782,7 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
                     else:
                         mem_str = f"({base_name})"
                     # LD (mem), r8 — sub-opcode 0x40+r
-                    elif 0x40 <= sub_opc_byte <= 0x47:
+                    if 0x40 <= sub_opc_byte <= 0x47:
                         op_reg = REG8_BY_INDEX.get(operand_reg_idx)
                         if op_reg:
                             return f"ld {mem_str}, {op_reg}", expected_nbytes
