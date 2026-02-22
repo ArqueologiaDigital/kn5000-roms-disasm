@@ -1234,20 +1234,29 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
             return native_asm, expected_size
 
     # Tier 2: 32-bit register immediate loads (5-byte form only)
-    if mnem_upper in ('LD', 'LDW') and operands_str and nbytes == 5:
-        parts = operands_str.split(',', 1)
-        if len(parts) == 2:
-            reg = parts[0].strip().upper()
-            imm_str = parts[1].strip()
-            if reg in NATIVE_LD_32BIT_REGS:
-                imm_val = parse_asl_immediate(imm_str)
-                # Fallback: extract immediate from ROM bytes (0x40+r, imm32_LE)
-                if imm_val is None and rom_bytes is not None and 0x40 <= rom_bytes[0] <= 0x47:
-                    imm_val = (rom_bytes[1] | (rom_bytes[2] << 8) |
-                               (rom_bytes[3] << 16) | (rom_bytes[4] << 24))
-                if imm_val is not None:
-                    native_asm = f"ld {reg.lower()}, 0x{imm_val:X}"
-                    return native_asm, 5
+    if mnem_upper in ('LD', 'LDW') and nbytes == 5:
+        if operands_str:
+            parts = operands_str.split(',', 1)
+            if len(parts) == 2:
+                reg = parts[0].strip().upper()
+                imm_str = parts[1].strip()
+                if reg in NATIVE_LD_32BIT_REGS:
+                    imm_val = parse_asl_immediate(imm_str)
+                    # Fallback: extract immediate from ROM bytes (0x40+r, imm32_LE)
+                    if imm_val is None and rom_bytes is not None and 0x40 <= rom_bytes[0] <= 0x47:
+                        imm_val = (rom_bytes[1] | (rom_bytes[2] << 8) |
+                                   (rom_bytes[3] << 16) | (rom_bytes[4] << 24))
+                    if imm_val is not None:
+                        native_asm = f"ld {reg.lower()}, 0x{imm_val:X}"
+                        return native_asm, 5
+        # ROM-bytes-only fallback for macro-split instructions (no operands_str)
+        if rom_bytes is not None and 0x40 <= rom_bytes[0] <= 0x47:
+            r_idx = rom_bytes[0] - 0x40
+            reg = REG32_BY_INDEX.get(r_idx)
+            if reg:
+                imm_val = (rom_bytes[1] | (rom_bytes[2] << 8) |
+                           (rom_bytes[3] << 16) | (rom_bytes[4] << 24))
+                return f"ld {reg}, 0x{imm_val:X}", 5
 
     # Tier 3: Register-register operations (2-byte encoding)
     # Verify ROM bytes match expected encoding to catch ASL disassembly errors.

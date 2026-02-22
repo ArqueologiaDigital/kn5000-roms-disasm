@@ -132719,7 +132719,7 @@ InitializeScoop:
 
 	; RegObjTable 01600004h, 0FA44E2h, 0E0CDACh, 	0E0CD94h, 0166h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x04, 0x00, 0x60, 0x01
+	ld xwa, 0x1600004
 	ld (xbc), xwa
 	ldada_24 xwa, 16401634
 	ld (xbc + 4), xwa
@@ -132731,7 +132731,7 @@ InitializeScoop:
 	call 0xFA42FB
 	; RegObjTable 0160000ch, 0FA58FBh, 0E0CDB2h, 	0E0CDAEh, 01c6h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0c, 0x00, 0x60, 0x01
+	ld xwa, 0x160000C
 	ld (xbc), xwa
 	ldada_24 xwa, 16406779
 	ld (xbc + 4), xwa
@@ -132743,7 +132743,7 @@ InitializeScoop:
 	call 0xFA42FB
 	; RegObjTable 0160000dh, 0FA5948h, 0E0CDB8h, 	0E0CDB4h, 01e6h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0d, 0x00, 0x60, 0x01
+	ld xwa, 0x160000D
 	ld (xbc), xwa
 	ldada_24 xwa, 16406856
 	ld (xbc + 4), xwa
@@ -132755,7 +132755,7 @@ InitializeScoop:
 	call 0xFA42FB
 	; RegObjTabl 01600002h, 0FA496Ch, 0000h,		0E0CD8Ah, 0126h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x02, 0x00, 0x60, 0x01
+	ld xwa, 0x1600002
 	ld (xbc), xwa
 	ldada_24 xwa, 16402796
 	ld (xbc + 4), xwa
@@ -132766,7 +132766,7 @@ InitializeScoop:
 	call 0xFA42FB
 	; RegObjTabl 01600002h, 0FA496Ch, 0000h,		0E0CD8Eh, 0426h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x02, 0x00, 0x60, 0x01
+	ld xwa, 0x1600002
 	ld (xbc), xwa
 	ldada_24 xwa, 16402796
 	ld (xbc + 4), xwa
@@ -132777,7 +132777,7 @@ InitializeScoop:
 	call 0xFA42FB
 	; RegObjTabl 01600001h, 0FA48A9h, 0000h,		0E0CDBAh, 0106h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x01, 0x00, 0x60, 0x01
+	ld xwa, 0x1600001
 	ld (xbc), xwa
 	ldada_24 xwa, 16402601
 	ld (xbc + 4), xwa
@@ -132788,7 +132788,7 @@ InitializeScoop:
 	call 0xFA42FB
 	; RegObjTabl 01600001h, 0FA48A9h, 0000h,		0E0CDBEh, 0406h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x01, 0x00, 0x60, 0x01
+	ld xwa, 0x1600001
 	ld (xbc), xwa
 	ldada_24 xwa, 16402601
 	ld (xbc + 4), xwa
@@ -132799,7 +132799,7 @@ InitializeScoop:
 	call 0xFA42FB
 	; RegObjTabl 01600003h, 0FA4A18h, 0021h,		0E0D72Eh, 0146h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x03, 0x00, 0x60, 0x01
+	ld xwa, 0x1600003
 	ld (xbc), xwa
 	ldada_24 xwa, 16402968
 	ld (xbc + 4), xwa
@@ -132810,7 +132810,7 @@ InitializeScoop:
 	call 0xFA42FB
 	; RegObjTabl 01600003h, 0FA4A18h, 0021h,		0E0D7B6h, 0446h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x03, 0x00, 0x60, 0x01
+	ld xwa, 0x1600003
 	ld (xbc), xwa
 	ldada_24 xwa, 16402968
 	ld (xbc + 4), xwa
@@ -132821,7 +132821,7 @@ InitializeScoop:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0001h,		0E0D204h, 0020h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -132832,7 +132832,7 @@ InitializeScoop:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0001h,		0E0D304h, 0320h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -132843,7 +132843,7 @@ InitializeScoop:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0001h,		0E0D20Ch, 0021h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -132854,7 +132854,7 @@ InitializeScoop:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0001h,		0E0D316h, 0321h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -132865,7 +132865,7 @@ InitializeScoop:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0001h,		0E0D214h, 0022h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -132876,7 +132876,7 @@ InitializeScoop:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0001h,		0E0D328h, 0322h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -132887,7 +132887,7 @@ InitializeScoop:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0001h,		0E0D21Ch, 0023h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -132898,7 +132898,7 @@ InitializeScoop:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0001h,		0E0D33Ch, 0323h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -132909,7 +132909,7 @@ InitializeScoop:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0001h,		0E0D224h, 0024h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -132920,7 +132920,7 @@ InitializeScoop:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0001h,		0E0D350h, 0324h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -132931,7 +132931,7 @@ InitializeScoop:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0001h,		0E0D22Ch, 0025h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -132942,7 +132942,7 @@ InitializeScoop:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0001h,		0E0D364h, 0325h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -132953,7 +132953,7 @@ InitializeScoop:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0001h,		0E0D234h, 0026h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -132964,7 +132964,7 @@ InitializeScoop:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0001h,		0E0D378h, 0326h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -132975,7 +132975,7 @@ InitializeScoop:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0001h,		0E0D23Ch, 0027h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -132986,7 +132986,7 @@ InitializeScoop:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0001h,		0E0D38Ch, 0327h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -132997,7 +132997,7 @@ InitializeScoop:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0001h,		0E0D244h, 0028h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -133008,7 +133008,7 @@ InitializeScoop:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0001h,		0E0D3A0h, 0328h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -133019,7 +133019,7 @@ InitializeScoop:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0001h,		0E0D24Ch, 0029h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -133030,7 +133030,7 @@ InitializeScoop:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0001h,		0E0D3B4h, 0329h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -133041,7 +133041,7 @@ InitializeScoop:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0001h,		0E0D254h, 002ah
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -133052,7 +133052,7 @@ InitializeScoop:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0001h,		0E0D3C8h, 032ah
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -133063,7 +133063,7 @@ InitializeScoop:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0001h,		0E0D25Ch, 002bh
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -133074,7 +133074,7 @@ InitializeScoop:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0001h,		0E0D3DCh, 032bh
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -133085,7 +133085,7 @@ InitializeScoop:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0001h,		0E0D264h, 002ch
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -133096,7 +133096,7 @@ InitializeScoop:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0001h,		0E0D3F0h, 032ch
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -133107,7 +133107,7 @@ InitializeScoop:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0001h,		0E0D26Ch, 002dh
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -133118,7 +133118,7 @@ InitializeScoop:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0001h,		0E0D404h, 032dh
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -133129,7 +133129,7 @@ InitializeScoop:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0001h,		0E0D274h, 002eh
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -133140,7 +133140,7 @@ InitializeScoop:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0001h,		0E0D418h, 032eh
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -133151,7 +133151,7 @@ InitializeScoop:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0001h,		0E0D27Ch, 002fh
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -133162,7 +133162,7 @@ InitializeScoop:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0001h,		0E0D42Ch, 032fh
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -133173,7 +133173,7 @@ InitializeScoop:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0001h,		0E0D284h, 0030h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -133184,7 +133184,7 @@ InitializeScoop:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0001h,		0E0D440h, 0330h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -133195,7 +133195,7 @@ InitializeScoop:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0001h,		0E0D28Ch, 0031h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -133206,7 +133206,7 @@ InitializeScoop:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0001h,		0E0D454h, 0331h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -133217,7 +133217,7 @@ InitializeScoop:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0001h,		0E0D294h, 0032h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -133228,7 +133228,7 @@ InitializeScoop:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0001h,		0E0D468h, 0332h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -133239,7 +133239,7 @@ InitializeScoop:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0001h,		0E0D29Ch, 0033h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -133250,7 +133250,7 @@ InitializeScoop:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0001h,		0E0D47Ch, 0333h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -133261,7 +133261,7 @@ InitializeScoop:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0001h,		0E0D2A4h, 0034h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -133272,7 +133272,7 @@ InitializeScoop:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0001h,		0E0D490h, 0334h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -133283,7 +133283,7 @@ InitializeScoop:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0001h,		0E0D2ACh, 0035h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -133294,7 +133294,7 @@ InitializeScoop:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0001h,		0E0D4A4h, 0335h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -133305,7 +133305,7 @@ InitializeScoop:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0001h,		0E0D2B4h, 0036h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -133316,7 +133316,7 @@ InitializeScoop:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0001h,		0E0D4B8h, 0336h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -133327,7 +133327,7 @@ InitializeScoop:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0001h,		0E0D2BCh, 0037h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -133338,7 +133338,7 @@ InitializeScoop:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0001h,		0E0D4CCh, 0337h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -133349,7 +133349,7 @@ InitializeScoop:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0001h,		0E0D2C4h, 0038h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -133360,7 +133360,7 @@ InitializeScoop:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0001h,		0E0D4E0h, 0338h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -133371,7 +133371,7 @@ InitializeScoop:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0001h,		0E0D2CCh, 0039h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -133382,7 +133382,7 @@ InitializeScoop:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0001h,		0E0D4F4h, 0339h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -133393,7 +133393,7 @@ InitializeScoop:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0001h,		0E0D2D4h, 003ah
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -133404,7 +133404,7 @@ InitializeScoop:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0001h,		0E0D508h, 033ah
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -133415,7 +133415,7 @@ InitializeScoop:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0001h,		0E0D2DCh, 003bh
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -133426,7 +133426,7 @@ InitializeScoop:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0001h,		0E0D51Ch, 033bh
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -133437,7 +133437,7 @@ InitializeScoop:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0001h,		0E0D2E4h, 003ch
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -133448,7 +133448,7 @@ InitializeScoop:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0001h,		0E0D52Eh, 033ch
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -133459,7 +133459,7 @@ InitializeScoop:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0001h,		0E0D2ECh, 003dh
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -133470,7 +133470,7 @@ InitializeScoop:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0001h,		0E0D540h, 033dh
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -133481,7 +133481,7 @@ InitializeScoop:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0001h,		0E0D2F4h, 003eh
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -133492,7 +133492,7 @@ InitializeScoop:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0001h,		0E0D552h, 033eh
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -133503,7 +133503,7 @@ InitializeScoop:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0001h,		0E0D2FCh, 003fh
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -133514,7 +133514,7 @@ InitializeScoop:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0001h,		0E0D566h, 033fh
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -133529,265 +133529,265 @@ InitializeScoop:
 	pushw 0xE0
 	pushw 0xD57A
 	lds32 xwa, 3
-	.byte 0x41, 0x00, 0x00, 0x46, 0x01
-	.byte 0x42, 0x20, 0x00, 0xa0, 0x01
+	ld xbc, 0x1460000
+	ld xde, 0x1A00020
 	call 0xFA4D2B
 
 	; RegTitle 0006h, 00e0h, 0d588h, 00000020h, 01460001h, 00200000h
 	pushw 0x6
 	pushw 0xE0
 	pushw 0xD588
-	.byte 0x40, 0x20, 0x00, 0x00, 0x00
-	.byte 0x41, 0x01, 0x00, 0x46, 0x01
-	.byte 0x42, 0x00, 0x00, 0x20, 0x00
+	ld xwa, 0x20
+	ld xbc, 0x1460001
+	ld xde, 0x200000
 	call 0xFA4D80
 	; RegTitle 0006h, 00e0h, 0d592h, 00000021h, 01460002h, 00210000h
 	pushw 0x6
 	pushw 0xE0
 	pushw 0xD592
-	.byte 0x40, 0x21, 0x00, 0x00, 0x00
-	.byte 0x41, 0x02, 0x00, 0x46, 0x01
-	.byte 0x42, 0x00, 0x00, 0x21, 0x00
+	ld xwa, 0x21
+	ld xbc, 0x1460002
+	ld xde, 0x210000
 	call 0xFA4D80
 	; RegTitle 0006h, 00e0h, 0d59ch, 00000022h, 01460003h, 00220000h
 	pushw 0x6
 	pushw 0xE0
 	pushw 0xD59C
-	.byte 0x40, 0x22, 0x00, 0x00, 0x00
-	.byte 0x41, 0x03, 0x00, 0x46, 0x01
-	.byte 0x42, 0x00, 0x00, 0x22, 0x00
+	ld xwa, 0x22
+	ld xbc, 0x1460003
+	ld xde, 0x220000
 	call 0xFA4D80
 	; RegTitle 0006h, 00e0h, 0d5aah, 00000023h, 01460004h, 00230000h
 	pushw 0x6
 	pushw 0xE0
 	pushw 0xD5AA
-	.byte 0x40, 0x23, 0x00, 0x00, 0x00
-	.byte 0x41, 0x04, 0x00, 0x46, 0x01
-	.byte 0x42, 0x00, 0x00, 0x23, 0x00
+	ld xwa, 0x23
+	ld xbc, 0x1460004
+	ld xde, 0x230000
 	call 0xFA4D80
 	; RegTitle 0006h, 00e0h, 0d5b8h, 00000024h, 01460005h, 00240000h
 	pushw 0x6
 	pushw 0xE0
 	pushw 0xD5B8
-	.byte 0x40, 0x24, 0x00, 0x00, 0x00
-	.byte 0x41, 0x05, 0x00, 0x46, 0x01
-	.byte 0x42, 0x00, 0x00, 0x24, 0x00
+	ld xwa, 0x24
+	ld xbc, 0x1460005
+	ld xde, 0x240000
 	call 0xFA4D80
 	; RegTitle 0006h, 00e0h, 0d5c6h, 00000025h, 01460006h, 00250000h
 	pushw 0x6
 	pushw 0xE0
 	pushw 0xD5C6
-	.byte 0x40, 0x25, 0x00, 0x00, 0x00
-	.byte 0x41, 0x06, 0x00, 0x46, 0x01
-	.byte 0x42, 0x00, 0x00, 0x25, 0x00
+	ld xwa, 0x25
+	ld xbc, 0x1460006
+	ld xde, 0x250000
 	call 0xFA4D80
 	; RegTitle 0006h, 00e0h, 0d5d4h, 00000026h, 01460007h, 00260000h
 	pushw 0x6
 	pushw 0xE0
 	pushw 0xD5D4
-	.byte 0x40, 0x26, 0x00, 0x00, 0x00
-	.byte 0x41, 0x07, 0x00, 0x46, 0x01
-	.byte 0x42, 0x00, 0x00, 0x26, 0x00
+	ld xwa, 0x26
+	ld xbc, 0x1460007
+	ld xde, 0x260000
 	call 0xFA4D80
 	; RegTitle 0006h, 00e0h, 0d5e2h, 00000027h, 01460008h, 00270000h
 	pushw 0x6
 	pushw 0xE0
 	pushw 0xD5E2
-	.byte 0x40, 0x27, 0x00, 0x00, 0x00
-	.byte 0x41, 0x08, 0x00, 0x46, 0x01
-	.byte 0x42, 0x00, 0x00, 0x27, 0x00
+	ld xwa, 0x27
+	ld xbc, 0x1460008
+	ld xde, 0x270000
 	call 0xFA4D80
 	; RegTitle 0006h, 00e0h, 0d5f0h, 00000028h, 01460009h, 00280000h
 	pushw 0x6
 	pushw 0xE0
 	pushw 0xD5F0
-	.byte 0x40, 0x28, 0x00, 0x00, 0x00
-	.byte 0x41, 0x09, 0x00, 0x46, 0x01
-	.byte 0x42, 0x00, 0x00, 0x28, 0x00
+	ld xwa, 0x28
+	ld xbc, 0x1460009
+	ld xde, 0x280000
 	call 0xFA4D80
 	; RegTitle 0006h, 00e0h, 0d5feh, 00000029h, 0146000ah, 00290000h
 	pushw 0x6
 	pushw 0xE0
 	pushw 0xD5FE
-	.byte 0x40, 0x29, 0x00, 0x00, 0x00
-	.byte 0x41, 0x0a, 0x00, 0x46, 0x01
-	.byte 0x42, 0x00, 0x00, 0x29, 0x00
+	ld xwa, 0x29
+	ld xbc, 0x146000A
+	ld xde, 0x290000
 	call 0xFA4D80
 	; RegTitle 0006h, 00e0h, 0d60ch, 0000002ah, 0146000bh, 002a0000h
 	pushw 0x6
 	pushw 0xE0
 	pushw 0xD60C
-	.byte 0x40, 0x2a, 0x00, 0x00, 0x00
-	.byte 0x41, 0x0b, 0x00, 0x46, 0x01
-	.byte 0x42, 0x00, 0x00, 0x2a, 0x00
+	ld xwa, 0x2A
+	ld xbc, 0x146000B
+	ld xde, 0x2A0000
 	call 0xFA4D80
 	; RegTitle 0006h, 00e0h, 0d61ah, 0000002bh, 0146000ch, 002b0000h
 	pushw 0x6
 	pushw 0xE0
 	pushw 0xD61A
-	.byte 0x40, 0x2b, 0x00, 0x00, 0x00
-	.byte 0x41, 0x0c, 0x00, 0x46, 0x01
-	.byte 0x42, 0x00, 0x00, 0x2b, 0x00
+	ld xwa, 0x2B
+	ld xbc, 0x146000C
+	ld xde, 0x2B0000
 	call 0xFA4D80
 	; RegTitle 0006h, 00e0h, 0d628h, 0000002ch, 0146000dh, 002c0000h
 	pushw 0x6
 	pushw 0xE0
 	pushw 0xD628
-	.byte 0x40, 0x2c, 0x00, 0x00, 0x00
-	.byte 0x41, 0x0d, 0x00, 0x46, 0x01
-	.byte 0x42, 0x00, 0x00, 0x2c, 0x00
+	ld xwa, 0x2C
+	ld xbc, 0x146000D
+	ld xde, 0x2C0000
 	call 0xFA4D80
 	; RegTitle 0006h, 00e0h, 0d636h, 0000002dh, 0146000eh, 002d0000h
 	pushw 0x6
 	pushw 0xE0
 	pushw 0xD636
-	.byte 0x40, 0x2d, 0x00, 0x00, 0x00
-	.byte 0x41, 0x0e, 0x00, 0x46, 0x01
-	.byte 0x42, 0x00, 0x00, 0x2d, 0x00
+	ld xwa, 0x2D
+	ld xbc, 0x146000E
+	ld xde, 0x2D0000
 	call 0xFA4D80
 	; RegTitle 0006h, 00e0h, 0d644h, 0000002eh, 0146000fh, 002e0000h
 	pushw 0x6
 	pushw 0xE0
 	pushw 0xD644
-	.byte 0x40, 0x2e, 0x00, 0x00, 0x00
-	.byte 0x41, 0x0f, 0x00, 0x46, 0x01
-	.byte 0x42, 0x00, 0x00, 0x2e, 0x00
+	ld xwa, 0x2E
+	ld xbc, 0x146000F
+	ld xde, 0x2E0000
 	call 0xFA4D80
 	; RegTitle 0006h, 00e0h, 0d652h, 0000002fh, 01460010h, 002f0000h
 	pushw 0x6
 	pushw 0xE0
 	pushw 0xD652
-	.byte 0x40, 0x2f, 0x00, 0x00, 0x00
-	.byte 0x41, 0x10, 0x00, 0x46, 0x01
-	.byte 0x42, 0x00, 0x00, 0x2f, 0x00
+	ld xwa, 0x2F
+	ld xbc, 0x1460010
+	ld xde, 0x2F0000
 	call 0xFA4D80
 	; RegTitle 0006h, 00e0h, 0d660h, 00000030h, 01460011h, 00300000h
 	pushw 0x6
 	pushw 0xE0
 	pushw 0xD660
-	.byte 0x40, 0x30, 0x00, 0x00, 0x00
-	.byte 0x41, 0x11, 0x00, 0x46, 0x01
-	.byte 0x42, 0x00, 0x00, 0x30, 0x00
+	ld xwa, 0x30
+	ld xbc, 0x1460011
+	ld xde, 0x300000
 	call 0xFA4D80
 	; RegTitle 0006h, 00e0h, 0d66eh, 00000031h, 01460012h, 00310000h
 	pushw 0x6
 	pushw 0xE0
 	pushw 0xD66E
-	.byte 0x40, 0x31, 0x00, 0x00, 0x00
-	.byte 0x41, 0x12, 0x00, 0x46, 0x01
-	.byte 0x42, 0x00, 0x00, 0x31, 0x00
+	ld xwa, 0x31
+	ld xbc, 0x1460012
+	ld xde, 0x310000
 	call 0xFA4D80
 	; RegTitle 0006h, 00e0h, 0d67ch, 00000032h, 01460013h, 00320000h
 	pushw 0x6
 	pushw 0xE0
 	pushw 0xD67C
-	.byte 0x40, 0x32, 0x00, 0x00, 0x00
-	.byte 0x41, 0x13, 0x00, 0x46, 0x01
-	.byte 0x42, 0x00, 0x00, 0x32, 0x00
+	ld xwa, 0x32
+	ld xbc, 0x1460013
+	ld xde, 0x320000
 	call 0xFA4D80
 	; RegTitle 0006h, 00e0h, 0d68ah, 00000033h, 01460014h, 00330000h
 	pushw 0x6
 	pushw 0xE0
 	pushw 0xD68A
-	.byte 0x40, 0x33, 0x00, 0x00, 0x00
-	.byte 0x41, 0x14, 0x00, 0x46, 0x01
-	.byte 0x42, 0x00, 0x00, 0x33, 0x00
+	ld xwa, 0x33
+	ld xbc, 0x1460014
+	ld xde, 0x330000
 	call 0xFA4D80
 	; RegTitle 0006h, 00e0h, 0d698h, 00000034h, 01460015h, 00340000h
 	pushw 0x6
 	pushw 0xE0
 	pushw 0xD698
-	.byte 0x40, 0x34, 0x00, 0x00, 0x00
-	.byte 0x41, 0x15, 0x00, 0x46, 0x01
-	.byte 0x42, 0x00, 0x00, 0x34, 0x00
+	ld xwa, 0x34
+	ld xbc, 0x1460015
+	ld xde, 0x340000
 	call 0xFA4D80
 	; RegTitle 0006h, 00e0h, 0d6a6h, 00000035h, 01460016h, 00350000h
 	pushw 0x6
 	pushw 0xE0
 	pushw 0xD6A6
-	.byte 0x40, 0x35, 0x00, 0x00, 0x00
-	.byte 0x41, 0x16, 0x00, 0x46, 0x01
-	.byte 0x42, 0x00, 0x00, 0x35, 0x00
+	ld xwa, 0x35
+	ld xbc, 0x1460016
+	ld xde, 0x350000
 	call 0xFA4D80
 	; RegTitle 0006h, 00e0h, 0d6b4h, 00000036h, 01460017h, 00360000h
 	pushw 0x6
 	pushw 0xE0
 	pushw 0xD6B4
-	.byte 0x40, 0x36, 0x00, 0x00, 0x00
-	.byte 0x41, 0x17, 0x00, 0x46, 0x01
-	.byte 0x42, 0x00, 0x00, 0x36, 0x00
+	ld xwa, 0x36
+	ld xbc, 0x1460017
+	ld xde, 0x360000
 	call 0xFA4D80
 	; RegTitle 0006h, 00e0h, 0d6c2h, 00000037h, 01460018h, 00370000h
 	pushw 0x6
 	pushw 0xE0
 	pushw 0xD6C2
-	.byte 0x40, 0x37, 0x00, 0x00, 0x00
-	.byte 0x41, 0x18, 0x00, 0x46, 0x01
-	.byte 0x42, 0x00, 0x00, 0x37, 0x00
+	ld xwa, 0x37
+	ld xbc, 0x1460018
+	ld xde, 0x370000
 	call 0xFA4D80
 	; RegTitle 0006h, 00e0h, 0d6d0h, 00000038h, 01460019h, 00380000h
 	pushw 0x6
 	pushw 0xE0
 	pushw 0xD6D0
-	.byte 0x40, 0x38, 0x00, 0x00, 0x00
-	.byte 0x41, 0x19, 0x00, 0x46, 0x01
-	.byte 0x42, 0x00, 0x00, 0x38, 0x00
+	ld xwa, 0x38
+	ld xbc, 0x1460019
+	ld xde, 0x380000
 	call 0xFA4D80
 	; RegTitle 0006h, 00e0h, 0d6deh, 00000039h, 0146001ah, 00390000h
 	pushw 0x6
 	pushw 0xE0
 	pushw 0xD6DE
-	.byte 0x40, 0x39, 0x00, 0x00, 0x00
-	.byte 0x41, 0x1a, 0x00, 0x46, 0x01
-	.byte 0x42, 0x00, 0x00, 0x39, 0x00
+	ld xwa, 0x39
+	ld xbc, 0x146001A
+	ld xde, 0x390000
 	call 0xFA4D80
 	; RegTitle 0006h, 00e0h, 0d6ech, 0000003ah, 0146001bh, 003a0000h
 	pushw 0x6
 	pushw 0xE0
 	pushw 0xD6EC
-	.byte 0x40, 0x3a, 0x00, 0x00, 0x00
-	.byte 0x41, 0x1b, 0x00, 0x46, 0x01
-	.byte 0x42, 0x00, 0x00, 0x3a, 0x00
+	ld xwa, 0x3A
+	ld xbc, 0x146001B
+	ld xde, 0x3A0000
 	call 0xFA4D80
 	; RegTitle 0006h, 00e0h, 0d6f8h, 0000003bh, 0146001ch, 003b0000h
 	pushw 0x6
 	pushw 0xE0
 	pushw 0xD6F8
-	.byte 0x40, 0x3b, 0x00, 0x00, 0x00
-	.byte 0x41, 0x1c, 0x00, 0x46, 0x01
-	.byte 0x42, 0x00, 0x00, 0x3b, 0x00
+	ld xwa, 0x3B
+	ld xbc, 0x146001C
+	ld xde, 0x3B0000
 	call 0xFA4D80
 	; RegTitle 0006h, 00e0h, 0d702h, 0000003ch, 0146001dh, 003c0000h
 	pushw 0x6
 	pushw 0xE0
 	pushw 0xD702
-	.byte 0x40, 0x3c, 0x00, 0x00, 0x00
-	.byte 0x41, 0x1d, 0x00, 0x46, 0x01
-	.byte 0x42, 0x00, 0x00, 0x3c, 0x00
+	ld xwa, 0x3C
+	ld xbc, 0x146001D
+	ld xde, 0x3C0000
 	call 0xFA4D80
 	; RegTitle 0006h, 00e0h, 0d70ch, 0000003dh, 0146001eh, 003d0000h
 	pushw 0x6
 	pushw 0xE0
 	pushw 0xD70C
-	.byte 0x40, 0x3d, 0x00, 0x00, 0x00
-	.byte 0x41, 0x1e, 0x00, 0x46, 0x01
-	.byte 0x42, 0x00, 0x00, 0x3d, 0x00
+	ld xwa, 0x3D
+	ld xbc, 0x146001E
+	ld xde, 0x3D0000
 	call 0xFA4D80
 	; RegTitle 0006h, 00e0h, 0d716h, 0000003eh, 0146001fh, 003e0000h
 	pushw 0x6
 	pushw 0xE0
 	pushw 0xD716
-	.byte 0x40, 0x3e, 0x00, 0x00, 0x00
-	.byte 0x41, 0x1f, 0x00, 0x46, 0x01
-	.byte 0x42, 0x00, 0x00, 0x3e, 0x00
+	ld xwa, 0x3E
+	ld xbc, 0x146001F
+	ld xde, 0x3E0000
 	call 0xFA4D80
 	; RegTitle 0006h, 00e0h, 0d722h, 0000003fh, 01460020h, 003f0000h
 	pushw 0x6
 	pushw 0xE0
 	pushw 0xD722
-	.byte 0x40, 0x3f, 0x00, 0x00, 0x00
-	.byte 0x41, 0x20, 0x00, 0x46, 0x01
-	.byte 0x42, 0x00, 0x00, 0x3f, 0x00
+	ld xwa, 0x3F
+	ld xbc, 0x1460020
+	ld xde, 0x3F0000
 	call 0xFA4D80
 
 	lda xsp, (xsp + 14)
@@ -147013,7 +147013,7 @@ InitializeNaka:
 
 	; RegObjTable 01600004h, 0FA44E2h, 0E0E95Ch,	0E0E944h, 016bh
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x04, 0x00, 0x60, 0x01
+	ld xwa, 0x1600004
 	ld (xbc), xwa
 	ldada_24 xwa, 16401634
 	ld (xbc + 4), xwa
@@ -147025,7 +147025,7 @@ InitializeNaka:
 	call 0xFA42FB
 	; RegObjTable 0160000ch, 0FA58FBh, 0E0E962h,	0E0E95Eh, 01cbh
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0c, 0x00, 0x60, 0x01
+	ld xwa, 0x160000C
 	ld (xbc), xwa
 	ldada_24 xwa, 16406779
 	ld (xbc + 4), xwa
@@ -147037,7 +147037,7 @@ InitializeNaka:
 	call 0xFA42FB
 	; RegObjTable 0160000dh, 0FA5948h, 0E0E968h,	0E0E964h, 01ebh
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0d, 0x00, 0x60, 0x01
+	ld xwa, 0x160000D
 	ld (xbc), xwa
 	ldada_24 xwa, 16406856
 	ld (xbc + 4), xwa
@@ -147049,7 +147049,7 @@ InitializeNaka:
 	call 0xFA42FB
 	; RegObjTabl 01600002h, 0FA496Ch, 0012h,		0E0E7AEh, 012bh
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x02, 0x00, 0x60, 0x01
+	ld xwa, 0x1600002
 	ld (xbc), xwa
 	ldada_24 xwa, 16402796
 	ld (xbc + 4), xwa
@@ -147060,7 +147060,7 @@ InitializeNaka:
 	call 0xFA42FB
 	; RegObjTabl 01600002h, 0FA496Ch, 0012h,		0E0E7FAh, 042bh
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x02, 0x00, 0x60, 0x01
+	ld xwa, 0x1600002
 	ld (xbc), xwa
 	ldada_24 xwa, 16402796
 	ld (xbc + 4), xwa
@@ -147071,7 +147071,7 @@ InitializeNaka:
 	call 0xFA42FB
 	; RegObjTabl 01600001h, 0FA48A9h, 0000h,		0E0E96Ah, 010bh
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x01, 0x00, 0x60, 0x01
+	ld xwa, 0x1600001
 	ld (xbc), xwa
 	ldada_24 xwa, 16402601
 	ld (xbc + 4), xwa
@@ -147082,7 +147082,7 @@ InitializeNaka:
 	call 0xFA42FB
 	; RegObjTabl 01600001h, 0FA48A9h, 0000h,		0E0E96Eh, 040bh
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x01, 0x00, 0x60, 0x01
+	ld xwa, 0x1600001
 	ld (xbc), xwa
 	ldada_24 xwa, 16402601
 	ld (xbc + 4), xwa
@@ -147093,7 +147093,7 @@ InitializeNaka:
 	call 0xFA42FB
 	; RegObjTabl 01600003h, 0FA4A18h, 0000h,		0E14824h, 014bh
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x03, 0x00, 0x60, 0x01
+	ld xwa, 0x1600003
 	ld (xbc), xwa
 	ldada_24 xwa, 16402968
 	ld (xbc + 4), xwa
@@ -147104,7 +147104,7 @@ InitializeNaka:
 	call 0xFA42FB
 	; RegObjTabl 01600003h, 0FA4A18h, 0000h,		LABEL_E14828, 044bh
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x03, 0x00, 0x60, 0x01
+	ld xwa, 0x1600003
 	ld (xbc), xwa
 	ldada_24 xwa, 16402968
 	ld (xbc + 4), xwa
@@ -147115,7 +147115,7 @@ InitializeNaka:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 01deh,		LABEL_E1344E, 00fdh
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -147126,7 +147126,7 @@ InitializeNaka:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 01deh,		0E13BCAh, 03fdh
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -147140,9 +147140,9 @@ InitializeNaka:
 	pushw 0xB
 	pushw 0xE1
 	pushw 0x481A
-	.byte 0x40, 0xfd, 0x00, 0x00, 0x00
-	.byte 0x41, 0x00, 0x00, 0x20, 0x01
-	.byte 0x42, 0x00, 0x00, 0xfd, 0x00
+	ld xwa, 0xFD
+	ld xbc, 0x1200000
+	ld xde, 0xFD0000
 	call 0xFA4D80
 	lda xsp, (xsp + 14)
 	ret
@@ -149687,7 +149687,7 @@ InitializeSuna:
 
 	; RegObjTable 01600004h, 0FA44E2h, 0E17322h,	0E16C86h, 0164h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x04, 0x00, 0x60, 0x01
+	ld xwa, 0x1600004
 	ld (xbc), xwa
 	ldada_24 xwa, 16401634
 	ld (xbc + 4), xwa
@@ -149699,7 +149699,7 @@ InitializeSuna:
 	call 0xFA42FB
 	; RegObjTable 0160000ch, 0FA58FBh, 0E17328h,	0E17324h, 01c4h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0c, 0x00, 0x60, 0x01
+	ld xwa, 0x160000C
 	ld (xbc), xwa
 	ldada_24 xwa, 16406779
 	ld (xbc + 4), xwa
@@ -149711,7 +149711,7 @@ InitializeSuna:
 	call 0xFA42FB
 	; RegObjTable 0160000dh, 0FA5948h, 0E176D2h,	0E1732Ah, 01e4h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0d, 0x00, 0x60, 0x01
+	ld xwa, 0x160000D
 	ld (xbc), xwa
 	ldada_24 xwa, 16406856
 	ld (xbc + 4), xwa
@@ -149723,7 +149723,7 @@ InitializeSuna:
 	call 0xFA42FB
 	; RegObjTabl 01600002h, 0FA496Ch, 0049h,		0E16284h, 0124h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x02, 0x00, 0x60, 0x01
+	ld xwa, 0x1600002
 	ld (xbc), xwa
 	ldada_24 xwa, 16402796
 	ld (xbc + 4), xwa
@@ -149734,7 +149734,7 @@ InitializeSuna:
 	call 0xFA42FB
 	; RegObjTabl 01600002h, 0FA496Ch, 0049h,		0E163ACh, 0424h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x02, 0x00, 0x60, 0x01
+	ld xwa, 0x1600002
 	ld (xbc), xwa
 	ldada_24 xwa, 16402796
 	ld (xbc + 4), xwa
@@ -149745,7 +149745,7 @@ InitializeSuna:
 	call 0xFA42FB
 	; RegObjTabl 01600001h, 0FA48A9h, 0001h,		0E176D4h, 0104h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x01, 0x00, 0x60, 0x01
+	ld xwa, 0x1600001
 	ld (xbc), xwa
 	ldada_24 xwa, 16402601
 	ld (xbc + 4), xwa
@@ -149756,7 +149756,7 @@ InitializeSuna:
 	call 0xFA42FB
 	; RegObjTabl 01600001h, 0FA48A9h, 0001h,		0E176DCh, 0404h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x01, 0x00, 0x60, 0x01
+	ld xwa, 0x1600001
 	ld (xbc), xwa
 	ldada_24 xwa, 16402601
 	ld (xbc + 4), xwa
@@ -149767,7 +149767,7 @@ InitializeSuna:
 	call 0xFA42FB
 	; RegObjTabl 01600003h, 0FA4A18h, 0024h,		0E1CA6Eh, 0144h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x03, 0x00, 0x60, 0x01
+	ld xwa, 0x1600003
 	ld (xbc), xwa
 	ldada_24 xwa, 16402968
 	ld (xbc + 4), xwa
@@ -149778,7 +149778,7 @@ InitializeSuna:
 	call 0xFA42FB
 	; RegObjTabl 01600003h, 0FA4A18h, 0024h,		0E1CB02h, 0444h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x03, 0x00, 0x60, 0x01
+	ld xwa, 0x1600003
 	ld (xbc), xwa
 	ldada_24 xwa, 16402968
 	ld (xbc + 4), xwa
@@ -149789,7 +149789,7 @@ InitializeSuna:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0003h,		0E1B4E2h, 0010h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -149800,7 +149800,7 @@ InitializeSuna:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0003h,		0E1BAFAh, 0310h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -149811,7 +149811,7 @@ InitializeSuna:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0008h,		0E1B4F2h, 0011h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -149822,7 +149822,7 @@ InitializeSuna:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0008h,		0E1BB22h, 0311h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -149833,7 +149833,7 @@ InitializeSuna:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0007h,		0E1B516h, 0012h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -149844,7 +149844,7 @@ InitializeSuna:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0007h,		0E1BB80h, 0312h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -149855,7 +149855,7 @@ InitializeSuna:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0004h,		0E1B536h, 0013h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -149866,7 +149866,7 @@ InitializeSuna:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0004h,		0E1BBCEh, 0313h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -149877,7 +149877,7 @@ InitializeSuna:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0004h,		0E1B54Ah, 0014h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -149888,7 +149888,7 @@ InitializeSuna:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0004h,		0E1BBFCh, 0314h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -149899,7 +149899,7 @@ InitializeSuna:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0008h,		0E1B55Eh, 0015h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -149910,7 +149910,7 @@ InitializeSuna:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0008h,		0E1BC2Ah, 0315h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -149921,7 +149921,7 @@ InitializeSuna:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0007h,		0E1B582h, 0016h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -149932,7 +149932,7 @@ InitializeSuna:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0007h,		0E1BC7Ch, 0316h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -149943,7 +149943,7 @@ InitializeSuna:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0012h,		0E1B5A2h, 00b0h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -149954,7 +149954,7 @@ InitializeSuna:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0012h,		0E1BCBCh, 03b0h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -149965,7 +149965,7 @@ InitializeSuna:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 000ch,		0E1B5EEh, 00b1h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -149976,7 +149976,7 @@ InitializeSuna:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 000ch,		0E1BD3Ah, 03b1h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -149987,7 +149987,7 @@ InitializeSuna:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0016h,		0E1B622h, 00b2h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -149998,7 +149998,7 @@ InitializeSuna:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0016h,		0E1BD94h, 03b2h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -150009,7 +150009,7 @@ InitializeSuna:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0005h,		0E1B67Eh, 00b3h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -150020,7 +150020,7 @@ InitializeSuna:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0005h,		0E1BE54h, 03b3h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -150031,7 +150031,7 @@ InitializeSuna:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0012h,		0E1B696h, 00b4h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -150042,7 +150042,7 @@ InitializeSuna:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0012h,		0E1BE9Ah, 03b4h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -150053,7 +150053,7 @@ InitializeSuna:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 001fh,		0E1B6E2h, 00b5h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -150064,7 +150064,7 @@ InitializeSuna:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 001fh,		0E1BF7Ah, 03b5h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -150075,7 +150075,7 @@ InitializeSuna:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0001h,		0E1B762h, 00b6h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -150086,7 +150086,7 @@ InitializeSuna:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0001h,		0E1C076h, 03b6h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -150097,7 +150097,7 @@ InitializeSuna:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0006h,		0E1B76Ah, 00b7h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -150108,7 +150108,7 @@ InitializeSuna:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0006h,		0E1C082h, 03b7h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -150119,7 +150119,7 @@ InitializeSuna:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0021h,		0E1B786h, 00b8h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -150130,7 +150130,7 @@ InitializeSuna:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0021h,		0E1C0E0h, 03b8h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -150141,7 +150141,7 @@ InitializeSuna:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0025h,		0E1B80Eh, 00b9h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -150152,7 +150152,7 @@ InitializeSuna:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0025h,		0E1C1FAh, 03b9h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -150163,7 +150163,7 @@ InitializeSuna:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 000eh,		0E1B8A6h, 00bah
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -150174,7 +150174,7 @@ InitializeSuna:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 000eh,		0E1C318h, 03bah
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -150185,7 +150185,7 @@ InitializeSuna:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0004h,		0E1B8E2h, 00bbh
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -150196,7 +150196,7 @@ InitializeSuna:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0004h,		0E1C392h, 03bbh
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -150207,7 +150207,7 @@ InitializeSuna:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 000bh,		0E1B8F6h, 00bdh
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -150218,7 +150218,7 @@ InitializeSuna:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 000bh,		0E1C3BCh, 03bdh
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -150229,7 +150229,7 @@ InitializeSuna:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0021h,		0E1B926h, 00beh
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -150240,7 +150240,7 @@ InitializeSuna:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0021h,		0E1C410h, 03beh
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -150251,7 +150251,7 @@ InitializeSuna:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 001bh,		0E1B9AEh, 00c8h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -150262,7 +150262,7 @@ InitializeSuna:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 001bh,		0E1C560h, 03c8h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -150273,7 +150273,7 @@ InitializeSuna:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0010h,		0E1BA1Eh, 00c9h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -150284,7 +150284,7 @@ InitializeSuna:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0010h,		0E1C6DCh, 03c9h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -150295,7 +150295,7 @@ InitializeSuna:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0006h,		0E1BA62h, 00cah
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -150306,7 +150306,7 @@ InitializeSuna:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0006h,		0E1C798h, 03cah
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -150317,7 +150317,7 @@ InitializeSuna:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0004h,		0E1BA7Eh, 00cbh
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -150328,7 +150328,7 @@ InitializeSuna:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0004h,		0E1C7CEh, 03cbh
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -150339,7 +150339,7 @@ InitializeSuna:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0009h,		0E1BA92h, 00cch
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -150350,7 +150350,7 @@ InitializeSuna:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0009h,		0E1C7FAh, 03cch
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -150361,7 +150361,7 @@ InitializeSuna:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0008h,		0E1BABAh, 00dch
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -150372,7 +150372,7 @@ InitializeSuna:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0008h,		0E1C85Eh, 03dch
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -150383,7 +150383,7 @@ InitializeSuna:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0006h,		0E1BADEh, 00edh
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -150394,7 +150394,7 @@ InitializeSuna:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0006h,		0E1C8B6h, 03edh
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -150408,258 +150408,258 @@ InitializeSuna:
 	pushw 0x4
 	pushw 0xE1
 	pushw 0xC8FA
-	.byte 0x40, 0x0e, 0x00, 0x00, 0x00
-	.byte 0x41, 0x00, 0x00, 0x44, 0x01
-	.byte 0x42, 0xb0, 0x00, 0xa0, 0x01
+	ld xwa, 0xE
+	ld xbc, 0x1440000
+	ld xde, 0x1A000B0
 	call 0xFA4D2B
 	; RegMode 0004h, 00e1h, 0c902h, 0000000fh, 01200000h, 01a000cah
 	pushw 0x4
 	pushw 0xE1
 	pushw 0xC902
-	.byte 0x40, 0x0f, 0x00, 0x00, 0x00
-	.byte 0x41, 0x00, 0x00, 0x20, 0x01
-	.byte 0x42, 0xca, 0x00, 0xa0, 0x01
+	ld xwa, 0xF
+	ld xbc, 0x1200000
+	ld xde, 0x1A000CA
 	call 0xFA4D2B
 	; RegMode 0004h, 00e1h, 0c90ah, 00000010h, 01200000h, 01a000c9h
 	pushw 0x4
 	pushw 0xE1
 	pushw 0xC90A
-	.byte 0x40, 0x10, 0x00, 0x00, 0x00
-	.byte 0x41, 0x00, 0x00, 0x20, 0x01
-	.byte 0x42, 0xc9, 0x00, 0xa0, 0x01
+	ld xwa, 0x10
+	ld xbc, 0x1200000
+	ld xde, 0x1A000C9
 	call 0xFA4D2B
 	; RegMode 0004h, 00e1h, 0c916h, 00000011h, 01440016h, 01a000dch
 	pushw 0x4
 	pushw 0xE1
 	pushw 0xC916
-	.byte 0x40, 0x11, 0x00, 0x00, 0x00
-	.byte 0x41, 0x16, 0x00, 0x44, 0x01
-	.byte 0x42, 0xdc, 0x00, 0xa0, 0x01
+	ld xwa, 0x11
+	ld xbc, 0x1440016
+	ld xde, 0x1A000DC
 	call 0xFA4D2B
 
 	; RegTitle 0004h, 00e1h, 0c922h, 00000010h, 0144001ch, 00100000h
 	pushw 0x4
 	pushw 0xE1
 	pushw 0xC922
-	.byte 0x40, 0x10, 0x00, 0x00, 0x00
-	.byte 0x41, 0x1c, 0x00, 0x44, 0x01
-	.byte 0x42, 0x00, 0x00, 0x10, 0x00
+	ld xwa, 0x10
+	ld xbc, 0x144001C
+	ld xde, 0x100000
 	call 0xFA4D80
 	; RegTitle 0004h, 00e1h, 0c932h, 00000011h, 0144001eh, 00110000h
 	pushw 0x4
 	pushw 0xE1
 	pushw 0xC932
-	.byte 0x40, 0x11, 0x00, 0x00, 0x00
-	.byte 0x41, 0x1e, 0x00, 0x44, 0x01
-	.byte 0x42, 0x00, 0x00, 0x11, 0x00
+	ld xwa, 0x11
+	ld xbc, 0x144001E
+	ld xde, 0x110000
 	call 0xFA4D80
 	; RegTitle 0004h, 00e1h, 0c942h, 00000012h, 0144001fh, 00120000h
 	pushw 0x4
 	pushw 0xE1
 	pushw 0xC942
-	.byte 0x40, 0x12, 0x00, 0x00, 0x00
-	.byte 0x41, 0x1f, 0x00, 0x44, 0x01
-	.byte 0x42, 0x00, 0x00, 0x12, 0x00
+	ld xwa, 0x12
+	ld xbc, 0x144001F
+	ld xde, 0x120000
 	call 0xFA4D80
 	; RegTitle 0004h, 00e1h, 0c952h, 00000013h, 01440022h, 00130000h
 	pushw 0x4
 	pushw 0xE1
 	pushw 0xC952
-	.byte 0x40, 0x13, 0x00, 0x00, 0x00
-	.byte 0x41, 0x22, 0x00, 0x44, 0x01
-	.byte 0x42, 0x00, 0x00, 0x13, 0x00
+	ld xwa, 0x13
+	ld xbc, 0x1440022
+	ld xde, 0x130000
 	call 0xFA4D80
 	; RegTitle 0004h, 00e1h, 0c962h, 00000014h, 0144001dh, 00140000h
 	pushw 0x4
 	pushw 0xE1
 	pushw 0xC962
-	.byte 0x40, 0x14, 0x00, 0x00, 0x00
-	.byte 0x41, 0x1d, 0x00, 0x44, 0x01
-	.byte 0x42, 0x00, 0x00, 0x14, 0x00
+	ld xwa, 0x14
+	ld xbc, 0x144001D
+	ld xde, 0x140000
 	call 0xFA4D80
 	; RegTitle 0004h, 00e1h, 0c970h, 00000015h, 01440020h, 00150000h
 	pushw 0x4
 	pushw 0xE1
 	pushw 0xC970
-	.byte 0x40, 0x15, 0x00, 0x00, 0x00
-	.byte 0x41, 0x20, 0x00, 0x44, 0x01
-	.byte 0x42, 0x00, 0x00, 0x15, 0x00
+	ld xwa, 0x15
+	ld xbc, 0x1440020
+	ld xde, 0x150000
 	call 0xFA4D80
 	; RegTitle 0004h, 00e1h, 0c97eh, 00000016h, 01440021h, 00160000h
 	pushw 0x4
 	pushw 0xE1
 	pushw 0xC97E
-	.byte 0x40, 0x16, 0x00, 0x00, 0x00
-	.byte 0x41, 0x21, 0x00, 0x44, 0x01
-	.byte 0x42, 0x00, 0x00, 0x16, 0x00
+	ld xwa, 0x16
+	ld xbc, 0x1440021
+	ld xde, 0x160000
 	call 0xFA4D80
 	; RegTitle 0004h, 00e1h, 0c98eh, 000000b0h, 01440005h, 00b00000h
 	pushw 0x4
 	pushw 0xE1
 	pushw 0xC98E
-	.byte 0x40, 0xb0, 0x00, 0x00, 0x00
-	.byte 0x41, 0x05, 0x00, 0x44, 0x01
-	.byte 0x42, 0x00, 0x00, 0xb0, 0x00
+	ld xwa, 0xB0
+	ld xbc, 0x1440005
+	ld xde, 0xB00000
 	call 0xFA4D80
 	; RegTitle 0004h, 00e1h, 0c998h, 000000b1h, 01440003h, 00b10000h
 	pushw 0x4
 	pushw 0xE1
 	pushw 0xC998
-	.byte 0x40, 0xb1, 0x00, 0x00, 0x00
-	.byte 0x41, 0x03, 0x00, 0x44, 0x01
-	.byte 0x42, 0x00, 0x00, 0xb1, 0x00
+	ld xwa, 0xB1
+	ld xbc, 0x1440003
+	ld xde, 0xB10000
 	call 0xFA4D80
 	; RegTitle 0004h, 00e1h, 0c9a2h, 000000b2h, 01440004h, 00b20000h
 	pushw 0x4
 	pushw 0xE1
 	pushw 0xC9A2
-	.byte 0x40, 0xb2, 0x00, 0x00, 0x00
-	.byte 0x41, 0x04, 0x00, 0x44, 0x01
-	.byte 0x42, 0x00, 0x00, 0xb2, 0x00
+	ld xwa, 0xB2
+	ld xbc, 0x1440004
+	ld xde, 0xB20000
 	call 0xFA4D80
 	; RegTitle 0004h, 00e1h, 0c9aeh, 000000b3h, 01200000h, 00b30000h
 	pushw 0x4
 	pushw 0xE1
 	pushw 0xC9AE
-	.byte 0x40, 0xb3, 0x00, 0x00, 0x00
-	.byte 0x41, 0x00, 0x00, 0x20, 0x01
-	.byte 0x42, 0x00, 0x00, 0xb3, 0x00
+	ld xwa, 0xB3
+	ld xbc, 0x1200000
+	ld xde, 0xB30000
 	call 0xFA4D80
 	; RegTitle 0004h, 00e1h, 0c9b8h, 000000b4h, 01440001h, 00b40000h
 	pushw 0x4
 	pushw 0xE1
 	pushw 0xC9B8
-	.byte 0x40, 0xb4, 0x00, 0x00, 0x00
-	.byte 0x41, 0x01, 0x00, 0x44, 0x01
-	.byte 0x42, 0x00, 0x00, 0xb4, 0x00
+	ld xwa, 0xB4
+	ld xbc, 0x1440001
+	ld xde, 0xB40000
 	call 0xFA4D80
 	; RegTitle 0004h, 00e1h, 0c9c2h, 000000b5h, 01440002h, 00b50000h
 	pushw 0x4
 	pushw 0xE1
 	pushw 0xC9C2
-	.byte 0x40, 0xb5, 0x00, 0x00, 0x00
-	.byte 0x41, 0x02, 0x00, 0x44, 0x01
-	.byte 0x42, 0x00, 0x00, 0xb5, 0x00
+	ld xwa, 0xB5
+	ld xbc, 0x1440002
+	ld xde, 0xB50000
 	call 0xFA4D80
 	; RegTitle 0004h, 00e1h, 0c9cch, 000000b6h, 01440019h, 00b60000h
 	pushw 0x4
 	pushw 0xE1
 	pushw 0xC9CC
-	.byte 0x40, 0xb6, 0x00, 0x00, 0x00
-	.byte 0x41, 0x19, 0x00, 0x44, 0x01
-	.byte 0x42, 0x00, 0x00, 0xb6, 0x00
+	ld xwa, 0xB6
+	ld xbc, 0x1440019
+	ld xde, 0xB60000
 	call 0xFA4D80
 	; RegTitle 0004h, 00e1h, 0c9d6h, 000000b7h, 01200000h, 00b70000h
 	pushw 0x4
 	pushw 0xE1
 	pushw 0xC9D6
-	.byte 0x40, 0xb7, 0x00, 0x00, 0x00
-	.byte 0x41, 0x00, 0x00, 0x20, 0x01
-	.byte 0x42, 0x00, 0x00, 0xb7, 0x00
+	ld xwa, 0xB7
+	ld xbc, 0x1200000
+	ld xde, 0xB70000
 	call 0xFA4D80
 	; RegTitle 0004h, 00e1h, 0c9e0h, 000000b8h, 01440006h, 00b80000h
 	pushw 0x4
 	pushw 0xE1
 	pushw 0xC9E0
-	.byte 0x40, 0xb8, 0x00, 0x00, 0x00
-	.byte 0x41, 0x06, 0x00, 0x44, 0x01
-	.byte 0x42, 0x00, 0x00, 0xb8, 0x00
+	ld xwa, 0xB8
+	ld xbc, 0x1440006
+	ld xde, 0xB80000
 	call 0xFA4D80
 	; RegTitle 0004h, 00e1h, 0c9eah, 000000b9h, 01440008h, 00b90000h
 	pushw 0x4
 	pushw 0xE1
 	pushw 0xC9EA
-	.byte 0x40, 0xb9, 0x00, 0x00, 0x00
-	.byte 0x41, 0x08, 0x00, 0x44, 0x01
-	.byte 0x42, 0x00, 0x00, 0xb9, 0x00
+	ld xwa, 0xB9
+	ld xbc, 0x1440008
+	ld xde, 0xB90000
 	call 0xFA4D80
 	; RegTitle 0004h, 00e1h, 0c9f6h, 000000bah, 01440007h, 00ba0000h
 	pushw 0x4
 	pushw 0xE1
 	pushw 0xC9F6
-	.byte 0x40, 0xba, 0x00, 0x00, 0x00
-	.byte 0x41, 0x07, 0x00, 0x44, 0x01
-	.byte 0x42, 0x00, 0x00, 0xba, 0x00
+	ld xwa, 0xBA
+	ld xbc, 0x1440007
+	ld xde, 0xBA0000
 	call 0xFA4D80
 	; RegTitle 0004h, 00e1h, 0ca00h, 000000bbh, 01200000h, 00bb0000h
 	pushw 0x4
 	pushw 0xE1
 	pushw 0xCA00
-	.byte 0x40, 0xbb, 0x00, 0x00, 0x00
-	.byte 0x41, 0x00, 0x00, 0x20, 0x01
-	.byte 0x42, 0x00, 0x00, 0xbb, 0x00
+	ld xwa, 0xBB
+	ld xbc, 0x1200000
+	ld xde, 0xBB0000
 	call 0xFA4D80
 	; RegTitle 0004h, 00e1h, 0ca0ah, 000000bdh, 01200000h, 00bd0000h
 	pushw 0x4
 	pushw 0xE1
 	pushw 0xCA0A
-	.byte 0x40, 0xbd, 0x00, 0x00, 0x00
-	.byte 0x41, 0x00, 0x00, 0x20, 0x01
-	.byte 0x42, 0x00, 0x00, 0xbd, 0x00
+	ld xwa, 0xBD
+	ld xbc, 0x1200000
+	ld xde, 0xBD0000
 	call 0xFA4D80
 	; RegTitle 0004h, 00e1h, 0ca14h, 000000beh, 01440009h, 00be0000h
 	pushw 0x4
 	pushw 0xE1
 	pushw 0xCA14
-	.byte 0x40, 0xbe, 0x00, 0x00, 0x00
-	.byte 0x41, 0x09, 0x00, 0x44, 0x01
-	.byte 0x42, 0x00, 0x00, 0xbe, 0x00
+	ld xwa, 0xBE
+	ld xbc, 0x1440009
+	ld xde, 0xBE0000
 	call 0xFA4D80
 	; RegTitle 0004h, 00e1h, 0ca20h, 000000c8h, 01440011h, 00c80000h
 	pushw 0x4
 	pushw 0xE1
 	pushw 0xCA20
-	.byte 0x40, 0xc8, 0x00, 0x00, 0x00
-	.byte 0x41, 0x11, 0x00, 0x44, 0x01
-	.byte 0x42, 0x00, 0x00, 0xc8, 0x00
+	ld xwa, 0xC8
+	ld xbc, 0x1440011
+	ld xde, 0xC80000
 	call 0xFA4D80
 	; RegTitle 0004h, 00e1h, 0ca2ch, 000000c9h, 01440015h, 00c90000h
 	pushw 0x4
 	pushw 0xE1
 	pushw 0xCA2C
-	.byte 0x40, 0xc9, 0x00, 0x00, 0x00
-	.byte 0x41, 0x15, 0x00, 0x44, 0x01
-	.byte 0x42, 0x00, 0x00, 0xc9, 0x00
+	ld xwa, 0xC9
+	ld xbc, 0x1440015
+	ld xde, 0xC90000
 	call 0xFA4D80
 	; RegTitle 0004h, 00e1h, 0ca36h, 000000cah, 01440012h, 00ca0000h
 	pushw 0x4
 	pushw 0xE1
 	pushw 0xCA36
-	.byte 0x40, 0xca, 0x00, 0x00, 0x00
-	.byte 0x41, 0x12, 0x00, 0x44, 0x01
-	.byte 0x42, 0x00, 0x00, 0xca, 0x00
+	ld xwa, 0xCA
+	ld xbc, 0x1440012
+	ld xde, 0xCA0000
 	call 0xFA4D80
 	; RegTitle 0004h, 00e1h, 0ca42h, 000000cbh, 01440013h, 00cb0000h
 	pushw 0x4
 	pushw 0xE1
 	pushw 0xCA42
-	.byte 0x40, 0xcb, 0x00, 0x00, 0x00
-	.byte 0x41, 0x13, 0x00, 0x44, 0x01
-	.byte 0x42, 0x00, 0x00, 0xcb, 0x00
+	ld xwa, 0xCB
+	ld xbc, 0x1440013
+	ld xde, 0xCB0000
 	call 0xFA4D80
 	; RegTitle 0004h, 00e1h, 0ca4eh, 000000cch, 01200000h, 00cc0000h
 	pushw 0x4
 	pushw 0xE1
 	pushw 0xCA4E
-	.byte 0x40, 0xcc, 0x00, 0x00, 0x00
-	.byte 0x41, 0x00, 0x00, 0x20, 0x01
-	.byte 0x42, 0x00, 0x00, 0xcc, 0x00
+	ld xwa, 0xCC
+	ld xbc, 0x1200000
+	ld xde, 0xCC0000
 	call 0xFA4D80
 	; RegTitle 0004h, 00e1h, 0ca5ah, 000000dch, 01440017h, 00dc0000h
 	pushw 0x4
 	pushw 0xE1
 	pushw 0xCA5A
-	.byte 0x40, 0xdc, 0x00, 0x00, 0x00
-	.byte 0x41, 0x17, 0x00, 0x44, 0x01
-	.byte 0x42, 0x00, 0x00, 0xdc, 0x00
+	ld xwa, 0xDC
+	ld xbc, 0x1440017
+	ld xde, 0xDC0000
 	call 0xFA4D80
 	; RegTitle 0004h, 00e1h, 0ca64h, 000000edh, 01200000h, 00ed0000h
 	pushw 0x4
 	pushw 0xE1
 	pushw 0xCA64
-	.byte 0x40, 0xed, 0x00, 0x00, 0x00
-	.byte 0x41, 0x00, 0x00, 0x20, 0x01
-	.byte 0x42, 0x00, 0x00, 0xed, 0x00
+	ld xwa, 0xED
+	ld xbc, 0x1200000
+	ld xde, 0xED0000
 	call 0xFA4D80
 
 	lda xsp, (xsp + 14)
@@ -156450,7 +156450,7 @@ InitializeHama:
 	lda xsp, (xsp - 14)
 
 	; RegObjTableHama 01600004h, 0FA44E2h, 0E1F0BCh,	0E1F080h, 0169h
-	.byte 0x40, 0x04, 0x00, 0x60, 0x01
+	ld xwa, 0x1600004
 	ld (xsp + 256), xwa
 	ldada_24 xwa, 16401634
 	ld (xsp + 4), xwa
@@ -156463,7 +156463,7 @@ InitializeHama:
 	ldw wa, 0x169
 	call 0xFA42FB
 	; RegObjTableHama 0160000ch, 0FA58FBh, 0E1F0D4h,	0E1F0BEh, 01c9h
-	.byte 0x40, 0x0c, 0x00, 0x60, 0x01
+	ld xwa, 0x160000C
 	ld (xsp + 256), xwa
 	ldada_24 xwa, 16406779
 	ld (xsp + 4), xwa
@@ -156476,7 +156476,7 @@ InitializeHama:
 	ldw wa, 0x1C9
 	call 0xFA42FB
 	; RegObjTableHama 0160000dh, 0FA5948h, 0E1F0EAh,	0E1F0D6h, 01e9h
-	.byte 0x40, 0x0d, 0x00, 0x60, 0x01
+	ld xwa, 0x160000D
 	ld (xsp + 256), xwa
 	ldada_24 xwa, 16406856
 	ld (xsp + 4), xwa
@@ -156489,7 +156489,7 @@ InitializeHama:
 	ldw wa, 0x1E9
 	call 0xFA42FB
 	; RegObjTablHama 01600002h, 0FA496Ch, 0002h,	0E1F04Ah, 0129h
-	.byte 0x40, 0x02, 0x00, 0x60, 0x01
+	ld xwa, 0x1600002
 	ld (xsp + 256), xwa
 	ldada_24 xwa, 16402796
 	ld (xsp + 4), xwa
@@ -156501,7 +156501,7 @@ InitializeHama:
 	ldw wa, 0x129
 	call 0xFA42FB
 	; RegObjTablHama 01600002h, 0FA496Ch, 0002h,	0E1F056h, 0429h
-	.byte 0x40, 0x02, 0x00, 0x60, 0x01
+	ld xwa, 0x1600002
 	ld (xsp + 256), xwa
 	ldada_24 xwa, 16402796
 	ld (xsp + 4), xwa
@@ -156513,7 +156513,7 @@ InitializeHama:
 	ldw wa, 0x429
 	call 0xFA42FB
 	; RegObjTablHama 01600001h, 0FA48A9h, 004bh,	0E1F0ECh, 0109h
-	.byte 0x40, 0x01, 0x00, 0x60, 0x01
+	ld xwa, 0x1600001
 	ld (xsp + 256), xwa
 	ldada_24 xwa, 16402601
 	ld (xsp + 4), xwa
@@ -156525,7 +156525,7 @@ InitializeHama:
 	ldw wa, 0x109
 	call 0xFA42FB
 	; RegObjTablHama 01600001h, 0FA48A9h, 004bh,	0E1F240h, 0409h
-	.byte 0x40, 0x01, 0x00, 0x60, 0x01
+	ld xwa, 0x1600001
 	ld (xsp + 256), xwa
 	ldada_24 xwa, 16402601
 	ld (xsp + 4), xwa
@@ -156537,7 +156537,7 @@ InitializeHama:
 	ldw wa, 0x409
 	call 0xFA42FB
 	; RegObjTablHama 01600003h, 0FA4A18h, 0001h,	0E1FD2Ch, 0149h
-	.byte 0x40, 0x03, 0x00, 0x60, 0x01
+	ld xwa, 0x1600003
 	ld (xsp + 256), xwa
 	ldada_24 xwa, 16402968
 	ld (xsp + 4), xwa
@@ -156549,7 +156549,7 @@ InitializeHama:
 	ldw wa, 0x149
 	call 0xFA42FB
 	; RegObjTablHama 01600003h, 0FA4A18h, 0001h,	0E1FD34h, 0449h
-	.byte 0x40, 0x03, 0x00, 0x60, 0x01
+	ld xwa, 0x1600003
 	ld (xsp + 256), xwa
 	ldada_24 xwa, 16402968
 	ld (xsp + 4), xwa
@@ -156561,7 +156561,7 @@ InitializeHama:
 	ldw wa, 0x449
 	call 0xFA42FB
 	; RegObjTablHama 01600010h, 0FA5995h, 0000h,	0E1FBD0h, 007fh
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xsp + 256), xwa
 	ldada_24 xwa, 16406933
 	ld (xsp + 4), xwa
@@ -156573,7 +156573,7 @@ InitializeHama:
 	ldw wa, 0x7F
 	call 0xFA42FB
 	; RegObjTablHama 0160000fh, 0FA62CBh, 0000h,	0E1FC40h, 037fh
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xsp + 256), xwa
 	ldada_24 xwa, 16409291
 	ld (xsp + 4), xwa
@@ -156585,7 +156585,7 @@ InitializeHama:
 	ldw wa, 0x37F
 	call 0xFA42FB
 	; RegObjTablHama 01600010h, 0FA5995h, 001ah,	0E1FBD4h, 00fch
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xsp + 256), xwa
 	ldada_24 xwa, 16406933
 	ld (xsp + 4), xwa
@@ -156597,7 +156597,7 @@ InitializeHama:
 	ldw wa, 0xFC
 	call 0xFA42FB
 	; RegObjTablHama 0160000fh, 0FA62CBh, 001ah,	0E1FC46h, 03fch
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xsp + 256), xwa
 	ldada_24 xwa, 16409291
 	ld (xsp + 4), xwa
@@ -156613,17 +156613,17 @@ InitializeHama:
 	pushw 0x9
 	ldada_24 xwa, 14810392
 	nop
-	.byte 0x40, 0x7f, 0x00, 0x00, 0x00
-	.byte 0x41, 0x00, 0x00, 0x49, 0x01
-	.byte 0x42, 0x00, 0x00, 0xfc, 0x00
+	ld xwa, 0x7F
+	ld xbc, 0x1490000
+	ld xde, 0xFC0000
 	call 0xFA4D80
 	; RegTitleHama 0009h, 0E1FD22h, 000000fch, 01490000h, 00fc0000h
 	pushw 0x9
 	ldada_24 xwa, 14810402
 	nop
-	.byte 0x40, 0xfc, 0x00, 0x00, 0x00
-	.byte 0x41, 0x00, 0x00, 0x49, 0x01
-	.byte 0x42, 0x00, 0x00, 0xfc, 0x00
+	ld xwa, 0xFC
+	ld xbc, 0x1490000
+	ld xde, 0xFC0000
 	call 0xFA4D80
 
 	lda xsp, (xsp + 14)
@@ -175457,7 +175457,7 @@ InitializeYoko:
 
 	; RegObjTable 01600004h, 0FA44E2h, 0E20CAEh,	0E208ECh, 0167h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x04, 0x00, 0x60, 0x01
+	ld xwa, 0x1600004
 	ld (xbc), xwa
 	ldada_24 xwa, 16401634
 	ld (xbc + 4), xwa
@@ -175469,7 +175469,7 @@ InitializeYoko:
 	call 0xFA42FB
 	; RegObjTable 0160000ch, 0FA58FBh, 0E20E22h,	0E20CB0h, 01c7h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0c, 0x00, 0x60, 0x01
+	ld xwa, 0x160000C
 	ld (xbc), xwa
 	ldada_24 xwa, 16406779
 	ld (xbc + 4), xwa
@@ -175481,7 +175481,7 @@ InitializeYoko:
 	call 0xFA42FB
 	; RegObjTable 0160000dh, 0FA5948h, 0E2106Ah,	0E20E24h, 01e7h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0d, 0x00, 0x60, 0x01
+	ld xwa, 0x160000D
 	ld (xbc), xwa
 	ldada_24 xwa, 16406856
 	ld (xbc + 4), xwa
@@ -175493,7 +175493,7 @@ InitializeYoko:
 	call 0xFA42FB
 	; RegObjTabl 01600002h, 0FA496Ch, 002eh,		0E20260h, 0127h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x02, 0x00, 0x60, 0x01
+	ld xwa, 0x1600002
 	ld (xbc), xwa
 	ldada_24 xwa, 16402796
 	ld (xbc + 4), xwa
@@ -175504,7 +175504,7 @@ InitializeYoko:
 	call 0xFA42FB
 	; RegObjTabl 01600002h, 0FA496Ch, 002eh,		0E2031Ch, 0427h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x02, 0x00, 0x60, 0x01
+	ld xwa, 0x1600002
 	ld (xbc), xwa
 	ldada_24 xwa, 16402796
 	ld (xbc + 4), xwa
@@ -175515,7 +175515,7 @@ InitializeYoko:
 	call 0xFA42FB
 	; RegObjTabl 01600001h, 0FA48A9h, 0001h,		0E2106Ch, 0107h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x01, 0x00, 0x60, 0x01
+	ld xwa, 0x1600001
 	ld (xbc), xwa
 	ldada_24 xwa, 16402601
 	ld (xbc + 4), xwa
@@ -175526,7 +175526,7 @@ InitializeYoko:
 	call 0xFA42FB
 	; RegObjTabl 01600001h, 0FA48A9h, 0001h,		0E21074h, 0407h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x01, 0x00, 0x60, 0x01
+	ld xwa, 0x1600001
 	ld (xbc), xwa
 	ldada_24 xwa, 16402601
 	ld (xbc + 4), xwa
@@ -175537,7 +175537,7 @@ InitializeYoko:
 	call 0xFA42FB
 	; RegObjTabl 01600003h, 0FA4A18h, 001fh,		0E25042h, 0147h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x03, 0x00, 0x60, 0x01
+	ld xwa, 0x1600003
 	ld (xbc), xwa
 	ldada_24 xwa, 16402968
 	ld (xbc + 4), xwa
@@ -175548,7 +175548,7 @@ InitializeYoko:
 	call 0xFA42FB
 	; RegObjTabl 01600003h, 0FA4A18h, 001fh,		0E250C2h, 0447h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x03, 0x00, 0x60, 0x01
+	ld xwa, 0x1600003
 	ld (xbc), xwa
 	ldada_24 xwa, 16402968
 	ld (xbc + 4), xwa
@@ -175559,7 +175559,7 @@ InitializeYoko:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 002bh,		0E240ACh, 006fh
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -175570,7 +175570,7 @@ InitializeYoko:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 002bh,		0E24578h, 036fh
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -175581,7 +175581,7 @@ InitializeYoko:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 000ch,		0E2415Ch, 0070h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -175592,7 +175592,7 @@ InitializeYoko:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 000ch,		0E246C8h, 0370h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -175603,7 +175603,7 @@ InitializeYoko:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 000bh,		0E24190h, 0071h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -175614,7 +175614,7 @@ InitializeYoko:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 000bh,		0E2472Eh, 0371h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -175625,7 +175625,7 @@ InitializeYoko:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0007h,		0E241C0h, 0072h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -175636,7 +175636,7 @@ InitializeYoko:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0007h,		0E24788h, 0372h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -175647,7 +175647,7 @@ InitializeYoko:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0010h,		0E241E0h, 0073h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -175658,7 +175658,7 @@ InitializeYoko:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0010h,		0E247CAh, 0373h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -175669,7 +175669,7 @@ InitializeYoko:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 000fh,		0E24224h, 0074h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -175680,7 +175680,7 @@ InitializeYoko:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 000fh,		0E24844h, 0374h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -175691,7 +175691,7 @@ InitializeYoko:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 000dh,		0E24264h, 0075h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -175702,7 +175702,7 @@ InitializeYoko:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 000dh,		0E248CCh, 0375h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -175713,7 +175713,7 @@ InitializeYoko:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0008h,		0E2429Ch, 0076h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -175724,7 +175724,7 @@ InitializeYoko:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0008h,		0E2493Ah, 0376h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -175735,7 +175735,7 @@ InitializeYoko:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 001eh,		0E242C0h, 0078h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -175746,7 +175746,7 @@ InitializeYoko:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 001eh,		0E2497Ch, 0378h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -175757,7 +175757,7 @@ InitializeYoko:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 000ch,		0E2433Ch, 007ah
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -175768,7 +175768,7 @@ InitializeYoko:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 000ch,		0E24A3Eh, 037ah
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -175779,7 +175779,7 @@ InitializeYoko:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0005h,		0E24370h, 0089h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -175790,7 +175790,7 @@ InitializeYoko:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0005h,		0E24A94h, 0389h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -175801,7 +175801,7 @@ InitializeYoko:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0001h,		0E24388h, 008ah
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -175812,7 +175812,7 @@ InitializeYoko:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0001h,		0E24ABEh, 038ah
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -175823,7 +175823,7 @@ InitializeYoko:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0016h,		0E24390h, 008bh
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -175834,7 +175834,7 @@ InitializeYoko:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0016h,		0E24ACAh, 038bh
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -175845,7 +175845,7 @@ InitializeYoko:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 001ch,		0E243ECh, 008ch
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -175856,7 +175856,7 @@ InitializeYoko:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 001ch,		0E24B80h, 038ch
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -175867,7 +175867,7 @@ InitializeYoko:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0005h,		0E24460h, 008eh
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -175878,7 +175878,7 @@ InitializeYoko:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0005h,		0E24C70h, 038eh
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -175889,7 +175889,7 @@ InitializeYoko:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0006h,		0E24478h, 008fh
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -175900,7 +175900,7 @@ InitializeYoko:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0006h,		0E24C9Ch, 038fh
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -175911,7 +175911,7 @@ InitializeYoko:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0004h,		0E24494h, 0092h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -175922,7 +175922,7 @@ InitializeYoko:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0004h,		0E24CCEh, 0392h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -175933,7 +175933,7 @@ InitializeYoko:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0000h,		0E244A8h, 00a7h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -175944,7 +175944,7 @@ InitializeYoko:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0000h,		0E24CF8h, 03a7h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -175955,7 +175955,7 @@ InitializeYoko:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0006h,		0E244ACh, 00a9h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -175966,7 +175966,7 @@ InitializeYoko:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0006h,		0E24CFEh, 03a9h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -175977,7 +175977,7 @@ InitializeYoko:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0004h,		0E244C8h, 00e0h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -175988,7 +175988,7 @@ InitializeYoko:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0004h,		0E24D32h, 03e0h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -175999,7 +175999,7 @@ InitializeYoko:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 000ch,		0E244DCh, 00e1h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -176010,7 +176010,7 @@ InitializeYoko:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 000ch,		0E24D58h, 03e1h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -176021,7 +176021,7 @@ InitializeYoko:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 000ch,		0E24510h, 00e2h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -176032,7 +176032,7 @@ InitializeYoko:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 000ch,		0E24DE6h, 03e2h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -176043,7 +176043,7 @@ InitializeYoko:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 000ch,		0E24544h, 00e3h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -176054,7 +176054,7 @@ InitializeYoko:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 000ch,		0E24E78h, 03e3h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -176068,202 +176068,202 @@ InitializeYoko:
 	pushw 0x7
 	pushw 0xE2
 	pushw 0x4F10
-	.byte 0x40, 0x0d, 0x00, 0x00, 0x00
-	.byte 0x41, 0x14, 0x00, 0x47, 0x01
-	.byte 0x42, 0x89, 0x00, 0xa0, 0x01
+	ld xwa, 0xD
+	ld xbc, 0x1470014
+	ld xde, 0x1A00089
 	call 0xFA4D2B
 	; RegMode 0007h, 00e2h, 4f1ch, 00000013h, 01470017h, 01a000e0h
 	pushw 0x7
 	pushw 0xE2
 	pushw 0x4F1C
-	.byte 0x40, 0x13, 0x00, 0x00, 0x00
-	.byte 0x41, 0x17, 0x00, 0x47, 0x01
-	.byte 0x42, 0xe0, 0x00, 0xa0, 0x01
+	ld xwa, 0x13
+	ld xbc, 0x1470017
+	ld xde, 0x1A000E0
 	call 0xFA4D2B
 
 	; RegTitle 0007h, 00e2h, 4f24h, 0000006fh, 01470012h, 006f0000h
 	pushw 0x7
 	pushw 0xE2
 	pushw 0x4F24
-	.byte 0x40, 0x6f, 0x00, 0x00, 0x00
-	.byte 0x41, 0x12, 0x00, 0x47, 0x01
-	.byte 0x42, 0x00, 0x00, 0x6f, 0x00
+	ld xwa, 0x6F
+	ld xbc, 0x1470012
+	ld xde, 0x6F0000
 	call 0xFA4D80
 	; RegTitle 0007h, 00e2h, 4f2eh, 00000070h, 01470010h, 00700000h
 	pushw 0x7
 	pushw 0xE2
 	pushw 0x4F2E
-	.byte 0x40, 0x70, 0x00, 0x00, 0x00
-	.byte 0x41, 0x10, 0x00, 0x47, 0x01
-	.byte 0x42, 0x00, 0x00, 0x70, 0x00
+	ld xwa, 0x70
+	ld xbc, 0x1470010
+	ld xde, 0x700000
 	call 0xFA4D80
 	; RegTitle 0007h, 00e2h, 4f38h, 00000071h, 01470011h, 00710000h
 	pushw 0x7
 	pushw 0xE2
 	pushw 0x4F38
-	.byte 0x40, 0x71, 0x00, 0x00, 0x00
-	.byte 0x41, 0x11, 0x00, 0x47, 0x01
-	.byte 0x42, 0x00, 0x00, 0x71, 0x00
+	ld xwa, 0x71
+	ld xbc, 0x1470011
+	ld xde, 0x710000
 	call 0xFA4D80
 	; RegTitle 0007h, 00e2h, 4f40h, 00000072h, 01470013h, 00720000h
 	pushw 0x7
 	pushw 0xE2
 	pushw 0x4F40
-	.byte 0x40, 0x72, 0x00, 0x00, 0x00
-	.byte 0x41, 0x13, 0x00, 0x47, 0x01
-	.byte 0x42, 0x00, 0x00, 0x72, 0x00
+	ld xwa, 0x72
+	ld xbc, 0x1470013
+	ld xde, 0x720000
 	call 0xFA4D80
 	; RegTitle 0007h, 00e2h, 4f4ch, 00000073h, 0147000eh, 00730000h
 	pushw 0x7
 	pushw 0xE2
 	pushw 0x4F4C
-	.byte 0x40, 0x73, 0x00, 0x00, 0x00
-	.byte 0x41, 0x0e, 0x00, 0x47, 0x01
-	.byte 0x42, 0x00, 0x00, 0x73, 0x00
+	ld xwa, 0x73
+	ld xbc, 0x147000E
+	ld xde, 0x730000
 	call 0xFA4D80
 	; RegTitle 0007h, 00e2h, 4f5ah, 00000074h, 0147000ch, 00740001h
 	pushw 0x7
 	pushw 0xE2
 	pushw 0x4F5A
-	.byte 0x40, 0x74, 0x00, 0x00, 0x00
-	.byte 0x41, 0x0c, 0x00, 0x47, 0x01
-	.byte 0x42, 0x01, 0x00, 0x74, 0x00
+	ld xwa, 0x74
+	ld xbc, 0x147000C
+	ld xde, 0x740001
 	call 0xFA4D80
 	; RegTitle 0007h, 00e2h, 4f68h, 00000075h, 0147000dh, 00750000h
 	pushw 0x7
 	pushw 0xE2
 	pushw 0x4F68
-	.byte 0x40, 0x75, 0x00, 0x00, 0x00
-	.byte 0x41, 0x0d, 0x00, 0x47, 0x01
-	.byte 0x42, 0x00, 0x00, 0x75, 0x00
+	ld xwa, 0x75
+	ld xbc, 0x147000D
+	ld xde, 0x750000
 	call 0xFA4D80
 	; RegTitle 0007h, 00e2h, 4f74h, 00000076h, 0147000fh, 00760000h
 	pushw 0x7
 	pushw 0xE2
 	pushw 0x4F74
-	.byte 0x40, 0x76, 0x00, 0x00, 0x00
-	.byte 0x41, 0x0f, 0x00, 0x47, 0x01
-	.byte 0x42, 0x00, 0x00, 0x76, 0x00
+	ld xwa, 0x76
+	ld xbc, 0x147000F
+	ld xde, 0x760000
 	call 0xFA4D80
 	; RegTitle 0007h, 00e2h, 4f84h, 00000078h, 0147000bh, 00780000h
 	pushw 0x7
 	pushw 0xE2
 	pushw 0x4F84
-	.byte 0x40, 0x78, 0x00, 0x00, 0x00
-	.byte 0x41, 0x0b, 0x00, 0x47, 0x01
-	.byte 0x42, 0x00, 0x00, 0x78, 0x00
+	ld xwa, 0x78
+	ld xbc, 0x147000B
+	ld xde, 0x780000
 	call 0xFA4D80
 	; RegTitle 0007h, 00e2h, 4f92h, 0000007ah, 0147000ah, 007a0000h
 	pushw 0x7
 	pushw 0xE2
 	pushw 0x4F92
-	.byte 0x40, 0x7a, 0x00, 0x00, 0x00
-	.byte 0x41, 0x0a, 0x00, 0x47, 0x01
-	.byte 0x42, 0x00, 0x00, 0x7a, 0x00
+	ld xwa, 0x7A
+	ld xbc, 0x147000A
+	ld xde, 0x7A0000
 	call 0xFA4D80
 	; RegTitle 0007h, 00e2h, 4fa0h, 00000089h, 01470015h, 00890000h
 	pushw 0x7
 	pushw 0xE2
 	pushw 0x4FA0
-	.byte 0x40, 0x89, 0x00, 0x00, 0x00
-	.byte 0x41, 0x15, 0x00, 0x47, 0x01
-	.byte 0x42, 0x00, 0x00, 0x89, 0x00
+	ld xwa, 0x89
+	ld xbc, 0x1470015
+	ld xde, 0x890000
 	call 0xFA4D80
 	; RegTitle 0007h, 00e2h, 4fach, 0000008ah, 01470016h, 008a0000h
 	pushw 0x7
 	pushw 0xE2
 	pushw 0x4FAC
-	.byte 0x40, 0x8a, 0x00, 0x00, 0x00
-	.byte 0x41, 0x16, 0x00, 0x47, 0x01
-	.byte 0x42, 0x00, 0x00, 0x8a, 0x00
+	ld xwa, 0x8A
+	ld xbc, 0x1470016
+	ld xde, 0x8A0000
 	call 0xFA4D80
 	; RegTitle 0007h, 00e2h, 4fb6h, 0000008bh, 01470006h, 008b0000h
 	pushw 0x7
 	pushw 0xE2
 	pushw 0x4FB6
-	.byte 0x40, 0x8b, 0x00, 0x00, 0x00
-	.byte 0x41, 0x06, 0x00, 0x47, 0x01
-	.byte 0x42, 0x00, 0x00, 0x8b, 0x00
+	ld xwa, 0x8B
+	ld xbc, 0x1470006
+	ld xde, 0x8B0000
 	call 0xFA4D80
 	; RegTitle 0007h, 00e2h, 4fc0h, 0000008ch, 01470008h, 008c0000h
 	pushw 0x7
 	pushw 0xE2
 	pushw 0x4FC0
-	.byte 0x40, 0x8c, 0x00, 0x00, 0x00
-	.byte 0x41, 0x08, 0x00, 0x47, 0x01
-	.byte 0x42, 0x00, 0x00, 0x8c, 0x00
+	ld xwa, 0x8C
+	ld xbc, 0x1470008
+	ld xde, 0x8C0000
 	call 0xFA4D80
 	; RegTitle 0007h, 00e2h, 4fcch, 0000008eh, 01470004h, 008e0000h
 	pushw 0x7
 	pushw 0xE2
 	pushw 0x4FCC
-	.byte 0x40, 0x8e, 0x00, 0x00, 0x00
-	.byte 0x41, 0x04, 0x00, 0x47, 0x01
-	.byte 0x42, 0x00, 0x00, 0x8e, 0x00
+	ld xwa, 0x8E
+	ld xbc, 0x1470004
+	ld xde, 0x8E0000
 	call 0xFA4D80
 	; RegTitle 0007h, 00e2h, 4fd8h, 0000008fh, 01470005h, 008f0000h
 	pushw 0x7
 	pushw 0xE2
 	pushw 0x4FD8
-	.byte 0x40, 0x8f, 0x00, 0x00, 0x00
-	.byte 0x41, 0x05, 0x00, 0x47, 0x01
-	.byte 0x42, 0x00, 0x00, 0x8f, 0x00
+	ld xwa, 0x8F
+	ld xbc, 0x1470005
+	ld xde, 0x8F0000
 	call 0xFA4D80
 	; RegTitle 0007h, 00e2h, 4fe6h, 00000092h, 01470003h, 00920000h
 	pushw 0x7
 	pushw 0xE2
 	pushw 0x4FE6
-	.byte 0x40, 0x92, 0x00, 0x00, 0x00
-	.byte 0x41, 0x03, 0x00, 0x47, 0x01
-	.byte 0x42, 0x00, 0x00, 0x92, 0x00
+	ld xwa, 0x92
+	ld xbc, 0x1470003
+	ld xde, 0x920000
 	call 0xFA4D80
 	; RegTitle 0007h, 00e2h, 4ff2h, 000000a7h, 01470005h, 008f0000h
 	pushw 0x7
 	pushw 0xE2
 	pushw 0x4FF2
-	.byte 0x40, 0xa7, 0x00, 0x00, 0x00
-	.byte 0x41, 0x05, 0x00, 0x47, 0x01
-	.byte 0x42, 0x00, 0x00, 0x8f, 0x00
+	ld xwa, 0xA7
+	ld xbc, 0x1470005
+	ld xde, 0x8F0000
 	call 0xFA4D80
 	; RegTitle 0007h, 00e2h, 5000h, 000000a9h, 01200000h, 00a90000h
 	pushw 0x7
 	pushw 0xE2
 	pushw 0x5000
-	.byte 0x40, 0xa9, 0x00, 0x00, 0x00
-	.byte 0x41, 0x00, 0x00, 0x20, 0x01
-	.byte 0x42, 0x00, 0x00, 0xa9, 0x00
+	ld xwa, 0xA9
+	ld xbc, 0x1200000
+	ld xde, 0xA90000
 	call 0xFA4D80
 	; RegTitle 0007h, 00e2h, 500eh, 000000e0h, 01470018h, 00e00000h
 	pushw 0x7
 	pushw 0xE2
 	pushw 0x500E
-	.byte 0x40, 0xe0, 0x00, 0x00, 0x00
-	.byte 0x41, 0x18, 0x00, 0x47, 0x01
-	.byte 0x42, 0x00, 0x00, 0xe0, 0x00
+	ld xwa, 0xE0
+	ld xbc, 0x1470018
+	ld xde, 0xE00000
 	call 0xFA4D80
 	; RegTitle 0007h, 00e2h, 501ah, 000000e1h, 01470019h, 00e10000h
 	pushw 0x7
 	pushw 0xE2
 	pushw 0x501A
-	.byte 0x40, 0xe1, 0x00, 0x00, 0x00
-	.byte 0x41, 0x19, 0x00, 0x47, 0x01
-	.byte 0x42, 0x00, 0x00, 0xe1, 0x00
+	ld xwa, 0xE1
+	ld xbc, 0x1470019
+	ld xde, 0xE10000
 	call 0xFA4D80
 	; RegTitle 0007h, 00e2h, 5028h, 000000e2h, 0147001ah, 00e20000h
 	pushw 0x7
 	pushw 0xE2
 	pushw 0x5028
-	.byte 0x40, 0xe2, 0x00, 0x00, 0x00
-	.byte 0x41, 0x1a, 0x00, 0x47, 0x01
-	.byte 0x42, 0x00, 0x00, 0xe2, 0x00
+	ld xwa, 0xE2
+	ld xbc, 0x147001A
+	ld xde, 0xE20000
 	call 0xFA4D80
 	; RegTitle 0007h, 00e2h, 5036h, 000000e3h, 0147001bh, 00e30000h
 	pushw 0x7
 	pushw 0xE2
 	pushw 0x5036
-	.byte 0x40, 0xe3, 0x00, 0x00, 0x00
-	.byte 0x41, 0x1b, 0x00, 0x47, 0x01
-	.byte 0x42, 0x00, 0x00, 0xe3, 0x00
+	ld xwa, 0xE3
+	ld xbc, 0x147001B
+	ld xde, 0xE30000
 	call 0xFA4D80
 
 	lda xsp, (xsp + 14)
@@ -180058,7 +180058,7 @@ InitializeKubo:	; F2D2C4
 
 	; RegObjTable 01600004h, 0FA44E2h, 0E27596h,	0E27180h, 0168h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x04, 0x00, 0x60, 0x01
+	ld xwa, 0x1600004
 	ld (xbc), xwa
 	ldada_24 xwa, 16401634
 	ld (xbc + 4), xwa
@@ -180070,7 +180070,7 @@ InitializeKubo:	; F2D2C4
 	call 0xFA42FB
 	; RegObjTable 0160000ch, 0FA58FBh, 0E275F8h,	0E27598h, 01c8h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0c, 0x00, 0x60, 0x01
+	ld xwa, 0x160000C
 	ld (xbc), xwa
 	ldada_24 xwa, 16406779
 	ld (xbc + 4), xwa
@@ -180082,7 +180082,7 @@ InitializeKubo:	; F2D2C4
 	call 0xFA42FB
 	; RegObjTable 0160000dh, 0FA5948h, LABEL_E27FA2,	0E275FAh, 01e8h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0d, 0x00, 0x60, 0x01
+	ld xwa, 0x160000D
 	ld (xbc), xwa
 	ldada_24 xwa, 16406856
 	ld (xbc + 4), xwa
@@ -180094,7 +180094,7 @@ InitializeKubo:	; F2D2C4
 	call 0xFA42FB
 	; RegObjTabl 01600002h, 0FA496Ch, 0049h,		0E26804h, 0128h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x02, 0x00, 0x60, 0x01
+	ld xwa, 0x1600002
 	ld (xbc), xwa
 	ldada_24 xwa, 16402796
 	ld (xbc + 4), xwa
@@ -180105,7 +180105,7 @@ InitializeKubo:	; F2D2C4
 	call 0xFA42FB
 	; RegObjTabl 01600002h, 0FA496Ch, 0049h,		0E2692Ch, 0428h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x02, 0x00, 0x60, 0x01
+	ld xwa, 0x1600002
 	ld (xbc), xwa
 	ldada_24 xwa, 16402796
 	ld (xbc + 4), xwa
@@ -180116,7 +180116,7 @@ InitializeKubo:	; F2D2C4
 	call 0xFA42FB
 	; RegObjTabl 01600001h, 0FA48A9h, 0000h,		003DF10h, 0108h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x01, 0x00, 0x60, 0x01
+	ld xwa, 0x1600001
 	ld (xbc), xwa
 	ldada_24 xwa, 16402601
 	ld (xbc + 4), xwa
@@ -180127,7 +180127,7 @@ InitializeKubo:	; F2D2C4
 	call 0xFA42FB
 	; RegObjTabl 01600001h, 0FA48A9h, 0000h,		003DF14h, 0408h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x01, 0x00, 0x60, 0x01
+	ld xwa, 0x1600001
 	ld (xbc), xwa
 	ldada_24 xwa, 16402601
 	ld (xbc + 4), xwa
@@ -180138,7 +180138,7 @@ InitializeKubo:	; F2D2C4
 	call 0xFA42FB
 	; RegObjTabl 01600003h, 0FA4A18h, 002ch,		0E3051Ch, 0148h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x03, 0x00, 0x60, 0x01
+	ld xwa, 0x1600003
 	ld (xbc), xwa
 	ldada_24 xwa, 16402968
 	ld (xbc + 4), xwa
@@ -180149,7 +180149,7 @@ InitializeKubo:	; F2D2C4
 	call 0xFA42FB
 	; RegObjTabl 01600003h, 0FA4A18h, 002ch,		0E305D0h, 0448h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x03, 0x00, 0x60, 0x01
+	ld xwa, 0x1600003
 	ld (xbc), xwa
 	ldada_24 xwa, 16402968
 	ld (xbc + 4), xwa
@@ -180160,7 +180160,7 @@ InitializeKubo:	; F2D2C4
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 000ch,		LABEL_E2E624, 000ah
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -180171,7 +180171,7 @@ InitializeKubo:	; F2D2C4
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 000ch,		0E2F0ACh, 030ah
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -180182,7 +180182,7 @@ InitializeKubo:	; F2D2C4
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 000ch,		0E2E658h, 000bh
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -180193,7 +180193,7 @@ InitializeKubo:	; F2D2C4
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 000ch,		0E2F0FAh, 030bh
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -180204,7 +180204,7 @@ InitializeKubo:	; F2D2C4
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0025h,		0E2E68Ch, 000ch
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -180215,7 +180215,7 @@ InitializeKubo:	; F2D2C4
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0025h,		0E2F148h, 030ch
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -180226,7 +180226,7 @@ InitializeKubo:	; F2D2C4
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 000ch,		0E2E724h, 000eh
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -180237,7 +180237,7 @@ InitializeKubo:	; F2D2C4
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 000ch,		0E2F232h, 030eh
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -180248,7 +180248,7 @@ InitializeKubo:	; F2D2C4
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 000ch,		0E2E758h, 0080h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -180259,7 +180259,7 @@ InitializeKubo:	; F2D2C4
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 000ch,		0E2F280h, 0380h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -180270,7 +180270,7 @@ InitializeKubo:	; F2D2C4
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 001ch,		0E2E78Ch, 0081h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -180281,7 +180281,7 @@ InitializeKubo:	; F2D2C4
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 001ch,		0E2F2CEh, 0381h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -180292,7 +180292,7 @@ InitializeKubo:	; F2D2C4
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0008h,		0E2E800h, 0082h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -180303,7 +180303,7 @@ InitializeKubo:	; F2D2C4
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0008h,		0E2F3AAh, 0382h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -180314,7 +180314,7 @@ InitializeKubo:	; F2D2C4
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0010h,		0E2E824h, 0083h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -180325,7 +180325,7 @@ InitializeKubo:	; F2D2C4
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0010h,		0E2F3E0h, 0383h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -180336,7 +180336,7 @@ InitializeKubo:	; F2D2C4
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 000ah,		0E2E868h, 0084h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -180347,7 +180347,7 @@ InitializeKubo:	; F2D2C4
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 000ah,		0E2F446h, 0384h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -180358,7 +180358,7 @@ InitializeKubo:	; F2D2C4
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0019h,		0E2E894h, 0085h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -180369,7 +180369,7 @@ InitializeKubo:	; F2D2C4
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0019h,		0E2F488h, 0385h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -180380,7 +180380,7 @@ InitializeKubo:	; F2D2C4
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 000bh,		0E2E8FCh, 0086h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -180391,7 +180391,7 @@ InitializeKubo:	; F2D2C4
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 000bh,		0E2F560h, 0386h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -180402,7 +180402,7 @@ InitializeKubo:	; F2D2C4
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0018h,		0E2E92Ch, 0087h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -180413,7 +180413,7 @@ InitializeKubo:	; F2D2C4
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0018h,		0E2F5B2h, 0387h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -180424,7 +180424,7 @@ InitializeKubo:	; F2D2C4
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 000ch,		0E2E990h, 0088h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -180435,7 +180435,7 @@ InitializeKubo:	; F2D2C4
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 000ch,		0E2F66Ah, 0388h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -180446,7 +180446,7 @@ InitializeKubo:	; F2D2C4
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0004h,		0E2E9C4h, 008dh
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -180457,7 +180457,7 @@ InitializeKubo:	; F2D2C4
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0004h,		0E2F6C2h, 038dh
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -180468,7 +180468,7 @@ InitializeKubo:	; F2D2C4
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0011h,		0E2E9D8h, 0090h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -180479,7 +180479,7 @@ InitializeKubo:	; F2D2C4
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0011h,		0E2F6E0h, 0390h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -180490,7 +180490,7 @@ InitializeKubo:	; F2D2C4
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0013h,		0E2EA20h, 0091h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -180501,7 +180501,7 @@ InitializeKubo:	; F2D2C4
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0013h,		0E2F758h, 0391h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -180512,7 +180512,7 @@ InitializeKubo:	; F2D2C4
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 001ah,		0E2EA70h, 0093h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -180523,7 +180523,7 @@ InitializeKubo:	; F2D2C4
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 001ah,		0E2F7DCh, 0393h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -180534,7 +180534,7 @@ InitializeKubo:	; F2D2C4
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0004h,		0E2EADCh, 0094h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -180545,7 +180545,7 @@ InitializeKubo:	; F2D2C4
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0004h,		0E2F898h, 0394h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -180556,7 +180556,7 @@ InitializeKubo:	; F2D2C4
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 001bh,		0E2EAF0h, 0095h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -180567,7 +180567,7 @@ InitializeKubo:	; F2D2C4
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 001bh,		0E2F8B6h, 0395h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -180578,7 +180578,7 @@ InitializeKubo:	; F2D2C4
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0008h,		0E2EB60h, 0096h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -180589,7 +180589,7 @@ InitializeKubo:	; F2D2C4
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0008h,		0E2F966h, 0396h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -180600,7 +180600,7 @@ InitializeKubo:	; F2D2C4
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0004h,		0E2EB84h, 0097h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -180611,7 +180611,7 @@ InitializeKubo:	; F2D2C4
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0004h,		0E2F99Ch, 0397h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -180622,7 +180622,7 @@ InitializeKubo:	; F2D2C4
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 001ah,		0E2EB98h, 0098h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -180633,7 +180633,7 @@ InitializeKubo:	; F2D2C4
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 001ah,		0E2F9BAh, 0398h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -180644,7 +180644,7 @@ InitializeKubo:	; F2D2C4
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0008h,		0E2EC04h, 0099h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -180655,7 +180655,7 @@ InitializeKubo:	; F2D2C4
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0008h,		0E2FA64h, 0399h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -180666,7 +180666,7 @@ InitializeKubo:	; F2D2C4
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 000eh,		0E2EC28h, 009ah
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -180677,7 +180677,7 @@ InitializeKubo:	; F2D2C4
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 000eh,		0E2FA9Ah, 039ah
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -180688,7 +180688,7 @@ InitializeKubo:	; F2D2C4
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0016h,		0E2EC64h, 009bh
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -180699,7 +180699,7 @@ InitializeKubo:	; F2D2C4
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0016h,		0E2FB02h, 039bh
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -180710,7 +180710,7 @@ InitializeKubo:	; F2D2C4
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0015h,		0E2ECC0h, 009ch
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -180721,7 +180721,7 @@ InitializeKubo:	; F2D2C4
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0015h,		0E2FB9Ah, 039ch
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -180732,7 +180732,7 @@ InitializeKubo:	; F2D2C4
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0010h,		0E2ED18h, 009dh
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -180743,7 +180743,7 @@ InitializeKubo:	; F2D2C4
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0010h,		0E2FC28h, 039dh
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -180754,7 +180754,7 @@ InitializeKubo:	; F2D2C4
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0010h,		0E2ED5Ch, 009eh
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -180765,7 +180765,7 @@ InitializeKubo:	; F2D2C4
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0010h,		0E2FC9Ah, 039eh
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -180776,7 +180776,7 @@ InitializeKubo:	; F2D2C4
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0019h,		0E2EDA0h, 009fh
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -180787,7 +180787,7 @@ InitializeKubo:	; F2D2C4
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0019h,		0E2FD0Ch, 039fh
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -180798,7 +180798,7 @@ InitializeKubo:	; F2D2C4
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0010h,		0E2EE08h, 00a0h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -180809,7 +180809,7 @@ InitializeKubo:	; F2D2C4
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0010h,		0E2FDB4h, 03a0h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -180820,7 +180820,7 @@ InitializeKubo:	; F2D2C4
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0010h,		0E2EE4Ch, 00a1h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -180831,7 +180831,7 @@ InitializeKubo:	; F2D2C4
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0010h,		0E2FE24h, 03a1h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -180842,7 +180842,7 @@ InitializeKubo:	; F2D2C4
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0011h,		0E2EE90h, 00a2h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -180853,7 +180853,7 @@ InitializeKubo:	; F2D2C4
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0011h,		0E2FE96h, 03a2h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -180864,7 +180864,7 @@ InitializeKubo:	; F2D2C4
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 000fh,		0E2EED8h, 00a3h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -180875,7 +180875,7 @@ InitializeKubo:	; F2D2C4
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 000fh,		0E2FF0Ch, 03a3h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -180886,7 +180886,7 @@ InitializeKubo:	; F2D2C4
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0011h,		0E2EF18h, 00a4h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -180897,7 +180897,7 @@ InitializeKubo:	; F2D2C4
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0011h,		0E2FF78h, 03a4h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -180908,7 +180908,7 @@ InitializeKubo:	; F2D2C4
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0000h,		0E2EF60h, 00a8h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -180919,7 +180919,7 @@ InitializeKubo:	; F2D2C4
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0000h,		0E2FFF0h, 03a8h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -180930,7 +180930,7 @@ InitializeKubo:	; F2D2C4
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0000h,		0E2EF64h, 00aah
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -180941,7 +180941,7 @@ InitializeKubo:	; F2D2C4
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0000h,		0E2FFF6h, 03aah
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -180952,7 +180952,7 @@ InitializeKubo:	; F2D2C4
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0002h,		0E2EF68h, 00abh
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -180963,7 +180963,7 @@ InitializeKubo:	; F2D2C4
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0002h,		0E2FFFCh, 03abh
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -180974,7 +180974,7 @@ InitializeKubo:	; F2D2C4
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 000fh,		0E2EF74h, 00d6h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -180985,7 +180985,7 @@ InitializeKubo:	; F2D2C4
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 000fh,		0E3000Eh, 03d6h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -180996,7 +180996,7 @@ InitializeKubo:	; F2D2C4
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 003dh,		0E2EFB4h, 00e7h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -181007,7 +181007,7 @@ InitializeKubo:	; F2D2C4
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 003dh,		0E3009Eh, 03e7h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -181022,369 +181022,369 @@ InitializeKubo:	; F2D2C4
 	pushw 0xE3
 	pushw 0x2F8
 	lds32 xwa, 7
-	.byte 0x41, 0x00, 0x00, 0x20, 0x01
-	.byte 0x42, 0xd6, 0x00, 0xa0, 0x01
+	ld xbc, 0x1200000
+	ld xde, 0x1A000D6
 	call 0xFA4D2B
 	; RegMode 0008h, 00e3h, 0308h, 00000008h, 01480004h, 01a00080h
 	pushw 0x8
 	pushw 0xE3
 	pushw 0x308
-	.byte 0x40, 0x08, 0x00, 0x00, 0x00
-	.byte 0x41, 0x04, 0x00, 0x48, 0x01
-	.byte 0x42, 0x80, 0x00, 0xa0, 0x01
+	ld xwa, 0x8
+	ld xbc, 0x1480004
+	ld xde, 0x1A00080
 	call 0xFA4D2B
 	; RegMode 0008h, 00e3h, 0310h, 00000009h, 01480007h, 01a00083h
 	pushw 0x8
 	pushw 0xE3
 	pushw 0x310
-	.byte 0x40, 0x09, 0x00, 0x00, 0x00
-	.byte 0x41, 0x07, 0x00, 0x48, 0x01
-	.byte 0x42, 0x83, 0x00, 0xa0, 0x01
+	ld xwa, 0x9
+	ld xbc, 0x1480007
+	ld xde, 0x1A00083
 	call 0xFA4D2B
 	; RegMode 0008h, 00e3h, 031ch, 0000000ah, 01480006h, 01a00081h
 	pushw 0x8
 	pushw 0xE3
 	pushw 0x31C
-	.byte 0x40, 0x0a, 0x00, 0x00, 0x00
-	.byte 0x41, 0x06, 0x00, 0x48, 0x01
-	.byte 0x42, 0x81, 0x00, 0xa0, 0x01
+	ld xwa, 0xA
+	ld xbc, 0x1480006
+	ld xde, 0x1A00081
 	call 0xFA4D2B
 	; RegMode 0008h, 00e3h, 0328h, 0000000bh, 01480005h, 01a00085h
 	pushw 0x8
 	pushw 0xE3
 	pushw 0x328
-	.byte 0x40, 0x0b, 0x00, 0x00, 0x00
-	.byte 0x41, 0x05, 0x00, 0x48, 0x01
-	.byte 0x42, 0x85, 0x00, 0xa0, 0x01
+	ld xwa, 0xB
+	ld xbc, 0x1480005
+	ld xde, 0x1A00085
 	call 0xFA4D2B
 	; RegMode 0008h, 00e3h, 0334h, 0000000ch, 01480008h, 01a00093h
 	pushw 0x8
 	pushw 0xE3
 	pushw 0x334
-	.byte 0x40, 0x0c, 0x00, 0x00, 0x00
-	.byte 0x41, 0x08, 0x00, 0x48, 0x01
-	.byte 0x42, 0x93, 0x00, 0xa0, 0x01
+	ld xwa, 0xC
+	ld xbc, 0x1480008
+	ld xde, 0x1A00093
 	call 0xFA4D2B
 	; RegMode 0008h, 00e3h, 0340h, 00000014h, 01480026h, 01a000e7h
 	pushw 0x8
 	pushw 0xE3
 	pushw 0x340
-	.byte 0x40, 0x14, 0x00, 0x00, 0x00
-	.byte 0x41, 0x26, 0x00, 0x48, 0x01
-	.byte 0x42, 0xe7, 0x00, 0xa0, 0x01
+	ld xwa, 0x14
+	ld xbc, 0x1480026
+	ld xde, 0x1A000E7
 	call 0xFA4D2B
 
 	; RegTitle 0008h, 00e3h, 0348h, 0000000ah, 01480020h, 000a0000h
 	pushw 0x8
 	pushw 0xE3
 	pushw 0x348
-	.byte 0x40, 0x0a, 0x00, 0x00, 0x00
-	.byte 0x41, 0x20, 0x00, 0x48, 0x01
-	.byte 0x42, 0x00, 0x00, 0x0a, 0x00
+	ld xwa, 0xA
+	ld xbc, 0x1480020
+	ld xde, 0xA0000
 	call 0xFA4D80
 	; RegTitle 0008h, 00e3h, 0354h, 0000000bh, 01480021h, 000b0000h
 	pushw 0x8
 	pushw 0xE3
 	pushw 0x354
-	.byte 0x40, 0x0b, 0x00, 0x00, 0x00
-	.byte 0x41, 0x21, 0x00, 0x48, 0x01
-	.byte 0x42, 0x00, 0x00, 0x0b, 0x00
+	ld xwa, 0xB
+	ld xbc, 0x1480021
+	ld xde, 0xB0000
 	call 0xFA4D80
 	; RegTitle 0008h, 00e3h, 0360h, 0000000ch, 01200000h, 000c0000h
 	pushw 0x8
 	pushw 0xE3
 	pushw 0x360
-	.byte 0x40, 0x0c, 0x00, 0x00, 0x00
-	.byte 0x41, 0x00, 0x00, 0x20, 0x01
-	.byte 0x42, 0x00, 0x00, 0x0c, 0x00
+	ld xwa, 0xC
+	ld xbc, 0x1200000
+	ld xde, 0xC0000
 	call 0xFA4D80
 	; RegTitle 0008h, 00e3h, 0370h, 0000000eh, 01480022h, 000e0000h
 	pushw 0x8
 	pushw 0xE3
 	pushw 0x370
-	.byte 0x40, 0x0e, 0x00, 0x00, 0x00
-	.byte 0x41, 0x22, 0x00, 0x48, 0x01
-	.byte 0x42, 0x00, 0x00, 0x0e, 0x00
+	ld xwa, 0xE
+	ld xbc, 0x1480022
+	ld xde, 0xE0000
 	call 0xFA4D80
 	; RegTitle 0008h, 00e3h, 037ch, 00000080h, 01200000h, 00800000h
 	pushw 0x8
 	pushw 0xE3
 	pushw 0x37C
-	.byte 0x40, 0x80, 0x00, 0x00, 0x00
-	.byte 0x41, 0x00, 0x00, 0x20, 0x01
-	.byte 0x42, 0x00, 0x00, 0x80, 0x00
+	ld xwa, 0x80
+	ld xbc, 0x1200000
+	ld xde, 0x800000
 	call 0xFA4D80
 	; RegTitle 0008h, 00e3h, 0386h, 00000081h, 0148000ah, 00810000h
 	pushw 0x8
 	pushw 0xE3
 	pushw 0x386
-	.byte 0x40, 0x81, 0x00, 0x00, 0x00
-	.byte 0x41, 0x0a, 0x00, 0x48, 0x01
-	.byte 0x42, 0x00, 0x00, 0x81, 0x00
+	ld xwa, 0x81
+	ld xbc, 0x148000A
+	ld xde, 0x810000
 	call 0xFA4D80
 	; RegTitle 0008h, 00e3h, 0390h, 00000082h, 01200000h, 00820000h
 	pushw 0x8
 	pushw 0xE3
 	pushw 0x390
-	.byte 0x40, 0x82, 0x00, 0x00, 0x00
-	.byte 0x41, 0x00, 0x00, 0x20, 0x01
-	.byte 0x42, 0x00, 0x00, 0x82, 0x00
+	ld xwa, 0x82
+	ld xbc, 0x1200000
+	ld xde, 0x820000
 	call 0xFA4D80
 	; RegTitle 0008h, 00e3h, 039ch, 00000083h, 01200000h, 00830000h
 	pushw 0x8
 	pushw 0xE3
 	pushw 0x39C
-	.byte 0x40, 0x83, 0x00, 0x00, 0x00
-	.byte 0x41, 0x00, 0x00, 0x20, 0x01
-	.byte 0x42, 0x00, 0x00, 0x83, 0x00
+	ld xwa, 0x83
+	ld xbc, 0x1200000
+	ld xde, 0x830000
 	call 0xFA4D80
 	; RegTitle 0008h, 00e3h, 03aah, 00000084h, 01200000h, 00840000h
 	pushw 0x8
 	pushw 0xE3
 	pushw 0x3AA
-	.byte 0x40, 0x84, 0x00, 0x00, 0x00
-	.byte 0x41, 0x00, 0x00, 0x20, 0x01
-	.byte 0x42, 0x00, 0x00, 0x84, 0x00
+	ld xwa, 0x84
+	ld xbc, 0x1200000
+	ld xde, 0x840000
 	call 0xFA4D80
 	; RegTitle 0008h, 00e3h, 03b6h, 00000085h, 01480009h, 00850000h
 	pushw 0x8
 	pushw 0xE3
 	pushw 0x3B6
-	.byte 0x40, 0x85, 0x00, 0x00, 0x00
-	.byte 0x41, 0x09, 0x00, 0x48, 0x01
-	.byte 0x42, 0x00, 0x00, 0x85, 0x00
+	ld xwa, 0x85
+	ld xbc, 0x1480009
+	ld xde, 0x850000
 	call 0xFA4D80
 	; RegTitle 0008h, 00e3h, 03c4h, 00000086h, 01200000h, 00860000h
 	pushw 0x8
 	pushw 0xE3
 	pushw 0x3C4
-	.byte 0x40, 0x86, 0x00, 0x00, 0x00
-	.byte 0x41, 0x00, 0x00, 0x20, 0x01
-	.byte 0x42, 0x00, 0x00, 0x86, 0x00
+	ld xwa, 0x86
+	ld xbc, 0x1200000
+	ld xde, 0x860000
 	call 0xFA4D80
 	; RegTitle 0008h, 00e3h, 03d0h, 00000087h, 0148000bh, 00870000h
 	pushw 0x8
 	pushw 0xE3
 	pushw 0x3D0
-	.byte 0x40, 0x87, 0x00, 0x00, 0x00
-	.byte 0x41, 0x0b, 0x00, 0x48, 0x01
-	.byte 0x42, 0x00, 0x00, 0x87, 0x00
+	ld xwa, 0x87
+	ld xbc, 0x148000B
+	ld xde, 0x870000
 	call 0xFA4D80
 	; RegTitle 0008h, 00e3h, 03dch, 00000088h, 0148000ch, 00880000h
 	pushw 0x8
 	pushw 0xE3
 	pushw 0x3DC
-	.byte 0x40, 0x88, 0x00, 0x00, 0x00
-	.byte 0x41, 0x0c, 0x00, 0x48, 0x01
-	.byte 0x42, 0x00, 0x00, 0x88, 0x00
+	ld xwa, 0x88
+	ld xbc, 0x148000C
+	ld xde, 0x880000
 	call 0xFA4D80
 	; RegTitle 0008h, 00e3h, 03e8h, 0000008dh, 01200000h, 008d0000h
 	pushw 0x8
 	pushw 0xE3
 	pushw 0x3E8
-	.byte 0x40, 0x8d, 0x00, 0x00, 0x00
-	.byte 0x41, 0x00, 0x00, 0x20, 0x01
-	.byte 0x42, 0x00, 0x00, 0x8d, 0x00
+	ld xwa, 0x8D
+	ld xbc, 0x1200000
+	ld xde, 0x8D0000
 	call 0xFA4D80
 	; RegTitle 0008h, 00e3h, 03f4h, 00000090h, 01480013h, 00900000h
 	pushw 0x8
 	pushw 0xE3
 	pushw 0x3F4
-	.byte 0x40, 0x90, 0x00, 0x00, 0x00
-	.byte 0x41, 0x13, 0x00, 0x48, 0x01
-	.byte 0x42, 0x00, 0x00, 0x90, 0x00
+	ld xwa, 0x90
+	ld xbc, 0x1480013
+	ld xde, 0x900000
 	call 0xFA4D80
 	; RegTitle 0008h, 00e3h, 0400h, 00000091h, 01480017h, 00910000h
 	pushw 0x8
 	pushw 0xE3
 	pushw 0x400
-	.byte 0x40, 0x91, 0x00, 0x00, 0x00
-	.byte 0x41, 0x17, 0x00, 0x48, 0x01
-	.byte 0x42, 0x00, 0x00, 0x91, 0x00
+	ld xwa, 0x91
+	ld xbc, 0x1480017
+	ld xde, 0x910000
 	call 0xFA4D80
 	; RegTitle 0008h, 00e3h, 040ch, 00000093h, 01200000h, 00930000h
 	pushw 0x8
 	pushw 0xE3
 	pushw 0x40C
-	.byte 0x40, 0x93, 0x00, 0x00, 0x00
-	.byte 0x41, 0x00, 0x00, 0x20, 0x01
-	.byte 0x42, 0x00, 0x00, 0x93, 0x00
+	ld xwa, 0x93
+	ld xbc, 0x1200000
+	ld xde, 0x930000
 	call 0xFA4D80
 	; RegTitle 0008h, 00e3h, 0418h, 00000094h, 0148001dh, 00940000h
 	pushw 0x8
 	pushw 0xE3
 	pushw 0x418
-	.byte 0x40, 0x94, 0x00, 0x00, 0x00
-	.byte 0x41, 0x1d, 0x00, 0x48, 0x01
-	.byte 0x42, 0x00, 0x00, 0x94, 0x00
+	ld xwa, 0x94
+	ld xbc, 0x148001D
+	ld xde, 0x940000
 	call 0xFA4D80
 	; RegTitle 0008h, 00e3h, 0426h, 00000095h, 0148001ch, 00950000h
 	pushw 0x8
 	pushw 0xE3
 	pushw 0x426
-	.byte 0x40, 0x95, 0x00, 0x00, 0x00
-	.byte 0x41, 0x1c, 0x00, 0x48, 0x01
-	.byte 0x42, 0x00, 0x00, 0x95, 0x00
+	ld xwa, 0x95
+	ld xbc, 0x148001C
+	ld xde, 0x950000
 	call 0xFA4D80
 	; RegTitle 0008h, 00e3h, 0434h, 00000096h, 01480024h, 00960000h
 	pushw 0x8
 	pushw 0xE3
 	pushw 0x434
-	.byte 0x40, 0x96, 0x00, 0x00, 0x00
-	.byte 0x41, 0x24, 0x00, 0x48, 0x01
-	.byte 0x42, 0x00, 0x00, 0x96, 0x00
+	ld xwa, 0x96
+	ld xbc, 0x1480024
+	ld xde, 0x960000
 	call 0xFA4D80
 	; RegTitle 0008h, 00e3h, 0442h, 00000097h, 0148001bh, 00970000h
 	pushw 0x8
 	pushw 0xE3
 	pushw 0x442
-	.byte 0x40, 0x97, 0x00, 0x00, 0x00
-	.byte 0x41, 0x1b, 0x00, 0x48, 0x01
-	.byte 0x42, 0x00, 0x00, 0x97, 0x00
+	ld xwa, 0x97
+	ld xbc, 0x148001B
+	ld xde, 0x970000
 	call 0xFA4D80
 	; RegTitle 0008h, 00e3h, 044eh, 00000098h, 0148001ah, 00980000h
 	pushw 0x8
 	pushw 0xE3
 	pushw 0x44E
-	.byte 0x40, 0x98, 0x00, 0x00, 0x00
-	.byte 0x41, 0x1a, 0x00, 0x48, 0x01
-	.byte 0x42, 0x00, 0x00, 0x98, 0x00
+	ld xwa, 0x98
+	ld xbc, 0x148001A
+	ld xde, 0x980000
 	call 0xFA4D80
 	; RegTitle 0008h, 00e3h, 045ah, 00000099h, 01480025h, 00990000h
 	pushw 0x8
 	pushw 0xE3
 	pushw 0x45A
-	.byte 0x40, 0x99, 0x00, 0x00, 0x00
-	.byte 0x41, 0x25, 0x00, 0x48, 0x01
-	.byte 0x42, 0x00, 0x00, 0x99, 0x00
+	ld xwa, 0x99
+	ld xbc, 0x1480025
+	ld xde, 0x990000
 	call 0xFA4D80
 	; RegTitle 0008h, 00e3h, 0468h, 0000009ah, 01480016h, 009a0000h
 	pushw 0x8
 	pushw 0xE3
 	pushw 0x468
-	.byte 0x40, 0x9a, 0x00, 0x00, 0x00
-	.byte 0x41, 0x16, 0x00, 0x48, 0x01
-	.byte 0x42, 0x00, 0x00, 0x9a, 0x00
+	ld xwa, 0x9A
+	ld xbc, 0x1480016
+	ld xde, 0x9A0000
 	call 0xFA4D80
 	; RegTitle 0008h, 00e3h, 0474h, 0000009bh, 01480018h, 009b0000h
 	pushw 0x8
 	pushw 0xE3
 	pushw 0x474
-	.byte 0x40, 0x9b, 0x00, 0x00, 0x00
-	.byte 0x41, 0x18, 0x00, 0x48, 0x01
-	.byte 0x42, 0x00, 0x00, 0x9b, 0x00
+	ld xwa, 0x9B
+	ld xbc, 0x1480018
+	ld xde, 0x9B0000
 	call 0xFA4D80
 	; RegTitle 0008h, 00e3h, 0480h, 0000009ch, 0148000dh, 009c0000h
 	pushw 0x8
 	pushw 0xE3
 	pushw 0x480
-	.byte 0x40, 0x9c, 0x00, 0x00, 0x00
-	.byte 0x41, 0x0d, 0x00, 0x48, 0x01
-	.byte 0x42, 0x00, 0x00, 0x9c, 0x00
+	ld xwa, 0x9C
+	ld xbc, 0x148000D
+	ld xde, 0x9C0000
 	call 0xFA4D80
 	; RegTitle 0008h, 00e3h, 048ah, 0000009dh, 01480011h, 009d0000h
 	pushw 0x8
 	pushw 0xE3
 	pushw 0x48A
-	.byte 0x40, 0x9d, 0x00, 0x00, 0x00
-	.byte 0x41, 0x11, 0x00, 0x48, 0x01
-	.byte 0x42, 0x00, 0x00, 0x9d, 0x00
+	ld xwa, 0x9D
+	ld xbc, 0x1480011
+	ld xde, 0x9D0000
 	call 0xFA4D80
 	; RegTitle 0008h, 00e3h, 0494h, 0000009eh, 01480010h, 009e0000h
 	pushw 0x8
 	pushw 0xE3
 	pushw 0x494
-	.byte 0x40, 0x9e, 0x00, 0x00, 0x00
-	.byte 0x41, 0x10, 0x00, 0x48, 0x01
-	.byte 0x42, 0x00, 0x00, 0x9e, 0x00
+	ld xwa, 0x9E
+	ld xbc, 0x1480010
+	ld xde, 0x9E0000
 	call 0xFA4D80
 	; RegTitle 0008h, 00e3h, 04a2h, 0000009fh, 01480012h, 009f0000h
 	pushw 0x8
 	pushw 0xE3
 	pushw 0x4A2
-	.byte 0x40, 0x9f, 0x00, 0x00, 0x00
-	.byte 0x41, 0x12, 0x00, 0x48, 0x01
-	.byte 0x42, 0x00, 0x00, 0x9f, 0x00
+	ld xwa, 0x9F
+	ld xbc, 0x1480012
+	ld xde, 0x9F0000
 	call 0xFA4D80
 	; RegTitle 0008h, 00e3h, 04b0h, 000000a0h, 01480019h, 00a00000h
 	pushw 0x8
 	pushw 0xE3
 	pushw 0x4B0
-	.byte 0x40, 0xa0, 0x00, 0x00, 0x00
-	.byte 0x41, 0x19, 0x00, 0x48, 0x01
-	.byte 0x42, 0x00, 0x00, 0xa0, 0x00
+	ld xwa, 0xA0
+	ld xbc, 0x1480019
+	ld xde, 0xA00000
 	call 0xFA4D80
 	; RegTitle 0008h, 00e3h, 04bch, 000000a1h, 0148000fh, 00a10000h
 	pushw 0x8
 	pushw 0xE3
 	pushw 0x4BC
-	.byte 0x40, 0xa1, 0x00, 0x00, 0x00
-	.byte 0x41, 0x0f, 0x00, 0x48, 0x01
-	.byte 0x42, 0x00, 0x00, 0xa1, 0x00
+	ld xwa, 0xA1
+	ld xbc, 0x148000F
+	ld xde, 0xA10000
 	call 0xFA4D80
 	; RegTitle 0008h, 00e3h, 04c6h, 000000a2h, 01480014h, 00a20000h
 	pushw 0x8
 	pushw 0xE3
 	pushw 0x4C6
-	.byte 0x40, 0xa2, 0x00, 0x00, 0x00
-	.byte 0x41, 0x14, 0x00, 0x48, 0x01
-	.byte 0x42, 0x00, 0x00, 0xa2, 0x00
+	ld xwa, 0xA2
+	ld xbc, 0x1480014
+	ld xde, 0xA20000
 	call 0xFA4D80
 	; RegTitle 0008h, 00e3h, 04d0h, 000000a3h, 0148000eh, 00a30000h
 	pushw 0x8
 	pushw 0xE3
 	pushw 0x4D0
-	.byte 0x40, 0xa3, 0x00, 0x00, 0x00
-	.byte 0x41, 0x0e, 0x00, 0x48, 0x01
-	.byte 0x42, 0x00, 0x00, 0xa3, 0x00
+	ld xwa, 0xA3
+	ld xbc, 0x148000E
+	ld xde, 0xA30000
 	call 0xFA4D80
 	; RegTitle 0008h, 00e3h, 04dah, 000000a4h, 01480015h, 00a40000h
 	pushw 0x8
 	pushw 0xE3
 	pushw 0x4DA
-	.byte 0x40, 0xa4, 0x00, 0x00, 0x00
-	.byte 0x41, 0x15, 0x00, 0x48, 0x01
-	.byte 0x42, 0x00, 0x00, 0xa4, 0x00
+	ld xwa, 0xA4
+	ld xbc, 0x1480015
+	ld xde, 0xA40000
 	call 0xFA4D80
 	; RegTitle 0008h, 00e3h, 04e4h, 000000a8h, 01480017h, 00910000h
 	pushw 0x8
 	pushw 0xE3
 	pushw 0x4E4
-	.byte 0x40, 0xa8, 0x00, 0x00, 0x00
-	.byte 0x41, 0x17, 0x00, 0x48, 0x01
-	.byte 0x42, 0x00, 0x00, 0x91, 0x00
+	ld xwa, 0xA8
+	ld xbc, 0x1480017
+	ld xde, 0x910000
 	call 0xFA4D80
 	; RegTitle 0008h, 00e3h, 04f0h, 000000aah, 01200000h, 008d0000h
 	pushw 0x8
 	pushw 0xE3
 	pushw 0x4F0
-	.byte 0x40, 0xaa, 0x00, 0x00, 0x00
-	.byte 0x41, 0x00, 0x00, 0x20, 0x01
-	.byte 0x42, 0x00, 0x00, 0x8d, 0x00
+	ld xwa, 0xAA
+	ld xbc, 0x1200000
+	ld xde, 0x8D0000
 	call 0xFA4D80
 	; RegTitle 0008h, 00e3h, 04fch, 000000abh, 01200000h, 00ab0000h
 	pushw 0x8
 	pushw 0xE3
 	pushw 0x4FC
-	.byte 0x40, 0xab, 0x00, 0x00, 0x00
-	.byte 0x41, 0x00, 0x00, 0x20, 0x01
-	.byte 0x42, 0x00, 0x00, 0xab, 0x00
+	ld xwa, 0xAB
+	ld xbc, 0x1200000
+	ld xde, 0xAB0000
 	call 0xFA4D80
 	; RegTitle 0008h, 00e3h, 0508h, 000000d6h, 0148002ah, 00d60000h
 	pushw 0x8
 	pushw 0xE3
 	pushw 0x508
-	.byte 0x40, 0xd6, 0x00, 0x00, 0x00
-	.byte 0x41, 0x2a, 0x00, 0x48, 0x01
-	.byte 0x42, 0x00, 0x00, 0xd6, 0x00
+	ld xwa, 0xD6
+	ld xbc, 0x148002A
+	ld xde, 0xD60000
 	call 0xFA4D80
 	; RegTitle 0008h, 00e3h, 0512h, 000000e7h, 01480027h, 00e70000h
 	pushw 0x8
 	pushw 0xE3
 	pushw 0x512
-	.byte 0x40, 0xe7, 0x00, 0x00, 0x00
-	.byte 0x41, 0x27, 0x00, 0x48, 0x01
-	.byte 0x42, 0x00, 0x00, 0xe7, 0x00
+	ld xwa, 0xE7
+	ld xbc, 0x1480027
+	ld xde, 0xE70000
 	call 0xFA4D80
 
 	lda xsp, (xsp + 14)
@@ -277489,7 +277489,7 @@ InitializeEast:
 
 	; RegObjTable 01600004h, 0FA44E2h, 0E55CD4h,	0E559EAh, 0163h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x04, 0x00, 0x60, 0x01
+	ld xwa, 0x1600004
 	ld (xbc), xwa
 	ldada_24 xwa, 16401634
 	ld (xbc + 4), xwa
@@ -277501,7 +277501,7 @@ InitializeEast:
 	call 0xFA42FB
 	; RegObjTable 0160000ch, 0FA58FBh, 0E55CDAh,	0E55CD6h, 01c3h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0c, 0x00, 0x60, 0x01
+	ld xwa, 0x160000C
 	ld (xbc), xwa
 	ldada_24 xwa, 16406779
 	ld (xbc + 4), xwa
@@ -277513,7 +277513,7 @@ InitializeEast:
 	call 0xFA42FB
 	; RegObjTable 0160000dh, 0FA5948h, 0E55DACh,	0E55CDCh, 01e3h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0d, 0x00, 0x60, 0x01
+	ld xwa, 0x160000D
 	ld (xbc), xwa
 	ldada_24 xwa, 16406856
 	ld (xbc + 4), xwa
@@ -277525,7 +277525,7 @@ InitializeEast:
 	call 0xFA42FB
 	; RegObjTabl 01600002h, 0FA496Ch, 003ch,		0E55210h, 0123h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x02, 0x00, 0x60, 0x01
+	ld xwa, 0x1600002
 	ld (xbc), xwa
 	ldada_24 xwa, 16402796
 	ld (xbc + 4), xwa
@@ -277536,7 +277536,7 @@ InitializeEast:
 	call 0xFA42FB
 	; RegObjTabl 01600002h, 0FA496Ch, 003ch,		0E55304h, 0423h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x02, 0x00, 0x60, 0x01
+	ld xwa, 0x1600002
 	ld (xbc), xwa
 	ldada_24 xwa, 16402796
 	ld (xbc + 4), xwa
@@ -277547,7 +277547,7 @@ InitializeEast:
 	call 0xFA42FB
 	; RegObjTabl 01600001h, 0FA48A9h, 0010h,		0E55DAEh, 0103h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x01, 0x00, 0x60, 0x01
+	ld xwa, 0x1600001
 	ld (xbc), xwa
 	ldada_24 xwa, 16402601
 	ld (xbc + 4), xwa
@@ -277558,7 +277558,7 @@ InitializeEast:
 	call 0xFA42FB
 	; RegObjTabl 01600001h, 0FA48A9h, 0010h,		0E55DF2h, 0403h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x01, 0x00, 0x60, 0x01
+	ld xwa, 0x1600001
 	ld (xbc), xwa
 	ldada_24 xwa, 16402601
 	ld (xbc + 4), xwa
@@ -277569,7 +277569,7 @@ InitializeEast:
 	call 0xFA42FB
 	; RegObjTabl 01600003h, 0FA4A18h, 0007h,		0E5AD8Ch, 0143h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x03, 0x00, 0x60, 0x01
+	ld xwa, 0x1600003
 	ld (xbc), xwa
 	ldada_24 xwa, 16402968
 	ld (xbc + 4), xwa
@@ -277580,7 +277580,7 @@ InitializeEast:
 	call 0xFA42FB
 	; RegObjTabl 01600003h, 0FA4A18h, 0007h,		0E5ADACh, 0443h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x03, 0x00, 0x60, 0x01
+	ld xwa, 0x1600003
 	ld (xbc), xwa
 	ldada_24 xwa, 16402968
 	ld (xbc + 4), xwa
@@ -277591,7 +277591,7 @@ InitializeEast:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0004h,		0E59C5Ah, 0009h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -277602,7 +277602,7 @@ InitializeEast:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0004h,		0E5A122h, 0309h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -277613,7 +277613,7 @@ InitializeEast:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0003h,		0E59C6Eh, 000fh
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -277624,7 +277624,7 @@ InitializeEast:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0003h,		0E5A152h, 030fh
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -277635,7 +277635,7 @@ InitializeEast:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 000ch,		0E59C7Eh, 0018h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -277646,7 +277646,7 @@ InitializeEast:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 000ch,		0E5A17Ah, 0318h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -277657,7 +277657,7 @@ InitializeEast:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 000ch,		0E59CB2h, 0019h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -277668,7 +277668,7 @@ InitializeEast:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 000ch,		0E5A1D4h, 0319h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -277679,7 +277679,7 @@ InitializeEast:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 000ch,		0E59CE6h, 001ah
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -277690,7 +277690,7 @@ InitializeEast:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 000ch,		0E5A23Ah, 031ah
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -277701,7 +277701,7 @@ InitializeEast:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0014h,		0E59D1Ah, 0050h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -277712,7 +277712,7 @@ InitializeEast:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0014h,		0E5A2A8h, 0350h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -277723,7 +277723,7 @@ InitializeEast:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0007h,		0E59D6Eh, 0051h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -277734,7 +277734,7 @@ InitializeEast:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0007h,		0E5A350h, 0351h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -277745,7 +277745,7 @@ InitializeEast:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0008h,		0E59D8Eh, 0052h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -277756,7 +277756,7 @@ InitializeEast:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0008h,		0E5A39Eh, 0352h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -277767,7 +277767,7 @@ InitializeEast:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0006h,		0E59DB2h, 0053h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -277778,7 +277778,7 @@ InitializeEast:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0006h,		0E5A3F2h, 0353h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -277789,7 +277789,7 @@ InitializeEast:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0005h,		0E59DCEh, 0054h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -277800,7 +277800,7 @@ InitializeEast:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0005h,		0E5A448h, 0354h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -277811,7 +277811,7 @@ InitializeEast:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0005h,		0E59DE6h, 0055h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -277822,7 +277822,7 @@ InitializeEast:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0005h,		0E5A488h, 0355h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -277833,7 +277833,7 @@ InitializeEast:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0043h,		0E59DFEh, 0056h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -277844,7 +277844,7 @@ InitializeEast:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0043h,		0E5A4C8h, 0356h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -277855,7 +277855,7 @@ InitializeEast:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 001ch,		0E59F0Eh, 0057h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -277866,7 +277866,7 @@ InitializeEast:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 001ch,		0E5A77Ch, 0357h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -277877,7 +277877,7 @@ InitializeEast:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0015h,		0E59F82h, 0058h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -277888,7 +277888,7 @@ InitializeEast:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0015h,		0E5A906h, 0358h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -277899,7 +277899,7 @@ InitializeEast:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0006h,		0E59FDAh, 0059h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -277910,7 +277910,7 @@ InitializeEast:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0006h,		0E5A9AEh, 0359h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -277921,7 +277921,7 @@ InitializeEast:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0006h,		0E59FF6h, 005ah
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -277932,7 +277932,7 @@ InitializeEast:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0006h,		0E5A9F0h, 035ah
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -277943,7 +277943,7 @@ InitializeEast:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0011h,		0E5A012h, 005bh
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -277954,7 +277954,7 @@ InitializeEast:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0011h,		0E5AA30h, 035bh
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -277965,7 +277965,7 @@ InitializeEast:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0008h,		0E5A05Ah, 005ch
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -277976,7 +277976,7 @@ InitializeEast:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0008h,		0E5AAC6h, 035ch
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -277987,7 +277987,7 @@ InitializeEast:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0018h,		0E5A07Eh, 00d7h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -277998,7 +277998,7 @@ InitializeEast:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0018h,		0E5AB12h, 03d7h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -278009,7 +278009,7 @@ InitializeEast:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0008h,		0E5A0E2h, 00d8h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -278020,7 +278020,7 @@ InitializeEast:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0008h,		0E5AC06h, 03d8h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -278031,7 +278031,7 @@ InitializeEast:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0006h,		0E5A106h, 00ech
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -278042,7 +278042,7 @@ InitializeEast:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0006h,		0E5AC5Ah, 03ech
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -278057,177 +278057,177 @@ InitializeEast:
 	pushw 0xE5
 	pushw 0xAC90
 	lds32 xwa, 5
-	.byte 0x41, 0x00, 0x00, 0x20, 0x01
-	.byte 0x42, 0x50, 0x00, 0xa0, 0x01
+	ld xbc, 0x1200000
+	ld xde, 0x1A00050
 	call 0xFA4D2B
 
 	; RegTitle 0003h, 00e5h, 0ac98h, 00000009h, 01200000h, 00090000h
 	pushw 0x3
 	pushw 0xE5
 	pushw 0xAC98
-	.byte 0x40, 0x09, 0x00, 0x00, 0x00
-	.byte 0x41, 0x00, 0x00, 0x20, 0x01
-	.byte 0x42, 0x00, 0x00, 0x09, 0x00
+	ld xwa, 0x9
+	ld xbc, 0x1200000
+	ld xde, 0x90000
 	call 0xFA4D80
 	; RegTitle 0003h, 00e5h, 0aca6h, 0000000fh, 01200000h, 000f0000h
 	pushw 0x3
 	pushw 0xE5
 	pushw 0xACA6
-	.byte 0x40, 0x0f, 0x00, 0x00, 0x00
-	.byte 0x41, 0x00, 0x00, 0x20, 0x01
-	.byte 0x42, 0x00, 0x00, 0x0f, 0x00
+	ld xwa, 0xF
+	ld xbc, 0x1200000
+	ld xde, 0xF0000
 	call 0xFA4D80
 	; RegTitle 0003h, 00e5h, 0acb0h, 00000018h, 01200000h, 00180000h
 	pushw 0x3
 	pushw 0xE5
 	pushw 0xACB0
-	.byte 0x40, 0x18, 0x00, 0x00, 0x00
-	.byte 0x41, 0x00, 0x00, 0x20, 0x01
-	.byte 0x42, 0x00, 0x00, 0x18, 0x00
+	ld xwa, 0x18
+	ld xbc, 0x1200000
+	ld xde, 0x180000
 	call 0xFA4D80
 	; RegTitle 0003h, 00e5h, 0acbeh, 00000019h, 01200000h, 00190000h
 	pushw 0x3
 	pushw 0xE5
 	pushw 0xACBE
-	.byte 0x40, 0x19, 0x00, 0x00, 0x00
-	.byte 0x41, 0x00, 0x00, 0x20, 0x01
-	.byte 0x42, 0x00, 0x00, 0x19, 0x00
+	ld xwa, 0x19
+	ld xbc, 0x1200000
+	ld xde, 0x190000
 	call 0xFA4D80
 	; RegTitle 0003h, 00e5h, 0accah, 0000001ah, 01200000h, 001a0000h
 	pushw 0x3
 	pushw 0xE5
 	pushw 0xACCA
-	.byte 0x40, 0x1a, 0x00, 0x00, 0x00
-	.byte 0x41, 0x00, 0x00, 0x20, 0x01
-	.byte 0x42, 0x00, 0x00, 0x1a, 0x00
+	ld xwa, 0x1A
+	ld xbc, 0x1200000
+	ld xde, 0x1A0000
 	call 0xFA4D80
 	; RegTitle 0003h, 00e5h, 0acdah, 00000050h, 01200000h, 00500000h
 	pushw 0x3
 	pushw 0xE5
 	pushw 0xACDA
-	.byte 0x40, 0x50, 0x00, 0x00, 0x00
-	.byte 0x41, 0x00, 0x00, 0x20, 0x01
-	.byte 0x42, 0x00, 0x00, 0x50, 0x00
+	ld xwa, 0x50
+	ld xbc, 0x1200000
+	ld xde, 0x500000
 	call 0xFA4D80
 	; RegTitle 0003h, 00e5h, 0ace4h, 00000051h, 01200000h, 00510000h
 	pushw 0x3
 	pushw 0xE5
 	pushw 0xACE4
-	.byte 0x40, 0x51, 0x00, 0x00, 0x00
-	.byte 0x41, 0x00, 0x00, 0x20, 0x01
-	.byte 0x42, 0x00, 0x00, 0x51, 0x00
+	ld xwa, 0x51
+	ld xbc, 0x1200000
+	ld xde, 0x510000
 	call 0xFA4D80
 	; RegTitle 0003h, 00e5h, 0aceeh, 00000052h, 01200000h, 00520000h
 	pushw 0x3
 	pushw 0xE5
 	pushw 0xACEE
-	.byte 0x40, 0x52, 0x00, 0x00, 0x00
-	.byte 0x41, 0x00, 0x00, 0x20, 0x01
-	.byte 0x42, 0x00, 0x00, 0x52, 0x00
+	ld xwa, 0x52
+	ld xbc, 0x1200000
+	ld xde, 0x520000
 	call 0xFA4D80
 	; RegTitle 0003h, 00e5h, 0acf8h, 00000053h, 01200000h, 00530000h
 	pushw 0x3
 	pushw 0xE5
 	pushw 0xACF8
-	.byte 0x40, 0x53, 0x00, 0x00, 0x00
-	.byte 0x41, 0x00, 0x00, 0x20, 0x01
-	.byte 0x42, 0x00, 0x00, 0x53, 0x00
+	ld xwa, 0x53
+	ld xbc, 0x1200000
+	ld xde, 0x530000
 	call 0xFA4D80
 	; RegTitle 0003h, 00e5h, 0ad02h, 00000054h, 01200000h, 00540000h
 	pushw 0x3
 	pushw 0xE5
 	pushw 0xAD02
-	.byte 0x40, 0x54, 0x00, 0x00, 0x00
-	.byte 0x41, 0x00, 0x00, 0x20, 0x01
-	.byte 0x42, 0x00, 0x00, 0x54, 0x00
+	ld xwa, 0x54
+	ld xbc, 0x1200000
+	ld xde, 0x540000
 	call 0xFA4D80
 	; RegTitle 0003h, 00e5h, 0ad0ch, 00000055h, 01200000h, 00550000h
 	pushw 0x3
 	pushw 0xE5
 	pushw 0xAD0C
-	.byte 0x40, 0x55, 0x00, 0x00, 0x00
-	.byte 0x41, 0x00, 0x00, 0x20, 0x01
-	.byte 0x42, 0x00, 0x00, 0x55, 0x00
+	ld xwa, 0x55
+	ld xbc, 0x1200000
+	ld xde, 0x550000
 	call 0xFA4D80
 	; RegTitle 0003h, 00e5h, 0ad18h, 00000056h, 01200000h, 00560000h
 	pushw 0x3
 	pushw 0xE5
 	pushw 0xAD18
-	.byte 0x40, 0x56, 0x00, 0x00, 0x00
-	.byte 0x41, 0x00, 0x00, 0x20, 0x01
-	.byte 0x42, 0x00, 0x00, 0x56, 0x00
+	ld xwa, 0x56
+	ld xbc, 0x1200000
+	ld xde, 0x560000
 	call 0xFA4D80
 	; RegTitle 0003h, 00e5h, 0ad24h, 00000057h, 01200000h, 00570000h
 	pushw 0x3
 	pushw 0xE5
 	pushw 0xAD24
-	.byte 0x40, 0x57, 0x00, 0x00, 0x00
-	.byte 0x41, 0x00, 0x00, 0x20, 0x01
-	.byte 0x42, 0x00, 0x00, 0x57, 0x00
+	ld xwa, 0x57
+	ld xbc, 0x1200000
+	ld xde, 0x570000
 	call 0xFA4D80
 	; RegTitle 0003h, 00e5h, 0ad2eh, 00000058h, 01200000h, 00580000h
 	pushw 0x3
 	pushw 0xE5
 	pushw 0xAD2E
-	.byte 0x40, 0x58, 0x00, 0x00, 0x00
-	.byte 0x41, 0x00, 0x00, 0x20, 0x01
-	.byte 0x42, 0x00, 0x00, 0x58, 0x00
+	ld xwa, 0x58
+	ld xbc, 0x1200000
+	ld xde, 0x580000
 	call 0xFA4D80
 	; RegTitle 0003h, 00e5h, 0ad3ah, 00000059h, 01200000h, 00590000h
 	pushw 0x3
 	pushw 0xE5
 	pushw 0xAD3A
-	.byte 0x40, 0x59, 0x00, 0x00, 0x00
-	.byte 0x41, 0x00, 0x00, 0x20, 0x01
-	.byte 0x42, 0x00, 0x00, 0x59, 0x00
+	ld xwa, 0x59
+	ld xbc, 0x1200000
+	ld xde, 0x590000
 	call 0xFA4D80
 	; RegTitle 0003h, 00e5h, 0ad46h, 0000005ah, 01200000h, 005a0000h
 	pushw 0x3
 	pushw 0xE5
 	pushw 0xAD46
-	.byte 0x40, 0x5a, 0x00, 0x00, 0x00
-	.byte 0x41, 0x00, 0x00, 0x20, 0x01
-	.byte 0x42, 0x00, 0x00, 0x5a, 0x00
+	ld xwa, 0x5A
+	ld xbc, 0x1200000
+	ld xde, 0x5A0000
 	call 0xFA4D80
 	; RegTitle 0003h, 00e5h, 0ad50h, 0000005bh, 01200000h, 005b0000h
 	pushw 0x3
 	pushw 0xE5
 	pushw 0xAD50
-	.byte 0x40, 0x5b, 0x00, 0x00, 0x00
-	.byte 0x41, 0x00, 0x00, 0x20, 0x01
-	.byte 0x42, 0x00, 0x00, 0x5b, 0x00
+	ld xwa, 0x5B
+	ld xbc, 0x1200000
+	ld xde, 0x5B0000
 	call 0xFA4D80
 	; RegTitle 0003h, 00e5h, 0ad5ch, 0000005ch, 01200000h, 005c0000h
 	pushw 0x3
 	pushw 0xE5
 	pushw 0xAD5C
-	.byte 0x40, 0x5c, 0x00, 0x00, 0x00
-	.byte 0x41, 0x00, 0x00, 0x20, 0x01
-	.byte 0x42, 0x00, 0x00, 0x5c, 0x00
+	ld xwa, 0x5C
+	ld xbc, 0x1200000
+	ld xde, 0x5C0000
 	call 0xFA4D80
 	; RegTitle 0003h, 00e5h, 0ad68h, 000000d7h, 01200000h, 00d70000h
 	pushw 0x3
 	pushw 0xE5
 	pushw 0xAD68
-	.byte 0x40, 0xd7, 0x00, 0x00, 0x00
-	.byte 0x41, 0x00, 0x00, 0x20, 0x01
-	.byte 0x42, 0x00, 0x00, 0xd7, 0x00
+	ld xwa, 0xD7
+	ld xbc, 0x1200000
+	ld xde, 0xD70000
 	call 0xFA4D80
 	; RegTitle 0003h, 00e5h, 0ad74h, 000000d8h, 01200000h, 00d80000h
 	pushw 0x3
 	pushw 0xE5
 	pushw 0xAD74
-	.byte 0x40, 0xd8, 0x00, 0x00, 0x00
-	.byte 0x41, 0x00, 0x00, 0x20, 0x01
-	.byte 0x42, 0x00, 0x00, 0xd8, 0x00
+	ld xwa, 0xD8
+	ld xbc, 0x1200000
+	ld xde, 0xD80000
 	call 0xFA4D80
 	; RegTitle 0003h, 00e5h, 0ad80h, 000000ech, 01200000h, 00ec0000h
 	pushw 0x3
 	pushw 0xE5
 	pushw 0xAD80
-	.byte 0x40, 0xec, 0x00, 0x00, 0x00
-	.byte 0x41, 0x00, 0x00, 0x20, 0x01
-	.byte 0x42, 0x00, 0x00, 0xec, 0x00
+	ld xwa, 0xEC
+	ld xbc, 0x1200000
+	ld xde, 0xEC0000
 	call 0xFA4D80
 
 	lda xsp, (xsp + 14)
@@ -286923,7 +286923,7 @@ InitializeMurai:
 
 	; RegObjTable 01600004h, 0FA44E2h, 0E812E2h,	0E80CF6h, 0161h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x04, 0x00, 0x60, 0x01
+	ld xwa, 0x1600004
 	ld (xbc), xwa
 	ldada_24 xwa, 16401634
 	ld (xbc + 4), xwa
@@ -286935,7 +286935,7 @@ InitializeMurai:
 	call 0xFA42FB
 	; RegObjTable 0160000ch, 0FA58FBh, 0E813A4h,	0E812E4h, 01c1h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0c, 0x00, 0x60, 0x01
+	ld xwa, 0x160000C
 	ld (xbc), xwa
 	ldada_24 xwa, 16406779
 	ld (xbc + 4), xwa
@@ -286947,7 +286947,7 @@ InitializeMurai:
 	call 0xFA42FB
 	; RegObjTable 0160000dh, 0FA5948h, 0E814F2h,	0E813A6h, 01e1h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0d, 0x00, 0x60, 0x01
+	ld xwa, 0x160000D
 	ld (xbc), xwa
 	ldada_24 xwa, 16406856
 	ld (xbc + 4), xwa
@@ -286959,7 +286959,7 @@ InitializeMurai:
 	call 0xFA42FB
 	; RegObjTabl 01600002h, 0FA496Ch, 002ch,		0E8070Ah, 0121h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x02, 0x00, 0x60, 0x01
+	ld xwa, 0x1600002
 	ld (xbc), xwa
 	ldada_24 xwa, 16402796
 	ld (xbc + 4), xwa
@@ -286970,7 +286970,7 @@ InitializeMurai:
 	call 0xFA42FB
 	; RegObjTabl 01600002h, 0FA496Ch, 002ch,		0E807BEh, 0421h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x02, 0x00, 0x60, 0x01
+	ld xwa, 0x1600002
 	ld (xbc), xwa
 	ldada_24 xwa, 16402796
 	ld (xbc + 4), xwa
@@ -286981,7 +286981,7 @@ InitializeMurai:
 	call 0xFA42FB
 	; RegObjTabl 01600001h, 0FA48A9h, 0025h,		0E814F4h, 0101h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x01, 0x00, 0x60, 0x01
+	ld xwa, 0x1600001
 	ld (xbc), xwa
 	ldada_24 xwa, 16402601
 	ld (xbc + 4), xwa
@@ -286992,7 +286992,7 @@ InitializeMurai:
 	call 0xFA42FB
 	; RegObjTabl 01600001h, 0FA48A9h, 0025h,		0E8158Ch, 0401h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x01, 0x00, 0x60, 0x01
+	ld xwa, 0x1600001
 	ld (xbc), xwa
 	ldada_24 xwa, 16402601
 	ld (xbc + 4), xwa
@@ -287003,7 +287003,7 @@ InitializeMurai:
 	call 0xFA42FB
 	; RegObjTabl 01600003h, 0FA4A18h, 0002h,		0E86638h, 0141h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x03, 0x00, 0x60, 0x01
+	ld xwa, 0x1600003
 	ld (xbc), xwa
 	ldada_24 xwa, 16402968
 	ld (xbc + 4), xwa
@@ -287014,7 +287014,7 @@ InitializeMurai:
 	call 0xFA42FB
 	; RegObjTabl 01600003h, 0FA4A18h, 0002h,		0E86644h, 0441h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x03, 0x00, 0x60, 0x01
+	ld xwa, 0x1600003
 	ld (xbc), xwa
 	ldada_24 xwa, 16402968
 	ld (xbc + 4), xwa
@@ -287025,7 +287025,7 @@ InitializeMurai:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0014h,		0E85470h, 0002h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -287036,7 +287036,7 @@ InitializeMurai:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0014h,		0E859F4h, 0302h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -287047,7 +287047,7 @@ InitializeMurai:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0054h,		0E854C4h, 0003h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -287058,7 +287058,7 @@ InitializeMurai:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0054h,		0E85A8Eh, 0303h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -287069,7 +287069,7 @@ InitializeMurai:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0004h,		0E85618h, 0004h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -287080,7 +287080,7 @@ InitializeMurai:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0004h,		0E85CF0h, 0304h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -287091,7 +287091,7 @@ InitializeMurai:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0036h,		0E8562Ch, 0005h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -287102,7 +287102,7 @@ InitializeMurai:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0036h,		0E85D14h, 0305h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -287113,7 +287113,7 @@ InitializeMurai:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0003h,		0E85708h, 0007h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -287124,7 +287124,7 @@ InitializeMurai:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0003h,		0E85F0Ah, 0307h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -287135,7 +287135,7 @@ InitializeMurai:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0004h,		0E85718h, 0008h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -287146,7 +287146,7 @@ InitializeMurai:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0004h,		0E85F2Ah, 0308h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -287157,7 +287157,7 @@ InitializeMurai:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 001dh,		0E8572Ch, 000dh
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -287168,7 +287168,7 @@ InitializeMurai:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 001dh,		0E85F4Eh, 030dh
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -287179,7 +287179,7 @@ InitializeMurai:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0004h,		0E857A4h, 00a5h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -287190,7 +287190,7 @@ InitializeMurai:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0004h,		0E8608Eh, 03a5h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -287201,7 +287201,7 @@ InitializeMurai:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 000fh,		0E857B8h, 00e4h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -287212,7 +287212,7 @@ InitializeMurai:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 000fh,		0E860B2h, 03e4h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -287223,7 +287223,7 @@ InitializeMurai:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 002ch,		0E857F8h, 00eah
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -287234,7 +287234,7 @@ InitializeMurai:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 002ch,		0E8617Eh, 03eah
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -287245,7 +287245,7 @@ InitializeMurai:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0025h,		0E858ACh, 00ebh
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -287256,7 +287256,7 @@ InitializeMurai:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0025h,		0E862F2h, 03ebh
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -287267,7 +287267,7 @@ InitializeMurai:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0018h,		0E85944h, 00eeh
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -287278,7 +287278,7 @@ InitializeMurai:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0018h,		0E863FEh, 03eeh
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -287289,7 +287289,7 @@ InitializeMurai:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 000bh,		0E859A8h, 00efh
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -287300,7 +287300,7 @@ InitializeMurai:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 000bh,		0E864D0h, 03efh
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -287311,7 +287311,7 @@ InitializeMurai:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0006h,		0E859D8h, 00f0h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -287322,7 +287322,7 @@ InitializeMurai:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0006h,		0E86534h, 03f0h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -287337,8 +287337,8 @@ InitializeMurai:
 	pushw 0xE8
 	pushw 0x658A
 	lds32 xwa, 2
-	.byte 0x41, 0x00, 0x00, 0x20, 0x01
-	.byte 0x42, 0x02, 0x00, 0xa0, 0x01
+	ld xbc, 0x1200000
+	ld xde, 0x1A00002
 	call 0xFA4D2B
 
 	; RegTitle 0001h, 00e8h, 6594h, 00000002h, 01200000h, 00020000h
@@ -287346,112 +287346,112 @@ InitializeMurai:
 	pushw 0xE8
 	pushw 0x6594
 	lds32 xwa, 2
-	.byte 0x41, 0x00, 0x00, 0x20, 0x01
-	.byte 0x42, 0x00, 0x00, 0x02, 0x00
+	ld xbc, 0x1200000
+	ld xde, 0x20000
 	call 0xFA4D80
 	; RegTitle 0001h, 00e8h, 659eh, 00000003h, 01200000h, 00030000h
 	pushw 0x1
 	pushw 0xE8
 	pushw 0x659E
 	lds32 xwa, 3
-	.byte 0x41, 0x00, 0x00, 0x20, 0x01
-	.byte 0x42, 0x00, 0x00, 0x03, 0x00
+	ld xbc, 0x1200000
+	ld xde, 0x30000
 	call 0xFA4D80
 	; RegTitle 0001h, 00e8h, 65a8h, 00000004h, 01200000h, 00040000h
 	pushw 0x1
 	pushw 0xE8
 	pushw 0x65A8
 	lds32 xwa, 4
-	.byte 0x41, 0x00, 0x00, 0x20, 0x01
-	.byte 0x42, 0x00, 0x00, 0x04, 0x00
+	ld xbc, 0x1200000
+	ld xde, 0x40000
 	call 0xFA4D80
 	; RegTitle 0001h, 00e8h, 65b4h, 00000005h, 01200000h, 00050000h
 	pushw 0x1
 	pushw 0xE8
 	pushw 0x65B4
 	lds32 xwa, 5
-	.byte 0x41, 0x00, 0x00, 0x20, 0x01
-	.byte 0x42, 0x00, 0x00, 0x05, 0x00
+	ld xbc, 0x1200000
+	ld xde, 0x50000
 	call 0xFA4D80
 	; RegTitle 0001h, 00e8h, 65c0h, 00000007h, 01200000h, 00070000h
 	pushw 0x1
 	pushw 0xE8
 	pushw 0x65C0
 	lds32 xwa, 7
-	.byte 0x41, 0x00, 0x00, 0x20, 0x01
-	.byte 0x42, 0x00, 0x00, 0x07, 0x00
+	ld xbc, 0x1200000
+	ld xde, 0x70000
 	call 0xFA4D80
 	; RegTitle 0001h, 00e8h, 65cch, 00000008h, 01200000h, 00080000h
 	pushw 0x1
 	pushw 0xE8
 	pushw 0x65CC
-	.byte 0x40, 0x08, 0x00, 0x00, 0x00
-	.byte 0x41, 0x00, 0x00, 0x20, 0x01
-	.byte 0x42, 0x00, 0x00, 0x08, 0x00
+	ld xwa, 0x8
+	ld xbc, 0x1200000
+	ld xde, 0x80000
 	call 0xFA4D80
 	; RegTitle 0001h, 00e8h, 65d8h, 0000000dh, 01200000h, 000d0000h
 	pushw 0x1
 	pushw 0xE8
 	pushw 0x65D8
-	.byte 0x40, 0x0d, 0x00, 0x00, 0x00
-	.byte 0x41, 0x00, 0x00, 0x20, 0x01
-	.byte 0x42, 0x00, 0x00, 0x0d, 0x00
+	ld xwa, 0xD
+	ld xbc, 0x1200000
+	ld xde, 0xD0000
 	call 0xFA4D80
 	; RegTitle 0001h, 00e8h, 65e2h, 000000a5h, 01200000h, 00a50000h
 	pushw 0x1
 	pushw 0xE8
 	pushw 0x65E2
-	.byte 0x40, 0xa5, 0x00, 0x00, 0x00
-	.byte 0x41, 0x00, 0x00, 0x20, 0x01
-	.byte 0x42, 0x00, 0x00, 0xa5, 0x00
+	ld xwa, 0xA5
+	ld xbc, 0x1200000
+	ld xde, 0xA50000
 	call 0xFA4D80
 	; RegTitle 0001h, 00e8h, 65eeh, 000000e4h, 01200000h, 00e40000h
 	pushw 0x1
 	pushw 0xE8
 	pushw 0x65EE
-	.byte 0x40, 0xe4, 0x00, 0x00, 0x00
-	.byte 0x41, 0x00, 0x00, 0x20, 0x01
-	.byte 0x42, 0x00, 0x00, 0xe4, 0x00
+	ld xwa, 0xE4
+	ld xbc, 0x1200000
+	ld xde, 0xE40000
 	call 0xFA4D80
 	; RegTitle 0001h, 00e8h, 65feh, 000000eah, 01200000h, 00ea0000h
 	pushw 0x1
 	pushw 0xE8
 	pushw 0x65FE
-	.byte 0x40, 0xea, 0x00, 0x00, 0x00
-	.byte 0x41, 0x00, 0x00, 0x20, 0x01
-	.byte 0x42, 0x00, 0x00, 0xea, 0x00
+	ld xwa, 0xEA
+	ld xbc, 0x1200000
+	ld xde, 0xEA0000
 	call 0xFA4D80
 	; RegTitle 0001h, 00e8h, 660ah, 000000ebh, 01200000h, 00eb0000h
 	pushw 0x1
 	pushw 0xE8
 	pushw 0x660A
-	.byte 0x40, 0xeb, 0x00, 0x00, 0x00
-	.byte 0x41, 0x00, 0x00, 0x20, 0x01
-	.byte 0x42, 0x00, 0x00, 0xeb, 0x00
+	ld xwa, 0xEB
+	ld xbc, 0x1200000
+	ld xde, 0xEB0000
 	call 0xFA4D80
 	; RegTitle 0001h, 00e8h, 6618h, 000000eeh, 01200000h, 00ee0000h
 	pushw 0x1
 	pushw 0xE8
 	pushw 0x6618
-	.byte 0x40, 0xee, 0x00, 0x00, 0x00
-	.byte 0x41, 0x00, 0x00, 0x20, 0x01
-	.byte 0x42, 0x00, 0x00, 0xee, 0x00
+	ld xwa, 0xEE
+	ld xbc, 0x1200000
+	ld xde, 0xEE0000
 	call 0xFA4D80
 	; RegTitle 0001h, 00e8h, 6622h, 000000efh, 01200000h, 00ef0000h
 	pushw 0x1
 	pushw 0xE8
 	pushw 0x6622
-	.byte 0x40, 0xef, 0x00, 0x00, 0x00
-	.byte 0x41, 0x00, 0x00, 0x20, 0x01
-	.byte 0x42, 0x00, 0x00, 0xef, 0x00
+	ld xwa, 0xEF
+	ld xbc, 0x1200000
+	ld xde, 0xEF0000
 	call 0xFA4D80
 	; RegTitle 0001h, 00e8h, 662ch, 000000f0h, 01200000h, 00f00000h
 	pushw 0x1
 	pushw 0xE8
 	pushw 0x662C
-	.byte 0x40, 0xf0, 0x00, 0x00, 0x00
-	.byte 0x41, 0x00, 0x00, 0x20, 0x01
-	.byte 0x42, 0x00, 0x00, 0xf0, 0x00
+	ld xwa, 0xF0
+	ld xbc, 0x1200000
+	ld xde, 0xF00000
 	call 0xFA4D80
 
 	lda xsp, (xsp + 14)
@@ -365788,7 +365788,7 @@ InitializeRoot:
 
 	; RegObjTable 01600004h, 0FA44E2h, 0EADA92h,	0EAC9EEh, 0160h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x04, 0x00, 0x60, 0x01
+	ld xwa, 0x1600004
 	ld (xbc), xwa
 	ldada_24 xwa, 16401634
 	ld (xbc + 4), xwa
@@ -365800,7 +365800,7 @@ InitializeRoot:
 	call 0xFA42FB
 	; RegObjTable 0160000ch, 0FA58FBh, 0EAEBB0h,	0EAE7B6h, 01c0h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0c, 0x00, 0x60, 0x01
+	ld xwa, 0x160000C
 	ld (xbc), xwa
 	ldada_24 xwa, 16406779
 	ld (xbc + 4), xwa
@@ -365812,7 +365812,7 @@ InitializeRoot:
 	call 0xFA42FB
 	; RegObjTable 0160000dh, 0FA5948h, 0EAFA6Ch,	0EAEBB2h, 01e0h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0d, 0x00, 0x60, 0x01
+	ld xwa, 0x160000D
 	ld (xbc), xwa
 	ldada_24 xwa, 16406856
 	ld (xbc + 4), xwa
@@ -365824,7 +365824,7 @@ InitializeRoot:
 	call 0xFA42FB
 	; RegObjTabl 01600002h, 0FA496Ch, 000ch,		0EAB2B4h, 0120h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x02, 0x00, 0x60, 0x01
+	ld xwa, 0x1600002
 	ld (xbc), xwa
 	ldada_24 xwa, 16402796
 	ld (xbc + 4), xwa
@@ -365835,7 +365835,7 @@ InitializeRoot:
 	call 0xFA42FB
 	; RegObjTabl 01600002h, 0FA496Ch, 000ch,		0EAB2E8h, 0420h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x02, 0x00, 0x60, 0x01
+	ld xwa, 0x1600002
 	ld (xbc), xwa
 	ldada_24 xwa, 16402796
 	ld (xbc + 4), xwa
@@ -365846,7 +365846,7 @@ InitializeRoot:
 	call 0xFA42FB
 	; RegObjTabl 01600001h, 0FA48A9h, 0160h,		0EAFA6Eh, 0100h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x01, 0x00, 0x60, 0x01
+	ld xwa, 0x1600001
 	ld (xbc), xwa
 	ldada_24 xwa, 16402601
 	ld (xbc + 4), xwa
@@ -365857,7 +365857,7 @@ InitializeRoot:
 	call 0xFA42FB
 	; RegObjTabl 01600001h, 0FA48A9h, 0160h,		0EAFFF2h, 0400h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x01, 0x00, 0x60, 0x01
+	ld xwa, 0x1600001
 	ld (xbc), xwa
 	ldada_24 xwa, 16402601
 	ld (xbc + 4), xwa
@@ -365868,7 +365868,7 @@ InitializeRoot:
 	call 0xFA42FB
 	; RegObjTabl 01600003h, 0FA4A18h, 000dh,		0EB3698h, 0140h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x03, 0x00, 0x60, 0x01
+	ld xwa, 0x1600003
 	ld (xbc), xwa
 	ldada_24 xwa, 16402968
 	ld (xbc + 4), xwa
@@ -365879,7 +365879,7 @@ InitializeRoot:
 	call 0xFA42FB
 	; RegObjTabl 01600003h, 0FA4A18h, 000dh,		0EB36D0h, 0440h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x03, 0x00, 0x60, 0x01
+	ld xwa, 0x1600003
 	ld (xbc), xwa
 	ldada_24 xwa, 16402968
 	ld (xbc + 4), xwa
@@ -365890,7 +365890,7 @@ InitializeRoot:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0033h,		0EB3374h, 0000h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -365901,7 +365901,7 @@ InitializeRoot:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0033h,		0EB346Ch, 0300h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -365912,7 +365912,7 @@ InitializeRoot:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0009h,		0EB3444h, 00ffh
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -365923,7 +365923,7 @@ InitializeRoot:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0009h,		0EB362Ah, 03ffh
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -365938,8 +365938,8 @@ InitializeRoot:
 	pushw 0xEB
 	pushw 0x3682
 	lds32 xwa, 0
-	.byte 0x41, 0x00, 0x00, 0x20, 0x01
-	.byte 0x42, 0x00, 0x00, 0xa0, 0x01
+	ld xbc, 0x1200000
+	ld xde, 0x1A00000
 	call 0xFA4D2B
 
 	; RegTitle 0000h, 00ebh, 3688h, 00000000h, 01200000h, 00000000h
@@ -365947,16 +365947,16 @@ InitializeRoot:
 	pushw 0xEB
 	pushw 0x3688
 	lds32 xwa, 0
-	.byte 0x41, 0x00, 0x00, 0x20, 0x01
+	ld xbc, 0x1200000
 	lds32 xde, 0
 	call 0xFA4D80
 	; RegTitle 0000h, 00ebh, 368eh, 000000ffh, 01400009h, 00ff0000h
 	pushw 0x0
 	pushw 0xEB
 	pushw 0x368E
-	.byte 0x40, 0xff, 0x00, 0x00, 0x00
-	.byte 0x41, 0x09, 0x00, 0x40, 0x01
-	.byte 0x42, 0x00, 0x00, 0xff, 0x00
+	ld xwa, 0xFF
+	ld xbc, 0x1400009
+	ld xde, 0xFF0000
 	call 0xFA4D80
 
 	lda xsp, (xsp + 14)
@@ -389885,7 +389885,7 @@ InitializeToshi:
 
 	; RegObjTable 01600004h, 0FA44E2h, 0ED2D02h,	LABEL_ED27E4, 0162h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x04, 0x00, 0x60, 0x01
+	ld xwa, 0x1600004
 	ld (xbc), xwa
 	ldada_24 xwa, 16401634
 	ld (xbc + 4), xwa
@@ -389897,7 +389897,7 @@ InitializeToshi:
 	call 0xFA42FB
 	; RegObjTable 0160000ch, 0FA58FBh, 0ED2D92h,	0ED2D04h, 01c2h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0c, 0x00, 0x60, 0x01
+	ld xwa, 0x160000C
 	ld (xbc), xwa
 	ldada_24 xwa, 16406779
 	ld (xbc + 4), xwa
@@ -389909,7 +389909,7 @@ InitializeToshi:
 	call 0xFA42FB
 	; RegObjTable 0160000dh, 0FA5948h, 0ED2F64h,	0ED2D94h, 01e2h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0d, 0x00, 0x60, 0x01
+	ld xwa, 0x160000D
 	ld (xbc), xwa
 	ldada_24 xwa, 16406856
 	ld (xbc + 4), xwa
@@ -389921,7 +389921,7 @@ InitializeToshi:
 	call 0xFA42FB
 	; RegObjTabl 01600002h, 0FA496Ch, 002ah,		0ED1C9Eh, 0122h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x02, 0x00, 0x60, 0x01
+	ld xwa, 0x1600002
 	ld (xbc), xwa
 	ldada_24 xwa, 16402796
 	ld (xbc + 4), xwa
@@ -389932,7 +389932,7 @@ InitializeToshi:
 	call 0xFA42FB
 	; RegObjTabl 01600002h, 0FA496Ch, 002ah,		0ED1D4Ah, 0422h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x02, 0x00, 0x60, 0x01
+	ld xwa, 0x1600002
 	ld (xbc), xwa
 	ldada_24 xwa, 16402796
 	ld (xbc + 4), xwa
@@ -389943,7 +389943,7 @@ InitializeToshi:
 	call 0xFA42FB
 	; RegObjTabl 01600001h, 0FA48A9h, 001ch,		0ED2F66h, 0102h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x01, 0x00, 0x60, 0x01
+	ld xwa, 0x1600001
 	ld (xbc), xwa
 	ldada_24 xwa, 16402601
 	ld (xbc + 4), xwa
@@ -389954,7 +389954,7 @@ InitializeToshi:
 	call 0xFA42FB
 	; RegObjTabl 01600001h, 0FA48A9h, 001ch,		0ED2FDAh, 0402h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x01, 0x00, 0x60, 0x01
+	ld xwa, 0x1600001
 	ld (xbc), xwa
 	ldada_24 xwa, 16402601
 	ld (xbc + 4), xwa
@@ -389965,7 +389965,7 @@ InitializeToshi:
 	call 0xFA42FB
 	; RegObjTabl 01600003h, 0FA4A18h, 0014h,		0ED3292h, 0142h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x03, 0x00, 0x60, 0x01
+	ld xwa, 0x1600003
 	ld (xbc), xwa
 	ldada_24 xwa, 16402968
 	ld (xbc + 4), xwa
@@ -389976,7 +389976,7 @@ InitializeToshi:
 	call 0xFA42FB
 	; RegObjTabl 01600003h, 0FA4A18h, 0014h,		0ED32E6h, 0442h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x03, 0x00, 0x60, 0x01
+	ld xwa, 0x1600003
 	ld (xbc), xwa
 	ldada_24 xwa, 16402968
 	ld (xbc + 4), xwa
@@ -389987,7 +389987,7 @@ InitializeToshi:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 003fh,		0ED77CEh, 0001h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -389998,7 +389998,7 @@ InitializeToshi:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 003fh,		0ED7E56h, 0301h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -390009,7 +390009,7 @@ InitializeToshi:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0009h,		0ED78CEh, 0040h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -390020,7 +390020,7 @@ InitializeToshi:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0009h,		0ED7FF6h, 0340h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -390031,7 +390031,7 @@ InitializeToshi:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0011h,		0ED78F6h, 0041h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -390042,7 +390042,7 @@ InitializeToshi:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0011h,		0ED803Ch, 0341h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -390053,7 +390053,7 @@ InitializeToshi:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0006h,		0ED793Eh, 0042h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -390064,7 +390064,7 @@ InitializeToshi:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0006h,		0ED80C2h, 0342h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -390075,7 +390075,7 @@ InitializeToshi:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0008h,		0ED795Ah, 0043h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -390086,7 +390086,7 @@ InitializeToshi:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0008h,		0ED80F6h, 0343h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -390097,7 +390097,7 @@ InitializeToshi:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0013h,		0ED797Eh, 0044h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -390108,7 +390108,7 @@ InitializeToshi:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0013h,		0ED8136h, 0344h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -390119,7 +390119,7 @@ InitializeToshi:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0013h,		0ED79CEh, 0045h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -390130,7 +390130,7 @@ InitializeToshi:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0013h,		0ED81AEh, 0345h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -390141,7 +390141,7 @@ InitializeToshi:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0000h,		0ED7A1Eh, 0046h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -390152,7 +390152,7 @@ InitializeToshi:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0000h,		0ED822Eh, 0346h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -390163,7 +390163,7 @@ InitializeToshi:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0007h,		0ED7A22h, 0047h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -390174,7 +390174,7 @@ InitializeToshi:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0007h,		0ED8234h, 0347h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -390185,7 +390185,7 @@ InitializeToshi:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0019h,		0ED7A42h, 0048h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -390196,7 +390196,7 @@ InitializeToshi:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0019h,		0ED826Eh, 0348h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -390207,7 +390207,7 @@ InitializeToshi:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0004h,		0ED7AAAh, 00c0h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -390218,7 +390218,7 @@ InitializeToshi:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0004h,		0ED8322h, 03c0h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -390229,7 +390229,7 @@ InitializeToshi:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0004h,		0ED7ABEh, 00c1h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -390240,7 +390240,7 @@ InitializeToshi:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0004h,		0ED8346h, 03c1h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -390251,7 +390251,7 @@ InitializeToshi:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0014h,		0ED7AD2h, 00c2h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -390262,7 +390262,7 @@ InitializeToshi:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0014h,		0ED836Ch, 03c2h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -390273,7 +390273,7 @@ InitializeToshi:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0011h,		0ED7B26h, 00c3h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -390284,7 +390284,7 @@ InitializeToshi:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0011h,		0ED83FCh, 03c3h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -390295,7 +390295,7 @@ InitializeToshi:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0008h,		0ED7B6Eh, 00c4h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -390306,7 +390306,7 @@ InitializeToshi:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0008h,		0ED8478h, 03c4h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -390317,7 +390317,7 @@ InitializeToshi:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0007h,		0ED7B92h, 00c5h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -390328,7 +390328,7 @@ InitializeToshi:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0007h,		0ED84B8h, 03c5h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -390339,7 +390339,7 @@ InitializeToshi:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0006h,		0ED7BB2h, 00d0h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -390350,7 +390350,7 @@ InitializeToshi:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0006h,		0ED84F0h, 03d0h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -390361,7 +390361,7 @@ InitializeToshi:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 000dh,		0ED7BCEh, 00d1h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -390372,7 +390372,7 @@ InitializeToshi:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 000dh,		0ED8520h, 03d1h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -390383,7 +390383,7 @@ InitializeToshi:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0007h,		0ED7C06h, 00d2h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -390394,7 +390394,7 @@ InitializeToshi:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0007h,		0ED857Ah, 03d2h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -390405,7 +390405,7 @@ InitializeToshi:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0007h,		0ED7C26h, 00d3h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -390416,7 +390416,7 @@ InitializeToshi:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0007h,		0ED85B0h, 03d3h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -390427,7 +390427,7 @@ InitializeToshi:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0002h,		0ED7C46h, 00e8h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -390438,7 +390438,7 @@ InitializeToshi:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0002h,		0ED85E8h, 03e8h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -390449,7 +390449,7 @@ InitializeToshi:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0003h,		0ED7C52h, 00e9h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -390460,7 +390460,7 @@ InitializeToshi:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0003h,		0ED85FEh, 03e9h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -390471,7 +390471,7 @@ InitializeToshi:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 000eh,		0ED7C62h, 00f4h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -390482,7 +390482,7 @@ InitializeToshi:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 000eh,		0ED861Ah, 03f4h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -390493,7 +390493,7 @@ InitializeToshi:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0017h,		0ED7C9Eh, 00f5h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -390504,7 +390504,7 @@ InitializeToshi:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0017h,		0ED8682h, 03f5h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -390515,7 +390515,7 @@ InitializeToshi:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0001h,		0ED7CFEh, 00f6h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -390526,7 +390526,7 @@ InitializeToshi:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0001h,		0ED8736h, 03f6h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -390537,7 +390537,7 @@ InitializeToshi:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0003h,		0ED7D06h, 00f7h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -390548,7 +390548,7 @@ InitializeToshi:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0003h,		0ED8746h, 03f7h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -390559,7 +390559,7 @@ InitializeToshi:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0043h,		0ED7D16h, 00f8h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -390570,7 +390570,7 @@ InitializeToshi:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0043h,		0ED8762h, 03f8h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -390581,7 +390581,7 @@ InitializeToshi:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0009h,		0ED7E26h, 00f9h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -390592,7 +390592,7 @@ InitializeToshi:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0009h,		0ED8922h, 03f9h
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -390603,7 +390603,7 @@ InitializeToshi:
 	call 0xFA42FB
 	; RegObjTabl 01600010h, 0FA5995h, 0001h,		0ED7E4Eh, 00fbh
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x10, 0x00, 0x60, 0x01
+	ld xwa, 0x1600010
 	ld (xbc), xwa
 	ldada_24 xwa, 16406933
 	ld (xbc + 4), xwa
@@ -390614,7 +390614,7 @@ InitializeToshi:
 	call 0xFA42FB
 	; RegObjTabl 0160000fh, 0FA62CBh, 0001h,		0ED896Eh, 03fbh
 	mrid2 0xB7, 0x31
-	.byte 0x40, 0x0f, 0x00, 0x60, 0x01
+	ld xwa, 0x160000F
 	ld (xbc), xwa
 	ldada_24 xwa, 16409291
 	ld (xbc + 4), xwa
@@ -390629,24 +390629,24 @@ InitializeToshi:
 	pushw 0xED
 	pushw 0x897C
 	lds32 xwa, 1
-	.byte 0x41, 0x00, 0x00, 0x20, 0x01
-	.byte 0x42, 0x01, 0x00, 0xa0, 0x01
+	ld xbc, 0x1200000
+	ld xde, 0x1A00001
 	call 0xFA4D2B
 	; RegMode 0002h, 00edh, 8986h, 00000004h, 01200000h, 01a00040h
 	pushw 0x2
 	pushw 0xED
 	pushw 0x8986
 	lds32 xwa, 4
-	.byte 0x41, 0x00, 0x00, 0x20, 0x01
-	.byte 0x42, 0x40, 0x00, 0xa0, 0x01
+	ld xbc, 0x1200000
+	ld xde, 0x1A00040
 	call 0xFA4D2B
 	; RegMode 0002h, 00edh, 8992h, 00000012h, 01200000h, 01a000c0h
 	pushw 0x2
 	pushw 0xED
 	pushw 0x8992
-	.byte 0x40, 0x12, 0x00, 0x00, 0x00
-	.byte 0x41, 0x00, 0x00, 0x20, 0x01
-	.byte 0x42, 0xc0, 0x00, 0xa0, 0x01
+	ld xwa, 0x12
+	ld xbc, 0x1200000
+	ld xde, 0x1A000C0
 	call 0xFA4D2B
 
 	; RegTitle 0002h, 00edh, 899ah, 00000001h, 01200000h, 00010001h
@@ -390654,232 +390654,232 @@ InitializeToshi:
 	pushw 0xED
 	pushw 0x899A
 	lds32 xwa, 1
-	.byte 0x41, 0x00, 0x00, 0x20, 0x01
-	.byte 0x42, 0x01, 0x00, 0x01, 0x00
+	ld xbc, 0x1200000
+	ld xde, 0x10001
 	call 0xFA4D80
 	; RegTitle 0002h, 00edh, 89a4h, 00000040h, 01200000h, 00400000h
 	pushw 0x2
 	pushw 0xED
 	pushw 0x89A4
-	.byte 0x40, 0x40, 0x00, 0x00, 0x00
-	.byte 0x41, 0x00, 0x00, 0x20, 0x01
-	.byte 0x42, 0x00, 0x00, 0x40, 0x00
+	ld xwa, 0x40
+	ld xbc, 0x1200000
+	ld xde, 0x400000
 	call 0xFA4D80
 	; RegTitle 0002h, 00edh, 89aeh, 00000041h, 0142000bh, 00410000h
 	pushw 0x2
 	pushw 0xED
 	pushw 0x89AE
-	.byte 0x40, 0x41, 0x00, 0x00, 0x00
-	.byte 0x41, 0x0b, 0x00, 0x42, 0x01
-	.byte 0x42, 0x00, 0x00, 0x41, 0x00
+	ld xwa, 0x41
+	ld xbc, 0x142000B
+	ld xde, 0x410000
 	call 0xFA4D80
 	; RegTitle 0002h, 00edh, 89b8h, 00000042h, 0142000ch, 00420000h
 	pushw 0x2
 	pushw 0xED
 	pushw 0x89B8
-	.byte 0x40, 0x42, 0x00, 0x00, 0x00
-	.byte 0x41, 0x0c, 0x00, 0x42, 0x01
-	.byte 0x42, 0x00, 0x00, 0x42, 0x00
+	ld xwa, 0x42
+	ld xbc, 0x142000C
+	ld xde, 0x420000
 	call 0xFA4D80
 	; RegTitle 0002h, 00edh, 89c4h, 00000043h, 01200000h, 00430000h
 	pushw 0x2
 	pushw 0xED
 	pushw 0x89C4
-	.byte 0x40, 0x43, 0x00, 0x00, 0x00
-	.byte 0x41, 0x00, 0x00, 0x20, 0x01
-	.byte 0x42, 0x00, 0x00, 0x43, 0x00
+	ld xwa, 0x43
+	ld xbc, 0x1200000
+	ld xde, 0x430000
 	call 0xFA4D80
 	; RegTitle 0002h, 00edh, 89d0h, 00000044h, 01200000h, 00440000h
 	pushw 0x2
 	pushw 0xED
 	pushw 0x89D0
-	.byte 0x40, 0x44, 0x00, 0x00, 0x00
-	.byte 0x41, 0x00, 0x00, 0x20, 0x01
-	.byte 0x42, 0x00, 0x00, 0x44, 0x00
+	ld xwa, 0x44
+	ld xbc, 0x1200000
+	ld xde, 0x440000
 	call 0xFA4D80
 	; RegTitle 0002h, 00edh, 89dch, 00000045h, 01200000h, 00450000h
 	pushw 0x2
 	pushw 0xED
 	pushw 0x89DC
-	.byte 0x40, 0x45, 0x00, 0x00, 0x00
-	.byte 0x41, 0x00, 0x00, 0x20, 0x01
-	.byte 0x42, 0x00, 0x00, 0x45, 0x00
+	ld xwa, 0x45
+	ld xbc, 0x1200000
+	ld xde, 0x450000
 	call 0xFA4D80
 	; RegTitle 0002h, 00edh, 89e6h, 00000046h, 01200000h, 00410000h
 	pushw 0x2
 	pushw 0xED
 	pushw 0x89E6
-	.byte 0x40, 0x46, 0x00, 0x00, 0x00
-	.byte 0x41, 0x00, 0x00, 0x20, 0x01
-	.byte 0x42, 0x00, 0x00, 0x41, 0x00
+	ld xwa, 0x46
+	ld xbc, 0x1200000
+	ld xde, 0x410000
 	call 0xFA4D80
 	; RegTitle 0002h, 00edh, 89f2h, 00000047h, 01200000h, 00470000h
 	pushw 0x2
 	pushw 0xED
 	pushw 0x89F2
-	.byte 0x40, 0x47, 0x00, 0x00, 0x00
-	.byte 0x41, 0x00, 0x00, 0x20, 0x01
-	.byte 0x42, 0x00, 0x00, 0x47, 0x00
+	ld xwa, 0x47
+	ld xbc, 0x1200000
+	ld xde, 0x470000
 	call 0xFA4D80
 	; RegTitle 0002h, 00edh, 89feh, 00000048h, 01200000h, 00480002h
 	pushw 0x2
 	pushw 0xED
 	pushw 0x89FE
-	.byte 0x40, 0x48, 0x00, 0x00, 0x00
-	.byte 0x41, 0x00, 0x00, 0x20, 0x01
-	.byte 0x42, 0x02, 0x00, 0x48, 0x00
+	ld xwa, 0x48
+	ld xbc, 0x1200000
+	ld xde, 0x480002
 	call 0xFA4D80
 	; RegTitle 0002h, 00edh, 8a0ch, 000000c0h, 01420009h, 00c00000h
 	pushw 0x2
 	pushw 0xED
 	pushw 0x8A0C
-	.byte 0x40, 0xc0, 0x00, 0x00, 0x00
-	.byte 0x41, 0x09, 0x00, 0x42, 0x01
-	.byte 0x42, 0x00, 0x00, 0xc0, 0x00
+	ld xwa, 0xC0
+	ld xbc, 0x1420009
+	ld xde, 0xC00000
 	call 0xFA4D80
 	; RegTitle 0002h, 00edh, 8a16h, 000000c1h, 01200000h, 00c10000h
 	pushw 0x2
 	pushw 0xED
 	pushw 0x8A16
-	.byte 0x40, 0xc1, 0x00, 0x00, 0x00
-	.byte 0x41, 0x00, 0x00, 0x20, 0x01
-	.byte 0x42, 0x00, 0x00, 0xc1, 0x00
+	ld xwa, 0xC1
+	ld xbc, 0x1200000
+	ld xde, 0xC10000
 	call 0xFA4D80
 	; RegTitle 0002h, 00edh, 8a24h, 000000c2h, 01200000h, 00c20000h
 	pushw 0x2
 	pushw 0xED
 	pushw 0x8A24
-	.byte 0x40, 0xc2, 0x00, 0x00, 0x00
-	.byte 0x41, 0x00, 0x00, 0x20, 0x01
-	.byte 0x42, 0x00, 0x00, 0xc2, 0x00
+	ld xwa, 0xC2
+	ld xbc, 0x1200000
+	ld xde, 0xC20000
 	call 0xFA4D80
 	; RegTitle 0002h, 00edh, 8a30h, 000000c3h, 01200000h, 00c30000h
 	pushw 0x2
 	pushw 0xED
 	pushw 0x8A30
-	.byte 0x40, 0xc3, 0x00, 0x00, 0x00
-	.byte 0x41, 0x00, 0x00, 0x20, 0x01
-	.byte 0x42, 0x00, 0x00, 0xc3, 0x00
+	ld xwa, 0xC3
+	ld xbc, 0x1200000
+	ld xde, 0xC30000
 	call 0xFA4D80
 	; RegTitle 0002h, 00edh, 8a3ch, 000000c4h, 01200000h, 00c40000h
 	pushw 0x2
 	pushw 0xED
 	pushw 0x8A3C
-	.byte 0x40, 0xc4, 0x00, 0x00, 0x00
-	.byte 0x41, 0x00, 0x00, 0x20, 0x01
-	.byte 0x42, 0x00, 0x00, 0xc4, 0x00
+	ld xwa, 0xC4
+	ld xbc, 0x1200000
+	ld xde, 0xC40000
 	call 0xFA4D80
 	; RegTitle 0002h, 00edh, 8a4ah, 000000c5h, 01200000h, 00c50000h
 	pushw 0x2
 	pushw 0xED
 	pushw 0x8A4A
-	.byte 0x40, 0xc5, 0x00, 0x00, 0x00
-	.byte 0x41, 0x00, 0x00, 0x20, 0x01
-	.byte 0x42, 0x00, 0x00, 0xc5, 0x00
+	ld xwa, 0xC5
+	ld xbc, 0x1200000
+	ld xde, 0xC50000
 	call 0xFA4D80
 	; RegTitle 0002h, 00edh, 8a56h, 000000d0h, 01200000h, 00d00000h
 	pushw 0x2
 	pushw 0xED
 	pushw 0x8A56
-	.byte 0x40, 0xd0, 0x00, 0x00, 0x00
-	.byte 0x41, 0x00, 0x00, 0x20, 0x01
-	.byte 0x42, 0x00, 0x00, 0xd0, 0x00
+	ld xwa, 0xD0
+	ld xbc, 0x1200000
+	ld xde, 0xD00000
 	call 0xFA4D80
 	; RegTitle 0002h, 00edh, 8a62h, 000000d1h, 01200000h, 00d10000h
 	pushw 0x2
 	pushw 0xED
 	pushw 0x8A62
-	.byte 0x40, 0xd1, 0x00, 0x00, 0x00
-	.byte 0x41, 0x00, 0x00, 0x20, 0x01
-	.byte 0x42, 0x00, 0x00, 0xd1, 0x00
+	ld xwa, 0xD1
+	ld xbc, 0x1200000
+	ld xde, 0xD10000
 	call 0xFA4D80
 	; RegTitle 0002h, 00edh, 8a6ch, 000000d2h, 01200000h, 00d20000h
 	pushw 0x2
 	pushw 0xED
 	pushw 0x8A6C
-	.byte 0x40, 0xd2, 0x00, 0x00, 0x00
-	.byte 0x41, 0x00, 0x00, 0x20, 0x01
-	.byte 0x42, 0x00, 0x00, 0xd2, 0x00
+	ld xwa, 0xD2
+	ld xbc, 0x1200000
+	ld xde, 0xD20000
 	call 0xFA4D80
 	; RegTitle 0002h, 00edh, 8a76h, 000000d3h, 01200000h, 00d30000h
 	pushw 0x2
 	pushw 0xED
 	pushw 0x8A76
-	.byte 0x40, 0xd3, 0x00, 0x00, 0x00
-	.byte 0x41, 0x00, 0x00, 0x20, 0x01
-	.byte 0x42, 0x00, 0x00, 0xd3, 0x00
+	ld xwa, 0xD3
+	ld xbc, 0x1200000
+	ld xde, 0xD30000
 	call 0xFA4D80
 	; RegTitle 0002h, 00edh, 8a82h, 000000e8h, 01200000h, 00e80000h
 	pushw 0x2
 	pushw 0xED
 	pushw 0x8A82
-	.byte 0x40, 0xe8, 0x00, 0x00, 0x00
-	.byte 0x41, 0x00, 0x00, 0x20, 0x01
-	.byte 0x42, 0x00, 0x00, 0xe8, 0x00
+	ld xwa, 0xE8
+	ld xbc, 0x1200000
+	ld xde, 0xE80000
 	call 0xFA4D80
 	; RegTitle 0002h, 00edh, 8a8ch, 000000e9h, 01200000h, 00e90000h
 	pushw 0x2
 	pushw 0xED
 	pushw 0x8A8C
-	.byte 0x40, 0xe9, 0x00, 0x00, 0x00
-	.byte 0x41, 0x00, 0x00, 0x20, 0x01
-	.byte 0x42, 0x00, 0x00, 0xe9, 0x00
+	ld xwa, 0xE9
+	ld xbc, 0x1200000
+	ld xde, 0xE90000
 	call 0xFA4D80
 	; RegTitle 0002h, 00edh, 8a96h, 000000f4h, 01200000h, 00f40000h
 	pushw 0x2
 	pushw 0xED
 	pushw 0x8A96
-	.byte 0x40, 0xf4, 0x00, 0x00, 0x00
-	.byte 0x41, 0x00, 0x00, 0x20, 0x01
-	.byte 0x42, 0x00, 0x00, 0xf4, 0x00
+	ld xwa, 0xF4
+	ld xbc, 0x1200000
+	ld xde, 0xF40000
 	call 0xFA4D80
 	; RegTitle 0002h, 00edh, 8aa0h, 000000f5h, 01420010h, 00f50000h
 	pushw 0x2
 	pushw 0xED
 	pushw 0x8AA0
-	.byte 0x40, 0xf5, 0x00, 0x00, 0x00
-	.byte 0x41, 0x10, 0x00, 0x42, 0x01
-	.byte 0x42, 0x00, 0x00, 0xf5, 0x00
+	ld xwa, 0xF5
+	ld xbc, 0x1420010
+	ld xde, 0xF50000
 	call 0xFA4D80
 	; RegTitle 0002h, 00edh, 8aaah, 000000f6h, 01420011h, 00f60000h
 	pushw 0x2
 	pushw 0xED
 	pushw 0x8AAA
-	.byte 0x40, 0xf6, 0x00, 0x00, 0x00
-	.byte 0x41, 0x11, 0x00, 0x42, 0x01
-	.byte 0x42, 0x00, 0x00, 0xf6, 0x00
+	ld xwa, 0xF6
+	ld xbc, 0x1420011
+	ld xde, 0xF60000
 	call 0xFA4D80
 	; RegTitle 0002h, 00edh, 8ab4h, 000000f7h, 01420012h, 00f70000h
 	pushw 0x2
 	pushw 0xED
 	pushw 0x8AB4
-	.byte 0x40, 0xf7, 0x00, 0x00, 0x00
-	.byte 0x41, 0x12, 0x00, 0x42, 0x01
-	.byte 0x42, 0x00, 0x00, 0xf7, 0x00
+	ld xwa, 0xF7
+	ld xbc, 0x1420012
+	ld xde, 0xF70000
 	call 0xFA4D80
 	; RegTitle 0002h, 00edh, 8abeh, 000000f8h, 01200000h, 00f80000h
 	pushw 0x2
 	pushw 0xED
 	pushw 0x8ABE
-	.byte 0x40, 0xf8, 0x00, 0x00, 0x00
-	.byte 0x41, 0x00, 0x00, 0x20, 0x01
-	.byte 0x42, 0x00, 0x00, 0xf8, 0x00
+	ld xwa, 0xF8
+	ld xbc, 0x1200000
+	ld xde, 0xF80000
 	call 0xFA4D80
 	; RegTitle 0002h, 00edh, 8ac8h, 000000f9h, 01420013h, 00f90000h
 	pushw 0x2
 	pushw 0xED
 	pushw 0x8AC8
-	.byte 0x40, 0xf9, 0x00, 0x00, 0x00
-	.byte 0x41, 0x13, 0x00, 0x42, 0x01
-	.byte 0x42, 0x00, 0x00, 0xf9, 0x00
+	ld xwa, 0xF9
+	ld xbc, 0x1420013
+	ld xde, 0xF90000
 	call 0xFA4D80
 	; RegTitle 0002h, 00edh, 8ad2h, 000000fbh, 01200000h, 00fb0000h
 	pushw 0x2
 	pushw 0xED
 	pushw 0x8AD2
-	.byte 0x40, 0xfb, 0x00, 0x00, 0x00
-	.byte 0x41, 0x00, 0x00, 0x20, 0x01
-	.byte 0x42, 0x00, 0x00, 0xfb, 0x00
+	ld xwa, 0xFB
+	ld xbc, 0x1200000
+	ld xde, 0xFB0000
 	call 0xFA4D80
 
 	lda xsp, (xsp + 14)
