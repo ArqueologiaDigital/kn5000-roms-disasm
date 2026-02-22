@@ -535,14 +535,14 @@
 ; These tables convert raw encoder values to MIDI CC values.
 ; Each table is 128 bytes (one entry per raw value 0-127).
 
-.equ ENCODER_LUT_MODWHEEL, 0xEDA13C	; Modulation wheel lookup table
-.equ ENCODER_LUT_VOLUME, 0xEDA1BC	; Volume lookup table
-.equ ENCODER_LUT_BREATH_INDEX, 0xEDA2BC	; Breath controller index lookup (word)
-.equ ENCODER_LUT_BREATH_VALUE, 0xEDA2D2	; Breath controller value lookup
-.equ ENCODER_LUT_BREATH_MULT, 0xEDA3D2	; Breath controller multiplier table
-.equ ENCODER_LUT_BREATH_OFFSET, 0xEDA3EA	; Breath controller offset table
-.equ ENCODER_LUT_FOOT, 0xEDA402	; Foot controller lookup table
-.equ ENCODER_LUT_EXPRESSION, 0xEDA482	; Expression lookup table
+	; (EQU→inline label) ENCODER_LUT_MODWHEEL = 0xEDA13C
+	; (EQU→inline label) ENCODER_LUT_VOLUME = 0xEDA1BC
+	; (EQU→inline label) ENCODER_LUT_BREATH_INDEX = 0xEDA2BC
+	; (EQU→inline label) ENCODER_LUT_BREATH_VALUE = 0xEDA2D2
+	; (EQU→inline label) ENCODER_LUT_BREATH_MULT = 0xEDA3D2
+	; (EQU→inline label) ENCODER_LUT_BREATH_OFFSET = 0xEDA3EA
+	; (EQU→inline label) ENCODER_LUT_FOOT = 0xEDA402
+	; (EQU→inline label) ENCODER_LUT_EXPRESSION = 0xEDA482
 
 ; =============================================================================
 ; Encoder State Tracking (RAM at 0x8Fxxh)
@@ -564,7 +564,7 @@
 ; Indexed by 5-bit encoder ID (0-31). Each entry is a 32-bit address.
 ; See ENCODER_HANDLER_TABLE_DATA in main source for the actual table contents.
 
-.equ ENCODER_HANDLER_TABLE, 0xEDA0BC	; Jump table for encoder-specific handlers (in ROM)
+	; (EQU→inline label) ENCODER_HANDLER_TABLE = 0xEDA0BC
 
 ; End of MIDI/Encoder constants
 ; --- end include: midi_encoder_constants.asm ---
@@ -98957,6 +98957,7 @@ LABEL_ED8D98:
 	.byte 0x1f, 0x1f, 0x1f, 0x1f, 0x1f, 0x16, 0x17, 0x18
 	.byte 0x1f, 0x1f, 0x1f, 0x19, 0x1f, 0x1f, 0x1f, 0x1f
 	.byte 0x1f, 0x1f, 0x1f, 0x1f
+ENCODER_HANDLER_TABLE:
 
 ; ENCODER_HANDLER_TABLE - Jump table for encoder-specific value processing
 ; Indexed by 5-bit encoder ID (0-31). Each entry is a 32-bit address.
@@ -98997,6 +98998,7 @@ ENCODER_HANDLER_TABLE_DATA:
 	.long Encoder_ReturnDefaultConstant
 	.long Encoder_ReturnDefaultConstant
 	.long Encoder_PassthroughIdentity
+ENCODER_LUT_MODWHEEL:
 	.byte 0x00, 0x02, 0x03, 0x04
 	.byte 0x05, 0x06, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b
 	.byte 0x0c, 0x0d, 0x0e, 0x0e, 0x0f, 0x10, 0x11, 0x12
@@ -325703,8 +325705,8 @@ LABEL_F97639:
 	stdi8 35434, 0
 	stdi8 35584, 0
 	calr LABEL_F972C8
-	.byte 0x1e, 0x70, 0xf5	; CALR FDC_INIT
-	.byte 0x78, 0x7e, 0xf5	; JRL T, FDC_CONFIG_VERIFY
+	calr FDC_INIT
+	jrl FDC_CONFIG_VERIFY
 
 LABEL_F97652:
 	.byte 0xd7, 0xfa
@@ -325726,6 +325728,7 @@ LABEL_F97652:
 	.byte 0x00, 0xc6, 0x1e, 0x81, 0xf9, 0x1e, 0x08, 0xff
 	.byte 0x30, 0xc6, 0x00, 0x1e, 0x1f, 0xfc, 0xc1, 0x24
 	.byte 0x8a, 0x3f, 0x00, 0xb0, 0xfe, 0x78, 0xfe, 0xfe
+FDC_CMD_EXEC:
 	.byte 0x2e, 0x1e, 0x16, 0xfe, 0xdb, 0xd8, 0x66, 0x08
 	.byte 0xf1, 0x68, 0x8a, 0x00, 0x01, 0x78, 0x36, 0x01
 	.byte 0x1e, 0x4d, 0xfe, 0xdb, 0xd8, 0x6e, 0x08, 0xf1
@@ -325810,6 +325813,7 @@ LABEL_F97652:
 	.byte 0x00, 0xc5, 0x1e, 0xe1, 0xf6, 0x1e, 0x68, 0xfc
 	.byte 0x30, 0xc5, 0x00, 0x1e, 0x7f, 0xf9, 0xc1, 0x24
 	.byte 0x8a, 0x3f, 0x00, 0xb0, 0xfe, 0x78, 0x5e, 0xfc
+FDC_MODE_CONFIG:
 	.byte 0x1e, 0x25, 0xfc, 0xc1, 0x24, 0x8a, 0x3f, 0x00
 	.byte 0x7e, 0xad, 0x00, 0x1e, 0xea, 0x02, 0xc1, 0x24
 	.byte 0x8a, 0x3f, 0x00, 0x7e, 0xa2, 0x00, 0x1e, 0xb5
@@ -325833,6 +325837,7 @@ LABEL_F97652:
 	.byte 0x80, 0x61, 0x80, 0x21, 0xf1, 0x36, 0x8a, 0x41
 	.byte 0xf1, 0x12, 0x8a, 0x41, 0xc1, 0x36, 0x8a, 0x21
 	.byte 0xd8, 0x12, 0xd1, 0x08, 0x8b, 0xf0, 0x63, 0xbe
+FDC_MC_EXIT:
 	.byte 0xc1, 0x24, 0x8a, 0x3f, 0x00, 0xf2, 0xd0, 0x6b
 	.byte 0xf9, 0xee, 0x1e, 0x09, 0xfc, 0xf1, 0x04, 0x8b
 	.byte 0x00, 0xff, 0x0e, 0x1e, 0x44, 0xfc, 0xc1, 0x24
@@ -325900,11 +325905,13 @@ LABEL_F97652:
 	.byte 0xde, 0xd8, 0x66, 0x09, 0x30, 0x0a, 0x00, 0x1e
 	.byte 0xcc, 0xf9, 0xde, 0x1c, 0xf7, 0x4e, 0x0e, 0xf0
 	.byte 0x28, 0xb3, 0x30, 0x0e, 0x00, 0x78, 0xa5, 0xf6
+FDC_STATUS_COPY:
 	.byte 0xc1, 0x26, 0x8a, 0x19, 0x24, 0x8a, 0x0e, 0xd1
 	.byte 0x44, 0x8a, 0x20, 0xd8, 0xd9, 0x66, 0x0d, 0xd8
 	.byte 0xd8, 0x6e, 0x02, 0x68, 0x0d, 0x30, 0xfe, 0x00
 	.byte 0x1e, 0x3e, 0xf9, 0x0e, 0xf1, 0x6a, 0x8a, 0x00
 	.byte 0xff, 0x0e, 0xf1, 0x6a, 0x8a, 0x00, 0x00, 0x0e
+FDC_INTERRUPT_HANDLER:
 	.byte 0xd7, 0xfa, 0x04, 0xc1, 0x24, 0x8a, 0x3f, 0x00
 	.byte 0x6e, 0x40, 0xd8, 0xac, 0x1e, 0x6e, 0xf6, 0xc1
 	.byte 0x24, 0x8a, 0x3f, 0x00, 0x6e, 0x34, 0x1e, 0x34
@@ -325987,34 +325994,34 @@ LABEL_F97CEF:
 ; =============================================================================
 
 ; FDC routine labels (code is in raw byte sections)
-.equ FDC_INIT, 0xF96BBF	; Basic FDC initialization
-.equ FDC_CONFIG_VERIFY, 0xF96BD0	; Configuration/status verification
-.equ FDC_CMD_DISPATCH_SUB, 0xF96D95	; Command handler subroutine
-.equ FDC_STATUS_HANDLER, 0xF97696	; Status/interrupt handler
-.equ FDC_CMD_EXEC, 0xF976E4	; Command execution handler
-.equ FDC_SECTOR_XFER, 0xF97835	; Sector/data transfer handler
-.equ FDC_MODE_CONFIG, 0xF97984	; Mode configuration (Handler 5)
-.equ FDC_CMD_ENABLE, 0xF97C21	; Command enable setup
-.equ FDC_CMD_DISABLE, 0xF97C4B	; Command disable
-.equ FDC_STATUS_COPY, 0xF97C54	; Copy cached status
-.equ FDC_OUTPUT_CTRL, 0xF97C5B	; Output control
-.equ FDC_INTERRUPT_HANDLER, 0xF97C7C	; Main interrupt handler
+	; (EQU→inline label) FDC_INIT = 0xF96BBF
+	; (EQU→inline label) FDC_CONFIG_VERIFY = 0xF96BD0
+	; (EQU→inline label) FDC_CMD_DISPATCH_SUB = 0xF96D95
+	; (EQU→inline label) FDC_STATUS_HANDLER = 0xF97696
+	; (EQU→inline label) FDC_CMD_EXEC = 0xF976E4
+	; (EQU→inline label) FDC_SECTOR_XFER = 0xF97835
+	; (EQU→inline label) FDC_MODE_CONFIG = 0xF97984
+	; (EQU→inline label) FDC_CMD_ENABLE = 0xF97C21
+	; (EQU→inline label) FDC_CMD_DISABLE = 0xF97C4B
+	; (EQU→inline label) FDC_STATUS_COPY = 0xF97C54
+	; (EQU→inline label) FDC_OUTPUT_CTRL = 0xF97C5B
+	; (EQU→inline label) FDC_INTERRUPT_HANDLER = 0xF97C7C
 
 ; Forward references to helper routines in raw byte sections
-.equ FDC_DRIVE_DETECT, 0xF97544	; FDC drive detection routine
-.equ FDC_DRIVE_STATUS, 0xF97592	; FDC drive status routine
-.equ FDC_PRE_OP_CHECK, 0xF975AC	; FDC pre-operation check
-.equ FDC_TIMING_DELAY, 0xF975DC	; FDC timing/delay routine
-.equ FDC_POST_OP, 0xF975E2	; FDC post-operation routine
-.equ FDC_CMD_SEND, 0xF972F9	; FDC command send routine
-.equ FDC_DETECT_CHECK, 0xF974FE	; FDC detection check routine
+	; (EQU→inline label) FDC_DRIVE_DETECT = 0xF97544
+	; (EQU→inline label) FDC_DRIVE_STATUS = 0xF97592
+	; (EQU→inline label) FDC_PRE_OP_CHECK = 0xF975AC
+	; (EQU→inline label) FDC_TIMING_DELAY = 0xF975DC
+	; (EQU→inline label) FDC_POST_OP = 0xF975E2
+	; (EQU→inline label) FDC_CMD_SEND = 0xF972F9
+	; (EQU→inline label) FDC_DETECT_CHECK = 0xF974FE
 
 ; Jump targets within FDC routines
-.equ FDC_CE_DISPATCH, 0xF9782A
-.equ FDC_CE_EXIT, 0xF97833
-.equ FDC_SX_MAIN, 0xF9795E
-.equ FDC_SX_EXIT, 0xF97967
-.equ FDC_MC_EXIT, 0xF97A3C
+	; (EQU→inline label) FDC_CE_DISPATCH = 0xF9782A
+	; (EQU→inline label) FDC_CE_EXIT = 0xF97833
+	; (EQU→inline label) FDC_SX_MAIN = 0xF9795E
+	; (EQU→inline label) FDC_SX_EXIT = 0xF97967
+	; (EQU→inline label) FDC_MC_EXIT = 0xF97A3C
 
 
 	.org 0xF97D8D - 0xE00000, 0xFF
@@ -326023,53 +326030,53 @@ FDC_HANDLER_DISPATCH_BASE:
 	jr LABEL_F97DE1
 
 FDC_HANDLER_01:
-	.byte 0x1e, 0x8c, 0xfe	; CALR FDC_CMD_ENABLE
+	calr FDC_CMD_ENABLE
 	calr LABEL_F97652
 	jr LABEL_F97DE1
 
 FDC_HANDLER_02:
-	.byte 0x1e, 0x84, 0xfe	; CALR FDC_CMD_ENABLE
-	.byte 0x1e, 0xf6, 0xf8	; CALR FDC_STATUS_HANDLER
+	calr FDC_CMD_ENABLE
+	calr FDC_STATUS_HANDLER
 	jr LABEL_F97DE1
 
 FDC_HANDLER_03:
-	.byte 0x1e, 0x7c, 0xfe	; CALR FDC_CMD_ENABLE
-	.byte 0x1e, 0x3c, 0xf9	; CALR FDC_CMD_EXEC
+	calr FDC_CMD_ENABLE
+	calr FDC_CMD_EXEC
 	jr LABEL_F97DE1
 
 FDC_HANDLER_04:
-	.byte 0x1e, 0x74, 0xfe	; CALR FDC_CMD_ENABLE
-	.byte 0x1e, 0x85, 0xfa	; CALR FDC_SECTOR_XFER
+	calr FDC_CMD_ENABLE
+	calr FDC_SECTOR_XFER
 	jr LABEL_F97DE1
 
 FDC_HANDLER_05:
-	.byte 0x1e, 0x6c, 0xfe	; CALR FDC_CMD_ENABLE
-	.byte 0x1e, 0xcc, 0xfb	; CALR FDC_MODE_CONFIG
+	calr FDC_CMD_ENABLE
+	calr FDC_MODE_CONFIG
 	jr LABEL_F97DE1
 
 FDC_HANDLER_06:
-	.byte 0x1e, 0x64, 0xfe	; CALR FDC_CMD_ENABLE
+	calr FDC_CMD_ENABLE
 	jr LABEL_F97DE1
 
 FDC_HANDLER_07:
-	.byte 0x1e, 0x89, 0xfe	; CALR FDC_CMD_DISABLE
+	calr FDC_CMD_DISABLE
 	jr LABEL_F97DE1
 
 FDC_HANDLER_08:
-	.byte 0x1e, 0x8d, 0xfe	; CALR FDC_STATUS_COPY
+	calr FDC_STATUS_COPY
 	jr LABEL_F97DE1
 
 FDC_HANDLER_09:
-	.byte 0x1e, 0x8f, 0xfe	; CALR FDC_OUTPUT_CTRL
+	calr FDC_OUTPUT_CTRL
 	jr LABEL_F97DE1
 
 FDC_HANDLER_10:
-	.byte 0x1e, 0xc4, 0xef	; CALR FDC_CMD_DISPATCH_SUB
+	calr FDC_CMD_DISPATCH_SUB
 	jr LABEL_F97DE1
 
 FDC_HANDLER_11:
-	.byte 0x1e, 0x4b, 0xfe	; CALR FDC_CMD_ENABLE
-	.byte 0x1e, 0xa3, 0xfe	; CALR FDC_INTERRUPT_HANDLER
+	calr FDC_CMD_ENABLE
+	calr FDC_INTERRUPT_HANDLER
 	jr LABEL_F97DE1
 
 LABEL_F97DDB:
@@ -459095,6 +459102,13 @@ FIRMWARE_VERSION:	; FFFFE8
 	.set LABEL_ED9F94, 0xED9F94
 	.set LABEL_ED9F9C, 0xED9F9C
 	.set LABEL_EDA02C, 0xEDA02C
+	.set ENCODER_LUT_VOLUME, 0xEDA1BC
+	.set ENCODER_LUT_BREATH_INDEX, 0xEDA2BC
+	.set ENCODER_LUT_BREATH_VALUE, 0xEDA2D2
+	.set ENCODER_LUT_BREATH_MULT, 0xEDA3D2
+	.set ENCODER_LUT_BREATH_OFFSET, 0xEDA3EA
+	.set ENCODER_LUT_FOOT, 0xEDA402
+	.set ENCODER_LUT_EXPRESSION, 0xEDA482
 	.set LABEL_EDA704, 0xEDA704
 	.set LABEL_EDA71C, 0xEDA71C
 	.set LABEL_EDA734, 0xEDA734
@@ -460607,6 +460621,25 @@ FIRMWARE_VERSION:	; FFFFE8
 	.set LABEL_F94250, 0xF94250
 	.set LABEL_F94256, 0xF94256
 	.set LABEL_F94262, 0xF94262
+	.set FDC_INIT, 0xF96BBF
+	.set FDC_CONFIG_VERIFY, 0xF96BD0
+	.set FDC_CMD_DISPATCH_SUB, 0xF96D95
+	.set FDC_CMD_SEND, 0xF972F9
+	.set FDC_DETECT_CHECK, 0xF974FE
+	.set FDC_DRIVE_DETECT, 0xF97544
+	.set FDC_DRIVE_STATUS, 0xF97592
+	.set FDC_PRE_OP_CHECK, 0xF975AC
+	.set FDC_TIMING_DELAY, 0xF975DC
+	.set FDC_POST_OP, 0xF975E2
+	.set FDC_STATUS_HANDLER, 0xF97696
+	.set FDC_CE_DISPATCH, 0xF9782A
+	.set FDC_CE_EXIT, 0xF97833
+	.set FDC_SECTOR_XFER, 0xF97835
+	.set FDC_SX_MAIN, 0xF9795E
+	.set FDC_SX_EXIT, 0xF97967
+	.set FDC_CMD_ENABLE, 0xF97C21
+	.set FDC_CMD_DISABLE, 0xF97C4B
+	.set FDC_OUTPUT_CTRL, 0xF97C5B
 	.set LABEL_F98748, 0xF98748
 	.set LABEL_FB40B7, 0xFB40B7
 	.set LABEL_FB4163, 0xFB4163

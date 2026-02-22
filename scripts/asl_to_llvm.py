@@ -69,6 +69,10 @@ DRIFTED_LABEL_NAMES = {
     'fmmsmfmedleyfunc', 'fmmdiskmedleyselectfunc',
 }
 
+# EQU names promoted to inline labels (suppressed from .equ emission).
+# Populated during convert_all() after label maps are built.
+EQU_INLINE_LABELS = set()
+
 # TLCS-900 condition code names for JR/JRL/JPcc instructions
 TLCS900_CC_NAMES = {
     0x0: 'f', 0x1: 'lt', 0x2: 'le', 0x3: 'ule',
@@ -719,17 +723,19 @@ def convert_line(line, in_file_path):
         path_str = remainder.strip().strip('"').strip("'")
         return f"\t; (include inlined) {path_str}"
 
-    # EQU → .equ
+    # EQU → .equ (suppressed for names promoted to inline labels)
     if first_upper == 'EQU':
         value = convert_expression(remainder.strip())
-        result = f".equ {label}, {value}"
-        if comment:
-            result += f"\t{comment}"
         # Track the value for address resolution
         try:
             KNOWN_EQUS[label] = eval_expr(value)
         except:
             pass
+        if label in EQU_INLINE_LABELS:
+            return f"\t; (EQU→inline label) {label} = {value}"
+        result = f".equ {label}, {value}"
+        if comment:
+            result += f"\t{comment}"
         return result
 
     # NAME EQU value (no colon on NAME)
@@ -738,13 +744,15 @@ def convert_line(line, in_file_path):
         if equ_match:
             value = convert_expression(equ_match.group(1).strip())
             name = first_word
-            result = f".equ {name}, {value}"
-            if comment:
-                result += f"\t{comment}"
             try:
                 KNOWN_EQUS[name] = eval_expr(value)
             except:
                 pass
+            if name in EQU_INLINE_LABELS:
+                return f"\t; (EQU→inline label) {name} = {value}"
+            result = f".equ {name}, {value}"
+            if comment:
+                result += f"\t{comment}"
             return result
 
     # ORG → .org
@@ -3826,6 +3834,37 @@ def convert_all(main_file, output_path):
     print("  Building address-to-label map...")
     ADDR_TO_LABEL, ADDR_TO_LABEL_ALL = _build_addr_to_label_map(sorted_content, seg_end_map, label_only_labels)
     print(f"  Labels mapped: {len(ADDR_TO_LABEL)} (JP/CALL), {len(ADDR_TO_LABEL_ALL)} (all)")
+
+    # Add EQU-defined addresses to label maps and label_only_labels.
+    # EQU names that point to ROM addresses (0xE00000-0xFFFFFF) can serve as
+    # branch targets for CALR/JR/JRL, but ONLY if emitted as inline labels
+    # (not .equ constants, which don't produce correct PC-relative offsets).
+    # EQU names that become inline labels (suppressed from .equ emission).
+    global EQU_INLINE_LABELS
+    EQU_INLINE_LABELS = set()
+    equ_labels_added = 0
+    for equ_name, equ_val in KNOWN_EQUS.items():
+        if isinstance(equ_val, int) and ROM_BASE <= equ_val < ROM_BASE + ROM_SIZE:
+            # Skip if a label already exists at this address
+            if equ_val in ADDR_TO_LABEL:
+                continue
+            # Skip register/condition code name conflicts
+            if equ_name.lower() in RESERVED_LABEL_NAMES:
+                continue
+            # Skip drifted labels
+            if equ_name.lower() in DRIFTED_LABEL_NAMES:
+                continue
+            ADDR_TO_LABEL[equ_val] = equ_name
+            ADDR_TO_LABEL_ALL[equ_val] = equ_name
+            # Add to label_only_labels for inline emission
+            if equ_val not in label_only_labels:
+                label_only_labels[equ_val] = []
+            if equ_name not in label_only_labels[equ_val]:
+                label_only_labels[equ_val].append(equ_name)
+            EQU_INLINE_LABELS.add(equ_name)
+            equ_labels_added += 1
+    if equ_labels_added:
+        print(f"  EQU labels added to maps: {equ_labels_added}")
 
     # Build output
     output_lines = []
