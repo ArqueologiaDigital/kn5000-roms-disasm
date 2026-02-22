@@ -1390,6 +1390,36 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
                 imm16 = rom_bytes[2] | (rom_bytes[3] << 8)
                 return f"ld {reg_name}, 0x{imm16:X}", 4
 
+    # Tier 15: Shift/Rotate instructions (3-byte: prefix + sub_opcode + count)
+    # Shifts: prefix_r + {0xEC=SLA, 0xED=SRA, 0xEE=SLL, 0xEF=SRL} + count
+    # Rotates: prefix_r + {0xE8=RLC, 0xE9=RRC, 0xEA=RL, 0xEB=RR} + 0x01
+    SHIFT_ROTATE_MNEMONICS = {
+        'SLL', 'SLA', 'SRL', 'SRA', 'RL', 'RLC', 'RR', 'RRC',
+    }
+    SHIFT_SUBOPC = {0xEC: 'sla', 0xED: 'sra', 0xEE: 'sll', 0xEF: 'srl'}
+    ROTATE_SUBOPC = {0xE8: 'rlc', 0xE9: 'rrc', 0xEA: 'rl', 0xEB: 'rr'}
+    REG32_BY_INDEX = {0: 'xwa', 1: 'xbc', 2: 'xde', 3: 'xhl',
+                      4: 'xix', 5: 'xiy', 6: 'xiz', 7: 'xsp'}
+    if nbytes == 3 and rom_bytes is not None and mnem_upper in SHIFT_ROTATE_MNEMONICS:
+        prefix = rom_bytes[0]
+        sub_opc = rom_bytes[1]
+        count = rom_bytes[2]
+        # Determine register from prefix byte
+        reg_name = None
+        if 0xC8 <= prefix <= 0xCF:
+            reg_name = REG8_BY_INDEX[prefix & 0x07]
+        elif 0xD8 <= prefix <= 0xDF:
+            reg_name = REG16_BY_INDEX[prefix & 0x07]
+        elif 0xE8 <= prefix <= 0xEF:
+            reg_name = REG32_BY_INDEX[prefix & 0x07]
+        if reg_name is not None:
+            if sub_opc in SHIFT_SUBOPC:
+                mnem = SHIFT_SUBOPC[sub_opc]
+                return f"{mnem} {reg_name}, {count}", 3
+            elif sub_opc in ROTATE_SUBOPC and count == 1:
+                mnem = ROTATE_SUBOPC[sub_opc]
+                return f"{mnem} {reg_name}", 3
+
     return None
 
 
