@@ -638,9 +638,11 @@ def convert_line(line, in_file_path):
                         SELF_CORRECTION_TRIGGERED = True
                         SELF_CORRECTION_ADDR = expected_addr
 
-        # Suppress LABEL_XXXXXX inline emission — collect for .set at end.
-        # Inline labels can drift from correct ROM address; .set is exact.
-        if m_lbl and expected_addr is not None:
+        # Suppress LABEL_XXXXXX inline emission when on a line WITH an instruction.
+        # Those labels can drift because instruction bytes are consumed before
+        # block correction padding. Label-only lines are safe (no bytes consumed,
+        # padding aligns the label to the correct position).
+        if m_lbl and expected_addr is not None and rest:
             SET_ONLY_LABELS[label] = expected_addr
             label = None
 
