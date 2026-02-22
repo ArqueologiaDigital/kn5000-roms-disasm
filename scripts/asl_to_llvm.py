@@ -1874,7 +1874,111 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
                         imm_val = rom_bytes[2] | (rom_bytes[3] << 8)
                         return f"{native_mnem} {reg_name}, 0x{imm_val:X}", 4
 
-    return None
+    # Tier 31: Memory INC/DEC (register-indirect, 8-bit and 16-bit data)
+    # 8-bit no-disp (2B): 0x80+r, 0x60+count%8 (INC) / 0x68+count%8 (DEC)
+    # 8-bit d8 (3B): 0x88+r, d8, 0x60+count%8 / 0x68+count%8
+    # 16-bit no-disp (2B): 0x90+r, 0x60+count%8 / 0x68+count%8
+    # 16-bit d8 (3B): 0x98+r, d8, 0x60+count%8 / 0x68+count%8
+    if rom_bytes is not None and mnem_upper in ('INC', 'INCW', 'DEC', 'DECW'):
+        prefix = rom_bytes[0]
+        is_inc = mnem_upper in ('INC', 'INCW')
+        # Determine prefix range and data size
+        if 0x80 <= prefix <= 0x87 and nbytes == 2:
+            # 8-bit no-disp
+            r_idx = prefix & 0x07
+            sub_opc = rom_bytes[1]
+            base_opc = 0x60 if is_inc else 0x68
+            if base_opc <= sub_opc <= base_opc + 7:
+                count = sub_opc - base_opc
+                if count == 0:
+                    count = 8
+                reg_name = REG32_BY_INDEX.get(r_idx)
+                if reg_name:
+                    mnem = 'incm8' if is_inc else 'decm8'
+                    return f"{mnem} {count}, ({reg_name})", 2
+        elif 0x88 <= prefix <= 0x8F and nbytes == 3:
+            # 8-bit d8
+            r_idx = prefix & 0x07
+            d8 = rom_bytes[1]
+            sub_opc = rom_bytes[2]
+            base_opc = 0x60 if is_inc else 0x68
+            if base_opc <= sub_opc <= base_opc + 7:
+                if d8 == 0:
+                    pass  # Skip d8=0: LLVM would emit 2-byte no-disp form
+                else:
+                    count = sub_opc - base_opc
+                    if count == 0:
+                        count = 8
+                    reg_name = REG32_BY_INDEX.get(r_idx)
+                    if reg_name:
+                        disp = d8 if d8 <= 127 else d8 - 256
+                        mnem = 'incm8' if is_inc else 'decm8'
+                        if disp >= 0:
+                            return f"{mnem} {count}, ({reg_name} + {disp})", 3
+                        else:
+                            return f"{mnem} {count}, ({reg_name} - {-disp})", 3
+        elif 0x90 <= prefix <= 0x97 and nbytes == 2:
+            # 16-bit no-disp
+            r_idx = prefix & 0x07
+            sub_opc = rom_bytes[1]
+            base_opc = 0x60 if is_inc else 0x68
+            if base_opc <= sub_opc <= base_opc + 7:
+                count = sub_opc - base_opc
+                if count == 0:
+                    count = 8
+                reg_name = REG32_BY_INDEX.get(r_idx)
+                if reg_name:
+                    mnem = 'incm' if is_inc else 'decm'
+                    return f"{mnem} {count}, ({reg_name})", 2
+        elif 0x98 <= prefix <= 0x9F and nbytes == 3:
+            # 16-bit d8
+            r_idx = prefix & 0x07
+            d8 = rom_bytes[1]
+            sub_opc = rom_bytes[2]
+            base_opc = 0x60 if is_inc else 0x68
+            if base_opc <= sub_opc <= base_opc + 7:
+                if d8 == 0:
+                    pass  # Skip d8=0
+                else:
+                    count = sub_opc - base_opc
+                    if count == 0:
+                        count = 8
+                    reg_name = REG32_BY_INDEX.get(r_idx)
+                    if reg_name:
+                        disp = d8 if d8 <= 127 else d8 - 256
+                        mnem = 'incm' if is_inc else 'decm'
+                        if disp >= 0:
+                            return f"{mnem} {count}, ({reg_name} + {disp})", 3
+                        else:
+                            return f"{mnem} {count}, ({reg_name} - {-disp})", 3
+
+    # Tier 32: Memory PUSHW (16-bit, register-indirect)
+    # No-disp (2B): 0x90+r, 0x04
+    # d8 (3B): 0x98+r, d8, 0x04
+    if rom_bytes is not None and mnem_upper == 'PUSHW':
+        prefix = rom_bytes[0]
+        if 0x90 <= prefix <= 0x97 and nbytes == 2:
+            if rom_bytes[1] == 0x04:
+                r_idx = prefix & 0x07
+                reg_name = REG32_BY_INDEX.get(r_idx)
+                if reg_name:
+                    return f"pushm ({reg_name})", 2
+        elif 0x98 <= prefix <= 0x9F and nbytes == 3:
+            if rom_bytes[2] == 0x04:
+                r_idx = prefix & 0x07
+                d8 = rom_bytes[1]
+                if d8 == 0:
+                    pass  # Skip d8=0
+                else:
+                    reg_name = REG32_BY_INDEX.get(r_idx)
+                    if reg_name:
+                        disp = d8 if d8 <= 127 else d8 - 256
+                        if disp >= 0:
+                            return f"pushm ({reg_name} + {disp})", 3
+                        else:
+                            return f"pushm ({reg_name} - {-disp})", 3
+
+    return None  # No native conversion available
 
 
 def convert_instruction(label, mnemonic, operands_str, comment, label_addr_suffix=""):
