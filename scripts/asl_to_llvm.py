@@ -73,6 +73,12 @@ REG8_BY_INDEX = {0: 'w', 1: 'a', 2: 'b', 3: 'c', 4: 'd', 5: 'e', 6: 'h', 7: 'l'}
 REG16_BY_INDEX = {0: 'wa', 1: 'bc', 2: 'de', 3: 'hl', 4: 'ix', 5: 'iy', 6: 'iz', 7: 'sp'}
 REG32_BY_INDEX = {0: 'xwa', 1: 'xbc', 2: 'xde', 3: 'xhl', 4: 'xix', 5: 'xiy', 6: 'xiz', 7: 'xsp'}
 
+# For 8-bit direct addressing: the sub-opcode reg index uses 8-bit register numbering
+# (W=0, A=1, B=2, C=3, D=4, E=5, H=6, L=7). The LLVM GPR register class can only
+# encode the low-byte registers (A, C, E, L) via sub_8bit extraction. The high-byte
+# registers (W, B, D, H) at even indices are NOT encodable and must fall back to .byte.
+REG8_TO_GPR = {1: 'xwa', 3: 'xbc', 5: 'xde', 7: 'xhl'}
+
 # Statistics counters for native vs fallback instructions
 NATIVE_INSTR_COUNT = 0
 BYTE_FALLBACK_COUNT = 0
@@ -2029,6 +2035,271 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
                             return f"pushm ({reg_name} + {disp})", 3
                         else:
                             return f"pushm ({reg_name} - {-disp})", 3
+
+    # =========================================================================
+    # Tier 35: Direct addressing (C1/D1/E1 + addr16 + sub-opcode)
+    # Source memory with 16-bit direct address. Sub-opcode table matches
+    # register-indirect table. Covers: LD reg,(addr), CP/AND/OR/ADD/SUB
+    # (addr)#imm, ALU reg,(addr), INC/DEC (addr).
+    # =========================================================================
+    if rom_bytes is not None and nbytes >= 4:
+        prefix = rom_bytes[0]
+        if prefix in (0xC1, 0xD1, 0xE1):
+            addr16 = rom_bytes[1] | (rom_bytes[2] << 8)
+            sub_opc = rom_bytes[3]
+            opsize = {0xC1: 8, 0xD1: 16, 0xE1: 32}[prefix]
+            reg_table = {8: REG32_BY_INDEX, 16: REG32_BY_INDEX, 32: REG32_BY_INDEX}
+            sz_suffix = {8: '8', 16: '16', 32: '32'}[opsize]
+            imm_bytes = {8: 1, 16: 2, 32: 4}[opsize]
+
+            # LD reg, (addr16): sub-opc 0x20-0x27, no extra bytes
+            if 0x20 <= sub_opc <= 0x27 and nbytes == 4:
+                reg_idx = sub_opc & 0x07
+                if opsize == 8:
+                    reg_name = REG8_TO_GPR.get(reg_idx)
+                else:
+                    reg_name = REG32_BY_INDEX.get(reg_idx)
+                if reg_name:
+                    return f"ldda{sz_suffix} {reg_name}, {addr16}", nbytes
+
+            # ALU (addr16), #imm: sub-opc 0x38-0x3F, + imm bytes
+            if 0x38 <= sub_opc <= 0x3F and nbytes == 4 + imm_bytes:
+                alu_idx = sub_opc & 0x07
+                imm_val = 0
+                for i in range(imm_bytes):
+                    imm_val |= rom_bytes[4 + i] << (8 * i)
+                alu_ops = {0: 'adddi', 1: 'addci', 2: 'subdi', 3: 'sbcdi',
+                           4: 'anddi', 5: 'xordi', 6: 'ordi', 7: 'cpdi'}
+                mnem = alu_ops[alu_idx] + sz_suffix
+                return f"{mnem} {addr16}, {imm_val}", nbytes
+
+            # ALU reg, (addr16) — load direction: sub-opc 0x80-0xFF (base + reg)
+            # ADD=0x80, ADC=0x90, SUB=0xA0, SBC=0xB0, AND=0xC0, XOR=0xD0, OR=0xE0, CP=0xF0
+            if sub_opc >= 0x80 and nbytes == 4:
+                alu_base = sub_opc & 0xF0
+                reg_idx = sub_opc & 0x07
+                is_store = (sub_opc & 0x08) != 0  # bit 3 set = result to memory
+                if opsize == 8:
+                    reg_name = REG8_TO_GPR.get(reg_idx)
+                else:
+                    reg_name = REG32_BY_INDEX.get(reg_idx)
+                if reg_name:
+                    if is_store:
+                        alu_store_ops = {0x80: 'adddm', 0x90: 'addcdm', 0xA0: 'subdm',
+                                         0xB0: 'sbcdm', 0xC0: 'anddm', 0xD0: 'xordm',
+                                         0xE0: 'orddm', 0xF0: 'cpdm'}
+                        mnem_base = alu_store_ops.get(alu_base)
+                        if mnem_base:
+                            mnem = mnem_base + sz_suffix
+                            return f"{mnem} {addr16}, {reg_name}", nbytes
+                    else:
+                        alu_load_ops = {0x80: 'addda', 0x90: 'addcda', 0xA0: 'subda',
+                                        0xB0: 'sbcda', 0xC0: 'andda', 0xD0: 'xorda',
+                                        0xE0: 'orda', 0xF0: 'cpda'}
+                        mnem_base = alu_load_ops.get(alu_base)
+                        if mnem_base:
+                            mnem = mnem_base + sz_suffix
+                            return f"{mnem} {reg_name}, {addr16}", nbytes
+
+            # INC/DEC (addr16): sub-opc 0x60+count / 0x68+count
+            if 0x60 <= sub_opc <= 0x6F and nbytes == 4:
+                is_dec = (sub_opc & 0x08) != 0
+                count = sub_opc & 0x07
+                if count == 0:
+                    count = 8
+                mnem = ('decdi' if is_dec else 'incdi') + sz_suffix
+                return f"{mnem} {count}, {addr16}", nbytes
+
+    # =========================================================================
+    # Tier 36: Direct addressing (C2/D2/E2 + addr24 + sub-opcode)
+    # Source memory with 24-bit direct address. Same sub-opcode table as Tier 35.
+    # =========================================================================
+    if rom_bytes is not None and nbytes >= 5:
+        prefix = rom_bytes[0]
+        if prefix in (0xC2, 0xD2, 0xE2):
+            addr24 = rom_bytes[1] | (rom_bytes[2] << 8) | (rom_bytes[3] << 16)
+            sub_opc = rom_bytes[4]
+            opsize = {0xC2: 8, 0xD2: 16, 0xE2: 32}[prefix]
+            sz_suffix = {8: '8', 16: '16', 32: '32'}[opsize]
+            imm_bytes = {8: 1, 16: 2, 32: 4}[opsize]
+            suffix24 = '_24'
+
+            # LD reg, (addr24): sub-opc 0x20-0x27
+            if 0x20 <= sub_opc <= 0x27 and nbytes == 5:
+                reg_idx = sub_opc & 0x07
+                if opsize == 8:
+                    reg_name = REG8_TO_GPR.get(reg_idx)
+                else:
+                    reg_name = REG32_BY_INDEX.get(reg_idx)
+                if reg_name:
+                    return f"ldda{sz_suffix}{suffix24} {reg_name}, {addr24}", nbytes
+
+            # ALU (addr24), #imm: sub-opc 0x38-0x3F
+            if 0x38 <= sub_opc <= 0x3F and nbytes == 5 + imm_bytes:
+                alu_idx = sub_opc & 0x07
+                imm_val = 0
+                for i in range(imm_bytes):
+                    imm_val |= rom_bytes[5 + i] << (8 * i)
+                alu_ops = {0: 'adddi', 1: 'addci', 2: 'subdi', 3: 'sbcdi',
+                           4: 'anddi', 5: 'xordi', 6: 'ordi', 7: 'cpdi'}
+                # For 24-bit addr, reuse 16-bit addr mnemonics — but we don't have
+                # 24-bit variants of ALU imm yet. Skip for now.
+                pass
+
+            # ALU reg, (addr24) — load direction
+            if sub_opc >= 0x80 and nbytes == 5:
+                alu_base = sub_opc & 0xF0
+                reg_idx = sub_opc & 0x07
+                is_store = (sub_opc & 0x08) != 0
+                # Skip store direction for 24-bit for now
+                if not is_store:
+                    reg_name = REG32_BY_INDEX.get(reg_idx)
+                    alu_load_ops = {0x80: 'addda', 0x90: 'addcda', 0xA0: 'subda',
+                                    0xB0: 'sbcda', 0xC0: 'andda', 0xD0: 'xorda',
+                                    0xE0: 'orda', 0xF0: 'cpda'}
+                    mnem_base = alu_load_ops.get(alu_base)
+                    if mnem_base and reg_name:
+                        # Need 24-bit instruction variant — skip for now
+                        pass
+
+            # INC/DEC (addr24): sub-opc 0x60+count / 0x68+count
+            # Skip 24-bit for now
+
+    # =========================================================================
+    # Tier 37: Destination direct addressing (F1 + addr16 + sub-opcode)
+    # Covers: LD (addr),reg; LD (addr),#imm; LDA reg,addr; BIT/SET/RES (addr);
+    #         INC/DEC (addr) via F1.
+    # =========================================================================
+    if rom_bytes is not None and nbytes >= 4 and rom_bytes[0] == 0xF1:
+        addr16 = rom_bytes[1] | (rom_bytes[2] << 8)
+        sub_opc = rom_bytes[3]
+
+        # LD (addr16), reg8: sub-opc 0x40+reg8, nbytes=4
+        if 0x40 <= sub_opc <= 0x47 and nbytes == 4:
+            reg_idx = sub_opc & 0x07
+            reg_name = REG8_TO_GPR.get(reg_idx)
+            if reg_name:
+                return f"stda8 {addr16}, {reg_name}", nbytes
+
+        # LD (addr16), reg16: sub-opc 0x50+reg16, nbytes=4
+        if 0x50 <= sub_opc <= 0x57 and nbytes == 4:
+            reg_idx = sub_opc & 0x07
+            reg_name = REG32_BY_INDEX.get(reg_idx)
+            if reg_name:
+                return f"stda16 {addr16}, {reg_name}", nbytes
+
+        # LD (addr16), #imm8: sub-opc 0x00, nbytes=5
+        if sub_opc == 0x00 and nbytes == 5:
+            imm8 = rom_bytes[4]
+            return f"stdi8 {addr16}, {imm8}", nbytes
+
+        # LDW (addr16), #imm16: sub-opc 0x02, nbytes=6
+        if sub_opc == 0x02 and nbytes == 6:
+            imm16 = rom_bytes[4] | (rom_bytes[5] << 8)
+            return f"stdi16 {addr16}, {imm16}", nbytes
+
+        # LDA reg32, addr16: sub-opc 0x30+reg32, nbytes=4
+        if 0x30 <= sub_opc <= 0x37 and nbytes == 4:
+            reg_idx = sub_opc & 0x07
+            reg_name = REG32_BY_INDEX.get(reg_idx)
+            if reg_name:
+                return f"ldada {reg_name}, {addr16}", nbytes
+
+        # BIT (addr16), bit: sub-opc 0xC8+bit, nbytes=4
+        if 0xC8 <= sub_opc <= 0xCF and nbytes == 4:
+            bit_num = sub_opc & 0x07
+            return f"bitda {bit_num}, {addr16}", nbytes
+
+        # SET (addr16), bit: sub-opc 0xB8+bit, nbytes=4
+        if 0xB8 <= sub_opc <= 0xBF and nbytes == 4:
+            bit_num = sub_opc & 0x07
+            return f"setda {bit_num}, {addr16}", nbytes
+
+        # RES (addr16), bit: sub-opc 0xB0+bit, nbytes=4
+        if 0xB0 <= sub_opc <= 0xB7 and nbytes == 4:
+            bit_num = sub_opc & 0x07
+            return f"resda {bit_num}, {addr16}", nbytes
+
+        # TSET (addr16), bit: sub-opc 0xA0+bit, nbytes=4
+        if 0xA0 <= sub_opc <= 0xA7 and nbytes == 4:
+            bit_num = sub_opc & 0x07
+            return f"tsetda {bit_num}, {addr16}", nbytes
+
+        # INC (addr16): sub-opc 0x60+count, nbytes=4
+        if 0x60 <= sub_opc <= 0x67 and nbytes == 4:
+            count = sub_opc & 0x07
+            if count == 0:
+                count = 8
+            return f"incdd8 {count}, {addr16}", nbytes
+
+        # DEC (addr16): sub-opc 0x68+count, nbytes=4
+        if 0x68 <= sub_opc <= 0x6F and nbytes == 4:
+            count = sub_opc & 0x07
+            if count == 0:
+                count = 8
+            return f"decdd8 {count}, {addr16}", nbytes
+
+        # INCW (addr16): sub-opc 0x70+count, nbytes=4 (word INC in F1 table)
+        if 0x70 <= sub_opc <= 0x77 and nbytes == 4:
+            count = sub_opc & 0x07
+            if count == 0:
+                count = 8
+            return f"incdd16 {count}, {addr16}", nbytes
+
+        # DECW (addr16): sub-opc 0x78+count, nbytes=4
+        if 0x78 <= sub_opc <= 0x7F and nbytes == 4:
+            count = sub_opc & 0x07
+            if count == 0:
+                count = 8
+            return f"decdd16 {count}, {addr16}", nbytes
+
+        # ALU (addr16), #imm8: sub-opc 0x38-0x3F (only byte ops under F1)
+        # CP=0x3F, OR=0x3E, XOR=0x3D, AND=0x3C, SBC=0x3B, SUB=0x3A, ADC=0x39, ADD=0x38
+        # Wait, these are under the destination table... Actually the sub-opcode
+        # table for F1 has 0x38-0x3F for ALU (addr), #imm too.
+        # These seem to always be 8-bit under F1. Let me check the data.
+        # Actually, looking at F1 data: 0x3F = CP etc. but the byte count varies.
+        # Under F1, 0x38-0x3F + imm8 would be 5 bytes for byte ops.
+        # This needs more investigation. Skip for now.
+
+    # =========================================================================
+    # Tier 38: Destination direct addressing (F2 + addr24 + sub-opcode)
+    # Same as Tier 37 but with 24-bit address.
+    # =========================================================================
+    if rom_bytes is not None and nbytes >= 5 and rom_bytes[0] == 0xF2:
+        addr24 = rom_bytes[1] | (rom_bytes[2] << 8) | (rom_bytes[3] << 16)
+        sub_opc = rom_bytes[4]
+
+        # LD (addr24), reg8: sub-opc 0x40+reg8, nbytes=5
+        if 0x40 <= sub_opc <= 0x47 and nbytes == 5:
+            reg_idx = sub_opc & 0x07
+            reg_name = REG8_TO_GPR.get(reg_idx)
+            if reg_name:
+                return f"stda8_24 {addr24}, {reg_name}", nbytes
+
+        # LD (addr24), reg16: sub-opc 0x50+reg16, nbytes=5
+        if 0x50 <= sub_opc <= 0x57 and nbytes == 5:
+            reg_idx = sub_opc & 0x07
+            reg_name = REG32_BY_INDEX.get(reg_idx)
+            if reg_name:
+                return f"stda16_24 {addr24}, {reg_name}", nbytes
+
+        # LD (addr24), #imm8: sub-opc 0x00, nbytes=6
+        if sub_opc == 0x00 and nbytes == 6:
+            imm8 = rom_bytes[5]
+            return f"stdi8_24 {addr24}, {imm8}", nbytes
+
+        # LDW (addr24), #imm16: sub-opc 0x02, nbytes=7
+        if sub_opc == 0x02 and nbytes == 7:
+            imm16 = rom_bytes[5] | (rom_bytes[6] << 8)
+            return f"stdi16_24 {addr24}, {imm16}", nbytes
+
+        # LDA reg32, addr24: sub-opc 0x30+reg32, nbytes=5
+        if 0x30 <= sub_opc <= 0x37 and nbytes == 5:
+            reg_idx = sub_opc & 0x07
+            reg_name = REG32_BY_INDEX.get(reg_idx)
+            if reg_name:
+                return f"ldada_24 {reg_name}, {addr24}", nbytes
 
     return None  # No native conversion available
 
