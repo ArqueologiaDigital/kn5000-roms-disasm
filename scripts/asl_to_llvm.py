@@ -1261,6 +1261,26 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
                 return "push_sr", 1
             elif mnem_upper == 'POP' and rom_bytes[0] == 0x03:
                 return "pop_sr", 1
+        elif reg == 'A':
+            if mnem_upper == 'PUSH' and rom_bytes[0] == 0x14:
+                return "push_a", 1
+            elif mnem_upper == 'POP' and rom_bytes[0] == 0x15:
+                return "pop_a", 1
+        elif reg == 'F':
+            if mnem_upper == 'PUSH' and rom_bytes[0] == 0x18:
+                return "push_f", 1
+            elif mnem_upper == 'POP' and rom_bytes[0] == 0x19:
+                return "pop_f", 1
+    # 1-byte flag manipulation
+    if nbytes == 1 and rom_bytes is not None:
+        SINGLE_BYTE_MAP = {
+            ('SCF', 0x11): 'scf', ('RCF', 0x10): 'rcf',
+            ('CCF', 0x12): 'ccf', ('ZCF', 0x13): 'zcf',
+            ('INCF', 0x0C): 'incf', ('DECF', 0x0D): 'decf',
+        }
+        key = (mnem_upper, rom_bytes[0])
+        if key in SINGLE_BYTE_MAP:
+            return SINGLE_BYTE_MAP[key], 1
 
     # Tier 6b: Prefix PUSH/POP (2-byte encoding)
     # PUSH r8: C8+r, 0x04; POP r8: C8+r, 0x05
@@ -1815,7 +1835,17 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
                             imm_val = rom_bytes[2 + disp_offset] | (rom_bytes[3 + disp_offset] << 8)
                             return f"ldmi16 {mem_str}, 0x{imm_val:X}", expected_nbytes
 
-    # Tier 29: MUL/MULS/DIV/DIVS register-immediate
+    # Tier 29: Indirect CALL (2-byte: B0+r, 0xE8)
+    # ASL: "CALL T, XHL" → LLVM: "call (xhl)"
+    if nbytes == 2 and rom_bytes is not None and mnem_upper == 'CALL':
+        prefix = rom_bytes[0]
+        if 0xB0 <= prefix <= 0xB7 and rom_bytes[1] == 0xE8:
+            r_idx = prefix & 0x07
+            reg_name = REG32_BY_INDEX.get(r_idx)
+            if reg_name:
+                return f"call ({reg_name})", 2
+
+    # Tier 30: MUL/MULS/DIV/DIVS register-immediate
     # ASL uses macro mnemonics like MULS_WA, DIVS_BC, MUL_A, MULW_WA, etc.
     # 8-bit: C8+r, sub_opc, imm8 (3 bytes)
     # 16-bit: D8+r, sub_opc, imm16_LE (4 bytes)
