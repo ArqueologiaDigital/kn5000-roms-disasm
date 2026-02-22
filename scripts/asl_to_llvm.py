@@ -1521,6 +1521,41 @@ def _dw_has_label_refs(args):
     return False
 
 
+def _try_dw_label_arithmetic(args):
+    """Try to convert DW args with label arithmetic to symbolic expressions.
+
+    Handles patterns like:
+      (LABEL_A - BASE)     → LABEL_A - BASE
+      -BASE + LABEL_A      → LABEL_A - BASE
+
+    Returns list of symbolic strings if ALL operands are label arithmetic,
+    or None if any operand doesn't match the pattern.
+    Uses A - B syntax (required by llvm-mc; -B + A is not supported).
+    """
+    parts = split_operands(args)
+
+    symbolic = []
+    for part in parts:
+        part = part.strip()
+
+        # Pattern 1: (A - B) with parens → A - B
+        m = re.match(r'^\((\w+)\s*-\s*(\w+)\)$', part)
+        if m:
+            symbolic.append(f"{m.group(1)} - {m.group(2)}")
+            continue
+
+        # Pattern 2: -BASE + LABEL (no parens) → LABEL - BASE
+        m = re.match(r'^-(\w+)\s*\+\s*(\w+)$', part)
+        if m:
+            symbolic.append(f"{m.group(2)} - {m.group(1)}")
+            continue
+
+        # Not a label arithmetic pattern
+        return None
+
+    return symbolic
+
+
 def convert_dw(label, args, comment):
     """Convert dw to .short, falling back to ROM bytes for label references."""
     global BLOCK_CURSOR
@@ -1539,18 +1574,23 @@ def convert_dw(label, args, comment):
             nbytes = remaining
         if nbytes > 0:
             rom_bytes = BLOCK_BUFFER[BLOCK_CURSOR:BLOCK_CURSOR + nbytes]
-            shorts = []
-            for i in range(0, nbytes, 2):
-                chunk = rom_bytes[i:i+2]
-                if len(chunk) == 2:
-                    val = chunk[0] | (chunk[1] << 8)
-                    shorts.append(f'0x{val:04X}')
-            if shorts:
-                short_str = ', '.join(shorts)
-                if _dw_args_all_numeric(args):
-                    result += f"\t.short {short_str}"
-                else:
-                    result += f"\t.short {short_str}\t; DW {args}"
+            # Try symbolic label arithmetic (e.g., -BASE + LABEL)
+            sym_exprs = _try_dw_label_arithmetic(args)
+            if sym_exprs is not None:
+                result += f"\t.short {', '.join(sym_exprs)}"
+            else:
+                shorts = []
+                for i in range(0, nbytes, 2):
+                    chunk = rom_bytes[i:i+2]
+                    if len(chunk) == 2:
+                        val = chunk[0] | (chunk[1] << 8)
+                        shorts.append(f'0x{val:04X}')
+                if shorts:
+                    short_str = ', '.join(shorts)
+                    if _dw_args_all_numeric(args):
+                        result += f"\t.short {short_str}"
+                    else:
+                        result += f"\t.short {short_str}\t; DW {args}"
             BLOCK_CURSOR += nbytes
             ADDR_TRACKER.advance(nbytes)
         if comment:
@@ -1558,19 +1598,23 @@ def convert_dw(label, args, comment):
         return result
 
     # Outside block buffer — use source-based conversion
-    # If dw references labels, emit raw bytes from ROM instead
+    # If dw references labels, try symbolic arithmetic or emit raw bytes from ROM
     if _dw_has_label_refs(args) and addr is not None:
         rom_bytes = get_rom_bytes(addr, nbytes)
         if rom_bytes is not None:
-            original = f"DW {args}"
-            shorts = []
-            for i in range(0, nbytes, 2):
-                chunk = rom_bytes[i:i+2]
-                if len(chunk) == 2:
-                    val = chunk[0] | (chunk[1] << 8)
-                    shorts.append(f'0x{val:04X}')
-            if shorts:
-                result += f"\t.short {', '.join(shorts)}\t; {original}"
+            sym_exprs = _try_dw_label_arithmetic(args)
+            if sym_exprs is not None:
+                result += f"\t.short {', '.join(sym_exprs)}"
+            else:
+                original = f"DW {args}"
+                shorts = []
+                for i in range(0, nbytes, 2):
+                    chunk = rom_bytes[i:i+2]
+                    if len(chunk) == 2:
+                        val = chunk[0] | (chunk[1] << 8)
+                        shorts.append(f'0x{val:04X}')
+                if shorts:
+                    result += f"\t.short {', '.join(shorts)}\t; {original}"
             ADDR_TRACKER.advance(nbytes)
             if comment:
                 result += f"\t{comment}"
