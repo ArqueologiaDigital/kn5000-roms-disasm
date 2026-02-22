@@ -113146,53 +113146,53 @@ RESET_HANDLER:	; EF03C6
 	stdi8 266, 4
 
 	; === Port F Setup (Control Panel / MIDI) ===
-	.byte 0x08, 0x3c, 0x00	; LD (PF), 000h
-	.byte 0x08, 0x3f, 0x73	; LD (PFFC), 073h	; Control panel enabled / MIDI disabled
-	.byte 0x08, 0x3e, 0x15	; LD (PFCR), 015h
+	ldio 0x3C, 0x00
+	ldio 0x3F, 0x73	; Control panel enabled / MIDI disabled
+	ldio 0x3E, 0x15
 	.byte 0xc0, 0x2c, 0x3c, 0xf0	; AND (PB), 0f0h
 	.byte 0xf0, 0x20, 0xb3	; RES 3, (P8)
 	.byte 0xf0, 0x3c, 0xb2	; RES 2, (PF)
 
 	; === Data Bus Ports Setup (P2, P3, P7) ===
-	.byte 0x08, 0x0b, 0xff	; LD (P2FC), 0ffh
-	.byte 0x08, 0x0f, 0xff	; LD (P3FC), 0ffh
-	.byte 0x08, 0x1c, 0xff	; LD (P7), 0ffh
-	.byte 0x08, 0x1f, 0x1f	; LD (P7FC), 01fh
-	.byte 0x08, 0x1e, 0x00	; LD (P7CR), 000h
+	ldio 0x0B, 0xFF
+	ldio 0x0F, 0xFF
+	ldio 0x1C, 0xFF
+	ldio 0x1F, 0x1F
+	ldio 0x1E, 0x00
 
 	; === Address Bus Ports Setup (PA, PB, PC, PD, PE, PH, PZ) ===
-	.byte 0x08, 0x28, 0xfe	; LD (PA), 0feh
-	.byte 0x08, 0x2b, 0x08	; LD (PAFC), 008h
-	.byte 0x08, 0x2c, 0xff	; LD (PB), 0ffh
-	.byte 0x08, 0x2f, 0x1f	; LD (PBFC), 01fh
-	.byte 0x08, 0x30, 0x03	; LD (PC), 003h
-	.byte 0x08, 0x33, 0x00	; LD (PCFC), 000h
-	.byte 0x08, 0x32, 0x02	; LD (PCCR), 002h
-	.byte 0x08, 0x34, 0x00	; LD (PD), 000h
-	.byte 0x08, 0x37, 0x06	; LD (PDFC), 006h
-	.byte 0x08, 0x36, 0x11	; LD (PDCR), 011h
-	.byte 0x08, 0x38, 0x00	; LD (PE), 000h
-	.byte 0x08, 0x3b, 0x42	; LD (PEFC), 042h
-	.byte 0x08, 0x3a, 0x20	; LD (PECR), 020h
-	.byte 0x08, 0x44, 0x00	; LD (PH), 000h
-	.byte 0x08, 0x47, 0x1e	; LD (PHFC), 01eh
-	.byte 0x08, 0x46, 0x09	; LD (PHCR), 009h
-	.byte 0x08, 0x68, 0xff	; LD (PZ), 0ffh
-	.byte 0x08, 0x6a, 0x03	; LD (PZCR), 003h
+	ldio 0x28, 0xFE
+	ldio 0x2B, 0x08
+	ldio 0x2C, 0xFF
+	ldio 0x2F, 0x1F
+	ldio 0x30, 0x03
+	ldio 0x33, 0x00
+	ldio 0x32, 0x02
+	ldio 0x34, 0x00
+	ldio 0x37, 0x06
+	ldio 0x36, 0x11
+	ldio 0x38, 0x00
+	ldio 0x3B, 0x42
+	ldio 0x3A, 0x20
+	ldio 0x44, 0x00
+	ldio 0x47, 0x1E
+	ldio 0x46, 0x09
+	ldio 0x68, 0xFF
+	ldio 0x6A, 0x03
 
 	; === 8-bit Timer Setup ===
-	.byte 0x08, 0x84, 0x1d	; LD (T01MOD), 01dh
-	.byte 0x08, 0x85, 0x1d	; LD (T23MOD), 01dh
-	.byte 0x08, 0x82, 0x00	; LD (T02FFCR), 000h
-	.byte 0x08, 0x88, 0x0a	; LD (TREG0), 00ah
-	.byte 0x08, 0x89, 0x10	; LD (TREG1), 010h
-	.byte 0x08, 0x81, 0x00	; LD (TRDC), 000h
+	ldio 0x84, 0x1D
+	ldio 0x85, 0x1D
+	ldio 0x82, 0x00
+	ldio 0x88, 0x0A
+	ldio 0x89, 0x10
+	ldio 0x81, 0x00
 	.byte 0xf0, 0x80, 0xb9	; SET 1, (T8RUN)
 
 	; === 16-bit Timer 4/5 Setup ===
-	.byte 0x08, 0x98, 0x05	; LD (T4MOD), 005h
-	.byte 0x08, 0x99, 0x00	; LD (T4FFCR), 000h
-	.byte 0x08, 0x9f, 0x00	; LD (T16CR), 000h
+	ldio 0x98, 0x05
+	ldio 0x99, 0x00
+	ldio 0x9F, 0x00
 	.byte 0x0a, 0x90, 0x01, 0x00	; LDW (TREG4L:24), 0001h (ASL unsupported)
 	.byte 0x0a, 0x92, 0x09, 0x3d	; LDW (TREG5L:24), 3d09h (ASL unsupported)
 	.byte 0xf0, 0x9e, 0xbf	; SET 7, (T16RUN)
@@ -113215,9 +113215,9 @@ RESET_HANDLER:	; EF03C6
 	stdi8 342, 255
 
 	; === Port 8 Setup (Chip Select) ===
-	.byte 0x08, 0x20, 0x3b	; LD (P8), 03bh
-	.byte 0x08, 0x23, 0x7f	; LD (P8FC), 07fh
-	.byte 0x08, 0x22, 0x3f	; LD (P8CR), 03fh
+	ldio 0x20, 0x3B
+	ldio 0x23, 0x7F
+	ldio 0x22, 0x3F
 
 	; === DRAM Initialization Delay 1 ===
 	ldw bc, 0x400
@@ -113251,13 +113251,13 @@ RESET_HANDLER:	; EF03C6
 	stdi8 341, 129
 
 	; === Interrupt Mode Control ===
-	.byte 0x08, 0xf6, 0x00	; LD (IIMC), 000h
+	ldio 0xF6, 0x00
 	; End of shared boot hardware initialization (315 bytes)
 	; ROM-specific code follows in each file
 ; --- end include: ../shared/boot_hw_init.asm ---
 	; End of shared boot code (315 bytes)
-	.byte 0x08, 0xd2, 0x29	; LD (SC0MOD), 029h
-	.byte 0x08, 0xd1, 0x00	; LD (SC0CR), 000h
+	ldio 0xD2, 0x29
+	ldio 0xD1, 0x00
 	.byte 0xc0, 0xd3, 0x3c, 0xcf	; AND (BR0CR), 0cfh
 	.byte 0xc0, 0xd3, 0x3c, 0xf0	; AND (BR0CR), 0f0h
 
@@ -113265,7 +113265,7 @@ LABEL_EF050F:
 	stdi8 304, 255
 	stdi8 305, 255
 	stdi8 306, 3
-	.byte 0x08, 0x3a, 0x20	; LD (PECR), 020h
+	ldio 0x3A, 0x20
 	ld xsp, 0xC00
 	calr Seems_to_copy_some_data_buffers
 
@@ -113279,7 +113279,7 @@ We_seem_to_be_running_boot_ROM_code:	; EF0536
 	call 0xEF55A7
 	pushw 0x8
 	pushw 0x3
-	.byte 0x40, 0x2e, 0x0b, 0xe0, 0x00	; LD XWA, Bitmap_1bit_Please_Wait	; "Please Wait !!"
+	ld xwa, 0xE00B2E	; "Please Wait !!"
 	ldw bc, 0x30
 	ldw de, 0x50
 	call Draw_FlashMemUpdate_message_bitmap
@@ -113410,23 +113410,23 @@ LABEL_EF0651:
 	ret
 
 LABEL_EF0656:
-	.byte 0x08, 0xf0, 0x00	; LD (INTE0AD), 000h
-	.byte 0x08, 0xe0, 0x00	; LD (INTE45), 000h
-	.byte 0x08, 0xe1, 0x00	; LD (INTE67), 000h
-	.byte 0x08, 0xe2, 0x00	; LD (INTE89), 000h
-	.byte 0x08, 0xe3, 0x00	; LD (INTEAB), 000h
-	.byte 0x08, 0xe4, 0x00	; LD (INTET01), 000h
-	.byte 0x08, 0xe5, 0x00	; LD (INTET23), 000h
-	.byte 0x08, 0xe6, 0x00	; LD (INTET45), 000h
-	.byte 0x08, 0xe7, 0x00	; LD (INTET67), 000h
-	.byte 0x08, 0xe8, 0x00	; LD (INTET89), 000h
-	.byte 0x08, 0xe9, 0x00	; LD (INTETAB), 000h
-	.byte 0x08, 0xea, 0x00	; LD (INTES0), 000h
-	.byte 0x08, 0xeb, 0x00	; LD (INTES1), 000h
-	.byte 0x08, 0xec, 0x00	; LD (INTETC01), 000h
-	.byte 0x08, 0xed, 0x00	; LD (INTETC23), 000h
-	.byte 0x08, 0xee, 0x00	; LD (INTETC45), 000h
-	.byte 0x08, 0xef, 0x00	; LD (INTETC67), 000h
+	ldio 0xF0, 0x00
+	ldio 0xE0, 0x00
+	ldio 0xE1, 0x00
+	ldio 0xE2, 0x00
+	ldio 0xE3, 0x00
+	ldio 0xE4, 0x00
+	ldio 0xE5, 0x00
+	ldio 0xE6, 0x00
+	ldio 0xE7, 0x00
+	ldio 0xE8, 0x00
+	ldio 0xE9, 0x00
+	ldio 0xEA, 0x00
+	ldio 0xEB, 0x00
+	ldio 0xEC, 0x00
+	ldio 0xED, 0x00
+	ldio 0xEE, 0x00
+	ldio 0xEF, 0x00
 	ret
 
 ; ===========================================================================
@@ -113472,7 +113472,7 @@ LABEL_EF0696:
 	ld xbc, 0x10000
 	ld xde, 0x90000
 	call 0xEF3457
-	.byte 0x46, 0x00, 0x00, 0x80, 0x00	; LD XIZ, TABLE_DATA_ROM__BASE_ADDR
+	ld xiz, 0x800000
 	cpdi8_24 16776941, 255
 	jr nz, LABEL_EF072A
 	ld xiz, 0x50000
@@ -113481,7 +113481,7 @@ LABEL_EF0696:
 	call LABEL_EF41E3
 	cp hl, 0xFFFF
 	jr nz, LABEL_EF072A
-	.byte 0x46, 0x00, 0x00, 0x80, 0x00	; LD XIZ, TABLE_DATA_ROM__BASE_ADDR
+	ld xiz, 0x800000
 
 LABEL_EF072A:
 	.byte 0xd3, 0xf9, 0x00, 0x01, 0x19, 0x04, 0x04	; LDW (0404h), (XIZ + 0100h)
@@ -115749,7 +115749,7 @@ LABEL_EF1A6C:
 LABEL_EF1A86:
 	call LABEL_EF22C9
 	calr Stop_and_Clear_8bit_Timer_3
-	.byte 0x08, 0x8b, 0x07	; LD (TREG3), 007h
+	ldio 0x8B, 0x07
 	.byte 0xc0, 0xe5, 0x21	; LD A, (INTET23)
 	and a, 0xF
 	or a, 0x20
@@ -118426,7 +118426,7 @@ SubCPU_Init_DMA_Channels:
 	and a, 0xF8
 	set 0, a
 	ld (xbc), a
-	.byte 0x08, 0x8a, 0x07	; LD (TREG2), 007h
+	ldio 0x8A, 0x07
 	ldada_24 xwa, 1310720
 	.byte 0xe8, 0x2e, 0x28	; LDC_DMAD2_XWA
 	ldb a, 0x8
@@ -118951,10 +118951,10 @@ LABEL_EF3689:
 
 LABEL_EF3724:
 	push xiz
-	.byte 0x41, 0x00, 0x00, 0x28, 0x00	; LD XBC, HDAE5000_ROM__BASE_ADDR
+	ld xbc, 0x280000
 	cps a, 1
 	jr nz, LABEL_EF3733
-	.byte 0x41, 0x00, 0x00, 0x30, 0x00	; LD XBC, CUSTOM_DATA_FLASH__BASE_ADDR
+	ld xbc, 0x300000
 
 LABEL_EF3733:
 	ld xiz, xbc
@@ -118996,10 +118996,10 @@ LABEL_EF379A:
 	push xiz
 	ld (xsp + 10), a
 	ldmw (xsp + 8), 0xFFFF
-	.byte 0x40, 0x00, 0x00, 0x28, 0x00	; LD XWA, HDAE5000_ROM__BASE_ADDR
+	ld xwa, 0x280000
 	cpmi8 (xsp + 10), 0x1
 	jr nz, LABEL_EF37B5
-	.byte 0x40, 0x00, 0x00, 0x30, 0x00	; LD XWA, CUSTOM_DATA_FLASH__BASE_ADDR
+	ld xwa, 0x300000
 
 LABEL_EF37B5:
 	ld (xsp + 4), xwa
@@ -119091,10 +119091,10 @@ LABEL_EF387A:
 	dec 2, xsp
 	push xiz
 	ld (xsp + 4), a
-	.byte 0x40, 0x00, 0x00, 0x28, 0x00	; LD XWA, HDAE5000_ROM__BASE_ADDR
+	ld xwa, 0x280000
 	cpmi8 (xsp + 4), 0x1
 	jr nz, LABEL_EF3890
-	.byte 0x40, 0x00, 0x00, 0x30, 0x00	; LD XWA, CUSTOM_DATA_FLASH__BASE_ADDR
+	ld xwa, 0x300000
 
 LABEL_EF3890:
 	ld xiz, xwa
@@ -119145,10 +119145,10 @@ LABEL_EF3929:
 	push xiz
 	ld (xsp + 8), xbc
 	ld (xsp + 12), a
-	.byte 0x40, 0x00, 0x00, 0x28, 0x00	; LD XWA, HDAE5000_ROM__BASE_ADDR
+	ld xwa, 0x280000
 	cpmi8 (xsp + 12), 0x1
 	jr nz, LABEL_EF3943
-	.byte 0x40, 0x00, 0x00, 0x30, 0x00	; LD XWA, CUSTOM_DATA_FLASH__BASE_ADDR
+	ld xwa, 0x300000
 
 LABEL_EF3943:
 	ld xiz, xwa
@@ -119493,14 +119493,14 @@ LABEL_EF3C8F:
 	ld xwa, 0x378700
 	push xwa
 	lds wa, 1
-	.byte 0x41, 0x00, 0x00, 0x80, 0x00	; LD XBC, TABLE_DATA_ROM__BASE_ADDR
+	ld xbc, 0x800000
 	ldw de, 0x400
 	calr LABEL_EF3C3C
 	lds wa, 1
 	jrl LABEL_EF3724
 
 LABEL_EF3CD1:
-	.byte 0x42, 0x00, 0x00, 0x80, 0x00	; LD XDE, TABLE_DATA_ROM__BASE_ADDR
+	ld xde, 0x800000
 
 LABEL_EF3CD6:
 	.byte 0xf0, 0x1c, 0xcd	; BIT 5, (P7)
@@ -119543,7 +119543,7 @@ HDAE5000_Detect:
 	stda32_24 8475988, xwa
 	ldda32_24 xwa, 8388608
 	ld (xsp + 4), xwa
-	.byte 0x40, 0x00, 0x00, 0x80, 0x00	; LD XWA, TABLE_DATA_ROM__BASE_ADDR
+	ld xwa, 0x800000
 	ld xiz, (xwa + 4)
 	ei 0
 	ld xwa, (xsp + 4)
@@ -119608,7 +119608,7 @@ LABEL_EF3DB7:
 ; ===========================================================================
 HDAE5000_Flash_Verify:
 	push xiz
-	.byte 0x46, 0x00, 0x00, 0x80, 0x00	; LD XIZ, TABLE_DATA_ROM__BASE_ADDR
+	ld xiz, 0x800000
 	ei 6
 
 ; == Notes ==
@@ -119991,7 +119991,7 @@ LABEL_EF41E3:
 	push xiz
 	ld (xsp + 10), xbc
 	ld xiz, xwa
-	.byte 0x45, 0x32, 0x00, 0xe0, 0x00	; LD XIY, SLIDE_STRING	; "SLIDE"
+	ld xiy, 0xE00032	; "SLIDE"
 	lda xix, (xsp + 4)
 	lds bc, 3
 	ldirw
@@ -120484,7 +120484,7 @@ LABEL_EF4687:
 SHOW_FD_TO_FLASH_MEMORY_MESSAGE:	; EF468E
 	pushw 0x8
 	pushw 0x2
-	.byte 0x40, 0x5e, 0x06, 0xe0, 0x00	; LD XWA, Bitmap_1bit_FD_to_Flash_Memory	; "FD -> Flash Memory"
+	ld xwa, 0xE0065E	; "FD -> Flash Memory"
 	ldw bc, 0x30
 	ldw de, 0xA0
 	call Draw_FlashMemUpdate_message_bitmap
@@ -120497,7 +120497,7 @@ LABEL_EF46A4:
 SHOW_CHANGE_FLOPPY_2_OF_2_MESSAGE:	; EF46A8
 	pushw 0x8
 	pushw 0x2
-	.byte 0x40, 0x96, 0x0d, 0xe0, 0x00	; LD XWA, Bitmap_1bit_Change_FD_2_of_2	; "Change FD (2/2)"
+	ld xwa, 0xE00D96	; "Change FD (2/2)"
 	ldw bc, 0x30
 	ldw de, 0xA0
 	call Draw_FlashMemUpdate_message_bitmap
@@ -120576,7 +120576,7 @@ Erase_and_Burn____when_disk_is_valid:	; EF4745
 	ld (xsp), a
 	pushw 0x8
 	pushw 0x2
-	.byte 0x40, 0xf6, 0x03, 0xe0, 0x00	; LD XWA, Bitmap_1bit_Now_Erasing	; "Now Erasing!!"
+	ld xwa, 0xE003F6	; "Now Erasing!!"
 	ldw bc, 0x30
 	ldw de, 0xA0
 	call Draw_FlashMemUpdate_message_bitmap
@@ -120599,12 +120599,12 @@ HANDLE_UPDATE_FILE_TYPE_ID_001h:	; EF4784
 	calr LABEL_EF4702
 	calr SHOW_FD_TO_FLASH_MEMORY_MESSAGE
 	ldw wa, 0x24
-	.byte 0x41, 0x00, 0x00, 0x80, 0x00	; LD XBC, TABLE_DATA_ROM__BASE_ADDR
+	ld xbc, 0x800000
 	calr LABEL_EF441B
 	lds wa, 2
 	calr LABEL_EF46A4
 	ldw wa, 0x24
-	.byte 0x41, 0x00, 0x00, 0x90, 0x00	; LD XBC, TABLE_DATA_ROM__BASE_ADDR + 100000h
+	ld xbc, 0x900000
 	jr LABEL_EF47C2
 
 
@@ -120613,12 +120613,12 @@ HANDLE_UPDATE_FILE_TYPE_ID_003h:	; EF47A4
 	calr LABEL_EF4702
 	calr SHOW_FD_TO_FLASH_MEMORY_MESSAGE
 	ldw wa, 0x24
-	.byte 0x41, 0x00, 0x00, 0x80, 0x00	; LD XBC, TABLE_DATA_ROM__BASE_ADDR
+	ld xbc, 0x800000
 	calr LABEL_EF441B
 	lds wa, 4
 	calr LABEL_EF46A4
 	ldw wa, 0x24
-	.byte 0x41, 0x00, 0x00, 0x90, 0x00	; LD XBC, TABLE_DATA_ROM__BASE_ADDR + 100000h
+	ld xbc, 0x900000
 
 LABEL_EF47C2:
 	calr LABEL_EF441B
@@ -120633,7 +120633,7 @@ HANDLE_UPDATE_FILE_TYPE_ID_005h:	; EF47C7
 	pushw 0x800
 	lds wa, 1
 	ldw bc, 0x24
-	.byte 0x42, 0x00, 0x00, 0x30, 0x00	; LD XDE, CUSTOM_DATA_FLASH__BASE_ADDR	; "custom_data" 8MBit FLASH ROM @ IC19
+	ld xde, 0x300000	; "custom_data" 8MBit FLASH ROM @ IC19
 	jr LABEL_EF47F5
 
 
@@ -120645,7 +120645,7 @@ HANDLE_UPDATE_FILE_TYPE_ID_006h:	; EF47DF
 	pushw 0x400
 	lds wa, 2
 	ldw bc, 0x24
-	.byte 0x42, 0x00, 0x00, 0x28, 0x00	; LD XDE, HDAE5000_ROM__BASE_ADDR
+	ld xde, 0x280000
 
 LABEL_EF47F5:
 	calr LABEL_EF454D
@@ -120682,7 +120682,7 @@ LABEL_EF4827:
 SHOW_ILLEGAL_DISK_MESSAGE:	; EF482A
 	pushw 0x8
 	pushw 0x2
-	.byte 0x40, 0xfe, 0x0f, 0xe0, 0x00	; LD XWA, Bitmap_1bit_Illegal_Disk	; "Illegal Disk!"
+	ld xwa, 0xE00FFE	; "Illegal Disk!"
 	ldw bc, 0x30
 	ldw de, 0xA0
 	call Draw_FlashMemUpdate_message_bitmap
@@ -120860,7 +120860,7 @@ LABEL_EF4953:
 LABEL_EF49A5:
 	lda xsp, (xsp - 10)
 	push xiz
-	.byte 0x40, 0x00, 0x00, 0x80, 0x00	; LD XWA, TABLE_DATA_ROM__BASE_ADDR
+	ld xwa, 0x800000
 	ld (xsp + 8), xwa
 	ldmi8 (xsp + 12), 0x4
 
@@ -120950,7 +120950,7 @@ Infinite_Loop_at_EF4B6B:
 	jr Infinite_Loop_at_EF4B6B
 
 LABEL_EF4B6D:
-	.byte 0x40, 0x00, 0x00, 0x80, 0x00	; LD XWA, TABLE_DATA_ROM__BASE_ADDR
+	ld xwa, 0x800000
 	ld xbc, 0xA00000
 	calr TableData_ROM_Verify
 	or xhl, xhl
@@ -120973,8 +120973,8 @@ LABEL_EF4B9F:
 	resda_24 0, 1441796
 	setda_24 1, 1441796
 	pushw 0x7
-	.byte 0x40, 0x00, 0x00, 0x80, 0x00	; LD XWA, TABLE_DATA_ROM__BASE_ADDR
-	.byte 0x41, 0x00, 0x00, 0x28, 0x00	; LD XBC, HDAE5000_ROM__BASE_ADDR
+	ld xwa, 0x800000
+	ld xbc, 0x280000
 	lds de, 4
 	calr HDAE5000_ROM_Transfer
 	or xhl, xhl
@@ -121199,7 +121199,7 @@ LABEL_EF4DB1:
 	stda32 1602, xwa
 	ldada_24 xwa, 432128
 	stda32 1610, xwa
-	.byte 0x40, 0x00, 0x00, 0x80, 0x00	; LD XWA, TABLE_DATA_ROM__BASE_ADDR
+	ld xwa, 0x800000
 	stda32 1606, xwa
 	stdi16 1614, 50
 	stdi16 1616, 180
@@ -121357,7 +121357,7 @@ FLASH_MEM_UPDATE:	; EF4F6F
 	jr z, LABEL_EF4FE4	; yes, it is.
 	pushw 0x8
 	pushw 0x2
-	.byte 0x40, 0x8e, 0x01, 0xe0, 0x00	; LD XWA, Bitmap_1bit_Flash_Memory_Update	; "Flash Memory Update"
+	ld xwa, 0xE0018E	; "Flash Memory Update"
 	ldw bc, 0x30
 	ldw de, 0x50
 	call Draw_FlashMemUpdate_message_bitmap
@@ -121366,13 +121366,13 @@ FLASH_MEM_UPDATE:	; EF4F6F
 	calr Erase_and_Burn____when_disk_is_valid
 	pushw 0x8
 	pushw 0x1
-	.byte 0x40, 0xc6, 0x08, 0xe0, 0x00	; LD XWA, Bitmap_1bit_Completed	; "Completed!"
+	ld xwa, 0xE008C6	; "Completed!"
 	ldw bc, 0x30
 	ldw de, 0xA0
 	call Draw_FlashMemUpdate_message_bitmap
 	pushw 0x8
 	pushw 0x1
-	.byte 0x40, 0x66, 0x12, 0xe0, 0x00	; LD XWA, Bitmap_1bit_Turn_On_AGAIN	; "Turn On AGAIN !!"
+	ld xwa, 0xE01266	; "Turn On AGAIN !!"
 	ldw bc, 0x30
 	ldw de, 0xC8
 	call Draw_FlashMemUpdate_message_bitmap
@@ -121386,7 +121386,7 @@ LABEL_EF4FE4:
 	jr nz, flash_update__not_today
 	pushw 0x8
 	pushw 0x2
-	.byte 0x40, 0x8e, 0x01, 0xe0, 0x00	; LD XWA, Bitmap_1bit_Flash_Memory_Update	; "Flash Memory Update"
+	ld xwa, 0xE0018E	; "Flash Memory Update"
 	ldw bc, 0x30
 	ldw de, 0x50
 	call Draw_FlashMemUpdate_message_bitmap
@@ -121395,13 +121395,13 @@ LABEL_EF4FE4:
 	calr Erase_and_Burn____when_disk_is_valid
 	pushw 0x8
 	pushw 0x1
-	.byte 0x40, 0xc6, 0x08, 0xe0, 0x00	; LD XWA, Bitmap_1bit_Completed	; "Completed!"
+	ld xwa, 0xE008C6	; "Completed!"
 	ldw bc, 0x30
 	ldw de, 0xA0
 	call Draw_FlashMemUpdate_message_bitmap
 	pushw 0x8
 	pushw 0x1
-	.byte 0x40, 0x66, 0x12, 0xe0, 0x00	; LD XWA, Bitmap_1bit_Turn_On_AGAIN	; "Turn On AGAIN !!"
+	ld xwa, 0xE01266	; "Turn On AGAIN !!"
 	ldw bc, 0x30
 	ldw de, 0xC8
 	call Draw_FlashMemUpdate_message_bitmap
@@ -121593,7 +121593,7 @@ Write_VGA_Register:
 	.byte 0x67, 0xf8	; JR C, .delay	; Loop until DE >= 256
 
 	extz xwa	; Zero-extend WA to XWA
-	.byte 0x42, 0x00, 0x00, 0x17, 0x00	; LD XDE, VGA_IO_BASE	; Load VGA I/O base address
+	ld xde, 0x170000	; Load VGA I/O base address
 	add xde, xwa	; Add port offset
 	ld (xde), c	; Write value to port
 	ret
@@ -121606,7 +121606,7 @@ Write_VGA_Register:
 ; -----------------------------------------------------------------------------
 Read_VGA_Register:
 	extz xwa	; Zero-extend WA to XWA
-	.byte 0x41, 0x00, 0x00, 0x17, 0x00	; LD XBC, VGA_IO_BASE	; Load VGA I/O base address
+	ld xbc, 0x170000	; Load VGA I/O base address
 	add xbc, xwa	; Add port offset
 	ld l, (xbc)	; Read value from port
 	ret
@@ -122002,7 +122002,7 @@ VGA_Setup:
 
 	; Set up parameters for video buffer initialization
 	; These are loaded here; caller provides the actual CALL to fill/copy routines
-	.byte 0x40, 0x00, 0x3c, 0x04, 0x00	; LD XWA, OFFSCREEN_BUFFER_1
+	ld xwa, 0x43C00
 	ldw bc, 0x808	; Fill pattern
 	ldw de, 0x9600	; Size in words (38400 = 0x9600)
 
@@ -122022,7 +122022,7 @@ VGA_Setup:
 	; === ROM-specific ending: initialize video buffers ===
 	call Fill_memory_at_XWA_with_DE_words_of_BC_value
 	ldada_24 xwa, 1703936
-	.byte 0x41, 0x00, 0x3c, 0x04, 0x00	; LD XBC, OFFSCREEN_BUFFER_1
+	ld xbc, 0x43C00
 	ldw de, 0x9600
 	call Copy_DE_words_from_XBC_to_XWA	; Blit video buffer
 
@@ -122426,8 +122426,8 @@ LABEL_EF5D9A:
 	ret
 
 LABEL_EF5DA3:
-	.byte 0x45, 0xb6, 0x5d, 0xef, 0x00	; LD XIY, LABEL_EF5DB6
-	.byte 0x44, 0x37, 0x5e, 0xef, 0x00	; LD XIX, LABEL_EF5E37
+	ld xiy, 0xEF5DB6
+	ld xix, 0xEF5E37
 	ld xwa, xiy
 	ld xbc, xix
 	call LABEL_F0212C
@@ -123624,7 +123624,7 @@ LABEL_EF718B:
 	jp LABEL_EF72AA
 
 LABEL_EF71C0:
-	.byte 0x45, 0xab, 0x72, 0xef, 0x00	; LD XIY, LABEL_EF72AB
+	ld xiy, 0xEF72AB
 	lds bc, 5
 	jp LABEL_EF72A8
 
@@ -123634,17 +123634,17 @@ LABEL_EF71CB:
 	jp LABEL_EF72AA
 
 LABEL_EF71D7:
-	.byte 0x45, 0xb0, 0x72, 0xef, 0x00	; LD XIY, LABEL_EF72B0
+	ld xiy, 0xEF72B0
 	lds bc, 6
 	jp LABEL_EF72A8
 
 LABEL_EF71E2:
-	.byte 0x45, 0xb6, 0x72, 0xef, 0x00	; LD XIY, LABEL_EF72B6
+	ld xiy, 0xEF72B6
 	lds bc, 5
 	jp LABEL_EF72A8
 
 LABEL_EF71ED:
-	.byte 0x45, 0xbb, 0x72, 0xef, 0x00	; LD XIY, LABEL_EF72BB
+	ld xiy, 0xEF72BB
 	lds bc, 4
 	jp LABEL_EF72A8
 
@@ -123664,7 +123664,7 @@ LABEL_EF71F8:
 	and a, 0x30
 	sra a, 4
 	ldw bc, 0xA
-	.byte 0x45, 0xc5, 0x72, 0xef, 0x00	; LD XIY, LABEL_EF72C5
+	ld xiy, 0xEF72C5
 	ld w, a
 	sla a, 3
 	sla w, 1
@@ -123708,13 +123708,13 @@ LABEL_EF7280:
 LABEL_EF728B:
 	xor b, b
 	sla bc, 3
-	.byte 0x45, 0xed, 0x72, 0xef, 0x00	; LD XIY, LABEL_EF72ED
+	ld xiy, 0xEF72ED
 	.byte 0xf3, 0x07, 0xf4, 0xe4, 0x35	; LDA XIY, XIY + BC
 	ldw bc, 0x8
 	jp LABEL_EF72A8
 
 LABEL_EF72A1:
-	.byte 0x45, 0xbf, 0x72, 0xef, 0x00	; LD XIY, LABEL_EF72BF
+	ld xiy, 0xEF72BF
 	lds bc, 6
 
 LABEL_EF72A8:
@@ -129838,7 +129838,7 @@ LABEL_F009F9:
 	pop xhl
 	push xhl
 	sla hl, 2
-	.byte 0x45, 0x60, 0xba, 0xe0, 0x00	; LD XIY, LABEL_E0BA60
+	ld xiy, 0xE0BA60
 	cpdi8 3429, 2
 	jr nz, LABEL_F00A21
 	ld xiy, 0xE0BAF8
@@ -129964,7 +129964,7 @@ LABEL_F00BED:
 	stdi8_24 257960, 0
 	calr LABEL_F00B6D
 	ld xiy, 0xE0B9ED
-	.byte 0x44, 0x60, 0xba, 0xe0, 0x00	; LD XIX, LABEL_E0BA60
+	ld xix, 0xE0BA60
 	call LABEL_EF5CF9
 	ldda8 a, 3424
 	stda8 4494, a
@@ -130088,7 +130088,7 @@ LABEL_F00D41:
 	lds bc, 4
 
 LABEL_F00D47:
-	.byte 0x45, 0x90, 0xbb, 0xe0, 0x00	; LD XIY, LABEL_E0BB90
+	ld xiy, 0xE0BB90
 	ld xix, xiy
 	muls bc, 0x2D
 	add xix, xbc
@@ -145339,16 +145339,16 @@ LABEL_F167AE:
 LABEL_F1691F:
 	.byte 0xf3, 0xfd, 0x94, 0xfe, 0x37	; LDA XSP, XSP - 16Ch
 	push xiz
-	.byte 0x45, 0x20, 0x5b, 0xe1, 0x00	; LD XIY, LABEL_E15B20
+	ld xiy, 0xE15B20
 	.byte 0xf3, 0xfd, 0x10, 0x01, 0x34	; LDA XIX, XSP + 0110h
 	ldw bc, 0x30
 	ldirw
-	.byte 0x45, 0x20, 0x5a, 0xe1, 0x00	; LD XIY, LABEL_E15A20
+	ld xiy, 0xE15A20
 	lda xix, (xsp + 16)
 	ldw bc, 0x80
 	ldirw
 	ldda32 xix, 3186
-	.byte 0x45, 0x80, 0x5b, 0xe1, 0x00	; LD XIY, LABEL_E15B80
+	ld xiy, 0xE15B80
 	ldw bc, 0x30
 	ldirw
 	ldda32 xwa, 3186
@@ -153210,7 +153210,7 @@ StylCnvStorBnkSel:
 	ld xhl, xde
 	ld xde, xbc
 	ld xiz, xwa
-	.byte 0x45, 0x7a, 0xe3, 0xe1, 0x00	; LD XIY, SLOT_NAME_PTRS
+	ld xiy, 0xE1E37A
 	lda xix, (xsp + 4)
 	ldw bc, 0x2E
 	ldirw
@@ -154125,7 +154125,7 @@ LABEL_F1E9A9:
 	pushw 0x4	; 4 bytes
 	pushw 0xE1
 	pushw 0xFFB0	; "XAPR"
-	.byte 0x40, 0x00, 0x00, 0x28, 0x00	; LD XWA, HDAE5000_ROM__BASE_ADDR
+	ld xwa, 0x280000
 	push xwa
 	call 0xFF0CC1
 	add xsp, 0xA
@@ -154154,7 +154154,7 @@ LABEL_F1E9E0:
 	pushw 0x4	; 4 bytes
 	pushw 0xE1
 	pushw 0xFFC6	; "XAPR"
-	.byte 0x40, 0x00, 0x00, 0x28, 0x00	; LD XWA, HDAE5000_ROM__BASE_ADDR
+	ld xwa, 0x280000
 	push xwa
 	call 0xFF0CC1
 	add xsp, 0xA
@@ -154293,23 +154293,23 @@ rcm_sv_XAPR_j:
 
 SetSepaOutMode:
 	lda xsp, (xsp - 20)
-	.byte 0x45, 0xe6, 0xff, 0xe1, 0x00	; LD XIY, LABEL_E1FFE6
+	ld xiy, 0xE1FFE6
 	lda xix, (xsp + 16)
 	ldiw
 	ldiw
-	.byte 0x45, 0xea, 0xff, 0xe1, 0x00	; LD XIY, LABEL_E1FFEA
+	ld xiy, 0xE1FFEA
 	lda xix, (xsp + 12)
 	ldiw
 	ldiw
-	.byte 0x45, 0xee, 0xff, 0xe1, 0x00	; LD XIY, LABEL_E1FFEE
+	ld xiy, 0xE1FFEE
 	lda xix, (xsp + 8)
 	ldiw
 	ldiw
-	.byte 0x45, 0xf2, 0xff, 0xe1, 0x00	; LD XIY, LABEL_E1FFF2
+	ld xiy, 0xE1FFF2
 	lda xix, (xsp + 4)
 	ldiw
 	ldiw
-	.byte 0x45, 0xf6, 0xff, 0xe1, 0x00	; LD XIY, LABEL_E1FFF6
+	ld xiy, 0xE1FFF6
 	ld xix, xsp
 	ldiw
 	ldiw
@@ -158381,7 +158381,7 @@ LABEL_F21867:
 	call LABEL_FEC04E
 	ld wa, hl
 	cps wa, 0
-	.byte 0xf2, 0xf4, 0x07, 0xf2, 0xde	; JP NZ, LABEL_F207F4
+	jpcc_24 14, 0xF207F4
 	calr LABEL_F22A5D
 	stdi8 4437, 0
 	ret
@@ -158405,7 +158405,7 @@ LABEL_F218BB:
 	call LABEL_FEC04E
 	ld wa, hl
 	cps wa, 0
-	.byte 0xf2, 0xf4, 0x07, 0xf2, 0xde	; JP NZ, LABEL_F207F4
+	jpcc_24 14, 0xF207F4
 	calr LABEL_F22A5D
 	stdi8 4437, 0
 	ret
@@ -158429,7 +158429,7 @@ LABEL_F218FF:
 	call LABEL_FEC04E
 	ld wa, hl
 	cps wa, 0
-	.byte 0xf2, 0xf4, 0x07, 0xf2, 0xde	; JP NZ, LABEL_F207F4
+	jpcc_24 14, 0xF207F4
 	calr LABEL_F22A5D
 	stdi8 4437, 0
 	ret
@@ -161085,7 +161085,7 @@ LABEL_F2341E:
 	ldda32 xbc, 6883
 	lds32 xwa, 0
 	cp xbc, xwa
-	.byte 0xf2, 0x36, 0x34, 0xf2, 0xd6	; JP Z, LABEL_F23436
+	jpcc_24 6, 0xF23436
 	call LABEL_F23713
 	nop
 	nop
@@ -161458,9 +161458,9 @@ LABEL_F23752:
 	lds32 xbc, 0
 	ldda32 xwa, 6883
 	cp xwa, xbc
-	.byte 0xf2, 0x71, 0x37, 0xf2, 0xd6	; JP Z, LABEL_F23771
+	jpcc_24 6, 0xF23771
 	cpdi8 6887, 1
-	.byte 0xf2, 0x71, 0x37, 0xf2, 0xd6	; JP Z, LABEL_F23771
+	jpcc_24 6, 0xF23771
 	dec 1, xwa
 
 LABEL_F23771:
@@ -162540,7 +162540,7 @@ LABEL_F24070:
 	ldda32 xbc, 6883
 	lds32 xwa, 0
 	cp xbc, xwa
-	.byte 0xf2, 0x88, 0x40, 0xf2, 0xd6	; JP Z, LABEL_F24088
+	jpcc_24 6, 0xF24088
 	call LABEL_F23713
 	nop
 	nop
@@ -163010,9 +163010,9 @@ LABEL_F2449F:
 	lds32 xbc, 0
 	ldda32 xwa, 6883
 	cp xwa, xbc
-	.byte 0xf2, 0xc0, 0x44, 0xf2, 0xd6	; JP Z, LABEL_F244C0
+	jpcc_24 6, 0xF244C0
 	cpdi8 6887, 1
-	.byte 0xf2, 0xc0, 0x44, 0xf2, 0xd6	; JP Z, LABEL_F244C0
+	jpcc_24 6, 0xF244C0
 	subda32 xwa, 4211
 
 LABEL_F244C0:
@@ -170924,7 +170924,7 @@ LABEL_F28E66:
 
 LABEL_F28E7E:
 	cpdi8 4324, 255
-	.byte 0xf2, 0x91, 0x8e, 0xf2, 0xde	; JP NZ, LABEL_F28E91
+	jpcc_24 14, 0xF28E91
 	stdi8 6881, 9
 	jp LABEL_F28F0F
 
@@ -170934,14 +170934,14 @@ LABEL_F28E91:
 
 LABEL_F28E9A:
 	cpdi8 4324, 255
-	.byte 0xf2, 0xb1, 0x8e, 0xf2, 0xde	; JP NZ, LABEL_F28EB1
+	jpcc_24 14, 0xF28EB1
 	cp iy, 0x9
-	.byte 0xf2, 0xbe, 0x8e, 0xf2, 0xd6	; JP Z, LABEL_F28EBE
+	jpcc_24 6, 0xF28EBE
 	jp LABEL_F28F09
 
 LABEL_F28EB1:
 	cp iy, 0xF
-	.byte 0xf2, 0xbe, 0x8e, 0xf2, 0xd6	; JP Z, LABEL_F28EBE
+	jpcc_24 6, 0xF28EBE
 	jp LABEL_F28F09
 
 LABEL_F28EBE:
@@ -171270,9 +171270,9 @@ LABEL_F291E0:
 	cps a, 3
 	jr z, LABEL_F2926C
 	cps a, 4
-	.byte 0xf2, 0x06, 0x93, 0xf2, 0xd6	; JP Z, LABEL_F29306
+	jpcc_24 6, 0xF29306
 	cps a, 5
-	.byte 0xf2, 0x06, 0x93, 0xf2, 0xd6	; JP Z, LABEL_F29306
+	jpcc_24 6, 0xF29306
 	jrl LABEL_F29474
 
 LABEL_F29243:
@@ -177815,7 +177815,7 @@ LABEL_F2EFF7:
 
 MsgToTtlProc:
 	cp xbc, 0x1C00001
-	.byte 0xf2, 0x09, 0x44, 0xfa, 0xde	; JP NZ, InheritedProc
+	jpcc_24 14, 0xFA4409
 	call 0xFA4409
 	call 0xFA586D
 	cp xhl, 0x1A000EE
@@ -200491,7 +200491,7 @@ LABEL_F3E071:
 
 LABEL_F3E07C:
 	cps l, 1
-	.byte 0xf2, 0x82, 0x87, 0xf9, 0xde	; JP NZ, LABEL_F98782
+	jpcc_24 14, 0xF98782
 	extz de
 	lds wa, 0
 	ld bc, de
@@ -201874,7 +201874,7 @@ LABEL_F3EC68:
 
 LABEL_F3EC73:
 	cps l, 1
-	.byte 0xf2, 0x82, 0x87, 0xf9, 0xde	; JP NZ, LABEL_F98782
+	jpcc_24 14, 0xF98782
 	extz de
 	lds wa, 0
 	ld bc, de
@@ -209725,9 +209725,9 @@ LABEL_F43675:
 
 LABEL_F43679:
 	cpdi8 9508, 0
-	.byte 0xf2, 0x05, 0x25, 0xef, 0xde	; JP NZ, LABEL_EF2505
+	jpcc_24 14, 0xEF2505
 	bitda 0, 10437
-	.byte 0xf2, 0xdc, 0x91, 0xf3, 0xde	; JP NZ, LABEL_F391DC
+	jpcc_24 14, 0xF391DC
 	ldda8 a, 1057
 	and a, 0x5
 	ret nz
@@ -210674,7 +210674,7 @@ APP_EVENT_HANDLER_F4417E:
 	jrl nc, LABEL_F4487E
 	incm8 1, (xwa)
 	ldda32 xwa, 10610
-	.byte 0x41, 0x0f, 0x00, 0xc0, 0x01	; LD XBC, EVT_INIT_HOOK
+	ld xbc, 0x1C0000F
 	lds32 xde, 0
 	jrl APP_EVENT_HANDLER_F4487A
 	ldda8 a, 36150
@@ -210716,7 +210716,7 @@ APP_EVENT_HANDLER_F4420D:
 	jr nc, APP_EVENT_HANDLER_F44227
 	incm 1, (xiz)
 	ldda32 xwa, 10610
-	.byte 0x41, 0x0f, 0x00, 0xc0, 0x01	; LD XBC, EVT_INIT_HOOK
+	ld xbc, 0x1C0000F
 	lds32 xde, 1
 	call 0xFA9E07
 APP_EVENT_HANDLER_F44227:
@@ -210727,7 +210727,7 @@ APP_EVENT_HANDLER_F44227:
 	ld bc, (xiz)
 	ld (xwa), bc
 	ldda32 xwa, 10610
-	.byte 0x41, 0x0f, 0x00, 0xc0, 0x01	; LD XBC, EVT_INIT_HOOK
+	ld xbc, 0x1C0000F
 	lds32 xde, 2
 	call 0xFA9E07
 APP_EVENT_HANDLER_F44243:
@@ -210777,7 +210777,7 @@ APP_EVENT_HANDLER_F442C2:
 	ld xwa, (xsp + 4)
 	incm 1, (xwa)
 	ldda32 xwa, 10610
-	.byte 0x41, 0x0f, 0x00, 0xc0, 0x01	; LD XBC, EVT_INIT_HOOK
+	ld xbc, 0x1C0000F
 	lds32 xde, 2
 	call 0xFA9E07
 APP_EVENT_HANDLER_F442DF:
@@ -210788,7 +210788,7 @@ APP_EVENT_HANDLER_F442DF:
 	ld wa, (xwa)
 	ld (xiz), wa
 	ldda32 xwa, 10610
-	.byte 0x41, 0x0f, 0x00, 0xc0, 0x01	; LD XBC, EVT_INIT_HOOK
+	ld xbc, 0x1C0000F
 	lds32 xde, 1
 	call 0xFA9E07
 APP_EVENT_HANDLER_F442FB:
@@ -210816,7 +210816,7 @@ APP_EVENT_HANDLER_F4431B:
 	inc 1, a
 	stda8 9740, a
 	ldda32 xwa, 10610
-	.byte 0x41, 0x0f, 0x00, 0xc0, 0x01	; LD XBC, EVT_INIT_HOOK
+	ld xbc, 0x1C0000F
 	lds32 xde, 3
 	jrl APP_EVENT_HANDLER_F4487A
 	ldda8 a, 9762
@@ -210825,7 +210825,7 @@ APP_EVENT_HANDLER_F4431B:
 	inc 1, a
 	stda8 9762, a
 	ldda32 xwa, 10610
-	.byte 0x41, 0x0f, 0x00, 0xc0, 0x01	; LD XBC, EVT_INIT_HOOK
+	ld xbc, 0x1C0000F
 	lds32 xde, 4
 	jrl APP_EVENT_HANDLER_F4487A
 	ldda8 a, 61998
@@ -210834,7 +210834,7 @@ APP_EVENT_HANDLER_F4431B:
 	inc 1, a
 	stda8 61998, a
 	ldda32 xwa, 10610
-	.byte 0x41, 0x0f, 0x00, 0xc0, 0x01	; LD XBC, EVT_INIT_HOOK
+	ld xbc, 0x1C0000F
 	lds32 xde, 5
 	jrl APP_EVENT_HANDLER_F4487A
 	ldda8 a, 61920
@@ -210843,7 +210843,7 @@ APP_EVENT_HANDLER_F4431B:
 	inc 1, a
 	stda8 61920, a
 	ldda32 xwa, 10610
-	.byte 0x41, 0x0f, 0x00, 0xc0, 0x01	; LD XBC, EVT_INIT_HOOK
+	ld xbc, 0x1C0000F
 	lds32 xde, 6
 	jrl APP_EVENT_HANDLER_F4487A
 	ldda8 a, 61942
@@ -210852,7 +210852,7 @@ APP_EVENT_HANDLER_F4431B:
 	inc 1, a
 	stda8 61942, a
 	ldda32 xwa, 10610
-	.byte 0x41, 0x0f, 0x00, 0xc0, 0x01	; LD XBC, EVT_INIT_HOOK
+	ld xbc, 0x1C0000F
 	lds32 xde, 7
 	jrl APP_EVENT_HANDLER_F4487A
 	ldda8 a, 9728
@@ -210861,7 +210861,7 @@ APP_EVENT_HANDLER_F4431B:
 	inc 1, a
 	stda8 9728, a
 	ldda32 xwa, 10610
-	.byte 0x41, 0x0f, 0x00, 0xc0, 0x01	; LD XBC, EVT_INIT_HOOK
+	ld xbc, 0x1C0000F
 	ld xde, 0x8
 	jrl APP_EVENT_HANDLER_F4487A
 	ldda8 a, 9730
@@ -210870,7 +210870,7 @@ APP_EVENT_HANDLER_F4431B:
 	inc 1, a
 	stda8 9730, a
 	ldda32 xwa, 10610
-	.byte 0x41, 0x0f, 0x00, 0xc0, 0x01	; LD XBC, EVT_INIT_HOOK
+	ld xbc, 0x1C0000F
 	ld xde, 0x9
 	jrl APP_EVENT_HANDLER_F4487A
 	ldda8 a, 9750
@@ -210879,7 +210879,7 @@ APP_EVENT_HANDLER_F4431B:
 	inc 1, a
 	stda8 9750, a
 	ldda32 xwa, 10610
-	.byte 0x41, 0x0f, 0x00, 0xc0, 0x01	; LD XBC, EVT_INIT_HOOK
+	ld xbc, 0x1C0000F
 	ld xde, 0xA
 	jrl APP_EVENT_HANDLER_F4487A
 	ldda8 a, 9816
@@ -210888,7 +210888,7 @@ APP_EVENT_HANDLER_F4431B:
 	inc 1, a
 	stda8 9816, a
 	ldda32 xwa, 10610
-	.byte 0x41, 0x0f, 0x00, 0xc0, 0x01	; LD XBC, EVT_INIT_HOOK
+	ld xbc, 0x1C0000F
 	ld xde, 0xB
 	jrl APP_EVENT_HANDLER_F4487A
 	ldda8 a, 61907
@@ -210912,7 +210912,7 @@ APP_EVENT_HANDLER_F44471:
 	stdi8 61907, 1
 APP_EVENT_HANDLER_F44476:
 	ldda32 xwa, 10610
-	.byte 0x41, 0x0f, 0x00, 0xc0, 0x01	; LD XBC, EVT_INIT_HOOK
+	ld xbc, 0x1C0000F
 	ld xde, 0xC
 	jrl APP_EVENT_HANDLER_F4487A
 	ldda8 a, 61908
@@ -210936,7 +210936,7 @@ APP_EVENT_HANDLER_F444B4:
 	stdi8 61908, 1
 APP_EVENT_HANDLER_F444B9:
 	ldda32 xwa, 10610
-	.byte 0x41, 0x0f, 0x00, 0xc0, 0x01	; LD XBC, EVT_INIT_HOOK
+	ld xbc, 0x1C0000F
 	ld xde, 0xD
 	jrl APP_EVENT_HANDLER_F4487A
 	ldda8 a, 61909
@@ -210945,7 +210945,7 @@ APP_EVENT_HANDLER_F444B9:
 	inc 1, a
 	stda8 61909, a
 	ldda32 xwa, 10610
-	.byte 0x41, 0x0f, 0x00, 0xc0, 0x01	; LD XBC, EVT_INIT_HOOK
+	ld xbc, 0x1C0000F
 	ld xde, 0xE
 	jrl APP_EVENT_HANDLER_F4487A
 	sub xwa, 0xF
@@ -211011,27 +211011,27 @@ APP_EVENT_HANDLER_F44564:
 	stda8 9770, a
 APP_EVENT_HANDLER_F445B0:
 	ldda32 xwa, 10610
-	.byte 0x41, 0x0f, 0x00, 0xc0, 0x01	; LD XBC, EVT_INIT_HOOK
+	ld xbc, 0x1C0000F
 	ld xde, 0xF
 	call 0xFA9E07
 	ldda32 xwa, 10610
-	.byte 0x41, 0x0f, 0x00, 0xc0, 0x01	; LD XBC, EVT_INIT_HOOK
+	ld xbc, 0x1C0000F
 	ld xde, 0x10
 	call 0xFA9E07
 	ldda32 xwa, 10610
-	.byte 0x41, 0x0f, 0x00, 0xc0, 0x01	; LD XBC, EVT_INIT_HOOK
+	ld xbc, 0x1C0000F
 	ld xde, 0x11
 	call 0xFA9E07
 	ldda32 xwa, 10610
-	.byte 0x41, 0x0f, 0x00, 0xc0, 0x01	; LD XBC, EVT_INIT_HOOK
+	ld xbc, 0x1C0000F
 	ld xde, 0x12
 	call 0xFA9E07
 	ldda32 xwa, 10610
-	.byte 0x41, 0x0f, 0x00, 0xc0, 0x01	; LD XBC, EVT_INIT_HOOK
+	ld xbc, 0x1C0000F
 	ld xde, 0x13
 	call 0xFA9E07
 	ldda32 xwa, 10610
-	.byte 0x41, 0x0f, 0x00, 0xc0, 0x01	; LD XBC, EVT_INIT_HOOK
+	ld xbc, 0x1C0000F
 	ld xde, 0x14
 	jrl APP_EVENT_HANDLER_F4487A
 	sub xwa, 0x15
@@ -211097,27 +211097,27 @@ APP_EVENT_HANDLER_F44694:
 	stda8 9776, a
 APP_EVENT_HANDLER_F446E0:
 	ldda32 xwa, 10610
-	.byte 0x41, 0x0f, 0x00, 0xc0, 0x01	; LD XBC, EVT_INIT_HOOK
+	ld xbc, 0x1C0000F
 	ld xde, 0x15
 	call 0xFA9E07
 	ldda32 xwa, 10610
-	.byte 0x41, 0x0f, 0x00, 0xc0, 0x01	; LD XBC, EVT_INIT_HOOK
+	ld xbc, 0x1C0000F
 	ld xde, 0x16
 	call 0xFA9E07
 	ldda32 xwa, 10610
-	.byte 0x41, 0x0f, 0x00, 0xc0, 0x01	; LD XBC, EVT_INIT_HOOK
+	ld xbc, 0x1C0000F
 	ld xde, 0x17
 	call 0xFA9E07
 	ldda32 xwa, 10610
-	.byte 0x41, 0x0f, 0x00, 0xc0, 0x01	; LD XBC, EVT_INIT_HOOK
+	ld xbc, 0x1C0000F
 	ld xde, 0x18
 	call 0xFA9E07
 	ldda32 xwa, 10610
-	.byte 0x41, 0x0f, 0x00, 0xc0, 0x01	; LD XBC, EVT_INIT_HOOK
+	ld xbc, 0x1C0000F
 	ld xde, 0x19
 	call 0xFA9E07
 	ldda32 xwa, 10610
-	.byte 0x41, 0x0f, 0x00, 0xc0, 0x01	; LD XBC, EVT_INIT_HOOK
+	ld xbc, 0x1C0000F
 	ld xde, 0x1A
 	jrl APP_EVENT_HANDLER_F4487A
 	cp xwa, 0x1E
@@ -211168,19 +211168,19 @@ APP_EVENT_HANDLER_F447BA:
 	stdi8 9996, 17
 APP_EVENT_HANDLER_F447D3:
 	ldda32 xwa, 10610
-	.byte 0x41, 0x0f, 0x00, 0xc0, 0x01	; LD XBC, EVT_INIT_HOOK
+	ld xbc, 0x1C0000F
 	ld xde, 0x1B
 	call 0xFA9E07
 	ldda32 xwa, 10610
-	.byte 0x41, 0x0f, 0x00, 0xc0, 0x01	; LD XBC, EVT_INIT_HOOK
+	ld xbc, 0x1C0000F
 	ld xde, 0x1C
 	call 0xFA9E07
 	ldda32 xwa, 10610
-	.byte 0x41, 0x0f, 0x00, 0xc0, 0x01	; LD XBC, EVT_INIT_HOOK
+	ld xbc, 0x1C0000F
 	ld xde, 0x1D
 	call 0xFA9E07
 	ldda32 xwa, 10610
-	.byte 0x41, 0x0f, 0x00, 0xc0, 0x01	; LD XBC, EVT_INIT_HOOK
+	ld xbc, 0x1C0000F
 	ld xde, 0x1E
 	jr APP_EVENT_HANDLER_F4487A
 	ldda8 a, 10360
@@ -211193,19 +211193,19 @@ APP_EVENT_HANDLER_F447D3:
 	extz wa
 	call LABEL_F408FC
 	ldda32 xwa, 10610
-	.byte 0x41, 0x0f, 0x00, 0xc0, 0x01	; LD XBC, EVT_INIT_HOOK
+	ld xbc, 0x1C0000F
 	ld xde, 0x1F
 	call 0xFA9E07
 	ldda32 xwa, 10610
-	.byte 0x41, 0x0f, 0x00, 0xc0, 0x01	; LD XBC, EVT_INIT_HOOK
+	ld xbc, 0x1C0000F
 	ld xde, 0x20
 	call 0xFA9E07
 	ldda32 xwa, 10610
-	.byte 0x41, 0x0f, 0x00, 0xc0, 0x01	; LD XBC, EVT_INIT_HOOK
+	ld xbc, 0x1C0000F
 	ld xde, 0x21
 	call 0xFA9E07
 	ldda32 xwa, 10610
-	.byte 0x41, 0x0f, 0x00, 0xc0, 0x01	; LD XBC, EVT_INIT_HOOK
+	ld xbc, 0x1C0000F
 	ld xde, 0x22
 APP_EVENT_HANDLER_F4487A:
 	call 0xFA9E07
@@ -218837,7 +218837,7 @@ LABEL_F49D17:
 	stda8 10361, a
 	call LABEL_F3FEFB
 	cpdi8 3301, 15
-	.byte 0xf2, 0x1a, 0xff, 0xf3, 0xdb	; JP UGT, LABEL_F3FF1A
+	jpcc_24 11, 0xF3FF1A
 	ldda8 a, 10359
 	dec 1, a
 	extz wa
@@ -232901,7 +232901,7 @@ LABEL_F54650:
 RhythmROM_ValidateHeader:
 	xor xwa, xwa
 	stda32 12919, xwa
-	.byte 0x44, 0x00, 0x00, 0x40, 0x00	; LD XIX, RHYTHM_DATA_ROM__BASE_ADDR
+	ld xix, 0x400000
 	ld xwa, (xix)
 	cp xwa, 0x5040100
 	jr nz, LABEL_F5467E
@@ -244214,7 +244214,7 @@ LABEL_F5B90B:
 
 LABEL_F5B90D:
 	cpda16 xiz, 13182
-	.byte 0xf2, 0x8d, 0xb9, 0xf5, 0xdf	; JP NC, LABEL_F5B98D
+	jpcc_24 15, 0xF5B98D
 	.byte 0xf3, 0x07, 0xe4, 0xf8, 0xcf	; BIT 7, (XBC + IZ)
 	jr z, LABEL_F5B986
 	ld ix, iz
@@ -244623,7 +244623,7 @@ LABEL_F5BCB2:
 
 LABEL_F5BCB4:
 	cpda16 xiz, 13182
-	.byte 0xf2, 0x35, 0xbd, 0xf5, 0xdf	; JP NC, LABEL_F5BD35
+	jpcc_24 15, 0xF5BD35
 	.byte 0xf3, 0x07, 0xe4, 0xf8, 0xcf	; BIT 7, (XBC + IZ)
 	jr z, LABEL_F5BD2E
 	ld ix, iz
@@ -244769,7 +244769,7 @@ LABEL_F5BE39:
 	ldda8 a, 13471
 	and a, 0x9
 	cps a, 0
-	.byte 0xf2, 0xc9, 0xbe, 0xf5, 0xd6	; JP Z, LABEL_F5BEC9
+	jpcc_24 6, 0xF5BEC9
 	bitda 0, 13471
 	jr z, LABEL_F5BE86
 	anddi8 13471, 254
@@ -255281,7 +255281,7 @@ LABEL_F635E1:
 	and l, 0xF
 	xor h, h
 	sla hl, 1
-	.byte 0x44, 0x43, 0x36, 0xf6, 0x00	; LD XIX, LABEL_F63643
+	ld xix, 0xF63643
 	xor xwa, xwa
 	.byte 0xd3, 0x07, 0xf0, 0xec, 0x20	; LD WA, (XIX + HL)
 	jr LABEL_F63663
@@ -255340,7 +255340,7 @@ LABEL_F636E2:
 RhythmROM_CalcPatternAddr:
 	and xwa, 0xFF00
 	sla xwa, 8
-	.byte 0x44, 0x00, 0x00, 0x40, 0x00	; LD XIX, RHYTHM_DATA_ROM__BASE_ADDR
+	ld xix, 0x400000
 	addda32 xix, 12919
 	add xix, xwa
 	ret
@@ -259660,7 +259660,7 @@ LABEL_F6718B:
 	ld w, a
 	and xwa, 0xFF00
 	sll xwa, 8
-	.byte 0x44, 0x00, 0x00, 0x40, 0x00	; LD XIX, RHYTHM_DATA_ROM__BASE_ADDR
+	ld xix, 0x400000
 	addda32 xix, 12919
 	add xix, xwa
 	add xix, xde
@@ -259809,7 +259809,7 @@ LABEL_F67304:
 	.byte 0xc3, 0x07, 0xf0, 0xe4, 0x20	; LD W, (XIX + BC)
 	and xwa, 0xFF00
 	sll xwa, 8
-	.byte 0x45, 0x00, 0x00, 0x40, 0x00	; LD XIY, RHYTHM_DATA_ROM__BASE_ADDR
+	ld xiy, 0x400000
 	addda32 xix, 12919
 	add xiy, xwa
 	ret
@@ -269010,7 +269010,7 @@ LABEL_F6EE3F:
 	cp a, 0xC0
 	jr z, LABEL_F6EEB0
 	cp a, 0x84
-	.byte 0xf2, 0xcd, 0xef, 0xf6, 0xd6	; JP Z, LABEL_F6EFCD
+	jpcc_24 6, 0xF6EFCD
 	calr LABEL_F6DEE0
 	jr LABEL_F6EE35
 
@@ -269218,27 +269218,27 @@ LABEL_F6F09C:
 	.byte 0xb1, 0xf0, 0xf6, 0x5e, 0x0e
 
 LABEL_F6F0B1:
-	.byte 0x45, 0x19, 0xf1, 0xf6, 0x00	; LD XIY, LABEL_F6F119
-	.byte 0x44, 0x00, 0x88, 0x1e, 0x00	; LD XIX, MSP_SETTINGS__BASE_ADDR
+	ld xiy, 0xF6F119
+	ld xix, 0x1E8800
 	ldw bc, 0x10
 	ldirw
 	ldb a, 0xC
 
 LABEL_F6F0C2:
-	.byte 0x45, 0x39, 0xf1, 0xf6, 0x00	; LD XIY, LABEL_F6F139
+	ld xiy, 0xF6F139
 	ldw bc, 0x8
 	ldirw
 	dec 1, a
 	jr nz, LABEL_F6F0C2
-	.byte 0x45, 0x49, 0xf2, 0xf6, 0x00	; LD XIY, BLOCK_OF_64_ZEROES
+	ld xiy, 0xF6F249
 	ld xix, 0x1E8A00
 	ldw bc, 0x20
 	ldirw
-	.byte 0x45, 0x89, 0xf2, 0xf6, 0x00	; LD XIY, HEADER__COMPILE_BANKS
+	ld xiy, 0xF6F289
 	ld xix, 0x1E8A40
 	ldw bc, 0x20
 	ldirw
-	.byte 0x45, 0xc9, 0xf2, 0xf6, 0x00	; LD XIY, HEADER__USER_BANKS
+	ld xiy, 0xF6F2C9
 	ld xix, 0x1E8A80
 	ldw bc, 0x20
 	ldirw
@@ -269246,7 +269246,7 @@ LABEL_F6F0C2:
 	ldb a, 0x39
 
 LABEL_F6F104:
-	.byte 0x45, 0x49, 0xf1, 0xf6, 0x00	; LD XIY, LABEL_F6F149
+	ld xiy, 0xF6F149
 	ldw bc, 0x80
 	ldirw
 	dec 1, a
@@ -269287,16 +269287,16 @@ HEADER__USER_BANKS:	; F6F2C9
 
 LABEL_F6F309:
 	calr LABEL_F6F0B1
-	.byte 0x45, 0x2f, 0xf4, 0xf6, 0x00	; LD XIY, LABEL_F6F42F
+	ld xiy, 0xF6F42F
 	ld xix, 0x1E8820
 	ldw bc, 0xF0
 	ldirw
 	ld xix, 0x1E8A00
-	.byte 0x45, 0x49, 0xf2, 0xf6, 0x00	; LD XIY, BLOCK_OF_64_ZEROES
+	ld xiy, 0xF6F249
 	ldw bc, 0x60
 	ldirw
 	ld xix, 0x1E8B00
-	.byte 0x45, 0x2f, 0xf6, 0xf6, 0x00	; LD XIY, MSP_FACTORY_DEFAULTS
+	ld xiy, 0xF6F62F
 	ldw bc, 0xA80
 	ldirw
 	calr LABEL_F6F3B0
@@ -269333,7 +269333,7 @@ LABEL_F6F375:
 	ret
 
 LABEL_F6F385:
-	.byte 0x45, 0x00, 0x88, 0x1e, 0x00	; LD XIY, MSP_SETTINGS__BASE_ADDR
+	ld xiy, 0x1E8800
 	add xiy, 0xE
 	ld wa, (xiy)
 	cps wa, 0
@@ -269344,7 +269344,7 @@ LABEL_F6F399:
 	ret
 
 LABEL_F6F39A:
-	.byte 0x45, 0x00, 0x88, 0x1e, 0x00	; LD XIY, MSP_SETTINGS__BASE_ADDR
+	ld xiy, 0x1E8800
 	add xiy, 0xA
 	ld a, (xiy)
 	bit 0, a
@@ -269383,7 +269383,7 @@ LABEL_F6F3D0:
 
 LABEL_F6F3E0:
 	ld xhl, 0x3C00
-	.byte 0x45, 0x00, 0x88, 0x1e, 0x00	; LD XIY, MSP_SETTINGS__BASE_ADDR
+	ld xiy, 0x1E8800
 	add xiy, 0x200
 	add xiy, 0x3800
 	ldb c, 0x39
@@ -274222,7 +274222,7 @@ LABEL_F74928:
 
 LABEL_F7492C:
 	pushw 0x34
-	.byte 0x41, 0xaa, 0x3b, 0xe6, 0x00	; LD XBC, Bitmap_SplitPoint_B
+	ld xbc, 0xE63BAA
 	ldw de, 0x39
 	call 0xFAC3DB
 	addmi16 (xsp + 4), 0x38
@@ -274259,7 +274259,7 @@ Draw_keybed_maybe_for_indicating_split_point:
 LABEL_F7498B:
 	lda xwa, (xsp + 4)
 	pushw 0x34
-	.byte 0x41, 0x4a, 0xae, 0xe5, 0x00	; LD XBC, Bitmap_SplitPoint_no_split
+	ld xbc, 0xE5AE4A
 	ldw de, 0x39
 	call 0xFAC3DB
 	addmi16 (xsp + 4), 0x38
@@ -274502,7 +274502,7 @@ CmptCnctDrawConnectionDiagram:
 	inc 8, xsp
 	lda xwa, (xsp + 4)
 	pushw 0x6C
-	.byte 0x41, 0x72, 0x47, 0xe6, 0x00	; LD XBC, Bitmap_MIDIConnections_1
+	ld xbc, 0xE64772
 	ldw de, 0x128
 	jr CmptCnctBitmapDrawComplete
 
@@ -274514,7 +274514,7 @@ LABEL_F74BB5:
 	inc 8, xsp
 	lda xwa, (xsp + 4)
 	pushw 0x6C
-	.byte 0x41, 0x52, 0xc4, 0xe6, 0x00	; LD XBC, Bitmap_MIDIConnections_2
+	ld xbc, 0xE6C452
 	ldw de, 0x128
 	jr CmptCnctBitmapDrawComplete
 
@@ -274526,7 +274526,7 @@ LABEL_F74BD2:
 	inc 8, xsp
 	lda xwa, (xsp + 4)
 	pushw 0x6C
-	.byte 0x41, 0x32, 0x41, 0xe7, 0x00	; LD XBC, Bitmap_MIDIConnections_3
+	ld xbc, 0xE74132
 	ldw de, 0x128
 	jr CmptCnctBitmapDrawComplete
 
@@ -274538,7 +274538,7 @@ LABEL_F74BEF:
 	inc 8, xsp
 	lda xwa, (xsp + 4)
 	pushw 0x6C
-	.byte 0x41, 0x72, 0x47, 0xe6, 0x00	; LD XBC, Bitmap_MIDIConnections_1
+	ld xbc, 0xE64772
 	ldw de, 0x128
 
 CmptCnctBitmapDrawComplete:
@@ -319364,7 +319364,7 @@ FDC_DMA_Setup_Exit:
 	ret
 
 FDC_Setup_DMA_Ack_Dest:
-	.byte 0x43, 0x00, 0x00, 0x12, 0x00	; LD XHL, FDC__DMA_ACKNOWLEDGE
+	ld xhl, 0x120000
 	.byte 0xeb, 0x2e, 0x0c	; LDC_DMAS3_XHL
 	ldda32 xhl, 35404
 	.byte 0xeb, 0x2e, 0x2c	; LDC_DMAD3_XHL
@@ -319375,7 +319375,7 @@ FDC_Setup_DMA_Ack_Dest:
 FDC_Setup_DMA_Src_Ack:
 	ldda32 xhl, 35404
 	.byte 0xeb, 0x2e, 0x0c	; LDC_DMAS3_XHL
-	.byte 0x43, 0x00, 0x00, 0x12, 0x00	; LD XHL, FDC__DMA_ACKNOWLEDGE
+	ld xhl, 0x120000
 	.byte 0xeb, 0x2e, 0x2c	; LDC_DMAD3_XHL
 	ldb a, 0x8
 	.byte 0xc9, 0x2e, 0x4e	; LDC_DMAM3_A
@@ -320244,7 +320244,7 @@ Reset_Floppy_Disk_Controller:	; F97EC9
 
 	; then do a lot of other stuff I still don't undertsand:
 
-	.byte 0x08, 0x47, 0x1e	; LD (PHFC), 01eh
+	ldio 0x47, 0x1E
 	.byte 0xf0, 0x34, 0xce	; BIT 6, (PD)	; Port D bit 6: "FD.I/O signal"
 	ret nz
 	ldb a, 0x0
@@ -348969,7 +348969,7 @@ ReadPixel:
 	ld wa, (xiz)
 	exts xwa
 	add xwa, xbc
-	.byte 0x41, 0x00, 0x3c, 0x04, 0x00	; LD XBC, OFFSCREEN_BUFFER_1
+	ld xbc, 0x43C00
 	add xbc, xwa
 	ld l, (xbc)
 	extz hl
@@ -349016,7 +349016,7 @@ LABEL_FAA81C:
 	ld wa, (xde)
 	exts xwa
 	add xwa, xbc
-	.byte 0x41, 0x00, 0x3c, 0x04, 0x00	; LD XBC, OFFSCREEN_BUFFER_1
+	ld xbc, 0x43C00
 	add xbc, xwa
 	.byte 0xc7, 0xf8, 0x89	; LD A, IZL
 	ld (xbc), a
@@ -349075,7 +349075,7 @@ LABEL_FAA895:
 	ld wa, (xde)
 	exts xwa
 	add xwa, xbc
-	.byte 0x41, 0x00, 0x3c, 0x04, 0x00	; LD XBC, OFFSCREEN_BUFFER_1
+	ld xbc, 0x43C00
 	add xbc, xwa
 	ld wa, (xsp + 2)
 	ld (xbc), a
@@ -349159,7 +349159,7 @@ LABEL_FAA965:
 	ld wa, (xhl)
 	exts xwa
 	add xwa, xde
-	.byte 0x42, 0x00, 0x3c, 0x04, 0x00	; LD XDE, OFFSCREEN_BUFFER_1
+	ld xde, 0x43C00
 	add xde, xwa
 	xor (xde), c
 
@@ -349852,7 +349852,7 @@ LABEL_FAAFE5:
 	ld wa, (xwa)
 	exts xwa
 	add xwa, xde
-	.byte 0x41, 0x00, 0x3c, 0x04, 0x00	; LD XBC, OFFSCREEN_BUFFER_1
+	ld xbc, 0x43C00
 	add xbc, xwa
 	ld wa, (xsp + 44)
 	ld (xbc), a
@@ -349878,7 +349878,7 @@ LABEL_FAB030:
 	ld wa, (xwa)
 	exts xwa
 	add xwa, xde
-	.byte 0x41, 0x00, 0x3c, 0x04, 0x00	; LD XBC, OFFSCREEN_BUFFER_1
+	ld xbc, 0x43C00
 	add xbc, xwa
 	ld wa, (xsp + 44)
 	xor (xbc), a
@@ -349910,7 +349910,7 @@ LABEL_FAB06F:
 	ld wa, (xwa)
 	exts xwa
 	add xwa, xde
-	.byte 0x41, 0x00, 0x3c, 0x04, 0x00	; LD XBC, OFFSCREEN_BUFFER_1
+	ld xbc, 0x43C00
 	add xbc, xwa
 	ld wa, (xsp + 44)
 	ld (xbc), a
@@ -349936,7 +349936,7 @@ LABEL_FAB0BA:
 	ld wa, (xwa)
 	exts xwa
 	add xwa, xde
-	.byte 0x41, 0x00, 0x3c, 0x04, 0x00	; LD XBC, OFFSCREEN_BUFFER_1
+	ld xbc, 0x43C00
 	add xbc, xwa
 	ld wa, (xsp + 44)
 	xor (xbc), a
@@ -350198,7 +350198,7 @@ LABEL_FAB31F:
 	ld wa, (xwa)
 	exts xwa
 	add xwa, xix
-	.byte 0x45, 0x00, 0x3c, 0x04, 0x00	; LD XIY, OFFSCREEN_BUFFER_1
+	ld xiy, 0x43C00
 	add xiy, xwa
 	ld (xsp + 2), xiy
 	ld bc, (xbc)
@@ -350373,7 +350373,7 @@ LABEL_FAB490:
 	ld bc, (xwa)
 	ld xwa, (xsp + 40)
 	.byte 0xf3, 0x07, 0xe0, 0xe4, 0x30	; LDA XWA, XWA + BC
-	.byte 0x41, 0x00, 0x3c, 0x04, 0x00	; LD XBC, OFFSCREEN_BUFFER_1
+	ld xbc, 0x43C00
 	add xbc, xwa
 	push xbc
 	call LABEL_FF0FFA
@@ -350391,7 +350391,7 @@ LABEL_FAB4EF:
 	ld bc, (xwa)
 	ld xwa, (xsp + 40)
 	.byte 0xf3, 0x07, 0xe0, 0xe4, 0x30	; LDA XWA, XWA + BC
-	.byte 0x41, 0x00, 0x3c, 0x04, 0x00	; LD XBC, OFFSCREEN_BUFFER_1
+	ld xbc, 0x43C00
 	add xbc, xwa
 	push xbc
 	call LABEL_FF0FFA
@@ -350412,7 +350412,7 @@ LABEL_FAB4EF:
 	ld wa, (xde)
 	exts xwa
 	add xwa, xbc
-	.byte 0x41, 0x00, 0x3c, 0x04, 0x00	; LD XBC, OFFSCREEN_BUFFER_1
+	ld xbc, 0x43C00
 	add xbc, xwa
 	push xbc
 	call LABEL_FF0FFA
@@ -350531,7 +350531,7 @@ LABEL_FAB628:
 	ld bc, (xde)
 	ld xwa, (xsp + 44)
 	.byte 0xf3, 0x07, 0xe0, 0xe4, 0x30	; LDA XWA, XWA + BC
-	.byte 0x41, 0x00, 0x3c, 0x04, 0x00	; LD XBC, OFFSCREEN_BUFFER_1
+	ld xbc, 0x43C00
 	add xbc, xwa
 	push xbc
 	call 0xFF0D99
@@ -350554,7 +350554,7 @@ LABEL_FAB66D:
 	ld bc, (xde)
 	ld xwa, (xsp + 44)
 	.byte 0xf3, 0x07, 0xe0, 0xe4, 0x30	; LDA XWA, XWA + BC
-	.byte 0x41, 0x00, 0x3c, 0x04, 0x00	; LD XBC, OFFSCREEN_BUFFER_1
+	ld xbc, 0x43C00
 	add xbc, xwa
 	push xbc
 	call 0xFF0D99
@@ -350578,7 +350578,7 @@ LABEL_FAB66D:
 	ld wa, (xhl)
 	exts xwa
 	add xwa, xbc
-	.byte 0x41, 0x00, 0x3c, 0x04, 0x00	; LD XBC, OFFSCREEN_BUFFER_1
+	ld xbc, 0x43C00
 	add xbc, xwa
 	push xbc
 	call 0xFF0D99
@@ -350767,7 +350767,7 @@ LABEL_FAB863:
 	jr z, LABEL_FAB89F
 	cp iy, 0x201
 	jrl nz, LABEL_FABA4E
-	.byte 0x44, 0x00, 0x3c, 0x04, 0x00	; LD XIX, OFFSCREEN_BUFFER_1
+	ld xix, 0x43C00
 	add xix, xbc
 	ld bc, (xsp + 16)
 	ld (xix), c
@@ -350780,7 +350780,7 @@ LABEL_FAB893:
 	jrl LABEL_FABA29
 
 LABEL_FAB89F:
-	.byte 0x44, 0x00, 0x3c, 0x04, 0x00	; LD XIX, OFFSCREEN_BUFFER_1
+	ld xix, 0x43C00
 	add xix, xbc
 	ld bc, (xsp + 16)
 	xor (xix), c
@@ -351170,7 +351170,7 @@ LABEL_FABBE7:
 	push xiz
 	push xwa
 	call 0xFF0D99
-	.byte 0x40, 0x00, 0x96, 0x00, 0x00	; LD XWA, 320 * 240 / 2
+	ld xwa, 0x9600
 	add (xsp + 14), xwa
 	.byte 0xee, 0xc8, 0x00, 0x96, 0x00, 0x00	; ADD XIZ, 320 * 240 / 2
 	pushw 0x9600
@@ -351466,7 +351466,7 @@ LABEL_FABE6F:
 	ld wa, (xhl)
 	exts xwa
 	add xwa, xde
-	.byte 0x42, 0x00, 0x3c, 0x04, 0x00	; LD XDE, OFFSCREEN_BUFFER_1
+	ld xde, 0x43C00
 	add xde, xwa
 	ld (xsp + 12), xde
 	ld (xsp + 8), bc
@@ -351612,7 +351612,7 @@ LABEL_FABF9B:
 	ld wa, (xde)
 	exts xwa
 	add xwa, xbc
-	.byte 0x43, 0x00, 0x3c, 0x04, 0x00	; LD XHL, OFFSCREEN_BUFFER_1
+	ld xhl, 0x43C00
 	add xhl, xwa
 	lds de, 0
 
@@ -352122,7 +352122,7 @@ LABEL_FAC457:
 	ld wa, (xhl)
 	exts xwa
 	add xwa, xde
-	.byte 0x42, 0x00, 0x3c, 0x04, 0x00	; LD XDE, OFFSCREEN_BUFFER_1
+	ld xde, 0x43C00
 	add xde, xwa
 	ld xiz, xde
 	ld (xsp + 6), bc
@@ -352444,7 +352444,7 @@ LABEL_FAC6F3:
 	ld xwa, (xsp + 32)
 	srl xwa, 2
 	ld (xsp + 32), xwa
-	.byte 0x41, 0x00, 0x94, 0x06, 0x00	; LD XBC, OFFSCREEN_BUFFER_4
+	ld xbc, 0x69400
 	lds32 xwa, 0
 	ld (xsp + 12), xwa
 
@@ -352646,7 +352646,7 @@ LABEL_FAC9A5:
 	jr ge, LABEL_FACA00
 	ld xwa, 0x140
 	add (xsp + 32), xwa
-	.byte 0x46, 0x00, 0x68, 0x05, 0x00	; LD XIZ, OFFSCREEN_BUFFER_2
+	ld xiz, 0x56800
 	ld xwa, (xsp + 32)
 	.byte 0xe8, 0xc8, 0x00, 0x68, 0x05, 0x00	; ADD XWA, OFFSCREEN_BUFFER_2
 	ld (xsp + 28), xwa
@@ -352696,10 +352696,10 @@ LABEL_FACA00:
 	ld wa, (xhl)
 	exts xwa
 	add xwa, xde
-	.byte 0x42, 0x00, 0x3c, 0x04, 0x00	; LD XDE, OFFSCREEN_BUFFER_1
+	ld xde, 0x43C00
 	add xde, xwa
 	ld xiz, xde
-	.byte 0x40, 0x00, 0x68, 0x05, 0x00	; LD XWA, OFFSCREEN_BUFFER_2
+	ld xwa, 0x56800
 	ld (xsp + 36), xwa
 	ld (xsp + 34), bc
 	ldmw (xsp + 32), 0x0
@@ -355435,17 +355435,17 @@ LABEL_FAE7DE:
 LABEL_FAE837:
 	pushw 0x9600
 	pushw 0x0
-	.byte 0x40, 0x00, 0x68, 0x05, 0x00	; LD XWA, OFFSCREEN_BUFFER_2
+	ld xwa, 0x56800
 	push xwa
 	call LABEL_FF0FFA
 	pushw 0x9600
 	pushw 0x0
-	.byte 0x40, 0x00, 0xfe, 0x05, 0x00	; LD XWA, OFFSCREEN_BUFFER_3
+	ld xwa, 0x5FE00
 	push xwa
 	call LABEL_FF0FFA
 	pushw 0x400
 	pushw 0x0
-	.byte 0x40, 0x00, 0x94, 0x06, 0x00	; LD XWA, OFFSCREEN_BUFFER_4
+	ld xwa, 0x69400
 	push xwa
 	call LABEL_FF0FFA
 	lda xsp, (xsp + 24)
@@ -355510,8 +355510,8 @@ LABEL_FAE907:
 	ld xwa, (xsp + 30)
 	srl xwa, 2
 	ld (xsp + 30), xwa
-	.byte 0x42, 0x00, 0x94, 0x06, 0x00	; LD XDE, OFFSCREEN_BUFFER_4
-	.byte 0x41, 0x00, 0x94, 0x06, 0x00	; LD XBC, OFFSCREEN_BUFFER_4
+	ld xde, 0x69400
+	ld xbc, 0x69400
 	ld xhl, 0x69800
 
 LABEL_FAE935:
@@ -355726,7 +355726,7 @@ LABEL_FAEB34:
 	jr ge, LABEL_FAEB93
 	ld xwa, 0x140
 	add (xsp + 30), xwa
-	.byte 0x40, 0x00, 0x68, 0x05, 0x00	; LD XWA, OFFSCREEN_BUFFER_2
+	ld xwa, 0x56800
 	ld (xsp + 26), xwa
 	ld xwa, (xsp + 30)
 	.byte 0xe8, 0xc8, 0x00, 0x68, 0x05, 0x00	; ADD XWA, OFFSCREEN_BUFFER_2
@@ -355939,7 +355939,7 @@ LABEL_FAED40:
 	.byte 0xf5, 0xe5, 0x02, 0x00, 0x00	; LDW (XBC+), 0000h
 	cp xbc, xwa
 	jr c, LABEL_FAED40
-	.byte 0x43, 0x00, 0x68, 0x05, 0x00	; LD XHL, OFFSCREEN_BUFFER_2
+	ld xhl, 0x56800
 	lds ix, 0
 
 LABEL_FAED50:
@@ -356184,7 +356184,7 @@ LABEL_FAEFAD:
 	ld xwa, (xsp + 4)
 	cp xwa, 0xC0
 	jr lt, LABEL_FAEFAD
-	.byte 0x43, 0x00, 0x68, 0x05, 0x00	; LD XHL, OFFSCREEN_BUFFER_2
+	ld xhl, 0x56800
 	lds ix, 0
 
 LABEL_FAEFCC:
@@ -356222,7 +356222,7 @@ LABEL_FAEFF0:
 
 LABEL_FAF00B:
 	lds wa, 1
-	.byte 0x41, 0x00, 0x68, 0x05, 0x00	; LD XBC, OFFSCREEN_BUFFER_2
+	ld xbc, 0x56800
 	ld xde, 0x3C0000
 	call LABEL_EF3BFC
 	ld xwa, 0x3D0000
@@ -356259,7 +356259,7 @@ CaptureLcd:
 	ldmw (xbc + 14), 0x8
 	lds32 xwa, 0
 	ld (xbc + 16), xwa
-	.byte 0x40, 0x00, 0x2c, 0x01, 0x00	; LD XWA, 320 * 240
+	ld xwa, 0x12C00
 	ld (xbc + 20), xwa
 	lds32 xwa, 0
 	ld (xbc + 24), xwa
@@ -356565,13 +356565,13 @@ LABEL_FAF360:
 	ld xiz, xwa
 	pushw 0x9600
 	push xwa
-	.byte 0x40, 0x00, 0x68, 0x05, 0x00	; LD XWA, OFFSCREEN_BUFFER_2
+	ld xwa, 0x56800
 	push xwa
 	call 0xFF0D99
 	.byte 0xee, 0xc8, 0x00, 0x96, 0x00, 0x00	; ADD XIZ, 320 * 240 / 2
 	pushw 0x9600
 	push xiz
-	.byte 0x40, 0x00, 0xfe, 0x05, 0x00	; LD XWA, OFFSCREEN_BUFFER_3
+	ld xwa, 0x5FE00
 	push xwa
 	call 0xFF0D99
 	lda xsp, (xsp + 20)
@@ -360168,7 +360168,7 @@ LABEL_FB3108:
 	add xwa, xiz
 	sll xwa, 6
 	add xwa, (xsp + 10)
-	.byte 0x41, 0x00, 0x3c, 0x04, 0x00	; LD XBC, OFFSCREEN_BUFFER_1
+	ld xbc, 0x43C00
 	add xbc, xwa
 	push xbc
 	srl xwa, 1
@@ -360198,7 +360198,7 @@ LABEL_FB314A:
 	add xwa, xiz
 	sll xwa, 6
 	add xwa, (xsp + 10)
-	.byte 0x41, 0x00, 0x3c, 0x04, 0x00	; LD XBC, OFFSCREEN_BUFFER_1
+	ld xbc, 0x43C00
 	add xbc, xwa
 	push xbc
 	srl xwa, 1
@@ -360829,7 +360829,7 @@ LABEL_FB4016:
 
 LABEL_FB4277:
 	cpdi8 36152, 138
-	.byte 0xf2, 0x1e, 0xa3, 0xef, 0xd6	; JP Z, LABEL_EFA31E
+	jpcc_24 6, 0xEFA31E
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C20000
 	lds32 xde, 0
@@ -366104,7 +366104,7 @@ Test_PROGRAM_and_TABLE_DATA_ROMs:	; FB7456
 	.byte 0xc7, 0xe2, 0xa8	; LD QA, 0
 
 LABEL_FB7482:
-	.byte 0x43, 0x00, 0x00, 0xe0, 0x00	; LD XHL, PROGRAM_FLASH__BASE_ADDR
+	ld xhl, 0xE00000
 	lds32 xix, 0
 
 LABEL_FB7489:
@@ -366156,7 +366156,7 @@ LABEL_FB74E1:
 	.byte 0xc7, 0xe2, 0xa8	; LD QA, 0
 
 LABEL_FB74FA:
-	.byte 0x43, 0x00, 0x00, 0x80, 0x00	; LD XHL, TABLE_DATA_ROM__BASE_ADDR
+	ld xhl, 0x800000
 	lds32 xix, 0
 
 LABEL_FB7501:
@@ -366214,7 +366214,7 @@ Test_Rhythm_data_ROM_IC14:
 	ldb w, 0x0
 
 LABEL_FB7574:
-	.byte 0x45, 0x00, 0x00, 0x40, 0x00	; LD XIY, RHYTHM_DATA_ROM__BASE_ADDR
+	ld xiy, 0x400000
 	lds32 xiz, 0
 
 LABEL_FB757B:
@@ -366280,7 +366280,7 @@ LABEL_FB75E9:
 	.byte 0xc7, 0xe2, 0xa8	; LD QA, 0
 
 LABEL_FB75FA:
-	.byte 0x44, 0x00, 0x00, 0x30, 0x00	; LD XIX, CUSTOM_DATA_FLASH__BASE_ADDR
+	ld xix, 0x300000
 	lds32 xiy, 0
 
 LABEL_FB7601:
@@ -382785,7 +382785,7 @@ LABEL_FC3E94:
 	and a, 0xC0
 	jr z, LABEL_FC3EC8
 				; if CP_Flags_A.76 != 0:
-	.byte 0x43, 0xad, 0x00, 0x02, 0x00	; LD XHL, CPANEL_RX_EVENT_QUEUE
+	ld xhl, 0x200AD
 	ldmw (xhl - 4), 0x0
 	ldmw (xhl - 8), 0x0
 	ldmw (xhl - 2), 0x80
@@ -382910,12 +382910,12 @@ CPanel_ScanButtons:	; FC3EE5
 
 
 CPanel_InitHardware:
-	.byte 0x43, 0xad, 0x00, 0x02, 0x00	; LD XHL, CPANEL_RX_EVENT_QUEUE
+	ld xhl, 0x200AD
 	ldmw (xhl - 4), 0x0
 	ldmw (xhl - 8), 0x0
 	ldmw (xhl - 2), 0x80
 
-	.byte 0x43, 0x37, 0x01, 0x02, 0x00	; LD XHL, CPANEL_LED_EVENT_QUEUE
+	ld xhl, 0x20137
 	ldmw (xhl - 4), 0x0
 	ldmw (xhl - 8), 0x0
 	ldmw (xhl - 2), 0x80
@@ -382933,24 +382933,24 @@ CPanel_InitHardware:
 	.byte 0xf0, 0x3b, 0x41	; LD (PEFC), A
 	ldb a, 0x46
 	.byte 0xf0, 0x3a, 0x41	; LD (PECR), A
-	.byte 0x08, 0xd6, 0x00	; LD (SC1MOD), 000h	; serial clk: TO2 trigger
+	ldio 0xD6, 0x00	; serial clk: TO2 trigger
 	                  ; serial transfer mode: I/O  transfer mode
 	                  ; wake-up function: disable
 	                  ; receive control: receive disable
 	                  ; handshake function control: CTS disable
-	.byte 0x08, 0xd7, 0x14	; LD (BR1CR), 014h	; Internal Clock T2 (16/fc)
+	ldio 0xD7, 0x14	; Internal Clock T2 (16/fc)
 	                 ; Divide by 4
 	                 ; fc = 16MHz, so fc/16/4 = 250kHz
-	.byte 0x08, 0xd5, 0x01	; LD (SC1CR), 001h	; Parity: odd
+	ldio 0xD5, 0x01	; Parity: odd
 	                 ; Parity addition: disable
 	                 ; clear all errors
 	                 ; Data transmit/receive at SCLK1 rising edge
 	                 ; I/O interface input clock: SCLK1 pin input
-	.byte 0x08, 0xe3, 0x07	; LD (INTEAB), 007h
-	.byte 0x08, 0xf8, 0x12	; LD (INTCLR), 012h	; INTA Pin
-	.byte 0x08, 0xeb, 0xff	; LD (INTES1), 0ffh
-	.byte 0x08, 0xf8, 0x22	; LD (INTCLR), 022h	; INTRX1: Serial receive 1
-	.byte 0x08, 0xf8, 0x23	; LD (INTCLR), 023h	; INTTX1: Serial send 1
+	ldio 0xE3, 0x07
+	ldio 0xF8, 0x12	; INTA Pin
+	ldio 0xEB, 0xFF
+	ldio 0xF8, 0x22	; INTRX1: Serial receive 1
+	ldio 0xF8, 0x23	; INTTX1: Serial send 1
 	.byte 0xc0, 0xc8, 0x3e, 0x10	; OR (TAMOD), 010h
 	.byte 0xc0, 0xc8, 0x3c, 0xf7	; AND (TAMOD), 0f7h
 	stdi8 36241, 125	; This looks pointless...
@@ -383014,12 +383014,12 @@ CPanel_SendInitSequence:
 	calr DELAY_3000_LOOPS
 
 	ei 6
-	.byte 0x08, 0xeb, 0xff	; LD (INTES1), 0ffh
-	.byte 0x08, 0xf8, 0x22	; LD (INTCLR), 022h	; INTRX1: Serial receive 1
-	.byte 0x08, 0xf8, 0x23	; LD (INTCLR), 023h	; INTTX1: Serial send 1
+	ldio 0xEB, 0xFF
+	ldio 0xF8, 0x22	; INTRX1: Serial receive 1
+	ldio 0xF8, 0x23	; INTTX1: Serial send 1
 	.byte 0xc0, 0xd6, 0x3c, 0xdf	; AND (SC1MOD), 0dfh	; RXE (bit 5) = 0: receive disable
-	.byte 0x08, 0xf8, 0x12	; LD (INTCLR), 012h	; INTA Pin
-	.byte 0x08, 0xe3, 0x05	; LD (INTEAB), 005h
+	ldio 0xF8, 0x12	; INTA Pin
+	ldio 0xE3, 0x05
 	stdi16 36253, 0
 	stdi16 36255, 0
 	ordi8 36242, 1	; CP_Flags_B.0 = 1
@@ -383032,11 +383032,11 @@ CPanel_InitLEDBuffer:
 	anddi8 36239, 191
 	ldda8 a, 36239
 	.byte 0xf0, 0x3f, 0x41	; LD (PFFC), A
-	.byte 0x08, 0xeb, 0xff	; LD (0ebh), 0ffh
-	.byte 0x08, 0xf8, 0x22	; LD (0f8h), 022h
-	.byte 0x08, 0xf8, 0x23	; LD (0f8h), 023h
-	.byte 0x08, 0xe3, 0x07	; LD (0e3h), 007h
-	.byte 0x08, 0xf8, 0x12	; LD (0f8h), 012h
+	ldio 0xEB, 0xFF
+	ldio 0xF8, 0x22
+	ldio 0xF8, 0x23
+	ldio 0xE3, 0x07
+	ldio 0xF8, 0x12
 	.byte 0xc0, 0x3c, 0x3c, 0xbf	; AND (03ch), 0bfh
 	ordi8 36238, 64
 	ldda8 a, 36238
@@ -383055,17 +383055,17 @@ CPanel_InitLEDBuffer:
 	ldda8 a, 36238
 	.byte 0xf0, 0x3e, 0x41	; LD (PFCR), A
 	.byte 0xc0, 0xd5, 0x3c, 0xfe	; AND (SC1CR), 0feh
-	.byte 0x08, 0xeb, 0xff	; LD (0ebh), 0ffh
-	.byte 0x08, 0xf8, 0x22	; LD (0f8h), 022h
-	.byte 0x08, 0xf8, 0x23	; LD (0f8h), 023h
-	.byte 0x45, 0x01, 0x8e, 0x00, 0x00	; LD XIY, CPANEL_LED_TX_BUFFER
+	ldio 0xEB, 0xFF
+	ldio 0xF8, 0x22
+	ldio 0xF8, 0x23
+	ld xiy, 0x8E01
 	addda16 xiy, 36349
 	ld a, (xiy)
 	incdi16 1, 36349
 	.byte 0xf0, 0xd4, 0x41	; LD (SC1BUF), A
 	calr DELAY_300_LOOPS
 	calr DELAY_300_LOOPS
-	.byte 0x45, 0x01, 0x8e, 0x00, 0x00	; LD XIY, CPANEL_LED_TX_BUFFER
+	ld xiy, 0x8E01
 	addda16 xiy, 36349
 	ld a, (xiy)
 	incdi16 1, 36349
@@ -383271,7 +383271,7 @@ LABEL_FC41F7:
 
 
 CPanel_ReadAllButtons:
-	.byte 0x43, 0xad, 0x00, 0x02, 0x00	; LD XHL, CPANEL_RX_EVENT_QUEUE
+	ld xhl, 0x200AD
 	ldmw (xhl - 4), 0x0
 	ldmw (xhl - 8), 0x0
 	ldmw (xhl - 2), 0x80
@@ -383316,7 +383316,7 @@ CPanel_ReadAllButtons:
 
 
 CPanel_PollStartup:
-	.byte 0x43, 0xad, 0x00, 0x02, 0x00	; LD XHL, CPANEL_RX_EVENT_QUEUE
+	ld xhl, 0x200AD
 	ldmw (xhl - 4), 0x0
 	ldmw (xhl - 8), 0x0
 	ldmw (xhl - 2), 0x80
@@ -383348,7 +383348,7 @@ CPanel_EncoderCheck:
 	stda8 36458, w
 	jr nz, CPanel_ButtonPollLoop
 	stda8 36458, w
-	.byte 0x43, 0xad, 0x00, 0x02, 0x00	; LD XHL, CPANEL_RX_EVENT_QUEUE
+	ld xhl, 0x200AD
 	ldmw (xhl - 4), 0x0
 	ldmw (xhl - 8), 0x0
 	ldmw (xhl - 2), 0x80
@@ -383363,7 +383363,7 @@ CPanel_EncoderCheck:
 
 
 CPanel_InitButtonState:	; do that
-	.byte 0x43, 0xad, 0x00, 0x02, 0x00	; LD XHL, CPANEL_RX_EVENT_QUEUE
+	ld xhl, 0x200AD
 	ldmw (xhl - 4), 0x0
 	ldmw (xhl - 8), 0x0
 	ldmw (xhl - 2), 0x80
@@ -383442,9 +383442,9 @@ CPanel_WaitTXReady_BufferCheck:
 
 LABEL_FC43B0:
 	ei 6
-	.byte 0x08, 0xf8, 0x22	; LD (INTCLR), 022h	; INTRX1: Serial receive 1
-	.byte 0x08, 0xf8, 0x23	; LD (INTCLR), 023h	; INTTX1: Serial send 1
-	.byte 0x08, 0xeb, 0xdd	; LD (INTES1), 0ddh
+	ldio 0xF8, 0x22	; INTRX1: Serial receive 1
+	ldio 0xF8, 0x23	; INTTX1: Serial send 1
+	ldio 0xEB, 0xDD
 	.byte 0xc0, 0xd6, 0x3c, 0xdf	; AND (SC1MOD), 0dfh	; RXE (bit 5) = 0: receive disable
 	ordi8 36242, 128	; CP_Flags_B.7 = 1
 	ei 0
@@ -383460,7 +383460,7 @@ CPanel_SendCommand:
 	ordi8 36236, 2
 	anddi8 36236, 254	; CP_Flags_A.10 = 2
 	stdi8 36234, 4	; ROUTINE_1
-	.byte 0x08, 0xd7, 0x28	; LD (BR1CR), 028h	; Internal Clock T8 (64/fc)
+	ldio 0xD7, 0x28	; Internal Clock T8 (64/fc)
 	                 ; Divide by 8
 	                 ; fc = 16MHz, so fc/64/8 = 31250
 	anddi8 36239, 191	; disable CPanel serial ckl
@@ -383470,13 +383470,13 @@ CPanel_SendCommand:
 	ordi8 36238, 64
 	ldda8 a, 36238
 	.byte 0xf0, 0x3e, 0x41	; LD (PFCR), A
-	.byte 0x08, 0xe3, 0x07	; LD (INTEAB), 007h
-	.byte 0x08, 0xf8, 0x12	; LD (INTCLR), 012h	; INTA Pin
+	ldio 0xE3, 0x07
+	ldio 0xF8, 0x12	; INTA Pin
 	.byte 0xc0, 0xd6, 0x3c, 0xdf	; AND (SC1MOD), 0dfh	; RXE (bit 5) = 0: CPanel receive disable
 	.byte 0xc0, 0xd5, 0x3c, 0xfe	; AND (SC1CR), 0feh	; IOC (bit 0) = 0: I/O interface input clock select = Baud rate generator
-	.byte 0x08, 0xf8, 0x23	; LD (INTCLR), 023h	; INTTX1: Serial send 1
-	.byte 0x08, 0xeb, 0xdf	; LD (INTES1), 0dfh
-	.byte 0x08, 0xf8, 0x22	; LD (INTCLR), 022h	; INTRX1: Serial receive 1
+	ldio 0xF8, 0x23	; INTTX1: Serial send 1
+	ldio 0xEB, 0xDF
+	ldio 0xF8, 0x22	; INTRX1: Serial receive 1
 	.byte 0xf0, 0xd4, 0x41	; LD (SC1BUF), A
 	ei 0
 	nop
@@ -383494,8 +383494,8 @@ INTA_HANDLER:	; fc442b
 	.byte 0xf0, 0x3e, 0x41	; LD (PFCR), A
 	.byte 0xc0, 0xd5, 0x3e, 0x01	; OR (SC1CR), 001h	; IOC (bit 0) = 1: Set I/O interface input clock select to SCLK1 pin
 	.byte 0xc0, 0xd5, 0x3c, 0xfd	; AND (SC1CR), 0fdh	; SCLKS (bit 1) = 0: Data transmit/receive at SCLK1 rising edge.
-	.byte 0x08, 0xe3, 0x05	; LD (INTEAB), 005h
-	.byte 0x08, 0xeb, 0x0d	; LD (INTES1), 00dh
+	ldio 0xE3, 0x05
+	ldio 0xEB, 0x0D
 	.byte 0xc0, 0xd6, 0x3e, 0x20	; OR (SC1MOD), 020h	; parity addition: enable
 	stdi8 36234, 32	;		ROUTINE_7
 	ordi8 36236, 1	; CP_Flags_A.0 = 1
@@ -383514,9 +383514,9 @@ LABEL_FC4470:
 
 INTA_HANDLER_END:	; FC447E
 	pop xwa
-	.byte 0x08, 0xf8, 0x12	; LD (INTCLR), 012h	; INTA Pin
-	.byte 0x08, 0xf8, 0x22	; LD (INTCLR), 022h	; INTRX1: Serial receive 1
-	.byte 0x08, 0xf8, 0x23	; LD (INTCLR), 023h	; INTTX1: Serial send 1
+	ldio 0xF8, 0x12	; INTA Pin
+	ldio 0xF8, 0x22	; INTRX1: Serial receive 1
+	ldio 0xF8, 0x23	; INTTX1: Serial send 1
 	reti
 
 
@@ -383550,9 +383550,9 @@ MOST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES:	; FC44CA
 	pop xiy
 	pop xhl
 	pop xwa
-	.byte 0x08, 0xf8, 0x12	; LD (INTCLR), 012h	; INTA Pin
-	.byte 0x08, 0xf8, 0x22	; LD (INTCLR), 022h	; INTRX1: Serial receive 1
-	.byte 0x08, 0xf8, 0x23	; LD (INTCLR), 023h	; INTTX1: Serial send 1
+	ldio 0xF8, 0x12	; INTA Pin
+	ldio 0xF8, 0x22	; INTRX1: Serial receive 1
+	ldio 0xF8, 0x23	; INTTX1: Serial send 1
 	reti
 
 
@@ -383571,9 +383571,9 @@ LEAST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES:	; FC44EC
 	pop xiy
 	pop xhl
 	pop xwa
-	.byte 0x08, 0xf8, 0x12	; LD (INTCLR), 012h	; INTA Pin
-	.byte 0x08, 0xf8, 0x22	; LD (INTCLR), 022h	; INTRX1: Serial receive 1
-	.byte 0x08, 0xf8, 0x23	; LD (INTCLR), 023h	; INTTX1: Serial send 1
+	ldio 0xF8, 0x12	; INTA Pin
+	ldio 0xF8, 0x22	; INTRX1: Serial receive 1
+	ldio 0xF8, 0x23	; INTTX1: Serial send 1
 	reti
 
 
@@ -383581,11 +383581,11 @@ CPanel_SM_StartTX:	; FC44F9	; Start transmitting command to set LEDs on the cont
 	anddi8 36238, 191
 	ldda8 a, 36238
 	.byte 0xf0, 0x3e, 0x41	; LD (PFCR), A
-	.byte 0x08, 0xd7, 0x24	; LD (BR1CR), 024h	; Internal Clock T8 (64/fc)
+	ldio 0xD7, 0x24	; Internal Clock T8 (64/fc)
 	                 ; Divide by 4
 	                 ; fc = 16MHz, so fc/64/4 = 62500
-	.byte 0x08, 0xe3, 0x07	; LD (INTEAB), 007h	; INTTRA(TREGA): M=7
-	.byte 0x08, 0xeb, 0xd0	; LD (INTES1), 0d0h	; INTTX1: M=5
+	ldio 0xE3, 0x07	; INTTRA(TREGA): M=7
+	ldio 0xEB, 0xD0	; INTTX1: M=5
 	.byte 0xc0, 0xd5, 0x3c, 0xfe	; AND (SC1CR), 0feh
 	.byte 0xf0, 0xd4, 0x41	; LD (SC1BUF), A
 	incdi8 4, 36234	; next = ROUTINE_2
@@ -383599,9 +383599,9 @@ CPanel_SM_StartTX:	; FC44F9	; Start transmitting command to set LEDs on the cont
 	stdi8 36235, 0
 	stdi8 36234, 0	; ROUTINE_0
 	ordi8 36242, 2	; CP_Flags_B.1 = 1  ; UNUSED
-	.byte 0x08, 0xe3, 0x05	; LD (INTEAB), 005h
-	.byte 0x08, 0xeb, 0xff	; LD (INTES1), 0ffh
-	.byte 0x08, 0xd7, 0x24	; LD (BR1CR), 024h	; Internal Clock T8 (64/fc)
+	ldio 0xE3, 0x05
+	ldio 0xEB, 0xFF
+	ldio 0xD7, 0x24	; Internal Clock T8 (64/fc)
 	                 ; Divide by 4
 	                 ; fc = 16MHz, so fc/64/4 = 62500
 	anddi8 36236, 253	; CP_Flags_A.1 = 0
@@ -383616,10 +383616,10 @@ CPanel_SM_TXDelay1:	; FC4544
 	anddi8 36239, 175	; disable CPanel serial clk and TX pin.
 	ldda8 a, 36239
 	.byte 0xf0, 0x3f, 0x41	; LD (PFFC), A
-	.byte 0x08, 0xd7, 0x24	; LD (BR1CR), 024h	; Internal Clock T8 (64/fc)
+	ldio 0xD7, 0x24	; Internal Clock T8 (64/fc)
 	                 ; Divide by 4
 	                 ; fc = 16MHz, so fc/64/4 = 62500
-	.byte 0x08, 0xeb, 0xd0	; LD (INTES1), 0d0h	; INTTX1: M=5
+	ldio 0xEB, 0xD0	; INTTX1: M=5
 	.byte 0xc0, 0xd5, 0x3c, 0xfe	; AND (SC1CR), 0feh
 	.byte 0xf0, 0xd4, 0x41	; LD (SC1BUF), A
 	incdi8 4, 36234	; next routine
@@ -383634,12 +383634,12 @@ CPanel_SM_TXDelay2:	; FC4573
 	anddi8 36239, 175	; disable CPanel serial clk and TX pin.
 	ldda8 a, 36239
 	.byte 0xf0, 0x3f, 0x41	; LD (PFFC), A
-	.byte 0x08, 0xd7, 0x24	; LD (BR1CR), 024h	; Internal Clock T8 (64/fc)
+	ldio 0xD7, 0x24	; Internal Clock T8 (64/fc)
 	                 ; Divide by 4
 	                 ; fc = 16MHz, so fc/64/4 = 62500
 	.byte 0xf0, 0xd4, 0x41	; LD (SC1BUF), A
-	.byte 0x08, 0xe3, 0x05	; LD (INTEAB), 005h
-	.byte 0x08, 0xeb, 0xd0	; LD (INTES1), 0d0h	; INTTX1: M=5
+	ldio 0xE3, 0x05
+	ldio 0xEB, 0xD0	; INTTX1: M=5
 	.byte 0xc0, 0xd5, 0x3c, 0xfe	; AND (SC1CR), 0feh
 	.byte 0xf0, 0xd4, 0x41	; LD (SC1BUF), A
 	incdi8 4, 36234	; next routine
@@ -383647,7 +383647,7 @@ CPanel_SM_TXDelay2:	; FC4573
 
 
 CPanel_SM_SendByte1:	; FC45A8
-	.byte 0x08, 0xd7, 0x14	; LD (BR1CR), 014h	; Internal Clock T2 (16/fc)
+	ldio 0xD7, 0x14	; Internal Clock T2 (16/fc)
 	                 ; Divide by 4
 	                 ; fc = 16MHz, so fc/16/4 = 250kHz
 	ordi8 36239, 80	; Enable CPanel serial clk and TX pin.
@@ -383657,9 +383657,9 @@ CPanel_SM_SendByte1:	; FC45A8
 	ldda8 a, 36238
 	.byte 0xf0, 0x3e, 0x41	; LD (PFCR), A
 	.byte 0xc0, 0xd5, 0x3c, 0xfe	; AND (SC1CR), 0feh
-	.byte 0x08, 0xe3, 0x05	; LD (INTEAB), 005h
-	.byte 0x08, 0xeb, 0xd0	; LD (INTES1), 0d0h	; INTTX1: M=5
-	.byte 0x45, 0x01, 0x8e, 0x00, 0x00	; LD XIY, CPANEL_LED_TX_BUFFER
+	ldio 0xE3, 0x05
+	ldio 0xEB, 0xD0	; INTTX1: M=5
+	ld xiy, 0x8E01
 	addda16 xiy, 36349
 	ld a, (xiy)
 	.byte 0xf0, 0xd4, 0x41	; LD (SC1BUF), A
@@ -383684,7 +383684,7 @@ LABEL_FC4606:
 
 
 CPanel_SM_SendByteN:	; FC460D
-	.byte 0x08, 0xd7, 0x14	; LD (BR1CR), 014h	; Internal Clock T2 (16/fc)
+	ldio 0xD7, 0x14	; Internal Clock T2 (16/fc)
 	                 ; Divide by 4
 	                 ; fc = 16MHz, so fc/16/4 = 250kHz
 	ordi8 36239, 80	; Enable CPanel serial clk and TX pin.
@@ -383694,9 +383694,9 @@ CPanel_SM_SendByteN:	; FC460D
 	ldda8 a, 36238
 	.byte 0xf0, 0x3e, 0x41	; LD (PFCR), A
 	.byte 0xc0, 0xd5, 0x3c, 0xfe	; AND (SC1CR), 0feh
-	.byte 0x08, 0xe3, 0x05	; LD (INTEAB), 005h
-	.byte 0x08, 0xeb, 0xd0	; LD (INTES1), 0d0h	; INTTX1: M=5
-	.byte 0x45, 0x01, 0x8e, 0x00, 0x00	; LD XIY, CPANEL_LED_TX_BUFFER
+	ldio 0xE3, 0x05
+	ldio 0xEB, 0xD0	; INTTX1: M=5
+	ld xiy, 0x8E01
 	addda16 xiy, 36349
 	ld a, (xiy)
 	.byte 0xf0, 0xd4, 0x41	; LD (SC1BUF), A
@@ -383734,12 +383734,12 @@ CPanel_SM_TXComplete:	; FC4672
 	ordi8 36238, 64
 	ldda8 a, 36238
 	.byte 0xf0, 0x3e, 0x41	; LD (PFCR), A
-	.byte 0x08, 0xd7, 0x28	; LD (BR1CR), 028h	; Internal Clock T8 (64/fc)
+	ldio 0xD7, 0x28	; Internal Clock T8 (64/fc)
 	                 ; Divide by 8
 	                 ; fc = 16MHz, so fc/64/8 = 31250
-	.byte 0x08, 0xe3, 0x07	; LD (INTEAB), 007h
+	ldio 0xE3, 0x07
 	.byte 0xc0, 0xd5, 0x3c, 0xfe	; AND (SC1CR), 0feh
-	.byte 0x08, 0xeb, 0xd0	; LD (INTES1), 0d0h	; INTTX1: M=5
+	ldio 0xEB, 0xD0	; INTTX1: M=5
 	.byte 0xf0, 0xd4, 0x41	; LD (SC1BUF), A
 	ordi8 36236, 2	; CP_Flags_A.1 = 1
 	jrl MOST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
@@ -383751,9 +383751,9 @@ LABEL_FC46C1:
 	anddi8 36239, 191	; disable CPanel serial clk
 	ldda8 a, 36239
 	.byte 0xf0, 0x3f, 0x41	; LD (PFFC), A
-	.byte 0x08, 0xe3, 0x05	; LD (INTEAB), 005h
-	.byte 0x08, 0xeb, 0xff	; LD (INTES1), 0ffh	; INTTX1: M=7 | INTRX1: M=7 (meaning: disable int.req.)
-	.byte 0x08, 0xd7, 0x24	; LD (BR1CR), 024h	; Internal Clock T8 (64/fc)
+	ldio 0xE3, 0x05
+	ldio 0xEB, 0xFF	; INTTX1: M=7 | INTRX1: M=7 (meaning: disable int.req.)
+	ldio 0xD7, 0x24	; Internal Clock T8 (64/fc)
 	                 ; Divide by 4
 	                 ; fc = 16MHz, so fc/64/4 = 62500
 	anddi8 36236, 253	; CP_Flags_A.1 = 0
@@ -383766,10 +383766,10 @@ CPanel_SM_RXByte1:	; FC46EA
 	.byte 0xf0, 0x3e, 0x41	; LD (PFCR), A
 	.byte 0xc0, 0xd5, 0x3e, 0x01	; OR (SC1CR), 001h
 	.byte 0xc0, 0xd5, 0x3c, 0xfd	; AND (SC1CR), 0fdh
-	.byte 0x08, 0xe3, 0x05	; LD (INTEAB), 005h
-	.byte 0x08, 0xeb, 0x0d	; LD (INTES1), 00dh
+	ldio 0xE3, 0x05
+	ldio 0xEB, 0x0D
 	.byte 0xc0, 0xd4, 0x21	; LD A, (SC1BUF)
-	.byte 0x45, 0xa1, 0x8d, 0x00, 0x00	; LD XIY, CPANEL_RX_RING_BUFFER
+	ld xiy, 0x8DA1
 	addda16 xiy, 36255
 	ld (xiy), a
 	ldda16 xhl, 36255
@@ -383812,7 +383812,7 @@ LABEL_FC4760:
 
 CPanel_SM_RXByteN:	; FC4767
 	.byte 0xc0, 0xd4, 0x21	; LD A, (SC1BUF)
-	.byte 0x45, 0xa1, 0x8d, 0x00, 0x00	; LD XIY, CPANEL_RX_RING_BUFFER
+	ld xiy, 0x8DA1
 	addda16 xiy, 36255
 	ld (xiy), a
 	bitda 0, 36242	; CP_Flags_B.0
@@ -383835,8 +383835,8 @@ LABEL_FC478D:
 	anddi8 36239, 191	; disable CPanel serial clk
 	ldda8 a, 36239
 	.byte 0xf0, 0x3f, 0x41	; LD (PFFC), A
-	.byte 0x08, 0xe3, 0x05	; LD (INTEAB), 005h
-	.byte 0x08, 0xeb, 0x0d	; LD (INTES1), 00dh
+	ldio 0xE3, 0x05
+	ldio 0xEB, 0x0D
 	.byte 0xc0, 0xd6, 0x3c, 0xdf	; AND (SC1MOD), 0dfh	; RXE (bit 5) = 0: receive disable
 	jrl LEAST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
 
@@ -383846,8 +383846,8 @@ LABEL_FC47CC:
 	.byte 0xf0, 0x3e, 0x41	; LD (PFCR), A
 	.byte 0xc0, 0xd5, 0x3e, 0x01	; OR (SC1CR), 001h
 	.byte 0xc0, 0xd5, 0x3c, 0xfd	; AND (SC1CR), 0fdh
-	.byte 0x08, 0xe3, 0x05	; LD (INTEAB), 005h
-	.byte 0x08, 0xeb, 0x0d	; LD (INTES1), 00dh
+	ldio 0xE3, 0x05
+	ldio 0xEB, 0x0D
 	jrl LEAST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
 
 
@@ -383858,12 +383858,12 @@ CPanel_SM_Idle:	; FC47E9		; CPANEL_SERIAL_IDLE_STATE (?)
 	anddi8 36236, 252	; CP_Flags_A.0 = 0
 						; CP_Flags_A.1 = 0
 	ordi8 36242, 4	; CP_Flags_B.2 = 1  : UNUSED
-	.byte 0x08, 0xf8, 0x23	; LD (INTCLR), 023h	; INTTX1: Serial send 1
+	ldio 0xF8, 0x23	; INTTX1: Serial send 1
 	.byte 0xc0, 0xd6, 0x3c, 0xdf	; AND (SC1MOD), 0dfh	; RXE (bit 5) = 0: receive disable
-	.byte 0x08, 0xeb, 0x0f	; LD (INTES1), 00fh
-	.byte 0x08, 0xf8, 0x22	; LD (INTCLR), 022h	; INTRX1: Serial receive 1
-	.byte 0x08, 0xe3, 0x07	; LD (INTEAB), 007h
-	.byte 0x08, 0xf8, 0x12	; LD (INTCLR), 012h	; INTA Pin
+	ldio 0xEB, 0x0F
+	ldio 0xF8, 0x22	; INTRX1: Serial receive 1
+	ldio 0xE3, 0x07
+	ldio 0xF8, 0x12	; INTA Pin
 	reti
 
 
@@ -383890,7 +383890,7 @@ LABEL_FC4831:
 	ldb w, 0xE0
 	ldb a, 0x13
 	ldda16 xiy, 36351
-	.byte 0x42, 0x01, 0x8e, 0x00, 0x00	; LD XDE, CPANEL_LED_TX_BUFFER
+	ld xde, 0x8E01
 	.byte 0xf3, 0x07, 0xe8, 0xf4, 0x40	; LD (XDE + IY), W
 	calr CPanel_IncLEDPtr
 	.byte 0xf3, 0x07, 0xe8, 0xf4, 0x41	; LD (XDE + IY), A
@@ -383956,15 +383956,15 @@ LABEL_FC48A4:
 	ordi8 36238, 64
 	ldda8 a, 36238
 	.byte 0xf0, 0x3e, 0x41	; LD (PFCR), A
-	.byte 0x08, 0xd7, 0x28	; LD (BR1CR), 028h	; Internal Clock T8 (64/fc)
+	ldio 0xD7, 0x28	; Internal Clock T8 (64/fc)
 	                 ; Divide by 8
 	                 ; fc = 16MHz, so fc/64/8 = 31250
 	.byte 0xc0, 0xd6, 0x3c, 0xdf	; AND (SC1MOD), 0dfh	; RXE (bit 5) = 0: CPanel receive disable
 	.byte 0xc0, 0xd5, 0x3c, 0xfe	; AND (SC1CR), 0feh
-	.byte 0x08, 0xe3, 0x07	; LD (INTEAB), 007h
-	.byte 0x08, 0xf8, 0x12	; LD (INTCLR), 012h	; INTA Pin
-	.byte 0x08, 0xf8, 0x23	; LD (INTCLR), 023h	; INTTX1: Serial send 1
-	.byte 0x08, 0xeb, 0xd0	; LD (INTES1), 0d0h
+	ldio 0xE3, 0x07
+	ldio 0xF8, 0x12	; INTA Pin
+	ldio 0xF8, 0x23	; INTTX1: Serial send 1
+	ldio 0xEB, 0xD0
 	.byte 0xf0, 0xd4, 0x41	; LD (SC1BUF), A
 
 LABEL_FC48E8:
@@ -383978,11 +383978,11 @@ LABEL_FC48EB:
 	jr ule, LABEL_FC48E8
 
 	ei 6
-	.byte 0x08, 0xf8, 0x22	; LD (INTCLR), 022h	; INTRX1: Serial receive 1
-	.byte 0x08, 0xf8, 0x23	; LD (INTCLR), 023h	; INTTX1: Serial send 1
-	.byte 0x08, 0xeb, 0xdd	; LD (INTES1), 0ddh
-	.byte 0x08, 0xf8, 0x12	; LD (INTCLR), 012h	; INTA Pin
-	.byte 0x08, 0xe3, 0x05	; LD (INTEAB), 005h
+	ldio 0xF8, 0x22	; INTRX1: Serial receive 1
+	ldio 0xF8, 0x23	; INTTX1: Serial send 1
+	ldio 0xEB, 0xDD
+	ldio 0xF8, 0x12	; INTA Pin
+	ldio 0xE3, 0x05
 	ordi8 36242, 128	; CP_Flags_B.7 = 1
 	jr LABEL_FC48E8
 
@@ -383997,9 +383997,9 @@ CPanel_RX_Process:
 	anddi8 36236, 251	; CP_Flags_A.2 = 0  ; UNUSED?
 
 CPanel_RX_DispatchLoop:
-	.byte 0x42, 0xa1, 0x8d, 0x00, 0x00	; LD XDE, CPANEL_RX_RING_BUFFER
+	ld xde, 0x8DA1
 	ldda16 xiy, 36253
-	.byte 0x46, 0xad, 0x00, 0x02, 0x00	; LD XIZ, CPANEL_RX_EVENT_QUEUE
+	ld xiz, 0x200AD
 	ld ix, (xiz - 4)
 
 CPanel_RX_ParseNext:
@@ -384054,7 +384054,7 @@ CPanel_RX_ButtonPacket:
 	stda8 36245, a
 
 	and w, 0x4F
-	.byte 0x43, 0x4a, 0x8e, 0x00, 0x00	; LD XHL, STATE_OF_CPANEL_BUTTONS
+	ld xhl, 0x8E4A
 	bit 6, w
 	jr z, LABEL_FC49BD
 	sub w, 0x30
@@ -384232,8 +384232,8 @@ CPanel_RX_Done:	; FC4B2C
 
 CPanel_UpdateLEDs:	; do this
 	ldda16 xiy, 36351
-	.byte 0x42, 0x01, 0x8e, 0x00, 0x00	; LD XDE, CPANEL_LED_TX_BUFFER
-	.byte 0x46, 0x37, 0x01, 0x02, 0x00	; LD XIZ, CPANEL_LED_EVENT_QUEUE
+	ld xde, 0x8E01
+	ld xiz, 0x20137
 	ld ix, (xiz - 8)
 	ld wa, (xiz - 4)
 	cp wa, (xiz - 8)
@@ -391381,7 +391381,7 @@ LABEL_FCAD7D:
 	ldda8 l, 37301
 	and l, 0x70
 	srl hl, 2
-	.byte 0x45, 0xa3, 0xad, 0xfc, 0x00	; LD XIY, LABEL_FCADA3
+	ld xiy, 0xFCADA3
 	.byte 0xe3, 0x07, 0xf4, 0xec, 0x25	; LD XIY, (XIY + HL)
 	call (xiy)
 	jr LABEL_FCAD50
@@ -396109,7 +396109,7 @@ LABEL_FCF8F5:
 READ_COM_SELECT_SWITCH:	; FCF8F6
 	ldda8 a, 104
 	srl a, 4
-	.byte 0x44, 0x0c, 0xf9, 0xfc, 0x00	; LD XIX, OFFSETS_FCF90C
+	ld xix, 0xFCF90C
 	.byte 0xc3, 0x03, 0xf0, 0xe0, 0x21	; LD A, (XIX + A)
 	stda8 47072, a
 	ret
@@ -408703,7 +408703,7 @@ PreLswLoad:
 
 PostLswLoad:
 	cps wa, 0
-	.byte 0xf2, 0x67, 0x4d, 0xfc, 0xd1	; JP LT, LABEL_FC4D67
+	jpcc_24 1, 0xFC4D67
 	cpdi8_24 213238, 0
 	callcc_24 6, 0xFDB4F9
 	call LABEL_FCA390

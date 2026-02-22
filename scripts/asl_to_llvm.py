@@ -1161,6 +1161,10 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
             imm_str = parts[1].strip()
             if reg in NATIVE_LD_32BIT_REGS:
                 imm_val = parse_asl_immediate(imm_str)
+                # Fallback: extract immediate from ROM bytes (0x40+r, imm32_LE)
+                if imm_val is None and rom_bytes is not None and 0x40 <= rom_bytes[0] <= 0x47:
+                    imm_val = (rom_bytes[1] | (rom_bytes[2] << 8) |
+                               (rom_bytes[3] << 16) | (rom_bytes[4] << 24))
                 if imm_val is not None:
                     native_asm = f"ld {reg.lower()}, 0x{imm_val:X}"
                     return native_asm, 5
@@ -2481,6 +2485,22 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
                 addr24 = rom_bytes[1] | (rom_bytes[2] << 8) | (rom_bytes[3] << 16)
                 cc = sub_opc & 0x0F
                 return f"callcc_24 {cc}, 0x{addr24:X}", 5
+
+    # Tier 41: F2 conditional JP (5-byte: F2 + addr24_LE + 0xD0+cc)
+    if nbytes == 5 and rom_bytes is not None and mnem_upper == 'JP':
+        if rom_bytes[0] == 0xF2:
+            sub_opc = rom_bytes[4]
+            if 0xD0 <= sub_opc <= 0xDF:
+                addr24 = rom_bytes[1] | (rom_bytes[2] << 8) | (rom_bytes[3] << 16)
+                cc = sub_opc & 0x0F
+                return f"jpcc_24 {cc}, 0x{addr24:X}", 5
+
+    # Tier 42: LD (n), #n — I/O register write (3-byte: 0x08 + addr8 + imm8)
+    if nbytes == 3 and rom_bytes is not None and mnem_upper == 'LD':
+        if rom_bytes[0] == 0x08:
+            addr8 = rom_bytes[1]
+            imm8 = rom_bytes[2]
+            return f"ldio 0x{addr8:02X}, 0x{imm8:02X}", 3
 
     return None  # No native conversion available
 
