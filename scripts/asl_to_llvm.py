@@ -1739,6 +1739,59 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
                                 imm_val = rom_bytes[imm_start] | (rom_bytes[imm_start + 1] << 8)
                             return f"{alu_mnem}mi{size_suffix} {mem_str}, 0x{imm_val:X}", expected_nbytes
 
+    # Tier 28: LD immediate-to-memory (destination memory prefix B0/B8 + sub_opc + imm)
+    # 8-bit:  B0+r + 0x00 + imm8 (3 bytes no disp)  /  B8+r + d8 + 0x00 + imm8 (4 bytes)
+    # 16-bit: B0+r + 0x14 + imm16 (4 bytes no disp)  /  B8+r + d8 + 0x14 + imm16 (5 bytes)
+    if rom_bytes is not None and mnem_upper in ('LD', 'LDW'):
+        prefix = rom_bytes[0]
+        if 0xB0 <= prefix <= 0xBF:
+            base_idx = prefix & 0x07
+            has_disp = (prefix & 0x08) != 0
+            disp_offset = 1 if has_disp else 0
+            sub_opc_byte = rom_bytes[1 + disp_offset]
+            if sub_opc_byte == 0x00:
+                # LD (mem), #imm8
+                expected_nbytes = 3 + disp_offset
+                if nbytes == expected_nbytes:
+                    base_name = REG32_BY_INDEX.get(base_idx)
+                    if base_name:
+                        mem_str = None
+                        if has_disp:
+                            d8 = rom_bytes[1]
+                            if d8 > 127:
+                                d8 -= 256
+                            if d8 < 0:
+                                mem_str = f"({base_name} - {-d8})"
+                            elif d8 > 0:
+                                mem_str = f"({base_name} + {d8})"
+                            # d8 == 0: skip (LLVM optimizes)
+                        else:
+                            mem_str = f"({base_name})"
+                        if mem_str is not None:
+                            imm_val = rom_bytes[2 + disp_offset]
+                            return f"ldmi8 {mem_str}, 0x{imm_val:X}", expected_nbytes
+            elif sub_opc_byte == 0x14:
+                # LD (mem), #imm16
+                expected_nbytes = 4 + disp_offset
+                if nbytes == expected_nbytes:
+                    base_name = REG32_BY_INDEX.get(base_idx)
+                    if base_name:
+                        mem_str = None
+                        if has_disp:
+                            d8 = rom_bytes[1]
+                            if d8 > 127:
+                                d8 -= 256
+                            if d8 < 0:
+                                mem_str = f"({base_name} - {-d8})"
+                            elif d8 > 0:
+                                mem_str = f"({base_name} + {d8})"
+                            # d8 == 0: skip (LLVM optimizes)
+                        else:
+                            mem_str = f"({base_name})"
+                        if mem_str is not None:
+                            imm_val = rom_bytes[2 + disp_offset] | (rom_bytes[3 + disp_offset] << 8)
+                            return f"ldmi16 {mem_str}, 0x{imm_val:X}", expected_nbytes
+
     return None
 
 
