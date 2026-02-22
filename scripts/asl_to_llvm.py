@@ -2128,6 +2128,29 @@ def convert_all(main_file, output_path):
                     addrs.append(int(m_addr.group(1), 16))
         return sorted(set(addrs))
 
+    # Helper: perform block transition at a boundary address.
+    # Pads the gap from current block cursor to boundary, then starts a new block.
+    def do_block_transition(boundary_addr):
+        nonlocal total_block_corrections, total_padding_bytes
+        total_block_corrections += 1
+        expected_block_bytes = boundary_addr - BLOCK_START_ADDR
+        gap = expected_block_bytes - BLOCK_CURSOR
+        if gap > 0:
+            gap_rom_offset = (BLOCK_START_ADDR + BLOCK_CURSOR) - ROM_BASE
+            for i in range(0, gap, 16):
+                chunk_size = min(16, gap - i)
+                chunk = rom_view[gap_rom_offset + i:gap_rom_offset + i + chunk_size]
+                byte_str = ', '.join(f'0x{b:02x}' for b in chunk)
+                addr_comment = f"0x{BLOCK_START_ADDR + BLOCK_CURSOR + i:06X} (block padding)"
+                output_lines.append(f"\t.byte {byte_str}\t; {addr_comment}")
+            total_padding_bytes += gap
+        elif gap < 0:
+            output_lines.append(f"\t; WARNING: block over-emitted by {-gap} bytes before 0x{boundary_addr:06X}")
+        if seg_end is not None and boundary_addr < seg_end:
+            idx = bisect.bisect_right(seg_label_addrs, boundary_addr)
+            next_end = seg_label_addrs[idx] if idx < len(seg_label_addrs) else seg_end
+            start_block(boundary_addr, next_end)
+
     # Emit content segments — per-line conversion with block-level buffers.
     # A "block" spans between two consecutive address-encoding labels (or
     # segment start/end). Each block reads exact ROM bytes. Instruction sizing
@@ -2171,34 +2194,24 @@ def convert_all(main_file, output_path):
                     output_lines.append(f"{lbl_name}:")
                 emitted_label_addrs.add(cur_addr)
 
+            # Track whether block was exhausted before convert_line.
+            # If so, data directives get 0 bytes and need re-conversion
+            # after the block transition creates a fresh block.
+            block_was_exhausted = (BLOCK_BUFFER is not None
+                                   and BLOCK_CURSOR >= BLOCK_SIZE)
+
             converted = convert_line(line, source)
 
-            # Check if block boundary was triggered during convert_line().
-            # This fires at every address-encoding label (not just mismatches).
-            # Pad the gap to reach boundary_addr and start a new tightly-sized block.
-            if SELF_CORRECTION_TRIGGERED and BLOCK_BUFFER is not None:
-                boundary_addr = SELF_CORRECTION_ADDR
-                total_block_corrections += 1
-                # How many bytes should this block have contributed?
-                expected_block_bytes = boundary_addr - BLOCK_START_ADDR
-                gap = expected_block_bytes - BLOCK_CURSOR
-                if gap > 0:
-                    # Emit gap bytes from ROM to reach boundary_addr
-                    gap_rom_offset = (BLOCK_START_ADDR + BLOCK_CURSOR) - ROM_BASE
-                    for i in range(0, gap, 16):
-                        chunk_size = min(16, gap - i)
-                        chunk = rom_view[gap_rom_offset + i:gap_rom_offset + i + chunk_size]
-                        byte_str = ', '.join(f'0x{b:02x}' for b in chunk)
-                        addr_comment = f"0x{BLOCK_START_ADDR + BLOCK_CURSOR + i:06X} (block padding)"
-                        output_lines.append(f"\t.byte {byte_str}\t; {addr_comment}")
-                    total_padding_bytes += gap
-                elif gap < 0:
-                    output_lines.append(f"\t; WARNING: block over-emitted by {-gap} bytes before 0x{boundary_addr:06X}")
-                # Start new block from boundary_addr to next label (or seg_end)
-                if seg_end is not None and boundary_addr < seg_end:
-                    idx = bisect.bisect_right(seg_label_addrs, boundary_addr)
-                    next_end = seg_label_addrs[idx] if idx < len(seg_label_addrs) else seg_end
-                    start_block(boundary_addr, next_end)
+            # After convert_line, handle block transitions triggered by
+            # self-correction at address-encoding labels.
+            if (SELF_CORRECTION_TRIGGERED
+                    and SELF_CORRECTION_ADDR != BLOCK_START_ADDR):
+                do_block_transition(SELF_CORRECTION_ADDR)
+                # If the block was exhausted BEFORE convert_line, data
+                # directives on this line got 0 bytes (clamped to remaining=0).
+                # Now that a fresh block exists, re-convert to get proper data.
+                if block_was_exhausted and BLOCK_BUFFER is not None:
+                    converted = convert_line(line, source)
 
             if converted is not None:
                 output_lines.append(converted)
