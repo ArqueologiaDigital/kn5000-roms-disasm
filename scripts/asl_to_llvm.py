@@ -44,9 +44,9 @@ KNOWN_EQUS = {}
 # Address → label name mapping for symbolic references in JP/CALL
 ADDR_TO_LABEL = {}
 
-# Address → label name mapping restricted to .set labels only (for .long data).
-# Inline labels may have position drift, but .set labels have exact addresses.
-ADDR_TO_LABEL_SET = {}
+# LABEL_XXXXXX collected for .set emission (suppressed from inline).
+# Inline labels may have position drift; .set has exact ORG addresses.
+SET_ONLY_LABELS = {}  # label_name -> addr
 
 # Statistics counters for native vs fallback instructions
 NATIVE_INSTR_COUNT = 0
@@ -637,6 +637,12 @@ def convert_line(line, in_file_path):
                     if SEG_START_ADDR <= expected_addr <= SEG_END_ADDR:
                         SELF_CORRECTION_TRIGGERED = True
                         SELF_CORRECTION_ADDR = expected_addr
+
+        # Suppress LABEL_XXXXXX inline emission — collect for .set at end.
+        # Inline labels can drift from correct ROM address; .set is exact.
+        if m_lbl and expected_addr is not None:
+            SET_ONLY_LABELS[label] = expected_addr
+            label = None
 
     # Label-only line
     if not rest:
@@ -1856,10 +1862,11 @@ def convert_all(main_file, output_path):
     """
     global ADDR_TRACKER, BLOCK_BUFFER, BLOCK_CURSOR, BLOCK_SIZE, BLOCK_START_ADDR
     global SEG_START_ADDR, SEG_END_ADDR, SELF_CORRECTION_TRIGGERED, SELF_CORRECTION_ADDR
-    global NATIVE_INSTR_COUNT, BYTE_FALLBACK_COUNT
+    global NATIVE_INSTR_COUNT, BYTE_FALLBACK_COUNT, SET_ONLY_LABELS
 
     NATIVE_INSTR_COUNT = 0
     BYTE_FALLBACK_COUNT = 0
+    SET_ONLY_LABELS = {}
 
     main_dir = os.path.dirname(main_file)
 
@@ -2019,7 +2026,7 @@ def convert_all(main_file, output_path):
     total_rom_bytes = 0
     total_padding_bytes = 0
     total_block_corrections = 0
-    emitted_label_addrs = set()  # Track which label-only labels were emitted inline
+    # All label-only labels are emitted as .set (not inline) for correct addresses
 
     # Create a memoryview for zero-copy ROM slicing in start_block()
     rom_view = memoryview(ORIGINAL_ROM) if ORIGINAL_ROM is not None else None
@@ -2108,14 +2115,6 @@ def convert_all(main_file, output_path):
             # Reset self-correction flag before each line
             SELF_CORRECTION_TRIGGERED = False
 
-            # Before converting this line, check if any label-only labels
-            # should be emitted at the current address
-            cur_addr = ADDR_TRACKER.get_addr()
-            if cur_addr is not None and cur_addr in label_only_labels and cur_addr not in emitted_label_addrs:
-                for lbl_name in label_only_labels[cur_addr]:
-                    output_lines.append(f"{lbl_name}:")
-                emitted_label_addrs.add(cur_addr)
-
             converted = convert_line(line, source)
 
             # Check if block boundary was triggered during convert_line().
@@ -2157,24 +2156,32 @@ def convert_all(main_file, output_path):
     # Clear block buffer
     BLOCK_BUFFER = None
 
-    # Emit remaining label-only labels as .set directives (needed for JP/CALL targets)
-    remaining_labels = []
+    # Emit all .set labels: label-only segments + content-segment LABEL_XXXXXX
+    all_set_labels = []
+    # Label-only segments (from ORG directives)
     for addr in sorted(label_only_labels.keys()):
-        if addr not in emitted_label_addrs:
-            for lbl_name in label_only_labels[addr]:
-                remaining_labels.append((addr, lbl_name))
+        for lbl_name in label_only_labels[addr]:
+            all_set_labels.append((addr, lbl_name))
+    # Content-segment LABEL_XXXXXX (suppressed from inline emission)
+    for lbl_name, addr in sorted(SET_ONLY_LABELS.items(), key=lambda x: x[1]):
+        all_set_labels.append((addr, lbl_name))
 
-    if remaining_labels:
+    if all_set_labels:
         output_lines.append("")
-        output_lines.append("; Label-only forward references (emitted as .set for JP/CALL targets)")
-        for addr, lbl_name in remaining_labels:
+        output_lines.append("; Labels emitted as .set (exact addresses from ORG/name)")
+        for addr, lbl_name in all_set_labels:
             output_lines.append(f"\t.set {lbl_name}, 0x{addr:06X}")
 
-    # Post-process: symbolize .long values for labels emitted as .set
-    # Only .set labels have guaranteed correct addresses; inline labels may drift.
-    set_label_map = {}  # addr -> name for labels that became .set
-    for addr, lbl_name in remaining_labels:
+    # Post-process: symbolize .long values.
+    # .set labels have guaranteed correct addresses. Content-segment named labels
+    # at reliable boundaries (in ADDR_TO_LABEL) are also at correct positions.
+    set_label_map = {}
+    for addr, lbl_name in all_set_labels:
         _record_label(set_label_map, addr, lbl_name)
+    # Add named labels from ADDR_TO_LABEL not already covered by .set
+    for addr, lbl_name in ADDR_TO_LABEL.items():
+        if addr not in set_label_map:
+            set_label_map[addr] = lbl_name
     if set_label_map:
         long_re = re.compile(r'0x([0-9A-Fa-f]{8})')
         symbolic_long_count = 0
@@ -2207,8 +2214,7 @@ def convert_all(main_file, output_path):
     print(f"  Padding bytes: {total_padding_bytes}")
     print(f"  Block corrections: {total_block_corrections}")
     print(f"  Native instruction lines: {NATIVE_INSTR_COUNT}")
-    print(f"  Label-only labels emitted inline: {len(emitted_label_addrs)}")
-    print(f"  Label-only labels as comments: {len(remaining_labels)}")
+    print(f"  Labels as .set: {len(all_set_labels)} ({len(all_set_labels) - len(SET_ONLY_LABELS)} label-only + {len(SET_ONLY_LABELS)} content LABEL_XXXXXX)")
 
 
 # ============================================================================
