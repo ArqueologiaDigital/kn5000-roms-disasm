@@ -57,6 +57,10 @@ TLCS900_CC_NAMES = {
     0xc: 'nov', 0xd: 'pl', 0xe: 'nz', 0xf: 'nc',
 }
 
+# Register index-to-name tables (for decoding opcodes with embedded register index)
+REG8_BY_INDEX = {0: 'w', 1: 'a', 2: 'b', 3: 'c', 4: 'd', 5: 'e', 6: 'h', 7: 'l'}
+REG16_BY_INDEX = {0: 'wa', 1: 'bc', 2: 'de', 3: 'hl', 4: 'ix', 5: 'iy', 6: 'iz', 7: 'sp'}
+
 # Statistics counters for native vs fallback instructions
 NATIVE_INSTR_COUNT = 0
 BYTE_FALLBACK_COUNT = 0
@@ -1315,6 +1319,62 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
             label = ADDR_TO_LABEL.get(target)
             if label:
                 return f"calr {label}", 3
+
+    # Tier 11: Short-form LD r8, #imm8 (2-byte: 0x20+r, imm8)
+    # ASL uses macros LD_A, LD_W, etc. for these, so check startswith('LD').
+    if nbytes == 2 and rom_bytes is not None and mnem_upper.startswith('LD'):
+        opcode = rom_bytes[0]
+        if 0x20 <= opcode <= 0x27:
+            r_idx = opcode & 0x07
+            reg_name = REG8_BY_INDEX[r_idx]
+            imm8 = rom_bytes[1]
+            return f"ldb {reg_name}, 0x{imm8:X}", 2
+
+    # Tier 12: Short-form LD r16, #imm16 (3-byte: 0x30+r, imm16_LE)
+    if nbytes == 3 and rom_bytes is not None and mnem_upper in ('LD', 'LDW'):
+        opcode = rom_bytes[0]
+        if 0x30 <= opcode <= 0x37:
+            r_idx = opcode & 0x07
+            reg_name = REG16_BY_INDEX[r_idx]
+            # SP (index 7) is not in GR16 register class — skip
+            if r_idx == 7:
+                pass  # fall through to .byte fallback
+            else:
+                imm16 = rom_bytes[1] | (rom_bytes[2] << 8)
+                return f"ldw {reg_name}, 0x{imm16:X}", 3
+
+    # Tier 12b: Small-immediate LD r16, #(0-7) (2-byte: D8+r, 0xA8+val)
+    if nbytes == 2 and rom_bytes is not None and mnem_upper.startswith('LD'):
+        opcode = rom_bytes[0]
+        if 0xD8 <= opcode <= 0xDF:
+            r_idx = opcode & 0x07
+            sub_opc = rom_bytes[1]
+            if 0xA8 <= sub_opc <= 0xAF:
+                val = sub_opc & 0x07
+                reg_name = REG16_BY_INDEX[r_idx]
+                # SP (index 7) is not in GR16 — skip
+                if r_idx != 7:
+                    return f"lds {reg_name}, {val}", 2
+
+    # Tier 13: Prefix-form LD r8, #imm8 (3-byte: C8+r, 0x03, imm8)
+    if nbytes == 3 and rom_bytes is not None and mnem_upper in ('LD', 'LDB'):
+        opcode = rom_bytes[0]
+        if 0xC8 <= opcode <= 0xCF and rom_bytes[1] == 0x03:
+            r_idx = opcode & 0x07
+            reg_name = REG8_BY_INDEX[r_idx]
+            imm8 = rom_bytes[2]
+            return f"ld {reg_name}, 0x{imm8:X}", 3
+
+    # Tier 14: Prefix-form LD r16, #imm16 (4-byte: D8+r, 0x03, imm16_LE)
+    if nbytes == 4 and rom_bytes is not None and mnem_upper in ('LD', 'LDW'):
+        opcode = rom_bytes[0]
+        if 0xD8 <= opcode <= 0xDF and rom_bytes[1] == 0x03:
+            r_idx = opcode & 0x07
+            reg_name = REG16_BY_INDEX[r_idx]
+            # SP (index 7) is not in GR16 — skip
+            if r_idx != 7:
+                imm16 = rom_bytes[2] | (rom_bytes[3] << 8)
+                return f"ld {reg_name}, 0x{imm16:X}", 4
 
     return None
 
