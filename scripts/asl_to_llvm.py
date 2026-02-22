@@ -1201,7 +1201,9 @@ def guess_mnemonics_from_opcode(first_byte):
     if 0x20 <= b <= 0x27: return ['LD']
     if 0x28 <= b <= 0x2F: return ['PUSH']
     if 0x30 <= b <= 0x37: return ['LDW']
+    if 0x38 <= b <= 0x3F: return ['PUSH']
     if 0x40 <= b <= 0x47: return ['LD']
+    if 0x48 <= b <= 0x4F: return ['POP']
     if 0x58 <= b <= 0x5F: return ['POP']
     if 0x60 <= b <= 0x6F: return ['JR']
     if 0x70 <= b <= 0x7F: return ['JRL']
@@ -1972,7 +1974,7 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
     # 16-bit: B0+r + 0x14 + imm16 (4 bytes no disp)  /  B8+r + d8 + 0x14 + imm16 (5 bytes)
     if rom_bytes is not None and mnem_upper in ('LD', 'LDW'):
         prefix = rom_bytes[0]
-        if 0xB0 <= prefix <= 0xBF:
+        if 0xB0 <= prefix <= 0xBF and nbytes >= 3:
             base_idx = prefix & 0x07
             has_disp = (prefix & 0x08) != 0
             disp_offset = 1 if has_disp else 0
@@ -3202,15 +3204,41 @@ def convert_db(label, args, comment, in_file_path, label_addr_suffix=""):
             nbytes = remaining
         if nbytes > 0:
             rom_bytes = BLOCK_BUFFER[BLOCK_CURSOR:BLOCK_CURSOR + nbytes]
-            string_form = _try_emit_as_string(rom_bytes)
-            if string_form is not None:
-                result += f"\t{string_form}"
-            else:
-                byte_str = ', '.join(f'0x{b:02x}' for b in rom_bytes)
-                if _db_args_all_numeric(args):
-                    result += f"\t.byte {byte_str}"
+            # Try native instruction conversion for db lines with instruction comments.
+            # Only attempt if the ASL comment starts with a known TLCS-900 mnemonic.
+            DB_INSTR_MNEMONICS = {
+                'NOP', 'EI', 'DI', 'RETI', 'RET', 'RETD', 'HALT', 'SWI', 'PUSH', 'POP',
+                'PUSHW', 'LD', 'LDW', 'LDA', 'ADD', 'ADC', 'SUB', 'SBC', 'AND', 'OR',
+                'XOR', 'CP', 'INC', 'DEC', 'NEG', 'CPL', 'EXTS', 'EXTZ', 'EX',
+                'SLA', 'SRA', 'SRL', 'SLL', 'RLC', 'RRC', 'RL', 'RR',
+                'SET', 'RES', 'BIT', 'CHG', 'TSET', 'CALL', 'CALR', 'JP', 'JR', 'JRL',
+                'DJNZ', 'MUL', 'MULS', 'DIV', 'DIVS', 'SCC', 'INCF', 'DECF',
+            }
+            native_done = False
+            if 1 <= nbytes <= 7 and comment:
+                # Extract mnemonic from comment like "; SRL 0, XBC (clear carry)"
+                ctext = comment.lstrip('; \t')
+                cmnem = ctext.split()[0].upper() if ctext else ''
+                if cmnem in DB_INSTR_MNEMONICS:
+                    addr = ADDR_TRACKER.get_addr()
+                    try:
+                        native = try_convert_native(cmnem, '', rom_bytes, nbytes, addr)
+                        if native is not None:
+                            native_asm, _ = native
+                            result += f"\t{native_asm}"
+                            native_done = True
+                    except (IndexError, KeyError, ValueError):
+                        pass  # Fall through to .byte emission
+            if not native_done:
+                string_form = _try_emit_as_string(rom_bytes)
+                if string_form is not None:
+                    result += f"\t{string_form}"
                 else:
-                    result += f"\t.byte {byte_str}\t; DB {args}"
+                    byte_str = ', '.join(f'0x{b:02x}' for b in rom_bytes)
+                    if _db_args_all_numeric(args):
+                        result += f"\t.byte {byte_str}"
+                    else:
+                        result += f"\t.byte {byte_str}\t; DB {args}"
             BLOCK_CURSOR += nbytes
             ADDR_TRACKER.advance(nbytes)
         if comment:

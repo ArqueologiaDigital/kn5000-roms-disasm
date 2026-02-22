@@ -151201,8 +151201,8 @@ GridCheck_Handler0:
 	ld xde, xhl	; Result in XDE
 	lda xwa, (xsp + 14)	; Get local var pointer
 	ld xbc, xde	; Copy result to XBC
-	.byte 0xe9, 0xef, 0x00	; SRL 0, XBC (clear carry)
-	.byte 0xd7, 0xe6, 0xa8	; LD QBC, 0 (clear high bits)
+	srl xbc, 0	; SRL 0, XBC (clear carry)
+	ldi0_werp 0xE6	; LD QBC, 0 (clear high bits)
 	ld (xwa), bc	; Store low word
 	ld (xwa + 2), de	; Store high word
 	ld wa, (xwa)	; Load state value
@@ -151233,8 +151233,8 @@ GridCheck_Handler1:
 	ld xde, xhl	; Result in XDE
 	lda xwa, (xsp + 14)	; Get local var pointer
 	ld xbc, xde	; Copy result to XBC
-	.byte 0xe9, 0xef, 0x00	; SRL 0, XBC (clear carry)
-	.byte 0xd7, 0xe6, 0xa8	; LD QBC, 0 (clear high bits)
+	srl xbc, 0	; SRL 0, XBC (clear carry)
+	ldi0_werp 0xE6	; LD QBC, 0 (clear high bits)
 	ld (xwa), bc	; Store low word
 	ld (xwa + 2), de	; Store high word
 	ld wa, (xwa)	; Load state value
@@ -156612,7 +156612,7 @@ InitializeHama:
 	; RegTitleHama 0009h, 0E1FD18h, 0000007fh, 01490000h, 00fc0000h
 	pushw 0x9
 	ldada_24 xwa, 14810392
-	nop
+	push xwa
 	ld xwa, 0x7F
 	ld xbc, 0x1490000
 	ld xde, 0xFC0000
@@ -156620,7 +156620,7 @@ InitializeHama:
 	; RegTitleHama 0009h, 0E1FD22h, 000000fch, 01490000h, 00fc0000h
 	pushw 0x9
 	ldada_24 xwa, 14810402
-	nop
+	push xwa
 	ld xwa, 0xFC
 	ld xbc, 0x1490000
 	ld xde, 0xFC0000
@@ -314716,7 +314716,7 @@ WP_GetBankMemName:
 	push xiz
 	ld hl, bc
 	ld xiz, xwa
-	.byte 0xf5, 0xf8, 0x31	; LDA XBC, XIZ+
+	dpi2 0xF8, 0x31	; LDA XBC, XIZ+
 	ld wa, (xsp + 8)
 	ld (xbc), a	; Store type marker
 	cps de, 4
@@ -325976,10 +325976,10 @@ LABEL_F97CEF:
 	stdi8 35364, 0
 	calr FDC_COMMAND_DISPATCHER
 	cps l, 0
-	.byte 0x6e, 0x74	; JR NZ, LABEL_F97DE1 (original encoding)
+	jr nz, LABEL_F97DE1	; JR NZ, LABEL_F97DE1 (original encoding)
 	ldda16 xwa, 35392
 	cp wa, 0xB
-	.byte 0x6b, 0x64	; JR UGT, LABEL_F97DDB (original encoding)
+	jr ugt, LABEL_F97DDB	; JR UGT, LABEL_F97DDB (original encoding)
 	add wa, wa
 	ldada_24 xix, 15374538
 	ld_wa_sriw3 0x07, 0xF0, 0xE0
@@ -398697,7 +398697,7 @@ LABEL_FCA361:
 	inc 1, de
 
 LABEL_FCA371:
-	.byte 0xf1, 0x92, 0x00, 0x52	; LD (TREG5L), DE
+	stda16 146, xde	; LD (TREG5L), DE
 	bitda 4, 64848
 	jr nz, LABEL_FCA385
 	bitda 4, 37113
@@ -403696,7 +403696,7 @@ LABEL_FCF301:
 	ldda16 xwa, 47062
 
 LABEL_FCF305:
-	.byte 0xf1, 0x92, 0x00, 0x50	; LD (TREG5L), WA
+	stda16 146, xwa	; LD (TREG5L), WA
 	stdi8 1066, 0
 	bitda 0, 1055
 	jr z, LABEL_FCF319
@@ -422199,7 +422199,7 @@ LABEL_FDEC9E:
 	jr nz, LABEL_FDECEA
 
 LABEL_FDECB6:
-	.byte 0xc1, 0x3a, 0x8d, 0x23	; LD C, (238D3Ah) - 24-bit addressing mode
+	ldda8 c, 36154	; LD C, (238D3Ah) - 24-bit addressing mode
 	extz bc
 	ldada_24 xde, 15634050
 	ld_c_srib3 0x07, 0xE8, 0xE4
@@ -422272,7 +422272,7 @@ LABEL_FDED58:
 	cpdm8 50600, c
 	jr z, LABEL_FDED94
 	stda8 50600, c
-	.byte 0xbf, 0x00, 0x00, 0x04	; LD (XSP + 000h), 004h - explicit displacement encoding
+	ldmi8 (xsp + 256), 0x4	; LD (XSP + 000h), 004h - explicit displacement encoding
 	ldmi8 (xsp + 1), 0xF0
 	ldmi8 (xsp + 2), 0x50
 	ldmi8 (xsp + 3), 0x91
