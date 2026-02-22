@@ -392200,7 +392200,7 @@ CPanel_RX_DispatchLoop:
 
 CPanel_RX_ParseNext:
 	cpmi16 (xiz - 2), 0x4
-	.byte 0x77, 0xf9, 0x01	; JRL C, CPanel_RX_Done
+	jrl c, CPanel_RX_Done
 
 	ldda16 xwa, 36255
 	subda16 xwa, 36253
@@ -392212,7 +392212,7 @@ CPanel_RX_ParseNext:
 
 CPanel_RX_PacketSizeCheck:
 	cps a, 2
-	.byte 0x77, 0xe2, 0x01	; JRL C, CPanel_RX_Done
+	jrl c, CPanel_RX_Done
 
 	ld_l_srib3 0x07, 0xE8, 0xF4
 	and l, 0x38
@@ -392322,7 +392322,7 @@ CPanel_RX_MultiBytePacket:
 	ld b, a
 	add a, 0x2
 	cp w, a
-	.byte 0x77, 0xd4, 0x00	; JRL C, CPanel_RX_Done
+	jrl c, CPanel_RX_Done
 
 	calr CPanel_IncRXPtr
 	ld_a_srib3 0x07, 0xE8, 0xF4

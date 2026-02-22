@@ -3731,6 +3731,16 @@ def _build_addr_to_label_map(sorted_content, seg_end_map, label_only_labels):
                             cur_addr += total
                     else:
                         cur_addr += size
+            else:
+                # Unrecognized first word: might be an ASL label without colon.
+                # Pattern: "LabelName ; XXXXXX" (no colon, address in comment)
+                if not remainder and cmt:
+                    m_addr = re.match(r'^;\s*([0-9A-Fa-f]{6})\s*$', cmt.strip())
+                    if m_addr:
+                        cur_addr = int(m_addr.group(1), 16)
+                        _record_label(addr_to_label, cur_addr, first)
+                        _record_label(addr_to_label_all, cur_addr, first)
+                        at_reliable_boundary = True
 
     return addr_to_label, addr_to_label_all
 
