@@ -2028,7 +2028,7 @@ def convert_all(main_file, output_path):
     total_rom_bytes = 0
     total_padding_bytes = 0
     total_block_corrections = 0
-    # All label-only labels are emitted as .set (not inline) for correct addresses
+    emitted_label_addrs = set()  # Track label-only labels emitted inline
 
     # Create a memoryview for zero-copy ROM slicing in start_block()
     rom_view = memoryview(ORIGINAL_ROM) if ORIGINAL_ROM is not None else None
@@ -2117,6 +2117,16 @@ def convert_all(main_file, output_path):
             # Reset self-correction flag before each line
             SELF_CORRECTION_TRIGGERED = False
 
+            # Emit label-only labels when address tracker reaches their address.
+            # These provide inline labels for readability. Position may have minor
+            # drift between block boundaries, but .set at end provides the
+            # authoritative address for JP/CALL and .long references.
+            cur_addr = ADDR_TRACKER.get_addr()
+            if cur_addr is not None and cur_addr in label_only_labels and cur_addr not in emitted_label_addrs:
+                for lbl_name in label_only_labels[cur_addr]:
+                    output_lines.append(f"{lbl_name}:")
+                emitted_label_addrs.add(cur_addr)
+
             converted = convert_line(line, source)
 
             # Check if block boundary was triggered during convert_line().
@@ -2158,13 +2168,16 @@ def convert_all(main_file, output_path):
     # Clear block buffer
     BLOCK_BUFFER = None
 
-    # Emit all .set labels: label-only segments + content-segment LABEL_XXXXXX
+    # Emit .set labels for those NOT emitted inline.
+    # Inline labels get their address from assembled position (usually correct).
+    # .set labels get exact addresses from ORG (always correct).
     all_set_labels = []
-    # Label-only segments (from ORG directives)
+    # Label-only segments not emitted inline (forward references beyond conversion range)
     for addr in sorted(label_only_labels.keys()):
-        for lbl_name in label_only_labels[addr]:
-            all_set_labels.append((addr, lbl_name))
-    # Content-segment LABEL_XXXXXX (suppressed from inline emission)
+        if addr not in emitted_label_addrs:
+            for lbl_name in label_only_labels[addr]:
+                all_set_labels.append((addr, lbl_name))
+    # Content-segment LABEL_XXXXXX on instruction lines (suppressed from inline)
     for lbl_name, addr in sorted(SET_ONLY_LABELS.items(), key=lambda x: x[1]):
         all_set_labels.append((addr, lbl_name))
 
@@ -2175,14 +2188,14 @@ def convert_all(main_file, output_path):
             output_lines.append(f"\t.set {lbl_name}, 0x{addr:06X}")
 
     # Post-process: symbolize .long values.
-    # .set labels have guaranteed correct addresses. Content-segment named labels
-    # at reliable boundaries (in ADDR_TO_LABEL) are also at correct positions.
+    # Only use .set labels (guaranteed correct addresses) and content-segment
+    # named labels at reliable boundaries. Skip inline labels (may have drift).
     set_label_map = {}
     for addr, lbl_name in all_set_labels:
         _record_label(set_label_map, addr, lbl_name)
-    # Add named labels from ADDR_TO_LABEL not already covered by .set
+    # Add content-segment named labels not in emitted_label_addrs or .set
     for addr, lbl_name in ADDR_TO_LABEL.items():
-        if addr not in set_label_map:
+        if addr not in set_label_map and addr not in emitted_label_addrs:
             set_label_map[addr] = lbl_name
     if set_label_map:
         long_re = re.compile(r'0x([0-9A-Fa-f]{8})')
@@ -2216,7 +2229,9 @@ def convert_all(main_file, output_path):
     print(f"  Padding bytes: {total_padding_bytes}")
     print(f"  Block corrections: {total_block_corrections}")
     print(f"  Native instruction lines: {NATIVE_INSTR_COUNT}")
-    print(f"  Labels as .set: {len(all_set_labels)} ({len(all_set_labels) - len(SET_ONLY_LABELS)} label-only + {len(SET_ONLY_LABELS)} content LABEL_XXXXXX)")
+    n_label_only_set = len(all_set_labels) - len(SET_ONLY_LABELS)
+    print(f"  Label-only labels: {len(emitted_label_addrs)} inline + {n_label_only_set} .set")
+    print(f"  Content LABEL_XXXXXX as .set: {len(SET_ONLY_LABELS)}")
 
 
 # ============================================================================
