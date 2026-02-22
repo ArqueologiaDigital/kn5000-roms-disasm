@@ -2567,6 +2567,29 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
                                 byte_args = ', '.join(f'0x{b:02X}' for b in addr_bytes)
                                 return f"ld_{reg_name}_sri{size_char}{addr_len} {byte_args}", nbytes
 
+                # For spi/spd (C5/D5/E5 and C4/D4/E4): extract sub-opcode
+                if low_nibble in (4, 5) and nop == 2:
+                    reg_idx = operand_bytes[0]
+                    sub_opc = operand_bytes[1]
+                    cat_name = 'spi' if low_nibble == 5 else 'spd'
+                    SPI_SPD_MAP = {
+                        ('spi','b',0x21):'ld_a_spib', ('spi','b',0x23):'ld_c_spib',
+                        ('spi','b',0x25):'ld_e_spib', ('spi','b',0x27):'ld_l_spib',
+                        ('spi','b',0x83):'add_c_spib', ('spi','b',0x85):'add_e_spib',
+                        ('spi','b',0xF1):'cp_a_spib',
+                        ('spi','w',0x20):'ld_wa_spiw', ('spi','w',0x21):'ld_bc_spiw',
+                        ('spi','w',0x22):'ld_de_spiw', ('spi','w',0x26):'ld_iz_spiw',
+                        ('spi','w',0x81):'add_bc_spiw', ('spi','w',0x82):'add_de_spiw',
+                        ('spi','w',0x83):'add_hl_spiw', ('spi','w',0xF2):'cp_de_spiw',
+                        ('spi','w',0xF9):'cpm_bc_spiw',
+                        ('spi','l',0x20):'ld_xwa_spil', ('spi','l',0x21):'ld_xbc_spil',
+                        ('spi','l',0x23):'ld_xhl_spil', ('spi','l',0x83):'add_xhl_spil',
+                        ('spd','b',0xF1):'cp_a_spdb',
+                    }
+                    mnem = SPI_SPD_MAP.get((cat_name, size_char, sub_opc))
+                    if mnem:
+                        return f"{mnem} 0x{reg_idx:02X}", nbytes
+
                 # For erp (C7/D7/E7): extract sub-opcode for known operations
                 # Format: [reg_idx, sub_opc] — nop==2 means trail=0 (sub_opc is last byte)
                 if low_nibble == 7 and nop == 2:
