@@ -1813,8 +1813,8 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
                         if mem_str is not None:
                             imm_val = rom_bytes[2 + disp_offset]
                             return f"ldmi8 {mem_str}, 0x{imm_val:X}", expected_nbytes
-            elif sub_opc_byte == 0x14:
-                # LD (mem), #imm16
+            elif sub_opc_byte in (0x02, 0x14, 0x16):
+                # LD (mem), #imm16 (sub-opcodes: 0x02, 0x14, 0x16)
                 expected_nbytes = 4 + disp_offset
                 if nbytes == expected_nbytes:
                     base_name = REG32_BY_INDEX.get(base_idx)
@@ -1833,7 +1833,14 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
                             mem_str = f"({base_name})"
                         if mem_str is not None:
                             imm_val = rom_bytes[2 + disp_offset] | (rom_bytes[3 + disp_offset] << 8)
-                            return f"ldmi16 {mem_str}, 0x{imm_val:X}", expected_nbytes
+                            # Use mnemonic matching the sub-opcode for byte-exact output
+                            if sub_opc_byte == 0x02:
+                                mnem = 'ldmw'
+                            elif sub_opc_byte == 0x16:
+                                mnem = 'ldmw2'
+                            else:
+                                mnem = 'ldmi16'
+                            return f"{mnem} {mem_str}, 0x{imm_val:X}", expected_nbytes
 
     # Tier 29: Indirect CALL (2-byte: B0+r, 0xE8)
     # ASL: "CALL T, XHL" → LLVM: "call (xhl)"
