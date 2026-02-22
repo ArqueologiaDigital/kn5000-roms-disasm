@@ -2504,15 +2504,26 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
 
     # Tier 43: Extended addressing mode instructions — categorized prefix patterns.
     # Classifies prefix bytes into semantic categories with computed prefix:
-    #   erp (C7/D7/E7): extended register prefix — bank register access
-    #   sri (C3/D3/E3): source register-indirect complex
-    #   spi (C5/D5/E5): source post-increment
-    #   sd8 (C0/D0/E0): source 8-bit direct address
-    #   dri (F3): destination register-indirect complex
-    #   dpi (F5): destination post-increment
-    #   dd8 (F0): destination 8-bit direct address
-    # Remaining patterns (80-BF, C8-CF, D8-DF, E8-EF, C1/C2/D1/D2/E1/E2/F1/F2/F4)
-    # still use generic extpfx.
+    #   Source addressing (C/D/E prefix, size=8/16/32):
+    #     sd8 (C0/D0/E0): 8-bit direct address
+    #     sd16 (C1/D1/E1): 16-bit direct address
+    #     sd24 (C2/D2/E2): 24-bit direct address
+    #     sri (C3/D3/E3): register-indirect complex
+    #     spd (C4/D4/E4): pre-decrement
+    #     spi (C5/D5/E5): post-increment
+    #     erp (C7/D7/E7): extended register prefix — bank register access
+    #   Destination addressing (F prefix, size-independent):
+    #     dd8 (F0): 8-bit direct address
+    #     dd16 (F1): 16-bit direct address
+    #     dd24 (F2): 24-bit direct address
+    #     dri (F3): register-indirect complex
+    #     dpd (F4): pre-decrement
+    #     dpi (F5): post-increment
+    #   Memory addressing (80-BF, register-indirect):
+    #     mri (80-87/90-97/A0-A7): no displacement
+    #     mrd (88-8F/98-9F/A8-AF): with d8 displacement
+    #     mdi (B0-B7): destination no displacement
+    #     mdd (B8-BF): destination with d8 displacement
     if rom_bytes is not None and 2 <= nbytes <= 10:
         first = rom_bytes[0]
         if first >= 0x80:
@@ -2528,29 +2539,48 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
                 # Map low nibble to category mnemonic
                 CATEGORY_MAP = {
                     0: 'sd8',   # 8-bit direct address
+                    1: 'sd16',  # 16-bit direct address
+                    2: 'sd24',  # 24-bit direct address
                     3: 'sri',   # register-indirect complex
+                    4: 'spd',   # pre-decrement
                     5: 'spi',   # post-increment
                     7: 'erp',   # extended register prefix
                 }
                 cat = CATEGORY_MAP.get(low_nibble)
-                if cat and 2 <= nop <= 6:
+                if cat and 1 <= nop <= 8:
                     byte_args = ', '.join(f'0x{b:02X}' for b in operand_bytes)
                     return f"{cat}{size_char}{nop} {byte_args}", nbytes
 
             # Destination addressing categories (F prefix)
-            if hi_nibble == 0xF:
+            if hi_nibble == 0xF and low_nibble <= 5:
                 DEST_CATEGORY = {
                     0: 'dd8',   # 8-bit direct address
+                    1: 'dd16',  # 16-bit direct address
+                    2: 'dd24',  # 24-bit direct address
                     3: 'dri',   # register-indirect complex
+                    4: 'dpd',   # pre-decrement
                     5: 'dpi',   # post-increment
                 }
                 cat = DEST_CATEGORY.get(low_nibble)
-                if cat and 2 <= nop <= 8:
+                if cat and 1 <= nop <= 8:
                     byte_args = ', '.join(f'0x{b:02X}' for b in operand_bytes)
                     return f"{cat}{nop} {byte_args}", nbytes
 
+            # Memory addressing categories (80-BF: register-indirect)
+            # Uses literal bytes (prefix byte included as first operand) since
+            # the prefix encodes register index which varies per instruction.
+            if 0x80 <= first <= 0xBF:
+                grp = (first >> 4) & 0x3  # 0=8-bit, 1=16-bit, 2=32-bit, 3=dst
+                has_disp = (first & 0x08) != 0
+                size_char = {0: 'b', 1: 'w', 2: 'l', 3: 'd'}[grp]
+                cat = f"mr{'d' if has_disp else 'i'}{size_char}"
+                if 2 <= nbytes <= 7:
+                    all_bytes = rom_bytes[:nbytes]
+                    byte_args = ', '.join(f'0x{b:02X}' for b in all_bytes)
+                    return f"{cat}{nbytes} {byte_args}", nbytes
+
             # Fallback: generic extpfx for remaining patterns
-            # (80-BF, C8-CF, D8-DF, E8-EF, C1/C2/D1/D2/E1/E2/F1/F2/F4, C4/D4/E4/F4)
+            # (C8-CF, D8-DF, E8-EF register prefix with unhandled sub-opcodes)
             byte_args = ', '.join(f'0x{b:02X}' for b in rom_bytes[:nbytes])
             return f"extpfx{nbytes} {byte_args}", nbytes
 
