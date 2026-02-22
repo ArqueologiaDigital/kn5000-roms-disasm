@@ -1468,7 +1468,7 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
     #              0xA0+r=SUB rm, 0xA8+r=SUB mr, 0xB0+r=SBC rm, 0xB8+r=SBC mr,
     #              0xC0+r=AND rm, 0xC8+r=AND mr, 0xD0+r=XOR rm, 0xD8+r=XOR mr,
     #              0xE0+r=OR rm, 0xE8+r=OR mr, 0xF0+r=CP rm, 0xF8+r=CP mr
-    MEM_ALU_MNEMONICS = {'ADD', 'ADC', 'SUB', 'SBC', 'AND', 'XOR', 'OR', 'CP'}
+    MEM_ALU_MNEMONICS = {'ADD', 'ADC', 'SUB', 'SBC', 'AND', 'XOR', 'OR', 'CP', 'LD', 'LDW'}
     # Sub-opcode base -> (mnemonic, direction: 'rm'=reg,mem or 'mr'=mem,reg)
     MEM_ALU_SUBOPC = {
         0x80: ('add', 'rm'), 0x88: ('add', 'mr'),
@@ -1502,34 +1502,100 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
                 sub_opc_byte = rom_bytes[2] if has_disp else rom_bytes[1]
                 sub_opc_base = sub_opc_byte & 0xF8
                 operand_reg_idx = sub_opc_byte & 0x07
-                if sub_opc_base in MEM_ALU_SUBOPC:
-                    alu_mnem, direction = MEM_ALU_SUBOPC[sub_opc_base]
-                    base_name = REG32_BY_INDEX.get(base_idx)
-                    # Get operand register name based on data size
-                    if data_size == 8:
-                        op_reg = REG8_BY_INDEX.get(operand_reg_idx)
-                    elif data_size == 16:
-                        op_reg = REG16_BY_INDEX.get(operand_reg_idx)
+                base_name = REG32_BY_INDEX.get(base_idx)
+                if base_name:
+                    # Format memory operand string
+                    # Skip d8=0 case: LLVM optimizes (reg + 0) to 2-byte no-disp,
+                    # but ROM uses 3-byte d8=0 encoding. Leave as .byte fallback.
+                    mem_str = None
+                    if has_disp:
+                        d8 = disp_byte
+                        if d8 > 127:
+                            d8 -= 256  # sign-extend
+                        if d8 < 0:
+                            mem_str = f"({base_name} - {-d8})"
+                        elif d8 > 0:
+                            mem_str = f"({base_name} + {d8})"
+                        # d8 == 0: mem_str stays None → skip conversion
                     else:
-                        op_reg = REG32_BY_INDEX.get(operand_reg_idx)
-                    if base_name and op_reg:
-                        # Format memory operand
-                        if has_disp:
-                            d8 = disp_byte
-                            if d8 > 127:
-                                d8 -= 256  # sign-extend
-                            if d8 < 0:
-                                mem_str = f"({base_name} - {-d8})"
-                            elif d8 > 0:
-                                mem_str = f"({base_name} + {d8})"
+                        mem_str = f"({base_name})"
+
+                    if mem_str is not None and sub_opc_base in MEM_ALU_SUBOPC:
+                        alu_mnem, direction = MEM_ALU_SUBOPC[sub_opc_base]
+                        if data_size == 8:
+                            op_reg = REG8_BY_INDEX.get(operand_reg_idx)
+                        elif data_size == 16:
+                            op_reg = REG16_BY_INDEX.get(operand_reg_idx)
+                        else:
+                            op_reg = REG32_BY_INDEX.get(operand_reg_idx)
+                        if op_reg:
+                            if direction == 'rm':
+                                return f"{alu_mnem} {op_reg}, {mem_str}", expected_nbytes
                             else:
-                                mem_str = f"({base_name})"
+                                return f"{alu_mnem} {mem_str}, {op_reg}", expected_nbytes
+
+                    # LD reg, (mem) — sub-opcode 0x20+r in source memory table
+                    if mem_str is not None and 0x20 <= sub_opc_byte <= 0x27:
+                        if data_size == 8:
+                            op_reg = REG8_BY_INDEX.get(operand_reg_idx)
+                        elif data_size == 16:
+                            op_reg = REG16_BY_INDEX.get(operand_reg_idx)
                         else:
-                            mem_str = f"({base_name})"
-                        if direction == 'rm':
-                            return f"{alu_mnem} {op_reg}, {mem_str}", expected_nbytes
-                        else:
-                            return f"{alu_mnem} {mem_str}, {op_reg}", expected_nbytes
+                            op_reg = REG32_BY_INDEX.get(operand_reg_idx)
+                        if op_reg:
+                            return f"ld {op_reg}, {mem_str}", expected_nbytes
+
+    # Tier 19: Destination memory (B0/B8 prefix) — LD stores and LDA
+    # B0+r = no disp, B8+r = d8 disp
+    # Sub-opcodes: 0x40+r=LD(mem),r8, 0x50+r=LD(mem),r16, 0x60+r=LD(mem),r32
+    #              0x30+r=LDA r32,mem
+    LD_STORE_MNEMONICS = {'LD', 'LDW', 'LDA'}
+    if rom_bytes is not None and mnem_upper in LD_STORE_MNEMONICS:
+        prefix = rom_bytes[0]
+        if 0xB0 <= prefix <= 0xBF:
+            base_idx = prefix & 0x07
+            has_disp = (prefix & 0x08) != 0
+            expected_nbytes = 3 if has_disp else 2
+            if nbytes == expected_nbytes:
+                disp_byte = rom_bytes[1] if has_disp else None
+                sub_opc_byte = rom_bytes[2] if has_disp else rom_bytes[1]
+                operand_reg_idx = sub_opc_byte & 0x07
+                base_name = REG32_BY_INDEX.get(base_idx)
+                if base_name:
+                    # Skip d8=0: LLVM optimizes to shorter no-disp encoding
+                    mem_str = None
+                    if has_disp:
+                        d8 = disp_byte
+                        if d8 > 127:
+                            d8 -= 256
+                        if d8 < 0:
+                            mem_str = f"({base_name} - {-d8})"
+                        elif d8 > 0:
+                            mem_str = f"({base_name} + {d8})"
+                    else:
+                        mem_str = f"({base_name})"
+                    if mem_str is None:
+                        pass  # d8=0, skip
+                    # LD (mem), r8 — sub-opcode 0x40+r
+                    elif 0x40 <= sub_opc_byte <= 0x47:
+                        op_reg = REG8_BY_INDEX.get(operand_reg_idx)
+                        if op_reg:
+                            return f"ld {mem_str}, {op_reg}", expected_nbytes
+                    # LD (mem), r16 — sub-opcode 0x50+r
+                    elif 0x50 <= sub_opc_byte <= 0x57:
+                        op_reg = REG16_BY_INDEX.get(operand_reg_idx)
+                        if op_reg:
+                            return f"ld {mem_str}, {op_reg}", expected_nbytes
+                    # LD (mem), r32 — sub-opcode 0x60+r
+                    elif 0x60 <= sub_opc_byte <= 0x67:
+                        op_reg = REG32_BY_INDEX.get(operand_reg_idx)
+                        if op_reg:
+                            return f"ld {mem_str}, {op_reg}", expected_nbytes
+                    # LDA r32, mem — sub-opcode 0x30+r
+                    elif 0x30 <= sub_opc_byte <= 0x37 and mnem_upper == 'LDA':
+                        op_reg = REG32_BY_INDEX.get(operand_reg_idx)
+                        if op_reg:
+                            return f"lda {op_reg}, {mem_str}", expected_nbytes
 
     return None
 
