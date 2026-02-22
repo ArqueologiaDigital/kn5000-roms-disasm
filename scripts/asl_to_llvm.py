@@ -2146,30 +2146,27 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
                 imm_val = 0
                 for i in range(imm_bytes):
                     imm_val |= rom_bytes[5 + i] << (8 * i)
-                alu_ops = {0: 'adddi', 1: 'addci', 2: 'subdi', 3: 'sbcdi',
-                           4: 'anddi', 5: 'xordi', 6: 'ordi', 7: 'cpdi'}
-                # For 24-bit addr, reuse 16-bit addr mnemonics — but we don't have
-                # 24-bit variants of ALU imm yet. Skip for now.
-                pass
+                alu_ops_24 = {0: 'adddi', 2: 'subdi', 7: 'cpdi'}
+                mnem_base = alu_ops_24.get(alu_idx)
+                if mnem_base and opsize == 16:
+                    mnem = mnem_base + '16_24'
+                    return f"{mnem} {addr24}, {imm_val}", nbytes
 
             # ALU reg, (addr24) — load direction
             if sub_opc >= 0x80 and nbytes == 5:
                 alu_base = sub_opc & 0xF0
                 reg_idx = sub_opc & 0x07
                 is_store = (sub_opc & 0x08) != 0
-                # Skip store direction for 24-bit for now
-                if not is_store:
-                    reg_name = REG32_BY_INDEX.get(reg_idx)
-                    alu_load_ops = {0x80: 'addda', 0x90: 'addcda', 0xA0: 'subda',
-                                    0xB0: 'sbcda', 0xC0: 'andda', 0xD0: 'xorda',
-                                    0xE0: 'orda', 0xF0: 'cpda'}
-                    mnem_base = alu_load_ops.get(alu_base)
+                if not is_store and opsize == 16:
+                    if opsize == 8:
+                        reg_name = REG8_BY_INDEX.get(reg_idx)
+                    else:
+                        reg_name = REG32_BY_INDEX.get(reg_idx)
+                    alu_load_ops_24 = {0x80: 'addda', 0xA0: 'subda', 0xF0: 'cpda'}
+                    mnem_base = alu_load_ops_24.get(alu_base)
                     if mnem_base and reg_name:
-                        # Need 24-bit instruction variant — skip for now
-                        pass
-
-            # INC/DEC (addr24): sub-opc 0x60+count / 0x68+count
-            # Skip 24-bit for now
+                        mnem = mnem_base + '16_24'
+                        return f"{mnem} {reg_name}, {addr24}", nbytes
 
     # =========================================================================
     # Tier 37: Destination direct addressing (F1 + addr16 + sub-opcode)
@@ -2193,6 +2190,13 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
             reg_name = REG32_BY_INDEX.get(reg_idx)
             if reg_name:
                 return f"stda16 {addr16}, {reg_name}", nbytes
+
+        # LD (addr16), reg32: sub-opc 0x60+reg32, nbytes=4
+        if 0x60 <= sub_opc <= 0x67 and nbytes == 4:
+            reg_idx = sub_opc & 0x07
+            reg_name = REG32_BY_INDEX.get(reg_idx)
+            if reg_name:
+                return f"stda32 {addr16}, {reg_name}", nbytes
 
         # LD (addr16), #imm8: sub-opc 0x00, nbytes=5
         if sub_opc == 0x00 and nbytes == 5:
@@ -2289,6 +2293,13 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
             reg_name = REG32_BY_INDEX.get(reg_idx)
             if reg_name:
                 return f"stda16_24 {addr24}, {reg_name}", nbytes
+
+        # LD (addr24), reg32: sub-opc 0x60+reg32, nbytes=5
+        if 0x60 <= sub_opc <= 0x67 and nbytes == 5:
+            reg_idx = sub_opc & 0x07
+            reg_name = REG32_BY_INDEX.get(reg_idx)
+            if reg_name:
+                return f"stda32_24 {addr24}, {reg_name}", nbytes
 
         # LD (addr24), #imm8: sub-opc 0x00, nbytes=6
         if sub_opc == 0x00 and nbytes == 6:
