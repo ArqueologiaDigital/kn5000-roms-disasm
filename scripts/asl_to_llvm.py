@@ -2536,6 +2536,37 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
             # Source addressing categories (C/D/E prefix, low nibble selects mode)
             if hi_nibble in (0xC, 0xD, 0xE) and low_nibble <= 7:
                 size_char = {0xC: 'b', 0xD: 'w', 0xE: 'l'}[hi_nibble]
+
+                # For sri (C3/D3/E3): try to extract LD sub-opcode
+                # C3 sub-addressing mode byte bits 1-0:
+                #   0: (r32) = 1 addr byte, 1: (r32+d16) = 3 addr bytes,
+                #   3: special (0x03=r32+r8, 0x07=r32+r16, 0x13=PC+d16) = 3 addr bytes
+                if low_nibble == 3 and nop >= 2:
+                    addr_mode = operand_bytes[0]
+                    mode_type = addr_mode & 0x03
+                    if mode_type == 0:
+                        addr_len = 1  # (r32) — just register, no displacement
+                    elif mode_type in (1, 3):
+                        addr_len = 3  # (r32+d16), (r32+r8), (r32+r16), (PC+d16)
+                    else:
+                        addr_len = 0  # unknown mode type 2
+                    # Check if sub-opcode after addr bytes is LD (0x20-0x27)
+                    if addr_len > 0 and nop == addr_len + 1:
+                        sub_opc = operand_bytes[addr_len]
+                        if 0x20 <= sub_opc <= 0x27:
+                            REG_NAMES_8 = {0x20:'w', 0x21:'a', 0x22:'b', 0x23:'c',
+                                           0x24:'d', 0x25:'e', 0x26:'h', 0x27:'l'}
+                            REG_NAMES_16 = {0x20:'wa', 0x21:'bc', 0x22:'de', 0x23:'hl',
+                                            0x24:'ix', 0x25:'iy', 0x26:'iz', 0x27:'sp'}
+                            REG_NAMES_32 = {0x20:'xwa', 0x21:'xbc', 0x22:'xde', 0x23:'xhl',
+                                            0x24:'xix', 0x25:'xiy', 0x26:'xiz', 0x27:'xsp'}
+                            reg_table = {0xC: REG_NAMES_8, 0xD: REG_NAMES_16, 0xE: REG_NAMES_32}
+                            reg_name = reg_table[hi_nibble].get(sub_opc, '')
+                            if reg_name:
+                                addr_bytes = operand_bytes[:addr_len]
+                                byte_args = ', '.join(f'0x{b:02X}' for b in addr_bytes)
+                                return f"ld_{reg_name}_sri{size_char}{addr_len} {byte_args}", nbytes
+
                 # Map low nibble to category mnemonic
                 CATEGORY_MAP = {
                     0: 'sd8',   # 8-bit direct address
@@ -2553,6 +2584,51 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
 
             # Destination addressing categories (F prefix)
             if hi_nibble == 0xF and low_nibble <= 5:
+                # For dri (F3): try to extract LD/LDA sub-opcode
+                if low_nibble == 3 and nop >= 2:
+                    addr_mode = operand_bytes[0]
+                    mode_type = addr_mode & 0x03
+                    if mode_type == 0:
+                        addr_len = 1
+                    elif mode_type in (1, 3):
+                        addr_len = 3
+                    else:
+                        addr_len = 0
+                    if addr_len > 0 and nop == addr_len + 1:
+                        sub_opc = operand_bytes[addr_len]
+                        # LD (mem), r8 — sub-opc 0x30-0x37
+                        if 0x30 <= sub_opc <= 0x37:
+                            REG8 = {0x30:'w', 0x31:'a', 0x32:'b', 0x33:'c',
+                                    0x34:'d', 0x35:'e', 0x36:'h', 0x37:'l'}
+                            reg = REG8[sub_opc]
+                            addr_bytes = operand_bytes[:addr_len]
+                            byte_args = ', '.join(f'0x{b:02X}' for b in addr_bytes)
+                            return f"st_{reg}_dri{addr_len} {byte_args}", nbytes
+                        # LDA r32, mem — sub-opc 0x40-0x47
+                        if 0x40 <= sub_opc <= 0x47:
+                            REG32 = {0x40:'xwa', 0x41:'xbc', 0x42:'xde', 0x43:'xhl',
+                                     0x44:'xix', 0x45:'xiy', 0x46:'xiz', 0x47:'xsp'}
+                            reg = REG32[sub_opc]
+                            addr_bytes = operand_bytes[:addr_len]
+                            byte_args = ', '.join(f'0x{b:02X}' for b in addr_bytes)
+                            return f"lda_{reg}_dri{addr_len} {byte_args}", nbytes
+                        # LD (mem), r16 — sub-opc 0x50-0x57
+                        if 0x50 <= sub_opc <= 0x57:
+                            REG16 = {0x50:'wa', 0x51:'bc', 0x52:'de', 0x53:'hl',
+                                     0x54:'ix', 0x55:'iy', 0x56:'iz', 0x57:'sp'}
+                            reg = REG16[sub_opc]
+                            addr_bytes = operand_bytes[:addr_len]
+                            byte_args = ', '.join(f'0x{b:02X}' for b in addr_bytes)
+                            return f"st_{reg}_dri{addr_len} {byte_args}", nbytes
+                        # LD (mem), r32 — sub-opc 0x60-0x67
+                        if 0x60 <= sub_opc <= 0x67:
+                            REG32 = {0x60:'xwa', 0x61:'xbc', 0x62:'xde', 0x63:'xhl',
+                                     0x64:'xix', 0x65:'xiy', 0x66:'xiz', 0x67:'xsp'}
+                            reg = REG32[sub_opc]
+                            addr_bytes = operand_bytes[:addr_len]
+                            byte_args = ', '.join(f'0x{b:02X}' for b in addr_bytes)
+                            return f"st_{reg}_dri{addr_len} {byte_args}", nbytes
+
                 DEST_CATEGORY = {
                     0: 'dd8',   # 8-bit direct address
                     1: 'dd16',  # 16-bit direct address
