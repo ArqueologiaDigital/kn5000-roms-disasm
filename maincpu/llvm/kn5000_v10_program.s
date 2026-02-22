@@ -113649,9 +113649,9 @@ LABEL_EF0839:
 ; -----------------------------------------------------------------------------
 Detect_Region_Code:
 	dd82 0x44, 0xCA
-	.byte 0x66, 0x11	; JR Z, .check_bit1_only
+	jr z, .check_bit1_only
 	dd82 0x44, 0xC9
-	.byte 0x66, 0x06	; JR Z, .mode2
+	jr z, .mode2
 	stdi8 1032, 1	; Region 1
 	ret
 	.mode2:
@@ -113659,7 +113659,7 @@ Detect_Region_Code:
 	ret
 	.check_bit1_only:
 	dd82 0x44, 0xC9
-	.byte 0x66, 0x06	; JR Z, .mode4
+	jr z, .mode4
 	stdi8 1032, 3	; Region 3
 	ret
 	.mode4:
@@ -113755,7 +113755,7 @@ Boot_CallInitHandlers:
 	.byte 0xc2, 0xee, 0xfe, 0xff, 0x3f, 0xff
 	; ENDIF
 
-	.byte 0x6e, 0x26	; JR NZ, .done	; 6e xx (offset computed by assembler)
+	jr nz, .done	; 6e xx (offset computed by assembler)
 
 	; LD QIZH, 0
 	.byte 0xc7, 0xfb, 0xa8
@@ -113784,7 +113784,7 @@ Boot_CallInitHandlers:
 	; CP QIZH, 4
 	.byte 0xc7, 0xfb, 0xdc
 
-	.byte 0x67, 0xdd	; JR C, .handler_loop	; 67 xx (offset computed by assembler)
+	jr c, .handler_loop	; 67 xx (offset computed by assembler)
 
 	.done:
 	pop_werp 0xFA	; d7 fa 05
@@ -121592,7 +121592,7 @@ Write_VGA_Register:
 	.delay:
 	inc 1, de	; Increment counter
 	cp de, 0x100	; Compare to 256
-	.byte 0x67, 0xf8	; JR C, .delay	; Loop until DE >= 256
+	jr c, .delay	; Loop until DE >= 256
 
 	extz xwa	; Zero-extend WA to XWA
 	ld xde, 0x170000	; Load VGA I/O base address
@@ -122768,7 +122768,7 @@ VGA_Setup:
 	calr Write_VGA_Register
 
 	; Call extended sequencer init
-	.byte 0x1e, 0x6c, 0xf6	; CALR VGA_Extended_Init
+	calr VGA_Extended_Init
 
 	; Set up parameters for video buffer initialization
 	; These are loaded here; caller provides the actual CALL to fill/copy routines
@@ -133843,7 +133843,7 @@ SeMenuModeFunc:
 	cp xbc, 0x1C00013
 	ret nz
 	cp xde, 0x1
-	.byte 0x66, 0x08	; JR Z, SeMenuModeFunc_Handler
+	jr z, SeMenuModeFunc_Handler
 	or xde, xde
 	ret nz
 	jp 0xF0A110

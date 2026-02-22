@@ -1498,6 +1498,20 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
                         return f"jr {label}", 2
                     else:
                         return f"jr {TLCS900_CC_NAMES[cc]}, {label}", 2
+            else:
+                # Fallback: if operands reference a label (local or named),
+                # use it directly — the label should exist in the LLVM output
+                # and the assembler will compute the correct offset.
+                # Byte-match verification catches any drift issues.
+                if operands_str:
+                    parts = operands_str.split(',')
+                    if len(parts) >= 2:
+                        target_part = parts[-1].strip()
+                        if re.match(r'^[A-Za-z_.]', target_part):
+                            if cc == 8:
+                                return f"jr {target_part}", 2
+                            else:
+                                return f"jr {TLCS900_CC_NAMES[cc]}, {target_part}", 2
 
     # Tier 9: JRL/JRLcc (3-byte relative jump: 0x70+cc, d16_LE)
     if nbytes == 3 and rom_bytes is not None and addr is not None:
@@ -1518,6 +1532,17 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
                         return f"jrl {label}", 3
                     else:
                         return f"jrl {TLCS900_CC_NAMES[cc]}, {label}", 3
+            else:
+                # Fallback: use operand label directly if available.
+                if operands_str:
+                    parts = operands_str.split(',')
+                    if len(parts) >= 2:
+                        target_part = parts[-1].strip()
+                        if re.match(r'^[A-Za-z_.]', target_part):
+                            if cc == 8:
+                                return f"jrl {target_part}", 3
+                            else:
+                                return f"jrl {TLCS900_CC_NAMES[cc]}, {target_part}", 3
 
     # Tier 10: CALR (3-byte relative call: 0x1E, d16_LE)
     if nbytes == 3 and rom_bytes is not None and addr is not None:
@@ -1533,6 +1558,12 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
                 ll = label.lower()
                 if ll not in RESERVED_LABEL_NAMES and ll not in DRIFTED_LABEL_NAMES:
                     return f"calr {label}", 3
+            else:
+                # Fallback: use operand label directly if available.
+                if operands_str:
+                    target_part = operands_str.strip()
+                    if re.match(r'^[A-Za-z_.]', target_part):
+                        return f"calr {target_part}", 3
 
     # Tier 10b: DJNZ (3-byte: prefix + 0x1C + d8)
     # 16-bit: D8+reg, 0x1C, d8 (decrement 16-bit register, jump if not zero)
