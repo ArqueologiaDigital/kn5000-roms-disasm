@@ -1686,6 +1686,59 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
         if rom_bytes[0] == 0x16:
             return "ex_ff", 1
 
+    # Tier 27: Memory-immediate ALU (source memory prefix + sub_opc + imm)
+    # 8-bit: prefix(80-8F) + [d8] + sub_opc(0x38-0x3F) + imm8
+    # 16-bit: prefix(90-9F) + [d8] + sub_opc(0x38-0x3F) + imm16
+    # Sub-opcodes: ADD=0x38, ADC=0x39, SUB=0x3A, SBC=0x3B,
+    #              AND=0x3C, XOR=0x3D, OR=0x3E, CP=0x3F
+    MEM_IMM_ALU_MNEMONICS = {
+        'CP', 'CPW', 'AND', 'ANDW', 'OR', 'ORW', 'ADD', 'ADDW',
+        'SUB', 'SUBW', 'ADC', 'ADCW', 'SBC', 'SBCW', 'XOR', 'XORW',
+    }
+    MEM_IMM_ALU_SUBOPC = {
+        0x38: 'add', 0x39: 'adc', 0x3A: 'sub', 0x3B: 'sbc',
+        0x3C: 'and', 0x3D: 'xor', 0x3E: 'or', 0x3F: 'cp',
+    }
+    if rom_bytes is not None and mnem_upper in MEM_IMM_ALU_MNEMONICS:
+        prefix = rom_bytes[0]
+        # Check for source memory prefix (0x80-0x9F for 8-bit and 16-bit)
+        if 0x80 <= prefix <= 0x9F:
+            base_idx = prefix & 0x07
+            has_disp = (prefix & 0x08) != 0
+            data_size = 8 if prefix < 0x90 else 16
+            imm_bytes = 1 if data_size == 8 else 2
+            size_suffix = '8' if data_size == 8 else '16'
+            # Expected: prefix(1) + [d8(1)] + sub_opc(1) + imm(1 or 2)
+            expected_nbytes = (1 + (1 if has_disp else 0) + 1 + imm_bytes)
+            if nbytes == expected_nbytes:
+                disp_offset = 1 if has_disp else 0
+                sub_opc_byte = rom_bytes[1 + disp_offset]
+                if sub_opc_byte in MEM_IMM_ALU_SUBOPC:
+                    base_name = REG32_BY_INDEX.get(base_idx)
+                    if base_name:
+                        # Build memory operand string (skip d8=0)
+                        mem_str = None
+                        if has_disp:
+                            d8 = rom_bytes[1]
+                            if d8 > 127:
+                                d8 -= 256
+                            if d8 < 0:
+                                mem_str = f"({base_name} - {-d8})"
+                            elif d8 > 0:
+                                mem_str = f"({base_name} + {d8})"
+                            # d8 == 0: skip
+                        else:
+                            mem_str = f"({base_name})"
+                        if mem_str is not None:
+                            alu_mnem = MEM_IMM_ALU_SUBOPC[sub_opc_byte]
+                            # Extract immediate
+                            imm_start = 2 + disp_offset
+                            if data_size == 8:
+                                imm_val = rom_bytes[imm_start]
+                            else:
+                                imm_val = rom_bytes[imm_start] | (rom_bytes[imm_start + 1] << 8)
+                            return f"{alu_mnem}mi{size_suffix} {mem_str}, 0x{imm_val:X}", expected_nbytes
+
     return None
 
 
