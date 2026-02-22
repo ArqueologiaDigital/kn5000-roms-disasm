@@ -49,6 +49,14 @@ ADDR_TO_LABEL_ALL = {}
 # Inline labels may have position drift; .set has exact ORG addresses.
 SET_ONLY_LABELS = {}  # label_name -> addr
 
+# TLCS-900 condition code names for JR/JRL/JPcc instructions
+TLCS900_CC_NAMES = {
+    0x0: 'f', 0x1: 'lt', 0x2: 'le', 0x3: 'ule',
+    0x4: 'ov', 0x5: 'mi', 0x6: 'z', 0x7: 'c',
+    0x8: 't', 0x9: 'ge', 0xa: 'gt', 0xb: 'ugt',
+    0xc: 'nov', 0xd: 'pl', 0xe: 'nz', 0xf: 'nc',
+}
+
 # Statistics counters for native vs fallback instructions
 NATIVE_INSTR_COUNT = 0
 BYTE_FALLBACK_COUNT = 0
@@ -542,6 +550,7 @@ def convert_line(line, in_file_path):
     global IN_MACRO_DEF, CURRENT_MACRO_DEF_NAME, CURRENT_MACRO_INSTR_COUNT
     global BLOCK_BUFFER, BLOCK_CURSOR, SELF_CORRECTION_TRIGGERED, SELF_CORRECTION_ADDR
     global _SAVED_BLOCK_BUFFER
+    global NATIVE_INSTR_COUNT, BYTE_FALLBACK_COUNT
 
     stripped = line.rstrip()
     if not stripped:
@@ -917,10 +926,20 @@ def convert_line(line, in_file_path):
                 nbytes = remaining
             if nbytes > 0:
                 rom_bytes = BLOCK_BUFFER[BLOCK_CURSOR:BLOCK_CURSOR + nbytes]
-                byte_str = ', '.join(f'0x{b:02x}' for b in rom_bytes)
-                args = remainder.strip()
-                original = f"{first_word} {args}".strip() if args else first_word
-                result += f"\t.byte {byte_str}\t; {original}"
+                # Try native conversion for single-instruction macros
+                native = None
+                if instr_count == 1:
+                    native = try_convert_native(first_word, remainder.strip(), rom_bytes, nbytes, addr)
+                if native is not None:
+                    native_asm, _ = native
+                    result += f"\t{native_asm}"
+                    NATIVE_INSTR_COUNT += 1
+                else:
+                    byte_str = ', '.join(f'0x{b:02x}' for b in rom_bytes)
+                    args = remainder.strip()
+                    original = f"{first_word} {args}".strip() if args else first_word
+                    result += f"\t.byte {byte_str}\t; {original}"
+                    BYTE_FALLBACK_COUNT += 1
                 BLOCK_CURSOR += nbytes
                 ADDR_TRACKER.advance(nbytes)
             else:
@@ -1089,7 +1108,7 @@ def parse_asl_immediate(value_str):
     return None
 
 
-def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes):
+def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
     """Try to convert an instruction to native LLVM syntax.
 
     Returns (native_asm_str, expected_nbytes) or None if not supported.
@@ -1254,6 +1273,49 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes):
                         native_asm = f"ld ({mem_reg.lower()}), {src_reg.lower()}"
                         return native_asm, 2
 
+    # Tier 8: JR/JRcc (2-byte relative jump: 0x60+cc, d8)
+    if nbytes == 2 and rom_bytes is not None and addr is not None:
+        opcode = rom_bytes[0]
+        if 0x60 <= opcode <= 0x6F and mnem_upper == 'JR':
+            cc = opcode & 0x0F
+            d8 = rom_bytes[1]
+            if d8 > 127:
+                d8 -= 256  # sign-extend
+            target = addr + 2 + d8
+            label = ADDR_TO_LABEL.get(target)
+            if label:
+                if cc == 8:  # T (always/unconditional)
+                    return f"jr {label}", 2
+                else:
+                    return f"jr {TLCS900_CC_NAMES[cc]}, {label}", 2
+
+    # Tier 9: JRL/JRLcc (3-byte relative jump: 0x70+cc, d16_LE)
+    if nbytes == 3 and rom_bytes is not None and addr is not None:
+        opcode = rom_bytes[0]
+        if 0x70 <= opcode <= 0x7F and mnem_upper in ('JRL', 'JP'):
+            cc = opcode & 0x0F
+            d16 = rom_bytes[1] | (rom_bytes[2] << 8)
+            if d16 > 32767:
+                d16 -= 65536  # sign-extend
+            target = addr + 3 + d16
+            label = ADDR_TO_LABEL.get(target)
+            if label:
+                if cc == 8:  # T (unconditional)
+                    return f"jrl {label}", 3
+                else:
+                    return f"jrl {TLCS900_CC_NAMES[cc]}, {label}", 3
+
+    # Tier 10: CALR (3-byte relative call: 0x1E, d16_LE)
+    if nbytes == 3 and rom_bytes is not None and addr is not None:
+        if rom_bytes[0] == 0x1E and mnem_upper in ('CALR', 'CALL'):
+            d16 = rom_bytes[1] | (rom_bytes[2] << 8)
+            if d16 > 32767:
+                d16 -= 65536
+            target = addr + 3 + d16
+            label = ADDR_TO_LABEL.get(target)
+            if label:
+                return f"calr {label}", 3
+
     return None
 
 
@@ -1276,7 +1338,7 @@ def convert_instruction(label, mnemonic, operands_str, comment, label_addr_suffi
         if nbytes > 0:
             rom_bytes = BLOCK_BUFFER[BLOCK_CURSOR:BLOCK_CURSOR + nbytes]
             # Try native conversion first
-            native = try_convert_native(mnemonic, operands_str, rom_bytes, nbytes)
+            native = try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr)
             if native is not None:
                 native_asm, _ = native
                 result += f"\t{native_asm}"
