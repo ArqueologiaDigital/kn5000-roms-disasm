@@ -2187,33 +2187,52 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
                 if reg_name:
                     return f"ldda{sz_suffix}{suffix24} {reg_name}, {addr24}", nbytes
 
-            # ALU (addr24), #imm: sub-opc 0x38-0x3F
+            # ALU (addr24), #imm: sub-opc 0x38-0x3F (all sizes)
             if 0x38 <= sub_opc <= 0x3F and nbytes == 5 + imm_bytes:
                 alu_idx = sub_opc & 0x07
                 imm_val = 0
                 for i in range(imm_bytes):
                     imm_val |= rom_bytes[5 + i] << (8 * i)
-                alu_ops_24 = {0: 'adddi', 2: 'subdi', 7: 'cpdi'}
-                mnem_base = alu_ops_24.get(alu_idx)
-                if mnem_base and opsize == 16:
-                    mnem = mnem_base + '16_24'
-                    return f"{mnem} {addr24}, {imm_val}", nbytes
+                alu_ops = {0: 'adddi', 1: 'addci', 2: 'subdi', 3: 'sbcdi',
+                           4: 'anddi', 5: 'xordi', 6: 'ordi', 7: 'cpdi'}
+                mnem = alu_ops[alu_idx] + sz_suffix + suffix24
+                return f"{mnem} {addr24}, {imm_val}", nbytes
 
-            # ALU reg, (addr24) — load direction
+            # ALU reg, (addr24) — load and store direction (all sizes)
             if sub_opc >= 0x80 and nbytes == 5:
                 alu_base = sub_opc & 0xF0
                 reg_idx = sub_opc & 0x07
                 is_store = (sub_opc & 0x08) != 0
-                if not is_store and opsize == 16:
-                    if opsize == 8:
-                        reg_name = REG8_BY_INDEX.get(reg_idx)
+                if opsize == 8:
+                    reg_name = REG8_BY_INDEX.get(reg_idx)
+                else:
+                    reg_name = REG32_BY_INDEX.get(reg_idx)
+                if reg_name:
+                    if is_store:
+                        alu_store_ops = {0x80: 'adddm', 0x90: 'addcdm', 0xA0: 'subdm',
+                                         0xB0: 'sbcdm', 0xC0: 'anddm', 0xD0: 'xordm',
+                                         0xE0: 'ordm', 0xF0: 'cpdm'}
+                        mnem_base = alu_store_ops.get(alu_base)
+                        if mnem_base:
+                            mnem = mnem_base + sz_suffix + suffix24
+                            return f"{mnem} {addr24}, {reg_name}", nbytes
                     else:
-                        reg_name = REG32_BY_INDEX.get(reg_idx)
-                    alu_load_ops_24 = {0x80: 'addda', 0xA0: 'subda', 0xF0: 'cpda'}
-                    mnem_base = alu_load_ops_24.get(alu_base)
-                    if mnem_base and reg_name:
-                        mnem = mnem_base + '16_24'
-                        return f"{mnem} {reg_name}, {addr24}", nbytes
+                        alu_load_ops = {0x80: 'addda', 0x90: 'addcda', 0xA0: 'subda',
+                                        0xB0: 'sbcda', 0xC0: 'andda', 0xD0: 'xorda',
+                                        0xE0: 'orda', 0xF0: 'cpda'}
+                        mnem_base = alu_load_ops.get(alu_base)
+                        if mnem_base:
+                            mnem = mnem_base + sz_suffix + suffix24
+                            return f"{mnem} {reg_name}, {addr24}", nbytes
+
+            # INC/DEC (addr24): sub-opc 0x60+count / 0x68+count
+            if 0x60 <= sub_opc <= 0x6F and nbytes == 5:
+                is_dec = (sub_opc & 0x08) != 0
+                count = sub_opc & 0x07
+                if count == 0:
+                    count = 8
+                mnem = ('decdi' if is_dec else 'incdi') + sz_suffix + suffix24
+                return f"{mnem} {count}, {addr24}", nbytes
 
     # =========================================================================
     # Tier 37: Destination direct addressing (F1 + addr16 + sub-opcode)
@@ -2364,6 +2383,59 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
             reg_name = REG32_BY_INDEX.get(reg_idx)
             if reg_name:
                 return f"ldada_24 {reg_name}, {addr24}", nbytes
+
+        # BIT (addr24): sub-opc 0xC8+bit, nbytes=5
+        if 0xC8 <= sub_opc <= 0xCF and nbytes == 5:
+            bit_num = sub_opc & 0x07
+            return f"bitda_24 {bit_num}, {addr24}", nbytes
+
+        # SET (addr24): sub-opc 0xB8+bit, nbytes=5
+        if 0xB8 <= sub_opc <= 0xBF and nbytes == 5:
+            bit_num = sub_opc & 0x07
+            return f"setda_24 {bit_num}, {addr24}", nbytes
+
+        # RES (addr24): sub-opc 0xB0+bit, nbytes=5
+        if 0xB0 <= sub_opc <= 0xB7 and nbytes == 5:
+            bit_num = sub_opc & 0x07
+            return f"resda_24 {bit_num}, {addr24}", nbytes
+
+        # CHG (addr24): sub-opc 0xC0+bit, nbytes=5
+        if 0xC0 <= sub_opc <= 0xC7 and nbytes == 5:
+            bit_num = sub_opc & 0x07
+            return f"chgda_24 {bit_num}, {addr24}", nbytes
+
+        # TSET (addr24): sub-opc 0xA0+bit, nbytes=5
+        if 0xA0 <= sub_opc <= 0xA7 and nbytes == 5:
+            bit_num = sub_opc & 0x07
+            return f"tsetda_24 {bit_num}, {addr24}", nbytes
+
+        # INC (addr24): sub-opc 0x60+count, nbytes=5
+        if 0x60 <= sub_opc <= 0x67 and nbytes == 5:
+            count = sub_opc & 0x07
+            if count == 0:
+                count = 8
+            return f"incdd8_24 {count}, {addr24}", nbytes
+
+        # DEC (addr24): sub-opc 0x68+count, nbytes=5
+        if 0x68 <= sub_opc <= 0x6F and nbytes == 5:
+            count = sub_opc & 0x07
+            if count == 0:
+                count = 8
+            return f"decdd8_24 {count}, {addr24}", nbytes
+
+        # INCW (addr24): sub-opc 0x70+count, nbytes=5
+        if 0x70 <= sub_opc <= 0x77 and nbytes == 5:
+            count = sub_opc & 0x07
+            if count == 0:
+                count = 8
+            return f"incdd16_24 {count}, {addr24}", nbytes
+
+        # DECW (addr24): sub-opc 0x78+count, nbytes=5
+        if 0x78 <= sub_opc <= 0x7F and nbytes == 5:
+            count = sub_opc & 0x07
+            if count == 0:
+                count = 8
+            return f"decdd16_24 {count}, {addr24}", nbytes
 
     return None  # No native conversion available
 
