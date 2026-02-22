@@ -309185,7 +309185,7 @@ LABEL_F8B615:
 	lds32 xwa, 0
 	ld xbc, 0x1C00017
 	ld xde, 0xD
-	.byte 0x78, 0x08, 0x67	; JRL T, FmmIntMedleyFunc
+	jrl FmmIntMedleyFunc
 
 LABEL_F8B62D:
 	cp a, 0x6C

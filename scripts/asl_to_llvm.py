@@ -65,8 +65,7 @@ RESERVED_LABEL_NAMES = {
 # causing incorrect PC-relative displacements for JR/JRL/CALR.
 # Identified via byte-matching verification of the built ROM.
 DRIFTED_LABEL_NAMES = {
-    'fmmintmedleyfunc', 'fmmpdfunc', 'fmmpdmedleyfunc',
-    'fmmsmfmedleyfunc', 'fmmdiskmedleyselectfunc',
+    'fmmpdmedleyfunc', 'fmmsmfmedleyfunc', 'fmmdiskmedleyselectfunc',
 }
 
 # EQU names promoted to inline labels (suppressed from .equ emission).
