@@ -1640,8 +1640,6 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
                 base_name = REG32_BY_INDEX.get(base_idx)
                 if base_name:
                     # Format memory operand string
-                    # Skip d8=0 case: LLVM optimizes (reg + 0) to 2-byte no-disp,
-                    # but ROM uses 3-byte d8=0 encoding. Leave as .byte fallback.
                     mem_str = None
                     if has_disp:
                         d8 = disp_byte
@@ -1651,7 +1649,8 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
                             mem_str = f"({base_name} - {-d8})"
                         elif d8 > 0:
                             mem_str = f"({base_name} + {d8})"
-                        # d8 == 0: mem_str stays None → skip conversion
+                        else:
+                            mem_str = f"({base_name} + 256)"  # Force d8=0 encoding
                     else:
                         mem_str = f"({base_name})"
 
@@ -1697,7 +1696,6 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
                 operand_reg_idx = sub_opc_byte & 0x07
                 base_name = REG32_BY_INDEX.get(base_idx)
                 if base_name:
-                    # Skip d8=0: LLVM optimizes to shorter no-disp encoding
                     mem_str = None
                     if has_disp:
                         d8 = disp_byte
@@ -1707,10 +1705,10 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
                             mem_str = f"({base_name} - {-d8})"
                         elif d8 > 0:
                             mem_str = f"({base_name} + {d8})"
+                        else:
+                            mem_str = f"({base_name} + 256)"  # Force d8=0 encoding
                     else:
                         mem_str = f"({base_name})"
-                    if mem_str is None:
-                        pass  # d8=0, skip
                     # LD (mem), r8 — sub-opcode 0x40+r
                     elif 0x40 <= sub_opc_byte <= 0x47:
                         op_reg = REG8_BY_INDEX.get(operand_reg_idx)
@@ -1826,7 +1824,7 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
                 if sub_opc_byte in MEM_IMM_ALU_SUBOPC:
                     base_name = REG32_BY_INDEX.get(base_idx)
                     if base_name:
-                        # Build memory operand string (skip d8=0)
+                        # Build memory operand string
                         mem_str = None
                         if has_disp:
                             d8 = rom_bytes[1]
@@ -1836,7 +1834,8 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
                                 mem_str = f"({base_name} - {-d8})"
                             elif d8 > 0:
                                 mem_str = f"({base_name} + {d8})"
-                            # d8 == 0: skip
+                            else:
+                                mem_str = f"({base_name} + 256)"  # Force d8=0 encoding
                         else:
                             mem_str = f"({base_name})"
                         if mem_str is not None:
@@ -1874,7 +1873,8 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
                                 mem_str = f"({base_name} - {-d8})"
                             elif d8 > 0:
                                 mem_str = f"({base_name} + {d8})"
-                            # d8 == 0: skip (LLVM optimizes)
+                            else:
+                                mem_str = f"({base_name} + 256)"  # Force d8=0 encoding
                         else:
                             mem_str = f"({base_name})"
                         if mem_str is not None:
@@ -1895,7 +1895,8 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
                                 mem_str = f"({base_name} - {-d8})"
                             elif d8 > 0:
                                 mem_str = f"({base_name} + {d8})"
-                            # d8 == 0: skip (LLVM optimizes)
+                            else:
+                                mem_str = f"({base_name} + 256)"  # Force d8=0 encoding
                         else:
                             mem_str = f"({base_name})"
                         if mem_str is not None:
@@ -1977,16 +1978,16 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
             sub_opc = rom_bytes[2]
             base_opc = 0x60 if is_inc else 0x68
             if base_opc <= sub_opc <= base_opc + 7:
-                if d8 == 0:
-                    pass  # Skip d8=0: LLVM would emit 2-byte no-disp form
-                else:
-                    count = sub_opc - base_opc
-                    if count == 0:
-                        count = 8
-                    reg_name = REG32_BY_INDEX.get(r_idx)
-                    if reg_name:
+                count = sub_opc - base_opc
+                if count == 0:
+                    count = 8
+                reg_name = REG32_BY_INDEX.get(r_idx)
+                if reg_name:
+                    mnem = 'incm8' if is_inc else 'decm8'
+                    if d8 == 0:
+                        return f"{mnem} {count}, ({reg_name} + 256)", 3  # Force d8=0
+                    else:
                         disp = d8 if d8 <= 127 else d8 - 256
-                        mnem = 'incm8' if is_inc else 'decm8'
                         if disp >= 0:
                             return f"{mnem} {count}, ({reg_name} + {disp})", 3
                         else:
@@ -2011,16 +2012,16 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
             sub_opc = rom_bytes[2]
             base_opc = 0x60 if is_inc else 0x68
             if base_opc <= sub_opc <= base_opc + 7:
-                if d8 == 0:
-                    pass  # Skip d8=0
-                else:
-                    count = sub_opc - base_opc
-                    if count == 0:
-                        count = 8
-                    reg_name = REG32_BY_INDEX.get(r_idx)
-                    if reg_name:
+                count = sub_opc - base_opc
+                if count == 0:
+                    count = 8
+                reg_name = REG32_BY_INDEX.get(r_idx)
+                if reg_name:
+                    mnem = 'incm' if is_inc else 'decm'
+                    if d8 == 0:
+                        return f"{mnem} {count}, ({reg_name} + 256)", 3  # Force d8=0
+                    else:
                         disp = d8 if d8 <= 127 else d8 - 256
-                        mnem = 'incm' if is_inc else 'decm'
                         if disp >= 0:
                             return f"{mnem} {count}, ({reg_name} + {disp})", 3
                         else:
@@ -2065,7 +2066,8 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
                                 mem_str = f"({base_name} - {-d8})"
                             elif d8 > 0:
                                 mem_str = f"({base_name} + {d8})"
-                            # d8 == 0: skip
+                            else:
+                                mem_str = f"({base_name} + 256)"  # Force d8=0 encoding
                         else:
                             mem_str = f"({base_name})"
                         if mem_str is not None:
@@ -2086,11 +2088,11 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
             if rom_bytes[2] == 0x04:
                 r_idx = prefix & 0x07
                 d8 = rom_bytes[1]
-                if d8 == 0:
-                    pass  # Skip d8=0
-                else:
-                    reg_name = REG32_BY_INDEX.get(r_idx)
-                    if reg_name:
+                reg_name = REG32_BY_INDEX.get(r_idx)
+                if reg_name:
+                    if d8 == 0:
+                        return f"pushm ({reg_name} + 256)", 3  # Force d8=0
+                    else:
                         disp = d8 if d8 <= 127 else d8 - 256
                         if disp >= 0:
                             return f"pushm ({reg_name} + {disp})", 3
