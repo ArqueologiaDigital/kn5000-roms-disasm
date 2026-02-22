@@ -1347,7 +1347,7 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
 
     # Tier 8: JR/JRcc (2-byte relative jump: 0x60+cc, d8)
     # Use ADDR_TO_LABEL (reliable) first, then ADDR_TO_LABEL_ALL for LABEL_XXXXXX only.
-    # Named labels in ADDR_TO_LABEL_ALL may have drifted positions.
+    # Named labels in ADDR_TO_LABEL_ALL may have drifted positions causing wrong offsets.
     if nbytes == 2 and rom_bytes is not None and addr is not None:
         opcode = rom_bytes[0]
         if 0x60 <= opcode <= 0x6F and mnem_upper == 'JR':
@@ -2056,7 +2056,7 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
             if 0x20 <= sub_opc <= 0x27 and nbytes == 4:
                 reg_idx = sub_opc & 0x07
                 if opsize == 8:
-                    reg_name = REG8_TO_GPR.get(reg_idx)
+                    reg_name = REG8_BY_INDEX.get(reg_idx)
                 else:
                     reg_name = REG32_BY_INDEX.get(reg_idx)
                 if reg_name:
@@ -2080,7 +2080,7 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
                 reg_idx = sub_opc & 0x07
                 is_store = (sub_opc & 0x08) != 0  # bit 3 set = result to memory
                 if opsize == 8:
-                    reg_name = REG8_TO_GPR.get(reg_idx)
+                    reg_name = REG8_BY_INDEX.get(reg_idx)
                 else:
                     reg_name = REG32_BY_INDEX.get(reg_idx)
                 if reg_name:
@@ -2128,7 +2128,7 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
             if 0x20 <= sub_opc <= 0x27 and nbytes == 5:
                 reg_idx = sub_opc & 0x07
                 if opsize == 8:
-                    reg_name = REG8_TO_GPR.get(reg_idx)
+                    reg_name = REG8_BY_INDEX.get(reg_idx)
                 else:
                     reg_name = REG32_BY_INDEX.get(reg_idx)
                 if reg_name:
@@ -2177,7 +2177,7 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
         # LD (addr16), reg8: sub-opc 0x40+reg8, nbytes=4
         if 0x40 <= sub_opc <= 0x47 and nbytes == 4:
             reg_idx = sub_opc & 0x07
-            reg_name = REG8_TO_GPR.get(reg_idx)
+            reg_name = REG8_BY_INDEX.get(reg_idx)
             if reg_name:
                 return f"stda8 {addr16}, {reg_name}", nbytes
 
@@ -2273,7 +2273,7 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
         # LD (addr24), reg8: sub-opc 0x40+reg8, nbytes=5
         if 0x40 <= sub_opc <= 0x47 and nbytes == 5:
             reg_idx = sub_opc & 0x07
-            reg_name = REG8_TO_GPR.get(reg_idx)
+            reg_name = REG8_BY_INDEX.get(reg_idx)
             if reg_name:
                 return f"stda8_24 {addr24}, {reg_name}", nbytes
 
