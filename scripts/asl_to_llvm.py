@@ -654,6 +654,16 @@ def convert_line(line, in_file_path):
             result += f"\t{comment}" if label else comment
         return result
 
+    # When a label has data AND an address comment ("; XXXXXX"), move the
+    # address comment to the label line. This keeps the expected address
+    # visually associated with the label rather than buried after data.
+    label_addr_suffix = ""
+    if label and comment and rest:
+        m_addr_cmt = re.match(r'^;\s*[0-9A-Fa-f]{6}\s*$', comment.strip())
+        if m_addr_cmt:
+            label_addr_suffix = f"\t{comment}"
+            comment = None
+
     # Get first word
     first_word, remainder = get_first_word(rest)
     first_upper = first_word.upper()
@@ -706,7 +716,7 @@ def convert_line(line, in_file_path):
         addr_str = convert_expression(remainder.strip())
         result = ""
         if label:
-            result = f"{label}:\n"
+            result = f"{label}:{label_addr_suffix}\n"
         result += f"\t.org {addr_str} - 0xE00000, 0xFF"
         if comment:
             result += f"\t{comment}"
@@ -762,10 +772,10 @@ def convert_line(line, in_file_path):
     # ---- Data directives ----
 
     if first_upper == 'DB':
-        return convert_db(label, remainder.strip(), comment, in_file_path)
+        return convert_db(label, remainder.strip(), comment, in_file_path, label_addr_suffix)
 
     if first_upper == 'DW':
-        return convert_dw(label, remainder.strip(), comment)
+        return convert_dw(label, remainder.strip(), comment, label_addr_suffix)
 
     if first_upper == 'DD':
         args_raw = remainder.strip()
@@ -783,7 +793,7 @@ def convert_line(line, in_file_path):
                 original = f"DD {args_raw}"
                 result = ""
                 if label:
-                    result = f"{label}:\n"
+                    result = f"{label}:{label_addr_suffix}\n"
                 # Emit as .long values (4 bytes each, little-endian)
                 longs = []
                 for i in range(0, nbytes, 4):
@@ -816,7 +826,7 @@ def convert_line(line, in_file_path):
             if rom_bytes is not None:
                 result = ""
                 if label:
-                    result = f"{label}:\n"
+                    result = f"{label}:{label_addr_suffix}\n"
                 original = f"DD {args_raw}"
                 longs = []
                 for i in range(0, nbytes, 4):
@@ -835,7 +845,7 @@ def convert_line(line, in_file_path):
         values = convert_expression(args_raw)
         result = ""
         if label:
-            result = f"{label}:\n"
+            result = f"{label}:{label_addr_suffix}\n"
         result += f"\t.long {values}"
         if comment:
             result += f"\t{comment}"
@@ -846,7 +856,7 @@ def convert_line(line, in_file_path):
         values = convert_expression(remainder.strip())
         result = ""
         if label:
-            result = f"{label}:\n"
+            result = f"{label}:{label_addr_suffix}\n"
         result += f"\t.space {values}"
         if comment:
             result += f"\t{comment}"
@@ -865,7 +875,7 @@ def convert_line(line, in_file_path):
         fsize = os.path.getsize(bin_path) if os.path.exists(bin_path) else 0
         result = ""
         if label:
-            result = f"{label}:\n"
+            result = f"{label}:{label_addr_suffix}\n"
         llvm_path = f"../{path_str}"
         result += f'\t.incbin "{llvm_path}"'
         if comment:
@@ -898,7 +908,7 @@ def convert_line(line, in_file_path):
 
         result = ""
         if label:
-            result = f"{label}:\n"
+            result = f"{label}:{label_addr_suffix}\n"
 
         if BLOCK_BUFFER is not None and nbytes is not None:
             # Use block buffer for macro bytes
@@ -943,7 +953,7 @@ def convert_line(line, in_file_path):
     # Emit as native LLVM syntax. If the LLVM backend doesn't support
     # the instruction, it will error. We'll fix those iteratively.
     if is_instruction(first_word):
-        return convert_instruction(label, first_word, remainder.strip(), comment)
+        return convert_instruction(label, first_word, remainder.strip(), comment, label_addr_suffix)
 
     # ---- Unknown / fallthrough ----
     # If no operands and word looks like a label (starts with letter,
@@ -951,7 +961,7 @@ def convert_line(line, in_file_path):
     if not remainder.strip() and re.match(r'^[A-Za-z_]\w*$', first_word):
         result = ""
         if label:
-            result = f"{label}:\n"
+            result = f"{label}:{label_addr_suffix}\n"
         result += f"{first_word}:"
         if comment:
             result += f"\t{comment}"
@@ -960,7 +970,7 @@ def convert_line(line, in_file_path):
     # Otherwise preserve as-is (may cause assembler error)
     result = ""
     if label:
-        result = f"{label}:\n"
+        result = f"{label}:{label_addr_suffix}\n"
     converted_rest = convert_expression(rest)
     result += f"\t{converted_rest}"
     if comment:
@@ -1247,13 +1257,13 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes):
     return None
 
 
-def convert_instruction(label, mnemonic, operands_str, comment):
+def convert_instruction(label, mnemonic, operands_str, comment, label_addr_suffix=""):
     """Convert a CPU instruction to native LLVM or .byte fallback."""
     global BLOCK_CURSOR, NATIVE_INSTR_COUNT, BYTE_FALLBACK_COUNT
 
     result = ""
     if label:
-        result = f"{label}:\n"
+        result = f"{label}:{label_addr_suffix}\n"
 
     addr = ADDR_TRACKER.get_addr()
     nbytes = get_instruction_size_from_rom(addr) if addr is not None else None
@@ -1318,42 +1328,71 @@ def _escape_string_bytes(byte_seq):
 
 
 def _try_emit_as_string(rom_bytes):
-    """Try to emit rom_bytes as .ascii/.asciz instead of .byte.
+    """Try to emit rom_bytes as .ascii/.asciz/.byte segments.
 
-    Returns a string directive or None if the bytes aren't a clean string.
-    Only converts if the printable prefix is at least 4 chars.
+    Splits mixed content into separate directives for readability:
+    - Runs of printable ASCII (>= 4 chars) → .ascii or .asciz
+    - Non-printable bytes → .byte
+
+    Returns a string of directives or None if no string segments found.
     """
     if len(rom_bytes) < 4:
         return None
 
-    # Find the longest initial run of printable ASCII bytes
-    printable_end = 0
-    for i, b in enumerate(rom_bytes):
-        if 0x20 <= b <= 0x7E:
-            printable_end = i + 1
+    # Scan for runs of printable ASCII (>= 4 chars)
+    segments = []  # (type, data) where type is 'bytes' or 'string'
+    i = 0
+    while i < len(rom_bytes):
+        # Check for a run of printable ASCII
+        j = i
+        while j < len(rom_bytes) and 0x20 <= rom_bytes[j] <= 0x7E:
+            j += 1
+        if j - i >= 4:
+            # Found a printable string run
+            if i > 0 or segments:
+                # Flush preceding non-printable bytes
+                pass  # Already handled below
+            # Check for null terminator
+            if j < len(rom_bytes) and rom_bytes[j] == 0x00:
+                segments.append(('asciz', rom_bytes[i:j]))
+                i = j + 1  # Skip the null byte
+            else:
+                segments.append(('ascii', rom_bytes[i:j]))
+                i = j
         else:
-            break
+            # Non-printable byte (or short printable run)
+            # Collect consecutive non-printable bytes
+            k = i
+            while k < len(rom_bytes):
+                # Check if we're at the start of a printable run >= 4
+                if 0x20 <= rom_bytes[k] <= 0x7E:
+                    run_end = k
+                    while run_end < len(rom_bytes) and 0x20 <= rom_bytes[run_end] <= 0x7E:
+                        run_end += 1
+                    if run_end - k >= 4:
+                        break  # Start of a new string run
+                k += 1
+            if k > i:
+                segments.append(('bytes', rom_bytes[i:k]))
+            i = k
 
-    if printable_end < 4:
+    # Only use this if we found at least one string segment
+    has_string = any(t in ('ascii', 'asciz') for t, _ in segments)
+    if not has_string:
         return None
 
-    remaining = rom_bytes[printable_end:]
-
-    if len(remaining) == 0:
-        # All printable — use .ascii
-        s = _escape_string_bytes(rom_bytes[:printable_end])
-        return f'.ascii "{s}"'
-    elif remaining[0] == 0x00:
-        # Null-terminated string
-        s = _escape_string_bytes(rom_bytes[:printable_end])
-        trailing = remaining[1:]
-        if len(trailing) == 0:
-            return f'.asciz "{s}"'
-        else:
-            byte_str = ', '.join(f'0x{b:02x}' for b in trailing)
-            return f'.asciz "{s}"\n\t.byte {byte_str}'
-    else:
-        return None
+    parts = []
+    for seg_type, seg_data in segments:
+        if seg_type == 'bytes':
+            byte_str = ', '.join(f'0x{b:02x}' for b in seg_data)
+            parts.append(f'.byte {byte_str}')
+        elif seg_type == 'ascii':
+            s = _escape_string_bytes(seg_data)
+            parts.append(f'.ascii "{s}"')
+        elif seg_type == 'asciz':
+            s = _escape_string_bytes(seg_data)
+            parts.append(f'.asciz "{s}"')
+    return '\n\t'.join(parts)
 
 
 def _count_db_bytes(args):
@@ -1409,12 +1448,12 @@ def _dw_args_all_numeric(args):
     return True
 
 
-def convert_db(label, args, comment, in_file_path):
+def convert_db(label, args, comment, in_file_path, label_addr_suffix=""):
     """Convert db directive - handle strings, bytes, and dup patterns."""
     global BLOCK_CURSOR
     result = ""
     if label:
-        result = f"{label}:\n"
+        result = f"{label}:{label_addr_suffix}\n"
 
     # Track bytes for address advancement
     nbytes = _count_db_bytes(args)
@@ -1557,12 +1596,12 @@ def _try_dw_label_arithmetic(args):
     return symbolic
 
 
-def convert_dw(label, args, comment):
+def convert_dw(label, args, comment, label_addr_suffix=""):
     """Convert dw to .short, falling back to ROM bytes for label references."""
     global BLOCK_CURSOR
     result = ""
     if label:
-        result = f"{label}:\n"
+        result = f"{label}:{label_addr_suffix}\n"
 
     nvalues = len(split_operands(args))
     nbytes = 2 * nvalues
