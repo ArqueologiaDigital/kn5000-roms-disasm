@@ -60,6 +60,15 @@ RESERVED_LABEL_NAMES = {
     'lt', 'le', 'ge', 'gt', 'ule', 'ugt', 't',
 }
 
+# Named labels with drifted inline positions in the LLVM output.
+# These labels are at wrong addresses when emitted as inline labels,
+# causing incorrect PC-relative displacements for JR/JRL/CALR.
+# Identified via byte-matching verification of the built ROM.
+DRIFTED_LABEL_NAMES = {
+    'fmmintmedleyfunc', 'fmmpdfunc', 'fmmpdmedleyfunc',
+    'fmmsmfmedleyfunc', 'fmmdiskmedleyselectfunc',
+}
+
 # TLCS-900 condition code names for JR/JRL/JPcc instructions
 TLCS900_CC_NAMES = {
     0x0: 'f', 0x1: 'lt', 0x2: 'le', 0x3: 'ule',
@@ -1346,8 +1355,7 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
                         return native_asm, 2
 
     # Tier 8: JR/JRcc (2-byte relative jump: 0x60+cc, d8)
-    # Use ADDR_TO_LABEL (reliable) first, then ADDR_TO_LABEL_ALL for LABEL_XXXXXX only.
-    # Named labels in ADDR_TO_LABEL_ALL may have drifted positions causing wrong offsets.
+    # Use ADDR_TO_LABEL (reliable) first, then ADDR_TO_LABEL_ALL (all tracked labels).
     if nbytes == 2 and rom_bytes is not None and addr is not None:
         opcode = rom_bytes[0]
         if 0x60 <= opcode <= 0x6F and mnem_upper == 'JR':
@@ -1358,14 +1366,14 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
             target = addr + 2 + d8
             label = ADDR_TO_LABEL.get(target)
             if not label:
-                lbl_all = ADDR_TO_LABEL_ALL.get(target)
-                if lbl_all and lbl_all.startswith('LABEL_'):
-                    label = lbl_all
-            if label and label.lower() not in RESERVED_LABEL_NAMES:
-                if cc == 8:  # T (always/unconditional)
-                    return f"jr {label}", 2
-                else:
-                    return f"jr {TLCS900_CC_NAMES[cc]}, {label}", 2
+                label = ADDR_TO_LABEL_ALL.get(target)
+            if label:
+                ll = label.lower()
+                if ll not in RESERVED_LABEL_NAMES and ll not in DRIFTED_LABEL_NAMES:
+                    if cc == 8:  # T (always/unconditional)
+                        return f"jr {label}", 2
+                    else:
+                        return f"jr {TLCS900_CC_NAMES[cc]}, {label}", 2
 
     # Tier 9: JRL/JRLcc (3-byte relative jump: 0x70+cc, d16_LE)
     if nbytes == 3 and rom_bytes is not None and addr is not None:
@@ -1378,14 +1386,14 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
             target = addr + 3 + d16
             label = ADDR_TO_LABEL.get(target)
             if not label:
-                lbl_all = ADDR_TO_LABEL_ALL.get(target)
-                if lbl_all and lbl_all.startswith('LABEL_'):
-                    label = lbl_all
-            if label and label.lower() not in RESERVED_LABEL_NAMES:
-                if cc == 8:  # T (unconditional)
-                    return f"jrl {label}", 3
-                else:
-                    return f"jrl {TLCS900_CC_NAMES[cc]}, {label}", 3
+                label = ADDR_TO_LABEL_ALL.get(target)
+            if label:
+                ll = label.lower()
+                if ll not in RESERVED_LABEL_NAMES and ll not in DRIFTED_LABEL_NAMES:
+                    if cc == 8:  # T (unconditional)
+                        return f"jrl {label}", 3
+                    else:
+                        return f"jrl {TLCS900_CC_NAMES[cc]}, {label}", 3
 
     # Tier 10: CALR (3-byte relative call: 0x1E, d16_LE)
     if nbytes == 3 and rom_bytes is not None and addr is not None:
@@ -1396,11 +1404,11 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
             target = addr + 3 + d16
             label = ADDR_TO_LABEL.get(target)
             if not label:
-                lbl_all = ADDR_TO_LABEL_ALL.get(target)
-                if lbl_all and lbl_all.startswith('LABEL_'):
-                    label = lbl_all
-            if label and label.lower() not in RESERVED_LABEL_NAMES:
-                return f"calr {label}", 3
+                label = ADDR_TO_LABEL_ALL.get(target)
+            if label:
+                ll = label.lower()
+                if ll not in RESERVED_LABEL_NAMES and ll not in DRIFTED_LABEL_NAMES:
+                    return f"calr {label}", 3
 
     # Tier 10b: DJNZ (3-byte: prefix + 0x1C + d8)
     # 16-bit: D8+reg, 0x1C, d8 (decrement 16-bit register, jump if not zero)
@@ -1414,10 +1422,12 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
             target = addr + 3 + d8
             label = ADDR_TO_LABEL.get(target)
             if not label:
-                lbl_all = ADDR_TO_LABEL_ALL.get(target)
-                if lbl_all and lbl_all.startswith('LABEL_'):
-                    label = lbl_all
-            if label and label.lower() not in RESERVED_LABEL_NAMES:
+                label = ADDR_TO_LABEL_ALL.get(target)
+            if label:
+                ll = label.lower()
+                if ll in RESERVED_LABEL_NAMES or ll in DRIFTED_LABEL_NAMES:
+                    label = None
+            if label:
                 if 0xD8 <= prefix <= 0xDF:
                     # 16-bit DJNZ uses GPR (32-bit names) with D8 prefix
                     reg_name = REG32_BY_INDEX[prefix & 0x07]
@@ -2436,6 +2446,41 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
             if count == 0:
                 count = 8
             return f"decdd16_24 {count}, {addr24}", nbytes
+
+    # Tier 39: Block transfer variants (non-standard prefix bytes)
+    # Standard LDI/LDIR/LDD/LDDR use 0x80 prefix (handled by existing _SIMPLE_LENGTHS).
+    # ROM uses variant prefixes (0x85, 0x83, 0x93, 0x95) that need separate instructions.
+    BLOCK_TRANSFER_MNEMONICS = {
+        'LDIRW_95', 'LDIW', 'LDIR', 'LDI', 'LDDR', 'LDDR_85',
+        'LDIR_83', 'LDIRW_93', 'CPIR',
+    }
+    if nbytes == 2 and rom_bytes is not None and mnem_upper in BLOCK_TRANSFER_MNEMONICS:
+        prefix = rom_bytes[0]
+        sub_opc = rom_bytes[1]
+        # Map (prefix, sub_opc) to LLVM instruction mnemonic
+        BLOCK_XFER_MAP = {
+            (0x85, 0x10): 'ldi85',
+            (0x85, 0x11): 'ldir85',
+            (0x85, 0x13): 'lddr85',
+            (0x83, 0x11): 'ldir83',
+            (0x83, 0x13): 'lddr83',
+            (0x83, 0x15): 'cpir83',
+            (0x95, 0x10): 'ldiw',
+            (0x95, 0x11): 'ldirw',
+            (0x93, 0x11): 'ldirw93',
+        }
+        native_mnem = BLOCK_XFER_MAP.get((prefix, sub_opc))
+        if native_mnem:
+            return native_mnem, 2
+
+    # Tier 40: F2 conditional CALL (5-byte: F2 + addr24_LE + 0xE0+cc)
+    if nbytes == 5 and rom_bytes is not None and mnem_upper == 'CALL':
+        if rom_bytes[0] == 0xF2:
+            sub_opc = rom_bytes[4]
+            if 0xE0 <= sub_opc <= 0xEF:
+                addr24 = rom_bytes[1] | (rom_bytes[2] << 8) | (rom_bytes[3] << 16)
+                cc = sub_opc & 0x0F
+                return f"callcc_24 {cc}, 0x{addr24:X}", 5
 
     return None  # No native conversion available
 
