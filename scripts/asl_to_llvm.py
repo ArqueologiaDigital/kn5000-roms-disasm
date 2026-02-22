@@ -1815,6 +1815,35 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
                             imm_val = rom_bytes[2 + disp_offset] | (rom_bytes[3 + disp_offset] << 8)
                             return f"ldmi16 {mem_str}, 0x{imm_val:X}", expected_nbytes
 
+    # Tier 29: MUL/MULS/DIV/DIVS register-immediate
+    # ASL uses macro mnemonics like MULS_WA, DIVS_BC, MUL_A, MULW_WA, etc.
+    # 8-bit: C8+r, sub_opc, imm8 (3 bytes)
+    # 16-bit: D8+r, sub_opc, imm16_LE (4 bytes)
+    MULDIV_IMM_SUBOPC = {0x08: 'mul', 0x09: 'muls', 0x0A: 'div', 0x0B: 'divs'}
+    MULDIV_ASL_PREFIXES = {'MUL', 'MULS', 'MULW', 'DIV', 'DIVS', 'DIVW'}
+    if rom_bytes is not None and nbytes in (3, 4):
+        # Check if ASL mnemonic matches (MUL_*, MULS_*, etc.)
+        base_mnem = mnem_upper.split('_')[0] if '_' in mnem_upper else mnem_upper
+        if base_mnem in MULDIV_ASL_PREFIXES:
+            prefix = rom_bytes[0]
+            sub_opc = rom_bytes[1]
+            if sub_opc in MULDIV_IMM_SUBOPC:
+                native_mnem = MULDIV_IMM_SUBOPC[sub_opc]
+                if 0xC8 <= prefix <= 0xCF and nbytes == 3:
+                    # 8-bit register prefix
+                    r_idx = prefix & 0x07
+                    reg_name = REG8_BY_INDEX.get(r_idx)
+                    if reg_name:
+                        imm_val = rom_bytes[2]
+                        return f"{native_mnem} {reg_name}, 0x{imm_val:X}", 3
+                elif 0xD8 <= prefix <= 0xDF and nbytes == 4:
+                    # 16-bit register prefix
+                    r_idx = prefix & 0x07
+                    reg_name = REG16_BY_INDEX.get(r_idx)
+                    if reg_name and r_idx != 7:  # SP not in GR16
+                        imm_val = rom_bytes[2] | (rom_bytes[3] << 8)
+                        return f"{native_mnem} {reg_name}, 0x{imm_val:X}", 4
+
     return None
 
 
