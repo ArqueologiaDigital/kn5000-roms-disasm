@@ -1379,6 +1379,36 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
                 return "push_f", 1
             elif mnem_upper == 'POP' and rom_bytes[0] == 0x19:
                 return "pop_f", 1
+    # ROM-bytes-only fallback for 1-byte PUSH/POP and other single-byte opcodes
+    if nbytes == 1 and rom_bytes is not None and not operands_str:
+        b = rom_bytes[0]
+        if 0x28 <= b <= 0x2E and mnem_upper == 'PUSH':
+            r_idx = b - 0x28
+            reg = REG16_BY_INDEX.get(r_idx)
+            if reg:
+                return f"pushw {reg}", 1
+        elif 0x38 <= b <= 0x3E and mnem_upper == 'PUSH':
+            r_idx = b - 0x38
+            reg = REG32_BY_INDEX.get(r_idx)
+            if reg:
+                return f"push {reg}", 1
+        elif 0x48 <= b <= 0x4E and mnem_upper == 'POP':
+            r_idx = b - 0x48
+            reg = REG16_BY_INDEX.get(r_idx)
+            if reg:
+                return f"popw {reg}", 1
+        elif 0x58 <= b <= 0x5E and mnem_upper == 'POP':
+            r_idx = b - 0x58
+            reg = REG32_BY_INDEX.get(r_idx)
+            if reg:
+                return f"pop {reg}", 1
+        elif b == 0x02 and mnem_upper == 'PUSH': return "push_sr", 1
+        elif b == 0x03 and mnem_upper == 'POP': return "pop_sr", 1
+        elif b == 0x14 and mnem_upper == 'PUSH': return "push_a", 1
+        elif b == 0x15 and mnem_upper == 'POP': return "pop_a", 1
+        elif b == 0x18 and mnem_upper == 'PUSH': return "push_f", 1
+        elif b == 0x19 and mnem_upper == 'POP': return "pop_f", 1
+        elif b == 0x16 and mnem_upper == 'EX': return "ex_ff", 1
     # 1-byte flag manipulation
     if nbytes == 1 and rom_bytes is not None:
         SINGLE_BYTE_MAP = {
