@@ -309217,7 +309217,7 @@ LABEL_F8B66A:
 	lds32 xwa, 0
 	ld xbc, 0x1C00017
 	ld xde, 0xD
-	.byte 0x1e, 0x41, 0x6d	; CALR FmmDiskMedleySelectFunc
+	calr FmmDiskMedleySelectFunc
 	ret
 
 LABEL_F8B67F:
