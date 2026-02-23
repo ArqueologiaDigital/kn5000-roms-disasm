@@ -761,7 +761,8 @@ Boot_Init__pause2:
 	ld (xbc), a
 
 	; === Check Boot Source ===
-	.byte 0x68, 0x00	; JR T, $+2	; nop-like branch
+	jr __jrt_nop_9FB652	; nop-like branch
+__jrt_nop_9FB652:
 	dd82 0x38, 0xC8	; Check Port E bit 0
 	jr nz, Boot_SkipFDCCheck
 
@@ -1109,7 +1110,7 @@ Boot_ClearRAM__copy1_done:
 	ldir83
 	djnz16 wa, -5	; DJNZ WA, -5
 Boot_ClearRAM__copy2_done:
-	.byte 0x78, 0x42, 0xfe	; JRL_T Boot_Init+014Bh	; return to caller at 0xFFB633
+	jrl Boot_Init+0x14B	; return to caller at 0xFFB633
 	ret	; never reached
 
 ; =============================================================================
@@ -2313,7 +2314,7 @@ Boot_DetectDiskType:
 	dec 2, xsp	; DEC 2, XSP - allocate 2 bytes
 	push xiz	; 3e
 	ldmi8 (xsp + 4), 0xFF	; LD (XSP+04h), 0xFF - default type
-	.byte 0x0b, 0x00, 0x02	; PUSH 0200h - sector size
+	pushw 0x200	; PUSH 0200h - sector size
 	call 0xFFFB56	; CALL 0xFFFB56 - allocate buffer
 	inc 2, xsp	; INC 2, XSP - pop arg
 	ld xiz, xhl	; LD XIZ, XHL - save buffer ptr
@@ -2323,9 +2324,9 @@ Boot_DetectDiskType:
 	calr FDC_ReadSectorWrapper	; CALR FDC_ReadSectorWrapper
 
 	; Check signature at offset 0xA000 -> type 1
-	.byte 0x0b, 0x26, 0x00	; PUSH 0026h - signature length
-	.byte 0x0b, 0xff, 0x00	; PUSH 00FFh - ???
-	.byte 0x0b, 0x00, 0xa0	; PUSH 0A000h - offset
+	pushw 0x26	; PUSH 0026h - signature length
+	pushw 0xFF	; PUSH 00FFh - ???
+	pushw 0xA000	; PUSH 0A000h - offset
 	push xiz	; 3e - buffer ptr
 	call 0xFFFBDC	; CALL 0xFFFBDC - check signature
 	add xsp, 0xA	; ADD XSP, 0Ah - pop 10 bytes
@@ -2335,9 +2336,9 @@ Boot_DetectDiskType:
 	jrl Boot_DetectDiskType__done	; JRL T, .done
 
 Boot_DetectDiskType__check_type2:
-	.byte 0x0b, 0x26, 0x00	; PUSH 0026h
-	.byte 0x0b, 0xff, 0x00	; PUSH 00FFh
-	.byte 0x0b, 0x28, 0xa0	; PUSH 0A028h - offset
+	pushw 0x26	; PUSH 0026h
+	pushw 0xFF	; PUSH 00FFh
+	pushw 0xA028	; PUSH 0A028h - offset
 	push xiz	; 3e
 	call 0xFFFBDC	; CALL 0xFFFBDC
 	add xsp, 0xA	; ADD XSP, 0Ah
@@ -2347,9 +2348,9 @@ Boot_DetectDiskType__check_type2:
 	jrl Boot_DetectDiskType__done	; JRL T, .done
 
 Boot_DetectDiskType__check_type3:
-	.byte 0x0b, 0x26, 0x00	; PUSH 0026h
-	.byte 0x0b, 0xff, 0x00	; PUSH 00FFh
-	.byte 0x0b, 0x78, 0xa0	; PUSH 0A078h - offset
+	pushw 0x26	; PUSH 0026h
+	pushw 0xFF	; PUSH 00FFh
+	pushw 0xA078	; PUSH 0A078h - offset
 	push xiz	; 3e
 	call 0xFFFBDC	; CALL 0xFFFBDC
 	add xsp, 0xA	; ADD XSP, 0Ah
@@ -2359,9 +2360,9 @@ Boot_DetectDiskType__check_type3:
 	jrl Boot_DetectDiskType__done	; JRL T, .done
 
 Boot_DetectDiskType__check_type4:
-	.byte 0x0b, 0x26, 0x00	; PUSH 0026h
-	.byte 0x0b, 0xff, 0x00	; PUSH 00FFh
-	.byte 0x0b, 0xa0, 0xa0	; PUSH 0A0A0h - offset
+	pushw 0x26	; PUSH 0026h
+	pushw 0xFF	; PUSH 00FFh
+	pushw 0xA0A0	; PUSH 0A0A0h - offset
 	push xiz	; 3e
 	call 0xFFFBDC	; CALL 0xFFFBDC
 	add xsp, 0xA	; ADD XSP, 0Ah
@@ -2371,9 +2372,9 @@ Boot_DetectDiskType__check_type4:
 	jr Boot_DetectDiskType__done	; JR T, .done
 
 Boot_DetectDiskType__check_type5:
-	.byte 0x0b, 0x26, 0x00	; PUSH 0026h
-	.byte 0x0b, 0xff, 0x00	; PUSH 00FFh
-	.byte 0x0b, 0xf0, 0xa0	; PUSH 0A0F0h - offset
+	pushw 0x26	; PUSH 0026h
+	pushw 0xFF	; PUSH 00FFh
+	pushw 0xA0F0	; PUSH 0A0F0h - offset
 	push xiz	; 3e
 	call 0xFFFBDC	; CALL 0xFFFBDC
 	add xsp, 0xA	; ADD XSP, 0Ah
@@ -2383,9 +2384,9 @@ Boot_DetectDiskType__check_type5:
 	jr Boot_DetectDiskType__done	; JR T, .done
 
 Boot_DetectDiskType__check_type6:
-	.byte 0x0b, 0x26, 0x00	; PUSH 0026h
-	.byte 0x0b, 0xff, 0x00	; PUSH 00FFh
-	.byte 0x0b, 0x18, 0xa1	; PUSH 0A118h - offset
+	pushw 0x26	; PUSH 0026h
+	pushw 0xFF	; PUSH 00FFh
+	pushw 0xA118	; PUSH 0A118h - offset
 	push xiz	; 3e
 	call 0xFFFBDC	; CALL 0xFFFBDC
 	add xsp, 0xA	; ADD XSP, 0Ah
@@ -2395,9 +2396,9 @@ Boot_DetectDiskType__check_type6:
 	jr Boot_DetectDiskType__done	; JR T, .done
 
 Boot_DetectDiskType__check_type7:
-	.byte 0x0b, 0x26, 0x00	; PUSH 0026h
-	.byte 0x0b, 0xff, 0x00	; PUSH 00FFh
-	.byte 0x0b, 0x50, 0xa0	; PUSH 0A050h - offset
+	pushw 0x26	; PUSH 0026h
+	pushw 0xFF	; PUSH 00FFh
+	pushw 0xA050	; PUSH 0A050h - offset
 	push xiz	; 3e
 	call 0xFFFBDC	; CALL 0xFFFBDC
 	add xsp, 0xA	; ADD XSP, 0Ah
@@ -2407,9 +2408,9 @@ Boot_DetectDiskType__check_type7:
 	jr Boot_DetectDiskType__done	; JR T, .done
 
 Boot_DetectDiskType__check_type8:
-	.byte 0x0b, 0x26, 0x00	; PUSH 0026h
-	.byte 0x0b, 0xff, 0x00	; PUSH 00FFh
-	.byte 0x0b, 0xc8, 0xa0	; PUSH 0A0C8h - offset
+	pushw 0x26	; PUSH 0026h
+	pushw 0xFF	; PUSH 00FFh
+	pushw 0xA0C8	; PUSH 0A0C8h - offset
 	push xiz	; 3e
 	call 0xFFFBDC	; CALL 0xFFFBDC
 	add xsp, 0xA	; ADD XSP, 0Ah
@@ -2707,8 +2708,8 @@ Boot_CopySectorsEx__cse_done:
 ; Address: 0x9FC354
 ; =============================================================================
 Boot_ClearScreen:
-	.byte 0x0b, 0x08, 0x00	; PUSH 0x0008 - color
-	.byte 0x0b, 0x02, 0x00	; PUSH 0x0002 - mode
+	pushw 0x8	; PUSH 0x0008 - color
+	pushw 0x2	; PUSH 0x0002 - mode
 	ld xwa, 0xFFA626	; LD XWA, 0x00FFA626 - bitmap addr
 	ldw bc, 0x30	; LD BC, 0x0030 - X pos
 	ldw de, 0xA0	; LD DE, 0x00A0 - Y pos
@@ -2723,8 +2724,8 @@ Boot_ClearScreen:
 Boot_WaitDiskInsert:
 	dec 2, xsp	; DEC 2, XSP - allocate 2 bytes
 	ld (xsp), a	; LD (XSP), A - save expected type
-	.byte 0x0b, 0x08, 0x00	; PUSH 0x0008
-	.byte 0x0b, 0x02, 0x00	; PUSH 0x0002
+	pushw 0x8	; PUSH 0x0008
+	pushw 0x2	; PUSH 0x0002
 	ld xwa, 0xFFAD5E	; LD XWA, 0x00FFAD5E - insert disk msg
 	ldw bc, 0x30	; LD BC, 0x0030
 	ldw de, 0xA0	; LD DE, 0x00A0
@@ -2817,8 +2818,8 @@ Boot_WaitFDCReady__wfdc_done:
 Boot_LoadDiskData:
 	dec 2, xsp	; DEC 2, XSP
 	ld (xsp), a	; LD (XSP), A - save disk type
-	.byte 0x0b, 0x08, 0x00	; PUSH 0x0008
-	.byte 0x0b, 0x02, 0x00	; PUSH 0x0002
+	pushw 0x8	; PUSH 0x0008
+	pushw 0x2	; PUSH 0x0002
 	ld xwa, 0xFFA3BE	; LD XWA, 0x00FFA3BE - loading msg
 	ldw bc, 0x30	; LD BC, 0x0030
 	ldw de, 0xA0	; LD DE, 0x00A0
@@ -2874,7 +2875,7 @@ Boot_LoadDiskData__ldd_type3:
 	lds wa, 1	; LD WA, 1
 	call 0xFFBBDB	; CALL 0xFFBBDB
 	calr Boot_ClearScreen	; CALR Boot_ClearScreen
-	.byte 0x0b, 0x00, 0x08	; PUSH 0x0800 - size
+	pushw 0x800	; PUSH 0x0800 - size
 	lds wa, 1	; LD WA, 1 - bank 1
 	ldw bc, 0x24	; LD BC, 0x0024 - start sector
 	ld xde, 0x300000	; LD XDE, 0x00300000 - dest
@@ -2885,7 +2886,7 @@ Boot_LoadDiskData__ldd_type4:
 	lds wa, 2	; LD WA, 2
 	call 0xFFBBDB	; CALL 0xFFBBDB
 	calr Boot_ClearScreen	; CALR Boot_ClearScreen
-	.byte 0x0b, 0x00, 0x04	; PUSH 0x0400 - size
+	pushw 0x400	; PUSH 0x0400 - size
 	lds wa, 2	; LD WA, 2 - bank 2
 	ldw bc, 0x24	; LD BC, 0x0024
 	ld xde, 0x280000	; LD XDE, 0x00280000
@@ -2916,8 +2917,8 @@ Boot_LoadDiskData__ldd_done:
 	ret	; 0e
 
 Boot_LoadDiskData__ldd_error:
-	.byte 0x0b, 0x08, 0x00	; PUSH 0x0008
-	.byte 0x0b, 0x02, 0x00	; PUSH 0x0002
+	pushw 0x8	; PUSH 0x0008
+	pushw 0x2	; PUSH 0x0002
 	ld xwa, 0xFFAFC6	; LD XWA, 0x00FFAFC6 - error msg
 	ldw bc, 0x30	; LD BC, 0x0030
 	ldw de, 0xA0	; LD DE, 0x00A0
@@ -3378,9 +3379,9 @@ LZSS_ParseHeader__read_header:
 	cps iz, 6	; CP IZ, 6
 	jr c, LZSS_ParseHeader__read_header	; JR C, .read_header
 	; Validate header against expected signature
-	.byte 0x0b, 0x05, 0x00	; PUSH 0x0005
-	.byte 0x0b, 0xff, 0x00	; PUSH 0x00FF
-	.byte 0x0b, 0x50, 0xa1	; PUSH 0xA150 (expected signature addr)
+	pushw 0x5	; PUSH 0x0005
+	pushw 0xFF	; PUSH 0x00FF
+	pushw 0xA150	; PUSH 0xA150 (expected signature addr)
 	push xwa	; PUSH XWA
 	call 0xFFFBDC	; CALL 0xFFFBDC (memcmp)
 	add xsp, 0xA	; ADD XSP, 0x0A
@@ -3439,7 +3440,7 @@ LZSS_Decompress:
 	push xiz	; PUSH XIZ
 
 	; === Allocate 4KB sliding window buffer ===
-	.byte 0x0b, 0x00, 0x10	; PUSH 0x1000 (4KB)
+	pushw 0x1000	; PUSH 0x1000 (4KB)
 	call 0xFFFB56	; CALL 0xFFFB56 (malloc)
 	inc 2, xsp	; INC 2, XSP (pop arg)
 	ld (xsp + 16), xhl	; LD (XSP+0x10), XHL - save window ptr
@@ -3718,8 +3719,8 @@ Boot_FlashUpdate_Main:
 	jr z, Boot_FlashUpdate_Main__update_check_flash	; 66 47
 
 	; Display "Flash Memory Update" message
-	.byte 0x0b, 0x08, 0x00	; PUSH 0x0008 - color
-	.byte 0x0b, 0x02, 0x00	; PUSH 0x0002 - mode
+	pushw 0x8	; PUSH 0x0008 - color
+	pushw 0x2	; PUSH 0x0002 - mode
 	ld xwa, 0xFFA156	; LD XWA, 0x00FFA156 - bitmap addr
 	ldw bc, 0x30	; LD BC, 0x0030 - X
 	ldw de, 0x50	; LD DE, 0x0050 - Y
@@ -3731,16 +3732,16 @@ Boot_FlashUpdate_Main:
 	calr Boot_LoadDiskData	; CALR Boot_LoadDiskData
 
 	; Display "Completed" message
-	.byte 0x0b, 0x08, 0x00	; PUSH 0x0008
-	.byte 0x0b, 0x01, 0x00	; PUSH 0x0001
+	pushw 0x8	; PUSH 0x0008
+	pushw 0x1	; PUSH 0x0001
 	ld xwa, 0xFFA88E	; LD XWA, 0x00FFA88E
 	ldw bc, 0x30	; LD BC, 0x0030
 	ldw de, 0xA0	; LD DE, 0x00A0
 	call 0xFFCCFB	; CALL DrawBitmap_UpdateDisplay
 
 	; Display "Turn On Again" message
-	.byte 0x0b, 0x08, 0x00	; PUSH 0x0008
-	.byte 0x0b, 0x01, 0x00	; PUSH 0x0001
+	pushw 0x8	; PUSH 0x0008
+	pushw 0x1	; PUSH 0x0001
 	ld xwa, 0xFFB22E	; LD XWA, 0x00FFB22E
 	ldw bc, 0x30	; LD BC, 0x0030
 	ldw de, 0xC8	; LD DE, 0x00C8
@@ -3758,8 +3759,8 @@ Boot_FlashUpdate_Main__update_check_flash:
 	jr nz, Boot_FlashUpdate_Main__update_done	; 6e 47
 
 	; Display update messages and perform update
-	.byte 0x0b, 0x08, 0x00	; PUSH 0x0008
-	.byte 0x0b, 0x02, 0x00	; PUSH 0x0002
+	pushw 0x8	; PUSH 0x0008
+	pushw 0x2	; PUSH 0x0002
 	ld xwa, 0xFFA156	; LD XWA, 0x00FFA156
 	ldw bc, 0x30	; LD BC, 0x0030
 	ldw de, 0x50	; LD DE, 0x0050
@@ -3769,15 +3770,15 @@ Boot_FlashUpdate_Main__update_check_flash:
 	extpfx2 0xD8, 0x12	; EXTZ WA
 	calr Boot_LoadDiskData	; CALR Boot_LoadDiskData
 
-	.byte 0x0b, 0x08, 0x00	; PUSH 0x0008
-	.byte 0x0b, 0x01, 0x00	; PUSH 0x0001
+	pushw 0x8	; PUSH 0x0008
+	pushw 0x1	; PUSH 0x0001
 	ld xwa, 0xFFA88E	; LD XWA, 0x00FFA88E
 	ldw bc, 0x30	; LD BC, 0x0030
 	ldw de, 0xA0	; LD DE, 0x00A0
 	call 0xFFCCFB	; CALL DrawBitmap_UpdateDisplay
 
-	.byte 0x0b, 0x08, 0x00	; PUSH 0x0008
-	.byte 0x0b, 0x01, 0x00	; PUSH 0x0001
+	pushw 0x8	; PUSH 0x0008
+	pushw 0x1	; PUSH 0x0001
 	ld xwa, 0xFFB22E	; LD XWA, 0x00FFB22E
 	ldw bc, 0x30	; LD BC, 0x0030
 	ldw de, 0xC8	; LD DE, 0x00C8

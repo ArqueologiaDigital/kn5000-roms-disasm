@@ -13362,7 +13362,8 @@ LABEL_01FAA6:
 	calr LABEL_01FC70
 	ei 0
 	stdi16 4156, 0
-	jr Audio_System_Init
+	jr __jrt_nop_01FACB
+__jrt_nop_01FACB:
 
 ; ============================================================================
 ; AUDIO SYSTEM INITIALIZATION
@@ -16991,7 +16992,8 @@ LABEL_021F08:
 	nop
 	dd82 0x18, 0xBF
 	stdi16_24 1048578, 41472
-	jr LABEL_021F26
+	jr __jrt_nop_021F26
+__jrt_nop_021F26:
 
 LABEL_021F26:
 	nop
@@ -17005,7 +17007,8 @@ LABEL_021F26:
 	nop
 	dd82 0x18, 0xBF
 	stdi16_24 1048578, 41600
-	jr LABEL_021F47
+	jr __jrt_nop_021F47
+__jrt_nop_021F47:
 
 LABEL_021F47:
 	nop
@@ -17031,7 +17034,8 @@ LABEL_021F63:
 	nop
 	dd82 0x18, 0xBF
 	stdi16_24 1048578, 0
-	jr LABEL_021F80
+	jr __jrt_nop_021F80
+__jrt_nop_021F80:
 
 LABEL_021F80:
 	nop
@@ -17044,7 +17048,8 @@ LABEL_021F80:
 	nop
 	dd82 0x18, 0xBF
 	stdi16_24 1048578, 32256
-	jr LABEL_021F9D
+	jr __jrt_nop_021F9D
+__jrt_nop_021F9D:
 
 LABEL_021F9D:
 	nop
@@ -25604,7 +25609,8 @@ LABEL_026FDD:
 	nop
 	dd82 0x18, 0xBF
 	stdi16_24 1048578, 65280
-	jr LABEL_026FFD
+	jr __jrt_nop_026FFD
+__jrt_nop_026FFD:
 
 LABEL_026FFD:
 	nop
@@ -25619,7 +25625,8 @@ LABEL_026FFD:
 	nop
 	dd82 0x18, 0xBF
 	stdi16_24 1048578, 65408
-	jr LABEL_027020
+	jr __jrt_nop_027020
+__jrt_nop_027020:
 
 LABEL_027020:
 	nop
@@ -25656,7 +25663,8 @@ LABEL_027059:
 	nop
 	dd82 0x18, 0xBF
 	stdi16_24 1048578, 65280
-	jr LABEL_027079
+	jr __jrt_nop_027079
+__jrt_nop_027079:
 
 LABEL_027079:
 	nop
@@ -25671,7 +25679,8 @@ LABEL_027079:
 	nop
 	dd82 0x18, 0xBF
 	stdi16_24 1048578, 65408
-	jr LABEL_02709C
+	jr __jrt_nop_02709C
+__jrt_nop_02709C:
 
 LABEL_02709C:
 	nop
@@ -25714,7 +25723,8 @@ LABEL_0270E8:
 	nop
 	dd82 0x18, 0xBF
 	stdi16_24 1048578, 65280
-	jr LABEL_027108
+	jr __jrt_nop_027108
+__jrt_nop_027108:
 
 LABEL_027108:
 	nop
@@ -25729,7 +25739,8 @@ LABEL_027108:
 	nop
 	dd82 0x18, 0xBF
 	stdi16_24 1048578, 65408
-	jr LABEL_02712B
+	jr __jrt_nop_02712B
+__jrt_nop_02712B:
 
 LABEL_02712B:
 	nop
@@ -25765,7 +25776,8 @@ LABEL_027156:
 	nop
 	dd82 0x18, 0xBF
 	stdi16_24 1048578, 41472
-	jr LABEL_027181
+	jr __jrt_nop_027181
+__jrt_nop_027181:
 
 LABEL_027181:
 	nop
@@ -25780,7 +25792,8 @@ LABEL_027181:
 	nop
 	dd82 0x18, 0xBF
 	stdi16_24 1048578, 41600
-	jr LABEL_0271A4
+	jr __jrt_nop_0271A4
+__jrt_nop_0271A4:
 
 LABEL_0271A4:
 	nop
@@ -26976,7 +26989,8 @@ LABEL_027F74:
 	dd82 0x18, 0xBF
 	ld wa, (xiz + 14)
 	stda16_24 1048578, xwa
-	jr LABEL_027F91
+	jr __jrt_nop_027F91
+__jrt_nop_027F91:
 
 LABEL_027F91:
 	nop
@@ -26996,7 +27010,8 @@ LABEL_027F96:
 	ld wa, (xiz + 4)
 	res 15, wa
 	stda16_24 1048578, xwa
-	jr LABEL_027FB6
+	jr __jrt_nop_027FB6
+__jrt_nop_027FB6:
 
 LABEL_027FB6:
 	nop
@@ -27013,7 +27028,8 @@ LABEL_027FBB:
 	nop
 	dd82 0x18, 0xBF
 	stda16_24 1048578, xiz
-	jr LABEL_027FD1
+	jr __jrt_nop_027FD1
+__jrt_nop_027FD1:
 
 LABEL_027FD1:
 	nop
@@ -27036,7 +27052,8 @@ LABEL_027FD6:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 46)
 	stda16_24 1048578, xwa
-	jr LABEL_027FFD
+	jr __jrt_nop_027FFD
+__jrt_nop_027FFD:
 
 LABEL_027FFD:
 	nop
@@ -27051,7 +27068,8 @@ LABEL_027FFD:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 50)
 	stda16_24 1048578, xwa
-	jr LABEL_02801F
+	jr __jrt_nop_02801F
+__jrt_nop_02801F:
 
 LABEL_02801F:
 	nop
@@ -27066,7 +27084,8 @@ LABEL_02801F:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 54)
 	stda16_24 1048578, xwa
-	jr LABEL_028041
+	jr __jrt_nop_028041
+__jrt_nop_028041:
 
 LABEL_028041:
 	nop
@@ -27081,7 +27100,8 @@ LABEL_028041:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 44)
 	stda16_24 1048578, xwa
-	jr LABEL_028063
+	jr __jrt_nop_028063
+__jrt_nop_028063:
 
 LABEL_028063:
 	nop
@@ -27096,7 +27116,8 @@ LABEL_028063:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 48)
 	stda16_24 1048578, xwa
-	jr LABEL_028085
+	jr __jrt_nop_028085
+__jrt_nop_028085:
 
 LABEL_028085:
 	nop
@@ -27111,7 +27132,8 @@ LABEL_028085:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 52)
 	stda16_24 1048578, xwa
-	jr LABEL_0280A7
+	jr __jrt_nop_0280A7
+__jrt_nop_0280A7:
 
 LABEL_0280A7:
 	nop
@@ -27135,7 +27157,8 @@ LABEL_0280AE:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 46)
 	stda16_24 1048578, xwa
-	jr LABEL_0280D5
+	jr __jrt_nop_0280D5
+__jrt_nop_0280D5:
 
 LABEL_0280D5:
 	nop
@@ -27150,7 +27173,8 @@ LABEL_0280D5:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 44)
 	stda16_24 1048578, xwa
-	jr LABEL_0280F7
+	jr __jrt_nop_0280F7
+__jrt_nop_0280F7:
 
 LABEL_0280F7:
 	nop
@@ -28910,7 +28934,8 @@ LABEL_02A1E9:
 	nop
 	dd82 0x18, 0xBF
 	stdi16_24 1048578, 41472
-	jr LABEL_02A208
+	jr __jrt_nop_02A208
+__jrt_nop_02A208:
 
 LABEL_02A208:
 	nop
@@ -28925,7 +28950,8 @@ LABEL_02A208:
 	nop
 	dd82 0x18, 0xBF
 	stdi16_24 1048578, 41600
-	jr LABEL_02A22A
+	jr __jrt_nop_02A22A
+__jrt_nop_02A22A:
 
 LABEL_02A22A:
 	nop
@@ -28943,7 +28969,8 @@ LABEL_02A22F:
 	nop
 	dd82 0x18, 0xBF
 	stdi16_24 1048578, 41472
-	jr LABEL_02A24E
+	jr __jrt_nop_02A24E
+__jrt_nop_02A24E:
 
 LABEL_02A24E:
 	nop
@@ -28958,7 +28985,8 @@ LABEL_02A24E:
 	nop
 	dd82 0x18, 0xBF
 	stdi16_24 1048578, 41600
-	jr LABEL_02A270
+	jr __jrt_nop_02A270
+__jrt_nop_02A270:
 
 LABEL_02A270:
 	nop
@@ -29438,7 +29466,8 @@ LABEL_02A692:
 	nop
 	dd82 0x18, 0xBF
 	stdi16_24 1048578, 41472
-	jr LABEL_02A6AF
+	jr __jrt_nop_02A6AF
+__jrt_nop_02A6AF:
 
 LABEL_02A6AF:
 	nop
@@ -29452,7 +29481,8 @@ LABEL_02A6AF:
 	nop
 	dd82 0x18, 0xBF
 	stdi16_24 1048578, 41600
-	jr LABEL_02A6CF
+	jr __jrt_nop_02A6CF
+__jrt_nop_02A6CF:
 
 LABEL_02A6CF:
 	nop
@@ -30762,7 +30792,8 @@ LABEL_02B4A1:
 	nop
 	dd82 0x18, 0xBF
 	stdi16_24 1048578, 0
-	jr LABEL_02B4C1
+	jr __jrt_nop_02B4C1
+__jrt_nop_02B4C1:
 
 LABEL_02B4C1:
 	nop
@@ -30775,7 +30806,8 @@ LABEL_02B4C1:
 	nop
 	dd82 0x18, 0xBF
 	stdi16_24 1048578, 32256
-	jr LABEL_02B4DD
+	jr __jrt_nop_02B4DD
+__jrt_nop_02B4DD:
 
 LABEL_02B4DD:
 	nop
@@ -32547,7 +32579,8 @@ Voice_SetPitch:
 	nop
 	dd82 0x18, 0xBF
 	stdi16_24 1048578, 65280
-	jr LABEL_02C780
+	jr __jrt_nop_02C780
+__jrt_nop_02C780:
 
 LABEL_02C780:
 	nop
@@ -32561,7 +32594,8 @@ LABEL_02C780:
 	nop
 	dd82 0x18, 0xBF
 	stdi16_24 1048578, 65408
-	jr LABEL_02C7A1
+	jr __jrt_nop_02C7A1
+__jrt_nop_02C7A1:
 
 LABEL_02C7A1:
 	nop
@@ -32645,7 +32679,8 @@ Voice_NoteOff:
 	nop
 	dd82 0x18, 0xBF
 	stdi16_24 1048578, 65280
-	jr LABEL_02C884
+	jr __jrt_nop_02C884
+__jrt_nop_02C884:
 
 LABEL_02C884:
 	nop
@@ -32659,7 +32694,8 @@ LABEL_02C884:
 	nop
 	dd82 0x18, 0xBF
 	stdi16_24 1048578, 65408
-	jr LABEL_02C8A5
+	jr __jrt_nop_02C8A5
+__jrt_nop_02C8A5:
 
 LABEL_02C8A5:
 	nop
@@ -32755,7 +32791,8 @@ LABEL_02C96B:
 	nop
 	dd82 0x18, 0xBF
 	stdi16_24 1048578, 65280
-	jr LABEL_02C9A3
+	jr __jrt_nop_02C9A3
+__jrt_nop_02C9A3:
 
 LABEL_02C9A3:
 	nop
@@ -32769,7 +32806,8 @@ LABEL_02C9A3:
 	nop
 	dd82 0x18, 0xBF
 	stdi16_24 1048578, 65408
-	jr LABEL_02C9C4
+	jr __jrt_nop_02C9C4
+__jrt_nop_02C9C4:
 
 LABEL_02C9C4:
 	nop
@@ -32896,7 +32934,8 @@ LABEL_02CACF:
 	nop
 	dd82 0x18, 0xBF
 	stdi16_24 1048578, 65280
-	jr LABEL_02CB07
+	jr __jrt_nop_02CB07
+__jrt_nop_02CB07:
 
 LABEL_02CB07:
 	nop
@@ -32910,7 +32949,8 @@ LABEL_02CB07:
 	nop
 	dd82 0x18, 0xBF
 	stdi16_24 1048578, 65408
-	jr LABEL_02CB28
+	jr __jrt_nop_02CB28
+__jrt_nop_02CB28:
 
 LABEL_02CB28:
 	nop
@@ -33005,7 +33045,8 @@ LABEL_02CBBA:
 	nop
 	dd82 0x18, 0xBF
 	stdi16_24 1048578, 65280
-	jr LABEL_02CC06
+	jr __jrt_nop_02CC06
+__jrt_nop_02CC06:
 
 LABEL_02CC06:
 	nop
@@ -33019,7 +33060,8 @@ LABEL_02CC06:
 	nop
 	dd82 0x18, 0xBF
 	stdi16_24 1048578, 65408
-	jr LABEL_02CC27
+	jr __jrt_nop_02CC27
+__jrt_nop_02CC27:
 
 LABEL_02CC27:
 	nop
@@ -33530,7 +33572,8 @@ LABEL_02D0BA:
 	dd82 0x18, 0xBF
 	ld wa, (xiz + 14)
 	stda16_24 1048578, xwa
-	jr LABEL_02D0D7
+	jr __jrt_nop_02D0D7
+__jrt_nop_02D0D7:
 
 LABEL_02D0D7:
 	nop
@@ -33561,7 +33604,8 @@ ToneGen_WriteVoiceParams:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 2)
 	stda16_24 1048578, xwa
-	jr LABEL_02D12A
+	jr __jrt_nop_02D12A
+__jrt_nop_02D12A:
 
 LABEL_02D12A:
 	nop
@@ -33577,7 +33621,8 @@ LABEL_02D12A:
 	ld wa, (xwa + 4)
 	set 15, wa
 	stda16_24 1048578, xwa
-	jr LABEL_02D14F
+	jr __jrt_nop_02D14F
+__jrt_nop_02D14F:
 
 LABEL_02D14F:
 	nop
@@ -33592,7 +33637,8 @@ LABEL_02D14F:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 6)
 	stda16_24 1048578, xwa
-	jr LABEL_02D171
+	jr __jrt_nop_02D171
+__jrt_nop_02D171:
 
 LABEL_02D171:
 	nop
@@ -33607,7 +33653,8 @@ LABEL_02D171:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 8)
 	stda16_24 1048578, xwa
-	jr LABEL_02D193
+	jr __jrt_nop_02D193
+__jrt_nop_02D193:
 
 LABEL_02D193:
 	nop
@@ -33622,7 +33669,8 @@ LABEL_02D193:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 10)
 	stda16_24 1048578, xwa
-	jr LABEL_02D1B5
+	jr __jrt_nop_02D1B5
+__jrt_nop_02D1B5:
 
 LABEL_02D1B5:
 	nop
@@ -33637,7 +33685,8 @@ LABEL_02D1B5:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 12)
 	stda16_24 1048578, xwa
-	jr LABEL_02D1D7
+	jr __jrt_nop_02D1D7
+__jrt_nop_02D1D7:
 
 LABEL_02D1D7:
 	nop
@@ -33652,7 +33701,8 @@ LABEL_02D1D7:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 14)
 	stda16_24 1048578, xwa
-	jr LABEL_02D1F9
+	jr __jrt_nop_02D1F9
+__jrt_nop_02D1F9:
 
 LABEL_02D1F9:
 	nop
@@ -33667,7 +33717,8 @@ LABEL_02D1F9:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 16)
 	stda16_24 1048578, xwa
-	jr LABEL_02D21B
+	jr __jrt_nop_02D21B
+__jrt_nop_02D21B:
 
 LABEL_02D21B:
 	nop
@@ -33682,7 +33733,8 @@ LABEL_02D21B:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 18)
 	stda16_24 1048578, xwa
-	jr LABEL_02D23D
+	jr __jrt_nop_02D23D
+__jrt_nop_02D23D:
 
 LABEL_02D23D:
 	nop
@@ -33697,7 +33749,8 @@ LABEL_02D23D:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 20)
 	stda16_24 1048578, xwa
-	jr LABEL_02D25F
+	jr __jrt_nop_02D25F
+__jrt_nop_02D25F:
 
 LABEL_02D25F:
 	nop
@@ -33712,7 +33765,8 @@ LABEL_02D25F:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 22)
 	stda16_24 1048578, xwa
-	jr LABEL_02D281
+	jr __jrt_nop_02D281
+__jrt_nop_02D281:
 
 LABEL_02D281:
 	nop
@@ -33727,7 +33781,8 @@ LABEL_02D281:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 24)
 	stda16_24 1048578, xwa
-	jr LABEL_02D2A3
+	jr __jrt_nop_02D2A3
+__jrt_nop_02D2A3:
 
 LABEL_02D2A3:
 	nop
@@ -33739,7 +33794,8 @@ LABEL_02D2A3:
 	nop
 	dd82 0x18, 0xBF
 	stdi16_24 1048578, 33024
-	jr LABEL_02D2BD
+	jr __jrt_nop_02D2BD
+__jrt_nop_02D2BD:
 
 LABEL_02D2BD:
 	nop
@@ -33754,7 +33810,8 @@ LABEL_02D2BD:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 26)
 	stda16_24 1048578, xwa
-	jr LABEL_02D2DF
+	jr __jrt_nop_02D2DF
+__jrt_nop_02D2DF:
 
 LABEL_02D2DF:
 	nop
@@ -33769,7 +33826,8 @@ LABEL_02D2DF:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 28)
 	stda16_24 1048578, xwa
-	jr LABEL_02D301
+	jr __jrt_nop_02D301
+__jrt_nop_02D301:
 
 LABEL_02D301:
 	nop
@@ -33784,7 +33842,8 @@ LABEL_02D301:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 30)
 	stda16_24 1048578, xwa
-	jr LABEL_02D323
+	jr __jrt_nop_02D323
+__jrt_nop_02D323:
 
 LABEL_02D323:
 	nop
@@ -33799,7 +33858,8 @@ LABEL_02D323:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 32)
 	stda16_24 1048578, xwa
-	jr LABEL_02D345
+	jr __jrt_nop_02D345
+__jrt_nop_02D345:
 
 LABEL_02D345:
 	nop
@@ -33814,7 +33874,8 @@ LABEL_02D345:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 34)
 	stda16_24 1048578, xwa
-	jr LABEL_02D367
+	jr __jrt_nop_02D367
+__jrt_nop_02D367:
 
 LABEL_02D367:
 	nop
@@ -33829,7 +33890,8 @@ LABEL_02D367:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 36)
 	stda16_24 1048578, xwa
-	jr LABEL_02D389
+	jr __jrt_nop_02D389
+__jrt_nop_02D389:
 
 LABEL_02D389:
 	nop
@@ -33844,7 +33906,8 @@ LABEL_02D389:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 38)
 	stda16_24 1048578, xwa
-	jr LABEL_02D3AB
+	jr __jrt_nop_02D3AB
+__jrt_nop_02D3AB:
 
 LABEL_02D3AB:
 	nop
@@ -33859,7 +33922,8 @@ LABEL_02D3AB:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 40)
 	stda16_24 1048578, xwa
-	jr LABEL_02D3CD
+	jr __jrt_nop_02D3CD
+__jrt_nop_02D3CD:
 
 LABEL_02D3CD:
 	nop
@@ -33874,7 +33938,8 @@ LABEL_02D3CD:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 42)
 	stda16_24 1048578, xwa
-	jr LABEL_02D3EF
+	jr __jrt_nop_02D3EF
+__jrt_nop_02D3EF:
 
 LABEL_02D3EF:
 	nop
@@ -33890,7 +33955,8 @@ LABEL_02D3EF:
 	ld wa, (xwa + 4)
 	res 15, wa
 	stda16_24 1048578, xwa
-	jr LABEL_02D414
+	jr __jrt_nop_02D414
+__jrt_nop_02D414:
 
 LABEL_02D414:
 	nop
@@ -33908,7 +33974,8 @@ ToneGen_WriteSingleReg:
 	nop
 	dd82 0x18, 0xBF
 	stda16_24 1048578, xiz
-	jr LABEL_02D431
+	jr __jrt_nop_02D431
+__jrt_nop_02D431:
 
 LABEL_02D431:
 	nop
@@ -33931,7 +33998,8 @@ LABEL_02D436:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 46)
 	stda16_24 1048578, xwa
-	jr LABEL_02D45D
+	jr __jrt_nop_02D45D
+__jrt_nop_02D45D:
 
 LABEL_02D45D:
 	nop
@@ -33946,7 +34014,8 @@ LABEL_02D45D:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 50)
 	stda16_24 1048578, xwa
-	jr LABEL_02D47F
+	jr __jrt_nop_02D47F
+__jrt_nop_02D47F:
 
 LABEL_02D47F:
 	nop
@@ -33961,7 +34030,8 @@ LABEL_02D47F:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 54)
 	stda16_24 1048578, xwa
-	jr LABEL_02D4A1
+	jr __jrt_nop_02D4A1
+__jrt_nop_02D4A1:
 
 LABEL_02D4A1:
 	nop
@@ -33976,7 +34046,8 @@ LABEL_02D4A1:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 44)
 	stda16_24 1048578, xwa
-	jr LABEL_02D4C3
+	jr __jrt_nop_02D4C3
+__jrt_nop_02D4C3:
 
 LABEL_02D4C3:
 	nop
@@ -33991,7 +34062,8 @@ LABEL_02D4C3:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 48)
 	stda16_24 1048578, xwa
-	jr LABEL_02D4E5
+	jr __jrt_nop_02D4E5
+__jrt_nop_02D4E5:
 
 LABEL_02D4E5:
 	nop
@@ -34006,7 +34078,8 @@ LABEL_02D4E5:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 52)
 	stda16_24 1048578, xwa
-	jr LABEL_02D507
+	jr __jrt_nop_02D507
+__jrt_nop_02D507:
 
 LABEL_02D507:
 	nop
@@ -34030,7 +34103,8 @@ LABEL_02D50E:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 46)
 	stda16_24 1048578, xwa
-	jr LABEL_02D535
+	jr __jrt_nop_02D535
+__jrt_nop_02D535:
 
 LABEL_02D535:
 	nop
@@ -34045,7 +34119,8 @@ LABEL_02D535:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 44)
 	stda16_24 1048578, xwa
-	jr LABEL_02D557
+	jr __jrt_nop_02D557
+__jrt_nop_02D557:
 
 LABEL_02D557:
 	nop
@@ -34086,7 +34161,8 @@ LABEL_02D5D0:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 26)
 	stda16_24 1048578, xwa
-	jr LABEL_02D5F7
+	jr __jrt_nop_02D5F7
+__jrt_nop_02D5F7:
 
 LABEL_02D5F7:
 	nop
@@ -34101,7 +34177,8 @@ LABEL_02D5F7:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 28)
 	stda16_24 1048578, xwa
-	jr LABEL_02D619
+	jr __jrt_nop_02D619
+__jrt_nop_02D619:
 
 LABEL_02D619:
 	nop
@@ -34125,7 +34202,8 @@ LABEL_02D620:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 46)
 	stda16_24 1048578, xwa
-	jr LABEL_02D647
+	jr __jrt_nop_02D647
+__jrt_nop_02D647:
 
 LABEL_02D647:
 	nop
@@ -34140,7 +34218,8 @@ LABEL_02D647:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 46)
 	stda16_24 1048578, xwa
-	jr LABEL_02D669
+	jr __jrt_nop_02D669
+__jrt_nop_02D669:
 
 LABEL_02D669:
 	nop
@@ -34159,7 +34238,8 @@ LABEL_02D670:
 	nop
 	dd82 0x18, 0xBF
 	stda16_24 1048578, xiz
-	jr LABEL_02D68A
+	jr __jrt_nop_02D68A
+__jrt_nop_02D68A:
 
 LABEL_02D68A:
 	nop
@@ -34183,7 +34263,8 @@ LABEL_02D68F:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 60)
 	stda16_24 1048578, xwa
-	jr LABEL_02D6B9
+	jr __jrt_nop_02D6B9
+__jrt_nop_02D6B9:
 
 LABEL_02D6B9:
 	nop
@@ -34195,7 +34276,8 @@ LABEL_02D6B9:
 	nop
 	dd82 0x18, 0xBF
 	stdi16_24 1048578, 33024
-	jr LABEL_02D6D3
+	jr __jrt_nop_02D6D3
+__jrt_nop_02D6D3:
 
 LABEL_02D6D3:
 	nop
@@ -34210,7 +34292,8 @@ LABEL_02D6D3:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 62)
 	stda16_24 1048578, xwa
-	jr LABEL_02D6F5
+	jr __jrt_nop_02D6F5
+__jrt_nop_02D6F5:
 
 LABEL_02D6F5:
 	nop
@@ -34226,7 +34309,8 @@ LABEL_02D6F5:
 	ld wa, (xwa + 4)
 	res 15, wa
 	stda16_24 1048578, xwa
-	jr LABEL_02D71A
+	jr __jrt_nop_02D71A
+__jrt_nop_02D71A:
 
 LABEL_02D71A:
 	nop
@@ -34240,7 +34324,8 @@ LABEL_02D71A:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 45)
 	stda16_24 1048578, xwa
-	jr LABEL_02D738
+	jr __jrt_nop_02D738
+__jrt_nop_02D738:
 
 LABEL_02D738:
 	nop
@@ -34264,7 +34349,8 @@ LABEL_02D73F:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 60)
 	stda16_24 1048578, xwa
-	jr LABEL_02D766
+	jr __jrt_nop_02D766
+__jrt_nop_02D766:
 
 LABEL_02D766:
 	nop
@@ -34276,7 +34362,8 @@ LABEL_02D766:
 	nop
 	dd82 0x18, 0xBF
 	stdi16_24 1048578, 33024
-	jr LABEL_02D780
+	jr __jrt_nop_02D780
+__jrt_nop_02D780:
 
 LABEL_02D780:
 	nop
@@ -34291,7 +34378,8 @@ LABEL_02D780:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 62)
 	stda16_24 1048578, xwa
-	jr LABEL_02D7A2
+	jr __jrt_nop_02D7A2
+__jrt_nop_02D7A2:
 
 LABEL_02D7A2:
 	nop
@@ -34305,7 +34393,8 @@ LABEL_02D7A2:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 45)
 	stda16_24 1048578, xwa
-	jr LABEL_02D7C0
+	jr __jrt_nop_02D7C0
+__jrt_nop_02D7C0:
 
 LABEL_02D7C0:
 	nop
@@ -34334,7 +34423,8 @@ LABEL_02D7DE:
 	dd82 0x18, 0xBF
 	ld wa, (xiz)
 	stda16_24 1048578, xwa
-	jr LABEL_02D7F5
+	jr __jrt_nop_02D7F5
+__jrt_nop_02D7F5:
 
 LABEL_02D7F5:
 	nop
@@ -34346,7 +34436,8 @@ LABEL_02D7F5:
 	dd82 0x18, 0xBF
 	ld wa, (xiz + 2)
 	stda16_24 1048578, xwa
-	jr LABEL_02D810
+	jr __jrt_nop_02D810
+__jrt_nop_02D810:
 
 LABEL_02D810:
 	nop
@@ -34358,7 +34449,8 @@ LABEL_02D810:
 	dd82 0x18, 0xBF
 	ld wa, (xiz + 4)
 	stda16_24 1048578, xwa
-	jr LABEL_02D82B
+	jr __jrt_nop_02D82B
+__jrt_nop_02D82B:
 
 LABEL_02D82B:
 	nop
@@ -34370,7 +34462,8 @@ LABEL_02D82B:
 	dd82 0x18, 0xBF
 	ld wa, (xiz + 6)
 	stda16_24 1048578, xwa
-	jr LABEL_02D846
+	jr __jrt_nop_02D846
+__jrt_nop_02D846:
 
 LABEL_02D846:
 	nop
@@ -34382,7 +34475,8 @@ LABEL_02D846:
 	dd82 0x18, 0xBF
 	ld wa, (xiz + 8)
 	stda16_24 1048578, xwa
-	jr LABEL_02D861
+	jr __jrt_nop_02D861
+__jrt_nop_02D861:
 
 LABEL_02D861:
 	nop
@@ -34394,7 +34488,8 @@ LABEL_02D861:
 	dd82 0x18, 0xBF
 	ld wa, (xiz + 10)
 	stda16_24 1048578, xwa
-	jr LABEL_02D87C
+	jr __jrt_nop_02D87C
+__jrt_nop_02D87C:
 
 LABEL_02D87C:
 	nop
@@ -34406,7 +34501,8 @@ LABEL_02D87C:
 	dd82 0x18, 0xBF
 	ld wa, (xiz + 12)
 	stda16_24 1048578, xwa
-	jr LABEL_02D897
+	jr __jrt_nop_02D897
+__jrt_nop_02D897:
 
 LABEL_02D897:
 	nop
@@ -34418,7 +34514,8 @@ LABEL_02D897:
 	dd82 0x18, 0xBF
 	ld wa, (xiz + 14)
 	stda16_24 1048578, xwa
-	jr LABEL_02D8B2
+	jr __jrt_nop_02D8B2
+__jrt_nop_02D8B2:
 
 LABEL_02D8B2:
 	nop
@@ -34430,7 +34527,8 @@ LABEL_02D8B2:
 	dd82 0x18, 0xBF
 	ld wa, (xiz + 16)
 	stda16_24 1048578, xwa
-	jr LABEL_02D8CD
+	jr __jrt_nop_02D8CD
+__jrt_nop_02D8CD:
 
 LABEL_02D8CD:
 	nop
@@ -34442,7 +34540,8 @@ LABEL_02D8CD:
 	dd82 0x18, 0xBF
 	ld wa, (xiz + 18)
 	stda16_24 1048578, xwa
-	jr LABEL_02D8E8
+	jr __jrt_nop_02D8E8
+__jrt_nop_02D8E8:
 
 LABEL_02D8E8:
 	nop
@@ -34454,7 +34553,8 @@ LABEL_02D8E8:
 	dd82 0x18, 0xBF
 	ld wa, (xiz + 20)
 	stda16_24 1048578, xwa
-	jr LABEL_02D903
+	jr __jrt_nop_02D903
+__jrt_nop_02D903:
 
 LABEL_02D903:
 	nop
@@ -34466,7 +34566,8 @@ LABEL_02D903:
 	dd82 0x18, 0xBF
 	ld wa, (xiz + 22)
 	stda16_24 1048578, xwa
-	jr LABEL_02D91E
+	jr __jrt_nop_02D91E
+__jrt_nop_02D91E:
 
 LABEL_02D91E:
 	nop
@@ -34478,7 +34579,8 @@ LABEL_02D91E:
 	dd82 0x18, 0xBF
 	ld wa, (xiz + 24)
 	stda16_24 1048578, xwa
-	jr LABEL_02D939
+	jr __jrt_nop_02D939
+__jrt_nop_02D939:
 
 LABEL_02D939:
 	nop
@@ -34534,7 +34636,8 @@ ToneGen_WriteExtParams_56:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 60)
 	stda16_24 1048578, xwa
-	jr LABEL_02DA48
+	jr __jrt_nop_02DA48
+__jrt_nop_02DA48:
 
 LABEL_02DA48:
 	nop
@@ -34551,7 +34654,8 @@ LABEL_02DA4B:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 64)
 	stda16_24 1048578, xwa
-	jr LABEL_02DA6A
+	jr __jrt_nop_02DA6A
+__jrt_nop_02DA6A:
 
 LABEL_02DA6A:
 	nop
@@ -34567,7 +34671,8 @@ LABEL_02DA6A:
 	ld wa, (xwa + 60)
 	res 15, wa
 	stda16_24 1048578, xwa
-	jr LABEL_02DA8F
+	jr __jrt_nop_02DA8F
+__jrt_nop_02DA8F:
 
 LABEL_02DA8F:
 	nop
@@ -34587,7 +34692,8 @@ LABEL_02DA96:
 	dd82 0x18, 0xBF
 	ld wa, (xiz + 64)
 	stda16_24 1048578, xwa
-	jr LABEL_02DAB3
+	jr __jrt_nop_02DAB3
+__jrt_nop_02DAB3:
 
 LABEL_02DAB3:
 	nop
@@ -34614,7 +34720,8 @@ LABEL_02DAB8:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 60)
 	stda16_24 1048578, xwa
-	jr LABEL_02DAEA
+	jr __jrt_nop_02DAEA
+__jrt_nop_02DAEA:
 
 LABEL_02DAEA:
 	nop
@@ -34632,7 +34739,8 @@ LABEL_02DAED:
 	ld wa, (xwa + 60)
 	res 15, wa
 	stda16_24 1048578, xwa
-	jr LABEL_02DB0F
+	jr __jrt_nop_02DB0F
+__jrt_nop_02DB0F:
 
 LABEL_02DB0F:
 	nop
@@ -34649,7 +34757,8 @@ LABEL_02DB16:
 	nop
 	dd82 0x18, 0xBF
 	stdi16_24 1048578, 33024
-	jr LABEL_02DB2F
+	jr __jrt_nop_02DB2F
+__jrt_nop_02DB2F:
 
 LABEL_02DB2F:
 	nop
@@ -34675,7 +34784,8 @@ ToneGen_WriteExtParams_56b:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 62)
 	stda16_24 1048578, xwa
-	jr LABEL_02DB65
+	jr __jrt_nop_02DB65
+__jrt_nop_02DB65:
 
 LABEL_02DB65:
 	nop
@@ -34692,7 +34802,8 @@ LABEL_02DB68:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 66)
 	stda16_24 1048578, xwa
-	jr LABEL_02DB87
+	jr __jrt_nop_02DB87
+__jrt_nop_02DB87:
 
 LABEL_02DB87:
 	nop
@@ -34708,7 +34819,8 @@ LABEL_02DB87:
 	ld wa, (xwa + 62)
 	res 15, wa
 	stda16_24 1048578, xwa
-	jr LABEL_02DBAC
+	jr __jrt_nop_02DBAC
+__jrt_nop_02DBAC:
 
 LABEL_02DBAC:
 	nop
@@ -34758,7 +34870,8 @@ ToneGen_WriteExtParams_15:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 58)
 	stda16_24 1048578, xwa
-	jr LABEL_02DC82
+	jr __jrt_nop_02DC82
+__jrt_nop_02DC82:
 
 LABEL_02DC82:
 	nop
@@ -34775,7 +34888,8 @@ LABEL_02DC85:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 56)
 	stda16_24 1048578, xwa
-	jr LABEL_02DCA4
+	jr __jrt_nop_02DCA4
+__jrt_nop_02DCA4:
 
 LABEL_02DCA4:
 	nop
@@ -34791,7 +34905,8 @@ LABEL_02DCA4:
 	ld wa, (xwa + 58)
 	res 15, wa
 	stda16_24 1048578, xwa
-	jr LABEL_02DCC9
+	jr __jrt_nop_02DCC9
+__jrt_nop_02DCC9:
 
 LABEL_02DCC9:
 	nop
@@ -34811,7 +34926,8 @@ LABEL_02DCD0:
 	dd82 0x18, 0xBF
 	ld wa, (xiz + 56)
 	stda16_24 1048578, xwa
-	jr LABEL_02DCED
+	jr __jrt_nop_02DCED
+__jrt_nop_02DCED:
 
 LABEL_02DCED:
 	nop
@@ -34838,7 +34954,8 @@ LABEL_02DCF2:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 58)
 	stda16_24 1048578, xwa
-	jr LABEL_02DD24
+	jr __jrt_nop_02DD24
+__jrt_nop_02DD24:
 
 LABEL_02DD24:
 	nop
@@ -34856,7 +34973,8 @@ LABEL_02DD27:
 	ld wa, (xwa + 58)
 	res 15, wa
 	stda16_24 1048578, xwa
-	jr LABEL_02DD49
+	jr __jrt_nop_02DD49
+__jrt_nop_02DD49:
 
 LABEL_02DD49:
 	nop
@@ -34873,7 +34991,8 @@ LABEL_02DD50:
 	nop
 	dd82 0x18, 0xBF
 	stdi16_24 1048578, 33024
-	jr LABEL_02DD69
+	jr __jrt_nop_02DD69
+__jrt_nop_02DD69:
 
 LABEL_02DD69:
 	nop
@@ -34927,7 +35046,8 @@ LABEL_02DE69:
 	dd82 0x18, 0xBF
 	ld wa, (xiz + 56)
 	stda16_24 1048578, xwa
-	jr LABEL_02DE8C
+	jr __jrt_nop_02DE8C
+__jrt_nop_02DE8C:
 
 LABEL_02DE8C:
 	nop
@@ -34943,7 +35063,8 @@ LABEL_02DE91:
 	dd82 0x18, 0xBF
 	ld wa, (xiz + 66)
 	stda16_24 1048578, xwa
-	jr LABEL_02DEAB
+	jr __jrt_nop_02DEAB
+__jrt_nop_02DEAB:
 
 LABEL_02DEAB:
 	nop
@@ -34974,7 +35095,8 @@ LABEL_02DEB0:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 58)
 	stda16_24 1048578, xwa
-	jr LABEL_02DEE8
+	jr __jrt_nop_02DEE8
+__jrt_nop_02DEE8:
 
 LABEL_02DEE8:
 	nop
@@ -34992,7 +35114,8 @@ LABEL_02DEEB:
 	ld wa, (xwa + 58)
 	res 15, wa
 	stda16_24 1048578, xwa
-	jr LABEL_02DF0D
+	jr __jrt_nop_02DF0D
+__jrt_nop_02DF0D:
 
 LABEL_02DF0D:
 	nop
@@ -35014,7 +35137,8 @@ LABEL_02DF12:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 62)
 	stda16_24 1048578, xwa
-	jr LABEL_02DF3C
+	jr __jrt_nop_02DF3C
+__jrt_nop_02DF3C:
 
 LABEL_02DF3C:
 	nop
@@ -35032,7 +35156,8 @@ LABEL_02DF3F:
 	ld wa, (xwa + 62)
 	res 15, wa
 	stda16_24 1048578, xwa
-	jr LABEL_02DF61
+	jr __jrt_nop_02DF61
+__jrt_nop_02DF61:
 
 LABEL_02DF61:
 	nop
@@ -35053,7 +35178,8 @@ LABEL_02DF68:
 	nop
 	dd82 0x18, 0xBF
 	stdi16_24 1048578, 33024
-	jr LABEL_02DF87
+	jr __jrt_nop_02DF87
+__jrt_nop_02DF87:
 
 LABEL_02DF87:
 	nop
@@ -35068,7 +35194,8 @@ LABEL_02DF8B:
 	nop
 	dd82 0x18, 0xBF
 	stdi16_24 1048578, 33024
-	jr LABEL_02DFA4
+	jr __jrt_nop_02DFA4
+__jrt_nop_02DFA4:
 
 LABEL_02DFA4:
 	nop
@@ -35099,7 +35226,8 @@ ToneGen_Config_Init:
 	nop
 	dd82 0x18, 0xBF
 	stdi16_24 1048578, 65280
-	jr LABEL_02DFEA
+	jr __jrt_nop_02DFEA
+__jrt_nop_02DFEA:
 
 LABEL_02DFEA:
 	nop
@@ -35112,7 +35240,8 @@ LABEL_02DFEA:
 	nop
 	dd82 0x18, 0xBF
 	stdi16_24 1048578, 65408
-	jr LABEL_02E008
+	jr __jrt_nop_02E008
+__jrt_nop_02E008:
 
 LABEL_02E008:
 	nop
@@ -35132,7 +35261,8 @@ LABEL_02E008:
 	nop
 	dd82 0x18, 0xBF
 	stdi16_24 1048578, 65280
-	jr LABEL_02E038
+	jr __jrt_nop_02E038
+__jrt_nop_02E038:
 
 LABEL_02E038:
 	nop
@@ -35145,7 +35275,8 @@ LABEL_02E038:
 	nop
 	dd82 0x18, 0xBF
 	stdi16_24 1048578, 65408
-	jr LABEL_02E056
+	jr __jrt_nop_02E056
+__jrt_nop_02E056:
 
 LABEL_02E056:
 	nop
@@ -35158,7 +35289,8 @@ LABEL_02E056:
 	nop
 	dd82 0x18, 0xBF
 	stdi16_24 1048578, 0
-	jr LABEL_02E074
+	jr __jrt_nop_02E074
+__jrt_nop_02E074:
 
 LABEL_02E074:
 	nop
@@ -35170,7 +35302,8 @@ LABEL_02E074:
 	nop
 	dd82 0x18, 0xBF
 	stdi16_24 1048578, 32256
-	jr LABEL_02E08E
+	jr __jrt_nop_02E08E
+__jrt_nop_02E08E:
 
 LABEL_02E08E:
 	nop
@@ -35237,7 +35370,8 @@ LABEL_02E18D:
 	ld xwa, (xsp + 6)
 	ld wa, (xwa + 6)
 	stda16_24 1048578, xwa
-	jr LABEL_02E1B4
+	jr __jrt_nop_02E1B4
+__jrt_nop_02E1B4:
 
 LABEL_02E1B4:
 	nop
@@ -35260,7 +35394,8 @@ LABEL_02E1B4:
 	res 15, bc
 	ld xwa, (xsp + 2)
 	ld (xwa), bc
-	jr LABEL_02E1ED
+	jr __jrt_nop_02E1ED
+__jrt_nop_02E1ED:
 
 LABEL_02E1ED:
 	nop
@@ -43226,7 +43361,8 @@ LABEL_0356E3:
 	nop
 	dd82 0x18, 0xBF
 	stdi16_24 1048578, 65280
-	jr LABEL_035727
+	jr __jrt_nop_035727
+__jrt_nop_035727:
 
 LABEL_035727:
 	nop
@@ -43240,7 +43376,8 @@ LABEL_035727:
 	nop
 	dd82 0x18, 0xBF
 	stdi16_24 1048578, 65408
-	jr LABEL_035749
+	jr __jrt_nop_035749
+__jrt_nop_035749:
 
 LABEL_035749:
 	nop
@@ -43301,7 +43438,8 @@ LABEL_0357A6:
 	nop
 	dd82 0x18, 0xBF
 	stdi16_24 1048578, 41472
-	jr LABEL_0357D8
+	jr __jrt_nop_0357D8
+__jrt_nop_0357D8:
 
 LABEL_0357D8:
 	nop
@@ -43315,7 +43453,8 @@ LABEL_0357D8:
 	nop
 	dd82 0x18, 0xBF
 	stdi16_24 1048578, 41600
-	jr LABEL_0357F9
+	jr __jrt_nop_0357F9
+__jrt_nop_0357F9:
 
 LABEL_0357F9:
 	nop
@@ -44533,226 +44672,281 @@ DSP_Send_Cmd_Cleanup:
 
 LABEL_03640A:
 	dd82 0x3C, 0xBA
-	jr LABEL_03640F
+	jr __jrt_nop_03640F
+__jrt_nop_03640F:
 
 LABEL_03640F:
 	nop
-	jr LABEL_036412
+	jr __jrt_nop_036412
+__jrt_nop_036412:
 
 LABEL_036412:
 	nop
-	jr LABEL_036415
+	jr __jrt_nop_036415
+__jrt_nop_036415:
 
 LABEL_036415:
 	nop
-	jr LABEL_036418
+	jr __jrt_nop_036418
+__jrt_nop_036418:
 
 LABEL_036418:
 	nop
-	jr LABEL_03641B
+	jr __jrt_nop_03641B
+__jrt_nop_03641B:
 
 LABEL_03641B:
 	nop
-	jr LABEL_03641E
+	jr __jrt_nop_03641E
+__jrt_nop_03641E:
 
 LABEL_03641E:
 	nop
-	jr LABEL_036421
+	jr __jrt_nop_036421
+__jrt_nop_036421:
 
 LABEL_036421:
 	nop
-	jr LABEL_036424
+	jr __jrt_nop_036424
+__jrt_nop_036424:
 
 LABEL_036424:
 	nop
-	jr LABEL_036427
+	jr __jrt_nop_036427
+__jrt_nop_036427:
 
 LABEL_036427:
 	nop
-	jr LABEL_03642A
+	jr __jrt_nop_03642A
+__jrt_nop_03642A:
 
 LABEL_03642A:
 	nop
-	jr LABEL_03642D
+	jr __jrt_nop_03642D
+__jrt_nop_03642D:
 
 LABEL_03642D:
 	nop
-	jr LABEL_036430
+	jr __jrt_nop_036430
+__jrt_nop_036430:
 
 LABEL_036430:
 	nop
-	jr LABEL_036433
+	jr __jrt_nop_036433
+__jrt_nop_036433:
 
 LABEL_036433:
 	nop
-	jr LABEL_036436
+	jr __jrt_nop_036436
+__jrt_nop_036436:
 
 LABEL_036436:
 	nop
-	jr LABEL_036439
+	jr __jrt_nop_036439
+__jrt_nop_036439:
 
 LABEL_036439:
 	nop
-	jr LABEL_03643C
+	jr __jrt_nop_03643C
+__jrt_nop_03643C:
 
 LABEL_03643C:
 	nop
-	jr LABEL_03643F
+	jr __jrt_nop_03643F
+__jrt_nop_03643F:
 
 LABEL_03643F:
 	nop
-	jr LABEL_036442
+	jr __jrt_nop_036442
+__jrt_nop_036442:
 
 LABEL_036442:
 	nop
-	jr LABEL_036445
+	jr __jrt_nop_036445
+__jrt_nop_036445:
 
 LABEL_036445:
 	nop
 	dd82 0x3C, 0xB8
-	jr LABEL_03644B
+	jr __jrt_nop_03644B
+__jrt_nop_03644B:
 
 LABEL_03644B:
 	nop
 	dd82 0x3C, 0xB0
-	jr LABEL_036451
+	jr __jrt_nop_036451
+__jrt_nop_036451:
 
 LABEL_036451:
 	nop
-	jr LABEL_036454
+	jr __jrt_nop_036454
+__jrt_nop_036454:
 
 LABEL_036454:
 	nop
-	jr LABEL_036457
+	jr __jrt_nop_036457
+__jrt_nop_036457:
 
 LABEL_036457:
 	nop
-	jr LABEL_03645A
+	jr __jrt_nop_03645A
+__jrt_nop_03645A:
 
 LABEL_03645A:
 	nop
-	jr LABEL_03645D
+	jr __jrt_nop_03645D
+__jrt_nop_03645D:
 
 LABEL_03645D:
 	nop
-	jr LABEL_036460
+	jr __jrt_nop_036460
+__jrt_nop_036460:
 
 LABEL_036460:
 	nop
-	jr LABEL_036463
+	jr __jrt_nop_036463
+__jrt_nop_036463:
 
 LABEL_036463:
 	nop
-	jr LABEL_036466
+	jr __jrt_nop_036466
+__jrt_nop_036466:
 
 LABEL_036466:
 	nop
-	jr LABEL_036469
+	jr __jrt_nop_036469
+__jrt_nop_036469:
 
 LABEL_036469:
 	nop
-	jr LABEL_03646C
+	jr __jrt_nop_03646C
+__jrt_nop_03646C:
 
 LABEL_03646C:
 	nop
-	jr LABEL_03646F
+	jr __jrt_nop_03646F
+__jrt_nop_03646F:
 
 LABEL_03646F:
 	nop
-	jr LABEL_036472
+	jr __jrt_nop_036472
+__jrt_nop_036472:
 
 LABEL_036472:
 	nop
-	jr LABEL_036475
+	jr __jrt_nop_036475
+__jrt_nop_036475:
 
 LABEL_036475:
 	nop
-	jr LABEL_036478
+	jr __jrt_nop_036478
+__jrt_nop_036478:
 
 LABEL_036478:
 	nop
-	jr LABEL_03647B
+	jr __jrt_nop_03647B
+__jrt_nop_03647B:
 
 LABEL_03647B:
 	nop
-	jr LABEL_03647E
+	jr __jrt_nop_03647E
+__jrt_nop_03647E:
 
 LABEL_03647E:
 	nop
 	dd82 0x3C, 0xB2
-	jr LABEL_036484
+	jr __jrt_nop_036484
+__jrt_nop_036484:
 
 LABEL_036484:
 	nop
-	jr LABEL_036487
+	jr __jrt_nop_036487
+__jrt_nop_036487:
 
 LABEL_036487:
 	nop
-	jr LABEL_03648A
+	jr __jrt_nop_03648A
+__jrt_nop_03648A:
 
 LABEL_03648A:
 	nop
-	jr LABEL_03648D
+	jr __jrt_nop_03648D
+__jrt_nop_03648D:
 
 LABEL_03648D:
 	nop
-	jr LABEL_036490
+	jr __jrt_nop_036490
+__jrt_nop_036490:
 
 LABEL_036490:
 	nop
-	jr LABEL_036493
+	jr __jrt_nop_036493
+__jrt_nop_036493:
 
 LABEL_036493:
 	nop
-	jr LABEL_036496
+	jr __jrt_nop_036496
+__jrt_nop_036496:
 
 LABEL_036496:
 	nop
-	jr LABEL_036499
+	jr __jrt_nop_036499
+__jrt_nop_036499:
 
 LABEL_036499:
 	nop
-	jr LABEL_03649C
+	jr __jrt_nop_03649C
+__jrt_nop_03649C:
 
 LABEL_03649C:
 	nop
-	jr LABEL_03649F
+	jr __jrt_nop_03649F
+__jrt_nop_03649F:
 
 LABEL_03649F:
 	nop
-	jr LABEL_0364A2
+	jr __jrt_nop_0364A2
+__jrt_nop_0364A2:
 
 LABEL_0364A2:
 	nop
-	jr LABEL_0364A5
+	jr __jrt_nop_0364A5
+__jrt_nop_0364A5:
 
 LABEL_0364A5:
 	nop
-	jr LABEL_0364A8
+	jr __jrt_nop_0364A8
+__jrt_nop_0364A8:
 
 LABEL_0364A8:
 	nop
-	jr LABEL_0364AB
+	jr __jrt_nop_0364AB
+__jrt_nop_0364AB:
 
 LABEL_0364AB:
 	nop
-	jr LABEL_0364AE
+	jr __jrt_nop_0364AE
+__jrt_nop_0364AE:
 
 LABEL_0364AE:
 	nop
-	jr LABEL_0364B1
+	jr __jrt_nop_0364B1
+__jrt_nop_0364B1:
 
 LABEL_0364B1:
 	nop
-	jr LABEL_0364B4
+	jr __jrt_nop_0364B4
+__jrt_nop_0364B4:
 
 LABEL_0364B4:
 	nop
-	jr LABEL_0364B7
+	jr __jrt_nop_0364B7
+__jrt_nop_0364B7:
 
 LABEL_0364B7:
 	nop
-	jr LABEL_0364BA
+	jr __jrt_nop_0364BA
+__jrt_nop_0364BA:
 
 LABEL_0364BA:
 	nop
@@ -44762,541 +44956,675 @@ LABEL_0364BA:
 LABEL_0364C4:
 	dd82 0x3C, 0xB2
 	dd82 0x3C, 0xB0
-	jr LABEL_0364CC
+	jr __jrt_nop_0364CC
+__jrt_nop_0364CC:
 
 LABEL_0364CC:
 	nop
-	jr LABEL_0364CF
+	jr __jrt_nop_0364CF
+__jrt_nop_0364CF:
 
 LABEL_0364CF:
 	nop
-	jr LABEL_0364D2
+	jr __jrt_nop_0364D2
+__jrt_nop_0364D2:
 
 LABEL_0364D2:
 	nop
-	jr LABEL_0364D5
+	jr __jrt_nop_0364D5
+__jrt_nop_0364D5:
 
 LABEL_0364D5:
 	nop
-	jr LABEL_0364D8
+	jr __jrt_nop_0364D8
+__jrt_nop_0364D8:
 
 LABEL_0364D8:
 	nop
-	jr LABEL_0364DB
+	jr __jrt_nop_0364DB
+__jrt_nop_0364DB:
 
 LABEL_0364DB:
 	nop
-	jr LABEL_0364DE
+	jr __jrt_nop_0364DE
+__jrt_nop_0364DE:
 
 LABEL_0364DE:
 	nop
-	jr LABEL_0364E1
+	jr __jrt_nop_0364E1
+__jrt_nop_0364E1:
 
 LABEL_0364E1:
 	nop
-	jr LABEL_0364E4
+	jr __jrt_nop_0364E4
+__jrt_nop_0364E4:
 
 LABEL_0364E4:
 	nop
-	jr LABEL_0364E7
+	jr __jrt_nop_0364E7
+__jrt_nop_0364E7:
 
 LABEL_0364E7:
 	nop
-	jr LABEL_0364EA
+	jr __jrt_nop_0364EA
+__jrt_nop_0364EA:
 
 LABEL_0364EA:
 	nop
-	jr LABEL_0364ED
+	jr __jrt_nop_0364ED
+__jrt_nop_0364ED:
 
 LABEL_0364ED:
 	nop
-	jr LABEL_0364F0
+	jr __jrt_nop_0364F0
+__jrt_nop_0364F0:
 
 LABEL_0364F0:
 	nop
-	jr LABEL_0364F3
+	jr __jrt_nop_0364F3
+__jrt_nop_0364F3:
 
 LABEL_0364F3:
 	nop
-	jr LABEL_0364F6
+	jr __jrt_nop_0364F6
+__jrt_nop_0364F6:
 
 LABEL_0364F6:
 	nop
-	jr LABEL_0364F9
+	jr __jrt_nop_0364F9
+__jrt_nop_0364F9:
 
 LABEL_0364F9:
 	nop
-	jr LABEL_0364FC
+	jr __jrt_nop_0364FC
+__jrt_nop_0364FC:
 
 LABEL_0364FC:
 	nop
-	jr LABEL_0364FF
+	jr __jrt_nop_0364FF
+__jrt_nop_0364FF:
 
 LABEL_0364FF:
 	nop
-	jr LABEL_036502
+	jr __jrt_nop_036502
+__jrt_nop_036502:
 
 LABEL_036502:
 	nop
 	dd82 0x3C, 0xBA
-	jr LABEL_036508
+	jr __jrt_nop_036508
+__jrt_nop_036508:
 
 LABEL_036508:
 	nop
-	jr LABEL_03650B
+	jr __jrt_nop_03650B
+__jrt_nop_03650B:
 
 LABEL_03650B:
 	nop
-	jr LABEL_03650E
+	jr __jrt_nop_03650E
+__jrt_nop_03650E:
 
 LABEL_03650E:
 	nop
-	jr LABEL_036511
+	jr __jrt_nop_036511
+__jrt_nop_036511:
 
 LABEL_036511:
 	nop
-	jr LABEL_036514
+	jr __jrt_nop_036514
+__jrt_nop_036514:
 
 LABEL_036514:
 	nop
-	jr LABEL_036517
+	jr __jrt_nop_036517
+__jrt_nop_036517:
 
 LABEL_036517:
 	nop
-	jr LABEL_03651A
+	jr __jrt_nop_03651A
+__jrt_nop_03651A:
 
 LABEL_03651A:
 	nop
-	jr LABEL_03651D
+	jr __jrt_nop_03651D
+__jrt_nop_03651D:
 
 LABEL_03651D:
 	nop
-	jr LABEL_036520
+	jr __jrt_nop_036520
+__jrt_nop_036520:
 
 LABEL_036520:
 	nop
-	jr LABEL_036523
+	jr __jrt_nop_036523
+__jrt_nop_036523:
 
 LABEL_036523:
 	nop
-	jr LABEL_036526
+	jr __jrt_nop_036526
+__jrt_nop_036526:
 
 LABEL_036526:
 	nop
-	jr LABEL_036529
+	jr __jrt_nop_036529
+__jrt_nop_036529:
 
 LABEL_036529:
 	nop
-	jr LABEL_03652C
+	jr __jrt_nop_03652C
+__jrt_nop_03652C:
 
 LABEL_03652C:
 	nop
-	jr LABEL_03652F
+	jr __jrt_nop_03652F
+__jrt_nop_03652F:
 
 LABEL_03652F:
 	nop
-	jr LABEL_036532
+	jr __jrt_nop_036532
+__jrt_nop_036532:
 
 LABEL_036532:
 	nop
-	jr LABEL_036535
+	jr __jrt_nop_036535
+__jrt_nop_036535:
 
 LABEL_036535:
 	nop
-	jr LABEL_036538
+	jr __jrt_nop_036538
+__jrt_nop_036538:
 
 LABEL_036538:
 	nop
-	jr LABEL_03653B
+	jr __jrt_nop_03653B
+__jrt_nop_03653B:
 
 LABEL_03653B:
 	nop
-	jr LABEL_03653E
+	jr __jrt_nop_03653E
+__jrt_nop_03653E:
 
 LABEL_03653E:
 	nop
 	dd82 0x3C, 0xB8
-	jr LABEL_036544
+	jr __jrt_nop_036544
+__jrt_nop_036544:
 
 LABEL_036544:
 	nop
-	jr LABEL_036547
+	jr __jrt_nop_036547
+__jrt_nop_036547:
 
 LABEL_036547:
 	nop
-	jr LABEL_03654A
+	jr __jrt_nop_03654A
+__jrt_nop_03654A:
 
 LABEL_03654A:
 	nop
-	jr LABEL_03654D
+	jr __jrt_nop_03654D
+__jrt_nop_03654D:
 
 LABEL_03654D:
 	nop
-	jr LABEL_036550
+	jr __jrt_nop_036550
+__jrt_nop_036550:
 
 LABEL_036550:
 	nop
-	jr LABEL_036553
+	jr __jrt_nop_036553
+__jrt_nop_036553:
 
 LABEL_036553:
 	nop
-	jr LABEL_036556
+	jr __jrt_nop_036556
+__jrt_nop_036556:
 
 LABEL_036556:
 	nop
-	jr LABEL_036559
+	jr __jrt_nop_036559
+__jrt_nop_036559:
 
 LABEL_036559:
 	nop
-	jr LABEL_03655C
+	jr __jrt_nop_03655C
+__jrt_nop_03655C:
 
 LABEL_03655C:
 	nop
-	jr LABEL_03655F
+	jr __jrt_nop_03655F
+__jrt_nop_03655F:
 
 LABEL_03655F:
 	nop
-	jr LABEL_036562
+	jr __jrt_nop_036562
+__jrt_nop_036562:
 
 LABEL_036562:
 	nop
-	jr LABEL_036565
+	jr __jrt_nop_036565
+__jrt_nop_036565:
 
 LABEL_036565:
 	nop
-	jr LABEL_036568
+	jr __jrt_nop_036568
+__jrt_nop_036568:
 
 LABEL_036568:
 	nop
-	jr LABEL_03656B
+	jr __jrt_nop_03656B
+__jrt_nop_03656B:
 
 LABEL_03656B:
 	nop
-	jr LABEL_03656E
+	jr __jrt_nop_03656E
+__jrt_nop_03656E:
 
 LABEL_03656E:
 	nop
-	jr LABEL_036571
+	jr __jrt_nop_036571
+__jrt_nop_036571:
 
 LABEL_036571:
 	nop
-	jr LABEL_036574
+	jr __jrt_nop_036574
+__jrt_nop_036574:
 
 LABEL_036574:
 	nop
-	jr LABEL_036577
+	jr __jrt_nop_036577
+__jrt_nop_036577:
 
 LABEL_036577:
 	nop
-	jr LABEL_03657A
+	jr __jrt_nop_03657A
+__jrt_nop_03657A:
 
 LABEL_03657A:
 	nop
-	jr LABEL_03657D
+	jr __jrt_nop_03657D
+__jrt_nop_03657D:
 
 LABEL_03657D:
 	nop
-	jr LABEL_036580
+	jr __jrt_nop_036580
+__jrt_nop_036580:
 
 LABEL_036580:
 	nop
-	jr LABEL_036583
+	jr __jrt_nop_036583
+__jrt_nop_036583:
 
 LABEL_036583:
 	nop
-	jr LABEL_036586
+	jr __jrt_nop_036586
+__jrt_nop_036586:
 
 LABEL_036586:
 	nop
-	jr LABEL_036589
+	jr __jrt_nop_036589
+__jrt_nop_036589:
 
 LABEL_036589:
 	nop
-	jr LABEL_03658C
+	jr __jrt_nop_03658C
+__jrt_nop_03658C:
 
 LABEL_03658C:
 	nop
-	jr LABEL_03658F
+	jr __jrt_nop_03658F
+__jrt_nop_03658F:
 
 LABEL_03658F:
 	nop
-	jr LABEL_036592
+	jr __jrt_nop_036592
+__jrt_nop_036592:
 
 LABEL_036592:
 	nop
-	jr LABEL_036595
+	jr __jrt_nop_036595
+__jrt_nop_036595:
 
 LABEL_036595:
 	nop
-	jr LABEL_036598
+	jr __jrt_nop_036598
+__jrt_nop_036598:
 
 LABEL_036598:
 	nop
-	jr LABEL_03659B
+	jr __jrt_nop_03659B
+__jrt_nop_03659B:
 
 LABEL_03659B:
 	nop
-	jr LABEL_03659E
+	jr __jrt_nop_03659E
+__jrt_nop_03659E:
 
 LABEL_03659E:
 	nop
-	jr LABEL_0365A1
+	jr __jrt_nop_0365A1
+__jrt_nop_0365A1:
 
 LABEL_0365A1:
 	nop
-	jr LABEL_0365A4
+	jr __jrt_nop_0365A4
+__jrt_nop_0365A4:
 
 LABEL_0365A4:
 	nop
-	jr LABEL_0365A7
+	jr __jrt_nop_0365A7
+__jrt_nop_0365A7:
 
 LABEL_0365A7:
 	nop
-	jr LABEL_0365AA
+	jr __jrt_nop_0365AA
+__jrt_nop_0365AA:
 
 LABEL_0365AA:
 	nop
-	jr LABEL_0365AD
+	jr __jrt_nop_0365AD
+__jrt_nop_0365AD:
 
 LABEL_0365AD:
 	nop
-	jr LABEL_0365B0
+	jr __jrt_nop_0365B0
+__jrt_nop_0365B0:
 
 LABEL_0365B0:
 	nop
-	jr LABEL_0365B3
+	jr __jrt_nop_0365B3
+__jrt_nop_0365B3:
 
 LABEL_0365B3:
 	nop
-	jr LABEL_0365B6
+	jr __jrt_nop_0365B6
+__jrt_nop_0365B6:
 
 LABEL_0365B6:
 	nop
-	jr LABEL_0365B9
+	jr __jrt_nop_0365B9
+__jrt_nop_0365B9:
 
 LABEL_0365B9:
 	nop
-	jr LABEL_0365BC
+	jr __jrt_nop_0365BC
+__jrt_nop_0365BC:
 
 LABEL_0365BC:
 	nop
-	jr LABEL_0365BF
+	jr __jrt_nop_0365BF
+__jrt_nop_0365BF:
 
 LABEL_0365BF:
 	nop
-	jr LABEL_0365C2
+	jr __jrt_nop_0365C2
+__jrt_nop_0365C2:
 
 LABEL_0365C2:
 	nop
-	jr LABEL_0365C5
+	jr __jrt_nop_0365C5
+__jrt_nop_0365C5:
 
 LABEL_0365C5:
 	nop
-	jr LABEL_0365C8
+	jr __jrt_nop_0365C8
+__jrt_nop_0365C8:
 
 LABEL_0365C8:
 	nop
-	jr LABEL_0365CB
+	jr __jrt_nop_0365CB
+__jrt_nop_0365CB:
 
 LABEL_0365CB:
 	nop
-	jr LABEL_0365CE
+	jr __jrt_nop_0365CE
+__jrt_nop_0365CE:
 
 LABEL_0365CE:
 	nop
-	jr LABEL_0365D1
+	jr __jrt_nop_0365D1
+__jrt_nop_0365D1:
 
 LABEL_0365D1:
 	nop
-	jr LABEL_0365D4
+	jr __jrt_nop_0365D4
+__jrt_nop_0365D4:
 
 LABEL_0365D4:
 	nop
-	jr LABEL_0365D7
+	jr __jrt_nop_0365D7
+__jrt_nop_0365D7:
 
 LABEL_0365D7:
 	nop
-	jr LABEL_0365DA
+	jr __jrt_nop_0365DA
+__jrt_nop_0365DA:
 
 LABEL_0365DA:
 	nop
-	jr LABEL_0365DD
+	jr __jrt_nop_0365DD
+__jrt_nop_0365DD:
 
 LABEL_0365DD:
 	nop
-	jr LABEL_0365E0
+	jr __jrt_nop_0365E0
+__jrt_nop_0365E0:
 
 LABEL_0365E0:
 	nop
-	jr LABEL_0365E3
+	jr __jrt_nop_0365E3
+__jrt_nop_0365E3:
 
 LABEL_0365E3:
 	nop
-	jr LABEL_0365E6
+	jr __jrt_nop_0365E6
+__jrt_nop_0365E6:
 
 LABEL_0365E6:
 	nop
-	jr LABEL_0365E9
+	jr __jrt_nop_0365E9
+__jrt_nop_0365E9:
 
 LABEL_0365E9:
 	nop
-	jr LABEL_0365EC
+	jr __jrt_nop_0365EC
+__jrt_nop_0365EC:
 
 LABEL_0365EC:
 	nop
-	jr LABEL_0365EF
+	jr __jrt_nop_0365EF
+__jrt_nop_0365EF:
 
 LABEL_0365EF:
 	nop
-	jr LABEL_0365F2
+	jr __jrt_nop_0365F2
+__jrt_nop_0365F2:
 
 LABEL_0365F2:
 	nop
-	jr LABEL_0365F5
+	jr __jrt_nop_0365F5
+__jrt_nop_0365F5:
 
 LABEL_0365F5:
 	nop
-	jr LABEL_0365F8
+	jr __jrt_nop_0365F8
+__jrt_nop_0365F8:
 
 LABEL_0365F8:
 	nop
-	jr LABEL_0365FB
+	jr __jrt_nop_0365FB
+__jrt_nop_0365FB:
 
 LABEL_0365FB:
 	nop
-	jr LABEL_0365FE
+	jr __jrt_nop_0365FE
+__jrt_nop_0365FE:
 
 LABEL_0365FE:
 	nop
-	jr LABEL_036601
+	jr __jrt_nop_036601
+__jrt_nop_036601:
 
 LABEL_036601:
 	nop
-	jr LABEL_036604
+	jr __jrt_nop_036604
+__jrt_nop_036604:
 
 LABEL_036604:
 	nop
-	jr LABEL_036607
+	jr __jrt_nop_036607
+__jrt_nop_036607:
 
 LABEL_036607:
 	nop
-	jr LABEL_03660A
+	jr __jrt_nop_03660A
+__jrt_nop_03660A:
 
 LABEL_03660A:
 	nop
-	jr LABEL_03660D
+	jr __jrt_nop_03660D
+__jrt_nop_03660D:
 
 LABEL_03660D:
 	nop
-	jr LABEL_036610
+	jr __jrt_nop_036610
+__jrt_nop_036610:
 
 LABEL_036610:
 	nop
-	jr LABEL_036613
+	jr __jrt_nop_036613
+__jrt_nop_036613:
 
 LABEL_036613:
 	nop
-	jr LABEL_036616
+	jr __jrt_nop_036616
+__jrt_nop_036616:
 
 LABEL_036616:
 	nop
-	jr LABEL_036619
+	jr __jrt_nop_036619
+__jrt_nop_036619:
 
 LABEL_036619:
 	nop
-	jr LABEL_03661C
+	jr __jrt_nop_03661C
+__jrt_nop_03661C:
 
 LABEL_03661C:
 	nop
-	jr LABEL_03661F
+	jr __jrt_nop_03661F
+__jrt_nop_03661F:
 
 LABEL_03661F:
 	nop
-	jr LABEL_036622
+	jr __jrt_nop_036622
+__jrt_nop_036622:
 
 LABEL_036622:
 	nop
-	jr LABEL_036625
+	jr __jrt_nop_036625
+__jrt_nop_036625:
 
 LABEL_036625:
 	nop
-	jr LABEL_036628
+	jr __jrt_nop_036628
+__jrt_nop_036628:
 
 LABEL_036628:
 	nop
-	jr LABEL_03662B
+	jr __jrt_nop_03662B
+__jrt_nop_03662B:
 
 LABEL_03662B:
 	nop
-	jr LABEL_03662E
+	jr __jrt_nop_03662E
+__jrt_nop_03662E:
 
 LABEL_03662E:
 	nop
-	jr LABEL_036631
+	jr __jrt_nop_036631
+__jrt_nop_036631:
 
 LABEL_036631:
 	nop
-	jr LABEL_036634
+	jr __jrt_nop_036634
+__jrt_nop_036634:
 
 LABEL_036634:
 	nop
-	jr LABEL_036637
+	jr __jrt_nop_036637
+__jrt_nop_036637:
 
 LABEL_036637:
 	nop
-	jr LABEL_03663A
+	jr __jrt_nop_03663A
+__jrt_nop_03663A:
 
 LABEL_03663A:
 	nop
-	jr LABEL_03663D
+	jr __jrt_nop_03663D
+__jrt_nop_03663D:
 
 LABEL_03663D:
 	nop
-	jr LABEL_036640
+	jr __jrt_nop_036640
+__jrt_nop_036640:
 
 LABEL_036640:
 	nop
-	jr LABEL_036643
+	jr __jrt_nop_036643
+__jrt_nop_036643:
 
 LABEL_036643:
 	nop
-	jr LABEL_036646
+	jr __jrt_nop_036646
+__jrt_nop_036646:
 
 LABEL_036646:
 	nop
-	jr LABEL_036649
+	jr __jrt_nop_036649
+__jrt_nop_036649:
 
 LABEL_036649:
 	nop
-	jr LABEL_03664C
+	jr __jrt_nop_03664C
+__jrt_nop_03664C:
 
 LABEL_03664C:
 	nop
-	jr LABEL_03664F
+	jr __jrt_nop_03664F
+__jrt_nop_03664F:
 
 LABEL_03664F:
 	nop
-	jr LABEL_036652
+	jr __jrt_nop_036652
+__jrt_nop_036652:
 
 LABEL_036652:
 	nop
-	jr LABEL_036655
+	jr __jrt_nop_036655
+__jrt_nop_036655:
 
 LABEL_036655:
 	nop
-	jr LABEL_036658
+	jr __jrt_nop_036658
+__jrt_nop_036658:
 
 LABEL_036658:
 	nop
-	jr LABEL_03665B
+	jr __jrt_nop_03665B
+__jrt_nop_03665B:
 
 LABEL_03665B:
 	nop
-	jr LABEL_03665E
+	jr __jrt_nop_03665E
+__jrt_nop_03665E:
 
 LABEL_03665E:
 	nop
-	jr LABEL_036661
+	jr __jrt_nop_036661
+__jrt_nop_036661:
 
 LABEL_036661:
 	nop
@@ -45330,150 +45658,186 @@ LABEL_0366A1:
 	dd82 0x3C, 0xB0
 
 LABEL_0366A4:
-	jr LABEL_0366A6
+	jr __jrt_nop_0366A6
+__jrt_nop_0366A6:
 
 LABEL_0366A6:
 	nop
 	erpb3 0xFB, 0xEE, 0x01
 	dd82 0x3C, 0xBA
-	jr LABEL_0366B0
+	jr __jrt_nop_0366B0
+__jrt_nop_0366B0:
 
 LABEL_0366B0:
 	nop
-	jr LABEL_0366B3
+	jr __jrt_nop_0366B3
+__jrt_nop_0366B3:
 
 LABEL_0366B3:
 	nop
-	jr LABEL_0366B6
+	jr __jrt_nop_0366B6
+__jrt_nop_0366B6:
 
 LABEL_0366B6:
 	nop
-	jr LABEL_0366B9
+	jr __jrt_nop_0366B9
+__jrt_nop_0366B9:
 
 LABEL_0366B9:
 	nop
-	jr LABEL_0366BC
+	jr __jrt_nop_0366BC
+__jrt_nop_0366BC:
 
 LABEL_0366BC:
 	nop
-	jr LABEL_0366BF
+	jr __jrt_nop_0366BF
+__jrt_nop_0366BF:
 
 LABEL_0366BF:
 	nop
-	jr LABEL_0366C2
+	jr __jrt_nop_0366C2
+__jrt_nop_0366C2:
 
 LABEL_0366C2:
 	nop
-	jr LABEL_0366C5
+	jr __jrt_nop_0366C5
+__jrt_nop_0366C5:
 
 LABEL_0366C5:
 	nop
-	jr LABEL_0366C8
+	jr __jrt_nop_0366C8
+__jrt_nop_0366C8:
 
 LABEL_0366C8:
 	nop
-	jr LABEL_0366CB
+	jr __jrt_nop_0366CB
+__jrt_nop_0366CB:
 
 LABEL_0366CB:
 	nop
-	jr LABEL_0366CE
+	jr __jrt_nop_0366CE
+__jrt_nop_0366CE:
 
 LABEL_0366CE:
 	nop
-	jr LABEL_0366D1
+	jr __jrt_nop_0366D1
+__jrt_nop_0366D1:
 
 LABEL_0366D1:
 	nop
-	jr LABEL_0366D4
+	jr __jrt_nop_0366D4
+__jrt_nop_0366D4:
 
 LABEL_0366D4:
 	nop
-	jr LABEL_0366D7
+	jr __jrt_nop_0366D7
+__jrt_nop_0366D7:
 
 LABEL_0366D7:
 	nop
-	jr LABEL_0366DA
+	jr __jrt_nop_0366DA
+__jrt_nop_0366DA:
 
 LABEL_0366DA:
 	nop
-	jr LABEL_0366DD
+	jr __jrt_nop_0366DD
+__jrt_nop_0366DD:
 
 LABEL_0366DD:
 	nop
 	dd82 0x3C, 0xB2
-	jr LABEL_0366E3
+	jr __jrt_nop_0366E3
+__jrt_nop_0366E3:
 
 LABEL_0366E3:
 	nop
-	jr LABEL_0366E6
+	jr __jrt_nop_0366E6
+__jrt_nop_0366E6:
 
 LABEL_0366E6:
 	nop
-	jr LABEL_0366E9
+	jr __jrt_nop_0366E9
+__jrt_nop_0366E9:
 
 LABEL_0366E9:
 	nop
-	jr LABEL_0366EC
+	jr __jrt_nop_0366EC
+__jrt_nop_0366EC:
 
 LABEL_0366EC:
 	nop
-	jr LABEL_0366EF
+	jr __jrt_nop_0366EF
+__jrt_nop_0366EF:
 
 LABEL_0366EF:
 	nop
-	jr LABEL_0366F2
+	jr __jrt_nop_0366F2
+__jrt_nop_0366F2:
 
 LABEL_0366F2:
 	nop
-	jr LABEL_0366F5
+	jr __jrt_nop_0366F5
+__jrt_nop_0366F5:
 
 LABEL_0366F5:
 	nop
-	jr LABEL_0366F8
+	jr __jrt_nop_0366F8
+__jrt_nop_0366F8:
 
 LABEL_0366F8:
 	nop
-	jr LABEL_0366FB
+	jr __jrt_nop_0366FB
+__jrt_nop_0366FB:
 
 LABEL_0366FB:
 	nop
-	jr LABEL_0366FE
+	jr __jrt_nop_0366FE
+__jrt_nop_0366FE:
 
 LABEL_0366FE:
 	nop
-	jr LABEL_036701
+	jr __jrt_nop_036701
+__jrt_nop_036701:
 
 LABEL_036701:
 	nop
-	jr LABEL_036704
+	jr __jrt_nop_036704
+__jrt_nop_036704:
 
 LABEL_036704:
 	nop
-	jr LABEL_036707
+	jr __jrt_nop_036707
+__jrt_nop_036707:
 
 LABEL_036707:
 	nop
-	jr LABEL_03670A
+	jr __jrt_nop_03670A
+__jrt_nop_03670A:
 
 LABEL_03670A:
 	nop
-	jr LABEL_03670D
+	jr __jrt_nop_03670D
+__jrt_nop_03670D:
 
 LABEL_03670D:
 	nop
-	jr LABEL_036710
+	jr __jrt_nop_036710
+__jrt_nop_036710:
 
 LABEL_036710:
 	nop
-	jr LABEL_036713
+	jr __jrt_nop_036713
+__jrt_nop_036713:
 
 LABEL_036713:
 	nop
-	jr LABEL_036716
+	jr __jrt_nop_036716
+__jrt_nop_036716:
 
 LABEL_036716:
 	nop
-	jr LABEL_036719
+	jr __jrt_nop_036719
+__jrt_nop_036719:
 
 LABEL_036719:
 	nop
@@ -45481,215 +45845,267 @@ LABEL_036719:
 	jrl gt, LABEL_036696
 
 LABEL_036721:
-	jr LABEL_036723
+	jr __jrt_nop_036723
+__jrt_nop_036723:
 
 LABEL_036723:
 	nop
 	dd82 0x3C, 0xBA
-	jr LABEL_036729
+	jr __jrt_nop_036729
+__jrt_nop_036729:
 
 LABEL_036729:
 	nop
-	jr LABEL_03672C
+	jr __jrt_nop_03672C
+__jrt_nop_03672C:
 
 LABEL_03672C:
 	nop
-	jr LABEL_03672F
+	jr __jrt_nop_03672F
+__jrt_nop_03672F:
 
 LABEL_03672F:
 	nop
-	jr LABEL_036732
+	jr __jrt_nop_036732
+__jrt_nop_036732:
 
 LABEL_036732:
 	nop
-	jr LABEL_036735
+	jr __jrt_nop_036735
+__jrt_nop_036735:
 
 LABEL_036735:
 	nop
-	jr LABEL_036738
+	jr __jrt_nop_036738
+__jrt_nop_036738:
 
 LABEL_036738:
 	nop
-	jr LABEL_03673B
+	jr __jrt_nop_03673B
+__jrt_nop_03673B:
 
 LABEL_03673B:
 	nop
-	jr LABEL_03673E
+	jr __jrt_nop_03673E
+__jrt_nop_03673E:
 
 LABEL_03673E:
 	nop
-	jr LABEL_036741
+	jr __jrt_nop_036741
+__jrt_nop_036741:
 
 LABEL_036741:
 	nop
-	jr LABEL_036744
+	jr __jrt_nop_036744
+__jrt_nop_036744:
 
 LABEL_036744:
 	nop
-	jr LABEL_036747
+	jr __jrt_nop_036747
+__jrt_nop_036747:
 
 LABEL_036747:
 	nop
-	jr LABEL_03674A
+	jr __jrt_nop_03674A
+__jrt_nop_03674A:
 
 LABEL_03674A:
 	nop
-	jr LABEL_03674D
+	jr __jrt_nop_03674D
+__jrt_nop_03674D:
 
 LABEL_03674D:
 	nop
-	jr LABEL_036750
+	jr __jrt_nop_036750
+__jrt_nop_036750:
 
 LABEL_036750:
 	nop
-	jr LABEL_036753
+	jr __jrt_nop_036753
+__jrt_nop_036753:
 
 LABEL_036753:
 	nop
-	jr LABEL_036756
+	jr __jrt_nop_036756
+__jrt_nop_036756:
 
 LABEL_036756:
 	nop
 	dd82 0x3C, 0xB2
-	jr LABEL_03675C
+	jr __jrt_nop_03675C
+__jrt_nop_03675C:
 
 LABEL_03675C:
 	nop
-	jr LABEL_03675F
+	jr __jrt_nop_03675F
+__jrt_nop_03675F:
 
 LABEL_03675F:
 	nop
-	jr LABEL_036762
+	jr __jrt_nop_036762
+__jrt_nop_036762:
 
 LABEL_036762:
 	nop
-	jr LABEL_036765
+	jr __jrt_nop_036765
+__jrt_nop_036765:
 
 LABEL_036765:
 	nop
-	jr LABEL_036768
+	jr __jrt_nop_036768
+__jrt_nop_036768:
 
 LABEL_036768:
 	nop
-	jr LABEL_03676B
+	jr __jrt_nop_03676B
+__jrt_nop_03676B:
 
 LABEL_03676B:
 	nop
-	jr LABEL_03676E
+	jr __jrt_nop_03676E
+__jrt_nop_03676E:
 
 LABEL_03676E:
 	nop
-	jr LABEL_036771
+	jr __jrt_nop_036771
+__jrt_nop_036771:
 
 LABEL_036771:
 	nop
-	jr LABEL_036774
+	jr __jrt_nop_036774
+__jrt_nop_036774:
 
 LABEL_036774:
 	nop
-	jr LABEL_036777
+	jr __jrt_nop_036777
+__jrt_nop_036777:
 
 LABEL_036777:
 	nop
-	jr LABEL_03677A
+	jr __jrt_nop_03677A
+__jrt_nop_03677A:
 
 LABEL_03677A:
 	nop
-	jr LABEL_03677D
+	jr __jrt_nop_03677D
+__jrt_nop_03677D:
 
 LABEL_03677D:
 	nop
-	jr LABEL_036780
+	jr __jrt_nop_036780
+__jrt_nop_036780:
 
 LABEL_036780:
 	nop
-	jr LABEL_036783
+	jr __jrt_nop_036783
+__jrt_nop_036783:
 
 LABEL_036783:
 	nop
-	jr LABEL_036786
+	jr __jrt_nop_036786
+__jrt_nop_036786:
 
 LABEL_036786:
 	nop
-	jr LABEL_036789
+	jr __jrt_nop_036789
+__jrt_nop_036789:
 
 LABEL_036789:
 	nop
-	jr LABEL_03678C
+	jr __jrt_nop_03678C
+__jrt_nop_03678C:
 
 LABEL_03678C:
 	nop
-	jr LABEL_03678F
+	jr __jrt_nop_03678F
+__jrt_nop_03678F:
 
 LABEL_03678F:
 	nop
-	jr LABEL_036792
+	jr __jrt_nop_036792
+__jrt_nop_036792:
 
 LABEL_036792:
 	nop
 	ld wa, (xsp + 6)
 	call 0x383DB
-	jr LABEL_03679C
+	jr __jrt_nop_03679C
+__jrt_nop_03679C:
 
 LABEL_03679C:
 	nop
-	jr LABEL_03679F
+	jr __jrt_nop_03679F
+__jrt_nop_03679F:
 
 LABEL_03679F:
 	nop
-	jr LABEL_0367A2
+	jr __jrt_nop_0367A2
+__jrt_nop_0367A2:
 
 LABEL_0367A2:
 	nop
-	jr LABEL_0367A5
+	jr __jrt_nop_0367A5
+__jrt_nop_0367A5:
 
 LABEL_0367A5:
 	nop
-	jr LABEL_0367A8
+	jr __jrt_nop_0367A8
+__jrt_nop_0367A8:
 
 LABEL_0367A8:
 	nop
-	jr LABEL_0367AB
+	jr __jrt_nop_0367AB
+__jrt_nop_0367AB:
 
 LABEL_0367AB:
 	nop
-	jr LABEL_0367AE
+	jr __jrt_nop_0367AE
+__jrt_nop_0367AE:
 
 LABEL_0367AE:
 	nop
-	jr LABEL_0367B1
+	jr __jrt_nop_0367B1
+__jrt_nop_0367B1:
 
 LABEL_0367B1:
 	nop
-	jr LABEL_0367B4
+	jr __jrt_nop_0367B4
+__jrt_nop_0367B4:
 
 LABEL_0367B4:
 	nop
-	jr LABEL_0367B7
+	jr __jrt_nop_0367B7
+__jrt_nop_0367B7:
 
 LABEL_0367B7:
 	nop
-	jr LABEL_0367BA
+	jr __jrt_nop_0367BA
+__jrt_nop_0367BA:
 
 LABEL_0367BA:
 	nop
-	jr LABEL_0367BD
+	jr __jrt_nop_0367BD
+__jrt_nop_0367BD:
 
 LABEL_0367BD:
 	nop
-	jr LABEL_0367C0
+	jr __jrt_nop_0367C0
+__jrt_nop_0367C0:
 
 LABEL_0367C0:
 	nop
-	jr LABEL_0367C3
+	jr __jrt_nop_0367C3
+__jrt_nop_0367C3:
 
 LABEL_0367C3:
 	nop
-	jr LABEL_0367C6
+	jr __jrt_nop_0367C6
+__jrt_nop_0367C6:
 
 LABEL_0367C6:
 	nop
-	jr LABEL_0367C9
+	jr __jrt_nop_0367C9
+__jrt_nop_0367C9:
 
 LABEL_0367C9:
 	nop
@@ -45817,150 +46233,186 @@ LABEL_0368EA:
 	dd82 0x3C, 0xB0
 
 LABEL_0368ED:
-	jr LABEL_0368EF
+	jr __jrt_nop_0368EF
+__jrt_nop_0368EF:
 
 LABEL_0368EF:
 	nop
 	erpb3 0xFB, 0xEE, 0x01
 	dd82 0x3C, 0xBA
-	jr LABEL_0368F9
+	jr __jrt_nop_0368F9
+__jrt_nop_0368F9:
 
 LABEL_0368F9:
 	nop
-	jr LABEL_0368FC
+	jr __jrt_nop_0368FC
+__jrt_nop_0368FC:
 
 LABEL_0368FC:
 	nop
-	jr LABEL_0368FF
+	jr __jrt_nop_0368FF
+__jrt_nop_0368FF:
 
 LABEL_0368FF:
 	nop
-	jr LABEL_036902
+	jr __jrt_nop_036902
+__jrt_nop_036902:
 
 LABEL_036902:
 	nop
-	jr LABEL_036905
+	jr __jrt_nop_036905
+__jrt_nop_036905:
 
 LABEL_036905:
 	nop
-	jr LABEL_036908
+	jr __jrt_nop_036908
+__jrt_nop_036908:
 
 LABEL_036908:
 	nop
-	jr LABEL_03690B
+	jr __jrt_nop_03690B
+__jrt_nop_03690B:
 
 LABEL_03690B:
 	nop
-	jr LABEL_03690E
+	jr __jrt_nop_03690E
+__jrt_nop_03690E:
 
 LABEL_03690E:
 	nop
-	jr LABEL_036911
+	jr __jrt_nop_036911
+__jrt_nop_036911:
 
 LABEL_036911:
 	nop
-	jr LABEL_036914
+	jr __jrt_nop_036914
+__jrt_nop_036914:
 
 LABEL_036914:
 	nop
-	jr LABEL_036917
+	jr __jrt_nop_036917
+__jrt_nop_036917:
 
 LABEL_036917:
 	nop
-	jr LABEL_03691A
+	jr __jrt_nop_03691A
+__jrt_nop_03691A:
 
 LABEL_03691A:
 	nop
-	jr LABEL_03691D
+	jr __jrt_nop_03691D
+__jrt_nop_03691D:
 
 LABEL_03691D:
 	nop
-	jr LABEL_036920
+	jr __jrt_nop_036920
+__jrt_nop_036920:
 
 LABEL_036920:
 	nop
-	jr LABEL_036923
+	jr __jrt_nop_036923
+__jrt_nop_036923:
 
 LABEL_036923:
 	nop
-	jr LABEL_036926
+	jr __jrt_nop_036926
+__jrt_nop_036926:
 
 LABEL_036926:
 	nop
 	dd82 0x3C, 0xB2
-	jr LABEL_03692C
+	jr __jrt_nop_03692C
+__jrt_nop_03692C:
 
 LABEL_03692C:
 	nop
-	jr LABEL_03692F
+	jr __jrt_nop_03692F
+__jrt_nop_03692F:
 
 LABEL_03692F:
 	nop
-	jr LABEL_036932
+	jr __jrt_nop_036932
+__jrt_nop_036932:
 
 LABEL_036932:
 	nop
-	jr LABEL_036935
+	jr __jrt_nop_036935
+__jrt_nop_036935:
 
 LABEL_036935:
 	nop
-	jr LABEL_036938
+	jr __jrt_nop_036938
+__jrt_nop_036938:
 
 LABEL_036938:
 	nop
-	jr LABEL_03693B
+	jr __jrt_nop_03693B
+__jrt_nop_03693B:
 
 LABEL_03693B:
 	nop
-	jr LABEL_03693E
+	jr __jrt_nop_03693E
+__jrt_nop_03693E:
 
 LABEL_03693E:
 	nop
-	jr LABEL_036941
+	jr __jrt_nop_036941
+__jrt_nop_036941:
 
 LABEL_036941:
 	nop
-	jr LABEL_036944
+	jr __jrt_nop_036944
+__jrt_nop_036944:
 
 LABEL_036944:
 	nop
-	jr LABEL_036947
+	jr __jrt_nop_036947
+__jrt_nop_036947:
 
 LABEL_036947:
 	nop
-	jr LABEL_03694A
+	jr __jrt_nop_03694A
+__jrt_nop_03694A:
 
 LABEL_03694A:
 	nop
-	jr LABEL_03694D
+	jr __jrt_nop_03694D
+__jrt_nop_03694D:
 
 LABEL_03694D:
 	nop
-	jr LABEL_036950
+	jr __jrt_nop_036950
+__jrt_nop_036950:
 
 LABEL_036950:
 	nop
-	jr LABEL_036953
+	jr __jrt_nop_036953
+__jrt_nop_036953:
 
 LABEL_036953:
 	nop
-	jr LABEL_036956
+	jr __jrt_nop_036956
+__jrt_nop_036956:
 
 LABEL_036956:
 	nop
-	jr LABEL_036959
+	jr __jrt_nop_036959
+__jrt_nop_036959:
 
 LABEL_036959:
 	nop
-	jr LABEL_03695C
+	jr __jrt_nop_03695C
+__jrt_nop_03695C:
 
 LABEL_03695C:
 	nop
-	jr LABEL_03695F
+	jr __jrt_nop_03695F
+__jrt_nop_03695F:
 
 LABEL_03695F:
 	nop
-	jr LABEL_036962
+	jr __jrt_nop_036962
+__jrt_nop_036962:
 
 LABEL_036962:
 	nop
@@ -45968,215 +46420,267 @@ LABEL_036962:
 	jrl gt, LABEL_0368DF
 
 LABEL_03696A:
-	jr LABEL_03696C
+	jr __jrt_nop_03696C
+__jrt_nop_03696C:
 
 LABEL_03696C:
 	nop
 	dd82 0x3C, 0xBA
-	jr LABEL_036972
+	jr __jrt_nop_036972
+__jrt_nop_036972:
 
 LABEL_036972:
 	nop
-	jr LABEL_036975
+	jr __jrt_nop_036975
+__jrt_nop_036975:
 
 LABEL_036975:
 	nop
-	jr LABEL_036978
+	jr __jrt_nop_036978
+__jrt_nop_036978:
 
 LABEL_036978:
 	nop
-	jr LABEL_03697B
+	jr __jrt_nop_03697B
+__jrt_nop_03697B:
 
 LABEL_03697B:
 	nop
-	jr LABEL_03697E
+	jr __jrt_nop_03697E
+__jrt_nop_03697E:
 
 LABEL_03697E:
 	nop
-	jr LABEL_036981
+	jr __jrt_nop_036981
+__jrt_nop_036981:
 
 LABEL_036981:
 	nop
-	jr LABEL_036984
+	jr __jrt_nop_036984
+__jrt_nop_036984:
 
 LABEL_036984:
 	nop
-	jr LABEL_036987
+	jr __jrt_nop_036987
+__jrt_nop_036987:
 
 LABEL_036987:
 	nop
-	jr LABEL_03698A
+	jr __jrt_nop_03698A
+__jrt_nop_03698A:
 
 LABEL_03698A:
 	nop
-	jr LABEL_03698D
+	jr __jrt_nop_03698D
+__jrt_nop_03698D:
 
 LABEL_03698D:
 	nop
-	jr LABEL_036990
+	jr __jrt_nop_036990
+__jrt_nop_036990:
 
 LABEL_036990:
 	nop
-	jr LABEL_036993
+	jr __jrt_nop_036993
+__jrt_nop_036993:
 
 LABEL_036993:
 	nop
-	jr LABEL_036996
+	jr __jrt_nop_036996
+__jrt_nop_036996:
 
 LABEL_036996:
 	nop
-	jr LABEL_036999
+	jr __jrt_nop_036999
+__jrt_nop_036999:
 
 LABEL_036999:
 	nop
-	jr LABEL_03699C
+	jr __jrt_nop_03699C
+__jrt_nop_03699C:
 
 LABEL_03699C:
 	nop
-	jr LABEL_03699F
+	jr __jrt_nop_03699F
+__jrt_nop_03699F:
 
 LABEL_03699F:
 	nop
 	dd82 0x3C, 0xB2
-	jr LABEL_0369A5
+	jr __jrt_nop_0369A5
+__jrt_nop_0369A5:
 
 LABEL_0369A5:
 	nop
-	jr LABEL_0369A8
+	jr __jrt_nop_0369A8
+__jrt_nop_0369A8:
 
 LABEL_0369A8:
 	nop
-	jr LABEL_0369AB
+	jr __jrt_nop_0369AB
+__jrt_nop_0369AB:
 
 LABEL_0369AB:
 	nop
-	jr LABEL_0369AE
+	jr __jrt_nop_0369AE
+__jrt_nop_0369AE:
 
 LABEL_0369AE:
 	nop
-	jr LABEL_0369B1
+	jr __jrt_nop_0369B1
+__jrt_nop_0369B1:
 
 LABEL_0369B1:
 	nop
-	jr LABEL_0369B4
+	jr __jrt_nop_0369B4
+__jrt_nop_0369B4:
 
 LABEL_0369B4:
 	nop
-	jr LABEL_0369B7
+	jr __jrt_nop_0369B7
+__jrt_nop_0369B7:
 
 LABEL_0369B7:
 	nop
-	jr LABEL_0369BA
+	jr __jrt_nop_0369BA
+__jrt_nop_0369BA:
 
 LABEL_0369BA:
 	nop
-	jr LABEL_0369BD
+	jr __jrt_nop_0369BD
+__jrt_nop_0369BD:
 
 LABEL_0369BD:
 	nop
-	jr LABEL_0369C0
+	jr __jrt_nop_0369C0
+__jrt_nop_0369C0:
 
 LABEL_0369C0:
 	nop
-	jr LABEL_0369C3
+	jr __jrt_nop_0369C3
+__jrt_nop_0369C3:
 
 LABEL_0369C3:
 	nop
-	jr LABEL_0369C6
+	jr __jrt_nop_0369C6
+__jrt_nop_0369C6:
 
 LABEL_0369C6:
 	nop
-	jr LABEL_0369C9
+	jr __jrt_nop_0369C9
+__jrt_nop_0369C9:
 
 LABEL_0369C9:
 	nop
-	jr LABEL_0369CC
+	jr __jrt_nop_0369CC
+__jrt_nop_0369CC:
 
 LABEL_0369CC:
 	nop
-	jr LABEL_0369CF
+	jr __jrt_nop_0369CF
+__jrt_nop_0369CF:
 
 LABEL_0369CF:
 	nop
-	jr LABEL_0369D2
+	jr __jrt_nop_0369D2
+__jrt_nop_0369D2:
 
 LABEL_0369D2:
 	nop
-	jr LABEL_0369D5
+	jr __jrt_nop_0369D5
+__jrt_nop_0369D5:
 
 LABEL_0369D5:
 	nop
-	jr LABEL_0369D8
+	jr __jrt_nop_0369D8
+__jrt_nop_0369D8:
 
 LABEL_0369D8:
 	nop
-	jr LABEL_0369DB
+	jr __jrt_nop_0369DB
+__jrt_nop_0369DB:
 
 LABEL_0369DB:
 	nop
 	ld wa, (xsp + 6)
 	call 0x383DB
-	jr LABEL_0369E5
+	jr __jrt_nop_0369E5
+__jrt_nop_0369E5:
 
 LABEL_0369E5:
 	nop
-	jr LABEL_0369E8
+	jr __jrt_nop_0369E8
+__jrt_nop_0369E8:
 
 LABEL_0369E8:
 	nop
-	jr LABEL_0369EB
+	jr __jrt_nop_0369EB
+__jrt_nop_0369EB:
 
 LABEL_0369EB:
 	nop
-	jr LABEL_0369EE
+	jr __jrt_nop_0369EE
+__jrt_nop_0369EE:
 
 LABEL_0369EE:
 	nop
-	jr LABEL_0369F1
+	jr __jrt_nop_0369F1
+__jrt_nop_0369F1:
 
 LABEL_0369F1:
 	nop
-	jr LABEL_0369F4
+	jr __jrt_nop_0369F4
+__jrt_nop_0369F4:
 
 LABEL_0369F4:
 	nop
-	jr LABEL_0369F7
+	jr __jrt_nop_0369F7
+__jrt_nop_0369F7:
 
 LABEL_0369F7:
 	nop
-	jr LABEL_0369FA
+	jr __jrt_nop_0369FA
+__jrt_nop_0369FA:
 
 LABEL_0369FA:
 	nop
-	jr LABEL_0369FD
+	jr __jrt_nop_0369FD
+__jrt_nop_0369FD:
 
 LABEL_0369FD:
 	nop
-	jr LABEL_036A00
+	jr __jrt_nop_036A00
+__jrt_nop_036A00:
 
 LABEL_036A00:
 	nop
-	jr LABEL_036A03
+	jr __jrt_nop_036A03
+__jrt_nop_036A03:
 
 LABEL_036A03:
 	nop
-	jr LABEL_036A06
+	jr __jrt_nop_036A06
+__jrt_nop_036A06:
 
 LABEL_036A06:
 	nop
-	jr LABEL_036A09
+	jr __jrt_nop_036A09
+__jrt_nop_036A09:
 
 LABEL_036A09:
 	nop
-	jr LABEL_036A0C
+	jr __jrt_nop_036A0C
+__jrt_nop_036A0C:
 
 LABEL_036A0C:
 	nop
-	jr LABEL_036A0F
+	jr __jrt_nop_036A0F
+__jrt_nop_036A0F:
 
 LABEL_036A0F:
 	nop
-	jr LABEL_036A12
+	jr __jrt_nop_036A12
+__jrt_nop_036A12:
 
 LABEL_036A12:
 	nop
@@ -57259,7 +57763,7 @@ LABEL_03DFCE:
 	lds32 xix, 0
 	ldi1_berp 0xEE
 	jr LABEL_03DFC5
-	.byte 0xff	; SWI 7
+	swi 7
 
 LABEL_03DFD6:
 	ldb e, 0x0
@@ -57368,7 +57872,8 @@ LABEL_03E085:
 	or_c_berp 0xEB
 	ldfr_c_berp 0xEB
 	ld (xwa + 4), xde
-	jr LABEL_03E0A5
+	jr __jrt_nop_03E0A5
+__jrt_nop_03E0A5:
 
 LABEL_03E0A5:
 	ldda32_24 xbc, 62504
@@ -58467,7 +58972,8 @@ LABEL_03EA06:
 	ldb d, 0x1
 	jr LABEL_03EA0E
 	ldb d, 0x2
-	jr LABEL_03EA0E
+	jr __jrt_nop_03EA0E
+__jrt_nop_03EA0E:
 
 LABEL_03EA0E:
 	bitm 0, (xbc + 2)
@@ -58970,7 +59476,8 @@ LABEL_03EE3A:
 	ldb d, 0x1
 	jr LABEL_03EE42
 	ldb d, 0x2
-	jr LABEL_03EE42
+	jr __jrt_nop_03EE42
+__jrt_nop_03EE42:
 
 LABEL_03EE42:
 	bitm 0, (xbc + 2)

@@ -115075,7 +115075,8 @@ LABEL_EF147E:
 	call LABEL_FCF9AE
 	call LABEL_FCA75D
 	calr LABEL_EF14D8
-	jr LABEL_EF148F
+	jr __jrt_nop_EF148F
+__jrt_nop_EF148F:
 
 LABEL_EF148F:
 	ldada_24 xhl, 127867
@@ -145865,7 +145866,8 @@ LABEL_F16F2C:
 
 LABEL_F16FFD:
 	lds wa, 0
-	jr LABEL_F17001
+	jr __jrt_nop_F17001
+__jrt_nop_F17001:
 
 LABEL_F17001:
 	dec 2, xsp
@@ -156348,7 +156350,8 @@ LABEL_F1FE49:
 	call LABEL_F1FFB2
 	cpdi8 10362, 0
 	jr z, LABEL_F1FE19
-	jr LABEL_F1FE58
+	jr __jrt_nop_F1FE58
+__jrt_nop_F1FE58:
 
 LABEL_F1FE58:
 	xor b, b
@@ -156960,7 +156963,8 @@ LABEL_F2068D:
 	call LABEL_F206D0
 	bitda 2, 3394
 	jr z, LABEL_F206AA
-	jr LABEL_F206AA
+	jr __jrt_nop_F206AA
+__jrt_nop_F206AA:
 
 LABEL_F206AA:
 	stdi8 4437, 0
@@ -157084,7 +157088,8 @@ LABEL_F2079D:
 	call LABEL_F207C8
 	bitda 2, 3394
 	jr z, LABEL_F207BA
-	jr LABEL_F207BA
+	jr __jrt_nop_F207BA
+__jrt_nop_F207BA:
 
 LABEL_F207BA:
 	stdi8 4437, 0
@@ -157221,7 +157226,8 @@ LABEL_F20903:
 	call LABEL_F2092E
 	bitda 2, 3394
 	jr z, LABEL_F20920
-	jr LABEL_F20920
+	jr __jrt_nop_F20920
+__jrt_nop_F20920:
 
 LABEL_F20920:
 	stdi8 4437, 0
@@ -157267,7 +157273,8 @@ LABEL_F20993:
 	call LABEL_F209BE
 	bitda 2, 3394
 	jr z, LABEL_F209B0
-	jr LABEL_F209B0
+	jr __jrt_nop_F209B0
+__jrt_nop_F209B0:
 
 LABEL_F209B0:
 	stdi8 4437, 0
@@ -157457,7 +157464,8 @@ LABEL_F20B70:
 	stdi8 4420, 0
 	bitda 2, 3394
 	jr z, LABEL_F20B8B
-	jr LABEL_F20B8B
+	jr __jrt_nop_F20B8B
+__jrt_nop_F20B8B:
 
 LABEL_F20B8B:
 	cpdi8 36151, 119
@@ -169633,7 +169641,8 @@ LABEL_F28217:
 	stda8_24 65507, a
 	call LABEL_F232D9
 	call LABEL_F2706D
-	jr LABEL_F28238
+	jr __jrt_nop_F28238
+__jrt_nop_F28238:
 
 LABEL_F28238:
 	popw wa
@@ -170976,7 +170985,8 @@ LABEL_F28D24:
 
 LABEL_F28D67:
 	ld wa, iy
-	jr LABEL_F28D6B
+	jr __jrt_nop_F28D6B
+__jrt_nop_F28D6B:
 
 LABEL_F28D6B:
 	ret
@@ -171492,7 +171502,8 @@ LABEL_F2926C:
 LABEL_F2927E:
 	pop xiy
 	pop xix
-	jr LABEL_F29282
+	jr __jrt_nop_F29282
+__jrt_nop_F29282:
 
 LABEL_F29282:
 	push xix
@@ -188653,7 +188664,8 @@ LABEL_F36F8B:
 	resda 0, 10050
 	stdi8 10100, 10
 	stdi8 10146, 11
-	jr LABEL_F36FA7
+	jr __jrt_nop_F36FA7
+__jrt_nop_F36FA7:
 
 LABEL_F36FA7:
 	pushw iz
@@ -188826,7 +188838,8 @@ LABEL_F37156:
 LABEL_F37165:
 	ldmm16 10132, 10130
 	ldmm16 10128, 10126
-	jr LABEL_F37173
+	jr __jrt_nop_F37173
+__jrt_nop_F37173:
 
 LABEL_F37173:
 	resda 2, 10407
@@ -189614,7 +189627,8 @@ LABEL_F37884:
 	call LABEL_F439AB
 
 LABEL_F37895:
-	jr LABEL_F37897
+	jr __jrt_nop_F37897
+__jrt_nop_F37897:
 
 LABEL_F37897:
 	cpdi8 10362, 0
@@ -189815,7 +189829,8 @@ LABEL_F37A4C:
 
 LABEL_F37A59:
 	resda 0, 10591
-	jr LABEL_F37A5F
+	jr __jrt_nop_F37A5F
+__jrt_nop_F37A5F:
 
 LABEL_F37A5F:
 	bitda 7, 10054
@@ -189851,7 +189866,8 @@ LABEL_F37AA3:
 
 LABEL_F37AB0:
 	resda 0, 10591
-	jr LABEL_F37AB6
+	jr __jrt_nop_F37AB6
+__jrt_nop_F37AB6:
 
 LABEL_F37AB6:
 	bitda 7, 10054
@@ -190730,7 +190746,8 @@ LABEL_F3827D:
 LABEL_F38280:
 	bitda 0, 10050
 	jr nz, LABEL_F382B0
-	jr LABEL_F38288
+	jr __jrt_nop_F38288
+__jrt_nop_F38288:
 
 LABEL_F38288:
 	bitda 0, 10591
@@ -190893,7 +190910,8 @@ LABEL_F3848D:
 	div wa, 0x60
 	ldto_wa_werp 0xE2
 	stda8 10116, a
-	jr LABEL_F384AA
+	jr __jrt_nop_F384AA
+__jrt_nop_F384AA:
 
 LABEL_F384AA:
 	ldda16 xbc, 10138
@@ -191380,7 +191398,8 @@ LABEL_F38907:
 
 LABEL_F3890C:
 	call LABEL_F3E155
-	jr LABEL_F38912
+	jr __jrt_nop_F38912
+__jrt_nop_F38912:
 
 LABEL_F38912:
 	stdi16 9832, 1
@@ -203995,7 +204014,8 @@ LABEL_F3FF3B:
 
 LABEL_F3FF42:
 	ld xwa, 0xE4459A
-	jr LABEL_F3FF49
+	jr __jrt_nop_F3FF49
+__jrt_nop_F3FF49:
 
 LABEL_F3FF49:
 	ldda8 c, 10362
@@ -216031,7 +216051,8 @@ LABEL_F481E3:
 	resda 0, 62014
 
 LABEL_F4820F:
-	jr LABEL_F48211
+	jr __jrt_nop_F48211
+__jrt_nop_F48211:
 
 LABEL_F48211:
 	resda 1, 62014
@@ -217048,7 +217069,8 @@ LABEL_F48A97:
 	call LABEL_F421A6
 	stda8 9607, l
 	call LABEL_F421C6
-	jr LABEL_F48AA9
+	jr __jrt_nop_F48AA9
+__jrt_nop_F48AA9:
 
 LABEL_F48AA9:
 	ldda16 xwa, 9614
@@ -217271,7 +217293,8 @@ LABEL_F48CBF:
 	ldda16 xwa, 9626
 	cps wa, 0
 	jrl nz, LABEL_F48F97
-	jr LABEL_F48CD4
+	jr __jrt_nop_F48CD4
+__jrt_nop_F48CD4:
 
 LABEL_F48CD4:
 	stdi16 9614, 0
@@ -217879,7 +217902,8 @@ LABEL_F492A3:
 	stdi16 9640, 65535
 	stdi8 9642, 255
 	ldmm16 9662, 9652
-	jr LABEL_F492B6
+	jr __jrt_nop_F492B6
+__jrt_nop_F492B6:
 
 LABEL_F492B6:
 	ldda16 xbc, 9636
@@ -218807,7 +218831,8 @@ LABEL_F49B23:
 	ret
 
 LABEL_F49B2F:
-	jr LABEL_F49B31
+	jr __jrt_nop_F49B31
+__jrt_nop_F49B31:
 
 LABEL_F49B31:
 	pushw iz
@@ -223223,7 +223248,8 @@ LABEL_F4CE3B:
 	ldda8 e, 9740
 	bit 7, e
 	jrl nz, LABEL_F4CFDA
-	jr LABEL_F4CE4D
+	jr __jrt_nop_F4CE4D
+__jrt_nop_F4CE4D:
 
 LABEL_F4CE4D:
 	dec 4, xsp
@@ -231613,7 +231639,8 @@ LABEL_F536F1:
 	bitda 1, 12932
 	jr z, LABEL_F53720
 	call LABEL_FB4277
-	jr LABEL_F53720
+	jr __jrt_nop_F53720
+__jrt_nop_F53720:
 
 LABEL_F53720:
 	ret
@@ -235524,7 +235551,8 @@ LABEL_F55E90:
 
 LABEL_F55ED6:
 	calr LABEL_F5607E
-	jr LABEL_F55EDB
+	jr __jrt_nop_F55EDB
+__jrt_nop_F55EDB:
 
 LABEL_F55EDB:
 	calr LABEL_F56331
@@ -236325,7 +236353,8 @@ LABEL_F56894:
 	bitda 5, 13100
 	jr z, LABEL_F568A7
 	call LABEL_F57E40
-	jr LABEL_F568A7
+	jr __jrt_nop_F568A7
+__jrt_nop_F568A7:
 
 LABEL_F568A7:
 	ret
@@ -236785,7 +236814,8 @@ LABEL_F56D35:
 	jr nz, LABEL_F56D47
 	add hl, 0x1D6
 	ld_wa_sriw3 0x07, 0xF4, 0xEC
-	jr LABEL_F56D47
+	jr __jrt_nop_F56D47
+__jrt_nop_F56D47:
 
 LABEL_F56D47:
 	sub wa, 0x8000
@@ -237748,7 +237778,8 @@ LABEL_F57642:
 	ldda8 e, 13107
 	stda8 13106, e
 	call 0xF543E1
-	jr LABEL_F57654
+	jr __jrt_nop_F57654
+__jrt_nop_F57654:
 
 LABEL_F57654:
 	ret
@@ -239420,7 +239451,8 @@ LABEL_F5879B:
 
 LABEL_F587BE:
 	call LABEL_F53DA8
-	jr LABEL_F587C4
+	jr __jrt_nop_F587C4
+__jrt_nop_F587C4:
 
 LABEL_F587C4:
 	anddi8 13068, 254
@@ -241593,7 +241625,8 @@ LABEL_F59F28:
 	bitda 2, 1054
 	jr z, LABEL_F59F4D
 	calr LABEL_F5A5C4
-	jr LABEL_F59F4D
+	jr __jrt_nop_F59F4D
+__jrt_nop_F59F4D:
 
 LABEL_F59F4D:
 	bitda 6, 13439
@@ -241603,7 +241636,8 @@ LABEL_F59F4D:
 	bitda 2, 1054
 	jr z, LABEL_F59F64
 	calr LABEL_F5A66A
-	jr LABEL_F59F64
+	jr __jrt_nop_F59F64
+__jrt_nop_F59F64:
 
 LABEL_F59F64:
 	ret
@@ -241940,7 +241974,8 @@ LABEL_F5A287:
 	jr z, LABEL_F5A2B1
 	ordi8 13441, 32
 	ordi8 13440, 32
-	jr LABEL_F5A2B1
+	jr __jrt_nop_F5A2B1
+__jrt_nop_F5A2B1:
 
 LABEL_F5A2B1:
 	ret
@@ -242763,7 +242798,8 @@ LABEL_F5AA80:
 LABEL_F5AA82:
 	anddi8 13464, 254
 	anddi8 13465, 254
-	jr LABEL_F5AA8E
+	jr __jrt_nop_F5AA8E
+__jrt_nop_F5AA8E:
 
 LABEL_F5AA8E:
 	anddi8 13464, 127
@@ -242897,7 +242933,8 @@ LABEL_F5ABC4:
 	bitda 7, 13421
 	jr nz, LABEL_F5ABD8
 	calr LABEL_F5ABF3
-	jr LABEL_F5ABD8
+	jr __jrt_nop_F5ABD8
+__jrt_nop_F5ABD8:
 
 LABEL_F5ABD8:
 	anddi8 13422, 251
@@ -243204,7 +243241,8 @@ LABEL_F5AE49:
 	bitda 2, 1056
 	jr nz, LABEL_F5AE54
 	calr LABEL_F5AEB4
-	jr LABEL_F5AE54
+	jr __jrt_nop_F5AE54
+__jrt_nop_F5AE54:
 
 LABEL_F5AE54:
 	ret
@@ -243967,7 +244005,8 @@ LABEL_F5B47E:
 	calr LABEL_F5BCB2
 	ldda16 xwa, 13172
 	stda16 13170, xwa
-	jr LABEL_F5B4EA
+	jr __jrt_nop_F5B4EA
+__jrt_nop_F5B4EA:
 
 LABEL_F5B4EA:
 	ret
@@ -244043,7 +244082,8 @@ LABEL_F5B4EB:
 	stda8 13106, a
 	ldda8 a, 13175
 	stda8 13174, a
-	jr LABEL_F5B619
+	jr __jrt_nop_F5B619
+__jrt_nop_F5B619:
 
 LABEL_F5B619:
 	ret
@@ -246518,7 +246558,8 @@ LABEL_F5D739:
 LABEL_F5D73A:
 	extz bc
 	extz wa
-	jr LABEL_F5D740
+	jr __jrt_nop_F5D740
+__jrt_nop_F5D740:
 
 LABEL_F5D740:
 	push xiz
@@ -250322,7 +250363,8 @@ LABEL_F60688:
 	calr LABEL_F606FC
 	calr LABEL_F60721
 	calr LABEL_F60A53
-	jr LABEL_F60695
+	jr __jrt_nop_F60695
+__jrt_nop_F60695:
 
 LABEL_F60695:
 	jrl LABEL_F60612
@@ -250767,7 +250809,8 @@ LABEL_F60A71:
 	cp a, 0xD5
 	jr nz, LABEL_F60A7A
 	ldb a, 0xD4
-	jr LABEL_F60A7A
+	jr __jrt_nop_F60A7A
+__jrt_nop_F60A7A:
 
 LABEL_F60A7A:
 	calr LABEL_F6097B
@@ -251506,7 +251549,8 @@ LABEL_F6114E:
 
 LABEL_F61153:
 	calr LABEL_F61250
-	jr LABEL_F61158
+	jr __jrt_nop_F61158
+__jrt_nop_F61158:
 
 LABEL_F61158:
 	cpdi8 32578, 0
@@ -259256,7 +259300,8 @@ LABEL_F66C20:
 	stdi16 14722, 5
 
 LABEL_F66C5E:
-	jr LABEL_F66C60
+	jr __jrt_nop_F66C60
+__jrt_nop_F66C60:
 
 LABEL_F66C60:
 	ldda16 xbc, 14722
@@ -259845,7 +259890,8 @@ LABEL_F6718B:
 	addda32 xix, 12919
 	add xix, xwa
 	add xix, xde
-	jr LABEL_F671E6
+	jr __jrt_nop_F671E6
+__jrt_nop_F671E6:
 
 LABEL_F671E6:
 	ret
@@ -267537,7 +267583,8 @@ LABEL_F6DCD0:
 	ret
 
 LABEL_F6DCD1:
-	jr LABEL_F6DCD3
+	jr __jrt_nop_F6DCD3
+__jrt_nop_F6DCD3:
 
 LABEL_F6DCD3:
 	xor a, a
@@ -268005,7 +268052,8 @@ LABEL_F6E14D:
 	calr LABEL_F6E300
 
 LABEL_F6E15A:
-	jr LABEL_F6E15C
+	jr __jrt_nop_F6E15C
+__jrt_nop_F6E15C:
 
 LABEL_F6E15C:
 	ret
@@ -270778,7 +270826,8 @@ LABEL_F70F52:
 	calr LABEL_F70F89
 	ldda16 xwa, 32256
 	stda16 32254, xwa
-	jr LABEL_F70F88
+	jr __jrt_nop_F70F88
+__jrt_nop_F70F88:
 
 LABEL_F70F88:
 	ret
@@ -272192,7 +272241,8 @@ LABEL_F72564:
 	ld (xhl + 2), a
 	lds de, 3
 	calr LABEL_F72A69
-	jr LABEL_F7256E
+	jr __jrt_nop_F7256E
+__jrt_nop_F7256E:
 
 LABEL_F7256E:
 	ret
@@ -296858,7 +296908,8 @@ LABEL_F86E60:
 
 LABEL_F86E76:
 	calr LABEL_F86E8D
-	jr Demo_PreSetup
+	jr __jrt_nop_F86E7B
+__jrt_nop_F86E7B:
 
 Demo_PreSetup:
 	call LABEL_F59AB9
@@ -299615,7 +299666,8 @@ LABEL_F890AF:
 	calr LABEL_F890DC
 	ld xwa, 0x271F2
 	ld xbc, 0xEA0452	; pointer to "________.MID"
-	jr LABEL_F890DC
+	jr __jrt_nop_F890DC
+__jrt_nop_F890DC:
 
 LABEL_F890DC:
 	ld xde, xbc
@@ -348301,7 +348353,8 @@ LABEL_FAA333:
 	jr LABEL_FAA2FB
 
 InitDrawTask:
-	jr LABEL_FAA347
+	jr __jrt_nop_FAA347
+__jrt_nop_FAA347:
 
 LABEL_FAA347:
 	lds wa, 3
@@ -348599,7 +348652,8 @@ LcdOn:
 	jrl LABEL_FAA36C
 
 LABEL_FAA5CE:
-	jr LABEL_FAA5D0
+	jr __jrt_nop_FAA5D0
+__jrt_nop_FAA5D0:
 
 LABEL_FAA5D0:
 	stdi16_24 197732, 1
@@ -348617,7 +348671,8 @@ LcdOff:	; faa5db
 	jrl LABEL_FAA36C
 
 LABEL_FAA5F3:
-	jr LABEL_FAA5F5
+	jr __jrt_nop_FAA5F5
+__jrt_nop_FAA5F5:
 
 LABEL_FAA5F5:
 	call LABEL_FB319A
@@ -351019,7 +351074,8 @@ LABEL_FABBD4:
 	ldada_24 xbc, 16432101
 	ld (xwa), xbc
 	jrl LABEL_FAA36C
-	jr LABEL_FABBE7
+	jr __jrt_nop_FABBE7
+__jrt_nop_FABBE7:
 
 LABEL_FABBE7:
 	lda xsp, (xsp - 12)
@@ -356418,7 +356474,8 @@ LABEL_FAF346:
 	ldada_24 xbc, 16446302
 	ld (xwa), xbc
 	jrl LABEL_FAA36C
-	jr LABEL_FAF360
+	jr __jrt_nop_FAF360
+__jrt_nop_FAF360:
 
 LABEL_FAF360:
 	push xiz
@@ -358481,7 +358538,8 @@ LABEL_FB1536:
 	ldada_24 xbc, 16454990
 	ld (xwa), xbc
 	jrl LABEL_FAA36C
-	jr LABEL_FB1550
+	jr __jrt_nop_FB1550
+__jrt_nop_FB1550:
 
 LABEL_FB1550:
 	stdi16_24 257938, 0
@@ -358499,7 +358557,8 @@ LABEL_FB155F:
 	ldada_24 xbc, 16455031
 	ld (xwa), xbc
 	jrl LABEL_FAA36C
-	jr LABEL_FB1579
+	jr __jrt_nop_FB1579
+__jrt_nop_FB1579:
 
 LABEL_FB1579:
 	stdi16_24 257938, 1
@@ -365046,7 +365105,8 @@ LABEL_FB6C2A:
 
 LABEL_FB6C4A:
 	stdi8 36174, 0
-	jr LABEL_FB6C51
+	jr __jrt_nop_FB6C51
+__jrt_nop_FB6C51:
 
 LABEL_FB6C51:
 	ld xwa, 0x28000
@@ -384084,7 +384144,8 @@ LABEL_FC4A8B:
 	popw hl
 	popw bc
 	jr nz, LABEL_FC4AC1
-	jr LABEL_FC4AB7
+	jr __jrt_nop_FC4AB7
+__jrt_nop_FC4AB7:
 
 LABEL_FC4AB7:
 	calr CPanel_DecEventPtr
@@ -384333,7 +384394,8 @@ LABEL_FC4CDE:
 	jrl LABEL_FC4DE1
 
 LABEL_FC4CEB:
-	jr LABEL_FC4CED
+	jr __jrt_nop_FC4CED
+__jrt_nop_FC4CED:
 
 LABEL_FC4CED:
 	lda xsp, (xsp - 14)
@@ -384730,7 +384792,8 @@ LABEL_FC520F:
 	lds de, 0
 	call LABEL_FCD201
 	call LABEL_FB559F
-	jr LABEL_FC5245
+	jr __jrt_nop_FC5245
+__jrt_nop_FC5245:
 
 LABEL_FC5245:
 	lda xsp, (xsp - 14)
@@ -386043,7 +386106,8 @@ LABEL_FC6A94:
 	ldada xwa, 36542
 	dd82 0x34, 0x9E
 	scc8 c, c
-	jr LABEL_FC6A9F
+	jr __jrt_nop_FC6A9F
+__jrt_nop_FC6A9F:
 
 LABEL_FC6A9F:
 	lda xsp, (xsp - 10)
@@ -391080,7 +391144,8 @@ LABEL_FCAB5F:
 	call LABEL_FCB9A5
 	call LABEL_F43679
 	call LABEL_FCB9C2
-	jr LABEL_FCAB95
+	jr __jrt_nop_FCAB95
+__jrt_nop_FCAB95:
 
 LABEL_FCAB95:
 	stdi8 37322, 0
@@ -404545,7 +404610,8 @@ LABEL_FD836F:
 	calr LABEL_FD83D2
 	ldda32 xwa, 48224
 	ldda32 xbc, 48312
-	jr LABEL_FD83D2
+	jr __jrt_nop_FD83D2
+__jrt_nop_FD83D2:
 
 LABEL_FD83D2:
 	ld xde, xbc
@@ -430907,7 +430973,8 @@ LABEL_FE948C:
 
 LABEL_FE949E:
 	anddi8_24 52958, 191
-	jr LABEL_FE94A6
+	jr __jrt_nop_FE94A6
+__jrt_nop_FE94A6:
 
 LABEL_FE94A6:
 	calr LABEL_FE9528
@@ -430922,7 +430989,8 @@ LABEL_FE94A6:
 
 LABEL_FE94C8:
 	ldb h, 0x0
-	jr LABEL_FE94CC
+	jr __jrt_nop_FE94CC
+__jrt_nop_FE94CC:
 
 LABEL_FE94CC:
 	pop xde
@@ -430949,7 +431017,8 @@ LABEL_FE94E7:
 
 LABEL_FE94F9:
 	anddi8_24 52958, 191
-	jr LABEL_FE9501
+	jr __jrt_nop_FE9501
+__jrt_nop_FE9501:
 
 LABEL_FE9501:
 	calr LABEL_FE9609
@@ -430963,7 +431032,8 @@ LABEL_FE9501:
 
 LABEL_FE9520:
 	ldb h, 0x0
-	jr LABEL_FE9524
+	jr __jrt_nop_FE9524
+__jrt_nop_FE9524:
 
 LABEL_FE9524:
 	pop xde
@@ -431130,7 +431200,8 @@ LABEL_FE9661:
 
 LABEL_FE966B:
 	calr LABEL_FE9671
-	jr LABEL_FE9670
+	jr __jrt_nop_FE9670
+__jrt_nop_FE9670:
 
 LABEL_FE9670:
 	ret
@@ -431188,7 +431259,8 @@ LABEL_FE96F6:
 	ldda16_24 xde, 52991
 	calr LABEL_FE9720
 	calr LABEL_FE97AD
-	jr LABEL_FE9709
+	jr __jrt_nop_FE9709
+__jrt_nop_FE9709:
 
 LABEL_FE9709:
 	stda8_24 52959, a
@@ -431382,7 +431454,8 @@ LABEL_FE990F:
 	dec 1, c
 	cps c, 0
 	jr z, LABEL_FE994F
-	jr LABEL_FE9917
+	jr __jrt_nop_FE9917
+__jrt_nop_FE9917:
 
 LABEL_FE9917:
 	inc 1, b
@@ -431413,7 +431486,8 @@ LABEL_FE992E:
 LABEL_FE994F:
 	ldb a, 0x0
 	ldb w, 0x0
-	jr LABEL_FE9955
+	jr __jrt_nop_FE9955
+__jrt_nop_FE9955:
 
 LABEL_FE9955:
 	ret
@@ -431437,7 +431511,8 @@ LABEL_FE996E:
 
 LABEL_FE9984:
 	calr LABEL_FE9A42
-	jr LABEL_FE9989
+	jr __jrt_nop_FE9989
+__jrt_nop_FE9989:
 
 LABEL_FE9989:
 	cps w, 0
@@ -431499,7 +431574,8 @@ LABEL_FE99DE:
 LABEL_FE9A04:
 	ldb a, 0x0
 	ldb w, 0x0
-	jr LABEL_FE9A0A
+	jr __jrt_nop_FE9A0A
+__jrt_nop_FE9A0A:
 
 LABEL_FE9A0A:
 	ld l, a
@@ -431624,7 +431700,8 @@ LABEL_FE9B37:
 
 LABEL_FE9B43:
 	calr LABEL_FE9EF9
-	jr LABEL_FE9B48
+	jr __jrt_nop_FE9B48
+__jrt_nop_FE9B48:
 
 LABEL_FE9B48:
 	ret
@@ -431773,7 +431850,8 @@ LABEL_FE9CB0:
 LABEL_FE9CBA:
 	xor hl, hl
 	anddi8_24 52958, 223
-	jr LABEL_FE9CC4
+	jr __jrt_nop_FE9CC4
+__jrt_nop_FE9CC4:
 
 LABEL_FE9CC4:
 	ld xix, 0xCF8F
@@ -431954,7 +432032,8 @@ LABEL_FE9E63:
 LABEL_FE9E84:
 	ldb a, 0x0
 	ldb w, 0x0
-	jr LABEL_FE9E8A
+	jr __jrt_nop_FE9E8A
+__jrt_nop_FE9E8A:
 
 LABEL_FE9E8A:
 	popw bc
@@ -431996,7 +432075,8 @@ LABEL_FE9E91:
 LABEL_FE9EF2:
 	ldb a, 0x0
 	ldb w, 0x0
-	jr LABEL_FE9EF8
+	jr __jrt_nop_FE9EF8
+__jrt_nop_FE9EF8:
 
 LABEL_FE9EF8:
 	ret
@@ -432088,7 +432168,8 @@ LABEL_FE9FF3:
 	anddi8_24 52958, 254
 	anddi8_24 52958, 127
 	ordi8_24 52958, 16
-	jr LABEL_FEA013
+	jr __jrt_nop_FEA013
+__jrt_nop_FEA013:
 
 LABEL_FEA013:
 	pop xiz
@@ -432222,7 +432303,8 @@ LABEL_FEA15A:
 
 LABEL_FEA16A:
 	ldda8_24 l, 52960
-	jr LABEL_FEA171
+	jr __jrt_nop_FEA171
+__jrt_nop_FEA171:
 
 LABEL_FEA171:
 	ld xiz, 0xFEA349
@@ -432273,7 +432355,8 @@ LABEL_FEA1E9:
 
 LABEL_FEA1F3:
 	decdi8_24 1, 52977
-	jr LABEL_FEA1FA
+	jr __jrt_nop_FEA1FA
+__jrt_nop_FEA1FA:
 
 LABEL_FEA1FA:
 	inc 1, hl
@@ -432402,7 +432485,8 @@ LABEL_FEA333:
 	stdi8 36162, 0
 	stdi8 36160, 0
 	stdi8 36164, 0
-	jr LABEL_FEA344
+	jr __jrt_nop_FEA344
+__jrt_nop_FEA344:
 
 LABEL_FEA344:
 	call LABEL_FB4277

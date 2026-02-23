@@ -98704,7 +98704,8 @@ BOOT_INIT__clock_done2:
 	call 0xFF85AE	; 0xFF85AE - DMA/Serial init
 	call 0xFF84A8	; 0xFF84A8 - Tone generator init
 
-	jr MAIN_LOOP	; Jump to main loop (2-byte NOP in fall-through)
+	jr __jrt_nop_FF840C	; Jump to main loop (2-byte NOP in fall-through)
+__jrt_nop_FF840C:
 
 ; ==============================================================================
 ; Main Loop - Wait for payload ready, then call it
@@ -100149,7 +100150,8 @@ HARDWARE_CALIBRATION_SEQUENCE:
 	stdi16_24 1048576, 2112	; Write 0x0840 to hardware reg
 	nop
 	stdi16_24 1048578, 65280	; Write 0xFF00 to hardware reg+2
-	.byte 0x68, 0x00	; jr T, $+2	; Short delay (jump to next instruction)
+	jr __jrt_nop_FF8C95	; Short delay (jump to next instruction)
+__jrt_nop_FF8C95:
 	nop
 	nop
 	nop
@@ -100158,7 +100160,8 @@ HARDWARE_CALIBRATION_SEQUENCE:
 	stdi16_24 1048576, 2048	; Write 0x0800 to hardware reg
 	nop
 	stdi16_24 1048578, 65408	; Write 0xFF80 to hardware reg+2
-	.byte 0x68, 0x00	; jr T, $+2	; Short delay
+	jr __jrt_nop_FF8CA9	; Short delay
+__jrt_nop_FF8CA9:
 	nop
 	nop
 	nop
@@ -100190,7 +100193,8 @@ HARDWARE_CALIBRATION_SEQUENCE__retry_loop:
 	stdi16_24 1048576, 2112
 	nop
 	stdi16_24 1048578, 65280
-	.byte 0x68, 0x00	; jr T, $+2
+	jr __jrt_nop_FF8CE3
+__jrt_nop_FF8CE3:
 	nop
 	nop
 	nop
@@ -100199,7 +100203,8 @@ HARDWARE_CALIBRATION_SEQUENCE__retry_loop:
 	stdi16_24 1048576, 2048
 	nop
 	stdi16_24 1048578, 65408
-	.byte 0x68, 0x00	; jr T, $+2
+	jr __jrt_nop_FF8CF7
+__jrt_nop_FF8CF7:
 	nop
 	nop
 	nop
@@ -100244,7 +100249,8 @@ HARDWARE_PARAM_BLOCK_WRITE:
 	ld xbc, (xsp + 2)	; Restore XBC
 	ld wa, (xbc + 2)	; Get param[2:3]
 	stda16_24 1048578, xwa	; Write data
-	.byte 0x68, 0x00	; jr T, $+2
+	jr __jrt_nop_FF8D2B
+__jrt_nop_FF8D2B:
 	nop
 	nop
 	nop
@@ -100257,7 +100263,8 @@ HARDWARE_PARAM_BLOCK_WRITE:
 	ld wa, (xbc + 4)	; Get param[4:5]
 	set 15, wa	; Set bit 15
 	stda16_24 1048578, xwa
-	.byte 0x68, 0x00	; jr T, $+2
+	jr __jrt_nop_FF8D47
+__jrt_nop_FF8D47:
 	nop
 	nop
 	nop
@@ -100269,7 +100276,8 @@ HARDWARE_PARAM_BLOCK_WRITE:
 	nop
 	ld wa, (xbc + 6)	; Get param[6:7]
 	stda16_24 1048578, xwa
-	.byte 0x68, 0x00	; jr T, $+2
+	jr __jrt_nop_FF8D60
+__jrt_nop_FF8D60:
 	nop
 	nop
 	nop
@@ -100281,7 +100289,8 @@ HARDWARE_PARAM_BLOCK_WRITE:
 	nop
 	ld wa, (xbc + 8)	; Get param[8:9]
 	stda16_24 1048578, xwa
-	.byte 0x68, 0x00	; jr T, $+2
+	jr __jrt_nop_FF8D79
+__jrt_nop_FF8D79:
 	nop
 	nop
 	nop
@@ -100293,7 +100302,8 @@ HARDWARE_PARAM_BLOCK_WRITE:
 	nop
 	ld wa, (xbc + 10)	; Get param[10:11]
 	stda16_24 1048578, xwa
-	.byte 0x68, 0x00	; jr T, $+2
+	jr __jrt_nop_FF8D92
+__jrt_nop_FF8D92:
 	nop
 	nop
 	nop
@@ -100305,7 +100315,8 @@ HARDWARE_PARAM_BLOCK_WRITE:
 	nop
 	ld wa, (xbc + 12)	; Get param[12:13]
 	stda16_24 1048578, xwa
-	.byte 0x68, 0x00	; jr T, $+2
+	jr __jrt_nop_FF8DAB
+__jrt_nop_FF8DAB:
 	nop
 	nop
 	nop
@@ -100317,7 +100328,8 @@ HARDWARE_PARAM_BLOCK_WRITE:
 	nop
 	ld wa, (xbc + 14)	; Get param[14:15]
 	stda16_24 1048578, xwa
-	.byte 0x68, 0x00	; jr T, $+2
+	jr __jrt_nop_FF8DC4
+__jrt_nop_FF8DC4:
 	nop
 	nop
 	nop
@@ -100329,7 +100341,8 @@ HARDWARE_PARAM_BLOCK_WRITE:
 	nop
 	ld wa, (xbc + 16)	; Get param[16:17]
 	stda16_24 1048578, xwa
-	.byte 0x68, 0x00	; jr T, $+2
+	jr __jrt_nop_FF8DDD
+__jrt_nop_FF8DDD:
 	nop
 	nop
 	nop
@@ -100341,7 +100354,8 @@ HARDWARE_PARAM_BLOCK_WRITE:
 	nop
 	ld wa, (xbc + 18)	; Get param[18:19]
 	stda16_24 1048578, xwa
-	.byte 0x68, 0x00	; jr T, $+2
+	jr __jrt_nop_FF8DF6
+__jrt_nop_FF8DF6:
 	nop
 	nop
 	nop
@@ -100353,7 +100367,8 @@ HARDWARE_PARAM_BLOCK_WRITE:
 	nop
 	ld wa, (xbc + 20)	; Get param[20:21]
 	stda16_24 1048578, xwa
-	.byte 0x68, 0x00	; jr T, $+2
+	jr __jrt_nop_FF8E0F
+__jrt_nop_FF8E0F:
 	nop
 	nop
 	nop
@@ -100365,7 +100380,8 @@ HARDWARE_PARAM_BLOCK_WRITE:
 	nop
 	ld wa, (xbc + 22)	; Get param[22:23]
 	stda16_24 1048578, xwa
-	.byte 0x68, 0x00	; jr T, $+2
+	jr __jrt_nop_FF8E28
+__jrt_nop_FF8E28:
 	nop
 	nop
 	nop
@@ -100377,7 +100393,8 @@ HARDWARE_PARAM_BLOCK_WRITE:
 	nop
 	ld wa, (xbc + 24)	; Get param[24:25]
 	stda16_24 1048578, xwa
-	.byte 0x68, 0x00	; jr T, $+2
+	jr __jrt_nop_FF8E41
+__jrt_nop_FF8E41:
 	nop
 	nop
 	nop
@@ -100386,7 +100403,8 @@ HARDWARE_PARAM_BLOCK_WRITE:
 	stda16_24 1048576, xiz	; Write base offset
 	nop
 	stdi16_24 1048578, 33024	; Write 0x8100
-	.byte 0x68, 0x00	; jr T, $+2
+	jr __jrt_nop_FF8E53
+__jrt_nop_FF8E53:
 	nop
 	nop
 	nop
@@ -100398,7 +100416,8 @@ HARDWARE_PARAM_BLOCK_WRITE:
 	nop
 	ld wa, (xbc + 26)	; Get param[26:27]
 	stda16_24 1048578, xwa
-	.byte 0x68, 0x00	; jr T, $+2
+	jr __jrt_nop_FF8E6C
+__jrt_nop_FF8E6C:
 	nop
 	nop
 	nop
@@ -100410,7 +100429,8 @@ HARDWARE_PARAM_BLOCK_WRITE:
 	nop
 	ld wa, (xbc + 28)	; Get param[28:29]
 	stda16_24 1048578, xwa
-	.byte 0x68, 0x00	; jr T, $+2
+	jr __jrt_nop_FF8E85
+__jrt_nop_FF8E85:
 	nop
 	nop
 	nop
@@ -100422,7 +100442,8 @@ HARDWARE_PARAM_BLOCK_WRITE:
 	nop
 	ld wa, (xbc + 30)	; Get param[30:31]
 	stda16_24 1048578, xwa
-	.byte 0x68, 0x00	; jr T, $+2
+	jr __jrt_nop_FF8E9E
+__jrt_nop_FF8E9E:
 	nop
 	nop
 	nop
@@ -100434,7 +100455,8 @@ HARDWARE_PARAM_BLOCK_WRITE:
 	nop
 	ld wa, (xbc + 32)	; Get param[32:33]
 	stda16_24 1048578, xwa
-	.byte 0x68, 0x00	; jr T, $+2
+	jr __jrt_nop_FF8EB7
+__jrt_nop_FF8EB7:
 	nop
 	nop
 	nop
@@ -100446,7 +100468,8 @@ HARDWARE_PARAM_BLOCK_WRITE:
 	nop
 	ld wa, (xbc + 34)	; Get param[34:35]
 	stda16_24 1048578, xwa
-	.byte 0x68, 0x00	; jr T, $+2
+	jr __jrt_nop_FF8ED0
+__jrt_nop_FF8ED0:
 	nop
 	nop
 	nop
@@ -100458,7 +100481,8 @@ HARDWARE_PARAM_BLOCK_WRITE:
 	nop
 	ld wa, (xbc + 36)	; Get param[36:37]
 	stda16_24 1048578, xwa
-	.byte 0x68, 0x00	; jr T, $+2
+	jr __jrt_nop_FF8EE9
+__jrt_nop_FF8EE9:
 	nop
 	nop
 	nop
@@ -100470,7 +100494,8 @@ HARDWARE_PARAM_BLOCK_WRITE:
 	nop
 	ld wa, (xbc + 38)	; Get param[38:39]
 	stda16_24 1048578, xwa
-	.byte 0x68, 0x00	; jr T, $+2
+	jr __jrt_nop_FF8F02
+__jrt_nop_FF8F02:
 	nop
 	nop
 	nop
@@ -100482,7 +100507,8 @@ HARDWARE_PARAM_BLOCK_WRITE:
 	nop
 	ld wa, (xbc + 40)	; Get param[40:41]
 	stda16_24 1048578, xwa
-	.byte 0x68, 0x00	; jr T, $+2
+	jr __jrt_nop_FF8F1B
+__jrt_nop_FF8F1B:
 	nop
 	nop
 	nop
@@ -100494,7 +100520,8 @@ HARDWARE_PARAM_BLOCK_WRITE:
 	nop
 	ld wa, (xbc + 42)	; Get param[42:43]
 	stda16_24 1048578, xwa
-	.byte 0x68, 0x00	; jr T, $+2
+	jr __jrt_nop_FF8F34
+__jrt_nop_FF8F34:
 	nop
 	nop
 	nop
@@ -100507,7 +100534,8 @@ HARDWARE_PARAM_BLOCK_WRITE:
 	ld wa, (xbc + 4)	; Get param[4:5] again
 	res 15, wa	; Clear bit 15 (was set earlier)
 	stda16_24 1048578, xwa
-	.byte 0x68, 0x00	; jr T, $+2
+	jr __jrt_nop_FF8F50
+__jrt_nop_FF8F50:
 	nop
 	nop
 	nop
@@ -100534,7 +100562,8 @@ HARDWARE_VERIFY_WRITE:
 	stda16_24 1048576, xwa	; Write address/command
 	nop
 	stda16_24 1048578, xiz	; Write data from IZ
-	.byte 0x68, 0x00	; jr T, $+2	; Short delay
+	jr __jrt_nop_FF8F67	; Short delay
+__jrt_nop_FF8F67:
 	nop
 	nop
 	nop

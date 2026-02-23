@@ -774,7 +774,7 @@ HDAE5000_Boot_Init:	; 28F576h
 	ld xiz, xhl	; XIZ = allocated buffer
 
 	; Copy from allocated buffer to VRAM area 1 (0x1A0000, size 0x9600)
-	.byte 0x0b, 0x00, 0x96	; push 9600h (16-bit immediate)
+	pushw 0x9600	; push 9600h (16-bit immediate)
 	ld xwa, xiz
 	push xwa	; Source
 	ld xwa, 0x1A0000	; Destination
@@ -782,7 +782,7 @@ HDAE5000_Boot_Init:	; 28F576h
 	call 0x29AE9F
 
 	; Copy from allocated buffer + offset to VRAM area 2 (0x1A9600)
-	.byte 0x0b, 0x00, 0x96	; push 9600h (16-bit immediate)
+	pushw 0x9600	; push 9600h (16-bit immediate)
 	ld xwa, xiz
 	add xwa, 0x9600	; Source + offset
 	push xwa

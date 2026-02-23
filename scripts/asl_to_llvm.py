@@ -54,6 +54,10 @@ ADDR_TO_LABEL_ALL = {}
 # Inline labels may have position drift; .set has exact ORG addresses.
 SET_ONLY_LABELS = {}  # label_name -> addr
 
+# Synthetic forward labels needed by JR T $+2 (delay NOP) conversion.
+# Maps target address → label name. Emitted in convert_all() before the next instruction.
+SYNTHETIC_FORWARD_LABELS = {}  # addr -> label_name
+
 # Labels that conflict with register or condition code names (case-insensitive).
 # These cannot be used as branch targets in native JR/JRL/CALR instructions.
 RESERVED_LABEL_NAMES = {
@@ -1694,6 +1698,12 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
         if nbytes == expected_size:
             return native_asm, expected_size
 
+    # Tier 1b: SWI (software interrupt) — 1-byte: 0xF8+imm3
+    if nbytes == 1 and rom_bytes is not None and mnem_upper == 'SWI':
+        if rom_bytes[0] >= 0xF8:
+            imm3 = rom_bytes[0] - 0xF8
+            return f"swi {imm3}", 1
+
     # Tier 2: 32-bit register immediate loads (5-byte form only)
     if mnem_upper in ('LD', 'LDW') and nbytes == 5:
         if operands_str:
@@ -1948,6 +1958,12 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
             if d8 > 127:
                 d8 -= 256  # sign-extend
             target = addr + 2 + d8
+            # Special case: d8==0 means JR T, $+2 (delay NOP — jump to next instruction).
+            # No label exists at target. Create a synthetic forward label.
+            if d8 == 0 and cc == 8:
+                synth_label = f"__jrt_nop_{target:06X}"
+                SYNTHETIC_FORWARD_LABELS[target] = synth_label
+                return f"jr {synth_label}", 2
             label = ADDR_TO_LABEL.get(target)
             if not label:
                 label = ADDR_TO_LABEL_ALL.get(target)
@@ -1974,9 +1990,11 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
                                 return f"jr {TLCS900_CC_NAMES[cc]}, {target_part}", 2
 
     # Tier 9: JRL/JRLcc (3-byte relative jump: 0x70+cc, d16_LE)
+    # Also matches ASL cc-suffixed mnemonics like JRL_T, JRL_Z, etc.
+    _is_jrl_mnem = mnem_upper in ('JRL', 'JP') or mnem_upper.startswith('JRL_')
     if nbytes == 3 and rom_bytes is not None and addr is not None:
         opcode = rom_bytes[0]
-        if 0x70 <= opcode <= 0x7F and mnem_upper in ('JRL', 'JP'):
+        if 0x70 <= opcode <= 0x7F and _is_jrl_mnem:
             cc = opcode & 0x0F
             d16 = rom_bytes[1] | (rom_bytes[2] << 8)
             if d16 > 32767:
@@ -1996,13 +2014,14 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
                 # Fallback: use operand label directly if available.
                 if operands_str:
                     parts = operands_str.split(',')
-                    if len(parts) >= 2:
-                        target_part = parts[-1].strip()
-                        if re.match(r'^[A-Za-z_.]', target_part):
-                            if cc == 8:
-                                return f"jrl {target_part}", 3
-                            else:
-                                return f"jrl {TLCS900_CC_NAMES[cc]}, {target_part}", 3
+                    # For cc-suffixed mnemonics (JRL_T label), operand is single (no comma)
+                    target_part = parts[-1].strip() if len(parts) >= 2 else operands_str.strip()
+                    target_part = convert_expression(target_part)  # ASL→LLVM hex notation
+                    if re.match(r'^[A-Za-z_.]', target_part):
+                        if cc == 8:
+                            return f"jrl {target_part}", 3
+                        else:
+                            return f"jrl {TLCS900_CC_NAMES[cc]}, {target_part}", 3
 
     # Tier 10: CALR (3-byte relative call: 0x1E, d16_LE)
     if nbytes == 3 and rom_bytes is not None and addr is not None:
@@ -2371,8 +2390,8 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
                     mnem = MULDIV_SUBOPC[sub_base]
                     return f"{mnem} {dst_reg}, {src_reg}", 2
 
-    # Tier 23: PUSHW immediate — 3-byte: 0x0B, imm16_LE
-    if nbytes == 3 and rom_bytes is not None and mnem_upper == 'PUSHW':
+    # Tier 23: PUSH/PUSHW immediate — 3-byte: 0x0B, imm16_LE
+    if nbytes == 3 and rom_bytes is not None and mnem_upper in ('PUSH', 'PUSHW'):
         if rom_bytes[0] == 0x0B:
             imm16 = rom_bytes[1] | (rom_bytes[2] << 8)
             return f"pushw 0x{imm16:X}", 3
@@ -4317,10 +4336,12 @@ def convert_all(main_file, output_path):
     global ADDR_TRACKER, BLOCK_BUFFER, BLOCK_CURSOR, BLOCK_SIZE, BLOCK_START_ADDR
     global SEG_START_ADDR, SEG_END_ADDR, SELF_CORRECTION_TRIGGERED, SELF_CORRECTION_ADDR
     global NATIVE_INSTR_COUNT, BYTE_FALLBACK_COUNT, SET_ONLY_LABELS
+    global SYNTHETIC_FORWARD_LABELS
 
     NATIVE_INSTR_COUNT = 0
     BYTE_FALLBACK_COUNT = 0
     SET_ONLY_LABELS = {}
+    SYNTHETIC_FORWARD_LABELS = {}
 
     main_dir = os.path.dirname(main_file)
 
@@ -4641,6 +4662,11 @@ def convert_all(main_file, output_path):
                 for lbl_name in label_only_labels[cur_addr]:
                     output_lines.append(f"{lbl_name}:")
                 emitted_label_addrs.add(cur_addr)
+
+            # Emit synthetic forward labels (created by JR T $+2 delay NOPs).
+            if cur_addr is not None and cur_addr in SYNTHETIC_FORWARD_LABELS:
+                synth_label = SYNTHETIC_FORWARD_LABELS.pop(cur_addr)
+                output_lines.append(f"{synth_label}:")
 
             # Track whether block was exhausted before convert_line.
             # If so, data directives get 0 bytes and need re-conversion
