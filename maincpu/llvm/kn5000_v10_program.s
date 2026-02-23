@@ -303409,7 +303409,7 @@ LABEL_F8B62D:
 	lds32 xwa, 0
 	ld xbc, 0x1C00017
 	ld xde, 0xD
-	.byte 0x78, 0x76, 0x77	; JRL T, FmmSmfMedleyFunc
+	jrl FmmSmfMedleyFunc
 
 LABEL_F8B641:
 	cp a, 0x6D
@@ -303425,7 +303425,7 @@ LABEL_F8B656:
 	lds32 xwa, 0
 	ld xbc, 0x1C00017
 	ld xde, 0xD
-	.byte 0x78, 0x56, 0x7f	; JRL T, FmmPdMedleyFunc
+	jrl FmmPdMedleyFunc
 
 LABEL_F8B66A:
 	cp a, 0x77
@@ -308251,7 +308251,7 @@ LABEL_F8E7EF:
 	ld xwa, (xsp + 32)
 	ld xbc, 0x1C0000B
 	lds32 xde, 0
-	.byte 0x1e, 0xad, 0x45	; CALR FmmSmfMedleyFunc
+	calr FmmSmfMedleyFunc
 
 LABEL_F8E80A:
 	cpdi8 36150, 107
@@ -313314,7 +313314,7 @@ SmfFmt_Exit:
 	; (block overflow) INC 6, XSP
 	; (block overflow) RET
 
-FmmSmfMedleyFunc:
+
 	; (block overflow) DEC 4, XSP
 	; (block overflow) PUSH IZ
 	; (block overflow) LD XHL, XBC
@@ -314145,7 +314145,7 @@ PdFmtSlot_Exit:
 	; (block overflow) INC 6, XSP
 	; (block overflow) RET
 
-FmmPdMedleyFunc:
+
 	; (block overflow) PUSH XIZ
 	; (block overflow) LD XHL, XDE
 	; (block overflow) LD XDE, XBC
@@ -452992,3 +452992,5 @@ FIRMWARE_VERSION:	; FFFFE8
 	.set LABEL_E14428, 0xE14428
 	.set LABEL_E1442A, 0xE1442A
 	.set LABEL_E14436, 0xE14436
+	.set FmmSmfMedleyFunc, 0xF92DB7
+	.set FmmPdMedleyFunc, 0xF935C0

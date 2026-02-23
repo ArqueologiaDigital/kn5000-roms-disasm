@@ -61,12 +61,11 @@ RESERVED_LABEL_NAMES = {
 }
 
 # Named labels with drifted inline positions in the LLVM output.
-# These labels are at wrong addresses when emitted as inline labels,
-# causing incorrect PC-relative displacements for JR/JRL/CALR.
-# Identified via byte-matching verification of the built ROM.
+# These labels are in block-overflow regions where their inline positions
+# are wrong. They are redirected to .set with correct ADDR_TRACKER addresses,
+# making them safe for PC-relative branch resolution (JR/JRL/CALR).
 DRIFTED_LABEL_NAMES = {
     'fmmpdmedleyfunc', 'fmmsmfmedleyfunc',
-    # FmmDiskMedleySelectFunc was removed — it's at the correct address now.
 }
 
 # EQU names promoted to inline labels (suppressed from .equ emission).
@@ -1005,6 +1004,10 @@ def convert_line(line, in_file_path):
 
     # Label-only line
     if not rest:
+        # Redirect drifted labels to .set — suppress inline emission.
+        # The correct address is looked up from ADDR_TO_LABEL_ALL (reverse map).
+        if label and label.lower() in DRIFTED_LABEL_NAMES:
+            label = None  # suppress inline; address populated later from label maps
         result = f"{label}:" if label else ""
         if comment:
             result += f"\t{comment}" if label else comment
@@ -1862,7 +1865,7 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
                 label = ADDR_TO_LABEL_ALL.get(target)
             if label:
                 ll = label.lower()
-                if ll not in RESERVED_LABEL_NAMES and ll not in DRIFTED_LABEL_NAMES:
+                if ll not in RESERVED_LABEL_NAMES:
                     if cc == 8:  # T (always/unconditional)
                         return f"jr {label}", 2
                     else:
@@ -1896,7 +1899,7 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
                 label = ADDR_TO_LABEL_ALL.get(target)
             if label:
                 ll = label.lower()
-                if ll not in RESERVED_LABEL_NAMES and ll not in DRIFTED_LABEL_NAMES:
+                if ll not in RESERVED_LABEL_NAMES:
                     if cc == 8:  # T (unconditional)
                         return f"jrl {label}", 3
                     else:
@@ -1925,7 +1928,7 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
                 label = ADDR_TO_LABEL_ALL.get(target)
             if label:
                 ll = label.lower()
-                if ll not in RESERVED_LABEL_NAMES and ll not in DRIFTED_LABEL_NAMES:
+                if ll not in RESERVED_LABEL_NAMES:
                     return f"calr {label}", 3
             else:
                 # Fallback: use operand label directly if available.
@@ -1949,7 +1952,7 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
                 label = ADDR_TO_LABEL_ALL.get(target)
             if label:
                 ll = label.lower()
-                if ll in RESERVED_LABEL_NAMES or ll in DRIFTED_LABEL_NAMES:
+                if ll in RESERVED_LABEL_NAMES:
                     label = None
             if label:
                 if 0xD8 <= prefix <= 0xDF:
@@ -4367,6 +4370,13 @@ def convert_all(main_file, output_path):
             equ_labels_added += 1
     if equ_labels_added:
         print(f"  EQU labels added to maps: {equ_labels_added}")
+
+    # Pre-populate SET_ONLY_LABELS for drifted labels using correct addresses
+    # from the label maps. These labels are in block-overflow regions where
+    # inline positions are wrong, so they must be emitted as .set directives.
+    for addr_val, lbl_name in ADDR_TO_LABEL_ALL.items():
+        if lbl_name.lower() in DRIFTED_LABEL_NAMES:
+            SET_ONLY_LABELS[lbl_name] = addr_val
 
     # Build output
     output_lines = []
