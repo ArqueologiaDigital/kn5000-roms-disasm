@@ -435905,41 +435905,40 @@ LABEL_FE72F2:
 	extz wa
 	sla wa, 2
 	add wa, 0xC4
-	dd162 0xFE, 0xC1
+	ldada xbc, 49662
 
-LABEL_FE730F:	; NOTE: nothing seems to call here, but I saw this value on VGA undocumented registers at routine EF5163. It may be just a coincidence, though.
-	.byte 0x31, 0xf3, 0x07	; LDA XDE, XBC + WA
-	spdl2 0xE0, 0x32
+LABEL_FE7310:	; NOTE: nothing seems to call here, but I saw this value on VGA undocumented registers at routine EF5163. It may be just a coincidence, though.  (was LABEL_FE730F - off by 1 byte)
+	st_b_dri3 0x07, 0xE4, 0xE0
 	ld xwa, xix
 	ld xbc, xhl
-	.byte 0x1d, 0x2c, 0x5c, 0xfe	; CP L, 0
+	call LABEL_FE5C2C
 	cps l, 0
-	.byte 0x76, 0x34, 0x01	; LDA XWA, XSP + 002h
-	mrdd3 0xBF, 0x02, 0x30
+	jrl z, LABEL_FE7456
+	lda xwa, (xsp + 2)
 	ld xde, xwa
-	mrdd3 0xBF, 0x02, 0x30
+	lda xwa, (xsp + 2)
 	ld xbc, xwa
-	.byte 0x0b, 0x02, 0x00	; LD XWA, XDE
+	pushw 0x2
 	ld xwa, xde
 	lds de, 4
-	.byte 0x1d, 0x62, 0x49, 0xfe	; CP L, 0
+	call LABEL_FE4962
 	cps l, 0
-	.byte 0x76, 0x1a, 0x01	; LDA XWA, XSP + 002h
-	mrdd3 0xBF, 0x02, 0x30
+	jrl z, LABEL_FE7456
+	lda xwa, (xsp + 2)
 	lds bc, 2
-	.byte 0x1d, 0x67, 0x55, 0xfe	; LDA XWA, XSP + 002h
-	mrdd3 0xBF, 0x02, 0x30
-	.byte 0x1d, 0x40, 0x5a, 0xfe	; CP L, 0
+	call LABEL_FE5567
+	lda xwa, (xsp + 2)
+	call LABEL_FE5A40
 	cps l, 0
-	.byte 0x7e, 0x05, 0x01	; CALL LABEL_FE8AFC
-	.byte 0x1d, 0xfc, 0x8a, 0xfe	; CP L, 0ffh
+	jrl nz, LABEL_FE7456
+	call LABEL_FE8AFC
 	cp l, 0xFF
-	.byte 0x76, 0xfb, 0x00	; LDA XWA, 0C1FEh
+	jrl z, LABEL_FE7456
 	ldada xwa, 49662
 	lds bc, 2
-	.byte 0x1d, 0x2a, 0x3d, 0xfe	; JRL T, LABEL_FE7456
+	call LABEL_FE3D2A
+	jrl LABEL_FE7456
 
-	.byte 0x78, 0xee, 0x00	; 0xFE7365 (block padding)
 LABEL_FE7368:
 	srib5 0xFD, 0xF0, 0x01, 0x3F, 0xFF
 	jr nz, LABEL_FE73D7

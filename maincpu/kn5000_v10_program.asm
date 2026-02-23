@@ -425354,7 +425354,7 @@ LABEL_FE72F2:
 	ADD WA, 00c4h
 	LDA XBC, 0C1FEh
 
-LABEL_FE730F:  ; NOTE: nothing seems to call here, but I saw this value on VGA undocumented registers at routine EF5163. It may be just a coincidence, though.
+LABEL_FE7310:  ; NOTE: nothing seems to call here, but I saw this value on VGA undocumented registers at routine EF5163. It may be just a coincidence, though.  (was LABEL_FE730F - off by 1 byte)
 	LDA XDE, XBC + WA
 	LD XWA, XIX
 	LD XBC, XHL
