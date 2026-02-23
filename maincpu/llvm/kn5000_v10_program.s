@@ -160824,7 +160824,7 @@ LABEL_F2300B:
 	ld wa, bc
 	sla xwa, 11
 	add xde, xwa
-	.byte 0x43, 0x04, 0x00, 0x00, 0x00	;	TODO: Fix ASL: LD XHL, 00000004h:32
+	ld xhl, 0x4	;	TODO: Fix ASL: LD XHL, 00000004h:32
 	add xhl, xde
 	cpmi8 (xhl + 1), 0x0
 	jr nz, LABEL_F2302F
@@ -160902,7 +160902,7 @@ LABEL_F230AC:
 	ld wa, bc
 	sla xwa, 11
 	add xde, xwa
-	.byte 0x43, 0x00, 0x00, 0x00, 0x00	;	TODO: Fix ASL: LD XHL, 00000000h
+	ld xhl, 0x0	;	TODO: Fix ASL: LD XHL, 00000000h
 	add xhl, xde
 	xor iy, iy
 
@@ -160963,7 +160963,7 @@ LABEL_F2313A:
 	ld wa, bc
 	sla xwa, 11
 	add xde, xwa
-	.byte 0x43, 0x04, 0x00, 0x00, 0x00	;	TODO: Fix ASL: LD XHL, 00000004h:32
+	ld xhl, 0x4	;	TODO: Fix ASL: LD XHL, 00000004h:32
 	add xhl, xde
 	cpmi8 (xhl + 1), 0x0
 	jr nz, LABEL_F2315E
@@ -161046,7 +161046,7 @@ LABEL_F231D9:
 	ld wa, bc
 	sla xwa, 11
 	add xde, xwa
-	.byte 0x43, 0x04, 0x00, 0x00, 0x00	;	TODO: Fix ASL: LD XHL, 00000004h:32
+	ld xhl, 0x4	;	TODO: Fix ASL: LD XHL, 00000004h:32
 	add xhl, xde
 	cpmi8 (xhl + 1), 0x0
 	jr nz, LABEL_F231FD

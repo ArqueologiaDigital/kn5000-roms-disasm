@@ -3623,12 +3623,24 @@ def convert_db(label, args, comment, in_file_path, label_addr_suffix=""):
             native_done = False
             if 1 <= nbytes <= 7 and comment:
                 # Extract mnemonic from comment like "; SRL 0, XBC (clear carry)"
+                # Also handle "TODO: Fix ASL: LD XHL, ..." pattern
                 ctext = comment.lstrip('; \t')
                 cmnem = ctext.split()[0].upper() if ctext else ''
+                if cmnem not in DB_INSTR_MNEMONICS:
+                    # Try extracting mnemonic after "Fix ASL:" prefix
+                    m = re.search(r'Fix ASL:\s*(\w+)', ctext, re.IGNORECASE)
+                    if m and m.group(1).upper() in DB_INSTR_MNEMONICS:
+                        cmnem = m.group(1).upper()
                 if cmnem in DB_INSTR_MNEMONICS:
                     addr = ADDR_TRACKER.get_addr()
                     try:
                         native = try_convert_native(cmnem, '', rom_bytes, nbytes, addr)
+                        if native is None:
+                            # Also try opcode-based guessing
+                            for mnem in guess_mnemonics_from_opcode(rom_bytes[0]):
+                                native = try_convert_native(mnem, '', rom_bytes, nbytes, addr)
+                                if native is not None:
+                                    break
                         if native is not None:
                             native_asm, _ = native
                             result += f"\t{native_asm}"
