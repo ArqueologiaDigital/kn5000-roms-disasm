@@ -277,6 +277,318 @@ CURRENT_MACRO_INSTR_COUNT = 0
 # because the LLVM assembler stores them without emitting bytes.
 IN_MACRO_DEF = 0
 
+
+def _mb(*lines):
+    """Build multi-line string by joining lines with newlines."""
+    return '\n'.join(lines)
+
+
+# Hand-crafted LLVM macro bodies for inline-defined ASL macros.
+# Keyed by uppercase macro name. When a macro is in this dict, the converter:
+# 1. Emits this body at the definition site (instead of converting ASL body lines)
+# 2. Emits macro calls at invocation sites (instead of inline expansion)
+# Uses .if/.else/.endif for encoding-dependent instructions (lds vs ldw, etc.)
+LLVM_MACRO_BODIES = {
+    # --- Leaf VGA macros ---
+    'VGA_WRITE': _mb(
+        ".macro VGA_WRITE regnum, value",
+        "\t.if \\regnum <= 7",
+        "\tlds wa, \\regnum",
+        "\t.else",
+        "\tldw wa, \\regnum",
+        "\t.endif",
+        "\t.if \\value <= 7",
+        "\tlds bc, \\value",
+        "\t.else",
+        "\tldw bc, \\value",
+        "\t.endif",
+        "\tcalr Write_VGA_Register",
+        ".endm",
+    ),
+    '_VGA_WRITE': _mb(
+        ".macro _VGA_WRITE regnum, value",
+        "\t.if \\regnum <= 7",
+        "\tlds wa, \\regnum",
+        "\t.else",
+        "\tldw wa, \\regnum",
+        "\t.endif",
+        "\t.if \\value <= 7",
+        "\tlds bc, \\value",
+        "\t.else",
+        "\tldw bc, \\value",
+        "\t.endif",
+        "\tcalr _Write_VGA_Register",
+        ".endm",
+    ),
+    '_VGA_READ': _mb(
+        ".macro _VGA_READ regnum",
+        "\t.if \\regnum <= 7",
+        "\tlds wa, \\regnum",
+        "\t.else",
+        "\tldw wa, \\regnum",
+        "\t.endif",
+        "\tcalr _Read_VGA_Register",
+        ".endm",
+    ),
+    'RET_VGA_WRITE': _mb(
+        ".macro RET_VGA_WRITE regnum, value",
+        "\t.if \\regnum <= 7",
+        "\tlds wa, \\regnum",
+        "\t.else",
+        "\tldw wa, \\regnum",
+        "\t.endif",
+        "\t.if \\value <= 7",
+        "\tlds bc, \\value",
+        "\t.else",
+        "\tldw bc, \\value",
+        "\t.endif",
+        "\tjrl t, Write_VGA_Register",
+        ".endm",
+    ),
+    # --- Compound VGA macros (call leaf macros) ---
+    'VGA_SEQUENCER': _mb(
+        ".macro VGA_SEQUENCER field, value",
+        "\tVGA_WRITE 0x3C4, \\field",
+        "\tVGA_WRITE 0x3C5, \\value",
+        ".endm",
+    ),
+    'VGA_GFX_CONTROLLER': _mb(
+        ".macro VGA_GFX_CONTROLLER field, value",
+        "\tVGA_WRITE 0x3CE, \\field",
+        "\tVGA_WRITE 0x3CF, \\value",
+        ".endm",
+    ),
+    'VGA_COLOR_CRTC': _mb(
+        ".macro VGA_COLOR_CRTC field, value",
+        "\tVGA_WRITE 0x3D4, \\field",
+        "\tVGA_WRITE 0x3D5, \\value",
+        ".endm",
+    ),
+    'VGA_ATTRIBUTE': _mb(
+        ".macro VGA_ATTRIBUTE field, value",
+        "\tVGA_WRITE 0x3C0, \\field",
+        "\tVGA_WRITE 0x3C0, \\value",
+        ".endm",
+    ),
+    'RET_VGA_SEQUENCER': _mb(
+        ".macro RET_VGA_SEQUENCER field, value",
+        "\tVGA_WRITE 0x3C4, \\field",
+        "\tRET_VGA_WRITE 0x3C5, \\value",
+        ".endm",
+    ),
+    '_VGA_SEQUENCER': _mb(
+        ".macro _VGA_SEQUENCER field, value",
+        "\t_VGA_WRITE 0x3C4, \\field",
+        "\t_VGA_WRITE 0x3C5, \\value",
+        ".endm",
+    ),
+    '_VGA_GFX_CONTROLLER': _mb(
+        ".macro _VGA_GFX_CONTROLLER field, value",
+        "\t_VGA_WRITE 0x3CE, \\field",
+        "\t_VGA_WRITE 0x3CF, \\value",
+        ".endm",
+    ),
+    '_VGA_COLOR_CRTC': _mb(
+        ".macro _VGA_COLOR_CRTC field, value",
+        "\t_VGA_WRITE 0x3D4, \\field",
+        "\t_VGA_WRITE 0x3D5, \\value",
+        ".endm",
+    ),
+    '_VGA_ATTRIBUTE': _mb(
+        ".macro _VGA_ATTRIBUTE field, value",
+        "\t_VGA_WRITE 0x3C0, \\field",
+        "\t_VGA_WRITE 0x3C0, \\value",
+        ".endm",
+    ),
+    # --- Palette macro (0 invocations, defined for ASL fidelity) ---
+    '_PALLETE_WRITE': _mb(
+        ".macro _PALLETE_WRITE red, green, blue",
+        "\tldw wa, 0x3C9",
+        "\t.if \\red <= 7",
+        "\tlds bc, \\red",
+        "\t.else",
+        "\tldw bc, \\red",
+        "\t.endif",
+        "\tcalr _Write_VGA_Register",
+        "\t.if \\green <= 7",
+        "\tlds bc, \\green",
+        "\t.else",
+        "\tldw bc, \\green",
+        "\t.endif",
+        "\tcalr _Write_VGA_Register",
+        "\t.if \\blue <= 7",
+        "\tlds bc, \\blue",
+        "\t.else",
+        "\tldw bc, \\blue",
+        "\t.endif",
+        "\tcalr _Write_VGA_Register",
+        ".endm",
+    ),
+    # --- Reg* macros ---
+    'REGOBJTABLE': _mb(
+        ".macro RegObjTable ParamA, ParamB, ParamC, ParamD, ParamE",
+        "\tmrid2 0xB7, 0x31",
+        "\t.if \\ParamA <= 7",
+        "\tlds32 xwa, \\ParamA",
+        "\t.else",
+        "\tld xwa, \\ParamA",
+        "\t.endif",
+        "\tld (xbc), xwa",
+        "\tldada_24 xwa, \\ParamB",
+        "\tld (xbc + 4), xwa",
+        "\tldda16_24 xwa, \\ParamC",
+        "\tld (xbc + 8), wa",
+        "\tldada_24 xwa, \\ParamD",
+        "\tld (xbc + 10), xwa",
+        "\t.if \\ParamE <= 7",
+        "\tlds wa, \\ParamE",
+        "\t.else",
+        "\tldw wa, \\ParamE",
+        "\t.endif",
+        "\tcall RegisterObjectTable",
+        ".endm",
+    ),
+    'REGOBJTABL': _mb(
+        ".macro RegObjTabl ParamA, ParamB, ParamC, ParamD, ParamE",
+        "\tmrid2 0xB7, 0x31",
+        "\t.if \\ParamA <= 7",
+        "\tlds32 xwa, \\ParamA",
+        "\t.else",
+        "\tld xwa, \\ParamA",
+        "\t.endif",
+        "\tld (xbc), xwa",
+        "\tldada_24 xwa, \\ParamB",
+        "\tld (xbc + 4), xwa",
+        "\tldmw (xbc + 8), \\ParamC",
+        "\tldada_24 xwa, \\ParamD",
+        "\tld (xbc + 10), xwa",
+        "\t.if \\ParamE <= 7",
+        "\tlds wa, \\ParamE",
+        "\t.else",
+        "\tldw wa, \\ParamE",
+        "\t.endif",
+        "\tcall RegisterObjectTable",
+        ".endm",
+    ),
+    'REGOBJTABLEHAMA': _mb(
+        ".macro RegObjTableHama ParamA, ParamB, ParamC, ParamD, ParamE",
+        "\t.if \\ParamA <= 7",
+        "\tlds32 xwa, \\ParamA",
+        "\t.else",
+        "\tld xwa, \\ParamA",
+        "\t.endif",
+        "\tld (xsp + 256), xwa",
+        "\tldada_24 xwa, \\ParamB",
+        "\tld (xsp + 4), xwa",
+        "\tldda16_24 xwa, \\ParamC",
+        "\tld (xsp + 8), wa",
+        "\tldada_24 xwa, \\ParamD",
+        "\tld (xsp + 10), xwa",
+        "\tmrid2 0xB7, 0x30",
+        "\tld xbc, xwa",
+        "\t.if \\ParamE <= 7",
+        "\tlds wa, \\ParamE",
+        "\t.else",
+        "\tldw wa, \\ParamE",
+        "\t.endif",
+        "\tcall RegisterObjectTable",
+        ".endm",
+    ),
+    'REGOBJTABLHAMA': _mb(
+        ".macro RegObjTablHama ParamA, ParamB, ParamC, ParamD, ParamE",
+        "\t.if \\ParamA <= 7",
+        "\tlds32 xwa, \\ParamA",
+        "\t.else",
+        "\tld xwa, \\ParamA",
+        "\t.endif",
+        "\tld (xsp + 256), xwa",
+        "\tldada_24 xwa, \\ParamB",
+        "\tld (xsp + 4), xwa",
+        "\tldmw (xsp + 8), \\ParamC",
+        "\tldada_24 xwa, \\ParamD",
+        "\tld (xsp + 10), xwa",
+        "\tmrid2 0xB7, 0x30",
+        "\tld xbc, xwa",
+        "\t.if \\ParamE <= 7",
+        "\tlds wa, \\ParamE",
+        "\t.else",
+        "\tldw wa, \\ParamE",
+        "\t.endif",
+        "\tcall RegisterObjectTable",
+        ".endm",
+    ),
+    'REGMODE': _mb(
+        ".macro RegMode ParamA, ParamBhi, ParamBlow, ParamC, ParamD, ParamE",
+        "\tpushw \\ParamA",
+        "\tpushw \\ParamBhi",
+        "\tpushw \\ParamBlow",
+        "\t.if \\ParamC <= 7",
+        "\tlds32 xwa, \\ParamC",
+        "\t.else",
+        "\tld xwa, \\ParamC",
+        "\t.endif",
+        "\t.if \\ParamD <= 7",
+        "\tlds32 xbc, \\ParamD",
+        "\t.else",
+        "\tld xbc, \\ParamD",
+        "\t.endif",
+        "\t.if \\ParamE <= 7",
+        "\tlds32 xde, \\ParamE",
+        "\t.else",
+        "\tld xde, \\ParamE",
+        "\t.endif",
+        "\tcall RegisterMode",
+        ".endm",
+    ),
+    'REGTITLE': _mb(
+        ".macro RegTitle ParamA, ParamBhi, ParamBlow, ParamC, ParamD, ParamE",
+        "\tpushw \\ParamA",
+        "\tpushw \\ParamBhi",
+        "\tpushw \\ParamBlow",
+        "\t.if \\ParamC <= 7",
+        "\tlds32 xwa, \\ParamC",
+        "\t.else",
+        "\tld xwa, \\ParamC",
+        "\t.endif",
+        "\t.if \\ParamD <= 7",
+        "\tlds32 xbc, \\ParamD",
+        "\t.else",
+        "\tld xbc, \\ParamD",
+        "\t.endif",
+        "\t.if \\ParamE <= 7",
+        "\tlds32 xde, \\ParamE",
+        "\t.else",
+        "\tld xde, \\ParamE",
+        "\t.endif",
+        "\tcall RegisterTitle",
+        ".endm",
+    ),
+    'REGTITLEHAMA': _mb(
+        ".macro RegTitleHama ParamA, ParamB, ParamC, ParamD, ParamE",
+        "\tpushw \\ParamA",
+        "\tldada_24 xwa, \\ParamB",
+        "\tpush xwa",
+        "\t.if \\ParamC <= 7",
+        "\tlds32 xwa, \\ParamC",
+        "\t.else",
+        "\tld xwa, \\ParamC",
+        "\t.endif",
+        "\t.if \\ParamD <= 7",
+        "\tlds32 xbc, \\ParamD",
+        "\t.else",
+        "\tld xbc, \\ParamD",
+        "\t.endif",
+        "\t.if \\ParamE <= 7",
+        "\tlds32 xde, \\ParamE",
+        "\t.else",
+        "\tld xde, \\ParamE",
+        "\t.endif",
+        "\tcall RegisterTitle",
+        ".endm",
+    ),
+}
+
+
 # Conditional assembly state: tracks IF/ELSE/ENDIF
 # For maincpu, INIT_FLAG_COMPARE_WORD=0, so IF evaluates to false
 COND_STATE = {
@@ -786,6 +1098,9 @@ def convert_line(line, in_file_path):
         if IN_MACRO_DEF == 1:
             CURRENT_MACRO_DEF_NAME = macro_name.upper()
             CURRENT_MACRO_INSTR_COUNT = 0
+        # Hand-crafted LLVM body for known macros
+        if macro_name.upper() in LLVM_MACRO_BODIES:
+            return LLVM_MACRO_BODIES[macro_name.upper()]
         macro_match = re.match(r'MACRO\s*(.*)', remainder.strip(), re.IGNORECASE)
         args_str = macro_match.group(1).strip() if macro_match else ""
         if args_str:
@@ -798,6 +1113,8 @@ def convert_line(line, in_file_path):
 
     if first_upper == 'ENDM':
         if IN_MACRO_DEF > 0:
+            is_known_endm = (IN_MACRO_DEF == 1 and CURRENT_MACRO_DEF_NAME
+                             and CURRENT_MACRO_DEF_NAME in LLVM_MACRO_BODIES)
             if IN_MACRO_DEF == 1 and CURRENT_MACRO_DEF_NAME:
                 MACRO_INSTR_COUNT[CURRENT_MACRO_DEF_NAME] = CURRENT_MACRO_INSTR_COUNT
                 CURRENT_MACRO_DEF_NAME = None
@@ -806,6 +1123,8 @@ def convert_line(line, in_file_path):
                 ADDR_TRACKER.unfreeze()
                 # Restore block buffer after macro definition
                 BLOCK_BUFFER = _SAVED_BLOCK_BUFFER
+                if is_known_endm:
+                    return ""
         return ".endm"
 
     # Count instructions/macros in macro body for expansion size tracking
@@ -816,6 +1135,11 @@ def convert_line(line, in_file_path):
             # Nested macro: add its leaf instruction count
             nested_count = MACRO_INSTR_COUNT.get(first_word.upper(), 1)
             CURRENT_MACRO_INSTR_COUNT += nested_count
+
+    # Suppress body lines for known macros (hand-crafted body already emitted)
+    if (IN_MACRO_DEF > 0 and CURRENT_MACRO_DEF_NAME
+            and CURRENT_MACRO_DEF_NAME in LLVM_MACRO_BODIES):
+        return ""
 
     # ---- Data directives ----
 
@@ -961,6 +1285,40 @@ def convert_line(line, in_file_path):
         result = ""
         if label:
             result = f"{label}:{label_addr_suffix}\n"
+
+        if first_word.upper() in LLVM_MACRO_BODIES:
+            # Macro calls expand to full instruction sequences.  If the
+            # invocation spans a block boundary (nbytes > remaining), fall
+            # through to inline expansion which handles partial blocks.
+            can_emit_call = True
+            if BLOCK_BUFFER is not None and nbytes is not None:
+                remaining = BLOCK_SIZE - BLOCK_CURSOR
+                if nbytes > remaining:
+                    can_emit_call = False
+            if can_emit_call:
+                args = remainder.strip()
+                if args:
+                    arg_list = split_operands(args)
+                    converted_args = [convert_expression(a) for a in arg_list]
+                    # Resolve LABEL_XXXXXX references to numeric addresses.
+                    # ExtAddrMode instructions (ldada_24, ldda16_24) inside
+                    # macro bodies don't support symbol relocations.
+                    for i, ca in enumerate(converted_args):
+                        m = re.match(r'^LABEL_([0-9A-Fa-f]+)$', ca)
+                        if m:
+                            converted_args[i] = '0x' + m.group(1)
+                    args_str = ', '.join(converted_args)
+                    result += f"\t{first_word} {args_str}"
+                else:
+                    result += f"\t{first_word}"
+                NATIVE_INSTR_COUNT += instr_count
+                if BLOCK_BUFFER is not None and nbytes is not None:
+                    BLOCK_CURSOR += nbytes
+                if nbytes is not None:
+                    ADDR_TRACKER.advance(nbytes)
+                if comment:
+                    result += f"\t{comment}"
+                return result
 
         if BLOCK_BUFFER is not None and nbytes is not None:
             # Use block buffer for macro bytes

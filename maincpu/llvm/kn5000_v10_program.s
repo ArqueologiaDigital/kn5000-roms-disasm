@@ -121656,43 +121656,82 @@ Read_VGA_Register:
 ; === VGA Macros ===
 ; These macros generate CALR instructions to Write_VGA_Register
 
-.macro VGA_WRITE regnum,value
-	.byte 0x30, 0xc4, 0x03	; LDW WA, regnum
-	.byte 0x30, 0xc4, 0x03	; LDW BC, value
-	.byte 0x30, 0xc4, 0x03	; CALR Write_VGA_Register
+.macro VGA_WRITE regnum, value
+	.if \regnum <= 7
+	lds wa, \regnum
+	.else
+	ldw wa, \regnum
+	.endif
+	.if \value <= 7
+	lds bc, \value
+	.else
+	ldw bc, \value
+	.endif
+	calr Write_VGA_Register
 .endm
 
-.macro VGA_SEQUENCER field,value
-	.byte 0x30, 0xc4, 0x03, 0xd9, 0xae, 0x1e, 0xd6, 0xff	; VGA_WRITE VGA_SEQ_ADDR, field
-	.byte 0x30, 0xc4, 0x03, 0xd9, 0xae, 0x1e, 0xd6, 0xff	; VGA_WRITE VGA_SEQ_DATA, value
+
+
+
+
+.macro VGA_SEQUENCER field, value
+	VGA_WRITE 0x3C4, \field
+	VGA_WRITE 0x3C5, \value
 .endm
 
-.macro VGA_GFX_CONTROLLER field,value
-	.byte 0x30, 0xc4, 0x03, 0xd9, 0xae, 0x1e, 0xd6, 0xff	; VGA_WRITE VGA_GC_ADDR, field
-	.byte 0x30, 0xc4, 0x03, 0xd9, 0xae, 0x1e, 0xd6, 0xff	; VGA_WRITE VGA_GC_DATA, value
+
+
+
+.macro VGA_GFX_CONTROLLER field, value
+	VGA_WRITE 0x3CE, \field
+	VGA_WRITE 0x3CF, \value
 .endm
 
-.macro VGA_COLOR_CRTC field,value
-	.byte 0x30, 0xc4, 0x03, 0xd9, 0xae, 0x1e, 0xd6, 0xff	; VGA_WRITE VGA_CRTC_ADDR, field
-	.byte 0x30, 0xc4, 0x03, 0xd9, 0xae, 0x1e, 0xd6, 0xff	; VGA_WRITE VGA_CRTC_DATA, value
+
+
+
+.macro VGA_COLOR_CRTC field, value
+	VGA_WRITE 0x3D4, \field
+	VGA_WRITE 0x3D5, \value
 .endm
 
-.macro VGA_ATTRIBUTE field,value
-	.byte 0x30, 0xc4, 0x03, 0xd9, 0xae, 0x1e, 0xd6, 0xff	; VGA_WRITE VGA_ATTR_ADDR, field
-	.byte 0x30, 0xc4, 0x03, 0xd9, 0xae, 0x1e, 0xd6, 0xff	; VGA_WRITE VGA_ATTR_ADDR, value
+
+
+
+.macro VGA_ATTRIBUTE field, value
+	VGA_WRITE 0x3C0, \field
+	VGA_WRITE 0x3C0, \value
 .endm
+
+
+
 
 ; This macro is used at the end - uses JRL for a tail-call optimization
-.macro RET_VGA_WRITE regnum,value
-	.byte 0x30, 0xc4, 0x03	; LDW WA, regnum
-	.byte 0x30, 0xc4, 0x03	; LDW BC, value
-	.byte 0x30, 0xc4, 0x03	; JRL T, Write_VGA_Register
+.macro RET_VGA_WRITE regnum, value
+	.if \regnum <= 7
+	lds wa, \regnum
+	.else
+	ldw wa, \regnum
+	.endif
+	.if \value <= 7
+	lds bc, \value
+	.else
+	ldw bc, \value
+	.endif
+	jrl t, Write_VGA_Register
 .endm
 
-.macro RET_VGA_SEQUENCER field,value
-	.byte 0x30, 0xc4, 0x03, 0xd9, 0xae, 0x1e, 0xd6, 0xff	; VGA_WRITE VGA_SEQ_ADDR, field
-	.byte 0x30, 0xc4, 0x03, 0xd9, 0xae, 0x1e, 0xd6, 0xff	; RET_VGA_WRITE VGA_SEQ_DATA, value
+
+
+
+
+.macro RET_VGA_SEQUENCER field, value
+	VGA_WRITE 0x3C4, \field
+	RET_VGA_WRITE 0x3C5, \value
 .endm
+
+
+
 
 
 ; =============================================================================
@@ -121708,462 +121747,90 @@ Read_VGA_Register:
 ; Label names use maincpu convention. Table_data can define aliases if needed.
 ; =============================================================================
 VGA_Extended_Init:
-	; VGA_SEQUENCER 06h, 001h
-	ldw wa, 0x3C4
-	lds bc, 6
-	calr Write_VGA_Register
-	ldw wa, 0x3C5
-	lds bc, 1
-	calr Write_VGA_Register
+	VGA_SEQUENCER 0x6, 0x1
 
-	; VGA_SEQUENCER 09h, 004h
-	ldw wa, 0x3C4
-	ldw bc, 0x9
-	calr Write_VGA_Register
-	ldw wa, 0x3C5
-	lds bc, 4
-	calr Write_VGA_Register
-	; VGA_SEQUENCER 0ah, 010h
-	ldw wa, 0x3C4
-	ldw bc, 0xA
-	calr Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0x10
-	calr Write_VGA_Register
-	; VGA_SEQUENCER 0bh, 013h
-	ldw wa, 0x3C4
-	ldw bc, 0xB
-	calr Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0x13
-	calr Write_VGA_Register
-	; VGA_SEQUENCER 0ch, 005h
-	ldw wa, 0x3C4
-	ldw bc, 0xC
-	calr Write_VGA_Register
-	ldw wa, 0x3C5
-	lds bc, 5
-	calr Write_VGA_Register
+	VGA_SEQUENCER 0x9, 0x4
+	VGA_SEQUENCER 0xa, 0x10
+	VGA_SEQUENCER 0xb, 0x13
+	VGA_SEQUENCER 0xc, 0x5
 
-	; VGA_SEQUENCER 09h, 006h
-	ldw wa, 0x3C4
-	ldw bc, 0x9
-	calr Write_VGA_Register
-	ldw wa, 0x3C5
-	lds bc, 6
-	calr Write_VGA_Register
-	; VGA_SEQUENCER 0ah, 015h
-	ldw wa, 0x3C4
-	ldw bc, 0xA
-	calr Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0x15
-	calr Write_VGA_Register
-	; VGA_SEQUENCER 0bh, 064h
-	ldw wa, 0x3C4
-	ldw bc, 0xB
-	calr Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0x64
-	calr Write_VGA_Register
-	; VGA_SEQUENCER 0ch, 007h
-	ldw wa, 0x3C4
-	ldw bc, 0xC
-	calr Write_VGA_Register
-	ldw wa, 0x3C5
-	lds bc, 7
-	calr Write_VGA_Register
+	VGA_SEQUENCER 0x9, 0x6
+	VGA_SEQUENCER 0xa, 0x15
+	VGA_SEQUENCER 0xb, 0x64
+	VGA_SEQUENCER 0xc, 0x7
 
-	; VGA_SEQUENCER 09h, 000h
-	ldw wa, 0x3C4
-	ldw bc, 0x9
-	calr Write_VGA_Register
-	ldw wa, 0x3C5
-	lds bc, 0
-	calr Write_VGA_Register
-	; VGA_SEQUENCER 0ah, 01ch
-	ldw wa, 0x3C4
-	ldw bc, 0xA
-	calr Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0x1C
-	calr Write_VGA_Register
-	; VGA_SEQUENCER 0bh, 011h
-	ldw wa, 0x3C4
-	ldw bc, 0xB
-	calr Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0x11
-	calr Write_VGA_Register
-	; VGA_SEQUENCER 0ch, 003h
-	ldw wa, 0x3C4
-	ldw bc, 0xC
-	calr Write_VGA_Register
-	ldw wa, 0x3C5
-	lds bc, 3
-	calr Write_VGA_Register
+	VGA_SEQUENCER 0x9, 0x0
+	VGA_SEQUENCER 0xa, 0x1c
+	VGA_SEQUENCER 0xb, 0x11
+	VGA_SEQUENCER 0xc, 0x3
 
-	; VGA_SEQUENCER 09h, 002h
-	ldw wa, 0x3C4
-	ldw bc, 0x9
-	calr Write_VGA_Register
-	ldw wa, 0x3C5
-	lds bc, 2
-	calr Write_VGA_Register
-	; VGA_SEQUENCER 0ah, 005h
-	ldw wa, 0x3C4
-	ldw bc, 0xA
-	calr Write_VGA_Register
-	ldw wa, 0x3C5
-	lds bc, 5
-	calr Write_VGA_Register
-	; VGA_SEQUENCER 0bh, 011h
-	ldw wa, 0x3C4
-	ldw bc, 0xB
-	calr Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0x11
-	calr Write_VGA_Register
-	; VGA_SEQUENCER 0ch, 003h
-	ldw wa, 0x3C4
-	ldw bc, 0xC
-	calr Write_VGA_Register
-	ldw wa, 0x3C5
-	lds bc, 3
-	calr Write_VGA_Register
+	VGA_SEQUENCER 0x9, 0x2
+	VGA_SEQUENCER 0xa, 0x5
+	VGA_SEQUENCER 0xb, 0x11
+	VGA_SEQUENCER 0xc, 0x3
 
-	; VGA_SEQUENCER 09h, 008h
-	ldw wa, 0x3C4
-	ldw bc, 0x9
-	calr Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0x8
-	calr Write_VGA_Register
-	; VGA_SEQUENCER 0ah, 092h
-	ldw wa, 0x3C4
-	ldw bc, 0xA
-	calr Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0x92
-	calr Write_VGA_Register
-	; VGA_SEQUENCER 0bh, 013h
-	ldw wa, 0x3C4
-	ldw bc, 0xB
-	calr Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0x13
-	calr Write_VGA_Register
-	; VGA_SEQUENCER 0ch, 008h
-	ldw wa, 0x3C4
-	ldw bc, 0xC
-	calr Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0x8
-	calr Write_VGA_Register
+	VGA_SEQUENCER 0x9, 0x8
+	VGA_SEQUENCER 0xa, 0x92
+	VGA_SEQUENCER 0xb, 0x13
+	VGA_SEQUENCER 0xc, 0x8
 
-	; VGA_SEQUENCER 09h, 00ah
-	ldw wa, 0x3C4
-	ldw bc, 0x9
-	calr Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0xA
-	calr Write_VGA_Register
-	; VGA_SEQUENCER 0ah, 001h
-	ldw wa, 0x3C4
-	ldw bc, 0xA
-	calr Write_VGA_Register
-	ldw wa, 0x3C5
-	lds bc, 1
-	calr Write_VGA_Register
-	; VGA_SEQUENCER 0bh, 014h
-	ldw wa, 0x3C4
-	ldw bc, 0xB
-	calr Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0x14
-	calr Write_VGA_Register
-	; VGA_SEQUENCER 0ch, 006h
-	ldw wa, 0x3C4
-	ldw bc, 0xC
-	calr Write_VGA_Register
-	ldw wa, 0x3C5
-	lds bc, 6
-	calr Write_VGA_Register
+	VGA_SEQUENCER 0x9, 0xa
+	VGA_SEQUENCER 0xa, 0x1
+	VGA_SEQUENCER 0xb, 0x14
+	VGA_SEQUENCER 0xc, 0x6
 
-	; VGA_SEQUENCER 09h, 00dh
-	ldw wa, 0x3C4
-	ldw bc, 0x9
-	calr Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0xD
-	calr Write_VGA_Register
-	; VGA_SEQUENCER 0ah, 001h
-	ldw wa, 0x3C4
-	ldw bc, 0xA
-	calr Write_VGA_Register
-	ldw wa, 0x3C5
-	lds bc, 1
-	calr Write_VGA_Register
+	VGA_SEQUENCER 0x9, 0xd
+	VGA_SEQUENCER 0xa, 0x1
 
-	; VGA_SEQUENCER 09h, 00ch
-	ldw wa, 0x3C4
-	ldw bc, 0x9
-	calr Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0xC
-	calr Write_VGA_Register
-	; VGA_SEQUENCER 0ah, 000h
-	ldw wa, 0x3C4
-	ldw bc, 0xA
-	calr Write_VGA_Register
-	ldw wa, 0x3C5
-	lds bc, 0
-	calr Write_VGA_Register
-	; VGA_SEQUENCER 0bh, 072h
-	ldw wa, 0x3C4
-	ldw bc, 0xB
-	calr Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0x72
-	calr Write_VGA_Register
-	; VGA_SEQUENCER 0ch, 009h
-	ldw wa, 0x3C4
-	ldw bc, 0xC
-	calr Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0x9
-	calr Write_VGA_Register
+	VGA_SEQUENCER 0x9, 0xc
+	VGA_SEQUENCER 0xa, 0x0
+	VGA_SEQUENCER 0xb, 0x72
+	VGA_SEQUENCER 0xc, 0x9
 
-	; VGA_SEQUENCER 09h, 00fh
-	ldw wa, 0x3C4
-	ldw bc, 0x9
-	calr Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0xF
-	calr Write_VGA_Register
-	; VGA_SEQUENCER 0ah, 011h
-	ldw wa, 0x3C4
-	ldw bc, 0xA
-	calr Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0x11
-	calr Write_VGA_Register
+	VGA_SEQUENCER 0x9, 0xf
+	VGA_SEQUENCER 0xa, 0x11
 
-	; VGA_SEQUENCER 09h, 00eh
-	ldw wa, 0x3C4
-	ldw bc, 0x9
-	calr Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0xE
-	calr Write_VGA_Register
-	; VGA_SEQUENCER 0ah, 000h
-	ldw wa, 0x3C4
-	ldw bc, 0xA
-	calr Write_VGA_Register
-	ldw wa, 0x3C5
-	lds bc, 0
-	calr Write_VGA_Register
-	; VGA_SEQUENCER 0bh, 013h
-	ldw wa, 0x3C4
-	ldw bc, 0xB
-	calr Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0x13
-	calr Write_VGA_Register
-	; VGA_SEQUENCER 0ch, 008h
-	ldw wa, 0x3C4
-	ldw bc, 0xC
-	calr Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0x8
-	calr Write_VGA_Register
+	VGA_SEQUENCER 0x9, 0xe
+	VGA_SEQUENCER 0xa, 0x0
+	VGA_SEQUENCER 0xb, 0x13
+	VGA_SEQUENCER 0xc, 0x8
 
-	; VGA_SEQUENCER 09h, 011h
-	ldw wa, 0x3C4
-	ldw bc, 0x9
-	calr Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0x11
-	calr Write_VGA_Register
-	; VGA_SEQUENCER 0ah, 0ffh
-	ldw wa, 0x3C4
-	ldw bc, 0xA
-	calr Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0xFF
-	calr Write_VGA_Register
+	VGA_SEQUENCER 0x9, 0x11
+	VGA_SEQUENCER 0xa, 0xff
 
-	; VGA_SEQUENCER 09h, 010h
-	ldw wa, 0x3C4
-	ldw bc, 0x9
-	calr Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0x10
-	calr Write_VGA_Register
-	; VGA_SEQUENCER 0ah, 0feh
-	ldw wa, 0x3C4
-	ldw bc, 0xA
-	calr Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0xFE
-	calr Write_VGA_Register
-	; VGA_SEQUENCER 0bh, 073h
-	ldw wa, 0x3C4
-	ldw bc, 0xB
-	calr Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0x73
-	calr Write_VGA_Register
-	; VGA_SEQUENCER 0ch, 00fh
-	ldw wa, 0x3C4
-	ldw bc, 0xC
-	calr Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0xF
-	calr Write_VGA_Register
+	VGA_SEQUENCER 0x9, 0x10
+	VGA_SEQUENCER 0xa, 0xfe
+	VGA_SEQUENCER 0xb, 0x73
+	VGA_SEQUENCER 0xc, 0xf
 
-	; VGA_SEQUENCER 09h, 001h
-	ldw wa, 0x3C4
-	ldw bc, 0x9
-	calr Write_VGA_Register
-	ldw wa, 0x3C5
-	lds bc, 1
-	calr Write_VGA_Register
-	; VGA_SEQUENCER 0ch, 074h
-	ldw wa, 0x3C4
-	ldw bc, 0xC
-	calr Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0x74
-	calr Write_VGA_Register
+	VGA_SEQUENCER 0x9, 0x1
+	VGA_SEQUENCER 0xc, 0x74
 
-	; VGA_SEQUENCER 09h, 003h
-	ldw wa, 0x3C4
-	ldw bc, 0x9
-	calr Write_VGA_Register
-	ldw wa, 0x3C5
-	lds bc, 3
-	calr Write_VGA_Register
-	; VGA_SEQUENCER 0ch, 009h
-	ldw wa, 0x3C4
-	ldw bc, 0xC
-	calr Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0x9
-	calr Write_VGA_Register
+	VGA_SEQUENCER 0x9, 0x3
+	VGA_SEQUENCER 0xc, 0x9
 
-	; VGA_SEQUENCER 09h, 005h
-	ldw wa, 0x3C4
-	ldw bc, 0x9
-	calr Write_VGA_Register
-	ldw wa, 0x3C5
-	lds bc, 5
-	calr Write_VGA_Register
-	; VGA_SEQUENCER 0ch, 02bh
-	ldw wa, 0x3C4
-	ldw bc, 0xC
-	calr Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0x2B
-	calr Write_VGA_Register
+	VGA_SEQUENCER 0x9, 0x5
+	VGA_SEQUENCER 0xc, 0x2b
 
-	; VGA_SEQUENCER 09h, 007h
-	ldw wa, 0x3C4
-	ldw bc, 0x9
-	calr Write_VGA_Register
-	ldw wa, 0x3C5
-	lds bc, 7
-	calr Write_VGA_Register
-	; VGA_SEQUENCER 0ch, 068h
-	ldw wa, 0x3C4
-	ldw bc, 0xC
-	calr Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0x68
-	calr Write_VGA_Register
+	VGA_SEQUENCER 0x9, 0x7
+	VGA_SEQUENCER 0xc, 0x68
 
-	; VGA_SEQUENCER 09h, 009h
-	ldw wa, 0x3C4
-	ldw bc, 0x9
-	calr Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0x9
-	calr Write_VGA_Register
-	; VGA_SEQUENCER 0ch, 005h
-	ldw wa, 0x3C4
-	ldw bc, 0xC
-	calr Write_VGA_Register
-	ldw wa, 0x3C5
-	lds bc, 5
-	calr Write_VGA_Register
+	VGA_SEQUENCER 0x9, 0x9
+	VGA_SEQUENCER 0xc, 0x5
 
-	; VGA_SEQUENCER 09h, 00bh
-	ldw wa, 0x3C4
-	ldw bc, 0x9
-	calr Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0xB
-	calr Write_VGA_Register
-	; VGA_SEQUENCER 0ch, 001h
-	ldw wa, 0x3C4
-	ldw bc, 0xC
-	calr Write_VGA_Register
-	ldw wa, 0x3C5
-	lds bc, 1
-	calr Write_VGA_Register
+	VGA_SEQUENCER 0x9, 0xb
+	VGA_SEQUENCER 0xc, 0x1
 
-	; VGA_SEQUENCER 09h, 00dh
-	ldw wa, 0x3C4
-	ldw bc, 0x9
-	calr Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0xD
-	calr Write_VGA_Register
-	; VGA_SEQUENCER 0ch, 00ch
-	ldw wa, 0x3C4
-	ldw bc, 0xC
-	calr Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0xC
-	calr Write_VGA_Register
+	VGA_SEQUENCER 0x9, 0xd
+	VGA_SEQUENCER 0xc, 0xc
 
-	; VGA_SEQUENCER 09h, 00fh
-	ldw wa, 0x3C4
-	ldw bc, 0x9
-	calr Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0xF
-	calr Write_VGA_Register
-	; VGA_SEQUENCER 0ch, 03ah
-	ldw wa, 0x3C4
-	ldw bc, 0xC
-	calr Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0x3A
-	calr Write_VGA_Register
+	VGA_SEQUENCER 0x9, 0xf
+	VGA_SEQUENCER 0xc, 0x3a
 
-	; VGA_SEQUENCER 09h, 011h
-	ldw wa, 0x3C4
-	ldw bc, 0x9
-	calr Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0x11
-	calr Write_VGA_Register
-	; VGA_SEQUENCER 0ch, 00dh
-	ldw wa, 0x3C4
-	ldw bc, 0xC
-	calr Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0xD
-	calr Write_VGA_Register
+	VGA_SEQUENCER 0x9, 0x11
+	VGA_SEQUENCER 0xc, 0xd
 
-	; RET_VGA_SEQUENCER 06h, 000h
-	ldw wa, 0x3C4
-	lds bc, 6
-	calr Write_VGA_Register
-	ldw wa, 0x3C5
-	lds bc, 0
-	jrl Write_VGA_Register
+	RET_VGA_SEQUENCER 0x6, 0x0
 
 
 ; =============================================================================
@@ -122185,488 +121852,92 @@ VGA_Extended_Init:
 ;   - Set VGA_SEQUENCER 01h, 001h to turn the screen on
 ; =============================================================================
 VGA_Setup:
-	; VGA_WRITE VGA_ENABLE, 001h
-	ldw wa, 0x3C3
-	lds bc, 1
-	calr Write_VGA_Register	; Global enable
-	; VGA_WRITE VGA_MISC_OUTPUT, 0e3h
-	ldw wa, 0x3C2
-	ldw bc, 0xE3
-	calr Write_VGA_Register	; 25 MHz dot clock, 60 Hz scanning
+	VGA_WRITE VGA_ENABLE, 0x1	; Global enable
+	VGA_WRITE VGA_MISC_OUTPUT, 0xe3	; 25 MHz dot clock, 60 Hz scanning
 
-	; VGA_SEQUENCER 00h, 000h
-	ldw wa, 0x3C4
-	lds bc, 0
-	calr Write_VGA_Register
-	ldw wa, 0x3C5
-	lds bc, 0
-	calr Write_VGA_Register	; Reset
-	; VGA_SEQUENCER 01h, 021h
-	ldw wa, 0x3C4
-	lds bc, 1
-	calr Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0x21
-	calr Write_VGA_Register	; Clocking Mode (screen off)
-	; VGA_SEQUENCER 00h, 003h
-	ldw wa, 0x3C4
-	lds bc, 0
-	calr Write_VGA_Register
-	ldw wa, 0x3C5
-	lds bc, 3
-	calr Write_VGA_Register	; Reset
-	; VGA_SEQUENCER 02h, 00fh
-	ldw wa, 0x3C4
-	lds bc, 2
-	calr Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0xF
-	calr Write_VGA_Register	; Map Mask (all 4 planes)
-	; VGA_SEQUENCER 03h, 000h
-	ldw wa, 0x3C4
-	lds bc, 3
-	calr Write_VGA_Register
-	ldw wa, 0x3C5
-	lds bc, 0
-	calr Write_VGA_Register	; Character Map Select
-	; VGA_SEQUENCER 04h, 006h
-	ldw wa, 0x3C4
-	lds bc, 4
-	calr Write_VGA_Register
-	ldw wa, 0x3C5
-	lds bc, 6
-	calr Write_VGA_Register	; Memory Mode
+	VGA_SEQUENCER 0x0, 0x0	; Reset
+	VGA_SEQUENCER 0x1, 0x21	; Clocking Mode (screen off)
+	VGA_SEQUENCER 0x0, 0x3	; Reset
+	VGA_SEQUENCER 0x2, 0xf	; Map Mask (all 4 planes)
+	VGA_SEQUENCER 0x3, 0x0	; Character Map Select
+	VGA_SEQUENCER 0x4, 0x6	; Memory Mode
 
-	; VGA_GFX_CONTROLLER GC_ENABLE_SET_RESET, 000h
-	ldw wa, 0x3CE
-	lds bc, 1
-	calr Write_VGA_Register
-	ldw wa, 0x3CF
-	lds bc, 0
-	calr Write_VGA_Register
-	; VGA_GFX_CONTROLLER GC_DATA_ROTATE, 000h
-	ldw wa, 0x3CE
-	lds bc, 3
-	calr Write_VGA_Register
-	ldw wa, 0x3CF
-	lds bc, 0
-	calr Write_VGA_Register
-	; VGA_GFX_CONTROLLER GC_READ_MAP_SELECT, 000h
-	ldw wa, 0x3CE
-	lds bc, 4
-	calr Write_VGA_Register
-	ldw wa, 0x3CF
-	lds bc, 0
-	calr Write_VGA_Register
-	; VGA_GFX_CONTROLLER GC_GRAPHICS_MODE, 000h
-	ldw wa, 0x3CE
-	lds bc, 5
-	calr Write_VGA_Register
-	ldw wa, 0x3CF
-	lds bc, 0
-	calr Write_VGA_Register
-	; VGA_GFX_CONTROLLER GC_MISC_GRAPHICS, 001h
-	ldw wa, 0x3CE
-	lds bc, 6
-	calr Write_VGA_Register
-	ldw wa, 0x3CF
-	lds bc, 1
-	calr Write_VGA_Register
-	; VGA_GFX_CONTROLLER GC_BIT_MASK, 0ffh
-	ldw wa, 0x3CE
-	ldw bc, 0x8
-	calr Write_VGA_Register
-	ldw wa, 0x3CF
-	ldw bc, 0xFF
-	calr Write_VGA_Register
+	VGA_GFX_CONTROLLER GC_ENABLE_SET_RESET, 0x0
+	VGA_GFX_CONTROLLER GC_DATA_ROTATE, 0x0
+	VGA_GFX_CONTROLLER GC_READ_MAP_SELECT, 0x0
+	VGA_GFX_CONTROLLER GC_GRAPHICS_MODE, 0x0
+	VGA_GFX_CONTROLLER GC_MISC_GRAPHICS, 0x1
+	VGA_GFX_CONTROLLER GC_BIT_MASK, 0xff
 
-	; VGA_COLOR_CRTC CRTC_VERT_RETRACE_END, 000h
-	ldw wa, 0x3D4
-	ldw bc, 0x11
-	calr Write_VGA_Register
-	ldw wa, 0x3D5
-	lds bc, 0
-	calr Write_VGA_Register	; Unlock protected regs
-	; VGA_COLOR_CRTC CRTC_OVERFLOW, 010h
-	ldw wa, 0x3D4
-	lds bc, 7
-	calr Write_VGA_Register
-	ldw wa, 0x3D5
-	ldw bc, 0x10
-	calr Write_VGA_Register
-	; VGA_COLOR_CRTC CRTC_PRESET_ROW_SCAN, 000h
-	ldw wa, 0x3D4
-	ldw bc, 0x8
-	calr Write_VGA_Register
-	ldw wa, 0x3D5
-	lds bc, 0
-	calr Write_VGA_Register
-	; VGA_COLOR_CRTC CRTC_MAX_SCAN_LINE, 040h
-	ldw wa, 0x3D4
-	ldw bc, 0x9
-	calr Write_VGA_Register
-	ldw wa, 0x3D5
-	ldw bc, 0x40
-	calr Write_VGA_Register
-	; VGA_COLOR_CRTC CRTC_START_ADDR_HIGH, 000h
-	ldw wa, 0x3D4
-	ldw bc, 0xC
-	calr Write_VGA_Register
-	ldw wa, 0x3D5
-	lds bc, 0
-	calr Write_VGA_Register
-	; VGA_COLOR_CRTC CRTC_START_ADDR_LOW, 000h
-	ldw wa, 0x3D4
-	ldw bc, 0xD
-	calr Write_VGA_Register
-	ldw wa, 0x3D5
-	lds bc, 0
-	calr Write_VGA_Register
-	; VGA_COLOR_CRTC CRTC_VERT_DISP_END, 0efh
-	ldw wa, 0x3D4
-	ldw bc, 0x12
-	calr Write_VGA_Register
-	ldw wa, 0x3D5
-	ldw bc, 0xEF
-	calr Write_VGA_Register
-	; VGA_COLOR_CRTC CRTC_OFFSET, 014h
-	ldw wa, 0x3D4
-	ldw bc, 0x13
-	calr Write_VGA_Register
-	ldw wa, 0x3D5
-	ldw bc, 0x14
-	calr Write_VGA_Register
-	; VGA_COLOR_CRTC CRTC_UNDERLINE_LOC, 000h
-	ldw wa, 0x3D4
-	ldw bc, 0x14
-	calr Write_VGA_Register
-	ldw wa, 0x3D5
-	lds bc, 0
-	calr Write_VGA_Register
-	; VGA_COLOR_CRTC CRTC_MODE_CONTROL, 0e3h
-	ldw wa, 0x3D4
-	ldw bc, 0x17
-	calr Write_VGA_Register
-	ldw wa, 0x3D5
-	ldw bc, 0xE3
-	calr Write_VGA_Register
-	; VGA_COLOR_CRTC CRTC_LINE_COMPARE, 0ffh
-	ldw wa, 0x3D4
-	ldw bc, 0x18
-	calr Write_VGA_Register
-	ldw wa, 0x3D5
-	ldw bc, 0xFF
-	calr Write_VGA_Register
+	VGA_COLOR_CRTC CRTC_VERT_RETRACE_END, 0x0	; Unlock protected regs
+	VGA_COLOR_CRTC CRTC_OVERFLOW, 0x10
+	VGA_COLOR_CRTC CRTC_PRESET_ROW_SCAN, 0x0
+	VGA_COLOR_CRTC CRTC_MAX_SCAN_LINE, 0x40
+	VGA_COLOR_CRTC CRTC_START_ADDR_HIGH, 0x0
+	VGA_COLOR_CRTC CRTC_START_ADDR_LOW, 0x0
+	VGA_COLOR_CRTC CRTC_VERT_DISP_END, 0xef
+	VGA_COLOR_CRTC CRTC_OFFSET, 0x14
+	VGA_COLOR_CRTC CRTC_UNDERLINE_LOC, 0x0
+	VGA_COLOR_CRTC CRTC_MODE_CONTROL, 0xe3
+	VGA_COLOR_CRTC CRTC_LINE_COMPARE, 0xff
 
 	; Read VGA_INPUT_STATUS - reuses BC=0FFh from previous write
 	ldw wa, 0x3DA
 	calr Read_VGA_Register
 
 	; EGA default palette (16 entries)
-	; VGA_ATTRIBUTE 00h, 000h
-	ldw wa, 0x3C0
-	lds bc, 0
-	calr Write_VGA_Register
-	ldw wa, 0x3C0
-	lds bc, 0
-	calr Write_VGA_Register
-	; VGA_ATTRIBUTE 01h, 001h
-	ldw wa, 0x3C0
-	lds bc, 1
-	calr Write_VGA_Register
-	ldw wa, 0x3C0
-	lds bc, 1
-	calr Write_VGA_Register
-	; VGA_ATTRIBUTE 02h, 002h
-	ldw wa, 0x3C0
-	lds bc, 2
-	calr Write_VGA_Register
-	ldw wa, 0x3C0
-	lds bc, 2
-	calr Write_VGA_Register
-	; VGA_ATTRIBUTE 03h, 003h
-	ldw wa, 0x3C0
-	lds bc, 3
-	calr Write_VGA_Register
-	ldw wa, 0x3C0
-	lds bc, 3
-	calr Write_VGA_Register
-	; VGA_ATTRIBUTE 04h, 004h
-	ldw wa, 0x3C0
-	lds bc, 4
-	calr Write_VGA_Register
-	ldw wa, 0x3C0
-	lds bc, 4
-	calr Write_VGA_Register
-	; VGA_ATTRIBUTE 05h, 005h
-	ldw wa, 0x3C0
-	lds bc, 5
-	calr Write_VGA_Register
-	ldw wa, 0x3C0
-	lds bc, 5
-	calr Write_VGA_Register
-	; VGA_ATTRIBUTE 06h, 014h
-	ldw wa, 0x3C0
-	lds bc, 6
-	calr Write_VGA_Register
-	ldw wa, 0x3C0
-	ldw bc, 0x14
-	calr Write_VGA_Register
-	; VGA_ATTRIBUTE 07h, 007h
-	ldw wa, 0x3C0
-	lds bc, 7
-	calr Write_VGA_Register
-	ldw wa, 0x3C0
-	lds bc, 7
-	calr Write_VGA_Register
-	; VGA_ATTRIBUTE 08h, 038h
-	ldw wa, 0x3C0
-	ldw bc, 0x8
-	calr Write_VGA_Register
-	ldw wa, 0x3C0
-	ldw bc, 0x38
-	calr Write_VGA_Register
-	; VGA_ATTRIBUTE 09h, 039h
-	ldw wa, 0x3C0
-	ldw bc, 0x9
-	calr Write_VGA_Register
-	ldw wa, 0x3C0
-	ldw bc, 0x39
-	calr Write_VGA_Register
-	; VGA_ATTRIBUTE 0ah, 03ah
-	ldw wa, 0x3C0
-	ldw bc, 0xA
-	calr Write_VGA_Register
-	ldw wa, 0x3C0
-	ldw bc, 0x3A
-	calr Write_VGA_Register
-	; VGA_ATTRIBUTE 0bh, 03bh
-	ldw wa, 0x3C0
-	ldw bc, 0xB
-	calr Write_VGA_Register
-	ldw wa, 0x3C0
-	ldw bc, 0x3B
-	calr Write_VGA_Register
-	; VGA_ATTRIBUTE 0ch, 03ch
-	ldw wa, 0x3C0
-	ldw bc, 0xC
-	calr Write_VGA_Register
-	ldw wa, 0x3C0
-	ldw bc, 0x3C
-	calr Write_VGA_Register
-	; VGA_ATTRIBUTE 0dh, 03dh
-	ldw wa, 0x3C0
-	ldw bc, 0xD
-	calr Write_VGA_Register
-	ldw wa, 0x3C0
-	ldw bc, 0x3D
-	calr Write_VGA_Register
-	; VGA_ATTRIBUTE 0eh, 03eh
-	ldw wa, 0x3C0
-	ldw bc, 0xE
-	calr Write_VGA_Register
-	ldw wa, 0x3C0
-	ldw bc, 0x3E
-	calr Write_VGA_Register
-	; VGA_ATTRIBUTE 0fh, 03fh
-	ldw wa, 0x3C0
-	ldw bc, 0xF
-	calr Write_VGA_Register
-	ldw wa, 0x3C0
-	ldw bc, 0x3F
-	calr Write_VGA_Register
-	; VGA_ATTRIBUTE ATTR_MODE_CONTROL, 001h
-	ldw wa, 0x3C0
-	ldw bc, 0x10
-	calr Write_VGA_Register
-	ldw wa, 0x3C0
-	lds bc, 1
-	calr Write_VGA_Register
-	; VGA_ATTRIBUTE ATTR_OVERSCAN_COLOR, 000h
-	ldw wa, 0x3C0
-	ldw bc, 0x11
-	calr Write_VGA_Register
-	ldw wa, 0x3C0
-	lds bc, 0
-	calr Write_VGA_Register
-	; VGA_ATTRIBUTE ATTR_COLOR_PLANE_ENABLE, 00fh
-	ldw wa, 0x3C0
-	ldw bc, 0x12
-	calr Write_VGA_Register
-	ldw wa, 0x3C0
-	ldw bc, 0xF
-	calr Write_VGA_Register
-	; VGA_ATTRIBUTE ATTR_HORIZ_PIXEL_PAN, 000h
-	ldw wa, 0x3C0
-	ldw bc, 0x13
-	calr Write_VGA_Register
-	ldw wa, 0x3C0
-	lds bc, 0
-	calr Write_VGA_Register
-	; VGA_ATTRIBUTE 34h, 000h
-	ldw wa, 0x3C0
-	ldw bc, 0x34
-	calr Write_VGA_Register
-	ldw wa, 0x3C0
-	lds bc, 0
-	calr Write_VGA_Register	; ATTR_COLOR_SELECT + Palette Address Source
+	VGA_ATTRIBUTE 0x0, 0x0
+	VGA_ATTRIBUTE 0x1, 0x1
+	VGA_ATTRIBUTE 0x2, 0x2
+	VGA_ATTRIBUTE 0x3, 0x3
+	VGA_ATTRIBUTE 0x4, 0x4
+	VGA_ATTRIBUTE 0x5, 0x5
+	VGA_ATTRIBUTE 0x6, 0x14
+	VGA_ATTRIBUTE 0x7, 0x7
+	VGA_ATTRIBUTE 0x8, 0x38
+	VGA_ATTRIBUTE 0x9, 0x39
+	VGA_ATTRIBUTE 0xa, 0x3a
+	VGA_ATTRIBUTE 0xb, 0x3b
+	VGA_ATTRIBUTE 0xc, 0x3c
+	VGA_ATTRIBUTE 0xd, 0x3d
+	VGA_ATTRIBUTE 0xe, 0x3e
+	VGA_ATTRIBUTE 0xf, 0x3f
+	VGA_ATTRIBUTE ATTR_MODE_CONTROL, 0x1
+	VGA_ATTRIBUTE ATTR_OVERSCAN_COLOR, 0x0
+	VGA_ATTRIBUTE ATTR_COLOR_PLANE_ENABLE, 0xf
+	VGA_ATTRIBUTE ATTR_HORIZ_PIXEL_PAN, 0x0
+	VGA_ATTRIBUTE 0x34, 0x0	; ATTR_COLOR_SELECT + Palette Address Source
 
-	; VGA_SEQUENCER 06h, 001h
-	ldw wa, 0x3C4
-	lds bc, 6
-	calr Write_VGA_Register
-	ldw wa, 0x3C5
-	lds bc, 1
-	calr Write_VGA_Register
+	VGA_SEQUENCER 0x6, 0x1
 
-	; VGA_COLOR_CRTC CRTC_HORIZ_TOTAL, 065h
-	ldw wa, 0x3D4
-	lds bc, 0
-	calr Write_VGA_Register
-	ldw wa, 0x3D5
-	ldw bc, 0x65
-	calr Write_VGA_Register
-	; VGA_COLOR_CRTC CRTC_HORIZ_DISP_END, 027h
-	ldw wa, 0x3D4
-	lds bc, 1
-	calr Write_VGA_Register
-	ldw wa, 0x3D5
-	ldw bc, 0x27
-	calr Write_VGA_Register
-	; VGA_COLOR_CRTC CRTC_START_HORIZ_RETRACE, 028h
-	ldw wa, 0x3D4
-	lds bc, 4
-	calr Write_VGA_Register
-	ldw wa, 0x3D5
-	ldw bc, 0x28
-	calr Write_VGA_Register
-	; VGA_COLOR_CRTC CRTC_END_HORIZ_RETRACE, 029h
-	ldw wa, 0x3D4
-	lds bc, 5
-	calr Write_VGA_Register
-	ldw wa, 0x3D5
-	ldw bc, 0x29
-	calr Write_VGA_Register
-	; VGA_COLOR_CRTC CRTC_VERT_TOTAL, 0f3h
-	ldw wa, 0x3D4
-	lds bc, 6
-	calr Write_VGA_Register
-	ldw wa, 0x3D5
-	ldw bc, 0xF3
-	calr Write_VGA_Register
-	; VGA_COLOR_CRTC CRTC_OVERFLOW, 000h
-	ldw wa, 0x3D4
-	lds bc, 7
-	calr Write_VGA_Register
-	ldw wa, 0x3D5
-	lds bc, 0
-	calr Write_VGA_Register
-	; VGA_COLOR_CRTC CRTC_MAX_SCAN_LINE, 000h
-	ldw wa, 0x3D4
-	ldw bc, 0x9
-	calr Write_VGA_Register
-	ldw wa, 0x3D5
-	lds bc, 0
-	calr Write_VGA_Register
-	; VGA_COLOR_CRTC CRTC_VERT_RETRACE_START, 0f2h
-	ldw wa, 0x3D4
-	ldw bc, 0x10
-	calr Write_VGA_Register
-	ldw wa, 0x3D5
-	ldw bc, 0xF2
-	calr Write_VGA_Register
-	; VGA_COLOR_CRTC CRTC_VERT_RETRACE_END, 003h
-	ldw wa, 0x3D4
-	ldw bc, 0x11
-	calr Write_VGA_Register
-	ldw wa, 0x3D5
-	lds bc, 3
-	calr Write_VGA_Register
-	; VGA_COLOR_CRTC CRTC_START_VERT_BLANK, 0efh
-	ldw wa, 0x3D4
-	ldw bc, 0x15
-	calr Write_VGA_Register
-	ldw wa, 0x3D5
-	ldw bc, 0xEF
-	calr Write_VGA_Register
-	; VGA_COLOR_CRTC CRTC_END_VERT_BLANK, 0f3h
-	ldw wa, 0x3D4
-	ldw bc, 0x16
-	calr Write_VGA_Register
-	ldw wa, 0x3D5
-	ldw bc, 0xF3
-	calr Write_VGA_Register
+	VGA_COLOR_CRTC CRTC_HORIZ_TOTAL, 0x65
+	VGA_COLOR_CRTC CRTC_HORIZ_DISP_END, 0x27
+	VGA_COLOR_CRTC CRTC_START_HORIZ_RETRACE, 0x28
+	VGA_COLOR_CRTC CRTC_END_HORIZ_RETRACE, 0x29
+	VGA_COLOR_CRTC CRTC_VERT_TOTAL, 0xf3
+	VGA_COLOR_CRTC CRTC_OVERFLOW, 0x0
+	VGA_COLOR_CRTC CRTC_MAX_SCAN_LINE, 0x0
+	VGA_COLOR_CRTC CRTC_VERT_RETRACE_START, 0xf2
+	VGA_COLOR_CRTC CRTC_VERT_RETRACE_END, 0x3
+	VGA_COLOR_CRTC CRTC_START_VERT_BLANK, 0xef
+	VGA_COLOR_CRTC CRTC_END_VERT_BLANK, 0xf3
 
-	; VGA_SEQUENCER 08h, 001h
-	ldw wa, 0x3C4
-	ldw bc, 0x8
-	calr Write_VGA_Register
-	ldw wa, 0x3C5
-	lds bc, 1
-	calr Write_VGA_Register
-	; VGA_SEQUENCER 0dh, 003h
-	ldw wa, 0x3C4
-	ldw bc, 0xD
-	calr Write_VGA_Register
-	ldw wa, 0x3C5
-	lds bc, 3
-	calr Write_VGA_Register
-	; VGA_SEQUENCER 0fh, 000h
-	ldw wa, 0x3C4
-	ldw bc, 0xF
-	calr Write_VGA_Register
-	ldw wa, 0x3C5
-	lds bc, 0
-	calr Write_VGA_Register
+	VGA_SEQUENCER 0x8, 0x1
+	VGA_SEQUENCER 0xd, 0x3
+	VGA_SEQUENCER 0xf, 0x0
 
-	; VGA_COLOR_CRTC 19h, 000h
-	ldw wa, 0x3D4
-	ldw bc, 0x19
-	calr Write_VGA_Register
-	ldw wa, 0x3D5
-	lds bc, 0
-	calr Write_VGA_Register	; MN89304-specific
-	; VGA_COLOR_CRTC 1ah, 010h
-	ldw wa, 0x3D4
-	ldw bc, 0x1A
-	calr Write_VGA_Register
-	ldw wa, 0x3D5
-	ldw bc, 0x10
-	calr Write_VGA_Register	; MN89304-specific
+	VGA_COLOR_CRTC 0x19, 0x0	; MN89304-specific
+	VGA_COLOR_CRTC 0x1a, 0x10	; MN89304-specific
 
-	; VGA_SEQUENCER 07h, 020h
-	ldw wa, 0x3C4
-	lds bc, 7
-	calr Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0x20
-	calr Write_VGA_Register	; Horiz char counter reset
-	; VGA_SEQUENCER 06h, 000h
-	ldw wa, 0x3C4
-	lds bc, 6
-	calr Write_VGA_Register
-	ldw wa, 0x3C5
-	lds bc, 0
-	calr Write_VGA_Register
+	VGA_SEQUENCER 0x7, 0x20	; Horiz char counter reset
+	VGA_SEQUENCER 0x6, 0x0
 
-	; VGA_COLOR_CRTC CRTC_VERT_RETRACE_END, 080h
-	ldw wa, 0x3D4
-	ldw bc, 0x11
-	calr Write_VGA_Register
-	ldw wa, 0x3D5
-	ldw bc, 0x80
-	calr Write_VGA_Register	; Lock protected regs 0-7
+	VGA_COLOR_CRTC CRTC_VERT_RETRACE_END, 0x80	; Lock protected regs 0-7
 
-	; VGA_WRITE 3c6h, 0ffh
-	ldw wa, 0x3C6
-	ldw bc, 0xFF
-	calr Write_VGA_Register	; DAC mask
+	VGA_WRITE 0x3c6, 0xff	; DAC mask
 
 	; === DAC Palette Setup ===
-	; VGA_WRITE 3c8h, 0
-	ldw wa, 0x3C8
-	lds bc, 0
-	calr Write_VGA_Register	; Start at palette index 0
+	VGA_WRITE 0x3c8, 0	; Start at palette index 0
 
 	; Color 0: Black (0, 0, 0)
 	ldw wa, 0x3C9
@@ -122796,13 +122067,7 @@ VGA_Setup:
 	ldw de, 0x9600
 	call Copy_DE_words_from_XBC_to_XWA	; Blit video buffer
 
-	; RET_VGA_SEQUENCER 01h, 001h
-	ldw wa, 0x3C4
-	lds bc, 1
-	calr Write_VGA_Register
-	ldw wa, 0x3C5
-	lds bc, 1
-	jrl Write_VGA_Register	; Clocking Mode (screen on)
+	RET_VGA_SEQUENCER 0x1, 0x1	; Clocking Mode (screen on)
 
 
 ;=============================================================================
@@ -132663,1132 +131928,247 @@ LABEL_F028DE:
 	lda xsp, (xsp + 54)
 	ret
 
-.macro RegObjTable ParamA,ParamB,ParamC,ParamD,ParamE
-	.byte 0xbf, 0xf2, 0x37	; LDA XBC, XSP
-	.byte 0xbf, 0xf2, 0x37	; LD XWA, ParamA
-	.byte 0xbf, 0xf2, 0x37	; LD (XBC), XWA
-	.byte 0xbf, 0xf2, 0x37	; LDA XWA, ParamB
-	.byte 0xbf, 0xf2, 0x37	; LD (XBC + 004h), XWA
-	.byte 0xbf, 0xf2, 0x37	; LD WA, (ParamC)
-	.byte 0xbf, 0xf2, 0x37	; LD (XBC + 008h), WA
-	.byte 0xbf, 0xf2, 0x37	; LDA XWA, ParamD
-	.byte 0xbf, 0xf2, 0x37	; LD (XBC + 00ah), XWA
-	.byte 0xbf, 0xf2, 0x37	; LD WA, ParamE
-	.byte 0xbf, 0xf2, 0x37	; CALL RegisterObjectTable
+.macro RegObjTable ParamA, ParamB, ParamC, ParamD, ParamE
+	mrid2 0xB7, 0x31
+	.if \ParamA <= 7
+	lds32 xwa, \ParamA
+	.else
+	ld xwa, \ParamA
+	.endif
+	ld (xbc), xwa
+	ldada_24 xwa, \ParamB
+	ld (xbc + 4), xwa
+	ldda16_24 xwa, \ParamC
+	ld (xbc + 8), wa
+	ldada_24 xwa, \ParamD
+	ld (xbc + 10), xwa
+	.if \ParamE <= 7
+	lds wa, \ParamE
+	.else
+	ldw wa, \ParamE
+	.endif
+	call RegisterObjectTable
 .endm
 
 
-.macro RegObjTabl ParamA,ParamB,ParamC,ParamD,ParamE
-	.byte 0xbf, 0xf2, 0x37	; LDA XBC, XSP
-	.byte 0xbf, 0xf2, 0x37	; LD XWA, ParamA
-	.byte 0xbf, 0xf2, 0x37	; LD (XBC), XWA
-	.byte 0xbf, 0xf2, 0x37	; LDA XWA, ParamB
-	.byte 0xbf, 0xf2, 0x37	; LD (XBC + 004h), XWA
-	.byte 0xbf, 0xf2, 0x37	; LDW (XBC + 008h:8), ParamC
-	.byte 0xbf, 0xf2, 0x37	; LDA XWA, ParamD
-	.byte 0xbf, 0xf2, 0x37	; LD (XBC + 00ah), XWA
-	.byte 0xbf, 0xf2, 0x37	; LD WA, ParamE
-	.byte 0xbf, 0xf2, 0x37	; CALL RegisterObjectTable
+
+
+
+
+
+
+
+
+
+
+
+
+.macro RegObjTabl ParamA, ParamB, ParamC, ParamD, ParamE
+	mrid2 0xB7, 0x31
+	.if \ParamA <= 7
+	lds32 xwa, \ParamA
+	.else
+	ld xwa, \ParamA
+	.endif
+	ld (xbc), xwa
+	ldada_24 xwa, \ParamB
+	ld (xbc + 4), xwa
+	ldmw (xbc + 8), \ParamC
+	ldada_24 xwa, \ParamD
+	ld (xbc + 10), xwa
+	.if \ParamE <= 7
+	lds wa, \ParamE
+	.else
+	ldw wa, \ParamE
+	.endif
+	call RegisterObjectTable
 .endm
 
 
-.macro RegMode ParamA,ParamBhi,ParamBlow,ParamC,ParamD,ParamE
-	.byte 0xbf, 0xf2, 0x37	; PUSHW ParamA
-	.byte 0xbf, 0xf2, 0x37	; PUSHW ParamBhi
-	.byte 0xbf, 0xf2, 0x37	; PUSHW ParamBlow
-	.byte 0xbf, 0xf2, 0x37	; LD XWA, ParamC
-	.byte 0xbf, 0xf2, 0x37	; LD XBC, ParamD
-	.byte 0xbf, 0xf2, 0x37	; LD XDE, ParamE
-	.byte 0xbf, 0xf2, 0x37	; CALL RegisterMode
+
+
+
+
+
+
+
+
+
+
+
+.macro RegMode ParamA, ParamBhi, ParamBlow, ParamC, ParamD, ParamE
+	pushw \ParamA
+	pushw \ParamBhi
+	pushw \ParamBlow
+	.if \ParamC <= 7
+	lds32 xwa, \ParamC
+	.else
+	ld xwa, \ParamC
+	.endif
+	.if \ParamD <= 7
+	lds32 xbc, \ParamD
+	.else
+	ld xbc, \ParamD
+	.endif
+	.if \ParamE <= 7
+	lds32 xde, \ParamE
+	.else
+	ld xde, \ParamE
+	.endif
+	call RegisterMode
 .endm
 
 
-.macro RegTitle ParamA,ParamBhi,ParamBlow,ParamC,ParamD,ParamE
-	.byte 0xbf, 0xf2, 0x37	; PUSHW ParamA
-	.byte 0xbf, 0xf2, 0x37	; PUSHW ParamBhi
-	.byte 0xbf, 0xf2, 0x37	; PUSHW ParamBlow
-	.byte 0xbf, 0xf2, 0x37	; LD XWA, ParamC
-	.byte 0xbf, 0xf2, 0x37	; LD XBC, ParamD
-	.byte 0xbf, 0xf2, 0x37	; LD XDE, ParamE
-	.byte 0xbf, 0xf2, 0x37	; CALL RegisterTitle
+
+
+
+
+
+
+
+
+.macro RegTitle ParamA, ParamBhi, ParamBlow, ParamC, ParamD, ParamE
+	pushw \ParamA
+	pushw \ParamBhi
+	pushw \ParamBlow
+	.if \ParamC <= 7
+	lds32 xwa, \ParamC
+	.else
+	ld xwa, \ParamC
+	.endif
+	.if \ParamD <= 7
+	lds32 xbc, \ParamD
+	.else
+	ld xbc, \ParamD
+	.endif
+	.if \ParamE <= 7
+	lds32 xde, \ParamE
+	.else
+	ld xde, \ParamE
+	.endif
+	call RegisterTitle
 .endm
+
+
+
+
+
+
+
+
 
 
 InitializeScoop:
 	lda xsp, (xsp - 14)
 
-	; RegObjTable 01600004h, 0FA44E2h, 0E0CDACh, 	0E0CD94h, 0166h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600004
-	ld (xbc), xwa
-	ldada_24 xwa, 16401634
-	ld (xbc + 4), xwa
-	ldda16_24 xwa, 14732716
-	ld (xbc + 8), wa
-	ldada_24 xwa, 14732692
-	ld (xbc + 10), xwa
-	ldw wa, 0x166
-	call 0xFA42FB
-	; RegObjTable 0160000ch, 0FA58FBh, 0E0CDB2h, 	0E0CDAEh, 01c6h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000C
-	ld (xbc), xwa
-	ldada_24 xwa, 16406779
-	ld (xbc + 4), xwa
-	ldda16_24 xwa, 14732722
-	ld (xbc + 8), wa
-	ldada_24 xwa, 14732718
-	ld (xbc + 10), xwa
-	ldw wa, 0x1C6
-	call 0xFA42FB
-	; RegObjTable 0160000dh, 0FA5948h, 0E0CDB8h, 	0E0CDB4h, 01e6h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000D
-	ld (xbc), xwa
-	ldada_24 xwa, 16406856
-	ld (xbc + 4), xwa
-	ldda16_24 xwa, 14732728
-	ld (xbc + 8), wa
-	ldada_24 xwa, 14732724
-	ld (xbc + 10), xwa
-	ldw wa, 0x1E6
-	call 0xFA42FB
-	; RegObjTabl 01600002h, 0FA496Ch, 0000h,		0E0CD8Ah, 0126h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600002
-	ld (xbc), xwa
-	ldada_24 xwa, 16402796
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x0
-	ldada_24 xwa, 14732682
-	ld (xbc + 10), xwa
-	ldw wa, 0x126
-	call 0xFA42FB
-	; RegObjTabl 01600002h, 0FA496Ch, 0000h,		0E0CD8Eh, 0426h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600002
-	ld (xbc), xwa
-	ldada_24 xwa, 16402796
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x0
-	ldada_24 xwa, 14732686
-	ld (xbc + 10), xwa
-	ldw wa, 0x426
-	call 0xFA42FB
-	; RegObjTabl 01600001h, 0FA48A9h, 0000h,		0E0CDBAh, 0106h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600001
-	ld (xbc), xwa
-	ldada_24 xwa, 16402601
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x0
-	ldada_24 xwa, 14732730
-	ld (xbc + 10), xwa
-	ldw wa, 0x106
-	call 0xFA42FB
-	; RegObjTabl 01600001h, 0FA48A9h, 0000h,		0E0CDBEh, 0406h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600001
-	ld (xbc), xwa
-	ldada_24 xwa, 16402601
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x0
-	ldada_24 xwa, 14732734
-	ld (xbc + 10), xwa
-	ldw wa, 0x406
-	call 0xFA42FB
-	; RegObjTabl 01600003h, 0FA4A18h, 0021h,		0E0D72Eh, 0146h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600003
-	ld (xbc), xwa
-	ldada_24 xwa, 16402968
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x21
-	ldada_24 xwa, 14735150
-	ld (xbc + 10), xwa
-	ldw wa, 0x146
-	call 0xFA42FB
-	; RegObjTabl 01600003h, 0FA4A18h, 0021h,		0E0D7B6h, 0446h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600003
-	ld (xbc), xwa
-	ldada_24 xwa, 16402968
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x21
-	ldada_24 xwa, 14735286
-	ld (xbc + 10), xwa
-	ldw wa, 0x446
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0001h,		0E0D204h, 0020h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1
-	ldada_24 xwa, 14733828
-	ld (xbc + 10), xwa
-	ldw wa, 0x20
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0001h,		0E0D304h, 0320h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1
-	ldada_24 xwa, 14734084
-	ld (xbc + 10), xwa
-	ldw wa, 0x320
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0001h,		0E0D20Ch, 0021h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1
-	ldada_24 xwa, 14733836
-	ld (xbc + 10), xwa
-	ldw wa, 0x21
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0001h,		0E0D316h, 0321h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1
-	ldada_24 xwa, 14734102
-	ld (xbc + 10), xwa
-	ldw wa, 0x321
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0001h,		0E0D214h, 0022h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1
-	ldada_24 xwa, 14733844
-	ld (xbc + 10), xwa
-	ldw wa, 0x22
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0001h,		0E0D328h, 0322h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1
-	ldada_24 xwa, 14734120
-	ld (xbc + 10), xwa
-	ldw wa, 0x322
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0001h,		0E0D21Ch, 0023h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1
-	ldada_24 xwa, 14733852
-	ld (xbc + 10), xwa
-	ldw wa, 0x23
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0001h,		0E0D33Ch, 0323h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1
-	ldada_24 xwa, 14734140
-	ld (xbc + 10), xwa
-	ldw wa, 0x323
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0001h,		0E0D224h, 0024h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1
-	ldada_24 xwa, 14733860
-	ld (xbc + 10), xwa
-	ldw wa, 0x24
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0001h,		0E0D350h, 0324h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1
-	ldada_24 xwa, 14734160
-	ld (xbc + 10), xwa
-	ldw wa, 0x324
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0001h,		0E0D22Ch, 0025h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1
-	ldada_24 xwa, 14733868
-	ld (xbc + 10), xwa
-	ldw wa, 0x25
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0001h,		0E0D364h, 0325h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1
-	ldada_24 xwa, 14734180
-	ld (xbc + 10), xwa
-	ldw wa, 0x325
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0001h,		0E0D234h, 0026h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1
-	ldada_24 xwa, 14733876
-	ld (xbc + 10), xwa
-	ldw wa, 0x26
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0001h,		0E0D378h, 0326h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1
-	ldada_24 xwa, 14734200
-	ld (xbc + 10), xwa
-	ldw wa, 0x326
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0001h,		0E0D23Ch, 0027h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1
-	ldada_24 xwa, 14733884
-	ld (xbc + 10), xwa
-	ldw wa, 0x27
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0001h,		0E0D38Ch, 0327h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1
-	ldada_24 xwa, 14734220
-	ld (xbc + 10), xwa
-	ldw wa, 0x327
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0001h,		0E0D244h, 0028h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1
-	ldada_24 xwa, 14733892
-	ld (xbc + 10), xwa
-	ldw wa, 0x28
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0001h,		0E0D3A0h, 0328h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1
-	ldada_24 xwa, 14734240
-	ld (xbc + 10), xwa
-	ldw wa, 0x328
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0001h,		0E0D24Ch, 0029h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1
-	ldada_24 xwa, 14733900
-	ld (xbc + 10), xwa
-	ldw wa, 0x29
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0001h,		0E0D3B4h, 0329h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1
-	ldada_24 xwa, 14734260
-	ld (xbc + 10), xwa
-	ldw wa, 0x329
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0001h,		0E0D254h, 002ah
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1
-	ldada_24 xwa, 14733908
-	ld (xbc + 10), xwa
-	ldw wa, 0x2A
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0001h,		0E0D3C8h, 032ah
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1
-	ldada_24 xwa, 14734280
-	ld (xbc + 10), xwa
-	ldw wa, 0x32A
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0001h,		0E0D25Ch, 002bh
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1
-	ldada_24 xwa, 14733916
-	ld (xbc + 10), xwa
-	ldw wa, 0x2B
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0001h,		0E0D3DCh, 032bh
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1
-	ldada_24 xwa, 14734300
-	ld (xbc + 10), xwa
-	ldw wa, 0x32B
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0001h,		0E0D264h, 002ch
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1
-	ldada_24 xwa, 14733924
-	ld (xbc + 10), xwa
-	ldw wa, 0x2C
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0001h,		0E0D3F0h, 032ch
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1
-	ldada_24 xwa, 14734320
-	ld (xbc + 10), xwa
-	ldw wa, 0x32C
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0001h,		0E0D26Ch, 002dh
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1
-	ldada_24 xwa, 14733932
-	ld (xbc + 10), xwa
-	ldw wa, 0x2D
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0001h,		0E0D404h, 032dh
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1
-	ldada_24 xwa, 14734340
-	ld (xbc + 10), xwa
-	ldw wa, 0x32D
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0001h,		0E0D274h, 002eh
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1
-	ldada_24 xwa, 14733940
-	ld (xbc + 10), xwa
-	ldw wa, 0x2E
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0001h,		0E0D418h, 032eh
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1
-	ldada_24 xwa, 14734360
-	ld (xbc + 10), xwa
-	ldw wa, 0x32E
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0001h,		0E0D27Ch, 002fh
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1
-	ldada_24 xwa, 14733948
-	ld (xbc + 10), xwa
-	ldw wa, 0x2F
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0001h,		0E0D42Ch, 032fh
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1
-	ldada_24 xwa, 14734380
-	ld (xbc + 10), xwa
-	ldw wa, 0x32F
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0001h,		0E0D284h, 0030h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1
-	ldada_24 xwa, 14733956
-	ld (xbc + 10), xwa
-	ldw wa, 0x30
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0001h,		0E0D440h, 0330h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1
-	ldada_24 xwa, 14734400
-	ld (xbc + 10), xwa
-	ldw wa, 0x330
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0001h,		0E0D28Ch, 0031h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1
-	ldada_24 xwa, 14733964
-	ld (xbc + 10), xwa
-	ldw wa, 0x31
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0001h,		0E0D454h, 0331h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1
-	ldada_24 xwa, 14734420
-	ld (xbc + 10), xwa
-	ldw wa, 0x331
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0001h,		0E0D294h, 0032h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1
-	ldada_24 xwa, 14733972
-	ld (xbc + 10), xwa
-	ldw wa, 0x32
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0001h,		0E0D468h, 0332h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1
-	ldada_24 xwa, 14734440
-	ld (xbc + 10), xwa
-	ldw wa, 0x332
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0001h,		0E0D29Ch, 0033h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1
-	ldada_24 xwa, 14733980
-	ld (xbc + 10), xwa
-	ldw wa, 0x33
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0001h,		0E0D47Ch, 0333h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1
-	ldada_24 xwa, 14734460
-	ld (xbc + 10), xwa
-	ldw wa, 0x333
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0001h,		0E0D2A4h, 0034h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1
-	ldada_24 xwa, 14733988
-	ld (xbc + 10), xwa
-	ldw wa, 0x34
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0001h,		0E0D490h, 0334h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1
-	ldada_24 xwa, 14734480
-	ld (xbc + 10), xwa
-	ldw wa, 0x334
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0001h,		0E0D2ACh, 0035h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1
-	ldada_24 xwa, 14733996
-	ld (xbc + 10), xwa
-	ldw wa, 0x35
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0001h,		0E0D4A4h, 0335h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1
-	ldada_24 xwa, 14734500
-	ld (xbc + 10), xwa
-	ldw wa, 0x335
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0001h,		0E0D2B4h, 0036h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1
-	ldada_24 xwa, 14734004
-	ld (xbc + 10), xwa
-	ldw wa, 0x36
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0001h,		0E0D4B8h, 0336h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1
-	ldada_24 xwa, 14734520
-	ld (xbc + 10), xwa
-	ldw wa, 0x336
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0001h,		0E0D2BCh, 0037h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1
-	ldada_24 xwa, 14734012
-	ld (xbc + 10), xwa
-	ldw wa, 0x37
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0001h,		0E0D4CCh, 0337h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1
-	ldada_24 xwa, 14734540
-	ld (xbc + 10), xwa
-	ldw wa, 0x337
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0001h,		0E0D2C4h, 0038h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1
-	ldada_24 xwa, 14734020
-	ld (xbc + 10), xwa
-	ldw wa, 0x38
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0001h,		0E0D4E0h, 0338h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1
-	ldada_24 xwa, 14734560
-	ld (xbc + 10), xwa
-	ldw wa, 0x338
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0001h,		0E0D2CCh, 0039h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1
-	ldada_24 xwa, 14734028
-	ld (xbc + 10), xwa
-	ldw wa, 0x39
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0001h,		0E0D4F4h, 0339h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1
-	ldada_24 xwa, 14734580
-	ld (xbc + 10), xwa
-	ldw wa, 0x339
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0001h,		0E0D2D4h, 003ah
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1
-	ldada_24 xwa, 14734036
-	ld (xbc + 10), xwa
-	ldw wa, 0x3A
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0001h,		0E0D508h, 033ah
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1
-	ldada_24 xwa, 14734600
-	ld (xbc + 10), xwa
-	ldw wa, 0x33A
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0001h,		0E0D2DCh, 003bh
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1
-	ldada_24 xwa, 14734044
-	ld (xbc + 10), xwa
-	ldw wa, 0x3B
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0001h,		0E0D51Ch, 033bh
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1
-	ldada_24 xwa, 14734620
-	ld (xbc + 10), xwa
-	ldw wa, 0x33B
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0001h,		0E0D2E4h, 003ch
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1
-	ldada_24 xwa, 14734052
-	ld (xbc + 10), xwa
-	ldw wa, 0x3C
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0001h,		0E0D52Eh, 033ch
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1
-	ldada_24 xwa, 14734638
-	ld (xbc + 10), xwa
-	ldw wa, 0x33C
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0001h,		0E0D2ECh, 003dh
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1
-	ldada_24 xwa, 14734060
-	ld (xbc + 10), xwa
-	ldw wa, 0x3D
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0001h,		0E0D540h, 033dh
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1
-	ldada_24 xwa, 14734656
-	ld (xbc + 10), xwa
-	ldw wa, 0x33D
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0001h,		0E0D2F4h, 003eh
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1
-	ldada_24 xwa, 14734068
-	ld (xbc + 10), xwa
-	ldw wa, 0x3E
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0001h,		0E0D552h, 033eh
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1
-	ldada_24 xwa, 14734674
-	ld (xbc + 10), xwa
-	ldw wa, 0x33E
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0001h,		0E0D2FCh, 003fh
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1
-	ldada_24 xwa, 14734076
-	ld (xbc + 10), xwa
-	ldw wa, 0x3F
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0001h,		0E0D566h, 033fh
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1
-	ldada_24 xwa, 14734694
-	ld (xbc + 10), xwa
-	ldw wa, 0x33F
-	call 0xFA42FB
+	RegObjTable 0x1600004, 0xFA44E2, 0xE0CDAC, 0xE0CD94, 0x166
+	RegObjTable 0x160000c, 0xFA58FB, 0xE0CDB2, 0xE0CDAE, 0x1c6
+	RegObjTable 0x160000d, 0xFA5948, 0xE0CDB8, 0xE0CDB4, 0x1e6
+	RegObjTabl 0x1600002, 0xFA496C, 0x0, 0xE0CD8A, 0x126
+	RegObjTabl 0x1600002, 0xFA496C, 0x0, 0xE0CD8E, 0x426
+	RegObjTabl 0x1600001, 0xFA48A9, 0x0, 0xE0CDBA, 0x106
+	RegObjTabl 0x1600001, 0xFA48A9, 0x0, 0xE0CDBE, 0x406
+	RegObjTabl 0x1600003, 0xFA4A18, 0x21, 0xE0D72E, 0x146
+	RegObjTabl 0x1600003, 0xFA4A18, 0x21, 0xE0D7B6, 0x446
+	RegObjTabl 0x1600010, 0xFA5995, 0x1, 0xE0D204, 0x20
+	RegObjTabl 0x160000f, 0xFA62CB, 0x1, 0xE0D304, 0x320
+	RegObjTabl 0x1600010, 0xFA5995, 0x1, 0xE0D20C, 0x21
+	RegObjTabl 0x160000f, 0xFA62CB, 0x1, 0xE0D316, 0x321
+	RegObjTabl 0x1600010, 0xFA5995, 0x1, 0xE0D214, 0x22
+	RegObjTabl 0x160000f, 0xFA62CB, 0x1, 0xE0D328, 0x322
+	RegObjTabl 0x1600010, 0xFA5995, 0x1, 0xE0D21C, 0x23
+	RegObjTabl 0x160000f, 0xFA62CB, 0x1, 0xE0D33C, 0x323
+	RegObjTabl 0x1600010, 0xFA5995, 0x1, 0xE0D224, 0x24
+	RegObjTabl 0x160000f, 0xFA62CB, 0x1, 0xE0D350, 0x324
+	RegObjTabl 0x1600010, 0xFA5995, 0x1, 0xE0D22C, 0x25
+	RegObjTabl 0x160000f, 0xFA62CB, 0x1, 0xE0D364, 0x325
+	RegObjTabl 0x1600010, 0xFA5995, 0x1, 0xE0D234, 0x26
+	RegObjTabl 0x160000f, 0xFA62CB, 0x1, 0xE0D378, 0x326
+	RegObjTabl 0x1600010, 0xFA5995, 0x1, 0xE0D23C, 0x27
+	RegObjTabl 0x160000f, 0xFA62CB, 0x1, 0xE0D38C, 0x327
+	RegObjTabl 0x1600010, 0xFA5995, 0x1, 0xE0D244, 0x28
+	RegObjTabl 0x160000f, 0xFA62CB, 0x1, 0xE0D3A0, 0x328
+	RegObjTabl 0x1600010, 0xFA5995, 0x1, 0xE0D24C, 0x29
+	RegObjTabl 0x160000f, 0xFA62CB, 0x1, 0xE0D3B4, 0x329
+	RegObjTabl 0x1600010, 0xFA5995, 0x1, 0xE0D254, 0x2a
+	RegObjTabl 0x160000f, 0xFA62CB, 0x1, 0xE0D3C8, 0x32a
+	RegObjTabl 0x1600010, 0xFA5995, 0x1, 0xE0D25C, 0x2b
+	RegObjTabl 0x160000f, 0xFA62CB, 0x1, 0xE0D3DC, 0x32b
+	RegObjTabl 0x1600010, 0xFA5995, 0x1, 0xE0D264, 0x2c
+	RegObjTabl 0x160000f, 0xFA62CB, 0x1, 0xE0D3F0, 0x32c
+	RegObjTabl 0x1600010, 0xFA5995, 0x1, 0xE0D26C, 0x2d
+	RegObjTabl 0x160000f, 0xFA62CB, 0x1, 0xE0D404, 0x32d
+	RegObjTabl 0x1600010, 0xFA5995, 0x1, 0xE0D274, 0x2e
+	RegObjTabl 0x160000f, 0xFA62CB, 0x1, 0xE0D418, 0x32e
+	RegObjTabl 0x1600010, 0xFA5995, 0x1, 0xE0D27C, 0x2f
+	RegObjTabl 0x160000f, 0xFA62CB, 0x1, 0xE0D42C, 0x32f
+	RegObjTabl 0x1600010, 0xFA5995, 0x1, 0xE0D284, 0x30
+	RegObjTabl 0x160000f, 0xFA62CB, 0x1, 0xE0D440, 0x330
+	RegObjTabl 0x1600010, 0xFA5995, 0x1, 0xE0D28C, 0x31
+	RegObjTabl 0x160000f, 0xFA62CB, 0x1, 0xE0D454, 0x331
+	RegObjTabl 0x1600010, 0xFA5995, 0x1, 0xE0D294, 0x32
+	RegObjTabl 0x160000f, 0xFA62CB, 0x1, 0xE0D468, 0x332
+	RegObjTabl 0x1600010, 0xFA5995, 0x1, 0xE0D29C, 0x33
+	RegObjTabl 0x160000f, 0xFA62CB, 0x1, 0xE0D47C, 0x333
+	RegObjTabl 0x1600010, 0xFA5995, 0x1, 0xE0D2A4, 0x34
+	RegObjTabl 0x160000f, 0xFA62CB, 0x1, 0xE0D490, 0x334
+	RegObjTabl 0x1600010, 0xFA5995, 0x1, 0xE0D2AC, 0x35
+	RegObjTabl 0x160000f, 0xFA62CB, 0x1, 0xE0D4A4, 0x335
+	RegObjTabl 0x1600010, 0xFA5995, 0x1, 0xE0D2B4, 0x36
+	RegObjTabl 0x160000f, 0xFA62CB, 0x1, 0xE0D4B8, 0x336
+	RegObjTabl 0x1600010, 0xFA5995, 0x1, 0xE0D2BC, 0x37
+	RegObjTabl 0x160000f, 0xFA62CB, 0x1, 0xE0D4CC, 0x337
+	RegObjTabl 0x1600010, 0xFA5995, 0x1, 0xE0D2C4, 0x38
+	RegObjTabl 0x160000f, 0xFA62CB, 0x1, 0xE0D4E0, 0x338
+	RegObjTabl 0x1600010, 0xFA5995, 0x1, 0xE0D2CC, 0x39
+	RegObjTabl 0x160000f, 0xFA62CB, 0x1, 0xE0D4F4, 0x339
+	RegObjTabl 0x1600010, 0xFA5995, 0x1, 0xE0D2D4, 0x3a
+	RegObjTabl 0x160000f, 0xFA62CB, 0x1, 0xE0D508, 0x33a
+	RegObjTabl 0x1600010, 0xFA5995, 0x1, 0xE0D2DC, 0x3b
+	RegObjTabl 0x160000f, 0xFA62CB, 0x1, 0xE0D51C, 0x33b
+	RegObjTabl 0x1600010, 0xFA5995, 0x1, 0xE0D2E4, 0x3c
+	RegObjTabl 0x160000f, 0xFA62CB, 0x1, 0xE0D52E, 0x33c
+	RegObjTabl 0x1600010, 0xFA5995, 0x1, 0xE0D2EC, 0x3d
+	RegObjTabl 0x160000f, 0xFA62CB, 0x1, 0xE0D540, 0x33d
+	RegObjTabl 0x1600010, 0xFA5995, 0x1, 0xE0D2F4, 0x3e
+	RegObjTabl 0x160000f, 0xFA62CB, 0x1, 0xE0D552, 0x33e
+	RegObjTabl 0x1600010, 0xFA5995, 0x1, 0xE0D2FC, 0x3f
+	RegObjTabl 0x160000f, 0xFA62CB, 0x1, 0xE0D566, 0x33f
 
-	; RegMode 0006h, 00e0h, 0d57ah, 00000003h, 01460000h, 01a00020h
-	pushw 0x6
-	pushw 0xE0
-	pushw 0xD57A
-	lds32 xwa, 3
-	ld xbc, 0x1460000
-	ld xde, 0x1A00020
-	call 0xFA4D2B
+	RegMode 0x6, 0xe0, 0xd57a, 0x3, 0x1460000, 0x1a00020
 
-	; RegTitle 0006h, 00e0h, 0d588h, 00000020h, 01460001h, 00200000h
-	pushw 0x6
-	pushw 0xE0
-	pushw 0xD588
-	ld xwa, 0x20
-	ld xbc, 0x1460001
-	ld xde, 0x200000
-	call 0xFA4D80
-	; RegTitle 0006h, 00e0h, 0d592h, 00000021h, 01460002h, 00210000h
-	pushw 0x6
-	pushw 0xE0
-	pushw 0xD592
-	ld xwa, 0x21
-	ld xbc, 0x1460002
-	ld xde, 0x210000
-	call 0xFA4D80
-	; RegTitle 0006h, 00e0h, 0d59ch, 00000022h, 01460003h, 00220000h
-	pushw 0x6
-	pushw 0xE0
-	pushw 0xD59C
-	ld xwa, 0x22
-	ld xbc, 0x1460003
-	ld xde, 0x220000
-	call 0xFA4D80
-	; RegTitle 0006h, 00e0h, 0d5aah, 00000023h, 01460004h, 00230000h
-	pushw 0x6
-	pushw 0xE0
-	pushw 0xD5AA
-	ld xwa, 0x23
-	ld xbc, 0x1460004
-	ld xde, 0x230000
-	call 0xFA4D80
-	; RegTitle 0006h, 00e0h, 0d5b8h, 00000024h, 01460005h, 00240000h
-	pushw 0x6
-	pushw 0xE0
-	pushw 0xD5B8
-	ld xwa, 0x24
-	ld xbc, 0x1460005
-	ld xde, 0x240000
-	call 0xFA4D80
-	; RegTitle 0006h, 00e0h, 0d5c6h, 00000025h, 01460006h, 00250000h
-	pushw 0x6
-	pushw 0xE0
-	pushw 0xD5C6
-	ld xwa, 0x25
-	ld xbc, 0x1460006
-	ld xde, 0x250000
-	call 0xFA4D80
-	; RegTitle 0006h, 00e0h, 0d5d4h, 00000026h, 01460007h, 00260000h
-	pushw 0x6
-	pushw 0xE0
-	pushw 0xD5D4
-	ld xwa, 0x26
-	ld xbc, 0x1460007
-	ld xde, 0x260000
-	call 0xFA4D80
-	; RegTitle 0006h, 00e0h, 0d5e2h, 00000027h, 01460008h, 00270000h
-	pushw 0x6
-	pushw 0xE0
-	pushw 0xD5E2
-	ld xwa, 0x27
-	ld xbc, 0x1460008
-	ld xde, 0x270000
-	call 0xFA4D80
-	; RegTitle 0006h, 00e0h, 0d5f0h, 00000028h, 01460009h, 00280000h
-	pushw 0x6
-	pushw 0xE0
-	pushw 0xD5F0
-	ld xwa, 0x28
-	ld xbc, 0x1460009
-	ld xde, 0x280000
-	call 0xFA4D80
-	; RegTitle 0006h, 00e0h, 0d5feh, 00000029h, 0146000ah, 00290000h
-	pushw 0x6
-	pushw 0xE0
-	pushw 0xD5FE
-	ld xwa, 0x29
-	ld xbc, 0x146000A
-	ld xde, 0x290000
-	call 0xFA4D80
-	; RegTitle 0006h, 00e0h, 0d60ch, 0000002ah, 0146000bh, 002a0000h
-	pushw 0x6
-	pushw 0xE0
-	pushw 0xD60C
-	ld xwa, 0x2A
-	ld xbc, 0x146000B
-	ld xde, 0x2A0000
-	call 0xFA4D80
-	; RegTitle 0006h, 00e0h, 0d61ah, 0000002bh, 0146000ch, 002b0000h
-	pushw 0x6
-	pushw 0xE0
-	pushw 0xD61A
-	ld xwa, 0x2B
-	ld xbc, 0x146000C
-	ld xde, 0x2B0000
-	call 0xFA4D80
-	; RegTitle 0006h, 00e0h, 0d628h, 0000002ch, 0146000dh, 002c0000h
-	pushw 0x6
-	pushw 0xE0
-	pushw 0xD628
-	ld xwa, 0x2C
-	ld xbc, 0x146000D
-	ld xde, 0x2C0000
-	call 0xFA4D80
-	; RegTitle 0006h, 00e0h, 0d636h, 0000002dh, 0146000eh, 002d0000h
-	pushw 0x6
-	pushw 0xE0
-	pushw 0xD636
-	ld xwa, 0x2D
-	ld xbc, 0x146000E
-	ld xde, 0x2D0000
-	call 0xFA4D80
-	; RegTitle 0006h, 00e0h, 0d644h, 0000002eh, 0146000fh, 002e0000h
-	pushw 0x6
-	pushw 0xE0
-	pushw 0xD644
-	ld xwa, 0x2E
-	ld xbc, 0x146000F
-	ld xde, 0x2E0000
-	call 0xFA4D80
-	; RegTitle 0006h, 00e0h, 0d652h, 0000002fh, 01460010h, 002f0000h
-	pushw 0x6
-	pushw 0xE0
-	pushw 0xD652
-	ld xwa, 0x2F
-	ld xbc, 0x1460010
-	ld xde, 0x2F0000
-	call 0xFA4D80
-	; RegTitle 0006h, 00e0h, 0d660h, 00000030h, 01460011h, 00300000h
-	pushw 0x6
-	pushw 0xE0
-	pushw 0xD660
-	ld xwa, 0x30
-	ld xbc, 0x1460011
-	ld xde, 0x300000
-	call 0xFA4D80
-	; RegTitle 0006h, 00e0h, 0d66eh, 00000031h, 01460012h, 00310000h
-	pushw 0x6
-	pushw 0xE0
-	pushw 0xD66E
-	ld xwa, 0x31
-	ld xbc, 0x1460012
-	ld xde, 0x310000
-	call 0xFA4D80
-	; RegTitle 0006h, 00e0h, 0d67ch, 00000032h, 01460013h, 00320000h
-	pushw 0x6
-	pushw 0xE0
-	pushw 0xD67C
-	ld xwa, 0x32
-	ld xbc, 0x1460013
-	ld xde, 0x320000
-	call 0xFA4D80
-	; RegTitle 0006h, 00e0h, 0d68ah, 00000033h, 01460014h, 00330000h
-	pushw 0x6
-	pushw 0xE0
-	pushw 0xD68A
-	ld xwa, 0x33
-	ld xbc, 0x1460014
-	ld xde, 0x330000
-	call 0xFA4D80
-	; RegTitle 0006h, 00e0h, 0d698h, 00000034h, 01460015h, 00340000h
-	pushw 0x6
-	pushw 0xE0
-	pushw 0xD698
-	ld xwa, 0x34
-	ld xbc, 0x1460015
-	ld xde, 0x340000
-	call 0xFA4D80
-	; RegTitle 0006h, 00e0h, 0d6a6h, 00000035h, 01460016h, 00350000h
-	pushw 0x6
-	pushw 0xE0
-	pushw 0xD6A6
-	ld xwa, 0x35
-	ld xbc, 0x1460016
-	ld xde, 0x350000
-	call 0xFA4D80
-	; RegTitle 0006h, 00e0h, 0d6b4h, 00000036h, 01460017h, 00360000h
-	pushw 0x6
-	pushw 0xE0
-	pushw 0xD6B4
-	ld xwa, 0x36
-	ld xbc, 0x1460017
-	ld xde, 0x360000
-	call 0xFA4D80
-	; RegTitle 0006h, 00e0h, 0d6c2h, 00000037h, 01460018h, 00370000h
-	pushw 0x6
-	pushw 0xE0
-	pushw 0xD6C2
-	ld xwa, 0x37
-	ld xbc, 0x1460018
-	ld xde, 0x370000
-	call 0xFA4D80
-	; RegTitle 0006h, 00e0h, 0d6d0h, 00000038h, 01460019h, 00380000h
-	pushw 0x6
-	pushw 0xE0
-	pushw 0xD6D0
-	ld xwa, 0x38
-	ld xbc, 0x1460019
-	ld xde, 0x380000
-	call 0xFA4D80
-	; RegTitle 0006h, 00e0h, 0d6deh, 00000039h, 0146001ah, 00390000h
-	pushw 0x6
-	pushw 0xE0
-	pushw 0xD6DE
-	ld xwa, 0x39
-	ld xbc, 0x146001A
-	ld xde, 0x390000
-	call 0xFA4D80
-	; RegTitle 0006h, 00e0h, 0d6ech, 0000003ah, 0146001bh, 003a0000h
-	pushw 0x6
-	pushw 0xE0
-	pushw 0xD6EC
-	ld xwa, 0x3A
-	ld xbc, 0x146001B
-	ld xde, 0x3A0000
-	call 0xFA4D80
-	; RegTitle 0006h, 00e0h, 0d6f8h, 0000003bh, 0146001ch, 003b0000h
-	pushw 0x6
-	pushw 0xE0
-	pushw 0xD6F8
-	ld xwa, 0x3B
-	ld xbc, 0x146001C
-	ld xde, 0x3B0000
-	call 0xFA4D80
-	; RegTitle 0006h, 00e0h, 0d702h, 0000003ch, 0146001dh, 003c0000h
-	pushw 0x6
-	pushw 0xE0
-	pushw 0xD702
-	ld xwa, 0x3C
-	ld xbc, 0x146001D
-	ld xde, 0x3C0000
-	call 0xFA4D80
-	; RegTitle 0006h, 00e0h, 0d70ch, 0000003dh, 0146001eh, 003d0000h
-	pushw 0x6
-	pushw 0xE0
-	pushw 0xD70C
-	ld xwa, 0x3D
-	ld xbc, 0x146001E
-	ld xde, 0x3D0000
-	call 0xFA4D80
-	; RegTitle 0006h, 00e0h, 0d716h, 0000003eh, 0146001fh, 003e0000h
-	pushw 0x6
-	pushw 0xE0
-	pushw 0xD716
-	ld xwa, 0x3E
-	ld xbc, 0x146001F
-	ld xde, 0x3E0000
-	call 0xFA4D80
-	; RegTitle 0006h, 00e0h, 0d722h, 0000003fh, 01460020h, 003f0000h
-	pushw 0x6
-	pushw 0xE0
-	pushw 0xD722
-	ld xwa, 0x3F
-	ld xbc, 0x1460020
-	ld xde, 0x3F0000
-	call 0xFA4D80
+	RegTitle 0x6, 0xe0, 0xd588, 0x20, 0x1460001, 0x200000
+	RegTitle 0x6, 0xe0, 0xd592, 0x21, 0x1460002, 0x210000
+	RegTitle 0x6, 0xe0, 0xd59c, 0x22, 0x1460003, 0x220000
+	RegTitle 0x6, 0xe0, 0xd5aa, 0x23, 0x1460004, 0x230000
+	RegTitle 0x6, 0xe0, 0xd5b8, 0x24, 0x1460005, 0x240000
+	RegTitle 0x6, 0xe0, 0xd5c6, 0x25, 0x1460006, 0x250000
+	RegTitle 0x6, 0xe0, 0xd5d4, 0x26, 0x1460007, 0x260000
+	RegTitle 0x6, 0xe0, 0xd5e2, 0x27, 0x1460008, 0x270000
+	RegTitle 0x6, 0xe0, 0xd5f0, 0x28, 0x1460009, 0x280000
+	RegTitle 0x6, 0xe0, 0xd5fe, 0x29, 0x146000a, 0x290000
+	RegTitle 0x6, 0xe0, 0xd60c, 0x2a, 0x146000b, 0x2a0000
+	RegTitle 0x6, 0xe0, 0xd61a, 0x2b, 0x146000c, 0x2b0000
+	RegTitle 0x6, 0xe0, 0xd628, 0x2c, 0x146000d, 0x2c0000
+	RegTitle 0x6, 0xe0, 0xd636, 0x2d, 0x146000e, 0x2d0000
+	RegTitle 0x6, 0xe0, 0xd644, 0x2e, 0x146000f, 0x2e0000
+	RegTitle 0x6, 0xe0, 0xd652, 0x2f, 0x1460010, 0x2f0000
+	RegTitle 0x6, 0xe0, 0xd660, 0x30, 0x1460011, 0x300000
+	RegTitle 0x6, 0xe0, 0xd66e, 0x31, 0x1460012, 0x310000
+	RegTitle 0x6, 0xe0, 0xd67c, 0x32, 0x1460013, 0x320000
+	RegTitle 0x6, 0xe0, 0xd68a, 0x33, 0x1460014, 0x330000
+	RegTitle 0x6, 0xe0, 0xd698, 0x34, 0x1460015, 0x340000
+	RegTitle 0x6, 0xe0, 0xd6a6, 0x35, 0x1460016, 0x350000
+	RegTitle 0x6, 0xe0, 0xd6b4, 0x36, 0x1460017, 0x360000
+	RegTitle 0x6, 0xe0, 0xd6c2, 0x37, 0x1460018, 0x370000
+	RegTitle 0x6, 0xe0, 0xd6d0, 0x38, 0x1460019, 0x380000
+	RegTitle 0x6, 0xe0, 0xd6de, 0x39, 0x146001a, 0x390000
+	RegTitle 0x6, 0xe0, 0xd6ec, 0x3a, 0x146001b, 0x3a0000
+	RegTitle 0x6, 0xe0, 0xd6f8, 0x3b, 0x146001c, 0x3b0000
+	RegTitle 0x6, 0xe0, 0xd702, 0x3c, 0x146001d, 0x3c0000
+	RegTitle 0x6, 0xe0, 0xd70c, 0x3d, 0x146001e, 0x3d0000
+	RegTitle 0x6, 0xe0, 0xd716, 0x3e, 0x146001f, 0x3e0000
+	RegTitle 0x6, 0xe0, 0xd722, 0x3f, 0x1460020, 0x3f0000
 
 	lda xsp, (xsp + 14)
 	ret
@@ -147011,139 +145391,19 @@ LABEL_F159B3:
 InitializeNaka:
 	lda xsp, (xsp - 14)
 
-	; RegObjTable 01600004h, 0FA44E2h, 0E0E95Ch,	0E0E944h, 016bh
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600004
-	ld (xbc), xwa
-	ldada_24 xwa, 16401634
-	ld (xbc + 4), xwa
-	ldda16_24 xwa, 14739804
-	ld (xbc + 8), wa
-	ldada_24 xwa, 14739780
-	ld (xbc + 10), xwa
-	ldw wa, 0x16B
-	call 0xFA42FB
-	; RegObjTable 0160000ch, 0FA58FBh, 0E0E962h,	0E0E95Eh, 01cbh
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000C
-	ld (xbc), xwa
-	ldada_24 xwa, 16406779
-	ld (xbc + 4), xwa
-	ldda16_24 xwa, 14739810
-	ld (xbc + 8), wa
-	ldada_24 xwa, 14739806
-	ld (xbc + 10), xwa
-	ldw wa, 0x1CB
-	call 0xFA42FB
-	; RegObjTable 0160000dh, 0FA5948h, 0E0E968h,	0E0E964h, 01ebh
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000D
-	ld (xbc), xwa
-	ldada_24 xwa, 16406856
-	ld (xbc + 4), xwa
-	ldda16_24 xwa, 14739816
-	ld (xbc + 8), wa
-	ldada_24 xwa, 14739812
-	ld (xbc + 10), xwa
-	ldw wa, 0x1EB
-	call 0xFA42FB
-	; RegObjTabl 01600002h, 0FA496Ch, 0012h,		0E0E7AEh, 012bh
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600002
-	ld (xbc), xwa
-	ldada_24 xwa, 16402796
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x12
-	ldada_24 xwa, 14739374
-	ld (xbc + 10), xwa
-	ldw wa, 0x12B
-	call 0xFA42FB
-	; RegObjTabl 01600002h, 0FA496Ch, 0012h,		0E0E7FAh, 042bh
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600002
-	ld (xbc), xwa
-	ldada_24 xwa, 16402796
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x12
-	ldada_24 xwa, 14739450
-	ld (xbc + 10), xwa
-	ldw wa, 0x42B
-	call 0xFA42FB
-	; RegObjTabl 01600001h, 0FA48A9h, 0000h,		0E0E96Ah, 010bh
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600001
-	ld (xbc), xwa
-	ldada_24 xwa, 16402601
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x0
-	ldada_24 xwa, 14739818
-	ld (xbc + 10), xwa
-	ldw wa, 0x10B
-	call 0xFA42FB
-	; RegObjTabl 01600001h, 0FA48A9h, 0000h,		0E0E96Eh, 040bh
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600001
-	ld (xbc), xwa
-	ldada_24 xwa, 16402601
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x0
-	ldada_24 xwa, 14739822
-	ld (xbc + 10), xwa
-	ldw wa, 0x40B
-	call 0xFA42FB
-	; RegObjTabl 01600003h, 0FA4A18h, 0000h,		0E14824h, 014bh
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600003
-	ld (xbc), xwa
-	ldada_24 xwa, 16402968
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x0
-	ldada_24 xwa, 14764068
-	ld (xbc + 10), xwa
-	ldw wa, 0x14B
-	call 0xFA42FB
-	; RegObjTabl 01600003h, 0FA4A18h, 0000h,		LABEL_E14828, 044bh
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600003
-	ld (xbc), xwa
-	ldada_24 xwa, 16402968
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x0
-	ldada_24 xwa, 14764072
-	ld (xbc + 10), xwa
-	ldw wa, 0x44B
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 01deh,		LABEL_E1344E, 00fdh
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1DE
-	ldada_24 xwa, 14758990
-	ld (xbc + 10), xwa
-	ldw wa, 0xFD
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 01deh,		0E13BCAh, 03fdh
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1DE
-	ldada_24 xwa, 14760906
-	ld (xbc + 10), xwa
-	ldw wa, 0x3FD
-	call 0xFA42FB
+	RegObjTable 0x1600004, 0xFA44E2, 0xE0E95C, 0xE0E944, 0x16b
+	RegObjTable 0x160000c, 0xFA58FB, 0xE0E962, 0xE0E95E, 0x1cb
+	RegObjTable 0x160000d, 0xFA5948, 0xE0E968, 0xE0E964, 0x1eb
+	RegObjTabl 0x1600002, 0xFA496C, 0x12, 0xE0E7AE, 0x12b
+	RegObjTabl 0x1600002, 0xFA496C, 0x12, 0xE0E7FA, 0x42b
+	RegObjTabl 0x1600001, 0xFA48A9, 0x0, 0xE0E96A, 0x10b
+	RegObjTabl 0x1600001, 0xFA48A9, 0x0, 0xE0E96E, 0x40b
+	RegObjTabl 0x1600003, 0xFA4A18, 0x0, 0xE14824, 0x14b
+	RegObjTabl 0x1600003, 0xFA4A18, 0x0, 0xE14828, 0x44b
+	RegObjTabl 0x1600010, 0xFA5995, 0x1de, 0xE1344E, 0xfd
+	RegObjTabl 0x160000f, 0xFA62CB, 0x1de, 0xE13BCA, 0x3fd
 
-	; RegTitle 000bh, 00e1h, 481ah, 000000fdh, 01200000h, 00fd0000h
-	pushw 0xB
-	pushw 0xE1
-	pushw 0x481A
-	ld xwa, 0xFD
-	ld xbc, 0x1200000
-	ld xde, 0xFD0000
-	call 0xFA4D80
+	RegTitle 0xb, 0xe1, 0x481a, 0xfd, 0x1200000, 0xfd0000
 	lda xsp, (xsp + 14)
 	ret
 
@@ -149685,982 +147945,105 @@ LABEL_F19624:
 InitializeSuna:
 	lda xsp, (xsp - 14)
 
-	; RegObjTable 01600004h, 0FA44E2h, 0E17322h,	0E16C86h, 0164h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600004
-	ld (xbc), xwa
-	ldada_24 xwa, 16401634
-	ld (xbc + 4), xwa
-	ldda16_24 xwa, 14775074
-	ld (xbc + 8), wa
-	ldada_24 xwa, 14773382
-	ld (xbc + 10), xwa
-	ldw wa, 0x164
-	call 0xFA42FB
-	; RegObjTable 0160000ch, 0FA58FBh, 0E17328h,	0E17324h, 01c4h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000C
-	ld (xbc), xwa
-	ldada_24 xwa, 16406779
-	ld (xbc + 4), xwa
-	ldda16_24 xwa, 14775080
-	ld (xbc + 8), wa
-	ldada_24 xwa, 14775076
-	ld (xbc + 10), xwa
-	ldw wa, 0x1C4
-	call 0xFA42FB
-	; RegObjTable 0160000dh, 0FA5948h, 0E176D2h,	0E1732Ah, 01e4h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000D
-	ld (xbc), xwa
-	ldada_24 xwa, 16406856
-	ld (xbc + 4), xwa
-	ldda16_24 xwa, 14776018
-	ld (xbc + 8), wa
-	ldada_24 xwa, 14775082
-	ld (xbc + 10), xwa
-	ldw wa, 0x1E4
-	call 0xFA42FB
-	; RegObjTabl 01600002h, 0FA496Ch, 0049h,		0E16284h, 0124h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600002
-	ld (xbc), xwa
-	ldada_24 xwa, 16402796
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x49
-	ldada_24 xwa, 14770820
-	ld (xbc + 10), xwa
-	ldw wa, 0x124
-	call 0xFA42FB
-	; RegObjTabl 01600002h, 0FA496Ch, 0049h,		0E163ACh, 0424h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600002
-	ld (xbc), xwa
-	ldada_24 xwa, 16402796
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x49
-	ldada_24 xwa, 14771116
-	ld (xbc + 10), xwa
-	ldw wa, 0x424
-	call 0xFA42FB
-	; RegObjTabl 01600001h, 0FA48A9h, 0001h,		0E176D4h, 0104h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600001
-	ld (xbc), xwa
-	ldada_24 xwa, 16402601
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1
-	ldada_24 xwa, 14776020
-	ld (xbc + 10), xwa
-	ldw wa, 0x104
-	call 0xFA42FB
-	; RegObjTabl 01600001h, 0FA48A9h, 0001h,		0E176DCh, 0404h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600001
-	ld (xbc), xwa
-	ldada_24 xwa, 16402601
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1
-	ldada_24 xwa, 14776028
-	ld (xbc + 10), xwa
-	ldw wa, 0x404
-	call 0xFA42FB
-	; RegObjTabl 01600003h, 0FA4A18h, 0024h,		0E1CA6Eh, 0144h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600003
-	ld (xbc), xwa
-	ldada_24 xwa, 16402968
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x24
-	ldada_24 xwa, 14797422
-	ld (xbc + 10), xwa
-	ldw wa, 0x144
-	call 0xFA42FB
-	; RegObjTabl 01600003h, 0FA4A18h, 0024h,		0E1CB02h, 0444h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600003
-	ld (xbc), xwa
-	ldada_24 xwa, 16402968
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x24
-	ldada_24 xwa, 14797570
-	ld (xbc + 10), xwa
-	ldw wa, 0x444
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0003h,		0E1B4E2h, 0010h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x3
-	ldada_24 xwa, 14791906
-	ld (xbc + 10), xwa
-	ldw wa, 0x10
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0003h,		0E1BAFAh, 0310h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x3
-	ldada_24 xwa, 14793466
-	ld (xbc + 10), xwa
-	ldw wa, 0x310
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0008h,		0E1B4F2h, 0011h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x8
-	ldada_24 xwa, 14791922
-	ld (xbc + 10), xwa
-	ldw wa, 0x11
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0008h,		0E1BB22h, 0311h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x8
-	ldada_24 xwa, 14793506
-	ld (xbc + 10), xwa
-	ldw wa, 0x311
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0007h,		0E1B516h, 0012h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x7
-	ldada_24 xwa, 14791958
-	ld (xbc + 10), xwa
-	ldw wa, 0x12
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0007h,		0E1BB80h, 0312h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x7
-	ldada_24 xwa, 14793600
-	ld (xbc + 10), xwa
-	ldw wa, 0x312
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0004h,		0E1B536h, 0013h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x4
-	ldada_24 xwa, 14791990
-	ld (xbc + 10), xwa
-	ldw wa, 0x13
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0004h,		0E1BBCEh, 0313h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x4
-	ldada_24 xwa, 14793678
-	ld (xbc + 10), xwa
-	ldw wa, 0x313
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0004h,		0E1B54Ah, 0014h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x4
-	ldada_24 xwa, 14792010
-	ld (xbc + 10), xwa
-	ldw wa, 0x14
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0004h,		0E1BBFCh, 0314h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x4
-	ldada_24 xwa, 14793724
-	ld (xbc + 10), xwa
-	ldw wa, 0x314
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0008h,		0E1B55Eh, 0015h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x8
-	ldada_24 xwa, 14792030
-	ld (xbc + 10), xwa
-	ldw wa, 0x15
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0008h,		0E1BC2Ah, 0315h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x8
-	ldada_24 xwa, 14793770
-	ld (xbc + 10), xwa
-	ldw wa, 0x315
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0007h,		0E1B582h, 0016h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x7
-	ldada_24 xwa, 14792066
-	ld (xbc + 10), xwa
-	ldw wa, 0x16
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0007h,		0E1BC7Ch, 0316h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x7
-	ldada_24 xwa, 14793852
-	ld (xbc + 10), xwa
-	ldw wa, 0x316
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0012h,		0E1B5A2h, 00b0h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x12
-	ldada_24 xwa, 14792098
-	ld (xbc + 10), xwa
-	ldw wa, 0xB0
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0012h,		0E1BCBCh, 03b0h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x12
-	ldada_24 xwa, 14793916
-	ld (xbc + 10), xwa
-	ldw wa, 0x3B0
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 000ch,		0E1B5EEh, 00b1h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0xC
-	ldada_24 xwa, 14792174
-	ld (xbc + 10), xwa
-	ldw wa, 0xB1
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 000ch,		0E1BD3Ah, 03b1h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0xC
-	ldada_24 xwa, 14794042
-	ld (xbc + 10), xwa
-	ldw wa, 0x3B1
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0016h,		0E1B622h, 00b2h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x16
-	ldada_24 xwa, 14792226
-	ld (xbc + 10), xwa
-	ldw wa, 0xB2
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0016h,		0E1BD94h, 03b2h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x16
-	ldada_24 xwa, 14794132
-	ld (xbc + 10), xwa
-	ldw wa, 0x3B2
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0005h,		0E1B67Eh, 00b3h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x5
-	ldada_24 xwa, 14792318
-	ld (xbc + 10), xwa
-	ldw wa, 0xB3
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0005h,		0E1BE54h, 03b3h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x5
-	ldada_24 xwa, 14794324
-	ld (xbc + 10), xwa
-	ldw wa, 0x3B3
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0012h,		0E1B696h, 00b4h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x12
-	ldada_24 xwa, 14792342
-	ld (xbc + 10), xwa
-	ldw wa, 0xB4
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0012h,		0E1BE9Ah, 03b4h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x12
-	ldada_24 xwa, 14794394
-	ld (xbc + 10), xwa
-	ldw wa, 0x3B4
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 001fh,		0E1B6E2h, 00b5h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1F
-	ldada_24 xwa, 14792418
-	ld (xbc + 10), xwa
-	ldw wa, 0xB5
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 001fh,		0E1BF7Ah, 03b5h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1F
-	ldada_24 xwa, 14794618
-	ld (xbc + 10), xwa
-	ldw wa, 0x3B5
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0001h,		0E1B762h, 00b6h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1
-	ldada_24 xwa, 14792546
-	ld (xbc + 10), xwa
-	ldw wa, 0xB6
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0001h,		0E1C076h, 03b6h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1
-	ldada_24 xwa, 14794870
-	ld (xbc + 10), xwa
-	ldw wa, 0x3B6
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0006h,		0E1B76Ah, 00b7h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x6
-	ldada_24 xwa, 14792554
-	ld (xbc + 10), xwa
-	ldw wa, 0xB7
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0006h,		0E1C082h, 03b7h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x6
-	ldada_24 xwa, 14794882
-	ld (xbc + 10), xwa
-	ldw wa, 0x3B7
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0021h,		0E1B786h, 00b8h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x21
-	ldada_24 xwa, 14792582
-	ld (xbc + 10), xwa
-	ldw wa, 0xB8
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0021h,		0E1C0E0h, 03b8h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x21
-	ldada_24 xwa, 14794976
-	ld (xbc + 10), xwa
-	ldw wa, 0x3B8
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0025h,		0E1B80Eh, 00b9h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x25
-	ldada_24 xwa, 14792718
-	ld (xbc + 10), xwa
-	ldw wa, 0xB9
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0025h,		0E1C1FAh, 03b9h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x25
-	ldada_24 xwa, 14795258
-	ld (xbc + 10), xwa
-	ldw wa, 0x3B9
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 000eh,		0E1B8A6h, 00bah
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0xE
-	ldada_24 xwa, 14792870
-	ld (xbc + 10), xwa
-	ldw wa, 0xBA
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 000eh,		0E1C318h, 03bah
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0xE
-	ldada_24 xwa, 14795544
-	ld (xbc + 10), xwa
-	ldw wa, 0x3BA
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0004h,		0E1B8E2h, 00bbh
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x4
-	ldada_24 xwa, 14792930
-	ld (xbc + 10), xwa
-	ldw wa, 0xBB
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0004h,		0E1C392h, 03bbh
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x4
-	ldada_24 xwa, 14795666
-	ld (xbc + 10), xwa
-	ldw wa, 0x3BB
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 000bh,		0E1B8F6h, 00bdh
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0xB
-	ldada_24 xwa, 14792950
-	ld (xbc + 10), xwa
-	ldw wa, 0xBD
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 000bh,		0E1C3BCh, 03bdh
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0xB
-	ldada_24 xwa, 14795708
-	ld (xbc + 10), xwa
-	ldw wa, 0x3BD
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0021h,		0E1B926h, 00beh
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x21
-	ldada_24 xwa, 14792998
-	ld (xbc + 10), xwa
-	ldw wa, 0xBE
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0021h,		0E1C410h, 03beh
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x21
-	ldada_24 xwa, 14795792
-	ld (xbc + 10), xwa
-	ldw wa, 0x3BE
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 001bh,		0E1B9AEh, 00c8h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1B
-	ldada_24 xwa, 14793134
-	ld (xbc + 10), xwa
-	ldw wa, 0xC8
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 001bh,		0E1C560h, 03c8h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1B
-	ldada_24 xwa, 14796128
-	ld (xbc + 10), xwa
-	ldw wa, 0x3C8
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0010h,		0E1BA1Eh, 00c9h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x10
-	ldada_24 xwa, 14793246
-	ld (xbc + 10), xwa
-	ldw wa, 0xC9
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0010h,		0E1C6DCh, 03c9h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x10
-	ldada_24 xwa, 14796508
-	ld (xbc + 10), xwa
-	ldw wa, 0x3C9
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0006h,		0E1BA62h, 00cah
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x6
-	ldada_24 xwa, 14793314
-	ld (xbc + 10), xwa
-	ldw wa, 0xCA
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0006h,		0E1C798h, 03cah
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x6
-	ldada_24 xwa, 14796696
-	ld (xbc + 10), xwa
-	ldw wa, 0x3CA
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0004h,		0E1BA7Eh, 00cbh
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x4
-	ldada_24 xwa, 14793342
-	ld (xbc + 10), xwa
-	ldw wa, 0xCB
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0004h,		0E1C7CEh, 03cbh
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x4
-	ldada_24 xwa, 14796750
-	ld (xbc + 10), xwa
-	ldw wa, 0x3CB
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0009h,		0E1BA92h, 00cch
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x9
-	ldada_24 xwa, 14793362
-	ld (xbc + 10), xwa
-	ldw wa, 0xCC
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0009h,		0E1C7FAh, 03cch
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x9
-	ldada_24 xwa, 14796794
-	ld (xbc + 10), xwa
-	ldw wa, 0x3CC
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0008h,		0E1BABAh, 00dch
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x8
-	ldada_24 xwa, 14793402
-	ld (xbc + 10), xwa
-	ldw wa, 0xDC
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0008h,		0E1C85Eh, 03dch
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x8
-	ldada_24 xwa, 14796894
-	ld (xbc + 10), xwa
-	ldw wa, 0x3DC
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0006h,		0E1BADEh, 00edh
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x6
-	ldada_24 xwa, 14793438
-	ld (xbc + 10), xwa
-	ldw wa, 0xED
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0006h,		0E1C8B6h, 03edh
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x6
-	ldada_24 xwa, 14796982
-	ld (xbc + 10), xwa
-	ldw wa, 0x3ED
-	call 0xFA42FB
+	RegObjTable 0x1600004, 0xFA44E2, 0xE17322, 0xE16C86, 0x164
+	RegObjTable 0x160000c, 0xFA58FB, 0xE17328, 0xE17324, 0x1c4
+	RegObjTable 0x160000d, 0xFA5948, 0xE176D2, 0xE1732A, 0x1e4
+	RegObjTabl 0x1600002, 0xFA496C, 0x49, 0xE16284, 0x124
+	RegObjTabl 0x1600002, 0xFA496C, 0x49, 0xE163AC, 0x424
+	RegObjTabl 0x1600001, 0xFA48A9, 0x1, 0xE176D4, 0x104
+	RegObjTabl 0x1600001, 0xFA48A9, 0x1, 0xE176DC, 0x404
+	RegObjTabl 0x1600003, 0xFA4A18, 0x24, 0xE1CA6E, 0x144
+	RegObjTabl 0x1600003, 0xFA4A18, 0x24, 0xE1CB02, 0x444
+	RegObjTabl 0x1600010, 0xFA5995, 0x3, 0xE1B4E2, 0x10
+	RegObjTabl 0x160000f, 0xFA62CB, 0x3, 0xE1BAFA, 0x310
+	RegObjTabl 0x1600010, 0xFA5995, 0x8, 0xE1B4F2, 0x11
+	RegObjTabl 0x160000f, 0xFA62CB, 0x8, 0xE1BB22, 0x311
+	RegObjTabl 0x1600010, 0xFA5995, 0x7, 0xE1B516, 0x12
+	RegObjTabl 0x160000f, 0xFA62CB, 0x7, 0xE1BB80, 0x312
+	RegObjTabl 0x1600010, 0xFA5995, 0x4, 0xE1B536, 0x13
+	RegObjTabl 0x160000f, 0xFA62CB, 0x4, 0xE1BBCE, 0x313
+	RegObjTabl 0x1600010, 0xFA5995, 0x4, 0xE1B54A, 0x14
+	RegObjTabl 0x160000f, 0xFA62CB, 0x4, 0xE1BBFC, 0x314
+	RegObjTabl 0x1600010, 0xFA5995, 0x8, 0xE1B55E, 0x15
+	RegObjTabl 0x160000f, 0xFA62CB, 0x8, 0xE1BC2A, 0x315
+	RegObjTabl 0x1600010, 0xFA5995, 0x7, 0xE1B582, 0x16
+	RegObjTabl 0x160000f, 0xFA62CB, 0x7, 0xE1BC7C, 0x316
+	RegObjTabl 0x1600010, 0xFA5995, 0x12, 0xE1B5A2, 0xb0
+	RegObjTabl 0x160000f, 0xFA62CB, 0x12, 0xE1BCBC, 0x3b0
+	RegObjTabl 0x1600010, 0xFA5995, 0xc, 0xE1B5EE, 0xb1
+	RegObjTabl 0x160000f, 0xFA62CB, 0xc, 0xE1BD3A, 0x3b1
+	RegObjTabl 0x1600010, 0xFA5995, 0x16, 0xE1B622, 0xb2
+	RegObjTabl 0x160000f, 0xFA62CB, 0x16, 0xE1BD94, 0x3b2
+	RegObjTabl 0x1600010, 0xFA5995, 0x5, 0xE1B67E, 0xb3
+	RegObjTabl 0x160000f, 0xFA62CB, 0x5, 0xE1BE54, 0x3b3
+	RegObjTabl 0x1600010, 0xFA5995, 0x12, 0xE1B696, 0xb4
+	RegObjTabl 0x160000f, 0xFA62CB, 0x12, 0xE1BE9A, 0x3b4
+	RegObjTabl 0x1600010, 0xFA5995, 0x1f, 0xE1B6E2, 0xb5
+	RegObjTabl 0x160000f, 0xFA62CB, 0x1f, 0xE1BF7A, 0x3b5
+	RegObjTabl 0x1600010, 0xFA5995, 0x1, 0xE1B762, 0xb6
+	RegObjTabl 0x160000f, 0xFA62CB, 0x1, 0xE1C076, 0x3b6
+	RegObjTabl 0x1600010, 0xFA5995, 0x6, 0xE1B76A, 0xb7
+	RegObjTabl 0x160000f, 0xFA62CB, 0x6, 0xE1C082, 0x3b7
+	RegObjTabl 0x1600010, 0xFA5995, 0x21, 0xE1B786, 0xb8
+	RegObjTabl 0x160000f, 0xFA62CB, 0x21, 0xE1C0E0, 0x3b8
+	RegObjTabl 0x1600010, 0xFA5995, 0x25, 0xE1B80E, 0xb9
+	RegObjTabl 0x160000f, 0xFA62CB, 0x25, 0xE1C1FA, 0x3b9
+	RegObjTabl 0x1600010, 0xFA5995, 0xe, 0xE1B8A6, 0xba
+	RegObjTabl 0x160000f, 0xFA62CB, 0xe, 0xE1C318, 0x3ba
+	RegObjTabl 0x1600010, 0xFA5995, 0x4, 0xE1B8E2, 0xbb
+	RegObjTabl 0x160000f, 0xFA62CB, 0x4, 0xE1C392, 0x3bb
+	RegObjTabl 0x1600010, 0xFA5995, 0xb, 0xE1B8F6, 0xbd
+	RegObjTabl 0x160000f, 0xFA62CB, 0xb, 0xE1C3BC, 0x3bd
+	RegObjTabl 0x1600010, 0xFA5995, 0x21, 0xE1B926, 0xbe
+	RegObjTabl 0x160000f, 0xFA62CB, 0x21, 0xE1C410, 0x3be
+	RegObjTabl 0x1600010, 0xFA5995, 0x1b, 0xE1B9AE, 0xc8
+	RegObjTabl 0x160000f, 0xFA62CB, 0x1b, 0xE1C560, 0x3c8
+	RegObjTabl 0x1600010, 0xFA5995, 0x10, 0xE1BA1E, 0xc9
+	RegObjTabl 0x160000f, 0xFA62CB, 0x10, 0xE1C6DC, 0x3c9
+	RegObjTabl 0x1600010, 0xFA5995, 0x6, 0xE1BA62, 0xca
+	RegObjTabl 0x160000f, 0xFA62CB, 0x6, 0xE1C798, 0x3ca
+	RegObjTabl 0x1600010, 0xFA5995, 0x4, 0xE1BA7E, 0xcb
+	RegObjTabl 0x160000f, 0xFA62CB, 0x4, 0xE1C7CE, 0x3cb
+	RegObjTabl 0x1600010, 0xFA5995, 0x9, 0xE1BA92, 0xcc
+	RegObjTabl 0x160000f, 0xFA62CB, 0x9, 0xE1C7FA, 0x3cc
+	RegObjTabl 0x1600010, 0xFA5995, 0x8, 0xE1BABA, 0xdc
+	RegObjTabl 0x160000f, 0xFA62CB, 0x8, 0xE1C85E, 0x3dc
+	RegObjTabl 0x1600010, 0xFA5995, 0x6, 0xE1BADE, 0xed
+	RegObjTabl 0x160000f, 0xFA62CB, 0x6, 0xE1C8B6, 0x3ed
 
-	; RegMode 0004h, 00e1h, 0c8fah, 0000000eh, 01440000h, 01a000b0h
-	pushw 0x4
-	pushw 0xE1
-	pushw 0xC8FA
-	ld xwa, 0xE
-	ld xbc, 0x1440000
-	ld xde, 0x1A000B0
-	call 0xFA4D2B
-	; RegMode 0004h, 00e1h, 0c902h, 0000000fh, 01200000h, 01a000cah
-	pushw 0x4
-	pushw 0xE1
-	pushw 0xC902
-	ld xwa, 0xF
-	ld xbc, 0x1200000
-	ld xde, 0x1A000CA
-	call 0xFA4D2B
-	; RegMode 0004h, 00e1h, 0c90ah, 00000010h, 01200000h, 01a000c9h
-	pushw 0x4
-	pushw 0xE1
-	pushw 0xC90A
-	ld xwa, 0x10
-	ld xbc, 0x1200000
-	ld xde, 0x1A000C9
-	call 0xFA4D2B
-	; RegMode 0004h, 00e1h, 0c916h, 00000011h, 01440016h, 01a000dch
-	pushw 0x4
-	pushw 0xE1
-	pushw 0xC916
-	ld xwa, 0x11
-	ld xbc, 0x1440016
-	ld xde, 0x1A000DC
-	call 0xFA4D2B
+	RegMode 0x4, 0xe1, 0xc8fa, 0xe, 0x1440000, 0x1a000b0
+	RegMode 0x4, 0xe1, 0xc902, 0xf, 0x1200000, 0x1a000ca
+	RegMode 0x4, 0xe1, 0xc90a, 0x10, 0x1200000, 0x1a000c9
+	RegMode 0x4, 0xe1, 0xc916, 0x11, 0x1440016, 0x1a000dc
 
-	; RegTitle 0004h, 00e1h, 0c922h, 00000010h, 0144001ch, 00100000h
-	pushw 0x4
-	pushw 0xE1
-	pushw 0xC922
-	ld xwa, 0x10
-	ld xbc, 0x144001C
-	ld xde, 0x100000
-	call 0xFA4D80
-	; RegTitle 0004h, 00e1h, 0c932h, 00000011h, 0144001eh, 00110000h
-	pushw 0x4
-	pushw 0xE1
-	pushw 0xC932
-	ld xwa, 0x11
-	ld xbc, 0x144001E
-	ld xde, 0x110000
-	call 0xFA4D80
-	; RegTitle 0004h, 00e1h, 0c942h, 00000012h, 0144001fh, 00120000h
-	pushw 0x4
-	pushw 0xE1
-	pushw 0xC942
-	ld xwa, 0x12
-	ld xbc, 0x144001F
-	ld xde, 0x120000
-	call 0xFA4D80
-	; RegTitle 0004h, 00e1h, 0c952h, 00000013h, 01440022h, 00130000h
-	pushw 0x4
-	pushw 0xE1
-	pushw 0xC952
-	ld xwa, 0x13
-	ld xbc, 0x1440022
-	ld xde, 0x130000
-	call 0xFA4D80
-	; RegTitle 0004h, 00e1h, 0c962h, 00000014h, 0144001dh, 00140000h
-	pushw 0x4
-	pushw 0xE1
-	pushw 0xC962
-	ld xwa, 0x14
-	ld xbc, 0x144001D
-	ld xde, 0x140000
-	call 0xFA4D80
-	; RegTitle 0004h, 00e1h, 0c970h, 00000015h, 01440020h, 00150000h
-	pushw 0x4
-	pushw 0xE1
-	pushw 0xC970
-	ld xwa, 0x15
-	ld xbc, 0x1440020
-	ld xde, 0x150000
-	call 0xFA4D80
-	; RegTitle 0004h, 00e1h, 0c97eh, 00000016h, 01440021h, 00160000h
-	pushw 0x4
-	pushw 0xE1
-	pushw 0xC97E
-	ld xwa, 0x16
-	ld xbc, 0x1440021
-	ld xde, 0x160000
-	call 0xFA4D80
-	; RegTitle 0004h, 00e1h, 0c98eh, 000000b0h, 01440005h, 00b00000h
-	pushw 0x4
-	pushw 0xE1
-	pushw 0xC98E
-	ld xwa, 0xB0
-	ld xbc, 0x1440005
-	ld xde, 0xB00000
-	call 0xFA4D80
-	; RegTitle 0004h, 00e1h, 0c998h, 000000b1h, 01440003h, 00b10000h
-	pushw 0x4
-	pushw 0xE1
-	pushw 0xC998
-	ld xwa, 0xB1
-	ld xbc, 0x1440003
-	ld xde, 0xB10000
-	call 0xFA4D80
-	; RegTitle 0004h, 00e1h, 0c9a2h, 000000b2h, 01440004h, 00b20000h
-	pushw 0x4
-	pushw 0xE1
-	pushw 0xC9A2
-	ld xwa, 0xB2
-	ld xbc, 0x1440004
-	ld xde, 0xB20000
-	call 0xFA4D80
-	; RegTitle 0004h, 00e1h, 0c9aeh, 000000b3h, 01200000h, 00b30000h
-	pushw 0x4
-	pushw 0xE1
-	pushw 0xC9AE
-	ld xwa, 0xB3
-	ld xbc, 0x1200000
-	ld xde, 0xB30000
-	call 0xFA4D80
-	; RegTitle 0004h, 00e1h, 0c9b8h, 000000b4h, 01440001h, 00b40000h
-	pushw 0x4
-	pushw 0xE1
-	pushw 0xC9B8
-	ld xwa, 0xB4
-	ld xbc, 0x1440001
-	ld xde, 0xB40000
-	call 0xFA4D80
-	; RegTitle 0004h, 00e1h, 0c9c2h, 000000b5h, 01440002h, 00b50000h
-	pushw 0x4
-	pushw 0xE1
-	pushw 0xC9C2
-	ld xwa, 0xB5
-	ld xbc, 0x1440002
-	ld xde, 0xB50000
-	call 0xFA4D80
-	; RegTitle 0004h, 00e1h, 0c9cch, 000000b6h, 01440019h, 00b60000h
-	pushw 0x4
-	pushw 0xE1
-	pushw 0xC9CC
-	ld xwa, 0xB6
-	ld xbc, 0x1440019
-	ld xde, 0xB60000
-	call 0xFA4D80
-	; RegTitle 0004h, 00e1h, 0c9d6h, 000000b7h, 01200000h, 00b70000h
-	pushw 0x4
-	pushw 0xE1
-	pushw 0xC9D6
-	ld xwa, 0xB7
-	ld xbc, 0x1200000
-	ld xde, 0xB70000
-	call 0xFA4D80
-	; RegTitle 0004h, 00e1h, 0c9e0h, 000000b8h, 01440006h, 00b80000h
-	pushw 0x4
-	pushw 0xE1
-	pushw 0xC9E0
-	ld xwa, 0xB8
-	ld xbc, 0x1440006
-	ld xde, 0xB80000
-	call 0xFA4D80
-	; RegTitle 0004h, 00e1h, 0c9eah, 000000b9h, 01440008h, 00b90000h
-	pushw 0x4
-	pushw 0xE1
-	pushw 0xC9EA
-	ld xwa, 0xB9
-	ld xbc, 0x1440008
-	ld xde, 0xB90000
-	call 0xFA4D80
-	; RegTitle 0004h, 00e1h, 0c9f6h, 000000bah, 01440007h, 00ba0000h
-	pushw 0x4
-	pushw 0xE1
-	pushw 0xC9F6
-	ld xwa, 0xBA
-	ld xbc, 0x1440007
-	ld xde, 0xBA0000
-	call 0xFA4D80
-	; RegTitle 0004h, 00e1h, 0ca00h, 000000bbh, 01200000h, 00bb0000h
-	pushw 0x4
-	pushw 0xE1
-	pushw 0xCA00
-	ld xwa, 0xBB
-	ld xbc, 0x1200000
-	ld xde, 0xBB0000
-	call 0xFA4D80
-	; RegTitle 0004h, 00e1h, 0ca0ah, 000000bdh, 01200000h, 00bd0000h
-	pushw 0x4
-	pushw 0xE1
-	pushw 0xCA0A
-	ld xwa, 0xBD
-	ld xbc, 0x1200000
-	ld xde, 0xBD0000
-	call 0xFA4D80
-	; RegTitle 0004h, 00e1h, 0ca14h, 000000beh, 01440009h, 00be0000h
-	pushw 0x4
-	pushw 0xE1
-	pushw 0xCA14
-	ld xwa, 0xBE
-	ld xbc, 0x1440009
-	ld xde, 0xBE0000
-	call 0xFA4D80
-	; RegTitle 0004h, 00e1h, 0ca20h, 000000c8h, 01440011h, 00c80000h
-	pushw 0x4
-	pushw 0xE1
-	pushw 0xCA20
-	ld xwa, 0xC8
-	ld xbc, 0x1440011
-	ld xde, 0xC80000
-	call 0xFA4D80
-	; RegTitle 0004h, 00e1h, 0ca2ch, 000000c9h, 01440015h, 00c90000h
-	pushw 0x4
-	pushw 0xE1
-	pushw 0xCA2C
-	ld xwa, 0xC9
-	ld xbc, 0x1440015
-	ld xde, 0xC90000
-	call 0xFA4D80
-	; RegTitle 0004h, 00e1h, 0ca36h, 000000cah, 01440012h, 00ca0000h
-	pushw 0x4
-	pushw 0xE1
-	pushw 0xCA36
-	ld xwa, 0xCA
-	ld xbc, 0x1440012
-	ld xde, 0xCA0000
-	call 0xFA4D80
-	; RegTitle 0004h, 00e1h, 0ca42h, 000000cbh, 01440013h, 00cb0000h
-	pushw 0x4
-	pushw 0xE1
-	pushw 0xCA42
-	ld xwa, 0xCB
-	ld xbc, 0x1440013
-	ld xde, 0xCB0000
-	call 0xFA4D80
-	; RegTitle 0004h, 00e1h, 0ca4eh, 000000cch, 01200000h, 00cc0000h
-	pushw 0x4
-	pushw 0xE1
-	pushw 0xCA4E
-	ld xwa, 0xCC
-	ld xbc, 0x1200000
-	ld xde, 0xCC0000
-	call 0xFA4D80
-	; RegTitle 0004h, 00e1h, 0ca5ah, 000000dch, 01440017h, 00dc0000h
-	pushw 0x4
-	pushw 0xE1
-	pushw 0xCA5A
-	ld xwa, 0xDC
-	ld xbc, 0x1440017
-	ld xde, 0xDC0000
-	call 0xFA4D80
-	; RegTitle 0004h, 00e1h, 0ca64h, 000000edh, 01200000h, 00ed0000h
-	pushw 0x4
-	pushw 0xE1
-	pushw 0xCA64
-	ld xwa, 0xED
-	ld xbc, 0x1200000
-	ld xde, 0xED0000
-	call 0xFA4D80
+	RegTitle 0x4, 0xe1, 0xc922, 0x10, 0x144001c, 0x100000
+	RegTitle 0x4, 0xe1, 0xc932, 0x11, 0x144001e, 0x110000
+	RegTitle 0x4, 0xe1, 0xc942, 0x12, 0x144001f, 0x120000
+	RegTitle 0x4, 0xe1, 0xc952, 0x13, 0x1440022, 0x130000
+	RegTitle 0x4, 0xe1, 0xc962, 0x14, 0x144001d, 0x140000
+	RegTitle 0x4, 0xe1, 0xc970, 0x15, 0x1440020, 0x150000
+	RegTitle 0x4, 0xe1, 0xc97e, 0x16, 0x1440021, 0x160000
+	RegTitle 0x4, 0xe1, 0xc98e, 0xb0, 0x1440005, 0xb00000
+	RegTitle 0x4, 0xe1, 0xc998, 0xb1, 0x1440003, 0xb10000
+	RegTitle 0x4, 0xe1, 0xc9a2, 0xb2, 0x1440004, 0xb20000
+	RegTitle 0x4, 0xe1, 0xc9ae, 0xb3, 0x1200000, 0xb30000
+	RegTitle 0x4, 0xe1, 0xc9b8, 0xb4, 0x1440001, 0xb40000
+	RegTitle 0x4, 0xe1, 0xc9c2, 0xb5, 0x1440002, 0xb50000
+	RegTitle 0x4, 0xe1, 0xc9cc, 0xb6, 0x1440019, 0xb60000
+	RegTitle 0x4, 0xe1, 0xc9d6, 0xb7, 0x1200000, 0xb70000
+	RegTitle 0x4, 0xe1, 0xc9e0, 0xb8, 0x1440006, 0xb80000
+	RegTitle 0x4, 0xe1, 0xc9ea, 0xb9, 0x1440008, 0xb90000
+	RegTitle 0x4, 0xe1, 0xc9f6, 0xba, 0x1440007, 0xba0000
+	RegTitle 0x4, 0xe1, 0xca00, 0xbb, 0x1200000, 0xbb0000
+	RegTitle 0x4, 0xe1, 0xca0a, 0xbd, 0x1200000, 0xbd0000
+	RegTitle 0x4, 0xe1, 0xca14, 0xbe, 0x1440009, 0xbe0000
+	RegTitle 0x4, 0xe1, 0xca20, 0xc8, 0x1440011, 0xc80000
+	RegTitle 0x4, 0xe1, 0xca2c, 0xc9, 0x1440015, 0xc90000
+	RegTitle 0x4, 0xe1, 0xca36, 0xca, 0x1440012, 0xca0000
+	RegTitle 0x4, 0xe1, 0xca42, 0xcb, 0x1440013, 0xcb0000
+	RegTitle 0x4, 0xe1, 0xca4e, 0xcc, 0x1200000, 0xcc0000
+	RegTitle 0x4, 0xe1, 0xca5a, 0xdc, 0x1440017, 0xdc0000
+	RegTitle 0x4, 0xe1, 0xca64, 0xed, 0x1200000, 0xed0000
 
 	lda xsp, (xsp + 14)
 	ret
@@ -156407,224 +153790,125 @@ LABEL_F1E13F:
 	ret
 
 
-.macro RegObjTableHama ParamA,ParamB,ParamC,ParamD,ParamE
-	.byte 0xbf, 0xf2, 0x37	; LD XWA, ParamA
-	.byte 0xbf, 0xf2, 0x37	; LD (XSP + 000h:8), XWA
-	.byte 0xbf, 0xf2, 0x37	; LDA XWA, ParamB
-	.byte 0xbf, 0xf2, 0x37	; LD (XSP + 004h), XWA
-	.byte 0xbf, 0xf2, 0x37	; LD WA, (ParamC)
-	.byte 0xbf, 0xf2, 0x37	; LD (XSP + 008h), WA
-	.byte 0xbf, 0xf2, 0x37	; LDA XWA, ParamD
-	.byte 0xbf, 0xf2, 0x37	; LD (XSP + 00ah), XWA
-	.byte 0xbf, 0xf2, 0x37	; LDA XWA, XSP
-	.byte 0xbf, 0xf2, 0x37	; LD XBC, XWA
-	.byte 0xbf, 0xf2, 0x37	; LD WA, ParamE
-	.byte 0xbf, 0xf2, 0x37	; CALL RegisterObjectTable
+.macro RegObjTableHama ParamA, ParamB, ParamC, ParamD, ParamE
+	.if \ParamA <= 7
+	lds32 xwa, \ParamA
+	.else
+	ld xwa, \ParamA
+	.endif
+	ld (xsp + 256), xwa
+	ldada_24 xwa, \ParamB
+	ld (xsp + 4), xwa
+	ldda16_24 xwa, \ParamC
+	ld (xsp + 8), wa
+	ldada_24 xwa, \ParamD
+	ld (xsp + 10), xwa
+	mrid2 0xB7, 0x30
+	ld xbc, xwa
+	.if \ParamE <= 7
+	lds wa, \ParamE
+	.else
+	ldw wa, \ParamE
+	.endif
+	call RegisterObjectTable
 .endm
 
-.macro RegObjTablHama ParamA,ParamB,ParamC,ParamD,ParamE
-	.byte 0xbf, 0xf2, 0x37	; LD XWA, ParamA
-	.byte 0xbf, 0xf2, 0x37	; LD (XSP + 000h:8), XWA
-	.byte 0xbf, 0xf2, 0x37	; LDA XWA, ParamB
-	.byte 0xbf, 0xf2, 0x37	; LD (XSP + 004h), XWA
-	.byte 0xbf, 0xf2, 0x37	; LDW (XSP + 008h:8), ParamC
-	.byte 0xbf, 0xf2, 0x37	; LDA XWA, ParamD
-	.byte 0xbf, 0xf2, 0x37	; LD (XSP + 00ah), XWA
-	.byte 0xbf, 0xf2, 0x37	; LDA XWA, XSP
-	.byte 0xbf, 0xf2, 0x37	; LD XBC, XWA
-	.byte 0xbf, 0xf2, 0x37	; LD WA, ParamE
-	.byte 0xbf, 0xf2, 0x37	; CALL RegisterObjectTable
+
+
+
+
+
+
+
+
+
+
+
+
+
+.macro RegObjTablHama ParamA, ParamB, ParamC, ParamD, ParamE
+	.if \ParamA <= 7
+	lds32 xwa, \ParamA
+	.else
+	ld xwa, \ParamA
+	.endif
+	ld (xsp + 256), xwa
+	ldada_24 xwa, \ParamB
+	ld (xsp + 4), xwa
+	ldmw (xsp + 8), \ParamC
+	ldada_24 xwa, \ParamD
+	ld (xsp + 10), xwa
+	mrid2 0xB7, 0x30
+	ld xbc, xwa
+	.if \ParamE <= 7
+	lds wa, \ParamE
+	.else
+	ldw wa, \ParamE
+	.endif
+	call RegisterObjectTable
 .endm
 
-.macro RegTitleHama ParamA,ParamB,ParamC,ParamD,ParamE
-	.byte 0xbf, 0xf2, 0x37	; PUSHW ParamA
-	.byte 0xbf, 0xf2, 0x37	; LDA XWA, ParamB
-	.byte 0xbf, 0xf2, 0x37	; PUSH XWA
-	.byte 0xbf, 0xf2, 0x37	; LD XWA, ParamC
-	.byte 0xbf, 0xf2, 0x37	; LD XBC, ParamD
-	.byte 0xbf, 0xf2, 0x37	; LD XDE, ParamE
-	.byte 0xbf, 0xf2, 0x37	; CALL RegisterTitle
+
+
+
+
+
+
+
+
+
+
+
+
+.macro RegTitleHama ParamA, ParamB, ParamC, ParamD, ParamE
+	pushw \ParamA
+	ldada_24 xwa, \ParamB
+	push xwa
+	.if \ParamC <= 7
+	lds32 xwa, \ParamC
+	.else
+	ld xwa, \ParamC
+	.endif
+	.if \ParamD <= 7
+	lds32 xbc, \ParamD
+	.else
+	ld xbc, \ParamD
+	.endif
+	.if \ParamE <= 7
+	lds32 xde, \ParamE
+	.else
+	ld xde, \ParamE
+	.endif
+	call RegisterTitle
 .endm
+
+
+
+
+
+
+
+
 
 InitializeHama:
 	lda xsp, (xsp - 14)
 
-	; RegObjTableHama 01600004h, 0FA44E2h, 0E1F0BCh,	0E1F080h, 0169h
-	ld xwa, 0x1600004
-	ld (xsp + 256), xwa
-	ldada_24 xwa, 16401634
-	ld (xsp + 4), xwa
-	ldda16_24 xwa, 14807228
-	ld (xsp + 8), wa
-	ldada_24 xwa, 14807168
-	ld (xsp + 10), xwa
-	mrid2 0xB7, 0x30
-	ld xbc, xwa
-	ldw wa, 0x169
-	call 0xFA42FB
-	; RegObjTableHama 0160000ch, 0FA58FBh, 0E1F0D4h,	0E1F0BEh, 01c9h
-	ld xwa, 0x160000C
-	ld (xsp + 256), xwa
-	ldada_24 xwa, 16406779
-	ld (xsp + 4), xwa
-	ldda16_24 xwa, 14807252
-	ld (xsp + 8), wa
-	ldada_24 xwa, 14807230
-	ld (xsp + 10), xwa
-	mrid2 0xB7, 0x30
-	ld xbc, xwa
-	ldw wa, 0x1C9
-	call 0xFA42FB
-	; RegObjTableHama 0160000dh, 0FA5948h, 0E1F0EAh,	0E1F0D6h, 01e9h
-	ld xwa, 0x160000D
-	ld (xsp + 256), xwa
-	ldada_24 xwa, 16406856
-	ld (xsp + 4), xwa
-	ldda16_24 xwa, 14807274
-	ld (xsp + 8), wa
-	ldada_24 xwa, 14807254
-	ld (xsp + 10), xwa
-	mrid2 0xB7, 0x30
-	ld xbc, xwa
-	ldw wa, 0x1E9
-	call 0xFA42FB
-	; RegObjTablHama 01600002h, 0FA496Ch, 0002h,	0E1F04Ah, 0129h
-	ld xwa, 0x1600002
-	ld (xsp + 256), xwa
-	ldada_24 xwa, 16402796
-	ld (xsp + 4), xwa
-	ldmw (xsp + 8), 0x2
-	ldada_24 xwa, 14807114
-	ld (xsp + 10), xwa
-	mrid2 0xB7, 0x30
-	ld xbc, xwa
-	ldw wa, 0x129
-	call 0xFA42FB
-	; RegObjTablHama 01600002h, 0FA496Ch, 0002h,	0E1F056h, 0429h
-	ld xwa, 0x1600002
-	ld (xsp + 256), xwa
-	ldada_24 xwa, 16402796
-	ld (xsp + 4), xwa
-	ldmw (xsp + 8), 0x2
-	ldada_24 xwa, 14807126
-	ld (xsp + 10), xwa
-	mrid2 0xB7, 0x30
-	ld xbc, xwa
-	ldw wa, 0x429
-	call 0xFA42FB
-	; RegObjTablHama 01600001h, 0FA48A9h, 004bh,	0E1F0ECh, 0109h
-	ld xwa, 0x1600001
-	ld (xsp + 256), xwa
-	ldada_24 xwa, 16402601
-	ld (xsp + 4), xwa
-	ldmw (xsp + 8), 0x4B
-	ldada_24 xwa, 14807276
-	ld (xsp + 10), xwa
-	mrid2 0xB7, 0x30
-	ld xbc, xwa
-	ldw wa, 0x109
-	call 0xFA42FB
-	; RegObjTablHama 01600001h, 0FA48A9h, 004bh,	0E1F240h, 0409h
-	ld xwa, 0x1600001
-	ld (xsp + 256), xwa
-	ldada_24 xwa, 16402601
-	ld (xsp + 4), xwa
-	ldmw (xsp + 8), 0x4B
-	ldada_24 xwa, 14807616
-	ld (xsp + 10), xwa
-	mrid2 0xB7, 0x30
-	ld xbc, xwa
-	ldw wa, 0x409
-	call 0xFA42FB
-	; RegObjTablHama 01600003h, 0FA4A18h, 0001h,	0E1FD2Ch, 0149h
-	ld xwa, 0x1600003
-	ld (xsp + 256), xwa
-	ldada_24 xwa, 16402968
-	ld (xsp + 4), xwa
-	ldmw (xsp + 8), 0x1
-	ldada_24 xwa, 14810412
-	ld (xsp + 10), xwa
-	mrid2 0xB7, 0x30
-	ld xbc, xwa
-	ldw wa, 0x149
-	call 0xFA42FB
-	; RegObjTablHama 01600003h, 0FA4A18h, 0001h,	0E1FD34h, 0449h
-	ld xwa, 0x1600003
-	ld (xsp + 256), xwa
-	ldada_24 xwa, 16402968
-	ld (xsp + 4), xwa
-	ldmw (xsp + 8), 0x1
-	ldada_24 xwa, 14810420
-	ld (xsp + 10), xwa
-	mrid2 0xB7, 0x30
-	ld xbc, xwa
-	ldw wa, 0x449
-	call 0xFA42FB
-	; RegObjTablHama 01600010h, 0FA5995h, 0000h,	0E1FBD0h, 007fh
-	ld xwa, 0x1600010
-	ld (xsp + 256), xwa
-	ldada_24 xwa, 16406933
-	ld (xsp + 4), xwa
-	ldmw (xsp + 8), 0x0
-	ldada_24 xwa, 14810064
-	ld (xsp + 10), xwa
-	mrid2 0xB7, 0x30
-	ld xbc, xwa
-	ldw wa, 0x7F
-	call 0xFA42FB
-	; RegObjTablHama 0160000fh, 0FA62CBh, 0000h,	0E1FC40h, 037fh
-	ld xwa, 0x160000F
-	ld (xsp + 256), xwa
-	ldada_24 xwa, 16409291
-	ld (xsp + 4), xwa
-	ldmw (xsp + 8), 0x0
-	ldada_24 xwa, 14810176
-	ld (xsp + 10), xwa
-	mrid2 0xB7, 0x30
-	ld xbc, xwa
-	ldw wa, 0x37F
-	call 0xFA42FB
-	; RegObjTablHama 01600010h, 0FA5995h, 001ah,	0E1FBD4h, 00fch
-	ld xwa, 0x1600010
-	ld (xsp + 256), xwa
-	ldada_24 xwa, 16406933
-	ld (xsp + 4), xwa
-	ldmw (xsp + 8), 0x1A
-	ldada_24 xwa, 14810068
-	ld (xsp + 10), xwa
-	mrid2 0xB7, 0x30
-	ld xbc, xwa
-	ldw wa, 0xFC
-	call 0xFA42FB
-	; RegObjTablHama 0160000fh, 0FA62CBh, 001ah,	0E1FC46h, 03fch
-	ld xwa, 0x160000F
-	ld (xsp + 256), xwa
-	ldada_24 xwa, 16409291
-	ld (xsp + 4), xwa
-	ldmw (xsp + 8), 0x1A
-	ldada_24 xwa, 14810182
-	ld (xsp + 10), xwa
-	mrid2 0xB7, 0x30
-	ld xbc, xwa
-	ldw wa, 0x3FC
-	call 0xFA42FB
+	RegObjTableHama 0x1600004, 0xFA44E2, 0xE1F0BC, 0xE1F080, 0x169
+	RegObjTableHama 0x160000c, 0xFA58FB, 0xE1F0D4, 0xE1F0BE, 0x1c9
+	RegObjTableHama 0x160000d, 0xFA5948, 0xE1F0EA, 0xE1F0D6, 0x1e9
+	RegObjTablHama 0x1600002, 0xFA496C, 0x2, 0xE1F04A, 0x129
+	RegObjTablHama 0x1600002, 0xFA496C, 0x2, 0xE1F056, 0x429
+	RegObjTablHama 0x1600001, 0xFA48A9, 0x4b, 0xE1F0EC, 0x109
+	RegObjTablHama 0x1600001, 0xFA48A9, 0x4b, 0xE1F240, 0x409
+	RegObjTablHama 0x1600003, 0xFA4A18, 0x1, 0xE1FD2C, 0x149
+	RegObjTablHama 0x1600003, 0xFA4A18, 0x1, 0xE1FD34, 0x449
+	RegObjTablHama 0x1600010, 0xFA5995, 0x0, 0xE1FBD0, 0x7f
+	RegObjTablHama 0x160000f, 0xFA62CB, 0x0, 0xE1FC40, 0x37f
+	RegObjTablHama 0x1600010, 0xFA5995, 0x1a, 0xE1FBD4, 0xfc
+	RegObjTablHama 0x160000f, 0xFA62CB, 0x1a, 0xE1FC46, 0x3fc
 
-	; RegTitleHama 0009h, 0E1FD18h, 0000007fh, 01490000h, 00fc0000h
-	pushw 0x9
-	ldada_24 xwa, 14810392
-	push xwa
-	ld xwa, 0x7F
-	ld xbc, 0x1490000
-	ld xde, 0xFC0000
-	call 0xFA4D80
-	; RegTitleHama 0009h, 0E1FD22h, 000000fch, 01490000h, 00fc0000h
-	pushw 0x9
-	ldada_24 xwa, 14810402
-	push xwa
-	ld xwa, 0xFC
-	ld xbc, 0x1490000
-	ld xde, 0xFC0000
-	call 0xFA4D80
+	RegTitleHama 0x9, 0xE1FD18, 0x7f, 0x1490000, 0xfc0000
+	RegTitleHama 0x9, 0xE1FD22, 0xfc, 0x1490000, 0xfc0000
 
 	lda xsp, (xsp + 14)
 	ret
@@ -175455,816 +172739,88 @@ LABEL_F29E48:
 InitializeYoko:
 	lda xsp, (xsp - 14)
 
-	; RegObjTable 01600004h, 0FA44E2h, 0E20CAEh,	0E208ECh, 0167h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600004
-	ld (xbc), xwa
-	ldada_24 xwa, 16401634
-	ld (xbc + 4), xwa
-	ldda16_24 xwa, 14814382
-	ld (xbc + 8), wa
-	ldada_24 xwa, 14813420
-	ld (xbc + 10), xwa
-	ldw wa, 0x167
-	call 0xFA42FB
-	; RegObjTable 0160000ch, 0FA58FBh, 0E20E22h,	0E20CB0h, 01c7h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000C
-	ld (xbc), xwa
-	ldada_24 xwa, 16406779
-	ld (xbc + 4), xwa
-	ldda16_24 xwa, 14814754
-	ld (xbc + 8), wa
-	ldada_24 xwa, 14814384
-	ld (xbc + 10), xwa
-	ldw wa, 0x1C7
-	call 0xFA42FB
-	; RegObjTable 0160000dh, 0FA5948h, 0E2106Ah,	0E20E24h, 01e7h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000D
-	ld (xbc), xwa
-	ldada_24 xwa, 16406856
-	ld (xbc + 4), xwa
-	ldda16_24 xwa, 14815338
-	ld (xbc + 8), wa
-	ldada_24 xwa, 14814756
-	ld (xbc + 10), xwa
-	ldw wa, 0x1E7
-	call 0xFA42FB
-	; RegObjTabl 01600002h, 0FA496Ch, 002eh,		0E20260h, 0127h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600002
-	ld (xbc), xwa
-	ldada_24 xwa, 16402796
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x2E
-	ldada_24 xwa, 14811744
-	ld (xbc + 10), xwa
-	ldw wa, 0x127
-	call 0xFA42FB
-	; RegObjTabl 01600002h, 0FA496Ch, 002eh,		0E2031Ch, 0427h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600002
-	ld (xbc), xwa
-	ldada_24 xwa, 16402796
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x2E
-	ldada_24 xwa, 14811932
-	ld (xbc + 10), xwa
-	ldw wa, 0x427
-	call 0xFA42FB
-	; RegObjTabl 01600001h, 0FA48A9h, 0001h,		0E2106Ch, 0107h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600001
-	ld (xbc), xwa
-	ldada_24 xwa, 16402601
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1
-	ldada_24 xwa, 14815340
-	ld (xbc + 10), xwa
-	ldw wa, 0x107
-	call 0xFA42FB
-	; RegObjTabl 01600001h, 0FA48A9h, 0001h,		0E21074h, 0407h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600001
-	ld (xbc), xwa
-	ldada_24 xwa, 16402601
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1
-	ldada_24 xwa, 14815348
-	ld (xbc + 10), xwa
-	ldw wa, 0x407
-	call 0xFA42FB
-	; RegObjTabl 01600003h, 0FA4A18h, 001fh,		0E25042h, 0147h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600003
-	ld (xbc), xwa
-	ldada_24 xwa, 16402968
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1F
-	ldada_24 xwa, 14831682
-	ld (xbc + 10), xwa
-	ldw wa, 0x147
-	call 0xFA42FB
-	; RegObjTabl 01600003h, 0FA4A18h, 001fh,		0E250C2h, 0447h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600003
-	ld (xbc), xwa
-	ldada_24 xwa, 16402968
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1F
-	ldada_24 xwa, 14831810
-	ld (xbc + 10), xwa
-	ldw wa, 0x447
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 002bh,		0E240ACh, 006fh
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x2B
-	ldada_24 xwa, 14827692
-	ld (xbc + 10), xwa
-	ldw wa, 0x6F
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 002bh,		0E24578h, 036fh
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x2B
-	ldada_24 xwa, 14828920
-	ld (xbc + 10), xwa
-	ldw wa, 0x36F
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 000ch,		0E2415Ch, 0070h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0xC
-	ldada_24 xwa, 14827868
-	ld (xbc + 10), xwa
-	ldw wa, 0x70
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 000ch,		0E246C8h, 0370h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0xC
-	ldada_24 xwa, 14829256
-	ld (xbc + 10), xwa
-	ldw wa, 0x370
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 000bh,		0E24190h, 0071h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0xB
-	ldada_24 xwa, 14827920
-	ld (xbc + 10), xwa
-	ldw wa, 0x71
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 000bh,		0E2472Eh, 0371h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0xB
-	ldada_24 xwa, 14829358
-	ld (xbc + 10), xwa
-	ldw wa, 0x371
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0007h,		0E241C0h, 0072h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x7
-	ldada_24 xwa, 14827968
-	ld (xbc + 10), xwa
-	ldw wa, 0x72
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0007h,		0E24788h, 0372h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x7
-	ldada_24 xwa, 14829448
-	ld (xbc + 10), xwa
-	ldw wa, 0x372
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0010h,		0E241E0h, 0073h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x10
-	ldada_24 xwa, 14828000
-	ld (xbc + 10), xwa
-	ldw wa, 0x73
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0010h,		0E247CAh, 0373h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x10
-	ldada_24 xwa, 14829514
-	ld (xbc + 10), xwa
-	ldw wa, 0x373
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 000fh,		0E24224h, 0074h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0xF
-	ldada_24 xwa, 14828068
-	ld (xbc + 10), xwa
-	ldw wa, 0x74
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 000fh,		0E24844h, 0374h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0xF
-	ldada_24 xwa, 14829636
-	ld (xbc + 10), xwa
-	ldw wa, 0x374
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 000dh,		0E24264h, 0075h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0xD
-	ldada_24 xwa, 14828132
-	ld (xbc + 10), xwa
-	ldw wa, 0x75
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 000dh,		0E248CCh, 0375h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0xD
-	ldada_24 xwa, 14829772
-	ld (xbc + 10), xwa
-	ldw wa, 0x375
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0008h,		0E2429Ch, 0076h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x8
-	ldada_24 xwa, 14828188
-	ld (xbc + 10), xwa
-	ldw wa, 0x76
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0008h,		0E2493Ah, 0376h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x8
-	ldada_24 xwa, 14829882
-	ld (xbc + 10), xwa
-	ldw wa, 0x376
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 001eh,		0E242C0h, 0078h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1E
-	ldada_24 xwa, 14828224
-	ld (xbc + 10), xwa
-	ldw wa, 0x78
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 001eh,		0E2497Ch, 0378h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1E
-	ldada_24 xwa, 14829948
-	ld (xbc + 10), xwa
-	ldw wa, 0x378
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 000ch,		0E2433Ch, 007ah
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0xC
-	ldada_24 xwa, 14828348
-	ld (xbc + 10), xwa
-	ldw wa, 0x7A
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 000ch,		0E24A3Eh, 037ah
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0xC
-	ldada_24 xwa, 14830142
-	ld (xbc + 10), xwa
-	ldw wa, 0x37A
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0005h,		0E24370h, 0089h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x5
-	ldada_24 xwa, 14828400
-	ld (xbc + 10), xwa
-	ldw wa, 0x89
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0005h,		0E24A94h, 0389h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x5
-	ldada_24 xwa, 14830228
-	ld (xbc + 10), xwa
-	ldw wa, 0x389
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0001h,		0E24388h, 008ah
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1
-	ldada_24 xwa, 14828424
-	ld (xbc + 10), xwa
-	ldw wa, 0x8A
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0001h,		0E24ABEh, 038ah
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1
-	ldada_24 xwa, 14830270
-	ld (xbc + 10), xwa
-	ldw wa, 0x38A
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0016h,		0E24390h, 008bh
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x16
-	ldada_24 xwa, 14828432
-	ld (xbc + 10), xwa
-	ldw wa, 0x8B
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0016h,		0E24ACAh, 038bh
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x16
-	ldada_24 xwa, 14830282
-	ld (xbc + 10), xwa
-	ldw wa, 0x38B
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 001ch,		0E243ECh, 008ch
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1C
-	ldada_24 xwa, 14828524
-	ld (xbc + 10), xwa
-	ldw wa, 0x8C
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 001ch,		0E24B80h, 038ch
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1C
-	ldada_24 xwa, 14830464
-	ld (xbc + 10), xwa
-	ldw wa, 0x38C
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0005h,		0E24460h, 008eh
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x5
-	ldada_24 xwa, 14828640
-	ld (xbc + 10), xwa
-	ldw wa, 0x8E
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0005h,		0E24C70h, 038eh
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x5
-	ldada_24 xwa, 14830704
-	ld (xbc + 10), xwa
-	ldw wa, 0x38E
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0006h,		0E24478h, 008fh
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x6
-	ldada_24 xwa, 14828664
-	ld (xbc + 10), xwa
-	ldw wa, 0x8F
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0006h,		0E24C9Ch, 038fh
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x6
-	ldada_24 xwa, 14830748
-	ld (xbc + 10), xwa
-	ldw wa, 0x38F
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0004h,		0E24494h, 0092h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x4
-	ldada_24 xwa, 14828692
-	ld (xbc + 10), xwa
-	ldw wa, 0x92
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0004h,		0E24CCEh, 0392h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x4
-	ldada_24 xwa, 14830798
-	ld (xbc + 10), xwa
-	ldw wa, 0x392
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0000h,		0E244A8h, 00a7h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x0
-	ldada_24 xwa, 14828712
-	ld (xbc + 10), xwa
-	ldw wa, 0xA7
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0000h,		0E24CF8h, 03a7h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x0
-	ldada_24 xwa, 14830840
-	ld (xbc + 10), xwa
-	ldw wa, 0x3A7
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0006h,		0E244ACh, 00a9h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x6
-	ldada_24 xwa, 14828716
-	ld (xbc + 10), xwa
-	ldw wa, 0xA9
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0006h,		0E24CFEh, 03a9h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x6
-	ldada_24 xwa, 14830846
-	ld (xbc + 10), xwa
-	ldw wa, 0x3A9
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0004h,		0E244C8h, 00e0h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x4
-	ldada_24 xwa, 14828744
-	ld (xbc + 10), xwa
-	ldw wa, 0xE0
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0004h,		0E24D32h, 03e0h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x4
-	ldada_24 xwa, 14830898
-	ld (xbc + 10), xwa
-	ldw wa, 0x3E0
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 000ch,		0E244DCh, 00e1h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0xC
-	ldada_24 xwa, 14828764
-	ld (xbc + 10), xwa
-	ldw wa, 0xE1
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 000ch,		0E24D58h, 03e1h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0xC
-	ldada_24 xwa, 14830936
-	ld (xbc + 10), xwa
-	ldw wa, 0x3E1
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 000ch,		0E24510h, 00e2h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0xC
-	ldada_24 xwa, 14828816
-	ld (xbc + 10), xwa
-	ldw wa, 0xE2
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 000ch,		0E24DE6h, 03e2h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0xC
-	ldada_24 xwa, 14831078
-	ld (xbc + 10), xwa
-	ldw wa, 0x3E2
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 000ch,		0E24544h, 00e3h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0xC
-	ldada_24 xwa, 14828868
-	ld (xbc + 10), xwa
-	ldw wa, 0xE3
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 000ch,		0E24E78h, 03e3h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0xC
-	ldada_24 xwa, 14831224
-	ld (xbc + 10), xwa
-	ldw wa, 0x3E3
-	call 0xFA42FB
+	RegObjTable 0x1600004, 0xFA44E2, 0xE20CAE, 0xE208EC, 0x167
+	RegObjTable 0x160000c, 0xFA58FB, 0xE20E22, 0xE20CB0, 0x1c7
+	RegObjTable 0x160000d, 0xFA5948, 0xE2106A, 0xE20E24, 0x1e7
+	RegObjTabl 0x1600002, 0xFA496C, 0x2e, 0xE20260, 0x127
+	RegObjTabl 0x1600002, 0xFA496C, 0x2e, 0xE2031C, 0x427
+	RegObjTabl 0x1600001, 0xFA48A9, 0x1, 0xE2106C, 0x107
+	RegObjTabl 0x1600001, 0xFA48A9, 0x1, 0xE21074, 0x407
+	RegObjTabl 0x1600003, 0xFA4A18, 0x1f, 0xE25042, 0x147
+	RegObjTabl 0x1600003, 0xFA4A18, 0x1f, 0xE250C2, 0x447
+	RegObjTabl 0x1600010, 0xFA5995, 0x2b, 0xE240AC, 0x6f
+	RegObjTabl 0x160000f, 0xFA62CB, 0x2b, 0xE24578, 0x36f
+	RegObjTabl 0x1600010, 0xFA5995, 0xc, 0xE2415C, 0x70
+	RegObjTabl 0x160000f, 0xFA62CB, 0xc, 0xE246C8, 0x370
+	RegObjTabl 0x1600010, 0xFA5995, 0xb, 0xE24190, 0x71
+	RegObjTabl 0x160000f, 0xFA62CB, 0xb, 0xE2472E, 0x371
+	RegObjTabl 0x1600010, 0xFA5995, 0x7, 0xE241C0, 0x72
+	RegObjTabl 0x160000f, 0xFA62CB, 0x7, 0xE24788, 0x372
+	RegObjTabl 0x1600010, 0xFA5995, 0x10, 0xE241E0, 0x73
+	RegObjTabl 0x160000f, 0xFA62CB, 0x10, 0xE247CA, 0x373
+	RegObjTabl 0x1600010, 0xFA5995, 0xf, 0xE24224, 0x74
+	RegObjTabl 0x160000f, 0xFA62CB, 0xf, 0xE24844, 0x374
+	RegObjTabl 0x1600010, 0xFA5995, 0xd, 0xE24264, 0x75
+	RegObjTabl 0x160000f, 0xFA62CB, 0xd, 0xE248CC, 0x375
+	RegObjTabl 0x1600010, 0xFA5995, 0x8, 0xE2429C, 0x76
+	RegObjTabl 0x160000f, 0xFA62CB, 0x8, 0xE2493A, 0x376
+	RegObjTabl 0x1600010, 0xFA5995, 0x1e, 0xE242C0, 0x78
+	RegObjTabl 0x160000f, 0xFA62CB, 0x1e, 0xE2497C, 0x378
+	RegObjTabl 0x1600010, 0xFA5995, 0xc, 0xE2433C, 0x7a
+	RegObjTabl 0x160000f, 0xFA62CB, 0xc, 0xE24A3E, 0x37a
+	RegObjTabl 0x1600010, 0xFA5995, 0x5, 0xE24370, 0x89
+	RegObjTabl 0x160000f, 0xFA62CB, 0x5, 0xE24A94, 0x389
+	RegObjTabl 0x1600010, 0xFA5995, 0x1, 0xE24388, 0x8a
+	RegObjTabl 0x160000f, 0xFA62CB, 0x1, 0xE24ABE, 0x38a
+	RegObjTabl 0x1600010, 0xFA5995, 0x16, 0xE24390, 0x8b
+	RegObjTabl 0x160000f, 0xFA62CB, 0x16, 0xE24ACA, 0x38b
+	RegObjTabl 0x1600010, 0xFA5995, 0x1c, 0xE243EC, 0x8c
+	RegObjTabl 0x160000f, 0xFA62CB, 0x1c, 0xE24B80, 0x38c
+	RegObjTabl 0x1600010, 0xFA5995, 0x5, 0xE24460, 0x8e
+	RegObjTabl 0x160000f, 0xFA62CB, 0x5, 0xE24C70, 0x38e
+	RegObjTabl 0x1600010, 0xFA5995, 0x6, 0xE24478, 0x8f
+	RegObjTabl 0x160000f, 0xFA62CB, 0x6, 0xE24C9C, 0x38f
+	RegObjTabl 0x1600010, 0xFA5995, 0x4, 0xE24494, 0x92
+	RegObjTabl 0x160000f, 0xFA62CB, 0x4, 0xE24CCE, 0x392
+	RegObjTabl 0x1600010, 0xFA5995, 0x0, 0xE244A8, 0xa7
+	RegObjTabl 0x160000f, 0xFA62CB, 0x0, 0xE24CF8, 0x3a7
+	RegObjTabl 0x1600010, 0xFA5995, 0x6, 0xE244AC, 0xa9
+	RegObjTabl 0x160000f, 0xFA62CB, 0x6, 0xE24CFE, 0x3a9
+	RegObjTabl 0x1600010, 0xFA5995, 0x4, 0xE244C8, 0xe0
+	RegObjTabl 0x160000f, 0xFA62CB, 0x4, 0xE24D32, 0x3e0
+	RegObjTabl 0x1600010, 0xFA5995, 0xc, 0xE244DC, 0xe1
+	RegObjTabl 0x160000f, 0xFA62CB, 0xc, 0xE24D58, 0x3e1
+	RegObjTabl 0x1600010, 0xFA5995, 0xc, 0xE24510, 0xe2
+	RegObjTabl 0x160000f, 0xFA62CB, 0xc, 0xE24DE6, 0x3e2
+	RegObjTabl 0x1600010, 0xFA5995, 0xc, 0xE24544, 0xe3
+	RegObjTabl 0x160000f, 0xFA62CB, 0xc, 0xE24E78, 0x3e3
 
-	; RegMode 0007h, 00e2h, 4f10h, 0000000dh, 01470014h, 01a00089h
-	pushw 0x7
-	pushw 0xE2
-	pushw 0x4F10
-	ld xwa, 0xD
-	ld xbc, 0x1470014
-	ld xde, 0x1A00089
-	call 0xFA4D2B
-	; RegMode 0007h, 00e2h, 4f1ch, 00000013h, 01470017h, 01a000e0h
-	pushw 0x7
-	pushw 0xE2
-	pushw 0x4F1C
-	ld xwa, 0x13
-	ld xbc, 0x1470017
-	ld xde, 0x1A000E0
-	call 0xFA4D2B
+	RegMode 0x7, 0xe2, 0x4f10, 0xd, 0x1470014, 0x1a00089
+	RegMode 0x7, 0xe2, 0x4f1c, 0x13, 0x1470017, 0x1a000e0
 
-	; RegTitle 0007h, 00e2h, 4f24h, 0000006fh, 01470012h, 006f0000h
-	pushw 0x7
-	pushw 0xE2
-	pushw 0x4F24
-	ld xwa, 0x6F
-	ld xbc, 0x1470012
-	ld xde, 0x6F0000
-	call 0xFA4D80
-	; RegTitle 0007h, 00e2h, 4f2eh, 00000070h, 01470010h, 00700000h
-	pushw 0x7
-	pushw 0xE2
-	pushw 0x4F2E
-	ld xwa, 0x70
-	ld xbc, 0x1470010
-	ld xde, 0x700000
-	call 0xFA4D80
-	; RegTitle 0007h, 00e2h, 4f38h, 00000071h, 01470011h, 00710000h
-	pushw 0x7
-	pushw 0xE2
-	pushw 0x4F38
-	ld xwa, 0x71
-	ld xbc, 0x1470011
-	ld xde, 0x710000
-	call 0xFA4D80
-	; RegTitle 0007h, 00e2h, 4f40h, 00000072h, 01470013h, 00720000h
-	pushw 0x7
-	pushw 0xE2
-	pushw 0x4F40
-	ld xwa, 0x72
-	ld xbc, 0x1470013
-	ld xde, 0x720000
-	call 0xFA4D80
-	; RegTitle 0007h, 00e2h, 4f4ch, 00000073h, 0147000eh, 00730000h
-	pushw 0x7
-	pushw 0xE2
-	pushw 0x4F4C
-	ld xwa, 0x73
-	ld xbc, 0x147000E
-	ld xde, 0x730000
-	call 0xFA4D80
-	; RegTitle 0007h, 00e2h, 4f5ah, 00000074h, 0147000ch, 00740001h
-	pushw 0x7
-	pushw 0xE2
-	pushw 0x4F5A
-	ld xwa, 0x74
-	ld xbc, 0x147000C
-	ld xde, 0x740001
-	call 0xFA4D80
-	; RegTitle 0007h, 00e2h, 4f68h, 00000075h, 0147000dh, 00750000h
-	pushw 0x7
-	pushw 0xE2
-	pushw 0x4F68
-	ld xwa, 0x75
-	ld xbc, 0x147000D
-	ld xde, 0x750000
-	call 0xFA4D80
-	; RegTitle 0007h, 00e2h, 4f74h, 00000076h, 0147000fh, 00760000h
-	pushw 0x7
-	pushw 0xE2
-	pushw 0x4F74
-	ld xwa, 0x76
-	ld xbc, 0x147000F
-	ld xde, 0x760000
-	call 0xFA4D80
-	; RegTitle 0007h, 00e2h, 4f84h, 00000078h, 0147000bh, 00780000h
-	pushw 0x7
-	pushw 0xE2
-	pushw 0x4F84
-	ld xwa, 0x78
-	ld xbc, 0x147000B
-	ld xde, 0x780000
-	call 0xFA4D80
-	; RegTitle 0007h, 00e2h, 4f92h, 0000007ah, 0147000ah, 007a0000h
-	pushw 0x7
-	pushw 0xE2
-	pushw 0x4F92
-	ld xwa, 0x7A
-	ld xbc, 0x147000A
-	ld xde, 0x7A0000
-	call 0xFA4D80
-	; RegTitle 0007h, 00e2h, 4fa0h, 00000089h, 01470015h, 00890000h
-	pushw 0x7
-	pushw 0xE2
-	pushw 0x4FA0
-	ld xwa, 0x89
-	ld xbc, 0x1470015
-	ld xde, 0x890000
-	call 0xFA4D80
-	; RegTitle 0007h, 00e2h, 4fach, 0000008ah, 01470016h, 008a0000h
-	pushw 0x7
-	pushw 0xE2
-	pushw 0x4FAC
-	ld xwa, 0x8A
-	ld xbc, 0x1470016
-	ld xde, 0x8A0000
-	call 0xFA4D80
-	; RegTitle 0007h, 00e2h, 4fb6h, 0000008bh, 01470006h, 008b0000h
-	pushw 0x7
-	pushw 0xE2
-	pushw 0x4FB6
-	ld xwa, 0x8B
-	ld xbc, 0x1470006
-	ld xde, 0x8B0000
-	call 0xFA4D80
-	; RegTitle 0007h, 00e2h, 4fc0h, 0000008ch, 01470008h, 008c0000h
-	pushw 0x7
-	pushw 0xE2
-	pushw 0x4FC0
-	ld xwa, 0x8C
-	ld xbc, 0x1470008
-	ld xde, 0x8C0000
-	call 0xFA4D80
-	; RegTitle 0007h, 00e2h, 4fcch, 0000008eh, 01470004h, 008e0000h
-	pushw 0x7
-	pushw 0xE2
-	pushw 0x4FCC
-	ld xwa, 0x8E
-	ld xbc, 0x1470004
-	ld xde, 0x8E0000
-	call 0xFA4D80
-	; RegTitle 0007h, 00e2h, 4fd8h, 0000008fh, 01470005h, 008f0000h
-	pushw 0x7
-	pushw 0xE2
-	pushw 0x4FD8
-	ld xwa, 0x8F
-	ld xbc, 0x1470005
-	ld xde, 0x8F0000
-	call 0xFA4D80
-	; RegTitle 0007h, 00e2h, 4fe6h, 00000092h, 01470003h, 00920000h
-	pushw 0x7
-	pushw 0xE2
-	pushw 0x4FE6
-	ld xwa, 0x92
-	ld xbc, 0x1470003
-	ld xde, 0x920000
-	call 0xFA4D80
-	; RegTitle 0007h, 00e2h, 4ff2h, 000000a7h, 01470005h, 008f0000h
-	pushw 0x7
-	pushw 0xE2
-	pushw 0x4FF2
-	ld xwa, 0xA7
-	ld xbc, 0x1470005
-	ld xde, 0x8F0000
-	call 0xFA4D80
-	; RegTitle 0007h, 00e2h, 5000h, 000000a9h, 01200000h, 00a90000h
-	pushw 0x7
-	pushw 0xE2
-	pushw 0x5000
-	ld xwa, 0xA9
-	ld xbc, 0x1200000
-	ld xde, 0xA90000
-	call 0xFA4D80
-	; RegTitle 0007h, 00e2h, 500eh, 000000e0h, 01470018h, 00e00000h
-	pushw 0x7
-	pushw 0xE2
-	pushw 0x500E
-	ld xwa, 0xE0
-	ld xbc, 0x1470018
-	ld xde, 0xE00000
-	call 0xFA4D80
-	; RegTitle 0007h, 00e2h, 501ah, 000000e1h, 01470019h, 00e10000h
-	pushw 0x7
-	pushw 0xE2
-	pushw 0x501A
-	ld xwa, 0xE1
-	ld xbc, 0x1470019
-	ld xde, 0xE10000
-	call 0xFA4D80
-	; RegTitle 0007h, 00e2h, 5028h, 000000e2h, 0147001ah, 00e20000h
-	pushw 0x7
-	pushw 0xE2
-	pushw 0x5028
-	ld xwa, 0xE2
-	ld xbc, 0x147001A
-	ld xde, 0xE20000
-	call 0xFA4D80
-	; RegTitle 0007h, 00e2h, 5036h, 000000e3h, 0147001bh, 00e30000h
-	pushw 0x7
-	pushw 0xE2
-	pushw 0x5036
-	ld xwa, 0xE3
-	ld xbc, 0x147001B
-	ld xde, 0xE30000
-	call 0xFA4D80
+	RegTitle 0x7, 0xe2, 0x4f24, 0x6f, 0x1470012, 0x6f0000
+	RegTitle 0x7, 0xe2, 0x4f2e, 0x70, 0x1470010, 0x700000
+	RegTitle 0x7, 0xe2, 0x4f38, 0x71, 0x1470011, 0x710000
+	RegTitle 0x7, 0xe2, 0x4f40, 0x72, 0x1470013, 0x720000
+	RegTitle 0x7, 0xe2, 0x4f4c, 0x73, 0x147000e, 0x730000
+	RegTitle 0x7, 0xe2, 0x4f5a, 0x74, 0x147000c, 0x740001
+	RegTitle 0x7, 0xe2, 0x4f68, 0x75, 0x147000d, 0x750000
+	RegTitle 0x7, 0xe2, 0x4f74, 0x76, 0x147000f, 0x760000
+	RegTitle 0x7, 0xe2, 0x4f84, 0x78, 0x147000b, 0x780000
+	RegTitle 0x7, 0xe2, 0x4f92, 0x7a, 0x147000a, 0x7a0000
+	RegTitle 0x7, 0xe2, 0x4fa0, 0x89, 0x1470015, 0x890000
+	RegTitle 0x7, 0xe2, 0x4fac, 0x8a, 0x1470016, 0x8a0000
+	RegTitle 0x7, 0xe2, 0x4fb6, 0x8b, 0x1470006, 0x8b0000
+	RegTitle 0x7, 0xe2, 0x4fc0, 0x8c, 0x1470008, 0x8c0000
+	RegTitle 0x7, 0xe2, 0x4fcc, 0x8e, 0x1470004, 0x8e0000
+	RegTitle 0x7, 0xe2, 0x4fd8, 0x8f, 0x1470005, 0x8f0000
+	RegTitle 0x7, 0xe2, 0x4fe6, 0x92, 0x1470003, 0x920000
+	RegTitle 0x7, 0xe2, 0x4ff2, 0xa7, 0x1470005, 0x8f0000
+	RegTitle 0x7, 0xe2, 0x5000, 0xa9, 0x1200000, 0xa90000
+	RegTitle 0x7, 0xe2, 0x500e, 0xe0, 0x1470018, 0xe00000
+	RegTitle 0x7, 0xe2, 0x501a, 0xe1, 0x1470019, 0xe10000
+	RegTitle 0x7, 0xe2, 0x5028, 0xe2, 0x147001a, 0xe20000
+	RegTitle 0x7, 0xe2, 0x5036, 0xe3, 0x147001b, 0xe30000
 
 	lda xsp, (xsp + 14)
 	ret
@@ -180056,1336 +176612,141 @@ LABEL_F2D2C0:
 InitializeKubo:	; F2D2C4
 	lda xsp, (xsp - 14)
 
-	; RegObjTable 01600004h, 0FA44E2h, 0E27596h,	0E27180h, 0168h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600004
-	ld (xbc), xwa
-	ldada_24 xwa, 16401634
-	ld (xbc + 4), xwa
-	ldda16_24 xwa, 14841238
-	ld (xbc + 8), wa
-	ldada_24 xwa, 14840192
-	ld (xbc + 10), xwa
-	ldw wa, 0x168
-	call 0xFA42FB
-	; RegObjTable 0160000ch, 0FA58FBh, 0E275F8h,	0E27598h, 01c8h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000C
-	ld (xbc), xwa
-	ldada_24 xwa, 16406779
-	ld (xbc + 4), xwa
-	ldda16_24 xwa, 14841336
-	ld (xbc + 8), wa
-	ldada_24 xwa, 14841240
-	ld (xbc + 10), xwa
-	ldw wa, 0x1C8
-	call 0xFA42FB
-	; RegObjTable 0160000dh, 0FA5948h, LABEL_E27FA2,	0E275FAh, 01e8h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000D
-	ld (xbc), xwa
-	ldada_24 xwa, 16406856
-	ld (xbc + 4), xwa
-	ldda16_24 xwa, 14843810
-	ld (xbc + 8), wa
-	ldada_24 xwa, 14841338
-	ld (xbc + 10), xwa
-	ldw wa, 0x1E8
-	call 0xFA42FB
-	; RegObjTabl 01600002h, 0FA496Ch, 0049h,		0E26804h, 0128h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600002
-	ld (xbc), xwa
-	ldada_24 xwa, 16402796
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x49
-	ldada_24 xwa, 14837764
-	ld (xbc + 10), xwa
-	ldw wa, 0x128
-	call 0xFA42FB
-	; RegObjTabl 01600002h, 0FA496Ch, 0049h,		0E2692Ch, 0428h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600002
-	ld (xbc), xwa
-	ldada_24 xwa, 16402796
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x49
-	ldada_24 xwa, 14838060
-	ld (xbc + 10), xwa
-	ldw wa, 0x428
-	call 0xFA42FB
-	; RegObjTabl 01600001h, 0FA48A9h, 0000h,		003DF10h, 0108h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600001
-	ld (xbc), xwa
-	ldada_24 xwa, 16402601
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x0
-	ldada_24 xwa, 253712
-	ld (xbc + 10), xwa
-	ldw wa, 0x108
-	call 0xFA42FB
-	; RegObjTabl 01600001h, 0FA48A9h, 0000h,		003DF14h, 0408h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600001
-	ld (xbc), xwa
-	ldada_24 xwa, 16402601
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x0
-	ldada_24 xwa, 253716
-	ld (xbc + 10), xwa
-	ldw wa, 0x408
-	call 0xFA42FB
-	; RegObjTabl 01600003h, 0FA4A18h, 002ch,		0E3051Ch, 0148h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600003
-	ld (xbc), xwa
-	ldada_24 xwa, 16402968
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x2C
-	ldada_24 xwa, 14877980
-	ld (xbc + 10), xwa
-	ldw wa, 0x148
-	call 0xFA42FB
-	; RegObjTabl 01600003h, 0FA4A18h, 002ch,		0E305D0h, 0448h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600003
-	ld (xbc), xwa
-	ldada_24 xwa, 16402968
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x2C
-	ldada_24 xwa, 14878160
-	ld (xbc + 10), xwa
-	ldw wa, 0x448
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 000ch,		LABEL_E2E624, 000ah
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0xC
-	ldada_24 xwa, 14870052
-	ld (xbc + 10), xwa
-	ldw wa, 0xA
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 000ch,		0E2F0ACh, 030ah
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0xC
-	ldada_24 xwa, 14872748
-	ld (xbc + 10), xwa
-	ldw wa, 0x30A
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 000ch,		0E2E658h, 000bh
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0xC
-	ldada_24 xwa, 14870104
-	ld (xbc + 10), xwa
-	ldw wa, 0xB
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 000ch,		0E2F0FAh, 030bh
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0xC
-	ldada_24 xwa, 14872826
-	ld (xbc + 10), xwa
-	ldw wa, 0x30B
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0025h,		0E2E68Ch, 000ch
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x25
-	ldada_24 xwa, 14870156
-	ld (xbc + 10), xwa
-	ldw wa, 0xC
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0025h,		0E2F148h, 030ch
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x25
-	ldada_24 xwa, 14872904
-	ld (xbc + 10), xwa
-	ldw wa, 0x30C
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 000ch,		0E2E724h, 000eh
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0xC
-	ldada_24 xwa, 14870308
-	ld (xbc + 10), xwa
-	ldw wa, 0xE
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 000ch,		0E2F232h, 030eh
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0xC
-	ldada_24 xwa, 14873138
-	ld (xbc + 10), xwa
-	ldw wa, 0x30E
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 000ch,		0E2E758h, 0080h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0xC
-	ldada_24 xwa, 14870360
-	ld (xbc + 10), xwa
-	ldw wa, 0x80
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 000ch,		0E2F280h, 0380h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0xC
-	ldada_24 xwa, 14873216
-	ld (xbc + 10), xwa
-	ldw wa, 0x380
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 001ch,		0E2E78Ch, 0081h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1C
-	ldada_24 xwa, 14870412
-	ld (xbc + 10), xwa
-	ldw wa, 0x81
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 001ch,		0E2F2CEh, 0381h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1C
-	ldada_24 xwa, 14873294
-	ld (xbc + 10), xwa
-	ldw wa, 0x381
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0008h,		0E2E800h, 0082h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x8
-	ldada_24 xwa, 14870528
-	ld (xbc + 10), xwa
-	ldw wa, 0x82
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0008h,		0E2F3AAh, 0382h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x8
-	ldada_24 xwa, 14873514
-	ld (xbc + 10), xwa
-	ldw wa, 0x382
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0010h,		0E2E824h, 0083h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x10
-	ldada_24 xwa, 14870564
-	ld (xbc + 10), xwa
-	ldw wa, 0x83
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0010h,		0E2F3E0h, 0383h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x10
-	ldada_24 xwa, 14873568
-	ld (xbc + 10), xwa
-	ldw wa, 0x383
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 000ah,		0E2E868h, 0084h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0xA
-	ldada_24 xwa, 14870632
-	ld (xbc + 10), xwa
-	ldw wa, 0x84
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 000ah,		0E2F446h, 0384h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0xA
-	ldada_24 xwa, 14873670
-	ld (xbc + 10), xwa
-	ldw wa, 0x384
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0019h,		0E2E894h, 0085h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x19
-	ldada_24 xwa, 14870676
-	ld (xbc + 10), xwa
-	ldw wa, 0x85
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0019h,		0E2F488h, 0385h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x19
-	ldada_24 xwa, 14873736
-	ld (xbc + 10), xwa
-	ldw wa, 0x385
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 000bh,		0E2E8FCh, 0086h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0xB
-	ldada_24 xwa, 14870780
-	ld (xbc + 10), xwa
-	ldw wa, 0x86
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 000bh,		0E2F560h, 0386h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0xB
-	ldada_24 xwa, 14873952
-	ld (xbc + 10), xwa
-	ldw wa, 0x386
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0018h,		0E2E92Ch, 0087h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x18
-	ldada_24 xwa, 14870828
-	ld (xbc + 10), xwa
-	ldw wa, 0x87
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0018h,		0E2F5B2h, 0387h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x18
-	ldada_24 xwa, 14874034
-	ld (xbc + 10), xwa
-	ldw wa, 0x387
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 000ch,		0E2E990h, 0088h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0xC
-	ldada_24 xwa, 14870928
-	ld (xbc + 10), xwa
-	ldw wa, 0x88
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 000ch,		0E2F66Ah, 0388h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0xC
-	ldada_24 xwa, 14874218
-	ld (xbc + 10), xwa
-	ldw wa, 0x388
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0004h,		0E2E9C4h, 008dh
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x4
-	ldada_24 xwa, 14870980
-	ld (xbc + 10), xwa
-	ldw wa, 0x8D
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0004h,		0E2F6C2h, 038dh
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x4
-	ldada_24 xwa, 14874306
-	ld (xbc + 10), xwa
-	ldw wa, 0x38D
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0011h,		0E2E9D8h, 0090h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x11
-	ldada_24 xwa, 14871000
-	ld (xbc + 10), xwa
-	ldw wa, 0x90
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0011h,		0E2F6E0h, 0390h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x11
-	ldada_24 xwa, 14874336
-	ld (xbc + 10), xwa
-	ldw wa, 0x390
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0013h,		0E2EA20h, 0091h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x13
-	ldada_24 xwa, 14871072
-	ld (xbc + 10), xwa
-	ldw wa, 0x91
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0013h,		0E2F758h, 0391h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x13
-	ldada_24 xwa, 14874456
-	ld (xbc + 10), xwa
-	ldw wa, 0x391
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 001ah,		0E2EA70h, 0093h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1A
-	ldada_24 xwa, 14871152
-	ld (xbc + 10), xwa
-	ldw wa, 0x93
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 001ah,		0E2F7DCh, 0393h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1A
-	ldada_24 xwa, 14874588
-	ld (xbc + 10), xwa
-	ldw wa, 0x393
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0004h,		0E2EADCh, 0094h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x4
-	ldada_24 xwa, 14871260
-	ld (xbc + 10), xwa
-	ldw wa, 0x94
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0004h,		0E2F898h, 0394h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x4
-	ldada_24 xwa, 14874776
-	ld (xbc + 10), xwa
-	ldw wa, 0x394
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 001bh,		0E2EAF0h, 0095h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1B
-	ldada_24 xwa, 14871280
-	ld (xbc + 10), xwa
-	ldw wa, 0x95
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 001bh,		0E2F8B6h, 0395h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1B
-	ldada_24 xwa, 14874806
-	ld (xbc + 10), xwa
-	ldw wa, 0x395
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0008h,		0E2EB60h, 0096h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x8
-	ldada_24 xwa, 14871392
-	ld (xbc + 10), xwa
-	ldw wa, 0x96
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0008h,		0E2F966h, 0396h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x8
-	ldada_24 xwa, 14874982
-	ld (xbc + 10), xwa
-	ldw wa, 0x396
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0004h,		0E2EB84h, 0097h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x4
-	ldada_24 xwa, 14871428
-	ld (xbc + 10), xwa
-	ldw wa, 0x97
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0004h,		0E2F99Ch, 0397h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x4
-	ldada_24 xwa, 14875036
-	ld (xbc + 10), xwa
-	ldw wa, 0x397
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 001ah,		0E2EB98h, 0098h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1A
-	ldada_24 xwa, 14871448
-	ld (xbc + 10), xwa
-	ldw wa, 0x98
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 001ah,		0E2F9BAh, 0398h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1A
-	ldada_24 xwa, 14875066
-	ld (xbc + 10), xwa
-	ldw wa, 0x398
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0008h,		0E2EC04h, 0099h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x8
-	ldada_24 xwa, 14871556
-	ld (xbc + 10), xwa
-	ldw wa, 0x99
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0008h,		0E2FA64h, 0399h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x8
-	ldada_24 xwa, 14875236
-	ld (xbc + 10), xwa
-	ldw wa, 0x399
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 000eh,		0E2EC28h, 009ah
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0xE
-	ldada_24 xwa, 14871592
-	ld (xbc + 10), xwa
-	ldw wa, 0x9A
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 000eh,		0E2FA9Ah, 039ah
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0xE
-	ldada_24 xwa, 14875290
-	ld (xbc + 10), xwa
-	ldw wa, 0x39A
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0016h,		0E2EC64h, 009bh
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x16
-	ldada_24 xwa, 14871652
-	ld (xbc + 10), xwa
-	ldw wa, 0x9B
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0016h,		0E2FB02h, 039bh
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x16
-	ldada_24 xwa, 14875394
-	ld (xbc + 10), xwa
-	ldw wa, 0x39B
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0015h,		0E2ECC0h, 009ch
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x15
-	ldada_24 xwa, 14871744
-	ld (xbc + 10), xwa
-	ldw wa, 0x9C
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0015h,		0E2FB9Ah, 039ch
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x15
-	ldada_24 xwa, 14875546
-	ld (xbc + 10), xwa
-	ldw wa, 0x39C
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0010h,		0E2ED18h, 009dh
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x10
-	ldada_24 xwa, 14871832
-	ld (xbc + 10), xwa
-	ldw wa, 0x9D
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0010h,		0E2FC28h, 039dh
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x10
-	ldada_24 xwa, 14875688
-	ld (xbc + 10), xwa
-	ldw wa, 0x39D
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0010h,		0E2ED5Ch, 009eh
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x10
-	ldada_24 xwa, 14871900
-	ld (xbc + 10), xwa
-	ldw wa, 0x9E
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0010h,		0E2FC9Ah, 039eh
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x10
-	ldada_24 xwa, 14875802
-	ld (xbc + 10), xwa
-	ldw wa, 0x39E
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0019h,		0E2EDA0h, 009fh
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x19
-	ldada_24 xwa, 14871968
-	ld (xbc + 10), xwa
-	ldw wa, 0x9F
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0019h,		0E2FD0Ch, 039fh
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x19
-	ldada_24 xwa, 14875916
-	ld (xbc + 10), xwa
-	ldw wa, 0x39F
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0010h,		0E2EE08h, 00a0h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x10
-	ldada_24 xwa, 14872072
-	ld (xbc + 10), xwa
-	ldw wa, 0xA0
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0010h,		0E2FDB4h, 03a0h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x10
-	ldada_24 xwa, 14876084
-	ld (xbc + 10), xwa
-	ldw wa, 0x3A0
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0010h,		0E2EE4Ch, 00a1h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x10
-	ldada_24 xwa, 14872140
-	ld (xbc + 10), xwa
-	ldw wa, 0xA1
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0010h,		0E2FE24h, 03a1h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x10
-	ldada_24 xwa, 14876196
-	ld (xbc + 10), xwa
-	ldw wa, 0x3A1
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0011h,		0E2EE90h, 00a2h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x11
-	ldada_24 xwa, 14872208
-	ld (xbc + 10), xwa
-	ldw wa, 0xA2
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0011h,		0E2FE96h, 03a2h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x11
-	ldada_24 xwa, 14876310
-	ld (xbc + 10), xwa
-	ldw wa, 0x3A2
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 000fh,		0E2EED8h, 00a3h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0xF
-	ldada_24 xwa, 14872280
-	ld (xbc + 10), xwa
-	ldw wa, 0xA3
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 000fh,		0E2FF0Ch, 03a3h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0xF
-	ldada_24 xwa, 14876428
-	ld (xbc + 10), xwa
-	ldw wa, 0x3A3
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0011h,		0E2EF18h, 00a4h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x11
-	ldada_24 xwa, 14872344
-	ld (xbc + 10), xwa
-	ldw wa, 0xA4
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0011h,		0E2FF78h, 03a4h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x11
-	ldada_24 xwa, 14876536
-	ld (xbc + 10), xwa
-	ldw wa, 0x3A4
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0000h,		0E2EF60h, 00a8h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x0
-	ldada_24 xwa, 14872416
-	ld (xbc + 10), xwa
-	ldw wa, 0xA8
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0000h,		0E2FFF0h, 03a8h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x0
-	ldada_24 xwa, 14876656
-	ld (xbc + 10), xwa
-	ldw wa, 0x3A8
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0000h,		0E2EF64h, 00aah
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x0
-	ldada_24 xwa, 14872420
-	ld (xbc + 10), xwa
-	ldw wa, 0xAA
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0000h,		0E2FFF6h, 03aah
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x0
-	ldada_24 xwa, 14876662
-	ld (xbc + 10), xwa
-	ldw wa, 0x3AA
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0002h,		0E2EF68h, 00abh
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x2
-	ldada_24 xwa, 14872424
-	ld (xbc + 10), xwa
-	ldw wa, 0xAB
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0002h,		0E2FFFCh, 03abh
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x2
-	ldada_24 xwa, 14876668
-	ld (xbc + 10), xwa
-	ldw wa, 0x3AB
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 000fh,		0E2EF74h, 00d6h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0xF
-	ldada_24 xwa, 14872436
-	ld (xbc + 10), xwa
-	ldw wa, 0xD6
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 000fh,		0E3000Eh, 03d6h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0xF
-	ldada_24 xwa, 14876686
-	ld (xbc + 10), xwa
-	ldw wa, 0x3D6
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 003dh,		0E2EFB4h, 00e7h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x3D
-	ldada_24 xwa, 14872500
-	ld (xbc + 10), xwa
-	ldw wa, 0xE7
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 003dh,		0E3009Eh, 03e7h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x3D
-	ldada_24 xwa, 14876830
-	ld (xbc + 10), xwa
-	ldw wa, 0x3E7
-	call 0xFA42FB
+	RegObjTable 0x1600004, 0xFA44E2, 0xE27596, 0xE27180, 0x168
+	RegObjTable 0x160000c, 0xFA58FB, 0xE275F8, 0xE27598, 0x1c8
+	RegObjTable 0x160000d, 0xFA5948, 0xE27FA2, 0xE275FA, 0x1e8
+	RegObjTabl 0x1600002, 0xFA496C, 0x49, 0xE26804, 0x128
+	RegObjTabl 0x1600002, 0xFA496C, 0x49, 0xE2692C, 0x428
+	RegObjTabl 0x1600001, 0xFA48A9, 0x0, 0x3DF10, 0x108
+	RegObjTabl 0x1600001, 0xFA48A9, 0x0, 0x3DF14, 0x408
+	RegObjTabl 0x1600003, 0xFA4A18, 0x2c, 0xE3051C, 0x148
+	RegObjTabl 0x1600003, 0xFA4A18, 0x2c, 0xE305D0, 0x448
+	RegObjTabl 0x1600010, 0xFA5995, 0xc, 0xE2E624, 0xa
+	RegObjTabl 0x160000f, 0xFA62CB, 0xc, 0xE2F0AC, 0x30a
+	RegObjTabl 0x1600010, 0xFA5995, 0xc, 0xE2E658, 0xb
+	RegObjTabl 0x160000f, 0xFA62CB, 0xc, 0xE2F0FA, 0x30b
+	RegObjTabl 0x1600010, 0xFA5995, 0x25, 0xE2E68C, 0xc
+	RegObjTabl 0x160000f, 0xFA62CB, 0x25, 0xE2F148, 0x30c
+	RegObjTabl 0x1600010, 0xFA5995, 0xc, 0xE2E724, 0xe
+	RegObjTabl 0x160000f, 0xFA62CB, 0xc, 0xE2F232, 0x30e
+	RegObjTabl 0x1600010, 0xFA5995, 0xc, 0xE2E758, 0x80
+	RegObjTabl 0x160000f, 0xFA62CB, 0xc, 0xE2F280, 0x380
+	RegObjTabl 0x1600010, 0xFA5995, 0x1c, 0xE2E78C, 0x81
+	RegObjTabl 0x160000f, 0xFA62CB, 0x1c, 0xE2F2CE, 0x381
+	RegObjTabl 0x1600010, 0xFA5995, 0x8, 0xE2E800, 0x82
+	RegObjTabl 0x160000f, 0xFA62CB, 0x8, 0xE2F3AA, 0x382
+	RegObjTabl 0x1600010, 0xFA5995, 0x10, 0xE2E824, 0x83
+	RegObjTabl 0x160000f, 0xFA62CB, 0x10, 0xE2F3E0, 0x383
+	RegObjTabl 0x1600010, 0xFA5995, 0xa, 0xE2E868, 0x84
+	RegObjTabl 0x160000f, 0xFA62CB, 0xa, 0xE2F446, 0x384
+	RegObjTabl 0x1600010, 0xFA5995, 0x19, 0xE2E894, 0x85
+	RegObjTabl 0x160000f, 0xFA62CB, 0x19, 0xE2F488, 0x385
+	RegObjTabl 0x1600010, 0xFA5995, 0xb, 0xE2E8FC, 0x86
+	RegObjTabl 0x160000f, 0xFA62CB, 0xb, 0xE2F560, 0x386
+	RegObjTabl 0x1600010, 0xFA5995, 0x18, 0xE2E92C, 0x87
+	RegObjTabl 0x160000f, 0xFA62CB, 0x18, 0xE2F5B2, 0x387
+	RegObjTabl 0x1600010, 0xFA5995, 0xc, 0xE2E990, 0x88
+	RegObjTabl 0x160000f, 0xFA62CB, 0xc, 0xE2F66A, 0x388
+	RegObjTabl 0x1600010, 0xFA5995, 0x4, 0xE2E9C4, 0x8d
+	RegObjTabl 0x160000f, 0xFA62CB, 0x4, 0xE2F6C2, 0x38d
+	RegObjTabl 0x1600010, 0xFA5995, 0x11, 0xE2E9D8, 0x90
+	RegObjTabl 0x160000f, 0xFA62CB, 0x11, 0xE2F6E0, 0x390
+	RegObjTabl 0x1600010, 0xFA5995, 0x13, 0xE2EA20, 0x91
+	RegObjTabl 0x160000f, 0xFA62CB, 0x13, 0xE2F758, 0x391
+	RegObjTabl 0x1600010, 0xFA5995, 0x1a, 0xE2EA70, 0x93
+	RegObjTabl 0x160000f, 0xFA62CB, 0x1a, 0xE2F7DC, 0x393
+	RegObjTabl 0x1600010, 0xFA5995, 0x4, 0xE2EADC, 0x94
+	RegObjTabl 0x160000f, 0xFA62CB, 0x4, 0xE2F898, 0x394
+	RegObjTabl 0x1600010, 0xFA5995, 0x1b, 0xE2EAF0, 0x95
+	RegObjTabl 0x160000f, 0xFA62CB, 0x1b, 0xE2F8B6, 0x395
+	RegObjTabl 0x1600010, 0xFA5995, 0x8, 0xE2EB60, 0x96
+	RegObjTabl 0x160000f, 0xFA62CB, 0x8, 0xE2F966, 0x396
+	RegObjTabl 0x1600010, 0xFA5995, 0x4, 0xE2EB84, 0x97
+	RegObjTabl 0x160000f, 0xFA62CB, 0x4, 0xE2F99C, 0x397
+	RegObjTabl 0x1600010, 0xFA5995, 0x1a, 0xE2EB98, 0x98
+	RegObjTabl 0x160000f, 0xFA62CB, 0x1a, 0xE2F9BA, 0x398
+	RegObjTabl 0x1600010, 0xFA5995, 0x8, 0xE2EC04, 0x99
+	RegObjTabl 0x160000f, 0xFA62CB, 0x8, 0xE2FA64, 0x399
+	RegObjTabl 0x1600010, 0xFA5995, 0xe, 0xE2EC28, 0x9a
+	RegObjTabl 0x160000f, 0xFA62CB, 0xe, 0xE2FA9A, 0x39a
+	RegObjTabl 0x1600010, 0xFA5995, 0x16, 0xE2EC64, 0x9b
+	RegObjTabl 0x160000f, 0xFA62CB, 0x16, 0xE2FB02, 0x39b
+	RegObjTabl 0x1600010, 0xFA5995, 0x15, 0xE2ECC0, 0x9c
+	RegObjTabl 0x160000f, 0xFA62CB, 0x15, 0xE2FB9A, 0x39c
+	RegObjTabl 0x1600010, 0xFA5995, 0x10, 0xE2ED18, 0x9d
+	RegObjTabl 0x160000f, 0xFA62CB, 0x10, 0xE2FC28, 0x39d
+	RegObjTabl 0x1600010, 0xFA5995, 0x10, 0xE2ED5C, 0x9e
+	RegObjTabl 0x160000f, 0xFA62CB, 0x10, 0xE2FC9A, 0x39e
+	RegObjTabl 0x1600010, 0xFA5995, 0x19, 0xE2EDA0, 0x9f
+	RegObjTabl 0x160000f, 0xFA62CB, 0x19, 0xE2FD0C, 0x39f
+	RegObjTabl 0x1600010, 0xFA5995, 0x10, 0xE2EE08, 0xa0
+	RegObjTabl 0x160000f, 0xFA62CB, 0x10, 0xE2FDB4, 0x3a0
+	RegObjTabl 0x1600010, 0xFA5995, 0x10, 0xE2EE4C, 0xa1
+	RegObjTabl 0x160000f, 0xFA62CB, 0x10, 0xE2FE24, 0x3a1
+	RegObjTabl 0x1600010, 0xFA5995, 0x11, 0xE2EE90, 0xa2
+	RegObjTabl 0x160000f, 0xFA62CB, 0x11, 0xE2FE96, 0x3a2
+	RegObjTabl 0x1600010, 0xFA5995, 0xf, 0xE2EED8, 0xa3
+	RegObjTabl 0x160000f, 0xFA62CB, 0xf, 0xE2FF0C, 0x3a3
+	RegObjTabl 0x1600010, 0xFA5995, 0x11, 0xE2EF18, 0xa4
+	RegObjTabl 0x160000f, 0xFA62CB, 0x11, 0xE2FF78, 0x3a4
+	RegObjTabl 0x1600010, 0xFA5995, 0x0, 0xE2EF60, 0xa8
+	RegObjTabl 0x160000f, 0xFA62CB, 0x0, 0xE2FFF0, 0x3a8
+	RegObjTabl 0x1600010, 0xFA5995, 0x0, 0xE2EF64, 0xaa
+	RegObjTabl 0x160000f, 0xFA62CB, 0x0, 0xE2FFF6, 0x3aa
+	RegObjTabl 0x1600010, 0xFA5995, 0x2, 0xE2EF68, 0xab
+	RegObjTabl 0x160000f, 0xFA62CB, 0x2, 0xE2FFFC, 0x3ab
+	RegObjTabl 0x1600010, 0xFA5995, 0xf, 0xE2EF74, 0xd6
+	RegObjTabl 0x160000f, 0xFA62CB, 0xf, 0xE3000E, 0x3d6
+	RegObjTabl 0x1600010, 0xFA5995, 0x3d, 0xE2EFB4, 0xe7
+	RegObjTabl 0x160000f, 0xFA62CB, 0x3d, 0xE3009E, 0x3e7
 
-	; RegMode 0008h, 00e3h, 02f8h, 00000007h, 01200000h, 01a000d6h
-	pushw 0x8
-	pushw 0xE3
-	pushw 0x2F8
-	lds32 xwa, 7
-	ld xbc, 0x1200000
-	ld xde, 0x1A000D6
-	call 0xFA4D2B
-	; RegMode 0008h, 00e3h, 0308h, 00000008h, 01480004h, 01a00080h
-	pushw 0x8
-	pushw 0xE3
-	pushw 0x308
-	ld xwa, 0x8
-	ld xbc, 0x1480004
-	ld xde, 0x1A00080
-	call 0xFA4D2B
-	; RegMode 0008h, 00e3h, 0310h, 00000009h, 01480007h, 01a00083h
-	pushw 0x8
-	pushw 0xE3
-	pushw 0x310
-	ld xwa, 0x9
-	ld xbc, 0x1480007
-	ld xde, 0x1A00083
-	call 0xFA4D2B
-	; RegMode 0008h, 00e3h, 031ch, 0000000ah, 01480006h, 01a00081h
-	pushw 0x8
-	pushw 0xE3
-	pushw 0x31C
-	ld xwa, 0xA
-	ld xbc, 0x1480006
-	ld xde, 0x1A00081
-	call 0xFA4D2B
-	; RegMode 0008h, 00e3h, 0328h, 0000000bh, 01480005h, 01a00085h
-	pushw 0x8
-	pushw 0xE3
-	pushw 0x328
-	ld xwa, 0xB
-	ld xbc, 0x1480005
-	ld xde, 0x1A00085
-	call 0xFA4D2B
-	; RegMode 0008h, 00e3h, 0334h, 0000000ch, 01480008h, 01a00093h
-	pushw 0x8
-	pushw 0xE3
-	pushw 0x334
-	ld xwa, 0xC
-	ld xbc, 0x1480008
-	ld xde, 0x1A00093
-	call 0xFA4D2B
-	; RegMode 0008h, 00e3h, 0340h, 00000014h, 01480026h, 01a000e7h
-	pushw 0x8
-	pushw 0xE3
-	pushw 0x340
-	ld xwa, 0x14
-	ld xbc, 0x1480026
-	ld xde, 0x1A000E7
-	call 0xFA4D2B
+	RegMode 0x8, 0xe3, 0x2f8, 0x7, 0x1200000, 0x1a000d6
+	RegMode 0x8, 0xe3, 0x308, 0x8, 0x1480004, 0x1a00080
+	RegMode 0x8, 0xe3, 0x310, 0x9, 0x1480007, 0x1a00083
+	RegMode 0x8, 0xe3, 0x31c, 0xa, 0x1480006, 0x1a00081
+	RegMode 0x8, 0xe3, 0x328, 0xb, 0x1480005, 0x1a00085
+	RegMode 0x8, 0xe3, 0x334, 0xc, 0x1480008, 0x1a00093
+	RegMode 0x8, 0xe3, 0x340, 0x14, 0x1480026, 0x1a000e7
 
-	; RegTitle 0008h, 00e3h, 0348h, 0000000ah, 01480020h, 000a0000h
-	pushw 0x8
-	pushw 0xE3
-	pushw 0x348
-	ld xwa, 0xA
-	ld xbc, 0x1480020
-	ld xde, 0xA0000
-	call 0xFA4D80
-	; RegTitle 0008h, 00e3h, 0354h, 0000000bh, 01480021h, 000b0000h
-	pushw 0x8
-	pushw 0xE3
-	pushw 0x354
-	ld xwa, 0xB
-	ld xbc, 0x1480021
-	ld xde, 0xB0000
-	call 0xFA4D80
-	; RegTitle 0008h, 00e3h, 0360h, 0000000ch, 01200000h, 000c0000h
-	pushw 0x8
-	pushw 0xE3
-	pushw 0x360
-	ld xwa, 0xC
-	ld xbc, 0x1200000
-	ld xde, 0xC0000
-	call 0xFA4D80
-	; RegTitle 0008h, 00e3h, 0370h, 0000000eh, 01480022h, 000e0000h
-	pushw 0x8
-	pushw 0xE3
-	pushw 0x370
-	ld xwa, 0xE
-	ld xbc, 0x1480022
-	ld xde, 0xE0000
-	call 0xFA4D80
-	; RegTitle 0008h, 00e3h, 037ch, 00000080h, 01200000h, 00800000h
-	pushw 0x8
-	pushw 0xE3
-	pushw 0x37C
-	ld xwa, 0x80
-	ld xbc, 0x1200000
-	ld xde, 0x800000
-	call 0xFA4D80
-	; RegTitle 0008h, 00e3h, 0386h, 00000081h, 0148000ah, 00810000h
-	pushw 0x8
-	pushw 0xE3
-	pushw 0x386
-	ld xwa, 0x81
-	ld xbc, 0x148000A
-	ld xde, 0x810000
-	call 0xFA4D80
-	; RegTitle 0008h, 00e3h, 0390h, 00000082h, 01200000h, 00820000h
-	pushw 0x8
-	pushw 0xE3
-	pushw 0x390
-	ld xwa, 0x82
-	ld xbc, 0x1200000
-	ld xde, 0x820000
-	call 0xFA4D80
-	; RegTitle 0008h, 00e3h, 039ch, 00000083h, 01200000h, 00830000h
-	pushw 0x8
-	pushw 0xE3
-	pushw 0x39C
-	ld xwa, 0x83
-	ld xbc, 0x1200000
-	ld xde, 0x830000
-	call 0xFA4D80
-	; RegTitle 0008h, 00e3h, 03aah, 00000084h, 01200000h, 00840000h
-	pushw 0x8
-	pushw 0xE3
-	pushw 0x3AA
-	ld xwa, 0x84
-	ld xbc, 0x1200000
-	ld xde, 0x840000
-	call 0xFA4D80
-	; RegTitle 0008h, 00e3h, 03b6h, 00000085h, 01480009h, 00850000h
-	pushw 0x8
-	pushw 0xE3
-	pushw 0x3B6
-	ld xwa, 0x85
-	ld xbc, 0x1480009
-	ld xde, 0x850000
-	call 0xFA4D80
-	; RegTitle 0008h, 00e3h, 03c4h, 00000086h, 01200000h, 00860000h
-	pushw 0x8
-	pushw 0xE3
-	pushw 0x3C4
-	ld xwa, 0x86
-	ld xbc, 0x1200000
-	ld xde, 0x860000
-	call 0xFA4D80
-	; RegTitle 0008h, 00e3h, 03d0h, 00000087h, 0148000bh, 00870000h
-	pushw 0x8
-	pushw 0xE3
-	pushw 0x3D0
-	ld xwa, 0x87
-	ld xbc, 0x148000B
-	ld xde, 0x870000
-	call 0xFA4D80
-	; RegTitle 0008h, 00e3h, 03dch, 00000088h, 0148000ch, 00880000h
-	pushw 0x8
-	pushw 0xE3
-	pushw 0x3DC
-	ld xwa, 0x88
-	ld xbc, 0x148000C
-	ld xde, 0x880000
-	call 0xFA4D80
-	; RegTitle 0008h, 00e3h, 03e8h, 0000008dh, 01200000h, 008d0000h
-	pushw 0x8
-	pushw 0xE3
-	pushw 0x3E8
-	ld xwa, 0x8D
-	ld xbc, 0x1200000
-	ld xde, 0x8D0000
-	call 0xFA4D80
-	; RegTitle 0008h, 00e3h, 03f4h, 00000090h, 01480013h, 00900000h
-	pushw 0x8
-	pushw 0xE3
-	pushw 0x3F4
-	ld xwa, 0x90
-	ld xbc, 0x1480013
-	ld xde, 0x900000
-	call 0xFA4D80
-	; RegTitle 0008h, 00e3h, 0400h, 00000091h, 01480017h, 00910000h
-	pushw 0x8
-	pushw 0xE3
-	pushw 0x400
-	ld xwa, 0x91
-	ld xbc, 0x1480017
-	ld xde, 0x910000
-	call 0xFA4D80
-	; RegTitle 0008h, 00e3h, 040ch, 00000093h, 01200000h, 00930000h
-	pushw 0x8
-	pushw 0xE3
-	pushw 0x40C
-	ld xwa, 0x93
-	ld xbc, 0x1200000
-	ld xde, 0x930000
-	call 0xFA4D80
-	; RegTitle 0008h, 00e3h, 0418h, 00000094h, 0148001dh, 00940000h
-	pushw 0x8
-	pushw 0xE3
-	pushw 0x418
-	ld xwa, 0x94
-	ld xbc, 0x148001D
-	ld xde, 0x940000
-	call 0xFA4D80
-	; RegTitle 0008h, 00e3h, 0426h, 00000095h, 0148001ch, 00950000h
-	pushw 0x8
-	pushw 0xE3
-	pushw 0x426
-	ld xwa, 0x95
-	ld xbc, 0x148001C
-	ld xde, 0x950000
-	call 0xFA4D80
-	; RegTitle 0008h, 00e3h, 0434h, 00000096h, 01480024h, 00960000h
-	pushw 0x8
-	pushw 0xE3
-	pushw 0x434
-	ld xwa, 0x96
-	ld xbc, 0x1480024
-	ld xde, 0x960000
-	call 0xFA4D80
-	; RegTitle 0008h, 00e3h, 0442h, 00000097h, 0148001bh, 00970000h
-	pushw 0x8
-	pushw 0xE3
-	pushw 0x442
-	ld xwa, 0x97
-	ld xbc, 0x148001B
-	ld xde, 0x970000
-	call 0xFA4D80
-	; RegTitle 0008h, 00e3h, 044eh, 00000098h, 0148001ah, 00980000h
-	pushw 0x8
-	pushw 0xE3
-	pushw 0x44E
-	ld xwa, 0x98
-	ld xbc, 0x148001A
-	ld xde, 0x980000
-	call 0xFA4D80
-	; RegTitle 0008h, 00e3h, 045ah, 00000099h, 01480025h, 00990000h
-	pushw 0x8
-	pushw 0xE3
-	pushw 0x45A
-	ld xwa, 0x99
-	ld xbc, 0x1480025
-	ld xde, 0x990000
-	call 0xFA4D80
-	; RegTitle 0008h, 00e3h, 0468h, 0000009ah, 01480016h, 009a0000h
-	pushw 0x8
-	pushw 0xE3
-	pushw 0x468
-	ld xwa, 0x9A
-	ld xbc, 0x1480016
-	ld xde, 0x9A0000
-	call 0xFA4D80
-	; RegTitle 0008h, 00e3h, 0474h, 0000009bh, 01480018h, 009b0000h
-	pushw 0x8
-	pushw 0xE3
-	pushw 0x474
-	ld xwa, 0x9B
-	ld xbc, 0x1480018
-	ld xde, 0x9B0000
-	call 0xFA4D80
-	; RegTitle 0008h, 00e3h, 0480h, 0000009ch, 0148000dh, 009c0000h
-	pushw 0x8
-	pushw 0xE3
-	pushw 0x480
-	ld xwa, 0x9C
-	ld xbc, 0x148000D
-	ld xde, 0x9C0000
-	call 0xFA4D80
-	; RegTitle 0008h, 00e3h, 048ah, 0000009dh, 01480011h, 009d0000h
-	pushw 0x8
-	pushw 0xE3
-	pushw 0x48A
-	ld xwa, 0x9D
-	ld xbc, 0x1480011
-	ld xde, 0x9D0000
-	call 0xFA4D80
-	; RegTitle 0008h, 00e3h, 0494h, 0000009eh, 01480010h, 009e0000h
-	pushw 0x8
-	pushw 0xE3
-	pushw 0x494
-	ld xwa, 0x9E
-	ld xbc, 0x1480010
-	ld xde, 0x9E0000
-	call 0xFA4D80
-	; RegTitle 0008h, 00e3h, 04a2h, 0000009fh, 01480012h, 009f0000h
-	pushw 0x8
-	pushw 0xE3
-	pushw 0x4A2
-	ld xwa, 0x9F
-	ld xbc, 0x1480012
-	ld xde, 0x9F0000
-	call 0xFA4D80
-	; RegTitle 0008h, 00e3h, 04b0h, 000000a0h, 01480019h, 00a00000h
-	pushw 0x8
-	pushw 0xE3
-	pushw 0x4B0
-	ld xwa, 0xA0
-	ld xbc, 0x1480019
-	ld xde, 0xA00000
-	call 0xFA4D80
-	; RegTitle 0008h, 00e3h, 04bch, 000000a1h, 0148000fh, 00a10000h
-	pushw 0x8
-	pushw 0xE3
-	pushw 0x4BC
-	ld xwa, 0xA1
-	ld xbc, 0x148000F
-	ld xde, 0xA10000
-	call 0xFA4D80
-	; RegTitle 0008h, 00e3h, 04c6h, 000000a2h, 01480014h, 00a20000h
-	pushw 0x8
-	pushw 0xE3
-	pushw 0x4C6
-	ld xwa, 0xA2
-	ld xbc, 0x1480014
-	ld xde, 0xA20000
-	call 0xFA4D80
-	; RegTitle 0008h, 00e3h, 04d0h, 000000a3h, 0148000eh, 00a30000h
-	pushw 0x8
-	pushw 0xE3
-	pushw 0x4D0
-	ld xwa, 0xA3
-	ld xbc, 0x148000E
-	ld xde, 0xA30000
-	call 0xFA4D80
-	; RegTitle 0008h, 00e3h, 04dah, 000000a4h, 01480015h, 00a40000h
-	pushw 0x8
-	pushw 0xE3
-	pushw 0x4DA
-	ld xwa, 0xA4
-	ld xbc, 0x1480015
-	ld xde, 0xA40000
-	call 0xFA4D80
-	; RegTitle 0008h, 00e3h, 04e4h, 000000a8h, 01480017h, 00910000h
-	pushw 0x8
-	pushw 0xE3
-	pushw 0x4E4
-	ld xwa, 0xA8
-	ld xbc, 0x1480017
-	ld xde, 0x910000
-	call 0xFA4D80
-	; RegTitle 0008h, 00e3h, 04f0h, 000000aah, 01200000h, 008d0000h
-	pushw 0x8
-	pushw 0xE3
-	pushw 0x4F0
-	ld xwa, 0xAA
-	ld xbc, 0x1200000
-	ld xde, 0x8D0000
-	call 0xFA4D80
-	; RegTitle 0008h, 00e3h, 04fch, 000000abh, 01200000h, 00ab0000h
-	pushw 0x8
-	pushw 0xE3
-	pushw 0x4FC
-	ld xwa, 0xAB
-	ld xbc, 0x1200000
-	ld xde, 0xAB0000
-	call 0xFA4D80
-	; RegTitle 0008h, 00e3h, 0508h, 000000d6h, 0148002ah, 00d60000h
-	pushw 0x8
-	pushw 0xE3
-	pushw 0x508
-	ld xwa, 0xD6
-	ld xbc, 0x148002A
-	ld xde, 0xD60000
-	call 0xFA4D80
-	; RegTitle 0008h, 00e3h, 0512h, 000000e7h, 01480027h, 00e70000h
-	pushw 0x8
-	pushw 0xE3
-	pushw 0x512
-	ld xwa, 0xE7
-	ld xbc, 0x1480027
-	ld xde, 0xE70000
-	call 0xFA4D80
+	RegTitle 0x8, 0xe3, 0x348, 0xa, 0x1480020, 0xa0000
+	RegTitle 0x8, 0xe3, 0x354, 0xb, 0x1480021, 0xb0000
+	RegTitle 0x8, 0xe3, 0x360, 0xc, 0x1200000, 0xc0000
+	RegTitle 0x8, 0xe3, 0x370, 0xe, 0x1480022, 0xe0000
+	RegTitle 0x8, 0xe3, 0x37c, 0x80, 0x1200000, 0x800000
+	RegTitle 0x8, 0xe3, 0x386, 0x81, 0x148000a, 0x810000
+	RegTitle 0x8, 0xe3, 0x390, 0x82, 0x1200000, 0x820000
+	RegTitle 0x8, 0xe3, 0x39c, 0x83, 0x1200000, 0x830000
+	RegTitle 0x8, 0xe3, 0x3aa, 0x84, 0x1200000, 0x840000
+	RegTitle 0x8, 0xe3, 0x3b6, 0x85, 0x1480009, 0x850000
+	RegTitle 0x8, 0xe3, 0x3c4, 0x86, 0x1200000, 0x860000
+	RegTitle 0x8, 0xe3, 0x3d0, 0x87, 0x148000b, 0x870000
+	RegTitle 0x8, 0xe3, 0x3dc, 0x88, 0x148000c, 0x880000
+	RegTitle 0x8, 0xe3, 0x3e8, 0x8d, 0x1200000, 0x8d0000
+	RegTitle 0x8, 0xe3, 0x3f4, 0x90, 0x1480013, 0x900000
+	RegTitle 0x8, 0xe3, 0x400, 0x91, 0x1480017, 0x910000
+	RegTitle 0x8, 0xe3, 0x40c, 0x93, 0x1200000, 0x930000
+	RegTitle 0x8, 0xe3, 0x418, 0x94, 0x148001d, 0x940000
+	RegTitle 0x8, 0xe3, 0x426, 0x95, 0x148001c, 0x950000
+	RegTitle 0x8, 0xe3, 0x434, 0x96, 0x1480024, 0x960000
+	RegTitle 0x8, 0xe3, 0x442, 0x97, 0x148001b, 0x970000
+	RegTitle 0x8, 0xe3, 0x44e, 0x98, 0x148001a, 0x980000
+	RegTitle 0x8, 0xe3, 0x45a, 0x99, 0x1480025, 0x990000
+	RegTitle 0x8, 0xe3, 0x468, 0x9a, 0x1480016, 0x9a0000
+	RegTitle 0x8, 0xe3, 0x474, 0x9b, 0x1480018, 0x9b0000
+	RegTitle 0x8, 0xe3, 0x480, 0x9c, 0x148000d, 0x9c0000
+	RegTitle 0x8, 0xe3, 0x48a, 0x9d, 0x1480011, 0x9d0000
+	RegTitle 0x8, 0xe3, 0x494, 0x9e, 0x1480010, 0x9e0000
+	RegTitle 0x8, 0xe3, 0x4a2, 0x9f, 0x1480012, 0x9f0000
+	RegTitle 0x8, 0xe3, 0x4b0, 0xa0, 0x1480019, 0xa00000
+	RegTitle 0x8, 0xe3, 0x4bc, 0xa1, 0x148000f, 0xa10000
+	RegTitle 0x8, 0xe3, 0x4c6, 0xa2, 0x1480014, 0xa20000
+	RegTitle 0x8, 0xe3, 0x4d0, 0xa3, 0x148000e, 0xa30000
+	RegTitle 0x8, 0xe3, 0x4da, 0xa4, 0x1480015, 0xa40000
+	RegTitle 0x8, 0xe3, 0x4e4, 0xa8, 0x1480017, 0x910000
+	RegTitle 0x8, 0xe3, 0x4f0, 0xaa, 0x1200000, 0x8d0000
+	RegTitle 0x8, 0xe3, 0x4fc, 0xab, 0x1200000, 0xab0000
+	RegTitle 0x8, 0xe3, 0x508, 0xd6, 0x148002a, 0xd60000
+	RegTitle 0x8, 0xe3, 0x512, 0xe7, 0x1480027, 0xe70000
 
 	lda xsp, (xsp + 14)
 	ret
@@ -277487,748 +272848,81 @@ LABEL_F72BAB:
 InitializeEast:
 	lda xsp, (xsp - 14)
 
-	; RegObjTable 01600004h, 0FA44E2h, 0E55CD4h,	0E559EAh, 0163h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600004
-	ld (xbc), xwa
-	ldada_24 xwa, 16401634
-	ld (xbc + 4), xwa
-	ldda16_24 xwa, 15031508
-	ld (xbc + 8), wa
-	ldada_24 xwa, 15030762
-	ld (xbc + 10), xwa
-	ldw wa, 0x163
-	call 0xFA42FB
-	; RegObjTable 0160000ch, 0FA58FBh, 0E55CDAh,	0E55CD6h, 01c3h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000C
-	ld (xbc), xwa
-	ldada_24 xwa, 16406779
-	ld (xbc + 4), xwa
-	ldda16_24 xwa, 15031514
-	ld (xbc + 8), wa
-	ldada_24 xwa, 15031510
-	ld (xbc + 10), xwa
-	ldw wa, 0x1C3
-	call 0xFA42FB
-	; RegObjTable 0160000dh, 0FA5948h, 0E55DACh,	0E55CDCh, 01e3h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000D
-	ld (xbc), xwa
-	ldada_24 xwa, 16406856
-	ld (xbc + 4), xwa
-	ldda16_24 xwa, 15031724
-	ld (xbc + 8), wa
-	ldada_24 xwa, 15031516
-	ld (xbc + 10), xwa
-	ldw wa, 0x1E3
-	call 0xFA42FB
-	; RegObjTabl 01600002h, 0FA496Ch, 003ch,		0E55210h, 0123h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600002
-	ld (xbc), xwa
-	ldada_24 xwa, 16402796
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x3C
-	ldada_24 xwa, 15028752
-	ld (xbc + 10), xwa
-	ldw wa, 0x123
-	call 0xFA42FB
-	; RegObjTabl 01600002h, 0FA496Ch, 003ch,		0E55304h, 0423h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600002
-	ld (xbc), xwa
-	ldada_24 xwa, 16402796
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x3C
-	ldada_24 xwa, 15028996
-	ld (xbc + 10), xwa
-	ldw wa, 0x423
-	call 0xFA42FB
-	; RegObjTabl 01600001h, 0FA48A9h, 0010h,		0E55DAEh, 0103h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600001
-	ld (xbc), xwa
-	ldada_24 xwa, 16402601
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x10
-	ldada_24 xwa, 15031726
-	ld (xbc + 10), xwa
-	ldw wa, 0x103
-	call 0xFA42FB
-	; RegObjTabl 01600001h, 0FA48A9h, 0010h,		0E55DF2h, 0403h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600001
-	ld (xbc), xwa
-	ldada_24 xwa, 16402601
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x10
-	ldada_24 xwa, 15031794
-	ld (xbc + 10), xwa
-	ldw wa, 0x403
-	call 0xFA42FB
-	; RegObjTabl 01600003h, 0FA4A18h, 0007h,		0E5AD8Ch, 0143h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600003
-	ld (xbc), xwa
-	ldada_24 xwa, 16402968
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x7
-	ldada_24 xwa, 15052172
-	ld (xbc + 10), xwa
-	ldw wa, 0x143
-	call 0xFA42FB
-	; RegObjTabl 01600003h, 0FA4A18h, 0007h,		0E5ADACh, 0443h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600003
-	ld (xbc), xwa
-	ldada_24 xwa, 16402968
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x7
-	ldada_24 xwa, 15052204
-	ld (xbc + 10), xwa
-	ldw wa, 0x443
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0004h,		0E59C5Ah, 0009h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x4
-	ldada_24 xwa, 15047770
-	ld (xbc + 10), xwa
-	ldw wa, 0x9
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0004h,		0E5A122h, 0309h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x4
-	ldada_24 xwa, 15048994
-	ld (xbc + 10), xwa
-	ldw wa, 0x309
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0003h,		0E59C6Eh, 000fh
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x3
-	ldada_24 xwa, 15047790
-	ld (xbc + 10), xwa
-	ldw wa, 0xF
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0003h,		0E5A152h, 030fh
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x3
-	ldada_24 xwa, 15049042
-	ld (xbc + 10), xwa
-	ldw wa, 0x30F
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 000ch,		0E59C7Eh, 0018h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0xC
-	ldada_24 xwa, 15047806
-	ld (xbc + 10), xwa
-	ldw wa, 0x18
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 000ch,		0E5A17Ah, 0318h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0xC
-	ldada_24 xwa, 15049082
-	ld (xbc + 10), xwa
-	ldw wa, 0x318
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 000ch,		0E59CB2h, 0019h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0xC
-	ldada_24 xwa, 15047858
-	ld (xbc + 10), xwa
-	ldw wa, 0x19
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 000ch,		0E5A1D4h, 0319h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0xC
-	ldada_24 xwa, 15049172
-	ld (xbc + 10), xwa
-	ldw wa, 0x319
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 000ch,		0E59CE6h, 001ah
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0xC
-	ldada_24 xwa, 15047910
-	ld (xbc + 10), xwa
-	ldw wa, 0x1A
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 000ch,		0E5A23Ah, 031ah
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0xC
-	ldada_24 xwa, 15049274
-	ld (xbc + 10), xwa
-	ldw wa, 0x31A
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0014h,		0E59D1Ah, 0050h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x14
-	ldada_24 xwa, 15047962
-	ld (xbc + 10), xwa
-	ldw wa, 0x50
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0014h,		0E5A2A8h, 0350h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x14
-	ldada_24 xwa, 15049384
-	ld (xbc + 10), xwa
-	ldw wa, 0x350
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0007h,		0E59D6Eh, 0051h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x7
-	ldada_24 xwa, 15048046
-	ld (xbc + 10), xwa
-	ldw wa, 0x51
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0007h,		0E5A350h, 0351h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x7
-	ldada_24 xwa, 15049552
-	ld (xbc + 10), xwa
-	ldw wa, 0x351
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0008h,		0E59D8Eh, 0052h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x8
-	ldada_24 xwa, 15048078
-	ld (xbc + 10), xwa
-	ldw wa, 0x52
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0008h,		0E5A39Eh, 0352h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x8
-	ldada_24 xwa, 15049630
-	ld (xbc + 10), xwa
-	ldw wa, 0x352
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0006h,		0E59DB2h, 0053h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x6
-	ldada_24 xwa, 15048114
-	ld (xbc + 10), xwa
-	ldw wa, 0x53
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0006h,		0E5A3F2h, 0353h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x6
-	ldada_24 xwa, 15049714
-	ld (xbc + 10), xwa
-	ldw wa, 0x353
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0005h,		0E59DCEh, 0054h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x5
-	ldada_24 xwa, 15048142
-	ld (xbc + 10), xwa
-	ldw wa, 0x54
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0005h,		0E5A448h, 0354h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x5
-	ldada_24 xwa, 15049800
-	ld (xbc + 10), xwa
-	ldw wa, 0x354
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0005h,		0E59DE6h, 0055h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x5
-	ldada_24 xwa, 15048166
-	ld (xbc + 10), xwa
-	ldw wa, 0x55
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0005h,		0E5A488h, 0355h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x5
-	ldada_24 xwa, 15049864
-	ld (xbc + 10), xwa
-	ldw wa, 0x355
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0043h,		0E59DFEh, 0056h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x43
-	ldada_24 xwa, 15048190
-	ld (xbc + 10), xwa
-	ldw wa, 0x56
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0043h,		0E5A4C8h, 0356h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x43
-	ldada_24 xwa, 15049928
-	ld (xbc + 10), xwa
-	ldw wa, 0x356
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 001ch,		0E59F0Eh, 0057h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1C
-	ldada_24 xwa, 15048462
-	ld (xbc + 10), xwa
-	ldw wa, 0x57
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 001ch,		0E5A77Ch, 0357h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1C
-	ldada_24 xwa, 15050620
-	ld (xbc + 10), xwa
-	ldw wa, 0x357
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0015h,		0E59F82h, 0058h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x15
-	ldada_24 xwa, 15048578
-	ld (xbc + 10), xwa
-	ldw wa, 0x58
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0015h,		0E5A906h, 0358h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x15
-	ldada_24 xwa, 15051014
-	ld (xbc + 10), xwa
-	ldw wa, 0x358
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0006h,		0E59FDAh, 0059h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x6
-	ldada_24 xwa, 15048666
-	ld (xbc + 10), xwa
-	ldw wa, 0x59
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0006h,		0E5A9AEh, 0359h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x6
-	ldada_24 xwa, 15051182
-	ld (xbc + 10), xwa
-	ldw wa, 0x359
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0006h,		0E59FF6h, 005ah
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x6
-	ldada_24 xwa, 15048694
-	ld (xbc + 10), xwa
-	ldw wa, 0x5A
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0006h,		0E5A9F0h, 035ah
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x6
-	ldada_24 xwa, 15051248
-	ld (xbc + 10), xwa
-	ldw wa, 0x35A
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0011h,		0E5A012h, 005bh
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x11
-	ldada_24 xwa, 15048722
-	ld (xbc + 10), xwa
-	ldw wa, 0x5B
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0011h,		0E5AA30h, 035bh
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x11
-	ldada_24 xwa, 15051312
-	ld (xbc + 10), xwa
-	ldw wa, 0x35B
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0008h,		0E5A05Ah, 005ch
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x8
-	ldada_24 xwa, 15048794
-	ld (xbc + 10), xwa
-	ldw wa, 0x5C
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0008h,		0E5AAC6h, 035ch
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x8
-	ldada_24 xwa, 15051462
-	ld (xbc + 10), xwa
-	ldw wa, 0x35C
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0018h,		0E5A07Eh, 00d7h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x18
-	ldada_24 xwa, 15048830
-	ld (xbc + 10), xwa
-	ldw wa, 0xD7
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0018h,		0E5AB12h, 03d7h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x18
-	ldada_24 xwa, 15051538
-	ld (xbc + 10), xwa
-	ldw wa, 0x3D7
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0008h,		0E5A0E2h, 00d8h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x8
-	ldada_24 xwa, 15048930
-	ld (xbc + 10), xwa
-	ldw wa, 0xD8
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0008h,		0E5AC06h, 03d8h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x8
-	ldada_24 xwa, 15051782
-	ld (xbc + 10), xwa
-	ldw wa, 0x3D8
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0006h,		0E5A106h, 00ech
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x6
-	ldada_24 xwa, 15048966
-	ld (xbc + 10), xwa
-	ldw wa, 0xEC
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0006h,		0E5AC5Ah, 03ech
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x6
-	ldada_24 xwa, 15051866
-	ld (xbc + 10), xwa
-	ldw wa, 0x3EC
-	call 0xFA42FB
+	RegObjTable 0x1600004, 0xFA44E2, 0xE55CD4, 0xE559EA, 0x163
+	RegObjTable 0x160000c, 0xFA58FB, 0xE55CDA, 0xE55CD6, 0x1c3
+	RegObjTable 0x160000d, 0xFA5948, 0xE55DAC, 0xE55CDC, 0x1e3
+	RegObjTabl 0x1600002, 0xFA496C, 0x3c, 0xE55210, 0x123
+	RegObjTabl 0x1600002, 0xFA496C, 0x3c, 0xE55304, 0x423
+	RegObjTabl 0x1600001, 0xFA48A9, 0x10, 0xE55DAE, 0x103
+	RegObjTabl 0x1600001, 0xFA48A9, 0x10, 0xE55DF2, 0x403
+	RegObjTabl 0x1600003, 0xFA4A18, 0x7, 0xE5AD8C, 0x143
+	RegObjTabl 0x1600003, 0xFA4A18, 0x7, 0xE5ADAC, 0x443
+	RegObjTabl 0x1600010, 0xFA5995, 0x4, 0xE59C5A, 0x9
+	RegObjTabl 0x160000f, 0xFA62CB, 0x4, 0xE5A122, 0x309
+	RegObjTabl 0x1600010, 0xFA5995, 0x3, 0xE59C6E, 0xf
+	RegObjTabl 0x160000f, 0xFA62CB, 0x3, 0xE5A152, 0x30f
+	RegObjTabl 0x1600010, 0xFA5995, 0xc, 0xE59C7E, 0x18
+	RegObjTabl 0x160000f, 0xFA62CB, 0xc, 0xE5A17A, 0x318
+	RegObjTabl 0x1600010, 0xFA5995, 0xc, 0xE59CB2, 0x19
+	RegObjTabl 0x160000f, 0xFA62CB, 0xc, 0xE5A1D4, 0x319
+	RegObjTabl 0x1600010, 0xFA5995, 0xc, 0xE59CE6, 0x1a
+	RegObjTabl 0x160000f, 0xFA62CB, 0xc, 0xE5A23A, 0x31a
+	RegObjTabl 0x1600010, 0xFA5995, 0x14, 0xE59D1A, 0x50
+	RegObjTabl 0x160000f, 0xFA62CB, 0x14, 0xE5A2A8, 0x350
+	RegObjTabl 0x1600010, 0xFA5995, 0x7, 0xE59D6E, 0x51
+	RegObjTabl 0x160000f, 0xFA62CB, 0x7, 0xE5A350, 0x351
+	RegObjTabl 0x1600010, 0xFA5995, 0x8, 0xE59D8E, 0x52
+	RegObjTabl 0x160000f, 0xFA62CB, 0x8, 0xE5A39E, 0x352
+	RegObjTabl 0x1600010, 0xFA5995, 0x6, 0xE59DB2, 0x53
+	RegObjTabl 0x160000f, 0xFA62CB, 0x6, 0xE5A3F2, 0x353
+	RegObjTabl 0x1600010, 0xFA5995, 0x5, 0xE59DCE, 0x54
+	RegObjTabl 0x160000f, 0xFA62CB, 0x5, 0xE5A448, 0x354
+	RegObjTabl 0x1600010, 0xFA5995, 0x5, 0xE59DE6, 0x55
+	RegObjTabl 0x160000f, 0xFA62CB, 0x5, 0xE5A488, 0x355
+	RegObjTabl 0x1600010, 0xFA5995, 0x43, 0xE59DFE, 0x56
+	RegObjTabl 0x160000f, 0xFA62CB, 0x43, 0xE5A4C8, 0x356
+	RegObjTabl 0x1600010, 0xFA5995, 0x1c, 0xE59F0E, 0x57
+	RegObjTabl 0x160000f, 0xFA62CB, 0x1c, 0xE5A77C, 0x357
+	RegObjTabl 0x1600010, 0xFA5995, 0x15, 0xE59F82, 0x58
+	RegObjTabl 0x160000f, 0xFA62CB, 0x15, 0xE5A906, 0x358
+	RegObjTabl 0x1600010, 0xFA5995, 0x6, 0xE59FDA, 0x59
+	RegObjTabl 0x160000f, 0xFA62CB, 0x6, 0xE5A9AE, 0x359
+	RegObjTabl 0x1600010, 0xFA5995, 0x6, 0xE59FF6, 0x5a
+	RegObjTabl 0x160000f, 0xFA62CB, 0x6, 0xE5A9F0, 0x35a
+	RegObjTabl 0x1600010, 0xFA5995, 0x11, 0xE5A012, 0x5b
+	RegObjTabl 0x160000f, 0xFA62CB, 0x11, 0xE5AA30, 0x35b
+	RegObjTabl 0x1600010, 0xFA5995, 0x8, 0xE5A05A, 0x5c
+	RegObjTabl 0x160000f, 0xFA62CB, 0x8, 0xE5AAC6, 0x35c
+	RegObjTabl 0x1600010, 0xFA5995, 0x18, 0xE5A07E, 0xd7
+	RegObjTabl 0x160000f, 0xFA62CB, 0x18, 0xE5AB12, 0x3d7
+	RegObjTabl 0x1600010, 0xFA5995, 0x8, 0xE5A0E2, 0xd8
+	RegObjTabl 0x160000f, 0xFA62CB, 0x8, 0xE5AC06, 0x3d8
+	RegObjTabl 0x1600010, 0xFA5995, 0x6, 0xE5A106, 0xec
+	RegObjTabl 0x160000f, 0xFA62CB, 0x6, 0xE5AC5A, 0x3ec
 
-	; RegMode 0003h, 00e5h, 0ac90h, 00000005h, 01200000h, 01a00050h
-	pushw 0x3
-	pushw 0xE5
-	pushw 0xAC90
-	lds32 xwa, 5
-	ld xbc, 0x1200000
-	ld xde, 0x1A00050
-	call 0xFA4D2B
+	RegMode 0x3, 0xe5, 0xac90, 0x5, 0x1200000, 0x1a00050
 
-	; RegTitle 0003h, 00e5h, 0ac98h, 00000009h, 01200000h, 00090000h
-	pushw 0x3
-	pushw 0xE5
-	pushw 0xAC98
-	ld xwa, 0x9
-	ld xbc, 0x1200000
-	ld xde, 0x90000
-	call 0xFA4D80
-	; RegTitle 0003h, 00e5h, 0aca6h, 0000000fh, 01200000h, 000f0000h
-	pushw 0x3
-	pushw 0xE5
-	pushw 0xACA6
-	ld xwa, 0xF
-	ld xbc, 0x1200000
-	ld xde, 0xF0000
-	call 0xFA4D80
-	; RegTitle 0003h, 00e5h, 0acb0h, 00000018h, 01200000h, 00180000h
-	pushw 0x3
-	pushw 0xE5
-	pushw 0xACB0
-	ld xwa, 0x18
-	ld xbc, 0x1200000
-	ld xde, 0x180000
-	call 0xFA4D80
-	; RegTitle 0003h, 00e5h, 0acbeh, 00000019h, 01200000h, 00190000h
-	pushw 0x3
-	pushw 0xE5
-	pushw 0xACBE
-	ld xwa, 0x19
-	ld xbc, 0x1200000
-	ld xde, 0x190000
-	call 0xFA4D80
-	; RegTitle 0003h, 00e5h, 0accah, 0000001ah, 01200000h, 001a0000h
-	pushw 0x3
-	pushw 0xE5
-	pushw 0xACCA
-	ld xwa, 0x1A
-	ld xbc, 0x1200000
-	ld xde, 0x1A0000
-	call 0xFA4D80
-	; RegTitle 0003h, 00e5h, 0acdah, 00000050h, 01200000h, 00500000h
-	pushw 0x3
-	pushw 0xE5
-	pushw 0xACDA
-	ld xwa, 0x50
-	ld xbc, 0x1200000
-	ld xde, 0x500000
-	call 0xFA4D80
-	; RegTitle 0003h, 00e5h, 0ace4h, 00000051h, 01200000h, 00510000h
-	pushw 0x3
-	pushw 0xE5
-	pushw 0xACE4
-	ld xwa, 0x51
-	ld xbc, 0x1200000
-	ld xde, 0x510000
-	call 0xFA4D80
-	; RegTitle 0003h, 00e5h, 0aceeh, 00000052h, 01200000h, 00520000h
-	pushw 0x3
-	pushw 0xE5
-	pushw 0xACEE
-	ld xwa, 0x52
-	ld xbc, 0x1200000
-	ld xde, 0x520000
-	call 0xFA4D80
-	; RegTitle 0003h, 00e5h, 0acf8h, 00000053h, 01200000h, 00530000h
-	pushw 0x3
-	pushw 0xE5
-	pushw 0xACF8
-	ld xwa, 0x53
-	ld xbc, 0x1200000
-	ld xde, 0x530000
-	call 0xFA4D80
-	; RegTitle 0003h, 00e5h, 0ad02h, 00000054h, 01200000h, 00540000h
-	pushw 0x3
-	pushw 0xE5
-	pushw 0xAD02
-	ld xwa, 0x54
-	ld xbc, 0x1200000
-	ld xde, 0x540000
-	call 0xFA4D80
-	; RegTitle 0003h, 00e5h, 0ad0ch, 00000055h, 01200000h, 00550000h
-	pushw 0x3
-	pushw 0xE5
-	pushw 0xAD0C
-	ld xwa, 0x55
-	ld xbc, 0x1200000
-	ld xde, 0x550000
-	call 0xFA4D80
-	; RegTitle 0003h, 00e5h, 0ad18h, 00000056h, 01200000h, 00560000h
-	pushw 0x3
-	pushw 0xE5
-	pushw 0xAD18
-	ld xwa, 0x56
-	ld xbc, 0x1200000
-	ld xde, 0x560000
-	call 0xFA4D80
-	; RegTitle 0003h, 00e5h, 0ad24h, 00000057h, 01200000h, 00570000h
-	pushw 0x3
-	pushw 0xE5
-	pushw 0xAD24
-	ld xwa, 0x57
-	ld xbc, 0x1200000
-	ld xde, 0x570000
-	call 0xFA4D80
-	; RegTitle 0003h, 00e5h, 0ad2eh, 00000058h, 01200000h, 00580000h
-	pushw 0x3
-	pushw 0xE5
-	pushw 0xAD2E
-	ld xwa, 0x58
-	ld xbc, 0x1200000
-	ld xde, 0x580000
-	call 0xFA4D80
-	; RegTitle 0003h, 00e5h, 0ad3ah, 00000059h, 01200000h, 00590000h
-	pushw 0x3
-	pushw 0xE5
-	pushw 0xAD3A
-	ld xwa, 0x59
-	ld xbc, 0x1200000
-	ld xde, 0x590000
-	call 0xFA4D80
-	; RegTitle 0003h, 00e5h, 0ad46h, 0000005ah, 01200000h, 005a0000h
-	pushw 0x3
-	pushw 0xE5
-	pushw 0xAD46
-	ld xwa, 0x5A
-	ld xbc, 0x1200000
-	ld xde, 0x5A0000
-	call 0xFA4D80
-	; RegTitle 0003h, 00e5h, 0ad50h, 0000005bh, 01200000h, 005b0000h
-	pushw 0x3
-	pushw 0xE5
-	pushw 0xAD50
-	ld xwa, 0x5B
-	ld xbc, 0x1200000
-	ld xde, 0x5B0000
-	call 0xFA4D80
-	; RegTitle 0003h, 00e5h, 0ad5ch, 0000005ch, 01200000h, 005c0000h
-	pushw 0x3
-	pushw 0xE5
-	pushw 0xAD5C
-	ld xwa, 0x5C
-	ld xbc, 0x1200000
-	ld xde, 0x5C0000
-	call 0xFA4D80
-	; RegTitle 0003h, 00e5h, 0ad68h, 000000d7h, 01200000h, 00d70000h
-	pushw 0x3
-	pushw 0xE5
-	pushw 0xAD68
-	ld xwa, 0xD7
-	ld xbc, 0x1200000
-	ld xde, 0xD70000
-	call 0xFA4D80
-	; RegTitle 0003h, 00e5h, 0ad74h, 000000d8h, 01200000h, 00d80000h
-	pushw 0x3
-	pushw 0xE5
-	pushw 0xAD74
-	ld xwa, 0xD8
-	ld xbc, 0x1200000
-	ld xde, 0xD80000
-	call 0xFA4D80
-	; RegTitle 0003h, 00e5h, 0ad80h, 000000ech, 01200000h, 00ec0000h
-	pushw 0x3
-	pushw 0xE5
-	pushw 0xAD80
-	ld xwa, 0xEC
-	ld xbc, 0x1200000
-	ld xde, 0xEC0000
-	call 0xFA4D80
+	RegTitle 0x3, 0xe5, 0xac98, 0x9, 0x1200000, 0x90000
+	RegTitle 0x3, 0xe5, 0xaca6, 0xf, 0x1200000, 0xf0000
+	RegTitle 0x3, 0xe5, 0xacb0, 0x18, 0x1200000, 0x180000
+	RegTitle 0x3, 0xe5, 0xacbe, 0x19, 0x1200000, 0x190000
+	RegTitle 0x3, 0xe5, 0xacca, 0x1a, 0x1200000, 0x1a0000
+	RegTitle 0x3, 0xe5, 0xacda, 0x50, 0x1200000, 0x500000
+	RegTitle 0x3, 0xe5, 0xace4, 0x51, 0x1200000, 0x510000
+	RegTitle 0x3, 0xe5, 0xacee, 0x52, 0x1200000, 0x520000
+	RegTitle 0x3, 0xe5, 0xacf8, 0x53, 0x1200000, 0x530000
+	RegTitle 0x3, 0xe5, 0xad02, 0x54, 0x1200000, 0x540000
+	RegTitle 0x3, 0xe5, 0xad0c, 0x55, 0x1200000, 0x550000
+	RegTitle 0x3, 0xe5, 0xad18, 0x56, 0x1200000, 0x560000
+	RegTitle 0x3, 0xe5, 0xad24, 0x57, 0x1200000, 0x570000
+	RegTitle 0x3, 0xe5, 0xad2e, 0x58, 0x1200000, 0x580000
+	RegTitle 0x3, 0xe5, 0xad3a, 0x59, 0x1200000, 0x590000
+	RegTitle 0x3, 0xe5, 0xad46, 0x5a, 0x1200000, 0x5a0000
+	RegTitle 0x3, 0xe5, 0xad50, 0x5b, 0x1200000, 0x5b0000
+	RegTitle 0x3, 0xe5, 0xad5c, 0x5c, 0x1200000, 0x5c0000
+	RegTitle 0x3, 0xe5, 0xad68, 0xd7, 0x1200000, 0xd70000
+	RegTitle 0x3, 0xe5, 0xad74, 0xd8, 0x1200000, 0xd80000
+	RegTitle 0x3, 0xe5, 0xad80, 0xec, 0x1200000, 0xec0000
 
 	lda xsp, (xsp + 14)
 	ret
@@ -286921,538 +281615,60 @@ LABEL_F7AD49:
 InitializeMurai:
 	lda xsp, (xsp - 14)
 
-	; RegObjTable 01600004h, 0FA44E2h, 0E812E2h,	0E80CF6h, 0161h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600004
-	ld (xbc), xwa
-	ldada_24 xwa, 16401634
-	ld (xbc + 4), xwa
-	ldda16_24 xwa, 15209186
-	ld (xbc + 8), wa
-	ldada_24 xwa, 15207670
-	ld (xbc + 10), xwa
-	ldw wa, 0x161
-	call 0xFA42FB
-	; RegObjTable 0160000ch, 0FA58FBh, 0E813A4h,	0E812E4h, 01c1h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000C
-	ld (xbc), xwa
-	ldada_24 xwa, 16406779
-	ld (xbc + 4), xwa
-	ldda16_24 xwa, 15209380
-	ld (xbc + 8), wa
-	ldada_24 xwa, 15209188
-	ld (xbc + 10), xwa
-	ldw wa, 0x1C1
-	call 0xFA42FB
-	; RegObjTable 0160000dh, 0FA5948h, 0E814F2h,	0E813A6h, 01e1h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000D
-	ld (xbc), xwa
-	ldada_24 xwa, 16406856
-	ld (xbc + 4), xwa
-	ldda16_24 xwa, 15209714
-	ld (xbc + 8), wa
-	ldada_24 xwa, 15209382
-	ld (xbc + 10), xwa
-	ldw wa, 0x1E1
-	call 0xFA42FB
-	; RegObjTabl 01600002h, 0FA496Ch, 002ch,		0E8070Ah, 0121h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600002
-	ld (xbc), xwa
-	ldada_24 xwa, 16402796
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x2C
-	ldada_24 xwa, 15206154
-	ld (xbc + 10), xwa
-	ldw wa, 0x121
-	call 0xFA42FB
-	; RegObjTabl 01600002h, 0FA496Ch, 002ch,		0E807BEh, 0421h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600002
-	ld (xbc), xwa
-	ldada_24 xwa, 16402796
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x2C
-	ldada_24 xwa, 15206334
-	ld (xbc + 10), xwa
-	ldw wa, 0x421
-	call 0xFA42FB
-	; RegObjTabl 01600001h, 0FA48A9h, 0025h,		0E814F4h, 0101h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600001
-	ld (xbc), xwa
-	ldada_24 xwa, 16402601
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x25
-	ldada_24 xwa, 15209716
-	ld (xbc + 10), xwa
-	ldw wa, 0x101
-	call 0xFA42FB
-	; RegObjTabl 01600001h, 0FA48A9h, 0025h,		0E8158Ch, 0401h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600001
-	ld (xbc), xwa
-	ldada_24 xwa, 16402601
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x25
-	ldada_24 xwa, 15209868
-	ld (xbc + 10), xwa
-	ldw wa, 0x401
-	call 0xFA42FB
-	; RegObjTabl 01600003h, 0FA4A18h, 0002h,		0E86638h, 0141h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600003
-	ld (xbc), xwa
-	ldada_24 xwa, 16402968
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x2
-	ldada_24 xwa, 15230520
-	ld (xbc + 10), xwa
-	ldw wa, 0x141
-	call 0xFA42FB
-	; RegObjTabl 01600003h, 0FA4A18h, 0002h,		0E86644h, 0441h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600003
-	ld (xbc), xwa
-	ldada_24 xwa, 16402968
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x2
-	ldada_24 xwa, 15230532
-	ld (xbc + 10), xwa
-	ldw wa, 0x441
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0014h,		0E85470h, 0002h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x14
-	ldada_24 xwa, 15225968
-	ld (xbc + 10), xwa
-	lds wa, 2
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0014h,		0E859F4h, 0302h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x14
-	ldada_24 xwa, 15227380
-	ld (xbc + 10), xwa
-	ldw wa, 0x302
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0054h,		0E854C4h, 0003h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x54
-	ldada_24 xwa, 15226052
-	ld (xbc + 10), xwa
-	lds wa, 3
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0054h,		0E85A8Eh, 0303h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x54
-	ldada_24 xwa, 15227534
-	ld (xbc + 10), xwa
-	ldw wa, 0x303
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0004h,		0E85618h, 0004h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x4
-	ldada_24 xwa, 15226392
-	ld (xbc + 10), xwa
-	lds wa, 4
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0004h,		0E85CF0h, 0304h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x4
-	ldada_24 xwa, 15228144
-	ld (xbc + 10), xwa
-	ldw wa, 0x304
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0036h,		0E8562Ch, 0005h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x36
-	ldada_24 xwa, 15226412
-	ld (xbc + 10), xwa
-	lds wa, 5
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0036h,		0E85D14h, 0305h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x36
-	ldada_24 xwa, 15228180
-	ld (xbc + 10), xwa
-	ldw wa, 0x305
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0003h,		0E85708h, 0007h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x3
-	ldada_24 xwa, 15226632
-	ld (xbc + 10), xwa
-	lds wa, 7
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0003h,		0E85F0Ah, 0307h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x3
-	ldada_24 xwa, 15228682
-	ld (xbc + 10), xwa
-	ldw wa, 0x307
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0004h,		0E85718h, 0008h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x4
-	ldada_24 xwa, 15226648
-	ld (xbc + 10), xwa
-	ldw wa, 0x8
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0004h,		0E85F2Ah, 0308h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x4
-	ldada_24 xwa, 15228714
-	ld (xbc + 10), xwa
-	ldw wa, 0x308
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 001dh,		0E8572Ch, 000dh
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1D
-	ldada_24 xwa, 15226668
-	ld (xbc + 10), xwa
-	ldw wa, 0xD
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 001dh,		0E85F4Eh, 030dh
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1D
-	ldada_24 xwa, 15228750
-	ld (xbc + 10), xwa
-	ldw wa, 0x30D
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0004h,		0E857A4h, 00a5h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x4
-	ldada_24 xwa, 15226788
-	ld (xbc + 10), xwa
-	ldw wa, 0xA5
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0004h,		0E8608Eh, 03a5h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x4
-	ldada_24 xwa, 15229070
-	ld (xbc + 10), xwa
-	ldw wa, 0x3A5
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 000fh,		0E857B8h, 00e4h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0xF
-	ldada_24 xwa, 15226808
-	ld (xbc + 10), xwa
-	ldw wa, 0xE4
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 000fh,		0E860B2h, 03e4h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0xF
-	ldada_24 xwa, 15229106
-	ld (xbc + 10), xwa
-	ldw wa, 0x3E4
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 002ch,		0E857F8h, 00eah
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x2C
-	ldada_24 xwa, 15226872
-	ld (xbc + 10), xwa
-	ldw wa, 0xEA
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 002ch,		0E8617Eh, 03eah
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x2C
-	ldada_24 xwa, 15229310
-	ld (xbc + 10), xwa
-	ldw wa, 0x3EA
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0025h,		0E858ACh, 00ebh
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x25
-	ldada_24 xwa, 15227052
-	ld (xbc + 10), xwa
-	ldw wa, 0xEB
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0025h,		0E862F2h, 03ebh
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x25
-	ldada_24 xwa, 15229682
-	ld (xbc + 10), xwa
-	ldw wa, 0x3EB
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0018h,		0E85944h, 00eeh
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x18
-	ldada_24 xwa, 15227204
-	ld (xbc + 10), xwa
-	ldw wa, 0xEE
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0018h,		0E863FEh, 03eeh
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x18
-	ldada_24 xwa, 15229950
-	ld (xbc + 10), xwa
-	ldw wa, 0x3EE
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 000bh,		0E859A8h, 00efh
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0xB
-	ldada_24 xwa, 15227304
-	ld (xbc + 10), xwa
-	ldw wa, 0xEF
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 000bh,		0E864D0h, 03efh
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0xB
-	ldada_24 xwa, 15230160
-	ld (xbc + 10), xwa
-	ldw wa, 0x3EF
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0006h,		0E859D8h, 00f0h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x6
-	ldada_24 xwa, 15227352
-	ld (xbc + 10), xwa
-	ldw wa, 0xF0
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0006h,		0E86534h, 03f0h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x6
-	ldada_24 xwa, 15230260
-	ld (xbc + 10), xwa
-	ldw wa, 0x3F0
-	call 0xFA42FB
+	RegObjTable 0x1600004, 0xFA44E2, 0xE812E2, 0xE80CF6, 0x161
+	RegObjTable 0x160000c, 0xFA58FB, 0xE813A4, 0xE812E4, 0x1c1
+	RegObjTable 0x160000d, 0xFA5948, 0xE814F2, 0xE813A6, 0x1e1
+	RegObjTabl 0x1600002, 0xFA496C, 0x2c, 0xE8070A, 0x121
+	RegObjTabl 0x1600002, 0xFA496C, 0x2c, 0xE807BE, 0x421
+	RegObjTabl 0x1600001, 0xFA48A9, 0x25, 0xE814F4, 0x101
+	RegObjTabl 0x1600001, 0xFA48A9, 0x25, 0xE8158C, 0x401
+	RegObjTabl 0x1600003, 0xFA4A18, 0x2, 0xE86638, 0x141
+	RegObjTabl 0x1600003, 0xFA4A18, 0x2, 0xE86644, 0x441
+	RegObjTabl 0x1600010, 0xFA5995, 0x14, 0xE85470, 0x2
+	RegObjTabl 0x160000f, 0xFA62CB, 0x14, 0xE859F4, 0x302
+	RegObjTabl 0x1600010, 0xFA5995, 0x54, 0xE854C4, 0x3
+	RegObjTabl 0x160000f, 0xFA62CB, 0x54, 0xE85A8E, 0x303
+	RegObjTabl 0x1600010, 0xFA5995, 0x4, 0xE85618, 0x4
+	RegObjTabl 0x160000f, 0xFA62CB, 0x4, 0xE85CF0, 0x304
+	RegObjTabl 0x1600010, 0xFA5995, 0x36, 0xE8562C, 0x5
+	RegObjTabl 0x160000f, 0xFA62CB, 0x36, 0xE85D14, 0x305
+	RegObjTabl 0x1600010, 0xFA5995, 0x3, 0xE85708, 0x7
+	RegObjTabl 0x160000f, 0xFA62CB, 0x3, 0xE85F0A, 0x307
+	RegObjTabl 0x1600010, 0xFA5995, 0x4, 0xE85718, 0x8
+	RegObjTabl 0x160000f, 0xFA62CB, 0x4, 0xE85F2A, 0x308
+	RegObjTabl 0x1600010, 0xFA5995, 0x1d, 0xE8572C, 0xd
+	RegObjTabl 0x160000f, 0xFA62CB, 0x1d, 0xE85F4E, 0x30d
+	RegObjTabl 0x1600010, 0xFA5995, 0x4, 0xE857A4, 0xa5
+	RegObjTabl 0x160000f, 0xFA62CB, 0x4, 0xE8608E, 0x3a5
+	RegObjTabl 0x1600010, 0xFA5995, 0xf, 0xE857B8, 0xe4
+	RegObjTabl 0x160000f, 0xFA62CB, 0xf, 0xE860B2, 0x3e4
+	RegObjTabl 0x1600010, 0xFA5995, 0x2c, 0xE857F8, 0xea
+	RegObjTabl 0x160000f, 0xFA62CB, 0x2c, 0xE8617E, 0x3ea
+	RegObjTabl 0x1600010, 0xFA5995, 0x25, 0xE858AC, 0xeb
+	RegObjTabl 0x160000f, 0xFA62CB, 0x25, 0xE862F2, 0x3eb
+	RegObjTabl 0x1600010, 0xFA5995, 0x18, 0xE85944, 0xee
+	RegObjTabl 0x160000f, 0xFA62CB, 0x18, 0xE863FE, 0x3ee
+	RegObjTabl 0x1600010, 0xFA5995, 0xb, 0xE859A8, 0xef
+	RegObjTabl 0x160000f, 0xFA62CB, 0xb, 0xE864D0, 0x3ef
+	RegObjTabl 0x1600010, 0xFA5995, 0x6, 0xE859D8, 0xf0
+	RegObjTabl 0x160000f, 0xFA62CB, 0x6, 0xE86534, 0x3f0
 
-	; RegMode 0001h, 00e8h, 658ah, 00000002h, 01200000h, 01a00002h
-	pushw 0x1
-	pushw 0xE8
-	pushw 0x658A
-	lds32 xwa, 2
-	ld xbc, 0x1200000
-	ld xde, 0x1A00002
-	call 0xFA4D2B
+	RegMode 0x1, 0xe8, 0x658a, 0x2, 0x1200000, 0x1a00002
 
-	; RegTitle 0001h, 00e8h, 6594h, 00000002h, 01200000h, 00020000h
-	pushw 0x1
-	pushw 0xE8
-	pushw 0x6594
-	lds32 xwa, 2
-	ld xbc, 0x1200000
-	ld xde, 0x20000
-	call 0xFA4D80
-	; RegTitle 0001h, 00e8h, 659eh, 00000003h, 01200000h, 00030000h
-	pushw 0x1
-	pushw 0xE8
-	pushw 0x659E
-	lds32 xwa, 3
-	ld xbc, 0x1200000
-	ld xde, 0x30000
-	call 0xFA4D80
-	; RegTitle 0001h, 00e8h, 65a8h, 00000004h, 01200000h, 00040000h
-	pushw 0x1
-	pushw 0xE8
-	pushw 0x65A8
-	lds32 xwa, 4
-	ld xbc, 0x1200000
-	ld xde, 0x40000
-	call 0xFA4D80
-	; RegTitle 0001h, 00e8h, 65b4h, 00000005h, 01200000h, 00050000h
-	pushw 0x1
-	pushw 0xE8
-	pushw 0x65B4
-	lds32 xwa, 5
-	ld xbc, 0x1200000
-	ld xde, 0x50000
-	call 0xFA4D80
-	; RegTitle 0001h, 00e8h, 65c0h, 00000007h, 01200000h, 00070000h
-	pushw 0x1
-	pushw 0xE8
-	pushw 0x65C0
-	lds32 xwa, 7
-	ld xbc, 0x1200000
-	ld xde, 0x70000
-	call 0xFA4D80
-	; RegTitle 0001h, 00e8h, 65cch, 00000008h, 01200000h, 00080000h
-	pushw 0x1
-	pushw 0xE8
-	pushw 0x65CC
-	ld xwa, 0x8
-	ld xbc, 0x1200000
-	ld xde, 0x80000
-	call 0xFA4D80
-	; RegTitle 0001h, 00e8h, 65d8h, 0000000dh, 01200000h, 000d0000h
-	pushw 0x1
-	pushw 0xE8
-	pushw 0x65D8
-	ld xwa, 0xD
-	ld xbc, 0x1200000
-	ld xde, 0xD0000
-	call 0xFA4D80
-	; RegTitle 0001h, 00e8h, 65e2h, 000000a5h, 01200000h, 00a50000h
-	pushw 0x1
-	pushw 0xE8
-	pushw 0x65E2
-	ld xwa, 0xA5
-	ld xbc, 0x1200000
-	ld xde, 0xA50000
-	call 0xFA4D80
-	; RegTitle 0001h, 00e8h, 65eeh, 000000e4h, 01200000h, 00e40000h
-	pushw 0x1
-	pushw 0xE8
-	pushw 0x65EE
-	ld xwa, 0xE4
-	ld xbc, 0x1200000
-	ld xde, 0xE40000
-	call 0xFA4D80
-	; RegTitle 0001h, 00e8h, 65feh, 000000eah, 01200000h, 00ea0000h
-	pushw 0x1
-	pushw 0xE8
-	pushw 0x65FE
-	ld xwa, 0xEA
-	ld xbc, 0x1200000
-	ld xde, 0xEA0000
-	call 0xFA4D80
-	; RegTitle 0001h, 00e8h, 660ah, 000000ebh, 01200000h, 00eb0000h
-	pushw 0x1
-	pushw 0xE8
-	pushw 0x660A
-	ld xwa, 0xEB
-	ld xbc, 0x1200000
-	ld xde, 0xEB0000
-	call 0xFA4D80
-	; RegTitle 0001h, 00e8h, 6618h, 000000eeh, 01200000h, 00ee0000h
-	pushw 0x1
-	pushw 0xE8
-	pushw 0x6618
-	ld xwa, 0xEE
-	ld xbc, 0x1200000
-	ld xde, 0xEE0000
-	call 0xFA4D80
-	; RegTitle 0001h, 00e8h, 6622h, 000000efh, 01200000h, 00ef0000h
-	pushw 0x1
-	pushw 0xE8
-	pushw 0x6622
-	ld xwa, 0xEF
-	ld xbc, 0x1200000
-	ld xde, 0xEF0000
-	call 0xFA4D80
-	; RegTitle 0001h, 00e8h, 662ch, 000000f0h, 01200000h, 00f00000h
-	pushw 0x1
-	pushw 0xE8
-	pushw 0x662C
-	ld xwa, 0xF0
-	ld xbc, 0x1200000
-	ld xde, 0xF00000
-	call 0xFA4D80
+	RegTitle 0x1, 0xe8, 0x6594, 0x2, 0x1200000, 0x20000
+	RegTitle 0x1, 0xe8, 0x659e, 0x3, 0x1200000, 0x30000
+	RegTitle 0x1, 0xe8, 0x65a8, 0x4, 0x1200000, 0x40000
+	RegTitle 0x1, 0xe8, 0x65b4, 0x5, 0x1200000, 0x50000
+	RegTitle 0x1, 0xe8, 0x65c0, 0x7, 0x1200000, 0x70000
+	RegTitle 0x1, 0xe8, 0x65cc, 0x8, 0x1200000, 0x80000
+	RegTitle 0x1, 0xe8, 0x65d8, 0xd, 0x1200000, 0xd0000
+	RegTitle 0x1, 0xe8, 0x65e2, 0xa5, 0x1200000, 0xa50000
+	RegTitle 0x1, 0xe8, 0x65ee, 0xe4, 0x1200000, 0xe40000
+	RegTitle 0x1, 0xe8, 0x65fe, 0xea, 0x1200000, 0xea0000
+	RegTitle 0x1, 0xe8, 0x660a, 0xeb, 0x1200000, 0xeb0000
+	RegTitle 0x1, 0xe8, 0x6618, 0xee, 0x1200000, 0xee0000
+	RegTitle 0x1, 0xe8, 0x6622, 0xef, 0x1200000, 0xef0000
+	RegTitle 0x1, 0xe8, 0x662c, 0xf0, 0x1200000, 0xf00000
 
 	lda xsp, (xsp + 14)
 	ret
@@ -365810,663 +360026,201 @@ GetWallPaletteRGB:
 InitializeRoot:
 	lda xsp, (xsp - 14)
 
-	; RegObjTable 01600004h, 0FA44E2h, 0EADA92h,	0EAC9EEh, 0160h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600004
-	ld (xbc), xwa
-	ldada_24 xwa, 16401634
-	ld (xbc + 4), xwa
-	ldda16_24 xwa, 15391378
-	ld (xbc + 8), wa
-	ldada_24 xwa, 15387118
-	ld (xbc + 10), xwa
-	ldw wa, 0x160
-	call 0xFA42FB
-	; RegObjTable 0160000ch, 0FA58FBh, 0EAEBB0h,	0EAE7B6h, 01c0h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000C
-	ld (xbc), xwa
-	ldada_24 xwa, 16406779
-	ld (xbc + 4), xwa
-	ldda16_24 xwa, 15395760
-	ld (xbc + 8), wa
-	ldada_24 xwa, 15394742
-	ld (xbc + 10), xwa
-	ldw wa, 0x1C0
-	call 0xFA42FB
-	; RegObjTable 0160000dh, 0FA5948h, 0EAFA6Ch,	0EAEBB2h, 01e0h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000D
-	ld (xbc), xwa
-	ldada_24 xwa, 16406856
-	ld (xbc + 4), xwa
-	ldda16_24 xwa, 15399532
-	ld (xbc + 8), wa
-	ldada_24 xwa, 15395762
-	ld (xbc + 10), xwa
-	ldw wa, 0x1E0
-	call 0xFA42FB
-	; RegObjTabl 01600002h, 0FA496Ch, 000ch,		0EAB2B4h, 0120h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600002
-	ld (xbc), xwa
-	ldada_24 xwa, 16402796
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0xC
-	ldada_24 xwa, 15381172
-	ld (xbc + 10), xwa
-	ldw wa, 0x120
-	call 0xFA42FB
-	; RegObjTabl 01600002h, 0FA496Ch, 000ch,		0EAB2E8h, 0420h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600002
-	ld (xbc), xwa
-	ldada_24 xwa, 16402796
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0xC
-	ldada_24 xwa, 15381224
-	ld (xbc + 10), xwa
-	ldw wa, 0x420
-	call 0xFA42FB
-	; RegObjTabl 01600001h, 0FA48A9h, 0160h,		0EAFA6Eh, 0100h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600001
-	ld (xbc), xwa
-	ldada_24 xwa, 16402601
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x160
-	ldada_24 xwa, 15399534
-	ld (xbc + 10), xwa
-	ldw wa, 0x100
-	call 0xFA42FB
-	; RegObjTabl 01600001h, 0FA48A9h, 0160h,		0EAFFF2h, 0400h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600001
-	ld (xbc), xwa
-	ldada_24 xwa, 16402601
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x160
-	ldada_24 xwa, 15400946
-	ld (xbc + 10), xwa
-	ldw wa, 0x400
-	call 0xFA42FB
-	; RegObjTabl 01600003h, 0FA4A18h, 000dh,		0EB3698h, 0140h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600003
-	ld (xbc), xwa
-	ldada_24 xwa, 16402968
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0xD
-	ldada_24 xwa, 15414936
-	ld (xbc + 10), xwa
-	ldw wa, 0x140
-	call 0xFA42FB
-	; RegObjTabl 01600003h, 0FA4A18h, 000dh,		0EB36D0h, 0440h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600003
-	ld (xbc), xwa
-	ldada_24 xwa, 16402968
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0xD
-	ldada_24 xwa, 15414992
-	ld (xbc + 10), xwa
-	ldw wa, 0x440
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0033h,		0EB3374h, 0000h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x33
-	ldada_24 xwa, 15414132
-	ld (xbc + 10), xwa
-	lds wa, 0
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0033h,		0EB346Ch, 0300h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x33
-	ldada_24 xwa, 15414380
-	ld (xbc + 10), xwa
-	ldw wa, 0x300
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0009h,		0EB3444h, 00ffh
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x9
-	ldada_24 xwa, 15414340
-	ld (xbc + 10), xwa
-	ldw wa, 0xFF
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0009h,		0EB362Ah, 03ffh
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x9
-	ldada_24 xwa, 15414826
-	ld (xbc + 10), xwa
-	ldw wa, 0x3FF
-	call 0xFA42FB
+	RegObjTable 0x1600004, 0xFA44E2, 0xEADA92, 0xEAC9EE, 0x160
+	RegObjTable 0x160000c, 0xFA58FB, 0xEAEBB0, 0xEAE7B6, 0x1c0
+	RegObjTable 0x160000d, 0xFA5948, 0xEAFA6C, 0xEAEBB2, 0x1e0
+	RegObjTabl 0x1600002, 0xFA496C, 0xc, 0xEAB2B4, 0x120
+	RegObjTabl 0x1600002, 0xFA496C, 0xc, 0xEAB2E8, 0x420
+	RegObjTabl 0x1600001, 0xFA48A9, 0x160, 0xEAFA6E, 0x100
+	RegObjTabl 0x1600001, 0xFA48A9, 0x160, 0xEAFFF2, 0x400
+	RegObjTabl 0x1600003, 0xFA4A18, 0xd, 0xEB3698, 0x140
+	RegObjTabl 0x1600003, 0xFA4A18, 0xd, 0xEB36D0, 0x440
+	RegObjTabl 0x1600010, 0xFA5995, 0x33, 0xEB3374, 0x0
+	RegObjTabl 0x160000f, 0xFA62CB, 0x33, 0xEB346C, 0x300
+	RegObjTabl 0x1600010, 0xFA5995, 0x9, 0xEB3444, 0xff
+	RegObjTabl 0x160000f, 0xFA62CB, 0x9, 0xEB362A, 0x3ff
 
-	; RegMode 0000h, 00ebh, 3682h, 00000000h, 01200000h, 01a00000h
-	pushw 0x0
-	pushw 0xEB
-	pushw 0x3682
-	lds32 xwa, 0
-	ld xbc, 0x1200000
-	ld xde, 0x1A00000
-	call 0xFA4D2B
+	RegMode 0x0, 0xeb, 0x3682, 0x0, 0x1200000, 0x1a00000
 
-	; RegTitle 0000h, 00ebh, 3688h, 00000000h, 01200000h, 00000000h
-	pushw 0x0
-	pushw 0xEB
-	pushw 0x3688
-	lds32 xwa, 0
-	ld xbc, 0x1200000
-	lds32 xde, 0
-	call 0xFA4D80
-	; RegTitle 0000h, 00ebh, 368eh, 000000ffh, 01400009h, 00ff0000h
-	pushw 0x0
-	pushw 0xEB
-	pushw 0x368E
-	ld xwa, 0xFF
-	ld xbc, 0x1400009
-	ld xde, 0xFF0000
-	call 0xFA4D80
+	RegTitle 0x0, 0xeb, 0x3688, 0x0, 0x1200000, 0x0
+	RegTitle 0x0, 0xeb, 0x368e, 0xff, 0x1400009, 0xff0000
 
 	lda xsp, (xsp + 14)
 	ret
 
 
-.macro _VGA_WRITE regnum,value
-	.byte 0xef, 0x6a	; LDW WA, regnum
-	.byte 0xef, 0x6a	; LDW BC, value
-	.byte 0xef, 0x6a	; CALR _Write_VGA_Register
+.macro _VGA_WRITE regnum, value
+	.if \regnum <= 7
+	lds wa, \regnum
+	.else
+	ldw wa, \regnum
+	.endif
+	.if \value <= 7
+	lds bc, \value
+	.else
+	ldw bc, \value
+	.endif
+	calr _Write_VGA_Register
 .endm
+
+
+
+
 
 .macro _VGA_READ regnum
-	.byte 0xef, 0x6a	; LDW WA, regnum
-	.byte 0xef, 0x6a	; CALR _Read_VGA_Register
+	.if \regnum <= 7
+	lds wa, \regnum
+	.else
+	ldw wa, \regnum
+	.endif
+	calr _Read_VGA_Register
 .endm
 
-.macro _PALLETE_WRITE red,green,blue
-	.byte 0xef, 0x6a	; LD WA, 3c9h
-	.byte 0xef, 0x6a	; LDW BC, red
-	.byte 0xef, 0x6a	; CALR _Write_VGA_Register
-	.byte 0xef, 0x6a	; LDW BC, green
-	.byte 0xef, 0x6a	; CALR _Write_VGA_Register
-	.byte 0xef, 0x6a	; LDW BC, blue
-	.byte 0xef, 0x6a	; CALR _Write_VGA_Register
+
+
+
+.macro _PALLETE_WRITE red, green, blue
+	ldw wa, 0x3C9
+	.if \red <= 7
+	lds bc, \red
+	.else
+	ldw bc, \red
+	.endif
+	calr _Write_VGA_Register
+	.if \green <= 7
+	lds bc, \green
+	.else
+	ldw bc, \green
+	.endif
+	calr _Write_VGA_Register
+	.if \blue <= 7
+	lds bc, \blue
+	.else
+	ldw bc, \blue
+	.endif
+	calr _Write_VGA_Register
 .endm
 
-.macro _VGA_ATTRIBUTE field,value
-	.byte 0xef, 0x6a, 0x3e, 0x30, 0xc3, 0x03	; _VGA_WRITE 3c0h, field
-	.byte 0xef, 0x6a, 0x3e, 0x30, 0xc3, 0x03	; _VGA_WRITE 3c0h, value
+
+
+
+
+
+
+
+
+.macro _VGA_ATTRIBUTE field, value
+	_VGA_WRITE 0x3C0, \field
+	_VGA_WRITE 0x3C0, \value
 .endm
 
-.macro _VGA_SEQUENCER field,value
-	.byte 0xef, 0x6a, 0x3e, 0x30, 0xc3, 0x03	; _VGA_WRITE 3c4h, field
-	.byte 0xef, 0x6a, 0x3e, 0x30, 0xc3, 0x03	; _VGA_WRITE 3c5h, value
+
+
+
+.macro _VGA_SEQUENCER field, value
+	_VGA_WRITE 0x3C4, \field
+	_VGA_WRITE 0x3C5, \value
 .endm
 
-.macro _VGA_GFX_CONTROLLER field,value
-	.byte 0xef, 0x6a, 0x3e, 0x30, 0xc3, 0x03	; _VGA_WRITE 3ceh, field
-	.byte 0xef, 0x6a, 0x3e, 0x30, 0xc3, 0x03	; _VGA_WRITE 3cfh, value
+
+
+
+.macro _VGA_GFX_CONTROLLER field, value
+	_VGA_WRITE 0x3CE, \field
+	_VGA_WRITE 0x3CF, \value
 .endm
 
-.macro _VGA_COLOR_CRTC field,value
-	.byte 0xef, 0x6a, 0x3e, 0x30, 0xc3, 0x03	; _VGA_WRITE 3d4h, field
-	.byte 0xef, 0x6a, 0x3e, 0x30, 0xc3, 0x03	; _VGA_WRITE 3d5h, value
+
+
+
+.macro _VGA_COLOR_CRTC field, value
+	_VGA_WRITE 0x3D4, \field
+	_VGA_WRITE 0x3D5, \value
 .endm
+
+
+
 
 
 LABEL_FB2B06:
 	dec 2, xsp
 	push xiz
 
-	; _VGA_WRITE 3c3h, 001h
-	ldw wa, 0x3C3
-	lds bc, 1
-	calr _Write_VGA_Register
-	; _VGA_WRITE 3c2h, 0e3h
-	ldw wa, 0x3C2
-	ldw bc, 0xE3
-	calr _Write_VGA_Register
+	_VGA_WRITE 0x3c3, 0x1
+	_VGA_WRITE 0x3c2, 0xe3
 
-	; _VGA_SEQUENCER 00h, 000h
-	ldw wa, 0x3C4
-	lds bc, 0
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	lds bc, 0
-	calr _Write_VGA_Register
-	; _VGA_SEQUENCER 01h, 021h
-	ldw wa, 0x3C4
-	lds bc, 1
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0x21
-	calr _Write_VGA_Register
-	; _VGA_SEQUENCER 00h, 003h
-	ldw wa, 0x3C4
-	lds bc, 0
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	lds bc, 3
-	calr _Write_VGA_Register
-	; _VGA_SEQUENCER 02h, 00fh
-	ldw wa, 0x3C4
-	lds bc, 2
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0xF
-	calr _Write_VGA_Register
-	; _VGA_SEQUENCER 03h, 000h
-	ldw wa, 0x3C4
-	lds bc, 3
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	lds bc, 0
-	calr _Write_VGA_Register
-	; _VGA_SEQUENCER 04h, 006h
-	ldw wa, 0x3C4
-	lds bc, 4
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	lds bc, 6
-	calr _Write_VGA_Register
+	_VGA_SEQUENCER 0x0, 0x0
+	_VGA_SEQUENCER 0x1, 0x21
+	_VGA_SEQUENCER 0x0, 0x3
+	_VGA_SEQUENCER 0x2, 0xf
+	_VGA_SEQUENCER 0x3, 0x0
+	_VGA_SEQUENCER 0x4, 0x6
 
-	; _VGA_GFX_CONTROLLER GC_ENABLE_SET_RESET, 000h
-	ldw wa, 0x3CE
-	lds bc, 1
-	calr _Write_VGA_Register
-	ldw wa, 0x3CF
-	lds bc, 0
-	calr _Write_VGA_Register
-	; _VGA_GFX_CONTROLLER GC_DATA_ROTATE, 000h
-	ldw wa, 0x3CE
-	lds bc, 3
-	calr _Write_VGA_Register
-	ldw wa, 0x3CF
-	lds bc, 0
-	calr _Write_VGA_Register
-	; _VGA_GFX_CONTROLLER GC_READ_MAP_SELECT, 000h
-	ldw wa, 0x3CE
-	lds bc, 4
-	calr _Write_VGA_Register
-	ldw wa, 0x3CF
-	lds bc, 0
-	calr _Write_VGA_Register
-	; _VGA_GFX_CONTROLLER GC_GRAPHICS_MODE, 000h
-	ldw wa, 0x3CE
-	lds bc, 5
-	calr _Write_VGA_Register
-	ldw wa, 0x3CF
-	lds bc, 0
-	calr _Write_VGA_Register
-	; _VGA_GFX_CONTROLLER GC_MISC_GRAPHICS, 001h
-	ldw wa, 0x3CE
-	lds bc, 6
-	calr _Write_VGA_Register
-	ldw wa, 0x3CF
-	lds bc, 1
-	calr _Write_VGA_Register
-	; _VGA_GFX_CONTROLLER GC_BIT_MASK, 0ffh
-	ldw wa, 0x3CE
-	ldw bc, 0x8
-	calr _Write_VGA_Register
-	ldw wa, 0x3CF
-	ldw bc, 0xFF
-	calr _Write_VGA_Register
+	_VGA_GFX_CONTROLLER GC_ENABLE_SET_RESET, 0x0
+	_VGA_GFX_CONTROLLER GC_DATA_ROTATE, 0x0
+	_VGA_GFX_CONTROLLER GC_READ_MAP_SELECT, 0x0
+	_VGA_GFX_CONTROLLER GC_GRAPHICS_MODE, 0x0
+	_VGA_GFX_CONTROLLER GC_MISC_GRAPHICS, 0x1
+	_VGA_GFX_CONTROLLER GC_BIT_MASK, 0xff
 
-	; _VGA_COLOR_CRTC CRTC_VERT_RETRACE_END, 000h
-	ldw wa, 0x3D4
-	ldw bc, 0x11
-	calr _Write_VGA_Register
-	ldw wa, 0x3D5
-	lds bc, 0
-	calr _Write_VGA_Register	; Unlock protected registers
-	; _VGA_COLOR_CRTC CRTC_OVERFLOW, 010h
-	ldw wa, 0x3D4
-	lds bc, 7
-	calr _Write_VGA_Register
-	ldw wa, 0x3D5
-	ldw bc, 0x10
-	calr _Write_VGA_Register
-	; _VGA_COLOR_CRTC CRTC_PRESET_ROW_SCAN, 000h
-	ldw wa, 0x3D4
-	ldw bc, 0x8
-	calr _Write_VGA_Register
-	ldw wa, 0x3D5
-	lds bc, 0
-	calr _Write_VGA_Register
-	; _VGA_COLOR_CRTC CRTC_MAX_SCAN_LINE, 040h
-	ldw wa, 0x3D4
-	ldw bc, 0x9
-	calr _Write_VGA_Register
-	ldw wa, 0x3D5
-	ldw bc, 0x40
-	calr _Write_VGA_Register
-	; _VGA_COLOR_CRTC CRTC_START_ADDR_HIGH, 000h
-	ldw wa, 0x3D4
-	ldw bc, 0xC
-	calr _Write_VGA_Register
-	ldw wa, 0x3D5
-	lds bc, 0
-	calr _Write_VGA_Register
-	; _VGA_COLOR_CRTC CRTC_START_ADDR_LOW, 000h
-	ldw wa, 0x3D4
-	ldw bc, 0xD
-	calr _Write_VGA_Register
-	ldw wa, 0x3D5
-	lds bc, 0
-	calr _Write_VGA_Register
-	; _VGA_COLOR_CRTC CRTC_VERT_DISP_END, 0efh
-	ldw wa, 0x3D4
-	ldw bc, 0x12
-	calr _Write_VGA_Register
-	ldw wa, 0x3D5
-	ldw bc, 0xEF
-	calr _Write_VGA_Register
-	; _VGA_COLOR_CRTC CRTC_OFFSET, 014h
-	ldw wa, 0x3D4
-	ldw bc, 0x13
-	calr _Write_VGA_Register
-	ldw wa, 0x3D5
-	ldw bc, 0x14
-	calr _Write_VGA_Register
-	; _VGA_COLOR_CRTC CRTC_UNDERLINE_LOC, 000h
-	ldw wa, 0x3D4
-	ldw bc, 0x14
-	calr _Write_VGA_Register
-	ldw wa, 0x3D5
-	lds bc, 0
-	calr _Write_VGA_Register
-	; _VGA_COLOR_CRTC CRTC_MODE_CONTROL, 0e3h
-	ldw wa, 0x3D4
-	ldw bc, 0x17
-	calr _Write_VGA_Register
-	ldw wa, 0x3D5
-	ldw bc, 0xE3
-	calr _Write_VGA_Register
-	; _VGA_COLOR_CRTC CRTC_LINE_COMPARE, 0ffh
-	ldw wa, 0x3D4
-	ldw bc, 0x18
-	calr _Write_VGA_Register
-	ldw wa, 0x3D5
-	ldw bc, 0xFF
-	calr _Write_VGA_Register
+	_VGA_COLOR_CRTC CRTC_VERT_RETRACE_END, 0x0	; Unlock protected registers
+	_VGA_COLOR_CRTC CRTC_OVERFLOW, 0x10
+	_VGA_COLOR_CRTC CRTC_PRESET_ROW_SCAN, 0x0
+	_VGA_COLOR_CRTC CRTC_MAX_SCAN_LINE, 0x40
+	_VGA_COLOR_CRTC CRTC_START_ADDR_HIGH, 0x0
+	_VGA_COLOR_CRTC CRTC_START_ADDR_LOW, 0x0
+	_VGA_COLOR_CRTC CRTC_VERT_DISP_END, 0xef
+	_VGA_COLOR_CRTC CRTC_OFFSET, 0x14
+	_VGA_COLOR_CRTC CRTC_UNDERLINE_LOC, 0x0
+	_VGA_COLOR_CRTC CRTC_MODE_CONTROL, 0xe3
+	_VGA_COLOR_CRTC CRTC_LINE_COMPARE, 0xff
 
-	; _VGA_READ 3dah
-	ldw wa, 0x3DA
-	calr _Read_VGA_Register
-	; _VGA_ATTRIBUTE 00h, 000h
-	ldw wa, 0x3C0
-	lds bc, 0
-	calr _Write_VGA_Register
-	ldw wa, 0x3C0
-	lds bc, 0
-	calr _Write_VGA_Register
-	; _VGA_ATTRIBUTE 01h, 001h
-	ldw wa, 0x3C0
-	lds bc, 1
-	calr _Write_VGA_Register
-	ldw wa, 0x3C0
-	lds bc, 1
-	calr _Write_VGA_Register
-	; _VGA_ATTRIBUTE 02h, 002h
-	ldw wa, 0x3C0
-	lds bc, 2
-	calr _Write_VGA_Register
-	ldw wa, 0x3C0
-	lds bc, 2
-	calr _Write_VGA_Register
-	; _VGA_ATTRIBUTE 03h, 003h
-	ldw wa, 0x3C0
-	lds bc, 3
-	calr _Write_VGA_Register
-	ldw wa, 0x3C0
-	lds bc, 3
-	calr _Write_VGA_Register
-	; _VGA_ATTRIBUTE 04h, 004h
-	ldw wa, 0x3C0
-	lds bc, 4
-	calr _Write_VGA_Register
-	ldw wa, 0x3C0
-	lds bc, 4
-	calr _Write_VGA_Register
-	; _VGA_ATTRIBUTE 05h, 005h
-	ldw wa, 0x3C0
-	lds bc, 5
-	calr _Write_VGA_Register
-	ldw wa, 0x3C0
-	lds bc, 5
-	calr _Write_VGA_Register
-	; _VGA_ATTRIBUTE 06h, 014h
-	ldw wa, 0x3C0
-	lds bc, 6
-	calr _Write_VGA_Register
-	ldw wa, 0x3C0
-	ldw bc, 0x14
-	calr _Write_VGA_Register
-	; _VGA_ATTRIBUTE 07h, 007h
-	ldw wa, 0x3C0
-	lds bc, 7
-	calr _Write_VGA_Register
-	ldw wa, 0x3C0
-	lds bc, 7
-	calr _Write_VGA_Register
-	; _VGA_ATTRIBUTE 08h, 038h
-	ldw wa, 0x3C0
-	ldw bc, 0x8
-	calr _Write_VGA_Register
-	ldw wa, 0x3C0
-	ldw bc, 0x38
-	calr _Write_VGA_Register
-	; _VGA_ATTRIBUTE 09h, 039h
-	ldw wa, 0x3C0
-	ldw bc, 0x9
-	calr _Write_VGA_Register
-	ldw wa, 0x3C0
-	ldw bc, 0x39
-	calr _Write_VGA_Register
-	; _VGA_ATTRIBUTE 0ah, 03ah
-	ldw wa, 0x3C0
-	ldw bc, 0xA
-	calr _Write_VGA_Register
-	ldw wa, 0x3C0
-	ldw bc, 0x3A
-	calr _Write_VGA_Register
-	; _VGA_ATTRIBUTE 0bh, 03bh
-	ldw wa, 0x3C0
-	ldw bc, 0xB
-	calr _Write_VGA_Register
-	ldw wa, 0x3C0
-	ldw bc, 0x3B
-	calr _Write_VGA_Register
-	; _VGA_ATTRIBUTE 0ch, 03ch
-	ldw wa, 0x3C0
-	ldw bc, 0xC
-	calr _Write_VGA_Register
-	ldw wa, 0x3C0
-	ldw bc, 0x3C
-	calr _Write_VGA_Register
-	; _VGA_ATTRIBUTE 0dh, 03dh
-	ldw wa, 0x3C0
-	ldw bc, 0xD
-	calr _Write_VGA_Register
-	ldw wa, 0x3C0
-	ldw bc, 0x3D
-	calr _Write_VGA_Register
-	; _VGA_ATTRIBUTE 0eh, 03eh
-	ldw wa, 0x3C0
-	ldw bc, 0xE
-	calr _Write_VGA_Register
-	ldw wa, 0x3C0
-	ldw bc, 0x3E
-	calr _Write_VGA_Register
-	; _VGA_ATTRIBUTE 0fh, 03fh
-	ldw wa, 0x3C0
-	ldw bc, 0xF
-	calr _Write_VGA_Register
-	ldw wa, 0x3C0
-	ldw bc, 0x3F
-	calr _Write_VGA_Register
-	; _VGA_ATTRIBUTE ATTR_MODE_CONTROL, 001h
-	ldw wa, 0x3C0
-	ldw bc, 0x10
-	calr _Write_VGA_Register
-	ldw wa, 0x3C0
-	lds bc, 1
-	calr _Write_VGA_Register
-	; _VGA_ATTRIBUTE ATTR_OVERSCAN_COLOR, 000h
-	ldw wa, 0x3C0
-	ldw bc, 0x11
-	calr _Write_VGA_Register
-	ldw wa, 0x3C0
-	lds bc, 0
-	calr _Write_VGA_Register
-	; _VGA_ATTRIBUTE ATTR_COLOR_PLANE_ENABLE, 00fh
-	ldw wa, 0x3C0
-	ldw bc, 0x12
-	calr _Write_VGA_Register
-	ldw wa, 0x3C0
-	ldw bc, 0xF
-	calr _Write_VGA_Register
-	; _VGA_ATTRIBUTE ATTR_HORIZ_PIXEL_PAN, 000h
-	ldw wa, 0x3C0
-	ldw bc, 0x13
-	calr _Write_VGA_Register
-	ldw wa, 0x3C0
-	lds bc, 0
-	calr _Write_VGA_Register
-	; _VGA_ATTRIBUTE 34h, 000h
-	ldw wa, 0x3C0
-	ldw bc, 0x34
-	calr _Write_VGA_Register
-	ldw wa, 0x3C0
-	lds bc, 0
-	calr _Write_VGA_Register	; ATTR_COLOR_SELECT + 20h (Palette Address Source bit)
+	_VGA_READ 0x3da
+	_VGA_ATTRIBUTE 0x0, 0x0
+	_VGA_ATTRIBUTE 0x1, 0x1
+	_VGA_ATTRIBUTE 0x2, 0x2
+	_VGA_ATTRIBUTE 0x3, 0x3
+	_VGA_ATTRIBUTE 0x4, 0x4
+	_VGA_ATTRIBUTE 0x5, 0x5
+	_VGA_ATTRIBUTE 0x6, 0x14
+	_VGA_ATTRIBUTE 0x7, 0x7
+	_VGA_ATTRIBUTE 0x8, 0x38
+	_VGA_ATTRIBUTE 0x9, 0x39
+	_VGA_ATTRIBUTE 0xa, 0x3a
+	_VGA_ATTRIBUTE 0xb, 0x3b
+	_VGA_ATTRIBUTE 0xc, 0x3c
+	_VGA_ATTRIBUTE 0xd, 0x3d
+	_VGA_ATTRIBUTE 0xe, 0x3e
+	_VGA_ATTRIBUTE 0xf, 0x3f
+	_VGA_ATTRIBUTE ATTR_MODE_CONTROL, 0x1
+	_VGA_ATTRIBUTE ATTR_OVERSCAN_COLOR, 0x0
+	_VGA_ATTRIBUTE ATTR_COLOR_PLANE_ENABLE, 0xf
+	_VGA_ATTRIBUTE ATTR_HORIZ_PIXEL_PAN, 0x0
+	_VGA_ATTRIBUTE 0x34, 0x0	; ATTR_COLOR_SELECT + 20h (Palette Address Source bit)
 
-	; _VGA_SEQUENCER 06h, 001h
-	ldw wa, 0x3C4
-	lds bc, 6
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	lds bc, 1
-	calr _Write_VGA_Register
+	_VGA_SEQUENCER 0x6, 0x1
 
-	; _VGA_COLOR_CRTC CRTC_HORIZ_TOTAL, 050h
-	ldw wa, 0x3D4
-	lds bc, 0
-	calr _Write_VGA_Register
-	ldw wa, 0x3D5
-	ldw bc, 0x50
-	calr _Write_VGA_Register
-	; _VGA_COLOR_CRTC CRTC_HORIZ_DISP_END, 027h
-	ldw wa, 0x3D4
-	lds bc, 1
-	calr _Write_VGA_Register
-	ldw wa, 0x3D5
-	ldw bc, 0x27
-	calr _Write_VGA_Register
-	; _VGA_COLOR_CRTC CRTC_START_HORIZ_RETRACE, 028h
-	ldw wa, 0x3D4
-	lds bc, 4
-	calr _Write_VGA_Register
-	ldw wa, 0x3D5
-	ldw bc, 0x28
-	calr _Write_VGA_Register
-	; _VGA_COLOR_CRTC CRTC_END_HORIZ_RETRACE, 029h
-	ldw wa, 0x3D4
-	lds bc, 5
-	calr _Write_VGA_Register
-	ldw wa, 0x3D5
-	ldw bc, 0x29
-	calr _Write_VGA_Register
-	; _VGA_COLOR_CRTC CRTC_VERT_TOTAL, 0f3h
-	ldw wa, 0x3D4
-	lds bc, 6
-	calr _Write_VGA_Register
-	ldw wa, 0x3D5
-	ldw bc, 0xF3
-	calr _Write_VGA_Register
-	; _VGA_COLOR_CRTC CRTC_OVERFLOW, 000h
-	ldw wa, 0x3D4
-	lds bc, 7
-	calr _Write_VGA_Register
-	ldw wa, 0x3D5
-	lds bc, 0
-	calr _Write_VGA_Register
-	; _VGA_COLOR_CRTC CRTC_MAX_SCAN_LINE, 000h
-	ldw wa, 0x3D4
-	ldw bc, 0x9
-	calr _Write_VGA_Register
-	ldw wa, 0x3D5
-	lds bc, 0
-	calr _Write_VGA_Register
-	; _VGA_COLOR_CRTC CRTC_VERT_RETRACE_START, 0f2h
-	ldw wa, 0x3D4
-	ldw bc, 0x10
-	calr _Write_VGA_Register
-	ldw wa, 0x3D5
-	ldw bc, 0xF2
-	calr _Write_VGA_Register
-	; _VGA_COLOR_CRTC CRTC_VERT_RETRACE_END, 003h
-	ldw wa, 0x3D4
-	ldw bc, 0x11
-	calr _Write_VGA_Register
-	ldw wa, 0x3D5
-	lds bc, 3
-	calr _Write_VGA_Register
-	; _VGA_COLOR_CRTC CRTC_START_VERT_BLANK, 0efh
-	ldw wa, 0x3D4
-	ldw bc, 0x15
-	calr _Write_VGA_Register
-	ldw wa, 0x3D5
-	ldw bc, 0xEF
-	calr _Write_VGA_Register
-	; _VGA_COLOR_CRTC CRTC_END_VERT_BLANK, 0f3h
-	ldw wa, 0x3D4
-	ldw bc, 0x16
-	calr _Write_VGA_Register
-	ldw wa, 0x3D5
-	ldw bc, 0xF3
-	calr _Write_VGA_Register
+	_VGA_COLOR_CRTC CRTC_HORIZ_TOTAL, 0x50
+	_VGA_COLOR_CRTC CRTC_HORIZ_DISP_END, 0x27
+	_VGA_COLOR_CRTC CRTC_START_HORIZ_RETRACE, 0x28
+	_VGA_COLOR_CRTC CRTC_END_HORIZ_RETRACE, 0x29
+	_VGA_COLOR_CRTC CRTC_VERT_TOTAL, 0xf3
+	_VGA_COLOR_CRTC CRTC_OVERFLOW, 0x0
+	_VGA_COLOR_CRTC CRTC_MAX_SCAN_LINE, 0x0
+	_VGA_COLOR_CRTC CRTC_VERT_RETRACE_START, 0xf2
+	_VGA_COLOR_CRTC CRTC_VERT_RETRACE_END, 0x3
+	_VGA_COLOR_CRTC CRTC_START_VERT_BLANK, 0xef
+	_VGA_COLOR_CRTC CRTC_END_VERT_BLANK, 0xf3
 
-	; _VGA_SEQUENCER 08h, 001h
-	ldw wa, 0x3C4
-	ldw bc, 0x8
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	lds bc, 1
-	calr _Write_VGA_Register
-	; _VGA_SEQUENCER 0dh, 003h
-	ldw wa, 0x3C4
-	ldw bc, 0xD
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	lds bc, 3
-	calr _Write_VGA_Register
+	_VGA_SEQUENCER 0x8, 0x1
+	_VGA_SEQUENCER 0xd, 0x3
 	call 0xEF0865
 	cps l, 4
 	jr nz, LABEL_FB2F12
 
 	; For byte-matching purposes, the following instructions
 	; are equivalent to: _VGA_SEQUENCER 0fh, 000h
-	; _VGA_WRITE 3c4h, 0fh
-	ldw wa, 0x3C4
-	ldw bc, 0xF
-	calr _Write_VGA_Register
+	_VGA_WRITE 0x3c4, 0xf
 	ldw wa, 0x3C5
 	lds bc, 0
 	; but omitting the final "CALR _Write_VGA_Register"
@@ -366477,70 +360231,25 @@ LABEL_FB2B06:
 LABEL_FB2F12:
 	; For byte-matching purposes, the following instructions
 	; are equivalent to: _VGA_SEQUENCER 0fh, 044h
-	; _VGA_WRITE 3c4h, 0fh
-	ldw wa, 0x3C4
-	ldw bc, 0xF
-	calr _Write_VGA_Register
+	_VGA_WRITE 0x3c4, 0xf
 	ldw wa, 0x3C5
 	ldw bc, 0x44
 LABEL_FB2F21:
 	calr _Write_VGA_Register
 
 LABEL_FB2F24:
-	; _VGA_SEQUENCER 13h, 001h
-	ldw wa, 0x3C4
-	ldw bc, 0x13
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	lds bc, 1
-	calr _Write_VGA_Register
+	_VGA_SEQUENCER 0x13, 0x1
 
-	; _VGA_COLOR_CRTC 19h, 000h
-	ldw wa, 0x3D4
-	ldw bc, 0x19
-	calr _Write_VGA_Register
-	ldw wa, 0x3D5
-	lds bc, 0
-	calr _Write_VGA_Register	; MN89304-specific register
-	; _VGA_COLOR_CRTC 1ah, 010h
-	ldw wa, 0x3D4
-	ldw bc, 0x1A
-	calr _Write_VGA_Register
-	ldw wa, 0x3D5
-	ldw bc, 0x10
-	calr _Write_VGA_Register	; MN89304-specific register
+	_VGA_COLOR_CRTC 0x19, 0x0	; MN89304-specific register
+	_VGA_COLOR_CRTC 0x1a, 0x10	; MN89304-specific register
 
-	; _VGA_SEQUENCER 07h, 020h
-	ldw wa, 0x3C4
-	lds bc, 7
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0x20
-	calr _Write_VGA_Register
-	; _VGA_SEQUENCER 06h, 000h
-	ldw wa, 0x3C4
-	lds bc, 6
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	lds bc, 0
-	calr _Write_VGA_Register
+	_VGA_SEQUENCER 0x7, 0x20
+	_VGA_SEQUENCER 0x6, 0x0
 
-	; _VGA_COLOR_CRTC CRTC_VERT_RETRACE_END, 080h
-	ldw wa, 0x3D4
-	ldw bc, 0x11
-	calr _Write_VGA_Register
-	ldw wa, 0x3D5
-	ldw bc, 0x80
-	calr _Write_VGA_Register	; Lock protected registers 0-7
+	_VGA_COLOR_CRTC CRTC_VERT_RETRACE_END, 0x80	; Lock protected registers 0-7
 
-	; _VGA_WRITE 3c6h, 0ffh
-	ldw wa, 0x3C6
-	ldw bc, 0xFF
-	calr _Write_VGA_Register
-	; _VGA_WRITE 3c8h, 000h
-	ldw wa, 0x3C8
-	lds bc, 0
-	calr _Write_VGA_Register
+	_VGA_WRITE 0x3c6, 0xff
+	_VGA_WRITE 0x3c8, 0x0
 
 	ldmw (xsp + 4), 0x0
 
@@ -366631,13 +360340,7 @@ LABEL_FB3038:
 	jrl c, LABEL_FB2FA1
 	calr LABEL_FB36A9
 	calr LABEL_FB3063
-	; _VGA_SEQUENCER 01h, 001h
-	ldw wa, 0x3C4
-	lds bc, 1
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	lds bc, 1
-	calr _Write_VGA_Register
+	_VGA_SEQUENCER 0x1, 0x1
 	pop xiz
 	inc 2, xsp
 	ret
@@ -366792,10 +360495,7 @@ LABEL_FB318A:
 	; _VGA_SEQUENCER 01h, 001h
 	; RET
 	;
-	; _VGA_WRITE 3c4h, 01h
-	ldw wa, 0x3C4
-	lds bc, 1
-	calr _Write_VGA_Register
+	_VGA_WRITE 0x3c4, 0x1
 	ldw wa, 0x3C5
 	lds bc, 1
 	jrl _Write_VGA_Register
@@ -366808,10 +360508,7 @@ LABEL_FB319A:
 	; _VGA_SEQUENCER 01h, 021h
 	; RET
 	;
-	; _VGA_WRITE 3c4h, 01h
-	ldw wa, 0x3C4
-	lds bc, 1
-	calr _Write_VGA_Register
+	_VGA_WRITE 0x3c4, 0x1
 	ldw wa, 0x3C5
 	ldw bc, 0x21
 	jrl _Write_VGA_Register
@@ -367046,454 +360743,88 @@ LABEL_FB3244:
 	.byte 0xd9, 0xa8, 0x78, 0xde, 0xf9
 
 LABEL_FB36A9:
-	; _VGA_SEQUENCER 06h, 001h
-	ldw wa, 0x3C4
-	lds bc, 6
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	lds bc, 1
-	calr _Write_VGA_Register
+	_VGA_SEQUENCER 0x6, 0x1
 
-	; _VGA_SEQUENCER 09h, 004h
-	ldw wa, 0x3C4
-	ldw bc, 0x9
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	lds bc, 4
-	calr _Write_VGA_Register
-	; _VGA_SEQUENCER 0ah, 010h
-	ldw wa, 0x3C4
-	ldw bc, 0xA
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0x10
-	calr _Write_VGA_Register
-	; _VGA_SEQUENCER 0bh, 013h
-	ldw wa, 0x3C4
-	ldw bc, 0xB
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0x13
-	calr _Write_VGA_Register
-	; _VGA_SEQUENCER 0ch, 005h
-	ldw wa, 0x3C4
-	ldw bc, 0xC
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	lds bc, 5
-	calr _Write_VGA_Register
+	_VGA_SEQUENCER 0x9, 0x4
+	_VGA_SEQUENCER 0xa, 0x10
+	_VGA_SEQUENCER 0xb, 0x13
+	_VGA_SEQUENCER 0xc, 0x5
 
-	; _VGA_SEQUENCER 09h, 006h
-	ldw wa, 0x3C4
-	ldw bc, 0x9
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	lds bc, 6
-	calr _Write_VGA_Register
-	; _VGA_SEQUENCER 0ah, 015h
-	ldw wa, 0x3C4
-	ldw bc, 0xA
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0x15
-	calr _Write_VGA_Register
-	; _VGA_SEQUENCER 0bh, 064h
-	ldw wa, 0x3C4
-	ldw bc, 0xB
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0x64
-	calr _Write_VGA_Register
-	; _VGA_SEQUENCER 0ch, 007h
-	ldw wa, 0x3C4
-	ldw bc, 0xC
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	lds bc, 7
-	calr _Write_VGA_Register
+	_VGA_SEQUENCER 0x9, 0x6
+	_VGA_SEQUENCER 0xa, 0x15
+	_VGA_SEQUENCER 0xb, 0x64
+	_VGA_SEQUENCER 0xc, 0x7
 
-	; _VGA_SEQUENCER 09h, 000h
-	ldw wa, 0x3C4
-	ldw bc, 0x9
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	lds bc, 0
-	calr _Write_VGA_Register
-	; _VGA_SEQUENCER 0ah, 01ch
-	ldw wa, 0x3C4
-	ldw bc, 0xA
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0x1C
-	calr _Write_VGA_Register
-	; _VGA_SEQUENCER 0bh, 011h
-	ldw wa, 0x3C4
-	ldw bc, 0xB
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0x11
-	calr _Write_VGA_Register
-	; _VGA_SEQUENCER 0ch, 003h
-	ldw wa, 0x3C4
-	ldw bc, 0xC
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	lds bc, 3
-	calr _Write_VGA_Register
+	_VGA_SEQUENCER 0x9, 0x0
+	_VGA_SEQUENCER 0xa, 0x1c
+	_VGA_SEQUENCER 0xb, 0x11
+	_VGA_SEQUENCER 0xc, 0x3
 
-	; _VGA_SEQUENCER 09h, 002h
-	ldw wa, 0x3C4
-	ldw bc, 0x9
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	lds bc, 2
-	calr _Write_VGA_Register
-	; _VGA_SEQUENCER 0ah, 005h
-	ldw wa, 0x3C4
-	ldw bc, 0xA
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	lds bc, 5
-	calr _Write_VGA_Register
-	; _VGA_SEQUENCER 0bh, 011h
-	ldw wa, 0x3C4
-	ldw bc, 0xB
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0x11
-	calr _Write_VGA_Register
-	; _VGA_SEQUENCER 0ch, 003h
-	ldw wa, 0x3C4
-	ldw bc, 0xC
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	lds bc, 3
-	calr _Write_VGA_Register
+	_VGA_SEQUENCER 0x9, 0x2
+	_VGA_SEQUENCER 0xa, 0x5
+	_VGA_SEQUENCER 0xb, 0x11
+	_VGA_SEQUENCER 0xc, 0x3
 
-	; _VGA_SEQUENCER 09h, 008h
-	ldw wa, 0x3C4
-	ldw bc, 0x9
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0x8
-	calr _Write_VGA_Register
-	; _VGA_SEQUENCER 0ah, 092h
-	ldw wa, 0x3C4
-	ldw bc, 0xA
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0x92
-	calr _Write_VGA_Register
-	; _VGA_SEQUENCER 0bh, 013h
-	ldw wa, 0x3C4
-	ldw bc, 0xB
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0x13
-	calr _Write_VGA_Register
-	; _VGA_SEQUENCER 0ch, 008h
-	ldw wa, 0x3C4
-	ldw bc, 0xC
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0x8
-	calr _Write_VGA_Register
+	_VGA_SEQUENCER 0x9, 0x8
+	_VGA_SEQUENCER 0xa, 0x92
+	_VGA_SEQUENCER 0xb, 0x13
+	_VGA_SEQUENCER 0xc, 0x8
 
-	; _VGA_SEQUENCER 09h, 00ah
-	ldw wa, 0x3C4
-	ldw bc, 0x9
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0xA
-	calr _Write_VGA_Register
-	; _VGA_SEQUENCER 0ah, 001h
-	ldw wa, 0x3C4
-	ldw bc, 0xA
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	lds bc, 1
-	calr _Write_VGA_Register
-	; _VGA_SEQUENCER 0bh, 014h
-	ldw wa, 0x3C4
-	ldw bc, 0xB
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0x14
-	calr _Write_VGA_Register
-	; _VGA_SEQUENCER 0ch, 006h
-	ldw wa, 0x3C4
-	ldw bc, 0xC
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	lds bc, 6
-	calr _Write_VGA_Register
+	_VGA_SEQUENCER 0x9, 0xa
+	_VGA_SEQUENCER 0xa, 0x1
+	_VGA_SEQUENCER 0xb, 0x14
+	_VGA_SEQUENCER 0xc, 0x6
 
-	; _VGA_SEQUENCER 09h, 00dh
-	ldw wa, 0x3C4
-	ldw bc, 0x9
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0xD
-	calr _Write_VGA_Register
-	; _VGA_SEQUENCER 0ah, 001h
-	ldw wa, 0x3C4
-	ldw bc, 0xA
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	lds bc, 1
-	calr _Write_VGA_Register
+	_VGA_SEQUENCER 0x9, 0xd
+	_VGA_SEQUENCER 0xa, 0x1
 
-	; _VGA_SEQUENCER 09h, 00ch
-	ldw wa, 0x3C4
-	ldw bc, 0x9
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0xC
-	calr _Write_VGA_Register
-	; _VGA_SEQUENCER 0ah, 000h
-	ldw wa, 0x3C4
-	ldw bc, 0xA
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	lds bc, 0
-	calr _Write_VGA_Register
-	; _VGA_SEQUENCER 0bh, 072h
-	ldw wa, 0x3C4
-	ldw bc, 0xB
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0x72
-	calr _Write_VGA_Register
-	; _VGA_SEQUENCER 0ch, 009h
-	ldw wa, 0x3C4
-	ldw bc, 0xC
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0x9
-	calr _Write_VGA_Register
+	_VGA_SEQUENCER 0x9, 0xc
+	_VGA_SEQUENCER 0xa, 0x0
+	_VGA_SEQUENCER 0xb, 0x72
+	_VGA_SEQUENCER 0xc, 0x9
 
-	; _VGA_SEQUENCER 09h, 00fh
-	ldw wa, 0x3C4
-	ldw bc, 0x9
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0xF
-	calr _Write_VGA_Register
-	; _VGA_SEQUENCER 0ah, 011h
-	ldw wa, 0x3C4
-	ldw bc, 0xA
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0x11
-	calr _Write_VGA_Register
+	_VGA_SEQUENCER 0x9, 0xf
+	_VGA_SEQUENCER 0xa, 0x11
 
-	; _VGA_SEQUENCER 09h, 00eh
-	ldw wa, 0x3C4
-	ldw bc, 0x9
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0xE
-	calr _Write_VGA_Register
-	; _VGA_SEQUENCER 0ah, 000h
-	ldw wa, 0x3C4
-	ldw bc, 0xA
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	lds bc, 0
-	calr _Write_VGA_Register
-	; _VGA_SEQUENCER 0bh, 013h
-	ldw wa, 0x3C4
-	ldw bc, 0xB
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0x13
-	calr _Write_VGA_Register
-	; _VGA_SEQUENCER 0ch, 008h
-	ldw wa, 0x3C4
-	ldw bc, 0xC
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0x8
-	calr _Write_VGA_Register
+	_VGA_SEQUENCER 0x9, 0xe
+	_VGA_SEQUENCER 0xa, 0x0
+	_VGA_SEQUENCER 0xb, 0x13
+	_VGA_SEQUENCER 0xc, 0x8
 
-	; _VGA_SEQUENCER 09h, 011h
-	ldw wa, 0x3C4
-	ldw bc, 0x9
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0x11
-	calr _Write_VGA_Register
-	; _VGA_SEQUENCER 0ah, 0ffh
-	ldw wa, 0x3C4
-	ldw bc, 0xA
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0xFF
-	calr _Write_VGA_Register
+	_VGA_SEQUENCER 0x9, 0x11
+	_VGA_SEQUENCER 0xa, 0xff
 
-	; _VGA_SEQUENCER 09h, 010h
-	ldw wa, 0x3C4
-	ldw bc, 0x9
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0x10
-	calr _Write_VGA_Register
-	; _VGA_SEQUENCER 0ah, 0feh
-	ldw wa, 0x3C4
-	ldw bc, 0xA
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0xFE
-	calr _Write_VGA_Register
-	; _VGA_SEQUENCER 0bh, 073h
-	ldw wa, 0x3C4
-	ldw bc, 0xB
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0x73
-	calr _Write_VGA_Register
-	; _VGA_SEQUENCER 0ch, 00fh
-	ldw wa, 0x3C4
-	ldw bc, 0xC
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0xF
-	calr _Write_VGA_Register
+	_VGA_SEQUENCER 0x9, 0x10
+	_VGA_SEQUENCER 0xa, 0xfe
+	_VGA_SEQUENCER 0xb, 0x73
+	_VGA_SEQUENCER 0xc, 0xf
 
-	; _VGA_SEQUENCER 09h, 001h
-	ldw wa, 0x3C4
-	ldw bc, 0x9
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	lds bc, 1
-	calr _Write_VGA_Register
-	; _VGA_SEQUENCER 0ch, 074h
-	ldw wa, 0x3C4
-	ldw bc, 0xC
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0x74
-	calr _Write_VGA_Register
+	_VGA_SEQUENCER 0x9, 0x1
+	_VGA_SEQUENCER 0xc, 0x74
 
-	; _VGA_SEQUENCER 09h, 003h
-	ldw wa, 0x3C4
-	ldw bc, 0x9
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	lds bc, 3
-	calr _Write_VGA_Register
-	; _VGA_SEQUENCER 0ch, 009h
-	ldw wa, 0x3C4
-	ldw bc, 0xC
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0x9
-	calr _Write_VGA_Register
+	_VGA_SEQUENCER 0x9, 0x3
+	_VGA_SEQUENCER 0xc, 0x9
 
-	; _VGA_SEQUENCER 09h, 005h
-	ldw wa, 0x3C4
-	ldw bc, 0x9
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	lds bc, 5
-	calr _Write_VGA_Register
-	; _VGA_SEQUENCER 0ch, 02bh
-	ldw wa, 0x3C4
-	ldw bc, 0xC
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0x2B
-	calr _Write_VGA_Register
+	_VGA_SEQUENCER 0x9, 0x5
+	_VGA_SEQUENCER 0xc, 0x2b
 
-	; _VGA_SEQUENCER 09h, 007h
-	ldw wa, 0x3C4
-	ldw bc, 0x9
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	lds bc, 7
-	calr _Write_VGA_Register
-	; _VGA_SEQUENCER 0ch, 068h
-	ldw wa, 0x3C4
-	ldw bc, 0xC
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0x68
-	calr _Write_VGA_Register
+	_VGA_SEQUENCER 0x9, 0x7
+	_VGA_SEQUENCER 0xc, 0x68
 
-	; _VGA_SEQUENCER 09h, 009h
-	ldw wa, 0x3C4
-	ldw bc, 0x9
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0x9
-	calr _Write_VGA_Register
-	; _VGA_SEQUENCER 0ch, 005h
-	ldw wa, 0x3C4
-	ldw bc, 0xC
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	lds bc, 5
-	calr _Write_VGA_Register
+	_VGA_SEQUENCER 0x9, 0x9
+	_VGA_SEQUENCER 0xc, 0x5
 
-	; _VGA_SEQUENCER 09h, 00bh
-	ldw wa, 0x3C4
-	ldw bc, 0x9
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0xB
-	calr _Write_VGA_Register
-	; _VGA_SEQUENCER 0ch, 001h
-	ldw wa, 0x3C4
-	ldw bc, 0xC
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	lds bc, 1
-	calr _Write_VGA_Register
+	_VGA_SEQUENCER 0x9, 0xb
+	_VGA_SEQUENCER 0xc, 0x1
 
-	; _VGA_SEQUENCER 09h, 00dh
-	ldw wa, 0x3C4
-	ldw bc, 0x9
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0xD
-	calr _Write_VGA_Register
-	; _VGA_SEQUENCER 0ch, 00ch
-	ldw wa, 0x3C4
-	ldw bc, 0xC
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0xC
-	calr _Write_VGA_Register
+	_VGA_SEQUENCER 0x9, 0xd
+	_VGA_SEQUENCER 0xc, 0xc
 
-	; _VGA_SEQUENCER 09h, 00fh
-	ldw wa, 0x3C4
-	ldw bc, 0x9
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0xF
-	calr _Write_VGA_Register
-	; _VGA_SEQUENCER 0ch, 03ah
-	ldw wa, 0x3C4
-	ldw bc, 0xC
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0x3A
-	calr _Write_VGA_Register
+	_VGA_SEQUENCER 0x9, 0xf
+	_VGA_SEQUENCER 0xc, 0x3a
 
-	; _VGA_SEQUENCER 09h, 011h
-	ldw wa, 0x3C4
-	ldw bc, 0x9
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0x11
-	calr _Write_VGA_Register
-	; _VGA_SEQUENCER 0ch, 00dh
-	ldw wa, 0x3C4
-	ldw bc, 0xC
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0xD
-	calr _Write_VGA_Register
+	_VGA_SEQUENCER 0x9, 0x11
+	_VGA_SEQUENCER 0xc, 0xd
 
 	; For byte-matching purposes:
 	; This is equivalent to:
@@ -367501,10 +360832,7 @@ LABEL_FB36A9:
 	; _VGA_SEQUENCER 06h, 000h
 	; RET
 	;
-	; _VGA_WRITE 3c4h, 06h
-	ldw wa, 0x3C4
-	lds bc, 6
-	calr _Write_VGA_Register
+	_VGA_WRITE 0x3c4, 0x6
 	ldw wa, 0x3C5
 	lds bc, 0
 	jrl _Write_VGA_Register
@@ -367512,477 +360840,93 @@ LABEL_FB36A9:
 
 ; who calls here?
 LABEL_FB3AED:
-	; _VGA_SEQUENCER 06h, 001h
-	ldw wa, 0x3C4
-	lds bc, 6
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	lds bc, 1
-	calr _Write_VGA_Register
-	; _VGA_SEQUENCER 09h, 004h
-	ldw wa, 0x3C4
-	ldw bc, 0x9
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	lds bc, 4
-	calr _Write_VGA_Register
-	; _VGA_SEQUENCER 0ah, 010h
-	ldw wa, 0x3C4
-	ldw bc, 0xA
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0x10
-	calr _Write_VGA_Register
-	; _VGA_SEQUENCER 0bh, 021h
-	ldw wa, 0x3C4
-	ldw bc, 0xB
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0x21
-	calr _Write_VGA_Register
-	; _VGA_WRITE 3c5h, 024h
-	ldw wa, 0x3C5
-	ldw bc, 0x24
-	calr _Write_VGA_Register
-	; _VGA_SEQUENCER 0ch, 005h
-	ldw wa, 0x3C4
-	ldw bc, 0xC
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	lds bc, 5
-	calr _Write_VGA_Register
+	_VGA_SEQUENCER 0x6, 0x1
+	_VGA_SEQUENCER 0x9, 0x4
+	_VGA_SEQUENCER 0xa, 0x10
+	_VGA_SEQUENCER 0xb, 0x21
+	_VGA_WRITE 0x3c5, 0x24
+	_VGA_SEQUENCER 0xc, 0x5
 
-	; _VGA_SEQUENCER 09h, 006h
-	ldw wa, 0x3C4
-	ldw bc, 0x9
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	lds bc, 6
-	calr _Write_VGA_Register
-	; _VGA_SEQUENCER 0ah, 015h
-	ldw wa, 0x3C4
-	ldw bc, 0xA
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0x15
-	calr _Write_VGA_Register
-	; _VGA_SEQUENCER 0bh, 064h
-	ldw wa, 0x3C4
-	ldw bc, 0xB
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0x64
-	calr _Write_VGA_Register
-	; _VGA_SEQUENCER 0ch, 007h
-	ldw wa, 0x3C4
-	ldw bc, 0xC
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	lds bc, 7
-	calr _Write_VGA_Register
+	_VGA_SEQUENCER 0x9, 0x6
+	_VGA_SEQUENCER 0xa, 0x15
+	_VGA_SEQUENCER 0xb, 0x64
+	_VGA_SEQUENCER 0xc, 0x7
 
-	; _VGA_SEQUENCER 09h, 000h
-	ldw wa, 0x3C4
-	ldw bc, 0x9
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	lds bc, 0
-	calr _Write_VGA_Register
-	; _VGA_SEQUENCER 0ah, 01ch
-	ldw wa, 0x3C4
-	ldw bc, 0xA
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0x1C
-	calr _Write_VGA_Register
-	; _VGA_SEQUENCER 0bh, 021h
-	ldw wa, 0x3C4
-	ldw bc, 0xB
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0x21
-	calr _Write_VGA_Register
-	; _VGA_WRITE 3c5h, 012h
-	ldw wa, 0x3C5
-	ldw bc, 0x12
-	calr _Write_VGA_Register
-	; _VGA_SEQUENCER 0ch, 003h
-	ldw wa, 0x3C4
-	ldw bc, 0xC
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	lds bc, 3
-	calr _Write_VGA_Register
+	_VGA_SEQUENCER 0x9, 0x0
+	_VGA_SEQUENCER 0xa, 0x1c
+	_VGA_SEQUENCER 0xb, 0x21
+	_VGA_WRITE 0x3c5, 0x12
+	_VGA_SEQUENCER 0xc, 0x3
 
-	; _VGA_SEQUENCER 09h, 002h
-	ldw wa, 0x3C4
-	ldw bc, 0x9
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	lds bc, 2
-	calr _Write_VGA_Register
-	; _VGA_SEQUENCER 0ah, 005h
-	ldw wa, 0x3C4
-	ldw bc, 0xA
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	lds bc, 5
-	calr _Write_VGA_Register
-	; _VGA_SEQUENCER 0bh, 022h
-	ldw wa, 0x3C4
-	ldw bc, 0xB
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0x22
-	calr _Write_VGA_Register
-	; _VGA_WRITE 3c5h, 011h
-	ldw wa, 0x3C5
-	ldw bc, 0x11
-	calr _Write_VGA_Register
-	; _VGA_SEQUENCER 0ch, 3
-	ldw wa, 0x3C4
-	ldw bc, 0xC
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	lds bc, 3
-	calr _Write_VGA_Register
+	_VGA_SEQUENCER 0x9, 0x2
+	_VGA_SEQUENCER 0xa, 0x5
+	_VGA_SEQUENCER 0xb, 0x22
+	_VGA_WRITE 0x3c5, 0x11
+	_VGA_SEQUENCER 0xc, 3
 
-	; _VGA_SEQUENCER 09h, 008h
-	ldw wa, 0x3C4
-	ldw bc, 0x9
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0x8
-	calr _Write_VGA_Register
-	; _VGA_SEQUENCER 0ah, 092h
-	ldw wa, 0x3C4
-	ldw bc, 0xA
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0x92
-	calr _Write_VGA_Register
-	; _VGA_SEQUENCER 0bh, 073h
-	ldw wa, 0x3C4
-	ldw bc, 0xB
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0x73
-	calr _Write_VGA_Register
-	; _VGA_WRITE 3c5h, 013h
-	ldw wa, 0x3C5
-	ldw bc, 0x13
-	calr _Write_VGA_Register
-	; _VGA_SEQUENCER 0ch, 008h
-	ldw wa, 0x3C4
-	ldw bc, 0xC
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0x8
-	calr _Write_VGA_Register
+	_VGA_SEQUENCER 0x9, 0x8
+	_VGA_SEQUENCER 0xa, 0x92
+	_VGA_SEQUENCER 0xb, 0x73
+	_VGA_WRITE 0x3c5, 0x13
+	_VGA_SEQUENCER 0xc, 0x8
 
-	; _VGA_SEQUENCER 09h, 00ah
-	ldw wa, 0x3C4
-	ldw bc, 0x9
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0xA
-	calr _Write_VGA_Register
-	; _VGA_SEQUENCER 0ah, 001h
-	ldw wa, 0x3C4
-	ldw bc, 0xA
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	lds bc, 1
-	calr _Write_VGA_Register
-	; _VGA_SEQUENCER 0bh, 024h
-	ldw wa, 0x3C4
-	ldw bc, 0xB
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0x24
-	calr _Write_VGA_Register
-	; _VGA_WRITE 3c5h, 032h
-	ldw wa, 0x3C5
-	ldw bc, 0x32
-	calr _Write_VGA_Register
-	; _VGA_SEQUENCER 0ch, 007h
-	ldw wa, 0x3C4
-	ldw bc, 0xC
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	lds bc, 7
-	calr _Write_VGA_Register
+	_VGA_SEQUENCER 0x9, 0xa
+	_VGA_SEQUENCER 0xa, 0x1
+	_VGA_SEQUENCER 0xb, 0x24
+	_VGA_WRITE 0x3c5, 0x32
+	_VGA_SEQUENCER 0xc, 0x7
 
-	; _VGA_SEQUENCER 09h, 00dh
-	ldw wa, 0x3C4
-	ldw bc, 0x9
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0xD
-	calr _Write_VGA_Register
-	; _VGA_SEQUENCER 0ah, 000h
-	ldw wa, 0x3C4
-	ldw bc, 0xA
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	lds bc, 0
-	calr _Write_VGA_Register
+	_VGA_SEQUENCER 0x9, 0xd
+	_VGA_SEQUENCER 0xa, 0x0
 
-	; _VGA_SEQUENCER 09h, 00ch
-	ldw wa, 0x3C4
-	ldw bc, 0x9
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0xC
-	calr _Write_VGA_Register
-	; _VGA_SEQUENCER 0ah, 001h
-	ldw wa, 0x3C4
-	ldw bc, 0xA
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	lds bc, 1
-	calr _Write_VGA_Register
-	; _VGA_SEQUENCER 0bh, 027h
-	ldw wa, 0x3C4
-	ldw bc, 0xB
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0x27
-	calr _Write_VGA_Register
-	; _VGA_WRITE 3c5h, 035h
-	ldw wa, 0x3C5
-	ldw bc, 0x35
-	calr _Write_VGA_Register
-	; _VGA_SEQUENCER 0ch, 00dh
-	ldw wa, 0x3C4
-	ldw bc, 0xC
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0xD
-	calr _Write_VGA_Register
+	_VGA_SEQUENCER 0x9, 0xc
+	_VGA_SEQUENCER 0xa, 0x1
+	_VGA_SEQUENCER 0xb, 0x27
+	_VGA_WRITE 0x3c5, 0x35
+	_VGA_SEQUENCER 0xc, 0xd
 
-	; _VGA_SEQUENCER 09h, 00fh
-	ldw wa, 0x3C4
-	ldw bc, 0x9
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0xF
-	calr _Write_VGA_Register
-	; _VGA_SEQUENCER 0ah, 011h
-	ldw wa, 0x3C4
-	ldw bc, 0xA
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0x11
-	calr _Write_VGA_Register
+	_VGA_SEQUENCER 0x9, 0xf
+	_VGA_SEQUENCER 0xa, 0x11
 
-	; _VGA_SEQUENCER 09h, 00eh
-	ldw wa, 0x3C4
-	ldw bc, 0x9
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0xE
-	calr _Write_VGA_Register
-	; _VGA_SEQUENCER 0ah, 000h
-	ldw wa, 0x3C4
-	ldw bc, 0xA
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	lds bc, 0
-	calr _Write_VGA_Register
-	; _VGA_SEQUENCER 0bh, 032h
-	ldw wa, 0x3C4
-	ldw bc, 0xB
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0x32
-	calr _Write_VGA_Register
-	; _VGA_SEQUENCER 0ch, 008h
-	ldw wa, 0x3C4
-	ldw bc, 0xC
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0x8
-	calr _Write_VGA_Register
+	_VGA_SEQUENCER 0x9, 0xe
+	_VGA_SEQUENCER 0xa, 0x0
+	_VGA_SEQUENCER 0xb, 0x32
+	_VGA_SEQUENCER 0xc, 0x8
 
-	; _VGA_SEQUENCER 09h, 011h
-	ldw wa, 0x3C4
-	ldw bc, 0x9
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0x11
-	calr _Write_VGA_Register
-	; _VGA_SEQUENCER 0ah, 033h
-	ldw wa, 0x3C4
-	ldw bc, 0xA
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0x33
-	calr _Write_VGA_Register
+	_VGA_SEQUENCER 0x9, 0x11
+	_VGA_SEQUENCER 0xa, 0x33
 
-	; _VGA_SEQUENCER 09h, 010h
-	ldw wa, 0x3C4
-	ldw bc, 0x9
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0x10
-	calr _Write_VGA_Register
-	; _VGA_SEQUENCER 0ah, 033h
-	ldw wa, 0x3C4
-	ldw bc, 0xA
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0x33
-	calr _Write_VGA_Register
-	; _VGA_SEQUENCER 0bh, 025h
-	ldw wa, 0x3C4
-	ldw bc, 0xB
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0x25
-	calr _Write_VGA_Register
-	; _VGA_SEQUENCER 0ch, 00fh
-	ldw wa, 0x3C4
-	ldw bc, 0xC
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0xF
-	calr _Write_VGA_Register
+	_VGA_SEQUENCER 0x9, 0x10
+	_VGA_SEQUENCER 0xa, 0x33
+	_VGA_SEQUENCER 0xb, 0x25
+	_VGA_SEQUENCER 0xc, 0xf
 
-	; _VGA_SEQUENCER 09h, 001h
-	ldw wa, 0x3C4
-	ldw bc, 0x9
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	lds bc, 1
-	calr _Write_VGA_Register
-	; _VGA_SEQUENCER 0ch, 074h
-	ldw wa, 0x3C4
-	ldw bc, 0xC
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0x74
-	calr _Write_VGA_Register
+	_VGA_SEQUENCER 0x9, 0x1
+	_VGA_SEQUENCER 0xc, 0x74
 
-	; _VGA_SEQUENCER 09h, 003h
-	ldw wa, 0x3C4
-	ldw bc, 0x9
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	lds bc, 3
-	calr _Write_VGA_Register
-	; _VGA_SEQUENCER 0ch, 00ah
-	ldw wa, 0x3C4
-	ldw bc, 0xC
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0xA
-	calr _Write_VGA_Register
+	_VGA_SEQUENCER 0x9, 0x3
+	_VGA_SEQUENCER 0xc, 0xa
 
-	; _VGA_SEQUENCER 09h, 005h
-	ldw wa, 0x3C4
-	ldw bc, 0x9
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	lds bc, 5
-	calr _Write_VGA_Register
-	; _VGA_SEQUENCER 0ch, 02ch
-	ldw wa, 0x3C4
-	ldw bc, 0xC
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0x2C
-	calr _Write_VGA_Register
+	_VGA_SEQUENCER 0x9, 0x5
+	_VGA_SEQUENCER 0xc, 0x2c
 
-	; _VGA_SEQUENCER 09h, 007h
-	ldw wa, 0x3C4
-	ldw bc, 0x9
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	lds bc, 7
-	calr _Write_VGA_Register
-	; _VGA_SEQUENCER 0ch, 069h
-	ldw wa, 0x3C4
-	ldw bc, 0xC
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0x69
-	calr _Write_VGA_Register
+	_VGA_SEQUENCER 0x9, 0x7
+	_VGA_SEQUENCER 0xc, 0x69
 
-	; _VGA_SEQUENCER 09h, 009h
-	ldw wa, 0x3C4
-	ldw bc, 0x9
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0x9
-	calr _Write_VGA_Register
-	; _VGA_SEQUENCER 0ch, 005h
-	ldw wa, 0x3C4
-	ldw bc, 0xC
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	lds bc, 5
-	calr _Write_VGA_Register
+	_VGA_SEQUENCER 0x9, 0x9
+	_VGA_SEQUENCER 0xc, 0x5
 
-	; _VGA_SEQUENCER 09h, 00bh
-	ldw wa, 0x3C4
-	ldw bc, 0x9
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0xB
-	calr _Write_VGA_Register
-	; _VGA_SEQUENCER 0ch, 001h
-	ldw wa, 0x3C4
-	ldw bc, 0xC
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	lds bc, 1
-	calr _Write_VGA_Register
+	_VGA_SEQUENCER 0x9, 0xb
+	_VGA_SEQUENCER 0xc, 0x1
 
-	; _VGA_SEQUENCER 09h, 00dh
-	ldw wa, 0x3C4
-	ldw bc, 0x9
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0xD
-	calr _Write_VGA_Register
-	; _VGA_SEQUENCER 0ch, 00dh
-	ldw wa, 0x3C4
-	ldw bc, 0xC
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0xD
-	calr _Write_VGA_Register
+	_VGA_SEQUENCER 0x9, 0xd
+	_VGA_SEQUENCER 0xc, 0xd
 
-	; _VGA_SEQUENCER 09h, 00fh
-	ldw wa, 0x3C4
-	ldw bc, 0x9
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0xF
-	calr _Write_VGA_Register
-	; _VGA_SEQUENCER 0ch, 03bh
-	ldw wa, 0x3C4
-	ldw bc, 0xC
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0x3B
-	calr _Write_VGA_Register
+	_VGA_SEQUENCER 0x9, 0xf
+	_VGA_SEQUENCER 0xc, 0x3b
 
-	; _VGA_SEQUENCER 09h, 011h
-	ldw wa, 0x3C4
-	ldw bc, 0x9
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0x11
-	calr _Write_VGA_Register
-	; _VGA_SEQUENCER 0ch, 008h
-	ldw wa, 0x3C4
-	ldw bc, 0xC
-	calr _Write_VGA_Register
-	ldw wa, 0x3C5
-	ldw bc, 0x8
-	calr _Write_VGA_Register
+	_VGA_SEQUENCER 0x9, 0x11
+	_VGA_SEQUENCER 0xc, 0x8
 
 	; For byte-matching purposes:
 	; This is equivalent to:
@@ -367990,10 +360934,7 @@ LABEL_FB3AED:
 	; _VGA_SEQUENCER 06h, 000h
 	; RET
 	;
-	; _VGA_WRITE 3c4h, 06h
-	ldw wa, 0x3C4
-	lds bc, 6
-	calr _Write_VGA_Register
+	_VGA_WRITE 0x3c4, 0x6
 	ldw wa, 0x3C5
 	lds bc, 0
 	jrl _Write_VGA_Register
@@ -389910,1004 +382851,107 @@ LABEL_FC3114:
 InitializeToshi:
 	lda xsp, (xsp - 14)
 
-	; RegObjTable 01600004h, 0FA44E2h, 0ED2D02h,	LABEL_ED27E4, 0162h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600004
-	ld (xbc), xwa
-	ldada_24 xwa, 16401634
-	ld (xbc + 4), xwa
-	ldda16_24 xwa, 15543554
-	ld (xbc + 8), wa
-	ldada_24 xwa, 15542244
-	ld (xbc + 10), xwa
-	ldw wa, 0x162
-	call 0xFA42FB
-	; RegObjTable 0160000ch, 0FA58FBh, 0ED2D92h,	0ED2D04h, 01c2h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000C
-	ld (xbc), xwa
-	ldada_24 xwa, 16406779
-	ld (xbc + 4), xwa
-	ldda16_24 xwa, 15543698
-	ld (xbc + 8), wa
-	ldada_24 xwa, 15543556
-	ld (xbc + 10), xwa
-	ldw wa, 0x1C2
-	call 0xFA42FB
-	; RegObjTable 0160000dh, 0FA5948h, 0ED2F64h,	0ED2D94h, 01e2h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000D
-	ld (xbc), xwa
-	ldada_24 xwa, 16406856
-	ld (xbc + 4), xwa
-	ldda16_24 xwa, 15544164
-	ld (xbc + 8), wa
-	ldada_24 xwa, 15543700
-	ld (xbc + 10), xwa
-	ldw wa, 0x1E2
-	call 0xFA42FB
-	; RegObjTabl 01600002h, 0FA496Ch, 002ah,		0ED1C9Eh, 0122h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600002
-	ld (xbc), xwa
-	ldada_24 xwa, 16402796
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x2A
-	ldada_24 xwa, 15539358
-	ld (xbc + 10), xwa
-	ldw wa, 0x122
-	call 0xFA42FB
-	; RegObjTabl 01600002h, 0FA496Ch, 002ah,		0ED1D4Ah, 0422h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600002
-	ld (xbc), xwa
-	ldada_24 xwa, 16402796
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x2A
-	ldada_24 xwa, 15539530
-	ld (xbc + 10), xwa
-	ldw wa, 0x422
-	call 0xFA42FB
-	; RegObjTabl 01600001h, 0FA48A9h, 001ch,		0ED2F66h, 0102h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600001
-	ld (xbc), xwa
-	ldada_24 xwa, 16402601
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1C
-	ldada_24 xwa, 15544166
-	ld (xbc + 10), xwa
-	ldw wa, 0x102
-	call 0xFA42FB
-	; RegObjTabl 01600001h, 0FA48A9h, 001ch,		0ED2FDAh, 0402h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600001
-	ld (xbc), xwa
-	ldada_24 xwa, 16402601
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1C
-	ldada_24 xwa, 15544282
-	ld (xbc + 10), xwa
-	ldw wa, 0x402
-	call 0xFA42FB
-	; RegObjTabl 01600003h, 0FA4A18h, 0014h,		0ED3292h, 0142h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600003
-	ld (xbc), xwa
-	ldada_24 xwa, 16402968
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x14
-	ldada_24 xwa, 15544978
-	ld (xbc + 10), xwa
-	ldw wa, 0x142
-	call 0xFA42FB
-	; RegObjTabl 01600003h, 0FA4A18h, 0014h,		0ED32E6h, 0442h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600003
-	ld (xbc), xwa
-	ldada_24 xwa, 16402968
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x14
-	ldada_24 xwa, 15545062
-	ld (xbc + 10), xwa
-	ldw wa, 0x442
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 003fh,		0ED77CEh, 0001h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x3F
-	ldada_24 xwa, 15562702
-	ld (xbc + 10), xwa
-	lds wa, 1
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 003fh,		0ED7E56h, 0301h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x3F
-	ldada_24 xwa, 15564374
-	ld (xbc + 10), xwa
-	ldw wa, 0x301
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0009h,		0ED78CEh, 0040h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x9
-	ldada_24 xwa, 15562958
-	ld (xbc + 10), xwa
-	ldw wa, 0x40
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0009h,		0ED7FF6h, 0340h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x9
-	ldada_24 xwa, 15564790
-	ld (xbc + 10), xwa
-	ldw wa, 0x340
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0011h,		0ED78F6h, 0041h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x11
-	ldada_24 xwa, 15562998
-	ld (xbc + 10), xwa
-	ldw wa, 0x41
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0011h,		0ED803Ch, 0341h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x11
-	ldada_24 xwa, 15564860
-	ld (xbc + 10), xwa
-	ldw wa, 0x341
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0006h,		0ED793Eh, 0042h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x6
-	ldada_24 xwa, 15563070
-	ld (xbc + 10), xwa
-	ldw wa, 0x42
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0006h,		0ED80C2h, 0342h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x6
-	ldada_24 xwa, 15564994
-	ld (xbc + 10), xwa
-	ldw wa, 0x342
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0008h,		0ED795Ah, 0043h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x8
-	ldada_24 xwa, 15563098
-	ld (xbc + 10), xwa
-	ldw wa, 0x43
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0008h,		0ED80F6h, 0343h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x8
-	ldada_24 xwa, 15565046
-	ld (xbc + 10), xwa
-	ldw wa, 0x343
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0013h,		0ED797Eh, 0044h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x13
-	ldada_24 xwa, 15563134
-	ld (xbc + 10), xwa
-	ldw wa, 0x44
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0013h,		0ED8136h, 0344h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x13
-	ldada_24 xwa, 15565110
-	ld (xbc + 10), xwa
-	ldw wa, 0x344
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0013h,		0ED79CEh, 0045h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x13
-	ldada_24 xwa, 15563214
-	ld (xbc + 10), xwa
-	ldw wa, 0x45
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0013h,		0ED81AEh, 0345h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x13
-	ldada_24 xwa, 15565230
-	ld (xbc + 10), xwa
-	ldw wa, 0x345
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0000h,		0ED7A1Eh, 0046h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x0
-	ldada_24 xwa, 15563294
-	ld (xbc + 10), xwa
-	ldw wa, 0x46
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0000h,		0ED822Eh, 0346h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x0
-	ldada_24 xwa, 15565358
-	ld (xbc + 10), xwa
-	ldw wa, 0x346
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0007h,		0ED7A22h, 0047h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x7
-	ldada_24 xwa, 15563298
-	ld (xbc + 10), xwa
-	ldw wa, 0x47
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0007h,		0ED8234h, 0347h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x7
-	ldada_24 xwa, 15565364
-	ld (xbc + 10), xwa
-	ldw wa, 0x347
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0019h,		0ED7A42h, 0048h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x19
-	ldada_24 xwa, 15563330
-	ld (xbc + 10), xwa
-	ldw wa, 0x48
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0019h,		0ED826Eh, 0348h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x19
-	ldada_24 xwa, 15565422
-	ld (xbc + 10), xwa
-	ldw wa, 0x348
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0004h,		0ED7AAAh, 00c0h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x4
-	ldada_24 xwa, 15563434
-	ld (xbc + 10), xwa
-	ldw wa, 0xC0
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0004h,		0ED8322h, 03c0h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x4
-	ldada_24 xwa, 15565602
-	ld (xbc + 10), xwa
-	ldw wa, 0x3C0
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0004h,		0ED7ABEh, 00c1h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x4
-	ldada_24 xwa, 15563454
-	ld (xbc + 10), xwa
-	ldw wa, 0xC1
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0004h,		0ED8346h, 03c1h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x4
-	ldada_24 xwa, 15565638
-	ld (xbc + 10), xwa
-	ldw wa, 0x3C1
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0014h,		0ED7AD2h, 00c2h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x14
-	ldada_24 xwa, 15563474
-	ld (xbc + 10), xwa
-	ldw wa, 0xC2
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0014h,		0ED836Ch, 03c2h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x14
-	ldada_24 xwa, 15565676
-	ld (xbc + 10), xwa
-	ldw wa, 0x3C2
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0011h,		0ED7B26h, 00c3h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x11
-	ldada_24 xwa, 15563558
-	ld (xbc + 10), xwa
-	ldw wa, 0xC3
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0011h,		0ED83FCh, 03c3h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x11
-	ldada_24 xwa, 15565820
-	ld (xbc + 10), xwa
-	ldw wa, 0x3C3
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0008h,		0ED7B6Eh, 00c4h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x8
-	ldada_24 xwa, 15563630
-	ld (xbc + 10), xwa
-	ldw wa, 0xC4
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0008h,		0ED8478h, 03c4h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x8
-	ldada_24 xwa, 15565944
-	ld (xbc + 10), xwa
-	ldw wa, 0x3C4
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0007h,		0ED7B92h, 00c5h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x7
-	ldada_24 xwa, 15563666
-	ld (xbc + 10), xwa
-	ldw wa, 0xC5
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0007h,		0ED84B8h, 03c5h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x7
-	ldada_24 xwa, 15566008
-	ld (xbc + 10), xwa
-	ldw wa, 0x3C5
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0006h,		0ED7BB2h, 00d0h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x6
-	ldada_24 xwa, 15563698
-	ld (xbc + 10), xwa
-	ldw wa, 0xD0
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0006h,		0ED84F0h, 03d0h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x6
-	ldada_24 xwa, 15566064
-	ld (xbc + 10), xwa
-	ldw wa, 0x3D0
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 000dh,		0ED7BCEh, 00d1h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0xD
-	ldada_24 xwa, 15563726
-	ld (xbc + 10), xwa
-	ldw wa, 0xD1
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 000dh,		0ED8520h, 03d1h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0xD
-	ldada_24 xwa, 15566112
-	ld (xbc + 10), xwa
-	ldw wa, 0x3D1
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0007h,		0ED7C06h, 00d2h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x7
-	ldada_24 xwa, 15563782
-	ld (xbc + 10), xwa
-	ldw wa, 0xD2
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0007h,		0ED857Ah, 03d2h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x7
-	ldada_24 xwa, 15566202
-	ld (xbc + 10), xwa
-	ldw wa, 0x3D2
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0007h,		0ED7C26h, 00d3h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x7
-	ldada_24 xwa, 15563814
-	ld (xbc + 10), xwa
-	ldw wa, 0xD3
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0007h,		0ED85B0h, 03d3h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x7
-	ldada_24 xwa, 15566256
-	ld (xbc + 10), xwa
-	ldw wa, 0x3D3
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0002h,		0ED7C46h, 00e8h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x2
-	ldada_24 xwa, 15563846
-	ld (xbc + 10), xwa
-	ldw wa, 0xE8
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0002h,		0ED85E8h, 03e8h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x2
-	ldada_24 xwa, 15566312
-	ld (xbc + 10), xwa
-	ldw wa, 0x3E8
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0003h,		0ED7C52h, 00e9h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x3
-	ldada_24 xwa, 15563858
-	ld (xbc + 10), xwa
-	ldw wa, 0xE9
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0003h,		0ED85FEh, 03e9h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x3
-	ldada_24 xwa, 15566334
-	ld (xbc + 10), xwa
-	ldw wa, 0x3E9
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 000eh,		0ED7C62h, 00f4h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0xE
-	ldada_24 xwa, 15563874
-	ld (xbc + 10), xwa
-	ldw wa, 0xF4
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 000eh,		0ED861Ah, 03f4h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0xE
-	ldada_24 xwa, 15566362
-	ld (xbc + 10), xwa
-	ldw wa, 0x3F4
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0017h,		0ED7C9Eh, 00f5h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x17
-	ldada_24 xwa, 15563934
-	ld (xbc + 10), xwa
-	ldw wa, 0xF5
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0017h,		0ED8682h, 03f5h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x17
-	ldada_24 xwa, 15566466
-	ld (xbc + 10), xwa
-	ldw wa, 0x3F5
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0001h,		0ED7CFEh, 00f6h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1
-	ldada_24 xwa, 15564030
-	ld (xbc + 10), xwa
-	ldw wa, 0xF6
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0001h,		0ED8736h, 03f6h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1
-	ldada_24 xwa, 15566646
-	ld (xbc + 10), xwa
-	ldw wa, 0x3F6
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0003h,		0ED7D06h, 00f7h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x3
-	ldada_24 xwa, 15564038
-	ld (xbc + 10), xwa
-	ldw wa, 0xF7
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0003h,		0ED8746h, 03f7h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x3
-	ldada_24 xwa, 15566662
-	ld (xbc + 10), xwa
-	ldw wa, 0x3F7
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0043h,		0ED7D16h, 00f8h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x43
-	ldada_24 xwa, 15564054
-	ld (xbc + 10), xwa
-	ldw wa, 0xF8
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0043h,		0ED8762h, 03f8h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x43
-	ldada_24 xwa, 15566690
-	ld (xbc + 10), xwa
-	ldw wa, 0x3F8
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0009h,		0ED7E26h, 00f9h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x9
-	ldada_24 xwa, 15564326
-	ld (xbc + 10), xwa
-	ldw wa, 0xF9
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0009h,		0ED8922h, 03f9h
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x9
-	ldada_24 xwa, 15567138
-	ld (xbc + 10), xwa
-	ldw wa, 0x3F9
-	call 0xFA42FB
-	; RegObjTabl 01600010h, 0FA5995h, 0001h,		0ED7E4Eh, 00fbh
-	mrid2 0xB7, 0x31
-	ld xwa, 0x1600010
-	ld (xbc), xwa
-	ldada_24 xwa, 16406933
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1
-	ldada_24 xwa, 15564366
-	ld (xbc + 10), xwa
-	ldw wa, 0xFB
-	call 0xFA42FB
-	; RegObjTabl 0160000fh, 0FA62CBh, 0001h,		0ED896Eh, 03fbh
-	mrid2 0xB7, 0x31
-	ld xwa, 0x160000F
-	ld (xbc), xwa
-	ldada_24 xwa, 16409291
-	ld (xbc + 4), xwa
-	ldmw (xbc + 8), 0x1
-	ldada_24 xwa, 15567214
-	ld (xbc + 10), xwa
-	ldw wa, 0x3FB
-	call 0xFA42FB
+	RegObjTable 0x1600004, 0xFA44E2, 0xED2D02, 0xED27E4, 0x162
+	RegObjTable 0x160000c, 0xFA58FB, 0xED2D92, 0xED2D04, 0x1c2
+	RegObjTable 0x160000d, 0xFA5948, 0xED2F64, 0xED2D94, 0x1e2
+	RegObjTabl 0x1600002, 0xFA496C, 0x2a, 0xED1C9E, 0x122
+	RegObjTabl 0x1600002, 0xFA496C, 0x2a, 0xED1D4A, 0x422
+	RegObjTabl 0x1600001, 0xFA48A9, 0x1c, 0xED2F66, 0x102
+	RegObjTabl 0x1600001, 0xFA48A9, 0x1c, 0xED2FDA, 0x402
+	RegObjTabl 0x1600003, 0xFA4A18, 0x14, 0xED3292, 0x142
+	RegObjTabl 0x1600003, 0xFA4A18, 0x14, 0xED32E6, 0x442
+	RegObjTabl 0x1600010, 0xFA5995, 0x3f, 0xED77CE, 0x1
+	RegObjTabl 0x160000f, 0xFA62CB, 0x3f, 0xED7E56, 0x301
+	RegObjTabl 0x1600010, 0xFA5995, 0x9, 0xED78CE, 0x40
+	RegObjTabl 0x160000f, 0xFA62CB, 0x9, 0xED7FF6, 0x340
+	RegObjTabl 0x1600010, 0xFA5995, 0x11, 0xED78F6, 0x41
+	RegObjTabl 0x160000f, 0xFA62CB, 0x11, 0xED803C, 0x341
+	RegObjTabl 0x1600010, 0xFA5995, 0x6, 0xED793E, 0x42
+	RegObjTabl 0x160000f, 0xFA62CB, 0x6, 0xED80C2, 0x342
+	RegObjTabl 0x1600010, 0xFA5995, 0x8, 0xED795A, 0x43
+	RegObjTabl 0x160000f, 0xFA62CB, 0x8, 0xED80F6, 0x343
+	RegObjTabl 0x1600010, 0xFA5995, 0x13, 0xED797E, 0x44
+	RegObjTabl 0x160000f, 0xFA62CB, 0x13, 0xED8136, 0x344
+	RegObjTabl 0x1600010, 0xFA5995, 0x13, 0xED79CE, 0x45
+	RegObjTabl 0x160000f, 0xFA62CB, 0x13, 0xED81AE, 0x345
+	RegObjTabl 0x1600010, 0xFA5995, 0x0, 0xED7A1E, 0x46
+	RegObjTabl 0x160000f, 0xFA62CB, 0x0, 0xED822E, 0x346
+	RegObjTabl 0x1600010, 0xFA5995, 0x7, 0xED7A22, 0x47
+	RegObjTabl 0x160000f, 0xFA62CB, 0x7, 0xED8234, 0x347
+	RegObjTabl 0x1600010, 0xFA5995, 0x19, 0xED7A42, 0x48
+	RegObjTabl 0x160000f, 0xFA62CB, 0x19, 0xED826E, 0x348
+	RegObjTabl 0x1600010, 0xFA5995, 0x4, 0xED7AAA, 0xc0
+	RegObjTabl 0x160000f, 0xFA62CB, 0x4, 0xED8322, 0x3c0
+	RegObjTabl 0x1600010, 0xFA5995, 0x4, 0xED7ABE, 0xc1
+	RegObjTabl 0x160000f, 0xFA62CB, 0x4, 0xED8346, 0x3c1
+	RegObjTabl 0x1600010, 0xFA5995, 0x14, 0xED7AD2, 0xc2
+	RegObjTabl 0x160000f, 0xFA62CB, 0x14, 0xED836C, 0x3c2
+	RegObjTabl 0x1600010, 0xFA5995, 0x11, 0xED7B26, 0xc3
+	RegObjTabl 0x160000f, 0xFA62CB, 0x11, 0xED83FC, 0x3c3
+	RegObjTabl 0x1600010, 0xFA5995, 0x8, 0xED7B6E, 0xc4
+	RegObjTabl 0x160000f, 0xFA62CB, 0x8, 0xED8478, 0x3c4
+	RegObjTabl 0x1600010, 0xFA5995, 0x7, 0xED7B92, 0xc5
+	RegObjTabl 0x160000f, 0xFA62CB, 0x7, 0xED84B8, 0x3c5
+	RegObjTabl 0x1600010, 0xFA5995, 0x6, 0xED7BB2, 0xd0
+	RegObjTabl 0x160000f, 0xFA62CB, 0x6, 0xED84F0, 0x3d0
+	RegObjTabl 0x1600010, 0xFA5995, 0xd, 0xED7BCE, 0xd1
+	RegObjTabl 0x160000f, 0xFA62CB, 0xd, 0xED8520, 0x3d1
+	RegObjTabl 0x1600010, 0xFA5995, 0x7, 0xED7C06, 0xd2
+	RegObjTabl 0x160000f, 0xFA62CB, 0x7, 0xED857A, 0x3d2
+	RegObjTabl 0x1600010, 0xFA5995, 0x7, 0xED7C26, 0xd3
+	RegObjTabl 0x160000f, 0xFA62CB, 0x7, 0xED85B0, 0x3d3
+	RegObjTabl 0x1600010, 0xFA5995, 0x2, 0xED7C46, 0xe8
+	RegObjTabl 0x160000f, 0xFA62CB, 0x2, 0xED85E8, 0x3e8
+	RegObjTabl 0x1600010, 0xFA5995, 0x3, 0xED7C52, 0xe9
+	RegObjTabl 0x160000f, 0xFA62CB, 0x3, 0xED85FE, 0x3e9
+	RegObjTabl 0x1600010, 0xFA5995, 0xe, 0xED7C62, 0xf4
+	RegObjTabl 0x160000f, 0xFA62CB, 0xe, 0xED861A, 0x3f4
+	RegObjTabl 0x1600010, 0xFA5995, 0x17, 0xED7C9E, 0xf5
+	RegObjTabl 0x160000f, 0xFA62CB, 0x17, 0xED8682, 0x3f5
+	RegObjTabl 0x1600010, 0xFA5995, 0x1, 0xED7CFE, 0xf6
+	RegObjTabl 0x160000f, 0xFA62CB, 0x1, 0xED8736, 0x3f6
+	RegObjTabl 0x1600010, 0xFA5995, 0x3, 0xED7D06, 0xf7
+	RegObjTabl 0x160000f, 0xFA62CB, 0x3, 0xED8746, 0x3f7
+	RegObjTabl 0x1600010, 0xFA5995, 0x43, 0xED7D16, 0xf8
+	RegObjTabl 0x160000f, 0xFA62CB, 0x43, 0xED8762, 0x3f8
+	RegObjTabl 0x1600010, 0xFA5995, 0x9, 0xED7E26, 0xf9
+	RegObjTabl 0x160000f, 0xFA62CB, 0x9, 0xED8922, 0x3f9
+	RegObjTabl 0x1600010, 0xFA5995, 0x1, 0xED7E4E, 0xfb
+	RegObjTabl 0x160000f, 0xFA62CB, 0x1, 0xED896E, 0x3fb
 
-	; RegMode 0002h, 00edh, 897ch, 00000001h, 01200000h, 01a00001h
-	pushw 0x2
-	pushw 0xED
-	pushw 0x897C
-	lds32 xwa, 1
-	ld xbc, 0x1200000
-	ld xde, 0x1A00001
-	call 0xFA4D2B
-	; RegMode 0002h, 00edh, 8986h, 00000004h, 01200000h, 01a00040h
-	pushw 0x2
-	pushw 0xED
-	pushw 0x8986
-	lds32 xwa, 4
-	ld xbc, 0x1200000
-	ld xde, 0x1A00040
-	call 0xFA4D2B
-	; RegMode 0002h, 00edh, 8992h, 00000012h, 01200000h, 01a000c0h
-	pushw 0x2
-	pushw 0xED
-	pushw 0x8992
-	ld xwa, 0x12
-	ld xbc, 0x1200000
-	ld xde, 0x1A000C0
-	call 0xFA4D2B
+	RegMode 0x2, 0xed, 0x897c, 0x1, 0x1200000, 0x1a00001
+	RegMode 0x2, 0xed, 0x8986, 0x4, 0x1200000, 0x1a00040
+	RegMode 0x2, 0xed, 0x8992, 0x12, 0x1200000, 0x1a000c0
 
-	; RegTitle 0002h, 00edh, 899ah, 00000001h, 01200000h, 00010001h
-	pushw 0x2
-	pushw 0xED
-	pushw 0x899A
-	lds32 xwa, 1
-	ld xbc, 0x1200000
-	ld xde, 0x10001
-	call 0xFA4D80
-	; RegTitle 0002h, 00edh, 89a4h, 00000040h, 01200000h, 00400000h
-	pushw 0x2
-	pushw 0xED
-	pushw 0x89A4
-	ld xwa, 0x40
-	ld xbc, 0x1200000
-	ld xde, 0x400000
-	call 0xFA4D80
-	; RegTitle 0002h, 00edh, 89aeh, 00000041h, 0142000bh, 00410000h
-	pushw 0x2
-	pushw 0xED
-	pushw 0x89AE
-	ld xwa, 0x41
-	ld xbc, 0x142000B
-	ld xde, 0x410000
-	call 0xFA4D80
-	; RegTitle 0002h, 00edh, 89b8h, 00000042h, 0142000ch, 00420000h
-	pushw 0x2
-	pushw 0xED
-	pushw 0x89B8
-	ld xwa, 0x42
-	ld xbc, 0x142000C
-	ld xde, 0x420000
-	call 0xFA4D80
-	; RegTitle 0002h, 00edh, 89c4h, 00000043h, 01200000h, 00430000h
-	pushw 0x2
-	pushw 0xED
-	pushw 0x89C4
-	ld xwa, 0x43
-	ld xbc, 0x1200000
-	ld xde, 0x430000
-	call 0xFA4D80
-	; RegTitle 0002h, 00edh, 89d0h, 00000044h, 01200000h, 00440000h
-	pushw 0x2
-	pushw 0xED
-	pushw 0x89D0
-	ld xwa, 0x44
-	ld xbc, 0x1200000
-	ld xde, 0x440000
-	call 0xFA4D80
-	; RegTitle 0002h, 00edh, 89dch, 00000045h, 01200000h, 00450000h
-	pushw 0x2
-	pushw 0xED
-	pushw 0x89DC
-	ld xwa, 0x45
-	ld xbc, 0x1200000
-	ld xde, 0x450000
-	call 0xFA4D80
-	; RegTitle 0002h, 00edh, 89e6h, 00000046h, 01200000h, 00410000h
-	pushw 0x2
-	pushw 0xED
-	pushw 0x89E6
-	ld xwa, 0x46
-	ld xbc, 0x1200000
-	ld xde, 0x410000
-	call 0xFA4D80
-	; RegTitle 0002h, 00edh, 89f2h, 00000047h, 01200000h, 00470000h
-	pushw 0x2
-	pushw 0xED
-	pushw 0x89F2
-	ld xwa, 0x47
-	ld xbc, 0x1200000
-	ld xde, 0x470000
-	call 0xFA4D80
-	; RegTitle 0002h, 00edh, 89feh, 00000048h, 01200000h, 00480002h
-	pushw 0x2
-	pushw 0xED
-	pushw 0x89FE
-	ld xwa, 0x48
-	ld xbc, 0x1200000
-	ld xde, 0x480002
-	call 0xFA4D80
-	; RegTitle 0002h, 00edh, 8a0ch, 000000c0h, 01420009h, 00c00000h
-	pushw 0x2
-	pushw 0xED
-	pushw 0x8A0C
-	ld xwa, 0xC0
-	ld xbc, 0x1420009
-	ld xde, 0xC00000
-	call 0xFA4D80
-	; RegTitle 0002h, 00edh, 8a16h, 000000c1h, 01200000h, 00c10000h
-	pushw 0x2
-	pushw 0xED
-	pushw 0x8A16
-	ld xwa, 0xC1
-	ld xbc, 0x1200000
-	ld xde, 0xC10000
-	call 0xFA4D80
-	; RegTitle 0002h, 00edh, 8a24h, 000000c2h, 01200000h, 00c20000h
-	pushw 0x2
-	pushw 0xED
-	pushw 0x8A24
-	ld xwa, 0xC2
-	ld xbc, 0x1200000
-	ld xde, 0xC20000
-	call 0xFA4D80
-	; RegTitle 0002h, 00edh, 8a30h, 000000c3h, 01200000h, 00c30000h
-	pushw 0x2
-	pushw 0xED
-	pushw 0x8A30
-	ld xwa, 0xC3
-	ld xbc, 0x1200000
-	ld xde, 0xC30000
-	call 0xFA4D80
-	; RegTitle 0002h, 00edh, 8a3ch, 000000c4h, 01200000h, 00c40000h
-	pushw 0x2
-	pushw 0xED
-	pushw 0x8A3C
-	ld xwa, 0xC4
-	ld xbc, 0x1200000
-	ld xde, 0xC40000
-	call 0xFA4D80
-	; RegTitle 0002h, 00edh, 8a4ah, 000000c5h, 01200000h, 00c50000h
-	pushw 0x2
-	pushw 0xED
-	pushw 0x8A4A
-	ld xwa, 0xC5
-	ld xbc, 0x1200000
-	ld xde, 0xC50000
-	call 0xFA4D80
-	; RegTitle 0002h, 00edh, 8a56h, 000000d0h, 01200000h, 00d00000h
-	pushw 0x2
-	pushw 0xED
-	pushw 0x8A56
-	ld xwa, 0xD0
-	ld xbc, 0x1200000
-	ld xde, 0xD00000
-	call 0xFA4D80
-	; RegTitle 0002h, 00edh, 8a62h, 000000d1h, 01200000h, 00d10000h
-	pushw 0x2
-	pushw 0xED
-	pushw 0x8A62
-	ld xwa, 0xD1
-	ld xbc, 0x1200000
-	ld xde, 0xD10000
-	call 0xFA4D80
-	; RegTitle 0002h, 00edh, 8a6ch, 000000d2h, 01200000h, 00d20000h
-	pushw 0x2
-	pushw 0xED
-	pushw 0x8A6C
-	ld xwa, 0xD2
-	ld xbc, 0x1200000
-	ld xde, 0xD20000
-	call 0xFA4D80
-	; RegTitle 0002h, 00edh, 8a76h, 000000d3h, 01200000h, 00d30000h
-	pushw 0x2
-	pushw 0xED
-	pushw 0x8A76
-	ld xwa, 0xD3
-	ld xbc, 0x1200000
-	ld xde, 0xD30000
-	call 0xFA4D80
-	; RegTitle 0002h, 00edh, 8a82h, 000000e8h, 01200000h, 00e80000h
-	pushw 0x2
-	pushw 0xED
-	pushw 0x8A82
-	ld xwa, 0xE8
-	ld xbc, 0x1200000
-	ld xde, 0xE80000
-	call 0xFA4D80
-	; RegTitle 0002h, 00edh, 8a8ch, 000000e9h, 01200000h, 00e90000h
-	pushw 0x2
-	pushw 0xED
-	pushw 0x8A8C
-	ld xwa, 0xE9
-	ld xbc, 0x1200000
-	ld xde, 0xE90000
-	call 0xFA4D80
-	; RegTitle 0002h, 00edh, 8a96h, 000000f4h, 01200000h, 00f40000h
-	pushw 0x2
-	pushw 0xED
-	pushw 0x8A96
-	ld xwa, 0xF4
-	ld xbc, 0x1200000
-	ld xde, 0xF40000
-	call 0xFA4D80
-	; RegTitle 0002h, 00edh, 8aa0h, 000000f5h, 01420010h, 00f50000h
-	pushw 0x2
-	pushw 0xED
-	pushw 0x8AA0
-	ld xwa, 0xF5
-	ld xbc, 0x1420010
-	ld xde, 0xF50000
-	call 0xFA4D80
-	; RegTitle 0002h, 00edh, 8aaah, 000000f6h, 01420011h, 00f60000h
-	pushw 0x2
-	pushw 0xED
-	pushw 0x8AAA
-	ld xwa, 0xF6
-	ld xbc, 0x1420011
-	ld xde, 0xF60000
-	call 0xFA4D80
-	; RegTitle 0002h, 00edh, 8ab4h, 000000f7h, 01420012h, 00f70000h
-	pushw 0x2
-	pushw 0xED
-	pushw 0x8AB4
-	ld xwa, 0xF7
-	ld xbc, 0x1420012
-	ld xde, 0xF70000
-	call 0xFA4D80
-	; RegTitle 0002h, 00edh, 8abeh, 000000f8h, 01200000h, 00f80000h
-	pushw 0x2
-	pushw 0xED
-	pushw 0x8ABE
-	ld xwa, 0xF8
-	ld xbc, 0x1200000
-	ld xde, 0xF80000
-	call 0xFA4D80
-	; RegTitle 0002h, 00edh, 8ac8h, 000000f9h, 01420013h, 00f90000h
-	pushw 0x2
-	pushw 0xED
-	pushw 0x8AC8
-	ld xwa, 0xF9
-	ld xbc, 0x1420013
-	ld xde, 0xF90000
-	call 0xFA4D80
-	; RegTitle 0002h, 00edh, 8ad2h, 000000fbh, 01200000h, 00fb0000h
-	pushw 0x2
-	pushw 0xED
-	pushw 0x8AD2
-	ld xwa, 0xFB
-	ld xbc, 0x1200000
-	ld xde, 0xFB0000
-	call 0xFA4D80
+	RegTitle 0x2, 0xed, 0x899a, 0x1, 0x1200000, 0x10001
+	RegTitle 0x2, 0xed, 0x89a4, 0x40, 0x1200000, 0x400000
+	RegTitle 0x2, 0xed, 0x89ae, 0x41, 0x142000b, 0x410000
+	RegTitle 0x2, 0xed, 0x89b8, 0x42, 0x142000c, 0x420000
+	RegTitle 0x2, 0xed, 0x89c4, 0x43, 0x1200000, 0x430000
+	RegTitle 0x2, 0xed, 0x89d0, 0x44, 0x1200000, 0x440000
+	RegTitle 0x2, 0xed, 0x89dc, 0x45, 0x1200000, 0x450000
+	RegTitle 0x2, 0xed, 0x89e6, 0x46, 0x1200000, 0x410000
+	RegTitle 0x2, 0xed, 0x89f2, 0x47, 0x1200000, 0x470000
+	RegTitle 0x2, 0xed, 0x89fe, 0x48, 0x1200000, 0x480002
+	RegTitle 0x2, 0xed, 0x8a0c, 0xc0, 0x1420009, 0xc00000
+	RegTitle 0x2, 0xed, 0x8a16, 0xc1, 0x1200000, 0xc10000
+	RegTitle 0x2, 0xed, 0x8a24, 0xc2, 0x1200000, 0xc20000
+	RegTitle 0x2, 0xed, 0x8a30, 0xc3, 0x1200000, 0xc30000
+	RegTitle 0x2, 0xed, 0x8a3c, 0xc4, 0x1200000, 0xc40000
+	RegTitle 0x2, 0xed, 0x8a4a, 0xc5, 0x1200000, 0xc50000
+	RegTitle 0x2, 0xed, 0x8a56, 0xd0, 0x1200000, 0xd00000
+	RegTitle 0x2, 0xed, 0x8a62, 0xd1, 0x1200000, 0xd10000
+	RegTitle 0x2, 0xed, 0x8a6c, 0xd2, 0x1200000, 0xd20000
+	RegTitle 0x2, 0xed, 0x8a76, 0xd3, 0x1200000, 0xd30000
+	RegTitle 0x2, 0xed, 0x8a82, 0xe8, 0x1200000, 0xe80000
+	RegTitle 0x2, 0xed, 0x8a8c, 0xe9, 0x1200000, 0xe90000
+	RegTitle 0x2, 0xed, 0x8a96, 0xf4, 0x1200000, 0xf40000
+	RegTitle 0x2, 0xed, 0x8aa0, 0xf5, 0x1420010, 0xf50000
+	RegTitle 0x2, 0xed, 0x8aaa, 0xf6, 0x1420011, 0xf60000
+	RegTitle 0x2, 0xed, 0x8ab4, 0xf7, 0x1420012, 0xf70000
+	RegTitle 0x2, 0xed, 0x8abe, 0xf8, 0x1200000, 0xf80000
+	RegTitle 0x2, 0xed, 0x8ac8, 0xf9, 0x1420013, 0xf90000
+	RegTitle 0x2, 0xed, 0x8ad2, 0xfb, 0x1200000, 0xfb0000
 
 	lda xsp, (xsp + 14)
 	ret
