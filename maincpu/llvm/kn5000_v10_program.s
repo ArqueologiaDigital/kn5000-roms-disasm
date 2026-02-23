@@ -113749,7 +113749,7 @@ Boot_CallInitHandlers:
 	push_werp 0xFA	; d7 fa 04
 
 	; Compare init flag - encoding differs between ROMs
-	; IF INIT_FLAG_COMPARE_WORD (evaluated to false for maincpu)
+	; IF INIT_FLAG_COMPARE_WORD (evaluated to false)
 	; ELSE
 	; maincpu: CP (0xFFFEEE), 0xFF (6 bytes)
 	.byte 0xc2, 0xee, 0xfe, 0xff, 0x3f, 0xff

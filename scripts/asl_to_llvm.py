@@ -4,7 +4,7 @@ ASL-to-LLVM Assembly Converter for KN5000 ROM disassembly.
 
 Converts ASL (Alfred Arnold's Macro Assembler) assembly files to LLVM
 assembly syntax for the TLCS-900 target. Processes the main assembly file
-and all its includes, producing parallel .s files under maincpu/llvm/.
+and all its includes, producing parallel .s files under the output directory.
 
 Strategy: Each CPU instruction is emitted as a .byte sequence from the
 original ROM binary, preserving the original ASL syntax as a comment.
@@ -13,9 +13,11 @@ equivalents. Native LLVM instructions progressively replace .byte
 fallbacks where the LLVM backend supports them.
 
 Usage:
-    python scripts/asl_to_llvm.py maincpu/kn5000_v10_program.asm
+    python scripts/asl_to_llvm.py <input.asm> [--rom-base 0xE00000] [--rom-size 0x200000] \\
+        [--rom-file original_ROMs/foo.rom] [--output-dir maincpu/llvm]
 """
 
+import argparse
 import bisect
 import os
 import re
@@ -28,9 +30,12 @@ from pathlib import Path
 # ============================================================================
 
 BASE_DIR = Path(".")
-LLVM_DIR = BASE_DIR / "maincpu" / "llvm"
-ROM_BASE = 0xE00000
-ROM_SIZE = 0x200000  # 2MB
+LLVM_DIR = BASE_DIR / "maincpu" / "llvm"  # Default; overridden by --output-dir
+ROM_BASE = 0xE00000  # Default; overridden by --rom-base
+ROM_SIZE = 0x200000  # Default; overridden by --rom-size
+
+# Input source directory (for resolving binclude paths)
+INPUT_DIR = ""  # Set in main() from input file path
 
 # Original ROM for byte extraction
 ORIGINAL_ROM = None  # Loaded on demand
@@ -96,10 +101,13 @@ NATIVE_INSTR_COUNT = 0
 BYTE_FALLBACK_COUNT = 0
 
 
-def load_original_rom():
+def load_original_rom(rom_path=None):
     """Load the original ROM binary for byte extraction."""
     global ORIGINAL_ROM
-    rom_path = BASE_DIR / "original_ROMs" / "kn5000_v10_program.rom"
+    if rom_path is None:
+        rom_path = BASE_DIR / "original_ROMs" / "kn5000_v10_program.rom"
+    else:
+        rom_path = Path(rom_path)
     if rom_path.exists():
         ORIGINAL_ROM = rom_path.read_bytes()
         print(f"  Loaded original ROM: {rom_path} ({len(ORIGINAL_ROM)} bytes)")
@@ -589,7 +597,7 @@ LLVM_MACRO_BODIES = {
 
 
 # Conditional assembly state: tracks IF/ELSE/ENDIF
-# For maincpu, INIT_FLAG_COMPARE_WORD=0, so IF evaluates to false
+# IF conditions are evaluated using KNOWN_EQUS values (0 = false)
 COND_STATE = {
     'active': True,     # Whether we're currently in an active (emitting) branch
     'depth': 0,         # Nesting depth
@@ -923,13 +931,13 @@ def convert_line(line, in_file_path):
 
         if test_upper == 'IF':
             if COND_STATE['depth'] == 0:
-                # Evaluate condition: for maincpu, INIT_FLAG_COMPARE_WORD=0
+                # Evaluate condition using KNOWN_EQUS (0 = false)
                 cond_name = test_remainder.strip()
                 cond_val = KNOWN_EQUS.get(cond_name, 0)
                 COND_STATE['depth'] = 1
                 COND_STATE['active'] = bool(cond_val)
                 COND_STATE['seen_else'] = False
-                return f"\t; IF {cond_name} (evaluated to {'true' if cond_val else 'false'} for maincpu)"
+                return f"\t; IF {cond_name} (evaluated to {'true' if cond_val else 'false'})"
             else:
                 COND_STATE['depth'] += 1
                 return None
@@ -1080,7 +1088,7 @@ def convert_line(line, in_file_path):
         result = ""
         if label:
             result = f"{label}:{label_addr_suffix}\n"
-        result += f"\t.org {addr_str} - 0xE00000, 0xFF"
+        result += f"\t.org {addr_str} - 0x{ROM_BASE:X}, 0xFF"
         if comment:
             result += f"\t{comment}"
         return result
@@ -1246,7 +1254,7 @@ def convert_line(line, in_file_path):
 
     if first_upper == 'BINCLUDE':
         path_str = remainder.strip().strip('"').strip("'")
-        bin_path = os.path.join('maincpu', path_str)
+        bin_path = os.path.join(INPUT_DIR, path_str) if INPUT_DIR else path_str
         fsize = os.path.getsize(bin_path) if os.path.exists(bin_path) else 0
         result = ""
         if label:
@@ -4634,21 +4642,47 @@ def convert_all(main_file, output_path):
 # ============================================================================
 
 def main():
-    if len(sys.argv) < 2:
-        print("Usage: python scripts/asl_to_llvm.py maincpu/kn5000_v10_program.asm")
-        sys.exit(1)
+    global ROM_BASE, ROM_SIZE, LLVM_DIR, INPUT_DIR
 
-    main_file = sys.argv[1]
+    parser = argparse.ArgumentParser(
+        description='ASL-to-LLVM Assembly Converter for KN5000 ROM disassembly.')
+    parser.add_argument('input_file', help='Main ASL assembly file to convert')
+    parser.add_argument('--rom-base', type=lambda x: int(x, 0), default=0xE00000,
+                        help='ROM base address (default: 0xE00000)')
+    parser.add_argument('--rom-size', type=lambda x: int(x, 0), default=0x200000,
+                        help='ROM size in bytes (default: 0x200000)')
+    parser.add_argument('--rom-file', default=None,
+                        help='Path to original ROM file (default: auto-detect)')
+    parser.add_argument('--output-dir', default=None,
+                        help='Output directory for LLVM files (default: <input-dir>/llvm)')
+
+    args = parser.parse_args()
+
+    main_file = args.input_file
     main_dir = os.path.dirname(main_file)
+    INPUT_DIR = main_dir
+
+    ROM_BASE = args.rom_base
+    ROM_SIZE = args.rom_size
+
+    if args.output_dir:
+        LLVM_DIR = Path(args.output_dir)
+    else:
+        LLVM_DIR = Path(main_dir) / "llvm"
+
+    # Derive output filename from input filename
+    input_basename = os.path.splitext(os.path.basename(main_file))[0]
+    main_output = os.path.join(str(LLVM_DIR), f'{input_basename}.s')
 
     print(f"ASL-to-LLVM converter (Phase 3)")
     print(f"Input: {main_file}")
-    print(f"Output: {LLVM_DIR}/kn5000_v10_program.s")
+    print(f"Output: {main_output}")
+    print(f"ROM base: 0x{ROM_BASE:X}, size: 0x{ROM_SIZE:X}")
     print()
 
     # Load original ROM
     print("Loading original ROM...")
-    load_original_rom()
+    load_original_rom(args.rom_file)
     print()
 
     # Step 1: Convert macro library (still separate — needed for macro name detection)
@@ -4663,7 +4697,6 @@ def main():
 
     # Step 2: Convert main file + all includes into single output
     print("Step 2: Converting all source files...")
-    main_output = os.path.join(str(LLVM_DIR), 'kn5000_v10_program.s')
     convert_all(main_file, main_output)
     print()
 
