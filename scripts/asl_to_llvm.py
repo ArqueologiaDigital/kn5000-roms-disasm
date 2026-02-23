@@ -940,6 +940,10 @@ def convert_line(line, in_file_path):
         # Inline macros may expand to multiple instructions — decode the right count.
         addr = ADDR_TRACKER.get_addr()
         instr_count = MACRO_INSTR_COUNT.get(first_word.upper(), 1)
+        # db-only macros (like PUSH_WORD) have instr_count=0 because their
+        # body contains only db directives.  Treat them as single-instruction.
+        if instr_count == 0:
+            instr_count = 1
 
         # Decode instr_count consecutive instructions from ROM
         nbytes = 0
@@ -968,6 +972,12 @@ def convert_line(line, in_file_path):
                 if instr_count == 1:
                     # Single-instruction macro: try native conversion
                     native = try_convert_native(first_word, remainder.strip(), rom_bytes, nbytes, addr)
+                    # If macro name isn't a known mnemonic, try opcode-based guessing
+                    if native is None:
+                        for mnem in guess_mnemonics_from_opcode(rom_bytes[0]):
+                            native = try_convert_native(mnem, '', rom_bytes, nbytes, addr)
+                            if native is not None:
+                                break
                     if native is not None:
                         native_asm, _ = native
                         result += f"\t{native_asm}"

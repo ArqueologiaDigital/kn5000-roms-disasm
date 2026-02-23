@@ -151093,8 +151093,8 @@ UI_COMPONENT_DISPATCH:	; F1A7CB
 	inc 1, a	; Increment by 1
 	extz wa	; Zero-extend A to WA
 	pushw wa	; Push WA as parameter
-	.byte 0x0b, 0xe1, 0x00	; PUSH_WORD 00E1h	; Push parameter
-	.byte 0x0b, 0xe4, 0xce	; PUSH_WORD 0CEE4h	; Push parameter
+	pushw 0xE1	; Push parameter
+	pushw 0xCEE4	; Push parameter
 	push xde	; Push XDE
 	call LABEL_FF0A72	; Call handler function
 	lda xsp, (xsp + 10)	; Clean up stack (10 bytes)
@@ -151113,8 +151113,8 @@ UI_COMPONENT_DISPATCH_CASE1:	; F1A7E5
 	ldada_24 xbc, 252430	; Load table address
 	ld_xwa_sril3 0x07, 0xE4, 0xE0	; Load entry from table
 	push xwa	; Push parameter
-	.byte 0x0b, 0xe1, 0x00	; PUSH_WORD 00E1h	; Push parameter
-	.byte 0x0b, 0xe8, 0xce	; PUSH_WORD 0CEE8h	; Push parameter
+	pushw 0xE1	; Push parameter
+	pushw 0xCEE8	; Push parameter
 	push xde	; Push XDE
 	call LABEL_FF0A72	; Call handler function
 	lda xsp, (xsp + 16)	; Clean up stack (16 bytes)
