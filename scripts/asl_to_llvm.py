@@ -2656,6 +2656,13 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
             imm8 = rom_bytes[2]
             return f"ldio 0x{addr8:02X}, 0x{imm8:02X}", 3
 
+    # Tier 42b: LDW (n), #nn — I/O register word write (4-byte: 0x0A + addr8 + imm16)
+    if nbytes == 4 and rom_bytes is not None and mnem_upper == 'LDW':
+        if rom_bytes[0] == 0x0A:
+            addr8 = rom_bytes[1]
+            imm16 = rom_bytes[2] | (rom_bytes[3] << 8)
+            return f"ldwio 0x{addr8:02X}, 0x{imm16:04X}", 4
+
     # Tier 43: Extended addressing mode instructions — categorized prefix patterns.
     # Classifies prefix bytes into semantic categories with computed prefix:
     #   Source addressing (C/D/E prefix, size=8/16/32):
