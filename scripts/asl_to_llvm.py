@@ -1298,6 +1298,8 @@ def convert_line(line, in_file_path):
     if first_upper == 'BINCLUDE':
         path_str = remainder.strip().strip('"').strip("'")
         bin_path = os.path.join(INPUT_DIR, path_str) if INPUT_DIR else path_str
+        if not os.path.exists(bin_path) and LLVM_DIR:
+            bin_path = os.path.join(str(LLVM_DIR), path_str)
         fsize = os.path.getsize(bin_path) if os.path.exists(bin_path) else 0
         result = ""
         if label:
@@ -3734,6 +3736,10 @@ def convert_db(label, args, comment, in_file_path, label_addr_suffix=""):
                 string_form = _try_emit_as_string(rom_bytes)
                 if string_form is not None:
                     result += f"\t{string_form}"
+                elif len(rom_bytes) >= 2 and all(b == 0x00 for b in rom_bytes):
+                    result += f"\t.zero {len(rom_bytes)}"
+                elif len(rom_bytes) >= 2 and all(b == rom_bytes[0] for b in rom_bytes):
+                    result += f"\t.fill {len(rom_bytes)}, 1, 0x{rom_bytes[0]:02x}"
                 else:
                     byte_str = ', '.join(f'0x{b:02x}' for b in rom_bytes)
                     if _db_args_all_numeric(args):
@@ -4560,8 +4566,19 @@ def main():
     print()
 
     # Step 1: Parse macro library for KNOWN_MACROS (no output file generated)
-    macro_input = os.path.normpath(os.path.join(main_dir, '..', 'tmp94c241.inc'))
-    if not os.path.exists(macro_input):
+    # Search for tmp94c241.inc: check parent directories up to 3 levels
+    macro_input = None
+    search_dir = main_dir or '.'
+    for _ in range(4):
+        candidate = os.path.normpath(os.path.join(search_dir, 'tmp94c241.inc'))
+        if os.path.exists(candidate):
+            macro_input = candidate
+            break
+        parent = os.path.dirname(search_dir)
+        if parent == search_dir:
+            break
+        search_dir = parent
+    if macro_input is None:
         macro_input = 'tmp94c241.inc'
 
     print("Step 1: Parsing macro library...")

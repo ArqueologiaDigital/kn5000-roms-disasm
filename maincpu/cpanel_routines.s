@@ -1191,7 +1191,7 @@ CPanel_RX_PacketSizeCheck:
 	jp (xhl)
 
 CPanel_RX_PacketHandlers_Padding:
-	.byte 0xff, 0xff
+	.fill 2, 1, 0xff
 
 CPanel_RX_PacketHandlers:
 	.long CPanel_RX_ButtonPacket
@@ -1431,7 +1431,7 @@ LABEL_FC4B63:
 	jp (xhl)
 
 CPanel_LED_PacketHandlers_Padding:
-	.byte 0xff, 0xff
+	.fill 2, 1, 0xff
 
 
 CPanel_LED_PacketHandlers:

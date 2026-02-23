@@ -1,4 +1,4 @@
-; Converted from custom_data/kn5000_custom_data.asm by asl_to_llvm.py
+; Converted from archive/asl/custom_data/kn5000_custom_data.asm by asl_to_llvm.py
 ; Modular includes preserved, segments globally sorted by ORG address.
 ; Per-instruction .byte fallback with progressive native replacement.
 ; This file is auto-generated. Edit the converter, not this file.

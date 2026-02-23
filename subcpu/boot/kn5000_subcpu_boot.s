@@ -1,4 +1,4 @@
-; Converted from subcpu/boot/kn5000_subcpu_boot.asm by asl_to_llvm.py
+; Converted from archive/asl/subcpu/boot/kn5000_subcpu_boot.asm by asl_to_llvm.py
 ; Modular includes preserved, segments globally sorted by ORG address.
 ; Per-instruction .byte fallback with progressive native replacement.
 ; This file is auto-generated. Edit the converter, not this file.
@@ -100768,8 +100768,8 @@ SUB_FEC1:
 
 	.org 0xFFFED2 - 0xFE0000, 0xFF
 
-	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff	; 0xFFFED2-0xFFFED9
-	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff	; 0xFFFEDA-0xFFFEDF
+	.fill 8, 1, 0xff	; 0xFFFED2-0xFFFED9
+	.fill 6, 1, 0xff	; 0xFFFEDA-0xFFFEDF
 
 ; ==============================================================================
 ; Reset Handler (0xFFFEE0)
@@ -100788,8 +100788,8 @@ RESET_HANDLER:
 
 	.org 0xFFFEE5 - 0xFE0000, 0xFF
 
-	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff	; 0xFFFEE5-0xFFFEED
-	.byte 0x00, 0x00	; 0xFFFEEE-0xFFFEEF
+	.fill 9, 1, 0xff	; 0xFFFEE5-0xFFFEED
+	.zero 2	; 0xFFFEEE-0xFFFEEF
 
 ; ==============================================================================
 ; Reserved data area (0xFFFEF0 - 0xFFFEFF)
@@ -100858,9 +100858,9 @@ VECTOR_TABLE:
 	.long 0x4D2	; Handler 43
 	.long 0x4D7	; Handler 44
 	; Fill rest with FF
-	.byte 0xff, 0xff, 0xff, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff
+	.fill 4, 1, 0xff
+	.fill 4, 1, 0xff
+	.fill 4, 1, 0xff
 
 	.org 0xFFFFF0 - 0xFE0000, 0xFF
 
