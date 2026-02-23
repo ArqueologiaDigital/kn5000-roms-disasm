@@ -2263,24 +2263,24 @@ LABEL_F919E3:
 	ld iz, wa
 	extz xiz
 	add xiz, xix
-	dpi2 0xF8, 0x47
+	x_dpi2_s47 0xF8
 	cps e, 0
 	jr z, LABEL_F91A39
 	cpmi16 (xsp + 4), 0x9
 	jr nz, LABEL_F91A27
-	dpi3 0xF8, 0x00, 0x31
+	x_dpi3_o00_t1 0xF8, 0x31
 	ldmi8 (xiz), 0x30
 	jr LABEL_F91A33
 
 LABEL_F91A27:
-	dpi3 0xF8, 0x00, 0x20
+	x_dpi3_o00_t1 0xF8, 0x20
 	ld wa, (xsp + 4)
 	add a, 0x31
 	ld (xiz), a
 
 LABEL_F91A33:
 	inc 1, xiz
-	dpi3 0xF8, 0x00, 0x3A
+	x_dpi3_o00_t1 0xF8, 0x3A
 
 LABEL_F91A39:
 	ld xwa, xiz

@@ -1017,7 +1017,7 @@ HDAE5000_Clear_Work_Buffer:	; 28F785h
 	srl xbc, 1	; srl 1, XBC  ; divide by 2 for word ops
 	jr z, HDAE5000_Clear_Work_Buffer__clear_done	; Skip if count was 0 or 1
 	ld xhl, xde	; Source = destination (for LDIRW)
-	dpi4 0xE9, 0x02, 0x00, 0x00	; ld (XDE+), 0x0000  ; store first word
+	x_dpi4_o02_t2 0xE9, 0x00, 0x00	; ld (XDE+), 0x0000  ; store first word
 	dec 1, xbc	; dec 1, XBC
 	or xbc, xbc
 	jr z, HDAE5000_Clear_Work_Buffer__clear_done
@@ -1440,7 +1440,7 @@ HDAE5000_MemFill:	; 29AEC7h
 	and de, 0x3	; DE = bytes to align (0-3)
 	jr z, HDAE5000_MemFill__aligned
 HDAE5000_MemFill__align_loop:
-	dpi2 0xF0, 0x41	; ld (XIX+), A - store byte
+	x_dpi2_s41 0xF0	; ld (XIX+), A - store byte
 	sub bc, 0x1	; sub BC, 1 - decrement count
 	ret z	; Return if done
 	djnz xde, HDAE5000_MemFill__align_loop	; djnz DE, .align_loop
@@ -1451,13 +1451,13 @@ HDAE5000_MemFill__aligned:
 	ld w, a	; W = A (fill byte)
 	ldfr_wa_werp 0xE2	; ld QWA, WA - expand to 32-bit
 HDAE5000_MemFill__fill_dwords:
-	dpi2 0xF2, 0x60	; ld (XIX+), XWA - store 4 bytes
+	x_dpi2_s60 0xF2	; ld (XIX+), XWA - store 4 bytes
 	djnz xbc, HDAE5000_MemFill__fill_dwords	; djnz BC, .fill_dwords
 HDAE5000_MemFill__remainder:
 	and de, 0x3	; DE = remaining bytes (0-3)
 	ret z	; Return if none
 HDAE5000_MemFill__fill_bytes:
-	dpi2 0xF0, 0x41	; ld (XIX+), A
+	x_dpi2_s41 0xF0	; ld (XIX+), A
 	djnz xde, HDAE5000_MemFill__fill_bytes	; djnz DE, .fill_bytes
 	ret
 
@@ -1477,7 +1477,7 @@ HDAE5000_StrCopy__find_end:
 	jr HDAE5000_StrCopy__copy_check
 HDAE5000_StrCopy__copy_loop:
 	ld_a_spib 0xE4	; ld A, (XBC+) - read src byte
-	dpi2 0xE8, 0x41	; ld (XDE+), A - write to dest
+	x_dpi2_s41 0xE8	; ld (XDE+), A - write to dest
 HDAE5000_StrCopy__copy_check:
 	cpmi8 (xbc), 0x0	; cp (XBC), 0 - check for null
 	jr nz, HDAE5000_StrCopy__copy_loop

@@ -202,7 +202,7 @@ LABEL_F8DD72:
 
 RenderSmfFilename:
 	extz bc
-	dri5 0x07, 0xE0, 0xE4, 0x00, 0x00
+	x_dri5_o00_t1 0x07, 0xE0, 0xE4, 0x00
 	lds ix, 0
 	ldada_24 xhl, 15652728
 	jr LABEL_F8DD97
@@ -230,7 +230,7 @@ LABEL_F8DDA8:
 	ret ge
 
 LABEL_F8DDAE:
-	dri5 0x07, 0xE0, 0xF0, 0x00, 0x5F
+	x_dri5_o00_t1 0x07, 0xE0, 0xF0, 0x5F
 	inc 1, ix
 	cp ix, 0x8
 	jr lt, LABEL_F8DDAE
@@ -314,7 +314,7 @@ SmfSeqToSongNumFunc:
 
 LABEL_F8DE91:
 	ldada xwa, 32916
-	dpi3 0xE0, 0x00, 0x00
+	x_dpi3_o00_t1 0xE0, 0x00
 	ld xbc, 0xEA073C
 	call LABEL_F890DC
 	ldada xiz, 32917
@@ -347,7 +347,7 @@ SmfSeqFromSongNumFunc:
 
 LABEL_F8DEE8:
 	ldada xwa, 33048
-	dpi3 0xE0, 0x00, 0x00
+	x_dpi3_o00_t1 0xE0, 0x00
 	ld xbc, 0xEA0748
 	call LABEL_F890DC
 	ldada xiz, 33049
@@ -451,7 +451,7 @@ LABEL_F8DFC0:
 	jr nc, LABEL_F8DFCE
 
 LABEL_F8DFC4:
-	dpi3 0xE0, 0x00, 0x20
+	x_dpi3_o00_t1 0xE0, 0x20
 	inc 1, ix
 	cp ix, bc
 	jr c, LABEL_F8DFC4
@@ -561,7 +561,7 @@ FmmSmfFileNameFunc:
 	add xde, 0xEA079E
 	ld de, (xde)
 	ldada_24 xix, 16310472
-	dri4 0x07, 0xF0, 0xE8, 0xD8
+	x_dri4_sd8 0x07, 0xF0, 0xE8
 LABEL_F8E0C8:
 	.byte 0xf1, 0xa0, 0x81, 0x61, 0xe8, 0xa8, 0xf1, 0xa4
 	.byte 0x81, 0x60, 0xf1, 0xa8, 0x81, 0x60, 0xc1, 0x36

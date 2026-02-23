@@ -37,9 +37,9 @@
 ; Exit:  (REGION_CODE_VAR) = 1-4
 ; -----------------------------------------------------------------------------
 Detect_Region_Code:
-	dd82 0x44, 0xCA
+	x_dd82_sca 0x44
 	jr z, Detect_Region_Code__check_bit1_only
-	dd82 0x44, 0xC9
+	x_dd82_sc9 0x44
 	jr z, Detect_Region_Code__mode2
 	stdi8 1032, 1	; Region 1
 	ret
@@ -47,7 +47,7 @@ Detect_Region_Code__mode2:
 	stdi8 1032, 2	; Region 2
 	ret
 Detect_Region_Code__check_bit1_only:
-	dd82 0x44, 0xC9
+	x_dd82_sc9 0x44
 	jr z, Detect_Region_Code__mode4
 	stdi8 1032, 3	; Region 3
 	ret

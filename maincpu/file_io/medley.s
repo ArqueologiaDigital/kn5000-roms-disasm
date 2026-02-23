@@ -244,7 +244,7 @@ SeqName_Exit:
 	ret
 
 FormatMedleyNumber:
-	dpi2 0xE0, 0x45
+	x_dpi2_s45 0xE0
 	cp c, 0xFF
 	jr nz, FmtNum_CheckMarked
 	ldb c, 0x20
@@ -256,8 +256,8 @@ FmtNum_CheckMarked:
 	ldb c, 0x4D
 
 FmtNum_WriteSpacePad:
-	dpi2 0xE0, 0x43
-	dpi3 0xE0, 0x00, 0x20
+	x_dpi2_s43 0xE0
+	x_dpi3_o00_t1 0xE0, 0x20
 	ldmi8 (xwa), 0x20
 	ret
 
@@ -265,7 +265,7 @@ FmtNum_FormatNumber:
 	inc 1, c
 	cp c, 0x64
 	jr c, FmtNum_WriteM
-	dpi2 0xE0, 0x33
+	x_dpi2_s33 0xE0
 	ld e, c
 	extz de
 	div e, 0x64
@@ -277,18 +277,18 @@ FmtNum_FormatNumber:
 	jr FmtNum_WriteTensUnits
 
 FmtNum_WriteM:
-	dpi3 0xE0, 0x00, 0x4D
+	x_dpi3_o00_t1 0xE0, 0x4D
 
 FmtNum_WriteTensUnits:
 	cp c, 0xA
 	jr nc, FmtNum_WriteTwoDigits
-	dpi3 0xE0, 0x00, 0x30
+	x_dpi3_o00_t1 0xE0, 0x30
 	add c, 0x30
 	ld (xwa), c
 	ret
 
 FmtNum_WriteTwoDigits:
-	dpi2 0xE0, 0x33
+	x_dpi2_s33 0xE0
 	ld e, c
 	extz de
 	div e, 0xA
@@ -1064,13 +1064,13 @@ DiskSel_CheckFileLoop:
 
 DiskSel_FileAvailable:
 	ldada xwa, 35110
-	dri6 0x07, 0xE0, 0xF8, 0x14, 0x3A, 0x89
+	x_dri6_o14_t2 0x07, 0xE0, 0xF8, 0x3A, 0x89
 	incdi8 1, 35130
 	jr DiskSel_NextFile
 
 DiskSel_MarkUnavail:
 	ldada xwa, 35110
-	dri5 0x07, 0xE0, 0xF8, 0x00, 0xFF
+	x_dri5_o00_t1 0x07, 0xE0, 0xF8, 0xFF
 
 DiskSel_NextFile:
 	inc 1, iz
@@ -1151,7 +1151,7 @@ DiskSel_SendFileInfo:
 	ld xbc, 0x1C0000F
 	call 0xFA9D58
 	inc1_werp 0xFA
-	erpw4 0xFA, 0xCF, 0x14, 0x00
+	x_erpw4_ocf_t2 0xFA, 0x14, 0x00
 	jr lt, DiskSel_SendFileInfo
 	lds32 xwa, 0
 	ld xbc, 0x1C0000B
@@ -1263,7 +1263,7 @@ DiskSel_RepeatSendInfo:
 	ld xbc, 0x1C0000F
 	call 0xFA9D58
 	inc1_werp 0xFA
-	erpw4 0xFA, 0xCF, 0x14, 0x00
+	x_erpw4_ocf_t2 0xFA, 0x14, 0x00
 	jr lt, DiskSel_RepeatSendInfo
 	lds32 xwa, 0
 	ld xbc, 0x1C0000B
@@ -1511,7 +1511,7 @@ DiskSel_HandleToggle:
 	lds iz, 0
 
 DiskSel_FindMarkedLoop:
-	srib5 0x07, 0xEC, 0xF8, 0x3F, 0xFE
+	x_srib5_o3f_t1 0x07, 0xEC, 0xF8, 0xFE
 	jr z, DiskSel_ToggleStart
 	inc 1, iz
 	cp iz, 0x14
@@ -3255,7 +3255,7 @@ DocDisk_CopyLoop:
 
 DocDisk_TerminateStr:
 	ld xde, xbc
-	dri5 0x07, 0xE4, 0xF0, 0x00, 0x00
+	x_dri5_o00_t1 0x07, 0xE4, 0xF0, 0x00
 	jr DocDisk_TrimLoop
 
 DocDisk_ClearTrailing:
@@ -4115,7 +4115,7 @@ ClearSlots_Loop:
 	ld bc, iz
 	calr SetSongSlotValue
 	inc1_werp 0xFA
-	erpw4 0xFA, 0xCF, 0x0A, 0x00
+	x_erpw4_ocf_t2 0xFA, 0x0A, 0x00
 	jr c, ClearSlots_Loop
 	pop xiz
 	ret

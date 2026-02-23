@@ -129,7 +129,7 @@ FDC_COMMAND_DISPATCHER:	; F96DB1
 	ldada_24 xix, 15374514
 	ld_wa_sriw3 0x07, 0xF0, 0xE0
 	ldada_24 xix, 16346582
-	dri4 0x07, 0xF0, 0xE0, 0xD8
+	x_dri4_sd8 0x07, 0xF0, 0xE0
 ; FDC command handler base - entry point for command 0
 FDC_CMD_HANDLER_BASE:	; F96DD6
 	calr FDC_SetupFormatParams
@@ -387,10 +387,10 @@ FDC_NOP_Delay_Exit:
 
 
 FDC_Pulse_PH0:
-	dd82 0x44, 0xB8
+	x_dd82_sb8 0x44
 	ldw wa, 0xA
 	calr FDC_NOP_Delay
-	dd82 0x44, 0xB0
+	x_dd82_sb0 0x44
 	ret
 
 
@@ -460,8 +460,8 @@ FDC_Setup_DMA_Src_Ack:
 FDC_Wait_Ready_Timeout:
 	push xiz
 	ldda16 xiz, 1033
-	erpw4 0xFA, 0x03, 0x80, 0x00
-	erpw4 0xFA, 0xCF, 0x80, 0x00
+	x_erpw4_o03_t2 0xFA, 0x80, 0x00
+	x_erpw4_ocf_t2 0xFA, 0x80, 0x00
 	jr nz, LABEL_F97107
 
 FDC_WaitReady_StatusLoop:
@@ -479,10 +479,10 @@ FDC_WaitReady_TimeoutCheck:
 	sub wa, iz
 	cp wa, 0x1F4
 	jr ule, FDC_WaitReady_LoopContinue
-	erpw4 0xFA, 0x03, 0xFF, 0xFF
+	x_erpw4_o03_t2 0xFA, 0xFF, 0xFF
 
 FDC_WaitReady_LoopContinue:
-	erpw4 0xFA, 0xCF, 0x80, 0x00
+	x_erpw4_ocf_t2 0xFA, 0x80, 0x00
 	jr z, FDC_WaitReady_StatusLoop
 
 LABEL_F97107:
@@ -499,8 +499,8 @@ FDC_WaitReady_Complete:
 FDC_Wait_Status_Timeout:
 	push xiz
 	ldda16 xiz, 1033
-	erpw4 0xFA, 0x03, 0x80, 0x00
-	erpw4 0xFA, 0xCF, 0x80, 0x00
+	x_erpw4_o03_t2 0xFA, 0x80, 0x00
+	x_erpw4_ocf_t2 0xFA, 0x80, 0x00
 	jr nz, LABEL_F9714F
 
 FDC_WaitStatus_StatusLoop:
@@ -517,10 +517,10 @@ LABEL_F97137:
 	sub wa, iz
 	cp wa, 0x1F4
 	jr ule, FDC_WaitStatus_TimeoutCheck
-	erpw4 0xFA, 0x03, 0xFF, 0xFF
+	x_erpw4_o03_t2 0xFA, 0xFF, 0xFF
 
 FDC_WaitStatus_TimeoutCheck:
-	erpw4 0xFA, 0xCF, 0x80, 0x00
+	x_erpw4_ocf_t2 0xFA, 0x80, 0x00
 	jr z, FDC_WaitStatus_StatusLoop
 
 LABEL_F9714F:
@@ -1092,7 +1092,7 @@ LABEL_F97CEF:
 	ldada_24 xix, 15374538
 	ld_wa_sriw3 0x07, 0xF0, 0xE0
 	ldada_24 xix, 16350605
-	dri4 0x07, 0xF0, 0xE0, 0xD8
+	x_dri4_sd8 0x07, 0xF0, 0xE0
 
 
 ; =============================================================================
@@ -1284,7 +1284,7 @@ LABEL_F97E93:
 LABEL_F97E99:
 	calr FDC_Wait_Status_Timeout
 	calr FDC_Read_Data
-	dpi2 0xF8, 0x47
+	x_dpi2_s47 0xF8
 
 LABEL_F97EA2:
 	calr FDC_Read_Status
@@ -1313,17 +1313,17 @@ Reset_Floppy_Disk_Controller:	; F97EC9
 ; I am not entirely sure yet, but it looks like FDC initialization code...
 
 	; reset FDC by toggling Port D bit 0
-	dd82 0x34, 0xB8
+	x_dd82_sb8 0x34
 	ldw wa, 0xA
 	calr SOME_DELAY
-	dd82 0x34, 0xB0
+	x_dd82_sb0 0x34
 	ldw wa, 0xA
 	jrl SOME_DELAY
 
 	; then do a lot of other stuff I still don't undertsand:
 
 	ldio 0x47, 0x1E
-	dd82 0x34, 0xCE	; Port D bit 6: "FD.I/O signal"
+	x_dd82_sce 0x34	; Port D bit 6: "FD.I/O signal"
 	ret nz
 	ldb a, 0x0
 	stdi16 35620, 0
@@ -1396,7 +1396,7 @@ LABEL_F97F09:
 	ret
 
 Check_for_Floppy_Disk_Change:	; F98001
-	dd82 0x34, 0xCE
+	x_dd82_sce 0x34
 	jr z, Detected_Floppy_Disk_Change
 	ldb l, 0x0
 	ret

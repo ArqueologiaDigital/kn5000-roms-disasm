@@ -35,7 +35,7 @@ MIDI_INIT_SEQUENCES:
 	lda xbc, (xbc + 64)
 
 LABEL_FCF130:
-	dpi4 0xE1, 0x02, 0x00, 0x00
+	x_dpi4_o02_t2 0xE1, 0x00, 0x00
 	cp xwa, xbc
 	jr c, LABEL_FCF130
 	ret
@@ -267,7 +267,7 @@ LABEL_FCF2E4:
 LABEL_FCF2F7:
 	extz xwa
 	xor w, w
-	sd16w3 0xDA, 0xB7, 0x48
+	x_sd16w3_s48 0xDA, 0xB7
 	jr LABEL_FCF305
 
 LABEL_FCF301:
@@ -343,7 +343,7 @@ LABEL_FCF395:
 LABEL_FCF3C0:
 	ldda8 a, 1046
 	ldda8 w, 1075
-	sd16b3 0x58, 0x04, 0x30
+	x_sd16b3_s30 0x58, 0x04
 	cp a, w
 	jr c, LABEL_FCF3EC
 	stdi8 1046, 0
@@ -635,7 +635,7 @@ MIDI_QUEUE_TRACK_EVENT:
 	and wa, wa
 	jr z, LABEL_FCF6B7
 	ld hl, (xix - 4)
-	dri5 0x07, 0xF0, 0xEC, 0x00, 0x81
+	x_dri5_o00_t1 0x07, 0xF0, 0xEC, 0x81
 	minc1_16 hl, 0x7FF
 	dec 1, wa
 	ld (xix - 4), hl
@@ -649,7 +649,7 @@ LABEL_FCF6B7:
 LABEL_FCF6BF:
 	ld xix, 0x477
 	ldda16 xhl, 1141
-	dri5 0x07, 0xF0, 0xEC, 0x00, 0x81
+	x_dri5_o00_t1 0x07, 0xF0, 0xEC, 0x81
 	inc 1, hl
 	stda16 1141, xhl
 	ret
