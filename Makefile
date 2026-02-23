@@ -7,7 +7,7 @@ LLVM_MC=$(LLVM_BIN)/llvm-mc
 LLVM_LLD=$(LLVM_BIN)/ld.lld
 LLVM_OBJCOPY=$(LLVM_BIN)/llvm-objcopy
 
-all: rebuilt_ROMs/kn5000_v10_program.rebuilt.rom rebuilt_ROMs/kn5000_subprogram_v142.rebuilt.rom rebuilt_ROMs/kn5000_subcpu_boot.rebuilt.rom rebuilt_ROMs/kn5000_table_data.rebuilt.rom rebuilt_ROMs/kn5000_custom_data.rebuilt.rom rebuilt_ROMs/hd-ae5000_v2_06i.rebuilt.rom rebuilt_ROMs/kn5000_v10_program.llvm.rom rebuilt_ROMs/kn5000_subprogram_v142.llvm.rom
+all: rebuilt_ROMs/kn5000_v10_program.rebuilt.rom rebuilt_ROMs/kn5000_subprogram_v142.rebuilt.rom rebuilt_ROMs/kn5000_subcpu_boot.rebuilt.rom rebuilt_ROMs/kn5000_table_data.rebuilt.rom rebuilt_ROMs/kn5000_custom_data.rebuilt.rom rebuilt_ROMs/hd-ae5000_v2_06i.rebuilt.rom rebuilt_ROMs/kn5000_v10_program.llvm.rom rebuilt_ROMs/kn5000_subprogram_v142.llvm.rom rebuilt_ROMs/kn5000_subcpu_boot.llvm.rom rebuilt_ROMs/hd-ae5000_v2_06i.llvm.rom rebuilt_ROMs/kn5000_table_data.llvm.rom rebuilt_ROMs/kn5000_custom_data.llvm.rom
 	python scripts/compare_roms.py
 
 rebuilt_ROMs/kn5000_v10_program.rebuilt.p: tmp94c241.inc maincpu/kn5000_v10_program.asm
@@ -120,6 +120,58 @@ rebuilt_ROMs/kn5000_subprogram_v142.llvm.rom: rebuilt_ROMs/kn5000_subprogram_v14
 	cat $@.part_a $@.part_b > $@
 	rm -f $@.full $@.part_a $@.part_b
 
+# --- Subcpu boot LLVM build ---
+SUBCPU_BOOT_LLVM_SRC=subcpu/boot/llvm/kn5000_subcpu_boot.s
+
+rebuilt_ROMs/kn5000_subcpu_boot.llvm.o: $(SUBCPU_BOOT_LLVM_SRC)
+	mkdir -p rebuilt_ROMs
+	$(LLVM_MC) -triple=tlcs900 -filetype=obj -I subcpu/boot/llvm -o $@ $<
+
+rebuilt_ROMs/kn5000_subcpu_boot.llvm.elf: rebuilt_ROMs/kn5000_subcpu_boot.llvm.o subcpu/boot/llvm/subcpu_boot.ld
+	$(LLVM_LLD) -T subcpu/boot/llvm/subcpu_boot.ld -o $@ $<
+
+rebuilt_ROMs/kn5000_subcpu_boot.llvm.rom: rebuilt_ROMs/kn5000_subcpu_boot.llvm.elf
+	$(LLVM_OBJCOPY) -O binary $< $@
+
+# --- HDAE5000 LLVM build ---
+HDAE5000_LLVM_SRC=hdae5000/llvm/hd-ae5000_v2_06i.s
+
+rebuilt_ROMs/hd-ae5000_v2_06i.llvm.o: $(HDAE5000_LLVM_SRC)
+	mkdir -p rebuilt_ROMs
+	$(LLVM_MC) -triple=tlcs900 -filetype=obj -I hdae5000/llvm -o $@ $<
+
+rebuilt_ROMs/hd-ae5000_v2_06i.llvm.elf: rebuilt_ROMs/hd-ae5000_v2_06i.llvm.o hdae5000/llvm/hdae5000.ld
+	$(LLVM_LLD) -T hdae5000/llvm/hdae5000.ld -o $@ $<
+
+rebuilt_ROMs/hd-ae5000_v2_06i.llvm.rom: rebuilt_ROMs/hd-ae5000_v2_06i.llvm.elf
+	$(LLVM_OBJCOPY) -O binary $< $@
+
+# --- Table data LLVM build ---
+TABLE_DATA_LLVM_SRC=table_data/llvm/kn5000_table_data.s
+
+rebuilt_ROMs/kn5000_table_data.llvm.o: $(TABLE_DATA_LLVM_SRC)
+	mkdir -p rebuilt_ROMs
+	$(LLVM_MC) -triple=tlcs900 -filetype=obj -I table_data/llvm -o $@ $<
+
+rebuilt_ROMs/kn5000_table_data.llvm.elf: rebuilt_ROMs/kn5000_table_data.llvm.o table_data/llvm/table_data.ld
+	$(LLVM_LLD) -T table_data/llvm/table_data.ld -o $@ $<
+
+rebuilt_ROMs/kn5000_table_data.llvm.rom: rebuilt_ROMs/kn5000_table_data.llvm.elf
+	$(LLVM_OBJCOPY) -O binary $< $@
+
+# --- Custom data LLVM build ---
+CUSTOM_DATA_LLVM_SRC=custom_data/llvm/kn5000_custom_data.s
+
+rebuilt_ROMs/kn5000_custom_data.llvm.o: $(CUSTOM_DATA_LLVM_SRC)
+	mkdir -p rebuilt_ROMs
+	$(LLVM_MC) -triple=tlcs900 -filetype=obj -I custom_data/llvm -o $@ $<
+
+rebuilt_ROMs/kn5000_custom_data.llvm.elf: rebuilt_ROMs/kn5000_custom_data.llvm.o custom_data/llvm/custom_data.ld
+	$(LLVM_LLD) -T custom_data/llvm/custom_data.ld -o $@ $<
+
+rebuilt_ROMs/kn5000_custom_data.llvm.rom: rebuilt_ROMs/kn5000_custom_data.llvm.elf
+	$(LLVM_OBJCOPY) -O binary $< $@
+
 # --- LLVM conversion targets ---
 llvm-convert: scripts/asl_to_llvm.py maincpu/kn5000_v10_program.asm tmp94c241.inc
 	python scripts/asl_to_llvm.py maincpu/kn5000_v10_program.asm
@@ -127,9 +179,27 @@ llvm-convert: scripts/asl_to_llvm.py maincpu/kn5000_v10_program.asm tmp94c241.in
 llvm-convert-subcpu: scripts/asl_to_llvm.py subcpu/kn5000_subprogram_v142.asm tmp94c241.inc rebuilt_ROMs/kn5000_subprogram_v142.full
 	python scripts/asl_to_llvm.py subcpu/kn5000_subprogram_v142.asm --rom-base 0x0400 --rom-size 0x3EB00 --rom-file rebuilt_ROMs/kn5000_subprogram_v142.full --output-dir subcpu/llvm
 
+llvm-convert-boot: scripts/asl_to_llvm.py subcpu/boot/kn5000_subcpu_boot.asm tmp94c241.inc
+	python scripts/asl_to_llvm.py subcpu/boot/kn5000_subcpu_boot.asm --rom-base 0xFE0000 --rom-size 0x20000 --rom-file original_ROMs/kn5000_subcpu_boot.ic30 --output-dir subcpu/boot/llvm
+
+llvm-convert-hdae5000: scripts/asl_to_llvm.py hdae5000/hd-ae5000_v2_06i.asm tmp94c241.inc
+	python scripts/asl_to_llvm.py hdae5000/hd-ae5000_v2_06i.asm --rom-base 0x280000 --rom-size 0x80000 --rom-file original_ROMs/hd-ae5000_v2_06i.ic4 --output-dir hdae5000/llvm
+
+llvm-convert-tabledata: scripts/asl_to_llvm.py table_data/kn5000_table_data.asm tmp94c241.inc
+	python scripts/asl_to_llvm.py table_data/kn5000_table_data.asm --rom-base 0x800000 --rom-size 0x200000 --rom-file original_ROMs/kn5000_table_data.rom --output-dir table_data/llvm
+
+llvm-convert-customdata: scripts/asl_to_llvm.py custom_data/kn5000_custom_data.asm tmp94c241.inc
+	python scripts/asl_to_llvm.py custom_data/kn5000_custom_data.asm --rom-base 0x300000 --rom-size 0x100000 --rom-file original_ROMs/kn5000_custom_data.ic19 --output-dir custom_data/llvm
+
+llvm-convert-all: llvm-convert llvm-convert-subcpu llvm-convert-boot llvm-convert-hdae5000 llvm-convert-tabledata llvm-convert-customdata
+
 clean_llvm:
 	rm -f rebuilt_ROMs/kn5000_v10_program.llvm.*
 	rm -f rebuilt_ROMs/kn5000_subprogram_v142.llvm.*
+	rm -f rebuilt_ROMs/kn5000_subcpu_boot.llvm.*
+	rm -f rebuilt_ROMs/hd-ae5000_v2_06i.llvm.*
+	rm -f rebuilt_ROMs/kn5000_table_data.llvm.*
+	rm -f rebuilt_ROMs/kn5000_custom_data.llvm.*
 
 # Documentation website targets
 DOCS_DIR=../kn5000-docs

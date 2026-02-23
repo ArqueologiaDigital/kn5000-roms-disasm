@@ -333,6 +333,10 @@ CURRENT_MACRO_INSTR_COUNT = 0
 # because the LLVM assembler stores them without emitting bytes.
 IN_MACRO_DEF = 0
 
+# REPT depth: when > 0, we're inside an ASL rept/endm block.
+# The corresponding ENDM should become .endr instead of .endm.
+IN_REPT = 0
+
 
 def _mb(*lines):
     """Build multi-line string by joining lines with newlines."""
@@ -1298,16 +1302,30 @@ def convert_line(line, in_file_path):
         result = ""
         if label:
             result = f"{label}:{label_addr_suffix}\n"
-        result += f"\t.space {values}"
-        if comment:
-            result += f"\t{comment}"
+        # Determine fill byte from original ROM content (ASL ds reserves space;
+        # p2bin fills uninitialized space with 0xFF)
+        fill_byte = 0xFF  # Default: flash ROM erased state
         try:
             nbytes = eval_expr(values)
+            addr = ADDR_TRACKER.get_addr()
+            if addr is not None and ORIGINAL_ROM is not None:
+                rom_offset = addr - ROM_BASE
+                if 0 <= rom_offset < len(ORIGINAL_ROM):
+                    end = min(rom_offset + nbytes, len(ORIGINAL_ROM))
+                    region = ORIGINAL_ROM[rom_offset:end]
+                    if region and all(b == 0x00 for b in region):
+                        fill_byte = 0x00
+                    elif region and all(b == 0xFF for b in region):
+                        fill_byte = 0xFF
+        except:
+            nbytes = None
+        result += f"\t.space {values}, 0x{fill_byte:02X}"
+        if comment:
+            result += f"\t{comment}"
+        if nbytes is not None:
             ADDR_TRACKER.advance(nbytes)
             if BLOCK_BUFFER is not None:
                 BLOCK_CURSOR += nbytes
-        except:
-            pass
         return result
 
     if first_upper == 'BINCLUDE':
@@ -4081,6 +4099,8 @@ def convert_macro_body_expr(expr, params):
 def read_all_lines(input_path, main_dir, depth=0):
     """Recursively read an ASL file, inlining includes (except macro library).
 
+    Also expands REPT/ENDM blocks inline so the converter sees flat content.
+
     Returns a list of (line_text, source_file) tuples.
     """
     if depth > 10:
@@ -4088,12 +4108,42 @@ def read_all_lines(input_path, main_dir, depth=0):
 
     result = []
     file_dir = os.path.dirname(input_path)
+    # Stack for nested REPT blocks: each entry is (count, body_lines)
+    rept_stack = []
+
     with open(input_path, 'r') as f:
         for line in f:
             line = line.rstrip('\n')
             stripped = line.strip()
             code_part, _ = split_comment(stripped)
             code_stripped = code_part.strip()
+
+            # Check for REPT directive
+            m_rept = re.match(r'rept\s+([0-9A-Fa-f]+[hH]|\d+)', code_stripped, re.IGNORECASE)
+            if m_rept:
+                count_str = m_rept.group(1)
+                if count_str.upper().endswith('H'):
+                    count = int(count_str[:-1], 16)
+                else:
+                    count = int(count_str)
+                rept_stack.append((count, []))
+                continue
+
+            # Check for ENDM closing a REPT
+            if code_stripped.upper() == 'ENDM' and rept_stack:
+                count, body = rept_stack.pop()
+                expanded = body * count
+                if rept_stack:
+                    # Nested rept — add to parent's body
+                    rept_stack[-1][1].extend(expanded)
+                else:
+                    result.extend(expanded)
+                continue
+
+            # If inside a REPT block, collect body lines
+            if rept_stack:
+                rept_stack[-1][1].append((line, input_path))
+                continue
 
             # Check for include directive
             m = re.match(r'include\s+"([^"]+)"', code_stripped, re.IGNORECASE)
