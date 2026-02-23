@@ -3622,21 +3622,28 @@ def convert_db(label, args, comment, in_file_path, label_addr_suffix=""):
             }
             native_done = False
             if 1 <= nbytes <= 7 and comment:
-                # Extract mnemonic from comment like "; SRL 0, XBC (clear carry)"
-                # Also handle "TODO: Fix ASL: LD XHL, ..." pattern
+                # Try native instruction conversion using comment mnemonic.
                 ctext = comment.lstrip('; \t')
                 cmnem = ctext.split()[0].upper() if ctext else ''
+                use_opcode_guess = False
                 if cmnem not in DB_INSTR_MNEMONICS:
-                    # Try extracting mnemonic after "Fix ASL:" prefix
+                    # Try "Fix ASL: MNEMONIC" pattern
                     m = re.search(r'Fix ASL:\s*(\w+)', ctext, re.IGNORECASE)
                     if m and m.group(1).upper() in DB_INSTR_MNEMONICS:
                         cmnem = m.group(1).upper()
+                if cmnem not in DB_INSTR_MNEMONICS:
+                    # Try "ADDR: MNEMONIC" pattern (e.g. "; F20DAD: LD ...")
+                    m = re.match(r'[0-9A-Fa-f]+:\s*(\w+)', ctext)
+                    if m and m.group(1).upper() in DB_INSTR_MNEMONICS:
+                        cmnem = m.group(1).upper()
+                        # Comment looks like an instruction annotation — allow opcode guessing
+                        use_opcode_guess = True
                 if cmnem in DB_INSTR_MNEMONICS:
                     addr = ADDR_TRACKER.get_addr()
                     try:
                         native = try_convert_native(cmnem, '', rom_bytes, nbytes, addr)
-                        if native is None:
-                            # Also try opcode-based guessing
+                        if native is None and use_opcode_guess:
+                            # Opcode-based guessing when comment mnemonic was wrong
                             for mnem in guess_mnemonics_from_opcode(rom_bytes[0]):
                                 native = try_convert_native(mnem, '', rom_bytes, nbytes, addr)
                                 if native is not None:

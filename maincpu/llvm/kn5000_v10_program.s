@@ -157679,7 +157679,7 @@ SQTR_DISPATCH_TABLE_2:	; F20D8E
 	pop xix	; F20DAA
 	pop xhl	; F20DAB
 	pop xde	; F20DAC
-	.byte 0xf1, 0x5c, 0x8f, 0xb8	; F20DAD: LD (XIX+5Ch), 0B8h (TMP94C241 encoding)
+	setda 0, 36700	; F20DAD: LD (XIX+5Ch), 0B8h (TMP94C241 encoding)
 	ldw wa, 0x60	; F20DB1
 	call LABEL_FC793D	; F20DB4
 	dd246 0x82, 0x10, 0x02, 0x14, 0x73, 0x28	; F20DB8
@@ -157694,7 +157694,7 @@ SQTR_DISPATCH_TABLE_2_CASE1:	; F20DC1
 	pop xix	; F20DCA
 	pop xhl	; F20DCB
 	pop xde	; F20DCC
-	.byte 0xf1, 0x5c, 0x8f, 0xb0	; F20DCD: LD (XIX+5Ch), 0B0h (TMP94C241 encoding)
+	resda 0, 36700	; F20DCD: LD (XIX+5Ch), 0B0h (TMP94C241 encoding)
 	ldw wa, 0x60	; F20DD1
 	call LABEL_FC793D	; F20DD4
 	jr LABEL_F20E31	; F20DD8
