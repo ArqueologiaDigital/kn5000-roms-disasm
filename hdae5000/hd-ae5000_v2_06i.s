@@ -595,7 +595,7 @@ HDAE5000_Alloc_Memory_4__type_A3:
 HDAE5000_Register_Frame:	; 2803C2h
 	; Register frame handler callback with main CPU
 	; Clears 0x23A08E, 0x23A092, 0x23A094 and initializes display data
-	.incbin "../includes/code_2803c2_28f542.bin"
+	.incbin "includes/code_2803c2_28f542.bin"
 
 HDAE5000_Alloc_Memory:	; 28F543h
 	; Memory/display parameter lookup routine
@@ -1233,7 +1233,7 @@ HDAE5000_Display_Init:	; 28F90Ch
 	; Registers callbacks via workspace function tables
 	; at 0x23A1A2 -> (XWA+0xE88) -> (XWA+0xE8)
 	; Calls Display_String routine at 0x298622
-	.incbin "../includes/code_28f90c_2953e1.bin"
+	.incbin "includes/code_28f90c_2953e1.bin"
 
 ; ============================================================================
 ; PPORT COMMAND HANDLER JUMP TABLE (0x2953E2 - 0x295411)
@@ -1371,7 +1371,7 @@ HDAE5000_PPORT_Strings:	; 29541Eh
 
 HDAE5000_Code_2_PartB:	; 295642h
 	; PPORT command handlers and HD routines
-	.incbin "../includes/code_295642_2971a2.bin"
+	.incbin "includes/code_295642_2971a2.bin"
 
 HDAE5000_Check_HD_Present:	; 2971A3h
 	; Entry wrapper for HD presence detection
@@ -1391,7 +1391,7 @@ HDAE5000_RAM_Test:	; 2971B7h
 	; 2. Verifies the pattern
 	; 3. Clears the RAM
 	; 4. Initializes HD-related variables at 0x229Dxx
-	.incbin "../includes/code_2971b7_29ae9e.bin"
+	.incbin "includes/code_2971b7_29ae9e.bin"
 
 ; ----------------------------------------------------------------------------
 ; Memory Utility Routines (0x29AE9F - 0x29AF2C)
@@ -1498,7 +1498,7 @@ HDAE5000_StrCopy__copy_check:
 ; ----------------------------------------------------------------------------
 
 HDAE5000_Code_Remainder:	; 29AF2Dh
-	.incbin "../includes/code_29af2d_2fffff.bin"
+	.incbin "includes/code_29af2d_2fffff.bin"
 
 ; ============================================================================
 ; END OF ROM (0x300000)

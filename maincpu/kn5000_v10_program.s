@@ -377,28 +377,28 @@ SLIDE_STRING_2:
 	.asciz "SLIDE"
 
 Bitmap_1bit_Flash_Memory_Update:	; e0018e
-	.incbin "../images/Bitmap_1bit_Flash_Memory_Update.bin"
+	.incbin "images/Bitmap_1bit_Flash_Memory_Update.bin"
 
 Bitmap_1bit_Now_Erasing:	; e003f6
-	.incbin "../images/Bitmap_1bit_Now_Erasing.bin"
+	.incbin "images/Bitmap_1bit_Now_Erasing.bin"
 
 Bitmap_1bit_FD_to_Flash_Memory:	; e0065e
-	.incbin "../images/Bitmap_1bit_FD_to_Flash_Memory.bin"
+	.incbin "images/Bitmap_1bit_FD_to_Flash_Memory.bin"
 
 Bitmap_1bit_Completed:	; e008c6
-	.incbin "../images/Bitmap_1bit_Completed.bin"
+	.incbin "images/Bitmap_1bit_Completed.bin"
 
 Bitmap_1bit_Please_Wait:	; e00b2e
-	.incbin "../images/Bitmap_1bit_Please_Wait.bin"
+	.incbin "images/Bitmap_1bit_Please_Wait.bin"
 
 Bitmap_1bit_Change_FD_2_of_2:	; e00d96
-	.incbin "../images/Bitmap_1bit_Change_FD_2_of_2.bin"
+	.incbin "images/Bitmap_1bit_Change_FD_2_of_2.bin"
 
 Bitmap_1bit_Illegal_Disk:	; e00ffe
-	.incbin "../images/Bitmap_1bit_Illegal_Disk.bin"
+	.incbin "images/Bitmap_1bit_Illegal_Disk.bin"
 
 Bitmap_1bit_Turn_On_AGAIN:	; e01266
-	.incbin "../images/Bitmap_1bit_Turn_On_AGAIN.bin"
+	.incbin "images/Bitmap_1bit_Turn_On_AGAIN.bin"
 
 
 LABEL_E014CE:
@@ -579,7 +579,7 @@ LABEL_E0174E:
 
 	.org 0xE0176C - 0xE00000, 0xFF
 LABEL_E0176C:
-	.incbin "../includes/e0176c_e01f7f.bin"	; FIXME: describe this data structure
+	.incbin "includes/e0176c_e01f7f.bin"	; FIXME: describe this data structure
 
 LABEL_E01F80:
 	.long LABEL_E014CE
@@ -896,13 +896,13 @@ SOUND_CATEGORY_NAMES:	; E023F0
 	.ascii "MEMORY B    "	; Category 17
 
 SOUND_DATA_PIANO:
-	.incbin "../includes/e02510_e0458f.bin"	; Instrument category data (PIANO, ORGAN, etc.)
+	.incbin "includes/e02510_e0458f.bin"	; Instrument category data (PIANO, ORGAN, etc.)
 
 SOUND_DATA_GUITAR:	; GUITAR data (referenced from sound category table)
-	.incbin "../includes/e04590_e04b2f.bin"
+	.incbin "includes/e04590_e04b2f.bin"
 
 SOUND_DATA_STRINGS_VOCAL:	; STRINGS & VOCAL data (referenced from sound category table)
-	.incbin "../includes/e04b30_e06baf.bin"
+	.incbin "includes/e04b30_e06baf.bin"
 
 SOUND_DATA_BRASS_PTRS:
 	.long LABEL_E06DB0
@@ -1100,16 +1100,16 @@ LABEL_E06F18:
 	.byte 0x01, 0xff, 0x7d, 0x03, 0xff, 0x7b, 0x02, 0xff
 
 SOUND_DATA_FLUTE:	; FLUTE sound data
-	.incbin "../includes/e06f30_e078f1.bin"
+	.incbin "includes/e06f30_e078f1.bin"
 
 LABEL_E078F2:	; Additional FLUTE data (referenced by pointer table)
-	.incbin "../includes/e078f2_e08baf.bin"
+	.incbin "includes/e078f2_e08baf.bin"
 
 SOUND_DATA_SAX_REED:	; SAX & REED sound data
-	.incbin "../includes/e08bb0_e0914f.bin"
+	.incbin "includes/e08bb0_e0914f.bin"
 
 SOUND_DATA_MALLET_ORCH_PERC:	; MALLET & ORCH PERC sound data
-	.incbin "../includes/e09150_e0adcf.bin"
+	.incbin "includes/e09150_e0adcf.bin"
 
 SOUND_DATA_WORLD_PERC:
 	.long LABEL_E0AFD0
@@ -1340,61 +1340,61 @@ SOUND_DATA_ORGAN_ACCORDION:
 	.byte 0xf0, 0x00, 0xf0, 0x00, 0xf0, 0x00, 0xf0, 0x00
 
 SOUND_DATA_ORCHESTRAL_PAD:
-	.incbin "../includes/e0b250_e0b2cf.bin"
+	.incbin "includes/e0b250_e0b2cf.bin"
 
 SOUND_DATA_SYNTH:
-	.incbin "../includes/e0b2d0_e0b3cf.bin"
+	.incbin "includes/e0b2d0_e0b3cf.bin"
 
 SOUND_DATA_BASS:
-	.incbin "../includes/e0b3d0_e0b3e1.bin"
+	.incbin "includes/e0b3d0_e0b3e1.bin"
 
 SOUND_DATA_DIGITAL_DRAWBAR:
-	.incbin "../includes/e0b3e2_e0b3f3.bin"
+	.incbin "includes/e0b3e2_e0b3f3.bin"
 
 SOUND_DATA_ACCORDION_REG:
-	.incbin "../includes/e0b3f4_e0b405.bin"
+	.incbin "includes/e0b3f4_e0b405.bin"
 
 SOUND_DATA_GM_SPECIAL:
-	.incbin "../includes/e0b406_e0b417.bin"
+	.incbin "includes/e0b406_e0b417.bin"
 
 SOUND_DATA_DRUM_KITS:
-	.incbin "../includes/e0b418_e0b4ec.bin"
+	.incbin "includes/e0b418_e0b4ec.bin"
 
 LABEL_E0B4ED:
-	.incbin "../includes/e0b4ed_e0b5e6.bin"
+	.incbin "includes/e0b4ed_e0b5e6.bin"
 
 LABEL_E0B5E7:
-	.incbin "../includes/e0b5e7_e0b60d.bin"
+	.incbin "includes/e0b5e7_e0b60d.bin"
 
 LABEL_E0B60E:
-	.incbin "../includes/e0b60e_e0b6a5.bin"
+	.incbin "includes/e0b60e_e0b6a5.bin"
 
 LABEL_E0B6A6:
-	.incbin "../includes/e0b6a6_e0b6cc.bin"
+	.incbin "includes/e0b6a6_e0b6cc.bin"
 
 LABEL_E0B6CD:
-	.incbin "../includes/e0b6cd_e0b783.bin"
+	.incbin "includes/e0b6cd_e0b783.bin"
 
 LABEL_E0B784:
-	.incbin "../includes/e0b784_e0b842.bin"
+	.incbin "includes/e0b784_e0b842.bin"
 
 LABEL_E0B843:
-	.incbin "../includes/e0b843_e0b8dd.bin"
+	.incbin "includes/e0b843_e0b8dd.bin"
 
 LABEL_E0B8DE:
-	.incbin "../includes/e0b8de_e0b904.bin"
+	.incbin "includes/e0b8de_e0b904.bin"
 
 LABEL_E0B905:
-	.incbin "../includes/e0b905_e0b92d.bin"
+	.incbin "includes/e0b905_e0b92d.bin"
 
 LABEL_E0B92E:
-	.incbin "../includes/e0b92e_e0b99c.bin"
+	.incbin "includes/e0b92e_e0b99c.bin"
 
 LABEL_E0B99D:
-	.incbin "../includes/e0b99d_e0b9ec.bin"
+	.incbin "includes/e0b99d_e0b9ec.bin"
 
 LABEL_E0B9ED:
-	.incbin "../includes/e0b9ed_e0ba5f.bin"
+	.incbin "includes/e0b9ed_e0ba5f.bin"
 
 LABEL_E0BA60:
 	.long LABEL_E0B4ED
@@ -1475,25 +1475,25 @@ LABEL_E0BA60:
 	.long LABEL_E0B9ED
 
 LABEL_E0BB90:
-	.incbin "../includes/e0bb90_e0c95a.bin"
+	.incbin "includes/e0bb90_e0c95a.bin"
 
 LABEL_E0C95B:
-	.incbin "../includes/e0c95b_e0ca12.bin"
+	.incbin "includes/e0c95b_e0ca12.bin"
 
 LABEL_E0CA13:
-	.incbin "../includes/e0ca13_e0caf6.bin"
+	.incbin "includes/e0ca13_e0caf6.bin"
 
 LABEL_E0CAF7:
-	.incbin "../includes/e0caf7_e0cd1d.bin"
+	.incbin "includes/e0caf7_e0cd1d.bin"
 
 LABEL_E0CD1E:
-	.incbin "../includes/e0cd1e_e0cfdd.bin"
+	.incbin "includes/e0cd1e_e0cfdd.bin"
 
 LABEL_E0CFDE:
-	.incbin "../includes/e0cfde_e0e406.bin"
+	.incbin "includes/e0cfde_e0e406.bin"
 
 LABEL_E0E407:
-	.incbin "../includes/e0e407_e0e973.bin"
+	.incbin "includes/e0e407_e0e973.bin"
 
 LABEL_E0E974:
 	.byte 0x34, 0x00, 0x60, 0x01
@@ -33858,16 +33858,16 @@ LABEL_E34C50:
 
 
 Bitmap_Ntedt0k:	; e34e78
-	.incbin "../images/BitmapNtedt0k.bin"
+	.incbin "images/BitmapNtedt0k.bin"
 
 Bitmap_Ntedt0d:	; e35668
-	.incbin "../images/BitmapNtedt0d.bin"
+	.incbin "images/BitmapNtedt0d.bin"
 
 Bitmap_Dredt0k:	; e3cd78
-	.incbin "../images/BitmapDredt0k.bin"
+	.incbin "images/BitmapDredt0k.bin"
 
 Bitmap_Dredt0d:	; e3f660
-	.incbin "../images/BitmapDredt0d.bin"
+	.incbin "images/BitmapDredt0d.bin"
 
 LABEL_E44478:
 	.byte 0x00, 0x17, 0x09, 0x23, 0x15, 0x2f, 0x21, 0x3b
@@ -47178,55 +47178,55 @@ LABEL_E5AE20:
 	.byte 0x00, 0xff
 
 Bitmap_SplitPoint_no_split:	; e5ae4a
-	.incbin "../images/BitmapSplitPoint_no_split.bin"
+	.incbin "images/BitmapSplitPoint_no_split.bin"
 
 Bitmap_SplitPoint_C:	; e5ba12
-	.incbin "../images/BitmapSplitPoint_C.bin"
+	.incbin "images/BitmapSplitPoint_C.bin"
 
 Bitmap_SplitPoint_Db:	; e5c5da
-	.incbin "../images/BitmapSplitPoint_Db.bin"
+	.incbin "images/BitmapSplitPoint_Db.bin"
 
 Bitmap_SplitPoint_D:	; e5d1a2
-	.incbin "../images/BitmapSplitPoint_D.bin"
+	.incbin "images/BitmapSplitPoint_D.bin"
 
 Bitmap_SplitPoint_Eb:	; e5dd6a
-	.incbin "../images/BitmapSplitPoint_Eb.bin"
+	.incbin "images/BitmapSplitPoint_Eb.bin"
 
 Bitmap_SplitPoint_E:	; e5e932
-	.incbin "../images/BitmapSplitPoint_E.bin"
+	.incbin "images/BitmapSplitPoint_E.bin"
 
 Bitmap_SplitPoint_F:	; e5f4fa
-	.incbin "../images/BitmapSplitPoint_F.bin"
+	.incbin "images/BitmapSplitPoint_F.bin"
 
 Bitmap_SplitPoint_Gb:	; e600c2
-	.incbin "../images/BitmapSplitPoint_Gb.bin"
+	.incbin "images/BitmapSplitPoint_Gb.bin"
 
 Bitmap_SplitPoint_G:	; e60c8a
-	.incbin "../images/BitmapSplitPoint_G.bin"
+	.incbin "images/BitmapSplitPoint_G.bin"
 
 Bitmap_SplitPoint_Ab:	; e61852
-	.incbin "../images/BitmapSplitPoint_Ab.bin"
+	.incbin "images/BitmapSplitPoint_Ab.bin"
 
 Bitmap_SplitPoint_A:	; e6241a
-	.incbin "../images/BitmapSplitPoint_A.bin"
+	.incbin "images/BitmapSplitPoint_A.bin"
 
 Bitmap_SplitPoint_Bb:	; e62fe2
-	.incbin "../images/BitmapSplitPoint_Bb.bin"
+	.incbin "images/BitmapSplitPoint_Bb.bin"
 
 Bitmap_SplitPoint_B:	; e63baa
-	.incbin "../images/BitmapSplitPoint_B.bin"
+	.incbin "images/BitmapSplitPoint_B.bin"
 
 Bitmap_MIDIConnections_1:	; e64772
-	.incbin "../images/BitmapMIDIConnections_1.bin"
+	.incbin "images/BitmapMIDIConnections_1.bin"
 
 Bitmap_MIDIConnections_2:	; e6c452
-	.incbin "../images/BitmapMIDIConnections_2.bin"
+	.incbin "images/BitmapMIDIConnections_2.bin"
 
 Bitmap_MIDIConnections_3:	; e74132
-	.incbin "../images/BitmapMIDIConnections_3.bin"
+	.incbin "images/BitmapMIDIConnections_3.bin"
 
 Bitmap_Bmphk:	; e7be12
-	.incbin "../images/BitmapBmphk.bin"
+	.incbin "images/BitmapBmphk.bin"
 
 LABEL_E7ECF2:
 	.byte 0xf5, 0x00, 0x06, 0x00, 0x3a, 0x01
@@ -53179,31 +53179,31 @@ LABEL_E86650:
 	.byte 0xff
 
 Bitmap_Accita16:	; e86676
-	.incbin "../images/BitmapAccita16.bin"
+	.incbin "images/BitmapAccita16.bin"
 
 Bitmap_Accger16:	; e892fe
-	.incbin "../images/BitmapAccger16.bin"
+	.incbin "images/BitmapAccger16.bin"
 
 Bitmap_SomeArrows:	; e8bf86
-	.incbin "../images/BitmapSomeArrows.bin"
+	.incbin "images/BitmapSomeArrows.bin"
 LABEL_E8C66A:
 
 Bitmap_DrawbarNumberedSlider_1:	; e8c66a
-	.incbin "../images/BitmapDrawbarNumberedSlider_1.bin"
+	.incbin "images/BitmapDrawbarNumberedSlider_1.bin"
 LABEL_E8D97E:
 
 Bitmap_DrawbarNumberedSlider_2:	; e8d97e
-	.incbin "../images/BitmapDrawbarNumberedSlider_2.bin"
+	.incbin "images/BitmapDrawbarNumberedSlider_2.bin"
 LABEL_E8EC92:
 
 Bitmap_DrawbarNumberedSlider_3:	; e8ec92
-	.incbin "../images/BitmapDrawbarNumberedSlider_3.bin"
+	.incbin "images/BitmapDrawbarNumberedSlider_3.bin"
 
 Bitmap_Technics_Logo:	; e8ffa6
-	.incbin "../images/BitmapTechnicsLogo.bin"
+	.incbin "images/BitmapTechnicsLogo.bin"
 
 Bitmap_KN5000_Logo:	; e9367e
-	.incbin "../images/BitmapKN5000Logo.bin"
+	.incbin "images/BitmapKN5000Logo.bin"
 
 LABEL_E9529E:
 	.byte 0x4f, 0x4e
@@ -67149,7 +67149,7 @@ LABEL_EA9ED0:
 	.asciz "2X : %s"
 
 Bitmap_WormWearingHat:	; ea9f20
-	.incbin "../images/BitmapWormWearingHat.bin"
+	.incbin "images/BitmapWormWearingHat.bin"
 
 LABEL_EAA160:
 	.asciz ".BMP"
@@ -77085,16 +77085,16 @@ LABEL_EB7688:
 	.byte 0x03, 0x00
 
 Bitmap_FadeInPicture:	; eb8072
-	.incbin "../images/BitmapFadeInPicture.bin"
+	.incbin "images/BitmapFadeInPicture.bin"
 
 Bitmap_FadeInText:	; eb8b62
-	.incbin "../images/BitmapFadeInText.bin"
+	.incbin "images/BitmapFadeInText.bin"
 
 Bitmap_FadeOutPicture:	; eb9102
-	.incbin "../images/BitmapFadeOutPicture.bin"
+	.incbin "images/BitmapFadeOutPicture.bin"
 
 Bitmap_FadeOutText:	; eb9c24
-	.incbin "../images/BitmapFadeOutText.bin"
+	.incbin "images/BitmapFadeOutText.bin"
 
 LABEL_EBA494:
 	.long LABEL_EC40B2
@@ -112558,7 +112558,7 @@ LABEL_EEE900:
 	.byte 0x20, 0x20, 0x00, 0x00, 0x00, 0xff, 0x00, 0xff
 	.byte 0x00, 0xff, 0x00, 0xff, 0xff, 0xff, 0xff, 0xff
 Palette_8bit_RGBA_2_Data:	; eefaf0 - second palette, 256 colors x 4 bytes (RGBA)
-	.incbin "../images/Palette_8bit_RGBA_2.bin"
+	.incbin "images/Palette_8bit_RGBA_2.bin"
 	.byte 0x20, 0x01, 0x00, 0x02, 0x01, 0x03, 0x02, 0x04
 	.byte 0x03, 0x05, 0x04, 0x06, 0x05, 0x07, 0x06, 0x08
 	.byte 0x07, 0x09, 0x08, 0x0a, 0x09, 0x0b, 0x0a, 0x0c

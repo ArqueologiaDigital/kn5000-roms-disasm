@@ -98558,7 +98558,7 @@
 DATA_TABLE_8000:
 	; TODO: Analyze and document these data tables
 	; For now, include as binary
-	.incbin "../subcpu_boot_data_8000.bin"
+	.incbin "subcpu_boot_data_8000.bin"
 
 ; ==============================================================================
 ; Boot Entry Point (0xFF8290)

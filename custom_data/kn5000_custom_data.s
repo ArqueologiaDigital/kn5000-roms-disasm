@@ -32,7 +32,7 @@
 ; Contains style names like "Bolero puro", etc.
 ; ============================================================
 CustomData_Section_0:
-	.incbin "../includes/section_0.bin"	; 0x300000-0x316FFF (92KB)
+	.incbin "includes/section_0.bin"	; 0x300000-0x316FFF (92KB)
 
 ; 8KB erased boot block sector gap
 	.space 0x2000, 0xFF	; 0x317000-0x318FFF
@@ -44,7 +44,7 @@ CustomData_Section_0:
 ; Both start with "HK" header at their respective offsets
 ; ============================================================
 CustomData_Sections_1_2:
-	.incbin "../includes/section_1_2.bin"	; 0x319000-0x346FFF (184KB)
+	.incbin "includes/section_1_2.bin"	; 0x319000-0x346FFF (184KB)
 
 ; 8KB erased sector gap
 	.space 0x2000, 0xFF	; 0x347000-0x348FFF
@@ -55,7 +55,7 @@ CustomData_Sections_1_2:
 ; Section 4 pointer: RAM (0C86h) = 0x360000
 ; ============================================================
 CustomData_Sections_3_4:
-	.incbin "../includes/section_3_4.bin"	; 0x349000-0x376FFF (184KB)
+	.incbin "includes/section_3_4.bin"	; 0x349000-0x376FFF (184KB)
 
 ; 8KB erased sector gap
 	.space 0x2000, 0xFF	; 0x377000-0x378FFF
@@ -66,7 +66,7 @@ CustomData_Sections_3_4:
 ; Section 6 pointer: RAM (0C8Eh) = 0x390000
 ; ============================================================
 CustomData_Sections_5_6:
-	.incbin "../includes/section_5_6.bin"	; 0x379000-0x3A6FFF (184KB)
+	.incbin "includes/section_5_6.bin"	; 0x379000-0x3A6FFF (184KB)
 
 ; 36KB erased (unused style area)
 	.space 0x9000, 0xFF	; 0x3A7000-0x3AFFFF
@@ -77,7 +77,7 @@ CustomData_Sections_5_6:
 ; Starts with "HK" header but mostly empty (minimal data)
 ; ============================================================
 CustomData_Section_7:
-	.incbin "../includes/section_7.bin"	; 0x3B0000-0x3B0FFF (4KB)
+	.incbin "includes/section_7.bin"	; 0x3B0000-0x3B0FFF (4KB)
 
 ; 60KB erased
 	.space 0xF000, 0xFF	; 0x3B1000-0x3BFFFF
@@ -77923,7 +77923,7 @@ CustomData_LCD_Wallpaper:
 ; Config: 0x3D3400 (80 bytes + sub-blocks)
 ; ============================================================
 CustomData_Registration_Memory:
-	.incbin "../includes/registration.bin"	; 0x3D3000-0x3D3FFF (4KB)
+	.incbin "includes/registration.bin"	; 0x3D3000-0x3D3FFF (4KB)
 
 ; ============================================================
 ; Erased region — includes SubCPU payload staging at 0x3E0000

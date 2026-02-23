@@ -7,7 +7,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 This is a ROM disassembly project for the Technics KN5000 music keyboard. The goal is to achieve 100% byte-matching reconstruction of the original firmware ROMs, enabling MAME emulation and homebrew development.
 
 **Target CPU:** TMP94C241F (TLCS900 variant)
-**Assembler:** Alfred Arnold's ASL Macro Assembler 1.42 Beta (Build 298)
+**Assembler:** Custom LLVM backend (`llvm-mc -triple=tlcs900`) — LLVM assembly is the authoritative source
+**Legacy assembler:** Alfred Arnold's ASL Macro Assembler 1.42 Beta (archived in `archive/asl/`)
 
 ### Documentation Website
 
@@ -39,7 +40,7 @@ make all
 # Full build: both ASL and LLVM (for cross-verification)
 make all-full
 
-# Build specific LLVM ROM targets
+# Build specific ROM targets
 make rebuilt_ROMs/kn5000_v10_program.llvm.rom         # Main CPU
 make rebuilt_ROMs/kn5000_subprogram_v142.llvm.rom     # Sub CPU payload
 make rebuilt_ROMs/kn5000_subcpu_boot.llvm.rom         # Sub CPU boot
@@ -47,12 +48,12 @@ make rebuilt_ROMs/kn5000_table_data.llvm.rom          # Table data
 make rebuilt_ROMs/kn5000_custom_data.llvm.rom         # Custom data
 make rebuilt_ROMs/hd-ae5000_v2_06i.llvm.rom           # HDAE5000
 
-# Reconvert ASL sources to LLVM (regenerates .s files)
+# Reconvert from archived ASL sources (regenerates .s files from archive/asl/)
 make llvm-convert-all
 
 # Clean build artifacts
-make clean              # All
-make clean_llvm         # LLVM only
+make clean              # LLVM build artifacts
+make clean-all          # All (LLVM + legacy ASL)
 
 # Rebuild preset data (assemble + LZSS compress)
 make rebuild-preset-data
@@ -68,10 +69,14 @@ make website            # All of the above (gallery + issues + rom-status)
 ```
 
 ### Assembly Source Organization
-- **LLVM sources** (primary, in `*/llvm/` directories): TLCS-900 assembly using LLVM syntax
-- **ASL sources** (secondary, in `*/` directories): Original ASL syntax, input to `scripts/asl_to_llvm.py`
-- **Converter**: `scripts/asl_to_llvm.py` generates LLVM sources from ASL with block-buffer correction
-- LLVM build pipeline: `llvm-mc -triple=tlcs900` → `ld.lld` → `llvm-objcopy` → raw binary
+- **LLVM assembly** (authoritative, in `*/` directories): `.s` files using LLVM/GNU syntax for TLCS-900
+  - `maincpu/kn5000_v10_program.s` + 30 modular includes (shared/, file_io/)
+  - `subcpu/kn5000_subprogram_v142.s`, `subcpu/boot/kn5000_subcpu_boot.s`
+  - `hdae5000/hd-ae5000_v2_06i.s`, `table_data/kn5000_table_data.s` + shared includes
+  - `custom_data/kn5000_custom_data.s`
+- **ASL sources** (archived in `archive/asl/`): Original ASL syntax, used by `scripts/asl_to_llvm.py`
+- **Build pipeline**: `llvm-mc -triple=tlcs900` → `ld.lld` → `llvm-objcopy` → raw binary
+- **Binary data files**: `*/includes/*.bin`, `*/images/*.bin` — referenced via `.incbin`
 
 ## Project Policies
 
@@ -141,21 +146,21 @@ FDC_INIT_ROUTINE 0xE12345
 
 **Full regeneration** (only if files become corrupted or majorly out of sync):
 ```bash
-# Generate map files with ASL (maincpu takes ~70 minutes, others are fast)
+# Generate map files from archived ASL sources (maincpu takes ~70 minutes, others are fast)
 ASL=../tools/asl/asl
 
-$ASL -w -g map maincpu/kn5000_v10_program.asm -o /tmp/maincpu.p
-$ASL -w -g map subcpu/kn5000_subprogram_v142.asm -o /tmp/subcpu.p
-$ASL -w -g map subcpu/boot/kn5000_subcpu_boot.asm -o /tmp/subcpu_boot.p
-$ASL -w -g map table_data/kn5000_table_data.asm -o /tmp/table_data.p
-$ASL -w -g map hdae5000/hd-ae5000_v2_06i.asm -o /tmp/hdae5000.p
+$ASL -w -g map archive/asl/maincpu/kn5000_v10_program.asm -o /tmp/maincpu.p
+$ASL -w -g map archive/asl/subcpu/kn5000_subprogram_v142.asm -o /tmp/subcpu.p
+$ASL -w -g map archive/asl/subcpu/boot/kn5000_subcpu_boot.asm -o /tmp/subcpu_boot.p
+$ASL -w -g map archive/asl/table_data/kn5000_table_data.asm -o /tmp/table_data.p
+$ASL -w -g map archive/asl/hdae5000/hd-ae5000_v2_06i.asm -o /tmp/hdae5000.p
 
 # Extract symbols from map files
-python scripts/extract_symbols_from_map.py maincpu/kn5000_v10_program.map symbols/maincpu_symbols_reference.txt
-python scripts/extract_symbols_from_map.py subcpu/kn5000_subprogram_v142.map symbols/subcpu_symbols_reference.txt
-python scripts/extract_symbols_from_map.py subcpu/boot/kn5000_subcpu_boot.map symbols/subcpu_boot_symbols_reference.txt
-python scripts/extract_symbols_from_map.py table_data/kn5000_table_data.map symbols/table_data_symbols_reference.txt
-python scripts/extract_symbols_from_map.py hdae5000/hd-ae5000_v2_06i.map symbols/hdae5000_symbols_reference.txt
+python scripts/extract_symbols_from_map.py archive/asl/maincpu/kn5000_v10_program.map symbols/maincpu_symbols_reference.txt
+python scripts/extract_symbols_from_map.py archive/asl/subcpu/kn5000_subprogram_v142.map symbols/subcpu_symbols_reference.txt
+python scripts/extract_symbols_from_map.py archive/asl/subcpu/boot/kn5000_subcpu_boot.map symbols/subcpu_boot_symbols_reference.txt
+python scripts/extract_symbols_from_map.py archive/asl/table_data/kn5000_table_data.map symbols/table_data_symbols_reference.txt
+python scripts/extract_symbols_from_map.py archive/asl/hdae5000/hd-ae5000_v2_06i.map symbols/hdae5000_symbols_reference.txt
 
 # Clean up intermediate files
 rm /tmp/*.p maincpu/*.map subcpu/*.map subcpu/boot/*.map table_data/*.map hdae5000/*.map
@@ -188,7 +193,7 @@ This ensures the documentation website always reflects the latest extracted imag
 
 **When new firmware event codes are discovered or existing codes are better understood, ALL of the following must be updated:**
 
-1. **Assembly source** -- Add/update `EVT_*` EQU constants in `hdae5000/hd-ae5000_v2_06i.asm` and `maincpu/kn5000_v10_program.asm`; replace raw hex values (e.g., `01C0000Fh`) with symbolic names (e.g., `EVT_INIT_HOOK`)
+1. **Assembly source** -- Add/update `EVT_*` `.equ` constants in `hdae5000/hd-ae5000_v2_06i.s` and `maincpu/kn5000_v10_program.s`; replace raw hex values with symbolic names (e.g., `EVT_INIT_HOOK`)
 2. **Event codes reference page** -- Update `../kn5000-docs/event-codes.md` with new codes, dispatch paths, and descriptions
 3. **HDAE5000 homebrew page** -- Update `../kn5000-docs/hdae5000-homebrew.md` if the discovery affects handler registration or activation flow
 4. **Mines project** -- Update `../../Mines/CLAUDE.md` if applicable
@@ -258,13 +263,13 @@ This is a strict policy to prevent documentation from becoming outdated as symbo
 1. **Before committing documentation changes**, verify that all symbol names mentioned exist in the assembly:
    ```bash
    # Search for a symbol in the assembly
-   grep -n "SYMBOL_NAME" maincpu/kn5000_v10_program.asm
+   grep -n "SYMBOL_NAME" maincpu/kn5000_v10_program.s
    ```
 
 2. **When renaming symbols in assembly**, search documentation for the old name:
    ```bash
    # Find all references in documentation
-   grep -rn "OLD_SYMBOL_NAME" ../kn5000-docs/
+   grep -rn "OLD_SYMBOL_NAME" ../kn5000-docs/ maincpu/ subcpu/ table_data/ hdae5000/
    ```
 
 3. **Common symbol categories to check:**
@@ -279,7 +284,7 @@ This is a strict policy to prevent documentation from becoming outdated as symbo
 
 5. **When in doubt**, grep the assembly for the address to find the current label:
    ```bash
-   grep "FC4489\|0xFC4489" maincpu/*.asm  # Find label at address 0xFC4489
+   grep "FC4489\|0xFC4489" maincpu/*.s  # Find label at address 0xFC4489
    ```
 
 **This policy exists because stale symbol names in documentation cause confusion and make it harder for contributors to navigate between docs and source code.**

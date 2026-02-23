@@ -14,7 +14,7 @@ fallbacks where the LLVM backend supports them.
 
 Usage:
     python scripts/asl_to_llvm.py <input.asm> [--rom-base 0xE00000] [--rom-size 0x200000] \\
-        [--rom-file original_ROMs/foo.rom] [--output-dir maincpu/llvm]
+        [--rom-file original_ROMs/foo.rom] [--output-dir maincpu]
 """
 
 import argparse
@@ -29,7 +29,7 @@ from pathlib import Path
 # ============================================================================
 
 BASE_DIR = Path(".")
-LLVM_DIR = BASE_DIR / "maincpu" / "llvm"  # Default; overridden by --output-dir
+LLVM_DIR = BASE_DIR / "maincpu"  # Default; overridden by --output-dir
 ROM_BASE = 0xE00000  # Default; overridden by --rom-base
 ROM_SIZE = 0x200000  # Default; overridden by --rom-size
 
@@ -1302,7 +1302,7 @@ def convert_line(line, in_file_path):
         result = ""
         if label:
             result = f"{label}:{label_addr_suffix}\n"
-        llvm_path = f"../{path_str}"
+        llvm_path = path_str
         result += f'\t.incbin "{llvm_path}"'
         if comment:
             result += f"\t{comment}"
