@@ -460,8 +460,8 @@ FDC_Setup_DMA_Src_Ack:
 FDC_Wait_Ready_Timeout:
 	push xiz
 	ldda16 xiz, 1033
-	x_erpw4_o03_t2 0xFA, 0x80, 0x00
-	x_erpw4_ocf_t2 0xFA, 0x80, 0x00
+	ldi_erpw 0xFA, 0x80, 0x00
+	cp_erpw 0xFA, 0x80, 0x00
 	jr nz, LABEL_F97107
 
 FDC_WaitReady_StatusLoop:
@@ -479,10 +479,10 @@ FDC_WaitReady_TimeoutCheck:
 	sub wa, iz
 	cp wa, 0x1F4
 	jr ule, FDC_WaitReady_LoopContinue
-	x_erpw4_o03_t2 0xFA, 0xFF, 0xFF
+	ldi_erpw 0xFA, 0xFF, 0xFF
 
 FDC_WaitReady_LoopContinue:
-	x_erpw4_ocf_t2 0xFA, 0x80, 0x00
+	cp_erpw 0xFA, 0x80, 0x00
 	jr z, FDC_WaitReady_StatusLoop
 
 LABEL_F97107:
@@ -499,8 +499,8 @@ FDC_WaitReady_Complete:
 FDC_Wait_Status_Timeout:
 	push xiz
 	ldda16 xiz, 1033
-	x_erpw4_o03_t2 0xFA, 0x80, 0x00
-	x_erpw4_ocf_t2 0xFA, 0x80, 0x00
+	ldi_erpw 0xFA, 0x80, 0x00
+	cp_erpw 0xFA, 0x80, 0x00
 	jr nz, LABEL_F9714F
 
 FDC_WaitStatus_StatusLoop:
@@ -517,10 +517,10 @@ LABEL_F97137:
 	sub wa, iz
 	cp wa, 0x1F4
 	jr ule, FDC_WaitStatus_TimeoutCheck
-	x_erpw4_o03_t2 0xFA, 0xFF, 0xFF
+	ldi_erpw 0xFA, 0xFF, 0xFF
 
 FDC_WaitStatus_TimeoutCheck:
-	x_erpw4_ocf_t2 0xFA, 0x80, 0x00
+	cp_erpw 0xFA, 0x80, 0x00
 	jr z, FDC_WaitStatus_StatusLoop
 
 LABEL_F9714F:

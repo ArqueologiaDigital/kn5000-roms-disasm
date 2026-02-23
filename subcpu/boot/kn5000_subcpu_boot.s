@@ -98648,8 +98648,8 @@ BOOT_INIT__clock_done:
 	; Initialize serial/DMA registers
 	ldio 0xD2, 0x01
 	ldio 0xD1, 0x00
-	x_sd8b3_o3c_t1 0xD3, 0xCF
-	x_sd8b3_o3c_t1 0xD3, 0xF0
+	and_sd8b_im 0xD3, 0xCF
+	and_sd8b_im 0xD3, 0xF0
 	ldio 0xD6, 0x29
 	lda_dd8l XBC, 0xD6
 	ld a, (xbc)
@@ -98657,8 +98657,8 @@ BOOT_INIT__clock_done:
 	set 0, a
 	ld (xbc), a
 	ldio 0xD5, 0x00
-	x_sd8b3_o3c_t1 0xD7, 0xCF
-	x_sd8b3_o3c_t1 0xD7, 0xF0
+	and_sd8b_im 0xD7, 0xCF
+	and_sd8b_im 0xD7, 0xF0
 
 	; Initialize DRAM refresh
 	stdi8 357, 113
@@ -98725,8 +98725,8 @@ MAIN_LOOP__check_status:
 	cpl a
 	and a, 0x1
 	sla a, 1
-	x_sd8b3_o3c_t1 0x30, 0xFD
-	x_sd8b2_se9 0x30
+	and_sd8b_im 0x30, 0xFD
+	or_sd8b_mr A, 0x30
 	jr MAIN_LOOP__wait_loop
 
 ; ==============================================================================
@@ -99025,7 +99025,7 @@ STUB_85AB:
 ; ==============================================================================
 
 INIT_DMA_SERIAL:
-	x_sd8b3_o3c_t1 0xE5, 0xF8	; Clear E5 bits
+	and_sd8b_im 0xE5, 0xF8	; Clear E5 bits
 	res_dd8 2, 0x80	; Watchdog mode
 	lda_dd8l XBC, 0xEC
 	ld a, (xbc)
@@ -99901,7 +99901,7 @@ SERIAL_INIT:
 	lda xde, (xwa + 8)
 SERIAL_INIT__check_loop:
 	ldto_berp A, 0xFB
-	x_spib2_se1 0xE4	; OR all status bytes
+	or_spib_rm A, 0xE4	; OR all status bytes
 	ldfr_berp A, 0xFB
 	cp xbc, xde
 	jr c, SERIAL_INIT__check_loop
@@ -100177,7 +100177,7 @@ __jrt_nop_FF8CA9:
 	calr HARDWARE_VERIFY_WRITE	; Call verification routine
 
 	; Check timeout counter
-	x_erpw4_ocf_t2 0xFA, 0xE8, 0x03	; Compare with 1000
+	cp_erpw 0xFA, 0xE8, 0x03	; Compare with 1000
 	jr nc, HARDWARE_CALIBRATION_SEQUENCE__exit	; If >= 1000, exit (timeout)
 
 HARDWARE_CALIBRATION_SEQUENCE__retry_loop:
@@ -100212,7 +100212,7 @@ __jrt_nop_FF8CF7:
 
 HARDWARE_CALIBRATION_SEQUENCE__success:
 	inc1_werp 0xFA	; Increment retry counter
-	x_erpw4_ocf_t2 0xFA, 0xE8, 0x03	; Compare with 1000
+	cp_erpw 0xFA, 0xE8, 0x03	; Compare with 1000
 	jr c, HARDWARE_CALIBRATION_SEQUENCE__retry_loop	; If < 1000, continue loop
 
 HARDWARE_CALIBRATION_SEQUENCE__exit:

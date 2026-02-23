@@ -267,7 +267,7 @@ LABEL_FCF2E4:
 LABEL_FCF2F7:
 	extz xwa
 	xor w, w
-	x_sd16w3_s48 0xDA, 0xB7
+	muls_sd16w 0, 0xDA, 0xB7
 	jr LABEL_FCF305
 
 LABEL_FCF301:
@@ -343,7 +343,7 @@ LABEL_FCF395:
 LABEL_FCF3C0:
 	ldda8 a, 1046
 	ldda8 w, 1075
-	x_sd16b3_s30 0x58, 0x04
+	ex_sd16b W, 0x58, 0x04
 	cp a, w
 	jr c, LABEL_FCF3EC
 	stdi8 1046, 0

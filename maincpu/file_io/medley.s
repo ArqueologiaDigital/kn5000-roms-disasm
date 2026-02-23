@@ -1151,7 +1151,7 @@ DiskSel_SendFileInfo:
 	ld xbc, 0x1C0000F
 	call 0xFA9D58
 	inc1_werp 0xFA
-	x_erpw4_ocf_t2 0xFA, 0x14, 0x00
+	cp_erpw 0xFA, 0x14, 0x00
 	jr lt, DiskSel_SendFileInfo
 	lds32 xwa, 0
 	ld xbc, 0x1C0000B
@@ -1263,7 +1263,7 @@ DiskSel_RepeatSendInfo:
 	ld xbc, 0x1C0000F
 	call 0xFA9D58
 	inc1_werp 0xFA
-	x_erpw4_ocf_t2 0xFA, 0x14, 0x00
+	cp_erpw 0xFA, 0x14, 0x00
 	jr lt, DiskSel_RepeatSendInfo
 	lds32 xwa, 0
 	ld xbc, 0x1C0000B
@@ -1511,7 +1511,7 @@ DiskSel_HandleToggle:
 	lds iz, 0
 
 DiskSel_FindMarkedLoop:
-	x_srib5_o3f_t1 0x07, 0xEC, 0xF8, 0xFE
+	cp_srib_im 0x07, 0xEC, 0xF8, 0xFE
 	jr z, DiskSel_ToggleStart
 	inc 1, iz
 	cp iz, 0x14
@@ -4115,7 +4115,7 @@ ClearSlots_Loop:
 	ld bc, iz
 	calr SetSongSlotValue
 	inc1_werp 0xFA
-	x_erpw4_ocf_t2 0xFA, 0x0A, 0x00
+	cp_erpw 0xFA, 0x0A, 0x00
 	jr c, ClearSlots_Loop
 	pop xiz
 	ret

@@ -467,7 +467,7 @@ LABEL_F954EC:
 	call LABEL_FF0FA0
 	inc 4, xsp
 	srl hl, 1
-	x_sd24w4_s04 0x8C, 0x74, 0x02
+	push_sd24w 0x8C, 0x74, 0x02
 	lda xwa, (xsp + 6)
 	ld xbc, xiz
 	ld de, hl

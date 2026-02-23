@@ -91,7 +91,7 @@ CPanel_InitHardware:
 	and a, 0x8F
 	stda8 36238, a
 	st_dd8b A, 0x3E
-	x_sd8b3_o3c_t1 0x3C, 0xBF	; PF bit 6, (SCLK1 | /CTS1) = 0
+	and_sd8b_im 0x3C, 0xBF	; PF bit 6, (SCLK1 | /CTS1) = 0
 	ldb a, 0x0
 	st_dd8b A, 0x3B
 	ldb a, 0x46
@@ -114,8 +114,8 @@ CPanel_InitHardware:
 	ldio 0xEB, 0xFF
 	ldio 0xF8, 0x22	; INTRX1: Serial receive 1
 	ldio 0xF8, 0x23	; INTTX1: Serial send 1
-	x_sd8b3_o3e_t1 0xC8, 0x10
-	x_sd8b3_o3c_t1 0xC8, 0xF7
+	or_sd8b_im 0xC8, 0x10
+	and_sd8b_im 0xC8, 0xF7
 	stdi8 36241, 125	; This looks pointless...
 
 	ordi8 36236, 64	; CP_Flags_A.6 = 1
@@ -180,7 +180,7 @@ CPanel_SendInitSequence:
 	ldio 0xEB, 0xFF
 	ldio 0xF8, 0x22	; INTRX1: Serial receive 1
 	ldio 0xF8, 0x23	; INTTX1: Serial send 1
-	x_sd8b3_o3c_t1 0xD6, 0xDF	; RXE (bit 5) = 0: receive disable
+	and_sd8b_im 0xD6, 0xDF	; RXE (bit 5) = 0: receive disable
 	ldio 0xF8, 0x12	; INTA Pin
 	ldio 0xE3, 0x05
 	stdi16 36253, 0
@@ -200,7 +200,7 @@ CPanel_InitLEDBuffer:
 	ldio 0xF8, 0x23
 	ldio 0xE3, 0x07
 	ldio 0xF8, 0x12
-	x_sd8b3_o3c_t1 0x3C, 0xBF
+	and_sd8b_im 0x3C, 0xBF
 	ordi8 36238, 64
 	ldda8 a, 36238
 	st_dd8b A, 0x3E
@@ -217,7 +217,7 @@ CPanel_InitLEDBuffer:
 	ordi8 36238, 80
 	ldda8 a, 36238
 	st_dd8b A, 0x3E
-	x_sd8b3_o3c_t1 0xD5, 0xFE
+	and_sd8b_im 0xD5, 0xFE
 	ldio 0xEB, 0xFF
 	ldio 0xF8, 0x22
 	ldio 0xF8, 0x23
@@ -235,8 +235,8 @@ CPanel_InitLEDBuffer:
 	st_dd8b A, 0xD4
 	calr DELAY_300_LOOPS
 	calr DELAY_300_LOOPS
-	x_sd8b3_o3e_t1 0xD5, 0x01
-	x_sd8b3_o3c_t1 0xD5, 0xFD
+	or_sd8b_im 0xD5, 0x01
+	and_sd8b_im 0xD5, 0xFD
 	anddi8 36238, 175
 	ldda8 a, 36238
 	st_dd8b A, 0x3E
@@ -608,7 +608,7 @@ LABEL_FC43B0:
 	ldio 0xF8, 0x22	; INTRX1: Serial receive 1
 	ldio 0xF8, 0x23	; INTTX1: Serial send 1
 	ldio 0xEB, 0xDD
-	x_sd8b3_o3c_t1 0xD6, 0xDF	; RXE (bit 5) = 0: receive disable
+	and_sd8b_im 0xD6, 0xDF	; RXE (bit 5) = 0: receive disable
 	ordi8 36242, 128	; CP_Flags_B.7 = 1
 	ei 0
 	ret
@@ -629,14 +629,14 @@ CPanel_SendCommand:
 	anddi8 36239, 191	; disable CPanel serial ckl
 	ldda8 a, 36239
 	st_dd8b A, 0x3F
-	x_sd8b3_o3c_t1 0x3C, 0xBF	; PF bit 6: SCLK1 = 0
+	and_sd8b_im 0x3C, 0xBF	; PF bit 6: SCLK1 = 0
 	ordi8 36238, 64
 	ldda8 a, 36238
 	st_dd8b A, 0x3E
 	ldio 0xE3, 0x07
 	ldio 0xF8, 0x12	; INTA Pin
-	x_sd8b3_o3c_t1 0xD6, 0xDF	; RXE (bit 5) = 0: CPanel receive disable
-	x_sd8b3_o3c_t1 0xD5, 0xFE	; IOC (bit 0) = 0: I/O interface input clock select = Baud rate generator
+	and_sd8b_im 0xD6, 0xDF	; RXE (bit 5) = 0: CPanel receive disable
+	and_sd8b_im 0xD5, 0xFE	; IOC (bit 0) = 0: I/O interface input clock select = Baud rate generator
 	ldio 0xF8, 0x23	; INTTX1: Serial send 1
 	ldio 0xEB, 0xDF
 	ldio 0xF8, 0x22	; INTRX1: Serial receive 1
@@ -655,11 +655,11 @@ INTA_HANDLER:	; fc442b
 	anddi8 36238, 159
 	ldda8 a, 36238
 	st_dd8b A, 0x3E
-	x_sd8b3_o3e_t1 0xD5, 0x01	; IOC (bit 0) = 1: Set I/O interface input clock select to SCLK1 pin
-	x_sd8b3_o3c_t1 0xD5, 0xFD	; SCLKS (bit 1) = 0: Data transmit/receive at SCLK1 rising edge.
+	or_sd8b_im 0xD5, 0x01	; IOC (bit 0) = 1: Set I/O interface input clock select to SCLK1 pin
+	and_sd8b_im 0xD5, 0xFD	; SCLKS (bit 1) = 0: Data transmit/receive at SCLK1 rising edge.
 	ldio 0xE3, 0x05
 	ldio 0xEB, 0x0D
-	x_sd8b3_o3e_t1 0xD6, 0x20	; parity addition: enable
+	or_sd8b_im 0xD6, 0x20	; parity addition: enable
 	stdi8 36234, 32	;		ROUTINE_7
 	ordi8 36236, 1	; CP_Flags_A.0 = 1
 	jr INTA_HANDLER_END
@@ -749,7 +749,7 @@ CPanel_SM_StartTX:	; FC44F9	; Start transmitting command to set LEDs on the cont
 	                 ; fc = 16MHz, so fc/64/4 = 62500
 	ldio 0xE3, 0x07	; INTTRA(TREGA): M=7
 	ldio 0xEB, 0xD0	; INTTX1: M=5
-	x_sd8b3_o3c_t1 0xD5, 0xFE
+	and_sd8b_im 0xD5, 0xFE
 	st_dd8b A, 0xD4
 	incdi8 4, 36234	; next = ROUTINE_2
 	mul a, 0x1
@@ -783,7 +783,7 @@ CPanel_SM_TXDelay1:	; FC4544
 	                 ; Divide by 4
 	                 ; fc = 16MHz, so fc/64/4 = 62500
 	ldio 0xEB, 0xD0	; INTTX1: M=5
-	x_sd8b3_o3c_t1 0xD5, 0xFE
+	and_sd8b_im 0xD5, 0xFE
 	st_dd8b A, 0xD4
 	incdi8 4, 36234	; next routine
 	jrl MOST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
@@ -803,7 +803,7 @@ CPanel_SM_TXDelay2:	; FC4573
 	st_dd8b A, 0xD4
 	ldio 0xE3, 0x05
 	ldio 0xEB, 0xD0	; INTTX1: M=5
-	x_sd8b3_o3c_t1 0xD5, 0xFE
+	and_sd8b_im 0xD5, 0xFE
 	st_dd8b A, 0xD4
 	incdi8 4, 36234	; next routine
 	jrl MOST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
@@ -819,7 +819,7 @@ CPanel_SM_SendByte1:	; FC45A8
 	ordi8 36238, 80
 	ldda8 a, 36238
 	st_dd8b A, 0x3E
-	x_sd8b3_o3c_t1 0xD5, 0xFE
+	and_sd8b_im 0xD5, 0xFE
 	ldio 0xE3, 0x05
 	ldio 0xEB, 0xD0	; INTTX1: M=5
 	ld xiy, 0x8E01
@@ -856,7 +856,7 @@ CPanel_SM_SendByteN:	; FC460D
 	ordi8 36238, 80
 	ldda8 a, 36238
 	st_dd8b A, 0x3E
-	x_sd8b3_o3c_t1 0xD5, 0xFE
+	and_sd8b_im 0xD5, 0xFE
 	ldio 0xE3, 0x05
 	ldio 0xEB, 0xD0	; INTTX1: M=5
 	ld xiy, 0x8E01
@@ -893,7 +893,7 @@ CPanel_SM_TXComplete:	; FC4672
 	anddi8 36239, 191	; disable CPanel serial clk
 	ldda8 a, 36239
 	st_dd8b A, 0x3F
-	x_sd8b3_o3c_t1 0x3C, 0xBF	; PF bit 6, (SCLK1 | /CTS1) = 0
+	and_sd8b_im 0x3C, 0xBF	; PF bit 6, (SCLK1 | /CTS1) = 0
 	ordi8 36238, 64
 	ldda8 a, 36238
 	st_dd8b A, 0x3E
@@ -901,7 +901,7 @@ CPanel_SM_TXComplete:	; FC4672
 	                 ; Divide by 8
 	                 ; fc = 16MHz, so fc/64/8 = 31250
 	ldio 0xE3, 0x07
-	x_sd8b3_o3c_t1 0xD5, 0xFE
+	and_sd8b_im 0xD5, 0xFE
 	ldio 0xEB, 0xD0	; INTTX1: M=5
 	st_dd8b A, 0xD4
 	ordi8 36236, 2	; CP_Flags_A.1 = 1
@@ -927,11 +927,11 @@ CPanel_SM_RXByte1:	; FC46EA
 	anddi8 36238, 159
 	ldda8 a, 36238
 	st_dd8b A, 0x3E
-	x_sd8b3_o3e_t1 0xD5, 0x01
-	x_sd8b3_o3c_t1 0xD5, 0xFD
+	or_sd8b_im 0xD5, 0x01
+	and_sd8b_im 0xD5, 0xFD
 	ldio 0xE3, 0x05
 	ldio 0xEB, 0x0D
-	x_sd8b2_s21 0xD4
+	ld_sd8b A, 0xD4
 	ld xiy, 0x8DA1
 	addda16 xiy, 36255
 	ld (xiy), a
@@ -974,7 +974,7 @@ LABEL_FC4760:
 
 
 CPanel_SM_RXByteN:	; FC4767
-	x_sd8b2_s21 0xD4
+	ld_sd8b A, 0xD4
 	ld xiy, 0x8DA1
 	addda16 xiy, 36255
 	ld (xiy), a
@@ -1000,15 +1000,15 @@ LABEL_FC478D:
 	st_dd8b A, 0x3F
 	ldio 0xE3, 0x05
 	ldio 0xEB, 0x0D
-	x_sd8b3_o3c_t1 0xD6, 0xDF	; RXE (bit 5) = 0: receive disable
+	and_sd8b_im 0xD6, 0xDF	; RXE (bit 5) = 0: receive disable
 	jrl LEAST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
 
 LABEL_FC47CC:
 	anddi8 36238, 159
 	ldda8 a, 36238
 	st_dd8b A, 0x3E
-	x_sd8b3_o3e_t1 0xD5, 0x01
-	x_sd8b3_o3c_t1 0xD5, 0xFD
+	or_sd8b_im 0xD5, 0x01
+	and_sd8b_im 0xD5, 0xFD
 	ldio 0xE3, 0x05
 	ldio 0xEB, 0x0D
 	jrl LEAST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
@@ -1022,7 +1022,7 @@ CPanel_SM_Idle:	; FC47E9		; CPANEL_SERIAL_IDLE_STATE (?)
 						; CP_Flags_A.1 = 0
 	ordi8 36242, 4	; CP_Flags_B.2 = 1  : UNUSED
 	ldio 0xF8, 0x23	; INTTX1: Serial send 1
-	x_sd8b3_o3c_t1 0xD6, 0xDF	; RXE (bit 5) = 0: receive disable
+	and_sd8b_im 0xD6, 0xDF	; RXE (bit 5) = 0: receive disable
 	ldio 0xEB, 0x0F
 	ldio 0xF8, 0x22	; INTRX1: Serial receive 1
 	ldio 0xE3, 0x07
@@ -1115,15 +1115,15 @@ LABEL_FC48A4:
 	anddi8 36239, 191	; disable CPanel serial clk
 	ldda8 a, 36239
 	st_dd8b A, 0x3F
-	x_sd8b3_o3c_t1 0x3C, 0xBF	; PF bit 6, (SCLK1 | /CTS1) = 0
+	and_sd8b_im 0x3C, 0xBF	; PF bit 6, (SCLK1 | /CTS1) = 0
 	ordi8 36238, 64
 	ldda8 a, 36238
 	st_dd8b A, 0x3E
 	ldio 0xD7, 0x28	; Internal Clock T8 (64/fc)
 	                 ; Divide by 8
 	                 ; fc = 16MHz, so fc/64/8 = 31250
-	x_sd8b3_o3c_t1 0xD6, 0xDF	; RXE (bit 5) = 0: CPanel receive disable
-	x_sd8b3_o3c_t1 0xD5, 0xFE
+	and_sd8b_im 0xD6, 0xDF	; RXE (bit 5) = 0: CPanel receive disable
+	and_sd8b_im 0xD5, 0xFE
 	ldio 0xE3, 0x07
 	ldio 0xF8, 0x12	; INTA Pin
 	ldio 0xF8, 0x23	; INTTX1: Serial send 1

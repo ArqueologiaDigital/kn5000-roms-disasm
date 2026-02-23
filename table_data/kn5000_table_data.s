@@ -1961,7 +1961,7 @@ Boot_CopySectors__cs_full_loop:
 	ld (xsp + 10), xde	; LD (XSP+0x0A), XDE
 	call 0xFFBCD7	; CALL 0xFFBCD7
 	inc1_werp 0xFA	; INC 1, QIZ
-	x_erpw4_ocf_t2 0xFA, 0x00, 0x09	; CP QIZ, 0x0900 (18*128)
+	cp_erpw 0xFA, 0x00, 0x09	; CP QIZ, 0x0900 (18*128)
 	jr c, Boot_CopySectors__cs_full_loop	; 67 de
 	incm 1, (xsp + 4)	; INCW 1, (XSP+0x04)
 	ld wa, (xsp + 8)	; LD WA, (XSP+0x08)
@@ -2098,7 +2098,7 @@ Boot_CopySectorsEx__cse_full_loop:
 	ld (xsp + 10), xhl	; LD (XSP+0x0A), XHL
 	call 0xFFB903	; CALL 0xFFB903
 	inc1_werp 0xFA	; INC 1, QIZ
-	x_erpw4_ocf_t2 0xFA, 0x00, 0x12	; CP QIZ, 0x1200 (18*256)
+	cp_erpw 0xFA, 0x00, 0x12	; CP QIZ, 0x1200 (18*256)
 	jr c, Boot_CopySectorsEx__cse_full_loop	; 67 d9
 	incm 1, (xsp + 4)	; INCW 1, (XSP+0x04)
 	ld wa, (xsp + 8)	; LD WA, (XSP+0x08)
@@ -2950,7 +2950,7 @@ LZSS_Decompress__preread_loop:
 LZSS_Decompress__read_header_loop:
 	calr LZSS_ReadByte	; CALR LZSS_ReadByte
 	inc1_werp 0xFA	; INC 1, QIZ
-	x_erpw4_ocf_t2 0xFA, 0x08, 0x00	; CP QIZ, 0x0008
+	cp_erpw 0xFA, 0x08, 0x00	; CP QIZ, 0x0008
 	jr c, LZSS_Decompress__read_header_loop	; JR C, .read_header_loop
 
 	; === Parse decompressed size (3 bytes) ===
@@ -3018,7 +3018,7 @@ LZSS_Decompress__back_reference:
 	; First byte: low 8 bits of offset
 	calr LZSS_ReadByte	; CALR LZSS_ReadByte
 	ldfr_werp HL, 0xFA	; LD QIZ, HL - save low offset
-	x_erpw4_ocf_t2 0xFA, 0xFF, 0xFF	; CP QIZ, 0xFFFF
+	cp_erpw 0xFA, 0xFF, 0xFF	; CP QIZ, 0xFFFF
 	jr z, LZSS_Decompress__done	; JR Z, .done
 
 	; Second byte: high 4 bits of offset + 4-bit length
@@ -3307,7 +3307,7 @@ DrawBitmap_UpdateDisplay__db_background:
 
 DrawBitmap_UpdateDisplay__db_next_bit:
 	inc1_werp 0xEE	; INC 1, QHL
-	x_erpw4_ocf_t2 0xEE, 0x08, 0x00	; CP QHL, 0x0008 - 8 bits per byte
+	cp_erpw 0xEE, 0x08, 0x00	; CP QHL, 0x0008 - 8 bits per byte
 	.byte 0x67, 0xa1	; JR C, .db_calc_addr
 
 	; Next row byte
@@ -3494,10 +3494,10 @@ FDC_WriteData:
 FDC_WaitReady:
 	push xiz	; 3e
 	ldda16 xiz, 3072	; LD IZ, (0x0C00) - get timer
-	x_erpw4_o03_t2 0xFA, 0x80, 0x00	; LD QIZ, 0x0080 - flag = pending
+	ldi_erpw 0xFA, 0x80, 0x00	; LD QIZ, 0x0080 - flag = pending
 
 FDC_WaitReady__fwr_check:
-	x_erpw4_ocf_t2 0xFA, 0x80, 0x00	; CP QIZ, 0x0080
+	cp_erpw 0xFA, 0x80, 0x00	; CP QIZ, 0x0080
 	jr nz, FDC_WaitReady__fwr_check_result	; 6e 29
 FDC_WaitReady__fwr_loop:
 	.byte 0x1e, 0xc9, 0xff	; CALR FDC_ReadStatus
@@ -3513,10 +3513,10 @@ FDC_WaitReady__fwr_not_ready:
 	sub wa, iz	; SUB WA, IZ
 	cp wa, 0x1F4	; CP WA, 0x01F4 (500) - timeout
 	jr ule, FDC_WaitReady__fwr_continue	; 63 05
-	x_erpw4_o03_t2 0xFA, 0xFF, 0xFF	; LD QIZ, 0xFFFF - flag = timeout
+	ldi_erpw 0xFA, 0xFF, 0xFF	; LD QIZ, 0xFFFF - flag = timeout
 
 FDC_WaitReady__fwr_continue:
-	x_erpw4_ocf_t2 0xFA, 0x80, 0x00	; CP QIZ, 0x0080
+	cp_erpw 0xFA, 0x80, 0x00	; CP QIZ, 0x0080
 	jr z, FDC_WaitReady__fwr_loop	; 66 d7
 
 FDC_WaitReady__fwr_check_result:
@@ -3537,10 +3537,10 @@ FDC_WaitReady__fwr_done:
 FDC_WaitComplete:
 	push xiz	; 3e
 	ldda16 xiz, 3072	; LD IZ, (0x0C00)
-	x_erpw4_o03_t2 0xFA, 0x80, 0x00	; LD QIZ, 0x0080
+	ldi_erpw 0xFA, 0x80, 0x00	; LD QIZ, 0x0080
 
 FDC_WaitComplete__fwc_check:
-	x_erpw4_ocf_t2 0xFA, 0x80, 0x00	; CP QIZ, 0x0080
+	cp_erpw 0xFA, 0x80, 0x00	; CP QIZ, 0x0080
 	jr nz, FDC_WaitComplete__fwc_check_result	; 6e 26
 FDC_WaitComplete__fwc_loop:
 	.byte 0x1e, 0x83, 0xff	; CALR FDC_ReadStatus
@@ -3554,10 +3554,10 @@ FDC_WaitComplete__fwc_not_done:
 	sub wa, iz	; SUB WA, IZ
 	cp wa, 0x1F4	; CP WA, 0x01F4 - timeout
 	jr ule, FDC_WaitComplete__fwc_continue	; 63 05
-	x_erpw4_o03_t2 0xFA, 0xFF, 0xFF	; LD QIZ, 0xFFFF
+	ldi_erpw 0xFA, 0xFF, 0xFF	; LD QIZ, 0xFFFF
 
 FDC_WaitComplete__fwc_continue:
-	x_erpw4_ocf_t2 0xFA, 0x80, 0x00	; CP QIZ, 0x0080
+	cp_erpw 0xFA, 0x80, 0x00	; CP QIZ, 0x0080
 	jr z, FDC_WaitComplete__fwc_loop	; 66 da
 
 FDC_WaitComplete__fwc_check_result:
