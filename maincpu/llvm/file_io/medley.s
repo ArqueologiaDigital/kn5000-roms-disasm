@@ -18,4188 +18,4213 @@
 ; =============================================================================
 
 FmmSeqSongNameFunc:
-	; (no addr) PUSH IZ
-	; (no addr) CP XBC, 01e50003h
-	; (no addr) JRL Z, SeqName_GetIndexReturn
-	; (no addr) LD HL, (82D8h)
-	; (no addr) CP XBC, 01e50002h
-	; (no addr) JRL Z, SeqName_SetIndexPlaying
-	; (no addr) CP XBC, 01c00018h
-	; (no addr) JR Z, SeqName_HandleNavigation
-	; (no addr) CP XBC, 01c00017h
-	; (no addr) JR Z, SeqName_HandleNavigation
-	; (no addr) CP XBC, 01c0000bh
-	; (no addr) JR Z, SeqName_InitAllSlots
-	; (no addr) CP XBC, 01e50004h
-	; (no addr) JR NZ, SeqName_ReturnZero
-	; (no addr) LD (82D4h), XDE
-	; (no addr) CP (84FEh), 000h
-	; (no addr) JR NZ, SeqName_SendCurrentIndex
-	; (no addr) LDW (82D8h), 0000h
+	pushw iz
+	cp xbc, 0x1E50003
+	jrl z, SeqName_GetIndexReturn
+	ldda16 xhl, 33496
+	cp xbc, 0x1E50002
+	jrl z, SeqName_SetIndexPlaying
+	cp xbc, 0x1C00018
+	jr z, SeqName_HandleNavigation
+	cp xbc, 0x1C00017
+	jr z, SeqName_HandleNavigation
+	cp xbc, 0x1C0000B
+	jr z, SeqName_InitAllSlots
+	cp xbc, 0x1E50004
+	jr nz, SeqName_ReturnZero
+	stda32 33492, xde
+	cpdi8 34046, 0
+	jr nz, SeqName_SendCurrentIndex
+	stdi16 33496, 0
 
 SeqName_SendCurrentIndex:
-	; (no addr) LD DE, (82D8h)
-	; (no addr) EXTZ XDE
-	; (no addr) LD XWA, (82D4h)
-	; (no addr) LD XBC, 01e50002h
-	; (no addr) JRL T, SeqName_PostEventExit
+	ldda16 xde, 33496
+	extz xde
+	ldda32 xwa, 33492
+	ld xbc, 0x1E50002
+	jrl SeqName_PostEventExit
 
 SeqName_InitAllSlots:
-	; (no addr) LD IZ, 0
+	lds iz, 0
 
 SeqName_SendSlotLoop:
-	; (no addr) LD BC, IZ
-	; (no addr) LD WA, BC
-	; (no addr) LD DE, 1
-	CALR LABEL_F919E3
-	; (no addr) LD XDE, XHL
-	; (no addr) LD XWA, (82D4h)
-	; (no addr) LD XBC, 01c0000fh
-	; (no addr) CALL ApPostEvent
-	; (no addr) INC 1, IZ
-	; (no addr) CP IZ, 000ah
-	; (no addr) JR LT, SeqName_SendSlotLoop
+	ld bc, iz
+	ld wa, bc
+	lds de, 1
+	calr LABEL_F919E3
+	ld xde, xhl
+	ldda32 xwa, 33492
+	ld xbc, 0x1C0000F
+	call 0xFA9D58
+	inc 1, iz
+	cp iz, 0xA
+	jr lt, SeqName_SendSlotLoop
 
 SeqName_ReturnZero:
-	; (no addr) LD XHL, 0
-	; (no addr) JRL T, SeqName_Exit
+	lds32 xhl, 0
+	jrl SeqName_Exit
 
 SeqName_HandleNavigation:
-	; (no addr) LD WA, HL
-	; (no addr) LD IZ, HL
-	; (no addr) OR XDE, XDE
-	; (no addr) JR NZ, SeqName_HandlePlayAction
-	; (no addr) CP (84FEh), 000h
-	; (no addr) JR NZ, SeqName_HandlePlayAction
-	; (no addr) CP XBC, 01c00018h
-	; (no addr) JR NZ, SeqName_CheckPrevKey
-	; (no addr) CP WA, 0009h
-	; (no addr) JRL NC, SeqName_GetCurrentIndex
-	; (no addr) INC 1, WA
-	; (no addr) JR T, SeqName_UpdateIndex
+	ld wa, hl
+	ld iz, hl
+	or xde, xde
+	jr nz, SeqName_HandlePlayAction
+	cpdi8 34046, 0
+	jr nz, SeqName_HandlePlayAction
+	cp xbc, 0x1C00018
+	jr nz, SeqName_CheckPrevKey
+	cp wa, 0x9
+	jrl nc, SeqName_GetCurrentIndex
+	inc 1, wa
+	jr SeqName_UpdateIndex
 
 SeqName_CheckPrevKey:
-	; (no addr) CP XBC, 01c00017h
-	; (no addr) JRL NZ, SeqName_GetCurrentIndex
-	; (no addr) CP WA, 0
-	; (no addr) JRL Z, SeqName_GetCurrentIndex
-	; (no addr) DEC 1, WA
+	cp xbc, 0x1C00017
+	jrl nz, SeqName_GetCurrentIndex
+	cps wa, 0
+	jrl z, SeqName_GetCurrentIndex
+	dec 1, wa
 
 SeqName_UpdateIndex:
-	; (no addr) LD (82D8h), WA
-	; (no addr) LD DE, WA
-	; (no addr) JRL T, SeqName_UpdateDisplay
+	stda16 33496, xwa
+	ld de, wa
+	jrl SeqName_UpdateDisplay
 
 SeqName_HandlePlayAction:
-	; (no addr) CP XDE, 00000004h
-	; (no addr) JRL NZ, SeqName_HandleAction32
-	; (no addr) CP (84FEh), 000h
-	; (no addr) JRL NZ, SeqName_HandleAction32
-	; (no addr) CALL CheckSongSlotHasData
-	; (no addr) CP L, 0
-	; (no addr) JR Z, SeqName_CheckDiskAvail
-	; (no addr) LDA XWA, 8A0Ch
-	; (no addr) BIT 7, (XWA + 001h)
-	; (no addr) JR NZ, SeqName_CheckDiskAvail
-	; (no addr) LD (XWA), 001h
-	; (no addr) LD XDE, 1
-	; (no addr) LD XWA, 0ffffffffh
-	; (no addr) LD XBC, 01c50004h
-	; (no addr) JR T, SeqName_PostAndExit
+	cp xde, 0x4
+	jrl nz, SeqName_HandleAction32
+	cpdi8 34046, 0
+	jrl nz, SeqName_HandleAction32
+	call CheckSongSlotHasData
+	cps l, 0
+	jr z, SeqName_CheckDiskAvail
+	ldada xwa, 35340
+	bitm 7, (xwa + 1)
+	jr nz, SeqName_CheckDiskAvail
+	ldmi8 (xwa), 0x1
+	lds32 xde, 1
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C50004
+	jr SeqName_PostAndExit
 
 SeqName_CheckDiskAvail:
-	; (no addr) CALL CheckFileSystemStatus
-	; (no addr) CP HL, 0
-	; (no addr) JR Z, SeqName_LoadAndPlay
-	; (no addr) CP (0340EAh), 000h
-	; (no addr) JR Z, SeqName_LoadAndPlay
-	; (no addr) LD XWA, 0ffffffffh
-	; (no addr) LD XBC, 01c50000h
-	; (no addr) LD XDE, 1
-	; (no addr) CALL ApPostEvent
-	; (no addr) LD XWA, 00600037h
-	; (no addr) LD XBC, 01c00001h
-	; (no addr) LD XDE, 0
+	call 0xF8943E
+	cps hl, 0
+	jr z, SeqName_LoadAndPlay
+	cpdi8_24 213226, 0
+	jr z, SeqName_LoadAndPlay
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C50000
+	lds32 xde, 1
+	call 0xFA9D58
+	ld xwa, 0x600037
+	ld xbc, 0x1C00001
+	lds32 xde, 0
 
 SeqName_PostAndExit:
-	; (no addr) CALL ApPostEvent
-	; (no addr) JRL T, SeqName_GetCurrentIndex
+	call 0xFA9D58
+	jrl SeqName_GetCurrentIndex
 
 SeqName_LoadAndPlay:
-	; (no addr) LD XWA, 00600026h
-	; (no addr) LD XBC, 01c00001h
-	; (no addr) LD XDE, 5
-	; (no addr) CALL ApPostEvent
-	; (no addr) LD WA, 0
-	CALR InitializeOperationState
-	; (no addr) LD WA, (82D8h)
-	; (no addr) CALL LABEL_F880AD
-	; (no addr) LD WA, HL
-	; (no addr) LD BC, 5
-	CALR LABEL_F8B48E
-	; (no addr) LD (7F42h), L
-	; (no addr) CALL LABEL_F89568
-	; (no addr) CALL GetEncodedFreeSpaceData
-	; (no addr) CALL GetEncodedFileSizeData
-	; (no addr) LD (8502h), HL
-	CALR SignalProgressUpdate
-	; (no addr) LD XWA, 00600026h
-	; (no addr) LD XBC, 01c00002h
-	; (no addr) LD XDE, 0
-	; (no addr) CALL ApPostEvent
-	; (no addr) LD WA, 00eeh
-	; (no addr) JR T, SeqName_ShowAndExit
+	ld xwa, 0x600026
+	ld xbc, 0x1C00001
+	lds32 xde, 5
+	call 0xFA9D58
+	lds wa, 0
+	calr InitializeOperationState
+	ldda16 xwa, 33496
+	call LABEL_F880AD
+	ld wa, hl
+	lds bc, 5
+	calr LABEL_F8B48E
+	stda8 32578, l
+	call LABEL_F89568
+	call 0xF8953B
+	call 0xF8987D
+	stda16 34050, xhl
+	calr SignalProgressUpdate
+	ld xwa, 0x600026
+	ld xbc, 0x1C00002
+	lds32 xde, 0
+	call 0xFA9D58
+	ldw wa, 0xEE
+	jr SeqName_ShowAndExit
 
 SeqName_HandleAction32:
-	; (no addr) CP XDE, 00000032h
-	; (no addr) JR NZ, SeqName_GetCurrentIndex
-	; (no addr) LD XWA, 00600026h
-	; (no addr) LD XBC, 01c00001h
-	; (no addr) LD XDE, 5
-	; (no addr) CALL ApPostEvent
-	; (no addr) LD WA, 0
-	CALR InitializeOperationState
-	; (no addr) LD WA, (82D8h)
-	; (no addr) CALL LABEL_F880AD
-	; (no addr) LD WA, HL
-	; (no addr) LD BC, 5
-	CALR LABEL_F8B48E
-	; (no addr) LD (7F42h), L
-	; (no addr) CALL LABEL_F89568
-	; (no addr) CALL GetEncodedFreeSpaceData
-	; (no addr) CALL GetEncodedFileSizeData
-	; (no addr) LD (8502h), HL
-	CALR SignalProgressUpdate
-	; (no addr) LD XWA, 00600026h
-	; (no addr) LD XBC, 01c00002h
-	; (no addr) LD XDE, 0
-	; (no addr) CALL ApPostEvent
-	; (no addr) LD WA, 00eeh
+	cp xde, 0x32
+	jr nz, SeqName_GetCurrentIndex
+	ld xwa, 0x600026
+	ld xbc, 0x1C00001
+	lds32 xde, 5
+	call 0xFA9D58
+	lds wa, 0
+	calr InitializeOperationState
+	ldda16 xwa, 33496
+	call LABEL_F880AD
+	ld wa, hl
+	lds bc, 5
+	calr LABEL_F8B48E
+	stda8 32578, l
+	call LABEL_F89568
+	call 0xF8953B
+	call 0xF8987D
+	stda16 34050, xhl
+	calr SignalProgressUpdate
+	ld xwa, 0x600026
+	ld xbc, 0x1C00002
+	lds32 xde, 0
+	call 0xFA9D58
+	ldw wa, 0xEE
 
 SeqName_ShowAndExit:
-	; (no addr) CALL LABEL_F994BD
+	call LABEL_F994BD
 
 SeqName_GetCurrentIndex:
-	; (no addr) LD DE, (82D8h)
+	ldda16 xde, 33496
 
 SeqName_UpdateDisplay:
-	; (no addr) CP IZ, DE
-	; (no addr) JRL Z, SeqName_ReturnZero
-	; (no addr) EXTZ XDE
-	; (no addr) LD XWA, (82D4h)
-	; (no addr) LD XBC, 01e50002h
-	; (no addr) CALL ApPostEvent
-	; (no addr) LD WA, IZ
-	; (no addr) LD BC, IZ
-	; (no addr) LD DE, 1
-	CALR LABEL_F919E3
-	; (no addr) LD XDE, XHL
-	; (no addr) LD XWA, (82D4h)
-	; (no addr) LD XBC, 01c0000fh
-	; (no addr) CALL ApPostEvent
-	; (no addr) LD BC, (82D8h)
-	; (no addr) LD WA, BC
-	; (no addr) LD DE, 1
-	CALR LABEL_F919E3
-	; (no addr) LD XDE, XHL
-	; (no addr) LD XWA, (82D4h)
-	; (no addr) LD XBC, 01c0000fh
-	; (no addr) JR T, SeqName_PostEventExit
+	cp iz, de
+	jrl z, SeqName_ReturnZero
+	extz xde
+	ldda32 xwa, 33492
+	ld xbc, 0x1E50002
+	call 0xFA9D58
+	ld wa, iz
+	ld bc, iz
+	lds de, 1
+	calr LABEL_F919E3
+	ld xde, xhl
+	ldda32 xwa, 33492
+	ld xbc, 0x1C0000F
+	call 0xFA9D58
+	ldda16 xbc, 33496
+	ld wa, bc
+	lds de, 1
+	calr LABEL_F919E3
+	ld xde, xhl
+	ldda32 xwa, 33492
+	ld xbc, 0x1C0000F
+	jr SeqName_PostEventExit
 
 SeqName_SetIndexPlaying:
-	; (no addr) CP (84FEh), 000h
-	; (no addr) JRL Z, SeqName_ReturnZero
-	; (no addr) LD IZ, HL
-	; (no addr) LD (82D8h), DE
-	; (no addr) EXTZ XDE
-	; (no addr) LD XWA, (82D4h)
-	; (no addr) LD XBC, 01e50002h
-	; (no addr) CALL ApPostEvent
-	; (no addr) LD WA, IZ
-	; (no addr) LD BC, IZ
-	; (no addr) LD DE, 1
-	CALR LABEL_F919E3
-	; (no addr) LD XDE, XHL
-	; (no addr) LD XWA, (82D4h)
-	; (no addr) LD XBC, 01c0000fh
-	; (no addr) CALL ApPostEvent
-	; (no addr) LD BC, (82D8h)
-	; (no addr) LD WA, BC
-	; (no addr) LD DE, 1
-	CALR LABEL_F919E3
-	; (no addr) LD XDE, XHL
-	; (no addr) LD XWA, (82D4h)
-	; (no addr) LD XBC, 01c0000fh
+	cpdi8 34046, 0
+	jrl z, SeqName_ReturnZero
+	ld iz, hl
+	stda16 33496, xde
+	extz xde
+	ldda32 xwa, 33492
+	ld xbc, 0x1E50002
+	call 0xFA9D58
+	ld wa, iz
+	ld bc, iz
+	lds de, 1
+	calr LABEL_F919E3
+	ld xde, xhl
+	ldda32 xwa, 33492
+	ld xbc, 0x1C0000F
+	call 0xFA9D58
+	ldda16 xbc, 33496
+	ld wa, bc
+	lds de, 1
+	calr LABEL_F919E3
+	ld xde, xhl
+	ldda32 xwa, 33492
+	ld xbc, 0x1C0000F
 
 SeqName_PostEventExit:
-	; (no addr) CALL ApPostEvent
-	; (no addr) JRL T, SeqName_ReturnZero
+	call 0xFA9D58
+	jrl SeqName_ReturnZero
 
 SeqName_GetIndexReturn:
-	; (no addr) LD HL, (82D8h)
-	; (no addr) EXTZ XHL
+	ldda16 xhl, 33496
+	extz xhl
 
 SeqName_Exit:
-	; (no addr) POP IZ
-	; (no addr) RET
+	popw iz
+	ret
 
 FormatMedleyNumber:
-	; (no addr) LD (XWA+), E
-	; (no addr) CP C, 0ffh
-	; (no addr) JR NZ, FmtNum_CheckMarked
-	LD_C 0x20
-	; (no addr) JR T, FmtNum_WriteSpacePad
+	dpi2 0xE0, 0x45
+	cp c, 0xFF
+	jr nz, FmtNum_CheckMarked
+	ldb c, 0x20
+	jr FmtNum_WriteSpacePad
 
 FmtNum_CheckMarked:
-	; (no addr) CP C, 0feh
-	; (no addr) JR NZ, FmtNum_FormatNumber
-	LD_C 0x4d
+	cp c, 0xFE
+	jr nz, FmtNum_FormatNumber
+	ldb c, 0x4D
 
 FmtNum_WriteSpacePad:
-	; (no addr) LD (XWA+), C
-	; (no addr) LD (XWA+), 020h
-	; (no addr) LD (XWA), 020h
-	; (no addr) RET
+	dpi2 0xE0, 0x43
+	dpi3 0xE0, 0x00, 0x20
+	ldmi8 (xwa), 0x20
+	ret
 
 FmtNum_FormatNumber:
-	; (no addr) INC 1, C
-	; (no addr) CP C, 064h
-	; (no addr) JR C, FmtNum_WriteM
-	LDA_XHL_XWA_plus__e0__
-	; (no addr) LD E, C
-	; (no addr) EXTZ DE
-	DIV_E 0x64
-	; (no addr) ADD E, 030h
-	; (no addr) LD (XHL), E
-	; (no addr) EXTZ BC
-	DIV_C 0x64
-	; (no addr) LD C, B
-	; (no addr) JR T, FmtNum_WriteTensUnits
+	inc 1, c
+	cp c, 0x64
+	jr c, FmtNum_WriteM
+	dpi2 0xE0, 0x33
+	ld e, c
+	extz de
+	div e, 0x64
+	add e, 0x30
+	ld (xhl), e
+	extz bc
+	div c, 0x64
+	ld c, b
+	jr FmtNum_WriteTensUnits
 
 FmtNum_WriteM:
-	; (no addr) LD (XWA+), 04dh
+	dpi3 0xE0, 0x00, 0x4D
 
 FmtNum_WriteTensUnits:
-	; (no addr) CP C, 00ah
-	; (no addr) JR NC, FmtNum_WriteTwoDigits
-	; (no addr) LD (XWA+), 030h
-	; (no addr) ADD C, 030h
-	; (no addr) LD (XWA), C
-	; (no addr) RET
+	cp c, 0xA
+	jr nc, FmtNum_WriteTwoDigits
+	dpi3 0xE0, 0x00, 0x30
+	add c, 0x30
+	ld (xwa), c
+	ret
 
 FmtNum_WriteTwoDigits:
-	LDA_XHL_XWA_plus__e0__
-	; (no addr) LD E, C
-	; (no addr) EXTZ DE
-	DIV_E 0xa
-	; (no addr) ADD E, 030h
-	; (no addr) LD (XHL), E
-	; (no addr) EXTZ BC
-	DIV_C 0xa
-	; (no addr) LD C, B
-	; (no addr) ADD C, 030h
-	; (no addr) LD (XWA), C
-	; (no addr) RET
+	dpi2 0xE0, 0x33
+	ld e, c
+	extz de
+	div e, 0xA
+	add e, 0x30
+	ld (xhl), e
+	extz bc
+	div c, 0xA
+	ld c, b
+	add c, 0x30
+	ld (xwa), c
+	ret
 
 FmmIntMedleyFunc:
-	; (no addr) DEC 8, XSP
-	; (no addr) PUSH IZ
-	; (no addr) LD (XSP + 006h), XWA
-	; (no addr) CP XBC, 01e5000ah
-	; (no addr) JRL Z, IntMed_CheckContinue
-	; (no addr) LD XWA, XDE
-	; (no addr) CP XBC, 01e50008h
-	; (no addr) JRL Z, IntMed_StoreDelayFlag
-	; (no addr) CP XBC, 01c00018h
-	; (no addr) JRL Z, IntMed_HandleNavToggle
-	; (no addr) CP XBC, 01c00017h
-	; (no addr) JRL Z, IntMed_HandleNavToggle
-	; (no addr) CP XBC, 01c0000bh
-	; (no addr) JRL Z, IntMed_InitSlotDisplay
-	; (no addr) CP XBC, 01e50004h
-	; (no addr) JRL Z, IntMed_StoreWindowPtr
-	; (no addr) CP XBC, 01c00013h
-	; (no addr) JRL NZ, IntMed_Exit
-	; (no addr) CP XDE, 00000003h
-	; (no addr) JRL Z, IntMed_HandleStop
-	; (no addr) CP XDE, 00000002h
-	; (no addr) JRL NZ, IntMed_Exit
-	; (no addr) CP (8D37h), 07ah
-	; (no addr) JR Z, IntMed_CheckPlaying
-	; (no addr) CALL LABEL_F20ACD
-	; (no addr) LD (84FEh), 000h
-	; (no addr) LD (889Ch), 000h
-	; (no addr) LD (889Ah), 000h
-	; (no addr) LD IZ, 0
+	dec 8, xsp
+	pushw iz
+	ld (xsp + 6), xwa
+	cp xbc, 0x1E5000A
+	jrl z, IntMed_CheckContinue
+	ld xwa, xde
+	cp xbc, 0x1E50008
+	jrl z, IntMed_StoreDelayFlag
+	cp xbc, 0x1C00018
+	jrl z, IntMed_HandleNavToggle
+	cp xbc, 0x1C00017
+	jrl z, IntMed_HandleNavToggle
+	cp xbc, 0x1C0000B
+	jrl z, IntMed_InitSlotDisplay
+	cp xbc, 0x1E50004
+	jrl z, IntMed_StoreWindowPtr
+	cp xbc, 0x1C00013
+	jrl nz, IntMed_Exit
+	cp xde, 0x3
+	jrl z, IntMed_HandleStop
+	cp xde, 0x2
+	jrl nz, IntMed_Exit
+	cpdi8 36151, 122
+	jr z, IntMed_CheckPlaying
+	call LABEL_F20ACD
+	stdi8 34046, 0
+	stdi8 34972, 0
+	stdi8 34970, 0
+	lds iz, 0
 
 IntMed_CheckSlotLoop:
-	; (no addr) LD A, IZL
-	; (no addr) EXTZ WA
-	; (no addr) CALL LABEL_F2065A
-	; (no addr) CP L, 0
-	; (no addr) JR Z, IntMed_MarkSlotEmpty
-	; (no addr) LDA XWA, 8890h
-	; (no addr) LD BC, IZ
-	; (no addr) EXTZ XBC
-	; (no addr) ADD XBC, XWA
-	; (no addr) LD (XBC), (889Ah)
-	; (no addr) INC 1, (889Ah)
-	; (no addr) JR T, IntMed_NextSlot
+	ldto_a_berp 0xF8
+	extz wa
+	call LABEL_F2065A
+	cps l, 0
+	jr z, IntMed_MarkSlotEmpty
+	ldada xwa, 34960
+	ld bc, iz
+	extz xbc
+	add xbc, xwa
+	ldmi16 (xbc), 0x889A
+	incdi8 1, 34970
+	jr IntMed_NextSlot
 
 IntMed_MarkSlotEmpty:
-	; (no addr) LDA XWA, 8890h
-	; (no addr) LD BC, IZ
-	; (no addr) EXTZ XBC
-	; (no addr) ADD XBC, XWA
-	; (no addr) LD (XBC), 0ffh
+	ldada xwa, 34960
+	ld bc, iz
+	extz xbc
+	add xbc, xwa
+	ldmi8 (xbc), 0xFF
 
 IntMed_NextSlot:
-	; (no addr) INC 1, IZ
-	; (no addr) CP IZ, 000ah
-	; (no addr) JR C, IntMed_CheckSlotLoop
-	; (no addr) LD XWA, 0
-	; (no addr) LD (82DEh), XWA
-	; (no addr) JRL T, IntMed_Exit
+	inc 1, iz
+	cp iz, 0xA
+	jr c, IntMed_CheckSlotLoop
+	lds32 xwa, 0
+	stda32 33502, xwa
+	jrl IntMed_Exit
 
 IntMed_CheckPlaying:
-	; (no addr) CALL LABEL_F2076D
-	; (no addr) CP L, 1
-	; (no addr) JRL NZ, IntMed_HandleError
-	; (no addr) LD (84FEh), 001h
-	; (no addr) LD A, (889Ch)
-	; (no addr) CP A, (889Ah)
-	; (no addr) JR NC, IntMed_CheckRepeat
-	; (no addr) LD IZ, 0
-	; (no addr) LDA XBC, 8890h
+	call LABEL_F2076D
+	cps l, 1
+	jrl nz, IntMed_HandleError
+	stdi8 34046, 1
+	ldda8 a, 34972
+	cpda8 a, 34970
+	jr nc, IntMed_CheckRepeat
+	lds iz, 0
+	ldada xbc, 34960
 
 IntMed_FindCurrentSong:
-	; (no addr) LD DE, IZ
-	; (no addr) EXTZ XDE
-	; (no addr) ADD XDE, XBC
-	; (no addr) CP (XDE), A
-	; (no addr) JR NZ, IntMed_NextSongSearch
-	; (no addr) LD DE, IZ
-	; (no addr) EXTZ XDE
-	; (no addr) LD XWA, (XSP + 006h)
-	; (no addr) LD XBC, 01e50002h
-	CALR FmmSeqSongNameFunc
-	; (no addr) LD A, IZL
-	; (no addr) EXTZ WA
-	; (no addr) CALL LABEL_F20BCE
-	; (no addr) INC 1, (889Ch)
-	; (no addr) LD XWA, (82DEh)
-	; (no addr) OR XWA, XWA
-	; (no addr) JRL Z, IntMed_Exit
-	; (no addr) LD XBC, 01e50009h
-	; (no addr) LD XDE, 0000001eh
-	; (no addr) JR T, IntMed_PostDelayEvent
+	ld de, iz
+	extz xde
+	add xde, xbc
+	cp (xde), a
+	jr nz, IntMed_NextSongSearch
+	ld de, iz
+	extz xde
+	ld xwa, (xsp + 6)
+	ld xbc, 0x1E50002
+	calr FmmSeqSongNameFunc
+	ldto_a_berp 0xF8
+	extz wa
+	call LABEL_F20BCE
+	incdi8 1, 34972
+	ldda32 xwa, 33502
+	or xwa, xwa
+	jrl z, IntMed_Exit
+	ld xbc, 0x1E50009
+	ld xde, 0x1E
+	jr IntMed_PostDelayEvent
 
 IntMed_NextSongSearch:
-	; (no addr) INC 1, IZ
-	; (no addr) CP IZ, 000ah
-	; (no addr) JR C, IntMed_FindCurrentSong
-	; (no addr) JRL T, IntMed_Exit
+	inc 1, iz
+	cp iz, 0xA
+	jr c, IntMed_FindCurrentSong
+	jrl IntMed_Exit
 
 IntMed_CheckRepeat:
-	; (no addr) CP (889Eh), 000h
-	; (no addr) JR Z, IntMed_ClearPlayFlag
-	; (no addr) LD (889Ch), 000h
-	; (no addr) LD IZ, 0
-	; (no addr) LDA XWA, 8890h
+	cpdi8 34974, 0
+	jr z, IntMed_ClearPlayFlag
+	stdi8 34972, 0
+	lds iz, 0
+	ldada xwa, 34960
 
 IntMed_PlayFromStart:
-	; (no addr) LD BC, IZ
-	; (no addr) EXTZ XBC
-	; (no addr) ADD XBC, XWA
-	; (no addr) CP (XBC), 000h
-	; (no addr) JR NZ, IntMed_NextSongLoop
-	; (no addr) LD DE, IZ
-	; (no addr) EXTZ XDE
-	; (no addr) LD XWA, (XSP + 006h)
-	; (no addr) LD XBC, 01e50002h
-	CALR FmmSeqSongNameFunc
-	; (no addr) LD A, IZL
-	; (no addr) EXTZ WA
-	; (no addr) CALL LABEL_F20BCE
-	; (no addr) INC 1, (889Ch)
-	; (no addr) LD XWA, (82DEh)
-	; (no addr) OR XWA, XWA
-	; (no addr) JRL Z, IntMed_Exit
-	; (no addr) LD XBC, 01e50009h
-	; (no addr) LD XDE, 0000001eh
+	ld bc, iz
+	extz xbc
+	add xbc, xwa
+	cpmi8 (xbc), 0x0
+	jr nz, IntMed_NextSongLoop
+	ld de, iz
+	extz xde
+	ld xwa, (xsp + 6)
+	ld xbc, 0x1E50002
+	calr FmmSeqSongNameFunc
+	ldto_a_berp 0xF8
+	extz wa
+	call LABEL_F20BCE
+	incdi8 1, 34972
+	ldda32 xwa, 33502
+	or xwa, xwa
+	jrl z, IntMed_Exit
+	ld xbc, 0x1E50009
+	ld xde, 0x1E
 
 IntMed_PostDelayEvent:
-	; (no addr) CALL ApPostEvent
-	; (no addr) JRL T, IntMed_Exit
+	call 0xFA9D58
+	jrl IntMed_Exit
 
 IntMed_NextSongLoop:
-	; (no addr) INC 1, IZ
-	; (no addr) CP IZ, 000ah
-	; (no addr) JR C, IntMed_PlayFromStart
-	; (no addr) JRL T, IntMed_Exit
+	inc 1, iz
+	cp iz, 0xA
+	jr c, IntMed_PlayFromStart
+	jrl IntMed_Exit
 
 IntMed_ClearPlayFlag:
-	; (no addr) LD (84FEh), 000h
-	; (no addr) JRL T, IntMed_Exit
+	stdi8 34046, 0
+	jrl IntMed_Exit
 
 IntMed_HandleError:
-	; (no addr) CALL LABEL_F2076D
-	; (no addr) LD (84FEh), 000h
-	; (no addr) CP L, 0
-	; (no addr) JRL Z, IntMed_Exit
-	; (no addr) LD (7F42h), 00eh
-	; (no addr) LD WA, 00eeh
-	; (no addr) CALL LABEL_F994BD
-	; (no addr) JRL T, IntMed_Exit
+	call LABEL_F2076D
+	stdi8 34046, 0
+	cps l, 0
+	jrl z, IntMed_Exit
+	stdi8 32578, 14
+	ldw wa, 0xEE
+	call LABEL_F994BD
+	jrl IntMed_Exit
 
 IntMed_HandleStop:
-	; (no addr) CP (8D36h), 07ah
-	; (no addr) JRL Z, IntMed_Exit
-	; (no addr) CALL LABEL_F20B70
-	; (no addr) LD (84FEh), 000h
-	; (no addr) JRL T, IntMed_Exit
+	cpdi8 36150, 122
+	jrl z, IntMed_Exit
+	call LABEL_F20B70
+	stdi8 34046, 0
+	jrl IntMed_Exit
 
 IntMed_StoreWindowPtr:
-	; (no addr) LD (82DAh), XWA
-	; (no addr) JRL T, IntMed_Exit
+	stda32 33498, xwa
+	jrl IntMed_Exit
 
 IntMed_InitSlotDisplay:
-	; (no addr) LD IZ, 0
+	lds iz, 0
 
 IntMed_FormatSlotLoop:
-	; (no addr) LD WA, IZ
-	; (no addr) SLL 3, WA
-	; (no addr) LDA XBC, 82E2h
-	; (no addr) EXTZ XWA
-	; (no addr) ADD XWA, XBC
-	; (no addr) LDA XBC, 8890h
-	; (no addr) LD DE, IZ
-	; (no addr) EXTZ XDE
-	; (no addr) ADD XDE, XBC
-	; (no addr) LD C, (XDE)
-	; (no addr) EXTZ BC
-	; (no addr) LD DE, IZ
-	CALR FormatMedleyNumber
-	; (no addr) LD DE, IZ
-	; (no addr) SLL 3, DE
-	; (no addr) LDA XWA, 82E2h
-	; (no addr) EXTZ XDE
-	; (no addr) ADD XDE, XWA
-	; (no addr) LD XWA, (82DAh)
-	; (no addr) LD XBC, 01c0000fh
-	; (no addr) CALL ApPostEvent
-	; (no addr) INC 1, IZ
-	; (no addr) CP IZ, 000ah
-	; (no addr) JR C, IntMed_FormatSlotLoop
-	; (no addr) JRL T, IntMed_Exit
+	ld wa, iz
+	sll wa, 3
+	ldada xbc, 33506
+	extz xwa
+	add xwa, xbc
+	ldada xbc, 34960
+	ld de, iz
+	extz xde
+	add xde, xbc
+	ld c, (xde)
+	extz bc
+	ld de, iz
+	calr FormatMedleyNumber
+	ld de, iz
+	sll de, 3
+	ldada xwa, 33506
+	extz xde
+	add xde, xwa
+	ldda32 xwa, 33498
+	ld xbc, 0x1C0000F
+	call 0xFA9D58
+	inc 1, iz
+	cp iz, 0xA
+	jr c, IntMed_FormatSlotLoop
+	jrl IntMed_Exit
 
 IntMed_HandleNavToggle:
-	; (no addr) LDA XWA, 8890h
-	; (no addr) CP XDE, 0000000ah
-	; (no addr) JRL NZ, IntMed_HandleSelectToggle
-	; (no addr) CP (84FEh), 000h
-	; (no addr) JRL NZ, IntMed_HandleSelectToggle
-	; (no addr) LD IZ, 0
+	ldada xwa, 34960
+	cp xde, 0xA
+	jrl nz, IntMed_HandleSelectToggle
+	cpdi8 34046, 0
+	jrl nz, IntMed_HandleSelectToggle
+	lds iz, 0
 
 IntMed_FindMarkedSlot:
-	; (no addr) LD BC, IZ
-	; (no addr) EXTZ XBC
-	; (no addr) ADD XBC, XWA
-	; (no addr) CP (XBC), 0feh
-	; (no addr) JR Z, IntMed_CheckAllMarked
-	; (no addr) INC 1, IZ
-	; (no addr) CP IZ, 000ah
-	; (no addr) JR C, IntMed_FindMarkedSlot
+	ld bc, iz
+	extz xbc
+	add xbc, xwa
+	cpmi8 (xbc), 0xFE
+	jr z, IntMed_CheckAllMarked
+	inc 1, iz
+	cp iz, 0xA
+	jr c, IntMed_FindMarkedSlot
 
 IntMed_CheckAllMarked:
-	; (no addr) CP IZ, 000ah
-	; (no addr) JR NC, IntMed_RemoveOrderLoop
-	; (no addr) LD IZ, 0
+	cp iz, 0xA
+	jr nc, IntMed_RemoveOrderLoop
+	lds iz, 0
 
 IntMed_AssignOrderLoop:
-	; (no addr) LDA XWA, 8890h
-	; (no addr) LD BC, IZ
-	; (no addr) EXTZ XBC
-	; (no addr) ADD XBC, XWA
-	; (no addr) LD A, (XBC)
-	; (no addr) CP A, 0feh
-	; (no addr) JR NZ, IntMed_NextAssignSlot
-	; (no addr) LD A, (889Ah)
-	; (no addr) LD (XBC), A
-	; (no addr) INC 1, (889Ah)
-	; (no addr) LD WA, IZ
-	; (no addr) SLL 3, WA
-	; (no addr) LDA XDE, 82E2h
-	; (no addr) EXTZ XWA
-	; (no addr) ADD XWA, XDE
-	; (no addr) LD C, (XBC)
-	; (no addr) EXTZ BC
-	; (no addr) LD DE, IZ
-	CALR FormatMedleyNumber
-	; (no addr) LD DE, IZ
-	; (no addr) SLL 3, DE
-	; (no addr) LDA XWA, 82E2h
-	; (no addr) EXTZ XDE
-	; (no addr) ADD XDE, XWA
-	; (no addr) LD XWA, (82DAh)
-	; (no addr) LD XBC, 01c0000fh
-	; (no addr) CALL ApPostEvent
+	ldada xwa, 34960
+	ld bc, iz
+	extz xbc
+	add xbc, xwa
+	ld a, (xbc)
+	cp a, 0xFE
+	jr nz, IntMed_NextAssignSlot
+	ldda8 a, 34970
+	ld (xbc), a
+	incdi8 1, 34970
+	ld wa, iz
+	sll wa, 3
+	ldada xde, 33506
+	extz xwa
+	add xwa, xde
+	ld c, (xbc)
+	extz bc
+	ld de, iz
+	calr FormatMedleyNumber
+	ld de, iz
+	sll de, 3
+	ldada xwa, 33506
+	extz xde
+	add xde, xwa
+	ldda32 xwa, 33498
+	ld xbc, 0x1C0000F
+	call 0xFA9D58
 
 IntMed_NextAssignSlot:
-	; (no addr) INC 1, IZ
-	; (no addr) CP IZ, 000ah
-	; (no addr) JR C, IntMed_AssignOrderLoop
-	; (no addr) JRL T, IntMed_Exit
+	inc 1, iz
+	cp iz, 0xA
+	jr c, IntMed_AssignOrderLoop
+	jrl IntMed_Exit
 
 IntMed_RemoveOrderLoop:
-	; (no addr) LD IZ, 0
+	lds iz, 0
 
 IntMed_UnmarkSlotLoop:
-	; (no addr) LDA XWA, 8890h
-	; (no addr) LD BC, IZ
-	; (no addr) EXTZ XBC
-	; (no addr) ADD XBC, XWA
-	; (no addr) LD A, (XBC)
-	; (no addr) CP A, 0fdh
-	; (no addr) JR UGT, IntMed_NextUnmark
-	; (no addr) LD (XBC), 0feh
-	; (no addr) DEC 1, (889Ah)
-	; (no addr) LD WA, IZ
-	; (no addr) SLL 3, WA
-	; (no addr) LDA XDE, 82E2h
-	; (no addr) EXTZ XWA
-	; (no addr) ADD XWA, XDE
-	; (no addr) LD C, (XBC)
-	; (no addr) EXTZ BC
-	; (no addr) LD DE, IZ
-	CALR FormatMedleyNumber
-	; (no addr) LD DE, IZ
-	; (no addr) SLL 3, DE
-	; (no addr) LDA XWA, 82E2h
-	; (no addr) EXTZ XDE
-	; (no addr) ADD XDE, XWA
-	; (no addr) LD XWA, (82DAh)
-	; (no addr) LD XBC, 01c0000fh
-	; (no addr) CALL ApPostEvent
+	ldada xwa, 34960
+	ld bc, iz
+	extz xbc
+	add xbc, xwa
+	ld a, (xbc)
+	cp a, 0xFD
+	jr ugt, IntMed_NextUnmark
+	ldmi8 (xbc), 0xFE
+	decdi8 1, 34970
+	ld wa, iz
+	sll wa, 3
+	ldada xde, 33506
+	extz xwa
+	add xwa, xde
+	ld c, (xbc)
+	extz bc
+	ld de, iz
+	calr FormatMedleyNumber
+	ld de, iz
+	sll de, 3
+	ldada xwa, 33506
+	extz xde
+	add xde, xwa
+	ldda32 xwa, 33498
+	ld xbc, 0x1C0000F
+	call 0xFA9D58
 
 IntMed_NextUnmark:
-	; (no addr) INC 1, IZ
-	; (no addr) CP IZ, 000ah
-	; (no addr) JR C, IntMed_UnmarkSlotLoop
-	; (no addr) JRL T, IntMed_Exit
+	inc 1, iz
+	cp iz, 0xA
+	jr c, IntMed_UnmarkSlotLoop
+	jrl IntMed_Exit
 
 IntMed_HandleSelectToggle:
-	; (no addr) CP XDE, 0000000bh
-	; (no addr) JRL NZ, IntMed_HandleRepeatToggle
-	; (no addr) CP (84FEh), 000h
-	; (no addr) JRL NZ, IntMed_HandleRepeatToggle
-	; (no addr) LD XWA, (XSP + 006h)
-	; (no addr) LD XBC, 01e50003h
-	; (no addr) LD XDE, 0
-	CALR FmmSeqSongNameFunc
-	; (no addr) LD IZ, HL
-	; (no addr) LDA XWA, 8890h
-	; (no addr) LD DE, IZ
-	; (no addr) EXTZ XDE
-	; (no addr) ADD XDE, XWA
-	; (no addr) LDA XBC, 82E2h
-	; (no addr) LD WA, IZ
-	; (no addr) SLL 3, WA
-	; (no addr) EXTZ XWA
-	; (no addr) ADD XWA, XBC
-	; (no addr) LD C, (XDE)
-	; (no addr) CP C, 0feh
-	; (no addr) JR NZ, IntMed_RemoveFromOrder
-	; (no addr) LD C, (889Ah)
-	; (no addr) LD (XDE), C
-	; (no addr) INC 1, (889Ah)
-	; (no addr) LD C, (XDE)
-	; (no addr) EXTZ BC
-	; (no addr) LD DE, IZ
-	CALR FormatMedleyNumber
-	; (no addr) LD DE, IZ
-	; (no addr) SLL 3, DE
-	; (no addr) LDA XBC, 82E2h
-	; (no addr) EXTZ XDE
-	; (no addr) ADD XDE, XBC
-	; (no addr) LD XWA, (82DAh)
-	; (no addr) LD XBC, 01c0000fh
-	; (no addr) CALL ApPostEvent
-	; (no addr) JRL T, IntMed_Exit
+	cp xde, 0xB
+	jrl nz, IntMed_HandleRepeatToggle
+	cpdi8 34046, 0
+	jrl nz, IntMed_HandleRepeatToggle
+	ld xwa, (xsp + 6)
+	ld xbc, 0x1E50003
+	lds32 xde, 0
+	calr FmmSeqSongNameFunc
+	ld iz, hl
+	ldada xwa, 34960
+	ld de, iz
+	extz xde
+	add xde, xwa
+	ldada xbc, 33506
+	ld wa, iz
+	sll wa, 3
+	extz xwa
+	add xwa, xbc
+	ld c, (xde)
+	cp c, 0xFE
+	jr nz, IntMed_RemoveFromOrder
+	ldda8 c, 34970
+	ld (xde), c
+	incdi8 1, 34970
+	ld c, (xde)
+	extz bc
+	ld de, iz
+	calr FormatMedleyNumber
+	ld de, iz
+	sll de, 3
+	ldada xbc, 33506
+	extz xde
+	add xde, xbc
+	ldda32 xwa, 33498
+	ld xbc, 0x1C0000F
+	call 0xFA9D58
+	jrl IntMed_Exit
 
 IntMed_RemoveFromOrder:
-	; (no addr) CP C, 0fdh
-	; (no addr) JRL UGT, IntMed_Exit
-	; (no addr) LD (XSP + 004h), C
-	; (no addr) LD (XDE), 0feh
-	; (no addr) DEC 1, (889Ah)
-	; (no addr) LD C, (XDE)
-	; (no addr) EXTZ BC
-	; (no addr) LD DE, IZ
-	CALR FormatMedleyNumber
-	; (no addr) LD DE, IZ
-	; (no addr) SLL 3, DE
-	; (no addr) LDA XBC, 82E2h
-	; (no addr) EXTZ XDE
-	; (no addr) ADD XDE, XBC
-	; (no addr) LD XWA, (82DAh)
-	; (no addr) LD XBC, 01c0000fh
-	; (no addr) CALL ApPostEvent
-	; (no addr) LDW (XSP + 002h:8), 0000h
-	; (no addr) LD IZ, 0
-	; (no addr) LD A, (889Ah)
-	; (no addr) EXTZ WA
-	; (no addr) CP WA, 0
-	; (no addr) JRL ULE, IntMed_Exit
+	cp c, 0xFD
+	jrl ugt, IntMed_Exit
+	ld (xsp + 4), c
+	ldmi8 (xde), 0xFE
+	decdi8 1, 34970
+	ld c, (xde)
+	extz bc
+	ld de, iz
+	calr FormatMedleyNumber
+	ld de, iz
+	sll de, 3
+	ldada xbc, 33506
+	extz xde
+	add xde, xbc
+	ldda32 xwa, 33498
+	ld xbc, 0x1C0000F
+	call 0xFA9D58
+	ldmw (xsp + 2), 0x0
+	lds iz, 0
+	ldda8 a, 34970
+	extz wa
+	cps wa, 0
+	jrl ule, IntMed_Exit
 
 IntMed_ReorderLoop:
-	; (no addr) LDA XWA, 8890h
-	; (no addr) LD DE, IZ
-	; (no addr) EXTZ XDE
-	; (no addr) ADD XDE, XWA
-	; (no addr) LD C, (XDE)
-	; (no addr) CP C, 0fdh
-	; (no addr) JR UGT, IntMed_NextReorder
-	; (no addr) INCW 1, (XSP + 002h)
-	; (no addr) CP C, (XSP + 004h)
-	; (no addr) JR ULE, IntMed_NextReorder
-	; (no addr) DEC 1, C
-	; (no addr) LD (XDE), C
-	; (no addr) LD WA, IZ
-	; (no addr) SLL 3, WA
-	; (no addr) LDA XDE, 82E2h
-	; (no addr) EXTZ XWA
-	; (no addr) ADD XWA, XDE
-	; (no addr) EXTZ BC
-	; (no addr) LD DE, IZ
-	CALR FormatMedleyNumber
-	; (no addr) LD DE, IZ
-	; (no addr) SLL 3, DE
-	; (no addr) LDA XWA, 82E2h
-	; (no addr) EXTZ XDE
-	; (no addr) ADD XDE, XWA
-	; (no addr) LD XWA, (82DAh)
-	; (no addr) LD XBC, 01c0000fh
-	; (no addr) CALL ApPostEvent
+	ldada xwa, 34960
+	ld de, iz
+	extz xde
+	add xde, xwa
+	ld c, (xde)
+	cp c, 0xFD
+	jr ugt, IntMed_NextReorder
+	incm 1, (xsp + 2)
+	cp c, (xsp + 4)
+	jr ule, IntMed_NextReorder
+	dec 1, c
+	ld (xde), c
+	ld wa, iz
+	sll wa, 3
+	ldada xde, 33506
+	extz xwa
+	add xwa, xde
+	extz bc
+	ld de, iz
+	calr FormatMedleyNumber
+	ld de, iz
+	sll de, 3
+	ldada xwa, 33506
+	extz xde
+	add xde, xwa
+	ldda32 xwa, 33498
+	ld xbc, 0x1C0000F
+	call 0xFA9D58
 
 IntMed_NextReorder:
-	; (no addr) INC 1, IZ
-	; (no addr) LD A, (889Ah)
-	; (no addr) EXTZ WA
-	; (no addr) CP (XSP + 002h), WA
-	; (no addr) JR C, IntMed_ReorderLoop
-	; (no addr) JRL T, IntMed_Exit
+	inc 1, iz
+	ldda8 a, 34970
+	extz wa
+	cp (xsp + 2), wa
+	jr c, IntMed_ReorderLoop
+	jrl IntMed_Exit
 
 IntMed_HandleRepeatToggle:
-	; (no addr) CP XDE, 0000000ch
-	; (no addr) JR NZ, IntMed_HandlePlay
-	; (no addr) CP XBC, 01c00017h
-	; (no addr) JR NZ, IntMed_SetRepeatOff
-	; (no addr) LD (889Eh), 001h
-	; (no addr) JRL T, IntMed_Exit
+	cp xde, 0xC
+	jr nz, IntMed_HandlePlay
+	cp xbc, 0x1C00017
+	jr nz, IntMed_SetRepeatOff
+	stdi8 34974, 1
+	jrl IntMed_Exit
 
 IntMed_SetRepeatOff:
-	; (no addr) LD (889Eh), 000h
-	; (no addr) JRL T, IntMed_Exit
+	stdi8 34974, 0
+	jrl IntMed_Exit
 
 IntMed_HandlePlay:
-	; (no addr) CP XDE, 0000000dh
-	; (no addr) JRL NZ, IntMed_Exit
-	; (no addr) CP (84FEh), 000h
-	; (no addr) JR NZ, IntMed_Exit
-	; (no addr) LD (889Ch), 000h
-	; (no addr) LD IZ, 0
+	cp xde, 0xD
+	jrl nz, IntMed_Exit
+	cpdi8 34046, 0
+	jr nz, IntMed_Exit
+	stdi8 34972, 0
+	lds iz, 0
 
 IntMed_StartPlayLoop:
-	; (no addr) LD BC, IZ
-	; (no addr) EXTZ XBC
-	; (no addr) ADD XBC, XWA
-	; (no addr) CP (XBC), 000h
-	; (no addr) JR NZ, IntMed_NextPlaySlot
-	; (no addr) LD (84FEh), 001h
-	; (no addr) LD DE, IZ
-	; (no addr) EXTZ XDE
-	; (no addr) LD XWA, (XSP + 006h)
-	; (no addr) LD XBC, 01e50002h
-	CALR FmmSeqSongNameFunc
-	; (no addr) LD A, IZL
-	; (no addr) EXTZ WA
-	; (no addr) CALL LABEL_F20BCE
-	; (no addr) INC 1, (889Ch)
-	; (no addr) LD XWA, 0ffffffffh
-	; (no addr) LD XBC, 01e0009ah
-	; (no addr) LD XDE, 0
-	; (no addr) CALL ApPostEvent
-	; (no addr) LD WA, 007ah
-	; (no addr) CALL UI_PostModeChangeEvent
-	; (no addr) JR T, IntMed_Exit
+	ld bc, iz
+	extz xbc
+	add xbc, xwa
+	cpmi8 (xbc), 0x0
+	jr nz, IntMed_NextPlaySlot
+	stdi8 34046, 1
+	ld de, iz
+	extz xde
+	ld xwa, (xsp + 6)
+	ld xbc, 0x1E50002
+	calr FmmSeqSongNameFunc
+	ldto_a_berp 0xF8
+	extz wa
+	call LABEL_F20BCE
+	incdi8 1, 34972
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1E0009A
+	lds32 xde, 0
+	call 0xFA9D58
+	ldw wa, 0x7A
+	call 0xF99490
+	jr IntMed_Exit
 
 IntMed_NextPlaySlot:
-	; (no addr) INC 1, IZ
-	; (no addr) CP IZ, 000ah
-	; (no addr) JR C, IntMed_StartPlayLoop
-	; (no addr) JR T, IntMed_Exit
+	inc 1, iz
+	cp iz, 0xA
+	jr c, IntMed_StartPlayLoop
+	jr IntMed_Exit
 
 IntMed_StoreDelayFlag:
-	; (no addr) LD (82DEh), XWA
-	; (no addr) JR T, IntMed_Exit
+	stda32 33502, xwa
+	jr IntMed_Exit
 
 IntMed_CheckContinue:
-	; (no addr) CP (84FEh), 000h
-	; (no addr) JR Z, IntMed_Exit
-	; (no addr) LD XWA, 0ffffffffh
-	; (no addr) LD XBC, 01e0009ah
-	; (no addr) LD XDE, 0
-	; (no addr) CALL ApPostEvent
-	; (no addr) LD WA, 007ah
-	; (no addr) CALL UI_PostModeChangeEvent
+	cpdi8 34046, 0
+	jr z, IntMed_Exit
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1E0009A
+	lds32 xde, 0
+	call 0xFA9D58
+	ldw wa, 0x7A
+	call 0xF99490
 
 IntMed_Exit:
-	; (no addr) LD XHL, 0
-	; (no addr) POP IZ
-	; (no addr) INC 8, XSP
-	; (no addr) RET
+	lds32 xhl, 0
+	popw iz
+	inc 8, xsp
+	ret
 
 FmmDiskMedley1Func:
-	; (no addr) PUSH IZ
-	; (no addr) CP XBC, 01c0000bh
-	; (no addr) JR Z, DiskMed1_InitLoop
-	; (no addr) CP XBC, 01e50004h
-	; (no addr) JR NZ, DiskMed1_Exit
-	; (no addr) LD (8332h), XDE
-	; (no addr) JR T, DiskMed1_Exit
+	pushw iz
+	cp xbc, 0x1C0000B
+	jr z, DiskMed1_InitLoop
+	cp xbc, 0x1E50004
+	jr nz, DiskMed1_Exit
+	stda32 33586, xde
+	jr DiskMed1_Exit
 
 DiskMed1_InitLoop:
-	; (no addr) LD IZ, 0
+	lds iz, 0
 
 DiskMed1_FormatLoop:
-	; (no addr) LD WA, IZ
-	; (no addr) SLL 3, WA
-	; (no addr) LDA XBC, 8336h
-	; (no addr) EXTZ XWA
-	; (no addr) ADD XWA, XBC
-	; (no addr) LDA XBC, 8926h
-	; (no addr) LD DE, IZ
-	; (no addr) EXTZ XDE
-	; (no addr) ADD XDE, XBC
-	; (no addr) LD C, (XDE)
-	; (no addr) EXTZ BC
-	; (no addr) LD DE, IZ
-	CALR FormatMedleyNumber
-	; (no addr) LD DE, IZ
-	; (no addr) SLL 3, DE
-	; (no addr) LDA XWA, 8336h
-	; (no addr) EXTZ XDE
-	; (no addr) ADD XDE, XWA
-	; (no addr) LD XWA, (8332h)
-	; (no addr) LD XBC, 01c0000fh
-	; (no addr) CALL ApPostEvent
-	; (no addr) INC 1, IZ
-	; (no addr) CP IZ, 000ah
-	; (no addr) JR C, DiskMed1_FormatLoop
+	ld wa, iz
+	sll wa, 3
+	ldada xbc, 33590
+	extz xwa
+	add xwa, xbc
+	ldada xbc, 35110
+	ld de, iz
+	extz xde
+	add xde, xbc
+	ld c, (xde)
+	extz bc
+	ld de, iz
+	calr FormatMedleyNumber
+	ld de, iz
+	sll de, 3
+	ldada xwa, 33590
+	extz xde
+	add xde, xwa
+	ldda32 xwa, 33586
+	ld xbc, 0x1C0000F
+	call 0xFA9D58
+	inc 1, iz
+	cp iz, 0xA
+	jr c, DiskMed1_FormatLoop
 
 DiskMed1_Exit:
-	; (no addr) LD XHL, 0
-	; (no addr) POP IZ
-	; (no addr) RET
+	lds32 xhl, 0
+	popw iz
+	ret
 
 FmmDiskMedley2Func:
-	; (no addr) PUSH IZ
-	; (no addr) CP XBC, 01c0000bh
-	; (no addr) JR Z, DiskMed2_InitLoop
-	; (no addr) CP XBC, 01e50004h
-	; (no addr) JR NZ, DiskMed2_Exit
-	; (no addr) LD (8386h), XDE
-	; (no addr) JR T, DiskMed2_Exit
+	pushw iz
+	cp xbc, 0x1C0000B
+	jr z, DiskMed2_InitLoop
+	cp xbc, 0x1E50004
+	jr nz, DiskMed2_Exit
+	stda32 33670, xde
+	jr DiskMed2_Exit
 
 DiskMed2_InitLoop:
-	; (no addr) LD IZ, 000ah
+	ldw iz, 0xA
 
 DiskMed2_FormatLoop:
-	; (no addr) LD WA, IZ
-	; (no addr) SLL 3, WA
-	; (no addr) LDA XBC, 00833Ah:24
-	; (no addr) EXTZ XWA
-	; (no addr) ADD XWA, XBC
-	; (no addr) LDA XBC, 8926h
-	; (no addr) LD DE, IZ
-	; (no addr) EXTZ XDE
-	; (no addr) ADD XDE, XBC
-	; (no addr) LD C, (XDE)
-	; (no addr) EXTZ BC
-	; (no addr) LD DE, IZ
-	; (no addr) SUB DE, 000ah
-	CALR FormatMedleyNumber
-	; (no addr) LD WA, IZ
-	; (no addr) SLL 3, WA
-	; (no addr) LDA XBC, 00833Ah:24
-	; (no addr) LD DE, WA
-	; (no addr) EXTZ XDE
-	; (no addr) ADD XDE, XBC
-	; (no addr) LD XWA, (8386h)
-	; (no addr) LD XBC, 01c0000fh
-	; (no addr) CALL ApPostEvent
-	; (no addr) INC 1, IZ
-	; (no addr) CP IZ, 0014h
-	; (no addr) JR C, DiskMed2_FormatLoop
+	ld wa, iz
+	sll wa, 3
+	ldada_24 xbc, 33594
+	extz xwa
+	add xwa, xbc
+	ldada xbc, 35110
+	ld de, iz
+	extz xde
+	add xde, xbc
+	ld c, (xde)
+	extz bc
+	ld de, iz
+	sub de, 0xA
+	calr FormatMedleyNumber
+	ld wa, iz
+	sll wa, 3
+	ldada_24 xbc, 33594
+	ld de, wa
+	extz xde
+	add xde, xbc
+	ldda32 xwa, 33670
+	ld xbc, 0x1C0000F
+	call 0xFA9D58
+	inc 1, iz
+	cp iz, 0x14
+	jr c, DiskMed2_FormatLoop
 
 DiskMed2_Exit:
-	; (no addr) LD XHL, 0
-	; (no addr) POP IZ
-	; (no addr) RET
+	lds32 xhl, 0
+	popw iz
+	ret
 
 DiskMed_PlayNextHelper:
-	; (no addr) PUSH IZ
-	; (no addr) CP XBC, 01c00018h
-	; (no addr) JR Z, DiskMed_InitPlayOrder
-	; (no addr) CP XBC, 01c00017h
-	; (no addr) JR Z, DiskMed_InitPlayOrder
-	; (no addr) CP XBC, 01c00013h
-	; (no addr) JRL NZ, DiskMed_ReturnZero
-	; (no addr) CP XDE, 00000003h
-	; (no addr) JRL Z, DiskMed_ReturnZero
-	; (no addr) CP XDE, 00000002h
-	; (no addr) JRL NZ, DiskMed_ReturnZero
-	; (no addr) CP (84FEh), 000h
-	; (no addr) JRL Z, DiskMed_ReturnZero
-	; (no addr) LD A, (889Ch)
-	; (no addr) CP A, (889Ah)
-	; (no addr) JR NC, DiskMed_ReturnFinished
-	; (no addr) LD IZ, 0
-	; (no addr) LDA XBC, 8890h
+	pushw iz
+	cp xbc, 0x1C00018
+	jr z, DiskMed_InitPlayOrder
+	cp xbc, 0x1C00017
+	jr z, DiskMed_InitPlayOrder
+	cp xbc, 0x1C00013
+	jrl nz, DiskMed_ReturnZero
+	cp xde, 0x3
+	jrl z, DiskMed_ReturnZero
+	cp xde, 0x2
+	jrl nz, DiskMed_ReturnZero
+	cpdi8 34046, 0
+	jrl z, DiskMed_ReturnZero
+	ldda8 a, 34972
+	cpda8 a, 34970
+	jr nc, DiskMed_ReturnFinished
+	lds iz, 0
+	ldada xbc, 34960
 
 DiskMed_FindSongLoop:
-	; (no addr) LD DE, IZ
-	; (no addr) EXTZ XDE
-	; (no addr) ADD XDE, XBC
-	; (no addr) CP (XDE), A
-	; (no addr) JR NZ, DiskMed_NextSong
-	; (no addr) LD A, IZL
-	; (no addr) EXTZ WA
-	; (no addr) JRL T, DiskMed_PlaySong
+	ld de, iz
+	extz xde
+	add xde, xbc
+	cp (xde), a
+	jr nz, DiskMed_NextSong
+	ldto_a_berp 0xF8
+	extz wa
+	jrl DiskMed_PlaySong
 
 DiskMed_NextSong:
-	; (no addr) INC 1, IZ
-	; (no addr) CP IZ, 000ah
-	; (no addr) JR C, DiskMed_FindSongLoop
-	; (no addr) JRL T, DiskMed_ReturnZero
+	inc 1, iz
+	cp iz, 0xA
+	jr c, DiskMed_FindSongLoop
+	jrl DiskMed_ReturnZero
 
 DiskMed_ReturnFinished:
-	; (no addr) LD XHL, 2
-	; (no addr) JRL T, DiskMed_HelperExit
+	lds32 xhl, 2
+	jrl DiskMed_HelperExit
 
 DiskMed_InitPlayOrder:
-	; (no addr) CP XDE, 0000000dh
-	; (no addr) JRL NZ, DiskMed_ReturnZero
-	; (no addr) LD (889Ch), 000h
-	; (no addr) LD (889Ah), 000h
-	; (no addr) LD (889Eh), 000h
-	; (no addr) LD IZ, 0
+	cp xde, 0xD
+	jrl nz, DiskMed_ReturnZero
+	stdi8 34972, 0
+	stdi8 34970, 0
+	stdi8 34974, 0
+	lds iz, 0
 
 DiskMed_CheckSlotLoop:
-	; (no addr) LD A, IZL
-	; (no addr) EXTZ WA
-	; (no addr) CALL LABEL_F2065A
-	; (no addr) LDA XBC, 8890h
-	; (no addr) LD WA, IZ
-	; (no addr) EXTZ XWA
-	; (no addr) ADD XWA, XBC
-	; (no addr) CP L, 0
-	; (no addr) JR Z, DiskMed_MarkUnused
-	; (no addr) LD (XWA), 0feh
-	; (no addr) JR T, DiskMed_NextSlotCheck
+	ldto_a_berp 0xF8
+	extz wa
+	call LABEL_F2065A
+	ldada xbc, 34960
+	ld wa, iz
+	extz xwa
+	add xwa, xbc
+	cps l, 0
+	jr z, DiskMed_MarkUnused
+	ldmi8 (xwa), 0xFE
+	jr DiskMed_NextSlotCheck
 
 DiskMed_MarkUnused:
-	; (no addr) LD (XWA), 0ffh
+	ldmi8 (xwa), 0xFF
 
 DiskMed_NextSlotCheck:
-	; (no addr) INC 1, IZ
-	; (no addr) CP IZ, 000ah
-	; (no addr) JR C, DiskMed_CheckSlotLoop
-	; (no addr) CP (8940h), 000h
-	; (no addr) JR Z, DiskMed_SingleSlotCheck
-	; (no addr) LDA XHL, 8890h
-	; (no addr) LD XBC, XHL
-	; (no addr) LDA XDE, XHL + 00ah
+	inc 1, iz
+	cp iz, 0xA
+	jr c, DiskMed_CheckSlotLoop
+	cpdi8 35136, 0
+	jr z, DiskMed_SingleSlotCheck
+	ldada xhl, 34960
+	ld xbc, xhl
+	lda xde, (xhl + 10)
 
 DiskMed_AssignOrder:
-	; (no addr) LD A, (XBC)
-	; (no addr) CP A, 0feh
-	; (no addr) JR NZ, DiskMed_NextAssign
-	; (no addr) LD (XBC), (889Ah)
-	; (no addr) INC 1, (889Ah)
+	ld a, (xbc)
+	cp a, 0xFE
+	jr nz, DiskMed_NextAssign
+	ldmi16 (xbc), 0x889A
+	incdi8 1, 34970
 
 DiskMed_NextAssign:
-	; (no addr) INC 1, XBC
-	; (no addr) CP XBC, XDE
-	; (no addr) JR C, DiskMed_AssignOrder
-	; (no addr) LD IZ, 0
+	inc 1, xbc
+	cp xbc, xde
+	jr c, DiskMed_AssignOrder
+	lds iz, 0
 
 DiskMed_FindFirstSong:
-	; (no addr) LD WA, IZ
-	; (no addr) EXTZ XWA
-	; (no addr) ADD XWA, XHL
-	; (no addr) LD A, (XWA)
-	; (no addr) CP A, (889Ch)
-	; (no addr) JR NZ, DiskMed_NextFirst
-	; (no addr) LD A, IZL
-	; (no addr) EXTZ WA
-	; (no addr) JR T, DiskMed_PlaySong
+	ld wa, iz
+	extz xwa
+	add xwa, xhl
+	ld a, (xwa)
+	cpda8 a, 34972
+	jr nz, DiskMed_NextFirst
+	ldto_a_berp 0xF8
+	extz wa
+	jr DiskMed_PlaySong
 
 DiskMed_NextFirst:
-	; (no addr) INC 1, IZ
-	; (no addr) CP IZ, 000ah
-	; (no addr) JR C, DiskMed_FindFirstSong
-	; (no addr) JR T, DiskMed_ReturnZero
+	inc 1, iz
+	cp iz, 0xA
+	jr c, DiskMed_FindFirstSong
+	jr DiskMed_ReturnZero
 
 DiskMed_SingleSlotCheck:
-	; (no addr) LDA XBC, 8890h
-	; (no addr) CP (XBC), 0feh
-	; (no addr) JR NZ, DiskMed_SingleSlotInit
-	; (no addr) LD (XBC), (889Ah)
-	; (no addr) INC 1, (889Ah)
+	ldada xbc, 34960
+	cpmi8 (xbc), 0xFE
+	jr nz, DiskMed_SingleSlotInit
+	ldmi16 (xbc), 0x889A
+	incdi8 1, 34970
 
 DiskMed_SingleSlotInit:
-	; (no addr) LD IZ, 0
+	lds iz, 0
 
 DiskMed_FindFirstLoop:
-	; (no addr) LD WA, IZ
-	; (no addr) EXTZ XWA
-	; (no addr) ADD XWA, XBC
-	; (no addr) LD A, (XWA)
-	; (no addr) CP A, (889Ch)
-	; (no addr) JR NZ, DiskMed_NextFindFirst
-	; (no addr) LD A, IZL
-	; (no addr) EXTZ WA
+	ld wa, iz
+	extz xwa
+	add xwa, xbc
+	ld a, (xwa)
+	cpda8 a, 34972
+	jr nz, DiskMed_NextFindFirst
+	ldto_a_berp 0xF8
+	extz wa
 
 DiskMed_PlaySong:
-	; (no addr) CALL LABEL_F20BCE
-	; (no addr) INC 1, (889Ch)
-	; (no addr) LD XHL, 1
-	; (no addr) JR T, DiskMed_HelperExit
+	call LABEL_F20BCE
+	incdi8 1, 34972
+	lds32 xhl, 1
+	jr DiskMed_HelperExit
 
 DiskMed_NextFindFirst:
-	; (no addr) INC 1, IZ
-	; (no addr) CP IZ, 000ah
-	; (no addr) JR C, DiskMed_FindFirstLoop
+	inc 1, iz
+	cp iz, 0xA
+	jr c, DiskMed_FindFirstLoop
 
 DiskMed_ReturnZero:
-	; (no addr) LD XHL, 0
+	lds32 xhl, 0
 
 DiskMed_HelperExit:
-	; (no addr) POP IZ
-	; (no addr) RET
+	popw iz
+	ret
 
 FmmDiskMedleySelectFunc:
-	; (no addr) LDA XSP, XSP - 14
-	; (no addr) PUSH XIZ
-	; (no addr) LD (XSP + 006h), XDE
-	; (no addr) LD (XSP + 00ah), XBC
-	; (no addr) LD (XSP + 00eh), XWA
-	; (no addr) LD XWA, (XSP + 00ah)
-	; (no addr) CP XWA, 01c00018h
-	; (no addr) JRL Z, DiskSel_HandleNavigation
-	; (no addr) CP XWA, 01c00017h
-	; (no addr) JRL Z, DiskSel_HandleNavigation
-	; (no addr) CP XWA, 01c0000bh
-	; (no addr) JRL Z, DiskSel_InitDisplay
-	; (no addr) CP XWA, 01e50004h
-	; (no addr) JRL Z, DiskSel_StoreWindowPtr
-	; (no addr) CP XWA, 01c00013h
-	; (no addr) JRL NZ, DiskSel_Exit
-	; (no addr) LD XWA, (XSP + 006h)
-	; (no addr) CP XWA, 00000003h
-	; (no addr) JRL Z, DiskSel_HandleStopEvent
-	; (no addr) CP XWA, 00000002h
-	; (no addr) JRL NZ, DiskSel_Exit
-	; (no addr) LD WA, 0
-	CALR InitializeOperationState
-	; (no addr) CP (8D37h), 078h
-	; (no addr) JRL Z, DiskSel_CheckPlaying
-	; (no addr) LD XWA, 0ffffffffh
-	; (no addr) LD XBC, 01e0009eh
-	; (no addr) LD XDE, 0
-	; (no addr) CALL ApPostEvent
-	; (no addr) LD XWA, 0ffffffffh
-	; (no addr) LD XBC, 01c0000ah
-	; (no addr) LD XDE, 0
-	; (no addr) CALL ApPostEvent
-	; (no addr) CPW (8502h), 0000h
-	; (no addr) JR GE, DiskSel_InitState
-	; (no addr) LD XWA, 00600026h
-	; (no addr) LD XBC, 01c00001h
-	; (no addr) LD XDE, 5
-	; (no addr) CALL ApPostEvent
-	; (no addr) CALL GetEncodedFileSizeData
-	; (no addr) LD (8502h), HL
-	; (no addr) CALL LABEL_F8958D
-	; (no addr) CALL GetEncodedFreeSpaceData
-	; (no addr) LD XWA, 00600026h
-	; (no addr) LD XBC, 01c00002h
-	; (no addr) LD XDE, 0
-	; (no addr) CALL ApPostEvent
-	; (no addr) LD XWA, 0ffffffffh
-	; (no addr) LD XBC, 01c0000ah
-	; (no addr) LD XDE, 0
-	; (no addr) CALL ApPostEvent
-	CALR SignalProgressUpdate
+	lda xsp, (xsp - 14)
+	push xiz
+	ld (xsp + 6), xde
+	ld (xsp + 10), xbc
+	ld (xsp + 14), xwa
+	ld xwa, (xsp + 10)
+	cp xwa, 0x1C00018
+	jrl z, DiskSel_HandleNavigation
+	cp xwa, 0x1C00017
+	jrl z, DiskSel_HandleNavigation
+	cp xwa, 0x1C0000B
+	jrl z, DiskSel_InitDisplay
+	cp xwa, 0x1E50004
+	jrl z, DiskSel_StoreWindowPtr
+	cp xwa, 0x1C00013
+	jrl nz, DiskSel_Exit
+	ld xwa, (xsp + 6)
+	cp xwa, 0x3
+	jrl z, DiskSel_HandleStopEvent
+	cp xwa, 0x2
+	jrl nz, DiskSel_Exit
+	lds wa, 0
+	calr InitializeOperationState
+	cpdi8 36151, 120
+	jrl z, DiskSel_CheckPlaying
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1E0009E
+	lds32 xde, 0
+	call 0xFA9D58
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C0000A
+	lds32 xde, 0
+	call 0xFA9D58
+	cpdi16 34050, 0
+	jr ge, DiskSel_InitState
+	ld xwa, 0x600026
+	ld xbc, 0x1C00001
+	lds32 xde, 5
+	call 0xFA9D58
+	call 0xF8987D
+	stda16 34050, xhl
+	call LABEL_F8958D
+	call 0xF8953B
+	ld xwa, 0x600026
+	ld xbc, 0x1C00002
+	lds32 xde, 0
+	call 0xFA9D58
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C0000A
+	lds32 xde, 0
+	call 0xFA9D58
+	calr SignalProgressUpdate
 
 DiskSel_InitState:
-	; (no addr) LD (84FEh), 000h
-	; (no addr) LD (893Ch), 000h
-	; (no addr) LD (893Ah), 000h
-	; (no addr) LD IZ, 0
+	stdi8 34046, 0
+	stdi8 35132, 0
+	stdi8 35130, 0
+	lds iz, 0
 
 DiskSel_CheckFileLoop:
-	; (no addr) LD WA, IZ
-	; (no addr) LD BC, 2
-	; (no addr) CALL LABEL_F89408
-	; (no addr) CP L, 0
-	; (no addr) JR NZ, DiskSel_FileAvailable
-	; (no addr) LD WA, IZ
-	; (no addr) LD BC, 0008h
-	; (no addr) CALL LABEL_F89408
-	; (no addr) CP L, 0
-	; (no addr) JR Z, DiskSel_MarkUnavail
+	ld wa, iz
+	lds bc, 2
+	call LABEL_F89408
+	cps l, 0
+	jr nz, DiskSel_FileAvailable
+	ld wa, iz
+	ldw bc, 0x8
+	call LABEL_F89408
+	cps l, 0
+	jr z, DiskSel_MarkUnavail
 
 DiskSel_FileAvailable:
-	; (no addr) LDA XWA, 8926h
-	; (no addr) LD (XWA + IZ), (893Ah)
-	; (no addr) INC 1, (893Ah)
-	; (no addr) JR T, DiskSel_NextFile
+	ldada xwa, 35110
+	dri6 0x07, 0xE0, 0xF8, 0x14, 0x3A, 0x89
+	incdi8 1, 35130
+	jr DiskSel_NextFile
 
 DiskSel_MarkUnavail:
-	; (no addr) LDA XWA, 8926h
-	; (no addr) LD (XWA + IZ), 0ffh
+	ldada xwa, 35110
+	dri5 0x07, 0xE0, 0xF8, 0x00, 0xFF
 
 DiskSel_NextFile:
-	; (no addr) INC 1, IZ
-	; (no addr) CP IZ, 0014h
-	; (no addr) JR LT, DiskSel_CheckFileLoop
-	; (no addr) CALL LABEL_F20ACD
-	; (no addr) JRL T, DiskSel_Exit
+	inc 1, iz
+	cp iz, 0x14
+	jr lt, DiskSel_CheckFileLoop
+	call LABEL_F20ACD
+	jrl DiskSel_Exit
 
 DiskSel_CheckPlaying:
-	; (no addr) CALL LABEL_F2076D
-	; (no addr) CP L, 1
-	; (no addr) JRL NZ, DiskSel_HandleError
-	; (no addr) LD (84FEh), 001h
-	; (no addr) LD XWA, (XSP + 00eh)
-	; (no addr) LD XBC, (XSP + 00ah)
-	; (no addr) LD XDE, (XSP + 006h)
-	CALR DiskMed_PlayNextHelper
-	; (no addr) CP L, 1
-	; (no addr) JR NZ, DiskSel_CheckFinished
-	; (no addr) LD XWA, 0ffffffffh
-	; (no addr) LD XBC, 01e0009eh
-	; (no addr) LD XDE, 0
-	; (no addr) CALL ApPostEvent
-	; (no addr) LD XWA, 0ffffffffh
-	; (no addr) LD XBC, 01e0009ah
-	; (no addr) LD XDE, 0
-	; (no addr) CALL ApPostEvent
-	; (no addr) LD WA, 0078h
-	; (no addr) JRL T, DiskSel_CallPauseMode
+	call LABEL_F2076D
+	cps l, 1
+	jrl nz, DiskSel_HandleError
+	stdi8 34046, 1
+	ld xwa, (xsp + 14)
+	ld xbc, (xsp + 10)
+	ld xde, (xsp + 6)
+	calr DiskMed_PlayNextHelper
+	cps l, 1
+	jr nz, DiskSel_CheckFinished
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1E0009E
+	lds32 xde, 0
+	call 0xFA9D58
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1E0009A
+	lds32 xde, 0
+	call 0xFA9D58
+	ldw wa, 0x78
+	jrl DiskSel_CallPauseMode
 
 DiskSel_CheckFinished:
-	; (no addr) CP L, 2
-	; (no addr) JRL NZ, DiskSel_Exit
-	; (no addr) LD XWA, 0ffffffffh
-	; (no addr) LD XBC, 01e0009eh
-	; (no addr) LD XDE, 0
-	; (no addr) CALL ApPostEvent
-	; (no addr) LD XWA, 0ffffffffh
-	; (no addr) LD XBC, 01c0000ah
-	; (no addr) LD XDE, 0
-	; (no addr) CALL ApPostEvent
-	; (no addr) LD A, (893Ch)
-	; (no addr) CP A, (893Ah)
-	; (no addr) JRL NC, DiskSel_CheckRepeat
-	; (no addr) LD IZ, 0
+	cps l, 2
+	jrl nz, DiskSel_Exit
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1E0009E
+	lds32 xde, 0
+	call 0xFA9D58
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C0000A
+	lds32 xde, 0
+	call 0xFA9D58
+	ldda8 a, 35132
+	cpda8 a, 35130
+	jrl nc, DiskSel_CheckRepeat
+	lds iz, 0
 
 DiskSel_ClearSelections:
-	; (no addr) LD A, IZL
-	; (no addr) EXTZ WA
-	; (no addr) CALL LABEL_F89321
-	; (no addr) INC 1, IZ
-	; (no addr) CP IZ, 0008h
-	; (no addr) JR LT, DiskSel_ClearSelections
-	; (no addr) LD IZ, 0
+	ldto_a_berp 0xF8
+	extz wa
+	call LABEL_F89321
+	inc 1, iz
+	cp iz, 0x8
+	jr lt, DiskSel_ClearSelections
+	lds iz, 0
 
 DiskSel_FindSongLoop:
-	; (no addr) LDA XWA, 8926h
-	; (no addr) LD A, (XWA + IZ)
-	; (no addr) CP A, (893Ch)
-	; (no addr) JRL NZ, DiskSel_NextSongLoop
-	; (no addr) LD (83DEh), IZ
-	; (no addr) LD WA, IZ
-	; (no addr) CALL NotifyUIOfSelectionChange
-	; (no addr) LD DE, (83DEh)
-	; (no addr) EXTS XDE
-	; (no addr) LD XWA, (83DAh)
-	; (no addr) LD XBC, 01e50002h
-	; (no addr) CALL ApPostEvent
-	; (no addr) LD QIZ, 0
+	ldada xwa, 35110
+	ld_a_srib3 0x07, 0xE0, 0xF8
+	cpda8 a, 35132
+	jrl nz, DiskSel_NextSongLoop
+	stda16 33758, xiz
+	ld wa, iz
+	call 0xF89605
+	ldda16 xde, 33758
+	exts xde
+	ldda32 xwa, 33754
+	ld xbc, 0x1E50002
+	call 0xFA9D58
+	ldi0_werp 0xFA
 
 DiskSel_SendFileInfo:
-	; (no addr) LD DE, QIZ
-	; (no addr) SLL 5, DE
-	; (no addr) LDA XBC, 850Ch
-	; (no addr) EXTZ XDE
-	; (no addr) ADD XDE, XBC
-	; (no addr) LD XWA, (83DAh)
-	; (no addr) LD XBC, 01c0000fh
-	; (no addr) CALL ApPostEvent
-	; (no addr) INC 1, QIZ
-	; (no addr) CP QIZ, 0014h
-	; (no addr) JR LT, DiskSel_SendFileInfo
-	; (no addr) LD XWA, 0
-	; (no addr) LD XBC, 01c0000bh
-	; (no addr) LD XDE, 0
-	CALR FmmDiskMedley1Func
-	; (no addr) LD XWA, 0
-	; (no addr) LD XBC, 01c0000bh
-	; (no addr) LD XDE, 0
-	CALR FmmDiskMedley2Func
-	; (no addr) LD XWA, 0
-	; (no addr) LD XBC, 01c0000bh
-	; (no addr) LD XDE, 00770008h
-	CALR DiskNameFunc
-	; (no addr) LD XWA, 0
-	; (no addr) LD XBC, 01c0000bh
-	; (no addr) LD XDE, 00770009h
-	CALR DiskInfoFunc
-	; (no addr) LD XWA, 00600026h
-	; (no addr) LD XBC, 01c00001h
-	; (no addr) LD XDE, 5
-	; (no addr) CALL ApPostEvent
-	; (no addr) LD WA, 0
-	CALR InitializeOperationState
-	; (no addr) CALL LABEL_F87A08
-	; (no addr) LD QIZ, HL
-	CALR SignalProgressUpdate
-	; (no addr) LD XWA, 00600026h
-	; (no addr) LD XBC, 01c00002h
-	; (no addr) LD XDE, 0
-	; (no addr) CALL ApPostEvent
-	; (no addr) LD XWA, 0ffffffffh
-	; (no addr) LD XBC, 01c0000ah
-	; (no addr) LD XDE, 0
-	; (no addr) CALL ApPostEvent
-	; (no addr) CP QIZ, 0
-	; (no addr) JR GE, DiskSel_PlayNext
-	; (no addr) LD (84FEh), 000h
-	; (no addr) LD WA, 0060h
-	; (no addr) CALL UI_PostModeChangeEvent
-	; (no addr) LD WA, QIZ
-	; (no addr) LD BC, 1
-	CALR LABEL_F8B48E
-	; (no addr) LD (7F42h), L
-	; (no addr) LD WA, 00eeh
-	; (no addr) JRL T, DiskSel_ShowErrorAndExit
+	ldto_de_werp 0xFA
+	sll de, 5
+	ldada xbc, 34060
+	extz xde
+	add xde, xbc
+	ldda32 xwa, 33754
+	ld xbc, 0x1C0000F
+	call 0xFA9D58
+	inc1_werp 0xFA
+	erpw4 0xFA, 0xCF, 0x14, 0x00
+	jr lt, DiskSel_SendFileInfo
+	lds32 xwa, 0
+	ld xbc, 0x1C0000B
+	lds32 xde, 0
+	calr FmmDiskMedley1Func
+	lds32 xwa, 0
+	ld xbc, 0x1C0000B
+	lds32 xde, 0
+	calr FmmDiskMedley2Func
+	lds32 xwa, 0
+	ld xbc, 0x1C0000B
+	ld xde, 0x770008
+	calr DiskNameFunc
+	lds32 xwa, 0
+	ld xbc, 0x1C0000B
+	ld xde, 0x770009
+	calr DiskInfoFunc
+	ld xwa, 0x600026
+	ld xbc, 0x1C00001
+	lds32 xde, 5
+	call 0xFA9D58
+	lds wa, 0
+	calr InitializeOperationState
+	call LABEL_F87A08
+	ldfr_hl_werp 0xFA
+	calr SignalProgressUpdate
+	ld xwa, 0x600026
+	ld xbc, 0x1C00002
+	lds32 xde, 0
+	call 0xFA9D58
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C0000A
+	lds32 xde, 0
+	call 0xFA9D58
+	cpi0_werp 0xFA
+	jr ge, DiskSel_PlayNext
+	stdi8 34046, 0
+	ldw wa, 0x60
+	call 0xF99490
+	ldto_wa_werp 0xFA
+	lds bc, 1
+	calr LABEL_F8B48E
+	stda8 32578, l
+	ldw wa, 0xEE
+	jrl DiskSel_ShowErrorAndExit
 
 DiskSel_PlayNext:
-	; (no addr) INC 1, (893Ch)
-	; (no addr) LD XWA, (XSP + 00eh)
-	; (no addr) LD XBC, 01c00017h
-	; (no addr) LD XDE, 0000000dh
-	CALR DiskMed_PlayNextHelper
-	; (no addr) CP L, 1
-	; (no addr) JR NZ, DiskSel_NextSongLoop
-	; (no addr) LD XWA, 0ffffffffh
-	; (no addr) LD XBC, 01e0009ah
-	; (no addr) LD XDE, 0
-	; (no addr) CALL ApPostEvent
-	; (no addr) LD WA, 0078h
-	; (no addr) CALL UI_PostModeChangeEvent
-	; (no addr) JR T, DiskSel_ClearPlaying
+	incdi8 1, 35132
+	ld xwa, (xsp + 14)
+	ld xbc, 0x1C00017
+	ld xde, 0xD
+	calr DiskMed_PlayNextHelper
+	cps l, 1
+	jr nz, DiskSel_NextSongLoop
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1E0009A
+	lds32 xde, 0
+	call 0xFA9D58
+	ldw wa, 0x78
+	call 0xF99490
+	jr DiskSel_ClearPlaying
 
 DiskSel_NextSongLoop:
-	; (no addr) INC 1, IZ
-	; (no addr) CP IZ, 0014h
-	; (no addr) JRL LT, DiskSel_FindSongLoop
+	inc 1, iz
+	cp iz, 0x14
+	jrl lt, DiskSel_FindSongLoop
 
 DiskSel_ClearPlaying:
-	; (no addr) LD (84FEh), 000h
-	; (no addr) JRL T, DiskSel_Exit
+	stdi8 34046, 0
+	jrl DiskSel_Exit
 
 DiskSel_CheckRepeat:
-	; (no addr) CP (893Eh), 000h
-	; (no addr) JR Z, DiskSel_ClearPlaying
-	; (no addr) LD (893Ch), 000h
-	; (no addr) LD IZ, 0
+	cpdi8 35134, 0
+	jr z, DiskSel_ClearPlaying
+	stdi8 35132, 0
+	lds iz, 0
 
 DiskSel_RepeatClear:
-	; (no addr) LD A, IZL
-	; (no addr) EXTZ WA
-	; (no addr) CALL LABEL_F89321
-	; (no addr) INC 1, IZ
-	; (no addr) CP IZ, 0008h
-	; (no addr) JR LT, DiskSel_RepeatClear
-	; (no addr) LD IZ, 0
+	ldto_a_berp 0xF8
+	extz wa
+	call LABEL_F89321
+	inc 1, iz
+	cp iz, 0x8
+	jr lt, DiskSel_RepeatClear
+	lds iz, 0
 
 DiskSel_RepeatFindLoop:
-	; (no addr) LDA XWA, 8926h
-	; (no addr) LD A, (XWA + IZ)
-	; (no addr) CP A, (893Ch)
-	; (no addr) JRL NZ, DiskSel_RepeatNext
-	; (no addr) LD (83DEh), IZ
-	; (no addr) LD WA, IZ
-	; (no addr) CALL NotifyUIOfSelectionChange
-	; (no addr) LD DE, (83DEh)
-	; (no addr) EXTS XDE
-	; (no addr) LD XWA, (83DAh)
-	; (no addr) LD XBC, 01e50002h
-	; (no addr) CALL ApPostEvent
-	; (no addr) LD QIZ, 0
+	ldada xwa, 35110
+	ld_a_srib3 0x07, 0xE0, 0xF8
+	cpda8 a, 35132
+	jrl nz, DiskSel_RepeatNext
+	stda16 33758, xiz
+	ld wa, iz
+	call 0xF89605
+	ldda16 xde, 33758
+	exts xde
+	ldda32 xwa, 33754
+	ld xbc, 0x1E50002
+	call 0xFA9D58
+	ldi0_werp 0xFA
 
 DiskSel_RepeatSendInfo:
-	; (no addr) LD DE, QIZ
-	; (no addr) SLL 5, DE
-	; (no addr) LDA XBC, 850Ch
-	; (no addr) EXTZ XDE
-	; (no addr) ADD XDE, XBC
-	; (no addr) LD XWA, (83DAh)
-	; (no addr) LD XBC, 01c0000fh
-	; (no addr) CALL ApPostEvent
-	; (no addr) INC 1, QIZ
-	; (no addr) CP QIZ, 0014h
-	; (no addr) JR LT, DiskSel_RepeatSendInfo
-	; (no addr) LD XWA, 0
-	; (no addr) LD XBC, 01c0000bh
-	; (no addr) LD XDE, 0
-	CALR FmmDiskMedley1Func
-	; (no addr) LD XWA, 0
-	; (no addr) LD XBC, 01c0000bh
-	; (no addr) LD XDE, 0
-	CALR FmmDiskMedley2Func
-	; (no addr) LD XWA, 0
-	; (no addr) LD XBC, 01c0000bh
-	; (no addr) LD XDE, 00770008h
-	CALR DiskNameFunc
-	; (no addr) LD XWA, 0
-	; (no addr) LD XBC, 01c0000bh
-	; (no addr) LD XDE, 00770009h
-	CALR DiskInfoFunc
-	; (no addr) LD XWA, 00600026h
-	; (no addr) LD XBC, 01c00001h
-	; (no addr) LD XDE, 5
-	; (no addr) CALL ApPostEvent
-	; (no addr) LD WA, 0
-	CALR InitializeOperationState
-	; (no addr) CALL LABEL_F87A08
-	; (no addr) LD QIZ, HL
-	CALR SignalProgressUpdate
-	; (no addr) LD XWA, 00600026h
-	; (no addr) LD XBC, 01c00002h
-	; (no addr) LD XDE, 0
-	; (no addr) CALL ApPostEvent
-	; (no addr) LD XWA, 0ffffffffh
-	; (no addr) LD XBC, 01c0000ah
-	; (no addr) LD XDE, 0
-	; (no addr) CALL ApPostEvent
-	; (no addr) CP QIZ, 0
-	; (no addr) JR GE, DiskSel_RepeatPlayNext
-	; (no addr) LD (84FEh), 000h
-	; (no addr) LD WA, 0060h
-	; (no addr) CALL UI_PostModeChangeEvent
-	; (no addr) LD WA, QIZ
-	; (no addr) LD BC, 1
-	CALR LABEL_F8B48E
-	; (no addr) LD (7F42h), L
-	; (no addr) LD WA, 00eeh
-	; (no addr) JRL T, DiskSel_ShowErrorAndExit
+	ldto_de_werp 0xFA
+	sll de, 5
+	ldada xbc, 34060
+	extz xde
+	add xde, xbc
+	ldda32 xwa, 33754
+	ld xbc, 0x1C0000F
+	call 0xFA9D58
+	inc1_werp 0xFA
+	erpw4 0xFA, 0xCF, 0x14, 0x00
+	jr lt, DiskSel_RepeatSendInfo
+	lds32 xwa, 0
+	ld xbc, 0x1C0000B
+	lds32 xde, 0
+	calr FmmDiskMedley1Func
+	lds32 xwa, 0
+	ld xbc, 0x1C0000B
+	lds32 xde, 0
+	calr FmmDiskMedley2Func
+	lds32 xwa, 0
+	ld xbc, 0x1C0000B
+	ld xde, 0x770008
+	calr DiskNameFunc
+	lds32 xwa, 0
+	ld xbc, 0x1C0000B
+	ld xde, 0x770009
+	calr DiskInfoFunc
+	ld xwa, 0x600026
+	ld xbc, 0x1C00001
+	lds32 xde, 5
+	call 0xFA9D58
+	lds wa, 0
+	calr InitializeOperationState
+	call LABEL_F87A08
+	ldfr_hl_werp 0xFA
+	calr SignalProgressUpdate
+	ld xwa, 0x600026
+	ld xbc, 0x1C00002
+	lds32 xde, 0
+	call 0xFA9D58
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C0000A
+	lds32 xde, 0
+	call 0xFA9D58
+	cpi0_werp 0xFA
+	jr ge, DiskSel_RepeatPlayNext
+	stdi8 34046, 0
+	ldw wa, 0x60
+	call 0xF99490
+	ldto_wa_werp 0xFA
+	lds bc, 1
+	calr LABEL_F8B48E
+	stda8 32578, l
+	ldw wa, 0xEE
+	jrl DiskSel_ShowErrorAndExit
 
 DiskSel_RepeatPlayNext:
-	; (no addr) INC 1, (893Ch)
-	; (no addr) LD XWA, (XSP + 00eh)
-	; (no addr) LD XBC, 01c00017h
-	; (no addr) LD XDE, 0000000dh
-	CALR DiskMed_PlayNextHelper
-	; (no addr) CP L, 1
-	; (no addr) JR NZ, DiskSel_RepeatNext
-	; (no addr) LD XWA, 0ffffffffh
-	; (no addr) LD XBC, 01e0009ah
-	; (no addr) LD XDE, 0
-	; (no addr) CALL ApPostEvent
-	; (no addr) LD WA, 0078h
+	incdi8 1, 35132
+	ld xwa, (xsp + 14)
+	ld xbc, 0x1C00017
+	ld xde, 0xD
+	calr DiskMed_PlayNextHelper
+	cps l, 1
+	jr nz, DiskSel_RepeatNext
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1E0009A
+	lds32 xde, 0
+	call 0xFA9D58
+	ldw wa, 0x78
 
 DiskSel_CallPauseMode:
-	; (no addr) CALL UI_PostModeChangeEvent
-	; (no addr) JRL T, DiskSel_Exit
+	call 0xF99490
+	jrl DiskSel_Exit
 
 DiskSel_RepeatNext:
-	; (no addr) INC 1, IZ
-	; (no addr) CP IZ, 0014h
-	; (no addr) JRL LT, DiskSel_RepeatFindLoop
-	; (no addr) JRL T, DiskSel_Exit
+	inc 1, iz
+	cp iz, 0x14
+	jrl lt, DiskSel_RepeatFindLoop
+	jrl DiskSel_Exit
 
 DiskSel_HandleError:
-	; (no addr) CALL LABEL_F2076D
-	; (no addr) LD (84FEh), 000h
-	; (no addr) CP L, 0
-	; (no addr) JR NZ, DiskSel_ShowError
-	; (no addr) LD XWA, 0ffffffffh
-	; (no addr) LD XBC, 01e0009eh
-	; (no addr) LD XDE, 0
-	; (no addr) CALL ApPostEvent
-	; (no addr) LD XWA, 0ffffffffh
-	; (no addr) LD XBC, 01c0000ah
-	; (no addr) LD XDE, 0
-	; (no addr) CALL ApPostEvent
-	; (no addr) JRL T, DiskSel_Exit
+	call LABEL_F2076D
+	stdi8 34046, 0
+	cps l, 0
+	jr nz, DiskSel_ShowError
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1E0009E
+	lds32 xde, 0
+	call 0xFA9D58
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C0000A
+	lds32 xde, 0
+	call 0xFA9D58
+	jrl DiskSel_Exit
 
 DiskSel_ShowError:
-	; (no addr) LD XWA, 0ffffffffh
-	; (no addr) LD XBC, 01e0009eh
-	; (no addr) LD XDE, 0
-	; (no addr) CALL ApPostEvent
-	; (no addr) LD (7F42h), 00eh
-	; (no addr) LD WA, 00eeh
-	; (no addr) JRL T, DiskSel_ShowErrorAndExit
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1E0009E
+	lds32 xde, 0
+	call 0xFA9D58
+	stdi8 32578, 14
+	ldw wa, 0xEE
+	jrl DiskSel_ShowErrorAndExit
 
 DiskSel_HandleStopEvent:
-	; (no addr) CP (8D36h), 078h
-	; (no addr) JR Z, DiskSel_PostStopEvent
-	; (no addr) CALL LABEL_F20B70
-	; (no addr) LD (84FEh), 000h
+	cpdi8 36150, 120
+	jr z, DiskSel_PostStopEvent
+	call LABEL_F20B70
+	stdi8 34046, 0
 
 DiskSel_PostStopEvent:
-	CALR CancelOperationCleanup
-	; (no addr) LD XWA, 0ffffffffh
-	; (no addr) LD XBC, 01e0009eh
-	; (no addr) LD XDE, 0
-	; (no addr) JRL T, DiskSel_PostEvent
+	calr CancelOperationCleanup
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1E0009E
+	lds32 xde, 0
+	jrl DiskSel_PostEvent
 
 DiskSel_StoreWindowPtr:
-	; (no addr) LD XWA, (XSP + 006h)
-	; (no addr) LD (83DAh), XWA
-	; (no addr) CALL GetCurrentFileIndex
-	; (no addr) LD (83DEh), HL
-	; (no addr) CP HL, 0
-	; (no addr) JR LT, DiskSel_DefaultIndex
-	; (no addr) EXTS XHL
-	; (no addr) LD XWA, (83DAh)
-	; (no addr) LD XBC, 01e50002h
-	; (no addr) LD XDE, XHL
-	; (no addr) JRL T, DiskSel_PostEvent
+	ld xwa, (xsp + 6)
+	stda32 33754, xwa
+	call 0xF895EF
+	stda16 33758, xhl
+	cps hl, 0
+	jr lt, DiskSel_DefaultIndex
+	exts xhl
+	ldda32 xwa, 33754
+	ld xbc, 0x1E50002
+	ld xde, xhl
+	jrl DiskSel_PostEvent
 
 DiskSel_DefaultIndex:
-	; (no addr) LDW (83DEh), 0000h
-	; (no addr) LD XWA, (83DAh)
-	; (no addr) LD XBC, 01e50002h
-	; (no addr) LD XDE, 0
-	; (no addr) JRL T, DiskSel_PostEvent
+	stdi16 33758, 0
+	ldda32 xwa, 33754
+	ld xbc, 0x1E50002
+	lds32 xde, 0
+	jrl DiskSel_PostEvent
 
 DiskSel_InitDisplay:
-	; (no addr) LD IZ, 0
+	lds iz, 0
 
 DiskSel_DisplayLoop:
-	; (no addr) LD WA, IZ
-	; (no addr) LD HL, WA
-	; (no addr) SLL 5, HL
-	; (no addr) LDA XDE, 850Ch
-	; (no addr) EXTZ XHL
-	; (no addr) ADD XHL, XDE
-	; (no addr) LD C, IZL
-	; (no addr) LD (XHL), C
-	; (no addr) LD BC, 2
-	; (no addr) CALL LABEL_F89408
-	; (no addr) LD WA, IZ
-	; (no addr) CP L, 0
-	; (no addr) JR NZ, DiskSel_GetFileName
-	; (no addr) LD BC, 0008h
-	; (no addr) CALL LABEL_F89408
-	; (no addr) CP L, 0
-	; (no addr) JR Z, DiskSel_EmptyFileName
-	; (no addr) LD WA, IZ
+	ld wa, iz
+	ld hl, wa
+	sll hl, 5
+	ldada xde, 34060
+	extz xhl
+	add xhl, xde
+	ldto_c_berp 0xF8
+	ld (xhl), c
+	lds bc, 2
+	call LABEL_F89408
+	ld wa, iz
+	cps l, 0
+	jr nz, DiskSel_GetFileName
+	ldw bc, 0x8
+	call LABEL_F89408
+	cps l, 0
+	jr z, DiskSel_EmptyFileName
+	ld wa, iz
 
 DiskSel_GetFileName:
-	; (no addr) CALL LABEL_F89623
-	; (no addr) LD XBC, XHL
-	; (no addr) JR T, DiskSel_FormatEntry
+	call LABEL_F89623
+	ld xbc, xhl
+	jr DiskSel_FormatEntry
 
 DiskSel_EmptyFileName:
-	; (no addr) LDA XBC, 0EA0A54h
+	ldada_24 xbc, 15338068
 
 DiskSel_FormatEntry:
-	; (no addr) LD DE, IZ
-	; (no addr) LD WA, DE
-	; (no addr) SLL 5, WA
-	; (no addr) LD HL, 1
-	; (no addr) ADD HL, WA
-	; (no addr) LDA XIX, 850Ch
-	; (no addr) EXTZ XHL
-	; (no addr) ADD XHL, XIX
-	; (no addr) INC 1, DE
-	; (no addr) PUSHW 0006h
-	; (no addr) PUSHW 0000h
-	; (no addr) LD XWA, XHL
-	; (no addr) CALL LABEL_F891DD
-	; (no addr) LD DE, IZ
-	; (no addr) SLL 5, DE
-	; (no addr) LDA XBC, 850Ch
-	; (no addr) EXTZ XDE
-	; (no addr) ADD XDE, XBC
-	; (no addr) LD XWA, (83DAh)
-	; (no addr) LD XBC, 01c0000fh
-	; (no addr) CALL ApPostEvent
-	; (no addr) INC 1, IZ
-	; (no addr) CP IZ, 0014h
-	; (no addr) JR LT, DiskSel_DisplayLoop
-	; (no addr) JRL T, DiskSel_Exit
+	ld de, iz
+	ld wa, de
+	sll wa, 5
+	lds hl, 1
+	add hl, wa
+	ldada xix, 34060
+	extz xhl
+	add xhl, xix
+	inc 1, de
+	pushw 0x6
+	pushw 0x0
+	ld xwa, xhl
+	call LABEL_F891DD
+	ld de, iz
+	sll de, 5
+	ldada xbc, 34060
+	extz xde
+	add xde, xbc
+	ldda32 xwa, 33754
+	ld xbc, 0x1C0000F
+	call 0xFA9D58
+	inc 1, iz
+	cp iz, 0x14
+	jr lt, DiskSel_DisplayLoop
+	jrl DiskSel_Exit
 
 DiskSel_HandleNavigation:
-	; (no addr) LD DE, (83DEh)
-	; (no addr) LD (XSP + 004h), DE
-	; (no addr) LD XBC, (XSP + 00ah)
-	; (no addr) LD XWA, (XSP + 006h)
-	; (no addr) OR XWA, XWA
-	; (no addr) JR NZ, DiskSel_CheckPage
-	; (no addr) CP (84FEh), 000h
-	; (no addr) JR NZ, DiskSel_CheckPage
-	; (no addr) LD XWA, XBC
-	; (no addr) CP XBC, 01c00018h
-	; (no addr) JR NZ, DiskSel_CheckPrevKey
-	; (no addr) CP DE, 0013h
-	; (no addr) JRL GE, DiskSel_GetCurrentIndex
-	; (no addr) INC 1, DE
-	; (no addr) JR T, DiskSel_SaveIndex
+	ldda16 xde, 33758
+	ld (xsp + 4), de
+	ld xbc, (xsp + 10)
+	ld xwa, (xsp + 6)
+	or xwa, xwa
+	jr nz, DiskSel_CheckPage
+	cpdi8 34046, 0
+	jr nz, DiskSel_CheckPage
+	ld xwa, xbc
+	cp xbc, 0x1C00018
+	jr nz, DiskSel_CheckPrevKey
+	cp de, 0x13
+	jrl ge, DiskSel_GetCurrentIndex
+	inc 1, de
+	jr DiskSel_SaveIndex
 
 DiskSel_CheckPrevKey:
-	; (no addr) CP XWA, 01c00017h
-	; (no addr) JRL NZ, DiskSel_GetCurrentIndex
-	; (no addr) CP DE, 0
-	; (no addr) JRL LE, DiskSel_GetCurrentIndex
-	; (no addr) DEC 1, DE
-	; (no addr) JR T, DiskSel_SaveIndex
+	cp xwa, 0x1C00017
+	jrl nz, DiskSel_GetCurrentIndex
+	cps de, 0
+	jrl le, DiskSel_GetCurrentIndex
+	dec 1, de
+	jr DiskSel_SaveIndex
 
 DiskSel_CheckPage:
-	; (no addr) LD XWA, (XSP + 006h)
-	; (no addr) CP XWA, 00000001h
-	; (no addr) JR NZ, DiskSel_CheckPageDown
-	; (no addr) CP (84FEh), 000h
-	; (no addr) JR NZ, DiskSel_CheckPageDown
-	; (no addr) CP DE, 000ah
-	; (no addr) JRL LT, DiskSel_GetCurrentIndex
-	; (no addr) SUB DE, 000ah
-	; (no addr) JR T, DiskSel_SaveIndex
+	ld xwa, (xsp + 6)
+	cp xwa, 0x1
+	jr nz, DiskSel_CheckPageDown
+	cpdi8 34046, 0
+	jr nz, DiskSel_CheckPageDown
+	cp de, 0xA
+	jrl lt, DiskSel_GetCurrentIndex
+	sub de, 0xA
+	jr DiskSel_SaveIndex
 
 DiskSel_CheckPageDown:
-	; (no addr) LD XWA, (XSP + 006h)
-	; (no addr) CP XWA, 00000002h
-	; (no addr) JR NZ, DiskSel_HandleToggle
-	; (no addr) CP (84FEh), 000h
-	; (no addr) JR NZ, DiskSel_HandleToggle
-	; (no addr) LD WA, DE
-	; (no addr) ADD WA, 000ah
-	; (no addr) CP WA, 0013h
-	; (no addr) JRL GT, DiskSel_GetCurrentIndex
-	; (no addr) ADD DE, 000ah
+	ld xwa, (xsp + 6)
+	cp xwa, 0x2
+	jr nz, DiskSel_HandleToggle
+	cpdi8 34046, 0
+	jr nz, DiskSel_HandleToggle
+	ld wa, de
+	add wa, 0xA
+	cp wa, 0x13
+	jrl gt, DiskSel_GetCurrentIndex
+	add de, 0xA
 
 DiskSel_SaveIndex:
-	; (no addr) LD (83DEh), DE
-	; (no addr) JRL T, DiskSel_UpdateDisplay
+	stda16 33758, xde
+	jrl DiskSel_UpdateDisplay
 
 DiskSel_HandleToggle:
-	; (no addr) LDA XHL, 8926h
-	; (no addr) LD XWA, (XSP + 006h)
-	; (no addr) CP XWA, 0000000ah
-	; (no addr) JR NZ, DiskSel_HandleSelect
-	; (no addr) CP (84FEh), 000h
-	; (no addr) JR NZ, DiskSel_HandleSelect
-	; (no addr) LD IZ, 0
+	ldada xhl, 35110
+	ld xwa, (xsp + 6)
+	cp xwa, 0xA
+	jr nz, DiskSel_HandleSelect
+	cpdi8 34046, 0
+	jr nz, DiskSel_HandleSelect
+	lds iz, 0
 
 DiskSel_FindMarkedLoop:
-	; (no addr) CP (XHL + IZ), 0feh
-	; (no addr) JR Z, DiskSel_ToggleStart
-	; (no addr) INC 1, IZ
-	; (no addr) CP IZ, 0014h
-	; (no addr) JR LT, DiskSel_FindMarkedLoop
+	srib5 0x07, 0xEC, 0xF8, 0x3F, 0xFE
+	jr z, DiskSel_ToggleStart
+	inc 1, iz
+	cp iz, 0x14
+	jr lt, DiskSel_FindMarkedLoop
 
 DiskSel_ToggleStart:
-	; (no addr) LDA XDE, XHL + 014h
-	; (no addr) CP IZ, 0014h
-	; (no addr) JR GE, DiskSel_UnmarkLoop
+	lda xde, (xhl + 20)
+	cp iz, 0x14
+	jr ge, DiskSel_UnmarkLoop
 
 DiskSel_AssignLoop:
-	; (no addr) LD A, (XHL)
-	; (no addr) CP A, 0feh
-	; (no addr) JR NZ, DiskSel_NextAssign
-	; (no addr) LD (XHL), (893Ah)
-	; (no addr) INC 1, (893Ah)
+	ld a, (xhl)
+	cp a, 0xFE
+	jr nz, DiskSel_NextAssign
+	ldmi16 (xhl), 0x893A
+	incdi8 1, 35130
 
 DiskSel_NextAssign:
-	; (no addr) INC 1, XHL
-	; (no addr) CP XHL, XDE
-	; (no addr) JR C, DiskSel_AssignLoop
-	; (no addr) JR T, DiskSel_RefreshDisplay
+	inc 1, xhl
+	cp xhl, xde
+	jr c, DiskSel_AssignLoop
+	jr DiskSel_RefreshDisplay
 
 DiskSel_UnmarkLoop:
-	; (no addr) LD A, (XHL)
-	; (no addr) CP A, 0fdh
-	; (no addr) JR UGT, DiskSel_NextUnmark
-	; (no addr) LD (XHL), 0feh
-	; (no addr) DEC 1, (893Ah)
+	ld a, (xhl)
+	cp a, 0xFD
+	jr ugt, DiskSel_NextUnmark
+	ldmi8 (xhl), 0xFE
+	decdi8 1, 35130
 
 DiskSel_NextUnmark:
-	; (no addr) INC 1, XHL
-	; (no addr) CP XHL, XDE
-	; (no addr) JR C, DiskSel_UnmarkLoop
+	inc 1, xhl
+	cp xhl, xde
+	jr c, DiskSel_UnmarkLoop
 
 DiskSel_RefreshDisplay:
-	; (no addr) LD XWA, 0
-	; (no addr) LD XBC, 01c0000bh
-	; (no addr) LD XDE, 0
-	CALR FmmDiskMedley1Func
-	; (no addr) LD XWA, 0
-	; (no addr) LD XBC, 01c0000bh
-	; (no addr) LD XDE, 0
-	; (no addr) JR T, DiskSel_RefreshBoth
+	lds32 xwa, 0
+	ld xbc, 0x1C0000B
+	lds32 xde, 0
+	calr FmmDiskMedley1Func
+	lds32 xwa, 0
+	ld xbc, 0x1C0000B
+	lds32 xde, 0
+	jr DiskSel_RefreshBoth
 
 DiskSel_HandleSelect:
-	; (no addr) LD XWA, (XSP + 006h)
-	; (no addr) CP XWA, 0000000bh
-	; (no addr) JR NZ, DiskSel_HandleRepeat
-	; (no addr) CP (84FEh), 000h
-	; (no addr) JR NZ, DiskSel_HandleRepeat
-	; (no addr) LD XIX, XHL
-	; (no addr) LDA XBC, XHL + DE
-	; (no addr) LD A, (XBC)
-	; (no addr) CP A, 0feh
-	; (no addr) JR NZ, DiskSel_RemoveSelect
-	; (no addr) LD (XBC), (893Ah)
-	; (no addr) INC 1, (893Ah)
-	; (no addr) JR T, DiskSel_RefreshAfterSelect
+	ld xwa, (xsp + 6)
+	cp xwa, 0xB
+	jr nz, DiskSel_HandleRepeat
+	cpdi8 34046, 0
+	jr nz, DiskSel_HandleRepeat
+	ld xix, xhl
+	st_a_dri3 0x07, 0xEC, 0xE8
+	ld a, (xbc)
+	cp a, 0xFE
+	jr nz, DiskSel_RemoveSelect
+	ldmi16 (xbc), 0x893A
+	incdi8 1, 35130
+	jr DiskSel_RefreshAfterSelect
 
 DiskSel_RemoveSelect:
-	; (no addr) CP A, 0fdh
-	; (no addr) JR UGT, DiskSel_RefreshAfterSelect
-	; (no addr) CP DE, 0014h
-	; (no addr) JR GE, DiskSel_ReorderSlots
-	; (no addr) LD (XBC), 0feh
-	; (no addr) DEC 1, (893Ah)
+	cp a, 0xFD
+	jr ugt, DiskSel_RefreshAfterSelect
+	cp de, 0x14
+	jr ge, DiskSel_ReorderSlots
+	ldmi8 (xbc), 0xFE
+	decdi8 1, 35130
 
 DiskSel_ReorderSlots:
-	; (no addr) LD XDE, XIX
-	; (no addr) LDA XHL, XIX + 014h
+	ld xde, xix
+	lda xhl, (xix + 20)
 
 DiskSel_ReorderLoop:
-	; (no addr) LD C, (XDE)
-	; (no addr) CP C, 0fdh
-	; (no addr) JR UGT, DiskSel_NextReorder
-	; (no addr) CP C, A
-	; (no addr) JR ULE, DiskSel_NextReorder
-	; (no addr) DEC 1, C
-	; (no addr) LD (XDE), C
+	ld c, (xde)
+	cp c, 0xFD
+	jr ugt, DiskSel_NextReorder
+	cp c, a
+	jr ule, DiskSel_NextReorder
+	dec 1, c
+	ld (xde), c
 
 DiskSel_NextReorder:
-	; (no addr) INC 1, XDE
-	; (no addr) CP XDE, XHL
-	; (no addr) JR C, DiskSel_ReorderLoop
+	inc 1, xde
+	cp xde, xhl
+	jr c, DiskSel_ReorderLoop
 
 DiskSel_RefreshAfterSelect:
-	; (no addr) LD XWA, 0
-	; (no addr) LD XBC, 01c0000bh
-	; (no addr) LD XDE, 0
-	CALR FmmDiskMedley1Func
-	; (no addr) LD XWA, 0
-	; (no addr) LD XBC, 01c0000bh
-	; (no addr) LD XDE, 0
+	lds32 xwa, 0
+	ld xbc, 0x1C0000B
+	lds32 xde, 0
+	calr FmmDiskMedley1Func
+	lds32 xwa, 0
+	ld xbc, 0x1C0000B
+	lds32 xde, 0
 
 DiskSel_RefreshBoth:
-	CALR FmmDiskMedley2Func
-	; (no addr) JRL T, DiskSel_GetCurrentIndex
+	calr FmmDiskMedley2Func
+	jrl DiskSel_GetCurrentIndex
 
 DiskSel_HandleRepeat:
-	; (no addr) LD XWA, (XSP + 006h)
-	; (no addr) CP XWA, 0000000ch
-	; (no addr) JR NZ, DiskSel_HandlePlayStart
-	; (no addr) CP XBC, 01c00017h
-	; (no addr) JR NZ, DiskSel_SetRepeatOff
-	; (no addr) LD (893Eh), 001h
-	; (no addr) JRL T, DiskSel_GetCurrentIndex
+	ld xwa, (xsp + 6)
+	cp xwa, 0xC
+	jr nz, DiskSel_HandlePlayStart
+	cp xbc, 0x1C00017
+	jr nz, DiskSel_SetRepeatOff
+	stdi8 35134, 1
+	jrl DiskSel_GetCurrentIndex
 
 DiskSel_SetRepeatOff:
-	; (no addr) LD (893Eh), 000h
-	; (no addr) JRL T, DiskSel_GetCurrentIndex
+	stdi8 35134, 0
+	jrl DiskSel_GetCurrentIndex
 
 DiskSel_HandlePlayStart:
-	; (no addr) LD XWA, (XSP + 006h)
-	; (no addr) CP XWA, 0000000dh
-	; (no addr) JRL NZ, DiskSel_HandleAllCheck
-	; (no addr) CP (84FEh), 000h
-	; (no addr) JRL NZ, DiskSel_HandleAllCheck
-	; (no addr) LD (893Ch), 000h
-	; (no addr) LD IZ, 0
+	ld xwa, (xsp + 6)
+	cp xwa, 0xD
+	jrl nz, DiskSel_HandleAllCheck
+	cpdi8 34046, 0
+	jrl nz, DiskSel_HandleAllCheck
+	stdi8 35132, 0
+	lds iz, 0
 
 DiskSel_PlayClearLoop:
-	; (no addr) LD A, IZL
-	; (no addr) EXTZ WA
-	; (no addr) CALL LABEL_F89321
-	; (no addr) INC 1, IZ
-	; (no addr) CP IZ, 0008h
-	; (no addr) JR LT, DiskSel_PlayClearLoop
-	; (no addr) LD IZ, 0
+	ldto_a_berp 0xF8
+	extz wa
+	call LABEL_F89321
+	inc 1, iz
+	cp iz, 0x8
+	jr lt, DiskSel_PlayClearLoop
+	lds iz, 0
 
 DiskSel_PlayFindLoop:
-	; (no addr) LDA XWA, 8926h
-	; (no addr) LD A, (XWA + IZ)
-	; (no addr) CP A, (893Ch)
-	; (no addr) JRL NZ, DiskSel_PlayNextLoop
-	; (no addr) LD (83DEh), IZ
-	; (no addr) LD WA, IZ
-	; (no addr) CALL NotifyUIOfSelectionChange
-	; (no addr) LD DE, (83DEh)
-	; (no addr) EXTS XDE
-	; (no addr) LD XWA, (83DAh)
-	; (no addr) LD XBC, 01e50002h
-	; (no addr) CALL ApPostEvent
-	; (no addr) LD XWA, 00600026h
-	; (no addr) LD XBC, 01c00001h
-	; (no addr) LD XDE, 5
-	; (no addr) CALL ApPostEvent
-	; (no addr) CALL LABEL_F87A08
-	; (no addr) LD QIZ, HL
-	CALR SignalProgressUpdate
-	; (no addr) LD XWA, 00600026h
-	; (no addr) LD XBC, 01c00002h
-	; (no addr) LD XDE, 0
-	; (no addr) CALL ApPostEvent
-	; (no addr) LD XWA, 0ffffffffh
-	; (no addr) LD XBC, 01c0000ah
-	; (no addr) LD XDE, 0
-	; (no addr) CALL ApPostEvent
-	; (no addr) CP QIZ, 0
-	; (no addr) JR GE, DiskSel_PlayNextSong
-	; (no addr) LD (84FEh), 000h
-	; (no addr) LD WA, 0060h
-	; (no addr) CALL UI_PostModeChangeEvent
-	; (no addr) LD WA, QIZ
-	; (no addr) LD BC, 1
-	CALR LABEL_F8B48E
-	; (no addr) LD (7F42h), L
-	; (no addr) LD WA, 00eeh
+	ldada xwa, 35110
+	ld_a_srib3 0x07, 0xE0, 0xF8
+	cpda8 a, 35132
+	jrl nz, DiskSel_PlayNextLoop
+	stda16 33758, xiz
+	ld wa, iz
+	call 0xF89605
+	ldda16 xde, 33758
+	exts xde
+	ldda32 xwa, 33754
+	ld xbc, 0x1E50002
+	call 0xFA9D58
+	ld xwa, 0x600026
+	ld xbc, 0x1C00001
+	lds32 xde, 5
+	call 0xFA9D58
+	call LABEL_F87A08
+	ldfr_hl_werp 0xFA
+	calr SignalProgressUpdate
+	ld xwa, 0x600026
+	ld xbc, 0x1C00002
+	lds32 xde, 0
+	call 0xFA9D58
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C0000A
+	lds32 xde, 0
+	call 0xFA9D58
+	cpi0_werp 0xFA
+	jr ge, DiskSel_PlayNextSong
+	stdi8 34046, 0
+	ldw wa, 0x60
+	call 0xF99490
+	ldto_wa_werp 0xFA
+	lds bc, 1
+	calr LABEL_F8B48E
+	stda8 32578, l
+	ldw wa, 0xEE
 
 DiskSel_ShowErrorAndExit:
-	; (no addr) CALL LABEL_F994BD
-	; (no addr) JRL T, DiskSel_Exit
+	call LABEL_F994BD
+	jrl DiskSel_Exit
 
 DiskSel_PlayNextSong:
-	; (no addr) LDW (XSP + 004h), (83DEh)
-	; (no addr) INC 1, (893Ch)
-	; (no addr) LD XWA, (XSP + 00eh)
-	; (no addr) LD XBC, (XSP + 00ah)
-	; (no addr) LD XDE, (XSP + 006h)
-	CALR DiskMed_PlayNextHelper
-	; (no addr) CP L, 1
-	; (no addr) JR NZ, DiskSel_PlayNextLoop
-	; (no addr) LD XWA, 0ffffffffh
-	; (no addr) LD XBC, 01e0009ah
-	; (no addr) LD XDE, 0
-	; (no addr) CALL ApPostEvent
-	; (no addr) LD WA, 0078h
-	; (no addr) CALL UI_PostModeChangeEvent
-	; (no addr) JR T, DiskSel_GetCurrentIndex
+	ldmw2 (xsp + 4), 0x83DE
+	incdi8 1, 35132
+	ld xwa, (xsp + 14)
+	ld xbc, (xsp + 10)
+	ld xde, (xsp + 6)
+	calr DiskMed_PlayNextHelper
+	cps l, 1
+	jr nz, DiskSel_PlayNextLoop
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1E0009A
+	lds32 xde, 0
+	call 0xFA9D58
+	ldw wa, 0x78
+	call 0xF99490
+	jr DiskSel_GetCurrentIndex
 
 DiskSel_PlayNextLoop:
-	; (no addr) INC 1, IZ
-	; (no addr) CP IZ, 0014h
-	; (no addr) JRL LT, DiskSel_PlayFindLoop
-	; (no addr) JR T, DiskSel_GetCurrentIndex
+	inc 1, iz
+	cp iz, 0x14
+	jrl lt, DiskSel_PlayFindLoop
+	jr DiskSel_GetCurrentIndex
 
 DiskSel_HandleAllCheck:
-	; (no addr) LD XWA, (XSP + 006h)
-	; (no addr) CP XWA, 0000000eh
-	; (no addr) JR NZ, DiskSel_GetCurrentIndex
-	; (no addr) CP XBC, 01c00017h
-	; (no addr) JR NZ, DiskSel_SetAllOff
-	; (no addr) LD (8940h), 001h
-	; (no addr) JR T, DiskSel_GetCurrentIndex
+	ld xwa, (xsp + 6)
+	cp xwa, 0xE
+	jr nz, DiskSel_GetCurrentIndex
+	cp xbc, 0x1C00017
+	jr nz, DiskSel_SetAllOff
+	stdi8 35136, 1
+	jr DiskSel_GetCurrentIndex
 
 DiskSel_SetAllOff:
-	; (no addr) LD (8940h), 000h
+	stdi8 35136, 0
 
 DiskSel_GetCurrentIndex:
-	; (no addr) LD DE, (83DEh)
+	ldda16 xde, 33758
 
 DiskSel_UpdateDisplay:
-	; (no addr) CP (XSP + 004h), DE
-	; (no addr) JR Z, DiskSel_Exit
-	; (no addr) LD WA, DE
-	; (no addr) CALL NotifyUIOfSelectionChange
-	; (no addr) LD DE, (83DEh)
-	; (no addr) EXTS XDE
-	; (no addr) LD XWA, (83DAh)
-	; (no addr) LD XBC, 01e50002h
-	; (no addr) CALL ApPostEvent
-	; (no addr) LD DE, (XSP + 004h)
-	; (no addr) SLL 5, DE
-	; (no addr) LDA XBC, 850Ch
-	; (no addr) EXTZ XDE
-	; (no addr) ADD XDE, XBC
-	; (no addr) LD XWA, (83DAh)
-	; (no addr) LD XBC, 01c0000fh
-	; (no addr) CALL ApPostEvent
-	; (no addr) LD DE, (83DEh)
-	; (no addr) SLL 5, DE
-	; (no addr) LDA XBC, 850Ch
-	; (no addr) EXTZ XDE
-	; (no addr) ADD XDE, XBC
-	; (no addr) LD XWA, (83DAh)
-	; (no addr) LD XBC, 01c0000fh
+	cp (xsp + 4), de
+	jr z, DiskSel_Exit
+	ld wa, de
+	call 0xF89605
+	ldda16 xde, 33758
+	exts xde
+	ldda32 xwa, 33754
+	ld xbc, 0x1E50002
+	call 0xFA9D58
+	ld de, (xsp + 4)
+	sll de, 5
+	ldada xbc, 34060
+	extz xde
+	add xde, xbc
+	ldda32 xwa, 33754
+	ld xbc, 0x1C0000F
+	call 0xFA9D58
+	ldda16 xde, 33758
+	sll de, 5
+	ldada xbc, 34060
+	extz xde
+	add xde, xbc
+	ldda32 xwa, 33754
+	ld xbc, 0x1C0000F
 
 DiskSel_PostEvent:
-	; (no addr) CALL ApPostEvent
+	call 0xFA9D58
 
 DiskSel_Exit:
-	; (no addr) LD XHL, 0
-	; (no addr) POP XIZ
-	; (no addr) LDA XSP, XSP + 00eh
-	; (no addr) RET
+	lds32 xhl, 0
+	pop xiz
+	lda xsp, (xsp + 14)
+	ret
 
+LABEL_F92C0E:
 GetPlayState1:
-	; (no addr) LD L, (8942h)
-	; (no addr) RET
+	ldda8 l, 35138
+	ret
 
+LABEL_F92C13:
 GetPlayState2:
-	; (no addr) LD L, (8944h)
-	; (no addr) RET
+	ldda8 l, 35140
+	ret
 
 SmfMedley_RawData:
-	.byte 0xC9, 0xD8, 0xD8, 0x7E, 0xF1, 0x44, 0x89, 0x41
-	.byte 0xE
+	.byte 0xc9, 0xd8, 0xd8, 0x7e, 0xf1, 0x44, 0x89, 0x41
+	.byte 0x0e
 
+LABEL_F92C21:
 NavigateSongList:
-	; (no addr) DEC 2, XSP
-	; (no addr) PUSH IZ
-	; (no addr) LD (XSP + 002h), WA
-	; (no addr) CPW (XSP + 002h), 0001h
-	; (no addr) JR Z, NavSong_CheckBounds
-	; (no addr) CPW (XSP + 002h), 0ffffh
-	; (no addr) JR NZ, NavSong_Exit
+	dec 2, xsp
+	pushw iz
+	ld (xsp + 2), wa
+	cpmi16 (xsp + 2), 0x1
+	jr z, NavSong_CheckBounds
+	cpmi16 (xsp + 2), 0xFFFF
+	jr nz, NavSong_Exit
 
 NavSong_CheckBounds:
-	; (no addr) CPW (8504h), 0000h
-	; (no addr) JR LE, NavSong_Exit
-	; (no addr) CALL LABEL_F89AC7
-	; (no addr) CP HL, 0
-	; (no addr) JR LT, NavSong_Exit
-	; (no addr) LD IZ, HL
-	; (no addr) ADD IZ, (XSP + 002h)
-	; (no addr) JR GE, NavSong_WrapToEnd
-	; (no addr) LD IZ, (8504h)
-	; (no addr) DEC 1, IZ
-	; (no addr) JR T, NavSong_CheckEnd
+	cpdi16 34052, 0
+	jr le, NavSong_Exit
+	call LABEL_F89AC7
+	cps hl, 0
+	jr lt, NavSong_Exit
+	ld iz, hl
+	add iz, (xsp + 2)
+	jr ge, NavSong_WrapToEnd
+	ldda16 xiz, 34052
+	dec 1, iz
+	jr NavSong_CheckEnd
 
 NavSong_WrapToEnd:
-	; (no addr) CP IZ, (8504h)
-	; (no addr) JR LT, NavSong_CheckEnd
-	; (no addr) LD IZ, 0
+	cpda16 xiz, 34052
+	jr lt, NavSong_CheckEnd
+	lds iz, 0
 
 NavSong_CheckEnd:
-	; (no addr) CP HL, IZ
-	; (no addr) JR Z, NavSong_Exit
-	; (no addr) LD WA, IZ
-	; (no addr) CALL LABEL_F89BA4
-	; (no addr) LD WA, IZ
-	; (no addr) CALL LABEL_F8A07F
+	cp hl, iz
+	jr z, NavSong_Exit
+	ld wa, iz
+	call LABEL_F89BA4
+	ld wa, iz
+	call LABEL_F8A07F
 
 NavSong_Exit:
-	; (no addr) POP IZ
-	; (no addr) INC 2, XSP
-	; (no addr) RET
+	popw iz
+	inc 2, xsp
+	ret
 
+LABEL_F92C70:
 NavigateDocList:
-	; (no addr) PUSH IZ
-	; (no addr) LD IZ, WA
-	; (no addr) CP IZ, 1
-	; (no addr) JR Z, NavDoc_CheckBounds
-	; (no addr) CP IZ, 0ffffh
-	; (no addr) JR NZ, NavDoc_Exit
+	pushw iz
+	ld iz, wa
+	cps iz, 1
+	jr z, NavDoc_CheckBounds
+	cp iz, 0xFFFF
+	jr nz, NavDoc_Exit
 
 NavDoc_CheckBounds:
-	; (no addr) CPW (8508h), 0000h
-	; (no addr) JR LE, NavDoc_Exit
-	; (no addr) CALL LABEL_F8A7CE
-	; (no addr) CP HL, 0
-	; (no addr) JR LT, NavDoc_Exit
-	; (no addr) LD WA, HL
-	; (no addr) ADD WA, IZ
-	; (no addr) JR GE, NavDoc_WrapToEnd
-	; (no addr) LD WA, (8508h)
-	; (no addr) DEC 1, WA
-	; (no addr) JR T, NavDoc_CheckEnd
+	cpdi16 34056, 0
+	jr le, NavDoc_Exit
+	call LABEL_F8A7CE
+	cps hl, 0
+	jr lt, NavDoc_Exit
+	ld wa, hl
+	add wa, iz
+	jr ge, NavDoc_WrapToEnd
+	ldda16 xwa, 34056
+	dec 1, wa
+	jr NavDoc_CheckEnd
 
 NavDoc_WrapToEnd:
-	; (no addr) CP WA, (8508h)
-	; (no addr) JR LT, NavDoc_CheckEnd
-	; (no addr) LD WA, 0
+	cpda16 xwa, 34056
+	jr lt, NavDoc_CheckEnd
+	lds wa, 0
 
 NavDoc_CheckEnd:
-	; (no addr) CP HL, WA
-	; (no addr) CALL NZ, LABEL_F8A956
+	cp hl, wa
+	callcc_24 14, 0xF8A956
 
 NavDoc_Exit:
-	; (no addr) POP IZ
-	; (no addr) RET
+	popw iz
+	ret
 
+LABEL_F92CAC:
 NavigatePdList:
-	; (no addr) PUSH IZ
-	; (no addr) LD IZ, WA
-	; (no addr) CP IZ, 1
-	; (no addr) JR Z, NavPd_CheckBounds
-	; (no addr) CP IZ, 0ffffh
-	; (no addr) JR NZ, NavPd_Exit
+	pushw iz
+	ld iz, wa
+	cps iz, 1
+	jr z, NavPd_CheckBounds
+	cp iz, 0xFFFF
+	jr nz, NavPd_Exit
 
 NavPd_CheckBounds:
-	; (no addr) CPW (8506h), 0000h
-	; (no addr) JR LE, NavPd_Exit
-	; (no addr) CALL LABEL_F8A4C8
-	; (no addr) CP HL, 0
-	; (no addr) JR LT, NavPd_Exit
-	; (no addr) LD WA, HL
-	; (no addr) ADD WA, IZ
-	; (no addr) JR GE, NavPd_WrapToEnd
-	; (no addr) LD WA, (8506h)
-	; (no addr) DEC 1, WA
-	; (no addr) JR T, NavPd_CheckEnd
+	cpdi16 34054, 0
+	jr le, NavPd_Exit
+	call LABEL_F8A4C8
+	cps hl, 0
+	jr lt, NavPd_Exit
+	ld wa, hl
+	add wa, iz
+	jr ge, NavPd_WrapToEnd
+	ldda16 xwa, 34054
+	dec 1, wa
+	jr NavPd_CheckEnd
 
 NavPd_WrapToEnd:
-	; (no addr) CP WA, (8506h)
-	; (no addr) JR LT, NavPd_CheckEnd
-	; (no addr) LD WA, 0
+	cpda16 xwa, 34054
+	jr lt, NavPd_CheckEnd
+	lds wa, 0
 
 NavPd_CheckEnd:
-	; (no addr) CP HL, WA
-	; (no addr) CALL NZ, LABEL_F8A5A5
+	cp hl, wa
+	callcc_24 14, 0xF8A5A5
 
 NavPd_Exit:
-	; (no addr) POP IZ
-	; (no addr) RET
+	popw iz
+	ret
 
 SmfMed_FormatSlotList:
-	; (no addr) DEC 6, XSP
-	; (no addr) PUSH XIZ
-	; (no addr) LD IZ, BC
-	; (no addr) LD (XSP + 006h), XWA
-	; (no addr) LD XWA, 0
-	; (no addr) LD XBC, 01e50003h
-	; (no addr) LD XDE, 0
-	CALR FmmSmfFileNameFunc
-	; (no addr) LD QIZ, HL
-	; (no addr) LD WA, QIZ
-	; (no addr) EXTZ XWA
-	DIVW_WA 0xa
-	; (no addr) LD QIZ, WA
-	MULW_WA 0xa
-	; (no addr) LD QIZ, WA
-	; (no addr) LDW (XSP + 004h:8), 000ah
-	; (no addr) LD WA, QIZ
-	; (no addr) ADD WA, 000ah
-	; (no addr) CP WA, IZ
-	; (no addr) JR C, SmfFmt_CalcVisible
-	; (no addr) LD (XSP + 004h), IZ
-	; (no addr) LD WA, QIZ
-	; (no addr) SUB (XSP + 004h), WA
+	dec 6, xsp
+	push xiz
+	ld iz, bc
+	ld (xsp + 6), xwa
+	lds32 xwa, 0
+	ld xbc, 0x1E50003
+	lds32 xde, 0
+	calr FmmSmfFileNameFunc
+	ldfr_hl_werp 0xFA
+	ldto_wa_werp 0xFA
+	extz xwa
+	div wa, 0xA
+	ldfr_wa_werp 0xFA
+	mul wa, 0xA
+	ldfr_wa_werp 0xFA
+	ldmw (xsp + 4), 0xA
+	ldto_wa_werp 0xFA
+	add wa, 0xA
+	cp wa, iz
+	jr c, SmfFmt_CalcVisible
+	ld (xsp + 4), iz
+	ldto_wa_werp 0xFA
+	sub (xsp + 4), wa
 
 SmfFmt_CalcVisible:
-	; (no addr) LD IZ, 0
-	; (no addr) CPW (XSP + 004h), 0000h
-	; (no addr) JR ULE, SmfFmt_FillEmpty
+	lds iz, 0
+	cpmi16 (xsp + 4), 0x0
+	jr ule, SmfFmt_FillEmpty
 
 SmfFmt_FormatLoop:
-	; (no addr) LD WA, IZ
-	; (no addr) SLL 3, WA
-	; (no addr) LDA XBC, 83E0h
-	; (no addr) EXTZ XWA
-	; (no addr) ADD XWA, XBC
-	; (no addr) LD BC, QIZ
-	; (no addr) ADD BC, IZ
-	; (no addr) LDA XDE, 88A0h
-	; (no addr) EXTZ XBC
-	; (no addr) ADD XBC, XDE
-	; (no addr) LD C, (XBC)
-	; (no addr) EXTZ BC
-	; (no addr) LD DE, IZ
-	CALR FormatMedleyNumber
-	; (no addr) LD DE, IZ
-	; (no addr) SLL 3, DE
-	; (no addr) LDA XWA, 83E0h
-	; (no addr) EXTZ XDE
-	; (no addr) ADD XDE, XWA
-	; (no addr) LD XWA, (XSP + 006h)
-	; (no addr) LD XBC, 01c0000fh
-	; (no addr) CALL ApPostEvent
-	; (no addr) INC 1, IZ
-	; (no addr) CP IZ, (XSP + 004h)
-	; (no addr) JR C, SmfFmt_FormatLoop
+	ld wa, iz
+	sll wa, 3
+	ldada xbc, 33760
+	extz xwa
+	add xwa, xbc
+	ldto_bc_werp 0xFA
+	add bc, iz
+	ldada xde, 34976
+	extz xbc
+	add xbc, xde
+	ld c, (xbc)
+	extz bc
+	ld de, iz
+	calr FormatMedleyNumber
+	ld de, iz
+	sll de, 3
+	ldada xwa, 33760
+	extz xde
+	add xde, xwa
+	ld xwa, (xsp + 6)
+	ld xbc, 0x1C0000F
+	call 0xFA9D58
+	inc 1, iz
+	cp iz, (xsp + 4)
+	jr c, SmfFmt_FormatLoop
 
 SmfFmt_FillEmpty:
-	; (no addr) CP IZ, 000ah
-	; (no addr) JR NC, SmfFmt_Exit
+	cp iz, 0xA
+	jr nc, SmfFmt_Exit
 
 SmfFmt_EmptyLoop:
-	; (no addr) LD WA, IZ
-	; (no addr) SLL 3, WA
-	; (no addr) LDA XBC, 83E0h
-	; (no addr) EXTZ XWA
-	; (no addr) ADD XWA, XBC
-	; (no addr) LD BC, 00ffh
-	; (no addr) LD DE, IZ
-	CALR FormatMedleyNumber
-	; (no addr) LD DE, IZ
-	; (no addr) SLL 3, DE
-	; (no addr) LDA XWA, 83E0h
-	; (no addr) EXTZ XDE
-	; (no addr) ADD XDE, XWA
-	; (no addr) LD XWA, (XSP + 006h)
-	; (no addr) LD XBC, 01c0000fh
-	; (no addr) CALL ApPostEvent
-	; (no addr) INC 1, IZ
-	; (no addr) CP IZ, 000ah
-	; (no addr) JR C, SmfFmt_EmptyLoop
+	ld wa, iz
+	sll wa, 3
+	ldada xbc, 33760
+	extz xwa
+	add xwa, xbc
+	ldw bc, 0xFF
+	ld de, iz
+	calr FormatMedleyNumber
+	ld de, iz
+	sll de, 3
+	ldada xwa, 33760
+	extz xde
+	add xde, xwa
+	ld xwa, (xsp + 6)
+	ld xbc, 0x1C0000F
+	call 0xFA9D58
+	inc 1, iz
+	cp iz, 0xA
+	jr c, SmfFmt_EmptyLoop
 
 SmfFmt_Exit:
-	; (no addr) POP XIZ
-	; (no addr) INC 6, XSP
-	; (no addr) RET
+	pop xiz
+	inc 6, xsp
+	ret
 
-FmmSmfMedleyFunc:
-	; (no addr) DEC 4, XSP
-	; (no addr) PUSH IZ
-	; (no addr) LD XHL, XBC
-	; (no addr) LD (XSP + 002h), XWA
-	; (no addr) CP XHL, 01e5000ah
-	; (no addr) JRL Z, SmfMed_CheckContinue
-	; (no addr) LD XWA, XDE
-	; (no addr) CP XHL, 01e50008h
-	; (no addr) JRL Z, SmfMed_StoreDelayFlag
-	; (no addr) LD BC, (8438h)
-	; (no addr) CP XHL, 01c00018h
-	; (no addr) JRL Z, SmfMed_HandleNavToggle
-	; (no addr) CP XHL, 01c00017h
-	; (no addr) JRL Z, SmfMed_HandleNavToggle
-	; (no addr) CP XHL, 01c0000bh
-	; (no addr) JRL Z, SmfMed_RefreshDisplay
-	; (no addr) CP XHL, 01e50004h
-	; (no addr) JRL Z, SmfMed_StoreWindowPtr
-	; (no addr) CP XHL, 01c00013h
-	; (no addr) JRL NZ, SmfMed_Exit
-	; (no addr) CP XDE, 00000003h
-	; (no addr) JRL Z, SmfMed_HandleStop
-	; (no addr) CP XDE, 00000002h
-	; (no addr) JRL NZ, SmfMed_Exit
-	; (no addr) LD WA, 0
-	CALR InitializeOperationState
-	; (no addr) LD A, (8D37h)
-	; (no addr) LD (843Ah), A
-	; (no addr) CP A, 06fh
-	; (no addr) JR Z, SmfMed_CheckNotPlaying
-	; (no addr) CP A, 072h
-	; (no addr) JR NZ, SmfMed_CheckPlayMode
+
+	dec 4, xsp
+	pushw iz
+	ld xhl, xbc
+	ld (xsp + 2), xwa
+	cp xhl, 0x1E5000A
+	jrl z, SmfMed_CheckContinue
+	ld xwa, xde
+	cp xhl, 0x1E50008
+	jrl z, SmfMed_StoreDelayFlag
+	ldda16 xbc, 33848
+	cp xhl, 0x1C00018
+	jrl z, SmfMed_HandleNavToggle
+	cp xhl, 0x1C00017
+	jrl z, SmfMed_HandleNavToggle
+	cp xhl, 0x1C0000B
+	jrl z, SmfMed_RefreshDisplay
+	cp xhl, 0x1E50004
+	jrl z, SmfMed_StoreWindowPtr
+	cp xhl, 0x1C00013
+	jrl nz, SmfMed_Exit
+	cp xde, 0x3
+	jrl z, SmfMed_HandleStop
+	cp xde, 0x2
+	jrl nz, SmfMed_Exit
+	lds wa, 0
+	calr InitializeOperationState
+	ldda8 a, 36151
+	stda8 33850, a
+	cp a, 0x6F
+	jr z, SmfMed_CheckNotPlaying
+	cp a, 0x72
+	jr nz, SmfMed_CheckPlayMode
 
 SmfMed_CheckNotPlaying:
-	; (no addr) LD (84FEh), 000h
-	; (no addr) CALL LABEL_F2076D
-	; (no addr) CP L, 4
-	; (no addr) JR Z, SmfMed_Error3F
-	; (no addr) CP L, 3
-	; (no addr) JR Z, SmfMed_Error31
-	; (no addr) CP L, 2
-	; (no addr) JRL NZ, SmfMed_Exit
-	; (no addr) LD (7F42h), 001h
-	; (no addr) LD WA, 00eeh
-	; (no addr) JR T, SmfMed_ShowError
+	stdi8 34046, 0
+	call LABEL_F2076D
+	cps l, 4
+	jr z, SmfMed_Error3F
+	cps l, 3
+	jr z, SmfMed_Error31
+	cps l, 2
+	jrl nz, SmfMed_Exit
+	stdi8 32578, 1
+	ldw wa, 0xEE
+	jr SmfMed_ShowError
 
 SmfMed_Error31:
-	; (no addr) LD (7F42h), 031h
-	; (no addr) LD WA, 00eeh
-	; (no addr) JR T, SmfMed_ShowError
+	stdi8 32578, 49
+	ldw wa, 0xEE
+	jr SmfMed_ShowError
 
 SmfMed_Error3F:
-	; (no addr) LD (7F42h), 03fh
-	; (no addr) LD WA, 00eeh
+	stdi8 32578, 63
+	ldw wa, 0xEE
 
 SmfMed_ShowError:
-	; (no addr) CALL LABEL_F994BD
-	; (no addr) JRL T, SmfMed_Exit
+	call LABEL_F994BD
+	jrl SmfMed_Exit
 
 SmfMed_CheckPlayMode:
-	; (no addr) CP A, 073h
-	; (no addr) JR Z, SmfMed_CheckPlaying
-	; (no addr) CP A, 076h
-	; (no addr) JRL NZ, SmfMed_InitFromDisk
+	cp a, 0x73
+	jr z, SmfMed_CheckPlaying
+	cp a, 0x76
+	jrl nz, SmfMed_InitFromDisk
 
 SmfMed_CheckPlaying:
-	; (no addr) CALL LABEL_F2076D
-	; (no addr) CP L, 1
-	; (no addr) JRL C, SmfMed_CheckNotPlayError
-	; (no addr) CALL LABEL_F2076D
-	; (no addr) CP L, 4
-	; (no addr) JR Z, SmfMed_PlayError3F
-	; (no addr) CP L, 3
-	; (no addr) JR Z, SmfMed_PlayError31
-	; (no addr) CP L, 2
-	; (no addr) JR NZ, SmfMed_SetPlaying
-	; (no addr) LD (7F42h), 001h
-	; (no addr) LD WA, 00eeh
-	; (no addr) JR T, SmfMed_ShowPlayError
+	call LABEL_F2076D
+	cps l, 1
+	jrl c, SmfMed_CheckNotPlayError
+	call LABEL_F2076D
+	cps l, 4
+	jr z, SmfMed_PlayError3F
+	cps l, 3
+	jr z, SmfMed_PlayError31
+	cps l, 2
+	jr nz, SmfMed_SetPlaying
+	stdi8 32578, 1
+	ldw wa, 0xEE
+	jr SmfMed_ShowPlayError
 
 SmfMed_PlayError31:
-	; (no addr) LD (7F42h), 031h
-	; (no addr) LD WA, 00eeh
-	; (no addr) JR T, SmfMed_ShowPlayError
+	stdi8 32578, 49
+	ldw wa, 0xEE
+	jr SmfMed_ShowPlayError
 
 SmfMed_PlayError3F:
-	; (no addr) LD (7F42h), 03fh
-	; (no addr) LD WA, 00eeh
+	stdi8 32578, 63
+	ldw wa, 0xEE
 
 SmfMed_ShowPlayError:
-	; (no addr) CALL LABEL_F994BD
-	; (no addr) INC 1, (843Ch)
+	call LABEL_F994BD
+	incdi8 1, 33852
 
 SmfMed_SetPlaying:
-	; (no addr) LD (84FEh), 001h
-	; (no addr) LD A, (8922h)
-	; (no addr) CP A, (8920h)
-	; (no addr) JR NC, SmfMed_CheckRepeat
-	; (no addr) LD IZ, 0
-	; (no addr) LD BC, (8438h)
-	; (no addr) CP BC, 0
-	; (no addr) JRL ULE, SmfMed_Exit
-	; (no addr) LDA XDE, 88A0h
+	stdi8 34046, 1
+	ldda8 a, 35106
+	cpda8 a, 35104
+	jr nc, SmfMed_CheckRepeat
+	lds iz, 0
+	ldda16 xbc, 33848
+	cps bc, 0
+	jrl ule, SmfMed_Exit
+	ldada xde, 34976
 
 SmfMed_FindSongLoop:
-	; (no addr) LD HL, IZ
-	; (no addr) EXTZ XHL
-	; (no addr) ADD XHL, XDE
-	; (no addr) CP (XHL), A
-	; (no addr) JR NZ, SmfMed_NextSong
-	; (no addr) LD DE, IZ
-	; (no addr) EXTZ XDE
-	; (no addr) LD XWA, (XSP + 002h)
-	; (no addr) LD XBC, 01e50002h
-	CALR FmmSmfFileNameFunc
-	; (no addr) LD XWA, (8430h)
-	; (no addr) LD BC, (8438h)
-	CALR SmfMed_FormatSlotList
-	; (no addr) INC 1, (8922h)
-	; (no addr) LD WA, IZ
-	; (no addr) CALL LABEL_F8A07F
-	; (no addr) LD XWA, (8434h)
-	; (no addr) OR XWA, XWA
-	; (no addr) JRL Z, SmfMed_Exit
-	; (no addr) LD XBC, 01e50009h
-	; (no addr) LD XDE, 0000001eh
-	; (no addr) JR T, SmfMed_PostDelayEvent
+	ld hl, iz
+	extz xhl
+	add xhl, xde
+	cp (xhl), a
+	jr nz, SmfMed_NextSong
+	ld de, iz
+	extz xde
+	ld xwa, (xsp + 2)
+	ld xbc, 0x1E50002
+	calr FmmSmfFileNameFunc
+	ldda32 xwa, 33840
+	ldda16 xbc, 33848
+	calr SmfMed_FormatSlotList
+	incdi8 1, 35106
+	ld wa, iz
+	call LABEL_F8A07F
+	ldda32 xwa, 33844
+	or xwa, xwa
+	jrl z, SmfMed_Exit
+	ld xbc, 0x1E50009
+	ld xde, 0x1E
+	jr SmfMed_PostDelayEvent
 
 SmfMed_NextSong:
-	; (no addr) INC 1, IZ
-	; (no addr) CP IZ, BC
-	; (no addr) JR C, SmfMed_FindSongLoop
-	; (no addr) JRL T, SmfMed_Exit
+	inc 1, iz
+	cp iz, bc
+	jr c, SmfMed_FindSongLoop
+	jrl SmfMed_Exit
 
 SmfMed_CheckRepeat:
-	; (no addr) CP (8924h), 000h
-	; (no addr) JR Z, SmfMed_ClearRepeatCount
-	; (no addr) CP (843Ch), A
-	; (no addr) JR NC, SmfMed_ClearRepeatCount
-	; (no addr) LD (8922h), 000h
-	; (no addr) LD (843Ch), 000h
-	; (no addr) LD IZ, 0
-	; (no addr) LD WA, (8438h)
-	; (no addr) CP WA, 0
-	; (no addr) JRL ULE, SmfMed_Exit
-	; (no addr) LDA XBC, 88A0h
+	cpdi8 35108, 0
+	jr z, SmfMed_ClearRepeatCount
+	cpdm8 33852, a
+	jr nc, SmfMed_ClearRepeatCount
+	stdi8 35106, 0
+	stdi8 33852, 0
+	lds iz, 0
+	ldda16 xwa, 33848
+	cps wa, 0
+	jrl ule, SmfMed_Exit
+	ldada xbc, 34976
 
 SmfMed_RepeatFindLoop:
-	; (no addr) LD DE, IZ
-	; (no addr) EXTZ XDE
-	; (no addr) ADD XDE, XBC
-	; (no addr) CP (XDE), 000h
-	; (no addr) JR NZ, SmfMed_RepeatNext
-	; (no addr) LD DE, IZ
-	; (no addr) EXTZ XDE
-	; (no addr) LD XWA, (XSP + 002h)
-	; (no addr) LD XBC, 01e50002h
-	CALR FmmSmfFileNameFunc
-	; (no addr) LD XWA, (8430h)
-	; (no addr) LD BC, (8438h)
-	CALR SmfMed_FormatSlotList
-	; (no addr) INC 1, (8922h)
-	; (no addr) LD WA, IZ
-	; (no addr) CALL LABEL_F8A07F
-	; (no addr) LD XWA, (8434h)
-	; (no addr) OR XWA, XWA
-	; (no addr) JRL Z, SmfMed_Exit
-	; (no addr) LD XBC, 01e50009h
-	; (no addr) LD XDE, 0000001eh
+	ld de, iz
+	extz xde
+	add xde, xbc
+	cpmi8 (xde), 0x0
+	jr nz, SmfMed_RepeatNext
+	ld de, iz
+	extz xde
+	ld xwa, (xsp + 2)
+	ld xbc, 0x1E50002
+	calr FmmSmfFileNameFunc
+	ldda32 xwa, 33840
+	ldda16 xbc, 33848
+	calr SmfMed_FormatSlotList
+	incdi8 1, 35106
+	ld wa, iz
+	call LABEL_F8A07F
+	ldda32 xwa, 33844
+	or xwa, xwa
+	jrl z, SmfMed_Exit
+	ld xbc, 0x1E50009
+	ld xde, 0x1E
 
 SmfMed_PostDelayEvent:
-	; (no addr) CALL ApPostEvent
-	; (no addr) JRL T, SmfMed_Exit
+	call 0xFA9D58
+	jrl SmfMed_Exit
 
 SmfMed_RepeatNext:
-	; (no addr) INC 1, IZ
-	; (no addr) CP IZ, WA
-	; (no addr) JR C, SmfMed_RepeatFindLoop
-	; (no addr) JRL T, SmfMed_Exit
+	inc 1, iz
+	cp iz, wa
+	jr c, SmfMed_RepeatFindLoop
+	jrl SmfMed_Exit
 
 SmfMed_ClearRepeatCount:
-	; (no addr) LD (843Ch), 000h
-	; (no addr) JR T, SmfMed_ClearPlaying
+	stdi8 33852, 0
+	jr SmfMed_ClearPlaying
 
 SmfMed_CheckNotPlayError:
-	; (no addr) CALL LABEL_F2076D
-	; (no addr) CP L, 0
-	; (no addr) JRL NZ, SmfMed_Exit
+	call LABEL_F2076D
+	cps l, 0
+	jrl nz, SmfMed_Exit
 
 SmfMed_ClearPlaying:
-	; (no addr) LD (84FEh), 000h
-	; (no addr) JRL T, SmfMed_Exit
+	stdi8 34046, 0
+	jrl SmfMed_Exit
 
 SmfMed_InitFromDisk:
-	; (no addr) LD XDE, 0
-	; (no addr) LD E, (8944h)
-	; (no addr) LD XWA, 006c0018h
-	; (no addr) LD XBC, 01e0003bh
-	; (no addr) CALL ApPostEvent
-	; (no addr) CPW (8504h), 0000h
-	; (no addr) JR GE, SmfMed_InitState
-	; (no addr) LD XWA, 00600026h
-	; (no addr) LD XBC, 01c00001h
-	; (no addr) LD XDE, 5
-	; (no addr) CALL ApPostEvent
-	; (no addr) CALL GetFileCountEncoded
-	; (no addr) LD (8504h), HL
-	; (no addr) CALL LABEL_F8958D
-	; (no addr) CALL GetEncodedFreeSpaceData
-	; (no addr) LD XWA, 00600026h
-	; (no addr) LD XBC, 01c00002h
-	; (no addr) LD XDE, 0
-	; (no addr) CALL ApPostEvent
-	; (no addr) LD XWA, 0ffffffffh
-	; (no addr) LD XBC, 01c0000ah
-	; (no addr) LD XDE, 0
-	; (no addr) CALL ApPostEvent
-	CALR SignalProgressUpdate
+	lds32 xde, 0
+	ldda8 e, 35140
+	ld xwa, 0x6C0018
+	ld xbc, 0x1E0003B
+	call 0xFA9D58
+	cpdi16 34052, 0
+	jr ge, SmfMed_InitState
+	ld xwa, 0x600026
+	ld xbc, 0x1C00001
+	lds32 xde, 5
+	call 0xFA9D58
+	call 0xF89C78
+	stda16 34052, xhl
+	call LABEL_F8958D
+	call 0xF8953B
+	ld xwa, 0x600026
+	ld xbc, 0x1C00002
+	lds32 xde, 0
+	call 0xFA9D58
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C0000A
+	lds32 xde, 0
+	call 0xFA9D58
+	calr SignalProgressUpdate
 
 SmfMed_InitState:
-	; (no addr) LD (84FEh), 000h
-	; (no addr) LD (8922h), 000h
-	; (no addr) LD (8920h), 000h
-	; (no addr) LD BC, 0080h
-	; (no addr) LD WA, (8504h)
-	; (no addr) CP WA, 0080h
-	; (no addr) JR UGT, SmfMed_ClampFileCount
-	; (no addr) LD BC, WA
+	stdi8 34046, 0
+	stdi8 35106, 0
+	stdi8 35104, 0
+	ldw bc, 0x80
+	ldda16 xwa, 34052
+	cp wa, 0x80
+	jr ugt, SmfMed_ClampFileCount
+	ld bc, wa
 
 SmfMed_ClampFileCount:
-	; (no addr) LD (8438h), BC
-	; (no addr) LD IZ, 0
-	; (no addr) CP BC, 0
-	; (no addr) JR ULE, SmfMed_FinishInit
-	; (no addr) LDA XWA, 88A0h
+	stda16 33848, xbc
+	lds iz, 0
+	cps bc, 0
+	jr ule, SmfMed_FinishInit
+	ldada xwa, 34976
 
 SmfMed_ClearSlotsLoop:
-	; (no addr) LD BC, IZ
-	; (no addr) EXTZ XBC
-	; (no addr) ADD XBC, XWA
-	; (no addr) LD (XBC), 0ffh
-	; (no addr) INC 1, IZ
-	; (no addr) CP IZ, (8438h)
-	; (no addr) JR C, SmfMed_ClearSlotsLoop
+	ld bc, iz
+	extz xbc
+	add xbc, xwa
+	ldmi8 (xbc), 0xFF
+	inc 1, iz
+	cpda16 xiz, 33848
+	jr c, SmfMed_ClearSlotsLoop
 
 SmfMed_FinishInit:
-	; (no addr) CALL LABEL_F20ACD
-	; (no addr) LD XWA, 0
-	; (no addr) LD (8434h), XWA
-	; (no addr) JRL T, SmfMed_Exit
+	call LABEL_F20ACD
+	lds32 xwa, 0
+	stda32 33844, xwa
+	jrl SmfMed_Exit
 
+LABEL_F93051:
 SmfMed_HandleStop:
-	; (no addr) LD A, (8D36h)
-	; (no addr) CP A, 06fh
-	; (no addr) JRL Z, SmfMed_Exit
-	; (no addr) CP A, 072h
-	; (no addr) JRL Z, SmfMed_Exit
-	; (no addr) CP A, 073h
-	; (no addr) JRL Z, SmfMed_Exit
-	; (no addr) CP A, 076h
-	; (no addr) JRL Z, SmfMed_Exit
-	; (no addr) CALL LABEL_F20B70
-	CALR CancelOperationCleanup
-	; (no addr) LD (84FEh), 000h
-	; (no addr) JRL T, SmfMed_Exit
+	ldda8 a, 36150
+	cp a, 0x6F
+	jrl z, SmfMed_Exit
+	cp a, 0x72
+	jrl z, SmfMed_Exit
+	cp a, 0x73
+	jrl z, SmfMed_Exit
+	cp a, 0x76
+	jrl z, SmfMed_Exit
+	call LABEL_F20B70
+	calr CancelOperationCleanup
+	stdi8 34046, 0
+	jrl SmfMed_Exit
 
 SmfMed_StoreWindowPtr:
-	; (no addr) LD (8430h), XWA
-	; (no addr) JRL T, SmfMed_Exit
+	stda32 33840, xwa
+	jrl SmfMed_Exit
 
 SmfMed_RefreshDisplay:
-	; (no addr) LD XWA, (8430h)
-	CALR SmfMed_FormatSlotList
-	; (no addr) JRL T, SmfMed_Exit
+	ldda32 xwa, 33840
+	calr SmfMed_FormatSlotList
+	jrl SmfMed_Exit
 
 SmfMed_HandleNavToggle:
-	; (no addr) LDA XWA, 88A0h
-	; (no addr) CP XDE, 0000000ah
-	; (no addr) JR NZ, SmfMed_HandleSelectToggle
-	; (no addr) CP (84FEh), 000h
-	; (no addr) JR NZ, SmfMed_HandleSelectToggle
-	; (no addr) LD IZ, 0
-	; (no addr) LD DE, BC
-	; (no addr) CP BC, 0
-	; (no addr) JR ULE, SmfMed_CheckAllUnmarked
+	ldada xwa, 34976
+	cp xde, 0xA
+	jr nz, SmfMed_HandleSelectToggle
+	cpdi8 34046, 0
+	jr nz, SmfMed_HandleSelectToggle
+	lds iz, 0
+	ld de, bc
+	cps bc, 0
+	jr ule, SmfMed_CheckAllUnmarked
 
 SmfMed_FindUnmarkedLoop:
-	; (no addr) LD BC, IZ
-	; (no addr) EXTZ XBC
-	; (no addr) ADD XBC, XWA
-	; (no addr) CP (XBC), 0ffh
-	; (no addr) JR Z, SmfMed_CheckAllUnmarked
-	; (no addr) INC 1, IZ
-	; (no addr) CP IZ, DE
-	; (no addr) JR C, SmfMed_FindUnmarkedLoop
+	ld bc, iz
+	extz xbc
+	add xbc, xwa
+	cpmi8 (xbc), 0xFF
+	jr z, SmfMed_CheckAllUnmarked
+	inc 1, iz
+	cp iz, de
+	jr c, SmfMed_FindUnmarkedLoop
 
 SmfMed_CheckAllUnmarked:
-	; (no addr) CP IZ, DE
-	; (no addr) JR NC, SmfMed_RemoveOrderLoop
-	; (no addr) LD IZ, 0
-	; (no addr) CP DE, 0
-	; (no addr) JR ULE, SmfMed_RefreshAfterToggle
-	; (no addr) LDA XDE, 88A0h
+	cp iz, de
+	jr nc, SmfMed_RemoveOrderLoop
+	lds iz, 0
+	cps de, 0
+	jr ule, SmfMed_RefreshAfterToggle
+	ldada xde, 34976
 
 SmfMed_AssignOrderLoop:
-	; (no addr) LD BC, IZ
-	; (no addr) EXTZ XBC
-	; (no addr) ADD XBC, XDE
-	; (no addr) LD A, (XBC)
-	; (no addr) CP A, 0ffh
-	; (no addr) JR NZ, SmfMed_NextAssign
-	; (no addr) LD (XBC), (8920h)
-	; (no addr) INC 1, (8920h)
+	ld bc, iz
+	extz xbc
+	add xbc, xde
+	ld a, (xbc)
+	cp a, 0xFF
+	jr nz, SmfMed_NextAssign
+	ldmi16 (xbc), 0x8920
+	incdi8 1, 35104
 
 SmfMed_NextAssign:
-	; (no addr) INC 1, IZ
-	; (no addr) CP IZ, (8438h)
-	; (no addr) JR C, SmfMed_AssignOrderLoop
-	; (no addr) JR T, SmfMed_RefreshAfterToggle
+	inc 1, iz
+	cpda16 xiz, 33848
+	jr c, SmfMed_AssignOrderLoop
+	jr SmfMed_RefreshAfterToggle
 
 SmfMed_RemoveOrderLoop:
-	; (no addr) LD IZ, 0
-	; (no addr) CP DE, 0
-	; (no addr) JR ULE, SmfMed_RefreshAfterToggle
-	; (no addr) LDA XDE, 88A0h
+	lds iz, 0
+	cps de, 0
+	jr ule, SmfMed_RefreshAfterToggle
+	ldada xde, 34976
 
 SmfMed_UnmarkLoop:
-	; (no addr) LD BC, IZ
-	; (no addr) EXTZ XBC
-	; (no addr) ADD XBC, XDE
-	; (no addr) LD A, (XBC)
-	; (no addr) CP A, 0fdh
-	; (no addr) JR UGT, SmfMed_NextUnmark
-	; (no addr) LD (XBC), 0ffh
-	; (no addr) DEC 1, (8920h)
+	ld bc, iz
+	extz xbc
+	add xbc, xde
+	ld a, (xbc)
+	cp a, 0xFD
+	jr ugt, SmfMed_NextUnmark
+	ldmi8 (xbc), 0xFF
+	decdi8 1, 35104
 
 SmfMed_NextUnmark:
-	; (no addr) INC 1, IZ
-	; (no addr) CP IZ, (8438h)
-	; (no addr) JR C, SmfMed_UnmarkLoop
+	inc 1, iz
+	cpda16 xiz, 33848
+	jr c, SmfMed_UnmarkLoop
 
 SmfMed_RefreshAfterToggle:
-	; (no addr) LD XWA, (8430h)
-	; (no addr) LD BC, (8438h)
-	; (no addr) JR T, SmfMed_CallFormatSlots
+	ldda32 xwa, 33840
+	ldda16 xbc, 33848
+	jr SmfMed_CallFormatSlots
 
 SmfMed_HandleSelectToggle:
-	; (no addr) CP XDE, 0000000bh
-	; (no addr) JR NZ, SmfMed_HandleRepeat
-	; (no addr) CP (84FEh), 000h
-	; (no addr) JR NZ, SmfMed_HandleRepeat
-	; (no addr) LD XWA, (XSP + 002h)
-	; (no addr) LD XBC, 01e50003h
-	; (no addr) LD XDE, 0
-	CALR FmmSmfFileNameFunc
-	; (no addr) LD IZ, HL
-	; (no addr) LDA XHL, 88A0h
-	; (no addr) LD WA, IZ
-	; (no addr) EXTZ XWA
-	; (no addr) ADD XWA, XHL
-	; (no addr) LD C, (XWA)
-	; (no addr) CP C, 0ffh
-	; (no addr) JR NZ, SmfMed_RemoveFromOrder
-	; (no addr) LD (XWA), (8920h)
-	; (no addr) INC 1, (8920h)
-	; (no addr) JR T, SmfMed_RefreshAfterSelect
+	cp xde, 0xB
+	jr nz, SmfMed_HandleRepeat
+	cpdi8 34046, 0
+	jr nz, SmfMed_HandleRepeat
+	ld xwa, (xsp + 2)
+	ld xbc, 0x1E50003
+	lds32 xde, 0
+	calr FmmSmfFileNameFunc
+	ld iz, hl
+	ldada xhl, 34976
+	ld wa, iz
+	extz xwa
+	add xwa, xhl
+	ld c, (xwa)
+	cp c, 0xFF
+	jr nz, SmfMed_RemoveFromOrder
+	ldmi16 (xwa), 0x8920
+	incdi8 1, 35104
+	jr SmfMed_RefreshAfterSelect
 
 SmfMed_RemoveFromOrder:
-	; (no addr) CP C, 0fdh
-	; (no addr) JR UGT, SmfMed_RefreshAfterSelect
-	; (no addr) LD (XWA), 0ffh
-	; (no addr) LD A, (8920h)
-	; (no addr) DEC 1, A
-	; (no addr) LD (8920h), A
-	; (no addr) LD IY, 0
-	; (no addr) LD IZ, 0
-	; (no addr) EXTZ WA
-	; (no addr) CP WA, 0
-	; (no addr) JR ULE, SmfMed_RefreshAfterSelect
-	; (no addr) LD IX, WA
+	cp c, 0xFD
+	jr ugt, SmfMed_RefreshAfterSelect
+	ldmi8 (xwa), 0xFF
+	ldda8 a, 35104
+	dec 1, a
+	stda8 35104, a
+	lds iy, 0
+	lds iz, 0
+	extz wa
+	cps wa, 0
+	jr ule, SmfMed_RefreshAfterSelect
+	ld ix, wa
 
 SmfMed_ReorderLoop:
-	; (no addr) LD DE, IZ
-	; (no addr) EXTZ XDE
-	; (no addr) ADD XDE, XHL
-	; (no addr) LD A, (XDE)
-	; (no addr) CP A, 0fdh
-	; (no addr) JR UGT, SmfMed_NextReorder
-	; (no addr) INC 1, IY
-	; (no addr) CP A, C
-	; (no addr) JR ULE, SmfMed_NextReorder
-	; (no addr) DEC 1, A
-	; (no addr) LD (XDE), A
+	ld de, iz
+	extz xde
+	add xde, xhl
+	ld a, (xde)
+	cp a, 0xFD
+	jr ugt, SmfMed_NextReorder
+	inc 1, iy
+	cp a, c
+	jr ule, SmfMed_NextReorder
+	dec 1, a
+	ld (xde), a
 
 SmfMed_NextReorder:
-	; (no addr) INC 1, IZ
-	; (no addr) CP IY, IX
-	; (no addr) JR C, SmfMed_ReorderLoop
+	inc 1, iz
+	cp iy, ix
+	jr c, SmfMed_ReorderLoop
 
 SmfMed_RefreshAfterSelect:
-	; (no addr) LD XWA, (8430h)
-	; (no addr) LD BC, (8438h)
+	ldda32 xwa, 33840
+	ldda16 xbc, 33848
 
 SmfMed_CallFormatSlots:
-	CALR SmfMed_FormatSlotList
-	; (no addr) JRL T, SmfMed_Exit
+	calr SmfMed_FormatSlotList
+	jrl SmfMed_Exit
 
 SmfMed_HandleRepeat:
-	; (no addr) CP XDE, 0000000ch
-	; (no addr) JR NZ, SmfMed_HandlePlay
-	; (no addr) CP XHL, 01c00017h
-	; (no addr) JR NZ, SmfMed_SetRepeatOff
-	; (no addr) LD (8924h), 001h
-	; (no addr) JRL T, SmfMed_Exit
+	cp xde, 0xC
+	jr nz, SmfMed_HandlePlay
+	cp xhl, 0x1C00017
+	jr nz, SmfMed_SetRepeatOff
+	stdi8 35108, 1
+	jrl SmfMed_Exit
 
 SmfMed_SetRepeatOff:
-	; (no addr) LD (8924h), 000h
-	; (no addr) JRL T, SmfMed_Exit
+	stdi8 35108, 0
+	jrl SmfMed_Exit
 
 SmfMed_HandlePlay:
-	; (no addr) CP XDE, 0000000dh
-	; (no addr) JRL NZ, SmfMed_Exit
-	; (no addr) CP (84FEh), 000h
-	; (no addr) JRL NZ, SmfMed_Exit
-	; (no addr) LD (8922h), 000h
-	; (no addr) LD (843Ch), 000h
-	; (no addr) LD IZ, 0
-	; (no addr) LD BC, (8438h)
-	; (no addr) CP BC, 0
-	; (no addr) JR ULE, SmfMed_CheckAutoPlay
+	cp xde, 0xD
+	jrl nz, SmfMed_Exit
+	cpdi8 34046, 0
+	jrl nz, SmfMed_Exit
+	stdi8 35106, 0
+	stdi8 33852, 0
+	lds iz, 0
+	ldda16 xbc, 33848
+	cps bc, 0
+	jr ule, SmfMed_CheckAutoPlay
 
 SmfMed_PlayFindLoop:
-	; (no addr) LD DE, IZ
-	; (no addr) EXTZ XDE
-	; (no addr) ADD XDE, XWA
-	; (no addr) CP (XDE), 000h
-	; (no addr) JR NZ, SmfMed_PlayNextLoop
-	; (no addr) LD (84FEh), 001h
-	; (no addr) LD DE, IZ
-	; (no addr) EXTZ XDE
-	; (no addr) LD XWA, (XSP + 002h)
-	; (no addr) LD XBC, 01e50002h
-	CALR FmmSmfFileNameFunc
-	; (no addr) INC 1, (8922h)
-	; (no addr) LD WA, IZ
-	; (no addr) CALL LABEL_F8A07F
-	; (no addr) LD XWA, 0ffffffffh
-	; (no addr) LD XBC, 01e0009ah
-	; (no addr) LD XDE, 0
-	; (no addr) CALL ApPostEvent
-	; (no addr) LD WA, 0073h
-	; (no addr) CALL UI_PostModeChangeEvent
-	; (no addr) JR T, SmfMed_CheckAutoPlay
+	ld de, iz
+	extz xde
+	add xde, xwa
+	cpmi8 (xde), 0x0
+	jr nz, SmfMed_PlayNextLoop
+	stdi8 34046, 1
+	ld de, iz
+	extz xde
+	ld xwa, (xsp + 2)
+	ld xbc, 0x1E50002
+	calr FmmSmfFileNameFunc
+	incdi8 1, 35106
+	ld wa, iz
+	call LABEL_F8A07F
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1E0009A
+	lds32 xde, 0
+	call 0xFA9D58
+	ldw wa, 0x73
+	call 0xF99490
+	jr SmfMed_CheckAutoPlay
 
 SmfMed_PlayNextLoop:
-	; (no addr) INC 1, IZ
-	; (no addr) CP IZ, BC
-	; (no addr) JR C, SmfMed_PlayFindLoop
+	inc 1, iz
+	cp iz, bc
+	jr c, SmfMed_PlayFindLoop
 
 SmfMed_CheckAutoPlay:
-	; (no addr) CP (84FEh), 000h
-	; (no addr) JR NZ, SmfMed_Exit
-	; (no addr) LD XWA, (XSP + 002h)
-	; (no addr) LD XBC, 01e50003h
-	; (no addr) LD XDE, 0
-	CALR FmmSmfFileNameFunc
-	; (no addr) LD IZ, HL
-	; (no addr) LD WA, IZ
-	; (no addr) CALL LABEL_F8A07F
-	; (no addr) LD XWA, 0ffffffffh
-	; (no addr) LD XBC, 01e0009ah
-	; (no addr) LD XDE, 0
-	; (no addr) CALL ApPostEvent
-	; (no addr) LD WA, 006fh
-	; (no addr) JR T, SmfMed_CallPauseMode
+	cpdi8 34046, 0
+	jr nz, SmfMed_Exit
+	ld xwa, (xsp + 2)
+	ld xbc, 0x1E50003
+	lds32 xde, 0
+	calr FmmSmfFileNameFunc
+	ld iz, hl
+	ld wa, iz
+	call LABEL_F8A07F
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1E0009A
+	lds32 xde, 0
+	call 0xFA9D58
+	ldw wa, 0x6F
+	jr SmfMed_CallPauseMode
 
 SmfMed_StoreDelayFlag:
-	; (no addr) LD (8434h), XWA
-	; (no addr) JR T, SmfMed_Exit
+	stda32 33844, xwa
+	jr SmfMed_Exit
 
 SmfMed_CheckContinue:
-	; (no addr) CP (84FEh), 000h
-	; (no addr) JR Z, SmfMed_Exit
-	; (no addr) LD XWA, 0ffffffffh
-	; (no addr) LD XBC, 01e0009ah
-	; (no addr) LD XDE, 0
-	; (no addr) CALL ApPostEvent
-	; (no addr) LD A, (843Ah)
-	; (no addr) EXTZ WA
+	cpdi8 34046, 0
+	jr z, SmfMed_Exit
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1E0009A
+	lds32 xde, 0
+	call 0xFA9D58
+	ldda8 a, 33850
+	extz wa
 
 SmfMed_CallPauseMode:
-	; (no addr) CALL UI_PostModeChangeEvent
+	call 0xF99490
 
 SmfMed_Exit:
-	; (no addr) LD XHL, 0
-	; (no addr) POP IZ
-	; (no addr) INC 4, XSP
-	; (no addr) RET
+	lds32 xhl, 0
+	popw iz
+	inc 4, xsp
+	ret
 
+LABEL_F93283:
 PdMed_FormatFileList:
-	; (no addr) DEC 6, XSP
-	; (no addr) PUSH IZ
-	; (no addr) LD (XSP + 002h), BC
-	; (no addr) LD (XSP + 004h), XWA
-	; (no addr) LD IZ, 0
+	dec 6, xsp
+	pushw iz
+	ld (xsp + 2), bc
+	ld (xsp + 4), xwa
+	lds iz, 0
 
 PdFmt_FormatLoop:
-	; (no addr) LD DE, IZ
-	; (no addr) SLL 5, DE
-	; (no addr) LDA XBC, 850Ch
-	; (no addr) EXTZ XDE
-	; (no addr) ADD XDE, XBC
-	; (no addr) LD A, IZL
-	; (no addr) LD (XDE), A
-	; (no addr) LD WA, (XSP + 002h)
-	; (no addr) ADD WA, IZ
-	; (no addr) CALL LABEL_F8A5F1
-	; (no addr) LD XBC, XHL
-	; (no addr) LD WA, IZ
-	; (no addr) SLL 5, WA
-	; (no addr) LD DE, 1
-	; (no addr) ADD DE, WA
-	; (no addr) LDA XHL, 850Ch
-	; (no addr) LD WA, DE
-	; (no addr) EXTZ XWA
-	; (no addr) ADD XWA, XHL
-	; (no addr) LD DE, (XSP + 002h)
-	; (no addr) ADD DE, IZ
-	; (no addr) INC 1, DE
-	; (no addr) PUSHW 0014h
-	; (no addr) PUSHW 0001h
-	; (no addr) CALL LABEL_F891DD
-	; (no addr) LD DE, IZ
-	; (no addr) SLL 5, DE
-	; (no addr) LDA XBC, 850Ch
-	; (no addr) EXTZ XDE
-	; (no addr) ADD XDE, XBC
-	; (no addr) LD XWA, (XSP + 004h)
-	; (no addr) LD XBC, 01c0000fh
-	; (no addr) CALL ApPostEvent
-	; (no addr) INC 1, IZ
-	; (no addr) CP IZ, 000ah
-	; (no addr) JR LT, PdFmt_FormatLoop
-	; (no addr) POP IZ
-	; (no addr) INC 6, XSP
-	; (no addr) RET
+	ld de, iz
+	sll de, 5
+	ldada xbc, 34060
+	extz xde
+	add xde, xbc
+	ldto_a_berp 0xF8
+	ld (xde), a
+	ld wa, (xsp + 2)
+	add wa, iz
+	call LABEL_F8A5F1
+	ld xbc, xhl
+	ld wa, iz
+	sll wa, 5
+	lds de, 1
+	add de, wa
+	ldada xhl, 34060
+	ld wa, de
+	extz xwa
+	add xwa, xhl
+	ld de, (xsp + 2)
+	add de, iz
+	inc 1, de
+	pushw 0x14
+	pushw 0x1
+	call LABEL_F891DD
+	ld de, iz
+	sll de, 5
+	ldada xbc, 34060
+	extz xde
+	add xde, xbc
+	ld xwa, (xsp + 4)
+	ld xbc, 0x1C0000F
+	call 0xFA9D58
+	inc 1, iz
+	cp iz, 0xA
+	jr lt, PdFmt_FormatLoop
+	popw iz
+	inc 6, xsp
+	ret
 
 FmmPdFileNameFunc:
-	; (no addr) DEC 4, XSP
-	; (no addr) PUSH IZ
-	; (no addr) LD (XSP + 002h), XWA
-	; (no addr) CP XBC, 01e50003h
-	; (no addr) JRL Z, PdName_GetIndexReturn
-	; (no addr) LD WA, (8442h)
-	; (no addr) LD IZ, WA
-	; (no addr) CP XBC, 01e50002h
-	; (no addr) JRL Z, PdName_SetIndexPlaying
-	; (no addr) LD HL, WA
-	; (no addr) EXTS XHL
-	DIVS_HL 0xa
-	; (no addr) CP XBC, 01c00018h
-	; (no addr) JR Z, PdName_HandleNavigation
-	; (no addr) CP XBC, 01c00017h
-	; (no addr) JR Z, PdName_HandleNavigation
-	; (no addr) CP XBC, 01c0000bh
-	; (no addr) JR Z, PdName_RefreshList
-	; (no addr) CP XBC, 01e50004h
-	; (no addr) JR NZ, PdName_ReturnZero
-	; (no addr) LD (843Eh), XDE
-	; (no addr) CALL LABEL_F8A4C8
-	; (no addr) LD (8442h), HL
-	; (no addr) CP HL, 0
-	; (no addr) JR GE, PdName_UpdateIndex
-	; (no addr) LDW (8442h), 0000h
+	dec 4, xsp
+	pushw iz
+	ld (xsp + 2), xwa
+	cp xbc, 0x1E50003
+	jrl z, PdName_GetIndexReturn
+	ldda16 xwa, 33858
+	ld iz, wa
+	cp xbc, 0x1E50002
+	jrl z, PdName_SetIndexPlaying
+	ld hl, wa
+	exts xhl
+	divs hl, 0xA
+	cp xbc, 0x1C00018
+	jr z, PdName_HandleNavigation
+	cp xbc, 0x1C00017
+	jr z, PdName_HandleNavigation
+	cp xbc, 0x1C0000B
+	jr z, PdName_RefreshList
+	cp xbc, 0x1E50004
+	jr nz, PdName_ReturnZero
+	stda32 33854, xde
+	call LABEL_F8A4C8
+	stda16 33858, xhl
+	cps hl, 0
+	jr ge, PdName_UpdateIndex
+	stdi16 33858, 0
 
 PdName_UpdateIndex:
-	; (no addr) LD WA, (8442h)
-	; (no addr) EXTS XWA
-	DIVS_WA 0xa
-	; (no addr) LD DE, QWA
-	; (no addr) EXTS XDE
-	; (no addr) LD XWA, (843Eh)
-	; (no addr) LD XBC, 01e50002h
-	; (no addr) JRL T, PdName_PostEvent
+	ldda16 xwa, 33858
+	exts xwa
+	divs wa, 0xA
+	ldto_de_werp 0xE2
+	exts xde
+	ldda32 xwa, 33854
+	ld xbc, 0x1E50002
+	jrl PdName_PostEvent
 
 PdName_RefreshList:
-	MULS_HL 0xa
-	; (no addr) LD XWA, (843Eh)
-	; (no addr) LD BC, HL
-	CALR PdMed_FormatFileList
+	muls hl, 0xA
+	ldda32 xwa, 33854
+	ld bc, hl
+	calr PdMed_FormatFileList
 
 PdName_ReturnZero:
-	; (no addr) LD XHL, 0
-	; (no addr) JRL T, PdName_Exit
+	lds32 xhl, 0
+	jrl PdName_Exit
 
 PdName_HandleNavigation:
-	; (no addr) OR XDE, XDE
-	; (no addr) JR NZ, PdName_CheckPageUp
-	; (no addr) CP (84FEh), 000h
-	; (no addr) JR NZ, PdName_CheckPageUp
-	; (no addr) CP XBC, 01c00018h
-	; (no addr) JR NZ, PdName_CheckPrevKey
-	; (no addr) LD BC, WA
-	; (no addr) INC 1, BC
-	; (no addr) CP BC, (8506h)
-	; (no addr) JR GE, PdName_GetCurrentIndex
-	; (no addr) INC 1, WA
-	; (no addr) JR T, PdName_SaveIndex
+	or xde, xde
+	jr nz, PdName_CheckPageUp
+	cpdi8 34046, 0
+	jr nz, PdName_CheckPageUp
+	cp xbc, 0x1C00018
+	jr nz, PdName_CheckPrevKey
+	ld bc, wa
+	inc 1, bc
+	cpda16 xbc, 34054
+	jr ge, PdName_GetCurrentIndex
+	inc 1, wa
+	jr PdName_SaveIndex
 
 PdName_CheckPrevKey:
-	; (no addr) CP XBC, 01c00017h
-	; (no addr) JR NZ, PdName_GetCurrentIndex
-	; (no addr) CP WA, 0
-	; (no addr) JR LE, PdName_GetCurrentIndex
-	; (no addr) DEC 1, WA
-	; (no addr) JR T, PdName_SaveIndex
+	cp xbc, 0x1C00017
+	jr nz, PdName_GetCurrentIndex
+	cps wa, 0
+	jr le, PdName_GetCurrentIndex
+	dec 1, wa
+	jr PdName_SaveIndex
 
 PdName_CheckPageUp:
-	; (no addr) CP XDE, 00000001h
-	; (no addr) JR NZ, PdName_CheckPageDown
-	; (no addr) CP (84FEh), 000h
-	; (no addr) JR NZ, PdName_CheckPageDown
-	; (no addr) CP WA, 000ah
-	; (no addr) JR LT, PdName_GetCurrentIndex
-	; (no addr) SUB WA, 000ah
-	; (no addr) JR T, PdName_SaveIndex
+	cp xde, 0x1
+	jr nz, PdName_CheckPageDown
+	cpdi8 34046, 0
+	jr nz, PdName_CheckPageDown
+	cp wa, 0xA
+	jr lt, PdName_GetCurrentIndex
+	sub wa, 0xA
+	jr PdName_SaveIndex
 
 PdName_CheckPageDown:
-	; (no addr) CP XDE, 00000002h
-	; (no addr) JR NZ, PdName_GetCurrentIndex
-	; (no addr) CP (84FEh), 000h
-	; (no addr) JR NZ, PdName_GetCurrentIndex
-	; (no addr) LD BC, WA
-	; (no addr) ADD BC, 000ah
-	; (no addr) LD DE, (8506h)
-	; (no addr) CP BC, DE
-	; (no addr) JR GE, PdName_CheckEndBound
-	; (no addr) ADD WA, 000ah
+	cp xde, 0x2
+	jr nz, PdName_GetCurrentIndex
+	cpdi8 34046, 0
+	jr nz, PdName_GetCurrentIndex
+	ld bc, wa
+	add bc, 0xA
+	ldda16 xde, 34054
+	cp bc, de
+	jr ge, PdName_CheckEndBound
+	add wa, 0xA
 
 PdName_SaveIndex:
-	; (no addr) LD (8442h), WA
-	; (no addr) JR T, PdName_UpdateDisplay
+	stda16 33858, xwa
+	jr PdName_UpdateDisplay
 
 PdName_CheckEndBound:
-	; (no addr) LD BC, DE
-	; (no addr) DEC 1, BC
-	; (no addr) LD WA, BC
-	; (no addr) EXTS XWA
-	DIVS_WA 0xa
-	; (no addr) CP HL, WA
-	; (no addr) JR GE, PdName_GetCurrentIndex
-	; (no addr) EXTS XDE
-	DIVS_DE 0xa
-	; (no addr) LD WA, QDE
-	; (no addr) CP WA, 0
-	; (no addr) JR Z, PdName_GetCurrentIndex
-	; (no addr) LD (8442h), BC
+	ld bc, de
+	dec 1, bc
+	ld wa, bc
+	exts xwa
+	divs wa, 0xA
+	cp hl, wa
+	jr ge, PdName_GetCurrentIndex
+	exts xde
+	divs de, 0xA
+	ldto_wa_werp 0xEA
+	cps wa, 0
+	jr z, PdName_GetCurrentIndex
+	stda16 33858, xbc
 
 PdName_GetCurrentIndex:
-	; (no addr) LD WA, (8442h)
+	ldda16 xwa, 33858
 
 PdName_UpdateDisplay:
-	; (no addr) CP IZ, WA
-	; (no addr) JRL Z, PdName_ReturnZero
-	; (no addr) CALL LABEL_F8A5A5
-	; (no addr) LD WA, (8442h)
-	; (no addr) EXTS XWA
-	DIVS_WA 0xa
-	; (no addr) LD DE, QWA
-	; (no addr) EXTS XDE
-	; (no addr) LD XWA, (843Eh)
-	; (no addr) LD XBC, 01e50002h
-	; (no addr) CALL ApPostEvent
-	; (no addr) LD BC, (8442h)
-	; (no addr) EXTS XBC
-	DIVS_BC 0xa
-	; (no addr) LD DE, IZ
-	; (no addr) EXTS XDE
-	DIVS_DE 0xa
-	; (no addr) LD XWA, (843Eh)
-	; (no addr) CP DE, BC
-	; (no addr) JR NZ, PdName_RefreshPage
-	; (no addr) LD BC, IZ
-	; (no addr) EXTS XBC
-	DIVS_BC 0xa
-	; (no addr) LD BC, QBC
-	; (no addr) SLL 5, BC
-	; (no addr) LDA XHL, 850Ch
-	; (no addr) LD DE, BC
-	; (no addr) EXTZ XDE
-	; (no addr) ADD XDE, XHL
-	; (no addr) LD XBC, 01c0000fh
-	; (no addr) CALL ApPostEvent
-	; (no addr) LD WA, (8442h)
-	; (no addr) EXTS XWA
-	DIVS_WA 0xa
-	; (no addr) LD WA, QWA
-	; (no addr) SLL 5, WA
-	; (no addr) LDA XBC, 850Ch
-	; (no addr) LD DE, WA
-	; (no addr) EXTZ XDE
-	; (no addr) ADD XDE, XBC
-	; (no addr) LD XWA, (843Eh)
-	; (no addr) LD XBC, 01c0000fh
-	; (no addr) CALL ApPostEvent
-	; (no addr) JRL T, PdName_ReturnZero
+	cp iz, wa
+	jrl z, PdName_ReturnZero
+	call LABEL_F8A5A5
+	ldda16 xwa, 33858
+	exts xwa
+	divs wa, 0xA
+	ldto_de_werp 0xE2
+	exts xde
+	ldda32 xwa, 33854
+	ld xbc, 0x1E50002
+	call 0xFA9D58
+	ldda16 xbc, 33858
+	exts xbc
+	divs bc, 0xA
+	ld de, iz
+	exts xde
+	divs de, 0xA
+	ldda32 xwa, 33854
+	cp de, bc
+	jr nz, PdName_RefreshPage
+	ld bc, iz
+	exts xbc
+	divs bc, 0xA
+	ldto_bc_werp 0xE6
+	sll bc, 5
+	ldada xhl, 34060
+	ld de, bc
+	extz xde
+	add xde, xhl
+	ld xbc, 0x1C0000F
+	call 0xFA9D58
+	ldda16 xwa, 33858
+	exts xwa
+	divs wa, 0xA
+	ldto_wa_werp 0xE2
+	sll wa, 5
+	ldada xbc, 34060
+	ld de, wa
+	extz xde
+	add xde, xbc
+	ldda32 xwa, 33854
+	ld xbc, 0x1C0000F
+	call 0xFA9D58
+	jrl PdName_ReturnZero
 
 PdName_RefreshPage:
-	MULS_BC 0xa
-	CALR PdMed_FormatFileList
-	; (no addr) LD XWA, (XSP + 002h)
-	; (no addr) LD XBC, 01c0000bh
-	; (no addr) LD XDE, 0
-	CALR FmmPdMedleyFunc
-	; (no addr) JRL T, PdName_ReturnZero
+	muls bc, 0xA
+	calr PdMed_FormatFileList
+	ld xwa, (xsp + 2)
+	ld xbc, 0x1C0000B
+	lds32 xde, 0
+	calr FmmPdMedleyFunc
+	jrl PdName_ReturnZero
 
 PdName_SetIndexPlaying:
-	; (no addr) CP (84FEh), 000h
-	; (no addr) JRL Z, PdName_ReturnZero
-	; (no addr) LD (8442h), DE
-	; (no addr) LD WA, DE
-	; (no addr) CALL LABEL_F8A5A5
-	; (no addr) LD WA, (8442h)
-	; (no addr) EXTS XWA
-	DIVS_WA 0xa
-	; (no addr) LD DE, QWA
-	; (no addr) EXTS XDE
-	; (no addr) LD XWA, (843Eh)
-	; (no addr) LD XBC, 01e50002h
+	cpdi8 34046, 0
+	jrl z, PdName_ReturnZero
+	stda16 33858, xde
+	ld wa, de
+	call LABEL_F8A5A5
+	ldda16 xwa, 33858
+	exts xwa
+	divs wa, 0xA
+	ldto_de_werp 0xE2
+	exts xde
+	ldda32 xwa, 33854
+	ld xbc, 0x1E50002
 
 PdName_PostEvent:
-	; (no addr) CALL ApPostEvent
-	; (no addr) JRL T, PdName_ReturnZero
+	call 0xFA9D58
+	jrl PdName_ReturnZero
 
 PdName_GetIndexReturn:
-	; (no addr) LD HL, (8442h)
-	; (no addr) EXTS XHL
+	ldda16 xhl, 33858
+	exts xhl
 
 PdName_Exit:
-	; (no addr) POP IZ
-	; (no addr) INC 4, XSP
-	; (no addr) RET
+	popw iz
+	inc 4, xsp
+	ret
 
 PdMed_FormatSlotList:
-	; (no addr) DEC 6, XSP
-	; (no addr) PUSH XIZ
-	; (no addr) LD IZ, BC
-	; (no addr) LD (XSP + 006h), XWA
-	; (no addr) LD XWA, 0
-	; (no addr) LD XBC, 01e50003h
-	; (no addr) LD XDE, 0
-	CALR FmmPdFileNameFunc
-	; (no addr) LD QIZ, HL
-	; (no addr) LD WA, QIZ
-	; (no addr) EXTZ XWA
-	DIVW_WA 0xa
-	; (no addr) LD QIZ, WA
-	MULW_WA 0xa
-	; (no addr) LD QIZ, WA
-	; (no addr) LDW (XSP + 004h:8), 000ah
-	; (no addr) LD WA, QIZ
-	; (no addr) ADD WA, 000ah
-	; (no addr) CP WA, IZ
-	; (no addr) JR C, PdFmtSlot_CalcVisible
-	; (no addr) LD (XSP + 004h), IZ
-	; (no addr) LD WA, QIZ
-	; (no addr) SUB (XSP + 004h), WA
+	dec 6, xsp
+	push xiz
+	ld iz, bc
+	ld (xsp + 6), xwa
+	lds32 xwa, 0
+	ld xbc, 0x1E50003
+	lds32 xde, 0
+	calr FmmPdFileNameFunc
+	ldfr_hl_werp 0xFA
+	ldto_wa_werp 0xFA
+	extz xwa
+	div wa, 0xA
+	ldfr_wa_werp 0xFA
+	mul wa, 0xA
+	ldfr_wa_werp 0xFA
+	ldmw (xsp + 4), 0xA
+	ldto_wa_werp 0xFA
+	add wa, 0xA
+	cp wa, iz
+	jr c, PdFmtSlot_CalcVisible
+	ld (xsp + 4), iz
+	ldto_wa_werp 0xFA
+	sub (xsp + 4), wa
 
 PdFmtSlot_CalcVisible:
-	; (no addr) LD IZ, 0
-	; (no addr) CPW (XSP + 004h), 0000h
-	; (no addr) JR ULE, PdFmtSlot_FillEmpty
+	lds iz, 0
+	cpmi16 (xsp + 4), 0x0
+	jr ule, PdFmtSlot_FillEmpty
 
 PdFmtSlot_FormatLoop:
-	; (no addr) LD WA, IZ
-	; (no addr) SLL 3, WA
-	; (no addr) LDA XBC, 8444h
-	; (no addr) EXTZ XWA
-	; (no addr) ADD XWA, XBC
-	; (no addr) LD BC, QIZ
-	; (no addr) ADD BC, IZ
-	; (no addr) LDA XDE, 88A0h
-	; (no addr) EXTZ XBC
-	; (no addr) ADD XBC, XDE
-	; (no addr) LD C, (XBC)
-	; (no addr) EXTZ BC
-	; (no addr) LD DE, IZ
-	CALR FormatMedleyNumber
-	; (no addr) LD DE, IZ
-	; (no addr) SLL 3, DE
-	; (no addr) LDA XWA, 8444h
-	; (no addr) EXTZ XDE
-	; (no addr) ADD XDE, XWA
-	; (no addr) LD XWA, (XSP + 006h)
-	; (no addr) LD XBC, 01c0000fh
-	; (no addr) CALL ApPostEvent
-	; (no addr) INC 1, IZ
-	; (no addr) CP IZ, (XSP + 004h)
-	; (no addr) JR C, PdFmtSlot_FormatLoop
+	ld wa, iz
+	sll wa, 3
+	ldada xbc, 33860
+	extz xwa
+	add xwa, xbc
+	ldto_bc_werp 0xFA
+	add bc, iz
+	ldada xde, 34976
+	extz xbc
+	add xbc, xde
+	ld c, (xbc)
+	extz bc
+	ld de, iz
+	calr FormatMedleyNumber
+	ld de, iz
+	sll de, 3
+	ldada xwa, 33860
+	extz xde
+	add xde, xwa
+	ld xwa, (xsp + 6)
+	ld xbc, 0x1C0000F
+	call 0xFA9D58
+	inc 1, iz
+	cp iz, (xsp + 4)
+	jr c, PdFmtSlot_FormatLoop
 
 PdFmtSlot_FillEmpty:
-	; (no addr) CP IZ, 000ah
-	; (no addr) JR NC, PdFmtSlot_Exit
+	cp iz, 0xA
+	jr nc, PdFmtSlot_Exit
 
 PdFmtSlot_EmptyLoop:
-	; (no addr) LD WA, IZ
-	; (no addr) SLL 3, WA
-	; (no addr) LDA XBC, 8444h
-	; (no addr) EXTZ XWA
-	; (no addr) ADD XWA, XBC
-	; (no addr) LD BC, 00ffh
-	; (no addr) LD DE, IZ
-	CALR FormatMedleyNumber
-	; (no addr) LD DE, IZ
-	; (no addr) SLL 3, DE
-	; (no addr) LDA XWA, 8444h
-	; (no addr) EXTZ XDE
-	; (no addr) ADD XDE, XWA
-	; (no addr) LD XWA, (XSP + 006h)
-	; (no addr) LD XBC, 01c0000fh
-	; (no addr) CALL ApPostEvent
-	; (no addr) INC 1, IZ
-	; (no addr) CP IZ, 000ah
-	; (no addr) JR C, PdFmtSlot_EmptyLoop
+	ld wa, iz
+	sll wa, 3
+	ldada xbc, 33860
+	extz xwa
+	add xwa, xbc
+	ldw bc, 0xFF
+	ld de, iz
+	calr FormatMedleyNumber
+	ld de, iz
+	sll de, 3
+	ldada xwa, 33860
+	extz xde
+	add xde, xwa
+	ld xwa, (xsp + 6)
+	ld xbc, 0x1C0000F
+	call 0xFA9D58
+	inc 1, iz
+	cp iz, 0xA
+	jr c, PdFmtSlot_EmptyLoop
 
 PdFmtSlot_Exit:
-	; (no addr) POP XIZ
-	; (no addr) INC 6, XSP
-	; (no addr) RET
+	pop xiz
+	inc 6, xsp
+	ret
 
-FmmPdMedleyFunc:
-	; (no addr) PUSH XIZ
-	; (no addr) LD XHL, XDE
-	; (no addr) LD XDE, XBC
-	; (no addr) LD XIZ, XWA
-	; (no addr) CP XDE, 01e5000ah
-	; (no addr) JRL Z, PdMed_CheckContinue
-	; (no addr) LD XWA, XHL
-	; (no addr) CP XDE, 01e50008h
-	; (no addr) JRL Z, PdMed_StoreDelayFlag
-	; (no addr) LD BC, (849Ch)
-	; (no addr) CP XDE, 01c00018h
-	; (no addr) JRL Z, PdMed_HandleNavToggle
-	; (no addr) CP XDE, 01c00017h
-	; (no addr) JRL Z, PdMed_HandleNavToggle
-	; (no addr) CP XDE, 01c0000bh
-	; (no addr) JRL Z, PdMed_RefreshDisplay
-	; (no addr) CP XDE, 01e50004h
-	; (no addr) JRL Z, PdMed_StoreWindowPtr
-	; (no addr) CP XDE, 01c00013h
-	; (no addr) JRL NZ, PdMed_Exit
-	; (no addr) CP XHL, 00000003h
-	; (no addr) JRL Z, PdMed_HandleStop
-	; (no addr) CP XHL, 00000002h
-	; (no addr) JRL NZ, PdMed_Exit
-	; (no addr) LD WA, 0
-	; (no addr) CALL InitializeOperationState
-	; (no addr) LD A, (8D37h)
-	; (no addr) CP A, 071h
-	; (no addr) JR NZ, PdMed_CheckPlayMode
-	; (no addr) LD (84FEh), 000h
-	; (no addr) CALL LABEL_F2076D
-	; (no addr) CP L, 2
-	; (no addr) JRL C, PdMed_Exit
-	; (no addr) LD (7F42h), 001h
-	; (no addr) LD WA, 00eeh
-	; (no addr) JRL T, PdMed_ShowError
+LABEL_F935C0:
+
+	push xiz
+	ld xhl, xde
+	ld xde, xbc
+	ld xiz, xwa
+	cp xde, 0x1E5000A
+	jrl z, PdMed_CheckContinue
+	ld xwa, xhl
+	cp xde, 0x1E50008
+	jrl z, PdMed_StoreDelayFlag
+	ldda16 xbc, 33948
+	cp xde, 0x1C00018
+	jrl z, PdMed_HandleNavToggle
+	cp xde, 0x1C00017
+	jrl z, PdMed_HandleNavToggle
+	cp xde, 0x1C0000B
+	jrl z, PdMed_RefreshDisplay
+	cp xde, 0x1E50004
+	jrl z, PdMed_StoreWindowPtr
+	cp xde, 0x1C00013
+	jrl nz, PdMed_Exit
+	cp xhl, 0x3
+	jrl z, PdMed_HandleStop
+	cp xhl, 0x2
+	jrl nz, PdMed_Exit
+	lds wa, 0
+	call 0xF8B204
+	ldda8 a, 36151
+	cp a, 0x71
+	jr nz, PdMed_CheckPlayMode
+	stdi8 34046, 0
+	call LABEL_F2076D
+	cps l, 2
+	jrl c, PdMed_Exit
+	stdi8 32578, 1
+	ldw wa, 0xEE
+	jrl PdMed_ShowError
 
 PdMed_CheckPlayMode:
-	; (no addr) CP A, 075h
-	; (no addr) JRL NZ, PdMed_InitFromDisk
-	; (no addr) CALL LABEL_F2076D
-	; (no addr) CP L, 1
-	; (no addr) JRL NZ, PdMed_HandleError
-	; (no addr) LD (84FEh), 001h
-	; (no addr) LD C, (8922h)
-	; (no addr) LDA XWA, 88A0h
-	; (no addr) CP C, (8920h)
-	; (no addr) JR NC, PdMed_CheckRepeat
-	; (no addr) LD HL, 0
-	; (no addr) LD DE, (849Ch)
-	; (no addr) CP DE, 0
-	; (no addr) JRL ULE, PdMed_Exit
+	cp a, 0x75
+	jrl nz, PdMed_InitFromDisk
+	call LABEL_F2076D
+	cps l, 1
+	jrl nz, PdMed_HandleError
+	stdi8 34046, 1
+	ldda8 c, 35106
+	ldada xwa, 34976
+	cpda8 c, 35104
+	jr nc, PdMed_CheckRepeat
+	lds hl, 0
+	ldda16 xde, 33948
+	cps de, 0
+	jrl ule, PdMed_Exit
 
 PdMed_FindSongLoop:
-	; (no addr) LD IX, HL
-	; (no addr) EXTZ XIX
-	; (no addr) ADD XIX, XWA
-	; (no addr) CP (XIX), C
-	; (no addr) JR NZ, PdMed_NextSong
-	; (no addr) EXTZ XHL
-	; (no addr) LD XWA, XIZ
-	; (no addr) LD XBC, 01e50002h
-	; (no addr) LD XDE, XHL
-	CALR FmmPdFileNameFunc
-	; (no addr) LD XWA, (8494h)
-	; (no addr) LD BC, (849Ch)
-	CALR PdMed_FormatSlotList
-	; (no addr) INC 1, (8922h)
-	; (no addr) LD XWA, (8498h)
-	; (no addr) OR XWA, XWA
-	; (no addr) JRL Z, PdMed_Exit
-	; (no addr) LD XBC, 01e50009h
-	; (no addr) LD XDE, 0000001eh
-	; (no addr) JR T, PdMed_PostDelayEvent
+	ld ix, hl
+	extz xix
+	add xix, xwa
+	cp (xix), c
+	jr nz, PdMed_NextSong
+	extz xhl
+	ld xwa, xiz
+	ld xbc, 0x1E50002
+	ld xde, xhl
+	calr FmmPdFileNameFunc
+	ldda32 xwa, 33940
+	ldda16 xbc, 33948
+	calr PdMed_FormatSlotList
+	incdi8 1, 35106
+	ldda32 xwa, 33944
+	or xwa, xwa
+	jrl z, PdMed_Exit
+	ld xbc, 0x1E50009
+	ld xde, 0x1E
+	jr PdMed_PostDelayEvent
 
 PdMed_NextSong:
-	; (no addr) INC 1, HL
-	; (no addr) CP HL, DE
-	; (no addr) JR C, PdMed_FindSongLoop
-	; (no addr) JRL T, PdMed_Exit
+	inc 1, hl
+	cp hl, de
+	jr c, PdMed_FindSongLoop
+	jrl PdMed_Exit
 
 PdMed_CheckRepeat:
-	; (no addr) CP (8924h), 000h
-	; (no addr) JR Z, PdMed_ClearPlaying
-	; (no addr) LD (8922h), 000h
-	; (no addr) LD HL, 0
-	; (no addr) LD BC, (849Ch)
-	; (no addr) CP BC, 0
-	; (no addr) JRL ULE, PdMed_Exit
+	cpdi8 35108, 0
+	jr z, PdMed_ClearPlaying
+	stdi8 35106, 0
+	lds hl, 0
+	ldda16 xbc, 33948
+	cps bc, 0
+	jrl ule, PdMed_Exit
 
 PdMed_RepeatFindLoop:
-	; (no addr) LD DE, HL
-	; (no addr) EXTZ XDE
-	; (no addr) ADD XDE, XWA
-	; (no addr) CP (XDE), 000h
-	; (no addr) JR NZ, PdMed_RepeatNext
-	; (no addr) EXTZ XHL
-	; (no addr) LD XWA, XIZ
-	; (no addr) LD XBC, 01e50002h
-	; (no addr) LD XDE, XHL
-	CALR FmmPdFileNameFunc
-	; (no addr) LD XWA, (8494h)
-	; (no addr) LD BC, (849Ch)
-	CALR PdMed_FormatSlotList
-	; (no addr) INC 1, (8922h)
-	; (no addr) LD XWA, (8498h)
-	; (no addr) OR XWA, XWA
-	; (no addr) JRL Z, PdMed_Exit
-	; (no addr) LD XBC, 01e50009h
-	; (no addr) LD XDE, 0000001eh
+	ld de, hl
+	extz xde
+	add xde, xwa
+	cpmi8 (xde), 0x0
+	jr nz, PdMed_RepeatNext
+	extz xhl
+	ld xwa, xiz
+	ld xbc, 0x1E50002
+	ld xde, xhl
+	calr FmmPdFileNameFunc
+	ldda32 xwa, 33940
+	ldda16 xbc, 33948
+	calr PdMed_FormatSlotList
+	incdi8 1, 35106
+	ldda32 xwa, 33944
+	or xwa, xwa
+	jrl z, PdMed_Exit
+	ld xbc, 0x1E50009
+	ld xde, 0x1E
 
 PdMed_PostDelayEvent:
-	; (no addr) CALL ApPostEvent
-	; (no addr) JRL T, PdMed_Exit
+	call 0xFA9D58
+	jrl PdMed_Exit
 
 PdMed_RepeatNext:
-	; (no addr) INC 1, HL
-	; (no addr) CP HL, BC
-	; (no addr) JR C, PdMed_RepeatFindLoop
-	; (no addr) JRL T, PdMed_Exit
+	inc 1, hl
+	cp hl, bc
+	jr c, PdMed_RepeatFindLoop
+	jrl PdMed_Exit
 
 PdMed_ClearPlaying:
-	; (no addr) LD (84FEh), 000h
-	; (no addr) JRL T, PdMed_Exit
+	stdi8 34046, 0
+	jrl PdMed_Exit
 
 PdMed_HandleError:
-	; (no addr) CALL LABEL_F2076D
-	; (no addr) LD (84FEh), 000h
-	; (no addr) CP L, 0
-	; (no addr) JRL Z, PdMed_Exit
-	; (no addr) LD (7F42h), 001h
-	; (no addr) LD WA, 00eeh
+	call LABEL_F2076D
+	stdi8 34046, 0
+	cps l, 0
+	jrl z, PdMed_Exit
+	stdi8 32578, 1
+	ldw wa, 0xEE
 
 PdMed_ShowError:
-	; (no addr) CALL LABEL_F994BD
-	; (no addr) JRL T, PdMed_Exit
+	call LABEL_F994BD
+	jrl PdMed_Exit
 
+LABEL_F9373F:
 PdMed_InitFromDisk:
-	; (no addr) CPW (8506h), 0000h
-	; (no addr) JR GE, PdMed_InitState
-	; (no addr) LD XWA, 00600026h
-	; (no addr) LD XBC, 01c00001h
-	; (no addr) LD XDE, 5
-	; (no addr) CALL ApPostEvent
-	; (no addr) CALL LABEL_F8A625
-	; (no addr) LD (8506h), HL
-	; (no addr) LD XWA, 00600026h
-	; (no addr) LD XBC, 01c00002h
-	; (no addr) LD XDE, 0
-	; (no addr) CALL ApPostEvent
-	; (no addr) LD XWA, 0ffffffffh
-	; (no addr) LD XBC, 01c0000ah
-	; (no addr) LD XDE, 0
-	; (no addr) CALL ApPostEvent
-	; (no addr) CALL SignalProgressUpdate
+	cpdi16 34054, 0
+	jr ge, PdMed_InitState
+	ld xwa, 0x600026
+	ld xbc, 0x1C00001
+	lds32 xde, 5
+	call 0xFA9D58
+	call LABEL_F8A625
+	stda16 34054, xhl
+	ld xwa, 0x600026
+	ld xbc, 0x1C00002
+	lds32 xde, 0
+	call 0xFA9D58
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C0000A
+	lds32 xde, 0
+	call 0xFA9D58
+	call 0xF8B260
 
 PdMed_InitState:
-	; (no addr) LD (84FEh), 000h
-	; (no addr) LD (8922h), 000h
-	; (no addr) LD (8920h), 000h
-	; (no addr) LD BC, 0080h
-	; (no addr) LD WA, (8506h)
-	; (no addr) CP WA, 0080h
-	; (no addr) JR UGT, PdMed_ClampCount
-	; (no addr) LD BC, WA
+	stdi8 34046, 0
+	stdi8 35106, 0
+	stdi8 35104, 0
+	ldw bc, 0x80
+	ldda16 xwa, 34054
+	cp wa, 0x80
+	jr ugt, PdMed_ClampCount
+	ld bc, wa
 
 PdMed_ClampCount:
-	; (no addr) LD (849Ch), BC
-	; (no addr) LD HL, 0
-	; (no addr) CP BC, 0
-	; (no addr) JR ULE, PdMed_FinishInit
-	; (no addr) LDA XWA, 88A0h
+	stda16 33948, xbc
+	lds hl, 0
+	cps bc, 0
+	jr ule, PdMed_FinishInit
+	ldada xwa, 34976
 
 PdMed_ClearSlotsLoop:
-	; (no addr) LD BC, HL
-	; (no addr) EXTZ XBC
-	; (no addr) ADD XBC, XWA
-	; (no addr) LD (XBC), 0ffh
-	; (no addr) INC 1, HL
-	; (no addr) CP HL, (849Ch)
-	; (no addr) JR C, PdMed_ClearSlotsLoop
+	ld bc, hl
+	extz xbc
+	add xbc, xwa
+	ldmi8 (xbc), 0xFF
+	inc 1, hl
+	cpda16 xhl, 33948
+	jr c, PdMed_ClearSlotsLoop
 
 PdMed_FinishInit:
-	; (no addr) CALL LABEL_F20ACD
-	; (no addr) LD XWA, 0
-	; (no addr) LD (8498h), XWA
-	; (no addr) JRL T, PdMed_Exit
+	call LABEL_F20ACD
+	lds32 xwa, 0
+	stda32 33944, xwa
+	jrl PdMed_Exit
 
 PdMed_HandleStop:
-	; (no addr) LD A, (8D36h)
-	; (no addr) CP A, 071h
-	; (no addr) JRL Z, PdMed_Exit
-	; (no addr) CP A, 075h
-	; (no addr) JRL Z, PdMed_Exit
-	; (no addr) CALL LABEL_F20B70
-	; (no addr) CALL CancelOperationCleanup
-	; (no addr) LD (84FEh), 000h
-	; (no addr) JRL T, PdMed_Exit
+	ldda8 a, 36150
+	cp a, 0x71
+	jrl z, PdMed_Exit
+	cp a, 0x75
+	jrl z, PdMed_Exit
+	call LABEL_F20B70
+	call 0xF8B244
+	stdi8 34046, 0
+	jrl PdMed_Exit
 
 PdMed_StoreWindowPtr:
-	; (no addr) LD (8494h), XWA
-	; (no addr) JRL T, PdMed_Exit
+	stda32 33940, xwa
+	jrl PdMed_Exit
 
 PdMed_RefreshDisplay:
-	; (no addr) LD XWA, (8494h)
-	CALR PdMed_FormatSlotList
-	; (no addr) JRL T, PdMed_Exit
+	ldda32 xwa, 33940
+	calr PdMed_FormatSlotList
+	jrl PdMed_Exit
 
 PdMed_HandleNavToggle:
-	; (no addr) CP XHL, 0000000ah
-	; (no addr) JRL NZ, PdMed_HandleSelectToggle
-	; (no addr) CP (84FEh), 000h
-	; (no addr) JR NZ, PdMed_HandleSelectToggle
-	; (no addr) LD HL, 0
-	; (no addr) LD WA, BC
-	; (no addr) CP BC, 0
-	; (no addr) JR ULE, PdMed_CheckAllUnmarked
-	; (no addr) LDA XBC, 88A0h
+	cp xhl, 0xA
+	jrl nz, PdMed_HandleSelectToggle
+	cpdi8 34046, 0
+	jr nz, PdMed_HandleSelectToggle
+	lds hl, 0
+	ld wa, bc
+	cps bc, 0
+	jr ule, PdMed_CheckAllUnmarked
+	ldada xbc, 34976
 
 PdMed_FindUnmarkedLoop:
-	; (no addr) LD DE, HL
-	; (no addr) EXTZ XDE
-	; (no addr) ADD XDE, XBC
-	; (no addr) CP (XDE), 0ffh
-	; (no addr) JR Z, PdMed_CheckAllUnmarked
-	; (no addr) INC 1, HL
-	; (no addr) CP HL, WA
-	; (no addr) JR C, PdMed_FindUnmarkedLoop
+	ld de, hl
+	extz xde
+	add xde, xbc
+	cpmi8 (xde), 0xFF
+	jr z, PdMed_CheckAllUnmarked
+	inc 1, hl
+	cp hl, wa
+	jr c, PdMed_FindUnmarkedLoop
 
 PdMed_CheckAllUnmarked:
-	; (no addr) CP HL, WA
-	; (no addr) JR NC, PdMed_RemoveOrderLoop
-	; (no addr) LD HL, 0
-	; (no addr) CP WA, 0
-	; (no addr) JR ULE, PdMed_RefreshAfterToggle
-	; (no addr) LDA XDE, 88A0h
+	cp hl, wa
+	jr nc, PdMed_RemoveOrderLoop
+	lds hl, 0
+	cps wa, 0
+	jr ule, PdMed_RefreshAfterToggle
+	ldada xde, 34976
 
 PdMed_AssignOrderLoop:
-	; (no addr) LD BC, HL
-	; (no addr) EXTZ XBC
-	; (no addr) ADD XBC, XDE
-	; (no addr) LD A, (XBC)
-	; (no addr) CP A, 0ffh
-	; (no addr) JR NZ, PdMed_NextAssign
-	; (no addr) LD (XBC), (8920h)
-	; (no addr) INC 1, (8920h)
+	ld bc, hl
+	extz xbc
+	add xbc, xde
+	ld a, (xbc)
+	cp a, 0xFF
+	jr nz, PdMed_NextAssign
+	ldmi16 (xbc), 0x8920
+	incdi8 1, 35104
 
 PdMed_NextAssign:
-	; (no addr) INC 1, HL
-	; (no addr) CP HL, (849Ch)
-	; (no addr) JR C, PdMed_AssignOrderLoop
-	; (no addr) JR T, PdMed_RefreshAfterToggle
+	inc 1, hl
+	cpda16 xhl, 33948
+	jr c, PdMed_AssignOrderLoop
+	jr PdMed_RefreshAfterToggle
 
 PdMed_RemoveOrderLoop:
-	; (no addr) LD HL, 0
-	; (no addr) CP WA, 0
-	; (no addr) JR ULE, PdMed_RefreshAfterToggle
-	; (no addr) LDA XDE, 88A0h
+	lds hl, 0
+	cps wa, 0
+	jr ule, PdMed_RefreshAfterToggle
+	ldada xde, 34976
 
 PdMed_UnmarkLoop:
-	; (no addr) LD BC, HL
-	; (no addr) EXTZ XBC
-	; (no addr) ADD XBC, XDE
-	; (no addr) LD A, (XBC)
-	; (no addr) CP A, 0fdh
-	; (no addr) JR UGT, PdMed_NextUnmark
-	; (no addr) LD (XBC), 0ffh
-	; (no addr) DEC 1, (8920h)
+	ld bc, hl
+	extz xbc
+	add xbc, xde
+	ld a, (xbc)
+	cp a, 0xFD
+	jr ugt, PdMed_NextUnmark
+	ldmi8 (xbc), 0xFF
+	decdi8 1, 35104
 
 PdMed_NextUnmark:
-	; (no addr) INC 1, HL
-	; (no addr) CP HL, (849Ch)
-	; (no addr) JR C, PdMed_UnmarkLoop
+	inc 1, hl
+	cpda16 xhl, 33948
+	jr c, PdMed_UnmarkLoop
 
 PdMed_RefreshAfterToggle:
-	; (no addr) LD XWA, (8494h)
-	; (no addr) LD BC, (849Ch)
-	; (no addr) JR T, PdMed_CallFormatSlots
+	ldda32 xwa, 33940
+	ldda16 xbc, 33948
+	jr PdMed_CallFormatSlots
 
 PdMed_HandleSelectToggle:
-	; (no addr) CP XHL, 0000000bh
-	; (no addr) JR NZ, PdMed_HandleRepeat
-	; (no addr) CP (84FEh), 000h
-	; (no addr) JR NZ, PdMed_HandleRepeat
-	; (no addr) LD XWA, XIZ
-	; (no addr) LD XBC, 01e50003h
-	; (no addr) LD XDE, 0
-	CALR FmmPdFileNameFunc
-	; (no addr) LDA XIX, 88A0h
-	; (no addr) EXTZ XHL
-	; (no addr) ADD XHL, XIX
-	; (no addr) LD C, (XHL)
-	; (no addr) CP C, 0ffh
-	; (no addr) JR NZ, PdMed_RemoveFromOrder
-	; (no addr) LD (XHL), (8920h)
-	; (no addr) INC 1, (8920h)
-	; (no addr) JR T, PdMed_RefreshAfterSelect
+	cp xhl, 0xB
+	jr nz, PdMed_HandleRepeat
+	cpdi8 34046, 0
+	jr nz, PdMed_HandleRepeat
+	ld xwa, xiz
+	ld xbc, 0x1E50003
+	lds32 xde, 0
+	calr FmmPdFileNameFunc
+	ldada xix, 34976
+	extz xhl
+	add xhl, xix
+	ld c, (xhl)
+	cp c, 0xFF
+	jr nz, PdMed_RemoveFromOrder
+	ldmi16 (xhl), 0x8920
+	incdi8 1, 35104
+	jr PdMed_RefreshAfterSelect
 
 PdMed_RemoveFromOrder:
-	; (no addr) CP C, 0fdh
-	; (no addr) JR UGT, PdMed_RefreshAfterSelect
-	; (no addr) LD (XHL), 0ffh
-	; (no addr) LD A, (8920h)
-	; (no addr) DEC 1, A
-	; (no addr) LD (8920h), A
-	; (no addr) LD IZ, 0
-	; (no addr) LD HL, 0
-	; (no addr) EXTZ WA
-	; (no addr) CP WA, 0
-	; (no addr) JR ULE, PdMed_RefreshAfterSelect
-	; (no addr) LD IY, WA
+	cp c, 0xFD
+	jr ugt, PdMed_RefreshAfterSelect
+	ldmi8 (xhl), 0xFF
+	ldda8 a, 35104
+	dec 1, a
+	stda8 35104, a
+	lds iz, 0
+	lds hl, 0
+	extz wa
+	cps wa, 0
+	jr ule, PdMed_RefreshAfterSelect
+	ld iy, wa
 
 PdMed_ReorderLoop:
-	; (no addr) LD DE, HL
-	; (no addr) EXTZ XDE
-	; (no addr) ADD XDE, XIX
-	; (no addr) LD A, (XDE)
-	; (no addr) CP A, 0fdh
-	; (no addr) JR UGT, PdMed_NextReorder
-	; (no addr) INC 1, IZ
-	; (no addr) CP A, C
-	; (no addr) JR ULE, PdMed_NextReorder
-	; (no addr) DEC 1, A
-	; (no addr) LD (XDE), A
+	ld de, hl
+	extz xde
+	add xde, xix
+	ld a, (xde)
+	cp a, 0xFD
+	jr ugt, PdMed_NextReorder
+	inc 1, iz
+	cp a, c
+	jr ule, PdMed_NextReorder
+	dec 1, a
+	ld (xde), a
 
 PdMed_NextReorder:
-	; (no addr) INC 1, HL
-	; (no addr) CP IZ, IY
-	; (no addr) JR C, PdMed_ReorderLoop
+	inc 1, hl
+	cp iz, iy
+	jr c, PdMed_ReorderLoop
 
 PdMed_RefreshAfterSelect:
-	; (no addr) LD XWA, (8494h)
-	; (no addr) LD BC, (849Ch)
+	ldda32 xwa, 33940
+	ldda16 xbc, 33948
 
 PdMed_CallFormatSlots:
-	CALR PdMed_FormatSlotList
-	; (no addr) JRL T, PdMed_Exit
+	calr PdMed_FormatSlotList
+	jrl PdMed_Exit
 
 PdMed_HandleRepeat:
-	; (no addr) CP XHL, 0000000ch
-	; (no addr) JR NZ, PdMed_HandlePlay
-	; (no addr) CP XDE, 01c00017h
-	; (no addr) JR NZ, PdMed_SetRepeatOff
-	; (no addr) LD (8924h), 001h
-	; (no addr) JRL T, PdMed_Exit
+	cp xhl, 0xC
+	jr nz, PdMed_HandlePlay
+	cp xde, 0x1C00017
+	jr nz, PdMed_SetRepeatOff
+	stdi8 35108, 1
+	jrl PdMed_Exit
 
 PdMed_SetRepeatOff:
-	; (no addr) LD (8924h), 000h
-	; (no addr) JRL T, PdMed_Exit
+	stdi8 35108, 0
+	jrl PdMed_Exit
 
 PdMed_HandlePlay:
-	; (no addr) CP XHL, 0000000dh
-	; (no addr) JRL NZ, PdMed_Exit
-	; (no addr) CP (84FEh), 000h
-	; (no addr) JRL NZ, PdMed_Exit
-	; (no addr) LD (8922h), 000h
-	; (no addr) LD HL, 0
-	; (no addr) LD WA, (849Ch)
-	; (no addr) CP WA, 0
-	; (no addr) JR ULE, PdMed_CheckAutoPlay
-	; (no addr) LDA XBC, 88A0h
+	cp xhl, 0xD
+	jrl nz, PdMed_Exit
+	cpdi8 34046, 0
+	jrl nz, PdMed_Exit
+	stdi8 35106, 0
+	lds hl, 0
+	ldda16 xwa, 33948
+	cps wa, 0
+	jr ule, PdMed_CheckAutoPlay
+	ldada xbc, 34976
 
 PdMed_PlayFindLoop:
-	; (no addr) LD DE, HL
-	; (no addr) EXTZ XDE
-	; (no addr) ADD XDE, XBC
-	; (no addr) CP (XDE), 000h
-	; (no addr) JR NZ, PdMed_PlayNextLoop
-	; (no addr) LD (84FEh), 001h
-	; (no addr) EXTZ XHL
-	; (no addr) LD XWA, XIZ
-	; (no addr) LD XBC, 01e50002h
-	; (no addr) LD XDE, XHL
-	CALR FmmPdFileNameFunc
-	; (no addr) INC 1, (8922h)
-	; (no addr) LD XWA, 0ffffffffh
-	; (no addr) LD XBC, 01e0009ah
-	; (no addr) LD XDE, 0
-	; (no addr) CALL ApPostEvent
-	; (no addr) LD WA, 0075h
-	; (no addr) CALL UI_PostModeChangeEvent
-	; (no addr) JR T, PdMed_CheckAutoPlay
+	ld de, hl
+	extz xde
+	add xde, xbc
+	cpmi8 (xde), 0x0
+	jr nz, PdMed_PlayNextLoop
+	stdi8 34046, 1
+	extz xhl
+	ld xwa, xiz
+	ld xbc, 0x1E50002
+	ld xde, xhl
+	calr FmmPdFileNameFunc
+	incdi8 1, 35106
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1E0009A
+	lds32 xde, 0
+	call 0xFA9D58
+	ldw wa, 0x75
+	call 0xF99490
+	jr PdMed_CheckAutoPlay
 
 PdMed_PlayNextLoop:
-	; (no addr) INC 1, HL
-	; (no addr) CP HL, WA
-	; (no addr) JR C, PdMed_PlayFindLoop
+	inc 1, hl
+	cp hl, wa
+	jr c, PdMed_PlayFindLoop
 
 PdMed_CheckAutoPlay:
-	; (no addr) CP (84FEh), 000h
-	; (no addr) JR NZ, PdMed_Exit
-	; (no addr) LD XWA, 0ffffffffh
-	; (no addr) LD XBC, 01e0009ah
-	; (no addr) LD XDE, 0
-	; (no addr) CALL ApPostEvent
-	; (no addr) LD WA, 0071h
-	; (no addr) JR T, PdMed_CallPauseMode
+	cpdi8 34046, 0
+	jr nz, PdMed_Exit
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1E0009A
+	lds32 xde, 0
+	call 0xFA9D58
+	ldw wa, 0x71
+	jr PdMed_CallPauseMode
 
 PdMed_StoreDelayFlag:
-	; (no addr) LD (8498h), XWA
-	; (no addr) JR T, PdMed_Exit
+	stda32 33944, xwa
+	jr PdMed_Exit
 
 PdMed_CheckContinue:
-	; (no addr) CP (84FEh), 000h
-	; (no addr) JR Z, PdMed_Exit
-	; (no addr) LD XWA, 0ffffffffh
-	; (no addr) LD XBC, 01e0009ah
-	; (no addr) LD XDE, 0
-	; (no addr) CALL ApPostEvent
-	; (no addr) LD WA, 0075h
+	cpdi8 34046, 0
+	jr z, PdMed_Exit
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1E0009A
+	lds32 xde, 0
+	call 0xFA9D58
+	ldw wa, 0x75
 
 PdMed_CallPauseMode:
-	; (no addr) CALL UI_PostModeChangeEvent
+	call 0xF99490
 
 PdMed_Exit:
-	; (no addr) LD XHL, 0
-	; (no addr) POP XIZ
-	; (no addr) RET
+	lds32 xhl, 0
+	pop xiz
+	ret
 
+LABEL_F939CE:
 DocDiskNameFunc:
-	; (no addr) PUSH XIZ
-	; (no addr) LD XIZ, XDE
-	; (no addr) CP XBC, 01c0000bh
-	; (no addr) JR NZ, DocDisk_Exit
-	; (no addr) CALL LABEL_F8958D
-	; (no addr) LD IX, 0
-	; (no addr) JR T, DocDisk_CopyLoop
+	push xiz
+	ld xiz, xde
+	cp xbc, 0x1C0000B
+	jr nz, DocDisk_Exit
+	call LABEL_F8958D
+	lds ix, 0
+	jr DocDisk_CopyLoop
 
 DocDisk_CopyCharLoop:
-	; (no addr) CP (XHL), 020h
-	; (no addr) JR Z, DocDisk_SkipSpace
-	; (no addr) LD DE, IX
-	; (no addr) INC 1, IX
-	; (no addr) LD A, (XHL)
-	; (no addr) LD (XBC + DE), A
+	cpmi8 (xhl), 0x20
+	jr z, DocDisk_SkipSpace
+	ld de, ix
+	inc 1, ix
+	ld a, (xhl)
+	lda_xbc_dri3 0x07, 0xE4, 0xE8
 
 DocDisk_SkipSpace:
-	; (no addr) INC 1, XHL
+	inc 1, xhl
 
 DocDisk_CopyLoop:
-	; (no addr) LDA XBC, 878Ch
-	; (no addr) CP (XHL), 000h
-	; (no addr) JR Z, DocDisk_TerminateStr
-	; (no addr) CP IX, 001eh
-	; (no addr) JR LT, DocDisk_CopyCharLoop
+	ldada xbc, 34700
+	cpmi8 (xhl), 0x0
+	jr z, DocDisk_TerminateStr
+	cp ix, 0x1E
+	jr lt, DocDisk_CopyCharLoop
 
 DocDisk_TerminateStr:
-	; (no addr) LD XDE, XBC
-	; (no addr) LD (XBC + IX), 000h
-	; (no addr) JR T, DocDisk_TrimLoop
+	ld xde, xbc
+	dri5 0x07, 0xE4, 0xF0, 0x00, 0x00
+	jr DocDisk_TrimLoop
 
 DocDisk_ClearTrailing:
-	; (no addr) LD (XWA), 000h
+	ldmi8 (xwa), 0x0
 
 DocDisk_TrimLoop:
-	; (no addr) DEC 1, IX
-	; (no addr) LDA XWA, XDE + IX
-	; (no addr) CP (XWA), 020h
-	; (no addr) JR NZ, DocDisk_PostEvent
-	; (no addr) CP IX, 0
-	; (no addr) JR GT, DocDisk_ClearTrailing
+	dec 1, ix
+	st_w_dri3 0x07, 0xE8, 0xF0
+	cpmi8 (xwa), 0x20
+	jr nz, DocDisk_PostEvent
+	cps ix, 0
+	jr gt, DocDisk_ClearTrailing
 
 DocDisk_PostEvent:
-	; (no addr) LD XWA, XIZ
-	; (no addr) LD XBC, 01c0000fh
-	; (no addr) CALL ApPostEvent
+	ld xwa, xiz
+	ld xbc, 0x1C0000F
+	call 0xFA9D58
 
 DocDisk_Exit:
-	; (no addr) LD XHL, 0
-	; (no addr) POP XIZ
-	; (no addr) RET
+	lds32 xhl, 0
+	pop xiz
+	ret
 
 DocMed_FormatFileList:
-	; (no addr) DEC 6, XSP
-	; (no addr) PUSH IZ
-	; (no addr) LD (XSP + 002h), BC
-	; (no addr) LD (XSP + 004h), XWA
-	; (no addr) LD IZ, 0
+	dec 6, xsp
+	pushw iz
+	ld (xsp + 2), bc
+	ld (xsp + 4), xwa
+	lds iz, 0
 
 DocFmt_FormatLoop:
-	; (no addr) LD DE, IZ
-	; (no addr) SLL 5, DE
-	; (no addr) LDA XBC, 850Ch
-	; (no addr) EXTZ XDE
-	; (no addr) ADD XDE, XBC
-	; (no addr) LD A, IZL
-	; (no addr) LD (XDE), A
-	; (no addr) LD WA, (XSP + 002h)
-	; (no addr) ADD WA, IZ
-	; (no addr) CALL LABEL_F8ABBB
-	; (no addr) LD XBC, XHL
-	; (no addr) LD WA, IZ
-	; (no addr) SLL 5, WA
-	; (no addr) LD DE, 1
-	; (no addr) ADD DE, WA
-	; (no addr) LDA XHL, 850Ch
-	; (no addr) LD WA, DE
-	; (no addr) EXTZ XWA
-	; (no addr) ADD XWA, XHL
-	; (no addr) LD DE, (XSP + 002h)
-	; (no addr) ADD DE, IZ
-	; (no addr) INC 1, DE
-	; (no addr) PUSHW 000ch
-	; (no addr) PUSHW 0000h
-	; (no addr) CALL LABEL_F891DD
-	; (no addr) LD DE, IZ
-	; (no addr) SLL 5, DE
-	; (no addr) LDA XBC, 850Ch
-	; (no addr) EXTZ XDE
-	; (no addr) ADD XDE, XBC
-	; (no addr) LD XWA, (XSP + 004h)
-	; (no addr) LD XBC, 01c0000fh
-	; (no addr) CALL ApPostEvent
-	; (no addr) INC 1, IZ
-	; (no addr) CP IZ, 000ah
-	; (no addr) JR LT, DocFmt_FormatLoop
-	; (no addr) POP IZ
-	; (no addr) INC 6, XSP
-	; (no addr) RET
+	ld de, iz
+	sll de, 5
+	ldada xbc, 34060
+	extz xde
+	add xde, xbc
+	ldto_a_berp 0xF8
+	ld (xde), a
+	ld wa, (xsp + 2)
+	add wa, iz
+	call LABEL_F8ABBB
+	ld xbc, xhl
+	ld wa, iz
+	sll wa, 5
+	lds de, 1
+	add de, wa
+	ldada xhl, 34060
+	ld wa, de
+	extz xwa
+	add xwa, xhl
+	ld de, (xsp + 2)
+	add de, iz
+	inc 1, de
+	pushw 0xC
+	pushw 0x0
+	call LABEL_F891DD
+	ld de, iz
+	sll de, 5
+	ldada xbc, 34060
+	extz xde
+	add xde, xbc
+	ld xwa, (xsp + 4)
+	ld xbc, 0x1C0000F
+	call 0xFA9D58
+	inc 1, iz
+	cp iz, 0xA
+	jr lt, DocFmt_FormatLoop
+	popw iz
+	inc 6, xsp
+	ret
 
 FmmDocFileNameFunc:
-	; (no addr) DEC 4, XSP
-	; (no addr) PUSH IZ
-	; (no addr) LD (XSP + 002h), XWA
-	; (no addr) CP XBC, 01e50003h
-	; (no addr) JRL Z, DocName_GetIndexReturn
-	; (no addr) LD WA, (84A2h)
-	; (no addr) LD IZ, WA
-	; (no addr) CP XBC, 01e50002h
-	; (no addr) JRL Z, DocName_SetIndexPlaying
-	; (no addr) LD HL, WA
-	; (no addr) EXTS XHL
-	DIVS_HL 0xa
-	; (no addr) CP XBC, 01c00018h
-	; (no addr) JR Z, DocName_HandleNavigation
-	; (no addr) CP XBC, 01c00017h
-	; (no addr) JR Z, DocName_HandleNavigation
-	; (no addr) CP XBC, 01c0000bh
-	; (no addr) JR Z, DocName_RefreshList
-	; (no addr) CP XBC, 01e50004h
-	; (no addr) JR NZ, DocName_ReturnZero
-	; (no addr) LD (849Eh), XDE
-	; (no addr) CALL LABEL_F8A7CE
-	; (no addr) LD (84A2h), HL
-	; (no addr) CP HL, 0
-	; (no addr) JR GE, DocName_UpdateIndex
-	; (no addr) LDW (84A2h), 0000h
+	dec 4, xsp
+	pushw iz
+	ld (xsp + 2), xwa
+	cp xbc, 0x1E50003
+	jrl z, DocName_GetIndexReturn
+	ldda16 xwa, 33954
+	ld iz, wa
+	cp xbc, 0x1E50002
+	jrl z, DocName_SetIndexPlaying
+	ld hl, wa
+	exts xhl
+	divs hl, 0xA
+	cp xbc, 0x1C00018
+	jr z, DocName_HandleNavigation
+	cp xbc, 0x1C00017
+	jr z, DocName_HandleNavigation
+	cp xbc, 0x1C0000B
+	jr z, DocName_RefreshList
+	cp xbc, 0x1E50004
+	jr nz, DocName_ReturnZero
+	stda32 33950, xde
+	call LABEL_F8A7CE
+	stda16 33954, xhl
+	cps hl, 0
+	jr ge, DocName_UpdateIndex
+	stdi16 33954, 0
 
 DocName_UpdateIndex:
-	; (no addr) LD WA, (84A2h)
-	; (no addr) EXTS XWA
-	DIVS_WA 0xa
-	; (no addr) LD DE, QWA
-	; (no addr) EXTS XDE
-	; (no addr) LD XWA, (849Eh)
-	; (no addr) LD XBC, 01e50002h
-	; (no addr) JRL T, DocName_PostEvent
+	ldda16 xwa, 33954
+	exts xwa
+	divs wa, 0xA
+	ldto_de_werp 0xE2
+	exts xde
+	ldda32 xwa, 33950
+	ld xbc, 0x1E50002
+	jrl DocName_PostEvent
 
 DocName_RefreshList:
-	MULS_HL 0xa
-	; (no addr) LD XWA, (849Eh)
-	; (no addr) LD BC, HL
-	CALR DocMed_FormatFileList
+	muls hl, 0xA
+	ldda32 xwa, 33950
+	ld bc, hl
+	calr DocMed_FormatFileList
 
 DocName_ReturnZero:
-	; (no addr) LD XHL, 0
-	; (no addr) JRL T, DocName_Exit
+	lds32 xhl, 0
+	jrl DocName_Exit
 
 DocName_HandleNavigation:
-	; (no addr) OR XDE, XDE
-	; (no addr) JR NZ, DocName_CheckPageUp
-	; (no addr) CP (84FEh), 000h
-	; (no addr) JR NZ, DocName_CheckPageUp
-	; (no addr) CP XBC, 01c00018h
-	; (no addr) JR NZ, DocName_CheckPrevKey
-	; (no addr) LD BC, WA
-	; (no addr) INC 1, BC
-	; (no addr) CP BC, (8508h)
-	; (no addr) JR GE, DocName_GetCurrentIndex
-	; (no addr) INC 1, WA
-	; (no addr) JR T, DocName_SaveIndex
+	or xde, xde
+	jr nz, DocName_CheckPageUp
+	cpdi8 34046, 0
+	jr nz, DocName_CheckPageUp
+	cp xbc, 0x1C00018
+	jr nz, DocName_CheckPrevKey
+	ld bc, wa
+	inc 1, bc
+	cpda16 xbc, 34056
+	jr ge, DocName_GetCurrentIndex
+	inc 1, wa
+	jr DocName_SaveIndex
 
 DocName_CheckPrevKey:
-	; (no addr) CP XBC, 01c00017h
-	; (no addr) JR NZ, DocName_GetCurrentIndex
-	; (no addr) CP WA, 0
-	; (no addr) JR LE, DocName_GetCurrentIndex
-	; (no addr) DEC 1, WA
-	; (no addr) JR T, DocName_SaveIndex
+	cp xbc, 0x1C00017
+	jr nz, DocName_GetCurrentIndex
+	cps wa, 0
+	jr le, DocName_GetCurrentIndex
+	dec 1, wa
+	jr DocName_SaveIndex
 
 DocName_CheckPageUp:
-	; (no addr) CP XDE, 00000001h
-	; (no addr) JR NZ, DocName_CheckPageDown
-	; (no addr) CP (84FEh), 000h
-	; (no addr) JR NZ, DocName_CheckPageDown
-	; (no addr) CP WA, 000ah
-	; (no addr) JR LT, DocName_GetCurrentIndex
-	; (no addr) SUB WA, 000ah
-	; (no addr) JR T, DocName_SaveIndex
+	cp xde, 0x1
+	jr nz, DocName_CheckPageDown
+	cpdi8 34046, 0
+	jr nz, DocName_CheckPageDown
+	cp wa, 0xA
+	jr lt, DocName_GetCurrentIndex
+	sub wa, 0xA
+	jr DocName_SaveIndex
 
 DocName_CheckPageDown:
-	; (no addr) CP XDE, 00000002h
-	; (no addr) JR NZ, DocName_GetCurrentIndex
-	; (no addr) CP (84FEh), 000h
-	; (no addr) JR NZ, DocName_GetCurrentIndex
-	; (no addr) LD BC, WA
-	; (no addr) ADD BC, 000ah
-	; (no addr) LD DE, (8508h)
-	; (no addr) CP BC, DE
-	; (no addr) JR GE, DocName_CheckEndBound
-	; (no addr) ADD WA, 000ah
+	cp xde, 0x2
+	jr nz, DocName_GetCurrentIndex
+	cpdi8 34046, 0
+	jr nz, DocName_GetCurrentIndex
+	ld bc, wa
+	add bc, 0xA
+	ldda16 xde, 34056
+	cp bc, de
+	jr ge, DocName_CheckEndBound
+	add wa, 0xA
 
 DocName_SaveIndex:
-	; (no addr) LD (84A2h), WA
-	; (no addr) JR T, DocName_UpdateDisplay
+	stda16 33954, xwa
+	jr DocName_UpdateDisplay
 
 DocName_CheckEndBound:
-	; (no addr) LD BC, DE
-	; (no addr) DEC 1, BC
-	; (no addr) LD WA, BC
-	; (no addr) EXTS XWA
-	DIVS_WA 0xa
-	; (no addr) CP HL, WA
-	; (no addr) JR GE, DocName_GetCurrentIndex
-	; (no addr) EXTS XDE
-	DIVS_DE 0xa
-	; (no addr) LD WA, QDE
-	; (no addr) CP WA, 0
-	; (no addr) JR Z, DocName_GetCurrentIndex
-	; (no addr) LD (84A2h), BC
+	ld bc, de
+	dec 1, bc
+	ld wa, bc
+	exts xwa
+	divs wa, 0xA
+	cp hl, wa
+	jr ge, DocName_GetCurrentIndex
+	exts xde
+	divs de, 0xA
+	ldto_wa_werp 0xEA
+	cps wa, 0
+	jr z, DocName_GetCurrentIndex
+	stda16 33954, xbc
 
 DocName_GetCurrentIndex:
-	; (no addr) LD WA, (84A2h)
+	ldda16 xwa, 33954
 
 DocName_UpdateDisplay:
-	; (no addr) CP IZ, WA
-	; (no addr) JRL Z, DocName_ReturnZero
-	; (no addr) CALL LABEL_F8A956
-	; (no addr) LD WA, (84A2h)
-	; (no addr) EXTS XWA
-	DIVS_WA 0xa
-	; (no addr) LD DE, QWA
-	; (no addr) EXTS XDE
-	; (no addr) LD XWA, (849Eh)
-	; (no addr) LD XBC, 01e50002h
-	; (no addr) CALL ApPostEvent
-	; (no addr) LD BC, (84A2h)
-	; (no addr) EXTS XBC
-	DIVS_BC 0xa
-	; (no addr) LD DE, IZ
-	; (no addr) EXTS XDE
-	DIVS_DE 0xa
-	; (no addr) LD XWA, (849Eh)
-	; (no addr) CP DE, BC
-	; (no addr) JR NZ, DocName_RefreshPage
-	; (no addr) LD BC, IZ
-	; (no addr) EXTS XBC
-	DIVS_BC 0xa
-	; (no addr) LD BC, QBC
-	; (no addr) SLL 5, BC
-	; (no addr) LDA XHL, 850Ch
-	; (no addr) LD DE, BC
-	; (no addr) EXTZ XDE
-	; (no addr) ADD XDE, XHL
-	; (no addr) LD XBC, 01c0000fh
-	; (no addr) CALL ApPostEvent
-	; (no addr) LD WA, (84A2h)
-	; (no addr) EXTS XWA
-	DIVS_WA 0xa
-	; (no addr) LD WA, QWA
-	; (no addr) SLL 5, WA
-	; (no addr) LDA XBC, 850Ch
-	; (no addr) LD DE, WA
-	; (no addr) EXTZ XDE
-	; (no addr) ADD XDE, XBC
-	; (no addr) LD XWA, (849Eh)
-	; (no addr) LD XBC, 01c0000fh
-	; (no addr) CALL ApPostEvent
-	; (no addr) JRL T, DocName_ReturnZero
+	cp iz, wa
+	jrl z, DocName_ReturnZero
+	call LABEL_F8A956
+	ldda16 xwa, 33954
+	exts xwa
+	divs wa, 0xA
+	ldto_de_werp 0xE2
+	exts xde
+	ldda32 xwa, 33950
+	ld xbc, 0x1E50002
+	call 0xFA9D58
+	ldda16 xbc, 33954
+	exts xbc
+	divs bc, 0xA
+	ld de, iz
+	exts xde
+	divs de, 0xA
+	ldda32 xwa, 33950
+	cp de, bc
+	jr nz, DocName_RefreshPage
+	ld bc, iz
+	exts xbc
+	divs bc, 0xA
+	ldto_bc_werp 0xE6
+	sll bc, 5
+	ldada xhl, 34060
+	ld de, bc
+	extz xde
+	add xde, xhl
+	ld xbc, 0x1C0000F
+	call 0xFA9D58
+	ldda16 xwa, 33954
+	exts xwa
+	divs wa, 0xA
+	ldto_wa_werp 0xE2
+	sll wa, 5
+	ldada xbc, 34060
+	ld de, wa
+	extz xde
+	add xde, xbc
+	ldda32 xwa, 33950
+	ld xbc, 0x1C0000F
+	call 0xFA9D58
+	jrl DocName_ReturnZero
 
 DocName_RefreshPage:
-	MULS_BC 0xa
-	CALR DocMed_FormatFileList
-	; (no addr) LD XWA, (XSP + 002h)
-	; (no addr) LD XBC, 01c0000bh
-	; (no addr) LD XDE, 0
-	CALR FmmDocMedleyFunc
-	; (no addr) JRL T, DocName_ReturnZero
+	muls bc, 0xA
+	calr DocMed_FormatFileList
+	ld xwa, (xsp + 2)
+	ld xbc, 0x1C0000B
+	lds32 xde, 0
+	calr FmmDocMedleyFunc
+	jrl DocName_ReturnZero
 
 DocName_SetIndexPlaying:
-	; (no addr) CP (84FEh), 000h
-	; (no addr) JRL Z, DocName_ReturnZero
-	; (no addr) LD (84A2h), DE
-	; (no addr) LD WA, DE
-	; (no addr) CALL LABEL_F8A956
-	; (no addr) LD WA, (84A2h)
-	; (no addr) EXTS XWA
-	DIVS_WA 0xa
-	; (no addr) LD DE, QWA
-	; (no addr) EXTS XDE
-	; (no addr) LD XWA, (849Eh)
-	; (no addr) LD XBC, 01e50002h
+	cpdi8 34046, 0
+	jrl z, DocName_ReturnZero
+	stda16 33954, xde
+	ld wa, de
+	call LABEL_F8A956
+	ldda16 xwa, 33954
+	exts xwa
+	divs wa, 0xA
+	ldto_de_werp 0xE2
+	exts xde
+	ldda32 xwa, 33950
+	ld xbc, 0x1E50002
 
 DocName_PostEvent:
-	; (no addr) CALL ApPostEvent
-	; (no addr) JRL T, DocName_ReturnZero
+	call 0xFA9D58
+	jrl DocName_ReturnZero
 
 DocName_GetIndexReturn:
-	; (no addr) LD HL, (84A2h)
-	; (no addr) EXTS XHL
+	ldda16 xhl, 33954
+	exts xhl
 
 DocName_Exit:
-	; (no addr) POP IZ
-	; (no addr) INC 4, XSP
-	; (no addr) RET
+	popw iz
+	inc 4, xsp
+	ret
 
+LABEL_F93C9C:
 DocMed_FormatSlotList:
-	; (no addr) DEC 6, XSP
-	; (no addr) PUSH XIZ
-	; (no addr) LD IZ, BC
-	; (no addr) LD (XSP + 006h), XWA
-	; (no addr) LD XWA, 0
-	; (no addr) LD XBC, 01e50003h
-	; (no addr) LD XDE, 0
-	CALR FmmDocFileNameFunc
-	; (no addr) LD QIZ, HL
-	; (no addr) LD WA, QIZ
-	; (no addr) EXTZ XWA
-	DIVW_WA 0xa
-	; (no addr) LD QIZ, WA
-	MULW_WA 0xa
-	; (no addr) LD QIZ, WA
-	; (no addr) LDW (XSP + 004h:8), 000ah
-	; (no addr) LD WA, QIZ
-	; (no addr) ADD WA, 000ah
-	; (no addr) CP WA, IZ
-	; (no addr) JR C, DocFmtSlot_CalcVisible
-	; (no addr) LD (XSP + 004h), IZ
-	; (no addr) LD WA, QIZ
-	; (no addr) SUB (XSP + 004h), WA
+	dec 6, xsp
+	push xiz
+	ld iz, bc
+	ld (xsp + 6), xwa
+	lds32 xwa, 0
+	ld xbc, 0x1E50003
+	lds32 xde, 0
+	calr FmmDocFileNameFunc
+	ldfr_hl_werp 0xFA
+	ldto_wa_werp 0xFA
+	extz xwa
+	div wa, 0xA
+	ldfr_wa_werp 0xFA
+	mul wa, 0xA
+	ldfr_wa_werp 0xFA
+	ldmw (xsp + 4), 0xA
+	ldto_wa_werp 0xFA
+	add wa, 0xA
+	cp wa, iz
+	jr c, DocFmtSlot_CalcVisible
+	ld (xsp + 4), iz
+	ldto_wa_werp 0xFA
+	sub (xsp + 4), wa
 
 DocFmtSlot_CalcVisible:
-	; (no addr) LD IZ, 0
-	; (no addr) CPW (XSP + 004h), 0000h
-	; (no addr) JR ULE, DocFmtSlot_FillEmpty
+	lds iz, 0
+	cpmi16 (xsp + 4), 0x0
+	jr ule, DocFmtSlot_FillEmpty
 
 DocFmtSlot_FormatLoop:
-	; (no addr) LD WA, IZ
-	; (no addr) SLL 3, WA
-	; (no addr) LDA XBC, 84A4h
-	; (no addr) EXTZ XWA
-	; (no addr) ADD XWA, XBC
-	; (no addr) LD BC, QIZ
-	; (no addr) ADD BC, IZ
-	; (no addr) LDA XDE, 88A0h
-	; (no addr) EXTZ XBC
-	; (no addr) ADD XBC, XDE
-	; (no addr) LD C, (XBC)
-	; (no addr) EXTZ BC
-	; (no addr) LD DE, IZ
-	CALR FormatMedleyNumber
-	; (no addr) LD DE, IZ
-	; (no addr) SLL 3, DE
-	; (no addr) LDA XWA, 84A4h
-	; (no addr) EXTZ XDE
-	; (no addr) ADD XDE, XWA
-	; (no addr) LD XWA, (XSP + 006h)
-	; (no addr) LD XBC, 01c0000fh
-	; (no addr) CALL ApPostEvent
-	; (no addr) INC 1, IZ
-	; (no addr) CP IZ, (XSP + 004h)
-	; (no addr) JR C, DocFmtSlot_FormatLoop
+	ld wa, iz
+	sll wa, 3
+	ldada xbc, 33956
+	extz xwa
+	add xwa, xbc
+	ldto_bc_werp 0xFA
+	add bc, iz
+	ldada xde, 34976
+	extz xbc
+	add xbc, xde
+	ld c, (xbc)
+	extz bc
+	ld de, iz
+	calr FormatMedleyNumber
+	ld de, iz
+	sll de, 3
+	ldada xwa, 33956
+	extz xde
+	add xde, xwa
+	ld xwa, (xsp + 6)
+	ld xbc, 0x1C0000F
+	call 0xFA9D58
+	inc 1, iz
+	cp iz, (xsp + 4)
+	jr c, DocFmtSlot_FormatLoop
 
 DocFmtSlot_FillEmpty:
-	; (no addr) CP IZ, 000ah
-	; (no addr) JR NC, DocFmtSlot_Exit
+	cp iz, 0xA
+	jr nc, DocFmtSlot_Exit
 
 DocFmtSlot_EmptyLoop:
-	; (no addr) LD WA, IZ
-	; (no addr) SLL 3, WA
-	; (no addr) LDA XBC, 84A4h
-	; (no addr) EXTZ XWA
-	; (no addr) ADD XWA, XBC
-	; (no addr) LD BC, 00ffh
-	; (no addr) LD DE, IZ
-	CALR FormatMedleyNumber
-	; (no addr) LD DE, IZ
-	; (no addr) SLL 3, DE
-	; (no addr) LDA XWA, 84A4h
-	; (no addr) EXTZ XDE
-	; (no addr) ADD XDE, XWA
-	; (no addr) LD XWA, (XSP + 006h)
-	; (no addr) LD XBC, 01c0000fh
-	; (no addr) CALL ApPostEvent
-	; (no addr) INC 1, IZ
-	; (no addr) CP IZ, 000ah
-	; (no addr) JR C, DocFmtSlot_EmptyLoop
+	ld wa, iz
+	sll wa, 3
+	ldada xbc, 33956
+	extz xwa
+	add xwa, xbc
+	ldw bc, 0xFF
+	ld de, iz
+	calr FormatMedleyNumber
+	ld de, iz
+	sll de, 3
+	ldada xwa, 33956
+	extz xde
+	add xde, xwa
+	ld xwa, (xsp + 6)
+	ld xbc, 0x1C0000F
+	call 0xFA9D58
+	inc 1, iz
+	cp iz, 0xA
+	jr c, DocFmtSlot_EmptyLoop
 
 DocFmtSlot_Exit:
-	; (no addr) POP XIZ
-	; (no addr) INC 6, XSP
-	; (no addr) RET
+	pop xiz
+	inc 6, xsp
+	ret
 
 FmmDocMedleyFunc:
-	; (no addr) PUSH XIZ
-	; (no addr) LD XHL, XDE
-	; (no addr) LD XDE, XBC
-	; (no addr) LD XIZ, XWA
-	; (no addr) CP XDE, 01e5000ah
-	; (no addr) JRL Z, DocMed_CheckContinue
-	; (no addr) LD XWA, XHL
-	; (no addr) CP XDE, 01e50008h
-	; (no addr) JRL Z, DocMed_StoreDelayFlag
-	; (no addr) LD BC, (84FCh)
-	; (no addr) CP XDE, 01c00018h
-	; (no addr) JRL Z, DocMed_HandleNavToggle
-	; (no addr) CP XDE, 01c00017h
-	; (no addr) JRL Z, DocMed_HandleNavToggle
-	; (no addr) CP XDE, 01c0000bh
-	; (no addr) JRL Z, DocMed_RefreshDisplay
-	; (no addr) CP XDE, 01e50004h
-	; (no addr) JRL Z, DocMed_StoreWindowPtr
-	; (no addr) CP XDE, 01c00013h
-	; (no addr) JRL NZ, DocMed_Exit
-	; (no addr) CP XHL, 00000003h
-	; (no addr) JRL Z, DocMed_HandleStop
-	; (no addr) CP XHL, 00000002h
-	; (no addr) JRL NZ, DocMed_Exit
-	; (no addr) LD WA, 0
-	; (no addr) CALL InitializeOperationState
-	; (no addr) LD A, (8D37h)
-	; (no addr) CP A, 070h
-	; (no addr) JR NZ, DocMed_CheckPlayMode
-	; (no addr) LD (84FEh), 000h
-	; (no addr) CALL LABEL_F2076D
-	; (no addr) CP L, 2
-	; (no addr) JRL C, DocMed_Exit
-	; (no addr) LD (7F42h), 001h
-	; (no addr) LD WA, 00eeh
-	; (no addr) JRL T, DocMed_ShowError
+	push xiz
+	ld xhl, xde
+	ld xde, xbc
+	ld xiz, xwa
+	cp xde, 0x1E5000A
+	jrl z, DocMed_CheckContinue
+	ld xwa, xhl
+	cp xde, 0x1E50008
+	jrl z, DocMed_StoreDelayFlag
+	ldda16 xbc, 34044
+	cp xde, 0x1C00018
+	jrl z, DocMed_HandleNavToggle
+	cp xde, 0x1C00017
+	jrl z, DocMed_HandleNavToggle
+	cp xde, 0x1C0000B
+	jrl z, DocMed_RefreshDisplay
+	cp xde, 0x1E50004
+	jrl z, DocMed_StoreWindowPtr
+	cp xde, 0x1C00013
+	jrl nz, DocMed_Exit
+	cp xhl, 0x3
+	jrl z, DocMed_HandleStop
+	cp xhl, 0x2
+	jrl nz, DocMed_Exit
+	lds wa, 0
+	call 0xF8B204
+	ldda8 a, 36151
+	cp a, 0x70
+	jr nz, DocMed_CheckPlayMode
+	stdi8 34046, 0
+	call LABEL_F2076D
+	cps l, 2
+	jrl c, DocMed_Exit
+	stdi8 32578, 1
+	ldw wa, 0xEE
+	jrl DocMed_ShowError
 
 DocMed_CheckPlayMode:
-	; (no addr) CP A, 074h
-	; (no addr) JRL NZ, DocMed_CheckInit
-	; (no addr) CALL LABEL_F2076D
-	; (no addr) CP L, 1
-	; (no addr) JRL NZ, DocMed_HandleError
-	; (no addr) LD (84FEh), 001h
-	; (no addr) LD C, (8922h)
-	; (no addr) LDA XWA, 88A0h
-	; (no addr) CP C, (8920h)
-	; (no addr) JR NC, DocMed_CheckRepeat
-	; (no addr) LD HL, 0
-	; (no addr) LD DE, (84FCh)
-	; (no addr) CP DE, 0
-	; (no addr) JRL ULE, DocMed_Exit
+	cp a, 0x74
+	jrl nz, DocMed_CheckInit
+	call LABEL_F2076D
+	cps l, 1
+	jrl nz, DocMed_HandleError
+	stdi8 34046, 1
+	ldda8 c, 35106
+	ldada xwa, 34976
+	cpda8 c, 35104
+	jr nc, DocMed_CheckRepeat
+	lds hl, 0
+	ldda16 xde, 34044
+	cps de, 0
+	jrl ule, DocMed_Exit
 
 DocMed_FindSongLoop:
-	; (no addr) LD IX, HL
-	; (no addr) EXTZ XIX
-	; (no addr) ADD XIX, XWA
-	; (no addr) CP (XIX), C
-	; (no addr) JR NZ, DocMed_NextSong
-	; (no addr) EXTZ XHL
-	; (no addr) LD XWA, XIZ
-	; (no addr) LD XBC, 01e50002h
-	; (no addr) LD XDE, XHL
-	CALR FmmDocFileNameFunc
-	; (no addr) LD XWA, (84F4h)
-	; (no addr) LD BC, (84FCh)
-	CALR DocMed_FormatSlotList
-	; (no addr) INC 1, (8922h)
-	; (no addr) LD XWA, (84F8h)
-	; (no addr) OR XWA, XWA
-	; (no addr) JRL Z, DocMed_Exit
-	; (no addr) LD XBC, 01e50009h
-	; (no addr) LD XDE, 0000001eh
-	; (no addr) JR T, DocMed_PostDelayEvent
+	ld ix, hl
+	extz xix
+	add xix, xwa
+	cp (xix), c
+	jr nz, DocMed_NextSong
+	extz xhl
+	ld xwa, xiz
+	ld xbc, 0x1E50002
+	ld xde, xhl
+	calr FmmDocFileNameFunc
+	ldda32 xwa, 34036
+	ldda16 xbc, 34044
+	calr DocMed_FormatSlotList
+	incdi8 1, 35106
+	ldda32 xwa, 34040
+	or xwa, xwa
+	jrl z, DocMed_Exit
+	ld xbc, 0x1E50009
+	ld xde, 0x1E
+	jr DocMed_PostDelayEvent
 
 DocMed_NextSong:
-	; (no addr) INC 1, HL
-	; (no addr) CP HL, DE
-	; (no addr) JR C, DocMed_FindSongLoop
-	; (no addr) JRL T, DocMed_Exit
+	inc 1, hl
+	cp hl, de
+	jr c, DocMed_FindSongLoop
+	jrl DocMed_Exit
 
 DocMed_CheckRepeat:
-	; (no addr) CP (8924h), 000h
-	; (no addr) JR Z, DocMed_ClearPlaying
-	; (no addr) LD (8922h), 000h
-	; (no addr) LD HL, 0
-	; (no addr) LD BC, (84FCh)
-	; (no addr) CP BC, 0
-	; (no addr) JRL ULE, DocMed_Exit
+	cpdi8 35108, 0
+	jr z, DocMed_ClearPlaying
+	stdi8 35106, 0
+	lds hl, 0
+	ldda16 xbc, 34044
+	cps bc, 0
+	jrl ule, DocMed_Exit
 
 DocMed_RepeatFindLoop:
-	; (no addr) LD DE, HL
-	; (no addr) EXTZ XDE
-	; (no addr) ADD XDE, XWA
-	; (no addr) CP (XDE), 000h
-	; (no addr) JR NZ, DocMed_RepeatNext
-	; (no addr) EXTZ XHL
-	; (no addr) LD XWA, XIZ
-	; (no addr) LD XBC, 01e50002h
-	; (no addr) LD XDE, XHL
-	CALR FmmDocFileNameFunc
-	; (no addr) LD XWA, (84F4h)
-	; (no addr) LD BC, (84FCh)
-	CALR DocMed_FormatSlotList
-	; (no addr) INC 1, (8922h)
-	; (no addr) LD XWA, (84F8h)
-	; (no addr) OR XWA, XWA
-	; (no addr) JRL Z, DocMed_Exit
-	; (no addr) LD XBC, 01e50009h
-	; (no addr) LD XDE, 0000001eh
+	ld de, hl
+	extz xde
+	add xde, xwa
+	cpmi8 (xde), 0x0
+	jr nz, DocMed_RepeatNext
+	extz xhl
+	ld xwa, xiz
+	ld xbc, 0x1E50002
+	ld xde, xhl
+	calr FmmDocFileNameFunc
+	ldda32 xwa, 34036
+	ldda16 xbc, 34044
+	calr DocMed_FormatSlotList
+	incdi8 1, 35106
+	ldda32 xwa, 34040
+	or xwa, xwa
+	jrl z, DocMed_Exit
+	ld xbc, 0x1E50009
+	ld xde, 0x1E
 
 DocMed_PostDelayEvent:
-	; (no addr) CALL ApPostEvent
-	; (no addr) JRL T, DocMed_Exit
+	call 0xFA9D58
+	jrl DocMed_Exit
 
 DocMed_RepeatNext:
-	; (no addr) INC 1, HL
-	; (no addr) CP HL, BC
-	; (no addr) JR C, DocMed_RepeatFindLoop
-	; (no addr) JRL T, DocMed_Exit
+	inc 1, hl
+	cp hl, bc
+	jr c, DocMed_RepeatFindLoop
+	jrl DocMed_Exit
 
 DocMed_ClearPlaying:
-	; (no addr) LD (84FEh), 000h
-	; (no addr) JRL T, DocMed_Exit
+	stdi8 34046, 0
+	jrl DocMed_Exit
 
 DocMed_HandleError:
-	; (no addr) CALL LABEL_F2076D
-	; (no addr) LD (84FEh), 000h
-	; (no addr) CP L, 0
-	; (no addr) JRL Z, DocMed_Exit
-	; (no addr) LD (7F42h), 001h
-	; (no addr) LD WA, 00eeh
+	call LABEL_F2076D
+	stdi8 34046, 0
+	cps l, 0
+	jrl z, DocMed_Exit
+	stdi8 32578, 1
+	ldw wa, 0xEE
 
 DocMed_ShowError:
-	; (no addr) CALL LABEL_F994BD
-	; (no addr) JRL T, DocMed_Exit
+	call LABEL_F994BD
+	jrl DocMed_Exit
 
+LABEL_F93EEA:
 DocMed_CheckInit:
-	; (no addr) CPW (8508h), 0000h
-	; (no addr) JR LT, DocMed_InitFromDisk
-	; (no addr) CPW (8504h), 0000h
-	; (no addr) JR NZ, DocMed_InitState
+	cpdi16 34056, 0
+	jr lt, DocMed_InitFromDisk
+	cpdi16 34052, 0
+	jr nz, DocMed_InitState
 
 DocMed_InitFromDisk:
-	; (no addr) LDW (8504h), 0ffffh
-	; (no addr) LD XWA, 00600026h
-	; (no addr) LD XBC, 01c00001h
-	; (no addr) LD XDE, 5
-	; (no addr) CALL ApPostEvent
-	; (no addr) CALL LABEL_F8A9D6
-	; (no addr) LD (8508h), HL
-	; (no addr) LD XWA, 00600026h
-	; (no addr) LD XBC, 01c00002h
-	; (no addr) LD XDE, 0
-	; (no addr) CALL ApPostEvent
-	; (no addr) LD XWA, 0ffffffffh
-	; (no addr) LD XBC, 01c0000ah
-	; (no addr) LD XDE, 0
-	; (no addr) CALL ApPostEvent
-	; (no addr) CALL SignalProgressUpdate
+	stdi16 34052, 65535
+	ld xwa, 0x600026
+	ld xbc, 0x1C00001
+	lds32 xde, 5
+	call 0xFA9D58
+	call LABEL_F8A9D6
+	stda16 34056, xhl
+	ld xwa, 0x600026
+	ld xbc, 0x1C00002
+	lds32 xde, 0
+	call 0xFA9D58
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C0000A
+	lds32 xde, 0
+	call 0xFA9D58
+	call 0xF8B260
 
 DocMed_InitState:
-	; (no addr) LD (84FEh), 000h
-	; (no addr) LD (8922h), 000h
-	; (no addr) LD (8920h), 000h
-	; (no addr) LD BC, 0080h
-	; (no addr) LD WA, (8508h)
-	; (no addr) CP WA, 0080h
-	; (no addr) JR UGT, DocMed_ClampCount
-	; (no addr) LD BC, WA
+	stdi8 34046, 0
+	stdi8 35106, 0
+	stdi8 35104, 0
+	ldw bc, 0x80
+	ldda16 xwa, 34056
+	cp wa, 0x80
+	jr ugt, DocMed_ClampCount
+	ld bc, wa
 
 DocMed_ClampCount:
-	; (no addr) LD (84FCh), BC
-	; (no addr) LD HL, 0
-	; (no addr) CP BC, 0
-	; (no addr) JR ULE, DocMed_FinishInit
-	; (no addr) LDA XWA, 88A0h
+	stda16 34044, xbc
+	lds hl, 0
+	cps bc, 0
+	jr ule, DocMed_FinishInit
+	ldada xwa, 34976
 
 DocMed_ClearSlotsLoop:
-	; (no addr) LD BC, HL
-	; (no addr) EXTZ XBC
-	; (no addr) ADD XBC, XWA
-	; (no addr) LD (XBC), 0ffh
-	; (no addr) INC 1, HL
-	; (no addr) CP HL, (84FCh)
-	; (no addr) JR C, DocMed_ClearSlotsLoop
+	ld bc, hl
+	extz xbc
+	add xbc, xwa
+	ldmi8 (xbc), 0xFF
+	inc 1, hl
+	cpda16 xhl, 34044
+	jr c, DocMed_ClearSlotsLoop
 
 DocMed_FinishInit:
-	; (no addr) CALL LABEL_F20ACD
-	; (no addr) LD XWA, 0
-	; (no addr) LD (84F8h), XWA
-	; (no addr) JRL T, DocMed_Exit
+	call LABEL_F20ACD
+	lds32 xwa, 0
+	stda32 34040, xwa
+	jrl DocMed_Exit
 
 DocMed_HandleStop:
-	; (no addr) LD A, (8D36h)
-	; (no addr) CP A, 070h
-	; (no addr) JRL Z, DocMed_Exit
-	; (no addr) CP A, 074h
-	; (no addr) JRL Z, DocMed_Exit
-	; (no addr) CALL LABEL_F20B70
-	; (no addr) CALL CancelOperationCleanup
-	; (no addr) LD (84FEh), 000h
-	; (no addr) JRL T, DocMed_Exit
+	ldda8 a, 36150
+	cp a, 0x70
+	jrl z, DocMed_Exit
+	cp a, 0x74
+	jrl z, DocMed_Exit
+	call LABEL_F20B70
+	call 0xF8B244
+	stdi8 34046, 0
+	jrl DocMed_Exit
 
 DocMed_StoreWindowPtr:
-	; (no addr) LD (84F4h), XWA
-	; (no addr) JRL T, DocMed_Exit
+	stda32 34036, xwa
+	jrl DocMed_Exit
 
 DocMed_RefreshDisplay:
-	; (no addr) LD XWA, (84F4h)
-	CALR DocMed_FormatSlotList
-	; (no addr) JRL T, DocMed_Exit
+	ldda32 xwa, 34036
+	calr DocMed_FormatSlotList
+	jrl DocMed_Exit
 
 DocMed_HandleNavToggle:
-	; (no addr) CP XHL, 0000000ah
-	; (no addr) JRL NZ, DocMed_HandleSelectToggle
-	; (no addr) CP (84FEh), 000h
-	; (no addr) JR NZ, DocMed_HandleSelectToggle
-	; (no addr) LD HL, 0
-	; (no addr) LD WA, BC
-	; (no addr) CP BC, 0
-	; (no addr) JR ULE, DocMed_CheckAllUnmarked
-	; (no addr) LDA XBC, 88A0h
+	cp xhl, 0xA
+	jrl nz, DocMed_HandleSelectToggle
+	cpdi8 34046, 0
+	jr nz, DocMed_HandleSelectToggle
+	lds hl, 0
+	ld wa, bc
+	cps bc, 0
+	jr ule, DocMed_CheckAllUnmarked
+	ldada xbc, 34976
 
 DocMed_FindUnmarkedLoop:
-	; (no addr) LD DE, HL
-	; (no addr) EXTZ XDE
-	; (no addr) ADD XDE, XBC
-	; (no addr) CP (XDE), 0ffh
-	; (no addr) JR Z, DocMed_CheckAllUnmarked
-	; (no addr) INC 1, HL
-	; (no addr) CP HL, WA
-	; (no addr) JR C, DocMed_FindUnmarkedLoop
+	ld de, hl
+	extz xde
+	add xde, xbc
+	cpmi8 (xde), 0xFF
+	jr z, DocMed_CheckAllUnmarked
+	inc 1, hl
+	cp hl, wa
+	jr c, DocMed_FindUnmarkedLoop
 
 DocMed_CheckAllUnmarked:
-	; (no addr) CP HL, WA
-	; (no addr) JR NC, DocMed_RemoveOrderLoop
-	; (no addr) LD HL, 0
-	; (no addr) CP WA, 0
-	; (no addr) JR ULE, DocMed_RefreshAfterToggle
-	; (no addr) LDA XDE, 88A0h
+	cp hl, wa
+	jr nc, DocMed_RemoveOrderLoop
+	lds hl, 0
+	cps wa, 0
+	jr ule, DocMed_RefreshAfterToggle
+	ldada xde, 34976
 
 DocMed_AssignOrderLoop:
-	; (no addr) LD BC, HL
-	; (no addr) EXTZ XBC
-	; (no addr) ADD XBC, XDE
-	; (no addr) LD A, (XBC)
-	; (no addr) CP A, 0ffh
-	; (no addr) JR NZ, DocMed_NextAssign
-	; (no addr) LD (XBC), (8920h)
-	; (no addr) INC 1, (8920h)
+	ld bc, hl
+	extz xbc
+	add xbc, xde
+	ld a, (xbc)
+	cp a, 0xFF
+	jr nz, DocMed_NextAssign
+	ldmi16 (xbc), 0x8920
+	incdi8 1, 35104
 
 DocMed_NextAssign:
-	; (no addr) INC 1, HL
-	; (no addr) CP HL, (84FCh)
-	; (no addr) JR C, DocMed_AssignOrderLoop
-	; (no addr) JR T, DocMed_RefreshAfterToggle
+	inc 1, hl
+	cpda16 xhl, 34044
+	jr c, DocMed_AssignOrderLoop
+	jr DocMed_RefreshAfterToggle
 
 DocMed_RemoveOrderLoop:
-	; (no addr) LD HL, 0
-	; (no addr) CP WA, 0
-	; (no addr) JR ULE, DocMed_RefreshAfterToggle
-	; (no addr) LDA XDE, 88A0h
+	lds hl, 0
+	cps wa, 0
+	jr ule, DocMed_RefreshAfterToggle
+	ldada xde, 34976
 
 DocMed_UnmarkLoop:
-	; (no addr) LD BC, HL
-	; (no addr) EXTZ XBC
-	; (no addr) ADD XBC, XDE
-	; (no addr) LD A, (XBC)
-	; (no addr) CP A, 0fdh
-	; (no addr) JR UGT, DocMed_NextUnmark
-	; (no addr) LD (XBC), 0ffh
-	; (no addr) DEC 1, (8920h)
+	ld bc, hl
+	extz xbc
+	add xbc, xde
+	ld a, (xbc)
+	cp a, 0xFD
+	jr ugt, DocMed_NextUnmark
+	ldmi8 (xbc), 0xFF
+	decdi8 1, 35104
 
 DocMed_NextUnmark:
-	; (no addr) INC 1, HL
-	; (no addr) CP HL, (84FCh)
-	; (no addr) JR C, DocMed_UnmarkLoop
+	inc 1, hl
+	cpda16 xhl, 34044
+	jr c, DocMed_UnmarkLoop
 
 DocMed_RefreshAfterToggle:
-	; (no addr) LD XWA, (84F4h)
-	; (no addr) LD BC, (84FCh)
-	; (no addr) JR T, DocMed_CallFormatSlots
+	ldda32 xwa, 34036
+	ldda16 xbc, 34044
+	jr DocMed_CallFormatSlots
 
 DocMed_HandleSelectToggle:
-	; (no addr) CP XHL, 0000000bh
-	; (no addr) JR NZ, DocMed_HandleRepeat
-	; (no addr) CP (84FEh), 000h
-	; (no addr) JR NZ, DocMed_HandleRepeat
-	; (no addr) LD XWA, XIZ
-	; (no addr) LD XBC, 01e50003h
-	; (no addr) LD XDE, 0
-	CALR FmmDocFileNameFunc
-	; (no addr) LDA XIX, 88A0h
-	; (no addr) EXTZ XHL
-	; (no addr) ADD XHL, XIX
-	; (no addr) LD C, (XHL)
-	; (no addr) CP C, 0ffh
-	; (no addr) JR NZ, DocMed_RemoveFromOrder
-	; (no addr) LD (XHL), (8920h)
-	; (no addr) INC 1, (8920h)
-	; (no addr) JR T, DocMed_RefreshAfterSelect
+	cp xhl, 0xB
+	jr nz, DocMed_HandleRepeat
+	cpdi8 34046, 0
+	jr nz, DocMed_HandleRepeat
+	ld xwa, xiz
+	ld xbc, 0x1E50003
+	lds32 xde, 0
+	calr FmmDocFileNameFunc
+	ldada xix, 34976
+	extz xhl
+	add xhl, xix
+	ld c, (xhl)
+	cp c, 0xFF
+	jr nz, DocMed_RemoveFromOrder
+	ldmi16 (xhl), 0x8920
+	incdi8 1, 35104
+	jr DocMed_RefreshAfterSelect
 
 DocMed_RemoveFromOrder:
-	; (no addr) CP C, 0fdh
-	; (no addr) JR UGT, DocMed_RefreshAfterSelect
-	; (no addr) LD (XHL), 0ffh
-	; (no addr) LD A, (8920h)
-	; (no addr) DEC 1, A
-	; (no addr) LD (8920h), A
-	; (no addr) LD IZ, 0
-	; (no addr) LD HL, 0
-	; (no addr) EXTZ WA
-	; (no addr) CP WA, 0
-	; (no addr) JR ULE, DocMed_RefreshAfterSelect
-	; (no addr) LD IY, WA
+	cp c, 0xFD
+	jr ugt, DocMed_RefreshAfterSelect
+	ldmi8 (xhl), 0xFF
+	ldda8 a, 35104
+	dec 1, a
+	stda8 35104, a
+	lds iz, 0
+	lds hl, 0
+	extz wa
+	cps wa, 0
+	jr ule, DocMed_RefreshAfterSelect
+	ld iy, wa
 
 DocMed_ReorderLoop:
-	; (no addr) LD DE, HL
-	; (no addr) EXTZ XDE
-	; (no addr) ADD XDE, XIX
-	; (no addr) LD A, (XDE)
-	; (no addr) CP A, 0fdh
-	; (no addr) JR UGT, DocMed_NextReorder
-	; (no addr) INC 1, IZ
-	; (no addr) CP A, C
-	; (no addr) JR ULE, DocMed_NextReorder
-	; (no addr) DEC 1, A
-	; (no addr) LD (XDE), A
+	ld de, hl
+	extz xde
+	add xde, xix
+	ld a, (xde)
+	cp a, 0xFD
+	jr ugt, DocMed_NextReorder
+	inc 1, iz
+	cp a, c
+	jr ule, DocMed_NextReorder
+	dec 1, a
+	ld (xde), a
 
 DocMed_NextReorder:
-	; (no addr) INC 1, HL
-	; (no addr) CP IZ, IY
-	; (no addr) JR C, DocMed_ReorderLoop
+	inc 1, hl
+	cp iz, iy
+	jr c, DocMed_ReorderLoop
 
 DocMed_RefreshAfterSelect:
-	; (no addr) LD XWA, (84F4h)
-	; (no addr) LD BC, (84FCh)
+	ldda32 xwa, 34036
+	ldda16 xbc, 34044
 
 DocMed_CallFormatSlots:
-	CALR DocMed_FormatSlotList
-	; (no addr) JRL T, DocMed_Exit
+	calr DocMed_FormatSlotList
+	jrl DocMed_Exit
 
 DocMed_HandleRepeat:
-	; (no addr) CP XHL, 0000000ch
-	; (no addr) JR NZ, DocMed_HandlePlay
-	; (no addr) CP XDE, 01c00017h
-	; (no addr) JR NZ, DocMed_SetRepeatOff
-	; (no addr) LD (8924h), 001h
-	; (no addr) JRL T, DocMed_Exit
+	cp xhl, 0xC
+	jr nz, DocMed_HandlePlay
+	cp xde, 0x1C00017
+	jr nz, DocMed_SetRepeatOff
+	stdi8 35108, 1
+	jrl DocMed_Exit
 
 DocMed_SetRepeatOff:
-	; (no addr) LD (8924h), 000h
-	; (no addr) JRL T, DocMed_Exit
+	stdi8 35108, 0
+	jrl DocMed_Exit
 
 DocMed_HandlePlay:
-	; (no addr) CP XHL, 0000000dh
-	; (no addr) JRL NZ, DocMed_Exit
-	; (no addr) CP (84FEh), 000h
-	; (no addr) JRL NZ, DocMed_Exit
-	; (no addr) LD (8922h), 000h
-	; (no addr) LD HL, 0
-	; (no addr) LD WA, (84FCh)
-	; (no addr) CP WA, 0
-	; (no addr) JR ULE, DocMed_CheckAutoPlay
-	; (no addr) LDA XBC, 88A0h
+	cp xhl, 0xD
+	jrl nz, DocMed_Exit
+	cpdi8 34046, 0
+	jrl nz, DocMed_Exit
+	stdi8 35106, 0
+	lds hl, 0
+	ldda16 xwa, 34044
+	cps wa, 0
+	jr ule, DocMed_CheckAutoPlay
+	ldada xbc, 34976
 
 DocMed_PlayFindLoop:
-	; (no addr) LD DE, HL
-	; (no addr) EXTZ XDE
-	; (no addr) ADD XDE, XBC
-	; (no addr) CP (XDE), 000h
-	; (no addr) JR NZ, DocMed_PlayNextLoop
-	; (no addr) LD (84FEh), 001h
-	; (no addr) EXTZ XHL
-	; (no addr) LD XWA, XIZ
-	; (no addr) LD XBC, 01e50002h
-	; (no addr) LD XDE, XHL
-	CALR FmmDocFileNameFunc
-	; (no addr) INC 1, (8922h)
-	; (no addr) LD XWA, 0ffffffffh
-	; (no addr) LD XBC, 01e0009ah
-	; (no addr) LD XDE, 0
-	; (no addr) CALL ApPostEvent
-	; (no addr) LD WA, 0074h
-	; (no addr) CALL UI_PostModeChangeEvent
-	; (no addr) JR T, DocMed_CheckAutoPlay
+	ld de, hl
+	extz xde
+	add xde, xbc
+	cpmi8 (xde), 0x0
+	jr nz, DocMed_PlayNextLoop
+	stdi8 34046, 1
+	extz xhl
+	ld xwa, xiz
+	ld xbc, 0x1E50002
+	ld xde, xhl
+	calr FmmDocFileNameFunc
+	incdi8 1, 35106
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1E0009A
+	lds32 xde, 0
+	call 0xFA9D58
+	ldw wa, 0x74
+	call 0xF99490
+	jr DocMed_CheckAutoPlay
 
 DocMed_PlayNextLoop:
-	; (no addr) INC 1, HL
-	; (no addr) CP HL, WA
-	; (no addr) JR C, DocMed_PlayFindLoop
+	inc 1, hl
+	cp hl, wa
+	jr c, DocMed_PlayFindLoop
 
 DocMed_CheckAutoPlay:
-	; (no addr) CP (84FEh), 000h
-	; (no addr) JR NZ, DocMed_Exit
-	; (no addr) LD XWA, XIZ
-	; (no addr) LD XBC, 01e50003h
-	; (no addr) LD XDE, 0
-	CALR FmmDocFileNameFunc
-	; (no addr) LD XWA, 0ffffffffh
-	; (no addr) LD XBC, 01e0009ah
-	; (no addr) LD XDE, 0
-	; (no addr) CALL ApPostEvent
-	; (no addr) LD WA, 0070h
-	; (no addr) JR T, DocMed_CallPauseMode
+	cpdi8 34046, 0
+	jr nz, DocMed_Exit
+	ld xwa, xiz
+	ld xbc, 0x1E50003
+	lds32 xde, 0
+	calr FmmDocFileNameFunc
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1E0009A
+	lds32 xde, 0
+	call 0xFA9D58
+	ldw wa, 0x70
+	jr DocMed_CallPauseMode
 
 DocMed_StoreDelayFlag:
-	; (no addr) LD (84F8h), XWA
-	; (no addr) JR T, DocMed_Exit
+	stda32 34040, xwa
+	jr DocMed_Exit
 
 DocMed_CheckContinue:
-	; (no addr) CP (84FEh), 000h
-	; (no addr) JR Z, DocMed_Exit
-	; (no addr) LD XWA, 0ffffffffh
-	; (no addr) LD XBC, 01e0009ah
-	; (no addr) LD XDE, 0
-	; (no addr) CALL ApPostEvent
-	; (no addr) LD WA, 0074h
+	cpdi8 34046, 0
+	jr z, DocMed_Exit
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1E0009A
+	lds32 xde, 0
+	call 0xFA9D58
+	ldw wa, 0x74
 
 DocMed_CallPauseMode:
-	; (no addr) CALL UI_PostModeChangeEvent
+	call 0xF99490
 
 DocMed_Exit:
-	; (no addr) LD XHL, 0
-	; (no addr) POP XIZ
-	; (no addr) RET
+	lds32 xhl, 0
+	pop xiz
+	ret
 
+LABEL_F94193:
 SetSongSlotValue:
-	; (no addr) CP WA, 000ah
-	; (no addr) RET NC
-	; (no addr) LDA XHL, 0AB000h
-	; (no addr) LD DE, WA
-	; (no addr) SLL 11, DE
-	; (no addr) EXTZ XDE
-	; (no addr) ADD XHL, XDE
-	; (no addr) ADD XHL, 0000001ch
-	; (no addr) LD (XHL), BC
-	; (no addr) LD E, (0FFE3h:24)
-	; (no addr) EXTZ DE
-	; (no addr) CP DE, WA
-	; (no addr) RET NZ
-	; (no addr) LDA XHL, 0F180h:24
-	; (no addr) ADD XHL, 0000001ch
-	; (no addr) LD (XHL), BC
-	; (no addr) RET
+	cp wa, 0xA
+	ret nc
+	ldada_24 xhl, 700416
+	ld de, wa
+	sll de, 11
+	extz xde
+	add xhl, xde
+	add xhl, 0x1C
+	ld (xhl), bc
+	ldda8_24 e, 65507
+	extz de
+	cp de, wa
+	ret nz
+	ldada_24 xhl, 61824
+	add xhl, 0x1C
+	ld (xhl), bc
+	ret
 
+LABEL_F941C8:
 GetSongSlotValue:
-	; (no addr) LD HL, 0
-	; (no addr) CP WA, 000ah
-	; (no addr) RET NC
-	; (no addr) LDA XBC, 0AB000h
-	; (no addr) SLL 11, WA
-	; (no addr) EXTZ XWA
-	; (no addr) ADD XBC, XWA
-	; (no addr) ADD XBC, 0000001ch
-	; (no addr) LD HL, (XBC)
-	; (no addr) RET
+	lds hl, 0
+	cp wa, 0xA
+	ret nc
+	ldada_24 xbc, 700416
+	sll wa, 11
+	extz xwa
+	add xbc, xwa
+	add xbc, 0x1C
+	ld hl, (xbc)
+	ret
 
+LABEL_F941E5:
 CheckSongSlotHasData:
-	CALR GetSongSlotValue
-	; (no addr) CP HL, 0
-	; (no addr) SCC NZ, HL
-	; (no addr) RET
+	calr GetSongSlotValue
+	cps hl, 0
+	scc16 nz, hl
+	ret
 
+LABEL_F941ED:
 SongSlot_RawData:
-	.byte 0x2E, 0xD9, 0x8E, 0x1E, 0xD5, 0xFF, 0xDE, 0xF3
-	.byte 0xDB, 0x76, 0x4E, 0xE
+	.byte 0x2e, 0xd9, 0x8e, 0x1e, 0xd5, 0xff, 0xde, 0xf3
+	.byte 0xdb, 0x76, 0x4e, 0x0e
 
+LABEL_F941F9:
 FindFirstEmptySlot:
-	; (no addr) PUSH IZ
-	; (no addr) LD IZ, 0
+	pushw iz
+	lds iz, 0
 
 FindEmpty_Loop:
-	; (no addr) LD WA, IZ
-	CALR GetSongSlotValue
-	; (no addr) CP HL, 0
-	; (no addr) JR NZ, FindEmpty_Exit
-	; (no addr) INC 1, IZ
-	; (no addr) CP IZ, 000ah
-	; (no addr) JR C, FindEmpty_Loop
+	ld wa, iz
+	calr GetSongSlotValue
+	cps hl, 0
+	jr nz, FindEmpty_Exit
+	inc 1, iz
+	cp iz, 0xA
+	jr c, FindEmpty_Loop
 
 FindEmpty_Exit:
-	; (no addr) POP IZ
-	; (no addr) RET
+	popw iz
+	ret
 
+LABEL_F9420F:
 ClearAllSongSlots:
-	; (no addr) PUSH XIZ
-	; (no addr) LD IZ, WA
-	; (no addr) LD QIZ, 0
+	push xiz
+	ld iz, wa
+	ldi0_werp 0xFA
 
 ClearSlots_Loop:
-	; (no addr) LD WA, QIZ
-	; (no addr) LD BC, IZ
-	CALR SetSongSlotValue
-	; (no addr) INC 1, QIZ
-	; (no addr) CP QIZ, 000ah
-	; (no addr) JR C, ClearSlots_Loop
-	; (no addr) POP XIZ
-	; (no addr) RET
+	ldto_wa_werp 0xFA
+	ld bc, iz
+	calr SetSongSlotValue
+	inc1_werp 0xFA
+	erpw4 0xFA, 0xCF, 0x0A, 0x00
+	jr c, ClearSlots_Loop
+	pop xiz
+	ret
 
+LABEL_F94229:
 ResetSlotsIfEmpty:
-	CALR FindFirstEmptySlot
-	; (no addr) LD WA, HL
-	; (no addr) CP WA, 0
-	; (no addr) RET Z
-	CALR ClearAllSongSlots
-	; (no addr) RET
+	calr FindFirstEmptySlot
+	ld wa, hl
+	cps wa, 0
+	ret z
+	calr ClearAllSongSlots
+	ret
 
+LABEL_F94236:
 CheckSlotIsSelected:
-	; (no addr) PUSH IZ
-	; (no addr) LD IZ, WA
-	CALR FindFirstEmptySlot
-	; (no addr) CP HL, IZ
-	; (no addr) SCC Z, HL
-	; (no addr) POP IZ
-	; (no addr) RET
+	pushw iz
+	ld iz, wa
+	calr FindFirstEmptySlot
+	cp hl, iz
+	scc16 z, hl
+	popw iz
+	ret
 
+LABEL_F94242:
 CheckAnySlotHasData:
-	CALR FindFirstEmptySlot
-	; (no addr) CP HL, 0
-	; (no addr) SCC NZ, HL
-	; (no addr) RET
+	calr FindFirstEmptySlot
+	cps hl, 0
+	scc16 nz, hl
+	ret
 
+LABEL_F9424A:
 SetCurrentSlotIndex:
-	; (no addr) LD (09480Eh), WA
-	; (no addr) RET
+	stda16_24 608270, xwa
+	ret
 
+LABEL_F94250:
 GetCurrentSlotIndex:
-	; (no addr) LD HL, (09480Eh)
-	; (no addr) RET
+	ldda16_24 xhl, 608270
+	ret
 
+LABEL_F94256:
 CheckIsCurrentSlot:
-	; (no addr) PUSH IZ
-	; (no addr) LD IZ, WA
-	CALR GetCurrentSlotIndex
-	; (no addr) CP HL, IZ
-	; (no addr) SCC Z, HL
-	; (no addr) POP IZ
-	; (no addr) RET
+	pushw iz
+	ld iz, wa
+	calr GetCurrentSlotIndex
+	cp hl, iz
+	scc16 z, hl
+	popw iz
+	ret
 
+LABEL_F94262:
 CheckSlotIndexValid:
-	CALR GetCurrentSlotIndex
-	; (no addr) CP HL, 0
-	; (no addr) SCC NZ, HL
-	; (no addr) RET
+	calr GetCurrentSlotIndex
+	cps hl, 0
+	scc16 nz, hl
+	ret
 
 InitializeCheap:
-	; (no addr) LDA XSP, XSP - 14
+	lda xsp, (xsp - 14)
 
-	RegObjTable 0x1600004, 0xFA44E2, 0xEA1186,	0xEA0F46, 0x165
-	RegObjTable 0x160000c, 0xFA58FB, 0xEA11F2,	0xEA1188, 0x1c5
-	RegObjTable 0x160000d, 0xFA5948, 0xEA1358,	0xEA11F4, 0x1e5
-	RegObjTabl  0x1600002, 0xFA496C, 0x1d,		0xEA0A56, 0x125
-	RegObjTabl  0x1600002, 0xFA496C, 0x1d,		0xEA0ACE, 0x425
-	RegObjTabl  0x1600001, 0xFA48A9, 0xd,		0xEA135A, 0x105
-	RegObjTabl  0x1600001, 0xFA48A9, 0xd,		0xEA1392, 0x405
-	RegObjTabl  0x1600003, 0xFA4A18, 0x39,		0xEA7FCE, 0x145
-	RegObjTabl  0x1600003, 0xFA4A18, 0x39,		0xEA80B6, 0x445
-	RegObjTabl  0x1600010, 0xFA5995, 0x4a,		0xEA67B6, 0x60
-	RegObjTabl  0x160000f, 0xFA62CB, 0x4a,		0xEA6FE2, 0x360
-	RegObjTabl  0x1600010, 0xFA5995, 0x80,		0xEA68E2, 0x61
-	RegObjTabl  0x160000f, 0xFA62CB, 0x80,		0xEA7228, 0x361
-	RegObjTabl  0x1600010, 0xFA5995, 0x0,		0xEA6AE6, 0x62
-	RegObjTabl  0x160000f, 0xFA62CB, 0x0,		0xEA75C6, 0x362
-	RegObjTabl  0x1600010, 0xFA5995, 0x0,		0xEA6AEA, 0x63
-	RegObjTabl  0x160000f, 0xFA62CB, 0x0,		0xEA75CC, 0x363
-	RegObjTabl  0x1600010, 0xFA5995, 0x0,		0xEA6AEE, 0x64
-	RegObjTabl  0x160000f, 0xFA62CB, 0x0,		0xEA75D2, 0x364
-	RegObjTabl  0x1600010, 0xFA5995, 0x3,		0xEA6AF2, 0x65
-	RegObjTabl  0x160000f, 0xFA62CB, 0x3,		0xEA75D8, 0x365
-	RegObjTabl  0x1600010, 0xFA5995, 0x0,		0xEA6B02, 0x66
-	RegObjTabl  0x160000f, 0xFA62CB, 0x0,		0xEA75FC, 0x366
-	RegObjTabl  0x1600010, 0xFA5995, 0x47,		0xEA6B06, 0x67
-	RegObjTabl  0x160000f, 0xFA62CB, 0x47,		0xEA7602, 0x367
-	RegObjTabl  0x1600010, 0xFA5995, 0x0,		0xEA6C26, 0x6a
-	RegObjTabl  0x160000f, 0xFA62CB, 0x0,		0xEA77E4, 0x36a
-	RegObjTabl  0x1600010, 0xFA5995, 0x15,		0xEA6C2A, 0x6b
-	RegObjTabl  0x160000f, 0xFA62CB, 0x15,		0xEA77EA, 0x36b
-	RegObjTabl  0x1600010, 0xFA5995, 0x53,		0xEA6C82, 0x6c
-	RegObjTabl  0x160000f, 0xFA62CB, 0x53,		0xEA7878, 0x36c
-	RegObjTabl  0x1600010, 0xFA5995, 0x0,		0xEA6DD2, 0x6d
-	RegObjTabl  0x160000f, 0xFA62CB, 0x0,		0xEA7ACA, 0x36d
-	RegObjTabl  0x1600010, 0xFA5995, 0x0,		0xEA6DD6, 0x6e
-	RegObjTabl  0x160000f, 0xFA62CB, 0x0,		0xEA7AD0, 0x36e
-	RegObjTabl  0x1600010, 0xFA5995, 0x15,		0xEA6DDA, 0x77
-	RegObjTabl  0x160000f, 0xFA62CB, 0x15,		0xEA7AD6, 0x377
-	RegObjTabl  0x1600010, 0xFA5995, 0x0,		0xEA6E32, 0x79
-	RegObjTabl  0x160000f, 0xFA62CB, 0x0,		0xEA7B8C, 0x379
-	RegObjTabl  0x1600010, 0xFA5995, 0x5e,		0xEA6E36, 0x7b
-	RegObjTabl  0x160000f, 0xFA62CB, 0x5e,		0xEA7B92, 0x37b
-	RegObjTabl  0x1600010, 0xFA5995, 0x0,		0xEA6FB2, 0x7c
-	RegObjTabl  0x160000f, 0xFA62CB, 0x0,		0xEA7E98, 0x37c
-	RegObjTabl  0x1600010, 0xFA5995, 0x0,		0xEA6FB6, 0x7d
-	RegObjTabl  0x160000f, 0xFA62CB, 0x0,		0xEA7E9E, 0x37d
-	RegObjTabl  0x1600010, 0xFA5995, 0x8,		0xEA6FBA, 0x7e
-	RegObjTabl  0x160000f, 0xFA62CB, 0x8,		0xEA7EA4, 0x37e
-	RegObjTabl  0x1600010, 0xFA5995, 0x0,		0xEA6FDE, 0xbc
-	RegObjTabl  0x160000f, 0xFA62CB, 0x0,		0xEA7EE2, 0x3bc
+	RegObjTable 0x1600004, 0xFA44E2, 0xEA1186, 0xEA0F46, 0x165
+	RegObjTable 0x160000c, 0xFA58FB, 0xEA11F2, 0xEA1188, 0x1c5
+	RegObjTable 0x160000d, 0xFA5948, 0xEA1358, 0xEA11F4, 0x1e5
+	RegObjTabl 0x1600002, 0xFA496C, 0x1d, 0xEA0A56, 0x125
+	RegObjTabl 0x1600002, 0xFA496C, 0x1d, 0xEA0ACE, 0x425
+	RegObjTabl 0x1600001, 0xFA48A9, 0xd, 0xEA135A, 0x105
+	RegObjTabl 0x1600001, 0xFA48A9, 0xd, 0xEA1392, 0x405
+	RegObjTabl 0x1600003, 0xFA4A18, 0x39, 0xEA7FCE, 0x145
+	RegObjTabl 0x1600003, 0xFA4A18, 0x39, 0xEA80B6, 0x445
+	RegObjTabl 0x1600010, 0xFA5995, 0x4a, 0xEA67B6, 0x60
+	RegObjTabl 0x160000f, 0xFA62CB, 0x4a, 0xEA6FE2, 0x360
+	RegObjTabl 0x1600010, 0xFA5995, 0x80, 0xEA68E2, 0x61
+	RegObjTabl 0x160000f, 0xFA62CB, 0x80, 0xEA7228, 0x361
+	RegObjTabl 0x1600010, 0xFA5995, 0x0, 0xEA6AE6, 0x62
+	RegObjTabl 0x160000f, 0xFA62CB, 0x0, 0xEA75C6, 0x362
+	RegObjTabl 0x1600010, 0xFA5995, 0x0, 0xEA6AEA, 0x63
+	RegObjTabl 0x160000f, 0xFA62CB, 0x0, 0xEA75CC, 0x363
+	RegObjTabl 0x1600010, 0xFA5995, 0x0, 0xEA6AEE, 0x64
+	RegObjTabl 0x160000f, 0xFA62CB, 0x0, 0xEA75D2, 0x364
+	RegObjTabl 0x1600010, 0xFA5995, 0x3, 0xEA6AF2, 0x65
+	RegObjTabl 0x160000f, 0xFA62CB, 0x3, 0xEA75D8, 0x365
+	RegObjTabl 0x1600010, 0xFA5995, 0x0, 0xEA6B02, 0x66
+	RegObjTabl 0x160000f, 0xFA62CB, 0x0, 0xEA75FC, 0x366
+	RegObjTabl 0x1600010, 0xFA5995, 0x47, 0xEA6B06, 0x67
+	RegObjTabl 0x160000f, 0xFA62CB, 0x47, 0xEA7602, 0x367
+	RegObjTabl 0x1600010, 0xFA5995, 0x0, 0xEA6C26, 0x6a
+	RegObjTabl 0x160000f, 0xFA62CB, 0x0, 0xEA77E4, 0x36a
+	RegObjTabl 0x1600010, 0xFA5995, 0x15, 0xEA6C2A, 0x6b
+	RegObjTabl 0x160000f, 0xFA62CB, 0x15, 0xEA77EA, 0x36b
+	RegObjTabl 0x1600010, 0xFA5995, 0x53, 0xEA6C82, 0x6c
+	RegObjTabl 0x160000f, 0xFA62CB, 0x53, 0xEA7878, 0x36c
+	RegObjTabl 0x1600010, 0xFA5995, 0x0, 0xEA6DD2, 0x6d
+	RegObjTabl 0x160000f, 0xFA62CB, 0x0, 0xEA7ACA, 0x36d
+	RegObjTabl 0x1600010, 0xFA5995, 0x0, 0xEA6DD6, 0x6e
+	RegObjTabl 0x160000f, 0xFA62CB, 0x0, 0xEA7AD0, 0x36e
+	RegObjTabl 0x1600010, 0xFA5995, 0x15, 0xEA6DDA, 0x77
+	RegObjTabl 0x160000f, 0xFA62CB, 0x15, 0xEA7AD6, 0x377
+	RegObjTabl 0x1600010, 0xFA5995, 0x0, 0xEA6E32, 0x79
+	RegObjTabl 0x160000f, 0xFA62CB, 0x0, 0xEA7B8C, 0x379
+	RegObjTabl 0x1600010, 0xFA5995, 0x5e, 0xEA6E36, 0x7b
+	RegObjTabl 0x160000f, 0xFA62CB, 0x5e, 0xEA7B92, 0x37b
+	RegObjTabl 0x1600010, 0xFA5995, 0x0, 0xEA6FB2, 0x7c
+	RegObjTabl 0x160000f, 0xFA62CB, 0x0, 0xEA7E98, 0x37c
+	RegObjTabl 0x1600010, 0xFA5995, 0x0, 0xEA6FB6, 0x7d
+	RegObjTabl 0x160000f, 0xFA62CB, 0x0, 0xEA7E9E, 0x37d
+	RegObjTabl 0x1600010, 0xFA5995, 0x8, 0xEA6FBA, 0x7e
+	RegObjTabl 0x160000f, 0xFA62CB, 0x8, 0xEA7EA4, 0x37e
+	RegObjTabl 0x1600010, 0xFA5995, 0x0, 0xEA6FDE, 0xbc
+	RegObjTabl 0x160000f, 0xFA62CB, 0x0, 0xEA7EE2, 0x3bc
 
 	RegMode 0x5, 0xea, 0x7ee8, 0x6, 0x1200000, 0x1a00060
 
@@ -4224,467 +4249,467 @@ InitializeCheap:
 	RegTitle 0x5, 0xea, 0x7fb8, 0x7e, 0x1200000, 0x7e0000
 	RegTitle 0x5, 0xea, 0x7fc4, 0xbc, 0x1450025, 0x60001b
 
-	; (no addr) LDA XSP, XSP + 14
-	; (no addr) RET
+	lda xsp, (xsp + 14)
+	ret
 
 PasswordText:
-	; (no addr) CP XBC, 01e0009fh
-	; (no addr) JR NZ, PasswordText_Exit
-	; (no addr) LDA XHL, 0EA85C8h
-	; (no addr) RET
+	cp xbc, 0x1E0009F
+	jr nz, PasswordText_Exit
+	ldada_24 xhl, 15369672
+	ret
 
 PasswordText_Exit:
-	; (no addr) LD XHL, 0
-	; (no addr) RET
+	lds32 xhl, 0
+	ret
 
 CheckPasswordText:
-	; (no addr) CP XBC, 01e0009fh
-	; (no addr) JR NZ, CheckPwd_Exit
-	; (no addr) LD A, (02748Eh)
-	; (no addr) CP A, 2
-	; (no addr) JR Z, CheckPwd_Type2
-	; (no addr) CP A, 1
-	; (no addr) JR NZ, CheckPwd_Type0
-	; (no addr) LD XHL, 00ea8832h
-	; (no addr) JR T, CheckPwd_Return
+	cp xbc, 0x1E0009F
+	jr nz, CheckPwd_Exit
+	ldda8_24 a, 160910
+	cps a, 2
+	jr z, CheckPwd_Type2
+	cps a, 1
+	jr nz, CheckPwd_Type0
+	ld xhl, 0xEA8832
+	jr CheckPwd_Return
 
 CheckPwd_Type2:
-	; (no addr) LD XHL, 00ea8a0ch
-	; (no addr) JR T, CheckPwd_Return
+	ld xhl, 0xEA8A0C
+	jr CheckPwd_Return
 
 CheckPwd_Type0:
-	; (no addr) LD XHL, 00ea868eh
+	ld xhl, 0xEA868E
 
 CheckPwd_Return:
-	; (no addr) RET
+	ret
 
 CheckPwd_Exit:
-	; (no addr) LD XHL, 0
-	; (no addr) RET
+	lds32 xhl, 0
+	ret
 
 WakeUpPassword:
-	; (no addr) DEC 4, XSP
-	; (no addr) PUSH XIZ
-	; (no addr) LD (XSP + 004h), XDE
-	; (no addr) LD XIZ, XWA
-	; (no addr) CP XBC, 01c50004h
-	; (no addr) JRL Z, WakeUp_StoreType
-	; (no addr) CP XBC, 01c00007h
-	; (no addr) JR Z, WakeUp_HandleOk
-	; (no addr) CP XBC, 01c00001h
-	; (no addr) JR Z, WakeUp_HandleInit
-	; (no addr) CP XBC, 01c0000dh
-	; (no addr) JR Z, WakeUp_HandleDirect
-	; (no addr) CP XBC, 01e00085h
-	; (no addr) JR Z, WakeUp_Return1
-	; (no addr) LD XWA, XIZ
-	; (no addr) LD XDE, (XSP + 004h)
-	; (no addr) CALL InheritedProc
-	; (no addr) JRL T, WakeUp_Exit
+	dec 4, xsp
+	push xiz
+	ld (xsp + 4), xde
+	ld xiz, xwa
+	cp xbc, 0x1C50004
+	jrl z, WakeUp_StoreType
+	cp xbc, 0x1C00007
+	jr z, WakeUp_HandleOk
+	cp xbc, 0x1C00001
+	jr z, WakeUp_HandleInit
+	cp xbc, 0x1C0000D
+	jr z, WakeUp_HandleDirect
+	cp xbc, 0x1E00085
+	jr z, WakeUp_Return1
+	ld xwa, xiz
+	ld xde, (xsp + 4)
+	call 0xFA4409
+	jrl WakeUp_Exit
 
 WakeUp_Return1:
-	; (no addr) LD XHL, 1
-	; (no addr) JRL T, WakeUp_Exit
+	lds32 xhl, 1
+	jrl WakeUp_Exit
 
 WakeUp_HandleDirect:
-	; (no addr) LD XWA, XIZ
-	; (no addr) LD XDE, (XSP + 004h)
-	; (no addr) CALL InheritedProc
-	; (no addr) LD XWA, XIZ
-	; (no addr) LD XBC, 01c0000fh
-	; (no addr) LD XDE, 00ea8bf0h
-	; (no addr) CALL SendEvent
-	; (no addr) JRL T, WakeUp_ReturnZero
+	ld xwa, xiz
+	ld xde, (xsp + 4)
+	call 0xFA4409
+	ld xwa, xiz
+	ld xbc, 0x1C0000F
+	ld xde, 0xEA8BF0
+	call 0xFA9660
+	jrl WakeUp_ReturnZero
 
 WakeUp_HandleInit:
-	; (no addr) LD XWA, XIZ
-	; (no addr) LD XDE, (XSP + 004h)
-	; (no addr) CALL InheritedProc
-	; (no addr) LD (02741Ah), 000h
-	; (no addr) JRL T, WakeUp_ReturnZero
+	ld xwa, xiz
+	ld xde, (xsp + 4)
+	call 0xFA4409
+	stdi8_24 160794, 0
+	jrl WakeUp_ReturnZero
 
 WakeUp_HandleOk:
-	; (no addr) LD XWA, XIZ
-	; (no addr) LD XDE, (XSP + 004h)
-	; (no addr) CALL InheritedProc
-	; (no addr) LD XWA, 00670001h
-	; (no addr) LD XBC, 01e00056h
-	; (no addr) LD XDE, 0
-	; (no addr) CALL SendEvent
-	; (no addr) CP XHL, 00000003h
-	; (no addr) JR Z, WakeUp_ReturnZero
-	; (no addr) LD XWA, (XSP + 004h)
-	; (no addr) CP XWA, 0000008ch
-	; (no addr) JR NZ, WakeUp_ClearCounter
-	; (no addr) INC 1, (02741Ah)
-	; (no addr) CP (02741Ah), 007h
-	; (no addr) JR NZ, WakeUp_ReturnZero
-	; (no addr) LD (02741Ah), 000h
-	; (no addr) LD XWA, 0ffffffffh
-	; (no addr) LD XBC, 01c50000h
-	; (no addr) LD XDE, 1
-	; (no addr) CALL PostEvent
-	; (no addr) LD XWA, 00600040h
-	; (no addr) LD XBC, 01c00001h
-	; (no addr) LD XDE, 0
-	; (no addr) JR T, WakeUp_PostEvent
+	ld xwa, xiz
+	ld xde, (xsp + 4)
+	call 0xFA4409
+	ld xwa, 0x670001
+	ld xbc, 0x1E00056
+	lds32 xde, 0
+	call 0xFA9660
+	cp xhl, 0x3
+	jr z, WakeUp_ReturnZero
+	ld xwa, (xsp + 4)
+	cp xwa, 0x8C
+	jr nz, WakeUp_ClearCounter
+	incdi8_24 1, 160794
+	cpdi8_24 160794, 7
+	jr nz, WakeUp_ReturnZero
+	stdi8_24 160794, 0
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C50000
+	lds32 xde, 1
+	call LABEL_FA9752
+	ld xwa, 0x600040
+	ld xbc, 0x1C00001
+	lds32 xde, 0
+	jr WakeUp_PostEvent
 
 WakeUp_ClearCounter:
-	; (no addr) LD (02741Ah), 000h
-	; (no addr) JR T, WakeUp_ReturnZero
+	stdi8_24 160794, 0
+	jr WakeUp_ReturnZero
 
 WakeUp_StoreType:
-	; (no addr) LD XWA, (XSP + 004h)
-	; (no addr) LD (02748Eh), A
-	; (no addr) LD XWA, 0ffffffffh
-	; (no addr) LD XBC, 01c50000h
-	; (no addr) LD XDE, 1
-	; (no addr) CALL PostEvent
-	; (no addr) LD XWA, 00600045h
-	; (no addr) LD XBC, 01c00001h
-	; (no addr) LD XDE, 0
+	ld xwa, (xsp + 4)
+	stda8_24 160910, a
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C50000
+	lds32 xde, 1
+	call LABEL_FA9752
+	ld xwa, 0x600045
+	ld xbc, 0x1C00001
+	lds32 xde, 0
 
 WakeUp_PostEvent:
-	; (no addr) CALL PostEvent
+	call LABEL_FA9752
 
 WakeUp_ReturnZero:
-	; (no addr) LD XHL, 0
+	lds32 xhl, 0
 
 WakeUp_Exit:
-	; (no addr) POP XIZ
-	; (no addr) INC 4, XSP
-	; (no addr) RET
+	pop xiz
+	inc 4, xsp
+	ret
 
 PasswordOk:
-	; (no addr) PUSH XIZ
-	; (no addr) LD XIZ, XWA
-	; (no addr) CP XBC, 01c00007h
-	; (no addr) JR Z, PwdOk_HandleConfirm
-	; (no addr) CP XBC, 01e0007ch
-	; (no addr) JR Z, PwdOk_Return2
-	; (no addr) CP XBC, 01e00084h
-	; (no addr) JR Z, PwdOk_ReturnZero
-	; (no addr) CP XBC, 01e0003ah
-	; (no addr) JR NZ, PwdOk_ReturnZero
-	; (no addr) PUSHW 00eah
-	; (no addr) PUSHW 8bf6h
-	; (no addr) PUSH XDE
-	; (no addr) CALL LABEL_FF0F4D
-	; (no addr) INC 8, XSP
-	; (no addr) LD XHL, XIZ
-	; (no addr) JR T, PwdOk_Exit
+	push xiz
+	ld xiz, xwa
+	cp xbc, 0x1C00007
+	jr z, PwdOk_HandleConfirm
+	cp xbc, 0x1E0007C
+	jr z, PwdOk_Return2
+	cp xbc, 0x1E00084
+	jr z, PwdOk_ReturnZero
+	cp xbc, 0x1E0003A
+	jr nz, PwdOk_ReturnZero
+	pushw 0xEA
+	pushw 0x8BF6
+	push xde
+	call LABEL_FF0F4D
+	inc 8, xsp
+	ld xhl, xiz
+	jr PwdOk_Exit
 
 PwdOk_Return2:
-	; (no addr) LD XHL, 2
-	; (no addr) JR T, PwdOk_Exit
+	lds32 xhl, 2
+	jr PwdOk_Exit
 
 PwdOk_HandleConfirm:
-	; (no addr) CALL GetNamingWindowID
-	; (no addr) LD XWA, XHL
-	; (no addr) LD XBC, 01e0003ah
-	; (no addr) LD XDE, 0002741ch
-	; (no addr) CALL SendEvent
-	; (no addr) LD XWA, 00600040h
-	; (no addr) LD XBC, 01c00002h
-	; (no addr) LD XDE, 0
-	; (no addr) CALL SendEvent
-	; (no addr) LD XWA, 0ffffffffh
-	; (no addr) LD XBC, 01c50000h
-	; (no addr) LD XDE, 0
-	; (no addr) CALL PostEvent
-	; (no addr) LD XWA, 0ffffffffh
-	; (no addr) LD XBC, 01c0000ah
-	; (no addr) LD XDE, 0
-	; (no addr) CALL PostEvent
-	; (no addr) LD DE, (02741Ch)
-	; (no addr) EXTZ XDE
-	; (no addr) LD XWA, 01450038h
-	; (no addr) LD XBC, 01e5000dh
-	; (no addr) CALL MainFuncCall
+	call 0xFA1FC7
+	ld xwa, xhl
+	ld xbc, 0x1E0003A
+	ld xde, 0x2741C
+	call 0xFA9660
+	ld xwa, 0x600040
+	ld xbc, 0x1C00002
+	lds32 xde, 0
+	call 0xFA9660
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C50000
+	lds32 xde, 0
+	call LABEL_FA9752
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C0000A
+	lds32 xde, 0
+	call LABEL_FA9752
+	ldda16_24 xde, 160796
+	extz xde
+	ld xwa, 0x1450038
+	ld xbc, 0x1E5000D
+	call 0xFA4A63
 
 PwdOk_ReturnZero:
-	; (no addr) LD XHL, 0
+	lds32 xhl, 0
 
 PwdOk_Exit:
-	; (no addr) POP XIZ
-	; (no addr) RET
+	pop xiz
+	ret
 
 CheckPasswordOk:
-	; (no addr) PUSH XIZ
-	; (no addr) LD XIZ, XWA
-	; (no addr) CP XBC, 01c00007h
-	; (no addr) JR Z, CheckOk_HandleConfirm
-	; (no addr) CP XBC, 01e0007ch
-	; (no addr) JR Z, CheckOk_Return2
-	; (no addr) CP XBC, 01e00084h
-	; (no addr) JRL Z, CheckOk_ReturnZero
-	; (no addr) CP XBC, 01e0003ah
-	; (no addr) JRL NZ, CheckOk_ReturnZero
-	; (no addr) PUSHW 00eah
-	; (no addr) PUSHW 8bfah
-	; (no addr) PUSH XDE
-	; (no addr) CALL LABEL_FF0F4D
-	; (no addr) INC 8, XSP
-	; (no addr) LD XHL, XIZ
-	; (no addr) JRL T, CheckOk_Exit
+	push xiz
+	ld xiz, xwa
+	cp xbc, 0x1C00007
+	jr z, CheckOk_HandleConfirm
+	cp xbc, 0x1E0007C
+	jr z, CheckOk_Return2
+	cp xbc, 0x1E00084
+	jrl z, CheckOk_ReturnZero
+	cp xbc, 0x1E0003A
+	jrl nz, CheckOk_ReturnZero
+	pushw 0xEA
+	pushw 0x8BFA
+	push xde
+	call LABEL_FF0F4D
+	inc 8, xsp
+	ld xhl, xiz
+	jrl CheckOk_Exit
 
 CheckOk_Return2:
-	; (no addr) LD XHL, 2
-	; (no addr) JRL T, CheckOk_Exit
+	lds32 xhl, 2
+	jrl CheckOk_Exit
 
 CheckOk_HandleConfirm:
-	; (no addr) CALL GetNamingWindowID
-	; (no addr) LD XWA, XHL
-	; (no addr) LD XBC, 01e0003ah
-	; (no addr) LD XDE, 00027424h
-	; (no addr) CALL SendEvent
-	; (no addr) LD XWA, 00600045h
-	; (no addr) LD XBC, 01c00002h
-	; (no addr) LD XDE, 0
-	; (no addr) CALL SendEvent
-	; (no addr) LD XWA, 0ffffffffh
-	; (no addr) LD XBC, 01c50000h
-	; (no addr) LD XDE, 0
-	; (no addr) CALL PostEvent
-	; (no addr) LD XWA, 0ffffffffh
-	; (no addr) LD XBC, 01c0000ah
-	; (no addr) LD XDE, 0
-	; (no addr) CALL PostEvent
-	; (no addr) LD XWA, 00670001h
-	; (no addr) LD XBC, 01e00056h
-	; (no addr) LD XDE, 0
-	; (no addr) CALL SendEvent
-	; (no addr) LDA XWA, 027424h
-	; (no addr) CP HL, 1
-	; (no addr) JR NZ, CheckOk_Type2
-	; (no addr) LD DE, (XWA)
-	; (no addr) EXTZ XDE
-	; (no addr) LD XWA, 01450038h
-	; (no addr) LD XBC, 01e5000eh
-	; (no addr) JR T, CheckOk_CallFunc
+	call 0xFA1FC7
+	ld xwa, xhl
+	ld xbc, 0x1E0003A
+	ld xde, 0x27424
+	call 0xFA9660
+	ld xwa, 0x600045
+	ld xbc, 0x1C00002
+	lds32 xde, 0
+	call 0xFA9660
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C50000
+	lds32 xde, 0
+	call LABEL_FA9752
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C0000A
+	lds32 xde, 0
+	call LABEL_FA9752
+	ld xwa, 0x670001
+	ld xbc, 0x1E00056
+	lds32 xde, 0
+	call 0xFA9660
+	ldada_24 xwa, 160804
+	cps hl, 1
+	jr nz, CheckOk_Type2
+	ld de, (xwa)
+	extz xde
+	ld xwa, 0x1450038
+	ld xbc, 0x1E5000E
+	jr CheckOk_CallFunc
 
 CheckOk_Type2:
-	; (no addr) CP HL, 2
-	; (no addr) JR NZ, CheckOk_Type3
-	; (no addr) LD DE, (XWA)
-	; (no addr) EXTZ XDE
-	; (no addr) LD XWA, 01450038h
-	; (no addr) LD XBC, 01e5000fh
-	; (no addr) JR T, CheckOk_CallFunc
+	cps hl, 2
+	jr nz, CheckOk_Type3
+	ld de, (xwa)
+	extz xde
+	ld xwa, 0x1450038
+	ld xbc, 0x1E5000F
+	jr CheckOk_CallFunc
 
 CheckOk_Type3:
-	; (no addr) CP HL, 3
-	; (no addr) JR NZ, CheckOk_ReturnZero
-	; (no addr) LD DE, (XWA)
-	; (no addr) EXTZ XDE
-	; (no addr) LD XWA, 01450038h
-	; (no addr) LD XBC, 01e50010h
+	cps hl, 3
+	jr nz, CheckOk_ReturnZero
+	ld de, (xwa)
+	extz xde
+	ld xwa, 0x1450038
+	ld xbc, 0x1E50010
 
 CheckOk_CallFunc:
-	; (no addr) CALL MainFuncCall
+	call 0xFA4A63
 
 CheckOk_ReturnZero:
-	; (no addr) LD XHL, 0
+	lds32 xhl, 0
 
 CheckOk_Exit:
-	; (no addr) POP XIZ
-	; (no addr) RET
+	pop xiz
+	ret
 
 PasswordNo:
-	; (no addr) CP XBC, 01c00007h
-	; (no addr) JR NZ, PwdNo_Exit
-	; (no addr) LD XWA, 00600040h
-	; (no addr) LD XBC, 01c00002h
-	; (no addr) LD XDE, 0
-	; (no addr) CALL SendEvent
-	; (no addr) LD XWA, 0ffffffffh
-	; (no addr) LD XBC, 01c50000h
-	; (no addr) LD XDE, 0
-	; (no addr) CALL PostEvent
-	; (no addr) LD XWA, 0ffffffffh
-	; (no addr) LD XBC, 01c0000ah
-	; (no addr) LD XDE, 0
-	; (no addr) CALL PostEvent
+	cp xbc, 0x1C00007
+	jr nz, PwdNo_Exit
+	ld xwa, 0x600040
+	ld xbc, 0x1C00002
+	lds32 xde, 0
+	call 0xFA9660
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C50000
+	lds32 xde, 0
+	call LABEL_FA9752
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C0000A
+	lds32 xde, 0
+	call LABEL_FA9752
 
 PwdNo_Exit:
-	; (no addr) LD XHL, 0
-	; (no addr) RET
+	lds32 xhl, 0
+	ret
 
 CheckPasswordNo:
-	; (no addr) CP XBC, 01c00007h
-	; (no addr) JR NZ, CheckNo_HandleConfirm
-	; (no addr) LD XWA, 00600045h
-	; (no addr) LD XBC, 01c00002h
-	; (no addr) LD XDE, 0
-	; (no addr) CALL SendEvent
-	; (no addr) LD XWA, 0ffffffffh
-	; (no addr) LD XBC, 01c50000h
-	; (no addr) LD XDE, 0
-	; (no addr) CALL PostEvent
-	; (no addr) LD XWA, 0ffffffffh
-	; (no addr) LD XBC, 01c0000ah
-	; (no addr) LD XDE, 0
-	; (no addr) CALL PostEvent
+	cp xbc, 0x1C00007
+	jr nz, CheckNo_HandleConfirm
+	ld xwa, 0x600045
+	ld xbc, 0x1C00002
+	lds32 xde, 0
+	call 0xFA9660
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C50000
+	lds32 xde, 0
+	call LABEL_FA9752
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C0000A
+	lds32 xde, 0
+	call LABEL_FA9752
 
 CheckNo_HandleConfirm:
-	; (no addr) LD XHL, 0
-	; (no addr) RET
+	lds32 xhl, 0
+	ret
 
 DiskAttention:
-	; (no addr) CP XBC, 01e0009fh
-	; (no addr) JR NZ, CheckNo_Type1
-	; (no addr) LDA XHL, 0EA8BFEh
-	; (no addr) RET
+	cp xbc, 0x1E0009F
+	jr nz, CheckNo_Type1
+	ldada_24 xhl, 15371262
+	ret
 
 CheckNo_Type1:
-	; (no addr) LD XHL, 0
-	; (no addr) RET
+	lds32 xhl, 0
+	ret
 
 DiskSure:
-	; (no addr) CP XBC, 01e0009fh
-	; (no addr) JR NZ, CheckNo_Type2
-	; (no addr) LDA XHL, 0EA8C5Ch
-	; (no addr) RET
+	cp xbc, 0x1E0009F
+	jr nz, CheckNo_Type2
+	ldada_24 xhl, 15371356
+	ret
 
 CheckNo_Type2:
-	; (no addr) LD XHL, 0
-	; (no addr) RET
+	lds32 xhl, 0
+	ret
 
 FormatText:
-	; (no addr) CP XBC, 01e0009fh
-	; (no addr) JR NZ, CheckNo_Type3
-	; (no addr) LDA XHL, 0EA8CDCh
-	; (no addr) RET
+	cp xbc, 0x1E0009F
+	jr nz, CheckNo_Type3
+	ldada_24 xhl, 15371484
+	ret
 
 CheckNo_Type3:
-	; (no addr) LD XHL, 0
-	; (no addr) RET
+	lds32 xhl, 0
+	ret
 
 DeleteText:
-	; (no addr) CP XBC, 01e0009fh
-	; (no addr) JR NZ, CheckNo_CallFunc
-	; (no addr) LDA XHL, 0EA8E70h
-	; (no addr) RET
+	cp xbc, 0x1E0009F
+	jr nz, CheckNo_CallFunc
+	ldada_24 xhl, 15371888
+	ret
 
 CheckNo_CallFunc:
-	; (no addr) LD XHL, 0
-	; (no addr) RET
+	lds32 xhl, 0
+	ret
 
 DeleteYes:
-	; (no addr) CP XBC, 01c00007h
-	; (no addr) JR NZ, PwdChange_HandleOk
-	; (no addr) LD XWA, 007b0051h
-	; (no addr) LD XBC, 01c00002h
-	; (no addr) LD XDE, 0
-	; (no addr) CALL SendEvent
-	; (no addr) LD XWA, 0ffffffffh
-	; (no addr) LD XBC, 01c50000h
-	; (no addr) LD XDE, 0
-	; (no addr) CALL PostEvent
-	; (no addr) LD XWA, 0ffffffffh
-	; (no addr) LD XBC, 01c0000ah
-	; (no addr) LD XDE, 0
-	; (no addr) CALL PostEvent
-	; (no addr) LD XWA, 0ffffffffh
-	; (no addr) LD XBC, 01c00017h
-	; (no addr) LD XDE, 00000033h
-	; (no addr) CALL PostEvent
+	cp xbc, 0x1C00007
+	jr nz, PwdChange_HandleOk
+	ld xwa, 0x7B0051
+	ld xbc, 0x1C00002
+	lds32 xde, 0
+	call 0xFA9660
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C50000
+	lds32 xde, 0
+	call LABEL_FA9752
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C0000A
+	lds32 xde, 0
+	call LABEL_FA9752
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C00017
+	ld xde, 0x33
+	call LABEL_FA9752
 
 PwdChange_HandleOk:
-	; (no addr) LD XHL, 0
-	; (no addr) RET
+	lds32 xhl, 0
+	ret
 
 DeleteNo:
-	; (no addr) CP XBC, 01c00007h
-	; (no addr) JR NZ, PwdChange_Type1
-	; (no addr) LD XWA, 007b0051h
-	; (no addr) LD XBC, 01c00002h
-	; (no addr) LD XDE, 0
-	; (no addr) CALL SendEvent
-	; (no addr) LD XWA, 0ffffffffh
-	; (no addr) LD XBC, 01c50000h
-	; (no addr) LD XDE, 0
-	; (no addr) CALL PostEvent
-	; (no addr) LD XWA, 0ffffffffh
-	; (no addr) LD XBC, 01c0000ah
-	; (no addr) LD XDE, 0
-	; (no addr) CALL PostEvent
+	cp xbc, 0x1C00007
+	jr nz, PwdChange_Type1
+	ld xwa, 0x7B0051
+	ld xbc, 0x1C00002
+	lds32 xde, 0
+	call 0xFA9660
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C50000
+	lds32 xde, 0
+	call LABEL_FA9752
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C0000A
+	lds32 xde, 0
+	call LABEL_FA9752
 
 PwdChange_Type1:
-	; (no addr) LD XHL, 0
-	; (no addr) RET
+	lds32 xhl, 0
+	ret
 
 SaveText:
-	; (no addr) CP XBC, 01e0009fh
-	; (no addr) JR NZ, PwdChange_CallFunc
-	; (no addr) LDA XHL, 0EA912Ah
-	; (no addr) RET
+	cp xbc, 0x1E0009F
+	jr nz, PwdChange_CallFunc
+	ldada_24 xhl, 15372586
+	ret
 
 PwdChange_CallFunc:
-	; (no addr) LD XHL, 0
-	; (no addr) RET
+	lds32 xhl, 0
+	ret
 
 SaveYes:
-	; (no addr) CP XBC, 01c00007h
-	; (no addr) JR NZ, PwdDel_HandleOk
-	; (no addr) LD XWA, 00600037h
-	; (no addr) LD XBC, 01c00002h
-	; (no addr) LD XDE, 0
-	; (no addr) CALL SendEvent
-	; (no addr) LD XWA, 0ffffffffh
-	; (no addr) LD XBC, 01c50000h
-	; (no addr) LD XDE, 0
-	; (no addr) CALL PostEvent
-	; (no addr) LD XWA, 0ffffffffh
-	; (no addr) LD XBC, 01c0000ah
-	; (no addr) LD XDE, 0
-	; (no addr) CALL PostEvent
-	; (no addr) LD XWA, 0ffffffffh
-	; (no addr) LD XBC, 01c00017h
-	; (no addr) LD XDE, 00000032h
-	; (no addr) CALL PostEvent
+	cp xbc, 0x1C00007
+	jr nz, PwdDel_HandleOk
+	ld xwa, 0x600037
+	ld xbc, 0x1C00002
+	lds32 xde, 0
+	call 0xFA9660
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C50000
+	lds32 xde, 0
+	call LABEL_FA9752
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C0000A
+	lds32 xde, 0
+	call LABEL_FA9752
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C00017
+	ld xde, 0x32
+	call LABEL_FA9752
 
 PwdDel_HandleOk:
-	; (no addr) LD XHL, 0
-	; (no addr) RET
+	lds32 xhl, 0
+	ret
 
 SaveNo:
-	; (no addr) CP XBC, 01c00007h
-	; (no addr) JR NZ, PwdDel_Type1
-	; (no addr) LD XWA, 00600037h
-	; (no addr) LD XBC, 01c00002h
-	; (no addr) LD XDE, 0
-	; (no addr) CALL SendEvent
-	; (no addr) LD XWA, 0ffffffffh
-	; (no addr) LD XBC, 01c50000h
-	; (no addr) LD XDE, 0
-	; (no addr) CALL PostEvent
-	; (no addr) LD XWA, 0ffffffffh
-	; (no addr) LD XBC, 01c0000ah
-	; (no addr) LD XDE, 0
-	; (no addr) CALL PostEvent
+	cp xbc, 0x1C00007
+	jr nz, PwdDel_Type1
+	ld xwa, 0x600037
+	ld xbc, 0x1C00002
+	lds32 xde, 0
+	call 0xFA9660
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C50000
+	lds32 xde, 0
+	call LABEL_FA9752
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C0000A
+	lds32 xde, 0
+	call LABEL_FA9752
 
 PwdDel_Type1:
-	; (no addr) LD XHL, 0
-	; (no addr) RET
+	lds32 xhl, 0
+	ret
 
 InsertOptionText:
-	; (no addr) CP XBC, 01e0009fh
-	; (no addr) JR NZ, PwdDel_Type2
-	; (no addr) LDA XHL, 0EA943Ch
-	; (no addr) RET
+	cp xbc, 0x1E0009F
+	jr nz, PwdDel_Type2
+	ldada_24 xhl, 15373372
+	ret
 
 PwdDel_Type2:
-	; (no addr) LD XHL, 0
-	; (no addr) RET
+	lds32 xhl, 0
+	ret
 
 TypePriorityText:
-	; (no addr) CP XBC, 01e0009fh
-	; (no addr) JR NZ, PwdDel_CallFunc
-	; (no addr) LDA XHL, 0EA9558h
-	; (no addr) RET
+	cp xbc, 0x1E0009F
+	jr nz, PwdDel_CallFunc
+	ldada_24 xhl, 15373656
+	ret
 
 PwdDel_CallFunc:
-	; (no addr) LD XHL, 0
-	; (no addr) RET
+	lds32 xhl, 0
+	ret
 

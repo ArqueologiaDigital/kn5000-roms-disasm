@@ -41,10 +41,10 @@ Boot_CallInitHandlers:
 	push_werp 0xFA	; d7 fa 04
 
 	; Compare init flag - encoding differs between ROMs
-	; IF INIT_FLAG_COMPARE_WORD (evaluated to false)
+	; IF INIT_FLAG_COMPARE_WORD (evaluated to true)
+	; table_data: CP (0xFFFEEE), 0xFFFF (7 bytes)
+	.byte 0xd2, 0xee, 0xfe, 0xff, 0x3f, 0xff, 0xff
 	; ELSE
-	; maincpu: CP (0xFFFEEE), 0xFF (6 bytes)
-	.byte 0xc2, 0xee, 0xfe, 0xff, 0x3f, 0xff
 	; ENDIF
 
 	jr nz, Boot_CallInitHandlers__done	; 6e xx (offset computed by assembler)
@@ -69,7 +69,7 @@ Boot_CallInitHandlers__handler_loop:
 	.byte 0xe3, 0x07, 0xe8, 0xe4, 0x21
 
 	; Call indirect call helper (address differs between ROMs)
-	call 0xEF183D
+	call 0xFFFA75
 
 	; INC 1, QIZH
 	.byte 0xc7, 0xfb, 0x61

@@ -104,14 +104,14 @@
 
 	; === DRAM Initialization Delay 1 ===
 	ldw bc, 0x400
-RESET_HANDLER__pause1:
-	djnz xbc, RESET_HANDLER__pause1
+Boot_Init__pause1:
+	djnz xbc, Boot_Init__pause1
 	stdi8 357, 129	; Enable DRAM refresh
 
 	; === DRAM Initialization Delay 2 ===
 	ldw bc, 0x2000
-RESET_HANDLER__pause2:
-	djnz xbc, RESET_HANDLER__pause2
+Boot_Init__pause2:
+	djnz xbc, Boot_Init__pause2
 	stdi8 357, 113
 	stdi8 354, 139
 	stdi8 355, 88

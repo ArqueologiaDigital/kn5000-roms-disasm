@@ -59,191 +59,191 @@
 ; =============================================================================
 
 CPanel_ScanButtons:	; FC3EE5
-	.byte 0xeb, 0xa8	; PUSH XIX
-	.byte 0x0e	; PUSH XIZ
-	.byte 0x1d, 0x47, 0xa5, 0xfa	; PUSH XHL
-	.byte 0x1d, 0x84, 0x95, 0xfa	; PUSH XDE
-	.byte 0x1d, 0x08, 0x9f, 0xfa	; CALL CPanel_ReadAllButtons
-	.byte 0x1d, 0xb3, 0x40, 0xfa	; POP XDE
-	.byte 0x1d, 0xb6, 0xa5, 0xfa	; POP XHL
-	.byte 0x40, 0x00, 0x00, 0xa0, 0x01	; POP XIZ
-	.byte 0x41, 0x9e, 0x00, 0xe0, 0x01	; POP XIX
-	.byte 0xea, 0xa9	; CALR CPanel_CheckSpecialCombos
-	.byte 0x1d, 0x52, 0x97, 0xfa	; RET
+	push xix
+	push xiz
+	push xhl
+	push xde
+	call 0xFC41FC
+	pop xde
+	pop xhl
+	pop xiz
+	pop xix
+	calr CPanel_CheckSpecialCombos
+	ret
 
 
 CPanel_InitHardware:
-	.byte 0xe8, 0xa8	; LD XHL, CPANEL_RX_EVENT_QUEUE
-	.byte 0x41, 0x01, 0x00, 0xc0, 0x01	; LDW (XHL - 4), 0000h
-	.byte 0xea, 0xa8	; LDW (XHL - 8), 0000h
-	.byte 0x1d, 0x52, 0x97, 0xfa	; LDW (XHL - 2), 0080h
+	ld xhl, 0x200AD
+	ldmw (xhl - 4), 0x0
+	ldmw (xhl - 8), 0x0
+	ldmw (xhl - 2), 0x80
 
-	.byte 0x40, 0xff, 0xff, 0xff, 0xff	; LD XHL, CPANEL_LED_EVENT_QUEUE
-	.byte 0x41, 0x14, 0x00, 0xc0, 0x01	; LDW (XHL - 4), 0000h
-	.byte 0x42, 0x01, 0x00, 0x80, 0x01	; LDW (XHL - 8), 0000h
-	.byte 0x1d, 0x52, 0x97, 0xfa	; LDW (XHL - 2), 0080h
+	ld xhl, 0x20137
+	ldmw (xhl - 4), 0x0
+	ldmw (xhl - 8), 0x0
+	ldmw (xhl - 2), 0x80
 
-	.byte 0x40, 0xff, 0xff, 0xff, 0xff	; LD_A 003h	; PF2=SCK0 Disabled, PF0=TxD0 and PF1=RXD0 (MIDI)
-	.byte 0x41, 0x16, 0x00, 0xc0, 0x01	; AND A, 0afh	; PF6=SCK1 Disabled, PF4=TxD1 and PF5=RXD1 (Control Panel)
-	.byte 0x42, 0xef, 0x00, 0xa0, 0x01	; LD (PFFC_VALUE), A
-	.byte 0x1b, 0x52, 0x97, 0xfa	; LD (PFFC), A
-	.byte 0xf1, 0x42, 0x7f, 0x00, 0x23	; LD_A 015h
-	.byte 0x0e	; AND A, 08fh
-	.byte 0x40, 0xff, 0xff, 0xff, 0xff	; LD (PFCR_VALUE), A
-	.byte 0x41, 0x9e, 0x00, 0xe0, 0x01	; LD (PFCR), A
-	.byte 0xea, 0xa8	; AND (PF), 0bfh	; PF bit 6, (SCLK1 | /CTS1) = 0
-	.byte 0x1d, 0x52, 0x97, 0xfa	; LD_A 000h
-	.byte 0x40, 0xff, 0xff, 0xff, 0xff	; LD (PEFC), A
-	.byte 0x41, 0x0a, 0x00, 0xc0, 0x01	; LD_A 046h
-	.byte 0xea, 0xa8	; LD (PECR), A
-	.byte 0x1d, 0x52, 0x97, 0xfa	; LD (SC1MOD), 000h	; serial clk: TO2 trigger
+	ldb a, 0x3	; PF2=SCK0 Disabled, PF0=TxD0 and PF1=RXD0 (MIDI)
+	and a, 0xAF	; PF6=SCK1 Disabled, PF4=TxD1 and PF5=RXD1 (Control Panel)
+	stda8 36239, a
+	dd82 0x3F, 0x41
+	ldb a, 0x15
+	and a, 0x8F
+	stda8 36238, a
+	dd82 0x3E, 0x41
+	sd8b3 0x3C, 0x3C, 0xBF	; PF bit 6, (SCLK1 | /CTS1) = 0
+	ldb a, 0x0
+	dd82 0x3B, 0x41
+	ldb a, 0x46
+	dd82 0x3A, 0x41
+	ldio 0xD6, 0x00	; serial clk: TO2 trigger
 	                  ; serial transfer mode: I/O  transfer mode
 	                  ; wake-up function: disable
 	                  ; receive control: receive disable
 	                  ; handshake function control: CTS disable
-	.byte 0xd8, 0xa8	; LD (BR1CR), 014h	; Internal Clock T2 (16/fc)
+	ldio 0xD7, 0x14	; Internal Clock T2 (16/fc)
 	                 ; Divide by 4
 	                 ; fc = 16MHz, so fc/16/4 = 250kHz
-	.byte 0x1d, 0x61, 0xa7, 0xfa	; LD (SC1CR), 001h	; Parity: odd
+	ldio 0xD5, 0x01	; Parity: odd
 	                 ; Parity addition: disable
 	                 ; clear all errors
 	                 ; Data transmit/receive at SCLK1 rising edge
 	                 ; I/O interface input clock: SCLK1 pin input
-	.byte 0x1d, 0x85, 0x95, 0xfa	; LD (INTEAB), 007h
-	.byte 0xd8, 0xa9	; LD (INTCLR), 012h	; INTA Pin
-	.byte 0x1d, 0x61, 0xa7, 0xfa	; LD (INTES1), 0ffh
-	.byte 0x1d, 0x1d, 0xa6, 0xfa	; LD (INTCLR), 022h	; INTRX1: Serial receive 1
-	.byte 0xe8, 0xa9	; LD (INTCLR), 023h	; INTTX1: Serial send 1
-	.byte 0xe2, 0x96, 0x74, 0x02, 0x88	; OR (TAMOD), 010h
-	.byte 0xd8, 0xaa	; AND (TAMOD), 0f7h
-	.byte 0x1d, 0xa7, 0x1e, 0xef	; LD (CPANEL_UNUSED_1), 07dh	; This looks pointless...
+	ldio 0xE3, 0x07
+	ldio 0xF8, 0x12	; INTA Pin
+	ldio 0xEB, 0xFF
+	ldio 0xF8, 0x22	; INTRX1: Serial receive 1
+	ldio 0xF8, 0x23	; INTTX1: Serial send 1
+	sd8b3 0xC8, 0x3E, 0x10
+	sd8b3 0xC8, 0x3C, 0xF7
+	stdi8 36241, 125	; This looks pointless...
 
-	.byte 0xd8, 0xa8	; OR (CPANEL_TX_RX_FLAGS), 040h	; CP_Flags_A.6 = 1
-	.byte 0x1d, 0x61, 0xa7, 0xfa	; LD (CPANEL_PACKET_BYTE_COUNT), 000h
-	.byte 0x1d, 0x2a, 0x12, 0xef	; AND (CPANEL_TX_RX_FLAGS), 0fch	; CP_Flags_A.10 = 00
-	.byte 0xcf, 0xd8	; LDW (CPANEL_LED_READ_PTR), 0000h
-	.byte 0x66, 0xe5	; LDW (CPANEL_LED_WRITE_PTR), 0000h
-	.byte 0x1d, 0x45, 0x9f, 0xfa	; LDW (CPANEL_RX_READ_PTR), 0000h
-	.byte 0x1d, 0x85, 0x95, 0xfa	; LDW (CPANEL_RX_WRITE_PTR), 0000h
+	ordi8 36236, 64	; CP_Flags_A.6 = 1
+	stdi8 36235, 0
+	anddi8 36236, 252	; CP_Flags_A.10 = 00
+	stdi16 36349, 0
+	stdi16 36351, 0
+	stdi16 36253, 0
+	stdi16 36255, 0
 
-	.byte 0x1d, 0xf0, 0xad, 0xf9	; CALR DELAY_6_TICKS
+	calr DELAY_6_TICKS
 
-	.byte 0xdb, 0xd8	; LD_A 01fh
-	.byte 0x66, 0x1f	; LD_W 0dah
-	.byte 0x1e, 0x6e, 0x07	; CALR CPanel_SendCommand
-	.byte 0xe8, 0xa8	; CALR DELAY_3000_LOOPS
+	ldb a, 0x1F
+	ldb w, 0xDA
+	calr CPanel_SendCommand
+	calr DELAY_3000_LOOPS
 
-	.byte 0x41, 0x00, 0x00, 0xc0, 0x01	; LDW (CPANEL_LED_READ_PTR), 0000h
-	.byte 0xea, 0xa8	; CALR DELAY_3000_LOOPS
+	stdi16 36349, 0
+	calr DELAY_3000_LOOPS
 
-	.byte 0x1d, 0x97, 0xae, 0xf9	; CALR CPanel_SendInitSequence
-	.byte 0xd8, 0xa9	; RET
+	calr CPanel_SendInitSequence
+	ret
 
 
 ; CPanel_SendInitSequence - Send initialization command sequence to control panel MCUs
 ; Commands sent: 0x1F 0x1A, 0x1D 0x00, 0xDD 0x03, 0x1E 0x80
 CPanel_SendInitSequence:
-	.byte 0x1d, 0x61, 0xa7, 0xfa	; LD_A 01fh
-	.byte 0x1d, 0x1d, 0xa6, 0xfa	; LD_W 01ah
-	.byte 0x1e, 0x63, 0x07	; CALR CPanel_SendCommand
-	.byte 0x68, 0xb6	; CALR DELAY_3000_LOOPS
+	ldb a, 0x1F
+	ldb w, 0x1A
+	calr CPanel_SendCommand
+	calr DELAY_3000_LOOPS
 
-	.byte 0xd8, 0xa9	; LDW (CPANEL_LED_READ_PTR), 0000h
-	.byte 0x68, 0xaa	; CALR DELAY_3000_LOOPS
+	stdi16 36349, 0
+	calr DELAY_3000_LOOPS
 
-	.byte 0x1d, 0x8b, 0x9a, 0xfa	; LD_A 01dh
-	.byte 0x40, 0x01, 0x00, 0x40, 0x01	; LD_W 0
-	.byte 0x41, 0xbb, 0x00, 0xe0, 0x01	; CALR CPanel_SendCommand
-	.byte 0xea, 0xa8	; CALR DELAY_3000_LOOPS
+	ldb a, 0x1D
+	ldb w, 0x0
+	calr CPanel_SendCommand
+	calr DELAY_3000_LOOPS
 
-	.byte 0x78, 0xf4, 0x11	; LDW (CPANEL_LED_READ_PTR), 0000h
-	.byte 0x3e	; CALR DELAY_3000_LOOPS
-	.byte 0xc1, 0x80, 0xc0, 0x21	; CALR DELAY_3000_LOOPS
+	stdi16 36349, 0
+	calr DELAY_3000_LOOPS
+	calr DELAY_3000_LOOPS
 
-	.byte 0xc1, 0x7d, 0xc0, 0x25	; LD_A 0ddh
-	.byte 0xc9, 0xcf, 0xaa	; LD_W 03h
-	.byte 0x76, 0xb1, 0x02	; CALR CPanel_SendCommand
-	.byte 0xc9, 0xcf, 0xa8	; CALR DELAY_3000_LOOPS
+	ldb a, 0xDD
+	ldb w, 0x3
+	calr CPanel_SendCommand
+	calr DELAY_3000_LOOPS
 
-	.byte 0x76, 0x75, 0x02	; LDW (CPANEL_LED_READ_PTR), 0000h
-	.byte 0xc9, 0xcf, 0xa9	; CALR DELAY_3000_LOOPS
-	.byte 0x7e, 0x79, 0x05	; CALR DELAY_3000_LOOPS
+	stdi16 36349, 0
+	calr DELAY_3000_LOOPS
+	calr DELAY_3000_LOOPS
 
-	.byte 0xcd, 0xcf, 0x10	; LD_A 01eh
-	.byte 0x7b, 0xf2, 0x01	; LD_W 080h
-	.byte 0xee, 0xa8	; CALR CPanel_SendCommand
-	.byte 0xc7, 0xf8, 0x9d	; CALR DELAY_3000_LOOPS
-	.byte 0xcd, 0xcf, 0x0e	; CALR DELAY_3000_LOOPS
-	.byte 0x6e, 0x43	; CALR DELAY_3000_LOOPS
+	ldb a, 0x1E
+	ldb w, 0x80
+	calr CPanel_SendCommand
+	calr DELAY_3000_LOOPS
+	calr DELAY_3000_LOOPS
+	calr DELAY_3000_LOOPS
 
-	.byte 0xc1, 0x7f, 0xc0, 0x25	; EI 006h
-	.byte 0xcd, 0x89	; LD (INTES1), 0ffh
-	.byte 0xc9, 0xcc, 0x03	; LD (INTCLR), 022h	; INTRX1: Serial receive 1
-	.byte 0x66, 0x38	; LD (INTCLR), 023h	; INTTX1: Serial send 1
-	.byte 0xc1, 0x7e, 0xc0, 0x23	; AND (SC1MOD), 0dfh	; RXE (bit 5) = 0: receive disable
-	.byte 0xcb, 0x89	; LD (INTCLR), 012h	; INTA Pin
-	.byte 0xc9, 0xcc, 0x03	; LD (INTEAB), 005h
-	.byte 0xc9, 0xdb	; LDW (CPANEL_RX_READ_PTR), 0000h
-	.byte 0x6e, 0x0c	; LDW (CPANEL_RX_WRITE_PTR), 0000h
-	.byte 0xe8, 0xab	; OR (CPANEL_PROTOCOL_FLAGS), 001h	; CP_Flags_B.0 = 1
-	.byte 0xd9, 0xad	; EI 000h
-	.byte 0xda, 0xac	; RET
+	ei 6
+	ldio 0xEB, 0xFF
+	ldio 0xF8, 0x22	; INTRX1: Serial receive 1
+	ldio 0xF8, 0x23	; INTTX1: Serial send 1
+	sd8b3 0xD6, 0x3C, 0xDF	; RXE (bit 5) = 0: receive disable
+	ldio 0xF8, 0x12	; INTA Pin
+	ldio 0xE3, 0x05
+	stdi16 36253, 0
+	stdi16 36255, 0
+	ordi8 36242, 1	; CP_Flags_B.0 = 1
+	ei 0
+	ret
 
 
 CPanel_InitLEDBuffer:
-	.byte 0x1d, 0x01, 0xd2, 0xfc	; LD (CPANEL_LED_TX_BUFFER), WA
-	.byte 0x68, 0x1f	; AND (PFFC_VALUE), 0bfh
-	.byte 0xcb, 0xc5	; LD A,(PFFC_VALUE)
-	.byte 0xcd, 0x33, 0x01	; LD (PFFC), A
-	.byte 0x66, 0x08	; LD (0ebh), 0ffh
-	.byte 0xe8, 0xab	; LD (0f8h), 022h
-	.byte 0xd9, 0xa9	; LD (0f8h), 023h
-	.byte 0xda, 0xac	; LD (0e3h), 007h
-	.byte 0x68, 0x0c	; LD (0f8h), 012h
-	.byte 0xcd, 0x33, 0x00	; AND (03ch), 0bfh
-	.byte 0x66, 0x0b	; OR (PFCR_VALUE), 040h
-	.byte 0xe8, 0xab	; LD A,(PFCR_VALUE)
-	.byte 0x31, 0xff, 0xff	; LD (PFCR), A
-	.byte 0xda, 0xac	; CALR DELAY_300_LOOPS
-	.byte 0x1d, 0x2f, 0xd3, 0xfc	; CALR DELAY_300_LOOPS
-	.byte 0xc1, 0x7f, 0xc0, 0x23	; AND (PFCR_VALUE), 0bfh
-	.byte 0xc1, 0x7e, 0xc0, 0x21	; LD A,(PFCR_VALUE)
-	.byte 0xcb, 0xc1	; LD (PFCR), A
-	.byte 0xee, 0x8a	; CALR DELAY_300_LOOPS
-	.byte 0xc9, 0x33, 0x01	; CALR DELAY_300_LOOPS
-	.byte 0x66, 0x5c	; OR (PFFC_VALUE), 050h
-	.byte 0x40, 0xff, 0xff, 0xff, 0xff	; LD A, (PFFC_VALUE)
-	.byte 0x41, 0x08, 0x00, 0xc0, 0x01	; LD (PFFC), A
-	.byte 0x1d, 0x58, 0x9d, 0xfa	; OR (PFCR_VALUE), 050h
-	.byte 0xee, 0x8a	; LD A, (PFCR_VALUE)
-	.byte 0x40, 0xff, 0xff, 0xff, 0xff	; LD (PFCR), A
-	.byte 0x41, 0x07, 0x00, 0xc0, 0x01	; AND (SC1CR), 0feh
-	.byte 0x1d, 0xd1, 0x98, 0xfa	; LD (0ebh), 0ffh
-	.byte 0xee, 0x8a	; LD (0f8h), 022h
-	.byte 0x40, 0xff, 0xff, 0xff, 0xff	; LD (0f8h), 023h
-	.byte 0x41, 0x07, 0x00, 0xc0, 0x01	; LD XIY, CPANEL_LED_TX_BUFFER
-	.byte 0x1d, 0x58, 0x9d, 0xfa	; ADD IY, (CPANEL_LED_READ_PTR)
-	.byte 0xee, 0x8a	; LD A, (XIY)
-	.byte 0xea, 0x88	; INCW 1, (CPANEL_LED_READ_PTR)
-	.byte 0xe8, 0xee, 0x02	; LD (SC1BUF), A
-	.byte 0x41, 0x66, 0x99, 0xea, 0x00	; CALR DELAY_300_LOOPS
-	.byte 0xe8, 0x81	; CALR DELAY_300_LOOPS
-	.byte 0xa1, 0x20	; LD XIY, CPANEL_LED_TX_BUFFER
-	.byte 0xe2, 0x9a, 0x74, 0x02, 0xe8	; ADD IY, (CPANEL_LED_READ_PTR)
-	.byte 0xa1, 0x20	; LD A, (XIY)
-	.byte 0xe2, 0x9e, 0x74, 0x02, 0xc0	; INCW 1, (CPANEL_LED_READ_PTR)
-	.byte 0x66, 0x3b	; LD (SC1BUF), A
-	.byte 0x40, 0xff, 0xff, 0xff, 0xff	; CALR DELAY_300_LOOPS
-	.byte 0x41, 0x30, 0x00, 0xc0, 0x01	; CALR DELAY_300_LOOPS
-	.byte 0x1d, 0x58, 0x9d, 0xfa	; OR (SC1CR), 001h
-	.byte 0x68, 0x2b	; AND (SC1CR), 0fdh
-	.byte 0xcb, 0x33, 0x01	; AND (PFCR_VALUE), 0afh
-	.byte 0x66, 0x26	; LD A, (PFCR_VALUE)
-	.byte 0x40, 0xff, 0xff, 0xff, 0xff	; LD (PFCR), A
-	.byte 0x41, 0x09, 0x00, 0xc0, 0x01	; AND (PFFC_VALUE), 0afh
-	.byte 0x1d, 0x58, 0x9d, 0xfa	; LD A, (PFFC_VALUE)
-	.byte 0xee, 0x88	; LD (PFFC), A
-	.byte 0xe8, 0xee, 0x02	; RET
+	stda16 36353, xwa
+	anddi8 36239, 191
+	ldda8 a, 36239
+	dd82 0x3F, 0x41
+	ldio 0xEB, 0xFF
+	ldio 0xF8, 0x22
+	ldio 0xF8, 0x23
+	ldio 0xE3, 0x07
+	ldio 0xF8, 0x12
+	sd8b3 0x3C, 0x3C, 0xBF
+	ordi8 36238, 64
+	ldda8 a, 36238
+	dd82 0x3E, 0x41
+	calr DELAY_300_LOOPS
+	calr DELAY_300_LOOPS
+	anddi8 36238, 191
+	ldda8 a, 36238
+	dd82 0x3E, 0x41
+	calr DELAY_300_LOOPS
+	calr DELAY_300_LOOPS
+	ordi8 36239, 80
+	ldda8 a, 36239
+	dd82 0x3F, 0x41
+	ordi8 36238, 80
+	ldda8 a, 36238
+	dd82 0x3E, 0x41
+	sd8b3 0xD5, 0x3C, 0xFE
+	ldio 0xEB, 0xFF
+	ldio 0xF8, 0x22
+	ldio 0xF8, 0x23
+	ld xiy, 0x8E01
+	addda16 xiy, 36349
+	ld a, (xiy)
+	incdi16 1, 36349
+	dd82 0xD4, 0x41
+	calr DELAY_300_LOOPS
+	calr DELAY_300_LOOPS
+	ld xiy, 0x8E01
+	addda16 xiy, 36349
+	ld a, (xiy)
+	incdi16 1, 36349
+	dd82 0xD4, 0x41
+	calr DELAY_300_LOOPS
+	calr DELAY_300_LOOPS
+	sd8b3 0xD5, 0x3E, 0x01
+	sd8b3 0xD5, 0x3C, 0xFD
+	anddi8 36238, 175
+	ldda8 a, 36238
+	dd82 0x3E, 0x41
+	anddi8 36239, 175
+	ldda8 a, 36239
+	dd82 0x3F, 0x41
+	ret
 
 
 
@@ -254,811 +254,811 @@ CPanel_InitLEDBuffer:
 ; between typical baudrates, but this is just a hunch for now...
 
 LABEL_FC0DE:
-	.byte 0x41, 0x66, 0x99, 0xea, 0x00	; LD WA, 2
+	lds wa, 2
 
 LABEL_FC40E0:
-	.byte 0xe8, 0x81	; DEC 1, WA
-	.byte 0xa1, 0x20	; CP WA, 0
-	.byte 0xd8, 0x06	; JR Z, LABEL_FC40E8
-	.byte 0xd7, 0xe2, 0x06	; JR T, LABEL_FC40E0
+	dec 1, wa
+	cps wa, 0
+	jr z, LABEL_FC40E8
+	jr LABEL_FC40E0
 
 LABEL_FC40E8:
-	.byte 0xe2, 0x9a, 0x74, 0x02, 0xc8	; ret
+	ret
 
 
 Delay_6_Loops:
-	.byte 0xc1, 0x7f, 0xc0, 0x23	; LD WA, 6
+	lds wa, 6
 
 LABEL_FC40EB:
-	.byte 0xc1, 0x7e, 0xc0, 0x21	; DEC 1, WA
-	.byte 0xcb, 0xc1	; CP WA, 0
-	.byte 0xee, 0x8a	; JR Z, LABEL_FC40F3
-	.byte 0xda, 0x31	; JR T, LABEL_FC40EB
+	dec 1, wa
+	cps wa, 0
+	jr z, LABEL_FC40F3
+	jr LABEL_FC40EB
 
 LABEL_FC40F3:
-	.byte 0x07	; RET
+	ret
 
 
 DELAY_10_LOOPS:	; FC40F4
-	.byte 0xc9, 0x33, 0x00	; LD WA, 000ah
+	ldw wa, 0xA
 
 LABEL_FC40F7:
-	.byte 0x66, 0x62	; DEC 1, WA
-	.byte 0x40, 0xff, 0xff, 0xff, 0xff	; CP WA, 0
-	.byte 0x41, 0x08, 0x00, 0xc0, 0x01	; JR Z, LABEL_FC40FF
-	.byte 0x1d, 0x58, 0x9d, 0xfa	; JR T, LABEL_FC40F7
+	dec 1, wa
+	cps wa, 0
+	jr z, LABEL_FC40FF
+	jr LABEL_FC40F7
 
 LABEL_FC40FF:
-	.byte 0xee, 0x8a	; RET
+	ret
 
 
 DELAY_300_LOOPS:	; FC4100
-	.byte 0xda, 0x31	; LD WA, 012ch
+	ldw wa, 0x12C
 
 LABEL_FC4103:
-	.byte 0x07	; DEC 1, WA
-	.byte 0x40, 0xff, 0xff, 0xff, 0xff	; CP WA, 0
-	.byte 0x41, 0x07, 0x00, 0xc0, 0x01	; JR Z, LABEL_FC410B
-	.byte 0x1d, 0xd1, 0x98, 0xfa	; JR T, LABEL_FC4103
+	dec 1, wa
+	cps wa, 0
+	jr z, LABEL_FC410B
+	jr LABEL_FC4103
 
 LABEL_FC410B:
-	.byte 0xee, 0x8a	; RET
+	ret
 
 
 DELAY_1500_LOOPS:	; FC410C
-	.byte 0xda, 0x31	; LD WA, 05dch
+	ldw wa, 0x5DC
 
 LABEL_FC410F:
-	.byte 0x07	; DEC 1, WA
-	.byte 0x40, 0xff, 0xff, 0xff, 0xff	; CP WA, 0
-	.byte 0x41, 0x07, 0x00, 0xc0, 0x01	; JR Z, LABEL_FC4117
-	.byte 0x1d, 0x58, 0x9d, 0xfa	; JR T, LABEL_FC410F
+	dec 1, wa
+	cps wa, 0
+	jr z, LABEL_FC4117
+	jr LABEL_FC410F
 
 LABEL_FC4117:
-	.byte 0xee, 0x8a	; RET
+	ret
 
 
 DELAY_3000_LOOPS:	; FC4118
-	.byte 0xea, 0x88	; LD WA, 0bb8h
+	ldw wa, 0xBB8
 
 LABEL_FC411B:
-	.byte 0xe8, 0xee, 0x02	; DEC 1, WA
-	.byte 0x41, 0x66, 0x99, 0xea, 0x00	; CP WA, 0
-	.byte 0xe8, 0x81	; JR Z, LABEL_FC4123
-	.byte 0xa1, 0x20	; JR T, LABEL_FC411B
+	dec 1, wa
+	cps wa, 0
+	jr z, LABEL_FC4123
+	jr LABEL_FC411B
 
 LABEL_FC4123:
-	.byte 0xe2, 0x9e, 0x74, 0x02, 0xe8	; RET
+	ret
 
 
 LABEL_FC4124:
-	.byte 0xD1, 0x9, 0x4, 0x20, 0xF1, 0x9B, 0x8D, 0x50
-	.byte 0xD1, 0x9, 0x4, 0x20, 0xD1, 0x9B, 0x8D, 0xA0
-	.byte 0xD8, 0xDA, 0x61, 0xF4, 0xE
+	.byte 0xd1, 0x09, 0x04, 0x20, 0xf1, 0x9b, 0x8d, 0x50
+	.byte 0xd1, 0x09, 0x04, 0x20, 0xd1, 0x9b, 0x8d, 0xa0
+	.byte 0xd8, 0xda, 0x61, 0xf4, 0x0e
 
 
 DELAY_6_TICKS:
-	.byte 0x9d, 0xfa, 0x68	; LD WA, (SYSTEM_TIMESTAMP)
-	.byte 0x2b	; LD (TIMESTAMP_FOR_DELAY), WA
+	ldda16 xwa, 1033
+	stda16 36251, xwa
 
 LABEL_FC4141:
-	.byte 0xcb, 0x33, 0x00	; LD WA, (SYSTEM_TIMESTAMP)
-	.byte 0x66, 0x26	; SUB WA, (TIMESTAMP_FOR_DELAY)
-	.byte 0x40, 0xff, 0xff, 0xff, 0xff	; CP WA, 6
-	.byte 0x41, 0x09, 0x00, 0xc0, 0x01	; JR LT, LABEL_FC4141
-	.byte 0x1d, 0x58, 0x9d, 0xfa	; RET
+	ldda16 xwa, 1033
+	subda16 xwa, 36251
+	cps wa, 6
+	jr lt, LABEL_FC4141
+	ret
 
 
 DELAY_51_TICKS:
-	.byte 0xee, 0x88	; LD WA, (SYSTEM_TIMESTAMP)
-	.byte 0xe8, 0xee, 0x02	; LD (TIMESTAMP_FOR_DELAY), WA
+	ldda16 xwa, 1033
+	stda16 36251, xwa
 
 LABEL_FC4156:
-	.byte 0x41, 0x66, 0x99, 0xea, 0x00	; LD WA, (SYSTEM_TIMESTAMP)
-	.byte 0xe8, 0x81	; SUB WA, (TIMESTAMP_FOR_DELAY)
-	.byte 0xa1, 0x20	; CP WA, 0033h
-	.byte 0xd8, 0x06	; JR LT, LABEL_FC4156
-	.byte 0xd7, 0xe2, 0x06	; RET
+	ldda16 xwa, 1033
+	subda16 xwa, 36251
+	cp wa, 0x33
+	jr lt, LABEL_FC4156
+	ret
 
 ; ???? R        L
 ; ???? 25 (001 00101): 01 | e2 (111 00010): 04
 ; ???? 20 (001 00000): 10 | e2 (111 00010): 11
 
 CPanel_CheckSpecialCombos:
-	.byte 0xe2, 0x9e, 0x74, 0x02, 0xc8	; CP (STATE_OF_CPANEL_BUTTONS_LEFT + 4), 06ch	;  CPL_SEG4 = 0110 1100 = AUTO PLAY CHORD + SPLIT POINT + VARIATION 4 + VARIATION 3 => display sw internal build numbers
-	.byte 0xe2, 0x9e, 0x74, 0x02, 0x20	; JR NZ, CPanel_SpecialCombo_FirmwareVersion
-	.byte 0xe2, 0x9a, 0x74, 0x02, 0xc0	; LD HL, 3	; SOFT VERSION SCREEN
-	.byte 0xf2, 0xa2, 0x74, 0x02, 0x60	; JR T, LABEL_FC4193
+	cpdi8 36446, 108	;  CPL_SEG4 = 0110 1100 = AUTO PLAY CHORD + SPLIT POINT + VARIATION 4 + VARIATION 3 => display sw internal build numbers
+	jr nz, CPanel_SpecialCombo_FirmwareVersion
+	lds hl, 3	; SOFT VERSION SCREEN
+	jr LABEL_FC4193
 
 CPanel_SpecialCombo_FirmwareVersion:
-	.byte 0xe8, 0xcf, 0x00, 0x11, 0x00, 0x00	; CP (STATE_OF_CPANEL_BUTTONS_RIGHT + 1), 070h	; CPR_SEG1 = 0111 0000 = GM SPECIAL + ACCORDION REGISTER + DIGITAL DRAWBAR => display fw version on screen & LEDs
-	.byte 0x66, 0x49	; JR NZ, CPanel_SpecialCombo_SoftVersion
-	.byte 0xe8, 0xcf, 0xa1, 0x00, 0x00, 0x00	; LD HL, 2
-	.byte 0x66, 0x2c	; JR T, LABEL_FC4193
+	cpdi8 36427, 112	; CPR_SEG1 = 0111 0000 = GM SPECIAL + ACCORDION REGISTER + DIGITAL DRAWBAR => display fw version on screen & LEDs
+	jr nz, CPanel_SpecialCombo_SoftVersion
+	lds hl, 2
+	jr LABEL_FC4193
 
 CPanel_SpecialCombo_SoftVersion:
-	.byte 0xe8, 0xcf, 0x91, 0x00, 0x00, 0x00	; CP (STATE_OF_CPANEL_BUTTONS_LEFT + 6), 038h	; CPL_SEG6 = 0011 1000 = SHOWTIME & TRAD DANCE + PARTY TIME + MARCH & WALTZ => ?
-	.byte 0x66, 0x13	; JR NZ, CPanel_SpecialCombo_BuildInfo
-	.byte 0xe8, 0xcf, 0x89, 0x00, 0x00, 0x00	; LD HL, 1
-	.byte 0x6e, 0x3d	; JR T, LABEL_FC4193
+	cpdi8 36448, 56	; CPL_SEG6 = 0011 1000 = SHOWTIME & TRAD DANCE + PARTY TIME + MARCH & WALTZ => ?
+	jr nz, CPanel_SpecialCombo_BuildInfo
+	lds hl, 1
+	jr LABEL_FC4193
 
 CPanel_SpecialCombo_BuildInfo:
-	.byte 0xe8, 0xaf	; CP (STATE_OF_CPANEL_BUTTONS_RIGHT + 6), 00fh	; CPR_SEG6 = 0000 1111 = 4 panel memory buttons (PM 4 + PM 3 + PM 2 + PM 1) => fw update
-	.byte 0x41, 0x01, 0x00, 0xc0, 0x01	; JR NZ, CPanel_SpecialCombo_FirmwareUpdate
-	.byte 0xea, 0xa8	; LD HL, 4
-	.byte 0x68, 0x20	; JR T, LABEL_FC4193
+	cpdi8 36432, 15	; CPR_SEG6 = 0000 1111 = 4 panel memory buttons (PM 4 + PM 3 + PM 2 + PM 1) => fw update
+	jr nz, CPanel_SpecialCombo_FirmwareUpdate
+	lds hl, 4
+	jr LABEL_FC4193
 
 CPanel_SpecialCombo_FirmwareUpdate:
-	.byte 0x40, 0xff, 0xff, 0xff, 0xff	; LD HL, 0
+	lds hl, 0
 
 LABEL_FC4193:
-	.byte 0x41, 0x15, 0x00, 0xc0, 0x01	; RET
+	ret
 
 
 CPanel_PanelDetection:
-	.byte 0x42, 0x00, 0x00, 0xa0, 0x01	; LD (CPANEL_PANEL_DETECT_FLAGS), 000h
-	.byte 0x68, 0x0f	; CALR CPanel_WaitTXReady
-	.byte 0x40, 0xff, 0xff, 0xff, 0xff	; EI 006h
-	.byte 0x41, 0x16, 0x00, 0xc0, 0x01	; LDW (CPANEL_RX_READ_PTR), 0000h
-	.byte 0x42, 0xf0, 0x00, 0xa0, 0x01	; LDW (CPANEL_RX_WRITE_PTR), 0000h
-	.byte 0x1d, 0x58, 0x9d, 0xfa	; OR (CPANEL_PROTOCOL_FLAGS), 001h	; CP_Flags_B.0 = 1
-	.byte 0x68, 0x0c	; EI 000h
-	.byte 0x1d, 0xe5, 0xfe, 0xff	; LD_A 020h	; my guess: 20 = 001 00000 where 001 = left-panel mcu
-	.byte 0xcf, 0xcf, 0xff	; LD_W 0
-	.byte 0xf2, 0x30, 0xf0, 0xfa, 0xe6	; CALR CPanel_SendCommand
-	.byte 0xc1, 0x7d, 0xc0, 0x3f, 0x20	; CALR DELAY_6_TICKS
-	.byte 0x6e, 0x2f	; CPW (CPANEL_RX_WRITE_PTR), 0000h
-	.byte 0xc1, 0x7e, 0xc0, 0x3f, 0x00	; JR Z, LABEL_FC41C8
-	.byte 0x66, 0x28	; OR (CPANEL_PANEL_DETECT_FLAGS), 001h	; my guess: CP_Flags_C.0
+	stdi8 36243, 0
+	calr CPanel_WaitTXReady
+	ei 6
+	stdi16 36253, 0
+	stdi16 36255, 0
+	ordi8 36242, 1	; CP_Flags_B.0 = 1
+	ei 0
+	ldb a, 0x20	; my guess: 20 = 001 00000 where 001 = left-panel mcu
+	ldb w, 0x0
+	calr CPanel_SendCommand
+	calr DELAY_6_TICKS
+	cpdi16 36255, 0
+	jr z, LABEL_FC41C8
+	ordi8 36243, 1	; my guess: CP_Flags_C.0
 					  ; = Got response from left-panel MCU
 
 LABEL_FC41C8:
-	.byte 0x40, 0xff, 0xff, 0xff, 0xff	; CALR CPanel_WaitTXReady
-	.byte 0x41, 0x3b, 0x00, 0xc0, 0x01	; EI 006h
-	.byte 0x1d, 0x68, 0x98, 0xfa	; LDW (CPANEL_RX_READ_PTR), 0000h
-	.byte 0xea, 0xa8	; LDW (CPANEL_RX_WRITE_PTR), 0000h
-	.byte 0xc1, 0x7e, 0xc0, 0x25	; OR (CPANEL_PROTOCOL_FLAGS), 001h	; CP_Flags_B.0 = 1
-	.byte 0xea, 0xc8, 0x00, 0x00, 0x80, 0x01	; EI 000h
-	.byte 0x40, 0xff, 0xff, 0xff, 0xff	; LD_A 0e0h	; my guess: E0 = 111 00000 where 111 = right-panel mcu
-	.byte 0x41, 0x3b, 0x00, 0xc0, 0x01	; LD_W 0
-	.byte 0x1d, 0x58, 0x9d, 0xfa	; CALR CPanel_SendCommand
-	.byte 0xc1, 0x7d, 0xc0, 0x3f, 0x21	; CALR DELAY_6_TICKS
-	.byte 0x7e, 0x43, 0x03	; CPW (CPANEL_RX_WRITE_PTR), 0000h
-	.byte 0xc1, 0x7e, 0xc0, 0x3f, 0x00	; JR Z, LABEL_FC41F7
-	.byte 0x76, 0x3b, 0x03	; OR (CPANEL_PANEL_DETECT_FLAGS), 008h	; my guess: CP_Flags_C.4
+	calr CPanel_WaitTXReady
+	ei 6
+	stdi16 36253, 0
+	stdi16 36255, 0
+	ordi8 36242, 1	; CP_Flags_B.0 = 1
+	ei 0
+	ldb a, 0xE0	; my guess: E0 = 111 00000 where 111 = right-panel mcu
+	ldb w, 0x0
+	calr CPanel_SendCommand
+	calr DELAY_6_TICKS
+	cpdi16 36255, 0
+	jr z, LABEL_FC41F7
+	ordi8 36243, 8	; my guess: CP_Flags_C.4
 					 ; = Got response from right-panel MCU
 
 LABEL_FC41F7:
-	.byte 0x40, 0xff, 0xff, 0xff, 0xff	; LD A, (CPANEL_PANEL_DETECT_FLAGS)
-	.byte 0x41, 0x1f, 0x00, 0xc0, 0x01	; RET
+	ldda8 a, 36243
+	ret
 
 
 CPanel_ReadAllButtons:
-	.byte 0x1d, 0x68, 0x98, 0xfa	; LD XHL, CPANEL_RX_EVENT_QUEUE
-	.byte 0xc1, 0x7e, 0xc0, 0x21	; LDW (XHL - 4), 0000h
-	.byte 0xc9, 0xc8, 0x10	; LDW (XHL - 8), 0000h
-	.byte 0xd8, 0x13	; LDW (XHL - 2), 0080h
+	ld xhl, 0x200AD
+	ldmw (xhl - 4), 0x0
+	ldmw (xhl - 8), 0x0
+	ldmw (xhl - 2), 0x80
 
-	.byte 0xd8, 0xec, 0x02	; EI 006h
-	.byte 0xf2, 0xe2, 0x98, 0xea, 0x31	; LD WA, (CPANEL_RX_READ_PTR)
-	.byte 0xe3, 0x07, 0xe4, 0xe0, 0x22	; LD (CPANEL_RX_WRITE_PTR), WA
-	.byte 0x40, 0xff, 0xff, 0xff, 0xff	; OR (CPANEL_PROTOCOL_FLAGS), 001h	; CP_Flags_B.0 = 1
-	.byte 0x41, 0x1f, 0x00, 0xc0, 0x01	; EI 000h
+	ei 6
+	ldda16 xwa, 36253
+	stda16 36255, xwa
+	ordi8 36242, 1	; CP_Flags_B.0 = 1
+	ei 0
 
-	.byte 0x78, 0x06, 0x03	; CALL CPanel_WaitTXReady
-	.byte 0xcd, 0xdb	; LD_A 025h
-	.byte 0x7e, 0x9b, 0x00	; LD_W 01h
-	.byte 0xc1, 0x7f, 0xc0, 0x23	; CALL CPanel_SendCommand
-	.byte 0xcb, 0x89	; CALR DELAY_6_TICKS
-	.byte 0xc1, 0x7e, 0xc0, 0xc1	; CALR DELAY_6_TICKS
-	.byte 0xc9, 0x33, 0x00	; CALR DELAY_6_TICKS
+	call 0xFC4375
+	ldb a, 0x25
+	ldb w, 0x1
+	call 0xFC43C7
+	calr DELAY_6_TICKS
+	calr DELAY_6_TICKS
+	calr DELAY_6_TICKS
 
-	.byte 0x66, 0x1a	; CALR CPanel_WaitTXReady
-	.byte 0x40, 0xff, 0xff, 0xff, 0xff	; LD_A 0e2h
-	.byte 0x41, 0x9b, 0x00, 0xe0, 0x01	; LD_W 04h
-	.byte 0xea, 0xa8	; CALR CPanel_SendCommand
-	.byte 0x1d, 0x58, 0x9d, 0xfa	; CALR DELAY_6_TICKS
-	.byte 0xe8, 0xa9	; CALR DELAY_6_TICKS
+	calr CPanel_WaitTXReady
+	ldb a, 0xE2
+	ldb w, 0x4
+	calr CPanel_SendCommand
+	calr DELAY_6_TICKS
+	calr DELAY_6_TICKS
 
-	.byte 0xe2, 0x90, 0x74, 0x02, 0xe8	; CALR CPanel_WaitTXReady
-	.byte 0x78, 0xdc, 0x02	; LD_A 020h
-	.byte 0xcb, 0x33, 0x00	; LD_W 010h
-	.byte 0x6e, 0x66	; CALR CPanel_SendCommand
-	.byte 0x78, 0xd4, 0x02	; CALR DELAY_6_TICKS
-	.byte 0xcd, 0xcf, 0x11	; CALR DELAY_6_TICKS
+	calr CPanel_WaitTXReady
+	ldb a, 0x20
+	ldb w, 0x10
+	calr CPanel_SendCommand
+	calr DELAY_6_TICKS
+	calr DELAY_6_TICKS
 
-	.byte 0x76, 0x9a, 0x02	; CALR CPanel_WaitTXReady
-	.byte 0xc1, 0x7f, 0xc0, 0x23	; LD_A 0e2h
-	.byte 0xcb, 0x89	; LD_W 011h
-	.byte 0xc1, 0x7e, 0xc0, 0xc1	; CALR CPanel_SendCommand
-	.byte 0xcd, 0xd9	; CALR DELAY_6_TICKS
-	.byte 0x76, 0xf5, 0x01	; CALR DELAY_6_TICKS
+	calr CPanel_WaitTXReady
+	ldb a, 0xE2
+	ldb w, 0x11
+	calr CPanel_SendCommand
+	calr DELAY_6_TICKS
+	calr DELAY_6_TICKS
 
-	.byte 0xcd, 0xcf, 0x15	; CALR CPanel_RX_Process
-	.byte 0x76, 0x92, 0x01	; RET
+	calr CPanel_RX_Process
+	ret
 
 
 CPanel_PollStartup:
-	.byte 0xcd, 0xdc	; LD XHL, CPANEL_RX_EVENT_QUEUE
-	.byte 0x76, 0x32, 0x01	; LDW (XHL - 4), 0000h
-	.byte 0xcd, 0xcf, 0x0e	; LDW (XHL - 8), 0000h
-	.byte 0x76, 0x99, 0x00	; LDW (XHL - 2), 0080h
-	.byte 0xcd, 0xcf, 0x12	; EI 006h
-	.byte 0x66, 0x6b	; LDW (CPANEL_RX_READ_PTR), 0000h
-	.byte 0xcd, 0xcf, 0x0f	; LDW (CPANEL_RX_WRITE_PTR), 0000h
-	.byte 0x66, 0x3d	; OR (CPANEL_PROTOCOL_FLAGS), 001h	; CP_Flags_B.0 = 1
-	.byte 0xcd, 0xdd	; EI 000h
+	ld xhl, 0x200AD
+	ldmw (xhl - 4), 0x0
+	ldmw (xhl - 8), 0x0
+	ldmw (xhl - 2), 0x80
+	ei 6
+	stdi16 36253, 0
+	stdi16 36255, 0
+	ordi8 36242, 1	; CP_Flags_B.0 = 1
+	ei 0
 
 CPanel_ButtonPollLoop:
-	.byte 0x7e, 0x9f, 0x02	; CALR CPanel_WaitTXReady
-	.byte 0xc1, 0x7f, 0xc0, 0x21	; LD_A 020h
-	.byte 0xc1, 0x7e, 0xc0, 0xc1	; LD_W 0bh
-	.byte 0xc9, 0x33, 0x00	; CALR CPanel_SendCommand
-	.byte 0x76, 0x91, 0x02	; CALR DELAY_6_TICKS
-	.byte 0xc9, 0x33, 0x01	; CALR CPanel_RX_Process
+	calr CPanel_WaitTXReady
+	ldb a, 0x20
+	ldb w, 0xB
+	calr CPanel_SendCommand
+	calr DELAY_6_TICKS
+	calr CPanel_RX_Process
 
-	.byte 0x76, 0x8b, 0x02	; LD A, (STATE_OF_CPANEL_BUTTONS + 11)	; Byte 11 is in gap between CPR (0-10) and CPL (16-26), possibly status/mode
-	.byte 0xe2, 0x90, 0x74, 0x02, 0x20	; LD_W 0dh	; Default encoder check mode
-	.byte 0xe8, 0xcf, 0x01, 0x00, 0x00, 0x00	; BIT 7, A	; Test bit 7 of status byte
-	.byte 0x7e, 0x7d, 0x02	; JR NZ, CPanel_EncoderCheck
-	.byte 0x1d, 0xe5, 0xfe, 0xff	; LD_W 0eh	; Alternate mode if bit 7 set
-	.byte 0xcf, 0xcf, 0xff	; BIT 6, A	; Test bit 6 of status byte
-	.byte 0xf2, 0x30, 0xf0, 0xfa, 0xe6	; JR NZ, CPanel_EncoderCheck
-	.byte 0xe8, 0xa8	; LD_W 0ch	; Third mode if bit 6 set
+	ldda8 a, 36437	; Byte 11 is in gap between CPR (0-10) and CPL (16-26), possibly status/mode
+	ldb w, 0xD	; Default encoder check mode
+	bit 7, a	; Test bit 7 of status byte
+	jr nz, CPanel_EncoderCheck
+	ldb w, 0xE	; Alternate mode if bit 7 set
+	bit 6, a	; Test bit 6 of status byte
+	jr nz, CPanel_EncoderCheck
+	ldb w, 0xC	; Third mode if bit 6 set
 
 CPanel_EncoderCheck:
-	.byte 0xf2, 0x90, 0x74, 0x02, 0x60	; CP (8E6Ah), W
-	.byte 0x78, 0x67, 0x02	; LD (8E6Ah), W
-	.byte 0xc9, 0x33, 0x07	; JR NZ, CPanel_ButtonPollLoop
-	.byte 0x66, 0x0f	; LD (8E6Ah), W
-	.byte 0x40, 0xff, 0xff, 0xff, 0xff	; LD XHL, CPANEL_RX_EVENT_QUEUE
-	.byte 0x41, 0xa5, 0x00, 0xe0, 0x01	; LDW (XHL - 4), 0000h
-	.byte 0xea, 0xa8	; LDW (XHL - 8), 0000h
-	.byte 0x78, 0x4f, 0x02	; LDW (XHL - 2), 0080h
-	.byte 0xcb, 0x33, 0x07	; EI 006h
-	.byte 0x76, 0x4d, 0x02	; LDW (CPANEL_LED_READ_PTR), 0000h
-	.byte 0x40, 0xff, 0xff, 0xff, 0xff	; LDW (CPANEL_LED_WRITE_PTR), 0000h
-	.byte 0x41, 0xa6, 0x00, 0xe0, 0x01	; LDW (CPANEL_RX_READ_PTR), 0000h
-	.byte 0xea, 0xa8	; LDW (CPANEL_RX_WRITE_PTR), 0000h
-	.byte 0x78, 0x3a, 0x02	; OR (CPANEL_PROTOCOL_FLAGS), 001h	; CP_Flags_B.0 = 1
-	.byte 0xc9, 0x33, 0x00	; EI 000h
-	.byte 0x66, 0x0f	; RET
+	cpdm8 36458, w
+	stda8 36458, w
+	jr nz, CPanel_ButtonPollLoop
+	stda8 36458, w
+	ld xhl, 0x200AD
+	ldmw (xhl - 4), 0x0
+	ldmw (xhl - 8), 0x0
+	ldmw (xhl - 2), 0x80
+	ei 6
+	stdi16 36349, 0
+	stdi16 36351, 0
+	stdi16 36253, 0
+	stdi16 36255, 0
+	ordi8 36242, 1	; CP_Flags_B.0 = 1
+	ei 0
+	ret
 
 
 CPanel_InitButtonState:	; do that
-	.byte 0x40, 0xff, 0xff, 0xff, 0xff	; LD XHL, CPANEL_RX_EVENT_QUEUE
-	.byte 0x41, 0xa5, 0x00, 0xe0, 0x01	; LDW (XHL - 4), 0000h
-	.byte 0xea, 0xa9	; LDW (XHL - 8), 0000h
-	.byte 0x78, 0x26, 0x02	; LDW (XHL - 2), 0080h
+	ld xhl, 0x200AD
+	ldmw (xhl - 4), 0x0
+	ldmw (xhl - 8), 0x0
+	ldmw (xhl - 2), 0x80
 
-	.byte 0xcb, 0x33, 0x00	; EI 006h
-	.byte 0x76, 0x24, 0x02	; LD (CPANEL_RX_READ_PTR), 000h
-	.byte 0x40, 0xff, 0xff, 0xff, 0xff	; LD (CPANEL_RX_WRITE_PTR), 000h
-	.byte 0x41, 0xa6, 0x00, 0xe0, 0x01	; OR (CPANEL_PROTOCOL_FLAGS), 001h	; CP_Flags_B.0 = 1
-	.byte 0xea, 0xa9	; EI 000h
+	ei 6
+	stdi8 36253, 0
+	stdi8 36255, 0
+	ordi8 36242, 1	; CP_Flags_B.0 = 1
+	ei 0
 
-	.byte 0x78, 0x11, 0x02	; CALR CPanel_WaitTXReady
-	.byte 0xc9, 0x33, 0x03	; LD_A 02bh
-	.byte 0x66, 0x0e	; LD_W 0
-	.byte 0x40, 0xff, 0xff, 0xff, 0xff	; CALR CPanel_SendCommand
-	.byte 0x41, 0xa5, 0x00, 0xe0, 0x01	; CALR DELAY_6_TICKS
-	.byte 0xea, 0xaa	; CALR DELAY_6_TICKS
-	.byte 0x68, 0x11	; CALR DELAY_6_TICKS
-	.byte 0xcb, 0x33, 0x03	; CALR CPanel_RX_ProcessWithFlag
+	calr CPanel_WaitTXReady
+	ldb a, 0x2B
+	ldb w, 0x0
+	calr CPanel_SendCommand
+	calr DELAY_6_TICKS
+	calr DELAY_6_TICKS
+	calr DELAY_6_TICKS
+	calr CPanel_RX_ProcessWithFlag
 
-	.byte 0x66, 0x10	; CALR CPanel_WaitTXReady
-	.byte 0x40, 0xff, 0xff, 0xff, 0xff	; LD_A 0ebh
-	.byte 0x41, 0xa6, 0x00, 0xe0, 0x01	; LD_W 0
-	.byte 0xea, 0xaa	; CALR CPanel_SendCommand
-	.byte 0x1d, 0x58, 0x9d, 0xfa	; CALR DELAY_6_TICKS
-	.byte 0xc1, 0x7f, 0xc0, 0x23	; CALR DELAY_6_TICKS
-	.byte 0xcb, 0x89	; CALR DELAY_6_TICKS
-	.byte 0xc1, 0x7e, 0xc0, 0xc1	; CALR CPanel_RX_ProcessWithFlag
+	calr CPanel_WaitTXReady
+	ldb a, 0xEB
+	ldb w, 0x0
+	calr CPanel_SendCommand
+	calr DELAY_6_TICKS
+	calr DELAY_6_TICKS
+	calr DELAY_6_TICKS
+	calr CPanel_RX_ProcessWithFlag
 
-	.byte 0xc9, 0x33, 0x02	; CALR CPanel_WaitTXReady
-	.byte 0x66, 0x0e	; LD_A 020h
-	.byte 0x40, 0xff, 0xff, 0xff, 0xff	; LD_W 010h
-	.byte 0x41, 0xa5, 0x00, 0xe0, 0x01	; CALR CPanel_SendCommand
-	.byte 0xea, 0xab	; CALR DELAY_6_TICKS
-	.byte 0x68, 0x11	; CALR DELAY_6_TICKS
-	.byte 0xcb, 0x33, 0x02	; CALR CPanel_RX_ProcessWithFlag
+	calr CPanel_WaitTXReady
+	ldb a, 0x20
+	ldb w, 0x10
+	calr CPanel_SendCommand
+	calr DELAY_6_TICKS
+	calr DELAY_6_TICKS
+	calr CPanel_RX_ProcessWithFlag
 
-	.byte 0x66, 0x10	; CALR CPanel_WaitTXReady
-	.byte 0x40, 0xff, 0xff, 0xff, 0xff	; LD_A 0e3h
-	.byte 0x41, 0xa6, 0x00, 0xe0, 0x01	; LD_W 010h
-	.byte 0xea, 0xab	; CALR CPanel_SendCommand
-	.byte 0x1d, 0x58, 0x9d, 0xfa	; CALR DELAY_6_TICKS
-	.byte 0xc1, 0x7f, 0xc0, 0x23	; CALR DELAY_6_TICKS
-	.byte 0xcb, 0x89	; CALR CPanel_RX_ProcessWithFlag
-	.byte 0xc1, 0x7e, 0xc0, 0xc1	; RET
+	calr CPanel_WaitTXReady
+	ldb a, 0xE3
+	ldb w, 0x10
+	calr CPanel_SendCommand
+	calr DELAY_6_TICKS
+	calr DELAY_6_TICKS
+	calr CPanel_RX_ProcessWithFlag
+	ret
 
 
 CPanel_WaitTXReady:
-	.byte 0xc9, 0x33, 0x04	; LD (CPANEL_COUNTER_DOWN_FROM_200), 0c8h	; =200
+	stdi8 36247, 200	; =200
 
 CPanel_WaitTXReady_Poll:
-	.byte 0x66, 0x12	; EI 006h
-	.byte 0x40, 0xff, 0xff, 0xff, 0xff	; BIT 6, (PF)	; PF.6 = state of SCLK1 pin == 1, (resting at pull-up)
-	.byte 0x41, 0xa5, 0x00, 0xe0, 0x01	; JR Z, CPanel_WaitTXReady_Timeout
-	.byte 0x42, 0x09, 0x00, 0x00, 0x00	; BIT 5, (PE)	; PE.5 = state of INTA pin == 0
-	.byte 0x78, 0x96, 0x01	; JR NZ, CPanel_WaitTXReady_Timeout
-	.byte 0xcb, 0x33, 0x04	; BIT 1, (CPANEL_TX_RX_FLAGS)
-	.byte 0x76, 0x94, 0x01	; JR NZ, CPanel_WaitTXReady_Timeout
-	.byte 0x40, 0xff, 0xff, 0xff, 0xff	; BIT 0, (CPANEL_TX_RX_FLAGS)
-	.byte 0x41, 0xa6, 0x00, 0xe0, 0x01	; JR NZ, CPanel_WaitTXReady_Timeout
-	.byte 0x42, 0x09, 0x00, 0x00, 0x00	; JR T, CPanel_WaitTXReady_BufferCheck
+	ei 6
+	dd82 0x3C, 0xCE	; PF.6 = state of SCLK1 pin == 1, (resting at pull-up)
+	jr z, CPanel_WaitTXReady_Timeout
+	dd82 0x38, 0xCD	; PE.5 = state of INTA pin == 0
+	jr nz, CPanel_WaitTXReady_Timeout
+	bitda 1, 36236
+	jr nz, CPanel_WaitTXReady_Timeout
+	bitda 0, 36236
+	jr nz, CPanel_WaitTXReady_Timeout
+	jr CPanel_WaitTXReady_BufferCheck
 
 CPanel_WaitTXReady_Timeout:
-	.byte 0x78, 0x7e, 0x01	; DEC 1, (CPANEL_COUNTER_DOWN_FROM_200)
-	.byte 0xc9, 0x33, 0x04	; CP (CPANEL_COUNTER_DOWN_FROM_200), 000h
-	.byte 0x66, 0x0e	; JR Z, LABEL_FC43B0
-	.byte 0x40, 0xff, 0xff, 0xff, 0xff	; EI 000h
-	.byte 0x41, 0xa5, 0x00, 0xe0, 0x01	; CALR DELAY_1500_LOOPS
-	.byte 0xea, 0xac	; JR T, CPanel_WaitTXReady_Poll
+	decdi8 1, 36247
+	cpdi8 36247, 0
+	jr z, LABEL_FC43B0
+	ei 0
+	calr DELAY_1500_LOOPS
+	jr CPanel_WaitTXReady_Poll
 
 CPanel_WaitTXReady_BufferCheck:
 	; Only reaches here when CP_Flags_A.10 == 00, and I think only CPanel_SM_Idle sets that value...
 
-	.byte 0x68, 0x11	; LD WA, (CPANEL_LED_WRITE_PTR)
-	.byte 0xcb, 0x33, 0x04	; CP WA, (CPANEL_LED_READ_PTR)
-	.byte 0x66, 0x10	; JR NZ, CPanel_WaitTXReady_Timeout
+	ldda16 xwa, 36351
+	cpda16 xwa, 36349
+	jr nz, CPanel_WaitTXReady_Timeout
 
 LABEL_FC43B0:
-	.byte 0x40, 0xff, 0xff, 0xff, 0xff	; EI 006h
-	.byte 0x41, 0xa6, 0x00, 0xe0, 0x01	; LD (INTCLR), 022h	; INTRX1: Serial receive 1
-	.byte 0xea, 0xac	; LD (INTCLR), 023h	; INTTX1: Serial send 1
-	.byte 0x1d, 0x58, 0x9d, 0xfa	; LD (INTES1), 0ddh
-	.byte 0xc1, 0x7f, 0xc0, 0x23	; AND (SC1MOD), 0dfh	; RXE (bit 5) = 0: receive disable
-	.byte 0xcb, 0x89	; OR (CPANEL_PROTOCOL_FLAGS), 080h	; CP_Flags_B.7 = 1
-	.byte 0xc1, 0x7e, 0xc0, 0xc1	; EI 000h
-	.byte 0xc9, 0x33, 0x05	; RET
+	ei 6
+	ldio 0xF8, 0x22	; INTRX1: Serial receive 1
+	ldio 0xF8, 0x23	; INTTX1: Serial send 1
+	ldio 0xEB, 0xDD
+	sd8b3 0xD6, 0x3C, 0xDF	; RXE (bit 5) = 0: receive disable
+	ordi8 36242, 128	; CP_Flags_B.7 = 1
+	ei 0
+	ret
 
 
 CPanel_SendCommand:
-	.byte 0x66, 0x0f	; EI 006h
-	.byte 0x40, 0xff, 0xff, 0xff, 0xff	; LDW (CPANEL_LED_READ_PTR), 0000h
-	.byte 0x41, 0xa5, 0x00, 0xe0, 0x01	; LDW (CPANEL_LED_WRITE_PTR), 0000h
-	.byte 0xea, 0xad	; LD (CPANEL_LED_TX_BUFFER), WA
-	.byte 0x78, 0x38, 0x01	; ADDW (CPANEL_LED_WRITE_PTR), 0002h
-	.byte 0xcb, 0x33, 0x05	; OR (CPANEL_TX_RX_FLAGS), 002h
-	.byte 0x76, 0x36, 0x01	; AND (CPANEL_TX_RX_FLAGS), 0feh	; CP_Flags_A.10 = 2
-	.byte 0x40, 0xff, 0xff, 0xff, 0xff	; LD (CPANEL_STATE_MACHINE_INDEX), 004h	; ROUTINE_1
-	.byte 0x41, 0xa6, 0x00, 0xe0, 0x01	; LD (BR1CR), 028h	; Internal Clock T8 (64/fc)
+	ei 6
+	stdi16 36349, 0
+	stdi16 36351, 0
+	stda16 36353, xwa
+	adddi16 36351, 2
+	ordi8 36236, 2
+	anddi8 36236, 254	; CP_Flags_A.10 = 2
+	stdi8 36234, 4	; ROUTINE_1
+	ldio 0xD7, 0x28	; Internal Clock T8 (64/fc)
 	                 ; Divide by 8
 	                 ; fc = 16MHz, so fc/64/8 = 31250
-	.byte 0xea, 0xad	; AND (PFFC_VALUE), 0bfh	; disable CPanel serial ckl
-	.byte 0x78, 0x23, 0x01	; LD A, (PFFC_VALUE)
-	.byte 0xc9, 0x33, 0x05	; LD (PFFC), A
-	.byte 0x66, 0x29	; AND (PF), 0bfh	; PF bit 6: SCLK1 = 0
-	.byte 0x1d, 0xa3, 0xe9, 0xf1	; OR (PFCR_VALUE), 040h
-	.byte 0xcf, 0xd8	; LD A, (PFCR_VALUE)
-	.byte 0x66, 0x12	; LD (PFCR), A
-	.byte 0x40, 0xff, 0xff, 0xff, 0xff	; LD (INTEAB), 007h
-	.byte 0x41, 0xa5, 0x00, 0xe0, 0x01	; LD (INTCLR), 012h	; INTA Pin
-	.byte 0x42, 0x0b, 0x00, 0x00, 0x00	; AND (SC1MOD), 0dfh	; RXE (bit 5) = 0: CPanel receive disable
-	.byte 0x78, 0x04, 0x01	; AND (SC1CR), 0feh	; IOC (bit 0) = 0: I/O interface input clock select = Baud rate generator
-	.byte 0x40, 0xff, 0xff, 0xff, 0xff	; LD (INTCLR), 023h	; INTTX1: Serial send 1
-	.byte 0x41, 0xa5, 0x00, 0xe0, 0x01	; LD (INTES1), 0dfh
-	.byte 0xea, 0xae	; LD (INTCLR), 022h	; INTRX1: Serial receive 1
-	.byte 0x78, 0xf5, 0x00	; LD (SC1BUF), A
-	.byte 0xcb, 0x33, 0x05	; EI 000h
-	.byte 0x76, 0xf3, 0x00	; NOP
-	.byte 0x1d, 0xa3, 0xe9, 0xf1	; RET
+	anddi8 36239, 191	; disable CPanel serial ckl
+	ldda8 a, 36239
+	dd82 0x3F, 0x41
+	sd8b3 0x3C, 0x3C, 0xBF	; PF bit 6: SCLK1 = 0
+	ordi8 36238, 64
+	ldda8 a, 36238
+	dd82 0x3E, 0x41
+	ldio 0xE3, 0x07
+	ldio 0xF8, 0x12	; INTA Pin
+	sd8b3 0xD6, 0x3C, 0xDF	; RXE (bit 5) = 0: CPanel receive disable
+	sd8b3 0xD5, 0x3C, 0xFE	; IOC (bit 0) = 0: I/O interface input clock select = Baud rate generator
+	ldio 0xF8, 0x23	; INTTX1: Serial send 1
+	ldio 0xEB, 0xDF
+	ldio 0xF8, 0x22	; INTRX1: Serial receive 1
+	dd82 0xD4, 0x41
+	ei 0
+	nop
+	ret
 
 
 INTA_HANDLER:	; fc442b
-	.byte 0xcf, 0xd8	; LD (CPANEL_COUNTER_UP_TO_20), 000h
-	.byte 0x66, 0x12	; PUSH XWA
-	.byte 0x40, 0xff, 0xff, 0xff, 0xff	; CP (CPANEL_PACKET_BYTE_COUNT), 000h
-	.byte 0x41, 0xa6, 0x00, 0xe0, 0x01	; JR NZ, LABEL_FC4462
+	stdi8 36248, 0
+	push xwa
+	cpdi8 36235, 0
+	jr nz, LABEL_FC4462
 
-	.byte 0x42, 0x0b, 0x00, 0x00, 0x00	; AND (PFCR_VALUE), 09fh
-	.byte 0x78, 0xd5, 0x00	; LD A, (PFCR_VALUE)
-	.byte 0x40, 0xff, 0xff, 0xff, 0xff	; LD (PFCR), A
-	.byte 0x41, 0xa6, 0x00, 0xe0, 0x01	; OR (SC1CR), 001h	; IOC (bit 0) = 1: Set I/O interface input clock select to SCLK1 pin
-	.byte 0xea, 0xae	; AND (SC1CR), 0fdh	; SCLKS (bit 1) = 0: Data transmit/receive at SCLK1 rising edge.
-	.byte 0x78, 0xc6, 0x00	; LD (INTEAB), 005h
-	.byte 0xc9, 0x33, 0x01	; LD (INTES1), 00dh
-	.byte 0x66, 0x0e	; OR (SC1MOD), 020h	; parity addition: enable
-	.byte 0x40, 0xff, 0xff, 0xff, 0xff	; LD (CPANEL_STATE_MACHINE_INDEX), 020h	;		ROUTINE_7
-	.byte 0x41, 0xa5, 0x00, 0xe0, 0x01	; OR (CPANEL_TX_RX_FLAGS), 001h	; CP_Flags_A.0 = 1
-	.byte 0xea, 0xaf	; JR T, INTA_HANDLER_END
+	anddi8 36238, 159
+	ldda8 a, 36238
+	dd82 0x3E, 0x41
+	sd8b3 0xD5, 0x3E, 0x01	; IOC (bit 0) = 1: Set I/O interface input clock select to SCLK1 pin
+	sd8b3 0xD5, 0x3C, 0xFD	; SCLKS (bit 1) = 0: Data transmit/receive at SCLK1 rising edge.
+	ldio 0xE3, 0x05
+	ldio 0xEB, 0x0D
+	sd8b3 0xD6, 0x3E, 0x20	; parity addition: enable
+	stdi8 36234, 32	;		ROUTINE_7
+	ordi8 36236, 1	; CP_Flags_A.0 = 1
+	jr INTA_HANDLER_END
 
 LABEL_FC4462:
-	.byte 0x68, 0x11	; CPW (CPANEL_RX_WRITE_PTR), 0000h
-	.byte 0xcb, 0x33, 0x01	; JR NZ, LABEL_FC4470
+	cpdi16 36255, 0
+	jr nz, LABEL_FC4470
 
-	.byte 0x66, 0x10	; LDW (CPANEL_RX_WRITE_PTR), 005ch
+	stdi16 36255, 92
 
 LABEL_FC4470:
-	.byte 0x40, 0xff, 0xff, 0xff, 0xff	; DECW 1, (CPANEL_RX_WRITE_PTR)
-	.byte 0x41, 0xa6, 0x00, 0xe0, 0x01	; OR (CPANEL_PROTOCOL_FLAGS), 040h	; CP_Flags_B.6 = 1  ; UNUSED
-	.byte 0xea, 0xaf	; AND (CPANEL_TX_RX_FLAGS), 0fdh	; CP_Flags_A.1 = 0
+	decdi16 1, 36255
+	ordi8 36242, 64	; CP_Flags_B.6 = 1  ; UNUSED
+	anddi8 36236, 253	; CP_Flags_A.1 = 0
 
 INTA_HANDLER_END:	; FC447E
-	.byte 0x1d, 0x58, 0x9d, 0xfa	; POP XWA
-	.byte 0xc1, 0x7f, 0xc0, 0x23	; LD (INTCLR), 012h	; INTA Pin
-	.byte 0xcb, 0x89	; LD (INTCLR), 022h	; INTRX1: Serial receive 1
-	.byte 0xc1, 0x7e, 0xc0, 0xc1	; LD (INTCLR), 023h	; INTTX1: Serial send 1
-	.byte 0xc9, 0x33, 0x05	; RETI
+	pop xwa
+	ldio 0xF8, 0x12	; INTA Pin
+	ldio 0xF8, 0x22	; INTRX1: Serial receive 1
+	ldio 0xF8, 0x23	; INTTX1: Serial send 1
+	reti
 
 
 CPANEL_STATE_MACHINE_TABLE:	; FC4489
-	.long CPanel_SM_Idle	;(offsets: 000h)  ; IDLE
-	.long CPanel_SM_StartTX	;(         004h)
-	.long CPanel_SM_SendByte1	;(         008h)
-	.long CPanel_SM_TXDelay1	;(         00ch)
-	.long CPanel_SM_SendByteN	;(         010h)
-	.long CPanel_SM_TXDelay2	;(         014h)
-	.long CPanel_SM_TXComplete	;(         018h)
-	.long CPanel_SM_Idle	;(         01ch)
-	.long CPanel_SM_RXByte1	;(         020h)  ; READ_BUTTONS_STATE_1
-	.long CPanel_SM_RXByteN	;(         024h)  ; READ_BUTTONS_STATE_2
-	.long CPanel_SM_Idle	;(         028h)  ; UNREACHABLE_STATE (?)
+	.long CPanel_SM_Idle
+	.long CPanel_SM_StartTX
+	.long CPanel_SM_SendByte1
+	.long CPanel_SM_TXDelay1
+	.long CPanel_SM_SendByteN
+	.long CPanel_SM_TXDelay2
+	.long CPanel_SM_TXComplete
+	.long CPanel_SM_Idle
+	.long CPanel_SM_RXByte1
+	.long CPanel_SM_RXByteN
+	.long CPanel_SM_Idle
 
 
 INTTX1_HANDLER:	; FC44B5
-	.byte 0x7f, 0xc0, 0x23	; PUSH XWA
-	.byte 0xcb, 0x89	; PUSH XHL
-	.byte 0xc1, 0x7e, 0xc0, 0xc1	; PUSH XIY
-	.byte 0xc9, 0x33, 0x06	; LD L, (CPANEL_STATE_MACHINE_INDEX)
-	.byte 0x66, 0x11	; XOR H, H
-	.byte 0x40, 0xff, 0xff, 0xff, 0xff	; EXTZ XHL
-	.byte 0x41, 0xa5, 0x00, 0xe0, 0x01	; ADD XHL, CPANEL_STATE_MACHINE_TABLE
-	.byte 0x42, 0x08, 0x00, 0x00, 0x00	; LD XHL, (XHL)
-	.byte 0x68, 0x46	; JP T, XHL
+	push xwa
+	push xhl
+	push xiy
+	ldda8 l, 36234
+	xor h, h
+	extz xhl
+	add xhl, 0xFC4489
+	ld xhl, (xhl)
+	jp (xhl)
 
 
 MOST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES:	; FC44CA
-	.byte 0xcb, 0x33, 0x06	; POP XIY
-	.byte 0x66, 0x45	; POP XHL
-	.byte 0x40, 0xff, 0xff, 0xff, 0xff	; POP XWA
-	.byte 0x41, 0xa6, 0x00, 0xe0, 0x01	; LD (INTCLR), 012h	; INTA Pin
-	.byte 0x42, 0x08, 0x00, 0x00, 0x00	; LD (INTCLR), 022h	; INTRX1: Serial receive 1
-	.byte 0x68, 0x30	; LD (INTCLR), 023h	; INTTX1: Serial send 1
-	.byte 0xc1, 0x7f, 0xc0, 0x23	; RETI
+	pop xiy
+	pop xhl
+	pop xwa
+	ldio 0xF8, 0x12	; INTA Pin
+	ldio 0xF8, 0x22	; INTRX1: Serial receive 1
+	ldio 0xF8, 0x23	; INTTX1: Serial send 1
+	reti
 
 
 INTRX1_HANDLER:	; FC44D7
-	.byte 0xcb, 0x89	; PUSH XWA
-	.byte 0xc1, 0x7e, 0xc0, 0xc1	; PUSH XHL
-	.byte 0x66, 0x11	; PUSH XIY
-	.byte 0x40, 0xff, 0xff, 0xff, 0xff	; LD L, (CPANEL_STATE_MACHINE_INDEX)
-	.byte 0x41, 0xa5, 0x00, 0xe0, 0x01	; XOR H, H
-	.byte 0x42, 0x0a, 0x00, 0x00, 0x00	; EXTZ XHL
-	.byte 0x68, 0x13	; ADD XHL, CPANEL_STATE_MACHINE_TABLE
-	.byte 0xcb, 0xd8	; LD XHL, (XHL)
-	.byte 0x66, 0x13	; JP T, XHL
+	push xwa
+	push xhl
+	push xiy
+	ldda8 l, 36234
+	xor h, h
+	extz xhl
+	add xhl, 0xFC4489
+	ld xhl, (xhl)
+	jp (xhl)
 
 LEAST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES:	; FC44EC
-	.byte 0x40, 0xff, 0xff, 0xff, 0xff	; POP XIY
-	.byte 0x41, 0xa6, 0x00, 0xe0, 0x01	; POP XHL
-	.byte 0x42, 0x0a, 0x00, 0x00, 0x00	; POP XWA
-	.byte 0x1d, 0x58, 0x9d, 0xfa	; LD (INTCLR), 012h	; INTA Pin
-	.byte 0x5e	; LD (INTCLR), 022h	; INTRX1: Serial receive 1
-	.byte 0x0e	; LD (INTCLR), 023h	; INTTX1: Serial send 1
-	.byte 0x1d, 0x97, 0x07, 0xef	; RETI
+	pop xiy
+	pop xhl
+	pop xwa
+	ldio 0xF8, 0x12	; INTA Pin
+	ldio 0xF8, 0x22	; INTRX1: Serial receive 1
+	ldio 0xF8, 0x23	; INTTX1: Serial send 1
+	reti
 
 
 CPanel_SM_StartTX:	; FC44F9	; Start transmitting command to set LEDs on the control panel... (?)
-	.byte 0xdb, 0xd8	; AND (PFCR_VALUE), 0bfh
-	.byte 0xb0, 0xf6	; LD A, (PFCR_VALUE)
-	.byte 0xc1, 0x38, 0x8d, 0x21	; LD (PFCR), A
-	.byte 0xd8, 0x12	; LD (BR1CR), 024h	; Internal Clock T8 (64/fc)
+	anddi8 36238, 191
+	ldda8 a, 36238
+	dd82 0x3E, 0x41
+	ldio 0xD7, 0x24	; Internal Clock T8 (64/fc)
 	                 ; Divide by 4
 	                 ; fc = 16MHz, so fc/64/4 = 62500
-	.byte 0xd8, 0xec, 0x02	; LD (INTEAB), 007h	; INTTRA(TREGA): M=7
-	.byte 0xf2, 0x80, 0x1f, 0xe0, 0x31	; LD (INTES1), 0d0h	; INTTX1: M=5
-	.byte 0xe3, 0x07, 0xe4, 0xe0, 0x24	; AND (SC1CR), 0feh
-	.byte 0xec, 0xe4	; LD (SC1BUF), A
-	.byte 0xb0, 0xf6	; INC 4, (CPANEL_STATE_MACHINE_INDEX)	; next = ROUTINE_2
-	.byte 0x94, 0x3f, 0xfe, 0xff	; MUL_A 001h
-	.byte 0x6e, 0x33	; MUL_A 001h
-	.byte 0xea, 0xa8	; BIT 6, (PF)	; PF.6 = state of SCLK1 pin
-	.byte 0xc1, 0x80, 0xc0, 0x25	; JR NZ, MOST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
+	ldio 0xE3, 0x07	; INTTRA(TREGA): M=7
+	ldio 0xEB, 0xD0	; INTTX1: M=5
+	sd8b3 0xD5, 0x3C, 0xFE
+	dd82 0xD4, 0x41
+	incdi8 4, 36234	; next = ROUTINE_2
+	mul a, 0x1
+	mul a, 0x1
+	dd82 0x3C, 0xCE	; PF.6 = state of SCLK1 pin
+	jr nz, MOST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
 
 
 						; If we receive a SCLK1 LOW, does it mean CPANEL is trying to spreak and we revert to IDLE state (ROUTINE_0) ?
-	.byte 0xea, 0xee, 0x08	; LD (CPANEL_PACKET_BYTE_COUNT), 000h
-	.byte 0xe8, 0xa8	; LD (CPANEL_STATE_MACHINE_INDEX), 000h	; ROUTINE_0
-	.byte 0xc1, 0x7d, 0xc0, 0x21	; OR (CPANEL_PROTOCOL_FLAGS), 002h	; CP_Flags_B.1 = 1  ; UNUSED
-	.byte 0xe8, 0x82	; LD (INTEAB), 005h
-	.byte 0xea, 0xee, 0x08	; LD (INTES1), 0ffh
-	.byte 0xe8, 0xa8	; LD (BR1CR), 024h	; Internal Clock T8 (64/fc)
+	stdi8 36235, 0
+	stdi8 36234, 0	; ROUTINE_0
+	ordi8 36242, 2	; CP_Flags_B.1 = 1  ; UNUSED
+	ldio 0xE3, 0x05
+	ldio 0xEB, 0xFF
+	ldio 0xD7, 0x24	; Internal Clock T8 (64/fc)
 	                 ; Divide by 4
 	                 ; fc = 16MHz, so fc/64/4 = 62500
-	.byte 0xc1, 0x7e, 0xc0, 0x21	; AND (CPANEL_TX_RX_FLAGS), 0fdh	; CP_Flags_A.1 = 0
-	.byte 0xe8, 0x82	; JRL T, MOST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
+	anddi8 36236, 253	; CP_Flags_A.1 = 0
+	jrl MOST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
 
 
 CPanel_SM_TXDelay1:	; FC4544
-	.byte 0xea, 0xee, 0x08	; CALR DELAY_10_LOOPS
-	.byte 0xe8, 0xa8	; AND (PFCR_VALUE), 0afh
-	.byte 0xc1, 0x7f, 0xc0, 0x21	; LD A, (PFCR_VALUE)
-	.byte 0xe8, 0x82	; LD (PFCR), A
-	.byte 0x40, 0xff, 0xff, 0xff, 0xff	; AND (PFFC_VALUE), 0afh	; disable CPanel serial clk and TX pin.
-	.byte 0x41, 0x38, 0x00, 0xc0, 0x01	; LD A, (PFFC_VALUE)
-	.byte 0x68, 0x4c	; LD (PFFC), A
-	.byte 0x94, 0x3f, 0xff, 0xff	; LD (BR1CR), 024h	; Internal Clock T8 (64/fc)
+	calr DELAY_10_LOOPS
+	anddi8 36238, 175
+	ldda8 a, 36238
+	dd82 0x3E, 0x41
+	anddi8 36239, 175	; disable CPanel serial clk and TX pin.
+	ldda8 a, 36239
+	dd82 0x3F, 0x41
+	ldio 0xD7, 0x24	; Internal Clock T8 (64/fc)
 	                 ; Divide by 4
 	                 ; fc = 16MHz, so fc/64/4 = 62500
-	.byte 0xb0, 0xf6	; LD (INTES1), 0d0h	; INTTX1: M=5
-	.byte 0xc1, 0x7d, 0xc0, 0x21	; AND (SC1CR), 0feh
-	.byte 0xc9, 0x8f	; LD (SC1BUF), A
-	.byte 0xdb, 0x12	; INC 4, (CPANEL_STATE_MACHINE_INDEX)	; next routine
-	.byte 0xc1, 0x80, 0xc0, 0x25	; JRL T, MOST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
+	ldio 0xEB, 0xD0	; INTTX1: M=5
+	sd8b3 0xD5, 0x3C, 0xFE
+	dd82 0xD4, 0x41
+	incdi8 4, 36234	; next routine
+	jrl MOST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
 
 
 CPanel_SM_TXDelay2:	; FC4573
-	.byte 0xcd, 0x8b	; CALR DELAY_10_LOOPS
-	.byte 0xd9, 0x12	; AND (PFCR_VALUE), 0afh
-	.byte 0xd9, 0xee, 0x08	; LD A, (PFCR_VALUE)
-	.byte 0xdb, 0x81	; LD (PFCR), A
-	.byte 0x94, 0xf9	; AND (PFFC_VALUE), 0afh	; disable CPanel serial clk and TX pin.
-	.byte 0x6e, 0x31	; LD A, (PFFC_VALUE)
-	.byte 0x24, 0x00	; LD (PFFC), A
-	.byte 0xea, 0x12	; LD (BR1CR), 024h	; Internal Clock T8 (64/fc)
+	calr DELAY_10_LOOPS
+	anddi8 36238, 175
+	ldda8 a, 36238
+	dd82 0x3E, 0x41
+	anddi8 36239, 175	; disable CPanel serial clk and TX pin.
+	ldda8 a, 36239
+	dd82 0x3F, 0x41
+	ldio 0xD7, 0x24	; Internal Clock T8 (64/fc)
 	                 ; Divide by 4
 	                 ; fc = 16MHz, so fc/64/4 = 62500
-	.byte 0xea, 0xee, 0x08	; LD (SC1BUF), A
-	.byte 0x20, 0x00	; LD (INTEAB), 005h
-	.byte 0xe8, 0x12	; LD (INTES1), 0d0h	; INTTX1: M=5
-	.byte 0xe8, 0x82	; AND (SC1CR), 0feh
-	.byte 0xea, 0xee, 0x08	; LD (SC1BUF), A
-	.byte 0xe8, 0xa8	; INC 4, (CPANEL_STATE_MACHINE_INDEX)	; next routine
-	.byte 0xc1, 0x7e, 0xc0, 0x21	; JRL T, MOST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
+	dd82 0xD4, 0x41
+	ldio 0xE3, 0x05
+	ldio 0xEB, 0xD0	; INTTX1: M=5
+	sd8b3 0xD5, 0x3C, 0xFE
+	dd82 0xD4, 0x41
+	incdi8 4, 36234	; next routine
+	jrl MOST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
 
 
 CPanel_SM_SendByte1:	; FC45A8
-	.byte 0xe8, 0x82	; LD (BR1CR), 014h	; Internal Clock T2 (16/fc)
+	ldio 0xD7, 0x14	; Internal Clock T2 (16/fc)
 	                 ; Divide by 4
 	                 ; fc = 16MHz, so fc/16/4 = 250kHz
-	.byte 0xea, 0xee, 0x08	; OR (PFFC_VALUE), 050h	; Enable CPanel serial clk and TX pin.
-	.byte 0xe8, 0xa8	; LD A, (PFFC_VALUE)
-	.byte 0xc1, 0x7f, 0xc0, 0x21	; LD (PFFC), A
-	.byte 0xe8, 0x82	; OR (PFCR_VALUE), 050h
-	.byte 0x40, 0xff, 0xff, 0xff, 0xff	; LD A, (PFCR_VALUE)
-	.byte 0x41, 0x38, 0x00, 0xc0, 0x01	; LD (PFCR), A
-	.byte 0x1b, 0x45, 0x99, 0xfa	; AND (SC1CR), 0feh
-	.byte 0xec, 0x62	; LD (INTEAB), 005h
-	.byte 0x94, 0x3f, 0xff, 0xff	; LD (INTES1), 0d0h	; INTTX1: M=5
-	.byte 0x6e, 0xc3	; LD XIY, CPANEL_LED_TX_BUFFER
-	.byte 0x0e	; ADD IY, (CPANEL_LED_READ_PTR)
-	.byte 0xc1, 0x7d, 0xc0, 0x21	; LD A, (XIY)
-	.byte 0xc9, 0xcf, 0x10	; LD (SC1BUF), A
-	.byte 0x66, 0x18	; INCW 1, (CPANEL_LED_READ_PTR)
-	.byte 0xc9, 0xd8	; CPW (CPANEL_LED_READ_PTR), 003ch
-	.byte 0xb0, 0xfe	; JR C, LABEL_FC45ED
-	.byte 0xc1, 0x7f, 0xc0, 0x21	; LDW (CPANEL_LED_READ_PTR), 0000h
+	ordi8 36239, 80	; Enable CPanel serial clk and TX pin.
+	ldda8 a, 36239
+	dd82 0x3F, 0x41
+	ordi8 36238, 80
+	ldda8 a, 36238
+	dd82 0x3E, 0x41
+	sd8b3 0xD5, 0x3C, 0xFE
+	ldio 0xE3, 0x05
+	ldio 0xEB, 0xD0	; INTTX1: M=5
+	ld xiy, 0x8E01
+	addda16 xiy, 36349
+	ld a, (xiy)
+	dd82 0xD4, 0x41
+	incdi16 1, 36349
+	cpdi16 36349, 60
+	jr c, LABEL_FC45ED
+	stdi16 36349, 0
 
 LABEL_FC45ED:
-	.byte 0xc9, 0xcc, 0x03	; LD (CPANEL_PACKET_BYTE_COUNT), 002h
-	.byte 0xb0, 0xf6	; LD A, (XIY)
-	.byte 0xc1, 0xe2, 0x26, 0x21	; AND A, 03fh
-	.byte 0xc9, 0xcc, 0x03	; CP A, 030h
-	.byte 0xb0, 0xfe	; JR C, LABEL_FC4606
-	.byte 0x68, 0x19	; AND A, 00fh
-	.byte 0x1d, 0xa7, 0xdf, 0xfd	; ADD A, 003h
-	.byte 0xea, 0xa8	; LD (CPANEL_PACKET_BYTE_COUNT), A
+	stdi8 36235, 2
+	ld a, (xiy)
+	and a, 0x3F
+	cp a, 0x30
+	jr c, LABEL_FC4606
+	and a, 0xF
+	add a, 0x3
+	stda8 36235, a
 
 LABEL_FC4606:
-	.byte 0xc1, 0x3a, 0x8d, 0x25	; INC 4, (CPANEL_STATE_MACHINE_INDEX)	; next = ROUTINE_3
-	.byte 0x40, 0xff, 0xff, 0xff, 0xff	; JRL T, MOST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
+	incdi8 4, 36234	; next = ROUTINE_3
+	jrl MOST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
 
 
 CPanel_SM_SendByteN:	; FC460D
-	.byte 0x41, 0x2f, 0x00, 0xc0, 0x01	; LD (BR1CR), 014h	; Internal Clock T2 (16/fc)
+	ldio 0xD7, 0x14	; Internal Clock T2 (16/fc)
 	                 ; Divide by 4
 	                 ; fc = 16MHz, so fc/16/4 = 250kHz
-	.byte 0x1d, 0x58, 0x9d, 0xfa	; OR (PFFC_VALUE), 050h	; Enable CPanel serial clk and TX pin.
-	.byte 0x0e	; LD A, (PFFC_VALUE)
-	.byte 0xc1, 0x66, 0xfc, 0x21	; LD (PFFC), A
-	.byte 0xc9, 0xcc, 0x01	; OR (PFCR_VALUE), 050h
-	.byte 0xc9, 0xd8	; LD A, (PFCR_VALUE)
-	.byte 0xcd, 0x76	; LD (PFCR), A
-	.byte 0xf1, 0x3a, 0x8d, 0x45	; AND (SC1CR), 0feh
-	.byte 0xda, 0x12	; LD (INTEAB), 005h
-	.byte 0x0b, 0xff, 0x00	; LD (INTES1), 0d0h	; INTTX1: M=5
-	.byte 0x30, 0x90, 0x00	; LD XIY, CPANEL_LED_TX_BUFFER
-	.byte 0x31, 0x10, 0x00	; ADD IY, (CPANEL_LED_READ_PTR)
-	.byte 0x1d, 0x24, 0xb2, 0xfd	; LD A, (XIY)
-	.byte 0x0e	; LD (SC1BUF), A
-	.byte 0xe9, 0xcf, 0xb0, 0x00, 0xe0, 0x01	; INCW 1, (CPANEL_LED_READ_PTR)
-	.byte 0x66, 0x3d	; CPW (CPANEL_LED_READ_PTR), 003ch
-	.byte 0xe9, 0xcf, 0xad, 0x00, 0xe0, 0x01	; JR C, LABEL_FC4652
-	.byte 0x66, 0x2f	; LDW (CPANEL_LED_READ_PTR), 0000h
+	ordi8 36239, 80	; Enable CPanel serial clk and TX pin.
+	ldda8 a, 36239
+	dd82 0x3F, 0x41
+	ordi8 36238, 80
+	ldda8 a, 36238
+	dd82 0x3E, 0x41
+	sd8b3 0xD5, 0x3C, 0xFE
+	ldio 0xE3, 0x05
+	ldio 0xEB, 0xD0	; INTTX1: M=5
+	ld xiy, 0x8E01
+	addda16 xiy, 36349
+	ld a, (xiy)
+	dd82 0xD4, 0x41
+	incdi16 1, 36349
+	cpdi16 36349, 60
+	jr c, LABEL_FC4652
+	stdi16 36349, 0
 
 LABEL_FC4652:
-	.byte 0xe9, 0xcf, 0xac, 0x00, 0xe0, 0x01	; DEC 1, (CPANEL_PACKET_BYTE_COUNT)
-	.byte 0x66, 0x18	; CP (CPANEL_PACKET_BYTE_COUNT), 001h
-	.byte 0xe9, 0xcf, 0xaf, 0x00, 0xe0, 0x01	; JR Z, LABEL_FC466B
-	.byte 0x66, 0x25	; CP (CPANEL_PACKET_BYTE_COUNT), 000h
-	.byte 0xe9, 0xcf, 0xae, 0x00, 0xe0, 0x01	; JR Z, LABEL_FC466B
-	.byte 0x6e, 0x1d	; DEC 4, (CPANEL_STATE_MACHINE_INDEX)	; previous routine
-	.byte 0xd8, 0xa9	; JRL T, MOST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
+	decdi8 1, 36235
+	cpdi8 36235, 1
+	jr z, LABEL_FC466B
+	cpdi8 36235, 0
+	jr z, LABEL_FC466B
+	decdi8 4, 36234	; previous routine
+	jrl MOST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
 
 LABEL_FC466B:
-	.byte 0x1d, 0x24, 0x1d, 0xef	; INC 4, (CPANEL_STATE_MACHINE_INDEX)	; next routine
-	.byte 0x68, 0x09	; JRL T, MOST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
+	incdi8 4, 36234	; next routine
+	jrl MOST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
 
 
 CPanel_SM_TXComplete:	; FC4672
-	.byte 0x40, 0x0c, 0x00, 0x40, 0x01	; LD (CPANEL_PACKET_BYTE_COUNT), 000h
-	.byte 0x1d, 0x63, 0x4a, 0xfa	; LD (CPANEL_STATE_MACHINE_INDEX), 000h	; ROUTINE_0
-	.byte 0x1d, 0xec, 0x1c, 0xef	; LD WA, (CPANEL_LED_WRITE_PTR)
-	.byte 0x68, 0x06	; SUB WA, (CPANEL_LED_READ_PTR)
-	.byte 0xd8, 0xa9	; CP WA, 2
-	.byte 0x1d, 0x24, 0x1d, 0xef	; JR C, LABEL_FC46C1
-	.byte 0xeb, 0xa8	; LD (CPANEL_STATE_MACHINE_INDEX), 004h	; ROUTINE_1
-	.byte 0x0e	; AND (PFFC_VALUE), 0bfh	; disable CPanel serial clk
-	.byte 0xe9, 0xcf, 0xb0, 0x00, 0xe0, 0x01	; LD A, (PFFC_VALUE)
-	.byte 0x66, 0x3f	; LD (PFFC), A
-	.byte 0xe9, 0xcf, 0xad, 0x00, 0xe0, 0x01	; AND (PF), 0bfh	; PF bit 6, (SCLK1 | /CTS1) = 0
-	.byte 0x66, 0x40	; OR (PFCR_VALUE), 040h
-	.byte 0xe9, 0xcf, 0xac, 0x00, 0xe0, 0x01	; LD A, (PFCR_VALUE)
-	.byte 0x66, 0x23	; LD (PFCR), A
-	.byte 0xe9, 0xcf, 0xaf, 0x00, 0xe0, 0x01	; LD (BR1CR), 028h	; Internal Clock T8 (64/fc)
+	stdi8 36235, 0
+	stdi8 36234, 0	; ROUTINE_0
+	ldda16 xwa, 36351
+	subda16 xwa, 36349
+	cps wa, 2
+	jr c, LABEL_FC46C1
+	stdi8 36234, 4	; ROUTINE_1
+	anddi8 36239, 191	; disable CPanel serial clk
+	ldda8 a, 36239
+	dd82 0x3F, 0x41
+	sd8b3 0x3C, 0x3C, 0xBF	; PF bit 6, (SCLK1 | /CTS1) = 0
+	ordi8 36238, 64
+	ldda8 a, 36238
+	dd82 0x3E, 0x41
+	ldio 0xD7, 0x28	; Internal Clock T8 (64/fc)
 	                 ; Divide by 8
 	                 ; fc = 16MHz, so fc/64/8 = 31250
-	.byte 0x66, 0x13	; LD (INTEAB), 007h
-	.byte 0xe9, 0xcf, 0xae, 0x00, 0xe0, 0x01	; AND (SC1CR), 0feh
-	.byte 0x6e, 0x28	; LD (INTES1), 0d0h	; INTTX1: M=5
-	.byte 0x40, 0xff, 0xff, 0xff, 0xff	; LD (SC1BUF), A
-	.byte 0x1d, 0x58, 0x9d, 0xfa	; OR (CPANEL_TX_RX_FLAGS), 002h	; CP_Flags_A.1 = 1
-	.byte 0x68, 0x0e	; JRL T, MOST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
+	ldio 0xE3, 0x07
+	sd8b3 0xD5, 0x3C, 0xFE
+	ldio 0xEB, 0xD0	; INTTX1: M=5
+	dd82 0xD4, 0x41
+	ordi8 36236, 2	; CP_Flags_A.1 = 1
+	jrl MOST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
 
 LABEL_FC46C1:
-	.byte 0xd8, 0xac	; AND (PFCR_VALUE), 0bfh
-	.byte 0x1d, 0x24, 0x1d, 0xef	; LD A, (PFCR_VALUE)
-	.byte 0x68, 0x15	; LD (PFCR), A
-	.byte 0xd8, 0xac	; AND (PFFC_VALUE), 0bfh	; disable CPanel serial clk
-	.byte 0x1d, 0x24, 0x1d, 0xef	; LD A, (PFFC_VALUE)
-	.byte 0x1d, 0xec, 0x1c, 0xef	; LD (PFFC), A
-	.byte 0x68, 0x09	; LD (INTEAB), 005h
-	.byte 0x40, 0xff, 0xff, 0xff, 0xff	; LD (INTES1), 0ffh	; INTTX1: M=7 | INTRX1: M=7 (meaning: disable int.req.)
-	.byte 0x1d, 0x58, 0x9d, 0xfa	; LD (BR1CR), 024h	; Internal Clock T8 (64/fc)
+	anddi8 36238, 191
+	ldda8 a, 36238
+	dd82 0x3E, 0x41
+	anddi8 36239, 191	; disable CPanel serial clk
+	ldda8 a, 36239
+	dd82 0x3F, 0x41
+	ldio 0xE3, 0x05
+	ldio 0xEB, 0xFF	; INTTX1: M=7 | INTRX1: M=7 (meaning: disable int.req.)
+	ldio 0xD7, 0x24	; Internal Clock T8 (64/fc)
 	                 ; Divide by 4
 	                 ; fc = 16MHz, so fc/64/4 = 62500
-	.byte 0xeb, 0xa8	; AND (CPANEL_TX_RX_FLAGS), 0fdh	; CP_Flags_A.1 = 0
-	.byte 0x0e	; JRL T, MOST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
+	anddi8 36236, 253	; CP_Flags_A.1 = 0
+	jrl MOST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
 
 
 CPanel_SM_RXByte1:	; FC46EA
-	.byte 0x40, 0x0b, 0x00, 0x20, 0x01	; AND (PFCR_VALUE), 09fh
-	.byte 0x41, 0xac, 0x00, 0xe0, 0x01	; LD A, (PFCR_VALUE)
-	.byte 0xea, 0xa8	; LD (PFCR), A
-	.byte 0x78, 0x56, 0xff	; OR (SC1CR), 001h
-	.byte 0x40, 0x0b, 0x00, 0x20, 0x01	; AND (SC1CR), 0fdh
-	.byte 0x41, 0xad, 0x00, 0xe0, 0x01	; LD (INTEAB), 005h
-	.byte 0xea, 0xa8	; LD (INTES1), 00dh
-	.byte 0x78, 0x47, 0xff	; LD A, (SC1BUF)
-	.byte 0x40, 0x0b, 0x00, 0x20, 0x01	; LD XIY, CPANEL_RX_RING_BUFFER
-	.byte 0x41, 0xae, 0x00, 0xe0, 0x01	; ADD IY, (CPANEL_RX_WRITE_PTR)
-	.byte 0xea, 0xa8	; LD (XIY), A
-	.byte 0x68, 0x81	; LD HL, (CPANEL_RX_WRITE_PTR)
-	.byte 0x40, 0x0b, 0x00, 0x20, 0x01	; SUB HL, (CPANEL_RX_READ_PTR)
-	.byte 0x41, 0xaf, 0x00, 0xe0, 0x01	; JR NC, LABEL_FC4722
-	.byte 0xea, 0xa8	; NEG HL
-	.byte 0x78, 0x72, 0xff	; LD IY, HL
-	.byte 0xf1, 0xdc, 0xe3, 0x00, 0x00	; JR T, LABEL_FC4727
+	anddi8 36238, 159
+	ldda8 a, 36238
+	dd82 0x3E, 0x41
+	sd8b3 0xD5, 0x3E, 0x01
+	sd8b3 0xD5, 0x3C, 0xFD
+	ldio 0xE3, 0x05
+	ldio 0xEB, 0x0D
+	sd8b2 0xD4, 0x21
+	ld xiy, 0x8DA1
+	addda16 xiy, 36255
+	ld (xiy), a
+	ldda16 xhl, 36255
+	subda16 xhl, 36253
+	jr nc, LABEL_FC4722
+	neg hl
+	ld iy, hl
+	jr LABEL_FC4727
 
 LABEL_FC4722:
-	.byte 0xf1, 0xde, 0xe3, 0x00, 0x00	; LD IY, 005ch
-	.byte 0xf1, 0xe0, 0xe3, 0x00, 0x00	; SUB IY, HL
+	ldw iy, 0x5C
+	sub iy, hl
 
 LABEL_FC4727:
-	.byte 0xf1, 0xe2, 0xe3, 0x00, 0x00	; CP IY, 3
-	.byte 0xf1, 0xe4, 0xe3, 0x00, 0xff	; JR NC, LABEL_FC4732
-	.byte 0xf1, 0xe6, 0xe3, 0x00, 0xff	; OR (CPANEL_PROTOCOL_FLAGS), 001h	; CP_Flags_B.0 = 1
-	.byte 0xe8, 0xa8	; JR T, LABEL_FC4749
+	cps iy, 3
+	jr nc, LABEL_FC4732
+	ordi8 36242, 1	; CP_Flags_B.0 = 1
+	jr LABEL_FC4749
 
 LABEL_FC4732:
-	.byte 0xf2, 0x9a, 0x74, 0x02, 0x60	; AND (CPANEL_PROTOCOL_FLAGS), 0feh	; CP_Flags_B.0 = 0
-	.byte 0xf2, 0x9e, 0x74, 0x02, 0x60	; INCW 1, (CPANEL_RX_WRITE_PTR)
-	.byte 0xf2, 0xa2, 0x74, 0x02, 0x60	; CPW (CPANEL_RX_WRITE_PTR), 005ch
-	.byte 0x40, 0xff, 0xff, 0xff, 0xff	; JR C, LABEL_FC4749
-	.byte 0x41, 0x08, 0x00, 0xc0, 0x01	; LDW (CPANEL_RX_WRITE_PTR), 0000h
+	anddi8 36242, 254	; CP_Flags_B.0 = 0
+	incdi16 1, 36255
+	cpdi16 36255, 92
+	jr c, LABEL_FC4749
+	stdi16 36255, 0
 
 LABEL_FC4749:
-	.byte 0x1d, 0x68, 0x98, 0xfa	; LD (CPANEL_PACKET_BYTE_COUNT), 002h
-	.byte 0x40, 0xff, 0xff, 0xff, 0xff	; AND A, 03fh
-	.byte 0x41, 0x07, 0x00, 0xc0, 0x01	; CP A, 030h
-	.byte 0x1d, 0x68, 0x98, 0xfa	; JR C, LABEL_FC4760
-	.byte 0x40, 0xff, 0xff, 0xff, 0xff	; AND A, 00fh
-	.byte 0x41, 0x09, 0x00, 0xc0, 0x01	; ADD A, 003h
-	.byte 0x1d, 0x68, 0x98, 0xfa	; LD (CPANEL_PACKET_BYTE_COUNT), A
+	stdi8 36235, 2
+	and a, 0x3F
+	cp a, 0x30
+	jr c, LABEL_FC4760
+	and a, 0xF
+	add a, 0x3
+	stda8 36235, a
 
 LABEL_FC4760:
-	.byte 0x40, 0xff, 0xff, 0xff, 0xff	; INC 4, (CPANEL_STATE_MACHINE_INDEX)	; next routine
-	.byte 0x41, 0x1f, 0x00, 0xc0, 0x01	; JRL T, LEAST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
+	incdi8 4, 36234	; next routine
+	jrl LEAST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
 
 
 CPanel_SM_RXByteN:	; FC4767
-	.byte 0x1d, 0x68, 0x98, 0xfa	; LD A, (SC1BUF)
-	.byte 0x40, 0xff, 0xff, 0xff, 0xff	; LD XIY, CPANEL_RX_RING_BUFFER
-	.byte 0x41, 0x1c, 0x00, 0xc0, 0x01	; ADD IY, (CPANEL_RX_WRITE_PTR)
-	.byte 0x1d, 0x68, 0x98, 0xfa	; LD (XIY), A
-	.byte 0x40, 0xff, 0xff, 0xff, 0xff	; BIT 0, (CPANEL_PROTOCOL_FLAGS)	; CP_Flags_B.0
-	.byte 0x41, 0x14, 0x00, 0xc0, 0x01	; JR NZ, LABEL_FC478D
-	.byte 0x1d, 0x68, 0x98, 0xfa	; INCW 1, (CPANEL_RX_WRITE_PTR)
-	.byte 0x40, 0xff, 0xff, 0xff, 0xff	; CPW (CPANEL_RX_WRITE_PTR), 005ch
-	.byte 0x41, 0x15, 0x00, 0xc0, 0x01	; JR C, LABEL_FC478D
-	.byte 0x1d, 0x68, 0x98, 0xfa	; LDW (CPANEL_RX_WRITE_PTR), 0000h
+	sd8b2 0xD4, 0x21
+	ld xiy, 0x8DA1
+	addda16 xiy, 36255
+	ld (xiy), a
+	bitda 0, 36242	; CP_Flags_B.0
+	jr nz, LABEL_FC478D
+	incdi16 1, 36255
+	cpdi16 36255, 92
+	jr c, LABEL_FC478D
+	stdi16 36255, 0
 
 LABEL_FC478D:
-	.byte 0x40, 0xff, 0xff, 0xff, 0xff	; DEC 1, (CPANEL_PACKET_BYTE_COUNT)
-	.byte 0x41, 0x16, 0x00, 0xc0, 0x01	; CP (CPANEL_PACKET_BYTE_COUNT), 001h
-	.byte 0x1d, 0x68, 0x98, 0xfa	; JR NZ, LABEL_FC47CC
-	.byte 0x40, 0xff, 0xff, 0xff, 0xff	; LD (CPANEL_PACKET_BYTE_COUNT), 000h
-	.byte 0x41, 0xb0, 0x00, 0xe0, 0x01	; AND (CPANEL_TX_RX_FLAGS), 0feh	; CP_Flags_A.0 = 0
-	.byte 0xea, 0xa8	; LD (CPANEL_STATE_MACHINE_INDEX), 000h	; ROUTINE_0
-	.byte 0x1b, 0x58, 0x9d, 0xfa	; AND (PFCR_VALUE), 09fh
-	.byte 0xe8, 0xa8	; LD A, (PFCR_VALUE)
-	.byte 0xf2, 0x9a, 0x74, 0x02, 0x60	; LD (PFCR), A
-	.byte 0xf2, 0x9e, 0x74, 0x02, 0x60	; AND (PFFC_VALUE), 0bfh	; disable CPanel serial clk
-	.byte 0xf2, 0xa2, 0x74, 0x02, 0x60	; LD A, (PFFC_VALUE)
-	.byte 0x40, 0xff, 0xff, 0xff, 0xff	; LD (PFFC), A
-	.byte 0x41, 0x08, 0x00, 0xc0, 0x01	; LD (INTEAB), 005h
-	.byte 0x1d, 0x68, 0x98, 0xfa	; LD (INTES1), 00dh
-	.byte 0x40, 0xff, 0xff, 0xff, 0xff	; AND (SC1MOD), 0dfh	; RXE (bit 5) = 0: receive disable
-	.byte 0x41, 0x07, 0x00, 0xc0, 0x01	; JRL T, LEAST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
+	decdi8 1, 36235
+	cpdi8 36235, 1
+	jr nz, LABEL_FC47CC
+	stdi8 36235, 0
+	anddi8 36236, 254	; CP_Flags_A.0 = 0
+	stdi8 36234, 0	; ROUTINE_0
+	anddi8 36238, 159
+	ldda8 a, 36238
+	dd82 0x3E, 0x41
+	anddi8 36239, 191	; disable CPanel serial clk
+	ldda8 a, 36239
+	dd82 0x3F, 0x41
+	ldio 0xE3, 0x05
+	ldio 0xEB, 0x0D
+	sd8b3 0xD6, 0x3C, 0xDF	; RXE (bit 5) = 0: receive disable
+	jrl LEAST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
 
 LABEL_FC47CC:
-	.byte 0x1d, 0x68, 0x98, 0xfa	; AND (PFCR_VALUE), 09fh
-	.byte 0x40, 0xff, 0xff, 0xff, 0xff	; LD A, (PFCR_VALUE)
-	.byte 0x41, 0x09, 0x00, 0xc0, 0x01	; LD (PFCR), A
-	.byte 0x1d, 0x68, 0x98, 0xfa	; OR (SC1CR), 001h
-	.byte 0x40, 0xff, 0xff, 0xff, 0xff	; AND (SC1CR), 0fdh
-	.byte 0x41, 0xb4, 0x00, 0xe0, 0x01	; LD (INTEAB), 005h
-	.byte 0xea, 0xa8	; LD (INTES1), 00dh
-	.byte 0x1b, 0x58, 0x9d, 0xfa	; JRL T, LEAST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
+	anddi8 36238, 159
+	ldda8 a, 36238
+	dd82 0x3E, 0x41
+	sd8b3 0xD5, 0x3E, 0x01
+	sd8b3 0xD5, 0x3C, 0xFD
+	ldio 0xE3, 0x05
+	ldio 0xEB, 0x0D
+	jrl LEAST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
 
 
 CPanel_SM_Idle:	; FC47E9		; CPANEL_SERIAL_IDLE_STATE (?)
-	.byte 0xf2, 0x4e, 0xef, 0x03, 0x02, 0x01, 0x00	; OR (CPANEL_PROTOCOL_FLAGS), 080h	; CP_Flags_B.7 = 1
-	.byte 0x0e	; JRL T, LEAST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
+	ordi8 36242, 128	; CP_Flags_B.7 = 1
+	jrl LEAST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
 
-	.byte 0xf2, 0x4e, 0xef, 0x03, 0x02, 0x00, 0x00	; AND (CPANEL_TX_RX_FLAGS), 0fch	; CP_Flags_A.0 = 0
+	anddi8 36236, 252	; CP_Flags_A.0 = 0
 						; CP_Flags_A.1 = 0
-	.byte 0x0e	; OR (CPANEL_PROTOCOL_FLAGS), 004h	; CP_Flags_B.2 = 1  : UNUSED
-	.byte 0x3a	; LD (INTCLR), 023h	; INTTX1: Serial send 1
-	.byte 0x1d, 0xf2, 0x0a, 0xff	; AND (SC1MOD), 0dfh	; RXE (bit 5) = 0: receive disable
-	.byte 0xef, 0x64	; LD (INTES1), 00fh
-	.byte 0xeb, 0xa8	; LD (INTCLR), 022h	; INTRX1: Serial receive 1
-	.byte 0x0e	; LD (INTEAB), 007h
-	.byte 0xbf, 0xf0, 0x37	; LD (INTCLR), 012h	; INTA Pin
-	.byte 0xe9, 0xcf, 0x68, 0x00, 0xe0, 0x01	; RETI
+	ordi8 36242, 4	; CP_Flags_B.2 = 1  : UNUSED
+	ldio 0xF8, 0x23	; INTTX1: Serial send 1
+	sd8b3 0xD6, 0x3C, 0xDF	; RXE (bit 5) = 0: receive disable
+	ldio 0xEB, 0x0F
+	ldio 0xF8, 0x22	; INTRX1: Serial receive 1
+	ldio 0xE3, 0x07
+	ldio 0xF8, 0x12	; INTA Pin
+	reti
 
 
 CPanel_InterruptPoll_MainLoop:
-	.byte 0x76, 0xb7, 0x01	; INC 1, (CPANEL_COUNTER_UP_TO_42)
-	.byte 0xe9, 0xcf, 0x6a, 0x00, 0xe0, 0x01	; CP (CPANEL_COUNTER_UP_TO_42), 02ah	; =42 ;-)
-	.byte 0x76, 0x99, 0x00	; JR ULE, LABEL_FC485B
-	.byte 0xe9, 0xcf, 0x69, 0x00, 0xe0, 0x01	; EI 006h
-	.byte 0x7e, 0x23, 0x02	; LD WA, (CPANEL_LED_WRITE_PTR)
-	.byte 0xb7, 0x62	; SUB WA, (CPANEL_LED_READ_PTR)
-	.byte 0xa2, 0x20	; JR NC, LABEL_FC482C
-	.byte 0xbf, 0x04, 0x60	; NEG WA
-	.byte 0x0b, 0x16, 0x00	; LD HL, WA
-	.byte 0x1d, 0x80, 0x0e, 0xff	; JR T, LABEL_FC4831
+	incdi8 1, 36250
+	cpdi8 36250, 42	; =42 ;-)
+	jr ule, LABEL_FC485B
+	ei 6
+	ldda16 xwa, 36351
+	subda16 xwa, 36349
+	jr nc, LABEL_FC482C
+	neg wa
+	ld hl, wa
+	jr LABEL_FC4831
 
 LABEL_FC482C:
-	.byte 0xef, 0x62	; LD HL, 003ch
-	.byte 0xbf, 0x0c, 0x63	; SUB HL, WA
+	ldw hl, 0x3C
+	sub hl, wa
 
 LABEL_FC4831:
-	.byte 0xa7, 0x23	; CP HL, 3
-	.byte 0xaf, 0x0c, 0x22	; JR C, LABEL_FC485B
-	.byte 0xeb, 0x8d	; LD (CPANEL_COUNTER_UP_TO_42), 000h
-	.byte 0xea, 0x8c	; LD_W 0e0h
-	.byte 0x31, 0x0b, 0x00	; LD_A 013h
-	.byte 0x95, 0x11	; LD IY, (CPANEL_LED_WRITE_PTR)
-	.byte 0x9b, 0x04, 0x20	; LD XDE, CPANEL_LED_TX_BUFFER
-	.byte 0xd8, 0xdc	; LD (XDE + IY), W
-	.byte 0x66, 0x34	; CALR CPanel_IncLEDPtr
-	.byte 0xd8, 0xda	; LD (XDE + IY), A
-	.byte 0x66, 0x1b	; CALR CPanel_IncLEDPtr
-	.byte 0xd8, 0xd9	; LD (CPANEL_LED_WRITE_PTR), IY
+	cps hl, 3
+	jr c, LABEL_FC485B
+	stdi8 36250, 0
+	ldb w, 0xE0
+	ldb a, 0x13
+	ldda16 xiy, 36351
+	ld xde, 0x8E01
+	lda_xwa_dri3 0x07, 0xE8, 0xF4
+	calr CPanel_IncLEDPtr
+	lda_xbc_dri3 0x07, 0xE8, 0xF4
+	calr CPanel_IncLEDPtr
+	stda16 36351, xiy
 
 
 ; 0 => 0 do_this
@@ -1067,131 +1067,131 @@ LABEL_FC4831:
 ; 3 => 0 do_that
 
 LABEL_FC485B:
-	.byte 0x6e, 0x38	; EI 000h
-	.byte 0xeb, 0x89	; LD A, (CPANEL_TX_RX_FLAGS)
-	.byte 0xb9, 0x0e, 0x31	; AND A, 0c0h
-	.byte 0xa1, 0x20	; CP A, 0	; if (CP_Flags_A.76 == 0) {
-	.byte 0xc9, 0x8d	; JR Z, LABEL_FC4877	; 	goto LABEL_FC4877; ; do this
+	ei 0
+	ldda8 a, 36236
+	and a, 0xC0
+	cps a, 0	; if (CP_Flags_A.76 == 0) {
+	jr z, LABEL_FC4877	; 	goto LABEL_FC4877; ; do this
 						; }
 
 
-	.byte 0xaf, 0x04, 0x20	; ADD (CPANEL_TX_RX_FLAGS), 040h
-	.byte 0xb0, 0x45	; CP A, 0c0h
-	.byte 0x40, 0xff, 0x00, 0x00, 0x00	; JR NZ, LABEL_FC4877	; if (CP_Flags_A.76++ == 3) {
+	adddi8 36236, 64
+	cp a, 0xC0
+	jr nz, LABEL_FC4877	; if (CP_Flags_A.76++ == 3) {
 
-	.byte 0xa1, 0xc8	; CALR CPanel_InitButtonState	; do that
+	calr CPanel_InitButtonState	; do that
 
-	.byte 0x68, 0x28	; JR T, LABEL_FC487A
+	jr LABEL_FC487A
 				; } else {
 
 LABEL_FC4877:
-	.byte 0xa7, 0x20	; CALR CPanel_UpdateLEDs	; do this
+	calr CPanel_UpdateLEDs	; do this
 				; }
 LABEL_FC487A:
-	.byte 0xb8, 0x0e, 0x31	; EI 006h
-	.byte 0xa1, 0x22	; BIT 6, (PF)	; PF.6 = state of SCLK1 pin
-	.byte 0xaf, 0x04, 0x20	; JR Z, LABEL_FC48EB
-	.byte 0xb0, 0x52	; BIT 5, (PE)	; PE.5 = state of INTA pin
-	.byte 0x40, 0xff, 0xff, 0x00, 0x00	; JR NZ, LABEL_FC48EB
-	.byte 0xa1, 0xc8	; BIT 1, (CPANEL_TX_RX_FLAGS)
-	.byte 0x68, 0x13	; JR NZ, LABEL_FC48EB
-	.byte 0xa7, 0x20	; BIT 0, (CPANEL_TX_RX_FLAGS)
-	.byte 0xaf, 0x04, 0x21	; JR NZ, LABEL_FC48EB
+	ei 6
+	dd82 0x3C, 0xCE	; PF.6 = state of SCLK1 pin
+	jr z, LABEL_FC48EB
+	dd82 0x38, 0xCD	; PE.5 = state of INTA pin
+	jr nz, LABEL_FC48EB
+	bitda 1, 36236
+	jr nz, LABEL_FC48EB
+	bitda 0, 36236
+	jr nz, LABEL_FC48EB
 
 	; Only reaches here when (CPANEL_TX_RX_FLAGS), CP_Flags_A.10 == 00:
-	.byte 0xa8, 0x0e, 0x20	; LD WA, (CPANEL_LED_WRITE_PTR)
-	.byte 0xb1, 0x60	; SUB WA, (CPANEL_LED_READ_PTR)
-	.byte 0x68, 0x07	; JR NC, LABEL_FC48A4
-	.byte 0xa7, 0x20	; NEG WA
-	.byte 0xe9, 0xa8	; EX A, W
-	.byte 0xb8, 0x0e, 0x61	; LD_A 03ch
-	.byte 0x40, 0xff, 0xff, 0xff, 0xff	; SUB A, W
+	ldda16 xwa, 36351
+	subda16 xwa, 36349
+	jr nc, LABEL_FC48A4
+	neg wa
+	ex8 a, w
+	ldb a, 0x3C
+	sub a, w
 
 LABEL_FC48A4:
-	.byte 0x41, 0x1d, 0x00, 0xc0, 0x01	; CP A, 2
-	.byte 0xaf, 0x0c, 0x22	; JR C, LABEL_FC48E8
-	.byte 0x1d, 0x58, 0x9d, 0xfa	; OR (CPANEL_TX_RX_FLAGS), 002h	; CP_Flags_A.1 = 1
-	.byte 0x40, 0xff, 0xff, 0xff, 0xff	; LD (CPANEL_STATE_MACHINE_INDEX), 004h	; ROUTINE_1
-	.byte 0x41, 0x23, 0x00, 0xe0, 0x01	; AND (PFFC_VALUE), 0bfh	; disable CPanel serial clk
-	.byte 0xaf, 0x0c, 0x22	; LD A, (PFFC_VALUE)
-	.byte 0x78, 0x8f, 0x01	; LD (PFFC), A
-	.byte 0xb7, 0x62	; AND (PF), 0bfh	; PF bit 6, (SCLK1 | /CTS1) = 0
-	.byte 0xa2, 0x20	; OR (PFCR_VALUE), 040h
-	.byte 0xbf, 0x04, 0x60	; LD A, (PFCR_VALUE)
-	.byte 0xa7, 0x20	; LD (PFCR), A
-	.byte 0x98, 0x04, 0x22	; LD (BR1CR), 028h	; Internal Clock T8 (64/fc)
+	cps a, 2
+	jr c, LABEL_FC48E8
+	ordi8 36236, 2	; CP_Flags_A.1 = 1
+	stdi8 36234, 4	; ROUTINE_1
+	anddi8 36239, 191	; disable CPanel serial clk
+	ldda8 a, 36239
+	dd82 0x3F, 0x41
+	sd8b3 0x3C, 0x3C, 0xBF	; PF bit 6, (SCLK1 | /CTS1) = 0
+	ordi8 36238, 64
+	ldda8 a, 36238
+	dd82 0x3E, 0x41
+	ldio 0xD7, 0x28	; Internal Clock T8 (64/fc)
 	                 ; Divide by 8
 	                 ; fc = 16MHz, so fc/64/8 = 31250
-	.byte 0xda, 0xdc	; AND (SC1MOD), 0dfh	; RXE (bit 5) = 0: CPanel receive disable
-	.byte 0x66, 0x51	; AND (SC1CR), 0feh
-	.byte 0xa8, 0x0a, 0x21	; LD (INTEAB), 007h
-	.byte 0xa8, 0x06, 0x20	; LD (INTCLR), 012h	; INTA Pin
-	.byte 0xda, 0xda	; LD (INTCLR), 023h	; INTTX1: Serial send 1
-	.byte 0x66, 0x23	; LD (INTES1), 0d0h
-	.byte 0xda, 0xd9	; LD (SC1BUF), A
+	sd8b3 0xD6, 0x3C, 0xDF	; RXE (bit 5) = 0: CPanel receive disable
+	sd8b3 0xD5, 0x3C, 0xFE
+	ldio 0xE3, 0x07
+	ldio 0xF8, 0x12	; INTA Pin
+	ldio 0xF8, 0x23	; INTTX1: Serial send 1
+	ldio 0xEB, 0xD0
+	dd82 0xD4, 0x41
 
 LABEL_FC48E8:
-	.byte 0x6e, 0x4d	; EI 000h
-	.byte 0xe9, 0xf0	; RET
+	ei 0
+	ret
 
 
 LABEL_FC48EB:
-	.byte 0x63, 0x07	; INC 1, (CPANEL_COUNTER_UP_TO_20)
-	.byte 0x41, 0xff, 0x00, 0x00, 0x00	; CP (CPANEL_COUNTER_UP_TO_20), 014h
-	.byte 0x68, 0x1d	; JR ULE, LABEL_FC48E8
+	incdi8 1, 36248
+	cpdi8 36248, 20
+	jr ule, LABEL_FC48E8
 
-	.byte 0xaf, 0x04, 0x20	; EI 006h
-	.byte 0xa0, 0x20	; LD (INTCLR), 022h	; INTRX1: Serial receive 1
-	.byte 0xe8, 0xcc, 0xff, 0x00, 0x00, 0x00	; LD (INTCLR), 023h	; INTTX1: Serial send 1
-	.byte 0xd8, 0x13	; LD (INTES1), 0ddh
-	.byte 0xe8, 0x13	; LD (INTCLR), 012h	; INTA Pin
-	.byte 0xbf, 0x08, 0x60	; LD (INTEAB), 005h
-	.byte 0x68, 0x33	; OR (CPANEL_PROTOCOL_FLAGS), 080h	; CP_Flags_B.7 = 1
-	.byte 0xe9, 0xf0	; JR T, LABEL_FC48E8
+	ei 6
+	ldio 0xF8, 0x22	; INTRX1: Serial receive 1
+	ldio 0xF8, 0x23	; INTTX1: Serial send 1
+	ldio 0xEB, 0xDD
+	ldio 0xF8, 0x12	; INTA Pin
+	ldio 0xE3, 0x05
+	ordi8 36242, 128	; CP_Flags_B.7 = 1
+	jr LABEL_FC48E8
 
 
 
 
 CPanel_RX_ProcessWithFlag:
-	.byte 0x63, 0x11	; OR (CPANEL_TX_RX_FLAGS), 004h	; CP_Flags_A.2 = 1  ; UNUSED?
-	.byte 0x41, 0xff, 0xff, 0x00, 0x00	; JR T, CPanel_RX_DispatchLoop
+	ordi8 36236, 4	; CP_Flags_A.2 = 1  ; UNUSED?
+	jr CPanel_RX_DispatchLoop
 
 CPanel_RX_Process:
-	.byte 0xaf, 0x04, 0x20	; AND (CPANEL_TX_RX_FLAGS), 0fbh	; CP_Flags_A.2 = 0  ; UNUSED?
+	anddi8 36236, 251	; CP_Flags_A.2 = 0  ; UNUSED?
 
 CPanel_RX_DispatchLoop:
-	.byte 0xa0, 0x20	; LD XDE, CPANEL_RX_RING_BUFFER
-	.byte 0xe9, 0xc0	; LD IY, (CPANEL_RX_READ_PTR)
-	.byte 0xbf, 0x08, 0x60	; LD XIZ, CPANEL_RX_EVENT_QUEUE
-	.byte 0x68, 0x1e	; LD IX, (XIZ - 4)
+	ld xde, 0x8DA1
+	ldda16 xiy, 36253
+	ld xiz, 0x200AD
+	ld ix, (xiz - 4)
 
 CPanel_RX_ParseNext:
-	.byte 0xaf, 0x04, 0x20	; CPW (XIZ - 2), 0004h
-	.byte 0xa0, 0x20	; JRL C, CPanel_RX_Done
+	cpmi16 (xiz - 2), 0x4
+	jrl c, CPanel_RX_Done
 
-	.byte 0xd7, 0xe2, 0xa8	; LD WA, (CPANEL_RX_WRITE_PTR)
-	.byte 0xe8, 0x13	; SUB WA, (CPANEL_RX_READ_PTR)
-	.byte 0xbf, 0x08, 0x60	; JR NC, CPanel_RX_PacketSizeCheck
-	.byte 0x68, 0x0f	; NEG WA
-	.byte 0xaf, 0x04, 0x20	; EX A, W
-	.byte 0xa0, 0x20	; LD_A 05ch
-	.byte 0xbf, 0x08, 0x60	; SUB A, W
+	ldda16 xwa, 36255
+	subda16 xwa, 36253
+	jr nc, CPanel_RX_PacketSizeCheck
+	neg wa
+	ex8 a, w
+	ldb a, 0x5C
+	sub a, w
 
 CPanel_RX_PacketSizeCheck:
-	.byte 0x68, 0x05	; CP A, 2
-	.byte 0xe8, 0xa8	; JRL C, CPanel_RX_Done
+	cps a, 2
+	jrl c, CPanel_RX_Done
 
-	.byte 0xbf, 0x08, 0x60	; LD L, (XDE + IY)
-	.byte 0xa7, 0x20	; AND L, 038h
-	.byte 0xa8, 0x0e, 0x21	; SRL 1, L
-	.byte 0xe9, 0xcf, 0x00, 0x00, 0x00, 0x00	; XOR H, H
-	.byte 0x62, 0x11	; EXTZ XHL
-	.byte 0xa8, 0x06, 0x20	; ADD XHL, CPanel_RX_PacketHandlers
-	.byte 0xe8, 0x8a	; LD XHL, (XHL)
-	.byte 0xe9, 0xa2	; JP T, XHL
+	ld_l_srib3 0x07, 0xE8, 0xF4
+	and l, 0x38
+	srl l, 1
+	xor h, h
+	extz xhl
+	add xhl, 0xFC4965
+	ld xhl, (xhl)
+	jp (xhl)
 
 CPanel_RX_PacketHandlers_Padding:
-	.byte 0xFF, 0xFF
+	.byte 0xff, 0xff
 
 CPanel_RX_PacketHandlers:
 	.long CPanel_RX_ButtonPacket
@@ -1204,232 +1204,234 @@ CPanel_RX_PacketHandlers:
 	.long CPanel_RX_MultiBytePacket
 
 CPanel_RX_ButtonPacket:
-	.byte 0x00	; LD W, (XDE + IY)
-	.byte 0x1d, 0x80, 0x0e, 0xff	; CALR CPanel_IncRXPtr
-	.byte 0xef, 0x62	; LD (XIZ + IX), W
-	.byte 0xbf, 0x0c, 0x63	; CALR CPanel_IncEventPtr
-	.byte 0xa7, 0x23	; LD (CPANEL_RX_PACKET_BYTE_1), W
+	ld_w_srib3 0x07, 0xE8, 0xF4
+	calr CPanel_IncRXPtr
+	lda_xwa_dri3 0x07, 0xF8, 0xF0
+	calr CPanel_IncEventPtr
+	stda8 36244, w
 
-	.byte 0xaf, 0x0c, 0x20	; LD A, (XDE + IY)
-	.byte 0xeb, 0x8d	; CALR CPanel_IncRXPtr
-	.byte 0xe8, 0x8c	; LD (XIZ + IX), A
-	.byte 0x31, 0x0b, 0x00	; CALR CPanel_IncEventPtr
-	.byte 0x95, 0x11	; LD (CPANEL_RX_PACKET_BYTE_2), A
+	ld_a_srib3 0x07, 0xE8, 0xF4
+	calr CPanel_IncRXPtr
+	lda_xbc_dri3 0x07, 0xF8, 0xF0
+	calr CPanel_IncEventPtr
+	stda8 36245, a
 
-	.byte 0xaf, 0x08, 0x21	; AND W, 04fh
-	.byte 0xb8, 0x0e, 0x61	; LD XHL, STATE_OF_CPANEL_BUTTONS
-	.byte 0x9b, 0x04, 0x20	; BIT 006h, W
-	.byte 0xd8, 0xdc	; JR Z, LABEL_FC49BD
-	.byte 0x66, 0x19	; SUB W, 030h
+	and w, 0x4F
+	ld xhl, 0x8E4A
+	bit 6, w
+	jr z, LABEL_FC49BD
+	sub w, 0x30
 
 LABEL_FC49BD:
-	.byte 0xd8, 0xda	; ADD L, W
-	.byte 0x66, 0x0b	; JR NC, LABEL_FC49C3
-	.byte 0xd8, 0xd9	; INC 1, H
+	add l, w
+	jr nc, LABEL_FC49C3
+	inc 1, h
 
 LABEL_FC49C3:
-	.byte 0x6e, 0x1b	; EX (XHL), A
-	.byte 0xaf, 0x04, 0x20	; XOR A, (XHL)
+	mrib2 0x83, 0x31
+	xor a, (xhl)
 
-	.byte 0xb0, 0x43	; LD (XIZ + IX), A
-	.byte 0x68, 0x1b	; CALR CPanel_IncEventPtr
+	lda_xbc_dri3 0x07, 0xF8, 0xF0
+	calr CPanel_IncEventPtr
 
-	.byte 0xaf, 0x08, 0x21	; LD (CPANEL_LAST_EVENT_VALUE), A
-	.byte 0xaf, 0x04, 0x20	; LD (XIZ - 4), IX
-	.byte 0xb0, 0x51	; DECW 3, (XIZ - 2)
-	.byte 0x68, 0x11	; LD (CPANEL_RX_READ_PTR), IY
-	.byte 0xaf, 0x04, 0x20	; JRL T, CPanel_RX_ParseNext
+	stda8 36246, a
+	ld (xiz - 4), ix
+	decm 3, (xiz - 2)
+	stda16 36253, xiy
+	jrl CPanel_RX_ParseNext
 
 CPanel_RX_EncoderPacket:
-	.byte 0xaf, 0x08, 0x21	; LD W, (XDE + IY)
-	.byte 0xb0, 0x61	; CALR CPanel_IncRXPtr
-	.byte 0x68, 0x07	; LD (XIZ + IX), W
-	.byte 0xa7, 0x20	; CALR CPanel_IncEventPtr
-	.byte 0xe9, 0xa8	; LD (CPANEL_RX_PACKET_BYTE_1), W
-	.byte 0xb8, 0x0e, 0x61	; LD A, (XDE + IY)
-	.byte 0x40, 0xff, 0xff, 0xff, 0xff	; CALR CPanel_IncRXPtr
-	.byte 0x41, 0x1d, 0x00, 0xc0, 0x01	; LD (CPANEL_RX_PACKET_BYTE_2), A
-	.byte 0xaf, 0x0c, 0x22	; LD C, W
-	.byte 0x1d, 0x58, 0x9d, 0xfa	; CALR LABEL_FC4A36
-	.byte 0x40, 0xff, 0xff, 0xff, 0xff	; CP HL, 0ffffh
-	.byte 0x41, 0x23, 0x00, 0xe0, 0x01	; JR NZ, LABEL_FC4A14
-	.byte 0xaf, 0x0c, 0x22	; CALR CPanel_DecEventPtr
-	.byte 0x68, 0x7a	; LD (CPANEL_RX_READ_PTR), IY
-	.byte 0xb7, 0x62	; JR T, LABEL_FC4A33
+	ld_w_srib3 0x07, 0xE8, 0xF4
+	calr CPanel_IncRXPtr
+	lda_xwa_dri3 0x07, 0xF8, 0xF0
+	calr CPanel_IncEventPtr
+	stda8 36244, w
+	ld_a_srib3 0x07, 0xE8, 0xF4
+	calr CPanel_IncRXPtr
+	stda8 36245, a
+	ld c, w
+	calr LABEL_FC4A36
+	cp hl, 0xFFFF
+	jr nz, LABEL_FC4A14
+	calr CPanel_DecEventPtr
+	stda16 36253, xiy
+	jr LABEL_FC4A33
 
 LABEL_FC4A14:
-	.byte 0xa2, 0x20	; LD (XIZ + IX), L
-	.byte 0xbf, 0x04, 0x60	; CALR CPanel_IncEventPtr
-	.byte 0xa7, 0x20	; LD (CPANEL_LAST_EVENT_VALUE), L
-	.byte 0x98, 0x04, 0x21	; LD (XIZ + IX), 0ffh
-	.byte 0xd9, 0xdc	; CALR CPanel_IncEventPtr
-	.byte 0x66, 0x22	; LD (XIZ - 4), IX
-	.byte 0xb8, 0x0e, 0x32	; DECW 3, (XIZ - 2)
-	.byte 0xd9, 0xda	; LD (CPANEL_RX_READ_PTR), IY
+	lda_xsp_dri3 0x07, 0xF8, 0xF0
+	calr CPanel_IncEventPtr
+	stda8 36246, l
+	dri5 0x07, 0xF8, 0xF0, 0x00, 0xFF
+	calr CPanel_IncEventPtr
+	ld (xiz - 4), ix
+	decm 3, (xiz - 2)
+	stda16 36253, xiy
 
 LABEL_FC4A33:
-	.byte 0x66, 0x0b	; JRL T, CPanel_RX_ParseNext
+	jrl CPanel_RX_ParseNext
 
 LABEL_FC4A36:
-	.byte 0xd9, 0xd9	; PUSH XDE
-	.byte 0x6e, 0x23	; PUSH XIZ
-	.byte 0x41, 0xff, 0x00, 0x00, 0x00	; PUSH XIX
-	.byte 0x68, 0x05	; CALR CPanel_EncoderDispatch
-	.byte 0x41, 0xff, 0xff, 0x00, 0x00	; POP XIX
-	.byte 0xaf, 0x04, 0x20	; POP XIZ
-	.byte 0xa0, 0x20	; POP XDE
-	.byte 0xe9, 0xc0	; RET
+	push xde
+	push xiz
+	push xix
+	calr CPanel_EncoderDispatch
+	pop xix
+	pop xiz
+	pop xde
+	ret
 
 CPanel_RX_MultiBytePacket:
-	.byte 0xb2, 0x60	; LD W, A
-	.byte 0x68, 0x10	; LD A, (XDE + IY)
-	.byte 0xaf, 0x04, 0x20	; LD C, A
-	.byte 0xa7, 0x21	; AND A, 00fh
-	.byte 0xa0, 0x20	; INC 1, A
-	.byte 0xb9, 0x0e, 0x60	; LD B, A
-	.byte 0x68, 0x04	; ADD A, 002h
-	.byte 0xe8, 0xa8	; CP W, A
-	.byte 0xb2, 0x60	; JRL C, CPanel_RX_Done
+	ld w, a
+	ld_a_srib3 0x07, 0xE8, 0xF4
+	ld c, a
+	and a, 0xF
+	inc 1, a
+	ld b, a
+	add a, 0x2
+	cp w, a
+	jrl c, CPanel_RX_Done
 
-	.byte 0x0b, 0x16, 0x00	; CALR CPanel_IncRXPtr
-	.byte 0x1d, 0x80, 0x0e, 0xff	; LD A, (XDE + IY)
-	.byte 0xef, 0x62	; CALR CPanel_IncRXPtr
-	.byte 0xbf, 0x0c, 0x63	; AND A, 01fh
-	.byte 0xa7, 0x20	; AND C, 0c0h
-	.byte 0xaf, 0x0c, 0x22	; OR C, A
-	.byte 0xe8, 0x8d	; LD W, C
-	.byte 0xea, 0x8c	; BIT 004h, W
-	.byte 0x31, 0x0b, 0x00	; JR NZ, LABEL_FC4A8B
-	.byte 0x95, 0x11	; AND C, 040h
-	.byte 0x40, 0xff, 0xff, 0xff, 0xff	; BIT 006h, C
-	.byte 0x41, 0x1d, 0x00, 0xc0, 0x01	; JR Z, LABEL_FC4A7D
-	.byte 0xaf, 0x0c, 0x22	; SUB C, 030h
+	calr CPanel_IncRXPtr
+	ld_a_srib3 0x07, 0xE8, 0xF4
+	calr CPanel_IncRXPtr
+	and a, 0x1F
+	and c, 0xC0
+	or c, a
+	ld w, c
+	bit 4, w
+	jr nz, LABEL_FC4A8B
+	and c, 0x40
+	bit 6, c
+	jr z, LABEL_FC4A7D
+	sub c, 0x30
 
 LABEL_FC4A7D:
-	.byte 0x1d, 0x58, 0x9d, 0xfa	; OR A, C
-	.byte 0x40, 0xff, 0xff, 0xff, 0xff	; LD L, A
-	.byte 0x41, 0x23, 0x00, 0xe0, 0x01	; EXTZ HL
-	.byte 0xaf, 0x0c, 0x22	; EXTZ XHL
-	.byte 0x1d, 0x58, 0x9d, 0xfa	; ADD XHL, STATE_OF_CPANEL_BUTTONS
+	or a, c
+	ld l, a
+	extz hl
+	extz xhl
+	add xhl, 0x8E4A
 
 LABEL_FC4A8B:
-	.byte 0xeb, 0xa8	; LD (XIZ + IX), W
-	.byte 0xbf, 0x10, 0x37	; CALR CPanel_IncEventPtr
-	.byte 0x0e	; LD A, (XDE + IY)
-	.byte 0xef, 0x68	; CALR CPanel_IncRXPtr
-	.byte 0x3e	; BIT 004h, W
-	.byte 0xe9, 0xcf, 0x66, 0x00, 0xe0, 0x01	; JR Z, LABEL_FC4AC5
-	.byte 0x66, 0x72	; PUSH BC
-	.byte 0xe9, 0xcf, 0x67, 0x00, 0xe0, 0x01	; LD C, W
-	.byte 0x7e, 0xc2, 0x00	; PUSH HL
-	.byte 0xea, 0x8e	; PUSH WA
-	.byte 0xa6, 0x20	; CALR LABEL_FC4A36
-	.byte 0xbf, 0x04, 0x60	; POP WA
-	.byte 0x0b, 0x0e, 0x00	; CP HL, 0ffffh
-	.byte 0x1d, 0x80, 0x0e, 0xff	; LD (CPANEL_LAST_EVENT_VALUE), L
-	.byte 0xef, 0x62	; POP HL
-	.byte 0xbf, 0x08, 0x63	; POP BC
-	.byte 0xaf, 0x08, 0x20	; JR NZ, LABEL_FC4AC1
-	.byte 0xee, 0x8d	; JR T, LABEL_FC4AB7
+	lda_xwa_dri3 0x07, 0xF8, 0xF0
+	calr CPanel_IncEventPtr
+	ld_a_srib3 0x07, 0xE8, 0xF4
+	calr CPanel_IncRXPtr
+	bit 4, w
+	jr z, LABEL_FC4AC5
+	pushw bc
+	ld c, w
+	pushw hl
+	pushw wa
+	calr LABEL_FC4A36
+	popw wa
+	cp hl, 0xFFFF
+	stda8 36246, l
+	popw hl
+	popw bc
+	jr nz, LABEL_FC4AC1
+	jr __jrt_nop_FC4AB7
+__jrt_nop_FC4AB7:
 
 LABEL_FC4AB7:
-	.byte 0xe8, 0x8c	; CALR CPanel_DecEventPtr
-	.byte 0xd9, 0xaf	; LD (CPANEL_RX_READ_PTR), IY
-	.byte 0x95, 0x11	; JRL T, LABEL_FC4B04
+	calr CPanel_DecEventPtr
+	stda16 36253, xiy
+	jrl LABEL_FC4B04
 
 LABEL_FC4AC1:
-	.byte 0xbe, 0x04, 0x31	; LD A, (CPANEL_LAST_EVENT_VALUE)
+	ldda8 a, 36246
+LABEL_FC4AC5:
 
 c:
-	.byte 0xb8, 0x08, 0x32	; LD (XIZ + IX), A
-	.byte 0x9e, 0x08, 0x3f, 0x00, 0x00	; CALR CPanel_IncEventPtr
-	.byte 0x66, 0x0d	; BIT 004h, W
-	.byte 0xaf, 0x04, 0x20	; JR NZ, LABEL_FC4AEA
-	.byte 0xa1, 0x21	; EX (XHL), A
-	.byte 0xa0, 0xe9	; XOR A, (XHL)
-	.byte 0xb2, 0x02, 0x01, 0x00	; INC 1, HL
-	.byte 0x68, 0x11	; BIT 4, (CPANEL_TX_RX_FLAGS)	; This is never set ?!
-	.byte 0xa1, 0x21	; JR Z, LABEL_FC4AEC
-	.byte 0xe9, 0xcd, 0xff, 0xff, 0xff, 0xff	; CP A, 0
-	.byte 0xaf, 0x04, 0x20	; JR NZ, LABEL_FC4AEC
+	lda_xbc_dri3 0x07, 0xF8, 0xF0
+	calr CPanel_IncEventPtr
+	bit 4, w
+	jr nz, LABEL_FC4AEA
+	mrib2 0x83, 0x31
+	xor a, (xhl)
+	inc 1, hl
+	bitda 4, 36236	; This is never set ?!
+	jr z, LABEL_FC4AEC
+	cps a, 0
+	jr nz, LABEL_FC4AEC
 					; if CP_Flags_A.4 != 0 && A == 0:
-	.byte 0xa0, 0xc9	; CALR CPanel_DecEventPtr
-	.byte 0xb2, 0x02, 0x00, 0x00	; CALR CPanel_DecEventPtr
-	.byte 0x40, 0xff, 0xff, 0xff, 0xff	; JR T, LABEL_FC4B00
+	calr CPanel_DecEventPtr
+	calr CPanel_DecEventPtr
+	jr LABEL_FC4B00
 
 LABEL_FC4AEA:
-	.byte 0x41, 0x24, 0x00, 0xc0, 0x01	; LD_A 0ffh
+	ldb a, 0xFF
 
 					; else:
 LABEL_FC4AEC:
-	.byte 0xaf, 0x08, 0x22	; LD (XIZ + IX), A
-	.byte 0x1d, 0x58, 0x9d, 0xfa	; CALR CPanel_IncEventPtr
-	.byte 0x40, 0xff, 0xff, 0xff, 0xff	; LD (XIZ - 4), IX
-	.byte 0x41, 0x23, 0x00, 0xe0, 0x01	; DECW 1, (XIZ - 2)
-	.byte 0xaf, 0x08, 0x22	; DECW 1, (XIZ - 2)
-	.byte 0x68, 0x55	; DECW 1, (XIZ - 2)
+	lda_xbc_dri3 0x07, 0xF8, 0xF0
+	calr CPanel_IncEventPtr
+	ld (xiz - 4), ix
+	decm 1, (xiz - 2)
+	decm 1, (xiz - 2)
+	decm 1, (xiz - 2)
 
 LABEL_FC4B00:
-	.byte 0xea, 0x8e	; LD (CPANEL_RX_READ_PTR), IY
+	stda16 36253, xiy
 
 LABEL_FC4B04:
-	.byte 0xa6, 0x20	; INC 1, W
-	.byte 0xbf, 0x04, 0x60	; DEC 1, B
-	.byte 0xae, 0x04, 0x21	; CP B, 0
-	.byte 0xaf, 0x04, 0x20	; JRL NZ, LABEL_FC4A8B
-	.byte 0xa0, 0xc1	; JRL T, CPanel_RX_ParseNext
+	inc 1, w
+	dec 1, b
+	cps b, 0
+	jrl nz, LABEL_FC4A8B
+	jrl CPanel_RX_ParseNext
 
 CPanel_RX_SyncPacket:
-	.byte 0xbe, 0x08, 0x30	; LD A, (XDE + IY)
-	.byte 0xe9, 0xe1	; CALR CPanel_IncRXPtr
-	.byte 0x66, 0x06	; LD A, (XDE + IY)
-	.byte 0xb0, 0x02, 0x01, 0x00	; CALR CPanel_IncRXPtr
-	.byte 0x68, 0x04	; LD (CPANEL_RX_READ_PTR), IY
-	.byte 0xb0, 0x02, 0x00, 0x00	; OR (CPANEL_PROTOCOL_FLAGS), 008h	; CP_Flags_B.3 = 1  ; UNUSED
-	.byte 0x0b, 0x0e, 0x00	; JRL T, CPanel_RX_ParseNext
+	ld_a_srib3 0x07, 0xE8, 0xF4
+	calr CPanel_IncRXPtr
+	ld_a_srib3 0x07, 0xE8, 0xF4
+	calr CPanel_IncRXPtr
+	stda16 36253, xiy
+	ordi8 36242, 8	; CP_Flags_B.3 = 1  ; UNUSED
+	jrl CPanel_RX_ParseNext
 
 CPanel_RX_Done:	; FC4B2C
-	.byte 0x1d, 0x80, 0x0e, 0xff	; RET
+	ret
 
 
 CPanel_UpdateLEDs:	; do this
-	.byte 0xef, 0x62	; LD IY, (CPANEL_LED_WRITE_PTR)
-	.byte 0xbf, 0x08, 0x63	; LD XDE, CPANEL_LED_TX_BUFFER
-	.byte 0xaf, 0x08, 0x20	; LD XIZ, CPANEL_LED_EVENT_QUEUE
-	.byte 0xee, 0x8d	; LD IX, (XIZ - 8)
-	.byte 0xe8, 0x8c	; LD WA, (XIZ - 4)
-	.byte 0xd9, 0xaf	; CP WA, (XIZ - 8)
-	.byte 0x95, 0x11	; JR NZ, LABEL_FC4B4E
-	.byte 0x40, 0xff, 0xff, 0xff, 0xff	; CPW (XIZ - 2), 0000h
-	.byte 0x41, 0x24, 0x00, 0xc0, 0x01	; JRL NZ, LABEL_FC4C07
+	ldda16 xiy, 36351
+	ld xde, 0x8E01
+	ld xiz, 0x20137
+	ld ix, (xiz - 8)
+	ld wa, (xiz - 4)
+	cp wa, (xiz - 8)
+	jr nz, LABEL_FC4B4E
+	cpmi16 (xiz - 2), 0x0
+	jrl nz, LABEL_FC4C07
 
 LABEL_FC4B4E:
-	.byte 0xaf, 0x08, 0x22	; LD WA, (CPANEL_LED_WRITE_PTR)
-	.byte 0x1d, 0x58, 0x9d, 0xfa	; SUB WA, (CPANEL_LED_READ_PTR)
-	.byte 0x40, 0xff, 0xff, 0xff, 0xff	; JR NC, LABEL_FC4B5E
-	.byte 0x41, 0x23, 0x00, 0xe0, 0x01	; NEG WA
-	.byte 0xaf, 0x08, 0x22	; LD HL, WA
-	.byte 0x1d, 0x58, 0x9d, 0xfa	; JR T, LABEL_FC4B63
+	ldda16 xwa, 36351
+	subda16 xwa, 36349
+	jr nc, LABEL_FC4B5E
+	neg wa
+	ld hl, wa
+	jr LABEL_FC4B63
 
 LABEL_FC4B5E:
-	.byte 0xeb, 0xa8	; LD HL, 003ch
-	.byte 0x5e	; SUB HL, WA
+	ldw hl, 0x3C
+	sub hl, wa
 
 LABEL_FC4B63:
-	.byte 0xef, 0x60	; CP HL, 3
-	.byte 0x0e	; JRL C, LABEL_FC4C07
-	.byte 0xbf, 0xec, 0x37	; LD A, (XIZ + IX)
-	.byte 0x3e	; AND A, 030h
-	.byte 0xbf, 0x14, 0x62	; SRL 2, A
-	.byte 0xaf, 0x14, 0x20	; LD L, A
-	.byte 0xe9, 0xcf, 0xa9, 0x00, 0xe0, 0x01	; XOR H, H
-	.byte 0x76, 0x52, 0x01	; EXTZ XHL
-	.byte 0xe9, 0xcf, 0xa8, 0x00, 0xe0, 0x01	; ADD XHL, CPanel_LED_PacketHandlers
-	.byte 0x76, 0x0a, 0x01	; LD XHL, (XHL)
-	.byte 0xe9, 0xcf, 0x61, 0x00, 0xe0, 0x01	; JP T, XHL
+	cps hl, 3
+	jrl c, LABEL_FC4C07
+	ld_a_srib3 0x07, 0xF8, 0xF0
+	and a, 0x30
+	srl a, 2
+	ld l, a
+	xor h, h
+	extz xhl
+	add xhl, 0xFC4B85
+	ld xhl, (xhl)
+	jp (xhl)
 
 CPanel_LED_PacketHandlers_Padding:
-	.byte 0xFF, 0xFF
+	.byte 0xff, 0xff
 
 
 CPanel_LED_PacketHandlers:
@@ -1440,67 +1442,67 @@ CPanel_LED_PacketHandlers:
 
 
 LABEL_FC4B95:
-	.byte 0xC3, 0x7, 0xF8, 0xF0, 0x21, 0x1E, 0x97, 0x0
-	.byte 0xF3, 0x7, 0xE8, 0xF4, 0x41, 0x1E
-	.byte 0x6E, 0x0, 0xC3, 0x7, 0xF8, 0xF0, 0x20, 0x1E
-	.byte 0x87, 0x0, 0xF3, 0x7, 0xE8, 0xF4, 0x40, 0x1E
-	.byte 0x5E, 0x0, 0xBE, 0xF8, 0x54, 0x9E, 0xFE, 0x61
-	.byte 0x9E, 0xFE, 0x61, 0xF1, 0xFF, 0x8D, 0x55, 0x78
-	.byte 0x79, 0xFF
+	.byte 0xc3, 0x07, 0xf8, 0xf0, 0x21, 0x1e, 0x97, 0x00
+	.byte 0xf3, 0x07, 0xe8, 0xf4, 0x41, 0x1e
+	.byte 0x6e, 0x00, 0xc3, 0x07, 0xf8, 0xf0, 0x20, 0x1e
+	.byte 0x87, 0x00, 0xf3, 0x07, 0xe8, 0xf4, 0x40, 0x1e
+	.byte 0x5e, 0x00, 0xbe, 0xf8, 0x54, 0x9e, 0xfe, 0x61
+	.byte 0x9e, 0xfe, 0x61, 0xf1, 0xff, 0x8d, 0x55, 0x78
+	.byte 0x79, 0xff
 
 LABEL_FC4BC5:
-	.byte 0xC3, 0x7, 0xF8, 0xF0, 0x21, 0x1E
-	.byte 0x67, 0x0, 0xC9, 0x8B, 0xC9, 0xCC, 0xF, 0xC9
-	.byte 0xC8, 0x2, 0xC9, 0x8A, 0xCB, 0x89, 0xF3, 0x7
-	.byte 0xE8, 0xF4, 0x41, 0x1E, 0x32, 0x0, 0x9E, 0xFE
-	.byte 0x61, 0xC3, 0x7, 0xF8, 0xF0, 0x21, 0x1E, 0x48
-	.byte 0x0, 0xF3, 0x7, 0xE8, 0xF4, 0x41, 0x1E, 0x1F
-	.byte 0x0, 0xBE, 0xF8, 0x54, 0x9E, 0xFE, 0x61, 0xF1
-	.byte 0xFF, 0x8D, 0x55, 0xCA, 0x69, 0xCA, 0xD8, 0x6E
-	.byte 0xE0, 0x78, 0x37, 0xFF
+	.byte 0xc3, 0x07, 0xf8, 0xf0, 0x21, 0x1e
+	.byte 0x67, 0x00, 0xc9, 0x8b, 0xc9, 0xcc, 0x0f, 0xc9
+	.byte 0xc8, 0x02, 0xc9, 0x8a, 0xcb, 0x89, 0xf3, 0x07
+	.byte 0xe8, 0xf4, 0x41, 0x1e, 0x32, 0x00, 0x9e, 0xfe
+	.byte 0x61, 0xc3, 0x07, 0xf8, 0xf0, 0x21, 0x1e, 0x48
+	.byte 0x00, 0xf3, 0x07, 0xe8, 0xf4, 0x41, 0x1e, 0x1f
+	.byte 0x00, 0xbe, 0xf8, 0x54, 0x9e, 0xfe, 0x61, 0xf1
+	.byte 0xff, 0x8d, 0x55, 0xca, 0x69, 0xca, 0xd8, 0x6e
+	.byte 0xe0, 0x78, 0x37, 0xff
 
 LABEL_FC4C07:
-	.byte 0x20, 0x00	; RET
+	ret
 
 
 CPanel_IncRXPtr:	; FC4C08
-	.byte 0xc0, 0x01, 0xaf	; INC 1, IY
-	.byte 0x06, 0x22	; CP IY, 005ch
-	.byte 0x1d, 0x58, 0x9d, 0xfa	; JR C, LABEL_FC4C12
-	.byte 0x40, 0xff, 0xff, 0xff, 0xff	; LD IY, 0
+	inc 1, iy
+	cp iy, 0x5C
+	jr c, LABEL_FC4C12
+	lds iy, 0
 
 LABEL_FC4C12:
-	.byte 0x41, 0x23, 0x00, 0xe0, 0x01	; RET
+	ret
 
 
 CPanel_IncLEDPtr:	; FC4C13
-	.byte 0xaf, 0x06, 0x22	; INC 1, IY
-	.byte 0x1d, 0x58, 0x9d, 0xfa	; CP IY, 003ch
-	.byte 0x40, 0xff, 0xff, 0xff, 0xff	; JR C, LABEL_FC4C1D
-	.byte 0x41, 0x23, 0x00, 0xe0, 0x01	; LD IY, 0
+	inc 1, iy
+	cp iy, 0x3C
+	jr c, LABEL_FC4C1D
+	lds iy, 0
 
 LABEL_FC4C1D:
-	.byte 0xaf, 0x0a, 0x22	; RET
+	ret
 
 
 CPanel_IncEventPtr:	; FC4C1E
-	.byte 0x68, 0x4e	; INC 1, IX
-	.byte 0xd9, 0xa8	; CP IX, 0080h
-	.byte 0x1d, 0xf7, 0xd4, 0xfc	; JR C, LABEL_FC4C28
-	.byte 0xbf, 0x11, 0x47	; LD IX, 0
+	inc 1, ix
+	cp ix, 0x80
+	jr c, LABEL_FC4C28
+	lds ix, 0
 
 LABEL_FC4C28:
-	.byte 0xaf, 0x14, 0x20	; RET
+	ret
 
 
 CPanel_DecEventPtr:	; FC4C29
-	.byte 0x31, 0x20, 0x00	; CP IX, 0
-	.byte 0x1d, 0xf7, 0xd4, 0xfc	; JR NZ, LABEL_FC4C31
-	.byte 0xbf, 0x0e, 0x30	; LD IX, 007fh
-	.byte 0xb8, 0x04, 0x47	; RET
+	cps ix, 0
+	jr nz, LABEL_FC4C31
+	ldw ix, 0x7F
+	ret
 
 LABEL_FC4C31:
-	.byte 0xaf, 0x14, 0x21	; DEC 1, IX
-	.byte 0xb8, 0x02, 0x43	; RET
+	dec 1, ix
+	ret
 
 ; End of control panel routines

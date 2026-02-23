@@ -57,14 +57,14 @@
 ; These tables convert raw encoder values to MIDI CC values.
 ; Each table is 128 bytes (one entry per raw value 0-127).
 
-.equ ENCODER_LUT_MODWHEEL, 0xEDA13C	; Modulation wheel lookup table
-.equ ENCODER_LUT_VOLUME, 0xEDA1BC	; Volume lookup table
-.equ ENCODER_LUT_BREATH_INDEX, 0xEDA2BC	; Breath controller index lookup (word)
-.equ ENCODER_LUT_BREATH_VALUE, 0xEDA2D2	; Breath controller value lookup
-.equ ENCODER_LUT_BREATH_MULT, 0xEDA3D2	; Breath controller multiplier table
-.equ ENCODER_LUT_BREATH_OFFSET, 0xEDA3EA	; Breath controller offset table
-.equ ENCODER_LUT_FOOT, 0xEDA402	; Foot controller lookup table
-.equ ENCODER_LUT_EXPRESSION, 0xEDA482	; Expression lookup table
+	; (EQU→inline label) ENCODER_LUT_MODWHEEL = 0xEDA13C
+	; (EQU→inline label) ENCODER_LUT_VOLUME = 0xEDA1BC
+	; (EQU→inline label) ENCODER_LUT_BREATH_INDEX = 0xEDA2BC
+	; (EQU→inline label) ENCODER_LUT_BREATH_VALUE = 0xEDA2D2
+	; (EQU→inline label) ENCODER_LUT_BREATH_MULT = 0xEDA3D2
+	; (EQU→inline label) ENCODER_LUT_BREATH_OFFSET = 0xEDA3EA
+	; (EQU→inline label) ENCODER_LUT_FOOT = 0xEDA402
+	; (EQU→inline label) ENCODER_LUT_EXPRESSION = 0xEDA482
 
 ; =============================================================================
 ; Encoder State Tracking (RAM at 0x8Fxxh)
@@ -86,6 +86,6 @@
 ; Indexed by 5-bit encoder ID (0-31). Each entry is a 32-bit address.
 ; See ENCODER_HANDLER_TABLE_DATA in main source for the actual table contents.
 
-.equ ENCODER_HANDLER_TABLE, 0xEDA0BC	; Jump table for encoder-specific handlers (in ROM)
+	; (EQU→inline label) ENCODER_HANDLER_TABLE = 0xEDA0BC
 
 ; End of MIDI/Encoder constants

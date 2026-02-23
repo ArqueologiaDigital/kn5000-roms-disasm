@@ -885,8 +885,14 @@ def get_instruction_size_from_rom(addr):
 # Include path computation
 # ============================================================================
 
-def compute_llvm_include_path(include_path, from_file):
-    """Compute the .include path for LLVM output."""
+def compute_llvm_include_path(include_path, from_file=None):
+    """Compute the .include path for LLVM output.
+
+    Converts ASL include paths to LLVM-style paths:
+    - ../shared/vga_constants.asm → shared/vga_constants.s
+    - fdc_constants.asm → fdc_constants.s
+    - file_io/title_handlers.asm → file_io/title_handlers.s
+    """
     if include_path.endswith('.inc'):
         new_path = include_path.replace('.inc', '.inc.s')
     elif include_path.endswith('.asm'):
@@ -898,6 +904,60 @@ def compute_llvm_include_path(include_path, from_file):
     while clean_path.startswith('../'):
         clean_path = clean_path[3:]
     return clean_path
+
+
+def split_output_into_includes(output_lines, output_dir):
+    """Split monolithic output at include boundaries into separate files.
+
+    Scans output_lines for '; --- begin include: ...' / '; --- end include: ...'
+    markers. Extracts content between them to separate .s files, replacing the
+    inlined section with a .include directive.
+
+    Returns the modified output_lines list.
+    """
+    result = []
+    include_stack = []  # Stack of (include_path, lines_buffer)
+    include_files_written = []
+
+    for line in output_lines:
+        # Check for include begin marker
+        m = re.match(r'^; --- begin include: (.+) ---$', line)
+        if m:
+            inc_path = m.group(1)
+            include_stack.append((inc_path, []))
+            continue
+
+        # Check for include end marker
+        m = re.match(r'^; --- end include: (.+) ---$', line)
+        if m:
+            if include_stack:
+                inc_path, inc_lines = include_stack.pop()
+                llvm_path = compute_llvm_include_path(inc_path)
+                full_path = os.path.join(output_dir, llvm_path)
+
+                # Write include file
+                os.makedirs(os.path.dirname(full_path), exist_ok=True)
+                with open(full_path, 'w') as f:
+                    f.write('\n'.join(inc_lines) + '\n')
+                include_files_written.append(llvm_path)
+
+                # Add .include directive to parent (or top-level result)
+                directive = f'\t.include "{llvm_path}"'
+                if include_stack:
+                    include_stack[-1][1].append(directive)
+                else:
+                    result.append(directive)
+            continue
+
+        # Append line to current include buffer or top-level result
+        if include_stack:
+            include_stack[-1][1].append(line)
+        else:
+            result.append(line)
+
+    if include_files_written:
+        print(f"  Include files written: {len(include_files_written)}")
+    return result
 
 
 # ============================================================================
@@ -4510,8 +4570,8 @@ def convert_all(main_file, output_path):
 
     # Build output
     output_lines = []
-    output_lines.append(f"; Converted from {main_file} by asl_to_llvm.py (Phase 3)")
-    output_lines.append(f"; All includes inlined, segments globally sorted by ORG address.")
+    output_lines.append(f"; Converted from {main_file} by asl_to_llvm.py")
+    output_lines.append(f"; Modular includes preserved, segments globally sorted by ORG address.")
     output_lines.append(f"; Per-instruction .byte fallback with progressive native replacement.")
     output_lines.append(f"; This file is auto-generated. Edit the converter, not this file.")
     output_lines.append("")
@@ -4748,7 +4808,11 @@ def convert_all(main_file, output_path):
                 symbolic_long_count += 1
         print(f"  Symbolic .long replacements: {symbolic_long_count}")
 
-    os.makedirs(os.path.dirname(output_path), exist_ok=True)
+    # Split output into modular include files (if any include boundaries exist)
+    output_dir = os.path.dirname(output_path)
+    output_lines = split_output_into_includes(output_lines, output_dir)
+
+    os.makedirs(output_dir, exist_ok=True)
     with open(output_path, 'w') as f:
         f.write('\n'.join(output_lines) + '\n')
 

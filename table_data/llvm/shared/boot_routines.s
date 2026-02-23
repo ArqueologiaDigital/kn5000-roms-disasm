@@ -41,18 +41,18 @@ Detect_Region_Code:
 	jr z, Detect_Region_Code__check_bit1_only
 	dd82 0x44, 0xC9
 	jr z, Detect_Region_Code__mode2
-	stdi8 1032, 1	; Region 1
+	stdi8 3078, 1	; Region 1
 	ret
 Detect_Region_Code__mode2:
-	stdi8 1032, 2	; Region 2
+	stdi8 3078, 2	; Region 2
 	ret
 Detect_Region_Code__check_bit1_only:
 	dd82 0x44, 0xC9
 	jr z, Detect_Region_Code__mode4
-	stdi8 1032, 3	; Region 3
+	stdi8 3078, 3	; Region 3
 	ret
 Detect_Region_Code__mode4:
-	stdi8 1032, 4	; Region 4
+	stdi8 3078, 4	; Region 4
 	ret
 
 ; -----------------------------------------------------------------------------
@@ -62,7 +62,7 @@ Detect_Region_Code__mode4:
 ; Exit:  L = region code (1-4)
 ; -----------------------------------------------------------------------------
 Get_Region_Code:
-	ldda8 l, 1032
+	ldda8 l, 3078
 	ret
 
 ; -----------------------------------------------------------------------------
@@ -81,7 +81,7 @@ Empty_Handler:
 ; This handles the case where the watchdog timer triggers during boot.
 ; -----------------------------------------------------------------------------
 Watchdog_Reset_Handler:
-	jrl RESET_HANDLER
+	jrl Boot_Init
 	reti	; Never reached
 
 ; End of shared boot routines

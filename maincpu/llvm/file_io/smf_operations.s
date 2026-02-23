@@ -15,1298 +15,1298 @@
 ; =============================================================================
 
 FmmSmfLoadTitleFunc:
-	; (no addr) CP XBC, 01c00007h
-	; (no addr) JRL Z, LABEL_F8DCE2
-	; (no addr) CP XBC, 01c00013h
-	; (no addr) JRL NZ, LABEL_F8DCFD
-	; (no addr) CP XDE, 00000003h
-	; (no addr) JRL Z, LABEL_F8DCDD
-	; (no addr) CP XDE, 00000002h
-	; (no addr) JRL NZ, LABEL_F8DCFD
-	; (no addr) LD (84FEh), 000h
-	; (no addr) LD WA, 1
-	CALR InitializeOperationState
-	; (no addr) LD XWA, 00600026h
-	; (no addr) LD XBC, 01c00001h
-	; (no addr) LD XDE, 5
-	; (no addr) CALL ApPostEvent
-	LD_8_8 0x808A, 0x8D37
-	; (no addr) CPW (8500h), 0000h
-	; (no addr) JR GE, LABEL_F8DBA6
-	; (no addr) CALL GetDiskSizeInfo
-	; (no addr) EXTZ HL
-	; (no addr) LD (8500h), HL
-	CALR SignalProgressUpdate
+	cp xbc, 0x1C00007
+	jrl z, LABEL_F8DCE2
+	cp xbc, 0x1C00013
+	jrl nz, LABEL_F8DCFD
+	cp xde, 0x3
+	jrl z, LABEL_F8DCDD
+	cp xde, 0x2
+	jrl nz, LABEL_F8DCFD
+	stdi8 34046, 0
+	lds wa, 1
+	calr InitializeOperationState
+	ld xwa, 0x600026
+	ld xbc, 0x1C00001
+	lds32 xde, 5
+	call 0xFA9D58
+	ldmm8 32906, 36151
+	cpdi16 34048, 0
+	jr ge, LABEL_F8DBA6
+	call 0xF89520
+	extz hl
+	stda16 34048, xhl
+	calr SignalProgressUpdate
 
 LABEL_F8DBA6:
-	; (no addr) LD WA, (8500h)
-	; (no addr) CP WA, 1
-	; (no addr) JRL Z, LABEL_F8DC70
-	; (no addr) CP WA, 0
-	; (no addr) JRL Z, LABEL_F8DC5A
-	; (no addr) CP WA, 5
-	; (no addr) JR Z, LABEL_F8DC16
-	; (no addr) CPW (8504h), 0000h
-	; (no addr) JR GE, LABEL_F8DBD3
-	; (no addr) CALL GetFileCountEncoded
-	; (no addr) LD (8504h), HL
-	; (no addr) CALL LABEL_F8958D
-	; (no addr) CALL GetEncodedFreeSpaceData
-	CALR SignalProgressUpdate
+	ldda16 xwa, 34048
+	cps wa, 1
+	jrl z, LABEL_F8DC70
+	cps wa, 0
+	jrl z, LABEL_F8DC5A
+	cps wa, 5
+	jr z, LABEL_F8DC16
+	cpdi16 34052, 0
+	jr ge, LABEL_F8DBD3
+	call 0xF89C78
+	stda16 34052, xhl
+	call LABEL_F8958D
+	call 0xF8953B
+	calr SignalProgressUpdate
 
 LABEL_F8DBD3:
-	; (no addr) CPW (8504h), 0000h
-	; (no addr) JRL NZ, LABEL_F8DCBB
-	; (no addr) CPW (8502h), 0000h
-	; (no addr) JR GE, LABEL_F8DBEF
-	; (no addr) CALL GetEncodedFileSizeData
-	; (no addr) LD (8502h), HL
-	CALR SignalProgressUpdate
+	cpdi16 34052, 0
+	jrl nz, LABEL_F8DCBB
+	cpdi16 34050, 0
+	jr ge, LABEL_F8DBEF
+	call 0xF8987D
+	stda16 34050, xhl
+	calr SignalProgressUpdate
 
 LABEL_F8DBEF:
-	; (no addr) CPW (8502h), 0000h
-	; (no addr) JRL LE, LABEL_F8DCBB
-	; (no addr) CP (808Ah), 061h
-	; (no addr) JRL Z, LABEL_F8DCBB
-	; (no addr) LD XWA, 00600026h
-	; (no addr) LD XBC, 01c00002h
-	; (no addr) LD XDE, 0
-	; (no addr) CALL ApPostEvent
-	; (no addr) LD WA, 0061h
-	; (no addr) JRL T, LABEL_F8DCF9
+	cpdi16 34050, 0
+	jrl le, LABEL_F8DCBB
+	cpdi8 32906, 97
+	jrl z, LABEL_F8DCBB
+	ld xwa, 0x600026
+	ld xbc, 0x1C00002
+	lds32 xde, 0
+	call 0xFA9D58
+	ldw wa, 0x61
+	jrl LABEL_F8DCF9
 
 LABEL_F8DC16:
-	; (no addr) LD XWA, 00600026h
-	; (no addr) LD XBC, 01c00002h
-	; (no addr) LD XDE, 0
-	; (no addr) CALL ApPostEvent
-	; (no addr) LD XWA, 0ffffffffh
-	; (no addr) LD XBC, 01e0009eh
-	; (no addr) LD XDE, 1
-	; (no addr) CALL ApPostEvent
-	; (no addr) LD A, (808Ah)
-	; (no addr) EXTZ WA
-	; (no addr) CALL UI_PostModeChangeEvent
-	; (no addr) LD XWA, 0ffffffffh
-	; (no addr) LD XBC, 01e0009eh
-	; (no addr) LD XDE, 0
-	; (no addr) CALL ApPostEvent
-	; (no addr) LD (7F42h), 000h
-	; (no addr) LD WA, 00eeh
-	; (no addr) JR T, LABEL_F8DCB5
+	ld xwa, 0x600026
+	ld xbc, 0x1C00002
+	lds32 xde, 0
+	call 0xFA9D58
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1E0009E
+	lds32 xde, 1
+	call 0xFA9D58
+	ldda8 a, 32906
+	extz wa
+	call 0xF99490
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1E0009E
+	lds32 xde, 0
+	call 0xFA9D58
+	stdi8 32578, 0
+	ldw wa, 0xEE
+	jr LABEL_F8DCB5
 
 LABEL_F8DC5A:
-	; (no addr) LD XWA, 00600026h
-	; (no addr) LD XBC, 01c00002h
-	; (no addr) LD XDE, 0
-	; (no addr) CALL ApPostEvent
-	; (no addr) LD WA, 007dh
-	; (no addr) JRL T, LABEL_F8DCF9
+	ld xwa, 0x600026
+	ld xbc, 0x1C00002
+	lds32 xde, 0
+	call 0xFA9D58
+	ldw wa, 0x7D
+	jrl LABEL_F8DCF9
 
 LABEL_F8DC70:
-	CALR ResetProgressIndication
-	; (no addr) LD XWA, 00600026h
-	; (no addr) LD XBC, 01c00002h
-	; (no addr) LD XDE, 0
-	; (no addr) CALL ApPostEvent
-	; (no addr) LD XWA, 0ffffffffh
-	; (no addr) LD XBC, 01e0009eh
-	; (no addr) LD XDE, 1
-	; (no addr) CALL ApPostEvent
-	; (no addr) LD A, (808Ah)
-	; (no addr) EXTZ WA
-	; (no addr) CALL UI_PostModeChangeEvent
-	; (no addr) LD XWA, 0ffffffffh
-	; (no addr) LD XBC, 01e0009eh
-	; (no addr) LD XDE, 0
-	; (no addr) CALL ApPostEvent
-	; (no addr) LD (7F42h), 002h
-	; (no addr) LD WA, 00eeh
+	calr ResetProgressIndication
+	ld xwa, 0x600026
+	ld xbc, 0x1C00002
+	lds32 xde, 0
+	call 0xFA9D58
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1E0009E
+	lds32 xde, 1
+	call 0xFA9D58
+	ldda8 a, 32906
+	extz wa
+	call 0xF99490
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1E0009E
+	lds32 xde, 0
+	call 0xFA9D58
+	stdi8 32578, 2
+	ldw wa, 0xEE
 
 LABEL_F8DCB5:
-	; (no addr) CALL LABEL_F994BD
-	; (no addr) JR T, LABEL_F8DCFD
+	call LABEL_F994BD
+	jr LABEL_F8DCFD
 
 LABEL_F8DCBB:
-	; (no addr) LD XWA, 00600026h
-	; (no addr) LD XBC, 01c00002h
-	; (no addr) LD XDE, 0
-	; (no addr) CALL ApPostEvent
-	; (no addr) LD XWA, 0ffffffffh
-	; (no addr) LD XBC, 01c0000ah
-	; (no addr) LD XDE, 0
-	; (no addr) CALL ApPostEvent
-	; (no addr) JR T, LABEL_F8DCFD
+	ld xwa, 0x600026
+	ld xbc, 0x1C00002
+	lds32 xde, 0
+	call 0xFA9D58
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C0000A
+	lds32 xde, 0
+	call 0xFA9D58
+	jr LABEL_F8DCFD
 
 LABEL_F8DCDD:
-	CALR CancelOperationCleanup
-	; (no addr) JR T, LABEL_F8DCFD
+	calr CancelOperationCleanup
+	jr LABEL_F8DCFD
 
 LABEL_F8DCE2:
-	; (no addr) CP XDE, 0000000fh
-	; (no addr) JR NZ, LABEL_F8DCFD
-	; (no addr) CP (8D34h), 007h
-	; (no addr) JR NZ, LABEL_F8DCF6
-	; (no addr) LD WA, 00d6h
-	; (no addr) JR T, LABEL_F8DCF9
+	cp xde, 0xF
+	jr nz, LABEL_F8DCFD
+	cpdi8 36148, 7
+	jr nz, LABEL_F8DCF6
+	ldw wa, 0xD6
+	jr LABEL_F8DCF9
 
 LABEL_F8DCF6:
-	; (no addr) LD WA, 0060h
+	ldw wa, 0x60
 
 LABEL_F8DCF9:
-	; (no addr) CALL UI_PostModeChangeEvent
+	call 0xF99490
 
 LABEL_F8DCFD:
-	; (no addr) LD XHL, 0
-	; (no addr) RET
+	lds32 xhl, 0
+	ret
 
 FmmSmfSaveTitleFunc:
-	; (no addr) CP XBC, 01c00013h
-	; (no addr) JR NZ, LABEL_F8DD72
-	; (no addr) CP XDE, 00000003h
-	; (no addr) JR Z, LABEL_F8DD6F
-	; (no addr) CP XDE, 00000002h
-	; (no addr) JR NZ, LABEL_F8DD72
-	; (no addr) LD (84FEh), 000h
-	; (no addr) LD WA, 1
-	CALR InitializeOperationState
-	; (no addr) LD XWA, 00600026h
-	; (no addr) LD XBC, 01c00001h
-	; (no addr) LD XDE, 5
-	; (no addr) CALL ApPostEvent
-	; (no addr) CPW (8504h), 0000h
-	; (no addr) JR GE, LABEL_F8DD4D
-	; (no addr) CALL GetFileCountEncoded
-	; (no addr) LD (8504h), HL
-	; (no addr) CALL LABEL_F8958D
-	; (no addr) CALL GetEncodedFreeSpaceData
-	CALR SignalProgressUpdate
+	cp xbc, 0x1C00013
+	jr nz, LABEL_F8DD72
+	cp xde, 0x3
+	jr z, LABEL_F8DD6F
+	cp xde, 0x2
+	jr nz, LABEL_F8DD72
+	stdi8 34046, 0
+	lds wa, 1
+	calr InitializeOperationState
+	ld xwa, 0x600026
+	ld xbc, 0x1C00001
+	lds32 xde, 5
+	call 0xFA9D58
+	cpdi16 34052, 0
+	jr ge, LABEL_F8DD4D
+	call 0xF89C78
+	stda16 34052, xhl
+	call LABEL_F8958D
+	call 0xF8953B
+	calr SignalProgressUpdate
 
 LABEL_F8DD4D:
-	; (no addr) LD XWA, 00600026h
-	; (no addr) LD XBC, 01c00002h
-	; (no addr) LD XDE, 0
-	; (no addr) CALL ApPostEvent
-	; (no addr) LD XWA, 0ffffffffh
-	; (no addr) LD XBC, 01c0000ah
-	; (no addr) LD XDE, 0
-	; (no addr) CALL ApPostEvent
-	; (no addr) JR T, LABEL_F8DD72
+	ld xwa, 0x600026
+	ld xbc, 0x1C00002
+	lds32 xde, 0
+	call 0xFA9D58
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C0000A
+	lds32 xde, 0
+	call 0xFA9D58
+	jr LABEL_F8DD72
 
 LABEL_F8DD6F:
-	CALR CancelOperationCleanup
+	calr CancelOperationCleanup
 
 LABEL_F8DD72:
-	; (no addr) LD XHL, 0
-	; (no addr) RET
+	lds32 xhl, 0
+	ret
 
 RenderSmfFilename:
-	; (no addr) EXTZ BC
-	; (no addr) LD (XWA + BC), 000h
-	; (no addr) LD IX, 0
-	; (no addr) LDA XHL, 0EED778h
-	; (no addr) JR T, LABEL_F8DD97
+	extz bc
+	dri5 0x07, 0xE0, 0xE4, 0x00, 0x00
+	lds ix, 0
+	ldada_24 xhl, 15652728
+	jr LABEL_F8DD97
 
 LABEL_F8DD86:
-	; (no addr) EXTZ BC
-	; (no addr) LD C, (XHL + BC)
-	; (no addr) AND C, 007h
-	; (no addr) JR NZ, LABEL_F8DD95
-	; (no addr) LD (XDE), 05fh
+	extz bc
+	ld_c_srib3 0x07, 0xEC, 0xE4
+	and c, 0x7
+	jr nz, LABEL_F8DD95
+	ldmi8 (xde), 0x5F
 
 LABEL_F8DD95:
-	; (no addr) INC 1, IX
+	inc 1, ix
 
 LABEL_F8DD97:
-	; (no addr) CP IX, 0008h
-	; (no addr) JR GE, LABEL_F8DDA8
-	; (no addr) LDA XDE, XWA + IX
-	; (no addr) LD C, (XDE)
-	; (no addr) CP C, 0
-	; (no addr) JR NZ, LABEL_F8DD86
+	cp ix, 0x8
+	jr ge, LABEL_F8DDA8
+	st_b_dri3 0x07, 0xE0, 0xF0
+	ld c, (xde)
+	cps c, 0
+	jr nz, LABEL_F8DD86
 
 LABEL_F8DDA8:
-	; (no addr) CP IX, 0008h
-	; (no addr) RET GE
+	cp ix, 0x8
+	ret ge
 
 LABEL_F8DDAE:
-	; (no addr) LD (XWA + IX), 05fh
-	; (no addr) INC 1, IX
-	; (no addr) CP IX, 0008h
-	; (no addr) JR LT, LABEL_F8DDAE
-	; (no addr) RET
+	dri5 0x07, 0xE0, 0xF0, 0x00, 0x5F
+	inc 1, ix
+	cp ix, 0x8
+	jr lt, LABEL_F8DDAE
+	ret
 
 SaveFileNameSmfFunc:
-	; (no addr) DEC 4, XSP
-	; (no addr) PUSH XIZ
-	; (no addr) LD (XSP + 004h), XDE
-	; (no addr) LDA XWA, 8850h
-	; (no addr) CP XBC, 01e00086h
-	; (no addr) JR Z, LABEL_F8DE48
-	; (no addr) CP XBC, 01e0003ah
-	; (no addr) JR Z, LABEL_F8DE1C
-	; (no addr) CP XBC, 01c0000bh
-	; (no addr) JR Z, LABEL_F8DDF2
-	; (no addr) CP XBC, 01e50004h
-	; (no addr) JRL NZ, LABEL_F8DE74
-	; (no addr) LD XWA, (XSP + 004h)
-	; (no addr) LD (808Ch), XWA
-	; (no addr) JRL T, LABEL_F8DE74
+	dec 4, xsp
+	push xiz
+	ld (xsp + 4), xde
+	ldada xwa, 34896
+	cp xbc, 0x1E00086
+	jr z, LABEL_F8DE48
+	cp xbc, 0x1E0003A
+	jr z, LABEL_F8DE1C
+	cp xbc, 0x1C0000B
+	jr z, LABEL_F8DDF2
+	cp xbc, 0x1E50004
+	jrl nz, LABEL_F8DE74
+	ld xwa, (xsp + 4)
+	stda32 32908, xwa
+	jrl LABEL_F8DE74
 
 LABEL_F8DDF2:
-	; (no addr) LD (XWA), 000h
-	; (no addr) LDA XIZ, XWA + 001h
-	; (no addr) CALL LABEL_F892D5
-	; (no addr) LD XBC, XHL
-	; (no addr) LD XWA, XIZ
-	; (no addr) CALL LABEL_F890DC
-	; (no addr) LDA XWA, 8851h
-	; (no addr) CALL LABEL_F8929D
-	; (no addr) LD XWA, (808Ch)
-	; (no addr) LD XBC, 01c0000fh
-	; (no addr) LD XDE, 00008850h
-	; (no addr) JR T, LABEL_F8DE42
+	ldmi8 (xwa), 0x0
+	lda xiz, (xwa + 1)
+	call LABEL_F892D5
+	ld xbc, xhl
+	ld xwa, xiz
+	call LABEL_F890DC
+	ldada xwa, 34897
+	call LABEL_F8929D
+	ldda32 xwa, 32908
+	ld xbc, 0x1C0000F
+	ld xde, 0x8850
+	jr LABEL_F8DE42
 
 LABEL_F8DE1C:
-	; (no addr) LD XIZ, XWA
-	; (no addr) CALL LABEL_F892D5
-	; (no addr) LD XBC, XHL
-	; (no addr) LD XWA, XIZ
-	; (no addr) CALL LABEL_F890DC
-	; (no addr) LD XWA, 00008850h
-	; (no addr) LD BC, 0008h
-	CALR RenderSmfFilename
-	; (no addr) LD XWA, (XSP + 004h)
-	; (no addr) LD XBC, 01e00086h
-	; (no addr) LD XDE, 00008850h
+	ld xiz, xwa
+	call LABEL_F892D5
+	ld xbc, xhl
+	ld xwa, xiz
+	call LABEL_F890DC
+	ld xwa, 0x8850
+	ldw bc, 0x8
+	calr RenderSmfFilename
+	ld xwa, (xsp + 4)
+	ld xbc, 0x1E00086
+	ld xde, 0x8850
 
 LABEL_F8DE42:
-	; (no addr) CALL ApPostEvent
-	; (no addr) JR T, LABEL_F8DE74
+	call 0xFA9D58
+	jr LABEL_F8DE74
 
 LABEL_F8DE48:
-	; (no addr) LD XBC, (XSP + 004h)
-	; (no addr) LD DE, 0008h
-	; (no addr) CALL LABEL_F890F2
-	; (no addr) LD XWA, 00008850h
-	; (no addr) LD BC, 0008h
-	CALR RenderSmfFilename
-	; (no addr) LD XWA, 00008850h
-	; (no addr) LD XBC, 00ea0736h
-	; (no addr) CALL LABEL_F89113
-	; (no addr) LD XWA, 00008850h
-	; (no addr) CALL LABEL_F892DB
+	ld xbc, (xsp + 4)
+	ldw de, 0x8
+	call LABEL_F890F2
+	ld xwa, 0x8850
+	ldw bc, 0x8
+	calr RenderSmfFilename
+	ld xwa, 0x8850
+	ld xbc, 0xEA0736
+	call LABEL_F89113
+	ld xwa, 0x8850
+	call LABEL_F892DB
 
 LABEL_F8DE74:
-	; (no addr) LD XHL, 0
-	; (no addr) POP XIZ
-	; (no addr) INC 4, XSP
-	; (no addr) RET
+	lds32 xhl, 0
+	pop xiz
+	inc 4, xsp
+	ret
 
 SmfSeqToSongNumFunc:
-	; (no addr) PUSH XIZ
-	; (no addr) CP XBC, 01c0000bh
-	; (no addr) JR Z, LABEL_F8DE91
-	; (no addr) CP XBC, 01e50004h
-	; (no addr) JR NZ, LABEL_F8DECD
-	; (no addr) LD (8090h), XDE
-	; (no addr) JR T, LABEL_F8DECD
+	push xiz
+	cp xbc, 0x1C0000B
+	jr z, LABEL_F8DE91
+	cp xbc, 0x1E50004
+	jr nz, LABEL_F8DECD
+	stda32 32912, xde
+	jr LABEL_F8DECD
 
 LABEL_F8DE91:
-	; (no addr) LDA XWA, 8094h
-	; (no addr) LD (XWA+), 000h
-	; (no addr) LD XBC, 00ea073ch
-	; (no addr) CALL LABEL_F890DC
-	; (no addr) LDA XIZ, 8095h
-	; (no addr) LD A, (8948h)
-	; (no addr) INC 1, A
-	; (no addr) EXTZ WA
-	; (no addr) LD BC, 2
-	CALR LABEL_F8B67F
-	; (no addr) LD XBC, XHL
-	; (no addr) LD XWA, XIZ
-	; (no addr) CALL LABEL_F89113
-	; (no addr) LD XWA, (8090h)
-	; (no addr) LD XBC, 01c0000fh
-	; (no addr) LD XDE, 00008094h
-	; (no addr) CALL ApPostEvent
+	ldada xwa, 32916
+	dpi3 0xE0, 0x00, 0x00
+	ld xbc, 0xEA073C
+	call LABEL_F890DC
+	ldada xiz, 32917
+	ldda8 a, 35144
+	inc 1, a
+	extz wa
+	lds bc, 2
+	calr LABEL_F8B67F
+	ld xbc, xhl
+	ld xwa, xiz
+	call LABEL_F89113
+	ldda32 xwa, 32912
+	ld xbc, 0x1C0000F
+	ld xde, 0x8094
+	call 0xFA9D58
 
 LABEL_F8DECD:
-	; (no addr) LD XHL, 0
-	; (no addr) POP XIZ
-	; (no addr) RET
+	lds32 xhl, 0
+	pop xiz
+	ret
 
 SmfSeqFromSongNumFunc:
-	; (no addr) PUSH XIZ
-	; (no addr) CP XBC, 01c0000bh
-	; (no addr) JR Z, LABEL_F8DEE8
-	; (no addr) CP XBC, 01e50004h
-	; (no addr) JR NZ, LABEL_F8DF24
-	; (no addr) LD (8114h), XDE
-	; (no addr) JR T, LABEL_F8DF24
+	push xiz
+	cp xbc, 0x1C0000B
+	jr z, LABEL_F8DEE8
+	cp xbc, 0x1E50004
+	jr nz, LABEL_F8DF24
+	stda32 33044, xde
+	jr LABEL_F8DF24
 
 LABEL_F8DEE8:
-	; (no addr) LDA XWA, 8118h
-	; (no addr) LD (XWA+), 000h
-	; (no addr) LD XBC, 00ea0748h
-	; (no addr) CALL LABEL_F890DC
-	; (no addr) LDA XIZ, 8119h
-	; (no addr) LD A, (8948h)
-	; (no addr) INC 1, A
-	; (no addr) EXTZ WA
-	; (no addr) LD BC, 2
-	CALR LABEL_F8B67F
-	; (no addr) LD XBC, XHL
-	; (no addr) LD XWA, XIZ
-	; (no addr) CALL LABEL_F89113
-	; (no addr) LD XWA, (8114h)
-	; (no addr) LD XBC, 01c0000fh
-	; (no addr) LD XDE, 00008118h
-	; (no addr) CALL ApPostEvent
+	ldada xwa, 33048
+	dpi3 0xE0, 0x00, 0x00
+	ld xbc, 0xEA0748
+	call LABEL_F890DC
+	ldada xiz, 33049
+	ldda8 a, 35144
+	inc 1, a
+	extz wa
+	lds bc, 2
+	calr LABEL_F8B67F
+	ld xbc, xhl
+	ld xwa, xiz
+	call LABEL_F89113
+	ldda32 xwa, 33044
+	ld xbc, 0x1C0000F
+	ld xde, 0x8118
+	call 0xFA9D58
 
 LABEL_F8DF24:
-	; (no addr) LD XHL, 0
-	; (no addr) POP XIZ
-	; (no addr) RET
+	lds32 xhl, 0
+	pop xiz
+	ret
 
 SmfSeqSongNameFunc:
-	; (no addr) CP XBC, 01c0000bh
-	; (no addr) JR Z, LABEL_F8DF3E
-	; (no addr) CP XBC, 01e50004h
-	; (no addr) JR NZ, LABEL_F8DF5A
-	; (no addr) LD (8198h), XDE
-	; (no addr) JR T, LABEL_F8DF5A
+	cp xbc, 0x1C0000B
+	jr z, LABEL_F8DF3E
+	cp xbc, 0x1E50004
+	jr nz, LABEL_F8DF5A
+	stda32 33176, xde
+	jr LABEL_F8DF5A
 
 LABEL_F8DF3E:
-	; (no addr) LD A, (8948h)
-	; (no addr) EXTZ WA
-	; (no addr) LD BC, 0
-	; (no addr) LD DE, 0
-	CALR LABEL_F919E3
-	; (no addr) LD XDE, XHL
-	; (no addr) LD XWA, (8198h)
-	; (no addr) LD XBC, 01c0000fh
-	; (no addr) CALL ApPostEvent
+	ldda8 a, 35144
+	extz wa
+	lds bc, 0
+	lds de, 0
+	calr LABEL_F919E3
+	ld xde, xhl
+	ldda32 xwa, 33176
+	ld xbc, 0x1C0000F
+	call 0xFA9D58
 
 LABEL_F8DF5A:
-	; (no addr) LD XHL, 0
-	; (no addr) RET
+	lds32 xhl, 0
+	ret
 
 SmfLoadAsFunc:
-	; (no addr) CP XBC, 01c0000bh
-	; (no addr) JR Z, LABEL_F8DF73
-	; (no addr) CP XBC, 01e50004h
-	; (no addr) JR NZ, LABEL_F8DF93
-	; (no addr) LD (819Ch), XDE
-	; (no addr) JR T, LABEL_F8DF93
+	cp xbc, 0x1C0000B
+	jr z, LABEL_F8DF73
+	cp xbc, 0x1E50004
+	jr nz, LABEL_F8DF93
+	stda32 33180, xde
+	jr LABEL_F8DF93
 
 LABEL_F8DF73:
-	; (no addr) LD A, (8946h)
-	; (no addr) EXTZ WA
-	; (no addr) SLA 002h, WA
-	; (no addr) LDA XBC, 0EA0754h
-	; (no addr) LD XDE, (XBC + WA)
-	; (no addr) LD XWA, (819Ch)
-	; (no addr) LD XBC, 01c0000fh
-	; (no addr) CALL ApPostEvent
+	ldda8 a, 35142
+	extz wa
+	sla wa, 2
+	ldada_24 xbc, 15337300
+	ld_xde_sril3 0x07, 0xE4, 0xE0
+	ldda32 xwa, 33180
+	ld xbc, 0x1C0000F
+	call 0xFA9D58
 
 LABEL_F8DF93:
-	; (no addr) LD XHL, 0
-	; (no addr) RET
+	lds32 xhl, 0
+	ret
 
 TrimAndPadSmfFilename:
-	; (no addr) LD IX, 0
-	; (no addr) LD XHL, XWA
-	; (no addr) JR T, LABEL_F8DFB6
+	lds ix, 0
+	ld xhl, xwa
+	jr LABEL_F8DFB6
 
 LABEL_F8DF9C:
-	; (no addr) CP E, 07eh
-	; (no addr) JR NZ, LABEL_F8DFA5
-	LD_E 0x5f
-	; (no addr) JR T, LABEL_F8DFAE
+	cp e, 0x7E
+	jr nz, LABEL_F8DFA5
+	ldb e, 0x5F
+	jr LABEL_F8DFAE
 
 LABEL_F8DFA5:
-	; (no addr) LD E, (XWA)
-	; (no addr) CP E, 020h
-	; (no addr) JR NC, LABEL_F8DFB0
-	LD_E 0x20
+	ld e, (xwa)
+	cp e, 0x20
+	jr nc, LABEL_F8DFB0
+	ldb e, 0x20
 
 LABEL_F8DFAE:
-	; (no addr) LD (XWA), E
+	ld (xwa), e
 
 LABEL_F8DFB0:
-	; (no addr) INC 1, IX
-	; (no addr) INC 1, XWA
-	; (no addr) INC 1, XHL
+	inc 1, ix
+	inc 1, xwa
+	inc 1, xhl
 
 LABEL_F8DFB6:
-	; (no addr) CP IX, BC
-	; (no addr) JR NC, LABEL_F8DFC0
-	; (no addr) LD E, (XHL)
-	; (no addr) CP E, 0
-	; (no addr) JR NZ, LABEL_F8DF9C
+	cp ix, bc
+	jr nc, LABEL_F8DFC0
+	ld e, (xhl)
+	cps e, 0
+	jr nz, LABEL_F8DF9C
 
 LABEL_F8DFC0:
-	; (no addr) CP IX, BC
-	; (no addr) JR NC, LABEL_F8DFCE
+	cp ix, bc
+	jr nc, LABEL_F8DFCE
 
 LABEL_F8DFC4:
-	; (no addr) LD (XWA+), 020h
-	; (no addr) INC 1, IX
-	; (no addr) CP IX, BC
-	; (no addr) JR C, LABEL_F8DFC4
+	dpi3 0xE0, 0x00, 0x20
+	inc 1, ix
+	cp ix, bc
+	jr c, LABEL_F8DFC4
 
 LABEL_F8DFCE:
-	; (no addr) LD (XWA), 000h
-	; (no addr) RET
+	ldmi8 (xwa), 0x0
+	ret
 
 DisplaySmfFileList:
-	; (no addr) DEC 6, XSP
-	; (no addr) PUSH IZ
-	; (no addr) LD (XSP + 002h), BC
-	; (no addr) LD (XSP + 004h), XWA
-	; (no addr) LD WA, 0
-	CALR InitializeOperationState
-	; (no addr) LD IZ, 0
+	dec 6, xsp
+	pushw iz
+	ld (xsp + 2), bc
+	ld (xsp + 4), xwa
+	lds wa, 0
+	calr InitializeOperationState
+	lds iz, 0
 
 LABEL_F8DFE2:
-	; (no addr) LD DE, IZ
-	; (no addr) SLL 5, DE
-	; (no addr) LDA XBC, 850Ch
-	; (no addr) EXTZ XDE
-	; (no addr) ADD XDE, XBC
-	; (no addr) LD A, IZL
-	; (no addr) LD (XDE), A
-	; (no addr) LD WA, (XSP + 002h)
-	; (no addr) ADD WA, IZ
-	; (no addr) CALL LABEL_F89BF0
-	; (no addr) LD XBC, XHL
-	; (no addr) LD WA, IZ
-	; (no addr) SLL 5, WA
-	; (no addr) LD DE, 1
-	; (no addr) ADD DE, WA
-	; (no addr) LDA XHL, 850Ch
-	; (no addr) LD WA, DE
-	; (no addr) EXTZ XWA
-	; (no addr) ADD XWA, XHL
-	; (no addr) LD DE, (XSP + 002h)
-	; (no addr) ADD DE, IZ
-	; (no addr) INC 1, DE
-	; (no addr) PUSHW 000ch
-	; (no addr) PUSHW 0001h
-	; (no addr) CALL LABEL_F891DD
-	; (no addr) LD DE, IZ
-	; (no addr) SLL 5, DE
-	; (no addr) LDA XBC, 850Ch
-	; (no addr) EXTZ XDE
-	; (no addr) ADD XDE, XBC
-	; (no addr) LD XWA, (XSP + 004h)
-	; (no addr) LD XBC, 01c0000fh
-	; (no addr) CALL ApPostEvent
-	; (no addr) INC 1, IZ
-	; (no addr) CP IZ, 000ah
-	; (no addr) JR LT, LABEL_F8DFE2
-	; (no addr) POP IZ
-	; (no addr) INC 6, XSP
-	; (no addr) RET
+	ld de, iz
+	sll de, 5
+	ldada xbc, 34060
+	extz xde
+	add xde, xbc
+	ldto_a_berp 0xF8
+	ld (xde), a
+	ld wa, (xsp + 2)
+	add wa, iz
+	call LABEL_F89BF0
+	ld xbc, xhl
+	ld wa, iz
+	sll wa, 5
+	lds de, 1
+	add de, wa
+	ldada xhl, 34060
+	ld wa, de
+	extz xwa
+	add xwa, xhl
+	ld de, (xsp + 2)
+	add de, iz
+	inc 1, de
+	pushw 0xC
+	pushw 0x1
+	call LABEL_F891DD
+	ld de, iz
+	sll de, 5
+	ldada xbc, 34060
+	extz xde
+	add xde, xbc
+	ld xwa, (xsp + 4)
+	ld xbc, 0x1C0000F
+	call 0xFA9D58
+	inc 1, iz
+	cp iz, 0xA
+	jr lt, LABEL_F8DFE2
+	popw iz
+	inc 6, xsp
+	ret
 
 ValidateSmfFilename:
-	; (no addr) LD IY, 0
-	; (no addr) LD HL, 0
-	; (no addr) JR T, LABEL_F8E05A
+	lds iy, 0
+	lds hl, 0
+	jr LABEL_F8E05A
 
 LABEL_F8E04E:
-	; (no addr) CP E, 020h
-	; (no addr) JR Z, LABEL_F8E056
-	LD_L 0x0
-	; (no addr) RET
+	cp e, 0x20
+	jr z, LABEL_F8E056
+	ldb l, 0x0
+	ret
 
 LABEL_F8E056:
-	; (no addr) INC 1, IY
-	; (no addr) INC 1, HL
+	inc 1, iy
+	inc 1, hl
 
 LABEL_F8E05A:
-	; (no addr) LD E, (XWA + IY)
-	; (no addr) CP E, 0
-	; (no addr) JR Z, LABEL_F8E067
-	; (no addr) CP HL, BC
-	; (no addr) JR C, LABEL_F8E04E
+	ld_e_srib3 0x07, 0xE0, 0xF4
+	cps e, 0
+	jr z, LABEL_F8E067
+	cp hl, bc
+	jr c, LABEL_F8E04E
 
 LABEL_F8E067:
-	LD_L 0x1
-	; (no addr) RET
+	ldb l, 0x1
+	ret
 
 FmmSmfFileNameFunc:
-	; (no addr) LDA XSP, XSP - 020h
-	; (no addr) PUSH XIZ
-	; (no addr) LD XIZ, XDE
-	; (no addr) LD (XSP + 01ch), XBC
-	; (no addr) LD (XSP + 020h), XWA
-	; (no addr) LD XDE, (XSP + 01ch)
-	; (no addr) LD XWA, (81A0h)
-	; (no addr) LD XBC, (XSP + 01ch)
-	; (no addr) CP XBC, 01c00018h
-	; (no addr) JRL Z, LABEL_F8E134
-	; (no addr) CP XBC, 01c00017h
-	; (no addr) JRL Z, LABEL_F8E134
-	; (no addr) CP XBC, 01c0000bh
-	; (no addr) JRL Z, LABEL_F8E11E
-	; (no addr) LD XBC, XIZ
-	; (no addr) SUB XDE, 01e50002h
-	; (no addr) CP XDE, 00000000h
-	; (no addr) JRL LT, LABEL_F8E12F
-	; (no addr) CP XDE, 00000005h
-	; (no addr) JR GT, LABEL_F8E12F
-	; (no addr) ADD XDE, XDE
-	; (no addr) ADD XDE, 00ea079eh
-	; (no addr) LD DE, (XDE)
-	; (no addr) LDA XIX, 0F8E0C8h
-	; (no addr) JP T, XIX + DE
+	lda xsp, (xsp - 32)
+	push xiz
+	ld xiz, xde
+	ld (xsp + 28), xbc
+	ld (xsp + 32), xwa
+	ld xde, (xsp + 28)
+	ldda32 xwa, 33184
+	ld xbc, (xsp + 28)
+	cp xbc, 0x1C00018
+	jrl z, LABEL_F8E134
+	cp xbc, 0x1C00017
+	jrl z, LABEL_F8E134
+	cp xbc, 0x1C0000B
+	jrl z, LABEL_F8E11E
+	ld xbc, xiz
+	sub xde, 0x1E50002
+	cp xde, 0x0
+	jrl lt, LABEL_F8E12F
+	cp xde, 0x5
+	jr gt, LABEL_F8E12F
+	add xde, xde
+	add xde, 0xEA079E
+	ld de, (xde)
+	ldada_24 xix, 16310472
+	dri4 0x07, 0xF0, 0xE8, 0xD8
 LABEL_F8E0C8:
-	.byte 0xF1, 0xA0, 0x81, 0x61, 0xE8, 0xA8, 0xF1, 0xA4
-	.byte 0x81, 0x60, 0xF1, 0xA8, 0x81, 0x60, 0xC1, 0x36
-	.byte 0x8D, 0x3F, 0x6B, 0x66, 0x14, 0x1D, 0xC7, 0x9A
-	.byte 0xF8, 0xF1, 0xAC, 0x81, 0x53, 0xDB, 0xD8, 0x69
-	.byte 0x1A, 0xF1, 0xAC, 0x81, 0x2, 0x0, 0x0, 0x68
-	.byte 0x12, 0xD1, 0x4, 0x85, 0x20, 0xF1, 0xAC, 0x81
-	.byte 0x50, 0xD8, 0xD8, 0x62, 0x2, 0xD8, 0x69, 0x1D
-	.byte 0xA4, 0x9B, 0xF8, 0xD1, 0xAC, 0x81, 0x20, 0xE8
-	.byte 0x13, 0xD8, 0xB, 0xA, 0x0, 0xD7, 0xE2, 0x8A
-	.byte 0xEA, 0x13, 0xE1, 0xA0, 0x81, 0x20, 0x41, 0x2
-	.byte 0x0, 0xE5, 0x1, 0x78, 0x89, 0x7
+	.byte 0xf1, 0xa0, 0x81, 0x61, 0xe8, 0xa8, 0xf1, 0xa4
+	.byte 0x81, 0x60, 0xf1, 0xa8, 0x81, 0x60, 0xc1, 0x36
+	.byte 0x8d, 0x3f, 0x6b, 0x66, 0x14, 0x1d, 0xc7, 0x9a
+	.byte 0xf8, 0xf1, 0xac, 0x81, 0x53, 0xdb, 0xd8, 0x69
+	.byte 0x1a, 0xf1, 0xac, 0x81, 0x02, 0x00, 0x00, 0x68
+	.byte 0x12, 0xd1, 0x04, 0x85, 0x20, 0xf1, 0xac, 0x81
+	.byte 0x50, 0xd8, 0xd8, 0x62, 0x02, 0xd8, 0x69, 0x1d
+	.byte 0xa4, 0x9b, 0xf8, 0xd1, 0xac, 0x81, 0x20, 0xe8
+	.byte 0x13, 0xd8, 0x0b, 0x0a, 0x00, 0xd7, 0xe2, 0x8a
+	.byte 0xea, 0x13, 0xe1, 0xa0, 0x81, 0x20, 0x41, 0x02
+	.byte 0x00, 0xe5, 0x01, 0x78, 0x89, 0x07
 
 LABEL_F8E11E:
-	; (no addr) LD BC, (81ACh)
-	; (no addr) EXTS XBC
-	DIVS_BC 0xa
-	MULS_BC 0xa
-	CALR DisplaySmfFileList
+	ldda16 xbc, 33196
+	exts xbc
+	divs bc, 0xA
+	muls bc, 0xA
+	calr DisplaySmfFileList
 
 LABEL_F8E12F:
-	; (no addr) LD XHL, 0
-	; (no addr) JRL T, LABEL_F8E8B4
+	lds32 xhl, 0
+	jrl LABEL_F8E8B4
 
 LABEL_F8E134:
-	; (no addr) LD XBC, 01c50001h
-	; (no addr) LD XDE, 1
-	; (no addr) CALL ApPostEvent
-	; (no addr) LD IX, (81ACh)
-	; (no addr) LD (XSP + 004h), IX
-	; (no addr) OR XIZ, XIZ
-	; (no addr) JR NZ, LABEL_F8E192
-	; (no addr) CP (84FEh), 000h
-	; (no addr) JR NZ, LABEL_F8E192
-	; (no addr) LD XWA, (XSP + 01ch)
-	; (no addr) CP XWA, 01c00018h
-	; (no addr) JR NZ, LABEL_F8E180
-	; (no addr) LD BC, IX
-	; (no addr) INC 1, BC
-	; (no addr) CP (8D36h), 06bh
-	; (no addr) JR Z, LABEL_F8E170
-	; (no addr) CP BC, (8504h)
-	; (no addr) JR LT, LABEL_F8E17B
-	; (no addr) JRL T, LABEL_F8E75D
+	ld xbc, 0x1C50001
+	lds32 xde, 1
+	call 0xFA9D58
+	ldda16 xix, 33196
+	ld (xsp + 4), ix
+	or xiz, xiz
+	jr nz, LABEL_F8E192
+	cpdi8 34046, 0
+	jr nz, LABEL_F8E192
+	ld xwa, (xsp + 28)
+	cp xwa, 0x1C00018
+	jr nz, LABEL_F8E180
+	ld bc, ix
+	inc 1, bc
+	cpdi8 36150, 107
+	jr z, LABEL_F8E170
+	cpda16 xbc, 34052
+	jr lt, LABEL_F8E17B
+	jrl LABEL_F8E75D
 
 LABEL_F8E170:
-	; (no addr) LD WA, (8504h)
-	; (no addr) INC 1, WA
-	; (no addr) CP BC, WA
-	; (no addr) JRL GE, LABEL_F8E75D
+	ldda16 xwa, 34052
+	inc 1, wa
+	cp bc, wa
+	jrl ge, LABEL_F8E75D
 
 LABEL_F8E17B:
-	; (no addr) INC 1, IX
-	; (no addr) JRL T, LABEL_F8E211
+	inc 1, ix
+	jrl LABEL_F8E211
 
 LABEL_F8E180:
-	; (no addr) CP XWA, 01c00017h
-	; (no addr) JRL NZ, LABEL_F8E75D
-	; (no addr) CP IX, 0
-	; (no addr) JRL LE, LABEL_F8E75D
-	; (no addr) DEC 1, IX
-	; (no addr) JR T, LABEL_F8E211
+	cp xwa, 0x1C00017
+	jrl nz, LABEL_F8E75D
+	cps ix, 0
+	jrl le, LABEL_F8E75D
+	dec 1, ix
+	jr LABEL_F8E211
 
 LABEL_F8E192:
-	; (no addr) CP XIZ, 00000001h
-	; (no addr) JR NZ, LABEL_F8E1AE
-	; (no addr) CP (84FEh), 000h
-	; (no addr) JR NZ, LABEL_F8E1AE
-	; (no addr) CP IX, 000ah
-	; (no addr) JRL LT, LABEL_F8E75D
-	; (no addr) SUB IX, 000ah
-	; (no addr) JR T, LABEL_F8E211
+	cp xiz, 0x1
+	jr nz, LABEL_F8E1AE
+	cpdi8 34046, 0
+	jr nz, LABEL_F8E1AE
+	cp ix, 0xA
+	jrl lt, LABEL_F8E75D
+	sub ix, 0xA
+	jr LABEL_F8E211
 
 LABEL_F8E1AE:
-	; (no addr) CP XIZ, 00000002h
-	; (no addr) JRL NZ, LABEL_F8E23C
-	; (no addr) CP (84FEh), 000h
-	; (no addr) JR NZ, LABEL_F8E23C
-	; (no addr) LD IY, IX
-	; (no addr) ADD IY, 000ah
-	; (no addr) LD BC, (8504h)
-	; (no addr) LD DE, IX
-	; (no addr) EXTS XDE
-	DIVS_DE 0xa
-	; (no addr) CP (8D36h), 06bh
-	; (no addr) JR Z, LABEL_F8E205
-	; (no addr) LD HL, BC
-	; (no addr) CP IY, BC
-	; (no addr) JR LT, LABEL_F8E20D
-	; (no addr) LD BC, HL
-	; (no addr) DEC 1, BC
-	; (no addr) LD WA, BC
-	; (no addr) EXTS XWA
-	DIVS_WA 0xa
-	; (no addr) CP DE, WA
-	; (no addr) JRL GE, LABEL_F8E75D
-	; (no addr) EXTS XHL
-	DIVS_HL 0xa
-	; (no addr) LD WA, QHL
-	; (no addr) CP WA, 0
-	; (no addr) JRL Z, LABEL_F8E75D
-	; (no addr) LD (81ACh), BC
-	; (no addr) LD HL, BC
-	; (no addr) JRL T, LABEL_F8E761
+	cp xiz, 0x2
+	jrl nz, LABEL_F8E23C
+	cpdi8 34046, 0
+	jr nz, LABEL_F8E23C
+	ld iy, ix
+	add iy, 0xA
+	ldda16 xbc, 34052
+	ld de, ix
+	exts xde
+	divs de, 0xA
+	cpdi8 36150, 107
+	jr z, LABEL_F8E205
+	ld hl, bc
+	cp iy, bc
+	jr lt, LABEL_F8E20D
+	ld bc, hl
+	dec 1, bc
+	ld wa, bc
+	exts xwa
+	divs wa, 0xA
+	cp de, wa
+	jrl ge, LABEL_F8E75D
+	exts xhl
+	divs hl, 0xA
+	ldto_wa_werp 0xEE
+	cps wa, 0
+	jrl z, LABEL_F8E75D
+	stda16 33196, xbc
+	ld hl, bc
+	jrl LABEL_F8E761
 
 LABEL_F8E205:
-	; (no addr) LD HL, BC
-	; (no addr) INC 1, BC
-	; (no addr) CP IY, BC
-	; (no addr) JR GE, LABEL_F8E21A
+	ld hl, bc
+	inc 1, bc
+	cp iy, bc
+	jr ge, LABEL_F8E21A
 
 LABEL_F8E20D:
-	; (no addr) ADD IX, 000ah
+	add ix, 0xA
 
 LABEL_F8E211:
-	; (no addr) LD (81ACh), IX
-	; (no addr) LD HL, IX
-	; (no addr) JRL T, LABEL_F8E761
+	stda16 33196, xix
+	ld hl, ix
+	jrl LABEL_F8E761
 
 LABEL_F8E21A:
-	; (no addr) LD WA, HL
-	; (no addr) EXTS XWA
-	DIVS_WA 0xa
-	; (no addr) CP DE, WA
-	; (no addr) JRL GE, LABEL_F8E75D
-	; (no addr) EXTS XBC
-	DIVS_BC 0xa
-	; (no addr) LD WA, QBC
-	; (no addr) CP WA, 0
-	; (no addr) JRL Z, LABEL_F8E75D
-	; (no addr) LD (81ACh), HL
-	; (no addr) JRL T, LABEL_F8E761
+	ld wa, hl
+	exts xwa
+	divs wa, 0xA
+	cp de, wa
+	jrl ge, LABEL_F8E75D
+	exts xbc
+	divs bc, 0xA
+	ldto_wa_werp 0xE6
+	cps wa, 0
+	jrl z, LABEL_F8E75D
+	stda16 33196, xhl
+	jrl LABEL_F8E761
 
 LABEL_F8E23C:
-	; (no addr) CP XIZ, 00000003h
-	; (no addr) JRL NZ, LABEL_F8E348
-	; (no addr) LD XWA, 00600026h
-	; (no addr) LD XBC, 01c00001h
-	; (no addr) LD XDE, 5
-	; (no addr) CALL ApPostEvent
-	; (no addr) LD WA, 0
-	CALR InitializeOperationState
-	; (no addr) LD A, (8948h)
-	; (no addr) EXTZ WA
-	; (no addr) LD C, (8946h)
-	; (no addr) EXTZ BC
-	; (no addr) CALL LoadFileSMF
-	; (no addr) LD (XSP + 006h), HL
-	CALR SignalProgressUpdate
-	; (no addr) CPW (XSP + 006h), 0000h
-	; (no addr) JR LT, LABEL_F8E2F3
-	; (no addr) LD WA, (81ACh)
-	; (no addr) CALL LABEL_F8A07F
-	; (no addr) LD XBC, XHL
-	; (no addr) LDA XWA, XSP + 008h
-	; (no addr) LD DE, 0010h
-	; (no addr) CALL LABEL_F890F2
-	; (no addr) LDA XWA, XSP + 008h
-	; (no addr) LD BC, 0010h
-	CALR ValidateSmfFilename
-	; (no addr) CP L, 0
-	; (no addr) JR Z, LABEL_F8E2AC
-	; (no addr) LD WA, (81ACh)
-	; (no addr) CALL LABEL_F89BF0
-	; (no addr) LD XBC, XHL
-	; (no addr) LDA XWA, XSP + 008h
-	; (no addr) LD DE, 0008h
-	; (no addr) CALL LABEL_F890F2
+	cp xiz, 0x3
+	jrl nz, LABEL_F8E348
+	ld xwa, 0x600026
+	ld xbc, 0x1C00001
+	lds32 xde, 5
+	call 0xFA9D58
+	lds wa, 0
+	calr InitializeOperationState
+	ldda8 a, 35144
+	extz wa
+	ldda8 c, 35142
+	extz bc
+	call 0xF88005
+	ld (xsp + 6), hl
+	calr SignalProgressUpdate
+	cpmi16 (xsp + 6), 0x0
+	jr lt, LABEL_F8E2F3
+	ldda16 xwa, 33196
+	call LABEL_F8A07F
+	ld xbc, xhl
+	lda xwa, (xsp + 8)
+	ldw de, 0x10
+	call LABEL_F890F2
+	lda xwa, (xsp + 8)
+	ldw bc, 0x10
+	calr ValidateSmfFilename
+	cps l, 0
+	jr z, LABEL_F8E2AC
+	ldda16 xwa, 33196
+	call LABEL_F89BF0
+	ld xbc, xhl
+	lda xwa, (xsp + 8)
+	ldw de, 0x8
+	call LABEL_F890F2
 
 LABEL_F8E2AC:
-	; (no addr) LDA XWA, XSP + 008h
-	; (no addr) LD BC, 0010h
-	CALR TrimAndPadSmfFilename
-	; (no addr) LDA XWA, 0AB000h
-	; (no addr) LD XBC, 0
-	; (no addr) LD C, (8948h)
-	; (no addr) SLL 11, XBC
-	; (no addr) ADD XWA, XBC
-	; (no addr) LDA XWA, XWA + 0100h
-	; (no addr) LDA XBC, XSP + 008h
-	; (no addr) LD DE, 0010h
-	; (no addr) CALL LABEL_F890F2
-	; (no addr) LD A, (00FFE3h:24)
-	; (no addr) CP A, (8948h)
-	; (no addr) JR NZ, LABEL_F8E2F3
-	; (no addr) LDA XWA, 0F180h:24
-	; (no addr) LDA XWA, XWA + 0100h
-	; (no addr) LDA XBC, XSP + 008h
-	; (no addr) LD DE, 0010h
-	; (no addr) CALL LABEL_F890F2
+	lda xwa, (xsp + 8)
+	ldw bc, 0x10
+	calr TrimAndPadSmfFilename
+	ldada_24 xwa, 700416
+	lds32 xbc, 0
+	ldda8 c, 35144
+	sll xbc, 11
+	add xwa, xbc
+	st_w_dri3 0xE1, 0x00, 0x01
+	lda xbc, (xsp + 8)
+	ldw de, 0x10
+	call LABEL_F890F2
+	ldda8_24 a, 65507
+	cpda8 a, 35144
+	jr nz, LABEL_F8E2F3
+	ldada_24 xwa, 61824
+	st_w_dri3 0xE1, 0x00, 0x01
+	lda xbc, (xsp + 8)
+	ldw de, 0x10
+	call LABEL_F890F2
 
 LABEL_F8E2F3:
-	; (no addr) LD XWA, 00600026h
-	; (no addr) LD XBC, 01c00002h
-	; (no addr) LD XDE, 0
-	; (no addr) CALL ApPostEvent
-	; (no addr) LD XWA, 0ffffffffh
-	; (no addr) LD XBC, 01e0009eh
-	; (no addr) LD XDE, 1
-	; (no addr) CALL ApPostEvent
-	; (no addr) CPW (0F19Eh), 0000h
-	; (no addr) JR Z, LABEL_F8E320
-	; (no addr) LD WA, 000ah
-	; (no addr) JR T, LABEL_F8E322
+	ld xwa, 0x600026
+	ld xbc, 0x1C00002
+	lds32 xde, 0
+	call 0xFA9D58
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1E0009E
+	lds32 xde, 1
+	call 0xFA9D58
+	cpdi16 61854, 0
+	jr z, LABEL_F8E320
+	ldw wa, 0xA
+	jr LABEL_F8E322
 
 LABEL_F8E320:
-	; (no addr) LD WA, 1
+	lds wa, 1
 
 LABEL_F8E322:
-	; (no addr) CALL LABEL_F99463
-	; (no addr) LD WA, (XSP + 006h)
-	; (no addr) LD BC, 1
-	CALR LABEL_F8B48E
-	; (no addr) LD (7F42h), L
-	; (no addr) LD XWA, 0ffffffffh
-	; (no addr) LD XBC, 01e0009eh
-	; (no addr) LD XDE, 0
-	; (no addr) CALL ApPostEvent
-	; (no addr) LD WA, 00eeh
-	; (no addr) JRL T, LABEL_F8E5A5
+	call LABEL_F99463
+	ld wa, (xsp + 6)
+	lds bc, 1
+	calr LABEL_F8B48E
+	stda8 32578, l
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1E0009E
+	lds32 xde, 0
+	call 0xFA9D58
+	ldw wa, 0xEE
+	jrl LABEL_F8E5A5
 
 LABEL_F8E348:
-	; (no addr) CP XIZ, 00000004h
-	; (no addr) JRL NZ, LABEL_F8E41B
-	; (no addr) LD XWA, 00600026h
-	; (no addr) LD XBC, 01c00001h
-	; (no addr) LD XDE, 5
-	; (no addr) CALL ApPostEvent
-	; (no addr) CALL LABEL_F892D5
-	; (no addr) LD XWA, XHL
-	; (no addr) CALL LABEL_F8947D
-	; (no addr) CP L, 0
-	; (no addr) JR Z, LABEL_F8E3A6
-	; (no addr) CP (0340EAh), 000h
-	; (no addr) JR Z, LABEL_F8E3A6
-	; (no addr) LD XWA, 00600026h
-	; (no addr) LD XBC, 01c00002h
-	; (no addr) LD XDE, 0
-	; (no addr) CALL ApPostEvent
-	; (no addr) LD XWA, 0ffffffffh
-	; (no addr) LD XBC, 01c50000h
-	; (no addr) LD XDE, 1
-	; (no addr) CALL ApPostEvent
-	; (no addr) LD XWA, 00600037h
-	; (no addr) LD XBC, 01c00001h
-	; (no addr) LD XDE, 0
-	; (no addr) JRL T, LABEL_F8E759
+	cp xiz, 0x4
+	jrl nz, LABEL_F8E41B
+	ld xwa, 0x600026
+	ld xbc, 0x1C00001
+	lds32 xde, 5
+	call 0xFA9D58
+	call LABEL_F892D5
+	ld xwa, xhl
+	call LABEL_F8947D
+	cps l, 0
+	jr z, LABEL_F8E3A6
+	cpdi8_24 213226, 0
+	jr z, LABEL_F8E3A6
+	ld xwa, 0x600026
+	ld xbc, 0x1C00002
+	lds32 xde, 0
+	call 0xFA9D58
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C50000
+	lds32 xde, 1
+	call 0xFA9D58
+	ld xwa, 0x600037
+	ld xbc, 0x1C00001
+	lds32 xde, 0
+	jrl LABEL_F8E759
 
 LABEL_F8E3A6:
-	; (no addr) LD WA, 0
-	CALR InitializeOperationState
-	; (no addr) LD A, (8948h)
-	; (no addr) EXTZ WA
-	; (no addr) LD C, (894Ah)
-	; (no addr) EXTZ BC
-	; (no addr) LD E, (894Ch)
-	; (no addr) EXTZ DE
-	; (no addr) CALL LABEL_F8805B
-	; (no addr) LD WA, HL
-	; (no addr) LD BC, 5
-	CALR LABEL_F8B48E
-	; (no addr) LD (7F42h), L
-	; (no addr) CALL LABEL_F89568
-	; (no addr) CALL GetEncodedFreeSpaceData
-	; (no addr) CALL GetFileCountEncoded
-	; (no addr) LD (8504h), HL
-	CALR SignalProgressUpdate
-	; (no addr) LD XWA, 00600026h
-	; (no addr) LD XBC, 01c00002h
-	; (no addr) LD XDE, 0
-	; (no addr) CALL ApPostEvent
-	; (no addr) LD XWA, 0ffffffffh
-	; (no addr) LD XBC, 01e0009eh
-	; (no addr) LD XDE, 1
-	; (no addr) CALL ApPostEvent
-	; (no addr) LD WA, 1
-	; (no addr) CALL LABEL_F99463
-	; (no addr) LD XWA, 0ffffffffh
-	; (no addr) LD XBC, 01e0009eh
-	; (no addr) LD XDE, 0
-	; (no addr) CALL ApPostEvent
-	; (no addr) LD WA, 00eeh
-	; (no addr) JRL T, LABEL_F8E5A5
+	lds wa, 0
+	calr InitializeOperationState
+	ldda8 a, 35144
+	extz wa
+	ldda8 c, 35146
+	extz bc
+	ldda8 e, 35148
+	extz de
+	call LABEL_F8805B
+	ld wa, hl
+	lds bc, 5
+	calr LABEL_F8B48E
+	stda8 32578, l
+	call LABEL_F89568
+	call 0xF8953B
+	call 0xF89C78
+	stda16 34052, xhl
+	calr SignalProgressUpdate
+	ld xwa, 0x600026
+	ld xbc, 0x1C00002
+	lds32 xde, 0
+	call 0xFA9D58
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1E0009E
+	lds32 xde, 1
+	call 0xFA9D58
+	lds wa, 1
+	call LABEL_F99463
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1E0009E
+	lds32 xde, 0
+	call 0xFA9D58
+	ldw wa, 0xEE
+	jrl LABEL_F8E5A5
 
 LABEL_F8E41B:
-	; (no addr) CP XIZ, 00000032h
-	; (no addr) JRL NZ, LABEL_F8E4A9
-	; (no addr) LD XWA, 00600026h
-	; (no addr) LD XBC, 01c00001h
-	; (no addr) LD XDE, 5
-	; (no addr) CALL ApPostEvent
-	; (no addr) LD WA, 0
-	CALR InitializeOperationState
-	; (no addr) LD A, (8948h)
-	; (no addr) EXTZ WA
-	; (no addr) LD C, (894Ah)
-	; (no addr) EXTZ BC
-	; (no addr) LD E, (894Ch)
-	; (no addr) EXTZ DE
-	; (no addr) CALL LABEL_F8805B
-	; (no addr) LD WA, HL
-	; (no addr) LD BC, 5
-	CALR LABEL_F8B48E
-	; (no addr) LD (7F42h), L
-	; (no addr) CALL LABEL_F89568
-	; (no addr) CALL GetEncodedFreeSpaceData
-	; (no addr) CALL GetFileCountEncoded
-	; (no addr) LD (8504h), HL
-	CALR SignalProgressUpdate
-	; (no addr) LD XWA, 00600026h
-	; (no addr) LD XBC, 01c00002h
-	; (no addr) LD XDE, 0
-	; (no addr) CALL ApPostEvent
-	; (no addr) LD XWA, 0ffffffffh
-	; (no addr) LD XBC, 01e0009eh
-	; (no addr) LD XDE, 1
-	; (no addr) CALL ApPostEvent
-	; (no addr) LD WA, 1
-	; (no addr) CALL LABEL_F99463
-	; (no addr) LD XWA, 0ffffffffh
-	; (no addr) LD XBC, 01e0009eh
-	; (no addr) LD XDE, 0
-	; (no addr) CALL ApPostEvent
-	; (no addr) LD WA, 00eeh
-	; (no addr) JRL T, LABEL_F8E5A5
+	cp xiz, 0x32
+	jrl nz, LABEL_F8E4A9
+	ld xwa, 0x600026
+	ld xbc, 0x1C00001
+	lds32 xde, 5
+	call 0xFA9D58
+	lds wa, 0
+	calr InitializeOperationState
+	ldda8 a, 35144
+	extz wa
+	ldda8 c, 35146
+	extz bc
+	ldda8 e, 35148
+	extz de
+	call LABEL_F8805B
+	ld wa, hl
+	lds bc, 5
+	calr LABEL_F8B48E
+	stda8 32578, l
+	call LABEL_F89568
+	call 0xF8953B
+	call 0xF89C78
+	stda16 34052, xhl
+	calr SignalProgressUpdate
+	ld xwa, 0x600026
+	ld xbc, 0x1C00002
+	lds32 xde, 0
+	call 0xFA9D58
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1E0009E
+	lds32 xde, 1
+	call 0xFA9D58
+	lds wa, 1
+	call LABEL_F99463
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1E0009E
+	lds32 xde, 0
+	call 0xFA9D58
+	ldw wa, 0xEE
+	jrl LABEL_F8E5A5
 
 LABEL_F8E4A9:
-	; (no addr) CP XIZ, 00000005h
-	; (no addr) JRL NZ, LABEL_F8E53C
-	; (no addr) CP (0340EAh), 000h
-	; (no addr) JR Z, LABEL_F8E4D9
-	; (no addr) LD XWA, 0ffffffffh
-	; (no addr) LD XBC, 01c50000h
-	; (no addr) LD XDE, 1
-	; (no addr) CALL ApPostEvent
-	; (no addr) LD XWA, 007b0051h
-	; (no addr) LD XBC, 01c00001h
-	; (no addr) LD XDE, 0
-	; (no addr) JRL T, LABEL_F8E759
+	cp xiz, 0x5
+	jrl nz, LABEL_F8E53C
+	cpdi8_24 213226, 0
+	jr z, LABEL_F8E4D9
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C50000
+	lds32 xde, 1
+	call 0xFA9D58
+	ld xwa, 0x7B0051
+	ld xbc, 0x1C00001
+	lds32 xde, 0
+	jrl LABEL_F8E759
 
 LABEL_F8E4D9:
-	; (no addr) LD XWA, 00600026h
-	; (no addr) LD XBC, 01c00001h
-	; (no addr) LD XDE, 5
-	; (no addr) CALL ApPostEvent
-	; (no addr) LD WA, 0
-	CALR InitializeOperationState
-	; (no addr) CALL LABEL_F88B22
-	; (no addr) LD WA, HL
-	; (no addr) LD BC, 5
-	CALR LABEL_F8B48E
-	; (no addr) LD (7F42h), L
-	CALR SignalProgressUpdate
-	; (no addr) CALL LABEL_F89568
-	; (no addr) CALL GetEncodedFreeSpaceData
-	; (no addr) CALL GetFileCountEncoded
-	; (no addr) LD (8504h), HL
-	; (no addr) LD XWA, 00600026h
-	; (no addr) LD XBC, 01c00002h
-	; (no addr) LD XDE, 0
-	; (no addr) CALL ApPostEvent
-	; (no addr) LD WA, (81ACh)
-	; (no addr) CP WA, (8504h)
-	; (no addr) JR LT, LABEL_F8E537
-	; (no addr) CP WA, 0
-	; (no addr) JR LE, LABEL_F8E537
-	; (no addr) DEC 1, WA
-	; (no addr) LD (81ACh), WA
-	; (no addr) LD (XSP + 004h), WA
+	ld xwa, 0x600026
+	ld xbc, 0x1C00001
+	lds32 xde, 5
+	call 0xFA9D58
+	lds wa, 0
+	calr InitializeOperationState
+	call LABEL_F88B22
+	ld wa, hl
+	lds bc, 5
+	calr LABEL_F8B48E
+	stda8 32578, l
+	calr SignalProgressUpdate
+	call LABEL_F89568
+	call 0xF8953B
+	call 0xF89C78
+	stda16 34052, xhl
+	ld xwa, 0x600026
+	ld xbc, 0x1C00002
+	lds32 xde, 0
+	call 0xFA9D58
+	ldda16 xwa, 33196
+	cpda16 xwa, 34052
+	jr lt, LABEL_F8E537
+	cps wa, 0
+	jr le, LABEL_F8E537
+	dec 1, wa
+	stda16 33196, xwa
+	ld (xsp + 4), wa
 
 LABEL_F8E537:
-	; (no addr) LD WA, 00eeh
-	; (no addr) JR T, LABEL_F8E5A5
+	ldw wa, 0xEE
+	jr LABEL_F8E5A5
 
 LABEL_F8E53C:
-	; (no addr) CP XIZ, 00000033h
-	; (no addr) JR NZ, LABEL_F8E5AC
-	; (no addr) LD XWA, 00600026h
-	; (no addr) LD XBC, 01c00001h
-	; (no addr) LD XDE, 5
-	; (no addr) CALL ApPostEvent
-	; (no addr) LD WA, 0
-	CALR InitializeOperationState
-	; (no addr) CALL LABEL_F88B22
-	; (no addr) LD WA, HL
-	; (no addr) LD BC, 5
-	CALR LABEL_F8B48E
-	; (no addr) LD (7F42h), L
-	CALR SignalProgressUpdate
-	; (no addr) CALL LABEL_F89568
-	; (no addr) CALL GetEncodedFreeSpaceData
-	; (no addr) CALL GetFileCountEncoded
-	; (no addr) LD (8504h), HL
-	; (no addr) LD XWA, 00600026h
-	; (no addr) LD XBC, 01c00002h
-	; (no addr) LD XDE, 0
-	; (no addr) CALL ApPostEvent
-	; (no addr) LD WA, (81ACh)
-	; (no addr) CP WA, (8504h)
-	; (no addr) JR LT, LABEL_F8E5A2
-	; (no addr) CP WA, 0
-	; (no addr) JR LE, LABEL_F8E5A2
-	; (no addr) DEC 1, WA
-	; (no addr) LD (81ACh), WA
-	; (no addr) LD (XSP + 004h), WA
+	cp xiz, 0x33
+	jr nz, LABEL_F8E5AC
+	ld xwa, 0x600026
+	ld xbc, 0x1C00001
+	lds32 xde, 5
+	call 0xFA9D58
+	lds wa, 0
+	calr InitializeOperationState
+	call LABEL_F88B22
+	ld wa, hl
+	lds bc, 5
+	calr LABEL_F8B48E
+	stda8 32578, l
+	calr SignalProgressUpdate
+	call LABEL_F89568
+	call 0xF8953B
+	call 0xF89C78
+	stda16 34052, xhl
+	ld xwa, 0x600026
+	ld xbc, 0x1C00002
+	lds32 xde, 0
+	call 0xFA9D58
+	ldda16 xwa, 33196
+	cpda16 xwa, 34052
+	jr lt, LABEL_F8E5A2
+	cps wa, 0
+	jr le, LABEL_F8E5A2
+	dec 1, wa
+	stda16 33196, xwa
+	ld (xsp + 4), wa
 
 LABEL_F8E5A2:
-	; (no addr) LD WA, 00eeh
+	ldw wa, 0xEE
 
 LABEL_F8E5A5:
-	; (no addr) CALL LABEL_F994BD
-	; (no addr) JRL T, LABEL_F8E75D
+	call LABEL_F994BD
+	jrl LABEL_F8E75D
 
 LABEL_F8E5AC:
-	; (no addr) CP XIZ, 0000000ah
-	; (no addr) JRL Z, LABEL_F8E75D
-	; (no addr) CP XIZ, 0000000bh
-	; (no addr) JRL Z, LABEL_F8E75D
-	; (no addr) CP XIZ, 0000000ch
-	; (no addr) JRL Z, LABEL_F8E75D
-	; (no addr) CP XIZ, 0000000dh
-	; (no addr) JRL Z, LABEL_F8E75D
-	; (no addr) CP XIZ, 00000014h
-	; (no addr) JR NZ, LABEL_F8E5FA
-	; (no addr) CP (84FEh), 000h
-	; (no addr) JR NZ, LABEL_F8E5FA
-	; (no addr) LD XWA, (XSP + 01ch)
-	; (no addr) CP XWA, 01c00017h
-	; (no addr) JR NZ, LABEL_F8E5F2
-	; (no addr) LD (8942h), 001h
-	; (no addr) JRL T, LABEL_F8E75D
+	cp xiz, 0xA
+	jrl z, LABEL_F8E75D
+	cp xiz, 0xB
+	jrl z, LABEL_F8E75D
+	cp xiz, 0xC
+	jrl z, LABEL_F8E75D
+	cp xiz, 0xD
+	jrl z, LABEL_F8E75D
+	cp xiz, 0x14
+	jr nz, LABEL_F8E5FA
+	cpdi8 34046, 0
+	jr nz, LABEL_F8E5FA
+	ld xwa, (xsp + 28)
+	cp xwa, 0x1C00017
+	jr nz, LABEL_F8E5F2
+	stdi8 35138, 1
+	jrl LABEL_F8E75D
 
 LABEL_F8E5F2:
-	; (no addr) LD (8942h), 000h
-	; (no addr) JRL T, LABEL_F8E75D
+	stdi8 35138, 0
+	jrl LABEL_F8E75D
 
 LABEL_F8E5FA:
-	; (no addr) CP XIZ, 00000015h
-	; (no addr) JR NZ, LABEL_F8E635
-	; (no addr) LD C, (8946h)
-	; (no addr) LD A, C
-	; (no addr) INC 1, A
-	; (no addr) CP A, 3
-	; (no addr) JR NC, LABEL_F8E620
-	; (no addr) INC 1, C
-	; (no addr) LD (8946h), C
-	; (no addr) LD XWA, (XSP + 020h)
-	; (no addr) LD XBC, 01c0000bh
-	; (no addr) LD XDE, 0
-	; (no addr) JR T, LABEL_F8E62F
+	cp xiz, 0x15
+	jr nz, LABEL_F8E635
+	ldda8 c, 35142
+	ld a, c
+	inc 1, a
+	cps a, 3
+	jr nc, LABEL_F8E620
+	inc 1, c
+	stda8 35142, c
+	ld xwa, (xsp + 32)
+	ld xbc, 0x1C0000B
+	lds32 xde, 0
+	jr LABEL_F8E62F
 
 LABEL_F8E620:
-	; (no addr) LD (8946h), 000h
-	; (no addr) LD XWA, (XSP + 020h)
-	; (no addr) LD XBC, 01c0000bh
-	; (no addr) LD XDE, 0
+	stdi8 35142, 0
+	ld xwa, (xsp + 32)
+	ld xbc, 0x1C0000B
+	lds32 xde, 0
 
 LABEL_F8E62F:
-	CALR SmfLoadAsFunc
-	; (no addr) JRL T, LABEL_F8E75D
+	calr SmfLoadAsFunc
+	jrl LABEL_F8E75D
 
 LABEL_F8E635:
-	; (no addr) CP XIZ, 00000016h
-	; (no addr) JR NZ, LABEL_F8E658
-	; (no addr) LD XWA, (XSP + 01ch)
-	; (no addr) CP XWA, 01c00017h
-	; (no addr) JR NZ, LABEL_F8E650
-	; (no addr) LD (894Ah), 001h
-	; (no addr) JRL T, LABEL_F8E75D
+	cp xiz, 0x16
+	jr nz, LABEL_F8E658
+	ld xwa, (xsp + 28)
+	cp xwa, 0x1C00017
+	jr nz, LABEL_F8E650
+	stdi8 35146, 1
+	jrl LABEL_F8E75D
 
 LABEL_F8E650:
-	; (no addr) LD (894Ah), 000h
-	; (no addr) JRL T, LABEL_F8E75D
+	stdi8 35146, 0
+	jrl LABEL_F8E75D
 
 LABEL_F8E658:
-	; (no addr) LD XWA, (XSP + 01ch)
-	; (no addr) CP XIZ, 00000017h
-	; (no addr) JR NZ, LABEL_F8E67B
-	; (no addr) CP XWA, 01c00017h
-	; (no addr) JR NZ, LABEL_F8E673
-	; (no addr) LD (894Ch), 001h
-	; (no addr) JRL T, LABEL_F8E75D
+	ld xwa, (xsp + 28)
+	cp xiz, 0x17
+	jr nz, LABEL_F8E67B
+	cp xwa, 0x1C00017
+	jr nz, LABEL_F8E673
+	stdi8 35148, 1
+	jrl LABEL_F8E75D
 
 LABEL_F8E673:
-	; (no addr) LD (894Ch), 000h
-	; (no addr) JRL T, LABEL_F8E75D
+	stdi8 35148, 0
+	jrl LABEL_F8E75D
 
 LABEL_F8E67B:
-	; (no addr) CP XIZ, 00000018h
-	; (no addr) JR NZ, LABEL_F8E69B
-	; (no addr) CP XWA, 01c00017h
-	; (no addr) JR NZ, LABEL_F8E693
-	; (no addr) LD (8944h), 001h
-	; (no addr) JRL T, LABEL_F8E75D
+	cp xiz, 0x18
+	jr nz, LABEL_F8E69B
+	cp xwa, 0x1C00017
+	jr nz, LABEL_F8E693
+	stdi8 35140, 1
+	jrl LABEL_F8E75D
 
 LABEL_F8E693:
-	; (no addr) LD (8944h), 000h
-	; (no addr) JRL T, LABEL_F8E75D
+	stdi8 35140, 0
+	jrl LABEL_F8E75D
 
 LABEL_F8E69B:
-	; (no addr) LD C, (8948h)
-	; (no addr) LD A, C
-	; (no addr) INC 1, A
-	; (no addr) CP XIZ, 0000001eh
-	; (no addr) JR NZ, LABEL_F8E6ED
-	; (no addr) CP A, 00ah
-	; (no addr) JR NC, LABEL_F8E6CF
-	; (no addr) INC 1, C
-	; (no addr) LD (8948h), C
-	; (no addr) LD XWA, (XSP + 020h)
-	; (no addr) LD XBC, 01c0000bh
-	; (no addr) LD XDE, 0
-	CALR SmfSeqToSongNumFunc
-	; (no addr) LD XWA, (XSP + 020h)
-	; (no addr) LD XBC, 01c0000bh
-	; (no addr) LD XDE, 0
-	; (no addr) JR T, LABEL_F8E735
+	ldda8 c, 35144
+	ld a, c
+	inc 1, a
+	cp xiz, 0x1E
+	jr nz, LABEL_F8E6ED
+	cp a, 0xA
+	jr nc, LABEL_F8E6CF
+	inc 1, c
+	stda8 35144, c
+	ld xwa, (xsp + 32)
+	ld xbc, 0x1C0000B
+	lds32 xde, 0
+	calr SmfSeqToSongNumFunc
+	ld xwa, (xsp + 32)
+	ld xbc, 0x1C0000B
+	lds32 xde, 0
+	jr LABEL_F8E735
 
 LABEL_F8E6CF:
-	; (no addr) LD (8948h), 000h
-	; (no addr) LD XWA, (XSP + 020h)
-	; (no addr) LD XBC, 01c0000bh
-	; (no addr) LD XDE, 0
-	CALR SmfSeqToSongNumFunc
-	; (no addr) LD XWA, (XSP + 020h)
-	; (no addr) LD XBC, 01c0000bh
-	; (no addr) LD XDE, 0
-	; (no addr) JR T, LABEL_F8E735
+	stdi8 35144, 0
+	ld xwa, (xsp + 32)
+	ld xbc, 0x1C0000B
+	lds32 xde, 0
+	calr SmfSeqToSongNumFunc
+	ld xwa, (xsp + 32)
+	ld xbc, 0x1C0000B
+	lds32 xde, 0
+	jr LABEL_F8E735
 
 LABEL_F8E6ED:
-	; (no addr) CP XIZ, 0000001fh
-	; (no addr) JR NZ, LABEL_F8E73A
-	; (no addr) CP A, 00ah
-	; (no addr) JR NC, LABEL_F8E719
-	; (no addr) INC 1, C
-	; (no addr) LD (8948h), C
-	; (no addr) LD XWA, (XSP + 020h)
-	; (no addr) LD XBC, 01c0000bh
-	; (no addr) LD XDE, 0
-	CALR SmfSeqFromSongNumFunc
-	; (no addr) LD XWA, (XSP + 020h)
-	; (no addr) LD XBC, 01c0000bh
-	; (no addr) LD XDE, 0
-	; (no addr) JR T, LABEL_F8E735
+	cp xiz, 0x1F
+	jr nz, LABEL_F8E73A
+	cp a, 0xA
+	jr nc, LABEL_F8E719
+	inc 1, c
+	stda8 35144, c
+	ld xwa, (xsp + 32)
+	ld xbc, 0x1C0000B
+	lds32 xde, 0
+	calr SmfSeqFromSongNumFunc
+	ld xwa, (xsp + 32)
+	ld xbc, 0x1C0000B
+	lds32 xde, 0
+	jr LABEL_F8E735
 
 LABEL_F8E719:
-	; (no addr) LD (8948h), 000h
-	; (no addr) LD XWA, (XSP + 020h)
-	; (no addr) LD XBC, 01c0000bh
-	; (no addr) LD XDE, 0
-	CALR SmfSeqFromSongNumFunc
-	; (no addr) LD XWA, (XSP + 020h)
-	; (no addr) LD XBC, 01c0000bh
-	; (no addr) LD XDE, 0
+	stdi8 35144, 0
+	ld xwa, (xsp + 32)
+	ld xbc, 0x1C0000B
+	lds32 xde, 0
+	calr SmfSeqFromSongNumFunc
+	ld xwa, (xsp + 32)
+	ld xbc, 0x1C0000B
+	lds32 xde, 0
 
 LABEL_F8E735:
-	CALR SmfSeqSongNameFunc
-	; (no addr) JR T, LABEL_F8E75D
+	calr SmfSeqSongNameFunc
+	jr LABEL_F8E75D
 
 LABEL_F8E73A:
-	; (no addr) CP XIZ, 00000028h
-	; (no addr) JR NZ, LABEL_F8E75D
-	; (no addr) CPW (81AEh), 0000h
-	; (no addr) JR Z, LABEL_F8E75D
-	; (no addr) LD XWA, (81A4h)
-	; (no addr) OR XWA, XWA
-	; (no addr) JR Z, LABEL_F8E75D
-	; (no addr) LD XBC, 01c0000ah
-	; (no addr) LD XDE, 0
+	cp xiz, 0x28
+	jr nz, LABEL_F8E75D
+	cpdi16 33198, 0
+	jr z, LABEL_F8E75D
+	ldda32 xwa, 33188
+	or xwa, xwa
+	jr z, LABEL_F8E75D
+	ld xbc, 0x1C0000A
+	lds32 xde, 0
 
 LABEL_F8E759:
-	; (no addr) CALL ApPostEvent
+	call 0xFA9D58
 
 LABEL_F8E75D:
-	; (no addr) LD HL, (81ACh)
+	ldda16 xhl, 33196
 
 LABEL_F8E761:
-	; (no addr) CP (XSP + 004h), HL
-	; (no addr) JRL Z, LABEL_F8E85B
-	; (no addr) LD WA, HL
-	; (no addr) CALL LABEL_F89BA4
-	; (no addr) LD WA, (81ACh)
-	; (no addr) EXTS XWA
-	DIVS_WA 0xa
-	; (no addr) LD DE, QWA
-	; (no addr) EXTS XDE
-	; (no addr) LD XWA, (81A0h)
-	; (no addr) LD XBC, 01e50002h
-	; (no addr) CALL ApPostEvent
-	; (no addr) LD BC, (81ACh)
-	; (no addr) EXTS XBC
-	DIVS_BC 0xa
-	; (no addr) LD DE, (XSP + 004h)
-	; (no addr) EXTS XDE
-	DIVS_DE 0xa
-	; (no addr) LD XWA, (81A0h)
-	; (no addr) CP DE, BC
-	; (no addr) JR NZ, LABEL_F8E7EF
-	; (no addr) LD BC, (XSP + 004h)
-	; (no addr) EXTS XBC
-	DIVS_BC 0xa
-	; (no addr) LD BC, QBC
-	; (no addr) SLL 5, BC
-	; (no addr) LDA XHL, 850Ch
-	; (no addr) LD DE, BC
-	; (no addr) EXTZ XDE
-	; (no addr) ADD XDE, XHL
-	; (no addr) LD XBC, 01c0000fh
-	; (no addr) CALL ApPostEvent
-	; (no addr) LD WA, (81ACh)
-	; (no addr) EXTS XWA
-	DIVS_WA 0xa
-	; (no addr) LD WA, QWA
-	; (no addr) SLL 5, WA
-	; (no addr) LDA XBC, 850Ch
-	; (no addr) LD DE, WA
-	; (no addr) EXTZ XDE
-	; (no addr) ADD XDE, XBC
-	; (no addr) LD XWA, (81A0h)
-	; (no addr) LD XBC, 01c0000fh
-	; (no addr) CALL ApPostEvent
-	; (no addr) JR T, LABEL_F8E80A
+	cp (xsp + 4), hl
+	jrl z, LABEL_F8E85B
+	ld wa, hl
+	call LABEL_F89BA4
+	ldda16 xwa, 33196
+	exts xwa
+	divs wa, 0xA
+	ldto_de_werp 0xE2
+	exts xde
+	ldda32 xwa, 33184
+	ld xbc, 0x1E50002
+	call 0xFA9D58
+	ldda16 xbc, 33196
+	exts xbc
+	divs bc, 0xA
+	ld de, (xsp + 4)
+	exts xde
+	divs de, 0xA
+	ldda32 xwa, 33184
+	cp de, bc
+	jr nz, LABEL_F8E7EF
+	ld bc, (xsp + 4)
+	exts xbc
+	divs bc, 0xA
+	ldto_bc_werp 0xE6
+	sll bc, 5
+	ldada xhl, 34060
+	ld de, bc
+	extz xde
+	add xde, xhl
+	ld xbc, 0x1C0000F
+	call 0xFA9D58
+	ldda16 xwa, 33196
+	exts xwa
+	divs wa, 0xA
+	ldto_wa_werp 0xE2
+	sll wa, 5
+	ldada xbc, 34060
+	ld de, wa
+	extz xde
+	add xde, xbc
+	ldda32 xwa, 33184
+	ld xbc, 0x1C0000F
+	call 0xFA9D58
+	jr LABEL_F8E80A
 
 LABEL_F8E7EF:
-	MULS_BC 0xa
-	CALR DisplaySmfFileList
-	; (no addr) CP (8D36h), 06ch
-	; (no addr) JR NZ, LABEL_F8E80A
-	; (no addr) LD XWA, (XSP + 020h)
-	; (no addr) LD XBC, 01c0000bh
-	; (no addr) LD XDE, 0
-	CALR FmmSmfMedleyFunc
+	muls bc, 0xA
+	calr DisplaySmfFileList
+	cpdi8 36150, 108
+	jr nz, LABEL_F8E80A
+	ld xwa, (xsp + 32)
+	ld xbc, 0x1C0000B
+	lds32 xde, 0
+	calr FmmSmfMedleyFunc
 
 LABEL_F8E80A:
-	; (no addr) CP (8D36h), 06bh
-	; (no addr) JR NZ, LABEL_F8E85B
-	; (no addr) LDA XIZ, 8850h
-	; (no addr) LD WA, (81ACh)
-	; (no addr) CP WA, (8504h)
-	; (no addr) JR LT, LABEL_F8E830
-	; (no addr) CP WA, 0
-	; (no addr) JR LE, LABEL_F8E830
-	; (no addr) LD XWA, XIZ
-	; (no addr) LD XBC, 00ea0790h
-	; (no addr) CALL LABEL_F890DC
-	; (no addr) JR T, LABEL_F8E845
+	cpdi8 36150, 107
+	jr nz, LABEL_F8E85B
+	ldada xiz, 34896
+	ldda16 xwa, 33196
+	cpda16 xwa, 34052
+	jr lt, LABEL_F8E830
+	cps wa, 0
+	jr le, LABEL_F8E830
+	ld xwa, xiz
+	ld xbc, 0xEA0790
+	call LABEL_F890DC
+	jr LABEL_F8E845
 
 LABEL_F8E830:
-	; (no addr) CALL LABEL_F89BF0
-	; (no addr) LD XBC, XHL
-	; (no addr) LD XWA, XIZ
-	; (no addr) CALL LABEL_F890DC
-	; (no addr) LD XWA, 00008850h
-	; (no addr) CALL LABEL_F8929D
+	call LABEL_F89BF0
+	ld xbc, xhl
+	ld xwa, xiz
+	call LABEL_F890DC
+	ld xwa, 0x8850
+	call LABEL_F8929D
 
 LABEL_F8E845:
-	; (no addr) LD XWA, 00008850h
-	; (no addr) CALL LABEL_F892DB
-	; (no addr) LD XWA, (XSP + 020h)
-	; (no addr) LD XBC, 01c0000bh
-	; (no addr) LD XDE, 0
-	CALR SaveFileNameSmfFunc
+	ld xwa, 0x8850
+	call LABEL_F892DB
+	ld xwa, (xsp + 32)
+	ld xbc, 0x1C0000B
+	lds32 xde, 0
+	calr SaveFileNameSmfFunc
 
 LABEL_F8E85B:
-	; (no addr) LD XWA, (81A0h)
-	; (no addr) LD XBC, 01c50001h
-	; (no addr) LD XDE, 0
-	; (no addr) JR T, LABEL_F8E8A7
-	; (no addr) LD (81A4h), XBC
-	; (no addr) JRL T, LABEL_F8E12F
-	; (no addr) LD (81A8h), XBC
-	; (no addr) JRL T, LABEL_F8E12F
-	; (no addr) LD (81AEh), IZ
-	; (no addr) JRL T, LABEL_F8E12F
-	; (no addr) CP (84FEh), 000h
-	; (no addr) JRL Z, LABEL_F8E12F
-	; (no addr) LD WA, IZ
-	; (no addr) LD (81ACh), WA
-	; (no addr) CALL LABEL_F89BA4
-	; (no addr) LD WA, (81ACh)
-	; (no addr) EXTS XWA
-	DIVS_WA 0xa
-	; (no addr) LD DE, QWA
-	; (no addr) EXTS XDE
-	; (no addr) LD XWA, (81A0h)
-	; (no addr) LD XBC, 01e50002h
+	ldda32 xwa, 33184
+	ld xbc, 0x1C50001
+	lds32 xde, 0
+	jr LABEL_F8E8A7
+	stda32 33188, xbc
+	jrl LABEL_F8E12F
+	stda32 33192, xbc
+	jrl LABEL_F8E12F
+	stda16 33198, xiz
+	jrl LABEL_F8E12F
+	cpdi8 34046, 0
+	jrl z, LABEL_F8E12F
+	ld wa, iz
+	stda16 33196, xwa
+	call LABEL_F89BA4
+	ldda16 xwa, 33196
+	exts xwa
+	divs wa, 0xA
+	ldto_de_werp 0xE2
+	exts xde
+	ldda32 xwa, 33184
+	ld xbc, 0x1E50002
 
 LABEL_F8E8A7:
-	; (no addr) CALL ApPostEvent
-	; (no addr) JRL T, LABEL_F8E12F
-	; (no addr) LD HL, (81ACh)
-	; (no addr) EXTS XHL
+	call 0xFA9D58
+	jrl LABEL_F8E12F
+	ldda16 xhl, 33196
+	exts xhl
 
 LABEL_F8E8B4:
-	; (no addr) POP XIZ
-	; (no addr) LDA XSP, XSP + 020h
-	; (no addr) RET
+	pop xiz
+	lda xsp, (xsp + 32)
+	ret
 
 DisplaySmfSequenceList:
-	; (no addr) DEC 6, XSP
-	; (no addr) PUSH IZ
-	; (no addr) LD (XSP + 002h), BC
-	; (no addr) LD (XSP + 004h), XWA
-	; (no addr) LD WA, 0
-	CALR InitializeOperationState
-	; (no addr) LD IZ, 0
+	dec 6, xsp
+	pushw iz
+	ld (xsp + 2), bc
+	ld (xsp + 4), xwa
+	lds wa, 0
+	calr InitializeOperationState
+	lds iz, 0
 
 LABEL_F8E8C9:
-	; (no addr) LD DE, IZ
-	; (no addr) SLL 5, DE
-	; (no addr) LDA XBC, 850Ch
-	; (no addr) EXTZ XDE
-	; (no addr) ADD XDE, XBC
-	; (no addr) LD A, IZL
-	; (no addr) LD (XDE), A
-	; (no addr) LD WA, (XSP + 002h)
-	; (no addr) ADD WA, IZ
-	; (no addr) CALL LABEL_F8B13D
-	; (no addr) LD XBC, XHL
-	; (no addr) LD WA, IZ
-	; (no addr) SLL 5, WA
-	; (no addr) LD DE, 1
-	; (no addr) ADD DE, WA
-	; (no addr) LDA XHL, 850Ch
-	; (no addr) LD WA, DE
-	; (no addr) EXTZ XWA
-	; (no addr) ADD XWA, XHL
-	; (no addr) LD DE, (XSP + 002h)
-	; (no addr) ADD DE, IZ
-	; (no addr) INC 1, DE
-	; (no addr) PUSHW 000ch
-	; (no addr) PUSHW 0001h
-	; (no addr) CALL LABEL_F891DD
-	; (no addr) LD DE, IZ
-	; (no addr) SLL 5, DE
-	; (no addr) LDA XBC, 850Ch
-	; (no addr) EXTZ XDE
-	; (no addr) ADD XDE, XBC
-	; (no addr) LD XWA, (XSP + 004h)
-	; (no addr) LD XBC, 01c0000fh
-	; (no addr) CALL ApPostEvent
-	; (no addr) INC 1, IZ
-	; (no addr) CP IZ, 000ah
-	; (no addr) JR LT, LABEL_F8E8C9
-	; (no addr) POP IZ
-	; (no addr) INC 6, XSP
-	; (no addr) RET
+	ld de, iz
+	sll de, 5
+	ldada xbc, 34060
+	extz xde
+	add xde, xbc
+	ldto_a_berp 0xF8
+	ld (xde), a
+	ld wa, (xsp + 2)
+	add wa, iz
+	call LABEL_F8B13D
+	ld xbc, xhl
+	ld wa, iz
+	sll wa, 5
+	lds de, 1
+	add de, wa
+	ldada xhl, 34060
+	ld wa, de
+	extz xwa
+	add xwa, xhl
+	ld de, (xsp + 2)
+	add de, iz
+	inc 1, de
+	pushw 0xC
+	pushw 0x1
+	call LABEL_F891DD
+	ld de, iz
+	sll de, 5
+	ldada xbc, 34060
+	extz xde
+	add xde, xbc
+	ld xwa, (xsp + 4)
+	ld xbc, 0x1C0000F
+	call 0xFA9D58
+	inc 1, iz
+	cp iz, 0xA
+	jr lt, LABEL_F8E8C9
+	popw iz
+	inc 6, xsp
+	ret
 

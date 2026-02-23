@@ -1,5 +1,5 @@
-; Converted from subcpu/kn5000_subprogram_v142.asm by asl_to_llvm.py (Phase 3)
-; All includes inlined, segments globally sorted by ORG address.
+; Converted from subcpu/kn5000_subprogram_v142.asm by asl_to_llvm.py
+; Modular includes preserved, segments globally sorted by ORG address.
 ; Per-instruction .byte fallback with progressive native replacement.
 ; This file is auto-generated. Edit the converter, not this file.
 
