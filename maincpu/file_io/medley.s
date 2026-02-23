@@ -244,7 +244,7 @@ SeqName_Exit:
 	ret
 
 FormatMedleyNumber:
-	x_dpi2_s45 0xE0
+	lda_dpi XIY, 0xE0
 	cp c, 0xFF
 	jr nz, FmtNum_CheckMarked
 	ldb c, 0x20
@@ -256,7 +256,7 @@ FmtNum_CheckMarked:
 	ldb c, 0x4D
 
 FmtNum_WriteSpacePad:
-	x_dpi2_s43 0xE0
+	lda_dpi XHL, 0xE0
 	x_dpi3_o00_t1 0xE0, 0x20
 	ldmi8 (xwa), 0x20
 	ret
@@ -265,7 +265,7 @@ FmtNum_FormatNumber:
 	inc 1, c
 	cp c, 0x64
 	jr c, FmtNum_WriteM
-	x_dpi2_s33 0xE0
+	st_dpib C, 0xE0
 	ld e, c
 	extz de
 	div e, 0x64
@@ -288,7 +288,7 @@ FmtNum_WriteTensUnits:
 	ret
 
 FmtNum_WriteTwoDigits:
-	x_dpi2_s33 0xE0
+	st_dpib C, 0xE0
 	ld e, c
 	extz de
 	div e, 0xA

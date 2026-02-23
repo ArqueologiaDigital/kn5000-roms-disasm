@@ -1134,7 +1134,7 @@ MemBlock_FillWithZeros:
 	cps bc, 0	; d9 d8
 	ret ule	; b0 f3 - return if count <= 0
 MemBlock_FillWithZeros__fill_loop:
-	x_dpi2_s52 0xE1	; LD (XWA+), DE - store 0 and advance
+	st_dpiw DE, 0xE1	; LD (XWA+), DE - store 0 and advance
 	inc 1, de	; da 61
 	cp de, bc	; d9 f2
 	jr c, MemBlock_FillWithZeros__fill_loop	; 67 f7
@@ -1596,7 +1596,7 @@ Flash_Update_TableData__program_loop_start:
 
 Flash_Update_TableData__program_loop:
 	ld xwa, (xsp + 4)	; LD XWA, (XSP+04h) - get src ptr
-	x_dpi2_s31 0xE2	; LDA XBC, XWA+ - load data, advance ptr
+	st_dpib A, 0xE2	; LDA XBC, XWA+ - load data, advance ptr
 	ld (xsp + 4), xwa	; LD (XSP+04h), XWA - save updated ptr
 
 	ld xwa, xbc	; e9 88 - XWA = data
@@ -1912,7 +1912,7 @@ Boot_CopySectors:
 	jr Boot_CopySectors__cs_partial_check	; 68 1b
 Boot_CopySectors__cs_partial_loop:
 	ld xwa, (xsp + 14)	; LD XWA, (XSP+0x0E) - dest table ptr
-	x_dpi2_s31 0xE2	; LDA XBC, XWA+ - get dest addr
+	st_dpib A, 0xE2	; LDA XBC, XWA+ - get dest addr
 	ld (xsp + 14), xwa	; LD (XSP+0x0E), XWA
 	ld xwa, xbc	; LD XWA, XBC
 	ld xde, (xsp + 10)	; LD XDE, (XSP+0x0A) - source ptr
@@ -1953,7 +1953,7 @@ Boot_CopySectors__cs_track_loop:
 
 Boot_CopySectors__cs_full_loop:
 	ld xwa, (xsp + 14)	; LD XWA, (XSP+0x0E)
-	x_dpi2_s31 0xE2	; LDA XBC, XWA+
+	st_dpib A, 0xE2	; LDA XBC, XWA+
 	ld (xsp + 14), xwa	; LD (XSP+0x0E), XWA
 	ld xwa, xbc	; LD XWA, XBC
 	ld xde, (xsp + 10)	; LD XDE, (XSP+0x0A)
@@ -1989,7 +1989,7 @@ Boot_CopySectors__cs_check_remainder:
 
 Boot_CopySectors__cs_rem_loop:
 	ld xwa, (xsp + 14)	; LD XWA, (XSP+0x0E)
-	x_dpi2_s31 0xE2	; LDA XBC, XWA+
+	st_dpib A, 0xE2	; LDA XBC, XWA+
 	ld (xsp + 14), xwa	; LD (XSP+0x0E), XWA
 	ld xwa, xbc	; LD XWA, XBC
 	ld xde, (xsp + 10)	; LD XDE, (XSP+0x0A)
@@ -2047,7 +2047,7 @@ Boot_CopySectorsEx__cse_partial_loop:
 	ld a, (xsp + 20)	; LD A, (XSP+0x14) - bank
 	extz wa	; EXTZ WA
 	ld xbc, (xsp + 14)	; LD XBC, (XSP+0x0E)
-	x_dpi2_s32 0xE5	; LDA XDE, XBC+
+	st_dpib B, 0xE5	; LDA XDE, XBC+
 	ld (xsp + 14), xbc	; LD (XSP+0x0E), XBC
 	ld xbc, xde	; LD XBC, XDE
 	ld xhl, (xsp + 10)	; LD XHL, (XSP+0x0A)
@@ -2090,7 +2090,7 @@ Boot_CopySectorsEx__cse_full_loop:
 	ld a, (xsp + 20)	; LD A, (XSP+0x14)
 	extz wa	; EXTZ WA
 	ld xbc, (xsp + 14)	; LD XBC, (XSP+0x0E)
-	x_dpi2_s32 0xE5	; LDA XDE, XBC+
+	st_dpib B, 0xE5	; LDA XDE, XBC+
 	ld (xsp + 14), xbc	; LD (XSP+0x0E), XBC
 	ld xbc, xde	; LD XBC, XDE
 	ld xhl, (xsp + 10)	; LD XHL, (XSP+0x0A)
@@ -2127,7 +2127,7 @@ Boot_CopySectorsEx__cse_rem_loop:
 	ld a, (xsp + 20)	; LD A, (XSP+0x14)
 	extz wa	; EXTZ WA
 	ld xbc, (xsp + 14)	; LD XBC, (XSP+0x0E)
-	x_dpi2_s32 0xE5	; LDA XDE, XBC+
+	st_dpib B, 0xE5	; LDA XDE, XBC+
 	ld (xsp + 14), xbc	; LD (XSP+0x0E), XBC
 	ld xbc, xde	; LD XBC, XDE
 	ld xhl, (xsp + 10)	; LD XHL, (XSP+0x0A)
@@ -2523,7 +2523,7 @@ Boot_ProgramCustomFlash__pcf_bank_loop:
 
 Boot_ProgramCustomFlash__pcf_copy_loop:
 	ld xwa, (xsp + 8)	; LD XWA, (XSP+0x08) - dest ptr
-	x_dpi2_s31 0xE1	; LDA XBC, XWA+
+	st_dpib A, 0xE1	; LDA XBC, XWA+
 	ld (xsp + 8), xwa	; LD (XSP+0x08), XWA
 	ld xwa, (xsp + 4)	; LD XWA, (XSP+0x04) - source ptr
 	ld_spiw DE, 0xE1	; LD DE, (XWA+)
@@ -2563,7 +2563,7 @@ Flash_ProgramHDAE_Initialization__phd1_bank_loop:
 
 Flash_ProgramHDAE_Initialization__phd1_copy_loop:
 	ld xwa, (xsp + 8)	; LD XWA, (XSP+0x08)
-	x_dpi2_s31 0xE2	; LDA XBC, XWA+
+	st_dpib A, 0xE2	; LDA XBC, XWA+
 	ld (xsp + 8), xwa	; LD (XSP+0x08), XWA
 	ld xwa, xbc	; LD XWA, XBC
 	ld xde, (xsp + 4)	; LD XDE, (XSP+0x04)
@@ -2602,7 +2602,7 @@ Flash_ProgramHDAE_Payload__phd2_bank_loop:
 
 Flash_ProgramHDAE_Payload__phd2_copy_loop:
 	ld xwa, (xsp + 8)	; LD XWA, (XSP+0x08)
-	x_dpi2_s31 0xE2	; LDA XBC, XWA+
+	st_dpib A, 0xE2	; LDA XBC, XWA+
 	ld (xsp + 8), xwa	; LD (XSP+0x08), XWA
 	ld xwa, xbc	; LD XWA, XBC
 	ld xde, (xsp + 4)	; LD XDE, (XSP+0x04)
@@ -2724,7 +2724,7 @@ LZSS_ReadByte__read_sectors:
 	stda32 3116, xwa	; LD (0x0C2C), XWA - reset buffer pointer
 LZSS_ReadByte__read_byte:
 	ldda32 xwa, 3116	; LD XWA, (0x0C2C) - get buffer pointer
-	x_dpi2_s31 0xE0	; LDA XBC, XWA+ (post-increment read)
+	st_dpib A, 0xE0	; LDA XBC, XWA+ (post-increment read)
 	stda32 3116, xwa	; LD (0x0C2C), XWA - save updated pointer
 	ld l, (xbc)	; LD L, (XBC) - read byte into L
 	extz hl	; EXTZ HL - zero-extend to HL
@@ -2755,7 +2755,7 @@ LZSS_OutputByte:
 	jr nz, LZSS_OutputByte__not_full	; JR NZ, .not_full
 	; Flush 4-byte buffer to destination
 	ldda32 xwa, 3112	; LD XWA, (0x0C28) - dest ptr
-	x_dpi2_s32 0xE2	; LDA XDE, XWA+ (post-increment)
+	st_dpib B, 0xE2	; LDA XDE, XWA+ (post-increment)
 	stda32 3112, xwa	; LD (0x0C28), XWA
 	ld xbc, (xbc)	; LD XBC, (XBC) - load 4 bytes from buffer
 	ld xwa, xde	; LD XWA, XDE
@@ -2785,7 +2785,7 @@ LZSS_OutputByte_Alt:
 	cps c, 1	; CP C, 1
 	jr nz, LZSS_OutputByte_Alt__not_full	; JR NZ, .not_full
 	ldda32 xwa, 3128	; LD XWA, (0x0C38)
-	x_dpi2_s31 0xE1	; LDA XBC, XWA+
+	st_dpib A, 0xE1	; LDA XBC, XWA+
 	stda32 3128, xwa	; LD (0x0C38), XWA
 	ld de, (xde)	; LD DE, (XDE)
 	lds wa, 1	; LD WA, 1
@@ -3696,7 +3696,7 @@ Handler_INT4__int4_setup_buffer:
 Handler_INT4__int4_read_loop:
 	.byte 0x1e, 0xef, 0xf2	; CALR Boot_ClearWatchdog (0x9FDDED)
 	.byte 0x1e, 0xed, 0xec	; CALR FDC_ReadData (0x9FD7EE)
-	x_dpi2_s47 0xF8	; LD (XIZ+), L - store result byte
+	lda_dpi XSP, 0xF8	; LD (XIZ+), L - store result byte
 
 Handler_INT4__int4_check_more:
 	.byte 0x1e, 0xe1, 0xec	; CALR FDC_ReadStatus

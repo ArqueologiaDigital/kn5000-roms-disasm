@@ -9968,8 +9968,8 @@ LABEL_01FDDA:
 
 LABEL_01FDF7:
 	ld ix, hl
-	x_dpi2_s54 0xED
-	x_dpi2_s54 0xED
+	st_dpiw IX, 0xED
+	st_dpiw IX, 0xED
 	djnz8 b, LABEL_01FDF7
 	ldw ix, 0x1048
 	extz xix
@@ -10002,8 +10002,8 @@ LABEL_01FE29:
 
 LABEL_01FE48:
 	ld ix, hl
-	x_dpi2_s54 0xED
-	x_dpi2_s54 0xED
+	st_dpiw IX, 0xED
+	st_dpiw IX, 0xED
 	djnz8 b, LABEL_01FE48
 	ld xhl, 0x1FDBE
 	ldw de, 0x1092
@@ -10016,8 +10016,8 @@ LABEL_01FE48:
 
 LABEL_01FE68:
 	ld ix, hl
-	x_dpi2_s54 0xED
-	x_dpi2_s54 0xED
+	st_dpiw IX, 0xED
+	st_dpiw IX, 0xED
 	djnz8 b, LABEL_01FE68
 	ldw hl, 0x10A6
 	extz xhl
@@ -10052,8 +10052,8 @@ LABEL_01FE99:
 
 LABEL_01FEBB:
 	ld ix, hl
-	x_dpi2_s54 0xED
-	x_dpi2_s54 0xED
+	st_dpiw IX, 0xED
+	st_dpiw IX, 0xED
 	djnz8 b, LABEL_01FEBB
 	ldw hl, 0x109E
 	extz xhl
@@ -10061,8 +10061,8 @@ LABEL_01FEBB:
 
 LABEL_01FECD:
 	ld ix, hl
-	x_dpi2_s54 0xED
-	x_dpi2_s54 0xED
+	st_dpiw IX, 0xED
+	st_dpiw IX, 0xED
 	djnz8 b, LABEL_01FECD
 	ld xwa, 0x1FEDF
 	jr LABEL_01FEE7
@@ -12822,7 +12822,7 @@ LABEL_021AC0:
 	ld de, wa
 	or de, bc
 	ld xwa, (xsp + 10)
-	x_dpi2_s52 0xE1
+	st_dpiw DE, 0xE1
 	ld (xsp + 10), xwa
 
 LABEL_021B24:
@@ -31681,7 +31681,7 @@ LABEL_02E273:
 
 LABEL_02E27B:
 	ld_spib C, 0xE0
-	x_dpi2_s43 0xEC
+	lda_dpi XHL, 0xEC
 	inc 1, ix
 	cp ix, de
 	jr c, LABEL_02E27B
@@ -33428,7 +33428,7 @@ LABEL_0309EA:
 
 LABEL_0309FC:
 	ld_spib A, 0xE4
-	x_dpi2_s41 0xF8
+	lda_dpi XBC, 0xF8
 	inc 1, de
 	cp de, hl
 	jr c, LABEL_0309FC
@@ -33844,7 +33844,7 @@ LABEL_03120F:
 LABEL_031218:
 	ld xwa, (xsp + 8)
 	ld_spib C, 0xF8
-	x_dpi2_s43 0xE0
+	lda_dpi XHL, 0xE0
 	ld (xsp + 8), xwa
 	inc 1, de
 	cp de, hl
@@ -34126,7 +34126,7 @@ LABEL_031A57:
 
 LABEL_031A5F:
 	ld_spib C, 0xEC
-	x_dpi2_s43 0xE8
+	lda_dpi XHL, 0xE8
 	inc 1, ix
 	cp ix, wa
 	jr c, LABEL_031A5F
@@ -39942,7 +39942,7 @@ LABEL_035A0E:
 	ld xwa, (xsp + 10)
 	calr DSP_RingBuf_Read
 	ld xwa, (xsp + 6)
-	x_dpi2_s47 0xE0
+	lda_dpi XSP, 0xE0
 	ld (xsp + 6), xwa
 	inc 1, iz
 	cp iz, (xsp + 4)
@@ -39966,7 +39966,7 @@ LABEL_035A42:
 	ld xwa, (xsp + 10)
 	calr DSP_RingBuf_Read
 	ld xwa, (xsp + 6)
-	x_dpi2_s47 0xE0
+	lda_dpi XSP, 0xE0
 	ld (xsp + 6), xwa
 	inc 1, iz
 	cp iz, (xsp + 4)
@@ -40013,7 +40013,7 @@ LABEL_035A8B:
 
 LABEL_035A9B:
 	ld xwa, (xsp + 4)
-	x_dpi2_s47 0xE0
+	lda_dpi XSP, 0xE0
 	ld (xsp + 4), xwa
 	inc 1, iz
 
@@ -51996,7 +51996,7 @@ LABEL_03CEFF:
 
 LABEL_03CF07:
 	ld xde, xwa
-	x_dpi2_s30 0xE8
+	st_dpib W, 0xE8
 	ld a, (xwa)
 	exts wa
 	exts xwa
@@ -52004,14 +52004,14 @@ LABEL_03CF07:
 	sla xwa, 0
 	and xwa, 0xFF000000
 	ld xhl, xwa
-	x_dpi2_s30 0xE8
+	st_dpib W, 0xE8
 	ld a, (xwa)
 	exts wa
 	exts xwa
 	ld xix, xwa
 	sla xix, 0
 	and xix, 0xFF0000
-	x_dpi2_s30 0xE8
+	st_dpib W, 0xE8
 	ld a, (xwa)
 	exts wa
 	exts xwa
@@ -55132,7 +55132,7 @@ LABEL_03E96A:
 	ld a, (xde)
 	sll a, 4
 	or a, w
-	x_dpi2_s41 0xE4
+	lda_dpi XBC, 0xE4
 	dec 1, xde
 	cp xde, xiz
 	jr ugt, LABEL_03E96A
@@ -55179,7 +55179,7 @@ LABEL_03E9C7:
 	ld a, (xde)
 	srl a, 4
 	or a, w
-	x_dpi2_s41 0xE4
+	lda_dpi XBC, 0xE4
 	dec 1, xde
 	cp xde, xiy
 	jr ugt, LABEL_03E9C7

@@ -1284,7 +1284,7 @@ LABEL_F97E93:
 LABEL_F97E99:
 	calr FDC_Wait_Status_Timeout
 	calr FDC_Read_Data
-	x_dpi2_s47 0xF8
+	lda_dpi XSP, 0xF8
 
 LABEL_F97EA2:
 	calr FDC_Read_Status

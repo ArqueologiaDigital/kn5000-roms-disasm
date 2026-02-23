@@ -2263,7 +2263,7 @@ LABEL_F919E3:
 	ld iz, wa
 	extz xiz
 	add xiz, xix
-	x_dpi2_s47 0xF8
+	lda_dpi XSP, 0xF8
 	cps e, 0
 	jr z, LABEL_F91A39
 	cpmi16 (xsp + 4), 0x9

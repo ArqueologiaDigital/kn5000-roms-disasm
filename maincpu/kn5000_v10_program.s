@@ -113080,14 +113080,14 @@ LABEL_EF07F3:
 
 LABEL_EF080E:
 	lds32 xwa, 0
-	x_dpi2_s60 0xE6
+	st_dpil XWA, 0xE6
 	cp xbc, 0x100000
 	jr c, LABEL_EF080E
 	ld xbc, 0x1E0000
 
 LABEL_EF0820:
 	lds32 xwa, 0
-	x_dpi2_s60 0xE6
+	st_dpil XWA, 0xE6
 	cp xbc, 0x200000
 	jr c, LABEL_EF0820
 	stdi16_24 65482, 23205
@@ -114899,7 +114899,7 @@ Copy_DE_words_from_XBC_to_XWA:	; ef18d7
 	ret
 
 Fill_memory_at_XWA_with_DE_words_of_BC_value:	; ef18e0
-	x_dpi2_s51 0xE1
+	st_dpiw BC, 0xE1
 	djnz xde, Fill_memory_at_XWA_with_DE_words_of_BC_value
 	ret
 
@@ -114969,8 +114969,8 @@ LABEL_EF1977:
 
 LABEL_EF1994:
 	ld ix, hl
-	x_dpi2_s54 0xED
-	x_dpi2_s54 0xED
+	st_dpiw IX, 0xED
+	st_dpiw IX, 0xED
 	djnz8 b, LABEL_EF1994
 	ldw ix, 0x489
 	extz xix
@@ -115003,8 +115003,8 @@ LABEL_EF19C6:
 
 LABEL_EF19E6:
 	ld ix, hl
-	x_dpi2_s54 0xED
-	x_dpi2_s54 0xED
+	st_dpiw IX, 0xED
+	st_dpiw IX, 0xED
 	djnz8 b, LABEL_EF19E6
 	ld xhl, 0xEF193D
 	ldw de, 0x533
@@ -115017,8 +115017,8 @@ LABEL_EF19E6:
 
 LABEL_EF1A07:
 	ld ix, hl
-	x_dpi2_s54 0xED
-	x_dpi2_s54 0xED
+	st_dpiw IX, 0xED
+	st_dpiw IX, 0xED
 	djnz8 b, LABEL_EF1A07
 	ldw hl, 0x567
 	extz xhl
@@ -115053,8 +115053,8 @@ LABEL_EF1A38:
 
 LABEL_EF1A5A:
 	ld ix, hl
-	x_dpi2_s54 0xED
-	x_dpi2_s54 0xED
+	st_dpiw IX, 0xED
+	st_dpiw IX, 0xED
 	djnz8 b, LABEL_EF1A5A
 	ldw hl, 0x553
 	extz xhl
@@ -115062,8 +115062,8 @@ LABEL_EF1A5A:
 
 LABEL_EF1A6C:
 	ld ix, hl
-	x_dpi2_s54 0xED
-	x_dpi2_s54 0xED
+	st_dpiw IX, 0xED
+	st_dpiw IX, 0xED
 	djnz8 b, LABEL_EF1A6C
 	ld xwa, 0xEF1A7E
 	jr LABEL_EF1A86
@@ -117955,7 +117955,7 @@ LABEL_EF342C:
 
 LABEL_EF3436:
 	ldda32 xwa, 1498
-	x_dpi2_s31 0xE0
+	st_dpib A, 0xE0
 	stda32 1498, xwa
 	ld a, (xbc)
 	stda8_24 1310720, a
@@ -118646,7 +118646,7 @@ LABEL_EF3B2F:
 	ret ule
 
 LABEL_EF3B35:
-	x_dpi2_s52 0xE1
+	st_dpiw DE, 0xE1
 	inc 1, de
 	cp de, bc
 	jr c, LABEL_EF3B35
@@ -118673,7 +118673,7 @@ LABEL_EF3B6F:
 	ld a, (xsp + 10)
 	extz wa
 	ld xbc, (xsp + 6)
-	x_dpi2_s32 0xE5
+	st_dpib B, 0xE5
 	ld (xsp + 6), xbc
 	ld xbc, xde
 	ld xhl, (xsp + 2)
@@ -118710,7 +118710,7 @@ LABEL_EF3BC1:
 	ld a, (xsp + 10)
 	extz wa
 	ld xbc, (xsp + 2)
-	x_dpi2_s32 0xE5
+	st_dpib B, 0xE5
 	ld (xsp + 2), xbc
 	ld xbc, xde
 	ld xhl, (xsp + 6)
@@ -119121,7 +119121,7 @@ LABEL_EF4020:
 	ld a, e
 	extz wa
 	ld e, a
-	x_dpi2_s45 0x38
+	lda_dpi XIY, 0x38
 	inc 1, xhl
 	ld wa, bc
 	inc 1, bc
@@ -119163,7 +119163,7 @@ LABEL_EF4083:
 	ld a, (xwa)
 	extz wa
 	ld e, a
-	x_dpi2_s45 0x38
+	lda_dpi XIY, 0x38
 	inc 1, xhl
 	ld wa, bc
 	inc 1, bc
@@ -119244,7 +119244,7 @@ LABEL_EF413E:
 	ld a, e
 	extz wa
 	ld e, a
-	x_dpi2_s45 0x38
+	lda_dpi XIY, 0x38
 	inc 1, xhl
 	ld wa, bc
 	inc 1, bc
@@ -119286,7 +119286,7 @@ LABEL_EF41A1:
 	ld a, (xwa)
 	extz wa
 	ld e, a
-	x_dpi2_s45 0x38
+	lda_dpi XIY, 0x38
 	inc 1, xhl
 	ld wa, bc
 	inc 1, bc
@@ -119576,7 +119576,7 @@ LABEL_EF441B:
 
 LABEL_EF445E:
 	ld xwa, (xsp + 14)
-	x_dpi2_s31 0xE2
+	st_dpib A, 0xE2
 	ld (xsp + 14), xwa
 	ld xwa, xbc
 	ld xde, (xsp + 10)
@@ -119618,7 +119618,7 @@ LABEL_EF44A8:
 
 LABEL_EF44C8:
 	ld xwa, (xsp + 14)
-	x_dpi2_s31 0xE2
+	st_dpib A, 0xE2
 	ld (xsp + 14), xwa
 	ld xwa, xbc
 	ld xde, (xsp + 10)
@@ -119652,7 +119652,7 @@ LABEL_EF44F5:
 
 LABEL_EF4521:
 	ld xwa, (xsp + 14)
-	x_dpi2_s31 0xE2
+	st_dpib A, 0xE2
 	ld (xsp + 14), xwa
 	ld xwa, xbc
 	ld xde, (xsp + 10)
@@ -119704,7 +119704,7 @@ LABEL_EF4593:
 	ld a, (xsp + 20)
 	extz wa
 	ld xbc, (xsp + 14)
-	x_dpi2_s32 0xE5
+	st_dpib B, 0xE5
 	ld (xsp + 14), xbc
 	ld xbc, xde
 	ld xhl, (xsp + 10)
@@ -119748,7 +119748,7 @@ LABEL_EF45FE:
 	ld a, (xsp + 20)
 	extz wa
 	ld xbc, (xsp + 14)
-	x_dpi2_s32 0xE5
+	st_dpib B, 0xE5
 	ld (xsp + 14), xbc
 	ld xbc, xde
 	ld xhl, (xsp + 10)
@@ -119784,7 +119784,7 @@ LABEL_EF465B:
 	ld a, (xsp + 20)
 	extz wa
 	ld xbc, (xsp + 14)
-	x_dpi2_s32 0xE5
+	st_dpib B, 0xE5
 	ld (xsp + 14), xbc
 	ld xbc, xde
 	ld xhl, (xsp + 10)
@@ -120151,7 +120151,7 @@ LABEL_EF4911:
 
 LABEL_EF4923:
 	ld xwa, (xsp + 8)
-	x_dpi2_s31 0xE1
+	st_dpib A, 0xE1
 	ld (xsp + 8), xwa
 	ld xwa, (xsp + 4)
 	ld_spiw DE, 0xE1
@@ -120197,7 +120197,7 @@ LABEL_EF49B5:
 
 LABEL_EF49C7:
 	ld xwa, (xsp + 8)
-	x_dpi2_s31 0xE2
+	st_dpib A, 0xE2
 	ld (xsp + 8), xwa
 	ld xwa, xbc
 	ld xde, (xsp + 4)
@@ -120363,7 +120363,7 @@ LABEL_EF4C3C:
 
 LABEL_EF4C69:
 	ldda32 xwa, 1610
-	x_dpi2_s31 0xE0
+	st_dpib A, 0xE0
 	stda32 1610, xwa
 	ld l, (xbc)
 	extz hl
@@ -120386,7 +120386,7 @@ LABEL_EF4C7A:
 	cps e, 3
 	jr nz, LABEL_EF4CB2
 	ldda32 xwa, 1606
-	x_dpi2_s32 0xE2
+	st_dpib B, 0xE2
 	stda32 1606, xwa
 	ld xbc, (xbc)
 	ld xwa, xde
@@ -120412,7 +120412,7 @@ LABEL_EF4CB9:
 	cps c, 1
 	jr nz, LABEL_EF4CF1
 	ldda32 xwa, 1622
-	x_dpi2_s31 0xE1
+	st_dpib A, 0xE1
 	stda32 1622, xwa
 	ld de, (xde)
 	lds wa, 1
@@ -122659,7 +122659,7 @@ LABEL_EF738B:
 	ldw bc, 0xF
 
 LABEL_EF7392:
-	x_dpi2_s50 0xF1
+	st_dpiw WA, 0xF1
 	djnz xbc, LABEL_EF7392
 	popw wa
 	ret
@@ -127426,7 +127426,7 @@ LABEL_EFE7BA:
 LABEL_EFEA55:
 	ld xix, 0xEB5
 	call LABEL_EFEA91
-	x_dpi2_s41 0xF0
+	lda_dpi XBC, 0xF0
 	cp a, 0x81
 	jrl z, LABEL_EFEA73
 	cp a, 0x82
@@ -127443,7 +127443,7 @@ LABEL_EFEA7B:
 	call LABEL_EFEA91
 	bit 7, a
 	jrl nz, LABEL_EFEA90
-	x_dpi2_s41 0xF0
+	lda_dpi XBC, 0xF0
 	jp LABEL_EFEA7B
 
 LABEL_EFEA90:
@@ -127706,7 +127706,7 @@ LABEL_EFF028:
 	ldb a, 0x20
 
 LABEL_EFF035:
-	x_dpi2_s41 0xF0
+	lda_dpi XBC, 0xF0
 	djnz xbc, LABEL_EFF035
 	pop xix
 	popw bc
@@ -127722,15 +127722,15 @@ LABEL_EFF03F:
 	sla wa, 3
 	st_dri3b E, 0x07, 0xF4, 0xE0
 	ldw wa, 0x2020
-	x_dpi2_s50 0xF1
-	x_dpi2_s50 0xF1
+	st_dpiw WA, 0xF1
+	st_dpiw WA, 0xF1
 	lds bc, 4
 	ldirw
 	ldb a, 0x20
 	lds bc, 3
 
 LABEL_EFF06C:
-	x_dpi2_s41 0xF0
+	lda_dpi XBC, 0xF0
 	djnz xbc, LABEL_EFF06C
 	call Display_UpdateRegion3
 	ret
@@ -129254,7 +129254,7 @@ LABEL_F01047:
 
 LABEL_F01057:
 	ld a, (xiy)
-	x_dpi2_s41 0xF0
+	lda_dpi XBC, 0xF0
 	add xiy, 0x4
 	djnz8 c, LABEL_F01057
 	ld xix, 0x1192
@@ -129263,7 +129263,7 @@ LABEL_F01057:
 
 LABEL_F01071:
 	ld a, (xiy)
-	x_dpi2_s41 0xF0
+	lda_dpi XBC, 0xF0
 	add xiy, 0x4
 	djnz8 c, LABEL_F01071
 	ld xiy, 0xE95
@@ -129271,7 +129271,7 @@ LABEL_F01071:
 
 LABEL_F01086:
 	ld a, (xiy)
-	x_dpi2_s41 0xF0
+	lda_dpi XBC, 0xF0
 	add xiy, 0x4
 	djnz8 c, LABEL_F01086
 	pop xiy
@@ -129291,7 +129291,7 @@ LABEL_F01099:
 
 LABEL_F010A9:
 	ld a, (xiy)
-	x_dpi2_s41 0xF0
+	lda_dpi XBC, 0xF0
 	add xiy, 0x4
 	djnz8 c, LABEL_F010A9
 	ld xiy, 0xE76
@@ -129299,7 +129299,7 @@ LABEL_F010A9:
 
 LABEL_F010BE:
 	ld a, (xiy)
-	x_dpi2_s41 0xF0
+	lda_dpi XBC, 0xF0
 	add xiy, 0x4
 	djnz8 c, LABEL_F010BE
 	ld xiy, 0xE96
@@ -129307,7 +129307,7 @@ LABEL_F010BE:
 
 LABEL_F010D3:
 	ld a, (xiy)
-	x_dpi2_s41 0xF0
+	lda_dpi XBC, 0xF0
 	add xiy, 0x4
 	djnz8 c, LABEL_F010D3
 	pop xiy
@@ -129327,7 +129327,7 @@ LABEL_F010E6:
 
 LABEL_F010F6:
 	ld wa, (xiy)
-	x_dpi2_s50 0xF1
+	st_dpiw WA, 0xF1
 	add xiy, 0x4
 	djnz8 c, LABEL_F010F6
 	pop xiy
@@ -129347,7 +129347,7 @@ LABEL_F01109:
 
 LABEL_F01119:
 	ld wa, (xiy)
-	x_dpi2_s50 0xF1
+	st_dpiw WA, 0xF1
 	add xiy, 0x4
 	djnz8 c, LABEL_F01119
 	pop xiy
@@ -129367,7 +129367,7 @@ LABEL_F0112C:
 
 LABEL_F0113C:
 	ld wa, (xiy)
-	x_dpi2_s50 0xF1
+	st_dpiw WA, 0xF1
 	add xiy, 0x4
 	djnz8 c, LABEL_F0113C
 	pop xiy
@@ -132240,7 +132240,7 @@ LABEL_F061BD:
 
 LABEL_F061C8:
 	ld_spib A, 0xE4
-	x_dpi2_s41 0xEC
+	lda_dpi XBC, 0xEC
 	cp xbc, xix
 	jr c, LABEL_F061C8
 	lds wa, 0
@@ -133519,7 +133519,7 @@ LABEL_F071FC:
 
 LABEL_F07208:
 	ld_spib A, 0xE4
-	x_dpi2_s41 0xEC
+	lda_dpi XBC, 0xEC
 	cp xbc, xde
 	jr c, LABEL_F07208
 	ret
@@ -135134,7 +135134,7 @@ LABEL_F096A0:
 
 LABEL_F096B7:
 	ld_spib A, 0xE8
-	x_dpi2_s41 0xEC
+	lda_dpi XBC, 0xEC
 	cp xde, xbc
 	jr c, LABEL_F096B7
 	ret
@@ -146073,7 +146073,7 @@ LABEL_F19565:
 
 LABEL_F1957B:
 	ld_spib A, 0xE4
-	x_dpi2_s41 0xE8
+	lda_dpi XBC, 0xE8
 	cp xbc, xhl
 	jr c, LABEL_F1957B
 	ldada_24 xhl, 14770660
@@ -146084,7 +146084,7 @@ LABEL_F1957B:
 
 LABEL_F19596:
 	ld_spib A, 0xE4
-	x_dpi2_s41 0xE8
+	lda_dpi XBC, 0xE8
 	cp xbc, xhl
 	jr c, LABEL_F19596
 	ldada_24 xhl, 14770500
@@ -146095,7 +146095,7 @@ LABEL_F19596:
 
 LABEL_F195B3:
 	ld_spib A, 0xE4
-	x_dpi2_s41 0xE8
+	lda_dpi XBC, 0xE8
 	cp xbc, xhl
 	jr c, LABEL_F195B3
 	ldada_24 xhl, 14770692
@@ -146106,7 +146106,7 @@ LABEL_F195B3:
 
 LABEL_F195D0:
 	ld_spib A, 0xE4
-	x_dpi2_s41 0xE8
+	lda_dpi XBC, 0xE8
 	cp xbc, xhl
 	jr c, LABEL_F195D0
 	ldada_24 xhl, 14770756
@@ -146117,7 +146117,7 @@ LABEL_F195D0:
 
 LABEL_F195ED:
 	ld_spib A, 0xE4
-	x_dpi2_s41 0xE8
+	lda_dpi XBC, 0xE8
 	cp xbc, xhl
 	jr c, LABEL_F195ED
 	ldda32 xwa, 3226
@@ -146137,7 +146137,7 @@ LABEL_F19600:
 
 LABEL_F1961A:
 	ld_spib A, 0xEC
-	x_dpi2_s41 0xF0
+	lda_dpi XBC, 0xF0
 	cp xhl, xiy
 	jr c, LABEL_F1961A
 
@@ -152268,7 +152268,7 @@ LABEL_F1E631:
 	jr nc, LABEL_F1E647
 
 LABEL_F1E63C:
-	x_dpi2_s51 0xE1
+	st_dpiw BC, 0xE1
 	inc 1, bc
 	cp bc, 0x400
 	jr c, LABEL_F1E63C
@@ -154328,7 +154328,7 @@ LABEL_F1FBE3:
 	ldb c, 0x10
 
 LABEL_F1FC06:
-	x_dpi2_s55 0xE1
+	st_dpiw IY, 0xE1
 	djnz8 c, LABEL_F1FC06
 	ld xwa, 0x98
 	add xwa, xde
@@ -154336,7 +154336,7 @@ LABEL_F1FC06:
 	ldb c, 0x10
 
 LABEL_F1FC17:
-	x_dpi2_s42 0xE0
+	lda_dpi XDE, 0xE0
 	djnz8 c, LABEL_F1FC17
 	ld xwa, 0x1E
 	add xwa, xde
@@ -154356,7 +154356,7 @@ LABEL_F1FC17:
 	ldb c, 0x10
 
 LABEL_F1FC57:
-	x_dpi2_s50 0xF1
+	st_dpiw WA, 0xF1
 	djnz8 c, LABEL_F1FC57
 	ld xix, 0xD0F
 	ldb c, 0x10
@@ -157782,7 +157782,7 @@ LABEL_F22628:
 	ld iz, wa
 	extz xiz
 	add xiz, xix
-	x_dpi2_s47 0xF8
+	lda_dpi XSP, 0xF8
 	cps e, 0
 	jr z, LABEL_F2267E
 	cpmi16 (xsp + 4), 0x9
@@ -157933,7 +157933,7 @@ LABEL_F227A5:
 	ld iz, wa
 	extz xiz
 	add xiz, xhl
-	x_dpi2_s43 0xF8
+	lda_dpi XHL, 0xF8
 	cps e, 0
 	jr z, LABEL_F227EC
 	cpmi16 (xsp + 4), 0x9
@@ -158849,7 +158849,7 @@ LABEL_F230EB:
 	lds bc, 6
 
 LABEL_F2310F:
-	x_dpi2_s50 0xF1
+	st_dpiw WA, 0xF1
 	djnz xbc, LABEL_F2310F
 	popw bc
 	inc 1, bc
@@ -159253,7 +159253,7 @@ LABEL_F234C8:
 	jp LABEL_F23645
 
 LABEL_F234CE:
-	x_dpi2_s41 0xF0
+	lda_dpi XBC, 0xF0
 	djnz xbc, LABEL_F234AE
 	call LABEL_F3C903
 	call LABEL_F2041B
@@ -159475,13 +159475,13 @@ LABEL_F236B7:
 	ldw bc, 0x8
 
 LABEL_F236C2:
-	x_dpi2_s50 0xF1
+	st_dpiw WA, 0xF1
 	djnz xbc, LABEL_F236C2
 	xor wa, wa
 	ldw bc, 0x28
 
 LABEL_F236CD:
-	x_dpi2_s50 0xF1
+	st_dpiw WA, 0xF1
 	djnz xbc, LABEL_F236CD
 	ret
 
@@ -159506,13 +159506,13 @@ LABEL_F236EE:
 	ldw bc, 0x8
 
 LABEL_F236FB:
-	x_dpi2_s50 0xF1
+	st_dpiw WA, 0xF1
 	djnz xbc, LABEL_F236FB
 	ld xix, 0xF82
 	ldw bc, 0x8
 
 LABEL_F23709:
-	x_dpi2_s50 0xF1
+	st_dpiw WA, 0xF1
 	djnz xbc, LABEL_F23709
 	pop xix
 	pop xbc
@@ -159577,7 +159577,7 @@ LABEL_F23779:
 	ld xix, 0xFAE
 
 LABEL_F23786:
-	x_dpi2_s50 0xF1
+	st_dpiw WA, 0xF1
 	djnz xbc, LABEL_F23786
 	pop xix
 	popw bc
@@ -159779,7 +159779,7 @@ LABEL_F23980:
 	jp LABEL_F23995
 
 LABEL_F23986:
-	x_dpi2_s41 0xF0
+	lda_dpi XBC, 0xF0
 	bit 7, a
 	jrl nz, LABEL_F23968
 	sub xix, 0x106E
@@ -160245,7 +160245,7 @@ LABEL_F23D29:
 	stda8 4010, a
 	xor bc, bc
 	ld xix, 0xFAB
-	x_dpi2_s41 0xF0
+	lda_dpi XBC, 0xF0
 	inc 1, c
 
 LABEL_F23D39:
@@ -160270,7 +160270,7 @@ LABEL_F23D53:
 	jp LABEL_F23D7E
 
 LABEL_F23D59:
-	x_dpi2_s41 0xF0
+	lda_dpi XBC, 0xF0
 	inc 1, c
 	ldda8 a, 4010
 	and a, 0xF0
@@ -160297,12 +160297,12 @@ LABEL_F23D7F:
 	ld l, a
 	and l, 0xF0
 	ld xix, 0xFAB
-	x_dpi2_s41 0xF0
+	lda_dpi XBC, 0xF0
 	xor h, h
 	ld a, c
 
 LABEL_F23D96:
-	x_dpi2_s41 0xF0
+	lda_dpi XBC, 0xF0
 	inc 1, h
 	ldb c, 0x1
 	cp l, 0xD0
@@ -160472,7 +160472,7 @@ LABEL_F23F13:
 	ld xix, 0xFAE
 
 LABEL_F23F20:
-	x_dpi2_s50 0xF1
+	st_dpiw WA, 0xF1
 	djnz xbc, LABEL_F23F20
 	pop xix
 	popw bc
@@ -161475,7 +161475,7 @@ LABEL_F247EB:
 	stda8 4010, a
 	xor bc, bc
 	ld xix, 0xFAB
-	x_dpi2_s41 0xF0
+	lda_dpi XBC, 0xF0
 	inc 1, c
 
 LABEL_F247FB:
@@ -161500,7 +161500,7 @@ LABEL_F24815:
 	jp LABEL_F24840
 
 LABEL_F2481B:
-	x_dpi2_s41 0xF0
+	lda_dpi XBC, 0xF0
 	inc 1, c
 	ldda8 a, 4010
 	and a, 0xF0
@@ -161906,7 +161906,7 @@ LABEL_F24BF8:
 	lds bc, 2
 
 LABEL_F24C01:
-	x_dpi2_s50 0xF1
+	st_dpiw WA, 0xF1
 	djnz xbc, LABEL_F24C01
 	ret
 
@@ -161933,7 +161933,7 @@ LABEL_F24C25:
 	jp LABEL_F24C3A
 
 LABEL_F24C2B:
-	x_dpi2_s41 0xF0
+	lda_dpi XBC, 0xF0
 	bit 7, a
 	jrl nz, LABEL_F24C0D
 	sub xix, 0x106E
@@ -163617,7 +163617,7 @@ LABEL_F25D10:
 	lds bc, 4
 
 LABEL_F25D19:
-	x_dpi2_s50 0xF1
+	st_dpiw WA, 0xF1
 	djnz xbc, LABEL_F25D19
 	ret
 
@@ -165477,9 +165477,9 @@ LABEL_F27170:
 	stda16 4004, xwa
 	stda32 6705, xix
 	ldda16 xwa, 4002
-	x_dpi2_s50 0xF1
+	st_dpiw WA, 0xF1
 	ldda16 xwa, 4004
-	x_dpi2_s50 0xF1
+	st_dpiw WA, 0xF1
 	stda32 4376, xix
 	ldda32 xix, 4376
 	ld xiy, 0xF2823A
@@ -165496,18 +165496,18 @@ LABEL_F27170:
 
 LABEL_F271F2:
 	ld_spib A, 0xF4
-	x_dpi2_s41 0xF0
+	lda_dpi XBC, 0xF0
 	bit 7, a
 	jr nz, LABEL_F271F2
 	ldw wa, 0x58FF
-	x_dpi2_s50 0xF1
+	st_dpiw WA, 0xF1
 	ldb a, 0x4
 	ldda8 w, 1075
-	x_dpi2_s50 0xF1
+	st_dpiw WA, 0xF1
 	ldw wa, 0x1802
-	x_dpi2_s50 0xF1
+	st_dpiw WA, 0xF1
 	ldb a, 0x8
-	x_dpi2_s41 0xF0
+	lda_dpi XBC, 0xF0
 	stda32 4376, xix
 	ldda8 l, 64610
 	xor h, h
@@ -165546,7 +165546,7 @@ LABEL_F2725F:
 
 LABEL_F27266:
 	ld_spib A, 0xF4
-	x_dpi2_s41 0xF0
+	lda_dpi XBC, 0xF0
 	pushw bc
 	push xiy
 	push xix
@@ -166653,18 +166653,18 @@ LABEL_F27B15:
 	ld xix, 0x11F9
 	st_dri3b D, 0x07, 0xF0, 0xEC
 	ldb a, 0x80
-	x_dpi2_s41 0xF0
+	lda_dpi XBC, 0xF0
 	ldda8 a, 4211
-	x_dpi2_s41 0xF0
+	lda_dpi XBC, 0xF0
 	ldda8 a, 4213
-	x_dpi2_s41 0xF0
+	lda_dpi XBC, 0xF0
 	ldda8 a, 4216
 	ldb w, 0x60
 	muls8rr a, w
 	xor hl, hl
 	ldda8 l, 4215
 	add wa, hl
-	x_dpi2_s50 0xF1
+	st_dpiw WA, 0xF1
 	jrl LABEL_F2780C
 
 LABEL_F27B48:
@@ -167729,7 +167729,7 @@ LABEL_F283C7:
 	ldw bc, 0x100
 
 LABEL_F283D4:
-	x_dpi2_s50 0xF1
+	st_dpiw WA, 0xF1
 	djnz xbc, LABEL_F283D4
 	pop xix
 	popw bc
@@ -167757,7 +167757,7 @@ LABEL_F28401:
 
 LABEL_F2840A:
 	ld_spib A, 0xF4
-	x_dpi2_s41 0xF0
+	lda_dpi XBC, 0xF0
 	pushw wa
 	push xiy
 	call LABEL_F2851E
@@ -167783,7 +167783,7 @@ LABEL_F28430:
 	bit 7, a
 	jr nz, LABEL_F2840A
 	ldb a, 0xFF
-	x_dpi2_s41 0xF0
+	lda_dpi XBC, 0xF0
 	call LABEL_F2851E
 	push xwa
 	push xbc
@@ -167803,7 +167803,7 @@ LABEL_F28454:
 LABEL_F2845A:
 	ldda32 xix, 4376
 	ldb a, 0x51
-	x_dpi2_s41 0xF0
+	lda_dpi XBC, 0xF0
 	call LABEL_F2851E
 	push xwa
 	push xbc
@@ -167823,7 +167823,7 @@ LABEL_F28479:
 LABEL_F2847F:
 	ldda32 xix, 4376
 	ldb a, 0x3
-	x_dpi2_s41 0xF0
+	lda_dpi XBC, 0xF0
 	call LABEL_F2851E
 	push xwa
 	push xbc
@@ -167843,7 +167843,7 @@ LABEL_F2849E:
 LABEL_F284A4:
 	ldda32 xix, 4376
 	ldda8 a, 3950
-	x_dpi2_s41 0xF0
+	lda_dpi XBC, 0xF0
 	call LABEL_F2851E
 	push xwa
 	push xbc
@@ -167863,7 +167863,7 @@ LABEL_F284C5:
 LABEL_F284CB:
 	ldda32 xix, 4376
 	ldda8 a, 3949
-	x_dpi2_s41 0xF0
+	lda_dpi XBC, 0xF0
 	call LABEL_F2851E
 	push xwa
 	push xbc
@@ -167883,7 +167883,7 @@ LABEL_F284EC:
 LABEL_F284F2:
 	ldda32 xix, 4376
 	ldda8 a, 3948
-	x_dpi2_s41 0xF0
+	lda_dpi XBC, 0xF0
 	call LABEL_F2851E
 	push xwa
 	push xbc
@@ -168003,7 +168003,7 @@ LABEL_F285B6:
 
 LABEL_F285C1:
 	ld_spib A, 0xF4
-	x_dpi2_s41 0xF0
+	lda_dpi XBC, 0xF0
 	pushw wa
 	pushw hl
 	push xiy
@@ -168033,7 +168033,7 @@ LABEL_F285EA:
 	jr nz, LABEL_F285C1
 	popw wa
 	ld h, a
-	x_dpi2_s41 0xF0
+	lda_dpi XBC, 0xF0
 	pushw wa
 	pushw hl
 	call LABEL_F2851E
@@ -168057,7 +168057,7 @@ LABEL_F28613:
 LABEL_F28619:
 	ldda32 xix, 4376
 	ld a, w
-	x_dpi2_s41 0xF0
+	lda_dpi XBC, 0xF0
 	pushw hl
 	call LABEL_F2851E
 	popw hl
@@ -168084,7 +168084,7 @@ LABEL_F28640:
 	cp h, 0xD0
 	jr z, LABEL_F28672
 	ld a, l
-	x_dpi2_s41 0xF0
+	lda_dpi XBC, 0xF0
 	call LABEL_F2851E
 	push xwa
 	push xbc
@@ -168691,7 +168691,7 @@ LABEL_F28BA6:
 	ldw wa, 0xFF
 
 LABEL_F28BB2:
-	x_dpi2_s41 0xF0
+	lda_dpi XBC, 0xF0
 	djnz xbc, LABEL_F28BB2
 	pop xix
 	ret
@@ -189282,7 +189282,7 @@ LABEL_F388BB:
 
 LABEL_F388E0:
 	ld_spib A, 0xE4
-	x_dpi2_s41 0xE8
+	lda_dpi XBC, 0xE8
 	cp xbc, xhl
 	jr c, LABEL_F388E0
 	inc 1, iz
@@ -189754,9 +189754,9 @@ LABEL_F38E71:
 
 LABEL_F38EA2:
 	ld_spiw WA, 0xED
-	x_dpi2_s50 0xF1
+	st_dpiw WA, 0xF1
 	ld_spib A, 0xE4
-	x_dpi2_s41 0xE8
+	lda_dpi XBC, 0xE8
 	cp xbc, xiy
 	jr c, LABEL_F38EA2
 	ldda8 c, 10437
@@ -192134,7 +192134,7 @@ LABEL_F3A596:
 
 LABEL_F3A5A5:
 	ld_spib A, 0xE8
-	x_dpi2_s41 0xE4
+	lda_dpi XBC, 0xE4
 	cp xbc, xhl
 	jr c, LABEL_F3A5A5
 	ld a, (xix)
@@ -195289,7 +195289,7 @@ LABEL_F3C18C:
 
 LABEL_F3C1B9:
 	ld_spib A, 0xE4
-	x_dpi2_s41 0xE8
+	lda_dpi XBC, 0xE8
 	cp xbc, xhl
 	jr c, LABEL_F3C1B9
 	lda xsp, (xsp + 16)
@@ -196531,7 +196531,7 @@ LABEL_F3CDB5:
 
 LABEL_F3CDC5:
 	ld_spib A, 0xE8
-	x_dpi2_s41 0xE4
+	lda_dpi XBC, 0xE4
 	cp xbc, xhl
 	jr c, LABEL_F3CDC5
 	ld a, (xix)
@@ -196633,7 +196633,7 @@ LABEL_F3CE8A:
 
 LABEL_F3CE9A:
 	ld_spib A, 0xE8
-	x_dpi2_s41 0xE4
+	lda_dpi XBC, 0xE4
 	cp xbc, xhl
 	jr c, LABEL_F3CE9A
 	ld a, (xix)
@@ -196727,7 +196727,7 @@ LABEL_F3CF5F:
 	st_dri3b B, 0xF1, 0x80, 0x00
 	ld xwa, (xsp + 2)
 	ld bc, (xde)
-	x_dpi2_s51 0xE1
+	st_dpiw BC, 0xE1
 	ld (xsp + 6), xwa
 	lda xbc, (xde + 2)
 	ld hl, (xbc)
@@ -196789,7 +196789,7 @@ LABEL_F3CFF8:
 
 LABEL_F3D008:
 	ld_spib A, 0xE8
-	x_dpi2_s41 0xE4
+	lda_dpi XBC, 0xE4
 	cp xbc, xhl
 	jr c, LABEL_F3D008
 	ld a, (xix)
@@ -200285,7 +200285,7 @@ LABEL_F3EF06:
 
 LABEL_F3EF3A:
 	ld_spib A, 0xE4
-	x_dpi2_s41 0xE8
+	lda_dpi XBC, 0xE8
 	cp xbc, xhl
 	jr c, LABEL_F3EF3A
 	ldw hl, 0xFFFF
@@ -200341,7 +200341,7 @@ LABEL_F3EF7E:
 
 LABEL_F3EFB5:
 	ld_spib A, 0xE4
-	x_dpi2_s41 0xE8
+	lda_dpi XBC, 0xE8
 	cp xbc, xhl
 	jr c, LABEL_F3EFB5
 	lds hl, 0
@@ -203059,7 +203059,7 @@ LABEL_F409F3:
 
 LABEL_F40A16:
 	ld_spib A, 0xE8
-	x_dpi2_s41 0xE4
+	lda_dpi XBC, 0xE4
 	cp xbc, xhl
 	jr c, LABEL_F40A16
 	jr LABEL_F40A4D
@@ -203084,7 +203084,7 @@ LABEL_F40A2F:
 
 LABEL_F40A43:
 	ld_spib A, 0xE8
-	x_dpi2_s41 0xE4
+	lda_dpi XBC, 0xE4
 	cp xbc, xhl
 	jr c, LABEL_F40A43
 
@@ -204176,7 +204176,7 @@ LABEL_F414BF:
 
 LABEL_F414C4:
 	ld_spib A, 0xE8
-	x_dpi2_s41 0xEC
+	lda_dpi XBC, 0xEC
 	cp xde, xbc
 	jr c, LABEL_F414C4
 	ret
@@ -204216,7 +204216,7 @@ LABEL_F4150D:
 
 LABEL_F4150F:
 	ld_spib A, 0xE8
-	x_dpi2_s41 0xE4
+	lda_dpi XBC, 0xE4
 	inc 1, hl
 	cp hl, 0x520
 	jr c, LABEL_F4150F
@@ -204837,7 +204837,7 @@ LABEL_F41A14:
 
 LABEL_F41A19:
 	ld_spib A, 0xEC
-	x_dpi2_s41 0xE8
+	lda_dpi XBC, 0xE8
 	cp xde, xbc
 	jr c, LABEL_F41A19
 	ret
@@ -221896,7 +221896,7 @@ LABEL_F4D558:
 
 LABEL_F4D5C4:
 	ld_spib A, 0xE8
-	x_dpi2_s41 0xEC
+	lda_dpi XBC, 0xEC
 	inc1_berp 0xFB
 	x_erpb3_ocf_t1 0xFB, 0xFB
 	jr c, LABEL_F4D5C4
@@ -221954,7 +221954,7 @@ LABEL_F4D5FD:
 
 LABEL_F4D65D:
 	ld_spib A, 0xE8
-	x_dpi2_s41 0xEC
+	lda_dpi XBC, 0xEC
 	inc1_berp 0xFB
 	x_erpb3_ocf_t1 0xFB, 0xFB
 	jr c, LABEL_F4D65D
@@ -222156,7 +222156,7 @@ LABEL_F4D7EA:
 
 LABEL_F4D84A:
 	ld_spib A, 0xE8
-	x_dpi2_s41 0xEC
+	lda_dpi XBC, 0xEC
 	inc1_berp 0xFA
 	x_erpb3_ocf_t1 0xFA, 0xFB
 	jr c, LABEL_F4D84A
@@ -222215,7 +222215,7 @@ LABEL_F4D888:
 
 LABEL_F4D8E8:
 	ld_spib A, 0xE8
-	x_dpi2_s41 0xEC
+	lda_dpi XBC, 0xEC
 	inc1_berp 0xFA
 	x_erpb3_ocf_t1 0xFA, 0xFB
 	jr c, LABEL_F4D8E8
@@ -228462,7 +228462,7 @@ LABEL_F52BE4:
 
 LABEL_F52BF2:
 	ld_spib A, 0xF8
-	x_dpi2_s41 0xE4
+	lda_dpi XBC, 0xE4
 
 LABEL_F52BF8:
 	cpmi8 (xiz), 0x0
@@ -256645,7 +256645,7 @@ LABEL_F667D2:
 
 LABEL_F667EB:
 	ld_spib A, 0xE8
-	x_dpi2_s41 0xE4
+	lda_dpi XBC, 0xE4
 	cp xbc, xhl
 	jr c, LABEL_F667EB
 	cpdi8 14737, 0
@@ -262723,7 +262723,7 @@ LABEL_F6BE39:
 
 LABEL_F6BE5D:
 	ld_spib A, 0xF0
-	x_dpi2_s41 0xE4
+	lda_dpi XBC, 0xE4
 	inc 1, xde
 	cp xde, 0x72A6
 	jr c, LABEL_F6BE5D
@@ -262913,7 +262913,7 @@ LABEL_F6C03A:
 	cp xwa, xix
 	jr c, LABEL_F6C03A
 	lds32 xwa, 0
-	x_dpi2_s60 0xE6
+	st_dpil XWA, 0xE6
 	lda xde, (xde + 32)
 	cp xbc, xhl
 	jr c, LABEL_F6C035
@@ -262986,7 +262986,7 @@ LABEL_F6C0CB:
 	cp xwa, xix
 	jr c, LABEL_F6C0CB
 	lds32 xwa, 0
-	x_dpi2_s60 0xE6
+	st_dpil XWA, 0xE6
 	lda xde, (xde + 100)
 	cp xbc, xhl
 	jr c, LABEL_F6C0C6
@@ -264742,7 +264742,7 @@ LABEL_F6D247:
 
 LABEL_F6D260:
 	lds32 xwa, 0
-	x_dpi2_s60 0xE6
+	st_dpil XWA, 0xE6
 	cp xbc, xde
 	jr c, LABEL_F6D260
 	ldda32 xwa, 15708
@@ -291966,7 +291966,7 @@ LABEL_F862B5:
 	st_dri3b B, 0xE9, 0xFC, 0x01
 
 LABEL_F862C6:
-	x_dpi2_s63 0xE6
+	st_dpil XHL, 0xE6
 	cp xbc, xde
 	jr ule, LABEL_F862C6
 	cp wa, 0x12
@@ -295619,7 +295619,7 @@ LABEL_F890DC:
 
 LABEL_F890E3:
 	ld_spib C, 0xE8
-	x_dpi2_s43 0xE0
+	lda_dpi XHL, 0xE0
 	cpmi8 (xde), 0x0
 	jr nz, LABEL_F890E3
 
@@ -295633,7 +295633,7 @@ LABEL_F890F2:
 
 LABEL_F890F6:
 	ld_spib C, 0xEC
-	x_dpi2_s43 0xE0
+	lda_dpi XHL, 0xE0
 	dec 1, de
 
 LABEL_F890FE:
@@ -295667,7 +295667,7 @@ LABEL_F89121:
 
 LABEL_F89126:
 	ld_spib C, 0xE8
-	x_dpi2_s43 0xE0
+	lda_dpi XHL, 0xE0
 	cpmi8 (xde), 0x0
 	jr nz, LABEL_F89126
 
@@ -295753,7 +295753,7 @@ LABEL_F89199:
 
 LABEL_F891A0:
 	add c, 0x30
-	x_dpi2_s43 0xE0
+	lda_dpi XHL, 0xE0
 	ld xbc, xde
 	jrl LABEL_F890DC
 
@@ -295782,14 +295782,14 @@ LABEL_F891DD:
 	pushw iz
 	cp de, 0x64
 	jr c, LABEL_F89218
-	x_dpi2_s34 0xE0
+	st_dpib D, 0xE0
 	ld hl, de
 	extz xhl
 	div hl, 0x64
 	add l, 0x30
 	ld (xix), l
 	sub de, 0x64
-	x_dpi2_s34 0xE0
+	st_dpib D, 0xE0
 	ld hl, de
 	extz xhl
 	div hl, 0xA
@@ -295803,13 +295803,13 @@ LABEL_F891DD:
 	jr LABEL_F8923C
 
 LABEL_F89218:
-	x_dpi2_s34 0xE0
+	st_dpib D, 0xE0
 	ld hl, de
 	extz xhl
 	div hl, 0xA
 	add l, 0x30
 	ld (xix), l
-	x_dpi2_s33 0xE0
+	st_dpib C, 0xE0
 	extz xde
 	div de, 0xA
 	ldto_werp DE, 0xEA
@@ -298463,7 +298463,7 @@ LABEL_F8AD02:
 	jr LABEL_F8AD14
 
 LABEL_F8AD0D:
-	x_dpi2_s41 0xE4
+	lda_dpi XBC, 0xE4
 	inc 1, hl
 	inc 1, xde
 
@@ -325333,7 +325333,7 @@ LABEL_FA7B5F:
 	calr LABEL_FA951C
 	ld xbc, (xhl)
 	ld_sril3 XWA, 0xFD, 0x3A, 0x01
-	x_dpi2_s61 0xE2
+	st_dpil XBC, 0xE2
 	push xbc
 	jr LABEL_FA7BBD
 
@@ -332638,7 +332638,7 @@ LABEL_FAC00B:
 	lds iy, 0
 
 LABEL_FAC018:
-	x_dpi2_s34 0xF9
+	st_dpib D, 0xF9
 	ld xwa, (xsp + 8)
 	ld_spib C, 0xE0
 	ld (xsp + 8), xwa
@@ -333501,7 +333501,7 @@ LABEL_FAC7DF:
 	lds32 xwa, 0
 	ld a, (xhl + 2)
 	add xix, xwa
-	x_dpi2_s64 0xE6
+	st_dpil XIX, 0xE6
 	lds32 xwa, 1
 	add (xsp + 12), xwa
 	ld xde, (xsp + 12)
@@ -336530,7 +336530,7 @@ LABEL_FAE907:
 
 LABEL_FAE935:
 	ld xwa, 0xFF000000
-	x_dpi2_s60 0xE6
+	st_dpil XWA, 0xE6
 	cp xbc, xhl
 	jr c, LABEL_FAE935
 	lds32 xwa, 0
@@ -336563,7 +336563,7 @@ LABEL_FAE954:
 	extz wa
 	extz xwa
 	add xix, xwa
-	x_dpi2_s64 0xEA
+	st_dpil XIX, 0xEA
 	lds32 xwa, 1
 	add (xsp + 6), xwa
 	ld xbc, (xsp + 6)
@@ -336980,7 +336980,7 @@ LABEL_FAED52:
 	ld (xsp + 44), xwa
 
 LABEL_FAED88:
-	x_dpi2_s43 0xE8
+	lda_dpi XHL, 0xE8
 	inc 1, c
 	cp xde, xwa
 	jr c, LABEL_FAED88
@@ -340590,7 +340590,7 @@ LABEL_FB26AF:
 	cpmi8 (xde), 0x7E
 	jr nz, LABEL_FB26C2
 	ld a, (xde)
-	x_dpi2_s41 0xE4
+	lda_dpi XBC, 0xE4
 	x_dpi3_o00_t1 0xE4, 0x34
 	addmi8 (xbc), 0x30
 	jr LABEL_FB26CB
@@ -340797,7 +340797,7 @@ InitPaletteRGB:
 
 LABEL_FB288A:
 	ld_spil XWA, 0xE6
-	x_dpi2_s60 0xEA
+	st_dpil XWA, 0xEA
 	cp xbc, xhl
 	jr c, LABEL_FB288A
 	ret
@@ -342105,7 +342105,7 @@ LABEL_FB43EB:
 	jr LABEL_FB4520
 
 LABEL_FB4510:
-	x_dpi2_s34 0xF8
+	st_dpib D, 0xF8
 	ld wa, iy
 	extz xwa
 	add xwa, (xsp + 82)
@@ -342275,7 +342275,7 @@ LABEL_FB4661:
 	add xwa, xix
 	ld xde, (xsp + 8)
 	ld a, (xwa)
-	x_dpi2_s41 0xE8
+	lda_dpi XBC, 0xE8
 	ld xwa, xde
 	sub xwa, xbc
 	add xwa, xix
@@ -342287,7 +342287,7 @@ LABEL_FB4661:
 	add xwa, xix
 	ld xde, (xsp + 4)
 	ld a, (xwa)
-	x_dpi2_s41 0xE8
+	lda_dpi XBC, 0xE8
 	ld xwa, xde
 	sub xwa, xbc
 	add xwa, xix
@@ -342323,7 +342323,7 @@ LABEL_FB4661:
 	add xwa, xix
 	ld xiy, (xsp + 12)
 	ld a, (xwa)
-	x_dpi2_s41 0xF4
+	lda_dpi XBC, 0xF4
 	ld xwa, xiy
 	sub xwa, xbc
 	add xwa, xix
@@ -342573,7 +342573,7 @@ LABEL_FB4935:
 
 LABEL_FB493B:
 	ld_spib A, 0xEC
-	x_dpi2_s41 0xF4
+	lda_dpi XBC, 0xF4
 
 LABEL_FB4941:
 	inc 1, bc
@@ -342820,7 +342820,7 @@ LABEL_FB4A83:
 	add xwa, xde
 	ld xbc, (xsp + 8)
 	ld a, (xwa)
-	x_dpi2_s41 0xE4
+	lda_dpi XBC, 0xE4
 	ld xwa, xbc
 	sub xwa, (xsp + 12)
 	add xwa, xde
@@ -343215,7 +343215,7 @@ LABEL_FB4EF4:
 	sub xwa, xhl
 	add xwa, xix
 	ld a, (xwa)
-	x_dpi2_s41 0xE4
+	lda_dpi XBC, 0xE4
 	cp xbc, xde
 	jr ule, LABEL_FB4EF4
 
@@ -343234,7 +343234,7 @@ LABEL_FB4F1C:
 	sub xwa, xhl
 	add xwa, xix
 	ld a, (xwa)
-	x_dpi2_s41 0xE4
+	lda_dpi XBC, 0xE4
 	cp xbc, xde
 	jr ule, LABEL_FB4F1C
 
@@ -343768,7 +343768,7 @@ LABEL_FB53E0:
 	sub xwa, xhl
 	add xwa, xix
 	ld a, (xwa)
-	x_dpi2_s41 0xE4
+	lda_dpi XBC, 0xE4
 	cp xbc, xde
 	jr ule, LABEL_FB53E0
 
@@ -343787,7 +343787,7 @@ LABEL_FB5408:
 	sub xwa, xhl
 	add xwa, xix
 	ld a, (xwa)
-	x_dpi2_s41 0xE4
+	lda_dpi XBC, 0xE4
 	cp xbc, xde
 	jr ule, LABEL_FB5408
 
@@ -343818,7 +343818,7 @@ LABEL_FB544B:
 	sub xwa, xhl
 	add xwa, xix
 	ld a, (xwa)
-	x_dpi2_s41 0xE4
+	lda_dpi XBC, 0xE4
 	cp xbc, xde
 	jr ule, LABEL_FB544B
 
@@ -343889,7 +343889,7 @@ LABEL_FB54F0:
 	sub xwa, xhl
 	add xwa, xix
 	ld a, (xwa)
-	x_dpi2_s41 0xE4
+	lda_dpi XBC, 0xE4
 	cp xbc, xde
 	jr ule, LABEL_FB54F0
 
@@ -343919,7 +343919,7 @@ LABEL_FB5532:
 	sub xwa, xhl
 	add xwa, xix
 	ld a, (xwa)
-	x_dpi2_s41 0xE4
+	lda_dpi XBC, 0xE4
 	cp xbc, xde
 	jr ule, LABEL_FB5532
 
@@ -343949,7 +343949,7 @@ LABEL_FB5574:
 	sub xwa, xhl
 	add xwa, xix
 	ld a, (xwa)
-	x_dpi2_s41 0xE4
+	lda_dpi XBC, 0xE4
 	cp xbc, xde
 	jr ule, LABEL_FB5574
 
@@ -346606,7 +346606,7 @@ LABEL_FB6FA5:
 LABEL_FB6FB8:
 	ld xde, (xsp + 8)
 	ld_spib A, 0xE8
-	x_dpi2_s41 0xF8
+	lda_dpi XBC, 0xF8
 	ld (xsp + 8), xde
 	inc 1, w
 
@@ -347078,7 +347078,7 @@ LABEL_FB7398:
 
 LABEL_FB73A5:
 	ld xwa, (xsp + 6)
-	x_dpi2_s60 0xEE
+	st_dpil XWA, 0xEE
 	ld xwa, (xhl)
 	ld (xsp + 6), xwa
 	ld xwa, 0xA5A5A5A5
@@ -347102,7 +347102,7 @@ LABEL_FB73D1:
 
 LABEL_FB73DE:
 	ld xwa, (xsp + 6)
-	x_dpi2_s60 0xEE
+	st_dpil XWA, 0xEE
 	sub xiz, 0x1
 	jr nz, LABEL_FB7372
 
@@ -347142,7 +347142,7 @@ LABEL_FB7422:
 	or a, (xbc)
 
 LABEL_FB7431:
-	x_dpi2_s40 0xF4
+	lda_dpi XWA, 0xF4
 	ld w, (xiy)
 	ldmi8 (xiy), 0xA5
 	cpmi8 (xiy), 0xA5
@@ -347150,7 +347150,7 @@ LABEL_FB7431:
 	or a, (xbc)
 
 LABEL_FB7440:
-	x_dpi2_s40 0xF4
+	lda_dpi XWA, 0xF4
 	sub xix, 0x1
 	jr nz, LABEL_FB7422
 
@@ -369961,9 +369961,9 @@ LABEL_FCA51A:
 
 LABEL_FCA542:
 	ld_spiw WA, 0xF5
-	x_dpi2_s50 0xF1
+	st_dpiw WA, 0xF1
 	ld_spiw WA, 0xF5
-	x_dpi2_s50 0xF1
+	st_dpiw WA, 0xF1
 	cp a, 0xFF
 	jr nz, LABEL_FCA542
 
@@ -370072,11 +370072,11 @@ LABEL_FCA6B8:
 
 LABEL_FCA6C7:
 	ld_spiw WA, 0xF5
-	x_dpi2_s50 0xF1
+	st_dpiw WA, 0xF1
 	cp a, 0xFF
 	jr z, LABEL_FCA6DA
 	ld_spiw WA, 0xF5
-	x_dpi2_s50 0xF1
+	st_dpiw WA, 0xF1
 	jr LABEL_FCA6C7
 
 LABEL_FCA6DA:
@@ -370107,7 +370107,7 @@ LABEL_FCA6FD:
 	ld xix, 0x91AD
 	ldb a, 0xC0
 	ldda8 w, 37321
-	x_dpi2_s50 0xF1
+	st_dpiw WA, 0xF1
 	x_dpi4_o02_t2 0xF1, 0x17, 0x00
 	ld wa, (xsp)
 	bit 7, a
@@ -370122,10 +370122,10 @@ LABEL_FCA732:
 	setda 1, 37293
 
 LABEL_FCA73E:
-	x_dpi2_s50 0xF1
+	st_dpiw WA, 0xF1
 	ldda8 a, 37319
 	ldb w, 0xFF
-	x_dpi2_s50 0xF1
+	st_dpiw WA, 0xF1
 	stdi8 37322, 7
 	calr LABEL_FCAB5F
 	call LABEL_EF1679
@@ -370378,9 +370378,9 @@ LABEL_FCAA9C:
 	ld xix, 0x91AD
 	ldb a, 0xB0
 	ldda8 w, 37321
-	x_dpi2_s50 0xF1
+	st_dpiw WA, 0xF1
 	ldda16 xwa, 37309
-	x_dpi2_s50 0xF1
+	st_dpiw WA, 0xF1
 	ldda16 xwa, 37311
 	bit 7, a
 	jr z, LABEL_FCAAE4
@@ -370394,7 +370394,7 @@ LABEL_FCAAE4:
 	setda 1, 37293
 
 LABEL_FCAAF0:
-	x_dpi2_s50 0xF1
+	st_dpiw WA, 0xF1
 	ldw wa, 0xFF7F
 	ld (xix), wa
 	stdi8 37322, 135
@@ -370428,11 +370428,11 @@ LABEL_FCAB09:
 
 LABEL_FCAB4B:
 	ld_spiw WA, 0xF5
-	x_dpi2_s50 0xF1
+	st_dpiw WA, 0xF1
 	cp a, 0xFF
 	jr z, LABEL_FCAB5E
 	ld_spiw WA, 0xF5
-	x_dpi2_s50 0xF1
+	st_dpiw WA, 0xF1
 	jr LABEL_FCAB4B
 
 LABEL_FCAB5E:
@@ -370496,7 +370496,7 @@ LABEL_FCABDF:
 	ld xix, 0x91AD
 	ldb a, 0xB2
 	ldda8 w, 37321
-	x_dpi2_s50 0xF1
+	st_dpiw WA, 0xF1
 	ldb a, 0x9A
 	bit 7, a
 	jr z, LABEL_FCABFB
@@ -370506,7 +370506,7 @@ LABEL_FCABDF:
 LABEL_FCABFB:
 	ld w, c
 	add w, 0x4
-	x_dpi2_s50 0xF1
+	st_dpiw WA, 0xF1
 	ldda8 a, 50600
 	bit 7, a
 	jr z, LABEL_FCAC13
@@ -370515,10 +370515,10 @@ LABEL_FCABFB:
 
 LABEL_FCAC13:
 	ldb w, 0x7F
-	x_dpi2_s50 0xF1
+	st_dpiw WA, 0xF1
 	ld a, c
 	ldb w, 0xFF
-	x_dpi2_s50 0xF1
+	st_dpiw WA, 0xF1
 	stdi8 37322, 7
 	pushw bc
 	calr LABEL_FCAB5F
@@ -370574,10 +370574,10 @@ LABEL_FCAC7F:
 LABEL_FCAC93:
 	ld xix, 0x91B5
 	ldw wa, 0xD2
-	x_dpi2_s50 0xF1
+	st_dpiw WA, 0xF1
 	xor a, a
 	ldb w, 0x40
-	x_dpi2_s50 0xF1
+	st_dpiw WA, 0xF1
 	ldda8 a, 37320
 	ldb w, 0xFF
 	ld (xix), wa
@@ -370587,10 +370587,10 @@ LABEL_FCAC93:
 LABEL_FCACB1:
 	ld xix, 0x91B5
 	ldw wa, 0xD1
-	x_dpi2_s50 0xF1
+	st_dpiw WA, 0xF1
 	ldb a, 0x0
 	ldda8 w, 37320
-	x_dpi2_s50 0xF1
+	st_dpiw WA, 0xF1
 	ldmi8 (xix), 0xFF
 	calr LABEL_FCB44E
 	ret
@@ -370598,10 +370598,10 @@ LABEL_FCACB1:
 LABEL_FCACCC:
 	ld xix, 0x91B5
 	ldw wa, 0xD0
-	x_dpi2_s50 0xF1
+	st_dpiw WA, 0xF1
 	ldb a, 0x0
 	ldda8 w, 37320
-	x_dpi2_s50 0xF1
+	st_dpiw WA, 0xF1
 	ldmi8 (xix), 0xFF
 	calr LABEL_FCB44E
 	ret
@@ -370609,7 +370609,7 @@ LABEL_FCACCC:
 LABEL_FCACE7:
 	ld xix, 0x91B5
 	ldw wa, 0xB0
-	x_dpi2_s50 0xF1
+	st_dpiw WA, 0xF1
 	extz hl
 	ldda8 l, 37320
 	ld xiy, 0xF1A0
@@ -370617,9 +370617,9 @@ LABEL_FCACE7:
 	ld xiy, 0xFCBA03
 	ld_srib3 A, 0x07, 0xF4, 0xEC
 	ldb w, 0x4
-	x_dpi2_s50 0xF1
+	st_dpiw WA, 0xF1
 	ldw wa, 0x800
-	x_dpi2_s50 0xF1
+	st_dpiw WA, 0xF1
 	ldda8 a, 37320
 	ldb w, 0xFF
 	ld (xix), wa
@@ -370658,7 +370658,7 @@ LABEL_FCAD50:
 LABEL_FCAD62:
 	pushw hl
 	call LABEL_EF2472
-	x_dpi2_s47 0xF4
+	lda_dpi XSP, 0xF4
 	popw hl
 	ld hl, (xix - 10)
 	cp hl, (xix - 6)
@@ -371066,11 +371066,11 @@ LABEL_FCB3D0:
 
 LABEL_FCB3F7:
 	ld_spiw WA, 0xF5
-	x_dpi2_s50 0xF1
+	st_dpiw WA, 0xF1
 	cp a, 0xFF
 	jr z, LABEL_FCB40A
 	ld_spiw WA, 0xF5
-	x_dpi2_s50 0xF1
+	st_dpiw WA, 0xF1
 	jr LABEL_FCB3F7
 
 LABEL_FCB40A:
@@ -374046,13 +374046,13 @@ LABEL_FCEC8F:
 	extz xde
 	add xde, xbc
 	ld a, (xiz + 4)
-	x_dpi2_s41 0xE8
+	lda_dpi XBC, 0xE8
 	ld a, (xiz + 5)
-	x_dpi2_s41 0xE8
+	lda_dpi XBC, 0xE8
 	ld a, (xiz + 6)
-	x_dpi2_s41 0xE8
+	lda_dpi XBC, 0xE8
 	ld a, (xiz + 7)
-	x_dpi2_s41 0xE8
+	lda_dpi XBC, 0xE8
 	jr LABEL_FCED1B
 
 LABEL_FCECEC:
@@ -374063,13 +374063,13 @@ LABEL_FCECEC:
 	extz xde
 	add xde, xbc
 	ld a, (xiz + 4)
-	x_dpi2_s41 0xE8
+	lda_dpi XBC, 0xE8
 	ld a, (xiz + 5)
-	x_dpi2_s41 0xE8
+	lda_dpi XBC, 0xE8
 	ld a, (xiz + 6)
-	x_dpi2_s41 0xE8
+	lda_dpi XBC, 0xE8
 	ld a, (xiz + 7)
-	x_dpi2_s41 0xE8
+	lda_dpi XBC, 0xE8
 
 LABEL_FCED1B:
 	ldmi8 (xde), 0xFF
@@ -374117,21 +374117,21 @@ LABEL_FCED32:
 	extz xde
 	add xde, xbc
 	ld a, (xiz + 4)
-	x_dpi2_s41 0xE8
+	lda_dpi XBC, 0xE8
 	ld a, (xiz + 5)
-	x_dpi2_s41 0xE8
+	lda_dpi XBC, 0xE8
 	ld a, (xiz + 6)
-	x_dpi2_s41 0xE8
+	lda_dpi XBC, 0xE8
 	ld a, (xiz + 7)
-	x_dpi2_s41 0xE8
+	lda_dpi XBC, 0xE8
 	ld a, (xiz + 8)
-	x_dpi2_s41 0xE8
+	lda_dpi XBC, 0xE8
 	ld a, (xiz + 9)
-	x_dpi2_s41 0xE8
+	lda_dpi XBC, 0xE8
 	ld a, (xiz + 10)
-	x_dpi2_s41 0xE8
+	lda_dpi XBC, 0xE8
 	ld a, (xiz + 11)
-	x_dpi2_s41 0xE8
+	lda_dpi XBC, 0xE8
 	jr LABEL_FCEDF2
 
 LABEL_FCEDAB:
@@ -374142,21 +374142,21 @@ LABEL_FCEDAB:
 	extz xde
 	add xde, xbc
 	ld a, (xiz + 4)
-	x_dpi2_s41 0xE8
+	lda_dpi XBC, 0xE8
 	ld a, (xiz + 5)
-	x_dpi2_s41 0xE8
+	lda_dpi XBC, 0xE8
 	ld a, (xiz + 6)
-	x_dpi2_s41 0xE8
+	lda_dpi XBC, 0xE8
 	ld a, (xiz + 7)
-	x_dpi2_s41 0xE8
+	lda_dpi XBC, 0xE8
 	ld a, (xiz + 8)
-	x_dpi2_s41 0xE8
+	lda_dpi XBC, 0xE8
 	ld a, (xiz + 9)
-	x_dpi2_s41 0xE8
+	lda_dpi XBC, 0xE8
 	ld a, (xiz + 10)
-	x_dpi2_s41 0xE8
+	lda_dpi XBC, 0xE8
 	ld a, (xiz + 11)
-	x_dpi2_s41 0xE8
+	lda_dpi XBC, 0xE8
 
 LABEL_FCEDF2:
 	ldmi8 (xde), 0xFF
@@ -374342,7 +374342,7 @@ LABEL_FCEF89:
 
 LABEL_FCEF94:
 	lds32 xwa, 0
-	x_dpi2_s60 0xE6
+	st_dpil XWA, 0xE6
 	cp xbc, xde
 	jr c, LABEL_FCEF94
 	ldada_24 xde, 229624
@@ -374568,7 +374568,7 @@ LABEL_FCFA25:
 
 LABEL_FCFA33:
 	call 0xEF27D8
-	x_dpi2_s47 0xF4
+	lda_dpi XSP, 0xF4
 	ld hl, (xiz - 10)
 	cp hl, (xiz - 6)
 	jr z, LABEL_FCFA4C
@@ -379431,7 +379431,7 @@ LABEL_FD557B:
 	ld a, (xix)
 	and a, 0xF8
 	or a, (xhl + 4)
-	x_dpi2_s41 0xF0
+	lda_dpi XBC, 0xF0
 	ld a, (xhl + 5)
 	ld (xix), a
 
@@ -379625,7 +379625,7 @@ LABEL_FD56FE:
 	ld a, (xix)
 	and a, 0xF8
 	or a, (xde + 4)
-	x_dpi2_s41 0xF0
+	lda_dpi XBC, 0xF0
 	ld a, (xde + 5)
 	ld (xix), a
 
@@ -380352,7 +380352,7 @@ LABEL_FD5DD1:
 	ldda32 xbc, 48212
 	lda xde, (xbc + 10)
 	ld xbc, (xde)
-	x_dpi2_s33 0xE4
+	st_dpib C, 0xE4
 	ld (xde), xbc
 	ld (xhl), a
 	ldda32 xbc, 48212
@@ -380374,7 +380374,7 @@ LABEL_FD5DFC:
 	ld xwa, (xbc)
 	cpmi8 (xwa), 0xFF
 	ret z
-	x_dpi2_s32 0xE0
+	st_dpib B, 0xE0
 	ld (xbc), xwa
 	ld l, (xde)
 	ret
@@ -381544,7 +381544,7 @@ LABEL_FD69EE:
 
 LABEL_FD69FD:
 	ld xde, (xix)
-	x_dpi2_s35 0xE8
+	st_dpib E, 0xE8
 	ld (xix), xde
 	ld_spib E, 0xE0
 	ld (xiy), e
@@ -381586,7 +381586,7 @@ LABEL_FD6A63:
 
 LABEL_FD6A72:
 	ld xde, (xix)
-	x_dpi2_s35 0xE8
+	st_dpib E, 0xE8
 	ld (xix), xde
 	ld_spib E, 0xE0
 	ld (xiy), e
@@ -381952,11 +381952,11 @@ LABEL_FD7107:
 LABEL_FD7116:
 	lda xbc, (xwa + 6)
 	ld xwa, (xbc)
-	x_dpi2_s32 0xE0
+	st_dpib B, 0xE0
 	ld (xbc), xwa
 	ld l, (xde)
 	sll l, 4
-	x_dpi2_s32 0xE0
+	st_dpib B, 0xE0
 	ld (xbc), xwa
 	ld a, (xde)
 	and a, 0xF
@@ -383133,7 +383133,7 @@ LABEL_FD85A5:
 
 LABEL_FD85C9:
 	ld_spiw WA, 0xE9
-	x_dpi2_s50 0xED
+	st_dpiw WA, 0xED
 	ld xwa, xbc
 	dec 1, xbc
 	or xwa, xwa
@@ -386772,11 +386772,11 @@ AssswbWr:
 	ldada xix, 48444
 	extz xhl
 	add xhl, xix
-	x_dpi2_s41 0xEC
-	x_dpi2_s43 0xEC
-	x_dpi2_s45 0xEC
+	lda_dpi XBC, 0xEC
+	lda_dpi XHL, 0xEC
+	lda_dpi XIY, 0xEC
 	ld a, (xsp + 4)
-	x_dpi2_s41 0xEC
+	lda_dpi XBC, 0xEC
 	ldmi8 (xhl), 0xFF
 	ldda16 xwa, 37086
 	inc 4, wa
@@ -386792,11 +386792,11 @@ AddswbWr:
 	ldada xix, 48953
 	extz xhl
 	add xhl, xix
-	x_dpi2_s41 0xEC
-	x_dpi2_s43 0xEC
-	x_dpi2_s45 0xEC
+	lda_dpi XBC, 0xEC
+	lda_dpi XHL, 0xEC
+	lda_dpi XIY, 0xEC
 	ld a, (xsp + 4)
-	x_dpi2_s41 0xEC
+	lda_dpi XBC, 0xEC
 	ldmi8 (xhl), 0xFF
 	ldda16 xwa, 37090
 	inc 4, wa
@@ -386820,11 +386820,11 @@ LABEL_FDB263:
 LABEL_FDB26A:
 	cp xiy, xhl
 	jr nc, LABEL_FDB280
-	x_dpi2_s41 0xF4
-	x_dpi2_s43 0xF4
-	x_dpi2_s45 0xF4
+	lda_dpi XBC, 0xF4
+	lda_dpi XHL, 0xF4
+	lda_dpi XIY, 0xF4
 	ld a, (xsp + 4)
-	x_dpi2_s41 0xF4
+	lda_dpi XBC, 0xF4
 	ldmi8 (xiy), 0xFF
 
 LABEL_FDB280:
@@ -387086,10 +387086,10 @@ LABEL_FDB4B3:
 	inc 1, xde
 	ld xwa, (xsp + 2)
 	ld c, (xbc)
-	x_dpi2_s43 0xE0
+	lda_dpi XHL, 0xE0
 	ld (xsp + 2), xwa
 	ld c, (xde)
-	x_dpi2_s43 0xE0
+	lda_dpi XHL, 0xE0
 	ld (xsp + 2), xwa
 	inc1_berp 0xFB
 	x_erpb3_ocf_t1 0xFB, 0x19
@@ -387208,7 +387208,7 @@ LABEL_FDB57F:
 
 LABEL_FDB5F5:
 	ld_spiw WA, 0xF1
-	x_dpi2_s50 0xED
+	st_dpiw WA, 0xED
 	inc 1, bc
 	ld wa, bc
 	cp wa, de
@@ -410747,7 +410747,7 @@ LABEL_FEA2B6:
 
 LABEL_FEA2C1:
 	ldb a, 0x40
-	x_dpi2_s50 0xF1
+	st_dpiw WA, 0xF1
 	djnz xbc, LABEL_FEA2B6
 
 LABEL_FEA2C9:
@@ -416698,7 +416698,7 @@ LABEL_FEE57A:
 LABEL_FEE591:
 	call 0xEF2C22
 	ld xwa, (xsp + 8)
-	x_dpi2_s47 0xE0
+	lda_dpi XSP, 0xE0
 	ld (xsp + 8), xwa
 	inc 1, iz
 	cps iz, 7
@@ -416715,7 +416715,7 @@ LABEL_FEE591:
 LABEL_FEE5BF:
 	call 0xEF2C22
 	ld_sril3 XWA, 0xFD, 0x36, 0x01
-	x_dpi2_s47 0xE0
+	lda_dpi XSP, 0xE0
 	st_dri3l XWA, 0xFD, 0x36, 0x01
 	inc 1, iz
 	x_sriw4_sf6 0xFD, 0x2E, 0x01
@@ -416762,7 +416762,7 @@ LABEL_FEE608:
 
 LABEL_FEE62A:
 	ld_spib A, 0xEC
-	x_dpi2_s41 0xE8
+	lda_dpi XBC, 0xE8
 	cp xde, xbc
 	jr c, LABEL_FEE62A
 	ret
@@ -416774,7 +416774,7 @@ LABEL_FEE635:
 
 LABEL_FEE63F:
 	ld_spib A, 0xE8
-	x_dpi2_s41 0xE4
+	lda_dpi XBC, 0xE4
 	cp xde, xhl
 	jr c, LABEL_FEE63F
 	ret
@@ -416814,7 +416814,7 @@ LABEL_FEE64A:
 
 LABEL_FEE6A1:
 	ld_spib A, 0xE4
-	x_dpi2_s41 0xE8
+	lda_dpi XBC, 0xE8
 	cp xbc, xhl
 	jr c, LABEL_FEE6A1
 
@@ -416900,7 +416900,7 @@ LABEL_FEE712:
 
 LABEL_FEE760:
 	ld_spib A, 0xE4
-	x_dpi2_s41 0xE8
+	lda_dpi XBC, 0xE8
 	cp xbc, xhl
 	jr c, LABEL_FEE760
 
@@ -418948,7 +418948,7 @@ LABEL_FF03DC:
 
 LABEL_FF03EB:
 	ld_spib A, 0xE4
-	x_dpi2_s41 0xE8
+	lda_dpi XBC, 0xE8
 	cp xbc, xhl
 	jr c, LABEL_FF03EB
 	calr LABEL_FF0233
@@ -418995,7 +418995,7 @@ LABEL_FF047C:
 
 LABEL_FF048E:
 	ld_spib A, 0xE4
-	x_dpi2_s41 0xE8
+	lda_dpi XBC, 0xE8
 	cp xbc, xhl
 	jr c, LABEL_FF048E
 	calr LABEL_FF0233
@@ -419729,7 +419729,7 @@ LABEL_FF0CF3:
 
 LABEL_FF0D00:
 	ld_spib A, 0xE8
-	x_dpi2_s41 0xF0
+	lda_dpi XBC, 0xF0
 	dec 1, bc
 
 LABEL_FF0D08:
@@ -419860,7 +419860,7 @@ LABEL_FF0DCA:
 
 LABEL_FF0DD4:
 	ld_spib A, 0xE4
-	x_dpi2_s41 0xE8
+	lda_dpi XBC, 0xE8
 
 LABEL_FF0DDA:
 	cpmi8 (xbc), 0x0
@@ -420149,7 +420149,7 @@ LABEL_FF0FFA:
 	jr z, LABEL_FF101F
 
 LABEL_FF1013:
-	x_dpi2_s41 0xF0
+	lda_dpi XBC, 0xF0
 	sub bc, 0x1
 	ret z
 	djnz xde, LABEL_FF1013
@@ -420162,7 +420162,7 @@ LABEL_FF101F:
 	ldfr_werp WA, 0xE2
 
 LABEL_FF102B:
-	x_dpi2_s60 0xF2
+	st_dpil XWA, 0xF2
 	djnz xbc, LABEL_FF102B
 
 LABEL_FF1031:
@@ -420170,7 +420170,7 @@ LABEL_FF1031:
 	ret z
 
 LABEL_FF1037:
-	x_dpi2_s41 0xF0
+	lda_dpi XBC, 0xF0
 	djnz xde, LABEL_FF1037
 	ret
 
@@ -421282,7 +421282,7 @@ LABEL_FF1948:
 
 LABEL_FF194A:
 	ld xwa, (xsp + 12)
-	x_dpi2_s31 0xE0
+	st_dpib A, 0xE0
 	ld (xsp + 4), xbc
 	ld (xsp + 12), xwa
 	ld xwa, xiz
@@ -421310,7 +421310,7 @@ LABEL_FF1983:
 
 LABEL_FF1989:
 	ld xwa, (xsp + 12)
-	x_dpi2_s31 0xE0
+	st_dpib A, 0xE0
 	ld (xsp + 4), xbc
 	ld (xsp + 12), xwa
 	ld xwa, xiz
@@ -421343,7 +421343,7 @@ LABEL_FF19D3:
 	ld xde, (xsp + 8)
 
 LABEL_FF19DB:
-	x_dpi2_s31 0xEC
+	st_dpib A, 0xEC
 	ld xwa, xde
 	and xwa, 0xF
 	add xwa, xix
@@ -421359,7 +421359,7 @@ LABEL_FF19F5:
 	ld xhl, (xsp + 4)
 
 LABEL_FF19FB:
-	x_dpi2_s31 0xEC
+	st_dpib A, 0xEC
 	ld xwa, xde
 	and xwa, 0x7
 	add xwa, 0x30
@@ -422823,7 +422823,7 @@ LABEL_FF25DC:
 	ld wa, (xbc)
 	extz xwa
 	div wa, 0xA
-	x_dpi2_s50 0xE5
+	st_dpiw WA, 0xE5
 	cp xbc, xde
 	jr c, LABEL_FF25DC
 	ret

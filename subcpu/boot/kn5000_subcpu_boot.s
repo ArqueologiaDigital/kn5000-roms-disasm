@@ -98979,7 +98979,7 @@ COPY_WORDS:
 ; ==============================================================================
 
 FILL_WORDS:
-	x_dpi2_s51 0xE1	; ld (XWA+), BC
+	st_dpiw BC, 0xE1	; ld (XWA+), BC
 	djnz16 de, -6	; djnz DE, FILL_WORDS
 	ret
 
@@ -99800,7 +99800,7 @@ MEM_TEST_ROUTINE__low1_ok:
 MEM_TEST_ROUTINE__high1_ok:
 	; Restore and test pattern 2
 	ld xwa, (xsp + 6)
-	x_dpi2_s60 0xEE	; Restore and advance
+	st_dpil XWA, 0xEE	; Restore and advance
 	ld xwa, (xhl)
 	ld (xsp + 6), xwa
 	; Write pattern 2: 0xA5A5A5A5
@@ -99825,7 +99825,7 @@ MEM_TEST_ROUTINE__low2_ok:
 MEM_TEST_ROUTINE__high2_ok:
 	; Restore original
 	ld xwa, (xsp + 6)
-	x_dpi2_s60 0xEE
+	st_dpil XWA, 0xEE
 	sub xiz, 0x1
 	jr nz, MEM_TEST_ROUTINE__test_loop
 MEM_TEST_ROUTINE__region_done:
