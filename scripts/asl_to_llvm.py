@@ -4614,8 +4614,15 @@ def convert_all(main_file, output_path):
     # Pre-scan function: extract address-encoding labels from segment lines.
     # These define block boundaries so instruction sizing errors can't cascade.
     def prescan_label_addrs(seg_lines):
-        """Return sorted list of addresses from address-encoding labels."""
+        """Return sorted list of addresses from address-encoding labels.
+
+        Only includes addresses that form a monotonically non-decreasing
+        sequence in source order. Backward-jumping labels (e.g., out-of-order
+        data section entries) are excluded to avoid creating spurious block
+        boundaries that truncate data tables.
+        """
         addrs = []
+        max_addr = -1
         for line, source in seg_lines:
             stripped = line.rstrip()
             if not stripped:
@@ -4628,22 +4635,32 @@ def convert_all(main_file, output_path):
             rest = rest.strip()
             if rest and re.match(r'^EQU\b', rest, re.IGNORECASE):
                 continue
+            addr = None
             m_lbl = re.match(r'^LABEL_([0-9A-Fa-f]{6})$', lbl)
             if m_lbl:
-                addrs.append(int(m_lbl.group(1), 16))
+                addr = int(m_lbl.group(1), 16)
             elif cmt:
                 m_addr = re.match(r'^;\s*([0-9A-Fa-f]{6})\s*$', cmt.strip())
                 if m_addr:
-                    addrs.append(int(m_addr.group(1), 16))
+                    addr = int(m_addr.group(1), 16)
+            if addr is not None:
+                if addr >= max_addr:
+                    addrs.append(addr)
+                    max_addr = addr
         return sorted(set(addrs))
 
     # Helper: perform block transition at a boundary address.
     # Pads the gap from current block cursor to boundary, then starts a new block.
+    total_nonzero_corrections = 0
+
     def do_block_transition(boundary_addr):
-        nonlocal total_block_corrections, total_padding_bytes
+        nonlocal total_block_corrections, total_padding_bytes, total_nonzero_corrections
         total_block_corrections += 1
         expected_block_bytes = boundary_addr - BLOCK_START_ADDR
         gap = expected_block_bytes - BLOCK_CURSOR
+        if gap != 0:
+            total_nonzero_corrections += 1
+            print(f"    DRIFT at 0x{boundary_addr:06X}: gap={gap} bytes (block 0x{BLOCK_START_ADDR:06X}, cursor={BLOCK_CURSOR}, expected={expected_block_bytes})")
         if gap > 0:
             gap_rom_offset = (BLOCK_START_ADDR + BLOCK_CURSOR) - ROM_BASE
             for i in range(0, gap, 16):
@@ -4821,7 +4838,7 @@ def convert_all(main_file, output_path):
     print(f"  ROM bytes covered: {total_rom_bytes} / {ROM_SIZE} ({100*total_rom_bytes/ROM_SIZE:.1f}%)")
     print(f"  .byte fallback lines: {BYTE_FALLBACK_COUNT}")
     print(f"  Padding bytes: {total_padding_bytes}")
-    print(f"  Block corrections: {total_block_corrections}")
+    print(f"  Block transitions: {total_block_corrections} ({total_nonzero_corrections} with drift)")
     print(f"  Native instruction lines: {NATIVE_INSTR_COUNT}")
     n_label_only_set = len(all_set_labels) - len(SET_ONLY_LABELS)
     print(f"  Label-only labels: {len(emitted_label_addrs)} inline + {n_label_only_set} .set")
