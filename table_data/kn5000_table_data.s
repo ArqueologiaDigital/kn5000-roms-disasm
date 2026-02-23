@@ -554,7 +554,7 @@ Boot_ClearRAM__copy1_done:
 	ldir83
 	djnz16 wa, -5	; DJNZ WA, -5
 Boot_ClearRAM__copy2_done:
-	.byte 0x78, 0x42, 0xfe	; JRL_T Boot_Init+014Bh	; return to caller at 0xFFB633
+	jrl Boot_Init+0x14B	; return to caller at 0xFFB633
 	ret	; never reached
 
 ; =============================================================================
@@ -1963,7 +1963,7 @@ Boot_CopySectors__cs_full_loop:
 	inc1_werp 0xFA	; INC 1, QIZ
 	erpw4 0xFA, 0xCF, 0x00, 0x09	; CP QIZ, 0x0900 (18*128)
 	jr c, Boot_CopySectors__cs_full_loop	; 67 de
-	.byte 0x9f, 0x04, 0x61	; INCW 1, (XSP+0x04)
+	incm 1, (xsp + 4)	; INCW 1, (XSP+0x04)
 	ld wa, (xsp + 8)	; LD WA, (XSP+0x08)
 	cp (xsp + 4), wa	; CP (XSP+0x04), WA
 	jr c, Boot_CopySectors__cs_track_loop	; 67 b3
@@ -2100,7 +2100,7 @@ Boot_CopySectorsEx__cse_full_loop:
 	inc1_werp 0xFA	; INC 1, QIZ
 	erpw4 0xFA, 0xCF, 0x00, 0x12	; CP QIZ, 0x1200 (18*256)
 	jr c, Boot_CopySectorsEx__cse_full_loop	; 67 d9
-	.byte 0x9f, 0x04, 0x61	; INCW 1, (XSP+0x04)
+	incm 1, (xsp + 4)	; INCW 1, (XSP+0x04)
 	ld wa, (xsp + 8)	; LD WA, (XSP+0x08)
 	cp (xsp + 4), wa	; CP (XSP+0x04), WA
 	jr c, Boot_CopySectorsEx__cse_track_loop	; 67 ae
@@ -2701,7 +2701,7 @@ LZSS_ReadByte__not_eof:
 	cpda32 xwa, 3116	; CP XWA, (0x0C2C) - buffer limit
 	jr nz, LZSS_ReadByte__read_byte	; JR NZ, .read_byte
 	; Need to read next sector
-	.byte 0xd1, 0x30, 0x0c, 0x60	; INCW 0, (0x0C30) - next sector X
+	incdi16 8, 3120	; INCW 0, (0x0C30) - next sector X
 	ldda16 xwa, 3120	; LD WA, (0x0C30)
 	ldda16 xbc, 3122	; LD BC, (0x0C32)
 	lds de, 6	; LD DE, 6 - sector size index
@@ -3005,7 +3005,7 @@ LZSS_Decompress__flags_valid:
 	calr LZSS_OutputByte	; CALR LZSS_OutputByte
 	; Store byte in sliding window
 	ld bc, (xsp + 10)	; LD BC, (XSP+0x0A) - window position
-	.byte 0x9f, 0x0a, 0x61	; INCW 1, (XSP+0x0A)
+	incm 1, (xsp + 10)	; INCW 1, (XSP+0x0A)
 	extz xbc	; EXTZ XBC
 	add xbc, (xsp + 16)	; ADD XBC, (XSP+0x10) - add window base
 	ldto_a_berp 0xF8	; LD A, IZL
@@ -3037,7 +3037,7 @@ LZSS_Decompress__back_reference:
 
 	; Extract length: (byte & 0x0F) + 2
 	andmi16 (xsp + 8), 0xF	; AND (XSP+0x08), 0x000F - extract length
-	.byte 0x9f, 0x08, 0x62	; INCW 2, (XSP+0x08) - length + 2
+	incm 2, (xsp + 8)	; INCW 2, (XSP+0x08) - length + 2
 
 	; === Copy from sliding window ===
 	ldmw (xsp + 6), 0x0	; LD (XSP+0x06), 0x0000 - copy counter
@@ -3060,7 +3060,7 @@ LZSS_Decompress__copy_loop:
 
 	; Store byte in sliding window at write position
 	ld bc, (xsp + 10)	; LD BC, (XSP+0x0A)
-	.byte 0x9f, 0x0a, 0x61	; INCW 1, (XSP+0x0A)
+	incm 1, (xsp + 10)	; INCW 1, (XSP+0x0A)
 	extz xbc	; EXTZ XBC
 	add xbc, (xsp + 12)	; ADD XBC, (XSP+0x0C)
 	ldto_a_berp 0xF8	; LD A, IZL
@@ -3068,7 +3068,7 @@ LZSS_Decompress__copy_loop:
 	andmi16 (xsp + 10), 0xFFF	; AND (XSP+0x0A), 0x0FFF - wrap position
 
 	; Increment counter and check if done
-	.byte 0x9f, 0x06, 0x61	; INCW 1, (XSP+0x06)
+	incm 1, (xsp + 6)	; INCW 1, (XSP+0x06)
 	ld wa, (xsp + 6)	; LD WA, (XSP+0x06)
 	cp wa, (xsp + 8)	; CP WA, (XSP+0x08) - compare with length
 	jr ule, LZSS_Decompress__copy_loop	; JR ULE, .copy_loop

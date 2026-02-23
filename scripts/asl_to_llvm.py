@@ -1954,7 +1954,7 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
                     # For cc-suffixed mnemonics (JRL_T label), operand is single (no comma)
                     target_part = parts[-1].strip() if len(parts) >= 2 else operands_str.strip()
                     target_part = convert_expression(target_part)  # ASL→LLVM hex notation
-                    if re.match(r'^[A-Za-z_]\w*$', target_part) or \
+                    if re.match(r'^[A-Za-z_]\w*(\s*[+\-]\s*(0x[\da-fA-F]+|\d+))?$', target_part) or \
                        re.match(r'^\.\w+$', target_part):
                         if cc == 8:
                             return f"jrl {target_part}", 3
@@ -3644,7 +3644,7 @@ def convert_db(label, args, comment, in_file_path, label_addr_suffix=""):
             DB_INSTR_MNEMONICS = {
                 'NOP', 'EI', 'DI', 'RETI', 'RET', 'RETD', 'HALT', 'SWI', 'PUSH', 'POP',
                 'PUSHW', 'LD', 'LDW', 'LDA', 'ADD', 'ADC', 'SUB', 'SBC', 'AND', 'OR',
-                'XOR', 'CP', 'INC', 'DEC', 'NEG', 'CPL', 'EXTS', 'EXTZ', 'EX',
+                'XOR', 'CP', 'INC', 'INCW', 'DEC', 'DECW', 'NEG', 'CPL', 'EXTS', 'EXTZ', 'EX',
                 'SLA', 'SRA', 'SRL', 'SLL', 'RLC', 'RRC', 'RL', 'RR',
                 'SET', 'RES', 'BIT', 'CHG', 'TSET', 'CALL', 'CALR', 'JP', 'JR', 'JRL',
                 'DJNZ', 'MUL', 'MULS', 'DIV', 'DIVS', 'SCC', 'INCF', 'DECF',
