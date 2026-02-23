@@ -257,7 +257,7 @@ FmtNum_CheckMarked:
 
 FmtNum_WriteSpacePad:
 	lda_dpi XHL, 0xE0
-	x_dpi3_o00_t1 0xE0, 0x20
+	stib_dpi 0xE0, 0x20
 	ldmi8 (xwa), 0x20
 	ret
 
@@ -277,12 +277,12 @@ FmtNum_FormatNumber:
 	jr FmtNum_WriteTensUnits
 
 FmtNum_WriteM:
-	x_dpi3_o00_t1 0xE0, 0x4D
+	stib_dpi 0xE0, 0x4D
 
 FmtNum_WriteTensUnits:
 	cp c, 0xA
 	jr nc, FmtNum_WriteTwoDigits
-	x_dpi3_o00_t1 0xE0, 0x30
+	stib_dpi 0xE0, 0x30
 	add c, 0x30
 	ld (xwa), c
 	ret
@@ -1064,13 +1064,13 @@ DiskSel_CheckFileLoop:
 
 DiskSel_FileAvailable:
 	ldada xwa, 35110
-	x_dri6_o14_t2 0x07, 0xE0, 0xF8, 0x3A, 0x89
+	ldmmb_dri 0x07, 0xE0, 0xF8, 0x3A, 0x89
 	incdi8 1, 35130
 	jr DiskSel_NextFile
 
 DiskSel_MarkUnavail:
 	ldada xwa, 35110
-	x_dri5_o00_t1 0x07, 0xE0, 0xF8, 0xFF
+	stib_dri 0x07, 0xE0, 0xF8, 0xFF
 
 DiskSel_NextFile:
 	inc 1, iz
@@ -3255,7 +3255,7 @@ DocDisk_CopyLoop:
 
 DocDisk_TerminateStr:
 	ld xde, xbc
-	x_dri5_o00_t1 0x07, 0xE4, 0xF0, 0x00
+	stib_dri 0x07, 0xE4, 0xF0, 0x00
 	jr DocDisk_TrimLoop
 
 DocDisk_ClearTrailing:

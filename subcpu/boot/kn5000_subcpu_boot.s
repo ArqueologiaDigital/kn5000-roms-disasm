@@ -98616,12 +98616,12 @@ BOOT_INIT:
 	ldio 0x8A, 0x40
 	ldio 0x8B, 0x20
 	ldio 0x81, 0x00	; Watchdog control
-	x_dd82_sb9 0x80	; Watchdog mode
+	set_dd8 1, 0x80	; Watchdog mode
 	ldio 0x98, 0x05
 	ldio 0x99, 0x00
 	ldio 0x9F, 0x00
 	ldio 0x9E, 0x00
-	x_dd82_sbf 0x9E
+	set_dd8 7, 0x9E
 
 	; Initialize timer registers
 	stdi8 323, 16
@@ -98635,7 +98635,7 @@ BOOT_INIT:
 	stdi8 330, 1
 
 	; Check bit 0 of register 0x40 for clock configuration
-	x_dd82_sc8 0x40
+	bit_dd8 0, 0x40
 	jr nz, BOOT_INIT__clock_alt
 	stdi8 334, 31
 	jr BOOT_INIT__clock_done
@@ -98651,7 +98651,7 @@ BOOT_INIT__clock_done:
 	x_sd8b3_o3c_t1 0xD3, 0xCF
 	x_sd8b3_o3c_t1 0xD3, 0xF0
 	ldio 0xD6, 0x29
-	x_dd82_s31 0xD6
+	lda_dd8l XBC, 0xD6
 	ld a, (xbc)
 	and a, 0xFC
 	set 0, a
@@ -98678,7 +98678,7 @@ BOOT_INIT__clock_done:
 	stdi8 329, 192
 
 	; Check clock config again
-	x_dd82_sc8 0x40
+	bit_dd8 0, 0x40
 	jr nz, BOOT_INIT__clock_alt2
 	stdi8 333, 138
 	jr BOOT_INIT__clock_done2
@@ -98720,7 +98720,7 @@ MAIN_LOOP__wait_loop:
 	call 0x400	; Call payload at 0x0400 (4-byte encoding)
 MAIN_LOOP__check_status:
 	; Read serial status and update control
-	x_dd82_s99 0x30
+	ldcf_dd8 1, 0x30
 	scc8 c, a
 	cpl a
 	and a, 0x1
@@ -98799,7 +98799,7 @@ COPY_VECTORS__done:
 	.org 0xFF8490 - 0xFE0000, 0xFF
 
 HALT_LOOP:
-	x_dd82_sb0 0x38	; Disable serial
+	res_dd8 0, 0x38	; Disable serial
 HALT_LOOP__halt:
 	halt	; Halt CPU
 	jr HALT_LOOP__halt	; Loop forever if we wake (jump to halt, not start)
@@ -99026,18 +99026,18 @@ STUB_85AB:
 
 INIT_DMA_SERIAL:
 	x_sd8b3_o3c_t1 0xE5, 0xF8	; Clear E5 bits
-	x_dd82_sb2 0x80	; Watchdog mode
-	x_dd82_s31 0xEC
+	res_dd8 2, 0x80	; Watchdog mode
+	lda_dd8l XBC, 0xEC
 	ld a, (xbc)
 	and a, 0xF8
 	or a, 0x5
 	ld (xbc), a
-	x_dd82_s31 0xED
+	lda_dd8l XBC, 0xED
 	ld a, (xbc)
 	and a, 0xF8
 	or a, 0x5
 	ld (xbc), a
-	x_dd82_s31 0xF0
+	lda_dd8l XBC, 0xF0
 	ld a, (xbc)
 	and a, 0xF8
 	set 0, a
@@ -99163,9 +99163,9 @@ SendData_Block:
 	ret z	; Yes - nothing to send
 	lds ix, 0	; IX = timeout counter
 SendData_Block__wait_ready1:
-	x_dd82_scc 0x34	; Check if other CPU ready
+	bit_dd8 4, 0x34	; Check if other CPU ready
 	jr z, SendData_Block__timeout1	; Not ready - check timeout
-	x_dd82_sb0 0x34	; Clear our ready flag
+	res_dd8 0, 0x34	; Clear our ready flag
 	stdi8 1302, 1	; Set DMA sync flag
 	ld l, c	; L = byte count
 	dec 1, l	; L = count - 1
@@ -99174,14 +99174,14 @@ SendData_Block__wait_ready1:
 	stda8_24 1179648, a	; Send command+count to main CPU
 	lds ix, 0	; Reset timeout counter
 SendData_Block__wait_ready2:
-	x_dd82_scc 0x34	; Check if main CPU acknowledged
+	bit_dd8 4, 0x34	; Check if main CPU acknowledged
 	jr nz, SendData_Block__timeout2	; Main CPU responded - check timeout
-	x_dd82_sb8 0x34	; Set our ready flag
+	set_dd8 0, 0x34	; Set our ready flag
 	ldc_cr32 xde, 0x08	; DMA source = XDE
 	extpfx2 0xD9, 0x12	; Zero-extend BC (count)
 	ldc_cr16 bc, 0x48	; DMA count = BC
 	stdi8 258, 22	; Set DMA mode
-	x_dd82_sba 0x80	; Start DMA transfer
+	set_dd8 2, 0x80	; Start DMA transfer
 	cpdi8 1302, 0	; Is DMA complete?
 	ret z	; Yes - return
 SendData_Block__wait_dma_done:
@@ -99199,7 +99199,7 @@ SendData_Block__timeout2:
 	inc 1, ix	; Increment counter
 	cp wa, 0xEA60	; Timeout limit
 	jr ule, SendData_Block__wait_ready2	; Keep waiting if not timed out
-	x_dd82_sb8 0x34	; Set ready flag before returning
+	set_dd8 0, 0x34	; Set ready flag before returning
 	ret
 
 ; ------------------------------------------------------------------------------
@@ -99223,15 +99223,15 @@ SendData_Block__timeout2:
 SendCmd_E3:
 	lds bc, 0	; BC = timeout counter
 SendCmd_E3__wait_ready:
-	x_dd82_scc 0x34	; Check if main CPU ready
+	bit_dd8 4, 0x34	; Check if main CPU ready
 	jr z, SendCmd_E3__timeout1	; Not ready - check timeout
-	x_dd82_sb0 0x34	; Clear our ready flag
+	res_dd8 0, 0x34	; Clear our ready flag
 	stdi8_24 1179648, 227	; Send E3 command to main CPU
 SendCmd_E3__wait_ack:
-	x_dd82_scc 0x34	; Check for acknowledgment
+	bit_dd8 4, 0x34	; Check for acknowledgment
 	jr nz, SendCmd_E3__timeout2	; Got response - handle in timeout2
 SendCmd_E3__set_flag_ret:	; Success path AND timeout2 target
-	x_dd82_sb8 0x34	; Set our ready flag
+	set_dd8 0, 0x34	; Set our ready flag
 	ret	; Done
 SendCmd_E3__timeout1:
 	ld wa, bc	; WA = timeout counter
@@ -99281,14 +99281,14 @@ SendParams_E2__timeout_wait:
 	cpdi8 1302, 0	; Check sync flag again
 	jr nz, SendParams_E2__timeout_wait	; Still not clear - keep waiting
 SendParams_E2__sync_cleared:
-	x_dd82_sb0 0x34	; Clear our ready flag
+	res_dd8 0, 0x34	; Clear our ready flag
 	stdi8 1302, 1	; Set DMA sync flag
 	stdi8_24 1179648, 226	; Send E2 command to main CPU
 	lds ix, 0	; Reset timeout counter
 SendParams_E2__wait_cpu_ready:
-	x_dd82_scc 0x34	; Check if main CPU ready
+	bit_dd8 4, 0x34	; Check if main CPU ready
 	jr nz, SendParams_E2__timeout2	; Not ready yet - check timeout
-	x_dd82_sb8 0x34	; Set our ready flag
+	set_dd8 0, 0x34	; Set our ready flag
 	ldada xhl, 1282	; XHL = address of DMA parameter block
 	ld (xhl), xwa	; Store XWA parameter
 	ld (xhl + 4), xde	; Store XDE parameter
@@ -99297,7 +99297,7 @@ SendParams_E2__wait_cpu_ready:
 	ldw wa, 0xA	; WA = 10 (DMA count)
 	ldc_cr16 wa, 0x48	; DMA count = 10
 	stdi8 258, 22	; Set DMA mode
-	x_dd82_sba 0x80	; Start DMA transfer
+	set_dd8 2, 0x80	; Start DMA transfer
 	setda 7, 1278	; Set DMA ready flag
 	cpdi8 1302, 0	; Is DMA complete?
 	ret z	; Yes - return
@@ -99310,7 +99310,7 @@ SendParams_E2__timeout2:
 	inc 1, ix	; Increment counter
 	cp hl, 0xEA60	; Timeout limit
 	jr ule, SendParams_E2__wait_cpu_ready	; Keep waiting if not timed out
-	x_dd82_sb8 0x34	; Set ready flag before returning
+	set_dd8 0, 0x34	; Set ready flag before returning
 	ret
 
 ; ------------------------------------------------------------------------------
@@ -99354,16 +99354,16 @@ TwoPhase_Transfer__timeout_sync:
 TwoPhase_Transfer__sync_cleared:
 	lds iz, 0	; Reset timeout counter
 TwoPhase_Transfer__wait_cpu_ready:
-	x_dd82_scc 0x34	; Check if CPU ready
+	bit_dd8 4, 0x34	; Check if CPU ready
 	jrl z, TwoPhase_Transfer__timeout_ready1	; Not ready - timeout handler
-	x_dd82_sb0 0x34	; Clear our ready flag
+	res_dd8 0, 0x34	; Clear our ready flag
 	stdi8 1302, 2	; Set sync flag to E1 mode
 	stdi8_24 1179648, 225	; Send E1 command
 	lds iz, 0	; Reset timeout counter
 TwoPhase_Transfer__wait_ack:
-	x_dd82_scc 0x34	; Check for acknowledgment
+	bit_dd8 4, 0x34	; Check for acknowledgment
 	jrl nz, TwoPhase_Transfer__timeout_ack	; Not acknowledged - timeout handler
-	x_dd82_sb8 0x34	; Set our ready flag
+	set_dd8 0, 0x34	; Set our ready flag
 	; Phase 1: Set up first DMA transfer
 	ldada xhl, 1342	; XHL = 0x053E (second buffer)
 	ld (xhl), xwa	; Store XWA to buffer
@@ -99375,7 +99375,7 @@ TwoPhase_Transfer__wait_ack:
 	lds wa, 6	; WA = 6 (DMA count)
 	ldc_cr16 wa, 0x48	; DMA count = 6
 	stdi8 258, 22	; Set DMA mode
-	x_dd82_sba 0x80	; Start DMA transfer
+	set_dd8 2, 0x80	; Start DMA transfer
 	; Wait for first transfer to complete (sync flag = 1)
 	cpdi8 1302, 1	; Is sync flag = 1?
 	jr z, TwoPhase_Transfer__phase1_done	; Yes - phase 1 complete
@@ -99400,7 +99400,7 @@ TwoPhase_Transfer__delay1_done:
 	ld wa, (xwa + 4)	; WA = count from buffer+4
 	ldc_cr16 wa, 0x48	; DMA count = WA
 	stdi8 258, 22	; Set DMA mode
-	x_dd82_sba 0x80	; Start DMA transfer
+	set_dd8 2, 0x80	; Start DMA transfer
 	; Wait for second transfer to complete (sync flag = 0)
 	cpdi8 1302, 0	; Is sync flag = 0?
 	jr z, TwoPhase_Transfer__phase2_done	; Yes - phase 2 complete
@@ -99430,7 +99430,7 @@ TwoPhase_Transfer__timeout_ack:
 	inc 1, iz	; Increment counter
 	cp hl, 0xEA60	; Timeout limit
 	jrl ule, TwoPhase_Transfer__wait_ack	; Keep waiting if not timed out
-	x_dd82_sb8 0x34	; Set ready flag before exit
+	set_dd8 0, 0x34	; Set ready flag before exit
 TwoPhase_Transfer__exit:
 	popw iz	; Restore IZ
 	ret
@@ -99469,7 +99469,7 @@ TwoPhase_Transfer__exit:
 
 InterCPU_RX_Handler:
 	push xwa
-	x_dd82_sca 0x34	; Check serial status
+	bit_dd8 2, 0x34	; Check serial status
 	jr nz, InterCPU_RX_Handler__exit
 	ldda8_24 a, 1179648	; Read command from main CPU
 	stda8 1306, a	; Save received byte
@@ -99514,7 +99514,7 @@ InterCPU_RX_Handler__default_cmd:
 InterCPU_RX_Handler__start_dma:
 	stdi8 256, 10	; Trigger DMA
 InterCPU_RX_Handler__clear_flag:
-	x_dd82_sb1 0x34
+	res_dd8 1, 0x34
 InterCPU_RX_Handler__exit:
 	pop xwa
 	reti
@@ -99536,7 +99536,7 @@ InterCPU_RX_Handler__exit:
 	.org 0xFF889A - 0xFE0000, 0xFF
 
 DMA_Complete_Handler:
-	x_dd82_sb2 0x80	; Clear watchdog bit
+	res_dd8 2, 0x80	; Clear watchdog bit
 	cpdi8 1302, 1	; State 1?
 	jr nz, DMA_Complete_Handler__not_state1
 	stdi8 1302, 0	; -> State 0
@@ -99619,7 +99619,7 @@ CMD_Dispatch_Handler__state3:
 	; State 3: Set completion flags
 	stdi8 1308, 255
 	stdi8 1304, 0
-	x_dd82_sb9 0x34
+	set_dd8 1, 0x34
 	setda 7, 1364
 	jr CMD_Dispatch_Handler__check_watchdog
 CMD_Dispatch_Handler__state4:
@@ -99627,14 +99627,14 @@ CMD_Dispatch_Handler__state4:
 	stdi8 1304, 0
 	resda 7, 1278
 CMD_Dispatch_Handler__set_flag_exit:
-	x_dd82_sb9 0x34
+	set_dd8 1, 0x34
 CMD_Dispatch_Handler__check_watchdog:
-	x_dd82_sca 0x80
+	bit_dd8 2, 0x80
 	jr z, CMD_Dispatch_Handler__exit
-	x_dd82_sb2 0x80
+	res_dd8 2, 0x80
 	nop
 	nop
-	x_dd82_sba 0x80
+	set_dd8 2, 0x80
 CMD_Dispatch_Handler__exit:
 	pop xwa
 	pop xbc
@@ -99654,8 +99654,8 @@ CMD_Dispatch_Handler__exit:
 
 INIT_MEMORY_TEST:
 	stdi8 1366, 0
-	x_dd82_sb9 0x30
-	x_dd82_sc8 0x30
+	set_dd8 1, 0x30
+	bit_dd8 0, 0x30
 	ret nz	; Return if bit set
 
 	lds wa, 0
@@ -99680,7 +99680,7 @@ INIT_MEMORY_TEST__no_error:
 	ld xwa, xbc
 	inc 8, xbc	; Increment XBC by 1
 INIT_MEMORY_TEST__clear_loop:
-	x_dpi3_o00_t1 0xE0, 0x00
+	stib_dpi 0xE0, 0x00
 	cp xwa, xbc
 	jr c, INIT_MEMORY_TEST__clear_loop
 
@@ -99698,7 +99698,7 @@ INIT_MEMORY_TEST__serial_loop:
 DELAY_ROUTINE:
 	ldb l, 0x0	; ld L, 00h (TMP94C241 encoding)
 DELAY_ROUTINE__outer_loop:
-	x_dd82_sb1 0x30
+	res_dd8 1, 0x30
 	ldw bc, 0x4000	; Default count
 	bit 0, a	; Check current bit
 	jr z, DELAY_ROUTINE__skip_long
@@ -99715,7 +99715,7 @@ DELAY_ROUTINE__inner_loop:
 	jr c, DELAY_ROUTINE__inner_loop
 	djnz xbc, DELAY_ROUTINE__delay_loop
 DELAY_ROUTINE__next_bit:
-	x_dd82_sb9 0x30
+	set_dd8 1, 0x30
 	ldw bc, 0x4000
 DELAY_ROUTINE__delay2_outer:
 	ldb e, 0x0	; ld E, 00h (TMP94C241 encoding)
@@ -99907,10 +99907,10 @@ SERIAL_INIT__check_loop:
 	jr c, SERIAL_INIT__check_loop
 	cpi_berp 0xFB, 0
 	jr z, SERIAL_INIT__no_error
-	x_dd82_sb1 0x30	; Disable timer interrupt on error
+	res_dd8 1, 0x30	; Disable timer interrupt on error
 	jr SERIAL_INIT__done
 SERIAL_INIT__no_error:
-	x_dd82_sb9 0x30	; Enable timer interrupt
+	set_dd8 1, 0x30	; Enable timer interrupt
 SERIAL_INIT__done:
 	pop_werp 0xFA
 	ret

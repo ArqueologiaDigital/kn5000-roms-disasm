@@ -9242,7 +9242,7 @@ Serial1_TX_Normal:	; 01F77Bh
 	calr READ_BYTE_FROM_RING_BUFFER
 	cp hl, 0xFFFF	; Buffer empty?
 	jr z, Serial1_TX_CheckEmpty
-	x_dd82_s47 0xD4	; Send byte
+	st_dd8b L, 0xD4	; Send byte
 
 Serial1_TX_CheckEmpty:	; 01F78Ch
 	bitda 0, 4148
@@ -9534,12 +9534,12 @@ RESET:	; 01F924
 	ldio 0x8A, 0x40
 	ldio 0x8B, 0x20
 	ldio 0x81, 0x00
-	x_dd82_sb9 0x80
+	set_dd8 1, 0x80
 	ldio 0x98, 0x05
 	ldio 0x99, 0x00
 	ldio 0x9F, 0x00
 	ldio 0x9E, 0x00
-	x_dd82_sbf 0x9E	; prescaler: run
+	set_dd8 7, 0x9E	; prescaler: run
 	stdi8 323, 16
 	stdi8 327, 17
 	stdi8 331, 255
@@ -9557,7 +9557,7 @@ RESET:	; 01F924
 	x_sd8b3_o3c_t1 0xD3, 0xCF
 	x_sd8b3_o3c_t1 0xD3, 0xF0
 	ldio 0xD6, 0x29	;receive-enable | 8-bit uart mode | serial transfer clock: baud-rate generator
-	x_dd82_s31 0xD6
+	lda_dd8l XBC, 0xD6
 	ld a, (xbc)
 	and a, 0xFC
 	set 0, a
@@ -9593,7 +9593,7 @@ LABEL_01FAA6:
 	ldada_24 xwa, 263834
 	ld xsp, xwa
 	call LABEL_01FDDA
-	x_dd82_s31 0xE4
+	lda_dd8l XBC, 0xE4
 	ld a, (xbc)
 	and a, 0x8F
 	or a, 0x30
@@ -9631,7 +9631,7 @@ LABEL_01FAF0:
 	ldda32 xwa, 4160
 	cp xwa, 0x3E8
 	jr ule, LABEL_01FAFF
-	x_dd82_sb8 0x38	; unmute (?) (here I'm assuming "MUTE" it is an active low signal)
+	set_dd8 0, 0x38	; unmute (?) (here I'm assuming "MUTE" it is an active low signal)
 
 LABEL_01FAFF:
 	bitda 1, 4158
@@ -9679,7 +9679,7 @@ LABEL_01FB41:
 	ldada_24 xix, 62560
 	ld_sriw3 BC, 0x07, 0xF0, 0xE4
 	ldada_24 xix, 129910
-	x_dri4_sd8 0x07, 0xF0, 0xE4
+	jp_dri 8, 0x07, 0xF0, 0xE4
 
 
 Audio_PlayNote_Variant_1:
@@ -9705,7 +9705,7 @@ LABEL_01FB8E:
 
 LABEL_01FB90:
 	scf
-	x_dd163_s2c 0x3E, 0x10
+	stcfa_dd16 0x3E, 0x10
 	jr LABEL_01FBB8
 
 LABEL_01FB97:
@@ -9747,7 +9747,7 @@ LABEL_01FBC1:
 
 
 MUTE_AND_HALT:	; 01FBF4
-	x_dd82_sb0 0x38	; mute (?) (here I'm assuming "MUTE" it is an active low signal)
+	res_dd8 0, 0x38	; mute (?) (here I'm assuming "MUTE" it is an active low signal)
 	halt
 
 
@@ -9763,7 +9763,7 @@ LABEL_01FC01:
 	srl xbc, 1
 	jr z, LABEL_01FC2E
 	ld xhl, xde
-	x_dpi4_o02_t2 0xE9, 0x00, 0x00
+	stiw_dpi 0xE9, 0x00, 0x00
 	dec 1, xbc
 	or xbc, xbc
 	jr z, LABEL_01FC2E
@@ -9788,7 +9788,7 @@ LABEL_01FC36:
 	srl xbc, 1
 	jr z, LABEL_01FC63
 	ld xhl, xde
-	x_dpi4_o02_t2 0xE9, 0x00, 0x00
+	stiw_dpi 0xE9, 0x00, 0x00
 	dec 1, xbc
 	or xbc, xbc
 	jr z, LABEL_01FC63
@@ -10077,7 +10077,7 @@ LABEL_01FEE7:
 	x_sd8b2_s21 0xE5
 	and a, 0xF
 	or a, 0x20
-	x_dd82_s41 0xE5
+	st_dd8b A, 0xE5
 	calr LABEL_020849
 	ldb a, 0x1
 	calr LABEL_01FFFD
@@ -10989,11 +10989,11 @@ LABEL_02080B:
 	.byte 0x40, 0x10, 0xf0, 0x6a, 0xfa, 0x0e
 
 LABEL_020849:
-	x_dd82_sbb 0x80
+	set_dd8 3, 0x80
 	ret
 
 LABEL_02084D:
-	x_dd82_sb3 0x80
+	res_dd8 3, 0x80
 	ret
 
 LABEL_020851:
@@ -11183,18 +11183,18 @@ Audio_CmdHandler_C0_FF:
 ; ===========================================================================
 InterCPU_Latch_Setup:
 	x_sd8b3_o3c_t1 0xE5, 0xF8
-	x_dd82_sb2 0x80
-	x_dd82_s31 0xEC
+	res_dd8 2, 0x80
+	lda_dd8l XBC, 0xEC
 	ld a, (xbc)
 	and a, 0xF8
 	or a, 0x5
 	ld (xbc), a
-	x_dd82_s31 0xED
+	lda_dd8l XBC, 0xED
 	ld a, (xbc)
 	and a, 0xF8
 	or a, 0x5
 	ld (xbc), a
-	x_dd82_s31 0xF0
+	lda_dd8l XBC, 0xF0
 	ld a, (xbc)
 	and a, 0xF8
 	set 0, a
@@ -11271,9 +11271,9 @@ InterCPU_DMA_Send_Chunk:
 	lds ix, 0
 
 DMA_Chunk_Start:
-	x_dd82_scc 0x34	; MSTAT1 - test if Main CPU is requesting handshake
+	bit_dd8 4, 0x34	; MSTAT1 - test if Main CPU is requesting handshake
 	jr z, InterCPU_Wait_MSTAT1_Clear
-	x_dd82_sb0 0x34	; SSTAT0 - clear to acknowledge Main CPU handshake request
+	res_dd8 0, 0x34	; SSTAT0 - clear to acknowledge Main CPU handshake request
 	stdi8 4328, 1
 	ld l, c
 	dec 1, l
@@ -11283,14 +11283,14 @@ DMA_Chunk_Start:
 	lds ix, 0
 
 DMA_Chunk_Transfer:
-	x_dd82_scc 0x34	; MSTAT1 - wait for Main CPU to clear (data ready to receive)
+	bit_dd8 4, 0x34	; MSTAT1 - wait for Main CPU to clear (data ready to receive)
 	jr nz, InterCPU_Wait_MSTAT1_Set
-	x_dd82_sb8 0x34	; SSTAT0 - set to signal ready to receive DMA data
+	set_dd8 0, 0x34	; SSTAT0 - set to signal ready to receive DMA data
 	ldc_cr32 xde, 0x08
 	extz bc
 	ldc_cr16 bc, 0x48
 	stdi8 258, 22
-	x_dd82_sba 0x80
+	set_dd8 2, 0x80
 	cpdi8 4328, 0
 	ret z
 
@@ -11311,7 +11311,7 @@ InterCPU_Wait_MSTAT1_Set:
 	inc 1, ix
 	cp wa, 0xEA60
 	jr ule, DMA_Chunk_Transfer
-	x_dd82_sb8 0x34	; SSTAT0 - timeout recovery: force ready state before exit
+	set_dd8 0, 0x34	; SSTAT0 - timeout recovery: force ready state before exit
 	ret
 
 LABEL_020D13:
@@ -11367,17 +11367,17 @@ E1_DMA_Ready:
 	lds iz, 0
 
 E1_Check_MSTAT1:
-	x_dd82_scc 0x34	; MSTAT1 - test if Main CPU is initiating E1 transfer
+	bit_dd8 4, 0x34	; MSTAT1 - test if Main CPU is initiating E1 transfer
 	jrl z, E1_Timeout_Retry
-	x_dd82_sb0 0x34	; SSTAT0 - clear to acknowledge E1 command from Main CPU
+	res_dd8 0, 0x34	; SSTAT0 - clear to acknowledge E1 command from Main CPU
 	stdi8 4328, 2
 	stdi8_24 1179648, 225
 	lds iz, 0
 
 E1_Start_Transfer:
-	x_dd82_scc 0x34	; MSTAT1 - wait for Main CPU to clear (header data ready)
+	bit_dd8 4, 0x34	; MSTAT1 - wait for Main CPU to clear (header data ready)
 	jrl nz, E1_Busy_Wait
-	x_dd82_sb8 0x34	; SSTAT0 - set to signal ready to receive DMA header
+	set_dd8 0, 0x34	; SSTAT0 - set to signal ready to receive DMA header
 	ldada xhl, 4368
 	ld (xhl), xwa
 	ldada xwa, 4318
@@ -11388,7 +11388,7 @@ E1_Start_Transfer:
 	lds wa, 6
 	ldc_cr16 wa, 0x48
 	stdi8 258, 22
-	x_dd82_sba 0x80
+	set_dd8 2, 0x80
 	cpdi8 4328, 1
 	jr z, E1_Delay_Loop1
 
@@ -11414,7 +11414,7 @@ E1_Phase2_Setup:
 	ld wa, (xwa + 4)
 	ldc_cr16 wa, 0x48
 	stdi8 258, 22
-	x_dd82_sba 0x80
+	set_dd8 2, 0x80
 	cpdi8 4328, 0
 	jr z, E1_Delay_Loop2
 
@@ -11448,7 +11448,7 @@ E1_Busy_Wait:
 	inc 1, iz
 	cp hl, 0xEA60
 	jrl ule, E1_Start_Transfer
-	x_dd82_sb8 0x34	; SSTAT0 - timeout recovery: force ready state before exit
+	set_dd8 0, 0x34	; SSTAT0 - timeout recovery: force ready state before exit
 
 E1_Exit:
 	popw iz
@@ -11466,7 +11466,7 @@ E1_Exit:
 ; ----------------------------------------------------------------------------
 INT0_HANDLER:	; 20E86
 	push xwa
-	x_dd82_sca 0x34	; MSTAT0 - test if Main CPU is currently sending data
+	bit_dd8 2, 0x34	; MSTAT0 - test if Main CPU is currently sending data
 	jr nz, INT0_Exit
 	ldda8_24 a, 1179648
 	stda8 4332, a
@@ -11512,7 +11512,7 @@ INT0_Start_DMA:	; 020EF7h
 	stdi8 256, 10	; Start DMA channel 0
 
 INT0_Ack:	; 020EFCh
-	x_dd82_sb1 0x34	; SSTAT1 - clear to acknowledge command received from Main CPU
+	res_dd8 1, 0x34	; SSTAT1 - clear to acknowledge command received from Main CPU
 
 INT0_Exit:	; 020EFFh
 	pop xwa
@@ -11529,7 +11529,7 @@ INT0_Exit:	; 020EFFh
 ; Stops Timer 8 which triggers the DMA transfers.
 ;=============================================================================
 MICRODMA_CH2_HANDLER:	; Channel #2 completion		; 20F01
-	x_dd82_sb2 0x80
+	res_dd8 2, 0x80
 	cpdi8 4328, 1
 	jr nz, MICRODMA_CH2_State2
 	stdi8 4328, 0
@@ -11606,7 +11606,7 @@ CH0_State2_E1:	; 020F6Dh - E1 command phase 1 complete, start phase 2
 CH0_State3_E2:	; 020F88h - E2 command complete
 	stdi8 4334, 255
 	stdi8 4330, 0
-	x_dd82_sb9 0x34	; SSTAT1 - set to signal ready for next command from Main CPU
+	set_dd8 1, 0x34	; SSTAT1 - set to signal ready for next command from Main CPU
 	setda 7, 4390	; Set E2 pending flag
 	jr CH0_Timer_Reset
 
@@ -11615,15 +11615,15 @@ CH0_State4_E1_Done:	; 020F9Bh - E1 two-phase transfer complete
 	resda 7, 1278
 
 CH0_Ack:	; 020FA4h
-	x_dd82_sb9 0x34	; SSTAT1 - set to signal E1 transfer complete, ready for next
+	set_dd8 1, 0x34	; SSTAT1 - set to signal E1 transfer complete, ready for next
 
 CH0_Timer_Reset:	; 020FA7h - reset Timer 8 if running
-	x_dd82_sca 0x80
+	bit_dd8 2, 0x80
 	jr z, CH0_Exit
-	x_dd82_sb2 0x80	; Stop timer
+	res_dd8 2, 0x80	; Stop timer
 	nop
 	nop
-	x_dd82_sba 0x80	; Restart timer
+	set_dd8 2, 0x80	; Restart timer
 
 CH0_Exit:	; 020FB4h
 	pop xwa
@@ -11657,7 +11657,7 @@ Cmd_Check_E2_Pending:	; 020FBCh
 ; Check for DMA timeout (stuck transfer detection)
 Cmd_Check_DMA_Timeout:	; 020FD9h
 	ei 0
-	x_dd82_sc9 0x34	; SSTAT1 - test own status: if set, no DMA transfer in progress
+	bit_dd8 1, 0x34	; SSTAT1 - test own status: if set, no DMA transfer in progress
 	jr nz, Cmd_DMA_Idle
 	ldc_16_cr wa, 0x40	; Get current DMA byte count
 	cpdm16 61468, xwa	; Compare with previous
@@ -11683,7 +11683,7 @@ Cmd_DMA_Check_Stuck:	; 021001h
 	stdi16 61466, 0
 	stdi8 256, 0	; Stop DMA
 	stdi8 4330, 0
-	x_dd82_sb9 0x34	; SSTAT1 - timeout recovery: force ready state after DMA abort
+	set_dd8 1, 0x34	; SSTAT1 - timeout recovery: force ready state after DMA abort
 	incdi8 1, 61464	; Increment error counter
 	ret
 
@@ -11697,7 +11697,7 @@ Cmd_DMA_Check_Stuck:	; 021001h
 ;        Readback may be used for verification or status check.
 ; ===========================================================================
 DAC_Write_Sample:
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	stda16_24 1048576, xwa
 	ldda16_24 xhl, 1048576
 	ret
@@ -12197,7 +12197,7 @@ LABEL_021463:
 LABEL_0214AC:
 	ld c, e
 	extz bc
-	x_dri5_o00_t1 0x07, 0xEC, 0xE4, 0xFF
+	stib_dri 0x07, 0xEC, 0xE4, 0xFF
 
 LABEL_0214B6:
 	ld c, (xsp + 6)
@@ -12312,7 +12312,7 @@ LABEL_0215A8:
 	ld bc, wa
 	inc 8, bc
 	ld xwa, (xsp + 4)
-	x_dri5_o00_t1 0x07, 0xE0, 0xE4, 0xFF
+	stib_dri 0x07, 0xE0, 0xE4, 0xFF
 
 LABEL_0215CD:
 	inc1_berp 0xFB
@@ -12412,17 +12412,17 @@ LABEL_02166A:
 	extz wa
 	muls wa, 0x5
 	ldada xbc, 8488
-	x_dri5_o00_t1 0x07, 0xE4, 0xE0, 0x00
+	stib_dri 0x07, 0xE4, 0xE0, 0x00
 	ldto_berp A, 0xFB
 	extz wa
 	muls wa, 0x5
 	ldada xbc, 8489
-	x_dri5_o00_t1 0x07, 0xE4, 0xE0, 0x00
+	stib_dri 0x07, 0xE4, 0xE0, 0x00
 	ldto_berp A, 0xFB
 	extz wa
 	muls wa, 0x5
 	ldada xbc, 8490
-	x_dri5_o00_t1 0x07, 0xE4, 0xE0, 0xFF
+	stib_dri 0x07, 0xE4, 0xE0, 0xFF
 	inc1_berp 0xFB
 	x_erpb3_ocf_t1 0xFB, 0xC0
 	jr c, LABEL_02166A
@@ -13223,13 +13223,13 @@ LABEL_021EF8:
 	jr nc, LABEL_021F53
 
 LABEL_021F08:
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld a, (xsp + 4)
 	extz wa
 	add wa, 0x840
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	stdi16_24 1048578, 41472
 	jr __jrt_nop_021F26
 __jrt_nop_021F26:
@@ -13238,13 +13238,13 @@ LABEL_021F26:
 	nop
 	nop
 	nop
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld a, (xsp + 4)
 	extz wa
 	add wa, 0x800
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	stdi16_24 1048578, 41600
 	jr __jrt_nop_021F47
 __jrt_nop_021F47:
@@ -13265,13 +13265,13 @@ LABEL_021F53:
 	jr nc, LABEL_021FA9
 
 LABEL_021F63:
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld a, (xsp + 4)
 	add a, 0xC0
 	extz wa
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	stdi16_24 1048578, 0
 	jr __jrt_nop_021F80
 __jrt_nop_021F80:
@@ -13280,12 +13280,12 @@ LABEL_021F80:
 	nop
 	nop
 	nop
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld a, (xsp + 4)
 	extz wa
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	stdi16_24 1048578, 32256
 	jr __jrt_nop_021F9D
 __jrt_nop_021F9D:
@@ -13335,7 +13335,7 @@ LABEL_022002:
 	extz wa
 	muls wa, 0x1E
 	ldada xbc, 4398
-	x_dri5_o00_t1 0x07, 0xE4, 0xE0, 0x00
+	stib_dri 0x07, 0xE4, 0xE0, 0x00
 	ldb e, 0x0
 	cps e, 7
 	jr nc, LABEL_022045
@@ -13478,12 +13478,12 @@ LABEL_02216B:
 	extz wa
 	add wa, wa
 	ldada xbc, 10542
-	x_dri6_o02_t2 0x07, 0xE4, 0xE0, 0x00, 0x00
+	stiw_dri 0x07, 0xE4, 0xE0, 0x00, 0x00
 	ld a, (xsp + 4)
 	extz wa
 	add wa, wa
 	ldada xbc, 10550
-	x_dri6_o02_t2 0x07, 0xE4, 0xE0, 0x00, 0x00
+	stiw_dri 0x07, 0xE4, 0xE0, 0x00, 0x00
 	incm8 1, (xsp + 4)
 	cpmi8 (xsp + 4), 0x4
 	jr c, LABEL_02216B
@@ -13709,7 +13709,7 @@ LABEL_022390:
 	ld bc, wa
 	inc 2, bc
 	ld xwa, (xsp + 16)
-	x_dri4_scf 0x07, 0xE0, 0xE4
+	bit_dri 7, 0x07, 0xE0, 0xE4
 	jrl z, LABEL_02253B
 	ld a, (xsp + 12)
 	extz wa
@@ -13753,7 +13753,7 @@ LABEL_0223F0:
 	ld bc, wa
 	inc 6, bc
 	ld xwa, (xsp + 16)
-	x_dri4_scf 0x07, 0xE0, 0xE4
+	bit_dri 7, 0x07, 0xE0, 0xE4
 	jr z, LABEL_022444
 	ldmi8 (xiz + 34), 0x88
 	ld a, (xsp + 14)
@@ -13877,7 +13877,7 @@ LABEL_022525:
 	ld bc, wa
 	add bc, 0xA
 	ld xwa, (xsp + 16)
-	x_dri5_o00_t1 0x07, 0xE0, 0xE4, 0xFF
+	stib_dri 0x07, 0xE0, 0xE4, 0xFF
 	jr LABEL_02254F
 
 LABEL_02253B:
@@ -13886,7 +13886,7 @@ LABEL_02253B:
 	ld bc, wa
 	add bc, 0xA
 	ld xwa, (xsp + 16)
-	x_dri5_o00_t1 0x07, 0xE0, 0xE4, 0xFF
+	stib_dri 0x07, 0xE0, 0xE4, 0xFF
 
 LABEL_02254F:
 	incm8 1, (xsp + 12)
@@ -13905,7 +13905,7 @@ LABEL_022565:
 	ld bc, wa
 	add bc, 0xA
 	ld xwa, (xsp + 16)
-	x_dri5_o00_t1 0x07, 0xE0, 0xE4, 0xFF
+	stib_dri 0x07, 0xE0, 0xE4, 0xFF
 	incm8 1, (xsp + 12)
 	cpmi8 (xsp + 12), 0x4
 	jr c, LABEL_022565
@@ -13921,7 +13921,7 @@ LABEL_022587:
 	extz wa
 	muls wa, 0x27
 	ldada xde, 5295
-	x_dri4_sb7 0x07, 0xE8, 0xE0
+	res_dri 7, 0x07, 0xE8, 0xE0
 	ld a, c
 	and a, 0xF
 	lds de, 1
@@ -14405,7 +14405,7 @@ LABEL_02295C:
 	ldada_24 xix, 63123
 	ld_sriw3 WA, 0x07, 0xF0, 0xE0
 	ldada_24 xix, 141698
-	x_dri4_sd8 0x07, 0xF0, 0xE0
+	jp_dri 8, 0x07, 0xF0, 0xE0
 
 LABEL_022982:
 	.byte 0xdb
@@ -15500,7 +15500,7 @@ LABEL_02333E:
 	extz bc
 	muls bc, 0x11F
 	ldada_24 xde, 267398
-	x_dri5_o00_t1 0x07, 0xE8, 0xE4, 0x00
+	stib_dri 0x07, 0xE8, 0xE4, 0x00
 	jr LABEL_0233E1
 
 LABEL_023391:
@@ -15508,7 +15508,7 @@ LABEL_023391:
 	extz bc
 	muls bc, 0x11F
 	ldada_24 xde, 267398
-	x_dri5_o00_t1 0x07, 0xE8, 0xE4, 0x10
+	stib_dri 0x07, 0xE8, 0xE4, 0x10
 	jr LABEL_0233E1
 
 LABEL_0233A6:
@@ -15516,7 +15516,7 @@ LABEL_0233A6:
 	extz bc
 	muls bc, 0x11F
 	ldada_24 xde, 267398
-	x_dri5_o00_t1 0x07, 0xE8, 0xE4, 0x20
+	stib_dri 0x07, 0xE8, 0xE4, 0x20
 	jr LABEL_0233E1
 
 LABEL_0233BB:
@@ -15524,12 +15524,12 @@ LABEL_0233BB:
 	extz bc
 	muls bc, 0x11F
 	ldada_24 xde, 267397
-	x_dri5_o00_t1 0x07, 0xE8, 0xE4, 0x00
+	stib_dri 0x07, 0xE8, 0xE4, 0x00
 	ld c, a
 	extz bc
 	muls bc, 0x11F
 	ldada_24 xde, 267398
-	x_dri5_o00_t1 0x07, 0xE8, 0xE4, 0x00
+	stib_dri 0x07, 0xE8, 0xE4, 0x00
 
 LABEL_0233E1:
 	extz wa
@@ -15547,7 +15547,7 @@ LABEL_0233F8:
 	extz wa
 	muls wa, 0x11F
 	ldada_24 xde, 267221
-	x_dri5_o00_t1 0x07, 0xE8, 0xE0, 0x00
+	stib_dri 0x07, 0xE8, 0xE0, 0x00
 	ld a, (xsp)
 	cps a, 2
 	jrl z, LABEL_0234D2
@@ -15593,7 +15593,7 @@ LABEL_02345F:
 	extz wa
 	muls wa, 0x11F
 	ldada_24 xbc, 267135
-	x_dri4_scb 0x07, 0xE4, 0xE0
+	bit_dri 3, 0x07, 0xE4, 0xE0
 	jr z, LABEL_023477
 	ldb l, 0x0
 	jr LABEL_0234C3
@@ -15613,7 +15613,7 @@ LABEL_023490:
 	extz wa
 	muls wa, 0x11F
 	ldada_24 xbc, 267135
-	x_dri4_scb 0x07, 0xE4, 0xE0
+	bit_dri 3, 0x07, 0xE4, 0xE0
 	jr z, LABEL_0234A8
 	ldb l, 0x0
 	jr LABEL_0234C3
@@ -15676,7 +15676,7 @@ LABEL_023512:
 	extz wa
 	muls wa, 0x11F
 	ldada_24 xbc, 267135
-	x_dri4_scc 0x07, 0xE4, 0xE0
+	bit_dri 4, 0x07, 0xE4, 0xE0
 	jr z, LABEL_02352A
 	ldb l, 0x0
 	jr LABEL_023576
@@ -15696,7 +15696,7 @@ LABEL_023543:
 	extz wa
 	muls wa, 0x11F
 	ldada_24 xbc, 267135
-	x_dri4_scc 0x07, 0xE4, 0xE0
+	bit_dri 4, 0x07, 0xE4, 0xE0
 	jr z, LABEL_02355B
 	ldb l, 0x0
 	jr LABEL_023576
@@ -16982,7 +16982,7 @@ LABEL_024102:
 	ldada_24 xix, 63143
 	ld_sriw3 BC, 0x07, 0xF0, 0xE4
 	ldada_24 xix, 147755
-	x_dri4_sd8 0x07, 0xF0, 0xE4
+	jp_dri 8, 0x07, 0xF0, 0xE4
 
 LABEL_02412B:
 	jrl LABEL_022DA1
@@ -17198,7 +17198,7 @@ LABEL_024300:
 	ldada_24 xix, 63155
 	ld_sriw3 WA, 0x07, 0xF0, 0xE0
 	ldada_24 xix, 148268
-	x_dri4_sd8 0x07, 0xF0, 0xE0
+	jp_dri 8, 0x07, 0xF0, 0xE0
 
 LABEL_02432C:
 	ld xwa, xiz
@@ -17343,7 +17343,7 @@ LABEL_024444:
 	ldada_24 xix, 63167
 	ld_sriw3 WA, 0x07, 0xF0, 0xE0
 	ldada_24 xix, 148594
-	x_dri4_sd8 0x07, 0xF0, 0xE0
+	jp_dri 8, 0x07, 0xF0, 0xE0
 
 LABEL_024472:
 	ld wa, (xiz + 66)
@@ -17451,7 +17451,7 @@ LABEL_024554:
 	ldada_24 xix, 63179
 	ld_sriw3 WA, 0x07, 0xF0, 0xE0
 	ldada_24 xix, 148866
-	x_dri4_sd8 0x07, 0xF0, 0xE0
+	jp_dri 8, 0x07, 0xF0, 0xE0
 
 LABEL_024582:
 	ld wa, (xiz + 66)
@@ -21839,14 +21839,14 @@ LABEL_026F89:
 	jrl LABEL_0271AF
 
 LABEL_026FDD:
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld xwa, (xsp + 4)
 	ld a, (xwa)
 	extz wa
 	add wa, 0x840
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	stdi16_24 1048578, 65280
 	jr __jrt_nop_026FFD
 __jrt_nop_026FFD:
@@ -21855,14 +21855,14 @@ LABEL_026FFD:
 	nop
 	nop
 	nop
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld xwa, (xsp + 4)
 	ld a, (xwa)
 	extz wa
 	add wa, 0x800
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	stdi16_24 1048578, 65408
 	jr __jrt_nop_027020
 __jrt_nop_027020:
@@ -21893,14 +21893,14 @@ LABEL_027037:
 	jrl LABEL_0271AF
 
 LABEL_027059:
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld xwa, (xsp + 4)
 	ld a, (xwa)
 	extz wa
 	add wa, 0x840
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	stdi16_24 1048578, 65280
 	jr __jrt_nop_027079
 __jrt_nop_027079:
@@ -21909,14 +21909,14 @@ LABEL_027079:
 	nop
 	nop
 	nop
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld xwa, (xsp + 4)
 	ld a, (xwa)
 	extz wa
 	add wa, 0x800
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	stdi16_24 1048578, 65408
 	jr __jrt_nop_02709C
 __jrt_nop_02709C:
@@ -21953,14 +21953,14 @@ LABEL_0270B0:
 	jrl LABEL_0271AF
 
 LABEL_0270E8:
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld xwa, (xsp + 4)
 	ld a, (xwa)
 	extz wa
 	add wa, 0x840
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	stdi16_24 1048578, 65280
 	jr __jrt_nop_027108
 __jrt_nop_027108:
@@ -21969,14 +21969,14 @@ LABEL_027108:
 	nop
 	nop
 	nop
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld xwa, (xsp + 4)
 	ld a, (xwa)
 	extz wa
 	add wa, 0x800
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	stdi16_24 1048578, 65408
 	jr __jrt_nop_02712B
 __jrt_nop_02712B:
@@ -22006,14 +22006,14 @@ LABEL_027156:
 	and wa, 0x7F
 	cps wa, 1
 	jr nz, LABEL_0271AC
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld xwa, (xsp + 4)
 	ld a, (xwa)
 	extz wa
 	add wa, 0x840
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	stdi16_24 1048578, 41472
 	jr __jrt_nop_027181
 __jrt_nop_027181:
@@ -22022,14 +22022,14 @@ LABEL_027181:
 	nop
 	nop
 	nop
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld xwa, (xsp + 4)
 	ld a, (xwa)
 	extz wa
 	add wa, 0x800
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	stdi16_24 1048578, 41600
 	jr __jrt_nop_0271A4
 __jrt_nop_0271A4:
@@ -22158,7 +22158,7 @@ LABEL_0272A3:
 	extz wa
 	muls wa, 0x47
 	ldada_24 xbc, 274619
-	x_dri6_o02_t2 0x07, 0xE4, 0xE0, 0x00, 0xF0
+	stiw_dri 0x07, 0xE4, 0xE0, 0x00, 0xF0
 	ret
 
 LABEL_027363:
@@ -22225,7 +22225,7 @@ LABEL_0273D8:
 	extz wa
 	muls wa, 0x11F
 	ldada_24 xbc, 267205
-	x_dri6_o02_t2 0x07, 0xE4, 0xE0, 0x2C, 0x00
+	stiw_dri 0x07, 0xE4, 0xE0, 0x2C, 0x00
 	jr LABEL_02743E
 
 LABEL_027424:
@@ -22360,7 +22360,7 @@ LABEL_027534:
 	extz wa
 	muls wa, 0x11F
 	ldada_24 xbc, 267201
-	x_dri6_o02_t2 0x07, 0xE4, 0xE0, 0x1C, 0x00
+	stiw_dri 0x07, 0xE4, 0xE0, 0x1C, 0x00
 	jr LABEL_02759A
 
 LABEL_027580:
@@ -22493,7 +22493,7 @@ LABEL_027690:
 	extz wa
 	muls wa, 0x11F
 	ldada_24 xbc, 267209
-	x_dri6_o02_t2 0x07, 0xE4, 0xE0, 0x1C, 0x00
+	stiw_dri 0x07, 0xE4, 0xE0, 0x1C, 0x00
 	jr LABEL_0276F4
 
 LABEL_0276DA:
@@ -23221,11 +23221,11 @@ LABEL_027CE4:
 LABEL_027F74:
 	push xiz
 	ld xiz, xbc
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	add wa, 0x400
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	ld wa, (xiz + 14)
 	stda16_24 1048578, xwa
 	jr __jrt_nop_027F91
@@ -23241,11 +23241,11 @@ LABEL_027F91:
 LABEL_027F96:
 	push xiz
 	ld xiz, xbc
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	add wa, 0x80
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	ld wa, (xiz + 4)
 	res 15, wa
 	stda16_24 1048578, xwa
@@ -23262,10 +23262,10 @@ LABEL_027FB6:
 LABEL_027FBB:
 	pushw iz
 	ld iz, bc
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	stda16_24 1048578, xiz
 	jr __jrt_nop_027FD1
 __jrt_nop_027FD1:
@@ -23282,12 +23282,12 @@ LABEL_027FD6:
 	pushw iz
 	ld (xsp + 2), xbc
 	ld iz, wa
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x840
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 46)
 	stda16_24 1048578, xwa
@@ -23298,12 +23298,12 @@ LABEL_027FFD:
 	nop
 	nop
 	nop
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x940
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 50)
 	stda16_24 1048578, xwa
@@ -23314,12 +23314,12 @@ LABEL_02801F:
 	nop
 	nop
 	nop
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0xA00
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 54)
 	stda16_24 1048578, xwa
@@ -23330,12 +23330,12 @@ LABEL_028041:
 	nop
 	nop
 	nop
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x800
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 44)
 	stda16_24 1048578, xwa
@@ -23346,12 +23346,12 @@ LABEL_028063:
 	nop
 	nop
 	nop
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x900
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 48)
 	stda16_24 1048578, xwa
@@ -23362,12 +23362,12 @@ LABEL_028085:
 	nop
 	nop
 	nop
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x9C0
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 52)
 	stda16_24 1048578, xwa
@@ -23387,12 +23387,12 @@ LABEL_0280AE:
 	pushw iz
 	ld (xsp + 2), xbc
 	ld iz, wa
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x840
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 46)
 	stda16_24 1048578, xwa
@@ -23403,12 +23403,12 @@ LABEL_0280D5:
 	nop
 	nop
 	nop
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x800
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 44)
 	stda16_24 1048578, xwa
@@ -23707,7 +23707,7 @@ LABEL_0288B2:
 	extz wa
 	muls wa, 0x11F
 	ldada_24 xbc, 267124
-	x_dri6_o02_t2 0x07, 0xE4, 0xE0, 0x00, 0xFE
+	stiw_dri 0x07, 0xE4, 0xE0, 0x00, 0xFE
 	ret
 
 LABEL_0288C5:
@@ -23766,7 +23766,7 @@ LABEL_02894F:
 	extz wa
 	muls wa, 0x11F
 	ldada_24 xbc, 267128
-	x_dri6_o02_t2 0x07, 0xE4, 0xE0, 0x00, 0xFE
+	stiw_dri 0x07, 0xE4, 0xE0, 0x00, 0xFE
 	ret
 
 LABEL_028962:
@@ -24913,7 +24913,7 @@ LABEL_029E31:
 	ldada_24 xix, 63235
 	ld_sriw3 HL, 0x07, 0xF0, 0xEC
 	ldada_24 xix, 171611
-	x_dri4_sd8 0x07, 0xF0, 0xEC
+	jp_dri 8, 0x07, 0xF0, 0xEC
 LABEL_029E5B:
 	.byte 0xd8, 0x12, 0x78, 0x87, 0xf2, 0xd8, 0x12, 0x78
 	.byte 0x0d, 0xf3, 0xd8, 0x12, 0x78, 0xca, 0xf2, 0xd8
@@ -25164,14 +25164,14 @@ LABEL_02A1BA:
 	jrl nz, LABEL_02A273
 
 LABEL_02A1E9:
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld xwa, (xsp)
 	ld a, (xwa)
 	extz wa
 	add wa, 0x840
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	stdi16_24 1048578, 41472
 	jr __jrt_nop_02A208
 __jrt_nop_02A208:
@@ -25180,14 +25180,14 @@ LABEL_02A208:
 	nop
 	nop
 	nop
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld xwa, (xsp)
 	ld a, (xwa)
 	extz wa
 	add wa, 0x800
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	stdi16_24 1048578, 41600
 	jr __jrt_nop_02A22A
 __jrt_nop_02A22A:
@@ -25199,14 +25199,14 @@ LABEL_02A22A:
 	jr LABEL_02A273
 
 LABEL_02A22F:
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld xwa, (xsp)
 	ld a, (xwa)
 	extz wa
 	add wa, 0x840
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	stdi16_24 1048578, 41472
 	jr __jrt_nop_02A24E
 __jrt_nop_02A24E:
@@ -25215,14 +25215,14 @@ LABEL_02A24E:
 	nop
 	nop
 	nop
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld xwa, (xsp)
 	ld a, (xwa)
 	extz wa
 	add wa, 0x800
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	stdi16_24 1048578, 41600
 	jr __jrt_nop_02A270
 __jrt_nop_02A270:
@@ -25300,7 +25300,7 @@ Voice_CtrlChange:
 	ldada_24 xix, 63289
 	ld_sriw3 WA, 0x07, 0xF0, 0xE0
 	ldada_24 xix, 172806
-	x_dri4_sd8 0x07, 0xF0, 0xE0
+	jp_dri 8, 0x07, 0xF0, 0xE0
 
 Voice_CC_ModWheel:
 	ld a, (xiz + 1)
@@ -25697,13 +25697,13 @@ LABEL_02A684:
 	jr nc, LABEL_02A6D9
 
 LABEL_02A692:
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld a, (xiz)
 	extz wa
 	add wa, 0x840
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	stdi16_24 1048578, 41472
 	jr __jrt_nop_02A6AF
 __jrt_nop_02A6AF:
@@ -25712,13 +25712,13 @@ LABEL_02A6AF:
 	nop
 	nop
 	nop
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld a, (xiz)
 	extz wa
 	add wa, 0x800
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	stdi16_24 1048578, 41600
 	jr __jrt_nop_02A6CF
 __jrt_nop_02A6CF:
@@ -25855,7 +25855,7 @@ LABEL_02A7E6:
 	ldada_24 xix, 63311
 	ld_sriw3 BC, 0x07, 0xF0, 0xE4
 	ldada_24 xix, 174076
-	x_dri4_sd8 0x07, 0xF0, 0xE4
+	jp_dri 8, 0x07, 0xF0, 0xE4
 
 LABEL_02A7FC:
 	ld a, (xwa + 3)
@@ -26451,22 +26451,22 @@ LABEL_02ADC1:
 	extz wa
 	muls wa, 0x11F
 	ldada_24 xbc, 267378
-	x_dri5_o00_t1 0x07, 0xE4, 0xE0, 0x00
+	stib_dri 0x07, 0xE4, 0xE0, 0x00
 	ld a, (xsp)
 	extz wa
 	muls wa, 0x11F
 	ldada_24 xbc, 267379
-	x_dri5_o00_t1 0x07, 0xE4, 0xE0, 0x00
+	stib_dri 0x07, 0xE4, 0xE0, 0x00
 	ld a, (xsp)
 	extz wa
 	muls wa, 0x11F
 	ldada_24 xbc, 267380
-	x_dri5_o00_t1 0x07, 0xE4, 0xE0, 0x00
+	stib_dri 0x07, 0xE4, 0xE0, 0x00
 	ld a, (xsp)
 	extz wa
 	muls wa, 0x11F
 	ldada_24 xbc, 267381
-	x_dri5_o00_t1 0x07, 0xE4, 0xE0, 0x00
+	stib_dri 0x07, 0xE4, 0xE0, 0x00
 	inc 2, xsp
 	ret
 
@@ -26854,7 +26854,7 @@ LABEL_02B301:
 	exts bc
 	ld xwa, (xsp + 8)
 	add (xwa + 13), bc
-	x_dri4_scf 0xF9, 0x18, 0x01
+	bit_dri 7, 0xF9, 0x18, 0x01
 	jr z, LABEL_02B333
 	ei 6
 	ldda32 xwa, 4160
@@ -27023,13 +27023,13 @@ LABEL_02B49E:
 LABEL_02B4A1:
 	dec 2, xsp
 	ld (xsp), a
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld a, (xsp)
 	add a, 0xC0
 	extz wa
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	stdi16_24 1048578, 0
 	jr __jrt_nop_02B4C1
 __jrt_nop_02B4C1:
@@ -27038,12 +27038,12 @@ LABEL_02B4C1:
 	nop
 	nop
 	nop
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld a, (xsp)
 	extz wa
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	stdi16_24 1048578, 32256
 	jr __jrt_nop_02B4DD
 __jrt_nop_02B4DD:
@@ -27243,7 +27243,7 @@ LABEL_02B6EA:
 	ld bc, wa
 	inc 2, bc
 	ld xwa, (xsp + 22)
-	x_dri5_o00_t1 0x07, 0xE0, 0xE4, 0x00
+	stib_dri 0x07, 0xE0, 0xE4, 0x00
 
 LABEL_02B6FC:
 	ld a, (xsp + 38)
@@ -27251,7 +27251,7 @@ LABEL_02B6FC:
 	ld bc, wa
 	inc 6, bc
 	ld xwa, (xsp + 22)
-	x_dri5_o00_t1 0x07, 0xE0, 0xE4, 0x00
+	stib_dri 0x07, 0xE0, 0xE4, 0x00
 	pop_werp 0xFA
 	lda xsp, (xsp + 24)
 	retd 0xA
@@ -27364,13 +27364,13 @@ LABEL_02B83A:
 	ld bc, wa
 	inc 2, bc
 	ld xwa, (xsp + 22)
-	x_dri5_o00_t1 0x07, 0xE0, 0xE4, 0x00
+	stib_dri 0x07, 0xE0, 0xE4, 0x00
 	ld a, (xsp + 38)
 	extz wa
 	ld bc, wa
 	inc 6, bc
 	ld xwa, (xsp + 22)
-	x_dri5_o00_t1 0x07, 0xE0, 0xE4, 0x00
+	stib_dri 0x07, 0xE0, 0xE4, 0x00
 	jrl LABEL_02BA25
 
 LABEL_02B861:
@@ -27510,7 +27510,7 @@ LABEL_02B9D9:
 	ld bc, wa
 	inc 6, bc
 	ld xwa, (xsp + 22)
-	x_dri5_o00_t1 0x07, 0xE0, 0xE4, 0x80
+	stib_dri 0x07, 0xE0, 0xE4, 0x80
 	jr LABEL_02BA25
 
 LABEL_02B9ED:
@@ -27519,7 +27519,7 @@ LABEL_02B9ED:
 	ld bc, wa
 	inc 6, bc
 	ld xwa, (xsp + 22)
-	x_dri5_o00_t1 0x07, 0xE0, 0xE4, 0x00
+	stib_dri 0x07, 0xE0, 0xE4, 0x00
 	jr LABEL_02BA25
 
 LABEL_02BA01:
@@ -27528,13 +27528,13 @@ LABEL_02BA01:
 	ld bc, wa
 	inc 2, bc
 	ld xwa, (xsp + 22)
-	x_dri5_o00_t1 0x07, 0xE0, 0xE4, 0x00
+	stib_dri 0x07, 0xE0, 0xE4, 0x00
 	ld a, (xsp + 38)
 	extz wa
 	ld bc, wa
 	inc 6, bc
 	ld xwa, (xsp + 22)
-	x_dri5_o00_t1 0x07, 0xE0, 0xE4, 0x00
+	stib_dri 0x07, 0xE0, 0xE4, 0x00
 
 LABEL_02BA25:
 	pop xiz
@@ -27998,7 +27998,7 @@ LABEL_02BEF1:
 	ld bc, wa
 	inc 2, bc
 	ld xwa, (xsp + 8)
-	x_dri5_o00_t1 0x07, 0xE0, 0xE4, 0x00
+	stib_dri 0x07, 0xE0, 0xE4, 0x00
 
 LABEL_02BF03:
 	ld a, (xsp + 22)
@@ -28006,7 +28006,7 @@ LABEL_02BF03:
 	ld bc, wa
 	inc 6, bc
 	ld xwa, (xsp + 8)
-	x_dri5_o00_t1 0x07, 0xE0, 0xE4, 0x00
+	stib_dri 0x07, 0xE0, 0xE4, 0x00
 	pop xiz
 	inc 8, xsp
 	retd 0x8
@@ -28028,7 +28028,7 @@ LABEL_02BF1B:
 	extz wa
 	muls wa, 0x11F
 	ldada_24 xbc, 267392
-	x_dri4_sbf 0x07, 0xE4, 0xE0
+	set_dri 7, 0x07, 0xE4, 0xE0
 	jr LABEL_02BF68
 
 LABEL_02BF55:
@@ -28036,7 +28036,7 @@ LABEL_02BF55:
 	extz wa
 	muls wa, 0x11F
 	ldada_24 xbc, 267392
-	x_dri4_sb7 0x07, 0xE4, 0xE0
+	res_dri 7, 0x07, 0xE4, 0xE0
 
 LABEL_02BF68:
 	ld a, (xsp + 6)
@@ -28354,7 +28354,7 @@ LABEL_02C295:
 	ld bc, wa
 	inc 2, bc
 	ld xwa, (xsp + 26)
-	x_dri5_o00_t1 0x07, 0xE0, 0xE4, 0x00
+	stib_dri 0x07, 0xE0, 0xE4, 0x00
 
 LABEL_02C2A7:
 	ld a, (xsp + 40)
@@ -28362,7 +28362,7 @@ LABEL_02C2A7:
 	ld bc, wa
 	inc 6, bc
 	ld xwa, (xsp + 26)
-	x_dri5_o00_t1 0x07, 0xE0, 0xE4, 0x00
+	stib_dri 0x07, 0xE0, 0xE4, 0x00
 	pop xiz
 	lda xsp, (xsp + 26)
 	retd 0x8
@@ -28654,7 +28654,7 @@ LABEL_02C5BD:
 	ld bc, wa
 	inc 2, bc
 	ld xwa, (xsp + 22)
-	x_dri5_o00_t1 0x07, 0xE0, 0xE4, 0x00
+	stib_dri 0x07, 0xE0, 0xE4, 0x00
 
 LABEL_02C5CF:
 	pop_werp 0xFA
@@ -28810,13 +28810,13 @@ Voice_SetPitch:
 	ldfr_berp A, 0xFB
 	x_erpb3_ocf_t1 0xFB, 0x40
 	jr nc, LABEL_02C7CE
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ldto_berp A, 0xFB
 	extz wa
 	add wa, 0x840
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	stdi16_24 1048578, 65280
 	jr __jrt_nop_02C780
 __jrt_nop_02C780:
@@ -28825,13 +28825,13 @@ LABEL_02C780:
 	nop
 	nop
 	nop
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ldto_berp A, 0xFB
 	extz wa
 	add wa, 0x800
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	stdi16_24 1048578, 65408
 	jr __jrt_nop_02C7A1
 __jrt_nop_02C7A1:
@@ -28910,13 +28910,13 @@ Voice_NoteOff:
 	ldfr_berp A, 0xFB
 	x_erpb3_ocf_t1 0xFB, 0x40
 	jr nc, LABEL_02C8DB
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ldto_berp A, 0xFB
 	extz wa
 	add wa, 0x840
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	stdi16_24 1048578, 65280
 	jr __jrt_nop_02C884
 __jrt_nop_02C884:
@@ -28925,13 +28925,13 @@ LABEL_02C884:
 	nop
 	nop
 	nop
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ldto_berp A, 0xFB
 	extz wa
 	add wa, 0x800
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	stdi16_24 1048578, 65408
 	jr __jrt_nop_02C8A5
 __jrt_nop_02C8A5:
@@ -29022,13 +29022,13 @@ LABEL_02C96B:
 	ldfr_berp A, 0xFB
 	x_erpb3_ocf_t1 0xFB, 0x40
 	jr nc, LABEL_02C9F1
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ldto_berp A, 0xFB
 	extz wa
 	add wa, 0x840
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	stdi16_24 1048578, 65280
 	jr __jrt_nop_02C9A3
 __jrt_nop_02C9A3:
@@ -29037,13 +29037,13 @@ LABEL_02C9A3:
 	nop
 	nop
 	nop
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ldto_berp A, 0xFB
 	extz wa
 	add wa, 0x800
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	stdi16_24 1048578, 65408
 	jr __jrt_nop_02C9C4
 __jrt_nop_02C9C4:
@@ -29165,13 +29165,13 @@ LABEL_02CACF:
 	ldfr_berp A, 0xFB
 	x_erpb3_ocf_t1 0xFB, 0x40
 	jr nc, LABEL_02CB33
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ldto_berp A, 0xFB
 	extz wa
 	add wa, 0x840
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	stdi16_24 1048578, 65280
 	jr __jrt_nop_02CB07
 __jrt_nop_02CB07:
@@ -29180,13 +29180,13 @@ LABEL_02CB07:
 	nop
 	nop
 	nop
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ldto_berp A, 0xFB
 	extz wa
 	add wa, 0x800
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	stdi16_24 1048578, 65408
 	jr __jrt_nop_02CB28
 __jrt_nop_02CB28:
@@ -29276,13 +29276,13 @@ LABEL_02CBBA:
 	extz bc
 	ld wa, de
 	call LABEL_0266D8
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ldto_berp A, 0xFB
 	extz wa
 	add wa, 0x840
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	stdi16_24 1048578, 65280
 	jr __jrt_nop_02CC06
 __jrt_nop_02CC06:
@@ -29291,13 +29291,13 @@ LABEL_02CC06:
 	nop
 	nop
 	nop
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ldto_berp A, 0xFB
 	extz wa
 	add wa, 0x800
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	stdi16_24 1048578, 65408
 	jr __jrt_nop_02CC27
 __jrt_nop_02CC27:
@@ -29804,11 +29804,11 @@ LABEL_02D0B8:
 LABEL_02D0BA:
 	push xiz
 	ld xiz, xbc
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	add wa, 0x400
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	ld wa, (xiz + 14)
 	stda16_24 1048578, xwa
 	jr __jrt_nop_02D0D7
@@ -29834,12 +29834,12 @@ ToneGen_WriteVoiceParams:
 	ld (xsp + 2), xbc
 	ld iz, wa
 	lds wa, 0
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x40
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 2)
 	stda16_24 1048578, xwa
@@ -29850,12 +29850,12 @@ LABEL_02D12A:
 	nop
 	nop
 	nop
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x80
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 4)
 	set 15, wa
@@ -29867,12 +29867,12 @@ LABEL_02D14F:
 	nop
 	nop
 	nop
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0xC0
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 6)
 	stda16_24 1048578, xwa
@@ -29883,12 +29883,12 @@ LABEL_02D171:
 	nop
 	nop
 	nop
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x100
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 8)
 	stda16_24 1048578, xwa
@@ -29899,12 +29899,12 @@ LABEL_02D193:
 	nop
 	nop
 	nop
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x140
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 10)
 	stda16_24 1048578, xwa
@@ -29915,12 +29915,12 @@ LABEL_02D1B5:
 	nop
 	nop
 	nop
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x180
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 12)
 	stda16_24 1048578, xwa
@@ -29931,12 +29931,12 @@ LABEL_02D1D7:
 	nop
 	nop
 	nop
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x400
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 14)
 	stda16_24 1048578, xwa
@@ -29947,12 +29947,12 @@ LABEL_02D1F9:
 	nop
 	nop
 	nop
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x440
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 16)
 	stda16_24 1048578, xwa
@@ -29963,12 +29963,12 @@ LABEL_02D21B:
 	nop
 	nop
 	nop
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x480
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 18)
 	stda16_24 1048578, xwa
@@ -29979,12 +29979,12 @@ LABEL_02D23D:
 	nop
 	nop
 	nop
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x4C0
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 20)
 	stda16_24 1048578, xwa
@@ -29995,12 +29995,12 @@ LABEL_02D25F:
 	nop
 	nop
 	nop
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x500
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 22)
 	stda16_24 1048578, xwa
@@ -30011,12 +30011,12 @@ LABEL_02D281:
 	nop
 	nop
 	nop
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x800
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 24)
 	stda16_24 1048578, xwa
@@ -30027,11 +30027,11 @@ LABEL_02D2A3:
 	nop
 	nop
 	nop
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld wa, iz
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	stdi16_24 1048578, 33024
 	jr __jrt_nop_02D2BD
 __jrt_nop_02D2BD:
@@ -30040,12 +30040,12 @@ LABEL_02D2BD:
 	nop
 	nop
 	nop
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x840
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 26)
 	stda16_24 1048578, xwa
@@ -30056,12 +30056,12 @@ LABEL_02D2DF:
 	nop
 	nop
 	nop
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x880
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 28)
 	stda16_24 1048578, xwa
@@ -30072,12 +30072,12 @@ LABEL_02D301:
 	nop
 	nop
 	nop
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x8C0
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 30)
 	stda16_24 1048578, xwa
@@ -30088,12 +30088,12 @@ LABEL_02D323:
 	nop
 	nop
 	nop
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x900
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 32)
 	stda16_24 1048578, xwa
@@ -30104,12 +30104,12 @@ LABEL_02D345:
 	nop
 	nop
 	nop
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x940
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 34)
 	stda16_24 1048578, xwa
@@ -30120,12 +30120,12 @@ LABEL_02D367:
 	nop
 	nop
 	nop
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x980
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 36)
 	stda16_24 1048578, xwa
@@ -30136,12 +30136,12 @@ LABEL_02D389:
 	nop
 	nop
 	nop
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x9C0
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 38)
 	stda16_24 1048578, xwa
@@ -30152,12 +30152,12 @@ LABEL_02D3AB:
 	nop
 	nop
 	nop
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0xA00
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 40)
 	stda16_24 1048578, xwa
@@ -30168,12 +30168,12 @@ LABEL_02D3CD:
 	nop
 	nop
 	nop
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0xA40
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 42)
 	stda16_24 1048578, xwa
@@ -30184,12 +30184,12 @@ LABEL_02D3EF:
 	nop
 	nop
 	nop
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x80
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 4)
 	res 15, wa
@@ -30208,10 +30208,10 @@ LABEL_02D414:
 ToneGen_WriteSingleReg:
 	pushw iz
 	ld iz, bc
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	stda16_24 1048578, xiz
 	jr __jrt_nop_02D431
 __jrt_nop_02D431:
@@ -30228,12 +30228,12 @@ LABEL_02D436:
 	pushw iz
 	ld (xsp + 2), xbc
 	ld iz, wa
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x840
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 46)
 	stda16_24 1048578, xwa
@@ -30244,12 +30244,12 @@ LABEL_02D45D:
 	nop
 	nop
 	nop
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x940
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 50)
 	stda16_24 1048578, xwa
@@ -30260,12 +30260,12 @@ LABEL_02D47F:
 	nop
 	nop
 	nop
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0xA00
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 54)
 	stda16_24 1048578, xwa
@@ -30276,12 +30276,12 @@ LABEL_02D4A1:
 	nop
 	nop
 	nop
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x800
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 44)
 	stda16_24 1048578, xwa
@@ -30292,12 +30292,12 @@ LABEL_02D4C3:
 	nop
 	nop
 	nop
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x900
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 48)
 	stda16_24 1048578, xwa
@@ -30308,12 +30308,12 @@ LABEL_02D4E5:
 	nop
 	nop
 	nop
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x9C0
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 52)
 	stda16_24 1048578, xwa
@@ -30333,12 +30333,12 @@ LABEL_02D50E:
 	pushw iz
 	ld (xsp + 2), xbc
 	ld iz, wa
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x840
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 46)
 	stda16_24 1048578, xwa
@@ -30349,12 +30349,12 @@ LABEL_02D535:
 	nop
 	nop
 	nop
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x800
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 44)
 	stda16_24 1048578, xwa
@@ -30391,12 +30391,12 @@ LABEL_02D5D0:
 	pushw iz
 	ld (xsp + 2), xbc
 	ld iz, wa
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x840
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 26)
 	stda16_24 1048578, xwa
@@ -30407,12 +30407,12 @@ LABEL_02D5F7:
 	nop
 	nop
 	nop
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x880
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 28)
 	stda16_24 1048578, xwa
@@ -30432,12 +30432,12 @@ LABEL_02D620:
 	pushw iz
 	ld (xsp + 2), xbc
 	ld iz, wa
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x840
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 46)
 	stda16_24 1048578, xwa
@@ -30448,12 +30448,12 @@ LABEL_02D647:
 	nop
 	nop
 	nop
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x880
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 46)
 	stda16_24 1048578, xwa
@@ -30471,11 +30471,11 @@ LABEL_02D669:
 LABEL_02D670:
 	pushw iz
 	ld iz, bc
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	add wa, 0x180
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	stda16_24 1048578, xiz
 	jr __jrt_nop_02D68A
 __jrt_nop_02D68A:
@@ -30493,12 +30493,12 @@ LABEL_02D68F:
 	ld (xsp + 2), xde
 	ld (xsp + 6), xbc
 	ld iz, wa
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x800
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 60)
 	stda16_24 1048578, xwa
@@ -30509,11 +30509,11 @@ LABEL_02D6B9:
 	nop
 	nop
 	nop
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld wa, iz
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	stdi16_24 1048578, 33024
 	jr __jrt_nop_02D6D3
 __jrt_nop_02D6D3:
@@ -30522,12 +30522,12 @@ LABEL_02D6D3:
 	nop
 	nop
 	nop
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x840
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 62)
 	stda16_24 1048578, xwa
@@ -30538,12 +30538,12 @@ LABEL_02D6F5:
 	nop
 	nop
 	nop
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x80
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	ld xwa, (xsp + 6)
 	ld wa, (xwa + 4)
 	res 15, wa
@@ -30555,11 +30555,11 @@ LABEL_02D71A:
 	nop
 	nop
 	nop
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld wa, iz
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 45)
 	stda16_24 1048578, xwa
@@ -30579,12 +30579,12 @@ LABEL_02D73F:
 	pushw iz
 	ld (xsp + 2), xbc
 	ld iz, wa
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x800
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 60)
 	stda16_24 1048578, xwa
@@ -30595,11 +30595,11 @@ LABEL_02D766:
 	nop
 	nop
 	nop
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld wa, iz
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	stdi16_24 1048578, 33024
 	jr __jrt_nop_02D780
 __jrt_nop_02D780:
@@ -30608,12 +30608,12 @@ LABEL_02D780:
 	nop
 	nop
 	nop
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x840
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 62)
 	stda16_24 1048578, xwa
@@ -30624,11 +30624,11 @@ LABEL_02D7A2:
 	nop
 	nop
 	nop
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld wa, iz
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 45)
 	stda16_24 1048578, xwa
@@ -30656,10 +30656,10 @@ LABEL_02D7DA:
 	ormi16 (xiz), 0x8
 
 LABEL_02D7DE:
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	stdi16_24 1048576, 512
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	ld wa, (xiz)
 	stda16_24 1048578, xwa
 	jr __jrt_nop_02D7F5
@@ -30669,10 +30669,10 @@ LABEL_02D7F5:
 	nop
 	nop
 	nop
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	stdi16_24 1048576, 513
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	ld wa, (xiz + 2)
 	stda16_24 1048578, xwa
 	jr __jrt_nop_02D810
@@ -30682,10 +30682,10 @@ LABEL_02D810:
 	nop
 	nop
 	nop
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	stdi16_24 1048576, 514
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	ld wa, (xiz + 4)
 	stda16_24 1048578, xwa
 	jr __jrt_nop_02D82B
@@ -30695,10 +30695,10 @@ LABEL_02D82B:
 	nop
 	nop
 	nop
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	stdi16_24 1048576, 515
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	ld wa, (xiz + 6)
 	stda16_24 1048578, xwa
 	jr __jrt_nop_02D846
@@ -30708,10 +30708,10 @@ LABEL_02D846:
 	nop
 	nop
 	nop
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	stdi16_24 1048576, 516
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	ld wa, (xiz + 8)
 	stda16_24 1048578, xwa
 	jr __jrt_nop_02D861
@@ -30721,10 +30721,10 @@ LABEL_02D861:
 	nop
 	nop
 	nop
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	stdi16_24 1048576, 517
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	ld wa, (xiz + 10)
 	stda16_24 1048578, xwa
 	jr __jrt_nop_02D87C
@@ -30734,10 +30734,10 @@ LABEL_02D87C:
 	nop
 	nop
 	nop
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	stdi16_24 1048576, 3072
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	ld wa, (xiz + 12)
 	stda16_24 1048578, xwa
 	jr __jrt_nop_02D897
@@ -30747,10 +30747,10 @@ LABEL_02D897:
 	nop
 	nop
 	nop
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	stdi16_24 1048576, 3073
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	ld wa, (xiz + 14)
 	stda16_24 1048578, xwa
 	jr __jrt_nop_02D8B2
@@ -30760,10 +30760,10 @@ LABEL_02D8B2:
 	nop
 	nop
 	nop
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	stdi16_24 1048576, 3074
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	ld wa, (xiz + 16)
 	stda16_24 1048578, xwa
 	jr __jrt_nop_02D8CD
@@ -30773,10 +30773,10 @@ LABEL_02D8CD:
 	nop
 	nop
 	nop
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	stdi16_24 1048576, 3075
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	ld wa, (xiz + 18)
 	stda16_24 1048578, xwa
 	jr __jrt_nop_02D8E8
@@ -30786,10 +30786,10 @@ LABEL_02D8E8:
 	nop
 	nop
 	nop
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	stdi16_24 1048576, 3076
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	ld wa, (xiz + 20)
 	stda16_24 1048578, xwa
 	jr __jrt_nop_02D903
@@ -30799,10 +30799,10 @@ LABEL_02D903:
 	nop
 	nop
 	nop
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	stdi16_24 1048576, 3077
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	ld wa, (xiz + 22)
 	stda16_24 1048578, xwa
 	jr __jrt_nop_02D91E
@@ -30812,10 +30812,10 @@ LABEL_02D91E:
 	nop
 	nop
 	nop
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	stdi16_24 1048576, 3584
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	ld wa, (xiz + 24)
 	stda16_24 1048578, xwa
 	jr __jrt_nop_02D939
@@ -30866,12 +30866,12 @@ ToneGen_WriteExtParams_56:
 	ld wa, (xwa + 60)
 	bit 15, wa
 	jr z, LABEL_02DA4B
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x580
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 60)
 	stda16_24 1048578, xwa
@@ -30884,12 +30884,12 @@ LABEL_02DA48:
 	nop
 
 LABEL_02DA4B:
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x600
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 64)
 	stda16_24 1048578, xwa
@@ -30900,12 +30900,12 @@ LABEL_02DA6A:
 	nop
 	nop
 	nop
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x580
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 60)
 	res 15, wa
@@ -30924,11 +30924,11 @@ LABEL_02DA8F:
 LABEL_02DA96:
 	push xiz
 	ld xiz, xbc
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	add wa, 0x600
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	ld wa, (xiz + 64)
 	stda16_24 1048578, xwa
 	jr __jrt_nop_02DAB3
@@ -30950,12 +30950,12 @@ LABEL_02DAB8:
 	ld wa, (xwa + 60)
 	bit 15, wa
 	jr z, LABEL_02DAED
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x580
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 60)
 	stda16_24 1048578, xwa
@@ -30968,12 +30968,12 @@ LABEL_02DAEA:
 	nop
 
 LABEL_02DAED:
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x580
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 60)
 	res 15, wa
@@ -30990,11 +30990,11 @@ LABEL_02DB0F:
 	ret
 
 LABEL_02DB16:
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	add wa, 0x580
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	stdi16_24 1048578, 33024
 	jr __jrt_nop_02DB2F
 __jrt_nop_02DB2F:
@@ -31014,12 +31014,12 @@ ToneGen_WriteExtParams_56b:
 	ld wa, (xwa + 62)
 	bit 15, wa
 	jr z, LABEL_02DB68
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x5C0
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 62)
 	stda16_24 1048578, xwa
@@ -31032,12 +31032,12 @@ LABEL_02DB65:
 	nop
 
 LABEL_02DB68:
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x640
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 66)
 	stda16_24 1048578, xwa
@@ -31048,12 +31048,12 @@ LABEL_02DB87:
 	nop
 	nop
 	nop
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x5C0
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 62)
 	res 15, wa
@@ -31100,12 +31100,12 @@ ToneGen_WriteExtParams_15:
 	ld wa, (xwa + 58)
 	bit 15, wa
 	jr z, LABEL_02DC85
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x540
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 58)
 	stda16_24 1048578, xwa
@@ -31118,12 +31118,12 @@ LABEL_02DC82:
 	nop
 
 LABEL_02DC85:
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x1C0
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 56)
 	stda16_24 1048578, xwa
@@ -31134,12 +31134,12 @@ LABEL_02DCA4:
 	nop
 	nop
 	nop
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x540
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 58)
 	res 15, wa
@@ -31158,11 +31158,11 @@ LABEL_02DCC9:
 LABEL_02DCD0:
 	push xiz
 	ld xiz, xbc
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	add wa, 0x1C0
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	ld wa, (xiz + 56)
 	stda16_24 1048578, xwa
 	jr __jrt_nop_02DCED
@@ -31184,12 +31184,12 @@ LABEL_02DCF2:
 	ld wa, (xwa + 58)
 	bit 15, wa
 	jr z, LABEL_02DD27
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x540
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 58)
 	stda16_24 1048578, xwa
@@ -31202,12 +31202,12 @@ LABEL_02DD24:
 	nop
 
 LABEL_02DD27:
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x540
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 58)
 	res 15, wa
@@ -31224,11 +31224,11 @@ LABEL_02DD49:
 	ret
 
 LABEL_02DD50:
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	add wa, 0x540
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	stdi16_24 1048578, 33024
 	jr __jrt_nop_02DD69
 __jrt_nop_02DD69:
@@ -31278,11 +31278,11 @@ LABEL_02DE69:
 	ld xiz, xbc
 	cp wa, 0x40
 	jr nc, LABEL_02DE91
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	add wa, 0x1C0
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	ld wa, (xiz + 56)
 	stda16_24 1048578, xwa
 	jr __jrt_nop_02DE8C
@@ -31295,11 +31295,11 @@ LABEL_02DE8C:
 	jr LABEL_02DEAE
 
 LABEL_02DE91:
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	add wa, 0x600
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	ld wa, (xiz + 66)
 	stda16_24 1048578, xwa
 	jr __jrt_nop_02DEAB
@@ -31325,12 +31325,12 @@ LABEL_02DEB0:
 	ld wa, (xwa + 58)
 	bit 15, wa
 	jr z, LABEL_02DEEB
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x540
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 58)
 	stda16_24 1048578, xwa
@@ -31343,12 +31343,12 @@ LABEL_02DEE8:
 	nop
 
 LABEL_02DEEB:
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x540
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 58)
 	res 15, wa
@@ -31367,12 +31367,12 @@ LABEL_02DF12:
 	ld wa, (xwa + 62)
 	bit 15, wa
 	jr z, LABEL_02DF3F
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x580
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 62)
 	stda16_24 1048578, xwa
@@ -31385,12 +31385,12 @@ LABEL_02DF3C:
 	nop
 
 LABEL_02DF3F:
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x580
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 62)
 	res 15, wa
@@ -31411,11 +31411,11 @@ LABEL_02DF64:
 LABEL_02DF68:
 	cp wa, 0x40
 	jr nc, LABEL_02DF8B
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	add wa, 0x540
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	stdi16_24 1048578, 33024
 	jr __jrt_nop_02DF87
 __jrt_nop_02DF87:
@@ -31427,11 +31427,11 @@ LABEL_02DF87:
 	ret
 
 LABEL_02DF8B:
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	add wa, 0x580
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	stdi16_24 1048578, 33024
 	jr __jrt_nop_02DFA4
 __jrt_nop_02DFA4:
@@ -31458,12 +31458,12 @@ DSP_Config_Init:
 	jrl nc, LABEL_02E0B2
 
 ToneGen_Config_Init:
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x840
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	stdi16_24 1048578, 65280
 	jr __jrt_nop_02DFEA
 __jrt_nop_02DFEA:
@@ -31472,12 +31472,12 @@ LABEL_02DFEA:
 	nop
 	nop
 	nop
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x800
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	stdi16_24 1048578, 65408
 	jr __jrt_nop_02E008
 __jrt_nop_02E008:
@@ -31493,12 +31493,12 @@ LABEL_02E008:
 	ld xbc, (xsp + 2)
 	ld bc, (xbc)
 	calr ToneGen_WriteSingleReg
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x840
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	stdi16_24 1048578, 65280
 	jr __jrt_nop_02E038
 __jrt_nop_02E038:
@@ -31507,12 +31507,12 @@ LABEL_02E038:
 	nop
 	nop
 	nop
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x800
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	stdi16_24 1048578, 65408
 	jr __jrt_nop_02E056
 __jrt_nop_02E056:
@@ -31521,12 +31521,12 @@ LABEL_02E056:
 	nop
 	nop
 	nop
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0xC0
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	stdi16_24 1048578, 0
 	jr __jrt_nop_02E074
 __jrt_nop_02E074:
@@ -31535,11 +31535,11 @@ LABEL_02E074:
 	nop
 	nop
 	nop
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld wa, iz
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	stdi16_24 1048578, 32256
 	jr __jrt_nop_02E08E
 __jrt_nop_02E08E:
@@ -31600,12 +31600,12 @@ LABEL_02E18D:
 	pushw iz
 	ld (xsp + 6), xbc
 	ld iz, wa
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0xC0
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	ld xwa, (xsp + 6)
 	ld wa, (xwa + 6)
 	stda16_24 1048578, xwa
@@ -31616,11 +31616,11 @@ LABEL_02E1B4:
 	nop
 	nop
 	nop
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ld wa, iz
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	ld xwa, 0x100002
 	ld (xsp + 2), xwa
 	ld wa, iz
@@ -31867,7 +31867,7 @@ LABEL_02E480:
 	muls wa, 0x51
 	add wa, 0x66
 	ldada_24 xde, 282580
-	x_dri4_scd 0x07, 0xE8, 0xE0
+	bit_dri 5, 0x07, 0xE8, 0xE0
 	jr nz, LABEL_02E4B7
 	inc 1, c
 
@@ -34151,7 +34151,7 @@ Voice_ParamFinalize:
 	ldada_24 xix, 64302
 	ld_sriw3 WA, 0x07, 0xF0, 0xE0
 	ldada_24 xix, 203425
-	x_dri4_sd8 0x07, 0xF0, 0xE0
+	jp_dri 8, 0x07, 0xF0, 0xE0
 
 LABEL_031AA1:
 	.byte 0xee, 0x88, 0x1e, 0xda, 0xd2, 0x78, 0xbf, 0x03
@@ -34184,7 +34184,7 @@ LABEL_031B39:
 	ldada_24 xix, 64286
 	ld_sriw3 WA, 0x07, 0xF0, 0xE0
 	ldada_24 xix, 203611
-	x_dri4_sd8 0x07, 0xF0, 0xE0
+	jp_dri 8, 0x07, 0xF0, 0xE0
 
 LABEL_031B5B:
 	.byte 0xee, 0x88, 0x1e, 0x35, 0xfc, 0x78, 0xca, 0x02
@@ -36505,7 +36505,7 @@ LABEL_0333BE:
 	ld bc, wa
 	add bc, 0x1A
 	ld xwa, (xsp + 2)
-	x_dri6_o02_t2 0x07, 0xE0, 0xE4, 0x00, 0x00
+	stiw_dri 0x07, 0xE0, 0xE4, 0x00, 0x00
 	ldi_berp 0xFB, 0
 	cpi_berp 0xFB, 4
 	jrl nc, LABEL_033550
@@ -36672,17 +36672,17 @@ LABEL_033557:
 	extz wa
 	muls wa, 0x11F
 	ldada_24 xbc, 267211
-	x_dri5_o00_t1 0x07, 0xE4, 0xE0, 0x0F
+	stib_dri 0x07, 0xE4, 0xE0, 0x0F
 	ld a, (xsp + 2)
 	extz wa
 	muls wa, 0x11F
 	ldada_24 xbc, 267212
-	x_dri5_o00_t1 0x07, 0xE4, 0xE0, 0x4F
+	stib_dri 0x07, 0xE4, 0xE0, 0x4F
 	ld a, (xsp + 2)
 	extz wa
 	muls wa, 0x11F
 	ldada_24 xbc, 267213
-	x_dri5_o00_t1 0x07, 0xE4, 0xE0, 0x96
+	stib_dri 0x07, 0xE4, 0xE0, 0x96
 	jr LABEL_033629
 
 LABEL_0335ED:
@@ -36690,17 +36690,17 @@ LABEL_0335ED:
 	extz wa
 	muls wa, 0x11F
 	ldada_24 xbc, 267211
-	x_dri5_o00_t1 0x07, 0xE4, 0xE0, 0x01
+	stib_dri 0x07, 0xE4, 0xE0, 0x01
 	ld a, (xsp + 2)
 	extz wa
 	muls wa, 0x11F
 	ldada_24 xbc, 267212
-	x_dri5_o00_t1 0x07, 0xE4, 0xE0, 0x01
+	stib_dri 0x07, 0xE4, 0xE0, 0x01
 	ld a, (xsp + 2)
 	extz wa
 	muls wa, 0x11F
 	ldada_24 xbc, 267213
-	x_dri5_o00_t1 0x07, 0xE4, 0xE0, 0x01
+	stib_dri 0x07, 0xE4, 0xE0, 0x01
 
 LABEL_033629:
 	ld a, (xsp + 2)
@@ -36744,7 +36744,7 @@ LABEL_033663:
 	extz wa
 	muls wa, 0x11F
 	ldada_24 xbc, 267211
-	x_dri4_sb9 0x07, 0xE4, 0xE0
+	set_dri 1, 0x07, 0xE4, 0xE0
 	jr LABEL_0336B8
 
 LABEL_0336A4:
@@ -36831,17 +36831,17 @@ LABEL_033793:
 	extz wa
 	muls wa, 0x11F
 	ldada_24 xbc, 267211
-	x_dri5_o00_t1 0x07, 0xE4, 0xE0, 0x00
+	stib_dri 0x07, 0xE4, 0xE0, 0x00
 	ld a, (xsp + 2)
 	extz wa
 	muls wa, 0x11F
 	ldada_24 xbc, 267212
-	x_dri5_o00_t1 0x07, 0xE4, 0xE0, 0x00
+	stib_dri 0x07, 0xE4, 0xE0, 0x00
 	ld a, (xsp + 2)
 	extz wa
 	muls wa, 0x11F
 	ldada_24 xbc, 267213
-	x_dri5_o00_t1 0x07, 0xE4, 0xE0, 0x00
+	stib_dri 0x07, 0xE4, 0xE0, 0x00
 
 LABEL_0337CF:
 	inc 4, xsp
@@ -36866,7 +36866,7 @@ LABEL_0337D2:
 	ldada_24 xix, 64358
 	ld_sriw3 DE, 0x07, 0xF0, 0xE8
 	ldada_24 xix, 210962
-	x_dri4_sd8 0x07, 0xF0, 0xE8
+	jp_dri 8, 0x07, 0xF0, 0xE8
 
 LABEL_033812:
 	.byte 0xcb, 0x8d, 0xda, 0x12, 0xda, 0x8c, 0xdc, 0x84
@@ -36948,7 +36948,7 @@ LABEL_03399E:
 	ldada_24 xix, 64382
 	ld_sriw3 DE, 0x07, 0xF0, 0xE8
 	ldada_24 xix, 211422
-	x_dri4_sd8 0x07, 0xF0, 0xE8
+	jp_dri 8, 0x07, 0xF0, 0xE8
 
 LABEL_0339DE:
 	.byte 0xcb, 0x8d, 0xda, 0x12, 0xda, 0x8c, 0xdc, 0x84
@@ -37226,7 +37226,7 @@ LABEL_033D82:
 	extz bc
 	muls bc, 0x27
 	ldada_24 xde, 73251
-	x_dri4_scf 0x07, 0xE8, 0xE4
+	bit_dri 7, 0x07, 0xE8, 0xE4
 	jr z, LABEL_033DAA
 	ld a, l
 	extz wa
@@ -37290,7 +37290,7 @@ LABEL_033E02:
 	ldada_24 xix, 64406
 	ld_sriw3 IY, 0x07, 0xF0, 0xF4
 	ldada_24 xix, 212548
-	x_dri4_sd8 0x07, 0xF0, 0xF4
+	jp_dri 8, 0x07, 0xF0, 0xF4
 
 LABEL_033E44:
 	.byte 0xcd, 0xd8, 0x6e, 0x73, 0xcb, 0x8d, 0xda, 0x12
@@ -37361,7 +37361,7 @@ LABEL_033F98:
 	ldada_24 xix, 73238
 	exts xde
 	add xde, xix
-	x_dri4_scd 0x07, 0xE8, 0xF4
+	bit_dri 5, 0x07, 0xE8, 0xF4
 	ret z
 	extz wa
 	muls wa, 0x11F
@@ -37380,7 +37380,7 @@ LABEL_033F98:
 	ldada_24 xbc, 73238
 	exts xwa
 	add xwa, xbc
-	x_dri4_sc9 0x07, 0xE0, 0xE8
+	bit_dri 1, 0x07, 0xE0, 0xE8
 	jr z, LABEL_033FFE
 	ldw hl, 0xC000
 	jr LABEL_034006
@@ -37461,7 +37461,7 @@ LABEL_034067:
 	ldada_24 xix, 64430
 	ld_sriw3 DE, 0x07, 0xF0, 0xE8
 	ldada_24 xix, 213196
-	x_dri4_sd8 0x07, 0xF0, 0xE8
+	jp_dri 8, 0x07, 0xF0, 0xE8
 
 LABEL_0340CC:
 	.byte 0xcb, 0xd9, 0xb0, 0xfe, 0xd8, 0x12, 0xd8, 0x09
@@ -37516,7 +37516,7 @@ LABEL_034153:
 	ldada_24 xix, 64448
 	ld_sriw3 DE, 0x07, 0xF0, 0xE8
 	ldada_24 xix, 213438
-	x_dri4_sd8 0x07, 0xF0, 0xE8
+	jp_dri 8, 0x07, 0xF0, 0xE8
 
 LABEL_0341BE:
 	.byte 0xcb, 0xd9, 0x6e, 0x1b, 0xc9, 0x8d, 0xda, 0x12
@@ -37577,7 +37577,7 @@ LABEL_03421E:
 	ldada_24 xix, 64466
 	ld_sriw3 DE, 0x07, 0xF0, 0xE8
 	ldada_24 xix, 213661
-	x_dri4_sd8 0x07, 0xF0, 0xE8
+	jp_dri 8, 0x07, 0xF0, 0xE8
 
 LABEL_03429D:
 	.byte 0xcb, 0xd9, 0xb0, 0xfe, 0xd8, 0x12, 0xd8, 0x09
@@ -37839,7 +37839,7 @@ LABEL_03463F:
 	extz wa
 	muls wa, 0x11F
 	ldada_24 xbc, 267216
-	x_dri5_o00_t1 0x07, 0xE4, 0xE0, 0x00
+	stib_dri 0x07, 0xE4, 0xE0, 0x00
 	ret
 
 LABEL_034651:
@@ -37865,7 +37865,7 @@ LABEL_03468A:
 	extz wa
 	muls wa, 0x11F
 	ldada_24 xbc, 267217
-	x_dri5_o00_t1 0x07, 0xE4, 0xE0, 0x00
+	stib_dri 0x07, 0xE4, 0xE0, 0x00
 	ret
 
 LABEL_03469C:
@@ -37891,7 +37891,7 @@ LABEL_0346D5:
 	extz wa
 	muls wa, 0x11F
 	ldada_24 xbc, 267218
-	x_dri5_o00_t1 0x07, 0xE4, 0xE0, 0x00
+	stib_dri 0x07, 0xE4, 0xE0, 0x00
 	ret
 
 LABEL_0346E7:
@@ -37917,7 +37917,7 @@ LABEL_034720:
 	extz wa
 	muls wa, 0x11F
 	ldada_24 xbc, 267219
-	x_dri5_o00_t1 0x07, 0xE4, 0xE0, 0x00
+	stib_dri 0x07, 0xE4, 0xE0, 0x00
 	ret
 
 LABEL_034732:
@@ -37943,7 +37943,7 @@ LABEL_03476B:
 	extz wa
 	muls wa, 0x11F
 	ldada_24 xbc, 267220
-	x_dri5_o00_t1 0x07, 0xE4, 0xE0, 0x00
+	stib_dri 0x07, 0xE4, 0xE0, 0x00
 	ret
 
 LABEL_03477D:
@@ -37960,7 +37960,7 @@ LABEL_03477D:
 	extz wa
 	muls wa, 0x11F
 	ldada_24 xbc, 267116
-	x_dri5_o00_t1 0x07, 0xE4, 0xE0, 0x00
+	stib_dri 0x07, 0xE4, 0xE0, 0x00
 	ret
 
 LABEL_0347B7:
@@ -37971,27 +37971,27 @@ LABEL_0347B7:
 	extz bc
 	muls bc, 0x11F
 	ldada_24 xde, 267141
-	x_dri6_o02_t2 0x07, 0xE8, 0xE4, 0x00, 0x00
+	stiw_dri 0x07, 0xE8, 0xE4, 0x00, 0x00
 	ld c, a
 	extz bc
 	muls bc, 0x11F
 	ldada_24 xde, 267143
-	x_dri5_o00_t1 0x07, 0xE8, 0xE4, 0x00
+	stib_dri 0x07, 0xE8, 0xE4, 0x00
 	ld c, a
 	extz bc
 	muls bc, 0x11F
 	ldada_24 xde, 267144
-	x_dri5_o00_t1 0x07, 0xE8, 0xE4, 0x00
+	stib_dri 0x07, 0xE8, 0xE4, 0x00
 	ld c, a
 	extz bc
 	muls bc, 0x11F
 	ldada_24 xde, 267139
-	x_dri5_o00_t1 0x07, 0xE8, 0xE4, 0x40
+	stib_dri 0x07, 0xE8, 0xE4, 0x40
 	ld c, a
 	extz bc
 	muls bc, 0x11F
 	ldada_24 xde, 267140
-	x_dri5_o00_t1 0x07, 0xE8, 0xE4, 0x40
+	stib_dri 0x07, 0xE8, 0xE4, 0x40
 	lds ix, 0
 	cps ix, 4
 	ret nc
@@ -38397,7 +38397,7 @@ LABEL_034B72:
 	exts xwa
 	add xwa, xbc
 	add xwa, xhl
-	x_dri6_o02_t2 0xE1, 0x88, 0x00, 0x00, 0x00
+	stiw_dri 0xE1, 0x88, 0x00, 0x00, 0x00
 	incm 1, (xsp + 6)
 	cpmi16 (xsp + 6), 0x3
 	jr c, LABEL_034B72
@@ -38465,7 +38465,7 @@ DSP_System_Init:	; 034C45h
 	jr nc, DSP_System_Init_Clear2
 
 DSP_System_Init_Clear1:
-	x_dpi3_o00_t1 0xE0, 0x00	; Clear byte
+	stib_dpi 0xE0, 0x00	; Clear byte
 	inc 1, bc
 	cp bc, 0x26
 	jr c, DSP_System_Init_Clear1
@@ -38477,7 +38477,7 @@ DSP_System_Init_Clear2:
 	jr nc, DSP_System_Init_Vars
 
 DSP_System_Init_Clear2_Loop:
-	x_dpi3_o00_t1 0xE0, 0x00
+	stib_dpi 0xE0, 0x00
 	inc 1, bc
 	cp bc, 0x1D26
 	jr c, DSP_System_Init_Clear2_Loop
@@ -38487,7 +38487,7 @@ DSP_System_Init_Vars:
 	lds wa, 0
 	stda16 11023, xwa	; Clear control variable
 	stda16 11021, xwa	; Clear control variable
-	x_dd82_scb 0x44	; Check hardware config pin
+	bit_dd8 3, 0x44	; Check hardware config pin
 	jr z, DSP_System_Init_SetBit
 	anddi16_24 267075, 65527	; Clear bit 3 of DSP config
 	jr DSP_System_Init_Continue
@@ -39592,13 +39592,13 @@ LABEL_0356E3:
 	ldfr_berp A, 0xFA
 	cpi_berp 0xF9, 0
 	jrl z, LABEL_035799
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ldda8 a, 15123
 	extz wa
 	add wa, 0x840
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	stdi16_24 1048578, 65280
 	jr __jrt_nop_035727
 __jrt_nop_035727:
@@ -39607,13 +39607,13 @@ LABEL_035727:
 	nop
 	nop
 	nop
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ldda8 a, 15123
 	extz wa
 	add wa, 0x800
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	stdi16_24 1048578, 65408
 	jr __jrt_nop_035749
 __jrt_nop_035749:
@@ -39669,13 +39669,13 @@ LABEL_0357A6:
 	ld a, (xwa)
 	cp_berp A, 0xFA
 	jr nz, LABEL_03580D
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ldto_berp A, 0xFB
 	extz wa
 	add wa, 0x840
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	stdi16_24 1048578, 41472
 	jr __jrt_nop_0357D8
 __jrt_nop_0357D8:
@@ -39684,13 +39684,13 @@ LABEL_0357D8:
 	nop
 	nop
 	nop
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	ldto_berp A, 0xFB
 	extz wa
 	add wa, 0x800
 	stda16_24 1048576, xwa
 	nop
-	x_dd82_sbf 0x18
+	set_dd8 7, 0x18
 	stdi16_24 1048578, 41600
 	jr __jrt_nop_0357F9
 __jrt_nop_0357F9:
@@ -40134,7 +40134,7 @@ LABEL_035B1B:
 	ldada_24 xix, 74203
 	ld_sriw3 WA, 0x07, 0xF0, 0xE0
 	ldada_24 xix, 220102
-	x_dri4_sd8 0x07, 0xF0, 0xE0
+	jp_dri 8, 0x07, 0xF0, 0xE0
 
 LABEL_035BC6:
 	ld wa, iz
@@ -40345,7 +40345,7 @@ LABEL_035DBC:
 	ldada_24 xix, 74173
 	ld_sriw3 WA, 0x07, 0xF0, 0xE0
 	ldada_24 xix, 220626
-	x_dri4_sd8 0x07, 0xF0, 0xE0
+	jp_dri 8, 0x07, 0xF0, 0xE0
 LABEL_035DD2:
 	.byte 0xc1, 0x70, 0x43, 0x21, 0xd8, 0x13, 0x1d, 0x23
 	.byte 0x8b, 0x02, 0x78, 0x54, 0x02, 0xc1, 0x70, 0x43
@@ -40885,7 +40885,7 @@ DSP_Send_Cmd_Ready:
 	cps hl, 0
 	jr z, DSP_Send_Cmd_Error
 	ld a, (xsp + 8)	; Get command byte
-	x_dd82_s41 0x68	; Write to DSP data port
+	st_dd8b A, 0x68	; Write to DSP data port
 	jr DSP_Send_Cmd_Cleanup
 
 DSP_Send_Cmd_Error:
@@ -40910,7 +40910,7 @@ DSP_Send_Cmd_Cleanup:
 	ret
 
 LABEL_03640A:
-	x_dd82_sba 0x3C
+	set_dd8 2, 0x3C
 	jr __jrt_nop_03640F
 __jrt_nop_03640F:
 
@@ -41006,13 +41006,13 @@ __jrt_nop_036445:
 
 LABEL_036445:
 	nop
-	x_dd82_sb8 0x3C
+	set_dd8 0, 0x3C
 	jr __jrt_nop_03644B
 __jrt_nop_03644B:
 
 LABEL_03644B:
 	nop
-	x_dd82_sb0 0x3C
+	res_dd8 0, 0x3C
 	jr __jrt_nop_036451
 __jrt_nop_036451:
 
@@ -41093,7 +41093,7 @@ __jrt_nop_03647E:
 
 LABEL_03647E:
 	nop
-	x_dd82_sb2 0x3C
+	res_dd8 2, 0x3C
 	jr __jrt_nop_036484
 __jrt_nop_036484:
 
@@ -41193,8 +41193,8 @@ LABEL_0364BA:
 	jp 0x38365
 
 LABEL_0364C4:
-	x_dd82_sb2 0x3C
-	x_dd82_sb0 0x3C
+	res_dd8 2, 0x3C
+	res_dd8 0, 0x3C
 	jr __jrt_nop_0364CC
 __jrt_nop_0364CC:
 
@@ -41290,7 +41290,7 @@ __jrt_nop_036502:
 
 LABEL_036502:
 	nop
-	x_dd82_sba 0x3C
+	set_dd8 2, 0x3C
 	jr __jrt_nop_036508
 __jrt_nop_036508:
 
@@ -41386,7 +41386,7 @@ __jrt_nop_03653E:
 
 LABEL_03653E:
 	nop
-	x_dd82_sb8 0x3C
+	set_dd8 0, 0x3C
 	jr __jrt_nop_036544
 __jrt_nop_036544:
 
@@ -41890,11 +41890,11 @@ DSP2_Send_Command:
 LABEL_036696:
 	x_erpb3_o33_t1 0xFB, 0x07
 	jr z, LABEL_0366A1
-	x_dd82_sb8 0x3C
+	set_dd8 0, 0x3C
 	jr LABEL_0366A4
 
 LABEL_0366A1:
-	x_dd82_sb0 0x3C
+	res_dd8 0, 0x3C
 
 LABEL_0366A4:
 	jr __jrt_nop_0366A6
@@ -41903,7 +41903,7 @@ __jrt_nop_0366A6:
 LABEL_0366A6:
 	nop
 	x_erpb3_oee_t1 0xFB, 0x01
-	x_dd82_sba 0x3C
+	set_dd8 2, 0x3C
 	jr __jrt_nop_0366B0
 __jrt_nop_0366B0:
 
@@ -41984,7 +41984,7 @@ __jrt_nop_0366DD:
 
 LABEL_0366DD:
 	nop
-	x_dd82_sb2 0x3C
+	res_dd8 2, 0x3C
 	jr __jrt_nop_0366E3
 __jrt_nop_0366E3:
 
@@ -42089,7 +42089,7 @@ __jrt_nop_036723:
 
 LABEL_036723:
 	nop
-	x_dd82_sba 0x3C
+	set_dd8 2, 0x3C
 	jr __jrt_nop_036729
 __jrt_nop_036729:
 
@@ -42170,7 +42170,7 @@ __jrt_nop_036756:
 
 LABEL_036756:
 	nop
-	x_dd82_sb2 0x3C
+	res_dd8 2, 0x3C
 	jr __jrt_nop_03675C
 __jrt_nop_03675C:
 
@@ -42426,7 +42426,7 @@ DSP_Send_Data_Ready:
 	cps hl, 0
 	jr z, DSP_Send_Data_Error
 	ld a, (xsp + 8)	; Get data byte
-	x_dd82_s41 0x68	; Write to DSP data port
+	st_dd8b A, 0x68	; Write to DSP data port
 	jr DSP_Send_Data_Cleanup
 
 DSP_Send_Data_Error:
@@ -42465,11 +42465,11 @@ DSP2_Send_Data:
 LABEL_0368DF:
 	x_erpb3_o33_t1 0xFB, 0x07
 	jr z, LABEL_0368EA
-	x_dd82_sb8 0x3C
+	set_dd8 0, 0x3C
 	jr LABEL_0368ED
 
 LABEL_0368EA:
-	x_dd82_sb0 0x3C
+	res_dd8 0, 0x3C
 
 LABEL_0368ED:
 	jr __jrt_nop_0368EF
@@ -42478,7 +42478,7 @@ __jrt_nop_0368EF:
 LABEL_0368EF:
 	nop
 	x_erpb3_oee_t1 0xFB, 0x01
-	x_dd82_sba 0x3C
+	set_dd8 2, 0x3C
 	jr __jrt_nop_0368F9
 __jrt_nop_0368F9:
 
@@ -42559,7 +42559,7 @@ __jrt_nop_036926:
 
 LABEL_036926:
 	nop
-	x_dd82_sb2 0x3C
+	res_dd8 2, 0x3C
 	jr __jrt_nop_03692C
 __jrt_nop_03692C:
 
@@ -42664,7 +42664,7 @@ __jrt_nop_03696C:
 
 LABEL_03696C:
 	nop
-	x_dd82_sba 0x3C
+	set_dd8 2, 0x3C
 	jr __jrt_nop_036972
 __jrt_nop_036972:
 
@@ -42745,7 +42745,7 @@ __jrt_nop_03699F:
 
 LABEL_03699F:
 	nop
-	x_dd82_sb2 0x3C
+	res_dd8 2, 0x3C
 	jr __jrt_nop_0369A5
 __jrt_nop_0369A5:
 
@@ -45732,45 +45732,45 @@ DSP_ScheduleDelay:
 ; ============================================================================
 
 DSP1_Assert_Reset:	; 038396h
-	x_dd82_sb1 0x44	; Assert DSP1 reset (active low)
+	res_dd8 1, 0x44	; Assert DSP1 reset (active low)
 	ret
 
 DSP1_Deassert_Reset:	; 03839Ah
-	x_dd82_sb9 0x44	; Deassert DSP1 reset
+	set_dd8 1, 0x44	; Deassert DSP1 reset
 	ret
 
 DSP2_Assert_Reset:	; 03839Eh
-	x_dd82_sb2 0x44	; Assert DSP2 reset (active low)
+	res_dd8 2, 0x44	; Assert DSP2 reset (active low)
 	ret
 
 DSP2_Deassert_Reset:	; 0383A2h
-	x_dd82_sba 0x44	; Deassert DSP2 reset
+	set_dd8 2, 0x44	; Deassert DSP2 reset
 	ret
 
 DSP_Nop:	; 0383A6h - Empty routine, used as placeholder
 	ret
 
 DSP_Set_Command_Mode:	; 0383A7h
-	x_dd82_sb6 0x1C	; DSPCD=0 selects command mode
+	res_dd8 6, 0x1C	; DSPCD=0 selects command mode
 	ret
 
 DSP_Set_Data_Mode:	; 0383ABh
-	x_dd82_sbe 0x1C	; DSPCD=1 selects data mode
+	set_dd8 6, 0x1C	; DSPCD=1 selects data mode
 	ret
 
 DSP_Assert_Write:	; 0383AFh
-	x_dd82_sb3 0x1C	; Assert write strobe (active low)
+	res_dd8 3, 0x1C	; Assert write strobe (active low)
 	ret
 
 DSP_Deassert_Write:	; 0383B3h
-	x_dd82_sbb 0x1C	; Deassert write strobe
+	set_dd8 3, 0x1C	; Deassert write strobe
 	ret
 
 DSP_Assert_Read_Data:	; 0383B7h - Raw bytes, appears to be RES 4, (P7)
 	.byte 0xf0, 0x1c, 0xb4, 0x0e
 
 DSP_Deassert_Read:	; 0383BBh
-	x_dd82_sbc 0x1C	; Deassert read strobe
+	set_dd8 4, 0x1C	; Deassert read strobe
 	ret
 
 ; ----------------------------------------------------------------------------
@@ -45788,11 +45788,11 @@ DSP_Select_Chip:	; 0383BFh
 	jr z, DSP_Select_Chip__select_dsp2
 	cps wa, 0
 	jr nz, DSP_Select_Chip__done
-	x_dd82_sb5 0x1C	; Assert DSP1 chip select (active low)
+	res_dd8 5, 0x1C	; Assert DSP1 chip select (active low)
 	jr DSP_Select_Chip__done
 
 DSP_Select_Chip__select_dsp2:
-	x_dd82_sb6 0x38	; Assert DSP2 chip select (active low)
+	res_dd8 6, 0x38	; Assert DSP2 chip select (active low)
 
 DSP_Select_Chip__done:
 	popw iz
@@ -45813,11 +45813,11 @@ DSP_Deselect_Chip:	; 0383DBh
 	jr z, DSP_Deselect_Chip__deselect_dsp2
 	cps wa, 0
 	jr nz, DSP_Deselect_Chip__done
-	x_dd82_sbd 0x1C	; Deassert DSP1 chip select
+	set_dd8 5, 0x1C	; Deassert DSP1 chip select
 	jr DSP_Deselect_Chip__done
 
 DSP_Deselect_Chip__deselect_dsp2:
-	x_dd82_sbe 0x38	; Deassert DSP2 chip select
+	set_dd8 6, 0x38	; Deassert DSP2 chip select
 
 DSP_Deselect_Chip__done:
 	popw iz
@@ -45830,8 +45830,8 @@ DSP_Deselect_Chip__done:
 ; ----------------------------------------------------------------------------
 DSP_Read_Status:	; 0383F7h
 	calr DSP_Nop
-	x_dd82_sb8 0x44
-	x_dd82_s98 0x44
+	set_dd8 0, 0x44
+	ldcf_dd8 0, 0x44
 	scc8 c, l
 	extz hl
 	ret
@@ -46813,7 +46813,7 @@ LABEL_038E4C:
 	ldw bc, 0x91
 	ldirw
 	ldda32 xwa, 19002
-	x_dri6_o02_t2 0xE1, 0x20, 0x01, 0x01, 0x00
+	stiw_dri 0xE1, 0x20, 0x01, 0x01, 0x00
 	ldda32 xbc, 19002
 	lds wa, 2
 	call LABEL_0204D1
@@ -46828,11 +46828,11 @@ LABEL_038E6E:
 	ldw bc, 0x91
 	ldirw
 	ldda32 xwa, 19006
-	x_dri6_o02_t2 0xE1, 0x20, 0x01, 0x01, 0x00
+	stiw_dri 0xE1, 0x20, 0x01, 0x01, 0x00
 	ldda32 xwa, 19006
 	call LABEL_036E3D
 	ldda32 xwa, 19006
-	x_dri6_o02_t2 0xE1, 0x20, 0x01, 0x00, 0x00
+	stiw_dri 0xE1, 0x20, 0x01, 0x00, 0x00
 	ret
 
 LABEL_038E9F:
@@ -51247,7 +51247,7 @@ DSP_BytecodeInterpreter_Loop:
 	ldada_24 xix, 83769
 	ld_sriw3 WA, 0x07, 0xF0, 0xE0
 	ldada_24 xix, 246574
-	x_dri4_sd8 0x07, 0xF0, 0xE0
+	jp_dri 8, 0x07, 0xF0, 0xE0
 
 
 DSP_Bytecode_Programs:
@@ -51671,7 +51671,7 @@ LABEL_03CB18:
 	ldada_24 xix, 83781
 	ld_sriw3 WA, 0x07, 0xF0, 0xE0
 	ldada_24 xix, 248718
-	x_dri4_sd8 0x07, 0xF0, 0xE0
+	jp_dri 8, 0x07, 0xF0, 0xE0
 LABEL_03CB8E:
 	.byte 0xbf, 0x2a, 0x30, 0xea, 0x89, 0x1d, 0x9f, 0x8e
 	.byte 0x03, 0x9f, 0x04, 0x04, 0xde, 0x88, 0xeb, 0x89
@@ -52237,12 +52237,12 @@ ToneGen_Note_Done:	; 03D0C2h
 ToneGen_Read_Voice_Data:	; 03D0C5h
 	push xiz
 	ld xiz, xwa
-	x_dd82_sbf 0x18	; Assert A23 for status read
+	set_dd8 7, 0x18	; Assert A23 for status read
 	nop
 	ldda16_24 xbc, 1114114	; Read status register
 	bit 0, bc	; Check data ready bit
 	jr z, ToneGen_Read_Not_Ready
-	x_dd82_sb7 0x18	; Deassert A23 for data read
+	res_dd8 7, 0x18	; Deassert A23 for data read
 	nop
 	ldda16_24 xwa, 1114112	; Read voice data (16-bit)
 	ld l, a	; L = note byte (low)
@@ -52424,10 +52424,10 @@ ToneGen_Poll_Delay:	; 03D227h
 	jr c, ToneGen_Poll_Delay
 
 ToneGen_Poll_Read:	; 03D230h
-	x_dd82_sbf 0x18	; A23 pin tied to D5VNAD (both pins "NAD" and "EXADL0" of of tone generator)
+	set_dd8 7, 0x18	; A23 pin tied to D5VNAD (both pins "NAD" and "EXADL0" of of tone generator)
 	nop
 	ldda16_24 xwa, 1114114
-	x_dd82_sb7 0x18
+	res_dd8 7, 0x18
 	nop
 	ldda16_24 xwa, 1114112
 	ld c, a
@@ -55144,7 +55144,7 @@ LABEL_03E96A:
 	jr ge, LABEL_03E99A
 
 LABEL_03E98E:
-	x_dri5_o00_t1 0x07, 0xF0, 0xE0, 0x00
+	stib_dri 0x07, 0xF0, 0xE0, 0x00
 	dec 1, wa
 	cp wa, iy
 	jr gt, LABEL_03E98E

@@ -278,7 +278,7 @@ LABEL_F8BE7D:
 	ld xbc, xwa
 
 LABEL_F8BE83:
-	x_dri5_o00_t1 0x07, 0xE4, 0xF4, 0x5F
+	stib_dri 0x07, 0xE4, 0xF4, 0x5F
 	inc 1, iy
 	cps iy, 6
 	jr lt, LABEL_F8BE83
@@ -381,7 +381,7 @@ LABEL_F8BF7E:
 	ld xbc, xwa
 
 LABEL_F8BF86:
-	x_dri5_o00_t1 0x07, 0xE4, 0xF4, 0x5F
+	stib_dri 0x07, 0xE4, 0xF4, 0x5F
 	inc 1, iy
 	cp iy, 0x8
 	jr lt, LABEL_F8BF86
@@ -939,7 +939,7 @@ LABEL_F8C5BA:
 	ld xwa, xde
 
 LABEL_F8C5C2:
-	x_dri5_o00_t1 0x07, 0xE0, 0xF4, 0x5F
+	stib_dri 0x07, 0xE0, 0xF4, 0x5F
 	inc 1, iy
 	cp iy, 0xB
 	jr lt, LABEL_F8C5C2
@@ -1232,7 +1232,7 @@ LABEL_F8C889:
 	ld xwa, xde
 
 LABEL_F8C88F:
-	x_dri5_o00_t1 0x07, 0xE0, 0xF4, 0x5F
+	stib_dri 0x07, 0xE0, 0xF4, 0x5F
 	inc 1, iy
 	cps iy, 6
 	jr lt, LABEL_F8C88F

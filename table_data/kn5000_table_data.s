@@ -372,7 +372,7 @@ Boot_Init:
 	call 0xFFBBF3	; Flash_Init_Custom_And_Table (boot-time address)
 
 	; === Configure Interrupt Enable Register ===
-	x_dd82_s31 0xE4
+	lda_dd8l XBC, 0xE4
 	ld a, (xbc)
 	and a, 0x8F
 	or a, 0x30
@@ -381,7 +381,7 @@ Boot_Init:
 	; === Check Boot Source ===
 	jr __jrt_nop_9FB652	; nop-like branch
 __jrt_nop_9FB652:
-	x_dd82_sc8 0x38	; Check Port E bit 0
+	bit_dd8 0, 0x38	; Check Port E bit 0
 	jr nz, Boot_SkipFDCCheck
 
 	; === Get Boot Mode and Check FDC ===
@@ -488,7 +488,7 @@ Boot_ClearRAM:
 	srl xbc, 1	; SRL 1, XBC (divide by 2 for word count)
 	jr z, Boot_ClearRAM__clear1_done	; skip if zero
 	ld xhl, xde	; source = dest for fill
-	x_dpi4_o02_t2 0xE9, 0x00, 0x00	; LD (XDE+), 0x0000 (store first zero word)
+	stiw_dpi 0xE9, 0x00, 0x00	; LD (XDE+), 0x0000 (store first zero word)
 	dec 1, xbc	; DEC 1, XBC
 	or xbc, xbc	; test if zero
 	jr z, Boot_ClearRAM__clear1_done
@@ -511,7 +511,7 @@ Boot_ClearRAM__clear1_aligned:
 	srl xbc, 1	; SRL 1, XBC
 	jr z, Boot_ClearRAM__clear2_done
 	ld xhl, xde
-	x_dpi4_o02_t2 0xE9, 0x00, 0x00	; LD (XDE+), 0x0000
+	stiw_dpi 0xE9, 0x00, 0x00	; LD (XDE+), 0x0000
 	dec 1, xbc	; DEC 1, XBC
 	or xbc, xbc
 	jr z, Boot_ClearRAM__clear2_done
@@ -638,7 +638,7 @@ Flash_Reset_16bit:
 Flash_Reset_16bit__got_base:
 	ld xiz, xbc	; e9 8e
 Flash_Reset_16bit__wait_ready:
-	x_dd82_scd 0x1C	; f0 1c cd - Wait for P3 bit 5 (flash ready)
+	bit_dd8 5, 0x1C	; f0 1c cd - Wait for P3 bit 5 (flash ready)
 	jr z, Flash_Reset_16bit__wait_ready	; 66 fb
 	ei 6	; 06 06 - Disable lower interrupts
 	; Send unlock sequence: base+AAAA = AA
@@ -646,7 +646,7 @@ Flash_Reset_16bit__wait_ready:
 	add xwa, 0xAAAA	; e8 c8 aa aa 00 00
 	ldmw (xwa), 0xAA	; LD (XWA), 00AAh (word store)
 	; Send unlock sequence: base+5554 = 55
-	x_dri6_o02_t2 0xF9, 0x54, 0x55, 0x55, 0x00	; LD (XIZ+5554h), 0055h
+	stiw_dri 0xF9, 0x54, 0x55, 0x55, 0x00	; LD (XIZ+5554h), 0055h
 	; Send reset command: base+AAAA = F0
 	ld xwa, xiz	; ee 88
 	add xwa, 0xAAAA	; e8 c8 aa aa 00 00
@@ -664,7 +664,7 @@ Flash_Reset_16bit__wait_ready:
 	ld xwa, xiz	; ee 88
 	add xwa, 0xAAAA	; e8 c8 aa aa 00 00
 	ldmw (xwa), 0xAA	; LD (XWA), 00AAh (word store)
-	x_dri6_o02_t2 0xF9, 0x54, 0x55, 0x55, 0x00	; LD (XIZ+5554h), 0055h
+	stiw_dri 0xF9, 0x54, 0x55, 0x55, 0x00	; LD (XIZ+5554h), 0055h
 	ld xwa, xiz	; ee 88
 	add xwa, 0xAAAA	; e8 c8 aa aa 00 00
 	ldmw (xwa), 0xF0	; LD (XWA), 00F0h (word store)
@@ -702,7 +702,7 @@ Flash_ReadID_16bit__got_base:
 	add xbc, 0xAAAA	; e9 c8 aa aa 00 00
 	ldmw (xbc), 0xAA	; LD (XBC), 00AAh (word store)
 	ld xde, (xsp + 4)	; LD XDE, (XSP+04h)
-	x_dri6_o02_t2 0xE9, 0x54, 0x55, 0x55, 0x00	; LD (XDE+5554h), 0055h
+	stiw_dri 0xE9, 0x54, 0x55, 0x55, 0x00	; LD (XDE+5554h), 0055h
 	ldmw (xbc), 0x90	; LD (XBC), 0090h - ID command (word store)
 	; Read manufacturer ID
 	ld wa, (xde)	; 92 20
@@ -758,7 +758,7 @@ Flash_ProgramWord_16bit:
 	jr z, Flash_ProgramWord_16bit__exit	; 66 51 - skip if already erased
 	; Wait for flash ready
 Flash_ProgramWord_16bit__wait_ready:
-	x_dd82_scd 0x1C	; f0 1c cd
+	bit_dd8 5, 0x1C	; f0 1c cd
 	jr z, Flash_ProgramWord_16bit__wait_ready	; 66 fb
 	; Check target
 	cps a, 1	; c9 d9
@@ -782,7 +782,7 @@ Flash_ProgramWord_16bit__do_program:
 	ld xwa, xiz	; ee 88
 	add xwa, 0xAAAA	; e8 c8 aa aa 00 00
 	ldmw (xwa), 0xAA	; LD (XWA), 00AAh (word store)
-	x_dri6_o02_t2 0xF9, 0x54, 0x55, 0x55, 0x00	; LD (XIZ+5554h), 0055h
+	stiw_dri 0xF9, 0x54, 0x55, 0x55, 0x00	; LD (XIZ+5554h), 0055h
 	ldmw (xwa), 0xA0	; LD (XWA), 00A0h - Program command (word store)
 	; Write data to destination
 	ld xwa, (xsp + 6)	; LD XWA, (XSP+06h) - destination
@@ -820,7 +820,7 @@ Flash_ChipErase_16bit__got_base:
 	add xwa, 0xAAAA	; e8 c8 aa aa 00 00
 	ldmw (xwa), 0xAA	; LD (XWA), 00AAh (word store)
 	; Byte 2: base+5554 = 55
-	x_dri6_o02_t2 0xF9, 0x54, 0x55, 0x55, 0x00	; LD (XIZ+5554h), 0055h
+	stiw_dri 0xF9, 0x54, 0x55, 0x55, 0x00	; LD (XIZ+5554h), 0055h
 	; Byte 3: base+AAAA = 80
 	ld xwa, xiz	; ee 88
 	add xwa, 0xAAAA	; e8 c8 aa aa 00 00
@@ -830,7 +830,7 @@ Flash_ChipErase_16bit__got_base:
 	add xwa, 0xAAAA	; e8 c8 aa aa 00 00
 	ldmw (xwa), 0xAA	; LD (XWA), 00AAh (word store)
 	; Byte 5: base+5554 = 55
-	x_dri6_o02_t2 0xF9, 0x54, 0x55, 0x55, 0x00	; LD (XIZ+5554h), 0055h
+	stiw_dri 0xF9, 0x54, 0x55, 0x55, 0x00	; LD (XIZ+5554h), 0055h
 	; Byte 6: base+AAAA = 10 (chip erase command)
 	ld xwa, xiz	; ee 88
 	add xwa, 0xAAAA	; e8 c8 aa aa 00 00
@@ -846,14 +846,14 @@ Flash_ChipErase_16bit__got_base:
 	ld xwa, xiz	; ee 88
 	add xwa, 0xAAAA	; e8 c8 aa aa 00 00
 	ldmw (xwa), 0xAA	; LD (XWA), 00AAh (word store)
-	x_dri6_o02_t2 0xF9, 0x54, 0x55, 0x55, 0x00	; LD (XIZ+5554h), 0055h
+	stiw_dri 0xF9, 0x54, 0x55, 0x55, 0x00	; LD (XIZ+5554h), 0055h
 	ld xwa, xiz	; ee 88
 	add xwa, 0xAAAA	; e8 c8 aa aa 00 00
 	ldmw (xwa), 0x80	; LD (XWA), 0080h (word store)
 	ld xwa, xiz	; ee 88
 	add xwa, 0xAAAA	; e8 c8 aa aa 00 00
 	ldmw (xwa), 0xAA	; LD (XWA), 00AAh (word store)
-	x_dri6_o02_t2 0xF9, 0x54, 0x55, 0x55, 0x00	; LD (XIZ+5554h), 0055h
+	stiw_dri 0xF9, 0x54, 0x55, 0x55, 0x00	; LD (XIZ+5554h), 0055h
 	ld xwa, xiz	; ee 88
 	add xwa, 0xAAAA	; e8 c8 aa aa 00 00
 	ldmw (xwa), 0x10	; LD (XWA), 0010h (word store)
@@ -903,14 +903,14 @@ Flash_SectorErase_16bit__do_erase:
 	ld xwa, xiz	; ee 88
 	add xwa, 0xAAAA	; e8 c8 aa aa 00 00
 	ldmw (xwa), 0xAA	; LD (XWA), 00AAh (word store)
-	x_dri6_o02_t2 0xF9, 0x54, 0x55, 0x55, 0x00	; LD (XIZ+5554h), 0055h
+	stiw_dri 0xF9, 0x54, 0x55, 0x55, 0x00	; LD (XIZ+5554h), 0055h
 	ld xwa, xiz	; ee 88
 	add xwa, 0xAAAA	; e8 c8 aa aa 00 00
 	ldmw (xwa), 0x80	; LD (XWA), 0080h (word store)
 	ld xwa, xiz	; ee 88
 	add xwa, 0xAAAA	; e8 c8 aa aa 00 00
 	ldmw (xwa), 0xAA	; LD (XWA), 00AAh (word store)
-	x_dri6_o02_t2 0xF9, 0x54, 0x55, 0x55, 0x00	; LD (XIZ+5554h), 0055h
+	stiw_dri 0xF9, 0x54, 0x55, 0x55, 0x00	; LD (XIZ+5554h), 0055h
 	; Send 0x30 to sector address
 	ld xwa, (xsp + 4)	; LD XWA, (XSP+04h)
 	ldmw (xwa), 0x30	; LD (XWA), 0030h - Sector erase command (word store)
@@ -973,8 +973,8 @@ Flash_SectorErase_16bit__check_non_region4:
 	jrl nz, Flash_SectorErase_16bit__sector_done	; JRL NZ, .sector_done
 
 	; Erase 8KB sectors at 0x4000 and 0x6000
-	x_dri6_o02_t2 0xF9, 0x00, 0x40, 0x30, 0x00	; LD (XIZ+4000h), 0030h
-	x_dri6_o02_t2 0xF9, 0x00, 0x60, 0x30, 0x00	; LD (XIZ+6000h), 0030h
+	stiw_dri 0xF9, 0x00, 0x40, 0x30, 0x00	; LD (XIZ+4000h), 0030h
+	stiw_dri 0xF9, 0x00, 0x60, 0x30, 0x00	; LD (XIZ+6000h), 0030h
 	ld xwa, 0x8000	; 40 00 80 00 00
 	jrl Flash_SectorErase_16bit__erase_last_sector	; JRL T, .erase_last_sector
 
@@ -1014,8 +1014,8 @@ Flash_SectorErase_16bit__check_hdae:
 	jr nz, Flash_SectorErase_16bit__sector_done	; 6e 45
 
 	; Erase 8KB boot block sectors at 0x4000 and 0x6000
-	x_dri6_o02_t2 0xF9, 0x00, 0x40, 0x30, 0x00	; LD (XIZ+4000h), 0030h
-	x_dri6_o02_t2 0xF9, 0x00, 0x60, 0x30, 0x00	; LD (XIZ+6000h), 0030h
+	stiw_dri 0xF9, 0x00, 0x40, 0x30, 0x00	; LD (XIZ+4000h), 0030h
+	stiw_dri 0xF9, 0x00, 0x60, 0x30, 0x00	; LD (XIZ+6000h), 0030h
 	ld xwa, 0x8000	; 40 00 80 00 00
 	jr Flash_SectorErase_16bit__erase_last_sector	; 68 28
 
@@ -1057,7 +1057,7 @@ Flash_SectorErase_16bit__sector_done:
 ; Exit: HL = 0 if success, 0xFFFF if still busy
 ; -----------------------------------------------------------------------------
 Flash_WaitComplete:
-	x_dd82_scd 0x1C	; f0 1c cd
+	bit_dd8 5, 0x1C	; f0 1c cd
 	jr z, Flash_WaitComplete__not_ready	; 66 03
 	lds hl, 0	; db a8
 	ret	; 0e
@@ -1176,7 +1176,7 @@ MemBlock_FillWithZeros__fill_loop:
 Flash_Reset_32bit:
 	ld xde, 0x800000	; Table Data ROM base address
 Flash_Reset_32bit__wait_ready:
-	x_dd82_scd 0x1C	; Wait for P3 bit 5 (flash ready)
+	bit_dd8 5, 0x1C	; Wait for P3 bit 5 (flash ready)
 	jr z, Flash_Reset_32bit__wait_ready
 
 	ld xbc, xde	; XBC = base
@@ -1292,7 +1292,7 @@ Flash_ProgramWord_32bit:
 	jr z, Flash_ProgramWord_32bit__skip_program	; Yes, skip
 
 Flash_ProgramWord_32bit__wait_ready:
-	x_dd82_scd 0x1C	; Wait for flash ready
+	bit_dd8 5, 0x1C	; Wait for flash ready
 	jr z, Flash_ProgramWord_32bit__wait_ready
 
 	ei 6	; Disable lower-priority interrupts
@@ -1514,7 +1514,7 @@ Flash_SectorErase_32bit:
 ; Exit: HL = 0 if success, 0xFFFF if still busy
 ; -----------------------------------------------------------------------------
 Flash_WaitComplete_32bit:
-	x_dd82_scd 0x1C	; f0 1c cd
+	bit_dd8 5, 0x1C	; f0 1c cd
 	jr z, Flash_WaitComplete_32bit__not_ready	; 66 03
 	lds hl, 0	; db a8
 	ret	; 0e
@@ -2283,7 +2283,7 @@ Boot_LoadDiskData:
 	ldada_24 xix, 16752960	; LDA XIX, 0xFFA140 - jump table
 	ld_sriw3 WA, 0x07, 0xF0, 0xE0	; LD WA, (XIX+WA)
 	ldada_24 xix, 16761930	; LDA XIX, 0xFFC44A - base addr
-	x_dri4_sd8 0x07, 0xF0, 0xE0	; JP T, XIX+WA - dispatch
+	jp_dri 8, 0x07, 0xF0, 0xE0	; JP T, XIX+WA - dispatch
 
 ; Type 1 handler (0x9FC44A): Table data disk 1
 Boot_LoadDiskData__ldd_type1:

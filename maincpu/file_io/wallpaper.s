@@ -659,7 +659,7 @@ WP_GetUserName3:
 	mul bc, 0x50	; Entry stride
 	add xhl, xbc
 	lda_dpi XIY, 0xF8
-	x_dpi3_o00_t1 0xF8, 0x20	; Space character
+	stib_dpi 0xF8, 0x20	; Space character
 	ld xwa, xiz
 	ld xbc, xhl
 	ldw de, 0xD	; Copy 13 bytes

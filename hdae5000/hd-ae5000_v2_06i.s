@@ -1017,7 +1017,7 @@ HDAE5000_Clear_Work_Buffer:	; 28F785h
 	srl xbc, 1	; srl 1, XBC  ; divide by 2 for word ops
 	jr z, HDAE5000_Clear_Work_Buffer__clear_done	; Skip if count was 0 or 1
 	ld xhl, xde	; Source = destination (for LDIRW)
-	x_dpi4_o02_t2 0xE9, 0x00, 0x00	; ld (XDE+), 0x0000  ; store first word
+	stiw_dpi 0xE9, 0x00, 0x00	; ld (XDE+), 0x0000  ; store first word
 	dec 1, xbc	; dec 1, XBC
 	or xbc, xbc
 	jr z, HDAE5000_Clear_Work_Buffer__clear_done

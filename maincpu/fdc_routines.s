@@ -129,7 +129,7 @@ FDC_COMMAND_DISPATCHER:	; F96DB1
 	ldada_24 xix, 15374514
 	ld_sriw3 WA, 0x07, 0xF0, 0xE0
 	ldada_24 xix, 16346582
-	x_dri4_sd8 0x07, 0xF0, 0xE0
+	jp_dri 8, 0x07, 0xF0, 0xE0
 ; FDC command handler base - entry point for command 0
 FDC_CMD_HANDLER_BASE:	; F96DD6
 	calr FDC_SetupFormatParams
@@ -387,10 +387,10 @@ FDC_NOP_Delay_Exit:
 
 
 FDC_Pulse_PH0:
-	x_dd82_sb8 0x44
+	set_dd8 0, 0x44
 	ldw wa, 0xA
 	calr FDC_NOP_Delay
-	x_dd82_sb0 0x44
+	res_dd8 0, 0x44
 	ret
 
 
@@ -1092,7 +1092,7 @@ LABEL_F97CEF:
 	ldada_24 xix, 15374538
 	ld_sriw3 WA, 0x07, 0xF0, 0xE0
 	ldada_24 xix, 16350605
-	x_dri4_sd8 0x07, 0xF0, 0xE0
+	jp_dri 8, 0x07, 0xF0, 0xE0
 
 
 ; =============================================================================
@@ -1313,17 +1313,17 @@ Reset_Floppy_Disk_Controller:	; F97EC9
 ; I am not entirely sure yet, but it looks like FDC initialization code...
 
 	; reset FDC by toggling Port D bit 0
-	x_dd82_sb8 0x34
+	set_dd8 0, 0x34
 	ldw wa, 0xA
 	calr SOME_DELAY
-	x_dd82_sb0 0x34
+	res_dd8 0, 0x34
 	ldw wa, 0xA
 	jrl SOME_DELAY
 
 	; then do a lot of other stuff I still don't undertsand:
 
 	ldio 0x47, 0x1E
-	x_dd82_sce 0x34	; Port D bit 6: "FD.I/O signal"
+	bit_dd8 6, 0x34	; Port D bit 6: "FD.I/O signal"
 	ret nz
 	ldb a, 0x0
 	stdi16 35620, 0
@@ -1396,7 +1396,7 @@ LABEL_F97F09:
 	ret
 
 Check_for_Floppy_Disk_Change:	; F98001
-	x_dd82_sce 0x34
+	bit_dd8 6, 0x34
 	jr z, Detected_Floppy_Disk_Change
 	ldb l, 0x0
 	ret
