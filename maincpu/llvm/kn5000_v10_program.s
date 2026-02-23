@@ -113223,14 +113223,14 @@ RESET_HANDLER:	; EF03C6
 
 	; === DRAM Initialization Delay 1 ===
 	ldw bc, 0x400
-	.pause1:
-	djnz16 bc, -3
+RESET_HANDLER__pause1:
+	djnz xbc, RESET_HANDLER__pause1
 	stdi8 357, 129	; Enable DRAM refresh
 
 	; === DRAM Initialization Delay 2 ===
 	ldw bc, 0x2000
-	.pause2:
-	djnz16 bc, -3
+RESET_HANDLER__pause2:
+	djnz xbc, RESET_HANDLER__pause2
 	stdi8 357, 113
 	stdi8 354, 139
 	stdi8 355, 88
@@ -113649,20 +113649,20 @@ LABEL_EF0839:
 ; -----------------------------------------------------------------------------
 Detect_Region_Code:
 	dd82 0x44, 0xCA
-	jr z, .check_bit1_only
+	jr z, Detect_Region_Code__check_bit1_only
 	dd82 0x44, 0xC9
-	jr z, .mode2
+	jr z, Detect_Region_Code__mode2
 	stdi8 1032, 1	; Region 1
 	ret
-	.mode2:
+Detect_Region_Code__mode2:
 	stdi8 1032, 2	; Region 2
 	ret
-	.check_bit1_only:
+Detect_Region_Code__check_bit1_only:
 	dd82 0x44, 0xC9
-	jr z, .mode4
+	jr z, Detect_Region_Code__mode4
 	stdi8 1032, 3	; Region 3
 	ret
-	.mode4:
+Detect_Region_Code__mode4:
 	stdi8 1032, 4	; Region 4
 	ret
 
@@ -113755,12 +113755,12 @@ Boot_CallInitHandlers:
 	.byte 0xc2, 0xee, 0xfe, 0xff, 0x3f, 0xff
 	; ENDIF
 
-	jr nz, .done	; 6e xx (offset computed by assembler)
+	jr nz, Boot_CallInitHandlers__done	; 6e xx (offset computed by assembler)
 
 	; LD QIZH, 0
 	.byte 0xc7, 0xfb, 0xa8
 
-	.handler_loop:
+Boot_CallInitHandlers__handler_loop:
 	; LD A, QIZH
 	.byte 0xc7, 0xfb, 0x89
 	; EXTZ WA
@@ -113784,9 +113784,9 @@ Boot_CallInitHandlers:
 	; CP QIZH, 4
 	.byte 0xc7, 0xfb, 0xdc
 
-	jr c, .handler_loop	; 67 xx (offset computed by assembler)
+	jr c, Boot_CallInitHandlers__handler_loop	; 67 xx (offset computed by assembler)
 
-	.done:
+Boot_CallInitHandlers__done:
 	pop_werp 0xFA	; d7 fa 05
 	ret	; 0e
 
@@ -121589,10 +121589,10 @@ VRAM_FillRect_Done:
 Write_VGA_Register:
 	lds de, 0	; Initialize delay counter
 
-	.delay:
+Write_VGA_Register__delay:
 	inc 1, de	; Increment counter
 	cp de, 0x100	; Compare to 256
-	jr c, .delay	; Loop until DE >= 256
+	jr c, Write_VGA_Register__delay	; Loop until DE >= 256
 
 	extz xwa	; Zero-extend WA to XWA
 	ld xde, 0x170000	; Load VGA I/O base address

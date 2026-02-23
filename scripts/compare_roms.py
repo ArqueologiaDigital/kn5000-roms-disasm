@@ -59,14 +59,21 @@ else:
 
 print (msg)
 
-# LLVM build comparison (optional - only if LLVM ROM exists)
-llvm_rom = "rebuilt_ROMs/kn5000_v10_program.llvm.rom"
-original_rom = "original_ROMs/kn5000_v10_program.rom"
+# LLVM build comparisons (optional - only if LLVM ROMs exist)
+for llvm_entry in [
+	("maincpu",		"kn5000_v10_program.rom",		"kn5000_v10_program.llvm.rom",		0xE00000),
+	("subcpu payload",	"kn5000_subprogram_v142.rom",		"kn5000_subprogram_v142.llvm.rom",	0x0400),
+]:
+	key, orig_name, llvm_name, rom_base = llvm_entry
+	llvm_path = f"rebuilt_ROMs/{llvm_name}"
+	orig_path = f"original_ROMs/{orig_name}"
 
-if os.path.exists(llvm_rom):
-	print("==== LLVM build (maincpu) ====")
-	original = open(original_rom, "rb").read()
-	llvm = open(llvm_rom, "rb").read()
+	if not os.path.exists(llvm_path):
+		continue
+
+	print(f"==== LLVM build ({key}) ====")
+	original = open(orig_path, "rb").read()
+	llvm = open(llvm_path, "rb").read()
 
 	if len(llvm) > len(original):
 		print(f"LLVM ROM is too big! ({len(llvm)} vs {len(original)} expected)")
@@ -94,7 +101,7 @@ if os.path.exists(llvm_rom):
 		print(f"\nFirst {len(first_mismatches)} mismatches:")
 		print(f"  {'Address':>10s}  {'Original':>8s}  {'LLVM':>8s}")
 		for addr, orig_byte, llvm_byte in first_mismatches:
-			rom_addr = 0xE00000 + addr
+			rom_addr = rom_base + addr
 			print(f"  0x{rom_addr:06X}  0x{orig_byte:02X}       0x{llvm_byte:02X}")
 
 	print()

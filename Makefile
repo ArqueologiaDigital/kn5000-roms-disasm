@@ -7,7 +7,7 @@ LLVM_MC=$(LLVM_BIN)/llvm-mc
 LLVM_LLD=$(LLVM_BIN)/ld.lld
 LLVM_OBJCOPY=$(LLVM_BIN)/llvm-objcopy
 
-all: rebuilt_ROMs/kn5000_v10_program.rebuilt.rom rebuilt_ROMs/kn5000_subprogram_v142.rebuilt.rom rebuilt_ROMs/kn5000_subcpu_boot.rebuilt.rom rebuilt_ROMs/kn5000_table_data.rebuilt.rom rebuilt_ROMs/kn5000_custom_data.rebuilt.rom rebuilt_ROMs/hd-ae5000_v2_06i.rebuilt.rom rebuilt_ROMs/kn5000_v10_program.llvm.rom
+all: rebuilt_ROMs/kn5000_v10_program.rebuilt.rom rebuilt_ROMs/kn5000_subprogram_v142.rebuilt.rom rebuilt_ROMs/kn5000_subcpu_boot.rebuilt.rom rebuilt_ROMs/kn5000_table_data.rebuilt.rom rebuilt_ROMs/kn5000_custom_data.rebuilt.rom rebuilt_ROMs/hd-ae5000_v2_06i.rebuilt.rom rebuilt_ROMs/kn5000_v10_program.llvm.rom rebuilt_ROMs/kn5000_subprogram_v142.llvm.rom
 	python scripts/compare_roms.py
 
 rebuilt_ROMs/kn5000_v10_program.rebuilt.p: tmp94c241.inc maincpu/kn5000_v10_program.asm
@@ -87,33 +87,49 @@ rebuilt_ROMs/hd-ae5000_v2_06i.rebuilt.rom: rebuilt_ROMs/hd-ae5000_v2_06i.rebuilt
 
 
 # ============================================================================
-# LLVM parallel build (maincpu only)
+# LLVM parallel builds
 # ============================================================================
 
-# Phase 2: All instructions emitted as .byte from ROM, preserving ASL as comments.
-# Future: progressively replace .byte with native LLVM instructions.
+# --- Maincpu LLVM build ---
+MAINCPU_LLVM_SRC=maincpu/llvm/kn5000_v10_program.s
 
-LLVM_SRC=maincpu/llvm/kn5000_v10_program.s
-
-# Assemble → object file
-rebuilt_ROMs/kn5000_v10_program.llvm.o: $(LLVM_SRC) original_ROMs/kn5000_v10_program.rom
+rebuilt_ROMs/kn5000_v10_program.llvm.o: $(MAINCPU_LLVM_SRC) original_ROMs/kn5000_v10_program.rom
 	mkdir -p rebuilt_ROMs
 	$(LLVM_MC) -triple=tlcs900 -filetype=obj -I maincpu/llvm -o $@ $<
 
-# Link → ELF
 rebuilt_ROMs/kn5000_v10_program.llvm.elf: rebuilt_ROMs/kn5000_v10_program.llvm.o maincpu/llvm/maincpu.ld
 	$(LLVM_LLD) -T maincpu/llvm/maincpu.ld -o $@ $<
 
-# Extract → raw binary ROM
 rebuilt_ROMs/kn5000_v10_program.llvm.rom: rebuilt_ROMs/kn5000_v10_program.llvm.elf
 	$(LLVM_OBJCOPY) -O binary $< $@
 
-# Convert ASL → LLVM assembly (for development; not yet used in build)
+# --- Subcpu payload LLVM build ---
+SUBCPU_LLVM_SRC=subcpu/llvm/kn5000_subprogram_v142.s
+
+rebuilt_ROMs/kn5000_subprogram_v142.llvm.o: $(SUBCPU_LLVM_SRC)
+	mkdir -p rebuilt_ROMs
+	$(LLVM_MC) -triple=tlcs900 -filetype=obj -I subcpu/llvm -o $@ $<
+
+rebuilt_ROMs/kn5000_subprogram_v142.llvm.elf: rebuilt_ROMs/kn5000_subprogram_v142.llvm.o subcpu/llvm/subcpu.ld
+	$(LLVM_LLD) -T subcpu/llvm/subcpu.ld -o $@ $<
+
+rebuilt_ROMs/kn5000_subprogram_v142.llvm.rom: rebuilt_ROMs/kn5000_subprogram_v142.llvm.elf
+	$(LLVM_OBJCOPY) -O binary $< $@.full
+	dd if=$@.full of=$@.part_a bs=1 count=256 2>/dev/null
+	dd if=$@.full of=$@.part_b bs=1 skip=60416 2>/dev/null
+	cat $@.part_a $@.part_b > $@
+	rm -f $@.full $@.part_a $@.part_b
+
+# --- LLVM conversion targets ---
 llvm-convert: scripts/asl_to_llvm.py maincpu/kn5000_v10_program.asm tmp94c241.inc
 	python scripts/asl_to_llvm.py maincpu/kn5000_v10_program.asm
 
+llvm-convert-subcpu: scripts/asl_to_llvm.py subcpu/kn5000_subprogram_v142.asm tmp94c241.inc rebuilt_ROMs/kn5000_subprogram_v142.full
+	python scripts/asl_to_llvm.py subcpu/kn5000_subprogram_v142.asm --rom-base 0x0400 --rom-size 0x3EB00 --rom-file rebuilt_ROMs/kn5000_subprogram_v142.full --output-dir subcpu/llvm
+
 clean_llvm:
 	rm -f rebuilt_ROMs/kn5000_v10_program.llvm.*
+	rm -f rebuilt_ROMs/kn5000_subprogram_v142.llvm.*
 
 # Documentation website targets
 DOCS_DIR=../kn5000-docs

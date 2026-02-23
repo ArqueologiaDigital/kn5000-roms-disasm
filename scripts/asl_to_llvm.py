@@ -100,6 +100,11 @@ REG8_TO_GPR = {1: 'xwa', 3: 'xbc', 5: 'xde', 7: 'xhl'}
 NATIVE_INSTR_COUNT = 0
 BYTE_FALLBACK_COUNT = 0
 
+# Local label qualification: ASL local labels (.name) are scoped to the
+# preceding global label. LLVM assembly has file-global labels, so we
+# prefix local labels with the parent global label to avoid conflicts.
+CURRENT_PARENT_LABEL = ""  # Most recent global label name
+
 
 def load_original_rom(rom_path=None):
     """Load the original ROM binary for byte extraction."""
@@ -195,11 +200,55 @@ def split_operands(text):
 
 
 def extract_label(code):
-    """Extract label from beginning of code line (NAME: pattern)."""
-    m = re.match(r'^(\w+):\s*(.*)', code)
+    """Extract label from beginning of code line (NAME: or .name: pattern).
+
+    Returns (label, rest) where label includes ASL local labels (.name).
+    For local labels, the leading dot is preserved in the returned name.
+    """
+    # Match global label (word chars) or local label (.word chars)
+    m = re.match(r'^(\.?\w+):\s*(.*)', code)
     if m:
         return m.group(1), m.group(2)
     return None, code
+
+
+def qualify_local_label(name):
+    """Qualify an ASL local label (.name) with the current parent label.
+
+    Returns the qualified name (e.g., 'DSP_Select_Chip__done' for '.done'
+    under parent 'DSP_Select_Chip'). Non-local labels are returned as-is.
+    """
+    if name and name.startswith('.'):
+        return f"{CURRENT_PARENT_LABEL}__{name[1:]}" if CURRENT_PARENT_LABEL else name[1:]
+    return name
+
+
+def qualify_local_refs(text):
+    """Replace ASL local label references (.name) in operand text with qualified names.
+
+    Only qualifies references that look like ASL local labels (lowercase .name
+    patterns used in branch targets), NOT file extensions, LLVM directives, etc.
+    """
+    # Don't process text inside quoted strings (binclude paths, etc.)
+    if '"' in text or "'" in text:
+        return text
+    def _qualify(m):
+        name = m.group(0)
+        # Skip if preceded by a word character (e.g., file.ext)
+        start = m.start()
+        if start > 0 and text[start - 1].isalnum():
+            return name
+        # Skip LLVM/ASL directives and common file extensions
+        if name.lower() in {'.byte', '.org', '.text', '.set', '.long', '.short',
+                            '.incbin', '.if', '.else', '.endif', '.endm', '.macro',
+                            '.zero', '.fill', '.align', '.section', '.globl',
+                            '.type', '.size', '.equ', '.space', '.comm',
+                            '.asciz', '.ascii', '.word', '.hword', '.quad',
+                            '.bin', '.rom', '.dat', '.bmp', '.ssf', '.asm',
+                            '.inc', '.p', '.s', '.o', '.elf', '.ld'}:
+            return name
+        return qualify_local_label(name)
+    return re.sub(r'\.\w+', _qualify, text)
 
 
 def get_first_word(text):
@@ -971,6 +1020,15 @@ def convert_line(line, in_file_path):
     label, rest = extract_label(code_stripped)
     rest = rest.strip()
 
+    # Track parent label for local label qualification.
+    # A global label (not starting with '.') becomes the new parent scope.
+    global CURRENT_PARENT_LABEL
+    if label and not label.startswith('.'):
+        CURRENT_PARENT_LABEL = label
+    # Qualify local labels (starting with '.') to avoid file-scope conflicts
+    if label and label.startswith('.'):
+        label = qualify_local_label(label)
+
     # Self-correct address tracker and segment cursor at labels with known addresses.
     # Labels like LABEL_XXXXXX encode their address in the name.
     # This resets ADDR_TRACKER and SEG_CURSOR to eliminate cumulative drift.
@@ -1424,7 +1482,11 @@ def convert_line(line, in_file_path):
     # Emit as native LLVM syntax. If the LLVM backend doesn't support
     # the instruction, it will error. We'll fix those iteratively.
     if is_instruction(first_word):
-        return convert_instruction(label, first_word, remainder.strip(), comment, label_addr_suffix)
+        operands = remainder.strip()
+        # Qualify local label references in operands (e.g., .done → Parent__done)
+        if operands and '.' in operands:
+            operands = qualify_local_refs(operands)
+        return convert_instruction(label, first_word, operands, comment, label_addr_suffix)
 
     # ---- Unknown / fallthrough ----
     # If no operands and word looks like a label (starts with letter,
@@ -4088,6 +4150,7 @@ def _build_addr_to_label_map(sorted_content, seg_end_map, label_only_labels):
             _record_label(addr_to_label_all, addr, name)
 
     # 2. Content segments: extract label addresses using address tracking.
+    parent_label = ""  # Track parent label for local label qualification
     for seg_addr, seg_lines in sorted_content:
         if seg_addr is None:
             continue
@@ -4101,6 +4164,14 @@ def _build_addr_to_label_map(sorted_content, seg_end_map, label_only_labels):
             label, rest = extract_label(code_stripped)
 
             if label:
+                # Track parent label scope for local label qualification
+                if not label.startswith('.'):
+                    parent_label = label
+                # Qualify local labels (starting with '.')
+                record_name = label
+                if label.startswith('.'):
+                    record_name = f"{parent_label}__{label[1:]}" if parent_label else label[1:]
+
                 m_lbl = re.match(r'^LABEL_([0-9A-Fa-f]{6})$', label)
                 if m_lbl:
                     cur_addr = int(m_lbl.group(1), 16)
@@ -4116,9 +4187,9 @@ def _build_addr_to_label_map(sorted_content, seg_end_map, label_only_labels):
                             at_reliable_boundary = True
                     # Reliable: record in both maps
                     if at_reliable_boundary:
-                        _record_label(addr_to_label, cur_addr, label)
+                        _record_label(addr_to_label, cur_addr, record_name)
                     # All: always record with tracked address
-                    _record_label(addr_to_label_all, cur_addr, label)
+                    _record_label(addr_to_label_all, cur_addr, record_name)
 
             # Advance cur_addr by the size of the directive/instruction
             directive = rest.strip() if rest else code_stripped if not label else ''
