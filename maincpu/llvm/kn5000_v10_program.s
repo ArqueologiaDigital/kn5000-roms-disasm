@@ -158758,7 +158758,7 @@ LABEL_F21A61:
 	lds32 xde, 0
 	call 0xFA9D58
 	ld wa, iz
-	call LABEL_F92C21
+	call NavigateSongList
 	stdi8_24 135304, 0
 	stdi16_24 135302, 0
 	calr LABEL_F2123A
@@ -158790,7 +158790,7 @@ LABEL_F21AD5:
 	lds32 xde, 0
 	call 0xFA9D58
 	ld wa, iz
-	call LABEL_F92C21
+	call NavigateSongList
 	stdi8_24 135304, 0
 	stdi16_24 135302, 0
 	calr LABEL_F2123A
@@ -158818,7 +158818,7 @@ LABEL_F21B44:
 
 LABEL_F21B4C:
 	ld wa, iz
-	call LABEL_F92C21
+	call NavigateSongList
 	stdi8_24 135304, 0
 	stdi16_24 135302, 0
 	calr LABEL_F2123A
@@ -158852,7 +158852,7 @@ LABEL_F21BA3:
 	jr z, LABEL_F21BE3
 	call LABEL_FEC11C
 	ld wa, iz
-	call LABEL_F92C70
+	call NavigateDocList
 	stdi16_24 135302, 0
 	calr LABEL_F2123A
 	calr LABEL_F21159
@@ -158871,7 +158871,7 @@ LABEL_F21BE3:
 	jr z, LABEL_F21C26
 	call LABEL_FEC11C
 	ld wa, iz
-	call LABEL_F92C70
+	call NavigateDocList
 	stdi16_24 135302, 0
 	calr LABEL_F2123A
 	calr LABEL_F21159
@@ -158890,7 +158890,7 @@ LABEL_F21C1E:
 
 LABEL_F21C26:
 	ld wa, iz
-	call LABEL_F92C70
+	call NavigateDocList
 	stdi16_24 135302, 0
 	calr LABEL_F2123A
 	calr LABEL_F21159
@@ -158915,7 +158915,7 @@ LABEL_F21C59:
 	jr z, LABEL_F21C99
 	call LABEL_FEC11C
 	ld wa, iz
-	call LABEL_F92CAC
+	call NavigatePdList
 	stdi16_24 135302, 0
 	calr LABEL_F2123A
 	calr LABEL_F21159
@@ -158934,7 +158934,7 @@ LABEL_F21C99:
 	jr z, LABEL_F21CDC
 	call LABEL_FEC11C
 	ld wa, iz
-	call LABEL_F92CAC
+	call NavigatePdList
 	stdi16_24 135302, 0
 	calr LABEL_F2123A
 	calr LABEL_F21159
@@ -158953,7 +158953,7 @@ LABEL_F21CD4:
 
 LABEL_F21CDC:
 	ld wa, iz
-	call LABEL_F92CAC
+	call NavigatePdList
 	stdi16_24 135302, 0
 	calr LABEL_F2123A
 	calr LABEL_F21159
@@ -297728,7 +297728,7 @@ LABEL_F877A3:
 	call LABEL_F47E63
 	cpmi16 (xsp + 2), 0x0
 	jr lt, LABEL_F87841
-	call LABEL_F94229
+	call ResetSlotsIfEmpty
 	jr LABEL_F87841
 
 LABEL_F877CC:
@@ -305302,10 +305302,10 @@ FmmPasswordFunc:
 	jr z, LABEL_F8C980
 	cp xbc, 0x1E5000D
 	jrl nz, LABEL_F8CAA6
-	call LABEL_F94242
+	call CheckAnySlotHasData
 	cps l, 0
 	jr nz, LABEL_F8C95A
-	call LABEL_F94262
+	call CheckSlotIndexValid
 	cps l, 0
 	jr z, LABEL_F8C969
 
@@ -305317,9 +305317,9 @@ LABEL_F8C95A:
 
 LABEL_F8C969:
 	ld wa, iz
-	call LABEL_F9420F
+	call ClearAllSongSlots
 	ld wa, iz
-	call LABEL_F9424A
+	call SetCurrentSlotIndex
 	ldada xwa, 35341
 	setm 7, (xwa)
 	setm 6, (xwa)
@@ -305328,11 +305328,11 @@ LABEL_F8C969:
 LABEL_F8C980:
 	cpmi8 (xde), 0x3
 	jr nz, LABEL_F8C9AB
-	call LABEL_F94236
+	call CheckSlotIsSelected
 	cps l, 0
 	jr z, LABEL_F8C9AB
 	ld wa, iz
-	call LABEL_F94256
+	call CheckIsCurrentSlot
 	cps l, 0
 	jr z, LABEL_F8C9AB
 	ldada xwa, 35341
@@ -305347,7 +305347,7 @@ LABEL_F8C9AB:
 	cpdi8 35340, 1
 	jr nz, LABEL_F8C9CC
 	ld wa, iz
-	call LABEL_F94236
+	call CheckSlotIsSelected
 	cps l, 0
 	jr z, LABEL_F8C9CC
 	setda 7, 35341
@@ -305360,7 +305360,7 @@ LABEL_F8C9CC:
 	cpdi8 35340, 2
 	jr nz, LABEL_F8C9F1
 	ld wa, iz
-	call LABEL_F94256
+	call CheckIsCurrentSlot
 	cps l, 0
 	jr z, LABEL_F8C9F1
 	setda 6, 35341
@@ -305380,11 +305380,11 @@ LABEL_F8C9F1:
 LABEL_F8C9FC:
 	cpmi8 (xde), 0x3
 	jr nz, LABEL_F8CA2A
-	call LABEL_F94236
+	call CheckSlotIsSelected
 	cps l, 0
 	jr z, LABEL_F8CA2A
 	ld wa, iz
-	call LABEL_F94256
+	call CheckIsCurrentSlot
 	cps l, 0
 	jr z, LABEL_F8CA2A
 	ldada xwa, 35341
@@ -305399,7 +305399,7 @@ LABEL_F8CA2A:
 	cpdi8 35340, 1
 	jr nz, LABEL_F8CA4E
 	ld wa, iz
-	call LABEL_F94236
+	call CheckSlotIsSelected
 	cps l, 0
 	jr z, LABEL_F8CA4E
 	setda 7, 35341
@@ -305412,7 +305412,7 @@ LABEL_F8CA4E:
 	cpdi8 35340, 2
 	jr nz, LABEL_F8CA75
 	ld wa, iz
-	call LABEL_F94256
+	call CheckIsCurrentSlot
 	cps l, 0
 	jr z, LABEL_F8CA75
 	setda 6, 35341
@@ -305430,7 +305430,7 @@ LABEL_F8CA75:
 	jr LABEL_F8CAA2
 
 LABEL_F8CA7F:
-	call LABEL_F94236
+	call CheckSlotIsSelected
 	cps l, 0
 	jr z, LABEL_F8CA9A
 	setda 7, 35341
@@ -305461,7 +305461,7 @@ SelectPasswordMode:
 	call LABEL_F89353
 	cps l, 0
 	jr z, LABEL_F8CACE
-	call LABEL_F94242
+	call CheckAnySlotHasData
 	cps l, 0
 	jr z, LABEL_F8CACE
 	bitda 7, 35341
@@ -305473,7 +305473,7 @@ LABEL_F8CACE:
 	call LABEL_F89353
 	cps l, 0
 	jr z, LABEL_F8CAE9
-	call LABEL_F94262
+	call CheckSlotIndexValid
 	cps l, 0
 	jr z, LABEL_F8CAE9
 	bitda 6, 35341
@@ -305485,9 +305485,9 @@ LABEL_F8CAE9:
 	jr z, LABEL_F8CB0B
 	cpi0_berp 0xFB
 	jr z, LABEL_F8CB0B
-	call LABEL_F94250
+	call GetCurrentSlotIndex
 	ld iz, hl
-	call LABEL_F941F9
+	call FindFirstEmptySlot
 	ldb a, 0x1
 	cp hl, iz
 	jr nz, LABEL_F8CB05
@@ -311443,7 +311443,7 @@ SeqName_HandlePlayAction:
 	jrl nz, SeqName_HandleAction32
 	cpdi8 34046, 0
 	jrl nz, SeqName_HandleAction32
-	call LABEL_F941E5
+	call CheckSongSlotHasData
 	cps l, 0
 	jr z, SeqName_CheckDiskAvail
 	ldada xwa, 35340
@@ -313105,2937 +313105,2961 @@ DiskSel_Exit:
 	pop xiz
 	lda xsp, (xsp + 14)
 	ret
+
 LABEL_F92C0E:
-
 GetPlayState1:
-	; (block overflow) LD L, (8942h)
-	; (block overflow) RET
+	ldda8 l, 35138
+	ret
 
+LABEL_F92C13:
 GetPlayState2:
-	; (block overflow) LD L, (8944h)
-	; (block overflow) RET
+	ldda8 l, 35140
+	ret
 
 SmfMedley_RawData:
+	.byte 0xc9, 0xd8, 0xd8, 0x7e, 0xf1, 0x44, 0x89, 0x41
+	.byte 0x0e
 
-
-
+LABEL_F92C21:
 NavigateSongList:
-	; (block overflow) DEC 2, XSP
-	; (block overflow) PUSH IZ
-	; (block overflow) LD (XSP + 002h), WA
-	; (block overflow) CPW (XSP + 002h), 0001h
-	; (block overflow) JR Z, NavSong_CheckBounds
-	; (block overflow) CPW (XSP + 002h), 0ffffh
-	; (block overflow) JR NZ, NavSong_Exit
+	dec 2, xsp
+	pushw iz
+	ld (xsp + 2), wa
+	cpmi16 (xsp + 2), 0x1
+	jr z, NavSong_CheckBounds
+	cpmi16 (xsp + 2), 0xFFFF
+	jr nz, NavSong_Exit
 
 NavSong_CheckBounds:
-	; (block overflow) CPW (8504h), 0000h
-	; (block overflow) JR LE, NavSong_Exit
-	; (block overflow) CALL LABEL_F89AC7
-	; (block overflow) CP HL, 0
-	; (block overflow) JR LT, NavSong_Exit
-	; (block overflow) LD IZ, HL
-	; (block overflow) ADD IZ, (XSP + 002h)
-	; (block overflow) JR GE, NavSong_WrapToEnd
-	; (block overflow) LD IZ, (8504h)
-	; (block overflow) DEC 1, IZ
-	; (block overflow) JR T, NavSong_CheckEnd
+	cpdi16 34052, 0
+	jr le, NavSong_Exit
+	call LABEL_F89AC7
+	cps hl, 0
+	jr lt, NavSong_Exit
+	ld iz, hl
+	add iz, (xsp + 2)
+	jr ge, NavSong_WrapToEnd
+	ldda16 xiz, 34052
+	dec 1, iz
+	jr NavSong_CheckEnd
 
 NavSong_WrapToEnd:
-	; (block overflow) CP IZ, (8504h)
-	; (block overflow) JR LT, NavSong_CheckEnd
-	; (block overflow) LD IZ, 0
+	cpda16 xiz, 34052
+	jr lt, NavSong_CheckEnd
+	lds iz, 0
 
 NavSong_CheckEnd:
-	; (block overflow) CP HL, IZ
-	; (block overflow) JR Z, NavSong_Exit
-	; (block overflow) LD WA, IZ
-	; (block overflow) CALL LABEL_F89BA4
-	; (block overflow) LD WA, IZ
-	; (block overflow) CALL LABEL_F8A07F
+	cp hl, iz
+	jr z, NavSong_Exit
+	ld wa, iz
+	call LABEL_F89BA4
+	ld wa, iz
+	call LABEL_F8A07F
 
 NavSong_Exit:
-	; (block overflow) POP IZ
-	; (block overflow) INC 2, XSP
-	; (block overflow) RET
+	popw iz
+	inc 2, xsp
+	ret
 
+LABEL_F92C70:
 NavigateDocList:
-	; (block overflow) PUSH IZ
-	; (block overflow) LD IZ, WA
-	; (block overflow) CP IZ, 1
-	; (block overflow) JR Z, NavDoc_CheckBounds
-	; (block overflow) CP IZ, 0ffffh
-	; (block overflow) JR NZ, NavDoc_Exit
+	pushw iz
+	ld iz, wa
+	cps iz, 1
+	jr z, NavDoc_CheckBounds
+	cp iz, 0xFFFF
+	jr nz, NavDoc_Exit
 
 NavDoc_CheckBounds:
-	; (block overflow) CPW (8508h), 0000h
-	; (block overflow) JR LE, NavDoc_Exit
-	; (block overflow) CALL LABEL_F8A7CE
-	; (block overflow) CP HL, 0
-	; (block overflow) JR LT, NavDoc_Exit
-	; (block overflow) LD WA, HL
-	; (block overflow) ADD WA, IZ
-	; (block overflow) JR GE, NavDoc_WrapToEnd
-	; (block overflow) LD WA, (8508h)
-	; (block overflow) DEC 1, WA
-	; (block overflow) JR T, NavDoc_CheckEnd
+	cpdi16 34056, 0
+	jr le, NavDoc_Exit
+	call LABEL_F8A7CE
+	cps hl, 0
+	jr lt, NavDoc_Exit
+	ld wa, hl
+	add wa, iz
+	jr ge, NavDoc_WrapToEnd
+	ldda16 xwa, 34056
+	dec 1, wa
+	jr NavDoc_CheckEnd
 
 NavDoc_WrapToEnd:
-	; (block overflow) CP WA, (8508h)
-	; (block overflow) JR LT, NavDoc_CheckEnd
-	; (block overflow) LD WA, 0
+	cpda16 xwa, 34056
+	jr lt, NavDoc_CheckEnd
+	lds wa, 0
 
 NavDoc_CheckEnd:
-	; (block overflow) CP HL, WA
-	; (block overflow) CALL NZ, LABEL_F8A956
+	cp hl, wa
+	callcc_24 14, 0xF8A956
 
 NavDoc_Exit:
-	; (block overflow) POP IZ
-	; (block overflow) RET
+	popw iz
+	ret
 
+LABEL_F92CAC:
 NavigatePdList:
-	; (block overflow) PUSH IZ
-	; (block overflow) LD IZ, WA
-	; (block overflow) CP IZ, 1
-	; (block overflow) JR Z, NavPd_CheckBounds
-	; (block overflow) CP IZ, 0ffffh
-	; (block overflow) JR NZ, NavPd_Exit
+	pushw iz
+	ld iz, wa
+	cps iz, 1
+	jr z, NavPd_CheckBounds
+	cp iz, 0xFFFF
+	jr nz, NavPd_Exit
 
 NavPd_CheckBounds:
-	; (block overflow) CPW (8506h), 0000h
-	; (block overflow) JR LE, NavPd_Exit
-	; (block overflow) CALL LABEL_F8A4C8
-	; (block overflow) CP HL, 0
-	; (block overflow) JR LT, NavPd_Exit
-	; (block overflow) LD WA, HL
-	; (block overflow) ADD WA, IZ
-	; (block overflow) JR GE, NavPd_WrapToEnd
-	; (block overflow) LD WA, (8506h)
-	; (block overflow) DEC 1, WA
-	; (block overflow) JR T, NavPd_CheckEnd
+	cpdi16 34054, 0
+	jr le, NavPd_Exit
+	call LABEL_F8A4C8
+	cps hl, 0
+	jr lt, NavPd_Exit
+	ld wa, hl
+	add wa, iz
+	jr ge, NavPd_WrapToEnd
+	ldda16 xwa, 34054
+	dec 1, wa
+	jr NavPd_CheckEnd
 
 NavPd_WrapToEnd:
-	; (block overflow) CP WA, (8506h)
-	; (block overflow) JR LT, NavPd_CheckEnd
-	; (block overflow) LD WA, 0
+	cpda16 xwa, 34054
+	jr lt, NavPd_CheckEnd
+	lds wa, 0
 
 NavPd_CheckEnd:
-	; (block overflow) CP HL, WA
-	; (block overflow) CALL NZ, LABEL_F8A5A5
+	cp hl, wa
+	callcc_24 14, 0xF8A5A5
 
 NavPd_Exit:
-	; (block overflow) POP IZ
-	; (block overflow) RET
+	popw iz
+	ret
 
 SmfMed_FormatSlotList:
-	; (block overflow) DEC 6, XSP
-	; (block overflow) PUSH XIZ
-	; (block overflow) LD IZ, BC
-	; (block overflow) LD (XSP + 006h), XWA
-	; (block overflow) LD XWA, 0
-	; (block overflow) LD XBC, 01e50003h
-	; (block overflow) LD XDE, 0
-	; (block overflow) CALR FmmSmfFileNameFunc
-	; (block overflow) LD QIZ, HL
-	; (block overflow) LD WA, QIZ
-	; (block overflow) EXTZ XWA
-	; (block overflow) DIVW_WA 000ah
-	; (block overflow) LD QIZ, WA
-	; (block overflow) MULW_WA 000ah
-	; (block overflow) LD QIZ, WA
-	; (block overflow) LDW (XSP + 004h:8), 000ah
-	; (block overflow) LD WA, QIZ
-	; (block overflow) ADD WA, 000ah
-	; (block overflow) CP WA, IZ
-	; (block overflow) JR C, SmfFmt_CalcVisible
-	; (block overflow) LD (XSP + 004h), IZ
-	; (block overflow) LD WA, QIZ
-	; (block overflow) SUB (XSP + 004h), WA
+	dec 6, xsp
+	push xiz
+	ld iz, bc
+	ld (xsp + 6), xwa
+	lds32 xwa, 0
+	ld xbc, 0x1E50003
+	lds32 xde, 0
+	calr FmmSmfFileNameFunc
+	ldfr_hl_werp 0xFA
+	ldto_wa_werp 0xFA
+	extz xwa
+	div wa, 0xA
+	ldfr_wa_werp 0xFA
+	mul wa, 0xA
+	ldfr_wa_werp 0xFA
+	ldmw (xsp + 4), 0xA
+	ldto_wa_werp 0xFA
+	add wa, 0xA
+	cp wa, iz
+	jr c, SmfFmt_CalcVisible
+	ld (xsp + 4), iz
+	ldto_wa_werp 0xFA
+	sub (xsp + 4), wa
 
 SmfFmt_CalcVisible:
-	; (block overflow) LD IZ, 0
-	; (block overflow) CPW (XSP + 004h), 0000h
-	; (block overflow) JR ULE, SmfFmt_FillEmpty
+	lds iz, 0
+	cpmi16 (xsp + 4), 0x0
+	jr ule, SmfFmt_FillEmpty
 
 SmfFmt_FormatLoop:
-	; (block overflow) LD WA, IZ
-	; (block overflow) SLL 3, WA
-	; (block overflow) LDA XBC, 83E0h
-	; (block overflow) EXTZ XWA
-	; (block overflow) ADD XWA, XBC
-	; (block overflow) LD BC, QIZ
-	; (block overflow) ADD BC, IZ
-	; (block overflow) LDA XDE, 88A0h
-	; (block overflow) EXTZ XBC
-	; (block overflow) ADD XBC, XDE
-	; (block overflow) LD C, (XBC)
-	; (block overflow) EXTZ BC
-	; (block overflow) LD DE, IZ
-	; (block overflow) CALR FormatMedleyNumber
-	; (block overflow) LD DE, IZ
-	; (block overflow) SLL 3, DE
-	; (block overflow) LDA XWA, 83E0h
-	; (block overflow) EXTZ XDE
-	; (block overflow) ADD XDE, XWA
-	; (block overflow) LD XWA, (XSP + 006h)
-	; (block overflow) LD XBC, 01c0000fh
-	; (block overflow) CALL ApPostEvent
-	; (block overflow) INC 1, IZ
-	; (block overflow) CP IZ, (XSP + 004h)
-	; (block overflow) JR C, SmfFmt_FormatLoop
+	ld wa, iz
+	sll wa, 3
+	ldada xbc, 33760
+	extz xwa
+	add xwa, xbc
+	ldto_bc_werp 0xFA
+	add bc, iz
+	ldada xde, 34976
+	extz xbc
+	add xbc, xde
+	ld c, (xbc)
+	extz bc
+	ld de, iz
+	calr FormatMedleyNumber
+	ld de, iz
+	sll de, 3
+	ldada xwa, 33760
+	extz xde
+	add xde, xwa
+	ld xwa, (xsp + 6)
+	ld xbc, 0x1C0000F
+	call 0xFA9D58
+	inc 1, iz
+	cp iz, (xsp + 4)
+	jr c, SmfFmt_FormatLoop
 
 SmfFmt_FillEmpty:
-	; (block overflow) CP IZ, 000ah
-	; (block overflow) JR NC, SmfFmt_Exit
+	cp iz, 0xA
+	jr nc, SmfFmt_Exit
 
 SmfFmt_EmptyLoop:
-	; (block overflow) LD WA, IZ
-	; (block overflow) SLL 3, WA
-	; (block overflow) LDA XBC, 83E0h
-	; (block overflow) EXTZ XWA
-	; (block overflow) ADD XWA, XBC
-	; (block overflow) LD BC, 00ffh
-	; (block overflow) LD DE, IZ
-	; (block overflow) CALR FormatMedleyNumber
-	; (block overflow) LD DE, IZ
-	; (block overflow) SLL 3, DE
-	; (block overflow) LDA XWA, 83E0h
-	; (block overflow) EXTZ XDE
-	; (block overflow) ADD XDE, XWA
-	; (block overflow) LD XWA, (XSP + 006h)
-	; (block overflow) LD XBC, 01c0000fh
-	; (block overflow) CALL ApPostEvent
-	; (block overflow) INC 1, IZ
-	; (block overflow) CP IZ, 000ah
-	; (block overflow) JR C, SmfFmt_EmptyLoop
+	ld wa, iz
+	sll wa, 3
+	ldada xbc, 33760
+	extz xwa
+	add xwa, xbc
+	ldw bc, 0xFF
+	ld de, iz
+	calr FormatMedleyNumber
+	ld de, iz
+	sll de, 3
+	ldada xwa, 33760
+	extz xde
+	add xde, xwa
+	ld xwa, (xsp + 6)
+	ld xbc, 0x1C0000F
+	call 0xFA9D58
+	inc 1, iz
+	cp iz, 0xA
+	jr c, SmfFmt_EmptyLoop
 
 SmfFmt_Exit:
-	; (block overflow) POP XIZ
-	; (block overflow) INC 6, XSP
-	; (block overflow) RET
+	pop xiz
+	inc 6, xsp
+	ret
 
 
-	; (block overflow) DEC 4, XSP
-	; (block overflow) PUSH IZ
-	; (block overflow) LD XHL, XBC
-	; (block overflow) LD (XSP + 002h), XWA
-	; (block overflow) CP XHL, 01e5000ah
-	; (block overflow) JRL Z, SmfMed_CheckContinue
-	; (block overflow) LD XWA, XDE
-	; (block overflow) CP XHL, 01e50008h
-	; (block overflow) JRL Z, SmfMed_StoreDelayFlag
-	; (block overflow) LD BC, (8438h)
-	; (block overflow) CP XHL, 01c00018h
-	; (block overflow) JRL Z, SmfMed_HandleNavToggle
-	; (block overflow) CP XHL, 01c00017h
-	; (block overflow) JRL Z, SmfMed_HandleNavToggle
-	; (block overflow) CP XHL, 01c0000bh
-	; (block overflow) JRL Z, SmfMed_RefreshDisplay
-	; (block overflow) CP XHL, 01e50004h
-	; (block overflow) JRL Z, SmfMed_StoreWindowPtr
-	; (block overflow) CP XHL, 01c00013h
-	; (block overflow) JRL NZ, SmfMed_Exit
-	; (block overflow) CP XDE, 00000003h
-	; (block overflow) JRL Z, SmfMed_HandleStop
-	; (block overflow) CP XDE, 00000002h
-	; (block overflow) JRL NZ, SmfMed_Exit
-	; (block overflow) LD WA, 0
-	; (block overflow) CALR InitializeOperationState
-	; (block overflow) LD A, (8D37h)
-	; (block overflow) LD (843Ah), A
-	; (block overflow) CP A, 06fh
-	; (block overflow) JR Z, SmfMed_CheckNotPlaying
-	; (block overflow) CP A, 072h
-	; (block overflow) JR NZ, SmfMed_CheckPlayMode
+	dec 4, xsp
+	pushw iz
+	ld xhl, xbc
+	ld (xsp + 2), xwa
+	cp xhl, 0x1E5000A
+	jrl z, SmfMed_CheckContinue
+	ld xwa, xde
+	cp xhl, 0x1E50008
+	jrl z, SmfMed_StoreDelayFlag
+	ldda16 xbc, 33848
+	cp xhl, 0x1C00018
+	jrl z, SmfMed_HandleNavToggle
+	cp xhl, 0x1C00017
+	jrl z, SmfMed_HandleNavToggle
+	cp xhl, 0x1C0000B
+	jrl z, SmfMed_RefreshDisplay
+	cp xhl, 0x1E50004
+	jrl z, SmfMed_StoreWindowPtr
+	cp xhl, 0x1C00013
+	jrl nz, SmfMed_Exit
+	cp xde, 0x3
+	jrl z, SmfMed_HandleStop
+	cp xde, 0x2
+	jrl nz, SmfMed_Exit
+	lds wa, 0
+	calr InitializeOperationState
+	ldda8 a, 36151
+	stda8 33850, a
+	cp a, 0x6F
+	jr z, SmfMed_CheckNotPlaying
+	cp a, 0x72
+	jr nz, SmfMed_CheckPlayMode
 
 SmfMed_CheckNotPlaying:
-	; (block overflow) LD (84FEh), 000h
-	; (block overflow) CALL LABEL_F2076D
-	; (block overflow) CP L, 4
-	; (block overflow) JR Z, SmfMed_Error3F
-	; (block overflow) CP L, 3
-	; (block overflow) JR Z, SmfMed_Error31
-	; (block overflow) CP L, 2
-	; (block overflow) JRL NZ, SmfMed_Exit
-	; (block overflow) LD (7F42h), 001h
-	; (block overflow) LD WA, 00eeh
-	; (block overflow) JR T, SmfMed_ShowError
+	stdi8 34046, 0
+	call LABEL_F2076D
+	cps l, 4
+	jr z, SmfMed_Error3F
+	cps l, 3
+	jr z, SmfMed_Error31
+	cps l, 2
+	jrl nz, SmfMed_Exit
+	stdi8 32578, 1
+	ldw wa, 0xEE
+	jr SmfMed_ShowError
 
 SmfMed_Error31:
-	; (block overflow) LD (7F42h), 031h
-	; (block overflow) LD WA, 00eeh
-	; (block overflow) JR T, SmfMed_ShowError
+	stdi8 32578, 49
+	ldw wa, 0xEE
+	jr SmfMed_ShowError
 
 SmfMed_Error3F:
-	; (block overflow) LD (7F42h), 03fh
-	; (block overflow) LD WA, 00eeh
+	stdi8 32578, 63
+	ldw wa, 0xEE
 
 SmfMed_ShowError:
-	; (block overflow) CALL LABEL_F994BD
-	; (block overflow) JRL T, SmfMed_Exit
+	call LABEL_F994BD
+	jrl SmfMed_Exit
 
 SmfMed_CheckPlayMode:
-	; (block overflow) CP A, 073h
-	; (block overflow) JR Z, SmfMed_CheckPlaying
-	; (block overflow) CP A, 076h
-	; (block overflow) JRL NZ, SmfMed_InitFromDisk
+	cp a, 0x73
+	jr z, SmfMed_CheckPlaying
+	cp a, 0x76
+	jrl nz, SmfMed_InitFromDisk
 
 SmfMed_CheckPlaying:
-	; (block overflow) CALL LABEL_F2076D
-	; (block overflow) CP L, 1
-	; (block overflow) JRL C, SmfMed_CheckNotPlayError
-	; (block overflow) CALL LABEL_F2076D
-	; (block overflow) CP L, 4
-	; (block overflow) JR Z, SmfMed_PlayError3F
-	; (block overflow) CP L, 3
-	; (block overflow) JR Z, SmfMed_PlayError31
-	; (block overflow) CP L, 2
-	; (block overflow) JR NZ, SmfMed_SetPlaying
-	; (block overflow) LD (7F42h), 001h
-	; (block overflow) LD WA, 00eeh
-	; (block overflow) JR T, SmfMed_ShowPlayError
+	call LABEL_F2076D
+	cps l, 1
+	jrl c, SmfMed_CheckNotPlayError
+	call LABEL_F2076D
+	cps l, 4
+	jr z, SmfMed_PlayError3F
+	cps l, 3
+	jr z, SmfMed_PlayError31
+	cps l, 2
+	jr nz, SmfMed_SetPlaying
+	stdi8 32578, 1
+	ldw wa, 0xEE
+	jr SmfMed_ShowPlayError
 
 SmfMed_PlayError31:
-	; (block overflow) LD (7F42h), 031h
-	; (block overflow) LD WA, 00eeh
-	; (block overflow) JR T, SmfMed_ShowPlayError
+	stdi8 32578, 49
+	ldw wa, 0xEE
+	jr SmfMed_ShowPlayError
 
 SmfMed_PlayError3F:
-	; (block overflow) LD (7F42h), 03fh
-	; (block overflow) LD WA, 00eeh
+	stdi8 32578, 63
+	ldw wa, 0xEE
 
 SmfMed_ShowPlayError:
-	; (block overflow) CALL LABEL_F994BD
-	; (block overflow) INC 1, (843Ch)
+	call LABEL_F994BD
+	incdi8 1, 33852
 
 SmfMed_SetPlaying:
-	; (block overflow) LD (84FEh), 001h
-	; (block overflow) LD A, (8922h)
-	; (block overflow) CP A, (8920h)
-	; (block overflow) JR NC, SmfMed_CheckRepeat
-	; (block overflow) LD IZ, 0
-	; (block overflow) LD BC, (8438h)
-	; (block overflow) CP BC, 0
-	; (block overflow) JRL ULE, SmfMed_Exit
-	; (block overflow) LDA XDE, 88A0h
+	stdi8 34046, 1
+	ldda8 a, 35106
+	cpda8 a, 35104
+	jr nc, SmfMed_CheckRepeat
+	lds iz, 0
+	ldda16 xbc, 33848
+	cps bc, 0
+	jrl ule, SmfMed_Exit
+	ldada xde, 34976
 
 SmfMed_FindSongLoop:
-	; (block overflow) LD HL, IZ
-	; (block overflow) EXTZ XHL
-	; (block overflow) ADD XHL, XDE
-	; (block overflow) CP (XHL), A
-	; (block overflow) JR NZ, SmfMed_NextSong
-	; (block overflow) LD DE, IZ
-	; (block overflow) EXTZ XDE
-	; (block overflow) LD XWA, (XSP + 002h)
-	; (block overflow) LD XBC, 01e50002h
-	; (block overflow) CALR FmmSmfFileNameFunc
-	; (block overflow) LD XWA, (8430h)
-	; (block overflow) LD BC, (8438h)
-	; (block overflow) CALR SmfMed_FormatSlotList
-	; (block overflow) INC 1, (8922h)
-	; (block overflow) LD WA, IZ
-	; (block overflow) CALL LABEL_F8A07F
-	; (block overflow) LD XWA, (8434h)
-	; (block overflow) OR XWA, XWA
-	; (block overflow) JRL Z, SmfMed_Exit
-	; (block overflow) LD XBC, 01e50009h
-	; (block overflow) LD XDE, 0000001eh
-	; (block overflow) JR T, SmfMed_PostDelayEvent
+	ld hl, iz
+	extz xhl
+	add xhl, xde
+	cp (xhl), a
+	jr nz, SmfMed_NextSong
+	ld de, iz
+	extz xde
+	ld xwa, (xsp + 2)
+	ld xbc, 0x1E50002
+	calr FmmSmfFileNameFunc
+	ldda32 xwa, 33840
+	ldda16 xbc, 33848
+	calr SmfMed_FormatSlotList
+	incdi8 1, 35106
+	ld wa, iz
+	call LABEL_F8A07F
+	ldda32 xwa, 33844
+	or xwa, xwa
+	jrl z, SmfMed_Exit
+	ld xbc, 0x1E50009
+	ld xde, 0x1E
+	jr SmfMed_PostDelayEvent
 
 SmfMed_NextSong:
-	; (block overflow) INC 1, IZ
-	; (block overflow) CP IZ, BC
-	; (block overflow) JR C, SmfMed_FindSongLoop
-	; (block overflow) JRL T, SmfMed_Exit
+	inc 1, iz
+	cp iz, bc
+	jr c, SmfMed_FindSongLoop
+	jrl SmfMed_Exit
 
 SmfMed_CheckRepeat:
-	; (block overflow) CP (8924h), 000h
-	; (block overflow) JR Z, SmfMed_ClearRepeatCount
-	; (block overflow) CP (843Ch), A
-	; (block overflow) JR NC, SmfMed_ClearRepeatCount
-	; (block overflow) LD (8922h), 000h
-	; (block overflow) LD (843Ch), 000h
-	; (block overflow) LD IZ, 0
-	; (block overflow) LD WA, (8438h)
-	; (block overflow) CP WA, 0
-	; (block overflow) JRL ULE, SmfMed_Exit
-	; (block overflow) LDA XBC, 88A0h
+	cpdi8 35108, 0
+	jr z, SmfMed_ClearRepeatCount
+	cpdm8 33852, a
+	jr nc, SmfMed_ClearRepeatCount
+	stdi8 35106, 0
+	stdi8 33852, 0
+	lds iz, 0
+	ldda16 xwa, 33848
+	cps wa, 0
+	jrl ule, SmfMed_Exit
+	ldada xbc, 34976
 
 SmfMed_RepeatFindLoop:
-	; (block overflow) LD DE, IZ
-	; (block overflow) EXTZ XDE
-	; (block overflow) ADD XDE, XBC
-	; (block overflow) CP (XDE), 000h
-	; (block overflow) JR NZ, SmfMed_RepeatNext
-	; (block overflow) LD DE, IZ
-	; (block overflow) EXTZ XDE
-	; (block overflow) LD XWA, (XSP + 002h)
-	; (block overflow) LD XBC, 01e50002h
-	; (block overflow) CALR FmmSmfFileNameFunc
-	; (block overflow) LD XWA, (8430h)
-	; (block overflow) LD BC, (8438h)
-	; (block overflow) CALR SmfMed_FormatSlotList
-	; (block overflow) INC 1, (8922h)
-	; (block overflow) LD WA, IZ
-	; (block overflow) CALL LABEL_F8A07F
-	; (block overflow) LD XWA, (8434h)
-	; (block overflow) OR XWA, XWA
-	; (block overflow) JRL Z, SmfMed_Exit
-	; (block overflow) LD XBC, 01e50009h
-	; (block overflow) LD XDE, 0000001eh
+	ld de, iz
+	extz xde
+	add xde, xbc
+	cpmi8 (xde), 0x0
+	jr nz, SmfMed_RepeatNext
+	ld de, iz
+	extz xde
+	ld xwa, (xsp + 2)
+	ld xbc, 0x1E50002
+	calr FmmSmfFileNameFunc
+	ldda32 xwa, 33840
+	ldda16 xbc, 33848
+	calr SmfMed_FormatSlotList
+	incdi8 1, 35106
+	ld wa, iz
+	call LABEL_F8A07F
+	ldda32 xwa, 33844
+	or xwa, xwa
+	jrl z, SmfMed_Exit
+	ld xbc, 0x1E50009
+	ld xde, 0x1E
 
 SmfMed_PostDelayEvent:
-	; (block overflow) CALL ApPostEvent
-	; (block overflow) JRL T, SmfMed_Exit
+	call 0xFA9D58
+	jrl SmfMed_Exit
 
 SmfMed_RepeatNext:
-	; (block overflow) INC 1, IZ
-	; (block overflow) CP IZ, WA
-	; (block overflow) JR C, SmfMed_RepeatFindLoop
-	; (block overflow) JRL T, SmfMed_Exit
+	inc 1, iz
+	cp iz, wa
+	jr c, SmfMed_RepeatFindLoop
+	jrl SmfMed_Exit
 
 SmfMed_ClearRepeatCount:
-	; (block overflow) LD (843Ch), 000h
-	; (block overflow) JR T, SmfMed_ClearPlaying
+	stdi8 33852, 0
+	jr SmfMed_ClearPlaying
 
 SmfMed_CheckNotPlayError:
-	; (block overflow) CALL LABEL_F2076D
-	; (block overflow) CP L, 0
-	; (block overflow) JRL NZ, SmfMed_Exit
+	call LABEL_F2076D
+	cps l, 0
+	jrl nz, SmfMed_Exit
 
 SmfMed_ClearPlaying:
-	; (block overflow) LD (84FEh), 000h
-	; (block overflow) JRL T, SmfMed_Exit
+	stdi8 34046, 0
+	jrl SmfMed_Exit
 
 SmfMed_InitFromDisk:
-	; (block overflow) LD XDE, 0
-	; (block overflow) LD E, (8944h)
-	; (block overflow) LD XWA, 006c0018h
-	; (block overflow) LD XBC, 01e0003bh
-	; (block overflow) CALL ApPostEvent
-	; (block overflow) CPW (8504h), 0000h
-	; (block overflow) JR GE, SmfMed_InitState
-	; (block overflow) LD XWA, 00600026h
-	; (block overflow) LD XBC, 01c00001h
-	; (block overflow) LD XDE, 5
-	; (block overflow) CALL ApPostEvent
-	; (block overflow) CALL GetFileCountEncoded
-	; (block overflow) LD (8504h), HL
-	; (block overflow) CALL LABEL_F8958D
-	; (block overflow) CALL GetEncodedFreeSpaceData
-	; (block overflow) LD XWA, 00600026h
-	; (block overflow) LD XBC, 01c00002h
-	; (block overflow) LD XDE, 0
-	; (block overflow) CALL ApPostEvent
-	; (block overflow) LD XWA, 0ffffffffh
-	; (block overflow) LD XBC, 01c0000ah
-	; (block overflow) LD XDE, 0
-	; (block overflow) CALL ApPostEvent
-	; (block overflow) CALR SignalProgressUpdate
+	lds32 xde, 0
+	ldda8 e, 35140
+	ld xwa, 0x6C0018
+	ld xbc, 0x1E0003B
+	call 0xFA9D58
+	cpdi16 34052, 0
+	jr ge, SmfMed_InitState
+	ld xwa, 0x600026
+	ld xbc, 0x1C00001
+	lds32 xde, 5
+	call 0xFA9D58
+	call 0xF89C78
+	stda16 34052, xhl
+	call LABEL_F8958D
+	call 0xF8953B
+	ld xwa, 0x600026
+	ld xbc, 0x1C00002
+	lds32 xde, 0
+	call 0xFA9D58
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C0000A
+	lds32 xde, 0
+	call 0xFA9D58
+	calr SignalProgressUpdate
 
 SmfMed_InitState:
-	; (block overflow) LD (84FEh), 000h
-	; (block overflow) LD (8922h), 000h
-	; (block overflow) LD (8920h), 000h
-	; (block overflow) LD BC, 0080h
-	; (block overflow) LD WA, (8504h)
-	; (block overflow) CP WA, 0080h
-	; (block overflow) JR UGT, SmfMed_ClampFileCount
-	; (block overflow) LD BC, WA
+	stdi8 34046, 0
+	stdi8 35106, 0
+	stdi8 35104, 0
+	ldw bc, 0x80
+	ldda16 xwa, 34052
+	cp wa, 0x80
+	jr ugt, SmfMed_ClampFileCount
+	ld bc, wa
 
 SmfMed_ClampFileCount:
-	; (block overflow) LD (8438h), BC
-	; (block overflow) LD IZ, 0
-	; (block overflow) CP BC, 0
-	; (block overflow) JR ULE, SmfMed_FinishInit
-	; (block overflow) LDA XWA, 88A0h
+	stda16 33848, xbc
+	lds iz, 0
+	cps bc, 0
+	jr ule, SmfMed_FinishInit
+	ldada xwa, 34976
 
 SmfMed_ClearSlotsLoop:
-	; (block overflow) LD BC, IZ
-	; (block overflow) EXTZ XBC
-	; (block overflow) ADD XBC, XWA
-	; (block overflow) LD (XBC), 0ffh
-	; (block overflow) INC 1, IZ
-	; (block overflow) CP IZ, (8438h)
-	; (block overflow) JR C, SmfMed_ClearSlotsLoop
+	ld bc, iz
+	extz xbc
+	add xbc, xwa
+	ldmi8 (xbc), 0xFF
+	inc 1, iz
+	cpda16 xiz, 33848
+	jr c, SmfMed_ClearSlotsLoop
 
 SmfMed_FinishInit:
-	; (block overflow) CALL LABEL_F20ACD
-	; (block overflow) LD XWA, 0
-	; (block overflow) LD (8434h), XWA
-	; (block overflow) JRL T, SmfMed_Exit
+	call LABEL_F20ACD
+	lds32 xwa, 0
+	stda32 33844, xwa
+	jrl SmfMed_Exit
 
+LABEL_F93051:
 SmfMed_HandleStop:
-	; (block overflow) LD A, (8D36h)
-	; (block overflow) CP A, 06fh
-	; (block overflow) JRL Z, SmfMed_Exit
-	; (block overflow) CP A, 072h
-	; (block overflow) JRL Z, SmfMed_Exit
-	; (block overflow) CP A, 073h
-	; (block overflow) JRL Z, SmfMed_Exit
-	; (block overflow) CP A, 076h
-	; (block overflow) JRL Z, SmfMed_Exit
-	; (block overflow) CALL LABEL_F20B70
-	; (block overflow) CALR CancelOperationCleanup
-	; (block overflow) LD (84FEh), 000h
-	; (block overflow) JRL T, SmfMed_Exit
+	ldda8 a, 36150
+	cp a, 0x6F
+	jrl z, SmfMed_Exit
+	cp a, 0x72
+	jrl z, SmfMed_Exit
+	cp a, 0x73
+	jrl z, SmfMed_Exit
+	cp a, 0x76
+	jrl z, SmfMed_Exit
+	call LABEL_F20B70
+	calr CancelOperationCleanup
+	stdi8 34046, 0
+	jrl SmfMed_Exit
 
 SmfMed_StoreWindowPtr:
-	; (block overflow) LD (8430h), XWA
-	; (block overflow) JRL T, SmfMed_Exit
+	stda32 33840, xwa
+	jrl SmfMed_Exit
 
 SmfMed_RefreshDisplay:
-	; (block overflow) LD XWA, (8430h)
-	; (block overflow) CALR SmfMed_FormatSlotList
-	; (block overflow) JRL T, SmfMed_Exit
+	ldda32 xwa, 33840
+	calr SmfMed_FormatSlotList
+	jrl SmfMed_Exit
 
 SmfMed_HandleNavToggle:
-	; (block overflow) LDA XWA, 88A0h
-	; (block overflow) CP XDE, 0000000ah
-	; (block overflow) JR NZ, SmfMed_HandleSelectToggle
-	; (block overflow) CP (84FEh), 000h
-	; (block overflow) JR NZ, SmfMed_HandleSelectToggle
-	; (block overflow) LD IZ, 0
-	; (block overflow) LD DE, BC
-	; (block overflow) CP BC, 0
-	; (block overflow) JR ULE, SmfMed_CheckAllUnmarked
+	ldada xwa, 34976
+	cp xde, 0xA
+	jr nz, SmfMed_HandleSelectToggle
+	cpdi8 34046, 0
+	jr nz, SmfMed_HandleSelectToggle
+	lds iz, 0
+	ld de, bc
+	cps bc, 0
+	jr ule, SmfMed_CheckAllUnmarked
 
 SmfMed_FindUnmarkedLoop:
-	; (block overflow) LD BC, IZ
-	; (block overflow) EXTZ XBC
-	; (block overflow) ADD XBC, XWA
-	; (block overflow) CP (XBC), 0ffh
-	; (block overflow) JR Z, SmfMed_CheckAllUnmarked
-	; (block overflow) INC 1, IZ
-	; (block overflow) CP IZ, DE
-	; (block overflow) JR C, SmfMed_FindUnmarkedLoop
+	ld bc, iz
+	extz xbc
+	add xbc, xwa
+	cpmi8 (xbc), 0xFF
+	jr z, SmfMed_CheckAllUnmarked
+	inc 1, iz
+	cp iz, de
+	jr c, SmfMed_FindUnmarkedLoop
 
 SmfMed_CheckAllUnmarked:
-	; (block overflow) CP IZ, DE
-	; (block overflow) JR NC, SmfMed_RemoveOrderLoop
-	; (block overflow) LD IZ, 0
-	; (block overflow) CP DE, 0
-	; (block overflow) JR ULE, SmfMed_RefreshAfterToggle
-	; (block overflow) LDA XDE, 88A0h
+	cp iz, de
+	jr nc, SmfMed_RemoveOrderLoop
+	lds iz, 0
+	cps de, 0
+	jr ule, SmfMed_RefreshAfterToggle
+	ldada xde, 34976
 
 SmfMed_AssignOrderLoop:
-	; (block overflow) LD BC, IZ
-	; (block overflow) EXTZ XBC
-	; (block overflow) ADD XBC, XDE
-	; (block overflow) LD A, (XBC)
-	; (block overflow) CP A, 0ffh
-	; (block overflow) JR NZ, SmfMed_NextAssign
-	; (block overflow) LD (XBC), (8920h)
-	; (block overflow) INC 1, (8920h)
+	ld bc, iz
+	extz xbc
+	add xbc, xde
+	ld a, (xbc)
+	cp a, 0xFF
+	jr nz, SmfMed_NextAssign
+	ldmi16 (xbc), 0x8920
+	incdi8 1, 35104
 
 SmfMed_NextAssign:
-	; (block overflow) INC 1, IZ
-	; (block overflow) CP IZ, (8438h)
-	; (block overflow) JR C, SmfMed_AssignOrderLoop
-	; (block overflow) JR T, SmfMed_RefreshAfterToggle
+	inc 1, iz
+	cpda16 xiz, 33848
+	jr c, SmfMed_AssignOrderLoop
+	jr SmfMed_RefreshAfterToggle
 
 SmfMed_RemoveOrderLoop:
-	; (block overflow) LD IZ, 0
-	; (block overflow) CP DE, 0
-	; (block overflow) JR ULE, SmfMed_RefreshAfterToggle
-	; (block overflow) LDA XDE, 88A0h
+	lds iz, 0
+	cps de, 0
+	jr ule, SmfMed_RefreshAfterToggle
+	ldada xde, 34976
 
 SmfMed_UnmarkLoop:
-	; (block overflow) LD BC, IZ
-	; (block overflow) EXTZ XBC
-	; (block overflow) ADD XBC, XDE
-	; (block overflow) LD A, (XBC)
-	; (block overflow) CP A, 0fdh
-	; (block overflow) JR UGT, SmfMed_NextUnmark
-	; (block overflow) LD (XBC), 0ffh
-	; (block overflow) DEC 1, (8920h)
+	ld bc, iz
+	extz xbc
+	add xbc, xde
+	ld a, (xbc)
+	cp a, 0xFD
+	jr ugt, SmfMed_NextUnmark
+	ldmi8 (xbc), 0xFF
+	decdi8 1, 35104
 
 SmfMed_NextUnmark:
-	; (block overflow) INC 1, IZ
-	; (block overflow) CP IZ, (8438h)
-	; (block overflow) JR C, SmfMed_UnmarkLoop
+	inc 1, iz
+	cpda16 xiz, 33848
+	jr c, SmfMed_UnmarkLoop
 
 SmfMed_RefreshAfterToggle:
-	; (block overflow) LD XWA, (8430h)
-	; (block overflow) LD BC, (8438h)
-	; (block overflow) JR T, SmfMed_CallFormatSlots
+	ldda32 xwa, 33840
+	ldda16 xbc, 33848
+	jr SmfMed_CallFormatSlots
 
 SmfMed_HandleSelectToggle:
-	; (block overflow) CP XDE, 0000000bh
-	; (block overflow) JR NZ, SmfMed_HandleRepeat
-	; (block overflow) CP (84FEh), 000h
-	; (block overflow) JR NZ, SmfMed_HandleRepeat
-	; (block overflow) LD XWA, (XSP + 002h)
-	; (block overflow) LD XBC, 01e50003h
-	; (block overflow) LD XDE, 0
-	; (block overflow) CALR FmmSmfFileNameFunc
-	; (block overflow) LD IZ, HL
-	; (block overflow) LDA XHL, 88A0h
-	; (block overflow) LD WA, IZ
-	; (block overflow) EXTZ XWA
-	; (block overflow) ADD XWA, XHL
-	; (block overflow) LD C, (XWA)
-	; (block overflow) CP C, 0ffh
-	; (block overflow) JR NZ, SmfMed_RemoveFromOrder
-	; (block overflow) LD (XWA), (8920h)
-	; (block overflow) INC 1, (8920h)
-	; (block overflow) JR T, SmfMed_RefreshAfterSelect
+	cp xde, 0xB
+	jr nz, SmfMed_HandleRepeat
+	cpdi8 34046, 0
+	jr nz, SmfMed_HandleRepeat
+	ld xwa, (xsp + 2)
+	ld xbc, 0x1E50003
+	lds32 xde, 0
+	calr FmmSmfFileNameFunc
+	ld iz, hl
+	ldada xhl, 34976
+	ld wa, iz
+	extz xwa
+	add xwa, xhl
+	ld c, (xwa)
+	cp c, 0xFF
+	jr nz, SmfMed_RemoveFromOrder
+	ldmi16 (xwa), 0x8920
+	incdi8 1, 35104
+	jr SmfMed_RefreshAfterSelect
 
 SmfMed_RemoveFromOrder:
-	; (block overflow) CP C, 0fdh
-	; (block overflow) JR UGT, SmfMed_RefreshAfterSelect
-	; (block overflow) LD (XWA), 0ffh
-	; (block overflow) LD A, (8920h)
-	; (block overflow) DEC 1, A
-	; (block overflow) LD (8920h), A
-	; (block overflow) LD IY, 0
-	; (block overflow) LD IZ, 0
-	; (block overflow) EXTZ WA
-	; (block overflow) CP WA, 0
-	; (block overflow) JR ULE, SmfMed_RefreshAfterSelect
-	; (block overflow) LD IX, WA
+	cp c, 0xFD
+	jr ugt, SmfMed_RefreshAfterSelect
+	ldmi8 (xwa), 0xFF
+	ldda8 a, 35104
+	dec 1, a
+	stda8 35104, a
+	lds iy, 0
+	lds iz, 0
+	extz wa
+	cps wa, 0
+	jr ule, SmfMed_RefreshAfterSelect
+	ld ix, wa
 
 SmfMed_ReorderLoop:
-	; (block overflow) LD DE, IZ
-	; (block overflow) EXTZ XDE
-	; (block overflow) ADD XDE, XHL
-	; (block overflow) LD A, (XDE)
-	; (block overflow) CP A, 0fdh
-	; (block overflow) JR UGT, SmfMed_NextReorder
-	; (block overflow) INC 1, IY
-	; (block overflow) CP A, C
-	; (block overflow) JR ULE, SmfMed_NextReorder
-	; (block overflow) DEC 1, A
-	; (block overflow) LD (XDE), A
+	ld de, iz
+	extz xde
+	add xde, xhl
+	ld a, (xde)
+	cp a, 0xFD
+	jr ugt, SmfMed_NextReorder
+	inc 1, iy
+	cp a, c
+	jr ule, SmfMed_NextReorder
+	dec 1, a
+	ld (xde), a
 
 SmfMed_NextReorder:
-	; (block overflow) INC 1, IZ
-	; (block overflow) CP IY, IX
-	; (block overflow) JR C, SmfMed_ReorderLoop
+	inc 1, iz
+	cp iy, ix
+	jr c, SmfMed_ReorderLoop
 
 SmfMed_RefreshAfterSelect:
-	; (block overflow) LD XWA, (8430h)
-	; (block overflow) LD BC, (8438h)
+	ldda32 xwa, 33840
+	ldda16 xbc, 33848
 
 SmfMed_CallFormatSlots:
-	; (block overflow) CALR SmfMed_FormatSlotList
-	; (block overflow) JRL T, SmfMed_Exit
+	calr SmfMed_FormatSlotList
+	jrl SmfMed_Exit
 
 SmfMed_HandleRepeat:
-	; (block overflow) CP XDE, 0000000ch
-	; (block overflow) JR NZ, SmfMed_HandlePlay
-	; (block overflow) CP XHL, 01c00017h
-	; (block overflow) JR NZ, SmfMed_SetRepeatOff
-	; (block overflow) LD (8924h), 001h
-	; (block overflow) JRL T, SmfMed_Exit
+	cp xde, 0xC
+	jr nz, SmfMed_HandlePlay
+	cp xhl, 0x1C00017
+	jr nz, SmfMed_SetRepeatOff
+	stdi8 35108, 1
+	jrl SmfMed_Exit
 
 SmfMed_SetRepeatOff:
-	; (block overflow) LD (8924h), 000h
-	; (block overflow) JRL T, SmfMed_Exit
+	stdi8 35108, 0
+	jrl SmfMed_Exit
 
 SmfMed_HandlePlay:
-	; (block overflow) CP XDE, 0000000dh
-	; (block overflow) JRL NZ, SmfMed_Exit
-	; (block overflow) CP (84FEh), 000h
-	; (block overflow) JRL NZ, SmfMed_Exit
-	; (block overflow) LD (8922h), 000h
-	; (block overflow) LD (843Ch), 000h
-	; (block overflow) LD IZ, 0
-	; (block overflow) LD BC, (8438h)
-	; (block overflow) CP BC, 0
-	; (block overflow) JR ULE, SmfMed_CheckAutoPlay
+	cp xde, 0xD
+	jrl nz, SmfMed_Exit
+	cpdi8 34046, 0
+	jrl nz, SmfMed_Exit
+	stdi8 35106, 0
+	stdi8 33852, 0
+	lds iz, 0
+	ldda16 xbc, 33848
+	cps bc, 0
+	jr ule, SmfMed_CheckAutoPlay
 
 SmfMed_PlayFindLoop:
-	; (block overflow) LD DE, IZ
-	; (block overflow) EXTZ XDE
-	; (block overflow) ADD XDE, XWA
-	; (block overflow) CP (XDE), 000h
-	; (block overflow) JR NZ, SmfMed_PlayNextLoop
-	; (block overflow) LD (84FEh), 001h
-	; (block overflow) LD DE, IZ
-	; (block overflow) EXTZ XDE
-	; (block overflow) LD XWA, (XSP + 002h)
-	; (block overflow) LD XBC, 01e50002h
-	; (block overflow) CALR FmmSmfFileNameFunc
-	; (block overflow) INC 1, (8922h)
-	; (block overflow) LD WA, IZ
-	; (block overflow) CALL LABEL_F8A07F
-	; (block overflow) LD XWA, 0ffffffffh
-	; (block overflow) LD XBC, 01e0009ah
-	; (block overflow) LD XDE, 0
-	; (block overflow) CALL ApPostEvent
-	; (block overflow) LD WA, 0073h
-	; (block overflow) CALL UI_PostModeChangeEvent
-	; (block overflow) JR T, SmfMed_CheckAutoPlay
+	ld de, iz
+	extz xde
+	add xde, xwa
+	cpmi8 (xde), 0x0
+	jr nz, SmfMed_PlayNextLoop
+	stdi8 34046, 1
+	ld de, iz
+	extz xde
+	ld xwa, (xsp + 2)
+	ld xbc, 0x1E50002
+	calr FmmSmfFileNameFunc
+	incdi8 1, 35106
+	ld wa, iz
+	call LABEL_F8A07F
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1E0009A
+	lds32 xde, 0
+	call 0xFA9D58
+	ldw wa, 0x73
+	call 0xF99490
+	jr SmfMed_CheckAutoPlay
 
 SmfMed_PlayNextLoop:
-	; (block overflow) INC 1, IZ
-	; (block overflow) CP IZ, BC
-	; (block overflow) JR C, SmfMed_PlayFindLoop
+	inc 1, iz
+	cp iz, bc
+	jr c, SmfMed_PlayFindLoop
 
 SmfMed_CheckAutoPlay:
-	; (block overflow) CP (84FEh), 000h
-	; (block overflow) JR NZ, SmfMed_Exit
-	; (block overflow) LD XWA, (XSP + 002h)
-	; (block overflow) LD XBC, 01e50003h
-	; (block overflow) LD XDE, 0
-	; (block overflow) CALR FmmSmfFileNameFunc
-	; (block overflow) LD IZ, HL
-	; (block overflow) LD WA, IZ
-	; (block overflow) CALL LABEL_F8A07F
-	; (block overflow) LD XWA, 0ffffffffh
-	; (block overflow) LD XBC, 01e0009ah
-	; (block overflow) LD XDE, 0
-	; (block overflow) CALL ApPostEvent
-	; (block overflow) LD WA, 006fh
-	; (block overflow) JR T, SmfMed_CallPauseMode
+	cpdi8 34046, 0
+	jr nz, SmfMed_Exit
+	ld xwa, (xsp + 2)
+	ld xbc, 0x1E50003
+	lds32 xde, 0
+	calr FmmSmfFileNameFunc
+	ld iz, hl
+	ld wa, iz
+	call LABEL_F8A07F
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1E0009A
+	lds32 xde, 0
+	call 0xFA9D58
+	ldw wa, 0x6F
+	jr SmfMed_CallPauseMode
 
 SmfMed_StoreDelayFlag:
-	; (block overflow) LD (8434h), XWA
-	; (block overflow) JR T, SmfMed_Exit
+	stda32 33844, xwa
+	jr SmfMed_Exit
 
 SmfMed_CheckContinue:
-	; (block overflow) CP (84FEh), 000h
-	; (block overflow) JR Z, SmfMed_Exit
-	; (block overflow) LD XWA, 0ffffffffh
-	; (block overflow) LD XBC, 01e0009ah
-	; (block overflow) LD XDE, 0
-	; (block overflow) CALL ApPostEvent
-	; (block overflow) LD A, (843Ah)
-	; (block overflow) EXTZ WA
+	cpdi8 34046, 0
+	jr z, SmfMed_Exit
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1E0009A
+	lds32 xde, 0
+	call 0xFA9D58
+	ldda8 a, 33850
+	extz wa
 
 SmfMed_CallPauseMode:
-	; (block overflow) CALL UI_PostModeChangeEvent
+	call 0xF99490
 
 SmfMed_Exit:
-	; (block overflow) LD XHL, 0
-	; (block overflow) POP IZ
-	; (block overflow) INC 4, XSP
-	; (block overflow) RET
+	lds32 xhl, 0
+	popw iz
+	inc 4, xsp
+	ret
 
+LABEL_F93283:
 PdMed_FormatFileList:
-	; (block overflow) DEC 6, XSP
-	; (block overflow) PUSH IZ
-	; (block overflow) LD (XSP + 002h), BC
-	; (block overflow) LD (XSP + 004h), XWA
-	; (block overflow) LD IZ, 0
+	dec 6, xsp
+	pushw iz
+	ld (xsp + 2), bc
+	ld (xsp + 4), xwa
+	lds iz, 0
 
 PdFmt_FormatLoop:
-	; (block overflow) LD DE, IZ
-	; (block overflow) SLL 5, DE
-	; (block overflow) LDA XBC, 850Ch
-	; (block overflow) EXTZ XDE
-	; (block overflow) ADD XDE, XBC
-	; (block overflow) LD A, IZL
-	; (block overflow) LD (XDE), A
-	; (block overflow) LD WA, (XSP + 002h)
-	; (block overflow) ADD WA, IZ
-	; (block overflow) CALL LABEL_F8A5F1
-	; (block overflow) LD XBC, XHL
-	; (block overflow) LD WA, IZ
-	; (block overflow) SLL 5, WA
-	; (block overflow) LD DE, 1
-	; (block overflow) ADD DE, WA
-	; (block overflow) LDA XHL, 850Ch
-	; (block overflow) LD WA, DE
-	; (block overflow) EXTZ XWA
-	; (block overflow) ADD XWA, XHL
-	; (block overflow) LD DE, (XSP + 002h)
-	; (block overflow) ADD DE, IZ
-	; (block overflow) INC 1, DE
-	; (block overflow) PUSHW 0014h
-	; (block overflow) PUSHW 0001h
-	; (block overflow) CALL LABEL_F891DD
-	; (block overflow) LD DE, IZ
-	; (block overflow) SLL 5, DE
-	; (block overflow) LDA XBC, 850Ch
-	; (block overflow) EXTZ XDE
-	; (block overflow) ADD XDE, XBC
-	; (block overflow) LD XWA, (XSP + 004h)
-	; (block overflow) LD XBC, 01c0000fh
-	; (block overflow) CALL ApPostEvent
-	; (block overflow) INC 1, IZ
-	; (block overflow) CP IZ, 000ah
-	; (block overflow) JR LT, PdFmt_FormatLoop
-	; (block overflow) POP IZ
-	; (block overflow) INC 6, XSP
-	; (block overflow) RET
+	ld de, iz
+	sll de, 5
+	ldada xbc, 34060
+	extz xde
+	add xde, xbc
+	ldto_a_berp 0xF8
+	ld (xde), a
+	ld wa, (xsp + 2)
+	add wa, iz
+	call LABEL_F8A5F1
+	ld xbc, xhl
+	ld wa, iz
+	sll wa, 5
+	lds de, 1
+	add de, wa
+	ldada xhl, 34060
+	ld wa, de
+	extz xwa
+	add xwa, xhl
+	ld de, (xsp + 2)
+	add de, iz
+	inc 1, de
+	pushw 0x14
+	pushw 0x1
+	call LABEL_F891DD
+	ld de, iz
+	sll de, 5
+	ldada xbc, 34060
+	extz xde
+	add xde, xbc
+	ld xwa, (xsp + 4)
+	ld xbc, 0x1C0000F
+	call 0xFA9D58
+	inc 1, iz
+	cp iz, 0xA
+	jr lt, PdFmt_FormatLoop
+	popw iz
+	inc 6, xsp
+	ret
 
 FmmPdFileNameFunc:
-	; (block overflow) DEC 4, XSP
-	; (block overflow) PUSH IZ
-	; (block overflow) LD (XSP + 002h), XWA
-	; (block overflow) CP XBC, 01e50003h
-	; (block overflow) JRL Z, PdName_GetIndexReturn
-	; (block overflow) LD WA, (8442h)
-	; (block overflow) LD IZ, WA
-	; (block overflow) CP XBC, 01e50002h
-	; (block overflow) JRL Z, PdName_SetIndexPlaying
-	; (block overflow) LD HL, WA
-	; (block overflow) EXTS XHL
-	; (block overflow) DIVS_HL 000ah
-	; (block overflow) CP XBC, 01c00018h
-	; (block overflow) JR Z, PdName_HandleNavigation
-	; (block overflow) CP XBC, 01c00017h
-	; (block overflow) JR Z, PdName_HandleNavigation
-	; (block overflow) CP XBC, 01c0000bh
-	; (block overflow) JR Z, PdName_RefreshList
-	; (block overflow) CP XBC, 01e50004h
-	; (block overflow) JR NZ, PdName_ReturnZero
-	; (block overflow) LD (843Eh), XDE
-	; (block overflow) CALL LABEL_F8A4C8
-	; (block overflow) LD (8442h), HL
-	; (block overflow) CP HL, 0
-	; (block overflow) JR GE, PdName_UpdateIndex
-	; (block overflow) LDW (8442h), 0000h
+	dec 4, xsp
+	pushw iz
+	ld (xsp + 2), xwa
+	cp xbc, 0x1E50003
+	jrl z, PdName_GetIndexReturn
+	ldda16 xwa, 33858
+	ld iz, wa
+	cp xbc, 0x1E50002
+	jrl z, PdName_SetIndexPlaying
+	ld hl, wa
+	exts xhl
+	divs hl, 0xA
+	cp xbc, 0x1C00018
+	jr z, PdName_HandleNavigation
+	cp xbc, 0x1C00017
+	jr z, PdName_HandleNavigation
+	cp xbc, 0x1C0000B
+	jr z, PdName_RefreshList
+	cp xbc, 0x1E50004
+	jr nz, PdName_ReturnZero
+	stda32 33854, xde
+	call LABEL_F8A4C8
+	stda16 33858, xhl
+	cps hl, 0
+	jr ge, PdName_UpdateIndex
+	stdi16 33858, 0
 
 PdName_UpdateIndex:
-	; (block overflow) LD WA, (8442h)
-	; (block overflow) EXTS XWA
-	; (block overflow) DIVS_WA 000ah
-	; (block overflow) LD DE, QWA
-	; (block overflow) EXTS XDE
-	; (block overflow) LD XWA, (843Eh)
-	; (block overflow) LD XBC, 01e50002h
-	; (block overflow) JRL T, PdName_PostEvent
+	ldda16 xwa, 33858
+	exts xwa
+	divs wa, 0xA
+	ldto_de_werp 0xE2
+	exts xde
+	ldda32 xwa, 33854
+	ld xbc, 0x1E50002
+	jrl PdName_PostEvent
 
 PdName_RefreshList:
-	; (block overflow) MULS_HL 000ah
-	; (block overflow) LD XWA, (843Eh)
-	; (block overflow) LD BC, HL
-	; (block overflow) CALR PdMed_FormatFileList
+	muls hl, 0xA
+	ldda32 xwa, 33854
+	ld bc, hl
+	calr PdMed_FormatFileList
 
 PdName_ReturnZero:
-	; (block overflow) LD XHL, 0
-	; (block overflow) JRL T, PdName_Exit
+	lds32 xhl, 0
+	jrl PdName_Exit
 
 PdName_HandleNavigation:
-	; (block overflow) OR XDE, XDE
-	; (block overflow) JR NZ, PdName_CheckPageUp
-	; (block overflow) CP (84FEh), 000h
-	; (block overflow) JR NZ, PdName_CheckPageUp
-	; (block overflow) CP XBC, 01c00018h
-	; (block overflow) JR NZ, PdName_CheckPrevKey
-	; (block overflow) LD BC, WA
-	; (block overflow) INC 1, BC
-	; (block overflow) CP BC, (8506h)
-	; (block overflow) JR GE, PdName_GetCurrentIndex
-	; (block overflow) INC 1, WA
-	; (block overflow) JR T, PdName_SaveIndex
+	or xde, xde
+	jr nz, PdName_CheckPageUp
+	cpdi8 34046, 0
+	jr nz, PdName_CheckPageUp
+	cp xbc, 0x1C00018
+	jr nz, PdName_CheckPrevKey
+	ld bc, wa
+	inc 1, bc
+	cpda16 xbc, 34054
+	jr ge, PdName_GetCurrentIndex
+	inc 1, wa
+	jr PdName_SaveIndex
 
 PdName_CheckPrevKey:
-	; (block overflow) CP XBC, 01c00017h
-	; (block overflow) JR NZ, PdName_GetCurrentIndex
-	; (block overflow) CP WA, 0
-	; (block overflow) JR LE, PdName_GetCurrentIndex
-	; (block overflow) DEC 1, WA
-	; (block overflow) JR T, PdName_SaveIndex
+	cp xbc, 0x1C00017
+	jr nz, PdName_GetCurrentIndex
+	cps wa, 0
+	jr le, PdName_GetCurrentIndex
+	dec 1, wa
+	jr PdName_SaveIndex
 
 PdName_CheckPageUp:
-	; (block overflow) CP XDE, 00000001h
-	; (block overflow) JR NZ, PdName_CheckPageDown
-	; (block overflow) CP (84FEh), 000h
-	; (block overflow) JR NZ, PdName_CheckPageDown
-	; (block overflow) CP WA, 000ah
-	; (block overflow) JR LT, PdName_GetCurrentIndex
-	; (block overflow) SUB WA, 000ah
-	; (block overflow) JR T, PdName_SaveIndex
+	cp xde, 0x1
+	jr nz, PdName_CheckPageDown
+	cpdi8 34046, 0
+	jr nz, PdName_CheckPageDown
+	cp wa, 0xA
+	jr lt, PdName_GetCurrentIndex
+	sub wa, 0xA
+	jr PdName_SaveIndex
 
 PdName_CheckPageDown:
-	; (block overflow) CP XDE, 00000002h
-	; (block overflow) JR NZ, PdName_GetCurrentIndex
-	; (block overflow) CP (84FEh), 000h
-	; (block overflow) JR NZ, PdName_GetCurrentIndex
-	; (block overflow) LD BC, WA
-	; (block overflow) ADD BC, 000ah
-	; (block overflow) LD DE, (8506h)
-	; (block overflow) CP BC, DE
-	; (block overflow) JR GE, PdName_CheckEndBound
-	; (block overflow) ADD WA, 000ah
+	cp xde, 0x2
+	jr nz, PdName_GetCurrentIndex
+	cpdi8 34046, 0
+	jr nz, PdName_GetCurrentIndex
+	ld bc, wa
+	add bc, 0xA
+	ldda16 xde, 34054
+	cp bc, de
+	jr ge, PdName_CheckEndBound
+	add wa, 0xA
 
 PdName_SaveIndex:
-	; (block overflow) LD (8442h), WA
-	; (block overflow) JR T, PdName_UpdateDisplay
+	stda16 33858, xwa
+	jr PdName_UpdateDisplay
 
 PdName_CheckEndBound:
-	; (block overflow) LD BC, DE
-	; (block overflow) DEC 1, BC
-	; (block overflow) LD WA, BC
-	; (block overflow) EXTS XWA
-	; (block overflow) DIVS_WA 000ah
-	; (block overflow) CP HL, WA
-	; (block overflow) JR GE, PdName_GetCurrentIndex
-	; (block overflow) EXTS XDE
-	; (block overflow) DIVS_DE 000ah
-	; (block overflow) LD WA, QDE
-	; (block overflow) CP WA, 0
-	; (block overflow) JR Z, PdName_GetCurrentIndex
-	; (block overflow) LD (8442h), BC
+	ld bc, de
+	dec 1, bc
+	ld wa, bc
+	exts xwa
+	divs wa, 0xA
+	cp hl, wa
+	jr ge, PdName_GetCurrentIndex
+	exts xde
+	divs de, 0xA
+	ldto_wa_werp 0xEA
+	cps wa, 0
+	jr z, PdName_GetCurrentIndex
+	stda16 33858, xbc
 
 PdName_GetCurrentIndex:
-	; (block overflow) LD WA, (8442h)
+	ldda16 xwa, 33858
 
 PdName_UpdateDisplay:
-	; (block overflow) CP IZ, WA
-	; (block overflow) JRL Z, PdName_ReturnZero
-	; (block overflow) CALL LABEL_F8A5A5
-	; (block overflow) LD WA, (8442h)
-	; (block overflow) EXTS XWA
-	; (block overflow) DIVS_WA 000ah
-	; (block overflow) LD DE, QWA
-	; (block overflow) EXTS XDE
-	; (block overflow) LD XWA, (843Eh)
-	; (block overflow) LD XBC, 01e50002h
-	; (block overflow) CALL ApPostEvent
-	; (block overflow) LD BC, (8442h)
-	; (block overflow) EXTS XBC
-	; (block overflow) DIVS_BC 000ah
-	; (block overflow) LD DE, IZ
-	; (block overflow) EXTS XDE
-	; (block overflow) DIVS_DE 000ah
-	; (block overflow) LD XWA, (843Eh)
-	; (block overflow) CP DE, BC
-	; (block overflow) JR NZ, PdName_RefreshPage
-	; (block overflow) LD BC, IZ
-	; (block overflow) EXTS XBC
-	; (block overflow) DIVS_BC 000ah
-	; (block overflow) LD BC, QBC
-	; (block overflow) SLL 5, BC
-	; (block overflow) LDA XHL, 850Ch
-	; (block overflow) LD DE, BC
-	; (block overflow) EXTZ XDE
-	; (block overflow) ADD XDE, XHL
-	; (block overflow) LD XBC, 01c0000fh
-	; (block overflow) CALL ApPostEvent
-	; (block overflow) LD WA, (8442h)
-	; (block overflow) EXTS XWA
-	; (block overflow) DIVS_WA 000ah
-	; (block overflow) LD WA, QWA
-	; (block overflow) SLL 5, WA
-	; (block overflow) LDA XBC, 850Ch
-	; (block overflow) LD DE, WA
-	; (block overflow) EXTZ XDE
-	; (block overflow) ADD XDE, XBC
-	; (block overflow) LD XWA, (843Eh)
-	; (block overflow) LD XBC, 01c0000fh
-	; (block overflow) CALL ApPostEvent
-	; (block overflow) JRL T, PdName_ReturnZero
+	cp iz, wa
+	jrl z, PdName_ReturnZero
+	call LABEL_F8A5A5
+	ldda16 xwa, 33858
+	exts xwa
+	divs wa, 0xA
+	ldto_de_werp 0xE2
+	exts xde
+	ldda32 xwa, 33854
+	ld xbc, 0x1E50002
+	call 0xFA9D58
+	ldda16 xbc, 33858
+	exts xbc
+	divs bc, 0xA
+	ld de, iz
+	exts xde
+	divs de, 0xA
+	ldda32 xwa, 33854
+	cp de, bc
+	jr nz, PdName_RefreshPage
+	ld bc, iz
+	exts xbc
+	divs bc, 0xA
+	ldto_bc_werp 0xE6
+	sll bc, 5
+	ldada xhl, 34060
+	ld de, bc
+	extz xde
+	add xde, xhl
+	ld xbc, 0x1C0000F
+	call 0xFA9D58
+	ldda16 xwa, 33858
+	exts xwa
+	divs wa, 0xA
+	ldto_wa_werp 0xE2
+	sll wa, 5
+	ldada xbc, 34060
+	ld de, wa
+	extz xde
+	add xde, xbc
+	ldda32 xwa, 33854
+	ld xbc, 0x1C0000F
+	call 0xFA9D58
+	jrl PdName_ReturnZero
 
 PdName_RefreshPage:
-	; (block overflow) MULS_BC 000ah
-	; (block overflow) CALR PdMed_FormatFileList
-	; (block overflow) LD XWA, (XSP + 002h)
-	; (block overflow) LD XBC, 01c0000bh
-	; (block overflow) LD XDE, 0
-	; (block overflow) CALR FmmPdMedleyFunc
-	; (block overflow) JRL T, PdName_ReturnZero
+	muls bc, 0xA
+	calr PdMed_FormatFileList
+	ld xwa, (xsp + 2)
+	ld xbc, 0x1C0000B
+	lds32 xde, 0
+	calr FmmPdMedleyFunc
+	jrl PdName_ReturnZero
 
 PdName_SetIndexPlaying:
-	; (block overflow) CP (84FEh), 000h
-	; (block overflow) JRL Z, PdName_ReturnZero
-	; (block overflow) LD (8442h), DE
-	; (block overflow) LD WA, DE
-	; (block overflow) CALL LABEL_F8A5A5
-	; (block overflow) LD WA, (8442h)
-	; (block overflow) EXTS XWA
-	; (block overflow) DIVS_WA 000ah
-	; (block overflow) LD DE, QWA
-	; (block overflow) EXTS XDE
-	; (block overflow) LD XWA, (843Eh)
-	; (block overflow) LD XBC, 01e50002h
+	cpdi8 34046, 0
+	jrl z, PdName_ReturnZero
+	stda16 33858, xde
+	ld wa, de
+	call LABEL_F8A5A5
+	ldda16 xwa, 33858
+	exts xwa
+	divs wa, 0xA
+	ldto_de_werp 0xE2
+	exts xde
+	ldda32 xwa, 33854
+	ld xbc, 0x1E50002
 
 PdName_PostEvent:
-	; (block overflow) CALL ApPostEvent
-	; (block overflow) JRL T, PdName_ReturnZero
+	call 0xFA9D58
+	jrl PdName_ReturnZero
 
 PdName_GetIndexReturn:
-	; (block overflow) LD HL, (8442h)
-	; (block overflow) EXTS XHL
+	ldda16 xhl, 33858
+	exts xhl
 
 PdName_Exit:
-	; (block overflow) POP IZ
-	; (block overflow) INC 4, XSP
-	; (block overflow) RET
+	popw iz
+	inc 4, xsp
+	ret
 
 PdMed_FormatSlotList:
-	; (block overflow) DEC 6, XSP
-	; (block overflow) PUSH XIZ
-	; (block overflow) LD IZ, BC
-	; (block overflow) LD (XSP + 006h), XWA
-	; (block overflow) LD XWA, 0
-	; (block overflow) LD XBC, 01e50003h
-	; (block overflow) LD XDE, 0
-	; (block overflow) CALR FmmPdFileNameFunc
-	; (block overflow) LD QIZ, HL
-	; (block overflow) LD WA, QIZ
-	; (block overflow) EXTZ XWA
-	; (block overflow) DIVW_WA 000ah
-	; (block overflow) LD QIZ, WA
-	; (block overflow) MULW_WA 000ah
-	; (block overflow) LD QIZ, WA
-	; (block overflow) LDW (XSP + 004h:8), 000ah
-	; (block overflow) LD WA, QIZ
-	; (block overflow) ADD WA, 000ah
-	; (block overflow) CP WA, IZ
-	; (block overflow) JR C, PdFmtSlot_CalcVisible
-	; (block overflow) LD (XSP + 004h), IZ
-	; (block overflow) LD WA, QIZ
-	; (block overflow) SUB (XSP + 004h), WA
+	dec 6, xsp
+	push xiz
+	ld iz, bc
+	ld (xsp + 6), xwa
+	lds32 xwa, 0
+	ld xbc, 0x1E50003
+	lds32 xde, 0
+	calr FmmPdFileNameFunc
+	ldfr_hl_werp 0xFA
+	ldto_wa_werp 0xFA
+	extz xwa
+	div wa, 0xA
+	ldfr_wa_werp 0xFA
+	mul wa, 0xA
+	ldfr_wa_werp 0xFA
+	ldmw (xsp + 4), 0xA
+	ldto_wa_werp 0xFA
+	add wa, 0xA
+	cp wa, iz
+	jr c, PdFmtSlot_CalcVisible
+	ld (xsp + 4), iz
+	ldto_wa_werp 0xFA
+	sub (xsp + 4), wa
 
 PdFmtSlot_CalcVisible:
-	; (block overflow) LD IZ, 0
-	; (block overflow) CPW (XSP + 004h), 0000h
-	; (block overflow) JR ULE, PdFmtSlot_FillEmpty
+	lds iz, 0
+	cpmi16 (xsp + 4), 0x0
+	jr ule, PdFmtSlot_FillEmpty
 
 PdFmtSlot_FormatLoop:
-	; (block overflow) LD WA, IZ
-	; (block overflow) SLL 3, WA
-	; (block overflow) LDA XBC, 8444h
-	; (block overflow) EXTZ XWA
-	; (block overflow) ADD XWA, XBC
-	; (block overflow) LD BC, QIZ
-	; (block overflow) ADD BC, IZ
-	; (block overflow) LDA XDE, 88A0h
-	; (block overflow) EXTZ XBC
-	; (block overflow) ADD XBC, XDE
-	; (block overflow) LD C, (XBC)
-	; (block overflow) EXTZ BC
-	; (block overflow) LD DE, IZ
-	; (block overflow) CALR FormatMedleyNumber
-	; (block overflow) LD DE, IZ
-	; (block overflow) SLL 3, DE
-	; (block overflow) LDA XWA, 8444h
-	; (block overflow) EXTZ XDE
-	; (block overflow) ADD XDE, XWA
-	; (block overflow) LD XWA, (XSP + 006h)
-	; (block overflow) LD XBC, 01c0000fh
-	; (block overflow) CALL ApPostEvent
-	; (block overflow) INC 1, IZ
-	; (block overflow) CP IZ, (XSP + 004h)
-	; (block overflow) JR C, PdFmtSlot_FormatLoop
+	ld wa, iz
+	sll wa, 3
+	ldada xbc, 33860
+	extz xwa
+	add xwa, xbc
+	ldto_bc_werp 0xFA
+	add bc, iz
+	ldada xde, 34976
+	extz xbc
+	add xbc, xde
+	ld c, (xbc)
+	extz bc
+	ld de, iz
+	calr FormatMedleyNumber
+	ld de, iz
+	sll de, 3
+	ldada xwa, 33860
+	extz xde
+	add xde, xwa
+	ld xwa, (xsp + 6)
+	ld xbc, 0x1C0000F
+	call 0xFA9D58
+	inc 1, iz
+	cp iz, (xsp + 4)
+	jr c, PdFmtSlot_FormatLoop
 
 PdFmtSlot_FillEmpty:
-	; (block overflow) CP IZ, 000ah
-	; (block overflow) JR NC, PdFmtSlot_Exit
+	cp iz, 0xA
+	jr nc, PdFmtSlot_Exit
 
 PdFmtSlot_EmptyLoop:
-	; (block overflow) LD WA, IZ
-	; (block overflow) SLL 3, WA
-	; (block overflow) LDA XBC, 8444h
-	; (block overflow) EXTZ XWA
-	; (block overflow) ADD XWA, XBC
-	; (block overflow) LD BC, 00ffh
-	; (block overflow) LD DE, IZ
-	; (block overflow) CALR FormatMedleyNumber
-	; (block overflow) LD DE, IZ
-	; (block overflow) SLL 3, DE
-	; (block overflow) LDA XWA, 8444h
-	; (block overflow) EXTZ XDE
-	; (block overflow) ADD XDE, XWA
-	; (block overflow) LD XWA, (XSP + 006h)
-	; (block overflow) LD XBC, 01c0000fh
-	; (block overflow) CALL ApPostEvent
-	; (block overflow) INC 1, IZ
-	; (block overflow) CP IZ, 000ah
-	; (block overflow) JR C, PdFmtSlot_EmptyLoop
+	ld wa, iz
+	sll wa, 3
+	ldada xbc, 33860
+	extz xwa
+	add xwa, xbc
+	ldw bc, 0xFF
+	ld de, iz
+	calr FormatMedleyNumber
+	ld de, iz
+	sll de, 3
+	ldada xwa, 33860
+	extz xde
+	add xde, xwa
+	ld xwa, (xsp + 6)
+	ld xbc, 0x1C0000F
+	call 0xFA9D58
+	inc 1, iz
+	cp iz, 0xA
+	jr c, PdFmtSlot_EmptyLoop
 
 PdFmtSlot_Exit:
-	; (block overflow) POP XIZ
-	; (block overflow) INC 6, XSP
-	; (block overflow) RET
+	pop xiz
+	inc 6, xsp
+	ret
 
+LABEL_F935C0:
 
-	; (block overflow) PUSH XIZ
-	; (block overflow) LD XHL, XDE
-	; (block overflow) LD XDE, XBC
-	; (block overflow) LD XIZ, XWA
-	; (block overflow) CP XDE, 01e5000ah
-	; (block overflow) JRL Z, PdMed_CheckContinue
-	; (block overflow) LD XWA, XHL
-	; (block overflow) CP XDE, 01e50008h
-	; (block overflow) JRL Z, PdMed_StoreDelayFlag
-	; (block overflow) LD BC, (849Ch)
-	; (block overflow) CP XDE, 01c00018h
-	; (block overflow) JRL Z, PdMed_HandleNavToggle
-	; (block overflow) CP XDE, 01c00017h
-	; (block overflow) JRL Z, PdMed_HandleNavToggle
-	; (block overflow) CP XDE, 01c0000bh
-	; (block overflow) JRL Z, PdMed_RefreshDisplay
-	; (block overflow) CP XDE, 01e50004h
-	; (block overflow) JRL Z, PdMed_StoreWindowPtr
-	; (block overflow) CP XDE, 01c00013h
-	; (block overflow) JRL NZ, PdMed_Exit
-	; (block overflow) CP XHL, 00000003h
-	; (block overflow) JRL Z, PdMed_HandleStop
-	; (block overflow) CP XHL, 00000002h
-	; (block overflow) JRL NZ, PdMed_Exit
-	; (block overflow) LD WA, 0
-	; (block overflow) CALL InitializeOperationState
-	; (block overflow) LD A, (8D37h)
-	; (block overflow) CP A, 071h
-	; (block overflow) JR NZ, PdMed_CheckPlayMode
-	; (block overflow) LD (84FEh), 000h
-	; (block overflow) CALL LABEL_F2076D
-	; (block overflow) CP L, 2
-	; (block overflow) JRL C, PdMed_Exit
-	; (block overflow) LD (7F42h), 001h
-	; (block overflow) LD WA, 00eeh
-	; (block overflow) JRL T, PdMed_ShowError
+	push xiz
+	ld xhl, xde
+	ld xde, xbc
+	ld xiz, xwa
+	cp xde, 0x1E5000A
+	jrl z, PdMed_CheckContinue
+	ld xwa, xhl
+	cp xde, 0x1E50008
+	jrl z, PdMed_StoreDelayFlag
+	ldda16 xbc, 33948
+	cp xde, 0x1C00018
+	jrl z, PdMed_HandleNavToggle
+	cp xde, 0x1C00017
+	jrl z, PdMed_HandleNavToggle
+	cp xde, 0x1C0000B
+	jrl z, PdMed_RefreshDisplay
+	cp xde, 0x1E50004
+	jrl z, PdMed_StoreWindowPtr
+	cp xde, 0x1C00013
+	jrl nz, PdMed_Exit
+	cp xhl, 0x3
+	jrl z, PdMed_HandleStop
+	cp xhl, 0x2
+	jrl nz, PdMed_Exit
+	lds wa, 0
+	call 0xF8B204
+	ldda8 a, 36151
+	cp a, 0x71
+	jr nz, PdMed_CheckPlayMode
+	stdi8 34046, 0
+	call LABEL_F2076D
+	cps l, 2
+	jrl c, PdMed_Exit
+	stdi8 32578, 1
+	ldw wa, 0xEE
+	jrl PdMed_ShowError
 
 PdMed_CheckPlayMode:
-	; (block overflow) CP A, 075h
-	; (block overflow) JRL NZ, PdMed_InitFromDisk
-	; (block overflow) CALL LABEL_F2076D
-	; (block overflow) CP L, 1
-	; (block overflow) JRL NZ, PdMed_HandleError
-	; (block overflow) LD (84FEh), 001h
-	; (block overflow) LD C, (8922h)
-	; (block overflow) LDA XWA, 88A0h
-	; (block overflow) CP C, (8920h)
-	; (block overflow) JR NC, PdMed_CheckRepeat
-	; (block overflow) LD HL, 0
-	; (block overflow) LD DE, (849Ch)
-	; (block overflow) CP DE, 0
-	; (block overflow) JRL ULE, PdMed_Exit
+	cp a, 0x75
+	jrl nz, PdMed_InitFromDisk
+	call LABEL_F2076D
+	cps l, 1
+	jrl nz, PdMed_HandleError
+	stdi8 34046, 1
+	ldda8 c, 35106
+	ldada xwa, 34976
+	cpda8 c, 35104
+	jr nc, PdMed_CheckRepeat
+	lds hl, 0
+	ldda16 xde, 33948
+	cps de, 0
+	jrl ule, PdMed_Exit
 
 PdMed_FindSongLoop:
-	; (block overflow) LD IX, HL
-	; (block overflow) EXTZ XIX
-	; (block overflow) ADD XIX, XWA
-	; (block overflow) CP (XIX), C
-	; (block overflow) JR NZ, PdMed_NextSong
-	; (block overflow) EXTZ XHL
-	; (block overflow) LD XWA, XIZ
-	; (block overflow) LD XBC, 01e50002h
-	; (block overflow) LD XDE, XHL
-	; (block overflow) CALR FmmPdFileNameFunc
-	; (block overflow) LD XWA, (8494h)
-	; (block overflow) LD BC, (849Ch)
-	; (block overflow) CALR PdMed_FormatSlotList
-	; (block overflow) INC 1, (8922h)
-	; (block overflow) LD XWA, (8498h)
-	; (block overflow) OR XWA, XWA
-	; (block overflow) JRL Z, PdMed_Exit
-	; (block overflow) LD XBC, 01e50009h
-	; (block overflow) LD XDE, 0000001eh
-	; (block overflow) JR T, PdMed_PostDelayEvent
+	ld ix, hl
+	extz xix
+	add xix, xwa
+	cp (xix), c
+	jr nz, PdMed_NextSong
+	extz xhl
+	ld xwa, xiz
+	ld xbc, 0x1E50002
+	ld xde, xhl
+	calr FmmPdFileNameFunc
+	ldda32 xwa, 33940
+	ldda16 xbc, 33948
+	calr PdMed_FormatSlotList
+	incdi8 1, 35106
+	ldda32 xwa, 33944
+	or xwa, xwa
+	jrl z, PdMed_Exit
+	ld xbc, 0x1E50009
+	ld xde, 0x1E
+	jr PdMed_PostDelayEvent
 
 PdMed_NextSong:
-	; (block overflow) INC 1, HL
-	; (block overflow) CP HL, DE
-	; (block overflow) JR C, PdMed_FindSongLoop
-	; (block overflow) JRL T, PdMed_Exit
+	inc 1, hl
+	cp hl, de
+	jr c, PdMed_FindSongLoop
+	jrl PdMed_Exit
 
 PdMed_CheckRepeat:
-	; (block overflow) CP (8924h), 000h
-	; (block overflow) JR Z, PdMed_ClearPlaying
-	; (block overflow) LD (8922h), 000h
-	; (block overflow) LD HL, 0
-	; (block overflow) LD BC, (849Ch)
-	; (block overflow) CP BC, 0
-	; (block overflow) JRL ULE, PdMed_Exit
+	cpdi8 35108, 0
+	jr z, PdMed_ClearPlaying
+	stdi8 35106, 0
+	lds hl, 0
+	ldda16 xbc, 33948
+	cps bc, 0
+	jrl ule, PdMed_Exit
 
 PdMed_RepeatFindLoop:
-	; (block overflow) LD DE, HL
-	; (block overflow) EXTZ XDE
-	; (block overflow) ADD XDE, XWA
-	; (block overflow) CP (XDE), 000h
-	; (block overflow) JR NZ, PdMed_RepeatNext
-	; (block overflow) EXTZ XHL
-	; (block overflow) LD XWA, XIZ
-	; (block overflow) LD XBC, 01e50002h
-	; (block overflow) LD XDE, XHL
-	; (block overflow) CALR FmmPdFileNameFunc
-	; (block overflow) LD XWA, (8494h)
-	; (block overflow) LD BC, (849Ch)
-	; (block overflow) CALR PdMed_FormatSlotList
-	; (block overflow) INC 1, (8922h)
-	; (block overflow) LD XWA, (8498h)
-	; (block overflow) OR XWA, XWA
-	; (block overflow) JRL Z, PdMed_Exit
-	; (block overflow) LD XBC, 01e50009h
-	; (block overflow) LD XDE, 0000001eh
+	ld de, hl
+	extz xde
+	add xde, xwa
+	cpmi8 (xde), 0x0
+	jr nz, PdMed_RepeatNext
+	extz xhl
+	ld xwa, xiz
+	ld xbc, 0x1E50002
+	ld xde, xhl
+	calr FmmPdFileNameFunc
+	ldda32 xwa, 33940
+	ldda16 xbc, 33948
+	calr PdMed_FormatSlotList
+	incdi8 1, 35106
+	ldda32 xwa, 33944
+	or xwa, xwa
+	jrl z, PdMed_Exit
+	ld xbc, 0x1E50009
+	ld xde, 0x1E
 
 PdMed_PostDelayEvent:
-	; (block overflow) CALL ApPostEvent
-	; (block overflow) JRL T, PdMed_Exit
+	call 0xFA9D58
+	jrl PdMed_Exit
 
 PdMed_RepeatNext:
-	; (block overflow) INC 1, HL
-	; (block overflow) CP HL, BC
-	; (block overflow) JR C, PdMed_RepeatFindLoop
-	; (block overflow) JRL T, PdMed_Exit
+	inc 1, hl
+	cp hl, bc
+	jr c, PdMed_RepeatFindLoop
+	jrl PdMed_Exit
 
 PdMed_ClearPlaying:
-	; (block overflow) LD (84FEh), 000h
-	; (block overflow) JRL T, PdMed_Exit
+	stdi8 34046, 0
+	jrl PdMed_Exit
 
 PdMed_HandleError:
-	; (block overflow) CALL LABEL_F2076D
-	; (block overflow) LD (84FEh), 000h
-	; (block overflow) CP L, 0
-	; (block overflow) JRL Z, PdMed_Exit
-	; (block overflow) LD (7F42h), 001h
-	; (block overflow) LD WA, 00eeh
+	call LABEL_F2076D
+	stdi8 34046, 0
+	cps l, 0
+	jrl z, PdMed_Exit
+	stdi8 32578, 1
+	ldw wa, 0xEE
 
 PdMed_ShowError:
-	; (block overflow) CALL LABEL_F994BD
-	; (block overflow) JRL T, PdMed_Exit
+	call LABEL_F994BD
+	jrl PdMed_Exit
 
+LABEL_F9373F:
 PdMed_InitFromDisk:
-	; (block overflow) CPW (8506h), 0000h
-	; (block overflow) JR GE, PdMed_InitState
-	; (block overflow) LD XWA, 00600026h
-	; (block overflow) LD XBC, 01c00001h
-	; (block overflow) LD XDE, 5
-	; (block overflow) CALL ApPostEvent
-	; (block overflow) CALL LABEL_F8A625
-	; (block overflow) LD (8506h), HL
-	; (block overflow) LD XWA, 00600026h
-	; (block overflow) LD XBC, 01c00002h
-	; (block overflow) LD XDE, 0
-	; (block overflow) CALL ApPostEvent
-	; (block overflow) LD XWA, 0ffffffffh
-	; (block overflow) LD XBC, 01c0000ah
-	; (block overflow) LD XDE, 0
-	; (block overflow) CALL ApPostEvent
-	; (block overflow) CALL SignalProgressUpdate
+	cpdi16 34054, 0
+	jr ge, PdMed_InitState
+	ld xwa, 0x600026
+	ld xbc, 0x1C00001
+	lds32 xde, 5
+	call 0xFA9D58
+	call LABEL_F8A625
+	stda16 34054, xhl
+	ld xwa, 0x600026
+	ld xbc, 0x1C00002
+	lds32 xde, 0
+	call 0xFA9D58
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C0000A
+	lds32 xde, 0
+	call 0xFA9D58
+	call 0xF8B260
 
 PdMed_InitState:
-	; (block overflow) LD (84FEh), 000h
-	; (block overflow) LD (8922h), 000h
-	; (block overflow) LD (8920h), 000h
-	; (block overflow) LD BC, 0080h
-	; (block overflow) LD WA, (8506h)
-	; (block overflow) CP WA, 0080h
-	; (block overflow) JR UGT, PdMed_ClampCount
-	; (block overflow) LD BC, WA
+	stdi8 34046, 0
+	stdi8 35106, 0
+	stdi8 35104, 0
+	ldw bc, 0x80
+	ldda16 xwa, 34054
+	cp wa, 0x80
+	jr ugt, PdMed_ClampCount
+	ld bc, wa
 
 PdMed_ClampCount:
-	; (block overflow) LD (849Ch), BC
-	; (block overflow) LD HL, 0
-	; (block overflow) CP BC, 0
-	; (block overflow) JR ULE, PdMed_FinishInit
-	; (block overflow) LDA XWA, 88A0h
+	stda16 33948, xbc
+	lds hl, 0
+	cps bc, 0
+	jr ule, PdMed_FinishInit
+	ldada xwa, 34976
 
 PdMed_ClearSlotsLoop:
-	; (block overflow) LD BC, HL
-	; (block overflow) EXTZ XBC
-	; (block overflow) ADD XBC, XWA
-	; (block overflow) LD (XBC), 0ffh
-	; (block overflow) INC 1, HL
-	; (block overflow) CP HL, (849Ch)
-	; (block overflow) JR C, PdMed_ClearSlotsLoop
+	ld bc, hl
+	extz xbc
+	add xbc, xwa
+	ldmi8 (xbc), 0xFF
+	inc 1, hl
+	cpda16 xhl, 33948
+	jr c, PdMed_ClearSlotsLoop
 
 PdMed_FinishInit:
-	; (block overflow) CALL LABEL_F20ACD
-	; (block overflow) LD XWA, 0
-	; (block overflow) LD (8498h), XWA
-	; (block overflow) JRL T, PdMed_Exit
+	call LABEL_F20ACD
+	lds32 xwa, 0
+	stda32 33944, xwa
+	jrl PdMed_Exit
 
 PdMed_HandleStop:
-	; (block overflow) LD A, (8D36h)
-	; (block overflow) CP A, 071h
-	; (block overflow) JRL Z, PdMed_Exit
-	; (block overflow) CP A, 075h
-	; (block overflow) JRL Z, PdMed_Exit
-	; (block overflow) CALL LABEL_F20B70
-	; (block overflow) CALL CancelOperationCleanup
-	; (block overflow) LD (84FEh), 000h
-	; (block overflow) JRL T, PdMed_Exit
+	ldda8 a, 36150
+	cp a, 0x71
+	jrl z, PdMed_Exit
+	cp a, 0x75
+	jrl z, PdMed_Exit
+	call LABEL_F20B70
+	call 0xF8B244
+	stdi8 34046, 0
+	jrl PdMed_Exit
 
 PdMed_StoreWindowPtr:
-	; (block overflow) LD (8494h), XWA
-	; (block overflow) JRL T, PdMed_Exit
+	stda32 33940, xwa
+	jrl PdMed_Exit
 
 PdMed_RefreshDisplay:
-	; (block overflow) LD XWA, (8494h)
-	; (block overflow) CALR PdMed_FormatSlotList
-	; (block overflow) JRL T, PdMed_Exit
+	ldda32 xwa, 33940
+	calr PdMed_FormatSlotList
+	jrl PdMed_Exit
 
 PdMed_HandleNavToggle:
-	; (block overflow) CP XHL, 0000000ah
-	; (block overflow) JRL NZ, PdMed_HandleSelectToggle
-	; (block overflow) CP (84FEh), 000h
-	; (block overflow) JR NZ, PdMed_HandleSelectToggle
-	; (block overflow) LD HL, 0
-	; (block overflow) LD WA, BC
-	; (block overflow) CP BC, 0
-	; (block overflow) JR ULE, PdMed_CheckAllUnmarked
-	; (block overflow) LDA XBC, 88A0h
+	cp xhl, 0xA
+	jrl nz, PdMed_HandleSelectToggle
+	cpdi8 34046, 0
+	jr nz, PdMed_HandleSelectToggle
+	lds hl, 0
+	ld wa, bc
+	cps bc, 0
+	jr ule, PdMed_CheckAllUnmarked
+	ldada xbc, 34976
 
 PdMed_FindUnmarkedLoop:
-	; (block overflow) LD DE, HL
-	; (block overflow) EXTZ XDE
-	; (block overflow) ADD XDE, XBC
-	; (block overflow) CP (XDE), 0ffh
-	; (block overflow) JR Z, PdMed_CheckAllUnmarked
-	; (block overflow) INC 1, HL
-	; (block overflow) CP HL, WA
-	; (block overflow) JR C, PdMed_FindUnmarkedLoop
+	ld de, hl
+	extz xde
+	add xde, xbc
+	cpmi8 (xde), 0xFF
+	jr z, PdMed_CheckAllUnmarked
+	inc 1, hl
+	cp hl, wa
+	jr c, PdMed_FindUnmarkedLoop
 
 PdMed_CheckAllUnmarked:
-	; (block overflow) CP HL, WA
-	; (block overflow) JR NC, PdMed_RemoveOrderLoop
-	; (block overflow) LD HL, 0
-	; (block overflow) CP WA, 0
-	; (block overflow) JR ULE, PdMed_RefreshAfterToggle
-	; (block overflow) LDA XDE, 88A0h
+	cp hl, wa
+	jr nc, PdMed_RemoveOrderLoop
+	lds hl, 0
+	cps wa, 0
+	jr ule, PdMed_RefreshAfterToggle
+	ldada xde, 34976
 
 PdMed_AssignOrderLoop:
-	; (block overflow) LD BC, HL
-	; (block overflow) EXTZ XBC
-	; (block overflow) ADD XBC, XDE
-	; (block overflow) LD A, (XBC)
-	; (block overflow) CP A, 0ffh
-	; (block overflow) JR NZ, PdMed_NextAssign
-	; (block overflow) LD (XBC), (8920h)
-	; (block overflow) INC 1, (8920h)
+	ld bc, hl
+	extz xbc
+	add xbc, xde
+	ld a, (xbc)
+	cp a, 0xFF
+	jr nz, PdMed_NextAssign
+	ldmi16 (xbc), 0x8920
+	incdi8 1, 35104
 
 PdMed_NextAssign:
-	; (block overflow) INC 1, HL
-	; (block overflow) CP HL, (849Ch)
-	; (block overflow) JR C, PdMed_AssignOrderLoop
-	; (block overflow) JR T, PdMed_RefreshAfterToggle
+	inc 1, hl
+	cpda16 xhl, 33948
+	jr c, PdMed_AssignOrderLoop
+	jr PdMed_RefreshAfterToggle
 
 PdMed_RemoveOrderLoop:
-	; (block overflow) LD HL, 0
-	; (block overflow) CP WA, 0
-	; (block overflow) JR ULE, PdMed_RefreshAfterToggle
-	; (block overflow) LDA XDE, 88A0h
+	lds hl, 0
+	cps wa, 0
+	jr ule, PdMed_RefreshAfterToggle
+	ldada xde, 34976
 
 PdMed_UnmarkLoop:
-	; (block overflow) LD BC, HL
-	; (block overflow) EXTZ XBC
-	; (block overflow) ADD XBC, XDE
-	; (block overflow) LD A, (XBC)
-	; (block overflow) CP A, 0fdh
-	; (block overflow) JR UGT, PdMed_NextUnmark
-	; (block overflow) LD (XBC), 0ffh
-	; (block overflow) DEC 1, (8920h)
+	ld bc, hl
+	extz xbc
+	add xbc, xde
+	ld a, (xbc)
+	cp a, 0xFD
+	jr ugt, PdMed_NextUnmark
+	ldmi8 (xbc), 0xFF
+	decdi8 1, 35104
 
 PdMed_NextUnmark:
-	; (block overflow) INC 1, HL
-	; (block overflow) CP HL, (849Ch)
-	; (block overflow) JR C, PdMed_UnmarkLoop
+	inc 1, hl
+	cpda16 xhl, 33948
+	jr c, PdMed_UnmarkLoop
 
 PdMed_RefreshAfterToggle:
-	; (block overflow) LD XWA, (8494h)
-	; (block overflow) LD BC, (849Ch)
-	; (block overflow) JR T, PdMed_CallFormatSlots
+	ldda32 xwa, 33940
+	ldda16 xbc, 33948
+	jr PdMed_CallFormatSlots
 
 PdMed_HandleSelectToggle:
-	; (block overflow) CP XHL, 0000000bh
-	; (block overflow) JR NZ, PdMed_HandleRepeat
-	; (block overflow) CP (84FEh), 000h
-	; (block overflow) JR NZ, PdMed_HandleRepeat
-	; (block overflow) LD XWA, XIZ
-	; (block overflow) LD XBC, 01e50003h
-	; (block overflow) LD XDE, 0
-	; (block overflow) CALR FmmPdFileNameFunc
-	; (block overflow) LDA XIX, 88A0h
-	; (block overflow) EXTZ XHL
-	; (block overflow) ADD XHL, XIX
-	; (block overflow) LD C, (XHL)
-	; (block overflow) CP C, 0ffh
-	; (block overflow) JR NZ, PdMed_RemoveFromOrder
-	; (block overflow) LD (XHL), (8920h)
-	; (block overflow) INC 1, (8920h)
-	; (block overflow) JR T, PdMed_RefreshAfterSelect
+	cp xhl, 0xB
+	jr nz, PdMed_HandleRepeat
+	cpdi8 34046, 0
+	jr nz, PdMed_HandleRepeat
+	ld xwa, xiz
+	ld xbc, 0x1E50003
+	lds32 xde, 0
+	calr FmmPdFileNameFunc
+	ldada xix, 34976
+	extz xhl
+	add xhl, xix
+	ld c, (xhl)
+	cp c, 0xFF
+	jr nz, PdMed_RemoveFromOrder
+	ldmi16 (xhl), 0x8920
+	incdi8 1, 35104
+	jr PdMed_RefreshAfterSelect
 
 PdMed_RemoveFromOrder:
-	; (block overflow) CP C, 0fdh
-	; (block overflow) JR UGT, PdMed_RefreshAfterSelect
-	; (block overflow) LD (XHL), 0ffh
-	; (block overflow) LD A, (8920h)
-	; (block overflow) DEC 1, A
-	; (block overflow) LD (8920h), A
-	; (block overflow) LD IZ, 0
-	; (block overflow) LD HL, 0
-	; (block overflow) EXTZ WA
-	; (block overflow) CP WA, 0
-	; (block overflow) JR ULE, PdMed_RefreshAfterSelect
-	; (block overflow) LD IY, WA
+	cp c, 0xFD
+	jr ugt, PdMed_RefreshAfterSelect
+	ldmi8 (xhl), 0xFF
+	ldda8 a, 35104
+	dec 1, a
+	stda8 35104, a
+	lds iz, 0
+	lds hl, 0
+	extz wa
+	cps wa, 0
+	jr ule, PdMed_RefreshAfterSelect
+	ld iy, wa
 
 PdMed_ReorderLoop:
-	; (block overflow) LD DE, HL
-	; (block overflow) EXTZ XDE
-	; (block overflow) ADD XDE, XIX
-	; (block overflow) LD A, (XDE)
-	; (block overflow) CP A, 0fdh
-	; (block overflow) JR UGT, PdMed_NextReorder
-	; (block overflow) INC 1, IZ
-	; (block overflow) CP A, C
-	; (block overflow) JR ULE, PdMed_NextReorder
-	; (block overflow) DEC 1, A
-	; (block overflow) LD (XDE), A
+	ld de, hl
+	extz xde
+	add xde, xix
+	ld a, (xde)
+	cp a, 0xFD
+	jr ugt, PdMed_NextReorder
+	inc 1, iz
+	cp a, c
+	jr ule, PdMed_NextReorder
+	dec 1, a
+	ld (xde), a
 
 PdMed_NextReorder:
-	; (block overflow) INC 1, HL
-	; (block overflow) CP IZ, IY
-	; (block overflow) JR C, PdMed_ReorderLoop
+	inc 1, hl
+	cp iz, iy
+	jr c, PdMed_ReorderLoop
 
 PdMed_RefreshAfterSelect:
-	; (block overflow) LD XWA, (8494h)
-	; (block overflow) LD BC, (849Ch)
+	ldda32 xwa, 33940
+	ldda16 xbc, 33948
 
 PdMed_CallFormatSlots:
-	; (block overflow) CALR PdMed_FormatSlotList
-	; (block overflow) JRL T, PdMed_Exit
+	calr PdMed_FormatSlotList
+	jrl PdMed_Exit
 
 PdMed_HandleRepeat:
-	; (block overflow) CP XHL, 0000000ch
-	; (block overflow) JR NZ, PdMed_HandlePlay
-	; (block overflow) CP XDE, 01c00017h
-	; (block overflow) JR NZ, PdMed_SetRepeatOff
-	; (block overflow) LD (8924h), 001h
-	; (block overflow) JRL T, PdMed_Exit
+	cp xhl, 0xC
+	jr nz, PdMed_HandlePlay
+	cp xde, 0x1C00017
+	jr nz, PdMed_SetRepeatOff
+	stdi8 35108, 1
+	jrl PdMed_Exit
 
 PdMed_SetRepeatOff:
-	; (block overflow) LD (8924h), 000h
-	; (block overflow) JRL T, PdMed_Exit
+	stdi8 35108, 0
+	jrl PdMed_Exit
 
 PdMed_HandlePlay:
-	; (block overflow) CP XHL, 0000000dh
-	; (block overflow) JRL NZ, PdMed_Exit
-	; (block overflow) CP (84FEh), 000h
-	; (block overflow) JRL NZ, PdMed_Exit
-	; (block overflow) LD (8922h), 000h
-	; (block overflow) LD HL, 0
-	; (block overflow) LD WA, (849Ch)
-	; (block overflow) CP WA, 0
-	; (block overflow) JR ULE, PdMed_CheckAutoPlay
-	; (block overflow) LDA XBC, 88A0h
+	cp xhl, 0xD
+	jrl nz, PdMed_Exit
+	cpdi8 34046, 0
+	jrl nz, PdMed_Exit
+	stdi8 35106, 0
+	lds hl, 0
+	ldda16 xwa, 33948
+	cps wa, 0
+	jr ule, PdMed_CheckAutoPlay
+	ldada xbc, 34976
 
 PdMed_PlayFindLoop:
-	; (block overflow) LD DE, HL
-	; (block overflow) EXTZ XDE
-	; (block overflow) ADD XDE, XBC
-	; (block overflow) CP (XDE), 000h
-	; (block overflow) JR NZ, PdMed_PlayNextLoop
-	; (block overflow) LD (84FEh), 001h
-	; (block overflow) EXTZ XHL
-	; (block overflow) LD XWA, XIZ
-	; (block overflow) LD XBC, 01e50002h
-	; (block overflow) LD XDE, XHL
-	; (block overflow) CALR FmmPdFileNameFunc
-	; (block overflow) INC 1, (8922h)
-	; (block overflow) LD XWA, 0ffffffffh
-	; (block overflow) LD XBC, 01e0009ah
-	; (block overflow) LD XDE, 0
-	; (block overflow) CALL ApPostEvent
-	; (block overflow) LD WA, 0075h
-	; (block overflow) CALL UI_PostModeChangeEvent
-	; (block overflow) JR T, PdMed_CheckAutoPlay
+	ld de, hl
+	extz xde
+	add xde, xbc
+	cpmi8 (xde), 0x0
+	jr nz, PdMed_PlayNextLoop
+	stdi8 34046, 1
+	extz xhl
+	ld xwa, xiz
+	ld xbc, 0x1E50002
+	ld xde, xhl
+	calr FmmPdFileNameFunc
+	incdi8 1, 35106
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1E0009A
+	lds32 xde, 0
+	call 0xFA9D58
+	ldw wa, 0x75
+	call 0xF99490
+	jr PdMed_CheckAutoPlay
 
 PdMed_PlayNextLoop:
-	; (block overflow) INC 1, HL
-	; (block overflow) CP HL, WA
-	; (block overflow) JR C, PdMed_PlayFindLoop
+	inc 1, hl
+	cp hl, wa
+	jr c, PdMed_PlayFindLoop
 
 PdMed_CheckAutoPlay:
-	; (block overflow) CP (84FEh), 000h
-	; (block overflow) JR NZ, PdMed_Exit
-	; (block overflow) LD XWA, 0ffffffffh
-	; (block overflow) LD XBC, 01e0009ah
-	; (block overflow) LD XDE, 0
-	; (block overflow) CALL ApPostEvent
-	; (block overflow) LD WA, 0071h
-	; (block overflow) JR T, PdMed_CallPauseMode
+	cpdi8 34046, 0
+	jr nz, PdMed_Exit
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1E0009A
+	lds32 xde, 0
+	call 0xFA9D58
+	ldw wa, 0x71
+	jr PdMed_CallPauseMode
 
 PdMed_StoreDelayFlag:
-	; (block overflow) LD (8498h), XWA
-	; (block overflow) JR T, PdMed_Exit
+	stda32 33944, xwa
+	jr PdMed_Exit
 
 PdMed_CheckContinue:
-	; (block overflow) CP (84FEh), 000h
-	; (block overflow) JR Z, PdMed_Exit
-	; (block overflow) LD XWA, 0ffffffffh
-	; (block overflow) LD XBC, 01e0009ah
-	; (block overflow) LD XDE, 0
-	; (block overflow) CALL ApPostEvent
-	; (block overflow) LD WA, 0075h
+	cpdi8 34046, 0
+	jr z, PdMed_Exit
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1E0009A
+	lds32 xde, 0
+	call 0xFA9D58
+	ldw wa, 0x75
 
 PdMed_CallPauseMode:
-	; (block overflow) CALL UI_PostModeChangeEvent
+	call 0xF99490
 
 PdMed_Exit:
-	; (block overflow) LD XHL, 0
-	; (block overflow) POP XIZ
-	; (block overflow) RET
+	lds32 xhl, 0
+	pop xiz
+	ret
 
+LABEL_F939CE:
 DocDiskNameFunc:
-	; (block overflow) PUSH XIZ
-	; (block overflow) LD XIZ, XDE
-	; (block overflow) CP XBC, 01c0000bh
-	; (block overflow) JR NZ, DocDisk_Exit
-	; (block overflow) CALL LABEL_F8958D
-	; (block overflow) LD IX, 0
-	; (block overflow) JR T, DocDisk_CopyLoop
+	push xiz
+	ld xiz, xde
+	cp xbc, 0x1C0000B
+	jr nz, DocDisk_Exit
+	call LABEL_F8958D
+	lds ix, 0
+	jr DocDisk_CopyLoop
 
 DocDisk_CopyCharLoop:
-	; (block overflow) CP (XHL), 020h
-	; (block overflow) JR Z, DocDisk_SkipSpace
-	; (block overflow) LD DE, IX
-	; (block overflow) INC 1, IX
-	; (block overflow) LD A, (XHL)
-	; (block overflow) LD (XBC + DE), A
+	cpmi8 (xhl), 0x20
+	jr z, DocDisk_SkipSpace
+	ld de, ix
+	inc 1, ix
+	ld a, (xhl)
+	lda_xbc_dri3 0x07, 0xE4, 0xE8
 
 DocDisk_SkipSpace:
-	; (block overflow) INC 1, XHL
+	inc 1, xhl
 
 DocDisk_CopyLoop:
-	; (block overflow) LDA XBC, 878Ch
-	; (block overflow) CP (XHL), 000h
-	; (block overflow) JR Z, DocDisk_TerminateStr
-	; (block overflow) CP IX, 001eh
-	; (block overflow) JR LT, DocDisk_CopyCharLoop
+	ldada xbc, 34700
+	cpmi8 (xhl), 0x0
+	jr z, DocDisk_TerminateStr
+	cp ix, 0x1E
+	jr lt, DocDisk_CopyCharLoop
 
 DocDisk_TerminateStr:
-	; (block overflow) LD XDE, XBC
-	; (block overflow) LD (XBC + IX), 000h
-	; (block overflow) JR T, DocDisk_TrimLoop
+	ld xde, xbc
+	dri5 0x07, 0xE4, 0xF0, 0x00, 0x00
+	jr DocDisk_TrimLoop
 
 DocDisk_ClearTrailing:
-	; (block overflow) LD (XWA), 000h
+	ldmi8 (xwa), 0x0
 
 DocDisk_TrimLoop:
-	; (block overflow) DEC 1, IX
-	; (block overflow) LDA XWA, XDE + IX
-	; (block overflow) CP (XWA), 020h
-	; (block overflow) JR NZ, DocDisk_PostEvent
-	; (block overflow) CP IX, 0
-	; (block overflow) JR GT, DocDisk_ClearTrailing
+	dec 1, ix
+	st_w_dri3 0x07, 0xE8, 0xF0
+	cpmi8 (xwa), 0x20
+	jr nz, DocDisk_PostEvent
+	cps ix, 0
+	jr gt, DocDisk_ClearTrailing
 
 DocDisk_PostEvent:
-	; (block overflow) LD XWA, XIZ
-	; (block overflow) LD XBC, 01c0000fh
-	; (block overflow) CALL ApPostEvent
+	ld xwa, xiz
+	ld xbc, 0x1C0000F
+	call 0xFA9D58
 
 DocDisk_Exit:
-	; (block overflow) LD XHL, 0
-	; (block overflow) POP XIZ
-	; (block overflow) RET
+	lds32 xhl, 0
+	pop xiz
+	ret
 
 DocMed_FormatFileList:
-	; (block overflow) DEC 6, XSP
-	; (block overflow) PUSH IZ
-	; (block overflow) LD (XSP + 002h), BC
-	; (block overflow) LD (XSP + 004h), XWA
-	; (block overflow) LD IZ, 0
+	dec 6, xsp
+	pushw iz
+	ld (xsp + 2), bc
+	ld (xsp + 4), xwa
+	lds iz, 0
 
 DocFmt_FormatLoop:
-	; (block overflow) LD DE, IZ
-	; (block overflow) SLL 5, DE
-	; (block overflow) LDA XBC, 850Ch
-	; (block overflow) EXTZ XDE
-	; (block overflow) ADD XDE, XBC
-	; (block overflow) LD A, IZL
-	; (block overflow) LD (XDE), A
-	; (block overflow) LD WA, (XSP + 002h)
-	; (block overflow) ADD WA, IZ
-	; (block overflow) CALL LABEL_F8ABBB
-	; (block overflow) LD XBC, XHL
-	; (block overflow) LD WA, IZ
-	; (block overflow) SLL 5, WA
-	; (block overflow) LD DE, 1
-	; (block overflow) ADD DE, WA
-	; (block overflow) LDA XHL, 850Ch
-	; (block overflow) LD WA, DE
-	; (block overflow) EXTZ XWA
-	; (block overflow) ADD XWA, XHL
-	; (block overflow) LD DE, (XSP + 002h)
-	; (block overflow) ADD DE, IZ
-	; (block overflow) INC 1, DE
-	; (block overflow) PUSHW 000ch
-	; (block overflow) PUSHW 0000h
-	; (block overflow) CALL LABEL_F891DD
-	; (block overflow) LD DE, IZ
-	; (block overflow) SLL 5, DE
-	; (block overflow) LDA XBC, 850Ch
-	; (block overflow) EXTZ XDE
-	; (block overflow) ADD XDE, XBC
-	; (block overflow) LD XWA, (XSP + 004h)
-	; (block overflow) LD XBC, 01c0000fh
-	; (block overflow) CALL ApPostEvent
-	; (block overflow) INC 1, IZ
-	; (block overflow) CP IZ, 000ah
-	; (block overflow) JR LT, DocFmt_FormatLoop
-	; (block overflow) POP IZ
-	; (block overflow) INC 6, XSP
-	; (block overflow) RET
+	ld de, iz
+	sll de, 5
+	ldada xbc, 34060
+	extz xde
+	add xde, xbc
+	ldto_a_berp 0xF8
+	ld (xde), a
+	ld wa, (xsp + 2)
+	add wa, iz
+	call LABEL_F8ABBB
+	ld xbc, xhl
+	ld wa, iz
+	sll wa, 5
+	lds de, 1
+	add de, wa
+	ldada xhl, 34060
+	ld wa, de
+	extz xwa
+	add xwa, xhl
+	ld de, (xsp + 2)
+	add de, iz
+	inc 1, de
+	pushw 0xC
+	pushw 0x0
+	call LABEL_F891DD
+	ld de, iz
+	sll de, 5
+	ldada xbc, 34060
+	extz xde
+	add xde, xbc
+	ld xwa, (xsp + 4)
+	ld xbc, 0x1C0000F
+	call 0xFA9D58
+	inc 1, iz
+	cp iz, 0xA
+	jr lt, DocFmt_FormatLoop
+	popw iz
+	inc 6, xsp
+	ret
 
 FmmDocFileNameFunc:
-	; (block overflow) DEC 4, XSP
-	; (block overflow) PUSH IZ
-	; (block overflow) LD (XSP + 002h), XWA
-	; (block overflow) CP XBC, 01e50003h
-	; (block overflow) JRL Z, DocName_GetIndexReturn
-	; (block overflow) LD WA, (84A2h)
-	; (block overflow) LD IZ, WA
-	; (block overflow) CP XBC, 01e50002h
-	; (block overflow) JRL Z, DocName_SetIndexPlaying
-	; (block overflow) LD HL, WA
-	; (block overflow) EXTS XHL
-	; (block overflow) DIVS_HL 000ah
-	; (block overflow) CP XBC, 01c00018h
-	; (block overflow) JR Z, DocName_HandleNavigation
-	; (block overflow) CP XBC, 01c00017h
-	; (block overflow) JR Z, DocName_HandleNavigation
-	; (block overflow) CP XBC, 01c0000bh
-	; (block overflow) JR Z, DocName_RefreshList
-	; (block overflow) CP XBC, 01e50004h
-	; (block overflow) JR NZ, DocName_ReturnZero
-	; (block overflow) LD (849Eh), XDE
-	; (block overflow) CALL LABEL_F8A7CE
-	; (block overflow) LD (84A2h), HL
-	; (block overflow) CP HL, 0
-	; (block overflow) JR GE, DocName_UpdateIndex
-	; (block overflow) LDW (84A2h), 0000h
+	dec 4, xsp
+	pushw iz
+	ld (xsp + 2), xwa
+	cp xbc, 0x1E50003
+	jrl z, DocName_GetIndexReturn
+	ldda16 xwa, 33954
+	ld iz, wa
+	cp xbc, 0x1E50002
+	jrl z, DocName_SetIndexPlaying
+	ld hl, wa
+	exts xhl
+	divs hl, 0xA
+	cp xbc, 0x1C00018
+	jr z, DocName_HandleNavigation
+	cp xbc, 0x1C00017
+	jr z, DocName_HandleNavigation
+	cp xbc, 0x1C0000B
+	jr z, DocName_RefreshList
+	cp xbc, 0x1E50004
+	jr nz, DocName_ReturnZero
+	stda32 33950, xde
+	call LABEL_F8A7CE
+	stda16 33954, xhl
+	cps hl, 0
+	jr ge, DocName_UpdateIndex
+	stdi16 33954, 0
 
 DocName_UpdateIndex:
-	; (block overflow) LD WA, (84A2h)
-	; (block overflow) EXTS XWA
-	; (block overflow) DIVS_WA 000ah
-	; (block overflow) LD DE, QWA
-	; (block overflow) EXTS XDE
-	; (block overflow) LD XWA, (849Eh)
-	; (block overflow) LD XBC, 01e50002h
-	; (block overflow) JRL T, DocName_PostEvent
+	ldda16 xwa, 33954
+	exts xwa
+	divs wa, 0xA
+	ldto_de_werp 0xE2
+	exts xde
+	ldda32 xwa, 33950
+	ld xbc, 0x1E50002
+	jrl DocName_PostEvent
 
 DocName_RefreshList:
-	; (block overflow) MULS_HL 000ah
-	; (block overflow) LD XWA, (849Eh)
-	; (block overflow) LD BC, HL
-	; (block overflow) CALR DocMed_FormatFileList
+	muls hl, 0xA
+	ldda32 xwa, 33950
+	ld bc, hl
+	calr DocMed_FormatFileList
 
 DocName_ReturnZero:
-	; (block overflow) LD XHL, 0
-	; (block overflow) JRL T, DocName_Exit
+	lds32 xhl, 0
+	jrl DocName_Exit
 
 DocName_HandleNavigation:
-	; (block overflow) OR XDE, XDE
-	; (block overflow) JR NZ, DocName_CheckPageUp
-	; (block overflow) CP (84FEh), 000h
-	; (block overflow) JR NZ, DocName_CheckPageUp
-	; (block overflow) CP XBC, 01c00018h
-	; (block overflow) JR NZ, DocName_CheckPrevKey
-	; (block overflow) LD BC, WA
-	; (block overflow) INC 1, BC
-	; (block overflow) CP BC, (8508h)
-	; (block overflow) JR GE, DocName_GetCurrentIndex
-	; (block overflow) INC 1, WA
-	; (block overflow) JR T, DocName_SaveIndex
+	or xde, xde
+	jr nz, DocName_CheckPageUp
+	cpdi8 34046, 0
+	jr nz, DocName_CheckPageUp
+	cp xbc, 0x1C00018
+	jr nz, DocName_CheckPrevKey
+	ld bc, wa
+	inc 1, bc
+	cpda16 xbc, 34056
+	jr ge, DocName_GetCurrentIndex
+	inc 1, wa
+	jr DocName_SaveIndex
 
 DocName_CheckPrevKey:
-	; (block overflow) CP XBC, 01c00017h
-	; (block overflow) JR NZ, DocName_GetCurrentIndex
-	; (block overflow) CP WA, 0
-	; (block overflow) JR LE, DocName_GetCurrentIndex
-	; (block overflow) DEC 1, WA
-	; (block overflow) JR T, DocName_SaveIndex
+	cp xbc, 0x1C00017
+	jr nz, DocName_GetCurrentIndex
+	cps wa, 0
+	jr le, DocName_GetCurrentIndex
+	dec 1, wa
+	jr DocName_SaveIndex
 
 DocName_CheckPageUp:
-	; (block overflow) CP XDE, 00000001h
-	; (block overflow) JR NZ, DocName_CheckPageDown
-	; (block overflow) CP (84FEh), 000h
-	; (block overflow) JR NZ, DocName_CheckPageDown
-	; (block overflow) CP WA, 000ah
-	; (block overflow) JR LT, DocName_GetCurrentIndex
-	; (block overflow) SUB WA, 000ah
-	; (block overflow) JR T, DocName_SaveIndex
+	cp xde, 0x1
+	jr nz, DocName_CheckPageDown
+	cpdi8 34046, 0
+	jr nz, DocName_CheckPageDown
+	cp wa, 0xA
+	jr lt, DocName_GetCurrentIndex
+	sub wa, 0xA
+	jr DocName_SaveIndex
 
 DocName_CheckPageDown:
-	; (block overflow) CP XDE, 00000002h
-	; (block overflow) JR NZ, DocName_GetCurrentIndex
-	; (block overflow) CP (84FEh), 000h
-	; (block overflow) JR NZ, DocName_GetCurrentIndex
-	; (block overflow) LD BC, WA
-	; (block overflow) ADD BC, 000ah
-	; (block overflow) LD DE, (8508h)
-	; (block overflow) CP BC, DE
-	; (block overflow) JR GE, DocName_CheckEndBound
-	; (block overflow) ADD WA, 000ah
+	cp xde, 0x2
+	jr nz, DocName_GetCurrentIndex
+	cpdi8 34046, 0
+	jr nz, DocName_GetCurrentIndex
+	ld bc, wa
+	add bc, 0xA
+	ldda16 xde, 34056
+	cp bc, de
+	jr ge, DocName_CheckEndBound
+	add wa, 0xA
 
 DocName_SaveIndex:
-	; (block overflow) LD (84A2h), WA
-	; (block overflow) JR T, DocName_UpdateDisplay
+	stda16 33954, xwa
+	jr DocName_UpdateDisplay
 
 DocName_CheckEndBound:
-	; (block overflow) LD BC, DE
-	; (block overflow) DEC 1, BC
-	; (block overflow) LD WA, BC
-	; (block overflow) EXTS XWA
-	; (block overflow) DIVS_WA 000ah
-	; (block overflow) CP HL, WA
-	; (block overflow) JR GE, DocName_GetCurrentIndex
-	; (block overflow) EXTS XDE
-	; (block overflow) DIVS_DE 000ah
-	; (block overflow) LD WA, QDE
-	; (block overflow) CP WA, 0
-	; (block overflow) JR Z, DocName_GetCurrentIndex
-	; (block overflow) LD (84A2h), BC
+	ld bc, de
+	dec 1, bc
+	ld wa, bc
+	exts xwa
+	divs wa, 0xA
+	cp hl, wa
+	jr ge, DocName_GetCurrentIndex
+	exts xde
+	divs de, 0xA
+	ldto_wa_werp 0xEA
+	cps wa, 0
+	jr z, DocName_GetCurrentIndex
+	stda16 33954, xbc
 
 DocName_GetCurrentIndex:
-	; (block overflow) LD WA, (84A2h)
+	ldda16 xwa, 33954
 
 DocName_UpdateDisplay:
-	; (block overflow) CP IZ, WA
-	; (block overflow) JRL Z, DocName_ReturnZero
-	; (block overflow) CALL LABEL_F8A956
-	; (block overflow) LD WA, (84A2h)
-	; (block overflow) EXTS XWA
-	; (block overflow) DIVS_WA 000ah
-	; (block overflow) LD DE, QWA
-	; (block overflow) EXTS XDE
-	; (block overflow) LD XWA, (849Eh)
-	; (block overflow) LD XBC, 01e50002h
-	; (block overflow) CALL ApPostEvent
-	; (block overflow) LD BC, (84A2h)
-	; (block overflow) EXTS XBC
-	; (block overflow) DIVS_BC 000ah
-	; (block overflow) LD DE, IZ
-	; (block overflow) EXTS XDE
-	; (block overflow) DIVS_DE 000ah
-	; (block overflow) LD XWA, (849Eh)
-	; (block overflow) CP DE, BC
-	; (block overflow) JR NZ, DocName_RefreshPage
-	; (block overflow) LD BC, IZ
-	; (block overflow) EXTS XBC
-	; (block overflow) DIVS_BC 000ah
-	; (block overflow) LD BC, QBC
-	; (block overflow) SLL 5, BC
-	; (block overflow) LDA XHL, 850Ch
-	; (block overflow) LD DE, BC
-	; (block overflow) EXTZ XDE
-	; (block overflow) ADD XDE, XHL
-	; (block overflow) LD XBC, 01c0000fh
-	; (block overflow) CALL ApPostEvent
-	; (block overflow) LD WA, (84A2h)
-	; (block overflow) EXTS XWA
-	; (block overflow) DIVS_WA 000ah
-	; (block overflow) LD WA, QWA
-	; (block overflow) SLL 5, WA
-	; (block overflow) LDA XBC, 850Ch
-	; (block overflow) LD DE, WA
-	; (block overflow) EXTZ XDE
-	; (block overflow) ADD XDE, XBC
-	; (block overflow) LD XWA, (849Eh)
-	; (block overflow) LD XBC, 01c0000fh
-	; (block overflow) CALL ApPostEvent
-	; (block overflow) JRL T, DocName_ReturnZero
+	cp iz, wa
+	jrl z, DocName_ReturnZero
+	call LABEL_F8A956
+	ldda16 xwa, 33954
+	exts xwa
+	divs wa, 0xA
+	ldto_de_werp 0xE2
+	exts xde
+	ldda32 xwa, 33950
+	ld xbc, 0x1E50002
+	call 0xFA9D58
+	ldda16 xbc, 33954
+	exts xbc
+	divs bc, 0xA
+	ld de, iz
+	exts xde
+	divs de, 0xA
+	ldda32 xwa, 33950
+	cp de, bc
+	jr nz, DocName_RefreshPage
+	ld bc, iz
+	exts xbc
+	divs bc, 0xA
+	ldto_bc_werp 0xE6
+	sll bc, 5
+	ldada xhl, 34060
+	ld de, bc
+	extz xde
+	add xde, xhl
+	ld xbc, 0x1C0000F
+	call 0xFA9D58
+	ldda16 xwa, 33954
+	exts xwa
+	divs wa, 0xA
+	ldto_wa_werp 0xE2
+	sll wa, 5
+	ldada xbc, 34060
+	ld de, wa
+	extz xde
+	add xde, xbc
+	ldda32 xwa, 33950
+	ld xbc, 0x1C0000F
+	call 0xFA9D58
+	jrl DocName_ReturnZero
 
 DocName_RefreshPage:
-	; (block overflow) MULS_BC 000ah
-	; (block overflow) CALR DocMed_FormatFileList
-	; (block overflow) LD XWA, (XSP + 002h)
-	; (block overflow) LD XBC, 01c0000bh
-	; (block overflow) LD XDE, 0
-	; (block overflow) CALR FmmDocMedleyFunc
-	; (block overflow) JRL T, DocName_ReturnZero
+	muls bc, 0xA
+	calr DocMed_FormatFileList
+	ld xwa, (xsp + 2)
+	ld xbc, 0x1C0000B
+	lds32 xde, 0
+	calr FmmDocMedleyFunc
+	jrl DocName_ReturnZero
 
 DocName_SetIndexPlaying:
-	; (block overflow) CP (84FEh), 000h
-	; (block overflow) JRL Z, DocName_ReturnZero
-	; (block overflow) LD (84A2h), DE
-	; (block overflow) LD WA, DE
-	; (block overflow) CALL LABEL_F8A956
-	; (block overflow) LD WA, (84A2h)
-	; (block overflow) EXTS XWA
-	; (block overflow) DIVS_WA 000ah
-	; (block overflow) LD DE, QWA
-	; (block overflow) EXTS XDE
-	; (block overflow) LD XWA, (849Eh)
-	; (block overflow) LD XBC, 01e50002h
+	cpdi8 34046, 0
+	jrl z, DocName_ReturnZero
+	stda16 33954, xde
+	ld wa, de
+	call LABEL_F8A956
+	ldda16 xwa, 33954
+	exts xwa
+	divs wa, 0xA
+	ldto_de_werp 0xE2
+	exts xde
+	ldda32 xwa, 33950
+	ld xbc, 0x1E50002
 
 DocName_PostEvent:
-	; (block overflow) CALL ApPostEvent
-	; (block overflow) JRL T, DocName_ReturnZero
+	call 0xFA9D58
+	jrl DocName_ReturnZero
 
 DocName_GetIndexReturn:
-	; (block overflow) LD HL, (84A2h)
-	; (block overflow) EXTS XHL
+	ldda16 xhl, 33954
+	exts xhl
 
 DocName_Exit:
-	; (block overflow) POP IZ
-	; (block overflow) INC 4, XSP
-	; (block overflow) RET
+	popw iz
+	inc 4, xsp
+	ret
 
+LABEL_F93C9C:
 DocMed_FormatSlotList:
-	; (block overflow) DEC 6, XSP
-	; (block overflow) PUSH XIZ
-	; (block overflow) LD IZ, BC
-	; (block overflow) LD (XSP + 006h), XWA
-	; (block overflow) LD XWA, 0
-	; (block overflow) LD XBC, 01e50003h
-	; (block overflow) LD XDE, 0
-	; (block overflow) CALR FmmDocFileNameFunc
-	; (block overflow) LD QIZ, HL
-	; (block overflow) LD WA, QIZ
-	; (block overflow) EXTZ XWA
-	; (block overflow) DIVW_WA 000ah
-	; (block overflow) LD QIZ, WA
-	; (block overflow) MULW_WA 000ah
-	; (block overflow) LD QIZ, WA
-	; (block overflow) LDW (XSP + 004h:8), 000ah
-	; (block overflow) LD WA, QIZ
-	; (block overflow) ADD WA, 000ah
-	; (block overflow) CP WA, IZ
-	; (block overflow) JR C, DocFmtSlot_CalcVisible
-	; (block overflow) LD (XSP + 004h), IZ
-	; (block overflow) LD WA, QIZ
-	; (block overflow) SUB (XSP + 004h), WA
+	dec 6, xsp
+	push xiz
+	ld iz, bc
+	ld (xsp + 6), xwa
+	lds32 xwa, 0
+	ld xbc, 0x1E50003
+	lds32 xde, 0
+	calr FmmDocFileNameFunc
+	ldfr_hl_werp 0xFA
+	ldto_wa_werp 0xFA
+	extz xwa
+	div wa, 0xA
+	ldfr_wa_werp 0xFA
+	mul wa, 0xA
+	ldfr_wa_werp 0xFA
+	ldmw (xsp + 4), 0xA
+	ldto_wa_werp 0xFA
+	add wa, 0xA
+	cp wa, iz
+	jr c, DocFmtSlot_CalcVisible
+	ld (xsp + 4), iz
+	ldto_wa_werp 0xFA
+	sub (xsp + 4), wa
 
 DocFmtSlot_CalcVisible:
-	; (block overflow) LD IZ, 0
-	; (block overflow) CPW (XSP + 004h), 0000h
-	; (block overflow) JR ULE, DocFmtSlot_FillEmpty
+	lds iz, 0
+	cpmi16 (xsp + 4), 0x0
+	jr ule, DocFmtSlot_FillEmpty
 
 DocFmtSlot_FormatLoop:
-	; (block overflow) LD WA, IZ
-	; (block overflow) SLL 3, WA
-	; (block overflow) LDA XBC, 84A4h
-	; (block overflow) EXTZ XWA
-	; (block overflow) ADD XWA, XBC
-	; (block overflow) LD BC, QIZ
-	; (block overflow) ADD BC, IZ
-	; (block overflow) LDA XDE, 88A0h
-	; (block overflow) EXTZ XBC
-	; (block overflow) ADD XBC, XDE
-	; (block overflow) LD C, (XBC)
-	; (block overflow) EXTZ BC
-	; (block overflow) LD DE, IZ
-	; (block overflow) CALR FormatMedleyNumber
-	; (block overflow) LD DE, IZ
-	; (block overflow) SLL 3, DE
-	; (block overflow) LDA XWA, 84A4h
-	; (block overflow) EXTZ XDE
-	; (block overflow) ADD XDE, XWA
-	; (block overflow) LD XWA, (XSP + 006h)
-	; (block overflow) LD XBC, 01c0000fh
-	; (block overflow) CALL ApPostEvent
-	; (block overflow) INC 1, IZ
-	; (block overflow) CP IZ, (XSP + 004h)
-	; (block overflow) JR C, DocFmtSlot_FormatLoop
+	ld wa, iz
+	sll wa, 3
+	ldada xbc, 33956
+	extz xwa
+	add xwa, xbc
+	ldto_bc_werp 0xFA
+	add bc, iz
+	ldada xde, 34976
+	extz xbc
+	add xbc, xde
+	ld c, (xbc)
+	extz bc
+	ld de, iz
+	calr FormatMedleyNumber
+	ld de, iz
+	sll de, 3
+	ldada xwa, 33956
+	extz xde
+	add xde, xwa
+	ld xwa, (xsp + 6)
+	ld xbc, 0x1C0000F
+	call 0xFA9D58
+	inc 1, iz
+	cp iz, (xsp + 4)
+	jr c, DocFmtSlot_FormatLoop
 
 DocFmtSlot_FillEmpty:
-	; (block overflow) CP IZ, 000ah
-	; (block overflow) JR NC, DocFmtSlot_Exit
+	cp iz, 0xA
+	jr nc, DocFmtSlot_Exit
 
 DocFmtSlot_EmptyLoop:
-	; (block overflow) LD WA, IZ
-	; (block overflow) SLL 3, WA
-	; (block overflow) LDA XBC, 84A4h
-	; (block overflow) EXTZ XWA
-	; (block overflow) ADD XWA, XBC
-	; (block overflow) LD BC, 00ffh
-	; (block overflow) LD DE, IZ
-	; (block overflow) CALR FormatMedleyNumber
-	; (block overflow) LD DE, IZ
-	; (block overflow) SLL 3, DE
-	; (block overflow) LDA XWA, 84A4h
-	; (block overflow) EXTZ XDE
-	; (block overflow) ADD XDE, XWA
-	; (block overflow) LD XWA, (XSP + 006h)
-	; (block overflow) LD XBC, 01c0000fh
-	; (block overflow) CALL ApPostEvent
-	; (block overflow) INC 1, IZ
-	; (block overflow) CP IZ, 000ah
-	; (block overflow) JR C, DocFmtSlot_EmptyLoop
+	ld wa, iz
+	sll wa, 3
+	ldada xbc, 33956
+	extz xwa
+	add xwa, xbc
+	ldw bc, 0xFF
+	ld de, iz
+	calr FormatMedleyNumber
+	ld de, iz
+	sll de, 3
+	ldada xwa, 33956
+	extz xde
+	add xde, xwa
+	ld xwa, (xsp + 6)
+	ld xbc, 0x1C0000F
+	call 0xFA9D58
+	inc 1, iz
+	cp iz, 0xA
+	jr c, DocFmtSlot_EmptyLoop
 
 DocFmtSlot_Exit:
-	; (block overflow) POP XIZ
-	; (block overflow) INC 6, XSP
-	; (block overflow) RET
+	pop xiz
+	inc 6, xsp
+	ret
 
 FmmDocMedleyFunc:
-	; (block overflow) PUSH XIZ
-	; (block overflow) LD XHL, XDE
-	; (block overflow) LD XDE, XBC
-	; (block overflow) LD XIZ, XWA
-	; (block overflow) CP XDE, 01e5000ah
-	; (block overflow) JRL Z, DocMed_CheckContinue
-	; (block overflow) LD XWA, XHL
-	; (block overflow) CP XDE, 01e50008h
-	; (block overflow) JRL Z, DocMed_StoreDelayFlag
-	; (block overflow) LD BC, (84FCh)
-	; (block overflow) CP XDE, 01c00018h
-	; (block overflow) JRL Z, DocMed_HandleNavToggle
-	; (block overflow) CP XDE, 01c00017h
-	; (block overflow) JRL Z, DocMed_HandleNavToggle
-	; (block overflow) CP XDE, 01c0000bh
-	; (block overflow) JRL Z, DocMed_RefreshDisplay
-	; (block overflow) CP XDE, 01e50004h
-	; (block overflow) JRL Z, DocMed_StoreWindowPtr
-	; (block overflow) CP XDE, 01c00013h
-	; (block overflow) JRL NZ, DocMed_Exit
-	; (block overflow) CP XHL, 00000003h
-	; (block overflow) JRL Z, DocMed_HandleStop
-	; (block overflow) CP XHL, 00000002h
-	; (block overflow) JRL NZ, DocMed_Exit
-	; (block overflow) LD WA, 0
-	; (block overflow) CALL InitializeOperationState
-	; (block overflow) LD A, (8D37h)
-	; (block overflow) CP A, 070h
-	; (block overflow) JR NZ, DocMed_CheckPlayMode
-	; (block overflow) LD (84FEh), 000h
-	; (block overflow) CALL LABEL_F2076D
-	; (block overflow) CP L, 2
-	; (block overflow) JRL C, DocMed_Exit
-	; (block overflow) LD (7F42h), 001h
-	; (block overflow) LD WA, 00eeh
-	; (block overflow) JRL T, DocMed_ShowError
+	push xiz
+	ld xhl, xde
+	ld xde, xbc
+	ld xiz, xwa
+	cp xde, 0x1E5000A
+	jrl z, DocMed_CheckContinue
+	ld xwa, xhl
+	cp xde, 0x1E50008
+	jrl z, DocMed_StoreDelayFlag
+	ldda16 xbc, 34044
+	cp xde, 0x1C00018
+	jrl z, DocMed_HandleNavToggle
+	cp xde, 0x1C00017
+	jrl z, DocMed_HandleNavToggle
+	cp xde, 0x1C0000B
+	jrl z, DocMed_RefreshDisplay
+	cp xde, 0x1E50004
+	jrl z, DocMed_StoreWindowPtr
+	cp xde, 0x1C00013
+	jrl nz, DocMed_Exit
+	cp xhl, 0x3
+	jrl z, DocMed_HandleStop
+	cp xhl, 0x2
+	jrl nz, DocMed_Exit
+	lds wa, 0
+	call 0xF8B204
+	ldda8 a, 36151
+	cp a, 0x70
+	jr nz, DocMed_CheckPlayMode
+	stdi8 34046, 0
+	call LABEL_F2076D
+	cps l, 2
+	jrl c, DocMed_Exit
+	stdi8 32578, 1
+	ldw wa, 0xEE
+	jrl DocMed_ShowError
 
 DocMed_CheckPlayMode:
-	; (block overflow) CP A, 074h
-	; (block overflow) JRL NZ, DocMed_CheckInit
-	; (block overflow) CALL LABEL_F2076D
-	; (block overflow) CP L, 1
-	; (block overflow) JRL NZ, DocMed_HandleError
-	; (block overflow) LD (84FEh), 001h
-	; (block overflow) LD C, (8922h)
-	; (block overflow) LDA XWA, 88A0h
-	; (block overflow) CP C, (8920h)
-	; (block overflow) JR NC, DocMed_CheckRepeat
-	; (block overflow) LD HL, 0
-	; (block overflow) LD DE, (84FCh)
-	; (block overflow) CP DE, 0
-	; (block overflow) JRL ULE, DocMed_Exit
+	cp a, 0x74
+	jrl nz, DocMed_CheckInit
+	call LABEL_F2076D
+	cps l, 1
+	jrl nz, DocMed_HandleError
+	stdi8 34046, 1
+	ldda8 c, 35106
+	ldada xwa, 34976
+	cpda8 c, 35104
+	jr nc, DocMed_CheckRepeat
+	lds hl, 0
+	ldda16 xde, 34044
+	cps de, 0
+	jrl ule, DocMed_Exit
 
 DocMed_FindSongLoop:
-	; (block overflow) LD IX, HL
-	; (block overflow) EXTZ XIX
-	; (block overflow) ADD XIX, XWA
-	; (block overflow) CP (XIX), C
-	; (block overflow) JR NZ, DocMed_NextSong
-	; (block overflow) EXTZ XHL
-	; (block overflow) LD XWA, XIZ
-	; (block overflow) LD XBC, 01e50002h
-	; (block overflow) LD XDE, XHL
-	; (block overflow) CALR FmmDocFileNameFunc
-	; (block overflow) LD XWA, (84F4h)
-	; (block overflow) LD BC, (84FCh)
-	; (block overflow) CALR DocMed_FormatSlotList
-	; (block overflow) INC 1, (8922h)
-	; (block overflow) LD XWA, (84F8h)
-	; (block overflow) OR XWA, XWA
-	; (block overflow) JRL Z, DocMed_Exit
-	; (block overflow) LD XBC, 01e50009h
-	; (block overflow) LD XDE, 0000001eh
-	; (block overflow) JR T, DocMed_PostDelayEvent
+	ld ix, hl
+	extz xix
+	add xix, xwa
+	cp (xix), c
+	jr nz, DocMed_NextSong
+	extz xhl
+	ld xwa, xiz
+	ld xbc, 0x1E50002
+	ld xde, xhl
+	calr FmmDocFileNameFunc
+	ldda32 xwa, 34036
+	ldda16 xbc, 34044
+	calr DocMed_FormatSlotList
+	incdi8 1, 35106
+	ldda32 xwa, 34040
+	or xwa, xwa
+	jrl z, DocMed_Exit
+	ld xbc, 0x1E50009
+	ld xde, 0x1E
+	jr DocMed_PostDelayEvent
 
 DocMed_NextSong:
-	; (block overflow) INC 1, HL
-	; (block overflow) CP HL, DE
-	; (block overflow) JR C, DocMed_FindSongLoop
-	; (block overflow) JRL T, DocMed_Exit
+	inc 1, hl
+	cp hl, de
+	jr c, DocMed_FindSongLoop
+	jrl DocMed_Exit
 
 DocMed_CheckRepeat:
-	; (block overflow) CP (8924h), 000h
-	; (block overflow) JR Z, DocMed_ClearPlaying
-	; (block overflow) LD (8922h), 000h
-	; (block overflow) LD HL, 0
-	; (block overflow) LD BC, (84FCh)
-	; (block overflow) CP BC, 0
-	; (block overflow) JRL ULE, DocMed_Exit
+	cpdi8 35108, 0
+	jr z, DocMed_ClearPlaying
+	stdi8 35106, 0
+	lds hl, 0
+	ldda16 xbc, 34044
+	cps bc, 0
+	jrl ule, DocMed_Exit
 
 DocMed_RepeatFindLoop:
-	; (block overflow) LD DE, HL
-	; (block overflow) EXTZ XDE
-	; (block overflow) ADD XDE, XWA
-	; (block overflow) CP (XDE), 000h
-	; (block overflow) JR NZ, DocMed_RepeatNext
-	; (block overflow) EXTZ XHL
-	; (block overflow) LD XWA, XIZ
-	; (block overflow) LD XBC, 01e50002h
-	; (block overflow) LD XDE, XHL
-	; (block overflow) CALR FmmDocFileNameFunc
-	; (block overflow) LD XWA, (84F4h)
-	; (block overflow) LD BC, (84FCh)
-	; (block overflow) CALR DocMed_FormatSlotList
-	; (block overflow) INC 1, (8922h)
-	; (block overflow) LD XWA, (84F8h)
-	; (block overflow) OR XWA, XWA
-	; (block overflow) JRL Z, DocMed_Exit
-	; (block overflow) LD XBC, 01e50009h
-	; (block overflow) LD XDE, 0000001eh
+	ld de, hl
+	extz xde
+	add xde, xwa
+	cpmi8 (xde), 0x0
+	jr nz, DocMed_RepeatNext
+	extz xhl
+	ld xwa, xiz
+	ld xbc, 0x1E50002
+	ld xde, xhl
+	calr FmmDocFileNameFunc
+	ldda32 xwa, 34036
+	ldda16 xbc, 34044
+	calr DocMed_FormatSlotList
+	incdi8 1, 35106
+	ldda32 xwa, 34040
+	or xwa, xwa
+	jrl z, DocMed_Exit
+	ld xbc, 0x1E50009
+	ld xde, 0x1E
 
 DocMed_PostDelayEvent:
-	; (block overflow) CALL ApPostEvent
-	; (block overflow) JRL T, DocMed_Exit
+	call 0xFA9D58
+	jrl DocMed_Exit
 
 DocMed_RepeatNext:
-	; (block overflow) INC 1, HL
-	; (block overflow) CP HL, BC
-	; (block overflow) JR C, DocMed_RepeatFindLoop
-	; (block overflow) JRL T, DocMed_Exit
+	inc 1, hl
+	cp hl, bc
+	jr c, DocMed_RepeatFindLoop
+	jrl DocMed_Exit
 
 DocMed_ClearPlaying:
-	; (block overflow) LD (84FEh), 000h
-	; (block overflow) JRL T, DocMed_Exit
+	stdi8 34046, 0
+	jrl DocMed_Exit
 
 DocMed_HandleError:
-	; (block overflow) CALL LABEL_F2076D
-	; (block overflow) LD (84FEh), 000h
-	; (block overflow) CP L, 0
-	; (block overflow) JRL Z, DocMed_Exit
-	; (block overflow) LD (7F42h), 001h
-	; (block overflow) LD WA, 00eeh
+	call LABEL_F2076D
+	stdi8 34046, 0
+	cps l, 0
+	jrl z, DocMed_Exit
+	stdi8 32578, 1
+	ldw wa, 0xEE
 
 DocMed_ShowError:
-	; (block overflow) CALL LABEL_F994BD
-	; (block overflow) JRL T, DocMed_Exit
+	call LABEL_F994BD
+	jrl DocMed_Exit
 
+LABEL_F93EEA:
 DocMed_CheckInit:
-	; (block overflow) CPW (8508h), 0000h
-	; (block overflow) JR LT, DocMed_InitFromDisk
-	; (block overflow) CPW (8504h), 0000h
-	; (block overflow) JR NZ, DocMed_InitState
+	cpdi16 34056, 0
+	jr lt, DocMed_InitFromDisk
+	cpdi16 34052, 0
+	jr nz, DocMed_InitState
 
 DocMed_InitFromDisk:
-	; (block overflow) LDW (8504h), 0ffffh
-	; (block overflow) LD XWA, 00600026h
-	; (block overflow) LD XBC, 01c00001h
-	; (block overflow) LD XDE, 5
-	; (block overflow) CALL ApPostEvent
-	; (block overflow) CALL LABEL_F8A9D6
-	; (block overflow) LD (8508h), HL
-	; (block overflow) LD XWA, 00600026h
-	; (block overflow) LD XBC, 01c00002h
-	; (block overflow) LD XDE, 0
-	; (block overflow) CALL ApPostEvent
-	; (block overflow) LD XWA, 0ffffffffh
-	; (block overflow) LD XBC, 01c0000ah
-	; (block overflow) LD XDE, 0
-	; (block overflow) CALL ApPostEvent
-	; (block overflow) CALL SignalProgressUpdate
+	stdi16 34052, 65535
+	ld xwa, 0x600026
+	ld xbc, 0x1C00001
+	lds32 xde, 5
+	call 0xFA9D58
+	call LABEL_F8A9D6
+	stda16 34056, xhl
+	ld xwa, 0x600026
+	ld xbc, 0x1C00002
+	lds32 xde, 0
+	call 0xFA9D58
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C0000A
+	lds32 xde, 0
+	call 0xFA9D58
+	call 0xF8B260
 
 DocMed_InitState:
-	; (block overflow) LD (84FEh), 000h
-	; (block overflow) LD (8922h), 000h
-	; (block overflow) LD (8920h), 000h
-	; (block overflow) LD BC, 0080h
-	; (block overflow) LD WA, (8508h)
-	; (block overflow) CP WA, 0080h
-	; (block overflow) JR UGT, DocMed_ClampCount
-	; (block overflow) LD BC, WA
+	stdi8 34046, 0
+	stdi8 35106, 0
+	stdi8 35104, 0
+	ldw bc, 0x80
+	ldda16 xwa, 34056
+	cp wa, 0x80
+	jr ugt, DocMed_ClampCount
+	ld bc, wa
 
 DocMed_ClampCount:
-	; (block overflow) LD (84FCh), BC
-	; (block overflow) LD HL, 0
-	; (block overflow) CP BC, 0
-	; (block overflow) JR ULE, DocMed_FinishInit
-	; (block overflow) LDA XWA, 88A0h
+	stda16 34044, xbc
+	lds hl, 0
+	cps bc, 0
+	jr ule, DocMed_FinishInit
+	ldada xwa, 34976
 
 DocMed_ClearSlotsLoop:
-	; (block overflow) LD BC, HL
-	; (block overflow) EXTZ XBC
-	; (block overflow) ADD XBC, XWA
-	; (block overflow) LD (XBC), 0ffh
-	; (block overflow) INC 1, HL
-	; (block overflow) CP HL, (84FCh)
-	; (block overflow) JR C, DocMed_ClearSlotsLoop
+	ld bc, hl
+	extz xbc
+	add xbc, xwa
+	ldmi8 (xbc), 0xFF
+	inc 1, hl
+	cpda16 xhl, 34044
+	jr c, DocMed_ClearSlotsLoop
 
 DocMed_FinishInit:
-	; (block overflow) CALL LABEL_F20ACD
-	; (block overflow) LD XWA, 0
-	; (block overflow) LD (84F8h), XWA
-	; (block overflow) JRL T, DocMed_Exit
+	call LABEL_F20ACD
+	lds32 xwa, 0
+	stda32 34040, xwa
+	jrl DocMed_Exit
 
 DocMed_HandleStop:
-	; (block overflow) LD A, (8D36h)
-	; (block overflow) CP A, 070h
-	; (block overflow) JRL Z, DocMed_Exit
-	; (block overflow) CP A, 074h
-	; (block overflow) JRL Z, DocMed_Exit
-	; (block overflow) CALL LABEL_F20B70
-	; (block overflow) CALL CancelOperationCleanup
-	; (block overflow) LD (84FEh), 000h
-	; (block overflow) JRL T, DocMed_Exit
+	ldda8 a, 36150
+	cp a, 0x70
+	jrl z, DocMed_Exit
+	cp a, 0x74
+	jrl z, DocMed_Exit
+	call LABEL_F20B70
+	call 0xF8B244
+	stdi8 34046, 0
+	jrl DocMed_Exit
 
 DocMed_StoreWindowPtr:
-	; (block overflow) LD (84F4h), XWA
-	; (block overflow) JRL T, DocMed_Exit
+	stda32 34036, xwa
+	jrl DocMed_Exit
 
 DocMed_RefreshDisplay:
-	; (block overflow) LD XWA, (84F4h)
-	; (block overflow) CALR DocMed_FormatSlotList
-	; (block overflow) JRL T, DocMed_Exit
+	ldda32 xwa, 34036
+	calr DocMed_FormatSlotList
+	jrl DocMed_Exit
 
 DocMed_HandleNavToggle:
-	; (block overflow) CP XHL, 0000000ah
-	; (block overflow) JRL NZ, DocMed_HandleSelectToggle
-	; (block overflow) CP (84FEh), 000h
-	; (block overflow) JR NZ, DocMed_HandleSelectToggle
-	; (block overflow) LD HL, 0
-	; (block overflow) LD WA, BC
-	; (block overflow) CP BC, 0
-	; (block overflow) JR ULE, DocMed_CheckAllUnmarked
-	; (block overflow) LDA XBC, 88A0h
+	cp xhl, 0xA
+	jrl nz, DocMed_HandleSelectToggle
+	cpdi8 34046, 0
+	jr nz, DocMed_HandleSelectToggle
+	lds hl, 0
+	ld wa, bc
+	cps bc, 0
+	jr ule, DocMed_CheckAllUnmarked
+	ldada xbc, 34976
 
 DocMed_FindUnmarkedLoop:
-	; (block overflow) LD DE, HL
-	; (block overflow) EXTZ XDE
-	; (block overflow) ADD XDE, XBC
-	; (block overflow) CP (XDE), 0ffh
-	; (block overflow) JR Z, DocMed_CheckAllUnmarked
-	; (block overflow) INC 1, HL
-	; (block overflow) CP HL, WA
-	; (block overflow) JR C, DocMed_FindUnmarkedLoop
+	ld de, hl
+	extz xde
+	add xde, xbc
+	cpmi8 (xde), 0xFF
+	jr z, DocMed_CheckAllUnmarked
+	inc 1, hl
+	cp hl, wa
+	jr c, DocMed_FindUnmarkedLoop
 
 DocMed_CheckAllUnmarked:
-	; (block overflow) CP HL, WA
-	; (block overflow) JR NC, DocMed_RemoveOrderLoop
-	; (block overflow) LD HL, 0
-	; (block overflow) CP WA, 0
-	; (block overflow) JR ULE, DocMed_RefreshAfterToggle
-	; (block overflow) LDA XDE, 88A0h
+	cp hl, wa
+	jr nc, DocMed_RemoveOrderLoop
+	lds hl, 0
+	cps wa, 0
+	jr ule, DocMed_RefreshAfterToggle
+	ldada xde, 34976
 
 DocMed_AssignOrderLoop:
-	; (block overflow) LD BC, HL
-	; (block overflow) EXTZ XBC
-	; (block overflow) ADD XBC, XDE
-	; (block overflow) LD A, (XBC)
-	; (block overflow) CP A, 0ffh
-	; (block overflow) JR NZ, DocMed_NextAssign
-	; (block overflow) LD (XBC), (8920h)
-	; (block overflow) INC 1, (8920h)
+	ld bc, hl
+	extz xbc
+	add xbc, xde
+	ld a, (xbc)
+	cp a, 0xFF
+	jr nz, DocMed_NextAssign
+	ldmi16 (xbc), 0x8920
+	incdi8 1, 35104
 
 DocMed_NextAssign:
-	; (block overflow) INC 1, HL
-	; (block overflow) CP HL, (84FCh)
-	; (block overflow) JR C, DocMed_AssignOrderLoop
-	; (block overflow) JR T, DocMed_RefreshAfterToggle
+	inc 1, hl
+	cpda16 xhl, 34044
+	jr c, DocMed_AssignOrderLoop
+	jr DocMed_RefreshAfterToggle
 
 DocMed_RemoveOrderLoop:
-	; (block overflow) LD HL, 0
-	; (block overflow) CP WA, 0
-	; (block overflow) JR ULE, DocMed_RefreshAfterToggle
-	; (block overflow) LDA XDE, 88A0h
+	lds hl, 0
+	cps wa, 0
+	jr ule, DocMed_RefreshAfterToggle
+	ldada xde, 34976
 
 DocMed_UnmarkLoop:
-	; (block overflow) LD BC, HL
-	; (block overflow) EXTZ XBC
-	; (block overflow) ADD XBC, XDE
-	; (block overflow) LD A, (XBC)
-	; (block overflow) CP A, 0fdh
-	; (block overflow) JR UGT, DocMed_NextUnmark
-	; (block overflow) LD (XBC), 0ffh
-	; (block overflow) DEC 1, (8920h)
+	ld bc, hl
+	extz xbc
+	add xbc, xde
+	ld a, (xbc)
+	cp a, 0xFD
+	jr ugt, DocMed_NextUnmark
+	ldmi8 (xbc), 0xFF
+	decdi8 1, 35104
 
 DocMed_NextUnmark:
-	; (block overflow) INC 1, HL
-	; (block overflow) CP HL, (84FCh)
-	; (block overflow) JR C, DocMed_UnmarkLoop
+	inc 1, hl
+	cpda16 xhl, 34044
+	jr c, DocMed_UnmarkLoop
 
 DocMed_RefreshAfterToggle:
-	; (block overflow) LD XWA, (84F4h)
-	; (block overflow) LD BC, (84FCh)
-	; (block overflow) JR T, DocMed_CallFormatSlots
+	ldda32 xwa, 34036
+	ldda16 xbc, 34044
+	jr DocMed_CallFormatSlots
 
 DocMed_HandleSelectToggle:
-	; (block overflow) CP XHL, 0000000bh
-	; (block overflow) JR NZ, DocMed_HandleRepeat
-	; (block overflow) CP (84FEh), 000h
-	; (block overflow) JR NZ, DocMed_HandleRepeat
-	; (block overflow) LD XWA, XIZ
-	; (block overflow) LD XBC, 01e50003h
-	; (block overflow) LD XDE, 0
-	; (block overflow) CALR FmmDocFileNameFunc
-	; (block overflow) LDA XIX, 88A0h
-	; (block overflow) EXTZ XHL
-	; (block overflow) ADD XHL, XIX
-	; (block overflow) LD C, (XHL)
-	; (block overflow) CP C, 0ffh
-	; (block overflow) JR NZ, DocMed_RemoveFromOrder
-	; (block overflow) LD (XHL), (8920h)
-	; (block overflow) INC 1, (8920h)
-	; (block overflow) JR T, DocMed_RefreshAfterSelect
+	cp xhl, 0xB
+	jr nz, DocMed_HandleRepeat
+	cpdi8 34046, 0
+	jr nz, DocMed_HandleRepeat
+	ld xwa, xiz
+	ld xbc, 0x1E50003
+	lds32 xde, 0
+	calr FmmDocFileNameFunc
+	ldada xix, 34976
+	extz xhl
+	add xhl, xix
+	ld c, (xhl)
+	cp c, 0xFF
+	jr nz, DocMed_RemoveFromOrder
+	ldmi16 (xhl), 0x8920
+	incdi8 1, 35104
+	jr DocMed_RefreshAfterSelect
 
 DocMed_RemoveFromOrder:
-	; (block overflow) CP C, 0fdh
-	; (block overflow) JR UGT, DocMed_RefreshAfterSelect
-	; (block overflow) LD (XHL), 0ffh
-	; (block overflow) LD A, (8920h)
-	; (block overflow) DEC 1, A
-	; (block overflow) LD (8920h), A
-	; (block overflow) LD IZ, 0
-	; (block overflow) LD HL, 0
-	; (block overflow) EXTZ WA
-	; (block overflow) CP WA, 0
-	; (block overflow) JR ULE, DocMed_RefreshAfterSelect
-	; (block overflow) LD IY, WA
+	cp c, 0xFD
+	jr ugt, DocMed_RefreshAfterSelect
+	ldmi8 (xhl), 0xFF
+	ldda8 a, 35104
+	dec 1, a
+	stda8 35104, a
+	lds iz, 0
+	lds hl, 0
+	extz wa
+	cps wa, 0
+	jr ule, DocMed_RefreshAfterSelect
+	ld iy, wa
 
 DocMed_ReorderLoop:
-	; (block overflow) LD DE, HL
-	; (block overflow) EXTZ XDE
-	; (block overflow) ADD XDE, XIX
-	; (block overflow) LD A, (XDE)
-	; (block overflow) CP A, 0fdh
-	; (block overflow) JR UGT, DocMed_NextReorder
-	; (block overflow) INC 1, IZ
-	; (block overflow) CP A, C
-	; (block overflow) JR ULE, DocMed_NextReorder
-	; (block overflow) DEC 1, A
-	; (block overflow) LD (XDE), A
+	ld de, hl
+	extz xde
+	add xde, xix
+	ld a, (xde)
+	cp a, 0xFD
+	jr ugt, DocMed_NextReorder
+	inc 1, iz
+	cp a, c
+	jr ule, DocMed_NextReorder
+	dec 1, a
+	ld (xde), a
 
 DocMed_NextReorder:
-	; (block overflow) INC 1, HL
-	; (block overflow) CP IZ, IY
-	; (block overflow) JR C, DocMed_ReorderLoop
+	inc 1, hl
+	cp iz, iy
+	jr c, DocMed_ReorderLoop
 
 DocMed_RefreshAfterSelect:
-	; (block overflow) LD XWA, (84F4h)
-	; (block overflow) LD BC, (84FCh)
+	ldda32 xwa, 34036
+	ldda16 xbc, 34044
 
 DocMed_CallFormatSlots:
-	; (block overflow) CALR DocMed_FormatSlotList
-	; (block overflow) JRL T, DocMed_Exit
+	calr DocMed_FormatSlotList
+	jrl DocMed_Exit
 
 DocMed_HandleRepeat:
-	; (block overflow) CP XHL, 0000000ch
-	; (block overflow) JR NZ, DocMed_HandlePlay
-	; (block overflow) CP XDE, 01c00017h
-	; (block overflow) JR NZ, DocMed_SetRepeatOff
-	; (block overflow) LD (8924h), 001h
-	; (block overflow) JRL T, DocMed_Exit
+	cp xhl, 0xC
+	jr nz, DocMed_HandlePlay
+	cp xde, 0x1C00017
+	jr nz, DocMed_SetRepeatOff
+	stdi8 35108, 1
+	jrl DocMed_Exit
 
 DocMed_SetRepeatOff:
-	; (block overflow) LD (8924h), 000h
-	; (block overflow) JRL T, DocMed_Exit
+	stdi8 35108, 0
+	jrl DocMed_Exit
 
 DocMed_HandlePlay:
-	; (block overflow) CP XHL, 0000000dh
-	; (block overflow) JRL NZ, DocMed_Exit
-	; (block overflow) CP (84FEh), 000h
-	; (block overflow) JRL NZ, DocMed_Exit
-	; (block overflow) LD (8922h), 000h
-	; (block overflow) LD HL, 0
-	; (block overflow) LD WA, (84FCh)
-	; (block overflow) CP WA, 0
-	; (block overflow) JR ULE, DocMed_CheckAutoPlay
-	; (block overflow) LDA XBC, 88A0h
+	cp xhl, 0xD
+	jrl nz, DocMed_Exit
+	cpdi8 34046, 0
+	jrl nz, DocMed_Exit
+	stdi8 35106, 0
+	lds hl, 0
+	ldda16 xwa, 34044
+	cps wa, 0
+	jr ule, DocMed_CheckAutoPlay
+	ldada xbc, 34976
 
 DocMed_PlayFindLoop:
-	; (block overflow) LD DE, HL
-	; (block overflow) EXTZ XDE
-	; (block overflow) ADD XDE, XBC
-	; (block overflow) CP (XDE), 000h
-	; (block overflow) JR NZ, DocMed_PlayNextLoop
-	; (block overflow) LD (84FEh), 001h
-	; (block overflow) EXTZ XHL
-	; (block overflow) LD XWA, XIZ
-	; (block overflow) LD XBC, 01e50002h
-	; (block overflow) LD XDE, XHL
-	; (block overflow) CALR FmmDocFileNameFunc
-	; (block overflow) INC 1, (8922h)
-	; (block overflow) LD XWA, 0ffffffffh
-	; (block overflow) LD XBC, 01e0009ah
-	; (block overflow) LD XDE, 0
-	; (block overflow) CALL ApPostEvent
-	; (block overflow) LD WA, 0074h
-	; (block overflow) CALL UI_PostModeChangeEvent
-	; (block overflow) JR T, DocMed_CheckAutoPlay
+	ld de, hl
+	extz xde
+	add xde, xbc
+	cpmi8 (xde), 0x0
+	jr nz, DocMed_PlayNextLoop
+	stdi8 34046, 1
+	extz xhl
+	ld xwa, xiz
+	ld xbc, 0x1E50002
+	ld xde, xhl
+	calr FmmDocFileNameFunc
+	incdi8 1, 35106
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1E0009A
+	lds32 xde, 0
+	call 0xFA9D58
+	ldw wa, 0x74
+	call 0xF99490
+	jr DocMed_CheckAutoPlay
 
 DocMed_PlayNextLoop:
-	; (block overflow) INC 1, HL
-	; (block overflow) CP HL, WA
-	; (block overflow) JR C, DocMed_PlayFindLoop
+	inc 1, hl
+	cp hl, wa
+	jr c, DocMed_PlayFindLoop
 
 DocMed_CheckAutoPlay:
-	; (block overflow) CP (84FEh), 000h
-	; (block overflow) JR NZ, DocMed_Exit
-	; (block overflow) LD XWA, XIZ
-	; (block overflow) LD XBC, 01e50003h
-	; (block overflow) LD XDE, 0
-	; (block overflow) CALR FmmDocFileNameFunc
-	; (block overflow) LD XWA, 0ffffffffh
-	; (block overflow) LD XBC, 01e0009ah
-	; (block overflow) LD XDE, 0
-	; (block overflow) CALL ApPostEvent
-	; (block overflow) LD WA, 0070h
-	; (block overflow) JR T, DocMed_CallPauseMode
+	cpdi8 34046, 0
+	jr nz, DocMed_Exit
+	ld xwa, xiz
+	ld xbc, 0x1E50003
+	lds32 xde, 0
+	calr FmmDocFileNameFunc
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1E0009A
+	lds32 xde, 0
+	call 0xFA9D58
+	ldw wa, 0x70
+	jr DocMed_CallPauseMode
 
 DocMed_StoreDelayFlag:
-	; (block overflow) LD (84F8h), XWA
-	; (block overflow) JR T, DocMed_Exit
+	stda32 34040, xwa
+	jr DocMed_Exit
 
 DocMed_CheckContinue:
-	; (block overflow) CP (84FEh), 000h
-	; (block overflow) JR Z, DocMed_Exit
-	; (block overflow) LD XWA, 0ffffffffh
-	; (block overflow) LD XBC, 01e0009ah
-	; (block overflow) LD XDE, 0
-	; (block overflow) CALL ApPostEvent
-	; (block overflow) LD WA, 0074h
+	cpdi8 34046, 0
+	jr z, DocMed_Exit
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1E0009A
+	lds32 xde, 0
+	call 0xFA9D58
+	ldw wa, 0x74
 
 DocMed_CallPauseMode:
-	; (block overflow) CALL UI_PostModeChangeEvent
+	call 0xF99490
 
 DocMed_Exit:
-	; (block overflow) LD XHL, 0
-	; (block overflow) POP XIZ
-	; (block overflow) RET
+	lds32 xhl, 0
+	pop xiz
+	ret
 
+LABEL_F94193:
 SetSongSlotValue:
-	; (block overflow) CP WA, 000ah
-	; (block overflow) RET NC
-	; (block overflow) LDA XHL, 0AB000h
-	; (block overflow) LD DE, WA
-	; (block overflow) SLL 11, DE
-	; (block overflow) EXTZ XDE
-	; (block overflow) ADD XHL, XDE
-	; (block overflow) ADD XHL, 0000001ch
-	; (block overflow) LD (XHL), BC
-	; (block overflow) LD E, (0FFE3h:24)
-	; (block overflow) EXTZ DE
-	; (block overflow) CP DE, WA
-	; (block overflow) RET NZ
-	; (block overflow) LDA XHL, 0F180h:24
-	; (block overflow) ADD XHL, 0000001ch
-	; (block overflow) LD (XHL), BC
-	; (block overflow) RET
+	cp wa, 0xA
+	ret nc
+	ldada_24 xhl, 700416
+	ld de, wa
+	sll de, 11
+	extz xde
+	add xhl, xde
+	add xhl, 0x1C
+	ld (xhl), bc
+	ldda8_24 e, 65507
+	extz de
+	cp de, wa
+	ret nz
+	ldada_24 xhl, 61824
+	add xhl, 0x1C
+	ld (xhl), bc
+	ret
 
+LABEL_F941C8:
 GetSongSlotValue:
-	; (block overflow) LD HL, 0
-	; (block overflow) CP WA, 000ah
-	; (block overflow) RET NC
-	; (block overflow) LDA XBC, 0AB000h
-	; (block overflow) SLL 11, WA
-	; (block overflow) EXTZ XWA
-	; (block overflow) ADD XBC, XWA
-	; (block overflow) ADD XBC, 0000001ch
-	; (block overflow) LD HL, (XBC)
-	; (block overflow) RET
+	lds hl, 0
+	cp wa, 0xA
+	ret nc
+	ldada_24 xbc, 700416
+	sll wa, 11
+	extz xwa
+	add xbc, xwa
+	add xbc, 0x1C
+	ld hl, (xbc)
+	ret
 
+LABEL_F941E5:
 CheckSongSlotHasData:
-	; (block overflow) CALR GetSongSlotValue
-	; (block overflow) CP HL, 0
-	; (block overflow) SCC NZ, HL
-	; (block overflow) RET
+	calr GetSongSlotValue
+	cps hl, 0
+	scc16 nz, hl
+	ret
 
+LABEL_F941ED:
 SongSlot_RawData:
+	.byte 0x2e, 0xd9, 0x8e, 0x1e, 0xd5, 0xff, 0xde, 0xf3
+	.byte 0xdb, 0x76, 0x4e, 0x0e
 
-
-
+LABEL_F941F9:
 FindFirstEmptySlot:
-	; (block overflow) PUSH IZ
-	; (block overflow) LD IZ, 0
+	pushw iz
+	lds iz, 0
 
 FindEmpty_Loop:
-	; (block overflow) LD WA, IZ
-	; (block overflow) CALR GetSongSlotValue
-	; (block overflow) CP HL, 0
-	; (block overflow) JR NZ, FindEmpty_Exit
-	; (block overflow) INC 1, IZ
-	; (block overflow) CP IZ, 000ah
-	; (block overflow) JR C, FindEmpty_Loop
+	ld wa, iz
+	calr GetSongSlotValue
+	cps hl, 0
+	jr nz, FindEmpty_Exit
+	inc 1, iz
+	cp iz, 0xA
+	jr c, FindEmpty_Loop
 
 FindEmpty_Exit:
-	; (block overflow) POP IZ
-	; (block overflow) RET
+	popw iz
+	ret
 
+LABEL_F9420F:
 ClearAllSongSlots:
-	; (block overflow) PUSH XIZ
-	; (block overflow) LD IZ, WA
-	; (block overflow) LD QIZ, 0
+	push xiz
+	ld iz, wa
+	ldi0_werp 0xFA
 
 ClearSlots_Loop:
-	; (block overflow) LD WA, QIZ
-	; (block overflow) LD BC, IZ
-	; (block overflow) CALR SetSongSlotValue
-	; (block overflow) INC 1, QIZ
-	; (block overflow) CP QIZ, 000ah
-	; (block overflow) JR C, ClearSlots_Loop
-	; (block overflow) POP XIZ
-	; (block overflow) RET
+	ldto_wa_werp 0xFA
+	ld bc, iz
+	calr SetSongSlotValue
+	inc1_werp 0xFA
+	erpw4 0xFA, 0xCF, 0x0A, 0x00
+	jr c, ClearSlots_Loop
+	pop xiz
+	ret
 
+LABEL_F94229:
 ResetSlotsIfEmpty:
-	; (block overflow) CALR FindFirstEmptySlot
-	; (block overflow) LD WA, HL
-	; (block overflow) CP WA, 0
-	; (block overflow) RET Z
-	; (block overflow) CALR ClearAllSongSlots
-	; (block overflow) RET
+	calr FindFirstEmptySlot
+	ld wa, hl
+	cps wa, 0
+	ret z
+	calr ClearAllSongSlots
+	ret
 
+LABEL_F94236:
 CheckSlotIsSelected:
-	; (block overflow) PUSH IZ
-	; (block overflow) LD IZ, WA
-	; (block overflow) CALR FindFirstEmptySlot
-	; (block overflow) CP HL, IZ
-	; (block overflow) SCC Z, HL
-	; (block overflow) POP IZ
-	; (block overflow) RET
+	pushw iz
+	ld iz, wa
+	calr FindFirstEmptySlot
+	cp hl, iz
+	scc16 z, hl
+	popw iz
+	ret
 
+LABEL_F94242:
 CheckAnySlotHasData:
-	; (block overflow) CALR FindFirstEmptySlot
-	; (block overflow) CP HL, 0
-	; (block overflow) SCC NZ, HL
-	; (block overflow) RET
+	calr FindFirstEmptySlot
+	cps hl, 0
+	scc16 nz, hl
+	ret
 
+LABEL_F9424A:
 SetCurrentSlotIndex:
-	; (block overflow) LD (09480Eh), WA
-	; (block overflow) RET
+	stda16_24 608270, xwa
+	ret
 
+LABEL_F94250:
 GetCurrentSlotIndex:
-	; (block overflow) LD HL, (09480Eh)
-	; (block overflow) RET
+	ldda16_24 xhl, 608270
+	ret
 
+LABEL_F94256:
 CheckIsCurrentSlot:
-	; (block overflow) PUSH IZ
-	; (block overflow) LD IZ, WA
-	; (block overflow) CALR GetCurrentSlotIndex
-	; (block overflow) CP HL, IZ
-	; (block overflow) SCC Z, HL
-	; (block overflow) POP IZ
-	; (block overflow) RET
+	pushw iz
+	ld iz, wa
+	calr GetCurrentSlotIndex
+	cp hl, iz
+	scc16 z, hl
+	popw iz
+	ret
 
+LABEL_F94262:
 CheckSlotIndexValid:
-	; (block overflow) CALR GetCurrentSlotIndex
-	; (block overflow) CP HL, 0
-	; (block overflow) SCC NZ, HL
-	; (block overflow) RET
+	calr GetCurrentSlotIndex
+	cps hl, 0
+	scc16 nz, hl
+	ret
 
 InitializeCheap:
-	; (block overflow) LDA XSP, XSP - 14
+	lda xsp, (xsp - 14)
 
-	; (block overflow) RegObjTable 01600004h, 0FA44E2h, 0EA1186h,	0EA0F46h, 0165h
-	; (block overflow) RegObjTable 0160000ch, 0FA58FBh, 0EA11F2h,	0EA1188h, 01c5h
-	; (block overflow) RegObjTable 0160000dh, 0FA5948h, 0EA1358h,	0EA11F4h, 01e5h
-	; (block overflow) RegObjTabl 01600002h, 0FA496Ch, 001dh,		0EA0A56h, 0125h
-	; (block overflow) RegObjTabl 01600002h, 0FA496Ch, 001dh,		0EA0ACEh, 0425h
-	; (block overflow) RegObjTabl 01600001h, 0FA48A9h, 000dh,		0EA135Ah, 0105h
-	; (block overflow) RegObjTabl 01600001h, 0FA48A9h, 000dh,		0EA1392h, 0405h
-	; (block overflow) RegObjTabl 01600003h, 0FA4A18h, 0039h,		0EA7FCEh, 0145h
-	; (block overflow) RegObjTabl 01600003h, 0FA4A18h, 0039h,		0EA80B6h, 0445h
-	; (block overflow) RegObjTabl 01600010h, 0FA5995h, 004ah,		0EA67B6h, 0060h
-	; (block overflow) RegObjTabl 0160000fh, 0FA62CBh, 004ah,		0EA6FE2h, 0360h
-	; (block overflow) RegObjTabl 01600010h, 0FA5995h, 0080h,		0EA68E2h, 0061h
-	; (block overflow) RegObjTabl 0160000fh, 0FA62CBh, 0080h,		0EA7228h, 0361h
-	; (block overflow) RegObjTabl 01600010h, 0FA5995h, 0000h,		0EA6AE6h, 0062h
-	; (block overflow) RegObjTabl 0160000fh, 0FA62CBh, 0000h,		0EA75C6h, 0362h
-	; (block overflow) RegObjTabl 01600010h, 0FA5995h, 0000h,		0EA6AEAh, 0063h
-	; (block overflow) RegObjTabl 0160000fh, 0FA62CBh, 0000h,		0EA75CCh, 0363h
-	; (block overflow) RegObjTabl 01600010h, 0FA5995h, 0000h,		0EA6AEEh, 0064h
-	; (block overflow) RegObjTabl 0160000fh, 0FA62CBh, 0000h,		0EA75D2h, 0364h
-	; (block overflow) RegObjTabl 01600010h, 0FA5995h, 0003h,		0EA6AF2h, 0065h
-	; (block overflow) RegObjTabl 0160000fh, 0FA62CBh, 0003h,		0EA75D8h, 0365h
-	; (block overflow) RegObjTabl 01600010h, 0FA5995h, 0000h,		0EA6B02h, 0066h
-	; (block overflow) RegObjTabl 0160000fh, 0FA62CBh, 0000h,		0EA75FCh, 0366h
-	; (block overflow) RegObjTabl 01600010h, 0FA5995h, 0047h,		0EA6B06h, 0067h
-	; (block overflow) RegObjTabl 0160000fh, 0FA62CBh, 0047h,		0EA7602h, 0367h
-	; (block overflow) RegObjTabl 01600010h, 0FA5995h, 0000h,		0EA6C26h, 006ah
-	; (block overflow) RegObjTabl 0160000fh, 0FA62CBh, 0000h,		0EA77E4h, 036ah
-	; (block overflow) RegObjTabl 01600010h, 0FA5995h, 0015h,		0EA6C2Ah, 006bh
-	; (block overflow) RegObjTabl 0160000fh, 0FA62CBh, 0015h,		0EA77EAh, 036bh
-	; (block overflow) RegObjTabl 01600010h, 0FA5995h, 0053h,		0EA6C82h, 006ch
-	; (block overflow) RegObjTabl 0160000fh, 0FA62CBh, 0053h,		0EA7878h, 036ch
-	; (block overflow) RegObjTabl 01600010h, 0FA5995h, 0000h,		0EA6DD2h, 006dh
-	; (block overflow) RegObjTabl 0160000fh, 0FA62CBh, 0000h,		0EA7ACAh, 036dh
-	; (block overflow) RegObjTabl 01600010h, 0FA5995h, 0000h,		0EA6DD6h, 006eh
-	; (block overflow) RegObjTabl 0160000fh, 0FA62CBh, 0000h,		0EA7AD0h, 036eh
-	; (block overflow) RegObjTabl 01600010h, 0FA5995h, 0015h,		0EA6DDAh, 0077h
-	; (block overflow) RegObjTabl 0160000fh, 0FA62CBh, 0015h,		0EA7AD6h, 0377h
-	; (block overflow) RegObjTabl 01600010h, 0FA5995h, 0000h,		0EA6E32h, 0079h
-	; (block overflow) RegObjTabl 0160000fh, 0FA62CBh, 0000h,		0EA7B8Ch, 0379h
-	; (block overflow) RegObjTabl 01600010h, 0FA5995h, 005eh,		0EA6E36h, 007bh
-	; (block overflow) RegObjTabl 0160000fh, 0FA62CBh, 005eh,		0EA7B92h, 037bh
-	; (block overflow) RegObjTabl 01600010h, 0FA5995h, 0000h,		0EA6FB2h, 007ch
-	; (block overflow) RegObjTabl 0160000fh, 0FA62CBh, 0000h,		0EA7E98h, 037ch
-	; (block overflow) RegObjTabl 01600010h, 0FA5995h, 0000h,		0EA6FB6h, 007dh
-	; (block overflow) RegObjTabl 0160000fh, 0FA62CBh, 0000h,		0EA7E9Eh, 037dh
-	; (block overflow) RegObjTabl 01600010h, 0FA5995h, 0008h,		0EA6FBAh, 007eh
-	; (block overflow) RegObjTabl 0160000fh, 0FA62CBh, 0008h,		0EA7EA4h, 037eh
-	; (block overflow) RegObjTabl 01600010h, 0FA5995h, 0000h,		0EA6FDEh, 00bch
-	; (block overflow) RegObjTabl 0160000fh, 0FA62CBh, 0000h,		0EA7EE2h, 03bch
+	RegObjTable 0x1600004, 0xFA44E2, 0xEA1186, 0xEA0F46, 0x165
+	RegObjTable 0x160000c, 0xFA58FB, 0xEA11F2, 0xEA1188, 0x1c5
+	RegObjTable 0x160000d, 0xFA5948, 0xEA1358, 0xEA11F4, 0x1e5
+	RegObjTabl 0x1600002, 0xFA496C, 0x1d, 0xEA0A56, 0x125
+	RegObjTabl 0x1600002, 0xFA496C, 0x1d, 0xEA0ACE, 0x425
+	RegObjTabl 0x1600001, 0xFA48A9, 0xd, 0xEA135A, 0x105
+	RegObjTabl 0x1600001, 0xFA48A9, 0xd, 0xEA1392, 0x405
+	RegObjTabl 0x1600003, 0xFA4A18, 0x39, 0xEA7FCE, 0x145
+	RegObjTabl 0x1600003, 0xFA4A18, 0x39, 0xEA80B6, 0x445
+	RegObjTabl 0x1600010, 0xFA5995, 0x4a, 0xEA67B6, 0x60
+	RegObjTabl 0x160000f, 0xFA62CB, 0x4a, 0xEA6FE2, 0x360
+	RegObjTabl 0x1600010, 0xFA5995, 0x80, 0xEA68E2, 0x61
+	RegObjTabl 0x160000f, 0xFA62CB, 0x80, 0xEA7228, 0x361
+	RegObjTabl 0x1600010, 0xFA5995, 0x0, 0xEA6AE6, 0x62
+	RegObjTabl 0x160000f, 0xFA62CB, 0x0, 0xEA75C6, 0x362
+	RegObjTabl 0x1600010, 0xFA5995, 0x0, 0xEA6AEA, 0x63
+	RegObjTabl 0x160000f, 0xFA62CB, 0x0, 0xEA75CC, 0x363
+	RegObjTabl 0x1600010, 0xFA5995, 0x0, 0xEA6AEE, 0x64
+	RegObjTabl 0x160000f, 0xFA62CB, 0x0, 0xEA75D2, 0x364
+	RegObjTabl 0x1600010, 0xFA5995, 0x3, 0xEA6AF2, 0x65
+	RegObjTabl 0x160000f, 0xFA62CB, 0x3, 0xEA75D8, 0x365
+	RegObjTabl 0x1600010, 0xFA5995, 0x0, 0xEA6B02, 0x66
+	RegObjTabl 0x160000f, 0xFA62CB, 0x0, 0xEA75FC, 0x366
+	RegObjTabl 0x1600010, 0xFA5995, 0x47, 0xEA6B06, 0x67
+	RegObjTabl 0x160000f, 0xFA62CB, 0x47, 0xEA7602, 0x367
+	RegObjTabl 0x1600010, 0xFA5995, 0x0, 0xEA6C26, 0x6a
+	RegObjTabl 0x160000f, 0xFA62CB, 0x0, 0xEA77E4, 0x36a
+	RegObjTabl 0x1600010, 0xFA5995, 0x15, 0xEA6C2A, 0x6b
+	RegObjTabl 0x160000f, 0xFA62CB, 0x15, 0xEA77EA, 0x36b
+	RegObjTabl 0x1600010, 0xFA5995, 0x53, 0xEA6C82, 0x6c
+	RegObjTabl 0x160000f, 0xFA62CB, 0x53, 0xEA7878, 0x36c
+	RegObjTabl 0x1600010, 0xFA5995, 0x0, 0xEA6DD2, 0x6d
+	RegObjTabl 0x160000f, 0xFA62CB, 0x0, 0xEA7ACA, 0x36d
+	RegObjTabl 0x1600010, 0xFA5995, 0x0, 0xEA6DD6, 0x6e
+	RegObjTabl 0x160000f, 0xFA62CB, 0x0, 0xEA7AD0, 0x36e
+	RegObjTabl 0x1600010, 0xFA5995, 0x15, 0xEA6DDA, 0x77
+	RegObjTabl 0x160000f, 0xFA62CB, 0x15, 0xEA7AD6, 0x377
+	RegObjTabl 0x1600010, 0xFA5995, 0x0, 0xEA6E32, 0x79
+	RegObjTabl 0x160000f, 0xFA62CB, 0x0, 0xEA7B8C, 0x379
+	RegObjTabl 0x1600010, 0xFA5995, 0x5e, 0xEA6E36, 0x7b
+	RegObjTabl 0x160000f, 0xFA62CB, 0x5e, 0xEA7B92, 0x37b
+	RegObjTabl 0x1600010, 0xFA5995, 0x0, 0xEA6FB2, 0x7c
+	RegObjTabl 0x160000f, 0xFA62CB, 0x0, 0xEA7E98, 0x37c
+	RegObjTabl 0x1600010, 0xFA5995, 0x0, 0xEA6FB6, 0x7d
+	RegObjTabl 0x160000f, 0xFA62CB, 0x0, 0xEA7E9E, 0x37d
+	RegObjTabl 0x1600010, 0xFA5995, 0x8, 0xEA6FBA, 0x7e
+	RegObjTabl 0x160000f, 0xFA62CB, 0x8, 0xEA7EA4, 0x37e
+	RegObjTabl 0x1600010, 0xFA5995, 0x0, 0xEA6FDE, 0xbc
+	RegObjTabl 0x160000f, 0xFA62CB, 0x0, 0xEA7EE2, 0x3bc
 
-	; (block overflow) RegMode 0005h, 00eah, 7ee8h, 00000006h, 01200000h, 01a00060h
+	RegMode 0x5, 0xea, 0x7ee8, 0x6, 0x1200000, 0x1a00060
 
-	; (block overflow) RegTitle 0005h, 00eah, 7ef0h, 00000060h, 01200000h, 00600000h
-	; (block overflow) RegTitle 0005h, 00eah, 7efah, 00000061h, 01450027h, 00610000h
-	; (block overflow) RegTitle 0005h, 00eah, 7f02h, 00000062h, 01450036h, 00610069h
-	; (block overflow) RegTitle 0005h, 00eah, 7f10h, 00000063h, 01450037h, 0060002bh
-	; (block overflow) RegTitle 0005h, 00eah, 7f1ah, 00000064h, 01450029h, 0061004bh
-	; (block overflow) RegTitle 0005h, 00eah, 7f26h, 00000065h, 01200000h, 00650000h
-	; (block overflow) RegTitle 0005h, 00eah, 7f32h, 00000066h, 01200000h, 00600018h
-	; (block overflow) RegTitle 0005h, 00eah, 7f3eh, 00000067h, 01450028h, 00670000h
-	; (block overflow) RegTitle 0005h, 00eah, 7f46h, 0000006ah, 01200000h, 00600028h
-	; (block overflow) RegTitle 0005h, 00eah, 7f56h, 0000006bh, 0145002dh, 006b0000h
-	; (block overflow) RegTitle 0005h, 00eah, 7f62h, 0000006ch, 0145001ch, 006c0000h
-	; (block overflow) RegTitle 0005h, 00eah, 7f6eh, 0000006dh, 0145001eh, 006c0026h
-	; (block overflow) RegTitle 0005h, 00eah, 7f7ah, 0000006eh, 0145001dh, 006c003dh
-	; (block overflow) RegTitle 0005h, 00eah, 7f84h, 00000077h, 01450026h, 00770000h
-	; (block overflow) RegTitle 0005h, 00eah, 7f8eh, 00000079h, 01450011h, 0060000ah
-	; (block overflow) RegTitle 0005h, 00eah, 7f98h, 0000007bh, 01450031h, 007b0000h
-	; (block overflow) RegTitle 0005h, 00eah, 7fa0h, 0000007ch, 01450032h, 007b0019h
-	; (block overflow) RegTitle 0005h, 00eah, 7fach, 0000007dh, 01450021h, 007b0018h
-	; (block overflow) RegTitle 0005h, 00eah, 7fb8h, 0000007eh, 01200000h, 007e0000h
-	; (block overflow) RegTitle 0005h, 00eah, 7fc4h, 000000bch, 01450025h, 0060001bh
+	RegTitle 0x5, 0xea, 0x7ef0, 0x60, 0x1200000, 0x600000
+	RegTitle 0x5, 0xea, 0x7efa, 0x61, 0x1450027, 0x610000
+	RegTitle 0x5, 0xea, 0x7f02, 0x62, 0x1450036, 0x610069
+	RegTitle 0x5, 0xea, 0x7f10, 0x63, 0x1450037, 0x60002b
+	RegTitle 0x5, 0xea, 0x7f1a, 0x64, 0x1450029, 0x61004b
+	RegTitle 0x5, 0xea, 0x7f26, 0x65, 0x1200000, 0x650000
+	RegTitle 0x5, 0xea, 0x7f32, 0x66, 0x1200000, 0x600018
+	RegTitle 0x5, 0xea, 0x7f3e, 0x67, 0x1450028, 0x670000
+	RegTitle 0x5, 0xea, 0x7f46, 0x6a, 0x1200000, 0x600028
+	RegTitle 0x5, 0xea, 0x7f56, 0x6b, 0x145002d, 0x6b0000
+	RegTitle 0x5, 0xea, 0x7f62, 0x6c, 0x145001c, 0x6c0000
+	RegTitle 0x5, 0xea, 0x7f6e, 0x6d, 0x145001e, 0x6c0026
+	RegTitle 0x5, 0xea, 0x7f7a, 0x6e, 0x145001d, 0x6c003d
+	RegTitle 0x5, 0xea, 0x7f84, 0x77, 0x1450026, 0x770000
+	RegTitle 0x5, 0xea, 0x7f8e, 0x79, 0x1450011, 0x60000a
+	RegTitle 0x5, 0xea, 0x7f98, 0x7b, 0x1450031, 0x7b0000
+	RegTitle 0x5, 0xea, 0x7fa0, 0x7c, 0x1450032, 0x7b0019
+	RegTitle 0x5, 0xea, 0x7fac, 0x7d, 0x1450021, 0x7b0018
+	RegTitle 0x5, 0xea, 0x7fb8, 0x7e, 0x1200000, 0x7e0000
+	RegTitle 0x5, 0xea, 0x7fc4, 0xbc, 0x1450025, 0x60001b
 
-	; (block overflow) LDA XSP, XSP + 14
-	; (block overflow) RET
+	lda xsp, (xsp + 14)
+	ret
 
 PasswordText:
-	; (block overflow) CP XBC, 01e0009fh
-	; (block overflow) JR NZ, PasswordText_Exit
-	; (block overflow) LDA XHL, 0EA85C8h
-	; (block overflow) RET
+	cp xbc, 0x1E0009F
+	jr nz, PasswordText_Exit
+	ldada_24 xhl, 15369672
+	ret
 
 PasswordText_Exit:
-	; (block overflow) LD XHL, 0
-	; (block overflow) RET
+	lds32 xhl, 0
+	ret
 
 CheckPasswordText:
-	; (block overflow) CP XBC, 01e0009fh
-	; (block overflow) JR NZ, CheckPwd_Exit
-	; (block overflow) LD A, (02748Eh)
-	; (block overflow) CP A, 2
-	; (block overflow) JR Z, CheckPwd_Type2
-	; (block overflow) CP A, 1
-	; (block overflow) JR NZ, CheckPwd_Type0
-	; (block overflow) LD XHL, 00ea8832h
-	; (block overflow) JR T, CheckPwd_Return
+	cp xbc, 0x1E0009F
+	jr nz, CheckPwd_Exit
+	ldda8_24 a, 160910
+	cps a, 2
+	jr z, CheckPwd_Type2
+	cps a, 1
+	jr nz, CheckPwd_Type0
+	ld xhl, 0xEA8832
+	jr CheckPwd_Return
 
 CheckPwd_Type2:
-	; (block overflow) LD XHL, 00ea8a0ch
-	; (block overflow) JR T, CheckPwd_Return
+	ld xhl, 0xEA8A0C
+	jr CheckPwd_Return
 
 CheckPwd_Type0:
-	; (block overflow) LD XHL, 00ea868eh
+	ld xhl, 0xEA868E
 
 CheckPwd_Return:
-	; (block overflow) RET
+	ret
 
 CheckPwd_Exit:
-	; (block overflow) LD XHL, 0
-	; (block overflow) RET
+	lds32 xhl, 0
+	ret
 
 WakeUpPassword:
-	; (block overflow) DEC 4, XSP
-	; (block overflow) PUSH XIZ
-	; (block overflow) LD (XSP + 004h), XDE
-	; (block overflow) LD XIZ, XWA
-	; (block overflow) CP XBC, 01c50004h
-	; (block overflow) JRL Z, WakeUp_StoreType
-	; (block overflow) CP XBC, 01c00007h
-	; (block overflow) JR Z, WakeUp_HandleOk
-	; (block overflow) CP XBC, 01c00001h
-	; (block overflow) JR Z, WakeUp_HandleInit
-	; (block overflow) CP XBC, 01c0000dh
-	; (block overflow) JR Z, WakeUp_HandleDirect
-	; (block overflow) CP XBC, 01e00085h
-	; (block overflow) JR Z, WakeUp_Return1
-	; (block overflow) LD XWA, XIZ
-	; (block overflow) LD XDE, (XSP + 004h)
-	; (block overflow) CALL InheritedProc
-	; (block overflow) JRL T, WakeUp_Exit
+	dec 4, xsp
+	push xiz
+	ld (xsp + 4), xde
+	ld xiz, xwa
+	cp xbc, 0x1C50004
+	jrl z, WakeUp_StoreType
+	cp xbc, 0x1C00007
+	jr z, WakeUp_HandleOk
+	cp xbc, 0x1C00001
+	jr z, WakeUp_HandleInit
+	cp xbc, 0x1C0000D
+	jr z, WakeUp_HandleDirect
+	cp xbc, 0x1E00085
+	jr z, WakeUp_Return1
+	ld xwa, xiz
+	ld xde, (xsp + 4)
+	call 0xFA4409
+	jrl WakeUp_Exit
 
 WakeUp_Return1:
-	; (block overflow) LD XHL, 1
-	; (block overflow) JRL T, WakeUp_Exit
+	lds32 xhl, 1
+	jrl WakeUp_Exit
 
 WakeUp_HandleDirect:
-	; (block overflow) LD XWA, XIZ
-	; (block overflow) LD XDE, (XSP + 004h)
-	; (block overflow) CALL InheritedProc
-	; (block overflow) LD XWA, XIZ
-	; (block overflow) LD XBC, 01c0000fh
-	; (block overflow) LD XDE, 00ea8bf0h
-	; (block overflow) CALL SendEvent
-	; (block overflow) JRL T, WakeUp_ReturnZero
+	ld xwa, xiz
+	ld xde, (xsp + 4)
+	call 0xFA4409
+	ld xwa, xiz
+	ld xbc, 0x1C0000F
+	ld xde, 0xEA8BF0
+	call 0xFA9660
+	jrl WakeUp_ReturnZero
 
 WakeUp_HandleInit:
-	; (block overflow) LD XWA, XIZ
-	; (block overflow) LD XDE, (XSP + 004h)
-	; (block overflow) CALL InheritedProc
-	; (block overflow) LD (02741Ah), 000h
-	; (block overflow) JRL T, WakeUp_ReturnZero
+	ld xwa, xiz
+	ld xde, (xsp + 4)
+	call 0xFA4409
+	stdi8_24 160794, 0
+	jrl WakeUp_ReturnZero
 
 WakeUp_HandleOk:
-	; (block overflow) LD XWA, XIZ
-	; (block overflow) LD XDE, (XSP + 004h)
-	; (block overflow) CALL InheritedProc
-	; (block overflow) LD XWA, 00670001h
-	; (block overflow) LD XBC, 01e00056h
-	; (block overflow) LD XDE, 0
-	; (block overflow) CALL SendEvent
-	; (block overflow) CP XHL, 00000003h
-	; (block overflow) JR Z, WakeUp_ReturnZero
-	; (block overflow) LD XWA, (XSP + 004h)
-	; (block overflow) CP XWA, 0000008ch
-	; (block overflow) JR NZ, WakeUp_ClearCounter
-	; (block overflow) INC 1, (02741Ah)
-	; (block overflow) CP (02741Ah), 007h
-	; (block overflow) JR NZ, WakeUp_ReturnZero
-	; (block overflow) LD (02741Ah), 000h
-	; (block overflow) LD XWA, 0ffffffffh
-	; (block overflow) LD XBC, 01c50000h
-	; (block overflow) LD XDE, 1
-	; (block overflow) CALL PostEvent
-	; (block overflow) LD XWA, 00600040h
-	; (block overflow) LD XBC, 01c00001h
-	; (block overflow) LD XDE, 0
-	; (block overflow) JR T, WakeUp_PostEvent
+	ld xwa, xiz
+	ld xde, (xsp + 4)
+	call 0xFA4409
+	ld xwa, 0x670001
+	ld xbc, 0x1E00056
+	lds32 xde, 0
+	call 0xFA9660
+	cp xhl, 0x3
+	jr z, WakeUp_ReturnZero
+	ld xwa, (xsp + 4)
+	cp xwa, 0x8C
+	jr nz, WakeUp_ClearCounter
+	incdi8_24 1, 160794
+	cpdi8_24 160794, 7
+	jr nz, WakeUp_ReturnZero
+	stdi8_24 160794, 0
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C50000
+	lds32 xde, 1
+	call LABEL_FA9752
+	ld xwa, 0x600040
+	ld xbc, 0x1C00001
+	lds32 xde, 0
+	jr WakeUp_PostEvent
 
 WakeUp_ClearCounter:
-	; (block overflow) LD (02741Ah), 000h
-	; (block overflow) JR T, WakeUp_ReturnZero
+	stdi8_24 160794, 0
+	jr WakeUp_ReturnZero
 
 WakeUp_StoreType:
-	; (block overflow) LD XWA, (XSP + 004h)
-	; (block overflow) LD (02748Eh), A
-	; (block overflow) LD XWA, 0ffffffffh
-	; (block overflow) LD XBC, 01c50000h
-	; (block overflow) LD XDE, 1
-	; (block overflow) CALL PostEvent
-	; (block overflow) LD XWA, 00600045h
-	; (block overflow) LD XBC, 01c00001h
-	; (block overflow) LD XDE, 0
+	ld xwa, (xsp + 4)
+	stda8_24 160910, a
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C50000
+	lds32 xde, 1
+	call LABEL_FA9752
+	ld xwa, 0x600045
+	ld xbc, 0x1C00001
+	lds32 xde, 0
 
 WakeUp_PostEvent:
-	; (block overflow) CALL PostEvent
+	call LABEL_FA9752
 
 WakeUp_ReturnZero:
-	; (block overflow) LD XHL, 0
+	lds32 xhl, 0
 
 WakeUp_Exit:
-	; (block overflow) POP XIZ
-	; (block overflow) INC 4, XSP
-	; (block overflow) RET
+	pop xiz
+	inc 4, xsp
+	ret
 
 PasswordOk:
-	; (block overflow) PUSH XIZ
-	; (block overflow) LD XIZ, XWA
-	; (block overflow) CP XBC, 01c00007h
-	; (block overflow) JR Z, PwdOk_HandleConfirm
-	; (block overflow) CP XBC, 01e0007ch
-	; (block overflow) JR Z, PwdOk_Return2
-	; (block overflow) CP XBC, 01e00084h
-	; (block overflow) JR Z, PwdOk_ReturnZero
-	; (block overflow) CP XBC, 01e0003ah
-	; (block overflow) JR NZ, PwdOk_ReturnZero
-	; (block overflow) PUSHW 00eah
-	; (block overflow) PUSHW 8bf6h
-	; (block overflow) PUSH XDE
-	; (block overflow) CALL LABEL_FF0F4D
-	; (block overflow) INC 8, XSP
-	; (block overflow) LD XHL, XIZ
-	; (block overflow) JR T, PwdOk_Exit
+	push xiz
+	ld xiz, xwa
+	cp xbc, 0x1C00007
+	jr z, PwdOk_HandleConfirm
+	cp xbc, 0x1E0007C
+	jr z, PwdOk_Return2
+	cp xbc, 0x1E00084
+	jr z, PwdOk_ReturnZero
+	cp xbc, 0x1E0003A
+	jr nz, PwdOk_ReturnZero
+	pushw 0xEA
+	pushw 0x8BF6
+	push xde
+	call LABEL_FF0F4D
+	inc 8, xsp
+	ld xhl, xiz
+	jr PwdOk_Exit
 
 PwdOk_Return2:
-	; (block overflow) LD XHL, 2
-	; (block overflow) JR T, PwdOk_Exit
+	lds32 xhl, 2
+	jr PwdOk_Exit
 
 PwdOk_HandleConfirm:
-	; (block overflow) CALL GetNamingWindowID
-	; (block overflow) LD XWA, XHL
-	; (block overflow) LD XBC, 01e0003ah
-	; (block overflow) LD XDE, 0002741ch
-	; (block overflow) CALL SendEvent
-	; (block overflow) LD XWA, 00600040h
-	; (block overflow) LD XBC, 01c00002h
-	; (block overflow) LD XDE, 0
-	; (block overflow) CALL SendEvent
-	; (block overflow) LD XWA, 0ffffffffh
-	; (block overflow) LD XBC, 01c50000h
-	; (block overflow) LD XDE, 0
-	; (block overflow) CALL PostEvent
-	; (block overflow) LD XWA, 0ffffffffh
-	; (block overflow) LD XBC, 01c0000ah
-	; (block overflow) LD XDE, 0
-	; (block overflow) CALL PostEvent
-	; (block overflow) LD DE, (02741Ch)
-	; (block overflow) EXTZ XDE
-	; (block overflow) LD XWA, 01450038h
-	; (block overflow) LD XBC, 01e5000dh
-	; (block overflow) CALL MainFuncCall
+	call 0xFA1FC7
+	ld xwa, xhl
+	ld xbc, 0x1E0003A
+	ld xde, 0x2741C
+	call 0xFA9660
+	ld xwa, 0x600040
+	ld xbc, 0x1C00002
+	lds32 xde, 0
+	call 0xFA9660
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C50000
+	lds32 xde, 0
+	call LABEL_FA9752
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C0000A
+	lds32 xde, 0
+	call LABEL_FA9752
+	ldda16_24 xde, 160796
+	extz xde
+	ld xwa, 0x1450038
+	ld xbc, 0x1E5000D
+	call 0xFA4A63
 
 PwdOk_ReturnZero:
-	; (block overflow) LD XHL, 0
+	lds32 xhl, 0
 
 PwdOk_Exit:
-	; (block overflow) POP XIZ
-	; (block overflow) RET
+	pop xiz
+	ret
 
 CheckPasswordOk:
-	; (block overflow) PUSH XIZ
-	; (block overflow) LD XIZ, XWA
-	; (block overflow) CP XBC, 01c00007h
-	; (block overflow) JR Z, CheckOk_HandleConfirm
-	; (block overflow) CP XBC, 01e0007ch
-	; (block overflow) JR Z, CheckOk_Return2
-	; (block overflow) CP XBC, 01e00084h
-	; (block overflow) JRL Z, CheckOk_ReturnZero
-	; (block overflow) CP XBC, 01e0003ah
-	; (block overflow) JRL NZ, CheckOk_ReturnZero
-	; (block overflow) PUSHW 00eah
-	; (block overflow) PUSHW 8bfah
-	; (block overflow) PUSH XDE
-	; (block overflow) CALL LABEL_FF0F4D
-	; (block overflow) INC 8, XSP
-	; (block overflow) LD XHL, XIZ
-	; (block overflow) JRL T, CheckOk_Exit
+	push xiz
+	ld xiz, xwa
+	cp xbc, 0x1C00007
+	jr z, CheckOk_HandleConfirm
+	cp xbc, 0x1E0007C
+	jr z, CheckOk_Return2
+	cp xbc, 0x1E00084
+	jrl z, CheckOk_ReturnZero
+	cp xbc, 0x1E0003A
+	jrl nz, CheckOk_ReturnZero
+	pushw 0xEA
+	pushw 0x8BFA
+	push xde
+	call LABEL_FF0F4D
+	inc 8, xsp
+	ld xhl, xiz
+	jrl CheckOk_Exit
 
 CheckOk_Return2:
-	; (block overflow) LD XHL, 2
-	; (block overflow) JRL T, CheckOk_Exit
+	lds32 xhl, 2
+	jrl CheckOk_Exit
 
 CheckOk_HandleConfirm:
-	; (block overflow) CALL GetNamingWindowID
-	; (block overflow) LD XWA, XHL
-	; (block overflow) LD XBC, 01e0003ah
-	; (block overflow) LD XDE, 00027424h
-	; (block overflow) CALL SendEvent
-	; (block overflow) LD XWA, 00600045h
-	; (block overflow) LD XBC, 01c00002h
-	; (block overflow) LD XDE, 0
-	; (block overflow) CALL SendEvent
-	; (block overflow) LD XWA, 0ffffffffh
-	; (block overflow) LD XBC, 01c50000h
-	; (block overflow) LD XDE, 0
-	; (block overflow) CALL PostEvent
-	; (block overflow) LD XWA, 0ffffffffh
-	; (block overflow) LD XBC, 01c0000ah
-	; (block overflow) LD XDE, 0
-	; (block overflow) CALL PostEvent
-	; (block overflow) LD XWA, 00670001h
-	; (block overflow) LD XBC, 01e00056h
-	; (block overflow) LD XDE, 0
-	; (block overflow) CALL SendEvent
-	; (block overflow) LDA XWA, 027424h
-	; (block overflow) CP HL, 1
-	; (block overflow) JR NZ, CheckOk_Type2
-	; (block overflow) LD DE, (XWA)
-	; (block overflow) EXTZ XDE
-	; (block overflow) LD XWA, 01450038h
-	; (block overflow) LD XBC, 01e5000eh
-	; (block overflow) JR T, CheckOk_CallFunc
+	call 0xFA1FC7
+	ld xwa, xhl
+	ld xbc, 0x1E0003A
+	ld xde, 0x27424
+	call 0xFA9660
+	ld xwa, 0x600045
+	ld xbc, 0x1C00002
+	lds32 xde, 0
+	call 0xFA9660
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C50000
+	lds32 xde, 0
+	call LABEL_FA9752
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C0000A
+	lds32 xde, 0
+	call LABEL_FA9752
+	ld xwa, 0x670001
+	ld xbc, 0x1E00056
+	lds32 xde, 0
+	call 0xFA9660
+	ldada_24 xwa, 160804
+	cps hl, 1
+	jr nz, CheckOk_Type2
+	ld de, (xwa)
+	extz xde
+	ld xwa, 0x1450038
+	ld xbc, 0x1E5000E
+	jr CheckOk_CallFunc
 
 CheckOk_Type2:
-	; (block overflow) CP HL, 2
-	; (block overflow) JR NZ, CheckOk_Type3
-	; (block overflow) LD DE, (XWA)
-	; (block overflow) EXTZ XDE
-	; (block overflow) LD XWA, 01450038h
-	; (block overflow) LD XBC, 01e5000fh
-	; (block overflow) JR T, CheckOk_CallFunc
+	cps hl, 2
+	jr nz, CheckOk_Type3
+	ld de, (xwa)
+	extz xde
+	ld xwa, 0x1450038
+	ld xbc, 0x1E5000F
+	jr CheckOk_CallFunc
 
 CheckOk_Type3:
-	; (block overflow) CP HL, 3
-	; (block overflow) JR NZ, CheckOk_ReturnZero
-	; (block overflow) LD DE, (XWA)
-	; (block overflow) EXTZ XDE
-	; (block overflow) LD XWA, 01450038h
-	; (block overflow) LD XBC, 01e50010h
+	cps hl, 3
+	jr nz, CheckOk_ReturnZero
+	ld de, (xwa)
+	extz xde
+	ld xwa, 0x1450038
+	ld xbc, 0x1E50010
 
 CheckOk_CallFunc:
-	; (block overflow) CALL MainFuncCall
+	call 0xFA4A63
 
 CheckOk_ReturnZero:
-	; (block overflow) LD XHL, 0
+	lds32 xhl, 0
 
 CheckOk_Exit:
-	; (block overflow) POP XIZ
-	; (block overflow) RET
+	pop xiz
+	ret
 
 PasswordNo:
-	; (block overflow) CP XBC, 01c00007h
-	; (block overflow) JR NZ, PwdNo_Exit
-	; (block overflow) LD XWA, 00600040h
-	; (block overflow) LD XBC, 01c00002h
-	; (block overflow) LD XDE, 0
-	; (block overflow) CALL SendEvent
-	; (block overflow) LD XWA, 0ffffffffh
-	; (block overflow) LD XBC, 01c50000h
-	; (block overflow) LD XDE, 0
-	; (block overflow) CALL PostEvent
-	; (block overflow) LD XWA, 0ffffffffh
-	; (block overflow) LD XBC, 01c0000ah
-	; (block overflow) LD XDE, 0
-	; (block overflow) CALL PostEvent
+	cp xbc, 0x1C00007
+	jr nz, PwdNo_Exit
+	ld xwa, 0x600040
+	ld xbc, 0x1C00002
+	lds32 xde, 0
+	call 0xFA9660
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C50000
+	lds32 xde, 0
+	call LABEL_FA9752
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C0000A
+	lds32 xde, 0
+	call LABEL_FA9752
 
 PwdNo_Exit:
-	; (block overflow) LD XHL, 0
-	; (block overflow) RET
+	lds32 xhl, 0
+	ret
 
 CheckPasswordNo:
-	; (block overflow) CP XBC, 01c00007h
-	; (block overflow) JR NZ, CheckNo_HandleConfirm
-	; (block overflow) LD XWA, 00600045h
-	; (block overflow) LD XBC, 01c00002h
-	; (block overflow) LD XDE, 0
-	; (block overflow) CALL SendEvent
-	; (block overflow) LD XWA, 0ffffffffh
-	; (block overflow) LD XBC, 01c50000h
-	; (block overflow) LD XDE, 0
-	; (block overflow) CALL PostEvent
-	; (block overflow) LD XWA, 0ffffffffh
-	; (block overflow) LD XBC, 01c0000ah
-	; (block overflow) LD XDE, 0
-	; (block overflow) CALL PostEvent
+	cp xbc, 0x1C00007
+	jr nz, CheckNo_HandleConfirm
+	ld xwa, 0x600045
+	ld xbc, 0x1C00002
+	lds32 xde, 0
+	call 0xFA9660
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C50000
+	lds32 xde, 0
+	call LABEL_FA9752
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C0000A
+	lds32 xde, 0
+	call LABEL_FA9752
 
 CheckNo_HandleConfirm:
-	; (block overflow) LD XHL, 0
-	; (block overflow) RET
+	lds32 xhl, 0
+	ret
 
 DiskAttention:
-	; (block overflow) CP XBC, 01e0009fh
-	; (block overflow) JR NZ, CheckNo_Type1
-	; (block overflow) LDA XHL, 0EA8BFEh
-	; (block overflow) RET
+	cp xbc, 0x1E0009F
+	jr nz, CheckNo_Type1
+	ldada_24 xhl, 15371262
+	ret
 
 CheckNo_Type1:
-	; (block overflow) LD XHL, 0
-	; (block overflow) RET
+	lds32 xhl, 0
+	ret
 
 DiskSure:
-	; (block overflow) CP XBC, 01e0009fh
-	; (block overflow) JR NZ, CheckNo_Type2
-	; (block overflow) LDA XHL, 0EA8C5Ch
-	; (block overflow) RET
+	cp xbc, 0x1E0009F
+	jr nz, CheckNo_Type2
+	ldada_24 xhl, 15371356
+	ret
 
 CheckNo_Type2:
-	; (block overflow) LD XHL, 0
-	; (block overflow) RET
+	lds32 xhl, 0
+	ret
 
 FormatText:
-	; (block overflow) CP XBC, 01e0009fh
-	; (block overflow) JR NZ, CheckNo_Type3
-	; (block overflow) LDA XHL, 0EA8CDCh
-	; (block overflow) RET
+	cp xbc, 0x1E0009F
+	jr nz, CheckNo_Type3
+	ldada_24 xhl, 15371484
+	ret
 
 CheckNo_Type3:
-	; (block overflow) LD XHL, 0
-	; (block overflow) RET
+	lds32 xhl, 0
+	ret
 
 DeleteText:
-	; (block overflow) CP XBC, 01e0009fh
-	; (block overflow) JR NZ, CheckNo_CallFunc
-	; (block overflow) LDA XHL, 0EA8E70h
-	; (block overflow) RET
+	cp xbc, 0x1E0009F
+	jr nz, CheckNo_CallFunc
+	ldada_24 xhl, 15371888
+	ret
 
 CheckNo_CallFunc:
-	; (block overflow) LD XHL, 0
-	; (block overflow) RET
+	lds32 xhl, 0
+	ret
 
 DeleteYes:
-	; (block overflow) CP XBC, 01c00007h
-	; (block overflow) JR NZ, PwdChange_HandleOk
-	; (block overflow) LD XWA, 007b0051h
-	; (block overflow) LD XBC, 01c00002h
-	; (block overflow) LD XDE, 0
-	; (block overflow) CALL SendEvent
-	; (block overflow) LD XWA, 0ffffffffh
-	; (block overflow) LD XBC, 01c50000h
-	; (block overflow) LD XDE, 0
-	; (block overflow) CALL PostEvent
-	; (block overflow) LD XWA, 0ffffffffh
-	; (block overflow) LD XBC, 01c0000ah
-	; (block overflow) LD XDE, 0
-	; (block overflow) CALL PostEvent
-	; (block overflow) LD XWA, 0ffffffffh
-	; (block overflow) LD XBC, 01c00017h
-	; (block overflow) LD XDE, 00000033h
-	; (block overflow) CALL PostEvent
+	cp xbc, 0x1C00007
+	jr nz, PwdChange_HandleOk
+	ld xwa, 0x7B0051
+	ld xbc, 0x1C00002
+	lds32 xde, 0
+	call 0xFA9660
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C50000
+	lds32 xde, 0
+	call LABEL_FA9752
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C0000A
+	lds32 xde, 0
+	call LABEL_FA9752
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C00017
+	ld xde, 0x33
+	call LABEL_FA9752
 
 PwdChange_HandleOk:
-	; (block overflow) LD XHL, 0
-	; (block overflow) RET
+	lds32 xhl, 0
+	ret
 
 DeleteNo:
-	; (block overflow) CP XBC, 01c00007h
-	; (block overflow) JR NZ, PwdChange_Type1
-	; (block overflow) LD XWA, 007b0051h
-	; (block overflow) LD XBC, 01c00002h
-	; (block overflow) LD XDE, 0
-	; (block overflow) CALL SendEvent
-	; (block overflow) LD XWA, 0ffffffffh
-	; (block overflow) LD XBC, 01c50000h
-	; (block overflow) LD XDE, 0
-	; (block overflow) CALL PostEvent
-	; (block overflow) LD XWA, 0ffffffffh
-	; (block overflow) LD XBC, 01c0000ah
-	; (block overflow) LD XDE, 0
-	; (block overflow) CALL PostEvent
+	cp xbc, 0x1C00007
+	jr nz, PwdChange_Type1
+	ld xwa, 0x7B0051
+	ld xbc, 0x1C00002
+	lds32 xde, 0
+	call 0xFA9660
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C50000
+	lds32 xde, 0
+	call LABEL_FA9752
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C0000A
+	lds32 xde, 0
+	call LABEL_FA9752
 
 PwdChange_Type1:
-	; (block overflow) LD XHL, 0
-	; (block overflow) RET
+	lds32 xhl, 0
+	ret
 
 SaveText:
-	; (block overflow) CP XBC, 01e0009fh
-	; (block overflow) JR NZ, PwdChange_CallFunc
-	; (block overflow) LDA XHL, 0EA912Ah
-	; (block overflow) RET
+	cp xbc, 0x1E0009F
+	jr nz, PwdChange_CallFunc
+	ldada_24 xhl, 15372586
+	ret
 
 PwdChange_CallFunc:
-	; (block overflow) LD XHL, 0
-	; (block overflow) RET
+	lds32 xhl, 0
+	ret
 
 SaveYes:
-	; (block overflow) CP XBC, 01c00007h
-	; (block overflow) JR NZ, PwdDel_HandleOk
-	; (block overflow) LD XWA, 00600037h
-	; (block overflow) LD XBC, 01c00002h
-	; (block overflow) LD XDE, 0
-	; (block overflow) CALL SendEvent
-	; (block overflow) LD XWA, 0ffffffffh
-	; (block overflow) LD XBC, 01c50000h
-	; (block overflow) LD XDE, 0
-	; (block overflow) CALL PostEvent
-	; (block overflow) LD XWA, 0ffffffffh
-	; (block overflow) LD XBC, 01c0000ah
-	; (block overflow) LD XDE, 0
-	; (block overflow) CALL PostEvent
-	; (block overflow) LD XWA, 0ffffffffh
-	; (block overflow) LD XBC, 01c00017h
-	; (block overflow) LD XDE, 00000032h
-	; (block overflow) CALL PostEvent
+	cp xbc, 0x1C00007
+	jr nz, PwdDel_HandleOk
+	ld xwa, 0x600037
+	ld xbc, 0x1C00002
+	lds32 xde, 0
+	call 0xFA9660
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C50000
+	lds32 xde, 0
+	call LABEL_FA9752
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C0000A
+	lds32 xde, 0
+	call LABEL_FA9752
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C00017
+	ld xde, 0x32
+	call LABEL_FA9752
 
 PwdDel_HandleOk:
-	; (block overflow) LD XHL, 0
-	; (block overflow) RET
+	lds32 xhl, 0
+	ret
 
 SaveNo:
-	; (block overflow) CP XBC, 01c00007h
-	; (block overflow) JR NZ, PwdDel_Type1
-	; (block overflow) LD XWA, 00600037h
-	; (block overflow) LD XBC, 01c00002h
-	; (block overflow) LD XDE, 0
-	; (block overflow) CALL SendEvent
-	; (block overflow) LD XWA, 0ffffffffh
-	; (block overflow) LD XBC, 01c50000h
-	; (block overflow) LD XDE, 0
-	; (block overflow) CALL PostEvent
-	; (block overflow) LD XWA, 0ffffffffh
-	; (block overflow) LD XBC, 01c0000ah
-	; (block overflow) LD XDE, 0
-	; (block overflow) CALL PostEvent
+	cp xbc, 0x1C00007
+	jr nz, PwdDel_Type1
+	ld xwa, 0x600037
+	ld xbc, 0x1C00002
+	lds32 xde, 0
+	call 0xFA9660
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C50000
+	lds32 xde, 0
+	call LABEL_FA9752
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C0000A
+	lds32 xde, 0
+	call LABEL_FA9752
 
 PwdDel_Type1:
-	; (block overflow) LD XHL, 0
-	; (block overflow) RET
+	lds32 xhl, 0
+	ret
 
 InsertOptionText:
-	; (block overflow) CP XBC, 01e0009fh
-	; (block overflow) JR NZ, PwdDel_Type2
-	; (block overflow) LDA XHL, 0EA943Ch
-	; (block overflow) RET
+	cp xbc, 0x1E0009F
+	jr nz, PwdDel_Type2
+	ldada_24 xhl, 15373372
+	ret
 
 PwdDel_Type2:
-	; (block overflow) LD XHL, 0
-	; (block overflow) RET
+	lds32 xhl, 0
+	ret
 
 TypePriorityText:
-	; (block overflow) CP XBC, 01e0009fh
-	; (block overflow) JR NZ, PwdDel_CallFunc
-	; (block overflow) LDA XHL, 0EA9558h
-	; (block overflow) RET
+	cp xbc, 0x1E0009F
+	jr nz, PwdDel_CallFunc
+	ldada_24 xhl, 15373656
+	ret
 
 PwdDel_CallFunc:
-	; (block overflow) LD XHL, 0
-	; (block overflow) RET
+	lds32 xhl, 0
+	ret
 
 ; --- end include: file_io/medley.asm ---
 ; --- begin include: password_slot_routines.asm ---
@@ -316073,383 +316097,10 @@ PwdDel_CallFunc:
 ;   LABEL_F94262   - Check if external has value
 ; =============================================================================
 
-; Forward declarations for labels within the binary sections.
-; Using EQU instead of ORG+label to avoid creating segment boundaries
-; that would cut through preceding code (medley.asm extends past F92C0E).
-
-	; (EQU→inline label) LABEL_F92C0E = 0xF92C0E
-	; (EQU→inline label) LABEL_F92C13 = 0xF92C13
-	; (EQU→inline label) LABEL_F92C21 = 0xF92C21
-	; (EQU→inline label) LABEL_F92C70 = 0xF92C70
-	; (EQU→inline label) LABEL_F92CAC = 0xF92CAC
-	; (EQU→inline label) LABEL_F94193 = 0xF94193
-	; (EQU→inline label) LABEL_F941C8 = 0xF941C8
-	; (EQU→inline label) LABEL_F941E5 = 0xF941E5
-	; (EQU→inline label) LABEL_F941ED = 0xF941ED
-	; (EQU→inline label) LABEL_F941F9 = 0xF941F9
-	; (EQU→inline label) LABEL_F9420F = 0xF9420F
-	; (EQU→inline label) LABEL_F94229 = 0xF94229
-	; (EQU→inline label) LABEL_F94236 = 0xF94236
-	; (EQU→inline label) LABEL_F94242 = 0xF94242
-	; (EQU→inline label) LABEL_F9424A = 0xF9424A
-	; (EQU→inline label) LABEL_F94250 = 0xF94250
-	; (EQU→inline label) LABEL_F94256 = 0xF94256
-	; (EQU→inline label) LABEL_F94262 = 0xF94262
-
-; =============================================================================
-; Password slot navigation routines (F92C0E - F92CE7)
-; =============================================================================
-
-	.org 0xF92C0E - 0xE00000, 0xFF
-	.incbin "../includes/f92c0e_f92ce7.bin"
-
-; =============================================================================
-; Password slot storage routines (F94193 - F94269)
-; =============================================================================
-
-	.byte 0xef, 0x6e, 0x3e, 0xd9, 0x8e, 0xbf, 0x06, 0x60, 0xe8, 0xa8, 0x41, 0x03, 0x00, 0xe5, 0x01, 0xea	; 0xF92CE8 (padding)
-	.byte 0xa8, 0x1e, 0x6e, 0xb3, 0xd7, 0xfa, 0x9b, 0xd7, 0xfa, 0x88, 0xe8, 0x12, 0xd8, 0x0a, 0x0a, 0x00	; 0xF92CF8 (padding)
-	.byte 0xd7, 0xfa, 0x98, 0xd8, 0x08, 0x0a, 0x00, 0xd7, 0xfa, 0x98, 0xbf, 0x04, 0x02, 0x0a, 0x00, 0xd7	; 0xF92D08 (padding)
-	.byte 0xfa, 0x88, 0xd8, 0xc8, 0x0a, 0x00, 0xde, 0xf0, 0x67, 0x09, 0xbf, 0x04, 0x56, 0xd7, 0xfa, 0x88	; 0xF92D18 (padding)
-	.byte 0x9f, 0x04, 0xa8, 0xde, 0xa8, 0x9f, 0x04, 0x3f, 0x00, 0x00, 0x63, 0x43, 0xde, 0x88, 0xd8, 0xee	; 0xF92D28 (padding)
-	.byte 0x03, 0xf1, 0xe0, 0x83, 0x31, 0xe8, 0x12, 0xe9, 0x80, 0xd7, 0xfa, 0x89, 0xde, 0x81, 0xf1, 0xa0	; 0xF92D38 (padding)
-	.byte 0x88, 0x32, 0xe9, 0x12, 0xea, 0x81, 0x81, 0x23, 0xd9, 0x12, 0xde, 0x8a, 0x1e, 0x72, 0xef, 0xde	; 0xF92D48 (padding)
-	.byte 0x8a, 0xda, 0xee, 0x03, 0xf1, 0xe0, 0x83, 0x30, 0xea, 0x12, 0xe8, 0x82, 0xaf, 0x06, 0x20, 0x41	; 0xF92D58 (padding)
-	.byte 0x0f, 0x00, 0xc0, 0x01, 0x1d, 0x58, 0x9d, 0xfa, 0xde, 0x61, 0x9f, 0x04, 0xf6, 0x67, 0xbd, 0xde	; 0xF92D68 (padding)
-	.byte 0xcf, 0x0a, 0x00, 0x6f, 0x36, 0xde, 0x88, 0xd8, 0xee, 0x03, 0xf1, 0xe0, 0x83, 0x31, 0xe8, 0x12	; 0xF92D78 (padding)
-	.byte 0xe9, 0x80, 0x31, 0xff, 0x00, 0xde, 0x8a, 0x1e, 0x37, 0xef, 0xde, 0x8a, 0xda, 0xee, 0x03, 0xf1	; 0xF92D88 (padding)
-	.byte 0xe0, 0x83, 0x30, 0xea, 0x12, 0xe8, 0x82, 0xaf, 0x06, 0x20, 0x41, 0x0f, 0x00, 0xc0, 0x01, 0x1d	; 0xF92D98 (padding)
-	.byte 0x58, 0x9d, 0xfa, 0xde, 0x61, 0xde, 0xcf, 0x0a, 0x00, 0x67, 0xca, 0x5e, 0xef, 0x66, 0x0e, 0xef	; 0xF92DA8 (padding)
-	.byte 0x6c, 0x2e, 0xe9, 0x8b, 0xbf, 0x02, 0x60, 0xeb, 0xcf, 0x0a, 0x00, 0xe5, 0x01, 0x76, 0x94, 0x04	; 0xF92DB8 (padding)
-	.byte 0xea, 0x88, 0xeb, 0xcf, 0x08, 0x00, 0xe5, 0x01, 0x76, 0x83, 0x04, 0xd1, 0x38, 0x84, 0x21, 0xeb	; 0xF92DC8 (padding)
-	.byte 0xcf, 0x18, 0x00, 0xc0, 0x01, 0x76, 0xad, 0x02, 0xeb, 0xcf, 0x17, 0x00, 0xc0, 0x01, 0x76, 0xa4	; 0xF92DD8 (padding)
-	.byte 0x02, 0xeb, 0xcf, 0x0b, 0x00, 0xc0, 0x01, 0x76, 0x91, 0x02, 0xeb, 0xcf, 0x04, 0x00, 0xe5, 0x01	; 0xF92DE8 (padding)
-	.byte 0x76, 0x81, 0x02, 0xeb, 0xcf, 0x13, 0x00, 0xc0, 0x01, 0x7e, 0x79, 0x04, 0xea, 0xcf, 0x03, 0x00	; 0xF92DF8 (padding)
-	.byte 0x00, 0x00, 0x76, 0x44, 0x02, 0xea, 0xcf, 0x02, 0x00, 0x00, 0x00, 0x7e, 0x67, 0x04, 0xd8, 0xa8	; 0xF92E08 (padding)
-	.byte 0x1e, 0xe9, 0x83, 0xc1, 0x37, 0x8d, 0x21, 0xf1, 0x3a, 0x84, 0x41, 0xc9, 0xcf, 0x6f, 0x66, 0x05	; 0xF92E18 (padding)
-	.byte 0xc9, 0xcf, 0x72, 0x6e, 0x39, 0xf1, 0xfe, 0x84, 0x00, 0x00, 0x1d, 0x6d, 0x07, 0xf2, 0xcf, 0xdc	; 0xF92E28 (padding)
-	.byte 0x66, 0x1d, 0xcf, 0xdb, 0x66, 0x0f, 0xcf, 0xda, 0x7e, 0x3a, 0x04, 0xf1, 0x42, 0x7f, 0x00, 0x01	; 0xF92E38 (padding)
-	.byte 0x30, 0xee, 0x00, 0x68, 0x12, 0xf1, 0x42, 0x7f, 0x00, 0x31, 0x30, 0xee, 0x00, 0x68, 0x08, 0xf1	; 0xF92E48 (padding)
-	.byte 0x42, 0x7f, 0x00, 0x3f, 0x30, 0xee, 0x00, 0x1d, 0xbd, 0x94, 0xf9, 0x78, 0x17, 0x04, 0xc9, 0xcf	; 0xF92E58 (padding)
-	.byte 0x73, 0x66, 0x06, 0xc9, 0xcf, 0x76, 0x7e, 0x37, 0x01, 0x1d, 0x6d, 0x07, 0xf2, 0xcf, 0xd9, 0x77	; 0xF92E68 (padding)
-	.byte 0x1d, 0x01, 0x1d, 0x6d, 0x07, 0xf2, 0xcf, 0xdc, 0x66, 0x1c, 0xcf, 0xdb, 0x66, 0x0e, 0xcf, 0xda	; 0xF92E78 (padding)
-	.byte 0x6e, 0x24, 0xf1, 0x42, 0x7f, 0x00, 0x01, 0x30, 0xee, 0x00, 0x68, 0x12, 0xf1, 0x42, 0x7f, 0x00	; 0xF92E88 (padding)
-	.byte 0x31, 0x30, 0xee, 0x00, 0x68, 0x08, 0xf1, 0x42, 0x7f, 0x00, 0x3f, 0x30, 0xee, 0x00, 0x1d, 0xbd	; 0xF92E98 (padding)
-	.byte 0x94, 0xf9, 0xc1, 0x3c, 0x84, 0x61, 0xf1, 0xfe, 0x84, 0x00, 0x01, 0xc1, 0x22, 0x89, 0x21, 0xc1	; 0xF92EA8 (padding)
-	.byte 0x20, 0x89, 0xf1, 0x6f, 0x5b, 0xde, 0xa8, 0xd1, 0x38, 0x84, 0x21, 0xd9, 0xd8, 0x73, 0xb5, 0x03	; 0xF92EB8 (padding)
-	.byte 0xf1, 0xa0, 0x88, 0x32, 0xde, 0x8b, 0xeb, 0x12, 0xea, 0x83, 0x83, 0xf9, 0x6e, 0x39, 0xde, 0x8a	; 0xF92EC8 (padding)
-	.byte 0xea, 0x12, 0xaf, 0x02, 0x20, 0x41, 0x02, 0x00, 0xe5, 0x01, 0x1e, 0x85, 0xb1, 0xe1, 0x30, 0x84	; 0xF92ED8 (padding)
-	.byte 0x20, 0xd1, 0x38, 0x84, 0x21, 0x1e, 0xf8, 0xfd, 0xc1, 0x22, 0x89, 0x61, 0xde, 0x88, 0x1d, 0x7f	; 0xF92EE8 (padding)
-	.byte 0xa0, 0xf8, 0xe1, 0x34, 0x84, 0x20, 0xe8, 0xe0, 0x76, 0x7a, 0x03, 0x41, 0x09, 0x00, 0xe5, 0x01	; 0xF92EF8 (padding)
-	.byte 0x42, 0x1e, 0x00, 0x00, 0x00, 0x68, 0x71, 0xde, 0x61, 0xd9, 0xf6, 0x67, 0xb7, 0x78, 0x65, 0x03	; 0xF92F08 (padding)
-	.byte 0xc1, 0x24, 0x89, 0x3f, 0x00, 0x66, 0x71, 0xc1, 0x3c, 0x84, 0xf9, 0x6f, 0x6b, 0xf1, 0x22, 0x89	; 0xF92F18 (padding)
-	.byte 0x00, 0x00, 0xf1, 0x3c, 0x84, 0x00, 0x00, 0xde, 0xa8, 0xd1, 0x38, 0x84, 0x20, 0xd8, 0xd8, 0x73	; 0xF92F28 (padding)
-	.byte 0x43, 0x03, 0xf1, 0xa0, 0x88, 0x31, 0xde, 0x8a, 0xea, 0x12, 0xe9, 0x82, 0x82, 0x3f, 0x00, 0x6e	; 0xF92F38 (padding)
-	.byte 0x3e, 0xde, 0x8a, 0xea, 0x12, 0xaf, 0x02, 0x20, 0x41, 0x02, 0x00, 0xe5, 0x01, 0x1e, 0x12, 0xb1	; 0xF92F48 (padding)
-	.byte 0xe1, 0x30, 0x84, 0x20, 0xd1, 0x38, 0x84, 0x21, 0x1e, 0x85, 0xfd, 0xc1, 0x22, 0x89, 0x61, 0xde	; 0xF92F58 (padding)
-	.byte 0x88, 0x1d, 0x7f, 0xa0, 0xf8, 0xe1, 0x34, 0x84, 0x20, 0xe8, 0xe0, 0x76, 0x07, 0x03, 0x41, 0x09	; 0xF92F68 (padding)
-	.byte 0x00, 0xe5, 0x01, 0x42, 0x1e, 0x00, 0x00, 0x00, 0x1d, 0x58, 0x9d, 0xfa, 0x78, 0xf6, 0x02, 0xde	; 0xF92F78 (padding)
-	.byte 0x61, 0xd8, 0xf6, 0x67, 0xb1, 0x78, 0xed, 0x02, 0xf1, 0x3c, 0x84, 0x00, 0x00, 0x68, 0x09, 0x1d	; 0xF92F88 (padding)
-	.byte 0x6d, 0x07, 0xf2, 0xcf, 0xd8, 0x7e, 0xdd, 0x02, 0xf1, 0xfe, 0x84, 0x00, 0x00, 0x78, 0xd5, 0x02	; 0xF92F98 (padding)
-	.byte 0xea, 0xa8, 0xc1, 0x44, 0x89, 0x25, 0x40, 0x18, 0x00, 0x6c, 0x00, 0x41, 0x3b, 0x00, 0xe0, 0x01	; 0xF92FA8 (padding)
-	.byte 0x1d, 0x58, 0x9d, 0xfa, 0xd1, 0x04, 0x85, 0x3f, 0x00, 0x00, 0x69, 0x43, 0x40, 0x26, 0x00, 0x60	; 0xF92FB8 (padding)
-	.byte 0x00, 0x41, 0x01, 0x00, 0xc0, 0x01, 0xea, 0xad, 0x1d, 0x58, 0x9d, 0xfa, 0x1d, 0x78, 0x9c, 0xf8	; 0xF92FC8 (padding)
-	.byte 0xf1, 0x04, 0x85, 0x53, 0x1d, 0x8d, 0x95, 0xf8, 0x1d, 0x3b, 0x95, 0xf8, 0x40, 0x26, 0x00, 0x60	; 0xF92FD8 (padding)
-	.byte 0x00, 0x41, 0x02, 0x00, 0xc0, 0x01, 0xea, 0xa8, 0x1d, 0x58, 0x9d, 0xfa, 0x40, 0xff, 0xff, 0xff	; 0xF92FE8 (padding)
-	.byte 0xff, 0x41, 0x0a, 0x00, 0xc0, 0x01, 0xea, 0xa8, 0x1d, 0x58, 0x9d, 0xfa, 0x1e, 0x59, 0x82, 0xf1	; 0xF92FF8 (padding)
-	.byte 0xfe, 0x84, 0x00, 0x00, 0xf1, 0x22, 0x89, 0x00, 0x00, 0xf1, 0x20, 0x89, 0x00, 0x00, 0x31, 0x80	; 0xF93008 (padding)
-	.byte 0x00, 0xd1, 0x04, 0x85, 0x20, 0xd8, 0xcf, 0x80, 0x00, 0x6b, 0x02, 0xd8, 0x89, 0xf1, 0x38, 0x84	; 0xF93018 (padding)
-	.byte 0x51, 0xde, 0xa8, 0xd9, 0xd8, 0x63, 0x15, 0xf1, 0xa0, 0x88, 0x30, 0xde, 0x89, 0xe9, 0x12, 0xe8	; 0xF93028 (padding)
-	.byte 0x81, 0xb1, 0x00, 0xff, 0xde, 0x61, 0xd1, 0x38, 0x84, 0xf6, 0x67, 0xef, 0x1d, 0xcd, 0x0a, 0xf2	; 0xF93038 (padding)
-	.byte 0xe8, 0xa8, 0xf1, 0x34, 0x84, 0x60, 0x78, 0x2c, 0x02, 0xc1, 0x36, 0x8d, 0x21, 0xc9, 0xcf, 0x6f	; 0xF93048 (padding)
-	.byte 0x76, 0x22, 0x02, 0xc9, 0xcf, 0x72, 0x76, 0x1c, 0x02, 0xc9, 0xcf, 0x73, 0x76, 0x16, 0x02, 0xc9	; 0xF93058 (padding)
-	.byte 0xcf, 0x76, 0x76, 0x10, 0x02, 0x1d, 0x70, 0x0b, 0xf2, 0x1e, 0xd0, 0x81, 0xf1, 0xfe, 0x84, 0x00	; 0xF93068 (padding)
-	.byte 0x00, 0x78, 0x01, 0x02, 0xf1, 0x30, 0x84, 0x60, 0x78, 0xfa, 0x01, 0xe1, 0x30, 0x84, 0x20, 0x1e	; 0xF93078 (padding)
-	.byte 0x5e, 0xfc, 0x78, 0xf0, 0x01, 0xf1, 0xa0, 0x88, 0x30, 0xea, 0xcf, 0x0a, 0x00, 0x00, 0x00, 0x6e	; 0xF93088 (padding)
-	.byte 0x7d, 0xc1, 0xfe, 0x84, 0x3f, 0x00, 0x6e, 0x76, 0xde, 0xa8, 0xd9, 0x8a, 0xd9, 0xd8, 0x63, 0x11	; 0xF93098 (padding)
-	.byte 0xde, 0x89, 0xe9, 0x12, 0xe8, 0x81, 0x81, 0x3f, 0xff, 0x66, 0x06, 0xde, 0x61, 0xda, 0xf6, 0x67	; 0xF930A8 (padding)
-	.byte 0xef, 0xda, 0xf6, 0x6f, 0x29, 0xde, 0xa8, 0xda, 0xd8, 0x63, 0x49, 0xf1, 0xa0, 0x88, 0x32, 0xde	; 0xF930B8 (padding)
-	.byte 0x89, 0xe9, 0x12, 0xea, 0x81, 0x81, 0x21, 0xc9, 0xcf, 0xff, 0x6e, 0x08, 0xb1, 0x14, 0x20, 0x89	; 0xF930C8 (padding)
-	.byte 0xc1, 0x20, 0x89, 0x61, 0xde, 0x61, 0xd1, 0x38, 0x84, 0xf6, 0x67, 0xe3, 0x68, 0x26, 0xde, 0xa8	; 0xF930D8 (padding)
-	.byte 0xda, 0xd8, 0x63, 0x20, 0xf1, 0xa0, 0x88, 0x32, 0xde, 0x89, 0xe9, 0x12, 0xea, 0x81, 0x81, 0x21	; 0xF930E8 (padding)
-	.byte 0xc9, 0xcf, 0xfd, 0x6b, 0x07, 0xb1, 0x00, 0xff, 0xc1, 0x20, 0x89, 0x69, 0xde, 0x61, 0xd1, 0x38	; 0xF930F8 (padding)
-	.byte 0x84, 0xf6, 0x67, 0xe4, 0xe1, 0x30, 0x84, 0x20, 0xd1, 0x38, 0x84, 0x21, 0x68, 0x7c, 0xea, 0xcf	; 0xF93108 (padding)
-	.byte 0x0b, 0x00, 0x00, 0x00, 0x6e, 0x7a, 0xc1, 0xfe, 0x84, 0x3f, 0x00, 0x6e, 0x73, 0xaf, 0x02, 0x20	; 0xF93118 (padding)
-	.byte 0x41, 0x03, 0x00, 0xe5, 0x01, 0xea, 0xa8, 0x1e, 0x38, 0xaf, 0xdb, 0x8e, 0xf1, 0xa0, 0x88, 0x33	; 0xF93128 (padding)
-	.byte 0xde, 0x88, 0xe8, 0x12, 0xeb, 0x80, 0x80, 0x23, 0xcb, 0xcf, 0xff, 0x6e, 0x0a, 0xb0, 0x14, 0x20	; 0xF93138 (padding)
-	.byte 0x89, 0xc1, 0x20, 0x89, 0x61, 0x68, 0x3b, 0xcb, 0xcf, 0xfd, 0x6b, 0x36, 0xb0, 0x00, 0xff, 0xc1	; 0xF93148 (padding)
-	.byte 0x20, 0x89, 0x21, 0xc9, 0x69, 0xf1, 0x20, 0x89, 0x41, 0xdd, 0xa8, 0xde, 0xa8, 0xd8, 0x12, 0xd8	; 0xF93158 (padding)
-	.byte 0xd8, 0x63, 0x1f, 0xd8, 0x8c, 0xde, 0x8a, 0xea, 0x12, 0xeb, 0x82, 0x82, 0x21, 0xc9, 0xcf, 0xfd	; 0xF93168 (padding)
-	.byte 0x6b, 0x0a, 0xdd, 0x61, 0xcb, 0xf1, 0x63, 0x04, 0xc9, 0x69, 0xb2, 0x41, 0xde, 0x61, 0xdc, 0xf5	; 0xF93178 (padding)
-	.byte 0x67, 0xe3, 0xe1, 0x30, 0x84, 0x20, 0xd1, 0x38, 0x84, 0x21, 0x1e, 0x53, 0xfb, 0x78, 0xe5, 0x00	; 0xF93188 (padding)
-	.byte 0xea, 0xcf, 0x0c, 0x00, 0x00, 0x00, 0x6e, 0x18, 0xeb, 0xcf, 0x17, 0x00, 0xc0, 0x01, 0x6e, 0x08	; 0xF93198 (padding)
-	.byte 0xf1, 0x24, 0x89, 0x00, 0x01, 0x78, 0xcd, 0x00, 0xf1, 0x24, 0x89, 0x00, 0x00, 0x78, 0xc5, 0x00	; 0xF931A8 (padding)
-	.byte 0xea, 0xcf, 0x0d, 0x00, 0x00, 0x00, 0x7e, 0xbc, 0x00, 0xc1, 0xfe, 0x84, 0x3f, 0x00, 0x7e, 0xb4	; 0xF931B8 (padding)
-	.byte 0x00, 0xf1, 0x22, 0x89, 0x00, 0x00, 0xf1, 0x3c, 0x84, 0x00, 0x00, 0xde, 0xa8, 0xd1, 0x38, 0x84	; 0xF931C8 (padding)
-	.byte 0x21, 0xd9, 0xd8, 0x63, 0x48, 0xde, 0x8a, 0xea, 0x12, 0xe8, 0x82, 0x82, 0x3f, 0x00, 0x6e, 0x37	; 0xF931D8 (padding)
-	.byte 0xf1, 0xfe, 0x84, 0x00, 0x01, 0xde, 0x8a, 0xea, 0x12, 0xaf, 0x02, 0x20, 0x41, 0x02, 0x00, 0xe5	; 0xF931E8 (padding)
-	.byte 0x01, 0x1e, 0x6e, 0xae, 0xc1, 0x22, 0x89, 0x61, 0xde, 0x88, 0x1d, 0x7f, 0xa0, 0xf8, 0x40, 0xff	; 0xF931F8 (padding)
-	.byte 0xff, 0xff, 0xff, 0x41, 0x9a, 0x00, 0xe0, 0x01, 0xea, 0xa8, 0x1d, 0x58, 0x9d, 0xfa, 0x30, 0x73	; 0xF93208 (padding)
-	.byte 0x00, 0x1d, 0x90, 0x94, 0xf9, 0x68, 0x06, 0xde, 0x61, 0xd9, 0xf6, 0x67, 0xb8, 0xc1, 0xfe, 0x84	; 0xF93218 (padding)
-	.byte 0x3f, 0x00, 0x6e, 0x51, 0xaf, 0x02, 0x20, 0x41, 0x03, 0x00, 0xe5, 0x01, 0xea, 0xa8, 0x1e, 0x31	; 0xF93228 (padding)
-	.byte 0xae, 0xdb, 0x8e, 0xde, 0x88, 0x1d, 0x7f, 0xa0, 0xf8, 0x40, 0xff, 0xff, 0xff, 0xff, 0x41, 0x9a	; 0xF93238 (padding)
-	.byte 0x00, 0xe0, 0x01, 0xea, 0xa8, 0x1d, 0x58, 0x9d, 0xfa, 0x30, 0x6f, 0x00, 0x68, 0x23, 0xf1, 0x34	; 0xF93248 (padding)
-	.byte 0x84, 0x60, 0x68, 0x21, 0xc1, 0xfe, 0x84, 0x3f, 0x00, 0x66, 0x1a, 0x40, 0xff, 0xff, 0xff, 0xff	; 0xF93258 (padding)
-	.byte 0x41, 0x9a, 0x00, 0xe0, 0x01, 0xea, 0xa8, 0x1d, 0x58, 0x9d, 0xfa, 0xc1, 0x3a, 0x84, 0x21, 0xd8	; 0xF93268 (padding)
-	.byte 0x12, 0x1d, 0x90, 0x94, 0xf9, 0xeb, 0xa8, 0x4e, 0xef, 0x64, 0x0e, 0xef, 0x6e, 0x2e, 0xbf, 0x02	; 0xF93278 (padding)
-	.byte 0x51, 0xbf, 0x04, 0x60, 0xde, 0xa8, 0xde, 0x8a, 0xda, 0xee, 0x05, 0xf1, 0x0c, 0x85, 0x31, 0xea	; 0xF93288 (padding)
-	.byte 0x12, 0xe9, 0x82, 0xc7, 0xf8, 0x89, 0xb2, 0x41, 0x9f, 0x02, 0x20, 0xde, 0x80, 0x1d, 0xf1, 0xa5	; 0xF93298 (padding)
-	.byte 0xf8, 0xeb, 0x89, 0xde, 0x88, 0xd8, 0xee, 0x05, 0xda, 0xa9, 0xd8, 0x82, 0xf1, 0x0c, 0x85, 0x33	; 0xF932A8 (padding)
-	.byte 0xda, 0x88, 0xe8, 0x12, 0xeb, 0x80, 0x9f, 0x02, 0x22, 0xde, 0x82, 0xda, 0x61, 0x0b, 0x14, 0x00	; 0xF932B8 (padding)
-	.byte 0x0b, 0x01, 0x00, 0x1d, 0xdd, 0x91, 0xf8, 0xde, 0x8a, 0xda, 0xee, 0x05, 0xf1, 0x0c, 0x85, 0x31	; 0xF932C8 (padding)
-	.byte 0xea, 0x12, 0xe9, 0x82, 0xaf, 0x04, 0x20, 0x41, 0x0f, 0x00, 0xc0, 0x01, 0x1d, 0x58, 0x9d, 0xfa	; 0xF932D8 (padding)
-	.byte 0xde, 0x61, 0xde, 0xcf, 0x0a, 0x00, 0x61, 0x9e, 0x4e, 0xef, 0x66, 0x0e, 0xef, 0x6c, 0x2e, 0xbf	; 0xF932E8 (padding)
-	.byte 0x02, 0x60, 0xe9, 0xcf, 0x03, 0x00, 0xe5, 0x01, 0x76, 0xe4, 0x01, 0xd1, 0x42, 0x84, 0x20, 0xd8	; 0xF932F8 (padding)
-	.byte 0x8e, 0xe9, 0xcf, 0x02, 0x00, 0xe5, 0x01, 0x76, 0xa4, 0x01, 0xd8, 0x8b, 0xeb, 0x13, 0xdb, 0x0b	; 0xF93308 (padding)
-	.byte 0x0a, 0x00, 0xe9, 0xcf, 0x18, 0x00, 0xc0, 0x01, 0x66, 0x5b, 0xe9, 0xcf, 0x17, 0x00, 0xc0, 0x01	; 0xF93318 (padding)
-	.byte 0x66, 0x53, 0xe9, 0xcf, 0x0b, 0x00, 0xc0, 0x01, 0x66, 0x39, 0xe9, 0xcf, 0x04, 0x00, 0xe5, 0x01	; 0xF93328 (padding)
-	.byte 0x6e, 0x3e, 0xf1, 0x3e, 0x84, 0x62, 0x1d, 0xc8, 0xa4, 0xf8, 0xf1, 0x42, 0x84, 0x53, 0xdb, 0xd8	; 0xF93338 (padding)
-	.byte 0x69, 0x06, 0xf1, 0x42, 0x84, 0x02, 0x00, 0x00, 0xd1, 0x42, 0x84, 0x20, 0xe8, 0x13, 0xd8, 0x0b	; 0xF93348 (padding)
-	.byte 0x0a, 0x00, 0xd7, 0xe2, 0x8a, 0xea, 0x13, 0xe1, 0x3e, 0x84, 0x20, 0x41, 0x02, 0x00, 0xe5, 0x01	; 0xF93358 (padding)
-	.byte 0x78, 0x75, 0x01, 0xdb, 0x09, 0x0a, 0x00, 0xe1, 0x3e, 0x84, 0x20, 0xdb, 0x89, 0x1e, 0x0b, 0xff	; 0xF93368 (padding)
-	.byte 0xeb, 0xa8, 0x78, 0x70, 0x01, 0xea, 0xe2, 0x6e, 0x2d, 0xc1, 0xfe, 0x84, 0x3f, 0x00, 0x6e, 0x26	; 0xF93378 (padding)
-	.byte 0xe9, 0xcf, 0x18, 0x00, 0xc0, 0x01, 0x6e, 0x0e, 0xd8, 0x89, 0xd9, 0x61, 0xd1, 0x06, 0x85, 0xf1	; 0xF93388 (padding)
-	.byte 0x69, 0x77, 0xd8, 0x61, 0x68, 0x4c, 0xe9, 0xcf, 0x17, 0x00, 0xc0, 0x01, 0x6e, 0x6b, 0xd8, 0xd8	; 0xF93398 (padding)
-	.byte 0x62, 0x67, 0xd8, 0x69, 0x68, 0x3c, 0xea, 0xcf, 0x01, 0x00, 0x00, 0x00, 0x6e, 0x13, 0xc1, 0xfe	; 0xF933A8 (padding)
-	.byte 0x84, 0x3f, 0x00, 0x6e, 0x0c, 0xd8, 0xcf, 0x0a, 0x00, 0x61, 0x4e, 0xd8, 0xca, 0x0a, 0x00, 0x68	; 0xF933B8 (padding)
-	.byte 0x21, 0xea, 0xcf, 0x02, 0x00, 0x00, 0x00, 0x6e, 0x40, 0xc1, 0xfe, 0x84, 0x3f, 0x00, 0x6e, 0x39	; 0xF933C8 (padding)
-	.byte 0xd8, 0x89, 0xd9, 0xc8, 0x0a, 0x00, 0xd1, 0x06, 0x85, 0x22, 0xda, 0xf1, 0x69, 0x0a, 0xd8, 0xc8	; 0xF933D8 (padding)
-	.byte 0x0a, 0x00, 0xf1, 0x42, 0x84, 0x50, 0x68, 0x25, 0xda, 0x89, 0xd9, 0x69, 0xd9, 0x88, 0xe8, 0x13	; 0xF933E8 (padding)
-	.byte 0xd8, 0x0b, 0x0a, 0x00, 0xd8, 0xf3, 0x69, 0x11, 0xea, 0x13, 0xda, 0x0b, 0x0a, 0x00, 0xd7, 0xea	; 0xF933F8 (padding)
-	.byte 0x88, 0xd8, 0xd8, 0x66, 0x04, 0xf1, 0x42, 0x84, 0x51, 0xd1, 0x42, 0x84, 0x20, 0xd8, 0xf6, 0x76	; 0xF93408 (padding)
-	.byte 0x5e, 0xff, 0x1d, 0xa5, 0xa5, 0xf8, 0xd1, 0x42, 0x84, 0x20, 0xe8, 0x13, 0xd8, 0x0b, 0x0a, 0x00	; 0xF93418 (padding)
-	.byte 0xd7, 0xe2, 0x8a, 0xea, 0x13, 0xe1, 0x3e, 0x84, 0x20, 0x41, 0x02, 0x00, 0xe5, 0x01, 0x1d, 0x58	; 0xF93428 (padding)
-	.byte 0x9d, 0xfa, 0xd1, 0x42, 0x84, 0x21, 0xe9, 0x13, 0xd9, 0x0b, 0x0a, 0x00, 0xde, 0x8a, 0xea, 0x13	; 0xF93438 (padding)
-	.byte 0xda, 0x0b, 0x0a, 0x00, 0xe1, 0x3e, 0x84, 0x20, 0xd9, 0xf2, 0x6e, 0x4b, 0xde, 0x89, 0xe9, 0x13	; 0xF93448 (padding)
-	.byte 0xd9, 0x0b, 0x0a, 0x00, 0xd7, 0xe6, 0x89, 0xd9, 0xee, 0x05, 0xf1, 0x0c, 0x85, 0x33, 0xd9, 0x8a	; 0xF93458 (padding)
-	.byte 0xea, 0x12, 0xeb, 0x82, 0x41, 0x0f, 0x00, 0xc0, 0x01, 0x1d, 0x58, 0x9d, 0xfa, 0xd1, 0x42, 0x84	; 0xF93468 (padding)
-	.byte 0x20, 0xe8, 0x13, 0xd8, 0x0b, 0x0a, 0x00, 0xd7, 0xe2, 0x88, 0xd8, 0xee, 0x05, 0xf1, 0x0c, 0x85	; 0xF93478 (padding)
-	.byte 0x31, 0xd8, 0x8a, 0xea, 0x12, 0xe9, 0x82, 0xe1, 0x3e, 0x84, 0x20, 0x41, 0x0f, 0x00, 0xc0, 0x01	; 0xF93488 (padding)
-	.byte 0x1d, 0x58, 0x9d, 0xfa, 0x78, 0xd9, 0xfe, 0xd9, 0x09, 0x0a, 0x00, 0x1e, 0xdd, 0xfd, 0xaf, 0x02	; 0xF93498 (padding)
-	.byte 0x20, 0x41, 0x0b, 0x00, 0xc0, 0x01, 0xea, 0xa8, 0x1e, 0x0d, 0x01, 0x78, 0xc2, 0xfe, 0xc1, 0xfe	; 0xF934A8 (padding)
-	.byte 0x84, 0x3f, 0x00, 0x76, 0xba, 0xfe, 0xf1, 0x42, 0x84, 0x52, 0xda, 0x88, 0x1d, 0xa5, 0xa5, 0xf8	; 0xF934B8 (padding)
-	.byte 0xd1, 0x42, 0x84, 0x20, 0xe8, 0x13, 0xd8, 0x0b, 0x0a, 0x00, 0xd7, 0xe2, 0x8a, 0xea, 0x13, 0xe1	; 0xF934C8 (padding)
-	.byte 0x3e, 0x84, 0x20, 0x41, 0x02, 0x00, 0xe5, 0x01, 0x1d, 0x58, 0x9d, 0xfa, 0x78, 0x91, 0xfe, 0xd1	; 0xF934D8 (padding)
-	.byte 0x42, 0x84, 0x23, 0xeb, 0x13, 0x4e, 0xef, 0x64, 0x0e, 0xef, 0x6e, 0x3e, 0xd9, 0x8e, 0xbf, 0x06	; 0xF934E8 (padding)
-	.byte 0x60, 0xe8, 0xa8, 0x41, 0x03, 0x00, 0xe5, 0x01, 0xea, 0xa8, 0x1e, 0xef, 0xfd, 0xd7, 0xfa, 0x9b	; 0xF934F8 (padding)
-	.byte 0xd7, 0xfa, 0x88, 0xe8, 0x12, 0xd8, 0x0a, 0x0a, 0x00, 0xd7, 0xfa, 0x98, 0xd8, 0x08, 0x0a, 0x00	; 0xF93508 (padding)
-	.byte 0xd7, 0xfa, 0x98, 0xbf, 0x04, 0x02, 0x0a, 0x00, 0xd7, 0xfa, 0x88, 0xd8, 0xc8, 0x0a, 0x00, 0xde	; 0xF93518 (padding)
-	.byte 0xf0, 0x67, 0x09, 0xbf, 0x04, 0x56, 0xd7, 0xfa, 0x88, 0x9f, 0x04, 0xa8, 0xde, 0xa8, 0x9f, 0x04	; 0xF93528 (padding)
-	.byte 0x3f, 0x00, 0x00, 0x63, 0x43, 0xde, 0x88, 0xd8, 0xee, 0x03, 0xf1, 0x44, 0x84, 0x31, 0xe8, 0x12	; 0xF93538 (padding)
-	.byte 0xe9, 0x80, 0xd7, 0xfa, 0x89, 0xde, 0x81, 0xf1, 0xa0, 0x88, 0x32, 0xe9, 0x12, 0xea, 0x81, 0x81	; 0xF93548 (padding)
-	.byte 0x23, 0xd9, 0x12, 0xde, 0x8a, 0x1e, 0x69, 0xe7, 0xde, 0x8a, 0xda, 0xee, 0x03, 0xf1, 0x44, 0x84	; 0xF93558 (padding)
-	.byte 0x30, 0xea, 0x12, 0xe8, 0x82, 0xaf, 0x06, 0x20, 0x41, 0x0f, 0x00, 0xc0, 0x01, 0x1d, 0x58, 0x9d	; 0xF93568 (padding)
-	.byte 0xfa, 0xde, 0x61, 0x9f, 0x04, 0xf6, 0x67, 0xbd, 0xde, 0xcf, 0x0a, 0x00, 0x6f, 0x36, 0xde, 0x88	; 0xF93578 (padding)
-	.byte 0xd8, 0xee, 0x03, 0xf1, 0x44, 0x84, 0x31, 0xe8, 0x12, 0xe9, 0x80, 0x31, 0xff, 0x00, 0xde, 0x8a	; 0xF93588 (padding)
-	.byte 0x1e, 0x2e, 0xe7, 0xde, 0x8a, 0xda, 0xee, 0x03, 0xf1, 0x44, 0x84, 0x30, 0xea, 0x12, 0xe8, 0x82	; 0xF93598 (padding)
-	.byte 0xaf, 0x06, 0x20, 0x41, 0x0f, 0x00, 0xc0, 0x01, 0x1d, 0x58, 0x9d, 0xfa, 0xde, 0x61, 0xde, 0xcf	; 0xF935A8 (padding)
-	.byte 0x0a, 0x00, 0x67, 0xca, 0x5e, 0xef, 0x66, 0x0e, 0x3e, 0xea, 0x8b, 0xe9, 0x8a, 0xe8, 0x8e, 0xea	; 0xF935B8 (padding)
-	.byte 0xcf, 0x0a, 0x00, 0xe5, 0x01, 0x76, 0xdc, 0x03, 0xeb, 0x88, 0xea, 0xcf, 0x08, 0x00, 0xe5, 0x01	; 0xF935C8 (padding)
-	.byte 0x76, 0xcb, 0x03, 0xd1, 0x9c, 0x84, 0x21, 0xea, 0xcf, 0x18, 0x00, 0xc0, 0x01, 0x76, 0x16, 0x02	; 0xF935D8 (padding)
-	.byte 0xea, 0xcf, 0x17, 0x00, 0xc0, 0x01, 0x76, 0x0d, 0x02, 0xea, 0xcf, 0x0b, 0x00, 0xc0, 0x01, 0x76	; 0xF935E8 (padding)
-	.byte 0xfa, 0x01, 0xea, 0xcf, 0x04, 0x00, 0xe5, 0x01, 0x76, 0xea, 0x01, 0xea, 0xcf, 0x13, 0x00, 0xc0	; 0xF935F8 (padding)
-	.byte 0x01, 0x7e, 0xbe, 0x03, 0xeb, 0xcf, 0x03, 0x00, 0x00, 0x00, 0x76, 0xb8, 0x01, 0xeb, 0xcf, 0x02	; 0xF93608 (padding)
-	.byte 0x00, 0x00, 0x00, 0x7e, 0xac, 0x03, 0xd8, 0xa8, 0x1d, 0x04, 0xb2, 0xf8, 0xc1, 0x37, 0x8d, 0x21	; 0xF93618 (padding)
-	.byte 0xc9, 0xcf, 0x71, 0x6e, 0x19, 0xf1, 0xfe, 0x84, 0x00, 0x00, 0x1d, 0x6d, 0x07, 0xf2, 0xcf, 0xda	; 0xF93628 (padding)
-	.byte 0x77, 0x8f, 0x03, 0xf1, 0x42, 0x7f, 0x00, 0x01, 0x30, 0xee, 0x00, 0x78, 0xf2, 0x00, 0xc9, 0xcf	; 0xF93638 (padding)
-	.byte 0x75, 0x7e, 0xf3, 0x00, 0x1d, 0x6d, 0x07, 0xf2, 0xcf, 0xd9, 0x7e, 0xcd, 0x00, 0xf1, 0xfe, 0x84	; 0xF93648 (padding)
-	.byte 0x00, 0x01, 0xc1, 0x22, 0x89, 0x23, 0xf1, 0xa0, 0x88, 0x30, 0xc1, 0x20, 0x89, 0xf3, 0x6f, 0x50	; 0xF93658 (padding)
-	.byte 0xdb, 0xa8, 0xd1, 0x9c, 0x84, 0x22, 0xda, 0xd8, 0x73, 0x57, 0x03, 0xdb, 0x8c, 0xec, 0x12, 0xe8	; 0xF93668 (padding)
-	.byte 0x84, 0x84, 0xfb, 0x6e, 0x32, 0xeb, 0x12, 0xee, 0x88, 0x41, 0x02, 0x00, 0xe5, 0x01, 0xeb, 0x8a	; 0xF93678 (padding)
-	.byte 0x1e, 0x69, 0xfc, 0xe1, 0x94, 0x84, 0x20, 0xd1, 0x9c, 0x84, 0x21, 0x1e, 0x5b, 0xfe, 0xc1, 0x22	; 0xF93688 (padding)
-	.byte 0x89, 0x61, 0xe1, 0x98, 0x84, 0x20, 0xe8, 0xe0, 0x76, 0x27, 0x03, 0x41, 0x09, 0x00, 0xe5, 0x01	; 0xF93698 (padding)
-	.byte 0x42, 0x1e, 0x00, 0x00, 0x00, 0x68, 0x5b, 0xdb, 0x61, 0xda, 0xf3, 0x67, 0xbe, 0x78, 0x12, 0x03	; 0xF936A8 (padding)
-	.byte 0xc1, 0x24, 0x89, 0x3f, 0x00, 0x66, 0x5b, 0xf1, 0x22, 0x89, 0x00, 0x00, 0xdb, 0xa8, 0xd1, 0x9c	; 0xF936B8 (padding)
-	.byte 0x84, 0x21, 0xd9, 0xd8, 0x73, 0xfb, 0x02, 0xdb, 0x8a, 0xea, 0x12, 0xe8, 0x82, 0x82, 0x3f, 0x00	; 0xF936C8 (padding)
-	.byte 0x6e, 0x37, 0xeb, 0x12, 0xee, 0x88, 0x41, 0x02, 0x00, 0xe5, 0x01, 0xeb, 0x8a, 0x1e, 0x0c, 0xfc	; 0xF936D8 (padding)
-	.byte 0xe1, 0x94, 0x84, 0x20, 0xd1, 0x9c, 0x84, 0x21, 0x1e, 0xfe, 0xfd, 0xc1, 0x22, 0x89, 0x61, 0xe1	; 0xF936E8 (padding)
-	.byte 0x98, 0x84, 0x20, 0xe8, 0xe0, 0x76, 0xca, 0x02, 0x41, 0x09, 0x00, 0xe5, 0x01, 0x42, 0x1e, 0x00	; 0xF936F8 (padding)
-	.byte 0x00, 0x00, 0x1d, 0x58, 0x9d, 0xfa, 0x78, 0xb9, 0x02, 0xdb, 0x61, 0xd9, 0xf3, 0x67, 0xb8, 0x78	; 0xF93708 (padding)
-	.byte 0xb0, 0x02, 0xf1, 0xfe, 0x84, 0x00, 0x00, 0x78, 0xa8, 0x02, 0x1d, 0x6d, 0x07, 0xf2, 0xf1, 0xfe	; 0xF93718 (padding)
-	.byte 0x84, 0x00, 0x00, 0xcf, 0xd8, 0x76, 0x9a, 0x02, 0xf1, 0x42, 0x7f, 0x00, 0x01, 0x30, 0xee, 0x00	; 0xF93728 (padding)
-	.byte 0x1d, 0xbd, 0x94, 0xf9, 0x78, 0x8b, 0x02, 0xd1, 0x06, 0x85, 0x3f, 0x00, 0x00, 0x69, 0x3c, 0x40	; 0xF93738 (padding)
-	.byte 0x26, 0x00, 0x60, 0x00, 0x41, 0x01, 0x00, 0xc0, 0x01, 0xea, 0xad, 0x1d, 0x58, 0x9d, 0xfa, 0x1d	; 0xF93748 (padding)
-	.byte 0x25, 0xa6, 0xf8, 0xf1, 0x06, 0x85, 0x53, 0x40, 0x26, 0x00, 0x60, 0x00, 0x41, 0x02, 0x00, 0xc0	; 0xF93758 (padding)
-	.byte 0x01, 0xea, 0xa8, 0x1d, 0x58, 0x9d, 0xfa, 0x40, 0xff, 0xff, 0xff, 0xff, 0x41, 0x0a, 0x00, 0xc0	; 0xF93768 (padding)
-	.byte 0x01, 0xea, 0xa8, 0x1d, 0x58, 0x9d, 0xfa, 0x1d, 0x60, 0xb2, 0xf8, 0xf1, 0xfe, 0x84, 0x00, 0x00	; 0xF93778 (padding)
-	.byte 0xf1, 0x22, 0x89, 0x00, 0x00, 0xf1, 0x20, 0x89, 0x00, 0x00, 0x31, 0x80, 0x00, 0xd1, 0x06, 0x85	; 0xF93788 (padding)
-	.byte 0x20, 0xd8, 0xcf, 0x80, 0x00, 0x6b, 0x02, 0xd8, 0x89, 0xf1, 0x9c, 0x84, 0x51, 0xdb, 0xa8, 0xd9	; 0xF93798 (padding)
-	.byte 0xd8, 0x63, 0x15, 0xf1, 0xa0, 0x88, 0x30, 0xdb, 0x89, 0xe9, 0x12, 0xe8, 0x81, 0xb1, 0x00, 0xff	; 0xF937A8 (padding)
-	.byte 0xdb, 0x61, 0xd1, 0x9c, 0x84, 0xf3, 0x67, 0xef, 0x1d, 0xcd, 0x0a, 0xf2, 0xe8, 0xa8, 0xf1, 0x98	; 0xF937B8 (padding)
-	.byte 0x84, 0x60, 0x78, 0xfd, 0x01, 0xc1, 0x36, 0x8d, 0x21, 0xc9, 0xcf, 0x71, 0x76, 0xf3, 0x01, 0xc9	; 0xF937C8 (padding)
-	.byte 0xcf, 0x75, 0x76, 0xed, 0x01, 0x1d, 0x70, 0x0b, 0xf2, 0x1d, 0x44, 0xb2, 0xf8, 0xf1, 0xfe, 0x84	; 0xF937D8 (padding)
-	.byte 0x00, 0x00, 0x78, 0xdd, 0x01, 0xf1, 0x94, 0x84, 0x60, 0x78, 0xd6, 0x01, 0xe1, 0x94, 0x84, 0x20	; 0xF937E8 (padding)
-	.byte 0x1e, 0xf6, 0xfc, 0x78, 0xcc, 0x01, 0xeb, 0xcf, 0x0a, 0x00, 0x00, 0x00, 0x7e, 0x81, 0x00, 0xc1	; 0xF937F8 (padding)
-	.byte 0xfe, 0x84, 0x3f, 0x00, 0x6e, 0x7a, 0xdb, 0xa8, 0xd9, 0x88, 0xd9, 0xd8, 0x63, 0x15, 0xf1, 0xa0	; 0xF93808 (padding)
-	.byte 0x88, 0x31, 0xdb, 0x8a, 0xea, 0x12, 0xe9, 0x82, 0x82, 0x3f, 0xff, 0x66, 0x06, 0xdb, 0x61, 0xd8	; 0xF93818 (padding)
-	.byte 0xf3, 0x67, 0xef, 0xd8, 0xf3, 0x6f, 0x29, 0xdb, 0xa8, 0xd8, 0xd8, 0x63, 0x49, 0xf1, 0xa0, 0x88	; 0xF93828 (padding)
-	.byte 0x32, 0xdb, 0x89, 0xe9, 0x12, 0xea, 0x81, 0x81, 0x21, 0xc9, 0xcf, 0xff, 0x6e, 0x08, 0xb1, 0x14	; 0xF93838 (padding)
-	.byte 0x20, 0x89, 0xc1, 0x20, 0x89, 0x61, 0xdb, 0x61, 0xd1, 0x9c, 0x84, 0xf3, 0x67, 0xe3, 0x68, 0x26	; 0xF93848 (padding)
-	.byte 0xdb, 0xa8, 0xd8, 0xd8, 0x63, 0x20, 0xf1, 0xa0, 0x88, 0x32, 0xdb, 0x89, 0xe9, 0x12, 0xea, 0x81	; 0xF93858 (padding)
-	.byte 0x81, 0x21, 0xc9, 0xcf, 0xfd, 0x6b, 0x07, 0xb1, 0x00, 0xff, 0xc1, 0x20, 0x89, 0x69, 0xdb, 0x61	; 0xF93868 (padding)
-	.byte 0xd1, 0x9c, 0x84, 0xf3, 0x67, 0xe4, 0xe1, 0x94, 0x84, 0x20, 0xd1, 0x9c, 0x84, 0x21, 0x68, 0x77	; 0xF93878 (padding)
-	.byte 0xeb, 0xcf, 0x0b, 0x00, 0x00, 0x00, 0x6e, 0x75, 0xc1, 0xfe, 0x84, 0x3f, 0x00, 0x6e, 0x6e, 0xee	; 0xF93888 (padding)
-	.byte 0x88, 0x41, 0x03, 0x00, 0xe5, 0x01, 0xea, 0xa8, 0x1e, 0x51, 0xfa, 0xf1, 0xa0, 0x88, 0x34, 0xeb	; 0xF93898 (padding)
-	.byte 0x12, 0xec, 0x83, 0x83, 0x23, 0xcb, 0xcf, 0xff, 0x6e, 0x0a, 0xb3, 0x14, 0x20, 0x89, 0xc1, 0x20	; 0xF938A8 (padding)
-	.byte 0x89, 0x61, 0x68, 0x3b, 0xcb, 0xcf, 0xfd, 0x6b, 0x36, 0xb3, 0x00, 0xff, 0xc1, 0x20, 0x89, 0x21	; 0xF938B8 (padding)
-	.byte 0xc9, 0x69, 0xf1, 0x20, 0x89, 0x41, 0xde, 0xa8, 0xdb, 0xa8, 0xd8, 0x12, 0xd8, 0xd8, 0x63, 0x1f	; 0xF938C8 (padding)
-	.byte 0xd8, 0x8d, 0xdb, 0x8a, 0xea, 0x12, 0xec, 0x82, 0x82, 0x21, 0xc9, 0xcf, 0xfd, 0x6b, 0x0a, 0xde	; 0xF938D8 (padding)
-	.byte 0x61, 0xcb, 0xf1, 0x63, 0x04, 0xc9, 0x69, 0xb2, 0x41, 0xdb, 0x61, 0xdd, 0xf6, 0x67, 0xe3, 0xe1	; 0xF938E8 (padding)
-	.byte 0x94, 0x84, 0x20, 0xd1, 0x9c, 0x84, 0x21, 0x1e, 0xef, 0xfb, 0x78, 0xc5, 0x00, 0xeb, 0xcf, 0x0c	; 0xF938F8 (padding)
-	.byte 0x00, 0x00, 0x00, 0x6e, 0x18, 0xea, 0xcf, 0x17, 0x00, 0xc0, 0x01, 0x6e, 0x08, 0xf1, 0x24, 0x89	; 0xF93908 (padding)
-	.byte 0x00, 0x01, 0x78, 0xad, 0x00, 0xf1, 0x24, 0x89, 0x00, 0x00, 0x78, 0xa5, 0x00, 0xeb, 0xcf, 0x0d	; 0xF93918 (padding)
-	.byte 0x00, 0x00, 0x00, 0x7e, 0x9c, 0x00, 0xc1, 0xfe, 0x84, 0x3f, 0x00, 0x7e, 0x94, 0x00, 0xf1, 0x22	; 0xF93928 (padding)
-	.byte 0x89, 0x00, 0x00, 0xdb, 0xa8, 0xd1, 0x9c, 0x84, 0x20, 0xd8, 0xd8, 0x63, 0x45, 0xf1, 0xa0, 0x88	; 0xF93938 (padding)
-	.byte 0x31, 0xdb, 0x8a, 0xea, 0x12, 0xe9, 0x82, 0x82, 0x3f, 0x00, 0x6e, 0x30, 0xf1, 0xfe, 0x84, 0x00	; 0xF93948 (padding)
-	.byte 0x01, 0xeb, 0x12, 0xee, 0x88, 0x41, 0x02, 0x00, 0xe5, 0x01, 0xeb, 0x8a, 0x1e, 0x8d, 0xf9, 0xc1	; 0xF93958 (padding)
-	.byte 0x22, 0x89, 0x61, 0x40, 0xff, 0xff, 0xff, 0xff, 0x41, 0x9a, 0x00, 0xe0, 0x01, 0xea, 0xa8, 0x1d	; 0xF93968 (padding)
-	.byte 0x58, 0x9d, 0xfa, 0x30, 0x75, 0x00, 0x1d, 0x90, 0x94, 0xf9, 0x68, 0x06, 0xdb, 0x61, 0xd8, 0xf3	; 0xF93978 (padding)
-	.byte 0x67, 0xbf, 0xc1, 0xfe, 0x84, 0x3f, 0x00, 0x6e, 0x39, 0x40, 0xff, 0xff, 0xff, 0xff, 0x41, 0x9a	; 0xF93988 (padding)
-	.byte 0x00, 0xe0, 0x01, 0xea, 0xa8, 0x1d, 0x58, 0x9d, 0xfa, 0x30, 0x71, 0x00, 0x68, 0x20, 0xf1, 0x98	; 0xF93998 (padding)
-	.byte 0x84, 0x60, 0x68, 0x1e, 0xc1, 0xfe, 0x84, 0x3f, 0x00, 0x66, 0x17, 0x40, 0xff, 0xff, 0xff, 0xff	; 0xF939A8 (padding)
-	.byte 0x41, 0x9a, 0x00, 0xe0, 0x01, 0xea, 0xa8, 0x1d, 0x58, 0x9d, 0xfa, 0x30, 0x75, 0x00, 0x1d, 0x90	; 0xF939B8 (padding)
-	.byte 0x94, 0xf9, 0xeb, 0xa8, 0x5e, 0x0e, 0x3e, 0xea, 0x8e, 0xe9, 0xcf, 0x0b, 0x00, 0xc0, 0x01, 0x6e	; 0xF939C8 (padding)
-	.byte 0x51, 0x1d, 0x8d, 0x95, 0xf8, 0xdc, 0xa8, 0x68, 0x12, 0x83, 0x3f, 0x20, 0x66, 0x0b, 0xdc, 0x8a	; 0xF939D8 (padding)
-	.byte 0xdc, 0x61, 0x83, 0x21, 0xf3, 0x07, 0xe4, 0xe8, 0x41, 0xeb, 0x61, 0xf1, 0x8c, 0x87, 0x31, 0x83	; 0xF939E8 (padding)
-	.byte 0x3f, 0x00, 0x66, 0x06, 0xdc, 0xcf, 0x1e, 0x00, 0x61, 0xdf, 0xe9, 0x8a, 0xf3, 0x07, 0xe4, 0xf0	; 0xF939F8 (padding)
-	.byte 0x00, 0x00, 0x68, 0x03, 0xb0, 0x00, 0x00, 0xdc, 0x69, 0xf3, 0x07, 0xe8, 0xf0, 0x30, 0x80, 0x3f	; 0xF93A08 (padding)
-	.byte 0x20, 0x6e, 0x04, 0xdc, 0xd8, 0x6a, 0xed, 0xee, 0x88, 0x41, 0x0f, 0x00, 0xc0, 0x01, 0x1d, 0x58	; 0xF93A18 (padding)
-	.byte 0x9d, 0xfa, 0xeb, 0xa8, 0x5e, 0x0e, 0xef, 0x6e, 0x2e, 0xbf, 0x02, 0x51, 0xbf, 0x04, 0x60, 0xde	; 0xF93A28 (padding)
-	.byte 0xa8, 0xde, 0x8a, 0xda, 0xee, 0x05, 0xf1, 0x0c, 0x85, 0x31, 0xea, 0x12, 0xe9, 0x82, 0xc7, 0xf8	; 0xF93A38 (padding)
-	.byte 0x89, 0xb2, 0x41, 0x9f, 0x02, 0x20, 0xde, 0x80, 0x1d, 0xbb, 0xab, 0xf8, 0xeb, 0x89, 0xde, 0x88	; 0xF93A48 (padding)
-	.byte 0xd8, 0xee, 0x05, 0xda, 0xa9, 0xd8, 0x82, 0xf1, 0x0c, 0x85, 0x33, 0xda, 0x88, 0xe8, 0x12, 0xeb	; 0xF93A58 (padding)
-	.byte 0x80, 0x9f, 0x02, 0x22, 0xde, 0x82, 0xda, 0x61, 0x0b, 0x0c, 0x00, 0x0b, 0x00, 0x00, 0x1d, 0xdd	; 0xF93A68 (padding)
-	.byte 0x91, 0xf8, 0xde, 0x8a, 0xda, 0xee, 0x05, 0xf1, 0x0c, 0x85, 0x31, 0xea, 0x12, 0xe9, 0x82, 0xaf	; 0xF93A78 (padding)
-	.byte 0x04, 0x20, 0x41, 0x0f, 0x00, 0xc0, 0x01, 0x1d, 0x58, 0x9d, 0xfa, 0xde, 0x61, 0xde, 0xcf, 0x0a	; 0xF93A88 (padding)
-	.byte 0x00, 0x61, 0x9e, 0x4e, 0xef, 0x66, 0x0e, 0xef, 0x6c, 0x2e, 0xbf, 0x02, 0x60, 0xe9, 0xcf, 0x03	; 0xF93A98 (padding)
-	.byte 0x00, 0xe5, 0x01, 0x76, 0xe4, 0x01, 0xd1, 0xa2, 0x84, 0x20, 0xd8, 0x8e, 0xe9, 0xcf, 0x02, 0x00	; 0xF93AA8 (padding)
-	.byte 0xe5, 0x01, 0x76, 0xa4, 0x01, 0xd8, 0x8b, 0xeb, 0x13, 0xdb, 0x0b, 0x0a, 0x00, 0xe9, 0xcf, 0x18	; 0xF93AB8 (padding)
-	.byte 0x00, 0xc0, 0x01, 0x66, 0x5b, 0xe9, 0xcf, 0x17, 0x00, 0xc0, 0x01, 0x66, 0x53, 0xe9, 0xcf, 0x0b	; 0xF93AC8 (padding)
-	.byte 0x00, 0xc0, 0x01, 0x66, 0x39, 0xe9, 0xcf, 0x04, 0x00, 0xe5, 0x01, 0x6e, 0x3e, 0xf1, 0x9e, 0x84	; 0xF93AD8 (padding)
-	.byte 0x62, 0x1d, 0xce, 0xa7, 0xf8, 0xf1, 0xa2, 0x84, 0x53, 0xdb, 0xd8, 0x69, 0x06, 0xf1, 0xa2, 0x84	; 0xF93AE8 (padding)
-	.byte 0x02, 0x00, 0x00, 0xd1, 0xa2, 0x84, 0x20, 0xe8, 0x13, 0xd8, 0x0b, 0x0a, 0x00, 0xd7, 0xe2, 0x8a	; 0xF93AF8 (padding)
-	.byte 0xea, 0x13, 0xe1, 0x9e, 0x84, 0x20, 0x41, 0x02, 0x00, 0xe5, 0x01, 0x78, 0x75, 0x01, 0xdb, 0x09	; 0xF93B08 (padding)
-	.byte 0x0a, 0x00, 0xe1, 0x9e, 0x84, 0x20, 0xdb, 0x89, 0x1e, 0x0b, 0xff, 0xeb, 0xa8, 0x78, 0x70, 0x01	; 0xF93B18 (padding)
-	.byte 0xea, 0xe2, 0x6e, 0x2d, 0xc1, 0xfe, 0x84, 0x3f, 0x00, 0x6e, 0x26, 0xe9, 0xcf, 0x18, 0x00, 0xc0	; 0xF93B28 (padding)
-	.byte 0x01, 0x6e, 0x0e, 0xd8, 0x89, 0xd9, 0x61, 0xd1, 0x08, 0x85, 0xf1, 0x69, 0x77, 0xd8, 0x61, 0x68	; 0xF93B38 (padding)
-	.byte 0x4c, 0xe9, 0xcf, 0x17, 0x00, 0xc0, 0x01, 0x6e, 0x6b, 0xd8, 0xd8, 0x62, 0x67, 0xd8, 0x69, 0x68	; 0xF93B48 (padding)
-	.byte 0x3c, 0xea, 0xcf, 0x01, 0x00, 0x00, 0x00, 0x6e, 0x13, 0xc1, 0xfe, 0x84, 0x3f, 0x00, 0x6e, 0x0c	; 0xF93B58 (padding)
-	.byte 0xd8, 0xcf, 0x0a, 0x00, 0x61, 0x4e, 0xd8, 0xca, 0x0a, 0x00, 0x68, 0x21, 0xea, 0xcf, 0x02, 0x00	; 0xF93B68 (padding)
-	.byte 0x00, 0x00, 0x6e, 0x40, 0xc1, 0xfe, 0x84, 0x3f, 0x00, 0x6e, 0x39, 0xd8, 0x89, 0xd9, 0xc8, 0x0a	; 0xF93B78 (padding)
-	.byte 0x00, 0xd1, 0x08, 0x85, 0x22, 0xda, 0xf1, 0x69, 0x0a, 0xd8, 0xc8, 0x0a, 0x00, 0xf1, 0xa2, 0x84	; 0xF93B88 (padding)
-	.byte 0x50, 0x68, 0x25, 0xda, 0x89, 0xd9, 0x69, 0xd9, 0x88, 0xe8, 0x13, 0xd8, 0x0b, 0x0a, 0x00, 0xd8	; 0xF93B98 (padding)
-	.byte 0xf3, 0x69, 0x11, 0xea, 0x13, 0xda, 0x0b, 0x0a, 0x00, 0xd7, 0xea, 0x88, 0xd8, 0xd8, 0x66, 0x04	; 0xF93BA8 (padding)
-	.byte 0xf1, 0xa2, 0x84, 0x51, 0xd1, 0xa2, 0x84, 0x20, 0xd8, 0xf6, 0x76, 0x5e, 0xff, 0x1d, 0x56, 0xa9	; 0xF93BB8 (padding)
-	.byte 0xf8, 0xd1, 0xa2, 0x84, 0x20, 0xe8, 0x13, 0xd8, 0x0b, 0x0a, 0x00, 0xd7, 0xe2, 0x8a, 0xea, 0x13	; 0xF93BC8 (padding)
-	.byte 0xe1, 0x9e, 0x84, 0x20, 0x41, 0x02, 0x00, 0xe5, 0x01, 0x1d, 0x58, 0x9d, 0xfa, 0xd1, 0xa2, 0x84	; 0xF93BD8 (padding)
-	.byte 0x21, 0xe9, 0x13, 0xd9, 0x0b, 0x0a, 0x00, 0xde, 0x8a, 0xea, 0x13, 0xda, 0x0b, 0x0a, 0x00, 0xe1	; 0xF93BE8 (padding)
-	.byte 0x9e, 0x84, 0x20, 0xd9, 0xf2, 0x6e, 0x4b, 0xde, 0x89, 0xe9, 0x13, 0xd9, 0x0b, 0x0a, 0x00, 0xd7	; 0xF93BF8 (padding)
-	.byte 0xe6, 0x89, 0xd9, 0xee, 0x05, 0xf1, 0x0c, 0x85, 0x33, 0xd9, 0x8a, 0xea, 0x12, 0xeb, 0x82, 0x41	; 0xF93C08 (padding)
-	.byte 0x0f, 0x00, 0xc0, 0x01, 0x1d, 0x58, 0x9d, 0xfa, 0xd1, 0xa2, 0x84, 0x20, 0xe8, 0x13, 0xd8, 0x0b	; 0xF93C18 (padding)
-	.byte 0x0a, 0x00, 0xd7, 0xe2, 0x88, 0xd8, 0xee, 0x05, 0xf1, 0x0c, 0x85, 0x31, 0xd8, 0x8a, 0xea, 0x12	; 0xF93C28 (padding)
-	.byte 0xe9, 0x82, 0xe1, 0x9e, 0x84, 0x20, 0x41, 0x0f, 0x00, 0xc0, 0x01, 0x1d, 0x58, 0x9d, 0xfa, 0x78	; 0xF93C38 (padding)
-	.byte 0xd9, 0xfe, 0xd9, 0x09, 0x0a, 0x00, 0x1e, 0xdd, 0xfd, 0xaf, 0x02, 0x20, 0x41, 0x0b, 0x00, 0xc0	; 0xF93C48 (padding)
-	.byte 0x01, 0xea, 0xa8, 0x1e, 0x0d, 0x01, 0x78, 0xc2, 0xfe, 0xc1, 0xfe, 0x84, 0x3f, 0x00, 0x76, 0xba	; 0xF93C58 (padding)
-	.byte 0xfe, 0xf1, 0xa2, 0x84, 0x52, 0xda, 0x88, 0x1d, 0x56, 0xa9, 0xf8, 0xd1, 0xa2, 0x84, 0x20, 0xe8	; 0xF93C68 (padding)
-	.byte 0x13, 0xd8, 0x0b, 0x0a, 0x00, 0xd7, 0xe2, 0x8a, 0xea, 0x13, 0xe1, 0x9e, 0x84, 0x20, 0x41, 0x02	; 0xF93C78 (padding)
-	.byte 0x00, 0xe5, 0x01, 0x1d, 0x58, 0x9d, 0xfa, 0x78, 0x91, 0xfe, 0xd1, 0xa2, 0x84, 0x23, 0xeb, 0x13	; 0xF93C88 (padding)
-	.byte 0x4e, 0xef, 0x64, 0x0e, 0xef, 0x6e, 0x3e, 0xd9, 0x8e, 0xbf, 0x06, 0x60, 0xe8, 0xa8, 0x41, 0x03	; 0xF93C98 (padding)
-	.byte 0x00, 0xe5, 0x01, 0xea, 0xa8, 0x1e, 0xef, 0xfd, 0xd7, 0xfa, 0x9b, 0xd7, 0xfa, 0x88, 0xe8, 0x12	; 0xF93CA8 (padding)
-	.byte 0xd8, 0x0a, 0x0a, 0x00, 0xd7, 0xfa, 0x98, 0xd8, 0x08, 0x0a, 0x00, 0xd7, 0xfa, 0x98, 0xbf, 0x04	; 0xF93CB8 (padding)
-	.byte 0x02, 0x0a, 0x00, 0xd7, 0xfa, 0x88, 0xd8, 0xc8, 0x0a, 0x00, 0xde, 0xf0, 0x67, 0x09, 0xbf, 0x04	; 0xF93CC8 (padding)
-	.byte 0x56, 0xd7, 0xfa, 0x88, 0x9f, 0x04, 0xa8, 0xde, 0xa8, 0x9f, 0x04, 0x3f, 0x00, 0x00, 0x63, 0x43	; 0xF93CD8 (padding)
-	.byte 0xde, 0x88, 0xd8, 0xee, 0x03, 0xf1, 0xa4, 0x84, 0x31, 0xe8, 0x12, 0xe9, 0x80, 0xd7, 0xfa, 0x89	; 0xF93CE8 (padding)
-	.byte 0xde, 0x81, 0xf1, 0xa0, 0x88, 0x32, 0xe9, 0x12, 0xea, 0x81, 0x81, 0x23, 0xd9, 0x12, 0xde, 0x8a	; 0xF93CF8 (padding)
-	.byte 0x1e, 0xbe, 0xdf, 0xde, 0x8a, 0xda, 0xee, 0x03, 0xf1, 0xa4, 0x84, 0x30, 0xea, 0x12, 0xe8, 0x82	; 0xF93D08 (padding)
-	.byte 0xaf, 0x06, 0x20, 0x41, 0x0f, 0x00, 0xc0, 0x01, 0x1d, 0x58, 0x9d, 0xfa, 0xde, 0x61, 0x9f, 0x04	; 0xF93D18 (padding)
-	.byte 0xf6, 0x67, 0xbd, 0xde, 0xcf, 0x0a, 0x00, 0x6f, 0x36, 0xde, 0x88, 0xd8, 0xee, 0x03, 0xf1, 0xa4	; 0xF93D28 (padding)
-	.byte 0x84, 0x31, 0xe8, 0x12, 0xe9, 0x80, 0x31, 0xff, 0x00, 0xde, 0x8a, 0x1e, 0x83, 0xdf, 0xde, 0x8a	; 0xF93D38 (padding)
-	.byte 0xda, 0xee, 0x03, 0xf1, 0xa4, 0x84, 0x30, 0xea, 0x12, 0xe8, 0x82, 0xaf, 0x06, 0x20, 0x41, 0x0f	; 0xF93D48 (padding)
-	.byte 0x00, 0xc0, 0x01, 0x1d, 0x58, 0x9d, 0xfa, 0xde, 0x61, 0xde, 0xcf, 0x0a, 0x00, 0x67, 0xca, 0x5e	; 0xF93D58 (padding)
-	.byte 0xef, 0x66, 0x0e, 0x3e, 0xea, 0x8b, 0xe9, 0x8a, 0xe8, 0x8e, 0xea, 0xcf, 0x0a, 0x00, 0xe5, 0x01	; 0xF93D68 (padding)
-	.byte 0x76, 0xf6, 0x03, 0xeb, 0x88, 0xea, 0xcf, 0x08, 0x00, 0xe5, 0x01, 0x76, 0xe5, 0x03, 0xd1, 0xfc	; 0xF93D78 (padding)
-	.byte 0x84, 0x21, 0xea, 0xcf, 0x18, 0x00, 0xc0, 0x01, 0x76, 0x24, 0x02, 0xea, 0xcf, 0x17, 0x00, 0xc0	; 0xF93D88 (padding)
-	.byte 0x01, 0x76, 0x1b, 0x02, 0xea, 0xcf, 0x0b, 0x00, 0xc0, 0x01, 0x76, 0x08, 0x02, 0xea, 0xcf, 0x04	; 0xF93D98 (padding)
-	.byte 0x00, 0xe5, 0x01, 0x76, 0xf8, 0x01, 0xea, 0xcf, 0x13, 0x00, 0xc0, 0x01, 0x7e, 0xd8, 0x03, 0xeb	; 0xF93DA8 (padding)
-	.byte 0xcf, 0x03, 0x00, 0x00, 0x00, 0x76, 0xc6, 0x01, 0xeb, 0xcf, 0x02, 0x00, 0x00, 0x00, 0x7e, 0xc6	; 0xF93DB8 (padding)
-	.byte 0x03, 0xd8, 0xa8, 0x1d, 0x04, 0xb2, 0xf8, 0xc1, 0x37, 0x8d, 0x21, 0xc9, 0xcf, 0x70, 0x6e, 0x19	; 0xF93DC8 (padding)
-	.byte 0xf1, 0xfe, 0x84, 0x00, 0x00, 0x1d, 0x6d, 0x07, 0xf2, 0xcf, 0xda, 0x77, 0xa9, 0x03, 0xf1, 0x42	; 0xF93DD8 (padding)
-	.byte 0x7f, 0x00, 0x01, 0x30, 0xee, 0x00, 0x78, 0xf2, 0x00, 0xc9, 0xcf, 0x74, 0x7e, 0xf3, 0x00, 0x1d	; 0xF93DE8 (padding)
-	.byte 0x6d, 0x07, 0xf2, 0xcf, 0xd9, 0x7e, 0xcd, 0x00, 0xf1, 0xfe, 0x84, 0x00, 0x01, 0xc1, 0x22, 0x89	; 0xF93DF8 (padding)
-	.byte 0x23, 0xf1, 0xa0, 0x88, 0x30, 0xc1, 0x20, 0x89, 0xf3, 0x6f, 0x50, 0xdb, 0xa8, 0xd1, 0xfc, 0x84	; 0xF93E08 (padding)
-	.byte 0x22, 0xda, 0xd8, 0x73, 0x71, 0x03, 0xdb, 0x8c, 0xec, 0x12, 0xe8, 0x84, 0x84, 0xfb, 0x6e, 0x32	; 0xF93E18 (padding)
-	.byte 0xeb, 0x12, 0xee, 0x88, 0x41, 0x02, 0x00, 0xe5, 0x01, 0xeb, 0x8a, 0x1e, 0x69, 0xfc, 0xe1, 0xf4	; 0xF93E28 (padding)
-	.byte 0x84, 0x20, 0xd1, 0xfc, 0x84, 0x21, 0x1e, 0x5b, 0xfe, 0xc1, 0x22, 0x89, 0x61, 0xe1, 0xf8, 0x84	; 0xF93E38 (padding)
-	.byte 0x20, 0xe8, 0xe0, 0x76, 0x41, 0x03, 0x41, 0x09, 0x00, 0xe5, 0x01, 0x42, 0x1e, 0x00, 0x00, 0x00	; 0xF93E48 (padding)
-	.byte 0x68, 0x5b, 0xdb, 0x61, 0xda, 0xf3, 0x67, 0xbe, 0x78, 0x2c, 0x03, 0xc1, 0x24, 0x89, 0x3f, 0x00	; 0xF93E58 (padding)
-	.byte 0x66, 0x5b, 0xf1, 0x22, 0x89, 0x00, 0x00, 0xdb, 0xa8, 0xd1, 0xfc, 0x84, 0x21, 0xd9, 0xd8, 0x73	; 0xF93E68 (padding)
-	.byte 0x15, 0x03, 0xdb, 0x8a, 0xea, 0x12, 0xe8, 0x82, 0x82, 0x3f, 0x00, 0x6e, 0x37, 0xeb, 0x12, 0xee	; 0xF93E78 (padding)
-	.byte 0x88, 0x41, 0x02, 0x00, 0xe5, 0x01, 0xeb, 0x8a, 0x1e, 0x0c, 0xfc, 0xe1, 0xf4, 0x84, 0x20, 0xd1	; 0xF93E88 (padding)
-	.byte 0xfc, 0x84, 0x21, 0x1e, 0xfe, 0xfd, 0xc1, 0x22, 0x89, 0x61, 0xe1, 0xf8, 0x84, 0x20, 0xe8, 0xe0	; 0xF93E98 (padding)
-	.byte 0x76, 0xe4, 0x02, 0x41, 0x09, 0x00, 0xe5, 0x01, 0x42, 0x1e, 0x00, 0x00, 0x00, 0x1d, 0x58, 0x9d	; 0xF93EA8 (padding)
-	.byte 0xfa, 0x78, 0xd3, 0x02, 0xdb, 0x61, 0xd9, 0xf3, 0x67, 0xb8, 0x78, 0xca, 0x02, 0xf1, 0xfe, 0x84	; 0xF93EB8 (padding)
-	.byte 0x00, 0x00, 0x78, 0xc2, 0x02, 0x1d, 0x6d, 0x07, 0xf2, 0xf1, 0xfe, 0x84, 0x00, 0x00, 0xcf, 0xd8	; 0xF93EC8 (padding)
-	.byte 0x76, 0xb4, 0x02, 0xf1, 0x42, 0x7f, 0x00, 0x01, 0x30, 0xee, 0x00, 0x1d, 0xbd, 0x94, 0xf9, 0x78	; 0xF93ED8 (padding)
-	.byte 0xa5, 0x02, 0xd1, 0x08, 0x85, 0x3f, 0x00, 0x00, 0x61, 0x08, 0xd1, 0x04, 0x85, 0x3f, 0x00, 0x00	; 0xF93EE8 (padding)
-	.byte 0x6e, 0x42, 0xf1, 0x04, 0x85, 0x02, 0xff, 0xff, 0x40, 0x26, 0x00, 0x60, 0x00, 0x41, 0x01, 0x00	; 0xF93EF8 (padding)
-	.byte 0xc0, 0x01, 0xea, 0xad, 0x1d, 0x58, 0x9d, 0xfa, 0x1d, 0xd6, 0xa9, 0xf8, 0xf1, 0x08, 0x85, 0x53	; 0xF93F08 (padding)
-	.byte 0x40, 0x26, 0x00, 0x60, 0x00, 0x41, 0x02, 0x00, 0xc0, 0x01, 0xea, 0xa8, 0x1d, 0x58, 0x9d, 0xfa	; 0xF93F18 (padding)
-	.byte 0x40, 0xff, 0xff, 0xff, 0xff, 0x41, 0x0a, 0x00, 0xc0, 0x01, 0xea, 0xa8, 0x1d, 0x58, 0x9d, 0xfa	; 0xF93F28 (padding)
-	.byte 0x1d, 0x60, 0xb2, 0xf8, 0xf1, 0xfe, 0x84, 0x00, 0x00, 0xf1, 0x22, 0x89, 0x00, 0x00, 0xf1, 0x20	; 0xF93F38 (padding)
-	.byte 0x89, 0x00, 0x00, 0x31, 0x80, 0x00, 0xd1, 0x08, 0x85, 0x20, 0xd8, 0xcf, 0x80, 0x00, 0x6b, 0x02	; 0xF93F48 (padding)
-	.byte 0xd8, 0x89, 0xf1, 0xfc, 0x84, 0x51, 0xdb, 0xa8, 0xd9, 0xd8, 0x63, 0x15, 0xf1, 0xa0, 0x88, 0x30	; 0xF93F58 (padding)
-	.byte 0xdb, 0x89, 0xe9, 0x12, 0xe8, 0x81, 0xb1, 0x00, 0xff, 0xdb, 0x61, 0xd1, 0xfc, 0x84, 0xf3, 0x67	; 0xF93F68 (padding)
-	.byte 0xef, 0x1d, 0xcd, 0x0a, 0xf2, 0xe8, 0xa8, 0xf1, 0xf8, 0x84, 0x60, 0x78, 0x09, 0x02, 0xc1, 0x36	; 0xF93F78 (padding)
-	.byte 0x8d, 0x21, 0xc9, 0xcf, 0x70, 0x76, 0xff, 0x01, 0xc9, 0xcf, 0x74, 0x76, 0xf9, 0x01, 0x1d, 0x70	; 0xF93F88 (padding)
-	.byte 0x0b, 0xf2, 0x1d, 0x44, 0xb2, 0xf8, 0xf1, 0xfe, 0x84, 0x00, 0x00, 0x78, 0xe9, 0x01, 0xf1, 0xf4	; 0xF93F98 (padding)
-	.byte 0x84, 0x60, 0x78, 0xe2, 0x01, 0xe1, 0xf4, 0x84, 0x20, 0x1e, 0xe8, 0xfc, 0x78, 0xd8, 0x01, 0xeb	; 0xF93FA8 (padding)
-	.byte 0xcf, 0x0a, 0x00, 0x00, 0x00, 0x7e, 0x81, 0x00, 0xc1, 0xfe, 0x84, 0x3f, 0x00, 0x6e, 0x7a, 0xdb	; 0xF93FB8 (padding)
-	.byte 0xa8, 0xd9, 0x88, 0xd9, 0xd8, 0x63, 0x15, 0xf1, 0xa0, 0x88, 0x31, 0xdb, 0x8a, 0xea, 0x12, 0xe9	; 0xF93FC8 (padding)
-	.byte 0x82, 0x82, 0x3f, 0xff, 0x66, 0x06, 0xdb, 0x61, 0xd8, 0xf3, 0x67, 0xef, 0xd8, 0xf3, 0x6f, 0x29	; 0xF93FD8 (padding)
-	.byte 0xdb, 0xa8, 0xd8, 0xd8, 0x63, 0x49, 0xf1, 0xa0, 0x88, 0x32, 0xdb, 0x89, 0xe9, 0x12, 0xea, 0x81	; 0xF93FE8 (padding)
-	.byte 0x81, 0x21, 0xc9, 0xcf, 0xff, 0x6e, 0x08, 0xb1, 0x14, 0x20, 0x89, 0xc1, 0x20, 0x89, 0x61, 0xdb	; 0xF93FF8 (padding)
-	.byte 0x61, 0xd1, 0xfc, 0x84, 0xf3, 0x67, 0xe3, 0x68, 0x26, 0xdb, 0xa8, 0xd8, 0xd8, 0x63, 0x20, 0xf1	; 0xF94008 (padding)
-	.byte 0xa0, 0x88, 0x32, 0xdb, 0x89, 0xe9, 0x12, 0xea, 0x81, 0x81, 0x21, 0xc9, 0xcf, 0xfd, 0x6b, 0x07	; 0xF94018 (padding)
-	.byte 0xb1, 0x00, 0xff, 0xc1, 0x20, 0x89, 0x69, 0xdb, 0x61, 0xd1, 0xfc, 0x84, 0xf3, 0x67, 0xe4, 0xe1	; 0xF94028 (padding)
-	.byte 0xf4, 0x84, 0x20, 0xd1, 0xfc, 0x84, 0x21, 0x68, 0x77, 0xeb, 0xcf, 0x0b, 0x00, 0x00, 0x00, 0x6e	; 0xF94038 (padding)
-	.byte 0x75, 0xc1, 0xfe, 0x84, 0x3f, 0x00, 0x6e, 0x6e, 0xee, 0x88, 0x41, 0x03, 0x00, 0xe5, 0x01, 0xea	; 0xF94048 (padding)
-	.byte 0xa8, 0x1e, 0x43, 0xfa, 0xf1, 0xa0, 0x88, 0x34, 0xeb, 0x12, 0xec, 0x83, 0x83, 0x23, 0xcb, 0xcf	; 0xF94058 (padding)
-	.byte 0xff, 0x6e, 0x0a, 0xb3, 0x14, 0x20, 0x89, 0xc1, 0x20, 0x89, 0x61, 0x68, 0x3b, 0xcb, 0xcf, 0xfd	; 0xF94068 (padding)
-	.byte 0x6b, 0x36, 0xb3, 0x00, 0xff, 0xc1, 0x20, 0x89, 0x21, 0xc9, 0x69, 0xf1, 0x20, 0x89, 0x41, 0xde	; 0xF94078 (padding)
-	.byte 0xa8, 0xdb, 0xa8, 0xd8, 0x12, 0xd8, 0xd8, 0x63, 0x1f, 0xd8, 0x8d, 0xdb, 0x8a, 0xea, 0x12, 0xec	; 0xF94088 (padding)
-	.byte 0x82, 0x82, 0x21, 0xc9, 0xcf, 0xfd, 0x6b, 0x0a, 0xde, 0x61, 0xcb, 0xf1, 0x63, 0x04, 0xc9, 0x69	; 0xF94098 (padding)
-	.byte 0xb2, 0x41, 0xdb, 0x61, 0xdd, 0xf6, 0x67, 0xe3, 0xe1, 0xf4, 0x84, 0x20, 0xd1, 0xfc, 0x84, 0x21	; 0xF940A8 (padding)
-	.byte 0x1e, 0xe1, 0xfb, 0x78, 0xd1, 0x00, 0xeb, 0xcf, 0x0c, 0x00, 0x00, 0x00, 0x6e, 0x18, 0xea, 0xcf	; 0xF940B8 (padding)
-	.byte 0x17, 0x00, 0xc0, 0x01, 0x6e, 0x08, 0xf1, 0x24, 0x89, 0x00, 0x01, 0x78, 0xb9, 0x00, 0xf1, 0x24	; 0xF940C8 (padding)
-	.byte 0x89, 0x00, 0x00, 0x78, 0xb1, 0x00, 0xeb, 0xcf, 0x0d, 0x00, 0x00, 0x00, 0x7e, 0xa8, 0x00, 0xc1	; 0xF940D8 (padding)
-	.byte 0xfe, 0x84, 0x3f, 0x00, 0x7e, 0xa0, 0x00, 0xf1, 0x22, 0x89, 0x00, 0x00, 0xdb, 0xa8, 0xd1, 0xfc	; 0xF940E8 (padding)
-	.byte 0x84, 0x20, 0xd8, 0xd8, 0x63, 0x45, 0xf1, 0xa0, 0x88, 0x31, 0xdb, 0x8a, 0xea, 0x12, 0xe9, 0x82	; 0xF940F8 (padding)
-	.byte 0x82, 0x3f, 0x00, 0x6e, 0x30, 0xf1, 0xfe, 0x84, 0x00, 0x01, 0xeb, 0x12, 0xee, 0x88, 0x41, 0x02	; 0xF94108 (padding)
-	.byte 0x00, 0xe5, 0x01, 0xeb, 0x8a, 0x1e, 0x7f, 0xf9, 0xc1, 0x22, 0x89, 0x61, 0x40, 0xff, 0xff, 0xff	; 0xF94118 (padding)
-	.byte 0xff, 0x41, 0x9a, 0x00, 0xe0, 0x01, 0xea, 0xa8, 0x1d, 0x58, 0x9d, 0xfa, 0x30, 0x74, 0x00, 0x1d	; 0xF94128 (padding)
-	.byte 0x90, 0x94, 0xf9, 0x68, 0x06, 0xdb, 0x61, 0xd8, 0xf3, 0x67, 0xbf, 0xc1, 0xfe, 0x84, 0x3f, 0x00	; 0xF94138 (padding)
-	.byte 0x6e, 0x45, 0xee, 0x88, 0x41, 0x03, 0x00, 0xe5, 0x01, 0xea, 0xa8, 0x1e, 0x49, 0xf9, 0x40, 0xff	; 0xF94148 (padding)
-	.byte 0xff, 0xff, 0xff, 0x41, 0x9a, 0x00, 0xe0, 0x01, 0xea, 0xa8, 0x1d, 0x58, 0x9d, 0xfa, 0x30, 0x70	; 0xF94158 (padding)
-	.byte 0x00, 0x68, 0x20, 0xf1, 0xf8, 0x84, 0x60, 0x68, 0x1e, 0xc1, 0xfe, 0x84, 0x3f, 0x00, 0x66, 0x17	; 0xF94168 (padding)
-	.byte 0x40, 0xff, 0xff, 0xff, 0xff, 0x41, 0x9a, 0x00, 0xe0, 0x01, 0xea, 0xa8, 0x1d, 0x58, 0x9d, 0xfa	; 0xF94178 (padding)
-	.byte 0x30, 0x74, 0x00, 0x1d, 0x90, 0x94, 0xf9, 0xeb, 0xa8, 0x5e, 0x0e	; 0xF94188 (padding)
-LABEL_F94193:
-	.org 0xF94193 - 0xE00000, 0xFF
-	.incbin "../includes/f94193_f94269.bin"
-
-; =============================================================================
-; Gap between password routines and misc_ui.asm (F9426A - F95082)
-; TODO: Disassemble this region
-; =============================================================================
-
-	.org 0xF9426A - 0xE00000, 0xFF
-	.incbin "../includes/f9426a_f95082.bin"
-
+; All password slot labels (LABEL_F92C0E through LABEL_F94262) are now
+; positioned labels in medley.asm. The binclude regions that previously
+; covered F92C0E-F92CE7, F94193-F94269, and F9426A-F95082 have been
+; removed since medley.asm produces the same bytes.
 ; --- end include: password_slot_routines.asm ---
 ; --- begin include: file_io/misc_ui.asm ---
 ; =============================================================================
@@ -338434,7 +338085,7 @@ LABEL_FA41A2:
 	call 0xFC3E60
 	call 0xFC3E61
 	call 0xFC3E62
-	call LABEL_FC3E63
+	call 0xFC3E63
 	call 0xFB28CB
 	popw iz
 	lda xsp, (xsp + 14)
@@ -383017,18 +382668,17 @@ InitializeUser30:
 	ret
 
 InitializeUser31:
-	; (block overflow) RET
+	ret
 
 EMPTY_ROUTINE__FC3E64:
-	; (block overflow) RET
+	ret
 
-LABEL_FC3E63:
-	.long 0x3E750E0E	; DD LABEL_FC3E75
-	.long 0x3EE400FC	; DD EMPTY_ROUTINE__FC3EE4
-	.long 0x3EE400FC	; DD EMPTY_ROUTINE__FC3EE4
-	.long 0x3E9300FC	; DD EMPTY_ROUTINE__FC3E93
+LABEL_FC3E65:
+	.long LABEL_FC3E75
+	.long EMPTY_ROUTINE__FC3EE4
+	.long EMPTY_ROUTINE__FC3EE4
+	.long EMPTY_ROUTINE__FC3E93
 
-	.byte 0xfc, 0x00	; 0xFC3E73 (block padding)
 LABEL_FC3E75:
 	ei 0
 	calr DELAY_51_TICKS
@@ -435057,7 +434707,7 @@ LABEL_FEC537:
 	ei 0
 
 LABEL_FEC55C:
-	call LABEL_F92C13
+	call GetPlayState2
 	cps l, 0
 	jr z, LABEL_FEC575
 	cpdi8 59876, 1
@@ -435340,7 +434990,7 @@ LABEL_FEC833:
 
 LABEL_FEC83A:
 	calr LABEL_FEC49B
-	call LABEL_F92C0E
+	call GetPlayState1
 	cps l, 0
 	jr z, LABEL_FEC84C
 	lds wa, 1
@@ -435713,7 +435363,7 @@ LABEL_FECB3B:
 	jr LABEL_FECB86
 
 LABEL_FECB51:
-	call LABEL_F92C13
+	call GetPlayState2
 	cps l, 0
 	jr z, LABEL_FECB86
 	cpdi8 59876, 1
@@ -452675,22 +452325,6 @@ FIRMWARE_VERSION:	; FFFFE8
 	.set LABEL_F8476E, 0xF8476E
 	.set LABEL_F900B9, 0xF900B9
 	.set LABEL_F900F1, 0xF900F1
-	.set LABEL_F92C13, 0xF92C13
-	.set LABEL_F92C21, 0xF92C21
-	.set LABEL_F92C70, 0xF92C70
-	.set LABEL_F92CAC, 0xF92CAC
-	.set LABEL_F941C8, 0xF941C8
-	.set LABEL_F941E5, 0xF941E5
-	.set LABEL_F941ED, 0xF941ED
-	.set LABEL_F941F9, 0xF941F9
-	.set LABEL_F9420F, 0xF9420F
-	.set LABEL_F94229, 0xF94229
-	.set LABEL_F94236, 0xF94236
-	.set LABEL_F94242, 0xF94242
-	.set LABEL_F9424A, 0xF9424A
-	.set LABEL_F94250, 0xF94250
-	.set LABEL_F94256, 0xF94256
-	.set LABEL_F94262, 0xF94262
 	.set FDC_INIT, 0xF96BBF
 	.set FDC_CONFIG_VERIFY, 0xF96BD0
 	.set FDC_CMD_DISPATCH_SUB, 0xF96D95

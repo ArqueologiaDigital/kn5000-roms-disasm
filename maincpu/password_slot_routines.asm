@@ -32,41 +32,7 @@
 ;   LABEL_F94262   - Check if external has value
 ; =============================================================================
 
-; Forward declarations for labels within the binary sections.
-; Using EQU instead of ORG+label to avoid creating segment boundaries
-; that would cut through preceding code (medley.asm extends past F92C0E).
-
-LABEL_F92C0E	equ	0F92C0Eh
-LABEL_F92C13	equ	0F92C13h
-LABEL_F92C21	equ	0F92C21h
-LABEL_F92C70	equ	0F92C70h
-LABEL_F92CAC	equ	0F92CACh
-LABEL_F94193	equ	0F94193h
-LABEL_F941C8	equ	0F941C8h
-LABEL_F941E5	equ	0F941E5h
-LABEL_F941ED	equ	0F941EDh
-LABEL_F941F9	equ	0F941F9h
-LABEL_F9420F	equ	0F9420Fh
-LABEL_F94229	equ	0F94229h
-LABEL_F94236	equ	0F94236h
-LABEL_F94242	equ	0F94242h
-LABEL_F9424A	equ	0F9424Ah
-LABEL_F94250	equ	0F94250h
-LABEL_F94256	equ	0F94256h
-LABEL_F94262	equ	0F94262h
-
-; =============================================================================
-; Password slot storage routines (F94193 - F94269)
-; =============================================================================
-
-	ORG 0F94193h
-	binclude "includes/f94193_f94269.bin"
-
-; =============================================================================
-; Gap between password routines and misc_ui.asm (F9426A - F95082)
-; TODO: Disassemble this region
-; =============================================================================
-
-	ORG 0F9426Ah
-	binclude "includes/f9426a_f95082.bin"
-
+; All password slot labels (LABEL_F92C0E through LABEL_F94262) are now
+; positioned labels in medley.asm. The binclude regions that previously
+; covered F92C0E-F92CE7, F94193-F94269, and F9426A-F95082 have been
+; removed since medley.asm produces the same bytes.

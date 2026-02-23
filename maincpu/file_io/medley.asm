@@ -1758,10 +1758,12 @@ DiskSel_Exit:
 	LDA XSP, XSP + 00eh
 	RET
 
+LABEL_F92C0E:
 GetPlayState1:
 	LD L, (8942h)
 	RET
 
+LABEL_F92C13:
 GetPlayState2:
 	LD L, (8944h)
 	RET
@@ -1770,6 +1772,7 @@ SmfMedley_RawData:
 	db 0C9h, 0D8h, 0D8h, 07Eh, 0F1h, 044h, 089h, 041h
 	db 00Eh
 
+LABEL_F92C21:
 NavigateSongList:
 	DEC 2, XSP
 	PUSH IZ
@@ -1810,6 +1813,7 @@ NavSong_Exit:
 	INC 2, XSP
 	RET
 
+LABEL_F92C70:
 NavigateDocList:
 	PUSH IZ
 	LD IZ, WA
@@ -1844,6 +1848,7 @@ NavDoc_Exit:
 	POP IZ
 	RET
 
+LABEL_F92CAC:
 NavigatePdList:
 	PUSH IZ
 	LD IZ, WA
@@ -2217,6 +2222,7 @@ SmfMed_FinishInit:
 	LD (8434h), XWA
 	JRL T, SmfMed_Exit
 
+LABEL_F93051:
 SmfMed_HandleStop:
 	LD A, (8D36h)
 	CP A, 06fh
@@ -2465,6 +2471,7 @@ SmfMed_Exit:
 	INC 4, XSP
 	RET
 
+LABEL_F93283:
 PdMed_FormatFileList:
 	DEC 6, XSP
 	PUSH IZ
@@ -2796,6 +2803,7 @@ PdFmtSlot_Exit:
 	INC 6, XSP
 	RET
 
+LABEL_F935C0:
 FmmPdMedleyFunc:
 	PUSH XIZ
 	LD XHL, XDE
@@ -2934,6 +2942,7 @@ PdMed_ShowError:
 	CALL LABEL_F994BD
 	JRL T, PdMed_Exit
 
+LABEL_F9373F:
 PdMed_InitFromDisk:
 	CPW (8506h), 0000h
 	JR GE, PdMed_InitState
@@ -3216,6 +3225,7 @@ PdMed_Exit:
 	POP XIZ
 	RET
 
+LABEL_F939CE:
 DocDiskNameFunc:
 	PUSH XIZ
 	LD XIZ, XDE
@@ -3513,6 +3523,7 @@ DocName_Exit:
 	INC 4, XSP
 	RET
 
+LABEL_F93C9C:
 DocMed_FormatSlotList:
 	DEC 6, XSP
 	PUSH XIZ
@@ -3738,6 +3749,7 @@ DocMed_ShowError:
 	CALL LABEL_F994BD
 	JRL T, DocMed_Exit
 
+LABEL_F93EEA:
 DocMed_CheckInit:
 	CPW (8508h), 0000h
 	JR LT, DocMed_InitFromDisk
@@ -4029,6 +4041,7 @@ DocMed_Exit:
 	POP XIZ
 	RET
 
+LABEL_F94193:
 SetSongSlotValue:
 	CP WA, 000ah
 	RET NC
@@ -4048,6 +4061,7 @@ SetSongSlotValue:
 	LD (XHL), BC
 	RET
 
+LABEL_F941C8:
 GetSongSlotValue:
 	LD HL, 0
 	CP WA, 000ah
@@ -4060,16 +4074,19 @@ GetSongSlotValue:
 	LD HL, (XBC)
 	RET
 
+LABEL_F941E5:
 CheckSongSlotHasData:
 	CALR GetSongSlotValue
 	CP HL, 0
 	SCC NZ, HL
 	RET
 
+LABEL_F941ED:
 SongSlot_RawData:
 	db 02Eh, 0D9h, 08Eh, 01Eh, 0D5h, 0FFh, 0DEh, 0F3h
 	db 0DBh, 076h, 04Eh, 00Eh
 
+LABEL_F941F9:
 FindFirstEmptySlot:
 	PUSH IZ
 	LD IZ, 0
@@ -4087,6 +4104,7 @@ FindEmpty_Exit:
 	POP IZ
 	RET
 
+LABEL_F9420F:
 ClearAllSongSlots:
 	PUSH XIZ
 	LD IZ, WA
@@ -4102,6 +4120,7 @@ ClearSlots_Loop:
 	POP XIZ
 	RET
 
+LABEL_F94229:
 ResetSlotsIfEmpty:
 	CALR FindFirstEmptySlot
 	LD WA, HL
@@ -4110,6 +4129,7 @@ ResetSlotsIfEmpty:
 	CALR ClearAllSongSlots
 	RET
 
+LABEL_F94236:
 CheckSlotIsSelected:
 	PUSH IZ
 	LD IZ, WA
@@ -4119,20 +4139,24 @@ CheckSlotIsSelected:
 	POP IZ
 	RET
 
+LABEL_F94242:
 CheckAnySlotHasData:
 	CALR FindFirstEmptySlot
 	CP HL, 0
 	SCC NZ, HL
 	RET
 
+LABEL_F9424A:
 SetCurrentSlotIndex:
 	LD (09480Eh), WA
 	RET
 
+LABEL_F94250:
 GetCurrentSlotIndex:
 	LD HL, (09480Eh)
 	RET
 
+LABEL_F94256:
 CheckIsCurrentSlot:
 	PUSH IZ
 	LD IZ, WA
@@ -4142,6 +4166,7 @@ CheckIsCurrentSlot:
 	POP IZ
 	RET
 
+LABEL_F94262:
 CheckSlotIndexValid:
 	CALR GetCurrentSlotIndex
 	CP HL, 0
