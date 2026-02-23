@@ -1021,12 +1021,12 @@ HDAE5000_Clear_Work_Buffer:	; 28F785h
 	dec 1, xbc	; dec 1, XBC
 	or xbc, xbc
 	jr z, HDAE5000_Clear_Work_Buffer__clear_done
-	.byte 0x93, 0x11	; ldirw  ; copy words (fills with zeros)
+	mriw2 0x93, 0x11	; ldirw  ; copy words (fills with zeros)
 	cpi0_werp 0xE6	; cp QBC, 0  ; check high word
 	jr z, HDAE5000_Clear_Work_Buffer__clear_done
 	ldto_wa_werp 0xE6	; ld WA, QBC  ; get high word count
 HDAE5000_Clear_Work_Buffer__clear_loop:
-	.byte 0x93, 0x11	; ldirw  ; continue word copy
+	mriw2 0x93, 0x11	; ldirw  ; continue word copy
 	djnz xwa, HDAE5000_Clear_Work_Buffer__clear_loop	; djnz WA, .clear_loop
 HDAE5000_Clear_Work_Buffer__clear_done:
 	bit 0, ix	; bit 0, IX  ; check if odd byte
@@ -1039,12 +1039,12 @@ HDAE5000_Clear_Work_Buffer__no_odd_byte:
 	ld xbc, 0xC82	; Count = 3,202 bytes
 	or xbc, xbc
 	jr z, HDAE5000_Clear_Work_Buffer__copy_done
-	.byte 0x83, 0x11	; ldir  ; copy bytes
+	ldir83	; ldir  ; copy bytes
 	cpi0_werp 0xE6	; cp QBC, 0
 	jr z, HDAE5000_Clear_Work_Buffer__copy_done
 	ldto_wa_werp 0xE6	; ld WA, QBC
 HDAE5000_Clear_Work_Buffer__copy_loop:
-	.byte 0x83, 0x11	; ldir
+	ldir83	; ldir
 	djnz xwa, HDAE5000_Clear_Work_Buffer__copy_loop	; djnz WA, .copy_loop
 HDAE5000_Clear_Work_Buffer__copy_done:
 	ret
@@ -1414,15 +1414,15 @@ HDAE5000_MemCopy:	; 29AE9Fh
 	ret z	; Return if src = dest
 	bit 0, ix	; bit 0, IX - check odd alignment
 	jr z, HDAE5000_MemCopy__copy_words
-	.byte 0x85, 0x10	; ldi - copy one byte
+	ldi85	; ldi - copy one byte
 	ret nov	; ret PO - return if count exhausted
 HDAE5000_MemCopy__copy_words:
 	srl bc, 1	; srl 1, BC - divide count by 2
 	jr z, HDAE5000_MemCopy__check_odd
-	.byte 0x95, 0x11	; ldirw - copy words
+	mriw2 0x95, 0x11	; ldirw - copy words
 HDAE5000_MemCopy__check_odd:
 	ret nc	; ret NC - return if no odd byte
-	.byte 0x85, 0x10	; ldi - copy final odd byte
+	ldi85	; ldi - copy final odd byte
 	ret
 
 HDAE5000_MemFill:	; 29AEC7h

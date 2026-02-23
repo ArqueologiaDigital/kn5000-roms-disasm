@@ -1983,7 +1983,9 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
                     parts = operands_str.split(',')
                     if len(parts) >= 2:
                         target_part = parts[-1].strip()
-                        if re.match(r'^[A-Za-z_.]', target_part):
+                        # Only use operand if it's a proper label name
+                        if re.match(r'^[A-Za-z_]\w*$', target_part) or \
+                           re.match(r'^\.\w+$', target_part):
                             if cc == 8:
                                 return f"jr {target_part}", 2
                             else:
@@ -2017,7 +2019,8 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
                     # For cc-suffixed mnemonics (JRL_T label), operand is single (no comma)
                     target_part = parts[-1].strip() if len(parts) >= 2 else operands_str.strip()
                     target_part = convert_expression(target_part)  # ASL→LLVM hex notation
-                    if re.match(r'^[A-Za-z_.]', target_part):
+                    if re.match(r'^[A-Za-z_]\w*$', target_part) or \
+                       re.match(r'^\.\w+$', target_part):
                         if cc == 8:
                             return f"jrl {target_part}", 3
                         else:
@@ -2038,10 +2041,10 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
                 if ll not in RESERVED_LABEL_NAMES:
                     return f"calr {label}", 3
             else:
-                # Fallback: use operand label directly if available.
+                # Fallback: use operand label if it exists in assembly output.
                 if operands_str:
                     target_part = operands_str.strip()
-                    if re.match(r'^[A-Za-z_.]', target_part):
+                    if re.match(r'^[A-Za-z_]\w*$', target_part):
                         return f"calr {target_part}", 3
 
     # Tier 10b: DJNZ (3-byte: prefix + 0x1C + d8)
@@ -3729,6 +3732,8 @@ def convert_db(label, args, comment, in_file_path, label_addr_suffix=""):
                 'SLA', 'SRA', 'SRL', 'SLL', 'RLC', 'RRC', 'RL', 'RR',
                 'SET', 'RES', 'BIT', 'CHG', 'TSET', 'CALL', 'CALR', 'JP', 'JR', 'JRL',
                 'DJNZ', 'MUL', 'MULS', 'DIV', 'DIVS', 'SCC', 'INCF', 'DECF',
+                'LDI', 'LDIR', 'LDIW', 'LDIRW', 'LDDR', 'CPIR',
+                'SRLW',
             }
             native_done = False
             if 1 <= nbytes <= 7 and comment:
@@ -3742,20 +3747,68 @@ def convert_db(label, args, comment, in_file_path, label_addr_suffix=""):
                     if m and m.group(1).upper() in DB_INSTR_MNEMONICS:
                         cmnem = m.group(1).upper()
                 if cmnem not in DB_INSTR_MNEMONICS:
+                    # Try stripping suffixes from macro names (e.g. LDW_16_16 → LDW)
+                    base = cmnem.split('_')[0]
+                    if base in DB_INSTR_MNEMONICS:
+                        cmnem = base
+                        use_opcode_guess = True
+                if cmnem not in DB_INSTR_MNEMONICS:
                     # Try "ADDR: MNEMONIC" pattern (e.g. "; F20DAD: LD ...")
                     m = re.match(r'[0-9A-Fa-f]+:\s*(\w+)', ctext)
                     if m and m.group(1).upper() in DB_INSTR_MNEMONICS:
                         cmnem = m.group(1).upper()
-                        # Comment looks like an instruction annotation — allow opcode guessing
                         use_opcode_guess = True
                 if cmnem in DB_INSTR_MNEMONICS:
                     addr = ADDR_TRACKER.get_addr()
+                    # Extract operands from comment for label resolution
+                    # E.g. "; CALR FDC_ReadStatus" → operands = "FDC_ReadStatus"
+                    # E.g. "; JR Z, .wait_loop" → operands = "Z, .wait_loop"
+                    comment_operands = ''
+                    words = ctext.split(None, 1)
+                    if len(words) > 1:
+                        comment_operands = words[1].split(';')[0].strip()
+                        # Strip parenthetical notes
+                        comment_operands = re.sub(r'\s*\(.*?\)\s*$', '', comment_operands)
+                        # Strip trailing human text after " - " separator
+                        comment_operands = re.sub(r'\s+-\s+\w.*$', '', comment_operands)
+                        # Strip trailing descriptive words (not valid operand chars)
+                        comment_operands = re.sub(r'\s+[a-z][\w\s]*$', '', comment_operands)
+                        # For branch instructions, validate comment labels:
+                        # 1. No local labels (.xxx) — they're unqualified in comments
+                        # 2. Label must exist at the correct target address
+                        #    (comments sometimes reference nearby but wrong labels)
+                        if cmnem in ('JR', 'JRL', 'CALR'):
+                            cparts = comment_operands.split(',')
+                            clabel = cparts[-1].strip()
+                            # Reject unqualified local labels — they won't resolve
+                            if clabel.startswith('.'):
+                                comment_operands = ''
+                            elif re.match(r'^[A-Za-z_]\w*$', clabel):
+                                # Compute actual target from ROM bytes
+                                rom_target = None
+                                if cmnem == 'JR' and nbytes == 2:
+                                    d8 = rom_bytes[1]
+                                    if d8 > 127: d8 -= 256
+                                    rom_target = addr + 2 + d8
+                                elif cmnem in ('JRL', 'CALR') and nbytes == 3:
+                                    d16 = rom_bytes[1] | (rom_bytes[2] << 8)
+                                    if d16 > 32767: d16 -= 65536
+                                    rom_target = addr + 3 + d16
+                                # Check label exists at the exact target address
+                                label_addr = None
+                                for a, n in ADDR_TO_LABEL_ALL.items():
+                                    if n == clabel:
+                                        label_addr = a
+                                        break
+                                if label_addr is None or \
+                                   (rom_target is not None and label_addr != rom_target):
+                                    comment_operands = ''  # wrong or missing label
                     try:
-                        native = try_convert_native(cmnem, '', rom_bytes, nbytes, addr)
+                        native = try_convert_native(cmnem, comment_operands, rom_bytes, nbytes, addr)
                         if native is None and use_opcode_guess:
                             # Opcode-based guessing when comment mnemonic was wrong
                             for mnem in guess_mnemonics_from_opcode(rom_bytes[0]):
-                                native = try_convert_native(mnem, '', rom_bytes, nbytes, addr)
+                                native = try_convert_native(mnem, comment_operands, rom_bytes, nbytes, addr)
                                 if native is not None:
                                     break
                         if native is not None:

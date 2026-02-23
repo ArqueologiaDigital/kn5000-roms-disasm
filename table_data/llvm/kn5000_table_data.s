@@ -1110,7 +1110,7 @@ Boot_ClearRAM__copy1_done:
 	ldir83
 	djnz16 wa, -5	; DJNZ WA, -5
 Boot_ClearRAM__copy2_done:
-	jrl Boot_Init+0x14B	; return to caller at 0xFFB633
+	.byte 0x78, 0x42, 0xfe	; JRL_T Boot_Init+014Bh	; return to caller at 0xFFB633
 	ret	; never reached
 
 ; =============================================================================
@@ -2445,7 +2445,7 @@ Boot_CopySectors:
 	ld wa, (xsp + 18)	; LD WA, (XSP+0x12)
 	ld (xsp + 6), wa	; LD (XSP+0x06), WA - current sector
 	ld wa, (xsp + 6)	; LD WA, (XSP+0x06)
-	extpfx2 0xE8, 0x12	; EXTZ XWA
+	extz xwa	; EXTZ XWA
 	div wa, 0x12	; DIV WA, 0x0012 - sectors per track
 	ldto_wa_werp 0xE2	; LD WA, QWA - get remainder
 	lds iz, 0	; LD IZ, 0 - offset = 0
@@ -2454,9 +2454,9 @@ Boot_CopySectors:
 
 	; Handle partial first track
 	ldw iz, 0x12	; LD IZ, 0x0012 - sectors per track
-	extpfx2 0xD8, 0xA6	; SUB IZ, WA - IZ = 18 - remainder
+	sub iz, wa	; SUB IZ, WA - IZ = 18 - remainder
 	ld wa, (xsp + 6)	; LD WA, (XSP+0x06)
-	extpfx2 0xE8, 0x12	; EXTZ XWA
+	extz xwa	; EXTZ XWA
 	ld bc, iz	; LD BC, IZ - sectors to read
 	ld xde, 0x99A4	; LD XDE, 0x000099A4 - buffer
 	calr FDC_ReadSectorWrapper	; CALR 0x9FBF92 (FDC_ReadSectorRange)
@@ -2480,7 +2480,7 @@ Boot_CopySectors__cs_partial_check:
 	ld bc, iz	; LD BC, IZ
 	sla bc, 7	; SLA 7, BC - BC = IZ * 128
 	ldto_wa_werp 0xFA	; LD WA, QIZ
-	extpfx2 0xD9, 0xF0	; CP WA, BC
+	cp wa, bc	; CP WA, BC
 	jr c, Boot_CopySectors__cs_partial_loop	; 67 d9
 
 Boot_CopySectors__cs_skip_partial:
@@ -2488,7 +2488,7 @@ Boot_CopySectors__cs_skip_partial:
 	ldmw (xsp + 8), 0x800	; LD (XSP+0x08), 0x0800 - total size
 	sub (xsp + 8), iz	; SUB (XSP+0x08), IZ
 	ld wa, (xsp + 8)	; LD WA, (XSP+0x08)
-	extpfx2 0xE8, 0x13	; EXTS XWA
+	exts xwa	; EXTS XWA
 	divs wa, 0x12	; DIVS WA, 0x0012 - full tracks
 	ld (xsp + 8), wa	; LD (XSP+0x08), WA - track count
 	ldmw (xsp + 4), 0x0	; LD (XSP+0x04), 0x0000 - counter
@@ -2498,7 +2498,7 @@ Boot_CopySectors__cs_skip_partial:
 
 Boot_CopySectors__cs_track_loop:
 	ld wa, (xsp + 6)	; LD WA, (XSP+0x06)
-	extpfx2 0xE8, 0x12	; EXTZ XWA
+	extz xwa	; EXTZ XWA
 	ldw bc, 0x12	; LD BC, 0x0012 - full track
 	ld xde, 0x99A4	; LD XDE, 0x000099A4
 	calr FDC_ReadSectorWrapper	; CALR 0x9FBF92
@@ -2534,7 +2534,7 @@ Boot_CopySectors__cs_check_remainder:
 
 	; Read remainder
 	ld wa, (xsp + 6)	; LD WA, (XSP+0x06)
-	extpfx2 0xE8, 0x12	; EXTZ XWA
+	extz xwa	; EXTZ XWA
 	ld bc, iz	; LD BC, IZ
 	ld xde, 0x99A4	; LD XDE, 0x000099A4
 	calr FDC_ReadSectorWrapper	; CALR 0x9FBF92
@@ -2557,7 +2557,7 @@ Boot_CopySectors__cs_rem_check:
 	ld bc, iz	; LD BC, IZ
 	sla bc, 7	; SLA 7, BC
 	ldto_wa_werp 0xFA	; LD WA, QIZ
-	extpfx2 0xD9, 0xF0	; CP WA, BC
+	cp wa, bc	; CP WA, BC
 	jr c, Boot_CopySectors__cs_rem_loop	; 67 d9
 
 Boot_CopySectors__cs_done:
@@ -2580,7 +2580,7 @@ Boot_CopySectorsEx:
 	ld wa, (xsp + 18)	; LD WA, (XSP+0x12)
 	ld (xsp + 6), wa	; LD (XSP+0x06), WA
 	ld wa, (xsp + 6)	; LD WA, (XSP+0x06)
-	extpfx2 0xE8, 0x12	; EXTZ XWA
+	extz xwa	; EXTZ XWA
 	div wa, 0x12	; DIV WA, 0x0012
 	ldto_wa_werp 0xE2	; LD WA, QWA
 	lds iz, 0	; LD IZ, 0
@@ -2588,9 +2588,9 @@ Boot_CopySectorsEx:
 	jr z, Boot_CopySectorsEx__cse_skip_partial	; 66 4d
 
 	ldw iz, 0x12	; LD IZ, 0x0012
-	extpfx2 0xD8, 0xA6	; SUB IZ, WA
+	sub iz, wa	; SUB IZ, WA
 	ld wa, (xsp + 6)	; LD WA, (XSP+0x06)
-	extpfx2 0xE8, 0x12	; EXTZ XWA
+	extz xwa	; EXTZ XWA
 	ld bc, iz	; LD BC, IZ
 	ld xde, 0x99A4	; LD XDE, 0x000099A4
 	calr FDC_ReadSectorWrapper	; CALR 0x9FBF92
@@ -2601,7 +2601,7 @@ Boot_CopySectorsEx:
 
 Boot_CopySectorsEx__cse_partial_loop:
 	ld a, (xsp + 20)	; LD A, (XSP+0x14) - bank
-	extpfx2 0xD8, 0x12	; EXTZ WA
+	extz wa	; EXTZ WA
 	ld xbc, (xsp + 14)	; LD XBC, (XSP+0x0E)
 	dpi2 0xE5, 0x32	; LDA XDE, XBC+
 	ld (xsp + 14), xbc	; LD (XSP+0x0E), XBC
@@ -2615,15 +2615,15 @@ Boot_CopySectorsEx__cse_partial_check:
 	ld bc, iz	; LD BC, IZ
 	sla bc, 8	; SLA 8, BC - BC = IZ * 256
 	ldto_wa_werp 0xFA	; LD WA, QIZ
-	extpfx2 0xD9, 0xF0	; CP WA, BC
+	cp wa, bc	; CP WA, BC
 	jr c, Boot_CopySectorsEx__cse_partial_loop	; 67 d4
 
 Boot_CopySectorsEx__cse_skip_partial:
 	add (xsp + 6), iz	; ADD (XSP+0x06), IZ
 	ld wa, iz	; LD WA, IZ
 	ld bc, (xsp + 26)	; LD BC, (XSP+0x1A) - total size
-	extpfx2 0xD8, 0xA1	; SUB BC, WA
-	extpfx2 0xE9, 0x12	; EXTZ XBC
+	sub bc, wa	; SUB BC, WA
+	extz xbc	; EXTZ XBC
 	div bc, 0x12	; DIV BC, 0x0012
 	ld (xsp + 8), bc	; LD (XSP+0x08), BC
 	ldmw (xsp + 4), 0x0	; LD (XSP+0x04), 0x0000
@@ -2633,7 +2633,7 @@ Boot_CopySectorsEx__cse_skip_partial:
 
 Boot_CopySectorsEx__cse_track_loop:
 	ld wa, (xsp + 6)	; LD WA, (XSP+0x06)
-	extpfx2 0xE8, 0x12	; EXTZ XWA
+	extz xwa	; EXTZ XWA
 	ldw bc, 0x12	; LD BC, 0x0012
 	ld xde, 0x99A4	; LD XDE, 0x000099A4
 	calr FDC_ReadSectorWrapper	; CALR 0x9FBF92
@@ -2644,7 +2644,7 @@ Boot_CopySectorsEx__cse_track_loop:
 
 Boot_CopySectorsEx__cse_full_loop:
 	ld a, (xsp + 20)	; LD A, (XSP+0x14)
-	extpfx2 0xD8, 0x12	; EXTZ WA
+	extz wa	; EXTZ WA
 	ld xbc, (xsp + 14)	; LD XBC, (XSP+0x0E)
 	dpi2 0xE5, 0x32	; LDA XDE, XBC+
 	ld (xsp + 14), xbc	; LD (XSP+0x0E), XBC
@@ -2670,7 +2670,7 @@ Boot_CopySectorsEx__cse_check_rem:
 	jr z, Boot_CopySectorsEx__cse_done	; 66 48
 
 	ld wa, (xsp + 6)	; LD WA, (XSP+0x06)
-	extpfx2 0xE8, 0x12	; EXTZ XWA
+	extz xwa	; EXTZ XWA
 	ld bc, iz	; LD BC, IZ
 	ld xde, 0x99A4	; LD XDE, 0x000099A4
 	calr FDC_ReadSectorWrapper	; CALR 0x9FBF92
@@ -2681,7 +2681,7 @@ Boot_CopySectorsEx__cse_check_rem:
 
 Boot_CopySectorsEx__cse_rem_loop:
 	ld a, (xsp + 20)	; LD A, (XSP+0x14)
-	extpfx2 0xD8, 0x12	; EXTZ WA
+	extz wa	; EXTZ WA
 	ld xbc, (xsp + 14)	; LD XBC, (XSP+0x0E)
 	dpi2 0xE5, 0x32	; LDA XDE, XBC+
 	ld (xsp + 14), xbc	; LD (XSP+0x0E), XBC
@@ -2695,7 +2695,7 @@ Boot_CopySectorsEx__cse_rem_check:
 	ld bc, iz	; LD BC, IZ
 	sla bc, 8	; SLA 8, BC
 	ldto_wa_werp 0xFA	; LD WA, QIZ
-	extpfx2 0xD9, 0xF0	; CP WA, BC
+	cp wa, bc	; CP WA, BC
 	jr c, Boot_CopySectorsEx__cse_rem_loop	; 67 d4
 
 Boot_CopySectorsEx__cse_done:
@@ -2827,7 +2827,7 @@ Boot_LoadDiskData:
 
 	; Validate disk type 1-8
 	ld a, (xsp)	; LD A, (XSP)
-	extpfx2 0xD8, 0x12	; EXTZ WA
+	extz wa	; EXTZ WA
 	dec 1, wa	; DEC 1, WA
 	cps wa, 0	; CP WA, 0
 	jrl lt, Boot_LoadDiskData__ldd_error	; JRL LT, .ldd_error (type < 1)
@@ -2835,7 +2835,7 @@ Boot_LoadDiskData:
 	jrl gt, Boot_LoadDiskData__ldd_error	; JRL GT, .ldd_error (type > 8)
 
 	; Dispatch via jump table
-	extpfx2 0xD8, 0x80	; ADD WA, WA - WA *= 2
+	add wa, wa	; ADD WA, WA - WA *= 2
 	ldada_24 xix, 16752960	; LDA XIX, 0xFFA140 - jump table
 	ld_wa_sriw3 0x07, 0xF0, 0xE0	; LD WA, (XIX+WA)
 	ldada_24 xix, 16761930	; LDA XIX, 0xFFC44A - base addr
@@ -2933,11 +2933,11 @@ Boot_LoadDiskData__ldd_halt:
 ; =============================================================================
 Boot_DelayLoop:
 	lds32 xbc, 0	; LD XBC, 0
-	extpfx2 0xE8, 0xF1	; CP XBC, XWA
+	cp xbc, xwa	; CP XBC, XWA
 	ret nc	; RET NC
 Boot_DelayLoop__delay_loop:
 	inc 1, xbc	; INC 1, XBC
-	extpfx2 0xE8, 0xF1	; CP XBC, XWA
+	cp xbc, xwa	; CP XBC, XWA
 	jr c, Boot_DelayLoop__delay_loop	; 67 fa
 	ret	; 0e
 
@@ -3012,7 +3012,7 @@ Flash_SearchFirstNonEmptyBlock__fvb_check:
 	ret nz	; RET NZ - found valid data
 Flash_SearchFirstNonEmptyBlock__fvb_next:
 	lda xhl, (xhl + 64)	; LDA XHL, XHL+0x40 - next 64-byte block
-	extpfx2 0xE9, 0xF3	; CP XHL, XBC
+	cp xhl, xbc	; CP XHL, XBC
 	jr nz, Flash_SearchFirstNonEmptyBlock__fvb_not_end	; 6e 03
 	lds32 xhl, 0	; LD XHL, 0 - not found
 	ret	; 0e
@@ -3032,7 +3032,7 @@ Boot_VerifyFlash:
 	ld xhl, xwa	; LD XHL, XWA - flash addr
 	ld w, e	; LD W, E - bank number
 	ld a, (xsp + 4)	; LD A, (XSP+0x04) - max bank
-	extpfx2 0xC9, 0xF0	; CP W, A
+	cp w, a	; CP W, A
 	jr ugt, Boot_VerifyFlash__vf_success	; 6b 22
 
 Boot_VerifyFlash__vf_bank_loop:
@@ -3046,10 +3046,10 @@ Boot_VerifyFlash__vf_compare:
 	jr nz, Boot_VerifyFlash__vf_mismatch	; 6e 10
 	ld xde, xiy	; LD XDE, XIY
 	dec 1, xiy	; DEC 1, XIY
-	extpfx2 0xEA, 0xE2	; OR XDE, XDE
+	or xde, xde	; OR XDE, XDE
 	jr nz, Boot_VerifyFlash__vf_compare	; 6e f0
 	inc 1, w	; INC 1, W - next bank
-	extpfx2 0xC9, 0xF0	; CP W, A
+	cp w, a	; CP W, A
 	jr ule, Boot_VerifyFlash__vf_bank_loop	; 63 de
 
 Boot_VerifyFlash__vf_success:
@@ -3265,11 +3265,11 @@ LZSS_ReadByte__not_eof:
 	lds iz, 0	; LD IZ, 0
 LZSS_ReadByte__read_sectors:
 	ldda16 xwa, 3124	; LD WA, (0x0C34)
-	extpfx2 0xE8, 0x12	; EXTZ XWA
+	extz xwa	; EXTZ XWA
 	ldw bc, 0x2400	; LD BC, 0x2400 - sector size
 	mul xbc, xiz	; MUL XBC, IZ
 	ld xde, 0x99A4	; LD XDE, 0x000099A4 - buffer base
-	extpfx2 0xE9, 0x82	; ADD XDE, XBC
+	add xde, xbc	; ADD XDE, XBC
 	ldw bc, 0x12	; LD BC, 0x0012
 	calr FDC_ReadSectorWrapper	; CALR 0xFFBF92 (read sector data)
 	adddi16 3124, 18	; ADD (0x0C34), 0x0012
@@ -3283,7 +3283,7 @@ LZSS_ReadByte__read_byte:
 	dpi2 0xE0, 0x31	; LDA XBC, XWA+ (post-increment read)
 	stda32 3116, xwa	; LD (0x0C2C), XWA - save updated pointer
 	ld l, (xbc)	; LD L, (XBC) - read byte into L
-	extpfx2 0xDB, 0x12	; EXTZ HL - zero-extend to HL
+	extz hl	; EXTZ HL - zero-extend to HL
 LZSS_ReadByte__exit:
 	popw iz	; POP IZ
 	ret	; RET
@@ -3298,10 +3298,10 @@ LZSS_ReadByte__exit:
 	.org 0x9FC935 - 0x800000, 0xFF
 LZSS_OutputByte:
 	ldda8 e, 3126	; LD E, (0x0C36) - output index
-	extpfx2 0xDA, 0x12	; EXTZ DE
+	extz de	; EXTZ DE
 	ldada xbc, 3082	; LDA XBC, 0x0C0A - temp buffer
-	extpfx2 0xEA, 0x12	; EXTZ XDE
-	extpfx2 0xE9, 0x82	; ADD XDE, XBC
+	extz xde	; EXTZ XDE
+	add xde, xbc	; ADD XDE, XBC
 	ld (xde), a	; LD (XDE), A - store byte
 	ldda8 a, 3126	; LD A, (0x0C36)
 	ld e, a	; LD E, A
@@ -3329,10 +3329,10 @@ LZSS_OutputByte__not_full:
 	.org 0x9FC974 - 0x800000, 0xFF
 LZSS_OutputByte_Alt:
 	ldda8 c, 3126	; LD C, (0x0C36)
-	extpfx2 0xD9, 0x12	; EXTZ BC
+	extz bc	; EXTZ BC
 	ldada xde, 3086	; LDA XDE, 0x0C0E
-	extpfx2 0xE9, 0x12	; EXTZ XBC
-	extpfx2 0xEA, 0x81	; ADD XBC, XDE
+	extz xbc	; EXTZ XBC
+	add xbc, xde	; ADD XBC, XDE
 	ld (xbc), a	; LD (XBC), A
 	ldda8 a, 3126	; LD A, (0x0C36)
 	ld c, a	; LD C, A
@@ -3370,10 +3370,10 @@ LZSS_ParseHeader:
 LZSS_ParseHeader__read_header:
 	calr LZSS_ReadByte	; CALR LZSS_ReadByte
 	ld bc, iz	; LD BC, IZ
-	extpfx2 0xE9, 0x12	; EXTZ XBC
+	extz xbc	; EXTZ XBC
 	lda xwa, (xsp + 2)	; LDA XWA, XSP+0x02
 	ld xde, xwa	; LD XDE, XWA
-	extpfx2 0xE9, 0x82	; ADD XDE, XBC
+	add xde, xbc	; ADD XDE, XBC
 	ld (xde), l	; LD (XDE), L
 	inc 1, iz	; INC 1, IZ
 	cps iz, 6	; CP IZ, 6
@@ -3394,11 +3394,11 @@ LZSS_ParseHeader__valid:
 	lds iz, 0	; LD IZ, 0
 LZSS_ParseHeader__read_more:
 	ld bc, iz	; LD BC, IZ
-	extpfx2 0xE9, 0x12	; EXTZ XBC
+	extz xbc	; EXTZ XBC
 	lda xwa, (xsp + 2)	; LDA XWA, XSP+0x02
-	extpfx2 0xE9, 0x80	; ADD XWA, XBC
+	add xwa, xbc	; ADD XWA, XBC
 	ld a, (xwa)	; LD A, (XWA)
-	extpfx2 0xD8, 0x12	; EXTZ WA
+	extz wa	; EXTZ WA
 	calr LZSS_OutputByte_Alt	; CALR LZSS_OutputByte_Alt
 	inc 1, iz	; INC 1, IZ
 	cps iz, 6	; CP IZ, 6
@@ -3413,7 +3413,7 @@ LZSS_ParseHeader__read_more:
 	; Copy remaining raw bytes
 LZSS_ParseHeader__decompress_loop:
 	calr LZSS_ReadByte	; CALR LZSS_ReadByte
-	extpfx2 0xDB, 0x12	; EXTZ HL
+	extz hl	; EXTZ HL
 	ld wa, hl	; LD WA, HL
 	calr LZSS_OutputByte_Alt	; CALR LZSS_OutputByte_Alt
 	ldda32 xwa, 3108	; LD XWA, (0x0C24)
@@ -3453,7 +3453,7 @@ LZSS_Decompress:
 LZSS_Decompress__prefill_loop:
 	ldda32 xwa, 3108	; LD XWA, (0x0C24)
 	ld xbc, (xsp + 16)	; LD XBC, (XSP+0x10) - window base
-	extpfx2 0xE8, 0x81	; ADD XBC, XWA
+	add xbc, xwa	; ADD XBC, XWA
 	ldmi8 (xbc), 0x0	; LD (XBC), 0x00
 	ldda32 xwa, 3108	; LD XWA, (0x0C24)
 	inc 1, xwa	; INC 1, XWA
@@ -3489,11 +3489,11 @@ LZSS_Decompress__prefill_loop:
 	ldi0_werp 0xFA	; LD QIZ, 0
 LZSS_Decompress__preread_loop:
 	ldda16 xwa, 3124	; LD WA, (0x0C34)
-	extpfx2 0xE8, 0x12	; EXTZ XWA
+	extz xwa	; EXTZ XWA
 	ldw bc, 0x2400	; LD BC, 0x2400
 	mul_xbc_werp 0xFA	; MUL XBC, QIZ
 	ld xde, 0x99A4	; LD XDE, 0x000099A4
-	extpfx2 0xE9, 0x82	; ADD XDE, XBC
+	add xde, xbc	; ADD XDE, XBC
 	ldw bc, 0x12	; LD BC, 0x0012
 	calr FDC_ReadSectorWrapper	; CALR 0xFFBF92
 	adddi16 3124, 18	; ADD (0x0C34), 0x0012
@@ -3511,17 +3511,17 @@ LZSS_Decompress__read_header_loop:
 
 	; === Parse decompressed size (3 bytes) ===
 	calr LZSS_ReadByte	; CALR LZSS_ReadByte
-	extpfx2 0xEB, 0x12	; EXTZ XHL
+	extz xhl	; EXTZ XHL
 	sla xhl, 0	; SLA 0, XHL (shift left for alignment)
 	stda32 3104, xhl	; LD (0x0C20), XHL
 	calr LZSS_ReadByte	; CALR LZSS_ReadByte
 	sll hl, 8	; SLL 8, HL
-	extpfx2 0xEB, 0x12	; EXTZ XHL
+	extz xhl	; EXTZ XHL
 	adddm32 3104, xhl	; ADD (0x0C20), XHL
 	calr LZSS_ReadByte	; CALR LZSS_ReadByte
-	extpfx2 0xEB, 0x12	; EXTZ XHL
+	extz xhl	; EXTZ XHL
 	ldda32 xwa, 3104	; LD XWA, (0x0C20)
-	extpfx2 0xEB, 0x80	; ADD XWA, XHL
+	add xwa, xhl	; ADD XWA, XHL
 	stda32 3104, xwa	; LD (0x0C20), XWA
 	cpdm32 3108, xwa	; CP (0x0C24), XWA
 	jrl nc, LZSS_Decompress__done	; JRL NC, .done - already past size
@@ -3532,7 +3532,7 @@ LZSS_Decompress__read_header_loop:
 ; -----------------------------------------------------------------------------
 LZSS_Decompress__decompress_loop:
 	; === Shift flag byte and check if need new flags ===
-	.byte 0x9f, 0x04, 0x7f	; SRLW (XSP+0x04) - shift flags right
+	mrdw3 0x9F, 0x04, 0x7F	; SRLW (XSP+0x04) - shift flags right
 	ld wa, (xsp + 4)	; LD WA, (XSP+0x04)
 	bit 8, wa	; BIT 8, WA - check sentinel bit
 	jr nz, LZSS_Decompress__flags_valid	; JR NZ, .flags_valid
@@ -3557,12 +3557,12 @@ LZSS_Decompress__flags_valid:
 	cp iz, 0xFFFF	; CP IZ, 0xFFFF
 	jrl z, LZSS_Decompress__done	; JRL Z, .done
 	ldto_a_berp 0xF8	; LD A, IZL - get byte value
-	extpfx2 0xD8, 0x12	; EXTZ WA
+	extz wa	; EXTZ WA
 	calr LZSS_OutputByte	; CALR LZSS_OutputByte
 	; Store byte in sliding window
 	ld bc, (xsp + 10)	; LD BC, (XSP+0x0A) - window position
 	.byte 0x9f, 0x0a, 0x61	; INCW 1, (XSP+0x0A)
-	extpfx2 0xE9, 0x12	; EXTZ XBC
+	extz xbc	; EXTZ XBC
 	add xbc, (xsp + 16)	; ADD XBC, (XSP+0x10) - add window base
 	ldto_a_berp 0xF8	; LD A, IZL
 	ld (xbc), a	; LD (XBC), A - store in window
@@ -3588,7 +3588,7 @@ LZSS_Decompress__back_reference:
 	and bc, 0xF0	; AND BC, 0x00F0 - extract high nibble
 	sll bc, 4	; SLL 4, BC - shift to bits 11-8
 	ldto_wa_werp 0xFA	; LD WA, QIZ
-	extpfx2 0xD9, 0xE0	; OR WA, BC - combine with low byte
+	or wa, bc	; OR WA, BC - combine with low byte
 	ldfr_wa_werp 0xFA	; LD QIZ, WA - QIZ = 12-bit offset
 
 	; Extract length: (byte & 0x0F) + 2
@@ -3605,19 +3605,19 @@ LZSS_Decompress__copy_loop:
 	ldto_wa_werp 0xFA	; LD WA, QIZ - get offset
 	add wa, (xsp + 6)	; ADD WA, (XSP+0x06) - add counter
 	and wa, 0xFFF	; AND WA, 0x0FFF - wrap to window
-	extpfx2 0xE8, 0x12	; EXTZ XWA
+	extz xwa	; EXTZ XWA
 	add xwa, (xsp + 12)	; ADD XWA, (XSP+0x0C) - add window base
 	ld a, (xwa)	; LD A, (XWA) - read from window
 	ldfr_a_berp 0xF8	; LD IZL, A
-	extpfx2 0xDE, 0x12	; EXTZ IZ
+	extz iz	; EXTZ IZ
 	ldto_a_berp 0xF8	; LD A, IZL
-	extpfx2 0xD8, 0x12	; EXTZ WA
+	extz wa	; EXTZ WA
 	calr LZSS_OutputByte	; CALR LZSS_OutputByte
 
 	; Store byte in sliding window at write position
 	ld bc, (xsp + 10)	; LD BC, (XSP+0x0A)
 	.byte 0x9f, 0x0a, 0x61	; INCW 1, (XSP+0x0A)
-	extpfx2 0xE9, 0x12	; EXTZ XBC
+	extz xbc	; EXTZ XBC
 	add xbc, (xsp + 12)	; ADD XBC, (XSP+0x0C)
 	ldto_a_berp 0xF8	; LD A, IZL
 	ld (xbc), a	; LD (XBC), A
@@ -3728,7 +3728,7 @@ Boot_FlashUpdate_Main:
 
 	; Execute disk type handler
 	ldto_a_berp 0xFB	; LD A, QIZH
-	extpfx2 0xD8, 0x12	; EXTZ WA
+	extz wa	; EXTZ WA
 	calr Boot_LoadDiskData	; CALR Boot_LoadDiskData
 
 	; Display "Completed" message
@@ -3767,7 +3767,7 @@ Boot_FlashUpdate_Main__update_check_flash:
 	call 0xFFCCFB	; CALL DrawBitmap_UpdateDisplay
 
 	ldto_a_berp 0xFB	; LD A, QIZH
-	extpfx2 0xD8, 0x12	; EXTZ WA
+	extz wa	; EXTZ WA
 	calr Boot_LoadDiskData	; CALR Boot_LoadDiskData
 
 	pushw 0x8	; PUSH 0x0008
@@ -3806,7 +3806,7 @@ DrawBitmap_UpdateDisplay:
 
 DrawBitmap_UpdateDisplay__db_row_loop:
 	ld wa, iz	; LD WA, IZ
-	extpfx2 0xE8, 0x12	; EXTZ XWA
+	extz xwa	; EXTZ XWA
 	div wa, 0x1C	; DIV WA, 0x001C - 28 bytes per row
 	ldto_wa_werp 0xE2	; LD WA, QWA - get remainder
 	cps wa, 0	; CP WA, 0
@@ -3817,23 +3817,23 @@ DrawBitmap_UpdateDisplay__db_row_loop:
 DrawBitmap_UpdateDisplay__db_not_row_start:
 	ldi0_werp 0xEE	; LD QHL, 0 - bit counter
 	ld de, iz	; LD DE, IZ
-	extpfx2 0xEA, 0x12	; EXTZ XDE
+	extz xde	; EXTZ XDE
 	add xde, (xsp + 2)	; ADD XDE, (XSP+0x02) - bitmap offset
 	ldada xwa, 4164	; LDA XWA, 0x1044
 	ldto_bc_werp 0xEE	; LD BC, QHL
-	extpfx2 0xE9, 0x12	; EXTZ XBC
-	extpfx2 0xE8, 0x81	; ADD XBC, XWA
+	extz xbc	; EXTZ XBC
+	add xbc, xwa	; ADD XBC, XWA
 	ld a, (xbc)	; LD A, (XBC) - get bitmask byte
 	and a, (xde)	; AND A, (XDE) - mask with bitmap data
 	ldfr_a_berp 0xF2	; LD QIXL, A
 
 DrawBitmap_UpdateDisplay__db_calc_addr:
 	ld de, ix	; LD DE, IX - Y position
-	extpfx2 0xEA, 0x12	; EXTZ XDE
+	extz xde	; EXTZ XDE
 	ldada_24 xbc, 277504	; LDA XBC, 0x043C00 - VGA base
 	ld xwa, xde	; LD XWA, XDE
 	sll xwa, 2	; SLL 2, XWA - Y * 4
-	extpfx2 0xEA, 0x80	; ADD XWA, XDE - Y * 5
+	add xwa, xde	; ADD XWA, XDE - Y * 5
 	sll xwa, 6	; SLL 6, XWA - Y * 320
 
 	; Check if bit set (foreground or background)
@@ -3843,10 +3843,10 @@ DrawBitmap_UpdateDisplay__db_calc_addr:
 	; Foreground pixel
 	ld de, iy	; LD DE, IY
 	inc 1, iy	; INC 1, IY
-	extpfx2 0xEA, 0x12	; EXTZ XDE
-	extpfx2 0xEA, 0x80	; ADD XWA, XDE - add X offset
+	extz xde	; EXTZ XDE
+	add xwa, xde	; ADD XWA, XDE - add X offset
 	ld xde, xbc	; LD XDE, XBC
-	extpfx2 0xE8, 0x82	; ADD XDE, XWA - final framebuffer addr
+	add xde, xwa	; ADD XDE, XWA - final framebuffer addr
 	ld a, (xsp + 10)	; LD A, (XSP+0x0A) - foreground color
 	ld (xde), a	; LD (XDE), A
 	jr DrawBitmap_UpdateDisplay__db_next_bit	; 68 11
@@ -3854,10 +3854,10 @@ DrawBitmap_UpdateDisplay__db_calc_addr:
 DrawBitmap_UpdateDisplay__db_background:
 	ld de, iy	; LD DE, IY
 	inc 1, iy	; INC 1, IY
-	extpfx2 0xEA, 0x12	; EXTZ XDE
-	extpfx2 0xEA, 0x80	; ADD XWA, XDE
+	extz xde	; EXTZ XDE
+	add xwa, xde	; ADD XWA, XDE
 	ld xde, xbc	; LD XDE, XBC
-	extpfx2 0xE8, 0x82	; ADD XDE, XWA
+	add xde, xwa	; ADD XDE, XWA
 	ld a, (xsp + 12)	; LD A, (XSP+0x0C) - background color
 	ld (xde), a	; LD (XDE), A
 
@@ -3901,32 +3901,32 @@ InitProgressDisplay_FillRegion__idp_x_loop:
 	ld iy, (xsp + 8)	; LD IY, (XSP+0x08)
 	ld bc, iy	; LD BC, IY
 	inc 6, bc	; INC 6, BC - IY + 6
-	extpfx2 0xD9, 0xF5	; CP IY, BC
+	cp iy, bc	; CP IY, BC
 	jr nc, InitProgressDisplay_FillRegion__idp_next_x	; 6f 34
 
 InitProgressDisplay_FillRegion__idp_y_loop:
 	ld de, iy	; LD DE, IY
-	extpfx2 0xEA, 0x12	; EXTZ XDE
+	extz xde	; EXTZ XDE
 	ld wa, ix	; LD WA, IX
-	extpfx2 0xE8, 0x12	; EXTZ XWA
+	extz xwa	; EXTZ XWA
 	ld xhl, xwa	; LD XHL, XWA
 	sll xhl, 2	; SLL 2, XHL
-	extpfx2 0xE8, 0x83	; ADD XHL, XWA
+	add xhl, xwa	; ADD XHL, XWA
 	sll xhl, 6	; SLL 6, XHL - Y * 320
-	extpfx2 0xEA, 0x83	; ADD XHL, XDE
+	add xhl, xde	; ADD XHL, XDE
 	srl xhl, 1	; SRL 1, XHL - word align
-	extpfx2 0xEB, 0x83	; ADD XHL, XHL
+	add xhl, xhl	; ADD XHL, XHL
 	ld xiz, 0x1A0000	; LD XIZ, 0x001A0000
-	extpfx2 0xEB, 0x86	; ADD XIZ, XHL
+	add xiz, xhl	; ADD XIZ, XHL
 	ld a, (xsp + 6)	; LD A, (XSP+0x06)
-	extpfx2 0xD8, 0x12	; EXTZ WA
+	extz wa	; EXTZ WA
 	ld de, wa	; LD DE, WA
 	sll de, 8	; SLL 8, DE
-	extpfx2 0xDA, 0xE0	; OR WA, DE - duplicate byte
+	or wa, de	; OR WA, DE - duplicate byte
 	ld (xiz), wa	; LD (XIZ), WA
 
 	inc 2, iy	; INC 2, IY
-	extpfx2 0xD9, 0xF5	; CP IY, BC
+	cp iy, bc	; CP IY, BC
 	jr c, InitProgressDisplay_FillRegion__idp_y_loop	; 67 cc
 
 InitProgressDisplay_FillRegion__idp_next_x:
@@ -4621,14 +4621,14 @@ FDC_WaitReady__fwr_loop:
 	.byte 0x1e, 0xc9, 0xff	; CALR FDC_ReadStatus
 	and l, 0x1F	; AND L, 0x1F - mask status bits
 	ld a, l	; LD A, L
-	extpfx2 0xD8, 0x12	; EXTZ WA
+	extz wa	; EXTZ WA
 	cps wa, 0	; CP WA, 0 - check if ready
 	jr nz, FDC_WaitReady__fwr_not_ready	; 6e 03
 	ldi0_werp 0xFA	; LD QIZ, 0 - flag = success
 
 FDC_WaitReady__fwr_not_ready:
 	ldda16 xwa, 3072	; LD WA, (0x0C00)
-	extpfx2 0xDE, 0xA0	; SUB WA, IZ
+	sub wa, iz	; SUB WA, IZ
 	cp wa, 0x1F4	; CP WA, 0x01F4 (500) - timeout
 	jr ule, FDC_WaitReady__fwr_continue	; 63 05
 	erpw4 0xFA, 0x03, 0xFF, 0xFF	; LD QIZ, 0xFFFF - flag = timeout
@@ -4669,7 +4669,7 @@ FDC_WaitComplete__fwc_loop:
 
 FDC_WaitComplete__fwc_not_done:
 	ldda16 xwa, 3072	; LD WA, (0x0C00)
-	extpfx2 0xDE, 0xA0	; SUB WA, IZ
+	sub wa, iz	; SUB WA, IZ
 	cp wa, 0x1F4	; CP WA, 0x01F4 - timeout
 	jr ule, FDC_WaitComplete__fwc_continue	; 63 05
 	erpw4 0xFA, 0x03, 0xFF, 0xFF	; LD QIZ, 0xFFFF

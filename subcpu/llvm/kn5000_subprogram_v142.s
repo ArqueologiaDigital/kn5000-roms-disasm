@@ -44367,7 +44367,7 @@ LABEL_03608C:
 	ret nz
 
 LABEL_036098:
-	.byte 0xd1, 0xb0, 0x45, 0x19, 0xb4, 0x44	; LDW_16_16 (044b4h), (045b0h)
+	ldmm16 17588, 17840	; LDW_16_16 (044b4h), (045b0h)
 	ldada xwa, 17550
 	call LABEL_038E31
 	ret
