@@ -98763,7 +98763,7 @@ TONE_GEN_CHANNEL_INIT__loop:
 	extz bc	; Zero-extend C to BC
 	sla bc, 2	; BC <<= 2 (multiply by 4 for table index)
 	ldada_24 xde, 16776944	; XDE = pointer to channel config table
-	ld_xbc_sril3 0x07, 0xE8, 0xE4	; XBC = config[channel] (4 bytes per entry)
+	ld_sril3 XBC, 0x07, 0xE8, 0xE4	; XBC = config[channel] (4 bytes per entry)
 	call TONE_GEN_WRITE	; Write config to tone generator
 	inc1_berp 0xFB	; Increment loop counter
 	cpi_berp 0xFB, 4	; Compare counter with 4
@@ -99600,7 +99600,7 @@ CMD_Dispatch_Handler:
 	extz wa
 	sla wa, 2	; index * 4
 	ldada_24 xbc, 16744448	; Jump table at ROM start
-	ld_xwa_sril3 0x07, 0xE4, 0xE0	; Get handler address
+	ld_sril3 XWA, 0x07, 0xE4, 0xE0	; Get handler address
 	call (xwa)	; Call handler (if valid)
 	inc 6, xsp	; Clean up stack
 	stdi8 1304, 0
@@ -99768,7 +99768,7 @@ MEM_TEST_ROUTINE__next_region:
 	extz wa
 	muls wa, 0xA	; Each entry is 10 bytes (TMP94C241 encoding)
 	ldada_24 xbc, 16744480	; Test config table
-	st_b_dri3 0x07, 0xE4, 0xE0	; Point to current entry
+	st_dri3b B, 0x07, 0xE4, 0xE0	; Point to current entry
 	ld xhl, (xde)	; Memory start address
 	ld xiz, (xde + 4)	; Size in dwords
 	srl xiz, 3	; Convert to iteration count
@@ -99861,7 +99861,7 @@ ROM_CHECKSUM__word_loop:
 	ld c, w
 	extz bc
 	add bc, bc	; Bank offset
-	st_b_dri3 0x07, 0xF0, 0xE4
+	st_dri3b B, 0x07, 0xF0, 0xE4
 	ld bc, (xde)	; Get current sum
 	ldfr_werp BC, 0xE2
 	ld_spiw BC, 0xF5	; Read word from ROM
@@ -100057,7 +100057,7 @@ NOTE_VELOCITY_LOOKUP_CALCULATE:
 	extz bc	; Zero-extend BC
 	ldada_24 xde, 16744524	; XDE = velocity curve table base
 	lds32 xhl, 0	; Clear XHL
-	ld_l_srib3 0x07, 0xE8, 0xE4	; L = table[velocity_index]
+	ld_srib3 L, 0x07, 0xE8, 0xE4	; L = table[velocity_index]
 	ldda16_24 xbc, 16744490	; BC = parameter from table
 	sub hl, bc	; HL = L - BC
 	ldada_24 xde, 16744512	; XDE = another table
@@ -100110,7 +100110,7 @@ NOTE_VELOCITY_LOOKUP_CALCULATE__use_min:
 	; Look up final velocity in curve table
 	extz bc	; Zero-extend BC (velocity 0-255)
 	ldada_24 xde, 16744780	; XDE = final velocity curve table
-	ld_c_srib3 0x07, 0xE8, 0xE4	; C = curve[velocity]
+	ld_srib3 C, 0x07, 0xE8, 0xE4	; C = curve[velocity]
 	ld (xwa + 1), c	; Store final velocity to output[1]
 	ret
 

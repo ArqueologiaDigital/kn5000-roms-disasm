@@ -523,7 +523,7 @@ LABEL_F8D68E:
 	extz wa
 	sla wa, 4
 	ldada xbc, 32646
-	st_b_dri3 0x07, 0xE4, 0xE0
+	st_dri3b B, 0x07, 0xE4, 0xE0
 	ldda32 xwa, 32642
 	ld xbc, 0x1C0000F
 	call 0xFA9D58
@@ -745,7 +745,7 @@ LABEL_F8D8BB:
 	extz wa
 	sla wa, 4
 	ldada xbc, 32778
-	st_b_dri3 0x07, 0xE4, 0xE0
+	st_dri3b B, 0x07, 0xE4, 0xE0
 	ldda32 xwa, 32774
 	ld xbc, 0x1C0000F
 	jrl LABEL_F8D9FD

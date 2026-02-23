@@ -285,8 +285,8 @@ HDAE5000_Handler_Registration:	; 280020h
 	ld xwa, 0x1600004	; PPI port address
 	ld (xsp + 256), xwa	; ld (XSP+0x00), XWA  ; port address
 	ldda32_24 xwa, 2335138
-	ld_xwa_sril3 0xE1, 0x0A, 0x0E	; Handler dispatch table
-	ld_xwa_sril3 0xE1, 0x68, 0x01	; Handler function via table offset 0x0168
+	ld_sril3 XWA, 0xE1, 0x0A, 0x0E	; Handler dispatch table
+	ld_sril3 XWA, 0xE1, 0x68, 0x01	; Handler function via table offset 0x0168
 	ld (xsp + 4), xwa	; ld (XSP+0x04), XWA  ; handler function ptr
 	ldda16_24 xwa, 2742654
 	ld (xsp + 8), wa	; ld (XSP+0x08), WA   ; record count (= 13)
@@ -295,8 +295,8 @@ HDAE5000_Handler_Registration:	; 280020h
 	lda xwa, (xsp)	; lda XWA, XSP  ; XWA = param block ptr
 	ld xbc, xwa	; XBC = param block ptr
 	ldda32_24 xwa, 2335138
-	ld_xwa_sril3 0xE1, 0x0A, 0x0E
-	ld_xhl_sril3 0xE1, 0xE4, 0x00	; RegisterObjectTable function
+	ld_sril3 XWA, 0xE1, 0x0A, 0x0E
+	ld_sril3 XHL, 0xE1, 0xE4, 0x00	; RegisterObjectTable function
 	ldw wa, 0x16A	; Handler ID
 	call (xhl)	; Register handler
 
@@ -304,8 +304,8 @@ HDAE5000_Handler_Registration:	; 280020h
 	ld xwa, 0x160000C	; PPI port address
 	ld (xsp + 256), xwa	; ld (XSP+0x00), XWA
 	ldda32_24 xwa, 2335138
-	ld_xwa_sril3 0xE1, 0x0A, 0x0E
-	ld_xwa_sril3 0xE1, 0x3C, 0x01	; Handler function via table offset 0x013C
+	ld_sril3 XWA, 0xE1, 0x0A, 0x0E
+	ld_sril3 XWA, 0xE1, 0x3C, 0x01	; Handler function via table offset 0x013C
 	ld (xsp + 4), xwa	; ld (XSP+0x04), XWA
 	ldda16_24 xwa, 2332706
 	ld (xsp + 8), wa	; ld (XSP+0x08), WA   ; data size (variable)
@@ -314,8 +314,8 @@ HDAE5000_Handler_Registration:	; 280020h
 	lda xwa, (xsp)	; lda XWA, XSP
 	ld xbc, xwa
 	ldda32_24 xwa, 2335138
-	ld_xwa_sril3 0xE1, 0x0A, 0x0E
-	ld_xhl_sril3 0xE1, 0xE4, 0x00	; RegisterObjectTable
+	ld_sril3 XWA, 0xE1, 0x0A, 0x0E
+	ld_sril3 XHL, 0xE1, 0xE4, 0x00	; RegisterObjectTable
 	ldw wa, 0x1CA	; Handler ID
 	call (xhl)
 
@@ -323,8 +323,8 @@ HDAE5000_Handler_Registration:	; 280020h
 	ld xwa, 0x160000D	; PPI port address
 	ld (xsp + 256), xwa	; ld (XSP+0x00), XWA
 	ldda32_24 xwa, 2335138
-	ld_xwa_sril3 0xE1, 0x0A, 0x0E
-	ld_xwa_sril3 0xE1, 0x40, 0x01	; Handler function via table offset 0x0140
+	ld_sril3 XWA, 0xE1, 0x0A, 0x0E
+	ld_sril3 XWA, 0xE1, 0x40, 0x01	; Handler function via table offset 0x0140
 	ld (xsp + 4), xwa	; ld (XSP+0x04), XWA
 	ldda16_24 xwa, 2332784
 	ld (xsp + 8), wa	; ld (XSP+0x08), WA   ; data size (variable)
@@ -333,8 +333,8 @@ HDAE5000_Handler_Registration:	; 280020h
 	lda xwa, (xsp)	; lda XWA, XSP
 	ld xbc, xwa
 	ldda32_24 xwa, 2335138
-	ld_xwa_sril3 0xE1, 0x0A, 0x0E
-	ld_xhl_sril3 0xE1, 0xE4, 0x00	; RegisterObjectTable
+	ld_sril3 XWA, 0xE1, 0x0A, 0x0E
+	ld_sril3 XHL, 0xE1, 0xE4, 0x00	; RegisterObjectTable
 	ldw wa, 0x1EA	; Handler ID
 	call (xhl)
 
@@ -342,8 +342,8 @@ HDAE5000_Handler_Registration:	; 280020h
 	ld xwa, 0x1600002	; PPI port address
 	ld (xsp + 256), xwa	; ld (XSP+0x00), XWA
 	ldda32_24 xwa, 2335138
-	ld_xwa_sril3 0xE1, 0x0A, 0x0E
-	ld_xwa_sril3 0xE1, 0x48, 0x02	; Handler function via table offset 0x0248
+	ld_sril3 XWA, 0xE1, 0x0A, 0x0E
+	ld_sril3 XWA, 0xE1, 0x48, 0x02	; Handler function via table offset 0x0248
 	ld (xsp + 4), xwa	; ld (XSP+0x04), XWA
 	ldmw (xsp + 8), 0x45	; ld (XSP+0x08), 0045h  ; size = 69 bytes
 	ldada_24 xwa, 2331946
@@ -351,8 +351,8 @@ HDAE5000_Handler_Registration:	; 280020h
 	lda xwa, (xsp)	; lda XWA, XSP
 	ld xbc, xwa
 	ldda32_24 xwa, 2335138
-	ld_xwa_sril3 0xE1, 0x0A, 0x0E
-	ld_xhl_sril3 0xE1, 0xE4, 0x00	; RegisterObjectTable
+	ld_sril3 XWA, 0xE1, 0x0A, 0x0E
+	ld_sril3 XHL, 0xE1, 0xE4, 0x00	; RegisterObjectTable
 	ldw wa, 0x12A	; Handler ID
 	call (xhl)
 
@@ -360,8 +360,8 @@ HDAE5000_Handler_Registration:	; 280020h
 	ld xwa, 0x1600002	; PPI port address
 	ld (xsp + 256), xwa	; ld (XSP+0x00), XWA
 	ldda32_24 xwa, 2335138
-	ld_xwa_sril3 0xE1, 0x0A, 0x0E
-	ld_xwa_sril3 0xE1, 0x48, 0x02	; Handler function via table offset 0x0248
+	ld_sril3 XWA, 0xE1, 0x0A, 0x0E
+	ld_sril3 XWA, 0xE1, 0x48, 0x02	; Handler function via table offset 0x0248
 	ld (xsp + 4), xwa	; ld (XSP+0x04), XWA
 	ldmw (xsp + 8), 0x45	; ld (XSP+0x08), 0045h  ; size = 69 bytes
 	ldada_24 xwa, 2332226
@@ -369,8 +369,8 @@ HDAE5000_Handler_Registration:	; 280020h
 	lda xwa, (xsp)	; lda XWA, XSP
 	ld xbc, xwa
 	ldda32_24 xwa, 2335138
-	ld_xwa_sril3 0xE1, 0x0A, 0x0E
-	ld_xhl_sril3 0xE1, 0xE4, 0x00	; RegisterObjectTable
+	ld_sril3 XWA, 0xE1, 0x0A, 0x0E
+	ld_sril3 XHL, 0xE1, 0xE4, 0x00	; RegisterObjectTable
 	ldw wa, 0x42A	; Handler ID
 	call (xhl)
 
@@ -378,8 +378,8 @@ HDAE5000_Handler_Registration:	; 280020h
 	ld xwa, 0x1600001	; PPI port address
 	ld (xsp + 256), xwa	; ld (XSP+0x00), XWA
 	ldda32_24 xwa, 2335138
-	ld_xwa_sril3 0xE1, 0x0A, 0x0E
-	ld_xwa_sril3 0xE1, 0x44, 0x02	; Handler function via table offset 0x0244
+	ld_sril3 XWA, 0xE1, 0x0A, 0x0E
+	ld_sril3 XWA, 0xE1, 0x44, 0x02	; Handler function via table offset 0x0244
 	ld (xsp + 4), xwa	; ld (XSP+0x04), XWA
 	ldmw (xsp + 8), 0xD	; ld (XSP+0x08), 000Dh  ; size = 13 bytes
 	ldada_24 xwa, 2332786
@@ -387,8 +387,8 @@ HDAE5000_Handler_Registration:	; 280020h
 	lda xwa, (xsp)	; lda XWA, XSP
 	ld xbc, xwa
 	ldda32_24 xwa, 2335138
-	ld_xwa_sril3 0xE1, 0x0A, 0x0E
-	ld_xhl_sril3 0xE1, 0xE4, 0x00	; RegisterObjectTable
+	ld_sril3 XWA, 0xE1, 0x0A, 0x0E
+	ld_sril3 XHL, 0xE1, 0xE4, 0x00	; RegisterObjectTable
 	ldw wa, 0x10A	; Handler ID
 	call (xhl)
 
@@ -396,8 +396,8 @@ HDAE5000_Handler_Registration:	; 280020h
 	ld xwa, 0x1600001	; PPI port address
 	ld (xsp + 256), xwa	; ld (XSP+0x00), XWA
 	ldda32_24 xwa, 2335138
-	ld_xwa_sril3 0xE1, 0x0A, 0x0E
-	ld_xwa_sril3 0xE1, 0x44, 0x02	; Handler function via table offset 0x0244
+	ld_sril3 XWA, 0xE1, 0x0A, 0x0E
+	ld_sril3 XWA, 0xE1, 0x44, 0x02	; Handler function via table offset 0x0244
 	ld (xsp + 4), xwa	; ld (XSP+0x04), XWA
 	ldmw (xsp + 8), 0xD	; ld (XSP+0x08), 000Dh  ; size = 13 bytes
 	ldada_24 xwa, 2332842
@@ -405,8 +405,8 @@ HDAE5000_Handler_Registration:	; 280020h
 	lda xwa, (xsp)	; lda XWA, XSP
 	ld xbc, xwa
 	ldda32_24 xwa, 2335138
-	ld_xwa_sril3 0xE1, 0x0A, 0x0E
-	ld_xhl_sril3 0xE1, 0xE4, 0x00	; RegisterObjectTable
+	ld_sril3 XWA, 0xE1, 0x0A, 0x0E
+	ld_sril3 XHL, 0xE1, 0xE4, 0x00	; RegisterObjectTable
 	ldw wa, 0x40A	; Handler ID
 	call (xhl)
 
@@ -414,8 +414,8 @@ HDAE5000_Handler_Registration:	; 280020h
 	ld xwa, 0x1600003	; PPI port address
 	ld (xsp + 256), xwa	; ld (XSP+0x00), XWA
 	ldda32_24 xwa, 2335138
-	ld_xwa_sril3 0xE1, 0x0A, 0x0E
-	ld_xwa_sril3 0xE1, 0x4C, 0x02	; Handler function via table offset 0x024C
+	ld_sril3 XWA, 0xE1, 0x0A, 0x0E
+	ld_sril3 XWA, 0xE1, 0x4C, 0x02	; Handler function via table offset 0x024C
 	ld (xsp + 4), xwa	; ld (XSP+0x04), XWA
 	ldmw (xsp + 8), 0xE	; ld (XSP+0x08), 000Eh  ; size = 14 bytes
 	ldada_24 xwa, 2334674
@@ -423,8 +423,8 @@ HDAE5000_Handler_Registration:	; 280020h
 	lda xwa, (xsp)	; lda XWA, XSP
 	ld xbc, xwa
 	ldda32_24 xwa, 2335138
-	ld_xwa_sril3 0xE1, 0x0A, 0x0E
-	ld_xhl_sril3 0xE1, 0xE4, 0x00	; RegisterObjectTable
+	ld_sril3 XWA, 0xE1, 0x0A, 0x0E
+	ld_sril3 XHL, 0xE1, 0xE4, 0x00	; RegisterObjectTable
 	ldw wa, 0x14A	; Handler ID
 	call (xhl)
 
@@ -432,8 +432,8 @@ HDAE5000_Handler_Registration:	; 280020h
 	ld xwa, 0x1600003	; PPI port address
 	ld (xsp + 256), xwa	; ld (XSP+0x00), XWA
 	ldda32_24 xwa, 2335138
-	ld_xwa_sril3 0xE1, 0x0A, 0x0E
-	ld_xwa_sril3 0xE1, 0x4C, 0x02	; Handler function via table offset 0x024C
+	ld_sril3 XWA, 0xE1, 0x0A, 0x0E
+	ld_sril3 XWA, 0xE1, 0x4C, 0x02	; Handler function via table offset 0x024C
 	ld (xsp + 4), xwa	; ld (XSP+0x04), XWA
 	ldmw (xsp + 8), 0xE	; ld (XSP+0x08), 000Eh  ; size = 14 bytes
 	ldada_24 xwa, 2334734
@@ -441,8 +441,8 @@ HDAE5000_Handler_Registration:	; 280020h
 	lda xwa, (xsp)	; lda XWA, XSP
 	ld xbc, xwa
 	ldda32_24 xwa, 2335138
-	ld_xwa_sril3 0xE1, 0x0A, 0x0E
-	ld_xhl_sril3 0xE1, 0xE4, 0x00	; RegisterObjectTable
+	ld_sril3 XWA, 0xE1, 0x0A, 0x0E
+	ld_sril3 XHL, 0xE1, 0xE4, 0x00	; RegisterObjectTable
 	ldw wa, 0x44A	; Handler ID
 	call (xhl)
 
@@ -450,8 +450,8 @@ HDAE5000_Handler_Registration:	; 280020h
 	ld xwa, 0x1600010	; PPI port address
 	ld (xsp + 256), xwa	; ld (XSP+0x00), XWA
 	ldda32_24 xwa, 2335138
-	ld_xwa_sril3 0xE1, 0x0A, 0x0E
-	ld_xwa_sril3 0xE1, 0x80, 0x02	; Handler function via table offset 0x0280
+	ld_sril3 XWA, 0xE1, 0x0A, 0x0E
+	ld_sril3 XWA, 0xE1, 0x80, 0x02	; Handler function via table offset 0x0280
 	ld (xsp + 4), xwa	; ld (XSP+0x04), XWA
 	ldmw (xsp + 8), 0x315	; ld (XSP+0x08), 0315h  ; size = 789 bytes
 	ldada_24 xwa, 2776364
@@ -459,8 +459,8 @@ HDAE5000_Handler_Registration:	; 280020h
 	lda xwa, (xsp)	; lda XWA, XSP
 	ld xbc, xwa
 	ldda32_24 xwa, 2335138
-	ld_xwa_sril3 0xE1, 0x0A, 0x0E
-	ld_xhl_sril3 0xE1, 0xE4, 0x00	; RegisterObjectTable
+	ld_sril3 XWA, 0xE1, 0x0A, 0x0E
+	ld_sril3 XHL, 0xE1, 0xE4, 0x00	; RegisterObjectTable
 	ldw wa, 0x7F	; Handler ID
 	call (xhl)
 
@@ -468,8 +468,8 @@ HDAE5000_Handler_Registration:	; 280020h
 	ld xwa, 0x160000F	; PPI port address
 	ld (xsp + 256), xwa	; ld (XSP+0x00), XWA
 	ldda32_24 xwa, 2335138
-	ld_xwa_sril3 0xE1, 0x0A, 0x0E
-	ld_xwa_sril3 0xE1, 0x48, 0x01	; Handler function via table offset 0x0148
+	ld_sril3 XWA, 0xE1, 0x0A, 0x0E
+	ld_sril3 XWA, 0xE1, 0x48, 0x01	; Handler function via table offset 0x0148
 	ld (xsp + 4), xwa	; ld (XSP+0x04), XWA
 	ldmw (xsp + 8), 0x315	; ld (XSP+0x08), 0315h  ; size = 789 bytes
 	ldada_24 xwa, 2779524
@@ -477,8 +477,8 @@ HDAE5000_Handler_Registration:	; 280020h
 	lda xwa, (xsp)	; lda XWA, XSP
 	ld xbc, xwa
 	ldda32_24 xwa, 2335138
-	ld_xwa_sril3 0xE1, 0x0A, 0x0E
-	ld_xhl_sril3 0xE1, 0xE4, 0x00	; RegisterObjectTable
+	ld_sril3 XWA, 0xE1, 0x0A, 0x0E
+	ld_sril3 XHL, 0xE1, 0xE4, 0x00	; RegisterObjectTable
 	ldw wa, 0x37F	; Handler ID
 	call (xhl)
 
@@ -488,8 +488,8 @@ HDAE5000_Handler_Registration:	; 280020h
 	ldada_24 xwa, 2786458
 	push xwa	; push pointer to init params
 	ldda32_24 xwa, 2335138
-	ld_xwa_sril3 0xE1, 0x0A, 0x0E
-	ld_xhl_sril3 0xE1, 0x70, 0x02	; Special dispatch function
+	ld_sril3 XWA, 0xE1, 0x0A, 0x0E
+	ld_sril3 XHL, 0xE1, 0x70, 0x02	; Special dispatch function
 	ld xwa, 0x7F	; Graphics handler ID
 	ld xbc, 0x14A0000	; Parallel data handler ref
 	ld xde, 0x7F01EE	; Combined handler ID + flags
@@ -796,8 +796,8 @@ HDAE5000_Boot_Init:	; 28F576h
 	; Call workspace[0x0E0A][0x02C4] to register a DISK MENU entry.
 	; Returns XHL = pointer to menu slot structure.
 	ldda32_24 xwa, 2335138
-	ld_xwa_sril3 0xE1, 0x0A, 0x0E	; Handler table A
-	ld_xix_sril3 0xE1, 0xC4, 0x02	; DISK MENU slot registration function
+	ld_sril3 XWA, 0xE1, 0x0A, 0x0E	; Handler table A
+	ld_sril3 XIX, 0xE1, 0xC4, 0x02	; DISK MENU slot registration function
 	ld xwa, 0x600002	; Menu group ID
 	call (xix)	; Returns XHL = slot pointer
 	;
@@ -822,22 +822,22 @@ HDAE5000_Boot_Init:	; 28F576h
 	;
 	; Handler 1: status monitor (used to check bit 2 for display init)
 	ldda32_24 xwa, 2335138
-	ld_xwa_sril3 0xE1, 0x88, 0x0E	; Handler table B
-	ld_xhl_sril3 0xE1, 0x08, 0x01	; Get callback via table B offset +0x0108
+	ld_sril3 XWA, 0xE1, 0x88, 0x0E	; Handler table B
+	ld_sril3 XHL, 0xE1, 0x08, 0x01	; Get callback via table B offset +0x0108
 	call (xhl)
 	stda32_24 2297548, xhl	; Store at 0x230ECC
 
 	; Handler 2: display offset calculator (state value read for display offset)
 	ldda32_24 xwa, 2335138
-	ld_xwa_sril3 0xE1, 0x88, 0x0E
-	ld_xhl_sril3 0xE1, 0x00, 0x01	; Table B offset +0x0100
+	ld_sril3 XWA, 0xE1, 0x88, 0x0E
+	ld_sril3 XHL, 0xE1, 0x00, 0x01	; Table B offset +0x0100
 	call (xhl)
 	stda32_24 2297554, xhl	; Store at 0x230ED2
 
 	; Handler 3: display state reader (state byte shifted for offset calc)
 	ldda32_24 xwa, 2335138
-	ld_xwa_sril3 0xE1, 0x88, 0x0E
-	ld_xhl_sril3 0xE1, 0x04, 0x01	; Table B offset +0x0104
+	ld_sril3 XWA, 0xE1, 0x88, 0x0E
+	ld_sril3 XHL, 0xE1, 0x04, 0x01	; Table B offset +0x0104
 	call (xhl)
 	stda32_24 2297558, xhl	; Store at 0x230ED6
 
@@ -850,8 +850,8 @@ HDAE5000_Boot_Init:	; 28F576h
 
 	; Hard disk present - initialize it
 	ldda32_24 xwa, 2335138
-	ld_xwa_sril3 0xE1, 0x0A, 0x0E
-	ld_xhl_sril3 0xE1, 0x24, 0x01	; HD init function
+	ld_sril3 XWA, 0xE1, 0x0A, 0x0E
+	ld_sril3 XHL, 0xE1, 0x24, 0x01	; HD init function
 	ld xwa, 0xFFFFFFFF	; Full init
 	ld xbc, 0x1C00016	; HD initialization parameters
 	ld xde, 0x1A0007F	; Buffer
@@ -929,8 +929,8 @@ HDAE5000_Frame_Handler:	; 28F662h
 	ldda32_24 xwa, 2335134	; Secondary workspace pointer
 	ld xde, xbc	; XDE = temp address
 	ldda32_24 xbc, 2335138	; Main workspace pointer
-	ld_xbc_sril3 0xE5, 0x0A, 0x0E	; Handler table A
-	ld_xhl_sril3 0xE5, 0x24, 0x01	; Get callback function
+	ld_sril3 XBC, 0xE5, 0x0A, 0x0E	; Handler table A
+	ld_sril3 XHL, 0xE5, 0x24, 0x01	; Get callback function
 	ld xbc, 0x1CA0004	; Display state update callback
 	call (xhl)	; Call callback if valid
 
@@ -956,8 +956,8 @@ HDAE5000_Frame_Handler_Status:	; 28F6E0h
 	;
 	; Initialize display - call workspace callback
 	ldda32_24 xwa, 2335138	; Main workspace pointer
-	ld_xwa_sril3 0xE1, 0x0A, 0x0E	; Handler table A
-	ld_xix_sril3 0xE1, 0x78, 0x02	; Get display callback
+	ld_sril3 XWA, 0xE1, 0x0A, 0x0E	; Handler table A
+	ld_sril3 XIX, 0xE1, 0x78, 0x02	; Get display callback
 	call (xix)	; Call if valid
 	cp xhl, 0x1A0007F	; Check return value
 	jr z, HDAE5000_Frame_Handler_Status__init_display	; If match, do full init
@@ -972,23 +972,23 @@ HDAE5000_Frame_Handler_Status:	; 28F6E0h
 HDAE5000_Frame_Handler_Status__init_display:
 	; Full display initialization sequence
 	ldda32_24 xwa, 2335138
-	ld_xwa_sril3 0xE1, 0x0A, 0x0E
-	ld_xhl_sril3 0xE1, 0x24, 0x01	; Init callback 1
+	ld_sril3 XWA, 0xE1, 0x0A, 0x0E
+	ld_sril3 XHL, 0xE1, 0x24, 0x01	; Init callback 1
 	ld xwa, 0x7F013E	; Display params
 	ld xbc, 0x1C00001	; Display initialization flags
 	lds32 xde, 0
 	call (xhl)
 	;
 	ldda32_24 xwa, 2335138
-	ld_xwa_sril3 0xE1, 0x0A, 0x0E
-	ld_xhl_sril3 0xE1, 0x34, 0x05	; Init callback 2
+	ld_sril3 XWA, 0xE1, 0x0A, 0x0E
+	ld_sril3 XHL, 0xE1, 0x34, 0x05	; Init callback 2
 	ld xwa, 0x7F013E
 	ld xbc, 0x1CA0000
 	call (xhl)
 	;
 	ldda32_24 xwa, 2335138
-	ld_xwa_sril3 0xE1, 0x0A, 0x0E
-	ld_xhl_sril3 0xE1, 0x24, 0x01	; Init callback 3
+	ld_sril3 XWA, 0xE1, 0x0A, 0x0E
+	ld_sril3 XHL, 0xE1, 0x24, 0x01	; Init callback 3
 	ld xwa, 0x7F013E
 	ld xbc, 0x1CA0000
 	lds32 xde, 0

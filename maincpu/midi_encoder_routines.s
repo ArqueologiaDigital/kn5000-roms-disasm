@@ -62,7 +62,7 @@ Encoder_ProcessModwheel:
 	srl a, 1	; Divide by 2
 	extz wa
 	ldada_24 xbc, 15573308	; Lookup table address
-	ld_a_srib3 0x07, 0xE4, 0xE0	; Get processed value from table
+	ld_srib3 A, 0x07, 0xE4, 0xE0	; Get processed value from table
 	ldda8 c, 36580	; Get current value
 	res 7, c	; Clear change flag
 	cp c, a	; Compare with new value
@@ -82,7 +82,7 @@ Encoder_ProcessVolume:
 	stda8 36556, a	; Store raw value
 	extz wa
 	ldada_24 xbc, 15573436	; Lookup table address
-	ld_a_srib3 0x07, 0xE4, 0xE0	; Get processed value
+	ld_srib3 A, 0x07, 0xE4, 0xE0	; Get processed value
 	calr Encoder_ClampScaleAndNormalize	; Clamp to valid range
 	ld a, l
 	cpda8 a, 36596	; Compare with current
@@ -118,7 +118,7 @@ Encoder_PerformScaling:
 	extz wa
 	add wa, wa	; Double for word table index
 	ldada_24 xbc, 15573692	; Index table
-	ld_bc_sriw3 0x07, 0xE4, 0xE0	; Get index offset
+	ld_sriw3 BC, 0x07, 0xE4, 0xE0	; Get index offset
 	extz xbc
 	ld xwa, xhl
 	call LABEL_FF0A5C	; Processing routine
@@ -140,7 +140,7 @@ Encoder_ProcessBreath:
 	stda8 36564, a	; Store raw value
 	extz wa
 	ldada_24 xbc, 15573714	; Lookup table
-	ld_a_srib3 0x07, 0xE4, 0xE0	; Get processed value
+	ld_srib3 A, 0x07, 0xE4, 0xE0	; Get processed value
 	ldda8 c, 14235	; Get system mode flags
 	and c, 0xF	; Mask relevant bits
 	jr nz, Encoder_ProcessBreath_WithModeAdjustment	; If mode active, process
@@ -158,10 +158,10 @@ Encoder_ProcessBreath_WithModeAdjustment:
 	extz bc
 	add bc, bc	; Word index
 	ldada_24 xwa, 15573970	; Multiplier table
-	ld_de_sriw3 0x07, 0xE0, 0xE4	; Get multiplier
+	ld_sriw3 DE, 0x07, 0xE0, 0xE4	; Get multiplier
 	mul xhl, xde	; Multiply
 	ldada_24 xwa, 15573994	; Offset table
-	ld_wa_sriw3 0x07, 0xE0, 0xE4	; Get offset
+	ld_sriw3 WA, 0x07, 0xE0, 0xE4	; Get offset
 	sub hl, wa	; Subtract offset
 	add hl, 0x4080	; Add center offset
 	srl hl, 8	; Divide by 256
@@ -190,7 +190,7 @@ Encoder_ProcessFoot:
 	srl a, 1	; Divide by 2
 	extz wa
 	ldada_24 xbc, 15574018	; Lookup table
-	ld_a_srib3 0x07, 0xE4, 0xE0	; Get processed value
+	ld_srib3 A, 0x07, 0xE4, 0xE0	; Get processed value
 	ldda8 c, 36586	; Get current value
 	res 7, c	; Clear change flag
 	cp c, a	; Compare
@@ -211,7 +211,7 @@ Encoder_ProcessExpression:
 	srl a, 1	; Divide by 2
 	extz wa
 	ldada_24 xbc, 15574146	; Lookup table
-	ld_a_srib3 0x07, 0xE4, 0xE0	; Get processed value
+	ld_srib3 A, 0x07, 0xE4, 0xE0	; Get processed value
 	stda8 36582, a	; Store value
 	extz wa
 	ld hl, wa	; Return value in HL

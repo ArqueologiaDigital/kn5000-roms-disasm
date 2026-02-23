@@ -127,7 +127,7 @@ FDC_COMMAND_DISPATCHER:	; F96DB1
 	jr ugt, FDC_CheckDriveCount
 	add wa, wa
 	ldada_24 xix, 15374514
-	ld_wa_sriw3 0x07, 0xF0, 0xE0
+	ld_sriw3 WA, 0x07, 0xF0, 0xE0
 	ldada_24 xix, 16346582
 	x_dri4_sd8 0x07, 0xF0, 0xE0
 ; FDC command handler base - entry point for command 0
@@ -1090,7 +1090,7 @@ LABEL_F97CEF:
 	jr ugt, LABEL_F97DDB	; JR UGT, LABEL_F97DDB (original encoding)
 	add wa, wa
 	ldada_24 xix, 15374538
-	ld_wa_sriw3 0x07, 0xF0, 0xE0
+	ld_sriw3 WA, 0x07, 0xF0, 0xE0
 	ldada_24 xix, 16350605
 	x_dri4_sd8 0x07, 0xF0, 0xE0
 

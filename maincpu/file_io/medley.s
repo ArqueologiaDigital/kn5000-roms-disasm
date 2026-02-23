@@ -1128,7 +1128,7 @@ DiskSel_ClearSelections:
 
 DiskSel_FindSongLoop:
 	ldada xwa, 35110
-	ld_a_srib3 0x07, 0xE0, 0xF8
+	ld_srib3 A, 0x07, 0xE0, 0xF8
 	cpda8 a, 35132
 	jrl nz, DiskSel_NextSongLoop
 	stda16 33758, xiz
@@ -1240,7 +1240,7 @@ DiskSel_RepeatClear:
 
 DiskSel_RepeatFindLoop:
 	ldada xwa, 35110
-	ld_a_srib3 0x07, 0xE0, 0xF8
+	ld_srib3 A, 0x07, 0xE0, 0xF8
 	cpda8 a, 35132
 	jrl nz, DiskSel_RepeatNext
 	stda16 33758, xiz
@@ -1564,7 +1564,7 @@ DiskSel_HandleSelect:
 	cpdi8 34046, 0
 	jr nz, DiskSel_HandleRepeat
 	ld xix, xhl
-	st_a_dri3 0x07, 0xEC, 0xE8
+	st_dri3b A, 0x07, 0xEC, 0xE8
 	ld a, (xbc)
 	cp a, 0xFE
 	jr nz, DiskSel_RemoveSelect
@@ -1644,7 +1644,7 @@ DiskSel_PlayClearLoop:
 
 DiskSel_PlayFindLoop:
 	ldada xwa, 35110
-	ld_a_srib3 0x07, 0xE0, 0xF8
+	ld_srib3 A, 0x07, 0xE0, 0xF8
 	cpda8 a, 35132
 	jrl nz, DiskSel_PlayNextLoop
 	stda16 33758, xiz
@@ -3241,7 +3241,7 @@ DocDisk_CopyCharLoop:
 	ld de, ix
 	inc 1, ix
 	ld a, (xhl)
-	lda_xbc_dri3 0x07, 0xE4, 0xE8
+	lda_dri3 XBC, 0x07, 0xE4, 0xE8
 
 DocDisk_SkipSpace:
 	inc 1, xhl
@@ -3263,7 +3263,7 @@ DocDisk_ClearTrailing:
 
 DocDisk_TrimLoop:
 	dec 1, ix
-	st_w_dri3 0x07, 0xE8, 0xF0
+	st_dri3b W, 0x07, 0xE8, 0xF0
 	cpmi8 (xwa), 0x20
 	jr nz, DocDisk_PostEvent
 	cps ix, 0

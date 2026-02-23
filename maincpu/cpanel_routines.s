@@ -1054,9 +1054,9 @@ LABEL_FC4831:
 	ldb a, 0x13
 	ldda16 xiy, 36351
 	ld xde, 0x8E01
-	lda_xwa_dri3 0x07, 0xE8, 0xF4
+	lda_dri3 XWA, 0x07, 0xE8, 0xF4
 	calr CPanel_IncLEDPtr
-	lda_xbc_dri3 0x07, 0xE8, 0xF4
+	lda_dri3 XBC, 0x07, 0xE8, 0xF4
 	calr CPanel_IncLEDPtr
 	stda16 36351, xiy
 
@@ -1181,7 +1181,7 @@ CPanel_RX_PacketSizeCheck:
 	cps a, 2
 	jrl c, CPanel_RX_Done
 
-	ld_l_srib3 0x07, 0xE8, 0xF4
+	ld_srib3 L, 0x07, 0xE8, 0xF4
 	and l, 0x38
 	srl l, 1
 	xor h, h
@@ -1204,15 +1204,15 @@ CPanel_RX_PacketHandlers:
 	.long CPanel_RX_MultiBytePacket
 
 CPanel_RX_ButtonPacket:
-	ld_w_srib3 0x07, 0xE8, 0xF4
+	ld_srib3 W, 0x07, 0xE8, 0xF4
 	calr CPanel_IncRXPtr
-	lda_xwa_dri3 0x07, 0xF8, 0xF0
+	lda_dri3 XWA, 0x07, 0xF8, 0xF0
 	calr CPanel_IncEventPtr
 	stda8 36244, w
 
-	ld_a_srib3 0x07, 0xE8, 0xF4
+	ld_srib3 A, 0x07, 0xE8, 0xF4
 	calr CPanel_IncRXPtr
-	lda_xbc_dri3 0x07, 0xF8, 0xF0
+	lda_dri3 XBC, 0x07, 0xF8, 0xF0
 	calr CPanel_IncEventPtr
 	stda8 36245, a
 
@@ -1231,7 +1231,7 @@ LABEL_FC49C3:
 	mrib2 0x83, 0x31
 	xor a, (xhl)
 
-	lda_xbc_dri3 0x07, 0xF8, 0xF0
+	lda_dri3 XBC, 0x07, 0xF8, 0xF0
 	calr CPanel_IncEventPtr
 
 	stda8 36246, a
@@ -1241,12 +1241,12 @@ LABEL_FC49C3:
 	jrl CPanel_RX_ParseNext
 
 CPanel_RX_EncoderPacket:
-	ld_w_srib3 0x07, 0xE8, 0xF4
+	ld_srib3 W, 0x07, 0xE8, 0xF4
 	calr CPanel_IncRXPtr
-	lda_xwa_dri3 0x07, 0xF8, 0xF0
+	lda_dri3 XWA, 0x07, 0xF8, 0xF0
 	calr CPanel_IncEventPtr
 	stda8 36244, w
-	ld_a_srib3 0x07, 0xE8, 0xF4
+	ld_srib3 A, 0x07, 0xE8, 0xF4
 	calr CPanel_IncRXPtr
 	stda8 36245, a
 	ld c, w
@@ -1258,7 +1258,7 @@ CPanel_RX_EncoderPacket:
 	jr LABEL_FC4A33
 
 LABEL_FC4A14:
-	lda_xsp_dri3 0x07, 0xF8, 0xF0
+	lda_dri3 XSP, 0x07, 0xF8, 0xF0
 	calr CPanel_IncEventPtr
 	stda8 36246, l
 	x_dri5_o00_t1 0x07, 0xF8, 0xF0, 0xFF
@@ -1282,7 +1282,7 @@ LABEL_FC4A36:
 
 CPanel_RX_MultiBytePacket:
 	ld w, a
-	ld_a_srib3 0x07, 0xE8, 0xF4
+	ld_srib3 A, 0x07, 0xE8, 0xF4
 	ld c, a
 	and a, 0xF
 	inc 1, a
@@ -1292,7 +1292,7 @@ CPanel_RX_MultiBytePacket:
 	jrl c, CPanel_RX_Done
 
 	calr CPanel_IncRXPtr
-	ld_a_srib3 0x07, 0xE8, 0xF4
+	ld_srib3 A, 0x07, 0xE8, 0xF4
 	calr CPanel_IncRXPtr
 	and a, 0x1F
 	and c, 0xC0
@@ -1313,9 +1313,9 @@ LABEL_FC4A7D:
 	add xhl, 0x8E4A
 
 LABEL_FC4A8B:
-	lda_xwa_dri3 0x07, 0xF8, 0xF0
+	lda_dri3 XWA, 0x07, 0xF8, 0xF0
 	calr CPanel_IncEventPtr
-	ld_a_srib3 0x07, 0xE8, 0xF4
+	ld_srib3 A, 0x07, 0xE8, 0xF4
 	calr CPanel_IncRXPtr
 	bit 4, w
 	jr z, LABEL_FC4AC5
@@ -1343,7 +1343,7 @@ LABEL_FC4AC1:
 LABEL_FC4AC5:
 
 c:
-	lda_xbc_dri3 0x07, 0xF8, 0xF0
+	lda_dri3 XBC, 0x07, 0xF8, 0xF0
 	calr CPanel_IncEventPtr
 	bit 4, w
 	jr nz, LABEL_FC4AEA
@@ -1364,7 +1364,7 @@ LABEL_FC4AEA:
 
 					; else:
 LABEL_FC4AEC:
-	lda_xbc_dri3 0x07, 0xF8, 0xF0
+	lda_dri3 XBC, 0x07, 0xF8, 0xF0
 	calr CPanel_IncEventPtr
 	ld (xiz - 4), ix
 	decm 1, (xiz - 2)
@@ -1382,9 +1382,9 @@ LABEL_FC4B04:
 	jrl CPanel_RX_ParseNext
 
 CPanel_RX_SyncPacket:
-	ld_a_srib3 0x07, 0xE8, 0xF4
+	ld_srib3 A, 0x07, 0xE8, 0xF4
 	calr CPanel_IncRXPtr
-	ld_a_srib3 0x07, 0xE8, 0xF4
+	ld_srib3 A, 0x07, 0xE8, 0xF4
 	calr CPanel_IncRXPtr
 	stda16 36253, xiy
 	ordi8 36242, 8	; CP_Flags_B.3 = 1  ; UNUSED
@@ -1420,7 +1420,7 @@ LABEL_FC4B5E:
 LABEL_FC4B63:
 	cps hl, 3
 	jrl c, LABEL_FC4C07
-	ld_a_srib3 0x07, 0xF8, 0xF0
+	ld_srib3 A, 0x07, 0xF8, 0xF0
 	and a, 0x30
 	srl a, 2
 	ld l, a

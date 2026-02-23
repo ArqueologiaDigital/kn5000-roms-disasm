@@ -209,7 +209,7 @@ RenderSmfFilename:
 
 LABEL_F8DD86:
 	extz bc
-	ld_c_srib3 0x07, 0xEC, 0xE4
+	ld_srib3 C, 0x07, 0xEC, 0xE4
 	and c, 0x7
 	jr nz, LABEL_F8DD95
 	ldmi8 (xde), 0x5F
@@ -220,7 +220,7 @@ LABEL_F8DD95:
 LABEL_F8DD97:
 	cp ix, 0x8
 	jr ge, LABEL_F8DDA8
-	st_b_dri3 0x07, 0xE0, 0xF0
+	st_dri3b B, 0x07, 0xE0, 0xF0
 	ld c, (xde)
 	cps c, 0
 	jr nz, LABEL_F8DD86
@@ -405,7 +405,7 @@ LABEL_F8DF73:
 	extz wa
 	sla wa, 2
 	ldada_24 xbc, 15337300
-	ld_xde_sril3 0x07, 0xE4, 0xE0
+	ld_sril3 XDE, 0x07, 0xE4, 0xE0
 	ldda32 xwa, 33180
 	ld xbc, 0x1C0000F
 	call 0xFA9D58
@@ -526,7 +526,7 @@ LABEL_F8E056:
 	inc 1, hl
 
 LABEL_F8E05A:
-	ld_e_srib3 0x07, 0xE0, 0xF4
+	ld_srib3 E, 0x07, 0xE0, 0xF4
 	cps e, 0
 	jr z, LABEL_F8E067
 	cp hl, bc
@@ -740,7 +740,7 @@ LABEL_F8E2AC:
 	ldda8 c, 35144
 	sll xbc, 11
 	add xwa, xbc
-	st_w_dri3 0xE1, 0x00, 0x01
+	st_dri3b W, 0xE1, 0x00, 0x01
 	lda xbc, (xsp + 8)
 	ldw de, 0x10
 	call LABEL_F890F2
@@ -748,7 +748,7 @@ LABEL_F8E2AC:
 	cpda8 a, 35144
 	jr nz, LABEL_F8E2F3
 	ldada_24 xwa, 61824
-	st_w_dri3 0xE1, 0x00, 0x01
+	st_dri3b W, 0xE1, 0x00, 0x01
 	lda xbc, (xsp + 8)
 	ldw de, 0x10
 	call LABEL_F890F2

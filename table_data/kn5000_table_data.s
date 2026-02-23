@@ -652,7 +652,7 @@ Flash_Reset_16bit__wait_ready:
 	add xwa, 0xAAAA	; e8 c8 aa aa 00 00
 	ldmw (xwa), 0xF0	; LD (XWA), 00F0h (word store)
 	; Read to complete cycle
-	ld_wa_sriw3 0xF9, 0x32, 0x32	; LD WA, (XIZ+3232h)
+	ld_sriw3 WA, 0xF9, 0x32, 0x32	; LD WA, (XIZ+3232h)
 	ei 0	; 06 00 - Re-enable interrupts
 	; Check if region code = 4 (high bank exists)
 	call 0xFFB700	; Get_Region_Code - returns region code in L
@@ -668,7 +668,7 @@ Flash_Reset_16bit__wait_ready:
 	ld xwa, xiz	; ee 88
 	add xwa, 0xAAAA	; e8 c8 aa aa 00 00
 	ldmw (xwa), 0xF0	; LD (XWA), 00F0h (word store)
-	ld_wa_sriw3 0xF9, 0x32, 0x32	; LD WA, (XIZ+3232h)
+	ld_sriw3 WA, 0xF9, 0x32, 0x32	; LD WA, (XIZ+3232h)
 	ei 0	; 06 00
 Flash_Reset_16bit__done:
 	pop xiz	; 5e
@@ -1194,7 +1194,7 @@ Flash_Reset_32bit__wait_ready:
 	ld xwa, 0xF000F0	; Software reset command (both chips)
 	ld (xbc), xwa	; Send reset
 
-	ld_xwa_sril3 0xE9, 0x64, 0x64	; LD XWA, (XDE+6464h) - completion read
+	ld_sril3 XWA, 0xE9, 0x64, 0x64	; LD XWA, (XDE+6464h) - completion read
 	ret
 
 ; -----------------------------------------------------------------------------
@@ -2281,7 +2281,7 @@ Boot_LoadDiskData:
 	; Dispatch via jump table
 	add wa, wa	; ADD WA, WA - WA *= 2
 	ldada_24 xix, 16752960	; LDA XIX, 0xFFA140 - jump table
-	ld_wa_sriw3 0x07, 0xF0, 0xE0	; LD WA, (XIX+WA)
+	ld_sriw3 WA, 0x07, 0xF0, 0xE0	; LD WA, (XIX+WA)
 	ldada_24 xix, 16761930	; LDA XIX, 0xFFC44A - base addr
 	x_dri4_sd8 0x07, 0xF0, 0xE0	; JP T, XIX+WA - dispatch
 

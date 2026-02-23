@@ -663,10 +663,10 @@ MIDI_QUEUE_EVENT_PAIR:
 	ei 6
 	ld xix, 0x1E753
 	ld hl, (xix - 4)
-	lda_xbc_dri3 0x07, 0xF0, 0xEC
+	lda_dri3 XBC, 0x07, 0xF0, 0xEC
 	minc1_16 hl, 0x7FF
 	ldda8 a, 1051
-	lda_xbc_dri3 0x07, 0xF0, 0xEC
+	lda_dri3 XBC, 0x07, 0xF0, 0xEC
 	minc1_16 hl, 0x7FF
 	ld (xix - 4), hl
 	decm 2, (xix - 2)
@@ -679,10 +679,10 @@ LABEL_FCF70C:
 LABEL_FCF713:
 	ld xix, 0x477
 	ldda16 xhl, 1141
-	lda_xbc_dri3 0x07, 0xF0, 0xEC
+	lda_dri3 XBC, 0x07, 0xF0, 0xEC
 	inc 1, hl
 	ldda8 a, 1051
-	lda_xbc_dri3 0x07, 0xF0, 0xEC
+	lda_dri3 XBC, 0x07, 0xF0, 0xEC
 	inc 1, hl
 	stda16 1141, xhl
 	ret
@@ -701,7 +701,7 @@ MIDI_CHANNEL_MESSAGE_DISPATCHER:
 	srl a, 2
 	xor w, w
 	ld xix, 0xFCF761
-	ld_xix_sril3 0x07, 0xF0, 0xE0
+	ld_sril3 XIX, 0x07, 0xF0, 0xE0
 	jp (xix)
 MIDI_CHANNEL_HANDLER_JUMP_TABLE:
 	.byte 0xff, 0xa8, 0xf7, 0xfc, 0x00, 0xa8, 0xf7, 0xfc
@@ -884,7 +884,7 @@ READ_COM_SELECT_SWITCH:	; FCF8F6
 	ldda8 a, 104
 	srl a, 4
 	ld xix, 0xFCF90C
-	ld_a_srib3 0x03, 0xF0, 0xE0
+	ld_srib3 A, 0x03, 0xF0, 0xE0
 	stda8 47072, a
 	ret
 

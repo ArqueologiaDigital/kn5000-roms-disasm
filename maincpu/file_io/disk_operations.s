@@ -256,7 +256,7 @@ FileRenameFunc:
 
 LABEL_F8BE5D:
 	extz bc
-	ld_c_srib3 0x07, 0xF0, 0xE4
+	ld_srib3 C, 0x07, 0xF0, 0xE4
 	and c, 0x7
 	jr nz, LABEL_F8BE6C
 	ldmi8 (xde), 0x5F
@@ -267,7 +267,7 @@ LABEL_F8BE6C:
 LABEL_F8BE6E:
 	cps iy, 6
 	jr ge, LABEL_F8BE7D
-	st_b_dri3 0x07, 0xEC, 0xF4
+	st_dri3b B, 0x07, 0xEC, 0xF4
 	ld c, (xde)
 	cps c, 0
 	jr nz, LABEL_F8BE5D
@@ -359,7 +359,7 @@ FileRenameSmfFunc:
 
 LABEL_F8BF5C:
 	extz bc
-	ld_c_srib3 0x07, 0xF0, 0xE4
+	ld_srib3 C, 0x07, 0xF0, 0xE4
 	and c, 0x7
 	jr nz, LABEL_F8BF6B
 	ldmi8 (xde), 0x5F
@@ -370,7 +370,7 @@ LABEL_F8BF6B:
 LABEL_F8BF6D:
 	cp iy, 0x8
 	jr ge, LABEL_F8BF7E
-	st_b_dri3 0x07, 0xEC, 0xF4
+	st_dri3b B, 0x07, 0xEC, 0xF4
 	ld c, (xde)
 	cps c, 0
 	jr nz, LABEL_F8BF5C
@@ -916,9 +916,9 @@ LABEL_F8C56C:
 	jr LABEL_F8C5AA
 
 LABEL_F8C594:
-	ld_a_srib3 0x07, 0xF0, 0xF4
+	ld_srib3 A, 0x07, 0xF0, 0xF4
 	extz wa
-	ld_a_srib3 0x07, 0xF8, 0xE0
+	ld_srib3 A, 0x07, 0xF8, 0xE0
 	and a, 0x7
 	jr nz, LABEL_F8C5A8
 	ldmi8 (xbc), 0x5F
@@ -929,7 +929,7 @@ LABEL_F8C5A8:
 LABEL_F8C5AA:
 	cp iy, 0xB
 	jr ge, LABEL_F8C5BA
-	st_a_dri3 0x07, 0xEC, 0xF4
+	st_dri3b A, 0x07, 0xEC, 0xF4
 	cpmi8 (xbc), 0x0
 	jr nz, LABEL_F8C594
 
@@ -1044,7 +1044,7 @@ LABEL_F8C694:
 	ldda16 xwa, 34048
 	sla wa, 2
 	ldada_24 xbc, 15336792
-	ld_xbc_sril3 0x07, 0xE4, 0xE0
+	ld_sril3 XBC, 0x07, 0xE4, 0xE0
 	ld xwa, 0x87CE
 	call LABEL_F890DC
 	ld xwa, 0x87CE
@@ -1210,7 +1210,7 @@ LABEL_F8C84A:
 
 LABEL_F8C869:
 	extz wa
-	ld_a_srib3 0x07, 0xF0, 0xE0
+	ld_srib3 A, 0x07, 0xF0, 0xE0
 	and a, 0x7
 	jr nz, LABEL_F8C878
 	ldmi8 (xbc), 0x5F
@@ -1221,7 +1221,7 @@ LABEL_F8C878:
 LABEL_F8C87A:
 	cps iy, 6
 	jr ge, LABEL_F8C889
-	st_a_dri3 0x07, 0xEC, 0xF4
+	st_dri3b A, 0x07, 0xEC, 0xF4
 	ld a, (xbc)
 	cps a, 0
 	jr nz, LABEL_F8C869
