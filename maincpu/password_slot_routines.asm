@@ -32,62 +32,28 @@
 ;   LABEL_F94262   - Check if external has value
 ; =============================================================================
 
-; Forward declarations for labels within the binary sections
-; These allow external code to reference these routines by name
+; Forward declarations for labels within the binary sections.
+; Using EQU instead of ORG+label to avoid creating segment boundaries
+; that would cut through preceding code (medley.asm extends past F92C0E).
 
-	ORG 0F92C0Eh
-LABEL_F92C0E:
-
-	ORG 0F92C13h
-LABEL_F92C13:
-
-	ORG 0F92C21h
-LABEL_F92C21:
-
-	ORG 0F92C70h
-LABEL_F92C70:
-
-	ORG 0F92CACh
-LABEL_F92CAC:
-
-	ORG 0F94193h
-LABEL_F94193:
-
-	ORG 0F941C8h
-LABEL_F941C8:
-
-	ORG 0F941E5h
-LABEL_F941E5:
-
-	ORG 0F941EDh
-LABEL_F941ED:
-
-	ORG 0F941F9h
-LABEL_F941F9:
-
-	ORG 0F9420Fh
-LABEL_F9420F:
-
-	ORG 0F94229h
-LABEL_F94229:
-
-	ORG 0F94236h
-LABEL_F94236:
-
-	ORG 0F94242h
-LABEL_F94242:
-
-	ORG 0F9424Ah
-LABEL_F9424A:
-
-	ORG 0F94250h
-LABEL_F94250:
-
-	ORG 0F94256h
-LABEL_F94256:
-
-	ORG 0F94262h
-LABEL_F94262:
+LABEL_F92C0E	equ	0F92C0Eh
+LABEL_F92C13	equ	0F92C13h
+LABEL_F92C21	equ	0F92C21h
+LABEL_F92C70	equ	0F92C70h
+LABEL_F92CAC	equ	0F92CACh
+LABEL_F94193	equ	0F94193h
+LABEL_F941C8	equ	0F941C8h
+LABEL_F941E5	equ	0F941E5h
+LABEL_F941ED	equ	0F941EDh
+LABEL_F941F9	equ	0F941F9h
+LABEL_F9420F	equ	0F9420Fh
+LABEL_F94229	equ	0F94229h
+LABEL_F94236	equ	0F94236h
+LABEL_F94242	equ	0F94242h
+LABEL_F9424A	equ	0F9424Ah
+LABEL_F94250	equ	0F94250h
+LABEL_F94256	equ	0F94256h
+LABEL_F94262	equ	0F94262h
 
 ; =============================================================================
 ; Password slot navigation routines (F92C0E - F92CE7)

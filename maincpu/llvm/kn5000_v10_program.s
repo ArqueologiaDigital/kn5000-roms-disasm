@@ -321857,8 +321857,32 @@ PwdDel_CallFunc:
 ;   LABEL_F94262   - Check if external has value
 ; =============================================================================
 
-; Forward declarations for labels within the binary sections
-; These allow external code to reference these routines by name
+; Forward declarations for labels within the binary sections.
+; Using EQU instead of ORG+label to avoid creating segment boundaries
+; that would cut through preceding code (medley.asm extends past F92C0E).
+
+	; (EQU→inline label) LABEL_F92C0E = 0xF92C0E
+	; (EQU→inline label) LABEL_F92C13 = 0xF92C13
+	; (EQU→inline label) LABEL_F92C21 = 0xF92C21
+	; (EQU→inline label) LABEL_F92C70 = 0xF92C70
+	; (EQU→inline label) LABEL_F92CAC = 0xF92CAC
+	; (EQU→inline label) LABEL_F94193 = 0xF94193
+	; (EQU→inline label) LABEL_F941C8 = 0xF941C8
+	; (EQU→inline label) LABEL_F941E5 = 0xF941E5
+	; (EQU→inline label) LABEL_F941ED = 0xF941ED
+	; (EQU→inline label) LABEL_F941F9 = 0xF941F9
+	; (EQU→inline label) LABEL_F9420F = 0xF9420F
+	; (EQU→inline label) LABEL_F94229 = 0xF94229
+	; (EQU→inline label) LABEL_F94236 = 0xF94236
+	; (EQU→inline label) LABEL_F94242 = 0xF94242
+	; (EQU→inline label) LABEL_F9424A = 0xF9424A
+	; (EQU→inline label) LABEL_F94250 = 0xF94250
+	; (EQU→inline label) LABEL_F94256 = 0xF94256
+	; (EQU→inline label) LABEL_F94262 = 0xF94262
+
+; =============================================================================
+; Password slot navigation routines (F92C0E - F92CE7)
+; =============================================================================
 
 	.org 0xF92C0E - 0xE00000, 0xFF
 	.incbin "../includes/f92c0e_f92ce7.bin"
