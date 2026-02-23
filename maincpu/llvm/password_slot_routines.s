@@ -37,27 +37,9 @@
 ; Forward declarations for labels within the binary sections
 ; These allow external code to reference these routines by name
 
-	.org 0xF92C0E - 0xE00000, 0xFF
-LABEL_F92C0E:
-
-	.org 0xF92C0E - 0xE00000, 0xFF
-	.incbin "../includes/f92c0e_f92ce7.bin"
-
 ; =============================================================================
 ; Password slot storage routines (F94193 - F94269)
 ; =============================================================================
-
-	.org 0xF92C13 - 0xE00000, 0xFF
-LABEL_F92C13:
-
-	.org 0xF92C21 - 0xE00000, 0xFF
-LABEL_F92C21:
-
-	.org 0xF92C70 - 0xE00000, 0xFF
-LABEL_F92C70:
-
-	.org 0xF92CAC - 0xE00000, 0xFF
-LABEL_F92CAC:
 
 	.org 0xF94193 - 0xE00000, 0xFF
 LABEL_F94193:
@@ -105,10 +87,6 @@ LABEL_F94256:
 
 	.org 0xF94262 - 0xE00000, 0xFF
 LABEL_F94262:
-
-; =============================================================================
-; Password slot navigation routines (F92C0E - F92CE7)
-; =============================================================================
 
 	.org 0xF9426A - 0xE00000, 0xFF
 	.incbin "../includes/f9426a_f95082.bin"
