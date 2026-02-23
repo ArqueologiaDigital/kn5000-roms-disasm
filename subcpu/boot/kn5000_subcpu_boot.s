@@ -98755,18 +98755,18 @@ TONE_GEN_CHANNEL_INIT:
 	push_werp 0xFA	; Save QIZ (QIZH used as loop counter)
 	cpdi16_24 16776942, 65535	; cp (0xFFFEEE), 0xFFFF - check init flag
 	jr nz, TONE_GEN_CHANNEL_INIT__done	; Skip if memory not 0xFFFF (already initialized)
-	ldi0_berp 0xFB	; Clear loop counter (QIZH = 0)
+	ldi_berp 0xFB, 0	; Clear loop counter (QIZH = 0)
 TONE_GEN_CHANNEL_INIT__loop:
-	ldto_a_berp 0xFB	; A = loop counter (QIZH)
+	ldto_berp A, 0xFB	; A = loop counter (QIZH)
 	extz wa	; Zero-extend A to WA
-	ldto_c_berp 0xFB	; C = loop counter (QIZH)
+	ldto_berp C, 0xFB	; C = loop counter (QIZH)
 	extz bc	; Zero-extend C to BC
 	sla bc, 2	; BC <<= 2 (multiply by 4 for table index)
 	ldada_24 xde, 16776944	; XDE = pointer to channel config table
 	ld_xbc_sril3 0x07, 0xE8, 0xE4	; XBC = config[channel] (4 bytes per entry)
 	call TONE_GEN_WRITE	; Write config to tone generator
 	inc1_berp 0xFB	; Increment loop counter
-	cpi4_berp 0xFB	; Compare counter with 4
+	cpi_berp 0xFB, 4	; Compare counter with 4
 	jr c, TONE_GEN_CHANNEL_INIT__loop	; Loop while counter < 4
 TONE_GEN_CHANNEL_INIT__done:
 	pop_werp 0xFA	; Restore QIZ
@@ -98783,9 +98783,9 @@ COPY_VECTORS:
 	or xbc, xbc
 	jr z, COPY_VECTORS__done
 	mrib2 0x83, 0x11	; Block copy (TMP94C241 encoding)
-	cpi0_werp 0xE6
+	cpi_werp 0xE6, 0
 	jr z, COPY_VECTORS__done
-	ldto_wa_werp 0xE6
+	ldto_werp WA, 0xE6
 COPY_VECTORS__copy_rest:
 	mrib2 0x83, 0x11	; TMP94C241 encoding
 	djnz xwa, COPY_VECTORS__copy_rest
@@ -98940,7 +98940,7 @@ WRITE_TONE_REG_SINGLE_CHANNEL:
 	ld (xiy + 2), b	; Write B
 	inc 1, a
 	ld (xiy), a
-	ldto_bc_werp 0xE6	; ld BC, QBC (high word of XBC)
+	ldto_werp BC, 0xE6	; ld BC, QBC (high word of XBC)
 	ld (xiy + 2), c
 	inc 1, a
 	ld (xiy), a
@@ -98953,7 +98953,7 @@ WRITE_TONE_REG_SINGLE_CHANNEL:
 	ld (xiy + 2), d	; Write D
 	inc 1, a
 	ld (xiy), a
-	ldto_bc_werp 0xEA	; ld BC, QDE (high word of XDE)
+	ldto_werp BC, 0xEA	; ld BC, QDE (high word of XDE)
 	ld (xiy + 2), c
 	inc 1, a
 	ld (xiy), a
@@ -99133,7 +99133,7 @@ SendData_Chunked__chunk_loop:
 SendData_Chunked__send_final:
 	mrdb3 0x8F, 0x06, 0x21	; A = channel/command
 	extpfx2 0xD8, 0x12	; Zero-extend A to WA
-	ldto_c_berp 0xF8	; C = remaining count (low byte)
+	ldto_berp C, 0xF8	; C = remaining count (low byte)
 	extpfx2 0xD9, 0x12	; Zero-extend C to BC
 	mrdl3 0xAF, 0x02, 0x22	; XDE = current source address
 	calr SendData_Block	; Send final chunk
@@ -99863,9 +99863,9 @@ ROM_CHECKSUM__word_loop:
 	add bc, bc	; Bank offset
 	st_b_dri3 0x07, 0xF0, 0xE4
 	ld bc, (xde)	; Get current sum
-	ldfr_bc_werp 0xE2
+	ldfr_werp BC, 0xE2
 	ld_bc_spiw 0xF5	; Read word from ROM
-	add_bc_werp 0xE2	; Add to sum
+	add_werp BC, 0xE2	; Add to sum
 	ld (xde), bc	; Store result
 	inc 1, xiz
 	cp xiz, 0x800
@@ -99894,18 +99894,18 @@ ROM_CHECKSUM__match:
 
 SERIAL_INIT:
 	push_werp 0xFA
-	ldi0_berp 0xFB	; Error accumulator
+	ldi_berp 0xFB, 0	; Error accumulator
 	calr CONTROL_PANEL_BIT_SET_CLEAR	; Initialize serial subsystem
 	ldada xwa, 1368
 	ld xbc, xwa
 	lda xde, (xwa + 8)
 SERIAL_INIT__check_loop:
-	ldto_a_berp 0xFB
+	ldto_berp A, 0xFB
 	x_spib2_se1 0xE4	; OR all status bytes
-	ldfr_a_berp 0xFB
+	ldfr_berp A, 0xFB
 	cp xbc, xde
 	jr c, SERIAL_INIT__check_loop
-	cpi0_berp 0xFB
+	cpi_berp 0xFB, 0
 	jr z, SERIAL_INIT__no_error
 	x_dd82_sb1 0x30	; Disable timer interrupt on error
 	jr SERIAL_INIT__done

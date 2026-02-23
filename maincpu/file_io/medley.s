@@ -333,7 +333,7 @@ FmmIntMedleyFunc:
 	lds iz, 0
 
 IntMed_CheckSlotLoop:
-	ldto_a_berp 0xF8
+	ldto_berp A, 0xF8
 	extz wa
 	call LABEL_F2065A
 	cps l, 0
@@ -383,7 +383,7 @@ IntMed_FindCurrentSong:
 	ld xwa, (xsp + 6)
 	ld xbc, 0x1E50002
 	calr FmmSeqSongNameFunc
-	ldto_a_berp 0xF8
+	ldto_berp A, 0xF8
 	extz wa
 	call LABEL_F20BCE
 	incdi8 1, 34972
@@ -418,7 +418,7 @@ IntMed_PlayFromStart:
 	ld xwa, (xsp + 6)
 	ld xbc, 0x1E50002
 	calr FmmSeqSongNameFunc
-	ldto_a_berp 0xF8
+	ldto_berp A, 0xF8
 	extz wa
 	call LABEL_F20BCE
 	incdi8 1, 34972
@@ -722,7 +722,7 @@ IntMed_StartPlayLoop:
 	ld xwa, (xsp + 6)
 	ld xbc, 0x1E50002
 	calr FmmSeqSongNameFunc
-	ldto_a_berp 0xF8
+	ldto_berp A, 0xF8
 	extz wa
 	call LABEL_F20BCE
 	incdi8 1, 34972
@@ -874,7 +874,7 @@ DiskMed_FindSongLoop:
 	add xde, xbc
 	cp (xde), a
 	jr nz, DiskMed_NextSong
-	ldto_a_berp 0xF8
+	ldto_berp A, 0xF8
 	extz wa
 	jrl DiskMed_PlaySong
 
@@ -897,7 +897,7 @@ DiskMed_InitPlayOrder:
 	lds iz, 0
 
 DiskMed_CheckSlotLoop:
-	ldto_a_berp 0xF8
+	ldto_berp A, 0xF8
 	extz wa
 	call LABEL_F2065A
 	ldada xbc, 34960
@@ -942,7 +942,7 @@ DiskMed_FindFirstSong:
 	ld a, (xwa)
 	cpda8 a, 34972
 	jr nz, DiskMed_NextFirst
-	ldto_a_berp 0xF8
+	ldto_berp A, 0xF8
 	extz wa
 	jr DiskMed_PlaySong
 
@@ -969,7 +969,7 @@ DiskMed_FindFirstLoop:
 	ld a, (xwa)
 	cpda8 a, 34972
 	jr nz, DiskMed_NextFindFirst
-	ldto_a_berp 0xF8
+	ldto_berp A, 0xF8
 	extz wa
 
 DiskMed_PlaySong:
@@ -1118,7 +1118,7 @@ DiskSel_CheckFinished:
 	lds iz, 0
 
 DiskSel_ClearSelections:
-	ldto_a_berp 0xF8
+	ldto_berp A, 0xF8
 	extz wa
 	call LABEL_F89321
 	inc 1, iz
@@ -1139,10 +1139,10 @@ DiskSel_FindSongLoop:
 	ldda32 xwa, 33754
 	ld xbc, 0x1E50002
 	call 0xFA9D58
-	ldi0_werp 0xFA
+	ldi_werp 0xFA, 0
 
 DiskSel_SendFileInfo:
-	ldto_de_werp 0xFA
+	ldto_werp DE, 0xFA
 	sll de, 5
 	ldada xbc, 34060
 	extz xde
@@ -1176,7 +1176,7 @@ DiskSel_SendFileInfo:
 	lds wa, 0
 	calr InitializeOperationState
 	call LABEL_F87A08
-	ldfr_hl_werp 0xFA
+	ldfr_werp HL, 0xFA
 	calr SignalProgressUpdate
 	ld xwa, 0x600026
 	ld xbc, 0x1C00002
@@ -1186,12 +1186,12 @@ DiskSel_SendFileInfo:
 	ld xbc, 0x1C0000A
 	lds32 xde, 0
 	call 0xFA9D58
-	cpi0_werp 0xFA
+	cpi_werp 0xFA, 0
 	jr ge, DiskSel_PlayNext
 	stdi8 34046, 0
 	ldw wa, 0x60
 	call 0xF99490
-	ldto_wa_werp 0xFA
+	ldto_werp WA, 0xFA
 	lds bc, 1
 	calr LABEL_F8B48E
 	stda8 32578, l
@@ -1230,7 +1230,7 @@ DiskSel_CheckRepeat:
 	lds iz, 0
 
 DiskSel_RepeatClear:
-	ldto_a_berp 0xF8
+	ldto_berp A, 0xF8
 	extz wa
 	call LABEL_F89321
 	inc 1, iz
@@ -1251,10 +1251,10 @@ DiskSel_RepeatFindLoop:
 	ldda32 xwa, 33754
 	ld xbc, 0x1E50002
 	call 0xFA9D58
-	ldi0_werp 0xFA
+	ldi_werp 0xFA, 0
 
 DiskSel_RepeatSendInfo:
-	ldto_de_werp 0xFA
+	ldto_werp DE, 0xFA
 	sll de, 5
 	ldada xbc, 34060
 	extz xde
@@ -1288,7 +1288,7 @@ DiskSel_RepeatSendInfo:
 	lds wa, 0
 	calr InitializeOperationState
 	call LABEL_F87A08
-	ldfr_hl_werp 0xFA
+	ldfr_werp HL, 0xFA
 	calr SignalProgressUpdate
 	ld xwa, 0x600026
 	ld xbc, 0x1C00002
@@ -1298,12 +1298,12 @@ DiskSel_RepeatSendInfo:
 	ld xbc, 0x1C0000A
 	lds32 xde, 0
 	call 0xFA9D58
-	cpi0_werp 0xFA
+	cpi_werp 0xFA, 0
 	jr ge, DiskSel_RepeatPlayNext
 	stdi8 34046, 0
 	ldw wa, 0x60
 	call 0xF99490
-	ldto_wa_werp 0xFA
+	ldto_werp WA, 0xFA
 	lds bc, 1
 	calr LABEL_F8B48E
 	stda8 32578, l
@@ -1401,7 +1401,7 @@ DiskSel_DisplayLoop:
 	ldada xde, 34060
 	extz xhl
 	add xhl, xde
-	ldto_c_berp 0xF8
+	ldto_berp C, 0xF8
 	ld (xhl), c
 	lds bc, 2
 	call LABEL_F89408
@@ -1634,7 +1634,7 @@ DiskSel_HandlePlayStart:
 	lds iz, 0
 
 DiskSel_PlayClearLoop:
-	ldto_a_berp 0xF8
+	ldto_berp A, 0xF8
 	extz wa
 	call LABEL_F89321
 	inc 1, iz
@@ -1660,7 +1660,7 @@ DiskSel_PlayFindLoop:
 	lds32 xde, 5
 	call 0xFA9D58
 	call LABEL_F87A08
-	ldfr_hl_werp 0xFA
+	ldfr_werp HL, 0xFA
 	calr SignalProgressUpdate
 	ld xwa, 0x600026
 	ld xbc, 0x1C00002
@@ -1670,12 +1670,12 @@ DiskSel_PlayFindLoop:
 	ld xbc, 0x1C0000A
 	lds32 xde, 0
 	call 0xFA9D58
-	cpi0_werp 0xFA
+	cpi_werp 0xFA, 0
 	jr ge, DiskSel_PlayNextSong
 	stdi8 34046, 0
 	ldw wa, 0x60
 	call 0xF99490
-	ldto_wa_werp 0xFA
+	ldto_werp WA, 0xFA
 	lds bc, 1
 	calr LABEL_F8B48E
 	stda8 32578, l
@@ -1892,20 +1892,20 @@ SmfMed_FormatSlotList:
 	ld xbc, 0x1E50003
 	lds32 xde, 0
 	calr FmmSmfFileNameFunc
-	ldfr_hl_werp 0xFA
-	ldto_wa_werp 0xFA
+	ldfr_werp HL, 0xFA
+	ldto_werp WA, 0xFA
 	extz xwa
 	div wa, 0xA
-	ldfr_wa_werp 0xFA
+	ldfr_werp WA, 0xFA
 	mul wa, 0xA
-	ldfr_wa_werp 0xFA
+	ldfr_werp WA, 0xFA
 	ldmw (xsp + 4), 0xA
-	ldto_wa_werp 0xFA
+	ldto_werp WA, 0xFA
 	add wa, 0xA
 	cp wa, iz
 	jr c, SmfFmt_CalcVisible
 	ld (xsp + 4), iz
-	ldto_wa_werp 0xFA
+	ldto_werp WA, 0xFA
 	sub (xsp + 4), wa
 
 SmfFmt_CalcVisible:
@@ -1919,7 +1919,7 @@ SmfFmt_FormatLoop:
 	ldada xbc, 33760
 	extz xwa
 	add xwa, xbc
-	ldto_bc_werp 0xFA
+	ldto_werp BC, 0xFA
 	add bc, iz
 	ldada xde, 34976
 	extz xbc
@@ -2485,7 +2485,7 @@ PdFmt_FormatLoop:
 	ldada xbc, 34060
 	extz xde
 	add xde, xbc
-	ldto_a_berp 0xF8
+	ldto_berp A, 0xF8
 	ld (xde), a
 	ld wa, (xsp + 2)
 	add wa, iz
@@ -2552,7 +2552,7 @@ PdName_UpdateIndex:
 	ldda16 xwa, 33858
 	exts xwa
 	divs wa, 0xA
-	ldto_de_werp 0xE2
+	ldto_werp DE, 0xE2
 	exts xde
 	ldda32 xwa, 33854
 	ld xbc, 0x1E50002
@@ -2626,7 +2626,7 @@ PdName_CheckEndBound:
 	jr ge, PdName_GetCurrentIndex
 	exts xde
 	divs de, 0xA
-	ldto_wa_werp 0xEA
+	ldto_werp WA, 0xEA
 	cps wa, 0
 	jr z, PdName_GetCurrentIndex
 	stda16 33858, xbc
@@ -2641,7 +2641,7 @@ PdName_UpdateDisplay:
 	ldda16 xwa, 33858
 	exts xwa
 	divs wa, 0xA
-	ldto_de_werp 0xE2
+	ldto_werp DE, 0xE2
 	exts xde
 	ldda32 xwa, 33854
 	ld xbc, 0x1E50002
@@ -2658,7 +2658,7 @@ PdName_UpdateDisplay:
 	ld bc, iz
 	exts xbc
 	divs bc, 0xA
-	ldto_bc_werp 0xE6
+	ldto_werp BC, 0xE6
 	sll bc, 5
 	ldada xhl, 34060
 	ld de, bc
@@ -2669,7 +2669,7 @@ PdName_UpdateDisplay:
 	ldda16 xwa, 33858
 	exts xwa
 	divs wa, 0xA
-	ldto_wa_werp 0xE2
+	ldto_werp WA, 0xE2
 	sll wa, 5
 	ldada xbc, 34060
 	ld de, wa
@@ -2698,7 +2698,7 @@ PdName_SetIndexPlaying:
 	ldda16 xwa, 33858
 	exts xwa
 	divs wa, 0xA
-	ldto_de_werp 0xE2
+	ldto_werp DE, 0xE2
 	exts xde
 	ldda32 xwa, 33854
 	ld xbc, 0x1E50002
@@ -2725,20 +2725,20 @@ PdMed_FormatSlotList:
 	ld xbc, 0x1E50003
 	lds32 xde, 0
 	calr FmmPdFileNameFunc
-	ldfr_hl_werp 0xFA
-	ldto_wa_werp 0xFA
+	ldfr_werp HL, 0xFA
+	ldto_werp WA, 0xFA
 	extz xwa
 	div wa, 0xA
-	ldfr_wa_werp 0xFA
+	ldfr_werp WA, 0xFA
 	mul wa, 0xA
-	ldfr_wa_werp 0xFA
+	ldfr_werp WA, 0xFA
 	ldmw (xsp + 4), 0xA
-	ldto_wa_werp 0xFA
+	ldto_werp WA, 0xFA
 	add wa, 0xA
 	cp wa, iz
 	jr c, PdFmtSlot_CalcVisible
 	ld (xsp + 4), iz
-	ldto_wa_werp 0xFA
+	ldto_werp WA, 0xFA
 	sub (xsp + 4), wa
 
 PdFmtSlot_CalcVisible:
@@ -2752,7 +2752,7 @@ PdFmtSlot_FormatLoop:
 	ldada xbc, 33860
 	extz xwa
 	add xwa, xbc
-	ldto_bc_werp 0xFA
+	ldto_werp BC, 0xFA
 	add bc, iz
 	ldada xde, 34976
 	extz xbc
@@ -3292,7 +3292,7 @@ DocFmt_FormatLoop:
 	ldada xbc, 34060
 	extz xde
 	add xde, xbc
-	ldto_a_berp 0xF8
+	ldto_berp A, 0xF8
 	ld (xde), a
 	ld wa, (xsp + 2)
 	add wa, iz
@@ -3359,7 +3359,7 @@ DocName_UpdateIndex:
 	ldda16 xwa, 33954
 	exts xwa
 	divs wa, 0xA
-	ldto_de_werp 0xE2
+	ldto_werp DE, 0xE2
 	exts xde
 	ldda32 xwa, 33950
 	ld xbc, 0x1E50002
@@ -3433,7 +3433,7 @@ DocName_CheckEndBound:
 	jr ge, DocName_GetCurrentIndex
 	exts xde
 	divs de, 0xA
-	ldto_wa_werp 0xEA
+	ldto_werp WA, 0xEA
 	cps wa, 0
 	jr z, DocName_GetCurrentIndex
 	stda16 33954, xbc
@@ -3448,7 +3448,7 @@ DocName_UpdateDisplay:
 	ldda16 xwa, 33954
 	exts xwa
 	divs wa, 0xA
-	ldto_de_werp 0xE2
+	ldto_werp DE, 0xE2
 	exts xde
 	ldda32 xwa, 33950
 	ld xbc, 0x1E50002
@@ -3465,7 +3465,7 @@ DocName_UpdateDisplay:
 	ld bc, iz
 	exts xbc
 	divs bc, 0xA
-	ldto_bc_werp 0xE6
+	ldto_werp BC, 0xE6
 	sll bc, 5
 	ldada xhl, 34060
 	ld de, bc
@@ -3476,7 +3476,7 @@ DocName_UpdateDisplay:
 	ldda16 xwa, 33954
 	exts xwa
 	divs wa, 0xA
-	ldto_wa_werp 0xE2
+	ldto_werp WA, 0xE2
 	sll wa, 5
 	ldada xbc, 34060
 	ld de, wa
@@ -3505,7 +3505,7 @@ DocName_SetIndexPlaying:
 	ldda16 xwa, 33954
 	exts xwa
 	divs wa, 0xA
-	ldto_de_werp 0xE2
+	ldto_werp DE, 0xE2
 	exts xde
 	ldda32 xwa, 33950
 	ld xbc, 0x1E50002
@@ -3533,20 +3533,20 @@ DocMed_FormatSlotList:
 	ld xbc, 0x1E50003
 	lds32 xde, 0
 	calr FmmDocFileNameFunc
-	ldfr_hl_werp 0xFA
-	ldto_wa_werp 0xFA
+	ldfr_werp HL, 0xFA
+	ldto_werp WA, 0xFA
 	extz xwa
 	div wa, 0xA
-	ldfr_wa_werp 0xFA
+	ldfr_werp WA, 0xFA
 	mul wa, 0xA
-	ldfr_wa_werp 0xFA
+	ldfr_werp WA, 0xFA
 	ldmw (xsp + 4), 0xA
-	ldto_wa_werp 0xFA
+	ldto_werp WA, 0xFA
 	add wa, 0xA
 	cp wa, iz
 	jr c, DocFmtSlot_CalcVisible
 	ld (xsp + 4), iz
-	ldto_wa_werp 0xFA
+	ldto_werp WA, 0xFA
 	sub (xsp + 4), wa
 
 DocFmtSlot_CalcVisible:
@@ -3560,7 +3560,7 @@ DocFmtSlot_FormatLoop:
 	ldada xbc, 33956
 	extz xwa
 	add xwa, xbc
-	ldto_bc_werp 0xFA
+	ldto_werp BC, 0xFA
 	add bc, iz
 	ldada xde, 34976
 	extz xbc
@@ -4108,10 +4108,10 @@ LABEL_F9420F:
 ClearAllSongSlots:
 	push xiz
 	ld iz, wa
-	ldi0_werp 0xFA
+	ldi_werp 0xFA, 0
 
 ClearSlots_Loop:
-	ldto_wa_werp 0xFA
+	ldto_werp WA, 0xFA
 	ld bc, iz
 	calr SetSongSlotValue
 	inc1_werp 0xFA

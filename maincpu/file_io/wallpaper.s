@@ -136,7 +136,7 @@ LABEL_F8EABA:
 	ldda16 xwa, 33204
 	exts xwa
 	divs wa, 0xA
-	ldto_de_werp 0xE2
+	ldto_werp DE, 0xE2
 	exts xde
 	ldda32 xwa, 33200
 	ld xbc, 0x1E50002
@@ -214,7 +214,7 @@ LABEL_F8EB6B:
 	jrl ge, LABEL_F8EC05
 	exts xde
 	divs de, 0xA
-	ldto_wa_werp 0xEA
+	ldto_werp WA, 0xEA
 	cps wa, 0
 	jr z, LABEL_F8EC05
 	stda16 33204, xbc
@@ -264,7 +264,7 @@ LABEL_F8EC09:
 	ldda16 xwa, 33204
 	exts xwa
 	divs wa, 0xA
-	ldto_de_werp 0xE2
+	ldto_werp DE, 0xE2
 	exts xde
 	ldda32 xwa, 33200
 	ld xbc, 0x1E50002
@@ -281,7 +281,7 @@ LABEL_F8EC09:
 	ld bc, (xsp + 4)
 	exts xbc
 	divs bc, 0xA
-	ldto_bc_werp 0xE6
+	ldto_werp BC, 0xE6
 	sll bc, 5
 	ldada xhl, 34060
 	ld de, bc
@@ -292,7 +292,7 @@ LABEL_F8EC09:
 	ldda16 xwa, 33204
 	exts xwa
 	divs wa, 0xA
-	ldto_wa_werp 0xE2
+	ldto_werp WA, 0xE2
 	sll wa, 5
 	ldada xbc, 34060
 	ld de, wa
@@ -324,7 +324,7 @@ LABEL_F8ECAD:
 LABEL_F8ECB3:
 	push xiz
 	call 0xF8943E
-	ldfr_hl_werp 0xFA
+	ldfr_werp HL, 0xFA
 	stdi16 35318, 0
 	lds iz, 0
 
@@ -341,7 +341,7 @@ LABEL_F8ECC3:
 	slla de
 
 LABEL_F8ECDB:
-	and_de_werp 0xFA
+	and_werp DE, 0xFA
 	jrl z, LABEL_F8ED7A
 	cps c, 3
 	jr nz, LABEL_F8ED11
@@ -410,7 +410,7 @@ LABEL_F8ED68:
 	jr c, LABEL_F8ED7A
 
 LABEL_F8ED73:
-	ldto_a_berp 0xF8
+	ldto_berp A, 0xF8
 	stda8 35320, a
 
 LABEL_F8ED7A:
@@ -430,11 +430,11 @@ LABEL_F8ED83:
 	jr z, LABEL_F8EDCE
 	lds iz, 1
 	extz wa
-	ldfr_wa_werp 0xE6
+	ldfr_werp WA, 0xE6
 	ldada_24 xde, 15337386
 
 LABEL_F8EDA0:
-	ldto_hl_werp 0xE6
+	ldto_werp HL, 0xE6
 	add hl, iz
 	and hl, 0x3
 	ld wa, hl

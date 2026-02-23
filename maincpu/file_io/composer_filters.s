@@ -150,7 +150,7 @@ LABEL_F8D30D:
 	ldada xde, 34060
 	extz xhl
 	add xhl, xde
-	ldto_c_berp 0xF8
+	ldto_berp C, 0xF8
 	ld (xhl), c
 	lds bc, 3
 	call LABEL_F89408
@@ -245,7 +245,7 @@ LABEL_F8D3E5:
 	lds iz, 0
 
 LABEL_F8D408:
-	ldto_a_berp 0xF8
+	ldto_berp A, 0xF8
 	extz wa
 	call LABEL_F89335
 	inc 1, iz

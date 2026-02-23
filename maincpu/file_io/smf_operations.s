@@ -475,7 +475,7 @@ LABEL_F8DFE2:
 	ldada xbc, 34060
 	extz xde
 	add xde, xbc
-	ldto_a_berp 0xF8
+	ldto_berp A, 0xF8
 	ld (xde), a
 	ld wa, (xsp + 2)
 	add wa, iz
@@ -660,7 +660,7 @@ LABEL_F8E1AE:
 	jrl ge, LABEL_F8E75D
 	exts xhl
 	divs hl, 0xA
-	ldto_wa_werp 0xEE
+	ldto_werp WA, 0xEE
 	cps wa, 0
 	jrl z, LABEL_F8E75D
 	stda16 33196, xbc
@@ -689,7 +689,7 @@ LABEL_F8E21A:
 	jrl ge, LABEL_F8E75D
 	exts xbc
 	divs bc, 0xA
-	ldto_wa_werp 0xE6
+	ldto_werp WA, 0xE6
 	cps wa, 0
 	jrl z, LABEL_F8E75D
 	stda16 33196, xhl
@@ -1146,7 +1146,7 @@ LABEL_F8E761:
 	ldda16 xwa, 33196
 	exts xwa
 	divs wa, 0xA
-	ldto_de_werp 0xE2
+	ldto_werp DE, 0xE2
 	exts xde
 	ldda32 xwa, 33184
 	ld xbc, 0x1E50002
@@ -1163,7 +1163,7 @@ LABEL_F8E761:
 	ld bc, (xsp + 4)
 	exts xbc
 	divs bc, 0xA
-	ldto_bc_werp 0xE6
+	ldto_werp BC, 0xE6
 	sll bc, 5
 	ldada xhl, 34060
 	ld de, bc
@@ -1174,7 +1174,7 @@ LABEL_F8E761:
 	ldda16 xwa, 33196
 	exts xwa
 	divs wa, 0xA
-	ldto_wa_werp 0xE2
+	ldto_werp WA, 0xE2
 	sll wa, 5
 	ldada xbc, 34060
 	ld de, wa
@@ -1244,7 +1244,7 @@ LABEL_F8E85B:
 	ldda16 xwa, 33196
 	exts xwa
 	divs wa, 0xA
-	ldto_de_werp 0xE2
+	ldto_werp DE, 0xE2
 	exts xde
 	ldda32 xwa, 33184
 	ld xbc, 0x1E50002
@@ -1275,7 +1275,7 @@ LABEL_F8E8C9:
 	ldada xbc, 34060
 	extz xde
 	add xde, xbc
-	ldto_a_berp 0xF8
+	ldto_berp A, 0xF8
 	ld (xde), a
 	ld wa, (xsp + 2)
 	add wa, iz

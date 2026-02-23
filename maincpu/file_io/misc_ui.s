@@ -764,8 +764,8 @@ LABEL_F95844:
 	exts wa
 	exts xwa
 	divs xwa, xde
-	ldto_wa_werp 0xE2
-	ldfr_wa_werp 0xEA
+	ldto_werp WA, 0xE2
+	ldfr_werp WA, 0xEA
 	ld_xwa_sril3 0xFD, 0xA2, 0x00
 	ld a, (xwa)
 	exts wa
@@ -773,7 +773,7 @@ LABEL_F95844:
 	divs xwa, xde
 	ld de, wa
 	ld wa, iz
-	mul_xwa_werp 0xEA
+	mul_werp WA, 0xEA
 	inc 2, wa
 	add hl, wa
 	ld (xix), hl
@@ -803,7 +803,7 @@ LABEL_F95844:
 	ld xix, (xwa + 42)
 	ld_xwa_sril3 0xFD, 0xA2, 0x00
 	ld a, (xwa)
-	ldfr_a_berp 0xF4
+	ldfr_berp A, 0xF4
 	exts iy
 	ld xwa, (xsp + 4)
 	lda xhl, (xwa + 28)

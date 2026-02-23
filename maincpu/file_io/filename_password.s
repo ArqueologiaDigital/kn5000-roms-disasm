@@ -176,8 +176,8 @@ LABEL_F8CAA6:
 
 SelectPasswordMode:
 	push xiz
-	ldi0_berp 0xFB
-	ldi0_berp 0xFA
+	ldi_berp 0xFB, 0
+	ldi_berp 0xFA, 0
 	lds wa, 2
 	call LABEL_F89353
 	cps l, 0
@@ -187,7 +187,7 @@ SelectPasswordMode:
 	jr z, LABEL_F8CACE
 	bitda 7, 35341
 	jr nz, LABEL_F8CACE
-	ldi1_berp 0xFA
+	ldi_berp 0xFA, 1
 
 LABEL_F8CACE:
 	lds wa, 3
@@ -199,12 +199,12 @@ LABEL_F8CACE:
 	jr z, LABEL_F8CAE9
 	bitda 6, 35341
 	jr nz, LABEL_F8CAE9
-	ldi1_berp 0xFB
+	ldi_berp 0xFB, 1
 
 LABEL_F8CAE9:
-	cpi0_berp 0xFA
+	cpi_berp 0xFA, 0
 	jr z, LABEL_F8CB0B
-	cpi0_berp 0xFB
+	cpi_berp 0xFB, 0
 	jr z, LABEL_F8CB0B
 	call GetCurrentSlotIndex
 	ld iz, hl
@@ -220,14 +220,14 @@ LABEL_F8CB05:
 
 LABEL_F8CB0B:
 	ldada xbc, 35340
-	cpi0_berp 0xFA
+	cpi_berp 0xFA, 0
 	jr z, LABEL_F8CB19
 	ldmi8 (xbc), 0x1
 	jr LABEL_F8CB24
 
 LABEL_F8CB19:
 	ldb a, 0x0
-	cpi0_berp 0xFB
+	cpi_berp 0xFB, 0
 	jr z, LABEL_F8CB22
 	ldb a, 0x2
 

@@ -1022,9 +1022,9 @@ HDAE5000_Clear_Work_Buffer:	; 28F785h
 	or xbc, xbc
 	jr z, HDAE5000_Clear_Work_Buffer__clear_done
 	mriw2 0x93, 0x11	; ldirw  ; copy words (fills with zeros)
-	cpi0_werp 0xE6	; cp QBC, 0  ; check high word
+	cpi_werp 0xE6, 0	; cp QBC, 0  ; check high word
 	jr z, HDAE5000_Clear_Work_Buffer__clear_done
-	ldto_wa_werp 0xE6	; ld WA, QBC  ; get high word count
+	ldto_werp WA, 0xE6	; ld WA, QBC  ; get high word count
 HDAE5000_Clear_Work_Buffer__clear_loop:
 	mriw2 0x93, 0x11	; ldirw  ; continue word copy
 	djnz xwa, HDAE5000_Clear_Work_Buffer__clear_loop	; djnz WA, .clear_loop
@@ -1040,9 +1040,9 @@ HDAE5000_Clear_Work_Buffer__no_odd_byte:
 	or xbc, xbc
 	jr z, HDAE5000_Clear_Work_Buffer__copy_done
 	ldir83	; ldir  ; copy bytes
-	cpi0_werp 0xE6	; cp QBC, 0
+	cpi_werp 0xE6, 0	; cp QBC, 0
 	jr z, HDAE5000_Clear_Work_Buffer__copy_done
-	ldto_wa_werp 0xE6	; ld WA, QBC
+	ldto_werp WA, 0xE6	; ld WA, QBC
 HDAE5000_Clear_Work_Buffer__copy_loop:
 	ldir83	; ldir
 	djnz xwa, HDAE5000_Clear_Work_Buffer__copy_loop	; djnz WA, .copy_loop
@@ -1209,7 +1209,7 @@ HDAE5000_Load_Palette:	; 28F8E0h
 	cps iz, 0	; initial check
 	jr lt, HDAE5000_Load_Palette__done	; skip loop if IZ < 0 (never happens here)
 HDAE5000_Load_Palette__loop:
-	ldto_e_berp 0xF8	; E = current palette index
+	ldto_berp E, 0xF8	; E = current palette index
 	ld wa, iz
 	exts xwa	; sign-extend WA to XWA
 	sll xwa, 2	; sll 2, XWA  ; XWA = index × 4
@@ -1449,7 +1449,7 @@ HDAE5000_MemFill__aligned:
 	srl bc, 2	; srl 2, BC - divide by 4
 	jr z, HDAE5000_MemFill__remainder
 	ld w, a	; W = A (fill byte)
-	ldfr_wa_werp 0xE2	; ld QWA, WA - expand to 32-bit
+	ldfr_werp WA, 0xE2	; ld QWA, WA - expand to 32-bit
 HDAE5000_MemFill__fill_dwords:
 	x_dpi2_s60 0xF2	; ld (XIX+), XWA - store 4 bytes
 	djnz xbc, HDAE5000_MemFill__fill_dwords	; djnz BC, .fill_dwords

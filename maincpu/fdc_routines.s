@@ -472,7 +472,7 @@ FDC_WaitReady_StatusLoop:
 	jr z, FDC_WaitReady_TimeoutCheck
 	cp a, 0xC0
 	jr nz, FDC_WaitReady_TimeoutCheck
-	ldi0_werp 0xFA
+	ldi_werp 0xFA, 0
 
 FDC_WaitReady_TimeoutCheck:
 	ldda16 xwa, 1033
@@ -486,7 +486,7 @@ FDC_WaitReady_LoopContinue:
 	jr z, FDC_WaitReady_StatusLoop
 
 LABEL_F97107:
-	cpi0_werp 0xFA
+	cpi_werp 0xFA, 0
 	jr z, FDC_WaitReady_Complete
 	lds wa, 2
 	calr FDC_Set_Status
@@ -510,7 +510,7 @@ FDC_WaitStatus_StatusLoop:
 	jr z, LABEL_F97137
 	cp l, 0xC0
 	jr nz, LABEL_F97137
-	ldi0_werp 0xFA
+	ldi_werp 0xFA, 0
 
 LABEL_F97137:
 	ldda16 xwa, 1033
@@ -524,7 +524,7 @@ FDC_WaitStatus_TimeoutCheck:
 	jr z, FDC_WaitStatus_StatusLoop
 
 LABEL_F9714F:
-	cpi0_werp 0xFA
+	cpi_werp 0xFA, 0
 	jr z, LABEL_F97159
 	lds wa, 2
 	calr FDC_Set_Status

@@ -88,7 +88,7 @@ Encoder_ProcessVolume:
 	cpda8 a, 36596	; Compare with current
 	jr z, Encoder_ProcessVolume_NoChange
 	stda8 36596, a	; Store new value
-	ldfr_a_berp 0xF8
+	ldfr_berp A, 0xF8
 	extz iz	; IZ = new value
 
 Encoder_ProcessVolume_NoChange:

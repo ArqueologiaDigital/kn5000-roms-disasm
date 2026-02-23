@@ -77,7 +77,7 @@ PcgOutGridBoxEventDispatch:
 	ld bc, (xwa + 26)
 	ld xwa, (xsp + 4)
 	srl xwa, 0
-	ldi0_werp 0xE2
+	ldi_werp 0xE2, 0
 	add wa, bc
 	ld de, wa
 	extz xde
@@ -88,7 +88,7 @@ PcgOutGridBoxEventDispatch:
 	ld bc, (xwa + 26)
 	ld xwa, (xsp + 4)
 	srl xwa, 0
-	ldi0_werp 0xE2
+	ldi_werp 0xE2, 0
 	add wa, bc
 	ld de, wa
 	extz xde
@@ -449,7 +449,7 @@ PcgOutGridCheckJumpTable:
 PcgOutCheckGridDataStructure:
 	ld xwa, xiz
 	srl xwa, 0
-	ldi0_werp 0xE2
+	ldi_werp 0xE2, 0
 	ld (xhl), wa
 	ld xwa, xbc
 	ld ix, iz

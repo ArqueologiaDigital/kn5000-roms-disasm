@@ -493,9 +493,9 @@ Boot_ClearRAM:
 	or xbc, xbc	; test if zero
 	jr z, Boot_ClearRAM__clear1_done
 	ldirw93	; word block copy - fills with zeros
-	cpi0_werp 0xE6	; CP QBC, 0 (check high dword)
+	cpi_werp 0xE6, 0	; CP QBC, 0 (check high dword)
 	jr z, Boot_ClearRAM__clear1_done
-	ldto_wa_werp 0xE6	; LD WA, QBC
+	ldto_werp WA, 0xE6	; LD WA, QBC
 	ldirw93
 	djnz16 wa, -5	; DJNZ WA, -5
 Boot_ClearRAM__clear1_done:
@@ -516,9 +516,9 @@ Boot_ClearRAM__clear1_aligned:
 	or xbc, xbc
 	jr z, Boot_ClearRAM__clear2_done
 	ldirw93
-	cpi0_werp 0xE6	; CP QBC, 0
+	cpi_werp 0xE6, 0	; CP QBC, 0
 	jr z, Boot_ClearRAM__clear2_done
-	ldto_wa_werp 0xE6	; LD WA, QBC
+	ldto_werp WA, 0xE6	; LD WA, QBC
 	ldirw93
 	djnz16 wa, -5	; DJNZ WA, -5
 Boot_ClearRAM__clear2_done:
@@ -534,9 +534,9 @@ Boot_ClearRAM__clear2_aligned:
 	or xbc, xbc
 	jr z, Boot_ClearRAM__copy1_done
 	ldir83	; byte block copy
-	cpi0_werp 0xE6	; CP QBC, 0
+	cpi_werp 0xE6, 0	; CP QBC, 0
 	jr z, Boot_ClearRAM__copy1_done
-	ldto_wa_werp 0xE6	; LD WA, QBC
+	ldto_werp WA, 0xE6	; LD WA, QBC
 	ldir83
 	djnz16 wa, -5	; DJNZ WA, -5
 Boot_ClearRAM__copy1_done:
@@ -548,9 +548,9 @@ Boot_ClearRAM__copy1_done:
 	or xbc, xbc
 	jr z, Boot_ClearRAM__copy2_done
 	ldir83
-	cpi0_werp 0xE6	; CP QBC, 0
+	cpi_werp 0xE6, 0	; CP QBC, 0
 	jr z, Boot_ClearRAM__copy2_done
-	ldto_wa_werp 0xE6	; LD WA, QBC
+	ldto_werp WA, 0xE6	; LD WA, QBC
 	ldir83
 	djnz16 wa, -5	; DJNZ WA, -5
 Boot_ClearRAM__copy2_done:
@@ -706,15 +706,15 @@ Flash_ReadID_16bit__got_base:
 	ldmw (xbc), 0x90	; LD (XBC), 0090h - ID command (word store)
 	; Read manufacturer ID
 	ld wa, (xde)	; 92 20
-	ldfr_wa_werp 0xFA	; LD QIZ, WA - store manufacturer ID
+	ldfr_werp WA, 0xFA	; LD QIZ, WA - store manufacturer ID
 	; Read device ID at base+2
 	ld xbc, xde	; ea 89
 	ld iz, (xbc + 2)	; LD IZ, (XBC+02h)
 	ei 0	; 06 00
 	; Validate manufacturer (01=AMD, 04=Fujitsu)
-	cpi1_werp 0xFA	; CP QIZ, 1
+	cpi_werp 0xFA, 1	; CP QIZ, 1
 	jr z, Flash_ReadID_16bit__valid_mfr	; 66 05
-	cpi4_werp 0xFA	; CP QIZ, 4
+	cpi_werp 0xFA, 4	; CP QIZ, 4
 	jr nz, Flash_ReadID_16bit__reset_exit	; 6e 23
 Flash_ReadID_16bit__valid_mfr:
 	; Validate device ID
@@ -1891,7 +1891,7 @@ Boot_CopySectors:
 	ld wa, (xsp + 6)	; LD WA, (XSP+0x06)
 	extz xwa	; EXTZ XWA
 	div wa, 0x12	; DIV WA, 0x0012 - sectors per track
-	ldto_wa_werp 0xE2	; LD WA, QWA - get remainder
+	ldto_werp WA, 0xE2	; LD WA, QWA - get remainder
 	lds iz, 0	; LD IZ, 0 - offset = 0
 	cps wa, 0	; CP WA, 0
 	jr z, Boot_CopySectors__cs_skip_partial	; 66 48
@@ -1906,7 +1906,7 @@ Boot_CopySectors:
 	calr FDC_ReadSectorWrapper	; CALR 0x9FBF92 (FDC_ReadSectorRange)
 	ldada_24 xwa, 39332	; LDA XWA, 0x0099A4
 	ld (xsp + 10), xwa	; LD (XSP+0x0A), XWA - source ptr
-	ldi0_werp 0xFA	; LD QIZ, 0 - counter
+	ldi_werp 0xFA, 0	; LD QIZ, 0 - counter
 
 	; Loop: write partial track bytes
 	jr Boot_CopySectors__cs_partial_check	; 68 1b
@@ -1923,7 +1923,7 @@ Boot_CopySectors__cs_partial_loop:
 Boot_CopySectors__cs_partial_check:
 	ld bc, iz	; LD BC, IZ
 	sla bc, 7	; SLA 7, BC - BC = IZ * 128
-	ldto_wa_werp 0xFA	; LD WA, QIZ
+	ldto_werp WA, 0xFA	; LD WA, QIZ
 	cp wa, bc	; CP WA, BC
 	jr c, Boot_CopySectors__cs_partial_loop	; 67 d9
 
@@ -1949,7 +1949,7 @@ Boot_CopySectors__cs_track_loop:
 	addmi16 (xsp + 6), 0x12	; ADD (XSP+0x06), 0x0012
 	ldada_24 xwa, 39332	; LDA XWA, 0x0099A4
 	ld (xsp + 10), xwa	; LD (XSP+0x0A), XWA
-	ldi0_werp 0xFA	; LD QIZ, 0
+	ldi_werp 0xFA, 0	; LD QIZ, 0
 
 Boot_CopySectors__cs_full_loop:
 	ld xwa, (xsp + 14)	; LD XWA, (XSP+0x0E)
@@ -1984,7 +1984,7 @@ Boot_CopySectors__cs_check_remainder:
 	calr FDC_ReadSectorWrapper	; CALR 0x9FBF92
 	ldada_24 xwa, 39332	; LDA XWA, 0x0099A4
 	ld (xsp + 10), xwa	; LD (XSP+0x0A), XWA
-	ldi0_werp 0xFA	; LD QIZ, 0
+	ldi_werp 0xFA, 0	; LD QIZ, 0
 	jr Boot_CopySectors__cs_rem_check	; 68 1b
 
 Boot_CopySectors__cs_rem_loop:
@@ -2000,7 +2000,7 @@ Boot_CopySectors__cs_rem_loop:
 Boot_CopySectors__cs_rem_check:
 	ld bc, iz	; LD BC, IZ
 	sla bc, 7	; SLA 7, BC
-	ldto_wa_werp 0xFA	; LD WA, QIZ
+	ldto_werp WA, 0xFA	; LD WA, QIZ
 	cp wa, bc	; CP WA, BC
 	jr c, Boot_CopySectors__cs_rem_loop	; 67 d9
 
@@ -2026,7 +2026,7 @@ Boot_CopySectorsEx:
 	ld wa, (xsp + 6)	; LD WA, (XSP+0x06)
 	extz xwa	; EXTZ XWA
 	div wa, 0x12	; DIV WA, 0x0012
-	ldto_wa_werp 0xE2	; LD WA, QWA
+	ldto_werp WA, 0xE2	; LD WA, QWA
 	lds iz, 0	; LD IZ, 0
 	cps wa, 0	; CP WA, 0
 	jr z, Boot_CopySectorsEx__cse_skip_partial	; 66 4d
@@ -2040,7 +2040,7 @@ Boot_CopySectorsEx:
 	calr FDC_ReadSectorWrapper	; CALR 0x9FBF92
 	ldada_24 xwa, 39332	; LDA XWA, 0x0099A4
 	ld (xsp + 10), xwa	; LD (XSP+0x0A), XWA
-	ldi0_werp 0xFA	; LD QIZ, 0
+	ldi_werp 0xFA, 0	; LD QIZ, 0
 	jr Boot_CopySectorsEx__cse_partial_check	; 68 20
 
 Boot_CopySectorsEx__cse_partial_loop:
@@ -2058,7 +2058,7 @@ Boot_CopySectorsEx__cse_partial_loop:
 Boot_CopySectorsEx__cse_partial_check:
 	ld bc, iz	; LD BC, IZ
 	sla bc, 8	; SLA 8, BC - BC = IZ * 256
-	ldto_wa_werp 0xFA	; LD WA, QIZ
+	ldto_werp WA, 0xFA	; LD WA, QIZ
 	cp wa, bc	; CP WA, BC
 	jr c, Boot_CopySectorsEx__cse_partial_loop	; 67 d4
 
@@ -2084,7 +2084,7 @@ Boot_CopySectorsEx__cse_track_loop:
 	addmi16 (xsp + 6), 0x12	; ADD (XSP+0x06), 0x0012
 	ldada_24 xwa, 39332	; LDA XWA, 0x0099A4
 	ld (xsp + 10), xwa	; LD (XSP+0x0A), XWA
-	ldi0_werp 0xFA	; LD QIZ, 0
+	ldi_werp 0xFA, 0	; LD QIZ, 0
 
 Boot_CopySectorsEx__cse_full_loop:
 	ld a, (xsp + 20)	; LD A, (XSP+0x14)
@@ -2120,7 +2120,7 @@ Boot_CopySectorsEx__cse_check_rem:
 	calr FDC_ReadSectorWrapper	; CALR 0x9FBF92
 	ldada_24 xwa, 39332	; LDA XWA, 0x0099A4
 	ld (xsp + 10), xwa	; LD (XSP+0x0A), XWA
-	ldi0_werp 0xFA	; LD QIZ, 0
+	ldi_werp 0xFA, 0	; LD QIZ, 0
 	jr Boot_CopySectorsEx__cse_rem_check	; 68 20
 
 Boot_CopySectorsEx__cse_rem_loop:
@@ -2138,7 +2138,7 @@ Boot_CopySectorsEx__cse_rem_loop:
 Boot_CopySectorsEx__cse_rem_check:
 	ld bc, iz	; LD BC, IZ
 	sla bc, 8	; SLA 8, BC
-	ldto_wa_werp 0xFA	; LD WA, QIZ
+	ldto_werp WA, 0xFA	; LD WA, QIZ
 	cp wa, bc	; CP WA, BC
 	jr c, Boot_CopySectorsEx__cse_rem_loop	; 67 d4
 
@@ -2628,7 +2628,7 @@ Flash_ProgramHDAE_Payload__phd2_copy_loop:
 ; =============================================================================
 HDAE5000_InitializeParallelPort:
 	push_werp 0xFA	; PUSH QIZ
-	ldi0_berp 0xFB	; LD QIZH, 0
+	ldi_berp 0xFB, 0	; LD QIZH, 0
 	ldio 0xE4, 0x00	; LD (0xE4), 0x00 - TMP94C241 SFR init
 	ldio 0xE0, 0x00	; LD (0xE0), 0x00
 	ldio 0xED, 0x00	; LD (0xED), 0x00
@@ -2930,23 +2930,23 @@ LZSS_Decompress__prefill_loop:
 	stdi16 3124, 36	; LD (0x0C34), 0x0024
 
 	; === Pre-read 4 sectors for initial buffer fill ===
-	ldi0_werp 0xFA	; LD QIZ, 0
+	ldi_werp 0xFA, 0	; LD QIZ, 0
 LZSS_Decompress__preread_loop:
 	ldda16 xwa, 3124	; LD WA, (0x0C34)
 	extz xwa	; EXTZ XWA
 	ldw bc, 0x2400	; LD BC, 0x2400
-	mul_xbc_werp 0xFA	; MUL XBC, QIZ
+	mul_werp BC, 0xFA	; MUL XBC, QIZ
 	ld xde, 0x99A4	; LD XDE, 0x000099A4
 	add xde, xbc	; ADD XDE, XBC
 	ldw bc, 0x12	; LD BC, 0x0012
 	calr FDC_ReadSectorWrapper	; CALR 0xFFBF92
 	adddi16 3124, 18	; ADD (0x0C34), 0x0012
 	inc1_werp 0xFA	; INC 1, QIZ
-	cpi4_werp 0xFA	; CP QIZ, 4
+	cpi_werp 0xFA, 4	; CP QIZ, 4
 	jr c, LZSS_Decompress__preread_loop	; JR C, .preread_loop
 
 	; === Read 8 header bytes ===
-	ldi0_werp 0xFA	; LD QIZ, 0
+	ldi_werp 0xFA, 0	; LD QIZ, 0
 LZSS_Decompress__read_header_loop:
 	calr LZSS_ReadByte	; CALR LZSS_ReadByte
 	inc1_werp 0xFA	; INC 1, QIZ
@@ -3000,7 +3000,7 @@ LZSS_Decompress__flags_valid:
 	ld iz, hl	; LD IZ, HL
 	cp iz, 0xFFFF	; CP IZ, 0xFFFF
 	jrl z, LZSS_Decompress__done	; JRL Z, .done
-	ldto_a_berp 0xF8	; LD A, IZL - get byte value
+	ldto_berp A, 0xF8	; LD A, IZL - get byte value
 	extz wa	; EXTZ WA
 	calr LZSS_OutputByte	; CALR LZSS_OutputByte
 	; Store byte in sliding window
@@ -3008,7 +3008,7 @@ LZSS_Decompress__flags_valid:
 	incm 1, (xsp + 10)	; INCW 1, (XSP+0x0A)
 	extz xbc	; EXTZ XBC
 	add xbc, (xsp + 16)	; ADD XBC, (XSP+0x10) - add window base
-	ldto_a_berp 0xF8	; LD A, IZL
+	ldto_berp A, 0xF8	; LD A, IZL
 	ld (xbc), a	; LD (XBC), A - store in window
 	andmi16 (xsp + 10), 0xFFF	; AND (XSP+0x0A), 0x0FFF - wrap window pos
 	jr LZSS_Decompress__check_done	; JR T, .check_done
@@ -3017,7 +3017,7 @@ LZSS_Decompress__back_reference:
 	; === BACK-REFERENCE: Read offset and length ===
 	; First byte: low 8 bits of offset
 	calr LZSS_ReadByte	; CALR LZSS_ReadByte
-	ldfr_hl_werp 0xFA	; LD QIZ, HL - save low offset
+	ldfr_werp HL, 0xFA	; LD QIZ, HL - save low offset
 	x_erpw4_ocf_t2 0xFA, 0xFF, 0xFF	; CP QIZ, 0xFFFF
 	jr z, LZSS_Decompress__done	; JR Z, .done
 
@@ -3031,9 +3031,9 @@ LZSS_Decompress__back_reference:
 	ld bc, (xsp + 8)	; LD BC, (XSP+0x08)
 	and bc, 0xF0	; AND BC, 0x00F0 - extract high nibble
 	sll bc, 4	; SLL 4, BC - shift to bits 11-8
-	ldto_wa_werp 0xFA	; LD WA, QIZ
+	ldto_werp WA, 0xFA	; LD WA, QIZ
 	or wa, bc	; OR WA, BC - combine with low byte
-	ldfr_wa_werp 0xFA	; LD QIZ, WA - QIZ = 12-bit offset
+	ldfr_werp WA, 0xFA	; LD QIZ, WA - QIZ = 12-bit offset
 
 	; Extract length: (byte & 0x0F) + 2
 	andmi16 (xsp + 8), 0xF	; AND (XSP+0x08), 0x000F - extract length
@@ -3046,15 +3046,15 @@ LZSS_Decompress__back_reference:
 
 LZSS_Decompress__copy_loop:
 	; Calculate source position in window
-	ldto_wa_werp 0xFA	; LD WA, QIZ - get offset
+	ldto_werp WA, 0xFA	; LD WA, QIZ - get offset
 	add wa, (xsp + 6)	; ADD WA, (XSP+0x06) - add counter
 	and wa, 0xFFF	; AND WA, 0x0FFF - wrap to window
 	extz xwa	; EXTZ XWA
 	add xwa, (xsp + 12)	; ADD XWA, (XSP+0x0C) - add window base
 	ld a, (xwa)	; LD A, (XWA) - read from window
-	ldfr_a_berp 0xF8	; LD IZL, A
+	ldfr_berp A, 0xF8	; LD IZL, A
 	extz iz	; EXTZ IZ
-	ldto_a_berp 0xF8	; LD A, IZL
+	ldto_berp A, 0xF8	; LD A, IZL
 	extz wa	; EXTZ WA
 	calr LZSS_OutputByte	; CALR LZSS_OutputByte
 
@@ -3063,7 +3063,7 @@ LZSS_Decompress__copy_loop:
 	incm 1, (xsp + 10)	; INCW 1, (XSP+0x0A)
 	extz xbc	; EXTZ XBC
 	add xbc, (xsp + 12)	; ADD XBC, (XSP+0x0C)
-	ldto_a_berp 0xF8	; LD A, IZL
+	ldto_berp A, 0xF8	; LD A, IZL
 	ld (xbc), a	; LD (XBC), A
 	andmi16 (xsp + 10), 0xFFF	; AND (XSP+0x0A), 0x0FFF - wrap position
 
@@ -3146,7 +3146,7 @@ Boot_FlashUpdate_Main:
 	; Initialize FDC and detect disk type
 	calr FDC_Reset	; CALR 0x9FBF07 (FDC_Init)
 	calr Boot_DetectDiskType	; CALR Boot_DetectDiskType
-	ldfr_l_berp 0xFB	; LD QIZH, L - save disk type
+	ldfr_berp L, 0xFB	; LD QIZH, L - save disk type
 
 	; Check region code
 	call 0xFFB700	; CALL 0xFFB700 (Boot_Get_Region_Code)
@@ -3159,7 +3159,7 @@ Boot_FlashUpdate_Main:
 	jr z, Boot_FlashUpdate_Main__update_check_flash	; 66 4c
 
 	; Check disk type 6 (skip for type 6)
-	cpi6_berp 0xFB	; CP QIZH, 6
+	cpi_berp 0xFB, 6	; CP QIZH, 6
 	jr z, Boot_FlashUpdate_Main__update_check_flash	; 66 47
 
 	; Display "Flash Memory Update" message
@@ -3171,7 +3171,7 @@ Boot_FlashUpdate_Main:
 	call 0xFFCCFB	; CALL DrawBitmap_UpdateDisplay
 
 	; Execute disk type handler
-	ldto_a_berp 0xFB	; LD A, QIZH
+	ldto_berp A, 0xFB	; LD A, QIZH
 	extz wa	; EXTZ WA
 	calr Boot_LoadDiskData	; CALR Boot_LoadDiskData
 
@@ -3199,7 +3199,7 @@ Boot_FlashUpdate_Main__update_check_flash:
 	jr z, Boot_FlashUpdate_Main__update_done	; 66 4c
 
 	; Only proceed if disk type 6
-	cpi6_berp 0xFB	; CP QIZH, 6
+	cpi_berp 0xFB, 6	; CP QIZH, 6
 	jr nz, Boot_FlashUpdate_Main__update_done	; 6e 47
 
 	; Display update messages and perform update
@@ -3210,7 +3210,7 @@ Boot_FlashUpdate_Main__update_check_flash:
 	ldw de, 0x50	; LD DE, 0x0050
 	call 0xFFCCFB	; CALL DrawBitmap_UpdateDisplay
 
-	ldto_a_berp 0xFB	; LD A, QIZH
+	ldto_berp A, 0xFB	; LD A, QIZH
 	extz wa	; EXTZ WA
 	calr Boot_LoadDiskData	; CALR Boot_LoadDiskData
 
@@ -3252,24 +3252,24 @@ DrawBitmap_UpdateDisplay__db_row_loop:
 	ld wa, iz	; LD WA, IZ
 	extz xwa	; EXTZ XWA
 	div wa, 0x1C	; DIV WA, 0x001C - 28 bytes per row
-	ldto_wa_werp 0xE2	; LD WA, QWA - get remainder
+	ldto_werp WA, 0xE2	; LD WA, QWA - get remainder
 	cps wa, 0	; CP WA, 0
 	jr nz, DrawBitmap_UpdateDisplay__db_not_row_start	; 6e 04
 	ld iy, hl	; LD IY, HL - reset X to start
 	dec 1, ix	; DEC 1, IX - decrement Y
 
 DrawBitmap_UpdateDisplay__db_not_row_start:
-	ldi0_werp 0xEE	; LD QHL, 0 - bit counter
+	ldi_werp 0xEE, 0	; LD QHL, 0 - bit counter
 	ld de, iz	; LD DE, IZ
 	extz xde	; EXTZ XDE
 	add xde, (xsp + 2)	; ADD XDE, (XSP+0x02) - bitmap offset
 	ldada xwa, 4164	; LDA XWA, 0x1044
-	ldto_bc_werp 0xEE	; LD BC, QHL
+	ldto_werp BC, 0xEE	; LD BC, QHL
 	extz xbc	; EXTZ XBC
 	add xbc, xwa	; ADD XBC, XWA
 	ld a, (xbc)	; LD A, (XBC) - get bitmask byte
 	and a, (xde)	; AND A, (XDE) - mask with bitmap data
-	ldfr_a_berp 0xF2	; LD QIXL, A
+	ldfr_berp A, 0xF2	; LD QIXL, A
 
 DrawBitmap_UpdateDisplay__db_calc_addr:
 	ld de, ix	; LD DE, IX - Y position
@@ -3281,7 +3281,7 @@ DrawBitmap_UpdateDisplay__db_calc_addr:
 	sll xwa, 6	; SLL 6, XWA - Y * 320
 
 	; Check if bit set (foreground or background)
-	cpi0_berp 0xF2	; CP QIXL, 0
+	cpi_berp 0xF2, 0	; CP QIXL, 0
 	jr z, DrawBitmap_UpdateDisplay__db_background	; 66 13
 
 	; Foreground pixel
@@ -3506,7 +3506,7 @@ FDC_WaitReady__fwr_loop:
 	extz wa	; EXTZ WA
 	cps wa, 0	; CP WA, 0 - check if ready
 	jr nz, FDC_WaitReady__fwr_not_ready	; 6e 03
-	ldi0_werp 0xFA	; LD QIZ, 0 - flag = success
+	ldi_werp 0xFA, 0	; LD QIZ, 0 - flag = success
 
 FDC_WaitReady__fwr_not_ready:
 	ldda16 xwa, 3072	; LD WA, (0x0C00)
@@ -3520,7 +3520,7 @@ FDC_WaitReady__fwr_continue:
 	jr z, FDC_WaitReady__fwr_loop	; 66 d7
 
 FDC_WaitReady__fwr_check_result:
-	cpi0_werp 0xFA	; CP QIZ, 0
+	cpi_werp 0xFA, 0	; CP QIZ, 0
 	jr z, FDC_WaitReady__fwr_done	; 66 05
 	lds wa, 1	; LD WA, 1 - error code
 	.byte 0x1e, 0xe2, 0x09	; CALR 0x9FE231 (FDC_Error)
@@ -3547,7 +3547,7 @@ FDC_WaitComplete__fwc_loop:
 	and l, 0x90	; AND L, 0x90 - mask DIO+RQM
 	cp l, 0x90	; CP L, 0x90 - both set?
 	jr nz, FDC_WaitComplete__fwc_not_done	; 6e 03
-	ldi0_werp 0xFA	; LD QIZ, 0 - success
+	ldi_werp 0xFA, 0	; LD QIZ, 0 - success
 
 FDC_WaitComplete__fwc_not_done:
 	ldda16 xwa, 3072	; LD WA, (0x0C00)
@@ -3561,7 +3561,7 @@ FDC_WaitComplete__fwc_continue:
 	jr z, FDC_WaitComplete__fwc_loop	; 66 da
 
 FDC_WaitComplete__fwc_check_result:
-	cpi0_werp 0xFA	; CP QIZ, 0
+	cpi_werp 0xFA, 0	; CP QIZ, 0
 	jr z, FDC_WaitComplete__fwc_done	; 66 05
 	lds wa, 1	; LD WA, 1
 	.byte 0x1e, 0x9f, 0x09	; CALR 0x9FE231

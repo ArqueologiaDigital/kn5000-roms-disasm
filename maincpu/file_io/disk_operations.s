@@ -751,7 +751,7 @@ LABEL_F8C3A1:
 	lds iz, 0
 
 LABEL_F8C3E6:
-	ldto_a_berp 0xF8
+	ldto_berp A, 0xF8
 	extz wa
 	call LABEL_F89321
 	inc 1, iz
@@ -832,7 +832,7 @@ LABEL_F8C4AE:
 	lds iz, 0
 
 LABEL_F8C4B7:
-	ldto_a_berp 0xF8
+	ldto_berp A, 0xF8
 	extz wa
 	call LABEL_F8937F
 	inc 1, iz
