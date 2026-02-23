@@ -33,20 +33,26 @@ Issues are tracked with Beads in `.beads/issues.jsonl`. Use `../tools/bd` comman
 ## Build Commands
 
 ```bash
-# Build all ROMs and run byte comparison
+# Build all ROMs (LLVM, primary) and run byte comparison
 make all
 
-# Build specific components
-make rebuilt_ROMs/kn5000_v10_program.rebuilt.rom      # Main CPU
-make rebuilt_ROMs/kn5000_subprogram_v142.rebuilt.rom  # Sub CPU
-make rebuilt_ROMs/kn5000_table_data.rebuilt.rom       # Table data
+# Full build: both ASL and LLVM (for cross-verification)
+make all-full
+
+# Build specific LLVM ROM targets
+make rebuilt_ROMs/kn5000_v10_program.llvm.rom         # Main CPU
+make rebuilt_ROMs/kn5000_subprogram_v142.llvm.rom     # Sub CPU payload
+make rebuilt_ROMs/kn5000_subcpu_boot.llvm.rom         # Sub CPU boot
+make rebuilt_ROMs/kn5000_table_data.llvm.rom          # Table data
+make rebuilt_ROMs/kn5000_custom_data.llvm.rom         # Custom data
+make rebuilt_ROMs/hd-ae5000_v2_06i.llvm.rom           # HDAE5000
+
+# Reconvert ASL sources to LLVM (regenerates .s files)
+make llvm-convert-all
 
 # Clean build artifacts
 make clean              # All
-make clean_maincpu      # Main CPU only
-make clean_subcpu       # Sub CPU only
-make clean_table_data   # Table data only
-make clean_preset_data  # Preset data intermediate files
+make clean_llvm         # LLVM only
 
 # Rebuild preset data (assemble + LZSS compress)
 make rebuild-preset-data
@@ -61,7 +67,11 @@ make rom-status         # Generate ROM status diagram
 make website            # All of the above (gallery + issues + rom-status)
 ```
 
-The ASL assembler path is configured in the Makefile at `ASL_PATH`.
+### Assembly Source Organization
+- **LLVM sources** (primary, in `*/llvm/` directories): TLCS-900 assembly using LLVM syntax
+- **ASL sources** (secondary, in `*/` directories): Original ASL syntax, input to `scripts/asl_to_llvm.py`
+- **Converter**: `scripts/asl_to_llvm.py` generates LLVM sources from ASL with block-buffer correction
+- LLVM build pipeline: `llvm-mc -triple=tlcs900` → `ld.lld` → `llvm-objcopy` → raw binary
 
 ## Project Policies
 
