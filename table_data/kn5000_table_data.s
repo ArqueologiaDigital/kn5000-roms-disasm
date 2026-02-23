@@ -1916,7 +1916,7 @@ Boot_CopySectors__cs_partial_loop:
 	ld (xsp + 14), xwa	; LD (XSP+0x0E), XWA
 	ld xwa, xbc	; LD XWA, XBC
 	ld xde, (xsp + 10)	; LD XDE, (XSP+0x0A) - source ptr
-	ld_xbc_spil 0xEA	; LD XBC, (XDE+) - get callback addr
+	ld_spil XBC, 0xEA	; LD XBC, (XDE+) - get callback addr
 	ld (xsp + 10), xde	; LD (XSP+0x0A), XDE
 	call 0xFFBCD7	; CALL 0xFFBCD7 - write with callback
 	inc1_werp 0xFA	; INC 1, QIZ
@@ -1957,7 +1957,7 @@ Boot_CopySectors__cs_full_loop:
 	ld (xsp + 14), xwa	; LD (XSP+0x0E), XWA
 	ld xwa, xbc	; LD XWA, XBC
 	ld xde, (xsp + 10)	; LD XDE, (XSP+0x0A)
-	ld_xbc_spil 0xEA	; LD XBC, (XDE+)
+	ld_spil XBC, 0xEA	; LD XBC, (XDE+)
 	ld (xsp + 10), xde	; LD (XSP+0x0A), XDE
 	call 0xFFBCD7	; CALL 0xFFBCD7
 	inc1_werp 0xFA	; INC 1, QIZ
@@ -1993,7 +1993,7 @@ Boot_CopySectors__cs_rem_loop:
 	ld (xsp + 14), xwa	; LD (XSP+0x0E), XWA
 	ld xwa, xbc	; LD XWA, XBC
 	ld xde, (xsp + 10)	; LD XDE, (XSP+0x0A)
-	ld_xbc_spil 0xEA	; LD XBC, (XDE+)
+	ld_spil XBC, 0xEA	; LD XBC, (XDE+)
 	ld (xsp + 10), xde	; LD (XSP+0x0A), XDE
 	call 0xFFBCD7	; CALL 0xFFBCD7
 	inc1_werp 0xFA	; INC 1, QIZ
@@ -2051,7 +2051,7 @@ Boot_CopySectorsEx__cse_partial_loop:
 	ld (xsp + 14), xbc	; LD (XSP+0x0E), XBC
 	ld xbc, xde	; LD XBC, XDE
 	ld xhl, (xsp + 10)	; LD XHL, (XSP+0x0A)
-	ld_de_spiw 0xED	; LD DE, (XHL+)
+	ld_spiw DE, 0xED	; LD DE, (XHL+)
 	ld (xsp + 10), xhl	; LD (XSP+0x0A), XHL
 	call 0xFFB903	; CALL 0xFFB903 (Flash_ProgramWord_16bit)
 	inc1_werp 0xFA	; INC 1, QIZ
@@ -2094,7 +2094,7 @@ Boot_CopySectorsEx__cse_full_loop:
 	ld (xsp + 14), xbc	; LD (XSP+0x0E), XBC
 	ld xbc, xde	; LD XBC, XDE
 	ld xhl, (xsp + 10)	; LD XHL, (XSP+0x0A)
-	ld_de_spiw 0xED	; LD DE, (XHL+)
+	ld_spiw DE, 0xED	; LD DE, (XHL+)
 	ld (xsp + 10), xhl	; LD (XSP+0x0A), XHL
 	call 0xFFB903	; CALL 0xFFB903
 	inc1_werp 0xFA	; INC 1, QIZ
@@ -2131,7 +2131,7 @@ Boot_CopySectorsEx__cse_rem_loop:
 	ld (xsp + 14), xbc	; LD (XSP+0x0E), XBC
 	ld xbc, xde	; LD XBC, XDE
 	ld xhl, (xsp + 10)	; LD XHL, (XSP+0x0A)
-	ld_de_spiw 0xED	; LD DE, (XHL+)
+	ld_spiw DE, 0xED	; LD DE, (XHL+)
 	ld (xsp + 10), xhl	; LD (XSP+0x0A), XHL
 	call 0xFFB903	; CALL 0xFFB903
 	inc1_werp 0xFA	; INC 1, QIZ
@@ -2485,8 +2485,8 @@ Boot_VerifyFlash__vf_bank_loop:
 	ld xiy, 0x3FFFF	; LD XIY, 0x0003FFFF - 256KB-1
 
 Boot_VerifyFlash__vf_compare:
-	ld_de_spiw 0xF1	; LD DE, (XIX+) - read source
-	cp_de_spiw 0xED	; CP DE, (XHL+) - compare with flash
+	ld_spiw DE, 0xF1	; LD DE, (XIX+) - read source
+	cp_spiw DE, 0xED	; CP DE, (XHL+) - compare with flash
 	jr nz, Boot_VerifyFlash__vf_mismatch	; 6e 10
 	ld xde, xiy	; LD XDE, XIY
 	dec 1, xiy	; DEC 1, XIY
@@ -2526,7 +2526,7 @@ Boot_ProgramCustomFlash__pcf_copy_loop:
 	x_dpi2_s31 0xE1	; LDA XBC, XWA+
 	ld (xsp + 8), xwa	; LD (XSP+0x08), XWA
 	ld xwa, (xsp + 4)	; LD XWA, (XSP+0x04) - source ptr
-	ld_de_spiw 0xE1	; LD DE, (XWA+)
+	ld_spiw DE, 0xE1	; LD DE, (XWA+)
 	ld (xsp + 4), xwa	; LD (XSP+0x04), XWA
 	lds wa, 1	; LD WA, 1 - bank 1
 	call 0xFFB903	; CALL 0xFFB903 (Flash_ProgramWord_16bit)
@@ -2567,7 +2567,7 @@ Flash_ProgramHDAE_Initialization__phd1_copy_loop:
 	ld (xsp + 8), xwa	; LD (XSP+0x08), XWA
 	ld xwa, xbc	; LD XWA, XBC
 	ld xde, (xsp + 4)	; LD XDE, (XSP+0x04)
-	ld_xbc_spil 0xEA	; LD XBC, (XDE+)
+	ld_spil XBC, 0xEA	; LD XBC, (XDE+)
 	ld (xsp + 4), xde	; LD (XSP+0x04), XDE
 	call 0xFFBCD7	; CALL 0xFFBCD7 (write with callback)
 	inc 1, xiz	; INC 1, XIZ
@@ -2606,7 +2606,7 @@ Flash_ProgramHDAE_Payload__phd2_copy_loop:
 	ld (xsp + 8), xwa	; LD (XSP+0x08), XWA
 	ld xwa, xbc	; LD XWA, XBC
 	ld xde, (xsp + 4)	; LD XDE, (XSP+0x04)
-	ld_xbc_spil 0xEA	; LD XBC, (XDE+)
+	ld_spil XBC, 0xEA	; LD XBC, (XDE+)
 	ld (xsp + 4), xde	; LD (XSP+0x04), XDE
 	call 0xFFBCD7	; CALL 0xFFBCD7
 	inc 1, xiz	; INC 1, XIZ

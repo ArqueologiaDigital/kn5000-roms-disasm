@@ -1476,7 +1476,7 @@ HDAE5000_StrCopy__find_end:
 	ld xbc, (xsp + 8)	; ld XBC, (XSP+0x08) - src
 	jr HDAE5000_StrCopy__copy_check
 HDAE5000_StrCopy__copy_loop:
-	ld_a_spib 0xE4	; ld A, (XBC+) - read src byte
+	ld_spib A, 0xE4	; ld A, (XBC+) - read src byte
 	x_dpi2_s41 0xE8	; ld (XDE+), A - write to dest
 HDAE5000_StrCopy__copy_check:
 	cpmi8 (xbc), 0x0	; cp (XBC), 0 - check for null

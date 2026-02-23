@@ -98887,7 +98887,7 @@ TONE_GEN_WRITE:
 	ldb d, 0x8
 TONE_GEN_WRITE__write_loop:
 	ld (xhl), a
-	ld_e_spib 0xE4
+	ld_spib E, 0xE4
 	ld (xhl + 2), e
 	inc 1, a
 	djnz8 d, TONE_GEN_WRITE__write_loop
@@ -98993,7 +98993,7 @@ CHECKSUM_CALC:
 	extz xbc	; Zero-extend BC to XBC
 	add xbc, xwa	; End address = start + count
 CHECKSUM_CALC__loop:
-	add_xhl_spil 0xE2	; add XHL, (XWA+)
+	add_spil XHL, 0xE2	; add XHL, (XWA+)
 	cp xwa, xbc
 	jr lt, CHECKSUM_CALC__loop	; Loop while XWA < end
 	cpl hl	; Complement result
@@ -99864,7 +99864,7 @@ ROM_CHECKSUM__word_loop:
 	st_b_dri3 0x07, 0xF0, 0xE4
 	ld bc, (xde)	; Get current sum
 	ldfr_werp BC, 0xE2
-	ld_bc_spiw 0xF5	; Read word from ROM
+	ld_spiw BC, 0xF5	; Read word from ROM
 	add_werp BC, 0xE2	; Add to sum
 	ld (xde), bc	; Store result
 	inc 1, xiz
@@ -100725,7 +100725,7 @@ DEBUG_OUTPUT_STRING:
 	push xiz
 	ld xix, xwa	; XIX = string pointer
 DEBUG_OUTPUT_STRING__loop:
-	ld_a_spib 0xF0	; Load next char, increment
+	ld_spib A, 0xF0	; Load next char, increment
 	cps a, 0	; Check for null terminator
 	jr z, DEBUG_OUTPUT_STRING__done	; If null, exit
 	push xix

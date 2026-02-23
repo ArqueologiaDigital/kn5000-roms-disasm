@@ -9426,7 +9426,7 @@ LABEL_01F89A:
 	bitda 2, 4148
 	jr nz, LABEL_01F8B2
 	ld xwa, (xsp + 6)
-	ld_c_spib 0xE0
+	ld_spib C, 0xE0
 	ld (xsp + 6), xwa
 	extz bc
 	ld wa, bc
@@ -9435,7 +9435,7 @@ LABEL_01F89A:
 
 LABEL_01F8B2:
 	ld xwa, (xsp + 6)
-	ld_c_spib 0xE0
+	ld_spib C, 0xE0
 	ld (xsp + 6), xwa
 	extz bc
 	ld xwa, 0x1016
@@ -9902,7 +9902,7 @@ DSP_Write_Channel:	; 01FCDEh
 
 DSP_Write_Channel_Loop:
 	ld (xhl), a	; Write register address
-	ld_e_spib 0xE4	; Get next data byte
+	ld_spib E, 0xE4	; Get next data byte
 	ld (xhl + 2), e	; Write data value
 	inc 1, a	; Next register
 	djnz8 d, DSP_Write_Channel_Loop
@@ -31680,7 +31680,7 @@ LABEL_02E273:
 	ret nc
 
 LABEL_02E27B:
-	ld_c_spib 0xE0
+	ld_spib C, 0xE0
 	x_dpi2_s43 0xEC
 	inc 1, ix
 	cp ix, de
@@ -33427,7 +33427,7 @@ LABEL_0309EA:
 	jr nc, LABEL_030A08
 
 LABEL_0309FC:
-	ld_a_spib 0xE4
+	ld_spib A, 0xE4
 	x_dpi2_s41 0xF8
 	inc 1, de
 	cp de, hl
@@ -33843,7 +33843,7 @@ LABEL_03120F:
 
 LABEL_031218:
 	ld xwa, (xsp + 8)
-	ld_c_spib 0xF8
+	ld_spib C, 0xF8
 	x_dpi2_s43 0xE0
 	ld (xsp + 8), xwa
 	inc 1, de
@@ -34125,7 +34125,7 @@ LABEL_031A57:
 	ret nc
 
 LABEL_031A5F:
-	ld_c_spib 0xEC
+	ld_spib C, 0xEC
 	x_dpi2_s43 0xE8
 	inc 1, ix
 	cp ix, wa
@@ -38886,7 +38886,7 @@ LABEL_034FE6:
 	jr z, LABEL_035000
 
 LABEL_034FFA:
-	add_de_spiw 0xE1
+	add_spiw DE, 0xE1
 	djnz xbc, LABEL_034FFA
 
 LABEL_035000:
@@ -39848,7 +39848,7 @@ DSP_RingBuf_Enqueue:
 	ldada xwa, 15206
 	extz xbc
 	add xbc, xwa
-	ld_a_spib 0xEC
+	ld_spib A, 0xEC
 	ld (xbc), a
 	incdi16 1, 15204
 	inc 1, ix
@@ -46095,7 +46095,7 @@ LABEL_03869B:
 	ld xwa, (xsp + 16)
 	ld xwa, (xwa)
 	ld (xsp + 6), xwa
-	ld_c_spib 0xE0
+	ld_spib C, 0xE0
 	ld (xsp + 6), xwa
 	cps c, 1
 	jr z, LABEL_0386EA
@@ -46976,7 +46976,7 @@ LABEL_038FE8:
 	ld (xsp + 4), xwa
 	ld xwa, (xsp + 4)
 	ld xiz, (xwa)
-	ld_a_spib 0xF8
+	ld_spib A, 0xF8
 	cps a, 2
 	jrl z, LABEL_039148
 	cps a, 1
@@ -47972,7 +47972,7 @@ LABEL_039ABD:
 	ld xwa, (xsp + 86)
 	ld xwa, (xwa)
 	ld (xsp + 2), xwa
-	ld_l_spib 0xE0
+	ld_spib L, 0xE0
 	ld (xsp + 2), xwa
 	and l, 0xF0
 	jr nz, LABEL_039AF2
@@ -48639,7 +48639,7 @@ LABEL_03A282:
 	ld (xsp + 4), xwa
 	ld xwa, (xsp + 4)
 	ld xiz, (xwa)
-	ld_a_spib 0xF8
+	ld_spib A, 0xF8
 	cps a, 2
 	jrl z, LABEL_03A3E2
 	cps a, 1
@@ -48840,7 +48840,7 @@ LABEL_03A4B7:
 	ld (xsp + 20), xwa
 	ld xwa, (xsp + 20)
 	ld xiz, (xwa)
-	ld_a_spib 0xF8
+	ld_spib A, 0xF8
 	and a, 0xF0
 	cp a, 0x20
 	jr z, LABEL_03A4EA
@@ -48999,7 +48999,7 @@ LABEL_03A620:
 	extz wa
 	ld (xsp + 2), wa
 	ld xwa, (xsp + 56)
-	ld_c_spib 0xE0
+	ld_spib C, 0xE0
 	ld (xsp + 56), xwa
 	and c, 0xF0
 	extz bc
@@ -50110,7 +50110,7 @@ LABEL_03B505:
 	extz wa
 	ld (xsp + 2), wa
 	ld xwa, (xsp + 40)
-	ld_c_spib 0xE0
+	ld_spib C, 0xE0
 	ld (xsp + 40), xwa
 	and c, 0xF0
 	ld a, c
@@ -50189,7 +50189,7 @@ LABEL_03B5F9:
 	cps wa, 2
 	jr nz, LABEL_03B624
 	ld xwa, (xsp + 40)
-	ld_c_spib 0xE0
+	ld_spib C, 0xE0
 	ld (xsp + 40), xwa
 	and c, 0x1F
 	ld a, c
@@ -51461,7 +51461,7 @@ DSP_Bytecode_Op0D_StateChange:
 
 DSP_Bytecode_Op0E_SendCommand:
 	ld xwa, (xsp + 26)
-	ld_c_spib 0xE0
+	ld_spib C, 0xE0
 	ld (xsp + 26), xwa
 	ld a, c
 	extz wa
@@ -51476,7 +51476,7 @@ DSP_Bytecode_Op0E_SendCommand:
 
 DSP_Bytecode_Op0E_DataLoop:
 	ld xwa, (xsp + 26)
-	ld_c_spib 0xE0
+	ld_spib C, 0xE0
 	ld (xsp + 26), xwa
 	ld a, c
 	extz wa
