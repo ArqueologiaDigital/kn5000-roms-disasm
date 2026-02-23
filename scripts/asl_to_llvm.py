@@ -4017,98 +4017,25 @@ def eval_expr(expr):
 # ============================================================================
 
 def convert_macro_file(input_path, output_path):
-    """Convert the ASL macro library to LLVM .macro/.endm format."""
+    """Parse the ASL macro library to populate KNOWN_MACROS.
+
+    The tmp94c241.inc macros are all ASL workarounds that emit raw bytes.
+    Since the LLVM backend supports all these instructions natively, we
+    only need to parse macro names for recognition during conversion —
+    no output file is generated.
+    """
     with open(input_path, 'r') as f:
         lines = f.readlines()
 
-    output_lines = []
-    current_params = []  # Parameter names for current macro
-
     for line in lines:
-        line = line.rstrip('\n')
         stripped = line.strip()
-
-        if not stripped:
-            output_lines.append("")
-            continue
-
-        if stripped.startswith(';'):
-            output_lines.append(line)
-            continue
-
-        # MACRO definition
         m = re.match(r'^(\w+)\s+MACRO\s*(.*)', stripped, re.IGNORECASE)
         if m:
             macro_name = m.group(1)
-            args_str = m.group(2).strip()
             KNOWN_MACROS.add(macro_name.upper())
-            current_params = re.split(r'[,\s]+', args_str) if args_str else []
 
-            if args_str:
-                output_lines.append(f".macro {macro_name} {args_str}")
-            else:
-                output_lines.append(f".macro {macro_name}")
-            continue
-
-        # ENDM
-        if stripped.upper() == 'ENDM':
-            output_lines.append(".endm")
-            output_lines.append("")
-            current_params = []
-            continue
-
-        # Macro body: convert db/dw to .byte/.short with parameter escaping
-        code_part, comment = split_comment(stripped)
-        code_stripped = code_part.strip()
-
-        if code_stripped:
-            first_word, remainder = get_first_word(code_stripped)
-            first_upper = first_word.upper()
-
-            if first_upper == 'DB':
-                converted = convert_macro_body_bytes(remainder.strip(), current_params)
-                line_out = f"\t.byte {converted}"
-            elif first_upper == 'DW':
-                converted = convert_macro_body_expr(remainder.strip(), current_params)
-                line_out = f"\t.short {converted}"
-            elif first_upper == 'DD':
-                converted = convert_macro_body_expr(remainder.strip(), current_params)
-                line_out = f"\t.long {converted}"
-            else:
-                line_out = f"\t; (unconverted) {stripped}"
-
-            if comment:
-                line_out += f"\t{comment}"
-            output_lines.append(line_out)
-        else:
-            output_lines.append(f"\t{comment}" if comment else "")
-
-    os.makedirs(os.path.dirname(output_path), exist_ok=True)
-    with open(output_path, 'w') as f:
-        f.write('\n'.join(output_lines) + '\n')
-
-    print(f"  Converted macro library: {input_path} → {output_path}")
-    print(f"  Found {len(KNOWN_MACROS)} macro definitions")
-
-
-def convert_macro_body_bytes(args, params):
-    """Convert db args in macro body, escaping parameter references."""
-    parts = split_db_args(args)
-    converted = [convert_macro_body_expr(p.strip(), params) for p in parts]
-    return ', '.join(converted)
-
-
-def convert_macro_body_expr(expr, params):
-    """Convert expression in macro body, handling parameter references."""
-    expr = convert_hex_in_text(expr)
-    expr = re.sub(r'(?<!\w)\$(?!\w)', '.', expr)
-
-    # Escape parameter references: bare param name → \param
-    for param in params:
-        if param:
-            expr = re.sub(r'\b' + re.escape(param) + r'\b', '\\\\' + param, expr)
-
-    return expr
+    print(f"  Parsed macro library: {input_path}")
+    print(f"  Found {len(KNOWN_MACROS)} macro definitions (no output file generated)")
 
 
 # ============================================================================
@@ -4832,14 +4759,13 @@ def main():
     load_original_rom(args.rom_file)
     print()
 
-    # Step 1: Convert macro library (still separate — needed for macro name detection)
+    # Step 1: Parse macro library for KNOWN_MACROS (no output file generated)
     macro_input = os.path.normpath(os.path.join(main_dir, '..', 'tmp94c241.inc'))
     if not os.path.exists(macro_input):
         macro_input = 'tmp94c241.inc'
-    macro_output = os.path.join(str(LLVM_DIR), 'tmp94c241.inc.s')
 
-    print("Step 1: Converting macro library...")
-    convert_macro_file(macro_input, macro_output)
+    print("Step 1: Parsing macro library...")
+    convert_macro_file(macro_input, None)
     print()
 
     # Step 2: Convert main file + all includes into single output
