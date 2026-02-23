@@ -18,7 +18,6 @@ Usage:
 """
 
 import argparse
-import bisect
 import os
 import re
 import sys
@@ -50,10 +49,6 @@ KNOWN_EQUS = {}
 ADDR_TO_LABEL = {}
 ADDR_TO_LABEL_ALL = {}
 
-# LABEL_XXXXXX collected for .set emission (suppressed from inline).
-# Inline labels may have position drift; .set has exact ORG addresses.
-SET_ONLY_LABELS = {}  # label_name -> addr
-
 # Synthetic forward labels needed by JR T $+2 (delay NOP) conversion.
 # Maps target address → label name. Emitted in convert_all() before the next instruction.
 SYNTHETIC_FORWARD_LABELS = {}  # addr -> label_name
@@ -67,14 +62,6 @@ RESERVED_LABEL_NAMES = {
     'sr', 'f',                                      # special registers
     'z', 'nz', 'c', 'nc', 'ov', 'nov', 'mi', 'pl',   # condition codes
     'lt', 'le', 'ge', 'gt', 'ule', 'ugt', 't',
-}
-
-# Named labels with drifted inline positions in the LLVM output.
-# These labels are in block-overflow regions where their inline positions
-# are wrong. They are redirected to .set with correct ADDR_TRACKER addresses,
-# making them safe for PC-relative branch resolution (JR/JRL/CALR).
-DRIFTED_LABEL_NAMES = {
-    'fmmpdmedleyfunc', 'fmmsmfmedleyfunc',
 }
 
 # EQU names promoted to inline labels (suppressed from .equ emission).
@@ -286,6 +273,9 @@ class AddressTracker:
             self.current_addr += nbytes
 
     def get_addr(self):
+        """Return current address, or None if frozen (inside macro def)."""
+        if self.frozen:
+            return None
         return self.current_addr
 
     def freeze(self):
@@ -302,25 +292,9 @@ ADDR_TRACKER = AddressTracker()
 
 # Block byte buffer context: when set, byte-emitting functions (instructions,
 # data directives) read from this buffer instead of ORIGINAL_ROM. A "block" is
-# the region between two consecutive self-correction labels. Since label
-# addresses are known-correct, the bytes in the block are guaranteed correct.
-# Instruction sizing errors only affect line breaks, not content or total count.
-BLOCK_BUFFER = None      # byte buffer for current block (ROM slice)
-BLOCK_CURSOR = 0         # position within block buffer
-BLOCK_SIZE = 0           # total size of block (next_label - this_label)
-BLOCK_START_ADDR = 0     # absolute address of block start
-_SAVED_BLOCK_BUFFER = None  # saved during macro definitions
-
 # Segment-level tracking for the overall segment
 SEG_START_ADDR = 0     # start address of segment
 SEG_END_ADDR = 0       # end address of segment (next segment start)
-
-# Pending .org corrections from self-correction at labels
-PENDING_ORG_CORRECTIONS = []
-
-# Self-correction flag: set by convert_line() when self-correction occurs
-SELF_CORRECTION_TRIGGERED = False
-SELF_CORRECTION_ADDR = 0
 
 # Macro expansion sizes: maps macro name (upper) → number of leaf instructions.
 # Inline macros (defined in source) may expand to multiple instructions.
@@ -1019,8 +993,6 @@ def convert_line(line, in_file_path):
     Returns the converted line string.
     """
     global IN_MACRO_DEF, CURRENT_MACRO_DEF_NAME, CURRENT_MACRO_INSTR_COUNT
-    global BLOCK_BUFFER, BLOCK_CURSOR, SELF_CORRECTION_TRIGGERED, SELF_CORRECTION_ADDR
-    global _SAVED_BLOCK_BUFFER
     global NATIVE_INSTR_COUNT, BYTE_FALLBACK_COUNT
 
     stripped = line.rstrip()
@@ -1097,12 +1069,11 @@ def convert_line(line, in_file_path):
     if label and label.startswith('.'):
         label = qualify_local_label(label)
 
-    # Self-correct address tracker and segment cursor at labels with known addresses.
+    # Reset address tracker at labels with known addresses.
     # Labels like LABEL_XXXXXX encode their address in the name.
-    # This resets ADDR_TRACKER and SEG_CURSOR to eliminate cumulative drift.
     # Skip labels that are EQU definitions (they alias other names, not addresses).
     is_equ_line = rest and re.match(r'^EQU\b', rest.strip(), re.IGNORECASE)
-    if label and ADDR_TRACKER.get_addr() is not None and not is_equ_line:
+    if label and not is_equ_line:
         expected_addr = None
         m_lbl = re.match(r'^LABEL_([0-9A-Fa-f]{6})$', label)
         if m_lbl:
@@ -1118,30 +1089,10 @@ def convert_line(line, in_file_path):
             if actual_addr is not None and expected_addr < actual_addr:
                 pass  # Backward label — keep current tracker position
             else:
-                if expected_addr != actual_addr:
-                    ADDR_TRACKER.set_org(expected_addr)
-                # Signal block boundary to convert_all() for EVERY forward
-                # address-encoding label. Blocks are sized between consecutive
-                # labels, limiting instruction sizing error accumulation.
-                if BLOCK_BUFFER is not None:
-                    if SEG_START_ADDR <= expected_addr <= SEG_END_ADDR:
-                        SELF_CORRECTION_TRIGGERED = True
-                        SELF_CORRECTION_ADDR = expected_addr
-
-        # Suppress LABEL_XXXXXX inline emission when on a line WITH an instruction.
-        # Those labels can drift because instruction bytes are consumed before
-        # block correction padding. Label-only lines are safe (no bytes consumed,
-        # padding aligns the label to the correct position).
-        if m_lbl and expected_addr is not None and rest:
-            SET_ONLY_LABELS[label] = expected_addr
-            label = None
+                ADDR_TRACKER.set_org(expected_addr)
 
     # Label-only line
     if not rest:
-        # Redirect drifted labels to .set — suppress inline emission.
-        # The correct address is looked up from ADDR_TO_LABEL_ALL (reverse map).
-        if label and label.lower() in DRIFTED_LABEL_NAMES:
-            label = None  # suppress inline; address populated later from label maps
         result = f"{label}:" if label else ""
         if comment:
             result += f"\t{comment}" if label else comment
@@ -1223,13 +1174,6 @@ def convert_line(line, in_file_path):
     if re.match(r'^MACRO(?:\s|$)', remainder.strip(), re.IGNORECASE):
         IN_MACRO_DEF += 1
         ADDR_TRACKER.freeze()
-        # Disable block buffer during macro defs so .byte lines inside the
-        # macro template don't consume ROM bytes. The assembler doesn't emit
-        # bytes for macro definitions — only for invocations.
-        if IN_MACRO_DEF == 1:
-            global _SAVED_BLOCK_BUFFER
-            _SAVED_BLOCK_BUFFER = BLOCK_BUFFER
-            BLOCK_BUFFER = None
         macro_name = first_word
         KNOWN_MACROS.add(macro_name.upper())
         if IN_MACRO_DEF == 1:
@@ -1258,8 +1202,6 @@ def convert_line(line, in_file_path):
             IN_MACRO_DEF -= 1
             if IN_MACRO_DEF == 0:
                 ADDR_TRACKER.unfreeze()
-                # Restore block buffer after macro definition
-                BLOCK_BUFFER = _SAVED_BLOCK_BUFFER
                 if is_known_endm:
                     return ""
         return ".endm"
@@ -1292,44 +1234,7 @@ def convert_line(line, in_file_path):
         nbytes = 4 * nvalues
         addr = ADDR_TRACKER.get_addr()
 
-        # When inside a block buffer, always emit from ROM
-        if BLOCK_BUFFER is not None:
-            remaining = BLOCK_SIZE - BLOCK_CURSOR
-            if nbytes > remaining:
-                nbytes = remaining
-            if nbytes > 0:
-                rom_bytes = BLOCK_BUFFER[BLOCK_CURSOR:BLOCK_CURSOR + nbytes]
-                original = f"DD {args_raw}"
-                result = ""
-                if label:
-                    result = f"{label}:{label_addr_suffix}\n"
-                # Emit as .long values (4 bytes each, little-endian)
-                longs = []
-                for i in range(0, nbytes, 4):
-                    chunk = rom_bytes[i:i+4]
-                    if len(chunk) == 4:
-                        val = chunk[0] | (chunk[1] << 8) | (chunk[2] << 16) | (chunk[3] << 24)
-                        longs.append(f'0x{val:08X}')
-                    else:
-                        # Partial word at end — emit as .byte
-                        byte_str = ', '.join(f'0x{b:02x}' for b in chunk)
-                        longs.append(None)
-                        valid = [l for l in longs if l]
-                        if valid:
-                            long_str = ', '.join(valid)
-                            result += f"\t.long {long_str}\t; {original}"
-                        result += f"\n\t.byte {byte_str}"
-                        break
-                else:
-                    long_str = ', '.join(longs)
-                    result += f"\t.long {long_str}\t; {original}"
-                BLOCK_CURSOR += nbytes
-                ADDR_TRACKER.advance(nbytes)
-                if comment:
-                    result += f"\t{comment}"
-                return result
-
-        # Outside block buffer — use source-based conversion
+        # When ROM is available and args reference labels, emit from ROM
         if _dw_has_label_refs(args_raw) and addr is not None:
             rom_bytes = get_rom_bytes(addr, nbytes)
             if rom_bytes is not None:
@@ -1388,8 +1293,6 @@ def convert_line(line, in_file_path):
             result += f"\t{comment}"
         if nbytes is not None:
             ADDR_TRACKER.advance(nbytes)
-            if BLOCK_BUFFER is not None:
-                BLOCK_CURSOR += nbytes
         return result
 
     if first_upper == 'BINCLUDE':
@@ -1405,8 +1308,6 @@ def convert_line(line, in_file_path):
             result += f"\t{comment}"
         if fsize > 0:
             ADDR_TRACKER.advance(fsize)
-            if BLOCK_BUFFER is not None:
-                BLOCK_CURSOR += fsize
         return result
 
     # ---- Macro invocations ----
@@ -1438,46 +1339,31 @@ def convert_line(line, in_file_path):
             result = f"{label}:{label_addr_suffix}\n"
 
         if first_word.upper() in LLVM_MACRO_BODIES:
-            # Macro calls expand to full instruction sequences.  If the
-            # invocation spans a block boundary (nbytes > remaining), fall
-            # through to inline expansion which handles partial blocks.
-            can_emit_call = True
-            if BLOCK_BUFFER is not None and nbytes is not None:
-                remaining = BLOCK_SIZE - BLOCK_CURSOR
-                if nbytes > remaining:
-                    can_emit_call = False
-            if can_emit_call:
-                args = remainder.strip()
-                if args:
-                    arg_list = split_operands(args)
-                    converted_args = [convert_expression(a) for a in arg_list]
-                    # Resolve LABEL_XXXXXX references to numeric addresses.
-                    # ExtAddrMode instructions (ldada_24, ldda16_24) inside
-                    # macro bodies don't support symbol relocations.
-                    for i, ca in enumerate(converted_args):
-                        m = re.match(r'^LABEL_([0-9A-Fa-f]+)$', ca)
-                        if m:
-                            converted_args[i] = '0x' + m.group(1)
-                    args_str = ', '.join(converted_args)
-                    result += f"\t{first_word} {args_str}"
-                else:
-                    result += f"\t{first_word}"
-                NATIVE_INSTR_COUNT += instr_count
-                if BLOCK_BUFFER is not None and nbytes is not None:
-                    BLOCK_CURSOR += nbytes
-                if nbytes is not None:
-                    ADDR_TRACKER.advance(nbytes)
-                if comment:
-                    result += f"\t{comment}"
-                return result
+            args = remainder.strip()
+            if args:
+                arg_list = split_operands(args)
+                converted_args = [convert_expression(a) for a in arg_list]
+                # Resolve LABEL_XXXXXX references to numeric addresses.
+                # ExtAddrMode instructions (ldada_24, ldda16_24) inside
+                # macro bodies don't support symbol relocations.
+                for i, ca in enumerate(converted_args):
+                    m = re.match(r'^LABEL_([0-9A-Fa-f]+)$', ca)
+                    if m:
+                        converted_args[i] = '0x' + m.group(1)
+                args_str = ', '.join(converted_args)
+                result += f"\t{first_word} {args_str}"
+            else:
+                result += f"\t{first_word}"
+            NATIVE_INSTR_COUNT += instr_count
+            if nbytes is not None:
+                ADDR_TRACKER.advance(nbytes)
+            if comment:
+                result += f"\t{comment}"
+            return result
 
-        if BLOCK_BUFFER is not None and nbytes is not None:
-            # Use block buffer for macro bytes
-            remaining = BLOCK_SIZE - BLOCK_CURSOR
-            if nbytes > remaining:
-                nbytes = remaining
-            if nbytes > 0:
-                rom_bytes = BLOCK_BUFFER[BLOCK_CURSOR:BLOCK_CURSOR + nbytes]
+        if addr is not None and nbytes is not None:
+            rom_bytes = get_rom_bytes(addr, nbytes)
+            if rom_bytes is not None:
                 if instr_count == 1:
                     # Single-instruction macro: try native conversion
                     native = try_convert_native(first_word, remainder.strip(), rom_bytes, nbytes, addr)
@@ -1532,20 +1418,7 @@ def convert_line(line, in_file_path):
                             BYTE_FALLBACK_COUNT += 1
                         cur_offset += sz
                         cur_addr += sz
-                BLOCK_CURSOR += nbytes
                 ADDR_TRACKER.advance(nbytes)
-            else:
-                args = remainder.strip()
-                original = f"{first_word} {args}".strip() if args else first_word
-                result += f"\t; (block overflow) {original}"
-        elif addr is not None and nbytes is not None:
-            offset = addr - ROM_BASE
-            rom_bytes = ORIGINAL_ROM[offset:offset + nbytes]
-            byte_str = ', '.join(f'0x{b:02x}' for b in rom_bytes)
-            args = remainder.strip()
-            original = f"{first_word} {args}".strip() if args else first_word
-            result += f"\t.byte {byte_str}\t; {original}"
-            ADDR_TRACKER.advance(nbytes)
         else:
             # Fallback: emit the macro call (may not assemble)
             args = remainder.strip()
@@ -3577,7 +3450,7 @@ def try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr=None):
 
 def convert_instruction(label, mnemonic, operands_str, comment, label_addr_suffix=""):
     """Convert a CPU instruction to native LLVM or .byte fallback."""
-    global BLOCK_CURSOR, NATIVE_INSTR_COUNT, BYTE_FALLBACK_COUNT
+    global NATIVE_INSTR_COUNT, BYTE_FALLBACK_COUNT
 
     result = ""
     if label:
@@ -3586,13 +3459,9 @@ def convert_instruction(label, mnemonic, operands_str, comment, label_addr_suffi
     addr = ADDR_TRACKER.get_addr()
     nbytes = get_instruction_size_from_rom(addr) if addr is not None else None
 
-    if BLOCK_BUFFER is not None and nbytes is not None:
-        # Use block buffer — guarantees correct byte content and total count
-        remaining = BLOCK_SIZE - BLOCK_CURSOR
-        if nbytes > remaining:
-            nbytes = remaining  # Clamp to block boundary
-        if nbytes > 0:
-            rom_bytes = BLOCK_BUFFER[BLOCK_CURSOR:BLOCK_CURSOR + nbytes]
+    if addr is not None and nbytes is not None:
+        rom_bytes = get_rom_bytes(addr, nbytes)
+        if rom_bytes is not None:
             # Try native conversion first
             native = try_convert_native(mnemonic, operands_str, rom_bytes, nbytes, addr)
             if native is not None:
@@ -3604,19 +3473,7 @@ def convert_instruction(label, mnemonic, operands_str, comment, label_addr_suffi
                 original = f"{mnemonic} {operands_str}".strip() if operands_str else mnemonic
                 result += f"\t.byte {byte_str}\t; {original}"
                 BYTE_FALLBACK_COUNT += 1
-            BLOCK_CURSOR += nbytes
             ADDR_TRACKER.advance(nbytes)
-        else:
-            # Block buffer exhausted — emit as comment only
-            original = f"{mnemonic} {operands_str}".strip() if operands_str else mnemonic
-            result += f"\t; (block overflow) {original}"
-    elif addr is not None and nbytes is not None:
-        offset = addr - ROM_BASE
-        rom_bytes = ORIGINAL_ROM[offset:offset + nbytes]
-        byte_str = ', '.join(f'0x{b:02x}' for b in rom_bytes)
-        original = f"{mnemonic} {operands_str}".strip() if operands_str else mnemonic
-        result += f"\t.byte {byte_str}\t; {original}"
-        ADDR_TRACKER.advance(nbytes)
     else:
         # No address tracking — preserve as comment
         original = f"{mnemonic} {operands_str}".strip() if operands_str else mnemonic
@@ -3768,7 +3625,6 @@ def _dw_args_all_numeric(args):
 
 def convert_db(label, args, comment, in_file_path, label_addr_suffix=""):
     """Convert db directive - handle strings, bytes, and dup patterns."""
-    global BLOCK_CURSOR
     result = ""
     if label:
         result = f"{label}:{label_addr_suffix}\n"
@@ -3776,13 +3632,11 @@ def convert_db(label, args, comment, in_file_path, label_addr_suffix=""):
     # Track bytes for address advancement
     nbytes = _count_db_bytes(args)
 
-    # When inside a block buffer, emit from ROM for guaranteed correctness
-    if BLOCK_BUFFER is not None and nbytes is not None:
-        remaining = BLOCK_SIZE - BLOCK_CURSOR
-        if nbytes > remaining:
-            nbytes = remaining
-        if nbytes > 0:
-            rom_bytes = BLOCK_BUFFER[BLOCK_CURSOR:BLOCK_CURSOR + nbytes]
+    # When ROM is available, emit from ROM for guaranteed correctness
+    addr = ADDR_TRACKER.get_addr()
+    if addr is not None and nbytes is not None and nbytes > 0:
+        rom_bytes = get_rom_bytes(addr, nbytes)
+        if rom_bytes is not None:
             # Try native instruction conversion for db lines with instruction comments.
             # Only attempt if the ASL comment starts with a known TLCS-900 mnemonic.
             DB_INSTR_MNEMONICS = {
@@ -3819,7 +3673,6 @@ def convert_db(label, args, comment, in_file_path, label_addr_suffix=""):
                         cmnem = m.group(1).upper()
                         use_opcode_guess = True
                 if cmnem in DB_INSTR_MNEMONICS:
-                    addr = ADDR_TRACKER.get_addr()
                     # Extract operands from comment for label resolution
                     # E.g. "; CALR FDC_ReadStatus" → operands = "FDC_ReadStatus"
                     # E.g. "; JR Z, .wait_loop" → operands = "Z, .wait_loop"
@@ -3887,13 +3740,12 @@ def convert_db(label, args, comment, in_file_path, label_addr_suffix=""):
                         result += f"\t.byte {byte_str}"
                     else:
                         result += f"\t.byte {byte_str}\t; DB {args}"
-            BLOCK_CURSOR += nbytes
             ADDR_TRACKER.advance(nbytes)
-        if comment:
-            result += f"\t{comment}"
-        return result
+            if comment:
+                result += f"\t{comment}"
+            return result
 
-    # Outside block buffer — use source-based conversion
+    # Source-based conversion (no ROM available)
     # Handle ASL dup pattern: db 920 dup (000h) → .fill 920, 1, 0x0
     dup_match = re.match(r'(.+?)\s+dup\s*\(([^)]+)\)', args, re.IGNORECASE)
     if dup_match:
@@ -4011,7 +3863,6 @@ def _try_dw_label_arithmetic(args):
 
 def convert_dw(label, args, comment, label_addr_suffix=""):
     """Convert dw to .short, falling back to ROM bytes for label references."""
-    global BLOCK_CURSOR
     result = ""
     if label:
         result = f"{label}:{label_addr_suffix}\n"
@@ -4020,14 +3871,10 @@ def convert_dw(label, args, comment, label_addr_suffix=""):
     nbytes = 2 * nvalues
     addr = ADDR_TRACKER.get_addr()
 
-    # When inside a block buffer, always emit from ROM
-    if BLOCK_BUFFER is not None:
-        remaining = BLOCK_SIZE - BLOCK_CURSOR
-        if nbytes > remaining:
-            nbytes = remaining
-        if nbytes > 0:
-            rom_bytes = BLOCK_BUFFER[BLOCK_CURSOR:BLOCK_CURSOR + nbytes]
-            # Try symbolic label arithmetic (e.g., -BASE + LABEL)
+    # If dw references labels, emit raw bytes from ROM (labels may not resolve)
+    if _dw_has_label_refs(args) and addr is not None:
+        rom_bytes = get_rom_bytes(addr, nbytes)
+        if rom_bytes is not None:
             sym_exprs = _try_dw_label_arithmetic(args)
             if sym_exprs is not None:
                 result += f"\t.short {', '.join(sym_exprs)}"
@@ -4044,30 +3891,6 @@ def convert_dw(label, args, comment, label_addr_suffix=""):
                         result += f"\t.short {short_str}"
                     else:
                         result += f"\t.short {short_str}\t; DW {args}"
-            BLOCK_CURSOR += nbytes
-            ADDR_TRACKER.advance(nbytes)
-        if comment:
-            result += f"\t{comment}"
-        return result
-
-    # Outside block buffer — use source-based conversion
-    # If dw references labels, try symbolic arithmetic or emit raw bytes from ROM
-    if _dw_has_label_refs(args) and addr is not None:
-        rom_bytes = get_rom_bytes(addr, nbytes)
-        if rom_bytes is not None:
-            sym_exprs = _try_dw_label_arithmetic(args)
-            if sym_exprs is not None:
-                result += f"\t.short {', '.join(sym_exprs)}"
-            else:
-                original = f"DW {args}"
-                shorts = []
-                for i in range(0, nbytes, 2):
-                    chunk = rom_bytes[i:i+2]
-                    if len(chunk) == 2:
-                        val = chunk[0] | (chunk[1] << 8)
-                        shorts.append(f'0x{val:04X}')
-                if shorts:
-                    result += f"\t.short {', '.join(shorts)}\t; {original}"
             ADDR_TRACKER.advance(nbytes)
             if comment:
                 result += f"\t{comment}"
@@ -4373,14 +4196,13 @@ def convert_all(main_file, output_path):
     Label-only segments (forward references with no code/data between ORGs)
     are emitted as real .org + label directives for branch targets.
     """
-    global ADDR_TRACKER, BLOCK_BUFFER, BLOCK_CURSOR, BLOCK_SIZE, BLOCK_START_ADDR
-    global SEG_START_ADDR, SEG_END_ADDR, SELF_CORRECTION_TRIGGERED, SELF_CORRECTION_ADDR
-    global NATIVE_INSTR_COUNT, BYTE_FALLBACK_COUNT, SET_ONLY_LABELS
+    global ADDR_TRACKER
+    global SEG_START_ADDR, SEG_END_ADDR
+    global NATIVE_INSTR_COUNT, BYTE_FALLBACK_COUNT
     global SYNTHETIC_FORWARD_LABELS
 
     NATIVE_INSTR_COUNT = 0
     BYTE_FALLBACK_COUNT = 0
-    SET_ONLY_LABELS = {}
     SYNTHETIC_FORWARD_LABELS = {}
 
     main_dir = os.path.dirname(main_file)
@@ -4546,9 +4368,6 @@ def convert_all(main_file, output_path):
             # Skip register/condition code name conflicts
             if equ_name.lower() in RESERVED_LABEL_NAMES:
                 continue
-            # Skip drifted labels
-            if equ_name.lower() in DRIFTED_LABEL_NAMES:
-                continue
             ADDR_TO_LABEL[equ_val] = equ_name
             ADDR_TO_LABEL_ALL[equ_val] = equ_name
             # Add to label_only_labels for inline emission
@@ -4561,13 +4380,6 @@ def convert_all(main_file, output_path):
     if equ_labels_added:
         print(f"  EQU labels added to maps: {equ_labels_added}")
 
-    # Pre-populate SET_ONLY_LABELS for drifted labels using correct addresses
-    # from the label maps. These labels are in block-overflow regions where
-    # inline positions are wrong, so they must be emitted as .set directives.
-    for addr_val, lbl_name in ADDR_TO_LABEL_ALL.items():
-        if lbl_name.lower() in DRIFTED_LABEL_NAMES:
-            SET_ONLY_LABELS[lbl_name] = addr_val
-
     # Build output
     output_lines = []
     output_lines.append(f"; Converted from {main_file} by asl_to_llvm.py")
@@ -4579,112 +4391,13 @@ def convert_all(main_file, output_path):
     output_lines.append("")
 
     total_rom_bytes = 0
-    total_padding_bytes = 0
-    total_block_corrections = 0
     emitted_label_addrs = set()  # Track label-only labels emitted inline
 
-    # Create a memoryview for zero-copy ROM slicing in start_block()
-    rom_view = memoryview(ORIGINAL_ROM) if ORIGINAL_ROM is not None else None
-
-    def start_block(addr, end_addr):
-        """Initialize a new block buffer from ROM[addr:end_addr]."""
-        global BLOCK_BUFFER, BLOCK_CURSOR, BLOCK_SIZE, BLOCK_START_ADDR
-        block_size = end_addr - addr
-        rom_offset = addr - ROM_BASE
-        BLOCK_BUFFER = rom_view[rom_offset:rom_offset + block_size]
-        BLOCK_CURSOR = 0
-        BLOCK_SIZE = block_size
-        BLOCK_START_ADDR = addr
-
-    def flush_block_padding():
-        """Emit remaining bytes in current block as padding."""
-        global BLOCK_CURSOR
-        nonlocal total_padding_bytes
-        if BLOCK_BUFFER is not None and BLOCK_CURSOR < BLOCK_SIZE:
-            pad_size = BLOCK_SIZE - BLOCK_CURSOR
-            pad_start = BLOCK_START_ADDR + BLOCK_CURSOR
-            for i in range(0, pad_size, 16):
-                chunk = BLOCK_BUFFER[BLOCK_CURSOR + i:BLOCK_CURSOR + i + 16]
-                byte_str = ', '.join(f'0x{b:02x}' for b in chunk)
-                addr_comment = f"0x{pad_start + i:06X} (padding)"
-                output_lines.append(f"\t.byte {byte_str}\t; {addr_comment}")
-            total_padding_bytes += pad_size
-            BLOCK_CURSOR = BLOCK_SIZE
-
-    # Pre-scan function: extract address-encoding labels from segment lines.
-    # These define block boundaries so instruction sizing errors can't cascade.
-    def prescan_label_addrs(seg_lines):
-        """Return sorted list of addresses from address-encoding labels.
-
-        Only includes addresses that form a monotonically non-decreasing
-        sequence in source order. Backward-jumping labels (e.g., out-of-order
-        data section entries) are excluded to avoid creating spurious block
-        boundaries that truncate data tables.
-        """
-        addrs = []
-        max_addr = -1
-        for line, source in seg_lines:
-            stripped = line.rstrip()
-            if not stripped:
-                continue
-            code_part, cmt = split_comment(stripped)
-            code_stripped = code_part.rstrip()
-            lbl, rest = extract_label(code_stripped)
-            if not lbl:
-                continue
-            rest = rest.strip()
-            if rest and re.match(r'^EQU\b', rest, re.IGNORECASE):
-                continue
-            addr = None
-            m_lbl = re.match(r'^LABEL_([0-9A-Fa-f]{6})$', lbl)
-            if m_lbl:
-                addr = int(m_lbl.group(1), 16)
-            elif cmt:
-                m_addr = re.match(r'^;\s*([0-9A-Fa-f]{6})\s*$', cmt.strip())
-                if m_addr:
-                    addr = int(m_addr.group(1), 16)
-            if addr is not None:
-                if addr >= max_addr:
-                    addrs.append(addr)
-                    max_addr = addr
-        return sorted(set(addrs))
-
-    # Helper: perform block transition at a boundary address.
-    # Pads the gap from current block cursor to boundary, then starts a new block.
-    total_nonzero_corrections = 0
-
-    def do_block_transition(boundary_addr):
-        nonlocal total_block_corrections, total_padding_bytes, total_nonzero_corrections
-        total_block_corrections += 1
-        expected_block_bytes = boundary_addr - BLOCK_START_ADDR
-        gap = expected_block_bytes - BLOCK_CURSOR
-        if gap != 0:
-            total_nonzero_corrections += 1
-            print(f"    DRIFT at 0x{boundary_addr:06X}: gap={gap} bytes (block 0x{BLOCK_START_ADDR:06X}, cursor={BLOCK_CURSOR}, expected={expected_block_bytes})")
-        if gap > 0:
-            gap_rom_offset = (BLOCK_START_ADDR + BLOCK_CURSOR) - ROM_BASE
-            for i in range(0, gap, 16):
-                chunk_size = min(16, gap - i)
-                chunk = rom_view[gap_rom_offset + i:gap_rom_offset + i + chunk_size]
-                byte_str = ', '.join(f'0x{b:02x}' for b in chunk)
-                addr_comment = f"0x{BLOCK_START_ADDR + BLOCK_CURSOR + i:06X} (block padding)"
-                output_lines.append(f"\t.byte {byte_str}\t; {addr_comment}")
-            total_padding_bytes += gap
-        elif gap < 0:
-            output_lines.append(f"\t; WARNING: block over-emitted by {-gap} bytes before 0x{boundary_addr:06X}")
-        if seg_end is not None and boundary_addr < seg_end:
-            idx = bisect.bisect_right(seg_label_addrs, boundary_addr)
-            next_end = seg_label_addrs[idx] if idx < len(seg_label_addrs) else seg_end
-            start_block(boundary_addr, next_end)
-
-    # Emit content segments — per-line conversion with block-level buffers.
-    # A "block" spans between two consecutive address-encoding labels (or
-    # segment start/end). Each block reads exact ROM bytes. Instruction sizing
-    # errors are confined to a single inter-label span and corrected at each
-    # label boundary via padding or clamping.
+    # Emit content segments — per-line conversion with direct ROM access.
+    # Address tracker is reset at each address-encoding label. Instructions
+    # and data are read directly from ROM at the tracked address.
     for seg_addr, seg_lines in sorted_content:
         seg_end = None
-        seg_label_addrs = []  # Pre-scanned label addresses for this segment
         if seg_addr is not None:
             # Reset address tracker at each segment boundary
             ADDR_TRACKER = AddressTracker()
@@ -4694,26 +4407,11 @@ def convert_all(main_file, output_path):
             if seg_addr in seg_end_map:
                 seg_end = seg_end_map[seg_addr]
                 SEG_END_ADDR = seg_end
-                # Pre-scan for label addresses to define block boundaries
-                seg_label_addrs = prescan_label_addrs(seg_lines)
-                # Find first block end: next label after seg_addr, or seg_end
-                idx = bisect.bisect_right(seg_label_addrs, seg_addr)
-                first_end = seg_label_addrs[idx] if idx < len(seg_label_addrs) else seg_end
-                start_block(seg_addr, first_end)
             else:
-                BLOCK_BUFFER = None
                 SEG_END_ADDR = ROM_BASE + ROM_SIZE
-        else:
-            BLOCK_BUFFER = None
 
         for line, source in seg_lines:
-            # Reset self-correction flag before each line
-            SELF_CORRECTION_TRIGGERED = False
-
             # Emit label-only labels when address tracker reaches their address.
-            # These provide inline labels for readability. Position may have minor
-            # drift between block boundaries, but .set at end provides the
-            # authoritative address for JP/CALL and .long references.
             cur_addr = ADDR_TRACKER.get_addr()
             if cur_addr is not None and cur_addr in label_only_labels and cur_addr not in emitted_label_addrs:
                 for lbl_name in label_only_labels[cur_addr]:
@@ -4725,49 +4423,21 @@ def convert_all(main_file, output_path):
                 synth_label = SYNTHETIC_FORWARD_LABELS.pop(cur_addr)
                 output_lines.append(f"{synth_label}:")
 
-            # Track whether block was exhausted before convert_line.
-            # If so, data directives get 0 bytes and need re-conversion
-            # after the block transition creates a fresh block.
-            block_was_exhausted = (BLOCK_BUFFER is not None
-                                   and BLOCK_CURSOR >= BLOCK_SIZE)
-
             converted = convert_line(line, source)
-
-            # After convert_line, handle block transitions triggered by
-            # self-correction at address-encoding labels.
-            if (SELF_CORRECTION_TRIGGERED
-                    and SELF_CORRECTION_ADDR != BLOCK_START_ADDR):
-                do_block_transition(SELF_CORRECTION_ADDR)
-                # If the block was exhausted BEFORE convert_line, data
-                # directives on this line got 0 bytes (clamped to remaining=0).
-                # Now that a fresh block exists, re-convert to get proper data.
-                if block_was_exhausted and BLOCK_BUFFER is not None:
-                    converted = convert_line(line, source)
 
             if converted is not None:
                 output_lines.append(converted)
 
-        # After processing all lines, pad remaining block bytes
-        flush_block_padding()
-
         if seg_addr is not None and seg_addr in seg_end_map:
             total_rom_bytes += seg_end_map[seg_addr] - seg_addr
 
-    # Clear block buffer
-    BLOCK_BUFFER = None
-
     # Emit .set labels for those NOT emitted inline.
-    # Inline labels get their address from assembled position (usually correct).
-    # .set labels get exact addresses from ORG (always correct).
+    # These are label-only labels at addresses not reached during conversion.
     all_set_labels = []
-    # Label-only segments not emitted inline (forward references beyond conversion range)
     for addr in sorted(label_only_labels.keys()):
         if addr not in emitted_label_addrs:
             for lbl_name in label_only_labels[addr]:
                 all_set_labels.append((addr, lbl_name))
-    # Content-segment LABEL_XXXXXX on instruction lines (suppressed from inline)
-    for lbl_name, addr in sorted(SET_ONLY_LABELS.items(), key=lambda x: x[1]):
-        all_set_labels.append((addr, lbl_name))
 
     if all_set_labels:
         output_lines.append("")
@@ -4837,12 +4507,8 @@ def convert_all(main_file, output_path):
     print(f"  Output: {output_path}")
     print(f"  ROM bytes covered: {total_rom_bytes} / {ROM_SIZE} ({100*total_rom_bytes/ROM_SIZE:.1f}%)")
     print(f"  .byte fallback lines: {BYTE_FALLBACK_COUNT}")
-    print(f"  Padding bytes: {total_padding_bytes}")
-    print(f"  Block transitions: {total_block_corrections} ({total_nonzero_corrections} with drift)")
     print(f"  Native instruction lines: {NATIVE_INSTR_COUNT}")
-    n_label_only_set = len(all_set_labels) - len(SET_ONLY_LABELS)
-    print(f"  Label-only labels: {len(emitted_label_addrs)} inline + {n_label_only_set} .set")
-    print(f"  Content LABEL_XXXXXX as .set: {len(SET_ONLY_LABELS)}")
+    print(f"  Labels: {len(emitted_label_addrs)} inline + {len(all_set_labels)} .set")
 
 
 # ============================================================================

@@ -29,13 +29,13 @@ TableData_BootRegionReserved:
 
 FeatureDemo_FileMetadata:
 	.asciz "hkst_55.ssf"	; Filename for the feature demo SSF file
-	.long 0x00000000	; DD 00000000h
+	.long 0x0
 	.long HKstSSF_Padding
 	.long Feature_Demo_XML
 	.long FeatureDemo_FileEntry1
 
 HKstSSF_Padding:
-	.short 0x0000
+	.short 0x0
 
 Feature_Demo_XML:	; 88000E
 	.incbin "../includes/hkst_55.ssf"
@@ -70,39 +70,39 @@ Feature_Bitmap_6:	; 8BAFE6
 
 FeatureDemo_FileEntry1:
 	.asciz "FTBMP01.BMP"
-	.long 0x00000000	; DD 00000000h
+	.long 0x0
 	.long Feature_Bitmap_1
-	.long 0x00013036	; DD 77878	; Actual BMP file size
+	.long 77878	; Actual BMP file size
 
 FeatureDemo_FileEntry2:
 	.asciz "FTBMP02.BMP"
-	.long 0x00000000	; DD 00000000h
+	.long 0x0
 	.long Feature_Bitmap_2
-	.long 0x0000A6B6	; DD 42678	; Actual BMP file size
+	.long 42678	; Actual BMP file size
 
 FeatureDemo_FileEntry3:
 	.asciz "FTBMP03.BMP"
-	.long 0x00000000	; DD 00000000h
+	.long 0x0
 	.long Feature_Bitmap_3
-	.long 0x00009A36	; DD 39478	; Actual BMP file size
+	.long 39478	; Actual BMP file size
 
 FeatureDemo_FileEntry4:
 	.asciz "FTBMP04.BMP"
-	.long 0x00000000	; DD 00000000h
+	.long 0x0
 	.long Feature_Bitmap_4
-	.long 0x00009A36	; DD 39478	; Size from ROM metadata
+	.long 39478	; Size from ROM metadata
 
 FeatureDemo_FileEntry5:
 	.asciz "FTBMP05.BMP"
-	.long 0x00000000	; DD 00000000h
+	.long 0x0
 	.long Feature_Bitmap_5
-	.long 0x0000A076	; DD 41078	; Actual BMP file size
+	.long 41078	; Actual BMP file size
 
 FeatureDemo_FileEntry6:
 	.asciz "FTBMP06.BMP"
-	.long 0x00000000	; DD 00000000h
+	.long 0x0
 	.long Feature_Bitmap_6
-	.long 0x00013036	; DD 77878	; Actual BMP file size
+	.long 77878	; Actual BMP file size
 
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; DB 30 dup (000h)
 

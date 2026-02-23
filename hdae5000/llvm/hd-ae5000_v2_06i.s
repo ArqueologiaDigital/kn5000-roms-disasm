@@ -1302,9 +1302,9 @@ HDAE5000_PPORT_Cmd_Table:	; 2953E2h
 
 HDAE5000_PPORT_Ptrs:	; 295412h
 	; 3 pointers to PPORT utility routines
-	.long 0x002966BE	; DD 002966BEh	; Pointer to utility 1
-	.long 0x002966FA	; DD 002966FAh	; Pointer to utility 2
-	.long 0x0029670C	; DD 0029670Ch	; Pointer to utility 3
+	.long 0x2966BE	; Pointer to utility 1
+	.long 0x2966FA	; Pointer to utility 2
+	.long 0x29670C	; Pointer to utility 3
 
 HDAE5000_PPORT_Strings:	; 29541Eh
 	; PPORT command menu strings (21 null-terminated strings)

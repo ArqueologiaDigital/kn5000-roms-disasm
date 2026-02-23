@@ -1970,7 +1970,7 @@ SmfFmt_Exit:
 	inc 6, xsp
 	ret
 
-
+FmmSmfMedleyFunc:
 	dec 4, xsp
 	pushw iz
 	ld xhl, xbc
@@ -2804,7 +2804,7 @@ PdFmtSlot_Exit:
 	ret
 
 LABEL_F935C0:
-
+FmmPdMedleyFunc:
 	push xiz
 	ld xhl, xde
 	ld xde, xbc

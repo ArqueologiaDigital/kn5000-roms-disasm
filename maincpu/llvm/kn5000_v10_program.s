@@ -1527,6 +1527,7 @@ LABEL_E0E9C2:
 	.byte 0xb4, 0xd5, 0x03, 0x00
 	.long LABEL_E0E9EC
 	.byte 0x00, 0x00, 0x00, 0x00
+LABEL_E0E9EC:
 	.byte 0x00, 0xff
 
 
@@ -2006,6 +2007,7 @@ LABEL_E0F108:
 	.long LABEL_E0F132
 	.byte 0x00, 0x00
 	.byte 0x00, 0x00
+LABEL_E0F132:
 	.byte 0x00, 0xff
 
 
@@ -6342,7 +6344,7 @@ LABEL_E1344E:
 	.long LABEL_E133E0
 	.long LABEL_E133FC
 	.long LABEL_E1342A
-	.long 0x00000000	; DD 00000000h
+	.long 0x0
 
 
 	.long LABEL_E14810
@@ -6826,124 +6828,225 @@ LABEL_E1344E:
 	.long LABEL_E14346
 
 
+LABEL_E14346:
 	.byte 0x00, 0xff
+LABEL_E14348:
 	.byte 0x00, 0xff
+LABEL_E1434A:
 	.byte 0x00, 0xff
+LABEL_E1434C:
 	.byte 0x00, 0xff
+LABEL_E1434E:
 	.byte 0x00, 0xff
+LABEL_E14350:
 	.byte 0x00, 0xff
+LABEL_E14352:
 	.byte 0x00, 0xff
+LABEL_E14354:
 	.byte 0x00, 0xff
+LABEL_E14356:
 	.byte 0x00, 0xff
+LABEL_E14358:
 	.byte 0x00, 0xff
+LABEL_E1435A:
 	.byte 0x00, 0xff
+LABEL_E1435C:
 	.byte 0x00, 0xff
+LABEL_E1435E:
 	.byte 0x00, 0xff
+LABEL_E14360:
 	.byte 0x00, 0xff
+LABEL_E14362:
 	.byte 0x00, 0xff
+LABEL_E14364:
 	.byte 0x00, 0xff
+LABEL_E14366:
 	.byte 0x00, 0xff
+LABEL_E14368:
 	.byte 0x00, 0xff
+LABEL_E1436A:
 	.byte 0x00, 0xff
+LABEL_E1436C:
 	.byte 0x00, 0xff
+LABEL_E1436E:
 	.byte 0x00, 0xff
+LABEL_E14370:
 	.byte 0x00, 0xff
+LABEL_E14372:
 	.byte 0x00, 0xff
+LABEL_E14374:
 	.byte 0x00, 0xff
+LABEL_E14376:
 	.byte 0x00, 0xff
+LABEL_E14378:
 	.byte 0x00, 0xff
+LABEL_E1437A:
 	.byte 0x00, 0xff
+LABEL_E1437C:
 	.byte 0x00, 0xff
+LABEL_E1437E:
 	.byte 0x00, 0xff
+LABEL_E14380:
 	.byte 0x00, 0xff
+LABEL_E14382:
 	.byte 0x00, 0xff
+LABEL_E14384:
 	.byte 0x00, 0xff
+LABEL_E14386:
 	.byte 0x00, 0xff
+LABEL_E14388:
 	.byte 0x00, 0xff
+LABEL_E1438A:
 	.byte 0x00, 0xff
+LABEL_E1438C:
 	.byte 0x00, 0xff
+LABEL_E1438E:
 	.byte 0x00, 0xff
+LABEL_E14390:
 	.byte 0x00, 0xff
 FTDEMO_FILENAME_43:
 	.asciz "ftdemo43"
 	.byte 0xff
+LABEL_E1439C:
 	.byte 0x00, 0xff
+LABEL_E1439E:
 	.byte 0x00, 0xff
+LABEL_E143A0:
 	.byte 0x00, 0xff
+LABEL_E143A2:
 	.byte 0x00, 0xff
+LABEL_E143A4:
 	.byte 0x00, 0xff
+LABEL_E143A6:
 	.byte 0x00, 0xff
+LABEL_E143A8:
 	.byte 0x00, 0xff
+LABEL_E143AA:
 	.byte 0x00, 0xff
+LABEL_E143AC:
 	.byte 0x00, 0xff
+LABEL_E143AE:
 	.byte 0x00, 0xff
+LABEL_E143B0:
 	.byte 0x00, 0xff
+LABEL_E143B2:
 	.byte 0x00, 0xff
+LABEL_E143B4:
 	.byte 0x00, 0xff
+LABEL_E143B6:
 	.byte 0x00, 0xff
+LABEL_E143B8:
 	.byte 0x00, 0xff
+LABEL_E143BA:
 	.byte 0x00, 0xff
+LABEL_E143BC:
 	.byte 0x00, 0xff
+LABEL_E143BE:
 	.byte 0x00, 0xff
+LABEL_E143C0:
 	.byte 0x00, 0xff
+LABEL_E143C2:
 	.byte 0x00, 0xff
 FTDEMO_FILENAME_48:
 	.asciz "ftdemo48"
 	.byte 0xff
+LABEL_E143CE:
 	.byte 0x00, 0xff
+LABEL_E143D0:
 	.byte 0x00, 0xff
+LABEL_E143D2:
 	.byte 0x00, 0xff
+LABEL_E143D4:
 	.byte 0x00, 0xff
+LABEL_E143D6:
 	.byte 0x00, 0xff
+LABEL_E143D8:
 	.byte 0x00, 0xff
+LABEL_E143DA:
 	.byte 0x00, 0xff
+LABEL_E143DC:
 	.byte 0x00, 0xff
+LABEL_E143DE:
 	.byte 0x00, 0xff
+LABEL_E143E0:
 	.byte 0x00, 0xff
+LABEL_E143E2:
 	.byte 0x00, 0xff
+LABEL_E143E4:
 	.byte 0x00, 0xff
+LABEL_E143E6:
 	.byte 0x00, 0xff
+LABEL_E143E8:
 	.byte 0x00, 0xff
+LABEL_E143EA:
 	.byte 0x00, 0xff
+LABEL_E143EC:
 	.byte 0x00, 0xff
+LABEL_E143EE:
 	.byte 0x00, 0xff
+LABEL_E143F0:
 	.byte 0x00, 0xff
+LABEL_E143F2:
 	.byte 0x00, 0xff
+LABEL_E143F4:
 	.byte 0x00, 0xff
 FTDEMO_FILENAME_47:
 	.asciz "ftdemo47"
 	.byte 0xff
+LABEL_E14400:
 	.byte 0x00, 0xff
 LABEL_E14402:
+LABEL_E14302:
 	.byte 0x00, 0xff
 LABEL_E14404:
+LABEL_E14304:
 	.byte 0x00, 0xff
 LABEL_E14406:
+LABEL_E14306:
 	.byte 0x00, 0xff
+LABEL_E14408:
 	.byte 0x00, 0xff
 LABEL_E1440A:
+LABEL_E1430A:
 	.byte 0x00, 0xff
 LABEL_E1440C:
+LABEL_E1430C:
 	.byte 0x00, 0xff
 LABEL_E1440E:
+LABEL_E1430E:
 	.byte 0x00, 0xff
+LABEL_E14410:
 	.byte 0x00, 0xff
+LABEL_E14412:
 	.byte 0x00, 0xff
+LABEL_E14414:
 	.byte 0x00, 0xff
+LABEL_E14416:
 	.byte 0x00, 0xff
+LABEL_E14418:
 	.byte 0x00, 0xff
+LABEL_E1441A:
 	.byte 0x00, 0xff
+LABEL_E1441C:
 	.byte 0x00, 0xff
+LABEL_E1441E:
 	.byte 0x00, 0xff
+LABEL_E14420:
 	.byte 0x00, 0xff
+LABEL_E14422:
 	.byte 0x00, 0xff
+LABEL_E14424:
 	.byte 0x00, 0xff
+LABEL_E14426:
 	.byte 0x00, 0xff
+LABEL_E14428:
 	.byte 0x00, 0xff
+LABEL_E1442A:
 	.byte 0x00, 0xff
 FTDEMO_FILENAME_46:
 	.asciz "ftdemo46"
 	.byte 0xff
+LABEL_E14436:
 	.byte 0x00, 0xff
 LABEL_E14438:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
@@ -7196,7 +7299,7 @@ LABEL_E14810:
 LABEL_E1481A:
 	.asciz "TT_FDMSP"
 	.byte 0xff
-	.long 0x00000000	; DD 00000000h
+	.long 0x0
 
 LABEL_E14828:
 	.long LABEL_E1482C
@@ -8136,8 +8239,8 @@ LABEL_E16184:
 	.byte 0x00
 	.byte 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00
-	.short 0x0000
-	.long 0x00000000	; DD 00000000h
+	.short 0x0
+	.long 0x0
 
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
@@ -12047,7 +12150,7 @@ LABEL_E1A6D2:
 
 
 	.byte 0x3e, 0x00, 0x60, 0x01, 0x19, 0x00
-	.long 0xFFFFFFFF	; DD 0FFFFFFFFh
+	.long 0xFFFFFFFF
 	.byte 0x1f, 0x00, 0x08, 0x00
 	.byte 0xf8, 0x00, 0xa0, 0x00, 0x37, 0x01, 0xb1, 0x00
 	.byte 0x07, 0x00, 0xc1, 0x00, 0xff, 0xff, 0x00, 0x00
@@ -12061,13 +12164,13 @@ String_ABORT:	; E1A6FE
 
 LABEL_E1A704:
 	.byte 0x34, 0x00, 0x60, 0x01, 0xff, 0xff, 0x01, 0x00
-	.long 0xFFFFFFFF	; DD 0FFFFFFFFh
-	.long 0x0000000A	; DD 00000000Ah
-	.short 0x0000
+	.long 0xFFFFFFFF
+	.long 0xA
+	.short 0x0
 	.long LABEL_EF013F
 	.byte 0xff, 0x00, 0x00, 0x00, 0x01, 0x00, 0xa0, 0x01, 0x26, 0xd7, 0x03, 0x00
 	.long String_MSP_BANK_SELECT
-	.long 0x000000A5	; DD 0000000A5h
+	.long 0xA5
 
 String_MSP_BANK_SELECT:	; E1A72E
 	.asciz "MSP BANK SELECT"
@@ -12240,15 +12343,15 @@ LABEL_E1AB00:
 
 LABEL_E1AB58:
 	.byte 0x34, 0x00, 0x60, 0x01, 0xff, 0xff, 0x01, 0x00
-	.long 0xFFFFFFFF	; DD 0FFFFFFFFh
-	.long 0x0000000A	; DD 00000000Ah
-	.short 0x0000
+	.long 0xFFFFFFFF
+	.long 0xA
+	.short 0x0
 	.long LABEL_EF013F
 	.byte 0xf9, 0x00
 	.byte 0x00, 0x00, 0x01, 0x00, 0xa0, 0x01, 0x62, 0xd7
 	.byte 0x03, 0x00
 	.long String_MSP_PHRASE_RECORDING
-	.long 0x000000A8	; DD 0000000A8h
+	.long 0xA8
 
 String_MSP_PHRASE_RECORDING:	; E1AB82
 	.asciz "MSP PHRASE RECORDING"
@@ -14093,7 +14196,7 @@ LABEL_E1C8EC:
 	.long StylCnvContTtlFunc
 	.long StylCnvStorTtlFunc
 	.long MainStylCnvFunc
-	.long 0x00000000	; DD 00000000h
+	.long 0x0
 
 	.long LABEL_E1CDD2
 	.long LABEL_E1CDC4
@@ -16710,24 +16813,24 @@ RESOURCE_INFO_HANDLER_OFFSETS:
 	.short LABEL_F1EAAF - RESOURCE_INFO_HANDLERS
 
 LABEL_E1FFE6:
-	.short 0x00B0
-	.short 0x019B
+	.short 0xB0
+	.short 0x19B
 
 LABEL_E1FFEA:
-	.short 0x00B0
+	.short 0xB0
 	.short 0x209B
 
 LABEL_E1FFEE:
-	.short 0x00B0
-	.short 0x009D
+	.short 0xB0
+	.short 0x9D
 
 LABEL_E1FFF2:
-	.short 0x00B0
-	.short 0x019D
+	.short 0xB0
+	.short 0x19D
 
 LABEL_E1FFF6:
-	.short 0x00B0
-	.short 0x029D
+	.short 0xB0
+	.short 0x29D
 
 LABEL_E1FFFA:
 	.byte 0x00, 0x00, 0x0e, 0x00, 0x1a, 0x00
@@ -49116,7 +49219,7 @@ LABEL_E818B0:
 	.byte 0xa0, 0x01, 0x60, 0xe6
 	.byte 0x03, 0x00
 	.long LABEL_E818DA
-	.long 0x00000015	; DD 00000015h
+	.long 0x15
 
 LABEL_E818DA:
 	.asciz "SOUND MENU"
@@ -49124,16 +49227,16 @@ LABEL_E818DA:
 
 LABEL_E818E6:	; This is a yellow "PAGE 1/2" button
 	.byte 0x25, 0x00, 0x60, 0x01, 0x00, 0x00
-	.short 0xFFFF, 0x0002
-	.short 0xFFFF, 0x0008
-	.short 0x00F5	; X-left coord of the button
-	.short 0x0006	; y-top coord of the button
-	.short 0x013B, 0x0017	; x-right coord of the button
-	.short 0x00F3, 0x00C1	; y-botton coord
+	.short 0xFFFF, 0x2
+	.short 0xFFFF, 0x8
+	.short 0xF5	; X-left coord of the button
+	.short 0x6	; y-top coord of the button
+	.short 0x13B, 0x17	; x-right coord of the button
+	.short 0xF3, 0xC1	; y-botton coord
 	.short 0xFFFF
-	.long 0x0003E664	; DD 00003E664h	; <-- the LSByte here affects the page number
-	.short 0x0001
-	.short 0x0002	; total number of pages
+	.long 0x3E664	; <-- the LSByte here affects the page number
+	.short 0x1
+	.short 0x2	; total number of pages
 LABEL_E8190A:
 
 	.byte 0x28, 0x00, 0x60, 0x01, 0x00, 0x00
@@ -49173,18 +49276,18 @@ LABEL_E81976:
 
 LABEL_E8199A:
 	.byte 0x1d, 0x00, 0x60, 0x01, 0x06, 0x00
-	.short 0xFFFF, 0x0008
-	.short 0xFFFF, 0x0008
-	.short 0x0008, 0x001E
-	.short 0x009C, 0x0037
-	.short 0x00F7, 0x0000
-	.short 0xFFFF, 0x0000
-	.short 0x0000, 0x00FF
-	.short 0x0000, 0x0088
-	.long 0x0003E66E	; DD 0003E66Eh
+	.short 0xFFFF, 0x8
+	.short 0xFFFF, 0x8
+	.short 0x8, 0x1E
+	.short 0x9C, 0x37
+	.short 0xF7, 0x0
+	.short 0xFFFF, 0x0
+	.short 0x0, 0xFF
+	.short 0x0, 0x88
+	.long 0x3E66E
 	.long LABEL_E819D0
-	.short 0x0003, 0x01A0
-	.long 0x00000002	; DD 000000002h
+	.short 0x3, 0x1A0
+	.long 0x2
 
 LABEL_E819D0:
 	.asciz "PART SETTING"
@@ -49220,25 +49323,25 @@ LABEL_E819D0:
 LABEL_E819DE:
 	.byte 0x1d, 0x00
 	.byte 0x60, 0x01, 0x06, 0x00
-	.short 0xFFFF, 0x0009
-	.short 0x0007, 0x0008
-	.short 0x0008	; X coord of menu item
-	.short 0x0048	; <== affects Y coord of the menu item's icon
+	.short 0xFFFF, 0x9
+	.short 0x7, 0x8
+	.short 0x8	; X coord of menu item
+	.short 0x48	; <== affects Y coord of the menu item's icon
 			;     and the text seems to disappear
-	.short 0x009C
-	.short 0x0061	; Y coord of menu item
-	.short 0x00F7	; bg color of menu item (00F7 means transparent)
-	.short 0x0000
-	.short 0xFFFF, 0x0000
-	.short 0x0000, 0x00FF
-	.short 0x0000
-	.short 0x0089	; <= affects positioning of label and icon
+	.short 0x9C
+	.short 0x61	; Y coord of menu item
+	.short 0xF7	; bg color of menu item (00F7 means transparent)
+	.short 0x0
+	.short 0xFFFF, 0x0
+	.short 0x0, 0xFF
+	.short 0x0
+	.short 0x89	; <= affects positioning of label and icon
 			;    with mirror and offset on the x axis
 
-	.long 0x0003E670	; DD 0003E670h
+	.long 0x3E670
 	.long LABEL_E81A14
-	.short 0x0008, 0x01A0
-	.long 0x00000007	; DD 000000007h	; <== Select Icon (0 = no-icon, 1=worm, 2=... etc)
+	.short 0x8, 0x1A0
+	.long 0x7	; <== Select Icon (0 = no-icon, 1=worm, 2=... etc)
 
 LABEL_E81A14:
 	.asciz "MIXER"
@@ -49263,7 +49366,7 @@ LABEL_E81A5E:
 	.byte 0xf7, 0x00, 0x00, 0x00
 	.byte 0xff, 0xff, 0x00, 0x00, 0x00, 0x00, 0xff, 0x00
 	.byte 0x00, 0x00, 0x8c, 0x00
-	.long 0x0003E674	; DD 3E674h
+	.long 0x3E674
 	.long LABEL_E81A94
 	.byte 0x05, 0x00, 0xa0, 0x01
 	.byte 0x84, 0x00, 0x00, 0x00
@@ -49279,7 +49382,7 @@ LABEL_E81AA0:
 	.byte 0xf7, 0x00, 0x00, 0x00
 	.byte 0xff, 0xff, 0x00, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00, 0x00, 0x00, 0x08, 0x00
-	.long 0x0003E676	; DD 3E676h
+	.long 0x3E676
 	.long LABEL_E81AD6
 	.byte 0x09, 0x00
 	.byte 0xa0, 0x01, 0x91, 0x00, 0x00, 0x00
@@ -49325,7 +49428,7 @@ LABEL_E81BAA:
 	.byte 0xa3, 0x00, 0xc6, 0x00, 0x37, 0x01, 0xdf, 0x00
 	.byte 0xf7, 0x00, 0x00, 0x00, 0xff, 0xff, 0x00, 0x00
 	.byte 0x00, 0x00, 0xff, 0x00, 0x00, 0x00, 0x0c, 0x00
-	.long 0x0003E67E	; DD 3E67Eh
+	.long 0x3E67E
 	.long LABEL_E81BE0
 	.byte 0x0e, 0x00, 0xa0, 0x01, 0x92, 0x00, 0x00, 0x00
 
@@ -49350,7 +49453,7 @@ LABEL_E81BF2:
 	.byte 0xff, 0x00
 	.byte 0x00, 0x00
 	.byte 0x8a, 0x00
-	.long 0x0003E680	; DD 3E680h
+	.long 0x3E680
 	.long LABEL_E81C28
 	.byte 0x03, 0x00, 0x80, 0x01, 0x0f, 0x00, 0x00, 0x00
 
@@ -49381,7 +49484,7 @@ LABEL_E81C98:
 	.byte 0xa3, 0x00, 0x72, 0x00, 0x37, 0x01, 0x8b, 0x00
 	.byte 0xf7, 0x00, 0x00, 0x00, 0xff, 0xff, 0x00, 0x00
 	.byte 0x00, 0x00, 0xff, 0x00, 0x00, 0x00, 0x0a, 0x00
-	.long 0x0003E68C	; DD 3E68Ch
+	.long 0x3E68C
 	.long LABEL_E81CCE
 	.byte 0x0d, 0x00
 	.byte 0xa0, 0x01, 0x18, 0x00, 0x00, 0x00
@@ -49397,7 +49500,7 @@ LABEL_E81CCE:
 	.byte 0x3f, 0x01, 0xef, 0x00
 	.byte 0xf8, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0xa0, 0x01
-	.long 0x0003E68E	; DD 00003E68Eh
+	.long 0x3E68E
 	.long LABEL_E81D06
 	.byte 0x02, 0x00, 0x00, 0x00
 
@@ -106972,14 +107075,14 @@ LABEL_EE75FA:
 	.long LABEL_EE659A
 	.long LABEL_EE6602
 	.long LABEL_EE68CE
-	.long 0x00000000	; DD 00000000h
+	.long 0x0
 	.long LABEL_EE689C
 	.long LABEL_EE699C
 	.long LABEL_EE69E8
-	.long 0x00000000	; DD 00000000h
-	.long 0x00000000	; DD 00000000h
-	.long 0x00000000	; DD 00000000h
-	.long 0x00000000	; DD 00000000h
+	.long 0x0
+	.long 0x0
+	.long 0x0
+	.long 0x0
 	.long LABEL_EE67CC
 	.long LABEL_EE736E
 	.long LABEL_EE73A4
@@ -106993,74 +107096,74 @@ LABEL_EE75FA:
 	.long LABEL_EE7554
 	.long LABEL_EE758A
 	.long LABEL_EE75C0
-	.long 0x00000000	; DD 00000000h
-	.long 0x00000000	; DD 00000000h
-	.long 0x00000000	; DD 00000000h
-	.long 0x00000000	; DD 00000000h
+	.long 0x0
+	.long 0x0
+	.long 0x0
+	.long 0x0
 	.long LABEL_EE63BA
 	.long LABEL_EE63E0
 	.long LABEL_EE6406
 	.long LABEL_EE642C
 	.long LABEL_EE6920
 	.long LABEL_EE6868
-	.long 0x00000000	; DD 00000000h
+	.long 0x0
 	.long LABEL_EE646E
-	.long 0x00000000	; DD 00000000h
-	.long 0x00000000	; DD 00000000h
-	.long 0x00000000	; DD 00000000h
-	.long 0x00000000	; DD 00000000h
-	.long 0x00000000	; DD 00000000h
-	.long 0x00000000	; DD 00000000h
-	.long 0x00000000	; DD 00000000h
-	.long 0x00000000	; DD 00000000h
+	.long 0x0
+	.long 0x0
+	.long 0x0
+	.long 0x0
+	.long 0x0
+	.long 0x0
+	.long 0x0
+	.long 0x0
 	.long LABEL_EE666A
-	.long 0x00000000	; DD 00000000h
+	.long 0x0
 	.long LABEL_EE66AC
-	.long 0x00000000	; DD 00000000h
+	.long 0x0
 	.long LABEL_EE66EE
 	.long LABEL_EE675E
 	.long LABEL_EE683A
-	.long 0x00000000	; DD 00000000h
+	.long 0x0
 	.long LABEL_EE6952
 	.long LABEL_EE6A5C
 	.long LABEL_EE6A9E
 	.long LABEL_EE6AE0
 	.long LABEL_EE6B22
-	.long 0x00000000	; DD 00000000h
-	.long 0x00000000	; DD 00000000h
-	.long 0x00000000	; DD 00000000h
+	.long 0x0
+	.long 0x0
+	.long 0x0
 	.long LABEL_EE6C24
 	.long LABEL_EE6CA2
 	.long LABEL_EE6D26
 	.long LABEL_EE6DDA
 	.long LABEL_EE6E54
-	.long 0x00000000	; DD 00000000h
+	.long 0x0
 	.long LABEL_EE6F08
 	.long LABEL_EE6FB0
 	.long LABEL_EE7010
 	.long LABEL_EE7076
 	.long LABEL_EE710C
 	.long LABEL_EE7168
-	.long 0x00000000	; DD 00000000h
-	.long 0x00000000	; DD 00000000h
-	.long 0x00000000	; DD 00000000h
+	.long 0x0
+	.long 0x0
+	.long 0x0
 	.long LABEL_EE6B64
-	.long 0x00000000	; DD 00000000h
-	.long 0x00000000	; DD 00000000h
-	.long 0x00000000	; DD 00000000h
-	.long 0x00000000	; DD 00000000h
-	.long 0x00000000	; DD 00000000h
-	.long 0x00000000	; DD 00000000h
-	.long 0x00000000	; DD 00000000h
-	.long 0x00000000	; DD 00000000h
+	.long 0x0
+	.long 0x0
+	.long 0x0
+	.long 0x0
+	.long 0x0
+	.long 0x0
+	.long 0x0
+	.long 0x0
 	.long LABEL_EE6B9C
 	.long LABEL_EE6BBE
 	.long LABEL_EE6BE0
 	.long LABEL_EE6C02
-	.long 0x00000000	; DD 00000000h
-	.long 0x00000000	; DD 00000000h
-	.long 0x00000000	; DD 00000000h
-	.long 0x00000000	; DD 00000000h
+	.long 0x0
+	.long 0x0
+	.long 0x0
+	.long 0x0
 	.long LABEL_EE71B6
 	.long LABEL_EE7218
 	.long LABEL_EE727A
@@ -107545,7 +107648,7 @@ LABEL_EE7FA8:
 	.long LABEL_F98697
 	.long LABEL_F84710
 	.long LABEL_FB7E14
-	.long 0xFFFFFFFF	; DD 0FFFFFFFFh
+	.long 0xFFFFFFFF
 
 LABEL_EE7FD4:
 	.long LABEL_FEA812
@@ -107557,7 +107660,7 @@ LABEL_EE7FD4:
 	.long LABEL_FB40B7
 	.long LABEL_F98697
 	.long LABEL_F84710
-	.long 0xFFFFFFFF	; DD 0FFFFFFFFh
+	.long 0xFFFFFFFF
 
 LABEL_EE7FFC:
 	.long LABEL_FEA812
@@ -107568,7 +107671,7 @@ LABEL_EE7FFC:
 	.long LABEL_FB40B7
 	.long LABEL_F98697
 	.long LABEL_F84710
-	.long 0xFFFFFFFF	; DD 0FFFFFFFFh
+	.long 0xFFFFFFFF
 
 LABEL_EE8020:
 	.long LABEL_FEA812
@@ -107578,7 +107681,7 @@ LABEL_EE8020:
 	.long LABEL_FC9554
 	.long LABEL_FB40B7
 	.long LABEL_F98697
-	.long 0xFFFFFFFF	; DD 0FFFFFFFFh
+	.long 0xFFFFFFFF
 
 LABEL_EE8040:
 	.long LABEL_FEA812
@@ -107588,7 +107691,7 @@ LABEL_EE8040:
 	.long LABEL_FC9554
 	.long LABEL_FB40B7
 	.long LABEL_F98697
-	.long 0xFFFFFFFF	; DD 0FFFFFFFFh
+	.long 0xFFFFFFFF
 
 LABEL_EE8060:
 	.long LABEL_FEA812
@@ -107598,7 +107701,7 @@ LABEL_EE8060:
 	.long LABEL_FC9554
 	.long LABEL_FB40B7
 	.long LABEL_F98697
-	.long 0xFFFFFFFF	; DD 0FFFFFFFFh
+	.long 0xFFFFFFFF
 
 LABEL_EE8080:
 	.long LABEL_FEA812
@@ -107608,7 +107711,7 @@ LABEL_EE8080:
 	.long LABEL_FC9554
 	.long LABEL_FB40B7
 	.long LABEL_F98697
-	.long 0xFFFFFFFF	; DD 0FFFFFFFFh
+	.long 0xFFFFFFFF
 
 LABEL_EE80A0:
 	.long LABEL_FEA812
@@ -107618,7 +107721,7 @@ LABEL_EE80A0:
 	.long LABEL_FC9554
 	.long LABEL_FB40B7
 	.long LABEL_F98697
-	.long 0xFFFFFFFF	; DD 0FFFFFFFFh
+	.long 0xFFFFFFFF
 
 LABEL_EE80C0:
 	.long LABEL_FEA812
@@ -107628,7 +107731,7 @@ LABEL_EE80C0:
 	.long LABEL_FC9554
 	.long LABEL_FB40B7
 	.long LABEL_F98697
-	.long 0xFFFFFFFF	; DD 0FFFFFFFFh
+	.long 0xFFFFFFFF
 
 LABEL_EE80E0:
 	.long LABEL_FEA812
@@ -107638,7 +107741,7 @@ LABEL_EE80E0:
 	.long LABEL_FC9554
 	.long LABEL_FB40B7
 	.long LABEL_F98697
-	.long 0xFFFFFFFF	; DD 0FFFFFFFFh
+	.long 0xFFFFFFFF
 
 LABEL_EE8100:
 	.long LABEL_FEA812
@@ -107648,7 +107751,7 @@ LABEL_EE8100:
 	.long LABEL_FC9554
 	.long LABEL_FB40B7
 	.long LABEL_F98697
-	.long 0xFFFFFFFF	; DD 0FFFFFFFFh
+	.long 0xFFFFFFFF
 
 LABEL_EE8120:
 	.long LABEL_FEA812
@@ -107658,7 +107761,7 @@ LABEL_EE8120:
 	.long LABEL_FC9554
 	.long LABEL_FB40B7
 	.long LABEL_F98697
-	.long 0xFFFFFFFF	; DD 0FFFFFFFFh
+	.long 0xFFFFFFFF
 
 LABEL_EE8140:
 	.long LABEL_FEA812
@@ -107668,7 +107771,7 @@ LABEL_EE8140:
 	.long LABEL_FC9554
 	.long LABEL_FB40B7
 	.long LABEL_F98697
-	.long 0xFFFFFFFF	; DD 0FFFFFFFFh
+	.long 0xFFFFFFFF
 
 LABEL_EE8160:
 	.long LABEL_FEA812
@@ -107678,7 +107781,7 @@ LABEL_EE8160:
 	.long LABEL_FC9554
 	.long LABEL_FB40B7
 	.long LABEL_F98697
-	.long 0xFFFFFFFF	; DD 0FFFFFFFFh
+	.long 0xFFFFFFFF
 
 LABEL_EE8180:
 	.long LABEL_FEA812
@@ -107688,7 +107791,7 @@ LABEL_EE8180:
 	.long LABEL_FC9554
 	.long LABEL_FB40B7
 	.long LABEL_F98697
-	.long 0xFFFFFFFF	; DD 0FFFFFFFFh
+	.long 0xFFFFFFFF
 
 LABEL_EE81A0:
 	.long LABEL_FEA812
@@ -107698,7 +107801,7 @@ LABEL_EE81A0:
 	.long LABEL_FC9554
 	.long LABEL_FB40B7
 	.long LABEL_F98697
-	.long 0xFFFFFFFF	; DD 0FFFFFFFFh
+	.long 0xFFFFFFFF
 
 LABEL_EE81C0:
 	.long LABEL_FEA812
@@ -107707,7 +107810,7 @@ LABEL_EE81C0:
 	.long LABEL_FD0452
 	.long LABEL_FB40B7
 	.long LABEL_F98697
-	.long 0xFFFFFFFF	; DD 0FFFFFFFFh
+	.long 0xFFFFFFFF
 
 LABEL_EE81DC:
 	.long LABEL_FEA812
@@ -107716,7 +107819,7 @@ LABEL_EE81DC:
 	.long LABEL_FD0452
 	.long LABEL_FB40B7
 	.long LABEL_F98697
-	.long 0xFFFFFFFF	; DD 0FFFFFFFFh
+	.long 0xFFFFFFFF
 
 LABEL_EE81F8:
 	.long LABEL_FEA812
@@ -107725,7 +107828,7 @@ LABEL_EE81F8:
 	.long LABEL_FD0452
 	.long LABEL_FB40B7
 	.long LABEL_F98697
-	.long 0xFFFFFFFF	; DD 0FFFFFFFFh
+	.long 0xFFFFFFFF
 
 LABEL_EE8214:
 	.long LABEL_FEA812
@@ -107734,7 +107837,7 @@ LABEL_EE8214:
 	.long LABEL_FD0452
 	.long LABEL_FB40B7
 	.long LABEL_F98697
-	.long 0xFFFFFFFF	; DD 0FFFFFFFFh
+	.long 0xFFFFFFFF
 
 LABEL_EE8230:
 	.long LABEL_FEA812
@@ -107743,7 +107846,7 @@ LABEL_EE8230:
 	.long LABEL_FD0452
 	.long LABEL_FB40B7
 	.long LABEL_F98697
-	.long 0xFFFFFFFF	; DD 0FFFFFFFFh
+	.long 0xFFFFFFFF
 
 LABEL_EE824C:
 	.long LABEL_FEA812
@@ -107752,7 +107855,7 @@ LABEL_EE824C:
 	.long LABEL_FD0452
 	.long LABEL_FB40B7
 	.long LABEL_F98697
-	.long 0xFFFFFFFF	; DD 0FFFFFFFFh
+	.long 0xFFFFFFFF
 
 LABEL_EE8268:
 	.long LABEL_FEA812
@@ -107761,7 +107864,7 @@ LABEL_EE8268:
 	.long LABEL_FD0452
 	.long LABEL_FB40B7
 	.long LABEL_F98697
-	.long 0xFFFFFFFF	; DD 0FFFFFFFFh
+	.long 0xFFFFFFFF
 
 LABEL_EE8284:
 	.long LABEL_FEA812
@@ -107770,7 +107873,7 @@ LABEL_EE8284:
 	.long LABEL_FD0452
 	.long LABEL_FB40B7
 	.long LABEL_F98697
-	.long 0xFFFFFFFF	; DD 0FFFFFFFFh
+	.long 0xFFFFFFFF
 
 LABEL_EE82A0:
 	.long LABEL_FEA812
@@ -107779,7 +107882,7 @@ LABEL_EE82A0:
 	.long LABEL_FD0452
 	.long LABEL_FB40B7
 	.long LABEL_F98697
-	.long 0xFFFFFFFF	; DD 0FFFFFFFFh
+	.long 0xFFFFFFFF
 
 LABEL_EE82BC:
 	.long LABEL_FEA812
@@ -107788,7 +107891,7 @@ LABEL_EE82BC:
 	.long LABEL_FD0452
 	.long LABEL_FB40B7
 	.long LABEL_F98697
-	.long 0xFFFFFFFF	; DD 0FFFFFFFFh
+	.long 0xFFFFFFFF
 
 LABEL_EE82D8:
 	.long LABEL_FEA812
@@ -107797,7 +107900,7 @@ LABEL_EE82D8:
 	.long LABEL_FD0452
 	.long LABEL_FB40B7
 	.long LABEL_F98697
-	.long 0xFFFFFFFF	; DD 0FFFFFFFFh
+	.long 0xFFFFFFFF
 
 LABEL_EE82F4:
 	.long LABEL_FEA812
@@ -107806,7 +107909,7 @@ LABEL_EE82F4:
 	.long LABEL_FD0452
 	.long LABEL_FB40B7
 	.long LABEL_F98697
-	.long 0xFFFFFFFF	; DD 0FFFFFFFFh
+	.long 0xFFFFFFFF
 
 LABEL_EE8310:
 	.long LABEL_FEA812
@@ -107815,7 +107918,7 @@ LABEL_EE8310:
 	.long LABEL_FD0452
 	.long LABEL_FB40B7
 	.long LABEL_F98697
-	.long 0xFFFFFFFF	; DD 0FFFFFFFFh
+	.long 0xFFFFFFFF
 
 LABEL_EE832C:
 	.long LABEL_FEA812
@@ -107824,7 +107927,7 @@ LABEL_EE832C:
 	.long LABEL_FD0452
 	.long LABEL_FB40B7
 	.long LABEL_F98697
-	.long 0xFFFFFFFF	; DD 0FFFFFFFFh
+	.long 0xFFFFFFFF
 
 LABEL_EE8348:
 	.long LABEL_FEA812
@@ -107833,7 +107936,7 @@ LABEL_EE8348:
 	.long LABEL_FD0452
 	.long LABEL_FB40B7
 	.long LABEL_F98697
-	.long 0xFFFFFFFF	; DD 0FFFFFFFFh
+	.long 0xFFFFFFFF
 
 LABEL_EE8364:
 	.long LABEL_FEA812
@@ -107842,123 +107945,123 @@ LABEL_EE8364:
 	.long LABEL_FD0452
 	.long LABEL_FB40B7
 	.long LABEL_F98697
-	.long 0xFFFFFFFF	; DD 0FFFFFFFFh
+	.long 0xFFFFFFFF
 
 LABEL_EE8380:
-	.long 0xFFFFFFFF	; DD 0FFFFFFFFh
+	.long 0xFFFFFFFF
 
 LABEL_EE8384:
-	.long 0xFFFFFFFF	; DD 0FFFFFFFFh
+	.long 0xFFFFFFFF
 
 LABEL_EE8388:
-	.long 0xFFFFFFFF	; DD 0FFFFFFFFh
+	.long 0xFFFFFFFF
 
 LABEL_EE838C:
-	.long 0xFFFFFFFF	; DD 0FFFFFFFFh
+	.long 0xFFFFFFFF
 
 LABEL_EE8390:
-	.long 0xFFFFFFFF	; DD 0FFFFFFFFh
+	.long 0xFFFFFFFF
 
 LABEL_EE8394:
-	.long 0xFFFFFFFF	; DD 0FFFFFFFFh
+	.long 0xFFFFFFFF
 
 LABEL_EE8398:
-	.long 0xFFFFFFFF	; DD 0FFFFFFFFh
+	.long 0xFFFFFFFF
 
 LABEL_EE839C:
-	.long 0xFFFFFFFF	; DD 0FFFFFFFFh
+	.long 0xFFFFFFFF
 
 LABEL_EE83A0:
-	.long 0xFFFFFFFF	; DD 0FFFFFFFFh
+	.long 0xFFFFFFFF
 
 LABEL_EE83A4:
-	.long 0xFFFFFFFF	; DD 0FFFFFFFFh
+	.long 0xFFFFFFFF
 
 LABEL_EE83A8:
-	.long 0xFFFFFFFF	; DD 0FFFFFFFFh
+	.long 0xFFFFFFFF
 
 LABEL_EE83AC:
-	.long 0xFFFFFFFF	; DD 0FFFFFFFFh
+	.long 0xFFFFFFFF
 
 LABEL_EE83B0:
-	.long 0xFFFFFFFF	; DD 0FFFFFFFFh
+	.long 0xFFFFFFFF
 
 LABEL_EE83B4:
-	.long 0xFFFFFFFF	; DD 0FFFFFFFFh
+	.long 0xFFFFFFFF
 
 LABEL_EE83B8:
-	.long 0xFFFFFFFF	; DD 0FFFFFFFFh
+	.long 0xFFFFFFFF
 
 LABEL_EE83BC:
-	.long 0xFFFFFFFF	; DD 0FFFFFFFFh
+	.long 0xFFFFFFFF
 
 LABEL_EE83C0:
-	.long 0xFFFFFFFF	; DD 0FFFFFFFFh
+	.long 0xFFFFFFFF
 
 LABEL_EE83C4:
-	.long 0xFFFFFFFF	; DD 0FFFFFFFFh
+	.long 0xFFFFFFFF
 
 LABEL_EE83C8:
-	.long 0xFFFFFFFF	; DD 0FFFFFFFFh
+	.long 0xFFFFFFFF
 
 LABEL_EE83CC:
-	.long 0xFFFFFFFF	; DD 0FFFFFFFFh
+	.long 0xFFFFFFFF
 
 LABEL_EE83D0:
-	.long 0xFFFFFFFF	; DD 0FFFFFFFFh
+	.long 0xFFFFFFFF
 
 LABEL_EE83D4:
-	.long 0xFFFFFFFF	; DD 0FFFFFFFFh
+	.long 0xFFFFFFFF
 
 LABEL_EE83D8:
-	.long 0xFFFFFFFF	; DD 0FFFFFFFFh
+	.long 0xFFFFFFFF
 
 LABEL_EE83DC:
-	.long 0xFFFFFFFF	; DD 0FFFFFFFFh
+	.long 0xFFFFFFFF
 
 LABEL_EE83E0:
-	.long 0xFFFFFFFF	; DD 0FFFFFFFFh
+	.long 0xFFFFFFFF
 
 LABEL_EE83E4:
-	.long 0xFFFFFFFF	; DD 0FFFFFFFFh
+	.long 0xFFFFFFFF
 
 LABEL_EE83E8:
-	.long 0xFFFFFFFF	; DD 0FFFFFFFFh
+	.long 0xFFFFFFFF
 
 LABEL_EE83EC:
-	.long 0xFFFFFFFF	; DD 0FFFFFFFFh
+	.long 0xFFFFFFFF
 
 LABEL_EE83F0:
-	.long 0xFFFFFFFF	; DD 0FFFFFFFFh
+	.long 0xFFFFFFFF
 
 LABEL_EE83F4:
-	.long 0xFFFFFFFF	; DD 0FFFFFFFFh
+	.long 0xFFFFFFFF
 
 LABEL_EE83F8:
-	.long 0xFFFFFFFF	; DD 0FFFFFFFFh
+	.long 0xFFFFFFFF
 
 LABEL_EE83FC:
-	.long 0xFFFFFFFF	; DD 0FFFFFFFFh
+	.long 0xFFFFFFFF
 
 LABEL_EE8400:
 	.long LABEL_FC7B07
-	.long 0xFFFFFFFF	; DD 0FFFFFFFFh
+	.long 0xFFFFFFFF
 
 LABEL_EE8408:
-	.long 0xFFFFFFFF	; DD 0FFFFFFFFh
+	.long 0xFFFFFFFF
 
 LABEL_EE840C:
-	.long 0xFFFFFFFF	; DD 0FFFFFFFFh
+	.long 0xFFFFFFFF
 
 LABEL_EE8410:
 	.long LABEL_F98697
 	.long LABEL_FEB010
-	.long 0xFFFFFFFF	; DD 0FFFFFFFFh
+	.long 0xFFFFFFFF
 
 LABEL_EE841C:
 	.long LABEL_F98697
 	.long LABEL_F8476E
-	.long 0xFFFFFFFF	; DD 0FFFFFFFFh
+	.long 0xFFFFFFFF
 
 LABEL_EE8428:
 	.long LABEL_F98697
@@ -267300,7 +267403,7 @@ LABEL_F6F139:
 
 LABEL_F6F149:
 	.byte 0x00
-	.long 0xFFFFFFFF	; DD 0FFFFFFFFh
+	.long 0xFFFFFFFF
 	.byte 0x87
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; DB 248 dup (00h)
 	.byte 0x00, 0x87
@@ -423230,10 +423333,10 @@ LABEL_FFFEEB:
 	.byte 0xff, 0xff, 0xff, 0x00, 0xff
 
 LABEL_FFFEF0:
-	.long 0x00000409	; DD 00000409h
-	.long 0x00000409	; DD 00000409h
-	.long 0x00000409	; DD 00000409h
-	.long 0x00000409	; DD 00000409h
+	.long 0x409
+	.long 0x409
+	.long 0x409
+	.long 0x409
 LABEL_FFFF00:
 
 
@@ -430820,108 +430923,3 @@ FIRMWARE_VERSION:	; FFFFE8
 	.set LABEL_FF0666, 0xFF0666
 	.set LABEL_FFCCE8, 0xFFCCE8
 	.set LABEL_FFFFFF, 0xFFFFFF
-	.set LABEL_E0E9EC, 0xE0E9EC
-	.set LABEL_E0F132, 0xE0F132
-	.set LABEL_E14302, 0xE14302
-	.set LABEL_E14304, 0xE14304
-	.set LABEL_E14306, 0xE14306
-	.set LABEL_E1430A, 0xE1430A
-	.set LABEL_E1430C, 0xE1430C
-	.set LABEL_E1430E, 0xE1430E
-	.set LABEL_E14346, 0xE14346
-	.set LABEL_E14348, 0xE14348
-	.set LABEL_E1434A, 0xE1434A
-	.set LABEL_E1434C, 0xE1434C
-	.set LABEL_E1434E, 0xE1434E
-	.set LABEL_E14350, 0xE14350
-	.set LABEL_E14352, 0xE14352
-	.set LABEL_E14354, 0xE14354
-	.set LABEL_E14356, 0xE14356
-	.set LABEL_E14358, 0xE14358
-	.set LABEL_E1435A, 0xE1435A
-	.set LABEL_E1435C, 0xE1435C
-	.set LABEL_E1435E, 0xE1435E
-	.set LABEL_E14360, 0xE14360
-	.set LABEL_E14362, 0xE14362
-	.set LABEL_E14364, 0xE14364
-	.set LABEL_E14366, 0xE14366
-	.set LABEL_E14368, 0xE14368
-	.set LABEL_E1436A, 0xE1436A
-	.set LABEL_E1436C, 0xE1436C
-	.set LABEL_E1436E, 0xE1436E
-	.set LABEL_E14370, 0xE14370
-	.set LABEL_E14372, 0xE14372
-	.set LABEL_E14374, 0xE14374
-	.set LABEL_E14376, 0xE14376
-	.set LABEL_E14378, 0xE14378
-	.set LABEL_E1437A, 0xE1437A
-	.set LABEL_E1437C, 0xE1437C
-	.set LABEL_E1437E, 0xE1437E
-	.set LABEL_E14380, 0xE14380
-	.set LABEL_E14382, 0xE14382
-	.set LABEL_E14384, 0xE14384
-	.set LABEL_E14386, 0xE14386
-	.set LABEL_E14388, 0xE14388
-	.set LABEL_E1438A, 0xE1438A
-	.set LABEL_E1438C, 0xE1438C
-	.set LABEL_E1438E, 0xE1438E
-	.set LABEL_E14390, 0xE14390
-	.set LABEL_E1439C, 0xE1439C
-	.set LABEL_E1439E, 0xE1439E
-	.set LABEL_E143A0, 0xE143A0
-	.set LABEL_E143A2, 0xE143A2
-	.set LABEL_E143A4, 0xE143A4
-	.set LABEL_E143A6, 0xE143A6
-	.set LABEL_E143A8, 0xE143A8
-	.set LABEL_E143AA, 0xE143AA
-	.set LABEL_E143AC, 0xE143AC
-	.set LABEL_E143AE, 0xE143AE
-	.set LABEL_E143B0, 0xE143B0
-	.set LABEL_E143B2, 0xE143B2
-	.set LABEL_E143B4, 0xE143B4
-	.set LABEL_E143B6, 0xE143B6
-	.set LABEL_E143B8, 0xE143B8
-	.set LABEL_E143BA, 0xE143BA
-	.set LABEL_E143BC, 0xE143BC
-	.set LABEL_E143BE, 0xE143BE
-	.set LABEL_E143C0, 0xE143C0
-	.set LABEL_E143C2, 0xE143C2
-	.set LABEL_E143CE, 0xE143CE
-	.set LABEL_E143D0, 0xE143D0
-	.set LABEL_E143D2, 0xE143D2
-	.set LABEL_E143D4, 0xE143D4
-	.set LABEL_E143D6, 0xE143D6
-	.set LABEL_E143D8, 0xE143D8
-	.set LABEL_E143DA, 0xE143DA
-	.set LABEL_E143DC, 0xE143DC
-	.set LABEL_E143DE, 0xE143DE
-	.set LABEL_E143E0, 0xE143E0
-	.set LABEL_E143E2, 0xE143E2
-	.set LABEL_E143E4, 0xE143E4
-	.set LABEL_E143E6, 0xE143E6
-	.set LABEL_E143E8, 0xE143E8
-	.set LABEL_E143EA, 0xE143EA
-	.set LABEL_E143EC, 0xE143EC
-	.set LABEL_E143EE, 0xE143EE
-	.set LABEL_E143F0, 0xE143F0
-	.set LABEL_E143F2, 0xE143F2
-	.set LABEL_E143F4, 0xE143F4
-	.set LABEL_E14400, 0xE14400
-	.set LABEL_E14408, 0xE14408
-	.set LABEL_E14410, 0xE14410
-	.set LABEL_E14412, 0xE14412
-	.set LABEL_E14414, 0xE14414
-	.set LABEL_E14416, 0xE14416
-	.set LABEL_E14418, 0xE14418
-	.set LABEL_E1441A, 0xE1441A
-	.set LABEL_E1441C, 0xE1441C
-	.set LABEL_E1441E, 0xE1441E
-	.set LABEL_E14420, 0xE14420
-	.set LABEL_E14422, 0xE14422
-	.set LABEL_E14424, 0xE14424
-	.set LABEL_E14426, 0xE14426
-	.set LABEL_E14428, 0xE14428
-	.set LABEL_E1442A, 0xE1442A
-	.set LABEL_E14436, 0xE14436
-	.set FmmSmfMedleyFunc, 0xF92DB7
-	.set FmmPdMedleyFunc, 0xF935C0
