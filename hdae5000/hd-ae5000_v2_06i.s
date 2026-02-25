@@ -1180,7 +1180,87 @@ HDAE5000_Display_Init:	; 28F90Ch
 	; Registers callbacks via workspace function tables
 	; at 0x23A1A2 -> (XWA+0xE88) -> (XWA+0xE8)
 	; Calls Display_String routine at 0x298622
-	.incbin "includes/code_28f90c_2953e1.bin"
+	.incbin "includes/code_28f90c_2953e1.bin", 0, 114
+
+HDAE5000_Calc_Offset_16:	; 0x28F97E
+	; Calculate 16-byte offset in table
+	.incbin "includes/code_28f90c_2953e1.bin", 114, 13
+
+HDAE5000_Copy_To_Table:	; 0x28F98B
+	; Copy data to table at 0x201632
+	.incbin "includes/code_28f90c_2953e1.bin", 127, 34
+
+HDAE5000_Get_Display_Dimensions_A1_2F:	; 0x28F9AD
+	; Memory check routine
+	.incbin "includes/code_28f90c_2953e1.bin", 161, 62
+
+HDAE5000_Count_Invalid_Cells:	; 0x28F9EB
+	; Count invalid entries
+	.incbin "includes/code_28f90c_2953e1.bin", 223, 51
+
+HDAE5000_Calculate_Row_Address:	; 0x28FA1E
+	; Calculate address with 0x4C multiplier
+	.incbin "includes/code_28f90c_2953e1.bin", 274, 56
+
+HDAE5000_Copy_Display_Cell:	; 0x28FA56
+	; Copy table entry
+	.incbin "includes/code_28f90c_2953e1.bin", 330, 74
+
+HDAE5000_Calculate_Tile_Address:	; 0x28FAA0
+	; Calculate address with 0x90 multiplier
+	.incbin "includes/code_28f90c_2953e1.bin", 404, 26
+
+HDAE5000_Copy_Display_Cell_90:	; 0x28FABA
+	; Copy 0x90-stride entry
+	.incbin "includes/code_28f90c_2953e1.bin", 430, 47
+
+HDAE5000_Validate_Cell_Coords:	; 0x28FAE9
+	; Check table entry validity
+	.incbin "includes/code_28f90c_2953e1.bin", 477, 61
+
+HDAE5000_Resolve_Cell_Address:	; 0x28FB26
+	; Get entry address with validation
+	.incbin "includes/code_28f90c_2953e1.bin", 538, 139
+
+HDAE5000_Cell_In_Bounds:	; 0x28FBB1
+	; Validate entry at coordinates
+	.incbin "includes/code_28f90c_2953e1.bin", 677, 21592
+
+HDAE5000_PPORT_Util:	; 0x295009
+	; PPORT utility function
+	.incbin "includes/code_28f90c_2953e1.bin", 22269, 19
+
+HDAE5000_PPORT_Handler:	; 0x29501C
+	; PPORT state machine entry
+	.incbin "includes/code_28f90c_2953e1.bin", 22288, 42
+
+HDAE5000_PPORT_Status:	; 0x295046
+	; PPORT status check
+	.incbin "includes/code_28f90c_2953e1.bin", 22330, 18
+
+HDAE5000_PPORT_Init:	; 0x295058
+	; PPORT initialization
+	.incbin "includes/code_28f90c_2953e1.bin", 22348, 116
+
+HDAE5000_PPORT_Dispatch:	; 0x2950CC
+	; Command dispatcher
+	.incbin "includes/code_28f90c_2953e1.bin", 22464, 44
+
+HDAE5000_Display_String:	; 0x2950F8
+	; Display string routine (heavily used)
+	.incbin "includes/code_28f90c_2953e1.bin", 22508, 36
+
+HDAE5000_PPORT_Setup:	; 0x29511C
+	; PPORT setup routine
+	.incbin "includes/code_28f90c_2953e1.bin", 22544, 442
+
+HDAE5000_PPORT_Menu:	; 0x2952D6
+	; PPORT menu handler
+	.incbin "includes/code_28f90c_2953e1.bin", 22986, 34
+
+HDAE5000_PPORT_Execute:	; 0x2952F8
+	; Execute PPORT command
+	.incbin "includes/code_28f90c_2953e1.bin", 23020, 234
 
 ; ============================================================================
 ; PPORT COMMAND HANDLER JUMP TABLE (0x2953E2 - 0x295411)
@@ -1318,7 +1398,83 @@ HDAE5000_PPORT_Strings:	; 29541Eh
 
 HDAE5000_Code_2_PartB:	; 295642h
 	; PPORT command handlers and HD routines
-	.incbin "includes/code_295642_2971a2.bin"
+	.incbin "includes/code_295642_2971a2.bin", 0, 660
+
+HDAE5000_Cmd01_SendInfo:	; 0x2958D6
+	; Handler: Send HD info
+	.incbin "includes/code_295642_2971a2.bin", 660, 62
+
+HDAE5000_Cmd02_Exit:	; 0x295914
+	; Handler: Exit PPORT
+	.incbin "includes/code_295642_2971a2.bin", 722, 226
+
+HDAE5000_Cmd03_ReadFSB:	; 0x2959F6
+	; Handler: Read FSB from HD
+	.incbin "includes/code_295642_2971a2.bin", 948, 838
+
+HDAE5000_Cmd04_SendFSB:	; 0x295D3C
+	; Handler: Send FSB to PC
+	.incbin "includes/code_295642_2971a2.bin", 1786, 798
+
+HDAE5000_Cmd05_RcvFSB:	; 0x29605A
+	; Handler: Receive FSB from PC
+	.incbin "includes/code_295642_2971a2.bin", 2584, 570
+
+HDAE5000_Cmd06_WriteFSB:	; 0x296294
+	; Handler: Write FSB to HD
+	.incbin "includes/code_295642_2971a2.bin", 3154, 150
+
+HDAE5000_PPORT_Cmd_LoadHDtoMemory:	; 0x29632A
+	; Load HD to Memory
+	.incbin "includes/code_295642_2971a2.bin", 3304, 18
+
+HDAE5000_PPORT_Cmd_SendDataBlock:	; 0x29633C
+	; Send data block to PC
+	.incbin "includes/code_295642_2971a2.bin", 3322, 362
+
+HDAE5000_PPORT_Cmd_SendFileList:	; 0x2964A6
+	; Send file list to PC
+	.incbin "includes/code_295642_2971a2.bin", 3684, 226
+
+HDAE5000_PPORT_Cmd_ReceiveDataBlock:	; 0x296588
+	; Receive data from PC
+	.incbin "includes/code_295642_2971a2.bin", 3910, 18
+
+HDAE5000_PPORT_Cmd_WriteMemoryToHD:	; 0x29659A
+	; Save memory to HD
+	.incbin "includes/code_295642_2971a2.bin", 3928, 230
+
+HDAE5000_PPORT_Cmd_Reserved:	; 0x296680
+	; (reserved/placeholder)
+	.incbin "includes/code_295642_2971a2.bin", 4158, 62
+
+PPORT_Utility_1:	; 0x2966BE
+	; PPORT utility routine 1
+	.incbin "includes/code_295642_2971a2.bin", 4220, 60
+
+PPORT_Utility_2:	; 0x2966FA
+	; PPORT utility routine 2
+	.incbin "includes/code_295642_2971a2.bin", 4280, 18
+
+PPORT_Utility_3:	; 0x29670C
+	; PPORT utility routine 3
+	.incbin "includes/code_295642_2971a2.bin", 4298, 168
+
+HDAE5000_Render_Display_Region:	; 0x2967B4
+	; Display region rendering
+	.incbin "includes/code_295642_2971a2.bin", 4466, 48
+
+HDAE5000_Render_Display_Region2:	; 0x2967E4
+	; Display region rendering 2
+	.incbin "includes/code_295642_2971a2.bin", 4514, 696
+
+HDAE5000_PPORT_Ready_Check:	; 0x296A9C
+	; Check PPORT readiness
+	.incbin "includes/code_295642_2971a2.bin", 5210, 26
+
+HDAE5000_PPORT_Cleanup:	; 0x296AB6
+	; PPORT cleanup routine
+	.incbin "includes/code_295642_2971a2.bin", 5236, 1773
 
 HDAE5000_Check_HD_Present:	; 2971A3h
 	; Entry wrapper for HD presence detection
@@ -1338,7 +1494,11 @@ HDAE5000_RAM_Test:	; 2971B7h
 	; 2. Verifies the pattern
 	; 3. Clears the RAM
 	; 4. Initializes HD-related variables at 0x229Dxx
-	.incbin "includes/code_2971b7_29ae9e.bin"
+	.incbin "includes/code_2971b7_29ae9e.bin", 0, 10233
+
+HDAE5000_Version_Info:	; 0x2999B0
+	; Version/author strings
+	.incbin "includes/code_2971b7_29ae9e.bin", 10233, 5359
 
 ; ----------------------------------------------------------------------------
 ; Memory Utility Routines (0x29AE9F - 0x29AF2C)
@@ -1445,7 +1605,59 @@ HDAE5000_StrCopy__copy_check:
 ; ----------------------------------------------------------------------------
 
 HDAE5000_Code_Remainder:	; 29AF2Dh
-	.incbin "includes/code_29af2d_2fffff.bin"
+	.incbin "includes/code_29af2d_2fffff.bin", 0, 68
+
+HDAE5000_Display_Buffer_Validate:	; 0x29AF71
+	; Buffer validation
+	.incbin "includes/code_29af2d_2fffff.bin", 68, 77
+
+HDAE5000_MemCompare_Block:	; 0x29AFBE
+	; Memory block compare
+	.incbin "includes/code_29af2d_2fffff.bin", 145, 50
+
+HDAE5000_MemCopy_Reverse:	; 0x29AFF0
+	; Memory copy (reverse direction)
+	.incbin "includes/code_29af2d_2fffff.bin", 195, 1853
+
+HDAE5000_Multiply:	; 0x29B72D
+	; 32-bit multiply routine
+	.incbin "includes/code_29af2d_2fffff.bin", 2048, 2227
+
+HDAE5000_UI_Config:	; 0x29BFE0
+	; UI configuration strings
+	.incbin "includes/code_29af2d_2fffff.bin", 4275, 202
+
+HDAE5000_RECORD_TABLE:	; 0x29C0AA
+	; Record/entry data table
+	.incbin "includes/code_29af2d_2fffff.bin", 4477, 6356
+
+HDAE5000_RECORD_COUNT:	; 0x29D97E
+	; Record count data
+	.incbin "includes/code_29af2d_2fffff.bin", 10833, 33710
+
+HDAE5000_GFX_DATA_1:	; 0x2A5D2C
+	; Graphics data block 1
+	.incbin "includes/code_29af2d_2fffff.bin", 44543, 3160
+
+HDAE5000_GFX_DATA_2:	; 0x2A6984
+	; Graphics data block 2
+	.incbin "includes/code_29af2d_2fffff.bin", 47703, 6934
+
+HDAE5000_GFX_INIT_PARAMS:	; 0x2A849A
+	; Graphics initialization parameters
+	.incbin "includes/code_29af2d_2fffff.bin", 54637, 252212
+
+HDAE5000_Palette_Data:	; 0x2E5DCE
+	; VGA palette data (256 entries)
+	.incbin "includes/code_29af2d_2fffff.bin", 306849, 77824
+
+HDAE5000_Display_Params:	; 0x2F8DCE
+	; Display configuration parameters
+	.incbin "includes/code_29af2d_2fffff.bin", 384673, 1764
+
+HDAE5000_Init_Data:	; 0x2F94B2
+	; Data copied to 0x23952A (0xC82 bytes)
+	.incbin "includes/code_29af2d_2fffff.bin", 386437, 27470
 
 ; ============================================================================
 ; END OF ROM (0x300000)
@@ -1454,26 +1666,3 @@ HDAE5000_Code_Remainder:	; 29AF2Dh
 end:
 
 ; Labels emitted as .set (exact addresses from ORG/name)
-	.set HDAE5000_PPORT_Handler, 0x29501C
-	.set HDAE5000_Cmd01_SendInfo, 0x2958D6
-	.set HDAE5000_Cmd02_Exit, 0x295914
-	.set HDAE5000_Cmd03_ReadFSB, 0x2959F6
-	.set HDAE5000_Cmd04_SendFSB, 0x295D3C
-	.set HDAE5000_Cmd05_RcvFSB, 0x29605A
-	.set HDAE5000_Cmd06_WriteFSB, 0x296294
-	.set HDAE5000_PPORT_Cmd_LoadHDtoMemory, 0x29632A
-	.set HDAE5000_PPORT_Cmd_SendDataBlock, 0x29633C
-	.set HDAE5000_PPORT_Cmd_SendFileList, 0x2964A6
-	.set HDAE5000_PPORT_Cmd_ReceiveDataBlock, 0x296588
-	.set HDAE5000_PPORT_Cmd_WriteMemoryToHD, 0x29659A
-	.set HDAE5000_PPORT_Cmd_Reserved, 0x296680
-	.set PPORT_Utility_1, 0x2966BE
-	.set PPORT_Utility_2, 0x2966FA
-	.set PPORT_Utility_3, 0x29670C
-	.set HDAE5000_RECORD_TABLE, 0x29C0AA
-	.set HDAE5000_RECORD_COUNT, 0x29D97E
-	.set HDAE5000_GFX_DATA_1, 0x2A5D2C
-	.set HDAE5000_GFX_DATA_2, 0x2A6984
-	.set HDAE5000_GFX_INIT_PARAMS, 0x2A849A
-	.set HDAE5000_Palette_Data, 0x2E5DCE
-	.set HDAE5000_Display_Params, 0x2F8DCE
