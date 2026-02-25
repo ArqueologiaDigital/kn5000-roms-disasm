@@ -108,8 +108,17 @@
 ;   0x2999B0  HDAE5000_Version_Info - Version string block:
 ;                "Technics Software section    M. Kitajima"
 ;                Version "2.33J", "2.21", "TECHNICS KN5000"
-;   0x29BFE0  HDAE5000_UI_Config - UI configuration strings:
-;                "infofont", "reversecolor", "fontcolor", "dial", etc.
+;   0x29BFE0  HDAE5000_UI_Config - UI configuration strings
+;   0x2BA1A6  HDAE5000_Font_Data - Font bitmap data (large block)
+;   0x2E1C82  HDAE5000_Config_Strings - Configuration and version strings
+;   0x2E21D8  HDAE5000_Test_Strings - PPORT test and debug strings
+;   0x2E2500  HDAE5000_Dir_Strings - Directory management strings
+;   0x2E2E76  HDAE5000_Char_Tables - Character set tables
+;   0x2E348F  HDAE5000_Path_Strings - File path and config strings
+;   0x2E365D  HDAE5000_UI_Icons - UI icon/pattern data with language IDs
+;   0x2E3704  HDAE5000_Multilingual_Messages - Trilingual UI messages (EN/DE/FR)
+;   0x2E5B80  HDAE5000_Lang_Codes - Language code strings and file types
+;   0x2F8DCE  HDAE5000_Display_Params - File extensions, device names, config
 ;   0x2F94B2  HDAE5000_Init_Data - Data copied to 0x23952A (0xC82 bytes)
 ;
 ; RAM Workspace (0x23xxxx):
@@ -1625,7 +1634,39 @@ HDAE5000_Multiply:	; 0x29B72D
 
 HDAE5000_UI_Config:	; 0x29BFE0
 	; UI configuration strings
-	.incbin "includes/code_29af2d_2fffff.bin", 4275, 202
+	.asciz "adraw"
+	.asciz "auto_inc"
+	.byte 0x00
+	.asciz "dial"
+	.byte 0x00
+	.asciz "sel_num"
+	.asciz "row"
+	.asciz "column"
+	.byte 0x00
+	.asciz "str_adr"
+	.asciz "main_func"
+	.asciz "fontcolor"
+	.asciz "font"
+	.zero 3
+	.asciz "fontcolor"
+	.asciz "color"
+	.zero 6
+	.asciz "func"
+	.zero 15
+	.asciz "infocolor"
+	.asciz "infofont"
+	.byte 0x00
+	.asciz "reversecolor"
+	.byte 0x00
+	.asciz "fontcolor"
+	.asciz "font"
+	.byte 0x00
+	.asciz "pEnable"
+	.zero 2
+	.asciz "sel_pos"
+	.asciz "sel_num"
+	.asciz "dial"
+	.byte 0x00
 
 HDAE5000_RECORD_TABLE:	; 0x29C0AA
 	; Record/entry data table
@@ -1645,7 +1686,43 @@ HDAE5000_GFX_DATA_2:	; 0x2A6984
 
 HDAE5000_GFX_INIT_PARAMS:	; 0x2A849A
 	; Graphics initialization parameters
-	.incbin "includes/code_29af2d_2fffff.bin", 54637, 252212
+	.incbin "includes/code_29af2d_2fffff.bin", 54637, 72972
+
+HDAE5000_Font_Data:	; 0x2BA1A6
+	; Font bitmap data (large block)
+	.incbin "includes/code_29af2d_2fffff.bin", 127609, 162524
+
+HDAE5000_Config_Strings:	; 0x2E1C82
+	; Configuration and version strings
+	.incbin "includes/code_29af2d_2fffff.bin", 290133, 1366
+
+HDAE5000_Test_Strings:	; 0x2E21D8
+	; PPORT test and debug strings
+	.incbin "includes/code_29af2d_2fffff.bin", 291499, 808
+
+HDAE5000_Dir_Strings:	; 0x2E2500
+	; Directory management strings
+	.incbin "includes/code_29af2d_2fffff.bin", 292307, 2422
+
+HDAE5000_Char_Tables:	; 0x2E2E76
+	; Character set tables
+	.incbin "includes/code_29af2d_2fffff.bin", 294729, 1561
+
+HDAE5000_Path_Strings:	; 0x2E348F
+	; File path and config strings
+	.incbin "includes/code_29af2d_2fffff.bin", 296290, 462
+
+HDAE5000_UI_Icons:	; 0x2E365D
+	; UI icon/pattern data with language IDs
+	.incbin "includes/code_29af2d_2fffff.bin", 296752, 167
+
+HDAE5000_Multilingual_Messages:	; 0x2E3704
+	; Trilingual UI messages (EN/DE/FR)
+	.incbin "includes/code_29af2d_2fffff.bin", 296919, 9340
+
+HDAE5000_Lang_Codes:	; 0x2E5B80
+	; Language code strings and file types
+	.incbin "includes/code_29af2d_2fffff.bin", 306259, 590
 
 HDAE5000_Palette_Data:	; 0x2E5DCE
 	; VGA palette data (256 entries)
@@ -1653,7 +1730,272 @@ HDAE5000_Palette_Data:	; 0x2E5DCE
 
 HDAE5000_Display_Params:	; 0x2F8DCE
 	; Display configuration parameters
-	.incbin "includes/code_29af2d_2fffff.bin", 384673, 1764
+	.asciz "HD-AE5000"
+	.zero 8
+	.asciz "                "
+	.byte 0x00
+	.asciz "                "
+	.byte 0x00
+	.asciz "                          "
+	.byte 0x00
+	.byte 0x98, 0x8e
+	.asciz "/"
+	.byte 0x04
+	.byte 0x00
+	.byte 0x02
+	.byte 0x00
+	.byte 0x94, 0x8e
+	.asciz "/"
+	.zero 2
+	.byte 0x02
+	.byte 0x00
+	.byte 0x90, 0x8e
+	.asciz "/"
+	.byte 0x05
+	.byte 0x00
+	.byte 0x02
+	.byte 0x00
+	.byte 0x8c, 0x8e
+	.asciz "/"
+	.zero 2
+	.byte 0x03
+	.byte 0x00
+	.ascii "z"
+	.byte 0x8e
+	.asciz "/"
+	.zero 2
+	.byte 0x10
+	.byte 0x00
+	.ascii "v"
+	.byte 0x8e
+	.asciz "/"
+	.zero 2
+	.byte 0x03
+	.byte 0x00
+	.ascii "r"
+	.byte 0x8e
+	.asciz "/"
+	.zero 2
+	.byte 0x03
+	.byte 0x00
+	.ascii "n"
+	.byte 0x8e
+	.asciz "/"
+	.zero 2
+	.byte 0x02
+	.byte 0x00
+	.ascii "h"
+	.byte 0x8e
+	.asciz "/"
+	.zero 2
+	.byte 0x04
+	.byte 0x00
+	.asciz "TLhd"
+	.byte 0x00
+	.asciz "HK"
+	.byte 0x00
+	.asciz "H"
+	.asciz "K"
+	.asciz "H"
+	.asciz "K"
+	.asciz "KN5000 SOUND RAM"
+	.byte 0x00
+	.asciz "H"
+	.asciz "K"
+	.byte 0x01, 0x08
+	.zero 2
+	.asciz "HK"
+	.byte 0x00
+	.asciz "HK"
+	.byte 0x00
+	.asciz ".SEQ"
+	.byte 0x00
+	.asciz ".SQF"
+	.byte 0x00
+	.asciz ".LSW"
+	.byte 0x00
+	.asciz "rb"
+	.byte 0x00
+	.asciz ".PMT"
+	.byte 0x00
+	.asciz "rb"
+	.byte 0x00
+	.asciz ".SQT"
+	.byte 0x00
+	.asciz "rb"
+	.byte 0x00
+	.asciz ".CMP"
+	.byte 0x00
+	.asciz "rb"
+	.byte 0x00
+	.asciz ".TM"
+	.asciz "rb"
+	.byte 0x00
+	.asciz ".MSP"
+	.byte 0x00
+	.asciz "rb"
+	.byte 0x00
+	.asciz ".RCM"
+	.byte 0x00
+	.asciz "rb"
+	.byte 0x00
+	.asciz ".MD"
+	.asciz "rb"
+	.byte 0x00
+	.asciz ".TLX"
+	.byte 0x00
+	.asciz "rb"
+	.byte 0x00
+	.asciz ".TTX"
+	.byte 0x00
+	.asciz "rb"
+	.byte 0x00
+	.asciz ".LSW"
+	.byte 0x00
+	.asciz "rb"
+	.byte 0x00
+	.asciz ".PMT"
+	.byte 0x00
+	.asciz "rb"
+	.byte 0x00
+	.asciz ".SQT"
+	.byte 0x00
+	.asciz "rb"
+	.byte 0x00
+	.asciz ".CMP"
+	.byte 0x00
+	.asciz "rb"
+	.byte 0x00
+	.asciz ".TM"
+	.asciz "rb"
+	.byte 0x00
+	.asciz ".MSP"
+	.byte 0x00
+	.asciz "rb"
+	.byte 0x00
+	.asciz ".RCM"
+	.byte 0x00
+	.asciz "rb"
+	.byte 0x00
+	.asciz ".MD"
+	.asciz "rb"
+	.byte 0x00
+	.asciz ".TLX"
+	.byte 0x00
+	.asciz "rb"
+	.byte 0x00
+	.asciz "---[ GetInfoBlockPointer ]---"
+	.asciz "ppib adr = %lx"
+	.byte 0x00
+	.asciz " "
+	.asciz "---[ TurnHdMotorOff ]---"
+	.byte 0x00
+	.asciz " "
+	.asciz "---[ SendInfosAboutHd ]---"
+	.byte 0x00
+	.asciz "hddname : "
+	.byte 0x00
+	.asciz "hddtrck : %d"
+	.byte 0x00
+	.asciz "hddhead : %d"
+	.byte 0x00
+	.asciz "hddsctr : %d"
+	.byte 0x00
+	.asciz "hddscby : %d"
+	.byte 0x00
+	.asciz " "
+	.asciz "---[ SendInfosAboutDirBlock ]---"
+	.byte 0x00
+	.asciz "FGB ptr : %lx"
+	.asciz "FGB wid : %d"
+	.byte 0x00
+	.asciz "FGB num : %d"
+	.byte 0x00
+	.asciz " "
+	.asciz "---[ SendInfosAboutFileSystemBlock ]---"
+	.asciz "FEB ptr : %lx"
+	.asciz "FEB wid : %d"
+	.byte 0x00
+	.asciz "FEB num : %d"
+	.byte 0x00
+	.asciz " "
+	.asciz "---[ SendInfosAboutFlsBlock ]---"
+	.byte 0x00
+	.asciz "FLS ptr : %lx"
+	.asciz "FLS wid : %d"
+	.byte 0x00
+	.asciz "FLS num : %d"
+	.byte 0x00
+	.asciz "FLS ent : %d"
+	.byte 0x00
+	.asciz " "
+	.asciz "---[ ReadDirBlockFromHd ]---"
+	.byte 0x00
+	.asciz " "
+	.asciz "---[ ReadFileBlockFromHd ]---"
+	.asciz " "
+	.asciz "---[ ReadFlsBlockFromHd ]---"
+	.byte 0x00
+	.asciz " "
+	.asciz "---[ WriteDirBlockToHd ]---"
+	.asciz " "
+	.asciz "---[ WriteFileSystemBlockToHd ]---"
+	.byte 0x00
+	.asciz " "
+	.asciz "---[ WriteFlsBlockToHd ]---"
+	.asciz " "
+	.asciz "---[ SendInfosAboutSong ]--- "
+	.asciz "dirname : %s"
+	.byte 0x00
+	.asciz "sngname : %s"
+	.byte 0x00
+	.asciz " "
+	.asciz "---[ LoadSongFromHdToMemory ]---"
+	.byte 0x00
+	.asciz " "
+	.asciz "---[ SaveSongInMemoryToHd ]---"
+	.byte 0x00
+	.asciz " "
+	.asciz "---[ InitWholeSongInMemory ]---"
+	.asciz " "
+	.asciz "---[ FormatHd ]---"
+	.byte 0x00
+	.asciz " "
+	.asciz "---[ SendPointerToFreeBufferSpace ]---"
+	.byte 0x00
+	.asciz "work adr : %lx"
+	.byte 0x00
+	.asciz " "
+	.asciz "---[ PreWholeSongInMemory ]---"
+	.byte 0x00
+	.asciz " "
+	.asciz "---[ WriteOpenHD ]--- "
+	.byte 0x00
+	.asciz "SUFFIX : %d"
+	.asciz "---[ WriteCloseHD ]--- "
+	.asciz "---[ WriteFileHD ]--- "
+	.byte 0x00
+	.asciz "---[ ReadOpenHD ]--- "
+	.asciz "---[ ReadFileHD ]--- "
+	.ascii "         (((((                  H"
+	.byte 0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x84
+	.byte 0x84, 0x84, 0x84, 0x84, 0x84, 0x84, 0x84, 0x84, 0x84, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10
+	.byte 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01
+	.byte 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10
+	.byte 0x82, 0x82, 0x82, 0x82, 0x82, 0x82, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02
+	.byte 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x10, 0x10, 0x10, 0x10
+	.asciz " "
+	.zero 129
+	.byte 0x0d, 0x01, 0x8a, 0x06, 0x8a, 0x06, 0x8a, 0x06, 0xe1, 0x06, 0x0d, 0x01, 0xe1, 0x06, 0xe1, 0x06
+	.byte 0xe1, 0x06, 0xe1, 0x06
+	.ascii "f"
+	.byte 0x06, 0x1a, 0x05, 0xaf, 0x03, 0xe1, 0x06, 0xe1, 0x06
+	.asciz "i"
+	.byte 0xe1, 0x06, 0xb9, 0x02, 0xe1, 0x06, 0xe1, 0x06, 0xb2, 0x03
+	.asciz "0123456789abcdef"
+	.byte 0x00
+	.asciz "0123456789ABCDEF"
+	.byte 0x00
 
 HDAE5000_Init_Data:	; 0x2F94B2
 	; Data copied to 0x23952A (0xC82 bytes)
