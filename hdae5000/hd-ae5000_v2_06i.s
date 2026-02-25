@@ -1248,10 +1248,10 @@ HDAE5000_PPORT_Cmd_Table:	; 2953E2h
 ; ============================================================================
 
 HDAE5000_PPORT_Ptrs:	; 295412h
-	; 3 pointers to PPORT utility routines
-	.long 0x2966BE	; Pointer to utility 1
-	.long 0x2966FA	; Pointer to utility 2
-	.long 0x29670C	; Pointer to utility 3
+	; 3 pointers to PPORT utility routines (in code_295642_2971a2.bin)
+	.long PPORT_Utility_1
+	.long PPORT_Utility_2
+	.long PPORT_Utility_3
 
 HDAE5000_PPORT_Strings:	; 29541Eh
 	; PPORT command menu strings (21 null-terminated strings)
@@ -1467,6 +1467,9 @@ end:
 	.set HDAE5000_PPORT_Cmd_ReceiveDataBlock, 0x296588
 	.set HDAE5000_PPORT_Cmd_WriteMemoryToHD, 0x29659A
 	.set HDAE5000_PPORT_Cmd_Reserved, 0x296680
+	.set PPORT_Utility_1, 0x2966BE
+	.set PPORT_Utility_2, 0x2966FA
+	.set PPORT_Utility_3, 0x29670C
 	.set HDAE5000_RECORD_TABLE, 0x29C0AA
 	.set HDAE5000_RECORD_COUNT, 0x29D97E
 	.set HDAE5000_GFX_DATA_1, 0x2A5D2C
