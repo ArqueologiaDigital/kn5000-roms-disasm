@@ -1830,21 +1830,115 @@ HDAE5000_Copy_To_Table:	; 0x28F98B (34 bytes)
 	popw iz
 	ret
 
-HDAE5000_Get_Display_Dimensions_A1_2F:	; 0x28F9AD
-	; Memory check routine
-	.incbin "includes/code_28f90c_2953e1.bin", 161, 62
+HDAE5000_Get_Display_Dimensions_A1_2F:	; 0x28F9AD (62 bytes)
+	; Check if tile entry matches reference; return 0 or -1
+	; Input: WA = tile index, Output: HL = 0 (match) or 0xFFFF (mismatch)
+	push xiz		; save XIZ
+	ld iz, wa		; IZ = tile index
+	.byte 0xd7, 0xfa, 0xa8	; ld QIZ, 0 (Q-bank: init result)
+	pushw 0x002F		; push max length (47)
+	pushw 0x8DE0		; push reference string address
+	call HDAE5000_Display_Buffer_Validate
+	pushw hl		; push reference length
+	pushw 0x002F		; push max length
+	pushw 0x8DE0		; push reference string
+	ld wa, iz		; restore tile index
+	extz xwa		; zero-extend
+	sll xwa, 4		; XWA *= 16
+	ld xbc, 0x00201632	; table base address
+	add xbc, xwa		; XBC = base + index*16
+	push xbc		; push tile address
+	call HDAE5000_MemCompare_Block
+	add xsp, 0x0000000E	; clean up 14 bytes
+	cps hl, 0		; check compare result
+	jr nz, .Lgdd_done	; skip if mismatch
+	.byte 0xd7, 0xfa, 0x03, 0xff, 0xff	; ld QIZ, 0xFFFF (Q-bank: mark invalid)
+.Lgdd_done:
+	.byte 0xd7, 0xfa, 0x8b	; ld HL, QIZ (Q-bank: load result)
+	pop xiz			; restore XIZ
+	ret
 
-HDAE5000_Count_Invalid_Cells:	; 0x28F9EB
-	; Count invalid entries
-	.incbin "includes/code_28f90c_2953e1.bin", 223, 51
+HDAE5000_Count_Invalid_Cells:	; 0x28F9EB (51 bytes)
+	; Count how many of 16 tile entries are invalid (-1)
+	; Input: WA = row param, Output: HL = count of invalid entries
+	dec 2, xsp		; allocate 2 bytes
+	push xiz		; save XIZ
+	ld (xsp + 4), wa	; save WA param on stack
+	lds iz, 0		; IZ = 0 (invalid counter)
+	.byte 0xd7, 0xfa, 0xa8	; ld QIZ, 0 (Q-bank: loop index)
+	.byte 0xd7, 0xfa, 0xcf, 0x10, 0x00	; cp QIZ, 16 (Q-bank)
+	jr nc, .Lcic_done	; if >= 16, done
+.Lcic_loop:
+	ld wa, (xsp + 4)	; restore WA param
+	.byte 0xd7, 0xfa, 0x89	; ld BC, QIZ (Q-bank: loop index)
+	calr HDAE5000_Table_Calc_Offset
+	cp hl, 0xFFFF		; check if invalid (-1)
+	jr nz, .Lcic_skip	; skip if valid
+	inc 1, iz		; count invalid
+.Lcic_skip:
+	.byte 0xd7, 0xfa, 0x61	; inc 1, QIZ (Q-bank: loop++)
+	.byte 0xd7, 0xfa, 0xcf, 0x10, 0x00	; cp QIZ, 16 (Q-bank)
+	jr c, .Lcic_loop	; if < 16, continue loop
+.Lcic_done:
+	ld hl, iz		; HL = invalid count
+	pop xiz			; restore XIZ
+	inc 2, xsp		; deallocate 2 bytes
+	ret
 
-HDAE5000_Calculate_Row_Address:	; 0x28FA1E
-	; Calculate address with 0x4C multiplier
-	.incbin "includes/code_28f90c_2953e1.bin", 274, 56
+HDAE5000_Calculate_Row_Address:	; 0x28FA1E (56 bytes)
+	; Calculate table address: base + row*1216 + 1920 + col*76
+	; Input: WA = row, BC = column
+	; Output: XHL = pointer to entry
+	dec 4, xsp		; allocate 4 bytes
+	pushw iz		; save IZ
+	ld iz, wa		; IZ = row
+	ld wa, bc		; WA = column
+	extz xwa		; zero-extend to 32-bit
+	ld xbc, 0x0000004C	; multiplier = 76
+	call HDAE5000_Multiply	; XHL = col * 76
+	ld (xsp + 2), xhl	; save col_offset on stack
+	ld wa, iz		; WA = row
+	extz xwa		; zero-extend
+	ld xbc, 0x000004C0	; multiplier = 1216
+	call HDAE5000_Multiply	; XHL = row * 1216
+	add xhl, 0x780		; XHL += 1920 (header offset)
+	ld xwa, xhl		; XWA = row_offset
+	add xwa, (xsp + 2)	; XWA += col_offset
+	ld xhl, 0x00201632	; table base address
+	add xhl, xwa		; XHL = base + total_offset
+	popw iz			; restore IZ
+	inc 4, xsp		; deallocate 4 bytes
+	ret
 
-HDAE5000_Copy_Display_Cell:	; 0x28FA56
-	; Copy table entry
-	.incbin "includes/code_28f90c_2953e1.bin", 330, 74
+HDAE5000_Copy_Display_Cell:	; 0x28FA56 (74 bytes)
+	; Copy table entry using row*1216 + 1920 + col*76 addressing, then callback
+	; Input: WA = row, BC = column, stack+2 = copy size
+	dec 4, xsp		; allocate 4 bytes
+	pushw iz		; save IZ
+	ld iz, wa		; IZ = row
+	pushw 0x001A		; push 26 (entry size)
+	push xde		; push dest pointer
+	ld wa, bc		; WA = column
+	extz xwa		; zero-extend
+	ld xbc, 0x0000004C	; multiplier = 76
+	call HDAE5000_Multiply	; XHL = col * 76
+	ld (xsp + 8), xhl	; save col_offset on stack
+	ld wa, iz		; WA = row
+	extz xwa		; zero-extend
+	ld xbc, 0x000004C0	; multiplier = 1216
+	call HDAE5000_Multiply	; XHL = row * 1216
+	add xhl, 0x780		; XHL += 1920
+	add xhl, (xsp + 8)	; XHL += col_offset
+	ld xwa, 0x00201632	; table base address
+	add xwa, xhl		; XWA = base + total_offset
+	push xwa		; push source pointer
+	call HDAE5000_MemCopy_Reverse
+	lda xsp, (xsp + 0x0A)	; deallocate 10 bytes
+	ld wa, (xsp + 0x0A)	; load copy size param from stack
+	calr HDAE5000_Display_Callback
+	popw iz			; restore IZ
+	inc 4, xsp		; deallocate 4 bytes
+	retd 0x0002		; return and pop 2 bytes
 
 HDAE5000_Calculate_Tile_Address:	; 0x28FAA0 (26 bytes)
 	; Calculate tile address: base + index * 0x90 (144)
@@ -1861,13 +1955,57 @@ HDAE5000_Calculate_Tile_Address:	; 0x28FAA0 (26 bytes)
 	add xhl, xbc		; XHL = base + offset
 	ret
 
-HDAE5000_Copy_Display_Cell_90:	; 0x28FABA
-	; Copy 0x90-stride entry
-	.incbin "includes/code_28f90c_2953e1.bin", 430, 47
+HDAE5000_Copy_Display_Cell_90:	; 0x28FABA (47 bytes)
+	; Copy entry with 0x90 stride: base + index*144 + 0x24180, then callback
+	; Input: WA = tile index, DE = callback param
+	pushw iz		; save IZ
+	ld iz, de		; IZ = callback param
+	pushw 0x0010		; push 16 (copy size)
+	push xbc		; push dest pointer
+	extz xwa		; zero-extend tile index
+	ld xbc, xwa		; XBC = index
+	sll xbc, 3		; XBC = index * 8
+	add xbc, xwa		; XBC = index * 9
+	sll xbc, 4		; XBC = index * 144
+	add xbc, 0x00024180	; add entry table offset
+	ld xwa, 0x00201632	; table base address
+	add xwa, xbc		; XWA = base + offset
+	push xwa		; push source pointer
+	call HDAE5000_MemCopy_Reverse	; copy 16 bytes
+	lda xsp, (xsp + 0x0A)	; deallocate 10 bytes
+	ld wa, iz		; restore callback param
+	calr HDAE5000_Display_Callback
+	popw iz			; restore IZ
+	ret
 
-HDAE5000_Validate_Cell_Coords:	; 0x28FAE9
-	; Check table entry validity
-	.incbin "includes/code_28f90c_2953e1.bin", 477, 61
+HDAE5000_Validate_Cell_Coords:	; 0x28FAE9 (61 bytes)
+	; Compare tile entry with reference, return 0 if valid or -1 if invalid
+	; Input: WA = tile index
+	; Output: HL = 0 (valid) or 0xFFFF (invalid)
+	dec 2, xsp		; allocate 2 bytes for result
+	pushw iz		; save IZ
+	ld iz, wa		; IZ = tile index
+	ldmw (xsp + 2), 0x0000	; result = 0 (valid)
+	pushw 0x002F		; push max length (47)
+	pushw 0x8DF2		; push reference string address
+	call HDAE5000_Display_Buffer_Validate
+	inc 4, xsp		; clean up 2 args
+	pushw hl		; push reference length
+	pushw 0x002F		; push max length
+	pushw 0x8DF2		; push reference string address
+	ld wa, iz		; restore tile index
+	calr HDAE5000_Calculate_Tile_Address	; XHL = tile address
+	push xhl		; push tile address (32-bit)
+	call HDAE5000_MemCompare_Block
+	add xsp, 0x0000000A	; clean up 10 bytes
+	cps hl, 0		; compare result
+	jr nz, .Lvcc_done	; if not equal, valid (keep 0)
+	ldmw (xsp + 2), 0xFFFF	; mark invalid (-1)
+.Lvcc_done:
+	ld hl, (xsp + 2)	; load result
+	popw iz			; restore IZ
+	inc 2, xsp		; deallocate 2 bytes
+	ret
 
 HDAE5000_Resolve_Cell_Address:	; 0x28FB26
 	; Get entry address with validation
@@ -2400,9 +2538,28 @@ HDAE5000_Code_2_PartB:	; 295642h
 	; PPORT command handlers and HD routines
 	.incbin "includes/code_295642_2971a2.bin", 0, 660
 
-HDAE5000_Cmd01_SendInfo:	; 0x2958D6
-	; Handler: Send HD info
-	.incbin "includes/code_295642_2971a2.bin", 660, 62
+HDAE5000_Cmd01_SendInfo:	; 0x2958D6 (62 bytes)
+	; Handler: Send HD info - display status, clear buffer, check result
+	ldw wa, 0x001A			; display row/column
+	nop
+	ldada_24 xbc, 2708630	; lda XBC, (0x295496) - status string
+	nop
+	call HDAE5000_Display_String
+	call HDAE5000_PPORT_Ready_Check
+	ldw wa, 0x000A			; display row/column
+	nop
+	ei 0x00				; enable interrupts
+	call HDAE5000_Display_String
+	ei 0x07				; disable interrupts
+	cps wa, 0			; check result
+	jpcc_24 6, 0x295900		; jp Z - skip cleanup if zero
+	nop
+	call HDAE5000_PPORT_Cleanup
+	call HDAE5000_PPORT_Sum_Buffer
+	cpdi8_24 2330836, 0x01	; cp (0x2390D4), 1
+	jpcc_24 6, 0x295374		; jp Z - exit to PPORT finish
+	nop
+	jp HDAE5000_PPORT_Cmd_Done
 
 HDAE5000_Cmd02_Exit:	; 0x295914
 	; Handler: Exit PPORT
@@ -2454,13 +2611,50 @@ HDAE5000_PPORT_Cmd_WriteMemoryToHD:	; 0x29659A
 	; Save memory to HD
 	.incbin "includes/code_295642_2971a2.bin", 3928, 230
 
-HDAE5000_PPORT_Cmd_Reserved:	; 0x296680
-	; (reserved/placeholder)
-	.incbin "includes/code_295642_2971a2.bin", 4158, 62
+HDAE5000_PPORT_Cmd_Reserved:	; 0x296680 (62 bytes)
+	; Reserved PPORT command - display status, clear buffer, check result
+	ldw wa, 0x001A			; display row/column
+	nop
+	ldada_24 xbc, 2708894	; lda XBC, (0x29559E) - status string
+	nop
+	call HDAE5000_Display_String
+	call HDAE5000_PPORT_Ready_Check
+	ldw wa, 0x0011			; display row/column
+	nop
+	ei 0x00				; enable interrupts
+	call HDAE5000_Display_String
+	ei 0x07				; disable interrupts
+	cps wa, 0			; check result
+	jpcc_24 6, 0x2966AA		; jp Z - skip cleanup if zero
+	nop
+	call HDAE5000_PPORT_Cleanup
+	call HDAE5000_PPORT_Sum_Buffer
+	cpdi8_24 2330836, 0x01	; cp (0x2390D4), 1
+	jpcc_24 6, 0x295374		; jp Z - exit to PPORT finish
+	nop
+	jp HDAE5000_PPORT_Cmd_Done
 
-PPORT_Utility_1:	; 0x2966BE
-	; PPORT utility routine 1
-	.incbin "includes/code_295642_2971a2.bin", 4220, 60
+PPORT_Utility_1:	; 0x2966BE (60 bytes)
+	; PPORT utility - display status, clear buffer, check result
+	ldw wa, 0x001A			; display row/column
+	nop
+	ldada_24 xbc, 2708918	; lda XBC, (0x2955B6) - status string
+	nop
+	call HDAE5000_Display_String
+	call HDAE5000_PPORT_Ready_Check
+	lds wa, 2			; WA = 2
+	ei 0x00				; enable interrupts
+	call HDAE5000_Display_String
+	ei 0x07				; disable interrupts
+	cps wa, 0			; check result
+	jpcc_24 6, 0x2966E6		; jp Z - skip cleanup if zero
+	nop
+	call HDAE5000_PPORT_Cleanup
+	call HDAE5000_PPORT_Sum_Buffer
+	cpdi8_24 2330836, 0x01	; cp (0x2390D4), 1
+	jpcc_24 6, 0x295374		; jp Z - exit to PPORT finish
+	nop
+	jp HDAE5000_PPORT_Cmd_Done
 
 PPORT_Utility_2:	; 0x2966FA
 	; PPORT utility routine 2 - display status and finish
@@ -2479,17 +2673,51 @@ HDAE5000_PPORT_Cmd_Done:	; 0x2967B0 (4 bytes)
 	; PPORT command completion - jump to finish handler
 	jp 0x295374
 
-HDAE5000_Render_Display_Region:	; 0x2967B4
-	; Display region rendering
-	.incbin "includes/code_295642_2971a2.bin", 4466, 48
+HDAE5000_Render_Display_Region:	; 0x2967B4 (48 bytes)
+	; Copy 4 display region parameters from (XIX+1..4) to direct memory
+	ldada_24 xix, 2330984	; lda XIX, (0x239168)
+	nop
+	ld a, (xix + 1)
+	nop
+	stda8_24 2330838, a	; st (0x2390D6), A
+	nop
+	ld a, (xix + 2)
+	nop
+	stda8_24 2330840, a	; st (0x2390D8), A
+	nop
+	ld a, (xix + 3)
+	nop
+	stda8_24 2330842, a	; st (0x2390DA), A
+	nop
+	ld a, (xix + 4)
+	nop
+	stda8_24 2330844, a	; st (0x2390DC), A
+	nop
+	ret
+	nop
 
 HDAE5000_Render_Display_Region2:	; 0x2967E4
 	; Display region rendering 2
-	.incbin "includes/code_295642_2971a2.bin", 4514, 696
+	.incbin "includes/code_295642_2971a2.bin", 4514, 166
 
-HDAE5000_PPORT_Ready_Check:	; 0x296A9C
-	; Check PPORT readiness
-	.incbin "includes/code_295642_2971a2.bin", 5210, 26
+HDAE5000_PPORT_Sum_Buffer:	; 0x29688A
+	; Sum 256 bytes of buffer memory, clear status word
+	.incbin "includes/code_295642_2971a2.bin", 4680, 530
+
+HDAE5000_PPORT_Ready_Check:	; 0x296A9C (26 bytes)
+	; Clear 256 bytes of memory at (XIX + 0..255) using register-indexed store
+	ldada_24 xix, 2330984	; lda XIX, (0x239168)
+	nop
+	lds bc, 0		; BC = 0 (loop counter)
+.Lprc_loop:
+	cp bc, 0x0100		; compare BC with 256
+	jr z, .Lprc_done	; if BC == 256, done
+	stib_dri 0x07, 0xF0, 0xE4, 0x00	; ld (XIX+BC), 0x00
+	inc 1, bc		; BC++
+	jr t, .Lprc_loop	; always loop back
+.Lprc_done:
+	ret
+	nop
 
 HDAE5000_PPORT_Cleanup:	; 0x296AB6
 	; PPORT cleanup routine
@@ -2986,9 +3214,11 @@ HDAE5000_Multiply:	; 0x29B72D
 	; 32-bit multiply routine
 	.incbin "includes/code_29af2d_2fffff.bin", 2048, 402
 
-HDAE5000_Divide_Unsigned:	; 0x29B8BF
-	; Unsigned 32÷32 divide (used by decimal string conversion)
-	.incbin "includes/code_29af2d_2fffff.bin", 2450, 6
+HDAE5000_Divide_Unsigned:	; 0x29B8BF (6 bytes)
+	; Unsigned 32÷32 divide - calls signed divide then copies result
+	calr HDAE5000_Divide_Signed
+	ld xhl, xde		; copy quotient from XDE to XHL
+	ret
 
 HDAE5000_Divide_Signed:	; 0x29B8C5
 	; Signed 32÷32 divide (used by decimal string conversion)
