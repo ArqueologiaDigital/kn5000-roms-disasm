@@ -1263,8 +1263,94 @@ HDAE5000_File_Format:	; 0x28E187 (772 bytes)
 	.incbin "includes/code_2803c2_28f542.bin", 56773, 772
 
 HDAE5000_Calc_Disk_Space:	; 0x28E48B (178 bytes)
-	; Calculate available disk space
-	.incbin "includes/code_2803c2_28f542.bin", 57545, 178
+	; First sub-routine: scan 4 entries, accumulate free space in XHL
+	; Input: WA = base index. Returns XHL = free space or -1 on overflow
+	lds32 xhl, 0			; XHL = 0 (accumulator)
+	lds ix, 0			; IX = 0 (loop index)
+	cps ix, 4			; check IX < 4
+	jr nc, .Lcds_overflow		; if IX >= 4, overflow
+.Lcds_loop:
+	ld bc, wa			; BC = base index
+	add bc, ix			; BC = base + loop index
+	extz xbc			; zero-extend to 32-bit
+	add xbc, 0x00000016		; add offset 22
+	ld xde, 0x0022B430		; XDE = table base address
+	add xde, xbc			; XDE = table entry pointer
+	ld c, (xde)			; C = entry byte
+	res 7, c			; clear bit 7 (status flag)
+	ldb b, 0x00			; B = 0 (extend C to 16-bit BC)
+	extz xbc			; zero-extend BC to XBC
+	add xhl, xbc			; accumulate into XHL
+	ld bc, wa			; BC = base index (again)
+	add bc, ix			; BC = base + loop index
+	extz xbc			; zero-extend
+	add xbc, 0x00000016		; add offset 22
+	ld xde, 0x0022B430		; table base
+	add xde, xbc			; entry pointer
+	cpmi8 (xde), 0x80		; check if entry >= 0x80
+	jr nc, .Lcds_continue		; if >= 0x80, skip to continue loop
+	; Entry < 0x80: found valid entry — store index and return
+	ld wa, ix			; WA = found index
+	inc 1, wa			; WA = index + 1
+	stda16_24 2295902, xwa		; ld (0x23085E), WA
+	ret
+.Lcds_continue:
+	sll xhl, 7			; shift accumulator left 7
+	inc 1, ix			; IX++
+	cps ix, 4			; check IX < 4
+	jr c, .Lcds_loop		; loop while IX < 4
+.Lcds_overflow:
+	ld xhl, 0xFFFFFFFF		; return -1
+	ret
+	; Second sub-routine: find highest set bit position in XWA
+	; Input: XWA = bitmap, XBC = buffer base. Returns HL = 0xFFFF
+.Lcds_find:
+	ld xde, xwa			; XDE = bitmap copy
+	lds hl, 1			; HL = 1 (bit position counter)
+	cps hl, 5			; check HL < 5
+	jr nc, .Lcds_apply		; if >= 5, skip search
+.Lcds_search:
+	srl xde, 7			; shift right 7
+	jr nz, .Lcds_next		; if nonzero, continue
+	ld ix, hl			; IX = current position
+	jr t, .Lcds_apply		; done searching
+.Lcds_next:
+	inc 1, hl			; HL++
+	cps hl, 5			; check HL < 5
+	jr c, .Lcds_search		; loop while HL < 5
+.Lcds_apply:
+	ld xde, xwa			; XDE = bitmap (fresh copy)
+	ld hl, ix			; HL = position from search
+	cps hl, 0			; check if zero
+	jr z, .Lcds_done		; if zero, nothing to do
+.Lcds_apply_loop:
+	ld wa, hl			; WA = current position
+	dec 1, wa			; WA = position - 1
+	extz xwa			; zero-extend
+	ld xix, xwa			; XIX = index
+	add xix, xbc			; XIX = buffer + index
+	ld a, e				; A = low byte of XDE
+	res 7, a			; clear bit 7
+	ld (xix), a			; store to buffer
+	srl xde, 7			; shift bitmap right 7
+	cp xde, 0x0000007F		; check if remaining fits in 7 bits
+	ret ule				; if <= 127, done (conditional return)
+	ld wa, hl			; WA = current position
+	dec 1, wa			; WA = position - 1
+	extz xwa			; zero-extend
+	ld xix, xwa			; XIX = index
+	add xix, xbc			; XIX = buffer + index
+	ld wa, hl			; WA = current position
+	dec 1, wa			; WA = position - 1
+	extz xwa			; zero-extend
+	add xwa, xbc			; XWA = buffer + index
+	ld a, (xwa)			; read existing byte
+	set 7, a			; set bit 7 (overflow flag)
+	ld (xix), a			; write back
+	djnz16 hl, .Lcds_apply_loop	; decrement HL, loop if nonzero
+.Lcds_done:
+	ldw hl, 0xFFFF			; return 0xFFFF
+	ret
 
 HDAE5000_Display_Notify:	; 0x28E53D (113 bytes)
 	; Validate notification file: read, check header, compare fields
