@@ -1233,8 +1233,96 @@ HDAE5000_Display_Manager:	; 0x28AF38 (441 bytes)
 	.incbin "includes/code_2803c2_28f542.bin", 43894, 441
 
 HDAE5000_Display_Scroll:	; 0x28B0F1 (271 bytes)
-	; Handle display scrolling
-	.incbin "includes/code_2803c2_28f542.bin", 44335, 271
+	; Handle display scroll: register handler, copy data, dispatch callback
+	; Input: WA = index, BC = param, DE = context ptr
+	lda xsp, (xsp - 34)		; allocate 34 bytes on stack (0xDE = -34)
+	pushw iz
+	ld iz, de			; IZ = context ptr
+	ld (xsp + 32), bc		; save BC param at offset 0x20
+	ld (xsp + 34), wa		; save WA index at offset 0x22
+	; --- Register handler via workspace ---
+	ldda32_24 xwa, 2335138		; ld XWA, (0x23A1A2)
+	ld_sril3 xwa, 0xE1, 0x0A, 0x0E	; ld XWA, (XWA + 0x0E0A)
+	ld_sril3 xhl, 0xE1, 0x00, 0x01	; ld XHL, (XWA + 0x0100)
+	ld xwa, 0x007F02C1
+	ld xbc, 0x01C00001
+	lds32 xde, 0
+	call (xhl)
+	; --- Copy data to stack buffer ---
+	pushw 0x001A			; param: size 26
+	ld xwa, (xsp + 48)		; reload source (+2 for pushw) = XSP+0x30
+	push xwa
+	lda xwa, (xsp + 10)		; destination (stack buffer at +0x0A)
+	push xwa
+	call HDAE5000_MemCopy_Reverse
+	lda xsp, (xsp + 10)		; pop 3 args
+	ldmi8 (xsp + 30), 0x00		; clear status byte at offset 0x1E
+	; --- Prepare and call 0x291140 ---
+	lda xwa, (xsp + 4)		; XWA = buffer ptr at stack+4
+	ld xde, xwa			; XDE = buffer
+	pushw iz			; push context ptr
+	pushm (xsp + 46)		; push word from (XSP+0x2E)
+	pushw 0x0000			; push 0
+	ld wa, (xsp + 40)		; WA = saved index (XSP+0x28)
+	ld bc, (xsp + 38)		; BC = saved param (XSP+0x26)
+	call 0x291140			; call scroll handler
+	ld (xsp + 2), hl		; save result at offset 2
+	; --- Check result ---
+	ld wa, (xsp + 2)		; reload result
+	cp wa, 0xFFFF			; check for failure
+	jr z, .Lds_alt			; if failed, try alternate
+	; --- Direct dispatch ---
+	ld xwa, (xsp + 40)		; load context (XSP+0x28)
+	ldda32_24 xbc, 2335138
+	ld_sril3 xbc, 0xE5, 0x0A, 0x0E
+	ld_sril3 xhl, 0xE5, 0x04, 0x01
+	ld xbc, 0x01C00001
+	lds32 xde, 0
+	call (xhl)
+	jr t, .Lds_finish
+.Lds_alt:
+	; --- Alternate handler ---
+	ldda32_24 xwa, 2335138
+	ld_sril3 xwa, 0xE1, 0x0A, 0x0E
+	ld_sril3 xhl, 0xE1, 0x00, 0x01
+	ld xwa, 0x007F0297
+	ld xbc, 0x01C00001
+	lds32 xde, 0
+	call (xhl)
+	ld xbc, (xsp + 40)		; XBC = context (XSP+0x28)
+	ld xwa, 0x007F0298
+	calr HDAE5000_UI_Main_Handler
+	; --- Register display handlers ---
+	ld xwa, 0x01CA0002
+	push xwa
+	ld xwa, (xsp + 44)		; XSP+0x2C
+	push xwa
+	ldda32_24 xwa, 2335138
+	ld_sril3 xwa, 0xE1, 0x0A, 0x0E
+	ld_sril3 xhl, 0xE1, 0x18, 0x04	; +0x0418
+	ld xwa, 0x0000014D
+	ld xbc, 0x007F0299
+	ld xde, 0xFFFFFFFF
+	call (xhl)
+	ld xwa, 0x01CA0002
+	push xwa
+	ld xwa, (xsp + 44)		; XSP+0x2C
+	push xwa
+	ldda32_24 xwa, 2335138
+	ld_sril3 xwa, 0xE1, 0x0A, 0x0E
+	ld_sril3 xhl, 0xE1, 0x10, 0x04	; +0x0410
+	ld xwa, 0x0000014D
+	ld xbc, 0x007F0299
+	ld xde, 0xFFFFFFFF
+	call (xhl)
+.Lds_finish:
+	ldada_24 xwa, 2272382		; lda XWA, 0x22AC7E
+	lda xbc, (xsp + 4)
+	calr HDAE5000_Get_Table_Entry
+	ld hl, (xsp + 2)		; restore result to HL
+	popw iz
+	lda xsp, (xsp + 34)		; deallocate stack
+	retd 0x000A			; return and pop 10 bytes
 
 HDAE5000_Display_Clear:	; 0x28B200 (43 bytes)
 	; Clear display area: copy 7 bytes from ROM table, then call buffer validate
@@ -1457,8 +1545,75 @@ HDAE5000_UI_Main_Handler:	; 0x28B3EA (8731 bytes)
 	.incbin "includes/code_2803c2_28f542.bin", 45096, 8731
 
 HDAE5000_Display_Error:	; 0x28D605 (204 bytes)
-	; Display error message to user
-	.incbin "includes/code_2803c2_28f542.bin", 53827, 204
+	; Four sub-routines for error display and device initialization
+	; Sub-routine 1: Clear display buffer at 0x22B430, reset state
+	pushw 0x5000			; param: size 0x5000
+	pushw 0x0000			; param: fill value 0
+	ldada_24 xwa, 2274352		; lda XWA, 0x22B430 — buffer base
+	push xwa
+	call HDAE5000_MemFill		; clear buffer
+	inc 0, xsp			; deallocate 8 bytes
+	lds32 xwa, 0			; clear XWA
+	stda32_24 2295026, xwa		; ld (0x2304F2), XWA — clear state ptr
+	stdi8_24 2335132, 0x00		; ld (0x23A19C), 0x00 — clear flag
+	ret
+	; Sub-routine 2: Validate and setup display
+.Lde_validate:
+	calr HDAE5000_Display_Notify	; validate notification
+	or xhl, xhl			; check result
+	jr nz, .Lde_err2		; if nonzero, error
+	calr HDAE5000_Display_Progress	; show progress
+	or xhl, xhl			; check result
+	jr nz, .Lde_err1		; if nonzero, error
+	stdi8_24 2335132, 0x01		; ld (0x23A19C), 0x01 — set flag
+	lds32 xhl, 0			; return success
+	ret
+.Lde_err1:
+	ld xhl, 0xFFFFFFFF		; return -1
+	ret
+.Lde_err2:
+	ld xhl, 0xFFFFFFFE		; return -2
+	ret
+	; Sub-routine 3: Check device status via workspace
+.Lde_devcheck:
+	ldda32_24 xwa, 2335138		; ld XWA, (0x23A1A2) — workspace ptr
+	ld_sril3 xwa, 0xE1, 0x88, 0x0E	; ld XWA, (XWA + 0x0E88)
+	ld xix, (xwa + 8)		; XIX = device status callback
+	call (xix)			; call device check
+	cps l, 3			; check if result == 3
+	jr z, .Lde_ready		; if so, device ready
+	cps l, 2			; check if result == 2
+	jr z, .Lde_ready		; if so, device ready
+	ld xhl, 0xFFFFFFFF		; return -1 (not ready)
+	ret
+	; Sub-routine 4: Full initialization with workspace callbacks
+.Lde_ready:
+	ldda32_24 xwa, 2335138
+	ld_sril3 xwa, 0xE1, 0x0A, 0x0E	; ld XWA, (XWA + 0x0E0A)
+	ld_sril3 xhl, 0xE1, 0x38, 0x05	; ld XHL, (XWA + 0x0538)
+	call (xhl)
+	ldada_24 xwa, 3038180		; lda XWA, 0x2E5BE4
+	ldada_24 xbc, 3038176		; lda XBC, 0x2E5BE0
+	ldda32_24 xde, 2335138		; ld XDE, (0x23A1A2)
+	ld_sril3 xde, 0xE9, 0x88, 0x0E	; ld XDE, (XDE + 0x0E88)
+	ld_sril3 xhl, 0xE9, 0xA0, 0x00	; ld XHL, (XDE + 0x00A0)
+	call (xhl)
+	ldada_24 xwa, 2274352		; lda XWA, 0x22B430
+	ldda32_24 xbc, 2335138		; ld XBC, (0x23A1A2)
+	ld_sril3 xbc, 0xE5, 0x88, 0x0E	; ld XBC, (XBC + 0x0E88)
+	ld_sril3 xhl, 0xE5, 0xA8, 0x00	; ld XHL, (XBC + 0x00A8)
+	ld xbc, 0x00005000		; size = 0x5000
+	call (xhl)
+	ldda32_24 xwa, 2335138
+	ld_sril3 xwa, 0xE1, 0x88, 0x0E
+	ld_sril3 xhl, 0xE1, 0xAC, 0x00	; ld XHL, (XWA + 0x00AC)
+	call (xhl)
+	ldda32_24 xwa, 2335138
+	ld_sril3 xwa, 0xE1, 0x0A, 0x0E
+	ld_sril3 xhl, 0xE1, 0x3C, 0x05	; ld XHL, (XWA + 0x053C)
+	call (xhl)
+	lds32 xhl, 0			; return success
+	ret
 
 HDAE5000_File_Operation:	; 0x28D6D1 (938 bytes)
 	; Execute file operation on HD
