@@ -5,6 +5,11 @@
 
 	.text
 
+.macro aligned_string str:vararg
+	.asciz \str
+	.p2align 1, 0xff
+.endm
+
 	; (ASL directive) cpu	96c141	; Actual CPU is 94c241f
 	; (ASL directive) page	0
 	; (ASL directive) maxmode	on
@@ -225,18 +230,12 @@ IconPixelData:
 	.org 0x9FA000 - 0x800000, 0xFF
 FileIdentifierStringsTable:
 	; File type identifier strings used for detecting file formats
-	.asciz "Technics KN5000 Program  DATA FILE 1/2"
-	.byte 0xff	; 9FA000
-	.asciz "Technics KN5000 Program  DATA FILE 2/2"
-	.byte 0xff	; 9FA028
-	.asciz "Technics KN5000 Program  DATA FILE PCK"
-	.byte 0xff	; 9FA050
-	.asciz "Technics KN5000 Table    DATA FILE 1/2"
-	.byte 0xff	; 9FA078
-	.asciz "Technics KN5000 Table    DATA FILE 2/2"
-	.byte 0xff	; 9FA0A0
-	.asciz "Technics KN5000 Table    DATA FILE PCK"
-	.byte 0xff	; 9FA0C8
+	aligned_string "Technics KN5000 Program  DATA FILE 1/2"	; 9FA000
+	aligned_string "Technics KN5000 Program  DATA FILE 2/2"	; 9FA028
+	aligned_string "Technics KN5000 Program  DATA FILE PCK"	; 9FA050
+	aligned_string "Technics KN5000 Table    DATA FILE 1/2"	; 9FA078
+	aligned_string "Technics KN5000 Table    DATA FILE 2/2"	; 9FA0A0
+	aligned_string "Technics KN5000 Table    DATA FILE PCK"	; 9FA0C8
 	.asciz "Technics KN5000 CMPCUSTOMDATA FILE    "
 	.byte 0x00	; 9FA0F0
 	.asciz "Technics KN5000 HD-AEPRG DATA FILE    "
