@@ -2476,8 +2476,8 @@ PPORT_Utility_3:	; 0x29670C (164 bytes)
 	.incbin "includes/code_295642_2971a2.bin", 4298, 164
 
 HDAE5000_PPORT_Cmd_Done:	; 0x2967B0 (4 bytes)
-	; PPORT command completion handler
-	.incbin "includes/code_295642_2971a2.bin", 4462, 4
+	; PPORT command completion - jump to finish handler
+	jp 0x295374
 
 HDAE5000_Render_Display_Region:	; 0x2967B4
 	; Display region rendering
@@ -2695,12 +2695,57 @@ HDAE5000_Cell_Copy_Buffer:	; 0x29ACC5 (263 bytes)
 	.incbin "includes/code_2971b7_29ae9e.bin", 15118, 263
 
 HDAE5000_String_Copy_N:	; 0x29ADCC (64 bytes)
-	; String copy with length limit (called by MemCopy_Block)
-	.incbin "includes/code_2971b7_29ae9e.bin", 15381, 64
+	; String copy with length limit
+	; Stack: [+0x0C] dest, [+0x10] source, [+0x14] limit (IZ), [+0x14] flags
+	; Uses String_Length to find end, then MemCopy to copy data
+	; Returns: XHL = end pointer (or 0 if not found)
+	dec 4, xsp			; allocate 4 bytes
+	pushw iz
+	ld iz, (xsp + 0x14)		; IZ = limit/count
+	pushw iz			; arg: count
+	pushm (xsp + 0x14)		; arg: search char/flags
+	ld xwa, (xsp + 0x12)		; source pointer
+	push xwa			; arg: string ptr
+	call HDAE5000_String_Length
+	inc 0, xsp			; clean up 8 bytes
+	ld (xsp + 2), xhl		; save result
+	ld xwa, (xsp + 2)		; reload result
+	or xwa, xwa			; test if found
+	jr nz, .Lscn_found
+	pushw iz			; not found: use full limit
+	jr t, .Lscn_copy
+.Lscn_found:
+	ld xwa, (xsp + 2)		; found position
+	sub xwa, (xsp + 0x0E)		; subtract source base = length
+	inc 1, xwa			; include found byte
+	pushw wa			; push 16-bit length
+.Lscn_copy:
+	ld xwa, (xsp + 0x10)		; dest pointer
+	push xwa
+	ld xwa, (xsp + 0x10)		; source pointer
+	push xwa
+	call HDAE5000_MemCopy
+	lda xsp, (xsp + 0x0A)		; clean up 10 bytes
+	ld xhl, (xsp + 2)		; return saved end pointer
+	popw iz
+	inc 4, xsp			; deallocate 4 bytes
+	ret
 
 HDAE5000_String_Length:	; 0x29AE0C (24 bytes)
-	; String length / validation (called by Display_Buffer_Validate)
-	.incbin "includes/code_2971b7_29ae9e.bin", 15445, 24
+	; Find character in string using block search (cpir)
+	; Stack: [+0x04] string ptr, [+0x08] search char (WA), [+0x0A] max count (BC)
+	; Returns: XHL = pointer past found char, or 0 if not found
+	lds32 xhl, 0			; default: not found
+	ld bc, (xsp + 0x0A)		; BC = max count
+	cps bc, 0
+	ret z				; count=0: return 0
+	ld xhl, (xsp + 4)		; XHL = string pointer
+	ld wa, (xsp + 8)		; WA (low byte = search char)
+	cpir83				; search for A in (XHL), decrement BC
+	dec 1, xhl			; back up to found position
+	ret z				; found: return pointer
+	lds32 xhl, 0			; not found: return 0
+	ret
 
 HDAE5000_File_Read:	; 0x29AE24 (123 bytes)
 	; File read operation (called by Display_Progress)
