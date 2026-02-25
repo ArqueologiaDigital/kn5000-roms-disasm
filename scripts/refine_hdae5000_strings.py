@@ -22,6 +22,13 @@ BIN_START = 0x29AF2D
 # New split points within existing sections (addr -> (label, comment))
 # These subdivide the huge GFX_INIT_PARAMS section
 NEW_SPLIT_POINTS = {
+    # Within RECORD_COUNT section
+    0x29DC14: ('HDAE5000_UI_Descriptors', 'UI page descriptors and config'),
+    0x29DF8A: ('HDAE5000_UI_Page_Titles', 'UI page title strings'),
+    0x29F9B2: ('HDAE5000_Panel_Save_UI', 'Panel memory save/load UI strings'),
+    0x2A477C: ('HDAE5000_Credits', 'Developer credits (Technosoft/KEY SOFT)'),
+    0x2A5634: ('HDAE5000_Demo_Data', 'Demo song data and rhythm custom UI'),
+    # Within GFX_INIT_PARAMS section
     0x2BA1A6: ('HDAE5000_Font_Data', 'Font bitmap data (large block)'),
     0x2E1C82: ('HDAE5000_Config_Strings', 'Configuration and version strings'),
     0x2E21D8: ('HDAE5000_Test_Strings', 'PPORT test and debug strings'),
@@ -37,6 +44,12 @@ NEW_SPLIT_POINTS = {
 # These are matched by start address
 CONVERT_ADDRS = {
     0x29BFE0,   # UI_Config
+    0x29D97E,   # RECORD_COUNT (event handler names)
+    0x29DC14,   # UI_Descriptors
+    0x29DF8A,   # UI_Page_Titles
+    0x29F9B2,   # Panel_Save_UI
+    0x2A477C,   # Credits
+    0x2A5634,   # Demo_Data
     0x2E1C82,   # Config_Strings
     0x2E21D8,   # Test_Strings
     0x2E2500,   # Dir_Strings
