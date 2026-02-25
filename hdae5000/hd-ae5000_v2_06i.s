@@ -688,8 +688,54 @@ HDAE5000_HD_Status_Check:	; 0x284FD6 (782 bytes)
 	.incbin "includes/code_2803c2_28f542.bin", 19476, 782
 
 HDAE5000_HD_Data_Copy:	; 0x2852E4 (92 bytes)
-	; Copy data between HD buffer and memory
-	.incbin "includes/code_2803c2_28f542.bin", 20258, 92
+	; Copy 12-byte record from (XDE) to (XWA) via ldirw, then set flag bytes
+	; Input: XWA = dest, XDE = src, BC = flags (HL), E from stack = flag value
+	; Returns with retd (deallocates 2 bytes from stack)
+	ld xix, xde			; save source
+	ld hl, bc			; HL = flags
+	ld e, (xsp + 4)			; E = flag byte from stack
+	ld xiy, xix			; XIY = source
+	ld xix, xwa			; XIX = dest (for ldirw)
+	lds bc, 6			; count = 6 words (12 bytes)
+	mriw2 0x95, 0x11		; ldirw — copy 6 words
+	ld (xwa), hl			; store flags at dest[0..1]
+	bit 0, hl			; bit 0 set?
+	jr z, .LHD_Data_Copy__bit1
+	ld (xwa + 2), e			; dest[2] = flag value
+.LHD_Data_Copy__bit1:
+	bit 1, hl
+	jr z, .LHD_Data_Copy__bit2
+	ld (xwa + 3), e
+.LHD_Data_Copy__bit2:
+	bit 2, hl
+	jr z, .LHD_Data_Copy__bit3
+	ld (xwa + 4), e
+.LHD_Data_Copy__bit3:
+	bit 3, hl
+	jr z, .LHD_Data_Copy__bit4
+	ld (xwa + 5), e
+.LHD_Data_Copy__bit4:
+	bit 4, hl
+	jr z, .LHD_Data_Copy__bit5
+	ld (xwa + 6), e
+.LHD_Data_Copy__bit5:
+	bit 5, hl
+	jr z, .LHD_Data_Copy__bit6
+	ld (xwa + 7), e
+.LHD_Data_Copy__bit6:
+	bit 6, hl
+	jr z, .LHD_Data_Copy__bit7
+	ld (xwa + 8), e
+.LHD_Data_Copy__bit7:
+	bit 7, hl
+	jr z, .LHD_Data_Copy__bit8
+	ld (xwa + 9), e
+.LHD_Data_Copy__bit8:
+	bit 8, hl
+	jr z, .LHD_Data_Copy__done
+	ld (xwa + 10), e
+.LHD_Data_Copy__done:
+	retd 0x0002
 
 HDAE5000_HD_Buffer_Init:	; 0x285340 (220 bytes)
 	; Initialize HD data buffer
@@ -748,15 +794,55 @@ HDAE5000_Display_Update_Offset:	; 0x28A5D3 (1612 bytes)
 
 HDAE5000_Menu_Register_A:	; 0x28AC1F (73 bytes)
 	; Register menu handler (variant A)
-	.incbin "includes/code_2803c2_28f542.bin", 43101, 73
+	; Input: A = menu index
+	; Uses workspace callbacks at +0x0E0A to register menu entries
+	dec 2, xsp			; allocate local space
+	ld (xsp), a			; save menu index
+	ldda32_24 xwa, 2335138		; ld XWA, (0x23A1A2) — workspace ptr
+	ld_sril3 xwa, 0xE1, 0x0A, 0x0E	; ld XWA, (XWA + 0x0E0A) — menu table
+	ld_sril3 xhl, 0xE1, 0x34, 0x05	; ld XHL, (XWA + 0x0534) — register fn
+	ld xwa, 0xFFFFFFFF		; param: all bits set
+	ld xbc, 0x01C00014		; param: menu geometry
+	call (xhl)			; register first entry
+	lds32 xwa, 0			; clear XWA
+	ld a, (xsp)			; restore menu index
+	add xwa, 0x01800000		; construct second entry ID
+	ld xde, xwa			; XDE = entry ID
+	ldda32_24 xwa, 2335138		; ld XWA, (0x23A1A2) — workspace ptr
+	ld_sril3 xwa, 0xE1, 0x0A, 0x0E	; ld XWA, (XWA + 0x0E0A) — menu table
+	ld_sril3 xhl, 0xE1, 0x24, 0x01	; ld XHL, (XWA + 0x0124) — alternate fn
+	ld xwa, 0xFFFFFFFF		; param: all bits set
+	ld xbc, 0x01C00014		; param: menu geometry
+	call (xhl)			; register second entry
+	inc 2, xsp			; deallocate local space
+	ret
 
 HDAE5000_Menu_Register_B:	; 0x28AC68 (146 bytes)
 	; Register menu handler (variant B) - called from outside this block
 	.incbin "includes/code_2803c2_28f542.bin", 43174, 146
 
 HDAE5000_HD_Shutdown:	; 0x28ACFA (78 bytes)
-	; Shut down HD - calls workspace handler with 0x01C00016
-	.incbin "includes/code_2803c2_28f542.bin", 43320, 78
+	; Shut down HD extension — unregister menu entries via workspace callbacks
+	; Input: WA = parameter (zero-extended)
+	; Tail-calls via jp (xhl) for final unregistration
+	extz wa				; zero-extend parameter
+	ldda32_24 xbc, 2335138		; ld XBC, (0x23A1A2) — workspace ptr
+	ld_sril3 xbc, 0xE5, 0x88, 0x0E	; ld XBC, (XBC + 0x0E88)
+	ld_sril3 xhl, 0xE5, 0x2C, 0x01	; ld XHL, (XBC + 0x012C) — shutdown handler
+	call (xhl)			; invoke shutdown
+	ldda32_24 xwa, 2335138		; ld XWA, (0x23A1A2) — workspace ptr
+	ld_sril3 xwa, 0xE1, 0x0A, 0x0E	; ld XWA, (XWA + 0x0E0A) — menu table
+	ld_sril3 xhl, 0xE1, 0x34, 0x05	; ld XHL, (XWA + 0x0534) — register fn
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x01C00016		; unregister params
+	call (xhl)			; unregister first entry
+	ldda32_24 xwa, 2335138		; ld XWA, (0x23A1A2) — workspace ptr
+	ld_sril3 xwa, 0xE1, 0x0A, 0x0E	; ld XWA, (XWA + 0x0E0A) — menu table
+	ld_sril3 xhl, 0xE1, 0x24, 0x01	; ld XHL, (XWA + 0x0124)
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x01C00016
+	ld xde, 0x01A000EE		; entry ID
+	jp (xhl)			; tail-call: unregister second entry
 
 HDAE5000_Menu_Handler:	; 0x28AD48 (248 bytes)
 	; Handle menu events and dispatch
