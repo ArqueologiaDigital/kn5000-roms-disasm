@@ -7445,8 +7445,7 @@ LABEL_E16980:
 LABEL_E16990:
 	.asciz "CmpNameOkFunc"
 	.byte 0x43, 0x6d
-	.asciz "pNamingCheck"
-	.byte 0xff
+	aligned_string "pNamingCheck"
 LABEL_E169AE:
 	.byte 0x43, 0x6d
 	.asciz "pBndRngFunc"
