@@ -1119,8 +1119,51 @@ HDAE5000_Calc_Disk_Space:	; 0x28E48B (178 bytes)
 	.incbin "includes/code_2803c2_28f542.bin", 57545, 178
 
 HDAE5000_Display_Notify:	; 0x28E53D (113 bytes)
-	; Display notification message
-	.incbin "includes/code_2803c2_28f542.bin", 57723, 113
+	; Validate notification file: read, check header, compare fields
+	; Returns XHL = 0 on success, negative error code on failure
+	pushw 0x0004			; push mode = 4
+	ldada_24 xwa, 3038370		; lda XWA, (0x2E5CA2) - source data
+	push xwa			; push source ptr
+	ldada_24 xwa, 2274352		; lda XWA, (0x22B430) - dest buffer
+	push xwa			; push dest ptr
+	call HDAE5000_File_Read
+	add xsp, 0x0000000A		; clean up 10 bytes (3 args)
+	cps hl, 0			; check read result
+	jr z, .Ldn_check1		; if OK, continue validation
+	ld xhl, 0xFFFFFFFF		; return -1 (read error)
+	ret
+.Ldn_check1:
+	lds32 xwa, 6			; param = 6
+	calr HDAE5000_String_To_Upper	; convert to uppercase
+	cpdm32_24 2274356, xhl		; cp (0x22B434), XHL - check header
+	jr z, .Ldn_check2		; if match, continue
+	ld xhl, 0xFFFFFFFE		; return -2 (header mismatch)
+	ret
+.Ldn_check2:
+	lds wa, 0			; param = 0
+	calr HDAE5000_String_Compare
+	cpdm16_24 2274360, xhl		; cp (0x22B438), HL
+	jr ule, .Ldn_check3		; if <= expected, continue
+	ld xhl, 0xFFFFFFFD		; return -3
+	ret
+.Ldn_check3:
+	lds wa, 1			; param = 1
+	calr HDAE5000_String_Compare
+	cpdm16_24 2274362, xhl		; cp (0x22B43A), HL
+	jr ule, .Ldn_check4		; if <= expected, continue
+	ld xhl, 0xFFFFFFFC		; return -4
+	ret
+.Ldn_check4:
+	ldw wa, 0x8000			; param = 0x8000
+	calr HDAE5000_String_Compare
+	ldda16_24 xwa, 2274364		; ld WA, (0x22B43C)
+	and wa, hl			; WA = WA & HL (mask check)
+	jr z, .Ldn_ok			; if zero, valid
+	ld xhl, 0xFFFFFFFB		; return -5
+	ret
+.Ldn_ok:
+	lds32 xhl, 0			; return 0 (success)
+	ret
 
 HDAE5000_Display_Progress:	; 0x28E5AE (59 bytes)
 	; Read file and process display progress string
