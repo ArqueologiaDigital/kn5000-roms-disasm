@@ -1063,12 +1063,170 @@ HDAE5000_HD_Shutdown:	; 0x28ACFA (78 bytes)
 	jp (xhl)			; tail-call: unregister second entry
 
 HDAE5000_Menu_Handler:	; 0x28AD48 (248 bytes)
-	; Handle menu events and dispatch
-	.incbin "includes/code_2803c2_28f542.bin", 43398, 248
+	; Handle menu events: copy params, register handler, dispatch callback
+	; Input: WA = menu ID, XBC = param block, XDE = context
+	lda xsp, (xsp - 22)		; allocate 22 bytes on stack
+	pushw iz
+	ld (xsp + 20), xde		; save context
+	ld iz, wa			; IZ = menu ID
+	pushw 0x0010			; param: size 16
+	push xbc			; param: source block
+	lda xwa, (xsp + 8)		; XWA = destination (stack buffer)
+	push xwa
+	call HDAE5000_MemCopy_Reverse	; copy param block to stack
+	lda xsp, (xsp + 10)		; pop 3 args (10 bytes)
+	ldmi8 (xsp + 18), 0x00		; clear status byte
+	; --- Register menu handler ---
+	ldda32_24 xwa, 2335138		; ld XWA, (0x23A1A2) — workspace ptr
+	ld_sril3 xwa, 0xE1, 0x0A, 0x0E	; ld XWA, (XWA + 0x0E0A)
+	ld_sril3 xhl, 0xE1, 0x00, 0x01	; ld XHL, (XWA + 0x0100)
+	ld xwa, 0x007F02C1		; handler ID
+	ld xbc, 0x01C00001		; param
+	lds32 xde, 3			; mode = 3
+	call (xhl)
+	calr HDAE5000_Wait_Callback_Loop
+	; --- Copy to table ---
+	lda xwa, (xsp + 2)		; XWA = stack buffer ptr
+	ld xbc, xwa			; XBC = buffer
+	ld wa, iz			; WA = menu ID
+	lds de, 0			; DE = 0
+	call HDAE5000_Copy_To_Table
+	cp hl, 0xFFFF			; check if copy failed
+	jr z, .Lmh_alt			; if failed, try alternate path
+	; --- Direct dispatch ---
+	ld xwa, (xsp + 20)		; reload context
+	ldda32_24 xbc, 2335138		; ld XBC, (0x23A1A2)
+	ld_sril3 xbc, 0xE5, 0x0A, 0x0E	; ld XBC, (XBC + 0x0E0A)
+	ld_sril3 xhl, 0xE5, 0x04, 0x01	; ld XHL, (XBC + 0x0104)
+	ld xbc, 0x01C00001		; param
+	lds32 xde, 0			; mode = 0
+	call (xhl)
+	jr t, .Lmh_finish
+.Lmh_alt:
+	; --- Alternate handler ---
+	ldda32_24 xwa, 2335138
+	ld_sril3 xwa, 0xE1, 0x0A, 0x0E
+	ld_sril3 xhl, 0xE1, 0x00, 0x01	; ld XHL, (XWA + 0x0100)
+	ld xwa, 0x007F0297		; alternate handler ID
+	ld xbc, 0x01C00001
+	lds32 xde, 0
+	call (xhl)
+	ld xbc, (xsp + 20)		; XBC = context
+	ld xwa, 0x007F0298		; event ID
+	calr HDAE5000_UI_Main_Handler
+	; --- Register display handlers ---
+	ld xwa, 0x01CA0002		; display param
+	push xwa
+	ld xwa, (xsp + 24)		; reload context (+4 for push)
+	push xwa
+	ldda32_24 xwa, 2335138
+	ld_sril3 xwa, 0xE1, 0x0A, 0x0E
+	ld_sril3 xhl, 0xE1, 0x18, 0x04	; ld XHL, (XWA + 0x0418)
+	ld xwa, 0x0000014D		; display handler ID
+	ld xbc, 0x007F0299		; event ID
+	ld xde, 0xFFFFFFFF		; param
+	call (xhl)
+	ld xwa, 0x01CA0002		; display param
+	push xwa
+	ld xwa, (xsp + 24)		; reload context (+4 for push)
+	push xwa
+	ldda32_24 xwa, 2335138
+	ld_sril3 xwa, 0xE1, 0x0A, 0x0E
+	ld_sril3 xhl, 0xE1, 0x10, 0x04	; ld XHL, (XWA + 0x0410)
+	ld xwa, 0x0000014D
+	ld xbc, 0x007F0299
+	ld xde, 0xFFFFFFFF
+	call (xhl)
+.Lmh_finish:
+	ldada_24 xwa, 2272242		; lda XWA, 0x22ABF2
+	lda xbc, (xsp + 2)		; XBC = stack buffer
+	calr HDAE5000_Get_Table_Entry
+	popw iz
+	lda xsp, (xsp + 22)		; deallocate stack
+	ret
 
 HDAE5000_Menu_Callback:	; 0x28AE40 (248 bytes)
-	; Menu callback processor
-	.incbin "includes/code_2803c2_28f542.bin", 43646, 248
+	; Menu callback processor: same structure as Menu_Handler with different
+	; call target (Copy_Display_Cell_90) and table address (0x22AD0A)
+	lda xsp, (xsp - 22)		; allocate 22 bytes on stack
+	pushw iz
+	ld (xsp + 20), xde		; save context
+	ld iz, wa			; IZ = menu ID
+	pushw 0x0010			; param: size 16
+	push xbc			; param: source block
+	lda xwa, (xsp + 8)		; XWA = destination (stack buffer)
+	push xwa
+	call HDAE5000_MemCopy_Reverse	; copy param block to stack
+	lda xsp, (xsp + 10)		; pop 3 args
+	ldmi8 (xsp + 18), 0x00		; clear status byte
+	; --- Register menu handler ---
+	ldda32_24 xwa, 2335138		; ld XWA, (0x23A1A2)
+	ld_sril3 xwa, 0xE1, 0x0A, 0x0E	; ld XWA, (XWA + 0x0E0A)
+	ld_sril3 xhl, 0xE1, 0x00, 0x01	; ld XHL, (XWA + 0x0100)
+	ld xwa, 0x007F02C1
+	ld xbc, 0x01C00001
+	lds32 xde, 3
+	call (xhl)
+	calr HDAE5000_Wait_Callback_Loop
+	; --- Copy display cell ---
+	lda xwa, (xsp + 2)
+	ld xbc, xwa
+	ld wa, iz
+	lds de, 0
+	call HDAE5000_Copy_Display_Cell_90
+	cp hl, 0xFFFF
+	jr z, .Lmc_alt
+	; --- Direct dispatch ---
+	ld xwa, (xsp + 20)
+	ldda32_24 xbc, 2335138
+	ld_sril3 xbc, 0xE5, 0x0A, 0x0E
+	ld_sril3 xhl, 0xE5, 0x04, 0x01	; ld XHL, (XBC + 0x0104)
+	ld xbc, 0x01C00001
+	lds32 xde, 0
+	call (xhl)
+	jr t, .Lmc_finish
+.Lmc_alt:
+	; --- Alternate handler ---
+	ldda32_24 xwa, 2335138
+	ld_sril3 xwa, 0xE1, 0x0A, 0x0E
+	ld_sril3 xhl, 0xE1, 0x00, 0x01
+	ld xwa, 0x007F0297
+	ld xbc, 0x01C00001
+	lds32 xde, 0
+	call (xhl)
+	ld xbc, (xsp + 20)
+	ld xwa, 0x007F0298
+	calr HDAE5000_UI_Main_Handler
+	; --- Register display handlers ---
+	ld xwa, 0x01CA0002
+	push xwa
+	ld xwa, (xsp + 24)
+	push xwa
+	ldda32_24 xwa, 2335138
+	ld_sril3 xwa, 0xE1, 0x0A, 0x0E
+	ld_sril3 xhl, 0xE1, 0x18, 0x04	; ld XHL, (XWA + 0x0418)
+	ld xwa, 0x0000014D
+	ld xbc, 0x007F0299
+	ld xde, 0xFFFFFFFF
+	call (xhl)
+	ld xwa, 0x01CA0002
+	push xwa
+	ld xwa, (xsp + 24)
+	push xwa
+	ldda32_24 xwa, 2335138
+	ld_sril3 xwa, 0xE1, 0x0A, 0x0E
+	ld_sril3 xhl, 0xE1, 0x10, 0x04	; ld XHL, (XWA + 0x0410)
+	ld xwa, 0x0000014D
+	ld xbc, 0x007F0299
+	ld xde, 0xFFFFFFFF
+	call (xhl)
+.Lmc_finish:
+	ldada_24 xwa, 2272522		; lda XWA, 0x22AD0A
+	lda xbc, (xsp + 2)
+	calr HDAE5000_Get_Table_Entry
+	popw iz
+	lda xsp, (xsp + 22)
+	ret
 
 HDAE5000_Display_Manager:	; 0x28AF38 (441 bytes)
 	; Manage display state; accesses 0x229DAB
