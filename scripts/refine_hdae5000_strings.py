@@ -53,7 +53,9 @@ CONVERT_ADDRS = {
     0x2E1C82,   # Config_Strings
     0x2E21D8,   # Test_Strings
     0x2E2500,   # Dir_Strings
+    0x2E2E76,   # Char_Tables
     0x2E348F,   # Path_Strings
+    0x2E365D,   # UI_Icons
     0x2E3704,   # Multilingual_Messages
     0x2E5B80,   # Lang_Codes
     0x2F8DCE,   # Display_Params
