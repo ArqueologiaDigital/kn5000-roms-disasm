@@ -635,8 +635,54 @@ HDAE5000_PPI_Init:	; 0x282B98 (13 bytes)
 
 HDAE5000_PPI_Transfer_Byte:	; 0x282BA5 (130 bytes)
 	; Transfer one byte via PPI to/from IDE bus
-	; Writes to ports B,C; reads from port A with handshake
-	.incbin "includes/code_2803c2_28f542.bin", 10211, 130
+	; Input: A = byte to transfer. Returns: L = 0x00 on match, 0xFF on mismatch
+	; --- Low nibble phase ---
+	ld l, a				; save original byte
+	and a, 0x0f			; mask low nibble
+	set 4, a			; set bit 4 (data strobe)
+	sll a, 3			; shift left 3
+	stda8_24 1441794, a		; ld (0x160002), A — PPI port B
+	ld c, a				; save port B value
+	srl c, 6			; shift right 6 for port C
+	stda8_24 1441796, c		; ld (0x160004), C — PPI port C
+	res 7, a			; clear bit 7 (handshake low)
+	srl a, 6			; shift right 6
+	stda8_24 1441796, a		; ld (0x160004), A — PPI port C
+	ld xwa, 0x000003E8		; timeout counter (1000)
+.Lppi_wait_high:
+	bitda_24 4, 1441792		; bit 4, (0x160000) — check ACK
+	jr z, .Lppi_wait_high		; wait until bit 4 set
+	ldda8_24 a, 1441792		; ld A, (0x160000) — read port A
+	and a, 0x0f			; mask low nibble
+	ld e, a				; save low nibble in E
+	; --- High nibble phase ---
+	ld a, l				; restore original byte
+	srl a, 1			; shift right 1
+	res 7, a			; clear bit 7
+	stda8_24 1441794, a		; ld (0x160002), A — PPI port B
+	ld c, a				; save port B value
+	srl c, 6			; shift right 6 for port C
+	stda8_24 1441796, c		; ld (0x160004), C — PPI port C
+	set 7, a			; set bit 7 (handshake high)
+	srl a, 6			; shift right 6
+	stda8_24 1441796, a		; ld (0x160004), A — PPI port C
+	ld xwa, 0x000003E8		; timeout counter (1000)
+.Lppi_wait_low:
+	bitda_24 4, 1441792		; bit 4, (0x160000) — check ACK
+	jr nz, .Lppi_wait_low		; wait until bit 4 clear
+	; --- Reassemble and verify ---
+	ld c, e				; C = low nibble
+	ldda8_24 a, 1441792		; ld A, (0x160000) — read port A
+	and a, 0x0f			; mask low nibble (high nibble of result)
+	sll a, 4			; shift left 4 to high position
+	or a, c				; combine with low nibble
+	cp a, l				; compare with original byte
+	jr nz, .Lppi_fail		; if mismatch, fail
+	ldb l, 0x00			; success: L = 0
+	ret
+.Lppi_fail:
+	ldb l, 0xFF			; failure: L = 0xFF
+	ret
 
 HDAE5000_PPI_Read_Register:	; 0x282C27 (71 bytes)
 	; Read an IDE register value via PPI
@@ -750,8 +796,69 @@ HDAE5000_HD_Error_Check:	; 0x284DE9 (355 bytes)
 	.incbin "includes/code_2803c2_28f542.bin", 18983, 355
 
 HDAE5000_HD_Wait_Ready:	; 0x284F4C (138 bytes)
-	; Wait for HD to become ready (poll status)
-	.incbin "includes/code_2803c2_28f542.bin", 19338, 138
+	; Set up two parameter blocks on stack from template data, then call
+	; workspace handler +0x0114 twice. Validates A < 16, L <= 1, E <= 2.
+	; Input: A = register index, L = bank, E = mode
+	dec 0, xsp			; allocate 8 bytes on stack
+	ld l, c				; save C in L
+	ld xiy, 0x002E272E		; source template address (first block)
+	lda xix, (xsp + 4)		; XIX = destination: stack+4
+	ldiw				; copy word (XIY→XIX, both advance)
+	ldiw				; copy second word
+	ld xiy, 0x002E2732		; source template address (second block)
+	ld xix, xsp			; XIX = destination: stack base
+	ldiw				; copy word
+	ldiw				; copy second word
+	; --- Parameter validation ---
+	cp a, 0x10			; A must be < 16
+	jr nc, .Lwr_exit		; if A >= 16, bail out
+	cps l, 1			; L must be <= 1
+	jr ugt, .Lwr_exit		; if L > 1, bail out
+	cps e, 2			; E must be <= 2
+	jr ugt, .Lwr_exit		; if E > 2, bail out
+	; --- Fill parameter blocks ---
+	ld (xsp + 5), a			; store register index at offset 5
+	ld (xsp + 1), a			; store register index at offset 1
+	cps l, 0			; check bank
+	jr nz, .Lwr_bank1
+	ldmi8 (xsp + 7), 0x01		; bank 0: store 0x01 at offset 7
+	jr t, .Lwr_mode
+.Lwr_bank1:
+	ldmi8 (xsp + 7), 0x20		; bank 1: store 0x20 at offset 7
+.Lwr_mode:
+	cps e, 0			; check mode
+	jr nz, .Lwr_mode1
+	ldmi8 (xsp + 3), 0x00		; mode 0: store 0x00 at offset 3
+	jr t, .Lwr_call
+.Lwr_mode1:
+	cps e, 1			; mode 1?
+	jr nz, .Lwr_mode2
+	ldmi8 (xsp + 3), 0x01		; mode 1: store 0x01 at offset 3
+	jr t, .Lwr_call
+.Lwr_mode2:
+	ldmi8 (xsp + 3), 0x02		; mode 2: store 0x02 at offset 3
+.Lwr_call:
+	; --- First workspace call (stack+4 block) ---
+	lda xwa, (xsp + 4)		; XWA = pointer to first param block
+	ld xde, xwa			; XDE = param block ptr
+	ldda32_24 xwa, 2335138		; ld XWA, (0x23A1A2) — workspace ptr
+	ld_sril3 xwa, 0xE1, 0x88, 0x0E	; ld XWA, (XWA + 0x0E88)
+	ld_sril3 xhl, 0xE1, 0x14, 0x01	; ld XHL, (XWA + 0x0114)
+	lds wa, 0			; WA = 0
+	lds bc, 4			; BC = 4 (param count)
+	call (xhl)			; call handler
+	; --- Second workspace call (stack base block) ---
+	lda xwa, (xsp)			; XWA = pointer to second param block
+	ld xde, xwa			; XDE = param block ptr
+	ldda32_24 xwa, 2335138		; ld XWA, (0x23A1A2) — workspace ptr
+	ld_sril3 xwa, 0xE1, 0x88, 0x0E	; ld XWA, (XWA + 0x0E88)
+	ld_sril3 xhl, 0xE1, 0x14, 0x01	; ld XHL, (XWA + 0x0114)
+	lds wa, 0			; WA = 0
+	lds bc, 4			; BC = 4
+	call (xhl)			; call handler
+.Lwr_exit:
+	inc 0, xsp			; deallocate 8 bytes
+	ret
 
 HDAE5000_HD_Status_Check:	; 0x284FD6 (782 bytes)
 	; Check HD status flags at 0x22B2F4, 0x23A0A0
