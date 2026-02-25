@@ -1694,15 +1694,1527 @@ HDAE5000_Font_Data:	; 0x2BA1A6
 
 HDAE5000_Config_Strings:	; 0x2E1C82
 	; Configuration and version strings
-	.incbin "includes/code_29af2d_2fffff.bin", 290133, 1366
+	.asciz "V2.06i"
+	.zero 3
+	.byte 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01
+	.zero 23
+	.ascii "   "
+	.byte 0x09
+	.zero 2
+	.ascii "                "
+	.byte 0x09
+	.byte 0x00
+	.ascii "   "
+	.byte 0x09
+	.zero 2
+	.ascii "                          "
+	.byte 0x09
+	.byte 0x00
+	.ascii "            "
+	.byte 0x09
+	.byte 0x00
+	.ascii "01:        "
+	.byte 0x09
+	.ascii "02:        "
+	.byte 0x09
+	.ascii "03:        "
+	.byte 0x09
+	.ascii "04:        "
+	.byte 0x09
+	.ascii "05:        "
+	.byte 0x09
+	.ascii "06:        "
+	.byte 0x09
+	.ascii "07:        "
+	.byte 0x09
+	.ascii "08:        "
+	.byte 0x09
+	.ascii "09:        "
+	.byte 0x09
+	.ascii "10:        "
+	.byte 0x09
+	.ascii "11:        "
+	.byte 0x09
+	.ascii "12:        "
+	.byte 0x09
+	.ascii "13:        "
+	.byte 0x09
+	.ascii "14:        "
+	.byte 0x09
+	.ascii "15:        "
+	.byte 0x09
+	.ascii "16:        "
+	.byte 0x09
+	.ascii "17:        "
+	.byte 0x09
+	.ascii "18:        "
+	.byte 0x09
+	.ascii "19:        "
+	.byte 0x09
+	.ascii "20:        "
+	.byte 0x09
+	.zero 2
+	.ascii "STATUS:                        "
+	.byte 0x09
+	.zero 14
+	.ascii "("
+	.byte 0x1e
+	.asciz "."
+	.ascii "$"
+	.byte 0x1e
+	.asciz "."
+	.ascii " "
+	.byte 0x1e
+	.asciz "."
+	.asciz "DEL"
+	.asciz "OFF"
+	.asciz "---"
+	.asciz "050354"
+	.byte 0x00
+	.asciz "965768"
+	.byte 0x00
+	.ascii "H"
+	.byte 0x1e
+	.asciz "."
+	.ascii "D"
+	.byte 0x1e
+	.asciz "."
+	.asciz "ON "
+	.asciz "OFF"
+	.ascii "P"
+	.byte 0x1e
+	.asciz "."
+	.ascii "01:SelectList"
+	.byte 0x09
+	.ascii "02"
+	.byte 0x09
+	.ascii "03"
+	.byte 0x09
+	.ascii "04"
+	.byte 0x09
+	.ascii "05"
+	.byte 0x09
+	.ascii "06"
+	.byte 0x09
+	.ascii "07"
+	.byte 0x09
+	.ascii "08"
+	.byte 0x09
+	.ascii "09"
+	.byte 0x09
+	.ascii "10"
+	.byte 0x09
+	.ascii "11"
+	.byte 0x09
+	.ascii "12"
+	.byte 0x09
+	.ascii "13"
+	.byte 0x09
+	.ascii "14"
+	.byte 0x09
+	.ascii "15"
+	.byte 0x09
+	.ascii "16"
+	.byte 0x09
+	.ascii "17"
+	.byte 0x09
+	.ascii "18"
+	.byte 0x09
+	.ascii "19"
+	.byte 0x09
+	.ascii "20"
+	.byte 0x09
+	.ascii "21"
+	.byte 0x09
+	.ascii "22"
+	.byte 0x09
+	.ascii "23"
+	.byte 0x09
+	.ascii "24"
+	.byte 0x09
+	.ascii "25"
+	.byte 0x09
+	.ascii "26"
+	.byte 0x09
+	.ascii "27"
+	.byte 0x09
+	.ascii "28"
+	.byte 0x09
+	.ascii "29"
+	.byte 0x09
+	.asciz "30"
+	.byte 0x00
+	.asciz "Debug Time!"
+	.byte 0xea  ; "ê"
+	.byte 0x1e
+	.asciz "."
+	.byte 0xdc  ; "Ü"
+	.byte 0x1e
+	.asciz "."
+	.byte 0xce  ; "Î"
+	.byte 0x1e
+	.asciz "."
+	.asciz " !#$%&?.... "
+	.byte 0x00
+	.asciz "abc...123..."
+	.byte 0x00
+	.asciz "ABC...123..."
+	.byte 0x00
+	.byte 0xe2  ; "â"
+	.byte 0x1f
+	.asciz "."
+	.byte 0xe0  ; "à"
+	.byte 0x1f
+	.asciz "."
+	.byte 0xde  ; "Þ"
+	.byte 0x1f
+	.asciz "."
+	.byte 0xdc  ; "Ü"
+	.byte 0x1f
+	.asciz "."
+	.byte 0xda  ; "Ú"
+	.byte 0x1f
+	.asciz "."
+	.byte 0xd8  ; "Ø"
+	.byte 0x1f
+	.asciz "."
+	.byte 0xd6  ; "Ö"
+	.byte 0x1f
+	.asciz "."
+	.byte 0xd4  ; "Ô"
+	.byte 0x1f
+	.asciz "."
+	.byte 0xd2  ; "Ò"
+	.byte 0x1f
+	.asciz "."
+	.byte 0xd0  ; "Ð"
+	.byte 0x1f
+	.asciz "."
+	.byte 0xce  ; "Î"
+	.byte 0x1f
+	.asciz "."
+	.byte 0xcc  ; "Ì"
+	.byte 0x1f
+	.asciz "."
+	.byte 0xca  ; "Ê"
+	.byte 0x1f
+	.asciz "."
+	.byte 0xc8  ; "È"
+	.byte 0x1f
+	.asciz "."
+	.byte 0xc6  ; "Æ"
+	.byte 0x1f
+	.asciz "."
+	.byte 0xc4  ; "Ä"
+	.byte 0x1f
+	.asciz "."
+	.byte 0xc2  ; "Â"
+	.byte 0x1f
+	.asciz "."
+	.byte 0xc0  ; "À"
+	.byte 0x1f
+	.asciz "."
+	.byte 0xbe  ; "¾"
+	.byte 0x1f
+	.asciz "."
+	.byte 0xbc  ; "¼"
+	.byte 0x1f
+	.asciz "."
+	.byte 0xba  ; "º"
+	.byte 0x1f
+	.asciz "."
+	.byte 0xb8  ; "¸"
+	.byte 0x1f
+	.asciz "."
+	.byte 0xb6  ; "¶"
+	.byte 0x1f
+	.asciz "."
+	.byte 0xb4  ; "´"
+	.byte 0x1f
+	.asciz "."
+	.byte 0xb2  ; "²"
+	.byte 0x1f
+	.asciz "."
+	.byte 0xb0  ; "°"
+	.byte 0x1f
+	.asciz "."
+	.byte 0xae  ; "®"
+	.byte 0x1f
+	.asciz "."
+	.byte 0xac  ; "¬"
+	.byte 0x1f
+	.asciz "."
+	.byte 0xaa  ; "ª"
+	.byte 0x1f
+	.asciz "."
+	.byte 0xa8  ; "¨"
+	.byte 0x1f
+	.asciz "."
+	.byte 0xa6  ; "¦"
+	.byte 0x1f
+	.asciz "."
+	.byte 0xa4  ; "¤"
+	.byte 0x1f
+	.asciz "."
+	.byte 0xa2  ; "¢"
+	.byte 0x1f
+	.asciz "."
+	.byte 0xa0  ; " "
+	.byte 0x1f
+	.asciz "."
+	.byte 0x9e  ; ""
+	.byte 0x1f
+	.asciz "."
+	.byte 0x9c  ; ""
+	.byte 0x1f
+	.asciz "."
+	.byte 0x9a  ; ""
+	.byte 0x1f
+	.asciz "."
+	.byte 0x96  ; ""
+	.byte 0x1f
+	.asciz "."
+	.byte 0x94  ; ""
+	.byte 0x1f
+	.asciz "."
+	.zero 2
+	.asciz "SPC"
+	.asciz "9"
+	.asciz "8"
+	.asciz "7"
+	.asciz "6"
+	.asciz "5"
+	.asciz "4"
+	.asciz "3"
+	.asciz "2"
+	.asciz "1"
+	.asciz "0"
+	.asciz "_"
+	.asciz "Z"
+	.asciz "Y"
+	.asciz "X"
+	.asciz "W"
+	.asciz "V"
+	.asciz "U"
+	.asciz "T"
+	.asciz "S"
+	.asciz "R"
+	.asciz "Q"
+	.asciz "P"
+	.asciz "O"
+	.asciz "N"
+	.asciz "M"
+	.asciz "L"
+	.asciz "K"
+	.asciz "J"
+	.asciz "I"
+	.asciz "H"
+	.asciz "G"
+	.asciz "F"
+	.asciz "E"
+	.asciz "D"
+	.asciz "C"
+	.asciz "B"
+	.asciz "A"
+	.byte 0xce  ; "Î"
+	.asciz " ."
+	.byte 0xcc  ; "Ì"
+	.asciz " ."
+	.byte 0xca  ; "Ê"
+	.asciz " ."
+	.byte 0xc8  ; "È"
+	.asciz " ."
+	.byte 0xc6  ; "Æ"
+	.asciz " ."
+	.byte 0xc4  ; "Ä"
+	.asciz " ."
+	.byte 0xc2  ; "Â"
+	.asciz " ."
+	.byte 0xc0  ; "À"
+	.asciz " ."
+	.byte 0xbe  ; "¾"
+	.asciz " ."
+	.byte 0xbc  ; "¼"
+	.asciz " ."
+	.byte 0xba  ; "º"
+	.asciz " ."
+	.byte 0xb8  ; "¸"
+	.asciz " ."
+	.byte 0xb6  ; "¶"
+	.asciz " ."
+	.byte 0xb4  ; "´"
+	.asciz " ."
+	.byte 0xb2  ; "²"
+	.asciz " ."
+	.byte 0xb0  ; "°"
+	.asciz " ."
+	.byte 0xae  ; "®"
+	.asciz " ."
+	.byte 0xac  ; "¬"
+	.asciz " ."
+	.byte 0xaa  ; "ª"
+	.asciz " ."
+	.byte 0xa8  ; "¨"
+	.asciz " ."
+	.byte 0xa6  ; "¦"
+	.asciz " ."
+	.byte 0xa4  ; "¤"
+	.asciz " ."
+	.byte 0xa2  ; "¢"
+	.asciz " ."
+	.byte 0xa0  ; " "
+	.asciz " ."
+	.byte 0x9e  ; ""
+	.asciz " ."
+	.byte 0x9c  ; ""
+	.asciz " ."
+	.byte 0x9a  ; ""
+	.asciz " ."
+	.byte 0x98  ; ""
+	.asciz " ."
+	.byte 0x96  ; ""
+	.asciz " ."
+	.byte 0x94  ; ""
+	.asciz " ."
+	.byte 0x92  ; ""
+	.asciz " ."
+	.byte 0x90  ; ""
+	.asciz " ."
+	.byte 0x8e  ; ""
+	.asciz " ."
+	.byte 0x8c  ; ""
+	.asciz " ."
+	.byte 0x8a  ; ""
+	.asciz " ."
+	.byte 0x88  ; ""
+	.asciz " ."
+	.byte 0x86  ; ""
+	.asciz " ."
+	.byte 0x82  ; ""
+	.asciz " ."
+	.byte 0x80  ; ""
+	.asciz " ."
+	.zero 2
+	.asciz "SPC"
+	.asciz "9"
+	.asciz "8"
+	.asciz "7"
+	.asciz "6"
+	.asciz "5"
+	.asciz "4"
+	.asciz "3"
+	.asciz "2"
+	.asciz "1"
+	.asciz "0"
+	.asciz "_"
+	.asciz "z"
+	.asciz "y"
+	.asciz "x"
+	.asciz "w"
+	.asciz "v"
+	.asciz "u"
+	.asciz "t"
+	.asciz "s"
+	.asciz "r"
+	.asciz "q"
+	.asciz "p"
+	.asciz "o"
+	.asciz "n"
+	.asciz "m"
+	.asciz "l"
+	.asciz "k"
+	.asciz "j"
+	.asciz "i"
+	.asciz "h"
+	.asciz "g"
+	.asciz "f"
+	.asciz "e"
+	.asciz "d"
+	.asciz "c"
+	.asciz "b"
+	.asciz "a"
+	.byte 0xa0  ; " "
+	.asciz "!."
+	.byte 0x9e  ; ""
+	.asciz "!."
+	.byte 0x9c  ; ""
+	.asciz "!."
+	.byte 0x9a  ; ""
+	.asciz "!."
+	.byte 0x98  ; ""
+	.asciz "!."
+	.byte 0x96  ; ""
+	.asciz "!."
+	.byte 0x92  ; ""
+	.asciz "!."
+	.byte 0x8e  ; ""
+	.asciz "!."
+	.byte 0x8c  ; ""
+	.asciz "!."
+	.byte 0x8a  ; ""
+	.asciz "!."
+	.byte 0x86  ; ""
+	.asciz "!."
+	.byte 0x82  ; ""
+	.asciz "!."
+	.byte 0x80  ; ""
+	.asciz "!."
+	.asciz "~!."
+	.asciz "|!."
+	.asciz "z!."
+	.asciz "x!."
+	.asciz "v!."
+	.asciz "t!."
+	.asciz "r!."
+	.asciz "p!."
+	.asciz "n!."
+	.asciz "j!."
+	.asciz "f!."
+	.asciz "d!."
+	.asciz "b!."
+	.asciz "`!."
+	.asciz "^!."
+	.asciz "\\!."
+	.asciz "Z!."
+	.asciz "X!."
+	.asciz "V!."
+	.asciz "T!."
+	.zero 2
+	.asciz "}"
+	.asciz "{"
+	.asciz "]"
+	.asciz "["
+	.asciz ">"
+	.asciz "<"
+	.asciz ")"
+	.asciz "("
+	.asciz "~8d"
+	.asciz "~8b"
+	.asciz "="
+	.asciz "/"
+	.asciz "*"
+	.asciz "-"
+	.asciz "+"
+	.asciz ";"
+	.asciz ":"
+	.asciz "."
+	.asciz ","
+	.asciz "`"
+	.asciz "~27"
+	.asciz "~22"
+	.asciz "|"
+	.asciz "^"
+	.asciz "~5c"
+	.asciz "~40"
+	.asciz "?"
+	.asciz "&"
+	.asciz "%"
+	.asciz "$"
+	.asciz "#"
+	.asciz "!"
+	.byte 0xf8  ; "ø"
+	.byte 0x1e
+	.asciz "."
+	.byte 0xe4  ; "ä"
+	.byte 0x1f
+	.asciz "."
+	.byte 0xd0  ; "Ð"
+	.asciz " ."
+	.asciz "%"
+	.asciz "%"
+	.byte 0x1f
+	.byte 0x00
+	.asciz "$"
+	.asciz "$"
+	.byte 0x1f
+	.byte 0x00
+	.byte 0xc4  ; "Ä"
+	.asciz "!."
+	.byte 0xc2  ; "Â"
+	.asciz "!."
+	.asciz "_"
+	.asciz " "
+	.zero 2
+	.asciz "L"
+	.byte 0x9d  ; ""
+	.byte 0x00
+	.ascii "["
+	.byte 0x01
+	.byte 0xb7  ; "·"
+	.byte 0x03
+	.byte 0xb5  ; "µ"
+	.byte 0x04
+	.ascii "D"
+	.byte 0x05
+	.byte 0xd3  ; "Ó"
+	.byte 0x05
+	.ascii "["
+	.byte 0x07
 
 HDAE5000_Test_Strings:	; 0x2E21D8
 	; PPORT test and debug strings
-	.incbin "includes/code_29af2d_2fffff.bin", 291499, 808
+	.asciz "Name"
+	.byte 0x00
+	.asciz "Test"
+	.byte 0x00
+	.asciz "PPORT TEST"
+	.byte 0x00
+	.asciz "HDD ID READ"
+	.asciz "FD TEST"
+	.asciz "OK"
+	.byte 0x00
+	.asciz "ERROR"
+	.asciz "ERROR"
+	.asciz "STOP TEST LOOP"
+	.byte 0x00
+	.asciz "START TEST LOOP"
+	.asciz "=======> Port Test OK"
+	.asciz "=======> Port Test Error"
+	.byte 0x00
+	.asciz "HD-TYPE : "
+	.byte 0x00
+	.asciz "Fre Capa: %3.1f [MB]"
+	.zero 3
+	.asciz "=======> HDD OK"
+	.asciz "=======> HDD NG!"
+	.zero 3
+	.byte 0xc8  ; "È"
+	.asciz "B%2.2d"
+	.asciz "*.*"
+	.asciz "CpHD"
+	.byte 0x00
+	.asciz "CpHD"
+	.byte 0x00
+	.ascii "WRITE PROTECTION   :ON     QUICK LOAD MODE:     1"
+	.byte 0x09
+	.ascii "WRITE CONFIRM      :OFF    JUMP AFTER LOAD:     2"
+	.byte 0x09
+	.ascii "LOAD BY NUMBER MODE:  1    FREE HDD SPACE :1251MB"
+	.byte 0x09
+	.zero 2
+	.asciz "%s"
+	.byte 0x00
+	.asciz "%s"
+	.byte 0x00
+	.asciz "  %d"
+	.byte 0x00
+	.asciz "     %d"
+	.asciz "     %d"
+	.asciz "%4ldMB"
+	.byte 0x00
+	.asciz "HDAE"
+	.zero 3
+	.byte 0x7f
+	.byte 0x00
+	.ascii "R"
+	.byte 0x02, 0x7f
+	.byte 0x00
+	.ascii "W"
+	.byte 0x02, 0x7f
+	.byte 0x00
+	.ascii "\\"
+	.byte 0x02, 0x7f
+	.byte 0x00
+	.ascii "a"
+	.byte 0x02, 0x7f
+	.byte 0x00
+	.ascii "f"
+	.byte 0x02, 0x7f
+	.byte 0x00
+	.ascii "k"
+	.byte 0x02, 0x7f
+	.byte 0x00
+	.ascii "p"
+	.byte 0x02, 0x7f
+	.byte 0x00
+	.ascii "u"
+	.byte 0x02, 0x7f
+	.zero 3
+	.byte 0xc0  ; "À"
+	.byte 0x01
+	.byte 0xc0  ; "À"
+	.byte 0x01
+	.byte 0xc0  ; "À"
+	.byte 0x01
+	.byte 0xa6  ; "¦"
+	.byte 0x01
+	.byte 0xc0  ; "À"
+	.byte 0x01
+	.ascii "7"
+	.byte 0x01
+	.byte 0xfe  ; "þ"
+	.byte 0x00
+	.ascii "   :                "
+	.byte 0x09
+	.byte 0x00
+	.asciz "%3.3d"
+	.ascii "CURRENT PANEL"
+	.byte 0x09
+	.ascii " PANEL MEMORY"
+	.byte 0x09
+	.ascii "  SEQUENCER  "
+	.byte 0x09
+	.ascii "  COMPOSER   "
+	.byte 0x09
+	.ascii " SOUND MEMORY"
+	.byte 0x09
+	.ascii "     MSP     "
+	.byte 0x09
+	.ascii "RHYTHM CUSTOM"
+	.byte 0x09
+	.ascii "  USER MIDI  "
+	.byte 0x09
+	.ascii "    LYRICS   "
+	.byte 0x09
+	.zero 2
+	.ascii "             "
+	.byte 0x09
+	.ascii "             "
+	.byte 0x09
+	.ascii "             "
+	.byte 0x09
+	.ascii "             "
+	.byte 0x09
+	.ascii "             "
+	.byte 0x09
+	.ascii "             "
+	.byte 0x09
+	.ascii "             "
+	.byte 0x09
+	.ascii "             "
+	.byte 0x09
+	.ascii "             "
+	.byte 0x09
+	.zero 2
+	.ascii "             "
+	.byte 0x09
+	.zero 2
+	.byte 0x04, 0x01, 0x7f
+	.byte 0x00
+	.ascii "["
+	.byte 0x01, 0x7f
+	.byte 0x00
+	.byte 0x03, 0x01, 0x7f
+	.byte 0x00
+	.ascii "\\"
+	.byte 0x01, 0x7f
+	.byte 0x00
+	.byte 0x02, 0x01, 0x7f
+	.byte 0x00
+	.ascii "`"
+	.byte 0x01, 0x7f
+	.byte 0x00
 
 HDAE5000_Dir_Strings:	; 0x2E2500
 	; Directory management strings
-	.incbin "includes/code_29af2d_2fffff.bin", 292307, 2422
+	.asciz "DIRECTORY "
+	.byte 0x00
+	.asciz "%2.2d"
+	.asciz ":"
+	.byte 0x09
+	.byte 0x00
+	.ascii ":                          "
+	.byte 0x09
+	.zero 2
+	.asciz "%2.2d"
+	.byte 0x15, 0x01
+	.byte 0xd7  ; "×"
+	.byte 0x00
+	.ascii "Q"
+	.byte 0x01
+	.byte 0x99  ; ""
+	.byte 0x01
+	.byte 0x99  ; ""
+	.byte 0x01
+	.byte 0x99  ; ""
+	.byte 0x01
+	.byte 0x99  ; ""
+	.byte 0x01
+	.byte 0x99  ; ""
+	.byte 0x01
+	.asciz " "
+	.byte 0x99  ; ""
+	.byte 0x01
+	.byte 0x99  ; ""
+	.byte 0x01
+	.byte 0x99  ; ""
+	.byte 0x01
+	.byte 0xb7  ; "·"
+	.byte 0x00
+	.byte 0x83  ; ""
+	.byte 0x00
+	.asciz "DELD"
+	.byte 0x00
+	.asciz "DELF"
+	.byte 0x00
+	.asciz "UTIL"
+	.byte 0x00
+	.asciz "---[ LSW File Info. ]---"
+	.byte 0x00
+	.asciz "adr  : "
+	.asciz "size : "
+	.asciz "---[ SDA File Info. ]---"
+	.byte 0x00
+	.asciz "adr  : "
+	.asciz "size : "
+	.asciz "---[ PMT File Info. ]---"
+	.byte 0x00
+	.asciz "adr  : "
+	.asciz "size : "
+	.asciz "---[ SQF File Info. ]---"
+	.byte 0x00
+	.asciz "adr  : "
+	.asciz "size : "
+	.asciz "---[ SEQ File Info. ]---"
+	.byte 0x00
+	.asciz "adr  : "
+	.asciz "size : "
+	.asciz "---[ CMP File Info. ]---"
+	.byte 0x00
+	.asciz "adr  : "
+	.asciz "size : "
+	.asciz "---[ TM File Info. ]---"
+	.asciz "adr  : "
+	.asciz "size : "
+	.asciz "---[ MSP File Info. ]---"
+	.byte 0x00
+	.asciz "adr  : "
+	.asciz "size : "
+	.asciz "---[ RCM File Info. ]---"
+	.byte 0x00
+	.asciz "adr  : "
+	.asciz "size : "
+	.asciz "---[ MD File Info. ]---"
+	.asciz "adr  : "
+	.asciz "size : "
+	.asciz "PCLK"
+	.byte 0x00
+	.asciz "PORT IS ACTIVE"
+	.byte 0x00
+	.asciz "              "
+	.byte 0x00
+	.byte 0xb0  ; "°"
+	.byte 0x00
+	.byte 0x9b  ; ""
+	.byte 0x00
+	.byte 0xb0  ; "°"
+	.byte 0x00
+	.byte 0x9d  ; ""
+	.byte 0x00
+	.asciz "v'."
+	.asciz "f'."
+	.asciz "V'."
+	.asciz "F'."
+	.asciz "BASS/DRUMS MONO"
+	.asciz "BASS+DRUMS MIX "
+	.asciz "   DRUMS L/R   "
+	.asciz "      OFF      "
+	.asciz "%s"
+	.byte 0x00
+	.asciz "%"
+	.asciz ")"
+	.asciz "i"
+	.asciz "i"
+	.asciz "i"
+	.asciz "-"
+	.asciz "1"
+	.asciz "5"
+	.asciz "<"
+	.zero 2
+	.asciz "B(."
+	.asciz "<(."
+	.asciz "6(."
+	.asciz "0(."
+	.asciz "*(."
+	.asciz "$(."
+	.byte 0x1e
+	.asciz "(."
+	.byte 0x18
+	.asciz "(."
+	.byte 0x12
+	.asciz "(."
+	.byte 0x0c
+	.asciz "(."
+	.byte 0x06
+	.asciz "(."
+	.byte 0x00
+	.asciz "(."
+	.byte 0xfa  ; "ú"
+	.asciz "'."
+	.byte 0xf4  ; "ô"
+	.asciz "'."
+	.byte 0xee  ; "î"
+	.asciz "'."
+	.byte 0xe8  ; "è"
+	.asciz "'."
+	.byte 0xe2  ; "â"
+	.asciz "'."
+	.asciz " 16 "
+	.byte 0x00
+	.asciz " 15 "
+	.byte 0x00
+	.asciz " 14 "
+	.byte 0x00
+	.asciz " 13 "
+	.byte 0x00
+	.asciz " 12 "
+	.byte 0x00
+	.asciz " 11 "
+	.byte 0x00
+	.asciz " 10 "
+	.byte 0x00
+	.asciz "  9 "
+	.byte 0x00
+	.asciz "  8 "
+	.byte 0x00
+	.asciz "  7 "
+	.byte 0x00
+	.asciz "  6 "
+	.byte 0x00
+	.asciz "  5 "
+	.byte 0x00
+	.asciz "  4 "
+	.byte 0x00
+	.asciz "  3 "
+	.byte 0x00
+	.asciz "  2 "
+	.byte 0x00
+	.asciz "  1 "
+	.byte 0x00
+	.asciz "NONE"
+	.byte 0x00
+	.asciz "%s"
+	.byte 0x00
+	.asciz "%"
+	.asciz ")"
+	.asciz "l"
+	.asciz "l"
+	.asciz "l"
+	.asciz "-"
+	.asciz "4"
+	.asciz "8"
+	.asciz "?"
+	.zero 2
+	.byte 0x04
+	.asciz ")."
+	.byte 0xfe  ; "þ"
+	.asciz "(."
+	.byte 0xf8  ; "ø"
+	.asciz "(."
+	.byte 0xf2  ; "ò"
+	.asciz "(."
+	.byte 0xec  ; "ì"
+	.asciz "(."
+	.byte 0xe6  ; "æ"
+	.asciz "(."
+	.byte 0xe0  ; "à"
+	.asciz "(."
+	.byte 0xda  ; "Ú"
+	.asciz "(."
+	.byte 0xd4  ; "Ô"
+	.asciz "(."
+	.byte 0xce  ; "Î"
+	.asciz "(."
+	.byte 0xc8  ; "È"
+	.asciz "(."
+	.byte 0xc2  ; "Â"
+	.asciz "(."
+	.byte 0xbc  ; "¼"
+	.asciz "(."
+	.byte 0xb6  ; "¶"
+	.asciz "(."
+	.byte 0xb0  ; "°"
+	.asciz "(."
+	.byte 0xaa  ; "ª"
+	.asciz "(."
+	.byte 0xa4  ; "¤"
+	.asciz "(."
+	.asciz " 16 "
+	.byte 0x00
+	.asciz " 15 "
+	.byte 0x00
+	.asciz " 14 "
+	.byte 0x00
+	.asciz " 13 "
+	.byte 0x00
+	.asciz " 12 "
+	.byte 0x00
+	.asciz " 11 "
+	.byte 0x00
+	.asciz " 10 "
+	.byte 0x00
+	.asciz "  9 "
+	.byte 0x00
+	.asciz "  8 "
+	.byte 0x00
+	.asciz "  7 "
+	.byte 0x00
+	.asciz "  6 "
+	.byte 0x00
+	.asciz "  5 "
+	.byte 0x00
+	.asciz "  4 "
+	.byte 0x00
+	.asciz "  3 "
+	.byte 0x00
+	.asciz "  2 "
+	.byte 0x00
+	.asciz "  1 "
+	.byte 0x00
+	.asciz "NONE"
+	.byte 0x00
+	.asciz "%s"
+	.byte 0x00
+	.asciz "%"
+	.asciz ")"
+	.asciz "l"
+	.asciz "l"
+	.asciz "l"
+	.asciz "-"
+	.asciz "4"
+	.asciz "8"
+	.asciz "?"
+	.zero 2
+	.asciz "6)."
+	.asciz "2)."
+	.asciz ".)."
+	.asciz "YES"
+	.asciz "NO "
+	.asciz "---"
+	.asciz "%s"
+	.byte 0x00
+	.byte 0x1b
+	.byte 0x00
+	.byte 0x1f
+	.byte 0x00
+	.asciz "B"
+	.asciz "B"
+	.asciz "B"
+	.asciz "#"
+	.asciz "'"
+	.asciz "+"
+	.asciz "2"
+	.zero 2
+	.asciz "SVOP"
+	.byte 0x00
+	.asciz "%s"
+	.byte 0x00
+	.asciz "'"
+	.asciz "+"
+	.asciz "F"
+	.asciz "F"
+	.asciz "F"
+	.asciz "/"
+	.asciz "3"
+	.asciz "7"
+	.asciz ">"
+	.zero 2
+	.asciz "%s"
+	.byte 0x00
+	.asciz "%"
+	.asciz ")"
+	.asciz "x"
+	.asciz "x"
+	.asciz "x"
+	.asciz "-"
+	.asciz ";"
+	.asciz "I"
+	.asciz "P"
+	.zero 2
+	.asciz "%s"
+	.byte 0x00
+	.asciz "%"
+	.asciz ")"
+	.asciz "x"
+	.asciz "x"
+	.asciz "x"
+	.asciz "-"
+	.asciz ";"
+	.asciz "I"
+	.asciz "P"
+	.zero 2
+	.asciz "%s"
+	.byte 0x00
+	.asciz "%"
+	.asciz ")"
+	.asciz "x"
+	.asciz "x"
+	.asciz "x"
+	.asciz "-"
+	.asciz ";"
+	.asciz "I"
+	.asciz "P"
+	.zero 2
+	.asciz "%s"
+	.byte 0x00
+	.asciz "%"
+	.asciz ")"
+	.asciz "x"
+	.asciz "x"
+	.asciz "x"
+	.asciz "-"
+	.asciz ";"
+	.asciz "I"
+	.asciz "P"
+	.zero 2
+	.asciz "%s"
+	.byte 0x00
+	.asciz "%"
+	.asciz ")"
+	.asciz "x"
+	.asciz "x"
+	.asciz "x"
+	.asciz "-"
+	.asciz ";"
+	.asciz "I"
+	.asciz "P"
+	.zero 2
+	.asciz "%s"
+	.byte 0x00
+	.asciz "%"
+	.asciz ")"
+	.asciz "x"
+	.asciz "x"
+	.asciz "x"
+	.asciz "-"
+	.asciz ";"
+	.asciz "I"
+	.asciz "P"
+	.zero 2
+	.asciz "%s"
+	.byte 0x00
+	.asciz "%"
+	.asciz ")"
+	.asciz "x"
+	.asciz "x"
+	.asciz "x"
+	.asciz "-"
+	.asciz ";"
+	.asciz "I"
+	.asciz "P"
+	.zero 2
+	.asciz "%s"
+	.byte 0x00
+	.asciz "%"
+	.asciz ")"
+	.asciz "x"
+	.asciz "x"
+	.asciz "x"
+	.asciz "-"
+	.asciz ";"
+	.asciz "I"
+	.asciz "P"
+	.zero 2
+	.asciz "%s"
+	.byte 0x00
+	.asciz "0"
+	.asciz "4"
+	.byte 0xa2  ; "¢"
+	.byte 0x00
+	.byte 0xa2  ; "¢"
+	.byte 0x00
+	.byte 0xa2  ; "¢"
+	.byte 0x00
+	.asciz "8"
+	.asciz "F"
+	.asciz "s"
+	.asciz "z"
+	.zero 2
+	.asciz "%s"
+	.byte 0x00
+	.asciz "%"
+	.asciz "%"
+	.asciz "J"
+	.asciz "J"
+	.asciz "J"
+	.asciz ")"
+	.asciz "-"
+	.asciz "1"
+	.asciz "8"
+	.zero 2
+	.asciz "%1d"
+	.byte 0x19
+	.byte 0x00
+	.byte 0x19
+	.byte 0x00
+	.asciz "4"
+	.asciz "4"
+	.asciz "4"
+	.byte 0x1d
+	.byte 0x00
+	.asciz "!"
+	.asciz "%"
+	.asciz ","
+	.zero 2
+	.asciz "%1d"
+	.byte 0xb0  ; "°"
+	.asciz "*."
+	.byte 0xa8  ; "¨"
+	.asciz "*."
+	.byte 0xa0  ; " "
+	.asciz "*."
+	.byte 0x98  ; ""
+	.asciz "*."
+	.byte 0x90  ; ""
+	.asciz "*."
+	.asciz " YELLOW"
+	.asciz " BLACK "
+	.asciz " BLUE  "
+	.asciz " GREEN "
+	.asciz " RED   "
+	.asciz "%s"
+	.byte 0x00
+	.asciz "%"
+	.asciz ")"
+	.asciz "D"
+	.asciz "D"
+	.asciz "D"
+	.asciz "-"
+	.asciz "1"
+	.asciz "5"
+	.asciz "<"
+	.zero 2
+	.byte 0x04
+	.asciz "+."
+	.byte 0xfc  ; "ü"
+	.asciz "*."
+	.byte 0xf4  ; "ô"
+	.asciz "*."
+	.byte 0xec  ; "ì"
+	.asciz "*."
+	.byte 0xe4  ; "ä"
+	.asciz "*."
+	.asciz " YELLOW"
+	.asciz " BLACK "
+	.asciz " BLUE  "
+	.asciz " GREEN "
+	.asciz " RED   "
+	.asciz "%s"
+	.byte 0x00
+	.asciz "%"
+	.asciz ")"
+	.asciz "D"
+	.asciz "D"
+	.asciz "D"
+	.asciz "-"
+	.asciz "1"
+	.asciz "5"
+	.asciz "<"
+	.zero 2
+	.asciz "%s"
+	.byte 0x00
+	.asciz "%"
+	.asciz "%"
+	.asciz "@"
+	.asciz "@"
+	.asciz "@"
+	.asciz ")"
+	.asciz "-"
+	.asciz "1"
+	.asciz "8"
+	.zero 2
+	.asciz "%1d"
+	.byte 0x19
+	.byte 0x00
+	.byte 0x19
+	.byte 0x00
+	.asciz "4"
+	.asciz "4"
+	.asciz "4"
+	.byte 0x1d
+	.byte 0x00
+	.asciz "!"
+	.asciz "%"
+	.asciz ","
+	.zero 2
+	.asciz "%1d"
+	.byte 0x19
+	.byte 0x00
+	.byte 0x19
+	.byte 0x00
+	.asciz "4"
+	.asciz "4"
+	.asciz "4"
+	.byte 0x1d
+	.byte 0x00
+	.asciz "!"
+	.asciz "%"
+	.asciz ","
+	.zero 2
+	.asciz "%1d"
+	.byte 0x19
+	.byte 0x00
+	.byte 0x19
+	.byte 0x00
+	.asciz "4"
+	.asciz "4"
+	.asciz "4"
+	.byte 0x1d
+	.byte 0x00
+	.asciz "!"
+	.asciz "%"
+	.asciz ","
+	.zero 2
+	.ascii "HD-TYPE             :                 "
+	.byte 0x09
+	.ascii "TRACKS              :                 "
+	.byte 0x09
+	.ascii "HEADS               :                 "
+	.byte 0x09
+	.ascii "SECTORS PER TRACK   :                 "
+	.byte 0x09
+	.ascii "TOTAL HD       (MB) :                 "
+	.byte 0x09
+	.ascii "USED BY SYSTEM (MB) :                 "
+	.byte 0x09
+	.ascii "FREE FOR USE   (MB) :                 "
+	.byte 0x09
+	.ascii "SOFTWARE RELEASE    :                 "
+	.byte 0x09
+	.zero 2
+	.asciz "%6.1f"
+	.asciz "%6.1f"
+	.asciz "%6.1f"
+	.zero 2
+	.byte 0xc8  ; "È"
+	.asciz "B"
+	.byte 0x00
+	.byte 0xc8  ; "È"
+	.asciz "B"
+	.byte 0x00
+	.byte 0xc8  ; "È"
+	.asciz "BFMT!"
+	.zero 3
+	.byte 0x13
+	.byte 0x00
+	.asciz "&"
+	.asciz "9"
+	.asciz "L"
+	.byte 0x90  ; ""
+	.byte 0x00
+	.asciz "a"
+	.asciz "a"
+	.zero 2
+	.byte 0x03
+	.byte 0x00
+	.byte 0x1e
+	.byte 0x00
+	.asciz "9"
+	.asciz "N"
+	.asciz "i"
+	.asciz "LBNS"
+	.byte 0x00
+	.asciz "4"
+	.asciz "N"
+	.asciz "h"
+	.byte 0x82  ; ""
+	.byte 0x00
+	.byte 0x9c  ; ""
+	.byte 0x00
+	.byte 0x0f
+	.byte 0x00
+	.byte 0x0f
+	.byte 0x00
+	.byte 0x0f
+	.byte 0x00
+	.byte 0xb6  ; "¶"
+	.byte 0x00
+	.byte 0xb6  ; "¶"
+	.byte 0x00
+	.byte 0xb6  ; "¶"
+	.byte 0x00
+	.byte 0xb6  ; "¶"
+	.byte 0x00
+	.zero 2
+	.asciz "LBN!"
+	.byte 0x00
+	.asciz "%1.1d"
+	.asciz "%2.2d"
+	.asciz "%3.3d"
+	.asciz " %1.1d"
+	.byte 0x00
+	.asciz " %2.2d"
+	.zero 3
+	.asciz "U"
+	.byte 0x89  ; ""
+	.byte 0x00
+	.byte 0xbd  ; "½"
+	.byte 0x00
+	.byte 0x14, 0x01
+	.ascii "I"
+	.byte 0x01
+	.byte 0xbb  ; "»"
+	.byte 0x01
+	.asciz "                          "
+	.byte 0x00
+	.asciz "%s"
+	.byte 0x00
+	.asciz "B"
+	.asciz "F"
+	.asciz "a"
+	.asciz "a"
+	.asciz "a"
+	.asciz "J"
+	.asciz "N"
+	.asciz "R"
+	.asciz "Y"
+	.zero 2
+	.asciz "%s"
+	.byte 0x00
+	.asciz "A"
+	.asciz "F"
+	.byte 0xcc  ; "Ì"
+	.byte 0x00
+	.byte 0xcc  ; "Ì"
+	.byte 0x00
+	.byte 0xcc  ; "Ì"
+	.byte 0x00
+	.asciz "K"
+	.asciz "f"
+	.byte 0x81  ; ""
+	.byte 0x00
+	.byte 0x88  ; ""
+	.byte 0x00
+	.zero 2
+	.asciz "%s"
+	.byte 0x00
+	.asciz "A"
+	.asciz "F"
+	.byte 0xcc  ; "Ì"
+	.byte 0x00
+	.byte 0xcc  ; "Ì"
+	.byte 0x00
+	.byte 0xcc  ; "Ì"
+	.byte 0x00
+	.asciz "K"
+	.asciz "f"
+	.byte 0x81  ; ""
+	.byte 0x00
+	.byte 0x88  ; ""
+	.byte 0x00
+	.zero 2
+	.asciz "%s"
+	.byte 0x00
+	.asciz "A"
+	.asciz "F"
+	.byte 0xcc  ; "Ì"
+	.byte 0x00
+	.byte 0xcc  ; "Ì"
+	.byte 0x00
+	.byte 0xcc  ; "Ì"
+	.byte 0x00
+	.asciz "K"
+	.asciz "f"
+	.byte 0x81  ; ""
+	.byte 0x00
+	.byte 0x88  ; ""
+	.byte 0x00
+	.zero 2
+	.asciz "%s"
+	.byte 0x00
+	.asciz "A"
+	.asciz "F"
+	.byte 0xcc  ; "Ì"
+	.byte 0x00
+	.byte 0xcc  ; "Ì"
+	.byte 0x00
+	.byte 0xcc  ; "Ì"
+	.byte 0x00
+	.asciz "K"
+	.asciz "f"
+	.byte 0x81  ; ""
+	.byte 0x00
+	.byte 0x88  ; ""
+	.byte 0x00
+	.zero 2
+	.asciz "%s"
+	.byte 0x00
+	.asciz "A"
+	.asciz "F"
+	.byte 0xcc  ; "Ì"
+	.byte 0x00
+	.byte 0xcc  ; "Ì"
+	.byte 0x00
+	.byte 0xcc  ; "Ì"
+	.byte 0x00
+	.asciz "K"
+	.asciz "f"
+	.byte 0x81  ; ""
+	.byte 0x00
+	.byte 0x88  ; ""
+	.byte 0x00
+	.zero 2
+	.asciz "%s"
+	.byte 0x00
+	.asciz "A"
+	.asciz "F"
+	.byte 0xcc  ; "Ì"
+	.byte 0x00
+	.byte 0xcc  ; "Ì"
+	.byte 0x00
+	.byte 0xcc  ; "Ì"
+	.byte 0x00
+	.asciz "K"
+	.asciz "f"
+	.byte 0x81  ; ""
+	.byte 0x00
+	.byte 0x88  ; ""
+	.byte 0x00
+	.zero 2
+	.asciz "%s"
+	.byte 0x00
+	.asciz "A"
+	.asciz "F"
+	.byte 0xcc  ; "Ì"
+	.byte 0x00
+	.byte 0xcc  ; "Ì"
+	.byte 0x00
+	.byte 0xcc  ; "Ì"
+	.byte 0x00
+	.asciz "K"
+	.asciz "f"
+	.byte 0x81  ; ""
+	.byte 0x00
+	.byte 0x88  ; ""
+	.byte 0x00
+	.zero 2
+	.asciz "%s"
+	.byte 0x00
+	.asciz "A"
+	.asciz "F"
+	.byte 0xcc  ; "Ì"
+	.byte 0x00
+	.byte 0xcc  ; "Ì"
+	.byte 0x00
+	.byte 0xcc  ; "Ì"
+	.byte 0x00
+	.asciz "K"
+	.asciz "f"
+	.byte 0x81  ; ""
+	.byte 0x00
+	.byte 0x88  ; ""
+	.byte 0x00
+	.zero 2
+	.asciz "%s"
+	.byte 0x00
+	.asciz "A"
+	.asciz "F"
+	.byte 0xcc  ; "Ì"
+	.byte 0x00
+	.byte 0xcc  ; "Ì"
+	.byte 0x00
+	.byte 0xcc  ; "Ì"
+	.byte 0x00
+	.asciz "K"
+	.asciz "f"
+	.byte 0x81  ; ""
+	.byte 0x00
+	.byte 0x88  ; ""
+	.byte 0x00
+	.zero 2
+	.ascii "   :                "
+	.byte 0x09
+	.byte 0x00
 
 HDAE5000_Char_Tables:	; 0x2E2E76
 	; Character set tables
@@ -1710,7 +3222,147 @@ HDAE5000_Char_Tables:	; 0x2E2E76
 
 HDAE5000_Path_Strings:	; 0x2E348F
 	; File path and config strings
-	.incbin "includes/code_29af2d_2fffff.bin", 296290, 462
+	.asciz ")BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB)"
+	.asciz "BZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZB"
+	.asciz "BZ{{{{"
+	.zero 2
+	.asciz "{{"
+	.zero 4
+	.asciz "{{"
+	.zero 2
+	.asciz "{{{"
+	.zero 3
+	.asciz "{{{"
+	.zero 3
+	.asciz "{{{{ZB"
+	.ascii "BZ"
+	.byte 0x9c, 0xad, 0xad  ; "­­"
+	.byte 0x00
+	.byte 0xf7, 0xf7, 0xf7  ; "÷÷÷"
+	.byte 0x00
+	.byte 0xad, 0xf7, 0xf7  ; "­÷÷"
+	.byte 0x00
+	.byte 0xf7, 0xf7, 0xad  ; "÷÷­"
+	.byte 0x00
+	.byte 0xf7, 0xf7, 0xf7  ; "÷÷÷"
+	.byte 0x00
+	.byte 0xad, 0xad  ; "­­"
+	.byte 0x00
+	.byte 0xf7, 0xf7, 0xf7  ; "÷÷÷"
+	.byte 0x00
+	.byte 0xad, 0xad  ; "­­"
+	.byte 0x00
+	.byte 0xf7, 0xf7, 0xf7, 0xad, 0xad, 0xad  ; "÷÷÷­­­"
+	.asciz "{kB"
+	.ascii "BZ{"
+	.byte 0xc6, 0xc6  ; "ÆÆ"
+	.byte 0x00
+	.byte 0xc6, 0xc6, 0xc6, 0xf7, 0xc6, 0xc6, 0xc6  ; "ÆÆÆ÷ÆÆÆ"
+	.byte 0x00
+	.byte 0xc6, 0xc6, 0xc6  ; "ÆÆÆ"
+	.byte 0x00
+	.byte 0xc6, 0xc6, 0xc6  ; "ÆÆÆ"
+	.byte 0x00
+	.byte 0xc6, 0xc6  ; "ÆÆ"
+	.byte 0x00
+	.byte 0xc6, 0xc6, 0xc6  ; "ÆÆÆ"
+	.byte 0x00
+	.byte 0xc6, 0xc6  ; "ÆÆ"
+	.byte 0x00
+	.byte 0xc6, 0xc6, 0xc6, 0xc6, 0xc6, 0xb5  ; "ÆÆÆÆÆµ"
+	.asciz "{ZB"
+	.ascii "BZ{"
+	.byte 0xde, 0xde, 0xf7  ; "ÞÞ÷"
+	.byte 0x00
+	.zero 2
+	.byte 0xde, 0xde, 0xde, 0xde  ; "ÞÞÞÞ"
+	.byte 0x00
+	.byte 0xde, 0xde, 0xde  ; "ÞÞÞ"
+	.byte 0x00
+	.byte 0xde, 0xde, 0xde  ; "ÞÞÞ"
+	.byte 0x00
+	.byte 0xde, 0xde  ; "ÞÞ"
+	.byte 0x00
+	.byte 0xde, 0xde, 0xde  ; "ÞÞÞ"
+	.byte 0x00
+	.byte 0xde, 0xde  ; "ÞÞ"
+	.byte 0x00
+	.zero 2
+	.byte 0xde, 0xde, 0xde, 0xc6  ; "ÞÞÞÆ"
+	.asciz "{ZB"
+	.ascii "BZ{"
+	.byte 0xef, 0xef, 0xef, 0xf7, 0xf7, 0xf7  ; "ïïï÷÷÷"
+	.byte 0x00
+	.byte 0xef, 0xef, 0xef  ; "ïïï"
+	.byte 0x00
+	.byte 0xef, 0xef, 0xef  ; "ïïï"
+	.byte 0x00
+	.byte 0xef, 0xef, 0xef  ; "ïïï"
+	.byte 0x00
+	.byte 0xef, 0xef  ; "ïï"
+	.byte 0x00
+	.zero 3
+	.byte 0xf7, 0xef, 0xef  ; "÷ïï"
+	.byte 0x00
+	.byte 0xf7, 0xf7, 0xef, 0xef, 0xef, 0xc6  ; "÷÷ïïïÆ"
+	.asciz "{ZB"
+	.ascii ")Z{"
+	.byte 0xd6, 0xd6, 0xd6, 0xd6, 0xd6, 0xd6  ; "ÖÖÖÖÖÖ"
+	.byte 0x00
+	.byte 0xd6, 0xd6, 0xd6  ; "ÖÖÖ"
+	.byte 0x00
+	.byte 0xd6, 0xd6, 0xd6  ; "ÖÖÖ"
+	.byte 0x00
+	.byte 0xd6, 0xd6, 0xd6  ; "ÖÖÖ"
+	.byte 0x00
+	.byte 0xd6, 0xd6  ; "ÖÖ"
+	.byte 0x00
+	.byte 0xf7  ; "÷"
+	.byte 0x00
+	.byte 0xf7, 0xd6, 0xd6, 0xd6  ; "÷ÖÖÖ"
+	.byte 0x00
+	.byte 0xd6, 0xd6, 0xd6, 0xd6, 0xd6, 0xc6  ; "ÖÖÖÖÖÆ"
+	.asciz "{k)"
+	.ascii "BZk"
+	.byte 0xc6, 0xc6  ; "ÆÆ"
+	.byte 0x00
+	.byte 0xc6, 0xc6, 0xc6  ; "ÆÆÆ"
+	.byte 0x00
+	.byte 0xc6, 0xc6, 0xc6  ; "ÆÆÆ"
+	.byte 0x00
+	.byte 0xc6, 0xc6, 0xc6  ; "ÆÆÆ"
+	.byte 0x00
+	.byte 0xc6, 0xc6, 0xc6  ; "ÆÆÆ"
+	.byte 0x00
+	.byte 0xc6, 0xc6  ; "ÆÆ"
+	.byte 0x00
+	.byte 0xc6, 0xf7  ; "Æ÷"
+	.byte 0x00
+	.byte 0xc6, 0xc6, 0xc6  ; "ÆÆÆ"
+	.byte 0x00
+	.byte 0xc6, 0xc6, 0xc6, 0xc6, 0xc6, 0xb5  ; "ÆÆÆÆÆµ"
+	.asciz "{Z)"
+	.ascii ")Z{"
+	.byte 0xad, 0xad, 0xf7  ; "­­÷"
+	.byte 0x00
+	.zero 2
+	.byte 0xf7, 0xad, 0xad, 0xad  ; "÷­­­"
+	.byte 0x00
+	.byte 0xad, 0xad, 0xad, 0xf7  ; "­­­÷"
+	.byte 0x00
+	.zero 2
+	.byte 0xf7, 0xad, 0xad  ; "÷­­"
+	.byte 0x00
+	.byte 0xad, 0xad, 0xf7  ; "­­÷"
+	.byte 0x00
+	.byte 0xad, 0xad  ; "­­"
+	.byte 0x00
+	.zero 3
+	.byte 0xad, 0xad, 0xad  ; "­­­"
+	.asciz "{Z)"
+	.ascii ")Z{"
+	.byte 0x9c, 0x9c, 0x9c, 0xf7, 0xf7, 0xf7, 0x9c, 0x9c, 0x9c, 0x9c, 0xf7, 0x9c, 0x9c, 0x9c, 0x9c, 0xf7, 0xf7, 0xf7, 0x9c, 0x9c, 0x9c, 0xf7, 0x9c, 0x9c, 0x9c, 0xf7, 0x9c, 0x9c, 0xf7, 0xf7, 0xf7, 0xf7, 0x9c, 0x9c, 0x8c  ; "÷÷÷÷÷÷÷÷÷÷÷÷÷"
+	.asciz "{Z)"
 
 HDAE5000_UI_Icons:	; 0x2E365D
 	; UI icon/pattern data with language IDs
@@ -1718,11 +3370,701 @@ HDAE5000_UI_Icons:	; 0x2E365D
 
 HDAE5000_Multilingual_Messages:	; 0x2E3704
 	; Trilingual UI messages (EN/DE/FR)
-	.incbin "includes/code_29af2d_2fffff.bin", 296919, 9340
+	.asciz "Would you really delete the selected directory?"
+	.asciz "Moechten Sie das angewaehlte Verzeichnis wirklich loeschen?"
+	.ascii "Voulez-vous effacer ce r"
+	.byte 0xe9  ; "é"
+	.asciz "pertoir?"
+	.asciz "Would you really delete the selected title?"
+	.asciz "Moechten Sie den angewaehlten Titel wirklich loeschen?"
+	.byte 0x00
+	.asciz "Voulez-vous effacer ce titre?"
+	.asciz "COPY FD TO HARD DISK"
+	.byte 0x00
+	.asciz "COPY FD TO HARD DISK"
+	.byte 0x00
+	.asciz "COPY FD TO HARD DISK"
+	.byte 0x00
+	.asciz "OUTPUT SETTING"
+	.byte 0x00
+	.asciz "OUTPUT SETTING"
+	.byte 0x00
+	.asciz "OUTPUT SETTING"
+	.byte 0x00
+	.asciz "SELECT BY   NAME    "
+	.byte 0x00
+	.asciz "SELECT BY   NAME    "
+	.byte 0x00
+	.asciz "SELECT BY   NAME    "
+	.byte 0x00
+	.asciz "LOAD BY     NUMBER"
+	.byte 0x00
+	.asciz "LOAD BY     NUMBER"
+	.byte 0x00
+	.asciz "LOAD BY     NUMBER"
+	.byte 0x00
+	.asciz "SELECT FILE LOAD SCRIPT"
+	.asciz "SELECT FILE LOAD SCRIPT"
+	.asciz "SELECT FILE LOAD SCRIPT"
+	.asciz "WRITE PROTECT: "
+	.asciz "WRITE PROTECT: "
+	.asciz "WRITE PROTECT: "
+	.asciz "WRITE CONFIRM: "
+	.asciz "WRITE CONFIRM: "
+	.asciz "WRITE CONFIRM: "
+	.asciz "ABOUT & HELP "
+	.asciz "ABOUT & HELP "
+	.asciz "ABOUT & HELP "
+	.asciz "SAVE SETUP"
+	.byte 0x00
+	.asciz "SAVE SETUP"
+	.byte 0x00
+	.asciz "SAVE SETUP"
+	.byte 0x00
+	.asciz "OUTPUT SETTING"
+	.byte 0x00
+	.asciz "OUTPUT SETTING"
+	.byte 0x00
+	.asciz "OUTPUT SETTING"
+	.byte 0x00
+	.asciz "SEPARATE OUTPUT MODE:"
+	.asciz "SEPARATE OUTPUT MODE:"
+	.asciz "SEPARATE OUTPUT MODE:"
+	.asciz "PART SELECT FOR SEQ.DRUMS OUT:"
+	.byte 0x00
+	.asciz "PART SELECT FOR SEQ.DRUMS OUT:"
+	.byte 0x00
+	.asciz "PART SELECT FOR SEQ.DRUMS OUT:"
+	.byte 0x00
+	.asciz "PART SELECT FOR SEQ.BASS  OUT:"
+	.byte 0x00
+	.asciz "PART SELECT FOR SEQ.BASS  OUT:"
+	.byte 0x00
+	.asciz "PART SELECT FOR SEQ.BASS  OUT:"
+	.byte 0x00
+	.asciz "! The separate outputs cannot be controlled by the internal volume control."
+	.asciz "! Die separaten Ausgaenge werden nicht durch Volumen am Keyboard kontrolliert."
+	.byte 0x00
+	.ascii "! Les sortie s"
+	.byte 0xe9  ; "é"
+	.ascii "par"
+	.byte 0xe9  ; "é"
+	.ascii "es ne peuvent pas "
+	.byte 0xea  ; "ê"
+	.ascii "tre control"
+	.byte 0xe9  ; "é"
+	.asciz "es par les volume du calvier."
+	.asciz "Hardware and software developement:"
+	.asciz "Hardware und Software Entwicklung:"
+	.byte 0x00
+	.asciz "Hardware et Software developement:"
+	.byte 0x00
+	.asciz "Conception, marketing, sales and service:"
+	.asciz "Konzeption, Marketing, Verkauf und Service:"
+	.asciz "Conception, Marketing, Vente et Service:"
+	.byte 0x00
+	.asciz "All rigths reserved by the called companies"
+	.asciz "Alle Rechte bei den obengenannten Firmen"
+	.byte 0x00
+	.asciz "All rigths reserved by the called companies"
+	.asciz "Special thanks to:"
+	.byte 0x00
+	.asciz "Spezieller Dank an:"
+	.asciz "Special thanks to:"
+	.byte 0x00
+	.asciz "Press 3 digits for directory and 2 digits for the file."
+	.asciz "Geben Sie 3 Ziffern fuer das Verzeichnis und 2 Ziffern fuer den Titel ein."
+	.byte 0x00
+	.ascii "Introduisez 3 chiffres pour le r"
+	.byte 0xe9  ; "é"
+	.asciz "pertoir at 2 chiffres pour le titre."
+	.asciz "Do you really want to overwrite this FLS entry?"
+	.asciz "Wollen Sie den bestehenden FLS Eintrag wirklich ueberschreiben?"
+	.ascii "Voulez-vous vraiment "
+	.byte 0xe9  ; "é"
+	.asciz "crire par dessus le FLS?"
+	.byte 0x00
+	.asciz "Do you really want to delete this FLS entry?"
+	.byte 0x00
+	.asciz "Wollen Sie den bestehenden FLS Eintrag wirklich loeschen?"
+	.asciz "Voulez-vous vraiment effacer ce FLS?"
+	.byte 0x00
+	.asciz "HD FORMAT will erase all files at once."
+	.asciz "HD FORMAT loescht alle Daten auf der Festplatte."
+	.byte 0x00
+	.ascii "HD-FORMAT effacera toutes les donn"
+	.byte 0xe9  ; "é"
+	.asciz "es de votre disque dur."
+	.byte 0x00
+	.asciz "Therefore you need a 6-digit key code. Please refer your owners manual chapter SETUP & TOOLS."
+	.asciz "Geben Sie auf dieser Seite den 6-stelligen Code ein. Schauen Sie in der Anleitung unter SETUP & TOOLS nach."
+	.ascii "Indroduisez le code "
+	.byte 0xe0  ; "à"
+	.ascii " 6 chiffres et r"
+	.byte 0xe9  ; "é"
+	.ascii "f"
+	.byte 0xe9  ; "é"
+	.ascii "rez-vous "
+	.byte 0xe0  ; "à"
+	.asciz " votre manuel dans (SETUP & TOOLS)."
+	.asciz "After your code input all data will be deleted irrevocable!"
+	.asciz "Nach der Codeeingabe werden alle Daten unwiderruflich geloescht!"
+	.byte 0x00
+	.ascii "Apr"
+	.byte 0xe8  ; "è"
+	.ascii "s l'introduction du code, toutes les donn"
+	.byte 0xe9  ; "é"
+	.ascii "es seront effac"
+	.byte 0xe9  ; "é"
+	.asciz "es."
+	.asciz "You are going to delete a FLS entry. Are you sure?"
+	.byte 0x00
+	.asciz "Sie haben einen FLS Eintrag zum Loeschen markiert. Sind Sie sicher?"
+	.asciz "Vous avez marquer un FLS connection pour effacer. Vous ait sure?"
+	.byte 0x00
+	.asciz "You are going to overwrite a FLS entry. Are you sure?"
+	.asciz "Sie ueberschreiben eine bestehenden FLS Eintrag. Sind Sie sicher?"
+	.asciz "Voulez-vous vraiment transcrire ce FLS enregistration?"
+	.byte 0x00
+	.asciz "The hard disk is write protected!"
+	.ascii "Die Festplatte ist schreibgesch"
+	.byte 0xfc  ; "ü"
+	.asciz "tzt!"
+	.byte 0x00
+	.ascii "Le disque dur est prot"
+	.byte 0xe9  ; "é"
+	.ascii "ger contre l'"
+	.byte 0xe9  ; "é"
+	.asciz "ctriture!"
+	.byte 0x00
+	.asciz "Please set the write protect mode to OFF."
+	.asciz "Schalten Sie WRITE PROTECT im SETUP & TOOLS auf OFF."
+	.byte 0x00
+	.ascii "Pour "
+	.byte 0xe9  ; "é"
+	.asciz "crire mettez la protection sur OFF."
+	.asciz "The hard disk is not formatted!"
+	.asciz "Die Festplatte ist nicht formatiert!"
+	.byte 0x00
+	.ascii "Le disque dur n'est pas format"
+	.byte 0xe9  ; "é"
+	.asciz "."
+	.byte 0x00
+	.asciz "Hard disk SRAM error."
+	.asciz "Im HD-AE5000 SRAM ist ein Fehler aufgetreten."
+	.asciz "Il y a un problem avec le SRAM de HD-AE5000."
+	.byte 0x00
+	.asciz "Hard disk reset error."
+	.byte 0x00
+	.asciz "Die Festplatte konnte nicht initialisiert werden."
+	.asciz "Votre disque dur n'est pas reconnu."
+	.asciz "Hard disk read error."
+	.asciz "Beim Lesen der Festplatte ist ein Fehler aufgetreten."
+	.ascii "Il y a un probl"
+	.byte 0xe9  ; "é"
+	.asciz "me de leture du disque."
+	.asciz "Hard disk ID read error."
+	.byte 0x00
+	.asciz "Die ID der Festplatte konnte nicht gelesen werden."
+	.byte 0x00
+	.ascii "L'ID du disque dur n'a pas pu "
+	.byte 0xea  ; "ê"
+	.asciz "tre lue."
+	.asciz "Hard disk track 0 error."
+	.byte 0x00
+	.asciz "Track O der Festplatte konnte nicht gelesen werden."
+	.ascii "La piste 0 du disque dur n'a pas pu "
+	.byte 0xea  ; "ê"
+	.asciz "tre lue."
+	.asciz "Hard disk FAT read error."
+	.asciz "Die FAT der Festplatte konnte nicht gelesen werden."
+	.ascii "Le FAT du disque dur n'a pas pu "
+	.byte 0xea  ; "ê"
+	.asciz "tre lue."
+	.asciz "Hard disk FSB read error."
+	.asciz "Der FSB der Festplatte konnte nicht gelesen werden."
+	.ascii "Le FSB du disque dur n'a pas pu "
+	.byte 0xea  ; "ê"
+	.asciz "tre lue."
+	.asciz "There are no files marked for copy to HD!"
+	.asciz "Es wurden keine Titel zum Kopieren gefunden."
+	.byte 0x00
+	.ascii "Aucun titre n'a "
+	.byte 0xe9  ; "é"
+	.ascii "t"
+	.byte 0xe9  ; "é"
+	.ascii " marqu"
+	.byte 0xe9  ; "é"
+	.asciz " pour faire des copies."
+	.asciz "Please make a safety backup of your data and call your service center."
+	.byte 0x00
+	.asciz "Sichern Sie alle Ihre Daten auf Diskette oder den PC und rufen Sie Ihre Service-Stelle an."
+	.byte 0x00
+	.ascii "Sauvez vos donn"
+	.byte 0xe9  ; "é"
+	.asciz "e sur disquette ou l'ordinateur et contactez votre service assistance."
+	.byte 0x00
+	.asciz "Please make a safety backup of your data and call your service center."
+	.byte 0x00
+	.asciz "Sichern Sie alle Ihre Daten auf Diskette oder den PC und rufen Sie Ihre Service-Stelle an."
+	.byte 0x00
+	.ascii "Sauvez vos donn"
+	.byte 0xe9  ; "é"
+	.asciz "e sur disquette ou l'ordinateur et contactez votre service assistance."
+	.byte 0x00
+	.asciz "The data on the disk you would like to copy to HD has no KN5000 format or some data are corrupted."
+	.byte 0x00
+	.asciz "Die Daten auf der Diskette die Sie kopieren moechten, haben keine KN5000 ID oder sind fehlerhaft."
+	.ascii "Les donn"
+	.byte 0xe9  ; "é"
+	.ascii "es que vous voulez charger ne sont pas du KN5000 format ou ont des d"
+	.byte 0xe9  ; "é"
+	.asciz "faults."
+	.asciz "The number or marked songs cannot fit in the free space of the selected directory."
+	.byte 0x00
+	.asciz "Im gewuenschten Verzeichnis sind nicht genuegend freie Plaetze fuer die Anzahl markierter Titel."
+	.byte 0x00
+	.ascii "Le r"
+	.byte 0xe9  ; "é"
+	.ascii "pertoir est satur"
+	.byte 0xe9  ; "é"
+	.ascii ", il n'y "
+	.byte 0xe0  ; "à"
+	.asciz " plus de place pour d'autres titre."
+	.byte 0x00
+	.asciz "Reduce the number of selected songs or find a free directory."
+	.asciz "Reduzieren Sie die Zahl der Titel oder waehlen Sie ein anderes Verzeichnis."
+	.ascii "Changer de r"
+	.byte 0xe9  ; "é"
+	.asciz "pertoire ou supprimez des titres."
+	.byte 0x00
+	.asciz "You cannot copy files/songs to an unnamed directory."
+	.byte 0x00
+	.asciz "Kopieren Sie keine Titel in ein nicht beschriftetes Verzeichnis."
+	.byte 0x00
+	.ascii "Vous ne pouvez pas copier des titres dans un r"
+	.byte 0xe9  ; "é"
+	.ascii "pertoire pas pr"
+	.byte 0xe9  ; "é"
+	.ascii "par"
+	.byte 0xe9  ; "é"
+	.asciz "."
+	.byte 0x00
+	.asciz "Please use a named directory or create the new directory with EDIT first."
+	.asciz "Waehlen Sie ein bereits beschriftetes Verzeichnis oder benennen Sie es zuvor mit EDIT."
+	.byte 0x00
+	.asciz "Nommez-le d'abord par example avec EDIT."
+	.byte 0x00
+	.asciz "The DIR number is out of range."
+	.asciz "Sie haben eine ungueltige Verzeichnis Nummer eingegeben."
+	.byte 0x00
+	.ascii "Le r"
+	.byte 0xe9  ; "é"
+	.asciz "pertoire choisi n'existe pas."
+	.byte 0x00
+	.asciz "The file number is out of range."
+	.byte 0x00
+	.asciz "Die eingegebene Nummer existiert nicht."
+	.asciz "Le titre choisi n'existe pas."
+	.asciz "Please wait ..."
+	.asciz "Bitte warten ..."
+	.byte 0x00
+	.asciz "Attendre S.V.P."
+	.asciz "!FORMAT ERROR!"
+	.byte 0x00
+	.asciz "!FORMAT FEHLER!"
+	.asciz "!FORMAT ERREUR!"
+	.asciz "The automatic HD format was not successful!"
+	.asciz "Die Formatierung war nicht erfolgreich!"
+	.asciz "Le formatage du disque dur n'a pas pu se faire correctement!"
+	.byte 0x00
+	.asciz "Please try once more, refer your owners manual or ask your dealer/service center."
+	.asciz "Versuchen Sie es nochmals, schauen Sie in der Anleitung nach oder rufen Sie Ihre Service-Stelle an."
+	.ascii "R"
+	.byte 0xe9  ; "é"
+	.ascii "p"
+	.byte 0xe9  ; "é"
+	.ascii "tez l'operation en vous r"
+	.byte 0xe9  ; "é"
+	.ascii "f"
+	.byte 0xe9  ; "é"
+	.ascii "rent au manuel ou en cas d'"
+	.byte 0xe9  ; "é"
+	.asciz "chec, contactez votre service assistance."
+	.asciz "Input error!"
+	.byte 0x00
+	.asciz "Eingabe-Fehler!"
+	.asciz "Erreur d'operation!"
+	.asciz "The key code input was wrong!"
+	.asciz "Die Nummerneingabe war falsch!"
+	.byte 0x00
+	.asciz "Le cocde n'est pas correct!"
+	.asciz "Please try once more, refer your owners manual or ask your dealer/service center."
+	.asciz "Versuchen Sie es nochmals, schauen Sie in der Anleitung nach oder rufen Sie Ihre Service-Stelle an."
+	.ascii "Veuillez r"
+	.byte 0xe9  ; "é"
+	.ascii "p"
+	.byte 0xe9  ; "é"
+	.ascii "ter l'ex"
+	.byte 0xe9  ; "é"
+	.ascii "cution et vous r"
+	.byte 0xe9  ; "é"
+	.ascii "f"
+	.byte 0xe9  ; "é"
+	.asciz "rez au manuel ou contactez votre service assistance."
+	.asciz "Delete file from hard disk:"
+	.asciz "Loesche Titel von Festplatte:"
+	.asciz "Effacer titre du disque dur:"
+	.byte 0x00
+	.asciz "The hard disk will now be formatted. This procedure can take about 2-3 minutes."
+	.asciz "Die Festplatte wird nun neu formatiert. Dieser Vorgang dauert ca. 2-3 Minuten."
+	.byte 0x00
+	.asciz "The hard disk will now be formatted. This procedure can take about 2-3 minutes."
+	.asciz "We recommend to turn ON and OFF again the power after the complete format."
+	.byte 0x00
+	.asciz "Wir empfehlen, nach der Formatierung das Keyboard aus und wieder einzuschalten."
+	.asciz "We recommend to turn ON and OFF again the power after the complete format."
+	.byte 0x00
+	.asciz "Track O will be recovered:"
+	.byte 0x00
+	.asciz "Track 0 wird kontrolliert:"
+	.byte 0x00
+	.asciz "Track O will be recovered:"
+	.byte 0x00
+	.asciz "The FLS entry remains free."
+	.asciz "Der FLS Eintrag bleibt frei."
+	.byte 0x00
+	.asciz "Ce FLS registartion reste libre."
+	.byte 0x00
+	.asciz "All following entries will be moved."
+	.byte 0x00
+	.asciz "Alle nachfolgenden Eintraege werden nachgeschoben."
+	.byte 0x00
+	.ascii "Tous les registartion suivant seront d"
+	.byte 0xe9  ; "é"
+	.asciz "placer."
+	.byte 0x00
+	.asciz "Evaluation 01-01-99"
+	.asciz "Test-Version 01-01-99"
+	.ascii "Version d'"
+	.byte 0xe9  ; "é"
+	.asciz "valuation"
+	.byte 0x00
+	.asciz "LYRICS LOAD MODE"
+	.byte 0x00
+	.asciz "LYRICS LOAD MODE"
+	.byte 0x00
+	.asciz "LYRICS LOAD MODE"
+	.byte 0x00
+	.asciz "COLOR ACTIV"
+	.asciz "AKTIVE FARBE"
+	.byte 0x00
+	.asciz "COLOUR ACTIVE"
+	.asciz "COLOR PASSIV"
+	.byte 0x00
+	.asciz "PASSIVE FARBE"
+	.asciz "COLOUR PASSIVE"
+	.byte 0x00
+	.asciz "You are going to overwrite an existing entry. Are you sure?"
+	.asciz "Sie ueberschreiben einen bestehenden Eintrag. Sind Sie sicher?"
+	.byte 0x00
+	.asciz "Vous etes en train de modifier un titre existant. Etes-vous sur?"
+	.byte 0x00
+	.asciz "YES"
+	.asciz "JA"
+	.byte 0x00
+	.asciz "OUI"
+	.asciz "NO"
+	.byte 0x00
+	.asciz "NEIN"
+	.byte 0x00
+	.asciz "NON"
+	.asciz "OK"
+	.byte 0x00
+	.asciz "OK"
+	.byte 0x00
+	.asciz "OK"
+	.byte 0x00
+	.asciz "CANCEL"
+	.byte 0x00
+	.asciz "Abbruch"
+	.asciz "CANCEL"
+	.byte 0x00
+	.asciz "Operation error!"
+	.byte 0x00
+	.asciz "Bedienungsfehler!"
+	.asciz "Error d'operation!"
+	.byte 0x00
+	.asciz "!SAVE ERROR!"
+	.byte 0x00
+	.asciz "!SAVE-FEHLER!"
+	.asciz "!SAVE ERREUR!"
+	.asciz "!LOAD ERROR!"
+	.byte 0x00
+	.asciz "!LOAD-FEHLER!"
+	.asciz "!LOAD ERREUR!"
+	.asciz "!SYSTEM ERROR!"
+	.byte 0x00
+	.asciz "!SYSTEM-FEHLER!"
+	.asciz "!SYSTEM ERREUR!"
+	.asciz "!ATTENTION!"
+	.asciz "!ACHTUNG!"
+	.asciz "!ATTENTION!"
+	.asciz "Press YES for confirmation, NO to abort."
+	.byte 0x00
+	.asciz "Bestaetigen Sie den Vorgang mit JA oder druecken Sie die NEIN Taste."
+	.byte 0x00
+	.asciz "Pressez OUI pour confirmer ou NON pour annuler."
+	.asciz "Please call your dealer or service center."
+	.byte 0x00
+	.asciz "Bitte rufen Sie Ihre Service-Stelle an."
+	.asciz "Contactez votre service assistance."
+	.asciz "No Message"
+	.zero 3
+	.asciz "I"
+	.byte 0x92  ; ""
+	.byte 0x00
+	.byte 0xdb  ; "Û"
+	.byte 0x00
+	.ascii "$"
+	.byte 0x01
+	.ascii "m"
+	.byte 0x01
+	.byte 0xb6  ; "¶"
+	.byte 0x01
+	.byte 0xff
+	.byte 0x01
+	.ascii "H"
+	.byte 0x02
+	.byte 0x91  ; ""
+	.byte 0x02
+	.byte 0xda  ; "Ú"
+	.byte 0x02
+	.ascii "#"
+	.byte 0x03
+	.ascii "l"
+	.byte 0x03
+	.byte 0xb5  ; "µ"
+	.byte 0x03
+	.byte 0xfe  ; "þ"
+	.byte 0x03
+	.ascii "G"
+	.byte 0x04
+	.byte 0x90  ; ""
+	.byte 0x04
+	.byte 0xd9  ; "Ù"
+	.byte 0x04
+	.ascii "\""
+	.byte 0x05
+	.ascii "k"
+	.byte 0x05
+	.byte 0xb4  ; "´"
+	.byte 0x05
+	.byte 0xfd  ; "ý"
+	.byte 0x05
+	.ascii "F"
+	.byte 0x06
+	.byte 0x8f  ; ""
+	.byte 0x06
+	.byte 0xd8  ; "Ø"
+	.byte 0x06
+	.ascii "!"
+	.byte 0x07
+	.ascii "j"
+	.byte 0x07
+	.byte 0xb3  ; "³"
+	.byte 0x07
+	.byte 0xfc  ; "ü"
+	.byte 0x07
+	.ascii "E"
+	.byte 0x08
+	.byte 0x8e  ; ""
+	.byte 0x08
+	.byte 0xd7  ; "×"
+	.byte 0x08
+	.ascii " "
+	.byte 0x09
+	.ascii "i"
+	.byte 0x09
+	.byte 0xb2  ; "²"
+	.byte 0x09
+	.byte 0xfb  ; "û"
+	.byte 0x09
+	.ascii "D"
+	.byte 0x0a
+	.byte 0x8d  ; ""
+	.byte 0x0a
+	.byte 0xd6  ; "Ö"
+	.byte 0x0a, 0x1f, 0x0b
+	.ascii "h"
+	.byte 0x0b
+	.byte 0xb1  ; "±"
+	.byte 0x0b
+	.byte 0xfa  ; "ú"
+	.byte 0x0b
+	.ascii "C"
+	.byte 0x0c
+	.byte 0x8c  ; ""
+	.byte 0x0c
+	.byte 0xd5  ; "Õ"
+	.byte 0x0c, 0x1e, 0x0d
+	.ascii "g"
+	.byte 0x0d
+	.byte 0xb0  ; "°"
+	.byte 0x0d
+	.byte 0xf9  ; "ù"
+	.byte 0x0d
+	.ascii "B"
+	.byte 0x0e
+	.byte 0x8b  ; ""
+	.byte 0x0e
+	.byte 0xd4  ; "Ô"
+	.byte 0x0e, 0x1d, 0x0f
+	.ascii "f"
+	.byte 0x0f
+	.byte 0xaf  ; "¯"
+	.byte 0x0f
+	.byte 0xf8  ; "ø"
+	.byte 0x0f
+	.ascii "A"
+	.byte 0x10
+	.byte 0x8a  ; ""
+	.byte 0x10
+	.byte 0xd3  ; "Ó"
+	.byte 0x10, 0x1c, 0x11
+	.ascii "e"
+	.byte 0x11
+	.byte 0xf1  ; "ñ"
+	.byte 0x15
+	.byte 0xae  ; "®"
+	.byte 0x11
+	.byte 0xf7  ; "÷"
+	.byte 0x11
+	.ascii "@"
+	.byte 0x12
+	.byte 0x89  ; ""
+	.byte 0x12
+	.byte 0xd2  ; "Ò"
+	.byte 0x12, 0x1b, 0x13
+	.ascii "d"
+	.byte 0x13
+	.byte 0xad  ; "­"
+	.byte 0x13
+	.byte 0xf1  ; "ñ"
+	.byte 0x15
+	.byte 0xf1  ; "ñ"
+	.byte 0x15
+	.byte 0xf6  ; "ö"
+	.byte 0x13
+	.ascii "?"
+	.byte 0x14
+	.byte 0x88  ; ""
+	.byte 0x14
+	.byte 0xd1  ; "Ñ"
+	.byte 0x14, 0x1a, 0x15
+	.ascii "c"
+	.byte 0x15
+	.byte 0xaa  ; "ª"
+	.byte 0x15
 
 HDAE5000_Lang_Codes:	; 0x2E5B80
 	; Language code strings and file types
-	.incbin "includes/code_29af2d_2fffff.bin", 306259, 590
+	.asciz "                                        "
+	.byte 0x00
+	.asciz "Reset"
+	.asciz "Load"
+	.byte 0x00
+	.asciz "%03i - %i "
+	.zero 3
+	.asciz "}"
+	.asciz "}"
+	.asciz "}"
+	.asciz "}"
+	.asciz "}"
+	.asciz "}"
+	.asciz "D"
+	.byte 0xaa  ; "ª"
+	.byte 0x00
+	.byte 0xb0  ; "°"
+	.byte 0x06, 0x10, 0x07
+	.byte 0xa2  ; "¢"
+	.byte 0x05
+	.ascii ")"
+	.byte 0x02
+	.byte 0xc5  ; "Å"
+	.byte 0x02
+	.ascii ";"
+	.byte 0x05
+	.asciz "rb"
+	.byte 0x00
+	.asciz "TESTTEST.TLX"
+	.byte 0x00
+	.asciz "Fault : No Lyrics loaded or corrupt Data - Code %i %i %i     "
+	.asciz " %i/%i "
+	.asciz "Chord : %s               "
+	.asciz "Info :                            "
+	.byte 0x00
+	.asciz "No Copyright Info"
+	.asciz "No Song Title"
+	.asciz " %i/%i "
+	.zero 4
+	.asciz "TLhd"
+	.byte 0x00
+	.asciz "TLtr"
+	.zero 3
+	.asciz "                           "
+	.asciz "                           "
+	.asciz "mid"
+	.asciz "   "
+	.asciz "                                                 "
+	.asciz "%s %s"
+	.asciz "%s %s"
+	.asciz ".TLX"
+	.byte 0x00
+	.asciz "rb"
+	.zero 3
+	.byte 0x03, 0x03, 0x03, 0x03, 0x02, 0x02
+	.zero 2
+	.byte 0x01, 0x01, 0x01, 0x01, 0x02, 0x02
+	.byte 0xe9  ; "é"
+	.byte 0x01
+	.byte 0x95  ; ""
+	.byte 0x00
+	.byte 0x1e, 0x01
+	.zero 2
+	.asciz " ->"
+	.asciz "*.*"
+	.asciz ".TTX"
+	.byte 0x00
+	.asciz "rb"
+	.byte 0x00
+	.asciz ".MID"
+	.byte 0x00
+	.asciz "rb"
+	.byte 0x00
+	.asciz "XLT."
+	.byte 0x00
+	.byte 0xbc  ; "¼"
+	.asciz "]."
+	.byte 0xb2  ; "²"
+	.asciz "]."
+	.byte 0xa8  ; "¨"
+	.asciz "]."
+	.byte 0x9e  ; ""
+	.asciz "]."
+	.byte 0x94  ; ""
+	.asciz "]."
+	.byte 0x8a  ; ""
+	.asciz "]."
+	.asciz "LANENG006"
+	.asciz "LANENG005"
+	.asciz "LANENG004"
+	.asciz "LANFRA003"
+	.asciz "LANDEU002"
+	.asciz "LANENG001"
+	.asciz "XAP"
+	.asciz "rb"
+	.byte 0x00
 
 HDAE5000_Palette_Data:	; 0x2E5DCE
 	; VGA palette data (256 entries)
