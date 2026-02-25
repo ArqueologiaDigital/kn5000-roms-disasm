@@ -401,8 +401,9 @@ def convert_aligned_strings(lines):
 
 
 def inject_macro(lines):
-    """Pass 4: Inject aligned_string macro after .text if needed."""
-    has_macro = any('.macro aligned_string' in line for line in lines)
+    """Pass 4: Inject aligned_string macro include after .text if needed."""
+    has_macro = any('.macro aligned_string' in line or
+                    'shared/macros.s' in line for line in lines)
     has_usage = any(
         'aligned_string "' in line and '.macro' not in line
         for line in lines
@@ -416,7 +417,7 @@ def inject_macro(lines):
     for line in lines:
         result.append(line)
         if not injected and line.strip() == '.text':
-            result.append(MACRO_DEF)
+            result.append('\n\t.include "shared/macros.s"\n')
             injected = True
 
     return result

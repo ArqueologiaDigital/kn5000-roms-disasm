@@ -1,11 +1,7 @@
 
 	.text
 
-.macro aligned_string str:vararg
-	.asciz \str
-	.p2align 1, 0xff
-.endm
-
+	.include "shared/macros.s"
 	.include "shared/sfr_tmp94c241.s"
 
 ; =============================================================================
