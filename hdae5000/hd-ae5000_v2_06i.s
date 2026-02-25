@@ -888,8 +888,49 @@ HDAE5000_Menu_Register_A:	; 0x28AC1F (73 bytes)
 	ret
 
 HDAE5000_Menu_Register_B:	; 0x28AC68 (146 bytes)
-	; Register menu handler (variant B) - called from outside this block
-	.incbin "includes/code_2803c2_28f542.bin", 43174, 146
+	; Register menu handler (variant B) — two sub-routines
+	; First sub-routine: register with 0x01C00015
+	dec 2, xsp			; allocate local space
+	ld (xsp), a			; save menu index
+	ldda32_24 xwa, 2335138		; ld XWA, (0x23A1A2) — workspace ptr
+	ld_sril3 xwa, 0xE1, 0x0A, 0x0E	; ld XWA, (XWA + 0x0E0A) — menu table
+	ld_sril3 xhl, 0xE1, 0x34, 0x05	; ld XHL, (XWA + 0x0534) — register fn
+	ld xwa, 0xFFFFFFFF		; param: all bits set
+	ld xbc, 0x01C00015		; param: menu geometry
+	call (xhl)			; register first entry
+	lds32 xwa, 0			; clear XWA
+	ld a, (xsp)			; restore menu index
+	add xwa, 0x01A00000		; construct entry ID
+	ld xde, xwa			; XDE = entry ID
+	ldda32_24 xwa, 2335138		; ld XWA, (0x23A1A2) — workspace ptr
+	ld_sril3 xwa, 0xE1, 0x0A, 0x0E	; ld XWA, (XWA + 0x0E0A) — menu table
+	ld_sril3 xhl, 0xE1, 0x24, 0x01	; ld XHL, (XWA + 0x0124) — alternate fn
+	ld xwa, 0xFFFFFFFF		; param: all bits set
+	ld xbc, 0x01C00015		; param: menu geometry
+	call (xhl)			; register second entry
+	inc 2, xsp			; deallocate local space
+	ret
+	; Second sub-routine: register with 0x01C00016
+	dec 2, xsp			; allocate local space
+	ld (xsp), a			; save menu index
+	ldda32_24 xwa, 2335138		; ld XWA, (0x23A1A2) — workspace ptr
+	ld_sril3 xwa, 0xE1, 0x0A, 0x0E	; ld XWA, (XWA + 0x0E0A) — menu table
+	ld_sril3 xhl, 0xE1, 0x34, 0x05	; ld XHL, (XWA + 0x0534) — register fn
+	ld xwa, 0xFFFFFFFF		; param: all bits set
+	ld xbc, 0x01C00016		; param: menu geometry
+	call (xhl)			; register first entry
+	lds32 xwa, 0			; clear XWA
+	ld a, (xsp)			; restore menu index
+	add xwa, 0x01A00000		; construct entry ID
+	ld xde, xwa			; XDE = entry ID
+	ldda32_24 xwa, 2335138		; ld XWA, (0x23A1A2) — workspace ptr
+	ld_sril3 xwa, 0xE1, 0x0A, 0x0E	; ld XWA, (XWA + 0x0E0A) — menu table
+	ld_sril3 xhl, 0xE1, 0x24, 0x01	; ld XHL, (XWA + 0x0124) — alternate fn
+	ld xwa, 0xFFFFFFFF		; param: all bits set
+	ld xbc, 0x01C00016		; param: menu geometry
+	call (xhl)			; register second entry
+	inc 2, xsp			; deallocate local space
+	ret
 
 HDAE5000_HD_Shutdown:	; 0x28ACFA (78 bytes)
 	; Shut down HD extension — unregister menu entries via workspace callbacks
