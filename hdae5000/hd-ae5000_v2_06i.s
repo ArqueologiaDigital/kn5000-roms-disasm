@@ -721,11 +721,166 @@ HDAE5000_PPI_Read_Register:	; 0x282C27 (71 bytes)
 
 HDAE5000_PPI_Write_Sector:	; 0x282C6E (192 bytes)
 	; Write a sector of data to HD via PPI
-	.incbin "includes/code_2803c2_28f542.bin", 10412, 192
+	; Large 124-byte stack frame for sector buffer and parameter blocks
+	lda xsp, (xsp - 124)		; allocate stack frame
+	lds wa, 0
+	call 0x293E88
+	cps hl, 0
+	jrl nz, .Lpws_error
+	lda xwa, (xsp + 72)
+	call 0x297573
+	; MemFill: clear 32-byte buffer
+	pushw 0x0020			; count = 32
+	pushw 0x0000			; fill value = 0
+	lda xwa, (xsp + 28)
+	push xwa			; buffer address
+	call HDAE5000_MemFill
+	; MemCopy_Block: copy 46 bytes from 0x2264 offset
+	pushw 0x002E			; count = 46
+	pushw 0x2264			; source offset
+	lda xwa, (xsp + 36)
+	push xwa			; dest address
+	call HDAE5000_MemCopy_Block
+	; MemCopy: copy 10 bytes between buffers
+	pushw 0x000A			; count = 10
+	lda xwa, (xsp + 100)
+	push xwa			; source
+	lda xwa, (xsp + 56)
+	push xwa			; dest
+	call HDAE5000_MemCopy
+	lda xsp, (xsp + 26)		; pop all args (26 bytes)
+	; Transfer byte to PPI
+	lda xwa, (xsp + 24)
+	calr HDAE5000_Event_Handler
+	; Write sector data
+	lda xwa, (xsp + 56)
+	call 0x298B6C
+	; MemFill: clear buffer again
+	pushw 0x0020			; count = 32
+	pushw 0x0000			; fill value = 0
+	lda xwa, (xsp + 28)
+	push xwa			; buffer address
+	call HDAE5000_MemFill
+	; Compare and copy operations
+	lda xbc, (xsp + 76)
+	lda xwa, (xsp + 20)
+	call 0x29B815
+	lda xbc, (xsp + 20)
+	ldada_24 xde, 3023530		; 0x2E22AA
+	lda xwa, (xsp + 20)
+	call 0x29B840
+	lda xbc, (xsp + 20)
+	lda xwa, (xsp + 24)
+	call 0x29BA20
+	; Copy block via PPI
+	lda xiy, (xsp + 24)
+	ld xix, (xiy + 4)
+	push xix
+	ld xix, (xiy + 0)
+	push xix
+	pushw 0x002E			; count = 46
+	pushw 0x2270			; offset
+	lda xwa, (xsp + 44)
+	push xwa
+	call HDAE5000_PPI_Block_Copy
+	lda xsp, (xsp + 24)		; pop args
+	; Transfer results
+	lda xwa, (xsp + 24)
+	calr HDAE5000_Event_Handler
+	ldada_24 xwa, 3023494		; 0x2E2286
+	calr HDAE5000_Event_Handler
+	ldada_24 xwa, 3023496		; 0x2E2288
+	calr HDAE5000_Event_Handler
+	jr t, .Lpws_done
+.Lpws_error:
+	ldada_24 xwa, 3023512		; 0x2E2298
+	calr HDAE5000_Event_Handler
+.Lpws_done:
+	lda xsp, (xsp + 124)		; deallocate stack frame
+	ret
 
 HDAE5000_PPI_Read_Sector:	; 0x282D2E (270 bytes)
 	; Read a sector of data from HD via PPI
-	.incbin "includes/code_2803c2_28f542.bin", 10604, 270
+	; Registers PPI device handlers for read operations via workspace dispatch
+	; Copy 14 bytes: source table → PPI buffer
+	pushw 0x000E			; count = 14
+	ldada_24 xwa, 3022054		; 0x2E1CE6
+	push xwa			; source
+	ldada_24 xwa, 2271900		; 0x22AA9C
+	push xwa			; dest
+	call HDAE5000_MemCopy
+	lda xsp, (xsp + 10)		; pop args
+	; Register PPI device: first handler pair (0xDE)
+	ldada_24 xwa, 2271900		; 0x22AA9C - buffer ptr
+	ld xde, xwa
+	ldda32_24 xwa, 2335138		; workspace ptr (0x23A1A2)
+	ld_sril3 xwa, 0xE1, 0x0A, 0x0E	; (XWA + 0x0E0A)
+	ld_sril3 xhl, 0xE1, 0x24, 0x01	; (XWA + 0x0124)
+	ld xwa, 0x007F00DE
+	ld xbc, 0x01EA000A
+	call (xhl)
+	; Register second handler (0xDE, different params)
+	ldda32_24 xwa, 2335138
+	ld_sril3 xwa, 0xE1, 0x0A, 0x0E
+	ld_sril3 xhl, 0xE1, 0x24, 0x01
+	ld xwa, 0x007F00DE
+	ld xbc, 0x01C0000F
+	ld xde, 0xFFFFFFFF
+	call (xhl)
+	; Copy 241 bytes: second table → PPI buffer
+	pushw 0x00F1			; count = 241
+	ldada_24 xwa, 3022068		; 0x2E1CF4
+	push xwa			; source
+	ldada_24 xwa, 2271914		; 0x22AAAA
+	push xwa			; dest
+	call HDAE5000_MemCopy
+	lda xsp, (xsp + 10)		; pop args
+	; Register PPI device: second handler pair (0xD7)
+	ldada_24 xwa, 2271914		; 0x22AAAA
+	ld xde, xwa
+	ldda32_24 xwa, 2335138
+	ld_sril3 xwa, 0xE1, 0x0A, 0x0E
+	ld_sril3 xhl, 0xE1, 0x24, 0x01
+	ld xwa, 0x007F00D7
+	ld xbc, 0x01EA000A
+	call (xhl)
+	; Second handler (0xD7, different params)
+	ldda32_24 xwa, 2335138
+	ld_sril3 xwa, 0xE1, 0x0A, 0x0E
+	ld_sril3 xhl, 0xE1, 0x24, 0x01
+	ld xwa, 0x007F00D7
+	ld xbc, 0x01C0000F
+	ld xde, 0xFFFFFFFF
+	call (xhl)
+	; Register third handler (0xD9)
+	ldda32_24 xwa, 2335138
+	ld_sril3 xwa, 0xE1, 0x0A, 0x0E
+	ld_sril3 xhl, 0xE1, 0x24, 0x01
+	ld xwa, 0x007F00D9
+	ld xbc, 0x01C0000D
+	lds32 xde, 0
+	call (xhl)
+	; Register fourth handler (0xD8)
+	ldda32_24 xwa, 2335138
+	ld_sril3 xwa, 0xE1, 0x0A, 0x0E
+	ld_sril3 xhl, 0xE1, 0x24, 0x01
+	ld xwa, 0x007F00D8
+	ld xbc, 0x01C0000D
+	lds32 xde, 0
+	call (xhl)
+	; Clear two 20-byte buffers
+	pushw 0x0014			; count = 20
+	pushw 0x0000			; fill = 0
+	ldada_24 xwa, 2272156		; 0x22AB9C
+	push xwa
+	call HDAE5000_MemFill
+	pushw 0x0014			; count = 20
+	pushw 0x0000			; fill = 0
+	ldada_24 xwa, 2272176		; 0x22ABB0
+	push xwa
+	call HDAE5000_MemFill
+	lda xsp, (xsp + 16)		; pop all args (16 bytes)
+	ret
 
 HDAE5000_PPI_Transfer_Block:	; 0x282E3C (81 bytes)
 	; Transfer a block of data via PPI
