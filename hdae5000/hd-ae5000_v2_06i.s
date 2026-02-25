@@ -1250,8 +1250,49 @@ HDAE5000_Extension_Check:	; 0x28F438 (153 bytes)
 	.incbin "includes/code_2803c2_28f542.bin", 61558, 153
 
 HDAE5000_Config_Init:	; 0x28F4D1 (114 bytes)
-	; Initialize configuration data
-	.incbin "includes/code_2803c2_28f542.bin", 61711, 114
+	; Initialize configuration: validate filename, check headers, verify extensions
+	; Input: XWA = pointer to config data structure (XIZ-indexed fields)
+	; Output: XHL = 0 success, -1..-4 error codes
+	push xiz
+	ld xiz, xwa			; save config ptr in XIZ
+	ld xwa, (xiz)			; load filename pointer (field 0x00)
+	calr HDAE5000_Filename_Validate
+	cp xhl, 0x4D546864		; check magic "MThd" (MIDI header, reversed)
+	jr z, .Lci_check1
+	ld xhl, 0xFFFFFFFF		; return -1 (invalid magic)
+	jr t, .Lci_exit
+.Lci_check1:
+	ld xwa, (xiz + 4)		; load field at offset 0x04
+	calr HDAE5000_Filename_Validate
+	cp xhl, 0x00000006		; check header size = 6
+	jr z, .Lci_check2
+	ld xhl, 0xFFFFFFFE		; return -2 (wrong header size)
+	jr t, .Lci_exit
+.Lci_check2:
+	ld wa, (xiz + 8)		; load 16-bit field at offset 0x08
+	calr HDAE5000_Extension_Check
+	stda16_24 2297530, xhl		; ld (0x230EBA), HL
+	cpdi16_24 2297530, 0x0001	; cp (0x230EBA), 1
+	jr ule, .Lci_check3		; if <= 1, continue
+	ld xhl, 0xFFFFFFFD		; return -3
+	jr t, .Lci_exit
+.Lci_check3:
+	ld wa, (xiz + 10)		; load field at offset 0x0A
+	calr HDAE5000_Extension_Check
+	stda16_24 2297532, xhl		; ld (0x230EBC), HL
+	ld wa, (xiz + 12)		; load field at offset 0x0C
+	calr HDAE5000_Extension_Check
+	stda16_24 2297534, xhl		; ld (0x230EBE), HL
+	ldda16_24 xwa, 2297534		; ld WA, (0x230EBE)
+	bit 15, wa			; test bit 15
+	jr z, .Lci_ok			; if not set, success
+	ld xhl, 0xFFFFFFFC		; return -4
+	jr t, .Lci_exit
+.Lci_ok:
+	lds32 xhl, 0			; return 0 (success)
+.Lci_exit:
+	pop xiz
+	ret
 
 HDAE5000_Alloc_Memory:	; 28F543h
 	; Memory/display parameter lookup routine
@@ -1837,12 +1878,66 @@ HDAE5000_Finalize_Init:	; 28F90Bh
 	; Stub that just returns (placeholder)
 	ret
 
-HDAE5000_Display_Init:	; 28F90Ch
+HDAE5000_Display_Init:	; 28F90Ch (114 bytes)
 	; Display and callback initialization
 	; Registers callbacks via workspace function tables
-	; at 0x23A1A2 -> (XWA+0xE88) -> (XWA+0xE8)
-	; Calls Display_String routine at 0x298622
-	.incbin "includes/code_28f90c_2953e1.bin", 0, 114
+	; Input: WA = display mode (1 = with sub-handlers)
+	dec 2, xsp			; allocate 2 bytes on stack
+	pushw iz			; save IZ
+	ld iz, wa			; IZ = mode parameter
+	ldda32_24 xwa, 2335138		; ld XWA, (0x23A1A2) — workspace pointer
+	.byte 0xe3, 0xe1		; ld XWA, (XWA+0x0E88) — display handler table
+	.short 0x0E88
+	.byte 0x20
+	.byte 0xe3, 0xe1		; ld XHL, (XWA+0x00E8) — init callback
+	.short 0x00E8
+	.byte 0x23
+	lds wa, 1			; WA = 1
+	call (xhl)			; call init callback
+	cps iz, 1			; mode == 1?
+	jr nz, .Ldi_skip1		; skip sub-handler if not
+	ldda32_24 xwa, 2335138		; ld XWA, (0x23A1A2)
+	.byte 0xe3, 0xe1		; ld XWA, (XWA+0x0E0A) — sub-handler table
+	.short 0x0E0A
+	.byte 0x20
+	.byte 0xe3, 0xe1		; ld XHL, (XWA+0x0538) — sub-handler callback
+	.short 0x0538
+	.byte 0x23
+	call (xhl)			; call sub-handler
+.Ldi_skip1:
+	call HDAE5000_Display_String_Render
+	ld (xsp + 2), hl		; save result on stack
+	cps iz, 1			; mode == 1?
+	jr nz, .Ldi_skip2		; skip sub-handler if not
+	ldda32_24 xwa, 2335138		; ld XWA, (0x23A1A2)
+	.byte 0xe3, 0xe1		; ld XWA, (XWA+0x0E0A)
+	.short 0x0E0A
+	.byte 0x20
+	.byte 0xe3, 0xe1		; ld XHL, (XWA+0x053C) — post-render callback
+	.short 0x053C
+	.byte 0x23
+	call (xhl)			; call post-render sub-handler
+.Ldi_skip2:
+	ldda32_24 xwa, 2335138		; ld XWA, (0x23A1A2)
+	.byte 0xe3, 0xe1		; ld XWA, (XWA+0x0E88)
+	.short 0x0E88
+	.byte 0x20
+	.byte 0xe3, 0xe1		; ld XHL, (XWA+0x00EC) — cleanup callback
+	.short 0x00EC
+	.byte 0x23
+	call (xhl)			; call cleanup
+	ldda32_24 xwa, 2335138		; ld XWA, (0x23A1A2)
+	.byte 0xe3, 0xe1		; ld XWA, (XWA+0x0E88)
+	.short 0x0E88
+	.byte 0x20
+	.byte 0xe3, 0xe1		; ld XHL, (XWA+0x00F0) — final callback
+	.short 0x00F0
+	.byte 0x23
+	call (xhl)			; call final callback
+	ld hl, (xsp + 2)		; restore result from stack
+	popw iz				; restore IZ
+	inc 2, xsp			; deallocate 2 bytes
+	ret
 
 HDAE5000_Calc_Offset_16:	; 0x28F97E (13 bytes)
 	; Calculate 16-byte offset in table at 0x201632
@@ -2944,7 +3039,9 @@ HDAE5000_Display_Copy:	; 0x297E16 (443 bytes)
 
 HDAE5000_Display_Restore:	; 0x297FD1 (9217 bytes)
 	; Display restore/update operation
-	.incbin "includes/code_2971b7_29ae9e.bin", 3610, 9217
+	.incbin "includes/code_2971b7_29ae9e.bin", 3610, 1617
+HDAE5000_Display_String_Render:	; 0x298622 (cross-reference from Display_Init)
+	.incbin "includes/code_2971b7_29ae9e.bin", 5227, 7600
 
 ; --- String Formatting Library (sprintf-like) ---
 HDAE5000_Int_To_Decimal_String:	; 0x29A3D2 (80 bytes)
