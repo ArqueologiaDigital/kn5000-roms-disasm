@@ -1633,7 +1633,134 @@ HDAE5000_File_Delete:	; 0x28DE2C (579 bytes)
 
 HDAE5000_File_Rename:	; 0x28E06F (280 bytes)
 	; Rename file on HD
-	.incbin "includes/code_2803c2_28f542.bin", 56493, 280
+	; Input: DE = file count (negative = special), C = partition, A = operation type
+	; Caller passes 32-bit argument on stack (accessed at xsp+14)
+	; Returns XHL = result offset or 0xFFFFFFFF on error
+	dec 0, xsp			; allocate 8 bytes
+	pushw iz
+	ld (xsp + 4), de		; save file count
+	ld (xsp + 6), c		; save partition
+	ld (xsp + 8), a		; save operation type
+	cpmi16 (xsp + 4), 0x0000
+	jrl lt, .Lfr_negative		; negative count → special handler
+	; Positive count: iterate and accumulate
+	ldmw (xsp + 2), 0x0000		; counter = 0
+	lds32 xwa, 0
+	stda32_24 2294848, xwa		; clear 0x230440
+	lds iz, 0
+	cp iz, (xsp + 4)
+	jr ge, .Lfr_loop_done
+.Lfr_loop_start:
+	ld bc, (xsp + 2)		; load counter
+	lds wa, 0
+	calr HDAE5000_File_Format
+	ld wa, hl
+	add (xsp + 2), wa		; accumulate
+	cps hl, 0
+	jr nz, .Lfr_loop_next
+	ld xhl, 0xFFFFFFFF		; format returned 0 → error
+	jrl .Lfr_exit
+.Lfr_loop_next:
+	inc 1, iz
+	cp iz, (xsp + 4)
+	jr lt, .Lfr_loop_start
+.Lfr_loop_done:
+	cpmi8 (xsp + 8), 0x7c		; check operation type
+	jr nz, .Lfr_search_pos
+	; Operation 0x7C: single format call, compute offset
+	ld a, (xsp + 6)
+	extz wa
+	ld bc, (xsp + 2)
+	calr HDAE5000_File_Format
+	ld wa, hl
+	cps wa, 0
+	jr z, .Lfr_7c_error
+	ld wa, (xsp + 2)
+	extz xwa
+	ld bc, hl
+	extz xbc
+	ld xhl, xbc
+	add xhl, xwa			; result = format_result + counter
+	jrl .Lfr_exit
+.Lfr_7c_error:
+	ld xhl, 0xFFFFFFFF
+	jrl .Lfr_exit
+.Lfr_search_pos:
+	; Not 0x7C: search loop until match or exhausted
+	ld a, (xsp + 6)
+	extz wa
+	ld bc, (xsp + 2)
+	calr HDAE5000_File_Format
+	ld wa, hl
+	add (xsp + 2), wa
+	cps hl, 0
+	jr z, .Lfr_search_pos_check
+	ld a, (xsp + 8)
+	extz wa
+	cpda16_24 xwa, 2294832		; compare with (0x230430)
+	jr nz, .Lfr_search_pos		; loop until match
+.Lfr_search_pos_check:
+	cps hl, 0
+	jr z, .Lfr_search_pos_err
+	ld hl, (xsp + 2)
+	extz xhl
+	jr t, .Lfr_exit
+.Lfr_search_pos_err:
+	ld xhl, 0xFFFFFFFF
+	jr t, .Lfr_exit
+.Lfr_negative:
+	; DE < 0: check special values
+	cpmi16 (xsp + 4), 0xFFFF	; DE == -1?
+	jr nz, .Lfr_check_fffe
+	ld xhl, 0xFFFFFFFF
+	jr t, .Lfr_exit
+.Lfr_check_fffe:
+	cpmi16 (xsp + 4), 0xFFFE	; DE == -2?
+	jr nz, .Lfr_return_zero
+	cpmi8 (xsp + 8), 0x7c
+	jr nz, .Lfr_fffe_search
+	; DE==-2, op==0x7C: use caller's stack arg
+	ld a, (xsp + 6)
+	ld e, a
+	extz de
+	ld xwa, (xsp + 14)		; caller's 32-bit argument
+	ld bc, wa
+	ld wa, de
+	calr HDAE5000_File_Format
+	extz xhl
+	jr t, .Lfr_exit
+.Lfr_fffe_search:
+	; DE==-2, op!=0x7C: search loop with caller's arg
+	ld xwa, (xsp + 14)
+	ld (xsp + 2), wa		; use lower 16 bits as counter
+.Lfr_fffe_loop:
+	ld a, (xsp + 6)
+	extz wa
+	ld bc, (xsp + 2)
+	calr HDAE5000_File_Format
+	ld wa, hl
+	add (xsp + 2), wa
+	cps hl, 0
+	jr z, .Lfr_fffe_check
+	ld a, (xsp + 8)
+	extz wa
+	cpda16_24 xwa, 2294832		; compare with (0x230430)
+	jr nz, .Lfr_fffe_loop
+.Lfr_fffe_check:
+	cps hl, 0
+	jr z, .Lfr_fffe_error
+	ld hl, (xsp + 2)
+	extz xhl
+	jr t, .Lfr_exit
+.Lfr_fffe_error:
+	ld xhl, 0xFFFFFFFF
+	jr t, .Lfr_exit
+.Lfr_return_zero:
+	lds32 xhl, 0
+.Lfr_exit:
+	popw iz
+	inc 0, xsp			; deallocate 8 bytes
+	retd 0x0004
 
 HDAE5000_File_Format:	; 0x28E187 (772 bytes)
 	; Format HD or partition
