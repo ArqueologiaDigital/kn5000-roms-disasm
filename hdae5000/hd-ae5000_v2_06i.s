@@ -1070,8 +1070,105 @@ HDAE5000_HD_Data_Copy:	; 0x2852E4 (92 bytes)
 	retd 0x0002
 
 HDAE5000_HD_Buffer_Init:	; 0x285340 (220 bytes)
-	; Initialize HD data buffer
-	.incbin "includes/code_2803c2_28f542.bin", 20350, 220
+	; Sub-routine 1: Build bit flags from partition status array
+	; Input: XWA = pointer to buffer (byte 0-1 = output flags, bytes 2-10 = status)
+	; Sets bit N in (XWA) for each partition N whose status byte == 2
+	ldmw (xwa + 0), 0x0000		; clear output flags
+	cpmi8 (xwa + 2), 0x02
+	jr nz, .Lhbi_skip0
+	ldmw (xwa + 0), 0x0001		; set bit 0
+.Lhbi_skip0:
+	cpmi8 (xwa + 3), 0x02
+	jr nz, .Lhbi_skip1
+	ormi16 (xwa + 0), 0x0002	; set bit 1
+.Lhbi_skip1:
+	cpmi8 (xwa + 4), 0x02
+	jr nz, .Lhbi_skip2
+	ormi16 (xwa + 0), 0x0004	; set bit 2
+.Lhbi_skip2:
+	cpmi8 (xwa + 5), 0x02
+	jr nz, .Lhbi_skip3
+	ormi16 (xwa + 0), 0x0008	; set bit 3
+.Lhbi_skip3:
+	cpmi8 (xwa + 6), 0x02
+	jr nz, .Lhbi_skip4
+	ormi16 (xwa + 0), 0x0010	; set bit 4
+.Lhbi_skip4:
+	cpmi8 (xwa + 7), 0x02
+	jr nz, .Lhbi_skip5
+	ormi16 (xwa + 0), 0x0020	; set bit 5
+.Lhbi_skip5:
+	cpmi8 (xwa + 8), 0x02
+	jr nz, .Lhbi_skip6
+	ormi16 (xwa + 0), 0x0040	; set bit 6
+.Lhbi_skip6:
+	cpmi8 (xwa + 9), 0x02
+	jr nz, .Lhbi_skip7
+	ormi16 (xwa + 0), 0x0080	; set bit 7
+.Lhbi_skip7:
+	cpmi8 (xwa + 10), 0x02
+	ret nz
+	ormi16 (xwa + 0), 0x0100	; set bit 8
+	ret
+	; Sub-routine 2: Command dispatcher with computed jump table
+	; Input: XWA = context pointer (saved as XIZ), XBC = command ID
+	; Returns XHL = result
+	push xiz
+	ld xiz, xwa			; save context
+	ld xwa, xbc			; command → XWA
+	cp xwa, 0x01E00082		; special command?
+	jr z, .Lhbi_special
+	sub xwa, 0x01E0003E		; normalize to index 0-9
+	cp xwa, 0x00000000
+	jr lt, .Lhbi_default
+	cp xwa, 0x00000009
+	jr gt, .Lhbi_default
+	add xwa, xwa			; index * 2 (table has 16-bit entries)
+	add xwa, 0x002E293E		; jump table base
+	ld wa, (xwa + 0)		; load offset from table
+	ldada_24 xix, 2642902		; base of case handlers (0x2853D6)
+	jp_dri 8, 0x07, 0xF0, 0xE0	; jp T, XIX+WA
+.Lhbi_case0:
+	; Case 0: PPI block copy from device
+	pushw 0x0023
+	pushw 0xA04E
+	pushw 0x002E
+	pushw 0x293A
+	ld xwa, (xde + 18)
+	push xwa
+	call HDAE5000_PPI_Block_Copy
+	lda xsp, (xsp + 12)		; pop args
+	ld xhl, xiz			; return context ptr
+	jr t, .Lhbi_exit
+.Lhbi_case1:
+	lds32 xhl, 1
+	jr t, .Lhbi_exit
+.Lhbi_case2:
+	lds32 xhl, 1
+	jr t, .Lhbi_exit
+.Lhbi_case3:
+	lds32 xhl, 0
+	jr t, .Lhbi_exit
+.Lhbi_case4:
+	lds32 xhl, 0
+	jr t, .Lhbi_exit
+.Lhbi_case5:
+	ldada_24 xhl, 2271831		; 0x22AA57
+	jr t, .Lhbi_exit
+.Lhbi_case6:
+	lds32 xhl, 1
+	jr t, .Lhbi_exit
+.Lhbi_special:
+	; Command 0x01E00082: init buffer then return 0
+	ldada_24 xwa, 2271820		; 0x22AA4C
+	calr HDAE5000_HD_Buffer_Init
+	lds32 xhl, 0
+	jr t, .Lhbi_exit
+.Lhbi_default:
+	lds32 xhl, 0
+.Lhbi_exit:
+	pop xiz
+	ret
 
 ; --- HD Configuration Manager and CHS Geometry ---
 HDAE5000_HD_Config_Manager:	; 0x28541C (3728 bytes)
