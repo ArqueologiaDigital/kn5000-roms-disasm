@@ -1,8 +1,6 @@
-
 	.text
 
-
-
+	.include "shared/sfr_tmp94c241.s"
 
 .equ INTER_CPU_COMM_LATCHES, 0x120000	; This is a pair of 8-bit latches used for
                                     ; bidirectional communication between
@@ -17,10 +15,6 @@
 	; (EQU→inline label) DMA_XFER_STATE = 0x10E8
 	; (EQU→inline label) CMD_PROCESSING_STATE = 0x10EA
 	; (EQU→inline label) BYTE_FROM_MAINCPU_LATCH = 0x10EC
-
-
-	.include "shared/sfr_tmp94c241.s"
-
 
 	.org 0x400 - 0x400, 0xFF
 

@@ -1,6 +1,8 @@
 
 	.text
 
+	.include "shared/event_codes.s"
+
 ; HDAE5000 Hard Disk Expansion ROM Disassembly
 ; Original file: hd-ae5000_v2_06i.ic4
 ; Size: 512KB (0x80000 bytes)
@@ -647,8 +649,6 @@ HDAE5000_Get_Init_Flag:	; 28F570h
 ;   0x28F90B - Finalize init
 ;   0x2803C2 - Register frame handler (code section 1)
 ; ============================================================================
-
-	.include "shared/event_codes.s"
 
 ; RAM variable addresses
 .equ HDAE5000_WORKSPACE_PTR, 0x23A1A2

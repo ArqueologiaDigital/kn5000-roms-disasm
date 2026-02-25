@@ -1,17 +1,19 @@
-
 	.text
 
 	.include "shared/macros.s"
+	.include "shared/sfr_tmp94c241.s"
+	.include "shared/vga_constants.s"
+	.include "shared/event_codes.s"
+	.include "fdc_constants.s"
+	.include "gui_constants.s"
+	.include "cpanel_constants.s"
+	.include "midi_encoder_constants.s"
 
 ; =============================================================================
 ; Constants for shared boot routines
 ; =============================================================================
 .equ REGION_CODE_VAR, 0x408	; RAM address for region code
 .equ BOOT_ENTRY_POINT, RESET_HANDLER	; Entry point for watchdog reset
-
-	.include "fdc_constants.s"
-
-	.include "shared/event_codes.s"
 
 .equ INTER_CPU_COMM_LATCHES, 0x140000	; This is a pair of 8-bit latches
                                             ; used for bidirectional
@@ -27,12 +29,6 @@
 .equ TABLE_DATA_ROM__BASE_ADDR, 0x800000
 .equ PROGRAM_FLASH__BASE_ADDR, 0xE00000
 
-; =============================================================================
-; VGA and GUI Constants
-; =============================================================================
-	.include "shared/vga_constants.s"
-	.include "gui_constants.s"
-
 .equ SYSTEM_TIMESTAMP, 0x409
 
 .equ MSP_SETTINGS, 0xC9A	; 1500h = 5376 bytes
@@ -40,21 +36,9 @@
 
 .equ COM_SELECT, 0xB7E0	; (byte)
 
-
-
-
-	.include "cpanel_constants.s"
-
-	.include "midi_encoder_constants.s"
-
-
 .equ SEQ_ALT3_RINGBUF_BASE, 0x201C1
 
-
 .equ MSP_SETTINGS__BASE_ADDR, 0x1E8800
-
-
-	.include "shared/sfr_tmp94c241.s"
 
 	.org PROGRAM_FLASH__BASE_ADDR - 0xE00000, 0xFF
 
