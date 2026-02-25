@@ -1778,17 +1778,65 @@ HDAE5000_Check_HD_Present:	; 2971A3h
 	ldda8_24 l, 2268562	; ld L, (229D92h) - get result
 	ret
 
-HDAE5000_RAM_Test:	; 2971B7h
-	; Internal RAM test and HD initialization
-	; 1. Fills 32KB (0x230F1C-0x238F1C) with 0x5A5A pattern
-	; 2. Verifies the pattern
-	; 3. Clears the RAM
-	; 4. Initializes HD-related variables at 0x229Dxx
-	.incbin "includes/code_2971b7_29ae9e.bin", 0, 10233
+; ============================================================================
+; HD Detection, RAM Test, and String Formatting Library
+; 0x2971B7-0x29AE9E (15,592 bytes, 11 identified routines)
+;
+; Contains:
+;   - RAM test and verification (32KB at 0x230F1C-0x238F1C)
+;   - HD initialization and drive detection (ATA IDENTIFY)
+;   - CHS geometry configuration
+;   - Version strings ("Technics Software section M. Kitajima", "2.33J")
+;   - sprintf-like string formatting library (decimal/hex/octal conversion)
+; ============================================================================
 
-HDAE5000_Version_Info:	; 0x2999B0
-	; Version/author strings
-	.incbin "includes/code_2971b7_29ae9e.bin", 10233, 5359
+HDAE5000_RAM_Test:	; 0x2971B7 (1902 bytes)
+	; RAM test: fill/verify 32KB at 0x230F1C-0x238F1C with 0x5A5A pattern
+	.incbin "includes/code_2971b7_29ae9e.bin", 0, 1902
+
+HDAE5000_HD_Init_Variables:	; 0x297925 (37 bytes)
+	; Initialize HD-related variables
+	.incbin "includes/code_2971b7_29ae9e.bin", 1902, 37
+
+HDAE5000_HD_Config_Init_Values:	; 0x29794A (389 bytes)
+	; Set initial HD config values at 0x229Dxx
+	.incbin "includes/code_2971b7_29ae9e.bin", 1939, 389
+
+HDAE5000_HD_Detect_Drive:	; 0x297ACF (10499 bytes)
+	; Detect HD presence via ATA IDENTIFY, configure CHS geometry
+	; Contains version strings at 0x2999B2:
+	;   "Technics Software section    M. Kitajima"
+	;   "2.33J", "2.21", "TECHNICS KN5000"
+	.incbin "includes/code_2971b7_29ae9e.bin", 2328, 10499
+
+; --- String Formatting Library (sprintf-like) ---
+HDAE5000_Int_To_Decimal_String:	; 0x29A3D2 (80 bytes)
+	; Convert signed integer to decimal string (divides by 10, adds '0')
+	.incbin "includes/code_2971b7_29ae9e.bin", 12827, 80
+
+HDAE5000_UInt_To_Decimal_String:	; 0x29A422 (63 bytes)
+	; Convert unsigned integer to decimal string
+	.incbin "includes/code_2971b7_29ae9e.bin", 12907, 63
+
+HDAE5000_Int_To_Hex_String:	; 0x29A461 (51 bytes)
+	; Convert integer to hex string (nibble extraction)
+	.incbin "includes/code_2971b7_29ae9e.bin", 12970, 51
+
+HDAE5000_Int_To_Octal_String:	; 0x29A494 (34 bytes)
+	; Convert integer to octal string (3-bit extraction)
+	.incbin "includes/code_2971b7_29ae9e.bin", 13021, 34
+
+HDAE5000_String_Format:	; 0x29A4B6 (173 bytes)
+	; sprintf-like formatter entry point (handles %e, %E, %f, %g, %d, %u, %x, %o, %s, %c)
+	.incbin "includes/code_2971b7_29ae9e.bin", 13055, 173
+
+HDAE5000_String_Format_Core:	; 0x29A563 (805 bytes)
+	; Core string format engine - processes format specifiers
+	.incbin "includes/code_2971b7_29ae9e.bin", 13228, 805
+
+HDAE5000_String_Format_Output:	; 0x29A888 (1559 bytes)
+	; Output handler for string formatter
+	.incbin "includes/code_2971b7_29ae9e.bin", 14033, 1559
 
 ; ----------------------------------------------------------------------------
 ; Memory Utility Routines (0x29AE9F - 0x29AF2C)
