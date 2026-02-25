@@ -2138,36 +2138,125 @@ HDAE5000_Display_Sub_294414:	; 0x294414 (3061 bytes)
 	.incbin "includes/code_28f90c_2953e1.bin", 19208, 3061
 
 HDAE5000_PPORT_Util:	; 0x295009
-	; PPORT utility function
-	.incbin "includes/code_28f90c_2953e1.bin", 22269, 19
+	; PPORT utility - push params and call workspace handler
+	pushw 0x0000			; arg 1
+	pushw 0x0001			; arg 2
+	ldda16_24 xde, 2330414		; DE = (0x238F2E) - callback ID
+	call HDAE5000_Workspace_Sub_29336B
+	lds hl, 0			; return 0
+	ret
+	nop
 
 HDAE5000_PPORT_Handler:	; 0x29501C
-	; PPORT state machine entry
-	.incbin "includes/code_28f90c_2953e1.bin", 22288, 42
+	; PPORT state machine entry - check active, load params, dispatch
+	cpdi8_24 2330624, 0x01		; check if PPORT active (0x239000)
+	jr nz, .Lpph_done
+	ldda16_24 xwa, 2330634		; WA = cmd param (0x23900A)
+	nop
+	ldda32_24 xbc, 2330636		; XBC = data ptr (0x23900C)
+	nop
+	ldda32_24 xde, 2330640		; XDE = size (0x239010)
+	nop
+	call HDAE5000_PPORT_Setup
+	call HDAE5000_PPORT_Dispatch
+.Lpph_done:
+	ret
+	nop
+	; --- Secondary entry: menu init ---
+	call HDAE5000_PPORT_Menu
+	jr t, HDAE5000_PPORT_Init
 
 HDAE5000_PPORT_Status:	; 0x295046
-	; PPORT status check
-	.incbin "includes/code_28f90c_2953e1.bin", 22330, 18
+	; Switch to PPORT stack context for status check
+	ei 0x06				; disable interrupts (level 6)
+	stda32_24 2330630, xsp		; save current SP (0x239006)
+	nop
+	ldda32_24 xsp, 2330626		; load PPORT SP (0x239002)
+	nop
+	ei 0x00				; re-enable interrupts
+	ret
+	nop
 
 HDAE5000_PPORT_Init:	; 0x295058
 	; PPORT initialization
 	.incbin "includes/code_28f90c_2953e1.bin", 22348, 116
 
 HDAE5000_PPORT_Dispatch:	; 0x2950CC
-	; Command dispatcher
-	.incbin "includes/code_28f90c_2953e1.bin", 22464, 44
+	; Command dispatcher - switch to PPORT context, check for command
+	push xhl
+	nop
+	call HDAE5000_PPORT_Status	; switch stacks
+	cpdi8_24 2330644, 0x00		; check command flag (0x239014)
+	jr nz, .Lppd_done
+	ldw hl, 0xFFFF			; no command: mark result = -1
+	nop
+	stda16_24 2330634, xhl		; store result (0x23900A)
+	nop
+	stdi8_24 2330624, 0x00		; clear PPORT active flag (0x239000)
+.Lppd_done:
+	pop xhl
+	nop
+	ret
+	nop
+	; --- Secondary entry: get result ---
+	ldda16_24 xhl, 2330634		; HL = command result (0x23900A)
+	nop
+	exts xhl			; sign-extend to 32-bit
+	ret
+	nop
 
 HDAE5000_Display_String:	; 0x2950F8
-	; Display string routine (heavily used)
-	.incbin "includes/code_28f90c_2953e1.bin", 22508, 36
+	; Display string on screen via PPORT protocol
+	; Input: WA = position, XBC = string ptr, XDE = format params
+	stda16_24 2330634, xwa		; store position (0x23900A)
+	nop
+	stda32_24 2330636, xbc		; store string ptr (0x23900C)
+	nop
+	stda32_24 2330640, xde		; store format (0x239010)
+	nop
+	stdi8_24 2330644, 0x01		; set command flag (0x239014)
+	call HDAE5000_PPORT_Init	; initialize PPORT transfer
+	stdi8_24 2330644, 0x00		; clear command flag
+	ret
+	nop
 
 HDAE5000_PPORT_Setup:	; 0x29511C
 	; PPORT setup routine
 	.incbin "includes/code_28f90c_2953e1.bin", 22544, 442
 
 HDAE5000_PPORT_Menu:	; 0x2952D6
-	; PPORT menu handler
-	.incbin "includes/code_28f90c_2953e1.bin", 22986, 34
+	; PPORT menu handler - save all registers, execute, restore
+	push xwa
+	nop
+	push xbc
+	nop
+	push xde
+	nop
+	push xhl
+	nop
+	push xix
+	nop
+	push xiy
+	nop
+	push xiz
+	nop
+	call HDAE5000_PPORT_Execute
+	pop xiz
+	nop
+	pop xiy
+	nop
+	pop xix
+	nop
+	pop xhl
+	nop
+	pop xde
+	nop
+	pop xbc
+	nop
+	pop xwa
+	nop
+	ret
+	nop
 
 HDAE5000_PPORT_Execute:	; 0x2952F8
 	; Execute PPORT command
@@ -2336,8 +2425,13 @@ HDAE5000_Cmd06_WriteFSB:	; 0x296294
 	.incbin "includes/code_295642_2971a2.bin", 3154, 150
 
 HDAE5000_PPORT_Cmd_LoadHDtoMemory:	; 0x29632A
-	; Load HD to Memory
-	.incbin "includes/code_295642_2971a2.bin", 3304, 18
+	; Load HD to memory - display status and finish
+	ldw wa, 0x001A			; display row/column
+	nop
+	ldada_24 xbc, 2708774		; 0x295526 - "Load HD" string
+	nop
+	call HDAE5000_Display_String
+	jp HDAE5000_PPORT_Cmd_Done
 
 HDAE5000_PPORT_Cmd_SendDataBlock:	; 0x29633C
 	; Send data block to PC
@@ -2348,8 +2442,13 @@ HDAE5000_PPORT_Cmd_SendFileList:	; 0x2964A6
 	.incbin "includes/code_295642_2971a2.bin", 3684, 226
 
 HDAE5000_PPORT_Cmd_ReceiveDataBlock:	; 0x296588
-	; Receive data from PC
-	.incbin "includes/code_295642_2971a2.bin", 3910, 18
+	; Receive data from PC - display status and finish
+	ldw wa, 0x001A			; display row/column
+	nop
+	ldada_24 xbc, 2708846		; 0x29556E - "Receive Data" string
+	nop
+	call HDAE5000_Display_String
+	jp HDAE5000_PPORT_Cmd_Done
 
 HDAE5000_PPORT_Cmd_WriteMemoryToHD:	; 0x29659A
 	; Save memory to HD
@@ -2364,12 +2463,21 @@ PPORT_Utility_1:	; 0x2966BE
 	.incbin "includes/code_295642_2971a2.bin", 4220, 60
 
 PPORT_Utility_2:	; 0x2966FA
-	; PPORT utility routine 2
-	.incbin "includes/code_295642_2971a2.bin", 4280, 18
+	; PPORT utility routine 2 - display status and finish
+	ldw wa, 0x001A			; display row/column
+	nop
+	ldada_24 xbc, 2708942		; 0x2955CE - status string
+	nop
+	call HDAE5000_Display_String
+	jp HDAE5000_PPORT_Cmd_Done
 
-PPORT_Utility_3:	; 0x29670C
+PPORT_Utility_3:	; 0x29670C (164 bytes)
 	; PPORT utility routine 3
-	.incbin "includes/code_295642_2971a2.bin", 4298, 168
+	.incbin "includes/code_295642_2971a2.bin", 4298, 164
+
+HDAE5000_PPORT_Cmd_Done:	; 0x2967B0 (4 bytes)
+	; PPORT command completion handler
+	.incbin "includes/code_295642_2971a2.bin", 4462, 4
 
 HDAE5000_Render_Display_Region:	; 0x2967B4
 	; Display region rendering
@@ -2582,9 +2690,17 @@ HDAE5000_PPI_Block_Copy:	; 0x29ABD8 (237 bytes)
 	; PPI block copy/transfer utility
 	.incbin "includes/code_2971b7_29ae9e.bin", 14881, 237
 
-HDAE5000_Cell_Copy_Buffer:	; 0x29ACC5 (351 bytes)
+HDAE5000_Cell_Copy_Buffer:	; 0x29ACC5 (263 bytes)
 	; Cell buffer copy routine (called by Cell_Get_Params)
-	.incbin "includes/code_2971b7_29ae9e.bin", 15118, 351
+	.incbin "includes/code_2971b7_29ae9e.bin", 15118, 263
+
+HDAE5000_String_Copy_N:	; 0x29ADCC (64 bytes)
+	; String copy with length limit (called by MemCopy_Block)
+	.incbin "includes/code_2971b7_29ae9e.bin", 15381, 64
+
+HDAE5000_String_Length:	; 0x29AE0C (24 bytes)
+	; String length / validation (called by Display_Buffer_Validate)
+	.incbin "includes/code_2971b7_29ae9e.bin", 15445, 24
 
 HDAE5000_File_Read:	; 0x29AE24 (123 bytes)
 	; File read operation (called by Display_Progress)
@@ -2695,19 +2811,127 @@ HDAE5000_StrCopy__copy_check:
 ; ----------------------------------------------------------------------------
 
 HDAE5000_Code_Remainder:	; 29AF2Dh
-	.incbin "includes/code_29af2d_2fffff.bin", 0, 24
+	; Validate display buffer and read file data
+	; Input: (XSP+8) = XIZ context, (XSP+0x12) = XWA file params
+	push xiz
+	ld xiz, (xsp + 8)		; load context pointer
+	push xiz			; arg for Display_Buffer_Validate
+	call HDAE5000_Display_Buffer_Validate
+	pushw hl			; save validation result
+	ld xwa, (xsp + 0x12)		; load file params
+	push xwa			; arg 2
+	push xiz			; arg 1
+	call HDAE5000_File_Read
+	lda xsp, (xsp + 0x0E)		; clean up 14 bytes
+	pop xiz
+	ret
 
 HDAE5000_MemCopy_Block:	; 0x29AF45
-	; Block memory copy routine
-	.incbin "includes/code_29af2d_2fffff.bin", 24, 44
+	; Block memory copy with null-termination
+	; Stack: [+0x10] source ptr, [+0x0C] dest ptr (XIZ context)
+	; Calls String_Copy_N with limit 0xFFFE, null-terminates if successful
+	; Returns: XHL = dest pointer (XIZ)
+	push xiz
+	pushw 0xFFFE			; max length
+	pushw 0x0000			; flags
+	ld xwa, (xsp + 0x10)		; source pointer
+	push xwa
+	ld xiz, (xsp + 0x10)		; dest pointer
+	push xiz
+	call HDAE5000_String_Copy_N
+	add xsp, 0x0000000C		; clean up 12 bytes
+	or xhl, xhl			; test result
+	jr nz, .Lmcb_done
+	ld xwa, xiz			; get dest pointer
+	add xwa, 0x0000FFFF		; point to last byte
+	ldmi8 (xwa), 0x00		; null-terminate
+.Lmcb_done:
+	ld xhl, xiz			; return dest pointer
+	pop xiz
+	ret
 
 HDAE5000_Display_Buffer_Validate:	; 0x29AF71
-	; Buffer validation
-	.incbin "includes/code_29af2d_2fffff.bin", 68, 77
+	; Validate display buffer - call String_Length, return offset or -1
+	; Stack: [+0x0C] = buffer pointer (XIZ)
+	; Returns: HL = offset from XIZ or -1 on failure
+	push xiz
+	pushw 0xFFFF			; sentinel
+	pushw 0x0000			; flags
+	ld xiz, (xsp + 0x0C)		; buffer pointer
+	push xiz
+	call HDAE5000_String_Length
+	inc 0, xsp			; clean up 8 bytes
+	or xhl, xhl			; test result
+	jr nz, .Ldbv_ok
+	ldw hl, 0xFFFF			; return -1
+	jr t, .Ldbv_done
+.Ldbv_ok:
+	sub xhl, xiz			; HL = length (offset from base)
+.Ldbv_done:
+	pop xiz
+	ret
+	; --- String copy with length limit (secondary entry) ---
+	; Stack: [+0x04] dest, [+0x08] source, [+0x0C] count
+	; Returns: XHL = end of copied string
+	ld xix, (xsp + 4)		; XIX = dest
+	ld xhl, xix			; XHL = dest (for return)
+	jr t, .Lscl_entry
+.Lscl_next:
+	inc 1, xix
+.Lscl_entry:
+	cpmi8 (xix), 0x00		; find end of dest string
+	jr nz, .Lscl_next
+	ld xde, (xsp + 8)		; XDE = source
+	ld bc, (xsp + 0x0C)		; BC = count
+	jr t, .Lscl_check
+.Lscl_copy:
+	ld a, (xde)			; load source byte
+	ld (xix), a			; store to dest
+	cpmi8 (xix), 0x00		; was it null terminator?
+	ret z				; yes - done
+	inc 1, xix
+	inc 1, xde
+.Lscl_check:
+	ld wa, bc			; save current count
+	dec 1, bc			; decrement remaining
+	cps wa, 0			; was count zero?
+	jr nz, .Lscl_copy		; no - copy next byte
+	ldmi8 (xix), 0x00		; null-terminate
+	ret
 
 HDAE5000_MemCompare_Block:	; 0x29AFBE
-	; Memory block compare
-	.incbin "includes/code_29af2d_2fffff.bin", 145, 50
+	; Compare two memory blocks byte-by-byte
+	; Stack: [+0x04] block A (XIX), [+0x08] block B (XDE), [+0x0C] count (BC)
+	; Returns: HL = 0 if match, else sign-extended difference of first mismatch
+	ld bc, (xsp + 0x0C)		; BC = count
+	ld xde, (xsp + 8)		; XDE = block B
+	ld xix, (xsp + 4)		; XIX = block A
+	jr t, .Lmcmp_check
+.Lmcmp_loop:
+	cpmi8 (xix), 0x00		; block A byte is null?
+	jr nz, .Lmcmp_advance
+	lds hl, 0			; return 0 (match up to null)
+	ret
+.Lmcmp_advance:
+	inc 1, xix
+	inc 1, xde
+	dec 1, bc
+.Lmcmp_check:
+	cps bc, 0			; count exhausted?
+	jr z, .Lmcmp_result
+	ld a, (xde)			; B byte
+	cp a, (xix)			; compare with A byte
+	jr z, .Lmcmp_loop		; equal - continue
+.Lmcmp_result:
+	ldb l, 0x00			; default L = 0
+	cps bc, 0			; if count exhausted, return 0
+	jr z, .Lmcmp_done
+	ld a, (xix)			; A byte
+	sub a, (xde)			; difference = A - B
+	ld l, a
+.Lmcmp_done:
+	exts hl				; sign-extend L to HL
+	ret
 
 HDAE5000_MemCopy_Reverse:	; 0x29AFF0
 	; Memory copy (reverse direction)
