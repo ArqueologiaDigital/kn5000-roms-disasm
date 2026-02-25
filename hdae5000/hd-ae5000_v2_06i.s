@@ -2007,9 +2007,68 @@ HDAE5000_Validate_Cell_Coords:	; 0x28FAE9 (61 bytes)
 	inc 2, xsp		; deallocate 2 bytes
 	ret
 
-HDAE5000_Resolve_Cell_Address:	; 0x28FB26
-	; Get entry address with validation
-	.incbin "includes/code_28f90c_2953e1.bin", 538, 139
+HDAE5000_Resolve_Cell_Address:	; 0x28FB26 (139 bytes)
+	; Get entry address with validation; returns XHL = entry ptr or error ptr
+	; Input: WA = row, BC = column
+	; Output: XHL = pointer to entry (or fallback if invalid)
+	dec 4, xsp		; allocate 4 bytes
+	pushw iz		; save IZ
+	ld iz, bc		; IZ = column
+	ld (xsp + 4), wa	; save row on stack
+	; First: validate the cell
+	ld wa, (xsp + 4)	; WA = row
+	ld bc, iz		; BC = column
+	calr HDAE5000_Cell_In_Bounds
+	cp hl, 0xFFFF		; invalid?
+	jr z, .Lrca_fail	; if -1, use fallback address
+	; Calculate row offset: look up row dimension table at 0x2257E2
+	ld bc, iz		; BC = column
+	extz xbc		; zero-extend column
+	ld wa, (xsp + 4)	; WA = row
+	extz xwa		; zero-extend row
+	ld xde, xwa		; XDE = row
+	sll xde, 3		; XDE = row * 8
+	add xde, xwa		; XDE = row * 9
+	sll xde, 4		; XDE = row * 144
+	add xde, xbc		; XDE = row*144 + col
+	ldada_24 xwa, 2250722	; lda XWA, (0x2257E2) - row dimension table
+	add xwa, xde		; XWA = table + row*144 + col
+	ld a, (xwa)		; A = dimension value
+	dec 1, a		; A -= 1
+	extz wa			; zero-extend A to WA
+	muls wa, 0x004C		; WA = (dim-1) * 76
+	ld (xsp + 2), wa	; save row_offset
+	; Calculate column offset: look up col dimension table at 0x2257C2
+	ld bc, iz		; BC = column
+	extz xbc		; zero-extend
+	ld wa, (xsp + 4)	; WA = row
+	extz xwa		; zero-extend
+	ld xde, xwa		; XDE = row
+	sll xde, 3		; XDE = row * 8
+	add xde, xwa		; XDE = row * 9
+	sll xde, 4		; XDE = row * 144
+	add xde, xbc		; XDE = row*144 + col
+	ldada_24 xwa, 2250690	; lda XWA, (0x2257C2) - col dimension table
+	add xwa, xde		; XWA = table + index
+	ld a, (xwa)		; A = col dimension
+	dec 1, a		; A -= 1
+	ldb w, 0x00		; W = 0 (zero-extend A to WA manually)
+	extz xwa		; zero-extend WA to XWA
+	ld xbc, 0x000004C0	; multiplier = 1216
+	call HDAE5000_Multiply	; XHL = col_dim * 1216
+	add xhl, 0x780		; XHL += 1920
+	ld wa, (xsp + 2)	; WA = row_offset
+	exts xwa		; sign-extend WA to XWA
+	add xwa, xhl		; XWA = total offset
+	ld xhl, 0x00201632	; table base address
+	add xhl, xwa		; XHL = final entry address
+	jr t, .Lrca_done	; jump to epilogue
+.Lrca_fail:
+	ldada_24 xhl, 3116548	; lda XHL, (0x2F8E04) - fallback/error address
+.Lrca_done:
+	popw iz			; restore IZ
+	inc 4, xsp		; deallocate 4 bytes
+	ret
 
 ; ============================================================================
 ; Display Table Management and UI Cell Rendering (0x28FBB1-0x295008)
@@ -2315,9 +2374,58 @@ HDAE5000_PPORT_Status:	; 0x295046
 	ret
 	nop
 
-HDAE5000_PPORT_Init:	; 0x295058
-	; PPORT initialization
-	.incbin "includes/code_28f90c_2953e1.bin", 22348, 116
+HDAE5000_PPORT_Init:	; 0x295058 (116 bytes, 3 entry points)
+	; Entry 1: Stack context switch (save/restore SP for PPORT workspace)
+	ei 0x06				; disable interrupts
+	stda32_24 2330626, xsp	; save current SP to (0x239002)
+	nop
+	ldda32_24 xsp, 2330630	; load PPORT SP from (0x239006)
+	nop
+	ei 0x00				; re-enable interrupts
+	ret
+	nop
+HDAE5000_PPORT_Init_Main:	; 0x29506A
+	; Entry 2: Initialize PPORT state machine
+	push xhl
+	nop
+	push xwa
+	nop
+	cpdi8_24 2330624, 0x01	; cp (0x239000), 1 — already initialized?
+	jr z, .Lpi_exit		; if already init, just return
+	stdi8_24 2330644, 0x00	; clear abort flag (0x239014)
+	stdi8_24 2330624, 0x01	; set state = initialized (0x239000)
+	ld xhl, 0x0023FFFC	; stack top for PPORT workspace
+	nop
+	stda32_24 2330626, xhl	; store as PPORT SP (0x239002)
+	nop
+	ld xwa, 0x00295040	; PPORT entry callback address
+	nop
+	ld (xhl), xwa		; store callback at stack top
+	ldb a, 0x00		; param = 0
+	call HDAE5000_PPORT_Status	; switch to PPORT stack and call
+	cpdi8_24 2330644, 0x00	; check abort flag (0x239014)
+	jr nz, .Lpi_exit	; if aborted, exit
+	ldw hl, 0xFFFF		; HL = -1 (error/timeout)
+	nop
+	stda16_24 2330634, xhl	; store result (0x23900A)
+	nop
+	stdi8_24 2330624, 0x00	; clear state = uninitialized
+.Lpi_exit:
+	pop xwa
+	nop
+	pop xhl
+	nop
+	ret
+	nop
+HDAE5000_PPORT_Reset:		; 0x2950BA
+	; Entry 3: Reset PPORT state
+	ldw hl, 0xFFFF		; HL = -1
+	nop
+	stda16_24 2330634, xhl	; store result (0x23900A)
+	nop
+	stdi8_24 2330624, 0x00	; clear state = uninitialized
+	ret
+	nop
 
 HDAE5000_PPORT_Dispatch:	; 0x2950CC
 	; Command dispatcher - switch to PPORT context, check for command
