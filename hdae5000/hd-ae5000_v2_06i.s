@@ -1124,8 +1124,72 @@ HDAE5000_Wait_Callback_Loop:	; 0x28B22B (45 bytes)
 	ret
 
 HDAE5000_Set_Menu_Visibility:	; 0x28B258 (229 bytes)
-	; Set menu item visibility via workspace callbacks
-	.incbin "includes/code_2803c2_28f542.bin", 44694, 229
+	; Set visibility for 9 menu items via workspace callback +0x0294
+	; Input: A = 0 → show (IZ=1), A != 0 → hide (IZ=0)
+	pushw iz
+	cps a, 0
+	jr nz, .Lsmv_hide
+	lds iz, 1			; show mode
+	jr t, .Lsmv_start
+.Lsmv_hide:
+	lds iz, 0			; hide mode
+.Lsmv_start:
+	ld bc, iz			; BC = visibility flag
+	ldda32_24 xwa, 2335138		; ld XWA, (0x23A1A2)
+	ld_sril3 xwa, 0xE1, 0x0A, 0x0E	; ld XWA, (XWA + 0x0E0A)
+	ld_sril3 xhl, 0xE1, 0x94, 0x02	; ld XHL, (XWA + 0x0294)
+	ld xwa, 0x007F002C		; menu item 1
+	call (xhl)
+	ld bc, iz
+	ldda32_24 xwa, 2335138
+	ld_sril3 xwa, 0xE1, 0x0A, 0x0E
+	ld_sril3 xhl, 0xE1, 0x94, 0x02
+	ld xwa, 0x007F0100		; menu item 2
+	call (xhl)
+	ld bc, iz
+	ldda32_24 xwa, 2335138
+	ld_sril3 xwa, 0xE1, 0x0A, 0x0E
+	ld_sril3 xhl, 0xE1, 0x94, 0x02
+	ld xwa, 0x007F010A		; menu item 3
+	call (xhl)
+	ld bc, iz
+	ldda32_24 xwa, 2335138
+	ld_sril3 xwa, 0xE1, 0x0A, 0x0E
+	ld_sril3 xhl, 0xE1, 0x94, 0x02
+	ld xwa, 0x007F00F9		; menu item 4
+	call (xhl)
+	ld bc, iz
+	ldda32_24 xwa, 2335138
+	ld_sril3 xwa, 0xE1, 0x0A, 0x0E
+	ld_sril3 xhl, 0xE1, 0x94, 0x02
+	ld xwa, 0x007F013E		; menu item 5
+	call (xhl)
+	ld bc, iz
+	ldda32_24 xwa, 2335138
+	ld_sril3 xwa, 0xE1, 0x0A, 0x0E
+	ld_sril3 xhl, 0xE1, 0x94, 0x02
+	ld xwa, 0x007F010D		; menu item 6
+	call (xhl)
+	ld bc, iz
+	ldda32_24 xwa, 2335138
+	ld_sril3 xwa, 0xE1, 0x0A, 0x0E
+	ld_sril3 xhl, 0xE1, 0x94, 0x02
+	ld xwa, 0x007F00DA		; menu item 7
+	call (xhl)
+	ld bc, iz
+	ldda32_24 xwa, 2335138
+	ld_sril3 xwa, 0xE1, 0x0A, 0x0E
+	ld_sril3 xhl, 0xE1, 0x94, 0x02
+	ld xwa, 0x007F00DC		; menu item 8
+	call (xhl)
+	ld bc, iz
+	ldda32_24 xwa, 2335138
+	ld_sril3 xwa, 0xE1, 0x0A, 0x0E
+	ld_sril3 xhl, 0xE1, 0x94, 0x02
+	ld xwa, 0x007F0080		; menu item 9
+	call (xhl)
+	popw iz
+	ret
 
 HDAE5000_Return_Stub:	; 0x28B33D (1 bytes)
 	ret
