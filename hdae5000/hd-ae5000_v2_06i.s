@@ -1246,8 +1246,57 @@ HDAE5000_Filename_Validate:	; 0x28F3FD (59 bytes)
 	ret
 
 HDAE5000_Extension_Check:	; 0x28F438 (153 bytes)
-	; Check and process file extensions
-	.incbin "includes/code_2803c2_28f542.bin", 61558, 153
+	; Byte-swap helper: swap high/low bytes of WA, return in HL
+	; Input: WA = 16-bit value
+	; Output: HL = byte-swapped result
+	ld hl, wa			; HL = WA
+	ldb h, 0x00			; clear H (keep L = low byte of WA)
+	srl wa, 8			; WA >>= 8 (high byte to low)
+	sll hl, 8			; HL <<= 8 (low byte to high)
+	ldb w, 0x00			; clear W
+	add hl, wa			; HL = (orig_low << 8) + orig_high
+	ret
+.Lec_main:				; 0x28F447 — extension check entry
+	push xiz
+	ld xiz, xwa			; save parameter in XIZ
+	ldda32_24 xwa, 2335138		; ld XWA, (0x23A1A2) — workspace ptr
+	ld_sril3 xwa, 0xE1, 0x88, 0x0E	; ld XWA, (XWA+0x0E88) — handler table
+	ld xix, (xwa + 8)		; ld XIX, (XWA+0x08)
+	call (xix)			; call validation handler
+	cps l, 3			; check result == 3?
+	jr z, .Lec_process		; if so, process extension
+	cps l, 2			; check result == 2?
+	jr nz, .Lec_finish		; if neither 2 nor 3, skip to end
+.Lec_process:
+	ldda32_24 xwa, 2335138		; ld XWA, (0x23A1A2)
+	ld_sril3 xwa, 0xE1, 0x0A, 0x0E	; ld XWA, (XWA+0x0E0A) — sub-handler table
+	ld_sril3 xhl, 0xE1, 0x38, 0x05	; ld XHL, (XWA+0x0538)
+	call (xhl)
+	ld xwa, xiz			; restore parameter
+	ldada_24 xbc, 3038666		; lda XBC, 0x2E5DCA — extension data ptr
+	ldda32_24 xde, 2335138		; ld XDE, (0x23A1A2)
+	ld_sril3 xde, 0xE9, 0x88, 0x0E	; ld XDE, (XDE+0x0E88)
+	ld_sril3 xhl, 0xE9, 0xA0, 0x00	; ld XHL, (XDE+0x00A0)
+	call (xhl)
+	ldada_24 xwa, 2297516		; lda XWA, 0x230EAC
+	ldda32_24 xbc, 2335138		; ld XBC, (0x23A1A2)
+	ld_sril3 xbc, 0xE5, 0x88, 0x0E	; ld XBC, (XBC+0x0E88)
+	ld_sril3 xhl, 0xE5, 0xA8, 0x00	; ld XHL, (XBC+0x00A8)
+	ld xbc, 0x0000000E		; count = 14
+	call (xhl)
+	ldda32_24 xwa, 2335138		; ld XWA, (0x23A1A2)
+	ld_sril3 xwa, 0xE1, 0x88, 0x0E	; ld XWA, (XWA+0x0E88)
+	ld_sril3 xhl, 0xE1, 0xAC, 0x00	; ld XHL, (XWA+0x00AC)
+	call (xhl)
+	ldda32_24 xwa, 2335138		; ld XWA, (0x23A1A2)
+	ld_sril3 xwa, 0xE1, 0x0A, 0x0E	; ld XWA, (XWA+0x0E0A)
+	ld_sril3 xhl, 0xE1, 0x3C, 0x05	; ld XHL, (XWA+0x053C)
+	call (xhl)
+.Lec_finish:
+	ldada_24 xwa, 2297516		; lda XWA, 0x230EAC
+	calr HDAE5000_Config_Init	; validate config
+	pop xiz
+	ret
 
 HDAE5000_Config_Init:	; 0x28F4D1 (114 bytes)
 	; Initialize configuration: validate filename, check headers, verify extensions
