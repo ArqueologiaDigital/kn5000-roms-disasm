@@ -1512,9 +1512,174 @@ HDAE5000_Resolve_Cell_Address:	; 0x28FB26
 	; Get entry address with validation
 	.incbin "includes/code_28f90c_2953e1.bin", 538, 139
 
-HDAE5000_Cell_In_Bounds:	; 0x28FBB1
-	; Validate entry at coordinates
-	.incbin "includes/code_28f90c_2953e1.bin", 677, 21592
+; ============================================================================
+; Display Table Management and UI Cell Rendering (0x28FBB1-0x295008)
+; 21,592 bytes, 50 routines
+;
+; Table operations use 0x4C (76) byte stride for row addressing
+; and 0x90 (144) byte stride for tile addressing.
+; Eight routines at 0x2934C8-0x293BB8 are exactly 222 bytes each,
+; likely one per UI cell/widget type.
+; ============================================================================
+
+HDAE5000_Cell_In_Bounds:	; 0x28FBB1 (1497 bytes)
+	; Validate entry at coordinates; calculates table offset
+	.incbin "includes/code_28f90c_2953e1.bin", 677, 1497
+
+HDAE5000_Table_Calc_Offset:	; 0x29018A (553 bytes)
+	; Calculate table offset using 0x4C multiplier
+	.incbin "includes/code_28f90c_2953e1.bin", 2174, 553
+
+HDAE5000_Table_Lookup:	; 0x2903B3 (928 bytes)
+	; Look up entry in display table; returns 0xFFFF on failure
+	.incbin "includes/code_28f90c_2953e1.bin", 2727, 928
+
+HDAE5000_Table_Sub_290753:	; 0x290753 (350 bytes)
+	.incbin "includes/code_28f90c_2953e1.bin", 3655, 350
+
+HDAE5000_Table_Sub_2908B1:	; 0x2908B1 (335 bytes)
+	.incbin "includes/code_28f90c_2953e1.bin", 4005, 335
+
+HDAE5000_Table_Sub_290A00:	; 0x290A00 (390 bytes)
+	.incbin "includes/code_28f90c_2953e1.bin", 4340, 390
+
+HDAE5000_Table_Sub_290B86:	; 0x290B86 (303 bytes)
+	.incbin "includes/code_28f90c_2953e1.bin", 4730, 303
+
+HDAE5000_Table_Sub_290CB5:	; 0x290CB5 (220 bytes)
+	.incbin "includes/code_28f90c_2953e1.bin", 5033, 220
+
+HDAE5000_Table_Sub_290D91:	; 0x290D91 (303 bytes)
+	.incbin "includes/code_28f90c_2953e1.bin", 5253, 303
+
+HDAE5000_Table_Sub_290EC0:	; 0x290EC0 (133 bytes)
+	.incbin "includes/code_28f90c_2953e1.bin", 5556, 133
+
+HDAE5000_Table_Sub_290F45:	; 0x290F45 (248 bytes)
+	.incbin "includes/code_28f90c_2953e1.bin", 5689, 248
+
+HDAE5000_Table_Sub_29103D:	; 0x29103D (1023 bytes)
+	.incbin "includes/code_28f90c_2953e1.bin", 5937, 1023
+
+HDAE5000_Table_Init_Entry:	; 0x29143C (359 bytes)
+	.incbin "includes/code_28f90c_2953e1.bin", 6960, 359
+
+HDAE5000_Table_Sub_2915A3:	; 0x2915A3 (217 bytes)
+	.incbin "includes/code_28f90c_2953e1.bin", 7319, 217
+
+HDAE5000_Table_Sub_29167C:	; 0x29167C (226 bytes)
+	.incbin "includes/code_28f90c_2953e1.bin", 7536, 226
+
+HDAE5000_Table_Sub_29175E:	; 0x29175E (211 bytes)
+	.incbin "includes/code_28f90c_2953e1.bin", 7762, 211
+
+HDAE5000_Table_Sub_291831:	; 0x291831 (216 bytes)
+	.incbin "includes/code_28f90c_2953e1.bin", 7973, 216
+
+HDAE5000_Table_Sub_291909:	; 0x291909 (211 bytes)
+	.incbin "includes/code_28f90c_2953e1.bin", 8189, 211
+
+HDAE5000_Table_Sub_2919DC:	; 0x2919DC (134 bytes)
+	.incbin "includes/code_28f90c_2953e1.bin", 8400, 134
+
+HDAE5000_Table_Sub_291A62:	; 0x291A62 (209 bytes)
+	.incbin "includes/code_28f90c_2953e1.bin", 8534, 209
+
+HDAE5000_Table_Sub_291B33:	; 0x291B33 (171 bytes)
+	.incbin "includes/code_28f90c_2953e1.bin", 8743, 171
+
+HDAE5000_Table_Sub_291BDE:	; 0x291BDE (47 bytes)
+	.incbin "includes/code_28f90c_2953e1.bin", 8914, 47
+
+HDAE5000_Table_Complex_Init:	; 0x291C0D (2171 bytes)
+	; Complex table initialization (large stack frame)
+	.incbin "includes/code_28f90c_2953e1.bin", 8961, 2171
+
+HDAE5000_Table_Sub_292488:	; 0x292488 (359 bytes)
+	.incbin "includes/code_28f90c_2953e1.bin", 11132, 359
+
+HDAE5000_Table_Sub_2925EF:	; 0x2925EF (425 bytes)
+	.incbin "includes/code_28f90c_2953e1.bin", 11491, 425
+
+HDAE5000_Table_Sub_292798:	; 0x292798 (419 bytes)
+	.incbin "includes/code_28f90c_2953e1.bin", 11916, 419
+
+HDAE5000_Table_Sub_29293B:	; 0x29293B (419 bytes)
+	.incbin "includes/code_28f90c_2953e1.bin", 12335, 419
+
+HDAE5000_Table_Sub_292ADE:	; 0x292ADE (288 bytes)
+	.incbin "includes/code_28f90c_2953e1.bin", 12754, 288
+
+HDAE5000_Table_Sub_292BFE:	; 0x292BFE (280 bytes)
+	.incbin "includes/code_28f90c_2953e1.bin", 13042, 280
+
+HDAE5000_Table_Sub_292D16:	; 0x292D16 (419 bytes)
+	.incbin "includes/code_28f90c_2953e1.bin", 13322, 419
+
+HDAE5000_Table_Sub_292EB9:	; 0x292EB9 (281 bytes)
+	.incbin "includes/code_28f90c_2953e1.bin", 13741, 281
+
+HDAE5000_Table_Sub_292FD2:	; 0x292FD2 (329 bytes)
+	.incbin "includes/code_28f90c_2953e1.bin", 14022, 329
+
+HDAE5000_Workspace_Handler:	; 0x29311B (592 bytes)
+	; Firmware workspace callback handler
+	.incbin "includes/code_28f90c_2953e1.bin", 14351, 592
+
+HDAE5000_Workspace_Sub_29336B:	; 0x29336B (349 bytes)
+	.incbin "includes/code_28f90c_2953e1.bin", 14943, 349
+
+; --- UI Cell Renderers (8 x 222 bytes each) ---
+HDAE5000_Cell_Render_Type0:	; 0x2934C8 (222 bytes)
+	.incbin "includes/code_28f90c_2953e1.bin", 15292, 222
+
+HDAE5000_Cell_Render_Type1:	; 0x2935A6 (222 bytes)
+	.incbin "includes/code_28f90c_2953e1.bin", 15514, 222
+
+HDAE5000_Cell_Render_Type2:	; 0x293684 (222 bytes)
+	.incbin "includes/code_28f90c_2953e1.bin", 15736, 222
+
+HDAE5000_Cell_Render_Type3:	; 0x293762 (222 bytes)
+	.incbin "includes/code_28f90c_2953e1.bin", 15958, 222
+
+HDAE5000_Cell_Render_Type4:	; 0x293840 (222 bytes)
+	.incbin "includes/code_28f90c_2953e1.bin", 16180, 222
+
+HDAE5000_Cell_Render_Type5:	; 0x29391E (222 bytes)
+	.incbin "includes/code_28f90c_2953e1.bin", 16402, 222
+
+HDAE5000_Cell_Render_Type6:	; 0x2939FC (222 bytes)
+	.incbin "includes/code_28f90c_2953e1.bin", 16624, 222
+
+HDAE5000_Cell_Render_Type7:	; 0x293ADA (222 bytes)
+	.incbin "includes/code_28f90c_2953e1.bin", 16846, 222
+
+HDAE5000_Cell_Render_Type8:	; 0x293BB8 (222 bytes)
+	.incbin "includes/code_28f90c_2953e1.bin", 17068, 222
+
+HDAE5000_Cell_Validate:	; 0x293C96 (347 bytes)
+	; Validate cell rendering parameters
+	.incbin "includes/code_28f90c_2953e1.bin", 17290, 347
+
+HDAE5000_Cell_Get_Params:	; 0x293DF1 (61 bytes)
+	.incbin "includes/code_28f90c_2953e1.bin", 17637, 61
+
+HDAE5000_Display_Callback:	; 0x293E2E (1093 bytes)
+	; Display callback handler via workspace
+	.incbin "includes/code_28f90c_2953e1.bin", 17698, 1093
+
+HDAE5000_Display_Sub_294273:	; 0x294273 (43 bytes)
+	.incbin "includes/code_28f90c_2953e1.bin", 18791, 43
+
+HDAE5000_Display_Sub_29429E:	; 0x29429E (99 bytes)
+	.incbin "includes/code_28f90c_2953e1.bin", 18834, 99
+
+HDAE5000_Display_Sub_294301:	; 0x294301 (275 bytes)
+	.incbin "includes/code_28f90c_2953e1.bin", 18933, 275
+
+HDAE5000_Display_Sub_294414:	; 0x294414 (3061 bytes)
+	; Large display management routine
+	.incbin "includes/code_28f90c_2953e1.bin", 19208, 3061
 
 HDAE5000_PPORT_Util:	; 0x295009
 	; PPORT utility function
