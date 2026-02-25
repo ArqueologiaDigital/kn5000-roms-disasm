@@ -640,7 +640,38 @@ HDAE5000_PPI_Transfer_Byte:	; 0x282BA5 (130 bytes)
 
 HDAE5000_PPI_Read_Register:	; 0x282C27 (71 bytes)
 	; Read an IDE register value via PPI
-	.incbin "includes/code_2803c2_28f542.bin", 10341, 71
+	; Reads register pair (low byte at IZ=0, high byte at IZ=1)
+	; Returns 16-bit value in (XSP+2), reports event on success
+	dec 2, xsp
+	pushw iz
+	ldmw (xsp + 2), 0x0000		; result = 0
+	calr HDAE5000_PPI_Init
+	lds iz, 0			; IZ = 0 (loop counter)
+	cp iz, 0x0100
+	jr ge, .Lppi_rd_loop_end
+.Lppi_rd_loop:
+	.byte 0xc7, 0xf8, 0x89		; ld a, izl (extended register)
+	extz wa
+	calr HDAE5000_PPI_Transfer_Byte
+	ld a, l				; result byte from transfer
+	exts wa				; sign-extend to 16-bit
+	or (xsp + 2), wa		; OR into result word
+	inc 1, iz
+	cp iz, 0x0100
+	jr lt, .Lppi_rd_loop
+.Lppi_rd_loop_end:
+	cpmi16 (xsp + 2), 0x0000	; test if result is zero
+	jr nz, .Lppi_rd_nonzero
+	ldada_24 xwa, 3023412		; 0x2E2234 - error event string
+	calr HDAE5000_Event_Handler
+	jr t, .Lppi_rd_done
+.Lppi_rd_nonzero:
+	ldada_24 xwa, 3023434		; 0x2E224A - success event string
+	calr HDAE5000_Event_Handler
+.Lppi_rd_done:
+	popw iz
+	inc 2, xsp
+	ret
 
 HDAE5000_PPI_Write_Sector:	; 0x282C6E (192 bytes)
 	; Write a sector of data to HD via PPI
@@ -652,7 +683,46 @@ HDAE5000_PPI_Read_Sector:	; 0x282D2E (270 bytes)
 
 HDAE5000_PPI_Transfer_Block:	; 0x282E3C (81 bytes)
 	; Transfer a block of data via PPI
-	.incbin "includes/code_2803c2_28f542.bin", 10874, 81
+	; Iterates entries 1..20, copies block via PPI_Block_Copy, validates buffer,
+	; then compares with MemCompare_Block. Returns matching index-1 or 0xFFFF.
+	dec 0, xsp			; allocate 8 bytes on stack
+	pushw iz
+	ld (xsp + 6), xwa		; save input parameter
+	lds iz, 1			; IZ = 1 (entry counter)
+	cp iz, 0x0014
+	jr gt, .Lptb_not_found
+.Lptb_loop:
+	pushw iz
+	pushw 0x002E			; block size = 46
+	pushw 0x22AE			; source base address
+	lda xwa, (xsp + 8)		; pointer to local buffer
+	push xwa
+	call HDAE5000_PPI_Block_Copy
+	lda xwa, (xsp + 0x0C)		; pointer to compare buffer
+	push xwa
+	call HDAE5000_Display_Buffer_Validate
+	pushw hl			; save validation result
+	ld xwa, (xsp + 0x16)		; reload input parameter
+	push xwa
+	lda xwa, (xsp + 0x16)		; pointer to local buffer
+	push xwa
+	call HDAE5000_MemCompare_Block
+	add xsp, 0x00000018		; clean up stack (24 bytes)
+	cps hl, 0			; check compare result
+	jr nz, .Lptb_found
+	ld hl, iz			; return index - 1
+	dec 1, hl
+	jr t, .Lptb_done
+.Lptb_found:
+	inc 1, iz
+	cp iz, 0x0014
+	jr le, .Lptb_loop
+.Lptb_not_found:
+	ldw hl, 0xFFFF			; return -1 (not found)
+.Lptb_done:
+	popw iz
+	inc 0, xsp			; deallocate 8 bytes
+	ret
 
 ; --- HD Drive Setup and Configuration ---
 HDAE5000_HD_Setup_Drive:	; 0x282E8D (1126 bytes)
@@ -913,8 +983,38 @@ HDAE5000_Return_Stub:	; 0x28B33D (1 bytes)
 	ret
 
 HDAE5000_Get_Table_Entry:	; 0x28B33E (61 bytes)
-	; Retrieve entry from data table
-	.incbin "includes/code_2803c2_28f542.bin", 44924, 61
+	; Retrieve entry from data table by index
+	; Input: XWA = pointer to table context structure
+	; Field +0: counter, +1: previous index, +2: current index
+	push xiz
+	ld xiz, xwa			; XIZ = table context pointer
+	push xbc
+	ld a, (xiz + 2)		; A = current index
+	extz wa
+	muls wa, 0x001B			; offset = index * 27 (entry size)
+	inc 4, wa			; skip 4-byte header
+	exts xwa			; sign-extend to 32-bit
+	add xwa, xiz			; XWA = pointer to entry
+	push xwa			; arg: entry pointer
+	call HDAE5000_MemCopy_Block
+	inc 0, xsp			; clean up 8 bytes (arg + saved XBC)
+	ld a, (xiz + 2)		; save current index
+	ld (xiz + 1), a		; as previous index
+	lda xwa, (xiz + 2)		; XWA = pointer to current index
+	incm8 1, (xwa)			; increment current index
+	ld a, (xwa)			; read new index value
+	cps a, 5			; wrap at 5?
+	jr c, .Lgte_no_wrap
+	ldmi8 (xiz + 2), 0x00		; reset to 0
+.Lgte_no_wrap:
+	cpmi8 (xiz), 0x05		; check counter < 5
+	jr nc, .Lgte_no_inc
+	incm8 1, (xiz)			; increment counter
+.Lgte_no_inc:
+	ld xwa, xiz			; return context pointer
+	calr HDAE5000_Return_Stub	; NOP call (returns immediately)
+	pop xiz
+	ret
 
 HDAE5000_Validate_String:	; 0x28B37B (56 bytes)
 	; Validate/navigate null-terminated record at (XWA)
@@ -1850,7 +1950,26 @@ HDAE5000_Table_Sub_291B33:	; 0x291B33 (171 bytes)
 	.incbin "includes/code_28f90c_2953e1.bin", 8743, 171
 
 HDAE5000_Table_Sub_291BDE:	; 0x291BDE (47 bytes)
-	.incbin "includes/code_28f90c_2953e1.bin", 8914, 47
+	; Initialize table entry structure with string address
+	; Input: WA = offset, XBC = structure pointer
+	; Output: HL = offset
+	dec 2, xsp
+	push xiz
+	ld xiz, xbc			; XIZ = structure pointer
+	ld (xsp + 4), wa		; save offset on stack
+	ldada_24 xwa, 2274352		; 0x22B430 - base string address
+	ld (xiz), xwa			; store string pointer in structure
+	ldda32_24 xwa, 2274370		; 0x22B442 - load source string pointer
+	call HDAE5000_String_To_Upper
+	add hl, 0x0016			; add 22 to string length
+	ld wa, hl
+	exts xwa			; sign-extend to 32-bit
+	ld (xiz + 4), xwa		; store computed size
+	stda32_24 2295026, xwa		; 0x2304F2 - global size variable
+	ld hl, (xsp + 4)		; return saved offset
+	pop xiz
+	inc 2, xsp
+	ret
 
 HDAE5000_Table_Complex_Init:	; 0x291C0D (2171 bytes)
 	; Complex table initialization (large stack frame)
@@ -1923,17 +2042,93 @@ HDAE5000_Cell_Validate:	; 0x293C96 (347 bytes)
 	.incbin "includes/code_28f90c_2953e1.bin", 17290, 347
 
 HDAE5000_Cell_Get_Params:	; 0x293DF1 (61 bytes)
-	.incbin "includes/code_28f90c_2953e1.bin", 17637, 61
+	; Get cell rendering parameters from data source
+	; Input: XWA = source pointer (0 = use default address 0x200)
+	; Output: XHL = parameter block pointer
+	dec 0, xsp			; allocate 8 bytes
+	push xiz
+	ld xiz, xwa			; XIZ = source pointer
+	or xwa, xwa			; test if source is NULL
+	jr z, .Lcgp_default
+	ld xbc, 0x00000200		; buffer size = 512
+	push xbc
+	push xwa			; source pointer
+	lda xwa, (xsp + 0x0C)		; pointer to local buffer
+	push xwa
+	call HDAE5000_Cell_Copy_Buffer
+	lda xsp, (xsp + 0x0C)		; clean up 12 bytes from stack
+	ld xwa, (xsp + 8)		; check copied length
+	or xwa, xwa
+	jr z, .Lcgp_result
+	ld xwa, (xsp + 4)		; get offset field
+	sla xwa, 9			; multiply by 512
+	add xwa, 0x00000200		; add base address
+	ld xiz, xwa			; XIZ = computed address
+	jr t, .Lcgp_result
+.Lcgp_default:
+	ld xiz, 0x00000200		; default: address 0x200
+.Lcgp_result:
+	ld xhl, xiz			; return value in XHL
+	pop xiz
+	inc 0, xsp			; deallocate 8 bytes
+	ret
 
 HDAE5000_Display_Callback:	; 0x293E2E (1093 bytes)
 	; Display callback handler via workspace
 	.incbin "includes/code_28f90c_2953e1.bin", 17698, 1093
 
 HDAE5000_Display_Sub_294273:	; 0x294273 (43 bytes)
-	.incbin "includes/code_28f90c_2953e1.bin", 18791, 43
+	; Set up display callback with function pointer
+	; Input: XWA = callback function pointer
+	; Output: HL = 0 (success) or 0xFFFF (already active)
+	cpdi8_24 2330412, 0x00		; check if callback is active (0x238F2C)
+	jr z, .Lds273_setup
+	stdi8_24 2330412, 0x00		; clear active flag
+	ldw hl, 0xFFFF			; return -1 (already active)
+	jr t, .Lds273_done
+.Lds273_setup:
+	ldada_24 xbc, 2297628		; 0x230F1C - callback table base
+	stda32_24 2330404, xbc		; 0x238F24 - store table pointer
+	stda32_24 2330408, xwa		; 0x238F28 - store callback function
+	stdi8_24 2330412, 0x01		; 0x238F2C - set active flag
+	lds hl, 0			; return 0 (success)
+.Lds273_done:
+	ret
 
 HDAE5000_Display_Sub_29429E:	; 0x29429E (99 bytes)
-	.incbin "includes/code_28f90c_2953e1.bin", 18834, 99
+	; Execute display callback and restore display state
+	; Checks callback state flag and dispatches to copy or restore
+	ldada_24 xwa, 2297628		; 0x230F1C - RAM test area base
+	cpda32_24 xwa, 2330404		; compare with stored table pointer (0x238F24)
+	jr z, .Lds29e_clear
+	cpdi8_24 2330412, 0x01		; check active flag == 1 (0x238F2C)
+	jr nz, .Lds29e_restore
+	; State 1: copy display block
+	ldada_24 xwa, 2297628		; XWA = base address
+	ld xhl, xwa			; XHL = dest (base)
+	ldada_24 xbc, 2297628		; XBC = base
+	ldda32_24 xwa, 2330404		; XWA = stored table pointer
+	sub xwa, xbc			; XWA = offset (table - base)
+	ld xbc, xwa			; XBC = size
+	ldda32_24 xde, 2330408		; XDE = callback function (0x238F28)
+	ld xwa, xhl			; XWA = dest address
+	call HDAE5000_Display_Copy
+	stdi8_24 2330412, 0x02		; set state to 2
+	jr t, .Lds29e_clear
+.Lds29e_restore:
+	; State 2+: restore display block
+	ldada_24 xwa, 2297628		; XWA = base address
+	ld xhl, xwa
+	ldada_24 xbc, 2297628		; XBC = base
+	ldda32_24 xwa, 2330404		; XWA = stored table pointer
+	sub xwa, xbc			; XWA = offset
+	ld xbc, xwa			; XBC = size
+	ldda32_24 xde, 2330408		; XDE = callback function
+	ld xwa, xhl			; XWA = dest address
+	call HDAE5000_Display_Restore
+.Lds29e_clear:
+	stdi8_24 2330412, 0x00		; clear active flag
+	ret
 
 HDAE5000_Display_Sub_294301:	; 0x294301 (275 bytes)
 	.incbin "includes/code_28f90c_2953e1.bin", 18933, 275
@@ -2249,12 +2444,20 @@ HDAE5000_HD_Config_Init_Values:	; 0x29794A (389 bytes)
 	; Set initial HD config values at 0x229Dxx
 	.incbin "includes/code_2971b7_29ae9e.bin", 1939, 389
 
-HDAE5000_HD_Detect_Drive:	; 0x297ACF (10499 bytes)
+HDAE5000_HD_Detect_Drive:	; 0x297ACF (839 bytes)
 	; Detect HD presence via ATA IDENTIFY, configure CHS geometry
 	; Contains version strings at 0x2999B2:
 	;   "Technics Software section    M. Kitajima"
 	;   "2.33J", "2.21", "TECHNICS KN5000"
-	.incbin "includes/code_2971b7_29ae9e.bin", 2328, 10499
+	.incbin "includes/code_2971b7_29ae9e.bin", 2328, 839
+
+HDAE5000_Display_Copy:	; 0x297E16 (443 bytes)
+	; Display block copy operation
+	.incbin "includes/code_2971b7_29ae9e.bin", 3167, 443
+
+HDAE5000_Display_Restore:	; 0x297FD1 (9217 bytes)
+	; Display restore/update operation
+	.incbin "includes/code_2971b7_29ae9e.bin", 3610, 9217
 
 ; --- String Formatting Library (sprintf-like) ---
 HDAE5000_Int_To_Decimal_String:	; 0x29A3D2 (80 bytes)
@@ -2371,9 +2574,17 @@ HDAE5000_String_Format_Core:	; 0x29A563 (805 bytes)
 	; Core string format engine - processes format specifiers
 	.incbin "includes/code_2971b7_29ae9e.bin", 13228, 805
 
-HDAE5000_String_Format_Output:	; 0x29A888 (1436 bytes)
+HDAE5000_String_Format_Output:	; 0x29A888 (848 bytes)
 	; Output handler for string formatter
-	.incbin "includes/code_2971b7_29ae9e.bin", 14033, 1436
+	.incbin "includes/code_2971b7_29ae9e.bin", 14033, 848
+
+HDAE5000_PPI_Block_Copy:	; 0x29ABD8 (237 bytes)
+	; PPI block copy/transfer utility
+	.incbin "includes/code_2971b7_29ae9e.bin", 14881, 237
+
+HDAE5000_Cell_Copy_Buffer:	; 0x29ACC5 (351 bytes)
+	; Cell buffer copy routine (called by Cell_Get_Params)
+	.incbin "includes/code_2971b7_29ae9e.bin", 15118, 351
 
 HDAE5000_File_Read:	; 0x29AE24 (123 bytes)
 	; File read operation (called by Display_Progress)
@@ -2484,7 +2695,11 @@ HDAE5000_StrCopy__copy_check:
 ; ----------------------------------------------------------------------------
 
 HDAE5000_Code_Remainder:	; 29AF2Dh
-	.incbin "includes/code_29af2d_2fffff.bin", 0, 68
+	.incbin "includes/code_29af2d_2fffff.bin", 0, 24
+
+HDAE5000_MemCopy_Block:	; 0x29AF45
+	; Block memory copy routine
+	.incbin "includes/code_29af2d_2fffff.bin", 24, 44
 
 HDAE5000_Display_Buffer_Validate:	; 0x29AF71
 	; Buffer validation
