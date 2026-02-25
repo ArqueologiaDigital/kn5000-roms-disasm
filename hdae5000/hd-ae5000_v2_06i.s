@@ -595,10 +595,291 @@ HDAE5000_Alloc_Memory_4__type_A3:
 	ld xhl, 0x1B	; 27 (small height)
 	ret
 
-HDAE5000_Register_Frame:	; 2803C2h
+; ============================================================================
+; CODE SECTION 1: Setup, HD interface, filesystem, and UI routines
+; 0x2803C2-0x28F542 (61,825 bytes, 64 identified routines)
+;
+; Hardware access:
+;   PPI 8255 ports at 0x160000-0x160006 (IDE/ATA bridge to HD)
+;   VGA registers via memory-mapped I/O
+;   HD config flags at 0x229D90-0x229DAE
+;   Workspace at 0x23A1A2 (shared with main CPU)
+;
+; Subsystem groups:
+;   0x2803C2-0x2827F3  Frame registration and event dispatch (9,266 bytes)
+;   0x2827F4-0x282B97  Event handler (932 bytes)
+;   0x282B98-0x282E3B  PPI/IDE low-level I/O (1,188 bytes)
+;   0x282E8D-0x28541B  HD drive setup and configuration (9,615 bytes)
+;   0x28541C-0x287054  HD config manager and CHS geometry (7,225 bytes)
+;   0x2870D6-0x28A2EF  Filesystem operations (12,826 bytes)
+;   0x28A2F0-0x28B3E9  Display, menu, and utility routines (4,346 bytes)
+;   0x28B3EA-0x28F542  UI handler, file ops, path/string utilities (16,857 bytes)
+; ============================================================================
+
+HDAE5000_Register_Frame:	; 0x2803C2 (9266 bytes)
 	; Register frame handler callback with main CPU
 	; Clears 0x23A08E, 0x23A092, 0x23A094 and initializes display data
-	.incbin "includes/code_2803c2_28f542.bin"
+	; Contains multiple sub-routines for event registration and dispatch
+	.incbin "includes/code_2803c2_28f542.bin", 0, 9266
+
+HDAE5000_Event_Handler:	; 0x2827F4 (932 bytes)
+	; Event handler - processes firmware events dispatched to HDAE5000
+	.incbin "includes/code_2803c2_28f542.bin", 9266, 932
+
+; --- PPI/IDE Low-Level I/O ---
+HDAE5000_PPI_Init:	; 0x282B98 (13 bytes)
+	; Initialize 8255 PPI: control=0x90, port A=0xFF
+	.incbin "includes/code_2803c2_28f542.bin", 10198, 13
+
+HDAE5000_PPI_Transfer_Byte:	; 0x282BA5 (130 bytes)
+	; Transfer one byte via PPI to/from IDE bus
+	; Writes to ports B,C; reads from port A with handshake
+	.incbin "includes/code_2803c2_28f542.bin", 10211, 130
+
+HDAE5000_PPI_Read_Register:	; 0x282C27 (71 bytes)
+	; Read an IDE register value via PPI
+	.incbin "includes/code_2803c2_28f542.bin", 10341, 71
+
+HDAE5000_PPI_Write_Sector:	; 0x282C6E (192 bytes)
+	; Write a sector of data to HD via PPI
+	.incbin "includes/code_2803c2_28f542.bin", 10412, 192
+
+HDAE5000_PPI_Read_Sector:	; 0x282D2E (270 bytes)
+	; Read a sector of data from HD via PPI
+	.incbin "includes/code_2803c2_28f542.bin", 10604, 270
+
+HDAE5000_PPI_Transfer_Block:	; 0x282E3C (81 bytes)
+	; Transfer a block of data via PPI
+	.incbin "includes/code_2803c2_28f542.bin", 10874, 81
+
+; --- HD Drive Setup and Configuration ---
+HDAE5000_HD_Setup_Drive:	; 0x282E8D (1126 bytes)
+	; Configure HD drive parameters; accesses HD config at 0x229D99
+	.incbin "includes/code_2803c2_28f542.bin", 10955, 1126
+
+HDAE5000_HD_Read_Identify:	; 0x2832F3 (1051 bytes)
+	; Read HD IDENTIFY data; extracts CHS params from 0x229D99-0x229DAB
+	.incbin "includes/code_2803c2_28f542.bin", 12081, 1051
+
+HDAE5000_HD_Format_Params:	; 0x28370E (702 bytes)
+	; Calculate format parameters for HD
+	.incbin "includes/code_2803c2_28f542.bin", 13132, 702
+
+HDAE5000_HD_Seek:	; 0x2839CC (412 bytes)
+	; Seek to a cylinder/head position on HD
+	.incbin "includes/code_2803c2_28f542.bin", 13834, 412
+
+HDAE5000_HD_Read_Write:	; 0x283B68 (4737 bytes)
+	; Core HD read/write operation; accesses 0x229D9A, 0x229DAC
+	.incbin "includes/code_2803c2_28f542.bin", 14246, 4737
+
+HDAE5000_HD_Error_Check:	; 0x284DE9 (355 bytes)
+	; Check HD operation result and handle errors
+	.incbin "includes/code_2803c2_28f542.bin", 18983, 355
+
+HDAE5000_HD_Wait_Ready:	; 0x284F4C (138 bytes)
+	; Wait for HD to become ready (poll status)
+	.incbin "includes/code_2803c2_28f542.bin", 19338, 138
+
+HDAE5000_HD_Status_Check:	; 0x284FD6 (782 bytes)
+	; Check HD status flags at 0x22B2F4, 0x23A0A0
+	.incbin "includes/code_2803c2_28f542.bin", 19476, 782
+
+HDAE5000_HD_Data_Copy:	; 0x2852E4 (92 bytes)
+	; Copy data between HD buffer and memory
+	.incbin "includes/code_2803c2_28f542.bin", 20258, 92
+
+HDAE5000_HD_Buffer_Init:	; 0x285340 (220 bytes)
+	; Initialize HD data buffer
+	.incbin "includes/code_2803c2_28f542.bin", 20350, 220
+
+; --- HD Configuration Manager and CHS Geometry ---
+HDAE5000_HD_Config_Manager:	; 0x28541C (3728 bytes)
+	; Manage HD configuration; heavy access to 0x229D99-0x229DAE
+	.incbin "includes/code_2803c2_28f542.bin", 20570, 3728
+
+HDAE5000_HD_Partition_Setup:	; 0x2862AC (818 bytes)
+	; Set up HD partition parameters
+	.incbin "includes/code_2803c2_28f542.bin", 24298, 818
+
+HDAE5000_HD_CHS_Calculate:	; 0x2865DE (1098 bytes)
+	; Calculate CHS (Cylinder/Head/Sector) addresses
+	.incbin "includes/code_2803c2_28f542.bin", 25116, 1098
+
+HDAE5000_HD_Sector_Read:	; 0x286A28 (1064 bytes)
+	; Read sectors from HD; accesses 0x229DAC
+	.incbin "includes/code_2803c2_28f542.bin", 26214, 1064
+
+HDAE5000_HD_Sector_Write:	; 0x286E50 (646 bytes)
+	; Write sectors to HD; accesses 0x229DAA, 0x229DAC
+	.incbin "includes/code_2803c2_28f542.bin", 27278, 646
+
+; --- Filesystem Operations ---
+HDAE5000_FS_Init:	; 0x2870D6 (3711 bytes)
+	; Initialize filesystem structures
+	.incbin "includes/code_2803c2_28f542.bin", 27924, 3711
+
+HDAE5000_FS_Read_FSB:	; 0x287F55 (832 bytes)
+	; Read File System Block from HD
+	.incbin "includes/code_2803c2_28f542.bin", 31635, 832
+
+HDAE5000_FS_Write_FSB:	; 0x288295 (5072 bytes)
+	; Write File System Block to HD; accesses 0x229DAC
+	.incbin "includes/code_2803c2_28f542.bin", 32467, 5072
+
+HDAE5000_FS_Buffer_Setup:	; 0x289665 (548 bytes)
+	; Set up filesystem buffers at 0x22AA9C
+	.incbin "includes/code_2803c2_28f542.bin", 37539, 548
+
+HDAE5000_FS_Scan_Directory:	; 0x289889 (2663 bytes)
+	; Scan directory entries on HD
+	.incbin "includes/code_2803c2_28f542.bin", 38087, 2663
+
+HDAE5000_FS_Entry_Lookup:	; 0x28A2F0 (739 bytes)
+	; Look up a file entry in the filesystem
+	.incbin "includes/code_2803c2_28f542.bin", 40750, 739
+
+; --- Display, Menu, and Utility Routines ---
+HDAE5000_Display_Update_Offset:	; 0x28A5D3 (1612 bytes)
+	; Update display offset from 0x23A092/0x23A094
+	.incbin "includes/code_2803c2_28f542.bin", 41489, 1612
+
+HDAE5000_Menu_Register_A:	; 0x28AC1F (73 bytes)
+	; Register menu handler (variant A)
+	.incbin "includes/code_2803c2_28f542.bin", 43101, 73
+
+HDAE5000_Menu_Register_B:	; 0x28AC68 (146 bytes)
+	; Register menu handler (variant B) - called from outside this block
+	.incbin "includes/code_2803c2_28f542.bin", 43174, 146
+
+HDAE5000_HD_Shutdown:	; 0x28ACFA (78 bytes)
+	; Shut down HD - calls workspace handler with 0x01C00016
+	.incbin "includes/code_2803c2_28f542.bin", 43320, 78
+
+HDAE5000_Menu_Handler:	; 0x28AD48 (248 bytes)
+	; Handle menu events and dispatch
+	.incbin "includes/code_2803c2_28f542.bin", 43398, 248
+
+HDAE5000_Menu_Callback:	; 0x28AE40 (248 bytes)
+	; Menu callback processor
+	.incbin "includes/code_2803c2_28f542.bin", 43646, 248
+
+HDAE5000_Display_Manager:	; 0x28AF38 (441 bytes)
+	; Manage display state; accesses 0x229DAB
+	.incbin "includes/code_2803c2_28f542.bin", 43894, 441
+
+HDAE5000_Display_Scroll:	; 0x28B0F1 (271 bytes)
+	; Handle display scrolling
+	.incbin "includes/code_2803c2_28f542.bin", 44335, 271
+
+HDAE5000_Display_Clear:	; 0x28B200 (43 bytes)
+	; Clear display area
+	.incbin "includes/code_2803c2_28f542.bin", 44606, 43
+
+HDAE5000_Wait_Callback_Loop:	; 0x28B22B (45 bytes)
+	; Loop calling workspace callback until HL returns 0
+	.incbin "includes/code_2803c2_28f542.bin", 44649, 45
+
+HDAE5000_Set_Menu_Visibility:	; 0x28B258 (229 bytes)
+	; Set menu item visibility via workspace callbacks
+	.incbin "includes/code_2803c2_28f542.bin", 44694, 229
+
+HDAE5000_Return_Stub:	; 0x28B33D (1 bytes)
+	; Single RET instruction
+	.incbin "includes/code_2803c2_28f542.bin", 44923, 1
+
+HDAE5000_Get_Table_Entry:	; 0x28B33E (61 bytes)
+	; Retrieve entry from data table
+	.incbin "includes/code_2803c2_28f542.bin", 44924, 61
+
+HDAE5000_Validate_String:	; 0x28B37B (56 bytes)
+	; Validate null-terminated string at (XWA)
+	.incbin "includes/code_2803c2_28f542.bin", 44985, 56
+
+HDAE5000_Get_Status_Byte:	; 0x28B3B3 (6 bytes)
+	; Return byte from 0x22AD9A in L - called from outside this block
+	.incbin "includes/code_2803c2_28f542.bin", 45041, 6
+
+HDAE5000_Set_Status_Byte:	; 0x28B3B9 (6 bytes)
+	; Store A to 0x22AD9B - called from outside this block
+	.incbin "includes/code_2803c2_28f542.bin", 45047, 6
+
+HDAE5000_Count_Active_Files:	; 0x28B3BF (43 bytes)
+	; Count active file entries in table at 0x22AA9C
+	.incbin "includes/code_2803c2_28f542.bin", 45053, 43
+
+; --- UI Handler, File Operations, Path/String Utilities ---
+HDAE5000_UI_Main_Handler:	; 0x28B3EA (8731 bytes)
+	; Main UI event handler - largest routine in this section
+	.incbin "includes/code_2803c2_28f542.bin", 45096, 8731
+
+HDAE5000_Display_Error:	; 0x28D605 (204 bytes)
+	; Display error message to user
+	.incbin "includes/code_2803c2_28f542.bin", 53827, 204
+
+HDAE5000_File_Operation:	; 0x28D6D1 (938 bytes)
+	; Execute file operation on HD
+	.incbin "includes/code_2803c2_28f542.bin", 54031, 938
+
+HDAE5000_File_Save:	; 0x28DA7B (381 bytes)
+	; Save file to HD; accesses 0x229DAD, 0x229DAE
+	.incbin "includes/code_2803c2_28f542.bin", 54969, 381
+
+HDAE5000_File_Load:	; 0x28DBF8 (564 bytes)
+	; Load file from HD
+	.incbin "includes/code_2803c2_28f542.bin", 55350, 564
+
+HDAE5000_File_Delete:	; 0x28DE2C (579 bytes)
+	; Delete file from HD
+	.incbin "includes/code_2803c2_28f542.bin", 55914, 579
+
+HDAE5000_File_Rename:	; 0x28E06F (280 bytes)
+	; Rename file on HD
+	.incbin "includes/code_2803c2_28f542.bin", 56493, 280
+
+HDAE5000_File_Format:	; 0x28E187 (772 bytes)
+	; Format HD or partition
+	.incbin "includes/code_2803c2_28f542.bin", 56773, 772
+
+HDAE5000_Calc_Disk_Space:	; 0x28E48B (178 bytes)
+	; Calculate available disk space
+	.incbin "includes/code_2803c2_28f542.bin", 57545, 178
+
+HDAE5000_Display_Notify:	; 0x28E53D (113 bytes)
+	; Display notification message
+	.incbin "includes/code_2803c2_28f542.bin", 57723, 113
+
+HDAE5000_Display_Progress:	; 0x28E5AE (59 bytes)
+	; Display progress indicator
+	.incbin "includes/code_2803c2_28f542.bin", 57836, 59
+
+HDAE5000_String_To_Upper:	; 0x28E5E9 (37 bytes)
+	; Convert string to uppercase
+	.incbin "includes/code_2803c2_28f542.bin", 57895, 37
+
+HDAE5000_String_Compare:	; 0x28E60E (2397 bytes)
+	; String comparison and manipulation utilities
+	.incbin "includes/code_2803c2_28f542.bin", 57932, 2397
+
+HDAE5000_Path_Builder:	; 0x28EF6B (556 bytes)
+	; Build file path strings
+	.incbin "includes/code_2803c2_28f542.bin", 60329, 556
+
+HDAE5000_Directory_Handler:	; 0x28F197 (614 bytes)
+	; Handle directory listing and navigation
+	.incbin "includes/code_2803c2_28f542.bin", 60885, 614
+
+HDAE5000_Filename_Validate:	; 0x28F3FD (59 bytes)
+	; Validate filename characters
+	.incbin "includes/code_2803c2_28f542.bin", 61499, 59
+
+HDAE5000_Extension_Check:	; 0x28F438 (153 bytes)
+	; Check and process file extensions
+	.incbin "includes/code_2803c2_28f542.bin", 61558, 153
+
+HDAE5000_Config_Init:	; 0x28F4D1 (114 bytes)
+	; Initialize configuration data
+	.incbin "includes/code_2803c2_28f542.bin", 61711, 114
 
 HDAE5000_Alloc_Memory:	; 28F543h
 	; Memory/display parameter lookup routine
