@@ -628,8 +628,10 @@ HDAE5000_Event_Handler:	; 0x2827F4 (932 bytes)
 
 ; --- PPI/IDE Low-Level I/O ---
 HDAE5000_PPI_Init:	; 0x282B98 (13 bytes)
-	; Initialize 8255 PPI: control=0x90, port A=0xFF
-	.incbin "includes/code_2803c2_28f542.bin", 10198, 13
+	; Initialize 8255 PPI: control=0x90 (mode set), port A=0xFF (all bits high)
+	stdi8_24 1441798, 144	; ld (0x160006), 0x90 - PPI control: mode 0, all output
+	stdi8_24 1441792, 255	; ld (0x160000), 0xFF - Port A: set all bits
+	ret
 
 HDAE5000_PPI_Transfer_Byte:	; 0x282BA5 (130 bytes)
 	; Transfer one byte via PPI to/from IDE bus
@@ -773,40 +775,125 @@ HDAE5000_Display_Scroll:	; 0x28B0F1 (271 bytes)
 	.incbin "includes/code_2803c2_28f542.bin", 44335, 271
 
 HDAE5000_Display_Clear:	; 0x28B200 (43 bytes)
-	; Clear display area
-	.incbin "includes/code_2803c2_28f542.bin", 44606, 43
+	; Clear display area: copy 7 bytes from ROM table, then call buffer validate
+	; Input: XWA = pointer to display buffer
+	lds ix, 0			; IX = loop counter = 0
+	cps ix, 7
+	jr nc, HDAE5000_Display_Clear__push
+HDAE5000_Display_Clear__loop:
+	st_dpib c, 0xE0		; lda XHL, (XWA+) - get next dest addr, post-inc XWA
+	ld bc, ix			; BC = current index
+	extz xbc			; zero-extend to 32 bits
+	ld xde, 0x002E1C82		; ROM source table
+	add xde, xbc			; XDE = &table[index]
+	ld c, (xde)			; C = table byte
+	ld (xhl), c			; store to display buffer
+	inc 1, ix			; index++
+	cps ix, 7
+	jr c, HDAE5000_Display_Clear__loop
+HDAE5000_Display_Clear__push:
+	pushw 0x002E			; push 0x2E (size param)
+	pushw 0x1C82			; push 0x1C82 (offset param)
+	call HDAE5000_Display_Buffer_Validate
+	inc 4, xsp			; deallocate 4 bytes from stack
+	ret
 
 HDAE5000_Wait_Callback_Loop:	; 0x28B22B (45 bytes)
-	; Loop calling workspace callback until HL returns 0
-	.incbin "includes/code_2803c2_28f542.bin", 44649, 45
+	; Poll workspace callback until HL returns 0
+	; Uses workspace ptr at (0x23A1A2) → callback table at +0x0E88
+	; Calls callback at +0x00B8 (type 3), then polls at +0x00D0 (type 1)
+	jr t, .LWait_Callback__poll
+.LWait_Callback__invoke:
+	ldda32_24 xwa, 2335138		; ld XWA, (0x23A1A2) — workspace ptr
+	ld_sril3 xwa, 0xE1, 0x88, 0x0E	; ld XWA, (XWA + 0x0E88) — callback table
+	ld_sril3 xhl, 0xE1, 0xB8, 0x00	; ld XHL, (XWA + 0x00B8) — callback fn
+	lds wa, 3			; callback type = 3
+	call (xhl)			; invoke callback
+.LWait_Callback__poll:
+	ldda32_24 xwa, 2335138		; ld XWA, (0x23A1A2) — workspace ptr
+	ld_sril3 xwa, 0xE1, 0x88, 0x0E	; ld XWA, (XWA + 0x0E88) — callback table
+	ld_sril3 xix, 0xE1, 0xD0, 0x00	; ld XIX, (XWA + 0x00D0) — poll fn
+	lds wa, 1			; poll type = 1
+	call (xix)			; invoke poll
+	cps hl, 0			; result == 0?
+	jr nz, .LWait_Callback__invoke	; keep polling if non-zero
+	ret
 
 HDAE5000_Set_Menu_Visibility:	; 0x28B258 (229 bytes)
 	; Set menu item visibility via workspace callbacks
 	.incbin "includes/code_2803c2_28f542.bin", 44694, 229
 
 HDAE5000_Return_Stub:	; 0x28B33D (1 bytes)
-	; Single RET instruction
-	.incbin "includes/code_2803c2_28f542.bin", 44923, 1
+	ret
 
 HDAE5000_Get_Table_Entry:	; 0x28B33E (61 bytes)
 	; Retrieve entry from data table
 	.incbin "includes/code_2803c2_28f542.bin", 44924, 61
 
 HDAE5000_Validate_String:	; 0x28B37B (56 bytes)
-	; Validate null-terminated string at (XWA)
-	.incbin "includes/code_2803c2_28f542.bin", 44985, 56
+	; Validate/navigate null-terminated record at (XWA)
+	; Record format: [count][index][data...]
+	; Returns XHL = pointer to data section, or 0 if record is empty
+	cpmi8 (xwa), 0x00		; check if record is empty
+	jr z, .LValidate_String__empty
+	ld c, (xwa + 1)			; get current index
+	extz bc				; zero-extend to 16-bit
+	muls bc, 0x001B			; index * 27 (record stride)
+	inc 4, bc			; skip 4-byte header
+	st_dri3b c, 0x07, 0xE0, 0xE4	; lda XHL, (XWA + BC) — pointer to data
+	cpmi8 (xwa + 1), 0x00		; check if index is non-zero
+	jr nz, .LValidate_String__dec
+	ld c, (xwa)			; get count
+	cps c, 5			; count == 5?
+	jr nz, .LValidate_String__dec_count
+	ldmi8 (xwa + 1), 0x04		; wrap: index = 4 (max-1)
+	jr t, .LValidate_String__ret
+.LValidate_String__dec_count:
+	ld c, (xwa)			; get count
+	dec 1, c			; count - 1
+	ld (xwa + 1), c			; index = count - 1
+	jr t, .LValidate_String__ret
+.LValidate_String__dec:
+	decm8 1, (xwa + 1)		; index--
+	jr t, .LValidate_String__ret
+.LValidate_String__empty:
+	lds32 xhl, 0			; return NULL
+.LValidate_String__ret:
+	ret
 
 HDAE5000_Get_Status_Byte:	; 0x28B3B3 (6 bytes)
-	; Return byte from 0x22AD9A in L - called from outside this block
-	.incbin "includes/code_2803c2_28f542.bin", 45041, 6
+	; Return byte from 0x22AD9A in L
+	ldda8_24 l, 2272666	; ld L, (0x22AD9A)
+	ret
 
 HDAE5000_Set_Status_Byte:	; 0x28B3B9 (6 bytes)
-	; Store A to 0x22AD9B - called from outside this block
-	.incbin "includes/code_2803c2_28f542.bin", 45047, 6
+	; Store A to 0x22AD9B
+	stda8_24 2272667, a	; ld (0x22AD9B), A
+	ret
 
 HDAE5000_Count_Active_Files:	; 0x28B3BF (43 bytes)
 	; Count active file entries in table at 0x22AA9C
-	.incbin "includes/code_2803c2_28f542.bin", 45053, 43
+	; Input: none
+	; Output: HL = count of entries with status byte == 1
+	; Scans 20 entries (0x0014), each 0x0114 bytes apart
+	lds hl, 0		; HL = count = 0
+	lds de, 0		; DE = index = 0
+	cp de, 0x0014		; check if index >= 20
+	ret nc			; return if index >= 20 (unsigned)
+HDAE5000_Count_Active_Files__loop:
+	ld wa, de		; WA = current index
+	extz xwa		; zero-extend to 32 bits
+	add xwa, 0x00000114	; add entry size offset
+	ld xbc, 0x0022AA9C	; table base address
+	add xbc, xwa		; XBC = &table[index]
+	cpmi8 (xbc), 0x01	; compare status byte with 1
+	jr nz, HDAE5000_Count_Active_Files__skip
+	inc 1, hl		; count++
+HDAE5000_Count_Active_Files__skip:
+	inc 1, de		; index++
+	cp de, 0x0014		; check if index < 20
+	jr c, HDAE5000_Count_Active_Files__loop
+	ret
 
 ; --- UI Handler, File Operations, Path/String Utilities ---
 HDAE5000_UI_Main_Handler:	; 0x28B3EA (8731 bytes)
@@ -850,12 +937,47 @@ HDAE5000_Display_Notify:	; 0x28E53D (113 bytes)
 	.incbin "includes/code_2803c2_28f542.bin", 57723, 113
 
 HDAE5000_Display_Progress:	; 0x28E5AE (59 bytes)
-	; Display progress indicator
-	.incbin "includes/code_2803c2_28f542.bin", 57836, 59
+	; Read file and process display progress string
+	; Returns XHL = 0 on success, -10 on error
+	pushw 0x0004			; push mode = 4
+	ldada_24 xwa, 3038376		; lda XWA, 0x2E5CA8 (source data ptr)
+	push xwa
+	ldada_24 xwa, 2274366		; lda XWA, 0x22B43E (dest buffer)
+	push xwa
+	call HDAE5000_File_Read		; read file data
+	add xsp, 0x0000000A		; deallocate 10 bytes (3 pushed args)
+	cps hl, 0			; check result
+	jr z, .LDisplay_Progress__ok
+	ld xhl, 0xFFFFFFF6		; return -10 (error)
+	ret
+.LDisplay_Progress__ok:
+	ldda32_24 xwa, 2274370		; ld XWA, (0x22B442) — get result data
+	calr HDAE5000_String_To_Upper	; unpack string bytes
+	ld xwa, xhl
+	add xwa, 0x00000016		; add offset 22
+	stda32_24 2295026, xwa		; ld (0x2304F2), XWA — store processed ptr
+	lds32 xhl, 0			; return 0 (success)
+	ret
 
 HDAE5000_String_To_Upper:	; 0x28E5E9 (37 bytes)
-	; Convert string to uppercase
-	.incbin "includes/code_2803c2_28f542.bin", 57895, 37
+	; Unpack 32-bit value into sum of byte-shifted components
+	; Input: XWA = packed 32-bit value
+	; Output: XHL = result (each byte shifted left 8 and added)
+	ld xhl, xwa			; copy input
+	and xhl, 0x000000FF		; mask lowest byte
+	lds de, 0			; loop counter = 0
+	cps de, 3			; compare with 3
+	ret ge				; return if already done
+.LString_To_Upper__loop:
+	srl xwa, 8			; next byte
+	sll xhl, 8			; shift result left
+	ld xbc, xwa
+	and xbc, 0x000000FF		; mask byte
+	add xhl, xbc			; accumulate
+	inc 1, de			; counter++
+	cps de, 3
+	jr lt, .LString_To_Upper__loop
+	ret
 
 HDAE5000_String_Compare:	; 0x28E60E (2397 bytes)
 	; String comparison and manipulation utilities
@@ -870,8 +992,29 @@ HDAE5000_Directory_Handler:	; 0x28F197 (614 bytes)
 	.incbin "includes/code_2803c2_28f542.bin", 60885, 614
 
 HDAE5000_Filename_Validate:	; 0x28F3FD (59 bytes)
-	; Validate filename characters
-	.incbin "includes/code_2803c2_28f542.bin", 61499, 59
+	; Unpack 32-bit value by extracting each byte, shifting and combining
+	; Like String_To_Upper but processes all 4 bytes unconditionally
+	; Input: XWA = packed 32-bit value
+	; Output: XHL = combined result
+	ld xbc, xwa
+	ld xhl, xbc
+	and xhl, 0x000000FF
+	srl xbc, 8
+	sll xhl, 8
+	ld xwa, xbc
+	and xwa, 0x000000FF
+	add xhl, xwa
+	srl xbc, 8
+	sll xhl, 8
+	ld xwa, xbc
+	and xwa, 0x000000FF
+	add xhl, xwa
+	srl xbc, 8
+	sll xhl, 8
+	ld xwa, xbc
+	and xwa, 0x000000FF
+	add xhl, xwa
+	ret
 
 HDAE5000_Extension_Check:	; 0x28F438 (153 bytes)
 	; Check and process file extensions
@@ -1472,13 +1615,34 @@ HDAE5000_Display_Init:	; 28F90Ch
 	; Calls Display_String routine at 0x298622
 	.incbin "includes/code_28f90c_2953e1.bin", 0, 114
 
-HDAE5000_Calc_Offset_16:	; 0x28F97E
-	; Calculate 16-byte offset in table
-	.incbin "includes/code_28f90c_2953e1.bin", 114, 13
+HDAE5000_Calc_Offset_16:	; 0x28F97E (13 bytes)
+	; Calculate 16-byte offset in table at 0x201632
+	; Input: WA = table index
+	; Output: XHL = pointer to 16-byte entry
+	extz xwa		; zero-extend index to 32 bits
+	sll xwa, 4		; multiply by 16
+	ld xhl, 0x201632	; table base address
+	add xhl, xwa		; XHL = base + index*16
+	ret
 
-HDAE5000_Copy_To_Table:	; 0x28F98B
-	; Copy data to table at 0x201632
-	.incbin "includes/code_28f90c_2953e1.bin", 127, 34
+HDAE5000_Copy_To_Table:	; 0x28F98B (34 bytes)
+	; Copy 16 bytes to table entry, then call Display_Callback
+	; Input: WA = table index, XBC = source pointer, DE = param
+	pushw iz
+	ld iz, de			; save DE param
+	pushw 0x0010			; push 16 (byte count)
+	push xbc			; push source pointer
+	extz xwa			; zero-extend index
+	sll xwa, 4			; index * 16
+	ld xbc, 0x00201632		; table base
+	add xbc, xwa			; XBC = dest ptr
+	push xbc			; push dest pointer
+	call HDAE5000_MemCopy_Reverse	; memcpy(dest, src, 16)
+	lda xsp, (xsp + 0x0A)		; deallocate 10 bytes
+	ld wa, iz			; restore param
+	calr HDAE5000_Display_Callback
+	popw iz
+	ret
 
 HDAE5000_Get_Display_Dimensions_A1_2F:	; 0x28F9AD
 	; Memory check routine
@@ -1496,9 +1660,20 @@ HDAE5000_Copy_Display_Cell:	; 0x28FA56
 	; Copy table entry
 	.incbin "includes/code_28f90c_2953e1.bin", 330, 74
 
-HDAE5000_Calculate_Tile_Address:	; 0x28FAA0
-	; Calculate address with 0x90 multiplier
-	.incbin "includes/code_28f90c_2953e1.bin", 404, 26
+HDAE5000_Calculate_Tile_Address:	; 0x28FAA0 (26 bytes)
+	; Calculate tile address: base + index * 0x90 (144)
+	; Input: WA = tile index
+	; Output: XHL = pointer to tile entry
+	; Algorithm: index*144 = index*(128+16) = (index<<3 + index)<<4
+	extz xwa		; zero-extend index to 32 bits
+	ld xbc, xwa		; XBC = index
+	sll xbc, 3		; XBC = index * 8
+	add xbc, xwa		; XBC = index * 9
+	sll xbc, 4		; XBC = index * 144
+	add xbc, 0x00024180	; add tile table offset
+	ld xhl, 0x201632	; table base address
+	add xhl, xbc		; XHL = base + offset
+	ret
 
 HDAE5000_Copy_Display_Cell_90:	; 0x28FABA
 	; Copy 0x90-stride entry
@@ -1960,8 +2135,29 @@ HDAE5000_RAM_Test:	; 0x2971B7 (1902 bytes)
 	.incbin "includes/code_2971b7_29ae9e.bin", 0, 1902
 
 HDAE5000_HD_Init_Variables:	; 0x297925 (37 bytes)
-	; Initialize HD-related variables
-	.incbin "includes/code_2971b7_29ae9e.bin", 1902, 37
+	; 32x32 → 64-bit multiply using partial products
+	; Computes XWA = BC * WA (full 32-bit result via 3 partial 16×16 multiplies)
+	; Input: WA = multiplicand, BC = multiplier (16-bit halves)
+	; Output: XWA = 32-bit product
+	push xhl
+	push xix
+	ld hl, bc			; HL = low(BC)
+	mul xhl, xwa			; XHL = low(BC) * WA
+	ld xix, xhl			; accumulate in XIX
+	ld hl, bc			; HL = low(BC) again
+	.byte 0xd7, 0xe2, 0x43		; mul XHL, QWA — HL * high(WA)
+	.byte 0xd7, 0xee, 0x9b		; ld QHL, HL — save partial to prev bank
+	lds hl, 0			; clear low HL
+	add xix, xhl			; add shifted partial product
+	.byte 0xd7, 0xe6, 0x8b		; ld HL, QBC — high(BC)
+	mul xhl, xwa			; XHL = high(BC) * WA
+	.byte 0xd7, 0xee, 0x9b		; ld QHL, HL — save partial
+	lds hl, 0			; clear low HL
+	add xix, xhl			; add shifted partial product
+	ld xwa, xix			; result in XWA
+	pop xix
+	pop xhl
+	ret
 
 HDAE5000_HD_Config_Init_Values:	; 0x29794A (389 bytes)
 	; Set initial HD config values at 0x229Dxx
@@ -1976,20 +2172,110 @@ HDAE5000_HD_Detect_Drive:	; 0x297ACF (10499 bytes)
 
 ; --- String Formatting Library (sprintf-like) ---
 HDAE5000_Int_To_Decimal_String:	; 0x29A3D2 (80 bytes)
-	; Convert signed integer to decimal string (divides by 10, adds '0')
-	.incbin "includes/code_2971b7_29ae9e.bin", 12827, 80
+	; Convert signed 32-bit integer to decimal string
+	; Stack: [+0x0C] = output buffer ptr (with write-ahead), [+0x10] = signed value
+	; Negates if negative, then extracts digits via repeated /10
+	dec 4, xsp			; allocate local scratch space
+	push xiz
+	ld xwa, (xsp + 16)		; load signed value
+	cp xwa, 0x00000000		; check sign
+	jr ge, .LInt_To_Dec__positive
+	cpl wa				; negate low word
+	.byte 0xd7, 0xe2, 0x06		; cpl QWA — negate high word
+	inc 1, xwa			; two's complement
+.LInt_To_Dec__positive:
+	ld xiz, xwa			; XIZ = |value|
+.LInt_To_Dec__loop:
+	ld xwa, (xsp + 12)		; get buffer state
+	st_dpib a, 0xE0			; lda XBC, (XWA+) — advance write ptr
+	ld (xsp + 4), xbc		; save digit write position
+	ld (xsp + 12), xwa		; save advanced buffer ptr
+	ld xwa, xiz			; value to divide
+	lda_dd8l xbc, 0x0A		; divisor = 10
+	call HDAE5000_Divide_Unsigned	; XHL = remainder
+	add xhl, 0x00000030		; remainder + '0' → ASCII digit
+	ld xwa, (xsp + 4)		; get digit write position
+	ld (xwa), l			; store digit character
+	ld xwa, xiz			; reload value
+	lda_dd8l xbc, 0x0A		; divisor = 10
+	call HDAE5000_Divide_Signed	; XHL = quotient
+	ld xiz, xhl			; update remaining value
+	or xiz, xiz			; check if zero
+	jr nz, .LInt_To_Dec__loop	; continue if non-zero
+	ld xwa, (xsp + 12)		; get end-of-string position
+	ldmi8 (xwa), 0x00		; null-terminate
+	pop xiz
+	inc 4, xsp			; deallocate scratch space
+	ret
 
 HDAE5000_UInt_To_Decimal_String:	; 0x29A422 (63 bytes)
-	; Convert unsigned integer to decimal string
-	.incbin "includes/code_2971b7_29ae9e.bin", 12907, 63
+	; Convert unsigned 32-bit integer to decimal string
+	; Stack: [+0x0C] = output buffer ptr (with write-ahead), [+0x10] = unsigned value
+	dec 4, xsp			; allocate local scratch space
+	push xiz
+	ld xiz, (xsp + 16)		; load unsigned value
+.LUInt_To_Dec__loop:
+	ld xwa, (xsp + 12)		; get buffer state
+	st_dpib a, 0xE0			; lda XBC, (XWA+) — advance write ptr
+	ld (xsp + 4), xbc		; save digit write position
+	ld (xsp + 12), xwa		; save advanced buffer ptr
+	ld xwa, xiz			; value to divide
+	lda_dd8l xbc, 0x0A		; divisor = 10
+	call HDAE5000_Divide_Unsigned	; XHL = remainder
+	add xhl, 0x00000030		; remainder + '0' → ASCII digit
+	ld xwa, (xsp + 4)		; get digit write position
+	ld (xwa), l			; store digit character
+	ld xwa, xiz			; reload value
+	lda_dd8l xbc, 0x0A		; divisor = 10
+	call HDAE5000_Divide_Signed	; XHL = quotient
+	ld xiz, xhl			; update remaining value
+	or xiz, xiz			; check if zero
+	jr nz, .LUInt_To_Dec__loop	; continue if non-zero
+	ld xwa, (xsp + 12)		; get end-of-string position
+	ldmi8 (xwa), 0x00		; null-terminate
+	pop xiz
+	inc 4, xsp			; deallocate scratch space
+	ret
 
 HDAE5000_Int_To_Hex_String:	; 0x29A461 (51 bytes)
-	; Convert integer to hex string (nibble extraction)
-	.incbin "includes/code_2971b7_29ae9e.bin", 12970, 51
+	; Convert integer to hex string using nibble extraction
+	; Stack: [+0x04] = output buffer ptr, [+0x08] = value, [+0x0C] = format char
+	; If format char == 'x' (0x78), use lowercase hex digits; else uppercase
+	ld xwa, 0x002F94A0		; lowercase hex digit table
+	cpmi16 (xsp + 12), 0x0078	; format == 'x'?
+	jr nz, .LInt_To_Hex__start
+	ld xwa, 0x002F948E		; uppercase hex digit table
+.LInt_To_Hex__start:
+	ld xix, xwa			; XIX = digit table pointer
+	ld xhl, (xsp + 4)		; buffer pointer
+	ld xde, (xsp + 8)		; value to convert
+.LInt_To_Hex__loop:
+	st_dpib a, 0xEC			; lda XBC, (XHL+) — post-increment buffer ptr
+	ld xwa, xde
+	and xwa, 0x0000000F		; mask low nibble
+	add xwa, xix			; index into digit table
+	ld a, (xwa)			; get hex digit char
+	ld (xbc), a			; store to buffer
+	srl xde, 4			; shift to next nibble
+	jr nz, .LInt_To_Hex__loop
+	ldmi8 (xhl), 0x00		; null-terminate
+	ret
 
 HDAE5000_Int_To_Octal_String:	; 0x29A494 (34 bytes)
-	; Convert integer to octal string (3-bit extraction)
-	.incbin "includes/code_2971b7_29ae9e.bin", 13021, 34
+	; Convert integer to octal string using 3-bit extraction
+	; Stack: [+0x04] = output buffer ptr, [+0x08] = value
+	ld xde, (xsp + 8)		; value to convert
+	ld xhl, (xsp + 4)		; buffer pointer
+.LInt_To_Octal__loop:
+	st_dpib a, 0xEC			; lda XBC, (XHL+) — post-increment buffer ptr
+	ld xwa, xde
+	and xwa, 0x00000007		; mask low 3 bits
+	add xwa, 0x00000030		; convert to ASCII '0'-'7'
+	ld (xbc), a			; store digit
+	srl xde, 3			; shift to next octal digit
+	jr nz, .LInt_To_Octal__loop
+	ldmi8 (xhl), 0x00		; null-terminate
+	ret
 
 HDAE5000_String_Format:	; 0x29A4B6 (173 bytes)
 	; sprintf-like formatter entry point (handles %e, %E, %f, %g, %d, %u, %x, %o, %s, %c)
@@ -1999,9 +2285,13 @@ HDAE5000_String_Format_Core:	; 0x29A563 (805 bytes)
 	; Core string format engine - processes format specifiers
 	.incbin "includes/code_2971b7_29ae9e.bin", 13228, 805
 
-HDAE5000_String_Format_Output:	; 0x29A888 (1559 bytes)
+HDAE5000_String_Format_Output:	; 0x29A888 (1436 bytes)
 	; Output handler for string formatter
-	.incbin "includes/code_2971b7_29ae9e.bin", 14033, 1559
+	.incbin "includes/code_2971b7_29ae9e.bin", 14033, 1436
+
+HDAE5000_File_Read:	; 0x29AE24 (123 bytes)
+	; File read operation (called by Display_Progress)
+	.incbin "includes/code_2971b7_29ae9e.bin", 15469, 123
 
 ; ----------------------------------------------------------------------------
 ; Memory Utility Routines (0x29AE9F - 0x29AF2C)
@@ -2124,7 +2414,15 @@ HDAE5000_MemCopy_Reverse:	; 0x29AFF0
 
 HDAE5000_Multiply:	; 0x29B72D
 	; 32-bit multiply routine
-	.incbin "includes/code_29af2d_2fffff.bin", 2048, 2227
+	.incbin "includes/code_29af2d_2fffff.bin", 2048, 402
+
+HDAE5000_Divide_Unsigned:	; 0x29B8BF
+	; Unsigned 32÷32 divide (used by decimal string conversion)
+	.incbin "includes/code_29af2d_2fffff.bin", 2450, 6
+
+HDAE5000_Divide_Signed:	; 0x29B8C5
+	; Signed 32÷32 divide (used by decimal string conversion)
+	.incbin "includes/code_29af2d_2fffff.bin", 2456, 1819
 
 HDAE5000_UI_Config:	; 0x29BFE0
 	; UI configuration strings
