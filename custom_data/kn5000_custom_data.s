@@ -1,7 +1,3 @@
-; Converted from archive/asl/custom_data/kn5000_custom_data.asm by asl_to_llvm.py
-; Modular includes preserved, segments globally sorted by ORG address.
-; Per-instruction .byte fallback with progressive native replacement.
-; This file is auto-generated. Edit the converter, not this file.
 
 	.text
 
@@ -19,10 +15,6 @@
 ;   Section 2: 0x330000   Section 6: 0x390000
 ;   Section 3: 0x349800   Section 7: 0x3B0000
 
-	; (ASL directive) cpu	96c141	; Actual CPU is TMP94C241F (ASL only supports TMP96C141)
-	; (ASL directive) page	0
-	; (ASL directive) maxmode	on
-	; (include inlined) ../tmp94c241.inc
 	.org 0x300000 - 0x300000, 0xFF
 
 ; ============================================================

@@ -1,7 +1,3 @@
-; Converted from archive/asl/table_data/kn5000_table_data.asm by asl_to_llvm.py
-; Modular includes preserved, segments globally sorted by ORG address.
-; Per-instruction .byte fallback with progressive native replacement.
-; This file is auto-generated. Edit the converter, not this file.
 
 	.text
 
@@ -10,10 +6,6 @@
 	.p2align 1, 0xff
 .endm
 
-	; (ASL directive) cpu	96c141	; Actual CPU is 94c241f
-	; (ASL directive) page	0
-	; (ASL directive) maxmode	on
-	; (include inlined) ../tmp94c241.inc
 	.include "shared/sfr_tmp94c241.s"
 
 ; =============================================================================

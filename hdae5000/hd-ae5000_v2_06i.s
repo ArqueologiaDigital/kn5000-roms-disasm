@@ -1,7 +1,3 @@
-; Converted from archive/asl/hdae5000/hd-ae5000_v2_06i.asm by asl_to_llvm.py
-; Modular includes preserved, segments globally sorted by ORG address.
-; Per-instruction .byte fallback with progressive native replacement.
-; This file is auto-generated. Edit the converter, not this file.
 
 	.text
 
@@ -175,10 +171,6 @@
 ; PPORT Command Handler Jump Table at 0x2953E2:
 ;   Contains 17 handler addresses for commands 01-17+
 
-	; (ASL directive) cpu	96c141	; Actual CPU is TMP94C241F (ASL only supports TMP96C141)
-	; (ASL directive) page	0
-	; (ASL directive) maxmode	on
-	; (include inlined) ../tmp94c241.inc
 
 	.org 0x280000 - 0x280000, 0xFF
 

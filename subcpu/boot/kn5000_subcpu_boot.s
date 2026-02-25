@@ -1,7 +1,3 @@
-; Converted from archive/asl/subcpu/boot/kn5000_subcpu_boot.asm by asl_to_llvm.py
-; Modular includes preserved, segments globally sorted by ORG address.
-; Per-instruction .byte fallback with progressive native replacement.
-; This file is auto-generated. Edit the converter, not this file.
 
 	.text
 
@@ -33,10 +29,6 @@
 ;
 ; Actual code starts at 0xFF8000 (file offset 0x18000)
 
-	; (ASL directive) cpu	96c141	; Actual CPU is TMP94C241F
-	; (ASL directive) page	0
-	; (ASL directive) maxmode	on
-	; (include inlined) ../../tmp94c241.inc
 
 ; ==============================================================================
 ; Constants
