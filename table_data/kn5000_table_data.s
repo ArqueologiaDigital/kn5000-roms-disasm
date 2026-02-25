@@ -317,11 +317,11 @@ Boot_BitMaskTable:	; Copied to RAM 0x1044 by Boot_ClearRAM (10 bytes)
 Boot_InitParams:	; Copied to RAM 0x9998 by Boot_ClearRAM (12 bytes)
 	; Stack/display initialization parameters
 	.byte 0x7e, 0x10	; Values at 0x9998-9999
-	.zero 2	; Values at 0x999A-999B
+	.byte 0x00, 0x00	; Values at 0x999A-999B
 	.byte 0x00, 0x80	; Values at 0x999C-999D
-	.zero 2	; Values at 0x999E-999F
-	.zero 2	; Values at 0x99A0-99A1
-	.zero 2	; Values at 0x99A2-99A3
+	.byte 0x00, 0x00	; Values at 0x999E-999F
+	.byte 0x00, 0x00	; Values at 0x99A0-99A1
+	.byte 0x00, 0x00	; Values at 0x99A2-99A3
 
 
 	.org 0x9FB4E8 - 0x800000, 0xFF
