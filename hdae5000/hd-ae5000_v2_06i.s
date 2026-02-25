@@ -1886,23 +1886,15 @@ HDAE5000_Display_Init:	; 28F90Ch (114 bytes)
 	pushw iz			; save IZ
 	ld iz, wa			; IZ = mode parameter
 	ldda32_24 xwa, 2335138		; ld XWA, (0x23A1A2) — workspace pointer
-	.byte 0xe3, 0xe1		; ld XWA, (XWA+0x0E88) — display handler table
-	.short 0x0E88
-	.byte 0x20
-	.byte 0xe3, 0xe1		; ld XHL, (XWA+0x00E8) — init callback
-	.short 0x00E8
-	.byte 0x23
+	ld_sril3 xwa, 0xE1, 0x88, 0x0E	; ld XWA, (XWA+0x0E88) — display handler table
+	ld_sril3 xhl, 0xE1, 0xE8, 0x00	; ld XHL, (XWA+0x00E8) — init callback
 	lds wa, 1			; WA = 1
 	call (xhl)			; call init callback
 	cps iz, 1			; mode == 1?
 	jr nz, .Ldi_skip1		; skip sub-handler if not
 	ldda32_24 xwa, 2335138		; ld XWA, (0x23A1A2)
-	.byte 0xe3, 0xe1		; ld XWA, (XWA+0x0E0A) — sub-handler table
-	.short 0x0E0A
-	.byte 0x20
-	.byte 0xe3, 0xe1		; ld XHL, (XWA+0x0538) — sub-handler callback
-	.short 0x0538
-	.byte 0x23
+	ld_sril3 xwa, 0xE1, 0x0A, 0x0E	; ld XWA, (XWA+0x0E0A) — sub-handler table
+	ld_sril3 xhl, 0xE1, 0x38, 0x05	; ld XHL, (XWA+0x0538) — sub-handler callback
 	call (xhl)			; call sub-handler
 .Ldi_skip1:
 	call HDAE5000_Display_String_Render
@@ -1910,29 +1902,17 @@ HDAE5000_Display_Init:	; 28F90Ch (114 bytes)
 	cps iz, 1			; mode == 1?
 	jr nz, .Ldi_skip2		; skip sub-handler if not
 	ldda32_24 xwa, 2335138		; ld XWA, (0x23A1A2)
-	.byte 0xe3, 0xe1		; ld XWA, (XWA+0x0E0A)
-	.short 0x0E0A
-	.byte 0x20
-	.byte 0xe3, 0xe1		; ld XHL, (XWA+0x053C) — post-render callback
-	.short 0x053C
-	.byte 0x23
+	ld_sril3 xwa, 0xE1, 0x0A, 0x0E	; ld XWA, (XWA+0x0E0A)
+	ld_sril3 xhl, 0xE1, 0x3C, 0x05	; ld XHL, (XWA+0x053C) — post-render callback
 	call (xhl)			; call post-render sub-handler
 .Ldi_skip2:
 	ldda32_24 xwa, 2335138		; ld XWA, (0x23A1A2)
-	.byte 0xe3, 0xe1		; ld XWA, (XWA+0x0E88)
-	.short 0x0E88
-	.byte 0x20
-	.byte 0xe3, 0xe1		; ld XHL, (XWA+0x00EC) — cleanup callback
-	.short 0x00EC
-	.byte 0x23
+	ld_sril3 xwa, 0xE1, 0x88, 0x0E	; ld XWA, (XWA+0x0E88)
+	ld_sril3 xhl, 0xE1, 0xEC, 0x00	; ld XHL, (XWA+0x00EC) — cleanup callback
 	call (xhl)			; call cleanup
 	ldda32_24 xwa, 2335138		; ld XWA, (0x23A1A2)
-	.byte 0xe3, 0xe1		; ld XWA, (XWA+0x0E88)
-	.short 0x0E88
-	.byte 0x20
-	.byte 0xe3, 0xe1		; ld XHL, (XWA+0x00F0) — final callback
-	.short 0x00F0
-	.byte 0x23
+	ld_sril3 xwa, 0xE1, 0x88, 0x0E	; ld XWA, (XWA+0x0E88)
+	ld_sril3 xhl, 0xE1, 0xF0, 0x00	; ld XHL, (XWA+0x00F0) — final callback
 	call (xhl)			; call final callback
 	ld hl, (xsp + 2)		; restore result from stack
 	popw iz				; restore IZ
