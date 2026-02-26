@@ -10435,9 +10435,717 @@ HDAE5000_PPORT_Ready_Check:	; 0x296A9C (26 bytes)
 	ret
 	nop
 
-HDAE5000_PPORT_Cleanup:	; 0x296AB6
-	; PPORT cleanup routine
-	.incbin "includes/code_295642_2971a2.bin", 5236, 1773
+HDAE5000_PPORT_Cleanup:	; 0x296AB6 (1773 bytes — 10 sub-routines)
+	; PPORT cleanup — mark end of buffer with 0xFF sentinel
+	ldada_24 xix, 2330984			; lda XIX, 0x239168
+	nop
+	.byte 0xF3, 0xF1, 0xFF, 0x00, 0x00, 0xFF ; ld (XIX+0x00FF), 0xFF
+	ret
+	nop
+
+.Lppc_utility:				; 0x296AC4 — Display + save XIX + copy buffer
+	; Push BC/HL, display command 1, save XIX to data ptr, copy BC..HL bytes
+	pushw bc
+	nop
+	pushw hl
+	nop
+	lds wa, 1				; display command
+	di
+	call HDAE5000_Display_String
+	ei 7
+	stda32_24 2330880, xix			; st (0x239100), XIX
+	nop
+	popw hl
+	nop
+	popw bc
+	nop
+	ldada_24 xiy, 2330984			; lda XIY, 0x239168
+	nop
+.Lutl_copy_loop:			; 0x296AE2
+	cp bc, hl
+	jr z, .Lutl_ret
+	ld_srib3 a, 0x07, 0xF0, 0xE4		; ld A, (XIX+BC)
+	nop
+	lda_dri3 xbc, 0x07, 0xF4, 0xE4	; ld (XIY+BC), A
+	nop
+	inc 1, bc
+	jr t, .Lutl_copy_loop
+.Lutl_ret:				; 0x296AF6
+	ret
+	nop
+
+.Lppc_send_bytes:			; 0x296AF8 — Send XIY bytes to PPORT with checksum
+	; Send XDE bytes starting at XIY, accumulate checksum in (0x2390FC)
+	; Then send 4 checksum bytes, finalize, retry on failure
+	stda32_24 2330968, xiy			; st (0x239158), XIY — save start
+	nop
+	stda32_24 2330972, xde			; st (0x23915C), XDE — save count
+	nop
+.Lsb_loop_start:			; 0x296B04
+	xor xwa, xwa
+	stda32_24 2330876, xwa			; st (0x2390FC), XWA — clear checksum
+	nop
+	lds32 xbc, 0				; XBC = 0 (byte counter)
+.Lsb_send_loop:			; 0x296B0E
+	cp xde, xbc
+	jpcc_24 6, 2714426			; jp Z, .Lsb_checksum
+	nop
+	ld w, (xiy)				; load byte from source
+	xor xhl, xhl
+	ld l, w					; XHL = byte value
+	add (2330876), xhl			; add to checksum at (0x2390FC)
+	nop
+	call .Lpsb_write_byte			; send byte via PPORT
+	cpdi8_24 2330836, 0x01			; error check
+	jpcc_24 6, 2714492			; jp Z, .Lsb_ret
+	nop
+	inc 1, xbc
+	inc 1, xiy
+	jp .Lsb_send_loop
+.Lsb_checksum:				; 0x296B3A — Send 4 checksum bytes
+	lds bc, 0
+	ldada_24 xix, 2330876			; lda XIX, 0x2390FC
+	nop
+.Lsb_cksum_loop:			; 0x296B42
+	cps bc, 4
+	jpcc_24 6, 2714468			; jp Z, .Lsb_finalize
+	nop
+	ld_srib3 w, 0x07, 0xF0, 0xE4		; ld W, (XIX+BC)
+	nop
+	call .Lpsb_write_byte
+	cpdi8_24 2330836, 0x01
+	jpcc_24 6, 2714492			; jp Z, .Lsb_ret
+	nop
+	inc 1, bc
+	jr t, .Lsb_cksum_loop
+.Lsb_finalize:				; 0x296B64
+	call .Lpsb_finish
+	cps w, 0
+	jr z, .Lsb_ret
+	ldda32_24 xiy, 2330968			; reload XIY from (0x239158)
+	nop
+	ldda32_24 xde, 2330972			; reload XDE from (0x23915C)
+	nop
+	jp .Lsb_loop_start			; retry
+.Lsb_ret:				; 0x296B7C
+	ret
+	nop
+
+.Lppc_recv_write_bytes:		; 0x296B7E — Receive XDE bytes into XIY with checksum
+	; Receive XDE bytes from PPORT into XIY buffer, accumulate checksum
+	; Check status port, receive 4 checksum bytes, finalize, retry on failure
+	stda32_24 2330968, xiy			; st (0x239158), XIY — save start
+	nop
+	stda32_24 2330972, xde			; st (0x23915C), XDE — save count
+	nop
+.Lrb_loop_start:			; 0x296B8A
+	xor xwa, xwa
+	stda32_24 2330876, xwa			; st (0x2390FC), XWA — clear checksum
+	nop
+	lds32 xbc, 0
+.Lrb_recv_loop:			; 0x296B94
+	cp xde, xbc
+	jpcc_24 6, 2714560			; jp Z, .Lrb_status_check
+	nop
+	call .Lpsb_read_byte			; receive byte from PPORT
+	cpdi8_24 2330836, 0x01
+	jpcc_24 6, 2714664			; jp Z, .Lrb_ret
+	nop
+	ld (xiy), w				; store received byte
+	xor xhl, xhl
+	ld l, w
+	add (2330876), xhl			; add to checksum
+	nop
+	inc 1, xbc
+	inc 1, xiy
+	jp .Lrb_recv_loop
+.Lrb_status_check:			; 0x296BC0 — Check PPORT status port
+	ldda8_24 a, 1441796			; ld A, (0x160004) — status port
+	nop
+	ld l, a
+	and l, 0x04
+	nop
+	cps l, 4
+	jpcc_24 14, 2714658			; jp NZ, .Lrb_set_error
+	nop
+	and a, 0x01
+	nop
+	cps a, 0
+	jr nz, .Lrb_status_check		; wait for ready
+.Lrb_recv_cksum:			; 0x296BDC — Receive 4 checksum bytes
+	lds bc, 0
+	ldada_24 xix, 2330876			; lda XIX, 0x2390FC
+	nop
+.Lrb_cksum_loop:			; 0x296BE4
+	cps bc, 4
+	jpcc_24 6, 2714630			; jp Z, .Lrb_finalize
+	nop
+	ld_srib3 w, 0x07, 0xF0, 0xE4		; ld W, (XIX+BC)
+	nop
+	call .Lpsb_write_byte
+	cpdi8_24 2330836, 0x01
+	jpcc_24 6, 2714664			; jp Z, .Lrb_ret
+	nop
+	inc 1, bc
+	jr t, .Lrb_cksum_loop
+.Lrb_finalize:				; 0x296C06
+	call .Lpsb_finish
+	cps w, 0
+	jpcc_24 6, 2714664			; jp Z, .Lrb_ret
+	nop
+	ldda32_24 xiy, 2330968			; reload saved start
+	nop
+	ldda32_24 xde, 2330972			; reload saved count
+	nop
+	jp .Lrb_loop_start			; retry
+.Lrb_set_error:			; 0x296C22
+	stdi8_24 2330836, 0x01			; set error flag (0x2390D4)
+.Lrb_ret:				; 0x296C28
+	ret
+	nop
+
+.Lppc_recv_sector_data:		; 0x296C2A — Receive 512-byte sector block
+	; Receive 512 bytes into sector buffer (0x239268), checksum, verify
+	xor xwa, xwa
+	stda32_24 2330876, xwa			; clear checksum
+	nop
+	lds bc, 0
+	ldada_24 xix, 2331240			; lda XIX, 0x239268
+	nop
+.Lrs_recv_loop:			; 0x296C3A
+	cp bc, 0x0200
+	jpcc_24 6, 2714728			; jp Z, .Lrs_checksum
+	nop
+	call .Lpsb_read_byte
+	cpdi8_24 2330836, 0x01
+	jpcc_24 6, 2714782			; jp Z, .Lrs_ret
+	nop
+	lda_dri3 xwa, 0x07, 0xF0, 0xE4	; ld (XIX+BC), W
+	nop
+	xor xhl, xhl
+	ld l, w
+	add (2330876), xhl			; add to checksum
+	nop
+	inc 1, bc
+	jr t, .Lrs_recv_loop
+.Lrs_checksum:				; 0x296C68 — Send 4 checksum bytes
+	lds bc, 0
+	ldada_24 xix, 2330876			; lda XIX, 0x2390FC
+	nop
+.Lrs_cksum_loop:			; 0x296C70
+	cps bc, 4
+	jpcc_24 6, 2714770			; jp Z, .Lrs_finalize
+	nop
+	ld_srib3 w, 0x07, 0xF0, 0xE4		; ld W, (XIX+BC)
+	nop
+	call .Lpsb_write_byte
+	cpdi8_24 2330836, 0x01
+	jpcc_24 6, 2714782			; jp Z, .Lrs_ret
+	nop
+	inc 1, bc
+	jr t, .Lrs_cksum_loop
+.Lrs_finalize:				; 0x296C92
+	call .Lpsb_finish
+	cps w, 0
+	jr z, .Lrs_ret
+	jp .Lppc_recv_sector_data		; retry
+.Lrs_ret:				; 0x296C9E
+	ret
+	nop
+
+.Lppc_send_regions:			; 0x296CA0 — Send two descriptor regions + checksum
+	; Send from (0x239108)/XDE then (0x239110)/XDE, verify checksum
+	ldda32_24 xiy, 2330888			; ld XIY, (0x239108)
+	nop
+	ldda32_24 xde, 2330892			; ld XDE, (0x23910C)
+	nop
+	xor xwa, xwa
+	stda32_24 2330876, xwa			; clear checksum
+	nop
+	lds32 xbc, 0
+.Lsr_loop1:				; 0x296CB6 — Send first region
+	cp xde, xbc
+	jpcc_24 6, 2714850			; jp Z, .Lsr_region2
+	nop
+	ld w, (xiy)
+	xor xhl, xhl
+	ld l, w
+	add (2330876), xhl
+	nop
+	call .Lpsb_write_byte
+	cpdi8_24 2330836, 0x01
+	jpcc_24 6, 2714962			; jp Z, .Lsr_ret
+	nop
+	inc 1, xbc
+	inc 1, xiy
+	jp .Lsr_loop1
+.Lsr_region2:				; 0x296CE2 — Load second region
+	ldda32_24 xiy, 2330896			; ld XIY, (0x239110)
+	nop
+	ldda32_24 xde, 2330900			; ld XDE, (0x239114)
+	nop
+	lds32 xbc, 0
+.Lsr_loop2:				; 0x296CF0 — Send second region
+	cp xde, xbc
+	jpcc_24 6, 2714908			; jp Z, .Lsr_checksum
+	nop
+	ld w, (xiy)
+	xor xhl, xhl
+	ld l, w
+	add (2330876), xhl
+	nop
+	call .Lpsb_write_byte
+	cpdi8_24 2330836, 0x01
+	jpcc_24 6, 2714962			; jp Z, .Lsr_ret
+	nop
+	inc 1, xbc
+	inc 1, xiy
+	jp .Lsr_loop2
+.Lsr_checksum:				; 0x296D1C — Send 4 checksum bytes
+	lds bc, 0
+	ldada_24 xix, 2330876			; lda XIX, 0x2390FC
+	nop
+.Lsr_cksum_loop:			; 0x296D24
+	cps bc, 4
+	jpcc_24 6, 2714950			; jp Z, .Lsr_finalize
+	nop
+	ld_srib3 w, 0x07, 0xF0, 0xE4
+	nop
+	call .Lpsb_write_byte
+	cpdi8_24 2330836, 0x01
+	jpcc_24 6, 2714962			; jp Z, .Lsr_ret
+	nop
+	inc 1, bc
+	jr t, .Lsr_cksum_loop
+.Lsr_finalize:				; 0x296D46
+	call .Lpsb_finish
+	cps w, 0
+	jr z, .Lsr_ret
+	jp .Lppc_send_regions			; retry
+.Lsr_ret:				; 0x296D52
+	ret
+	nop
+
+.Lppc_recv_custom_data:		; 0x296D54 — Receive custom ROM data
+	; Phase 1: receive 0x640 bytes into 0xF980
+	; Phase 2: receive 0x800 bytes into 0x1E7800
+	; Then send checksum, finalize, retry on failure
+	ld xiy, 0x0000F980
+	nop
+	ld xde, 0x00000640
+	nop
+	xor xwa, xwa
+	stda32_24 2330876, xwa			; clear checksum
+	nop
+	lds32 xbc, 0
+.Lrc_loop1:				; 0x296D6A — Receive phase 1
+	cp xde, xbc
+	jpcc_24 6, 2715030			; jp Z, .Lrc_phase2
+	nop
+	call .Lpsb_read_byte
+	cpdi8_24 2330836, 0x01
+	jpcc_24 6, 2715142			; jp Z, .Lrc_ret
+	nop
+	ld (xiy), w
+	xor xhl, xhl
+	ld l, w
+	add (2330876), xhl
+	nop
+	inc 1, xbc
+	inc 1, xiy
+	jp .Lrc_loop1
+.Lrc_phase2:				; 0x296D96 — Receive phase 2
+	ld xiy, 0x001E7800
+	nop
+	ld xde, 0x00000800
+	nop
+	lds32 xbc, 0
+.Lrc_loop2:				; 0x296DA4
+	cp xde, xbc
+	jpcc_24 6, 2715088			; jp Z, .Lrc_checksum
+	nop
+	call .Lpsb_read_byte
+	cpdi8_24 2330836, 0x01
+	jpcc_24 6, 2715142			; jp Z, .Lrc_ret
+	nop
+	ld (xiy), w
+	xor xhl, xhl
+	ld l, w
+	add (2330876), xhl
+	nop
+	inc 1, xbc
+	inc 1, xiy
+	jp .Lrc_loop2
+.Lrc_checksum:				; 0x296DD0 — Send 4 checksum bytes
+	lds bc, 0
+	ldada_24 xix, 2330876			; lda XIX, 0x2390FC
+	nop
+.Lrc_cksum_loop:			; 0x296DD8
+	cps bc, 4
+	jpcc_24 6, 2715130			; jp Z, .Lrc_finalize
+	nop
+	ld_srib3 w, 0x07, 0xF0, 0xE4
+	nop
+	call .Lpsb_write_byte
+	cpdi8_24 2330836, 0x01
+	jpcc_24 6, 2715142			; jp Z, .Lrc_ret
+	nop
+	inc 1, bc
+	jr t, .Lrc_cksum_loop
+.Lrc_finalize:				; 0x296DFA
+	call .Lpsb_finish
+	cps w, 0
+	jr z, .Lrc_ret
+	jp .Lppc_recv_custom_data		; retry
+.Lrc_ret:				; 0x296E06
+	ret
+	nop
+
+.Lppc_init_region_descriptors:	; 0x296E08 — Initialize region descriptors
+	; Clear all 10 region descriptor slots to 0, then test each flag bit
+	; and load the corresponding region size constant
+	lds32 xwa, 0				; XWA = 0
+	stda32_24 2330892, xwa			; (0x23910C) = 0
+	nop
+	stda32_24 2330900, xwa			; (0x239114) = 0
+	nop
+	stda32_24 2330908, xwa			; (0x23911C) = 0
+	nop
+	stda32_24 2330916, xwa			; (0x239124) = 0
+	nop
+	stda32_24 2330924, xwa			; (0x23912C) = 0
+	nop
+	stda32_24 2330932, xwa			; (0x239134) = 0
+	nop
+	stda32_24 2330940, xwa			; (0x23913C) = 0
+	nop
+	stda32_24 2330944, xwa			; (0x239140) = 0
+	nop
+	stda32_24 2330952, xwa			; (0x239148) = 0
+	nop
+	stda32_24 2330960, xwa			; (0x239150) = 0
+	nop
+	; Bit 0: custom region size
+	ldda8_24 a, 2330850			; ld A, (0x2390E2) — masked sector
+	nop
+	and a, 0x01
+	nop
+	cps a, 1
+	jpcc_24 14, 2715236			; jp NZ, .Lir_bit1
+	nop
+	ld xwa, 0x00000E40
+	nop
+	stda32_24 2330892, xwa			; st (0x23910C), XWA
+	nop
+.Lir_bit1:				; 0x296E64 — Bit 1: region 1 size
+	ldda8_24 a, 2330850
+	nop
+	and a, 0x02
+	nop
+	cps a, 2
+	jpcc_24 14, 2715266			; jp NZ, .Lir_bit2
+	nop
+	ld xwa, 0x00012CB0
+	nop
+	stda32_24 2330908, xwa			; st (0x23911C), XWA
+	nop
+.Lir_bit2:				; 0x296E82 — Bit 2: compute from HD
+	ldda8_24 a, 2330850
+	nop
+	and a, 0x04
+	nop
+	cps a, 4
+	jpcc_24 14, 2715326			; jp NZ, .Lir_bit3
+	nop
+	ldb e, 0x04				; E = flag bit value
+	stdi8_24 2330862, 0x10			; st (0x2390EE), 0x10 — sectors per track
+	stdi8_24 2330860, 0x4E			; st (0x2390EC), 0x4E — sector offset
+	call .Lppc_compute_sector
+	cpdi8_24 2330854, 0x01			; cp (0x2390E6), 1
+	jpcc_24 6, 2715588			; jp Z, .Lir_ret
+	nop
+	add xiy, 0x00005000
+	stda32_24 2330916, xiy			; st (0x239124), XIY
+	nop
+.Lir_bit3:				; 0x296EBE — Bit 3: compute from HD
+	ldda8_24 a, 2330850
+	nop
+	and a, 0x08
+	nop
+	cp a, 0x08
+	nop
+	jpcc_24 14, 2715382			; jp NZ, .Lir_bit4
+	nop
+	ldb e, 0x08
+	stdi8_24 2330862, 0x10			; sectors per track
+	stdi8_24 2330860, 0x2E			; sector offset
+	call .Lppc_compute_sector
+	cpdi8_24 2330854, 0x01
+	jpcc_24 6, 2715588			; jp Z, .Lir_ret
+	nop
+	stda32_24 2330924, xiy			; st (0x23912C), XIY
+	nop
+.Lir_bit4:				; 0x296EF6 — Bit 4: fixed size
+	ldda8_24 a, 2330850
+	nop
+	and a, 0x10
+	nop
+	cp a, 0x10
+	nop
+	jpcc_24 14, 2715414			; jp NZ, .Lir_bit5
+	nop
+	ld xwa, 0x000072AA
+	nop
+	stda32_24 2330932, xwa			; st (0x239134), XWA
+	nop
+.Lir_bit5:				; 0x296F16 — Bit 5: compute from HD
+	ldda8_24 a, 2330850
+	nop
+	and a, 0x20
+	nop
+	cp a, 0x20
+	nop
+	jpcc_24 14, 2715470			; jp NZ, .Lir_bit6
+	nop
+	ldb e, 0x20
+	stdi8_24 2330862, 0x10			; sectors per track
+	stdi8_24 2330860, 0x1E			; sector offset
+	call .Lppc_compute_sector
+	cpdi8_24 2330854, 0x01
+	jpcc_24 6, 2715588			; jp Z, .Lir_ret
+	nop
+	stda32_24 2330940, xiy			; st (0x23913C), XIY
+	nop
+.Lir_bit6:				; 0x296F4E — Bit 6: compute from HD
+	ldda8_24 a, 2330850
+	nop
+	and a, 0x40
+	nop
+	cp a, 0x40
+	nop
+	jpcc_24 14, 2715526			; jp NZ, .Lir_bit7
+	nop
+	ldb e, 0x40
+	stdi8_24 2330862, 0x20			; sectors per track
+	stdi8_24 2330860, 0x1C			; sector offset
+	call .Lppc_compute_sector
+	cpdi8_24 2330854, 0x01
+	jpcc_24 6, 2715588			; jp Z, .Lir_ret
+	nop
+	stda32_24 2330944, xiy			; st (0x239140), XIY
+	nop
+.Lir_bit7:				; 0x296F86 — Bit 7: fixed size
+	ldda8_24 a, 2330850
+	nop
+	and a, 0x80
+	nop
+	cp a, 0x80
+	nop
+	jpcc_24 14, 2715558			; jp NZ, .Lir_flag2_bit0
+	nop
+	ld xwa, 0x00000400
+	nop
+	stda32_24 2330952, xwa			; st (0x239148), XWA
+	nop
+.Lir_flag2_bit0:			; 0x296FA6 — Flag byte 2, bit 0
+	ldda8_24 a, 2330852			; ld A, (0x2390E4) — masked head
+	nop
+	and a, 0x01
+	nop
+	cps a, 1
+	jpcc_24 14, 2715588			; jp NZ, .Lir_ret
+	nop
+	ld xwa, 0x002304F2
+	nop
+	stda32_24 2330960, xwa			; st (0x239150), XWA
+	nop
+.Lir_ret:				; 0x296FC4
+	ret
+	nop
+
+.Lppc_compute_sector:		; 0x296FC6 — Compute sector descriptor
+	; Read HD sector using display commands, compute XIY from sector data
+	ldda32_24 xix, 2330880			; ld XIX, (0x239100)
+	nop
+	stdi8_24 2330854, 0x00			; clear error flag (0x2390E6)
+	xor wa, wa
+	ld a, e					; A = flag bit value
+	ld (xix), wa				; store to buffer
+	xor xbc, xbc
+	xor xde, xde
+	ldda8_24 c, 2330838			; ld C, (0x2390D6)
+	nop
+	ldda8_24 e, 2330840			; ld E, (0x2390D8)
+	nop
+	ldw wa, 0x0018				; display command — HD read
+	nop
+	di
+	call HDAE5000_Display_String
+	ei 7
+	cps wa, 0				; check result
+	jpcc_24 6, 2715652			; jp Z, .Lcs_read_sector
+	nop
+	stdi8_24 2330854, 0x01			; set error flag
+	jr t, .Lcs_ret
+.Lcs_read_sector:			; 0x297004
+	ldada_24 xbc, 2331240			; lda XBC, 0x239268
+	nop
+	ld xde, 0x00000200			; 512 bytes
+	nop
+	ldw wa, 0x0019				; display command — sector read
+	nop
+	di
+	call HDAE5000_Display_String
+	ei 7
+	cps wa, 0
+	jpcc_24 6, 2715692			; jp Z, .Lcs_process
+	nop
+	stdi8_24 2330854, 0x01			; set error flag
+	jr t, .Lcs_ret
+.Lcs_process:				; 0x29702C — Process sector data
+	xor xwa, xwa
+	ldada_24 xix, 2331240			; lda XIX, 0x239268
+	nop
+	ldda8_24 a, 2330860			; ld A, (0x2390EC) — sector offset
+	nop
+	add xix, xwa				; XIX += offset (A in low byte)
+	cpdi8_24 2330862, 0x20			; cp (0x2390EE), 0x20 — check sectors/track
+	jr z, .Lcs_load_xiy			; if 32 sectors, load 32-bit directly
+	xor xwa, xwa
+	ld wa, (xix)				; load 16-bit value
+	mul wa, 0x0010				; multiply by 16
+	ld xiy, xwa				; XIY = result
+	jr t, .Lcs_ret
+.Lcs_load_xiy:				; 0x297050
+	ld xiy, (xix)				; load 32-bit value directly
+.Lcs_ret:				; 0x297052
+	ret
+	nop
+
+.Lppc_send_region_to_pc:		; 0x297054 — Send region data to PC
+	; Main send routine: reads region descriptor, sets up PPORT buffer,
+	; sends sectors in 512-byte blocks with checksum verification
+	ldda32_24 xwa, 2330980			; ld XWA, (0x239164) — region descriptor
+	nop
+	stda32_24 2330968, xwa			; st (0x239158), XWA — save for retry
+	nop
+	xor xwa, xwa
+	stda32_24 2330876, xwa			; clear checksum
+	nop
+	stdi8_24 2330854, 0x00			; clear error flag
+	call 2713602				; call 0x296802 — register XIX
+	ldda32_24 xix, 2330880			; ld XIX, (0x239100)
+	nop
+	xor wa, wa
+	ldda8_24 a, 2330864			; ld A, (0x2390F0) — flag byte 1
+	nop
+	ld (xix), a				; store to buffer[0]
+	ldda8_24 a, 2330866			; ld A, (0x2390F2) — flag byte 2
+	nop
+	ld (xix + 1), a			; store to buffer[1]
+	nop
+	xor bc, bc
+	xor de, de
+	ldda8_24 c, 2330838			; ld C, (0x2390D6)
+	nop
+	ldda8_24 e, 2330840			; ld E, (0x2390D8)
+	nop
+	ldw wa, 0x0018				; display command — HD read
+	nop
+	di
+	call HDAE5000_Display_String
+	ei 7
+	cps wa, 0
+	jpcc_24 6, 2715834			; jp Z, .Lsrpc_send_init
+	nop
+	ldw wa, 0xFF00				; error marker
+	nop
+	stdi8_24 2330854, 0x01			; set error flag
+.Lsrpc_send_init:			; 0x2970BA — Send WA byte + start transfer
+	call .Lpsb_write_byte
+	cpdi8_24 2330836, 0x01
+	jpcc_24 6, 2716066			; jp Z, .Lsrpc_ret
+	nop
+	cpdi8_24 2330854, 0x01			; check error flag
+	jpcc_24 6, 2716066			; jp Z, .Lsrpc_ret
+	nop
+	ldada_24 xix, 2331240			; lda XIX, 0x239268
+	nop
+	stdi16_24 2330872, 0x0200		; st (0x2390F8), 0x0200 — block size
+	nop
+.Lsrpc_main_loop:			; 0x2970E4 — Main send loop
+	ldda32_24 xwa, 2330980			; ld XWA, (0x239164) — remaining bytes
+	nop
+	cp xwa, 0				; all bytes sent?
+	jpcc_24 6, 2716000			; jp Z, .Lsrpc_final_checksum
+	nop
+	cpdi16_24 2330872, 0x0200		; cp (0x2390F8), 0x0200
+	nop
+	jr z, .Lsrpc_read_block		; if block counter = 512, read new block
+	jr t, .Lsrpc_send_byte		; otherwise send next byte
+.Lsrpc_read_block:			; 0x297102 — Read 512-byte block from HD
+	push xix
+	nop
+	lda xbc, (xix)
+	ld xde, 0x00000200			; 512 bytes
+	nop
+	ldw wa, 0x0019				; display command — sector read
+	nop
+	di
+	call HDAE5000_Display_String
+	ei 7
+	pop xix
+	nop
+	stdi16_24 2330872, 0x0000		; reset block counter
+	nop
+.Lsrpc_send_byte:			; 0x297122 — Send one byte
+	ldda16_24 xbc, 2330872			; ld BC, (0x2390F8) — block offset
+	nop
+	ld_srib3 w, 0x07, 0xF0, 0xE4		; ld W, (XIX+BC) — load byte
+	nop
+	xor xhl, xhl
+	ld l, w
+	add (2330876), xhl			; add to checksum
+	nop
+	call .Lpsb_write_byte
+	cpdi8_24 2330836, 0x01
+	jpcc_24 6, 2716066			; jp Z, .Lsrpc_ret
+	nop
+	.byte 0xD2, 0xF8, 0x90, 0x23, 0x61	; incw 1, (0x2390F8) — inc block counter
+	nop
+	ldda32_24 xwa, 2330980			; ld XWA, (0x239164)
+	nop
+	dec 1, xwa
+	stda32_24 2330980, xwa			; st (0x239164), XWA
+	nop
+	jp .Lsrpc_main_loop
+.Lsrpc_final_checksum:		; 0x297160 — Send 4 checksum bytes
+	lds bc, 0
+	ldada_24 xix, 2330876			; lda XIX, 0x2390FC
+	nop
+.Lsrpc_cksum_loop:			; 0x297168
+	cps bc, 4
+	jpcc_24 6, 2716042			; jp Z, .Lsrpc_finalize
+	nop
+	ld_srib3 w, 0x07, 0xF0, 0xE4
+	nop
+	call .Lpsb_write_byte
+	cpdi8_24 2330836, 0x01
+	jpcc_24 6, 2716066			; jp Z, .Lsrpc_ret
+	nop
+	inc 1, bc
+	jr t, .Lsrpc_cksum_loop
+.Lsrpc_finalize:			; 0x29718A
+	call .Lpsb_finish
+	cps w, 0
+	jr z, .Lsrpc_ret
+	ldda32_24 xwa, 2330968			; reload saved region descriptor
+	nop
+	stda32_24 2330980, xwa			; st (0x239164), XWA
+	nop
+	jp .Lppc_send_region_to_pc		; retry
+.Lsrpc_ret:				; 0x2971A2
+	ret
 
 HDAE5000_Check_HD_Present:	; 2971A3h
 	; Entry wrapper for HD presence detection
