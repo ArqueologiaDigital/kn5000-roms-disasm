@@ -11663,8 +11663,140 @@ HDAE5000_HD_Detect_Drive:	; 0x297AD2 (836 bytes)
 	jp .Lhdd_success3
 
 HDAE5000_Display_Copy:	; 0x297E16 (443 bytes)
-	; Display block copy operation
-	.incbin "includes/code_2971b7_29ae9e.bin", 3167, 443
+	; Copy HD sectors into display buffer, tracking allocation
+
+	; --- Wrapper: save params, call main, return status in HL ---
+	push xiz
+	ldw hl, 65535			; assume error
+	cpdi8_24 2097698, 0		; HD error flag set?
+	jpcc_24 14, 2719304		; jp NZ, .Ldc_exit
+	stda32_24 2268480, xwa		; save XWA → (0x229D40)
+	stda32_24 2268472, xbc		; save XBC → (0x229D38) = total bytes
+	stda32_24 2268460, xde		; save XDE → (0x229D2C) = entry list ptr
+	call .Ldc_main
+	xor hl, hl			; assume success
+	cpdi8_24 2097698, 0
+	jpcc_24 6, 2719304		; jp Z, .Ldc_exit
+	ldw hl, 65535			; error
+.Ldc_exit:				; 0x297E48
+	pop xiz
+	ret
+
+	; --- Main display copy function ---
+.Ldc_main:				; 0x297E4A
+	push xwa
+	push xbc
+	push xde
+	push xhl
+	push xix
+	push xiy
+	push xiz
+	; Compute sector count = ceil(total_bytes / sector_size)
+	xor xwa, xwa
+	xor xbc, xbc
+	ldda32_24 xwa, 2268472		; total bytes
+	ldda32_24 xbc, 2268248		; sector size (0x229C58)
+	call HDAE5000_HD_Config_Init_Values	; divide XWA/XBC
+	cp xbc, 0			; remainder?
+	jpcc_24 6, 2719344		; jp Z, no round-up
+	inc 1, xwa			; round up
+.Ldc_no_roundup:			; 0x297E70
+	stda32_24 2268312, xwa		; sector count → (0x229C98)
+	stdi8_24 2268604, 0		; (0x229DBC) = 0 — boundary flag
+	; Check first entry in list
+	ldda32_24 xix, 2268460		; XIX = entry list ptr
+	ld xwa, (xix)			; first entry
+	cp xwa, 4294967295		; == 0xFFFFFFFF? (empty)
+	jpcc_24 6, 2719382		; jp Z, skip store
+	stda32_24 2268344, xwa		; → (0x229CB8) start sector
+	call 2721178			; call 0x29859A
+.Ldc_skip_first:			; 0x297E96
+	; Initialize config registers
+	ldda32_24 xwa, 2268264		; base sector (0x229C68)
+	stda32_24 2268340, xwa		; → (0x229CB4)
+	xor xwa, xwa
+	stda32_24 2268336, xwa		; (0x229CB0) = 0
+	ld xwa, 512
+	stda32_24 2268332, xwa		; (0x229CAC) = 512 sector size
+	ld xwa, 4294967295
+	stda32_24 2268456, xwa		; (0x229D28) = 0xFFFFFFFF
+	xor xwa, xwa
+	stda32_24 2268324, xwa		; (0x229CA4) = 0 iteration counter
+	stdi8_24 2268564, 0		; (0x229D94) = 0 — first-sector flag
+	stdi8_24 2268565, 0		; (0x229D95) = 0 — first-alloc flag
+	stdi8_24 2268566, 0		; (0x229D96) = 0
+	; Main allocation loop
+.Ldc_loop:				; 0x297ED4
+	call 2720323			; call 0x298243 — find next free sector
+	ldda32_24 xwa, 2268328		; result (0x229CA8)
+	cp xwa, 4294967293		; == 0xFFFFFFFD? (disk full)
+	jpcc_24 14, 2719474		; jp NZ, .Ldc_not_full
+	stdi8_24 2268604, 1		; boundary flag = 1
+	jp .Ldc_cleanup			; done
+.Ldc_not_full:				; 0x297EF2
+	ldda32_24 xwa, 2268328		; re-load result
+	cpdi8_24 2268564, 0		; first-sector flag?
+	jpcc_24 14, 2719504		; jp NZ, .Ldc_not_first
+	stda32_24 2268316, xwa		; (0x229C9C) = first result
+	stda32_24 2268320, xwa		; (0x229CA0) = current result
+	jp .Ldc_after_first		; skip
+.Ldc_not_first:				; 0x297F10
+	stda32_24 2268320, xwa		; (0x229CA0) = current result
+.Ldc_after_first:			; 0x297F15
+	call 2720539			; call 0x29831B — allocate sector
+	cpdi8_24 2268567, 0		; (0x229D97) alloc error?
+	jpcc_24 6, 2719542		; jp Z, .Ldc_alloc_ok
+	; Alloc failed — mark as end, retry
+	ld xwa, 4294967295
+	stda32_24 2268320, xwa		; (0x229CA0) = 0xFFFFFFFF
+	call 2720682			; call 0x2983AA — commit
+	jp .Ldc_loop
+.Ldc_alloc_ok:				; 0x297F36
+	cpdi8_24 2268565, 0		; first-alloc flag?
+	jpcc_24 14, 2719571		; jp NZ, .Ldc_after_alloc
+	stdi8_24 2268565, 1		; set first-alloc flag
+	ldda32_24 xwa, 2268328		; store to entry list
+	ldda32_24 xix, 2268460
+	ld (xix), xwa
+.Ldc_after_alloc:			; 0x297F53
+	ldda32_24 xwa, 2268324		; iteration++
+	inc 1, xwa
+	stda32_24 2268324, xwa
+	cpda32_24 xwa, 2268312		; == sector count?
+	jpcc_24 6, 2719632		; jp Z, .Ldc_all_done
+	cpdi8_24 2268564, 0		; first-sector flag?
+	jpcc_24 14, 2719614		; jp NZ, .Ldc_mid_sector
+	stdi8_24 2268564, 1		; set first-sector flag
+	jp .Ldc_loop
+.Ldc_mid_sector:			; 0x297F7E
+	call 2720682			; commit current sector
+	ldda32_24 xwa, 2268320		; current → (0x229C9C)
+	stda32_24 2268316, xwa
+	jp .Ldc_loop
+.Ldc_all_done:				; 0x297F90
+	call 2720682			; commit final sector
+	ldda32_24 xwa, 2268320
+	stda32_24 2268316, xwa
+	ld xwa, 4294967294		; 0xFFFFFFFE = end marker
+	stda32_24 2268320, xwa
+	call 2720682			; commit end marker
+	; Adjust used sector count
+	ldda32_24 xwa, 2268288		; (0x229C80) used count
+	ldda32_24 xbc, 2268312		; sector count
+	sub xwa, xbc			; used -= allocated
+	stda32_24 2268288, xwa
+	jpcc_24 9, 2719689		; jp GE, .Ldc_cleanup (no underflow)
+	xor xwa, xwa			; clamp to 0
+	stda32_24 2268288, xwa
+.Ldc_cleanup:				; 0x297FC9
+	pop xiz
+	pop xiy
+	pop xix
+	pop xhl
+	pop xde
+	pop xbc
+	pop xwa
+	ret
 
 HDAE5000_Display_Restore:	; 0x297FD1 (9217 bytes)
 	; Display restore/update operation
