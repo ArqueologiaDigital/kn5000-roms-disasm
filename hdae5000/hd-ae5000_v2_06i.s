@@ -3980,33 +3980,650 @@ HDAE5000_Workspace_Handler:	; 0x29311B (592 bytes)
 HDAE5000_Workspace_Sub_29336B:	; 0x29336B (349 bytes)
 	.incbin "includes/code_28f90c_2953e1.bin", 14943, 349
 
-; --- UI Cell Renderers (8 x 222 bytes each) ---
+; --- UI Cell Renderers (9 x 222 bytes each) ---
+; Delete table entry: check existence, call handler, clear entry (-1), clear flag (0)
 HDAE5000_Cell_Render_Type0:	; 0x2934C8 (222 bytes)
-	.incbin "includes/code_28f90c_2953e1.bin", 15292, 222
+	dec 4, xsp
+	push xiz
+	ld (xsp + 4), bc	; save file number
+	ld (xsp + 6), wa	; save partition
+	; --- Check if entry exists ---
+	ld wa, (xsp + 4)
+	extz xwa
+	ld xbc, 0x0000004C	; multiplier = 76
+	call 0x29B72D
+	ld xiz, xhl
+	ld wa, (xsp + 6)
+	extz xwa
+	ld xbc, 0x000004C0	; multiplier = 1216
+	call 0x29B72D
+	add xhl, 0x780		; += 1920
+	add xhl, xiz
+	ldada_24 xwa, 2102870	; 0x201656 (table base)
+	add xwa, xhl
+	ld xwa, (xwa)
+	cp xwa, 0xFFFFFFFF
+	jrl z, .Lcr0_exit
+	; --- Get entry value and call handler ---
+	ld wa, (xsp + 4)
+	extz xwa
+	ld xbc, 0x0000004C
+	call 0x29B72D
+	ld xiz, xhl
+	ld wa, (xsp + 6)
+	extz xwa
+	ld xbc, 0x000004C0
+	call 0x29B72D
+	add xhl, 0x780
+	add xhl, xiz
+	ldada_24 xwa, 2102870	; 0x201656
+	add xwa, xhl
+	ld xwa, (xwa)
+	call 0x298590
+	; --- Clear entry (store -1) ---
+	ld wa, (xsp + 4)
+	extz xwa
+	ld xbc, 0x0000004C
+	call 0x29B72D
+	ld xiz, xhl
+	ld wa, (xsp + 6)
+	extz xwa
+	ld xbc, 0x000004C0
+	call 0x29B72D
+	add xhl, 0x780
+	add xhl, xiz
+	ldada_24 xwa, 2102870	; 0x201656
+	ld xbc, xwa
+	add xbc, xhl
+	ld xwa, 0xFFFFFFFF
+	ld (xbc), xwa
+	; --- Clear flag (store 0) ---
+	ld wa, (xsp + 4)
+	extz xwa
+	ld xbc, 0x0000004C
+	call 0x29B72D
+	ld xiz, xhl
+	ld wa, (xsp + 6)
+	extz xwa
+	ld xbc, 0x000004C0
+	call 0x29B72D
+	add xhl, 0x780
+	add xhl, xiz
+	ldada_24 xwa, 2102860	; 0x20164C (flag base)
+	add xwa, xhl
+	ldmi8 (xwa), 0x00
+.Lcr0_exit:
+	pop xiz
+	inc 4, xsp
+	ret
 
 HDAE5000_Cell_Render_Type1:	; 0x2935A6 (222 bytes)
-	.incbin "includes/code_28f90c_2953e1.bin", 15514, 222
+	dec 4, xsp
+	push xiz
+	ld (xsp + 4), bc
+	ld (xsp + 6), wa
+	ld wa, (xsp + 4)
+	extz xwa
+	ld xbc, 0x0000004C
+	call 0x29B72D
+	ld xiz, xhl
+	ld wa, (xsp + 6)
+	extz xwa
+	ld xbc, 0x000004C0
+	call 0x29B72D
+	add xhl, 0x780
+	add xhl, xiz
+	ldada_24 xwa, 2102874	; 0x20165A (table base)
+	add xwa, xhl
+	ld xwa, (xwa)
+	cp xwa, 0xFFFFFFFF
+	jrl z, .Lcr1_exit
+	ld wa, (xsp + 4)
+	extz xwa
+	ld xbc, 0x0000004C
+	call 0x29B72D
+	ld xiz, xhl
+	ld wa, (xsp + 6)
+	extz xwa
+	ld xbc, 0x000004C0
+	call 0x29B72D
+	add xhl, 0x780
+	add xhl, xiz
+	ldada_24 xwa, 2102874	; 0x20165A
+	add xwa, xhl
+	ld xwa, (xwa)
+	call 0x298590
+	ld wa, (xsp + 4)
+	extz xwa
+	ld xbc, 0x0000004C
+	call 0x29B72D
+	ld xiz, xhl
+	ld wa, (xsp + 6)
+	extz xwa
+	ld xbc, 0x000004C0
+	call 0x29B72D
+	add xhl, 0x780
+	add xhl, xiz
+	ldada_24 xwa, 2102874	; 0x20165A
+	ld xbc, xwa
+	add xbc, xhl
+	ld xwa, 0xFFFFFFFF
+	ld (xbc), xwa
+	ld wa, (xsp + 4)
+	extz xwa
+	ld xbc, 0x0000004C
+	call 0x29B72D
+	ld xiz, xhl
+	ld wa, (xsp + 6)
+	extz xwa
+	ld xbc, 0x000004C0
+	call 0x29B72D
+	add xhl, 0x780
+	add xhl, xiz
+	ldada_24 xwa, 2102861	; 0x20164D (flag base)
+	add xwa, xhl
+	ldmi8 (xwa), 0x00
+.Lcr1_exit:
+	pop xiz
+	inc 4, xsp
+	ret
 
 HDAE5000_Cell_Render_Type2:	; 0x293684 (222 bytes)
-	.incbin "includes/code_28f90c_2953e1.bin", 15736, 222
+	dec 4, xsp
+	push xiz
+	ld (xsp + 4), bc
+	ld (xsp + 6), wa
+	ld wa, (xsp + 4)
+	extz xwa
+	ld xbc, 0x0000004C
+	call 0x29B72D
+	ld xiz, xhl
+	ld wa, (xsp + 6)
+	extz xwa
+	ld xbc, 0x000004C0
+	call 0x29B72D
+	add xhl, 0x780
+	add xhl, xiz
+	ldada_24 xwa, 2102878	; 0x20165E (table base)
+	add xwa, xhl
+	ld xwa, (xwa)
+	cp xwa, 0xFFFFFFFF
+	jrl z, .Lcr2_exit
+	ld wa, (xsp + 4)
+	extz xwa
+	ld xbc, 0x0000004C
+	call 0x29B72D
+	ld xiz, xhl
+	ld wa, (xsp + 6)
+	extz xwa
+	ld xbc, 0x000004C0
+	call 0x29B72D
+	add xhl, 0x780
+	add xhl, xiz
+	ldada_24 xwa, 2102878	; 0x20165E
+	add xwa, xhl
+	ld xwa, (xwa)
+	call 0x298590
+	ld wa, (xsp + 4)
+	extz xwa
+	ld xbc, 0x0000004C
+	call 0x29B72D
+	ld xiz, xhl
+	ld wa, (xsp + 6)
+	extz xwa
+	ld xbc, 0x000004C0
+	call 0x29B72D
+	add xhl, 0x780
+	add xhl, xiz
+	ldada_24 xwa, 2102878	; 0x20165E
+	ld xbc, xwa
+	add xbc, xhl
+	ld xwa, 0xFFFFFFFF
+	ld (xbc), xwa
+	ld wa, (xsp + 4)
+	extz xwa
+	ld xbc, 0x0000004C
+	call 0x29B72D
+	ld xiz, xhl
+	ld wa, (xsp + 6)
+	extz xwa
+	ld xbc, 0x000004C0
+	call 0x29B72D
+	add xhl, 0x780
+	add xhl, xiz
+	ldada_24 xwa, 2102862	; 0x20164E (flag base)
+	add xwa, xhl
+	ldmi8 (xwa), 0x00
+.Lcr2_exit:
+	pop xiz
+	inc 4, xsp
+	ret
 
 HDAE5000_Cell_Render_Type3:	; 0x293762 (222 bytes)
-	.incbin "includes/code_28f90c_2953e1.bin", 15958, 222
+	dec 4, xsp
+	push xiz
+	ld (xsp + 4), bc
+	ld (xsp + 6), wa
+	ld wa, (xsp + 4)
+	extz xwa
+	ld xbc, 0x0000004C
+	call 0x29B72D
+	ld xiz, xhl
+	ld wa, (xsp + 6)
+	extz xwa
+	ld xbc, 0x000004C0
+	call 0x29B72D
+	add xhl, 0x780
+	add xhl, xiz
+	ldada_24 xwa, 2102882	; 0x201662 (table base)
+	add xwa, xhl
+	ld xwa, (xwa)
+	cp xwa, 0xFFFFFFFF
+	jrl z, .Lcr3_exit
+	ld wa, (xsp + 4)
+	extz xwa
+	ld xbc, 0x0000004C
+	call 0x29B72D
+	ld xiz, xhl
+	ld wa, (xsp + 6)
+	extz xwa
+	ld xbc, 0x000004C0
+	call 0x29B72D
+	add xhl, 0x780
+	add xhl, xiz
+	ldada_24 xwa, 2102882	; 0x201662
+	add xwa, xhl
+	ld xwa, (xwa)
+	call 0x298590
+	ld wa, (xsp + 4)
+	extz xwa
+	ld xbc, 0x0000004C
+	call 0x29B72D
+	ld xiz, xhl
+	ld wa, (xsp + 6)
+	extz xwa
+	ld xbc, 0x000004C0
+	call 0x29B72D
+	add xhl, 0x780
+	add xhl, xiz
+	ldada_24 xwa, 2102882	; 0x201662
+	ld xbc, xwa
+	add xbc, xhl
+	ld xwa, 0xFFFFFFFF
+	ld (xbc), xwa
+	ld wa, (xsp + 4)
+	extz xwa
+	ld xbc, 0x0000004C
+	call 0x29B72D
+	ld xiz, xhl
+	ld wa, (xsp + 6)
+	extz xwa
+	ld xbc, 0x000004C0
+	call 0x29B72D
+	add xhl, 0x780
+	add xhl, xiz
+	ldada_24 xwa, 2102863	; 0x20164F (flag base)
+	add xwa, xhl
+	ldmi8 (xwa), 0x00
+.Lcr3_exit:
+	pop xiz
+	inc 4, xsp
+	ret
 
 HDAE5000_Cell_Render_Type4:	; 0x293840 (222 bytes)
-	.incbin "includes/code_28f90c_2953e1.bin", 16180, 222
+	dec 4, xsp
+	push xiz
+	ld (xsp + 4), bc
+	ld (xsp + 6), wa
+	ld wa, (xsp + 4)
+	extz xwa
+	ld xbc, 0x0000004C
+	call 0x29B72D
+	ld xiz, xhl
+	ld wa, (xsp + 6)
+	extz xwa
+	ld xbc, 0x000004C0
+	call 0x29B72D
+	add xhl, 0x780
+	add xhl, xiz
+	ldada_24 xwa, 2102886	; 0x201666 (table base)
+	add xwa, xhl
+	ld xwa, (xwa)
+	cp xwa, 0xFFFFFFFF
+	jrl z, .Lcr4_exit
+	ld wa, (xsp + 4)
+	extz xwa
+	ld xbc, 0x0000004C
+	call 0x29B72D
+	ld xiz, xhl
+	ld wa, (xsp + 6)
+	extz xwa
+	ld xbc, 0x000004C0
+	call 0x29B72D
+	add xhl, 0x780
+	add xhl, xiz
+	ldada_24 xwa, 2102886	; 0x201666
+	add xwa, xhl
+	ld xwa, (xwa)
+	call 0x298590
+	ld wa, (xsp + 4)
+	extz xwa
+	ld xbc, 0x0000004C
+	call 0x29B72D
+	ld xiz, xhl
+	ld wa, (xsp + 6)
+	extz xwa
+	ld xbc, 0x000004C0
+	call 0x29B72D
+	add xhl, 0x780
+	add xhl, xiz
+	ldada_24 xwa, 2102886	; 0x201666
+	ld xbc, xwa
+	add xbc, xhl
+	ld xwa, 0xFFFFFFFF
+	ld (xbc), xwa
+	ld wa, (xsp + 4)
+	extz xwa
+	ld xbc, 0x0000004C
+	call 0x29B72D
+	ld xiz, xhl
+	ld wa, (xsp + 6)
+	extz xwa
+	ld xbc, 0x000004C0
+	call 0x29B72D
+	add xhl, 0x780
+	add xhl, xiz
+	ldada_24 xwa, 2102864	; 0x201650 (flag base)
+	add xwa, xhl
+	ldmi8 (xwa), 0x00
+.Lcr4_exit:
+	pop xiz
+	inc 4, xsp
+	ret
 
 HDAE5000_Cell_Render_Type5:	; 0x29391E (222 bytes)
-	.incbin "includes/code_28f90c_2953e1.bin", 16402, 222
+	dec 4, xsp
+	push xiz
+	ld (xsp + 4), bc
+	ld (xsp + 6), wa
+	ld wa, (xsp + 4)
+	extz xwa
+	ld xbc, 0x0000004C
+	call 0x29B72D
+	ld xiz, xhl
+	ld wa, (xsp + 6)
+	extz xwa
+	ld xbc, 0x000004C0
+	call 0x29B72D
+	add xhl, 0x780
+	add xhl, xiz
+	ldada_24 xwa, 2102890	; 0x20166A (table base)
+	add xwa, xhl
+	ld xwa, (xwa)
+	cp xwa, 0xFFFFFFFF
+	jrl z, .Lcr5_exit
+	ld wa, (xsp + 4)
+	extz xwa
+	ld xbc, 0x0000004C
+	call 0x29B72D
+	ld xiz, xhl
+	ld wa, (xsp + 6)
+	extz xwa
+	ld xbc, 0x000004C0
+	call 0x29B72D
+	add xhl, 0x780
+	add xhl, xiz
+	ldada_24 xwa, 2102890	; 0x20166A
+	add xwa, xhl
+	ld xwa, (xwa)
+	call 0x298590
+	ld wa, (xsp + 4)
+	extz xwa
+	ld xbc, 0x0000004C
+	call 0x29B72D
+	ld xiz, xhl
+	ld wa, (xsp + 6)
+	extz xwa
+	ld xbc, 0x000004C0
+	call 0x29B72D
+	add xhl, 0x780
+	add xhl, xiz
+	ldada_24 xwa, 2102890	; 0x20166A
+	ld xbc, xwa
+	add xbc, xhl
+	ld xwa, 0xFFFFFFFF
+	ld (xbc), xwa
+	ld wa, (xsp + 4)
+	extz xwa
+	ld xbc, 0x0000004C
+	call 0x29B72D
+	ld xiz, xhl
+	ld wa, (xsp + 6)
+	extz xwa
+	ld xbc, 0x000004C0
+	call 0x29B72D
+	add xhl, 0x780
+	add xhl, xiz
+	ldada_24 xwa, 2102865	; 0x201651 (flag base)
+	add xwa, xhl
+	ldmi8 (xwa), 0x00
+.Lcr5_exit:
+	pop xiz
+	inc 4, xsp
+	ret
 
 HDAE5000_Cell_Render_Type6:	; 0x2939FC (222 bytes)
-	.incbin "includes/code_28f90c_2953e1.bin", 16624, 222
+	dec 4, xsp
+	push xiz
+	ld (xsp + 4), bc
+	ld (xsp + 6), wa
+	ld wa, (xsp + 4)
+	extz xwa
+	ld xbc, 0x0000004C
+	call 0x29B72D
+	ld xiz, xhl
+	ld wa, (xsp + 6)
+	extz xwa
+	ld xbc, 0x000004C0
+	call 0x29B72D
+	add xhl, 0x780
+	add xhl, xiz
+	ldada_24 xwa, 2102894	; 0x20166E (table base)
+	add xwa, xhl
+	ld xwa, (xwa)
+	cp xwa, 0xFFFFFFFF
+	jrl z, .Lcr6_exit
+	ld wa, (xsp + 4)
+	extz xwa
+	ld xbc, 0x0000004C
+	call 0x29B72D
+	ld xiz, xhl
+	ld wa, (xsp + 6)
+	extz xwa
+	ld xbc, 0x000004C0
+	call 0x29B72D
+	add xhl, 0x780
+	add xhl, xiz
+	ldada_24 xwa, 2102894	; 0x20166E
+	add xwa, xhl
+	ld xwa, (xwa)
+	call 0x298590
+	ld wa, (xsp + 4)
+	extz xwa
+	ld xbc, 0x0000004C
+	call 0x29B72D
+	ld xiz, xhl
+	ld wa, (xsp + 6)
+	extz xwa
+	ld xbc, 0x000004C0
+	call 0x29B72D
+	add xhl, 0x780
+	add xhl, xiz
+	ldada_24 xwa, 2102894	; 0x20166E
+	ld xbc, xwa
+	add xbc, xhl
+	ld xwa, 0xFFFFFFFF
+	ld (xbc), xwa
+	ld wa, (xsp + 4)
+	extz xwa
+	ld xbc, 0x0000004C
+	call 0x29B72D
+	ld xiz, xhl
+	ld wa, (xsp + 6)
+	extz xwa
+	ld xbc, 0x000004C0
+	call 0x29B72D
+	add xhl, 0x780
+	add xhl, xiz
+	ldada_24 xwa, 2102866	; 0x201652 (flag base)
+	add xwa, xhl
+	ldmi8 (xwa), 0x00
+.Lcr6_exit:
+	pop xiz
+	inc 4, xsp
+	ret
 
 HDAE5000_Cell_Render_Type7:	; 0x293ADA (222 bytes)
-	.incbin "includes/code_28f90c_2953e1.bin", 16846, 222
+	dec 4, xsp
+	push xiz
+	ld (xsp + 4), bc
+	ld (xsp + 6), wa
+	ld wa, (xsp + 4)
+	extz xwa
+	ld xbc, 0x0000004C
+	call 0x29B72D
+	ld xiz, xhl
+	ld wa, (xsp + 6)
+	extz xwa
+	ld xbc, 0x000004C0
+	call 0x29B72D
+	add xhl, 0x780
+	add xhl, xiz
+	ldada_24 xwa, 2102898	; 0x201672 (table base)
+	add xwa, xhl
+	ld xwa, (xwa)
+	cp xwa, 0xFFFFFFFF
+	jrl z, .Lcr7_exit
+	ld wa, (xsp + 4)
+	extz xwa
+	ld xbc, 0x0000004C
+	call 0x29B72D
+	ld xiz, xhl
+	ld wa, (xsp + 6)
+	extz xwa
+	ld xbc, 0x000004C0
+	call 0x29B72D
+	add xhl, 0x780
+	add xhl, xiz
+	ldada_24 xwa, 2102898	; 0x201672
+	add xwa, xhl
+	ld xwa, (xwa)
+	call 0x298590
+	ld wa, (xsp + 4)
+	extz xwa
+	ld xbc, 0x0000004C
+	call 0x29B72D
+	ld xiz, xhl
+	ld wa, (xsp + 6)
+	extz xwa
+	ld xbc, 0x000004C0
+	call 0x29B72D
+	add xhl, 0x780
+	add xhl, xiz
+	ldada_24 xwa, 2102898	; 0x201672
+	ld xbc, xwa
+	add xbc, xhl
+	ld xwa, 0xFFFFFFFF
+	ld (xbc), xwa
+	ld wa, (xsp + 4)
+	extz xwa
+	ld xbc, 0x0000004C
+	call 0x29B72D
+	ld xiz, xhl
+	ld wa, (xsp + 6)
+	extz xwa
+	ld xbc, 0x000004C0
+	call 0x29B72D
+	add xhl, 0x780
+	add xhl, xiz
+	ldada_24 xwa, 2102867	; 0x201653 (flag base)
+	add xwa, xhl
+	ldmi8 (xwa), 0x00
+.Lcr7_exit:
+	pop xiz
+	inc 4, xsp
+	ret
 
 HDAE5000_Cell_Render_Type8:	; 0x293BB8 (222 bytes)
-	.incbin "includes/code_28f90c_2953e1.bin", 17068, 222
+	dec 4, xsp
+	push xiz
+	ld (xsp + 4), bc
+	ld (xsp + 6), wa
+	ld wa, (xsp + 4)
+	extz xwa
+	ld xbc, 0x0000004C
+	call 0x29B72D
+	ld xiz, xhl
+	ld wa, (xsp + 6)
+	extz xwa
+	ld xbc, 0x000004C0
+	call 0x29B72D
+	add xhl, 0x780
+	add xhl, xiz
+	ldada_24 xwa, 2102902	; 0x201676 (table base)
+	add xwa, xhl
+	ld xwa, (xwa)
+	cp xwa, 0xFFFFFFFF
+	jrl z, .Lcr8_exit
+	ld wa, (xsp + 4)
+	extz xwa
+	ld xbc, 0x0000004C
+	call 0x29B72D
+	ld xiz, xhl
+	ld wa, (xsp + 6)
+	extz xwa
+	ld xbc, 0x000004C0
+	call 0x29B72D
+	add xhl, 0x780
+	add xhl, xiz
+	ldada_24 xwa, 2102902	; 0x201676
+	add xwa, xhl
+	ld xwa, (xwa)
+	call 0x298590
+	ld wa, (xsp + 4)
+	extz xwa
+	ld xbc, 0x0000004C
+	call 0x29B72D
+	ld xiz, xhl
+	ld wa, (xsp + 6)
+	extz xwa
+	ld xbc, 0x000004C0
+	call 0x29B72D
+	add xhl, 0x780
+	add xhl, xiz
+	ldada_24 xwa, 2102902	; 0x201676
+	ld xbc, xwa
+	add xbc, xhl
+	ld xwa, 0xFFFFFFFF
+	ld (xbc), xwa
+	ld wa, (xsp + 4)
+	extz xwa
+	ld xbc, 0x0000004C
+	call 0x29B72D
+	ld xiz, xhl
+	ld wa, (xsp + 6)
+	extz xwa
+	ld xbc, 0x000004C0
+	call 0x29B72D
+	add xhl, 0x780
+	add xhl, xiz
+	ldada_24 xwa, 2102868	; 0x201654 (flag base)
+	add xwa, xhl
+	ldmi8 (xwa), 0x00
+.Lcr8_exit:
+	pop xiz
+	inc 4, xsp
+	ret
 
 HDAE5000_Cell_Validate:	; 0x293C96 (347 bytes)
 	; Validate cell rendering parameters
