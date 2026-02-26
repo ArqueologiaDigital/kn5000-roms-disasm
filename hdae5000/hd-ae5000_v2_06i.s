@@ -2780,7 +2780,224 @@ HDAE5000_HD_Sector_Read:	; 0x286A28 (1064 bytes)
 
 HDAE5000_HD_Sector_Write:	; 0x286E50 (646 bytes)
 	; Write sectors to HD; accesses 0x229DAA, 0x229DAC
-	.incbin "includes/code_2803c2_28f542.bin", 27278, 646
+	; --- Prologue ---
+	push xiz				; 3e
+	.byte 0xd7, 0xfa, 0xa8		; ld qiz, 0 — init result
+
+	; --- Switch on state variable at 0x22AA5C ---
+	ldda16_24 xwa, 0x22aa5c		; d2 5c aa 22 20 — ld wa, (0x22aa5c)
+	cps wa, 4				; d8 dc
+	jrl z, .Lsw_case4			; 76 xx xx
+	cps wa, 3				; d8 db
+	jrl z, .Lsw_case3			; 76 xx xx
+	cps wa, 2				; d8 da
+	jr z, .Lsw_case2			; 66 xx
+	cps wa, 1				; d8 d9
+	jr z, .Lsw_case1			; 66 xx
+	cps wa, 0				; d8 d8
+	jrl nz, .Lsw_exit			; 7e xx xx
+
+	; === Case 0: initialize cylinder from BC*100, set state=1 ===
+	ld wa, bc				; d9 88
+	mul wa, 0x0064				; d8 08 64 00
+	stda16_24 0x22aa5e, xwa			; f2 5e aa 22 50 — ld (0x22aa5e), wa
+	stdi16_24 0x22aa60, 0x0000		; f2 60 aa 22 02 00 00
+	stdi16_24 0x22aa5c, 0x0001		; f2 5c aa 22 02 01 00
+	.byte 0x0b, 0x01, 0x00		; push 0x0001
+	ldda16_24 xwa, 0x22aa5e		; d2 5e aa 22 20
+	ldda16_24 xbc, 0x22aa60		; d2 60 aa 22 21
+	ldda16_24 xde, 0x22aa5c		; d2 5c aa 22 22
+	calr HDAE5000_FS_Init			; 1e xx xx
+	.byte 0xd7, 0xfa, 0x9b		; ld qiz, hl — save result
+	jrl t, .Lsw_exit			; 78 xx xx
+
+	; === Case 1: add BC*10 to cylinder, set state=2 ===
+.Lsw_case1:					; 0x286EA4
+	ld wa, bc				; d9 88
+	mul wa, 0x000a				; d8 08 0a 00
+	adddm16_24 0x22aa5e, xwa		; d2 5e aa 22 88
+	stdi16_24 0x22aa5c, 0x0002		; f2 5c aa 22 02 02 00
+	.byte 0x0b, 0x01, 0x00		; push 0x0001
+	ldda16_24 xwa, 0x22aa5e		; d2 5e aa 22 20
+	ldda16_24 xbc, 0x22aa60		; d2 60 aa 22 21
+	ldda16_24 xde, 0x22aa5c		; d2 5c aa 22 22
+	calr HDAE5000_FS_Init			; 1e xx xx
+	.byte 0xd7, 0xfa, 0x9b		; ld qiz, hl
+	jrl t, .Lsw_exit			; 78 xx xx
+
+	; === Case 2: add BC to cylinder, set state=3 ===
+.Lsw_case2:					; 0x286ED1
+	adddm16_24 0x22aa5e, xbc		; d2 5e aa 22 89
+	stdi16_24 0x22aa5c, 0x0003		; f2 5c aa 22 02 03 00
+	.byte 0x0b, 0x01, 0x00		; push 0x0001
+	ldda16_24 xwa, 0x22aa5e		; d2 5e aa 22 20
+	ldda16_24 xbc, 0x22aa60		; d2 60 aa 22 21
+	ldda16_24 xde, 0x22aa5c		; d2 5c aa 22 22
+	calr HDAE5000_FS_Init			; 1e xx xx
+	.byte 0xd7, 0xfa, 0x9b		; ld qiz, hl
+	jrl t, .Lsw_exit			; 78 xx xx
+
+	; === Case 3: set head from BC*10, set state=4 ===
+.Lsw_case3:					; 0x286EF8
+	ld wa, bc				; d9 88
+	mul wa, 0x000a				; d8 08 0a 00
+	stda16_24 0x22aa60, xwa			; f2 60 aa 22 50
+	stdi16_24 0x22aa5c, 0x0004		; f2 5c aa 22 02 04 00
+	.byte 0x0b, 0x01, 0x00		; push 0x0001
+	ldda16_24 xwa, 0x22aa5e		; d2 5e aa 22 20
+	ldda16_24 xbc, 0x22aa60		; d2 60 aa 22 21
+	ldda16_24 xde, 0x22aa5c		; d2 5c aa 22 22
+	calr HDAE5000_FS_Init			; 1e xx xx
+	.byte 0xd7, 0xfa, 0x9b		; ld qiz, hl
+	jrl t, .Lsw_exit			; 78 xx xx
+
+	; === Case 4: add BC to head, set state=5, then process ===
+.Lsw_case4:					; 0x286F25
+	adddm16_24 0x22aa60, xbc		; d2 60 aa 22 89
+	stdi16_24 0x22aa5c, 0x0005		; f2 5c aa 22 02 05 00
+	.byte 0x0b, 0x01, 0x00		; push 0x0001
+	ldda16_24 xwa, 0x22aa5e		; d2 5e aa 22 20
+	ldda16_24 xbc, 0x22aa60		; d2 60 aa 22 21
+	ldda16_24 xde, 0x22aa5c		; d2 5c aa 22 22
+	calr HDAE5000_FS_Init			; 1e xx xx
+	.byte 0xd7, 0xfa, 0x9b		; ld qiz, hl
+
+	; --- After all cases: check result ---
+	.byte 0xd7, 0xfa, 0x88		; ld wa, qiz — load result
+	cps wa, 0				; d8 d8
+	jrl nz, .Lsw_exit			; 7e xx xx — error → exit
+
+	; --- Compute sector address and look up in table ---
+	ldda16_24 xwa, 0x22aa5e		; d2 5e aa 22 20 — cylinder
+	dec 1, wa				; d8 69
+	stda16_24 0x23a092, xwa			; f2 92 a0 23 50
+	ldda16_24 xwa, 0x22aa60		; d2 60 aa 22 20 — head
+	dec 1, wa				; d8 69
+	stda16_24 0x23a094, xwa			; f2 94 a0 23 50
+	ldda16_24 xwa, 0x23a092		; d2 92 a0 23 20
+	ldda16_24 xbc, 0x23a094		; d2 94 a0 23 21
+	call HDAE5000_Table_Lookup		; 1d b3 03 29
+	ld iz, hl				; db 8e
+	ld wa, iz				; de 88
+	cp wa, 0xffff				; d8 cf ff ff
+	jr z, .Lsw_lookup_notfound		; 66 xx
+
+	; --- Found: copy data and seek ---
+.Lsw_lookup_found:				; 0x286F81
+	ldada_24 xwa, 0x22aa4c			; f2 4c aa 22 30
+	ld bc, iz				; de 89
+	.byte 0x0b, 0x02, 0x00		; push 0x0002
+	ldada_24 xde, 0x2e1c96			; f2 96 1c 2e 32
+	calr HDAE5000_HD_Data_Copy		; 1e xx xx
+	ldda16_24 xbc, 0x23a092		; d2 92 a0 23 21
+	ldda16_24 xde, 0x23a094		; d2 94 a0 23 22
+	ld wa, iz				; de 88
+	.byte 0x28			; push wa (compact 16-bit)
+	ld xwa, 0x007f0098			; 40 98 00 7f 00
+	calr HDAE5000_HD_Seek			; 1e xx xx
+	jr t, .Lsw_after_lookup			; 68 xx
+
+	; --- Not found: copy default data and seek with -1 ---
+.Lsw_lookup_notfound:				; 0x286FAA
+	ldada_24 xwa, 0x22aa4c			; f2 4c aa 22 30
+	.byte 0x0b, 0x02, 0x00		; push 0x0002
+	ldada_24 xde, 0x2e1c96			; f2 96 1c 2e 32
+	lds bc, 0				; d9 a8
+	calr HDAE5000_HD_Data_Copy		; 1e xx xx
+	.byte 0x0b, 0xff, 0xff		; push 0xffff
+	ld xwa, 0x007f0098			; 40 98 00 7f 00
+	ldw bc, 0xffff				; 31 ff ff
+	ldw de, 0xffff				; 32 ff ff
+	calr HDAE5000_HD_Seek			; 1e xx xx
+
+	; --- After table lookup: check sectors per track ---
+.Lsw_after_lookup:				; 0x286FCD
+	cpdi8_24 0x229daa, 0x02			; c2 aa 9d 22 3f 02
+	jr nz, .Lsw_exit			; 6e xx
+	; Sectors per track == 2: do display and FS operations
+	.byte 0x0b, 0x01, 0x00		; push 0x0001
+	ld xwa, 0x007f008f			; 40 8f 00 7f 00
+	push xwa				; 38
+	ldda16_24 xwa, 0x23a092		; d2 92 a0 23 20
+	ldda16_24 xbc, 0x23a094		; d2 94 a0 23 21
+	ldda16_24 xde, 0x22aa4c		; d2 4c aa 22 22
+	calr HDAE5000_Display_Manager		; 1e xx xx
+	.byte 0x0b, 0x01, 0x00		; push 0x0001
+	lds wa, 0				; d8 a8
+	lds bc, 0				; d9 a8
+	lds de, 6				; da ae
+	calr HDAE5000_FS_Init			; 1e xx xx
+	; Check second disk flag
+	cpdi8_24 0x229dac, 0x02			; c2 ac 9d 22 3f 02
+	jr nz, .Lsw_exit			; 6e xx
+	; Check bit 8 of aa4c entry
+	ldda16_24 xwa, 0x22aa4c		; d2 4c aa 22 20
+	and wa, 0x0100				; d8 cc 00 01
+	cp wa, 0x0100				; d8 cf 00 01
+	jr nz, .Lsw_exit			; 6e xx
+	; Register event: format complete
+	ldda32_24 xwa, 0x23a1a2		; e2 a2 a1 23 20
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e		; e3 e1 0a 0e 20
+	ld_sril3 xhl, 0xe1, 0x24, 0x01		; e3 e1 24 01 23
+	ld xwa, 0x007f02f0			; 40 f0 02 7f 00
+	ld xbc, 0x01c00001			; 41 01 00 c0 01
+	lds32 xde, 0				; ea a8
+	call (xhl)				; b3 e8
+
+	; === Exit: check QIZ result ===
+.Lsw_exit:					; 0x287030
+	.byte 0xd7, 0xfa, 0x88		; ld wa, qiz
+	cp wa, 0xfffe				; d8 cf fe ff
+	jr z, .Lsw_err_fffe			; 66 xx
+	cp wa, 0xffff				; d8 cf ff ff
+	jrl nz, .Lsw_done			; 7e xx xx
+
+	; --- Error 0xFFFF: register error + timer ---
+	ldda32_24 xwa, 0x23a1a2		; e2 a2 a1 23 20
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e		; e3 e1 0a 0e 20
+	ld_sril3 xhl, 0xe1, 0x04, 0x01		; e3 e1 04 01 23 — ld xhl, (xwa+0x0104)
+	ld xwa, 0x007f02b7			; 40 b7 02 7f 00
+	ld xbc, 0x01c00001			; 41 01 00 c0 01
+	lds32 xde, 5				; ea ad
+	call (xhl)				; b3 e8
+	ld xwa, 0x01ca0002			; 40 02 00 ca 01
+	push xwa				; 38
+	ld xwa, 0x007f008f			; 40 8f 00 7f 00
+	push xwa				; 38
+	ldda32_24 xwa, 0x23a1a2		; e2 a2 a1 23 20
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e		; e3 e1 0a 0e 20
+	ld_sril3 xhl, 0xe1, 0x10, 0x04		; e3 e1 10 04 23 — ld xhl, (xwa+0x0410)
+	ld xwa, 0x00000021			; 40 21 00 00 00
+	ld xbc, 0x007f02b8			; 41 b8 02 7f 00
+	ld xde, 0xffffffff			; 42 ff ff ff ff
+	call (xhl)				; b3 e8
+	jr t, .Lsw_done				; 68 xx
+
+	; --- Error 0xFFFE: register different error + timer ---
+.Lsw_err_fffe:					; 0x28708B
+	ldda32_24 xwa, 0x23a1a2		; e2 a2 a1 23 20
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e		; e3 e1 0a 0e 20
+	ld_sril3 xhl, 0xe1, 0x04, 0x01		; e3 e1 04 01 23 — ld xhl, (xwa+0x0104)
+	ld xwa, 0x007f02bc			; 40 bc 02 7f 00
+	ld xbc, 0x01c00001			; 41 01 00 c0 01
+	lds32 xde, 5				; ea ad
+	call (xhl)				; b3 e8
+	ld xwa, 0x01ca0002			; 40 02 00 ca 01
+	push xwa				; 38
+	ld xwa, 0x007f008f			; 40 8f 00 7f 00
+	push xwa				; 38
+	ldda32_24 xwa, 0x23a1a2		; e2 a2 a1 23 20
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e		; e3 e1 0a 0e 20
+	ld_sril3 xhl, 0xe1, 0x10, 0x04		; e3 e1 10 04 23 — ld xhl, (xwa+0x0410)
+	ld xwa, 0x00000021			; 40 21 00 00 00
+	ld xbc, 0x007f02bd			; 41 bd 02 7f 00
+	ld xde, 0xffffffff			; 42 ff ff ff ff
+	call (xhl)				; b3 e8
+
+	; --- Epilogue ---
+.Lsw_done:					; 0x2870D4
+	pop xiz					; 5e
+	ret					; 0e
 
 ; --- Filesystem Operations ---
 HDAE5000_FS_Init:	; 0x2870D6 (3711 bytes)
