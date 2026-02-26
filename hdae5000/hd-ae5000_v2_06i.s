@@ -3009,8 +3009,306 @@ HDAE5000_File_Rename:	; 0x28E06F (280 bytes)
 	retd 0x0004
 
 HDAE5000_File_Format:	; 0x28E187 (772 bytes)
-	; Format HD or partition
-	.incbin "includes/code_2803c2_28f542.bin", 56773, 772
+	; Format HD or partition — parse sector table, validate, copy strings
+	; Input: BC = start sector, A = flags (bit0=backup, bit1=copy filename)
+	; Output: HL = sectors consumed or 0 on error
+	; Uses QIZH (XIZ high byte) as backup flag
+
+	; --- Prologue ---
+	dec 4, xsp			; allocate 8 bytes
+	push xiz
+	ld (xsp + 4), bc		; save start sector
+	ld (xsp + 6), a		; save flags
+	ldi_berp 0xfb, 0		; QIZH = 0 (no backup)
+
+	; --- Check sector limit ---
+	ld wa, (xsp + 4)
+	inc 4, wa			; WA += 4
+	cp wa, 20457			; cp WA, 0x4FE9
+	jr ule, .Lff_start
+	stdi16_24 2295734, 65535	; (0x2307B6) = 0xFFFF — error
+	lds hl, 0
+	jrl t, .Lff_epilogue
+
+.Lff_start:				; 0x28E1AA
+	ld iz, (xsp + 4)		; IZ = start sector
+	ld a, (xsp + 6)		; A = flags
+	and a, 1			; isolate bit 0
+	cps a, 1
+	jr nz, .Lff_skip_backup_flag
+	ldi_berp 0xfb, 1		; QIZH = 1 (backup mode)
+
+.Lff_skip_backup_flag:			; 0x28E1BA
+	cpi_berp 0xfb, 1		; check QIZH == 1
+	jr nz, .Lff_skip_backup_save
+	; Save current position before overwriting
+	ldda16_24 xwa, 2294840		; WA = (0x230438)
+	stda16_24 2294844, xwa		; (0x23043C) = WA
+	ld wa, (xsp + 4)
+	stda16_24 2294840, xwa		; (0x230438) = start sector
+
+.Lff_skip_backup_save:			; 0x28E1D1
+	ld wa, iz
+	calr HDAE5000_Calc_Disk_Space
+	stda32_24 2295904, xhl		; (0x230860) = free space
+	cp xhl, 4294967295		; == 0xFFFFFFFF?
+	jr nz, .Lff_after_space_check
+	stdi16_24 2295734, 65534	; (0x2307B6) = 0xFFFE — error
+	lds hl, 0
+	jrl t, .Lff_epilogue
+
+.Lff_after_space_check:			; 0x28E1EF
+	cpi_berp 0xfb, 1
+	jr nz, .Lff_skip_backup_copy
+	; Backup: save old values
+	ldda32_24 xwa, 2294848		; XWA = (0x230440)
+	stda32_24 2294856, xwa		; (0x230448) = XWA
+	ldda32_24 xwa, 2294860		; XWA = (0x23044C)
+	stda32_24 2294868, xwa		; (0x230454) = XWA
+	ldda32_24 xwa, 2295904		; XWA = (0x230860)
+	stda32_24 2294860, xwa		; (0x23044C) = XWA
+
+.Lff_skip_backup_copy:			; 0x28E212
+	ldda32_24 xwa, 2295904		; XWA = (0x230860)
+	adddm32_24 2294848, xwa	; (0x230440) += XWA
+	addda16_24 xiz, 2295902	; IZ += (0x23085E)
+	ld wa, iz
+	inc 1, iz			; IZ++
+	; Read sector type byte
+	extz xwa
+	add xwa, 22			; offset by 0x16
+	ld xbc, 2274352			; XBC = 0x0022B430 (table base)
+	add xbc, xwa
+	cpmi8 (xbc), 255		; cp (XBC), 0xFF
+	jr z, .Lff_byte2_read		; if 0xFF, continue
+	stdi16_24 2295734, 65533	; (0x2307B6) = 0xFFFD — error
+	lds hl, 0
+	jrl t, .Lff_epilogue
+
+.Lff_byte2_read:			; 0x28E245
+	ld wa, iz
+	inc 1, iz			; IZ++
+	extz xwa
+	add xwa, 22
+	ld xbc, 2274352			; table base
+	add xbc, xwa
+	ld a, (xbc)			; A = table[IZ+22]
+	extz wa
+	stda16_24 2294832, xwa		; (0x230430) = WA — file type code
+	cpdi16_24 2294832, 47		; cp (0x230430), 0x2F
+	jr nz, .Lff_after_type_check
+	; Type 0x2F: abort
+	stdi16_24 2294836, 1		; (0x230434) = 1 — abort flag
+	ld xwa, 4294967295		; 0xFFFFFFFF
+	stda32_24 2295904, xwa		; (0x230860) = -1
+	lds hl, 0
+	jrl t, .Lff_epilogue
+
+.Lff_after_type_check:			; 0x28E280
+	ld wa, iz
+	calr HDAE5000_Calc_Disk_Space
+	ld xwa, xhl
+	cp xwa, 4294967295		; == 0xFFFFFFFF?
+	jr nz, .Lff_after_format_calc
+	stdi16_24 2295734, 65532	; (0x2307B6) = 0xFFFC — error
+	lds hl, 0
+	jrl t, .Lff_epilogue
+
+.Lff_after_format_calc:			; 0x28E29B
+	addda16_24 xiz, 2295902	; IZ += (0x23085E)
+	stda16_24 2294838, xhl		; (0x230436) = HL — file length
+	; Check combined length
+	ld wa, iz
+	addda16_24 xwa, 2294838	; WA += (0x230436)
+	cp wa, 20457			; cp WA, 0x4FE9
+	jr ule, .Lff_after_limit2
+	stdi16_24 2295734, 65531	; (0x2307B6) = 0xFFFB — error
+	lds hl, 0
+	jrl t, .Lff_epilogue
+
+.Lff_after_limit2:			; 0x28E2BE
+	ld wa, iz
+	addda16_24 xwa, 2294838	; WA += (0x230436)
+	stda16_24 2294842, xwa		; (0x23043A) = WA — end position
+	; Compute free space for remaining
+	ld wa, iz
+	addda16_24 xwa, 2294838	; WA += (0x230436)
+	calr HDAE5000_Calc_Disk_Space
+	stda32_24 2294864, xhl		; (0x230450) = XHL
+	cp xhl, 4294967295
+	jr nz, .Lff_after_error3
+	stdi16_24 2295734, 65530	; (0x2307B6) = 0xFFFA — error
+	lds hl, 0
+	jrl t, .Lff_epilogue
+
+.Lff_after_error3:			; 0x28E2ED
+	; Read terminator byte
+	ld wa, iz
+	addda16_24 xwa, 2294838	; WA += (0x230436)
+	addda16_24 xwa, 2295902	; WA += (0x23085E)
+	inc 4, wa			; WA += 4
+	extz xwa
+	add xwa, 22
+	ld xbc, 2274352
+	add xbc, xwa
+	ld a, (xbc)
+	stda8_24 2295938, a		; (0x230882) = A
+
+	; --- Copy string block 1 (if QIZH == 1) ---
+	cpi_berp 0xfb, 1
+	jr nz, .Lff_after_copy1		; skip if not backup mode
+	cpdi16_24 2294838, 127		; cp (0x230436), 0x7F
+	jr ugt, .Lff_long_copy1	; if > 127, truncate
+	; Short copy: actual length
+	ldda16_24 xwa, 2294838		; WA = (0x230436)
+	extz xwa
+	pushw wa			; push length
+	ld wa, iz
+	extz xwa
+	add xwa, 22
+	ld xbc, 2274352
+	add xbc, xwa
+	push xbc			; push source
+	ldada_24 xwa, 2294872		; &0x230458 — dest
+	push xwa
+	call 2731679			; strcpy_len 0x29AE9F
+	lda xsp, (xsp + 10)		; pop 10 bytes
+	; Null-terminate
+	ldda16_24 xwa, 2294838		; WA = length
+	extz xwa
+	add xwa, 40			; + 0x28
+	ld xbc, 2294832			; XBC = 0x00230430
+	add xbc, xwa
+	ldmi8 (xbc), 0			; null terminate
+	jr t, .Lff_after_copy1
+
+.Lff_long_copy1:			; 0x28E35F
+	pushw 127			; max = 0x7F
+	ld wa, iz
+	extz xwa
+	add xwa, 22
+	ld xbc, 2274352
+	add xbc, xwa
+	push xbc			; push source
+	ldada_24 xwa, 2294872		; &0x230458
+	push xwa
+	call 2731679			; strcpy_len
+	lda xsp, (xsp + 10)
+	stdi8_24 2294999, 0		; (0x2304D7) = 0 — null terminate at 127
+
+.Lff_after_copy1:			; 0x28E387
+	; Compute total allocation
+	ldda32_24 xwa, 2294848		; XWA = (0x230440)
+	addda32_24 xwa, 2294864	; XWA += (0x230450)
+	stda32_24 2294852, xwa		; (0x230444) = XWA — total
+
+	; --- Copy string block 2 (if flag bit 1 set) ---
+	ld a, (xsp + 6)		; A = flags
+	and a, 2			; isolate bit 1
+	cps a, 2
+	jr nz, .Lff_after_copy2		; skip if bit 1 not set
+	cpdi16_24 2294838, 127		; cp (0x230436), 0x7F
+	jr ugt, .Lff_long_copy2
+	; Short copy
+	ldda16_24 xwa, 2294838
+	extz xwa
+	pushw wa
+	ld wa, iz
+	extz xwa
+	add xwa, 22
+	ld xbc, 2274352
+	add xbc, xwa
+	push xbc
+	ldada_24 xwa, 2295350		; &0x230636
+	push xwa
+	call 2731679			; strcpy_len
+	lda xsp, (xsp + 10)
+	; Null-terminate
+	ldda16_24 xwa, 2294838
+	extz xwa
+	ld xbc, 2295350			; 0x00230636
+	add xbc, xwa
+	ldmi8 (xbc), 0
+	jr t, .Lff_after_copy2
+
+.Lff_long_copy2:			; 0x28E3E3
+	pushw 127
+	ld wa, iz
+	extz xwa
+	add xwa, 22
+	ld xbc, 2274352
+	add xbc, xwa
+	push xbc
+	ldada_24 xwa, 2295350		; &0x230636
+	push xwa
+	call 2731679
+	lda xsp, (xsp + 10)
+	stdi8_24 2295477, 0		; (0x2306B5) = 0
+
+.Lff_after_copy2:			; 0x28E40B
+	ldda16_24 xhl, 2294842		; HL = (0x23043A) — end position
+	sub hl, (xsp + 4)		; HL -= start sector
+
+	; --- Epilogue ---
+.Lff_epilogue:				; 0x28E413
+	pop xiz
+	inc 4, xsp
+	ret
+
+	; --- Helper 1: Read 2-byte word from sector table ---
+	; Input: WA = sector index
+	; Output: HL = (table[WA+22+1] | (table[WA+22] << 8))
+HDAE5000_Read_Table_Word:		; 0x28E417
+	ld bc, wa
+	inc 1, bc			; BC = WA + 1
+	extz xbc
+	add xbc, 22
+	ld xde, 2274352			; 0x0022B430
+	add xde, xbc
+	ld c, (xde)			; C = low byte
+	ld e, c				; E = C
+	extz de				; DE = C (zero-extended)
+	extz xwa
+	add xwa, 22
+	ld xbc, 2274352
+	add xbc, xwa
+	ld a, (xbc)			; A = high byte
+	extz wa
+	sll wa, 8			; WA = A << 8
+	ld hl, wa			; HL = high byte << 8
+	or hl, de			; HL |= low byte
+	ret
+
+	; --- Helper 2: Read multi-byte value from sector table ---
+	; Input: WA = sector index
+	; Output: XHL = accumulated multi-byte value (up to 3 bytes)
+HDAE5000_Read_Table_Multi:		; 0x28E44B
+	ld bc, wa
+	extz xbc
+	add xbc, 22
+	ld xde, 2274352
+	add xde, xbc
+	ld c, (xde)			; C = count byte
+	lds32 xhl, 0
+	ld l, c				; L = count (initial byte)
+	lds ix, 0
+	cps ix, 3
+	ret nc				; if count >= 3, return early
+.Lff_h2_loop:				; 0x28E468
+	ld bc, wa
+	add bc, ix			; BC = WA + IX
+	extz xbc
+	add xbc, 22
+	ld xde, 2274352
+	add xde, xbc
+	lds32 xbc, 0
+	ld c, (xde)			; C = table byte
+	sla xhl, 8			; XHL <<= 8
+	add xhl, xbc			; XHL += byte
+	inc 1, ix
+	cps ix, 3
+	jr c, .Lff_h2_loop		; loop while IX < 3
+	ret
 
 HDAE5000_Calc_Disk_Space:	; 0x28E48B (178 bytes)
 	; First sub-routine: scan 4 entries, accumulate free space in XHL
