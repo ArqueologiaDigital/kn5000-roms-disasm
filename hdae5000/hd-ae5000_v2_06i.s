@@ -8868,8 +8868,91 @@ HDAE5000_Int_To_Octal_String:	; 0x29A494 (34 bytes)
 	ret
 
 HDAE5000_String_Format:	; 0x29A4B6 (173 bytes)
-	; sprintf-like formatter entry point (handles %e, %E, %f, %g, %d, %u, %x, %o, %s, %c)
-	.incbin "includes/code_2971b7_29ae9e.bin", 13055, 173
+	; sprintf-like formatter entry point (handles %e, %E, %f, %F, %g, %G)
+	; Allocates 26-byte stack frame, dispatches to String_Format_Core or
+	; String_Format_Output based on format specifier character in C register.
+	lda xsp, (xsp - 26)		; allocate 26-byte stack frame
+	push xiz			; save XIZ
+	ldmw (xsp + 4), 0x0000		; clear local variable
+	lda xwa, (xsp + 6)		; XWA = &local[2]
+	push xwa			; push output buffer ptr
+	lda xwa, (xsp + 8)		; XWA = &local[4] (adjusted)
+	push xwa			; push another ptr
+	pushm (xsp + 0x34)		; push caller param
+	lda xwa, (xsp + 0x12)		; XWA = &local[14]
+	push xwa			; push ptr
+	ld xwa, (xsp + 0x36)		; load caller's 32-bit param
+	push xwa			; push value
+	call 2732154			; call 0x29B07A (setup utility)
+	lda xsp, (xsp + 0x12)		; deallocate 18 bytes of args
+	stdi16_24 2331784, 0x0000	; [0x239488] = 0 (clear format state)
+	lda xde, (xsp + 8)		; XDE = &local[4]
+	ld xiy, xde			; XIY = format output ptr
+	ld c, (xsp + 0x22)		; C = format specifier char
+	ld xiz, (xsp + 0x24)		; XIZ = caller param
+	ld ix, (xsp + 0x2E)		; IX = precision
+	ld hl, (xsp + 0x30)		; HL = width
+	ld a, c				; A = specifier char
+	exts wa				; sign-extend A to WA
+	cp c, 0x65			; specifier == 'e'?
+	jr z, .Lsf_e_format
+	cp c, 0x45			; specifier == 'E'?
+	jr nz, .Lsf_not_eE
+.Lsf_e_format:
+	pushm (xsp + 0x06)		; push param
+	pushm (xsp + 0x06)		; push param
+	push xiy			; push output ptr
+	pushw hl			; push width
+	pushw ix			; push precision
+	pushm (xsp + 0x38)		; push caller param
+	push xiz			; push XIZ
+	pushw wa			; push specifier
+	jr t, .Lsf_call_output		; always → String_Format_Output
+.Lsf_not_eE:
+	cp c, 0x66			; specifier == 'f'?
+	jr z, .Lsf_f_format
+	cp c, 0x46			; specifier == 'F'?
+	jr nz, .Lsf_not_fF
+.Lsf_f_format:
+	pushm (xsp + 0x06)		; push param
+	pushm (xsp + 0x06)		; push param
+	push xiy			; push output ptr
+	pushw hl			; push width
+	pushw ix			; push precision
+	pushm (xsp + 0x38)		; push caller param
+	push xiz			; push XIZ
+	pushw wa			; push specifier
+.Lsf_call_core:
+	calr HDAE5000_String_Format_Core
+	lda xsp, (xsp + 0x14)		; deallocate 20 bytes of args
+	jr t, .Lsf_cleanup		; always → cleanup
+.Lsf_not_fF:				; g/G format handling
+	ld wa, (xsp + 0x2C)		; WA = flags
+	bit 4, wa			; bit 4 set?
+	jr nz, .Lsf_have_precision
+	lds hl, 6			; default precision = 6
+	setm 4, (xsp + 0x2C)		; set precision flag
+.Lsf_have_precision:
+	exts bc				; sign-extend C to BC
+	pushm (xsp + 0x06)		; push param
+	pushm (xsp + 0x06)		; push param
+	push xde			; push XDE
+	pushw hl			; push width
+	pushw ix			; push precision
+	pushm (xsp + 0x38)		; push caller param
+	push xiz			; push XIZ
+	pushw bc			; push specifier (extended)
+	cpmi16 (xsp + 0x18), 0xFFFC	; compare local with -4?
+	jr le, .Lsf_call_output		; if LE → output
+	cp (xsp + 0x18), hl		; compare local with width
+	jr le, .Lsf_call_core		; if LE → use Core formatter
+.Lsf_call_output:
+	calr HDAE5000_String_Format_Output
+	lda xsp, (xsp + 0x14)		; deallocate 20 bytes of args
+.Lsf_cleanup:
+	pop xiz				; restore XIZ
+	lda xsp, (xsp + 0x1A)		; deallocate 26-byte stack frame
+	ret
 
 HDAE5000_String_Format_Core:	; 0x29A563 (805 bytes)
 	; Core string format engine - processes format specifiers
