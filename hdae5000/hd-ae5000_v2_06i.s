@@ -5047,8 +5047,716 @@ HDAE5000_FS_Entry_Lookup:	; 0x28A2F0 (739 bytes)
 
 ; --- Display, Menu, and Utility Routines ---
 HDAE5000_Display_Update_Offset:	; 0x28A5D3 (1612 bytes)
-	; Update display offset from 0x23A092/0x23A094
-	.incbin "includes/code_2803c2_28f542.bin", 41489, 1612
+	; Part 1: Table lookup + data copy utility (68 bytes)
+	ldda16_24 xwa, 0x23a092		; WA = cylinder
+	ldda16_24 xbc, 0x23a094	; BC = head
+	call HDAE5000_Table_Lookup
+	ld wa, hl
+	cp wa, 0xffff
+	jr z, .LDUO__not_found
+	; Found — copy data
+	ldada_24 xwa, 0x22abe6
+	.byte 0x0b, 0x02, 0x00		; push 0x0002
+	ld bc, hl
+	ldada_24 xde, 0x2e1e08
+	calr HDAE5000_HD_Data_Copy
+	jr t, .LDUO__done_p1
+.LDUO__not_found:
+	ldada_24 xwa, 0x22abe6
+	.byte 0x0b, 0x02, 0x00		; push 0x0002
+	ldada_24 xde, 0x2e1e08
+	lds bc, 0
+	calr HDAE5000_HD_Data_Copy
+.LDUO__done_p1:
+	stdi16_24 0x22abe6, 0x0000
+	ret
+	;
+	; Part 2: Handler A (0x28A617) — event handler with stack frame
+.LDUO__handlerA:
+	dec 4, xsp			; alloc 16 bytes
+	push xiz
+	ld (xsp + 0x04), xwa
+	ld xwa, xbc
+	cp xwa, 0x01e00082
+	jr z, .LDUO__hA_ev82
+	sub xwa, 0x01e0003e		; normalize event code
+	cp xwa, 0x00000000
+	jr lt, .LDUO__hA_default
+	cp xwa, 0x00000009
+	jr gt, .LDUO__hA_default
+	add xwa, xwa
+	add xwa, 0x002e2f6c		; jump table
+	ld wa, (xwa)
+	ldada_24 xix, 0x28a651		; dispatch base
+	.byte 0xf3, 0x07, 0xf0, 0xe0, 0xd8	; jp (XIX + WA)
+	; Case 0: full lookup
+	ld xiz, xde
+	ldda16_24 xwa, 0x23a092
+	ldda16_24 xbc, 0x23a094
+	call HDAE5000_Calculate_Row_Address
+	push xhl
+	.byte 0x0b, 0x2e, 0x00		; push 0x002e
+	.byte 0x0b, 0x68, 0x2f		; push 0x2f68
+	ld xwa, (xiz + 0x12)
+	push xwa
+	call 0x29abd8
+	lda xsp, (xsp + 0x0c)
+	ld xhl, (xsp + 0x04)
+	jr t, .LDUO__hA_exit
+	; Case 1
+	lds32 xhl, 1
+	jr t, .LDUO__hA_exit
+	; Case 2
+	lds32 xhl, 1
+	jr t, .LDUO__hA_exit
+	; Case 3
+	lds32 xhl, 0
+	jr t, .LDUO__hA_exit
+	; Case 4
+	lds32 xhl, 0
+	jr t, .LDUO__hA_exit
+	; Case 5
+	ldada_24 xhl, 0x22aa57
+	jr t, .LDUO__hA_exit
+	; Case 6
+	lds32 xhl, 1
+	jr t, .LDUO__hA_exit
+.LDUO__hA_ev82:
+	lds32 xhl, 0
+	jr t, .LDUO__hA_exit
+.LDUO__hA_default:
+	lds32 xhl, 0
+.LDUO__hA_exit:
+	pop xiz
+	inc 4, xsp
+	ret
+	;
+	; Part 3: Handler B (0x28A69D) — digit callback for slot 0 (0x22ABE8)
+.LDUO__handlerB:
+	push xiz
+	ld xiz, xwa
+	ld xwa, xbc
+	cp xwa, 0x01e00082
+	jr z, .LDUO__hB_ev82
+	sub xwa, 0x01e0003e
+	cp xwa, 0x00000000
+	jr lt, .LDUO__hB_default
+	cp xwa, 0x00000009
+	jr gt, .LDUO__hB_default
+	add xwa, xwa
+	add xwa, 0x002e2f84
+	ld wa, (xwa)
+	ldada_24 xix, 0x28a6d4
+	.byte 0xf3, 0x07, 0xf0, 0xe0, 0xd8	; jp (XIX + WA)
+	; Case 0: index + format + display
+	ld xwa, (xde + 0x0e)
+	sll xwa, 2
+	ld xbc, 0x002e1e14
+	add xbc, xwa
+	ld xwa, (xbc)
+	push xwa
+	.byte 0x0b, 0x2e, 0x00		; push 0x002e
+	.byte 0x0b, 0x80, 0x2f		; push 0x2f80
+	ld xwa, (xde + 0x12)
+	push xwa
+	call 0x29abd8
+	lda xsp, (xsp + 0x0c)
+	ld xhl, xiz
+	jr t, .LDUO__hB_exit
+	; Case 1
+	lds32 xhl, 1
+	jr t, .LDUO__hB_exit
+	; Case 2
+	lds32 xhl, 1
+	jr t, .LDUO__hB_exit
+	; Case 3: conditional on (0x22abe8)
+	lds32 xhl, 2
+	cpdi8_24 0x22abe8, 0x00
+	jr nz, .LDUO__hB_c3_nz
+	lds32 xhl, 0
+.LDUO__hB_c3_nz:
+	jr t, .LDUO__hB_exit
+	; Case 4: conditional on (0x22abe8)
+	lds32 xhl, 1
+	cpdi8_24 0x22abe8, 0x00
+	jr nz, .LDUO__hB_c4_nz
+	lds32 xhl, 0
+.LDUO__hB_c4_nz:
+	jr t, .LDUO__hB_exit
+	; Case 5
+	ldada_24 xhl, 0x22abe8
+	jr t, .LDUO__hB_exit
+	; Case 6
+	lds32 xhl, 1
+	jr t, .LDUO__hB_exit
+.LDUO__hB_ev82:
+	ldada_24 xwa, 0x22abe6
+	calr HDAE5000_HD_Buffer_Init
+	lds32 xhl, 0
+	jr t, .LDUO__hB_exit
+.LDUO__hB_default:
+	lds32 xhl, 0
+.LDUO__hB_exit:
+	pop xiz
+	ret
+	;
+	; Part 4: Handler C (0x28A738) — slot 1 (0x22ABE9)
+.LDUO__handlerC:
+	push xiz
+	ld xiz, xwa
+	ld xwa, xbc
+	cp xwa, 0x01e00082
+	jr z, .LDUO__hC_ev82
+	sub xwa, 0x01e0003e
+	cp xwa, 0x00000000
+	jr lt, .LDUO__hC_default
+	cp xwa, 0x00000009
+	jr gt, .LDUO__hC_default
+	add xwa, xwa
+	add xwa, 0x002e2f9c
+	ld wa, (xwa)
+	ldada_24 xix, 0x28a76f
+	.byte 0xf3, 0x07, 0xf0, 0xe0, 0xd8	; jp (XIX + WA)
+	; Case 0
+	ld xwa, (xde + 0x0e)
+	sll xwa, 2
+	ld xbc, 0x002e1e14
+	add xbc, xwa
+	ld xwa, (xbc)
+	push xwa
+	.byte 0x0b, 0x2e, 0x00		; push 0x002e
+	.byte 0x0b, 0x98, 0x2f		; push 0x2f98
+	ld xwa, (xde + 0x12)
+	push xwa
+	call 0x29abd8
+	lda xsp, (xsp + 0x0c)
+	ld xhl, xiz
+	jr t, .LDUO__hC_exit
+	; Case 1
+	lds32 xhl, 1
+	jr t, .LDUO__hC_exit
+	; Case 2
+	lds32 xhl, 1
+	jr t, .LDUO__hC_exit
+	; Case 3
+	lds32 xhl, 2
+	cpdi8_24 0x22abe9, 0x00
+	jr nz, .LDUO__hC_c3_nz
+	lds32 xhl, 0
+.LDUO__hC_c3_nz:
+	jr t, .LDUO__hC_exit
+	; Case 4
+	lds32 xhl, 1
+	cpdi8_24 0x22abe9, 0x00
+	jr nz, .LDUO__hC_c4_nz
+	lds32 xhl, 0
+.LDUO__hC_c4_nz:
+	jr t, .LDUO__hC_exit
+	; Case 5
+	ldada_24 xhl, 0x22abe9
+	jr t, .LDUO__hC_exit
+	; Case 6
+	lds32 xhl, 1
+	jr t, .LDUO__hC_exit
+.LDUO__hC_ev82:
+	ldada_24 xwa, 0x22abe6
+	calr HDAE5000_HD_Buffer_Init
+	lds32 xhl, 0
+	jr t, .LDUO__hC_exit
+.LDUO__hC_default:
+	lds32 xhl, 0
+.LDUO__hC_exit:
+	pop xiz
+	ret
+	;
+	; Part 5: Handler D (0x28A7D3) — slot 2 (0x22ABEA)
+.LDUO__handlerD:
+	push xiz
+	ld xiz, xwa
+	ld xwa, xbc
+	cp xwa, 0x01e00082
+	jr z, .LDUO__hD_ev82
+	sub xwa, 0x01e0003e
+	cp xwa, 0x00000000
+	jr lt, .LDUO__hD_default
+	cp xwa, 0x00000009
+	jr gt, .LDUO__hD_default
+	add xwa, xwa
+	add xwa, 0x002e2fb4
+	ld wa, (xwa)
+	ldada_24 xix, 0x28a80a
+	.byte 0xf3, 0x07, 0xf0, 0xe0, 0xd8	; jp (XIX + WA)
+	; Case 0
+	ld xwa, (xde + 0x0e)
+	sll xwa, 2
+	ld xbc, 0x002e1e14
+	add xbc, xwa
+	ld xwa, (xbc)
+	push xwa
+	.byte 0x0b, 0x2e, 0x00		; push 0x002e
+	.byte 0x0b, 0xb0, 0x2f		; push 0x2fb0
+	ld xwa, (xde + 0x12)
+	push xwa
+	call 0x29abd8
+	lda xsp, (xsp + 0x0c)
+	ld xhl, xiz
+	jr t, .LDUO__hD_exit
+	; Case 1
+	lds32 xhl, 1
+	jr t, .LDUO__hD_exit
+	; Case 2
+	lds32 xhl, 1
+	jr t, .LDUO__hD_exit
+	; Case 3
+	lds32 xhl, 2
+	cpdi8_24 0x22abea, 0x00
+	jr nz, .LDUO__hD_c3_nz
+	lds32 xhl, 0
+.LDUO__hD_c3_nz:
+	jr t, .LDUO__hD_exit
+	; Case 4
+	lds32 xhl, 1
+	cpdi8_24 0x22abea, 0x00
+	jr nz, .LDUO__hD_c4_nz
+	lds32 xhl, 0
+.LDUO__hD_c4_nz:
+	jr t, .LDUO__hD_exit
+	; Case 5
+	ldada_24 xhl, 0x22abea
+	jr t, .LDUO__hD_exit
+	; Case 6
+	lds32 xhl, 1
+	jr t, .LDUO__hD_exit
+.LDUO__hD_ev82:
+	ldada_24 xwa, 0x22abe6
+	calr HDAE5000_HD_Buffer_Init
+	lds32 xhl, 0
+	jr t, .LDUO__hD_exit
+.LDUO__hD_default:
+	lds32 xhl, 0
+.LDUO__hD_exit:
+	pop xiz
+	ret
+	;
+	; Part 6: Handler E (0x28A86E) — slot 3 (0x22ABEB)
+.LDUO__handlerE:
+	push xiz
+	ld xiz, xwa
+	ld xwa, xbc
+	cp xwa, 0x01e00082
+	jr z, .LDUO__hE_ev82
+	sub xwa, 0x01e0003e
+	cp xwa, 0x00000000
+	jr lt, .LDUO__hE_default
+	cp xwa, 0x00000009
+	jr gt, .LDUO__hE_default
+	add xwa, xwa
+	add xwa, 0x002e2fcc
+	ld wa, (xwa)
+	ldada_24 xix, 0x28a8a5
+	.byte 0xf3, 0x07, 0xf0, 0xe0, 0xd8	; jp (XIX + WA)
+	; Case 0
+	ld xwa, (xde + 0x0e)
+	sll xwa, 2
+	ld xbc, 0x002e1e14
+	add xbc, xwa
+	ld xwa, (xbc)
+	push xwa
+	.byte 0x0b, 0x2e, 0x00		; push 0x002e
+	.byte 0x0b, 0xc8, 0x2f		; push 0x2fc8
+	ld xwa, (xde + 0x12)
+	push xwa
+	call 0x29abd8
+	lda xsp, (xsp + 0x0c)
+	ld xhl, xiz
+	jr t, .LDUO__hE_exit
+	; Case 1
+	lds32 xhl, 1
+	jr t, .LDUO__hE_exit
+	; Case 2
+	lds32 xhl, 1
+	jr t, .LDUO__hE_exit
+	; Case 3
+	lds32 xhl, 2
+	cpdi8_24 0x22abeb, 0x00
+	jr nz, .LDUO__hE_c3_nz
+	lds32 xhl, 0
+.LDUO__hE_c3_nz:
+	jr t, .LDUO__hE_exit
+	; Case 4
+	lds32 xhl, 1
+	cpdi8_24 0x22abeb, 0x00
+	jr nz, .LDUO__hE_c4_nz
+	lds32 xhl, 0
+.LDUO__hE_c4_nz:
+	jr t, .LDUO__hE_exit
+	; Case 5
+	ldada_24 xhl, 0x22abeb
+	jr t, .LDUO__hE_exit
+	; Case 6
+	lds32 xhl, 1
+	jr t, .LDUO__hE_exit
+.LDUO__hE_ev82:
+	ldada_24 xwa, 0x22abe6
+	calr HDAE5000_HD_Buffer_Init
+	lds32 xhl, 0
+	jr t, .LDUO__hE_exit
+.LDUO__hE_default:
+	lds32 xhl, 0
+.LDUO__hE_exit:
+	pop xiz
+	ret
+	;
+	; Part 7: Handler F (0x28A909) — slot 4 (0x22ABEC)
+.LDUO__handlerF:
+	push xiz
+	ld xiz, xwa
+	ld xwa, xbc
+	cp xwa, 0x01e00082
+	jr z, .LDUO__hF_ev82
+	sub xwa, 0x01e0003e
+	cp xwa, 0x00000000
+	jr lt, .LDUO__hF_default
+	cp xwa, 0x00000009
+	jr gt, .LDUO__hF_default
+	add xwa, xwa
+	add xwa, 0x002e2fe4
+	ld wa, (xwa)
+	ldada_24 xix, 0x28a940
+	.byte 0xf3, 0x07, 0xf0, 0xe0, 0xd8	; jp (XIX + WA)
+	; Case 0
+	ld xwa, (xde + 0x0e)
+	sll xwa, 2
+	ld xbc, 0x002e1e14
+	add xbc, xwa
+	ld xwa, (xbc)
+	push xwa
+	.byte 0x0b, 0x2e, 0x00		; push 0x002e
+	.byte 0x0b, 0xe0, 0x2f		; push 0x2fe0
+	ld xwa, (xde + 0x12)
+	push xwa
+	call 0x29abd8
+	lda xsp, (xsp + 0x0c)
+	ld xhl, xiz
+	jr t, .LDUO__hF_exit
+	; Case 1
+	lds32 xhl, 1
+	jr t, .LDUO__hF_exit
+	; Case 2
+	lds32 xhl, 1
+	jr t, .LDUO__hF_exit
+	; Case 3
+	lds32 xhl, 2
+	cpdi8_24 0x22abec, 0x00
+	jr nz, .LDUO__hF_c3_nz
+	lds32 xhl, 0
+.LDUO__hF_c3_nz:
+	jr t, .LDUO__hF_exit
+	; Case 4
+	lds32 xhl, 1
+	cpdi8_24 0x22abec, 0x00
+	jr nz, .LDUO__hF_c4_nz
+	lds32 xhl, 0
+.LDUO__hF_c4_nz:
+	jr t, .LDUO__hF_exit
+	; Case 5
+	ldada_24 xhl, 0x22abec
+	jr t, .LDUO__hF_exit
+	; Case 6
+	lds32 xhl, 1
+	jr t, .LDUO__hF_exit
+.LDUO__hF_ev82:
+	ldada_24 xwa, 0x22abe6
+	calr HDAE5000_HD_Buffer_Init
+	lds32 xhl, 0
+	jr t, .LDUO__hF_exit
+.LDUO__hF_default:
+	lds32 xhl, 0
+.LDUO__hF_exit:
+	pop xiz
+	ret
+	;
+	; Part 8: Handler G (0x28A9A4) — slot 5 (0x22ABED)
+.LDUO__handlerG:
+	push xiz
+	ld xiz, xwa
+	ld xwa, xbc
+	cp xwa, 0x01e00082
+	jr z, .LDUO__hG_ev82
+	sub xwa, 0x01e0003e
+	cp xwa, 0x00000000
+	jr lt, .LDUO__hG_default
+	cp xwa, 0x00000009
+	jr gt, .LDUO__hG_default
+	add xwa, xwa
+	add xwa, 0x002e2ffc
+	ld wa, (xwa)
+	ldada_24 xix, 0x28a9db
+	.byte 0xf3, 0x07, 0xf0, 0xe0, 0xd8	; jp (XIX + WA)
+	; Case 0
+	ld xwa, (xde + 0x0e)
+	sll xwa, 2
+	ld xbc, 0x002e1e14
+	add xbc, xwa
+	ld xwa, (xbc)
+	push xwa
+	.byte 0x0b, 0x2e, 0x00		; push 0x002e
+	.byte 0x0b, 0xf8, 0x2f		; push 0x2ff8
+	ld xwa, (xde + 0x12)
+	push xwa
+	call 0x29abd8
+	lda xsp, (xsp + 0x0c)
+	ld xhl, xiz
+	jr t, .LDUO__hG_exit
+	; Case 1
+	lds32 xhl, 1
+	jr t, .LDUO__hG_exit
+	; Case 2
+	lds32 xhl, 1
+	jr t, .LDUO__hG_exit
+	; Case 3
+	lds32 xhl, 2
+	cpdi8_24 0x22abed, 0x00
+	jr nz, .LDUO__hG_c3_nz
+	lds32 xhl, 0
+.LDUO__hG_c3_nz:
+	jr t, .LDUO__hG_exit
+	; Case 4
+	lds32 xhl, 1
+	cpdi8_24 0x22abed, 0x00
+	jr nz, .LDUO__hG_c4_nz
+	lds32 xhl, 0
+.LDUO__hG_c4_nz:
+	jr t, .LDUO__hG_exit
+	; Case 5
+	ldada_24 xhl, 0x22abed
+	jr t, .LDUO__hG_exit
+	; Case 6
+	lds32 xhl, 1
+	jr t, .LDUO__hG_exit
+.LDUO__hG_ev82:
+	ldada_24 xwa, 0x22abe6
+	calr HDAE5000_HD_Buffer_Init
+	lds32 xhl, 0
+	jr t, .LDUO__hG_exit
+.LDUO__hG_default:
+	lds32 xhl, 0
+.LDUO__hG_exit:
+	pop xiz
+	ret
+	;
+	; Part 9: Handler H (0x28AA3F) — slot 6 (0x22ABEE)
+.LDUO__handlerH:
+	push xiz
+	ld xiz, xwa
+	ld xwa, xbc
+	cp xwa, 0x01e00082
+	jr z, .LDUO__hH_ev82
+	sub xwa, 0x01e0003e
+	cp xwa, 0x00000000
+	jr lt, .LDUO__hH_default
+	cp xwa, 0x00000009
+	jr gt, .LDUO__hH_default
+	add xwa, xwa
+	add xwa, 0x002e3014
+	ld wa, (xwa)
+	ldada_24 xix, 0x28aa76
+	.byte 0xf3, 0x07, 0xf0, 0xe0, 0xd8	; jp (XIX + WA)
+	; Case 0
+	ld xwa, (xde + 0x0e)
+	sll xwa, 2
+	ld xbc, 0x002e1e14
+	add xbc, xwa
+	ld xwa, (xbc)
+	push xwa
+	.byte 0x0b, 0x2e, 0x00		; push 0x002e
+	.byte 0x0b, 0x10, 0x30		; push 0x3010
+	ld xwa, (xde + 0x12)
+	push xwa
+	call 0x29abd8
+	lda xsp, (xsp + 0x0c)
+	ld xhl, xiz
+	jr t, .LDUO__hH_exit
+	; Case 1
+	lds32 xhl, 1
+	jr t, .LDUO__hH_exit
+	; Case 2
+	lds32 xhl, 1
+	jr t, .LDUO__hH_exit
+	; Case 3
+	lds32 xhl, 2
+	cpdi8_24 0x22abee, 0x00
+	jr nz, .LDUO__hH_c3_nz
+	lds32 xhl, 0
+.LDUO__hH_c3_nz:
+	jr t, .LDUO__hH_exit
+	; Case 4
+	lds32 xhl, 1
+	cpdi8_24 0x22abee, 0x00
+	jr nz, .LDUO__hH_c4_nz
+	lds32 xhl, 0
+.LDUO__hH_c4_nz:
+	jr t, .LDUO__hH_exit
+	; Case 5
+	ldada_24 xhl, 0x22abee
+	jr t, .LDUO__hH_exit
+	; Case 6
+	lds32 xhl, 1
+	jr t, .LDUO__hH_exit
+.LDUO__hH_ev82:
+	ldada_24 xwa, 0x22abe6
+	calr HDAE5000_HD_Buffer_Init
+	lds32 xhl, 0
+	jr t, .LDUO__hH_exit
+.LDUO__hH_default:
+	lds32 xhl, 0
+.LDUO__hH_exit:
+	pop xiz
+	ret
+	;
+	; Part 10: Handler I (0x28AADA) — slot 7 (0x22ABEF)
+.LDUO__handlerI:
+	push xiz
+	ld xiz, xwa
+	ld xwa, xbc
+	cp xwa, 0x01e00082
+	jr z, .LDUO__hI_ev82
+	sub xwa, 0x01e0003e
+	cp xwa, 0x00000000
+	jr lt, .LDUO__hI_default
+	cp xwa, 0x00000009
+	jr gt, .LDUO__hI_default
+	add xwa, xwa
+	add xwa, 0x002e302c
+	ld wa, (xwa)
+	ldada_24 xix, 0x28ab11
+	.byte 0xf3, 0x07, 0xf0, 0xe0, 0xd8	; jp (XIX + WA)
+	; Case 0
+	ld xwa, (xde + 0x0e)
+	sll xwa, 2
+	ld xbc, 0x002e1e14
+	add xbc, xwa
+	ld xwa, (xbc)
+	push xwa
+	.byte 0x0b, 0x2e, 0x00		; push 0x002e
+	.byte 0x0b, 0x28, 0x30		; push 0x3028
+	ld xwa, (xde + 0x12)
+	push xwa
+	call 0x29abd8
+	lda xsp, (xsp + 0x0c)
+	ld xhl, xiz
+	jr t, .LDUO__hI_exit
+	; Case 1
+	lds32 xhl, 1
+	jr t, .LDUO__hI_exit
+	; Case 2
+	lds32 xhl, 1
+	jr t, .LDUO__hI_exit
+	; Case 3
+	lds32 xhl, 2
+	cpdi8_24 0x22abef, 0x00
+	jr nz, .LDUO__hI_c3_nz
+	lds32 xhl, 0
+.LDUO__hI_c3_nz:
+	jr t, .LDUO__hI_exit
+	; Case 4
+	lds32 xhl, 1
+	cpdi8_24 0x22abef, 0x00
+	jr nz, .LDUO__hI_c4_nz
+	lds32 xhl, 0
+.LDUO__hI_c4_nz:
+	jr t, .LDUO__hI_exit
+	; Case 5
+	ldada_24 xhl, 0x22abef
+	jr t, .LDUO__hI_exit
+	; Case 6
+	lds32 xhl, 1
+	jr t, .LDUO__hI_exit
+.LDUO__hI_ev82:
+	ldada_24 xwa, 0x22abe6
+	calr HDAE5000_HD_Buffer_Init
+	lds32 xhl, 0
+	jr t, .LDUO__hI_exit
+.LDUO__hI_default:
+	lds32 xhl, 0
+.LDUO__hI_exit:
+	pop xiz
+	ret
+	;
+	; Part 11: Handler J (0x28AB75) — slot 8 (0x22ABF0), variant with jrl
+.LDUO__handlerJ:
+	push xiz
+	ld xiz, xwa
+	ld xwa, xbc
+	cp xwa, 0x01e00082
+	jrl z, .LDUO__hJ_ev82
+	sub xwa, 0x01e0003e
+	cp xwa, 0x00000000
+	jrl lt, .LDUO__hJ_default
+	cp xwa, 0x00000009
+	jrl gt, .LDUO__hJ_default
+	add xwa, xwa
+	add xwa, 0x002e3044
+	ld wa, (xwa)
+	ldada_24 xix, 0x28abaf
+	.byte 0xf3, 0x07, 0xf0, 0xe0, 0xd8	; jp (XIX + WA)
+	; Case 0
+	ld xwa, (xde + 0x0e)
+	sll xwa, 2
+	ld xbc, 0x002e1e14
+	add xbc, xwa
+	ld xwa, (xbc)
+	push xwa
+	.byte 0x0b, 0x2e, 0x00		; push 0x002e
+	.byte 0x0b, 0x40, 0x30		; push 0x3040
+	ld xwa, (xde + 0x12)
+	push xwa
+	call 0x29abd8
+	lda xsp, (xsp + 0x0c)
+	ld xhl, xiz
+	jr t, .LDUO__hJ_exit
+	; Case 1
+	lds32 xhl, 1
+	jr t, .LDUO__hJ_exit
+	; Case 2
+	lds32 xhl, 1
+	jr t, .LDUO__hJ_exit
+	; Case 3
+	lds32 xhl, 2
+	cpdi8_24 0x22abf0, 0x00
+	jr nz, .LDUO__hJ_c3_nz
+	lds32 xhl, 0
+.LDUO__hJ_c3_nz:
+	jr t, .LDUO__hJ_exit
+	; Case 4: extra comparison vs 0x01
+	cpdi8_24 0x22abf0, 0x01
+	jr nz, .LDUO__hJ_c4_ne1
+	lds32 xhl, 2
+	jr t, .LDUO__hJ_c4_chk
+.LDUO__hJ_c4_ne1:
+	lds32 xhl, 1
+.LDUO__hJ_c4_chk:
+	cpdi8_24 0x22abf0, 0x00
+	jr nz, .LDUO__hJ_c4_nz
+	lds32 xhl, 0
+.LDUO__hJ_c4_nz:
+	jr t, .LDUO__hJ_exit
+	; Case 5
+	ldada_24 xhl, 0x22abf0
+	jr t, .LDUO__hJ_exit
+	; Case 6
+	lds32 xhl, 1
+	jr t, .LDUO__hJ_exit
+.LDUO__hJ_ev82:
+	ldada_24 xwa, 0x22abe6
+	calr HDAE5000_HD_Buffer_Init
+	lds32 xhl, 0
+	jr t, .LDUO__hJ_exit
+.LDUO__hJ_default:
+	lds32 xhl, 0
+.LDUO__hJ_exit:
+	pop xiz
+	ret
 
 HDAE5000_Menu_Register_A:	; 0x28AC1F (73 bytes)
 	; Register menu handler (variant A)
