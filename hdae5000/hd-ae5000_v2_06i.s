@@ -8469,9 +8469,86 @@ HDAE5000_Cmd01_SendInfo:	; 0x2958D6 (62 bytes)
 	nop
 	jp HDAE5000_PPORT_Cmd_Done
 
-HDAE5000_Cmd02_Exit:	; 0x295914
-	; Handler: Exit PPORT
-	.incbin "includes/code_295642_2971a2.bin", 722, 226
+HDAE5000_Cmd02_Exit:	; 0x295914 (226 bytes)
+	; Handler: Exit PPORT — display status, render, read sector/head masks,
+	; AND with data bytes, write back, sum buffer, check results
+	ldw wa, 0x001A				; display command
+	nop
+	ldada_24 xbc, 2708654			; lda XBC, 0x2954AE — status string
+	nop
+	call HDAE5000_Display_String
+	call HDAE5000_Render_Display_Region
+	call HDAE5000_Render_Display_Region2
+	call 2713602				; call 0x296802 — register XIX
+	call HDAE5000_PPORT_Ready_Check
+	lds bc, 0				; BC = 0
+	ldw hl, 0x00C8				; HL = 200
+	nop
+	call 2714308				; call 0x296AC4 — utility
+	ldada_24 xix, 2330984			; lda XIX, 0x239168
+	nop
+	ld a, (xix)				; read byte 0 from PPORT data
+	stda8_24 2330846, a			; st (0x2390DE), A — save sector byte
+	nop
+	ldda8_24 w, 2330842			; ld W, (0x2390DA) — sector mask
+	nop
+	and w, a				; W = mask AND data
+	stda8_24 2330850, w			; st (0x2390E2), W — masked sector
+	nop
+	ld a, (xix + 1)			; read byte 1 from PPORT data
+	nop
+	stda8_24 2330848, a			; st (0x2390E0), A — save head byte
+	nop
+	ldda8_24 w, 2330844			; ld W, (0x2390DC) — head mask
+	nop
+	and w, a				; W = mask AND data
+	stda8_24 2330852, w			; st (0x2390E4), W — masked head
+	nop
+	ld (xix), w				; write masked head to PPORT[0]
+	call HDAE5000_PPORT_Sum_Buffer
+	cpdi8_24 2330836, 0x01			; cp (0x2390D4), 1 — error?
+	jpcc_24 6, 2708340			; jp Z, 0x295374 — abort
+	nop
+	cpdi8_24 2330850, 0x00			; cp (0x2390E2), 0 — masked sector=0?
+	jpcc_24 6, 2710002			; jp Z, 0x2959F2 — skip to end
+	nop
+	jp .Lce_continue
+.Lce_check_head:			; 0x295992
+	cpdi8_24 2330852, 0x00			; cp (0x2390E4), 0 — masked head=0?
+	jpcc_24 6, 2710002			; jp Z, 0x2959F2 — skip to end
+	nop
+.Lce_continue:				; 0x29599E
+	call HDAE5000_PPORT_Ready_Check
+	ldda32_24 xix, 2330880			; ld XIX, (0x239100) — data source ptr
+	nop
+	ldda8_24 a, 2330850			; ld A, (0x2390E2) — masked sector
+	nop
+	ld (xix), a				; write sector to buffer[0]
+	ldda8_24 a, 2330852			; ld A, (0x2390E4) — masked head
+	nop
+	ld (xix + 1), a			; write head to buffer[1]
+	nop
+	xor xbc, xbc
+	xor xde, xde
+	ldda8_24 c, 2330838			; ld C, (0x2390D6)
+	nop
+	ldda8_24 e, 2330840			; ld E, (0x2390D8)
+	nop
+	ldw wa, 0x000E				; display command
+	nop
+	di
+	call HDAE5000_Display_String
+	ei 7
+	cps wa, 0				; check result
+	jpcc_24 6, 2709986			; jp Z, 0x2959E2 — skip cleanup
+	nop
+	call HDAE5000_PPORT_Cleanup
+.Lce_final_sum:				; 0x2959E2
+	call HDAE5000_PPORT_Sum_Buffer
+	cpdi8_24 2330836, 0x01			; cp (0x2390D4), 1 — error?
+	jpcc_24 6, 2708340			; jp Z, 0x295374 — abort
+	nop
+	jp HDAE5000_PPORT_Cmd_Done
 
 HDAE5000_Cmd03_ReadFSB:	; 0x2959F6
 	; Handler: Read FSB from HD
