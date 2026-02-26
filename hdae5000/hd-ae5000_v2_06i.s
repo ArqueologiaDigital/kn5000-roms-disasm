@@ -5810,7 +5810,141 @@ HDAE5000_Workspace_Handler:	; 0x29311B (592 bytes)
 	.incbin "includes/code_28f90c_2953e1.bin", 14351, 592
 
 HDAE5000_Workspace_Sub_29336B:	; 0x29336B (349 bytes)
-	.incbin "includes/code_28f90c_2953e1.bin", 14943, 349
+	dec 4, xsp
+	push xiz
+	ld iz, de
+	ld (xsp + 4), bc	; save file number
+	ld (xsp + 6), wa	; save partition
+	cps iz, 0
+	jrl z, .Lws36b_exit	; nothing to do
+	; Workspace dispatch at 0xE8
+	ldda32_24 xwa, 2335138	; 0x23A1A2
+	ld_sril3 xwa, 0xE1, 0x88, 0x0E
+	ld_sril3 xhl, 0xE1, 0xE8, 0x00
+	lds wa, 1
+	call (xhl)
+	; Check workspace flag at (xsp+14)
+	cpmi16 (xsp + 14), 0x0001
+	jr nz, .Lws36b_skip1
+	; Workspace dispatch at 0x0538
+	ldda32_24 xwa, 2335138
+	ld_sril3 xwa, 0xE1, 0x0A, 0x0E
+	ld_sril3 xhl, 0xE1, 0x38, 0x05
+	call (xhl)
+.Lws36b_skip1:
+	call 0x297466
+	; Bitmask dispatch: test bits of IZ, call corresponding renderers
+	bit 0, iz
+	jr z, .Lws36b_bit1
+	ld wa, (xsp + 6)
+	ld bc, (xsp + 4)
+	calr HDAE5000_Cell_Render_Type0
+.Lws36b_bit1:
+	bit 1, iz
+	jr z, .Lws36b_bit2
+	ld wa, (xsp + 6)
+	ld bc, (xsp + 4)
+	calr HDAE5000_Cell_Render_Type1
+.Lws36b_bit2:
+	bit 2, iz
+	jr z, .Lws36b_bit3
+	ld wa, (xsp + 6)
+	ld bc, (xsp + 4)
+	calr HDAE5000_Cell_Render_Type2
+.Lws36b_bit3:
+	bit 3, iz
+	jr z, .Lws36b_bit4
+	ld wa, (xsp + 6)
+	ld bc, (xsp + 4)
+	calr HDAE5000_Cell_Render_Type3
+.Lws36b_bit4:
+	bit 4, iz
+	jr z, .Lws36b_bit5
+	ld wa, (xsp + 6)
+	ld bc, (xsp + 4)
+	calr HDAE5000_Cell_Render_Type4
+.Lws36b_bit5:
+	bit 5, iz
+	jr z, .Lws36b_bit6
+	ld wa, (xsp + 6)
+	ld bc, (xsp + 4)
+	calr HDAE5000_Cell_Render_Type5
+.Lws36b_bit6:
+	bit 6, iz
+	jr z, .Lws36b_bit7
+	ld wa, (xsp + 6)
+	ld bc, (xsp + 4)
+	calr HDAE5000_Cell_Render_Type6
+.Lws36b_bit7:
+	bit 7, iz
+	jr z, .Lws36b_bit8
+	ld wa, (xsp + 6)
+	ld bc, (xsp + 4)
+	calr HDAE5000_Cell_Render_Type7
+.Lws36b_bit8:
+	bit 8, iz
+	jr z, .Lws36b_calc
+	ld wa, (xsp + 6)
+	ld bc, (xsp + 4)
+	calr HDAE5000_Cell_Render_Type8
+.Lws36b_calc:
+	; Calculate table offset
+	ld wa, (xsp + 6)
+	ld bc, (xsp + 4)
+	calr HDAE5000_Table_Calc_Offset
+	cp hl, 0xFFFF
+	jr nz, .Lws36b_post
+	; Push args and call 0x29AEC7
+	pushw 0x001A
+	pushw 0x0020
+	ld wa, (xsp + 8)
+	extz xwa
+	ld xbc, 0x0000004C
+	call 0x29B72D
+	ld xiz, xhl
+	ld wa, (xsp + 10)
+	extz xwa
+	ld xbc, 0x000004C0
+	call 0x29B72D
+	add xhl, 0x780
+	add xhl, xiz
+	ld xwa, 0x00201632
+	add xwa, xhl
+	push xwa
+	call 0x29AEC7
+	inc 0, xsp
+	; Call workspace handler
+	ld wa, (xsp + 6)
+	ld bc, (xsp + 4)
+	calr HDAE5000_Workspace_Handler
+.Lws36b_post:
+	call 0x297A78
+	; Conditional call NZ to 0x2974B5
+	cpmi16 (xsp + 12), 0x0001
+	callcc_24 14, 2716853	; call nz, 0x2974B5
+	; Check workspace flag at (xsp+14)
+	cpmi16 (xsp + 14), 0x0001
+	jr nz, .Lws36b_skip2
+	; Workspace dispatch at 0x053C
+	ldda32_24 xwa, 2335138
+	ld_sril3 xwa, 0xE1, 0x0A, 0x0E
+	ld_sril3 xhl, 0xE1, 0x3C, 0x05
+	call (xhl)
+.Lws36b_skip2:
+	; Workspace dispatch at 0xEC
+	ldda32_24 xwa, 2335138
+	ld_sril3 xwa, 0xE1, 0x88, 0x0E
+	ld_sril3 xhl, 0xE1, 0xEC, 0x00
+	call (xhl)
+	; Workspace dispatch at 0xF0
+	ldda32_24 xwa, 2335138
+	ld_sril3 xwa, 0xE1, 0x88, 0x0E
+	ld_sril3 xhl, 0xE1, 0xF0, 0x00
+	call (xhl)
+.Lws36b_exit:
+	pop xiz
+	inc 4, xsp
+	retd 4
 
 ; --- UI Cell Renderers (9 x 222 bytes each) ---
 ; Delete table entry: check existence, call handler, clear entry (-1), clear flag (0)
