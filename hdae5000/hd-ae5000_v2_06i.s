@@ -8650,9 +8650,88 @@ HDAE5000_PPORT_Cmd_ReceiveDataBlock:	; 0x296588
 	call HDAE5000_Display_String
 	jp HDAE5000_PPORT_Cmd_Done
 
-HDAE5000_PPORT_Cmd_WriteMemoryToHD:	; 0x29659A
-	; Save memory to HD
-	.incbin "includes/code_295642_2971a2.bin", 3928, 230
+HDAE5000_PPORT_Cmd_WriteMemoryToHD:	; 0x29659A (230 bytes)
+	; Save memory to HD with sector/head masking and multi-step transfer.
+	ldw wa, 0x001A			; display row/column
+	nop
+	ldada_24 xbc, 2708870		; 0x295586 - "Write Memory" string
+	nop
+	call HDAE5000_Display_String
+	call HDAE5000_Render_Display_Region
+	call HDAE5000_Render_Display_Region2
+	call 2713602			; call 0x296802 (prepare data)
+	call HDAE5000_PPORT_Ready_Check
+	lds bc, 0			; BC = 0
+	ldw hl, 0x00C8			; HL = 200 (block size)
+	nop
+	call 2714308			; call 0x296AC4 (transfer setup)
+	ldada_24 xix, 2330984		; XIX = 0x239168 (PPORT cmd area)
+	nop
+	ld a, (xix)			; A = cmd[0]
+	stda8_24 2330846, a		; [0x2390DE] = cmd[0] (raw sector byte)
+	nop
+	ldda8_24 w, 2330842		; W = [0x2390DA] (sector mask)
+	nop
+	and w, a			; W = cmd[0] AND sector_mask
+	stda8_24 2330850, w		; [0x2390E2] = masked sector
+	nop
+	ld (xix), w			; update cmd[0] with masked value
+	ld a, (xix + 1)			; A = cmd[1]
+	nop
+	stda8_24 2330848, a		; [0x2390E0] = cmd[1] (raw head byte)
+	nop
+	ldda8_24 w, 2330844		; W = [0x2390DC] (head mask)
+	nop
+	and w, a			; W = cmd[1] AND head_mask
+	stda8_24 2330852, w		; [0x2390E4] = masked head
+	nop
+	ld (xix + 1), w			; update cmd[1] with masked value
+	nop
+	call HDAE5000_PPORT_Sum_Buffer
+	cpdi8_24 2330836, 1		; [0x2390D4] == 1? (status check)
+	jpcc_24 6, 2708340		; jp Z → exit to PPORT finish (0x295374)
+	nop
+	cpdi8_24 2330850, 0x00		; masked sector == 0?
+	jpcc_24 6, 2713116		; jp Z → check head (0x29661C)
+	nop
+	jp 2713128			; jp → do write (0x296628)
+.Lwmhd_check_head:			; 0x29661C
+	cpdi8_24 2330852, 0x00		; masked head == 0?
+	jpcc_24 6, 2713212		; jp Z → done (0x29667C)
+	nop
+.Lwmhd_do_write:			; 0x296628
+	call HDAE5000_PPORT_Ready_Check
+	ldda32_24 xix, 2330880		; XIX = [0x239100] (data source ptr)
+	nop
+	ldda8_24 a, 2330850		; A = masked sector
+	nop
+	ld (xix), a			; store to data[0]
+	ldda8_24 a, 2330852		; A = masked head
+	nop
+	ld (xix + 1), a			; store to data[1]
+	nop
+	xor xbc, xbc			; XBC = 0
+	xor xde, xde			; XDE = 0
+	ldda8_24 c, 2330838		; C = [0x2390D6] (sector param)
+	nop
+	ldda8_24 e, 2330840		; E = [0x2390D8] (head param)
+	nop
+	ldw wa, 0x001B			; WA = 0x1B (write command)
+	nop
+	ei 0x00				; disable interrupts
+	call HDAE5000_Display_String
+	ei 0x07				; enable interrupts
+	cps wa, 0			; result == 0?
+	jpcc_24 6, 2713196		; jp Z → skip error (0x29666C)
+	nop
+	call HDAE5000_PPORT_Cleanup
+.Lwmhd_after_write:			; 0x29666C
+	call HDAE5000_PPORT_Sum_Buffer
+	cpdi8_24 2330836, 1		; [0x2390D4] == 1?
+	jpcc_24 6, 2708340		; jp Z → exit (0x295374)
+	nop
+.Lwmhd_done:				; 0x29667C
+	jp HDAE5000_PPORT_Cmd_Done
 
 HDAE5000_PPORT_Cmd_Reserved:	; 0x296680 (62 bytes)
 	; Reserved PPORT command - display status, clear buffer, check result
