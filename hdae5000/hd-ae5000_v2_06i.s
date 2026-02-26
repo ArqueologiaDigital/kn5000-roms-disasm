@@ -6960,9 +6960,119 @@ HDAE5000_PPORT_Menu:	; 0x2952D6
 	ret
 	nop
 
-HDAE5000_PPORT_Execute:	; 0x2952F8
-	; Execute PPORT command
-	.incbin "includes/code_28f90c_2953e1.bin", 23020, 234
+HDAE5000_PPORT_Execute:	; 0x2952F8 (234 bytes)
+	; Execute PPORT command — dispatch on A register (command ID 0-7)
+	and a, 0x7F			; mask high bit
+	nop
+	cps a, 0
+	jr nz, .Lppe_cmd1
+	jp .Lppe_read_exec		; cmd 0 → read/execute
+.Lppe_cmd1:
+	cps a, 1
+	jr nz, .Lppe_cmd2
+	jp .Lppe_read_exec		; cmd 1 → read/execute
+.Lppe_cmd2:
+	cps a, 2
+	jr nz, .Lppe_cmd3
+	jp .Lppe_simple_ret		; cmd 2 → simple ret
+.Lppe_cmd3:
+	cps a, 3
+	jr nz, .Lppe_cmd4
+	jp .Lppe_simple_ret		; cmd 3 → simple ret
+.Lppe_cmd4:
+	cps a, 4
+	jr nz, .Lppe_cmd5
+	jp .Lppe_simple_ret		; cmd 4 → simple ret
+.Lppe_cmd5:
+	cps a, 5
+	jr nz, .Lppe_cmd6
+	jp .Lppe_simple_ret		; cmd 5 → simple ret
+.Lppe_cmd6:
+	cps a, 6
+	jr nz, .Lppe_cmd7
+	jp .Lppe_simple_ret		; cmd 6 → simple ret
+.Lppe_cmd7:
+	cps a, 7
+	jr nz, .Lppe_default
+	jp .Lppe_simple_ret		; cmd 7 → simple ret
+.Lppe_default:
+	jp .Lppe_simple_ret		; unknown → simple ret
+.Lppe_simple_ret:
+	ret
+	; Padding (17 bytes)
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+.Lppe_write_setup:
+	; Write I/O registers and clear flag
+	ldb a, 0x89
+	stda8_24 1441798, a		; (0x160006) = 0x89
+	nop
+	ldb a, 0x28
+	stda8_24 1441794, a		; (0x160002) = 0x28
+	nop
+	stdi8_24 2330836, 0x00		; (0x2390D4) = 0
+	ret
+	nop
+.Lppe_read_exec:
+	; Read/execute with polling loop
+	ei 0x07				; enable interrupts
+	ldb a, 0x89
+	stda8_24 1441798, a		; (0x160006) = 0x89
+	nop
+.Lppe_poll:
+	lds wa, 0			; WA = 0
+	call HDAE5000_Display_String	; 0x2950F8
+	ldda8_24 a, 1441796		; read (0x160004)
+	nop
+	and a, 0x04			; test bit 2
+	nop
+	cps a, 4			; bit 2 set?
+	jr nz, .Lppe_poll		; keep polling if not
+	ldb a, 0x18
+	stda8_24 1441794, a		; (0x160002) = 0x18
+	nop
+	stdi8_24 2330836, 0x00		; (0x2390D4) = 0
+	call 0x296814
+	cpdi8_24 2330836, 1		; (0x2390D4) == 1?
+	jpcc_24 6, 2708340		; if Z, go back to polling (0x295374)
+	nop
+	ldada_24 xix, 2330984		; XIX = 0x239168
+	nop
+	xor xwa, xwa			; XWA = 0
+	ld a, (xix)			; A = command index
+	cp xwa, 0x00000014		; compare with 20
+	jpcc_24 11, 2708340		; if UGT 20, invalid → repoll (0x295374)
+	nop
+	dec 1, xwa			; XWA = index - 1
+	sll xwa, 2			; XWA *= 4 (table entry size)
+	nop
+	ldada_24 xix, 2708430		; XIX = jump table base (0x2953CE)
+	nop
+	add xix, xwa			; XIX += offset
+	ld xiy, (xix)			; XIY = handler address
+	jp (xiy)			; jump to handler
+.Lppe_jump_table:
+	; 5-entry jump table (4 bytes each)
+	.long 0x00295642		; entry 0
+	.long 0x002956CC		; entry 1
+	.long 0x002956F2		; entry 2
+	.long 0x0029572E		; entry 3
+	.long 0x00295802		; entry 4
 
 ; ============================================================================
 ; PPORT COMMAND HANDLER JUMP TABLE (0x2953E2 - 0x295411)
