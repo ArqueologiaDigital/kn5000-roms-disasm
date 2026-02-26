@@ -2319,8 +2319,245 @@ HDAE5000_File_Load:	; 0x28DBF8 (564 bytes)
 	ret
 
 HDAE5000_File_Delete:	; 0x28DE2C (579 bytes)
-	; Delete file from HD
-	.incbin "includes/code_2803c2_28f542.bin", 55914, 579
+	; Delete file from HD: manage directory entries and string renaming
+	; Input: A = mode (1 = copy entries first), BC = entry index
+	; Returns: XHL = result count
+
+	; --- Prologue: allocate stack frame, save registers ---
+	lda xsp, (xsp - 58)		; allocate 58 bytes of locals
+	pushw iz			; save IZ
+	ld (xsp + 58), bc		; save BC param at [0x3A]
+	ldda32_24 xbc, 2294848		; XBC = (0x230440)
+	ld (xsp + 10), xbc		; save to local[0x0A]
+	ldda32_24 xbc, 2294852		; XBC = (0x230444)
+	ld (xsp + 14), xbc		; save to local[0x0E]
+
+	; --- If A == 1: copy 5 directory entries ---
+	cps a, 1
+	jr nz, .Lfd_else		; skip copy if A != 1
+
+	ldmw (xsp + 2), 0		; slot = 0
+	cpmi16 (xsp + 2), 5		; while slot < 5
+	jr ge, .Lfd_copy_done
+.Lfd_copy_loop:				; 0x28DE53
+	; Compute dest = 0x23A0D2 + slot*40
+	ld wa, (xsp + 2)
+	muls wa, 40
+	ldada_24 xbc, 2334930		; XBC = 0x23A0D2
+	exts xwa
+	add xwa, xbc
+	push xwa
+	; Compute src = 0x23A0AA + slot*40
+	ld wa, (xsp + 6)		; slot (offset by push)
+	muls wa, 40
+	ldada_24 xbc, 2334890		; XBC = 0x23A0AA
+	exts xwa
+	add xwa, xbc
+	push xwa
+	call 2731845			; call 0x29AF45 (memcpy)
+	; Get strlen of source entry
+	ld wa, (xsp + 10)		; slot (offset by 2 pushes)
+	muls wa, 40
+	ldada_24 xbc, 2334890		; XBC = 0x23A0AA
+	exts xwa
+	add xwa, xbc
+	push xwa
+	call 2731889			; call 0x29AF71 (strlen)
+	lda xsp, (xsp + 12)		; pop 12 bytes
+	; Store length at 0x2304D8 + slot + 16
+	ld wa, (xsp + 2)		; slot
+	add wa, 16
+	ldada_24 xbc, 2295000		; XBC = 0x2304D8
+	lda_dri3 xsp, 0x07, 0xe4, 0xe0	; ld (XBC+WA), L
+	incm 1, (xsp + 2)		; slot++
+	cpmi16 (xsp + 2), 5
+	jr lt, .Lfd_copy_loop
+.Lfd_copy_done:				; 0x28DEAC
+	ldb c, 5			; C = 5 (entry count)
+	jr t, .Lfd_setup_loop
+.Lfd_else:				; 0x28DEB0
+	ldb c, 0			; C = 0
+
+.Lfd_setup_loop:			; 0x28DEB2
+	; --- Setup outer loop ---
+	ld wa, (xsp + 58)		; WA = saved BC param
+	ld (xsp + 4), wa		; local[0x04] = entry index
+	ld a, c				; A = count
+	extz wa
+	ld (xsp + 2), wa		; local[0x02] = count
+	cpmi16 (xsp + 2), 6		; if count >= 6
+	jrl ge, .Lfd_epilogue		;   skip to epilogue
+
+.Lfd_outer_loop:			; 0x28DEC7
+	; --- Outer loop: process each directory entry ---
+	ldmi8 (xsp + 18), 0		; clear string buffer at local[0x12]
+	ld wa, (xsp + 4)		; WA = entry index
+	extz xwa
+	push xwa
+	lds wa, 5			; type = 5
+	lds bc, 2
+	ldw de, 65534			; DE = 0xFFFE
+	calr HDAE5000_File_Rename
+	ld (xsp + 6), xhl		; local[0x06] = result
+	cpdi16_24 2294836, 1		; if (0x230434) == 1
+	jrl z, .Lfd_tail_copy		;   goto tail_copy
+	ld xwa, (xsp + 6)		; XWA = result
+	cp xwa, 0
+	jrl le, .Lfd_no_entry		; if result <= 0, no entry
+
+	; Check file type byte
+	cpdi8_24 2295350, 13		; cp (0x230636), 0x0D
+	jr nz, .Lfd_try_0a		; if != 0x0D, try next type
+
+	; --- File type 0x0D: directory entry — copy to local buffer ---
+	ld xwa, (xsp + 6)		; result
+	ld (xsp + 4), wa		; save low word
+	lda xwa, (xsp + 18)		; XWA = &local[0x12]
+	push xwa
+	ld wa, (xsp + 6)		; slot (offset by push)
+	muls wa, 40
+	ldada_24 xbc, 2334890		; XBC = 0x23A0AA
+	exts xwa
+	add xwa, xbc
+	push xwa
+	call 2731845			; memcpy
+	inc 0, xsp			; pop stack frame
+
+.Lfd_strlen_store:			; 0x28DF1D
+	; Get strlen and store length, then advance slot
+	ld wa, (xsp + 2)		; slot
+	muls wa, 40
+	ldada_24 xbc, 2334890		; XBC = 0x23A0AA
+	exts xwa
+	add xwa, xbc
+	push xwa
+	call 2731889			; strlen
+	inc 4, xsp			; pop 4 bytes
+	ld wa, (xsp + 2)		; slot
+	add wa, 16
+	ldada_24 xbc, 2295000		; XBC = 0x2304D8
+	lda_dri3 xsp, 0x07, 0xe4, 0xe0	; ld (XBC+WA), L
+	incm 1, (xsp + 2)		; slot++
+	cpmi16 (xsp + 2), 6		; if slot < 6
+	jrl lt, .Lfd_outer_loop		;   continue outer loop
+
+.Lfd_epilogue:				; 0x28DF50
+	; --- Restore state and return ---
+	ld xwa, (xsp + 10)
+	stda32_24 2294848, xwa		; restore (0x230440)
+	ld xwa, (xsp + 14)
+	stda32_24 2294852, xwa		; restore (0x230444)
+	ld hl, (xsp + 4)		; HL = local[0x04]
+	extz xhl			; XHL = zero-extend(HL)
+	popw iz				; restore IZ
+	lda xsp, (xsp + 58)		; deallocate stack frame
+	ret
+
+.Lfd_try_0a:				; 0x28DF6A
+	; --- File type 0x0A: named entry ---
+	cpdi8_24 2295350, 10		; cp (0x230636), 0x0A
+	jr nz, .Lfd_other_type
+	ld xwa, (xsp + 6)		; result
+	ld (xsp + 4), wa		; save
+	pushw 46			; max = 0x2E
+	pushw 23710			; src = 0x5C9E
+	ld wa, (xsp + 6)		; slot (offset)
+	muls wa, 40
+	ldada_24 xbc, 2334890		; XBC = 0x23A0AA
+	exts xwa
+	add xwa, xbc
+	push xwa
+	call 2731845			; memcpy
+	inc 0, xsp			; pop frame
+	jr t, .Lfd_strlen_store		; goto strlen/store
+
+.Lfd_other_type:			; 0x28DF97
+	; --- Other file type: check string length ---
+	ldada_24 xwa, 2295350		; XWA = &0x230636
+	push xwa
+	call 2731889			; strlen(0x230636)
+	inc 4, xsp			; pop 4 bytes
+	cp hl, 39			; if strlen <= 39
+	jr ule, .Lfd_short_string	;   handle short string
+	; String too long: save and restart loop
+	ld xwa, (xsp + 6)		; result
+	ld (xsp + 4), wa
+	jrl t, .Lfd_outer_loop		; restart
+
+.Lfd_short_string:			; 0x28DFB2
+	; Get local buffer length
+	lda xwa, (xsp + 18)		; &local[0x12]
+	push xwa
+	call 2731889			; strlen(&local)
+	ld iz, hl			; IZ = local strlen
+	; Get source string length
+	ldada_24 xwa, 2295350		; &0x230636
+	push xwa
+	call 2731889			; strlen(0x230636)
+	inc 0, xsp			; pop frame
+	add hl, iz			; HL = combined length
+	cp hl, 39			; if combined > 39
+	jr ugt, .Lfd_tail_copy		;   no room, goto tail_copy
+	; Concatenate strings
+	ldada_24 xwa, 2295350		; &0x230636
+	push xwa
+	lda xwa, (xsp + 22)		; &local[0x12] (offset by push)
+	push xwa
+	call 2731787			; call 0x29AF0B (strcat)
+	inc 0, xsp			; pop frame
+	ld xwa, (xsp + 6)		; result
+	ld (xsp + 4), wa		; save
+
+.Lfd_no_entry:				; 0x28DFE6
+	; --- No entry found or zero result: use default ---
+	ld xwa, (xsp + 6)		; XWA = result
+	or xwa, xwa			; test zero
+	jr nz, .Lfd_check_positive	; if nonzero, check further
+	; Result is zero: copy default string
+	pushw 46			; max = 0x2E
+	pushw 23712			; src = 0x5CA0
+	ld wa, (xsp + 6)		; slot (offset)
+	muls wa, 40
+	ldada_24 xbc, 2334890		; XBC = 0x23A0AA
+	exts xwa
+	add xwa, xbc
+	push xwa
+	call 2731845			; memcpy
+	inc 0, xsp			; pop frame
+	jrl t, .Lfd_strlen_store	; goto strlen/store
+
+.Lfd_check_positive:			; 0x28E00D
+	ld xwa, (xsp + 6)		; XWA = result
+	cp xwa, 0
+	jrl gt, .Lfd_outer_loop + 4	; if result > 0, continue (0x28DECB)
+
+.Lfd_tail_copy:				; 0x28E019
+	; --- Copy entry to directory slot ---
+	lda xwa, (xsp + 18)		; &local[0x12]
+	push xwa
+	ld wa, (xsp + 6)		; slot (offset)
+	muls wa, 40
+	ldada_24 xbc, 2334890		; XBC = 0x23A0AA
+	exts xwa
+	add xwa, xbc
+	push xwa
+	call 2731845			; memcpy
+	ld wa, (xsp + 10)		; slot (offset by 2 pushes)
+	muls wa, 40
+	ldada_24 xbc, 2334890		; XBC = 0x23A0AA
+	exts xwa
+	add xwa, xbc
+	push xwa
+	call 2731889			; strlen
+	lda xsp, (xsp + 12)		; pop 12 bytes
+	ld wa, (xsp + 2)		; slot
+	add wa, 16
+	ldada_24 xbc, 2295000		; XBC = 0x2304D8
+	lda_dri3 xsp, 0x07, 0xe4, 0xe0	; ld (XBC+WA), L
+	cpdi16_24 2294836, 1		; if (0x230434) != 1
+	jrl nz, .Lfd_strlen_store	;   goto strlen/store
+	stdi16_24 2294836, 0		; (0x230434) = 0
+	jrl t, .Lfd_epilogue		; done
 
 HDAE5000_File_Rename:	; 0x28E06F (280 bytes)
 	; Rename file on HD
