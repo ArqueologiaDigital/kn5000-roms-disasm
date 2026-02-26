@@ -3347,7 +3347,395 @@ HDAE5000_HD_CHS_Calculate:	; 0x2865DE (1098 bytes)
 
 HDAE5000_HD_Sector_Read:	; 0x286A28 (1064 bytes)
 	; Read sectors from HD; accesses 0x229DAC
-	.incbin "includes/code_2803c2_28f542.bin", 26214, 1064
+	; Part 1: CHS input state machine with jump table dispatch
+	.byte 0x2e			; push iz (compact)
+	ld hl, (xsp + 0x06)		; HL = param from stack
+	ld de, wa			; DE = input digit
+	ldda16_24 xwa, 0x22aa5c	; load current state
+	cps wa, 5			; state >= 6? (unsigned)
+	jrl ugt, .LHD_SR__apply	; yes → apply values
+	add wa, wa			; state * 2
+	ldada_24 xix, 0x2e2cf2		; jump table base
+	.byte 0xd3, 0x07, 0xf0, 0xe0, 0x20	; ld WA, (XIX + WA)
+	ldada_24 xix, 0x286a4e		; dispatch base
+	.byte 0xf3, 0x07, 0xf0, 0xe0, 0xd8	; jp (XIX + WA)
+	; Case 0 (offset 0x0000): jump to FS_Init directly
+	jrl t, .LHD_SR__cleanup
+	; Case 1 (offset 0x0003): cylinder digit * 100
+	ld wa, hl
+	muls wa, 0x0064			; WA = digit * 100
+	add de, wa			; DE += WA
+	cp de, 0x0064			; DE >= 100?
+	jr lt, .LHD_SR__c1_lo
+	ldw de, 0x0064			; clamp to 100
+	jr t, .LHD_SR__apply
+.LHD_SR__c1_lo:
+	cps de, 0			; DE > 0?
+	jr gt, .LHD_SR__apply
+	lds de, 0			; clamp to 0
+	jr t, .LHD_SR__apply
+	; Case 2 (offset 0x001E): cylinder digit * 10
+	ld wa, hl
+	muls wa, 0x000a			; WA = digit * 10
+	add de, wa
+	cp de, 0x0078			; DE >= 120?
+	jr lt, .LHD_SR__c2_lo
+	ldw de, 0x0078			; clamp to 120
+	jr t, .LHD_SR__apply
+.LHD_SR__c2_lo:
+	cps de, 1			; DE > 1?
+	jr gt, .LHD_SR__apply
+	lds de, 0
+	jr t, .LHD_SR__apply
+	; Case 3 (offset 0x0039): cylinder unit digit
+	add de, hl
+	cp de, 0x0078
+	jr le, .LHD_SR__c3_lo
+	ldw de, 0x0078
+	jr t, .LHD_SR__apply
+.LHD_SR__c3_lo:
+	cps de, 0
+	jr gt, .LHD_SR__apply
+	lds de, 1
+	jr t, .LHD_SR__apply
+	; Case 4 (offset 0x004E): head digit * 10
+	ld wa, hl
+	muls wa, 0x000a
+	add bc, wa
+	cp bc, 0x000a			; BC >= 10?
+	jr lt, .LHD_SR__c4_lo
+	ldw bc, 0x000a
+	jr t, .LHD_SR__apply
+.LHD_SR__c4_lo:
+	cps bc, 0
+	jr gt, .LHD_SR__apply
+	lds bc, 0
+	jr t, .LHD_SR__apply
+	; Case 5 (offset 0x0069): head unit digit
+	add bc, hl
+	cp bc, 0x0010			; BC >= 16?
+	jr le, .LHD_SR__c5_lo
+	ldw bc, 0x0010
+	jr t, .LHD_SR__apply
+.LHD_SR__c5_lo:
+	cps bc, 0
+	jr gt, .LHD_SR__apply
+	lds bc, 1
+.LHD_SR__apply:				; store results
+	stda16_24 0x22aa5e, xde	; store cylinder
+	stda16_24 0x22aa60, xbc	; store head
+	cpdi16_24 0x22aa5c, 0x0005	; state == 5?
+	jr nz, .LHD_SR__fs_init
+	; State 5: complete — do table lookup and seek
+	ldda16_24 xwa, 0x22aa5e
+	dec 1, wa
+	stda16_24 0x23a092, xwa
+	ldda16_24 xwa, 0x22aa60
+	dec 1, wa
+	stda16_24 0x23a094, xwa
+	ldda16_24 xwa, 0x23a092
+	ldda16_24 xbc, 0x23a094
+	call HDAE5000_Table_Lookup
+	ld iz, hl
+	ld wa, iz
+	cp wa, 0xffff
+	jr z, .LHD_SR__no_match
+	; Match found — copy data and seek
+	ldada_24 xwa, 0x22aa4c
+	ld bc, iz
+	.byte 0x0b, 0x02, 0x00		; push 0x0002
+	ldada_24 xde, 0x2e1c96
+	calr HDAE5000_HD_Data_Copy
+	ldda16_24 xbc, 0x23a092
+	ldda16_24 xde, 0x23a094
+	ld wa, iz
+	.byte 0x28			; push wa (compact)
+	ld xwa, 0x007f0098
+	calr HDAE5000_HD_Seek
+	jr t, .LHD_SR__fs_init
+.LHD_SR__no_match:			; No match — clear and seek with 0xFFFF
+	ldada_24 xwa, 0x22aa4c
+	.byte 0x0b, 0x02, 0x00		; push 0x0002
+	ldada_24 xde, 0x2e1c96
+	lds bc, 0
+	calr HDAE5000_HD_Data_Copy
+	.byte 0x0b, 0xff, 0xff		; push 0xFFFF
+	ld xwa, 0x007f0098
+	ldw bc, 0xffff
+	ldw de, 0xffff
+	calr HDAE5000_HD_Seek
+.LHD_SR__fs_init:			; Re-init filesystem display
+	.byte 0x0b, 0x01, 0x00		; push 0x0001
+	ldda16_24 xwa, 0x22aa5e
+	ldda16_24 xbc, 0x22aa60
+	ldda16_24 xde, 0x22aa5c
+	calr HDAE5000_FS_Init
+.LHD_SR__cleanup:
+	.byte 0x4e			; pop iz (compact)
+	retd 0x0002			; return, dealloc 2 bytes
+	;
+	; Part 2: Event handler A (0x286B72)
+.LHD_SR__handlerA:
+	dec 0, xsp			; alloc 8 bytes
+	push xiz
+	ld (xsp + 0x04), xde
+	ld (xsp + 0x08), xbc
+	ld xiz, xwa
+	ld xwa, (xsp + 0x08)		; XWA = event code
+	cp xwa, 0x01c00007
+	jr z, .LHD_SR__a_evt07
+	cp xwa, 0x01c0000d
+	jr z, .LHD_SR__a_evt0d
+	cp xwa, 0x01e00085
+	jrl nz, .LHD_SR__a_exit
+	lds32 xhl, 1			; event 0x85: XHL = 1
+	jrl t, .LHD_SR__a_epilogue
+.LHD_SR__a_evt0d:			; event 0x0D: display update
+	ld xwa, xiz
+	ld xbc, (xsp + 0x08)
+	ld xde, (xsp + 0x04)
+	ldda32_24 xhl, 0x23a1a2
+	ld_sril3 xhl, 0xed, 0x0a, 0x0e
+	ld_sril3 xhl, 0xed, 0xdc, 0x00
+	call (xhl)
+	ldada_24 xwa, 0x2e2cfe
+	ld xbc, xwa
+	ld xwa, xiz
+	ld xde, xbc
+	ldda32_24 xbc, 0x23a1a2
+	ld_sril3 xbc, 0xe5, 0x0a, 0x0e
+	ld_sril3 xhl, 0xe5, 0x00, 0x01
+	ld xbc, 0x01c0000f
+	call (xhl)
+	lds32 xhl, 0
+	jrl t, .LHD_SR__a_epilogue
+.LHD_SR__a_evt07:			; event 0x07: jump table dispatch
+	ld xde, (xsp + 0x04)
+	ldda32_24 xwa, 0x23a1a2
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e
+	ld_sril3 xix, 0xe1, 0x00, 0x01
+	ld xwa, 0x02600024
+	ld xbc, 0x01e00029
+	call (xix)
+	ld xwa, xhl
+	cp xwa, 0x0000000c		; case > 12?
+	jrl ugt, .LHD_SR__a_exit
+	add xwa, xwa			; index * 2
+	add xwa, 0x002e2d04
+	ld wa, (xwa)
+	ldada_24 xix, 0x286c1a		; dispatch base
+	.byte 0xf3, 0x07, 0xf0, 0xe0, 0xd8	; jp (XIX + WA)
+	; Case 0: re-init FS
+	.byte 0x0b, 0x01, 0x00		; push 0x0001
+	lds wa, 0
+	lds bc, 0
+	lds de, 6
+	calr HDAE5000_FS_Init
+	jrl t, .LHD_SR__a_exit
+	; Case 1: toggle read/write direction
+	ld xwa, (xsp + 0x04)
+	bit 0x07, wa			; bit 7?
+	jr nz, .LHD_SR__a_c1_set
+	lds wa, 1
+	jr t, .LHD_SR__a_c1_push
+.LHD_SR__a_c1_set:
+	ldw wa, 0xffff
+.LHD_SR__a_c1_push:
+	.byte 0x28			; push wa
+	ldda16_24 xwa, 0x22aa5e
+	ldda16_24 xbc, 0x22aa60
+	ldda16_24 xde, 0x22aa5c
+	calr HDAE5000_HD_Sector_Read	; recursive call
+	jrl t, .LHD_SR__a_exit
+	; Case 2: sector write (BC=0 or 1)
+	ld xwa, (xsp + 0x04)
+	bit 0x07, wa
+	jr z, .LHD_SR__a_c2b
+	ld xwa, xiz
+	lds bc, 0
+	calr HDAE5000_HD_Sector_Write
+	jr t, .LHD_SR__a_exit
+.LHD_SR__a_c2b:
+	ld xwa, xiz
+	lds bc, 1
+	calr HDAE5000_HD_Sector_Write
+	jr t, .LHD_SR__a_exit
+	; Case 3: sector write (BC=2 or 3)
+	ld xwa, (xsp + 0x04)
+	bit 0x07, wa
+	jr z, .LHD_SR__a_c3b
+	ld xwa, xiz
+	lds bc, 2
+	calr HDAE5000_HD_Sector_Write
+	jr t, .LHD_SR__a_exit
+.LHD_SR__a_c3b:
+	ld xwa, xiz
+	lds bc, 3
+	calr HDAE5000_HD_Sector_Write
+	jr t, .LHD_SR__a_exit
+	; Case 4: sector write (BC=4 or 5)
+	ld xwa, (xsp + 0x04)
+	bit 0x07, wa
+	jr z, .LHD_SR__a_c4b
+	ld xwa, xiz
+	lds bc, 4
+	calr HDAE5000_HD_Sector_Write
+	jr t, .LHD_SR__a_exit
+.LHD_SR__a_c4b:
+	ld xwa, xiz
+	lds bc, 5
+	calr HDAE5000_HD_Sector_Write
+	jr t, .LHD_SR__a_exit
+	; Case 5: sector write (BC=6 or 7)
+	ld xwa, (xsp + 0x04)
+	bit 0x07, wa
+	jr z, .LHD_SR__a_c5b
+	ld xwa, xiz
+	lds bc, 6
+	calr HDAE5000_HD_Sector_Write
+	jr t, .LHD_SR__a_exit
+.LHD_SR__a_c5b:
+	ld xwa, xiz
+	lds bc, 7
+	calr HDAE5000_HD_Sector_Write
+	jr t, .LHD_SR__a_exit
+	; Case 6: sector write (BC=8 or 9)
+	ld xwa, (xsp + 0x04)
+	bit 0x07, wa
+	jr z, .LHD_SR__a_c6b
+	ld xwa, xiz
+	ldw bc, 0x0008
+	calr HDAE5000_HD_Sector_Write
+	jr t, .LHD_SR__a_exit
+.LHD_SR__a_c6b:
+	ld xwa, xiz
+	ldw bc, 0x0009
+	calr HDAE5000_HD_Sector_Write
+.LHD_SR__a_exit:			; common exit for handler A
+	ld xwa, xiz
+	ld xbc, (xsp + 0x08)
+	ld xde, (xsp + 0x04)
+	ldda32_24 xhl, 0x23a1a2
+	ld_sril3 xhl, 0xed, 0x0a, 0x0e
+	ld_sril3 xix, 0xed, 0xdc, 0x00
+	call (xix)
+.LHD_SR__a_epilogue:
+	pop xiz
+	inc 0, xsp
+	ret
+	;
+	; Part 3: Event handler B (0x286CED)
+.LHD_SR__handlerB:
+	dec 0, xsp
+	push xiz
+	ld (xsp + 0x04), xde
+	ld xiz, xbc			; save event code in XIZ
+	ld (xsp + 0x08), xwa
+	ld xwa, xiz			; XWA = event code
+	cp xwa, 0x01c00007
+	jrl z, .LHD_SR__b_evt07
+	cp xwa, 0x01c0000d
+	jr z, .LHD_SR__b_evt0d
+	cp xwa, 0x01e00085
+	jr z, .LHD_SR__b_evt85
+	cp xwa, 0x01c00001
+	jrl nz, .LHD_SR__b_exit
+	; Event 0x01: table lookup and copy
+	ldda16_24 xwa, 0x23a092
+	ldda16_24 xbc, 0x23a094
+	call HDAE5000_Table_Lookup
+	ld wa, hl
+	cp wa, 0xffff
+	jr z, .LHD_SR__b_nomatch
+	ldada_24 xwa, 0x22aa4c
+	.byte 0x0b, 0x02, 0x00		; push 0x0002
+	ld bc, hl
+	ldada_24 xde, 0x2e1c96
+	calr HDAE5000_HD_Data_Copy
+	jrl t, .LHD_SR__b_exit
+.LHD_SR__b_nomatch:
+	ldada_24 xwa, 0x22aa4c
+	.byte 0x0b, 0x02, 0x00		; push 0x0002
+	ldada_24 xde, 0x2e1c96
+	lds bc, 0
+	calr HDAE5000_HD_Data_Copy
+	jrl t, .LHD_SR__b_exit
+.LHD_SR__b_evt85:			; event 0x85: XHL = 1
+	lds32 xhl, 1
+	jrl t, .LHD_SR__b_epilogue
+.LHD_SR__b_evt0d:			; event 0x0D: display update
+	ld xwa, (xsp + 0x08)
+	ld xbc, xiz
+	ld xde, (xsp + 0x04)
+	ldda32_24 xhl, 0x23a1a2
+	ld_sril3 xhl, 0xed, 0x0a, 0x0e
+	ld_sril3 xhl, 0xed, 0xdc, 0x00
+	call (xhl)
+	ldada_24 xwa, 0x2e2d1e
+	ld xbc, xwa
+	ld xwa, (xsp + 0x08)
+	ld xde, xbc
+	ldda32_24 xbc, 0x23a1a2
+	ld_sril3 xbc, 0xe5, 0x0a, 0x0e
+	ld_sril3 xhl, 0xe5, 0x00, 0x01
+	ld xbc, 0x01c0000f
+	call (xhl)
+	lds32 xhl, 0
+	jrl t, .LHD_SR__b_epilogue
+.LHD_SR__b_evt07:			; event 0x07: sector operations
+	ld xde, (xsp + 0x04)
+	ldda32_24 xwa, 0x23a1a2
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e
+	ld_sril3 xix, 0xe1, 0x00, 0x01
+	ld xwa, 0x02600024
+	ld xbc, 0x01e00029
+	call (xix)
+	cp xhl, 0x00000009
+	jr z, .LHD_SR__b_check_state
+	cp xhl, 0x00000008
+	jr nz, .LHD_SR__b_exit
+.LHD_SR__b_check_state:
+	cpdi16_24 0x22aa5c, 0x0005	; state == 5?
+	jr nz, .LHD_SR__b_exit
+	; State 5: display manager call + sector read
+	.byte 0x0b, 0x01, 0x00		; push 0x0001
+	ld xwa, 0x007f008f
+	push xwa
+	ldda16_24 xwa, 0x23a092
+	ldda16_24 xbc, 0x23a094
+	ldda16_24 xde, 0x22aa4c
+	calr HDAE5000_Display_Manager
+	.byte 0x0b, 0x01, 0x00		; push 0x0001
+	lds wa, 0
+	lds bc, 0
+	lds de, 6
+	calr HDAE5000_FS_Init
+	cpdi8_24 0x229dac, 0x02
+	jr nz, .LHD_SR__b_exit
+	ldda16_24 xwa, 0x22aa4c
+	and wa, 0x0100
+	cp wa, 0x0100
+	jr nz, .LHD_SR__b_exit
+	; Flag set: register display handler
+	ldda32_24 xwa, 0x23a1a2
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e
+	ld_sril3 xhl, 0xe1, 0x24, 0x01
+	ld xwa, 0x007f02f0
+	ld xbc, 0x01c00001
+	lds32 xde, 0
+	call (xhl)
+.LHD_SR__b_exit:			; common exit
+	ld xwa, (xsp + 0x08)
+	ld xbc, xiz
+	ld xde, (xsp + 0x04)
+	ldda32_24 xhl, 0x23a1a2
+	ld_sril3 xhl, 0xed, 0x0a, 0x0e
+	ld_sril3 xix, 0xed, 0xdc, 0x00
+	call (xix)
+.LHD_SR__b_epilogue:
+	pop xiz
+	inc 0, xsp
+	ret
 
 HDAE5000_HD_Sector_Write:	; 0x286E50 (646 bytes)
 	; Write sectors to HD; accesses 0x229DAA, 0x229DAC
