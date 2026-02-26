@@ -3342,8 +3342,371 @@ HDAE5000_HD_Partition_Setup:	; 0x2862AC (818 bytes)
 	ret
 
 HDAE5000_HD_CHS_Calculate:	; 0x2865DE (1098 bytes)
-	; Calculate CHS (Cylinder/Head/Sector) addresses
-	.incbin "includes/code_2803c2_28f542.bin", 25116, 1098
+	; Part 1: CHS digit accumulator — stores digit, checks for 6-digit match
+	dec 0, xsp			; alloc 4 bytes
+	.byte 0x2e			; push iz (compact)
+	.byte 0x0b, 0x0a, 0x00		; push 0x000a
+	lda xbc, (xsp + 0x04)
+	push xbc
+	.byte 0x28			; push wa (compact)
+	call 0x29ac3b
+	inc 0, xsp			; dealloc 4 bytes
+	ldda8_24 xwa, 0x22ad9c		; A = current count
+	extz wa
+	ld bc, wa
+	inc 2, bc			; BC = count + 2
+	ldada_24 xde, 0x22ad9c		; XDE = buffer base
+	ld a, (xsp + 0x02)		; A = digit param
+	.byte 0xf3, 0x07, 0xe8, 0xe4, 0x41	; ld (XDE+BC), A
+	.byte 0xc2, 0x9c, 0xad, 0x22, 0x61	; inc 1, (0x22ad9c)
+	cpdi8_24 0x22ad9c, 0x06	; count == 6?
+	jr nz, .LCHSC__not_full
+	; 6 digits entered — match against patterns
+	.byte 0x0b, 0x2e, 0x00		; push 0x002e
+	.byte 0x0b, 0x2c, 0x1e		; push 0x1e2c
+	ldada_24 xwa, 0x22ad9e
+	push xwa
+	call 0x29af2d			; string compare
+	inc 0, xsp
+	cps hl, 0
+	jr nz, .LCHSC__try2
+	lds iz, 2			; match pattern 1 → IZ=2
+	jr t, .LCHSC__clear
+.LCHSC__try2:
+	.byte 0x0b, 0x2e, 0x00		; push 0x002e
+	.byte 0x0b, 0x34, 0x1e		; push 0x1e34
+	ldada_24 xwa, 0x22ad9e
+	push xwa
+	call 0x29af2d			; string compare
+	inc 0, xsp
+	cps hl, 0
+	jr nz, .LCHSC__no_match
+	lds iz, 3			; match pattern 2 → IZ=3
+	jr t, .LCHSC__clear
+.LCHSC__no_match:
+	lds iz, 1			; no match → IZ=1
+.LCHSC__clear:
+	.byte 0x0b, 0x0a, 0x00		; push 0x000a
+	.byte 0x0b, 0x00, 0x00		; push 0x0000
+	ldada_24 xwa, 0x22ad9c
+	push xwa
+	call 0x29aec7			; MemFill (clear buffer)
+	inc 0, xsp
+	jr t, .LCHSC__return
+.LCHSC__not_full:
+	lds iz, 0			; not full → IZ=0
+.LCHSC__return:
+	ld hl, iz			; return value in HL
+	.byte 0x4e			; pop iz (compact)
+	inc 0, xsp			; dealloc 4 bytes
+	ret
+	;
+	; Part 2: Event handler (0x286666)
+.LCHSC__handler:
+	dec 6, xsp			; alloc 24 bytes
+	push xiz
+	ld xiz, xde			; XIZ = param
+	ld (xsp + 0x06), xwa		; save event code
+	ld xwa, xbc			; XWA = event code
+	cp xwa, 0x01ca0002
+	jrl z, .LCHSC__ev_close
+	cp xwa, 0x01c00007
+	jr z, .LCHSC__ev_key
+	cp xwa, 0x01c0000d
+	jr z, .LCHSC__ev_0d
+	cp xwa, 0x01e00085
+	jr z, .LCHSC__ev_85
+	; Default: pass through to registered handler
+	ld xwa, (xsp + 0x06)
+	ld xde, xiz
+	ldda32_24 xhl, 0x23a1a2
+	ld_sril3 xhl, 0xed, 0x0a, 0x0e		; XHL = (XHL + 0x0E0A)
+	ld_sril3 xix, 0xed, 0xdc, 0x00		; XIX = (XHL + 0x00DC)
+	call (xix)
+	jrl t, .LCHSC__exit
+.LCHSC__ev_85:				; Event 0x01E00085
+	lds32 xhl, 1
+	jrl t, .LCHSC__exit
+.LCHSC__ev_0d:				; Event 0x01C0000D
+	ld xwa, (xsp + 0x06)
+	ld xde, xiz
+	ldda32_24 xhl, 0x23a1a2
+	ld_sril3 xhl, 0xed, 0x0a, 0x0e
+	ld_sril3 xhl, 0xed, 0xdc, 0x00		; XHL = (XHL + 0x00DC)
+	call (xhl)
+	ldada_24 xwa, 0x2e2cdc
+	ld xbc, xwa
+	ld xwa, (xsp + 0x06)
+	ld xde, xbc
+	ldda32_24 xbc, 0x23a1a2
+	ld_sril3 xbc, 0xe5, 0x0a, 0x0e		; XBC = (XBC + 0x0E0A)
+	ld_sril3 xhl, 0xe5, 0x00, 0x01		; XHL = (XBC + 0x0100)
+	ld xbc, 0x01c0000f
+	call (xhl)
+	lds32 xhl, 0
+	jrl t, .LCHSC__exit
+.LCHSC__ev_key:				; Event 0x01C00007
+	.byte 0xbf, 0x04, 0x02, 0x00, 0x00	; ld (XSP+0x04), 0x0000
+	ld xde, xiz
+	ldda32_24 xwa, 0x23a1a2
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e		; XWA = (XWA + 0x0E0A)
+	ld_sril3 xix, 0xe1, 0x00, 0x01		; XIX = (XWA + 0x0100)
+	ld xwa, 0x02600024
+	ld xbc, 0x01e00029
+	call (xix)
+	ld xwa, xhl
+	cp xwa, 0x00000007
+	jrl ugt, .LCHSC__post_switch		; > 7 → skip
+	add xwa, xwa				; XWA * 2
+	add xwa, 0x002e2ce2			; jump table base
+	ld wa, (xwa)				; WA = offset
+	ldada_24 xix, 0x28672d			; dispatch base
+	.byte 0xf3, 0x07, 0xf0, 0xe0, 0xd8	; jp (XIX + WA)
+	; Case 0: bit test → call with 0/1
+	bit 0x07, iz
+	jr z, .LCHSC__c0_even
+	lds wa, 0
+	jr t, .LCHSC__c0_call
+.LCHSC__c0_even:
+	lds wa, 1
+.LCHSC__c0_call:
+	calr HDAE5000_HD_CHS_Calculate		; recursive
+	ld (xsp + 0x04), hl
+	jr t, .LCHSC__post_switch
+	; Case 1: bit test → call with 2/3
+	bit 0x07, iz
+	jr z, .LCHSC__c1_even
+	lds wa, 2
+	jr t, .LCHSC__c1_call
+.LCHSC__c1_even:
+	lds wa, 3
+.LCHSC__c1_call:
+	calr HDAE5000_HD_CHS_Calculate
+	ld (xsp + 0x04), hl
+	jr t, .LCHSC__post_switch
+	; Case 2: bit test → call with 4/5
+	bit 0x07, iz
+	jr z, .LCHSC__c2_even
+	lds wa, 4
+	jr t, .LCHSC__c2_call
+.LCHSC__c2_even:
+	lds wa, 5
+.LCHSC__c2_call:
+	calr HDAE5000_HD_CHS_Calculate
+	ld (xsp + 0x04), hl
+	jr t, .LCHSC__post_switch
+	; Case 3: bit test → call with 6/7
+	bit 0x07, iz
+	jr z, .LCHSC__c3_even
+	lds wa, 6
+	jr t, .LCHSC__c3_call
+.LCHSC__c3_even:
+	lds wa, 7
+.LCHSC__c3_call:
+	calr HDAE5000_HD_CHS_Calculate
+	ld (xsp + 0x04), hl
+	jr t, .LCHSC__post_switch
+	; Case 4: bit test → call with 8/9 (ldw for values > 7)
+	bit 0x07, iz
+	jr z, .LCHSC__c4_even
+	ldw wa, 0x0008
+	jr t, .LCHSC__c4_call
+.LCHSC__c4_even:
+	ldw wa, 0x0009
+.LCHSC__c4_call:
+	calr HDAE5000_HD_CHS_Calculate
+	ld (xsp + 0x04), hl
+	jr t, .LCHSC__post_switch
+	; Case 6/7: clear buffer + display setup
+	.byte 0x0b, 0x0a, 0x00		; push 0x000a
+	.byte 0x0b, 0x00, 0x00		; push 0x0000
+	ldada_24 xwa, 0x22ad9c
+	push xwa
+	call 0x29aec7			; MemFill
+	inc 0, xsp
+	ldda32_24 xwa, 0x23a1a2
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e
+	ld_sril3 xhl, 0xe1, 0x04, 0x01		; XHL = (XWA + 0x0104)
+	ld xwa, 0x007f0013
+	ld xbc, 0x01c00001
+	lds32 xde, 0
+	call (xhl)
+	; Post-switch: dispatch on result
+.LCHSC__post_switch:
+	ld wa, (xsp + 0x04)
+	cps wa, 3
+	jrl z, .LCHSC__res3
+	cps wa, 2
+	jr z, .LCHSC__res2
+	cps wa, 1
+	jrl nz, .LCHSC__done
+	; Result 1: setup with 0x007f02cb + two dialog boxes
+	ldda32_24 xwa, 0x23a1a2
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e
+	ld_sril3 xhl, 0xe1, 0x00, 0x01		; XHL = (XWA + 0x0100)
+	ld xwa, 0x007f02cb
+	ld xbc, 0x01c00001
+	lds32 xde, 3
+	call (xhl)
+	ld xwa, 0x01ca0002
+	push xwa
+	ld xwa, 0x007f021a
+	push xwa
+	ldda32_24 xwa, 0x23a1a2
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e
+	ld_sril3 xhl, 0xe1, 0x18, 0x04		; XHL = (XWA + 0x0418)
+	ld xwa, 0x0000014d
+	ld xbc, 0x007f02cd
+	ld xde, 0xffffffff
+	call (xhl)
+	ld xwa, 0x01ca0002
+	push xwa
+	ld xwa, 0x007f021a
+	push xwa
+	ldda32_24 xwa, 0x23a1a2
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e
+	ld_sril3 xhl, 0xe1, 0x10, 0x04		; XHL = (XWA + 0x0410)
+	ld xwa, 0x0000014d
+	ld xbc, 0x007f02cd
+	ld xde, 0xffffffff
+	call (xhl)
+	jrl t, .LCHSC__done
+.LCHSC__res2:				; Result 2: display setup + validate + FS init
+	ldda32_24 xwa, 0x23a1a2
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e
+	ld_sril3 xhl, 0xe1, 0x00, 0x01
+	ld xwa, 0x007f0223
+	ld xbc, 0x01c00001
+	lds32 xde, 0
+	call (xhl)
+	calr HDAE5000_Wait_Callback_Loop
+	lds wa, 1
+	call 0x28f90c
+	cps hl, 0
+	jr nz, .LCHSC__res2_err
+	; Success: display + FS read
+	ldda32_24 xwa, 0x23a1a2
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e
+	ld_sril3 xhl, 0xe1, 0x04, 0x01
+	ld xwa, 0x007f0013
+	ld xbc, 0x01c00001
+	lds32 xde, 0
+	call (xhl)
+	ld xwa, 0x007f0025
+	calr HDAE5000_HD_Format_Params
+	lds wa, 0
+	lds bc, 0
+	calr HDAE5000_HD_Read_Write
+	calr HDAE5000_FS_Read_FSB
+	lds wa, 0
+	lds bc, 2
+	calr HDAE5000_FS_Write_FSB
+	jrl t, .LCHSC__done
+.LCHSC__res2_err:			; Error: display error + two dialog boxes
+	ldda32_24 xwa, 0x23a1a2
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e
+	ld_sril3 xhl, 0xe1, 0x04, 0x01
+	ld xwa, 0x007f02c4
+	ld xbc, 0x01c00001
+	lds32 xde, 3
+	call (xhl)
+	ld xwa, 0x01ca0002
+	push xwa
+	ld xwa, 0x007f021a
+	push xwa
+	ldda32_24 xwa, 0x23a1a2
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e
+	ld_sril3 xhl, 0xe1, 0x18, 0x04
+	ld xwa, 0x0000014d
+	ld xbc, 0x007f02c6
+	ld xde, 0xffffffff
+	call (xhl)
+	ld xwa, 0x01ca0002
+	push xwa
+	ld xwa, 0x007f021a
+	push xwa
+	ldda32_24 xwa, 0x23a1a2
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e
+	ld_sril3 xhl, 0xe1, 0x10, 0x04
+	ld xwa, 0x0000014d
+	ld xbc, 0x007f02c6
+	ld xde, 0xffffffff
+	call (xhl)
+	jrl t, .LCHSC__done
+.LCHSC__res3:				; Result 3: set flags + validate + check match
+	stdi8_24 0x229da9, 0x01
+	stdi8_24 0x229daa, 0x01
+	stdi8_24 0x229dab, 0x01
+	ldda32_24 xwa, 0x23a1a2
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e
+	ld_sril3 xhl, 0xe1, 0x00, 0x01
+	ld xwa, 0x007f0294
+	ld xbc, 0x01c00001
+	lds32 xde, 0
+	call (xhl)
+	calr HDAE5000_Wait_Callback_Loop
+	lds wa, 0
+	call 0x293f3c
+	cp hl, 0xffff
+	jr z, .LCHSC__res3_nomatch
+	; Match found
+	ldda32_24 xwa, 0x23a1a2
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e
+	ld_sril3 xhl, 0xe1, 0x04, 0x01
+	ld xwa, 0x007f0013
+	ld xbc, 0x01c00001
+	lds32 xde, 0
+	call (xhl)
+	jrl t, .LCHSC__done
+.LCHSC__res3_nomatch:			; No match — setup error display + dialog boxes
+	ldda32_24 xwa, 0x23a1a2
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e
+	ld_sril3 xhl, 0xe1, 0x04, 0x01
+	ld xwa, 0x007f0297
+	ld xbc, 0x01c00001
+	lds32 xde, 3
+	call (xhl)
+	ld xwa, 0x007f0298
+	ld xbc, 0x007f021a
+	calr HDAE5000_UI_Main_Handler
+	ld xwa, 0x01ca0002
+	push xwa
+	ld xwa, 0x007f021a
+	push xwa
+	ldda32_24 xwa, 0x23a1a2
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e
+	ld_sril3 xhl, 0xe1, 0x18, 0x04
+	ld xwa, 0x0000014d
+	ld xbc, 0x007f0299
+	ld xde, 0xffffffff
+	call (xhl)
+	ld xwa, 0x01ca0002
+	push xwa
+	ld xwa, 0x007f021a
+	push xwa
+	ldda32_24 xwa, 0x23a1a2
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e
+	ld_sril3 xhl, 0xe1, 0x10, 0x04
+	ld xwa, 0x0000014d
+	ld xbc, 0x007f0299
+	ld xde, 0xffffffff
+	call (xhl)
+.LCHSC__done:				; Common exit
+	lds32 xhl, 0
+	jr t, .LCHSC__exit
+.LCHSC__ev_close:			; Event 0x01CA0002: close display
+	ldda32_24 xwa, 0x23a1a2
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e
+	ld_sril3 xhl, 0xe1, 0x04, 0x01
+	ld xwa, 0x007f021a
+	ld xbc, 0x01c00001
+	lds32 xde, 0
+	call (xhl)
+	lds32 xhl, 0
+.LCHSC__exit:
+	pop xiz
+	inc 6, xsp			; dealloc 24 bytes
+	ret
 
 HDAE5000_HD_Sector_Read:	; 0x286A28 (1064 bytes)
 	; Read sectors from HD; accesses 0x229DAC
