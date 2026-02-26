@@ -8954,9 +8954,239 @@ HDAE5000_Render_Display_Region2:	; 0x2967E4 (166 bytes)
 	ret
 	nop
 
-HDAE5000_PPORT_Sum_Buffer:	; 0x29688A
-	; Sum 256 bytes of buffer memory, clear status word
-	.incbin "includes/code_295642_2971a2.bin", 4680, 530
+HDAE5000_PPORT_Sum_Buffer:	; 0x29688A (530 bytes)
+	; Sum 256 bytes from buffer, send checksum, then send buffer bytes;
+	; retry on success, return on error. Uses PPORT I/O read/write sub-routines.
+	xor xwa, xwa
+	stda32_24 2330876, xwa			; st (0x2390FC), XWA — clear 32-bit checksum
+	nop
+	lds bc, 0				; counter = 0
+	ldada_24 xix, 2330984			; lda XIX, 0x239168
+	nop
+.Lpsb_loop1:				; 0x29689A — send buffer bytes and accumulate checksum
+	cp bc, 0x0100				; 256 iterations?
+	jpcc_24 6, 2713800			; jp Z, 0x2968C8 — done, send checksum
+	nop
+	ld_srib3 w, 0x07, 0xF0, 0xE4		; ld W, (XIX+BC) — read buffer byte
+	nop
+	xor xhl, xhl
+	ld l, w					; L = W (zero-extend to 32-bit)
+	adddm32_24 2330876, xhl		; add (0x2390FC), XHL — accumulate
+	nop
+	call .Lpsb_write_byte			; send byte via PPORT
+	cpdi8_24 2330836, 0x01			; cp (0x2390D4), 1 — error?
+	jpcc_24 6, 2713854			; jp Z, 0x2968FE — exit on error
+	nop
+	inc 1, bc
+	jr t, .Lpsb_loop1
+.Lpsb_send_checksum:			; 0x2968C8
+	lds bc, 0
+	ldada_24 xix, 2330876			; lda XIX, 0x2390FC — checksum bytes
+	nop
+.Lpsb_loop2:				; 0x2968D0 — send 4 checksum bytes
+	cps bc, 4
+	jpcc_24 6, 2713842			; jp Z, 0x2968F2 — done
+	nop
+	ld_srib3 w, 0x07, 0xF0, 0xE4		; ld W, (XIX+BC) — checksum byte
+	nop
+	call .Lpsb_write_byte			; send byte
+	cpdi8_24 2330836, 0x01			; error check
+	jpcc_24 6, 2713854			; jp Z, 0x2968FE — exit on error
+	nop
+	inc 1, bc
+	jr t, .Lpsb_loop2
+.Lpsb_finalize:				; 0x2968F2
+	call .Lpsb_finish			; finalize transfer
+	cps w, 0				; check result
+	jr z, .Lpsb_exit
+	jp HDAE5000_PPORT_Sum_Buffer		; retry
+.Lpsb_exit:				; 0x2968FE
+	ret
+	nop
+.Lpsb_read_byte:			; 0x296900 — Read one byte from parallel port → W
+	; Handshake: wait for BUSY=1 (bit2=1), then DATA_READY (bit0=1),
+	; read data, acknowledge, wait for completion
+	ldda8_24 a, 1441796			; ld A, (0x160004) — read status
+	nop
+	ld l, a
+	and l, 0x04				; test bit 2
+	nop
+	cps l, 4				; BUSY?
+	jpcc_24 14, 2714008			; jp NZ, 0x296998 — error if not busy
+	nop
+	and a, 0x01				; test bit 0
+	nop
+	cps a, 1				; DATA_READY?
+	jpcc_24 14, 2713856			; jp NZ, 0x296900 — retry
+	nop
+.Lpsb_read_phase2:			; 0x296920
+	ldda8_24 a, 1441796			; ld A, (0x160004)
+	nop
+	ld l, a
+	and l, 0x04
+	nop
+	cps l, 4
+	jpcc_24 14, 2714008			; jp NZ, error
+	nop
+	and a, 0x02				; test bit 1
+	nop
+	cps a, 0				; wait for bit1=0
+	jpcc_24 14, 2713888			; jp NZ, 0x296920 — retry
+	nop
+	ldb a, 0x99				; command byte — request read
+	stda8_24 1441798, a			; st (0x160006), A — send command
+	nop
+	ldda8_24 a, 1441794			; ld A, (0x160002) — control register
+	nop
+	and a, 0xF7				; clear bit 3
+	nop
+	stda8_24 1441794, a			; st (0x160002), A
+	nop
+.Lpsb_read_phase3:			; 0x296958
+	ldda8_24 a, 1441796			; ld A, (0x160004) — status
+	nop
+	ld l, a
+	and l, 0x04
+	nop
+	cps l, 4
+	jpcc_24 14, 2714008			; jp NZ, error
+	nop
+	and a, 0x02
+	nop
+	cps a, 2				; wait for bit1=1
+	jpcc_24 14, 2713944			; jp NZ, 0x296958 — retry
+	nop
+	ldda8_24 w, 1441792			; ld W, (0x160000) — read data byte
+	nop
+	ldb a, 0x89				; acknowledge byte
+	stda8_24 1441798, a			; st (0x160006), A
+	nop
+	ldda8_24 a, 1441794			; ld A, (0x160002)
+	nop
+	or a, 0x08				; set bit 3
+	nop
+	stda8_24 1441794, a			; st (0x160002), A
+	nop
+	ret
+	nop
+.Lpsb_read_error:			; 0x296998
+	stdi8_24 2330836, 0x01			; st (0x2390D4), 1 — set error flag
+	ret
+	nop
+.Lpsb_write_byte:			; 0x2969A0 — Write byte W to parallel port
+	; Handshake: wait for BUSY=1 (bit2=1), then READY (bit0=0),
+	; write data, signal, wait for ack
+	ldda8_24 a, 1441796			; ld A, (0x160004) — status
+	nop
+	ld l, a
+	and l, 0x04
+	nop
+	cps l, 4
+	jpcc_24 14, 2714152			; jp NZ, 0x296A28 — error
+	nop
+	and a, 0x01
+	nop
+	cps a, 0				; wait for bit0=0
+	jpcc_24 14, 2714016			; jp NZ, 0x2969A0 — retry
+	nop
+	stda8_24 1441792, w			; st (0x160000), W — write data
+	nop
+	ldda8_24 a, 1441794			; ld A, (0x160002)
+	nop
+	and a, 0xF7				; clear bit 3
+	nop
+	stda8_24 1441794, a			; st (0x160002), A
+	nop
+.Lpsb_write_phase2:			; 0x2969D6
+	ldda8_24 a, 1441796			; ld A, (0x160004)
+	nop
+	ld l, a
+	and l, 0x04
+	nop
+	cps l, 4
+	jpcc_24 14, 2714152			; jp NZ, error
+	nop
+	and a, 0x02
+	nop
+	cps a, 0				; wait for bit1=0
+	jpcc_24 14, 2714070			; jp NZ, 0x2969D6 — retry
+	nop
+	ldda8_24 a, 1441794			; ld A, (0x160002)
+	nop
+	or a, 0x08				; set bit 3
+	nop
+	stda8_24 1441794, a			; st (0x160002), A
+	nop
+.Lpsb_write_phase3:			; 0x296A06
+	ldda8_24 a, 1441796			; ld A, (0x160004)
+	nop
+	ld l, a
+	and l, 0x04
+	nop
+	cps l, 4
+	jpcc_24 14, 2714152			; jp NZ, error
+	nop
+	and a, 0x02
+	nop
+	cps a, 2				; wait for bit1=1
+	jpcc_24 14, 2714118			; jp NZ, 0x296A06 — retry
+	nop
+	ret
+	nop
+.Lpsb_write_error:			; 0x296A28
+	stdi8_24 2330836, 0x01			; st (0x2390D4), 1 — set error flag
+	ret
+	nop
+.Lpsb_finish:				; 0x296A30 — Finalize parallel port transfer
+	; Deassert, wait for completion, read final status bit
+	ldda8_24 a, 1441794			; ld A, (0x160002)
+	nop
+	and a, 0xF7				; clear bit 3
+	nop
+	stda8_24 1441794, a			; st (0x160002), A
+	nop
+.Lpsb_fin_wait1:			; 0x296A40
+	ldda8_24 a, 1441796			; ld A, (0x160004)
+	nop
+	ld l, a
+	and l, 0x04
+	nop
+	cps l, 4
+	jpcc_24 14, 2714260			; jp NZ, 0x296A94 — error
+	nop
+	and a, 0x02
+	nop
+	cps a, 0				; wait for bit1=0
+	jr nz, .Lpsb_fin_wait1			; retry
+	ldda8_24 w, 1441796			; ld W, (0x160004) — final status
+	nop
+	and w, 0x01				; extract bit 0 → result
+	nop
+	ldda8_24 a, 1441794			; ld A, (0x160002)
+	nop
+	or a, 0x08				; set bit 3
+	nop
+	stda8_24 1441794, a			; st (0x160002), A
+	nop
+.Lpsb_fin_wait2:			; 0x296A76
+	ldda8_24 a, 1441796			; ld A, (0x160004)
+	nop
+	ld l, a
+	and l, 0x04
+	nop
+	cps l, 4
+	jpcc_24 14, 2714260			; jp NZ, error
+	nop
+	and a, 0x02
+	nop
+	cps a, 2				; wait for bit1=1
+	jr nz, .Lpsb_fin_wait2			; retry
+	ret
+	nop
+.Lpsb_fin_error:			; 0x296A94
+	stdi8_24 2330836, 0x01			; st (0x2390D4), 1 — set error flag
+	ret
+	nop
 
 HDAE5000_PPORT_Ready_Check:	; 0x296A9C (26 bytes)
 	; Clear 256 bytes of memory at (XIX + 0..255) using register-indexed store
