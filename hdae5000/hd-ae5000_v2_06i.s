@@ -1989,7 +1989,325 @@ HDAE5000_Display_Error:	; 0x28D605 (204 bytes)
 
 HDAE5000_File_Operation:	; 0x28D6D1 (938 bytes)
 	; Execute file operation on HD
-	.incbin "includes/code_2803c2_28f542.bin", 54031, 938
+	; Main loop: process file entries, handle types 0x7E/0x58/5
+	; Multiple vtable dispatch calls, File_Delete/Rename sub-calls
+	; Input: XWA = param struct ptr, C = display flag
+
+	; --- Prologue: allocate 12 bytes, save XIZ ---
+	dec 6, xsp
+	push xiz
+	ld (xsp + 8), c			; save display flag
+	ld xiz, xwa			; XIZ = param struct ptr
+
+	; --- Compute sector count, check limits ---
+	ldda32_24 xbc, 2295912		; XBC = (0x230868)
+	ld xwa, (xiz + 4)		; XWA = param[4]
+	call 2733869			; call multiply 0x29B72D
+	cpdm32_24 2295908, xhl		; cp (0x230864), XHL
+	jrl z, .Lfo_epilogue		; if equal, nothing to do
+	stda32_24 2295908, xhl		; (0x230864) = XHL
+	ldda32_24 xwa, 2294852		; XWA = (0x230444)
+	cpda32_24 xwa, 2295908		; cp XWA, (0x230864)
+	jrl ugt, .Lfo_epilogue		; if limit exceeded, exit
+	cpdi16_24 2294836, 0		; cp (0x230434), 0 — abort flag
+	jrl nz, .Lfo_epilogue		; if abort, exit
+	ldmw (xsp + 6), 0		; iteration counter = 0
+
+	; --- Main loop: process entries ---
+.Lfo_loop:				; 0x28D70E
+	ldda16_24 xwa, 2295916		; WA = (0x23086C) — current offset
+	extz xwa
+	push xwa			; push offset arg
+	ldw wa, 124			; WA = 0x7C
+	lds bc, 2
+	ldw de, 65534			; DE = 0xFFFE
+	calr HDAE5000_File_Rename
+	ld xiz, xhl			; XIZ = result
+	cpdi16_24 2294836, 1		; check abort flag
+	jrl z, .Lfo_epilogue
+	cp xiz, 0
+	jr le, .Lfo_display		; result <= 0 → display handler
+
+	; --- Result > 0: advance offset, dispatch on type ---
+	ld wa, iz
+	adddm16_24 2295916, xwa	; (0x23086C) += IZ
+	incm 1, (xsp + 6)		; iteration counter++
+	ldda16_24 xwa, 2294832		; WA = (0x230430) — file type
+	cp wa, 126			; type 0x7E?
+	jrl z, .Lfo_type_7E
+	cp wa, 88			; type 0x58?
+	jrl z, .Lfo_type_58
+	cps wa, 5			; type 5?
+	jrl nz, .Lfo_end_iter		; unknown type → skip
+
+	; --- Type 5: check for newline (0x0D/0x0A) ---
+	cpdi8_24 2295350, 13		; cp (0x230636), 0x0D
+	jr z, .Lfo_type5_newline
+	cpdi8_24 2295350, 10		; cp (0x230636), 0x0A
+	jrl nz, .Lfo_string_handler	; not newline → string handler
+
+.Lfo_type5_newline:			; 0x28D768
+	stdi16_24 2295012, 0		; (0x2304E4) = 0 — reset position
+	cpdi8_24 2295022, 2		; cp (0x2304EE), 2
+	jr nc, .Lfo_file_delete		; if >= 2, do file delete
+	incdi8_24 1, 2295022		; (0x2304EE)++
+	jrl t, .Lfo_epilogue
+
+	; --- Display handler: show entry info ---
+.Lfo_display:				; 0x28D77F
+	pushm (xsp + 6)		; push iteration counter
+	push_sd24w 0xb6, 0x07, 0x23	; pushw (0x2307B6)
+	push xiz			; push result
+	pushw 46			; width
+	pushw 23538			; format 0x5BF2
+	ldada_24 xwa, 2295478		; &0x2306B6
+	push xwa
+	call 2730968			; call display 0x29ABD8
+	lda xsp, (xsp + 16)		; pop 16 bytes
+	; Vtable call: notify display
+	ldda32_24 xwa, 2335134		; XWA = (0x23A19E)
+	ldda32_24 xbc, 2335138		; XBC = (0x23A1A2)
+	ld_sril3 xbc, 0xe5, 0x0a, 0x0e	; XBC = (XBC + 0x0E0A)
+	ld_sril3 xhl, 0xe5, 0x00, 0x01	; XHL = (XBC + 0x0100)
+	ld xbc, 30015497		; XBC = 0x01CA0009
+	lds32 xde, 2
+	call (xhl)
+	jrl t, .Lfo_epilogue
+
+	; --- File delete block ---
+.Lfo_file_delete:			; 0x28D7BB
+	ldda16_24 xbc, 2295920		; BC = (0x230870)
+	lds wa, 1
+	calr HDAE5000_File_Delete
+	ld xiz, xhl
+	stdi8_24 2295024, 0		; (0x2304F0) = 0
+	cp xiz, 0
+	jr le, .Lfo_skip_iz_store1
+	stda16_24 2295920, xiz		; (0x230870) = IZ
+.Lfo_skip_iz_store1:			; 0x28D7DA
+	cpmi8 (xsp + 8), 1		; check display flag
+	jr nz, .Lfo_after_vtable1
+	; Vtable call: update display
+	ldda32_24 xwa, 2335134
+	ldda32_24 xbc, 2335138
+	ld_sril3 xbc, 0xe5, 0x0a, 0x0e
+	ld_sril3 xhl, 0xe5, 0x00, 0x01
+	ld xbc, 30015496		; 0x01CA0008
+	lds32 xde, 0
+	call (xhl)
+.Lfo_after_vtable1:			; 0x28D7FD
+	jrl t, .Lfo_epilogue
+
+	; --- String handler: copy and accumulate ---
+.Lfo_string_handler:			; 0x28D800
+	ldada_24 xwa, 2295350		; &0x230636
+	push xwa
+	call 2731889			; strlen 0x29AF71
+	inc 4, xsp			; pop 8 bytes
+	ld (xsp + 4), hl		; save strlen result
+	cp hl, 39			; cp HL, 0x27
+	jrl gt, .Lfo_epilogue		; if > 39, exit
+	; memcpy string
+	ldada_24 xwa, 2295350		; &0x230636
+	push xwa
+	ldada_24 xwa, 2295070		; &0x23051E — dest buffer
+	push xwa
+	call 2731845			; memcpy 0x29AF45
+	inc 0, xsp			; pop stack frame
+	; Check cumulative length
+	ld wa, (xsp + 4)		; WA = strlen result
+	addda16_24 xwa, 2295012	; WA += (0x2304E4)
+	cp wa, 39			; cp WA, 0x27
+	jr ule, .Lfo_after_trunc	; if <= 39, no overflow
+	; Overflow: reset and try file delete
+	stdi16_24 2295012, 0		; (0x2304E4) = 0
+	cpdi8_24 2295022, 2		; cp (0x2304EE), 2
+	jr nc, .Lfo_file_delete2	; if >= 2, delete
+	incdi8_24 1, 2295022		; (0x2304EE)++
+	jr t, .Lfo_after_trunc
+
+.Lfo_file_delete2:			; 0x28D84C
+	ldda16_24 xbc, 2295920		; BC = (0x230870)
+	lds wa, 1
+	calr HDAE5000_File_Delete
+	ld xiz, xhl
+	cp xiz, 0
+	jr le, .Lfo_skip_iz_store2
+	stda16_24 2295920, xiz		; (0x230870) = IZ
+.Lfo_skip_iz_store2:			; 0x28D865
+	cpmi8 (xsp + 8), 1		; check display flag
+	jr nz, .Lfo_after_trunc
+	; Vtable call
+	ldda32_24 xwa, 2335134
+	ldda32_24 xbc, 2335138
+	ld_sril3 xbc, 0xe5, 0x0a, 0x0e
+	ld_sril3 xhl, 0xe5, 0x00, 0x01
+	ld xbc, 30015496		; 0x01CA0008
+	lds32 xde, 0
+	call (xhl)
+
+	; --- Compute table entry and store pointers ---
+.Lfo_after_trunc:			; 0x28D888
+	ldda8_24 a, 2295022		; A = (0x2304EE)
+	extz wa
+	add wa, 16			; WA += 0x10
+	ldada_24 xbc, 2295000		; XBC = &0x2304D8
+	ld_srib3 a, 0x07, 0xe4, 0xe0	; A = (XBC + WA) — table lookup
+	extz wa
+	ld bc, wa			; BC = index
+	add bc, bc			; BC *= 2
+	ldada_24 xde, 2295736		; XDE = &0x2307B8
+	ldda16_24 xwa, 2295012		; WA = (0x2304E4)
+	extz xwa
+	add xwa, xwa			; XWA *= 2
+	ld xhl, 2295822		; XHL = 0x0023080E
+	add xhl, xwa			; XHL += XWA*2
+	ld wa, (xhl)			; WA = offset table[position]
+	add_sriw_rm wa, 0x07, 0xe8, 0xe4	; WA += (XDE + BC)
+	stda16_24 2295930, xwa		; (0x23087A) = WA
+	; Compute sector size
+	ldda8_24 a, 2295022		; A = (0x2304EE)
+	extz wa
+	ldada_24 xbc, 2295816		; XBC = &0x230808
+	ld_srib3 a, 0x07, 0xe4, 0xe0	; A = (XBC + WA)
+	extz wa
+	stda16_24 2295932, xwa		; (0x23087C) = WA
+	; Update position
+	ld wa, (xsp + 4)		; WA = strlen
+	adddm16_24 2295012, xwa	; (0x2304E4) += strlen
+	stdi8_24 2295024, 1		; (0x2304F0) = 1
+	; Optional vtable call
+	cpmi8 (xsp + 8), 1		; check display flag
+	jr nz, .Lfo_after_vtable3
+	ldda32_24 xwa, 2335134
+	ldda32_24 xbc, 2335138
+	ld_sril3 xbc, 0xe5, 0x0a, 0x0e
+	ld_sril3 xhl, 0xe5, 0x00, 0x01
+	ld xbc, 30015497		; 0x01CA0009
+	lds32 xde, 0
+	call (xhl)
+
+	; --- Check if at end position ---
+.Lfo_after_vtable3:			; 0x28D90D
+	ldda16_24 xwa, 2295012		; WA = (0x2304E4)
+	cpda16_24 xwa, 2295920		; cp WA, (0x230870)
+	jrl nz, .Lfo_end_iter		; if not at end, continue
+	; Check terminator byte
+	cpdi8_24 2295938, 13		; cp (0x230882), 0x0D
+	jr nz, .Lfo_not_cr
+	cpdi8_24 2295938, 10		; cp (0x230882), 0x0A
+	jrl z, .Lfo_end_iter		; if CR+LF, end iteration
+.Lfo_not_cr:				; 0x28D92B
+	stdi16_24 2295012, 0		; reset position
+	cpdi8_24 2295022, 2		; cp (0x2304EE), 2
+	jr nc, .Lfo_file_delete3
+	incdi8_24 1, 2295022
+	jrl t, .Lfo_end_iter
+
+.Lfo_file_delete3:			; 0x28D942
+	ldda16_24 xbc, 2295920		; BC = (0x230870)
+	lds wa, 1
+	calr HDAE5000_File_Delete
+	ld xiz, xhl
+	cp xiz, 0
+	jr le, .Lfo_skip_iz_store3
+	stda16_24 2295920, xiz		; (0x230870) = IZ
+.Lfo_skip_iz_store3:			; 0x28D95B
+	cpmi8 (xsp + 8), 1
+	jrl nz, .Lfo_end_iter
+	; Vtable call
+	ldda32_24 xwa, 2335134
+	ldda32_24 xbc, 2335138
+	ld_sril3 xbc, 0xe5, 0x0a, 0x0e
+	ld_sril3 xhl, 0xe5, 0x00, 0x01
+	ld xbc, 30015496		; 0x01CA0008
+	lds32 xde, 0
+	call (xhl)
+	jrl t, .Lfo_end_iter
+
+	; --- Type 0x58: audio parameter handler ---
+.Lfo_type_58:				; 0x28D982
+	ldda8_24 a, 2295350		; A = (0x230636) — type byte
+	stda8_24 2295716, a		; (0x2307A4) = A
+	cpdi8_24 2295351, 1		; cp (0x230637), 1 — subtype
+	jr nz, .Lfo_58_check2
+	stdi8_24 2295720, 2		; (0x2307A8) = 2
+	stdi16_24 2295726, 24		; (0x2307AE) = 0x0018
+.Lfo_58_check2:				; 0x28D9A1
+	cpdi8_24 2295351, 2
+	jr nz, .Lfo_58_check3
+	stdi8_24 2295720, 4
+	stdi16_24 2295726, 12		; 0x000C
+.Lfo_58_check3:				; 0x28D9B6
+	cpdi8_24 2295351, 3
+	jr nz, .Lfo_58_check4
+	stdi8_24 2295720, 8
+	stdi16_24 2295726, 6		; 0x0006
+.Lfo_58_check4:				; 0x28D9CB
+	cpdi8_24 2295351, 4
+	jr nz, .Lfo_58_done_checks
+	stdi8_24 2295720, 16		; 0x10
+	stdi16_24 2295726, 3		; 0x0003
+.Lfo_58_done_checks:			; 0x28D9E0
+	; Format and display audio params
+	ldda8_24 a, 2295720		; A = (0x2307A8)
+	extz wa
+	pushw wa
+	ldda8_24 a, 2295716		; A = (0x2307A4)
+	extz wa
+	pushw wa
+	pushw 46			; width
+	pushw 23600			; format 0x5C30
+	ldada_24 xwa, 2295696		; &0x230790
+	push xwa
+	call 2730968			; display 0x29ABD8
+	lda xsp, (xsp + 12)		; pop 12 bytes
+	; Vtable call
+	ldda32_24 xwa, 2335134
+	ldda32_24 xbc, 2335138
+	ld_sril3 xbc, 0xe5, 0x0a, 0x0e
+	ld_sril3 xhl, 0xe5, 0x00, 0x01
+	ld xbc, 30015497		; 0x01CA0009
+	lds32 xde, 4
+	call (xhl)
+	jr t, .Lfo_end_iter
+
+	; --- Type 0x7E: directory reference handler ---
+.Lfo_type_7E:				; 0x28DA22
+	ldda8_24 a, 2295350		; A = (0x230636)
+	cp a, 48			; cp A, 0x30
+	jr nz, .Lfo_end_iter
+	; Build path string and display
+	ldada_24 xwa, 2295351		; &0x230637
+	push xwa
+	pushw 46			; width
+	pushw 23608			; format 0x5C38
+	ldada_24 xwa, 2295478		; &0x2306B6
+	push xwa
+	call 2730968			; display 0x29ABD8
+	lda xsp, (xsp + 12)		; pop 12 bytes
+	; Vtable call
+	ldda32_24 xwa, 2335134
+	ldda32_24 xbc, 2335138
+	ld_sril3 xbc, 0xe5, 0x0a, 0x0e
+	ld_sril3 xhl, 0xe5, 0x00, 0x01
+	ld xbc, 30015497		; 0x01CA0009
+	lds32 xde, 2
+	call (xhl)
+
+	; --- End of iteration: check loop condition ---
+.Lfo_end_iter:				; 0x28DA62
+	ldda32_24 xwa, 2294852		; XWA = (0x230444) — limit
+	cpda32_24 xwa, 2295908		; cp XWA, (0x230864)
+	jr ugt, .Lfo_epilogue		; if past limit, exit
+	cp xiz, 0
+	jrl gt, .Lfo_loop		; if XIZ > 0, continue loop
+
+	; --- Epilogue ---
+.Lfo_epilogue:				; 0x28DA77
+	pop xiz
+	inc 6, xsp
+	ret
 
 HDAE5000_File_Save:	; 0x28DA7B (381 bytes)
 	; Save file to HD: initialize allocation tables, set file type codes
