@@ -8630,9 +8630,131 @@ HDAE5000_PPORT_Cmd_LoadHDtoMemory:	; 0x29632A
 	call HDAE5000_Display_String
 	jp HDAE5000_PPORT_Cmd_Done
 
-HDAE5000_PPORT_Cmd_SendDataBlock:	; 0x29633C
-	; Send data block to PC
-	.incbin "includes/code_295642_2971a2.bin", 3322, 362
+HDAE5000_PPORT_Cmd_SendDataBlock:	; 0x29633C (362 bytes)
+	; Send data block to PC — display status, render, build transfer buffer
+	; from PPORT data, then loop sending 512-byte sectors until count exhausted
+	ldw wa, 0x001A				; display command
+	nop
+	ldada_24 xbc, 2708798			; lda XBC, 0x29553E — status string
+	nop
+	call HDAE5000_Display_String
+	call HDAE5000_Render_Display_Region
+	ldada_24 xix, 2330984			; lda XIX, 0x239168
+	nop
+	add xix, 0x00000005			; advance to data offset +5
+	ld xwa, (xix)				; read 32-bit sector count
+	stda32_24 2330964, xwa			; st (0x239154), XWA — save count
+	nop
+	lds wa, 1				; WA = 1 (display command)
+	di
+	call HDAE5000_Display_String
+	ei 7
+	xor wa, wa				; clear WA
+	ldda8_24 a, 2330842			; ld A, (0x2390DA) — sector mask
+	nop
+	ld (xix), a				; store to buffer
+	ldda8_24 a, 2330844			; ld A, (0x2390DC) — head mask
+	nop
+	ld (xix + 1), a			; store to buffer+1
+	nop
+	add xix, 0x00000002			; advance past sector/head bytes
+	lds bc, 0				; counter = 0
+	ldada_24 xiy, 2330984			; lda XIY, 0x239168
+	nop
+	add xiy, 0x00000009			; XIY points to source data offset +9
+.Lsdb_copy_loop:			; 0x296394 — copy 26 bytes from XIY+BC to XIX+BC
+	cp bc, 0x001A				; 26 bytes?
+	jr z, .Lsdb_copy_done			; exit loop
+	ld_srib3 a, 0x07, 0xF4, 0xE4		; ld A, (XIY+BC) — source byte
+	nop
+	lda_dri3 xbc, 0x07, 0xF0, 0xE4		; ld (XIX+BC), A — store to dest
+	nop
+	inc 1, bc
+	jr t, .Lsdb_copy_loop
+.Lsdb_copy_done:			; 0x2963AA
+	stdi8_24 2330854, 0x00			; st (0x2390E6), 0 — clear error flag
+	xor xbc, xbc
+	xor xde, xde
+	ldda8_24 c, 2330838			; ld C, (0x2390D6)
+	nop
+	ldda8_24 e, 2330840			; ld E, (0x2390D8)
+	nop
+	ldw wa, 0x0015				; display command
+	nop
+	di
+	call HDAE5000_Display_String
+	ei 7
+	cps wa, 0				; check display result
+	jpcc_24 6, 2712542			; jp Z, 0x2963DE — skip error setup
+	nop
+	ldw wa, 0xFF00				; error indicator
+	nop
+	stdi8_24 2330854, 0x01			; st (0x2390E6), 1 — set error flag
+.Lsdb_send_header:			; 0x2963DE
+	call .Lpsb_write_byte			; send header byte via PPORT
+	cpdi8_24 2330836, 0x01			; error check
+	jpcc_24 6, 2708340			; jp Z, abort
+	nop
+	cpdi8_24 2330854, 0x01			; cp (0x2390E6), 1 — error flag set?
+	jpcc_24 6, 2712738			; jp Z, 0x2964A2 — exit
+	nop
+.Lsdb_sector_loop:			; 0x2963FA — main sector send loop
+	ldda32_24 xwa, 2330964			; ld XWA, (0x239154) — remaining count
+	nop
+	cp xwa, 0x00000000			; all done?
+	jpcc_24 6, 2712698			; jp Z, 0x29647A — send final status
+	nop
+	call 2714666				; call 0x296C2A — read sector from HD
+	cpdi8_24 2330836, 0x01			; error check
+	jpcc_24 6, 2708340			; jp Z, abort
+	nop
+	stdi8_24 2330854, 0x00			; clear error flag
+	ldada_24 xbc, 2331240			; lda XBC, 0x239268 — sector data buffer
+	nop
+	ld xde, 0x00000200			; 512 bytes
+	nop
+	ldw wa, 0x0017				; display command (send data)
+	nop
+	di
+	call HDAE5000_Display_String
+	ei 7
+	cps wa, 0				; check result
+	jpcc_24 6, 2712652			; jp Z, 0x29644C — skip error
+	nop
+	ldw wa, 0xFF00				; error indicator
+	nop
+	stdi8_24 2330854, 0x01			; set error flag
+.Lsdb_send_sector:			; 0x29644C
+	call .Lpsb_write_byte			; send byte
+	cpdi8_24 2330836, 0x01			; error check
+	jpcc_24 6, 2708340			; jp Z, abort
+	nop
+	cpdi8_24 2330854, 0x01			; error flag?
+	jpcc_24 6, 2712738			; jp Z, exit
+	nop
+	ldda32_24 xwa, 2330964			; reload count
+	nop
+	dec 1, xwa				; decrement sector count
+	stda32_24 2330964, xwa			; store back
+	nop
+	jp .Lsdb_sector_loop			; next sector
+.Lsdb_send_final:			; 0x29647A — send final status byte
+	ldw wa, 0x0016				; display command (final)
+	nop
+	di
+	call HDAE5000_Display_String
+	ei 7
+	cps wa, 0
+	jpcc_24 6, 2712722			; jp Z, 0x296492 — skip error
+	nop
+	ldw wa, 0xFF00				; error indicator
+	nop
+.Lsdb_send_final2:			; 0x296492
+	call .Lpsb_write_byte			; send final byte
+	cpdi8_24 2330836, 0x01			; error check
+	jpcc_24 6, 2708340			; jp Z, abort
+	nop
+	jp HDAE5000_PPORT_Cmd_Done
 
 HDAE5000_PPORT_Cmd_SendFileList:	; 0x2964A6 (226 bytes)
 	; Send file list to PC - displays status, builds transfer buffer
