@@ -8963,8 +8963,120 @@ HDAE5000_String_Format_Output:	; 0x29A888 (848 bytes)
 	.incbin "includes/code_2971b7_29ae9e.bin", 14033, 848
 
 HDAE5000_PPI_Block_Copy:	; 0x29ABD8 (237 bytes)
-	; PPI block copy/transfer utility
-	.incbin "includes/code_2971b7_29ae9e.bin", 14881, 237
+	; PPI block copy/transfer with callback-based byte output.
+	; Contains 4 sub-routines: 2 setup variants, 1 callback, 1 int-to-string converter.
+	;
+	; --- Sub 1: Setup variant 1 (with extra stack param) ---
+	; Stack: [+0x08] = buffer ptr, [+0x10] = params, [+0x14] = format data
+	dec 4, xsp			; allocate 4 bytes
+	ld xwa, (xsp + 8)		; XWA = buffer ptr
+	stda32_24 2331778, xwa		; [0x239482] = buffer ptr
+	ldmi8 (xwa), 0x00		; null-terminate buffer
+	lda xwa, (xsp + 0x10)		; XWA = &param area
+	ld (xsp), xwa			; save to local
+	pushw 0x0029			; push callback addr high word
+	pushw 0xAC21			; push callback addr low (→ 0x0029AC21)
+	lda xwa, (xsp + 4)		; XWA = &callback addr on stack
+	push xwa			; push callback ptr
+	ld xwa, (xsp + 0x14)		; XWA = format data
+	push xwa			; push
+	call 2726631			; call 0x299AE7 (PPI transfer engine)
+	lda xsp, (xsp + 0x10)		; cleanup 16 bytes
+	ret
+	;
+	; --- Sub 2: Setup variant 2 (simpler) ---
+	ld xwa, (xsp + 4)		; XWA = buffer ptr
+	stda32_24 2331778, xwa		; [0x239482] = buffer ptr
+	ldmi8 (xwa), 0x00		; null-terminate buffer
+	pushw 0x0029			; push callback addr high word
+	pushw 0xAC21			; push callback addr low
+	lda xwa, (xsp + 0x10)		; XWA = &callback addr on stack
+	push xwa			; push callback ptr
+	ld xwa, (xsp + 0x10)		; XWA = format data
+	push xwa			; push
+	call 2726631			; call 0x299AE7
+	lda xsp, (xsp + 0x0C)		; cleanup 12 bytes
+	ret
+	;
+	; --- Sub 3: Byte-write callback (called by PPI engine) ---
+	; Appends one byte to buffer at [0x239482], advances pointer, null-terminates.
+.Lppi_callback:				; 0x29AC21
+	ldda32_24 xbc, 2331778		; XBC = [0x239482] (current buffer ptr)
+	lds32 xwa, 1			; XWA = 1
+	adddm32_24 2331778, xwa	; [0x239482]++ (advance ptr)
+	ld wa, (xsp + 4)		; WA = character to write
+	ld (xbc), a			; store character at buffer
+	ldda32_24 xwa, 2331778		; XWA = new buffer ptr
+	ldmi8 (xwa), 0x00		; null-terminate
+	ret
+	;
+	; --- Sub 4: Integer to base-N string converter ---
+	; Stack: [+0x1A] = value, [+0x1C] = output ptr, [+0x20] = radix
+	; Handles signed decimal (radix 10), validates radix 2-36.
+	; Uses QBC (previous register bank) to hold the working value.
+	lda xsp, (xsp - 18)		; allocate 18-byte frame
+	push xiz			; save XIZ
+	ld xhl, (xsp + 0x1C)		; XHL = output buffer ptr
+	lds ix, 0			; IX = 0 (sign = positive)
+	ld bc, (xsp + 0x20)		; BC = radix
+	cps bc, 2			; radix < 2?
+	jr lt, .Lppi_empty		; → invalid, output empty string
+	cp bc, 0x0024			; radix > 36?
+	jr le, .Lppi_convert		; → valid, start conversion
+.Lppi_empty:
+	ldmi8 (xhl), 0x00		; *output = '\0'
+	jr t, .Lppi_done		; → exit
+.Lppi_convert:
+	ld wa, (xsp + 0x1A)		; WA = value to convert
+	.byte 0xD7, 0xE6, 0x98		; ld QBC, WA (save value in prev bank)
+	lda xiz, (xsp + 4)		; XIZ = &local scratch buffer
+	ldmi8 (xiz + 0x11), 0x00	; null-terminate scratch[17]
+	lda xiy, (xiz + 0x10)		; XIY = scratch end pointer
+	cp bc, 0x000A			; radix == 10? (decimal)
+	jr nz, .Lppi_div_loop		; → unsigned for other radixes
+	.byte 0xD7, 0xE6, 0x88		; ld WA, QBC (reload value)
+	cps wa, 0			; value < 0? (signed check)
+	jr ge, .Lppi_div_loop		; → non-negative
+	lds ix, 1			; IX = 1 (negative flag)
+	.byte 0xD7, 0xE6, 0x88		; ld WA, QBC (reload value)
+	neg wa				; negate (make positive)
+	.byte 0xD7, 0xE6, 0x98		; ld QBC, WA (save positive value)
+.Lppi_div_loop:
+	ld de, bc			; DE = radix (divisor)
+	.byte 0xD7, 0xE6, 0x88		; ld WA, QBC (current value)
+	extz xwa			; zero-extend WA to XWA
+	div xwa, xde			; XWA = WA / DE (quot in WA, rem in high)
+	.byte 0xD7, 0xE2, 0x88		; ld WA, QWA (get remainder)
+	add a, 0x30			; convert to ASCII '0'-'9'
+	ld (xiy), a			; store digit
+	cpmi8 (xiy), 0x39		; digit > '9'?
+	jr le, .Lppi_digit_ok		; → it's 0-9
+	addmi8 (xiy), 0x27		; adjust for 'a'-'z' (0x30+0x27=0x57→'W'+n)
+.Lppi_digit_ok:
+	.byte 0xD7, 0xE6, 0x88		; ld WA, QBC (reload quotient)
+	extz xwa			; zero-extend
+	div xwa, xde			; divide again to get next quotient
+	.byte 0xD7, 0xE6, 0x98		; ld QBC, WA (save new quotient)
+	.byte 0xD7, 0xE6, 0xD8		; cp QBC, 0 (quotient == 0?)
+	jr z, .Lppi_digits_done		; → all digits extracted
+	dec 1, xiy			; move digit pointer back
+	jr t, .Lppi_div_loop		; → next digit
+.Lppi_digits_done:
+	cps ix, 0			; negative flag set?
+	jr z, .Lppi_copy_digits		; → no sign needed
+	stib_dpd 0xF4, 0x2D		; ld (-XIY), '-' (pre-decrement, store minus sign)
+.Lppi_copy_digits:
+	lda xwa, (xiz + 0x12)		; XWA = &scratch[18] (past null-terminator)
+	sub xwa, xiy			; XWA = string length (including null)
+	pushw wa			; push length
+	push xiy			; push source ptr
+	push xhl			; push destination ptr
+	call HDAE5000_MemCopy		; copy digit string to output
+	lda xsp, (xsp + 0x0A)		; cleanup 10 bytes
+.Lppi_done:
+	pop xiz				; restore XIZ
+	lda xsp, (xsp + 0x12)		; deallocate 18-byte frame
+	ret
 
 HDAE5000_Cell_Copy_Buffer:	; 0x29ACC5 (263 bytes)
 	; Cell buffer copy routine (called by Cell_Get_Params)
