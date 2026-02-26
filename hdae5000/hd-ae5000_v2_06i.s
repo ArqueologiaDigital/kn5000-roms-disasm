@@ -3268,7 +3268,48 @@ HDAE5000_Table_Sub_290D91:	; 0x290D91 (303 bytes)
 	.incbin "includes/code_28f90c_2953e1.bin", 5253, 303
 
 HDAE5000_Table_Sub_290EC0:	; 0x290EC0 (133 bytes)
-	.incbin "includes/code_28f90c_2953e1.bin", 5556, 133
+	dec 4, xsp		; allocate 4 bytes on stack
+	push xiz		; save XIZ
+	ld (xsp + 4), bc	; save BC (file number param)
+	ld (xsp + 6), wa	; save WA (partition param)
+	ld wa, (xsp + 4)	; WA = file number
+	extz xwa		; zero-extend to 32-bit
+	ld xbc, 0x0000004C	; multiplier = 76
+	call 0x29B72D		; multiply XWA * XBC
+	ld xiz, xhl		; XIZ = file_number * 76
+	ld wa, (xsp + 6)	; WA = partition
+	extz xwa		; zero-extend to 32-bit
+	ld xbc, 0x000004C0	; multiplier = 1216
+	call 0x29B72D		; multiply XWA * XBC
+	add xhl, 0x780		; XHL += 1920 (header offset)
+	add xhl, xiz		; XHL += file_number * 76
+	ldada_24 xwa, 2102894	; XWA = 0x20166E (table base)
+	add xwa, xhl		; XWA = base + computed offset
+	ld xwa, (xwa)		; XWA = table entry value
+	cp xwa, 0xFFFFFFFF	; empty entry?
+	jr z, .Lts290_exit	; skip if -1
+	ld xiy, 0x002F8DD8	; destination for ldirw
+	ld xix, 0x00238F1C	; source for ldirw
+	lds bc, 4		; count = 4 words (8 bytes)
+	mriw2 0x95, 0x11	; ldirw — copy from XIX to XIY
+	ld wa, (xsp + 6)	; reload partition
+	stda16_24 2330398, xwa	; ld (0x238F1E), WA
+	ld wa, (xsp + 4)	; reload file number
+	stda16_24 2330400, xwa	; ld (0x238F20), WA
+	ldada_24 xwa, 2703254	; XWA = 0x293F96 (function ptr 1)
+	ld xde, xwa		; XDE = function ptr 1
+	ldada_24 xwa, 2703692	; XWA = 0x29414C (function ptr 2)
+	ld xbc, xwa		; XBC = function ptr 2
+	ld xwa, xde		; XWA = function ptr 1
+	ldda32_24 xde, 2335138	; XDE = (0x23A1A2) workspace ptr
+	ld_sril3 xde, 0xE9, 0x88, 0x0E	; XDE = (XDE+0x0E88)
+	ld_sril3 xhl, 0xE9, 0xB0, 0x00	; XHL = (XDE+0x00B0) handler
+	call (xhl)		; dispatch handler
+.Lts290_exit:
+	lds hl, 0		; return 0
+	pop xiz			; restore XIZ
+	inc 4, xsp		; deallocate 4 bytes
+	ret
 
 HDAE5000_Table_Sub_290F45:	; 0x290F45 (248 bytes)
 	.incbin "includes/code_28f90c_2953e1.bin", 5689, 248
@@ -3295,7 +3336,47 @@ HDAE5000_Table_Sub_291909:	; 0x291909 (211 bytes)
 	.incbin "includes/code_28f90c_2953e1.bin", 8189, 211
 
 HDAE5000_Table_Sub_2919DC:	; 0x2919DC (134 bytes)
-	.incbin "includes/code_28f90c_2953e1.bin", 8400, 134
+	push xiz		; save XIZ
+	ld de, bc		; DE = BC (file number param)
+	lds hl, 0		; HL = 0
+	ld xiy, 0x002F8DD8	; destination for ldirw
+	ld xix, 0x00238F1C	; source for ldirw
+	lds bc, 4		; count = 4 words
+	mriw2 0x95, 0x11	; ldirw — copy from XIX to XIY
+	stda16_24 2330398, xwa	; ld (0x238F1E), WA — partition
+	stda16_24 2330400, xde	; ld (0x238F20), DE — file number
+	ldda16_24 xwa, 2330400	; WA = (0x238F20) file number
+	extz xwa		; zero-extend to 32-bit
+	ld xbc, 0x0000004C	; multiplier = 76
+	call 0x29B72D		; multiply
+	ld xiz, xhl		; XIZ = file_number * 76
+	ldda16_24 xwa, 2330398	; WA = (0x238F1E) partition
+	extz xwa		; zero-extend to 32-bit
+	ld xbc, 0x000004C0	; multiplier = 1216
+	call 0x29B72D		; multiply
+	add xhl, 0x780		; XHL += 1920 (header offset)
+	add xhl, xiz		; XHL += file_number * 76
+	ldada_24 xwa, 2102894	; XWA = 0x20166E (table base)
+	add xwa, xhl		; XWA = base + computed offset
+	calr HDAE5000_Display_Sub_294273
+	ld wa, hl		; WA = result
+	cp wa, 0xFFFF		; check for failure
+	jr z, .Lts919_exit	; skip if failed
+	ldada_24 xwa, 2703698	; XWA = 0x294152
+	ld xhl, xwa		; XHL = handler 1
+	ldada_24 xwa, 2703465	; XWA = 0x294069
+	ld xbc, xwa		; XBC = handler 2
+	ldada_24 xwa, 2703692	; XWA = 0x29414C
+	ld xde, xwa		; XDE = handler 3
+	ld xwa, xhl		; XWA = handler 1
+	ldda32_24 xhl, 2335138	; XHL = (0x23A1A2) workspace ptr
+	ld_sril3 xhl, 0xED, 0x88, 0x0E	; XHL = (XHL+0x0E88)
+	ld_sril3 xix, 0xED, 0xB4, 0x00	; XIX = (XHL+0x00B4)
+	call (xix)		; dispatch handler
+	calr HDAE5000_Display_Sub_29429E
+.Lts919_exit:
+	pop xiz			; restore XIZ
+	ret
 
 HDAE5000_Table_Sub_291A62:	; 0x291A62 (209 bytes)
 	.incbin "includes/code_28f90c_2953e1.bin", 8534, 209
