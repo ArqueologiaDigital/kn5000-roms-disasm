@@ -6592,8 +6592,138 @@ HDAE5000_Cell_Render_Type8:	; 0x293BB8 (222 bytes)
 	ret
 
 HDAE5000_Cell_Validate:	; 0x293C96 (347 bytes)
-	; Validate cell rendering parameters
-	.incbin "includes/code_28f90c_2953e1.bin", 17290, 347
+	; Validate cell rendering — tests bits 0-8, accumulates sizes in XIZ
+	lda xsp, (xsp - 12)
+	push xiz
+	ld (xsp + 14), wa		; save bitmask
+	ldmw (xsp + 4), 0x0000		; init result = 0
+	lds32 xiz, 0			; accumulator = 0
+	; --- Bit 0: call handler(0) and handler(1) ---
+	ld wa, (xsp + 14)
+	bit 0, wa
+	jr z, .Lcv_bit1
+	lda xwa, (xsp + 6)		; XWA = scratch buffer address
+	ld xbc, xwa
+	ldda32_24 xwa, 2335138		; (0x23A1A2) — workspace ptr
+	ld_sril3 xwa, 0xE1, 0x88, 0x0E	; XWA = (XWA+0x0E88)
+	ld_sril3 xhl, 0xE1, 0x80, 0x00	; XHL = (XWA+0x0080) — handler
+	lds wa, 0			; param = 0
+	call (xhl)
+	add xiz, (xsp + 10)		; accumulate size
+	lda xwa, (xsp + 6)
+	ld xbc, xwa
+	ldda32_24 xwa, 2335138
+	ld_sril3 xwa, 0xE1, 0x88, 0x0E
+	ld_sril3 xhl, 0xE1, 0x80, 0x00
+	lds wa, 1			; param = 1
+	call (xhl)
+	add xiz, (xsp + 10)
+	; --- Bit 1: call handler(2) ---
+.Lcv_bit1:
+	ld wa, (xsp + 14)
+	bit 1, wa
+	jr z, .Lcv_bit2
+	lda xwa, (xsp + 6)
+	ld xbc, xwa
+	ldda32_24 xwa, 2335138
+	ld_sril3 xwa, 0xE1, 0x88, 0x0E
+	ld_sril3 xhl, 0xE1, 0x80, 0x00
+	lds wa, 2			; param = 2
+	call (xhl)
+	add xiz, (xsp + 10)
+	; --- Bit 2: call handler(3) + extra handler at +0x34 ---
+.Lcv_bit2:
+	ld wa, (xsp + 14)
+	bit 2, wa
+	jr z, .Lcv_bit3
+	lda xwa, (xsp + 6)
+	ld xbc, xwa
+	ldda32_24 xwa, 2335138
+	ld_sril3 xwa, 0xE1, 0x88, 0x0E
+	ld_sril3 xhl, 0xE1, 0x80, 0x00
+	lds wa, 3			; param = 3
+	call (xhl)
+	add xiz, (xsp + 10)
+	; Extra handler at +0x34
+	ldda32_24 xwa, 2335138
+	ld_sril3 xwa, 0xE1, 0x88, 0x0E
+	ld xix, (xwa + 0x34)
+	call (xix)
+	add xiz, xhl
+	; --- Bit 3: handler at +0x44 ---
+.Lcv_bit3:
+	ld wa, (xsp + 14)
+	bit 3, wa
+	jr z, .Lcv_bit4
+	ldda32_24 xwa, 2335138
+	ld_sril3 xwa, 0xE1, 0x88, 0x0E
+	ld xix, (xwa + 0x44)
+	call (xix)
+	add xiz, xhl
+	; --- Bit 4: fixed constant 0x72AA ---
+.Lcv_bit4:
+	ld wa, (xsp + 14)
+	bit 4, wa
+	jr z, .Lcv_bit5
+	ld xwa, 0x000072AA
+	ld (xsp + 10), xwa
+	add xiz, (xsp + 10)
+	; --- Bit 5: handler at +0x64 ---
+.Lcv_bit5:
+	ld wa, (xsp + 14)
+	bit 5, wa
+	jr z, .Lcv_bit6
+	ldda32_24 xwa, 2335138
+	ld_sril3 xwa, 0xE1, 0x88, 0x0E
+	ld xix, (xwa + 0x64)
+	call (xix)
+	add xiz, xhl
+	; --- Bit 6: call handler(8) ---
+.Lcv_bit6:
+	ld wa, (xsp + 14)
+	bit 6, wa
+	jr z, .Lcv_bit7
+	lda xwa, (xsp + 6)
+	ld xbc, xwa
+	ldda32_24 xwa, 2335138
+	ld_sril3 xwa, 0xE1, 0x88, 0x0E
+	ld_sril3 xhl, 0xE1, 0x80, 0x00
+	ldw wa, 8			; param = 8
+	call (xhl)
+	add xiz, (xsp + 10)
+	; --- Bit 7: call handler(9) ---
+.Lcv_bit7:
+	ld wa, (xsp + 14)
+	bit 7, wa
+	jr z, .Lcv_bit8
+	lda xwa, (xsp + 6)
+	ld xbc, xwa
+	ldda32_24 xwa, 2335138
+	ld_sril3 xwa, 0xE1, 0x88, 0x0E
+	ld_sril3 xhl, 0xE1, 0x80, 0x00
+	ldw wa, 9			; param = 9
+	call (xhl)
+	add xiz, (xsp + 10)
+	; --- Bit 8: fixed constant 0x5000 ---
+.Lcv_bit8:
+	ld wa, (xsp + 14)
+	bit 8, wa
+	jr z, .Lcv_final
+	add xiz, 0x00005000
+	; --- Final validation ---
+.Lcv_final:
+	ld xwa, xiz			; total accumulated size
+	call 0x298C7D			; validate total
+	ld xiz, xhl			; save result
+	call 0x297D35			; get available space
+	cp xhl, xiz			; available > needed?
+	jr ugt, .Lcv_done
+	ldmw (xsp + 4), 0xFFFF		; set error flag
+.Lcv_done:
+	ld hl, (xsp + 4)
+	pop xiz
+	lda xsp, (xsp + 12)
+	ret
 
 HDAE5000_Cell_Get_Params:	; 0x293DF1 (61 bytes)
 	; Get cell rendering parameters from data source
