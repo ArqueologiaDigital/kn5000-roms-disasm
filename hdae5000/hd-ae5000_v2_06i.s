@@ -3073,7 +3073,165 @@ HDAE5000_Menu_Callback:	; 0x28AE40 (248 bytes)
 
 HDAE5000_Display_Manager:	; 0x28AF38 (441 bytes)
 	; Manage display state; accesses 0x229DAB
-	.incbin "includes/code_2803c2_28f542.bin", 43894, 441
+	; --- Prologue ---
+	dec 0, xsp				; ef 68 — allocate 4 bytes
+	.byte 0x2e			; push iz (compact 16-bit)
+	ld (xsp + 0x04), de			; bf 04 52
+	ld (xsp + 0x06), bc			; bf 06 51
+	ld (xsp + 0x08), wa			; bf 08 50
+	ld iz, (xsp + 0x12)			; 9f 12 26 — load mode arg
+	cps iz, 1				; de d9
+
+	; --- Branch on mode ---
+	jr nz, .Ldm_mode2			; 6e xx
+
+	; Mode 1: register event via +0x0100 vtable
+	ldda32_24 xwa, 0x23a1a2		; e2 a2 a1 23 20
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e		; e3 e1 0a 0e 20 — ld xwa, (xwa+0x0e0a)
+	ld_sril3 xhl, 0xe1, 0x00, 0x01		; e3 e1 00 01 23 — ld xhl, (xwa+0x0100)
+	ld xwa, 0x007f02c1			; 40 c1 02 7f 00
+	ld xbc, 0x01c00001			; 41 01 00 c0 01
+	lds32 xde, 5				; ea ad
+	call (xhl)				; b3 e8
+	calr HDAE5000_Wait_Callback_Loop	; 1e xx xx
+	jr t, .Ldm_common			; 68 xx
+
+.Ldm_mode2:					; 0x28AF6D
+	; Mode 2: register event via +0x0124 vtable, then call +0x0E88/+0x00E4
+	ldda32_24 xwa, 0x23a1a2		; e2 a2 a1 23 20
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e		; e3 e1 0a 0e 20 — ld xwa, (xwa+0x0e0a)
+	ld_sril3 xhl, 0xe1, 0x24, 0x01		; e3 e1 24 01 23 — ld xhl, (xwa+0x0124)
+	ld xwa, 0x007f02c1			; 40 c1 02 7f 00
+	ld xbc, 0x01c00001			; 41 01 00 c0 01
+	lds32 xde, 5				; ea ad
+	call (xhl)				; b3 e8
+	ldda32_24 xwa, 0x23a1a2		; e2 a2 a1 23 20
+	ld_sril3 xwa, 0xe1, 0x88, 0x0e		; e3 e1 88 0e 20 — ld xwa, (xwa+0x0e88)
+	ld_sril3 xhl, 0xe1, 0xe4, 0x00		; e3 e1 e4 00 23 — ld xhl, (xwa+0x00e4)
+	ldw wa, 0x0064				; 30 64 00
+	call (xhl)				; b3 e8
+	calr HDAE5000_Wait_Callback_Loop	; 1e xx xx
+
+.Ldm_common:					; 0x28AFA1
+	; Common: dispatch via saved args
+	.byte 0x2e			; push iz (compact 16-bit)
+	.byte 0x0b, 0x00, 0x00		; push 0x0000
+	ld wa, (xsp + 0x0c)			; 9f 0c 20
+	ld bc, (xsp + 0x0a)			; 9f 0a 21
+	ld de, (xsp + 0x08)			; 9f 08 22
+	call 0x2905e9				; 1d e9 05 29
+	ld (xsp + 0x02), hl			; bf 02 53 — save result
+	ld wa, (xsp + 0x02)			; 9f 02 20
+	cp wa, 0xffff				; d8 cf ff ff
+	jrl z, .Ldm_fail			; 76 xx xx — WA == -1 → failure
+
+	; --- Success path ---
+	cpdi8_24 0x229dab, 0x01			; c2 ab 9d 22 3f 01
+	jr nz, .Ldm_success_check		; 6e xx
+	lds wa, 1				; d8 a9
+	calr HDAE5000_Menu_Register_A		; 1e xx xx
+	jrl t, .Ldm_done			; 78 xx xx
+
+.Ldm_success_check:				; 0x28AFCF
+	cps iz, 1				; de d9
+	jr nz, .Ldm_mode2_dereg		; 6e xx
+
+	; Mode 1 deregistration: via +0x0104 vtable
+	ld xwa, (xsp + 0x0e)			; af 0e 20
+	ldda32_24 xbc, 0x23a1a2		; e2 a2 a1 23 21
+	ld_sril3 xbc, 0xe5, 0x0a, 0x0e		; e3 e5 0a 0e 21 — ld xbc, (xbc+0x0e0a)
+	ld_sril3 xhl, 0xe5, 0x04, 0x01		; e3 e5 04 01 23 — ld xhl, (xbc+0x0104)
+	ld xbc, 0x01c00001			; 41 01 00 c0 01
+	lds32 xde, 0				; ea a8
+	call (xhl)				; b3 e8
+	ldda32_24 xwa, 0x23a1a2		; e2 a2 a1 23 20
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e		; e3 e1 0a 0e 20 — ld xwa, (xwa+0x0e0a)
+	ld_sril3 xhl, 0xe1, 0x04, 0x01		; e3 e1 04 01 23 — ld xhl, (xwa+0x0104)
+	ld xwa, 0xffffffff			; 40 ff ff ff ff
+	ld xbc, 0x01c00018			; 41 18 00 c0 01
+	lds32 xde, 0				; ea a8
+	call (xhl)				; b3 e8
+	jrl t, .Ldm_done			; 78 xx xx
+
+.Ldm_mode2_dereg:				; 0x28B00E
+	; Mode 2 deregistration: via +0x0124 vtable
+	ld xwa, (xsp + 0x0e)			; af 0e 20
+	ldda32_24 xbc, 0x23a1a2		; e2 a2 a1 23 21
+	ld_sril3 xbc, 0xe5, 0x0a, 0x0e		; e3 e5 0a 0e 21 — ld xbc, (xbc+0x0e0a)
+	ld_sril3 xhl, 0xe5, 0x24, 0x01		; e3 e5 24 01 23 — ld xhl, (xbc+0x0124)
+	ld xbc, 0x01c00001			; 41 01 00 c0 01
+	lds32 xde, 0				; ea a8
+	call (xhl)				; b3 e8
+	ldda32_24 xwa, 0x23a1a2		; e2 a2 a1 23 20
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e		; e3 e1 0a 0e 20 — ld xwa, (xwa+0x0e0a)
+	ld_sril3 xhl, 0xe1, 0x24, 0x01		; e3 e1 24 01 23 — ld xhl, (xwa+0x0124)
+	ld xwa, 0xffffffff			; 40 ff ff ff ff
+	ld xbc, 0x01c00018			; 41 18 00 c0 01
+	lds32 xde, 0				; ea a8
+	call (xhl)				; b3 e8
+	jrl t, .Ldm_done			; 78 xx xx
+
+.Ldm_fail:					; 0x28B049
+	; Failure path: register error event
+	cps iz, 1				; de d9
+	jr nz, .Ldm_fail_mode2			; 6e xx
+
+	; Fail mode 1: via +0x0100 vtable
+	ldda32_24 xwa, 0x23a1a2		; e2 a2 a1 23 20
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e		; e3 e1 0a 0e 20 — ld xwa, (xwa+0x0e0a)
+	ld_sril3 xhl, 0xe1, 0x00, 0x01		; e3 e1 00 01 23 — ld xhl, (xwa+0x0100)
+	ld xwa, 0x007f029d			; 40 9d 02 7f 00
+	ld xbc, 0x01c00001			; 41 01 00 c0 01
+	lds32 xde, 0				; ea a8
+	call (xhl)				; b3 e8
+	jr t, .Ldm_fail_common			; 68 xx
+
+.Ldm_fail_mode2:				; 0x28B06C
+	; Fail mode 2: via +0x0124 vtable
+	ldda32_24 xwa, 0x23a1a2		; e2 a2 a1 23 20
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e		; e3 e1 0a 0e 20 — ld xwa, (xwa+0x0e0a)
+	ld_sril3 xhl, 0xe1, 0x24, 0x01		; e3 e1 24 01 23 — ld xhl, (xwa+0x0124)
+	ld xwa, 0x007f029d			; 40 9d 02 7f 00
+	ld xbc, 0x01c00001			; 41 01 00 c0 01
+	lds32 xde, 0				; ea a8
+	call (xhl)				; b3 e8
+
+.Ldm_fail_common:				; 0x28B089
+	; Register error display handlers
+	ld xbc, (xsp + 0x0e)			; af 0e 21
+	ld xwa, 0x007f029e			; 40 9e 02 7f 00
+	calr HDAE5000_UI_Main_Handler		; 1e xx xx
+	; Register via +0x0418 vtable (timer handler)
+	ld xwa, 0x01ca0002			; 40 02 00 ca 01
+	push xwa				; 38
+	ld xwa, (xsp + 0x12)			; af 12 20
+	push xwa				; 38
+	ldda32_24 xwa, 0x23a1a2		; e2 a2 a1 23 20
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e		; e3 e1 0a 0e 20 — ld xwa, (xwa+0x0e0a)
+	ld_sril3 xhl, 0xe1, 0x18, 0x04		; e3 e1 18 04 23 — ld xhl, (xwa+0x0418)
+	ld xwa, 0x0000014d			; 40 4d 01 00 00
+	ld xbc, 0x007f029f			; 41 9f 02 7f 00
+	ld xde, 0xffffffff			; 42 ff ff ff ff
+	call (xhl)				; b3 e8
+	; Register via +0x0410 vtable (second timer handler)
+	ld xwa, 0x01ca0002			; 40 02 00 ca 01
+	push xwa				; 38
+	ld xwa, (xsp + 0x12)			; af 12 20
+	push xwa				; 38
+	ldda32_24 xwa, 0x23a1a2		; e2 a2 a1 23 20
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e		; e3 e1 0a 0e 20 — ld xwa, (xwa+0x0e0a)
+	ld_sril3 xhl, 0xe1, 0x10, 0x04		; e3 e1 10 04 23 — ld xhl, (xwa+0x0410)
+	ld xwa, 0x0000014d			; 40 4d 01 00 00
+	ld xbc, 0x007f029f			; 41 9f 02 7f 00
+	ld xde, 0xffffffff			; 42 ff ff ff ff
+	call (xhl)				; b3 e8
+
+.Ldm_done:					; 0x28B0E8
+	; --- Epilogue ---
+	ld hl, (xsp + 0x02)			; 9f 02 23
+	.byte 0x4e			; pop iz (compact 16-bit)
+	inc 0, xsp				; ef 60
+	retd 0x0006				; 0f 06 00
 
 HDAE5000_Display_Scroll:	; 0x28B0F1 (271 bytes)
 	; Handle display scroll: register handler, copy data, dispatch callback
