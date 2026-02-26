@@ -3379,10 +3379,131 @@ HDAE5000_Table_Sub_2919DC:	; 0x2919DC (134 bytes)
 	ret
 
 HDAE5000_Table_Sub_291A62:	; 0x291A62 (209 bytes)
-	.incbin "includes/code_28f90c_2953e1.bin", 8534, 209
+	lda xsp, (xsp - 20)	; allocate 20 bytes on stack
+	push xiz		; save XIZ
+	ld (xsp + 20), bc	; save BC param (file number)
+	ld (xsp + 22), wa	; save WA param (partition)
+	lda xwa, (xsp + 12)	; XWA = addr of local buffer
+	ld xbc, xwa		; XBC = buffer address
+	ldda32_24 xwa, 2335138	; XWA = (0x23A1A2) workspace ptr
+	ld_sril3 xwa, 0xE1, 0x88, 0x0E	; XWA = (XWA+0x0E88)
+	ld_sril3 xhl, 0xE1, 0x80, 0x00	; XHL = (XWA+0x0080) handler
+	ldw wa, 0x0009		; WA = 9 (operation code)
+	call (xhl)		; dispatch
+	ldda32_24 xwa, 2335138	; reload workspace ptr
+	ld_sril3 xwa, 0xE1, 0x88, 0x0E	; XWA = (XWA+0x0E88)
+	ld xhl, (xwa + 116)	; XHL = (XWA+0x74) handler
+	call (xhl)		; dispatch
+	lda xwa, (xsp + 12)	; XWA = addr of local buffer
+	ld (xsp + 4), xwa	; store buffer ptr
+	lda xwa, (xsp + 16)	; XWA = addr of result area
+	ld (xsp + 8), xwa	; store result ptr
+	ld wa, (xsp + 20)	; WA = file number
+	extz xwa
+	ld xbc, 0x0000004C	; multiplier = 76
+	call 0x29B72D		; multiply
+	ld xiz, xhl		; XIZ = file_number * 76
+	ld wa, (xsp + 22)	; WA = partition
+	extz xwa
+	ld xbc, 0x000004C0	; multiplier = 1216
+	call 0x29B72D		; multiply
+	add xhl, 0x780		; XHL += 1920
+	add xhl, xiz		; XHL += file_number * 76
+	ldada_24 xwa, 2102898	; XWA = 0x201672 (table base)
+	add xwa, xhl		; XWA = base + offset
+	ld xde, xwa		; XDE = table address
+	ld xwa, (xsp + 4)	; XWA = buffer ptr
+	ld xwa, (xwa)		; dereference
+	ld xbc, (xsp + 8)	; XBC = result ptr
+	ld xbc, (xbc)		; dereference
+	call 0x297E16		; compare/process
+	ld (xsp + 10), hl	; save HL result
+	ld wa, (xsp + 10)	; WA = result
+	cp wa, 0xFFFF		; check for failure
+	jr z, .Lts91a_post	; skip if failed
+	ld wa, (xsp + 20)	; WA = file number (reload)
+	extz xwa
+	ld xbc, 0x0000004C	; multiplier = 76
+	call 0x29B72D		; multiply
+	ld xiz, xhl		; XIZ = file_number * 76
+	ld wa, (xsp + 22)	; WA = partition (reload)
+	extz xwa
+	ld xbc, 0x000004C0	; multiplier = 1216
+	call 0x29B72D		; multiply
+	add xhl, 0x780		; XHL += 1920
+	add xhl, xiz		; XHL += file_number * 76
+	ldada_24 xwa, 2102867	; XWA = 0x201653 (flag table)
+	add xwa, xhl		; XWA = base + offset
+	ldmi8 (xwa), 0x01	; set flag byte to 1
+.Lts91a_post:
+	ld wa, (xsp + 10)	; WA = result (param for handler)
+	ldda32_24 xbc, 2335138	; XBC = (0x23A1A2) workspace ptr
+	ld_sril3 xbc, 0xE5, 0x88, 0x0E	; XBC = (XBC+0x0E88)
+	ld xhl, (xbc + 120)	; XHL = (XBC+0x78) handler
+	call (xhl)		; dispatch
+	ld hl, (xsp + 10)	; HL = result
+	pop xiz			; restore XIZ
+	lda xsp, (xsp + 20)	; deallocate 20 bytes
+	ret
 
 HDAE5000_Table_Sub_291B33:	; 0x291B33 (171 bytes)
-	.incbin "includes/code_28f90c_2953e1.bin", 8743, 171
+	lda xsp, (xsp - 20)	; allocate 20 bytes on stack
+	push xiz		; save XIZ
+	ld (xsp + 20), bc	; save BC param (file number)
+	ld (xsp + 22), wa	; save WA param (partition)
+	lda xwa, (xsp + 12)	; XWA = addr of local buffer
+	ld xbc, xwa		; XBC = buffer address
+	ldw wa, 0x000A		; WA = 10 (string length)
+	calr HDAE5000_Table_Sub_291BDE	; init table entry
+	ld xwa, (xsp + 16)	; XWA = param block
+	calr HDAE5000_Cell_Get_Params
+	ld (xsp + 16), xhl	; save result XHL
+	lda xwa, (xsp + 12)	; XWA = addr of local buffer
+	ld (xsp + 4), xwa	; store buffer ptr
+	lda xwa, (xsp + 16)	; XWA = addr of result
+	ld (xsp + 8), xwa	; store result ptr
+	ld wa, (xsp + 20)	; WA = file number
+	extz xwa
+	ld xbc, 0x0000004C	; multiplier = 76
+	call 0x29B72D		; multiply
+	ld xiz, xhl		; XIZ = file_number * 76
+	ld wa, (xsp + 22)	; WA = partition
+	extz xwa
+	ld xbc, 0x000004C0	; multiplier = 1216
+	call 0x29B72D		; multiply
+	add xhl, 0x780		; XHL += 1920
+	add xhl, xiz		; XHL += file_number * 76
+	ldada_24 xwa, 2102902	; XWA = 0x201676 (table base)
+	add xwa, xhl		; XWA = base + offset
+	ld xde, xwa		; XDE = table address
+	ld xwa, (xsp + 4)	; XWA = buffer ptr
+	ld xwa, (xwa)		; dereference
+	ld xbc, (xsp + 8)	; XBC = result ptr
+	ld xbc, (xbc)		; dereference
+	call 0x297E16		; compare/process
+	ld (xsp + 10), hl	; save HL result
+	ld wa, (xsp + 10)	; WA = result
+	cp wa, 0xFFFF		; check for failure
+	jr z, .Lts91b_exit	; skip if failed
+	ld wa, (xsp + 20)	; WA = file number (reload)
+	extz xwa
+	ld xbc, 0x0000004C	; multiplier = 76
+	call 0x29B72D		; multiply
+	ld xiz, xhl		; XIZ = file_number * 76
+	ld wa, (xsp + 22)	; WA = partition (reload)
+	extz xwa
+	ld xbc, 0x000004C0	; multiplier = 1216
+	call 0x29B72D		; multiply
+	add xhl, 0x780		; XHL += 1920
+	add xhl, xiz		; XHL += file_number * 76
+	ldada_24 xwa, 2102868	; XWA = 0x201654 (flag table)
+	add xwa, xhl		; XWA = base + offset
+	ldmi8 (xwa), 0x01	; set flag byte to 1
+.Lts91b_exit:
+	ld hl, (xsp + 10)	; HL = result
+	pop xiz			; restore XIZ
+	lda xsp, (xsp + 20)	; deallocate 20 bytes
+	ret
 
 HDAE5000_Table_Sub_291BDE:	; 0x291BDE (47 bytes)
 	; Initialize table entry structure with string address
