@@ -3436,8 +3436,340 @@ HDAE5000_Table_Calc_Offset:	; 0x29018A (553 bytes)
 	ret
 
 HDAE5000_Table_Lookup:	; 0x2903B3 (928 bytes)
-	; Look up entry in display table; returns 0xFFFF on failure
-	.incbin "includes/code_28f90c_2953e1.bin", 2727, 928
+	; Part 1: Build occupied-slot bitmask (bits 0-8)
+	; WA = row, BC = column. Returns HL = bitmask or 0xFFFF if all free.
+	dec 6, xsp
+	push xiz
+	ld (xsp + 6), bc		; save column
+	ld (xsp + 8), wa		; save row
+	ldmw (xsp + 4), 0x0000		; init bitmask = 0
+	; First check if ALL slots are free (call Table_Calc_Offset)
+	ld wa, (xsp + 8)
+	ld bc, (xsp + 6)
+	calr HDAE5000_Table_Calc_Offset
+	cp hl, 0xFFFF
+	jrl z, .Ltl_all_free
+	; --- Check slot 0: 0x201656 ---
+	ld wa, (xsp + 6)
+	extz xwa
+	ld xbc, 0x0000004C
+	call HDAE5000_Multiply
+	ld xiz, xhl
+	ld wa, (xsp + 8)
+	extz xwa
+	ld xbc, 0x000004C0
+	call HDAE5000_Multiply
+	add xhl, 0x00000780
+	add xhl, xiz
+	ldada_24 xwa, 2102870		; 0x201656
+	add xwa, xhl
+	ld xwa, (xwa)
+	cp xwa, 0xFFFFFFFF
+	jr z, .Ltl_chk1
+	setm 0, (xsp + 4)		; bit 0
+	; --- Check slot 1: 0x20165A ---
+.Ltl_chk1:
+	ld wa, (xsp + 6)
+	extz xwa
+	ld xbc, 0x0000004C
+	call HDAE5000_Multiply
+	ld xiz, xhl
+	ld wa, (xsp + 8)
+	extz xwa
+	ld xbc, 0x000004C0
+	call HDAE5000_Multiply
+	add xhl, 0x00000780
+	add xhl, xiz
+	ldada_24 xwa, 2102874		; 0x20165A
+	add xwa, xhl
+	ld xwa, (xwa)
+	cp xwa, 0xFFFFFFFF
+	jr z, .Ltl_chk2
+	setm 1, (xsp + 4)		; bit 1
+	; --- Check slot 2: 0x20165E ---
+.Ltl_chk2:
+	ld wa, (xsp + 6)
+	extz xwa
+	ld xbc, 0x0000004C
+	call HDAE5000_Multiply
+	ld xiz, xhl
+	ld wa, (xsp + 8)
+	extz xwa
+	ld xbc, 0x000004C0
+	call HDAE5000_Multiply
+	add xhl, 0x00000780
+	add xhl, xiz
+	ldada_24 xwa, 2102878		; 0x20165E
+	add xwa, xhl
+	ld xwa, (xwa)
+	cp xwa, 0xFFFFFFFF
+	jr z, .Ltl_chk3
+	setm 2, (xsp + 4)		; bit 2
+	; --- Check slot 3: 0x201662 ---
+.Ltl_chk3:
+	ld wa, (xsp + 6)
+	extz xwa
+	ld xbc, 0x0000004C
+	call HDAE5000_Multiply
+	ld xiz, xhl
+	ld wa, (xsp + 8)
+	extz xwa
+	ld xbc, 0x000004C0
+	call HDAE5000_Multiply
+	add xhl, 0x00000780
+	add xhl, xiz
+	ldada_24 xwa, 2102882		; 0x201662
+	add xwa, xhl
+	ld xwa, (xwa)
+	cp xwa, 0xFFFFFFFF
+	jr z, .Ltl_chk4
+	setm 3, (xsp + 4)		; bit 3
+	; --- Check slot 4: 0x201666 ---
+.Ltl_chk4:
+	ld wa, (xsp + 6)
+	extz xwa
+	ld xbc, 0x0000004C
+	call HDAE5000_Multiply
+	ld xiz, xhl
+	ld wa, (xsp + 8)
+	extz xwa
+	ld xbc, 0x000004C0
+	call HDAE5000_Multiply
+	add xhl, 0x00000780
+	add xhl, xiz
+	ldada_24 xwa, 2102886		; 0x201666
+	add xwa, xhl
+	ld xwa, (xwa)
+	cp xwa, 0xFFFFFFFF
+	jr z, .Ltl_chk5
+	setm 4, (xsp + 4)		; bit 4
+	; --- Check slot 5: 0x20166A ---
+.Ltl_chk5:
+	ld wa, (xsp + 6)
+	extz xwa
+	ld xbc, 0x0000004C
+	call HDAE5000_Multiply
+	ld xiz, xhl
+	ld wa, (xsp + 8)
+	extz xwa
+	ld xbc, 0x000004C0
+	call HDAE5000_Multiply
+	add xhl, 0x00000780
+	add xhl, xiz
+	ldada_24 xwa, 2102890		; 0x20166A
+	add xwa, xhl
+	ld xwa, (xwa)
+	cp xwa, 0xFFFFFFFF
+	jr z, .Ltl_chk6
+	setm 5, (xsp + 4)		; bit 5
+	; --- Check slot 6: 0x20166E ---
+.Ltl_chk6:
+	ld wa, (xsp + 6)
+	extz xwa
+	ld xbc, 0x0000004C
+	call HDAE5000_Multiply
+	ld xiz, xhl
+	ld wa, (xsp + 8)
+	extz xwa
+	ld xbc, 0x000004C0
+	call HDAE5000_Multiply
+	add xhl, 0x00000780
+	add xhl, xiz
+	ldada_24 xwa, 2102894		; 0x20166E
+	add xwa, xhl
+	ld xwa, (xwa)
+	cp xwa, 0xFFFFFFFF
+	jr z, .Ltl_chk7
+	setm 6, (xsp + 4)		; bit 6
+	; --- Check slot 7: 0x201672 ---
+.Ltl_chk7:
+	ld wa, (xsp + 6)
+	extz xwa
+	ld xbc, 0x0000004C
+	call HDAE5000_Multiply
+	ld xiz, xhl
+	ld wa, (xsp + 8)
+	extz xwa
+	ld xbc, 0x000004C0
+	call HDAE5000_Multiply
+	add xhl, 0x00000780
+	add xhl, xiz
+	ldada_24 xwa, 2102898		; 0x201672
+	add xwa, xhl
+	ld xwa, (xwa)
+	cp xwa, 0xFFFFFFFF
+	jr z, .Ltl_chk8
+	setm 7, (xsp + 4)		; bit 7
+	; --- Check slot 8: 0x201676 ---
+.Ltl_chk8:
+	ld wa, (xsp + 6)
+	extz xwa
+	ld xbc, 0x0000004C
+	call HDAE5000_Multiply
+	ld xiz, xhl
+	ld wa, (xsp + 8)
+	extz xwa
+	ld xbc, 0x000004C0
+	call HDAE5000_Multiply
+	add xhl, 0x00000780
+	add xhl, xiz
+	ldada_24 xwa, 2102902		; 0x201676
+	add xwa, xhl
+	ld xwa, (xwa)
+	cp xwa, 0xFFFFFFFF
+	jr z, .Ltl_bitmask_done
+	setm 0, (xsp + 5)		; bit 8 (high byte)
+	jr .Ltl_bitmask_done
+.Ltl_all_free:
+	ldmw (xsp + 4), 0xFFFF		; all free marker
+.Ltl_bitmask_done:
+	ld hl, (xsp + 4)		; return bitmask
+	pop xiz
+	inc 6, xsp
+	ret
+	; Part 2: Entry setup handler (0x2905E9)
+	; Uses bitmask in WA, dispatches Cell_Render routines per bit
+	; IZ = entry ID, DE = param, BC = flags
+	dec 4, xsp
+	push xiz
+	ld (xsp + 4), de		; save DE
+	ld (xsp + 6), bc		; save BC (flags)
+	ld iz, wa			; IZ = bitmask
+	; Workspace handler init
+	ldda32_24 xwa, 2335138		; (0x23A1A2)
+	ld_sril3 xwa, 0xE1, 0x88, 0x0E	; XWA = (XWA+0x0E88)
+	ld_sril3 xhl, 0xE1, 0xE8, 0x00	; XHL = (XWA+0x00E8)
+	lds wa, 1
+	call (xhl)
+	; Conditional extra handler (if BC == 1)
+	cpmi16 (xsp + 14), 0x0001
+	jr nz, .Ltl2_skip_extra
+	ldda32_24 xwa, 2335138
+	ld_sril3 xwa, 0xE1, 0x0A, 0x0E
+	ld_sril3 xhl, 0xE1, 0x38, 0x05
+	call (xhl)
+.Ltl2_skip_extra:
+	call 0x297466
+	; Test bits 0-8, calling Cell_Render subroutines
+	ld wa, (xsp + 4)		; reload DE (bitmask param)
+	; --- Bit 0 ---
+	bit 0, wa
+	jr z, .Ltl2_bit1
+	ld wa, iz
+	ld bc, (xsp + 6)
+	calr HDAE5000_Table_Sub_290753
+	.byte 0xD7, 0xFA, 0x9B		; ld QIZ, HL (previous-bank store)
+	; --- Bit 1 ---
+.Ltl2_bit1:
+	.byte 0xD7, 0xFA, 0xCF, 0xFF, 0xFF	; cp QIZ, 0xFFFF
+	jr z, .Ltl2_bit2
+	ld wa, (xsp + 4)
+	bit 1, wa
+	jr z, .Ltl2_bit2
+	ld wa, iz
+	ld bc, (xsp + 6)
+	calr HDAE5000_Table_Sub_2908B1
+	.byte 0xD7, 0xFA, 0x9B		; ld QIZ, HL
+	; --- Bit 2 ---
+.Ltl2_bit2:
+	.byte 0xD7, 0xFA, 0xCF, 0xFF, 0xFF	; cp QIZ, 0xFFFF
+	jr z, .Ltl2_bit3
+	ld wa, (xsp + 4)
+	bit 2, wa
+	jr z, .Ltl2_bit3
+	ld wa, iz
+	ld bc, (xsp + 6)
+	calr HDAE5000_Table_Sub_290A00
+	.byte 0xD7, 0xFA, 0x9B		; ld QIZ, HL
+	; --- Bit 3 ---
+.Ltl2_bit3:
+	.byte 0xD7, 0xFA, 0xCF, 0xFF, 0xFF	; cp QIZ, 0xFFFF
+	jr z, .Ltl2_bit4
+	ld wa, (xsp + 4)
+	bit 3, wa
+	jr z, .Ltl2_bit4
+	ld wa, iz
+	ld bc, (xsp + 6)
+	calr HDAE5000_Table_Sub_290B86
+	.byte 0xD7, 0xFA, 0x9B		; ld QIZ, HL
+	; --- Bit 4 ---
+.Ltl2_bit4:
+	.byte 0xD7, 0xFA, 0xCF, 0xFF, 0xFF	; cp QIZ, 0xFFFF
+	jr z, .Ltl2_bit5
+	ld wa, (xsp + 4)
+	bit 4, wa
+	jr z, .Ltl2_bit5
+	ld wa, iz
+	ld bc, (xsp + 6)
+	calr HDAE5000_Table_Sub_290CB5
+	.byte 0xD7, 0xFA, 0x9B		; ld QIZ, HL
+	; --- Bit 5 ---
+.Ltl2_bit5:
+	.byte 0xD7, 0xFA, 0xCF, 0xFF, 0xFF	; cp QIZ, 0xFFFF
+	jr z, .Ltl2_bit6
+	ld wa, (xsp + 4)
+	bit 5, wa
+	jr z, .Ltl2_bit6
+	ld wa, iz
+	ld bc, (xsp + 6)
+	calr HDAE5000_Table_Sub_290D91
+	.byte 0xD7, 0xFA, 0x9B		; ld QIZ, HL
+	; --- Bit 6 ---
+.Ltl2_bit6:
+	.byte 0xD7, 0xFA, 0xCF, 0xFF, 0xFF	; cp QIZ, 0xFFFF
+	jr z, .Ltl2_bit7
+	ld wa, (xsp + 4)
+	bit 6, wa
+	jr z, .Ltl2_bit7
+	ld wa, iz
+	ld bc, (xsp + 6)
+	calr HDAE5000_Table_Sub_290EC0
+	.byte 0xD7, 0xFA, 0x9B		; ld QIZ, HL
+	; --- Bit 7 ---
+.Ltl2_bit7:
+	.byte 0xD7, 0xFA, 0xCF, 0xFF, 0xFF	; cp QIZ, 0xFFFF
+	jr z, .Ltl2_bit8
+	ld wa, (xsp + 4)
+	bit 7, wa
+	jr z, .Ltl2_bit8
+	ld wa, iz
+	ld bc, (xsp + 6)
+	calr HDAE5000_Table_Sub_290F45
+	.byte 0xD7, 0xFA, 0x9B		; ld QIZ, HL
+	; --- Bit 8 ---
+.Ltl2_bit8:
+	.byte 0xD7, 0xFA, 0xCF, 0xFF, 0xFF	; cp QIZ, 0xFFFF
+	jr z, .Ltl2_final
+	ld wa, (xsp + 4)
+	bit 8, wa
+	jr z, .Ltl2_final
+	ld wa, iz
+	ld bc, (xsp + 6)
+	calr HDAE5000_Table_Sub_29103D
+	.byte 0xD7, 0xFA, 0x9B		; ld QIZ, HL
+	; --- Final workspace cleanup ---
+.Ltl2_final:
+	cpmi16 (xsp + 12), 0x0001	; check param
+	callcc_24 14, 2716853		; call nz, 0x2974B5
+	cpmi16 (xsp + 14), 0x0001	; check BC == 1?
+	jr nz, .Ltl2_skip_final
+	ldda32_24 xwa, 2335138
+	ld_sril3 xwa, 0xE1, 0x0A, 0x0E
+	ld_sril3 xhl, 0xE1, 0x3C, 0x05
+	call (xhl)
+.Ltl2_skip_final:
+	ldda32_24 xwa, 2335138
+	ld_sril3 xwa, 0xE1, 0x88, 0x0E
+	ld_sril3 xhl, 0xE1, 0xEC, 0x00
+	call (xhl)
+	ldda32_24 xwa, 2335138
+	ld_sril3 xwa, 0xE1, 0x88, 0x0E
+	ld_sril3 xhl, 0xE1, 0xF0, 0x00
+	call (xhl)
+	.byte 0xD7, 0xFA, 0x8B		; ld HL, QIZ (load from previous-bank)
+	pop xiz
+	inc 4, xsp
+	retd 4
 
 HDAE5000_Table_Sub_290753:	; 0x290753 (350 bytes)
 	lda xsp, (xsp - 28)
