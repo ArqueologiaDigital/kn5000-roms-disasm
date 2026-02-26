@@ -2797,7 +2797,211 @@ HDAE5000_FS_Write_FSB:	; 0x288295 (5072 bytes)
 
 HDAE5000_FS_Buffer_Setup:	; 0x289665 (548 bytes)
 	; Set up filesystem buffers at 0x22AA9C
-	.incbin "includes/code_2803c2_28f542.bin", 37539, 548
+	; --- Register events for filesystem buffer at 0x22AA9C ---
+	ldada_24 xwa, 0x22aa9c			; f2 9c aa 22 30
+	ld xde, xwa				; e8 8a
+	ldda32_24 xwa, 0x23a1a2		; e2 a2 a1 23 20
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e		; e3 e1 0a 0e 20 — ld xwa, (xwa+0x0e0a)
+	ld_sril3 xhl, 0xe1, 0x24, 0x01		; e3 e1 24 01 23 — ld xhl, (xwa+0x0124)
+	ld xwa, 0x007f00de			; 40 de 00 7f 00
+	ld xbc, 0x01ea000a			; 41 0a 00 ea 01
+	call (xhl)				; b3 e8
+
+	; Deregister event 0x01C0000F
+	ldda32_24 xwa, 0x23a1a2		; e2 a2 a1 23 20
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e		; e3 e1 0a 0e 20
+	ld_sril3 xhl, 0xe1, 0x24, 0x01		; e3 e1 24 01 23
+	ld xwa, 0x007f00de			; 40 de 00 7f 00
+	ld xbc, 0x01c0000f			; 41 0f 00 c0 01
+	ld xde, 0xffffffff			; 42 ff ff ff ff
+	call (xhl)				; b3 e8
+
+	; --- Initialize 20 buffer entries ---
+	lds de, 0				; da a8
+	cp de, 0x0014				; da cf 14 00
+	jr nc, .Lfbs_after_loop			; 6f xx
+
+.Lfbs_loop:					; 0x2896AF
+	ld wa, de				; da 88
+	mul wa, 0x000c				; d8 08 0c 00
+	add wa, 0x000a				; d8 c8 0a 00
+	extz xwa				; e8 12
+	add xwa, 0x0000000e			; e8 c8 0e 00 00 00
+	ld xbc, 0x0022aa9c			; 41 9c aa 22 00
+	add xbc, xwa				; e8 81
+	.byte 0xb1, 0x00, 0x20		; ld (xbc), 0x20 — set flag to space
+
+	; Check status flag at +0x0114
+	ld wa, de				; da 88
+	extz xwa				; e8 12
+	add xwa, 0x00000114			; e8 c8 14 01 00 00
+	ld xbc, 0x0022aa9c			; 41 9c aa 22 00
+	add xbc, xwa				; e8 81
+	.byte 0x81, 0x3f, 0x01		; cp (xbc), 0x01
+	jr nz, .Lfbs_loop_next			; 6e xx
+
+	; Entry is active: set flag to 0x2A (asterisk)
+	ld wa, de				; da 88
+	mul wa, 0x000c				; d8 08 0c 00
+	add wa, 0x000a				; d8 c8 0a 00
+	extz xwa				; e8 12
+	add xwa, 0x0000000e			; e8 c8 0e 00 00 00
+	ld xbc, 0x0022aa9c			; 41 9c aa 22 00
+	add xbc, xwa				; e8 81
+	.byte 0xb1, 0x00, 0x2a		; ld (xbc), 0x2a — set flag to asterisk
+
+.Lfbs_loop_next:				; 0x2896FD
+	inc 1, de				; da 61
+	cp de, 0x0014				; da cf 14 00
+	jr c, .Lfbs_loop			; 67 xx
+
+.Lfbs_after_loop:				; 0x289705
+	; --- Register events for second buffer at 0x22AAAA ---
+	ldada_24 xwa, 0x22aaaa			; f2 aa aa 22 30
+	ld xde, xwa				; e8 8a
+	ldda32_24 xwa, 0x23a1a2		; e2 a2 a1 23 20
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e		; e3 e1 0a 0e 20
+	ld_sril3 xhl, 0xe1, 0x24, 0x01		; e3 e1 24 01 23
+	ld xwa, 0x007f00d7			; 40 d7 00 7f 00
+	ld xbc, 0x01ea000a			; 41 0a 00 ea 01
+	call (xhl)				; b3 e8
+
+	; Deregister event 0x01C0000F
+	ldda32_24 xwa, 0x23a1a2		; e2 a2 a1 23 20
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e		; e3 e1 0a 0e 20
+	ld_sril3 xhl, 0xe1, 0x24, 0x01		; e3 e1 24 01 23
+	ld xwa, 0x007f00d7			; 40 d7 00 7f 00
+	ld xbc, 0x01c0000f			; 41 0f 00 c0 01
+	ld xde, 0xffffffff			; 42 ff ff ff ff
+	call (xhl)				; b3 e8
+
+	; Register event 0x01C0000D (handler 1)
+	ldda32_24 xwa, 0x23a1a2		; e2 a2 a1 23 20
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e		; e3 e1 0a 0e 20
+	ld_sril3 xhl, 0xe1, 0x24, 0x01		; e3 e1 24 01 23
+	ld xwa, 0x007f00d9			; 40 d9 00 7f 00
+	ld xbc, 0x01c0000d			; 41 0d 00 c0 01
+	lds32 xde, 0				; ea a8
+	call (xhl)				; b3 e8
+
+	; Register event 0x01C0000D (handler 2) — tail call via jp
+	ldda32_24 xwa, 0x23a1a2		; e2 a2 a1 23 20
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e		; e3 e1 0a 0e 20
+	ld_sril3 xhl, 0xe1, 0x24, 0x01		; e3 e1 24 01 23
+	ld xwa, 0x007f00d8			; 40 d8 00 7f 00
+	ld xbc, 0x01c0000d			; 41 0d 00 c0 01
+	lds32 xde, 0				; ea a8
+	jp (xhl)				; b3 d8 — tail call
+
+; --- Event handler sub-function ---
+.Lfbs_evt_handler:				; 0x289781
+	.byte 0x2e			; push iz (compact 16-bit)
+	cp xbc, 0x01ea0002			; e9 cf 02 00 ea 01
+	jrl z, .Lfbs_evt_0002			; 76 xx xx
+	cp xbc, 0x01ea0008			; e9 cf 08 00 ea 01
+	jrl z, .Lfbs_evt_0008			; 76 xx xx
+	cp xbc, 0x01ea0006			; e9 cf 06 00 ea 01
+	jr z, .Lfbs_evt_0006			; 66 xx
+	cp xbc, 0x01ea0009			; e9 cf 09 00 ea 01
+	jrl nz, .Lfbs_evt_done			; 7e xx xx
+
+	; Event 0x01EA0009: scan all 20 entries, mark active ones
+.Lfbs_evt_0009:					; 0x2897A5
+	lds iz, 0				; de a8
+	cp iz, 0x0014				; de cf 14 00
+	jrl nc, .Lfbs_evt_done			; 7f xx xx
+
+.Lfbs_evt_0009_loop:				; 0x2897AE
+	ld wa, iz				; de 88
+	extz xwa				; e8 12
+	add xwa, 0x00000100			; e8 c8 00 01 00 00
+	ld xbc, 0x0022aa9c			; 41 9c aa 22 00
+	add xbc, xwa				; e8 81
+	.byte 0x81, 0x3f, 0x01		; cp (xbc), 0x01
+	jr nz, .Lfbs_evt_0009_next		; 6e xx
+	; Entry is active: mark status flag
+	ld wa, iz				; de 88
+	extz xwa				; e8 12
+	add xwa, 0x00000114			; e8 c8 14 01 00 00
+	ld xbc, 0x0022aa9c			; 41 9c aa 22 00
+	add xbc, xwa				; e8 81
+	.byte 0xb1, 0x00, 0x01		; ld (xbc), 0x01
+	calr HDAE5000_FS_Buffer_Setup		; 1e xx xx — self-call
+
+.Lfbs_evt_0009_next:				; 0x2897DB
+	inc 1, iz				; de 61
+	cp iz, 0x0014				; de cf 14 00
+	jr c, .Lfbs_evt_0009_loop		; 67 xx
+	jrl t, .Lfbs_evt_done			; 78 xx xx
+
+	; Event 0x01EA0006: format params and check active files
+.Lfbs_evt_0006:					; 0x2897E6
+	ld xwa, 0x007f00e6			; 40 e6 00 7f 00
+	calr HDAE5000_HD_Format_Params		; 1e xx xx
+	calr HDAE5000_Count_Active_Files	; 1e xx xx
+	cps hl, 0				; db d8
+	jr z, .Lfbs_evt_0006_empty		; 66 xx
+	; Has active files: register status 0x007f00e2
+	ldda32_24 xwa, 0x23a1a2		; e2 a2 a1 23 20
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e		; e3 e1 0a 0e 20
+	ld_sril3 xhl, 0xe1, 0x24, 0x01		; e3 e1 24 01 23
+	ld xwa, 0x007f00e2			; 40 e2 00 7f 00
+	ld xbc, 0x01c00001			; 41 01 00 c0 01
+	lds32 xde, 0				; ea a8
+	call (xhl)				; b3 e8
+	jr t, .Lfbs_evt_done			; 68 xx
+
+.Lfbs_evt_0006_empty:				; 0x289814
+	; No active files: register status 0x007f027a
+	ldda32_24 xwa, 0x23a1a2		; e2 a2 a1 23 20
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e		; e3 e1 0a 0e 20
+	ld_sril3 xhl, 0xe1, 0x24, 0x01		; e3 e1 24 01 23
+	ld xwa, 0x007f027a			; 40 7a 02 7f 00
+	ld xbc, 0x01c00001			; 41 01 00 c0 01
+	lds32 xde, 0				; ea a8
+	call (xhl)				; b3 e8
+	jr t, .Lfbs_evt_done			; 68 xx
+
+	; Event 0x01EA0008: check entry, toggle flag
+.Lfbs_evt_0008:					; 0x289833
+	ld xwa, xde				; ea 88
+	add xwa, 0x00000100			; e8 c8 00 01 00 00
+	ld xbc, 0x0022aa9c			; 41 9c aa 22 00
+	add xbc, xwa				; e8 81
+	.byte 0x81, 0x3f, 0x01		; cp (xbc), 0x01
+	jr nz, .Lfbs_evt_done			; 6e xx
+	; First flag is set: check second flag at +0x0114
+	ld xwa, xde				; ea 88
+	add xwa, 0x00000114			; e8 c8 14 01 00 00
+	ld xbc, 0x0022aa9c			; 41 9c aa 22 00
+	add xbc, xwa				; e8 81
+	.byte 0x81, 0x3f, 0x01		; cp (xbc), 0x01
+	jr nz, .Lfbs_evt_0008_set1		; 6e xx
+	; Second flag is set: clear it to 0
+	add xde, 0x00000114			; ea c8 14 01 00 00
+	ld xwa, 0x0022aa9c			; 40 9c aa 22 00
+	add xwa, xde				; ea 80
+	.byte 0xb0, 0x00, 0x00		; ld (xwa), 0x00
+	jr t, .Lfbs_evt_0008_done		; 68 xx
+
+.Lfbs_evt_0008_set1:				; 0x28986D
+	; Second flag not set: set it to 1
+	add xde, 0x00000114			; ea c8 14 01 00 00
+	ld xwa, 0x0022aa9c			; 40 9c aa 22 00
+	add xwa, xde				; ea 80
+	.byte 0xb0, 0x00, 0x01		; ld (xwa), 0x01
+
+.Lfbs_evt_0008_done:				; 0x28987D
+	calr HDAE5000_FS_Buffer_Setup		; 1e xx xx — self-call
+	jr t, .Lfbs_evt_done			; 68 xx
+
+.Lfbs_evt_0002:					; 0x289882
+	calr HDAE5000_FS_Buffer_Setup		; 1e xx xx — self-call
+
+.Lfbs_evt_done:					; 0x289885
+	lds32 xhl, 0				; eb a8
+	.byte 0x4e			; pop iz (compact 16-bit)
+	ret					; 0e
 
 HDAE5000_FS_Scan_Directory:	; 0x289889 (2663 bytes)
 	; Scan directory entries on HD
