@@ -2608,7 +2608,305 @@ HDAE5000_HD_Wait_Ready:	; 0x284F4C (138 bytes)
 
 HDAE5000_HD_Status_Check:	; 0x284FD6 (782 bytes)
 	; Check HD status flags at 0x22B2F4, 0x23A0A0
-	.incbin "includes/code_2803c2_28f542.bin", 19476, 782
+	; Part 1: Main status check — dispatch on disk state byte at 0x22B2F4
+	ldda8_24 xwa, 0x22b2f4		; ld A, (0x22B2F4)
+	extz wa
+	ldda32_24 xbc, 0x23a1a2	; ld XBC, (0x23A1A2)
+	ld_sril3 xbc, 0xe5, 0x88, 0x0e	; ld XBC, (XBC + 0x0E88)
+	ld_sril3 xhl, 0xe5, 0x84, 0x00	; ld XHL, (XBC + 0x0084)
+	call (xhl)			; callback
+	cpdi8_24 0x23a0a2, 0x00	; cp (0x23A0A2), 0
+	jr z, .LHD_SC__skip_a2
+	ldda8_24 xwa, 0x23a0a2		; ld A, (0x23A0A2)
+	dec 1, a
+	extz wa
+	lds bc, 0
+	lds de, 0
+	calr HDAE5000_HD_Wait_Ready
+	stdi8_24 0x23a0a2, 0x00	; (0x23A0A2) = 0
+.LHD_SC__skip_a2:
+	cpdi8_24 0x23a0a4, 0x00	; cp (0x23A0A4), 0
+	jr z, .LHD_SC__dispatch
+	ldda8_24 xwa, 0x23a0a4		; ld A, (0x23A0A4)
+	dec 1, a
+	extz wa
+	lds bc, 0
+	lds de, 0
+	calr HDAE5000_HD_Wait_Ready
+	stdi8_24 0x23a0a4, 0x00	; (0x23A0A4) = 0
+.LHD_SC__dispatch:
+	ldda8_24 xwa, 0x22b2f4		; re-read state byte
+	cps a, 3
+	jr z, .LHD_SC__state3
+	cps a, 2
+	jr z, .LHD_SC__state2
+	cps a, 1
+	jr z, .LHD_SC__state1
+	cps a, 0
+	ret z
+	ret
+.LHD_SC__state1:			; state=1: process A0A0, copy to A0A2
+	cpdi8_24 0x23a0a0, 0x00
+	ret z
+	ldda8_24 xwa, 0x23a0a0
+	dec 1, a
+	extz wa
+	lds bc, 1
+	lds de, 0
+	calr HDAE5000_HD_Wait_Ready
+	ldda8_24 xwa, 0x23a0a0
+	stda8_24 0x23a0a2, a		; (0x23A0A2) = A
+	ret
+.LHD_SC__state2:			; state=2: process A0A0+A09E
+	cpdi8_24 0x23a0a0, 0x00
+	jr z, .LHD_SC__s2_check_9e
+	ldda8_24 xwa, 0x23a0a0
+	dec 1, a
+	extz wa
+	lds bc, 1
+	lds de, 0
+	calr HDAE5000_HD_Wait_Ready
+	ldda8_24 xwa, 0x23a0a0
+	stda8_24 0x23a0a2, a
+.LHD_SC__s2_check_9e:
+	cpdi8_24 0x23a09e, 0x00
+	ret z
+	ldda8_24 xwa, 0x23a09e
+	dec 1, a
+	extz wa
+	lds bc, 1
+	lds de, 0
+	calr HDAE5000_HD_Wait_Ready
+	ldda8_24 xwa, 0x23a09e
+	stda8_24 0x23a0a4, a
+	ret
+.LHD_SC__state3:			; state=3: process A0A0 (DE=2) + A09E (DE=1)
+	cpdi8_24 0x23a0a0, 0x00
+	jr z, .LHD_SC__s3_check_9e
+	ldda8_24 xwa, 0x23a0a0
+	dec 1, a
+	extz wa
+	lds bc, 1
+	lds de, 2
+	calr HDAE5000_HD_Wait_Ready
+	ldda8_24 xwa, 0x23a0a0
+	stda8_24 0x23a0a2, a
+.LHD_SC__s3_check_9e:
+	cpdi8_24 0x23a09e, 0x00
+	ret z
+	ldda8_24 xwa, 0x23a09e
+	dec 1, a
+	extz wa
+	lds bc, 1
+	lds de, 1
+	calr HDAE5000_HD_Wait_Ready
+	ldda8_24 xwa, 0x23a09e
+	stda8_24 0x23a0a4, a
+	ret
+	;
+	; Part 2: Event handler 1 (0x2850ED) — jump table dispatch
+.LHD_SC__handler1:
+	push xiz
+	ld xiz, xwa			; save context in XIZ
+	ld xwa, xbc			; XWA = event code
+	cp xwa, 0x01e00082		; special event?
+	jr z, .LHD_SC__h1_event82
+	sub xwa, 0x01e0003e		; normalize to 0-based index
+	cp xwa, 0x00000000
+	jrl lt, .LHD_SC__h1_default
+	cp xwa, 0x00000009
+	jr gt, .LHD_SC__h1_default
+	add xwa, xwa			; index * 2 (16-bit offsets)
+	add xwa, 0x002e278a		; + jump table base
+	ld wa, (xwa)			; WA = offset
+	ldada_24 xix, 0x285125		; XIX = dispatch base (h1_case9)
+	.byte 0xf3, 0x07, 0xf0, 0xe0, 0xd8	; jp (XIX + WA)
+.LHD_SC__h1_case9:			; case 9 (offset 0x0000): PPI block copy
+	ld xwa, (xde + 0x0e)
+	sll xwa, 2
+	ld xbc, 0x002e2736		; secondary data table
+	add xbc, xwa
+	ld xwa, (xbc)			; load address from table
+	push xwa
+	.byte 0x0b, 0x2e, 0x00		; push 0x002E
+	.byte 0x0b, 0x86, 0x27		; push 0x2786
+	ld xwa, (xde + 0x12)
+	push xwa
+	call HDAE5000_PPI_Block_Copy
+	lda xsp, (xsp + 0x0c)		; deallocate 12 bytes
+	ld xhl, xiz			; return saved context
+	jr t, .LHD_SC__h1_exit
+.LHD_SC__h1_case0:			; case 0 (offset 0x0025)
+	lds32 xhl, 1
+	jr t, .LHD_SC__h1_exit
+.LHD_SC__h1_case1:			; case 1 (offset 0x0029)
+	lds32 xhl, 1
+	jr t, .LHD_SC__h1_exit
+.LHD_SC__h1_case5:			; case 5 (offset 0x002D)
+	lds32 xhl, 3
+	jr t, .LHD_SC__h1_exit
+.LHD_SC__h1_case6:			; case 6 (offset 0x0031)
+	lds32 xhl, 0
+	jr t, .LHD_SC__h1_exit
+.LHD_SC__h1_case7:			; case 7 (offset 0x0035)
+	ldada_24 xhl, 0x22b2f4
+	jr t, .LHD_SC__h1_exit
+.LHD_SC__h1_case8:			; case 8 (offset 0x003C)
+	lds32 xhl, 1
+	jr t, .LHD_SC__h1_exit
+.LHD_SC__h1_event82:			; event 0x01E00082: callback chain
+	ldda32_24 xwa, 0x23a1a2
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e	; ld XWA, (XWA + 0x0E0A)
+	ld_sril3 xhl, 0xe1, 0x38, 0x05	; ld XHL, (XWA + 0x0538)
+	call (xhl)
+	calr HDAE5000_HD_Status_Check	; recursive call
+	ldda32_24 xwa, 0x23a1a2
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e
+	ld_sril3 xhl, 0xe1, 0x3c, 0x05	; ld XHL, (XWA + 0x053C)
+	call (xhl)
+	lds32 xhl, 0
+	jr t, .LHD_SC__h1_exit
+.LHD_SC__h1_default:			; out-of-range
+	lds32 xhl, 0
+.LHD_SC__h1_exit:
+	pop xiz
+	ret
+	;
+	; Part 3: Event handler 2 (0x285192) — same structure, different data
+.LHD_SC__handler2:
+	push xiz
+	ld xiz, xwa
+	ld xwa, xbc
+	cp xwa, 0x01e00082
+	jr z, .LHD_SC__h2_event82
+	sub xwa, 0x01e0003e
+	cp xwa, 0x00000000
+	jrl lt, .LHD_SC__h2_default
+	cp xwa, 0x00000009
+	jrl gt, .LHD_SC__h2_default
+	add xwa, xwa
+	add xwa, 0x002e284c		; jump table 2
+	ld wa, (xwa)
+	ldada_24 xix, 0x2851cb		; XIX = dispatch base (h2_case9)
+	.byte 0xf3, 0x07, 0xf0, 0xe0, 0xd8	; jp (XIX + WA)
+.LHD_SC__h2_case9:			; case 9: PPI block copy
+	ld xwa, (xde + 0x0e)
+	sll xwa, 2
+	ld xbc, 0x002e279e		; secondary data table 2
+	add xbc, xwa
+	ld xwa, (xbc)
+	push xwa
+	.byte 0x0b, 0x2e, 0x00		; push 0x002E
+	.byte 0x0b, 0x48, 0x28		; push 0x2848
+	ld xwa, (xde + 0x12)
+	push xwa
+	call HDAE5000_PPI_Block_Copy
+	lda xsp, (xsp + 0x0c)
+	ld xhl, xiz
+	jr t, .LHD_SC__h2_exit
+.LHD_SC__h2_case0:
+	lds32 xhl, 1
+	jr t, .LHD_SC__h2_exit
+.LHD_SC__h2_case1:
+	lds32 xhl, 1
+	jr t, .LHD_SC__h2_exit
+.LHD_SC__h2_case5:			; case 5: XHL = 0x10
+	ld xhl, 0x00000010
+	jr t, .LHD_SC__h2_exit
+.LHD_SC__h2_case6:
+	lds32 xhl, 0
+	jr t, .LHD_SC__h2_exit
+.LHD_SC__h2_case7:			; case 7: lda XHL, 0x23A0A0
+	ldada_24 xhl, 0x23a0a0
+	jr t, .LHD_SC__h2_exit
+.LHD_SC__h2_case8:
+	lds32 xhl, 1
+	jr t, .LHD_SC__h2_exit
+.LHD_SC__h2_event82:
+	ldda32_24 xwa, 0x23a1a2
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e
+	ld_sril3 xhl, 0xe1, 0x38, 0x05
+	call (xhl)
+	calr HDAE5000_HD_Status_Check
+	ldda32_24 xwa, 0x23a1a2
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e
+	ld_sril3 xhl, 0xe1, 0x3c, 0x05
+	call (xhl)
+	lds32 xhl, 0
+	jr t, .LHD_SC__h2_exit
+.LHD_SC__h2_default:
+	lds32 xhl, 0
+.LHD_SC__h2_exit:
+	pop xiz
+	ret
+	;
+	; Part 4: Event handler 3 (0x28523B) — same structure, different data
+.LHD_SC__handler3:
+	push xiz
+	ld xiz, xwa
+	ld xwa, xbc
+	cp xwa, 0x01e00082
+	jr z, .LHD_SC__h3_event82
+	sub xwa, 0x01e0003e
+	cp xwa, 0x00000000
+	jrl lt, .LHD_SC__h3_default
+	cp xwa, 0x00000009
+	jrl gt, .LHD_SC__h3_default
+	add xwa, xwa
+	add xwa, 0x002e290e		; jump table 3
+	ld wa, (xwa)
+	ldada_24 xix, 0x285274		; XIX = dispatch base (h3_case9)
+	.byte 0xf3, 0x07, 0xf0, 0xe0, 0xd8	; jp (XIX + WA)
+.LHD_SC__h3_case9:			; case 9: PPI block copy
+	ld xwa, (xde + 0x0e)
+	sll xwa, 2
+	ld xbc, 0x002e2860		; secondary data table 3
+	add xbc, xwa
+	ld xwa, (xbc)
+	push xwa
+	.byte 0x0b, 0x2e, 0x00		; push 0x002E
+	.byte 0x0b, 0x0a, 0x29		; push 0x290A
+	ld xwa, (xde + 0x12)
+	push xwa
+	call HDAE5000_PPI_Block_Copy
+	lda xsp, (xsp + 0x0c)
+	ld xhl, xiz
+	jr t, .LHD_SC__h3_exit
+.LHD_SC__h3_case0:
+	lds32 xhl, 1
+	jr t, .LHD_SC__h3_exit
+.LHD_SC__h3_case1:
+	lds32 xhl, 1
+	jr t, .LHD_SC__h3_exit
+.LHD_SC__h3_case5:			; case 5: XHL = 0x10
+	ld xhl, 0x00000010
+	jr t, .LHD_SC__h3_exit
+.LHD_SC__h3_case6:
+	lds32 xhl, 0
+	jr t, .LHD_SC__h3_exit
+.LHD_SC__h3_case7:			; case 7: lda XHL, 0x23A09E
+	ldada_24 xhl, 0x23a09e
+	jr t, .LHD_SC__h3_exit
+.LHD_SC__h3_case8:
+	lds32 xhl, 1
+	jr t, .LHD_SC__h3_exit
+.LHD_SC__h3_event82:
+	ldda32_24 xwa, 0x23a1a2
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e
+	ld_sril3 xhl, 0xe1, 0x38, 0x05
+	call (xhl)
+	calr HDAE5000_HD_Status_Check
+	ldda32_24 xwa, 0x23a1a2
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e
+	ld_sril3 xhl, 0xe1, 0x3c, 0x05
+	call (xhl)
+	lds32 xhl, 0
+	jr t, .LHD_SC__h3_exit
+.LHD_SC__h3_default:
+	lds32 xhl, 0
+.LHD_SC__h3_exit:
+	pop xiz
+	ret
 
 HDAE5000_HD_Data_Copy:	; 0x2852E4 (92 bytes)
 	; Copy 12-byte record from (XDE) to (XWA) via ldirw, then set flag bytes
