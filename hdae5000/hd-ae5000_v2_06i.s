@@ -11200,16 +11200,199 @@ HDAE5000_HD_Init_Variables:	; 0x297925 (37 bytes)
 	pop xhl
 	ret
 
-HDAE5000_HD_Config_Init_Values:	; 0x29794A (389 bytes)
-	; Set initial HD config values at 0x229Dxx
-	.incbin "includes/code_2971b7_29ae9e.bin", 1939, 389
+HDAE5000_HD_Config_Init_Values:	; 0x29794A (392 bytes)
+	; Contains: 32-bit division, memory region init, HD config init (start)
 
-HDAE5000_HD_Detect_Drive:	; 0x297ACF (839 bytes)
-	; Detect HD presence via ATA IDENTIFY, configure CHS geometry
+	; --- 32-bit unsigned division ---
+	; Input: XWA = dividend, XBC = divisor
+	; Output: XWA = quotient, XBC = remainder
+	push xix
+	push xiy
+	push xiz
+	xor xix, xix			; remainder = 0
+	xor xiy, xiy			; quotient = 0
+	ldw iz, 32			; 32-bit counter
+.Lhciv_div_loop:
+	cps iz, 0
+	jr z, .Lhciv_div_done
+	dec 1, iz
+	sll xix, 1			; shift remainder left
+	sll xiy, 1			; shift quotient left
+	sll xwa, 1			; shift dividend (MSB → carry)
+	jr nc, .Lhciv_div_no_carry
+	inc 1, xix			; shift carry into remainder
+.Lhciv_div_no_carry:
+	cp xix, xbc			; remainder >= divisor?
+	jr nc, .Lhciv_div_sub
+	jp .Lhciv_div_loop
+.Lhciv_div_sub:
+	sub xix, xbc			; remainder -= divisor
+	inc 1, xiy			; quotient++
+	jp .Lhciv_div_loop
+.Lhciv_div_done:
+	ld xwa, xiy			; quotient → XWA
+	ld xbc, xix			; remainder → XBC
+	pop xiz
+	pop xiy
+	pop xix
+	ret
+
+	; --- Memory region initialization ---
+	; Fill HD file allocation tables with spaces, zeros, 0xFFFFFFFF markers
+.Lhciv_mem_init:				; 0x29797F
+	push xwa
+	push xbc
+	push xde
+	push xhl
+	push xix
+	push xiy
+	push xiz
+	; Region 1: fill 0x201632-0x201DB2 with 0x20 (space)
+	ld xix, 2102834		; 0x201632
+	ld xiy, 2104754		; 0x201DB2
+.Lhciv_fill1:
+	cp xix, xiy
+	jpcc_24 6, 2718112		; jp Z, .Lhciv_section2
+	ldmi8 (xix), 32		; store 0x20 (space)
+	inc 1, xix
+	jp .Lhciv_fill1
+	; Region 2: structured fill 0x201DB2-0x2257B2 (76-byte records)
+.Lhciv_section2:			; 0x2979A0
+	ld xix, 2104754		; 0x201DB2
+	ld xiy, 2250674		; 0x2257B2
+.Lhciv_outer2:				; 0x2979AA
+	cp xix, xiy
+	jpcc_24 6, 2718243		; jp Z, .Lhciv_section3
+	; Inner: 26 bytes of 0x20 (space)
+	xor xbc, xbc
+.Lhciv_space26:				; 0x2979B3
+	cp xbc, 26
+	jpcc_24 6, 2718155		; jp Z, .Lhciv_zeros
+	push xix
+	add xix, xbc
+	ldmi8 (xix), 32
+	pop xix
+	inc 1, xbc
+	jp .Lhciv_space26
+	; Inner: 10 bytes of 0x00 at offset 26
+.Lhciv_zeros:				; 0x2979CB
+	lds bc, 0
+.Lhciv_zeros_loop:			; 0x2979CD
+	cp bc, 10
+	jpcc_24 6, 2718185		; jp Z, .Lhciv_ff
+	pushw bc
+	ldw wa, 26
+	add bc, wa			; offset = counter + 26
+	stib_dri 0x07, 0xF0, 0xE4, 0x00	; ld (XIX+BC), 0x00
+	popw bc
+	inc 1, bc
+	jp .Lhciv_zeros_loop
+	; Inner: 10 × 32-bit 0xFFFFFFFF at offset 36
+.Lhciv_ff:				; 0x2979E9
+	xor xbc, xbc
+.Lhciv_ff_loop:				; 0x2979EB
+	cp xbc, 10
+	jpcc_24 6, 2718233		; jp Z, .Lhciv_next_record
+	push xbc
+	lds32 xwa, 4			; entry size = 4 bytes
+	call HDAE5000_HD_Init_Variables	; XWA = XBC * 4 (multiply)
+	add xwa, 36			; offset = 4*i + 36
+	ld xbc, xwa
+	push xix
+	add xix, xbc
+	ld xwa, 4294967295		; 0xFFFFFFFF marker
+	ld (xix), xwa
+	inc 1, xiz
+	pop xix
+	pop xbc
+	inc 1, xbc
+	jp .Lhciv_ff_loop
+	; Advance to next 76-byte record
+.Lhciv_next_record:			; 0x297A19
+	add xix, 76
+	jp .Lhciv_outer2
+	; Region 3: fill 0x2257B2-0x229B32 with 0x00
+.Lhciv_section3:			; 0x297A23
+	ld xix, 2250674		; 0x2257B2
+	ld xiy, 2267954		; 0x229B32
+.Lhciv_fill_zero:			; 0x297A2D
+	cp xix, xiy
+	jpcc_24 6, 2718269		; jp Z, .Lhciv_section4
+	ldmi8 (xix), 0
+	inc 1, xix
+	jp .Lhciv_fill_zero
+	; Region 4: fill 0x2257B2 in blocks of 144-byte rows, 120 rows,
+	; 16 bytes of 0x20 per row
+.Lhciv_section4:			; 0x297A3D
+	ld xix, 2250674		; 0x2257B2
+	lds hl, 0			; row counter
+.Lhciv_row_loop:			; 0x297A44
+	cp hl, 120			; 0x78 rows total
+	jpcc_24 6, 2718320		; jp Z, .Lhciv_mem_exit
+	lds bc, 0			; column counter
+.Lhciv_col_loop:			; 0x297A4F
+	cp bc, 16			; 16 bytes per row
+	jpcc_24 6, 2718308		; jp Z, .Lhciv_next_row
+	stib_dri 0x07, 0xF0, 0xE4, 0x20	; ld (XIX+BC), 0x20
+	inc 1, bc
+	jp .Lhciv_col_loop
+.Lhciv_next_row:			; 0x297A64
+	add xix, 144			; 0x90 bytes per row stride
+	inc 1, hl
+	jp .Lhciv_row_loop
+.Lhciv_mem_exit:			; 0x297A70
+	pop xiz
+	pop xiy
+	pop xix
+	pop xhl
+	pop xde
+	pop xbc
+	pop xwa
+	ret
+
+	; --- HD presence check wrapper ---
+	; Calls HD config init, returns HL = 0 (success) or 0xFFFF (error)
+.Lhciv_hd_check:			; 0x297A78
+	call .Lhciv_hd_config_init
+	xor hl, hl
+	cpdi8_24 2097698, 0		; cp (0x200222), 0
+	jpcc_24 6, 2718348		; jp Z, ret (no error)
+	ldw hl, 65535			; HL = 0xFFFF (error)
+	ret
+
+	; --- HD config initialization (start — continues in next block) ---
+	; Write all 323 sectors from RAM to HD, with retry
+.Lhciv_hd_config_init:			; 0x297A8D
+	push xwa
+	push xbc
+	push xde
+	push xhl
+	push xix
+	push xiy
+	push xiz
+	stdi8_24 2268563, 7		; (0x229D93) = 7 — retry counter
+.Lhciv_config_restart:			; 0x297A9A
+	ldda32_24 xwa, 2268260		; XWA = (0x229C64) — HD base sector
+	stda32_24 2268276, xwa		; (0x229C74) = current sector
+	ld xwa, 2102834		; 0x201632 — RAM buffer base
+	stda32_24 2268280, xwa		; (0x229C78) = buffer ptr
+	xor xwa, xwa
+	stda32_24 2268284, xwa		; (0x229C7C) = sector counter = 0
+.Lhciv_write_loop:			; 0x297AB5
+	ld xwa, 323			; 0x143 — total sectors
+	cpdm32_24 2268284, xwa		; cp (0x229C7C), XWA — counter == 323?
+	jpcc_24 6, 2718473		; jp Z, verify phase (0x297B09 in next block)
+	ldda32_24 xhl, 2268276		; XHL = (0x229C74) — current sector
+	ldda32_24 xix, 2268280		; XIX = (0x229C78) — current buffer ptr
+	call 2717339			; call 0x29769B — write sector to HD
+	; Function continues in next block (HD_Detect_Drive)
+
+HDAE5000_HD_Detect_Drive:	; 0x297AD2 (836 bytes)
+	; Continuation of HD config init + HD detect drive logic
 	; Contains version strings at 0x2999B2:
 	;   "Technics Software section    M. Kitajima"
 	;   "2.33J", "2.21", "TECHNICS KN5000"
-	.incbin "includes/code_2971b7_29ae9e.bin", 2328, 839
+	.incbin "includes/code_2971b7_29ae9e.bin", 2331, 836
 
 HDAE5000_Display_Copy:	; 0x297E16 (443 bytes)
 	; Display block copy operation
