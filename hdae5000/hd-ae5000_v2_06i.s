@@ -8788,8 +8788,68 @@ PPORT_Utility_2:	; 0x2966FA
 	jp HDAE5000_PPORT_Cmd_Done
 
 PPORT_Utility_3:	; 0x29670C (164 bytes)
-	; PPORT utility routine 3
-	.incbin "includes/code_295642_2971a2.bin", 4298, 164
+	; PPORT utility routine 3 — display string, read PPORT data, execute,
+	; check status, display result string (success or error)
+	ldw wa, 0x001A				; display command
+	nop
+	ldada_24 xbc, 2708966			; lda XBC, 0x2955E6 — string pointer
+	nop
+	call HDAE5000_Display_String
+	lds32 xbc, 0
+	lds32 xde, 0
+	ldw wa, 0x001D				; display command
+	nop
+	call HDAE5000_Display_String
+	ei 7					; enable interrupts
+	ldada_24 xix, 2330984			; lda XIX, 0x239168 — PPORT command area
+	nop
+	ld xwa, (xix + 2)			; read 32-bit parameter
+	nop
+	stda32_24 2330884, xwa			; st (0x239104), XWA — store parameter
+	nop
+	ld xiy, 0x00010000			; block size 64KB
+	nop
+	ldda32_24 xde, 2330884			; ld XDE, (0x239104)
+	nop
+	call 2714494				; call 0x296B7E — execute operation
+	cpdi8_24 2330836, 0x01			; cp (0x2390D4), 1 — check status flag
+	jpcc_24 6, 2708340			; jp Z, 0x295374 — abort if status=1
+	nop
+	ld xbc, 0x00010000			; block size
+	nop
+	ld xde, 0x00239104			; data address (immediate)
+	nop
+	ldw wa, 0x001C				; display command
+	nop
+	call HDAE5000_Display_String
+	stda16_24 2330874, xwa			; st (0x2390FA), WA — save result
+	nop
+	di					; disable interrupts
+	lds32 xbc, 0
+	lds32 xde, 0
+	ldw wa, 0x001E				; display command
+	nop
+	call HDAE5000_Display_String
+	ldda16_24 xwa, 2330874			; ld WA, (0x2390FA) — reload result
+	nop
+	cp wa, 0x0058				; check result value
+	jpcc_24 6, 2713502			; jp Z, 0x29679E — jump if success
+	nop
+	; Error path
+	ldw wa, 0x001A				; display command
+	nop
+	ldada_24 xbc, 2709012			; lda XBC, 0x295614 — error string
+	nop
+	call HDAE5000_Display_String
+	jp HDAE5000_PPORT_Cmd_Done
+.Lpu3_success:
+	; Success path
+	ldw wa, 0x001A				; display command
+	nop
+	ldada_24 xbc, 2708990			; lda XBC, 0x2955FE — success string
+	nop
+	call HDAE5000_Display_String
+	jp HDAE5000_PPORT_Cmd_Done
 
 HDAE5000_PPORT_Cmd_Done:	; 0x2967B0 (4 bytes)
 	; PPORT command completion - jump to finish handler
