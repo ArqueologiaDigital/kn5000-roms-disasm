@@ -5806,8 +5806,244 @@ HDAE5000_Table_Sub_292FD2:	; 0x292FD2 (329 bytes)
 	ret
 
 HDAE5000_Workspace_Handler:	; 0x29311B (592 bytes)
-	; Firmware workspace callback handler
-	.incbin "includes/code_28f90c_2953e1.bin", 14351, 592
+	; Part 1: Clear matching entries in workspace tables
+	; Nested loop: IZ = 0..119, IY = 0..31
+	; For each (IZ,IY), computes table index = IZ*9*16 + IY
+	; If table[index] matches WA+1 AND table[index+0x20] matches BC+1,
+	; clears 4 related entries at offsets 0xC2, 0xE2, 0x02, 0x22
+	pushw iz
+	lds iz, 0			; IZ = 0 (outer counter)
+	cp iz, 0x0078
+	jrl nc, .Lwh_outer_done		; skip if IZ >= 120
+.Lwh_outer_loop:
+	lds iy, 0			; IY = 0 (inner counter)
+	cp iy, 0x0020
+	jrl nc, .Lwh_inner_done		; skip if IY >= 32
+.Lwh_inner_loop:
+	; Compute table index: XIX = IZ * 144 + IY
+	ld hl, iy
+	extz xhl
+	ld de, iz
+	extz xde
+	ld xix, xde
+	sll xix, 3			; XIX = IZ * 8
+	add xix, xde			; XIX = IZ * 9
+	sll xix, 4			; XIX = IZ * 144
+	add xix, xhl			; XIX = IZ * 144 + IY
+	; Check WA match at base 0x2257C2
+	ldada_24 xde, 2250690		; XDE = 0x2257C2
+	add xde, xix
+	ld e, (xde)			; E = table entry
+	ld l, e
+	extz hl
+	ld de, wa			; DE = WA
+	inc 1, de			; DE = WA + 1
+	cp de, hl			; match?
+	jrl nz, .Lwh_next_inner
+	; Check BC match at base 0x2257E2
+	ld hl, iy
+	extz xhl
+	ld de, iz
+	extz xde
+	ld xix, xde
+	sll xix, 3
+	add xix, xde
+	sll xix, 4
+	add xix, xhl
+	ldada_24 xde, 2250722		; XDE = 0x2257E2
+	add xde, xix
+	ld e, (xde)
+	ld l, e
+	extz hl
+	ld de, bc			; DE = BC
+	inc 1, de			; DE = BC + 1
+	cp de, hl
+	jr nz, .Lwh_next_inner
+	; Both match — clear 4 table entries
+	; Clear entry at base 0x2257C2
+	ld hl, iy
+	extz xhl
+	ld de, iz
+	extz xde
+	ld xix, xde
+	sll xix, 3
+	add xix, xde
+	sll xix, 4
+	add xix, xhl
+	ldada_24 xde, 2250690		; 0x2257C2
+	add xde, xix
+	ldmi8 (xde), 0x00
+	; Clear entry at base 0x2257E2
+	ld hl, iy
+	extz xhl
+	ld de, iz
+	extz xde
+	ld xix, xde
+	sll xix, 3
+	add xix, xde
+	sll xix, 4
+	add xix, xhl
+	ldada_24 xde, 2250722		; 0x2257E2
+	add xde, xix
+	ldmi8 (xde), 0x00
+	; Clear entry at base 0x225802
+	ld hl, iy
+	extz xhl
+	ld de, iz
+	extz xde
+	ld xix, xde
+	sll xix, 3
+	add xix, xde
+	sll xix, 4
+	add xix, xhl
+	ldada_24 xde, 2250754		; 0x225802
+	add xde, xix
+	ldmi8 (xde), 0x00
+	; Clear entry at base 0x225822
+	ld hl, iy
+	extz xhl
+	ld de, iz
+	extz xde
+	ld xix, xde
+	sll xix, 3
+	add xix, xde
+	sll xix, 4
+	add xix, xhl
+	ldada_24 xde, 2250786		; 0x225822
+	add xde, xix
+	ldmi8 (xde), 0x00
+.Lwh_next_inner:
+	inc 1, iy
+	cp iy, 0x0020
+	jrl c, .Lwh_inner_loop
+.Lwh_inner_done:
+	inc 1, iz
+	cp iz, 0x0078
+	jrl c, .Lwh_outer_loop
+.Lwh_outer_done:
+	popw iz
+	ret
+	; Part 2: Main workspace handler entry (0x29320D)
+	; Called by firmware — saves regs, dispatches through handler chain
+	dec 0, xsp			; callee cleanup placeholder
+	push xiz
+	ld (xsp + 6), de		; save DE (param)
+	ld (xsp + 8), bc		; save BC (param)
+	ld (xsp + 10), wa		; save WA (param)
+	; Get handler through workspace chain
+	ldda32_24 xwa, 2335138		; (0x23A1A2) — workspace ptr
+	ld_sril3 xwa, 0xE1, 0x88, 0x0E	; XWA = (XWA+0x0E88)
+	ld_sril3 xhl, 0xE1, 0xE8, 0x00	; XHL = (XWA+0x00E8) — handler
+	lds wa, 1			; param = 1
+	call (xhl)
+	; Conditional: if BC == 1, call extra handler
+	cpmi16 (xsp + 8), 0x0001
+	jr nz, .Lwh_skip_extra
+	ldda32_24 xwa, 2335138
+	ld_sril3 xwa, 0xE1, 0x0A, 0x0E	; XWA = (XWA+0x0E0A)
+	ld_sril3 xhl, 0xE1, 0x38, 0x05	; XHL = (XWA+0x0538)
+	call (xhl)
+.Lwh_skip_extra:
+	call 0x297466
+	ldmw (xsp + 4), 0x0000		; slot counter = 0
+	; Loop over 16 slots
+	cpmi16 (xsp + 4), 0x0010
+	jrl nc, .Lwh_loop_done
+.Lwh_slot_loop:
+	ld wa, (xsp + 10)
+	ld bc, (xsp + 4)
+	calr HDAE5000_Table_Calc_Offset
+	cp hl, 0xFFFF
+	jr z, .Lwh_slot_fill
+	; Process slot — call all 10 render types
+	ld wa, (xsp + 10)
+	ld bc, (xsp + 4)
+	calr HDAE5000_Cell_Render_Type0
+	ld wa, (xsp + 10)
+	ld bc, (xsp + 4)
+	calr HDAE5000_Cell_Render_Type1
+	ld wa, (xsp + 10)
+	ld bc, (xsp + 4)
+	calr HDAE5000_Cell_Render_Type2
+	ld wa, (xsp + 10)
+	ld bc, (xsp + 4)
+	calr HDAE5000_Cell_Render_Type3
+	ld wa, (xsp + 10)
+	ld bc, (xsp + 4)
+	calr HDAE5000_Cell_Render_Type4
+	ld wa, (xsp + 10)
+	ld bc, (xsp + 4)
+	calr HDAE5000_Cell_Render_Type5
+	ld wa, (xsp + 10)
+	ld bc, (xsp + 4)
+	calr HDAE5000_Cell_Render_Type6
+	ld wa, (xsp + 10)
+	ld bc, (xsp + 4)
+	calr HDAE5000_Cell_Render_Type7
+	ld wa, (xsp + 10)
+	ld bc, (xsp + 4)
+	calr HDAE5000_Cell_Render_Type8
+	ld wa, (xsp + 10)
+	ld bc, (xsp + 4)
+	calr HDAE5000_Workspace_Handler	; recursive call (clear matching)
+.Lwh_slot_fill:
+	; Compute fill address and call MemFill
+	pushw 0x001A			; fill count
+	pushw 0x0020			; fill value/params
+	ld wa, (xsp + 8)		; BC (adjusted for pushes)
+	extz xwa
+	ld xbc, 0x0000004C		; stride
+	call HDAE5000_Multiply
+	ld xiz, xhl			; save offset
+	ld wa, (xsp + 14)		; WA (adjusted)
+	extz xwa
+	ld xbc, 0x000004C0		; stride
+	call HDAE5000_Multiply
+	add xhl, 0x00000780		; base offset
+	add xhl, xiz			; total offset
+	ld xwa, 0x00201632		; table base address
+	add xwa, xhl			; absolute address
+	push xwa			; push fill dest
+	call HDAE5000_MemFill
+	inc 0, xsp			; stack cleanup (no-op)
+	incm 1, (xsp + 4)		; slot counter++
+	cpmi16 (xsp + 4), 0x0010
+	jrl c, .Lwh_slot_loop
+.Lwh_loop_done:
+	; Post-loop: fill final block
+	pushw 0x0010			; block count
+	pushw 0x0020			; block params
+	ld wa, (xsp + 14)		; WA (adjusted)
+	extz xwa
+	sll xwa, 4			; * 16
+	ld xbc, 0x00201632		; table base
+	add xbc, xwa
+	push xbc			; push fill dest
+	call HDAE5000_MemFill
+	inc 0, xsp			; stack cleanup
+	; Final handler calls
+	call 0x297A78
+	cpmi16 (xsp + 6), 0x0001	; DE == 1?
+	callcc_24 14, 2716853		; call nz, 0x2974B5
+	cpmi16 (xsp + 8), 0x0001	; BC == 1?
+	jr nz, .Lwh_skip_final
+	ldda32_24 xwa, 2335138
+	ld_sril3 xwa, 0xE1, 0x0A, 0x0E	; XWA = (XWA+0x0E0A)
+	ld_sril3 xhl, 0xE1, 0x3C, 0x05	; XHL = (XWA+0x053C)
+	call (xhl)
+.Lwh_skip_final:
+	; Workspace cleanup calls
+	ldda32_24 xwa, 2335138
+	ld_sril3 xwa, 0xE1, 0x88, 0x0E
+	ld_sril3 xhl, 0xE1, 0xEC, 0x00	; XHL = (XWA+0x00EC)
+	call (xhl)
+	ldda32_24 xwa, 2335138
+	ld_sril3 xwa, 0xE1, 0x88, 0x0E
+	ld_sril3 xhl, 0xE1, 0xF0, 0x00	; XHL = (XWA+0x00F0)
+	call (xhl)
+	pop xiz
+	inc 0, xsp			; stack cleanup
+	ret
 
 HDAE5000_Workspace_Sub_29336B:	; 0x29336B (349 bytes)
 	dec 4, xsp
