@@ -2121,8 +2121,202 @@ HDAE5000_File_Save:	; 0x28DA7B (381 bytes)
 	ret
 
 HDAE5000_File_Load:	; 0x28DBF8 (564 bytes)
-	; Load file from HD
-	.incbin "includes/code_2803c2_28f542.bin", 55350, 564
+	; Load file from HD: populate file descriptors from HD entries
+	; Three main blocks: slot1 filename, slot2 filename, audio params
+	; Each calls File_Rename to look up entry, then copies data or defaults
+
+	; --- Block 1: Load filename slot 1 (WA=2, BC=2, max 0x32 chars) ---
+	lds32 xwa, 0
+	push xwa
+	lds wa, 2
+	lds bc, 2
+	ldw de, 65534			; DE = 0xFFFE
+	calr HDAE5000_File_Rename
+	cp xhl, 0
+	jr le, .Lfl_default1		; if result <= 0, use default
+
+	; Result > 0: copy filename, cap at 50 bytes
+	cpdi16_24 2294838, 50		; cp (0x230436), 0x32
+	jr c, .Lfl_short1		; if length < 50, copy actual length
+	; Length >= 50: truncate
+	pushw 50
+	ldada_24 xwa, 2295350		; &0x230636
+	push xwa
+	ldada_24 xwa, 2295606		; &0x230736
+	push xwa
+	call 2732016			; call 0x29AFF0 (memcpy)
+	lda xsp, (xsp + 10)		; pop 10 bytes
+	stdi8_24 2295655, 0		; (0x230767) = null terminator
+	jr t, .Lfl_block2
+.Lfl_short1:				; 0x28DC34
+	; Copy actual length
+	ldda16_24 xwa, 2294838		; WA = (0x230436)
+	pushw wa
+	ldada_24 xwa, 2295350		; &0x230636
+	push xwa
+	ldada_24 xwa, 2295606		; &0x230736
+	push xwa
+	call 2732016			; call 0x29AFF0 (memcpy)
+	lda xsp, (xsp + 10)		; pop 10 bytes
+	; Null-terminate at actual length
+	ldda16_24 xwa, 2294838		; WA = (0x230436)
+	extz xwa
+	ld xbc, 2295606			; XBC = 0x00230736
+	add xbc, xwa
+	ldmi8 (xbc), 0			; *(base + len) = 0
+	jr t, .Lfl_block2
+.Lfl_default1:				; 0x28DC60
+	; No entry found: copy default string
+	pushw 46			; max length = 0x2E
+	pushw 23670			; source = 0x5C76
+	ldada_24 xwa, 2295606		; &0x230736
+	push xwa
+	call 2731845			; call 0x29AF45
+	inc 0, xsp			; pop stack frame
+
+.Lfl_block2:				; 0x28DC72
+	; --- Block 2: Load filename slot 2 (WA=3, BC=2, max 0x28 chars) ---
+	lds32 xwa, 0
+	push xwa
+	lds wa, 3
+	lds bc, 2
+	ldw de, 65534			; DE = 0xFFFE
+	calr HDAE5000_File_Rename
+	cp xhl, 0
+	jr le, .Lfl_default2		; if result <= 0, use default
+
+	; Result > 0: copy, cap at 40 bytes
+	cpdi16_24 2294838, 40		; cp (0x230436), 0x28
+	jr c, .Lfl_short2
+	; Truncate at 40
+	pushw 40
+	ldada_24 xwa, 2295350		; &0x230636
+	push xwa
+	ldada_24 xwa, 2295656		; &0x230768
+	push xwa
+	call 2732016			; call 0x29AFF0
+	lda xsp, (xsp + 10)
+	stdi8_24 2295695, 0		; (0x23078F) = null terminator
+	jr t, .Lfl_block3
+.Lfl_short2:				; 0x28DCAE
+	; Copy actual length
+	ldda16_24 xwa, 2294838		; WA = (0x230436)
+	pushw wa
+	ldada_24 xwa, 2295350		; &0x230636
+	push xwa
+	ldada_24 xwa, 2295656		; &0x230768
+	push xwa
+	call 2732016			; call 0x29AFF0
+	lda xsp, (xsp + 10)
+	ldda16_24 xwa, 2294838		; WA = (0x230436)
+	extz xwa
+	ld xbc, 2295656			; XBC = 0x00230768
+	add xbc, xwa
+	ldmi8 (xbc), 0			; *(base + len) = 0
+	jr t, .Lfl_block3
+.Lfl_default2:				; 0x28DCDA
+	; Copy default string
+	pushw 46			; max = 0x2E
+	pushw 23688			; source = 0x5C88
+	ldada_24 xwa, 2295606		; &0x230736
+	push xwa
+	call 2731845			; call 0x29AF45
+	inc 0, xsp			; pop stack frame
+
+.Lfl_block3:				; 0x28DCEC
+	; --- Block 3: Load audio settings (WA=0x58, BC=2) ---
+	lds32 xwa, 0
+	push xwa
+	ldw wa, 88			; WA = 0x58
+	lds bc, 2
+	ldw de, 65534			; DE = 0xFFFE
+	calr HDAE5000_File_Rename
+	cp xhl, 0
+	jrl le, .Lfl_audio_default	; long relative jump if no entry
+
+	; Entry found: read channel count and type
+	ldda8_24 a, 2295350		; A = (0x230636) — channel count
+	stda8_24 2295716, a		; (0x2307A4) = A
+	stda8_24 2295718, a		; (0x2307A6) = A
+
+	; Switch on audio type (0x230637): 1→2ch/24, 2→4ch/12, 3→8ch/6, 4→16ch/3
+	cpdi8_24 2295351, 1		; cp (0x230637), 1
+	jr nz, .Lfl_audio_ch2
+	stdi8_24 2295720, 2		; (0x2307A8) = 2
+	stdi16_24 2295726, 24		; (0x2307AE) = 24
+	stdi16_24 2295728, 24		; (0x2307B0) = 24
+.Lfl_audio_ch2:				; 0x28DD2E
+	cpdi8_24 2295351, 2		; cp (0x230637), 2
+	jr nz, .Lfl_audio_ch3
+	stdi8_24 2295720, 4		; (0x2307A8) = 4
+	stdi16_24 2295726, 12		; (0x2307AE) = 12
+	stdi16_24 2295728, 12		; (0x2307B0) = 12
+.Lfl_audio_ch3:				; 0x28DD4A
+	cpdi8_24 2295351, 3		; cp (0x230637), 3
+	jr nz, .Lfl_audio_ch4
+	stdi8_24 2295720, 8		; (0x2307A8) = 8
+	stdi16_24 2295726, 6		; (0x2307AE) = 6
+	stdi16_24 2295728, 6		; (0x2307B0) = 6
+.Lfl_audio_ch4:				; 0x28DD66
+	cpdi8_24 2295351, 4		; cp (0x230637), 4
+	jr nz, .Lfl_audio_done
+	stdi8_24 2295720, 16		; (0x2307A8) = 16
+	stdi16_24 2295726, 3		; (0x2307AE) = 3
+	stdi16_24 2295728, 3		; (0x2307B0) = 3
+	jr t, .Lfl_audio_done
+.Lfl_audio_default:			; 0x28DD84
+	; No entry: default to 4ch/12
+	stdi8_24 2295718, 4		; (0x2307A6) = 4
+	stdi8_24 2295716, 4		; (0x2307A4) = 4
+	stdi8_24 2295720, 4		; (0x2307A8) = 4
+	stdi16_24 2295726, 12		; (0x2307AE) = 12
+	stdi16_24 2295728, 12		; (0x2307B0) = 12
+
+.Lfl_audio_done:			; 0x28DDA4
+	; --- Build format string and display ---
+	ldda8_24 a, 2295720		; A = (0x2307A8)
+	extz wa
+	pushw wa
+	ldda8_24 a, 2295716		; A = (0x2307A4)
+	extz wa
+	pushw wa
+	pushw 46			; 0x2E
+	pushw 23702			; 0x5C96
+	ldada_24 xwa, 2295696		; &0x230790
+	push xwa
+	call 2730968			; call 0x29ABD8
+	lda xsp, (xsp + 12)		; pop 12 bytes
+
+	; --- Call via function pointer (nested indirection) ---
+	ldda32_24 xwa, 2335134		; XWA = (0x23A19E)
+	ldda32_24 xbc, 2335138		; XBC = (0x23A1A2)
+	ld_sril3 xbc, 0xe5, 0x0a, 0x0e	; XBC = (XBC + 0x0E0A) — vtable ptr
+	ld_sril3 xhl, 0xe5, 0x00, 0x01	; XHL = (XBC + 0x0100) — function ptr
+	ld xbc, 30015493		; XBC = 0x01CA0005
+	lds32 xde, 0
+	call (xhl)			; call function ptr
+
+	; --- Clear state variables ---
+	stdi16_24 2294832, 255		; (0x230430) = 0x00FF
+	stdi16_24 2294834, 0		; (0x230432) = 0
+	stdi16_24 2294836, 0		; (0x230434) = 0
+	stdi16_24 2294838, 0		; (0x230436) = 0
+	stdi8_24 2295024, 0		; (0x2304F0) = 0
+	stdi16_24 2295918, 0		; (0x23086E) = 0
+	lds32 xwa, 0
+	stda32_24 2294848, xwa		; (0x230440) = 0
+
+	; --- Final call: slot 0x7C ---
+	lds32 xwa, 0
+	push xwa
+	ldw wa, 124			; WA = 0x7C
+	lds bc, 2
+	ldw de, 65534			; DE = 0xFFFE
+	calr HDAE5000_File_Rename
+	lds32 xwa, 0
+	stda32_24 2294848, xwa		; (0x230440) = 0
+	lds32 xhl, 0			; return XHL = 0 (success)
+	ret
 
 HDAE5000_File_Delete:	; 0x28DE2C (579 bytes)
 	; Delete file from HD
