@@ -1199,7 +1199,389 @@ HDAE5000_PPI_Transfer_Block:	; 0x282E3C (81 bytes)
 ; --- HD Drive Setup and Configuration ---
 HDAE5000_HD_Setup_Drive:	; 0x282E8D (1126 bytes)
 	; Configure HD drive parameters; accesses HD config at 0x229D99
-	.incbin "includes/code_2803c2_28f542.bin", 10955, 1126
+	; Checks disk status, identifies drive, formats partition table, registers events
+	.byte 0xf3, 0xfd, 0xf4, 0xfe, 0x37	; lda xsp, (xsp + 0xfef4) — alloc 268-byte frame
+	push xiz					; 3e
+	.byte 0xbf, 0x04, 0x02, 0x00, 0x00	; ld (xsp+0x04), 0x0000 — clear return value
+	; Check disk status via 0x0e88 vtable
+	ldda32_24 xwa, 0x23a1a2			; e2 a2 a1 23 20
+	ld_sril3 xwa, 0xe1, 0x88, 0x0e		; e3 e1 88 0e 20
+	ld xix, (xwa + 0x08)				; a8 08 24
+	call (xix)					; b4 e8
+	cps l, 3					; cf db
+	jr z, .Lsd_status_ok				; 66 05
+	cps l, 2					; cf da
+	jrl nz, .Lsd_not_ready			; 7e 49 02
+.Lsd_status_ok:
+	; Register event 0xD2 via vtable 0x0124
+	ldda32_24 xwa, 0x23a1a2			; e2 a2 a1 23 20
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e		; e3 e1 0a 0e 20
+	ld_sril3 xhl, 0xe1, 0x24, 0x01		; e3 e1 24 01 23 — (xwa+0x0124)
+	ld xwa, 0x007f00d2				; 40 d2 00 7f 00
+	ld xbc, 0x01c00001				; 41 01 00 c0 01
+	ld xde, 0xffffffff				; 42 ff ff ff ff
+	call (xhl)					; b3 e8
+	calr HDAE5000_PPI_Read_Sector			; 1e 5b fe
+	; Get drive info via 0x0e88.0x0090 vtable
+	ldda32_24 xwa, 0x23a1a2			; e2 a2 a1 23 20
+	ld_sril3 xwa, 0xe1, 0x88, 0x0e		; e3 e1 88 0e 20
+	ld_sril3 xhl, 0xe1, 0x90, 0x00		; e3 e1 90 00 23
+	call (xhl)					; b3 e8
+	ld xiz, xhl					; eb 8e
+	ld xwa, xiz					; ee 88
+	or xwa, xwa					; e8 e0 — test if null
+	jr z, .Lsd_skip_copy				; 66 18
+	; Copy drive info to 0x22aa9c buffer
+	ld xwa, xiz					; ee 88
+	push xwa					; 38
+	call 0x29af71					; 1d 71 af 29
+	.byte 0x2b				; push hl (compact)
+	ld xwa, xiz					; ee 88
+	push xwa					; 38
+	ldada_24 xwa, 0x22aa9c			; f2 9c aa 22 30
+	push xwa					; 38
+	call 0x29ae9f					; 1d 9f ae 29
+	lda xsp, (xsp + 0x0e)			; bf 0e 37
+.Lsd_skip_copy:
+	; Register event 0xDE via vtable, with 0x22aa9c as data
+	ldada_24 xwa, 0x22aa9c			; f2 9c aa 22 30
+	ld xde, xwa					; e8 8a
+	ldda32_24 xwa, 0x23a1a2			; e2 a2 a1 23 20
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e		; e3 e1 0a 0e 20
+	ld_sril3 xhl, 0xe1, 0x24, 0x01		; e3 e1 24 01 23
+	ld xwa, 0x007f00de				; 40 de 00 7f 00
+	ld xbc, 0x01ea000a				; 41 0a 00 ea 01
+	call (xhl)					; b3 e8
+	ldda32_24 xwa, 0x23a1a2			; e2 a2 a1 23 20
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e		; e3 e1 0a 0e 20
+	ld_sril3 xhl, 0xe1, 0x24, 0x01		; e3 e1 24 01 23
+	ld xwa, 0x007f00de				; 40 de 00 7f 00
+	ld xbc, 0x01c0000f				; 41 0f 00 c0 01
+	ld xde, 0xffffffff				; 42 ff ff ff ff
+	call (xhl)					; b3 e8
+	; Identify drive: call via 0x0e88.0x0094
+	ldada_24 xwa, 0x2e22b4			; f2 b4 22 2e 30
+	ld xde, xwa					; e8 8a
+	lda xwa, (xsp + 0x06)			; bf 06 30
+	ld xbc, xwa					; e8 89
+	ld xwa, xde					; ea 88
+	ldda32_24 xde, 0x23a1a2			; e2 a2 a1 23 22
+	ld_sril3 xde, 0xe9, 0x88, 0x0e		; e3 e9 88 0e 22
+	ld_sril3 xhl, 0xe9, 0x94, 0x00		; e3 e9 94 00 23
+	call (xhl)					; b3 e8
+	ld xiz, xhl					; eb 8e
+	; Check identify result
+	ld xwa, xiz					; ee 88
+	cp xwa, 0x00000000				; e8 cf 00 00 00 00
+	jrl lt, .Lsd_post_loop			; 71 ab 00
+	; First pass: process partitions
+	lda xwa, (xsp + 0x0c)			; bf 0c 30
+	calr HDAE5000_PPI_Transfer_Block		; 1e c4 fe
+	ld wa, hl					; db 88
+	cp wa, 0xffff					; d8 cf ff ff
+	jr z, .Lsd_loop_done				; 66 6e
+	ld wa, hl					; db 88
+	add wa, 0x0100				; d8 c8 00 01
+	ldada_24 xbc, 0x22aa9c			; f2 9c aa 22 31
+	.byte 0xf3, 0x07, 0xe4, 0xe0, 0x00, 0x01	; ld (xbc+wa), 0x01
+	pushw 0x0006					; 0b 06 00
+	lda xwa, (xsp + 0x10)			; bf 10 30
+	push xwa					; 38
+	ld wa, hl					; db 88
+	muls wa, 0x000c				; d8 09 0c 00
+	ldada_24 xbc, 0x22aaad			; f2 ad aa 22 31
+	exts xwa					; e8 13
+	add xwa, xbc					; e9 80
+	push xwa					; 38
+	call 0x29ae9f					; 1d 9f ae 29
+	lda xsp, (xsp + 0x0a)			; bf 0a 37
+	jr t, .Lsd_loop_done				; 68 3d
+	; Second pass (loop target for retry)
+.Lsd_retry:
+	lda xwa, (xsp + 0x0c)			; bf 0c 30
+	calr HDAE5000_PPI_Transfer_Block		; 1e 85 fe
+	ld wa, hl					; db 88
+	cp wa, 0xffff					; d8 cf ff ff
+	jr z, .Lsd_loop_done				; 66 2f
+	ld wa, hl					; db 88
+	add wa, 0x0100				; d8 c8 00 01
+	ldada_24 xbc, 0x22aa9c			; f2 9c aa 22 31
+	.byte 0xf3, 0x07, 0xe4, 0xe0, 0x00, 0x01	; ld (xbc+wa), 0x01
+	pushw 0x0006					; 0b 06 00
+	lda xwa, (xsp + 0x10)			; bf 10 30
+	push xwa					; 38
+	ld wa, hl					; db 88
+	muls wa, 0x000c				; d8 09 0c 00
+	ldada_24 xbc, 0x22aaad			; f2 ad aa 22 31
+	exts xwa					; e8 13
+	add xwa, xbc					; e9 80
+	push xwa					; 38
+	call 0x29ae9f					; 1d 9f ae 29
+	lda xsp, (xsp + 0x0a)			; bf 0a 37
+.Lsd_loop_done:
+	; Get next partition via 0x0e88.0x0098
+	lda xwa, (xsp + 0x06)			; bf 06 30
+	ld xbc, xwa					; e8 89
+	ld xwa, xiz					; ee 88
+	ldda32_24 xde, 0x23a1a2			; e2 a2 a1 23 22
+	ld_sril3 xde, 0xe9, 0x88, 0x0e		; e3 e9 88 0e 22
+	ld_sril3 xix, 0xe9, 0x98, 0x00		; e3 e9 98 00 24
+	call (xix)					; b4 e8
+	cps hl, 0					; db d8
+	jr z, .Lsd_retry				; 66 a7
+	; Cleanup: call via 0x0e88.0x009c
+	ld xwa, xiz					; ee 88
+	ldda32_24 xbc, 0x23a1a2			; e2 a2 a1 23 21
+	ld_sril3 xbc, 0xe5, 0x88, 0x0e		; e3 e5 88 0e 21
+	ld_sril3 xhl, 0xe5, 0x9c, 0x00		; e3 e5 9c 00 23
+	call (xhl)					; b3 e8
+.Lsd_post_loop:
+	; Format partition display table: loop over 20 entries
+	lds de, 0					; da a8
+	cp de, 0x0014					; da cf 14 00
+	jr nc, .Lsd_display_done			; 6f 56
+.Lsd_display_loop:
+	ld wa, de					; da 88
+	mul wa, 0x000c				; d8 08 0c 00
+	add wa, 0x000a				; d8 c8 0a 00
+	extz xwa					; e8 12
+	add xwa, 0x0000000e				; e8 c8 0e 00 00 00
+	ld xbc, 0x0022aa9c				; 41 9c aa 22 00
+	add xbc, xwa					; e8 81
+	.byte 0xb1, 0x00, 0x20			; ld (xbc), 0x20 — space char
+	; Check if partition marked active
+	ld wa, de					; da 88
+	extz xwa					; e8 12
+	add xwa, 0x00000114				; e8 c8 14 01 00 00
+	ld xbc, 0x0022aa9c				; 41 9c aa 22 00
+	add xbc, xwa					; e8 81
+	.byte 0x81, 0x3f, 0x01			; cp (xbc), 0x01
+	jr nz, .Lsd_display_next			; 6e 1c
+	; Active partition: mark with asterisk
+	ld wa, de					; da 88
+	mul wa, 0x000c				; d8 08 0c 00
+	add wa, 0x000a				; d8 c8 0a 00
+	extz xwa					; e8 12
+	add xwa, 0x0000000e				; e8 c8 0e 00 00 00
+	ld xbc, 0x0022aa9c				; 41 9c aa 22 00
+	add xbc, xwa					; e8 81
+	.byte 0xb1, 0x00, 0x2a			; ld (xbc), 0x2a — asterisk
+.Lsd_display_next:
+	inc 1, de					; da 61
+	cp de, 0x0014					; da cf 14 00
+	jr c, .Lsd_display_loop			; 67 aa
+.Lsd_display_done:
+	; Register display events via vtable 0x0124
+	ldada_24 xwa, 0x22aaaa			; f2 aa aa 22 30
+	ld xde, xwa					; e8 8a
+	ldda32_24 xwa, 0x23a1a2			; e2 a2 a1 23 20
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e		; e3 e1 0a 0e 20
+	ld_sril3 xhl, 0xe1, 0x24, 0x01		; e3 e1 24 01 23
+	ld xwa, 0x007f00d7				; 40 d7 00 7f 00
+	ld xbc, 0x01ea000a				; 41 0a 00 ea 01
+	call (xhl)					; b3 e8
+	ldda32_24 xwa, 0x23a1a2			; e2 a2 a1 23 20
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e		; e3 e1 0a 0e 20
+	ld_sril3 xhl, 0xe1, 0x24, 0x01		; e3 e1 24 01 23
+	ld xwa, 0x007f00d7				; 40 d7 00 7f 00
+	ld xbc, 0x01c0000f				; 41 0f 00 c0 01
+	ld xde, 0xffffffff				; 42 ff ff ff ff
+	call (xhl)					; b3 e8
+	; Register event 0xD9 + 0xD8
+	ldda32_24 xwa, 0x23a1a2			; e2 a2 a1 23 20
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e		; e3 e1 0a 0e 20
+	ld_sril3 xhl, 0xe1, 0x24, 0x01		; e3 e1 24 01 23
+	ld xwa, 0x007f00d9				; 40 d9 00 7f 00
+	ld xbc, 0x01c0000d				; 41 0d 00 c0 01
+	lds32 xde, 0					; ea a8
+	call (xhl)					; b3 e8
+	ldda32_24 xwa, 0x23a1a2			; e2 a2 a1 23 20
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e		; e3 e1 0a 0e 20
+	ld_sril3 xhl, 0xe1, 0x24, 0x01		; e3 e1 24 01 23
+	ld xwa, 0x007f00d8				; 40 d8 00 7f 00
+	ld xbc, 0x01c0000d				; 41 0d 00 c0 01
+	lds32 xde, 0					; ea a8
+	call (xhl)					; b3 e8
+	jr t, .Lsd_epilogue				; 68 0a
+.Lsd_not_ready:
+	; Disk not ready: call shutdown with error code 2
+	lds wa, 2					; d8 aa
+	calr HDAE5000_HD_Shutdown			; 1e fc 7b
+	.byte 0xbf, 0x04, 0x02, 0xff, 0xff	; ld (xsp+0x04), 0xffff — set error
+.Lsd_epilogue:
+	ld hl, (xsp + 0x04)				; 9f 04 23
+	pop xiz					; 5e
+	.byte 0xf3, 0xfd, 0x0c, 0x01, 0x37	; lda xsp, (xsp + 0x010c) — dealloc frame
+	ret						; 0e
+	; --- Sub-handler 1: event 0x01C00007 dispatch (0x28310D) ---
+.Lsd_sub1:
+	cp xbc, 0x01c00007				; e9 cf 07 00 c0 01
+	jr nz, .Lsd_sub1_done			; 6e 63
+	ldda32_24 xwa, 0x23a1a2			; e2 a2 a1 23 20
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e		; e3 e1 0a 0e 20
+	ld_sril3 xix, 0xe1, 0x00, 0x01		; e3 e1 00 01 24
+	ld xwa, 0x02600024				; 40 24 00 60 02
+	ld xbc, 0x01e00029				; 41 29 00 e0 01
+	call (xix)					; b4 e8
+	cp xhl, 0x0000000a				; eb cf 0a 00 00 00
+	jr z, .Lsd_sub1_evt_0a			; 66 34
+	cp xhl, 0x0000008a				; eb cf 8a 00 00 00
+	jr nz, .Lsd_sub1_done			; 6e 38
+	; Event 0x8A: check 0x229d99 config
+	cpdi8_24 0x229d99, 0x00			; c2 99 9d 22 3f 00
+	jr nz, .Lsd_sub1_configured			; 6e 05
+	calr HDAE5000_HD_Setup_Drive			; 1e 42 fd — recursive setup
+	jr t, .Lsd_sub1_done				; 68 2b
+.Lsd_sub1_configured:
+	; Already configured: register event 0x024A
+	ldda32_24 xwa, 0x23a1a2			; e2 a2 a1 23 20
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e		; e3 e1 0a 0e 20
+	ld_sril3 xhl, 0xe1, 0x24, 0x01		; e3 e1 24 01 23
+	ld xwa, 0x007f024a				; 40 4a 02 7f 00
+	ld xbc, 0x01c00001				; 41 01 00 c0 01
+	lds32 xde, 0					; ea a8
+	call (xhl)					; b3 e8
+	jr t, .Lsd_sub1_done				; 68 0c
+.Lsd_sub1_evt_0a:
+	; Event 0x0A: init filesystem
+	pushw 0x0000					; 0b 00 00
+	lds wa, 0					; d8 a8
+	lds bc, 0					; d9 a8
+	lds de, 6					; da ae
+	calr HDAE5000_FS_Init				; 1e 5e 3f
+.Lsd_sub1_done:
+	lds32 xhl, 0					; eb a8
+	ret						; 0e
+	; --- Sub-handler 2: event handler for 0xD9 (0x28317B) ---
+.Lsd_sub2:
+	push xiz					; 3e
+	ld xiz, xwa					; e8 8e
+	ld xwa, xbc					; e9 88
+	cp xwa, 0x01c00007				; e8 cf 07 00 c0 01
+	jr z, .Lsd_sub2_c00007			; 66 63
+	cp xwa, 0x01c0000d				; e8 cf 0d 00 c0 01
+	jr z, .Lsd_sub2_c0000d			; 66 23
+	cp xwa, 0x01e00085				; e8 cf 85 00 e0 01
+	jr z, .Lsd_sub2_e00085			; 66 16
+	; Default: call cleanup callback
+	ld xwa, xiz					; ee 88
+	ldda32_24 xhl, 0x23a1a2			; e2 a2 a1 23 23
+	ld_sril3 xhl, 0xed, 0x0a, 0x0e		; e3 ed 0a 0e 23
+	ld_sril3 xix, 0xed, 0xdc, 0x00		; e3 ed dc 00 24
+	call (xix)					; b4 e8
+	jrl t, .Lsd_sub2_done				; 78 87 00
+.Lsd_sub2_e00085:
+	lds32 xhl, 1					; eb a9
+	jrl t, .Lsd_sub2_done				; 78 82 00
+.Lsd_sub2_c0000d:
+	; Forward event via vtable
+	ld xwa, xiz					; ee 88
+	ldda32_24 xhl, 0x23a1a2			; e2 a2 a1 23 23
+	ld_sril3 xhl, 0xed, 0x0a, 0x0e		; e3 ed 0a 0e 23
+	ld_sril3 xhl, 0xed, 0xdc, 0x00		; e3 ed dc 00 23
+	call (xhl)					; b3 e8
+	ldada_24 xwa, 0x2e22b8			; f2 b8 22 2e 30
+	ld xbc, xwa					; e8 89
+	ld xwa, xiz					; ee 88
+	ld xde, xbc					; e9 8a
+	ldda32_24 xbc, 0x23a1a2			; e2 a2 a1 23 21
+	ld_sril3 xbc, 0xe5, 0x0a, 0x0e		; e3 e5 0a 0e 21
+	ld_sril3 xhl, 0xe5, 0x00, 0x01		; e3 e5 00 01 23
+	ld xbc, 0x01c0000f				; 41 0f 00 c0 01
+	call (xhl)					; b3 e8
+	lds32 xhl, 0					; eb a8
+	jr t, .Lsd_sub2_done				; 68 4a
+.Lsd_sub2_c00007:
+	; Check for events 0x07 or 0x06
+	ldda32_24 xwa, 0x23a1a2			; e2 a2 a1 23 20
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e		; e3 e1 0a 0e 20
+	ld_sril3 xix, 0xe1, 0x00, 0x01		; e3 e1 00 01 24
+	ld xwa, 0x02600024				; 40 24 00 60 02
+	ld xbc, 0x01e00029				; 41 29 00 e0 01
+	call (xix)					; b4 e8
+	cp xhl, 0x00000007				; eb cf 07 00 00 00
+	jr z, .Lsd_sub2_deregister			; 66 08
+	cp xhl, 0x00000006				; eb cf 06 00 00 00
+	jr nz, .Lsd_sub2_skip_dereg			; 6e 1d
+.Lsd_sub2_deregister:
+	; Deregister event via vtable 0x0104
+	ldda32_24 xwa, 0x23a1a2			; e2 a2 a1 23 20
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e		; e3 e1 0a 0e 20
+	ld_sril3 xhl, 0xe1, 0x04, 0x01		; e3 e1 04 01 23
+	ld xwa, 0x007f0000				; 40 00 00 7f 00
+	ld xbc, 0x01c00001				; 41 01 00 c0 01
+	lds32 xde, 0					; ea a8
+	call (xhl)					; b3 e8
+.Lsd_sub2_skip_dereg:
+	lds32 xhl, 0					; eb a8
+.Lsd_sub2_done:
+	pop xiz					; 5e
+	ret						; 0e
+	; --- Sub-handler 3: event handler for 0xD8 (0x283237) ---
+.Lsd_sub3:
+	push xiz					; 3e
+	ld xiz, xwa					; e8 8e
+	ld xwa, xbc					; e9 88
+	cp xwa, 0x01c00007				; e8 cf 07 00 c0 01
+	jr z, .Lsd_sub3_c00007			; 66 63
+	cp xwa, 0x01c0000d				; e8 cf 0d 00 c0 01
+	jr z, .Lsd_sub3_c0000d			; 66 23
+	cp xwa, 0x01e00085				; e8 cf 85 00 e0 01
+	jr z, .Lsd_sub3_e00085			; 66 16
+	; Default: call cleanup callback
+	ld xwa, xiz					; ee 88
+	ldda32_24 xhl, 0x23a1a2			; e2 a2 a1 23 23
+	ld_sril3 xhl, 0xed, 0x0a, 0x0e		; e3 ed 0a 0e 23
+	ld_sril3 xix, 0xed, 0xdc, 0x00		; e3 ed dc 00 24
+	call (xix)					; b4 e8
+	jrl t, .Lsd_sub3_done				; 78 87 00
+.Lsd_sub3_e00085:
+	lds32 xhl, 1					; eb a9
+	jrl t, .Lsd_sub3_done				; 78 82 00
+.Lsd_sub3_c0000d:
+	; Forward event via vtable
+	ld xwa, xiz					; ee 88
+	ldda32_24 xhl, 0x23a1a2			; e2 a2 a1 23 23
+	ld_sril3 xhl, 0xed, 0x0a, 0x0e		; e3 ed 0a 0e 23
+	ld_sril3 xhl, 0xed, 0xdc, 0x00		; e3 ed dc 00 23
+	call (xhl)					; b3 e8
+	ldada_24 xwa, 0x2e22be			; f2 be 22 2e 30
+	ld xbc, xwa					; e8 89
+	ld xwa, xiz					; ee 88
+	ld xde, xbc					; e9 8a
+	ldda32_24 xbc, 0x23a1a2			; e2 a2 a1 23 21
+	ld_sril3 xbc, 0xe5, 0x0a, 0x0e		; e3 e5 0a 0e 21
+	ld_sril3 xhl, 0xe5, 0x00, 0x01		; e3 e5 00 01 23
+	ld xbc, 0x01c0000f				; 41 0f 00 c0 01
+	call (xhl)					; b3 e8
+	lds32 xhl, 0					; eb a8
+	jr t, .Lsd_sub3_done				; 68 4a
+.Lsd_sub3_c00007:
+	; Check for events 0x07 or 0x06
+	ldda32_24 xwa, 0x23a1a2			; e2 a2 a1 23 20
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e		; e3 e1 0a 0e 20
+	ld_sril3 xix, 0xe1, 0x00, 0x01		; e3 e1 00 01 24
+	ld xwa, 0x02600024				; 40 24 00 60 02
+	ld xbc, 0x01e00029				; 41 29 00 e0 01
+	call (xix)					; b4 e8
+	cp xhl, 0x00000007				; eb cf 07 00 00 00
+	jr z, .Lsd_sub3_deregister			; 66 08
+	cp xhl, 0x00000006				; eb cf 06 00 00 00
+	jr nz, .Lsd_sub3_skip_dereg			; 6e 1d
+.Lsd_sub3_deregister:
+	; Deregister event 0xD2 via vtable 0x0104
+	ldda32_24 xwa, 0x23a1a2			; e2 a2 a1 23 20
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e		; e3 e1 0a 0e 20
+	ld_sril3 xhl, 0xe1, 0x04, 0x01		; e3 e1 04 01 23
+	ld xwa, 0x007f00d2				; 40 d2 00 7f 00
+	ld xbc, 0x01c00001				; 41 01 00 c0 01
+	lds32 xde, 0					; ea a8
+	call (xhl)					; b3 e8
+.Lsd_sub3_skip_dereg:
+	lds32 xhl, 0					; eb a8
+.Lsd_sub3_done:
+	pop xiz					; 5e
+	ret						; 0e
 
 HDAE5000_HD_Read_Identify:	; 0x2832F3 (1051 bytes)
 	; Read HD IDENTIFY data; extracts CHS params from 0x229D99-0x229DAB
