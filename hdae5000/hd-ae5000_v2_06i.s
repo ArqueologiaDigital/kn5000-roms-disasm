@@ -8878,9 +8878,81 @@ HDAE5000_Render_Display_Region:	; 0x2967B4 (48 bytes)
 	ret
 	nop
 
-HDAE5000_Render_Display_Region2:	; 0x2967E4
-	; Display region rendering 2
-	.incbin "includes/code_295642_2971a2.bin", 4514, 166
+HDAE5000_Render_Display_Region2:	; 0x2967E4 (166 bytes)
+	; Display region rendering 2 — load display params and call Display_String
+	xor xbc, xbc				; clear XBC
+	xor xde, xde				; clear XDE
+	ldda8_24 c, 2330838			; ld C, (0x2390D6) — column
+	nop
+	ldda8_24 e, 2330840			; ld E, (0x2390D8) — row
+	nop
+	ldw wa, 0x000D				; display command
+	nop
+	di					; disable interrupts
+	call HDAE5000_Display_String
+	ei 7					; enable interrupts
+	ret
+	nop
+.Lrdr2_register:			; 0x296802
+	; Set WA=1, call Display_String, store XIX to data source ptr
+	lds wa, 1
+	di
+	call HDAE5000_Display_String
+	ei 7
+	stda32_24 2330880, xix			; st (0x239100), XIX — data source ptr
+	nop
+	ret
+	nop
+.Lrdr2_main:				; 0x296814
+	; Buffer read loop: read 256 bytes via I/O, accumulate 32-bit checksum,
+	; then send 4 checksum bytes, finalize
+	xor xwa, xwa
+	stda32_24 2330876, xwa			; st (0x2390FC), XWA — clear checksum
+	nop
+	lds bc, 0				; counter = 0
+	ldada_24 xix, 2330984			; lda XIX, 0x239168
+	nop
+.Lrdr2_loop1:				; 0x296824
+	cp bc, 0x0100				; 256 iterations?
+	jpcc_24 6, 2713682			; jp Z, 0x296852 — exit loop
+	nop
+	call 2713856				; call 0x296900 — read one byte → W
+	cpdi8_24 2330836, 0x01			; cp (0x2390D4), 1 — error check
+	jpcc_24 6, 2713736			; jp Z, 0x296888 — exit on error
+	nop
+	lda_dri3 xwa, 0x07, 0xF0, 0xE4		; ld (XIX+BC), W — store byte to buffer
+	nop
+	xor xhl, xhl				; XHL = 0
+	ld l, w					; L = W (zero-extend byte to 32-bit)
+	adddm32_24 2330876, xhl		; add (0x2390FC), XHL — accumulate checksum
+	nop
+	inc 1, bc				; BC++
+	jr t, .Lrdr2_loop1			; loop
+.Lrdr2_send_checksum:			; 0x296852
+	; Send 4 checksum bytes
+	lds bc, 0				; counter = 0
+	ldada_24 xix, 2330876			; lda XIX, 0x2390FC — checksum
+	nop
+.Lrdr2_loop2:				; 0x29685A
+	cps bc, 4				; 4 bytes?
+	jpcc_24 6, 2713724			; jp Z, 0x29687C — exit loop
+	nop
+	ld_srib3 w, 0x07, 0xF0, 0xE4		; ld W, (XIX+BC) — load checksum byte
+	nop
+	call 2714016				; call 0x2969A0 — send one byte
+	cpdi8_24 2330836, 0x01			; cp (0x2390D4), 1 — error check
+	jpcc_24 6, 2713736			; jp Z, 0x296888 — exit on error
+	nop
+	inc 1, bc				; BC++
+	jr t, .Lrdr2_loop2			; loop
+.Lrdr2_finalize:			; 0x29687C
+	call 2714160				; call 0x296A30 — finalize transfer
+	cps w, 0				; check result
+	jr z, .Lrdr2_exit			; exit if done
+	jp .Lrdr2_main				; retry main loop
+.Lrdr2_exit:				; 0x296888
+	ret
+	nop
 
 HDAE5000_PPORT_Sum_Buffer:	; 0x29688A
 	; Sum 256 bytes of buffer memory, clear status word
