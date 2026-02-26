@@ -3066,7 +3066,280 @@ HDAE5000_HD_Config_Manager:	; 0x28541C (3728 bytes)
 
 HDAE5000_HD_Partition_Setup:	; 0x2862AC (818 bytes)
 	; Set up HD partition parameters
-	.incbin "includes/code_2803c2_28f542.bin", 24298, 818
+	; Part 1: Display partition info — allocate stack frame, format strings
+	.byte 0xbf, 0x94, 0x37		; lda xsp, (xsp + 0x94) — alloc ~108 bytes
+	.byte 0x0b, 0x39, 0x01		; push 0x0139
+	ldada_24 xwa, 0x2e2b84
+	push xwa
+	ldada_24 xwa, 0x22b2f6
+	push xwa
+	call 0x29ae9f			; HDAE5000_MemCopy
+	lda xsp, (xsp + 0x0a)
+	lda xwa, (xsp + 0x38)
+	call 0x297573
+	.byte 0x0b, 0x10, 0x00		; push 0x0010
+	lda xwa, (xsp + 0x44)
+	push xwa
+	ldada_24 xwa, 0x22b30c
+	push xwa
+	call 0x29ae9f
+	.byte 0x0b, 0x0a, 0x00		; push 0x000A
+	lda xwa, (xsp + 0x24)
+	push xwa
+	ld wa, (xsp + 0x48)
+	.byte 0x28			; push wa (compact)
+	call 0x29ac3b
+	lda xwa, (xsp + 0x2a)
+	push xwa
+	call 0x29af71			; HDAE5000_Display_Buffer_Validate
+	.byte 0x2b			; push hl (compact)
+	lda xwa, (xsp + 0x30)
+	push xwa
+	ldada_24 xwa, 0x22b333
+	push xwa
+	call 0x29ae9f
+	lda xsp, (xsp + 0x20)
+	.byte 0x0b, 0x0a, 0x00		; push 0x000A
+	lda xwa, (xsp + 0x1a)
+	push xwa
+	ld wa, (xsp + 0x40)
+	.byte 0x28			; push wa
+	call 0x29ac3b
+	lda xwa, (xsp + 0x20)
+	push xwa
+	call 0x29af71
+	.byte 0x2b			; push hl
+	lda xwa, (xsp + 0x26)
+	push xwa
+	ldada_24 xwa, 0x22b35a
+	push xwa
+	call 0x29ae9f
+	.byte 0x0b, 0x0a, 0x00		; push 0x000A
+	lda xwa, (xsp + 0x30)
+	push xwa
+	ld wa, (xsp + 0x58)
+	.byte 0x28			; push wa
+	call 0x29ac3b
+	lda xsp, (xsp + 0x1e)
+	lda xwa, (xsp + 0x18)
+	push xwa
+	call 0x29af71
+	.byte 0x2b			; push hl
+	lda xwa, (xsp + 0x1e)
+	push xwa
+	ldada_24 xwa, 0x22b381
+	push xwa
+	call 0x29ae9f
+	lda xsp, (xsp + 0x0e)
+	lda xwa, (xsp + 0x28)
+	call 0x298b6c
+	.byte 0x0b, 0x10, 0x00		; push 0x0010
+	.byte 0x0b, 0x00, 0x00		; push 0x0000
+	lda xwa, (xsp + 0x1c)
+	push xwa
+	call 0x29aec7			; HDAE5000_MemFill
+	lda xbc, (xsp + 0x30)
+	lda xwa, (xsp + 0x14)
+	call 0x29b815
+	lda xbc, (xsp + 0x14)
+	ldada_24 xde, 0x2e2cd0
+	lda xwa, (xsp + 0x14)
+	call 0x29b840
+	lda xbc, (xsp + 0x14)
+	lda xwa, (xsp + 0x18)
+	call 0x29ba20
+	lda xiy, (xsp + 0x18)
+	ld xix, (xiy + 0x04)
+	push xix
+	ld xix, (xiy)
+	push xix
+	.byte 0x0b, 0x2e, 0x00		; push 0x002E
+	.byte 0x0b, 0xbe, 0x2c		; push 0x2CBE
+	lda xwa, (xsp + 0x2c)
+	push xwa
+	call HDAE5000_PPI_Block_Copy
+	lda xwa, (xsp + 0x30)
+	push xwa
+	call 0x29af71
+	lda xsp, (xsp + 0x1c)
+	.byte 0x2b			; push hl
+	lda xwa, (xsp + 0x1a)
+	push xwa
+	ldada_24 xwa, 0x22b3a8
+	push xwa
+	call 0x29ae9f
+	.byte 0x0b, 0x10, 0x00		; push 0x0010
+	.byte 0x0b, 0x00, 0x00		; push 0x0000
+	lda xwa, (xsp + 0x26)
+	push xwa
+	call 0x29aec7
+	lda xsp, (xsp + 0x12)
+	lda xbc, (xsp + 0x2c)
+	lda xwa, (xsp + 0x0c)
+	call 0x29b815
+	lda xbc, (xsp + 0x0c)
+	ldada_24 xde, 0x2e2cd4
+	lda xwa, (xsp + 0x0c)
+	call 0x29b840
+	lda xbc, (xsp + 0x0c)
+	lda xwa, (xsp + 0x10)
+	call 0x29ba20
+	lda xiy, (xsp + 0x10)
+	ld xix, (xiy + 0x04)
+	push xix
+	ld xix, (xiy)
+	push xix
+	.byte 0x0b, 0x2e, 0x00		; push 0x002E
+	.byte 0x0b, 0xc4, 0x2c		; push 0x2CC4
+	lda xwa, (xsp + 0x24)
+	push xwa
+	call HDAE5000_PPI_Block_Copy
+	lda xwa, (xsp + 0x28)
+	push xwa
+	call 0x29af71
+	.byte 0x2b			; push hl
+	lda xwa, (xsp + 0x2e)
+	push xwa
+	ldada_24 xwa, 0x22b3cf
+	push xwa
+	call 0x29ae9f
+	lda xsp, (xsp + 0x1e)
+	.byte 0x0b, 0x10, 0x00		; push 0x0010
+	.byte 0x0b, 0x00, 0x00		; push 0x0000
+	lda xwa, (xsp + 0x1c)
+	push xwa
+	call 0x29aec7
+	lda xbc, (xsp + 0x3c)
+	lda xwa, (xsp + 0x14)
+	call 0x29b815
+	lda xbc, (xsp + 0x14)
+	ldada_24 xde, 0x2e2cd8
+	lda xwa, (xsp + 0x14)
+	call 0x29b840
+	lda xbc, (xsp + 0x14)
+	lda xwa, (xsp + 0x18)
+	call 0x29ba20
+	lda xiy, (xsp + 0x18)
+	ld xix, (xiy + 0x04)
+	push xix
+	ld xix, (xiy)
+	push xix
+	.byte 0x0b, 0x2e, 0x00		; push 0x002E
+	.byte 0x0b, 0xca, 0x2c		; push 0x2CCA
+	lda xwa, (xsp + 0x2c)
+	push xwa
+	call HDAE5000_PPI_Block_Copy
+	lda xwa, (xsp + 0x30)
+	push xwa
+	call 0x29af71
+	lda xsp, (xsp + 0x1c)
+	.byte 0x2b			; push hl
+	lda xwa, (xsp + 0x1a)
+	push xwa
+	ldada_24 xwa, 0x22b3f6
+	push xwa
+	call 0x29ae9f
+	.byte 0x0b, 0x10, 0x00		; push 0x0010
+	.byte 0x0b, 0x00, 0x00		; push 0x0000
+	lda xwa, (xsp + 0x26)
+	push xwa
+	call 0x29aec7
+	lda xsp, (xsp + 0x12)
+	lda xwa, (xsp + 0x18)
+	calr HDAE5000_Display_Clear
+	lda xwa, (xsp + 0x18)
+	push xwa
+	call 0x29af71
+	.byte 0x2b			; push hl
+	lda xwa, (xsp + 0x1e)
+	push xwa
+	ldada_24 xwa, 0x22b41d
+	push xwa
+	call 0x29ae9f
+	lda xsp, (xsp + 0x0e)
+	; Register partition display handler
+	ldada_24 xwa, 0x22b2f6
+	ld xde, xwa
+	ldda32_24 xwa, 0x23a1a2
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e
+	ld_sril3 xhl, 0xe1, 0x24, 0x01	; ld XHL, (XWA + 0x0124)
+	ld xwa, 0x007f022a
+	ld xbc, 0x01ea000a
+	call (xhl)
+	ldda32_24 xwa, 0x23a1a2
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e
+	ld_sril3 xhl, 0xe1, 0x24, 0x01
+	ld xwa, 0x007f022a
+	ld xbc, 0x01c0000f
+	ld xde, 0xffffffff
+	call (xhl)
+	lda xsp, (xsp + 0x6c)		; deallocate stack frame
+	ret
+	;
+	; Part 2: Event handler (0x286502)
+.LHD_PS__handler:
+	cp xbc, 0x01c00007
+	jrl nz, .LHD_PS__exit
+	ldda32_24 xwa, 0x23a1a2
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e
+	ld_sril3 xix, 0xe1, 0x00, 0x01	; ld XIX, (XWA + 0x0100)
+	ld xwa, 0x02600024
+	ld xbc, 0x01e00029
+	call (xix)
+	; Check return value
+	cp xhl, 0x0000000c
+	jrl z, .LHD_PS__case_0c
+	cp xhl, 0x00000009
+	jr z, .LHD_PS__case_09
+	cp xhl, 0x0000008c
+	jrl nz, .LHD_PS__exit
+	; Case 0x8C: update display with error code
+	ldda32_24 xwa, 0x23a1a2
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e
+	ld_sril3 xhl, 0xe1, 0x24, 0x01
+	ld xwa, 0x007f02c1
+	ld xbc, 0x01c00001
+	lds32 xde, 5
+	call (xhl)
+	lds wa, 0
+	call 0x293f3c
+	ldda32_24 xwa, 0x23a1a2
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e
+	ld_sril3 xhl, 0xe1, 0x24, 0x01
+	ld xwa, 0x007f0013
+	ld xbc, 0x01c00001
+	lds32 xde, 0
+	call (xhl)
+	jr t, .LHD_PS__exit
+.LHD_PS__case_09:			; case 0x09: format and validate
+	.byte 0x0b, 0x0a, 0x00		; push 0x000A
+	.byte 0x0b, 0x00, 0x00		; push 0x0000
+	ldada_24 xwa, 0x22ad9c
+	push xwa
+	call 0x29aec7
+	inc 0, xsp			; deallocate 8 bytes
+	cpdi8_24 0x229d99, 0x00
+	jr nz, .LHD_PS__exit
+	ldda32_24 xwa, 0x23a1a2
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e
+	ld_sril3 xhl, 0xe1, 0x24, 0x01
+	ld xwa, 0x007f021a
+	ld xbc, 0x01c00001
+	lds32 xde, 0
+	call (xhl)
+	jr t, .LHD_PS__exit
+.LHD_PS__case_0c:			; case 0x0C: recursive re-setup
+	calr HDAE5000_HD_Partition_Setup
+	ldda32_24 xwa, 0x23a1a2
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e
+	ld_sril3 xhl, 0xe1, 0x24, 0x01
+	ld xwa, 0x007f0227
+	ld xbc, 0x01c00001
+	lds32 xde, 0
+	call (xhl)
+.LHD_PS__exit:
+	lds32 xhl, 0
+	ret
 
 HDAE5000_HD_CHS_Calculate:	; 0x2865DE (1098 bytes)
 	; Calculate CHS (Cylinder/Head/Sector) addresses
