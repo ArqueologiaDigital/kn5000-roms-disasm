@@ -3242,8 +3242,198 @@ HDAE5000_Cell_In_Bounds:	; 0x28FBB1 (1497 bytes)
 	.incbin "includes/code_28f90c_2953e1.bin", 677, 1497
 
 HDAE5000_Table_Calc_Offset:	; 0x29018A (553 bytes)
-	; Calculate table offset using 0x4C multiplier
-	.incbin "includes/code_28f90c_2953e1.bin", 2174, 553
+	; Check 9 table slots for availability (-1 = free)
+	; WA = row index, BC = column index
+	; Returns HL=0 if any slot occupied, HL=0xFFFF if all free
+	dec 4, xsp
+	push xiz
+	ld (xsp + 4), bc		; save column
+	ld (xsp + 6), wa		; save row
+	; --- Slot 0: base 0x201656 ---
+	ld wa, (xsp + 4)
+	extz xwa
+	ld xbc, 0x0000004C
+	call HDAE5000_Multiply
+	ld xiz, xhl			; XIZ = column * 0x4C
+	ld wa, (xsp + 6)
+	extz xwa
+	ld xbc, 0x000004C0
+	call HDAE5000_Multiply
+	add xhl, 0x00000780		; + base offset
+	add xhl, xiz			; + column offset
+	ldada_24 xwa, 2102870		; 0x201656
+	add xwa, xhl
+	ld xwa, (xwa)			; load slot value
+	cp xwa, 0xFFFFFFFF		; free?
+	jr z, .Ltco_slot1
+	lds hl, 0			; occupied → return 0
+	jrl .Ltco_exit
+	; --- Slot 1: base 0x20165A ---
+.Ltco_slot1:
+	ld wa, (xsp + 4)
+	extz xwa
+	ld xbc, 0x0000004C
+	call HDAE5000_Multiply
+	ld xiz, xhl
+	ld wa, (xsp + 6)
+	extz xwa
+	ld xbc, 0x000004C0
+	call HDAE5000_Multiply
+	add xhl, 0x00000780
+	add xhl, xiz
+	ldada_24 xwa, 2102874		; 0x20165A
+	add xwa, xhl
+	ld xwa, (xwa)
+	cp xwa, 0xFFFFFFFF
+	jr z, .Ltco_slot2
+	lds hl, 0
+	jrl .Ltco_exit
+	; --- Slot 2: base 0x20165E ---
+.Ltco_slot2:
+	ld wa, (xsp + 4)
+	extz xwa
+	ld xbc, 0x0000004C
+	call HDAE5000_Multiply
+	ld xiz, xhl
+	ld wa, (xsp + 6)
+	extz xwa
+	ld xbc, 0x000004C0
+	call HDAE5000_Multiply
+	add xhl, 0x00000780
+	add xhl, xiz
+	ldada_24 xwa, 2102878		; 0x20165E
+	add xwa, xhl
+	ld xwa, (xwa)
+	cp xwa, 0xFFFFFFFF
+	jr z, .Ltco_slot3
+	lds hl, 0
+	jrl .Ltco_exit
+	; --- Slot 3: base 0x201662 ---
+.Ltco_slot3:
+	ld wa, (xsp + 4)
+	extz xwa
+	ld xbc, 0x0000004C
+	call HDAE5000_Multiply
+	ld xiz, xhl
+	ld wa, (xsp + 6)
+	extz xwa
+	ld xbc, 0x000004C0
+	call HDAE5000_Multiply
+	add xhl, 0x00000780
+	add xhl, xiz
+	ldada_24 xwa, 2102882		; 0x201662
+	add xwa, xhl
+	ld xwa, (xwa)
+	cp xwa, 0xFFFFFFFF
+	jr z, .Ltco_slot4
+	lds hl, 0
+	jrl .Ltco_exit
+	; --- Slot 4: base 0x201666 ---
+.Ltco_slot4:
+	ld wa, (xsp + 4)
+	extz xwa
+	ld xbc, 0x0000004C
+	call HDAE5000_Multiply
+	ld xiz, xhl
+	ld wa, (xsp + 6)
+	extz xwa
+	ld xbc, 0x000004C0
+	call HDAE5000_Multiply
+	add xhl, 0x00000780
+	add xhl, xiz
+	ldada_24 xwa, 2102886		; 0x201666
+	add xwa, xhl
+	ld xwa, (xwa)
+	cp xwa, 0xFFFFFFFF
+	jr z, .Ltco_slot5
+	lds hl, 0
+	jrl .Ltco_exit
+	; --- Slot 5: base 0x20166A ---
+.Ltco_slot5:
+	ld wa, (xsp + 4)
+	extz xwa
+	ld xbc, 0x0000004C
+	call HDAE5000_Multiply
+	ld xiz, xhl
+	ld wa, (xsp + 6)
+	extz xwa
+	ld xbc, 0x000004C0
+	call HDAE5000_Multiply
+	add xhl, 0x00000780
+	add xhl, xiz
+	ldada_24 xwa, 2102890		; 0x20166A
+	add xwa, xhl
+	ld xwa, (xwa)
+	cp xwa, 0xFFFFFFFF
+	jr z, .Ltco_slot6
+	lds hl, 0
+	jrl .Ltco_exit
+	; --- Slot 6: base 0x20166E ---
+.Ltco_slot6:
+	ld wa, (xsp + 4)
+	extz xwa
+	ld xbc, 0x0000004C
+	call HDAE5000_Multiply
+	ld xiz, xhl
+	ld wa, (xsp + 6)
+	extz xwa
+	ld xbc, 0x000004C0
+	call HDAE5000_Multiply
+	add xhl, 0x00000780
+	add xhl, xiz
+	ldada_24 xwa, 2102894		; 0x20166E
+	add xwa, xhl
+	ld xwa, (xwa)
+	cp xwa, 0xFFFFFFFF
+	jr z, .Ltco_slot7
+	lds hl, 0
+	jr .Ltco_exit
+	; --- Slot 7: base 0x201672 ---
+.Ltco_slot7:
+	ld wa, (xsp + 4)
+	extz xwa
+	ld xbc, 0x0000004C
+	call HDAE5000_Multiply
+	ld xiz, xhl
+	ld wa, (xsp + 6)
+	extz xwa
+	ld xbc, 0x000004C0
+	call HDAE5000_Multiply
+	add xhl, 0x00000780
+	add xhl, xiz
+	ldada_24 xwa, 2102898		; 0x201672
+	add xwa, xhl
+	ld xwa, (xwa)
+	cp xwa, 0xFFFFFFFF
+	jr z, .Ltco_slot8
+	lds hl, 0
+	jr .Ltco_exit
+	; --- Slot 8: base 0x201676 ---
+.Ltco_slot8:
+	ld wa, (xsp + 4)
+	extz xwa
+	ld xbc, 0x0000004C
+	call HDAE5000_Multiply
+	ld xiz, xhl
+	ld wa, (xsp + 6)
+	extz xwa
+	ld xbc, 0x000004C0
+	call HDAE5000_Multiply
+	add xhl, 0x00000780
+	add xhl, xiz
+	ldada_24 xwa, 2102902		; 0x201676
+	add xwa, xhl
+	ld xwa, (xwa)
+	cp xwa, 0xFFFFFFFF
+	jr z, .Ltco_all_free
+	lds hl, 0
+	jr .Ltco_exit
+.Ltco_all_free:
+	ldw hl, 0xFFFF			; all slots free
+.Ltco_exit:
+	pop xiz
+	inc 4, xsp
+	ret
 
 HDAE5000_Table_Lookup:	; 0x2903B3 (928 bytes)
 	; Look up entry in display table; returns 0xFFFF on failure
