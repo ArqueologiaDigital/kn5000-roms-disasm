@@ -1992,8 +1992,133 @@ HDAE5000_File_Operation:	; 0x28D6D1 (938 bytes)
 	.incbin "includes/code_2803c2_28f542.bin", 54031, 938
 
 HDAE5000_File_Save:	; 0x28DA7B (381 bytes)
-	; Save file to HD; accesses 0x229DAD, 0x229DAE
-	.incbin "includes/code_2803c2_28f542.bin", 54969, 381
+	; Save file to HD: initialize allocation tables, set file type codes
+	; Input: XWA = param1, XBC = total bytes, XDE = entry list ptr
+
+	; --- Initialization: clear file save state ---
+	stdi8_24 2335130, 1		; (0x23A19A) = 1 — save in progress
+	stdi16_24 2295008, 0		; (0x2304E0) = 0
+	stdi16_24 2295010, 0		; (0x2304E2) = 0
+	stdi16_24 2295012, 0		; (0x2304E4) = 0
+	stdi8_24 2295022, 0		; (0x2304EE) = 0
+	stdi16_24 2295014, 0		; (0x2304E6) = 0
+	stdi8_24 2295023, 0		; (0x2304EF) = 0
+	lds32 xwa, 0
+	stda32_24 2295000, xwa		; (0x2304D8) = 0
+	; Push args and call display init
+	pushw 240			; height = 0xF0
+	pushw 32			; width = 0x20
+	ldada_24 xwa, 2334890		; XWA = &0x23A0AA
+	push xwa
+	call 2731719			; call 0x29AEC7
+
+	; --- Clear file descriptor ---
+	stdi16_24 2295920, 0		; (0x230870) = 0
+	stdi16_24 2295916, 0		; (0x23086C) = 0
+	stdi16_24 2294840, 0		; (0x230438) = 0
+	stdi16_24 2294842, 0		; (0x23043A) = 0
+	stdi16_24 2294844, 0		; (0x23043C) = 0
+	lds32 xwa, 0
+	stda32_24 2294848, xwa		; (0x230440) = 0
+	lds32 xwa, 0
+	stda32_24 2294852, xwa		; (0x230444) = 0
+	lds32 xwa, 0
+	stda32_24 2294856, xwa		; (0x230448) = 0
+	lds32 xwa, 0
+	stda32_24 2294860, xwa		; (0x23044C) = 0
+	lds32 xwa, 0
+	stda32_24 2294864, xwa		; (0x230450) = 0
+	lds32 xwa, 0
+	stda32_24 2294868, xwa		; (0x230454) = 0
+	ld xwa, 4294967295		; 0xFFFFFFFF
+	stda32_24 2295908, xwa		; (0x230864) = 0xFFFFFFFF
+	stdi16_24 2295922, 0		; (0x230872) = 0
+	stdi16_24 2295924, 0		; (0x230874) = 0
+	lds32 xwa, 0
+	stda32_24 2295926, xwa		; (0x230876) = 0
+
+	; --- Copy filename ---
+	pushw 46			; max length = 0x2E
+	pushw 23634			; source offset = 0x5C52
+	ldada_24 xwa, 2295478		; XWA = &0x2306B6 (filename dest)
+	push xwa
+	call 2731845			; call 0x29AF45
+	lda xsp, (xsp + 16)		; pop 16 bytes of args
+
+	; --- Set file params ---
+	stdi16_24 2295722, 1		; (0x2307AA) = 1
+	stdi16_24 2295724, 0		; (0x2307AC) = 0
+
+	; --- Compute file size in sectors ---
+	ldda16_24 xwa, 2274364		; WA = (0x22B43C) — bytes per sector
+	calr HDAE5000_String_Compare	; (actually a multiply helper)
+	ld wa, hl			; result WA = HL
+	extz xwa			; zero-extend to 32-bit
+	ld xbc, 12			; divisor
+	call HDAE5000_Divide_Signed	; divide
+	stda32_24 2295912, xhl		; (0x230868) = XHL (quotient)
+
+	; --- File type code switch on (0x229DAD) ---
+	ldda8_24 a, 2268589		; A = (0x229DAD)
+	cps a, 4
+	jr z, .Lfs_type1_4
+	cps a, 3
+	jr z, .Lfs_type1_3
+	cps a, 2
+	jr z, .Lfs_type1_2
+	cps a, 1
+	jr z, .Lfs_type1_1
+	cps a, 0
+	jr nz, .Lfs_type1_default
+	stdi8_24 2295934, 249		; (0x23087E) = 0xF9
+	jr t, .Lfs_type1_done
+.Lfs_type1_1:				; 0x28DB88
+	stdi8_24 2295934, 2		; (0x23087E) = 0x02
+	jr t, .Lfs_type1_done
+.Lfs_type1_2:				; 0x28DB90
+	stdi8_24 2295934, 252		; (0x23087E) = 0xFC
+	jr t, .Lfs_type1_done
+.Lfs_type1_3:				; 0x28DB98
+	stdi8_24 2295934, 0		; (0x23087E) = 0x00
+	jr t, .Lfs_type1_done
+.Lfs_type1_4:				; 0x28DBA0
+	stdi8_24 2295934, 251		; (0x23087E) = 0xFB
+	jr t, .Lfs_type1_done
+.Lfs_type1_default:			; 0x28DBA8
+	stdi8_24 2295934, 252		; (0x23087E) = 0xFC
+.Lfs_type1_done:			; 0x28DBAE
+
+	; --- File type code switch on (0x229DAE) ---
+	ldda8_24 a, 2268590		; A = (0x229DAE)
+	cps a, 4
+	jr z, .Lfs_type2_4
+	cps a, 3
+	jr z, .Lfs_type2_3
+	cps a, 2
+	jr z, .Lfs_type2_2
+	cps a, 1
+	jr z, .Lfs_type2_1
+	cps a, 0
+	jr nz, .Lfs_type2_default
+	stdi8_24 2295936, 249		; (0x230880) = 0xF9
+	jr t, .Lfs_type2_done
+.Lfs_type2_1:				; 0x28DBCF
+	stdi8_24 2295936, 2		; (0x230880) = 0x02
+	jr t, .Lfs_type2_done
+.Lfs_type2_2:				; 0x28DBD7
+	stdi8_24 2295936, 252		; (0x230880) = 0xFC
+	jr t, .Lfs_type2_done
+.Lfs_type2_3:				; 0x28DBDF
+	stdi8_24 2295936, 0		; (0x230880) = 0x00
+	jr t, .Lfs_type2_done
+.Lfs_type2_4:				; 0x28DBE7
+	stdi8_24 2295936, 251		; (0x230880) = 0xFB
+	jr t, .Lfs_type2_done
+.Lfs_type2_default:			; 0x28DBEF
+	stdi8_24 2295936, 0		; (0x230880) = 0x00
+.Lfs_type2_done:			; 0x28DBF5
+	lds32 xhl, 0			; return XHL = 0 (success)
+	ret
 
 HDAE5000_File_Load:	; 0x28DBF8 (564 bytes)
 	; Load file from HD
