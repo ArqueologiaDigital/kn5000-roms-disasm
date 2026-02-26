@@ -8886,8 +8886,71 @@ HDAE5000_String_Length:	; 0x29AE0C (24 bytes)
 	ret
 
 HDAE5000_File_Read:	; 0x29AE24 (123 bytes)
-	; File read operation (called by Display_Progress)
-	.incbin "includes/code_2971b7_29ae9e.bin", 15469, 123
+	; Memory comparison (memcmp-like): compares BC bytes at XIX vs XIY
+	; Stack: [+0x04] ptr1, [+0x08] ptr2, [+0x0C] length
+	; Returns: HL = 0 if equal, HL = signed byte difference if not
+	; Optimized: aligns to 4-byte boundary, then compares 32-bit words
+	ld bc, (xsp + 12)		; BC = length
+	lds hl, 0			; result = 0 (equal)
+	cps bc, 0			; length == 0?
+	ret z				; return if zero length
+	ld xix, (xsp + 4)		; XIX = ptr1
+	ld xiy, (xsp + 8)		; XIY = ptr2
+	cp xix, xiy			; same pointer?
+	ret z				; return if same
+	ld de, ix			; DE = low 16 bits of ptr1
+	neg de				; negate
+	and de, 0x0003			; DE = bytes to 4-byte alignment
+	jr z, .Lfr_aligned		; skip if already aligned
+.Lfr_byte_loop1:
+	ld_spib l, 0xF0			; L = *(XIX++)
+	extz hl				; zero-extend L to HL
+	ld_spib a, 0xF4			; A = *(XIY++)
+	extz wa				; zero-extend A to WA
+	sub hl, wa			; compare
+	ret nz				; return if different
+	sub bc, 0x0001			; decrement length
+	ret z				; return if done
+	djnz16 de, .Lfr_byte_loop1	; loop for alignment bytes
+.Lfr_aligned:
+	ld de, bc			; save remaining length
+	srl bc, 2			; BC = number of 32-bit words
+	jr z, .Lfr_remainder		; skip if no full words
+.Lfr_word_loop:
+	ld_spil xhl, 0xF2		; XHL = *(XIX++) (32-bit)
+	ld_spil xwa, 0xF6		; XWA = *(XIY++) (32-bit)
+	cp xhl, xwa			; compare 32-bit words
+	jr z, .Lfr_word_next		; skip if equal
+	; Words differ — find which byte differs
+	cp hl, wa			; compare low 16 bits
+	jr nz, .Lfr_check_byte		; if low halves differ
+	.byte 0xD7, 0xEE, 0x8B		; ld hl, qhl (high word from prev bank)
+	.byte 0xD7, 0xE2, 0x88		; ld wa, qwa (high word from prev bank)
+.Lfr_check_byte:
+	cp l, a				; compare low bytes
+	jr nz, .Lfr_found_diff		; if different
+	ld l, h				; move high byte to L
+	ld a, w				; move high byte to A
+.Lfr_found_diff:
+	extz hl				; zero-extend L to HL
+	extz wa				; zero-extend A to WA
+	sub hl, wa			; HL = difference
+	ret				; return
+.Lfr_word_next:
+	djnz16 bc, .Lfr_word_loop	; loop for remaining words
+	lds hl, 0			; clear result (equal so far)
+.Lfr_remainder:
+	and de, 0x0003			; DE = remaining bytes
+	ret z				; return if none
+.Lfr_byte_loop2:
+	ld_spib l, 0xF0			; L = *(XIX++)
+	extz hl				; zero-extend L to HL
+	ld_spib a, 0xF4			; A = *(XIY++)
+	extz wa				; zero-extend A to WA
+	sub hl, wa			; compare
+	ret nz				; return if different
+	djnz16 de, .Lfr_byte_loop2	; loop for remaining
+	ret				; return (HL = 0, equal)
 
 ; ----------------------------------------------------------------------------
 ; Memory Utility Routines (0x29AE9F - 0x29AF2C)
