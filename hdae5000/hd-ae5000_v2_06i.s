@@ -624,7 +624,278 @@ HDAE5000_Register_Frame:	; 0x2803C2 (9266 bytes)
 
 HDAE5000_Event_Handler:	; 0x2827F4 (932 bytes)
 	; Event handler - processes firmware events dispatched to HDAE5000
-	.incbin "includes/code_2803c2_28f542.bin", 9266, 932
+	; Entry point 1: vtable trampoline — registers callback via vtable, then jp (xhl)
+	ld xde, xwa					; e8 8a
+	ldda32_24 xwa, 0x23a1a2			; e2 a2 a1 23 20 — load context base
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e		; e3 e1 0a 0e 20 — xwa = (xwa+0x0e0a) vtable ptr
+	ld_sril3 xhl, 0xe1, 0x00, 0x01		; e3 e1 00 01 23 — xhl = (xwa+0x0100) callback
+	ld xwa, 0xffffffff				; 40 ff ff ff ff
+	ld xbc, 0x01c00025				; 41 25 00 c0 01
+	jp (xhl)					; b3 d8
+	; Entry point 2: main event handler dispatcher
+.Leh_main:
+	dec 0, xsp					; ef 68 — allocate stack frame
+	push xiz					; 3e
+	ld (xsp + 0x04), xde				; bf 04 62 — save XDE
+	ld (xsp + 0x08), xbc				; bf 08 61 — save XBC
+	ld xiz, xwa					; e8 8e — save context in XIZ
+	ld xwa, (xsp + 0x08)				; af 08 20 — load event code
+	cp xwa, 0x01c00007				; e8 cf 07 00 c0 01
+	jr z, .Leh_event_c00007			; 66 55
+	cp xwa, 0x01c0000d				; e8 cf 0d 00 c0 01
+	jr z, .Leh_event_c0000d			; 66 0e
+	cp xwa, 0x01e00085				; e8 cf 85 00 e0 01
+	jrl nz, .Leh_epilogue				; 7e 43 03
+	; Event 0x01E00085: return 1 (acknowledge)
+	lds32 xhl, 1					; eb a9
+	jrl t, .Leh_return				; 78 57 03
+	; Event 0x01C0000D: forward to vtable callback
+.Leh_event_c0000d:
+	ld xwa, xiz					; ee 88 — restore context
+	ld xbc, (xsp + 0x08)				; af 08 21
+	ld xde, (xsp + 0x04)				; af 04 22
+	ldda32_24 xhl, 0x23a1a2			; e2 a2 a1 23 23
+	ld_sril3 xhl, 0xed, 0x0a, 0x0e		; e3 ed 0a 0e 23 — xhl = (xhl+0x0e0a)
+	ld_sril3 xhl, 0xed, 0xdc, 0x00		; e3 ed dc 00 23 — xhl = (xhl+0x00dc) indirect call
+	call (xhl)					; b3 e8
+	ldada_24 xwa, 0x2e21de			; f2 de 21 2e 30
+	ld xbc, xwa					; e8 89
+	ld xwa, xiz					; ee 88
+	ld xde, xbc					; e9 8a
+	ldda32_24 xbc, 0x23a1a2			; e2 a2 a1 23 21
+	ld_sril3 xbc, 0xe5, 0x0a, 0x0e		; e3 e5 0a 0e 21 — xbc = (xbc+0x0e0a)
+	ld_sril3 xhl, 0xe5, 0x00, 0x01		; e3 e5 00 01 23 — xhl = (xbc+0x0100) callback
+	ld xbc, 0x01c0000f				; 41 0f 00 c0 01
+	call (xhl)					; b3 e8
+	lds32 xhl, 0					; eb a8
+	jrl t, .Leh_return				; 78 18 03
+	; Event 0x01C00007: sub-dispatch on XDE value
+.Leh_event_c00007:
+	ld xwa, (xsp + 0x04)				; af 04 20 — load XDE arg
+	cp xwa, 0x0000000c				; e8 cf 0c 00 00 00
+	jrl z, .Leh_xde_0c				; 76 62 02
+	cp xwa, 0x0000000b				; e8 cf 0b 00 00 00
+	jrl z, .Leh_xde_0b				; 76 6a 01
+	cp xwa, 0x0000000a				; e8 cf 0a 00 00 00
+	jrl z, .Leh_xde_0a				; 76 b5 00
+	cp xwa, 0x00000009				; e8 cf 09 00 00 00
+	jrl nz, .Leh_epilogue				; 7e d8 02
+	; XDE == 0x09: register event 0x4B, call init, register vtable callback
+.Leh_xde_09:
+	ldda32_24 xwa, 0x23a1a2			; e2 a2 a1 23 20
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e		; e3 e1 0a 0e 20
+	ld_sril3 xhl, 0xe1, 0x00, 0x01		; e3 e1 00 01 23 — callback ptr
+	ld xwa, 0x007f004b				; 40 4b 00 7f 00
+	ld xbc, 0x01c0000f				; 41 0f 00 c0 01
+	lds32 xde, 1					; ea a9
+	call (xhl)					; b3 e8 — register event
+	ldda32_24 xwa, 0x23a1a2			; e2 a2 a1 23 20
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e		; e3 e1 0a 0e 20
+	ld_sril3 xhl, 0xe1, 0x84, 0x00		; e3 e1 84 00 23 — (xwa+0x0084) init fn
+	call (xhl)					; b3 e8 — call init
+	call HDAE5000_Wait_Callback_Loop		; 1d 2b b2 28
+	ldada_24 xwa, 0x2e21e4			; f2 e4 21 2e 30
+	calr HDAE5000_Event_Handler			; 1e 17 ff — register handler
+	calr HDAE5000_PPI_Read_Register		; 1e 47 03
+	ldda32_24 xwa, 0x23a1a2			; e2 a2 a1 23 20
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e		; e3 e1 0a 0e 20
+	ld_sril3 xhl, 0xe1, 0x00, 0x01		; e3 e1 00 01 23
+	ld xwa, 0x007f004b				; 40 4b 00 7f 00
+	ld xbc, 0x01c0000f				; 41 0f 00 c0 01
+	lds32 xde, 0					; ea a8
+	call (xhl)					; b3 e8 — unregister event
+	ldda32_24 xwa, 0x23a1a2			; e2 a2 a1 23 20
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e		; e3 e1 0a 0e 20
+	ld_sril3 xix, 0xe1, 0x00, 0x01		; e3 e1 00 01 24 — xix = callback
+	ld xwa, 0x007f0049				; 40 49 00 7f 00
+	ld xbc, 0x01e0006b				; 41 6b 00 e0 01
+	lds32 xde, 0					; ea a8
+	call (xix)					; b4 e8
+	cp xhl, 0x00000001				; eb cf 01 00 00 00
+	jrl nz, .Leh_epilogue				; 7e 58 02
+	; Post-call: push event/subcode, invoke dispatch
+	ld xwa, 0x01c00007				; 40 07 00 c0 01
+	push xwa					; 38
+	ld xwa, 0x0000000a				; 40 0a 00 00 00
+	push xwa					; 38
+	ld xbc, xiz					; ee 89
+	ldda32_24 xwa, 0x23a1a2			; e2 a2 a1 23 20
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e		; e3 e1 0a 0e 20
+	ld_sril3 xhl, 0xe1, 0x10, 0x04		; e3 e1 10 04 23 — (xwa+0x0410) dispatch
+	ld xwa, 0x00000029				; 40 29 00 00 00
+	ld xde, 0xffffffff				; 42 ff ff ff ff
+	call (xhl)					; b3 e8
+	jrl t, .Leh_epilogue				; 78 2c 02
+	; XDE == 0x0A: register event 0x4D, write sector
+.Leh_xde_0a:
+	ldda32_24 xwa, 0x23a1a2			; e2 a2 a1 23 20
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e		; e3 e1 0a 0e 20
+	ld_sril3 xhl, 0xe1, 0x00, 0x01		; e3 e1 00 01 23
+	ld xwa, 0x007f004d				; 40 4d 00 7f 00
+	ld xbc, 0x01c0000f				; 41 0f 00 c0 01
+	lds32 xde, 1					; ea a9
+	call (xhl)					; b3 e8
+	ldda32_24 xwa, 0x23a1a2			; e2 a2 a1 23 20
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e		; e3 e1 0a 0e 20
+	ld_sril3 xhl, 0xe1, 0x84, 0x00		; e3 e1 84 00 23 — init fn
+	call (xhl)					; b3 e8
+	call HDAE5000_Wait_Callback_Loop		; 1d 2b b2 28
+	ldada_24 xwa, 0x2e21f0			; f2 f0 21 2e 30
+	calr HDAE5000_Event_Handler			; 1e 6b fe
+	calr HDAE5000_PPI_Write_Sector			; 1e e2 02
+	ldda32_24 xwa, 0x23a1a2			; e2 a2 a1 23 20
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e		; e3 e1 0a 0e 20
+	ld_sril3 xhl, 0xe1, 0x00, 0x01		; e3 e1 00 01 23
+	ld xwa, 0x007f004d				; 40 4d 00 7f 00
+	ld xbc, 0x01c0000f				; 41 0f 00 c0 01
+	lds32 xde, 0					; ea a8
+	call (xhl)					; b3 e8
+	ldda32_24 xwa, 0x23a1a2			; e2 a2 a1 23 20
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e		; e3 e1 0a 0e 20
+	ld_sril3 xix, 0xe1, 0x00, 0x01		; e3 e1 00 01 24
+	ld xwa, 0x007f0049				; 40 49 00 7f 00
+	ld xbc, 0x01e0006b				; 41 6b 00 e0 01
+	lds32 xde, 0					; ea a8
+	call (xix)					; b4 e8
+	cp xhl, 0x00000001				; eb cf 01 00 00 00
+	jrl nz, .Leh_epilogue				; 7e ac 01
+	ld xwa, 0x01c00007				; 40 07 00 c0 01
+	push xwa					; 38
+	ld xwa, 0x0000000b				; 40 0b 00 00 00
+	push xwa					; 38
+	ld xbc, xiz					; ee 89
+	ldda32_24 xwa, 0x23a1a2			; e2 a2 a1 23 20
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e		; e3 e1 0a 0e 20
+	ld_sril3 xhl, 0xe1, 0x10, 0x04		; e3 e1 10 04 23
+	ld xwa, 0x00000029				; 40 29 00 00 00
+	ld xde, 0xffffffff				; 42 ff ff ff ff
+	call (xhl)					; b3 e8
+	jrl t, .Leh_epilogue				; 78 80 01
+	; XDE == 0x0B: register event 0x4C, read/check disk status
+.Leh_xde_0b:
+	ldda32_24 xwa, 0x23a1a2			; e2 a2 a1 23 20
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e		; e3 e1 0a 0e 20
+	ld_sril3 xhl, 0xe1, 0x00, 0x01		; e3 e1 00 01 23
+	ld xwa, 0x007f004c				; 40 4c 00 7f 00
+	ld xbc, 0x01c0000f				; 41 0f 00 c0 01
+	lds32 xde, 1					; ea a9
+	call (xhl)					; b3 e8
+	ldda32_24 xwa, 0x23a1a2			; e2 a2 a1 23 20
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e		; e3 e1 0a 0e 20
+	ld_sril3 xhl, 0xe1, 0x84, 0x00		; e3 e1 84 00 23
+	call (xhl)					; b3 e8
+	call HDAE5000_Wait_Callback_Loop		; 1d 2b b2 28
+	ldada_24 xwa, 0x2e21fc			; f2 fc 21 2e 30
+	calr HDAE5000_Event_Handler			; 1e bf fd
+	; Check disk status via 0x0e88 table
+	ldda32_24 xwa, 0x23a1a2			; e2 a2 a1 23 20
+	ld_sril3 xwa, 0xe1, 0x88, 0x0e		; e3 e1 88 0e 20 — (xwa+0x0e88)
+	ld xix, (xwa + 0x08)				; a8 08 24
+	call (xix)					; b4 e8
+	cps l, 3					; cf db
+	jr z, .Leh_status_2or3			; 66 04
+	cps l, 2					; cf da
+	jr nz, .Leh_status_other			; 6e 27
+.Leh_status_2or3:
+	ldda32_24 xwa, 0x23a1a2			; e2 a2 a1 23 20
+	ld_sril3 xwa, 0xe1, 0x88, 0x0e		; e3 e1 88 0e 20
+	ld xix, (xwa + 0x04)				; a8 04 24
+	call (xix)					; b4 e8
+	cps hl, 0					; db d8
+	jr nz, .Leh_status_nonzero			; 6e 0a
+	ldada_24 xwa, 0x2e2204			; f2 04 22 2e 30
+	calr HDAE5000_Event_Handler			; 1e 8d fd
+	jr t, .Leh_after_status			; 68 12
+.Leh_status_nonzero:
+	ldada_24 xwa, 0x2e2208			; f2 08 22 2e 30
+	calr HDAE5000_Event_Handler			; 1e 83 fd
+	jr t, .Leh_after_status			; 68 08
+.Leh_status_other:
+	ldada_24 xwa, 0x2e220e			; f2 0e 22 2e 30
+	calr HDAE5000_Event_Handler			; 1e 79 fd
+.Leh_after_status:
+	ldda32_24 xwa, 0x23a1a2			; e2 a2 a1 23 20
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e		; e3 e1 0a 0e 20
+	ld_sril3 xhl, 0xe1, 0x00, 0x01		; e3 e1 00 01 23
+	ld xwa, 0x007f004c				; 40 4c 00 7f 00
+	ld xbc, 0x01c0000f				; 41 0f 00 c0 01
+	lds32 xde, 0					; ea a8
+	call (xhl)					; b3 e8
+	ldda32_24 xwa, 0x23a1a2			; e2 a2 a1 23 20
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e		; e3 e1 0a 0e 20
+	ld_sril3 xix, 0xe1, 0x00, 0x01		; e3 e1 00 01 24
+	ld xwa, 0x007f0049				; 40 49 00 7f 00
+	ld xbc, 0x01e0006b				; 41 6b 00 e0 01
+	lds32 xde, 0					; ea a8
+	call (xix)					; b4 e8
+	cp xhl, 0x00000001				; eb cf 01 00 00 00
+	jrl nz, .Leh_epilogue				; 7e bd 00
+	ld xwa, 0x01c00007				; 40 07 00 c0 01
+	push xwa					; 38
+	ld xwa, 0x00000009				; 40 09 00 00 00
+	push xwa					; 38
+	ld xbc, xiz					; ee 89
+	ldda32_24 xwa, 0x23a1a2			; e2 a2 a1 23 20
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e		; e3 e1 0a 0e 20
+	ld_sril3 xhl, 0xe1, 0x10, 0x04		; e3 e1 10 04 23
+	ld xwa, 0x00000029				; 40 29 00 00 00
+	ld xde, 0xffffffff				; 42 ff ff ff ff
+	call (xhl)					; b3 e8
+	jrl t, .Leh_epilogue				; 78 91 00
+	; XDE == 0x0C: check device, show status messages
+.Leh_xde_0c:
+	ldda32_24 xwa, 0x23a1a2			; e2 a2 a1 23 20
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e		; e3 e1 0a 0e 20
+	ld_sril3 xix, 0xe1, 0x00, 0x01		; e3 e1 00 01 24
+	ld xwa, 0x007f0049				; 40 49 00 7f 00
+	ld xbc, 0x01e0006b				; 41 6b 00 e0 01
+	lds32 xde, 0					; ea a8
+	call (xix)					; b4 e8
+	cp xhl, 0x00000001				; eb cf 01 00 00 00
+	jr nz, .Leh_xde_0c_no_device			; 6e 27
+	; Device present: show "connected" message
+	ldda32_24 xwa, 0x23a1a2			; e2 a2 a1 23 20
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e		; e3 e1 0a 0e 20
+	ld_sril3 xhl, 0xe1, 0x00, 0x01		; e3 e1 00 01 23
+	ld xwa, 0x007f0049				; 40 49 00 7f 00
+	ld xbc, 0x01e0003b				; 41 3b 00 e0 01
+	lds32 xde, 0					; ea a8
+	call (xhl)					; b3 e8
+	ldada_24 xwa, 0x2e2214			; f2 14 22 2e 30
+	calr HDAE5000_Event_Handler			; 1e c0 fc
+	jr t, .Leh_epilogue				; 68 45
+.Leh_xde_0c_no_device:
+	; Device not present: show "not connected" message
+	ldda32_24 xwa, 0x23a1a2			; e2 a2 a1 23 20
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e		; e3 e1 0a 0e 20
+	ld_sril3 xhl, 0xe1, 0x00, 0x01		; e3 e1 00 01 23
+	ld xwa, 0x007f0049				; 40 49 00 7f 00
+	ld xbc, 0x01e0003b				; 41 3b 00 e0 01
+	lds32 xde, 1					; ea a9
+	call (xhl)					; b3 e8
+	ldada_24 xwa, 0x2e2224			; f2 24 22 2e 30
+	calr HDAE5000_Event_Handler			; 1e 99 fc
+	; Final cleanup: call deregister via vtable
+	ldda32_24 xwa, 0x23a1a2			; e2 a2 a1 23 20
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e		; e3 e1 0a 0e 20
+	ld_sril3 xhl, 0xe1, 0x04, 0x01		; e3 e1 04 01 23 — (xwa+0x0104) deregister
+	ld xwa, 0xffffffff				; 40 ff ff ff ff
+	ld xbc, 0x01c00007				; 41 07 00 c0 01
+	ld xde, 0x00000009				; 42 09 00 00 00
+	call (xhl)					; b3 e8
+	; Epilogue: restore regs, call cleanup callback, return
+.Leh_epilogue:
+	ld xwa, xiz					; ee 88
+	ld xbc, (xsp + 0x08)				; af 08 21
+	ld xde, (xsp + 0x04)				; af 04 22
+	ldda32_24 xhl, 0x23a1a2			; e2 a2 a1 23 23
+	ld_sril3 xhl, 0xed, 0x0a, 0x0e		; e3 ed 0a 0e 23 — xhl = (xhl+0x0e0a)
+	ld_sril3 xix, 0xed, 0xdc, 0x00		; e3 ed dc 00 24 — xix = (xhl+0x00dc)
+	call (xix)					; b4 e8
+.Leh_return:
+	pop xiz					; 5e
+	inc 0, xsp					; ef 60 — deallocate stack frame
+	ret						; 0e
 
 ; --- PPI/IDE Low-Level I/O ---
 HDAE5000_PPI_Init:	; 0x282B98 (13 bytes)
