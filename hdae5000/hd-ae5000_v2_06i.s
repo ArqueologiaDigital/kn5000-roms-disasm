@@ -1585,7 +1585,392 @@ HDAE5000_HD_Setup_Drive:	; 0x282E8D (1126 bytes)
 
 HDAE5000_HD_Read_Identify:	; 0x2832F3 (1051 bytes)
 	; Read HD IDENTIFY data; extracts CHS params from 0x229D99-0x229DAB
-	.incbin "includes/code_2803c2_28f542.bin", 12081, 1051
+	; --- Prologue: allocate 32-byte stack frame ---
+	.byte 0xbf, 0xe0, 0x37		; lda xsp, (xsp + 0xe0) — alloc 32-byte frame
+
+	; --- Format CHS display strings ---
+	; Block 1: cylinder type (0x229d99) → display buffer 0x22ada6
+	.byte 0x0b, 0x97, 0x00		; push 0x0097
+	ldada_24 xwa, 0x2e22c4			; f2 c4 22 2e 30
+	push xwa				; 38
+	ldada_24 xwa, 0x22ada6			; f2 a6 ad 22 30
+	push xwa				; 38
+	call 0x29ae9f				; 1d 9f ae 29 — MemCopy
+	ldda8_24 xwa, 0x229d99			; c2 99 9d 22 21 — ld a, (0x229d99)
+	extz wa					; d8 12
+	sla wa, 2				; d8 ec 02
+	ldada_24 xbc, 0x2e1e3c			; f2 3c 1e 2e 31
+	ld_sril3 xwa, 0x07, 0xe4, 0xe0		; e3 07 e4 e0 20 — ld xwa, (xbc+wa)
+	push xwa				; 38
+	.byte 0x0b, 0x2e, 0x00		; push 0x002e
+	.byte 0x0b, 0x5c, 0x23		; push 0x235c
+	lda xwa, (xsp + 0x12)			; bf 12 30
+	push xwa				; 38
+	call HDAE5000_PPI_Block_Copy		; 1d d8 ab 29
+	lda xwa, (xsp + 0x16)			; bf 16 30
+	push xwa				; 38
+	call 0x29af71				; 1d 71 af 29 — Display_Buffer_Validate
+	lda xsp, (xsp + 0x1a)			; bf 1a 37
+
+	; Block 2: heads (0x229d9a) → display buffer 0x22adba
+	.byte 0x2b			; push hl (compact 16-bit)
+	lda xwa, (xsp + 0x02)			; bf 02 30
+	push xwa				; 38
+	ldada_24 xwa, 0x22adba			; f2 ba ad 22 30
+	push xwa				; 38
+	call 0x29ae9f				; 1d 9f ae 29 — MemCopy
+	ldda8_24 xwa, 0x229d9a			; c2 9a 9d 22 21 — ld a, (0x229d9a)
+	extz wa					; d8 12
+	sla wa, 2				; d8 ec 02
+	ldada_24 xbc, 0x2e1e3c			; f2 3c 1e 2e 31
+	ld_sril3 xwa, 0x07, 0xe4, 0xe0		; e3 07 e4 e0 20 — ld xwa, (xbc+wa)
+	push xwa				; 38
+	.byte 0x0b, 0x2e, 0x00		; push 0x002e
+	.byte 0x0b, 0x60, 0x23		; push 0x2360
+	lda xwa, (xsp + 0x12)			; bf 12 30
+	push xwa				; 38
+	call HDAE5000_PPI_Block_Copy		; 1d d8 ab 29
+	lda xwa, (xsp + 0x16)			; bf 16 30
+	push xwa				; 38
+	call 0x29af71				; 1d 71 af 29 — Display_Buffer_Validate
+	lda xsp, (xsp + 0x1a)			; bf 1a 37
+
+	; Block 3: sectors (0x229daa) → display buffer 0x22adec
+	.byte 0x2b			; push hl (compact 16-bit)
+	lda xwa, (xsp + 0x02)			; bf 02 30
+	push xwa				; 38
+	ldada_24 xwa, 0x22adec			; f2 ec ad 22 30
+	push xwa				; 38
+	call 0x29ae9f				; 1d 9f ae 29 — MemCopy
+	ldda8_24 xwa, 0x229daa			; c2 aa 9d 22 21 — ld a, (0x229daa)
+	extz wa					; d8 12
+	.byte 0x28			; push wa (compact 16-bit)
+	.byte 0x0b, 0x2e, 0x00		; push 0x002e
+	.byte 0x0b, 0x64, 0x23		; push 0x2364
+	lda xwa, (xsp + 0x10)			; bf 10 30
+	push xwa				; 38
+	call HDAE5000_PPI_Block_Copy		; 1d d8 ab 29
+	lda xwa, (xsp + 0x14)			; bf 14 30
+	push xwa				; 38
+	call 0x29af71				; 1d 71 af 29 — Display_Buffer_Validate
+	lda xsp, (xsp + 0x18)			; bf 18 37
+
+	; Block 4: cylinder count high (0x229da9) → display buffer 0x22ae1e
+	.byte 0x2b			; push hl (compact 16-bit)
+	lda xwa, (xsp + 0x02)			; bf 02 30
+	push xwa				; 38
+	ldada_24 xwa, 0x22ae1e			; f2 1e ae 22 30
+	push xwa				; 38
+	call 0x29ae9f				; 1d 9f ae 29 — MemCopy
+	ldda8_24 xwa, 0x229da9			; c2 a9 9d 22 21 — ld a, (0x229da9)
+	extz wa					; d8 12
+	.byte 0x28			; push wa (compact 16-bit)
+	.byte 0x0b, 0x2e, 0x00		; push 0x002e
+	.byte 0x0b, 0x6a, 0x23		; push 0x236a
+	lda xwa, (xsp + 0x10)			; bf 10 30
+	push xwa				; 38
+	call HDAE5000_PPI_Block_Copy		; 1d d8 ab 29
+	lda xwa, (xsp + 0x14)			; bf 14 30
+	push xwa				; 38
+	call 0x29af71				; 1d 71 af 29 — Display_Buffer_Validate
+	lda xsp, (xsp + 0x18)			; bf 18 37
+
+	; Block 5: cylinder count (0x229dab) → display buffer 0x22add1
+	.byte 0x2b			; push hl (compact 16-bit)
+	lda xwa, (xsp + 0x02)			; bf 02 30
+	push xwa				; 38
+	ldada_24 xwa, 0x22add1			; f2 d1 ad 22 30
+	push xwa				; 38
+	call 0x29ae9f				; 1d 9f ae 29 — MemCopy
+	ldda8_24 xwa, 0x229dab			; c2 ab 9d 22 21 — ld a, (0x229dab)
+	extz wa					; d8 12
+	.byte 0x28			; push wa (compact 16-bit)
+	.byte 0x0b, 0x2e, 0x00		; push 0x002e
+	.byte 0x0b, 0x72, 0x23		; push 0x2372
+	lda xwa, (xsp + 0x10)			; bf 10 30
+	push xwa				; 38
+	call HDAE5000_PPI_Block_Copy		; 1d d8 ab 29
+	lda xwa, (xsp + 0x14)			; bf 14 30
+	push xwa				; 38
+	call 0x29af71				; 1d 71 af 29 — Display_Buffer_Validate
+	lda xsp, (xsp + 0x18)			; bf 18 37
+
+	; Block 6: total size string → display buffer 0x22ae03
+	.byte 0x2b			; push hl (compact 16-bit)
+	lda xwa, (xsp + 0x02)			; bf 02 30
+	push xwa				; 38
+	ldada_24 xwa, 0x22ae03			; f2 03 ae 22 30
+	push xwa				; 38
+	call 0x29ae9f				; 1d 9f ae 29 — MemCopy
+	lda xsp, (xsp + 0x0a)			; bf 0a 37
+
+	; Compute capacity: divide total sectors by 100
+	lda xwa, (xsp + 0x10)			; bf 10 30
+	call 0x298b6c				; 1d 6c 8b 29
+	ld xwa, (xsp + 0x1c)			; af 1c 20 — load dividend
+	ld xbc, 0x00000064			; 41 64 00 00 00 — divisor = 100
+	call HDAE5000_Divide_Signed		; 1d c5 b8 29
+	push xhl				; 3b — push remainder
+	.byte 0x0b, 0x2e, 0x00		; push 0x002e
+	.byte 0x0b, 0x7a, 0x23		; push 0x237a
+	lda xwa, (xsp + 0x08)			; bf 08 30
+	push xwa				; 38
+	call HDAE5000_PPI_Block_Copy		; 1d d8 ab 29
+	lda xwa, (xsp + 0x0c)			; bf 0c 30
+	push xwa				; 38
+	call 0x29af71				; 1d 71 af 29 — Display_Buffer_Validate
+
+	; Block 7: capacity text → display buffer 0x22ae35
+	.byte 0x2b			; push hl (compact 16-bit)
+	lda xwa, (xsp + 0x12)			; bf 12 30
+	push xwa				; 38
+	ldada_24 xwa, 0x22ae35			; f2 35 ae 22 30
+	push xwa				; 38
+	call 0x29ae9f				; 1d 9f ae 29 — MemCopy
+	lda xsp, (xsp + 0x1a)			; bf 1a 37
+
+	; --- Register event handlers ---
+	; Register event 0x01EA000A with display buffer
+	ldada_24 xwa, 0x22ada6			; f2 a6 ad 22 30
+	ld xde, xwa				; e8 8a
+	ldda32_24 xwa, 0x23a1a2		; e2 a2 a1 23 20
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e		; e3 e1 0a 0e 20 — ld xwa, (xwa+0x0e0a)
+	ld_sril3 xhl, 0xe1, 0x00, 0x01		; e3 e1 00 01 23 — ld xhl, (xwa+0x0100)
+	ld xwa, 0x007f000a			; 40 0a 00 7f 00
+	ld xbc, 0x01ea000a			; 41 0a 00 ea 01
+	call (xhl)				; b3 e8
+
+	; Register event 0x01C0000F with XDE=0xFFFFFFFF (deregister)
+	ldda32_24 xwa, 0x23a1a2		; e2 a2 a1 23 20
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e		; e3 e1 0a 0e 20 — ld xwa, (xwa+0x0e0a)
+	ld_sril3 xhl, 0xe1, 0x00, 0x01		; e3 e1 00 01 23 — ld xhl, (xwa+0x0100)
+	ld xwa, 0x007f000a			; 40 0a 00 7f 00
+	ld xbc, 0x01c0000f			; 41 0f 00 c0 01
+	ld xde, 0xffffffff			; 42 ff ff ff ff
+	call (xhl)				; b3 e8
+
+	; --- Epilogue ---
+	lda xsp, (xsp + 0x20)			; bf 20 37
+	ret					; 0e
+
+; --- Event handler sub-function ---
+.Lri_event_handler:				; 0x283498
+	dec 0, xsp				; ef 68 — allocate 4 bytes
+	push xiz				; 3e
+	ld (xsp + 0x04), xde			; bf 04 62
+	ld xiz, xbc				; e9 8e
+	ld (xsp + 0x08), xwa			; bf 08 60
+	ld xwa, xiz				; ee 88
+	cp xwa, 0x01c0000d			; e8 cf 0d 00 c0 01
+	jr z, .Lri_evt_000d			; 66 xx
+	cp xwa, 0x01e00085			; e8 cf 85 00 e0 01
+	jr z, .Lri_evt_0085			; 66 xx
+
+	; Default: forward to vtable handler at +0x0EDC
+	ld xwa, (xsp + 0x08)			; af 08 20
+	ld xbc, xiz				; ee 89
+	ld xde, (xsp + 0x04)			; af 04 22
+	ldda32_24 xhl, 0x23a1a2		; e2 a2 a1 23 23
+	ld_sril3 xhl, 0xed, 0x0a, 0x0e		; e3 ed 0a 0e 23 — ld xhl, (xhl+0x0e0a)
+	ld_sril3 xix, 0xed, 0xdc, 0x00		; e3 ed dc 00 24 — ld xix, (xhl+0x00dc)
+	call (xix)				; b4 e8
+	jr t, .Lri_evt_done			; 68 xx
+
+.Lri_evt_0085:					; 0x2834D0
+	lds32 xhl, 1				; eb a9
+	jr t, .Lri_evt_done			; 68 xx
+
+.Lri_evt_000d:					; 0x2834D4
+	calr HDAE5000_HD_Read_Identify		; 1e xx xx — recursive self-call
+	ld xwa, (xsp + 0x08)			; af 08 20
+	ld xbc, xiz				; ee 89
+	ld xde, (xsp + 0x04)			; af 04 22
+	ldda32_24 xhl, 0x23a1a2		; e2 a2 a1 23 23
+	ld_sril3 xhl, 0xed, 0x0a, 0x0e		; e3 ed 0a 0e 23 — ld xhl, (xhl+0x0e0a)
+	ld_sril3 xhl, 0xed, 0xdc, 0x00		; e3 ed dc 00 23 — ld xhl, (xhl+0x00dc)
+	call (xhl)				; b3 e8
+	; Re-register event 0x01C0000F with new handler
+	ldada_24 xwa, 0x2e2382			; f2 82 23 2e 30
+	ld xbc, xwa				; e8 89
+	ld xwa, (xsp + 0x08)			; af 08 20
+	ld xde, xbc				; e9 8a
+	ldda32_24 xbc, 0x23a1a2		; e2 a2 a1 23 21
+	ld_sril3 xbc, 0xe5, 0x0a, 0x0e		; e3 e5 0a 0e 21 — ld xbc, (xbc+0x0e0a)
+	ld_sril3 xhl, 0xe5, 0x00, 0x01		; e3 e5 00 01 23 — ld xhl, (xbc+0x0100)
+	ld xbc, 0x01c0000f			; 41 0f 00 c0 01
+	call (xhl)				; b3 e8
+	lds32 xhl, 0				; eb a8
+
+.Lri_evt_done:					; 0x283514
+	pop xiz					; 5e
+	inc 0, xsp				; ef 60
+	ret					; 0e
+
+; --- Jump table dispatcher sub-function ---
+.Lri_dispatch:					; 0x283518
+	cp xbc, 0x01c00013			; e9 cf 13 00 c0 01
+	jrl nz, .Lri_done			; 7e xx xx
+	ld xwa, xde				; ea 88
+	dec 2, xwa				; e8 6a — subtract 2 (cases start at 2)
+	cp xwa, 0x00000000			; e8 cf 00 00 00 00
+	jrl c, .Lri_done			; 77 xx xx — unsigned < 0
+	cp xwa, 0x00000007			; e8 cf 07 00 00 00
+	jrl ugt, .Lri_done			; 7b xx xx — > 7
+	add xwa, xwa				; e8 80 — multiply by 2 (word offsets)
+	add xwa, 0x002e23ac			; e8 c8 ac 23 2e 00 — add table base
+	ld wa, (xwa)				; 90 20 — load 16-bit jump offset
+	ldada_24 xix, 0x28354b			; f2 4b 35 28 34 — jump base
+	.byte 0xf3, 0x07, 0xf0, 0xe0, 0xd8	; jp t, (xix+wa) — F3 indexed jump
+
+	; === Case 2: main setup — read/write, format, init filesystem ===
+.Lri_jt_base:					; 0x28354B (jump table base)
+	stdi8_24 0x22ae3c, 0x00			; f2 3c ae 22 00 00
+	ldada_24 xwa, 0x22ada6			; f2 a6 ad 22 30
+	ld xde, xwa				; e8 8a
+	ldda32_24 xwa, 0x23a1a2		; e2 a2 a1 23 20
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e		; e3 e1 0a 0e 20 — ld xwa, (xwa+0x0e0a)
+	ld_sril3 xhl, 0xe1, 0x24, 0x01		; e3 e1 24 01 23 — ld xhl, (xwa+0x0124)
+	ld xwa, 0x007f000a			; 40 0a 00 7f 00
+	ld xbc, 0x01ea000a			; 41 0a 00 ea 01
+	call (xhl)				; b3 e8
+	lds wa, 0				; d8 a8
+	lds bc, 0				; d9 a8
+	calr HDAE5000_HD_Read_Write		; 1e xx xx
+
+	stdi8_24 0x22aa4a, 0x00			; f2 4a aa 22 00 00
+	ldada_24 xwa, 0x22a2ca			; f2 ca a2 22 30
+	ld xde, xwa				; e8 8a
+	ldda32_24 xwa, 0x23a1a2		; e2 a2 a1 23 20
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e		; e3 e1 0a 0e 20 — ld xwa, (xwa+0x0e0a)
+	ld_sril3 xhl, 0xe1, 0x24, 0x01		; e3 e1 24 01 23 — ld xhl, (xwa+0x0124)
+	ld xwa, 0x007f00fb			; 40 fb 00 7f 00
+	ld xbc, 0x01ea000a			; 41 0a 00 ea 01
+	call (xhl)				; b3 e8
+	lds wa, 0				; d8 a8
+	lds bc, 2				; d9 aa
+	calr HDAE5000_FS_Write_FSB		; 1e xx xx
+
+	stdi8_24 0x22a2c8, 0x00			; f2 c8 a2 22 00 00
+	ldada_24 xwa, 0x22a0d0			; f2 d0 a0 22 30
+	ld xde, xwa				; e8 8a
+	ldda32_24 xwa, 0x23a1a2		; e2 a2 a1 23 20
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e		; e3 e1 0a 0e 20 — ld xwa, (xwa+0x0e0a)
+	ld_sril3 xhl, 0xe1, 0x24, 0x01		; e3 e1 24 01 23 — ld xhl, (xwa+0x0124)
+	ld xwa, 0x007f0025			; 40 25 00 7f 00
+	ld xbc, 0x01ea000a			; 41 0a 00 ea 01
+	call (xhl)				; b3 e8
+	ld xwa, 0x007f0025			; 40 25 00 7f 00
+	calr HDAE5000_HD_Format_Params		; 1e xx xx
+	calr HDAE5000_FS_Read_FSB		; 1e xx xx
+	.byte 0x0b, 0x00, 0x00		; push 0x0000
+	lds wa, 0				; d8 a8
+	lds bc, 0				; d9 a8
+	lds de, 6				; da ae
+	calr HDAE5000_FS_Init			; 1e xx xx
+
+	; Copy volume label string
+	.byte 0x0b, 0x21, 0x00		; push 0x0021
+	ldada_24 xwa, 0x2e1de6			; f2 e6 1d 2e 30
+	push xwa				; 38
+	ldada_24 xwa, 0x22abc4			; f2 c4 ab 22 30
+	push xwa				; 38
+	call 0x29ae9f				; 1d 9f ae 29 — MemCopy
+	lda xsp, (xsp + 0x0a)			; bf 0a 37
+
+	; Register event for volume label display
+	ldada_24 xwa, 0x22abc4			; f2 c4 ab 22 30
+	ld xde, xwa				; e8 8a
+	ldda32_24 xwa, 0x23a1a2		; e2 a2 a1 23 20
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e		; e3 e1 0a 0e 20 — ld xwa, (xwa+0x0e0a)
+	ld_sril3 xhl, 0xe1, 0x24, 0x01		; e3 e1 24 01 23 — ld xhl, (xwa+0x0124)
+	ld xwa, 0x007f0068			; 40 68 00 7f 00
+	ld xbc, 0x01ea000a			; 41 0a 00 ea 01
+	call (xhl)				; b3 e8
+
+	; Set initial disk status
+	ld xwa, 0x007f0000			; 40 00 00 7f 00
+	stda32_24 0x23a09a, xwa			; f2 9a a0 23 60
+	cpdi8_24 0x22ad9a, 0x01			; c2 9a ad 22 3f 01
+	jrl nz, .Lri_done			; 7e xx xx
+	cpdi8_24 0x22ad9b, 0x01			; c2 9b ad 22 3f 01
+	jrl nz, .Lri_done			; 7e xx xx
+	ld xwa, 0x007f013a			; 40 3a 01 7f 00
+	stda32_24 0x23a09a, xwa			; f2 9a a0 23 60
+	jrl t, .Lri_done			; 78 xx xx
+
+	; === Case 9: check cylinder count, set disk capacity ===
+.Lri_case9:					; 0x283649
+	ldda8_24 xwa, 0x229da9			; c2 a9 9d 22 21 — ld a, (0x229da9)
+	cps a, 3				; c9 db
+	jr z, .Lri_case9_cyl3			; 66 xx
+	cps a, 2				; c9 da
+	jr z, .Lri_case9_cyl2			; 66 xx
+	cps a, 1				; c9 d9
+	jrl nz, .Lri_done			; 7e xx xx
+	ld xwa, 0x007f0018			; 40 18 00 7f 00
+	stda32_24 0x23a09a, xwa			; f2 9a a0 23 60
+	jrl t, .Lri_done			; 78 xx xx
+
+.Lri_case9_cyl2:				; 0x283668
+	ld xwa, 0x007f008f			; 40 8f 00 7f 00
+	stda32_24 0x23a09a, xwa			; f2 9a a0 23 60
+	jrl t, .Lri_done			; 78 xx xx
+
+.Lri_case9_cyl3:				; 0x283675
+	ld xwa, 0x007f013a			; 40 3a 01 7f 00
+	stda32_24 0x23a09a, xwa			; f2 9a a0 23 60
+	jrl t, .Lri_done			; 78 xx xx
+
+	; === Case 8: dispatch event to sub-device ===
+.Lri_case8:					; 0x283682
+	ldda32_24 xwa, 0x23a09a		; e2 9a a0 23 20
+	ldda32_24 xbc, 0x23a1a2		; e2 a2 a1 23 21
+	ld_sril3 xbc, 0xe5, 0x0a, 0x0e		; e3 e5 0a 0e 21 — ld xbc, (xbc+0x0e0a)
+	ld_sril3 xhl, 0xe5, 0x24, 0x01		; e3 e5 24 01 23 — ld xhl, (xbc+0x0124)
+	ld xbc, 0x01c00001			; 41 01 00 c0 01
+	lds32 xde, 0				; ea a8
+	call (xhl)				; b3 e8
+
+	; Deregister event 0x01C00018
+	ldda32_24 xwa, 0x23a1a2		; e2 a2 a1 23 20
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e		; e3 e1 0a 0e 20 — ld xwa, (xwa+0x0e0a)
+	ld_sril3 xhl, 0xe1, 0x24, 0x01		; e3 e1 24 01 23 — ld xhl, (xwa+0x0124)
+	ld xwa, 0xffffffff			; 40 ff ff ff ff
+	ld xbc, 0x01c00018			; 41 18 00 c0 01
+	lds32 xde, 0				; ea a8
+	call (xhl)				; b3 e8
+
+	; Check disk presence flags
+	cpdi8_24 0x22ad9a, 0x01			; c2 9a ad 22 3f 01
+	jr nz, .Lri_done			; 6e xx
+	cpdi8_24 0x22ad9b, 0x01			; c2 9b ad 22 3f 01
+	jr nz, .Lri_done			; 6e xx
+
+	; Clear flag and register event 0x01CA0000
+	stdi8_24 0x22ad9b, 0x00			; f2 9b ad 22 00 00
+	ldda32_24 xwa, 0x23a1a2		; e2 a2 a1 23 20
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e		; e3 e1 0a 0e 20 — ld xwa, (xwa+0x0e0a)
+	ld_sril3 xhl, 0xe1, 0x24, 0x01		; e3 e1 24 01 23 — ld xhl, (xwa+0x0124)
+	ld xwa, 0x007f013a			; 40 3a 01 7f 00
+	ld xbc, 0x01ca0000			; 41 00 00 ca 01
+	lds32 xde, 0				; ea a8
+	call (xhl)				; b3 e8
+	jr t, .Lri_done				; 68 xx
+
+	; === Case 6: init flag check, set disk size from table ===
+.Lri_case6:					; 0x2836F1
+	call HDAE5000_Get_Init_Flag		; 1d 70 f5 28
+	ld a, l					; cf 89
+	extz wa					; d8 12
+	sla wa, 2				; d8 ec 02
+	ldada_24 xbc, 0x2e2388			; f2 88 23 2e 31
+	ld_sril3 xwa, 0x07, 0xe4, 0xe0		; e3 07 e4 e0 20 — ld xwa, (xbc+wa)
+	stda32_24 0x23a09a, xwa			; f2 9a a0 23 60
+
+	; === Common exit ===
+.Lri_done:					; 0x28370B
+	lds32 xhl, 0				; eb a8
+	ret					; 0e
 
 HDAE5000_HD_Format_Params:	; 0x28370E (702 bytes)
 	; Format 24 cylinder/head entries into format buffer at 0x22a0d0
