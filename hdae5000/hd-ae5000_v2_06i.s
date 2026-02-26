@@ -3491,8 +3491,842 @@ HDAE5000_String_To_Upper:	; 0x28E5E9 (37 bytes)
 	ret
 
 HDAE5000_String_Compare:	; 0x28E60E (2397 bytes)
-	; String comparison and manipulation utilities
-	.incbin "includes/code_2803c2_28f542.bin", 57932, 2397
+	; Multiply helper + event dispatch function for UI management
+	; Handles button events (up/down/enter) and display region setup
+	; Dispatches on arg2 (XBC) to 13+ case handlers
+
+	; --- Multiply helper (13 bytes): byte-split multiply ---
+	ld hl, wa
+	ldb h, 0			; keep low byte only
+	srl wa, 8			; WA = high byte
+	sll hl, 8			; HL <<= 8
+	add hl, wa			; HL = low*256 + high
+	ret
+
+	; --- Main dispatch function (2384 bytes) ---
+.Lsc_dispatch:
+	st_dri3b l, 0xfd, 0x7e, 0xff	; lda XSP, XSP-130 (stack frame)
+	push xiz
+	ld (xsp + 0x7a), xde		; save arg3
+	ld (xsp + 0x7e), xbc		; save arg2
+	st_dri3l xwa, 0xfd, 0x82, 0x00	; save arg1 at (XSP+0x82)
+
+	; --- Case dispatch on arg2 ---
+	ld xwa, (xsp + 0x7e)
+	cp xwa, 0x01c00007
+	jrl z, .Lsc_case_07
+	cp xwa, 0x01c00018
+	jrl z, .Lsc_case_18
+	cp xwa, 0x01c00017
+	jrl z, .Lsc_case_17
+	cp xwa, 0x01ea0011
+	jrl z, .Lsc_case_11_ea
+	cp xwa, 0x01ea0010
+	jrl z, .Lsc_case_10_ea
+	cp xwa, 0x01ea000f
+	jrl z, .Lsc_case_0f_ea
+	cp xwa, 0x01ea000e
+	jrl z, .Lsc_case_0e
+	cp xwa, 0x01c0000f
+	jrl z, .Lsc_case_0f
+	cp xwa, 0x01ca000c
+	jrl z, .Lsc_case_0c
+	cp xwa, 0x01c00002
+	jrl z, .Lsc_case_02
+	cp xwa, 0x01c00001
+	jr z, .Lsc_case_01
+	cp xwa, 0x01c0000d
+	jrl nz, .Lsc_default
+
+	; ============================================================
+	; Case 0x01C0000D — dispatch vtable calls + send messages
+	; ============================================================
+.Lsc_case_0d:
+	ld_sril3 XWA, 0xfd, 0x82, 0x00	; reload arg1
+	ld xbc, (xsp + 0x7e)
+	ld xde, (xsp + 0x7a)
+	ldda32_24 xhl, 0x23a1a2
+	ld_sril3 XHL, 0xed, 0x0a, 0x0e	; vtable base
+	ld_sril3 XHL, 0xed, 0xdc, 0x00	; method 0x00DC
+	call (xhl)
+
+	ld_sril3 XWA, 0xfd, 0x82, 0x00
+	ldda32_24 xbc, 0x23a1a2
+	ld_sril3 XBC, 0xe5, 0x0a, 0x0e
+	ld_sril3 XIX, 0xe5, 0xc4, 0x02	; method 0x02C4
+	call (xix)
+
+	ld_sril3 XWA, 0xfd, 0x82, 0x00
+	ldda32_24 xbc, 0x23a1a2
+	ld_sril3 XBC, 0xe5, 0x0a, 0x0e
+	ld_sril3 XHL, 0xe5, 0x00, 0x01	; method 0x0100
+	ld xbc, 0x01ca000c
+	lds32 xde, 0
+	call (xhl)
+
+	ld_sril3 XWA, 0xfd, 0x82, 0x00
+	ldda32_24 xbc, 0x23a1a2
+	ld_sril3 XBC, 0xe5, 0x0a, 0x0e
+	ld_sril3 XHL, 0xe5, 0x00, 0x01	; method 0x0100
+	ld xbc, 0x01c0000f
+	lds32 xde, 0
+	call (xhl)
+
+	lds32 xhl, 0
+	jrl t, .Lsc_epilogue
+
+	; ============================================================
+	; Case 0x01C00001 — vtable dispatch + display setup
+	; ============================================================
+.Lsc_case_01:
+	ld_sril3 XWA, 0xfd, 0x82, 0x00
+	ld xbc, (xsp + 0x7e)
+	ld xde, (xsp + 0x7a)
+	ldda32_24 xhl, 0x23a1a2
+	ld_sril3 XHL, 0xed, 0x0a, 0x0e
+	ld_sril3 XHL, 0xed, 0xdc, 0x00
+	call (xhl)
+
+	ld_sril3 XWA, 0xfd, 0x82, 0x00
+	ldda32_24 xbc, 0x23a1a2
+	ld_sril3 XBC, 0xe5, 0x0a, 0x0e
+	ld_sril3 XIX, 0xe5, 0xc4, 0x02
+	call (xix)
+
+	ld_sril3 XWA, 0xfd, 0x82, 0x00
+	ldda32_24 xbc, 0x23a1a2
+	ld_sril3 XBC, 0xe5, 0x0a, 0x0e
+	ld_sril3 XHL, 0xe5, 0xc8, 0x03	; method 0x03C8
+	ld xbc, 0x01c00018
+	lds32 xde, 0
+	call (xhl)
+
+	ld_sril3 XWA, 0xfd, 0x82, 0x00
+	ldda32_24 xbc, 0x23a1a2
+	ld_sril3 XBC, 0xe5, 0x0a, 0x0e
+	ld_sril3 XHL, 0xe5, 0xcc, 0x03	; method 0x03CC
+	ld xbc, 0x01c00017
+	lds32 xde, 0
+	call (xhl)
+
+	ldda32_24 xwa, 0x23a1a2
+	ld_sril3 XWA, 0xe1, 0x0a, 0x0e
+	ld_sril3 XHL, 0xe1, 0xc4, 0x03	; method 0x03C4
+	lds wa, 1
+	call (xhl)
+
+	pushw 0x002e
+	pushw 0x5cae
+	pushw 0x0023
+	pushw 0x0e7a
+	call 0x29af45
+	inc 0, xsp			; clean 8 bytes
+
+	ld_sril3 XWA, 0xfd, 0x82, 0x00
+	ldda32_24 xbc, 0x23a1a2
+	ld_sril3 XBC, 0xe5, 0x0a, 0x0e
+	ld_sril3 XHL, 0xe5, 0x00, 0x01	; method 0x0100
+	ld xbc, 0x01ea000e
+	lds32 xde, 0
+	call (xhl)
+
+	stdi16_24 0x22a0c8, 0x0021
+	stdi16_24 0x22a0cc, 0x0118
+	stdi16_24 0x22a0ca, 0x00c5
+	stdi16_24 0x22a0ce, 0x00d1
+	ldda16_24 xwa, 0x22a0c8
+	inc 2, wa
+	stda16_24 0x22a0bc, xwa
+	ldda16_24 xwa, 0x22a0ca
+	inc 3, wa
+	stda16_24 0x22a0be, xwa
+
+	lds32 xhl, 0
+	jrl t, .Lsc_epilogue
+
+	; ============================================================
+	; Case 0x01C00002 — simple vtable call
+	; ============================================================
+.Lsc_case_02:
+	ld_sril3 XWA, 0xfd, 0x82, 0x00
+	ld xbc, (xsp + 0x7e)
+	ld xde, (xsp + 0x7a)
+	ldda32_24 xhl, 0x23a1a2
+	ld_sril3 XHL, 0xed, 0x0a, 0x0e
+	ld_sril3 XHL, 0xed, 0xdc, 0x00
+	call (xhl)
+	lds32 xhl, 0
+	jrl t, .Lsc_epilogue
+
+	; ============================================================
+	; Case 0x01CA000C — 3-section loop UI setup
+	; ============================================================
+.Lsc_case_0c:
+	ldmw (xsp + 0x6e), 0x0016
+	ldw wa, 0x0016
+	add wa, 0x0037
+	ld (xsp + 0x72), wa
+	ld wa, (xsp + 0x6e)
+	inc 2, wa
+	ld (xsp + 0x76), wa
+	ldmw (xsp + 0x04), 0x0000
+	cpmi16 (xsp + 0x04), 0x000c
+	jrl nc, .Lsc_0c_sect2
+
+	; --- Section 1 loop: 12 iterations ---
+.Lsc_0c_loop1:
+	ld wa, (xsp + 0x04)
+	mul wa, 0x000c
+	add wa, 0x0028
+	ld (xsp + 0x70), wa
+	add wa, 0x000c
+	ld (xsp + 0x74), wa
+	ld wa, (xsp + 0x70)
+	inc 3, wa
+	ld (xsp + 0x78), wa
+	lda xwa, (xsp + 0x6e)
+	ld xhl, xwa
+	lda xwa, (xsp + 0x76)
+	ld xbc, xwa
+	ldada_24 xwa, 0x2e5cb0
+	ld xde, xwa
+	lds32 xwa, 3
+	push xwa
+	pushw 0x00ff
+	pushw 0x00f5
+	ld xwa, xhl
+	ldda32_24 xhl, 0x23a1a2
+	ld_sril3 XHL, 0xed, 0x0a, 0x0e
+	ld_sril3 XHL, 0xed, 0xc4, 0x00	; method 0x00C4
+	call (xhl)
+
+	lda xwa, (xsp + 0x6e)
+	ld xix, xwa
+	lda xwa, (xsp + 0x76)
+	ld xhl, xwa
+	ldda16_24 xwa, 0x230e78
+	add wa, (xsp + 0x04)
+	extz xwa
+	ld xbc, xwa
+	sll xbc, 3
+	add xbc, xwa
+	ld xde, 0x00230884
+	add xde, xbc
+	lds32 xwa, 3
+	push xwa
+	pushw 0x00ff
+	pushw 0x00f5
+	ld xwa, xix
+	ld xbc, xhl
+	ldda32_24 xhl, 0x23a1a2
+	ld_sril3 XHL, 0xed, 0x0a, 0x0e
+	ld_sril3 XHL, 0xed, 0xc4, 0x00
+	call (xhl)
+
+	incm 1, (xsp + 0x04)
+	cpmi16 (xsp + 0x04), 0x000c
+	jrl c, .Lsc_0c_loop1
+
+	; --- Section 2: offset 0x5C, 12 iterations ---
+.Lsc_0c_sect2:
+	ldmw (xsp + 0x6e), 0x005c
+	ldw wa, 0x005c
+	add wa, 0x00a2
+	ld (xsp + 0x72), wa
+	ld wa, (xsp + 0x6e)
+	inc 2, wa
+	ld (xsp + 0x76), wa
+	ldmw (xsp + 0x04), 0x0000
+	cpmi16 (xsp + 0x04), 0x000c
+	jrl nc, .Lsc_0c_sect3
+
+.Lsc_0c_loop2:
+	ld wa, (xsp + 0x04)
+	mul wa, 0x000c
+	add wa, 0x0028
+	ld (xsp + 0x70), wa
+	add wa, 0x000c
+	ld (xsp + 0x74), wa
+	ld wa, (xsp + 0x70)
+	inc 3, wa
+	ld (xsp + 0x78), wa
+	lda xwa, (xsp + 0x6e)
+	ld xhl, xwa
+	lda xwa, (xsp + 0x76)
+	ld xbc, xwa
+	ldada_24 xwa, 0x2e5ccc
+	ld xde, xwa
+	lds32 xwa, 3
+	push xwa
+	pushw 0x00ff
+	pushw 0x00f5
+	ld xwa, xhl
+	ldda32_24 xhl, 0x23a1a2
+	ld_sril3 XHL, 0xed, 0x0a, 0x0e
+	ld_sril3 XHL, 0xed, 0xc4, 0x00
+	call (xhl)
+
+	lda xwa, (xsp + 0x6e)
+	ld (xsp + 0x06), xwa
+	lda xwa, (xsp + 0x76)
+	ld xiz, xwa
+	ldda16_24 xwa, 0x230e78
+	add wa, (xsp + 0x04)
+	extz xwa
+	ld xbc, 0x0000001b
+	call 0x29b72d
+	ld xde, 0x002309f6
+	add xde, xhl
+	lds32 xwa, 3
+	push xwa
+	pushw 0x00ff
+	pushw 0x00f5
+	ld xwa, (xsp + 0x0e)
+	ld xbc, xiz
+	ldda32_24 xhl, 0x23a1a2
+	ld_sril3 XHL, 0xed, 0x0a, 0x0e
+	ld_sril3 XHL, 0xed, 0xc4, 0x00
+	call (xhl)
+
+	incm 1, (xsp + 0x04)
+	cpmi16 (xsp + 0x04), 0x000c
+	jrl c, .Lsc_0c_loop2
+
+	; --- Section 3: offset 0x10C, 12 iterations ---
+.Lsc_0c_sect3:
+	ldmw (xsp + 0x6e), 0x010c
+	ldw wa, 0x010c
+	add wa, 0x001f
+	ld (xsp + 0x72), wa
+	ld wa, (xsp + 0x6e)
+	inc 2, wa
+	ld (xsp + 0x76), wa
+	ldmw (xsp + 0x04), 0x0000
+	cpmi16 (xsp + 0x04), 0x000c
+	jrl nc, .Lsc_0c_done
+
+.Lsc_0c_loop3:
+	ld wa, (xsp + 0x04)
+	mul wa, 0x000c
+	add wa, 0x0028
+	ld (xsp + 0x70), wa
+	add wa, 0x000c
+	ld (xsp + 0x74), wa
+	ld wa, (xsp + 0x70)
+	inc 3, wa
+	ld (xsp + 0x78), wa
+	ldda16_24 xwa, 0x230e78
+	add wa, (xsp + 0x04)
+	extz xwa
+	ld xbc, 0x00230e4a
+	add xbc, xwa
+	cpmi8 (xbc), 0x00
+	jr z, .Lsc_0c_z
+
+	; nonzero: slot occupied
+.Lsc_0c_nz:
+	lda xwa, (xsp + 0x6e)
+	ld xhl, xwa
+	lda xwa, (xsp + 0x76)
+	ld xbc, xwa
+	ldada_24 xwa, 0x2e5ce8
+	ld xde, xwa
+	lds32 xwa, 3
+	push xwa
+	pushw 0x00ff
+	pushw 0x00f5
+	ld xwa, xhl
+	ldda32_24 xhl, 0x23a1a2
+	ld_sril3 XHL, 0xed, 0x0a, 0x0e
+	ld_sril3 XHL, 0xed, 0xc4, 0x00
+	call (xhl)
+	jr t, .Lsc_0c_loop3end
+
+	; zero: slot empty
+.Lsc_0c_z:
+	lda xwa, (xsp + 0x6e)
+	ld xhl, xwa
+	lda xwa, (xsp + 0x76)
+	ld xbc, xwa
+	ldada_24 xwa, 0x2e5cec
+	ld xde, xwa
+	lds32 xwa, 3
+	push xwa
+	pushw 0x00ff
+	pushw 0x00f5
+	ld xwa, xhl
+	ldda32_24 xhl, 0x23a1a2
+	ld_sril3 XHL, 0xed, 0x0a, 0x0e
+	ld_sril3 XHL, 0xed, 0xc4, 0x00
+	call (xhl)
+
+.Lsc_0c_loop3end:
+	incm 1, (xsp + 0x04)
+	cpmi16 (xsp + 0x04), 0x000c
+	jrl c, .Lsc_0c_loop3
+
+.Lsc_0c_done:
+	lds32 xhl, 0
+	jrl t, .Lsc_epilogue
+
+	; ============================================================
+	; Case 0x01C0000F — display region configuration
+	; ============================================================
+.Lsc_case_0f:
+	ldda16_24 xwa, 0x230e74
+	mul wa, 0x000c
+	add wa, 0x0028
+	ld (xsp + 0x70), wa
+	add wa, 0x000c
+	ld (xsp + 0x74), wa
+
+	; Region 1: y=0x14
+	ldmw (xsp + 0x6e), 0x0014
+	stdi16_24 0x22a0c0, 0x0014
+	ld wa, (xsp + 0x6e)
+	add wa, 0x0039
+	ld (xsp + 0x72), wa
+	stda16_24 0x22a0c4, xwa
+	ldada_24 xwa, 0x22a0c0
+	ldda32_24 xbc, 0x23a1a2
+	ld_sril3 XBC, 0xe5, 0x0a, 0x0e
+	ld_sril3 XHL, 0xe5, 0xa8, 0x00	; method 0x00A8
+	ldw bc, 0x00f5
+	call (xhl)
+
+	lda xwa, (xsp + 0x6e)
+	ldda32_24 xbc, 0x23a1a2
+	ld_sril3 XBC, 0xe5, 0x0a, 0x0e
+	ld_sril3 XHL, 0xe5, 0xa8, 0x00
+	ldw bc, 0x00f2
+	call (xhl)
+
+	; Region 2: y=0x5C
+	ldmw (xsp + 0x6e), 0x005c
+	stdi16_24 0x22a0c0, 0x005c
+	ld wa, (xsp + 0x6e)
+	add wa, 0x00a2
+	ld (xsp + 0x72), wa
+	stda16_24 0x22a0c4, xwa
+	ldada_24 xwa, 0x22a0c0
+	ldda32_24 xbc, 0x23a1a2
+	ld_sril3 XBC, 0xe5, 0x0a, 0x0e
+	ld_sril3 XHL, 0xe5, 0xa8, 0x00
+	ldw bc, 0x00f5
+	call (xhl)
+
+	lda xwa, (xsp + 0x6e)
+	ldda32_24 xbc, 0x23a1a2
+	ld_sril3 XBC, 0xe5, 0x0a, 0x0e
+	ld_sril3 XHL, 0xe5, 0xa8, 0x00
+	ldw bc, 0x00f2
+	call (xhl)
+
+	; Region 3: y=0x10C
+	ldmw (xsp + 0x6e), 0x010c
+	stdi16_24 0x22a0c0, 0x010c
+	ld wa, (xsp + 0x6e)
+	add wa, 0x001f
+	ld (xsp + 0x72), wa
+	stda16_24 0x22a0c4, xwa
+	ldada_24 xwa, 0x22a0c0
+	ldda32_24 xbc, 0x23a1a2
+	ld_sril3 XBC, 0xe5, 0x0a, 0x0e
+	ld_sril3 XHL, 0xe5, 0xa8, 0x00
+	ldw bc, 0x00f5
+	call (xhl)
+
+	lda xwa, (xsp + 0x6e)
+	ldda32_24 xbc, 0x23a1a2
+	ld_sril3 XBC, 0xe5, 0x0a, 0x0e
+	ld_sril3 XHL, 0xe5, 0xa8, 0x00
+	ldw bc, 0x00f2
+	call (xhl)
+
+	; Store current slot bounds
+	ld wa, (xsp + 0x70)
+	stda16_24 0x22a0c2, xwa
+	ld wa, (xsp + 0x74)
+	stda16_24 0x22a0c6, xwa
+
+	; Setup display frame rect
+	ldada_24 xwa, 0x22a0c8
+	ld xhl, xwa
+	ldada_24 xwa, 0x22a0bc
+	ld xbc, xwa
+	ldada_24 xwa, 0x2e5cf0
+	ld xde, xwa
+	lds32 xwa, 3
+	push xwa
+	pushw 0x00ff
+	pushw 0x00f5
+	ld xwa, xhl
+	ldda32_24 xhl, 0x23a1a2
+	ld_sril3 XHL, 0xed, 0x0a, 0x0e
+	ld_sril3 XHL, 0xed, 0xc4, 0x00
+	call (xhl)
+
+	; String lookup for current slot
+	ldda16_24 xwa, 0x230e76
+	extz xwa
+	ld xbc, 0x0000001b
+	call 0x29b72d
+	ld xwa, 0x002309f6
+	add xwa, xhl
+	push xwa
+	call 0x29af71
+	inc 4, xsp
+	cps hl, 0
+	jr z, .Lsc_0f_notfound
+
+	; Found: format with name
+	ldda16_24 xwa, 0x230e76
+	extz xwa
+	ld xbc, 0x0000001b
+	call 0x29b72d
+	ld xwa, 0x002309f6
+	add xwa, xhl
+	push xwa
+	pushw 0x0023
+	pushw 0x0e7a
+	pushw 0x002e
+	pushw 0x5d22
+	lda xwa, (xsp + 0x16)
+	push xwa
+	call 0x29abd8
+	lda xsp, (xsp + 0x10)
+	jr t, .Lsc_0f_merge
+
+	; Not found: format with slot index
+.Lsc_0f_notfound:
+	ldda16_24 xwa, 0x230e76
+	extz xwa
+	ld xbc, xwa
+	sll xbc, 3
+	add xbc, xwa
+	ld xwa, 0x00230884
+	add xwa, xbc
+	push xwa
+	pushw 0x0023
+	pushw 0x0e7a
+	pushw 0x002e
+	pushw 0x5d28
+	lda xwa, (xsp + 0x16)
+	push xwa
+	call 0x29abd8
+	lda xsp, (xsp + 0x10)
+
+.Lsc_0f_merge:
+	ldada_24 xwa, 0x22a0c8
+	ld xhl, xwa
+	ldada_24 xwa, 0x22a0bc
+	ld xbc, xwa
+	lda xwa, (xsp + 0x0a)
+	ld xde, xwa
+	lds32 xwa, 3
+	push xwa
+	pushw 0x00ff
+	pushw 0x00f5
+	ld xwa, xhl
+	ldda32_24 xhl, 0x23a1a2
+	ld_sril3 XHL, 0xed, 0x0a, 0x0e
+	ld_sril3 XHL, 0xed, 0xc4, 0x00
+	call (xhl)
+
+	lds32 xhl, 0
+	jrl t, .Lsc_epilogue
+
+	; ============================================================
+	; Case 0x01EA000E — memory initialization + path builder
+	; ============================================================
+.Lsc_case_0e:
+	stdi16_24 0x230e76, 0x0000
+	stdi16_24 0x230e78, 0x0000
+	stdi16_24 0x230e72, 0x0000
+	stdi16_24 0x230e74, 0x0000
+
+	pushw 0x0171
+	pushw 0x0000
+	ldada_24 xwa, 0x230884
+	push xwa
+	call 0x29aec7
+	pushw 0x0453
+	pushw 0x0000
+	ldada_24 xwa, 0x2309f6
+	push xwa
+	call 0x29aec7
+	pushw 0x0028
+	pushw 0x0000
+	ldada_24 xwa, 0x230e4a
+	push xwa
+	call 0x29aec7
+	lda xsp, (xsp + 0x18)		; clean 24 bytes (3 calls x 8)
+
+	calr HDAE5000_Path_Builder
+	lds32 xhl, 0
+	jrl t, .Lsc_epilogue
+
+	; ============================================================
+	; Cases 0x01EA000F/0010/0011 — return 0
+	; ============================================================
+.Lsc_case_0f_ea:
+	lds32 xhl, 0
+	jrl t, .Lsc_epilogue
+.Lsc_case_10_ea:
+	lds32 xhl, 0
+	jrl t, .Lsc_epilogue
+.Lsc_case_11_ea:
+	lds32 xhl, 0
+	jrl t, .Lsc_epilogue
+
+	; ============================================================
+	; Case 0x01C00017 — vtable call + send message 0x01C00007
+	; ============================================================
+.Lsc_case_17:
+	ld_sril3 XWA, 0xfd, 0x82, 0x00
+	ld xbc, (xsp + 0x7e)
+	ld xde, (xsp + 0x7a)
+	ldda32_24 xhl, 0x23a1a2
+	ld_sril3 XHL, 0xed, 0x0a, 0x0e
+	ld_sril3 XHL, 0xed, 0xdc, 0x00
+	call (xhl)
+
+	ld_sril3 XWA, 0xfd, 0x82, 0x00
+	ldda32_24 xbc, 0x23a1a2
+	ld_sril3 XBC, 0xe5, 0x0a, 0x0e
+	ld_sril3 XHL, 0xe5, 0x00, 0x01
+	ld xbc, 0x01c00007
+	lds32 xde, 3
+	call (xhl)
+
+	; ============================================================
+	; Default case — vtable call + forward to case_01
+	; ============================================================
+.Lsc_default:
+	ld_sril3 XWA, 0xfd, 0x82, 0x00
+	ld xbc, (xsp + 0x7e)
+	ld xde, (xsp + 0x7a)
+	ldda32_24 xhl, 0x23a1a2
+	ld_sril3 XHL, 0xed, 0x0a, 0x0e
+	ld_sril3 XIX, 0xed, 0xdc, 0x00
+	call (xix)
+	jrl t, .Lsc_epilogue
+
+	; ============================================================
+	; Case 0x01C00018 — vtable calls + send 0x01C00007 with flag
+	; ============================================================
+.Lsc_case_18:
+	ld_sril3 XWA, 0xfd, 0x82, 0x00
+	ld xbc, (xsp + 0x7e)
+	ld xde, (xsp + 0x7a)
+	ldda32_24 xhl, 0x23a1a2
+	ld_sril3 XHL, 0xed, 0x0a, 0x0e
+	ld_sril3 XHL, 0xed, 0xdc, 0x00
+	call (xhl)
+
+	ld_sril3 XWA, 0xfd, 0x82, 0x00
+	ldda32_24 xbc, 0x23a1a2
+	ld_sril3 XBC, 0xe5, 0x0a, 0x0e
+	ld_sril3 XHL, 0xe5, 0x00, 0x01
+	ld xbc, 0x01c00007
+	ld xde, 0x00000083
+	call (xhl)
+	jr t, .Lsc_default
+
+	; ============================================================
+	; Case 0x01C00007 — button handler with sub-dispatch
+	; ============================================================
+.Lsc_case_07:
+	ld xwa, (xsp + 0x7a)		; XWA = arg3 (button code)
+	cp xwa, 0x00000007
+	jr ule, .Lsc_07_inrange
+	sub xwa, 0x00000078
+	cp xwa, 0x00000008
+	jrl c, .Lsc_ret0
+	cp xwa, 0x0000000f
+	jrl ugt, .Lsc_ret0
+
+.Lsc_07_inrange:
+	add xwa, 0x002e5d38		; byte lookup table
+	ld wa, (xwa)
+	extz wa
+	sll wa, 1			; word offset
+	ld xix, 0x002e5d48		; offset table base
+	ld_sriw3 wa, 0x07, 0xf0, 0xe0	; WA = (XIX+WA) — load jump offset
+	ldada_24 xix, 0x28ed79		; base = .Lsc_07_btn_down
+	jp_dri 8, 0x07, 0xf0, 0xe0	; jp T, XIX+WA
+
+	; --- Down button handler ---
+.Lsc_07_btn_down:
+	cpdi16_24 0x230e76, 0x0000
+	jr nz, .Lsc_down_nz
+	ld xhl, 0xffffffff		; return -1
+	jrl t, .Lsc_epilogue
+
+.Lsc_down_nz:
+	decdi16_24 1, 0x230e76		; slot_index--
+	cpdi16_24 0x230e74, 0x0000
+	jr nz, .Lsc_down_74nz
+
+	; page_offset == 0: check scroll_offset
+	cpdi16_24 0x230e78, 0x0000
+	jr nz, .Lsc_down_78nz
+	ld xhl, 0xffffffff
+	jrl t, .Lsc_epilogue
+
+.Lsc_down_78nz:
+	decdi16_24 1, 0x230e78
+	ld_sril3 XWA, 0xfd, 0x82, 0x00
+	ldda32_24 xbc, 0x23a1a2
+	ld_sril3 XBC, 0xe5, 0x0a, 0x0e
+	ld_sril3 XHL, 0xe5, 0x00, 0x01
+	ld xbc, 0x01c0000d
+	lds32 xde, 0
+	call (xhl)
+	jr t, .Lsc_down_merge
+
+.Lsc_down_74nz:
+	decdi16_24 1, 0x230e74
+	ld_sril3 XWA, 0xfd, 0x82, 0x00
+	ldda32_24 xbc, 0x23a1a2
+	ld_sril3 XBC, 0xe5, 0x0a, 0x0e
+	ld_sril3 XHL, 0xe5, 0x00, 0x01
+	ld xbc, 0x01c0000f
+	lds32 xde, 0
+	call (xhl)
+
+.Lsc_down_merge:
+	ld_sril3 XWA, 0xfd, 0x82, 0x00
+	ld xbc, (xsp + 0x7e)
+	ld xde, (xsp + 0x7a)
+	ldda32_24 xhl, 0x23a1a2
+	ld_sril3 XHL, 0xed, 0x0a, 0x0e
+	ld_sril3 XHL, 0xed, 0x2c, 0x04	; method 0x042C
+	call (xhl)
+	jrl t, .Lsc_ret0
+
+	; --- Up button handler ---
+.Lsc_07_btn_up:
+	ldda16_24 xwa, 0x230e72
+	dec 1, wa
+	cpdm16_24 0x230e76, xwa		; compare slot_index with limit
+	jr c, .Lsc_up_ok
+	ld xhl, 0xffffffff
+	jrl t, .Lsc_epilogue
+
+.Lsc_up_ok:
+	incdi16_24 1, 0x230e76
+	cpdi16_24 0x230e74, 0x000b
+	jr c, .Lsc_up_inc74
+
+	; page_offset >= 11: scroll
+	incdi16_24 1, 0x230e78
+	ld_sril3 XWA, 0xfd, 0x82, 0x00
+	ldda32_24 xbc, 0x23a1a2
+	ld_sril3 XBC, 0xe5, 0x0a, 0x0e
+	ld_sril3 XHL, 0xe5, 0x00, 0x01
+	ld xbc, 0x01c0000d
+	lds32 xde, 0
+	call (xhl)
+	jr t, .Lsc_up_merge
+
+.Lsc_up_inc74:
+	incdi16_24 1, 0x230e74
+	ld_sril3 XWA, 0xfd, 0x82, 0x00
+	ldda32_24 xbc, 0x23a1a2
+	ld_sril3 XBC, 0xe5, 0x0a, 0x0e
+	ld_sril3 XHL, 0xe5, 0x00, 0x01
+	ld xbc, 0x01c0000f
+	lds32 xde, 0
+	call (xhl)
+
+.Lsc_up_merge:
+	ld_sril3 XWA, 0xfd, 0x82, 0x00
+	ld xbc, (xsp + 0x7e)
+	ld xde, (xsp + 0x7a)
+	ldda32_24 xhl, 0x23a1a2
+	ld_sril3 XHL, 0xed, 0x0a, 0x0e
+	ld_sril3 XHL, 0xed, 0x2c, 0x04
+	call (xhl)
+	jrl t, .Lsc_ret0
+
+	; --- Enter/Select button handler ---
+.Lsc_07_btn_enter:
+	ldda32_24 xwa, 0x23a1a2
+	ld_sril3 XWA, 0xe1, 0x88, 0x0e	; (XWA+0x0E88) status obj
+	ld xix, (xwa + 0x08)
+	call (xix)			; get status
+	cps l, 3
+	jr z, .Lsc_enter_active
+	cps l, 2
+	jrl nz, .Lsc_enter_skip
+
+.Lsc_enter_active:
+	ldda32_24 xwa, 0x23a1a2
+	ld_sril3 XWA, 0xe1, 0x0a, 0x0e
+	ld_sril3 XHL, 0xe1, 0x38, 0x05	; method 0x0538
+	call (xhl)
+
+	ldda16_24 xwa, 0x230e76
+	extz xwa
+	ld xbc, xwa
+	sll xbc, 3
+	add xbc, xwa
+	ld xwa, 0x00230884
+	add xwa, xbc
+	push xwa			; slot data address
+	lda xwa, (xsp + 0x0e)
+	push xwa			; format buffer
+	call 0x29af45
+	pushw 0x002e
+	pushw 0x5d2e
+	lda xwa, (xsp + 0x16)
+	push xwa
+	call 0x29af0b
+	lda xsp, (xsp + 0x10)		; clean 16 bytes
+
+	lda xwa, (xsp + 0x0a)
+	ldada_24 xbc, 0x2e5d34
+	ldda32_24 xde, 0x23a1a2
+	ld_sril3 XDE, 0xe9, 0x88, 0x0e
+	ld_sril3 XHL, 0xe9, 0xa0, 0x00	; method 0x00A0
+	call (xhl)
+
+	ldada_24 xwa, 0x22b430
+	ldda32_24 xbc, 0x23a1a2
+	ld_sril3 XBC, 0xe5, 0x88, 0x0e
+	ld_sril3 XHL, 0xe5, 0xa8, 0x00
+	ld xbc, 0x00005000
+	call (xhl)
+
+	ldda32_24 xwa, 0x23a1a2
+	ld_sril3 XWA, 0xe1, 0x88, 0x0e
+	ld_sril3 XHL, 0xe1, 0xac, 0x00	; method 0x00AC
+	call (xhl)
+
+	ldda32_24 xwa, 0x23a1a2
+	ld_sril3 XWA, 0xe1, 0x0a, 0x0e
+	ld_sril3 XHL, 0xe1, 0x3c, 0x05	; method 0x053C
+	call (xhl)
+
+.Lsc_enter_skip:
+	ldda32_24 xwa, 0x23a1a2
+	ld_sril3 XWA, 0xe1, 0x0a, 0x0e
+	ld_sril3 XHL, 0xe1, 0x24, 0x01	; method 0x0124
+	ld xwa, 0x007f02f0
+	ld xbc, 0x01c00001
+	lds32 xde, 0
+	call (xhl)
+
+	; ============================================================
+	; Epilogue
+	; ============================================================
+.Lsc_ret0:
+	lds32 xhl, 0
+.Lsc_epilogue:
+	pop xiz
+	st_dri3b l, 0xfd, 0x82, 0x00	; lda XSP, XSP+130 (restore stack)
+	ret
 
 HDAE5000_Path_Builder:	; 0x28EF6B (556 bytes)
 	; Build file path strings using vtable dispatch
