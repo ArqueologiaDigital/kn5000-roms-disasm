@@ -4145,7 +4145,149 @@ HDAE5000_Table_Sub_292488:	; 0x292488 (359 bytes)
 	.incbin "includes/code_28f90c_2953e1.bin", 11132, 359
 
 HDAE5000_Table_Sub_2925EF:	; 0x2925EF (425 bytes)
-	.incbin "includes/code_28f90c_2953e1.bin", 11491, 425
+	lda xsp, (xsp - 30)
+	push xiz
+	ld (xsp + 30), bc	; save file number
+	ld (xsp + 32), wa	; save partition
+	ldmw (xsp + 14), 0x0000	; init result = 0
+	; Call 0x29AE9F with args
+	pushw 0x0008
+	push xde
+	lda xwa, (xsp + 22)
+	push xwa
+	call 0x29AE9F
+	; Call 0x29AF45 with args
+	pushw 0x002F
+	pushw 0x8F12
+	lda xwa, (xsp + 38)
+	push xwa
+	call 0x29AF45
+	lda xsp, (xsp + 18)	; clean up pushed args
+	; First workspace dispatch
+	lda xwa, (xsp + 16)
+	ldada_24 xbc, 3116824	; 0x2F8F18
+	ldda32_24 xde, 2335138	; workspace ptr (0x23A1A2)
+	ld_sril3 xde, 0xE9, 0x88, 0x0E	; (XDE+0x0E88)
+	ld_sril3 xix, 0xE9, 0xA0, 0x00	; (XDE+0x00A0)
+	call (xix)
+	; Check result
+	cps hl, 0
+	jr ge, .Lts925_1
+	ldw hl, 0xFFFF
+	jrl .Lts925_exit
+.Lts925_1:
+	; Second workspace dispatch
+	ldada_24 xwa, 2297628	; 0x230F1C
+	ldda32_24 xbc, 2335138
+	ld_sril3 xbc, 0xE5, 0x88, 0x0E	; (XBC+0x0E88)
+	ld_sril3 xhl, 0xE5, 0xA8, 0x00	; (XBC+0x00A8)
+	ld xbc, 0x00008000
+	call (xhl)
+	ld (xsp + 4), xhl
+	ldada_24 xwa, 2297628	; 0x230F1C
+	ld (xsp + 8), xwa
+	ld xwa, (xsp + 4)
+	calr HDAE5000_Cell_Get_Params
+	ld (xsp + 12), xhl
+	; Multiply: compute table offset
+	ld wa, (xsp + 30)
+	extz xwa
+	ld xbc, 0x0000004C
+	call 0x29B72D
+	ld xiz, xhl
+	ld wa, (xsp + 32)
+	extz xwa
+	ld xbc, 0x000004C0
+	call 0x29B72D
+	add xhl, 0x780
+	add xhl, xiz
+	; Table lookup
+	ldada_24 xwa, 2102874	; 0x20165A (table base)
+	add xwa, xhl
+	ld xde, xwa
+	ld xwa, (xsp + 8)
+	ld xbc, (xsp + 12)
+	call 0x297E16
+	ld (xsp + 14), hl	; store result
+	ld wa, (xsp + 14)	; reload for compare
+	cp wa, 0xFFFF
+	jr nz, .Lts925_2
+	ldw hl, 0xFFFF
+	jrl .Lts925_exit
+.Lts925_2:
+	; Check if dispatch returned 0x8000
+	ld xwa, (xsp + 4)
+	cp xwa, 0x00008000
+	jrl nz, .Lts925_5
+.Lts925_loop:
+	; Re-dispatch
+	ldada_24 xwa, 2297628	; 0x230F1C
+	ldda32_24 xbc, 2335138
+	ld_sril3 xbc, 0xE5, 0x88, 0x0E
+	ld_sril3 xhl, 0xE5, 0xA8, 0x00
+	ld xbc, 0x00008000
+	call (xhl)
+	ld (xsp + 4), xhl
+	ld xwa, (xsp + 4)
+	cp xwa, 0x00000000
+	jr le, .Lts925_4
+	; Retry with new params
+	ldada_24 xwa, 2297628	; 0x230F1C
+	ld (xsp + 8), xwa
+	ld xwa, (xsp + 4)
+	calr HDAE5000_Cell_Get_Params
+	ld (xsp + 12), xhl
+	ld wa, (xsp + 30)
+	extz xwa
+	ld xbc, 0x0000004C
+	call 0x29B72D
+	ld xiz, xhl
+	ld wa, (xsp + 32)
+	extz xwa
+	ld xbc, 0x000004C0
+	call 0x29B72D
+	add xhl, 0x780
+	add xhl, xiz
+	ldada_24 xwa, 2102874	; 0x20165A
+	add xwa, xhl
+	ld xde, xwa
+	ld xwa, (xsp + 8)
+	ld xbc, (xsp + 12)
+	call 0x297FD1
+	ld (xsp + 14), hl
+	ld wa, (xsp + 14)
+	cp wa, 0xFFFF
+	jr z, .Lts925_5
+.Lts925_4:
+	ld xwa, (xsp + 4)
+	cp xwa, 0x00008000
+	jrl z, .Lts925_loop
+.Lts925_5:
+	; Post-processing: set flag
+	ld wa, (xsp + 30)
+	extz xwa
+	ld xbc, 0x0000004C
+	call 0x29B72D
+	ld xiz, xhl
+	ld wa, (xsp + 32)
+	extz xwa
+	ld xbc, 0x000004C0
+	call 0x29B72D
+	add xhl, 0x780
+	add xhl, xiz
+	ldada_24 xwa, 2102861	; 0x20164D (flag base)
+	add xwa, xhl
+	ldmi8 (xwa), 0x01
+	; Final workspace dispatch
+	ldda32_24 xwa, 2335138
+	ld_sril3 xwa, 0xE1, 0x88, 0x0E	; (XWA+0x0E88)
+	ld_sril3 xhl, 0xE1, 0xAC, 0x00	; (XWA+0x00AC)
+	call (xhl)
+	ld hl, (xsp + 14)	; normal exit: load result
+.Lts925_exit:			; error exit: HL already set
+	pop xiz
+	lda xsp, (xsp + 30)
+	ret
 
 HDAE5000_Table_Sub_292798:	; 0x292798 (419 bytes)
 	lda xsp, (xsp - 32)
