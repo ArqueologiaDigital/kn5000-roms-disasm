@@ -7052,9 +7052,235 @@ HDAE5000_Display_String:	; 0x2950F8
 	ret
 	nop
 
-HDAE5000_PPORT_Setup:	; 0x29511C
-	; PPORT setup routine
-	.incbin "includes/code_28f90c_2953e1.bin", 22544, 442
+HDAE5000_PPORT_Setup:	; 0x29511C (442 bytes)
+	; PPORT command dispatcher — WA = command ID (1-30)
+	cps wa, 0
+	jr le, .Lpps_error		; WA <= 0 → error
+	cp wa, 0x001E
+	jr gt, .Lpps_error		; WA > 30 → error
+	push xhl
+	nop
+	ld hl, wa			; HL = command number
+	sla xhl, 2			; XHL *= 4 (table offset)
+	nop
+	extz xhl			; zero-extend
+	ld xix, 0x00295146		; table base
+	nop
+	ld_sril3 xhl, 0x07, 0xF0, 0xEC	; XHL = (XIX + HL) — load handler addr
+	nop
+	call (xhl)			; call handler
+	pop xhl
+	nop
+	ret
+	nop
+.Lpps_error:
+	lds wa, 1			; return 1 (error)
+	ret
+	nop
+.Lpps_jump_table:
+	; 31-entry jump table (entry 0 unused, entries 1-30 = commands)
+	.long 0x002951C2		; entry 0 (unused)
+	.long 0x002951C4		; entry 1
+	.long 0x002951CC		; entry 2
+	.long 0x002951D4		; entry 3
+	.long 0x002951DC		; entry 4
+	.long 0x002951E2		; entry 5
+	.long 0x002951E8		; entry 6
+	.long 0x002951EE		; entry 7
+	.long 0x002951F6		; entry 8
+	.long 0x002951FE		; entry 9
+	.long 0x00295206		; entry 10
+	.long 0x0029520E		; entry 11
+	.long 0x00295216		; entry 12
+	.long 0x0029521E		; entry 13
+	.long 0x0029522A		; entry 14
+	.long 0x00295236		; entry 15
+	.long 0x00295242		; entry 16
+	.long 0x00295248		; entry 17
+	.long 0x00295250		; entry 18
+	.long 0x00295256		; entry 19
+	.long 0x0029525E		; entry 20
+	.long 0x00295264		; entry 21
+	.long 0x00295270		; entry 22
+	.long 0x00295278		; entry 23
+	.long 0x00295284		; entry 24
+	.long 0x00295290		; entry 25
+	.long 0x0029529C		; entry 26
+	.long 0x002952A6		; entry 27
+	.long 0x002952B2		; entry 28
+	.long 0x002952BE		; entry 29
+	.long 0x002952CA		; entry 30
+	; --- Handler stubs (commands 0-30) ---
+.Lpps_handler_0:			; 0x2951C2
+	ret
+	nop
+.Lpps_handler_1:			; 0x2951C4
+	call 0x294416
+	ld xix, xhl
+	ret
+	nop
+.Lpps_handler_2:			; 0x2951CC
+	call 0x29444E
+	ld wa, hl
+	ret
+	nop
+.Lpps_handler_3:			; 0x2951D4
+	call 0x294471
+	ld wa, hl
+	ret
+	nop
+.Lpps_handler_4:			; 0x2951DC
+	call 0x29456E
+	ret
+	nop
+.Lpps_handler_5:			; 0x2951E2
+	call 0x2945FA
+	ret
+	nop
+.Lpps_handler_6:			; 0x2951E8
+	call 0x294686
+	ret
+	nop
+.Lpps_handler_7:			; 0x2951EE
+	call 0x294735
+	ld wa, hl
+	ret
+	nop
+.Lpps_handler_8:			; 0x2951F6
+	call 0x29475A
+	ld wa, hl
+	ret
+	nop
+.Lpps_handler_9:			; 0x2951FE
+	call 0x29477F
+	ld wa, hl
+	ret
+	nop
+.Lpps_handler_10:			; 0x295206
+	call 0x2947A4
+	ld wa, hl
+	ret
+	nop
+.Lpps_handler_11:			; 0x29520E
+	call 0x2947C9
+	ld wa, hl
+	ret
+	nop
+.Lpps_handler_12:			; 0x295216
+	call 0x2947EE
+	ld wa, hl
+	ret
+	nop
+.Lpps_handler_13:			; 0x29521E
+	ld wa, bc			; shuffle args
+	ld bc, de
+	call 0x294813
+	ld wa, hl
+	ret
+	nop
+.Lpps_handler_14:			; 0x29522A
+	ld wa, bc
+	ld bc, de
+	call 0x294B21
+	ld wa, hl
+	ret
+	nop
+.Lpps_handler_15:			; 0x295236
+	ld wa, bc
+	ld bc, de
+	call 0x294B4F
+	ld wa, hl
+	ret
+	nop
+.Lpps_handler_16:			; 0x295242
+	call 0x294B82
+	ret
+	nop
+.Lpps_handler_17:			; 0x295248
+	call 0x294C6A
+	ld wa, hl
+	ret
+	nop
+.Lpps_handler_18:			; 0x295250
+	call 0x294C8D
+	ret
+	nop
+.Lpps_handler_19:			; 0x295256
+	call 0x294CAD
+	ld xix, xhl
+	ret
+	nop
+.Lpps_handler_20:			; 0x29525E
+	call 0x294CE2
+	ret
+	nop
+.Lpps_handler_21:			; 0x295264
+	ld wa, bc
+	ld bc, de
+	call 0x294DA1
+	ld wa, hl
+	ret
+	nop
+.Lpps_handler_22:			; 0x295270
+	call 0x294EC8
+	ld wa, hl
+	ret
+	nop
+.Lpps_handler_23:			; 0x295278
+	ld xwa, xbc			; 32-bit arg shuffle
+	ld xbc, xde
+	call 0x294EEF
+	ld wa, hl
+	ret
+	nop
+.Lpps_handler_24:			; 0x295284
+	ld wa, bc
+	ld bc, de
+	call 0x294F0A
+	ld wa, hl
+	ret
+	nop
+.Lpps_handler_25:			; 0x295290
+	ld xwa, xbc
+	ld xbc, xde
+	call 0x294F9B
+	ld wa, hl
+	ret
+	nop
+.Lpps_handler_26:			; 0x29529C
+	ld xwa, xbc
+	call 0x284D7F
+	lds wa, 0
+	ret
+	nop
+.Lpps_handler_27:			; 0x2952A6
+	ld wa, bc
+	ld bc, de
+	call 0x295009
+	ld wa, hl
+	ret
+	nop
+.Lpps_handler_28:			; 0x2952B2
+	ld xwa, xbc
+	ld xbc, xde
+	call 0x28F308
+	ld wa, hl
+	ret
+	nop
+.Lpps_handler_29:			; 0x2952BE
+	ld xwa, xbc
+	ld xbc, xde
+	call 0x28F343
+	ld wa, hl
+	ret
+	nop
+.Lpps_handler_30:			; 0x2952CA
+	ld xwa, xbc
+	ld xbc, xde
+	call 0x28F357
+	ld wa, hl
+	ret
+	nop
 
 HDAE5000_PPORT_Menu:	; 0x2952D6
 	; PPORT menu handler - save all registers, execute, restore
