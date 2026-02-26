@@ -4834,7 +4834,114 @@ HDAE5000_Table_Sub_292EB9:	; 0x292EB9 (281 bytes)
 	ret
 
 HDAE5000_Table_Sub_292FD2:	; 0x292FD2 (329 bytes)
-	.incbin "includes/code_28f90c_2953e1.bin", 14022, 329
+	lda xsp, (xsp - 34)
+	push xiz
+	ld (xsp + 34), bc
+	ld (xsp + 36), wa
+	ldmw (xsp + 10), 0x0000
+	pushw 0x0008
+	push xde
+	lda xwa, (xsp + 18)
+	push xwa
+	call 0x29AE9F
+	pushw 0x002F
+	pushw 0x8F54
+	lda xwa, (xsp + 34)
+	push xwa
+	call 0x29AF45
+	lda xsp, (xsp + 18)
+	; Dispatch via XIX
+	lda xwa, (xsp + 12)
+	ldada_24 xbc, 3116890	; 0x2F8F5A
+	ldda32_24 xde, 2335138
+	ld_sril3 xde, 0xE9, 0x88, 0x0E
+	ld_sril3 xix, 0xE9, 0xA0, 0x00
+	call (xix)
+	cps hl, 0
+	jrl lt, .Lts92f_error
+	; Call 0x29AEC7 with args (8 bytes pushed, cleaned by inc 0)
+	pushw 0x8000
+	pushw 0x0000
+	ldada_24 xwa, 2297628	; 0x230F1C
+	push xwa
+	call 0x29AEC7
+	inc 0, xsp		; clean up 8 bytes
+	; Workspace dispatch with XBC=0x16
+	ldada_24 xwa, 2297628
+	ldda32_24 xbc, 2335138
+	ld_sril3 xbc, 0xE5, 0x88, 0x0E
+	ld_sril3 xhl, 0xE5, 0xA8, 0x00
+	ld xbc, 0x00000016
+	call (xhl)
+	; Load param, call 0x28E5E9, sign extend result
+	ldada_24 xwa, 2297628
+	ld xwa, (xwa + 18)	; offset 0x12
+	call 0x28E5E9
+	ld iz, hl		; 16-bit result to IZ
+	exts xiz		; sign extend to 32-bit
+	ld xwa, xiz
+	add xwa, 0x00000016
+	calr HDAE5000_Cell_Get_Params
+	ld (xsp + 30), xhl
+	; Dispatch with XIZ as XBC param
+	ldada_24 xwa, 2297650	; 0x230F32
+	ld xbc, xiz
+	ldda32_24 xde, 2335138
+	ld_sril3 xde, 0xE9, 0x88, 0x0E
+	ld_sril3 xhl, 0xE9, 0xA8, 0x00
+	call (xhl)
+	; Table lookup
+	ldada_24 xwa, 2297628
+	ld (xsp + 4), xwa
+	lda xwa, (xsp + 30)
+	ld (xsp + 8), xwa
+	ld wa, (xsp + 34)
+	extz xwa
+	ld xbc, 0x0000004C
+	call 0x29B72D
+	ld xiz, xhl
+	ld wa, (xsp + 36)
+	extz xwa
+	ld xbc, 0x000004C0
+	call 0x29B72D
+	add xhl, 0x780
+	add xhl, xiz
+	ldada_24 xwa, 2102902	; 0x201676 (table base)
+	add xwa, xhl
+	ld xde, xwa
+	ld xwa, (xsp + 4)
+	ld xbc, (xsp + 8)
+	ld xbc, (xbc)		; double dereference
+	call 0x297E16
+	ld (xsp + 10), hl
+	; Set flag
+	ld wa, (xsp + 34)
+	extz xwa
+	ld xbc, 0x0000004C
+	call 0x29B72D
+	ld xiz, xhl
+	ld wa, (xsp + 36)
+	extz xwa
+	ld xbc, 0x000004C0
+	call 0x29B72D
+	add xhl, 0x780
+	add xhl, xiz
+	ldada_24 xwa, 2102868	; 0x201654 (flag base)
+	add xwa, xhl
+	ldmi8 (xwa), 0x01
+	; Final workspace dispatch
+	ldda32_24 xwa, 2335138
+	ld_sril3 xwa, 0xE1, 0x88, 0x0E
+	ld_sril3 xhl, 0xE1, 0xAC, 0x00
+	call (xhl)
+	jr .Lts92f_load
+.Lts92f_error:
+	ldmw (xsp + 10), 0xFFFF
+.Lts92f_load:
+	ld hl, (xsp + 10)
+	pop xiz
+	lda xsp, (xsp + 34)
+	ret
 
 HDAE5000_Workspace_Handler:	; 0x29311B (592 bytes)
 	; Firmware workspace callback handler
