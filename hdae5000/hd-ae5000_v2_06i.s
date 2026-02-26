@@ -2879,8 +2879,247 @@ HDAE5000_String_Compare:	; 0x28E60E (2397 bytes)
 	.incbin "includes/code_2803c2_28f542.bin", 57932, 2397
 
 HDAE5000_Path_Builder:	; 0x28EF6B (556 bytes)
-	; Build file path strings
-	.incbin "includes/code_2803c2_28f542.bin", 60329, 556
+	; Build file path strings using vtable dispatch
+	; Scans directory entries, builds path strings, validates filenames
+	; Uses nested vtable calls through (0x23A1A2) + offsets
+
+	; --- Prologue: allocate ~370 bytes of stack ---
+	st_dri3b l, 0xfd, 0x8e, 0xfe	; lda XSP, XSP-370
+	push xiz			; save XIZ
+	lds32 xwa, 0
+	ld (xsp + 4), xwa		; local[0x04] = 0 (result)
+
+	; --- Get vtable, call method at +0x08 via XIX ---
+	ldda32_24 xwa, 2335138		; XWA = (0x23A1A2) — vtable base
+	ld_sril3 xwa, 0xe1, 0x88, 0x0e	; XWA = (XWA + 0x0E88)
+	ld xix, (xwa + 8)		; XIX = (XWA + 0x08) — method ptr
+	call (xix)			; call method
+	cps l, 3			; if L != 3
+	jr z, .Lpb_continue		;   (L==3 → continue)
+	cps l, 2			; if L != 2 either
+	jrl nz, .Lpb_exit		;   return
+
+.Lpb_continue:				; 0x28EF8E
+	; --- Call vtable method at +0x0538 ---
+	ldda32_24 xwa, 2335138		; XWA = (0x23A1A2)
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e	; XWA = (XWA + 0x0E0A)
+	ld_sril3 xhl, 0xe1, 0x38, 0x05	; XHL = (XWA + 0x0538)
+	call (xhl)
+
+	; --- Call vtable method at +0x0090, get XIZ ---
+	ldda32_24 xwa, 2335138		; XWA = (0x23A1A2)
+	ld_sril3 xwa, 0xe1, 0x88, 0x0e	; XWA = (XWA + 0x0E88)
+	ld_sril3 xhl, 0xe1, 0x90, 0x00	; XHL = (XWA + 0x0090)
+	call (xhl)
+	ld xiz, xhl			; XIZ = result
+
+	; --- If XIZ != 0: get strlen, copy to buffer ---
+	ld xwa, xiz
+	or xwa, xwa			; test zero
+	jr z, .Lpb_empty_path		; if zero, clear buffer
+
+	ld xwa, xiz
+	push xwa
+	call 2731889			; strlen(XIZ)
+	pushw hl			; push strlen
+	ld xwa, xiz
+	push xwa
+	ldada_24 xwa, 2297466		; XWA = &0x230E7A (path buffer)
+	push xwa
+	call 2731679			; call 0x29AE9F (strcpy with length)
+	lda xsp, (xsp + 14)		; pop 14 bytes
+	jr t, .Lpb_after_path
+
+.Lpb_empty_path:			; 0x28EFD2
+	stdi8_24 2297466, 0		; (0x230E7A) = '\0'
+
+.Lpb_after_path:			; 0x28EFD8
+	stdi8_24 2297474, 0		; (0x230E82) = '\0'
+	ldada_24 xwa, 2297466		; XWA = &0x230E7A
+	push xwa
+	call 2731889			; strlen(path buffer)
+	inc 4, xsp
+	cps hl, 0			; if strlen > 0
+	jr z, .Lpb_no_separator		;   skip separator append
+
+	; Append separator
+	pushw 46			; max = 0x2E
+	pushw 23888			; src = 0x5D50 (separator string)
+	pushw 35			; offset = 0x23
+	pushw 3706			; dest = 0x0E7A
+	call 2731787			; call 0x29AF0B (strcat)
+	inc 0, xsp
+
+.Lpb_no_separator:			; 0x28F000
+	; --- Call vtable method at +0x0094 to scan directory ---
+	ldada_24 xwa, 3038548		; XWA = 0x2E5D54 (param)
+	ld xde, xwa
+	lda xwa, (xsp + 8)		; XWA = &local[0x08]
+	ld xbc, xwa
+	ld xwa, xde			; restore XWA
+	ldda32_24 xde, 2335138		; XDE = (0x23A1A2)
+	ld_sril3 xde, 0xe9, 0x88, 0x0e	; XDE = (XDE + 0x0E88)
+	ld_sril3 xhl, 0xe9, 0x94, 0x00	; XHL = (XDE + 0x0094)
+	call (xhl)
+	ld xiz, xhl			; XIZ = scan result
+
+	; --- Call Directory_Handler for validation ---
+	lda xwa, (xsp + 14)		; XWA = &local[0x0E]
+	calr HDAE5000_Directory_Handler
+	ld (xsp + 4), xhl		; save result
+
+	jr t, .Lpb_validate		; always jump to validation
+
+.Lpb_retry:				; 0x28F02C
+	lda xwa, (xsp + 14)
+	calr HDAE5000_Directory_Handler
+	ld (xsp + 4), xhl
+
+.Lpb_validate:				; 0x28F035
+	; --- Call vtable method at +0x0098 (validate/next) ---
+	lda xwa, (xsp + 8)		; XWA = &local[0x08]
+	ld xbc, xwa
+	ld xwa, xiz
+	ldda32_24 xde, 2335138		; XDE = (0x23A1A2)
+	ld_sril3 xde, 0xe9, 0x88, 0x0e	; XDE = (XDE + 0x0E88)
+	ld_sril3 xix, 0xe9, 0x98, 0x00	; XIX = (XDE + 0x0098)
+	call (xix)
+	cps hl, 0
+	jr z, .Lpb_retry		; if HL == 0, retry
+
+	; --- Call vtable method at +0x009C ---
+	ld xwa, xiz
+	ldda32_24 xbc, 2335138		; XBC = (0x23A1A2)
+	ld_sril3 xbc, 0xe5, 0x88, 0x0e	; XBC = (XBC + 0x0E88)
+	ld_sril3 xhl, 0xe5, 0x9c, 0x00	; XHL = (XBC + 0x009C)
+	call (xhl)
+
+	; --- Directory entry loop ---
+	lds iz, 0			; IZ = 0 (loop counter)
+	cpda16_24 xiz, 2297458		; cp IZ, (0x230E72) — entry count
+	jrl nc, .Lpb_loop_done		; if IZ >= count, done
+
+.Lpb_entry_loop:			; 0x28F06E
+	; Compute entry address: 0x230884 + IZ*9
+	ld wa, iz
+	extz xwa
+	ld xbc, xwa
+	sll xbc, 3			; XBC = IZ * 8
+	add xbc, xwa			; XBC = IZ * 9
+	ld xwa, 2295940			; XWA = 0x00230884
+	add xwa, xbc			; XWA = entry address
+	push xwa
+	st_dri3b w, 0xfd, 0x16, 0x01	; lda XWA, XSP+0x0116
+	push xwa
+	call 2731845			; call 0x29AF45 (memcpy)
+
+	; Append separator string
+	pushw 46			; max = 0x2E
+	pushw 23896			; src = 0x5D58
+	st_dri3b w, 0xfd, 0x1e, 0x01	; lda XWA, XSP+0x011E
+	push xwa
+	call 2731787			; call 0x29AF0B (strcat)
+	lda xsp, (xsp + 16)		; pop 16 bytes
+
+	; --- Call vtable method at +0x00A0 (display entry) ---
+	st_dri3b w, 0xfd, 0x12, 0x01	; lda XWA, XSP+0x0112
+	ldada_24 xbc, 3038558		; XBC = 0x2E5D5E
+	ldda32_24 xde, 2335138		; XDE = (0x23A1A2)
+	ld_sril3 xde, 0xe9, 0x88, 0x0e	; XDE = (XDE + 0x0E88)
+	ld_sril3 xhl, 0xe9, 0xa0, 0x00	; XHL = (XDE + 0x00A0)
+	call (xhl)
+
+	; --- Compute entry index * 27, add to base ---
+	ld wa, iz
+	extz xwa
+	ld xbc, 27			; 0x1B
+	call 2733869			; call 0x29B72D (multiply)
+	ld xwa, 2296310			; XWA = 0x002309F6
+	add xwa, xhl			; XWA = base + IZ*27
+
+	; --- Call vtable method at +0x00A8 ---
+	ldda32_24 xbc, 2335138		; XBC = (0x23A1A2)
+	ld_sril3 xbc, 0xe5, 0x88, 0x0e	; XBC = (XBC + 0x0E88)
+	ld_sril3 xhl, 0xe5, 0xa8, 0x00	; XHL = (XBC + 0x00A8)
+	ld xbc, 26			; 0x1A
+	call (xhl)
+
+	; --- Call vtable method at +0x00AC ---
+	ldda32_24 xwa, 2335138		; XWA = (0x23A1A2)
+	ld_sril3 xwa, 0xe1, 0x88, 0x0e
+	ld_sril3 xhl, 0xe1, 0xac, 0x00	; XHL = (XWA + 0x00AC)
+	call (xhl)
+
+	; --- Same pattern: entry address IZ*9, copy, append, display ---
+	ld wa, iz
+	extz xwa
+	ld xbc, xwa
+	sll xbc, 3
+	add xbc, xwa
+	ld xwa, 2295940			; 0x00230884
+	add xwa, xbc
+	push xwa
+	st_dri3b w, 0xfd, 0x16, 0x01	; lda XWA, XSP+0x0116
+	push xwa
+	call 2731845			; memcpy
+	pushw 46
+	pushw 23906			; src = 0x5D62
+	st_dri3b w, 0xfd, 0x1e, 0x01	; lda XWA, XSP+0x011E
+	push xwa
+	call 2731787			; strcat
+	lda xsp, (xsp + 16)		; pop 16 bytes
+
+	; --- Call vtable method at +0x00A0 via XIX ---
+	st_dri3b w, 0xfd, 0x12, 0x01	; lda XWA, XSP+0x0112
+	ldada_24 xbc, 3038568		; XBC = 0x2E5D68
+	ldda32_24 xde, 2335138		; XDE = (0x23A1A2)
+	ld_sril3 xde, 0xe9, 0x88, 0x0e
+	ld_sril3 xix, 0xe9, 0xa0, 0x00	; XIX = (XDE + 0x00A0)
+	call (xix)
+
+	; --- Check result and set flag ---
+	cps hl, 0
+	jr lt, .Lpb_set_zero		; if HL < 0, set 0
+	; HL >= 0: set flag to 1
+	ld wa, iz
+	extz xwa
+	ld xbc, 2297418			; XBC = 0x00230E4A
+	add xbc, xwa
+	ldmi8 (xbc), 1			; flag[IZ] = 1
+	jr t, .Lpb_entry_next
+
+.Lpb_set_zero:				; 0x28F153
+	ld wa, iz
+	extz xwa
+	ld xbc, 2297418			; XBC = 0x00230E4A
+	add xbc, xwa
+	ldmi8 (xbc), 0			; flag[IZ] = 0
+
+.Lpb_entry_next:			; 0x28F161
+	; --- Call vtable method at +0x00AC (advance) ---
+	ldda32_24 xwa, 2335138
+	ld_sril3 xwa, 0xe1, 0x88, 0x0e
+	ld_sril3 xhl, 0xe1, 0xac, 0x00
+	call (xhl)
+
+	; --- Loop control ---
+	inc 1, iz			; IZ++
+	cpda16_24 xiz, 2297458		; cp IZ, (0x230E72)
+	jrl c, .Lpb_entry_loop		; if IZ < count, loop
+
+.Lpb_loop_done:				; 0x28F17C
+	; --- Call vtable method at +0x053C (finalize) ---
+	ldda32_24 xwa, 2335138
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e
+	ld_sril3 xhl, 0xe1, 0x3c, 0x05	; XHL = (XWA + 0x053C)
+	call (xhl)
+
+.Lpb_exit:				; 0x28F18D
+	; --- Epilogue: return result and deallocate ---
+	ld xhl, (xsp + 4)		; XHL = result
+	pop xiz				; restore XIZ
+	st_dri3b l, 0xfd, 0x72, 0x01	; lda XSP, XSP+0x0172
+	ret
 
 HDAE5000_Directory_Handler:	; 0x28F197 (614 bytes)
 	; Handle directory listing and navigation
