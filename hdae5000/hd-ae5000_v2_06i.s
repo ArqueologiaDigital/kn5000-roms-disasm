@@ -3577,7 +3577,292 @@ HDAE5000_FS_Init:	; 0x2870D6 (3711 bytes)
 
 HDAE5000_FS_Read_FSB:	; 0x287F55 (832 bytes)
 	; Read File System Block from HD
-	.incbin "includes/code_2803c2_28f542.bin", 31635, 832
+	; Part 1: Init loop — read 24 directory entries
+	.byte 0xbf, 0xea, 0x37		; lda xsp, (xsp + 0xEA) — alloc stack
+	.byte 0x2e			; push iz (compact)
+	.byte 0x0b, 0x81, 0x07		; push 0x0781
+	.byte 0x0b, 0x00, 0x00		; push 0x0000
+	ldada_24 xwa, 0x22a2ca
+	push xwa
+	call 0x29aec7			; MemFill
+	inc 0, xsp			; dealloc 8 bytes
+	lds iz, 0			; IZ = 0 (loop counter)
+	cp iz, 0x0018			; pre-check: 24 iterations?
+	jrl nc, .LFS_RdFSB__loop_done
+.LFS_RdFSB__loop:			; loop body start
+	.byte 0x0b, 0x15, 0x00		; push 0x0015
+	ldada_24 xwa, 0x2e2e60
+	push xwa
+	ldw wa, 0x0015			; 21 bytes per entry
+	mul xwa, xiz			; offset = IZ * 21
+	ld xbc, 0x0022a2ca
+	add xbc, xwa
+	push xbc
+	call 0x29ae9f			; MemCopy
+	ldda16_24 xwa, 0x23a090
+	add wa, iz
+	inc 1, wa
+	.byte 0x28			; push wa (compact)
+	.byte 0x0b, 0x2e, 0x00		; push 0x002E
+	.byte 0x0b, 0x76, 0x2e		; push 0x2E76
+	lda xwa, (xsp + 0x12)
+	push xwa
+	call HDAE5000_PPI_Block_Copy
+	lda xwa, (xsp + 0x16)
+	push xwa
+	call 0x29af71			; Display_Buffer_Validate
+	lda xsp, (xsp + 0x18)
+	.byte 0x2b			; push hl (compact)
+	lda xwa, (xsp + 0x04)
+	push xwa
+	ldw wa, 0x0015
+	mul xwa, xiz
+	ld xbc, 0x0022a2ca
+	add xbc, xwa
+	push xbc
+	call 0x29ae9f
+	lda xsp, (xsp + 0x0a)
+	ldda16_24 xwa, 0x23a090
+	add wa, iz
+	call HDAE5000_Calculate_Tile_Address
+	.byte 0x0b, 0x10, 0x00		; push 0x0010
+	push xhl
+	ldw wa, 0x0015
+	mul xwa, xiz
+	inc 4, wa			; offset + 4
+	extz xwa
+	ld xbc, 0x0022a2ca
+	add xbc, xwa
+	push xbc
+	call 0x29ae9f
+	lda xsp, (xsp + 0x0a)
+	inc 1, iz			; IZ++
+	cp iz, 0x0018
+	jrl c, .LFS_RdFSB__loop	; loop while IZ < 24
+.LFS_RdFSB__loop_done:
+	ldada_24 xwa, 0x22a2ca
+	ld xde, xwa
+	ldda32_24 xwa, 0x23a1a2
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e
+	ld_sril3 xhl, 0xe1, 0x24, 0x01	; ld XHL, (XWA + 0x0124)
+	ld xwa, 0x007f00fb
+	ld xbc, 0x01ea000a
+	call (xhl)
+	ldda32_24 xwa, 0x23a1a2
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e
+	ld_sril3 xhl, 0xe1, 0x24, 0x01
+	ld xwa, 0x007f00fb
+	ld xbc, 0x01c0000f
+	ld xde, 0xffffffff
+	call (xhl)
+	.byte 0x4e			; pop iz (compact)
+	lda xsp, (xsp + 0x16)		; dealloc stack frame
+	ret
+	;
+	; Part 2: Event handler A (0x288041)
+.LFS_RdFSB__handlerA:
+	push xiz
+	ld xiz, xwa			; save context
+	cp xbc, 0x01c00007
+	jr z, .LFS_RdFSB__a_evt07
+	cp xbc, 0x01e0007c
+	jr z, .LFS_RdFSB__a_evt7c
+	cp xbc, 0x01e00084
+	jr z, .LFS_RdFSB__a_evt84
+	cp xbc, 0x01e00086
+	jr z, .LFS_RdFSB__a_evt86
+	cp xbc, 0x01e0003a
+	jr z, .LFS_RdFSB__a_evt3a
+	lds32 xhl, 0			; unrecognized event
+	jrl t, .LFS_RdFSB__a_exit
+.LFS_RdFSB__a_evt3a:			; event 0x3A: copy display data
+	.byte 0x0b, 0x10, 0x00		; push 0x0010
+	ldada_24 xwa, 0x23a06e
+	push xwa
+	push xde
+	call HDAE5000_MemCopy_Reverse
+	lda xsp, (xsp + 0x0a)
+	ld xhl, xiz
+	jrl t, .LFS_RdFSB__a_exit
+.LFS_RdFSB__a_evt86:			; event 0x86: copy + clear flag
+	.byte 0x0b, 0x10, 0x00		; push 0x0010
+	push xde
+	.byte 0x0b, 0x23, 0x00		; push 0x0023
+	.byte 0x0b, 0x6e, 0xa0		; push 0xA06E
+	call HDAE5000_MemCopy_Reverse
+	lda xsp, (xsp + 0x0a)
+	stdi8_24 0x23a07e, 0x00	; clear byte
+	ld xhl, xiz
+	jrl t, .LFS_RdFSB__a_exit
+.LFS_RdFSB__a_evt84:
+	lds32 xhl, 0
+	jrl t, .LFS_RdFSB__a_exit
+.LFS_RdFSB__a_evt7c:
+	ld xhl, 0x00000010
+	jrl t, .LFS_RdFSB__a_exit
+.LFS_RdFSB__a_evt07:			; event 0x07: file operation
+	cp xde, 0x0000000b
+	jr z, .LFS_RdFSB__a_case0b
+	cp xde, 0x0000008a
+	jrl nz, .LFS_RdFSB__a_done
+	; Case 0x8A: validate string and display
+	ldada_24 xwa, 0x22ad0a
+	calr HDAE5000_Validate_String
+	ld xiz, xhl
+	ld xwa, xiz
+	or xwa, xwa
+	jrl z, .LFS_RdFSB__a_done
+	ld xwa, xiz
+	push xwa
+	call 0x29af71
+	.byte 0x2b			; push hl
+	ld xwa, xiz
+	push xwa
+	ldada_24 xwa, 0x23a06e
+	push xwa
+	call 0x29ae9f
+	lda xsp, (xsp + 0x0e)
+	ldda32_24 xwa, 0x23a1a2
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e
+	ld_sril3 xix, 0xe1, 0x0c, 0x05	; ld XIX, (XWA + 0x050C)
+	call (xix)
+	ldada_24 xwa, 0x23a06e
+	ld xbc, xwa
+	ld xwa, xhl
+	ld xde, xbc
+	ldda32_24 xbc, 0x23a1a2
+	ld_sril3 xbc, 0xe5, 0x0a, 0x0e
+	ld_sril3 xhl, 0xe5, 0x00, 0x01	; ld XHL, (XBC + 0x0100)
+	ld xbc, 0x01e00086
+	call (xhl)
+	jr t, .LFS_RdFSB__a_done
+.LFS_RdFSB__a_case0b:			; case 0x0B: sector list display
+	ldda32_24 xwa, 0x23a1a2
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e
+	ld_sril3 xix, 0xe1, 0x0c, 0x05
+	call (xix)
+	ldada_24 xwa, 0x23a06e
+	ld xbc, xwa
+	ld xwa, xhl
+	ld xde, xbc
+	ldda32_24 xbc, 0x23a1a2
+	ld_sril3 xbc, 0xe5, 0x0a, 0x0e
+	ld_sril3 xhl, 0xe5, 0x00, 0x01
+	ld xbc, 0x01e0003a
+	call (xhl)
+	ldda16_24 xwa, 0x23a096
+	ldada_24 xbc, 0x23a06e
+	ld xde, 0x007f00f0
+	calr HDAE5000_Menu_Callback
+	calr HDAE5000_FS_Read_FSB	; recursive call
+.LFS_RdFSB__a_done:
+	lds32 xhl, 0
+.LFS_RdFSB__a_exit:
+	pop xiz
+	ret
+	;
+	; Part 3: Event handler B (0x288169) — same structure, different data
+.LFS_RdFSB__handlerB:
+	push xiz
+	ld xiz, xwa
+	cp xbc, 0x01c00007
+	jr z, .LFS_RdFSB__b_evt07
+	cp xbc, 0x01e0007c
+	jr z, .LFS_RdFSB__b_evt7c
+	cp xbc, 0x01e00084
+	jr z, .LFS_RdFSB__b_evt84
+	cp xbc, 0x01e00086
+	jr z, .LFS_RdFSB__b_evt86
+	cp xbc, 0x01e0003a
+	jr z, .LFS_RdFSB__b_evt3a
+	lds32 xhl, 0
+	jrl t, .LFS_RdFSB__b_exit
+.LFS_RdFSB__b_evt3a:
+	.byte 0x0b, 0x10, 0x00		; push 0x0010
+	ldada_24 xwa, 0x23a06e
+	push xwa
+	push xde
+	call HDAE5000_MemCopy_Reverse
+	lda xsp, (xsp + 0x0a)
+	ld xhl, xiz
+	jrl t, .LFS_RdFSB__b_exit
+.LFS_RdFSB__b_evt86:
+	.byte 0x0b, 0x10, 0x00		; push 0x0010
+	push xde
+	.byte 0x0b, 0x23, 0x00		; push 0x0023
+	.byte 0x0b, 0x6e, 0xa0		; push 0xA06E
+	call HDAE5000_MemCopy_Reverse
+	lda xsp, (xsp + 0x0a)
+	stdi8_24 0x23a07e, 0x00
+	ld xhl, xiz
+	jrl t, .LFS_RdFSB__b_exit
+.LFS_RdFSB__b_evt84:
+	lds32 xhl, 0
+	jrl t, .LFS_RdFSB__b_exit
+.LFS_RdFSB__b_evt7c:
+	ld xhl, 0x00000010
+	jrl t, .LFS_RdFSB__b_exit
+.LFS_RdFSB__b_evt07:
+	cp xde, 0x0000000b
+	jr z, .LFS_RdFSB__b_case0b
+	cp xde, 0x0000008a
+	jrl nz, .LFS_RdFSB__b_done
+	ldada_24 xwa, 0x22ad0a
+	calr HDAE5000_Validate_String
+	ld xiz, xhl
+	ld xwa, xiz
+	or xwa, xwa
+	jrl z, .LFS_RdFSB__b_done
+	ld xwa, xiz
+	push xwa
+	call 0x29af71
+	.byte 0x2b			; push hl
+	ld xwa, xiz
+	push xwa
+	ldada_24 xwa, 0x23a06e
+	push xwa
+	call 0x29ae9f
+	lda xsp, (xsp + 0x0e)
+	ldda32_24 xwa, 0x23a1a2
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e
+	ld_sril3 xix, 0xe1, 0x0c, 0x05
+	call (xix)
+	ldada_24 xwa, 0x23a06e
+	ld xbc, xwa
+	ld xwa, xhl
+	ld xde, xbc
+	ldda32_24 xbc, 0x23a1a2
+	ld_sril3 xbc, 0xe5, 0x0a, 0x0e
+	ld_sril3 xhl, 0xe5, 0x00, 0x01
+	ld xbc, 0x01e00086
+	call (xhl)
+	jr t, .LFS_RdFSB__b_done
+.LFS_RdFSB__b_case0b:
+	ldda32_24 xwa, 0x23a1a2
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e
+	ld_sril3 xix, 0xe1, 0x0c, 0x05
+	call (xix)
+	ldada_24 xwa, 0x23a06e
+	ld xbc, xwa
+	ld xwa, xhl
+	ld xde, xbc
+	ldda32_24 xbc, 0x23a1a2
+	ld_sril3 xbc, 0xe5, 0x0a, 0x0e
+	ld_sril3 xhl, 0xe5, 0x00, 0x01
+	ld xbc, 0x01e0003a
+	call (xhl)
+	ldda16_24 xwa, 0x23a096
+	ldada_24 xbc, 0x23a06e
+	ld xde, 0x007f0163
+	calr HDAE5000_Menu_Callback
+	lds wa, 1
+	lds bc, 2
+	calr HDAE5000_FS_Write_FSB
+.LFS_RdFSB__b_done:
+	lds32 xhl, 0
+.LFS_RdFSB__b_exit:
+	pop xiz
+	ret
 
 HDAE5000_FS_Write_FSB:	; 0x288295 (5072 bytes)
 	; Write File System Block to HD; accesses 0x229DAC
