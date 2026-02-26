@@ -8442,9 +8442,262 @@ HDAE5000_PPORT_Strings:	; 29541Eh
 ;   - Zero padding at end (~65KB)
 ; ============================================================================
 
-HDAE5000_Code_2_PartB:	; 295642h
-	; PPORT command handlers and HD routines
-	.incbin "includes/code_295642_2971a2.bin", 0, 660
+HDAE5000_Code_2_PartB:	; 0x295642 (660 bytes)
+	; PPORT command handler: initialize HD — display status, read flag bytes,
+	; check compatibility, call utility with params, sum buffer
+	ldw wa, 0x001A				; display command
+	nop
+	ldada_24 xbc, 2708510			; lda XBC, 0x29541E — status string
+	nop
+	call HDAE5000_Display_String
+	ldada_24 xix, 2330984			; lda XIX, 0x239168
+	nop
+	ld a, (xix + 1)			; read flag byte 1
+	nop
+	stda8_24 2330868, a			; st (0x2390F4), A
+	nop
+	ld a, (xix + 2)			; read flag byte 2
+	nop
+	stda8_24 2330870, a			; st (0x2390F6), A
+	nop
+	call HDAE5000_PPORT_Ready_Check
+	lds wa, 3				; display command
+	di
+	call HDAE5000_Display_String
+	ei 7
+	cps wa, 0				; check result
+	jpcc_24 6, 2709124			; jp Z, 0x295684 — success path
+	nop
+	jp .Lc2b_do_cleanup
+.Lc2b_check_compat:			; 0x295684
+	ldda8_24 a, 2334794			; ld A, (0x23A04A) — compatibility byte
+	nop
+	cpdm8_24 2330868, a			; cp (0x2390F4), A — match?
+	nop
+	jpcc_24 6, 2709164			; jp Z, 0x2956AC — match, skip error
+	nop
+	ldw wa, 0x001A
+	nop
+	ldada_24 xbc, 2709034			; lda XBC, 0x29562A — error string
+	nop
+	call HDAE5000_Display_String
+.Lc2b_do_cleanup:			; 0x2956A4
+	call HDAE5000_PPORT_Cleanup
+	jp .Lc2b_sum_and_done
+.Lc2b_compat_ok:			; 0x2956AC
+	ldw bc, 0x0097				; BC param
+	nop
+	ldw hl, 0x00CA				; HL param
+	nop
+	call 2714308				; call 0x296AC4 — utility
+.Lc2b_sum_and_done:			; 0x2956B8
+	call HDAE5000_PPORT_Sum_Buffer
+	cpdi8_24 2330836, 0x01			; error check
+	jpcc_24 6, 2708340			; jp Z, abort
+	nop
+	jp HDAE5000_PPORT_Cmd_Done
+
+.Lc2b_cmd_format:			; 0x2956CC — Format HD command handler
+	di
+	ldw wa, 0x001A
+	nop
+	ldada_24 xbc, 2708534			; lda XBC, 0x295436 — format string
+	nop
+	call HDAE5000_Display_String
+	lds wa, 1				; display command
+	call HDAE5000_Display_String
+	xor wa, wa				; WA = 0
+	ldb a, 0xFF				; A = 0xFF, so WA = 0x00FF
+	ld (xix), wa				; store to PPORT data
+	ldw wa, 0x0012				; display command
+	nop
+	call HDAE5000_Display_String
+	ret
+	nop
+
+.Lc2b_cmd_read_status:			; 0x2956F2 — Read status command handler
+	ldw wa, 0x001A
+	nop
+	ldada_24 xbc, 2708558			; lda XBC, 0x29544E — status string
+	nop
+	call HDAE5000_Display_String
+	call HDAE5000_PPORT_Ready_Check
+	lds wa, 7				; display command
+	di
+	call HDAE5000_Display_String
+	ei 7
+	cps wa, 0
+	jpcc_24 6, 2709274			; jp Z, 0x29571A — skip cleanup
+	nop
+	call HDAE5000_PPORT_Cleanup
+.Lc2b_rs_sum:				; 0x29571A
+	call HDAE5000_PPORT_Sum_Buffer
+	cpdi8_24 2330836, 0x01
+	jpcc_24 6, 2708340
+	nop
+	jp HDAE5000_PPORT_Cmd_Done
+
+.Lc2b_cmd_read_hd:			; 0x29572E — Read HD sectors command handler
+	; Display status, read 3 CHS parameter sets, call read function for each
+	ldw wa, 0x001A
+	nop
+	ldada_24 xbc, 2708582			; lda XBC, 0x295466 — status string
+	nop
+	call HDAE5000_Display_String
+	call HDAE5000_PPORT_Ready_Check
+	lds wa, 4				; display progress step 1
+	di
+	call HDAE5000_Display_String
+	ei 7
+	ldw bc, 0x002C
+	nop
+	ldw hl, 0x0034
+	nop
+	call 2714308				; call 0x296AC4
+	lds wa, 5				; step 2
+	di
+	call HDAE5000_Display_String
+	ei 7
+	ldw bc, 0x0034
+	nop
+	ldw hl, 0x003C
+	nop
+	call 2714308
+	lds wa, 6				; step 3
+	di
+	call HDAE5000_Display_String
+	ei 7
+	ldw bc, 0x003C
+	nop
+	ldw hl, 0x0046
+	nop
+	call 2714308
+	call HDAE5000_PPORT_Sum_Buffer
+	cpdi8_24 2330836, 0x01
+	jpcc_24 6, 2708340
+	nop
+	; Read 3 CHS regions from PPORT data
+	ldada_24 xix, 2330984			; lda XIX, 0x239168
+	nop
+	ld bc, (xix + 0x30)			; sectors low
+	nop
+	ld de, (xix + 0x32)			; sectors high
+	nop
+	mul xde, xbc				; XDE = DE × BC (total sectors)
+	ld xiy, (xix + 0x2C)			; region start
+	nop
+	call 2714360				; call 0x296AF8 — read region
+	cpdi8_24 2330836, 0x01
+	jpcc_24 6, 2708340
+	nop
+	ldada_24 xix, 2330984
+	nop
+	ld bc, (xix + 0x38)
+	nop
+	ld de, (xix + 0x3A)
+	nop
+	mul xde, xbc
+	ld xiy, (xix + 0x34)
+	nop
+	call 2714360
+	cpdi8_24 2330836, 0x01
+	jpcc_24 6, 2708340
+	nop
+	ldada_24 xix, 2330984
+	nop
+	ld bc, (xix + 0x40)
+	nop
+	ld de, (xix + 0x42)
+	nop
+	mul xde, xbc
+	ld xiy, (xix + 0x3C)
+	nop
+	call 2714360
+	cpdi8_24 2330836, 0x01
+	jpcc_24 6, 2708340
+	nop
+	jp HDAE5000_PPORT_Cmd_Done
+
+.Lc2b_cmd_write_hd:			; 0x295802 — Write HD sectors command handler
+	; Same as read but calls write function (0x296B7E) instead
+	ldw wa, 0x001A
+	nop
+	ldada_24 xbc, 2708606			; lda XBC, 0x29547E — status string
+	nop
+	call HDAE5000_Display_String
+	call HDAE5000_PPORT_Ready_Check
+	lds wa, 4
+	di
+	call HDAE5000_Display_String
+	ei 7
+	ldw bc, 0x002C
+	nop
+	ldw hl, 0x0034
+	nop
+	call 2714308
+	lds wa, 5
+	di
+	call HDAE5000_Display_String
+	ei 7
+	ldw bc, 0x0034
+	nop
+	ldw hl, 0x003C
+	nop
+	call 2714308
+	lds wa, 6
+	di
+	call HDAE5000_Display_String
+	ei 7
+	ldw bc, 0x003C
+	nop
+	ldw hl, 0x0046
+	nop
+	call 2714308
+	call HDAE5000_PPORT_Sum_Buffer
+	cpdi8_24 2330836, 0x01
+	jpcc_24 6, 2708340
+	nop
+	; Write 3 CHS regions from PPORT data
+	ldada_24 xix, 2330984
+	nop
+	ld bc, (xix + 0x30)
+	nop
+	ld de, (xix + 0x32)
+	nop
+	mul xde, xbc
+	ld xiy, (xix + 0x2C)
+	nop
+	call 2714494				; call 0x296B7E — write region
+	cpdi8_24 2330836, 0x01
+	jpcc_24 6, 2708340
+	nop
+	ldada_24 xix, 2330984
+	nop
+	ld bc, (xix + 0x38)
+	nop
+	ld de, (xix + 0x3A)
+	nop
+	mul xde, xbc
+	ld xiy, (xix + 0x34)
+	nop
+	call 2714494
+	cpdi8_24 2330836, 0x01
+	jpcc_24 6, 2708340
+	nop
+	ldada_24 xix, 2330984
+	nop
+	ld bc, (xix + 0x40)
+	nop
+	ld de, (xix + 0x42)
+	nop
+	mul xde, xbc
+	ld xiy, (xix + 0x3C)
+	nop
+	call 2714494
+	cpdi8_24 2330836, 0x01
+	jpcc_24 6, 2708340
+	nop
+	jp HDAE5000_PPORT_Cmd_Done
 
 HDAE5000_Cmd01_SendInfo:	; 0x2958D6 (62 bytes)
 	; Handler: Send HD info - display status, clear buffer, check result
