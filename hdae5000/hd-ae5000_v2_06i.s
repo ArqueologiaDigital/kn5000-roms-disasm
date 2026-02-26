@@ -8803,9 +8803,310 @@ HDAE5000_Cmd02_Exit:	; 0x295914 (226 bytes)
 	nop
 	jp HDAE5000_PPORT_Cmd_Done
 
-HDAE5000_Cmd03_ReadFSB:	; 0x2959F6
-	; Handler: Read FSB from HD
-	.incbin "includes/code_295642_2971a2.bin", 948, 838
+HDAE5000_Cmd03_ReadFSB:	; 0x2959F6 (838 bytes)
+	; Handler: Read FSB from HD — display status, render, read sector/head masks,
+	; copy 18 region descriptors from PPORT buffer, then read each flagged region
+	ldw wa, 0x001A				; display command
+	nop
+	ldada_24 xbc, 2708678			; lda XBC, 0x2954C6 — status string
+	nop
+	call HDAE5000_Display_String
+	call HDAE5000_Render_Display_Region
+	call HDAE5000_Render_Display_Region2
+	call 2713602				; call 0x296802 — register XIX
+	call HDAE5000_PPORT_Ready_Check
+	lds bc, 0
+	ldw hl, 0x002C
+	nop
+	call 2714308				; call 0x296AC4
+	ldada_24 xix, 2330984			; lda XIX, 0x239168
+	nop
+	ld a, (xix)				; sector mask byte
+	stda8_24 2330846, a			; st (0x2390DE), A
+	nop
+	ldda8_24 w, 2330842			; ld W, (0x2390DA)
+	nop
+	and w, a				; apply mask
+	and w, 0xBF				; clear bit 6
+	nop
+	stda8_24 2330850, w			; st (0x2390E2), W — masked sector
+	nop
+	ld a, (xix + 1)			; head mask byte
+	nop
+	stda8_24 2330848, a			; st (0x2390E0), A
+	nop
+	ldda8_24 w, 2330844			; ld W, (0x2390DC)
+	nop
+	and w, a
+	stda8_24 2330852, w			; st (0x2390E4), W — masked head
+	nop
+	ld (xix + 1), w			; write back
+	nop
+	call HDAE5000_PPORT_Sum_Buffer
+	cpdi8_24 2330836, 0x01			; error check
+	jpcc_24 6, 2708340			; jp Z, abort
+	nop
+	cpdi8_24 2330850, 0x00			; masked sector = 0?
+	jpcc_24 6, 2710840			; jp Z, 0x295D38 — skip to end
+	nop
+	jp .Lrfsb_continue
+.Lrfsb_check_head:			; 0x295A7A
+	cpdi8_24 2330852, 0x00			; masked head = 0?
+	jpcc_24 6, 2710840			; jp Z, skip to end
+	nop
+.Lrfsb_continue:			; 0x295A86
+	stdi8_24 2330854, 0x00			; st (0x2390E6), 0 — clear error flag
+	call HDAE5000_PPORT_Ready_Check
+	ldda32_24 xix, 2330880			; ld XIX, (0x239100) — data ptr
+	nop
+	ldda8_24 a, 2330850			; ld A, (0x2390E2)
+	nop
+	ld (xix), a
+	ldda8_24 a, 2330852			; ld A, (0x2390E4)
+	nop
+	ld (xix + 1), a
+	nop
+	xor xbc, xbc
+	xor xde, xde
+	ldda8_24 c, 2330838
+	nop
+	ldda8_24 e, 2330840
+	nop
+	ldw wa, 0x000E				; display command
+	nop
+	di
+	call HDAE5000_Display_String
+	ei 7
+	cps wa, 0
+	jr z, .Lrfsb_no_error_flag
+	stdi8_24 2330854, 0x01			; set error flag
+.Lrfsb_no_error_flag:			; 0x295ACE
+	call HDAE5000_Render_Display_Region2
+	ldda32_24 xix, 2330880			; ld XIX, (0x239100)
+	nop
+	; Copy 18 region descriptors from PPORT buffer to memory
+	; Short displacement (8-bit signed): offsets 0x46-0x7C
+	ld xwa, (xix + 0x46)
+	nop
+	stda32_24 2330888, xwa			; st (0x239108)
+	nop
+	ld xwa, (xix + 0x4A)
+	nop
+	stda32_24 2330892, xwa			; st (0x23910C)
+	nop
+	ld xwa, (xix + 0x4F)
+	nop
+	stda32_24 2330896, xwa			; st (0x239110)
+	nop
+	ld xwa, (xix + 0x53)
+	nop
+	stda32_24 2330900, xwa			; st (0x239114)
+	nop
+	ld xwa, (xix + 0x58)
+	nop
+	stda32_24 2330904, xwa			; st (0x239118)
+	nop
+	ld xwa, (xix + 0x5C)
+	nop
+	stda32_24 2330908, xwa			; st (0x23911C)
+	nop
+	ld xwa, (xix + 0x61)
+	nop
+	stda32_24 2330912, xwa			; st (0x239120)
+	nop
+	ld xwa, (xix + 0x65)
+	nop
+	stda32_24 2330916, xwa			; st (0x239124)
+	nop
+	ld xwa, (xix + 0x6A)
+	nop
+	stda32_24 2330920, xwa			; st (0x239128)
+	nop
+	ld xwa, (xix + 0x6E)
+	nop
+	stda32_24 2330924, xwa			; st (0x23912C)
+	nop
+	ld xwa, (xix + 0x73)
+	nop
+	stda32_24 2330928, xwa			; st (0x239130)
+	nop
+	ld xwa, (xix + 0x77)
+	nop
+	stda32_24 2330932, xwa			; st (0x239134)
+	nop
+	ld xwa, (xix + 0x7C)
+	nop
+	stda32_24 2330936, xwa			; st (0x239138)
+	nop
+	; Extended displacement (16-bit): offsets >= 0x80
+	.byte 0xE3, 0xF1, 0x80, 0x00, 0x20	; ld XWA, (XIX + 0x0080)
+	nop
+	stda32_24 2330940, xwa			; st (0x23913C)
+	nop
+	.byte 0xE3, 0xF1, 0x8E, 0x00, 0x20	; ld XWA, (XIX + 0x008E)
+	nop
+	stda32_24 2330948, xwa			; st (0x239144)
+	nop
+	.byte 0xE3, 0xF1, 0x92, 0x00, 0x20	; ld XWA, (XIX + 0x0092)
+	nop
+	stda32_24 2330952, xwa			; st (0x239148)
+	nop
+	.byte 0xE3, 0xF1, 0xBF, 0x00, 0x20	; ld XWA, (XIX + 0x00BF)
+	nop
+	stda32_24 2330956, xwa			; st (0x23914C)
+	nop
+	.byte 0xE3, 0xF1, 0xC3, 0x00, 0x20	; ld XWA, (XIX + 0x00C3)
+	nop
+	stda32_24 2330960, xwa			; st (0x239150)
+	nop
+	; Setup for final sum/check
+	call HDAE5000_PPORT_Ready_Check
+	lds bc, 0
+	ldw hl, 0x00C8
+	nop
+	call 2714308				; call 0x296AC4
+	cpdi8_24 2330854, 0x00			; error flag clear?
+	jr z, .Lrfsb_sum
+	call HDAE5000_PPORT_Cleanup
+.Lrfsb_sum:				; 0x295BB0
+	call HDAE5000_PPORT_Sum_Buffer
+	cpdi8_24 2330836, 0x01
+	jpcc_24 6, 2708340			; jp Z, abort
+	nop
+	cpdi8_24 2330854, 0x01			; error flag set?
+	jpcc_24 6, 2710840			; jp Z, exit
+	nop
+	; Test flag bits and read corresponding regions
+	; Bit 0: custom region
+	ldda8_24 a, 2330850			; ld A, (0x2390E2)
+	nop
+	and a, 0x01
+	nop
+	cps a, 1
+	jpcc_24 14, 2710510			; jp NZ, skip
+	nop
+	call 2714784				; call 0x296CA0 — read custom region
+	cpdi8_24 2330836, 0x01
+	jpcc_24 6, 2708340
+	nop
+.Lrfsb_bit1:				; 0x295BEE — Bit 1
+	ldda8_24 a, 2330850
+	nop
+	and a, 0x02
+	nop
+	cps a, 2
+	jpcc_24 14, 2710556			; jp NZ, skip
+	nop
+	ldda32_24 xiy, 2330904			; ld XIY, (0x239118)
+	nop
+	ldda32_24 xde, 2330908			; ld XDE, (0x23911C)
+	nop
+	call 2714360				; call 0x296AF8 — read region
+	cpdi8_24 2330836, 0x01
+	jpcc_24 6, 2708340
+	nop
+.Lrfsb_bit2:				; 0x295C1C — Bit 2
+	ldda8_24 a, 2330850
+	nop
+	and a, 0x04
+	nop
+	cps a, 4
+	jpcc_24 14, 2710602
+	nop
+	ldda32_24 xiy, 2330912			; ld XIY, (0x239120)
+	nop
+	ldda32_24 xde, 2330916			; ld XDE, (0x239124)
+	nop
+	call 2714360
+	cpdi8_24 2330836, 0x01
+	jpcc_24 6, 2708340
+	nop
+.Lrfsb_bit3:				; 0x295C4A — Bit 3
+	ldda8_24 a, 2330850
+	nop
+	and a, 0x08
+	nop
+	cp a, 0x08
+	nop
+	jpcc_24 14, 2710650
+	nop
+	ldda32_24 xiy, 2330920			; ld XIY, (0x239128)
+	nop
+	ldda32_24 xde, 2330924			; ld XDE, (0x23912C)
+	nop
+	call 2714360
+	cpdi8_24 2330836, 0x01
+	jpcc_24 6, 2708340
+	nop
+.Lrfsb_bit4:				; 0x295C7A — Bit 4
+	ldda8_24 a, 2330850
+	nop
+	and a, 0x10
+	nop
+	cp a, 0x10
+	nop
+	jpcc_24 14, 2710698
+	nop
+	ldda32_24 xiy, 2330928			; ld XIY, (0x239130)
+	nop
+	ldda32_24 xde, 2330932			; ld XDE, (0x239134)
+	nop
+	call 2714360
+	cpdi8_24 2330836, 0x01
+	jpcc_24 6, 2708340
+	nop
+.Lrfsb_bit5:				; 0x295CAA — Bit 5
+	ldda8_24 a, 2330850
+	nop
+	and a, 0x20
+	nop
+	cp a, 0x20
+	nop
+	jpcc_24 14, 2710746
+	nop
+	ldda32_24 xiy, 2330936			; ld XIY, (0x239138)
+	nop
+	ldda32_24 xde, 2330940			; ld XDE, (0x23913C)
+	nop
+	call 2714360
+	cpdi8_24 2330836, 0x01
+	jpcc_24 6, 2708340
+	nop
+.Lrfsb_bit7:				; 0x295CDA — Bit 7
+	ldda8_24 a, 2330850
+	nop
+	and a, 0x80
+	nop
+	cp a, 0x80
+	nop
+	jpcc_24 14, 2710794
+	nop
+	ldda32_24 xiy, 2330948			; ld XIY, (0x239144)
+	nop
+	ldda32_24 xde, 2330952			; ld XDE, (0x239148)
+	nop
+	call 2714360
+	cpdi8_24 2330836, 0x01
+	jpcc_24 6, 2708340
+	nop
+.Lrfsb_flag2_bit0:			; 0x295D0A — Head flag bit 0
+	ldda8_24 a, 2330852			; ld A, (0x2390E4) — masked head
+	nop
+	and a, 0x01
+	nop
+	cps a, 1
+	jpcc_24 14, 2710840			; jp NZ, exit
+	nop
+	ldda32_24 xiy, 2330956			; ld XIY, (0x23914C)
+	nop
+	ldda32_24 xde, 2330960			; ld XDE, (0x239150)
+	nop
+	call 2714360
+	cpdi8_24 2330836, 0x01
+	jpcc_24 6, 2708340
+	nop
+.Lrfsb_exit:				; 0x295D38
+	jp HDAE5000_PPORT_Cmd_Done
 
 HDAE5000_Cmd04_SendFSB:	; 0x295D3C
 	; Handler: Send FSB to PC
