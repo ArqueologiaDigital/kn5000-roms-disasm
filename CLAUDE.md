@@ -716,7 +716,10 @@ echo "XX XX XX XX" | xxd -r -p > /tmp/bytes.bin
 | `4E` (1 byte) — `pop iz` compact form | `de 05` (2 bytes) — uses register-prefix form | `.byte 0x4e` |
 | `8f 00 21` (3 bytes) — `ld a, (xsp + 0x00)` | `87 21` (2 bytes) — folds zero displacement | `.byte 0x8f, 0x00, 0x21` |
 
-**Same pattern applies to all compact push/pop of 16-bit index registers:** `push ix` (0x2C), `push iy` (0x2D), `push iz` (0x2E), `push sp` (0x2F), `pop ix` (0x4C), `pop iy` (0x4D), `pop iz` (0x4E), `pop sp` (0x4F) — test each with `llvm-mc` before using.
+**Same pattern applies to ALL compact push/pop of 16-bit registers.** The assembler always uses the 2-byte register-prefix form, but the ROM uses 1-byte compact opcodes:
+- `push wa` (0x28), `push bc` (0x29), `push de` (0x2A), `push hl` (0x2B), `push ix` (0x2C), `push iy` (0x2D), `push iz` (0x2E), `push sp` (0x2F)
+- `pop wa` (0x48), `pop bc` (0x49), `pop de` (0x4A), `pop hl` (0x4B), `pop ix` (0x4C), `pop iy` (0x4D), `pop iz` (0x4E), `pop sp` (0x4F)
+- **Fix:** Use `.byte 0xNN` for each. The 32-bit push/pop (`push xwa` = 0x38, etc.) work correctly as 1-byte.
 
 **Mnemonic reference for common operations:**
 
