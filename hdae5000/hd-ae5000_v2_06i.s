@@ -4422,10 +4422,195 @@ HDAE5000_Table_Sub_29293B:	; 0x29293B (419 bytes)
 	ret
 
 HDAE5000_Table_Sub_292ADE:	; 0x292ADE (288 bytes)
-	.incbin "includes/code_28f90c_2953e1.bin", 12754, 288
+	lda xsp, (xsp - 34)
+	push xiz
+	ld (xsp + 34), bc	; save file number
+	ld (xsp + 36), wa	; save partition
+	ldmw (xsp + 10), 0x0000	; init result = 0
+	; Call 0x29AE9F with args
+	pushw 0x0008
+	push xde
+	lda xwa, (xsp + 18)
+	push xwa
+	call 0x29AE9F
+	; Call 0x29AF45 with args
+	pushw 0x002F
+	pushw 0x8F30
+	lda xwa, (xsp + 34)
+	push xwa
+	call 0x29AF45
+	lda xsp, (xsp + 18)	; clean up pushed args
+	; Workspace dispatch with WA=6
+	lda xwa, (xsp + 26)
+	ld xbc, xwa
+	ldda32_24 xwa, 2335138
+	ld_sril3 xwa, 0xE1, 0x88, 0x0E
+	ld_sril3 xhl, 0xE1, 0x80, 0x00	; (XWA+0x0080)
+	lds wa, 6
+	call (xhl)
+	; Load constant and save
+	ld xwa, 0x000072AA
+	ld (xsp + 30), xwa
+	; Second dispatch via XIX
+	lda xwa, (xsp + 12)
+	ldada_24 xbc, 3116852	; 0x2F8F34
+	ldda32_24 xde, 2335138
+	ld_sril3 xde, 0xE9, 0x88, 0x0E
+	ld_sril3 xix, 0xE9, 0xA0, 0x00
+	call (xix)
+	cps hl, 0
+	jrl lt, .Lts92a_error
+	; Workspace dispatch: get handler
+	ldada_24 xwa, 2297628	; 0x230F1C
+	ld xbc, (xsp + 30)
+	ldda32_24 xde, 2335138
+	ld_sril3 xde, 0xE9, 0x88, 0x0E
+	ld_sril3 xhl, 0xE9, 0xA8, 0x00	; (XDE+0x00A8)
+	call (xhl)
+	; Save workspace base and get cell params
+	ldada_24 xwa, 2297628
+	ld (xsp + 4), xwa
+	ld xwa, (xsp + 30)
+	calr HDAE5000_Cell_Get_Params
+	ld (xsp + 8), xhl
+	; Multiply: compute table offset
+	ld wa, (xsp + 34)
+	extz xwa
+	ld xbc, 0x0000004C
+	call 0x29B72D
+	ld xiz, xhl
+	ld wa, (xsp + 36)
+	extz xwa
+	ld xbc, 0x000004C0
+	call 0x29B72D
+	add xhl, 0x780
+	add xhl, xiz
+	; Table lookup
+	ldada_24 xwa, 2102886	; 0x201666 (table base)
+	add xwa, xhl
+	ld xde, xwa
+	ld xwa, (xsp + 4)
+	ld xbc, (xsp + 8)
+	call 0x297E16
+	ld (xsp + 10), hl
+	; Set flag
+	ld wa, (xsp + 34)
+	extz xwa
+	ld xbc, 0x0000004C
+	call 0x29B72D
+	ld xiz, xhl
+	ld wa, (xsp + 36)
+	extz xwa
+	ld xbc, 0x000004C0
+	call 0x29B72D
+	add xhl, 0x780
+	add xhl, xiz
+	ldada_24 xwa, 2102864	; 0x201650 (flag base)
+	add xwa, xhl
+	ldmi8 (xwa), 0x01
+	; Final workspace dispatch
+	ldda32_24 xwa, 2335138
+	ld_sril3 xwa, 0xE1, 0x88, 0x0E
+	ld_sril3 xhl, 0xE1, 0xAC, 0x00	; (XWA+0x00AC)
+	call (xhl)
+	jr .Lts92a_load
+.Lts92a_error:
+	ldmw (xsp + 10), 0xFFFF	; error: result = -1
+.Lts92a_load:
+	ld hl, (xsp + 10)
+	pop xiz
+	lda xsp, (xsp + 34)
+	ret
 
 HDAE5000_Table_Sub_292BFE:	; 0x292BFE (280 bytes)
-	.incbin "includes/code_28f90c_2953e1.bin", 13042, 280
+	lda xsp, (xsp - 34)
+	push xiz
+	ld (xsp + 34), bc
+	ld (xsp + 36), wa
+	ldmw (xsp + 10), 0x0000
+	pushw 0x0008
+	push xde
+	lda xwa, (xsp + 18)
+	push xwa
+	call 0x29AE9F
+	pushw 0x002F
+	pushw 0x8F38
+	lda xwa, (xsp + 34)
+	push xwa
+	call 0x29AF45
+	lda xsp, (xsp + 18)
+	; Workspace dispatch with WA=7
+	lda xwa, (xsp + 26)
+	ld xbc, xwa
+	ldda32_24 xwa, 2335138
+	ld_sril3 xwa, 0xE1, 0x88, 0x0E
+	ld_sril3 xhl, 0xE1, 0x80, 0x00
+	lds wa, 7
+	call (xhl)
+	; Second dispatch via XIX (no constant store)
+	lda xwa, (xsp + 12)
+	ldada_24 xbc, 3116862	; 0x2F8F3E
+	ldda32_24 xde, 2335138
+	ld_sril3 xde, 0xE9, 0x88, 0x0E
+	ld_sril3 xix, 0xE9, 0xA0, 0x00
+	call (xix)
+	cps hl, 0
+	jrl lt, .Lts92b_error
+	ldada_24 xwa, 2297628
+	ld xbc, (xsp + 30)
+	ldda32_24 xde, 2335138
+	ld_sril3 xde, 0xE9, 0x88, 0x0E
+	ld_sril3 xhl, 0xE9, 0xA8, 0x00
+	call (xhl)
+	ldada_24 xwa, 2297628
+	ld (xsp + 4), xwa
+	ld xwa, (xsp + 30)
+	calr HDAE5000_Cell_Get_Params
+	ld (xsp + 8), xhl
+	ld wa, (xsp + 34)
+	extz xwa
+	ld xbc, 0x0000004C
+	call 0x29B72D
+	ld xiz, xhl
+	ld wa, (xsp + 36)
+	extz xwa
+	ld xbc, 0x000004C0
+	call 0x29B72D
+	add xhl, 0x780
+	add xhl, xiz
+	ldada_24 xwa, 2102890	; 0x20166A (table base)
+	add xwa, xhl
+	ld xde, xwa
+	ld xwa, (xsp + 4)
+	ld xbc, (xsp + 8)
+	call 0x297E16
+	ld (xsp + 10), hl
+	ld wa, (xsp + 34)
+	extz xwa
+	ld xbc, 0x0000004C
+	call 0x29B72D
+	ld xiz, xhl
+	ld wa, (xsp + 36)
+	extz xwa
+	ld xbc, 0x000004C0
+	call 0x29B72D
+	add xhl, 0x780
+	add xhl, xiz
+	ldada_24 xwa, 2102865	; 0x201651 (flag base)
+	add xwa, xhl
+	ldmi8 (xwa), 0x01
+	ldda32_24 xwa, 2335138
+	ld_sril3 xwa, 0xE1, 0x88, 0x0E
+	ld_sril3 xhl, 0xE1, 0xAC, 0x00
+	call (xhl)
+	jr .Lts92b_load
+.Lts92b_error:
+	ldmw (xsp + 10), 0xFFFF
+.Lts92b_load:
+	ld hl, (xsp + 10)
+	pop xiz
+	lda xsp, (xsp + 34)
+	ret
 
 HDAE5000_Table_Sub_292D16:	; 0x292D16 (419 bytes)
 	lda xsp, (xsp - 32)
@@ -4559,7 +4744,94 @@ HDAE5000_Table_Sub_292D16:	; 0x292D16 (419 bytes)
 	ret
 
 HDAE5000_Table_Sub_292EB9:	; 0x292EB9 (281 bytes)
-	.incbin "includes/code_28f90c_2953e1.bin", 13741, 281
+	lda xsp, (xsp - 34)
+	push xiz
+	ld (xsp + 34), bc
+	ld (xsp + 36), wa
+	ldmw (xsp + 10), 0x0000
+	pushw 0x0008
+	push xde
+	lda xwa, (xsp + 18)
+	push xwa
+	call 0x29AE9F
+	pushw 0x002F
+	pushw 0x8F4C
+	lda xwa, (xsp + 34)
+	push xwa
+	call 0x29AF45
+	lda xsp, (xsp + 18)
+	; Workspace dispatch with WA=9
+	lda xwa, (xsp + 26)
+	ld xbc, xwa
+	ldda32_24 xwa, 2335138
+	ld_sril3 xwa, 0xE1, 0x88, 0x0E
+	ld_sril3 xhl, 0xE1, 0x80, 0x00
+	ldw wa, 0x0009
+	call (xhl)
+	; Second dispatch via XIX
+	lda xwa, (xsp + 12)
+	ldada_24 xbc, 3116880	; 0x2F8F50
+	ldda32_24 xde, 2335138
+	ld_sril3 xde, 0xE9, 0x88, 0x0E
+	ld_sril3 xix, 0xE9, 0xA0, 0x00
+	call (xix)
+	cps hl, 0
+	jrl lt, .Lts92e_error
+	ldada_24 xwa, 2297628
+	ld xbc, (xsp + 30)
+	ldda32_24 xde, 2335138
+	ld_sril3 xde, 0xE9, 0x88, 0x0E
+	ld_sril3 xhl, 0xE9, 0xA8, 0x00
+	call (xhl)
+	ldada_24 xwa, 2297628
+	ld (xsp + 4), xwa
+	ld xwa, (xsp + 30)
+	calr HDAE5000_Cell_Get_Params
+	ld (xsp + 8), xhl
+	ld wa, (xsp + 34)
+	extz xwa
+	ld xbc, 0x0000004C
+	call 0x29B72D
+	ld xiz, xhl
+	ld wa, (xsp + 36)
+	extz xwa
+	ld xbc, 0x000004C0
+	call 0x29B72D
+	add xhl, 0x780
+	add xhl, xiz
+	ldada_24 xwa, 2102898	; 0x201672 (table base)
+	add xwa, xhl
+	ld xde, xwa
+	ld xwa, (xsp + 4)
+	ld xbc, (xsp + 8)
+	call 0x297E16
+	ld (xsp + 10), hl
+	ld wa, (xsp + 34)
+	extz xwa
+	ld xbc, 0x0000004C
+	call 0x29B72D
+	ld xiz, xhl
+	ld wa, (xsp + 36)
+	extz xwa
+	ld xbc, 0x000004C0
+	call 0x29B72D
+	add xhl, 0x780
+	add xhl, xiz
+	ldada_24 xwa, 2102867	; 0x201653 (flag base)
+	add xwa, xhl
+	ldmi8 (xwa), 0x01
+	ldda32_24 xwa, 2335138
+	ld_sril3 xwa, 0xE1, 0x88, 0x0E
+	ld_sril3 xhl, 0xE1, 0xAC, 0x00
+	call (xhl)
+	jr .Lts92e_load
+.Lts92e_error:
+	ldmw (xsp + 10), 0xFFFF
+.Lts92e_load:
+	ld hl, (xsp + 10)
+	pop xiz
+	lda xsp, (xsp + 34)
+	ret
 
 HDAE5000_Table_Sub_292FD2:	; 0x292FD2 (329 bytes)
 	.incbin "includes/code_28f90c_2953e1.bin", 14022, 329
