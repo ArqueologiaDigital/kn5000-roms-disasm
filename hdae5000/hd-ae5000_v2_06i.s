@@ -8557,9 +8557,89 @@ HDAE5000_PPORT_Cmd_SendDataBlock:	; 0x29633C
 	; Send data block to PC
 	.incbin "includes/code_295642_2971a2.bin", 3322, 362
 
-HDAE5000_PPORT_Cmd_SendFileList:	; 0x2964A6
-	; Send file list to PC
-	.incbin "includes/code_295642_2971a2.bin", 3684, 226
+HDAE5000_PPORT_Cmd_SendFileList:	; 0x2964A6 (226 bytes)
+	; Send file list to PC - displays status, builds transfer buffer
+	; with disk info from 0x23910C-0x239150, then sends via PPORT.
+	ldw wa, 0x001A			; display row/column
+	nop
+	ldada_24 xbc, 2708822		; 0x295556 - "Send File List" string
+	nop
+	call HDAE5000_Display_String
+	call HDAE5000_Render_Display_Region
+	call HDAE5000_Render_Display_Region2
+	call 2713602			; call 0x296802 (prepare file list)
+	ldda32_24 xix, 2330880		; XIX = [0x239100] (data source ptr)
+	nop
+	ld a, (xix)			; A = first byte
+	stda8_24 2330850, a		; [0x2390E2] = first byte
+	nop
+	ld a, (xix + 1)			; A = second byte
+	nop
+	stda8_24 2330852, a		; [0x2390E4] = second byte
+	nop
+	call 2715144			; call 0x296E08 (process file list)
+	call HDAE5000_Render_Display_Region2
+	call HDAE5000_PPORT_Ready_Check
+	lds bc, 0			; BC = 0 (offset)
+	ldw hl, 0x002C			; HL = 44 (block size)
+	nop
+	call 2714308			; call 0x296AC4 (transfer setup)
+	cpdi8_24 2330854, 0x00		; [0x2390E6] == 0? (error check)
+	jpcc_24 6, 2712830		; jp Z, skip cleanup (0x2964FE)
+	nop
+	call HDAE5000_PPORT_Cleanup
+.Lsfl_build_buffer:			; 0x2964FE
+	ldada_24 xix, 2330984		; XIX = 0x239168 (PPORT cmd area)
+	nop
+	ldda8_24 a, 2330850		; A = [0x2390E2]
+	nop
+	ld (xix), a			; store to cmd[0]
+	ldda8_24 a, 2330852		; A = [0x2390E4]
+	nop
+	ld (xix + 1), a			; store to cmd[1]
+	nop
+	add xix, 0x0000002C		; advance past header (44 bytes)
+	; Copy 9 disk info fields (32-bit each) from 0x23910C-0x239150
+	ldda32_24 xwa, 2330892		; [0x23910C]
+	nop
+	ld (xix), xwa
+	inc 4, xix
+	ldda32_24 xwa, 2330908		; [0x23911C]
+	nop
+	ld (xix), xwa
+	inc 4, xix
+	ldda32_24 xwa, 2330916		; [0x239124]
+	nop
+	ld (xix), xwa
+	inc 4, xix
+	ldda32_24 xwa, 2330924		; [0x23912C]
+	nop
+	ld (xix), xwa
+	inc 4, xix
+	ldda32_24 xwa, 2330932		; [0x239134]
+	nop
+	ld (xix), xwa
+	inc 4, xix
+	ldda32_24 xwa, 2330940		; [0x23913C]
+	nop
+	ld (xix), xwa
+	inc 4, xix
+	ldda32_24 xwa, 2330944		; [0x239140]
+	nop
+	ld (xix), xwa
+	inc 4, xix
+	ldda32_24 xwa, 2330952		; [0x239148]
+	nop
+	ld (xix), xwa
+	inc 4, xix
+	ldda32_24 xwa, 2330960		; [0x239150]
+	nop
+	ld (xix), xwa
+	call HDAE5000_PPORT_Sum_Buffer
+	cpdi8_24 2330836, 1		; [0x2390D4] == 1? (status check)
+	jpcc_24 6, 2708340		; jp Z, exit to PPORT finish (0x295374)
+	nop
+	jp HDAE5000_PPORT_Cmd_Done
 
 HDAE5000_PPORT_Cmd_ReceiveDataBlock:	; 0x296588
 	; Receive data from PC - display status and finish
