@@ -3524,7 +3524,217 @@ HDAE5000_FS_Scan_Directory:	; 0x289889 (2663 bytes)
 
 HDAE5000_FS_Entry_Lookup:	; 0x28A2F0 (739 bytes)
 	; Look up a file entry in the filesystem
-	.incbin "includes/code_2803c2_28f542.bin", 40750, 739
+	; Part 1: 9 lookup blocks — read byte, lookup table, call handler
+	; Block 1: address 0x22ABE8, command 0x007F01CF
+	ldda8_24 xwa, 0x22abe8
+	extz wa
+	sla wa, 2
+	ldada_24 xbc, 0x2e1e14
+	ld_sril3 xde, 0x07, 0xe4, 0xe0	; ld XDE, (XBC + WA)
+	ldda32_24 xwa, 0x23a1a2
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e	; ld XWA, (XWA + 0x0E0A)
+	ld_sril3 xhl, 0xe1, 0x04, 0x01	; ld XHL, (XWA + 0x0104)
+	ld xwa, 0x007f01cf
+	ld xbc, 0x01c0000f
+	call (xhl)
+	; Block 2: address 0x22ABE9, command 0x007F01D0
+	ldda8_24 xwa, 0x22abe9
+	extz wa
+	sla wa, 2
+	ldada_24 xbc, 0x2e1e14
+	ld_sril3 xde, 0x07, 0xe4, 0xe0
+	ldda32_24 xwa, 0x23a1a2
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e
+	ld_sril3 xhl, 0xe1, 0x04, 0x01
+	ld xwa, 0x007f01d0
+	ld xbc, 0x01c0000f
+	call (xhl)
+	; Block 3: address 0x22ABEA, command 0x007F01D1
+	ldda8_24 xwa, 0x22abea
+	extz wa
+	sla wa, 2
+	ldada_24 xbc, 0x2e1e14
+	ld_sril3 xde, 0x07, 0xe4, 0xe0
+	ldda32_24 xwa, 0x23a1a2
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e
+	ld_sril3 xhl, 0xe1, 0x04, 0x01
+	ld xwa, 0x007f01d1
+	ld xbc, 0x01c0000f
+	call (xhl)
+	; Block 4: address 0x22ABEB, command 0x007F01D2
+	ldda8_24 xwa, 0x22abeb
+	extz wa
+	sla wa, 2
+	ldada_24 xbc, 0x2e1e14
+	ld_sril3 xde, 0x07, 0xe4, 0xe0
+	ldda32_24 xwa, 0x23a1a2
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e
+	ld_sril3 xhl, 0xe1, 0x04, 0x01
+	ld xwa, 0x007f01d2
+	ld xbc, 0x01c0000f
+	call (xhl)
+	; Block 5: address 0x22ABEC, command 0x007F01D3
+	ldda8_24 xwa, 0x22abec
+	extz wa
+	sla wa, 2
+	ldada_24 xbc, 0x2e1e14
+	ld_sril3 xde, 0x07, 0xe4, 0xe0
+	ldda32_24 xwa, 0x23a1a2
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e
+	ld_sril3 xhl, 0xe1, 0x04, 0x01
+	ld xwa, 0x007f01d3
+	ld xbc, 0x01c0000f
+	call (xhl)
+	; Block 6: address 0x22ABED, command 0x007F01D4
+	ldda8_24 xwa, 0x22abed
+	extz wa
+	sla wa, 2
+	ldada_24 xbc, 0x2e1e14
+	ld_sril3 xde, 0x07, 0xe4, 0xe0
+	ldda32_24 xwa, 0x23a1a2
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e
+	ld_sril3 xhl, 0xe1, 0x04, 0x01
+	ld xwa, 0x007f01d4
+	ld xbc, 0x01c0000f
+	call (xhl)
+	; Block 7: address 0x22ABEE, command 0x007F01D5
+	ldda8_24 xwa, 0x22abee
+	extz wa
+	sla wa, 2
+	ldada_24 xbc, 0x2e1e14
+	ld_sril3 xde, 0x07, 0xe4, 0xe0
+	ldda32_24 xwa, 0x23a1a2
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e
+	ld_sril3 xhl, 0xe1, 0x04, 0x01
+	ld xwa, 0x007f01d5
+	ld xbc, 0x01c0000f
+	call (xhl)
+	; Block 8: address 0x22ABEF, command 0x007F01D6
+	ldda8_24 xwa, 0x22abef
+	extz wa
+	sla wa, 2
+	ldada_24 xbc, 0x2e1e14
+	ld_sril3 xde, 0x07, 0xe4, 0xe0
+	ldda32_24 xwa, 0x23a1a2
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e
+	ld_sril3 xhl, 0xe1, 0x04, 0x01
+	ld xwa, 0x007f01d6
+	ld xbc, 0x01c0000f
+	call (xhl)
+	; Block 9: address 0x22ABF0, command 0x007F01E9 (tail call)
+	ldda8_24 xwa, 0x22abf0
+	extz wa
+	sla wa, 2
+	ldada_24 xbc, 0x2e1e14
+	ld_sril3 xde, 0x07, 0xe4, 0xe0
+	ldda32_24 xwa, 0x23a1a2
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e
+	ld_sril3 xhl, 0xe1, 0x04, 0x01
+	ld xwa, 0x007f01e9
+	ld xbc, 0x01c0000f
+	jp (xhl)			; tail call (not call)
+	;
+	; Part 2: Event handler (0x28A497) — dispatches on event codes
+.LFS_EL__handler:
+	dec 0, xsp			; allocate 8 bytes
+	push xiz
+	ld (xsp + 0x04), xde		; save XDE to stack
+	ld xiz, xbc			; save event code in XIZ
+	ld (xsp + 0x08), xwa		; save XWA to stack
+	ld xwa, xiz			; XWA = event code
+	cp xwa, 0x01c00007		; event 0x01C00007?
+	jr z, .LFS_EL__evt_07
+	cp xwa, 0x01c0000d		; event 0x01C0000D?
+	jr z, .LFS_EL__evt_0d
+	cp xwa, 0x01e00085		; event 0x01E00085?
+	jrl nz, .LFS_EL__exit		; no match → exit
+	lds32 xhl, 1			; XHL = 1
+	jrl t, .LFS_EL__epilogue
+.LFS_EL__evt_0d:			; handler for event 0x0D
+	ld xwa, (xsp + 0x08)		; restore XWA
+	ld xbc, xiz
+	ld xde, (xsp + 0x04)		; restore XDE
+	ldda32_24 xhl, 0x23a1a2
+	ld_sril3 xhl, 0xed, 0x0a, 0x0e	; ld XHL, (XHL + 0x0E0A)
+	ld_sril3 xhl, 0xed, 0xdc, 0x00	; ld XHL, (XHL + 0x00DC)
+	call (xhl)
+	ldada_24 xwa, 0x2e2f62		; status display data
+	ld xbc, xwa
+	ld xwa, (xsp + 0x08)
+	ld xde, xbc
+	ldda32_24 xbc, 0x23a1a2
+	ld_sril3 xbc, 0xe5, 0x0a, 0x0e	; ld XBC, (XBC + 0x0E0A)
+	ld_sril3 xhl, 0xe5, 0x00, 0x01	; ld XHL, (XBC + 0x0100)
+	ld xbc, 0x01c0000f
+	call (xhl)
+	lds32 xhl, 0
+	jrl t, .LFS_EL__epilogue
+.LFS_EL__evt_07:			; handler for event 0x07
+	ld xde, (xsp + 0x04)
+	ldda32_24 xwa, 0x23a1a2
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e
+	ld_sril3 xix, 0xe1, 0x00, 0x01	; ld XIX, (XWA + 0x0100)
+	ld xwa, 0x02600024
+	ld xbc, 0x01e00029
+	call (xix)
+	; Check return value in XHL
+	cp xhl, 0x0000000b
+	jr z, .LFS_EL__case_0b
+	cp xhl, 0x0000000a
+	jr z, .LFS_EL__case_0a
+	cp xhl, 0x00000008
+	jr nz, .LFS_EL__exit
+	; Case 0x08: delete file entry
+	ldda32_24 xwa, 0x23a1a2
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e
+	ld_sril3 xhl, 0xe1, 0x24, 0x01	; ld XHL, (XWA + 0x0124)
+	ld xwa, 0x007f01fb
+	ld xbc, 0x01c00001
+	lds32 xde, 0
+	call (xhl)
+	jr t, .LFS_EL__exit
+.LFS_EL__case_0a:			; Case 0x0A: copy file
+	ldda16_24 xwa, 0x23a092
+	ldda16_24 xbc, 0x23a094
+	call HDAE5000_Table_Lookup
+	ld wa, hl
+	cp wa, 0xffff
+	jr z, .LFS_EL__0a_skip
+	ldada_24 xwa, 0x22abe6
+	.byte 0x0b, 0x02, 0x00		; push 0x0002
+	ld bc, hl
+	ldada_24 xde, 0x2e1e08
+	calr HDAE5000_HD_Data_Copy
+.LFS_EL__0a_skip:
+	calr HDAE5000_FS_Entry_Lookup	; recursive call
+	jr t, .LFS_EL__exit
+.LFS_EL__case_0b:			; Case 0x0B: save file
+	ldda16_24 xwa, 0x23a092
+	ldda16_24 xbc, 0x23a094
+	call HDAE5000_Table_Lookup
+	ld wa, hl
+	cp wa, 0xffff
+	jr z, .LFS_EL__0b_skip
+	ldada_24 xwa, 0x22abe6
+	.byte 0x0b, 0x01, 0x00		; push 0x0001
+	ld bc, hl
+	ldada_24 xde, 0x2e1e08
+	calr HDAE5000_HD_Data_Copy
+.LFS_EL__0b_skip:
+	stdi16_24 0x22abe6, 0x0000	; clear entry
+	calr HDAE5000_FS_Entry_Lookup	; recursive call
+.LFS_EL__exit:				; common exit path
+	ld xwa, (xsp + 0x08)		; restore registers
+	ld xbc, xiz
+	ld xde, (xsp + 0x04)
+	ldda32_24 xhl, 0x23a1a2
+	ld_sril3 xhl, 0xed, 0x0a, 0x0e	; ld XHL, (XHL + 0x0E0A)
+	ld_sril3 xix, 0xed, 0xdc, 0x00	; ld XIX, (XHL + 0x00DC)
+	call (xix)
+.LFS_EL__epilogue:
+	pop xiz
+	inc 0, xsp			; deallocate 8 bytes
+	ret
 
 ; --- Display, Menu, and Utility Routines ---
 HDAE5000_Display_Update_Offset:	; 0x28A5D3 (1612 bytes)
