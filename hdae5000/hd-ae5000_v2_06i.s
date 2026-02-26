@@ -4828,8 +4828,810 @@ HDAE5000_FS_Buffer_Setup:	; 0x289665 (548 bytes)
 	ret					; 0e
 
 HDAE5000_FS_Scan_Directory:	; 0x289889 (2663 bytes)
-	; Scan directory entries on HD
-	.incbin "includes/code_2803c2_28f542.bin", 38087, 2663
+	; Part 1: Main scan loop — iterate directory entries, search partitions
+	.byte 0xf3, 0xfd, 0xd4, 0xfe, 0x37	; lda XSP, XSP+0xFED4 (alloc ~300 bytes)
+	push xiz
+	.byte 0xf3, 0xfd, 0x2c, 0x01, 0x52	; ld (XSP+0x012C), DE
+	.byte 0xf3, 0xfd, 0x2e, 0x01, 0x51	; ld (XSP+0x012E), BC
+	lds iz, 0
+.LFSD__loop:
+	.byte 0xd3, 0xfd, 0x2e, 0x01, 0xf6	; cp IZ, (XSP+0x012E)
+	jrl nc, .LFSD__loop_done
+.LFSD__loop_body:
+	ld wa, iz
+	extz xwa
+	add xwa, 0x00000114
+	ld xbc, 0x0022aa9c
+	add xbc, xwa
+	.byte 0x81, 0x3f, 0x01		; cp (XBC), 0x01
+	jrl nz, .LFSD__loop_next
+	; Valid entry — format and display
+	.byte 0x0b, 0x0d, 0x00		; push 0x000d
+	.byte 0x0b, 0x00, 0x00		; push 0x0000
+	.byte 0xf3, 0xfd, 0x22, 0x01, 0x30	; lda XWA, XSP+0x0122
+	push xwa
+	call 0x29aec7			; MemFill
+	ld wa, iz
+	inc 1, wa
+	.byte 0x28			; push wa (compact)
+	.byte 0x0b, 0x2e, 0x00		; push 0x002e
+	.byte 0x0b, 0x24, 0x2f		; push 0x2f24
+	.byte 0xf3, 0xfd, 0x2c, 0x01, 0x30	; lda XWA, XSP+0x012C
+	push xwa
+	call 0x29abd8
+	.byte 0x0b, 0x06, 0x00		; push 0x0006
+	ld wa, iz
+	mul wa, 0x000c
+	inc 3, wa
+	extz xwa
+	add xwa, 0x0000000e
+	ld xbc, 0x0022aa9c
+	add xbc, xwa
+	push xbc
+	.byte 0xf3, 0xfd, 0x38, 0x01, 0x30	; lda XWA, XSP+0x0138
+	push xwa
+	call 0x29aff0			; MemCopy_Reverse
+	lda xsp, (xsp + 0x1c)
+	.byte 0xbf, 0x04, 0x02, 0xff, 0xff	; ld (XSP+0x04), 0xFFFF
+	; QIZ loop: search 16 partitions
+	.byte 0xd7, 0xfa, 0xa8		; ld QIZ, 0
+	.byte 0xd7, 0xfa, 0xcf, 0x10, 0x00	; cp QIZ, 0x0010
+	jr nc, .LFSD__qiz_done
+.LFSD__qiz_loop:
+	.byte 0xd7, 0xfa, 0x89		; ld BC, QIZ
+	.byte 0xd3, 0xfd, 0x2c, 0x01, 0x20	; ld WA, (XSP+0x012C)
+	call 0x29018a
+	cp hl, 0xffff
+	jr nz, .LFSD__qiz_found
+	.byte 0xd7, 0xfa, 0x88		; ld WA, QIZ
+	ld (xsp + 0x04), wa
+	jr t, .LFSD__qiz_done
+.LFSD__qiz_found:
+	.byte 0xd7, 0xfa, 0x61		; inc 1, QIZ
+	.byte 0xd7, 0xfa, 0xcf, 0x10, 0x00	; cp QIZ, 0x0010
+	jr c, .LFSD__qiz_loop
+.LFSD__qiz_done:
+	.byte 0x9f, 0x04, 0x3f, 0xff, 0xff	; cp (XSP+0x04), 0xFFFF
+	jrl z, .LFSD__loop_next
+	; Copy 8 bytes from entry
+	.byte 0x0b, 0x08, 0x00		; push 0x0008
+	.byte 0xf3, 0xfd, 0x20, 0x01, 0x30	; lda XWA, XSP+0x0120
+	push xwa
+	.byte 0xf3, 0xfd, 0x16, 0x01, 0x30	; lda XWA, XSP+0x0116
+	push xwa
+	call 0x29ae9f			; MemCopy
+	lda xsp, (xsp + 0x0a)
+	; Search 8 format fields (set QIZ bits 0-7)
+	.byte 0xd7, 0xfa, 0xa8		; ld QIZ, 0
+	; Field 0 (0x2F2A)
+	ldda32_24 xwa, 0x23a1a2
+	ld_sril3 xwa, 0xe1, 0x88, 0x0e		; XWA = (XWA+0x0E88)
+	ld xhl, (xwa + 0x08)
+	call (xhl)
+	.byte 0x0b, 0x2e, 0x00		; push 0x002e
+	.byte 0x0b, 0x2a, 0x2f		; push 0x2f2a
+	.byte 0xf3, 0xfd, 0x1c, 0x01, 0x30	; lda XWA, XSP+0x011C
+	push xwa
+	call 0x29af45
+	inc 0, xsp
+	lda xwa, (xsp + 0x06)
+	ld xbc, xwa
+	.byte 0xf3, 0xfd, 0x10, 0x01, 0x30	; lda XWA, XSP+0x0110
+	ldda32_24 xde, 0x23a1a2
+	ld_sril3 xde, 0xe9, 0x88, 0x0e		; XDE = (XDE+0x0E88)
+	ld_sril3 xix, 0xe9, 0x94, 0x00		; XIX = (XDE+0x0094)
+	call (xix)
+	ld xwa, xhl
+	cp xwa, 0xffffffff
+	jr z, .LFSD__f1
+	.byte 0xd7, 0xfa, 0xa9		; ld QIZ, 1
+	ld xwa, xhl
+	ldda32_24 xbc, 0x23a1a2
+	ld_sril3 xbc, 0xe5, 0x88, 0x0e
+	ld_sril3 xhl, 0xe5, 0x9c, 0x00		; XHL = (XBC+0x009C)
+	call (xhl)
+.LFSD__f1:				; Field 1 (0x2F30)
+	.byte 0x0b, 0x2e, 0x00		; push 0x002e
+	.byte 0x0b, 0x30, 0x2f		; push 0x2f30
+	.byte 0xf3, 0xfd, 0x1c, 0x01, 0x30	; lda XWA, XSP+0x011C
+	push xwa
+	call 0x29af45
+	inc 0, xsp
+	lda xwa, (xsp + 0x06)
+	ld xbc, xwa
+	.byte 0xf3, 0xfd, 0x10, 0x01, 0x30	; lda XWA, XSP+0x0110
+	ldda32_24 xde, 0x23a1a2
+	ld_sril3 xde, 0xe9, 0x88, 0x0e
+	ld_sril3 xix, 0xe9, 0x94, 0x00
+	call (xix)
+	ld xwa, xhl
+	cp xwa, 0xffffffff
+	jr z, .LFSD__f2
+	.byte 0xd7, 0xfa, 0x31, 0x01	; set 0x01, QIZ
+	ld xwa, xhl
+	ldda32_24 xbc, 0x23a1a2
+	ld_sril3 xbc, 0xe5, 0x88, 0x0e
+	ld_sril3 xhl, 0xe5, 0x9c, 0x00
+	call (xhl)
+.LFSD__f2:				; Field 2 (0x2F36)
+	.byte 0x0b, 0x2e, 0x00		; push 0x002e
+	.byte 0x0b, 0x36, 0x2f		; push 0x2f36
+	.byte 0xf3, 0xfd, 0x1c, 0x01, 0x30
+	push xwa
+	call 0x29af45
+	inc 0, xsp
+	lda xwa, (xsp + 0x06)
+	ld xbc, xwa
+	.byte 0xf3, 0xfd, 0x10, 0x01, 0x30
+	ldda32_24 xde, 0x23a1a2
+	ld_sril3 xde, 0xe9, 0x88, 0x0e
+	ld_sril3 xix, 0xe9, 0x94, 0x00
+	call (xix)
+	ld xwa, xhl
+	cp xwa, 0xffffffff
+	jr z, .LFSD__f3
+	.byte 0xd7, 0xfa, 0x31, 0x02	; set 0x02, QIZ
+	ld xwa, xhl
+	ldda32_24 xbc, 0x23a1a2
+	ld_sril3 xbc, 0xe5, 0x88, 0x0e
+	ld_sril3 xhl, 0xe5, 0x9c, 0x00
+	call (xhl)
+.LFSD__f3:				; Field 3 (0x2F3C)
+	.byte 0x0b, 0x2e, 0x00		; push 0x002e
+	.byte 0x0b, 0x3c, 0x2f		; push 0x2f3c
+	.byte 0xf3, 0xfd, 0x1c, 0x01, 0x30
+	push xwa
+	call 0x29af45
+	inc 0, xsp
+	lda xwa, (xsp + 0x06)
+	ld xbc, xwa
+	.byte 0xf3, 0xfd, 0x10, 0x01, 0x30
+	ldda32_24 xde, 0x23a1a2
+	ld_sril3 xde, 0xe9, 0x88, 0x0e
+	ld_sril3 xix, 0xe9, 0x94, 0x00
+	call (xix)
+	ld xwa, xhl
+	cp xwa, 0xffffffff
+	jr z, .LFSD__f4
+	.byte 0xd7, 0xfa, 0x31, 0x03	; set 0x03, QIZ
+	ld xwa, xhl
+	ldda32_24 xbc, 0x23a1a2
+	ld_sril3 xbc, 0xe5, 0x88, 0x0e
+	ld_sril3 xhl, 0xe5, 0x9c, 0x00
+	call (xhl)
+.LFSD__f4:				; Field 4 (0x2F42)
+	.byte 0x0b, 0x2e, 0x00		; push 0x002e
+	.byte 0x0b, 0x42, 0x2f		; push 0x2f42
+	.byte 0xf3, 0xfd, 0x1c, 0x01, 0x30
+	push xwa
+	call 0x29af45
+	inc 0, xsp
+	lda xwa, (xsp + 0x06)
+	ld xbc, xwa
+	.byte 0xf3, 0xfd, 0x10, 0x01, 0x30
+	ldda32_24 xde, 0x23a1a2
+	ld_sril3 xde, 0xe9, 0x88, 0x0e
+	ld_sril3 xix, 0xe9, 0x94, 0x00
+	call (xix)
+	ld xwa, xhl
+	cp xwa, 0xffffffff
+	jr z, .LFSD__f5
+	.byte 0xd7, 0xfa, 0x31, 0x04	; set 0x04, QIZ
+	ld xwa, xhl
+	ldda32_24 xbc, 0x23a1a2
+	ld_sril3 xbc, 0xe5, 0x88, 0x0e
+	ld_sril3 xhl, 0xe5, 0x9c, 0x00
+	call (xhl)
+.LFSD__f5:				; Field 5 (0x2F46)
+	.byte 0x0b, 0x2e, 0x00		; push 0x002e
+	.byte 0x0b, 0x46, 0x2f		; push 0x2f46
+	.byte 0xf3, 0xfd, 0x1c, 0x01, 0x30
+	push xwa
+	call 0x29af45
+	inc 0, xsp
+	lda xwa, (xsp + 0x06)
+	ld xbc, xwa
+	.byte 0xf3, 0xfd, 0x10, 0x01, 0x30
+	ldda32_24 xde, 0x23a1a2
+	ld_sril3 xde, 0xe9, 0x88, 0x0e
+	ld_sril3 xix, 0xe9, 0x94, 0x00
+	call (xix)
+	ld xwa, xhl
+	cp xwa, 0xffffffff
+	jr z, .LFSD__f6
+	.byte 0xd7, 0xfa, 0x31, 0x05	; set 0x05, QIZ
+	ld xwa, xhl
+	ldda32_24 xbc, 0x23a1a2
+	ld_sril3 xbc, 0xe5, 0x88, 0x0e
+	ld_sril3 xhl, 0xe5, 0x9c, 0x00
+	call (xhl)
+.LFSD__f6:				; Field 6 (0x2F4C)
+	.byte 0x0b, 0x2e, 0x00		; push 0x002e
+	.byte 0x0b, 0x4c, 0x2f		; push 0x2f4c
+	.byte 0xf3, 0xfd, 0x1c, 0x01, 0x30
+	push xwa
+	call 0x29af45
+	inc 0, xsp
+	lda xwa, (xsp + 0x06)
+	ld xbc, xwa
+	.byte 0xf3, 0xfd, 0x10, 0x01, 0x30
+	ldda32_24 xde, 0x23a1a2
+	ld_sril3 xde, 0xe9, 0x88, 0x0e
+	ld_sril3 xix, 0xe9, 0x94, 0x00
+	call (xix)
+	ld xwa, xhl
+	cp xwa, 0xffffffff
+	jr z, .LFSD__f7
+	.byte 0xd7, 0xfa, 0x31, 0x06	; set 0x06, QIZ
+	ld xwa, xhl
+	ldda32_24 xbc, 0x23a1a2
+	ld_sril3 xbc, 0xe5, 0x88, 0x0e
+	ld_sril3 xhl, 0xe5, 0x9c, 0x00
+	call (xhl)
+.LFSD__f7:				; Field 7 (0x2F52)
+	.byte 0x0b, 0x2e, 0x00		; push 0x002e
+	.byte 0x0b, 0x52, 0x2f		; push 0x2f52
+	.byte 0xf3, 0xfd, 0x1c, 0x01, 0x30
+	push xwa
+	call 0x29af45
+	inc 0, xsp
+	lda xwa, (xsp + 0x06)
+	ld xbc, xwa
+	.byte 0xf3, 0xfd, 0x10, 0x01, 0x30
+	ldda32_24 xde, 0x23a1a2
+	ld_sril3 xde, 0xe9, 0x88, 0x0e
+	ld_sril3 xix, 0xe9, 0x94, 0x00
+	call (xix)
+	ld xwa, xhl
+	cp xwa, 0xffffffff
+	jr z, .LFSD__f8
+	.byte 0xd7, 0xfa, 0x31, 0x07	; set 0x07, QIZ
+	ld xwa, xhl
+	ldda32_24 xbc, 0x23a1a2
+	ld_sril3 xbc, 0xe5, 0x88, 0x0e
+	ld_sril3 xhl, 0xe5, 0x9c, 0x00
+	call (xhl)
+.LFSD__f8:				; Field 8 (0x2F56)
+	.byte 0x0b, 0x2e, 0x00		; push 0x002e
+	.byte 0x0b, 0x56, 0x2f		; push 0x2f56
+	.byte 0xf3, 0xfd, 0x1c, 0x01, 0x30
+	push xwa
+	call 0x29af45
+	inc 0, xsp
+	lda xwa, (xsp + 0x06)
+	ld xbc, xwa
+	.byte 0xf3, 0xfd, 0x10, 0x01, 0x30
+	ldda32_24 xde, 0x23a1a2
+	ld_sril3 xde, 0xe9, 0x88, 0x0e
+	ld_sril3 xix, 0xe9, 0x94, 0x00
+	call (xix)
+	ld xwa, xhl
+	cp xwa, 0xffffffff
+	jr z, .LFSD__post_search
+	.byte 0xd7, 0xfa, 0x31, 0x08	; set 0x08, QIZ
+	ld xwa, xhl
+	ldda32_24 xbc, 0x23a1a2
+	ld_sril3 xbc, 0xe5, 0x88, 0x0e
+	ld_sril3 xhl, 0xe5, 0x9c, 0x00
+	call (xhl)
+.LFSD__post_search:
+	; Check results and call directory handler
+	.byte 0xf3, 0xfd, 0x1e, 0x01, 0x30	; lda XWA, XSP+0x011E
+	.byte 0xd7, 0xfa, 0x89		; ld BC, QIZ
+	call 0x291c58
+	cp hl, 0xffff
+	jrl z, .LFSD__no_match
+	; Match — attempt write
+	ld bc, (xsp + 0x04)
+	.byte 0xf3, 0xfd, 0x1e, 0x01, 0x30	; lda XWA, XSP+0x011E
+	ld xde, xwa
+	.byte 0xd7, 0xfa, 0x04		; push QIZ
+	.byte 0x0b, 0x00, 0x00		; push 0x0000
+	.byte 0x0b, 0x00, 0x00		; push 0x0000
+	.byte 0xd3, 0xfd, 0x32, 0x01, 0x20	; ld WA, (XSP+0x0132)
+	call 0x292151
+	cp hl, 0xffff
+	jrl nz, .LFSD__loop_next
+	; Write failed — error display
+	ldda32_24 xwa, 0x23a1a2
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e
+	ld_sril3 xhl, 0xe1, 0x24, 0x01		; XHL = (XWA+0x0124)
+	ld xwa, 0x007f0297
+	ld xbc, 0x01c00001
+	lds32 xde, 0
+	call (xhl)
+	ld xwa, 0x007f0298
+	ld xbc, 0x007f00d2
+	calr HDAE5000_UI_Main_Handler
+	ld xwa, 0x01ca0002
+	push xwa
+	ld xwa, 0x007f00d2
+	push xwa
+	ldda32_24 xwa, 0x23a1a2
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e
+	ld_sril3 xhl, 0xe1, 0x18, 0x04
+	ld xwa, 0x0000014d
+	ld xbc, 0x007f0299
+	ld xde, 0xffffffff
+	call (xhl)
+	ld xwa, 0x01ca0002
+	push xwa
+	ld xwa, 0x007f00d2
+	push xwa
+	ldda32_24 xwa, 0x23a1a2
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e
+	ld_sril3 xhl, 0xe1, 0x10, 0x04
+	ld xwa, 0x0000014d
+	ld xbc, 0x007f0299
+	ld xde, 0xffffffff
+	call (xhl)
+	ldw hl, 0xffff
+	jrl t, .LFSD__exit
+.LFSD__no_match:
+	; No match — confirmation display
+	ldda32_24 xwa, 0x23a1a2
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e
+	ld_sril3 xhl, 0xe1, 0x24, 0x01
+	ld xwa, 0x007f02a3
+	ld xbc, 0x01c00001
+	lds32 xde, 3
+	call (xhl)
+	ld xwa, 0x01ca0002
+	push xwa
+	ld xwa, 0x007f00d2
+	push xwa
+	ldda32_24 xwa, 0x23a1a2
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e
+	ld_sril3 xhl, 0xe1, 0x18, 0x04
+	ld xwa, 0x0000014d
+	ld xbc, 0x007f02a5
+	ld xde, 0xffffffff
+	call (xhl)
+	ld xwa, 0x01ca0002
+	push xwa
+	ld xwa, 0x007f00d2
+	push xwa
+	ldda32_24 xwa, 0x23a1a2
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e
+	ld_sril3 xhl, 0xe1, 0x10, 0x04
+	ld xwa, 0x0000014d
+	ld xbc, 0x007f02a5
+	ld xde, 0xffffffff
+	call (xhl)
+	ldw hl, 0xffff
+	jr t, .LFSD__exit
+.LFSD__loop_next:
+	inc 1, iz
+	.byte 0xd3, 0xfd, 0x2e, 0x01, 0xf6	; cp IZ, (XSP+0x012E)
+	jrl c, .LFSD__loop_body
+.LFSD__loop_done:
+	lds hl, 0
+.LFSD__exit:
+	pop xiz
+	.byte 0xf3, 0xfd, 0x2c, 0x01, 0x37	; lda XSP, XSP+0x012C (dealloc)
+	ret
+	;
+	; Part 2: Event handler — navigation (0x289D72)
+.LFSD__handlerA:
+	push xiz
+	ld xiz, xde
+	cp xbc, 0x01ea0000
+	jrl z, .LFSD__hA_scroll_down
+	cp xbc, 0x01ea0001
+	jrl z, .LFSD__hA_scroll_up
+	cp xbc, 0x01ea0008
+	jrl z, .LFSD__hA_sector_info
+	cp xbc, 0x01ea0006
+	jrl z, .LFSD__hA_cyl_calc
+	cp xbc, 0x01c00007
+	jrl nz, .LFSD__hA_exit
+	; Event 0x01C00007: page select
+	ld xde, xiz
+	ldda32_24 xwa, 0x23a1a2
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e
+	ld_sril3 xix, 0xe1, 0x00, 0x01
+	ld xwa, 0x02600024
+	ld xbc, 0x01e00029
+	call (xix)
+	cp xhl, 0x00000007
+	jr z, .LFSD__hA_page7
+	cp xhl, 0x00000006
+	jr z, .LFSD__hA_page6
+	cp xhl, 0x00000005
+	jr z, .LFSD__hA_page5
+	cp xhl, 0x00000001
+	jr z, .LFSD__hA_page1
+	or xhl, xhl
+	jrl nz, .LFSD__hA_exit
+	; Page 0: offset = 0x0000
+	stdi16_24 0x23a08e, 0x0000
+	ld xwa, 0x007f00e6
+	calr HDAE5000_HD_Format_Params
+	jrl t, .LFSD__hA_exit
+.LFSD__hA_page1:			; Page 1: offset = 0x0018
+	stdi16_24 0x23a08e, 0x0018
+	ld xwa, 0x007f00e6
+	calr HDAE5000_HD_Format_Params
+	jrl t, .LFSD__hA_exit
+.LFSD__hA_page5:			; Page 5: offset = 0x0030
+	stdi16_24 0x23a08e, 0x0030
+	ld xwa, 0x007f00e6
+	calr HDAE5000_HD_Format_Params
+	jrl t, .LFSD__hA_exit
+.LFSD__hA_page6:			; Page 6: offset = 0x0048
+	stdi16_24 0x23a08e, 0x0048
+	ld xwa, 0x007f00e6
+	calr HDAE5000_HD_Format_Params
+	jrl t, .LFSD__hA_exit
+.LFSD__hA_page7:			; Page 7: offset = 0x0060
+	stdi16_24 0x23a08e, 0x0060
+	ld xwa, 0x007f00e6
+	calr HDAE5000_HD_Format_Params
+	jrl t, .LFSD__hA_exit
+.LFSD__hA_cyl_calc:			; Event 0x01EA0006: cylinder select
+	ldda16_24 xwa, 0x23a08e
+	ld bc, iz
+	add bc, wa
+	stda16_24 0x23a092, xbc
+	ld wa, bc
+	call 0x28f9ad
+	cp hl, 0xffff
+	jr nz, .LFSD__hA_cyl_ok
+	; Invalid — error display
+	ldda32_24 xwa, 0x23a1a2
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e
+	ld_sril3 xhl, 0xe1, 0x24, 0x01
+	ld xwa, 0x007f02b0
+	ld xbc, 0x01c00001
+	lds32 xde, 0
+	call (xhl)
+	ld xwa, 0x01ca0002
+	push xwa
+	ld xwa, 0x007f00e2
+	push xwa
+	ldda32_24 xwa, 0x23a1a2
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e
+	ld_sril3 xhl, 0xe1, 0x18, 0x04
+	ld xwa, 0x0000014d
+	ld xbc, 0x007f02b2
+	ld xde, 0xffffffff
+	call (xhl)
+	ld xwa, 0x01ca0002
+	push xwa
+	ld xwa, 0x007f00e2
+	push xwa
+	ldda32_24 xwa, 0x23a1a2
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e
+	ld_sril3 xhl, 0xe1, 0x10, 0x04
+	ld xwa, 0x0000014d
+	ld xbc, 0x007f02b2
+	ld xde, 0xffffffff
+	call (xhl)
+	jrl t, .LFSD__hA_exit
+.LFSD__hA_cyl_ok:
+	; Valid cylinder — check bounds
+	calr HDAE5000_Count_Active_Files
+	ld iz, hl
+	ldda16_24 xwa, 0x23a092
+	call 0x28f9eb
+	cp hl, iz
+	jr c, .LFSD__hA_cyl_fits
+	; Too many — error + recursive scan
+	ldda32_24 xwa, 0x23a1a2
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e
+	ld_sril3 xhl, 0xe1, 0x24, 0x01
+	ld xwa, 0x007f02c1
+	ld xbc, 0x01c00001
+	lds32 xde, 5
+	call (xhl)
+	ldada_24 xwa, 0x22abb0
+	ldda16_24 xde, 0x23a092
+	ldw bc, 0x0014
+	calr HDAE5000_FS_Scan_Directory	; recursive
+	cp hl, 0xffff
+	jrl z, .LFSD__hA_exit
+	; Display clear + redraw
+	ldda32_24 xwa, 0x23a1a2
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e
+	ld_sril3 xhl, 0xe1, 0x24, 0x01
+	ld xwa, 0x007f00d2
+	ld xbc, 0x01c00001
+	lds32 xde, 0
+	call (xhl)
+	jrl t, .LFSD__hA_exit
+.LFSD__hA_cyl_fits:
+	; Fits — setup display + dialog boxes
+	ldda32_24 xwa, 0x23a1a2
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e
+	ld_sril3 xhl, 0xe1, 0x24, 0x01
+	ld xwa, 0x007f02a9
+	ld xbc, 0x01c00001
+	lds32 xde, 0
+	call (xhl)
+	ld xwa, 0x01ca0002
+	push xwa
+	ld xwa, 0x007f00e2
+	push xwa
+	ldda32_24 xwa, 0x23a1a2
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e
+	ld_sril3 xhl, 0xe1, 0x18, 0x04
+	ld xwa, 0x0000014d
+	ld xbc, 0x007f02ab
+	ld xde, 0xffffffff
+	call (xhl)
+	ld xwa, 0x01ca0002
+	push xwa
+	ld xwa, 0x007f00e2
+	push xwa
+	ldda32_24 xwa, 0x23a1a2
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e
+	ld_sril3 xhl, 0xe1, 0x10, 0x04
+	ld xwa, 0x0000014d
+	ld xbc, 0x007f02ab
+	ld xde, 0xffffffff
+	call (xhl)
+	jrl t, .LFSD__hA_exit
+.LFSD__hA_sector_info:			; Event 0x01EA0008: sector info display
+	ldda16_24 xwa, 0x23a08e
+	ld bc, iz
+	add bc, wa
+	stda16_24 0x23a092, xbc
+	ld wa, bc
+	call HDAE5000_Calc_Offset_16
+	ld xde, xhl
+	ldda32_24 xwa, 0x23a1a2
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e
+	ld_sril3 xhl, 0xe1, 0x50, 0x02		; XHL = (XWA+0x0250)
+	ld xwa, 0x012a0019
+	ld xbc, 0x01e00086
+	call (xhl)
+	ldda32_24 xwa, 0x23a1a2
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e
+	ld_sril3 xhl, 0xe1, 0x24, 0x01
+	ld xwa, 0x007f017b
+	ld xbc, 0x01c00001
+	lds32 xde, 0
+	call (xhl)
+	jr t, .LFSD__hA_exit
+.LFSD__hA_scroll_up:			; Event 0x01EA0001: scroll up
+	cpdi16_24 0x23a08e, 0x0018
+	jr lt, .LFSD__hA_exit
+	.byte 0xd2, 0x8e, 0xa0, 0x23, 0x3a, 0x18, 0x00	; sub (0x23a08e), 0x0018
+	ld xwa, 0x007f00e6
+	calr HDAE5000_HD_Format_Params
+	ld xwa, xiz
+	add xwa, 0x00000018
+	ld xde, xwa
+	ldda32_24 xwa, 0x23a1a2
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e
+	ld_sril3 xhl, 0xe1, 0x24, 0x01
+	ld xwa, 0x007f00e6
+	ld xbc, 0x01ea0003
+	call (xhl)
+	jr t, .LFSD__hA_exit
+.LFSD__hA_scroll_down:			; Event 0x01EA0000: scroll down
+	cpdi16_24 0x23a08e, 0x0060
+	jr ge, .LFSD__hA_exit
+	.byte 0xd2, 0x8e, 0xa0, 0x23, 0x38, 0x18, 0x00	; add (0x23a08e), 0x0018
+	ld xwa, 0x007f00e6
+	calr HDAE5000_HD_Format_Params
+	ld xwa, xiz
+	sub xwa, 0x00000018
+	ld xde, xwa
+	ldda32_24 xwa, 0x23a1a2
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e
+	ld_sril3 xhl, 0xe1, 0x24, 0x01
+	ld xwa, 0x007f00e6
+	ld xbc, 0x01ea0003
+	call (xhl)
+.LFSD__hA_exit:
+	lds32 xhl, 0
+	pop xiz
+	ret
+	;
+	; Part 3: Event handler — file operations (0x28A07E)
+.LFSD__handlerB:
+	push xiz
+	ld xiz, xwa
+	cp xbc, 0x01c00007
+	jr z, .LFSD__hB_key
+	cp xbc, 0x01e0007c
+	jr z, .LFSD__hB_7c
+	cp xbc, 0x01e00084
+	jr z, .LFSD__hB_84
+	cp xbc, 0x01e00086
+	jr z, .LFSD__hB_86
+	cp xbc, 0x01e0003a
+	jrl nz, .LFSD__hB_default
+	; Event 0x01E0003A: copy data block
+	.byte 0x0b, 0x10, 0x00		; push 0x0010
+	ldada_24 xwa, 0x23a06e
+	push xwa
+	push xde
+	call 0x29aff0
+	lda xsp, (xsp + 0x0a)
+	ld xhl, xiz
+	jrl t, .LFSD__hB_exit2
+.LFSD__hB_86:				; Event 0x01E00086: copy + clear flag
+	.byte 0x0b, 0x10, 0x00		; push 0x0010
+	push xde
+	.byte 0x0b, 0x23, 0x00		; push 0x0023
+	.byte 0x0b, 0x6e, 0xa0		; push 0xa06e
+	call 0x29aff0
+	lda xsp, (xsp + 0x0a)
+	stdi8_24 0x23a07e, 0x00
+	ld xhl, xiz
+	jrl t, .LFSD__hB_exit2
+.LFSD__hB_84:				; Event 0x01E00084
+	lds32 xhl, 0
+	jrl t, .LFSD__hB_exit2
+.LFSD__hB_7c:				; Event 0x01E0007C
+	ld xhl, 0x00000010
+	jrl t, .LFSD__hB_exit2
+.LFSD__hB_key:				; Event 0x01C00007: key dispatch
+	cp xde, 0x0000000b
+	jr z, .LFSD__hB_key_0b
+	cp xde, 0x0000008a
+	jrl nz, .LFSD__hB_default
+	; Key 0x8A: validate string + copy
+	ldada_24 xwa, 0x22abf2
+	calr HDAE5000_Validate_String
+	ld xiz, xhl
+	ld xwa, xiz
+	or xwa, xwa
+	jrl z, .LFSD__hB_default
+	ld xwa, xiz
+	push xwa
+	call 0x29af71
+	.byte 0x2b			; push hl (compact)
+	ld xwa, xiz
+	push xwa
+	ldada_24 xwa, 0x23a06e
+	push xwa
+	call 0x29ae9f
+	lda xsp, (xsp + 0x0e)
+	ldda32_24 xwa, 0x23a1a2
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e
+	ld_sril3 xix, 0xe1, 0x0c, 0x05		; XIX = (XWA+0x050C)
+	call (xix)
+	ldada_24 xwa, 0x23a06e
+	ld xbc, xwa
+	ld xwa, xhl
+	ld xde, xbc
+	ldda32_24 xbc, 0x23a1a2
+	ld_sril3 xbc, 0xe5, 0x0a, 0x0e
+	ld_sril3 xhl, 0xe5, 0x00, 0x01
+	ld xbc, 0x01e00086
+	call (xhl)
+	jr t, .LFSD__hB_default
+.LFSD__hB_key_0b:			; Key 0x0B: direct lookup
+	ldda32_24 xwa, 0x23a1a2
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e
+	ld_sril3 xix, 0xe1, 0x0c, 0x05
+	call (xix)
+	ldada_24 xwa, 0x23a06e
+	ld xbc, xwa
+	ld xwa, xhl
+	ld xde, xbc
+	ldda32_24 xbc, 0x23a1a2
+	ld_sril3 xbc, 0xe5, 0x0a, 0x0e
+	ld_sril3 xhl, 0xe5, 0x00, 0x01
+	ld xbc, 0x01e0003a
+	call (xhl)
+	; Update display
+	ldda16_24 xwa, 0x23a092
+	ldada_24 xbc, 0x23a06e
+	ld xde, 0x007f00e2
+	calr HDAE5000_Menu_Handler
+	ld xwa, 0x007f0025
+	calr HDAE5000_HD_Format_Params
+.LFSD__hB_default:
+	lds32 xhl, 0
+.LFSD__hB_exit2:
+	pop xiz
+	ret
+	;
+	; Part 4: Event handler — menu selection (0x28A1A7)
+.LFSD__handlerC:
+	dec 0, xsp			; alloc 4 bytes
+	push xiz
+	ld (xsp + 0x04), xde
+	ld xiz, xbc
+	ld (xsp + 0x08), xwa
+	ld xwa, xiz
+	cp xwa, 0x01c00007
+	jr z, .LFSD__hC_key
+	cp xwa, 0x01c0000d
+	jr z, .LFSD__hC_0d
+	cp xwa, 0x01e00085
+	jrl nz, .LFSD__hC_default
+	; Event 0x01E00085
+	lds32 xhl, 1
+	jrl t, .LFSD__hC_exit
+.LFSD__hC_0d:				; Event 0x01C0000D: pass-through
+	ld xwa, (xsp + 0x08)
+	ld xbc, xiz
+	ld xde, (xsp + 0x04)
+	ldda32_24 xhl, 0x23a1a2
+	ld_sril3 xhl, 0xed, 0x0a, 0x0e
+	ld_sril3 xhl, 0xed, 0xdc, 0x00
+	call (xhl)
+	ldada_24 xwa, 0x2e2f5c
+	ld xbc, xwa
+	ld xwa, (xsp + 0x08)
+	ld xde, xbc
+	ldda32_24 xbc, 0x23a1a2
+	ld_sril3 xbc, 0xe5, 0x0a, 0x0e
+	ld_sril3 xhl, 0xe5, 0x00, 0x01
+	ld xbc, 0x01c0000f
+	call (xhl)
+	lds32 xhl, 0
+	jrl t, .LFSD__hC_exit
+.LFSD__hC_key:				; Event 0x01C00007: key dispatch
+	ld xde, (xsp + 0x04)
+	ldda32_24 xwa, 0x23a1a2
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e
+	ld_sril3 xix, 0xe1, 0x00, 0x01
+	ld xwa, 0x02600024
+	ld xbc, 0x01e00029
+	call (xix)
+	cp xhl, 0x00000007
+	jr z, .LFSD__hC_key_67
+	cp xhl, 0x00000006
+	jr z, .LFSD__hC_key_67
+	cp xhl, 0x00000001
+	jr z, .LFSD__hC_key_1
+	or xhl, xhl
+	jrl nz, .LFSD__hC_default
+.LFSD__hC_key_1:			; Key 0 or 1: register menu + display
+	ldada_24 xwa, 0x23a04e
+	ld xde, xwa
+	ldda32_24 xwa, 0x23a1a2
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e
+	ld_sril3 xhl, 0xe1, 0x00, 0x01
+	ld xwa, 0x007f01ae
+	ld xbc, 0x01e0003a
+	call (xhl)
+	ldda32_24 xwa, 0x23a1a2
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e
+	ld_sril3 xhl, 0xe1, 0x00, 0x01
+	ld xwa, 0x007f004e
+	ld xbc, 0x01c00001
+	lds32 xde, 0
+	call (xhl)
+	.byte 0x0b, 0x23, 0x00		; push 0x0023
+	.byte 0x0b, 0x4e, 0xa0		; push 0xa04e
+	.byte 0x0b, 0x01, 0x00		; push 0x0001
+	ld xwa, 0x007f0018
+	push xwa
+	ldda16_24 xwa, 0x23a092
+	ldda16_24 xbc, 0x23a094
+	ldda16_24 xde, 0x22aa4c
+	calr HDAE5000_Display_Scroll
+	lds wa, 0
+	lds bc, 0
+	calr HDAE5000_HD_Read_Write
+	jr t, .LFSD__hC_default
+.LFSD__hC_key_67:			; Key 6 or 7: close display
+	ldda32_24 xwa, 0x23a1a2
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e
+	ld_sril3 xhl, 0xe1, 0x04, 0x01
+	ld xwa, 0x007f0018
+	ld xbc, 0x01c00001
+	lds32 xde, 0
+	call (xhl)
+.LFSD__hC_default:			; Default: pass-through to registered handler
+	ld xwa, (xsp + 0x08)
+	ld xbc, xiz
+	ld xde, (xsp + 0x04)
+	ldda32_24 xhl, 0x23a1a2
+	ld_sril3 xhl, 0xed, 0x0a, 0x0e
+	ld_sril3 xix, 0xed, 0xdc, 0x00
+	call (xix)
+.LFSD__hC_exit:
+	pop xiz
+	inc 0, xsp
+	ret
 
 HDAE5000_FS_Entry_Lookup:	; 0x28A2F0 (739 bytes)
 	; Look up a file entry in the filesystem
