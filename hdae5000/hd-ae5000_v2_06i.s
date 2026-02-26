@@ -939,8 +939,177 @@ HDAE5000_HD_Format_Params:	; 0x28370E (702 bytes)
 	.incbin "includes/code_2803c2_28f542.bin", 13132, 702
 
 HDAE5000_HD_Seek:	; 0x2839CC (412 bytes)
-	; Seek to a cylinder/head position on HD
-	.incbin "includes/code_2803c2_28f542.bin", 13834, 412
+	; Seek to cylinder/head position on HD
+	; Args: XWA = context ptr, BC = cylinder, DE = head, (XSP+0x0a) = flags
+	; Calls format function (0x29ae9f) with different params based on IZ flags
+
+	; --- Prologue ---
+	dec 4, xsp			; allocate 4 bytes
+	.byte 0x2e			; push iz (compact 1-byte form)
+	ld (xsp + 0x02), xwa		; save context ptr
+	ld iz, (xsp + 0x0a)		; IZ = flags
+
+	; --- Check BC == 0xFFFF (invalid cylinder) ---
+	cp bc, 0xffff
+	jr z, .Lhsk_bc_invalid
+	cp de, 0xffff			; check DE == 0xFFFF (invalid head)
+	jr nz, .Lhsk_check_bits
+
+.Lhsk_bc_invalid:
+	pushw 0x007f
+	ldada_24 xwa, 0x2e2458
+	push xwa
+	ldada_24 xwa, 0x22b274
+	push xwa
+	call 0x29ae9f
+	lda xsp, (xsp + 0x0a)
+	jrl t, .Lhsk_epilogue_vtable
+
+.Lhsk_check_bits:
+	pushw 0x007f
+	ldada_24 xwa, 0x2e23d8
+	push xwa
+	ldada_24 xwa, 0x22b274
+	push xwa
+	call 0x29ae9f
+	lda xsp, (xsp + 0x0a)
+
+	cp iz, 0xffff
+	jrl z, .Lhsk_iz_invalid
+
+	; --- Bit 0 ---
+	bit 0, iz
+	jr nz, .Lhsk_bit1
+	pushw 0x000e
+	ldada_24 xwa, 0x2e24d8
+	push xwa
+	ldada_24 xwa, 0x22b274
+	push xwa
+	call 0x29ae9f
+	lda xsp, (xsp + 0x0a)
+
+.Lhsk_bit1:
+	bit 1, iz
+	jr nz, .Lhsk_bit2
+	pushw 0x000e
+	ldada_24 xwa, 0x2e24d8
+	push xwa
+	ldada_24 xwa, 0x22b282
+	push xwa
+	call 0x29ae9f
+	lda xsp, (xsp + 0x0a)
+
+.Lhsk_bit2:
+	bit 2, iz
+	jr nz, .Lhsk_bit3
+	pushw 0x000e
+	ldada_24 xwa, 0x2e24d8
+	push xwa
+	ldada_24 xwa, 0x22b290
+	push xwa
+	call 0x29ae9f
+	lda xsp, (xsp + 0x0a)
+
+.Lhsk_bit3:
+	bit 3, iz
+	jr nz, .Lhsk_bit4
+	pushw 0x000e
+	ldada_24 xwa, 0x2e24d8
+	push xwa
+	ldada_24 xwa, 0x22b29e
+	push xwa
+	call 0x29ae9f
+	lda xsp, (xsp + 0x0a)
+
+.Lhsk_bit4:
+	bit 4, iz
+	jr nz, .Lhsk_bit5
+	pushw 0x000e
+	ldada_24 xwa, 0x2e24d8
+	push xwa
+	ldada_24 xwa, 0x22b2ac
+	push xwa
+	call 0x29ae9f
+	lda xsp, (xsp + 0x0a)
+
+.Lhsk_bit5:
+	bit 5, iz
+	jr nz, .Lhsk_bit6
+	pushw 0x000e
+	ldada_24 xwa, 0x2e24d8
+	push xwa
+	ldada_24 xwa, 0x22b2ba
+	push xwa
+	call 0x29ae9f
+	lda xsp, (xsp + 0x0a)
+
+.Lhsk_bit6:
+	bit 6, iz
+	jr nz, .Lhsk_bit7
+	pushw 0x000e
+	ldada_24 xwa, 0x2e24d8
+	push xwa
+	ldada_24 xwa, 0x22b2c8
+	push xwa
+	call 0x29ae9f
+	lda xsp, (xsp + 0x0a)
+
+.Lhsk_bit7:
+	bit 7, iz
+	jr nz, .Lhsk_bit8
+	pushw 0x000e
+	ldada_24 xwa, 0x2e24d8
+	push xwa
+	ldada_24 xwa, 0x22b2d6
+	push xwa
+	call 0x29ae9f
+	lda xsp, (xsp + 0x0a)
+
+.Lhsk_bit8:
+	bit 8, iz
+	jr nz, .Lhsk_epilogue_vtable
+	pushw 0x000e
+	ldada_24 xwa, 0x2e24d8
+	push xwa
+	ldada_24 xwa, 0x22b2e4
+	push xwa
+	call 0x29ae9f
+	lda xsp, (xsp + 0x0a)
+	jr t, .Lhsk_epilogue_vtable
+
+.Lhsk_iz_invalid:
+	pushw 0x007f
+	ldada_24 xwa, 0x2e2458
+	push xwa
+	ldada_24 xwa, 0x22b274
+	push xwa
+	call 0x29ae9f
+	lda xsp, (xsp + 0x0a)
+
+.Lhsk_epilogue_vtable:
+	; Load vtable and call two methods
+	ldada_24 xwa, 0x22b274
+	ld xbc, xwa
+	ld xwa, (xsp + 0x02)		; restore context ptr
+	ld xde, xbc
+	ldda32_24 xbc, 0x23a1a2
+	ld_sril3 xbc, 0xe5, 0x0a, 0x0e	; XBC = (XBC + 0x0e0a)
+	ld_sril3 xhl, 0xe5, 0x24, 0x01	; XHL = (XBC + 0x0124)
+	ld xbc, 0x01ea000a
+	call (xhl)
+
+	ld xwa, (xsp + 0x02)		; restore context ptr
+	ldda32_24 xbc, 0x23a1a2
+	ld_sril3 xbc, 0xe5, 0x0a, 0x0e	; XBC = (XBC + 0x0e0a)
+	ld_sril3 xhl, 0xe5, 0x24, 0x01	; XHL = (XBC + 0x0124)
+	ld xbc, 0x01c0000f
+	ld xde, 0xffffffff
+	call (xhl)
+
+	; --- Epilogue ---
+	.byte 0x4e			; pop iz (compact 1-byte form)
+	inc 4, xsp
+	retd 0x0002
 
 HDAE5000_HD_Read_Write:	; 0x283B68 (4737 bytes)
 	; Core HD read/write operation; accesses 0x229D9A, 0x229DAC
