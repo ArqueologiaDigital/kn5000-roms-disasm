@@ -6685,7 +6685,106 @@ HDAE5000_Display_Sub_29429E:	; 0x29429E (99 bytes)
 	ret
 
 HDAE5000_Display_Sub_294301:	; 0x294301 (275 bytes)
-	.incbin "includes/code_28f90c_2953e1.bin", 18933, 275
+	lda xsp, (xsp - 14)
+	push xiz
+	ld (xsp + 10), xbc		; save arg1
+	ld (xsp + 14), xwa		; save arg0
+	ldmw (xsp + 8), 0x0000		; init result = 0
+	ldda8_24 a, 2330412		; load active flag (0x238F2C)
+	cps a, 2
+	jr z, .Lds301_mode2
+	cps a, 1
+	jr nz, .Lds301_err1
+.Lds301_mode2:
+	ld xwa, (xsp + 10)		; reload arg1
+	or xwa, xwa			; test if zero
+	jr nz, .Lds301_compute
+	ldw hl, 0xFFFF
+	jrl .Lds301_exit
+.Lds301_err1:
+	ldw hl, 0xFFFF
+	jrl .Lds301_exit
+.Lds301_compute:
+	ldada_24 xwa, 2330396		; XWA = 0x238F1C (base address)
+	subda32_24 xwa, 2330404	; XWA -= (0x238F24) => remaining space
+	ld (xsp + 4), xwa		; save remaining
+	ld xwa, (xsp + 10)		; reload arg1 (requested size)
+	cp xwa, (xsp + 4)		; compare requested vs remaining
+	jr ugt, .Lds301_use_remaining
+	ld xiz, (xsp + 10)		; XIZ = requested (fits)
+	jr .Lds301_check_limit
+.Lds301_use_remaining:
+	ld xiz, (xsp + 4)		; XIZ = remaining (capped)
+.Lds301_check_limit:
+	cp xiz, 0x0000FFFF		; compare with 0xFFFF
+	jr ule, .Lds301_small
+	; Large transfer: split into two calls
+	pushw 0xFFFF			; count = 0xFFFF
+	ld xwa, (xsp + 16)		; reload arg0 (adjusted for push)
+	push xwa			; push source
+	ldda32_24 xwa, 2330404		; XWA = current position
+	push xwa			; push dest
+	call 0x29AE9F
+	ld xwa, xiz			; XWA = total size
+	sub xwa, 0x0000FFFF		; remainder after first chunk
+	pushw wa			; push remainder count
+	ld xwa, (xsp + 26)		; reload arg0 (deep stack)
+	add xwa, 0x0000FFFF		; advance source by 0xFFFF
+	push xwa			; push adjusted source
+	ldda32_24 xwa, 2330404		; reload current position
+	add xwa, 0x0000FFFF		; advance dest by 0xFFFF
+	push xwa			; push adjusted dest
+	call 0x29AE9F
+	lda xsp, (xsp + 20)		; cleanup 20 bytes of args
+	jr .Lds301_update
+.Lds301_small:
+	ld wa, iz			; WA = count (16-bit)
+	pushw wa			; push count
+	ld xwa, (xsp + 16)		; reload arg0
+	push xwa			; push source
+	ldda32_24 xwa, 2330404		; current position
+	push xwa			; push dest
+	call 0x29AE9F
+	lda xsp, (xsp + 10)		; cleanup 10 bytes of args
+.Lds301_update:
+	add (xsp + 14), xiz		; advance arg0 by transferred size
+	adddm32_24 2330404, xiz	; advance current position
+	sub (xsp + 4), xiz		; decrease remaining
+	ld xwa, (xsp + 4)		; check if remaining > 0
+	or xwa, xwa
+	jr nz, .Lds301_finalize
+	; Remaining exhausted — handle based on active flag
+	cpdi8_24 2330412, 1		; active flag == 1?
+	jr nz, .Lds301_flag2
+	ldada_24 xwa, 2297628		; 0x230F1C
+	ldda32_24 xde, 2330408		; XDE = callback
+	ld xbc, 0x00008000
+	call 0x297E16
+	ld (xsp + 8), hl		; save result
+	stdi8_24 2330412, 2		; set active flag = 2
+	jr .Lds301_check_result
+.Lds301_flag2:
+	ldada_24 xwa, 2297628		; 0x230F1C
+	ldda32_24 xde, 2330408		; XDE = callback
+	ld xbc, 0x00008000
+	call 0x297FD1
+	ld (xsp + 8), hl		; save result
+.Lds301_check_result:
+	cpmi16 (xsp + 8), 0x0000	; result == 0?
+	jr nz, .Lds301_exit_result
+	ldada_24 xwa, 2297628		; 0x230F1C — reset position
+	stda32_24 2330404, xwa		; store to current position
+.Lds301_finalize:
+	sub (xsp + 10), xiz		; decrease arg1 by transferred
+	ld xwa, (xsp + 10)		; check if arg1 > 0
+	or xwa, xwa
+	jrl nz, .Lds301_compute	; loop if more to transfer
+.Lds301_exit_result:
+	ld hl, (xsp + 8)		; load result
+.Lds301_exit:
+	pop xiz
+	lda xsp, (xsp + 14)
+	ret
 
 HDAE5000_Display_Sub_294414:	; 0x294414 (3061 bytes)
 	; Large display management routine
