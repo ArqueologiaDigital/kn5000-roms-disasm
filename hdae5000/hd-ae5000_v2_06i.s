@@ -935,8 +935,272 @@ HDAE5000_HD_Read_Identify:	; 0x2832F3 (1051 bytes)
 	.incbin "includes/code_2803c2_28f542.bin", 12081, 1051
 
 HDAE5000_HD_Format_Params:	; 0x28370E (702 bytes)
-	; Calculate format parameters for HD
-	.incbin "includes/code_2803c2_28f542.bin", 13132, 702
+	; Format 24 cylinder/head entries into format buffer at 0x22a0d0
+	; Args: XWA = context ptr (stored at XSP+0x18)
+	; Uses table at 0x23a08e for base offset
+
+	; --- Prologue ---
+	.byte 0xbf, 0xe6, 0x37		; lda xsp, (xsp + 0xe6) — allocate 26-byte stack frame
+	.byte 0x2e			; push iz (compact 1-byte)
+	ld (xsp + 0x18), xwa		; save context ptr
+
+	; --- Format 0x01F9 entries into buffer ---
+	pushw 0x01f9
+	pushw 0x0000
+	ldada_24 xwa, 0x22a0d0
+	push xwa
+	call 0x29aec7
+	inc 0, xsp			; (NOP — callee cleaned stack)
+
+	; --- Loop: format 24 (0x18) entries ---
+	lds iz, 0			; IZ = loop counter
+	cp iz, 0x0018
+	jr ge, .Lfp_loop_done
+
+.Lfp_format_entry:
+	; Format field name
+	pushw 0x0015
+	ldada_24 xwa, 0x2e23bc
+	push xwa
+	ldw wa, 0x0015
+	muls xwa, xiz			; XWA = IZ * 21
+	ldada_24 xbc, 0x22a0d0
+	exts xwa
+	add xwa, xbc			; XWA = buffer + IZ*21
+	push xwa
+	call 0x29ae9f
+	; Format entry number
+	ld wa, iz
+	addda16_24 xwa, 0x23a08e	; WA += base offset
+	inc 1, wa
+	.byte 0x28			; push wa (compact 1-byte)
+	pushw 0x002e
+	pushw 0x23d2
+	lda xwa, (xsp + 0x12)
+	push xwa
+	call 0x29abd8
+	; Format second field
+	pushw 0x0003
+	lda xwa, (xsp + 0x18)
+	push xwa
+	ldw wa, 0x0015
+	muls xwa, xiz
+	ldada_24 xbc, 0x22a0d0
+	exts xwa
+	add xwa, xbc
+	push xwa
+	call 0x29ae9f
+	lda xsp, (xsp + 0x1e)		; clean stack (30 bytes)
+
+	; Load sector address for this entry
+	ldda16_24 xwa, 0x23a08e	; WA = base offset
+	add wa, iz			; WA = base + IZ
+	call 0x28f97e			; XHL = sector address
+	; Format sector data
+	pushw 0x0010
+	push xhl
+	ldw wa, 0x0015
+	muls xwa, xiz
+	ldada_24 xbc, 0x22a0d4
+	exts xwa
+	add xwa, xbc
+	push xwa
+	call 0x29ae9f
+	lda xsp, (xsp + 0x0a)		; clean stack
+
+	inc 1, iz
+	cp iz, 0x0018
+	jr lt, .Lfp_format_entry
+
+.Lfp_loop_done:
+	; --- Epilogue: vtable calls ---
+	ldada_24 xwa, 0x22a0d0
+	ld xbc, xwa
+	ld xwa, (xsp + 0x18)		; restore context ptr
+	ld xde, xbc
+	ldda32_24 xbc, 0x23a1a2
+	ld_sril3 xbc, 0xe5, 0x0a, 0x0e	; XBC = (XBC + 0x0e0a)
+	ld_sril3 xhl, 0xe5, 0x24, 0x01	; XHL = (XBC + 0x0124)
+	ld xbc, 0x01ea000a
+	call (xhl)
+
+	ld xwa, (xsp + 0x18)		; restore context ptr
+	ldda32_24 xbc, 0x23a1a2
+	ld_sril3 xbc, 0xe5, 0x0a, 0x0e
+	ld_sril3 xhl, 0xe5, 0x24, 0x01
+	ld xbc, 0x01c0000f
+	ld xde, 0xffffffff
+	call (xhl)
+
+	.byte 0x4e			; pop iz (compact 1-byte)
+	lda xsp, (xsp + 0x1a)		; deallocate 26-byte frame
+	ret
+
+; --- HD Format Event Dispatcher (0x2837F2) ---
+; Handles event codes 0x01EA0000-0x01EA0008, 0x01C00007
+HDAE5000_HD_Format_Dispatch:	; 0x2837F2
+	push xiz
+	ld xiz, xde			; save XDE in XIZ
+
+	; Dispatch on event code in XBC
+	cp xbc, 0x01ea0000
+	jrl z, .Lfd_page_down		; 0x01EA0000 = page down
+	cp xbc, 0x01ea0001
+	jrl z, .Lfd_page_up		; 0x01EA0001 = page up
+	cp xbc, 0x01ea0008
+	jrl z, .Lfd_seek		; 0x01EA0008 = seek
+	cp xbc, 0x01ea0007
+	jrl z, .Lfd_set_format		; 0x01EA0007 = set format params
+	cp xbc, 0x01ea0006
+	jrl z, .Lfd_set_format		; 0x01EA0006 = same handler
+	cp xbc, 0x01c00007
+	jrl nz, .Lfd_done		; not 0x01C00007 → exit
+
+	; --- Handle 0x01C00007: UI navigation ---
+	ld xde, xiz
+	ldda32_24 xwa, 0x23a1a2
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e	; XWA = (XWA + 0x0e0a)
+	ld_sril3 xix, 0xe1, 0x00, 0x01	; XIX = (XWA + 0x0100)
+	ld xwa, 0x02600024
+	ld xbc, 0x01e00029
+	call (xix)			; call UI handler
+
+	; Dispatch on XHL return value
+	cp xhl, 0x00000007
+	jr z, .Lfd_nav_case7
+	cp xhl, 0x00000006
+	jr z, .Lfd_nav_case6
+	cp xhl, 0x00000005
+	jr z, .Lfd_nav_case5
+	cp xhl, 0x00000001
+	jr z, .Lfd_nav_case1
+	or xhl, xhl
+	jrl nz, .Lfd_done		; XHL != 0 → exit
+
+	; Case 0: offset = 0x0000
+	stdi16_24 0x23a08e, 0x0000
+	ld xwa, 0x007f0025
+	calr HDAE5000_HD_Format_Params
+	jrl t, .Lfd_done
+
+.Lfd_nav_case1:
+	; Case 1: offset = 0x0018
+	stdi16_24 0x23a08e, 0x0018
+	ld xwa, 0x007f0025
+	calr HDAE5000_HD_Format_Params
+	jrl t, .Lfd_done
+
+.Lfd_nav_case5:
+	; Case 5: offset = 0x0030
+	stdi16_24 0x23a08e, 0x0030
+	ld xwa, 0x007f0025
+	calr HDAE5000_HD_Format_Params
+	jrl t, .Lfd_done
+
+.Lfd_nav_case6:
+	; Case 6: offset = 0x0048
+	stdi16_24 0x23a08e, 0x0048
+	ld xwa, 0x007f0025
+	calr HDAE5000_HD_Format_Params
+	jrl t, .Lfd_done
+
+.Lfd_nav_case7:
+	; Case 7: offset = 0x0060
+	stdi16_24 0x23a08e, 0x0060
+	ld xwa, 0x007f0025
+	calr HDAE5000_HD_Format_Params
+	jrl t, .Lfd_done
+
+.Lfd_set_format:
+	; Handle 0x01EA0006/0007: set format parameters
+	ldda16_24 xbc, 0x23a08e	; BC = base offset
+	ld wa, iz
+	add wa, bc
+	stda16_24 0x23a092, xwa	; store new position
+	lds wa, 0			; WA = 0
+	lds bc, 0			; BC = 0
+	calr HDAE5000_HD_Read_Write	; call HD read/write
+
+	; Notify UI
+	ldda32_24 xwa, 0x23a1a2
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e
+	ld_sril3 xhl, 0xe1, 0x24, 0x01	; XHL = vtable method
+	ld xwa, 0x007f0018
+	ld xbc, 0x01c00001
+	lds32 xde, 0
+	call (xhl)
+	jrl t, .Lfd_done
+
+.Lfd_seek:
+	; Handle 0x01EA0008: seek operation
+	ldda16_24 xwa, 0x23a08e	; WA = base offset
+	ld bc, iz
+	add bc, wa
+	stda16_24 0x23a092, xbc	; store seek position
+	ld wa, bc
+	call 0x28f97e			; XHL = sector address
+	ld xde, xhl
+
+	ldda32_24 xwa, 0x23a1a2
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e
+	ld_sril3 xhl, 0xe1, 0x50, 0x02	; XHL = (XWA + 0x0250) vtable method
+	ld xwa, 0x012a0002
+	ld xbc, 0x01e00086
+	call (xhl)
+
+	; Send completion notification
+	ldda32_24 xwa, 0x23a1a2
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e
+	ld_sril3 xhl, 0xe1, 0x24, 0x01
+	ld xwa, 0x007f0058
+	ld xbc, 0x01c00001
+	lds32 xde, 0
+	call (xhl)
+	jr t, .Lfd_done
+
+.Lfd_page_up:
+	; Handle 0x01EA0001: page up
+	cpdi16_24 0x23a08e, 0x0018
+	jr lt, .Lfd_done		; already at minimum
+	subdi16_24 0x23a08e, 0x0018	; subtract 24 from offset
+	ld xwa, 0x007f0025
+	calr HDAE5000_HD_Format_Params
+	; Calculate new entry index
+	ld xwa, xiz
+	add xwa, 0x00000018
+	ld xde, xwa
+
+	ldda32_24 xwa, 0x23a1a2
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e
+	ld_sril3 xhl, 0xe1, 0x24, 0x01
+	ld xwa, 0x007f0025
+	ld xbc, 0x01ea0003
+	call (xhl)
+	jr t, .Lfd_done
+
+.Lfd_page_down:
+	; Handle 0x01EA0000: page down
+	cpdi16_24 0x23a08e, 0x0060
+	jr ge, .Lfd_done		; already at maximum
+	adddi16_24 0x23a08e, 0x0018	; add 24 to offset
+	ld xwa, 0x007f0025
+	calr HDAE5000_HD_Format_Params
+	; Calculate new entry index
+	ld xwa, xiz
+	sub xwa, 0x00000018
+	ld xde, xwa
+
+	ldda32_24 xwa, 0x23a1a2
+	ld_sril3 xwa, 0xe1, 0x0a, 0x0e
+	ld_sril3 xhl, 0xe1, 0x24, 0x01
+	ld xwa, 0x007f0025
+	ld xbc, 0x01ea0003
+	call (xhl)
+
+.Lfd_done:
+	lds32 xhl, 0
+	pop xiz
+	ret
 
 HDAE5000_HD_Seek:	; 0x2839CC (412 bytes)
 	; Seek to cylinder/head position on HD
