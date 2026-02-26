@@ -11388,11 +11388,279 @@ HDAE5000_HD_Config_Init_Values:	; 0x29794A (392 bytes)
 	; Function continues in next block (HD_Detect_Drive)
 
 HDAE5000_HD_Detect_Drive:	; 0x297AD2 (836 bytes)
-	; Continuation of HD config init + HD detect drive logic
-	; Contains version strings at 0x2999B2:
-	;   "Technics Software section    M. Kitajima"
-	;   "2.33J", "2.21", "TECHNICS KN5000"
-	.incbin "includes/code_2971b7_29ae9e.bin", 2331, 836
+	; HD config write+verify (continuation), read+verify, sector counting
+
+	; --- Write phase continuation (from .Lhciv_hd_config_init in prev block) ---
+	; After calling write sector, check error and increment counters
+	cpdi8_24 2097698, 0		; cp (0x200222), 0 — error?
+	jpcc_24 14, 2718639		; jp NZ, .Lhdd_error1
+	ldda32_24 xwa, 2268276		; XWA = (0x229C74) sector++
+	inc 1, xwa
+	stda32_24 2268276, xwa
+	ldda32_24 xwa, 2268284		; XWA = (0x229C7C) counter++
+	inc 1, xwa
+	stda32_24 2268284, xwa
+	ldda32_24 xwa, 2268280		; XWA = (0x229C78) buffer += 512
+	add xwa, 512
+	stda32_24 2268280, xwa
+	jp .Lhciv_write_loop		; loop back to write phase
+
+	; --- Verify phase: read back each sector, compare with RAM ---
+.Lhdd_verify1:				; 0x297B09
+	ldda32_24 xwa, 2268260		; base sector → (0x229C74)
+	stda32_24 2268276, xwa
+	ld xwa, 2102834		; 0x201632 → (0x229C78)
+	stda32_24 2268280, xwa
+	xor xwa, xwa
+	stda32_24 2268284, xwa		; counter = 0
+.Lhdd_verify_loop1:			; 0x297B24
+	ld xwa, 323
+	cpdm32_24 2268284, xwa		; counter == 323?
+	jpcc_24 6, 2718631		; jp Z, .Lhdd_success1
+	ldda32_24 xhl, 2268276		; XHL = current sector
+	ld xde, 512			; 512 bytes
+	ld xix, 2097704			; 0x200228 read buffer
+	call 2717576			; read sector to buffer
+	cpdi8_24 2097698, 0		; error check
+	jpcc_24 14, 2718639		; jp NZ, .Lhdd_error1
+	ldda32_24 xix, 2268280		; XIX = RAM buffer ptr
+	ld xiy, 2097704			; XIY = read buffer
+	lds bc, 0
+.Lhdd_compare_loop1:			; 0x297B5D
+	cp bc, 512			; compared all 512 bytes?
+	jpcc_24 6, 2718587		; jp Z, .Lhdd_verify_next1
+	ld_sril3 xwa, 0x07, 0xF0, 0xE4	; XWA = (XIX+BC)
+	cp_sril_rm xwa, 0x07, 0xF4, 0xE4	; cp XWA, (XIY+BC)
+	jpcc_24 14, 2718639		; jp NZ, .Lhdd_error1
+	inc 4, bc			; 4 bytes at a time
+	jp .Lhdd_compare_loop1
+.Lhdd_verify_next1:			; 0x297B7B
+	ldda32_24 xwa, 2268276		; sector++
+	inc 1, xwa
+	stda32_24 2268276, xwa
+	ldda32_24 xwa, 2268284		; counter++
+	inc 1, xwa
+	stda32_24 2268284, xwa
+	ldda32_24 xwa, 2268280		; buffer += 512
+	add xwa, 512
+	stda32_24 2268280, xwa
+	jp .Lhdd_verify_loop1
+
+	; --- Success exit 1 ---
+.Lhdd_success1:			; 0x297BA7
+	pop xiz
+	pop xiy
+	pop xix
+	pop xhl
+	pop xde
+	pop xbc
+	pop xwa
+	ret
+
+	; --- Error handler 1: retry or set error flag ---
+.Lhdd_error1:				; 0x297BAF
+	cpdi8_24 2268563, 0		; (0x229D93) retry == 0?
+	jpcc_24 6, 2718659		; jp Z, .Lhdd_final_error1
+	decdi8_24 1, 2268563		; retry--
+	jp .Lhciv_config_restart	; restart from scratch
+.Lhdd_final_error1:			; 0x297BC3
+	stdi8_24 2097698, 1		; (0x200222) = 1 error flag
+	xor xwa, xwa
+	stda32_24 2268288, xwa		; clear (0x229C80)
+	jp .Lhdd_success1		; clean up and return
+
+	; === HD Config Read+Verify Wrapper ===
+	; Calls config init 2, returns HL = 0 (ok) or 0xFFFF (error)
+.Lhdd_wrapper2:				; 0x297BD4
+	call .Lhdd_config_init2
+	xor hl, hl
+	cpdi8_24 2097698, 0		; error?
+	jpcc_24 6, 2718696		; jp Z, .Lhdd_wrapper2_ret
+	ldw hl, 65535
+.Lhdd_wrapper2_ret:			; 0x297BE8
+	ret
+
+	; === HD Config Init 2: Read all sectors, then verify by re-reading ===
+.Lhdd_config_init2:			; 0x297BE9
+	push xwa
+	push xbc
+	push xde
+	push xhl
+	push xix
+	push xiy
+	push xiz
+	stdi8_24 2268563, 7		; retry = 7
+.Lhdd_restart2:				; 0x297BF6
+	ldda32_24 xwa, 2268260		; base sector
+	stda32_24 2268276, xwa
+	ld xwa, 2102834
+	stda32_24 2268280, xwa		; buffer = 0x201632
+	xor xwa, xwa
+	stda32_24 2268284, xwa		; counter = 0
+	; Read phase: read each of 323 sectors into RAM
+.Lhdd_read_loop2:			; 0x297C11
+	ld xwa, 323
+	cpdm32_24 2268284, xwa		; counter == 323?
+	jpcc_24 6, 2718826		; jp Z, .Lhdd_verify_start2
+	ld xde, 512
+	ldda32_24 xhl, 2268276		; current sector
+	ldda32_24 xix, 2268280		; current buffer ptr
+	call 2717576			; read sector
+	cpdi8_24 2097698, 0
+	jpcc_24 14, 2718992		; jp NZ, .Lhdd_error2
+	ldda32_24 xwa, 2268284		; counter++
+	inc 1, xwa
+	stda32_24 2268284, xwa
+	ldda32_24 xwa, 2268276		; sector++
+	inc 1, xwa
+	stda32_24 2268276, xwa
+	ldda32_24 xwa, 2268280		; buffer += 512
+	add xwa, 512
+	stda32_24 2268280, xwa
+	jp .Lhdd_read_loop2
+	; Verify phase: re-read each sector, compare with RAM copy
+.Lhdd_verify_start2:			; 0x297C6A
+	ldda32_24 xwa, 2268260
+	stda32_24 2268276, xwa
+	ld xwa, 2102834
+	stda32_24 2268280, xwa
+	xor xwa, xwa
+	stda32_24 2268284, xwa
+.Lhdd_verify_loop2:			; 0x297C85
+	ld xwa, 323
+	cpdm32_24 2268284, xwa
+	jpcc_24 6, 2718984		; jp Z, .Lhdd_success2
+	ldda32_24 xhl, 2268276
+	ld xde, 512
+	ld xix, 2097704			; read into 0x200228
+	call 2717576
+	cpdi8_24 2097698, 0
+	jpcc_24 14, 2718992		; jp NZ, .Lhdd_error2
+	ldda32_24 xix, 2268280		; RAM buffer
+	ld xiy, 2097704			; read buffer
+	lds bc, 0
+.Lhdd_compare_loop2:			; 0x297CBE
+	cp bc, 512
+	jpcc_24 6, 2718940		; jp Z, .Lhdd_verify_next2
+	ld_sril3 xwa, 0x07, 0xF0, 0xE4	; XWA = (XIX+BC)
+	cp_sril_rm xwa, 0x07, 0xF4, 0xE4	; cp XWA, (XIY+BC)
+	jpcc_24 14, 2718992		; jp NZ, .Lhdd_error2
+	inc 4, bc
+	jp .Lhdd_compare_loop2
+.Lhdd_verify_next2:			; 0x297CDC
+	ldda32_24 xwa, 2268276
+	inc 1, xwa
+	stda32_24 2268276, xwa
+	ldda32_24 xwa, 2268284
+	inc 1, xwa
+	stda32_24 2268284, xwa
+	ldda32_24 xwa, 2268280
+	add xwa, 512
+	stda32_24 2268280, xwa
+	jp .Lhdd_verify_loop2
+
+.Lhdd_success2:			; 0x297D08
+	pop xiz
+	pop xiy
+	pop xix
+	pop xhl
+	pop xde
+	pop xbc
+	pop xwa
+	ret
+
+.Lhdd_error2:				; 0x297D10
+	cpdi8_24 2268563, 0
+	jpcc_24 6, 2719012		; jp Z, .Lhdd_final_error2
+	decdi8_24 1, 2268563
+	jp .Lhdd_restart2
+.Lhdd_final_error2:			; 0x297D24
+	stdi8_24 2097698, 1
+	xor xwa, xwa
+	stda32_24 2268288, xwa
+	jp .Lhdd_success2
+
+	; === HD Count Used Sectors Wrapper ===
+	; Returns XHL = count of used sectors (or 0 on error)
+.Lhdd_wrapper3:				; 0x297D35
+	call .Lhdd_count_sectors
+	ldda32_24 xhl, 2268288		; XHL = (0x229C80) used count
+	cpdi8_24 2097698, 0
+	jr z, .Lhdd_wrapper3_ret
+	xor xhl, xhl			; error → return 0
+.Lhdd_wrapper3_ret:			; 0x297D48
+	ret
+
+	; === Count Used Sectors ===
+	; Reads each sector, counts those with non-zero 32-bit words
+.Lhdd_count_sectors:			; 0x297D49
+	push xwa
+	push xbc
+	push xde
+	push xhl
+	push xix
+	push xiy
+	push xiz
+	stdi8_24 2268563, 5		; retry = 5
+.Lhdd_restart3:				; 0x297D56
+	xor xwa, xwa
+	stda32_24 2268288, xwa		; used count = 0
+	ldda32_24 xwa, 2268264		; base sector from (0x229C68)
+	stda32_24 2268292, xwa		; → (0x229C84) current sector
+	xor xwa, xwa
+	stda32_24 2268296, xwa		; (0x229C88) = 0 counter
+.Lhdd_outer3:				; 0x297D6E
+	ldda32_24 xwa, 2268272		; total sectors (0x229C70)
+	cpdm32_24 2268296, xwa		; counter >= total?
+	jpcc_24 15, 2719209		; jp NC, .Lhdd_success3
+	ld xde, 512
+	ldda32_24 xhl, 2268292		; current sector
+	ldada_24 xix, 2097704		; XIX = &0x200228
+	call 2717576			; read sector
+	cpdi8_24 2097698, 0
+	jpcc_24 14, 2719217		; jp NZ, .Lhdd_error3
+	ldada_24 xix, 2097704
+	lds bc, 0
+.Lhdd_inner3:				; 0x297DA2
+	cp bc, 512			; scanned all bytes?
+	jpcc_24 6, 2719193		; jp Z, .Lhdd_next_sector3
+	ldda32_24 xwa, 2268296		; increment scan counter
+	inc 1, xwa
+	stda32_24 2268296, xwa
+	ld_sril3 xwa, 0x07, 0xF0, 0xE4	; XWA = (XIX+BC)
+	inc 4, bc
+	cp xwa, 0			; is this 32-bit word zero?
+	jpcc_24 14, 2719138		; jp NZ, .Lhdd_inner3 (non-zero, keep scanning)
+	ldda32_24 xwa, 2268288		; used count++
+	inc 1, xwa
+	stda32_24 2268288, xwa
+	jp .Lhdd_inner3			; continue scanning
+.Lhdd_next_sector3:			; 0x297DD9
+	ldda32_24 xwa, 2268292		; sector++
+	inc 1, xwa
+	stda32_24 2268292, xwa
+	jp .Lhdd_outer3
+
+.Lhdd_success3:			; 0x297DE9
+	pop xiz
+	pop xiy
+	pop xix
+	pop xhl
+	pop xde
+	pop xbc
+	pop xwa
+	ret
+
+.Lhdd_error3:				; 0x297DF1
+	cpdi8_24 2268563, 0
+	jpcc_24 6, 2719237		; jp Z, .Lhdd_final_error3
+	decdi8_24 1, 2268563
+	jp .Lhdd_restart3
+.Lhdd_final_error3:			; 0x297E05
+	stdi8_24 2097698, 1
+	xor xwa, xwa
+	stda32_24 2268288, xwa
+	jp .Lhdd_success3
 
 HDAE5000_Display_Copy:	; 0x297E16 (443 bytes)
 	; Display block copy operation
