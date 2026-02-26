@@ -947,8 +947,128 @@ HDAE5000_HD_Read_Write:	; 0x283B68 (4737 bytes)
 	.incbin "includes/code_2803c2_28f542.bin", 14246, 4737
 
 HDAE5000_HD_Error_Check:	; 0x284DE9 (355 bytes)
-	; Check HD operation result and handle errors
-	.incbin "includes/code_2803c2_28f542.bin", 18983, 355
+	; Part 1: Display error message (0x284DE9)
+	; XWA = string address. Validates length, copies to buffer, displays.
+	push xiz
+	ld xiz, xwa			; save string address
+	ld xwa, xiz
+	push xwa
+	call HDAE5000_Display_Buffer_Validate
+	inc 4, xsp			; cleanup arg
+	cp hl, 0x0019			; cap length at 25
+	jr ule, .Lhec_len_ok
+	ldw hl, 0x0019
+.Lhec_len_ok:
+	pushw hl			; push length
+	ld xwa, xiz
+	push xwa			; push source
+	ldada_24 xwa, 2272203		; 0x22ABCB — dest buffer
+	push xwa
+	call HDAE5000_MemCopy_Reverse
+	lda xsp, (xsp + 10)		; cleanup 10 bytes of args
+	; Display error string
+	ldada_24 xwa, 2272196		; 0x22ABC4 — display buffer
+	ld xde, xwa
+	ldda32_24 xwa, 2335138		; (0x23A1A2)
+	ld_sril3 xwa, 0xE1, 0x0A, 0x0E	; (XWA+0x0E0A)
+	ld_sril3 xhl, 0xE1, 0x00, 0x01	; (XWA+0x0100) — display handler
+	ld xwa, 0x007F0068		; display params
+	ld xbc, 0x01EA000A		; color/position
+	call (xhl)
+	; Clear display line
+	ldda32_24 xwa, 2335138
+	ld_sril3 xwa, 0xE1, 0x0A, 0x0E
+	ld_sril3 xhl, 0xE1, 0x00, 0x01
+	ld xwa, 0x007F0068
+	ld xbc, 0x01C0000F
+	ld xde, 0xFFFFFFFF
+	call (xhl)
+	pop xiz
+	ret
+	; Part 2: Error handler dispatcher (0x284E53)
+	; XWA = original params, XBC = error code, XDE = extra data
+	dec 0, xsp
+	push xiz
+	ld (xsp + 4), xde		; save extra data
+	ld xiz, xbc			; XIZ = error code
+	ld (xsp + 8), xwa		; save original params
+	; Dispatch on error code
+	ld xwa, xiz
+	cp xwa, 0x01C00007		; error 7 (command failed)?
+	jr z, .Lhd_err7
+	cp xwa, 0x01C0000D		; error 13 (retry)?
+	jr z, .Lhd_err13
+	cp xwa, 0x01E00085		; error 0x85 (fatal)?
+	jrl nz, .Lhd_cleanup
+	lds32 xhl, 1			; return 1 (fatal)
+	jrl .Lhd_exit
+.Lhd_err13:
+	; Error 13: retry — call callback, copy buffer, redisplay
+	ld xwa, (xsp + 8)
+	ld xbc, xiz
+	ld xde, (xsp + 4)
+	ldda32_24 xhl, 2335138
+	ld_sril3 xhl, 0xED, 0x0A, 0x0E	; (XHL+0x0E0A)
+	ld_sril3 xhl, 0xED, 0xDC, 0x00	; (XHL+0x00DC) — callback
+	call (xhl)
+	ldada_24 xwa, 3024648		; 0x2E2708 — status buffer
+	ld xbc, xwa
+	ld xwa, (xsp + 8)
+	ld xde, xbc
+	ldda32_24 xbc, 2335138
+	ld_sril3 xbc, 0xE5, 0x0A, 0x0E	; (XBC+0x0E0A)
+	ld_sril3 xhl, 0xE5, 0x00, 0x01	; (XBC+0x0100) — display handler
+	ld xbc, 0x01C0000F
+	call (xhl)
+	lds32 xhl, 0			; return 0 (retry ok)
+	jrl .Lhd_exit
+.Lhd_err7:
+	; Error 7: command failed — check sub-code
+	ld xde, (xsp + 4)
+	ldda32_24 xwa, 2335138
+	ld_sril3 xwa, 0xE1, 0x0A, 0x0E
+	ld_sril3 xix, 0xE1, 0x00, 0x01	; XIX = display handler
+	ld xwa, 0x02600024
+	ld xbc, 0x01E00029
+	call (xix)
+	cp xhl, 0x00000007		; sub-code 7?
+	jr z, .Lhd_err7_display
+	cp xhl, 0x00000006		; sub-code 6?
+	jr z, .Lhd_err7_display
+	cp xhl, 0x00000001		; sub-code 1?
+	jr z, .Lhd_err7_minor
+	or xhl, xhl			; sub-code 0?
+	jr nz, .Lhd_cleanup
+.Lhd_err7_minor:
+	ldada_24 xwa, 3024654		; 0x2E270E — error string
+	calr HDAE5000_HD_Error_Check	; recursive: display error
+	call HDAE5000_PPORT_Init_Main
+	jr .Lhd_cleanup
+.Lhd_err7_display:
+	call HDAE5000_PPORT_Reset
+	ldada_24 xwa, 3024670		; 0x2E271E — error string
+	calr HDAE5000_HD_Error_Check	; recursive: display error
+	; Reinit display handler
+	ldda32_24 xwa, 2335138
+	ld_sril3 xwa, 0xE1, 0x0A, 0x0E
+	ld_sril3 xhl, 0xE1, 0x04, 0x01	; (XWA+0x0104) — init handler
+	ld xwa, 0x007F0013
+	ld xbc, 0x01C00001
+	lds32 xde, 0
+	call (xhl)
+.Lhd_cleanup:
+	; Final cleanup: call error callback
+	ld xwa, (xsp + 8)
+	ld xbc, xiz
+	ld xde, (xsp + 4)
+	ldda32_24 xhl, 2335138
+	ld_sril3 xhl, 0xED, 0x0A, 0x0E
+	ld_sril3 xix, 0xED, 0xDC, 0x00	; XIX = callback
+	call (xix)
+.Lhd_exit:
+	pop xiz
+	inc 0, xsp
+	ret
 
 HDAE5000_HD_Wait_Ready:	; 0x284F4C (138 bytes)
 	; Set up two parameter blocks on stack from template data, then call
