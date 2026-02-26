@@ -3321,19 +3321,286 @@ HDAE5000_Table_Init_Entry:	; 0x29143C (359 bytes)
 	.incbin "includes/code_28f90c_2953e1.bin", 6960, 359
 
 HDAE5000_Table_Sub_2915A3:	; 0x2915A3 (217 bytes)
-	.incbin "includes/code_28f90c_2953e1.bin", 7319, 217
+	lda xsp, (xsp - 20)
+	push xiz
+	ld (xsp + 20), bc
+	ld (xsp + 22), wa
+	lda xwa, (xsp + 12)
+	ld xbc, xwa
+	ldda32_24 xwa, 2335138
+	ld_sril3 xwa, 0xE1, 0x88, 0x0E
+	ld_sril3 xhl, 0xE1, 0x80, 0x00
+	lds wa, 2		; operation code = 2
+	call (xhl)
+	ld xwa, (xsp + 16)
+	calr HDAE5000_Cell_Get_Params
+	ld (xsp + 16), xhl	; save result
+	ldda32_24 xwa, 2335138
+	ld_sril3 xwa, 0xE1, 0x88, 0x0E
+	ld xhl, (xwa + 36)	; (XWA+0x24)
+	call (xhl)
+	lda xwa, (xsp + 12)
+	ld (xsp + 4), xwa
+	lda xwa, (xsp + 16)
+	ld (xsp + 8), xwa
+	ld wa, (xsp + 20)
+	extz xwa
+	ld xbc, 0x0000004C
+	call 0x29B72D
+	ld xiz, xhl
+	ld wa, (xsp + 22)
+	extz xwa
+	ld xbc, 0x000004C0
+	call 0x29B72D
+	add xhl, 0x780
+	add xhl, xiz
+	ldada_24 xwa, 2102874	; 0x20165A
+	add xwa, xhl
+	ld xde, xwa
+	ld xwa, (xsp + 4)
+	ld xwa, (xwa)
+	ld xbc, (xsp + 8)
+	ld xbc, (xbc)
+	call 0x297E16
+	ld (xsp + 10), hl
+	ld wa, (xsp + 10)
+	cp wa, 0xFFFF
+	jr z, .Lts915_post
+	ld wa, (xsp + 20)
+	extz xwa
+	ld xbc, 0x0000004C
+	call 0x29B72D
+	ld xiz, xhl
+	ld wa, (xsp + 22)
+	extz xwa
+	ld xbc, 0x000004C0
+	call 0x29B72D
+	add xhl, 0x780
+	add xhl, xiz
+	ldada_24 xwa, 2102861	; 0x20164D
+	add xwa, xhl
+	ldmi8 (xwa), 0x01
+.Lts915_post:
+	ld wa, (xsp + 10)
+	ldda32_24 xbc, 2335138
+	ld_sril3 xbc, 0xE5, 0x88, 0x0E
+	ld xhl, (xbc + 40)	; (XBC+0x28)
+	call (xhl)
+	ld hl, (xsp + 10)
+	pop xiz
+	lda xsp, (xsp + 20)
+	ret
 
 HDAE5000_Table_Sub_29167C:	; 0x29167C (226 bytes)
 	.incbin "includes/code_28f90c_2953e1.bin", 7536, 226
 
 HDAE5000_Table_Sub_29175E:	; 0x29175E (211 bytes)
-	.incbin "includes/code_28f90c_2953e1.bin", 7762, 211
+	lda xsp, (xsp - 20)	; allocate 20 bytes
+	push xiz
+	ld (xsp + 20), bc	; save file number
+	ld (xsp + 22), wa	; save partition
+	lda xwa, (xsp + 12)
+	ld xbc, xwa		; XBC = buffer addr
+	ldda32_24 xwa, 2335138	; workspace ptr
+	ld_sril3 xwa, 0xE1, 0x88, 0x0E
+	ld_sril3 xhl, 0xE1, 0x80, 0x00
+	lds wa, 5		; operation code = 5
+	call (xhl)
+	ldda32_24 xwa, 2335138	; reload workspace
+	ld_sril3 xwa, 0xE1, 0x88, 0x0E
+	ld xix, (xwa + 68)	; (XWA+0x44)
+	call (xix)
+	ld (xsp + 16), xhl	; save dispatch result
+	lda xwa, (xsp + 12)
+	ld (xsp + 4), xwa
+	lda xwa, (xsp + 16)
+	ld (xsp + 8), xwa
+	ld wa, (xsp + 20)
+	extz xwa
+	ld xbc, 0x0000004C
+	call 0x29B72D
+	ld xiz, xhl
+	ld wa, (xsp + 22)
+	extz xwa
+	ld xbc, 0x000004C0
+	call 0x29B72D
+	add xhl, 0x780
+	add xhl, xiz
+	ldada_24 xwa, 2102882	; 0x201662
+	add xwa, xhl
+	ld xde, xwa
+	ld xwa, (xsp + 4)
+	ld xwa, (xwa)
+	ld xbc, (xsp + 8)
+	ld xbc, (xbc)
+	call 0x297E16
+	ld (xsp + 10), hl
+	ld wa, (xsp + 10)
+	cp wa, 0xFFFF
+	jr z, .Lts917_post
+	ld wa, (xsp + 20)
+	extz xwa
+	ld xbc, 0x0000004C
+	call 0x29B72D
+	ld xiz, xhl
+	ld wa, (xsp + 22)
+	extz xwa
+	ld xbc, 0x000004C0
+	call 0x29B72D
+	add xhl, 0x780
+	add xhl, xiz
+	ldada_24 xwa, 2102863	; 0x20164F
+	add xwa, xhl
+	ldmi8 (xwa), 0x01
+.Lts917_post:
+	ld wa, (xsp + 10)
+	ldda32_24 xbc, 2335138
+	ld_sril3 xbc, 0xE5, 0x88, 0x0E
+	ld xhl, (xbc + 72)	; (XBC+0x48)
+	call (xhl)
+	ld hl, (xsp + 10)
+	pop xiz
+	lda xsp, (xsp + 20)
+	ret
 
 HDAE5000_Table_Sub_291831:	; 0x291831 (216 bytes)
-	.incbin "includes/code_28f90c_2953e1.bin", 7973, 216
+	lda xsp, (xsp - 20)
+	push xiz
+	ld (xsp + 20), bc
+	ld (xsp + 22), wa
+	lda xwa, (xsp + 12)
+	ld xbc, xwa
+	ldda32_24 xwa, 2335138
+	ld_sril3 xwa, 0xE1, 0x88, 0x0E
+	ld_sril3 xhl, 0xE1, 0x80, 0x00
+	lds wa, 6		; operation code = 6
+	call (xhl)
+	ld xwa, 0x000072AA	; constant for XSP+16
+	ld (xsp + 16), xwa
+	ldda32_24 xwa, 2335138
+	ld_sril3 xwa, 0xE1, 0x88, 0x0E
+	ld xhl, (xwa + 84)	; (XWA+0x54)
+	call (xhl)
+	lda xwa, (xsp + 12)
+	ld (xsp + 4), xwa
+	lda xwa, (xsp + 16)
+	ld (xsp + 8), xwa
+	ld wa, (xsp + 20)
+	extz xwa
+	ld xbc, 0x0000004C
+	call 0x29B72D
+	ld xiz, xhl
+	ld wa, (xsp + 22)
+	extz xwa
+	ld xbc, 0x000004C0
+	call 0x29B72D
+	add xhl, 0x780
+	add xhl, xiz
+	ldada_24 xwa, 2102886	; 0x201666
+	add xwa, xhl
+	ld xde, xwa
+	ld xwa, (xsp + 4)
+	ld xwa, (xwa)
+	ld xbc, (xsp + 8)
+	ld xbc, (xbc)
+	call 0x297E16
+	ld (xsp + 10), hl
+	ld wa, (xsp + 10)
+	cp wa, 0xFFFF
+	jr z, .Lts918_post
+	ld wa, (xsp + 20)
+	extz xwa
+	ld xbc, 0x0000004C
+	call 0x29B72D
+	ld xiz, xhl
+	ld wa, (xsp + 22)
+	extz xwa
+	ld xbc, 0x000004C0
+	call 0x29B72D
+	add xhl, 0x780
+	add xhl, xiz
+	ldada_24 xwa, 2102864	; 0x201650
+	add xwa, xhl
+	ldmi8 (xwa), 0x01
+.Lts918_post:
+	ld wa, (xsp + 10)
+	ldda32_24 xbc, 2335138
+	ld_sril3 xbc, 0xE5, 0x88, 0x0E
+	ld xhl, (xbc + 88)	; (XBC+0x58)
+	call (xhl)
+	ld hl, (xsp + 10)
+	pop xiz
+	lda xsp, (xsp + 20)
+	ret
 
 HDAE5000_Table_Sub_291909:	; 0x291909 (211 bytes)
-	.incbin "includes/code_28f90c_2953e1.bin", 8189, 211
+	lda xsp, (xsp - 20)	; allocate 20 bytes
+	push xiz
+	ld (xsp + 20), bc	; save file number
+	ld (xsp + 22), wa	; save partition
+	lda xwa, (xsp + 12)
+	ld xbc, xwa		; XBC = buffer addr
+	ldda32_24 xwa, 2335138	; workspace ptr
+	ld_sril3 xwa, 0xE1, 0x88, 0x0E
+	ld_sril3 xhl, 0xE1, 0x80, 0x00
+	lds wa, 7		; operation code = 7
+	call (xhl)
+	ldda32_24 xwa, 2335138	; reload workspace
+	ld_sril3 xwa, 0xE1, 0x88, 0x0E
+	ld xix, (xwa + 100)	; (XWA+0x64)
+	call (xix)
+	ld (xsp + 16), xhl	; save dispatch result
+	lda xwa, (xsp + 12)
+	ld (xsp + 4), xwa
+	lda xwa, (xsp + 16)
+	ld (xsp + 8), xwa
+	ld wa, (xsp + 20)
+	extz xwa
+	ld xbc, 0x0000004C
+	call 0x29B72D
+	ld xiz, xhl
+	ld wa, (xsp + 22)
+	extz xwa
+	ld xbc, 0x000004C0
+	call 0x29B72D
+	add xhl, 0x780
+	add xhl, xiz
+	ldada_24 xwa, 2102890	; 0x20166A
+	add xwa, xhl
+	ld xde, xwa
+	ld xwa, (xsp + 4)
+	ld xwa, (xwa)
+	ld xbc, (xsp + 8)
+	ld xbc, (xbc)
+	call 0x297E16
+	ld (xsp + 10), hl
+	ld wa, (xsp + 10)
+	cp wa, 0xFFFF
+	jr z, .Lts919b_post
+	ld wa, (xsp + 20)
+	extz xwa
+	ld xbc, 0x0000004C
+	call 0x29B72D
+	ld xiz, xhl
+	ld wa, (xsp + 22)
+	extz xwa
+	ld xbc, 0x000004C0
+	call 0x29B72D
+	add xhl, 0x780
+	add xhl, xiz
+	ldada_24 xwa, 2102865	; 0x201651
+	add xwa, xhl
+	ldmi8 (xwa), 0x01
+.Lts919b_post:
+	ld wa, (xsp + 10)
+	ldda32_24 xbc, 2335138
+	ld_sril3 xbc, 0xE5, 0x88, 0x0E
+	ld xhl, (xbc + 104)	; (XBC+0x68)
+	call (xhl)
+	ld hl, (xsp + 10)
+	pop xiz
+	lda xsp, (xsp + 20)
+	ret
 
 HDAE5000_Table_Sub_2919DC:	; 0x2919DC (134 bytes)
 	push xiz		; save XIZ
