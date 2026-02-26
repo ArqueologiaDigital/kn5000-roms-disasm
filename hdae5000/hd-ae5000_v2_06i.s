@@ -4572,8 +4572,316 @@ HDAE5000_Path_Builder:	; 0x28EF6B (556 bytes)
 	ret
 
 HDAE5000_Directory_Handler:	; 0x28F197 (614 bytes)
-	; Handle directory listing and navigation
-	.incbin "includes/code_2803c2_28f542.bin", 60885, 614
+	; Directory entry insertion with sorted-position insert logic
+	; Calls string format/compare utilities, manages (0x230e72) entry count
+	; Max 40 entries (0x28), each 9 bytes in table at 0x230884
+
+	; --- Prologue ---
+	.byte 0xbf, 0x9c, 0x37		; lda xsp, (xsp + 0x9c) — allocate 100-byte stack frame
+	push xiz
+	push xwa			; save arg1
+	lda xwa, (xsp + 0x3a)
+	push xwa
+	call 0x29af45			; format string
+	lda xwa, (xsp + 0x3e)
+	push xwa
+	call 0x29b01b			; parse name
+	lda xwa, (xsp + 0x42)
+	push xwa
+	call 0x29b04e			; validate
+	pushw 0x0004
+	pushw 0x002e
+	pushw 0x5d6c
+	lda xwa, (xsp + 0x4c)
+	push xwa
+	call 0x29afbe			; search/match
+	add xsp, 0x0000001a		; clean 26 bytes
+	cps hl, 0
+	jrl nz, .Ldh_ret0
+
+	; Check max entries
+	cpdi16_24 0x230e72, 0x0028
+	jr c, .Ldh_under_limit
+	ld xhl, 0xffffffff		; return -1 (full)
+	jrl t, .Ldh_epilogue
+
+.Ldh_under_limit:
+	lda xwa, (xsp + 0x36)
+	push xwa
+	call 0x29b01b
+	lda xwa, (xsp + 0x3a)
+	push xwa
+	lda xwa, (xsp + 0x0c)
+	push xwa
+	call 0x29af45
+	lda xwa, (xsp + 0x10)
+	push xwa
+	call 0x29af71			; string compare
+	lda xsp, (xsp + 0x10)		; clean 16 bytes
+	dec 4, hl
+	ld wa, hl
+	extz xwa
+	lda xbc, (xsp + 0x04)
+	add xbc, xwa
+	ldmi8 (xbc), 0x00		; null-terminate
+
+	; First entry? (count == 0)
+	cpdi16_24 0x230e72, 0x0000
+	jr nz, .Ldh_search
+
+	; Direct insert at slot 0
+	lda xwa, (xsp + 0x04)
+	push xwa
+	ldada_24 xwa, 0x230884
+	push xwa
+	call 0x29af45
+	inc 0, xsp			; clean 8 bytes
+	incdi16_24 1, 0x230e72
+	lds32 xhl, 0
+	jrl t, .Ldh_epilogue
+
+	; Sorted insertion search
+.Ldh_search:
+	ldi_werp 0xfa, 0		; QIZ = 0 (search index)
+	ldto_werp wa, 0xfa		; WA = QIZ
+	cpda16_24 xwa, 0x230e72	; compare QIZ with count
+	jrl nc, .Ldh_append
+
+.Ldh_search_loop:
+	ldto_werp wa, 0xfa		; WA = QIZ
+	muls wa, 0x0009			; slot offset = QIZ * 9
+	ldada_24 xbc, 0x230884
+	exts xwa
+	add xwa, xbc			; XWA = slot address
+	push xwa
+	lda xwa, (xsp + 0x08)
+	push xwa
+	call 0x29af2d			; string compare
+	inc 0, xsp			; clean 8 bytes
+	cps hl, 0
+	jr ge, .Ldh_next_slot
+
+	; Found insert position — shift entries down
+	ldda16_24 xiz, 0x230e72		; IZ = total count
+	cp_werp iz, 0xfa		; compare IZ with QIZ
+	jr le, .Ldh_do_insert
+
+	; Shift loop: move entries [QIZ..IZ-1] down by one slot
+.Ldh_shift_loop:
+	ld wa, iz
+	muls wa, 0x0009
+	ldada_24 xbc, 0x23087b		; offset -9 from table base (src)
+	exts xwa
+	add xwa, xbc
+	push xwa			; source
+	ld wa, iz
+	muls wa, 0x0009
+	ldada_24 xbc, 0x230884		; table base (dst)
+	exts xwa
+	add xwa, xbc
+	push xwa			; destination
+	call 0x29af45			; copy 9-byte entry
+	inc 0, xsp
+	dec 1, iz
+	cp_werp iz, 0xfa
+	jr gt, .Ldh_shift_loop
+
+.Ldh_do_insert:
+	lda xwa, (xsp + 0x04)
+	push xwa
+	ldto_werp wa, 0xfa
+	muls wa, 0x0009
+	ldada_24 xbc, 0x230884
+	exts xwa
+	add xwa, xbc
+	push xwa
+	call 0x29af45			; copy entry to insert position
+	inc 0, xsp
+	incdi16_24 1, 0x230e72
+	lds32 xhl, 0
+	jr t, .Ldh_epilogue
+
+.Ldh_next_slot:
+	inc1_werp 0xfa			; QIZ++
+	ldto_werp wa, 0xfa
+	cpda16_24 xwa, 0x230e72
+	jrl c, .Ldh_search_loop
+
+	; Append at end (no sorted position found)
+.Ldh_append:
+	lda xwa, (xsp + 0x04)
+	push xwa
+	ldda16_24 xwa, 0x230e72
+	extz xwa
+	ld xbc, xwa
+	sll xbc, 3
+	add xbc, xwa
+	ld xwa, 0x00230884
+	add xwa, xbc
+	push xwa
+	call 0x29af45
+	inc 0, xsp
+	incdi16_24 1, 0x230e72
+	lds32 xhl, 0
+	jr t, .Ldh_epilogue
+
+.Ldh_ret0:
+	lds32 xhl, 0
+.Ldh_epilogue:
+	pop xiz
+	lda xsp, (xsp + 0x64)		; restore stack (+100)
+	ret
+
+	; ============================================================
+	; Event code matcher — check for 0x01E0009F
+	; ============================================================
+HDAE5000_Dir_Event_Check:	; 0x28F2F7
+	cp xbc, 0x01e0009f
+	jr nz, .Ldec_no
+	ldada_24 xhl, 0x2e5d72
+	ret
+.Ldec_no:
+	lds32 xhl, 0
+	ret
+
+	; ============================================================
+	; Format + ROM region setup helper
+	; ============================================================
+HDAE5000_Dir_Format_Setup:	; 0x28F308
+	.byte 0xbf, 0xe8, 0x37		; lda xsp, (xsp + 0xe8) — allocate 24-byte stack frame
+	push xiz
+	ld xiz, xbc			; save XBC in XIZ
+	ld (xsp + 0x18), xwa		; save arg1
+	pushw 0x002e
+	pushw 0x5dc6
+	lda xwa, (xsp + 0x08)
+	push xwa
+	call 0x29af45
+	inc 0, xsp
+	ld (xsp + 0x08), xiz		; store XIZ to stack
+	ld xwa, 0x00280000
+	ld (xsp + 0x14), xwa
+	ld xwa, 0x002f0000
+	ld (xsp + 0x0c), xwa
+	ld xwa, (xsp + 0x18)
+	ld xbc, (xsp + 0x04)
+	call 0x23feb0
+	pop xiz
+	lda xsp, (xsp + 0x18)
+	ret
+
+	; ============================================================
+	; Vtable helper: call method 0x0538 (flush), return HL=0
+	; ============================================================
+HDAE5000_Dir_Flush:		; 0x28F343
+	ldda32_24 xwa, 0x23a1a2
+	ld_sril3 XWA, 0xe1, 0x0a, 0x0e
+	ld_sril3 XHL, 0xe1, 0x38, 0x05	; method 0x0538
+	call (xhl)
+	lds hl, 0
+	ret
+
+	; ============================================================
+	; Vtable helper: call method 0x053C (close), return HL=0
+	; ============================================================
+HDAE5000_Dir_Close:		; 0x28F357
+	ldda32_24 xwa, 0x23a1a2
+	ld_sril3 XWA, 0xe1, 0x0a, 0x0e
+	ld_sril3 XHL, 0xe1, 0x3c, 0x05	; method 0x053C
+	call (xhl)
+	lds hl, 0
+	ret
+
+	; ============================================================
+	; Variable-length integer encoder (7-bit chunks, MSB continuation)
+	; Input: XWA = value to encode, XBC = output buffer pointer
+	; Output: XHL = number of bytes written
+	; ============================================================
+HDAE5000_VarInt_Encode:		; 0x28F36B
+	dec 6, xsp			; allocate 6-byte temp buffer
+	ld xix, xwa			; XIX = value to encode
+	lds hl, 0			; HL = byte count
+
+.Lve_extract:
+	lda xde, (xsp + 0x00)		; XDE = temp buffer (reloaded each iteration)
+	ld xwa, xix
+	and xwa, 0x0000007f		; extract low 7 bits
+	lda_dri3 xbc, 0x07, 0xe8, 0xec	; (XDE+HL) = A (store byte)
+	srl xix, 7			; shift value right by 7
+	inc 1, hl
+	or xix, xix			; test if zero
+	jr nz, .Lve_extract
+
+	; Reverse into output with MSB continuation bits
+	lds ix, 1
+	cp ix, hl
+	jr ge, .Lve_copy_last
+
+.Lve_set_msb:
+	ld wa, hl
+	sub wa, ix
+	ld de, wa
+	dec 1, de
+	lda xwa, (xsp + 0x00)
+	ld_srib3 a, 0x07, 0xe0, 0xf0	; A = (XWA+IX) — load temp byte
+	set 7, a			; set continuation bit
+	lda_dri3 xbc, 0x07, 0xe4, 0xe8	; (XBC+DE) = A — store to output
+	inc 1, ix
+	cp ix, hl
+	jr lt, .Lve_set_msb
+
+.Lve_copy_last:
+	ld de, hl
+	dec 1, de
+	.byte 0x8f, 0x00, 0x21		; ld a, (xsp + 0x00) — first temp byte
+	lda_dri3 xbc, 0x07, 0xe4, 0xe8	; (XBC+DE) = A
+	exts xhl
+	inc 6, xsp			; free temp buffer
+	ret
+
+	; ============================================================
+	; Variable-length integer decoder (7-bit chunks, MSB continuation)
+	; Input: XWA = data pointer, XBC = output byte count pointer
+	; Output: XHL = decoded value, or -1 on error
+	; ============================================================
+HDAE5000_VarInt_Decode:		; 0x28F3BD
+	ld xde, xwa			; XDE = data pointer
+	lds ix, 0			; IX = byte index
+	lds32 xhl, 0			; XHL = accumulator
+
+	ld a, (xde)			; A = first byte (for length check)
+	ldfr_berp a, 0xf4		; IYL = A (save first byte)
+
+.Lvd_loop:
+	ld_srib3 a, 0x07, 0xe8, 0xf0	; A = (XDE+IX) — load indexed byte
+	res 7, a			; clear continuation bit
+	ldb w, 0			; W = 0
+	extz xwa			; XWA = byte value (zero-extended)
+	add xhl, xwa			; accumulate
+
+	bit_dri 7, 0x07, 0xe8, 0xf0	; test bit 7 of (XDE+IX)
+	jr nz, .Lvd_continue
+	; No continuation — done
+	ldto_berp a, 0xf0		; A = IXL (byte count)
+	inc 1, a
+	ld (xbc), a			; store byte count
+	ret
+
+.Lvd_continue:
+	inc 1, ix
+	sll xhl, 7			; shift accumulator left by 7
+	cps ix, 4
+	jr le, .Lvd_length_check
+	cpi_berp 0xf4, 7		; compare IYL with 7
+	jr ugt, .Lvd_error
+
+.Lvd_length_check:
+	cps ix, 5
+	jr le, .Lvd_loop
+
+.Lvd_error:
+	ld xhl, 0xffffffff		; return -1
+	ret
 
 HDAE5000_Filename_Validate:	; 0x28F3FD (59 bytes)
 	; Unpack 32-bit value by extracting each byte, shifting and combining
