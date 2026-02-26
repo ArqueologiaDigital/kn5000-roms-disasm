@@ -8485,9 +8485,64 @@ HDAE5000_Cmd05_RcvFSB:	; 0x29605A
 	; Handler: Receive FSB from PC
 	.incbin "includes/code_295642_2971a2.bin", 2584, 570
 
-HDAE5000_Cmd06_WriteFSB:	; 0x296294
-	; Handler: Write FSB to HD
-	.incbin "includes/code_295642_2971a2.bin", 3154, 150
+HDAE5000_Cmd06_WriteFSB:	; 0x296294 (150 bytes)
+	; Handler: Write FSB (File System Block) to HD
+	; Displays "Write FSB" status, calls render, copies PPORT data to XIX buffer,
+	; loads sector/head params, calls Display_String with result, sums and cleans up.
+	ldw wa, 0x001A			; display row/column
+	nop
+	ldada_24 xbc, 2708750		; 0x29550E - "Write FSB" string
+	nop
+	call HDAE5000_Display_String
+	call HDAE5000_Render_Display_Region
+	lds wa, 1			; WA = 1
+	ei 0x00				; disable interrupts
+	call HDAE5000_Display_String
+	ei 0x07				; enable interrupts
+	xor wa, wa			; WA = 0
+	ldda8_24 a, 2330842		; A = [0x2390DA] (FSB byte 0)
+	nop
+	ld (xix), a			; store to buffer[0]
+	ldda8_24 a, 2330844		; A = [0x2390DC] (FSB byte 1)
+	nop
+	ld (xix + 1), a			; store to buffer[1]
+	nop
+	add xix, 0x00000002		; advance buffer pointer past header
+	lds bc, 0			; BC = 0 (loop counter)
+	ldada_24 xiy, 2330984		; XIY = 0x239168 (PPORT command area)
+	nop
+	add xiy, 0x00000005		; skip 5-byte header
+.Lwfsb_copy_loop:
+	cp bc, 0x001A			; copied 26 bytes?
+	jr z, .Lwfsb_done_copy		; yes, done
+	ld_srib3 a, 0x07, 0xF4, 0xE4	; A = (XIY + BC) — read from PPORT data
+	nop
+	lda_dri3 xbc, 0x07, 0xF0, 0xE4	; (XIX + BC) = A — write to buffer
+	nop
+	inc 1, bc			; BC++
+	jr t, .Lwfsb_copy_loop		; always loop
+.Lwfsb_done_copy:
+	xor xbc, xbc			; XBC = 0
+	xor xde, xde			; XDE = 0
+	ldda8_24 c, 2330838		; C = [0x2390D6] (sector)
+	nop
+	ldda8_24 e, 2330840		; E = [0x2390D8] (head)
+	nop
+	ldw wa, 0x000F			; WA = 0x0F (command code)
+	nop
+	ei 0x00				; disable interrupts
+	call HDAE5000_Display_String
+	ei 0x07				; enable interrupts
+	cps wa, 0			; result == 0?
+	jpcc_24 6, 2712342		; jp Z, skip error handling (0x296316)
+	nop
+	call HDAE5000_PPORT_Cleanup
+.Lwfsb_after_error:			; 0x296316
+	call HDAE5000_PPORT_Sum_Buffer
+	cpdi8_24 2330836, 1		; [0x2390D4] == 1? (status check)
+	jpcc_24 6, 2708340		; jp Z, exit to PPORT finish (0x295374)
+	nop
+	jp HDAE5000_PPORT_Cmd_Done
 
 HDAE5000_PPORT_Cmd_LoadHDtoMemory:	; 0x29632A
 	; Load HD to memory - display status and finish
