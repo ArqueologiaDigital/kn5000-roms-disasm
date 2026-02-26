@@ -697,6 +697,64 @@ echo "XX XX XX XX" | xxd -r -p > /tmp/bytes.bin
 
 **Note:** unidasm provides a linear disassembly without distinguishing code from data. Manual analysis is still required to identify routine boundaries, data tables, and add meaningful labels/comments.
 
+### LLVM TLCS-900 Assembler Encoding Quirks (MUST READ)
+
+**The LLVM TLCS-900 backend sometimes generates different (longer) encodings than the original ROM firmware uses.** When converting `.incbin` blocks to instruction-level assembly, these mismatches cause byte comparison failures. This reference documents all known quirks and their workarounds.
+
+**Workflow for HDAE5000 disassembly:**
+1. Use `unidasm` to disassemble the `.incbin` region: `../tools/unidasm original_ROMs/hd-ae5000_v2_06i.ic4 -arch tlcs900 -basepc <addr> -skip <offset> -count <N>`
+2. Test uncertain instruction encodings: `echo '<instruction>' | /mnt/shared/llvm-project/build/bin/llvm-mc -triple=tlcs900 -show-encoding`
+3. Write the conversion, replacing the `.incbin` with instructions
+4. Build and verify: `make all` — must show 100% match for all ROMs
+
+**Known encoding mismatches requiring `.byte` workarounds:**
+
+| ROM Pattern | Assembler Produces | Fix |
+|-------------|-------------------|-----|
+| `bf d8 37` (3 bytes) — `lda xsp, (xsp + d)` when d >= 0x80 | `f3 1d d8 00 37` (5 bytes) — uses F3 prefix with 16-bit displacement | `.byte 0xbf, d, 0x37` |
+| `2E` (1 byte) — `push iz` compact form | `de 04` (2 bytes) — uses register-prefix form | `.byte 0x2e` |
+| `4E` (1 byte) — `pop iz` compact form | `de 05` (2 bytes) — uses register-prefix form | `.byte 0x4e` |
+| `8f 00 21` (3 bytes) — `ld a, (xsp + 0x00)` | `87 21` (2 bytes) — folds zero displacement | `.byte 0x8f, 0x00, 0x21` |
+
+**Same pattern applies to all compact push/pop of 16-bit index registers:** `push ix` (0x2C), `push iy` (0x2D), `push iz` (0x2E), `push sp` (0x2F), `pop ix` (0x4C), `pop iy` (0x4D), `pop iz` (0x4E), `pop sp` (0x4F) — test each with `llvm-mc` before using.
+
+**Mnemonic reference for common operations:**
+
+| Operation | Mnemonic | Example Encoding |
+|-----------|----------|-----------------|
+| Push 16-bit immediate | `pushw imm16` (NOT `push imm16`) | `pushw 0x007f` → `0b 7f 00` |
+| Compare register with D2 memory | `cpda16_24 xreg, addr` (sub-opcode 0xF0+r) | `cpda16_24 xwa, 0x230e72` → `d2 72 0e 23 f0` |
+| Compare D2 memory with register | `cpdm16_24 addr, xreg` (sub-opcode 0xF8+r) | `cpdm16_24 0x230e72, xwa` → `d2 72 0e 23 f8` |
+| F2 LDA 24-bit address | `ldada_24 xreg, addr` | `ldada_24 xwa, 0x2e2458` → `f2 58 24 2e 30` |
+| E2 32-bit load from 24-bit addr | `ldda32_24 xreg, addr` | `ldda32_24 xbc, 0x23a1a2` → `e2 a2 a1 23 21` |
+| D2 16-bit load from 24-bit addr | `ldda16_24 xreg, addr` | `ldda16_24 xiz, 0x230e72` → `d2 72 0e 23 26` |
+| E3 indexed 32-bit load | `ld_sril3 xreg, b0, b1, b2` | `ld_sril3 xbc, 0xe5, 0x0a, 0x0e` → `e3 e5 0a 0e 21` |
+| C3 indexed 8-bit load | `ld_srib3 reg, b0, b1, b2` | `ld_srib3 a, 0x07, 0xe0, 0xf0` → `c3 07 e0 f0 21` |
+| F3 DRI byte store | `lda_dri3 xreg, b0, b1, b2` | `lda_dri3 xbc, 0x07, 0xe8, 0xec` → `f3 07 e8 ec 41` |
+| F3 DRI bit test | `bit_dri N, b0, b1, b2` | `bit_dri 7, 0x07, 0xe8, 0xf0` → `f3 07 e8 f0 cf` |
+| F3 DRI set/reset bit | `set_dri N, b0, b1, b2` / `res_dri` | raw bytes |
+| D7 word ERP load imm | `ldi_werp bank, N` | raw bytes per D7 prefix |
+| D7 word ERP reg copy | `ldto_werp reg, bank` | raw bytes per D7 prefix |
+| D7 word ERP compare | `cp_werp reg, bank` | raw bytes per D7 prefix |
+| D2 memory inc/dec | `incdi16_24 N, addr` / `decdi16_24 N, addr` | raw bytes per D2 prefix |
+| D2 compare with immediate | `cpdi16_24 addr, imm16` | raw bytes per D2 prefix |
+| Stack store immediate | `ldmw (xsp+d), imm` | raw bytes |
+| Stack compare immediate | `cpmi16 (xsp+d), imm` | raw bytes |
+| Stack word inc/dec | `incm N, (xsp+d)` / `decm N, (xsp+d)` | raw bytes |
+| Compact compare small | `cps reg, N` | `cps hl, 0` → `db d8`, `cps l, 3` → `cf db` |
+| Return + deallocate | `retd imm16` | `retd 2` → `0f 02 00` |
+| Indirect call | `call (xhl)` | → `b3 e8` (2 bytes) |
+| Compact 8-bit load | `ldb reg, imm` | `ldb w, 0` → `20 00` |
+| Compact 16-bit load | `ldw reg, imm` | `ldw wa, 0x1234` → raw bytes |
+| Compact 32-bit small imm | `lds32 xreg, N` | `lds32 xhl, 0` → `eb a8` |
+
+**Critical gotchas:**
+- `ldada_24` uses `i32imm` operand type — **cannot resolve labels**. Must use numeric addresses for absolute references.
+- `cpda16_24` vs `cpdm16_24` — opposite compare directions (register-memory vs memory-register). Wrong choice flips the carry flag behavior. Check the sub-opcode: 0xF0+r = cpda (register, mem), 0xF8+r = cpdm (mem, register).
+- Stack-relative LDA with displacement >= 0x80: always use `.byte` (assembler treats d8 as signed, uses F3 5-byte form for >= 128).
+- DRI/SRI raw bytes (b0, b1, b2): Copy exactly from unidasm output. Even small errors (e.g., 0xE8 vs 0xE0) cause mismatches.
+- Loop label placement: Verify jump targets against unidasm addresses. Off-by-one label positions cause displacement mismatches.
+
 ### LZSS Compressed Regions
 
 The KN5000 firmware uses LZSS compression (SLIDE4K format) for embedded data. When working with compressed regions, reference `../kn5000-docs/lzss-compression.md` for full details.
