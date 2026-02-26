@@ -9079,8 +9079,130 @@ HDAE5000_PPI_Block_Copy:	; 0x29ABD8 (237 bytes)
 	ret
 
 HDAE5000_Cell_Copy_Buffer:	; 0x29ACC5 (263 bytes)
-	; Cell buffer copy routine (called by Cell_Get_Params)
-	.incbin "includes/code_2971b7_29ae9e.bin", 15118, 263
+	; Cell buffer copy + integer-to-string conversion (3 sub-routines).
+	;
+	; --- Sub 1: Cell copy buffer (0x29ACC5-0x29AD07, 67 bytes) ---
+	; Calls multiply/divide utilities, copies 8 bytes via LDIRW.
+	lda xsp, (xsp - 16)		; allocate 16-byte frame
+	push xiz			; save XIZ
+	ld xwa, (xsp + 0x20)		; XWA = param (format ptr?)
+	or xwa, xwa			; zero check
+	jr z, .Lccb_copy		; skip if null
+	lda xwa, (xsp + 0x0C)		; XWA = &local[12]
+	ld (xsp + 8), xwa		; save ptr A
+	ld (xsp + 4), xwa		; save ptr B
+	ld xiz, (xsp + 0x1C)		; XIZ = source data ptr
+	ld xwa, xiz			; XWA = source ptr
+	ld xbc, (xsp + 0x20)		; XBC = format param
+	call 2734267			; call 0x29B8BB (multiply variant 1)
+	ld xwa, (xsp + 4)		; reload ptr B
+	ld (xwa), xhl			; store result to local
+	ld xwa, xiz			; XWA = source ptr
+	ld xbc, (xsp + 0x20)		; XBC = format param
+	call 2734263			; call 0x29B8B7 (multiply variant 2)
+	ld xwa, (xsp + 8)		; reload ptr A
+	ld (xwa + 4), xhl		; store result to local+4
+.Lccb_copy:
+	ld xix, (xsp + 0x18)		; XIX = destination ptr
+	lda xiy, (xsp + 0x0C)		; XIY = &local[12] (source)
+	lds bc, 4			; BC = 4 (copy 4 words = 8 bytes)
+	ldirw				; block copy 16-bit × 4
+	pop xiz				; restore XIZ
+	lda xsp, (xsp + 0x10)		; deallocate 16-byte frame
+	ret
+	;
+	; --- Sub 2: Signed number format handler (0x29AD08-0x29AD43, 60 bytes) ---
+	; Prepends '-' for negative values when radix==10, then calls Sub 3.
+.Lccb_sign_handler:			; 0x29AD08
+	ld xbc, (xsp + 8)		; XBC = output buffer ptr
+	ld xde, (xsp + 4)		; XDE = value to convert
+	ld wa, (xsp + 0x0C)		; WA = radix
+	cp wa, 0x000A			; radix == 10? (decimal)
+	jr nz, .Lccb_unsigned		; → unsigned conversion
+	cp xde, 0x00000000		; value < 0? (signed check)
+	jr ge, .Lccb_unsigned		; → non-negative
+	; Negative decimal: prepend '-' and negate
+	ldmi8 (xbc), 0x2D		; store '-' at buffer start
+	pushw wa			; push radix
+	lda xwa, (xbc + 1)		; XWA = buffer+1 (past '-')
+	push xwa			; push output ptr
+	cpl de				; complement DE (bitwise NOT)
+	.byte 0xD7, 0xEA, 0x06		; cpl QDE (complement high word)
+	inc 1, xde			; +1 → two's complement negate
+	push xde			; push negated value
+	call .Lccb_converter		; call base-N converter
+	lda xsp, (xsp + 0x0A)		; cleanup 10 bytes
+	dec 1, xhl			; adjust string length for '-'
+	ret
+.Lccb_unsigned:
+	pushw wa			; push radix
+	push xbc			; push output ptr
+	push xde			; push value
+	call .Lccb_converter		; call base-N converter
+	lda xsp, (xsp + 0x0A)		; cleanup 10 bytes
+	ret
+	;
+	; --- Sub 3: General base-N string converter (0x29AD44-0x29ADCB, 136 bytes) ---
+	; Converts integer to string with radix 2-36.
+	; Stack: [+0x36] = value, [+0x3A] = output ptr, [+0x3E] = radix
+.Lccb_converter:			; 0x29AD44
+	lda xsp, (xsp - 46)		; allocate 46-byte frame
+	push xiz			; save XIZ
+	cpmi16 (xsp + 0x3E), 0x0002	; radix < 2?
+	jr lt, .Lccb_invalid		; → invalid
+	cpmi16 (xsp + 0x3E), 0x0024	; radix > 36?
+	jr le, .Lccb_start		; → valid
+.Lccb_invalid:
+	ld xwa, (xsp + 0x3A)		; XWA = output buffer
+	ldmi8 (xwa), 0x00		; output empty string
+	jr t, .Lccb_conv_done		; → exit
+.Lccb_start:
+	lda xwa, (xsp + 0x10)		; XWA = &local scratch
+	ld (xsp + 8), xwa		; save scratch base ptr
+	ldmi8 (xwa + 0x20), 0x00	; null-terminate scratch[32]
+	ld xwa, (xsp + 8)		; reload scratch ptr
+	lda xwa, (xwa + 0x1F)		; XWA = &scratch[31] (digit fill ptr)
+	ld (xsp + 4), xwa		; save digit ptr
+	ld xiz, (xsp + 0x36)		; XIZ = value to convert
+.Lccb_digit_loop:
+	ld wa, (xsp + 0x3E)		; WA = radix
+	exts xwa			; sign-extend radix to XWA
+	ld (xsp + 0x0C), xwa		; save 32-bit radix
+	ld xwa, xiz			; XWA = current value
+	ld xbc, (xsp + 0x0C)		; XBC = radix
+	call HDAE5000_Divide_Unsigned	; XHL = quotient, XDE = remainder
+	add l, 0x30			; convert remainder to ASCII '0'-'9'
+	ld xwa, (xsp + 4)		; reload digit ptr
+	ld (xwa), l			; store digit char
+	cpmi8 (xwa), 0x39		; digit > '9'?
+	jr le, .Lccb_digit_ok		; → it's 0-9
+	addmi8 (xwa), 0x27		; adjust for 'a'-'f' (+0x27)
+.Lccb_digit_ok:
+	ld xwa, xiz			; XWA = current value
+	ld xbc, (xsp + 0x0C)		; XBC = radix
+	call HDAE5000_Divide_Signed	; XHL = quotient
+	ld xiz, xhl			; XIZ = new quotient
+	or xiz, xiz			; quotient == 0?
+	jr z, .Lccb_copy_result	; → all digits extracted
+	lds32 xwa, 1			; XWA = 1
+	sub (xsp + 4), xwa		; digit ptr-- (move backward)
+	jr t, .Lccb_digit_loop		; → next digit
+.Lccb_copy_result:
+	ld xwa, (xsp + 8)		; reload scratch base
+	lda xwa, (xwa + 0x21)		; XWA = &scratch[33] (past null-terminator)
+	sub xwa, (xsp + 4)		; XWA = string length
+	push xwa			; push length
+	ld xwa, (xsp + 8)		; reload digit ptr
+	push xwa			; push source
+	ld xwa, (xsp + 0x42)		; XWA = output buffer (deep stack offset)
+	push xwa			; push destination
+	call HDAE5000_MemCopy		; copy digits to output
+	lda xsp, (xsp + 0x0C)		; cleanup 12 bytes
+.Lccb_conv_done:
+	ld xhl, (xsp + 0x3A)		; XHL = output buffer (return value)
+	pop xiz				; restore XIZ
+	lda xsp, (xsp + 0x2E)		; deallocate 46-byte frame
+	ret
 
 HDAE5000_String_Copy_N:	; 0x29ADCC (64 bytes)
 	; String copy with length limit
