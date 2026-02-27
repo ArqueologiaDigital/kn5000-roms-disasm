@@ -111,7 +111,7 @@ SeqName_CheckDiskAvail:
 	call 0xF8943E
 	cps hl, 0
 	jr z, SeqName_LoadAndPlay
-	cpdi8_24 213226, 0
+	cpdi8_24 0x0340ea, 0x00
 	jr z, SeqName_LoadAndPlay
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C50000
@@ -818,7 +818,7 @@ DiskMed2_InitLoop:
 DiskMed2_FormatLoop:
 	ld wa, iz
 	sll wa, 3
-	ldada_24 xbc, 33594
+	ldada_24 xbc, 0x00833a
 	extz xwa
 	add xwa, xbc
 	ldada xbc, 35110
@@ -832,7 +832,7 @@ DiskMed2_FormatLoop:
 	calr FormatMedleyNumber
 	ld wa, iz
 	sll wa, 3
-	ldada_24 xbc, 33594
+	ldada_24 xbc, 0x00833a
 	ld de, wa
 	extz xde
 	add xde, xbc
@@ -1420,7 +1420,7 @@ DiskSel_GetFileName:
 	jr DiskSel_FormatEntry
 
 DiskSel_EmptyFileName:
-	ldada_24 xbc, 15338068
+	ldada_24 xbc, 0xea0a54
 
 DiskSel_FormatEntry:
 	ld de, iz
@@ -4045,18 +4045,18 @@ LABEL_F94193:
 SetSongSlotValue:
 	cp wa, 0xA
 	ret nc
-	ldada_24 xhl, 700416
+	ldada_24 xhl, 0x0ab000
 	ld de, wa
 	sll de, 11
 	extz xde
 	add xhl, xde
 	add xhl, 0x1C
 	ld (xhl), bc
-	ldda8_24 e, 65507
+	ldda8_24 e, 0x00ffe3
 	extz de
 	cp de, wa
 	ret nz
-	ldada_24 xhl, 61824
+	ldada_24 xhl, 0x00f180
 	add xhl, 0x1C
 	ld (xhl), bc
 	ret
@@ -4066,7 +4066,7 @@ GetSongSlotValue:
 	lds hl, 0
 	cp wa, 0xA
 	ret nc
-	ldada_24 xbc, 700416
+	ldada_24 xbc, 0x0ab000
 	sll wa, 11
 	extz xwa
 	add xbc, xwa
@@ -4148,12 +4148,12 @@ CheckAnySlotHasData:
 
 LABEL_F9424A:
 SetCurrentSlotIndex:
-	stda16_24 608270, xwa
+	stda16_24 0x09480e, xwa
 	ret
 
 LABEL_F94250:
 GetCurrentSlotIndex:
-	ldda16_24 xhl, 608270
+	ldda16_24 xhl, 0x09480e
 	ret
 
 LABEL_F94256:
@@ -4255,7 +4255,7 @@ InitializeCheap:
 PasswordText:
 	cp xbc, 0x1E0009F
 	jr nz, PasswordText_Exit
-	ldada_24 xhl, 15369672
+	ldada_24 xhl, 0xea85c8
 	ret
 
 PasswordText_Exit:
@@ -4265,7 +4265,7 @@ PasswordText_Exit:
 CheckPasswordText:
 	cp xbc, 0x1E0009F
 	jr nz, CheckPwd_Exit
-	ldda8_24 a, 160910
+	ldda8_24 a, 0x02748e
 	cps a, 2
 	jr z, CheckPwd_Type2
 	cps a, 1
@@ -4325,7 +4325,7 @@ WakeUp_HandleInit:
 	ld xwa, xiz
 	ld xde, (xsp + 4)
 	call 0xFA4409
-	stdi8_24 160794, 0
+	stdi8_24 0x02741a, 0x00
 	jrl WakeUp_ReturnZero
 
 WakeUp_HandleOk:
@@ -4342,9 +4342,9 @@ WakeUp_HandleOk:
 	cp xwa, 0x8C
 	jr nz, WakeUp_ClearCounter
 	incdi8_24 1, 160794
-	cpdi8_24 160794, 7
+	cpdi8_24 0x02741a, 0x07
 	jr nz, WakeUp_ReturnZero
-	stdi8_24 160794, 0
+	stdi8_24 0x02741a, 0x00
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C50000
 	lds32 xde, 1
@@ -4355,12 +4355,12 @@ WakeUp_HandleOk:
 	jr WakeUp_PostEvent
 
 WakeUp_ClearCounter:
-	stdi8_24 160794, 0
+	stdi8_24 0x02741a, 0x00
 	jr WakeUp_ReturnZero
 
 WakeUp_StoreType:
 	ld xwa, (xsp + 4)
-	stda8_24 160910, a
+	stda8_24 0x02748e, a
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C50000
 	lds32 xde, 1
@@ -4421,7 +4421,7 @@ PwdOk_HandleConfirm:
 	ld xbc, 0x1C0000A
 	lds32 xde, 0
 	call LABEL_FA9752
-	ldda16_24 xde, 160796
+	ldda16_24 xde, 0x02741c
 	extz xde
 	ld xwa, 0x1450038
 	ld xbc, 0x1E5000D
@@ -4479,7 +4479,7 @@ CheckOk_HandleConfirm:
 	ld xbc, 0x1E00056
 	lds32 xde, 0
 	call 0xFA9660
-	ldada_24 xwa, 160804
+	ldada_24 xwa, 0x027424
 	cps hl, 1
 	jr nz, CheckOk_Type2
 	ld de, (xwa)
@@ -4558,7 +4558,7 @@ CheckNo_HandleConfirm:
 DiskAttention:
 	cp xbc, 0x1E0009F
 	jr nz, CheckNo_Type1
-	ldada_24 xhl, 15371262
+	ldada_24 xhl, 0xea8bfe
 	ret
 
 CheckNo_Type1:
@@ -4568,7 +4568,7 @@ CheckNo_Type1:
 DiskSure:
 	cp xbc, 0x1E0009F
 	jr nz, CheckNo_Type2
-	ldada_24 xhl, 15371356
+	ldada_24 xhl, 0xea8c5c
 	ret
 
 CheckNo_Type2:
@@ -4578,7 +4578,7 @@ CheckNo_Type2:
 FormatText:
 	cp xbc, 0x1E0009F
 	jr nz, CheckNo_Type3
-	ldada_24 xhl, 15371484
+	ldada_24 xhl, 0xea8cdc
 	ret
 
 CheckNo_Type3:
@@ -4588,7 +4588,7 @@ CheckNo_Type3:
 DeleteText:
 	cp xbc, 0x1E0009F
 	jr nz, CheckNo_CallFunc
-	ldada_24 xhl, 15371888
+	ldada_24 xhl, 0xea8e70
 	ret
 
 CheckNo_CallFunc:
@@ -4642,7 +4642,7 @@ PwdChange_Type1:
 SaveText:
 	cp xbc, 0x1E0009F
 	jr nz, PwdChange_CallFunc
-	ldada_24 xhl, 15372586
+	ldada_24 xhl, 0xea912a
 	ret
 
 PwdChange_CallFunc:
@@ -4696,7 +4696,7 @@ PwdDel_Type1:
 InsertOptionText:
 	cp xbc, 0x1E0009F
 	jr nz, PwdDel_Type2
-	ldada_24 xhl, 15373372
+	ldada_24 xhl, 0xea943c
 	ret
 
 PwdDel_Type2:
@@ -4706,7 +4706,7 @@ PwdDel_Type2:
 TypePriorityText:
 	cp xbc, 0x1E0009F
 	jr nz, PwdDel_CallFunc
-	ldada_24 xhl, 15373656
+	ldada_24 xhl, 0xea9558
 	ret
 
 PwdDel_CallFunc:

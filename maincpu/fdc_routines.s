@@ -19,11 +19,11 @@
 ; =============================================================================
 
 FDC_Read_Status:
-	ldda8_24 l, 1114120
+	ldda8_24 l, 0x110008
 	ret
 
 FDC_Read_Data:
-	ldda8_24 l, 1114122
+	ldda8_24 l, 0x11000a
 	ret
 
 FDC_Send_Command:
@@ -32,7 +32,7 @@ FDC_Send_Command:
 	.byte 0x0e
 
 FDC_Write_Data:
-	stda8_24 1114122, a
+	stda8_24 0x11000a, a
 	ret
 
 FDC_WaitReady:
@@ -126,9 +126,9 @@ FDC_COMMAND_DISPATCHER:	; F96DB1
 	cp wa, 0xB
 	jr ugt, FDC_CheckDriveCount
 	add wa, wa
-	ldada_24 xix, 15374514
+	ldada_24 xix, 0xea98b2
 	ld_sriw3 WA, 0x07, 0xF0, 0xE0
-	ldada_24 xix, 16346582
+	ldada_24 xix, 0xf96dd6
 	jp_dri 8, 0x07, 0xF0, 0xE0
 ; FDC command handler base - entry point for command 0
 FDC_CMD_HANDLER_BASE:	; F96DD6
@@ -1089,9 +1089,9 @@ LABEL_F97CEF:
 	cp wa, 0xB
 	jr ugt, LABEL_F97DDB	; JR UGT, LABEL_F97DDB (original encoding)
 	add wa, wa
-	ldada_24 xix, 15374538
+	ldada_24 xix, 0xea98ca
 	ld_sriw3 WA, 0x07, 0xF0, 0xE0
-	ldada_24 xix, 16350605
+	ldada_24 xix, 0xf97d8d
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
 

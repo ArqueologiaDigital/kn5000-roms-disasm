@@ -204,7 +204,7 @@ RenderSmfFilename:
 	extz bc
 	stib_dri 0x07, 0xE0, 0xE4, 0x00
 	lds ix, 0
-	ldada_24 xhl, 15652728
+	ldada_24 xhl, 0xeed778
 	jr LABEL_F8DD97
 
 LABEL_F8DD86:
@@ -404,7 +404,7 @@ LABEL_F8DF73:
 	ldda8 a, 35142
 	extz wa
 	sla wa, 2
-	ldada_24 xbc, 15337300
+	ldada_24 xbc, 0xea0754
 	ld_sril3 XDE, 0x07, 0xE4, 0xE0
 	ldda32 xwa, 33180
 	ld xbc, 0x1C0000F
@@ -560,7 +560,7 @@ FmmSmfFileNameFunc:
 	add xde, xde
 	add xde, 0xEA079E
 	ld de, (xde)
-	ldada_24 xix, 16310472
+	ldada_24 xix, 0xf8e0c8
 	jp_dri 8, 0x07, 0xF0, 0xE8
 LABEL_F8E0C8:
 	.byte 0xf1, 0xa0, 0x81, 0x61, 0xe8, 0xa8, 0xf1, 0xa4
@@ -735,7 +735,7 @@ LABEL_F8E2AC:
 	lda xwa, (xsp + 8)
 	ldw bc, 0x10
 	calr TrimAndPadSmfFilename
-	ldada_24 xwa, 700416
+	ldada_24 xwa, 0x0ab000
 	lds32 xbc, 0
 	ldda8 c, 35144
 	sll xbc, 11
@@ -744,10 +744,10 @@ LABEL_F8E2AC:
 	lda xbc, (xsp + 8)
 	ldw de, 0x10
 	call LABEL_F890F2
-	ldda8_24 a, 65507
+	ldda8_24 a, 0x00ffe3
 	cpda8 a, 35144
 	jr nz, LABEL_F8E2F3
-	ldada_24 xwa, 61824
+	ldada_24 xwa, 0x00f180
 	st_dri3b W, 0xE1, 0x00, 0x01
 	lda xbc, (xsp + 8)
 	ldw de, 0x10
@@ -795,7 +795,7 @@ LABEL_F8E348:
 	call LABEL_F8947D
 	cps l, 0
 	jr z, LABEL_F8E3A6
-	cpdi8_24 213226, 0
+	cpdi8_24 0x0340ea, 0x00
 	jr z, LABEL_F8E3A6
 	ld xwa, 0x600026
 	ld xbc, 0x1C00002
@@ -891,7 +891,7 @@ LABEL_F8E41B:
 LABEL_F8E4A9:
 	cp xiz, 0x5
 	jrl nz, LABEL_F8E53C
-	cpdi8_24 213226, 0
+	cpdi8_24 0x0340ea, 0x00
 	jr z, LABEL_F8E4D9
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C50000

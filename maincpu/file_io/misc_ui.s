@@ -24,7 +24,7 @@ JumpInsertFunc:
 	add xbc, xbc
 	add xbc, 0xEA96E4
 	ld bc, (xbc)
-	ldada_24 xix, 16339120
+	ldada_24 xix, 0xf950b0
 	jp_dri 8, 0x07, 0xF0, 0xE4
 LABEL_F950B0:
 	.byte 0xaa, 0x0e, 0x20, 0xe8, 0xee, 0x02, 0x41, 0x8a
@@ -36,7 +36,7 @@ LABEL_F950B0:
 LABEL_F950D6:
 	lds32 xhl, 0
 	jr LABEL_F950DF
-	ldada_24 xhl, 213234
+	ldada_24 xhl, 0x0340f2
 
 LABEL_F950DF:
 	pop xiz
@@ -56,7 +56,7 @@ FilePriorityFunc:
 	ld wa, (xde + 8)
 	and wa, 0x1
 	sla wa, 2
-	ldada_24 xbc, 15374072
+	ldada_24 xbc, 0xea96f8
 	ld_sril3 XWA, 0x07, 0xE4, 0xE0
 	push xwa
 	ld xwa, (xde + 10)
@@ -67,7 +67,7 @@ FilePriorityFunc:
 	jr LABEL_F95134
 
 LABEL_F95127:
-	ldada_24 xhl, 213236
+	ldada_24 xhl, 0x0340f4
 	jr LABEL_F95134
 
 LABEL_F9512E:
@@ -453,15 +453,15 @@ WaitingFunc:
 	cp xbc, 0x1C00001
 	jr nz, LABEL_F9552D
 	ld xwa, (xsp + 68)
-	stda16_24 160906, xwa
-	stdi16_24 160908, 0
+	stda16_24 0x02748a, xwa
+	stdi16_24 0x02748c, 0x0000
 	jr LABEL_F9552D
 
 LABEL_F954EC:
-	ldda8_24 a, 213220
+	ldda8_24 a, 0x0340e4
 	extz wa
 	sla wa, 2
-	ldada_24 xbc, 15374104
+	ldada_24 xbc, 0xea9718
 	ld_sril3 XIZ, 0x07, 0xE4, 0xE0
 	push xiz
 	call LABEL_FF0FA0
@@ -472,7 +472,7 @@ LABEL_F954EC:
 	ld xbc, xiz
 	ld de, hl
 	calr DrawString_Centered
-	stda16_24 160908, xhl
+	stda16_24 0x02748c, xhl
 	ld xwa, (xsp + 68)
 	lda xde, (xsp + 4)
 	ld xbc, 0x1C0000F

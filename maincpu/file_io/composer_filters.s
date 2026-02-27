@@ -162,7 +162,7 @@ LABEL_F8D30D:
 	jr LABEL_F8D33A
 
 LABEL_F8D335:
-	ldada_24 xbc, 15337196
+	ldada_24 xbc, 0xea06ec
 
 LABEL_F8D33A:
 	ld de, iz
@@ -842,7 +842,7 @@ LABEL_F8D9D1:
 	call 0xF8943E
 	cps hl, 0
 	jr z, LABEL_F8DA04
-	cpdi8_24 213226, 0
+	cpdi8_24 0x0340ea, 0x00
 	jr z, LABEL_F8DA04
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C50000

@@ -39,7 +39,7 @@ CPanel_EncoderDispatch:
 	or c, e	; Combine to form 5-bit index
 	extz bc
 	sla bc, 2	; Multiply by 4 (jump table entry size)
-	ldada_24 xde, 15573180
+	ldada_24 xde, 0xeda0bc
 	exts xbc
 	add xbc, xde	; XBC = table entry address
 	ld xix, (xbc)	; Load handler address
@@ -61,7 +61,7 @@ Encoder_ProcessModwheel:
 	stda8 36554, c	; Store raw value
 	srl a, 1	; Divide by 2
 	extz wa
-	ldada_24 xbc, 15573308	; Lookup table address
+	ldada_24 xbc, 0xeda13c                  ; Lookup table address
 	ld_srib3 A, 0x07, 0xE4, 0xE0	; Get processed value from table
 	ldda8 c, 36580	; Get current value
 	res 7, c	; Clear change flag
@@ -81,7 +81,7 @@ Encoder_ProcessVolume:
 	ldw iz, 0xFFFF	; Default return = no change
 	stda8 36556, a	; Store raw value
 	extz wa
-	ldada_24 xbc, 15573436	; Lookup table address
+	ldada_24 xbc, 0xeda1bc                  ; Lookup table address
 	ld_srib3 A, 0x07, 0xE4, 0xE0	; Get processed value
 	calr Encoder_ClampScaleAndNormalize	; Clamp to valid range
 	ld a, l
@@ -117,7 +117,7 @@ Encoder_PerformScaling:
 	ldda8 a, 36572	; Get mode value
 	extz wa
 	add wa, wa	; Double for word table index
-	ldada_24 xbc, 15573692	; Index table
+	ldada_24 xbc, 0xeda2bc                  ; Index table
 	ld_sriw3 BC, 0x07, 0xE4, 0xE0	; Get index offset
 	extz xbc
 	ld xwa, xhl
@@ -139,7 +139,7 @@ Encoder_ProcessBreath:
 	cpl a	; Invert input
 	stda8 36564, a	; Store raw value
 	extz wa
-	ldada_24 xbc, 15573714	; Lookup table
+	ldada_24 xbc, 0xeda2d2                  ; Lookup table
 	ld_srib3 A, 0x07, 0xE4, 0xE0	; Get processed value
 	ldda8 c, 14235	; Get system mode flags
 	and c, 0xF	; Mask relevant bits
@@ -157,10 +157,10 @@ Encoder_ProcessBreath_WithModeAdjustment:
 	dec 1, c	; Decrement mode for index
 	extz bc
 	add bc, bc	; Word index
-	ldada_24 xwa, 15573970	; Multiplier table
+	ldada_24 xwa, 0xeda3d2                  ; Multiplier table
 	ld_sriw3 DE, 0x07, 0xE0, 0xE4	; Get multiplier
 	mul xhl, xde	; Multiply
-	ldada_24 xwa, 15573994	; Offset table
+	ldada_24 xwa, 0xeda3ea                  ; Offset table
 	ld_sriw3 WA, 0x07, 0xE0, 0xE4	; Get offset
 	sub hl, wa	; Subtract offset
 	add hl, 0x4080	; Add center offset
@@ -189,7 +189,7 @@ Encoder_ProcessFoot:
 	stda8 36566, a	; Store raw value
 	srl a, 1	; Divide by 2
 	extz wa
-	ldada_24 xbc, 15574018	; Lookup table
+	ldada_24 xbc, 0xeda402                  ; Lookup table
 	ld_srib3 A, 0x07, 0xE4, 0xE0	; Get processed value
 	ldda8 c, 36586	; Get current value
 	res 7, c	; Clear change flag
@@ -210,7 +210,7 @@ Encoder_ProcessExpression:
 	stda8 36568, c	; Store raw value
 	srl a, 1	; Divide by 2
 	extz wa
-	ldada_24 xbc, 15574146	; Lookup table
+	ldada_24 xbc, 0xeda482                  ; Lookup table
 	ld_srib3 A, 0x07, 0xE4, 0xE0	; Get processed value
 	stda8 36582, a	; Store value
 	extz wa

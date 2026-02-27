@@ -284,7 +284,7 @@ MdSetupLoadFunc:
 	add xhl, xhl
 	add xhl, 0xE7F928
 	ld hl, (xhl)
-	ldada_24 xix, 16207184
+	ldada_24 xix, 0xf74d50
 	jp_dri 8, 0x07, 0xF0, 0xEC
 SetupLoadOptionJumpTable:
 	.byte 0xaa, 0x0e, 0x20, 0xe8, 0xcc, 0x02, 0x00, 0x00
@@ -297,7 +297,7 @@ SetupLoadOptionJumpTable:
 SetupLoadInvalidIndex:
 	lds32 xhl, 0
 	jr LABEL_F74D87
-	ldada_24 xhl, 65472
+	ldada_24 xhl, 0x00ffc0
 	jr LABEL_F74D87
 	lds32 xhl, 1
 
