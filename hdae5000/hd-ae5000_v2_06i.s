@@ -19967,11 +19967,26 @@ HDAE5000_File_Rename:	; 0x28E06F (280 bytes)
 	inc 0, xsp			; deallocate 8 bytes
 	retd 0x0004
 
-HDAE5000_File_Format:	; 0x28E187 (772 bytes)
-	; Format HD or partition — parse sector table, validate, copy strings
+	; ============================================================
+	; Format disk partition
+	; Validates sector range, reads VarInt-encoded allocation data
+	; from sector table at 0x22B430, and maps the partition layout.
+	; Supports backup mode (preserves previous allocation state) and
+	; filename copy mode (copies sector data as filename string).
+	;
+	; Error codes stored to (0x2307B6):
+	;   0xFFFF = start+4 exceeds max sector limit (20,457)
+	;   0xFFFE = Calc_Disk_Space returned -1 (VarInt overflow)
+	;   0xFFFD = first sector byte ≠ 0xFF (sector not free)
+	;   0xFFFC = second Calc_Disk_Space failed
+	;   0xFFFB = total allocation exceeds max sector limit
+	;   0xFFFA = third Calc_Disk_Space failed
+	;
 	; Input: BC = start sector, A = flags (bit0=backup, bit1=copy filename)
-	; Output: HL = sectors consumed or 0 on error
+	; Output: HL = sectors consumed (end - start), or 0 on error
 	; Uses QIZH (XIZ high byte) as backup flag
+	; ============================================================
+HDAE5000_File_Format:	; 0x28E187 (772 bytes)
 
 	; --- Prologue ---
 	dec 4, xsp			; allocate 8 bytes
@@ -19980,10 +19995,10 @@ HDAE5000_File_Format:	; 0x28E187 (772 bytes)
 	ld (xsp + 6), a		; save flags
 	ldi_berp 0xfb, 0		; QIZH = 0 (no backup)
 
-	; --- Check sector limit ---
-	ld wa, (xsp + 4)
-	inc 4, wa			; WA += 4
-	cp wa, 20457			; cp WA, 0x4FE9
+	; --- Check sector limit (max 20,457 = 0x4FE9) ---
+	ld wa, (xsp + 4)		; WA = start sector
+	inc 4, wa			; WA += 4 (need 4 header sectors)
+	cp wa, 20457			; start+4 within addressable range?
 	jr ule, .Lff_start
 	sti16_24 0x2307b6, 0xffff              ; (0x2307B6) = 0xFFFF — error
 	lds hl, 0
@@ -20033,14 +20048,14 @@ HDAE5000_File_Format:	; 0x28E187 (772 bytes)
 	addda16_24 xiz, 2295902	; IZ += (0x23085E)
 	ld wa, iz
 	inc 1, iz			; IZ++
-	; Read sector type byte
+	; Read sector type byte: table[sector + 22]
 	extz xwa
-	add xwa, 22			; offset by 0x16
+	add xwa, 22			; +22 = descriptor offset in table
 	ld xbc, 2274352			; XBC = 0x0022B430 (table base)
 	add xbc, xwa
-	cp (xbc), 255		; cp (XBC), 0xFF
-	jr z, .Lff_byte2_read		; if 0xFF, continue
-	sti16_24 0x2307b6, 0xfffd              ; (0x2307B6) = 0xFFFD — error
+	cp (xbc), 255		; 0xFF = free sector?
+	jr z, .Lff_byte2_read		; yes → sector available for formatting
+	sti16_24 0x2307b6, 0xfffd              ; error: sector not free (0xFFFD)
 	lds hl, 0
 	jrl t, .Lff_epilogue
 
@@ -20051,12 +20066,12 @@ HDAE5000_File_Format:	; 0x28E187 (772 bytes)
 	add xwa, 22
 	ld xbc, 2274352			; table base
 	add xbc, xwa
-	ld a, (xbc)			; A = table[IZ+22]
+	ld a, (xbc)			; A = sector type byte
 	extz wa
-	st16_24 0x230430, xwa                 ; (0x230430) = WA — file type code
-	cpdi16_24 2294832, 47		; cp (0x230430), 0x2F
+	st16_24 0x230430, xwa                 ; (0x230430) = file type code
+	cpdi16_24 2294832, 47		; type == 0x2F (reserved/invalid)?
 	jr nz, .Lff_after_type_check
-	; Type 0x2F: abort
+	; Type 0x2F = reserved sector — abort formatting
 	sti16_24 0x230434, 0x0001              ; (0x230434) = 1 — abort flag
 	ld xwa, 4294967295		; 0xFFFFFFFF
 	st32_24 0x230860, xwa                 ; (0x230860) = -1
@@ -20214,9 +20229,13 @@ HDAE5000_File_Format:	; 0x28E187 (772 bytes)
 	inc 4, xsp
 	ret
 
-	; --- Helper 1: Read 2-byte word from sector table ---
+	; ============================================================
+	; Read 16-bit big-endian word from sector allocation table
+	; Reads table[WA+23] as low byte and table[WA+22] as high byte,
+	; combining into HL = (high << 8) | low.
 	; Input: WA = sector index
-	; Output: HL = (table[WA+22+1] | (table[WA+22] << 8))
+	; Output: HL = 16-bit value from two consecutive table entries
+	; ============================================================
 HDAE5000_Read_Table_Word:		; 0x28E417
 	ld bc, wa
 	inc 1, bc			; BC = WA + 1
@@ -20238,9 +20257,13 @@ HDAE5000_Read_Table_Word:		; 0x28E417
 	or hl, de			; HL |= low byte
 	ret
 
-	; --- Helper 2: Read multi-byte value from sector table ---
+	; ============================================================
+	; Read 24-bit big-endian value from sector allocation table
+	; Reads up to 3 consecutive bytes from table[WA+22..WA+24],
+	; accumulating as XHL = (byte0 << 16) | (byte1 << 8) | byte2.
 	; Input: WA = sector index
-	; Output: XHL = accumulated multi-byte value (up to 3 bytes)
+	; Output: XHL = 24-bit value from 3 consecutive table entries
+	; ============================================================
 HDAE5000_Read_Table_Multi:		; 0x28E44B
 	ld bc, wa
 	extz xbc
@@ -20269,94 +20292,120 @@ HDAE5000_Read_Table_Multi:		; 0x28E44B
 	jr c, .Lff_h2_loop		; loop while IX < 3
 	ret
 
+	; ============================================================
+	; Calculate free disk space from sector allocation table
+	;
+	; Sector Allocation Table (0x22B430, ~20KB):
+	;   Each sector's descriptor byte is at table[sector_index + 22].
+	;   Descriptors are VarInt-encoded (7-bit payload, bit 7 = continuation).
+	;   Special type codes: 0xFF = free, 0x2F = reserved/invalid.
+	;   Max addressable sector: 20,457 (0x4FE9).
+	;
+	; Sub-routine 1 (entry point): Decode VarInt from up to 4 consecutive
+	;   table entries starting at table[base_sector + 22]. Accumulates
+	;   7-bit chunks into XHL using MSB-first ordering.
+	; Sub-routine 2 (.Lcds_find): Encode a bitmap value as VarInt bytes
+	;   into a caller-provided buffer.
+	;
+	; Input: WA = base sector index
+	; Output: XHL = decoded free space value, or -1 on overflow
+	; Side effect: stores bytes consumed + 1 to (0x23085E)
+	; ============================================================
 HDAE5000_Calc_Disk_Space:	; 0x28E48B (178 bytes)
-	; First sub-routine: scan 4 entries, accumulate free space in XHL
-	; Input: WA = base index. Returns XHL = free space or -1 on overflow
-	lds32 xhl, 0			; XHL = 0 (accumulator)
-	lds ix, 0			; IX = 0 (loop index)
-	cps ix, 4			; check IX < 4
-	jr nc, .Lcds_overflow		; if IX >= 4, overflow
+	; --- Sub-routine 1: Inline VarInt decode from sector table ---
+	lds32 xhl, 0			; XHL = accumulator (decoded value)
+	lds ix, 0			; IX = byte index (0-3)
+	cps ix, 4			; guard: max 4 bytes per VarInt
+	jr nc, .Lcds_overflow
 .Lcds_loop:
-	ld bc, wa			; BC = base index
-	add bc, ix			; BC = base + loop index
-	extz xbc			; zero-extend to 32-bit
-	add xbc, 0x00000016		; add offset 22
-	ld xde, 0x0022B430		; XDE = table base address
-	add xde, xbc			; XDE = table entry pointer
-	ld c, (xde)			; C = entry byte
-	res 7, c			; clear bit 7 (status flag)
-	ldb b, 0x00			; B = 0 (extend C to 16-bit BC)
-	extz xbc			; zero-extend BC to XBC
-	add xhl, xbc			; accumulate into XHL
-	ld bc, wa			; BC = base index (again)
-	add bc, ix			; BC = base + loop index
-	extz xbc			; zero-extend
-	add xbc, 0x00000016		; add offset 22
-	ld xde, 0x0022B430		; table base
-	add xde, xbc			; entry pointer
-	cp (xde), 0x80		; check if entry >= 0x80
-	jr nc, .Lcds_continue		; if >= 0x80, skip to continue loop
-	; Entry < 0x80: found valid entry — store index and return
-	ld wa, ix			; WA = found index
-	inc 1, wa			; WA = index + 1
-	st16_24 0x23085e, xwa                 ; ld (0x23085E), WA
-	ret
+	; Read descriptor byte: table[base_sector + IX + 22]
+	ld bc, wa			; BC = base sector index
+	add bc, ix			; BC += byte offset
+	extz xbc
+	add xbc, 0x00000016		; +22 = descriptor offset within table
+	ld xde, 0x0022B430		; XDE = sector allocation table base
+	add xde, xbc			; XDE → table[sector + 22]
+	ld c, (xde)			; C = descriptor byte
+	res 7, c			; strip VarInt continuation bit → 7-bit payload
+	ldb b, 0x00
+	extz xbc			; XBC = payload (zero-extended)
+	add xhl, xbc			; accumulate: XHL += payload
+	; Re-read byte to check continuation bit (bit 7)
+	ld bc, wa
+	add bc, ix
+	extz xbc
+	add xbc, 0x00000016
+	ld xde, 0x0022B430
+	add xde, xbc
+	cp (xde), 0x80		; bit 7 set? (continuation)
+	jr nc, .Lcds_continue		; yes → more bytes follow
+	; Continuation=0 → VarInt complete, return decoded value
+	ld wa, ix			; WA = bytes consumed (0-based)
+	inc 1, wa			; WA = byte count (1-based)
+	st16_24 0x23085e, xwa                 ; store bytes consumed to (0x23085E)
+	ret				; return XHL = free space value
 .Lcds_continue:
-	sll xhl, 7			; shift accumulator left 7
-	inc 1, ix			; IX++
-	cps ix, 4			; check IX < 4
-	jr c, .Lcds_loop		; loop while IX < 4
+	sll xhl, 7			; make room for next 7-bit chunk
+	inc 1, ix
+	cps ix, 4			; max 4 continuation bytes
+	jr c, .Lcds_loop
 .Lcds_overflow:
-	ld xhl, 0xFFFFFFFF		; return -1
+	ld xhl, 0xFFFFFFFF		; overflow: VarInt > 4 bytes
 	ret
-	; Second sub-routine: find highest set bit position in XWA
-	; Input: XWA = bitmap, XBC = buffer base. Returns HL = 0xFFFF
+	; --- Sub-routine 2: Encode value as VarInt into buffer ---
+	; Finds how many 7-bit chunks are needed, then serializes
+	; MSB-first with bit 7 = continuation on all but last byte.
+	; Input: XWA = value to encode, XBC = output buffer pointer
+	; Output: HL = 0xFFFF (sentinel)
 .Lcds_find:
-	ld xde, xwa			; XDE = bitmap copy
-	lds hl, 1			; HL = 1 (bit position counter)
-	cps hl, 5			; check HL < 5
-	jr nc, .Lcds_apply		; if >= 5, skip search
+	; Step 1: Count how many 7-bit chunks are needed
+	ld xde, xwa			; XDE = value to encode
+	lds hl, 1			; HL = chunk count (start at 1)
+	cps hl, 5			; max 5 chunks
+	jr nc, .Lcds_apply
 .Lcds_search:
-	srl xde, 7			; shift right 7
-	jr nz, .Lcds_next		; if nonzero, continue
-	ld ix, hl			; IX = current position
-	jr t, .Lcds_apply		; done searching
+	srl xde, 7			; shift out 7 bits
+	jr nz, .Lcds_next		; still nonzero? need more chunks
+	ld ix, hl			; IX = total chunks needed
+	jr t, .Lcds_apply		; done counting
 .Lcds_next:
-	inc 1, hl			; HL++
-	cps hl, 5			; check HL < 5
-	jr c, .Lcds_search		; loop while HL < 5
+	inc 1, hl
+	cps hl, 5
+	jr c, .Lcds_search
+	; Step 2: Serialize chunks MSB-first into buffer
 .Lcds_apply:
-	ld xde, xwa			; XDE = bitmap (fresh copy)
-	ld hl, ix			; HL = position from search
-	cps hl, 0			; check if zero
-	jr z, .Lcds_done		; if zero, nothing to do
+	ld xde, xwa			; XDE = value (fresh copy)
+	ld hl, ix			; HL = chunk count
+	cps hl, 0
+	jr z, .Lcds_done		; nothing to write
 .Lcds_apply_loop:
-	ld wa, hl			; WA = current position
-	dec 1, wa			; WA = position - 1
-	extz xwa			; zero-extend
-	ld xix, xwa			; XIX = index
-	add xix, xbc			; XIX = buffer + index
-	ld a, e				; A = low byte of XDE
-	res 7, a			; clear bit 7
-	ld (xix), a			; store to buffer
-	srl xde, 7			; shift bitmap right 7
-	cp xde, 0x0000007F		; check if remaining fits in 7 bits
-	ret ule				; if <= 127, done (conditional return)
-	ld wa, hl			; WA = current position
-	dec 1, wa			; WA = position - 1
-	extz xwa			; zero-extend
-	ld xix, xwa			; XIX = index
-	add xix, xbc			; XIX = buffer + index
-	ld wa, hl			; WA = current position
-	dec 1, wa			; WA = position - 1
-	extz xwa			; zero-extend
-	add xwa, xbc			; XWA = buffer + index
-	ld a, (xwa)			; read existing byte
-	set 7, a			; set bit 7 (overflow flag)
-	ld (xix), a			; write back
-	djnz16 hl, .Lcds_apply_loop	; decrement HL, loop if nonzero
+	ld wa, hl
+	dec 1, wa			; WA = output index (HL-1)
+	extz xwa
+	ld xix, xwa
+	add xix, xbc			; XIX = &buffer[index]
+	ld a, e				; A = low 7 bits of XDE
+	res 7, a			; clear continuation bit (initially)
+	ld (xix), a			; buffer[index] = 7-bit payload
+	srl xde, 7			; shift out the 7 bits we just wrote
+	cp xde, 0x0000007F		; remaining value fits in 7 bits?
+	ret ule				; yes → last byte already written, done
+	; More bytes needed: set continuation bit on byte we just wrote
+	ld wa, hl
+	dec 1, wa
+	extz xwa
+	ld xix, xwa
+	add xix, xbc			; XIX = &buffer[index]
+	ld wa, hl
+	dec 1, wa
+	extz xwa
+	add xwa, xbc
+	ld a, (xwa)			; re-read byte we just stored
+	set 7, a			; set continuation bit (more bytes follow)
+	ld (xix), a			; write back with continuation
+	djnz16 hl, .Lcds_apply_loop	; next chunk
 .Lcds_done:
-	ldw hl, 0xFFFF			; return 0xFFFF
+	ldw hl, 0xFFFF			; return sentinel
 	ret
 
 HDAE5000_Display_Notify:	; 0x28E53D (113 bytes)
@@ -21752,56 +21801,72 @@ HDAE5000_Dir_Close:		; 0x28F357
 	ret
 
 	; ============================================================
-	; Variable-length integer encoder (7-bit chunks, MSB continuation)
+	; Variable-length integer encoder (MIDI-style VarInt)
+	; Encodes a 32-bit value using 7-bit chunks, MSB-first.
+	; Format: bit 7 = 1 means "more bytes follow" (continuation)
+	;         bit 7 = 0 means "this is the last byte"
+	; Example: 389 (0x185) → [0x83, 0x05]
+	;   0x83 = 1_0000011 (cont=1, payload=3)
+	;   0x05 = 0_0000101 (cont=0, payload=5)
+	;   Decoded: (3 << 7) | 5 = 389
+	; Max 5 bytes for 32-bit values (5 × 7 = 35 bits)
+	; Algorithm: Extract 7-bit chunks LSB-first into temp buffer,
+	;   then reverse into output setting bit 7 on all but last
 	; Input: XWA = value to encode, XBC = output buffer pointer
-	; Output: XHL = number of bytes written
+	; Output: XHL = number of bytes written (1-5)
 	; ============================================================
 HDAE5000_VarInt_Encode:		; 0x28F36B
 	dec 6, xsp			; allocate 6-byte temp buffer
 	ld xix, xwa			; XIX = value to encode
 	lds hl, 0			; HL = byte count
 
+	; --- Phase 1: Extract 7-bit chunks LSB-first into temp buffer ---
 .Lve_extract:
-	lda xde, (xsp + 0x00)		; XDE = temp buffer (reloaded each iteration)
+	lda xde, (xsp + 0x00)		; XDE = temp buffer base on stack
 	ld xwa, xix
-	and xwa, 0x0000007f		; extract low 7 bits
-	lda_dri3 xbc, 0x07, 0xe8, 0xec	; (XDE+HL) = A (store byte)
-	srl xix, 7			; shift value right by 7
-	inc 1, hl
-	or xix, xix			; test if zero
-	jr nz, .Lve_extract
+	and xwa, 0x0000007f		; extract low 7 bits of remaining value
+	lda_dri3 xbc, 0x07, 0xe8, 0xec	; temp[HL] = A (store 7-bit chunk)
+	srl xix, 7			; shift remaining value right by 7
+	inc 1, hl			; HL = chunk count
+	or xix, xix			; any bits left?
+	jr nz, .Lve_extract		; loop until value fully consumed
 
-	; Reverse into output with MSB continuation bits
-	lds ix, 1
-	cp ix, hl
+	; --- Phase 2: Reverse chunks into output, set continuation bits ---
+	; temp[] has chunks in LSB-first order; output needs MSB-first
+	lds ix, 1			; IX = reverse index (skip first temp byte)
+	cp ix, hl			; only one chunk? skip to last
 	jr ge, .Lve_copy_last
 
 .Lve_set_msb:
 	ld wa, hl
-	sub wa, ix
+	sub wa, ix			; WA = count - reverse_index
 	ld de, wa
-	dec 1, de
+	dec 1, de			; DE = output position
 	lda xwa, (xsp + 0x00)
-	ld_srib3 a, 0x07, 0xe0, 0xf0	; A = (XWA+IX) — load temp byte
-	set 7, a			; set continuation bit
-	lda_dri3 xbc, 0x07, 0xe4, 0xe8	; (XBC+DE) = A — store to output
+	ld_srib3 a, 0x07, 0xe0, 0xf0	; A = temp[IX] — load chunk (MSB-first order)
+	set 7, a			; set continuation bit (more bytes follow)
+	lda_dri3 xbc, 0x07, 0xe4, 0xe8	; output[DE] = A — store to caller's buffer
 	inc 1, ix
 	cp ix, hl
 	jr lt, .Lve_set_msb
 
+	; --- Phase 3: Copy final byte WITHOUT continuation bit ---
 .Lve_copy_last:
 	ld de, hl
-	dec 1, de
-	ld8_src_rid8 xsp, 0x00, a		; ld a, (xsp + 0x00) — first temp byte
-	lda_dri3 xbc, 0x07, 0xe4, 0xe8	; (XBC+DE) = A
-	exts xhl
+	dec 1, de			; DE = last output position
+	ld8_src_rid8 xsp, 0x00, a		; A = temp[0] — LSB chunk (becomes last output byte)
+	lda_dri3 xbc, 0x07, 0xe4, 0xe8	; output[DE] = A (bit 7 clear = final byte)
+	exts xhl			; sign-extend HL to XHL (byte count)
 	inc 6, xsp			; free temp buffer
 	ret
 
 	; ============================================================
-	; Variable-length integer decoder (7-bit chunks, MSB continuation)
+	; Variable-length integer decoder (MIDI-style VarInt)
+	; Reads MSB-first 7-bit chunks; bit 7 = 1 means "more bytes"
+	; Max 5 bytes (35 bits). Returns -1 if encoding is invalid.
 	; Input: XWA = data pointer, XBC = output byte count pointer
-	; Output: XHL = decoded value, or -1 on error
+	; Output: XHL = decoded value, or 0xFFFFFFFF on error
+	; Side effect: stores bytes consumed to (XBC)
 	; ============================================================
 HDAE5000_VarInt_Decode:		; 0x28F3BD
 	ld xde, xwa			; XDE = data pointer
@@ -21812,34 +21877,35 @@ HDAE5000_VarInt_Decode:		; 0x28F3BD
 	ldfr_berp a, 0xf4		; IYL = A (save first byte)
 
 .Lvd_loop:
-	ld_srib3 a, 0x07, 0xe8, 0xf0	; A = (XDE+IX) — load indexed byte
-	res 7, a			; clear continuation bit
+	ld_srib3 a, 0x07, 0xe8, 0xf0	; A = data[IX] — load current byte
+	res 7, a			; strip continuation bit → 7-bit payload
 	ldb w, 0			; W = 0
-	extz xwa			; XWA = byte value (zero-extended)
-	add xhl, xwa			; accumulate
+	extz xwa			; XWA = payload (zero-extended to 32-bit)
+	add xhl, xwa			; accumulate: XHL += payload
 
-	bit_dri 7, 0x07, 0xe8, 0xf0	; test bit 7 of (XDE+IX)
+	bit_dri 7, 0x07, 0xe8, 0xf0	; test continuation bit of data[IX]
 	jr nz, .Lvd_continue
-	; No continuation — done
-	ldto_berp a, 0xf0		; A = IXL (byte count)
-	inc 1, a
-	ld (xbc), a			; store byte count
+	; Continuation=0 → this was the last byte, decoding complete
+	ldto_berp a, 0xf0		; A = IXL (byte index)
+	inc 1, a			; A = bytes consumed
+	ld (xbc), a			; store byte count to caller's pointer
 	ret
 
 .Lvd_continue:
-	inc 1, ix
-	sll xhl, 7			; shift accumulator left by 7
+	; Continuation=1 → more bytes follow
+	inc 1, ix			; advance to next byte
+	sll xhl, 7			; make room for next 7-bit chunk
 	cps ix, 4
 	jr le, .Lvd_length_check
-	cpi_berp 0xf4, 7		; compare IYL with 7
+	cpi_berp 0xf4, 7		; if first byte > 7 and >4 bytes: invalid
 	jr ugt, .Lvd_error
 
 .Lvd_length_check:
-	cps ix, 5
+	cps ix, 5			; max 5 bytes (35 bits for 32-bit values)
 	jr le, .Lvd_loop
 
 .Lvd_error:
-	ld xhl, 0xffffffff		; return -1
+	ld xhl, 0xffffffff		; return -1 (invalid VarInt encoding)
 	ret
 
 HDAE5000_Filename_Validate:	; 0x28F3FD (59 bytes)
