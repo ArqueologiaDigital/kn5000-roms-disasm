@@ -19268,9 +19268,21 @@ HDAE5000_File_Operation:	; 0x28D6D1 (938 bytes)
 	inc 6, xsp
 	ret
 
+	; ============================================================
+	; Save file to HD — initialize allocation and set file type codes
+	; Clears all file descriptor fields (0x230438-0x230876), copies
+	; filename to 0x2306B6, computes sector count, then sets the
+	; file type codes based on content type at (0x229DAD)/(0x229DAE).
+	;
+	; File type code mapping (stored to 0x23087E / 0x230880):
+	;   Content type 0 → 0xF9    Content type 1 → 0x02
+	;   Content type 2 → 0xFC    Content type 3 → 0x00
+	;   Content type 4 → 0xFB    Default → 0xFC / 0x00
+	;
+	; Input: (implicit — reads globals at 0x229DAD/0x229DAE)
+	; Output: XHL = 0 (always succeeds after setup)
+	; ============================================================
 HDAE5000_File_Save:	; 0x28DA7B (381 bytes)
-	; Save file to HD: initialize allocation tables, set file type codes
-	; Input: XWA = param1, XBC = total bytes, XDE = entry list ptr
 
 	; --- Initialization: clear file save state ---
 	sti8_24 0x23a19a, 0x01                 ; (0x23A19A) = 1 — save in progress
@@ -19328,15 +19340,15 @@ HDAE5000_File_Save:	; 0x28DA7B (381 bytes)
 
 	; --- Compute file size in sectors ---
 	ld16_24 xwa, 0x22b43c                 ; WA = (0x22B43C) — bytes per sector
-	calr HDAE5000_String_Compare	; (actually a multiply helper)
+	calr HDAE5000_String_Compare	; (multiply helper: WA * something)
 	ld wa, hl			; result WA = HL
 	extz xwa			; zero-extend to 32-bit
 	ld xbc, 12			; divisor
 	call HDAE5000_Divide_Signed	; divide
 	st32_24 0x230868, xhl                 ; (0x230868) = XHL (quotient)
 
-	; --- File type code switch on (0x229DAD) ---
-	ld8_24 a, 0x229dad                    ; A = (0x229DAD)
+	; --- File type code switch on (0x229DAD) → 0x23087E ---
+	ld8_24 a, 0x229dad                    ; A = content type 1
 	cps a, 4
 	jr z, .Lfs_type1_4
 	cps a, 3
@@ -19365,8 +19377,8 @@ HDAE5000_File_Save:	; 0x28DA7B (381 bytes)
 	sti8_24 0x23087e, 0xfc                 ; (0x23087E) = 0xFC
 .Lfs_type1_done:			; 0x28DBAE
 
-	; --- File type code switch on (0x229DAE) ---
-	ld8_24 a, 0x229dae                    ; A = (0x229DAE)
+	; --- File type code switch on (0x229DAE) → 0x230880 ---
+	ld8_24 a, 0x229dae                    ; A = content type 2
 	cps a, 4
 	jr z, .Lfs_type2_4
 	cps a, 3
@@ -19397,10 +19409,22 @@ HDAE5000_File_Save:	; 0x28DA7B (381 bytes)
 	lds32 xhl, 0			; return XHL = 0 (success)
 	ret
 
+	; ============================================================
+	; Load file from HD — populate file descriptors from directory
+	; Uses File_Rename as a directory lookup (not actual rename):
+	;   Block 1: filename slot 1 (type 2, max 50 chars → 0x230736)
+	;   Block 2: filename slot 2 (type 3, max 40 chars → 0x230768)
+	;   Block 3: audio settings (type 0x58 → 0x2307A4-0x2307B0)
+	;     Audio channel mapping:
+	;       type 1 → 2ch, 24 samples   type 2 → 4ch, 12 samples
+	;       type 3 → 8ch, 6 samples    type 4 → 16ch, 3 samples
+	;     Default: 4ch, 12 samples
+	;   Final: additional data via type 0x7C lookup
+	;
+	; Input: (implicit — reads directory via File_Rename)
+	; Output: XHL = 0 (always succeeds)
+	; ============================================================
 HDAE5000_File_Load:	; 0x28DBF8 (564 bytes)
-	; Load file from HD: populate file descriptors from HD entries
-	; Three main blocks: slot1 filename, slot2 filename, audio params
-	; Each calls File_Rename to look up entry, then copies data or defaults
 
 	; --- Block 1: Load filename slot 1 (WA=2, BC=2, max 0x32 chars) ---
 	lds32 xwa, 0
@@ -19516,30 +19540,31 @@ HDAE5000_File_Load:	; 0x28DBF8 (564 bytes)
 	st8_24 0x2307a4, a                    ; (0x2307A4) = A
 	st8_24 0x2307a6, a                    ; (0x2307A6) = A
 
-	; Switch on audio type (0x230637): 1→2ch/24, 2→4ch/12, 3→8ch/6, 4→16ch/3
-	cpi8_24 0x230637, 0x01                 ; cp (0x230637), 1
+	; Switch on audio type at (0x230637):
+	;   Stores: channel count → 0x2307A8, samples/ch → 0x2307AE/0x2307B0
+	cpi8_24 0x230637, 0x01                 ; type 1?
 	jr nz, .Lfl_audio_ch2
-	sti8_24 0x2307a8, 0x02                 ; (0x2307A8) = 2
-	sti16_24 0x2307ae, 0x0018              ; (0x2307AE) = 24
-	sti16_24 0x2307b0, 0x0018              ; (0x2307B0) = 24
+	sti8_24 0x2307a8, 0x02                 ; channels = 2
+	sti16_24 0x2307ae, 0x0018              ; samples per channel = 24
+	sti16_24 0x2307b0, 0x0018              ; samples per channel (copy) = 24
 .Lfl_audio_ch2:				; 0x28DD2E
-	cpi8_24 0x230637, 0x02                 ; cp (0x230637), 2
+	cpi8_24 0x230637, 0x02                 ; type 2?
 	jr nz, .Lfl_audio_ch3
-	sti8_24 0x2307a8, 0x04                 ; (0x2307A8) = 4
-	sti16_24 0x2307ae, 0x000c              ; (0x2307AE) = 12
-	sti16_24 0x2307b0, 0x000c              ; (0x2307B0) = 12
+	sti8_24 0x2307a8, 0x04                 ; channels = 4
+	sti16_24 0x2307ae, 0x000c              ; samples per channel = 12
+	sti16_24 0x2307b0, 0x000c              ; samples per channel (copy) = 12
 .Lfl_audio_ch3:				; 0x28DD4A
-	cpi8_24 0x230637, 0x03                 ; cp (0x230637), 3
+	cpi8_24 0x230637, 0x03                 ; type 3?
 	jr nz, .Lfl_audio_ch4
-	sti8_24 0x2307a8, 0x08                 ; (0x2307A8) = 8
-	sti16_24 0x2307ae, 0x0006              ; (0x2307AE) = 6
-	sti16_24 0x2307b0, 0x0006              ; (0x2307B0) = 6
+	sti8_24 0x2307a8, 0x08                 ; channels = 8
+	sti16_24 0x2307ae, 0x0006              ; samples per channel = 6
+	sti16_24 0x2307b0, 0x0006              ; samples per channel (copy) = 6
 .Lfl_audio_ch4:				; 0x28DD66
-	cpi8_24 0x230637, 0x04                 ; cp (0x230637), 4
+	cpi8_24 0x230637, 0x04                 ; type 4?
 	jr nz, .Lfl_audio_done
-	sti8_24 0x2307a8, 0x10                 ; (0x2307A8) = 16
-	sti16_24 0x2307ae, 0x0003              ; (0x2307AE) = 3
-	sti16_24 0x2307b0, 0x0003              ; (0x2307B0) = 3
+	sti8_24 0x2307a8, 0x10                 ; channels = 16
+	sti16_24 0x2307ae, 0x0003              ; samples per channel = 3
+	sti16_24 0x2307b0, 0x0003              ; samples per channel (copy) = 3
 	jr t, .Lfl_audio_done
 .Lfl_audio_default:			; 0x28DD84
 	; No entry: default to 4ch/12
@@ -19595,10 +19620,24 @@ HDAE5000_File_Load:	; 0x28DBF8 (564 bytes)
 	lds32 xhl, 0			; return XHL = 0 (success)
 	ret
 
+	; ============================================================
+	; Delete file from HD — manage directory entries
+	; If mode=1: backup 5 entries (40 bytes each, 0x23A0AA → 0x23A0D2)
+	; before modifying. Then iterates up to 6 directory slots,
+	; calling File_Rename(type=5) to look up each entry.
+	;
+	; File type dispatch on byte at (0x230636):
+	;   0x0D: directory entry → copy raw entry to local buffer
+	;   0x0A: named entry → fill with default string (ROM 0x5C9E)
+	;   Other: concatenate entry names (max 39 chars combined)
+	;
+	; String lengths tracked at 0x2304D8[slot + 16].
+	; Restores original allocation state on exit.
+	;
+	; Input: A = mode (1=backup first), BC = starting entry index
+	; Output: XHL = final entry index (zero-extended)
+	; ============================================================
 HDAE5000_File_Delete:	; 0x28DE2C (579 bytes)
-	; Delete file from HD: manage directory entries and string renaming
-	; Input: A = mode (1 = copy entries first), BC = entry index
-	; Returns: XHL = result count
 
 	; --- Prologue: allocate stack frame, save registers ---
 	lda xsp, (xsp - 58)		; allocate 58 bytes of locals
@@ -19609,9 +19648,9 @@ HDAE5000_File_Delete:	; 0x28DE2C (579 bytes)
 	ld32_24 xbc, 0x230444                 ; XBC = (0x230444)
 	ld (xsp + 14), xbc		; save to local[0x0E]
 
-	; --- If A == 1: copy 5 directory entries ---
+	; --- If A == 1: backup 5 directory entries (40 bytes each) ---
 	cps a, 1
-	jr nz, .Lfd_else		; skip copy if A != 1
+	jr nz, .Lfd_else		; skip backup if mode != 1
 
 	ldw (xsp + 2), 0		; slot = 0
 	cpw (xsp + 2), 5		; while slot < 5
@@ -19686,7 +19725,7 @@ HDAE5000_File_Delete:	; 0x28DE2C (579 bytes)
 	cpi8_24 0x230636, 0x0d                 ; cp (0x230636), 0x0D
 	jr nz, .Lfd_try_0a		; if != 0x0D, try next type
 
-	; --- File type 0x0D: directory entry — copy to local buffer ---
+	; --- File type 0x0D: raw directory entry → copy to local stack buffer ---
 	ld xwa, (xsp + 6)		; result
 	ld (xsp + 4), wa		; save low word
 	lda xwa, (xsp + 18)		; XWA = &local[0x12]
@@ -19731,7 +19770,7 @@ HDAE5000_File_Delete:	; 0x28DE2C (579 bytes)
 	ret
 
 .Lfd_try_0a:				; 0x28DF6A
-	; --- File type 0x0A: named entry ---
+	; --- File type 0x0A: named entry → fill with default name ---
 	cpi8_24 0x230636, 0x0a                 ; cp (0x230636), 0x0A
 	jr nz, .Lfd_other_type
 	ld xwa, (xsp + 6)		; result
@@ -19749,7 +19788,7 @@ HDAE5000_File_Delete:	; 0x28DE2C (579 bytes)
 	jr t, .Lfd_strlen_store		; goto strlen/store
 
 .Lfd_other_type:			; 0x28DF97
-	; --- Other file type: check string length ---
+	; --- Other file type: concatenate entry name if it fits ---
 	lda_24 xwa, 0x230636                  ; XWA = &0x230636
 	push xwa
 	call 2731889			; strlen(0x230636)
@@ -19836,11 +19875,27 @@ HDAE5000_File_Delete:	; 0x28DE2C (579 bytes)
 	sti16_24 0x230434, 0x0000              ; (0x230434) = 0
 	jrl t, .Lfd_epilogue		; done
 
+	; ============================================================
+	; Directory search/lookup — traverse partitions to find entries
+	; Despite the name, this is NOT a rename operation. It walks
+	; partitions by calling File_Format, searching for entries
+	; whose type code at (0x230430) matches the requested type.
+	;
+	; Modes based on DE (file count):
+	;   DE >= 0: iterate DE partitions starting from sector 0
+	;     Type 0x7C: single format at partition C, return offset
+	;     Other: search loop until type matches at (0x230430)
+	;   DE == -1: return error (-1) immediately
+	;   DE == -2: use caller's 32-bit stack arg as start sector
+	;     Same sub-modes as DE >= 0 (0x7C vs search)
+	;
+	; Input: WA = operation/entry type to find
+	;        BC = partition type byte
+	;        DE = file count (-1=error, -2=use stack arg)
+	;        (xsp+14) = 32-bit caller arg (for DE==-2 mode)
+	; Output: XHL = sector offset of found entry, or -1 on error
+	; ============================================================
 HDAE5000_File_Rename:	; 0x28E06F (280 bytes)
-	; Rename file on HD
-	; Input: DE = file count (negative = special), C = partition, A = operation type
-	; Caller passes 32-bit argument on stack (accessed at xsp+14)
-	; Returns XHL = result offset or 0xFFFFFFFF on error
 	dec 0, xsp			; allocate 8 bytes
 	pushw iz
 	ld (xsp + 4), de		; save file count
@@ -19891,7 +19946,7 @@ HDAE5000_File_Rename:	; 0x28E06F (280 bytes)
 	ld xhl, 0xFFFFFFFF
 	jrl .Lfr_exit
 .Lfr_search_pos:
-	; Not 0x7C: search loop until match or exhausted
+	; Not 0x7C: search loop — walk partitions until type matches
 	ld a, (xsp + 6)
 	extz wa
 	ld bc, (xsp + 2)
@@ -19902,8 +19957,8 @@ HDAE5000_File_Rename:	; 0x28E06F (280 bytes)
 	jr z, .Lfr_search_pos_check
 	ld a, (xsp + 8)
 	extz wa
-	cpda16_24 xwa, 2294832		; compare with (0x230430)
-	jr nz, .Lfr_search_pos		; loop until match
+	cpda16_24 xwa, 2294832		; type == (0x230430)? (file type from partition)
+	jr nz, .Lfr_search_pos		; no match → try next partition
 .Lfr_search_pos_check:
 	cps hl, 0
 	jr z, .Lfr_search_pos_err
