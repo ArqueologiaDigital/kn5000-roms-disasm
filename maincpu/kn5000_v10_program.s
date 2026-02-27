@@ -89062,7 +89062,7 @@ LABEL_EF05A2:
 	jr nz, LABEL_EF05B5
 	calr Get_Region_Code
 	cps l, 4
-	callcc_24 14, 0xEF4BCC	; if it is present (and this unit was sold in
+	call_24 nz, 0xEF4BCC	; if it is present (and this unit was sold in
 					; a specific market region), then call the
 					; HDAE5000 PPI init code
 
@@ -94879,7 +94879,7 @@ LABEL_EF3B05:
 	calr LABEL_EF3724
 	call 0xEF0865
 	cps l, 4
-	callcc_24 14, 0xEF3CD1
+	call_24 nz, 0xEF3CD1
 	lds wa, 1
 	calr LABEL_EF379A
 	st16_24 0x0205e0, xhl
@@ -96550,7 +96550,7 @@ LABEL_EF4B9F:
 	lds de, 4
 	calr HDAE5000_ROM_Transfer
 	or xhl, xhl
-	callcc_24 14, 0xEF4890
+	call_24 nz, 0xEF4890
 
 LABEL_EF4BCA:
 	jr LABEL_EF4BCA
@@ -120519,7 +120519,7 @@ LABEL_F1800B:
 	ld bc, wa
 	and bc, 0xFF
 	cp bc, 0x80
-	callcc_24 15, 0xF182AE
+	call_24 nc, 0xF182AE
 	ld a, (xsp + 2)
 	extz wa
 	ldto_berp C, 0xFB
@@ -120530,7 +120530,7 @@ LABEL_F1800B:
 	ld bc, wa
 	and bc, 0xFF
 	cp bc, 0x80
-	callcc_24 15, 0xF182AE
+	call_24 nc, 0xF182AE
 	ld a, (xsp + 2)
 	extz wa
 	ldto_berp C, 0xFB
@@ -120541,7 +120541,7 @@ LABEL_F1800B:
 	ld bc, wa
 	and bc, 0xFF
 	cp bc, 0x80
-	callcc_24 15, 0xF182AE
+	call_24 nc, 0xF182AE
 	ld a, (xsp + 2)
 	extz wa
 	ldto_berp C, 0xFB
@@ -120552,7 +120552,7 @@ LABEL_F1800B:
 	ld bc, wa
 	and bc, 0xFF
 	cp bc, 0x80
-	callcc_24 15, 0xF182AE
+	call_24 nc, 0xF182AE
 	inc1_berp 0xFB
 	cp_erpb 0xFB, 0x0A
 	jrl c, LABEL_F17FE4
@@ -120596,7 +120596,7 @@ LABEL_F180D0:
 	ld bc, wa
 	and bc, 0xFF
 	cp bc, 0x80
-	callcc_24 15, 0xF182DC
+	call_24 nc, 0xF182DC
 	ld a, (xsp + 2)
 	extz wa
 	ldto_berp C, 0xFB
@@ -120607,7 +120607,7 @@ LABEL_F180D0:
 	ld bc, wa
 	and bc, 0xFF
 	cp bc, 0x80
-	callcc_24 15, 0xF182DC
+	call_24 nc, 0xF182DC
 	ld a, (xsp + 2)
 	extz wa
 	ldto_berp C, 0xFB
@@ -120618,7 +120618,7 @@ LABEL_F180D0:
 	ld bc, wa
 	and bc, 0xFF
 	cp bc, 0x80
-	callcc_24 15, 0xF182DC
+	call_24 nc, 0xF182DC
 	ld a, (xsp + 2)
 	extz wa
 	ldto_berp C, 0xFB
@@ -120629,7 +120629,7 @@ LABEL_F180D0:
 	ld bc, wa
 	and bc, 0xFF
 	cp bc, 0x80
-	callcc_24 15, 0xF182DC
+	call_24 nc, 0xF182DC
 	inc1_berp 0xFB
 	cp_erpb 0xFB, 0x0A
 	jrl c, LABEL_F180A9
@@ -132464,7 +132464,7 @@ LABEL_F21867:
 	call LABEL_FEC04E
 	ld wa, hl
 	cps wa, 0
-	jpcc_24 14, 0xF207F4
+	jp_24 nz, 0xF207F4
 	calr LABEL_F22A5D
 	stdi8 4437, 0
 	ret
@@ -132488,7 +132488,7 @@ LABEL_F218BB:
 	call LABEL_FEC04E
 	ld wa, hl
 	cps wa, 0
-	jpcc_24 14, 0xF207F4
+	jp_24 nz, 0xF207F4
 	calr LABEL_F22A5D
 	stdi8 4437, 0
 	ret
@@ -132512,7 +132512,7 @@ LABEL_F218FF:
 	call LABEL_FEC04E
 	ld wa, hl
 	cps wa, 0
-	jpcc_24 14, 0xF207F4
+	jp_24 nz, 0xF207F4
 	calr LABEL_F22A5D
 	stdi8 4437, 0
 	ret
@@ -134869,7 +134869,7 @@ LABEL_F2341E:
 	ldda32 xbc, 6883
 	lds32 xwa, 0
 	cp xbc, xwa
-	jpcc_24 6, 0xF23436
+	jp_24 z, 0xF23436
 	call LABEL_F23713
 	nop
 	nop
@@ -135242,9 +135242,9 @@ LABEL_F23752:
 	lds32 xbc, 0
 	ldda32 xwa, 6883
 	cp xwa, xbc
-	jpcc_24 6, 0xF23771
+	jp_24 z, 0xF23771
 	cpdi8 6887, 1
-	jpcc_24 6, 0xF23771
+	jp_24 z, 0xF23771
 	dec 1, xwa
 
 LABEL_F23771:
@@ -136324,7 +136324,7 @@ LABEL_F24070:
 	ldda32 xbc, 6883
 	lds32 xwa, 0
 	cp xbc, xwa
-	jpcc_24 6, 0xF24088
+	jp_24 z, 0xF24088
 	call LABEL_F23713
 	nop
 	nop
@@ -136794,9 +136794,9 @@ LABEL_F2449F:
 	lds32 xbc, 0
 	ldda32 xwa, 6883
 	cp xwa, xbc
-	jpcc_24 6, 0xF244C0
+	jp_24 z, 0xF244C0
 	cpdi8 6887, 1
-	jpcc_24 6, 0xF244C0
+	jp_24 z, 0xF244C0
 	subda32 xwa, 4211
 
 LABEL_F244C0:
@@ -144710,7 +144710,7 @@ LABEL_F28E66:
 
 LABEL_F28E7E:
 	cpdi8 4324, 255
-	jpcc_24 14, 0xF28E91
+	jp_24 nz, 0xF28E91
 	stdi8 6881, 9
 	jp LABEL_F28F0F
 
@@ -144720,14 +144720,14 @@ LABEL_F28E91:
 
 LABEL_F28E9A:
 	cpdi8 4324, 255
-	jpcc_24 14, 0xF28EB1
+	jp_24 nz, 0xF28EB1
 	cp iy, 0x9
-	jpcc_24 6, 0xF28EBE
+	jp_24 z, 0xF28EBE
 	jp LABEL_F28F09
 
 LABEL_F28EB1:
 	cp iy, 0xF
-	jpcc_24 6, 0xF28EBE
+	jp_24 z, 0xF28EBE
 	jp LABEL_F28F09
 
 LABEL_F28EBE:
@@ -145056,9 +145056,9 @@ LABEL_F291E0:
 	cps a, 3
 	jr z, LABEL_F2926C
 	cps a, 4
-	jpcc_24 6, 0xF29306
+	jp_24 z, 0xF29306
 	cps a, 5
-	jpcc_24 6, 0xF29306
+	jp_24 z, 0xF29306
 	jrl LABEL_F29474
 
 LABEL_F29243:
@@ -147258,7 +147258,7 @@ LABEL_F2B171:
 LABEL_F2B18D:
 	add wa, (xbc)
 	cp_srib_im 0x07, 0xEC, 0xE0, 0x0D
-	callcc_24 6, 0xF2B081
+	call_24 z, 0xF2B081
 	pushw 0x2
 	pushw 0xF4E
 	call LABEL_FF0FA0
@@ -151602,7 +151602,7 @@ LABEL_F2EFF7:
 
 MsgToTtlProc:
 	cp xbc, 0x1C00001
-	jpcc_24 14, 0xFA4409
+	jp_24 nz, 0xFA4409
 	call 0xFA4409
 	call 0xFA586D
 	cp xhl, 0x1A000EE
@@ -160599,7 +160599,7 @@ LABEL_F35EF0:
 	cpda8_24 a, 135336
 	jr c, LABEL_F35F56
 	cpda8_24 a, 135338
-	callcc_24 3, 0xF360BC
+	call_24 ule, 0xF360BC
 
 LABEL_F35F56:
 	calr LABEL_F35E16
@@ -160703,7 +160703,7 @@ LABEL_F3602C:
 	cpda8_24 a, 135336
 	jr c, LABEL_F36089
 	cpda8_24 a, 135338
-	callcc_24 3, 0xF360BC
+	call_24 ule, 0xF360BC
 
 LABEL_F36089:
 	calr LABEL_F35E16
@@ -161304,7 +161304,7 @@ LABEL_F3665F:
 	inc 1, a
 	stda8 10118, a
 	bitda 0, 10050
-	callcc_24 14, 0xF37A5F
+	call_24 nz, 0xF37A5F
 	calr LABEL_F36E2F
 	call LABEL_F46902
 	calr LABEL_F36D59
@@ -161319,7 +161319,7 @@ LABEL_F3668C:
 	dec 1, a
 	stda8 10118, a
 	bitda 0, 10050
-	callcc_24 14, 0xF37AB6
+	call_24 nz, 0xF37AB6
 	calr LABEL_F36E2F
 	call LABEL_F46902
 	calr LABEL_F36D59
@@ -162918,7 +162918,7 @@ LABEL_F375D7:
 	ldda8 a, 10100
 	mul a, 0x60
 	cpdm16 10138, xwa
-	callcc_24 7, 0xF38445
+	call_24 c, 0xF38445
 	bitda 0, 10591
 	jr nz, LABEL_F3763C
 	calr LABEL_F3767B
@@ -164939,7 +164939,7 @@ LABEL_F3888B:
 	call LABEL_F4680F
 	call LABEL_F46983
 	bitda 0, 10591
-	callcc_24 14, 0xF38728
+	call_24 nz, 0xF38728
 	jp LABEL_F468BD
 
 LABEL_F388A8:
@@ -165641,7 +165641,7 @@ LABEL_F39099:
 	extz wa
 	call LABEL_F40C02
 	cpdi8 10362, 0
-	callcc_24 6, 0xF3915B
+	call_24 z, 0xF3915B
 	ldmm16 10581, 10415
 	ldda16 xwa, 9830
 	stda8 10583, a
@@ -167259,7 +167259,7 @@ LABEL_F3A09A:
 	resda 2, 13434
 	ldda8 a, 7558
 	cps a, 1
-	callcc_24 6, 0xF3DA8E
+	call_24 z, 0xF3DA8E
 	lds wa, 0
 	call LABEL_F99525
 	ldda16 xwa, 8980
@@ -168597,7 +168597,7 @@ LABEL_F3ACE2:
 LABEL_F3ACF1:
 	ldda8 a, 64607
 	and a, 0x30
-	callcc_24 6, 0xF3DF7C
+	call_24 z, 0xF3DF7C
 	stdi16 7574, 65535
 
 LABEL_F3AD03:
@@ -168608,9 +168608,9 @@ LABEL_F3AD03:
 
 LABEL_F3AD0E:
 	cpdi8 7556, 0
-	callcc_24 14, 0xF3DA7C
+	call_24 nz, 0xF3DA7C
 	cpdi8 7558, 0
-	callcc_24 14, 0xF3DA8E
+	call_24 nz, 0xF3DA8E
 
 LABEL_F3AD22:
 	ld l, (xsp + 6)
@@ -168732,9 +168732,9 @@ LABEL_F3AE09:
 
 LABEL_F3AE13:
 	cpdi8 7556, 0
-	callcc_24 14, 0xF3DA7C
+	call_24 nz, 0xF3DA7C
 	cpdi8 7558, 0
-	callcc_24 14, 0xF3DA8E
+	call_24 nz, 0xF3DA8E
 
 LABEL_F3AE27:
 	ld l, (xsp + 8)
@@ -168751,10 +168751,10 @@ LABEL_F3AE2E:
 	extz wa
 	call LABEL_F3E6FD
 	cpdi8 7558, 1
-	callcc_24 6, 0xF3DA8E
+	call_24 z, 0xF3DA8E
 	call LABEL_EF2451
 	cp hl, 0xF
-	callcc_24 1, 0xF3DA7C
+	call_24 lt, 0xF3DA7C
 	ld a, (xsp)
 	extz wa
 	muls wa, 0x9
@@ -171159,7 +171159,7 @@ LABEL_F3C352:
 	cpw (xsp + 4), 0x1
 	jr nz, LABEL_F3C37A
 	bitda 1, 10417
-	callcc_24 6, 0xF3D61F
+	call_24 z, 0xF3D61F
 
 LABEL_F3C37A:
 	ldb l, 0x0
@@ -172035,7 +172035,7 @@ LABEL_F3CBE7:
 	ldw wa, 0x32
 	call LABEL_F3DFFF
 	cp (xsp + 18), 0x0
-	callcc_24 14, 0xF3CD85
+	call_24 nz, 0xF3CD85
 	cp (xsp + 18), 0x0
 	jr z, LABEL_F3CC19
 	ldda16 xbc, 8998
@@ -172790,7 +172790,7 @@ LABEL_F3D2A6:
 	calr LABEL_F3CE53
 	call LABEL_F41DB9
 	cpdi8 7522, 1
-	callcc_24 6, 0xF3D840
+	call_24 z, 0xF3D840
 	call LABEL_F3E91B
 	lda xwa, (xsp + 20)
 	calr LABEL_F3D09B
@@ -173540,10 +173540,10 @@ LABEL_F3D9AC:
 	cp a, 0x90
 	jr nz, LABEL_F3D9E9
 	cpdi8 7558, 0
-	callcc_24 14, 0xF3DA8E
+	call_24 nz, 0xF3DA8E
 	call LABEL_EF2451
 	cp hl, 0xF
-	callcc_24 1, 0xF3DA7C
+	call_24 lt, 0xF3DA7C
 	push xiz
 	ld a, (xsp + 8)
 	extz wa
@@ -173555,10 +173555,10 @@ LABEL_F3D9AC:
 
 LABEL_F3D9E9:
 	cpdi8 7556, 0
-	callcc_24 14, 0xF3DA7C
+	call_24 nz, 0xF3DA7C
 	call LABEL_EF2451
 	cp hl, 0xF
-	callcc_24 1, 0xF3DA8E
+	call_24 lt, 0xF3DA8E
 	push xiz
 	ld a, (xsp + 8)
 	extz wa
@@ -173582,10 +173582,10 @@ LABEL_F3DA16:
 	cp a, 0x90
 	jr nz, LABEL_F3DA51
 	cpdi8 7558, 0
-	callcc_24 14, 0xF3DA8E
+	call_24 nz, 0xF3DA8E
 	call LABEL_EF2451
 	cp hl, 0xF
-	callcc_24 1, 0xF3DA7C
+	call_24 lt, 0xF3DA7C
 	push xiz
 	ld a, (xsp + 8)
 	extz wa
@@ -173597,10 +173597,10 @@ LABEL_F3DA16:
 
 LABEL_F3DA51:
 	cpdi8 7556, 0
-	callcc_24 14, 0xF3DA7C
+	call_24 nz, 0xF3DA7C
 	call LABEL_EF2451
 	cp hl, 0xF
-	callcc_24 1, 0xF3DA8E
+	call_24 lt, 0xF3DA8E
 	push xiz
 	ld a, (xsp + 8)
 	extz wa
@@ -173727,7 +173727,7 @@ LABEL_F3DB59:
 	jr z, LABEL_F3DB88
 	ldda8 a, 3431
 	cps a, 4
-	callcc_24 14, 0xF3DA7C
+	call_24 nz, 0xF3DA7C
 	jrl LABEL_F3DCEA
 
 LABEL_F3DB7F:
@@ -174226,7 +174226,7 @@ LABEL_F3DFFF:
 	lda xsp, (xsp - 10)
 	ld (xsp + 8), a
 	cpdi8 7558, 0
-	callcc_24 14, 0xF3DA8E
+	call_24 nz, 0xF3DA8E
 	lda xde, (xsp)
 	ld (xde), 0x90
 	ld (xde + 1), 0x7F
@@ -174286,7 +174286,7 @@ LABEL_F3E071:
 
 LABEL_F3E07C:
 	cps l, 1
-	jpcc_24 14, 0xF98782
+	jp_24 nz, 0xF98782
 	extz de
 	lds wa, 0
 	ld bc, de
@@ -174741,7 +174741,7 @@ LABEL_F3E444:
 	ld c, (xde + 4)
 	inc 1, c
 	cp c, (xsp + 10)
-	callcc_24 6, 0xF3E6FD
+	call_24 z, 0xF3E6FD
 	ldto_berp A, 0xFB
 	extz wa
 	muls wa, 0x9
@@ -175669,7 +175669,7 @@ LABEL_F3EC68:
 
 LABEL_F3EC73:
 	cps l, 1
-	jpcc_24 14, 0xF98782
+	jp_24 nz, 0xF98782
 	extz de
 	lds wa, 0
 	ld bc, de
@@ -175703,7 +175703,7 @@ LABEL_F3ECB8:
 	cp a, 0x87
 	jr z, LABEL_F3ECCF
 	cp a, 0x88
-	callcc_24 14, 0xFDB557
+	call_24 nz, 0xFDB557
 
 LABEL_F3ECCF:
 	resda 0, 10419
@@ -175757,7 +175757,7 @@ LABEL_F3ED34:
 	cps wa, 0
 	jr z, LABEL_F3ED5E
 	cpda16 xwa, 10296
-	callcc_24 14, 0xF393FC
+	call_24 nz, 0xF393FC
 	ldda8 a, 1075
 	cpda8 a, 10346
 	ret z
@@ -176948,7 +176948,7 @@ LABEL_F3F8D7:
 	calr LABEL_F417E5
 	ld wa, hl
 	cp wa, 0xFFFF
-	callcc_24 14, 0xF41F7C
+	call_24 nz, 0xF41F7C
 
 LABEL_F3F900:
 	inc1_berp 0xF9
@@ -183348,7 +183348,7 @@ LABEL_F434DC:
 	call 0xFDDE6F
 	ldda8 a, 1056
 	and a, 0x5
-	callcc_24 6, 0xF59AB9
+	call_24 z, 0xF59AB9
 	calr LABEL_F3E052
 
 LABEL_F434EF:
@@ -183502,7 +183502,7 @@ LABEL_F435FA:
 	ldda16 xwa, 61854
 	ldda16 xbc, 10420
 	and wa, bc
-	callcc_24 6, 0xF3CAC1
+	call_24 z, 0xF3CAC1
 
 LABEL_F43658:
 	pop_werp 0xFA
@@ -183521,9 +183521,9 @@ LABEL_F43675:
 
 LABEL_F43679:
 	cpdi8 9508, 0
-	jpcc_24 14, 0xEF2505
+	jp_24 nz, 0xEF2505
 	bitda 0, 10437
-	jpcc_24 14, 0xF391DC
+	jp_24 nz, 0xF391DC
 	ldda8 a, 1057
 	and a, 0x5
 	ret nz
@@ -187211,7 +187211,7 @@ LABEL_F466CB:
 	calr LABEL_F4695F
 	calr LABEL_F46A27
 	bitda 0, 10050
-	callcc_24 6, 0xF468BD
+	call_24 z, 0xF468BD
 	calr LABEL_F46983
 	bitda 0, 10591
 	jrl z, LABEL_F467B2
@@ -188051,7 +188051,7 @@ SqNoteEdtTitleFunc:
 	cp xbc, 0x1C00013
 	jr nz, LABEL_F46F14
 	cp xde, 0x3
-	callcc_24 6, 0xF37156
+	call_24 z, 0xF37156
 
 LABEL_F46F14:
 	lds32 xhl, 0
@@ -188075,7 +188075,7 @@ SqDrmEdtTitleFunc:
 	cp xbc, 0x1C00013
 	jr nz, LABEL_F46F4D
 	cp xde, 0x3
-	callcc_24 6, 0xF37134
+	call_24 z, 0xF37134
 
 LABEL_F46F4D:
 	lds32 xhl, 0
@@ -188130,7 +188130,7 @@ SqNoteCycpTitleFunc:
 	cp xbc, 0x1C00013
 	jr nz, LABEL_F46FC3
 	cp xde, 0x3
-	callcc_24 6, 0xF3884C
+	call_24 z, 0xF3884C
 
 LABEL_F46FC3:
 	lds32 xhl, 0
@@ -188140,7 +188140,7 @@ SqDrmCycpTitleFunc:
 	cp xbc, 0x1C00013
 	jr nz, LABEL_F46FD9
 	cp xde, 0x3
-	callcc_24 6, 0xF3884C
+	call_24 z, 0xF3884C
 
 LABEL_F46FD9:
 	lds32 xhl, 0
@@ -188152,7 +188152,7 @@ HelpModeFunc:
 	cp xde, 0x1
 	jr z, LABEL_F46FF3
 	or xde, xde
-	callcc_24 6, 0xF59AB9
+	call_24 z, 0xF59AB9
 
 LABEL_F46FF3:
 	lds32 xhl, 0
@@ -191837,14 +191837,14 @@ LABEL_F495ED:
 	extz xwa
 	add xwa, xbc
 	cp (xwa), 0xF
-	callcc_24 6, 0xF496F9
+	call_24 z, 0xF496F9
 	ldda8 a, 9696
 	extz wa
 	ldada xbc, 61856
 	extz xwa
 	add xwa, xbc
 	cp (xwa), 0x10
-	callcc_24 6, 0xF49642
+	call_24 z, 0xF49642
 
 LABEL_F49631:
 	ldda8 a, 9696
@@ -192638,7 +192638,7 @@ LABEL_F49D17:
 	stda8 10361, a
 	call LABEL_F3FEFB
 	cpdi8 3301, 15
-	jpcc_24 11, 0xF3FF1A
+	jp_24 ugt, 0xF3FF1A
 	ldda8 a, 10359
 	dec 1, a
 	extz wa
@@ -195591,7 +195591,7 @@ LABEL_F4C17A:
 	cp a, 0xF
 	jr z, LABEL_F4C1A4
 	cp a, 0x10
-	callcc_24 14, 0xF4C1D6
+	call_24 nz, 0xF4C1D6
 
 LABEL_F4C1A4:
 	ldda8 a, 10362
@@ -196320,7 +196320,7 @@ LABEL_F4C929:
 	cp a, 0xF
 	jr z, LABEL_F4C953
 	cp a, 0x10
-	callcc_24 14, 0xF4C98A
+	call_24 nz, 0xF4C98A
 
 LABEL_F4C953:
 	ldda8 a, 10362
@@ -196512,7 +196512,7 @@ LABEL_F4CAE8:
 	cp a, 0xF
 	jr z, LABEL_F4CB12
 	cp a, 0x10
-	callcc_24 14, 0xF4CB4A
+	call_24 nz, 0xF4CB4A
 
 LABEL_F4CB12:
 	ldda8 a, 10362
@@ -196690,7 +196690,7 @@ LABEL_F4CCAA:
 	cp a, 0xF
 	jr z, LABEL_F4CCD4
 	cp a, 0x10
-	callcc_24 14, 0xF4CD06
+	call_24 nz, 0xF4CD06
 
 LABEL_F4CCD4:
 	ldda8 a, 10362
@@ -197025,7 +197025,7 @@ LABEL_F4D047:
 	bitda 0, 9824
 	jr z, LABEL_F4D06A
 	bitda 0, 9826
-	callcc_24 6, 0xF4DD4F
+	call_24 z, 0xF4DD4F
 
 LABEL_F4D06A:
 	ldda32 xwa, 10018
@@ -197144,7 +197144,7 @@ LABEL_F4D17D:
 	bitda 0, 9824
 	jr z, LABEL_F4D19F
 	bitda 0, 9826
-	callcc_24 6, 0xF4DD4F
+	call_24 z, 0xF4DD4F
 
 LABEL_F4D19F:
 	ldto_berp A, 0xF9
@@ -218073,7 +218073,7 @@ LABEL_F5B90B:
 
 LABEL_F5B90D:
 	cpda16 xiz, 13182
-	jpcc_24 15, 0xF5B98D
+	jp_24 nc, 0xF5B98D
 	bit_dri 7, 0x07, 0xE4, 0xF8
 	jr z, LABEL_F5B986
 	ld ix, iz
@@ -218482,7 +218482,7 @@ LABEL_F5BCB2:
 
 LABEL_F5BCB4:
 	cpda16 xiz, 13182
-	jpcc_24 15, 0xF5BD35
+	jp_24 nc, 0xF5BD35
 	bit_dri 7, 0x07, 0xE4, 0xF8
 	jr z, LABEL_F5BD2E
 	ld ix, iz
@@ -218628,7 +218628,7 @@ LABEL_F5BE39:
 	ldda8 a, 13471
 	and a, 0x9
 	cps a, 0
-	jpcc_24 6, 0xF5BEC9
+	jp_24 z, 0xF5BEC9
 	bitda 0, 13471
 	jr z, LABEL_F5BE86
 	anddi8 13471, 254
@@ -238690,7 +238690,7 @@ StylCnvTxtTtlFunc:
 
 LABEL_F6C21C:
 	cpdi8 36148, 6
-	callcc_24 14, 0xF6BCD6
+	call_24 nz, 0xF6BCD6
 
 LABEL_F6C226:
 	lds32 xhl, 0
@@ -239220,7 +239220,7 @@ LABEL_F6C759:
 
 LABEL_F6C763:
 	cpdi8 36148, 6
-	callcc_24 14, 0xF6BCD6
+	call_24 nz, 0xF6BCD6
 	lds wa, 0
 	jr LABEL_F6C779
 
@@ -239433,7 +239433,7 @@ LABEL_F6C989:
 
 LABEL_F6C991:
 	cpdi8 36148, 6
-	callcc_24 14, 0xF6BCD6
+	call_24 nz, 0xF6BCD6
 	lds wa, 0
 	jr LABEL_F6C9A7
 
@@ -239664,7 +239664,7 @@ StylCnvStorTtlFunc:
 
 LABEL_F6CBF1:
 	cpdi8 36148, 6
-	callcc_24 14, 0xF6BCD6
+	call_24 nz, 0xF6BCD6
 
 LABEL_F6CBFB:
 	lds32 xhl, 0
@@ -242716,7 +242716,7 @@ LABEL_F6EE3F:
 	cp a, 0xC0
 	jr z, LABEL_F6EEB0
 	cp a, 0x84
-	jpcc_24 6, 0xF6EFCD
+	jp_24 z, 0xF6EFCD
 	calr LABEL_F6DEE0
 	jr LABEL_F6EE35
 
@@ -257416,7 +257416,7 @@ LABEL_F7DDD0:
 	muls wa, 0xE
 	lda_24 xbc, 0xe9d340
 	cp_sriw_im 0x07, 0xE4, 0xE0, 0x05, 0x00
-	callcc_24 14, 0xFABB73
+	call_24 nz, 0xFABB73
 	ld xwa, xiz
 	ld xbc, 0x1C0000F
 	lds32 xde, 0
@@ -265492,7 +265492,7 @@ LABEL_F847FB:
 
 LABEL_F8482B:
 	and a, 0x7
-	callcc_24 14, 0xF84FC3
+	call_24 nz, 0xF84FC3
 	bitda_24 7, 149486
 	jr z, LABEL_F84878
 	sti8_24 0x0247f2, 0x00
@@ -265568,7 +265568,7 @@ LABEL_F848D0:
 	lda_24 xbc, 0xe9fcc4
 	ld_srib3 C, 0x07, 0xE4, 0xE0
 	andda8_24 c, 149490
-	callcc_24 14, 0xF84B2C
+	call_24 nz, 0xF84B2C
 	inc1_berp 0xFB
 	cpi_berp 0xFB, 2
 	jr ule, LABEL_F8487B
@@ -265606,7 +265606,7 @@ LABEL_F84923:
 LABEL_F84951:
 	ld_srib3 C, 0x07, 0xEC, 0xE0
 	and c, e
-	callcc_24 14, 0xF84E3A
+	call_24 nz, 0xF84E3A
 
 LABEL_F8495D:
 	inc1_berp 0xFB
@@ -266496,7 +266496,7 @@ LABEL_F85161:
 	lda_24 xbc, 0xe9fcc8
 	ld_srib3 C, 0x07, 0xE4, 0xE0
 	andda8_24 c, 149486
-	callcc_24 14, 0xF84CBF
+	call_24 nz, 0xF84CBF
 	inc1_berp 0xFB
 	cpi_berp 0xFB, 2
 	jr ule, LABEL_F85161
@@ -266915,7 +266915,7 @@ LABEL_F8571B:
 	cps bc, 1
 	jr z, LABEL_F85726
 	cps bc, 0
-	callcc_24 6, 0xF85F8C
+	call_24 z, 0xF85F8C
 
 LABEL_F85726:
 	lds hl, 0
@@ -268128,7 +268128,7 @@ LABEL_F86B7C:
 	calr LABEL_F86F2E
 	calr LABEL_F86E17
 	cpdi8 36152, 228
-	callcc_24 14, 0xF22A4D
+	call_24 nz, 0xF22A4D
 	jrl LABEL_F86C5F
 
 LABEL_F86BAA:
@@ -268139,7 +268139,7 @@ LABEL_F86BAA:
 	cpda8 a, 4439
 	jr z, LABEL_F86BCA
 	cpdi8 36152, 228
-	callcc_24 14, 0xF22A4D
+	call_24 nz, 0xF22A4D
 
 LABEL_F86BC7:
 	jrl LABEL_F86D86
@@ -268147,7 +268147,7 @@ LABEL_F86BC7:
 LABEL_F86BCA:
 	stdi8 36686, 4
 	cpdi8 36152, 228
-	callcc_24 14, 0xF22A4D
+	call_24 nz, 0xF22A4D
 	ldda8 a, 10404
 	extz wa
 	call LABEL_F846AD
@@ -268156,7 +268156,7 @@ LABEL_F86BCA:
 LABEL_F86BE4:
 	calr LABEL_F86C25
 	cpdi16_24 154500, 0
-	callcc_24 14, 0xF86E17
+	call_24 nz, 0xF86E17
 	ldda8 a, 3375
 	cps a, 0
 	ret z
@@ -268194,7 +268194,7 @@ LABEL_F86C30:
 	ret nz
 	setda 3, 10413
 	cpdi8 36152, 228
-	callcc_24 14, 0xF229BB
+	call_24 nz, 0xF229BB
 	pushw 0x1
 	ldw wa, 0xA8
 	lds bc, 1
@@ -268204,7 +268204,7 @@ LABEL_F86C30:
 
 LABEL_F86C5F:
 	cpdi8 36152, 228
-	callcc_24 14, 0xF22A4D
+	call_24 nz, 0xF22A4D
 	ldda8 a, 10404
 	extz wa
 	call LABEL_F846AD
@@ -271828,7 +271828,7 @@ LABEL_F89573:
 	lda xbc, (xwa + 4)
 	ld32_24 xde, 0xea0394
 	cp xde, (xbc)
-	callcc_24 6, 0xF52751
+	call_24 z, 0xF52751
 	ld32_24 xhl, 0x025d70
 	ret
 
@@ -273921,7 +273921,7 @@ LABEL_F8ABCE:
 	lda_24 xwa, 0x025ec0
 	add xwa, xhl
 	cp (xwa), 0x0
-	callcc_24 6, 0xF8AA03
+	call_24 z, 0xF8AA03
 	ld16_24 xwa, 0x0271ee
 	ld bc, iz
 	sub bc, wa
@@ -277191,7 +277191,7 @@ LABEL_F98302:
 LABEL_F98308:
 	call 0xFFFEE5
 	cp l, 0xFF
-	callcc_24 6, 0xFAF030
+	call_24 z, 0xFAF030
 
 LABEL_F98314:
 	cpdi8 49277, 32
@@ -277278,7 +277278,7 @@ LABEL_F983C1:
 	jrl nz, LABEL_F98695
 	call 0xFFFEE5
 	cp l, 0xFF
-	callcc_24 6, 0xFAF030
+	call_24 z, 0xFAF030
 
 LABEL_F98424:
 	lds32 xwa, 0
@@ -280601,7 +280601,7 @@ LABEL_F9A79E:
 LABEL_F9A7AB:
 	calr LABEL_F9ADF0
 	cps hl, 0
-	callcc_24 14, 0xF9883C
+	call_24 nz, 0xF9883C
 	ld xwa, (xsp + 12)
 	ld xbc, 0x1E000B1
 	lds32 xde, 0
@@ -280616,7 +280616,7 @@ LABEL_F9A7AB:
 	calr SetWallColor
 	calr LABEL_F9ADF0
 	cps hl, 0
-	callcc_24 14, 0xF9884B
+	call_24 nz, 0xF9884B
 	call 0xFA5867
 	ld xwa, xhl
 	ld xde, (xsp + 12)
@@ -281353,9 +281353,9 @@ LABEL_F9AF66:
 
 LABEL_F9AF76:
 	bitda 4, 58334
-	callcc_24 14, 0xF994EA
+	call_24 nz, 0xF994EA
 	bitda 4, 58336
-	callcc_24 14, 0xF994FA
+	call_24 nz, 0xF994FA
 	bitda 3, 58338
 	jr z, LABEL_F9AF94
 	lds wa, 1
@@ -293422,7 +293422,7 @@ LABEL_FA317D:
 
 CaptureLcdCheck:
 	cp xbc, 0x1C00007
-	callcc_24 6, 0xFAF030
+	call_24 z, 0xFAF030
 	lds32 xhl, 0
 	ret
 
@@ -309604,7 +309604,7 @@ LABEL_FACD22:
 LABEL_FACD33:
 	ld_sriw BC, (xsp + 0x0144)
 	cp bc, 0xF7
-	callcc_24 14, 0xFAB2CF
+	call_24 nz, 0xFAB2CF
 	lda xwa, (xsp + 40)
 	ld (xsp + 24), xwa
 	cp (xwa), 0x0
@@ -314814,7 +314814,7 @@ LABEL_FB1112:
 LABEL_FB1123:
 	ld_sriw BC, (xsp + 0x0142)
 	cp bc, 0xF7
-	callcc_24 14, 0xFAF938
+	call_24 nz, 0xFAF938
 	lda xwa, (xsp + 38)
 	ld (xsp + 30), xwa
 	cp (xwa), 0x0
@@ -317479,7 +317479,7 @@ LABEL_FB4016:
 
 LABEL_FB4277:
 	cpdi8 36152, 138
-	jpcc_24 6, 0xEFA31E
+	jp_24 z, 0xEFA31E
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C20000
 	lds32 xde, 0
@@ -317818,7 +317818,7 @@ LABEL_FB461C:
 	bitda 4, 64848
 	jr nz, LABEL_FB463A
 	bitda 1, 64812
-	callcc_24 14, 0xFB5791
+	call_24 nz, 0xFB5791
 
 LABEL_FB463A:
 	ld xwa, 0x302
@@ -317826,7 +317826,7 @@ LABEL_FB463A:
 	cps hl, 1
 	jr nz, LABEL_FB4650
 	bitda 6, 64926
-	callcc_24 6, 0xFD57F2
+	call_24 z, 0xFD57F2
 
 LABEL_FB4650:
 	ldda8 a, 36178
@@ -318076,7 +318076,7 @@ LABEL_FB4661:
 
 LABEL_FB48A8:
 	cp (xsp + 16), 0x50
-	callcc_24 14, 0xFB4D71
+	call_24 nz, 0xFB4D71
 	push xde
 	push xhl
 	push xix
@@ -319777,15 +319777,15 @@ LABEL_FB578C:
 
 LABEL_FB5791:
 	bitda 7, 63940
-	callcc_24 6, 0xFB57C8
+	call_24 z, 0xFB57C8
 	bitda 7, 63943
-	callcc_24 6, 0xFB58F7
+	call_24 z, 0xFB58F7
 	bitda 7, 63966
-	callcc_24 6, 0xFB582D
+	call_24 z, 0xFB582D
 	bitda 7, 63969
-	callcc_24 6, 0xFB592E
+	call_24 z, 0xFB592E
 	bitda 7, 63992
-	callcc_24 6, 0xFB5892
+	call_24 z, 0xFB5892
 	bitda 7, 63995
 	ret nz
 	calr LABEL_FB5965
@@ -323281,9 +323281,9 @@ LABEL_FB7904:
 
 LABEL_FB790F:
 	cpdi8 36150, 248
-	callcc_24 6, 0xFB79AA
+	call_24 z, 0xFB79AA
 	cpdi8 36150, 247
-	callcc_24 6, 0xFB7BFF
+	call_24 z, 0xFB7BFF
 	cpdi8 36150, 251
 	ret nz
 	calr LABEL_FB7A86
@@ -344455,7 +344455,7 @@ LABEL_FC9A95:
 
 LABEL_FC9AC9:
 	cp c, 0x48
-	callcc_24 6, 0xF53302
+	call_24 z, 0xF53302
 
 LABEL_FC9AD1:
 	inc 6, xsp
@@ -344495,7 +344495,7 @@ LABEL_FC9B16:
 
 LABEL_FC9B4A:
 	cp c, 0x48
-	callcc_24 6, 0xF53309
+	call_24 z, 0xF53309
 
 LABEL_FC9B52:
 	inc 6, xsp
@@ -344609,7 +344609,7 @@ LABEL_FC9CD2:
 	calr LABEL_FC9923
 	ldda8 a, 37162
 	and a, 0x48
-	callcc_24 14, 0xFC9663
+	call_24 nz, 0xFC9663
 
 LABEL_FC9CF3:
 	pop_werp 0xFA
@@ -349666,7 +349666,7 @@ LABEL_FCEC8F:
 	cps hl, 1
 	jr nz, LABEL_FCED30
 	cpdi16 37086, 508
-	callcc_24 15, 0xEF14D8
+	call_24 nc, 0xEF14D8
 	ldada xbc, 48444
 	ldda16 xde, 37086
 	extz xde
@@ -349683,7 +349683,7 @@ LABEL_FCEC8F:
 
 LABEL_FCECEC:
 	cpdi16 37086, 508
-	callcc_24 15, 0xEF14F3
+	call_24 nc, 0xEF14F3
 	ldada xbc, 48444
 	ldda16 xde, 37086
 	extz xde
@@ -349737,7 +349737,7 @@ LABEL_FCED32:
 	cps wa, 1
 	jrl nz, LABEL_FCEE47
 	cpdi16 37086, 504
-	callcc_24 15, 0xEF14D8
+	call_24 nc, 0xEF14D8
 	ldada xbc, 48444
 	ldda16 xde, 37086
 	extz xde
@@ -349762,7 +349762,7 @@ LABEL_FCED32:
 
 LABEL_FCEDAB:
 	cpdi16 37086, 504
-	callcc_24 15, 0xEF14F3
+	call_24 nc, 0xEF14F3
 	ldada xbc, 48444
 	ldda16 xde, 37086
 	extz xde
@@ -360595,7 +360595,7 @@ LABEL_FD9948:
 	cp (xiz + 9), l
 	jr ugt, LABEL_FD9959
 	cp l, (xiz + 10)
-	callcc_24 3, 0xFD5C80
+	call_24 ule, 0xFD5C80
 
 LABEL_FD9959:
 	pop xiz
@@ -362745,9 +362745,9 @@ PreLswLoad:
 
 PostLswLoad:
 	cps wa, 0
-	jpcc_24 1, 0xFC4D67
+	jp_24 lt, 0xFC4D67
 	cpi8_24 0x0340f6, 0x00
-	callcc_24 6, 0xFDB4F9
+	call_24 z, 0xFDB4F9
 	call LABEL_FCA390
 	call LABEL_FC99F2
 	call LABEL_FC4C4B
@@ -366866,7 +366866,7 @@ LABEL_FDDB7D:
 	or xwa, xwa
 	jr nz, LABEL_FDDB5A
 	cps iz, 0
-	callcc_24 6, 0xFDDB2E
+	call_24 z, 0xFDDB2E
 	pop xiz
 	ret
 
@@ -367108,7 +367108,7 @@ Audio_CheckSubsystemReady:
 	call 0xFDF08A
 	ldda16 xwa, 50584
 	and wa, 0x60
-	callcc_24 6, 0xFDF5F5
+	call_24 z, 0xFDF5F5
 	bitda 1, 64615
 	jr z, LABEL_FDDE9A
 	ldda16 xwa, 50580
@@ -367287,7 +367287,7 @@ LABEL_FDE055:
 	anddi16 50582, 65503
 	ldda16 xwa, 50582
 	and wa, 0x7
-	callcc_24 6, 0xFDF5F5
+	call_24 z, 0xFDF5F5
 
 LABEL_FDE068:
 	resda 2, 49662
@@ -367894,7 +367894,7 @@ LABEL_FDEB3F:
 	dec 2, xsp
 	ld (xsp), a
 	cp (xsp), 0x1
-	callcc_24 6, 0xFDF5F5
+	call_24 z, 0xFDF5F5
 	ordi16 50580, 2
 	ld a, (xsp)
 	extz wa
@@ -367906,7 +367906,7 @@ LABEL_FDEB5B:
 	dec 2, xsp
 	ld (xsp), a
 	cp (xsp), 0x1
-	callcc_24 6, 0xFDF5F5
+	call_24 z, 0xFDF5F5
 	ldda8 a, 36150
 	cp a, 0xC9
 	jr nz, LABEL_FDEB7D
@@ -368954,10 +368954,10 @@ LABEL_FDF5F5:
 	anddi16 50582, 65519
 	call LABEL_FE94D0
 	cp l, 0xFF
-	callcc_24 14, 0xFE12B8
+	call_24 nz, 0xFE12B8
 	call LABEL_FE8AFC
 	cp l, 0xFF
-	callcc_24 14, 0xFE12FC
+	call_24 nz, 0xFE12FC
 	stda16 50582, xiz
 	popw iz
 	ret
@@ -369303,10 +369303,10 @@ LABEL_FDFA0F:
 	stdi16 50378, 0
 	ldda16 xwa, 50588
 	and wa, 0x188
-	callcc_24 14, 0xFDFB71
+	call_24 nz, 0xFDFB71
 	ldda16 xwa, 50588
 	and wa, 0x1C0
-	callcc_24 14, 0xFDFE28
+	call_24 nz, 0xFDFE28
 	ldda16 xwa, 50588
 	and wa, 0x102
 	jr z, LABEL_FDFA3E
@@ -369338,16 +369338,16 @@ LABEL_FDFA66:
 LABEL_FDFA69:
 	ldda16 xwa, 50588
 	bit 2, wa
-	callcc_24 14, 0xFDFF5D
+	call_24 nz, 0xFDFF5D
 	ldda16 xwa, 50588
 	bit 3, wa
-	callcc_24 14, 0xFE0023
+	call_24 nz, 0xFE0023
 	ldda16 xwa, 50588
 	bit 6, wa
-	callcc_24 14, 0xFE013E
+	call_24 nz, 0xFE013E
 	ldda16 xwa, 50588
 	bit 4, wa
-	callcc_24 14, 0xFE019B
+	call_24 nz, 0xFE019B
 	ldda16 xwa, 50586
 	bit 13, wa
 	jr z, LABEL_FDFAAB
@@ -369363,7 +369363,7 @@ LABEL_FDFAAB:
 LABEL_FDFAB4:
 	call LABEL_FE94D0
 	cp l, 0xFF
-	callcc_24 14, 0xFE12B8
+	call_24 nz, 0xFE12B8
 
 LABEL_FDFAC0:
 	ldda16 xwa, 50586
@@ -369371,7 +369371,7 @@ LABEL_FDFAC0:
 	jr z, LABEL_FDFAD5
 	call LABEL_FE8AFC
 	cp l, 0xFF
-	callcc_24 14, 0xFE12FC
+	call_24 nz, 0xFE12FC
 
 LABEL_FDFAD5:
 	call LABEL_FE1311
@@ -372039,7 +372039,7 @@ LABEL_FE141A:
 LABEL_FE1428:
 	call LABEL_FE8AFC
 	cp l, 0xFF
-	callcc_24 14, 0xFE12FC
+	call_24 nz, 0xFE12FC
 
 LABEL_FE1434:
 	inc 1, iz
@@ -378126,7 +378126,7 @@ LABEL_FE50B6:
 	cp iz, wa
 	jrl lt, LABEL_FE5002
 	cps iz, 0
-	callcc_24 10, 0xFEBF79
+	call_24 gt, 0xFEBF79
 
 LABEL_FE50CA:
 	popw iz
@@ -389637,7 +389637,7 @@ LABEL_FECC35:
 LABEL_FECC40:
 	calr LABEL_FEE246
 	cps hl, 0
-	callcc_24 10, 0xF2AA02
+	call_24 gt, 0xF2AA02
 	ld wa, iz
 	cp wa, 0xFFFD
 	jr z, LABEL_FECC67
@@ -392071,7 +392071,7 @@ LABEL_FEE285:
 
 LABEL_FEE295:
 	cpda16 xiz, 55474
-	callcc_24 11, 0xFEE1A9
+	call_24 ugt, 0xFEE1A9
 	ldw (xsp + 2), 0x0
 	lds wa, 0
 	cp wa, iz
@@ -392215,7 +392215,7 @@ LABEL_FEE39D:
 
 LABEL_FEE3AD:
 	cpda16 xiz, 57528
-	callcc_24 11, 0xFEE2C9
+	call_24 ugt, 0xFEE2C9
 	ldw (xsp + 2), 0x0
 	lds wa, 0
 	cp wa, iz

@@ -46,7 +46,7 @@ LABEL_F8B82A:
 
 DirectPlayTtlJgFunc:
 	cp xbc, 0x1C00007
-	callcc_24 6, 0xF8B3D8
+	call_24 z, 0xF8B3D8
 	lds32 xhl, 0
 	ret
 

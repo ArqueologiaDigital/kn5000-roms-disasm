@@ -53517,7 +53517,7 @@ LABEL_03DEE7:
 LABEL_03DEEA:
 	ld e, (xwa + 2)
 	or e, (xbc + 2)
-	jpcc_24 14, 0x3EA06
+	jp_24 nz, 0x3EA06
 	ld xhl, (xwa + 8)
 	ld xde, (xwa + 4)
 	add xde, (xbc + 4)
@@ -53545,7 +53545,7 @@ LABEL_03DF31:
 LABEL_03DF38:
 	ld e, (xwa + 2)
 	or e, (xbc + 2)
-	jpcc_24 14, 0x3EA02
+	jp_24 nz, 0x3EA02
 	ld xix, (xwa + 4)
 	add xix, (xbc + 4)
 	bit_erpw 0xF2, 0x08
@@ -54150,7 +54150,7 @@ LABEL_03E3EB:
 LABEL_03E3F6:
 	ld e, (xwa + 2)
 	or e, (xbc + 2)
-	jpcc_24 14, 0x3E884
+	jp_24 nz, 0x3E884
 	ld l, (xbc + 3)
 	xor (xwa + 3), l
 	ld hl, (xbc + 256)
@@ -54225,7 +54225,7 @@ LABEL_03E4B3:
 LABEL_03E4B4:
 	ld e, (xwa + 2)
 	or e, (xwa + 2)
-	jpcc_24 14, 0x3E884
+	jp_24 nz, 0x3E884
 	push xiz
 	push xwa
 	ld hl, (xbc + 256)
@@ -54308,7 +54308,7 @@ LABEL_03E547:
 LABEL_03E54C:
 	ld e, (xwa + 2)
 	or e, (xbc + 2)
-	jpcc_24 14, 0x3EE3A
+	jp_24 nz, 0x3EE3A
 	ld xhl, (xwa + 8)
 	ld xde, (xwa + 4)
 	sub xde, (xbc + 4)
@@ -54391,7 +54391,7 @@ LABEL_03E5F1:
 LABEL_03E5F6:
 	ld e, (xwa + 2)
 	or e, (xbc + 2)
-	jpcc_24 14, 0x3EE36
+	jp_24 nz, 0x3EE36
 	ld xiy, xwa
 	ld de, (xwa + 256)
 	ld xix, (xwa + 4)
@@ -55055,7 +55055,7 @@ LABEL_03EBCD:
 LABEL_03EBCE:
 	ld e, (xwa + 2)
 	or e, (xbc + 2)
-	jpcc_24 14, 0x3EE70
+	jp_24 nz, 0x3EE70
 	push xiz
 	lda xsp, (xsp - 16)
 	ld xhl, (xbc)
@@ -55135,7 +55135,7 @@ LABEL_03EC93:
 LABEL_03EC9E:
 	ld e, (xwa + 2)
 	or e, (xbc + 2)
-	jpcc_24 14, 0x3EE70
+	jp_24 nz, 0x3EE70
 	push xiz
 	ld xiz, xwa
 	ld xhl, (xbc)

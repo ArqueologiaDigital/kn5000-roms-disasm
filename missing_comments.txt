@@ -1,0 +1,133 @@
+-	.ascii "XAPR4"	; Magic identifier ("XAPR" checked by main CPU)
+-	.ascii "     PIANO      "	; Category 0
+-	.ascii "     GUITAR     "	; Category 1
+-	.ascii "STRINGS & VOCAL      "	; Category 2
+-	.ascii "BRASS           "	; Category 3
+-	.ascii "FLUTE         "	; Category 4
+-	.ascii "SAX & REED   "	; Category 5
+-	.ascii "MALLET&ORCH PERC   "	; Category 6
+-	.ascii "WORLD PERC   "	; Category 7
+-	.ascii "ORGAN&ACCORDION  "	; Category 8
+-	.ascii "ORCHESTRAL PAD      "	; Category 9
+-	.ascii "SYNTH            "	; Category 10
+-	.ascii "BASS      "	; Category 11
+-	.ascii "DIGITAL DRAWBAR  "	; Category 12
+-	.ascii "ACCORDION REG.    "	; Category 13
+-	.ascii "GM SPECIAL      "	; Category 14
+-	.ascii "DRUM KITS        "	; Category 15
+-	.ascii "MEMORY A        "	; Category 16
+-	.ascii "MEMORY B    "	; Category 17
+-	.asciz "FTBMP01"	; Technics logo + World Globe
+-	.byte 0x7e, 0x37, 0x66, 0x00	; DB "~7f", 000h
+-	.asciz "FTBMP02"	; Upside-down showcasing subwoofers
+-	.asciz "FTBMP03"	; Some floppy disks
+-	.asciz "FTBMP04"	; Inserting disks into the floppy drive
+-	.asciz "FTBMP05"	; Arrows representing 360 surround sound
+-	.byte 0x00, 0x00, 0xff, 0x00, 0x4d, 0x49, 0x43, 0x00	; DB 000h, 000h, 0FFh, 000h, "MIC", 000h
+-	.asciz "FTBMP06"	; KN5000 name + rainbow comet
+-	.asciz "Italian"	; NOTE: Appears to be mislabeled in ROM
+-	.byte 0x4e, 0x47, 0x00, 0xff	; DB "NG", 000h, 0FFh
+-	.byte 0x44, 0x52, 0x4d, 0x00	; DB "DRM", 000h
+-	.byte 0x4e, 0x47, 0x00, 0xff	; DB "NG", 000h, 0FFh
+-	.byte 0xe1, 0x00, 0x44, 0x52, 0x4d, 0x00	; DB 0E1h, 000h, "DRM", 000h
+-	.byte 0x42, 0x41, 0x4c, 0x00	; DB "BAL", 000h
+-	.byte 0xff, 0x00, 0x4d, 0x45, 0x4d, 0x00	; DB 0FFh, 000h, "MEM", 000h
+-	.byte 0x53, 0x45, 0x54, 0x00	; DB "SET", 000h
+-	.byte 0x4e, 0x47, 0x00, 0xff	; DB "NG", 000h, 0FFh
+-	.byte 0x49, 0x4e, 0x47, 0x00	; DB "ING", 000h
+-	.byte 0xff	; English (12 bytes)
+-	.asciz "ACHTUNG !"	; German (10 bytes)
+-	.byte 0xff	; French (12 bytes)
+-	.byte 0xff	; Duplicate (12 bytes)
+-	.asciz "Perhatian !"	; Indonesian (12 bytes)
+-	.asciz "Are You Sure?"	; English (14 bytes)
+-	.asciz "Sind Sie sicher ?"	; German (18 bytes)
+-	.asciz " seguro?"	; Spanish (14 bytes)
+-	.asciz "Are You Sure?"	; Duplicate (14 bytes)
+-	.asciz "Apakah yakin akan dihapus ?"	; Indonesian (28 bytes)
+-	.asciz "The Custom sound memories included with this pattern will be copied into the Sound Group memories. Some of the Sound Group memories will be replaced by them. OK?"	; English (162 bytes)
+-	.byte 0xff	; German (152 bytes)
+-	.asciz "es. OK?"	; French (186 bytes)
+-	.asciz " de acuerdo?"	; Spanish (194 bytes)
+-	.asciz "The Custom sound memories included with this pattern will be copied into the Sound Group memories. Some of the Sound Group memories will be replaced by them. OK?"	; Duplicate (162 bytes)
+-	.asciz "Custom Sound Memory termasuk dengan Pattern yang akan digandakan kedalam SOUND GROUP MEMORIES. Beberapa Sound Group Memory dikembalikan. OK ?"	; Indonesian (142 bytes)
+-	.byte 0xff	; English (32 bytes)
+-	.byte 0xff	; German (20 bytes)
+-	.byte 0xff	; French (48 bytes)
+-	.asciz "Las memorias de los grupos de sonido afectadas son:"	; Spanish (52 bytes)
+-	.byte 0xff	; Duplicate (32 bytes)
+-	.byte 0xff	; Indonesian (36 bytes)
+-	.asciz "The Custom sound memory is full.Some sounds which are used by current Custom Rhythms will be deleted. OK?"	; English (106 bytes)
+-	.asciz "scht. OK ?"	; German (112 bytes)
+-	.asciz "es. OK?"	; French (114 bytes)
+-	.asciz " de acuerdo?"	; Spanish (146 bytes)
+-	.asciz "The Custom sound memory is full.Some sounds which are used by current Custom Rhythms will be deleted. OK?"	; Duplicate (106 bytes)
+-	.asciz "Custom Sound memory sudah penuh.Beberapa suara (Sounds) yang digunakan dengan Custom Rhythms sekarang akan dihapus. Benar ?"	; Indonesian (124 bytes)
+-	.byte 0xff	; English (26 bytes)
+-	.asciz "Betroffene Custom Rhythmen:"	; German (28 bytes)
+-	.byte 0xff	; Spanish (42 bytes)
+-	.byte 0xff	; Duplicate (26 bytes)
+-	.asciz "Custom Rhythm sudah bekerja :"	; Indonesian (30 bytes)
+-	.asciz "Please Insert the Style Convert Disk!"	; English (38 bytes)
+-	.asciz "Bitte legen Sie die Style Convert Diskette in das Laufwerk ein."	; German (64 bytes)
+-	.asciz "Please Insert the Style Convert Disk!"	; French (38 bytes)
+-	.asciz "Please Insert the Style Convert Disk!"	; Spanish (38 bytes)
+-	.asciz "Please Insert the Style Convert Disk!"	; Duplicate (38 bytes)
+-	.asciz "Please Insert the Style Convert Disk!"	; Indonesian (38 bytes)
+-	.byte 0x00, 0xff, 0x4e, 0x47, 0x00, 0xff, 0x41, 0x3a	; DB 000h, 0FFh, "NG", 000h, 0FFh, 041h, 03Ah
+-	.byte 0x4d, 0x49, 0x43, 0x00	; DB "MIC", 000h
+-	.byte 0x00, 0x00, 0x4d, 0x49, 0x43, 0x00	; DB 000h, 000h, "MIC", 000h
+-	.byte 0x00, 0x00, 0x00, 0x00, 0x4d, 0x49, 0x43, 0x00	; DB 000h, 000h, 000h, 000h, "MIC", 000h
+-	.byte 0x4d, 0x49, 0x43, 0x00	; DB "MIC", 000h
+-	.byte 0x00, 0x00, 0x00, 0x00, 0x4d, 0x49, 0x43, 0x00	; DB 000h, 000h, 000h, 000h, "MIC", 000h
+-	.byte 0x4e, 0x47, 0x00, 0xff	; DB "NG", 000h, 0FFh
+-	.byte 0x4e, 0x47, 0x00, 0xff, 0x02, 0x00, 0x67, 0x01	; DB "NG", 000h, 0FFh, 002h, 000h, 067h, 001h
+-	.byte 0x4e, 0x47, 0x00, 0xff	; DB "NG", 000h, 0FFh
+-	.byte 0x53, 0x45, 0x54, 0x00	; DB "SET", 000h
+-	.byte 0x4f, 0x4e, 0x20, 0x00, 0x4f, 0x46, 0x46, 0x00	; DB "ON ", 000h, "OFF", 000h
+-	.byte 0x2d, 0x2d, 0x20, 0x00, 0x2d, 0x2d, 0x20, 0x00	; DB "-- ", 000h, "-- ", 000h
+-	.byte 0x4f, 0x4e, 0x20, 0x00, 0x4f, 0x46, 0x46, 0x00	; DB "ON ", 000h, "OFF", 000h
+-	.byte 0x2d, 0x2d, 0x20, 0x00, 0x2d, 0x2d, 0x20, 0x00	; DB "-- ", 000h, "-- ", 000h
+-	.byte 0x4f, 0x4e, 0x20, 0x00, 0x4f, 0x46, 0x46, 0x00	; DB "ON ", 000h, "OFF", 000h
+-	.byte 0x2d, 0x2d, 0x20, 0x00, 0x2d, 0x2d, 0x20, 0x00	; DB "-- ", 000h, "-- ", 000h
+-	.byte 0x4f, 0x4e, 0x20, 0x00, 0x4f, 0x46, 0x46, 0x00	; DB "ON ", 000h, "OFF", 000h
+-	.byte 0x2d, 0x2d, 0x20, 0x00, 0x2d, 0x2d, 0x20, 0x00	; DB "-- ", 000h, "-- ", 000h
+-	.byte 0x4c, 0x4f, 0x57, 0x00	; DB "LOW", 000h
+-	.byte 0x49, 0x4e, 0x43, 0x00	; DB "INC", 000h
+-	.byte 0x52, 0x59, 0x00, 0xff, 0x53, 0x45, 0x54, 0x00	; DB 052h, 059h, 000h, 0FFh, "SET", 000h
+-	.byte 0x4e, 0x47, 0x00, 0xff	; DB "NG", 000h, 0FFh
+-	.byte 0x4e, 0x47, 0x00, 0xff, 0x0f, 0x00, 0x63, 0x01	; DB "NG", 000h, 0FFh, 00Fh, 000h, 063h, 001h
+-	.byte 0x49, 0x4e, 0x47, 0x00	; DB "ING", 000h
+-	.byte 0x4d, 0x45, 0x4d, 0x00	; DB "MEM", 000h
+-	.byte 0x50, 0x41, 0x4e, 0x00	; DB "PAN", 000h
+-	.byte 0x4f, 0x4e, 0x20, 0x00, 0x4f, 0x46, 0x46, 0x00	; DB "ON ", 000h, "OFF", 000h
+-	.byte 0x4f, 0x4e, 0x20, 0x00, 0x4f, 0x46, 0x46, 0x00	; DB "ON ", 000h, "OFF", 000h
+-	.byte 0x4f, 0x4e, 0x20, 0x00, 0x4f, 0x46, 0x46, 0x00	; DB "ON ", 000h, "OFF", 000h
+-	.byte 0x4f, 0x4e, 0x20, 0x00, 0x4f, 0x46, 0x46, 0x00	; DB "ON ", 000h, "OFF", 000h
+-	.byte 0x21, 0x00	; DB "!", 000h
+-	.byte 0x21, 0x00	; DB "!", 000h
+-	.byte 0x4d, 0x45, 0x00, 0xff, 0x50, 0x41, 0x4e, 0x00	; DB 04Dh, 045h, 000h, 0FFh, "PAN", 000h
+-	.byte 0x4d, 0x45, 0x00, 0xff, 0x53, 0x52, 0x43, 0x00	; DB 04Dh, 045h, 000h, 0FFh, "SRC", 000h
+-	.byte 0x50, 0x41, 0x4e, 0x00, 0x4e, 0x4f, 0x00, 0xff	; DB "PAN", 000h, "NO", 000h, 0FFh
+-	.byte 0x41, 0x4c, 0x54, 0x00, 0x53, 0x52, 0x43, 0x00	; DB "ALT", 000h, "SRC", 000h
+-	.byte 0x4d, 0x44, 0x20, 0x00, 0x52, 0x43, 0x4d, 0x00	; DB 04Dh, 044h, 020h, 000h, "RCM", 000h
+-	.byte 0x4d, 0x49, 0x44, 0x00, 0x00, 0x00, 0x00, 0x00	; DB "MID", 000h, 000h, 000h, 000h, 000h
+-	.byte 0x4e, 0x47, 0x00, 0xff	; DB "NG", 000h, 0FFh
+-	.byte 0x4e, 0x47, 0x00, 0xff	; DB "NG", 000h, 0FFh
+-	.byte 0x49, 0x4e, 0x47, 0x00	; DB "ING", 000h
+-	.byte 0x46, 0x00, 0x4f, 0x4b, 0x00, 0xff, 0x3c, 0x00	; DB 046h, 000h, "OK", 000h, 0FFh, 03Ch, 000h
+-	.byte 0x30, 0x00, 0x59, 0x45, 0x53, 0x00, 0x4e, 0x4f	; DB 030h, 000h, "YES", 000h, 04Eh, 04Fh
+-	.byte 0xea, 0x00, 0x4d, 0x49, 0x43, 0x00, 0x4d, 0x45	; DB 0EAh, 000h, "MIC", 000h, 04Dh, 045h
+-	.byte 0x43, 0x48, 0x44, 0x00, 0x44, 0x52, 0x4d, 0x00	; DB 043h, 048h, 044h, 000h, "DRM", 000h
+-	.byte 0x4e, 0x47, 0x00, 0xff	; DB "NG", 000h, 0FFh
+-	.byte 0x4e, 0x47, 0x00, 0xff	; DB "NG", 000h, 0FFh
+-	.asciz "CAUTION!!"	; English text
+-	.byte 0x4e, 0x4f, 0x00, 0xff	; DB "NO", 000h, 0FFh
+-	.ascii "h\":;"
+-	.asciz "hkst_55.ssf"	; Filename for the feature demo SSF file
+-	.byte 0xff	; 9FA000
+-	.byte 0xff	; 9FA028
+-	.byte 0xff	; 9FA050
+-	.byte 0xff	; 9FA078
+-	.byte 0xff	; 9FA0A0
+-	.byte 0xff	; 9FA0C8

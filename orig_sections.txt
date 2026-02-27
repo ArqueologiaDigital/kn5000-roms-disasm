@@ -1,0 +1,10 @@
+
+rebuilt_ROMs/kn5000_v10_program.llvm.o:	file format elf32-tlcs900
+
+Sections:
+Idx Name          Size     VMA      Type
+  0               00000000 00000000 
+  1 .strtab       00081104 00000000 
+  2 .text         00200000 00000000 TEXT
+  3 .rela.text    0002f52c 00000000 
+  4 .symtab       0009ada0 00000000 

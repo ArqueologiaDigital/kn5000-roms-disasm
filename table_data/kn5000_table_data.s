@@ -387,7 +387,7 @@ __jrt_nop_9FB652:
 	; === Get Boot Mode and Check FDC ===
 	calr Get_Region_Code
 	cps l, 4
-	callcc_24 14, 0xFFC6B2	; CALL NZ, 0xFFC6B2 (Boot_FDCRoutine)
+	call_24 nz, 0xFFC6B2	; CALL NZ, 0xFFC6B2 (Boot_FDCRoutine)
 
 Boot_SkipFDCCheck:
 	call 0xFFEC63	; Boot_CheckFlash
@@ -1105,7 +1105,7 @@ Flash_Init_Custom_And_Table:
 	; Check region and reset Table Data ROM if not region 4
 	call 0xFFB700	; CALL Boot_Get_Region_Code (0xFFB700)
 	cps l, 4	; cf dc
-	callcc_24 14, 0xFFBC2D	; CALL NZ, Flash_Reset_32bit (0xFFBC2D)
+	call_24 nz, 0xFFBC2D	; CALL NZ, Flash_Reset_32bit (0xFFBC2D)
 
 	; Read Custom Data device ID
 	lds wa, 1	; d8 a9

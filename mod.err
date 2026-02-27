@@ -1,0 +1,2 @@
+<unknown>:0: error: fixup value out of range for 8-bit relative branch (displacement 172 requires JRL instead of JR)
+<unknown>:0: error: fixup value out of range for 8-bit relative branch (displacement 156 requires JRL instead of JR)

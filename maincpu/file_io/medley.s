@@ -1842,7 +1842,7 @@ NavDoc_WrapToEnd:
 
 NavDoc_CheckEnd:
 	cp hl, wa
-	callcc_24 14, 0xF8A956
+	call_24 nz, 0xF8A956
 
 NavDoc_Exit:
 	popw iz
@@ -1877,7 +1877,7 @@ NavPd_WrapToEnd:
 
 NavPd_CheckEnd:
 	cp hl, wa
-	callcc_24 14, 0xF8A5A5
+	call_24 nz, 0xF8A5A5
 
 NavPd_Exit:
 	popw iz
