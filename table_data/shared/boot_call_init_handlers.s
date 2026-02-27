@@ -56,11 +56,11 @@ Boot_CallInitHandlers__handler_loop:
 	; LD A, QIZH
 	.byte 0xc7, 0xfb, 0x89
 	; EXTZ WA
-	.byte 0xd8, 0x12
+	extz	wa
 	; LD C, QIZH
 	.byte 0xc7, 0xfb, 0x8b
 	; EXTZ BC
-	.byte 0xd9, 0x12
+	extz	bc
 	; SLA 2, BC (multiply by 4 for 32-bit table entries)
 	.byte 0xd9, 0xec, 0x02
 	; LDA XDE, 0xFFFEF0 (init handler table)
