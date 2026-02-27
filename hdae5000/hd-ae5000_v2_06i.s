@@ -23891,10 +23891,10 @@ HDAE5000_Table_Lookup:	; 0x2903B3 (928 bytes)
 	ld wa, iz
 	ld bc, (xsp + 6)
 	calr HDAE5000_Table_Sub_290753
-	.byte 0xD7, 0xFA, 0x9B		; ld QIZ, HL (previous-bank store)
+	ld qiz, hl		; ld QIZ, HL (previous-bank store)
 	; --- Bit 1 ---
 .Ltl2_bit1:
-	.byte 0xD7, 0xFA, 0xCF, 0xFF, 0xFF	; cp QIZ, 0xFFFF
+	cpw qiz, 0xffff		; cp QIZ, 0xFFFF
 	jr z, .Ltl2_bit2
 	ld wa, (xsp + 4)
 	bit 1, wa
@@ -23902,10 +23902,10 @@ HDAE5000_Table_Lookup:	; 0x2903B3 (928 bytes)
 	ld wa, iz
 	ld bc, (xsp + 6)
 	calr HDAE5000_Table_Sub_2908B1
-	.byte 0xD7, 0xFA, 0x9B		; ld QIZ, HL
+	ld qiz, hl		; ld QIZ, HL
 	; --- Bit 2 ---
 .Ltl2_bit2:
-	.byte 0xD7, 0xFA, 0xCF, 0xFF, 0xFF	; cp QIZ, 0xFFFF
+	cpw qiz, 0xffff		; cp QIZ, 0xFFFF
 	jr z, .Ltl2_bit3
 	ld wa, (xsp + 4)
 	bit 2, wa
@@ -23913,10 +23913,10 @@ HDAE5000_Table_Lookup:	; 0x2903B3 (928 bytes)
 	ld wa, iz
 	ld bc, (xsp + 6)
 	calr HDAE5000_Table_Sub_290A00
-	.byte 0xD7, 0xFA, 0x9B		; ld QIZ, HL
+	ld qiz, hl		; ld QIZ, HL
 	; --- Bit 3 ---
 .Ltl2_bit3:
-	.byte 0xD7, 0xFA, 0xCF, 0xFF, 0xFF	; cp QIZ, 0xFFFF
+	cpw qiz, 0xffff		; cp QIZ, 0xFFFF
 	jr z, .Ltl2_bit4
 	ld wa, (xsp + 4)
 	bit 3, wa
@@ -23924,10 +23924,10 @@ HDAE5000_Table_Lookup:	; 0x2903B3 (928 bytes)
 	ld wa, iz
 	ld bc, (xsp + 6)
 	calr HDAE5000_Table_Sub_290B86
-	.byte 0xD7, 0xFA, 0x9B		; ld QIZ, HL
+	ld qiz, hl		; ld QIZ, HL
 	; --- Bit 4 ---
 .Ltl2_bit4:
-	.byte 0xD7, 0xFA, 0xCF, 0xFF, 0xFF	; cp QIZ, 0xFFFF
+	cpw qiz, 0xffff		; cp QIZ, 0xFFFF
 	jr z, .Ltl2_bit5
 	ld wa, (xsp + 4)
 	bit 4, wa
@@ -23935,10 +23935,10 @@ HDAE5000_Table_Lookup:	; 0x2903B3 (928 bytes)
 	ld wa, iz
 	ld bc, (xsp + 6)
 	calr HDAE5000_Table_Sub_290CB5
-	.byte 0xD7, 0xFA, 0x9B		; ld QIZ, HL
+	ld qiz, hl		; ld QIZ, HL
 	; --- Bit 5 ---
 .Ltl2_bit5:
-	.byte 0xD7, 0xFA, 0xCF, 0xFF, 0xFF	; cp QIZ, 0xFFFF
+	cpw qiz, 0xffff		; cp QIZ, 0xFFFF
 	jr z, .Ltl2_bit6
 	ld wa, (xsp + 4)
 	bit 5, wa
@@ -23946,10 +23946,10 @@ HDAE5000_Table_Lookup:	; 0x2903B3 (928 bytes)
 	ld wa, iz
 	ld bc, (xsp + 6)
 	calr HDAE5000_Table_Sub_290D91
-	.byte 0xD7, 0xFA, 0x9B		; ld QIZ, HL
+	ld qiz, hl		; ld QIZ, HL
 	; --- Bit 6 ---
 .Ltl2_bit6:
-	.byte 0xD7, 0xFA, 0xCF, 0xFF, 0xFF	; cp QIZ, 0xFFFF
+	cpw qiz, 0xffff		; cp QIZ, 0xFFFF
 	jr z, .Ltl2_bit7
 	ld wa, (xsp + 4)
 	bit 6, wa
@@ -23957,10 +23957,10 @@ HDAE5000_Table_Lookup:	; 0x2903B3 (928 bytes)
 	ld wa, iz
 	ld bc, (xsp + 6)
 	calr HDAE5000_Table_Sub_290EC0
-	.byte 0xD7, 0xFA, 0x9B		; ld QIZ, HL
+	ld qiz, hl		; ld QIZ, HL
 	; --- Bit 7 ---
 .Ltl2_bit7:
-	.byte 0xD7, 0xFA, 0xCF, 0xFF, 0xFF	; cp QIZ, 0xFFFF
+	cpw qiz, 0xffff		; cp QIZ, 0xFFFF
 	jr z, .Ltl2_bit8
 	ld wa, (xsp + 4)
 	bit 7, wa
@@ -23968,10 +23968,10 @@ HDAE5000_Table_Lookup:	; 0x2903B3 (928 bytes)
 	ld wa, iz
 	ld bc, (xsp + 6)
 	calr HDAE5000_Table_Sub_290F45
-	.byte 0xD7, 0xFA, 0x9B		; ld QIZ, HL
+	ld qiz, hl		; ld QIZ, HL
 	; --- Bit 8 ---
 .Ltl2_bit8:
-	.byte 0xD7, 0xFA, 0xCF, 0xFF, 0xFF	; cp QIZ, 0xFFFF
+	cpw qiz, 0xffff		; cp QIZ, 0xFFFF
 	jr z, .Ltl2_final
 	ld wa, (xsp + 4)
 	bit 8, wa
@@ -23979,7 +23979,7 @@ HDAE5000_Table_Lookup:	; 0x2903B3 (928 bytes)
 	ld wa, iz
 	ld bc, (xsp + 6)
 	calr HDAE5000_Table_Sub_29103D
-	.byte 0xD7, 0xFA, 0x9B		; ld QIZ, HL
+	ld qiz, hl		; ld QIZ, HL
 	; --- Final workspace cleanup ---
 .Ltl2_final:
 	cpw (xsp + 12), 0x0001	; check param
@@ -23999,7 +23999,7 @@ HDAE5000_Table_Lookup:	; 0x2903B3 (928 bytes)
 	ld_sril xwa, (xwa + 0x0e88)
 	ld_sril xhl, (xwa + 0x00f0)
 	call (xhl)
-	.byte 0xD7, 0xFA, 0x8B		; ld HL, QIZ (load from previous-bank)
+	ld hl, qiz		; ld HL, QIZ (load from previous-bank)
 	pop xiz
 	inc 4, xsp
 	retd 4
@@ -39100,36 +39100,36 @@ HDAE5000_PPI_Block_Copy:	; 0x29ABD8 (237 bytes)
 	jr t, .Lppi_done		; → exit
 .Lppi_convert:
 	ld wa, (xsp + 0x1A)		; WA = value to convert
-	.byte 0xD7, 0xE6, 0x98		; ld QBC, WA (save value in prev bank)
+	ld qbc, wa		; ld QBC, WA (save value in prev bank)
 	lda xiz, (xsp + 4)		; XIZ = &local scratch buffer
 	ld (xiz + 0x11), 0x00	; null-terminate scratch[17]
 	lda xiy, (xiz + 0x10)		; XIY = scratch end pointer
 	cp bc, 0x000A			; radix == 10? (decimal)
 	jr nz, .Lppi_div_loop		; → unsigned for other radixes
-	.byte 0xD7, 0xE6, 0x88		; ld WA, QBC (reload value)
+	ld wa, qbc		; ld WA, QBC (reload value)
 	cps wa, 0			; value < 0? (signed check)
 	jr ge, .Lppi_div_loop		; → non-negative
 	lds ix, 1			; IX = 1 (negative flag)
-	.byte 0xD7, 0xE6, 0x88		; ld WA, QBC (reload value)
+	ld wa, qbc		; ld WA, QBC (reload value)
 	neg wa				; negate (make positive)
-	.byte 0xD7, 0xE6, 0x98		; ld QBC, WA (save positive value)
+	ld qbc, wa		; ld QBC, WA (save positive value)
 .Lppi_div_loop:
 	ld de, bc			; DE = radix (divisor)
-	.byte 0xD7, 0xE6, 0x88		; ld WA, QBC (current value)
+	ld wa, qbc		; ld WA, QBC (current value)
 	extz xwa			; zero-extend WA to XWA
 	div xwa, xde			; XWA = WA / DE (quot in WA, rem in high)
-	.byte 0xD7, 0xE2, 0x88		; ld WA, QWA (get remainder)
+	ld wa, qwa		; ld WA, QWA (get remainder)
 	add a, 0x30			; convert to ASCII '0'-'9'
 	ld (xiy), a			; store digit
 	cp (xiy), 0x39		; digit > '9'?
 	jr le, .Lppi_digit_ok		; → it's 0-9
 	addmi8 (xiy), 0x27		; adjust for 'a'-'z' (0x30+0x27=0x57→'W'+n)
 .Lppi_digit_ok:
-	.byte 0xD7, 0xE6, 0x88		; ld WA, QBC (reload quotient)
+	ld wa, qbc		; ld WA, QBC (reload quotient)
 	extz xwa			; zero-extend
 	div xwa, xde			; divide again to get next quotient
-	.byte 0xD7, 0xE6, 0x98		; ld QBC, WA (save new quotient)
-	.byte 0xD7, 0xE6, 0xD8		; cp QBC, 0 (quotient == 0?)
+	ld qbc, wa		; ld QBC, WA (save new quotient)
+	cp qbc, 0		; cp QBC, 0 (quotient == 0?)
 	jr z, .Lppi_digits_done		; → all digits extracted
 	dec 1, xiy			; move digit pointer back
 	jr t, .Lppi_div_loop		; → next digit
@@ -39199,7 +39199,7 @@ HDAE5000_Cell_Copy_Buffer:	; 0x29ACC5 (263 bytes)
 	lda xwa, (xbc + 1)		; XWA = buffer+1 (past '-')
 	push xwa			; push output ptr
 	cpl de				; complement DE (bitwise NOT)
-	.byte 0xD7, 0xEA, 0x06		; cpl QDE (complement high word)
+	cpl qde		; cpl QDE (complement high word)
 	inc 1, xde			; +1 → two's complement negate
 	push xde			; push negated value
 	call .Lccb_converter		; call base-N converter
@@ -39368,8 +39368,8 @@ HDAE5000_File_Read:	; 0x29AE24 (123 bytes)
 	; Words differ — find which byte differs
 	cp hl, wa			; compare low 16 bits
 	jr nz, .Lfr_check_byte		; if low halves differ
-	.byte 0xD7, 0xEE, 0x8B		; ld hl, qhl (high word from prev bank)
-	.byte 0xD7, 0xE2, 0x88		; ld wa, qwa (high word from prev bank)
+	ld hl, qhl		; ld hl, qhl (high word from prev bank)
+	ld wa, qwa		; ld wa, qwa (high word from prev bank)
 .Lfr_check_byte:
 	cp l, a				; compare low bytes
 	jr nz, .Lfr_found_diff		; if different
