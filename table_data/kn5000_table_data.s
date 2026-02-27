@@ -1081,9 +1081,10 @@ Flash_ChipErase_16bit_Wait__wait_loop:
 	calr Flash_WaitComplete	; CALR Flash_WaitComplete (0x9FBBCF)
 	cp hl, 0xFFFF	; db cf ff ff
 	ret nz	; b0 fe
-	calr Flash_WaitComplete	; CALR Flash_WaitComplete (0x9FBBCF)
+Flash_ChipErase_16bit_Wait__recheck:
+	calr Flash_WaitComplete	; CALR Flash_WaitComplete
 	cp hl, 0xFFFF	; db cf ff ff
-	.byte 0x66, 0xf7	; JR Z, .wait_loop (offset -9)
+	jr z, Flash_ChipErase_16bit_Wait__recheck	; JR Z, recheck
 	ret	; 0e
 
 ; -----------------------------------------------------------------------------
@@ -1537,9 +1538,10 @@ Flash_ChipErase_32bit_Wait__wait_loop:
 	calr Flash_WaitComplete_32bit	; CALR Flash_WaitComplete_32bit (0x9FBE85)
 	cp hl, 0xFFFF	; db cf ff ff
 	ret nz	; b0 fe
-	calr Flash_WaitComplete_32bit	; CALR Flash_WaitComplete_32bit (0x9FBE85)
+Flash_ChipErase_32bit_Wait__recheck:
+	calr Flash_WaitComplete_32bit	; CALR Flash_WaitComplete_32bit
 	cp hl, 0xFFFF	; db cf ff ff
-	.byte 0x66, 0xf7	; JR Z, .wait_loop (offset -9)
+	jr z, Flash_ChipErase_32bit_Wait__recheck	; JR Z, recheck
 	ret	; 0e
 
 ; -----------------------------------------------------------------------------
@@ -1718,6 +1720,7 @@ FDC_ReadSectorWrapper:
 	ld (xsp + 4), xde	; LD (XSP+04h), XDE
 	ld (xsp + 8), bc	; LD (XSP+08h), BC
 	ld xiz, xwa	; e8 8e - save sector info
+FDC_ReadSectorWrapper__retry:
 	ld xwa, xiz	; ee 88
 	ld bc, (xsp + 8)	; LD BC, (XSP+08h)
 	ld xde, (xsp + 4)	; LD XDE, (XSP+04h)
@@ -1732,7 +1735,7 @@ FDC_ReadSectorWrapper:
 
 	; Read failed, try FDC reset and retry
 	calr FDC_Reset	; CALR FDC_Reset (0x9FBF07)
-	.byte 0x68, 0xdd	; JR T, .-35 - retry from start
+	jr t, FDC_ReadSectorWrapper__retry	; JR T, retry from start
 
 FDC_ReadSectorWrapper__read_ok:
 	pop xiz	; 5e
@@ -2168,6 +2171,7 @@ Boot_ClearScreen:
 Boot_WaitDiskInsert:
 	dec 2, xsp	; DEC 2, XSP - allocate 2 bytes
 	ld (xsp), a	; LD (XSP), A - save expected type
+Boot_WaitDiskInsert__display_prompt:
 	pushw 0x8	; PUSH 0x0008
 	pushw 0x2	; PUSH 0x0002
 	ld xwa, 0xFFAD5E	; LD XWA, 0x00FFAD5E - insert disk msg
@@ -2179,9 +2183,10 @@ Boot_WaitDiskInsert__wdi_wait_remove:
 	call 0xFFEC63	; CALL 0xFFEC63 - check disk present
 	cps l, 0	; CP L, 0
 	jr z, Boot_WaitDiskInsert__wdi_check_insert	; 66 08
+Boot_WaitDiskInsert__wdi_recheck_remove:
 	call 0xFFEC63	; CALL 0xFFEC63
 	cps l, 0	; CP L, 0
-	.byte 0x6e, 0xf8	; JR NZ, .wdi_wait_remove
+	jr nz, Boot_WaitDiskInsert__wdi_recheck_remove	; JR NZ, recheck disk removal
 
 Boot_WaitDiskInsert__wdi_check_insert:
 	lds32 xwa, 0	; LD XWA, 0
@@ -2194,9 +2199,10 @@ Boot_WaitDiskInsert__wdi_wait_insert:
 	call 0xFFEC63	; CALL 0xFFEC63
 	cps l, 0	; CP L, 0
 	jr nz, Boot_WaitDiskInsert__wdi_delay2	; 6e 08
+Boot_WaitDiskInsert__wdi_recheck_insert:
 	call 0xFFEC63	; CALL 0xFFEC63
 	cps l, 0	; CP L, 0
-	.byte 0x66, 0xf8	; JR Z, .wdi_wait_insert
+	jr z, Boot_WaitDiskInsert__wdi_recheck_insert	; JR Z, recheck disk insert
 
 Boot_WaitDiskInsert__wdi_delay2:
 	lds32 xwa, 0	; LD XWA, 0
@@ -2208,7 +2214,7 @@ Boot_WaitDiskInsert__wdi_delay2_loop:
 	; Check disk type
 	calr Boot_DetectDiskType	; CALR Boot_DetectDiskType
 	cp l, (xsp)	; CP L, (XSP) - compare with expected
-	.byte 0x6e, 0xac	; JR NZ, Boot_WaitDiskInsert
+	jr nz, Boot_WaitDiskInsert__display_prompt	; JR NZ, wrong type, re-prompt
 
 	; Type matches - clear screen and return
 	calr Boot_ClearScreen	; CALR Boot_ClearScreen
@@ -2232,6 +2238,7 @@ Boot_WaitFDCReady__wfdc_poll:
 	jr nz, Boot_WaitFDCReady__wfdc_done	; 6e 29
 
 	; Timeout handling
+Boot_WaitFDCReady__wfdc_timeout_check:
 	ldda32 xwa, 3072	; LD XWA, (0x0C00)
 	cp xwa, 0x1F4	; CP XWA, 0x000001F4 (500)
 	jr ule, Boot_WaitFDCReady__wfdc_continue	; 63 13
@@ -2248,7 +2255,7 @@ Boot_WaitFDCReady__wfdc_poll:
 Boot_WaitFDCReady__wfdc_continue:
 	call 0xFFBE85	; CALL 0xFFBE85
 	cp hl, 0xFFFF	; CP HL, 0xFFFF
-	.byte 0x66, 0xd7	; JR Z, .wfdc_poll
+	jr z, Boot_WaitFDCReady__wfdc_timeout_check	; JR Z, recheck with timeout
 
 Boot_WaitFDCReady__wfdc_done:
 	popw iz	; 4e
@@ -3260,6 +3267,7 @@ DrawBitmap_UpdateDisplay__db_row_loop:
 
 DrawBitmap_UpdateDisplay__db_not_row_start:
 	ldi_werp 0xEE, 0	; LD QHL, 0 - bit counter
+DrawBitmap_UpdateDisplay__db_next_pixel:
 	ld de, iz	; LD DE, IZ
 	extz xde	; EXTZ XDE
 	add xde, (xsp + 2)	; ADD XDE, (XSP+0x02) - bitmap offset
@@ -3308,7 +3316,7 @@ DrawBitmap_UpdateDisplay__db_background:
 DrawBitmap_UpdateDisplay__db_next_bit:
 	inc1_werp 0xEE	; INC 1, QHL
 	cp_erpw 0xEE, 0x08, 0x00	; CP QHL, 0x0008 - 8 bits per byte
-	.byte 0x67, 0xa1	; JR C, .db_calc_addr
+	jr c, DrawBitmap_UpdateDisplay__db_next_pixel	; JR C, next bit in same byte
 
 	; Next row byte
 	inc 1, iz	; INC 1, IZ
@@ -3500,7 +3508,7 @@ FDC_WaitReady__fwr_check:
 	cp_erpw 0xFA, 0x80, 0x00	; CP QIZ, 0x0080
 	jr nz, FDC_WaitReady__fwr_check_result	; 6e 29
 FDC_WaitReady__fwr_loop:
-	.byte 0x1e, 0xc9, 0xff	; CALR FDC_ReadStatus
+	calr FDC_ReadStatus	; CALR FDC_ReadStatus
 	and l, 0x1F	; AND L, 0x1F - mask status bits
 	ld a, l	; LD A, L
 	extz wa	; EXTZ WA
@@ -3543,7 +3551,7 @@ FDC_WaitComplete__fwc_check:
 	cp_erpw 0xFA, 0x80, 0x00	; CP QIZ, 0x0080
 	jr nz, FDC_WaitComplete__fwc_check_result	; 6e 26
 FDC_WaitComplete__fwc_loop:
-	.byte 0x1e, 0x83, 0xff	; CALR FDC_ReadStatus
+	calr FDC_ReadStatus	; CALR FDC_ReadStatus
 	and l, 0x90	; AND L, 0x90 - mask DIO+RQM
 	cp l, 0x90	; CP L, 0x90 - both set?
 	jr nz, FDC_WaitComplete__fwc_not_done	; 6e 03
@@ -3577,7 +3585,7 @@ FDC_WaitComplete__fwc_done:
 ; -----------------------------------------------------------------------------
 FDC_Seek:
 	ldw wa, 0x36	; LD WA, 0x0036 - SEEK command
-	.byte 0x1e, 0x5a, 0xff	; CALR FDC_WriteStatus
+	calr FDC_WriteStatus	; CALR FDC_WriteStatus
 	lds wa, 2	; LD WA, 2 - delay parameter
 	.byte 0x1e, 0xf7, 0x09	; CALR 0x9FE296 (delay routine)
 	stdi8 3378, 255	; LD (0x0D32), 0xFF - set flag
@@ -3661,16 +3669,16 @@ Handler_INT4__int4_check_timeout:
 	cp wa, 0x64	; CP WA, 0x0064 (100)
 	jr gt, Handler_INT4__int4_done	; 6a 59 - timeout exceeded
 
-	.byte 0x1e, 0x20, 0xed	; CALR FDC_ReadStatus (0x9FD7E8)
+	calr FDC_ReadStatus	; CALR FDC_ReadStatus
 	bit 7, l	; BIT 7, L - check RQM (request for master)
 	jr z, Handler_INT4__int4_check_timeout	; 66 ee - not ready, keep polling
 
 Handler_INT4__int4_wait_rqm:
-	.byte 0x1e, 0x18, 0xed	; CALR FDC_ReadStatus
+	calr FDC_ReadStatus	; CALR FDC_ReadStatus
 	bit 7, l	; BIT 7, L
 	jr z, Handler_INT4__int4_wait_rqm	; 66 f8
 
-	.byte 0x1e, 0x10, 0xed	; CALR FDC_ReadStatus
+	calr FDC_ReadStatus	; CALR FDC_ReadStatus
 	bit 6, l	; BIT 6, L - check DIO (data direction)
 	jr nz, Handler_INT4__int4_setup_buffer	; 6e 18 - FDC has data for us
 
@@ -3680,14 +3688,14 @@ Handler_INT4__int4_wait_rqm:
 	jr z, Handler_INT4__int4_send_cmd	; 66 0b
 
 Handler_INT4__int4_poll_ready:
-	.byte 0x1e, 0x01, 0xed	; CALR FDC_ReadStatus
+	calr FDC_ReadStatus	; CALR FDC_ReadStatus
 	and l, 0xF0	; AND L, 0xF0 - mask status bits
 	cp l, 0x80	; CP L, 0x80 - RQM set, DIO clear?
 	jr nz, Handler_INT4__int4_poll_ready	; 6e f5
 
 Handler_INT4__int4_send_cmd:
 	ldw wa, 0x8	; LD WA, 0x0008 - sense interrupt command
-	.byte 0x1e, 0x10, 0xed	; CALR FDC_WriteData (0x9FD805)
+	calr FDC_WriteData	; CALR FDC_WriteData
 
 Handler_INT4__int4_setup_buffer:
 	ldada xiz, 3214	; LDA XIZ, 0x0C8E - result buffer
@@ -3695,15 +3703,15 @@ Handler_INT4__int4_setup_buffer:
 
 Handler_INT4__int4_read_loop:
 	.byte 0x1e, 0xef, 0xf2	; CALR Boot_ClearWatchdog (0x9FDDED)
-	.byte 0x1e, 0xed, 0xec	; CALR FDC_ReadData (0x9FD7EE)
+	calr FDC_ReadData	; CALR FDC_ReadData
 	lda_dpi XSP, 0xF8	; LD (XIZ+), L - store result byte
 
 Handler_INT4__int4_check_more:
-	.byte 0x1e, 0xe1, 0xec	; CALR FDC_ReadStatus
+	calr FDC_ReadStatus	; CALR FDC_ReadStatus
 	bit 7, l	; BIT 7, L - RQM set?
 	jr z, Handler_INT4__int4_check_more	; 66 f8 - wait for ready
 
-	.byte 0x1e, 0xd9, 0xec	; CALR FDC_ReadStatus
+	calr FDC_ReadStatus	; CALR FDC_ReadStatus
 	bit 6, l	; BIT 6, L - DIO set?
 	jr nz, Handler_INT4__int4_read_loop	; 6e e7 - more data to read
 
