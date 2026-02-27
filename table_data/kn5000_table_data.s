@@ -3531,7 +3531,7 @@ FDC_WaitReady__fwr_check_result:
 	cpi_werp 0xFA, 0	; CP QIZ, 0
 	jr z, FDC_WaitReady__fwr_done	; 66 05
 	lds wa, 1	; LD WA, 1 - error code
-	.byte 0x1e, 0xe2, 0x09	; CALR 0x9FE231 (FDC_Error)
+	calr FDC_Error	; CALR FDC_Error
 
 FDC_WaitReady__fwr_done:
 	pop xiz	; 5e
@@ -3572,7 +3572,7 @@ FDC_WaitComplete__fwc_check_result:
 	cpi_werp 0xFA, 0	; CP QIZ, 0
 	jr z, FDC_WaitComplete__fwc_done	; 66 05
 	lds wa, 1	; LD WA, 1
-	.byte 0x1e, 0x9f, 0x09	; CALR 0x9FE231
+	calr FDC_Error	; CALR FDC_Error
 
 FDC_WaitComplete__fwc_done:
 	pop xiz	; 5e
@@ -3587,7 +3587,7 @@ FDC_Seek:
 	ldw wa, 0x36	; LD WA, 0x0036 - SEEK command
 	calr FDC_WriteStatus	; CALR FDC_WriteStatus
 	lds wa, 2	; LD WA, 2 - delay parameter
-	.byte 0x1e, 0xf7, 0x09	; CALR 0x9FE296 (delay routine)
+	calr Boot_Delay	; CALR Boot_Delay
 	stdi8 3378, 255	; LD (0x0D32), 0xFF - set flag
 	ret	; 0e
 
@@ -3611,7 +3611,20 @@ FDC_Seek:
 ;   - Programs new firmware data
 ;   - Updates progress display
 ; =============================================================================
-	.incbin "includes/bootcode_flash_handlers.bin"
+	; Split into segments to expose CALR target labels
+	.incbin "includes/bootcode_flash_handlers.bin", 0, 1138	; 0x9FD8A5-0x9FDD16
+Boot_TimerTick:	; Address: 0x9FDD17
+	.incbin "includes/bootcode_flash_handlers.bin", 1138, 15	; 0x9FDD17-0x9FDD25
+Boot_UpdateDisplay:	; Address: 0x9FDD26
+	.incbin "includes/bootcode_flash_handlers.bin", 1153, 199	; 0x9FDD26-0x9FDDEC
+Boot_ClearWatchdog:	; Address: 0x9FDDED
+	.incbin "includes/bootcode_flash_handlers.bin", 1352, 298	; 0x9FDDED-0x9FDF16
+FDC_ProcessResults:	; Address: 0x9FDF17
+	.incbin "includes/bootcode_flash_handlers.bin", 1650, 794	; 0x9FDF17-0x9FE230
+FDC_Error:	; Address: 0x9FE231
+	.incbin "includes/bootcode_flash_handlers.bin", 2444, 101	; 0x9FE231-0x9FE295
+Boot_Delay:	; Address: 0x9FE296
+	.incbin "includes/bootcode_flash_handlers.bin", 2545, 2055	; 0x9FE296-0x9FEA9C
 
 ; =============================================================================
 ; BootTimer_InterruptHandler - Timer Counter 3 Interrupt Handler
@@ -3631,8 +3644,8 @@ BootTimer_InterruptHandler:
 	push xde	; 3a
 	push xbc	; 39
 	push xwa	; 38
-	.byte 0x1e, 0x70, 0xf2	; CALR Boot_TimerTick (0x9FDD17)
-	.byte 0x1e, 0x7c, 0xf2	; CALR Boot_UpdateDisplay (0x9FDD26)
+	calr Boot_TimerTick	; CALR Boot_TimerTick
+	calr Boot_UpdateDisplay	; CALR Boot_UpdateDisplay
 	pop xwa	; 58 - restore all registers
 	pop xbc	; 59
 	pop xde	; 5a
@@ -3702,7 +3715,7 @@ Handler_INT4__int4_setup_buffer:
 	inc 1, xiz	; INC 1, XIZ
 
 Handler_INT4__int4_read_loop:
-	.byte 0x1e, 0xef, 0xf2	; CALR Boot_ClearWatchdog (0x9FDDED)
+	calr Boot_ClearWatchdog	; CALR Boot_ClearWatchdog
 	calr FDC_ReadData	; CALR FDC_ReadData
 	lda_dpi XSP, 0xF8	; LD (XIZ+), L - store result byte
 
@@ -3715,7 +3728,7 @@ Handler_INT4__int4_check_more:
 	bit 6, l	; BIT 6, L - DIO set?
 	jr nz, Handler_INT4__int4_read_loop	; 6e e7 - more data to read
 
-	.byte 0x1e, 0x00, 0xf4	; CALR FDC_ProcessResults (0x9FDF17)
+	calr FDC_ProcessResults	; CALR FDC_ProcessResults
 	cpdi8 3215, 128	; CP (0x0C8F), 0x80 - check status
 	jr nz, Handler_INT4__int4_wait_rqm	; 6e af - not done, continue
 
