@@ -50,15 +50,15 @@ Boot_CallInitHandlers:
 	jr nz, Boot_CallInitHandlers__done	; 6e xx (offset computed by assembler)
 
 	; LD QIZH, 0
-	.byte 0xc7, 0xfb, 0xa8
+	ldi_berp 0xfb, 0
 
 Boot_CallInitHandlers__handler_loop:
 	; LD A, QIZH
-	.byte 0xc7, 0xfb, 0x89
+	ldto_berp a, 0xfb
 	; EXTZ WA
 	extz	wa
 	; LD C, QIZH
-	.byte 0xc7, 0xfb, 0x8b
+	ldto_berp c, 0xfb
 	; EXTZ BC
 	extz	bc
 	; SLA 2, BC (multiply by 4 for 32-bit table entries)
@@ -72,9 +72,9 @@ Boot_CallInitHandlers__handler_loop:
 	call 0xEF183D
 
 	; INC 1, QIZH
-	.byte 0xc7, 0xfb, 0x61
+	inc_berp 0xfb, 1
 	; CP QIZH, 4
-	.byte 0xc7, 0xfb, 0xdc
+	cpi_berp 0xfb, 4
 
 	jr c, Boot_CallInitHandlers__handler_loop	; 67 xx (offset computed by assembler)
 
