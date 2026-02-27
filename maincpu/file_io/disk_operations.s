@@ -138,7 +138,7 @@ LABEL_F8BCD7:
 	call LABEL_F8945F
 	cps hl, 0
 	jr z, LABEL_F8BD20
-	cpdi8_24 0x0340ea, 0x00
+	cpi8_24 0x0340ea, 0x00
 	jr z, LABEL_F8BD20
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C50000
@@ -249,7 +249,7 @@ FileRenameFunc:
 	ld xwa, xiz
 	call LABEL_F890DC
 	lds iy, 0
-	ldada_24 xix, 0xeed778
+	lda_24 xix, 0xeed778
 	ldada xwa, 34928
 	ld xhl, xwa
 	jr LABEL_F8BE6E
@@ -352,7 +352,7 @@ FileRenameSmfFunc:
 	ld xwa, xiz
 	call LABEL_F890DC
 	lds iy, 0
-	ldada_24 xix, 0xeed778
+	lda_24 xix, 0xeed778
 	ldada xwa, 34928
 	ld xhl, xwa
 	jr LABEL_F8BF6D
@@ -910,7 +910,7 @@ LABEL_F8C56C:
 	call LABEL_F890DC
 	lds iy, 0
 	ldada xix, 34928
-	ldada_24 xiz, 0xeed778
+	lda_24 xiz, 0xeed778
 	ldada xde, 34700
 	ld xhl, xde
 	jr LABEL_F8C5AA
@@ -1043,7 +1043,7 @@ LABEL_F8C694:
 	ld (xsp + 4), xbc
 	ldda16 xwa, 34048
 	sla wa, 2
-	ldada_24 xbc, 0xea0558
+	lda_24 xbc, 0xea0558
 	ld_sril3 XBC, 0x07, 0xE4, 0xE0
 	ld xwa, 0x87CE
 	call LABEL_F890DC
@@ -1203,7 +1203,7 @@ LABEL_F8C84A:
 	ld xwa, xiz
 	call LABEL_F890DC
 	lds iy, 0
-	ldada_24 xix, 0xeed778
+	lda_24 xix, 0xeed778
 	ldada xde, 34896
 	ld xhl, xde
 	jr LABEL_F8C87A

@@ -446,7 +446,7 @@ LABEL_F8CD65:
 	call 0xF8943E
 	cps hl, 0
 	jr z, LABEL_F8CD94
-	cpdi8_24 0x0340ea, 0x00
+	cpi8_24 0x0340ea, 0x00
 	jr z, LABEL_F8CD94
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C50000
@@ -533,7 +533,7 @@ LABEL_F8CE82:
 	call 0xF8943E
 	cps hl, 0
 	jr z, LABEL_F8CF0B
-	cpdi8_24 0x0340ea, 0x00
+	cpi8_24 0x0340ea, 0x00
 	jr z, LABEL_F8CEBE
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C50000

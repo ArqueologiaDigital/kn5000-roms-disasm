@@ -72,7 +72,7 @@ ExcDotFunc:
 	add xbc, xbc
 	add xbc, 0xE7FD8A
 	ld bc, (xbc)
-	ldada_24 xix, 0xf76696
+	lda_24 xix, 0xf76696
 	jp_dri 8, 0x07, 0xF0, 0xE4
 ExcDotFunc_HandlerJumpTable:
 	.byte 0xaa, 0x12, 0x24, 0xaa, 0x0e, 0x21, 0xcb, 0x8f
@@ -102,7 +102,7 @@ ExcPmemFunc:
 	add xbc, xbc
 	add xbc, 0xE7FDD6
 	ld bc, (xbc)
-	ldada_24 xix, 0xf76706
+	lda_24 xix, 0xf76706
 	jp_dri 8, 0x07, 0xF0, 0xE4
 LABEL_F76706:
 	.byte 0xaa, 0x0e, 0x20, 0xe8, 0xee, 0x02, 0x41, 0x9e
@@ -114,7 +114,7 @@ LABEL_F76706:
 ExcPmemFunc_InvalidIndex_Exit:
 	lds32 xhl, 0
 	jr ExcPmemFunc_Return
-	ldada_24 xhl, 0x024760
+	lda_24 xhl, 0x024760
 
 ExcPmemFunc_Return:
 	pop xiz
@@ -131,7 +131,7 @@ ExcSmemFunc:
 	add xbc, xbc
 	add xbc, 0xE7FDEA
 	ld bc, (xbc)
-	ldada_24 xix, 0xf76764
+	lda_24 xix, 0xf76764
 	jp_dri 8, 0x07, 0xF0, 0xE4
 LABEL_F76764:
 	.byte 0xaa, 0x0e, 0x20, 0xe8, 0xee, 0x02, 0x41, 0x9e
@@ -143,7 +143,7 @@ LABEL_F76764:
 ExcSmemFunc_InvalidIndex_Exit:
 	lds32 xhl, 0
 	jr ExcSmemFunc_Return
-	ldada_24 xhl, 0x024762
+	lda_24 xhl, 0x024762
 
 ExcSmemFunc_Return:
 	pop xiz
@@ -160,7 +160,7 @@ ExcCompFunc:
 	add xbc, xbc
 	add xbc, 0xE7FDFE
 	ld bc, (xbc)
-	ldada_24 xix, 0xf767c2
+	lda_24 xix, 0xf767c2
 	jp_dri 8, 0x07, 0xF0, 0xE4
 LABEL_F767C2:
 	.byte 0xaa, 0x0e, 0x20, 0xe8, 0xee, 0x02, 0x41, 0x9e
@@ -172,7 +172,7 @@ LABEL_F767C2:
 ExcCompFunc_InvalidIndex_Exit:
 	lds32 xhl, 0
 	jr ExcCompFunc_Return
-	ldada_24 xhl, 0x024764
+	lda_24 xhl, 0x024764
 
 ExcCompFunc_Return:
 	pop xiz
@@ -189,7 +189,7 @@ ExcSeqFunc:
 	add xbc, xbc
 	add xbc, 0xE7FE12
 	ld bc, (xbc)
-	ldada_24 xix, 0xf76820
+	lda_24 xix, 0xf76820
 	jp_dri 8, 0x07, 0xF0, 0xE4
 LABEL_F76820:
 	.byte 0xaa, 0x0e, 0x20, 0xe8, 0xee, 0x02, 0x41, 0x9e
@@ -201,7 +201,7 @@ LABEL_F76820:
 ExcSeqFunc_InvalidIndex_Exit:
 	lds32 xhl, 0
 	jr ExcSeqFunc_Return
-	ldada_24 xhl, 0x024766
+	lda_24 xhl, 0x024766
 
 ExcSeqFunc_Return:
 	pop xiz
@@ -218,7 +218,7 @@ ExcMspFunc:
 	add xbc, xbc
 	add xbc, 0xE7FE26
 	ld bc, (xbc)
-	ldada_24 xix, 0xf7687e
+	lda_24 xix, 0xf7687e
 	jp_dri 8, 0x07, 0xF0, 0xE4
 LABEL_F7687E:
 	.byte 0xaa, 0x0e, 0x20, 0xe8, 0xee, 0x02, 0x41, 0x9e
@@ -230,7 +230,7 @@ LABEL_F7687E:
 ExcMspFunc_InvalidIndex_Exit:
 	lds32 xhl, 0
 	jr ExcMspFunc_Return
-	ldada_24 xhl, 0x024768
+	lda_24 xhl, 0x024768
 
 ExcMspFunc_Return:
 	pop xiz

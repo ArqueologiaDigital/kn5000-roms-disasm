@@ -29,7 +29,7 @@ LABEL_F8EF70:
 	ldda8 a, 35320
 	extz wa
 	sla wa, 2
-	ldada_24 xbc, 0xea0598
+	lda_24 xbc, 0xea0598
 	ld_sril3 XDE, 0x07, 0xE4, 0xE0
 	ldda32 xwa, 33206
 	ld xbc, 0x1C0000F
@@ -51,7 +51,7 @@ LABEL_F8EFA9:
 	ldda8 a, 35320
 	extz wa
 	sla wa, 2
-	ldada_24 xbc, 0xea05f2
+	lda_24 xbc, 0xea05f2
 	ld_sril3 XDE, 0x07, 0xE4, 0xE0
 	ldda32 xwa, 33210
 	ld xbc, 0x1C0000F
@@ -71,7 +71,7 @@ SingleLoadDstMemFunc:
 
 LABEL_F8EFE2:
 	ldda32 xwa, 33214
-	ldada_24 xde, 0xea0624
+	lda_24 xde, 0xea0624
 	cpdi8 35322, 0
 	jr z, LABEL_F8F003
 	cpdi8 35320, 1
@@ -104,7 +104,7 @@ SingleLoadSrcBankFunc:
 
 LABEL_F8F033:
 	ldda32 xwa, 33218
-	ldada_24 xde, 0xea05f2
+	lda_24 xde, 0xea05f2
 	ldda8 c, 35320
 	cps c, 0
 	jr nz, LABEL_F8F055
@@ -137,7 +137,7 @@ SingleLoadSrcMemFunc:
 
 LABEL_F8F081:
 	ldda32 xwa, 33222
-	ldada_24 xde, 0xea0624
+	lda_24 xde, 0xea0624
 	ldda8 c, 35320
 	cps c, 1
 	jr z, LABEL_F8F099
@@ -644,7 +644,7 @@ LABEL_F8FEEF:
 	ldda8 c, 35320
 	extz bc
 	sla bc, 2
-	ldada_24 xde, 0xea0996
+	lda_24 xde, 0xea0996
 	st_dri3b C, 0x07, 0xE8, 0xE4
 	ld xbc, (xsp + 4)
 	ld xde, xiz
@@ -674,7 +674,7 @@ LABEL_F8FF51:
 	ldda8 c, 35320
 	extz bc
 	sla bc, 2
-	ldada_24 xde, 0xea0996
+	lda_24 xde, 0xea0996
 	st_dri3b C, 0x07, 0xE8, 0xE4
 	ld xbc, (xsp + 4)
 	ld xde, xiz
@@ -705,7 +705,7 @@ LABEL_F8FFA9:
 	ldda8 c, 35320
 	extz bc
 	sla bc, 2
-	ldada_24 xde, 0xea0996
+	lda_24 xde, 0xea0996
 	st_dri3b C, 0x07, 0xE8, 0xE4
 	ld xbc, (xsp + 4)
 	ld xde, xiz
@@ -724,7 +724,7 @@ LABEL_F8FFD0:
 	ldda8 c, 35320
 	extz bc
 	sla bc, 2
-	ldada_24 xde, 0xea0996
+	lda_24 xde, 0xea0996
 	st_dri3b C, 0x07, 0xE8, 0xE4
 	ld xbc, (xsp + 4)
 	ld xde, xiz
@@ -742,7 +742,7 @@ LABEL_F9000C:
 	ldda8 c, 35320
 	extz bc
 	sla bc, 2
-	ldada_24 xde, 0xea0996
+	lda_24 xde, 0xea0996
 	st_dri3b C, 0x07, 0xE8, 0xE4
 	ld xbc, (xsp + 4)
 	ld xde, xiz
@@ -756,7 +756,7 @@ LABEL_F90044:
 	ldda8 c, 35320
 	extz bc
 	sla bc, 2
-	ldada_24 xde, 0xea0996
+	lda_24 xde, 0xea0996
 	st_dri3b C, 0x07, 0xE8, 0xE4
 	ld xbc, (xsp + 4)
 	ld xde, xiz
@@ -1298,7 +1298,7 @@ LABEL_F90E6D:
 	ldda8 c, 35320
 	extz bc
 	sla bc, 2
-	ldada_24 xde, 0xea0a16
+	lda_24 xde, 0xea0a16
 	st_dri3b C, 0x07, 0xE8, 0xE4
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
@@ -1315,7 +1315,7 @@ LABEL_F90EEA:
 	ldda8 c, 35320
 	extz bc
 	sla bc, 2
-	ldada_24 xde, 0xea0a16
+	lda_24 xde, 0xea0a16
 	st_dri3b C, 0x07, 0xE8, 0xE4
 	ld xbc, 0x1C0000B
 	lds32 xde, 0
@@ -1353,7 +1353,7 @@ LABEL_F90F21:
 	ldda8 c, 35320
 	extz bc
 	sla bc, 2
-	ldada_24 xde, 0xea0a16
+	lda_24 xde, 0xea0a16
 	st_dri3b C, 0x07, 0xE8, 0xE4
 	ld xbc, 0x1C0000B
 	lds32 xde, 0
@@ -1417,7 +1417,7 @@ LABEL_F90FDF:
 	ldda8 c, 35320
 	extz bc
 	sla bc, 2
-	ldada_24 xde, 0xea0a16
+	lda_24 xde, 0xea0a16
 	st_dri3b C, 0x07, 0xE8, 0xE4
 	ld xbc, 0x1C0000B
 	lds32 xde, 0
@@ -1447,7 +1447,7 @@ LABEL_F91072:
 	ldda8 c, 35320
 	extz bc
 	sla bc, 2
-	ldada_24 xde, 0xea0a16
+	lda_24 xde, 0xea0a16
 	st_dri3b C, 0x07, 0xE8, 0xE4
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
@@ -1479,7 +1479,7 @@ LABEL_F910DF:
 	ldda8 c, 35320
 	extz bc
 	sla bc, 2
-	ldada_24 xde, 0xea0a16
+	lda_24 xde, 0xea0a16
 	st_dri3b C, 0x07, 0xE8, 0xE4
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
@@ -1496,7 +1496,7 @@ LABEL_F91124:
 	ldda8 c, 35320
 	extz bc
 	sla bc, 2
-	ldada_24 xde, 0xea0a16
+	lda_24 xde, 0xea0a16
 	st_dri3b C, 0x07, 0xE8, 0xE4
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
@@ -1518,7 +1518,7 @@ LABEL_F9115A:
 	ldda8 c, 35320
 	extz bc
 	sla bc, 2
-	ldada_24 xde, 0xea0a16
+	lda_24 xde, 0xea0a16
 	st_dri3b C, 0x07, 0xE8, 0xE4
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
@@ -1536,7 +1536,7 @@ LABEL_F911A0:
 	ldda8 c, 35320
 	extz bc
 	sla bc, 2
-	ldada_24 xde, 0xea0a16
+	lda_24 xde, 0xea0a16
 	st_dri3b C, 0x07, 0xE8, 0xE4
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
@@ -1552,7 +1552,7 @@ LABEL_F911D6:
 	ldda8 c, 35320
 	extz bc
 	sla bc, 2
-	ldada_24 xde, 0xea0a16
+	lda_24 xde, 0xea0a16
 	st_dri3b C, 0x07, 0xE8, 0xE4
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
@@ -1571,7 +1571,7 @@ LABEL_F91208:
 	ldda8 c, 35320
 	extz bc
 	sla bc, 2
-	ldada_24 xde, 0xea0a16
+	lda_24 xde, 0xea0a16
 	st_dri3b C, 0x07, 0xE8, 0xE4
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
@@ -1590,7 +1590,7 @@ LABEL_F91245:
 	ldda8 c, 35320
 	extz bc
 	sla bc, 2
-	ldada_24 xde, 0xea0a16
+	lda_24 xde, 0xea0a16
 	st_dri3b C, 0x07, 0xE8, 0xE4
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
@@ -1637,7 +1637,7 @@ LABEL_F912D6:
 	ldda8 c, 35320
 	extz bc
 	sla bc, 2
-	ldada_24 xde, 0xea0a2a
+	lda_24 xde, 0xea0a2a
 	st_dri3b C, 0x07, 0xE8, 0xE4
 	ld xbc, xiz
 	ld xde, (xsp + 4)
@@ -1657,7 +1657,7 @@ LABEL_F9130B:
 	ldda8 c, 35320
 	extz bc
 	sla bc, 2
-	ldada_24 xde, 0xea0a2a
+	lda_24 xde, 0xea0a2a
 	st_dri3b C, 0x07, 0xE8, 0xE4
 	ld xbc, xiz
 	ld xde, (xsp + 4)
@@ -1679,7 +1679,7 @@ LABEL_F91348:
 	ldda8 c, 35320
 	extz bc
 	sla bc, 2
-	ldada_24 xde, 0xea0a2a
+	lda_24 xde, 0xea0a2a
 	st_dri3b C, 0x07, 0xE8, 0xE4
 	ld xbc, xiz
 	ld xde, (xsp + 4)
@@ -1696,7 +1696,7 @@ LABEL_F9138C:
 	ldda8 c, 35320
 	extz bc
 	sla bc, 2
-	ldada_24 xde, 0xea0a2a
+	lda_24 xde, 0xea0a2a
 	st_dri3b C, 0x07, 0xE8, 0xE4
 	ld xbc, xiz
 	ld xde, (xsp + 4)
@@ -1716,7 +1716,7 @@ LABEL_F913C1:
 	ldda8 c, 35320
 	extz bc
 	sla bc, 2
-	ldada_24 xde, 0xea0a2a
+	lda_24 xde, 0xea0a2a
 	st_dri3b C, 0x07, 0xE8, 0xE4
 	ld xbc, xiz
 	ld xde, (xsp + 4)
@@ -1737,7 +1737,7 @@ LABEL_F91400:
 	ldda8 c, 35320
 	extz bc
 	sla bc, 2
-	ldada_24 xde, 0xea0a2a
+	lda_24 xde, 0xea0a2a
 	st_dri3b C, 0x07, 0xE8, 0xE4
 	ld xbc, xiz
 	ld xde, (xsp + 4)
@@ -1752,7 +1752,7 @@ LABEL_F91442:
 	ldda8 c, 35320
 	extz bc
 	sla bc, 2
-	ldada_24 xde, 0xea0a2a
+	lda_24 xde, 0xea0a2a
 	st_dri3b C, 0x07, 0xE8, 0xE4
 	ld xbc, xiz
 	ld xde, (xsp + 4)
@@ -1824,7 +1824,7 @@ LABEL_F914C8:
 	ldda8 c, 35320
 	extz bc
 	sla bc, 2
-	ldada_24 xde, 0xea0a3e
+	lda_24 xde, 0xea0a3e
 	st_dri3b C, 0x07, 0xE8, 0xE4
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
@@ -1860,7 +1860,7 @@ LABEL_F9153A:
 	ldda8 c, 35320
 	extz bc
 	sla bc, 2
-	ldada_24 xde, 0xea0a3e
+	lda_24 xde, 0xea0a3e
 	st_dri3b C, 0x07, 0xE8, 0xE4
 	ld xbc, 0x1C0000B
 	lds32 xde, 0
@@ -1888,7 +1888,7 @@ LABEL_F915BF:
 	ldda8 c, 35320
 	extz bc
 	sla bc, 2
-	ldada_24 xde, 0xea0a3e
+	lda_24 xde, 0xea0a3e
 	st_dri3b C, 0x07, 0xE8, 0xE4
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
@@ -1918,7 +1918,7 @@ LABEL_F9162C:
 	ldda8 c, 35320
 	extz bc
 	sla bc, 2
-	ldada_24 xde, 0xea0a3e
+	lda_24 xde, 0xea0a3e
 	st_dri3b C, 0x07, 0xE8, 0xE4
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
@@ -1940,7 +1940,7 @@ LABEL_F9166A:
 	ldda8 c, 35320
 	extz bc
 	sla bc, 2
-	ldada_24 xde, 0xea0a3e
+	lda_24 xde, 0xea0a3e
 	st_dri3b C, 0x07, 0xE8, 0xE4
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
@@ -1956,7 +1956,7 @@ LABEL_F916AF:
 	ldda8 c, 35320
 	extz bc
 	sla bc, 2
-	ldada_24 xde, 0xea0a3e
+	lda_24 xde, 0xea0a3e
 	st_dri3b C, 0x07, 0xE8, 0xE4
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
@@ -1975,7 +1975,7 @@ LABEL_F916E0:
 	ldda8 c, 35320
 	extz bc
 	sla bc, 2
-	ldada_24 xde, 0xea0a3e
+	lda_24 xde, 0xea0a3e
 	st_dri3b C, 0x07, 0xE8, 0xE4
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
@@ -1996,7 +1996,7 @@ LABEL_F9171C:
 	ldda8 c, 35320
 	extz bc
 	sla bc, 2
-	ldada_24 xde, 0xea0a3e
+	lda_24 xde, 0xea0a3e
 	st_dri3b C, 0x07, 0xE8, 0xE4
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
@@ -2050,7 +2050,7 @@ LABEL_F917B8:
 	jr LABEL_F917D5
 
 LABEL_F917D0:
-	ldada_24 xiz, 0xea0a52
+	lda_24 xiz, 0xea0a52
 
 LABEL_F917D5:
 	ldada xwa, 34929
@@ -2096,7 +2096,7 @@ LABEL_F9182A:
 	jr z, LABEL_F918A8
 	call 0xF89605
 	stdi8 34928, 0
-	ldada_24 xiz, 0xea0a52
+	lda_24 xiz, 0xea0a52
 	stdi8 35320, 4
 	lds wa, 3
 	call LABEL_F893D1
@@ -2251,7 +2251,7 @@ LABEL_F919E3:
 	push xiz
 	ld hl, bc
 	ld (xsp + 4), wa
-	ldada_24 xbc, 0x0ab000
+	lda_24 xbc, 0x0ab000
 	ld wa, (xsp + 4)
 	extz xwa
 	sll xwa, 11

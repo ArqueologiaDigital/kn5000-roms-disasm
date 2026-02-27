@@ -57,7 +57,7 @@ AcPcgOutGridBoxProc:
 	add xbc, xbc
 	add xbc, 0xE7FF20
 	ld bc, (xbc)
-	ldada_24 xix, 0xf7743b
+	lda_24 xix, 0xf7743b
 	jp_dri 8, 0x07, 0xF0, 0xE4
 
 PcgOutGridBoxEventDispatch:
@@ -292,7 +292,7 @@ PcgOutGridCheck:
 	add xwa, xwa
 	add xwa, 0xE7FFEE
 	ld wa, (xwa)
-	ldada_24 xix, 0xf776bd
+	lda_24 xix, 0xf776bd
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
 PcgOutGridCheckJumpTable:
@@ -467,7 +467,7 @@ PcgOutCheckGridDataStructure:
 	jr z, LABEL_F77B9E
 	cps de, 0
 	jrl nz, PcgOutGridCheckComplete
-	ldda8_24 a, 0x02476a
+	ld8_24 a, 0x02476a
 	inc 1, a
 	extz wa
 	pushw wa
@@ -483,7 +483,7 @@ PcgOutCheckGridDataStructure:
 	jrl LABEL_F77D7F
 
 LABEL_F77B9E:
-	ldda8_24 a, 0x02476c
+	ld8_24 a, 0x02476c
 	inc 1, a
 	extz wa
 	pushw wa
@@ -499,7 +499,7 @@ LABEL_F77B9E:
 	jrl LABEL_F77D7F
 
 LABEL_F77BC7:
-	cpdi8_24 0x024770, 0xff
+	cpi8_24 0x024770, 0xff
 	jr nz, LABEL_F77C14
 	pushw 0xE7
 	pushw 0xFFAA
@@ -525,7 +525,7 @@ LABEL_F77BC7:
 	jrl LABEL_F77D7F
 
 LABEL_F77C14:
-	ldda8_24 a, 0x02476e
+	ld8_24 a, 0x02476e
 	exts wa
 	pushw wa
 	pushw 0xE7
@@ -539,9 +539,9 @@ LABEL_F77C14:
 	ld xbc, 0x1E0008C
 	call 0xFA9660
 	ldmw (xsp + 6), 0x4
-	ldda8_24 c, 0x024770
+	ld8_24 c, 0x024770
 	exts bc
-	ldda8_24 a, 0x02476e
+	ld8_24 a, 0x02476e
 	exts wa
 	sll wa, 7
 	add wa, bc
@@ -560,7 +560,7 @@ LABEL_F77C14:
 
 LABEL_F77C77:
 	ldmw (xwa), 0x2
-	cpdi8_24 0x024770, 0xff
+	cpi8_24 0x024770, 0xff
 	jr nz, LABEL_F77CEF
 	pushw 0xE7
 	pushw 0xFFC6
@@ -598,7 +598,7 @@ LABEL_F77C77:
 	jrl LABEL_F77D7F
 
 LABEL_F77CEF:
-	ldda8_24 a, 0x02476e
+	ld8_24 a, 0x02476e
 	exts wa
 	pushw wa
 	pushw 0xE7
@@ -612,7 +612,7 @@ LABEL_F77CEF:
 	ld xbc, 0x1E0008C
 	call 0xFA9660
 	ldmw (xsp + 6), 0x3
-	ldda8_24 a, 0x024770
+	ld8_24 a, 0x024770
 	exts wa
 	pushw wa
 	pushw 0xE7
@@ -627,9 +627,9 @@ LABEL_F77CEF:
 	ld xbc, 0x1E0008C
 	call 0xFA9660
 	ldmw (xsp + 6), 0x4
-	ldda8_24 c, 0x024770
+	ld8_24 c, 0x024770
 	exts bc
-	ldda8_24 a, 0x02476e
+	ld8_24 a, 0x02476e
 	exts wa
 	sll wa, 7
 	add wa, bc
@@ -657,13 +657,13 @@ PcgOutGridCheckComplete:
 PcgOutSendFunc:
 	cp xbc, 0x1C00008
 	jr nz, LABEL_F77DD7
-	ldada_24 xde, 0x024752
-	ldda8_24 a, 0x02476a
+	lda_24 xde, 0x024752
+	ld8_24 a, 0x02476a
 	ld (xde), a
-	ldda8_24 a, 0x02476c
+	ld8_24 a, 0x02476c
 	ld (xde + 1), a
 	lda xbc, (xde + 2)
-	ldda8_24 l, 0x024770
+	ld8_24 l, 0x024770
 	cp l, 0xFF
 	jr nz, LABEL_F77DB9
 	ldmw (xbc), 0xFFFF
@@ -671,7 +671,7 @@ PcgOutSendFunc:
 
 LABEL_F77DB9:
 	exts hl
-	ldda8_24 a, 0x02476e
+	ld8_24 a, 0x02476e
 	exts wa
 	sla wa, 7
 	add wa, hl

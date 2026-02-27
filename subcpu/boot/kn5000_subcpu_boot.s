@@ -98682,7 +98682,7 @@ BOOT_INIT__clock_done2:
 	ldio 0xF6, 0x00
 
 	; Set up stack pointer
-	ldada_24 xwa, 0x0005a2                  ; lda XWA, 0x0005a2 (24-bit encoding)
+	lda_24 xwa, 0x0005a2                  ; lda XWA, 0x0005a2 (24-bit encoding)
 	ld xsp, xwa
 
 	; Copy interrupt vector trampolines to RAM at 0x0400
@@ -98754,7 +98754,7 @@ TONE_GEN_CHANNEL_INIT__loop:
 	ldto_berp C, 0xFB	; C = loop counter (QIZH)
 	extz bc	; Zero-extend C to BC
 	sla bc, 2	; BC <<= 2 (multiply by 4 for table index)
-	ldada_24 xde, 0xfffef0                  ; XDE = pointer to channel config table
+	lda_24 xde, 0xfffef0                  ; XDE = pointer to channel config table
 	ld_sril3 XBC, 0x07, 0xE8, 0xE4	; XBC = config[channel] (4 bytes per entry)
 	call TONE_GEN_WRITE	; Write config to tone generator
 	inc1_berp 0xFB	; Increment loop counter
@@ -99037,11 +99037,11 @@ INIT_DMA_SERIAL:
 	ldio 0x8A, 0x0A
 
 	; Set up DMA for inter-CPU latch at 0x120000
-	ldada_24 xwa, 0x120000
+	lda_24 xwa, 0x120000
 	ldc_cr32 xwa, 0x28	; DMA channel 2 destination = 0x120000
 	ldb a, 0x8
 	ldc_cr8 a, 0x4A	; DMA channel 2 count = 8
-	ldada_24 xwa, 0x120000
+	lda_24 xwa, 0x120000
 	ldc_cr32 xwa, 0x00	; DMA channel 0 source = 0x120000
 	ldb a, 0x0	; TMP94C241 encoding (21 00)
 	ldc_cr8 a, 0x42	; DMA channel 0 mode = 0
@@ -99163,7 +99163,7 @@ SendData_Block__wait_ready1:
 	dec 1, l	; L = count - 1
 	sll a, 5	; A = command << 5
 	or a, l	; A = (command << 5) | (count - 1)
-	stda8_24 0x120000, a                    ; Send command+count to main CPU
+	st8_24 0x120000, a                    ; Send command+count to main CPU
 	lds ix, 0	; Reset timeout counter
 SendData_Block__wait_ready2:
 	bit_dd8 4, 0x34	; Check if main CPU acknowledged
@@ -99218,7 +99218,7 @@ SendCmd_E3__wait_ready:
 	bit_dd8 4, 0x34	; Check if main CPU ready
 	jr z, SendCmd_E3__timeout1	; Not ready - check timeout
 	res_dd8 0, 0x34	; Clear our ready flag
-	stdi8_24 0x120000, 0xe3                 ; Send E3 command to main CPU
+	sti8_24 0x120000, 0xe3                 ; Send E3 command to main CPU
 SendCmd_E3__wait_ack:
 	bit_dd8 4, 0x34	; Check for acknowledgment
 	jr nz, SendCmd_E3__timeout2	; Got response - handle in timeout2
@@ -99275,7 +99275,7 @@ SendParams_E2__timeout_wait:
 SendParams_E2__sync_cleared:
 	res_dd8 0, 0x34	; Clear our ready flag
 	stdi8 1302, 1	; Set DMA sync flag
-	stdi8_24 0x120000, 0xe2                 ; Send E2 command to main CPU
+	sti8_24 0x120000, 0xe2                 ; Send E2 command to main CPU
 	lds ix, 0	; Reset timeout counter
 SendParams_E2__wait_cpu_ready:
 	bit_dd8 4, 0x34	; Check if main CPU ready
@@ -99350,7 +99350,7 @@ TwoPhase_Transfer__wait_cpu_ready:
 	jrl z, TwoPhase_Transfer__timeout_ready1	; Not ready - timeout handler
 	res_dd8 0, 0x34	; Clear our ready flag
 	stdi8 1302, 2	; Set sync flag to E1 mode
-	stdi8_24 0x120000, 0xe1                 ; Send E1 command
+	sti8_24 0x120000, 0xe1                 ; Send E1 command
 	lds iz, 0	; Reset timeout counter
 TwoPhase_Transfer__wait_ack:
 	bit_dd8 4, 0x34	; Check for acknowledgment
@@ -99463,7 +99463,7 @@ InterCPU_RX_Handler:
 	push xwa
 	bit_dd8 2, 0x34	; Check serial status
 	jr nz, InterCPU_RX_Handler__exit
-	ldda8_24 a, 0x120000                    ; Read command from main CPU
+	ld8_24 a, 0x120000                    ; Read command from main CPU
 	stda8 1306, a	; Save received byte
 	cp a, 0xE1	; Command E1?
 	jr nz, InterCPU_RX_Handler__not_e1
@@ -99591,7 +99591,7 @@ CMD_Dispatch_Handler:
 	ld a, c
 	extz wa
 	sla wa, 2	; index * 4
-	ldada_24 xbc, 0xff8000                  ; Jump table at ROM start
+	lda_24 xbc, 0xff8000                  ; Jump table at ROM start
 	ld_sril3 XWA, 0x07, 0xE4, 0xE0	; Get handler address
 	call (xwa)	; Call handler (if valid)
 	inc 6, xsp	; Clean up stack
@@ -99667,7 +99667,7 @@ INIT_MEMORY_TEST__no_error:
 	calr DELAY_ROUTINE	; 0xFF89A9 (3-byte relative call)
 
 	; Clear serial buffer area
-	stdi16_24 0x110002, 0x0003              ; 7-byte encoding: f2 02 00 11 02 03 00
+	sti16_24 0x110002, 0x0003              ; 7-byte encoding: f2 02 00 11 02 03 00
 	ldada xbc, 1368
 	ld xwa, xbc
 	inc 8, xbc	; Increment XBC by 1
@@ -99759,7 +99759,7 @@ MEM_TEST_ROUTINE__next_region:
 	ld a, (xsp + 4)
 	extz wa
 	muls wa, 0xA	; Each entry is 10 bytes (TMP94C241 encoding)
-	ldada_24 xbc, 0xff8020                  ; Test config table
+	lda_24 xbc, 0xff8020                  ; Test config table
 	st_dri3b B, 0x07, 0xE4, 0xE0	; Point to current entry
 	ld xhl, (xde)	; Memory start address
 	ld xiz, (xde + 4)	; Size in dwords
@@ -99983,11 +99983,11 @@ CONTROL_PANEL_BIT_SET_CLEAR__done:
 INTER_CPU_LATCH_READ_DISPATCH:
 	push xiz
 	ld xiz, xwa	; Save parameter pointer in XIZ
-	ldda16_24 xhl, 0x110002                 ; Read status register
+	ld16_24 xhl, 0x110002                 ; Read status register
 	bit 0, hl	; Check bit 0 (data available?)
 	jr z, INTER_CPU_LATCH_READ_DISPATCH__error	; If not set, return error
 
-	ldda16_24 xwa, 0x110000                 ; Read data word from latch
+	ld16_24 xwa, 0x110000                 ; Read data word from latch
 	ld b, a	; B = low byte
 	and b, 0xFF	; Mask to byte
 	srl wa, 8	; WA >>= 8 (get high byte in A)
@@ -100047,16 +100047,16 @@ NOTE_VELOCITY_LOOKUP_CALCULATE:
 	; Calculate velocity from tables
 	ld c, e	; C = velocity index
 	extz bc	; Zero-extend BC
-	ldada_24 xde, 0xff804c                  ; XDE = velocity curve table base
+	lda_24 xde, 0xff804c                  ; XDE = velocity curve table base
 	lds32 xhl, 0	; Clear XHL
 	ld_srib3 L, 0x07, 0xE8, 0xE4	; L = table[velocity_index]
-	ldda16_24 xbc, 0xff802a                 ; BC = parameter from table
+	ld16_24 xbc, 0xff802a                 ; BC = parameter from table
 	sub hl, bc	; HL = L - BC
-	ldada_24 xde, 0xff8040                  ; XDE = another table
+	lda_24 xde, 0xff8040                  ; XDE = another table
 	ld c, (xde)	; C = table[0]
 	extz bc	; Zero-extend BC
 	muls xbc, xhl	; XBC = BC * HL (signed)
-	ldda16_24 xhl, 0xff802c                 ; HL = divisor from table
+	ld16_24 xhl, 0xff802c                 ; HL = divisor from table
 	exts xbc	; Sign-extend XBC
 	divs xbc, xhl	; XBC = XBC / HL (signed)
 	ld hl, bc	; HL = quotient
@@ -100101,7 +100101,7 @@ NOTE_VELOCITY_LOOKUP_CALCULATE__use_max:
 NOTE_VELOCITY_LOOKUP_CALCULATE__use_min:
 	; Look up final velocity in curve table
 	extz bc	; Zero-extend BC (velocity 0-255)
-	ldada_24 xde, 0xff814c                  ; XDE = final velocity curve table
+	lda_24 xde, 0xff814c                  ; XDE = final velocity curve table
 	ld_srib3 C, 0x07, 0xE8, 0xE4	; C = curve[velocity]
 	ld (xwa + 1), c	; Store final velocity to output[1]
 	ret
@@ -100119,8 +100119,8 @@ NOTE_VELOCITY_LOOKUP_CALCULATE__zero_velocity:
 	.org 0xFF8C75 - 0xFE0000, 0xFF
 
 AUDIO_HW_WRITE_READ:
-	stda16_24 0x100000, xwa                 ; Write WA to hardware register
-	ldda16_24 xhl, 0x100004                 ; Read status/result
+	st16_24 0x100000, xwa                 ; Write WA to hardware register
+	ld16_24 xhl, 0x100004                 ; Read status/result
 	ret
 
 ; ==============================================================================
@@ -100139,9 +100139,9 @@ HARDWARE_CALIBRATION_SEQUENCE:
 	ldw iz, 0xFFFF	; Initialize error flag to -1
 
 	; First hardware write sequence
-	stdi16_24 0x100000, 0x0840              ; Write 0x0840 to hardware reg
+	sti16_24 0x100000, 0x0840              ; Write 0x0840 to hardware reg
 	nop
-	stdi16_24 0x100002, 0xff00              ; Write 0xFF00 to hardware reg+2
+	sti16_24 0x100002, 0xff00              ; Write 0xFF00 to hardware reg+2
 	jr __jrt_nop_FF8C95	; Short delay (jump to next instruction)
 __jrt_nop_FF8C95:
 	nop
@@ -100149,9 +100149,9 @@ __jrt_nop_FF8C95:
 	nop
 
 	; Second hardware write sequence
-	stdi16_24 0x100000, 0x0800              ; Write 0x0800 to hardware reg
+	sti16_24 0x100000, 0x0800              ; Write 0x0800 to hardware reg
 	nop
-	stdi16_24 0x100002, 0xff80              ; Write 0xFF80 to hardware reg+2
+	sti16_24 0x100002, 0xff80              ; Write 0xFF80 to hardware reg+2
 	jr __jrt_nop_FF8CA9	; Short delay
 __jrt_nop_FF8CA9:
 	nop
@@ -100164,7 +100164,7 @@ __jrt_nop_FF8CA9:
 	calr HARDWARE_PARAM_BLOCK_WRITE	; Write parameters to hardware
 
 	; Read back and verify
-	ldda16_24 xbc, 0xff824c                 ; Read first word from param block
+	ld16_24 xbc, 0xff824c                 ; Read first word from param block
 	lds wa, 0
 	calr HARDWARE_VERIFY_WRITE	; Call verification routine
 
@@ -100182,9 +100182,9 @@ HARDWARE_CALIBRATION_SEQUENCE__retry_loop:
 	lds iz, 0	; Clear error flag (will succeed)
 
 	; Repeat first hardware write sequence
-	stdi16_24 0x100000, 0x0840
+	sti16_24 0x100000, 0x0840
 	nop
-	stdi16_24 0x100002, 0xff00
+	sti16_24 0x100002, 0xff00
 	jr __jrt_nop_FF8CE3
 __jrt_nop_FF8CE3:
 	nop
@@ -100192,9 +100192,9 @@ __jrt_nop_FF8CE3:
 	nop
 
 	; Repeat second hardware write sequence
-	stdi16_24 0x100000, 0x0800
+	sti16_24 0x100000, 0x0800
 	nop
-	stdi16_24 0x100002, 0xff80
+	sti16_24 0x100002, 0xff80
 	jr __jrt_nop_FF8CF7
 __jrt_nop_FF8CF7:
 	nop
@@ -100236,11 +100236,11 @@ HARDWARE_PARAM_BLOCK_WRITE:
 	; Write parameter 0 (offset +0x40)
 	ld wa, iz
 	add wa, 0x40
-	stda16_24 0x100000, xwa                 ; Address = base + 0x40
+	st16_24 0x100000, xwa                 ; Address = base + 0x40
 	nop
 	ld xbc, (xsp + 2)	; Restore XBC
 	ld wa, (xbc + 2)	; Get param[2:3]
-	stda16_24 0x100002, xwa                 ; Write data
+	st16_24 0x100002, xwa                 ; Write data
 	jr __jrt_nop_FF8D2B
 __jrt_nop_FF8D2B:
 	nop
@@ -100250,11 +100250,11 @@ __jrt_nop_FF8D2B:
 	; Write parameter 1 (offset +0x80)
 	ld wa, iz
 	add wa, 0x80
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	ld wa, (xbc + 4)	; Get param[4:5]
 	set 15, wa	; Set bit 15
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_FF8D47
 __jrt_nop_FF8D47:
 	nop
@@ -100264,10 +100264,10 @@ __jrt_nop_FF8D47:
 	; Write parameter 2 (offset +0xC0)
 	ld wa, iz
 	add wa, 0xC0
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	ld wa, (xbc + 6)	; Get param[6:7]
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_FF8D60
 __jrt_nop_FF8D60:
 	nop
@@ -100277,10 +100277,10 @@ __jrt_nop_FF8D60:
 	; Write parameter 3 (offset +0x100)
 	ld wa, iz
 	add wa, 0x100
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	ld wa, (xbc + 8)	; Get param[8:9]
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_FF8D79
 __jrt_nop_FF8D79:
 	nop
@@ -100290,10 +100290,10 @@ __jrt_nop_FF8D79:
 	; Write parameter 4 (offset +0x140)
 	ld wa, iz
 	add wa, 0x140
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	ld wa, (xbc + 10)	; Get param[10:11]
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_FF8D92
 __jrt_nop_FF8D92:
 	nop
@@ -100303,10 +100303,10 @@ __jrt_nop_FF8D92:
 	; Write parameter 5 (offset +0x180)
 	ld wa, iz
 	add wa, 0x180
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	ld wa, (xbc + 12)	; Get param[12:13]
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_FF8DAB
 __jrt_nop_FF8DAB:
 	nop
@@ -100316,10 +100316,10 @@ __jrt_nop_FF8DAB:
 	; Write parameter 6 (offset +0x400)
 	ld wa, iz
 	add wa, 0x400
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	ld wa, (xbc + 14)	; Get param[14:15]
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_FF8DC4
 __jrt_nop_FF8DC4:
 	nop
@@ -100329,10 +100329,10 @@ __jrt_nop_FF8DC4:
 	; Write parameter 7 (offset +0x440)
 	ld wa, iz
 	add wa, 0x440
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	ld wa, (xbc + 16)	; Get param[16:17]
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_FF8DDD
 __jrt_nop_FF8DDD:
 	nop
@@ -100342,10 +100342,10 @@ __jrt_nop_FF8DDD:
 	; Write parameter 8 (offset +0x480)
 	ld wa, iz
 	add wa, 0x480
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	ld wa, (xbc + 18)	; Get param[18:19]
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_FF8DF6
 __jrt_nop_FF8DF6:
 	nop
@@ -100355,10 +100355,10 @@ __jrt_nop_FF8DF6:
 	; Write parameter 9 (offset +0x4C0)
 	ld wa, iz
 	add wa, 0x4C0
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	ld wa, (xbc + 20)	; Get param[20:21]
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_FF8E0F
 __jrt_nop_FF8E0F:
 	nop
@@ -100368,10 +100368,10 @@ __jrt_nop_FF8E0F:
 	; Write parameter 10 (offset +0x500)
 	ld wa, iz
 	add wa, 0x500
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	ld wa, (xbc + 22)	; Get param[22:23]
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_FF8E28
 __jrt_nop_FF8E28:
 	nop
@@ -100381,10 +100381,10 @@ __jrt_nop_FF8E28:
 	; Write parameter 11 (offset +0x800)
 	ld wa, iz
 	add wa, 0x800
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	ld wa, (xbc + 24)	; Get param[24:25]
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_FF8E41
 __jrt_nop_FF8E41:
 	nop
@@ -100392,9 +100392,9 @@ __jrt_nop_FF8E41:
 	nop
 
 	; Write IZ directly with constant 0x8100
-	stda16_24 0x100000, xiz                 ; Write base offset
+	st16_24 0x100000, xiz                 ; Write base offset
 	nop
-	stdi16_24 0x100002, 0x8100              ; Write 0x8100
+	sti16_24 0x100002, 0x8100              ; Write 0x8100
 	jr __jrt_nop_FF8E53
 __jrt_nop_FF8E53:
 	nop
@@ -100404,10 +100404,10 @@ __jrt_nop_FF8E53:
 	; Write parameter 12 (offset +0x840)
 	ld wa, iz
 	add wa, 0x840
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	ld wa, (xbc + 26)	; Get param[26:27]
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_FF8E6C
 __jrt_nop_FF8E6C:
 	nop
@@ -100417,10 +100417,10 @@ __jrt_nop_FF8E6C:
 	; Write parameter 13 (offset +0x880)
 	ld wa, iz
 	add wa, 0x880
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	ld wa, (xbc + 28)	; Get param[28:29]
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_FF8E85
 __jrt_nop_FF8E85:
 	nop
@@ -100430,10 +100430,10 @@ __jrt_nop_FF8E85:
 	; Write parameter 14 (offset +0x8C0)
 	ld wa, iz
 	add wa, 0x8C0
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	ld wa, (xbc + 30)	; Get param[30:31]
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_FF8E9E
 __jrt_nop_FF8E9E:
 	nop
@@ -100443,10 +100443,10 @@ __jrt_nop_FF8E9E:
 	; Write parameter 15 (offset +0x900)
 	ld wa, iz
 	add wa, 0x900
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	ld wa, (xbc + 32)	; Get param[32:33]
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_FF8EB7
 __jrt_nop_FF8EB7:
 	nop
@@ -100456,10 +100456,10 @@ __jrt_nop_FF8EB7:
 	; Write parameter 16 (offset +0x940)
 	ld wa, iz
 	add wa, 0x940
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	ld wa, (xbc + 34)	; Get param[34:35]
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_FF8ED0
 __jrt_nop_FF8ED0:
 	nop
@@ -100469,10 +100469,10 @@ __jrt_nop_FF8ED0:
 	; Write parameter 17 (offset +0x980)
 	ld wa, iz
 	add wa, 0x980
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	ld wa, (xbc + 36)	; Get param[36:37]
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_FF8EE9
 __jrt_nop_FF8EE9:
 	nop
@@ -100482,10 +100482,10 @@ __jrt_nop_FF8EE9:
 	; Write parameter 18 (offset +0x9C0)
 	ld wa, iz
 	add wa, 0x9C0
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	ld wa, (xbc + 38)	; Get param[38:39]
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_FF8F02
 __jrt_nop_FF8F02:
 	nop
@@ -100495,10 +100495,10 @@ __jrt_nop_FF8F02:
 	; Write parameter 19 (offset +0xA00)
 	ld wa, iz
 	add wa, 0xA00
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	ld wa, (xbc + 40)	; Get param[40:41]
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_FF8F1B
 __jrt_nop_FF8F1B:
 	nop
@@ -100508,10 +100508,10 @@ __jrt_nop_FF8F1B:
 	; Write parameter 20 (offset +0xA40)
 	ld wa, iz
 	add wa, 0xA40
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	ld wa, (xbc + 42)	; Get param[42:43]
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_FF8F34
 __jrt_nop_FF8F34:
 	nop
@@ -100521,11 +100521,11 @@ __jrt_nop_FF8F34:
 	; Final write - parameter 1 again with bit 15 cleared (offset +0x80)
 	ld wa, iz
 	add wa, 0x80
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	ld wa, (xbc + 4)	; Get param[4:5] again
 	res 15, wa	; Clear bit 15 (was set earlier)
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_FF8F50
 __jrt_nop_FF8F50:
 	nop
@@ -100551,9 +100551,9 @@ __jrt_nop_FF8F50:
 HARDWARE_VERIFY_WRITE:
 	pushw iz
 	ld iz, bc	; Save BC in IZ
-	stda16_24 0x100000, xwa                 ; Write address/command
+	st16_24 0x100000, xwa                 ; Write address/command
 	nop
-	stda16_24 0x100002, xiz                 ; Write data from IZ
+	st16_24 0x100002, xiz                 ; Write data from IZ
 	jr __jrt_nop_FF8F67	; Short delay
 __jrt_nop_FF8F67:
 	nop

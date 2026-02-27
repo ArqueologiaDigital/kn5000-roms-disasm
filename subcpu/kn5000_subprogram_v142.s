@@ -9201,7 +9201,7 @@ RESET:	; 01F924
 	calr LABEL_01FC01
 
 LABEL_01FAA6:
-	ldada_24 xwa, 0x04069a
+	lda_24 xwa, 0x04069a
 	ld xsp, xwa
 	call LABEL_01FDDA
 	lda_dd8l XBC, 0xE4
@@ -9287,9 +9287,9 @@ LABEL_01FB41:
 	cps bc, 5
 	jr gt, LABEL_01FBB8
 	add bc, bc
-	ldada_24 xix, 0x00f460
+	lda_24 xix, 0x00f460
 	ld_sriw3 BC, 0x07, 0xF0, 0xE4
-	ldada_24 xix, 0x01fb76
+	lda_24 xix, 0x01fb76
 	jp_dri 8, 0x07, 0xF0, 0xE4
 
 
@@ -10625,7 +10625,7 @@ LABEL_020851:
 LABEL_0208B8:
 	pushw ix
 	push xde
-	ldada_24 xde, 0x040c2e
+	lda_24 xde, 0x040c2e
 	call LABEL_020B83
 	pop xde
 	popw ix
@@ -10656,7 +10656,7 @@ LABEL_0208C6:
 LABEL_020966:
 	pushw ix
 	push xde
-	ldada_24 xde, 0x041038
+	lda_24 xde, 0x041038
 	call LABEL_020A65
 	pop xde
 	popw ix
@@ -10687,7 +10687,7 @@ LABEL_020974:
 LABEL_020A14:
 	pushw ix
 	push xde
-	ldada_24 xde, 0x041142
+	lda_24 xde, 0x041142
 	call LABEL_020AF4
 	pop xde
 	popw ix
@@ -10811,11 +10811,11 @@ InterCPU_Latch_Setup:
 	set 0, a
 	ld (xbc), a
 	ldio 0x8A, 0x14
-	ldada_24 xwa, 0x120000
+	lda_24 xwa, 0x120000
 	ldc_cr32 xwa, 0x28
 	ldb a, 0x8
 	ldc_cr8 a, 0x4A
-	ldada_24 xwa, 0x120000
+	lda_24 xwa, 0x120000
 	ldc_cr32 xwa, 0x00
 	ldb a, 0x0
 	ldc_cr8 a, 0x42
@@ -10890,7 +10890,7 @@ DMA_Chunk_Start:
 	dec 1, l
 	sll a, 5
 	or a, l
-	stda8_24 0x120000, a
+	st8_24 0x120000, a
 	lds ix, 0
 
 DMA_Chunk_Transfer:
@@ -10982,7 +10982,7 @@ E1_Check_MSTAT1:
 	jrl z, E1_Timeout_Retry
 	res_dd8 0, 0x34	; SSTAT0 - clear to acknowledge E1 command from Main CPU
 	stdi8 4328, 2
-	stdi8_24 0x120000, 0xe1
+	sti8_24 0x120000, 0xe1
 	lds iz, 0
 
 E1_Start_Transfer:
@@ -11079,7 +11079,7 @@ INT0_HANDLER:	; 20E86
 	push xwa
 	bit_dd8 2, 0x34	; MSTAT0 - test if Main CPU is currently sending data
 	jr nz, INT0_Exit
-	ldda8_24 a, 0x120000
+	ld8_24 a, 0x120000
 	stda8 4332, a
 	cp a, 0xE1
 	jr nz, INT0_Check_E2
@@ -11197,7 +11197,7 @@ MICRODMA_CH0_HANDLER:	; 20F1Fh - Channel #0 completion (command dispatch)
 	ld a, c
 	extz wa
 	sla wa, 2	; Multiply by 4 (table entry size)
-	ldada_24 xbc, 0x00f46c
+	lda_24 xbc, 0x00f46c
 	ld_sril3 XWA, 0x07, 0xE4, 0xE0
 	call (xwa)	; Dispatch to handler
 	inc 6, xsp
@@ -11309,8 +11309,8 @@ Cmd_DMA_Check_Stuck:	; 021001h
 ; ===========================================================================
 DAC_Write_Sample:
 	res_dd8 7, 0x18
-	stda16_24 0x100000, xwa
-	ldda16_24 xhl, 0x100000
+	st16_24 0x100000, xwa
+	ld16_24 xhl, 0x100000
 	ret
 
 RingBuf_SetOffsetHi:
@@ -12152,12 +12152,12 @@ LABEL_0217AD:
 	ld a, (xsp + 4)
 	and a, 0x1F
 	extz wa
-	ldada_24 xbc, 0x00f48c
+	lda_24 xbc, 0x00f48c
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	ldfr_berp A, 0xFA
 	ld a, (xsp + 4)
 	extz wa
-	ldada_24 xbc, 0x00f4ac
+	lda_24 xbc, 0x00f4ac
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	ld (xsp + 2), a
 	ld a, (xsp + 6)
@@ -12410,7 +12410,7 @@ LABEL_021AC0:
 	jr nc, LABEL_021B24
 	ldto_berp A, 0xFA
 	extz wa
-	ldada_24 xbc, 0x00f4ec
+	lda_24 xbc, 0x00f4ec
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	ldfr_berp A, 0xFB
 	and a, (xsp + 8)
@@ -12419,7 +12419,7 @@ LABEL_021AC0:
 	ldto_berp A, 0xFB
 	and a, 0x1F
 	extz wa
-	ldada_24 xbc, 0x00f48c
+	lda_24 xbc, 0x00f48c
 	ld_srib3 C, 0x07, 0xE4, 0xE0
 	ld a, e
 	extz wa
@@ -12838,10 +12838,10 @@ LABEL_021F08:
 	ld a, (xsp + 4)
 	extz wa
 	add wa, 0x840
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	stdi16_24 0x100002, 0xa200
+	sti16_24 0x100002, 0xa200
 	jr __jrt_nop_021F26
 __jrt_nop_021F26:
 
@@ -12853,10 +12853,10 @@ LABEL_021F26:
 	ld a, (xsp + 4)
 	extz wa
 	add wa, 0x800
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	stdi16_24 0x100002, 0xa280
+	sti16_24 0x100002, 0xa280
 	jr __jrt_nop_021F47
 __jrt_nop_021F47:
 
@@ -12880,10 +12880,10 @@ LABEL_021F63:
 	ld a, (xsp + 4)
 	add a, 0xC0
 	extz wa
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	stdi16_24 0x100002, 0x0000
+	sti16_24 0x100002, 0x0000
 	jr __jrt_nop_021F80
 __jrt_nop_021F80:
 
@@ -12894,10 +12894,10 @@ LABEL_021F80:
 	res_dd8 7, 0x18
 	ld a, (xsp + 4)
 	extz wa
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	stdi16_24 0x100002, 0x7e00
+	sti16_24 0x100002, 0x7e00
 	jr __jrt_nop_021F9D
 __jrt_nop_021F9D:
 
@@ -12924,7 +12924,7 @@ LABEL_021FB4:
 	ldada xhl, 4397
 	ld a, (xsp + 4)
 	extz wa
-	ldada_24 xbc, 0x00f507
+	lda_24 xbc, 0x00f507
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	lda_dri3 XBC, 0x07, 0xEC, 0xE8
 	jr LABEL_022002
@@ -12937,7 +12937,7 @@ LABEL_021FDF:
 	ldada xhl, 4397
 	ld a, (xsp + 4)
 	extz wa
-	ldada_24 xbc, 0x00f519
+	lda_24 xbc, 0x00f519
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	lda_dri3 XBC, 0x07, 0xEC, 0xE8
 
@@ -12989,7 +12989,7 @@ LABEL_02205A:
 	ld a, (xsp + 4)
 	extz wa
 	sla wa, 2
-	ldada_24 xbc, 0x00f52b
+	lda_24 xbc, 0x00f52b
 	ld_sril3 XWA, 0x07, 0xE4, 0xE0
 	st_dri3l XWA, 0x07, 0xEC, 0xE8
 	jr LABEL_0220AE
@@ -13003,7 +13003,7 @@ LABEL_022088:
 	ld a, (xsp + 4)
 	extz wa
 	sla wa, 2
-	ldada_24 xbc, 0x00f597
+	lda_24 xbc, 0x00f597
 	ld_sril3 XWA, 0x07, 0xE4, 0xE0
 	st_dri3l XWA, 0x07, 0xEC, 0xE8
 
@@ -13256,7 +13256,7 @@ LABEL_022306:
 LABEL_022309:
 	inc 2, xwa
 	ld xde, xwa
-	ldada_24 xwa, 0x00f603
+	lda_24 xwa, 0x00f603
 	ld xbc, xwa
 	cpmi8 (xbc), 0xFF
 	jr z, LABEL_02233D
@@ -13331,7 +13331,7 @@ LABEL_022390:
 	and a, 0xF
 	extz wa
 	muls wa, 0x6
-	ldada_24 xbc, 0x00f633
+	lda_24 xbc, 0x00f633
 	exts xwa
 	add xwa, xbc
 	ld (xsp + 8), xwa
@@ -13911,7 +13911,7 @@ LABEL_02289D:
 	ld c, a
 	extz bc
 	muls bc, 0x11F
-	ldada_24 xde, 0x04136e
+	lda_24 xde, 0x04136e
 	ld_sril3 XBC, 0x07, 0xE8, 0xE4
 	ld c, (xbc + 42)
 	and c, 0xF0
@@ -13919,10 +13919,10 @@ LABEL_02289D:
 	extz wa
 	muls wa, 0x11F
 	ld de, wa
-	ldada_24 xhl, 0x0413d5
+	lda_24 xhl, 0x0413d5
 	ld a, c
 	extz wa
-	ldada_24 xbc, 0x011acf
+	lda_24 xbc, 0x011acf
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	lda_dri3 XBC, 0x07, 0xEC, 0xE8
 	ret
@@ -13931,17 +13931,17 @@ LABEL_0228D9:
 	ld c, a
 	extz bc
 	muls bc, 0x11F
-	ldada_24 xde, 0x04136e
+	lda_24 xde, 0x04136e
 	ld_sril3 XBC, 0x07, 0xE8, 0xE4
 	ld c, (xbc + 42)
 	and c, 0xF
 	extz wa
 	muls wa, 0x11F
 	ld de, wa
-	ldada_24 xhl, 0x0413d5
+	lda_24 xhl, 0x0413d5
 	ld a, c
 	extz wa
-	ldada_24 xbc, 0x011acf
+	lda_24 xbc, 0x011acf
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	lda_dri3 XBC, 0x07, 0xEC, 0xE8
 	ret
@@ -13999,7 +13999,7 @@ LABEL_02294B:
 	ret
 
 LABEL_02294E:
-	ldda16_24 xde, 0x041343
+	ld16_24 xde, 0x041343
 	bit 1, de
 	jr z, LABEL_02295C
 	lds hl, 0
@@ -14013,9 +14013,9 @@ LABEL_02295C:
 	cp wa, 0x9
 	jr gt, LABEL_022986
 	add wa, wa
-	ldada_24 xix, 0x00f693
+	lda_24 xix, 0x00f693
 	ld_sriw3 WA, 0x07, 0xF0, 0xE0
-	ldada_24 xix, 0x022982
+	lda_24 xix, 0x022982
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
 LABEL_022982:
@@ -14028,7 +14028,7 @@ LABEL_022986:
 	and c, 0xF
 	ld a, c
 	extz wa
-	ldada_24 xbc, 0x011acf
+	lda_24 xbc, 0x011acf
 	ld_srib3 L, 0x07, 0xE4, 0xE0
 	exts hl
 	sla hl, 8
@@ -14134,7 +14134,7 @@ LABEL_022A3F:
 	ld (xwa + 15), xbc
 	ormi16 (xwa + 1), 0x7000
 	ld wa, (xbc)
-	stda16_24 0x0451ce, xwa
+	st16_24 0x0451ce, xwa
 	ld wa, (xbc + 13)
 	stda16 10558, xwa
 	ret
@@ -14146,7 +14146,7 @@ LABEL_022A61:
 	ld (xwa + 15), xbc
 	ormi16 (xwa + 1), 0x5000
 	ld wa, (xbc)
-	stda16_24 0x0451ce, xwa
+	st16_24 0x0451ce, xwa
 	ld wa, (xbc + 10)
 	stda16 10558, xwa
 	ret
@@ -14158,7 +14158,7 @@ LABEL_022A83:
 	ld (xwa + 15), xbc
 	ormi16 (xwa + 1), 0x3000
 	ld wa, (xbc)
-	stda16_24 0x0451ce, xwa
+	st16_24 0x0451ce, xwa
 	stdi16 10558, 0
 	ret
 
@@ -14169,7 +14169,7 @@ LABEL_022AA4:
 	ld (xwa + 15), xbc
 	ormi16 (xwa + 1), 0x1000
 	ld wa, (xbc)
-	stda16_24 0x0451ce, xwa
+	st16_24 0x0451ce, xwa
 	stdi16 10558, 0
 	ret
 
@@ -14180,7 +14180,7 @@ LABEL_022AC5:
 	ld (xwa + 15), xbc
 	ormi16 (xwa + 1), 0x4000
 	ld wa, (xbc)
-	stda16_24 0x0451ce, xwa
+	st16_24 0x0451ce, xwa
 	ld wa, (xbc + 4)
 	stda16 10558, xwa
 	ret
@@ -14191,7 +14191,7 @@ LABEL_022AE7:
 	st_dri3b A, 0x07, 0xE4, 0xE8
 	ld (xwa + 15), xbc
 	ld wa, (xbc)
-	stda16_24 0x0451ce, xwa
+	st16_24 0x0451ce, xwa
 	stdi16 10558, 0
 	ret
 
@@ -14231,7 +14231,7 @@ LABEL_022B2A:
 	cps a, 0
 	jr ge, LABEL_022B43
 	extz bc
-	ldada_24 xhl, 0x00fee4
+	lda_24 xhl, 0x00fee4
 	ld_srib3 C, 0x07, 0xEC, 0xE4
 	extz bc
 	cpl a
@@ -14242,7 +14242,7 @@ LABEL_022B43:
 	exts ix
 	ld a, c
 	extz wa
-	ldada_24 xbc, 0x00ff64
+	lda_24 xbc, 0x00ff64
 	ld_srib3 L, 0x07, 0xE4, 0xE0
 	exts hl
 	ld wa, hl
@@ -14265,7 +14265,7 @@ LABEL_022B68:
 
 LABEL_022B79:
 	extz wa
-	ldada_24 xbc, 0x0119c8
+	lda_24 xbc, 0x0119c8
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	extz wa
 	cpl wa
@@ -14279,7 +14279,7 @@ LABEL_022B8D:
 
 LABEL_022B96:
 	extz wa
-	ldada_24 xbc, 0x0119c8
+	lda_24 xbc, 0x0119c8
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	extz wa
 
@@ -14289,7 +14289,7 @@ LABEL_022BA4:
 
 LABEL_022BA7:
 	extz wa
-	ldada_24 xbc, 0x0119c8
+	lda_24 xbc, 0x0119c8
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	extz wa
 	ld hl, wa
@@ -14464,7 +14464,7 @@ LABEL_022CF8:
 	ld xbc, xwa
 	add xbc, xbc
 	add xbc, xwa
-	ldada_24 xwa, 0x011a26
+	lda_24 xwa, 0x011a26
 	add xwa, xbc
 	ld a, (xwa)
 	ld l, a
@@ -14485,7 +14485,7 @@ LABEL_022CF8:
 	ld xbc, xwa
 	add xbc, xbc
 	add xbc, xwa
-	ldada_24 xwa, 0x011a27
+	lda_24 xwa, 0x011a27
 	add xwa, xbc
 	ld a, (xwa)
 	exts wa
@@ -14498,7 +14498,7 @@ LABEL_022D53:
 	ld xbc, xwa
 	add xbc, xbc
 	add xbc, xwa
-	ldada_24 xwa, 0x0119fc
+	lda_24 xwa, 0x0119fc
 	add xwa, xbc
 	ld a, (xwa)
 	ld l, a
@@ -14519,7 +14519,7 @@ LABEL_022D53:
 	ld xbc, xwa
 	add xbc, xbc
 	add xbc, xwa
-	ldada_24 xwa, 0x0119fd
+	lda_24 xwa, 0x0119fd
 	add xwa, xbc
 	ld a, (xwa)
 	exts wa
@@ -14556,7 +14556,7 @@ LABEL_022DBD:
 	ld a, c
 	extz wa
 	muls wa, 0x1B
-	ldada_24 xbc, 0x04424e
+	lda_24 xbc, 0x04424e
 	exts xwa
 	add xwa, xbc
 	st_dri3b W, 0x07, 0xE0, 0xE8
@@ -14599,14 +14599,14 @@ LABEL_022E2A:
 	push xiz
 	extz wa
 	muls wa, 0x1B
-	ldada_24 xbc, 0x04424e
+	lda_24 xbc, 0x04424e
 	exts xwa
 	add xwa, xbc
 	ld (xsp + 4), xwa
 	ld a, (xwa + 1)
 	extz wa
 	add wa, wa
-	ldada_24 xbc, 0x010a64
+	lda_24 xbc, 0x010a64
 	ld_sriw3 WA, 0x07, 0xE4, 0xE0
 	ld iz, wa
 	extz xiz
@@ -14644,7 +14644,7 @@ LABEL_022E9A:
 	and a, 0x3
 	extz wa
 	add wa, wa
-	ldada_24 xbc, 0x011511
+	lda_24 xbc, 0x011511
 	ld_sriw3 WA, 0x07, 0xE4, 0xE0
 	ld bc, iz
 	ld hl, bc
@@ -14656,12 +14656,12 @@ LABEL_022E9A:
 LABEL_022EBA:
 	extz wa
 	muls wa, 0x1B
-	ldada_24 xbc, 0x04424e
+	lda_24 xbc, 0x04424e
 	st_dri3b B, 0x07, 0xE4, 0xE0
 	ld a, (xde + 3)
 	extz wa
 	add wa, wa
-	ldada_24 xbc, 0x010964
+	lda_24 xbc, 0x010964
 	ld_sriw3 HL, 0x07, 0xE4, 0xE0
 	extz xhl
 	ld a, (xde + 4)
@@ -14691,14 +14691,14 @@ LABEL_022F3C:
 	push xiz
 	extz wa
 	muls wa, 0x1B
-	ldada_24 xbc, 0x044257
+	lda_24 xbc, 0x044257
 	exts xwa
 	add xwa, xbc
 	ld (xsp + 4), xwa
 	ld a, (xwa + 1)
 	extz wa
 	add wa, wa
-	ldada_24 xbc, 0x010b64
+	lda_24 xbc, 0x010b64
 	ld_sriw3 WA, 0x07, 0xE4, 0xE0
 	ld iz, wa
 	extz xiz
@@ -14736,7 +14736,7 @@ LABEL_022FAC:
 	and a, 0x3
 	extz wa
 	add wa, wa
-	ldada_24 xbc, 0x011511
+	lda_24 xbc, 0x011511
 	ld_sriw3 WA, 0x07, 0xE4, 0xE0
 	ld bc, iz
 	ld hl, bc
@@ -14748,14 +14748,14 @@ LABEL_022FAC:
 LABEL_022FCC:
 	extz wa
 	muls wa, 0x1B
-	ldada_24 xbc, 0x044257
+	lda_24 xbc, 0x044257
 	exts xwa
 	add xwa, xbc
 	ld xde, xwa
 	ld a, (xde + 3)
 	extz wa
 	add wa, wa
-	ldada_24 xbc, 0x010964
+	lda_24 xbc, 0x010964
 	ld_sriw3 HL, 0x07, 0xE4, 0xE0
 	extz xhl
 	ld a, (xde + 4)
@@ -14784,7 +14784,7 @@ LABEL_023043:
 	ld c, a
 	extz bc
 	muls bc, 0x1B
-	ldada_24 xde, 0x044260
+	lda_24 xde, 0x044260
 	exts xbc
 	add xbc, xde
 	ld (xsp + 4), xbc
@@ -14794,7 +14794,7 @@ LABEL_023043:
 	ld a, (xwa + 1)
 	extz wa
 	add wa, wa
-	ldada_24 xbc, 0x010c64
+	lda_24 xbc, 0x010c64
 	ld_sriw3 WA, 0x07, 0xE4, 0xE0
 	ld iz, wa
 	extz xiz
@@ -14832,11 +14832,11 @@ LABEL_0230BD:
 	and a, 0x3
 	extz wa
 	add wa, wa
-	ldada_24 xbc, 0x011511
+	lda_24 xbc, 0x011511
 	ld_sriw3 WA, 0x07, 0xE4, 0xE0
 	ld bc, iz
 	or bc, wa
-	stda16_24 0x045204, xbc
+	st16_24 0x045204, xbc
 	jr LABEL_02315B
 
 LABEL_0230DE:
@@ -14844,7 +14844,7 @@ LABEL_0230DE:
 	ld a, (xwa + 1)
 	extz wa
 	add wa, wa
-	ldada_24 xbc, 0x010c64
+	lda_24 xbc, 0x010c64
 	ld_sriw3 WA, 0x07, 0xE4, 0xE0
 	ld iz, wa
 	extz xiz
@@ -14882,11 +14882,11 @@ LABEL_02313C:
 	and a, 0x3
 	extz wa
 	add wa, wa
-	ldada_24 xbc, 0x011511
+	lda_24 xbc, 0x011511
 	ld_sriw3 WA, 0x07, 0xE4, 0xE0
 	ld bc, iz
 	or bc, wa
-	stda16_24 0x04520e, xbc
+	st16_24 0x04520e, xbc
 
 LABEL_02315B:
 	pop xiz
@@ -14900,14 +14900,14 @@ LABEL_02315F:
 	ld a, (xsp + 4)
 	extz wa
 	muls wa, 0x1B
-	ldada_24 xbc, 0x044260
+	lda_24 xbc, 0x044260
 	exts xwa
 	add xwa, xbc
 	ld xiz, xwa
 	ld a, (xiz + 3)
 	extz wa
 	add wa, wa
-	ldada_24 xbc, 0x010964
+	lda_24 xbc, 0x010964
 	ld_sriw3 HL, 0x07, 0xE4, 0xE0
 	extz xhl
 	ld a, (xiz + 4)
@@ -14926,11 +14926,11 @@ LABEL_0231AF:
 	bitm 5, (xiz)
 	jr z, LABEL_0231BD
 	set 15, hl
-	stda16_24 0x045206, xhl
+	st16_24 0x045206, xhl
 	jr LABEL_0231D6
 
 LABEL_0231BD:
-	stda16_24 0x045206, xhl
+	st16_24 0x045206, xhl
 	jr LABEL_0231D6
 
 LABEL_0231C4:
@@ -14939,7 +14939,7 @@ LABEL_0231C4:
 	ld xhl, 0x3FFF
 
 LABEL_0231D1:
-	stda16_24 0x04520a, xhl
+	st16_24 0x04520a, xhl
 
 LABEL_0231D6:
 	pop xiz
@@ -14976,7 +14976,7 @@ LABEL_02324E:
 	extz wa
 	sla wa, 8
 	add wa, de
-	ldada_24 xbc, 0x00ffe4
+	lda_24 xbc, 0x00ffe4
 	ld_srib3 L, 0x07, 0xE4, 0xE0
 	extz hl
 	ret
@@ -15039,7 +15039,7 @@ LABEL_0232C7:
 	calr LABEL_0232B3
 	ld bc, hl
 	add bc, bc
-	ldada_24 xwa, 0x010764
+	lda_24 xwa, 0x010764
 	ld_sriw3 WA, 0x07, 0xE0, 0xE4
 	add wa, wa
 	ld bc, wa
@@ -15065,7 +15065,7 @@ LABEL_023309:
 LABEL_02331C:
 	or bc, wa
 	set 15, bc
-	stda16_24 0x0451d0, xbc
+	st16_24 0x0451d0, xbc
 	pop xiz
 	ret
 
@@ -15089,7 +15089,7 @@ LABEL_02333E:
 	ld c, a
 	extz bc
 	muls bc, 0x11F
-	ldada_24 xde, 0x041481
+	lda_24 xde, 0x041481
 	ldda32 xhl, 4160
 	sub_sril_rm XHL, 0x07, 0xE8, 0xE4
 	jrl z, LABEL_0233E1
@@ -15098,7 +15098,7 @@ LABEL_02333E:
 	ld c, a
 	extz bc
 	muls bc, 0x11F
-	ldada_24 xde, 0x041485
+	lda_24 xde, 0x041485
 	exts xbc
 	add xbc, xde
 	incm8 1, (xbc)
@@ -15110,7 +15110,7 @@ LABEL_02333E:
 	ld c, a
 	extz bc
 	muls bc, 0x11F
-	ldada_24 xde, 0x041486
+	lda_24 xde, 0x041486
 	stib_dri 0x07, 0xE8, 0xE4, 0x00
 	jr LABEL_0233E1
 
@@ -15118,7 +15118,7 @@ LABEL_023391:
 	ld c, a
 	extz bc
 	muls bc, 0x11F
-	ldada_24 xde, 0x041486
+	lda_24 xde, 0x041486
 	stib_dri 0x07, 0xE8, 0xE4, 0x10
 	jr LABEL_0233E1
 
@@ -15126,7 +15126,7 @@ LABEL_0233A6:
 	ld c, a
 	extz bc
 	muls bc, 0x11F
-	ldada_24 xde, 0x041486
+	lda_24 xde, 0x041486
 	stib_dri 0x07, 0xE8, 0xE4, 0x20
 	jr LABEL_0233E1
 
@@ -15134,19 +15134,19 @@ LABEL_0233BB:
 	ld c, a
 	extz bc
 	muls bc, 0x11F
-	ldada_24 xde, 0x041485
+	lda_24 xde, 0x041485
 	stib_dri 0x07, 0xE8, 0xE4, 0x00
 	ld c, a
 	extz bc
 	muls bc, 0x11F
-	ldada_24 xde, 0x041486
+	lda_24 xde, 0x041486
 	stib_dri 0x07, 0xE8, 0xE4, 0x00
 
 LABEL_0233E1:
 	extz wa
 	muls wa, 0x11F
 	ld bc, wa
-	ldada_24 xde, 0x041481
+	lda_24 xde, 0x041481
 	ldda32 xwa, 4160
 	st_dri3l XWA, 0x07, 0xE8, 0xE4
 	ret
@@ -15157,7 +15157,7 @@ LABEL_0233F8:
 	ld a, (xsp)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xde, 0x0413d5
+	lda_24 xde, 0x0413d5
 	stib_dri 0x07, 0xE8, 0xE0, 0x00
 	ld a, (xsp)
 	cps a, 2
@@ -15182,7 +15182,7 @@ LABEL_02341F:
 	jrl LABEL_0234C3
 
 LABEL_02343C:
-	ldda8_24 a, 0x04134b
+	ld8_24 a, 0x04134b
 	extz wa
 	calr LABEL_022912
 	jr LABEL_0234C3
@@ -15194,7 +15194,7 @@ LABEL_023448:
 	jr LABEL_0234C3
 
 LABEL_023453:
-	ldda8_24 a, 0x04134b
+	ld8_24 a, 0x04134b
 	extz wa
 	calr LABEL_02291D
 	jr LABEL_0234C3
@@ -15203,7 +15203,7 @@ LABEL_02345F:
 	ld a, (xsp)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x04137f
+	lda_24 xbc, 0x04137f
 	bit_dri 3, 0x07, 0xE4, 0xE0
 	jr z, LABEL_023477
 	ldb l, 0x0
@@ -15213,7 +15213,7 @@ LABEL_023477:
 	ld a, (xsp)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x04137f
+	lda_24 xbc, 0x04137f
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	extz wa
 	calr LABEL_022930
@@ -15223,7 +15223,7 @@ LABEL_023490:
 	ld a, (xsp)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x04137f
+	lda_24 xbc, 0x04137f
 	bit_dri 3, 0x07, 0xE4, 0xE0
 	jr z, LABEL_0234A8
 	ldb l, 0x0
@@ -15233,7 +15233,7 @@ LABEL_0234A8:
 	ld a, (xsp)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x04137f
+	lda_24 xbc, 0x04137f
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	extz wa
 	calr LABEL_02293B
@@ -15265,7 +15265,7 @@ LABEL_0234D2:
 	jrl LABEL_023576
 
 LABEL_0234EF:
-	ldda8_24 a, 0x04134b
+	ld8_24 a, 0x04134b
 	extz wa
 	calr LABEL_022912
 	jr LABEL_023576
@@ -15277,7 +15277,7 @@ LABEL_0234FB:
 	jr LABEL_023576
 
 LABEL_023506:
-	ldda8_24 a, 0x04134b
+	ld8_24 a, 0x04134b
 	extz wa
 	calr LABEL_02291D
 	jr LABEL_023576
@@ -15286,7 +15286,7 @@ LABEL_023512:
 	ld a, (xsp)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x04137f
+	lda_24 xbc, 0x04137f
 	bit_dri 4, 0x07, 0xE4, 0xE0
 	jr z, LABEL_02352A
 	ldb l, 0x0
@@ -15296,7 +15296,7 @@ LABEL_02352A:
 	ld a, (xsp)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x04137f
+	lda_24 xbc, 0x04137f
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	extz wa
 	calr LABEL_022930
@@ -15306,7 +15306,7 @@ LABEL_023543:
 	ld a, (xsp)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x04137f
+	lda_24 xbc, 0x04137f
 	bit_dri 4, 0x07, 0xE4, 0xE0
 	jr z, LABEL_02355B
 	ldb l, 0x0
@@ -15316,7 +15316,7 @@ LABEL_02355B:
 	ld a, (xsp)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x04137f
+	lda_24 xbc, 0x04137f
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	extz wa
 	calr LABEL_02293B
@@ -15384,7 +15384,7 @@ LABEL_023584:
 	ld a, (xsp + 6)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x04136a
+	lda_24 xbc, 0x04136a
 	ld_sriw3 WA, 0x07, 0xE4, 0xE0
 	bit 8, wa
 	jrl z, LABEL_023738
@@ -15426,7 +15426,7 @@ LABEL_023660:
 	res 7, a
 	extz wa
 	add wa, wa
-	ldada_24 xbc, 0x00fce4
+	lda_24 xbc, 0x00fce4
 	ld_sriw3 WA, 0x07, 0xE4, 0xE0
 	add iz, wa
 	jrl LABEL_023738
@@ -15437,7 +15437,7 @@ LABEL_02367C:
 	res 7, a
 	extz wa
 	add wa, wa
-	ldada_24 xbc, 0x00fde4
+	lda_24 xbc, 0x00fde4
 	ld_sriw3 WA, 0x07, 0xE4, 0xE0
 	add iz, wa
 	jrl LABEL_023738
@@ -15446,7 +15446,7 @@ LABEL_023698:
 	ld a, (xsp + 6)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x04136e
+	lda_24 xbc, 0x04136e
 	ld_sril3 XWA, 0x07, 0xE4, 0xE0
 	ld l, (xwa + 19)
 	ld a, l
@@ -15472,7 +15472,7 @@ LABEL_0236D2:
 	res 7, a
 	extz wa
 	add wa, wa
-	ldada_24 xbc, 0x00fce4
+	lda_24 xbc, 0x00fce4
 	ld_sriw3 WA, 0x07, 0xE4, 0xE0
 	add iz, wa
 	jr LABEL_023738
@@ -15483,7 +15483,7 @@ LABEL_0236ED:
 	res 7, a
 	extz wa
 	add wa, wa
-	ldada_24 xbc, 0x00fde4
+	lda_24 xbc, 0x00fde4
 	ld_sriw3 WA, 0x07, 0xE4, 0xE0
 	add iz, wa
 	jr LABEL_023738
@@ -15500,7 +15500,7 @@ LABEL_023708:
 	ld a, l
 	extz wa
 	muls wa, 0xC
-	ldada_24 xbc, 0x011b68
+	lda_24 xbc, 0x011b68
 	exts xwa
 	add xwa, xbc
 	ld_srib3 A, 0x07, 0xE0, 0xE8
@@ -15797,14 +15797,14 @@ LABEL_02399D:
 	ormi16 (xiz + 1), 0x4000
 	ld xwa, (xsp + 4)
 	ld wa, (xwa)
-	stda16_24 0x0451ce, xwa
+	st16_24 0x0451ce, xwa
 	ld xwa, (xsp + 4)
 	ld wa, (xwa + 4)
 	stda16 10558, xwa
-	ldda16_24 xwa, 0x041343
+	ld16_24 xwa, 0x041343
 	bit 2, wa
 	jr z, LABEL_0239DD
-	ldda16_24 xwa, 0x0451ce
+	ld16_24 xwa, 0x0451ce
 	and wa, 0xF000
 	add wa, wa
 	anddi16_24 283086, 4095
@@ -15825,7 +15825,7 @@ LABEL_0239E1:
 	exts wa
 	muls wa, 0xD
 	sra wa, 7
-	stda16_24 0x041366, xwa
+	st16_24 0x041366, xwa
 	ret
 
 LABEL_023A05:
@@ -15885,7 +15885,7 @@ LABEL_023A76:
 LABEL_023A83:
 	ld wa, de
 	calr LABEL_022B02
-	stda16_24 0x0451da, xhl
+	st16_24 0x0451da, xhl
 	ret
 
 LABEL_023A8E:
@@ -15916,7 +15916,7 @@ LABEL_023ABF:
 LABEL_023AC5:
 	ld wa, de
 	calr LABEL_022B02
-	stda16_24 0x0451da, xhl
+	st16_24 0x0451da, xhl
 	ret
 
 LABEL_023AD0:
@@ -15973,7 +15973,7 @@ LABEL_023B21:
 	ld de, hl
 	ld a, (xiz + 9)
 	extz wa
-	ldada_24 xbc, 0x0118fe
+	lda_24 xbc, 0x0118fe
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	extz wa
 	add wa, de
@@ -15983,7 +15983,7 @@ LABEL_023B21:
 LABEL_023B60:
 	ld a, (xiz + 9)
 	extz wa
-	ldada_24 xbc, 0x0118fe
+	lda_24 xbc, 0x0118fe
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	extz wa
 	ld (xsp + 10), wa
@@ -15994,7 +15994,7 @@ LABEL_023B74:
 	ld de, hl
 	ld a, (xiz + 11)
 	extz wa
-	ldada_24 xbc, 0x0118fe
+	lda_24 xbc, 0x0118fe
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	extz wa
 	add wa, de
@@ -16004,7 +16004,7 @@ LABEL_023B74:
 LABEL_023B94:
 	ld a, (xiz + 11)
 	extz wa
-	ldada_24 xbc, 0x0118fe
+	lda_24 xbc, 0x0118fe
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	extz wa
 	ld (xsp + 12), wa
@@ -16014,7 +16014,7 @@ LABEL_023BA8:
 	jr z, LABEL_023BC6
 	ld a, (xiz + 13)
 	extz wa
-	ldada_24 xbc, 0x0118fe
+	lda_24 xbc, 0x0118fe
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	extz wa
 	add wa, hl
@@ -16024,7 +16024,7 @@ LABEL_023BA8:
 LABEL_023BC6:
 	ld a, (xiz + 13)
 	extz wa
-	ldada_24 xbc, 0x0118fe
+	lda_24 xbc, 0x0118fe
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	extz wa
 	ld (xsp + 14), wa
@@ -16033,19 +16033,19 @@ LABEL_023BC6:
 LABEL_023BDC:
 	ld a, (xiz + 9)
 	extz wa
-	ldada_24 xbc, 0x0118fe
+	lda_24 xbc, 0x0118fe
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	extz wa
 	ld (xsp + 10), wa
 	ld a, (xiz + 11)
 	extz wa
-	ldada_24 xbc, 0x0118fe
+	lda_24 xbc, 0x0118fe
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	extz wa
 	ld (xsp + 12), wa
 	ld a, (xiz + 13)
 	extz wa
-	ldada_24 xbc, 0x0118fe
+	lda_24 xbc, 0x0118fe
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	extz wa
 	ld (xsp + 14), wa
@@ -16080,7 +16080,7 @@ LABEL_023C3C:
 	ld bc, (xsp + 10)
 	sla bc, 8
 	or bc, wa
-	stda16_24 0x0451ec, xbc
+	st16_24 0x0451ec, xbc
 	cpmi8 (xiz + 21), 0x0
 	jr z, LABEL_023CAA
 	ld a, (xiz + 19)
@@ -16133,13 +16133,13 @@ LABEL_023CC6:
 	ld bc, (xsp + 12)
 	sla bc, 8
 	or bc, wa
-	stda16_24 0x0451ee, xbc
+	st16_24 0x0451ee, xbc
 	ld wa, (xsp + 8)
 	ldb w, 0x0
 	ld bc, (xsp + 14)
 	sla bc, 8
 	or bc, wa
-	stda16_24 0x0451f0, xbc
+	st16_24 0x0451f0, xbc
 	pop xiz
 	lda xsp, (xsp + 16)
 	ret
@@ -16590,9 +16590,9 @@ LABEL_024102:
 	cps bc, 5
 	jr gt, LABEL_02412B
 	add bc, bc
-	ldada_24 xix, 0x00f6a7
+	lda_24 xix, 0x00f6a7
 	ld_sriw3 BC, 0x07, 0xF0, 0xE4
-	ldada_24 xix, 0x02412b
+	lda_24 xix, 0x02412b
 	jp_dri 8, 0x07, 0xF0, 0xE4
 
 LABEL_02412B:
@@ -16806,18 +16806,18 @@ LABEL_024300:
 	cps wa, 5
 	jr gt, LABEL_02432C
 	add wa, wa
-	ldada_24 xix, 0x00f6b3
+	lda_24 xix, 0x00f6b3
 	ld_sriw3 WA, 0x07, 0xF0, 0xE0
-	ldada_24 xix, 0x02432c
+	lda_24 xix, 0x02432c
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
 LABEL_02432C:
 	ld xwa, xiz
 	calr LABEL_022DA1
 	ld wa, (xiz + 66)
-	stda16_24 0x0451d4, xwa
+	st16_24 0x0451d4, xwa
 	ld wa, (xiz + 68)
-	stda16_24 0x0451d6, xwa
+	st16_24 0x0451d6, xwa
 	jr LABEL_024364
 	ld xwa, xiz
 	calr LABEL_02413E
@@ -16872,16 +16872,16 @@ LABEL_0243A7:
 	ld wa, (xiz + 66)
 	and wa, 0xFF80
 	or wa, hl
-	stda16_24 0x0451d4, xwa
+	st16_24 0x0451d4, xwa
 	jr LABEL_0243C2
 
 LABEL_0243BA:
 	ld wa, (xiz + 66)
-	stda16_24 0x0451d4, xwa
+	st16_24 0x0451d4, xwa
 
 LABEL_0243C2:
 	ld wa, (xiz + 68)
-	stda16_24 0x0451d6, xwa
+	st16_24 0x0451d6, xwa
 	pop xiz
 	ret
 
@@ -16921,18 +16921,18 @@ LABEL_02440D:
 	ld bc, (xiz + 66)
 	and bc, 0xFF80
 	or bc, wa
-	stda16_24 0x0451d4, xbc
+	st16_24 0x0451d4, xbc
 	ld wa, (xiz + 68)
 	and wa, 0xFF80
 	or wa, hl
-	stda16_24 0x0451d6, xwa
+	st16_24 0x0451d6, xwa
 	jr LABEL_024442
 
 LABEL_024432:
 	ld wa, (xiz + 66)
-	stda16_24 0x0451d4, xwa
+	st16_24 0x0451d4, xwa
 	ld wa, (xiz + 68)
-	stda16_24 0x0451d6, xwa
+	st16_24 0x0451d6, xwa
 
 LABEL_024442:
 	pop xiz
@@ -16951,16 +16951,16 @@ LABEL_024444:
 	cps wa, 5
 	jr gt, LABEL_024472
 	add wa, wa
-	ldada_24 xix, 0x00f6bf
+	lda_24 xix, 0x00f6bf
 	ld_sriw3 WA, 0x07, 0xF0, 0xE0
-	ldada_24 xix, 0x024472
+	lda_24 xix, 0x024472
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
 LABEL_024472:
 	ld wa, (xiz + 66)
-	stda16_24 0x0451d4, xwa
+	st16_24 0x0451d4, xwa
 	ld wa, (xiz + 68)
-	stda16_24 0x0451d6, xwa
+	st16_24 0x0451d6, xwa
 	jrl LABEL_024550
 	ld xwa, xiz
 	calr LABEL_024366
@@ -17026,20 +17026,20 @@ LABEL_024517:
 	ld wa, (xiz + 66)
 	and wa, 0xFF80
 	or wa, hl
-	stda16_24 0x0451d4, xwa
+	st16_24 0x0451d4, xwa
 	ld wa, (xsp + 4)
 	calr LABEL_022BF2
 	ld wa, (xiz + 68)
 	and wa, 0xFF80
 	or wa, hl
-	stda16_24 0x0451d6, xwa
+	st16_24 0x0451d6, xwa
 	jr LABEL_024550
 
 LABEL_024540:
 	ld wa, (xiz + 66)
-	stda16_24 0x0451d4, xwa
+	st16_24 0x0451d4, xwa
 	ld wa, (xiz + 68)
-	stda16_24 0x0451d6, xwa
+	st16_24 0x0451d6, xwa
 
 LABEL_024550:
 	pop xiz
@@ -17059,16 +17059,16 @@ LABEL_024554:
 	cps wa, 5
 	jr gt, LABEL_024582
 	add wa, wa
-	ldada_24 xix, 0x00f6cb
+	lda_24 xix, 0x00f6cb
 	ld_sriw3 WA, 0x07, 0xF0, 0xE0
-	ldada_24 xix, 0x024582
+	lda_24 xix, 0x024582
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
 LABEL_024582:
 	ld wa, (xiz + 66)
-	stda16_24 0x0451d4, xwa
+	st16_24 0x0451d4, xwa
 	ld wa, (xiz + 68)
-	stda16_24 0x0451d6, xwa
+	st16_24 0x0451d6, xwa
 	jrl LABEL_024660
 	ld xwa, xiz
 	calr LABEL_024366
@@ -17134,20 +17134,20 @@ LABEL_024627:
 	ld wa, (xiz + 66)
 	and wa, 0xFF80
 	or wa, hl
-	stda16_24 0x0451d4, xwa
+	st16_24 0x0451d4, xwa
 	ld wa, (xsp + 4)
 	calr LABEL_022BF2
 	ld wa, (xiz + 68)
 	and wa, 0xFF80
 	or wa, hl
-	stda16_24 0x0451d6, xwa
+	st16_24 0x0451d6, xwa
 	jr LABEL_024660
 
 LABEL_024650:
 	ld wa, (xiz + 66)
-	stda16_24 0x0451d4, xwa
+	st16_24 0x0451d4, xwa
 	ld wa, (xiz + 68)
-	stda16_24 0x0451d6, xwa
+	st16_24 0x0451d6, xwa
 
 LABEL_024660:
 	pop xiz
@@ -17181,7 +17181,7 @@ LABEL_024664:
 	ld xwa, (xsp + 2)
 	ld a, (xwa + 63)
 	extz wa
-	ldada_24 xbc, 0x0118fe
+	lda_24 xbc, 0x0118fe
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	extz wa
 	add wa, de
@@ -17192,7 +17192,7 @@ LABEL_0246BC:
 	ld xwa, (xsp + 2)
 	ld a, (xwa + 63)
 	extz wa
-	ldada_24 xbc, 0x0118fe
+	lda_24 xbc, 0x0118fe
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	extz wa
 	ld (xsp + 6), wa
@@ -17205,7 +17205,7 @@ LABEL_0246D3:
 	ld xwa, (xsp + 2)
 	ld a, (xwa + 65)
 	extz wa
-	ldada_24 xbc, 0x0118fe
+	lda_24 xbc, 0x0118fe
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	extz wa
 	add wa, de
@@ -17216,7 +17216,7 @@ LABEL_0246F9:
 	ld xwa, (xsp + 2)
 	ld a, (xwa + 65)
 	extz wa
-	ldada_24 xbc, 0x0118fe
+	lda_24 xbc, 0x0118fe
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	extz wa
 	ld (xsp + 8), wa
@@ -17228,7 +17228,7 @@ LABEL_024710:
 	ld xwa, (xsp + 2)
 	ld a, (xwa + 67)
 	extz wa
-	ldada_24 xbc, 0x0118fe
+	lda_24 xbc, 0x0118fe
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	extz wa
 	add wa, hl
@@ -17239,7 +17239,7 @@ LABEL_024734:
 	ld xwa, (xsp + 2)
 	ld a, (xwa + 67)
 	extz wa
-	ldada_24 xbc, 0x0118fe
+	lda_24 xbc, 0x0118fe
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	extz wa
 	ld (xsp + 10), wa
@@ -17249,21 +17249,21 @@ LABEL_02474D:
 	ld xwa, (xsp + 2)
 	ld a, (xwa + 63)
 	extz wa
-	ldada_24 xbc, 0x0118fe
+	lda_24 xbc, 0x0118fe
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	extz wa
 	ld (xsp + 6), wa
 	ld xwa, (xsp + 2)
 	ld a, (xwa + 65)
 	extz wa
-	ldada_24 xbc, 0x0118fe
+	lda_24 xbc, 0x0118fe
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	extz wa
 	ld (xsp + 8), wa
 	ld xwa, (xsp + 2)
 	ld a, (xwa + 67)
 	extz wa
-	ldada_24 xbc, 0x0118fe
+	lda_24 xbc, 0x0118fe
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	extz wa
 	ld (xsp + 10), wa
@@ -17310,7 +17310,7 @@ LABEL_0247BF:
 	ld wa, (xsp + 6)
 	sla wa, 8
 	or wa, hl
-	stda16_24 0x0451f2, xwa
+	st16_24 0x0451f2, xwa
 	ld xwa, (xsp + 2)
 	cpmi8 (xwa + 75), 0x0
 	jr z, LABEL_02484C
@@ -17388,12 +17388,12 @@ LABEL_024868:
 	ld bc, (xsp + 8)
 	sla bc, 8
 	or bc, wa
-	stda16_24 0x0451f4, xbc
+	st16_24 0x0451f4, xbc
 	ldb h, 0x0
 	ld wa, (xsp + 10)
 	sla wa, 8
 	or wa, hl
-	stda16_24 0x0451f6, xwa
+	st16_24 0x0451f6, xwa
 	popw iz
 	lda xsp, (xsp + 14)
 	ret
@@ -17477,7 +17477,7 @@ LABEL_02492D:
 	ld wa, (xsp + 8)
 	sll wa, 8
 	or wa, bc
-	stda16_24 0x0451e2, xwa
+	st16_24 0x0451e2, xwa
 	ld xwa, (xsp + 2)
 	ld c, (xwa + 61)
 	ld xwa, (xsp + 2)
@@ -17489,27 +17489,27 @@ LABEL_02492D:
 	ld wa, (xsp + 6)
 	sll wa, 8
 	or wa, hl
-	stda16_24 0x0451ea, xwa
+	st16_24 0x0451ea, xwa
 	popw iz
 	lda xsp, (xsp + 12)
 	ret
 
 LABEL_0249BF:
 	ld xhl, (xwa + 23)
-	stdi16_24 0x0451ea, 0x0000
-	stdi16_24 0x0451e2, 0x0000
-	stdi16_24 0x0451ec, 0x0000
-	stdi16_24 0x0451ee, 0x0000
-	stdi16_24 0x0451f0, 0x0000
-	stdi16_24 0x0451f2, 0x0000
-	stdi16_24 0x0451f4, 0x0000
-	stdi16_24 0x0451f6, 0x0000
-	stdi16_24 0x0451dc, 0x0000
-	stdi16_24 0x0451de, 0x0000
+	sti16_24 0x0451ea, 0x0000
+	sti16_24 0x0451e2, 0x0000
+	sti16_24 0x0451ec, 0x0000
+	sti16_24 0x0451ee, 0x0000
+	sti16_24 0x0451f0, 0x0000
+	sti16_24 0x0451f2, 0x0000
+	sti16_24 0x0451f4, 0x0000
+	sti16_24 0x0451f6, 0x0000
+	sti16_24 0x0451dc, 0x0000
+	sti16_24 0x0451de, 0x0000
 	ld c, (xwa + 4)
 	extz bc
 	muls bc, 0x11F
-	ldada_24 xde, 0x04138e
+	lda_24 xde, 0x04138e
 	cp_srib_im 0x07, 0xE8, 0xE4, 0x01
 	jr nz, LABEL_024A25
 	ldmw (xwa + 43), 0x0
@@ -17519,7 +17519,7 @@ LABEL_024A25:
 	ld c, (xwa + 4)
 	extz bc
 	muls bc, 0x11F
-	ldada_24 xde, 0x04138e
+	lda_24 xde, 0x04138e
 	cp_srib_im 0x07, 0xE8, 0xE4, 0x02
 	jr nz, LABEL_024A42
 	ldmw (xwa + 43), 0x7F
@@ -17532,8 +17532,8 @@ LABEL_024A42:
 
 LABEL_024A49:
 	ld wa, (xwa + 43)
-	stda16_24 0x0451d8, xwa
-	stdi16_24 0x0451e0, 0x0000
+	st16_24 0x0451d8, xwa
+	sti16_24 0x0451e0, 0x0000
 	ret
 
 LABEL_024A59:
@@ -17553,7 +17553,7 @@ LABEL_024A59:
 	ld c, a
 	extz bc
 	muls bc, 0x11F
-	ldada_24 xix, 0x04136e
+	lda_24 xix, 0x04136e
 	ld_sril3 XBC, 0x07, 0xF0, 0xE4
 	st_dri3b A, 0x07, 0xE4, 0xF4
 	ld (xsp + 4), xbc
@@ -17566,7 +17566,7 @@ LABEL_024A59:
 	ld c, (xsp + 20)
 	extz bc
 	muls bc, 0x1B
-	ldada_24 xix, 0x04424e
+	lda_24 xix, 0x04424e
 	exts xbc
 	add xbc, xix
 	st_dri3b H, 0x07, 0xE4, 0xF4
@@ -17581,7 +17581,7 @@ LABEL_024A59:
 	add iy, ix
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041368
+	lda_24 xbc, 0x041368
 	exts xwa
 	add xwa, xbc
 	st_dri3b W, 0x07, 0xE0, 0xF4
@@ -17592,7 +17592,7 @@ LABEL_024A59:
 	jr z, LABEL_024B5E
 	cps e, 0
 	jr nz, LABEL_024B5E
-	cpdi8_24 0x0451a7, 0xf5
+	cpi8_24 0x0451a7, 0xf5
 	jr z, LABEL_024B5E
 	ld xwa, (xsp + 12)
 	ld a, (xwa + 104)
@@ -17701,8 +17701,8 @@ LABEL_024BE3:
 	lda xsp, (xsp - 22)
 	push xiz
 	ld (xsp + 22), xwa
-	stdi16_24 0x0451dc, 0x0000
-	stdi16_24 0x0451de, 0x0000
+	sti16_24 0x0451dc, 0x0000
+	sti16_24 0x0451de, 0x0000
 	ld xwa, (xsp + 22)
 	ld xwa, (xwa + 35)
 	ld (xsp + 4), xwa
@@ -17776,7 +17776,7 @@ LABEL_024CAB:
 	extz xwa
 	ld xbc, 0x1B
 	call LABEL_03D8CA
-	ldada_24 xiz, 0x04424e
+	lda_24 xiz, 0x04424e
 	add xiz, xhl
 	ld xwa, (xsp + 22)
 	ld a, (xwa + 12)
@@ -17788,7 +17788,7 @@ LABEL_024CAB:
 	ld wa, (xwa + 26)
 	and wa, 0xC0
 	or wa, (xsp + 14)
-	stda16_24 0x0451dc, xwa
+	st16_24 0x0451dc, xwa
 	ld wa, (xsp + 12)
 	bit 15, wa
 	jr z, LABEL_024CF9
@@ -17814,9 +17814,9 @@ LABEL_024CF9:
 	ld wa, (xsp + 14)
 	extz wa
 	calr LABEL_022EBA
-	stda16_24 0x045208, xhl
+	st16_24 0x045208, xhl
 	ld wa, (xsp + 14)
-	ldada_24 xbc, 0x0451cc
+	lda_24 xbc, 0x0451cc
 	call LABEL_02DAB8
 
 LABEL_024D31:
@@ -17835,9 +17835,9 @@ LABEL_024D46:
 	ldmi8 (xiz + 8), 0x0
 	andmi8 (xiz), 0xF3
 	setm 4, (xiz)
-	stdi16_24 0x04520c, 0x0000
+	sti16_24 0x04520c, 0x0000
 	ld wa, (xsp + 14)
-	ldada_24 xbc, 0x0451cc
+	lda_24 xbc, 0x0451cc
 	call LABEL_02DA96
 	jrl LABEL_024E66
 
@@ -17855,9 +17855,9 @@ LABEL_024D73:
 	ld wa, (xsp + 14)
 	extz wa
 	calr LABEL_022E2A
-	stda16_24 0x04520c, xhl
+	st16_24 0x04520c, xhl
 	ld wa, (xsp + 14)
-	ldada_24 xbc, 0x0451cc
+	lda_24 xbc, 0x0451cc
 	call LABEL_02DA96
 	jrl LABEL_024E66
 
@@ -17869,9 +17869,9 @@ LABEL_024D96:
 	ld wa, (xsp + 14)
 	extz wa
 	calr LABEL_022E2A
-	stda16_24 0x04520c, xhl
+	st16_24 0x04520c, xhl
 	ld wa, (xsp + 14)
-	ldada_24 xbc, 0x0451cc
+	lda_24 xbc, 0x0451cc
 	call LABEL_02DA96
 	jrl LABEL_024E66
 
@@ -17917,7 +17917,7 @@ LABEL_024DBE:
 	ld wa, (xsp + 12)
 	and wa, 0x7F
 	or wa, (xsp + 20)
-	stda16_24 0x0451dc, xwa
+	st16_24 0x0451dc, xwa
 	ld wa, (xsp + 12)
 	bit 15, wa
 	jr z, LABEL_024E44
@@ -17929,12 +17929,12 @@ LABEL_024DBE:
 LABEL_024E44:
 	ld xwa, (xsp + 4)
 	ld wa, (xwa + 91)
-	stda16_24 0x04520c, xwa
+	st16_24 0x04520c, xwa
 	ld xwa, (xsp + 4)
 	ld wa, (xwa + 93)
-	stda16_24 0x045208, xwa
+	st16_24 0x045208, xwa
 	ld wa, (xsp + 14)
-	ldada_24 xbc, 0x0451cc
+	lda_24 xbc, 0x0451cc
 	call 0x2DA16
 
 LABEL_024E66:
@@ -17973,7 +17973,7 @@ LABEL_024E66:
 	jr nc, LABEL_024F3C
 	ld wa, (xsp + 14)
 	or wa, (xsp + 20)
-	stda16_24 0x0451de, xwa
+	st16_24 0x0451de, xwa
 	ld a, (xsp + 16)
 	extz wa
 	call LABEL_033B4C
@@ -17990,8 +17990,8 @@ LABEL_024E66:
 LABEL_024EEA:
 	ld xwa, (xsp + 4)
 	ld wa, (xwa + 87)
-	stda16_24 0x04520e, xwa
-	ldda16_24 xiz, 0x04520e
+	st16_24 0x04520e, xwa
+	ld16_24 xiz, 0x04520e
 	extz xiz
 	and xiz, 0x1FFF
 	ld xwa, (xsp + 22)
@@ -18008,9 +18008,9 @@ LABEL_024EEA:
 	ordm16_24 283150, xwa
 	ld xwa, (xsp + 4)
 	ld wa, (xwa + 89)
-	stda16_24 0x04520a, xwa
+	st16_24 0x04520a, xwa
 	ld wa, (xsp + 14)
-	ldada_24 xbc, 0x0451cc
+	lda_24 xbc, 0x0451cc
 	call 0x2DB33
 
 LABEL_024F3C:
@@ -18095,7 +18095,7 @@ LABEL_024FFF:
 	extz xwa
 	ld xbc, 0x1B
 	call LABEL_03D8CA
-	ldada_24 xwa, 0x044257
+	lda_24 xwa, 0x044257
 	add xwa, xhl
 	ld (xsp + 10), xwa
 	ld xwa, (xsp + 22)
@@ -18136,9 +18136,9 @@ LABEL_025051:
 	ldto_berp A, 0xF8
 	extz wa
 	calr LABEL_022FCC
-	stda16_24 0x045206, xhl
+	st16_24 0x045206, xhl
 	ld wa, iz
-	ldada_24 xbc, 0x0451cc
+	lda_24 xbc, 0x0451cc
 	call LABEL_02DCF2
 
 LABEL_025088:
@@ -18162,9 +18162,9 @@ LABEL_0250A3:
 	andmi8 (xwa), 0xF3
 	ld xwa, (xsp + 10)
 	setm 4, (xwa)
-	stdi16_24 0x045204, 0x0000
+	sti16_24 0x045204, 0x0000
 	ld wa, iz
-	ldada_24 xbc, 0x0451cc
+	lda_24 xbc, 0x0451cc
 	call LABEL_02DCD0
 	jrl LABEL_0251BA
 
@@ -18184,9 +18184,9 @@ LABEL_0250DB:
 	ldto_berp A, 0xF8
 	extz wa
 	calr LABEL_022F3C
-	stda16_24 0x045204, xhl
+	st16_24 0x045204, xhl
 	ld wa, iz
-	ldada_24 xbc, 0x0451cc
+	lda_24 xbc, 0x0451cc
 	call LABEL_02DCD0
 	jrl LABEL_0251BA
 
@@ -18198,9 +18198,9 @@ LABEL_025100:
 	ldto_berp A, 0xF8
 	extz wa
 	calr LABEL_022F3C
-	stda16_24 0x045204, xhl
+	st16_24 0x045204, xhl
 	ld wa, iz
-	ldada_24 xbc, 0x0451cc
+	lda_24 xbc, 0x0451cc
 	call LABEL_02DCD0
 	jrl LABEL_0251BA
 
@@ -18251,12 +18251,12 @@ LABEL_025127:
 LABEL_025199:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 95)
-	stda16_24 0x045204, xwa
+	st16_24 0x045204, xwa
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 97)
-	stda16_24 0x045206, xwa
+	st16_24 0x045206, xwa
 	ld wa, iz
-	ldada_24 xbc, 0x0451cc
+	lda_24 xbc, 0x0451cc
 	call 0x2DC50
 
 LABEL_0251BA:
@@ -18264,7 +18264,7 @@ LABEL_0251BA:
 	ld a, (xwa + 4)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x04138e
+	lda_24 xbc, 0x04138e
 	cp_srib_im 0x07, 0xE4, 0xE0, 0x01
 	jr nz, LABEL_0251DE
 	ld bc, (xsp + 16)
@@ -18277,7 +18277,7 @@ LABEL_0251DE:
 	ld a, (xwa + 4)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x04138e
+	lda_24 xbc, 0x04138e
 	cp_srib_im 0x07, 0xE4, 0xE0, 0x02
 	jr nz, LABEL_025206
 	ld bc, (xsp + 16)
@@ -18298,7 +18298,7 @@ LABEL_025206:
 LABEL_025219:
 	ld xwa, (xsp + 22)
 	ld wa, (xwa + 43)
-	stda16_24 0x0451d8, xwa
+	st16_24 0x0451d8, xwa
 	popw iz
 	lda xsp, (xsp + 24)
 	ret
@@ -18307,7 +18307,7 @@ LABEL_025229:
 	lda xsp, (xsp - 22)
 	pushw iz
 	ld (xsp + 20), xwa
-	stdi16_24 0x0451e0, 0x4400
+	sti16_24 0x0451e0, 0x4400
 	ld xwa, (xsp + 20)
 	ld xwa, (xwa + 35)
 	ld (xsp + 2), xwa
@@ -18378,7 +18378,7 @@ LABEL_0252E3:
 	extz xwa
 	ld xbc, 0x1B
 	call LABEL_03D8CA
-	ldada_24 xwa, 0x044260
+	lda_24 xwa, 0x044260
 	add xwa, xhl
 	ld (xsp + 10), xwa
 	ld xwa, (xsp + 20)
@@ -18418,7 +18418,7 @@ LABEL_025331:
 	extz wa
 	calr LABEL_02315F
 	ld wa, iz
-	ldada_24 xbc, 0x0451cc
+	lda_24 xbc, 0x0451cc
 	call LABEL_02DEB0
 
 LABEL_025363:
@@ -18442,10 +18442,10 @@ LABEL_02537E:
 	andmi8 (xwa), 0xF3
 	ld xwa, (xsp + 10)
 	setm 4, (xwa)
-	stdi16_24 0x045204, 0x0000
-	stdi16_24 0x04520e, 0x0000
+	sti16_24 0x045204, 0x0000
+	sti16_24 0x04520e, 0x0000
 	ld wa, iz
-	ldada_24 xbc, 0x0451cc
+	lda_24 xbc, 0x0451cc
 	call LABEL_02DE69
 	jr LABEL_0253F9
 
@@ -18466,7 +18466,7 @@ LABEL_0253BC:
 	extz wa
 	calr LABEL_023043
 	ld wa, iz
-	ldada_24 xbc, 0x0451cc
+	lda_24 xbc, 0x0451cc
 	call LABEL_02DE69
 	jr LABEL_0253F9
 
@@ -18479,7 +18479,7 @@ LABEL_0253DB:
 	extz wa
 	calr LABEL_023043
 	ld wa, iz
-	ldada_24 xbc, 0x0451cc
+	lda_24 xbc, 0x0451cc
 	call LABEL_02DE69
 
 LABEL_0253F9:
@@ -18494,7 +18494,7 @@ LABEL_0253FE:
 	ld xbc, (xwa + 35)
 	cpmi8 (xbc + 18), 0x0
 	jr z, LABEL_025429
-	ldda8_24 c, 0x04134c
+	ld8_24 c, 0x04134c
 	cps c, 6
 	jr nz, LABEL_02541D
 	lds de, 0
@@ -18541,7 +18541,7 @@ LABEL_025461:
 	ld xbc, (xwa + 35)
 	cpmi8 (xbc + 18), 0x0
 	jr z, LABEL_025489
-	ldda8_24 c, 0x04134c
+	ld8_24 c, 0x04134c
 	cps c, 6
 	jr z, LABEL_025477
 	cps c, 5
@@ -18565,7 +18565,7 @@ LABEL_025489:
 	or de, wa
 
 LABEL_025493:
-	stda16_24 0x0451d2, xde
+	st16_24 0x0451d2, xde
 	ret
 
 LABEL_025499:
@@ -18576,7 +18576,7 @@ LABEL_025499:
 	ld xbc, (xwa + 35)
 	cpmi8 (xbc + 18), 0x0
 	jr z, LABEL_0254C7
-	ldda8_24 c, 0x04134c
+	ld8_24 c, 0x04134c
 	cps c, 6
 	jr nz, LABEL_0254BB
 	lds de, 0
@@ -18618,7 +18618,7 @@ LABEL_0254F2:
 	ld xbc, (xwa + 35)
 	cpmi8 (xbc + 18), 0x0
 	jr z, LABEL_02551A
-	ldda8_24 c, 0x04134c
+	ld8_24 c, 0x04134c
 	cps c, 6
 	jr z, LABEL_025508
 	cps c, 5
@@ -18642,14 +18642,14 @@ LABEL_02551A:
 	or de, wa
 
 LABEL_025524:
-	stda16_24 0x0451d2, xde
+	st16_24 0x0451d2, xde
 	ret
 
 LABEL_02552A:
 	ld e, a
 	extz de
 	muls de, 0x11F
-	ldada_24 xhl, 0x04138d
+	lda_24 xhl, 0x04138d
 	ld_srib3 E, 0x07, 0xEC, 0xE8
 	and e, 0xF
 	cps e, 1
@@ -18668,7 +18668,7 @@ LABEL_025551:
 LABEL_025558:
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xde, 0x04138d
+	lda_24 xde, 0x04138d
 	ld_srib3 A, 0x07, 0xE8, 0xE0
 	and a, 0xF0
 	cp a, 0x10
@@ -18707,7 +18707,7 @@ LABEL_0255AA:
 	ld xwa, (xiz + 35)
 	cpmi8 (xwa + 18), 0x0
 	jr z, LABEL_0255DA
-	ldda8_24 a, 0x04134c
+	ld8_24 a, 0x04134c
 	cps a, 6
 	jr z, LABEL_0255C4
 	cps a, 5
@@ -18748,7 +18748,7 @@ LABEL_0255F3:
 	ld xwa, (xiz + 35)
 	cpmi8 (xwa + 18), 0x0
 	jr z, LABEL_025621
-	ldda8_24 a, 0x04134c
+	ld8_24 a, 0x04134c
 	cps a, 6
 	jr z, LABEL_025613
 	cps a, 5
@@ -18814,7 +18814,7 @@ LABEL_025672:
 	ld iz, hl
 	ldto_berp A, 0xF8
 	extz wa
-	ldada_24 xbc, 0x011899
+	lda_24 xbc, 0x011899
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	extz wa
 	ld iz, wa
@@ -18910,27 +18910,27 @@ LABEL_02576E:
 	ld xwa, (xsp + 4)
 	ld a, (xwa + 40)
 	extz wa
-	ldada_24 xbc, 0x011963
+	lda_24 xbc, 0x011963
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	extz wa
 	ldb w, 0x0
 	ld bc, iz
 	sla bc, 8
 	or bc, wa
-	stda16_24 0x0451e4, xbc
+	st16_24 0x0451e4, xbc
 	ld xwa, (xsp + 14)
 	ld (xwa + 60), bc
 	ld xwa, (xsp + 4)
 	ld a, (xwa + 41)
 	extz wa
-	ldada_24 xbc, 0x0118fe
+	lda_24 xbc, 0x0118fe
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	extz wa
 	ld (xsp + 10), wa
 	ld xwa, (xsp + 4)
 	ld a, (xwa + 43)
 	extz wa
-	ldada_24 xbc, 0x0118fe
+	lda_24 xbc, 0x0118fe
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	extz wa
 	ld (xsp + 12), wa
@@ -19036,7 +19036,7 @@ LABEL_0258BE:
 	ld xwa, (xsp + 4)
 	ld a, (xwa + 42)
 	extz wa
-	ldada_24 xbc, 0x011963
+	lda_24 xbc, 0x011963
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	extz wa
 	ld hl, wa
@@ -19050,7 +19050,7 @@ LABEL_0258DC:
 	ld xwa, (xsp + 4)
 	ld a, (xwa + 44)
 	extz wa
-	ldada_24 xbc, 0x011963
+	lda_24 xbc, 0x011963
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	extz wa
 	ld de, wa
@@ -19150,7 +19150,7 @@ LABEL_0259C2:
 	jr z, LABEL_0259EE
 	ld wa, iz
 	set 15, wa
-	stda16_24 0x0451e8, xwa
+	st16_24 0x0451e8, xwa
 	jr LABEL_025A03
 
 LABEL_0259EE:
@@ -19161,7 +19161,7 @@ LABEL_0259EE:
 	ld wa, (xwa + 64)
 	ldb a, 0x0
 	or wa, bc
-	stda16_24 0x0451e8, xwa
+	st16_24 0x0451e8, xwa
 
 LABEL_025A03:
 	ld wa, (xsp + 2)
@@ -19171,16 +19171,16 @@ LABEL_025A03:
 	ld wa, (xwa + 62)
 	ldb a, 0x0
 	or wa, bc
-	stda16_24 0x0451e6, xwa
+	st16_24 0x0451e6, xwa
 	jr LABEL_025A31
 
 LABEL_025A1B:
 	ld xwa, (xsp + 6)
 	ld wa, (xwa + 62)
-	stda16_24 0x0451e6, xwa
+	st16_24 0x0451e6, xwa
 	ld xwa, (xsp + 6)
 	ld wa, (xwa + 64)
-	stda16_24 0x0451e8, xwa
+	st16_24 0x0451e8, xwa
 
 LABEL_025A31:
 	popw iz
@@ -19202,7 +19202,7 @@ LABEL_025A35:
 	ld xwa, (xsp + 6)
 	ld a, (xwa + 8)
 	extz wa
-	ldada_24 xbc, 0x011899
+	lda_24 xbc, 0x011899
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	extz wa
 	ld iz, wa
@@ -19232,27 +19232,27 @@ LABEL_025A9E:
 	sla wa, 8
 	ld bc, wa
 	or bc, 0x7F
-	stda16_24 0x0451e4, xbc
+	st16_24 0x0451e4, xbc
 	ld xwa, (xsp + 10)
 	ld (xwa + 60), bc
 	ld xwa, (xsp + 6)
 	ld a, (xwa + 9)
 	extz wa
-	ldada_24 xbc, 0x0118fe
+	lda_24 xbc, 0x0118fe
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	extz wa
 	ld hl, wa
 	ld xwa, (xsp + 6)
 	ld a, (xwa + 11)
 	extz wa
-	ldada_24 xbc, 0x0118fe
+	lda_24 xbc, 0x0118fe
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	extz wa
 	ld de, wa
 	ld xwa, (xsp + 6)
 	ld a, (xwa + 10)
 	extz wa
-	ldada_24 xbc, 0x011963
+	lda_24 xbc, 0x011963
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	extz wa
 	ld bc, wa
@@ -19275,7 +19275,7 @@ LABEL_025AFE:
 	ld xwa, (xsp + 6)
 	ld a, (xwa + 12)
 	extz wa
-	ldada_24 xbc, 0x011963
+	lda_24 xbc, 0x011963
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	extz wa
 	ldb w, 0x0
@@ -19287,7 +19287,7 @@ LABEL_025AFE:
 	ld xwa, (xsp + 6)
 	ld a, (xwa + 13)
 	extz wa
-	ldada_24 xbc, 0x0118fe
+	lda_24 xbc, 0x0118fe
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	extz wa
 	ld c, a
@@ -19386,7 +19386,7 @@ LABEL_025C14:
 	jr z, LABEL_025C40
 	ld wa, iz
 	set 15, wa
-	stda16_24 0x0451e8, xwa
+	st16_24 0x0451e8, xwa
 	jr LABEL_025C55
 
 LABEL_025C40:
@@ -19397,7 +19397,7 @@ LABEL_025C40:
 	ld wa, (xwa + 64)
 	ldb a, 0x0
 	or wa, bc
-	stda16_24 0x0451e8, xwa
+	st16_24 0x0451e8, xwa
 
 LABEL_025C55:
 	ld wa, (xsp + 2)
@@ -19407,16 +19407,16 @@ LABEL_025C55:
 	ld wa, (xwa + 62)
 	ldb a, 0x0
 	or wa, bc
-	stda16_24 0x0451e6, xwa
+	st16_24 0x0451e6, xwa
 	jr LABEL_025C83
 
 LABEL_025C6D:
 	ld xwa, (xsp + 6)
 	ld wa, (xwa + 62)
-	stda16_24 0x0451e6, xwa
+	st16_24 0x0451e6, xwa
 	ld xwa, (xsp + 6)
 	ld wa, (xwa + 64)
-	stda16_24 0x0451e8, xwa
+	st16_24 0x0451e8, xwa
 
 LABEL_025C83:
 	popw iz
@@ -19447,7 +19447,7 @@ LABEL_025CB4:
 	ld wa, (xwa + 1)
 	bit 11, wa
 	jr z, LABEL_025CCB
-	ldda8_24 a, 0x0118b3
+	ld8_24 a, 0x0118b3
 	extz wa
 	ld iz, wa
 	jrl LABEL_025DBE
@@ -19468,7 +19468,7 @@ LABEL_025CCB:
 	ld iz, hl
 	ldto_berp A, 0xF8
 	extz wa
-	ldada_24 xbc, 0x011899
+	lda_24 xbc, 0x011899
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	extz wa
 	ld iz, wa
@@ -19565,27 +19565,27 @@ LABEL_025DD2:
 	ld xwa, (xsp + 4)
 	ld a, (xwa + 40)
 	extz wa
-	ldada_24 xbc, 0x011963
+	lda_24 xbc, 0x011963
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	extz wa
 	ldb w, 0x0
 	ld bc, iz
 	sla bc, 8
 	or bc, wa
-	stda16_24 0x0451e4, xbc
+	st16_24 0x0451e4, xbc
 	ld xwa, (xsp + 14)
 	ld (xwa + 60), bc
 	ld xwa, (xsp + 4)
 	ld a, (xwa + 41)
 	extz wa
-	ldada_24 xbc, 0x0118fe
+	lda_24 xbc, 0x0118fe
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	extz wa
 	ld (xsp + 10), wa
 	ld xwa, (xsp + 4)
 	ld a, (xwa + 43)
 	extz wa
-	ldada_24 xbc, 0x0118fe
+	lda_24 xbc, 0x0118fe
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	extz wa
 	ld (xsp + 12), wa
@@ -19691,7 +19691,7 @@ LABEL_025F22:
 	ld xwa, (xsp + 4)
 	ld a, (xwa + 42)
 	extz wa
-	ldada_24 xbc, 0x011963
+	lda_24 xbc, 0x011963
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	extz wa
 	ld hl, wa
@@ -19705,7 +19705,7 @@ LABEL_025F40:
 	ld xwa, (xsp + 4)
 	ld a, (xwa + 44)
 	extz wa
-	ldada_24 xbc, 0x011963
+	lda_24 xbc, 0x011963
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	extz wa
 	ld de, wa
@@ -19714,13 +19714,13 @@ LABEL_025F40:
 	ld bc, (xsp + 10)
 	sla bc, 8
 	or bc, wa
-	stda16_24 0x0451e6, xbc
+	st16_24 0x0451e6, xbc
 	ld wa, de
 	ldb w, 0x0
 	ld bc, (xsp + 12)
 	sla bc, 8
 	or bc, wa
-	stda16_24 0x0451e8, xbc
+	st16_24 0x0451e8, xbc
 	pop xiz
 	lda xsp, (xsp + 14)
 	ret
@@ -19748,7 +19748,7 @@ LABEL_025FAC:
 	ld xwa, (xsp + 4)
 	ld a, (xwa + 39)
 	extz wa
-	ldada_24 xbc, 0x011899
+	lda_24 xbc, 0x011899
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	extz wa
 	ldfr_werp WA, 0xFA
@@ -19845,14 +19845,14 @@ LABEL_026099:
 	ld xwa, (xsp + 4)
 	ld a, (xwa + 40)
 	extz wa
-	ldada_24 xbc, 0x011963
+	lda_24 xbc, 0x011963
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	extz wa
 	ldb w, 0x0
 	ldto_werp BC, 0xFA
 	sla bc, 8
 	or bc, wa
-	stda16_24 0x0451e4, xbc
+	st16_24 0x0451e4, xbc
 	ld xwa, (xsp + 14)
 	ld (xwa + 60), bc
 	ld xwa, (xsp + 14)
@@ -19870,7 +19870,7 @@ LABEL_026099:
 	ld (xsp + 10), hl
 	ld wa, (xsp + 10)
 	extz wa
-	ldada_24 xbc, 0x0118fe
+	lda_24 xbc, 0x0118fe
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	extz wa
 	ld (xsp + 10), wa
@@ -19889,7 +19889,7 @@ LABEL_026099:
 	ld (xsp + 12), hl
 	ld wa, (xsp + 12)
 	extz wa
-	ldada_24 xbc, 0x0118fe
+	lda_24 xbc, 0x0118fe
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	extz wa
 	ld (xsp + 12), wa
@@ -19995,7 +19995,7 @@ LABEL_026226:
 	ld xwa, (xsp + 4)
 	ld a, (xwa + 42)
 	extz wa
-	ldada_24 xbc, 0x011963
+	lda_24 xbc, 0x011963
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	extz wa
 	ld hl, wa
@@ -20009,7 +20009,7 @@ LABEL_026244:
 	ld xwa, (xsp + 4)
 	ld a, (xwa + 44)
 	extz wa
-	ldada_24 xbc, 0x011963
+	lda_24 xbc, 0x011963
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	extz wa
 	ld de, wa
@@ -20018,13 +20018,13 @@ LABEL_026244:
 	ld bc, (xsp + 10)
 	sla bc, 8
 	or bc, wa
-	stda16_24 0x0451e6, xbc
+	st16_24 0x0451e6, xbc
 	ld wa, de
 	ldb w, 0x0
 	ld bc, (xsp + 12)
 	sla bc, 8
 	or bc, wa
-	stda16_24 0x0451e8, xbc
+	st16_24 0x0451e8, xbc
 	pop xiz
 	lda xsp, (xsp + 14)
 	ret
@@ -20190,7 +20190,7 @@ LABEL_026396:
 
 LABEL_0263BC:
 	and bc, 0x7F
-	ldda16_24 xwa, 0x041343
+	ld16_24 xwa, 0x041343
 	bit 0, wa
 	jr nz, LABEL_0263D3
 	ld xwa, (xsp + 2)
@@ -20209,7 +20209,7 @@ LABEL_0263D3:
 	jrl LABEL_02647F
 
 LABEL_0263EB:
-	ldda16_24 xwa, 0x041343
+	ld16_24 xwa, 0x041343
 	bit 1, wa
 	jr z, LABEL_02640C
 	ld wa, bc
@@ -20309,7 +20309,7 @@ LABEL_02647F:
 	ld a, (xwa + 3)
 	exts wa
 	add iz, wa
-	ldda32_24 xwa, 0x045314
+	ld32_24 xwa, 0x045314
 	add_sriw_rm IZ, 0xE1, 0xE0, 0x00
 	addda16 xiz, 10560
 	ld xwa, (xsp + 6)
@@ -20354,7 +20354,7 @@ LABEL_026533:
 	ld e, a
 	extz de
 	and de, 0x7F
-	ldda16_24 xwa, 0x041343
+	ld16_24 xwa, 0x041343
 	bit 0, wa
 	jr nz, LABEL_02655D
 	cpmi8 (xiz + 7), 0xE0
@@ -20372,7 +20372,7 @@ LABEL_02655D:
 	jr LABEL_0265F1
 
 LABEL_026574:
-	ldda16_24 xwa, 0x041343
+	ld16_24 xwa, 0x041343
 	bit 1, wa
 	jr z, LABEL_026593
 	ld wa, de
@@ -20443,7 +20443,7 @@ LABEL_0265F1:
 	ld a, (xwa + 3)
 	exts wa
 	add hl, wa
-	ldda32_24 xwa, 0x045314
+	ld32_24 xwa, 0x045314
 	add_sriw_rm HL, 0xE1, 0xE0, 0x00
 	addda16 xhl, 10560
 	ld xwa, (xsp + 4)
@@ -20474,7 +20474,7 @@ LABEL_026657:
 	ld c, (xbc + 34)
 	exts bc
 	add de, bc
-	ldda16_24 xbc, 0x041343
+	ld16_24 xbc, 0x041343
 	bit 1, bc
 	jr z, LABEL_02667F
 	cpmi8 (xwa + 4), 0x1
@@ -20506,7 +20506,7 @@ LABEL_02669D:
 	sub de, 0x200
 
 LABEL_0266A1:
-	ldda16_24 xbc, 0x041343
+	ld16_24 xbc, 0x041343
 	bit 1, bc
 	jr z, LABEL_0266D3
 	ld xbc, (xwa + 35)
@@ -20535,26 +20535,26 @@ LABEL_0266D8:
 	push xiz
 	extz bc
 	muls bc, 0x47
-	ldada_24 xde, 0x0430ad
+	lda_24 xde, 0x0430ad
 	ld_sril3 XBC, 0x07, 0xE8, 0xE4
 	bitm 3, (xbc)
 	jr z, LABEL_026765
 	ld c, (xbc + 14)
 	ld (xsp + 4), c
 	extz bc
-	ldada_24 xde, 0x011ae8
+	lda_24 xde, 0x011ae8
 	ld_srib3 C, 0x07, 0xE8, 0xE4
 	extz bc
 	sll bc, 8
 	set 7, bc
-	stda16_24 0x0451f8, xbc
+	st16_24 0x0451f8, xbc
 	ld c, (xsp + 4)
 	extz bc
-	ldada_24 xde, 0x011ae8
+	lda_24 xde, 0x011ae8
 	ld_srib3 C, 0x07, 0xE8, 0xE4
 	extz bc
 	sll bc, 8
-	stda16_24 0x0451fa, xbc
+	st16_24 0x0451fa, xbc
 	extz wa
 	call LABEL_02CD36
 	lda xwa, (xhl + 5)
@@ -20566,14 +20566,14 @@ LABEL_026737:
 	ld a, (xiz)
 	extz wa
 	muls wa, 0x47
-	ldada_24 xbc, 0x0430ad
+	lda_24 xbc, 0x0430ad
 	ld_sril3 XBC, 0x07, 0xE4, 0xE0
 	ld a, (xsp + 4)
 	cp a, (xbc + 14)
 	jr nz, LABEL_02675E
 	ld a, (xiz)
 	extz wa
-	ldada_24 xbc, 0x0451cc
+	lda_24 xbc, 0x0451cc
 	call LABEL_02D50E
 
 LABEL_02675E:
@@ -20608,7 +20608,7 @@ LABEL_026769:
 	ld iz, hl
 	ldto_berp A, 0xF8
 	extz wa
-	ldada_24 xbc, 0x0118fe
+	lda_24 xbc, 0x0118fe
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	extz wa
 	ld iz, wa
@@ -20625,10 +20625,10 @@ LABEL_026769:
 	ld xwa, (xwa + 35)
 	ld a, (xwa + 24)
 	extz wa
-	ldada_24 xbc, 0x011adf
+	lda_24 xbc, 0x011adf
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	extz wa
-	ldada_24 xbc, 0x0118fe
+	lda_24 xbc, 0x0118fe
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	extz wa
 	cp wa, iz
@@ -20667,27 +20667,27 @@ LABEL_02682F:
 	ld wa, iz
 	sla wa, 8
 	set 7, wa
-	stda16_24 0x0451f8, xwa
+	st16_24 0x0451f8, xwa
 	ld wa, iz
 	sla wa, 8
-	stda16_24 0x0451fa, xwa
+	st16_24 0x0451fa, xwa
 	popw iz
 	inc 8, xsp
 	ret
 
 LABEL_02684A:
 	ld bc, (xwa + 62)
-	stda16_24 0x0451e6, xbc
+	st16_24 0x0451e6, xbc
 	ld wa, (xwa + 64)
-	stda16_24 0x0451e8, xwa
+	st16_24 0x0451e8, xwa
 	ret
 
 LABEL_02685B:
 	ld bc, (xwa + 64)
 	set 7, bc
-	stda16_24 0x0451f8, xbc
+	st16_24 0x0451f8, xbc
 	ld wa, (xwa + 64)
-	stda16_24 0x0451fa, xwa
+	st16_24 0x0451fa, xwa
 	ret
 
 LABEL_02686F:
@@ -20706,17 +20706,17 @@ LABEL_02686F:
 	ld xwa, (xwa + 35)
 	ld a, (xwa + 24)
 	extz wa
-	ldada_24 xbc, 0x011adf
+	lda_24 xbc, 0x011adf
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	extz wa
-	ldada_24 xbc, 0x0118fe
+	lda_24 xbc, 0x0118fe
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	extz wa
 	ld iz, wa
 	ld xwa, (xsp + 2)
 	ld a, (xwa + 45)
 	extz wa
-	ldada_24 xbc, 0x0118fe
+	lda_24 xbc, 0x0118fe
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	extz wa
 	ld bc, iz
@@ -20725,7 +20725,7 @@ LABEL_02686F:
 	ld xwa, (xsp + 2)
 	ld a, (xwa + 45)
 	extz wa
-	ldada_24 xbc, 0x0118fe
+	lda_24 xbc, 0x0118fe
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	extz wa
 	ld iz, wa
@@ -20747,7 +20747,7 @@ LABEL_0268E3:
 	ld iz, hl
 	ldto_berp A, 0xF8
 	extz wa
-	ldada_24 xbc, 0x0118fe
+	lda_24 xbc, 0x0118fe
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	extz wa
 	ld iz, wa
@@ -20784,10 +20784,10 @@ LABEL_02695A:
 	ld wa, iz
 	sla wa, 8
 	set 7, wa
-	stda16_24 0x0451f8, xwa
+	st16_24 0x0451f8, xwa
 	ld wa, iz
 	sla wa, 8
-	stda16_24 0x0451fa, xwa
+	st16_24 0x0451fa, xwa
 	popw iz
 	inc 8, xsp
 	ret
@@ -20801,7 +20801,7 @@ LABEL_026975:
 	ld (xsp + 2), xwa
 	ld a, (xwa + 15)
 	extz wa
-	ldada_24 xbc, 0x0118fe
+	lda_24 xbc, 0x0118fe
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	extz wa
 	ld iz, wa
@@ -20814,10 +20814,10 @@ LABEL_026975:
 	ld xwa, (xwa + 35)
 	ld a, (xwa + 24)
 	extz wa
-	ldada_24 xbc, 0x011adf
+	lda_24 xbc, 0x011adf
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	extz wa
-	ldada_24 xbc, 0x0118fe
+	lda_24 xbc, 0x0118fe
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	extz wa
 	cp wa, iz
@@ -20917,8 +20917,8 @@ LABEL_026A93:
 	ld wa, iz
 	sla wa, 8
 	or wa, hl
-	stda16_24 0x0451fc, xwa
-	stda16_24 0x0451fe, xwa
+	st16_24 0x0451fc, xwa
+	st16_24 0x0451fe, xwa
 	popw iz
 	inc 8, xsp
 	ret
@@ -20932,7 +20932,7 @@ LABEL_026AAA:
 	ld (xsp + 2), xwa
 	ld a, (xwa + 69)
 	extz wa
-	ldada_24 xbc, 0x0118fe
+	lda_24 xbc, 0x0118fe
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	extz wa
 	ld iz, wa
@@ -20945,10 +20945,10 @@ LABEL_026AAA:
 	ld xwa, (xwa + 35)
 	ld a, (xwa + 24)
 	extz wa
-	ldada_24 xbc, 0x011adf
+	lda_24 xbc, 0x011adf
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	extz wa
-	ldada_24 xbc, 0x0118fe
+	lda_24 xbc, 0x0118fe
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	extz wa
 	cp wa, iz
@@ -21043,26 +21043,26 @@ LABEL_026BA3:
 	ld wa, iz
 	sla wa, 8
 	or wa, hl
-	stda16_24 0x045200, xwa
-	stda16_24 0x045202, xwa
+	st16_24 0x045200, xwa
+	st16_24 0x045202, xwa
 	popw iz
 	inc 8, xsp
 	ret
 
 LABEL_026BDC:
-	stdi16_24 0x0451fc, 0x0000
-	stdi16_24 0x0451fe, 0x0000
+	sti16_24 0x0451fc, 0x0000
+	sti16_24 0x0451fe, 0x0000
 	ld c, (xwa + 70)
 	extz bc
 	sll bc, 8
 	set 7, bc
-	stda16_24 0x0451f8, xbc
+	st16_24 0x0451f8, xbc
 	ld a, (xwa + 70)
 	extz wa
 	sll wa, 8
-	stda16_24 0x0451fa, xwa
-	stdi16_24 0x045200, 0x0000
-	stdi16_24 0x045202, 0x0000
+	st16_24 0x0451fa, xwa
+	sti16_24 0x045200, 0x0000
+	sti16_24 0x045202, 0x0000
 	ret
 
 LABEL_026C16:
@@ -21072,18 +21072,18 @@ LABEL_026C16:
 	jr z, LABEL_026C43
 	ld a, (xwa + 13)
 	extz wa
-	ldada_24 xbc, 0x0118fe
+	lda_24 xbc, 0x0118fe
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	extz wa
 	sll wa, 8
-	stda16_24 0x0451fa, xwa
+	st16_24 0x0451fa, xwa
 	set 7, wa
-	stda16_24 0x0451f8, xwa
+	st16_24 0x0451f8, xwa
 	ret
 
 LABEL_026C43:
-	stdi16_24 0x0451f8, 0x0080
-	stdi16_24 0x0451fa, 0x0000
+	sti16_24 0x0451f8, 0x0080
+	sti16_24 0x0451fa, 0x0000
 	ret
 
 LABEL_026C52:
@@ -21148,7 +21148,7 @@ LABEL_026CB7:
 	extz xwa
 	ld xbc, 0x1B
 	call LABEL_03D8CA
-	ldada_24 xbc, 0x04424e
+	lda_24 xbc, 0x04424e
 	add xbc, xhl
 	ld a, (xbc)
 	and a, 0x18
@@ -21161,10 +21161,10 @@ LABEL_026CB7:
 	ldto_berp A, 0xF8
 	extz wa
 	calr LABEL_022E2A
-	stda16_24 0x04520c, xhl
+	st16_24 0x04520c, xhl
 	cp_erpw 0xFA, 0x00, 0x01
 	jr z, LABEL_026D1A
-	ldda16_24 xhl, 0x04520c
+	ld16_24 xhl, 0x04520c
 	extz xhl
 	and xhl, 0x1FFF
 	ldto_werp BC, 0xFA
@@ -21177,7 +21177,7 @@ LABEL_026CB7:
 
 LABEL_026D1A:
 	ld wa, iz
-	ldada_24 xbc, 0x0451cc
+	lda_24 xbc, 0x0451cc
 	call LABEL_02DA96
 
 LABEL_026D25:
@@ -21195,7 +21195,7 @@ LABEL_026D35:
 	extz xwa
 	ld xbc, 0x1B
 	call LABEL_03D8CA
-	ldada_24 xwa, 0x044257
+	lda_24 xwa, 0x044257
 	add xwa, xhl
 	ld xbc, xwa
 	ld a, (xbc)
@@ -21209,10 +21209,10 @@ LABEL_026D35:
 	ldto_berp A, 0xF8
 	extz wa
 	calr LABEL_022F3C
-	stda16_24 0x045204, xhl
+	st16_24 0x045204, xhl
 	cp_erpw 0xFA, 0x00, 0x01
 	jr z, LABEL_026D9A
-	ldda16_24 xhl, 0x045204
+	ld16_24 xhl, 0x045204
 	extz xhl
 	and xhl, 0x1FFF
 	ldto_werp BC, 0xFA
@@ -21225,7 +21225,7 @@ LABEL_026D35:
 
 LABEL_026D9A:
 	ld wa, iz
-	ldada_24 xbc, 0x0451cc
+	lda_24 xbc, 0x0451cc
 	call LABEL_02DCD0
 
 LABEL_026DA5:
@@ -21243,7 +21243,7 @@ LABEL_026DB6:
 	extz xwa
 	ld xbc, 0x1B
 	call LABEL_03D8CA
-	ldada_24 xwa, 0x044260
+	lda_24 xwa, 0x044260
 	add xwa, xhl
 	ld xbc, xwa
 	ld a, (xbc)
@@ -21261,7 +21261,7 @@ LABEL_026DB6:
 	jr z, LABEL_026E45
 	cp iz, 0x40
 	jr nc, LABEL_026E1E
-	ldda16_24 xhl, 0x045204
+	ld16_24 xhl, 0x045204
 	extz xhl
 	and xhl, 0x1FFF
 	ldto_werp BC, 0xFA
@@ -21274,7 +21274,7 @@ LABEL_026DB6:
 	jr LABEL_026E45
 
 LABEL_026E1E:
-	ldda16_24 xhl, 0x04520e
+	ld16_24 xhl, 0x04520e
 	extz xhl
 	and xhl, 0x1FFF
 	ldto_werp BC, 0xFA
@@ -21287,7 +21287,7 @@ LABEL_026E1E:
 
 LABEL_026E45:
 	ld wa, iz
-	ldada_24 xbc, 0x0451cc
+	lda_24 xbc, 0x0451cc
 	call LABEL_02DE69
 
 LABEL_026E50:
@@ -21366,7 +21366,7 @@ LABEL_026EC3:
 	ld a, (xwa + 4)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x04138e
+	lda_24 xbc, 0x04138e
 	cp_srib_im 0x07, 0xE4, 0xE0, 0x01
 	jr nz, LABEL_026F1E
 	ld xwa, (xsp + 4)
@@ -21382,7 +21382,7 @@ LABEL_026F1E:
 	ld a, (xwa + 4)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x04138e
+	lda_24 xbc, 0x04138e
 	cp_srib_im 0x07, 0xE4, 0xE0, 0x02
 	jr nz, LABEL_026F4A
 	ld xwa, (xsp + 4)
@@ -21455,10 +21455,10 @@ LABEL_026FDD:
 	ld a, (xwa)
 	extz wa
 	add wa, 0x840
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	stdi16_24 0x100002, 0xff00
+	sti16_24 0x100002, 0xff00
 	jr __jrt_nop_026FFD
 __jrt_nop_026FFD:
 
@@ -21471,10 +21471,10 @@ LABEL_026FFD:
 	ld a, (xwa)
 	extz wa
 	add wa, 0x800
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	stdi16_24 0x100002, 0xff80
+	sti16_24 0x100002, 0xff80
 	jr __jrt_nop_027020
 __jrt_nop_027020:
 
@@ -21498,7 +21498,7 @@ LABEL_027037:
 	ld xwa, (xsp + 4)
 	ld a, (xwa)
 	extz wa
-	ldada_24 xbc, 0x0451cc
+	lda_24 xbc, 0x0451cc
 	ld xde, (xsp + 4)
 	call LABEL_02D68F
 	jrl LABEL_0271AF
@@ -21509,10 +21509,10 @@ LABEL_027059:
 	ld a, (xwa)
 	extz wa
 	add wa, 0x840
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	stdi16_24 0x100002, 0xff00
+	sti16_24 0x100002, 0xff00
 	jr __jrt_nop_027079
 __jrt_nop_027079:
 
@@ -21525,10 +21525,10 @@ LABEL_027079:
 	ld a, (xwa)
 	extz wa
 	add wa, 0x800
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	stdi16_24 0x100002, 0xff80
+	sti16_24 0x100002, 0xff80
 	jr __jrt_nop_02709C
 __jrt_nop_02709C:
 
@@ -21569,10 +21569,10 @@ LABEL_0270E8:
 	ld a, (xwa)
 	extz wa
 	add wa, 0x840
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	stdi16_24 0x100002, 0xff00
+	sti16_24 0x100002, 0xff00
 	jr __jrt_nop_027108
 __jrt_nop_027108:
 
@@ -21585,10 +21585,10 @@ LABEL_027108:
 	ld a, (xwa)
 	extz wa
 	add wa, 0x800
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	stdi16_24 0x100002, 0xff80
+	sti16_24 0x100002, 0xff80
 	jr __jrt_nop_02712B
 __jrt_nop_02712B:
 
@@ -21603,7 +21603,7 @@ LABEL_02712B:
 	ld xwa, (xsp + 4)
 	ld a, (xwa)
 	extz wa
-	ldada_24 xbc, 0x0451cc
+	lda_24 xbc, 0x0451cc
 	ld xde, (xsp + 4)
 	call LABEL_02D68F
 	jr LABEL_0271AF
@@ -21622,10 +21622,10 @@ LABEL_027156:
 	ld a, (xwa)
 	extz wa
 	add wa, 0x840
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	stdi16_24 0x100002, 0xa200
+	sti16_24 0x100002, 0xa200
 	jr __jrt_nop_027181
 __jrt_nop_027181:
 
@@ -21638,10 +21638,10 @@ LABEL_027181:
 	ld a, (xwa)
 	extz wa
 	add wa, 0x800
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	stdi16_24 0x100002, 0xa280
+	sti16_24 0x100002, 0xa280
 	jr __jrt_nop_0271A4
 __jrt_nop_0271A4:
 
@@ -21664,20 +21664,20 @@ LABEL_0271AF:
 	ret
 
 LABEL_0271BC:
-	ldda16_24 xwa, 0x041343
+	ld16_24 xwa, 0x041343
 	bit 11, wa
 	jr z, LABEL_0271E8
 	incdi16_24 1, 267100
-	ldda8_24 a, 0x011c7c
+	ld8_24 a, 0x011c7c
 	exts wa
 	add wa, wa
-	stda16_24 0x04135a, xwa
+	st16_24 0x04135a, xwa
 	anddi16_24 267075, 63487
 	ordi16_24 267075, 5120
 	ret
 
 LABEL_0271E8:
-	ldda16_24 xwa, 0x041343
+	ld16_24 xwa, 0x041343
 	bit 12, wa
 	jr z, LABEL_0271FF
 	incdi16_24 1, 267100
@@ -21685,50 +21685,50 @@ LABEL_0271E8:
 	ret
 
 LABEL_0271FF:
-	ldda16_24 xwa, 0x041343
+	ld16_24 xwa, 0x041343
 	bit 13, wa
 	jrl z, LABEL_02729B
-	ldda16_24 xwa, 0x041343
+	ld16_24 xwa, 0x041343
 	bit 14, wa
 	jr z, LABEL_02723B
 	incdi16_24 2, 267100
-	ldda16_24 xwa, 0x04135c
+	ld16_24 xwa, 0x04135c
 	extz xwa
 	ld xbc, 0x11C7C
 	add xbc, xwa
 	ld a, (xbc)
 	exts wa
 	add wa, wa
-	stda16_24 0x04135a, xwa
+	st16_24 0x04135a, xwa
 	ordi16_24 267075, 1024
 	jr LABEL_02727C
 
 LABEL_02723B:
-	ldda16_24 xwa, 0x041343
+	ld16_24 xwa, 0x041343
 	extz xwa
 	bit 15, wa
 	jr z, LABEL_02726E
 	incdi16_24 1, 267100
-	ldda16_24 xwa, 0x04135c
+	ld16_24 xwa, 0x04135c
 	extz xwa
 	ld xbc, 0x11C7C
 	add xbc, xwa
 	ld a, (xbc)
 	exts wa
 	add wa, wa
-	stda16_24 0x04135a, xwa
+	st16_24 0x04135a, xwa
 	ordi16_24 267075, 1024
 	jr LABEL_02727C
 
 LABEL_02726E:
-	stdi16_24 0x04135a, 0x0000
+	sti16_24 0x04135a, 0x0000
 	ordi16_24 267075, 1024
 
 LABEL_02727C:
 	cpdi16_24 267098, 0
 	ret nz
 	anddi16_24 267075, 8191
-	stdi16_24 0x04135c, 0x0000
+	sti16_24 0x04135c, 0x0000
 	ordi16_24 267075, 1024
 	ret
 
@@ -21737,48 +21737,48 @@ LABEL_02729B:
 	ret
 
 LABEL_0272A3:
-	stdi16_24 0x0451ce, 0x0000
-	ldda16_24 xbc, 0x041360
-	stda16_24 0x0451da, xbc
-	stdi16_24 0x0451ec, 0x0000
-	stdi16_24 0x0451ee, 0x0000
-	stdi16_24 0x0451f0, 0x0000
-	stdi16_24 0x0451d4, 0x017f
-	stdi16_24 0x0451d6, 0x7f7f
-	stdi16_24 0x0451f2, 0x0000
-	stdi16_24 0x0451f4, 0x0000
-	stdi16_24 0x0451f6, 0x0000
-	stdi16_24 0x0451e2, 0x0000
-	stdi16_24 0x0451ea, 0x0000
-	stdi16_24 0x0451dc, 0x0000
-	stdi16_24 0x0451de, 0x0000
-	stdi16_24 0x0451d8, 0x0040
-	stdi16_24 0x0451e0, 0x0000
-	stdi16_24 0x0451d2, 0x0000
-	stdi16_24 0x0451e4, 0xff7f
-	ldda16_24 xbc, 0x041362
-	stda16_24 0x0451e6, xbc
-	ldda16_24 xbc, 0x041362
-	stda16_24 0x0451e8, xbc
-	ldda16_24 xbc, 0x041364
+	sti16_24 0x0451ce, 0x0000
+	ld16_24 xbc, 0x041360
+	st16_24 0x0451da, xbc
+	sti16_24 0x0451ec, 0x0000
+	sti16_24 0x0451ee, 0x0000
+	sti16_24 0x0451f0, 0x0000
+	sti16_24 0x0451d4, 0x017f
+	sti16_24 0x0451d6, 0x7f7f
+	sti16_24 0x0451f2, 0x0000
+	sti16_24 0x0451f4, 0x0000
+	sti16_24 0x0451f6, 0x0000
+	sti16_24 0x0451e2, 0x0000
+	sti16_24 0x0451ea, 0x0000
+	sti16_24 0x0451dc, 0x0000
+	sti16_24 0x0451de, 0x0000
+	sti16_24 0x0451d8, 0x0040
+	sti16_24 0x0451e0, 0x0000
+	sti16_24 0x0451d2, 0x0000
+	sti16_24 0x0451e4, 0xff7f
+	ld16_24 xbc, 0x041362
+	st16_24 0x0451e6, xbc
+	ld16_24 xbc, 0x041362
+	st16_24 0x0451e8, xbc
+	ld16_24 xbc, 0x041364
 	add bc, bc
-	ldada_24 xde, 0x010764
+	lda_24 xde, 0x010764
 	ld_sriw3 BC, 0x07, 0xE8, 0xE4
 	add bc, bc
-	stda16_24 0x0451d0, xbc
+	st16_24 0x0451d0, xbc
 	extz wa
 	muls wa, 0x47
-	ldada_24 xbc, 0x0430bb
+	lda_24 xbc, 0x0430bb
 	stiw_dri 0x07, 0xE4, 0xE0, 0x00, 0xF0
 	ret
 
 LABEL_027363:
 	lda xsp, (xsp - 14)
 	push_werp 0xFA
-	cpdi8_24 0x04135e, 0x00
+	cpi8_24 0x04135e, 0x00
 	jr z, LABEL_0273D1
 	decdi8_24 1, 267103
-	cpdi8_24 0x04135f, 0x00
+	cpi8_24 0x04135f, 0x00
 	jr nz, LABEL_0273D1
 	lda xwa, (xsp + 2)
 	call LABEL_02D00D
@@ -21790,7 +21790,7 @@ LABEL_027363:
 	calr LABEL_0272A3
 	ldto_berp A, 0xFB
 	extz wa
-	ldada_24 xbc, 0x0451cc
+	lda_24 xbc, 0x0451cc
 	call 0x2D101
 	ldto_berp A, 0xFB
 	ld l, a
@@ -21799,14 +21799,14 @@ LABEL_027363:
 	extz wa
 	muls wa, 0x47
 	ld bc, wa
-	ldada_24 xde, 0x0430bb
+	lda_24 xde, 0x0430bb
 	ld wa, hl
 	ld_sriw3 BC, 0x07, 0xE8, 0xE4
 	call 0x2D41B
 
 LABEL_0273C6:
 	decdi8_24 1, 267102
-	stdi8_24 0x04135f, 0x04
+	sti8_24 0x04135f, 0x04
 
 LABEL_0273D1:
 	pop_werp 0xFA
@@ -21831,21 +21831,21 @@ LABEL_0273D8:
 	srl xhl, 8
 	cp xhl, 0x2C
 	jr nc, LABEL_027424
-	stdi16_24 0x045208, 0x002c
+	sti16_24 0x045208, 0x002c
 	ld a, (xsp + 8)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x0413c5
+	lda_24 xbc, 0x0413c5
 	stiw_dri 0x07, 0xE4, 0xE0, 0x2C, 0x00
 	jr LABEL_02743E
 
 LABEL_027424:
 	ld wa, hl
-	stda16_24 0x045208, xwa
+	st16_24 0x045208, xwa
 	ld a, (xsp + 8)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x0413c5
+	lda_24 xbc, 0x0413c5
 	st_dri3w HL, 0x07, 0xE4, 0xE0
 
 LABEL_02743E:
@@ -21856,7 +21856,7 @@ LABEL_02743E:
 	extz xhl
 	ld a, (xsp + 6)
 	extz wa
-	ldada_24 xbc, 0x010dce
+	lda_24 xbc, 0x010dce
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	lds32 xbc, 0
 	ld c, a
@@ -21864,11 +21864,11 @@ LABEL_02743E:
 	call LABEL_03D8CA
 	srl xhl, 8
 	ld wa, hl
-	stda16_24 0x04520c, xwa
+	st16_24 0x04520c, xwa
 	ld a, (xsp + 8)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x0413c3
+	lda_24 xbc, 0x0413c3
 	st_dri3w HL, 0x07, 0xE4, 0xE0
 	ld a, (xsp + 8)
 	extz wa
@@ -21886,7 +21886,7 @@ LABEL_027496:
 	add xwa, (xsp + 2)
 	ld wa, (xwa)
 	ldb w, 0x0
-	ldada_24 xbc, 0x0451cc
+	lda_24 xbc, 0x0451cc
 	call 0x2DA16
 	inc 1, iz
 
@@ -21910,12 +21910,12 @@ LABEL_0274C7:
 	extz wa
 	lds bc, 1
 	call LABEL_03399E
-	stda16_24 0x045208, xhl
+	st16_24 0x045208, xhl
 	ld a, (xsp + 6)
 	extz wa
 	lds bc, 1
 	call LABEL_0337D2
-	stda16_24 0x04520c, xhl
+	st16_24 0x04520c, xhl
 	ld a, (xsp + 6)
 	extz wa
 	ldw bc, 0xD
@@ -21932,7 +21932,7 @@ LABEL_027503:
 	add xwa, (xsp)
 	ld wa, (xwa)
 	ldb w, 0x0
-	ldada_24 xbc, 0x0451cc
+	lda_24 xbc, 0x0451cc
 	call 0x2DA16
 	incm 1, (xsp + 4)
 
@@ -21966,21 +21966,21 @@ LABEL_027534:
 	srl xhl, 8
 	cp xhl, 0x1C
 	jr nc, LABEL_027580
-	stdi16_24 0x04520a, 0x001c
+	sti16_24 0x04520a, 0x001c
 	ld a, (xsp + 8)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x0413c1
+	lda_24 xbc, 0x0413c1
 	stiw_dri 0x07, 0xE4, 0xE0, 0x1C, 0x00
 	jr LABEL_02759A
 
 LABEL_027580:
 	ld wa, hl
-	stda16_24 0x04520a, xwa
+	st16_24 0x04520a, xwa
 	ld a, (xsp + 8)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x0413c1
+	lda_24 xbc, 0x0413c1
 	st_dri3w HL, 0x07, 0xE4, 0xE0
 
 LABEL_02759A:
@@ -21991,7 +21991,7 @@ LABEL_02759A:
 	extz xhl
 	ld a, (xsp + 6)
 	extz wa
-	ldada_24 xbc, 0x010ece
+	lda_24 xbc, 0x010ece
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	lds32 xbc, 0
 	ld c, a
@@ -21999,11 +21999,11 @@ LABEL_02759A:
 	call LABEL_03D8CA
 	srl xhl, 8
 	ld wa, hl
-	stda16_24 0x04520e, xwa
+	st16_24 0x04520e, xwa
 	ld a, (xsp + 8)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x0413bf
+	lda_24 xbc, 0x0413bf
 	st_dri3w HL, 0x07, 0xE4, 0xE0
 	ld a, (xsp + 8)
 	extz wa
@@ -22021,7 +22021,7 @@ LABEL_0275F2:
 	add xwa, (xsp + 2)
 	ld wa, (xwa)
 	ldb w, 0x0
-	ldada_24 xbc, 0x0451cc
+	lda_24 xbc, 0x0451cc
 	call 0x2DB33
 	inc 1, iz
 
@@ -22045,12 +22045,12 @@ LABEL_027623:
 	extz wa
 	lds bc, 0
 	call LABEL_03399E
-	stda16_24 0x04520a, xhl
+	st16_24 0x04520a, xhl
 	ld a, (xsp + 6)
 	extz wa
 	lds bc, 0
 	call LABEL_0337D2
-	stda16_24 0x04520e, xhl
+	st16_24 0x04520e, xhl
 	ld a, (xsp + 6)
 	extz wa
 	ldw bc, 0xC
@@ -22067,7 +22067,7 @@ LABEL_02765F:
 	add xwa, (xsp)
 	ld wa, (xwa)
 	ldb w, 0x0
-	ldada_24 xbc, 0x0451cc
+	lda_24 xbc, 0x0451cc
 	call 0x2DB33
 	incm 1, (xsp + 4)
 
@@ -22099,21 +22099,21 @@ LABEL_027690:
 	srl xhl, 8
 	cp xhl, 0x1C
 	jr nc, LABEL_0276DA
-	stdi16_24 0x045206, 0x001c
+	sti16_24 0x045206, 0x001c
 	ld a, (xsp + 8)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x0413c9
+	lda_24 xbc, 0x0413c9
 	stiw_dri 0x07, 0xE4, 0xE0, 0x1C, 0x00
 	jr LABEL_0276F4
 
 LABEL_0276DA:
 	ld wa, hl
-	stda16_24 0x045206, xwa
+	st16_24 0x045206, xwa
 	ld a, (xsp + 8)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x0413c9
+	lda_24 xbc, 0x0413c9
 	st_dri3w HL, 0x07, 0xE4, 0xE0
 
 LABEL_0276F4:
@@ -22133,7 +22133,7 @@ LABEL_02770B:
 	add xwa, (xsp)
 	ld wa, (xwa)
 	ldb w, 0x0
-	ldada_24 xbc, 0x0451cc
+	lda_24 xbc, 0x0451cc
 	call LABEL_02DCF2
 	incm 1, (xsp + 4)
 
@@ -22155,7 +22155,7 @@ LABEL_02773D:
 	ld a, (xsp + 6)
 	extz wa
 	call LABEL_033C6B
-	stda16_24 0x045206, xhl
+	st16_24 0x045206, xhl
 	ld a, (xsp + 6)
 	extz wa
 	ldw bc, 0x10
@@ -22172,7 +22172,7 @@ LABEL_027767:
 	add xwa, (xsp)
 	ld wa, (xwa)
 	ldb w, 0x0
-	ldada_24 xbc, 0x0451cc
+	lda_24 xbc, 0x0451cc
 	call LABEL_02DCF2
 	incm 1, (xsp + 4)
 
@@ -22211,7 +22211,7 @@ LABEL_0277B3:
 	extz de
 	ld a, (xsp + 4)
 	extz wa
-	ldada_24 xbc, 0x010d64
+	lda_24 xbc, 0x010d64
 	ld_srib3 C, 0x07, 0xE4, 0xE0
 	ld wa, de
 	calr LABEL_0273D8
@@ -22239,7 +22239,7 @@ LABEL_0277F2:
 	extz de
 	ld a, (xsp + 4)
 	extz wa
-	ldada_24 xbc, 0x010db4
+	lda_24 xbc, 0x010db4
 	ld_srib3 C, 0x07, 0xE4, 0xE0
 	ld wa, de
 	calr LABEL_027534
@@ -22248,7 +22248,7 @@ LABEL_0277F2:
 	extz de
 	ld a, (xsp + 4)
 	extz wa
-	ldada_24 xbc, 0x010db4
+	lda_24 xbc, 0x010db4
 	ld_srib3 C, 0x07, 0xE4, 0xE0
 	ld wa, de
 	calr LABEL_027690
@@ -22279,7 +22279,7 @@ LABEL_027850:
 	extz de
 	ld a, (xsp + 4)
 	extz wa
-	ldada_24 xbc, 0x010db4
+	lda_24 xbc, 0x010db4
 	ld_srib3 C, 0x07, 0xE4, 0xE0
 	ld wa, de
 	calr LABEL_0273D8
@@ -22298,7 +22298,7 @@ LABEL_02787A:
 	extz de
 	ld a, (xsp + 4)
 	extz wa
-	ldada_24 xbc, 0x010db4
+	lda_24 xbc, 0x010db4
 	ld_srib3 C, 0x07, 0xE4, 0xE0
 	ld wa, de
 	calr LABEL_027534
@@ -22307,7 +22307,7 @@ LABEL_02787A:
 	extz de
 	ld a, (xsp + 4)
 	extz wa
-	ldada_24 xbc, 0x010db4
+	lda_24 xbc, 0x010db4
 	ld_srib3 C, 0x07, 0xE4, 0xE0
 	ld wa, de
 	calr LABEL_027690
@@ -22327,7 +22327,7 @@ LABEL_0278CB:
 	ld xwa, (xsp + 2)
 	ld a, (xwa + 100)
 	extz wa
-	ldada_24 xbc, 0x010d64
+	lda_24 xbc, 0x010d64
 	ld_srib3 L, 0x07, 0xE4, 0xE0
 	ldi_erpb 0xFB, 0x19
 	jr LABEL_0278F8
@@ -22338,7 +22338,7 @@ LABEL_0278F5:
 LABEL_0278F8:
 	ldto_berp A, 0xFB
 	extz wa
-	ldada_24 xbc, 0x010db4
+	lda_24 xbc, 0x010db4
 	cp_srib_rm L, 0x07, 0xE4, 0xE0
 	jr c, LABEL_0278F5
 	ld xwa, (xsp + 2)
@@ -22349,7 +22349,7 @@ LABEL_0278F8:
 	extz de
 	ld a, l
 	extz wa
-	ldada_24 xbc, 0x010d64
+	lda_24 xbc, 0x010d64
 	ld_srib3 C, 0x07, 0xE4, 0xE0
 	ld wa, de
 	calr LABEL_0273D8
@@ -22370,7 +22370,7 @@ LABEL_0278F8:
 	extz de
 	ldto_berp A, 0xFB
 	extz wa
-	ldada_24 xbc, 0x010db4
+	lda_24 xbc, 0x010db4
 	ld_srib3 C, 0x07, 0xE4, 0xE0
 	ld wa, de
 	calr LABEL_027534
@@ -22379,7 +22379,7 @@ LABEL_0278F8:
 	extz de
 	ldto_berp A, 0xFB
 	extz wa
-	ldada_24 xbc, 0x010db4
+	lda_24 xbc, 0x010db4
 	ld_srib3 C, 0x07, 0xE4, 0xE0
 	ld wa, de
 	calr LABEL_027690
@@ -22398,7 +22398,7 @@ LABEL_027987:
 	ld a, (xwa + 100)
 	srl a, 1
 	extz wa
-	ldada_24 xbc, 0x010db4
+	lda_24 xbc, 0x010db4
 	ld_srib3 E, 0x07, 0xE4, 0xE0
 	ldi_berp 0xFB, 0
 	jr LABEL_0279B6
@@ -22409,7 +22409,7 @@ LABEL_0279B3:
 LABEL_0279B6:
 	ldto_berp A, 0xFB
 	extz wa
-	ldada_24 xbc, 0x010d64
+	lda_24 xbc, 0x010d64
 	cp_srib_rm E, 0x07, 0xE4, 0xE0
 	jr ugt, LABEL_0279B3
 	ld xwa, (xsp + 2)
@@ -22420,7 +22420,7 @@ LABEL_0279B6:
 	extz de
 	ldto_berp A, 0xFB
 	extz wa
-	ldada_24 xbc, 0x010db4
+	lda_24 xbc, 0x010db4
 	ld_srib3 C, 0x07, 0xE4, 0xE0
 	ld wa, de
 	calr LABEL_0273D8
@@ -22441,7 +22441,7 @@ LABEL_0279B6:
 	extz de
 	ldto_berp A, 0xFB
 	extz wa
-	ldada_24 xbc, 0x010db4
+	lda_24 xbc, 0x010db4
 	ld_srib3 C, 0x07, 0xE4, 0xE0
 	ld wa, de
 	calr LABEL_027534
@@ -22450,7 +22450,7 @@ LABEL_0279B6:
 	extz de
 	ldto_berp A, 0xFB
 	extz wa
-	ldada_24 xbc, 0x010db4
+	lda_24 xbc, 0x010db4
 	ld_srib3 C, 0x07, 0xE4, 0xE0
 	ld wa, de
 	calr LABEL_027690
@@ -22473,7 +22473,7 @@ LABEL_027A5B:
 	ld a, (xwa)
 	extz wa
 	muls wa, 0x47
-	ldada_24 xbc, 0x04308e
+	lda_24 xbc, 0x04308e
 	st_dri3b H, 0x07, 0xE4, 0xE0
 	ld xwa, (xiz + 35)
 	ld wa, (xwa + 10)
@@ -22518,7 +22518,7 @@ LABEL_027AC4:
 	push xiz
 	calr LABEL_027363
 	calr LABEL_0271BC
-	ldda16_24 xwa, 0x041343
+	ld16_24 xwa, 0x041343
 	bit 10, wa
 	jrl z, LABEL_027BA0
 	call LABEL_02CD55
@@ -22532,7 +22532,7 @@ LABEL_027AE8:
 	ld a, (xwa)
 	extz wa
 	muls wa, 0x47
-	ldada_24 xbc, 0x04308e
+	lda_24 xbc, 0x04308e
 	st_dri3b H, 0x07, 0xE4, 0xE0
 	ld wa, (xiz + 1)
 	bit 10, wa
@@ -22542,7 +22542,7 @@ LABEL_027AE8:
 	ld xwa, (xsp + 4)
 	ld a, (xwa)
 	extz wa
-	ldada_24 xbc, 0x0451cc
+	lda_24 xbc, 0x0451cc
 	call LABEL_02D0BA
 
 LABEL_027B1A:
@@ -22615,7 +22615,7 @@ LABEL_027BB0:
 	ld a, (xwa)
 	extz wa
 	muls wa, 0x47
-	ldada_24 xbc, 0x04308e
+	lda_24 xbc, 0x04308e
 	st_dri3b H, 0x07, 0xE4, 0xE0
 	ld xwa, (xiz + 35)
 	ld wa, (xwa + 10)
@@ -22682,7 +22682,7 @@ LABEL_027C51:
 	ldto_berp A, 0xFB
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041368
+	lda_24 xbc, 0x041368
 	st_dri3b A, 0x07, 0xE4, 0xE0
 	ld a, (xbc + 99)
 	bit 0, a
@@ -22734,14 +22734,14 @@ LABEL_027CBA:
 LABEL_027CBE:
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x04136a
+	lda_24 xbc, 0x04136a
 	or_sriw_im 0x07, 0xE4, 0xE0, 0x00, 0x20
 	ret
 
 LABEL_027CD1:
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x04136a
+	lda_24 xbc, 0x04136a
 	and_sriw_im 0x07, 0xE4, 0xE0, 0xFF, 0xDF
 	ret
 
@@ -22834,11 +22834,11 @@ LABEL_027F74:
 	ld xiz, xbc
 	res_dd8 7, 0x18
 	add wa, 0x400
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld wa, (xiz + 14)
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_027F91
 __jrt_nop_027F91:
 
@@ -22854,12 +22854,12 @@ LABEL_027F96:
 	ld xiz, xbc
 	res_dd8 7, 0x18
 	add wa, 0x80
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld wa, (xiz + 4)
 	res 15, wa
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_027FB6
 __jrt_nop_027FB6:
 
@@ -22874,10 +22874,10 @@ LABEL_027FBB:
 	pushw iz
 	ld iz, bc
 	res_dd8 7, 0x18
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	stda16_24 0x100002, xiz
+	st16_24 0x100002, xiz
 	jr __jrt_nop_027FD1
 __jrt_nop_027FD1:
 
@@ -22896,12 +22896,12 @@ LABEL_027FD6:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x840
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 46)
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_027FFD
 __jrt_nop_027FFD:
 
@@ -22912,12 +22912,12 @@ LABEL_027FFD:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x940
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 50)
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_02801F
 __jrt_nop_02801F:
 
@@ -22928,12 +22928,12 @@ LABEL_02801F:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0xA00
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 54)
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_028041
 __jrt_nop_028041:
 
@@ -22944,12 +22944,12 @@ LABEL_028041:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x800
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 44)
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_028063
 __jrt_nop_028063:
 
@@ -22960,12 +22960,12 @@ LABEL_028063:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x900
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 48)
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_028085
 __jrt_nop_028085:
 
@@ -22976,12 +22976,12 @@ LABEL_028085:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x9C0
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 52)
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_0280A7
 __jrt_nop_0280A7:
 
@@ -23001,12 +23001,12 @@ LABEL_0280AE:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x840
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 46)
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_0280D5
 __jrt_nop_0280D5:
 
@@ -23017,12 +23017,12 @@ LABEL_0280D5:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x800
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 44)
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_0280F7
 __jrt_nop_0280F7:
 
@@ -23272,33 +23272,33 @@ LABEL_0280FE:
 LABEL_028839:
 	cps c, 0
 	jr z, LABEL_0288B2
-	ldda16_24 xde, 0x041343
+	ld16_24 xde, 0x041343
 	bit 0, de
 	jr z, LABEL_02886A
 	extz wa
 	muls wa, 0x11F
 	ld de, wa
-	ldada_24 xhl, 0x041374
+	lda_24 xhl, 0x041374
 	ld a, c
 	extz wa
 	add wa, wa
-	ldada_24 xbc, 0x011d16
+	lda_24 xbc, 0x011d16
 	ld_sriw3 WA, 0x07, 0xE4, 0xE0
 	st_dri3w WA, 0x07, 0xEC, 0xE8
 	ret
 
 LABEL_02886A:
-	ldda16_24 xde, 0x041343
+	ld16_24 xde, 0x041343
 	bit 1, de
 	jr z, LABEL_028897
 	extz wa
 	muls wa, 0x11F
 	ld de, wa
-	ldada_24 xhl, 0x041374
+	lda_24 xhl, 0x041374
 	ld a, c
 	extz wa
 	add wa, wa
-	ldada_24 xbc, 0x011d16
+	lda_24 xbc, 0x011d16
 	ld_sriw3 WA, 0x07, 0xE4, 0xE0
 	st_dri3w WA, 0x07, 0xEC, 0xE8
 	ret
@@ -23307,7 +23307,7 @@ LABEL_028897:
 	extz wa
 	muls wa, 0x11F
 	ld de, wa
-	ldada_24 xhl, 0x041374
+	lda_24 xhl, 0x041374
 	ld a, c
 	extz wa
 	sub wa, 0x7F
@@ -23317,47 +23317,47 @@ LABEL_028897:
 LABEL_0288B2:
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041374
+	lda_24 xbc, 0x041374
 	stiw_dri 0x07, 0xE4, 0xE0, 0x00, 0xFE
 	ret
 
 LABEL_0288C5:
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xde, 0x041376
+	lda_24 xde, 0x041376
 	lda_dri3 XHL, 0x07, 0xE8, 0xE0
 	ret
 
 LABEL_0288D6:
 	cps c, 0
 	jr z, LABEL_02894F
-	ldda16_24 xde, 0x041343
+	ld16_24 xde, 0x041343
 	bit 0, de
 	jr z, LABEL_028907
 	extz wa
 	muls wa, 0x11F
 	ld de, wa
-	ldada_24 xhl, 0x041378
+	lda_24 xhl, 0x041378
 	ld a, c
 	extz wa
 	add wa, wa
-	ldada_24 xbc, 0x011d16
+	lda_24 xbc, 0x011d16
 	ld_sriw3 WA, 0x07, 0xE4, 0xE0
 	st_dri3w WA, 0x07, 0xEC, 0xE8
 	ret
 
 LABEL_028907:
-	ldda16_24 xde, 0x041343
+	ld16_24 xde, 0x041343
 	bit 1, de
 	jr z, LABEL_028934
 	extz wa
 	muls wa, 0x11F
 	ld de, wa
-	ldada_24 xhl, 0x041378
+	lda_24 xhl, 0x041378
 	ld a, c
 	extz wa
 	add wa, wa
-	ldada_24 xbc, 0x011d16
+	lda_24 xbc, 0x011d16
 	ld_sriw3 WA, 0x07, 0xE4, 0xE0
 	st_dri3w WA, 0x07, 0xEC, 0xE8
 	ret
@@ -23366,7 +23366,7 @@ LABEL_028934:
 	extz wa
 	muls wa, 0x11F
 	ld de, wa
-	ldada_24 xhl, 0x041378
+	lda_24 xhl, 0x041378
 	ld a, c
 	extz wa
 	sub wa, 0x7F
@@ -23376,7 +23376,7 @@ LABEL_028934:
 LABEL_02894F:
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041378
+	lda_24 xbc, 0x041378
 	stiw_dri 0x07, 0xE4, 0xE0, 0x00, 0xFE
 	ret
 
@@ -23385,28 +23385,28 @@ LABEL_028962:
 	jr z, LABEL_028979
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041372
+	lda_24 xbc, 0x041372
 	or_sriw_im 0x07, 0xE4, 0xE0, 0x01, 0x00
 	ret
 
 LABEL_028979:
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041372
+	lda_24 xbc, 0x041372
 	and_sriw_im 0x07, 0xE4, 0xE0, 0xFE, 0xFF
 	ret
 
 LABEL_02898C:
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xde, 0x041377
+	lda_24 xde, 0x041377
 	lda_dri3 XHL, 0x07, 0xE8, 0xE0
 	ret
 
 LABEL_02899D:
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xde, 0x04137a
+	lda_24 xde, 0x04137a
 	lda_dri3 XHL, 0x07, 0xE8, 0xE0
 	ret
 
@@ -23415,21 +23415,21 @@ LABEL_0289AE:
 	jr z, LABEL_0289C5
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041372
+	lda_24 xbc, 0x041372
 	or_sriw_im 0x07, 0xE4, 0xE0, 0x00, 0x40
 	ret
 
 LABEL_0289C5:
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041372
+	lda_24 xbc, 0x041372
 	and_sriw_im 0x07, 0xE4, 0xE0, 0xFF, 0xBF
 	ret
 
 LABEL_0289D8:
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xde, 0x04137b
+	lda_24 xde, 0x04137b
 	lda_dri3 XHL, 0x07, 0xE8, 0xE0
 	ret
 
@@ -23440,7 +23440,7 @@ LABEL_0289E9:
 	add de, de
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x04137c
+	lda_24 xbc, 0x04137c
 	st_dri3w DE, 0x07, 0xE4, 0xE0
 	ret
 
@@ -23449,7 +23449,7 @@ LABEL_028A04:
 	sub e, 0x40
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x04137e
+	lda_24 xbc, 0x04137e
 	lda_dri3 XIY, 0x07, 0xE4, 0xE0
 	ret
 
@@ -23464,7 +23464,7 @@ LABEL_028A1A:
 LABEL_028A44:
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xde, 0x04137f
+	lda_24 xde, 0x04137f
 	lda_dri3 XHL, 0x07, 0xE8, 0xE0
 	ret
 
@@ -23473,28 +23473,28 @@ LABEL_028A55:
 	jr z, LABEL_028A6C
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041372
+	lda_24 xbc, 0x041372
 	or_sriw_im 0x07, 0xE4, 0xE0, 0x04, 0x00
 	ret
 
 LABEL_028A6C:
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041372
+	lda_24 xbc, 0x041372
 	and_sriw_im 0x07, 0xE4, 0xE0, 0xFB, 0xFF
 	ret
 
 LABEL_028A7F:
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xde, 0x041380
+	lda_24 xde, 0x041380
 	lda_dri3 XHL, 0x07, 0xE8, 0xE0
 	ret
 
 LABEL_028A90:
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xde, 0x04138d
+	lda_24 xde, 0x04138d
 	lda_dri3 XHL, 0x07, 0xE8, 0xE0
 	ret
 
@@ -23503,21 +23503,21 @@ LABEL_028AA1:
 	jr z, LABEL_028AB8
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x04136a
+	lda_24 xbc, 0x04136a
 	or_sriw_im 0x07, 0xE4, 0xE0, 0x00, 0x01
 	ret
 
 LABEL_028AB8:
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x04136a
+	lda_24 xbc, 0x04136a
 	and_sriw_im 0x07, 0xE4, 0xE0, 0xFF, 0xFE
 	ret
 
 LABEL_028ACB:
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xde, 0x04138e
+	lda_24 xde, 0x04138e
 	lda_dri3 XHL, 0x07, 0xE8, 0xE0
 	ret
 
@@ -23563,30 +23563,30 @@ LABEL_028B23:
 	sub a, 0x40
 	add a, a
 	exts wa
-	stda16_24 0x041347, xwa
+	st16_24 0x041347, xwa
 	ret
 
 LABEL_028B30:
 	exts wa
 	sla wa, 8
-	stda16_24 0x041349, xwa
+	st16_24 0x041349, xwa
 	ret
 
 LABEL_028B3B:
 	cps a, 0
 	jr z, LABEL_028B58
-	ldda16_24 xwa, 0x041343
+	ld16_24 xwa, 0x041343
 	bit 12, wa
 	ret nz
 	ordi16_24 267075, 2048
-	stdi16_24 0x04135c, 0x0000
+	sti16_24 0x04135c, 0x0000
 	ret
 
 LABEL_028B58:
-	ldda16_24 xwa, 0x041343
+	ld16_24 xwa, 0x041343
 	bit 12, wa
 	ret z
-	ldda16_24 xwa, 0x041343
+	ld16_24 xwa, 0x041343
 	extz xwa
 	and xwa, 0xFFFF2FFF
 	set 13, wa
@@ -23599,44 +23599,44 @@ LABEL_028B80:
 	set 14, wa
 
 LABEL_028B83:
-	stda16_24 0x041343, xwa
-	stdi16_24 0x04135c, 0x0000
+	st16_24 0x041343, xwa
+	sti16_24 0x04135c, 0x0000
 	ret
 
 LABEL_028B90:
-	stda8_24 0x04134d, a
+	st8_24 0x04134d, a
 	ret
 
 LABEL_028B96:
-	ldda8_24 l, 0x04134d
+	ld8_24 l, 0x04134d
 	ret
 
 LABEL_028B9C:
 	bit 3, a
 	jr z, LABEL_028BA9
-	stdi8_24 0x04135e, 0x03
+	sti8_24 0x04135e, 0x03
 	jr LABEL_028BAF
 
 LABEL_028BA9:
-	stdi8_24 0x04135e, 0x01
+	sti8_24 0x04135e, 0x01
 
 LABEL_028BAF:
-	stdi8_24 0x04135f, 0x01
+	sti8_24 0x04135f, 0x01
 	ld c, a
 	and c, 0xF0
 	srl c, 4
 	extz bc
 	add bc, bc
-	ldada_24 xde, 0x00f6f3
+	lda_24 xde, 0x00f6f3
 	ld_sriw3 BC, 0x07, 0xE8, 0xE4
-	stda16_24 0x041360, xbc
+	st16_24 0x041360, xbc
 	bit 2, a
 	jr z, LABEL_028BDE
-	stdi16_24 0x041362, 0x8000
+	sti16_24 0x041362, 0x8000
 	jr LABEL_028BE5
 
 LABEL_028BDE:
-	stdi16_24 0x041362, 0xa000
+	sti16_24 0x041362, 0xa000
 
 LABEL_028BE5:
 	and a, 0x3
@@ -23645,11 +23645,11 @@ LABEL_028BE5:
 	ldb a, 0xC8
 	sub a, c
 	extz wa
-	stda16_24 0x041364, xwa
+	st16_24 0x041364, xwa
 	ret
 
 LABEL_028BF9:
-	stda8_24 0x04134b, a
+	st8_24 0x04134b, a
 	ret
 
 LABEL_028BFF:
@@ -23665,7 +23665,7 @@ LABEL_028C0C:
 LABEL_028C14:
 	extz wa
 	add wa, 0xC
-	ldada_24 xde, 0x041342
+	lda_24 xde, 0x041342
 	sub c, 0x80
 	lda_dri3 XHL, 0x07, 0xE8, 0xE0
 	ret
@@ -23673,7 +23673,7 @@ LABEL_028C14:
 LABEL_028C28:
 	extz wa
 	add wa, 0xC
-	ldada_24 xbc, 0x041342
+	lda_24 xbc, 0x041342
 	ld_srib3 L, 0x07, 0xE4, 0xE0
 	ret
 
@@ -23681,7 +23681,7 @@ LABEL_028C39:
 	dec 2, xsp
 	push xiz
 	and a, 0xF
-	stda8_24 0x04134c, a
+	st8_24 0x04134c, a
 	ldmi8 (xsp + 4), 0x0
 	cpmi8 (xsp + 4), 0x1A
 	jrl nc, LABEL_028D2A
@@ -23690,7 +23690,7 @@ LABEL_028C4F:
 	ld a, (xsp + 4)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041372
+	lda_24 xbc, 0x041372
 	ld_sriw3 WA, 0x07, 0xE4, 0xE0
 	bit 1, wa
 	jrl z, LABEL_028D20
@@ -23706,12 +23706,12 @@ LABEL_028C7C:
 	ld a, (xiz)
 	extz wa
 	muls wa, 0x47
-	ldada_24 xbc, 0x043092
+	lda_24 xbc, 0x043092
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	ld (xsp + 4), a
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x04136e
+	lda_24 xbc, 0x04136e
 	ld_sril3 XWA, 0x07, 0xE4, 0xE0
 	ld a, (xwa + 16)
 	and a, 0xC0
@@ -23728,14 +23728,14 @@ LABEL_028CBA:
 	ld a, (xiz)
 	extz wa
 	muls wa, 0x47
-	ldada_24 xbc, 0x04308e
+	lda_24 xbc, 0x04308e
 	exts xwa
 	add xwa, xbc
 	call LABEL_0253FE
 	ld a, (xiz)
 	extz wa
 	muls wa, 0x47
-	ldada_24 xbc, 0x04308e
+	lda_24 xbc, 0x04308e
 	exts xwa
 	add xwa, xbc
 	call LABEL_025589
@@ -23745,14 +23745,14 @@ LABEL_028CE6:
 	ld a, (xiz)
 	extz wa
 	muls wa, 0x47
-	ldada_24 xbc, 0x04308e
+	lda_24 xbc, 0x04308e
 	exts xwa
 	add xwa, xbc
 	call LABEL_025499
 	ld a, (xiz)
 	extz wa
 	muls wa, 0x47
-	ldada_24 xbc, 0x04308e
+	lda_24 xbc, 0x04308e
 	exts xwa
 	add xwa, xbc
 	call LABEL_0255F3
@@ -23786,14 +23786,14 @@ LABEL_028D3A:
 	ret
 
 LABEL_028D42:
-	ldda16_24 xhl, 0x041343
+	ld16_24 xhl, 0x041343
 	and hl, 0x200
 	ret
 
 LABEL_028D4C:
 	dec 4, xsp
 	push xiz
-	ldada_24 xbc, 0x04308e
+	lda_24 xbc, 0x04308e
 	ld (xsp + 4), xbc
 	inc 5, xwa
 	ld xiz, xwa
@@ -23824,7 +23824,7 @@ LABEL_028D8E:
 	call LABEL_023A4A
 	ld a, (xiz)
 	extz wa
-	ldada_24 xbc, 0x0451cc
+	lda_24 xbc, 0x0451cc
 	calr LABEL_027F74
 	jr LABEL_028DB4
 
@@ -23833,7 +23833,7 @@ LABEL_028DA2:
 	call LABEL_023A99
 	ld a, (xiz)
 	extz wa
-	ldada_24 xbc, 0x0451cc
+	lda_24 xbc, 0x0451cc
 	calr LABEL_027F74
 
 LABEL_028DB4:
@@ -23849,7 +23849,7 @@ LABEL_028DBB:
 LABEL_028DBF:
 	dec 4, xsp
 	push xiz
-	ldada_24 xbc, 0x04308e
+	lda_24 xbc, 0x04308e
 	ld (xsp + 4), xbc
 	inc 5, xwa
 	ld xiz, xwa
@@ -23887,7 +23887,7 @@ LABEL_028E09:
 LABEL_028E0F:
 	ld a, (xiz)
 	extz wa
-	ldada_24 xbc, 0x0451cc
+	lda_24 xbc, 0x0451cc
 	calr LABEL_027F96
 	inc 1, xiz
 	cpmi8 (xiz), 0x40
@@ -23902,7 +23902,7 @@ LABEL_028E26:
 	lda xsp, (xsp - 10)
 	push xiz
 	ld (xsp + 12), c
-	ldada_24 xbc, 0x04308e
+	lda_24 xbc, 0x04308e
 	ld (xsp + 4), xbc
 	inc 5, xwa
 	ld (xsp + 8), xwa
@@ -23947,7 +23947,7 @@ LABEL_028E89:
 	ld xwa, (xsp + 8)
 	ld a, (xwa)
 	extz wa
-	ldada_24 xbc, 0x0451cc
+	lda_24 xbc, 0x0451cc
 	call LABEL_02D620
 	ld xwa, (xsp + 8)
 	ld a, (xwa)
@@ -23971,7 +23971,7 @@ LABEL_028EC7:
 	ld xwa, (xsp + 8)
 	ld a, (xwa)
 	extz wa
-	ldada_24 xbc, 0x0451cc
+	lda_24 xbc, 0x0451cc
 	calr LABEL_027FD6
 	jr LABEL_028F62
 
@@ -23984,7 +23984,7 @@ LABEL_028EEA:
 	ld xwa, (xsp + 8)
 	ld a, (xwa)
 	extz wa
-	ldada_24 xbc, 0x0451cc
+	lda_24 xbc, 0x0451cc
 	call LABEL_02D620
 	ld xwa, (xsp + 8)
 	ld a, (xwa)
@@ -24007,7 +24007,7 @@ LABEL_028F27:
 	ld xwa, (xsp + 8)
 	ld a, (xwa)
 	extz wa
-	ldada_24 xbc, 0x0451cc
+	lda_24 xbc, 0x0451cc
 	calr LABEL_0280AE
 	jr LABEL_028F62
 
@@ -24019,7 +24019,7 @@ LABEL_028F47:
 	ld xwa, (xsp + 8)
 	ld a, (xwa)
 	extz wa
-	ldada_24 xbc, 0x0451cc
+	lda_24 xbc, 0x0451cc
 	calr LABEL_0280AE
 
 LABEL_028F62:
@@ -24521,9 +24521,9 @@ LABEL_029E31:
 	cp hl, 0x1A
 	ret gt
 	add hl, hl
-	ldada_24 xix, 0x00f703
+	lda_24 xix, 0x00f703
 	ld_sriw3 HL, 0x07, 0xF0, 0xEC
-	ldada_24 xix, 0x029e5b
+	lda_24 xix, 0x029e5b
 	jp_dri 8, 0x07, 0xF0, 0xEC
 LABEL_029E5B:
 	.byte 0xd8, 0x12, 0x78, 0x87, 0xf2, 0xd8, 0x12, 0x78
@@ -24570,7 +24570,7 @@ Voice_ModWheel_Apply:
 	ld a, (xsp + 12)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x04136e
+	lda_24 xbc, 0x04136e
 	ld_sril3 XWA, 0x07, 0xE4, 0xE0
 	ld a, (xwa + 16)
 	and a, 0xC0
@@ -24599,7 +24599,7 @@ LABEL_029FB7:
 	extz wa
 	muls wa, 0x11F
 	ld de, wa
-	ldada_24 xhl, 0x04136e
+	lda_24 xhl, 0x04136e
 	ld wa, (xsp + 8)
 	extz xwa
 	ld xbc, xwa
@@ -24621,7 +24621,7 @@ LABEL_02A004:
 	ld a, (xsp + 12)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x04136e
+	lda_24 xbc, 0x04136e
 	ld_sril3 XWA, 0x07, 0xE4, 0xE0
 	ld (xsp + 4), xwa
 	ldmw (xsp + 8), 0x0
@@ -24681,7 +24681,7 @@ LABEL_02A0E9:
 	ld a, (xsp + 2)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x04136e
+	lda_24 xbc, 0x04136e
 	ld_sril3 XWA, 0x07, 0xE4, 0xE0
 	ld a, (xwa + 16)
 	and a, 0xC0
@@ -24733,7 +24733,7 @@ LABEL_02A11C:
 	ld a, (xsp + 2)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x0413ce
+	lda_24 xbc, 0x0413ce
 	lda_dri3 XSP, 0x07, 0xE4, 0xE0
 
 LABEL_02A18C:
@@ -24762,7 +24762,7 @@ LABEL_02A1BA:
 	ld a, (xwa)
 	extz wa
 	muls wa, 0x47
-	ldada_24 xbc, 0x04308f
+	lda_24 xbc, 0x04308f
 	ld_sriw3 WA, 0x07, 0xE4, 0xE0
 	and wa, 0x3C
 	cp wa, 0x8
@@ -24780,10 +24780,10 @@ LABEL_02A1E9:
 	ld a, (xwa)
 	extz wa
 	add wa, 0x840
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	stdi16_24 0x100002, 0xa200
+	sti16_24 0x100002, 0xa200
 	jr __jrt_nop_02A208
 __jrt_nop_02A208:
 
@@ -24796,10 +24796,10 @@ LABEL_02A208:
 	ld a, (xwa)
 	extz wa
 	add wa, 0x800
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	stdi16_24 0x100002, 0xa280
+	sti16_24 0x100002, 0xa280
 	jr __jrt_nop_02A22A
 __jrt_nop_02A22A:
 
@@ -24815,10 +24815,10 @@ LABEL_02A22F:
 	ld a, (xwa)
 	extz wa
 	add wa, 0x840
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	stdi16_24 0x100002, 0xa200
+	sti16_24 0x100002, 0xa200
 	jr __jrt_nop_02A24E
 __jrt_nop_02A24E:
 
@@ -24831,10 +24831,10 @@ LABEL_02A24E:
 	ld a, (xwa)
 	extz wa
 	add wa, 0x800
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	stdi16_24 0x100002, 0xa280
+	sti16_24 0x100002, 0xa280
 	jr __jrt_nop_02A270
 __jrt_nop_02A270:
 
@@ -24908,9 +24908,9 @@ Voice_CtrlChange:
 	cp wa, 0xA
 	jrl gt, Voice_CC_Exit
 	add wa, wa
-	ldada_24 xix, 0x00f739
+	lda_24 xix, 0x00f739
 	ld_sriw3 WA, 0x07, 0xF0, 0xE0
-	ldada_24 xix, 0x02a306
+	lda_24 xix, 0x02a306
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
 Voice_CC_ModWheel:
@@ -25150,7 +25150,7 @@ Voice_ChanPressure:
 	ld (xsp + 6), a
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x04136e
+	lda_24 xbc, 0x04136e
 	ld_sril3 XWA, 0x07, 0xE4, 0xE0
 	ld a, (xwa + 16)
 	and a, 0xC0
@@ -25167,7 +25167,7 @@ LABEL_02A530:
 	ld a, (xsp + 6)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x04136e
+	lda_24 xbc, 0x04136e
 	ld_sril3 XWA, 0x07, 0xE4, 0xE0
 	ld (xsp + 2), xwa
 	ldi_berp 0xFB, 0
@@ -25201,7 +25201,7 @@ LABEL_02A589:
 	ld a, (xsp + 6)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x04136e
+	lda_24 xbc, 0x04136e
 	ld_sril3 XWA, 0x07, 0xE4, 0xE0
 	ld (xsp + 2), xwa
 	ldi_berp 0xFB, 0
@@ -25250,7 +25250,7 @@ Voice_PitchBend:
 	ld a, e
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xhl, 0x04136e
+	lda_24 xhl, 0x04136e
 	ld_sril3 XWA, 0x07, 0xEC, 0xE0
 	ld a, (xwa + 16)
 	and a, 0xC0
@@ -25269,7 +25269,7 @@ LABEL_02A62E:
 	ld a, e
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xde, 0x04136e
+	lda_24 xde, 0x04136e
 	ld_sril3 XWA, 0x07, 0xE8, 0xE0
 	lda xde, (xwa + 20)
 	ld wa, hl
@@ -25279,7 +25279,7 @@ LABEL_02A64C:
 	ld a, e
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xhl, 0x04136e
+	lda_24 xhl, 0x04136e
 	ld_sril3 XHL, 0x07, 0xEC, 0xE0
 	ld a, e
 	extz wa
@@ -25312,10 +25312,10 @@ LABEL_02A692:
 	ld a, (xiz)
 	extz wa
 	add wa, 0x840
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	stdi16_24 0x100002, 0xa200
+	sti16_24 0x100002, 0xa200
 	jr __jrt_nop_02A6AF
 __jrt_nop_02A6AF:
 
@@ -25327,10 +25327,10 @@ LABEL_02A6AF:
 	ld a, (xiz)
 	extz wa
 	add wa, 0x800
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	stdi16_24 0x100002, 0xa280
+	sti16_24 0x100002, 0xa280
 	jr __jrt_nop_02A6CF
 __jrt_nop_02A6CF:
 
@@ -25373,14 +25373,14 @@ LABEL_02A6F7:
 	ld a, (xsp)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041381
+	lda_24 xbc, 0x041381
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	ldfr_berp A, 0xF0
 	extz ix
 	ld a, (xsp)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041382
+	lda_24 xbc, 0x041382
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	ld e, a
 	extz de
@@ -25390,7 +25390,7 @@ LABEL_02A6F7:
 	ld a, (xsp)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x04136e
+	lda_24 xbc, 0x04136e
 	ld_sril3 XWA, 0x07, 0xE4, 0xE0
 	ld a, (xwa + 16)
 	and a, 0xC0
@@ -25463,9 +25463,9 @@ Voice_SystemMsg:
 
 LABEL_02A7E6:
 	add bc, bc
-	ldada_24 xix, 0x00f74f
+	lda_24 xix, 0x00f74f
 	ld_sriw3 BC, 0x07, 0xF0, 0xE4
-	ldada_24 xix, 0x02a7fc
+	lda_24 xix, 0x02a7fc
 	jp_dri 8, 0x07, 0xF0, 0xE4
 
 LABEL_02A7FC:
@@ -25722,7 +25722,7 @@ LABEL_02AA47:
 	ld a, (xsp + 4)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041368
+	lda_24 xbc, 0x041368
 	exts xwa
 	add xwa, xbc
 	add xwa, xhl
@@ -25738,7 +25738,7 @@ LABEL_02AA47:
 	ld a, (xsp + 4)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041368
+	lda_24 xbc, 0x041368
 	exts xwa
 	add xwa, xbc
 	add xwa, xhl
@@ -25755,7 +25755,7 @@ LABEL_02AA47:
 	ld a, (xsp + 4)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041368
+	lda_24 xbc, 0x041368
 	exts xwa
 	add xwa, xbc
 	ld xbc, xwa
@@ -25779,11 +25779,11 @@ LABEL_02AAE7:
 	add de, 0x6E
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041368
+	lda_24 xbc, 0x041368
 	exts xwa
 	add xwa, xbc
 	st_dri3b A, 0x07, 0xE0, 0xE8
-	ldada_24 xwa, 0x00f8b0
+	lda_24 xwa, 0x00f8b0
 	ld (xbc + 4), xwa
 	ret
 
@@ -25796,7 +25796,7 @@ LABEL_02AB10:
 	ld e, a
 	extz de
 	muls de, 0x11F
-	ldada_24 xhl, 0x041368
+	lda_24 xhl, 0x041368
 	exts xde
 	add xde, xhl
 	ld_sril3 XDE, 0x07, 0xE8, 0xF0
@@ -25805,9 +25805,9 @@ LABEL_02AB10:
 	srl e, 4
 	ldfr_berp E, 0xF0
 	extz ix
-	ldda32_24 xde, 0x045314
+	ld32_24 xde, 0x045314
 	ld xhl, (xde + 112)
-	ldda32_24 xde, 0x045314
+	ld32_24 xde, 0x045314
 	ld_sriw DE, (xde + 0x00ec)
 	extz bc
 	muls bc, 0x25
@@ -25815,7 +25815,7 @@ LABEL_02AB10:
 	add iy, 0x6E
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041368
+	lda_24 xbc, 0x041368
 	exts xwa
 	add xwa, xbc
 	st_dri3b A, 0x07, 0xE0, 0xF4
@@ -25830,12 +25830,12 @@ LABEL_02AB83:
 	ld c, a
 	extz bc
 	muls bc, 0x11F
-	ldada_24 xde, 0x041368
+	lda_24 xde, 0x041368
 	st_dri3b B, 0x07, 0xE8, 0xE4
 	st_dri3b B, 0xE9, 0x02, 0x01
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041368
+	lda_24 xbc, 0x041368
 	exts xwa
 	add xwa, xbc
 	inc 2, xwa
@@ -25879,7 +25879,7 @@ LABEL_02ABEE:
 	ld l, e
 	extz hl
 	muls hl, 0x3
-	ldada_24 xix, 0x00f77d
+	lda_24 xix, 0x00f77d
 	ld_srib3 L, 0x07, 0xF0, 0xEC
 	ldfr_berp L, 0xF0
 	extz ix
@@ -25890,7 +25890,7 @@ LABEL_02ABEE:
 	ld l, e
 	extz hl
 	muls hl, 0x3
-	ldada_24 xix, 0x00f77e
+	lda_24 xix, 0x00f77e
 	ld_srib3 L, 0x07, 0xF0, 0xEC
 	ldfr_berp L, 0xF0
 	extz ix
@@ -25900,7 +25900,7 @@ LABEL_02ABEE:
 	srl bc, 4
 	extz de
 	muls de, 0x3
-	ldada_24 xhl, 0x00f77f
+	lda_24 xhl, 0x00f77f
 	ld_srib3 E, 0x07, 0xEC, 0xE8
 	extz de
 	and bc, 0xF
@@ -25994,7 +25994,7 @@ LABEL_02AD03:
 	ld a, (xsp + 6)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x04146a
+	lda_24 xbc, 0x04146a
 	st_dri3b C, 0x07, 0xE4, 0xE0
 	lda xwa, (xsp + 4)
 	ld xbc, xwa
@@ -26008,43 +26008,43 @@ LABEL_02AD03:
 	extz wa
 	muls wa, 0x11F
 	ld de, wa
-	ldada_24 xhl, 0x041476
+	lda_24 xhl, 0x041476
 	ld a, (xsp + 4)
 	extz wa
 	add wa, wa
-	ldada_24 xbc, 0x00f786
+	lda_24 xbc, 0x00f786
 	ld_sriw3 WA, 0x07, 0xE4, 0xE0
 	st_dri3w WA, 0x07, 0xEC, 0xE8
 	ld a, (xsp + 6)
 	extz wa
 	muls wa, 0x11F
 	ld de, wa
-	ldada_24 xhl, 0x04147a
+	lda_24 xhl, 0x04147a
 	ld a, (xsp + 2)
 	extz wa
 	add wa, wa
-	ldada_24 xbc, 0x00f79a
+	lda_24 xbc, 0x00f79a
 	ld_sriw3 WA, 0x07, 0xE4, 0xE0
 	st_dri3w WA, 0x07, 0xEC, 0xE8
 	ld a, (xsp + 4)
 	extz wa
 	add wa, wa
-	ldada_24 xbc, 0x00f7d2
+	lda_24 xbc, 0x00f7d2
 	ld_sriw3 DE, 0x07, 0xE4, 0xE0
 	ld a, (xsp + 2)
 	extz wa
 	add wa, wa
-	ldada_24 xbc, 0x00f7ac
+	lda_24 xbc, 0x00f7ac
 	add_sriw_rm DE, 0x07, 0xE4, 0xE0
 	ld a, (xsp)
 	extz wa
 	add wa, wa
-	ldada_24 xbc, 0x00f7be
+	lda_24 xbc, 0x00f7be
 	add_sriw_rm DE, 0x07, 0xE4, 0xE0
 	ld a, (xsp + 6)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041478
+	lda_24 xbc, 0x041478
 	st_dri3w DE, 0x07, 0xE4, 0xE0
 	inc 8, xsp
 	ret
@@ -26061,22 +26061,22 @@ LABEL_02ADC1:
 	ld a, (xsp)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041472
+	lda_24 xbc, 0x041472
 	stib_dri 0x07, 0xE4, 0xE0, 0x00
 	ld a, (xsp)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041473
+	lda_24 xbc, 0x041473
 	stib_dri 0x07, 0xE4, 0xE0, 0x00
 	ld a, (xsp)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041474
+	lda_24 xbc, 0x041474
 	stib_dri 0x07, 0xE4, 0xE0, 0x00
 	ld a, (xsp)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041475
+	lda_24 xbc, 0x041475
 	stib_dri 0x07, 0xE4, 0xE0, 0x00
 	inc 2, xsp
 	ret
@@ -26168,19 +26168,19 @@ LABEL_02B014:
 	ld a, (xsp + 10)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041474
+	lda_24 xbc, 0x041474
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	ld (xsp + 6), a
 	ld a, (xsp + 10)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041475
+	lda_24 xbc, 0x041475
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	ld (xsp + 8), a
 	ld a, (xsp + 10)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x0413d6
+	lda_24 xbc, 0x0413d6
 	ld_sril3 XIZ, 0x07, 0xE4, 0xE0
 	ldmw (xsp + 4), 0x0
 	cpmi16 (xsp + 4), 0x4
@@ -26195,7 +26195,7 @@ LABEL_02B066:
 	ld a, (xsp + 10)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041368
+	lda_24 xbc, 0x041368
 	exts xwa
 	add xwa, xbc
 	add xwa, xde
@@ -26232,7 +26232,7 @@ LABEL_02B0D3:
 	ld a, (xsp + 10)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041472
+	lda_24 xbc, 0x041472
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	ld c, a
 	exts bc
@@ -26244,7 +26244,7 @@ LABEL_02B0D3:
 	ld a, (xsp + 10)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041473
+	lda_24 xbc, 0x041473
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	ld c, a
 	exts bc
@@ -26256,7 +26256,7 @@ LABEL_02B0D3:
 	ld a, (xsp + 10)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041473
+	lda_24 xbc, 0x041473
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	ld c, a
 	exts bc
@@ -26279,13 +26279,13 @@ LABEL_02B150:
 LABEL_02B154:
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xhl, 0x041368
+	lda_24 xhl, 0x041368
 	st_dri3b C, 0x07, 0xEC, 0xE0
 	st_dri3b C, 0xED, 0x02, 0x01
 	ld a, c
 	extz wa
 	muls wa, 0x47
-	ldada_24 xbc, 0x043094
+	lda_24 xbc, 0x043094
 	ld_sriw3 WA, 0x07, 0xE4, 0xE0
 	srl wa, 8
 	add wa, 0xC
@@ -26333,14 +26333,14 @@ LABEL_02B1DF:
 LABEL_02B1E0:
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xhl, 0x041368
+	lda_24 xhl, 0x041368
 	st_dri3b D, 0x07, 0xEC, 0xE0
 	st_dri3b D, 0xF1, 0x02, 0x01
 	ldb l, 0x0
 	ld a, c
 	extz wa
 	muls wa, 0x47
-	ldada_24 xbc, 0x043094
+	lda_24 xbc, 0x043094
 	ld_sriw3 WA, 0x07, 0xE4, 0xE0
 	srl wa, 8
 	sub wa, 0xC
@@ -26511,7 +26511,7 @@ LABEL_02B37C:
 LABEL_02B386:
 	ld de, wa
 	add wa, wa
-	ldada_24 xbc, 0x00f7e6
+	lda_24 xbc, 0x00f7e6
 	ld_sriw3 WA, 0x07, 0xE4, 0xE0
 	extz xwa
 	ld xbc, (xsp + 4)
@@ -26638,10 +26638,10 @@ LABEL_02B4A1:
 	ld a, (xsp)
 	add a, 0xC0
 	extz wa
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	stdi16_24 0x100002, 0x0000
+	sti16_24 0x100002, 0x0000
 	jr __jrt_nop_02B4C1
 __jrt_nop_02B4C1:
 
@@ -26652,10 +26652,10 @@ LABEL_02B4C1:
 	res_dd8 7, 0x18
 	ld a, (xsp)
 	extz wa
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	stdi16_24 0x100002, 0x7e00
+	sti16_24 0x100002, 0x7e00
 	jr __jrt_nop_02B4DD
 __jrt_nop_02B4DD:
 
@@ -26673,7 +26673,7 @@ LABEL_02B4E3:
 	ld a, (xsp + 4)
 	extz wa
 	muls wa, 0x47
-	ldada_24 xbc, 0x04308e
+	lda_24 xbc, 0x04308e
 	st_dri3b H, 0x07, 0xE4, 0xE0
 	ld xwa, xiz
 	call LABEL_023849
@@ -26712,7 +26712,7 @@ LABEL_02B4E3:
 	call LABEL_026637
 	ld a, (xsp + 4)
 	extz wa
-	ldada_24 xbc, 0x0451cc
+	lda_24 xbc, 0x0451cc
 	call 0x2D101
 	pop xiz
 	inc 2, xsp
@@ -26807,7 +26807,7 @@ LABEL_02B576:
 	ld a, (xsp + 20)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041368
+	lda_24 xbc, 0x041368
 	st_dri3b A, 0x07, 0xE4, 0xE0
 	ld xwa, (xsp + 2)
 	ld (xwa + 35), xbc
@@ -26819,7 +26819,7 @@ LABEL_02B576:
 	ld a, (xsp + 20)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041368
+	lda_24 xbc, 0x041368
 	exts xwa
 	add xwa, xbc
 	st_dri3b A, 0x07, 0xE0, 0xE8
@@ -26875,7 +26875,7 @@ LABEL_02B717:
 	ld a, (xsp + 20)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x04136a
+	lda_24 xbc, 0x04136a
 	ld_sriw3 WA, 0x07, 0xE4, 0xE0
 	and wa, de
 	jrl z, LABEL_02BA01
@@ -26887,7 +26887,7 @@ LABEL_02B717:
 	ld a, (xsp + 20)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041368
+	lda_24 xbc, 0x041368
 	exts xwa
 	add xwa, xbc
 	st_dri3b W, 0x07, 0xE0, 0xE8
@@ -26905,7 +26905,7 @@ LABEL_02B717:
 	ld a, (xsp + 20)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041368
+	lda_24 xbc, 0x041368
 	exts xwa
 	add xwa, xbc
 	ld_sril3 XWA, 0x07, 0xE0, 0xE8
@@ -26922,7 +26922,7 @@ LABEL_02B717:
 	ld a, (xsp + 20)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041368
+	lda_24 xbc, 0x041368
 	exts xwa
 	add xwa, xbc
 	st_dri3b W, 0x07, 0xE0, 0xE8
@@ -26936,7 +26936,7 @@ LABEL_02B717:
 	ld a, (xsp + 20)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041368
+	lda_24 xbc, 0x041368
 	exts xwa
 	add xwa, xbc
 	st_dri3b W, 0x07, 0xE0, 0xE8
@@ -27002,7 +27002,7 @@ LABEL_02B861:
 	ld a, (xsp + 34)
 	set 7, a
 	ld (xiz + 5), a
-	ldda16_24 xwa, 0x041343
+	ld16_24 xwa, 0x041343
 	bit 1, wa
 	jr z, LABEL_02B8D3
 	cpmi8 (xsp + 20), 0x0
@@ -27033,14 +27033,14 @@ LABEL_02B8D3:
 	ld a, (xsp + 20)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041368
+	lda_24 xbc, 0x041368
 	exts xwa
 	add xwa, xbc
 	ld (xiz + 35), xwa
 	ld a, (xsp + 20)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x04136e
+	lda_24 xbc, 0x04136e
 	ld_sril3 XWA, 0x07, 0xE4, 0xE0
 	ld (xiz + 19), xwa
 	ld xwa, (xsp + 4)
@@ -27073,28 +27073,28 @@ LABEL_02B8D3:
 	ld xwa, (xiz + 19)
 	ld a, (xwa + 94)
 	extz wa
-	ldada_24 xbc, 0x012038
+	lda_24 xbc, 0x012038
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	ld (xiz + 53), a
 	ld xwa, (xiz + 19)
 	ld a, (xwa + 95)
 	extz wa
 	add wa, wa
-	ldada_24 xbc, 0x012057
+	lda_24 xbc, 0x012057
 	ld_sriw3 WA, 0x07, 0xE4, 0xE0
 	ld (xiz + 54), wa
 	ld xwa, (xiz + 19)
 	ld a, (xwa + 96)
 	extz wa
 	add wa, wa
-	ldada_24 xbc, 0x012095
+	lda_24 xbc, 0x012095
 	ld_sriw3 WA, 0x07, 0xE4, 0xE0
 	ld (xiz + 58), wa
 	ld xwa, (xiz + 19)
 	ld a, (xwa + 97)
 	extz wa
 	add wa, wa
-	ldada_24 xbc, 0x012057
+	lda_24 xbc, 0x012057
 	ld_sriw3 WA, 0x07, 0xE4, 0xE0
 	ld (xiz + 56), wa
 	ld a, (xsp + 38)
@@ -27172,7 +27172,7 @@ LABEL_02BA2C:
 	ld a, (xsp + 8)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x04136a
+	lda_24 xbc, 0x04136a
 	ld_sriw3 WA, 0x07, 0xE4, 0xE0
 	bit 14, wa
 	jr z, LABEL_02BA92
@@ -27214,7 +27214,7 @@ LABEL_02BAB6:
 	ld a, (xsp + 8)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x04136a
+	lda_24 xbc, 0x04136a
 	ld_sriw3 WA, 0x07, 0xE4, 0xE0
 	extz xwa
 	bit 15, wa
@@ -27310,7 +27310,7 @@ LABEL_02BB75:
 	extz wa
 	muls wa, 0x47
 	ld hl, wa
-	ldada_24 xiz, 0x04308e
+	lda_24 xiz, 0x04308e
 	ld a, (xsp + 4)
 	extz wa
 	muls wa, 0x47
@@ -27327,7 +27327,7 @@ LABEL_02BBD5:
 	extz wa
 	muls wa, 0x47
 	ld hl, wa
-	ldada_24 xiz, 0x04308e
+	lda_24 xiz, 0x04308e
 	ld a, (xsp + 4)
 	extz wa
 	muls wa, 0x47
@@ -27340,7 +27340,7 @@ LABEL_02BBD5:
 	ld a, e
 	extz wa
 	muls wa, 0x47
-	ldada_24 xbc, 0x04308e
+	lda_24 xbc, 0x04308e
 	lda_dri3 XIY, 0x07, 0xE4, 0xE0
 	ld a, (xsp + 4)
 	extz wa
@@ -27363,7 +27363,7 @@ LABEL_02BC3A:
 	ld a, e
 	extz wa
 	muls wa, 0x47
-	ldada_24 xbc, 0x0430bd
+	lda_24 xbc, 0x0430bd
 	st_dri3w HL, 0x07, 0xE4, 0xE0
 	ld a, (xsp + 4)
 	extz wa
@@ -27382,14 +27382,14 @@ LABEL_02BC6D:
 	ld a, e
 	extz wa
 	muls wa, 0x47
-	ldada_24 xbc, 0x0430bf
+	lda_24 xbc, 0x0430bf
 	st_dri3w HL, 0x07, 0xE4, 0xE0
 
 LABEL_02BC7F:
 	ld a, e
 	extz wa
 	muls wa, 0x47
-	ldada_24 xbc, 0x0430b5
+	lda_24 xbc, 0x0430b5
 	ld_sril3 XWA, 0x07, 0xE4, 0xE0
 	ld wa, (xwa + 24)
 	extz xwa
@@ -27398,7 +27398,7 @@ LABEL_02BC7F:
 	ld a, e
 	extz wa
 	muls wa, 0x47
-	ldada_24 xbc, 0x04308f
+	lda_24 xbc, 0x04308f
 	or_sriw_im 0x07, 0xE4, 0xE0, 0x00, 0x01
 	jr LABEL_02BCC5
 
@@ -27406,7 +27406,7 @@ LABEL_02BCB1:
 	ld a, e
 	extz wa
 	muls wa, 0x47
-	ldada_24 xbc, 0x04308f
+	lda_24 xbc, 0x04308f
 	and_sriw_im 0x07, 0xE4, 0xE0, 0xFF, 0xFE
 
 LABEL_02BCC5:
@@ -27426,7 +27426,7 @@ LABEL_02BCD6:
 	ld a, (xsp + 4)
 	extz wa
 	muls wa, 0x47
-	ldada_24 xbc, 0x04308e
+	lda_24 xbc, 0x04308e
 	st_dri3b H, 0x07, 0xE4, 0xE0
 	ld xwa, xiz
 	call LABEL_0238F8
@@ -27479,7 +27479,7 @@ LABEL_02BD5D:
 LABEL_02BD75:
 	ld a, (xsp + 4)
 	extz wa
-	ldada_24 xbc, 0x0451cc
+	lda_24 xbc, 0x0451cc
 	call 0x2D101
 	pop xiz
 	inc 2, xsp
@@ -27492,7 +27492,7 @@ LABEL_02BD87:
 	ld a, c
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xhl, 0x04136a
+	lda_24 xhl, 0x04136a
 	ld_sriw3 WA, 0x07, 0xEC, 0xE0
 	and wa, de
 	jrl z, LABEL_02BEF1
@@ -27504,7 +27504,7 @@ LABEL_02BD87:
 	ld a, c
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xde, 0x041368
+	lda_24 xde, 0x041368
 	exts xwa
 	add xwa, xde
 	st_dri3b W, 0x07, 0xE0, 0xEC
@@ -27518,7 +27518,7 @@ LABEL_02BD87:
 	ld a, c
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xde, 0x041368
+	lda_24 xde, 0x041368
 	exts xwa
 	add xwa, xde
 	ld_sril3 XDE, 0x07, 0xE0, 0xEC
@@ -27530,7 +27530,7 @@ LABEL_02BD87:
 	ld a, c
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xhl, 0x041368
+	lda_24 xhl, 0x041368
 	exts xwa
 	add xwa, xhl
 	st_dri3b W, 0x07, 0xE0, 0xF0
@@ -27543,7 +27543,7 @@ LABEL_02BD87:
 	ld a, c
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xix, 0x041368
+	lda_24 xix, 0x041368
 	exts xwa
 	add xwa, xix
 	st_dri3b D, 0x07, 0xE0, 0xF4
@@ -27570,14 +27570,14 @@ LABEL_02BE62:
 	ld a, c
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xiy, 0x041368
+	lda_24 xiy, 0x041368
 	exts xwa
 	add xwa, xiy
 	ld (xiz + 35), xwa
 	ld a, c
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x04136e
+	lda_24 xbc, 0x04136e
 	ld_sril3 XWA, 0x07, 0xE4, 0xE0
 	ld (xiz + 19), xwa
 	ld (xiz + 23), xde
@@ -27631,14 +27631,14 @@ LABEL_02BF1B:
 	ld a, (xsp + 8)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x04136a
+	lda_24 xbc, 0x04136a
 	ld_sriw3 WA, 0x07, 0xE4, 0xE0
 	bit 13, wa
 	jr z, LABEL_02BF55
 	ld a, (xsp + 8)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041480
+	lda_24 xbc, 0x041480
 	set_dri 7, 0x07, 0xE4, 0xE0
 	jr LABEL_02BF68
 
@@ -27646,7 +27646,7 @@ LABEL_02BF55:
 	ld a, (xsp + 8)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041480
+	lda_24 xbc, 0x041480
 	res_dri 7, 0x07, 0xE4, 0xE0
 
 LABEL_02BF68:
@@ -27762,7 +27762,7 @@ LABEL_02C03D:
 	extz wa
 	muls wa, 0x47
 	ld hl, wa
-	ldada_24 xiz, 0x04308e
+	lda_24 xiz, 0x04308e
 	ld a, e
 	extz wa
 	muls wa, 0x47
@@ -27776,7 +27776,7 @@ LABEL_02C03D:
 	extz wa
 	muls wa, 0x47
 	ld bc, wa
-	ldada_24 xhl, 0x04308e
+	lda_24 xhl, 0x04308e
 	ld a, (xsp + 4)
 	lda_dri3 XBC, 0x07, 0xEC, 0xE4
 
@@ -27797,7 +27797,7 @@ LABEL_02C0B6:
 	ld a, (xsp + 4)
 	extz wa
 	muls wa, 0x47
-	ldada_24 xbc, 0x04308e
+	lda_24 xbc, 0x04308e
 	st_dri3b H, 0x07, 0xE4, 0xE0
 	ld xwa, xiz
 	call LABEL_023849
@@ -27826,7 +27826,7 @@ LABEL_02C0B6:
 	call LABEL_026684
 	ld a, (xsp + 4)
 	extz wa
-	ldada_24 xbc, 0x0451cc
+	lda_24 xbc, 0x0451cc
 	call 0x2D101
 	pop xiz
 	inc 2, xsp
@@ -27841,7 +27841,7 @@ LABEL_02C12B:
 	ld a, (xsp + 24)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x04136e
+	lda_24 xbc, 0x04136e
 	ld_sril3 XHL, 0x07, 0xE4, 0xE0
 	ld a, (xsp + 38)
 	ld c, a
@@ -27905,7 +27905,7 @@ LABEL_02C12B:
 	ld a, (xsp + 38)
 	set 7, a
 	ld (xiz + 5), a
-	ldda16_24 xwa, 0x041343
+	ld16_24 xwa, 0x041343
 	bit 1, wa
 	jr z, LABEL_02C21A
 	ld a, (xsp + 36)
@@ -27922,7 +27922,7 @@ LABEL_02C21A:
 	ld a, (xsp + 24)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041368
+	lda_24 xbc, 0x041368
 	exts xwa
 	add xwa, xbc
 	ld (xiz + 35), xwa
@@ -27934,7 +27934,7 @@ LABEL_02C21A:
 	ld a, (xsp + 24)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041368
+	lda_24 xbc, 0x041368
 	exts xwa
 	add xwa, xbc
 	st_dri3b W, 0x07, 0xE0, 0xE8
@@ -28055,7 +28055,7 @@ LABEL_02C353:
 	extz wa
 	muls wa, 0x47
 	ld hl, wa
-	ldada_24 xiz, 0x04308e
+	lda_24 xiz, 0x04308e
 	ld a, e
 	extz wa
 	muls wa, 0x47
@@ -28069,7 +28069,7 @@ LABEL_02C353:
 	extz wa
 	muls wa, 0x47
 	ld bc, wa
-	ldada_24 xhl, 0x04308e
+	lda_24 xhl, 0x04308e
 	ld a, (xsp + 4)
 	lda_dri3 XBC, 0x07, 0xEC, 0xE4
 
@@ -28090,11 +28090,11 @@ LABEL_02C3CC:
 	ld a, (xsp + 4)
 	extz wa
 	muls wa, 0x47
-	ldada_24 xbc, 0x04308e
+	lda_24 xbc, 0x04308e
 	st_dri3b H, 0x07, 0xE4, 0xE0
 	ld xwa, xiz
 	call LABEL_023849
-	ldada_24 xwa, 0x0451ce
+	lda_24 xwa, 0x0451ce
 	call LABEL_02B3C0
 	ld xwa, xiz
 	call LABEL_023A8E
@@ -28123,7 +28123,7 @@ LABEL_02C3CC:
 	call LABEL_026684
 	ld a, (xsp + 4)
 	extz wa
-	ldada_24 xbc, 0x0451cc
+	lda_24 xbc, 0x0451cc
 	call 0x2D101
 	pop xiz
 	inc 2, xsp
@@ -28148,7 +28148,7 @@ LABEL_02C450:
 	ld a, (xsp + 20)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041368
+	lda_24 xbc, 0x041368
 	exts xwa
 	add xwa, xbc
 	st_dri3b W, 0x07, 0xE0, 0xE8
@@ -28235,7 +28235,7 @@ LABEL_02C450:
 	ld a, (xsp + 20)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xde, 0x041368
+	lda_24 xde, 0x041368
 	exts xwa
 	add xwa, xde
 	ld (xbc + 35), xwa
@@ -28348,7 +28348,7 @@ LABEL_02C653:
 	extz wa
 	muls wa, 0x47
 	ld hl, wa
-	ldada_24 xiz, 0x04308e
+	lda_24 xiz, 0x04308e
 	ld a, (xsp + 4)
 	extz wa
 	muls wa, 0x47
@@ -28361,7 +28361,7 @@ LABEL_02C653:
 	ld a, e
 	extz wa
 	muls wa, 0x47
-	ldada_24 xbc, 0x04308e
+	lda_24 xbc, 0x04308e
 	lda_dri3 XIY, 0x07, 0xE4, 0xE0
 
 LABEL_02C6C7:
@@ -28378,7 +28378,7 @@ Voice_SetPitch:
 	ld a, (xsp + 20)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x04136e
+	lda_24 xbc, 0x04136e
 	ld_sril3 XWA, 0x07, 0xE4, 0xE0
 	ld a, (xwa + 16)
 	and a, 0xC0
@@ -28387,7 +28387,7 @@ Voice_SetPitch:
 	ld a, (xsp + 20)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x04136a
+	lda_24 xbc, 0x04136a
 	ld_sriw3 WA, 0x07, 0xE4, 0xE0
 	and wa, 0x7
 	jrl z, LABEL_02C7CE
@@ -28425,10 +28425,10 @@ Voice_SetPitch:
 	ldto_berp A, 0xFB
 	extz wa
 	add wa, 0x840
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	stdi16_24 0x100002, 0xff00
+	sti16_24 0x100002, 0xff00
 	jr __jrt_nop_02C780
 __jrt_nop_02C780:
 
@@ -28440,10 +28440,10 @@ LABEL_02C780:
 	ldto_berp A, 0xFB
 	extz wa
 	add wa, 0x800
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	stdi16_24 0x100002, 0xff80
+	sti16_24 0x100002, 0xff80
 	jr __jrt_nop_02C7A1
 __jrt_nop_02C7A1:
 
@@ -28461,7 +28461,7 @@ LABEL_02C7A1:
 	extz wa
 	muls wa, 0x47
 	ld bc, wa
-	ldada_24 xde, 0x0430bb
+	lda_24 xde, 0x0430bb
 	ld wa, hl
 	ld_sriw3 BC, 0x07, 0xE8, 0xE4
 	call 0x2D41B
@@ -28480,7 +28480,7 @@ Voice_NoteOff:
 	ld a, (xsp + 20)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x04136e
+	lda_24 xbc, 0x04136e
 	ld_sril3 XWA, 0x07, 0xE4, 0xE0
 	ld a, (xwa + 16)
 	and a, 0xC0
@@ -28489,7 +28489,7 @@ Voice_NoteOff:
 	ld a, (xsp + 20)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x04136a
+	lda_24 xbc, 0x04136a
 	ld_sriw3 WA, 0x07, 0xE4, 0xE0
 	and wa, 0x7
 	jrl z, LABEL_02C8DB
@@ -28525,10 +28525,10 @@ Voice_NoteOff:
 	ldto_berp A, 0xFB
 	extz wa
 	add wa, 0x840
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	stdi16_24 0x100002, 0xff00
+	sti16_24 0x100002, 0xff00
 	jr __jrt_nop_02C884
 __jrt_nop_02C884:
 
@@ -28540,10 +28540,10 @@ LABEL_02C884:
 	ldto_berp A, 0xFB
 	extz wa
 	add wa, 0x800
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	stdi16_24 0x100002, 0xff80
+	sti16_24 0x100002, 0xff80
 	jr __jrt_nop_02C8A5
 __jrt_nop_02C8A5:
 
@@ -28561,7 +28561,7 @@ LABEL_02C8A5:
 	extz wa
 	muls wa, 0x47
 	ld bc, wa
-	ldada_24 xde, 0x0430bb
+	lda_24 xde, 0x0430bb
 	ld wa, hl
 	ld_sriw3 BC, 0x07, 0xE8, 0xE4
 	call 0x2D41B
@@ -28583,7 +28583,7 @@ Voice_SetVelocity:
 	ld a, (xsp + 20)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x04136e
+	lda_24 xbc, 0x04136e
 	ld_sril3 XWA, 0x07, 0xE4, 0xE0
 	ld a, (xwa + 16)
 	and a, 0xC0
@@ -28637,10 +28637,10 @@ LABEL_02C96B:
 	ldto_berp A, 0xFB
 	extz wa
 	add wa, 0x840
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	stdi16_24 0x100002, 0xff00
+	sti16_24 0x100002, 0xff00
 	jr __jrt_nop_02C9A3
 __jrt_nop_02C9A3:
 
@@ -28652,10 +28652,10 @@ LABEL_02C9A3:
 	ldto_berp A, 0xFB
 	extz wa
 	add wa, 0x800
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	stdi16_24 0x100002, 0xff80
+	sti16_24 0x100002, 0xff80
 	jr __jrt_nop_02C9C4
 __jrt_nop_02C9C4:
 
@@ -28666,7 +28666,7 @@ LABEL_02C9C4:
 	ldto_berp A, 0xFB
 	extz wa
 	muls wa, 0x47
-	ldada_24 xbc, 0x04308f
+	lda_24 xbc, 0x04308f
 	ld_sriw3 WA, 0x07, 0xE4, 0xE0
 	bit 1, wa
 	jr z, LABEL_02C9E9
@@ -28705,13 +28705,13 @@ LABEL_02CA02:
 	ldfr_berp A, 0xFB
 	extz wa
 	muls wa, 0x47
-	ldada_24 xbc, 0x0430bd
+	lda_24 xbc, 0x0430bd
 	cp_sriw_im 0x07, 0xE4, 0xE0, 0x00, 0x00
 	jr nz, LABEL_02CA78
 	ldto_berp A, 0xFB
 	extz wa
 	muls wa, 0x47
-	ldada_24 xbc, 0x04308f
+	lda_24 xbc, 0x04308f
 	ld_sriw3 WA, 0x07, 0xE4, 0xE0
 	bit 8, wa
 	jr nz, LABEL_02CA78
@@ -28722,7 +28722,7 @@ LABEL_02CA02:
 	extz wa
 	muls wa, 0x47
 	ld bc, wa
-	ldada_24 xde, 0x0430bb
+	lda_24 xde, 0x0430bb
 	ld wa, hl
 	ld_sriw3 BC, 0x07, 0xE8, 0xE4
 	call 0x2D41B
@@ -28780,10 +28780,10 @@ LABEL_02CACF:
 	ldto_berp A, 0xFB
 	extz wa
 	add wa, 0x840
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	stdi16_24 0x100002, 0xff00
+	sti16_24 0x100002, 0xff00
 	jr __jrt_nop_02CB07
 __jrt_nop_02CB07:
 
@@ -28795,10 +28795,10 @@ LABEL_02CB07:
 	ldto_berp A, 0xFB
 	extz wa
 	add wa, 0x800
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	stdi16_24 0x100002, 0xff80
+	sti16_24 0x100002, 0xff80
 	jr __jrt_nop_02CB28
 __jrt_nop_02CB28:
 
@@ -28836,7 +28836,7 @@ LABEL_02CB43:
 	extz wa
 	muls wa, 0x47
 	ld bc, wa
-	ldada_24 xde, 0x0430bb
+	lda_24 xde, 0x0430bb
 	ld wa, hl
 	ld_sriw3 BC, 0x07, 0xE8, 0xE4
 	call 0x2D41B
@@ -28891,10 +28891,10 @@ LABEL_02CBBA:
 	ldto_berp A, 0xFB
 	extz wa
 	add wa, 0x840
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	stdi16_24 0x100002, 0xff00
+	sti16_24 0x100002, 0xff00
 	jr __jrt_nop_02CC06
 __jrt_nop_02CC06:
 
@@ -28906,10 +28906,10 @@ LABEL_02CC06:
 	ldto_berp A, 0xFB
 	extz wa
 	add wa, 0x800
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	stdi16_24 0x100002, 0xff80
+	sti16_24 0x100002, 0xff80
 	jr __jrt_nop_02CC27
 __jrt_nop_02CC27:
 
@@ -28947,7 +28947,7 @@ LABEL_02CC42:
 	extz wa
 	muls wa, 0x47
 	ld bc, wa
-	ldada_24 xde, 0x0430bb
+	lda_24 xde, 0x0430bb
 	ld wa, hl
 	ld_sriw3 BC, 0x07, 0xE8, 0xE4
 	call 0x2D41B
@@ -28966,7 +28966,7 @@ LABEL_02CC8F:
 	ld a, (xsp + 20)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041368
+	lda_24 xbc, 0x041368
 	and_sriw_im 0x07, 0xE4, 0xE0, 0xF3, 0xFF
 	pop_werp 0xFA
 	lda xsp, (xsp + 20)
@@ -29058,7 +29058,7 @@ LABEL_02CD71:
 	ld a, (xsp + 4)
 	extz wa
 	muls wa, 0x47
-	ldada_24 xbc, 0x04308e
+	lda_24 xbc, 0x04308e
 	st_dri3b H, 0x07, 0xE4, 0xE0
 	resm 7, (xiz + 5)
 	ld wa, (xiz + 1)
@@ -29078,7 +29078,7 @@ LABEL_02CDA2:
 	call LABEL_026769
 	ld a, (xsp + 4)
 	extz wa
-	ldada_24 xbc, 0x0451cc
+	lda_24 xbc, 0x0451cc
 	call LABEL_02D620
 	ld a, (xsp + 4)
 	extz wa
@@ -29099,7 +29099,7 @@ LABEL_02CDDA:
 	call LABEL_026AAA
 	ld a, (xsp + 4)
 	extz wa
-	ldada_24 xbc, 0x0451cc
+	lda_24 xbc, 0x0451cc
 	call LABEL_02D436
 	jr LABEL_02CE48
 
@@ -29111,7 +29111,7 @@ LABEL_02CDFC:
 	call LABEL_026769
 	ld a, (xsp + 4)
 	extz wa
-	ldada_24 xbc, 0x0451cc
+	lda_24 xbc, 0x0451cc
 	call LABEL_02D620
 	ld a, (xsp + 4)
 	extz wa
@@ -29128,7 +29128,7 @@ LABEL_02CE34:
 	call LABEL_02684A
 	ld a, (xsp + 4)
 	extz wa
-	ldada_24 xbc, 0x0451cc
+	lda_24 xbc, 0x0451cc
 	call LABEL_02D5D0
 
 LABEL_02CE48:
@@ -29143,7 +29143,7 @@ LABEL_02CE4C:
 	ld a, (xsp + 10)
 	extz wa
 	muls wa, 0x47
-	ldada_24 xbc, 0x04308e
+	lda_24 xbc, 0x04308e
 	st_dri3b H, 0x07, 0xE4, 0xE0
 	ld xwa, (xiz + 35)
 	ld (xsp + 4), xwa
@@ -29184,7 +29184,7 @@ LABEL_02CEAE:
 	call LABEL_026AAA
 	ld a, (xsp + 10)
 	extz wa
-	ldada_24 xbc, 0x0451cc
+	lda_24 xbc, 0x0451cc
 	call LABEL_02D436
 
 LABEL_02CEC8:
@@ -29201,7 +29201,7 @@ LABEL_02CED5:
 	ld a, (xsp)
 	extz wa
 	muls wa, 0x47
-	ldada_24 xbc, 0x04308e
+	lda_24 xbc, 0x04308e
 	exts xwa
 	add xwa, xbc
 	resm 7, (xwa + 5)
@@ -29210,7 +29210,7 @@ LABEL_02CED5:
 	call LABEL_026BDC
 	ld a, (xsp)
 	extz wa
-	ldada_24 xbc, 0x0451cc
+	lda_24 xbc, 0x0451cc
 	call LABEL_02D436
 
 LABEL_02CF04:
@@ -29222,7 +29222,7 @@ Voice_ParamInit:
 	push xiz
 	inc 5, xwa
 	ld xiz, xwa
-	ldada_24 xwa, 0x04308e
+	lda_24 xwa, 0x04308e
 	ld (xsp + 4), xwa
 	cpmi8 (xiz), 0x40
 	jr nc, LABEL_02CF93
@@ -29360,7 +29360,7 @@ LABEL_02D009:
 LABEL_02D00D:
 	push xiz
 	ld xiz, xwa
-	ldda16_24 xwa, 0x041360
+	ld16_24 xwa, 0x041360
 	srl wa, 8
 	or wa, 0x1480
 	ld (xiz), wa
@@ -29376,11 +29376,11 @@ LABEL_02D00D:
 	ld a, (xiz + 10)
 	extz wa
 	muls wa, 0x47
-	ldada_24 xbc, 0x04308e
+	lda_24 xbc, 0x04308e
 	st_dri3b A, 0x07, 0xE4, 0xE0
-	ldda16_24 xwa, 0x041360
+	ld16_24 xwa, 0x041360
 	ld (xbc + 8), wa
-	ldda16_24 xwa, 0x041360
+	ld16_24 xwa, 0x041360
 	ld (xbc + 6), wa
 	ldmw (xbc + 1), 0x1
 	lds32 xwa, 0
@@ -29395,7 +29395,7 @@ LABEL_02D00D:
 	ld (xbc + 39), xwa
 	ldmi8 (xbc + 12), 0x0
 	ldmi8 (xbc + 4), 0x14
-	ldda16_24 xwa, 0x041360
+	ld16_24 xwa, 0x041360
 	srl wa, 8
 	ld (xbc + 5), a
 	ld a, (xiz + 10)
@@ -29417,11 +29417,11 @@ LABEL_02D0BA:
 	ld xiz, xbc
 	res_dd8 7, 0x18
 	add wa, 0x400
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld wa, (xiz + 14)
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_02D0D7
 __jrt_nop_02D0D7:
 
@@ -29448,12 +29448,12 @@ ToneGen_WriteVoiceParams:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x40
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 2)
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_02D12A
 __jrt_nop_02D12A:
 
@@ -29464,13 +29464,13 @@ LABEL_02D12A:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x80
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 4)
 	set 15, wa
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_02D14F
 __jrt_nop_02D14F:
 
@@ -29481,12 +29481,12 @@ LABEL_02D14F:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0xC0
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 6)
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_02D171
 __jrt_nop_02D171:
 
@@ -29497,12 +29497,12 @@ LABEL_02D171:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x100
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 8)
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_02D193
 __jrt_nop_02D193:
 
@@ -29513,12 +29513,12 @@ LABEL_02D193:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x140
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 10)
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_02D1B5
 __jrt_nop_02D1B5:
 
@@ -29529,12 +29529,12 @@ LABEL_02D1B5:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x180
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 12)
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_02D1D7
 __jrt_nop_02D1D7:
 
@@ -29545,12 +29545,12 @@ LABEL_02D1D7:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x400
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 14)
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_02D1F9
 __jrt_nop_02D1F9:
 
@@ -29561,12 +29561,12 @@ LABEL_02D1F9:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x440
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 16)
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_02D21B
 __jrt_nop_02D21B:
 
@@ -29577,12 +29577,12 @@ LABEL_02D21B:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x480
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 18)
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_02D23D
 __jrt_nop_02D23D:
 
@@ -29593,12 +29593,12 @@ LABEL_02D23D:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x4C0
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 20)
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_02D25F
 __jrt_nop_02D25F:
 
@@ -29609,12 +29609,12 @@ LABEL_02D25F:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x500
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 22)
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_02D281
 __jrt_nop_02D281:
 
@@ -29625,12 +29625,12 @@ LABEL_02D281:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x800
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 24)
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_02D2A3
 __jrt_nop_02D2A3:
 
@@ -29640,10 +29640,10 @@ LABEL_02D2A3:
 	nop
 	res_dd8 7, 0x18
 	ld wa, iz
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	stdi16_24 0x100002, 0x8100
+	sti16_24 0x100002, 0x8100
 	jr __jrt_nop_02D2BD
 __jrt_nop_02D2BD:
 
@@ -29654,12 +29654,12 @@ LABEL_02D2BD:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x840
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 26)
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_02D2DF
 __jrt_nop_02D2DF:
 
@@ -29670,12 +29670,12 @@ LABEL_02D2DF:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x880
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 28)
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_02D301
 __jrt_nop_02D301:
 
@@ -29686,12 +29686,12 @@ LABEL_02D301:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x8C0
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 30)
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_02D323
 __jrt_nop_02D323:
 
@@ -29702,12 +29702,12 @@ LABEL_02D323:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x900
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 32)
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_02D345
 __jrt_nop_02D345:
 
@@ -29718,12 +29718,12 @@ LABEL_02D345:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x940
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 34)
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_02D367
 __jrt_nop_02D367:
 
@@ -29734,12 +29734,12 @@ LABEL_02D367:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x980
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 36)
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_02D389
 __jrt_nop_02D389:
 
@@ -29750,12 +29750,12 @@ LABEL_02D389:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x9C0
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 38)
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_02D3AB
 __jrt_nop_02D3AB:
 
@@ -29766,12 +29766,12 @@ LABEL_02D3AB:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0xA00
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 40)
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_02D3CD
 __jrt_nop_02D3CD:
 
@@ -29782,12 +29782,12 @@ LABEL_02D3CD:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0xA40
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 42)
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_02D3EF
 __jrt_nop_02D3EF:
 
@@ -29798,13 +29798,13 @@ LABEL_02D3EF:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x80
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 4)
 	res 15, wa
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_02D414
 __jrt_nop_02D414:
 
@@ -29820,10 +29820,10 @@ ToneGen_WriteSingleReg:
 	pushw iz
 	ld iz, bc
 	res_dd8 7, 0x18
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	stda16_24 0x100002, xiz
+	st16_24 0x100002, xiz
 	jr __jrt_nop_02D431
 __jrt_nop_02D431:
 
@@ -29842,12 +29842,12 @@ LABEL_02D436:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x840
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 46)
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_02D45D
 __jrt_nop_02D45D:
 
@@ -29858,12 +29858,12 @@ LABEL_02D45D:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x940
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 50)
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_02D47F
 __jrt_nop_02D47F:
 
@@ -29874,12 +29874,12 @@ LABEL_02D47F:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0xA00
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 54)
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_02D4A1
 __jrt_nop_02D4A1:
 
@@ -29890,12 +29890,12 @@ LABEL_02D4A1:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x800
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 44)
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_02D4C3
 __jrt_nop_02D4C3:
 
@@ -29906,12 +29906,12 @@ LABEL_02D4C3:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x900
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 48)
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_02D4E5
 __jrt_nop_02D4E5:
 
@@ -29922,12 +29922,12 @@ LABEL_02D4E5:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x9C0
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 52)
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_02D507
 __jrt_nop_02D507:
 
@@ -29947,12 +29947,12 @@ LABEL_02D50E:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x840
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 46)
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_02D535
 __jrt_nop_02D535:
 
@@ -29963,12 +29963,12 @@ LABEL_02D535:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x800
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 44)
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_02D557
 __jrt_nop_02D557:
 
@@ -30005,12 +30005,12 @@ LABEL_02D5D0:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x840
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 26)
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_02D5F7
 __jrt_nop_02D5F7:
 
@@ -30021,12 +30021,12 @@ LABEL_02D5F7:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x880
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 28)
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_02D619
 __jrt_nop_02D619:
 
@@ -30046,12 +30046,12 @@ LABEL_02D620:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x840
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 46)
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_02D647
 __jrt_nop_02D647:
 
@@ -30062,12 +30062,12 @@ LABEL_02D647:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x880
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 46)
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_02D669
 __jrt_nop_02D669:
 
@@ -30084,10 +30084,10 @@ LABEL_02D670:
 	ld iz, bc
 	res_dd8 7, 0x18
 	add wa, 0x180
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	stda16_24 0x100002, xiz
+	st16_24 0x100002, xiz
 	jr __jrt_nop_02D68A
 __jrt_nop_02D68A:
 
@@ -30107,12 +30107,12 @@ LABEL_02D68F:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x800
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 60)
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_02D6B9
 __jrt_nop_02D6B9:
 
@@ -30122,10 +30122,10 @@ LABEL_02D6B9:
 	nop
 	res_dd8 7, 0x18
 	ld wa, iz
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	stdi16_24 0x100002, 0x8100
+	sti16_24 0x100002, 0x8100
 	jr __jrt_nop_02D6D3
 __jrt_nop_02D6D3:
 
@@ -30136,12 +30136,12 @@ LABEL_02D6D3:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x840
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 62)
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_02D6F5
 __jrt_nop_02D6F5:
 
@@ -30152,13 +30152,13 @@ LABEL_02D6F5:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x80
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 6)
 	ld wa, (xwa + 4)
 	res 15, wa
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_02D71A
 __jrt_nop_02D71A:
 
@@ -30168,12 +30168,12 @@ LABEL_02D71A:
 	nop
 	res_dd8 7, 0x18
 	ld wa, iz
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 45)
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_02D738
 __jrt_nop_02D738:
 
@@ -30193,12 +30193,12 @@ LABEL_02D73F:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x800
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 60)
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_02D766
 __jrt_nop_02D766:
 
@@ -30208,10 +30208,10 @@ LABEL_02D766:
 	nop
 	res_dd8 7, 0x18
 	ld wa, iz
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	stdi16_24 0x100002, 0x8100
+	sti16_24 0x100002, 0x8100
 	jr __jrt_nop_02D780
 __jrt_nop_02D780:
 
@@ -30222,12 +30222,12 @@ LABEL_02D780:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x840
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 62)
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_02D7A2
 __jrt_nop_02D7A2:
 
@@ -30237,12 +30237,12 @@ LABEL_02D7A2:
 	nop
 	res_dd8 7, 0x18
 	ld wa, iz
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 45)
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_02D7C0
 __jrt_nop_02D7C0:
 
@@ -30257,7 +30257,7 @@ LABEL_02D7C0:
 ToneGen_WriteGlobalConfig:
 	push xiz
 	ld xiz, xwa
-	ldda16_24 xwa, 0x041343
+	ld16_24 xwa, 0x041343
 	bit 3, wa
 	jr z, LABEL_02D7DA
 	andmi16 (xiz), 0xFFF7
@@ -30268,11 +30268,11 @@ LABEL_02D7DA:
 
 LABEL_02D7DE:
 	res_dd8 7, 0x18
-	stdi16_24 0x100000, 0x0200
+	sti16_24 0x100000, 0x0200
 	nop
 	set_dd8 7, 0x18
 	ld wa, (xiz)
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_02D7F5
 __jrt_nop_02D7F5:
 
@@ -30281,11 +30281,11 @@ LABEL_02D7F5:
 	nop
 	nop
 	res_dd8 7, 0x18
-	stdi16_24 0x100000, 0x0201
+	sti16_24 0x100000, 0x0201
 	nop
 	set_dd8 7, 0x18
 	ld wa, (xiz + 2)
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_02D810
 __jrt_nop_02D810:
 
@@ -30294,11 +30294,11 @@ LABEL_02D810:
 	nop
 	nop
 	res_dd8 7, 0x18
-	stdi16_24 0x100000, 0x0202
+	sti16_24 0x100000, 0x0202
 	nop
 	set_dd8 7, 0x18
 	ld wa, (xiz + 4)
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_02D82B
 __jrt_nop_02D82B:
 
@@ -30307,11 +30307,11 @@ LABEL_02D82B:
 	nop
 	nop
 	res_dd8 7, 0x18
-	stdi16_24 0x100000, 0x0203
+	sti16_24 0x100000, 0x0203
 	nop
 	set_dd8 7, 0x18
 	ld wa, (xiz + 6)
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_02D846
 __jrt_nop_02D846:
 
@@ -30320,11 +30320,11 @@ LABEL_02D846:
 	nop
 	nop
 	res_dd8 7, 0x18
-	stdi16_24 0x100000, 0x0204
+	sti16_24 0x100000, 0x0204
 	nop
 	set_dd8 7, 0x18
 	ld wa, (xiz + 8)
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_02D861
 __jrt_nop_02D861:
 
@@ -30333,11 +30333,11 @@ LABEL_02D861:
 	nop
 	nop
 	res_dd8 7, 0x18
-	stdi16_24 0x100000, 0x0205
+	sti16_24 0x100000, 0x0205
 	nop
 	set_dd8 7, 0x18
 	ld wa, (xiz + 10)
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_02D87C
 __jrt_nop_02D87C:
 
@@ -30346,11 +30346,11 @@ LABEL_02D87C:
 	nop
 	nop
 	res_dd8 7, 0x18
-	stdi16_24 0x100000, 0x0c00
+	sti16_24 0x100000, 0x0c00
 	nop
 	set_dd8 7, 0x18
 	ld wa, (xiz + 12)
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_02D897
 __jrt_nop_02D897:
 
@@ -30359,11 +30359,11 @@ LABEL_02D897:
 	nop
 	nop
 	res_dd8 7, 0x18
-	stdi16_24 0x100000, 0x0c01
+	sti16_24 0x100000, 0x0c01
 	nop
 	set_dd8 7, 0x18
 	ld wa, (xiz + 14)
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_02D8B2
 __jrt_nop_02D8B2:
 
@@ -30372,11 +30372,11 @@ LABEL_02D8B2:
 	nop
 	nop
 	res_dd8 7, 0x18
-	stdi16_24 0x100000, 0x0c02
+	sti16_24 0x100000, 0x0c02
 	nop
 	set_dd8 7, 0x18
 	ld wa, (xiz + 16)
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_02D8CD
 __jrt_nop_02D8CD:
 
@@ -30385,11 +30385,11 @@ LABEL_02D8CD:
 	nop
 	nop
 	res_dd8 7, 0x18
-	stdi16_24 0x100000, 0x0c03
+	sti16_24 0x100000, 0x0c03
 	nop
 	set_dd8 7, 0x18
 	ld wa, (xiz + 18)
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_02D8E8
 __jrt_nop_02D8E8:
 
@@ -30398,11 +30398,11 @@ LABEL_02D8E8:
 	nop
 	nop
 	res_dd8 7, 0x18
-	stdi16_24 0x100000, 0x0c04
+	sti16_24 0x100000, 0x0c04
 	nop
 	set_dd8 7, 0x18
 	ld wa, (xiz + 20)
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_02D903
 __jrt_nop_02D903:
 
@@ -30411,11 +30411,11 @@ LABEL_02D903:
 	nop
 	nop
 	res_dd8 7, 0x18
-	stdi16_24 0x100000, 0x0c05
+	sti16_24 0x100000, 0x0c05
 	nop
 	set_dd8 7, 0x18
 	ld wa, (xiz + 22)
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_02D91E
 __jrt_nop_02D91E:
 
@@ -30424,11 +30424,11 @@ LABEL_02D91E:
 	nop
 	nop
 	res_dd8 7, 0x18
-	stdi16_24 0x100000, 0x0e00
+	sti16_24 0x100000, 0x0e00
 	nop
 	set_dd8 7, 0x18
 	ld wa, (xiz + 24)
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_02D939
 __jrt_nop_02D939:
 
@@ -30480,12 +30480,12 @@ ToneGen_WriteExtParams_56:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x580
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 60)
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_02DA48
 __jrt_nop_02DA48:
 
@@ -30498,12 +30498,12 @@ LABEL_02DA4B:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x600
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 64)
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_02DA6A
 __jrt_nop_02DA6A:
 
@@ -30514,13 +30514,13 @@ LABEL_02DA6A:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x580
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 60)
 	res 15, wa
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_02DA8F
 __jrt_nop_02DA8F:
 
@@ -30537,11 +30537,11 @@ LABEL_02DA96:
 	ld xiz, xbc
 	res_dd8 7, 0x18
 	add wa, 0x600
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld wa, (xiz + 64)
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_02DAB3
 __jrt_nop_02DAB3:
 
@@ -30564,12 +30564,12 @@ LABEL_02DAB8:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x580
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 60)
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_02DAEA
 __jrt_nop_02DAEA:
 
@@ -30582,13 +30582,13 @@ LABEL_02DAED:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x580
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 60)
 	res 15, wa
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_02DB0F
 __jrt_nop_02DB0F:
 
@@ -30603,10 +30603,10 @@ LABEL_02DB0F:
 LABEL_02DB16:
 	res_dd8 7, 0x18
 	add wa, 0x580
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	stdi16_24 0x100002, 0x8100
+	sti16_24 0x100002, 0x8100
 	jr __jrt_nop_02DB2F
 __jrt_nop_02DB2F:
 
@@ -30628,12 +30628,12 @@ ToneGen_WriteExtParams_56b:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x5C0
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 62)
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_02DB65
 __jrt_nop_02DB65:
 
@@ -30646,12 +30646,12 @@ LABEL_02DB68:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x640
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 66)
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_02DB87
 __jrt_nop_02DB87:
 
@@ -30662,13 +30662,13 @@ LABEL_02DB87:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x5C0
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 62)
 	res 15, wa
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_02DBAC
 __jrt_nop_02DBAC:
 
@@ -30714,12 +30714,12 @@ ToneGen_WriteExtParams_15:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x540
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 58)
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_02DC82
 __jrt_nop_02DC82:
 
@@ -30732,12 +30732,12 @@ LABEL_02DC85:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x1C0
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 56)
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_02DCA4
 __jrt_nop_02DCA4:
 
@@ -30748,13 +30748,13 @@ LABEL_02DCA4:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x540
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 58)
 	res 15, wa
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_02DCC9
 __jrt_nop_02DCC9:
 
@@ -30771,11 +30771,11 @@ LABEL_02DCD0:
 	ld xiz, xbc
 	res_dd8 7, 0x18
 	add wa, 0x1C0
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld wa, (xiz + 56)
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_02DCED
 __jrt_nop_02DCED:
 
@@ -30798,12 +30798,12 @@ LABEL_02DCF2:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x540
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 58)
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_02DD24
 __jrt_nop_02DD24:
 
@@ -30816,13 +30816,13 @@ LABEL_02DD27:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x540
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 58)
 	res 15, wa
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_02DD49
 __jrt_nop_02DD49:
 
@@ -30837,10 +30837,10 @@ LABEL_02DD49:
 LABEL_02DD50:
 	res_dd8 7, 0x18
 	add wa, 0x540
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	stdi16_24 0x100002, 0x8100
+	sti16_24 0x100002, 0x8100
 	jr __jrt_nop_02DD69
 __jrt_nop_02DD69:
 
@@ -30891,11 +30891,11 @@ LABEL_02DE69:
 	jr nc, LABEL_02DE91
 	res_dd8 7, 0x18
 	add wa, 0x1C0
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld wa, (xiz + 56)
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_02DE8C
 __jrt_nop_02DE8C:
 
@@ -30908,11 +30908,11 @@ LABEL_02DE8C:
 LABEL_02DE91:
 	res_dd8 7, 0x18
 	add wa, 0x600
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld wa, (xiz + 66)
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_02DEAB
 __jrt_nop_02DEAB:
 
@@ -30939,12 +30939,12 @@ LABEL_02DEB0:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x540
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 58)
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_02DEE8
 __jrt_nop_02DEE8:
 
@@ -30957,13 +30957,13 @@ LABEL_02DEEB:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x540
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 58)
 	res 15, wa
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_02DF0D
 __jrt_nop_02DF0D:
 
@@ -30981,12 +30981,12 @@ LABEL_02DF12:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x580
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 62)
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_02DF3C
 __jrt_nop_02DF3C:
 
@@ -30999,13 +30999,13 @@ LABEL_02DF3F:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x580
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 62)
 	res 15, wa
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_02DF61
 __jrt_nop_02DF61:
 
@@ -31024,10 +31024,10 @@ LABEL_02DF68:
 	jr nc, LABEL_02DF8B
 	res_dd8 7, 0x18
 	add wa, 0x540
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	stdi16_24 0x100002, 0x8100
+	sti16_24 0x100002, 0x8100
 	jr __jrt_nop_02DF87
 __jrt_nop_02DF87:
 
@@ -31040,10 +31040,10 @@ LABEL_02DF87:
 LABEL_02DF8B:
 	res_dd8 7, 0x18
 	add wa, 0x580
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	stdi16_24 0x100002, 0x8100
+	sti16_24 0x100002, 0x8100
 	jr __jrt_nop_02DFA4
 __jrt_nop_02DFA4:
 
@@ -31056,7 +31056,7 @@ LABEL_02DFA4:
 DSP_Config_Init:
 	dec 4, xsp
 	pushw iz
-	ldada_24 xwa, 0x00f8bb
+	lda_24 xwa, 0x00f8bb
 	calr ToneGen_WriteGlobalConfig
 	ldada xwa, 10916
 	ld (xsp + 2), xwa
@@ -31072,10 +31072,10 @@ ToneGen_Config_Init:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x840
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	stdi16_24 0x100002, 0xff00
+	sti16_24 0x100002, 0xff00
 	jr __jrt_nop_02DFEA
 __jrt_nop_02DFEA:
 
@@ -31086,10 +31086,10 @@ LABEL_02DFEA:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x800
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	stdi16_24 0x100002, 0xff80
+	sti16_24 0x100002, 0xff80
 	jr __jrt_nop_02E008
 __jrt_nop_02E008:
 
@@ -31107,10 +31107,10 @@ LABEL_02E008:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x840
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	stdi16_24 0x100002, 0xff00
+	sti16_24 0x100002, 0xff00
 	jr __jrt_nop_02E038
 __jrt_nop_02E038:
 
@@ -31121,10 +31121,10 @@ LABEL_02E038:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x800
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	stdi16_24 0x100002, 0xff80
+	sti16_24 0x100002, 0xff80
 	jr __jrt_nop_02E056
 __jrt_nop_02E056:
 
@@ -31135,10 +31135,10 @@ LABEL_02E056:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0xC0
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	stdi16_24 0x100002, 0x0000
+	sti16_24 0x100002, 0x0000
 	jr __jrt_nop_02E074
 __jrt_nop_02E074:
 
@@ -31148,10 +31148,10 @@ LABEL_02E074:
 	nop
 	res_dd8 7, 0x18
 	ld wa, iz
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	stdi16_24 0x100002, 0x7e00
+	sti16_24 0x100002, 0x7e00
 	jr __jrt_nop_02E08E
 __jrt_nop_02E08E:
 
@@ -31214,12 +31214,12 @@ LABEL_02E18D:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0xC0
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 6)
 	ld wa, (xwa + 6)
-	stda16_24 0x100002, xwa
+	st16_24 0x100002, xwa
 	jr __jrt_nop_02E1B4
 __jrt_nop_02E1B4:
 
@@ -31229,7 +31229,7 @@ LABEL_02E1B4:
 	nop
 	res_dd8 7, 0x18
 	ld wa, iz
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, 0x100002
@@ -31238,7 +31238,7 @@ LABEL_02E1B4:
 	extz xwa
 	ld xbc, 0x47
 	call LABEL_03D8CA
-	ldada_24 xwa, 0x0430bb
+	lda_24 xwa, 0x0430bb
 	add xwa, xhl
 	ld bc, (xwa)
 	res 15, bc
@@ -31265,7 +31265,7 @@ LABEL_02E213:
 	extz xwa
 	ld xbc, 0x11F
 	call LABEL_03D8CA
-	ldada_24 xwa, 0x04136e
+	lda_24 xwa, 0x04136e
 	add xwa, xhl
 	ld xwa, (xwa)
 	ld a, (xwa + 16)
@@ -31305,9 +31305,9 @@ LABEL_02E288:
 	ld a, (xsp + 2)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x04136e
+	lda_24 xbc, 0x04136e
 	ld_sril3 XDE, 0x07, 0xE4, 0xE0
-	ldada_24 xwa, 0x044fce
+	lda_24 xwa, 0x044fce
 	ld xbc, xwa
 	ld xwa, xde
 	ldw de, 0x66
@@ -31325,7 +31325,7 @@ LABEL_02E2BA:
 	ld a, (xsp + 2)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041368
+	lda_24 xbc, 0x041368
 	exts xwa
 	add xwa, xbc
 	ld_sril3 XDE, 0x07, 0xE0, 0xE8
@@ -31333,7 +31333,7 @@ LABEL_02E2BA:
 	extz wa
 	muls wa, 0x51
 	add wa, 0x66
-	ldada_24 xbc, 0x044fce
+	lda_24 xbc, 0x044fce
 	exts xwa
 	add xwa, xbc
 	ld xbc, xwa
@@ -31374,11 +31374,11 @@ LABEL_02E353:
 	extz wa
 	muls wa, 0xB
 	add wa, 0x1AA
-	ldada_24 xbc, 0x044fce
+	lda_24 xbc, 0x044fce
 	exts xwa
 	add xwa, xbc
 	ld xbc, xwa
-	ldda32_24 xde, 0x045314
+	ld32_24 xde, 0x045314
 	ld xwa, xhl
 	ld_sriw DE, (xde + 0x00ea)
 	calr LABEL_02E273
@@ -31427,7 +31427,7 @@ LABEL_02E41A:
 	ld a, (xsp + 4)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041372
+	lda_24 xbc, 0x041372
 	ld_sriw3 WA, 0x07, 0xE4, 0xE0
 	extz xwa
 	bit 15, wa
@@ -31448,10 +31448,10 @@ LABEL_02E449:
 	extz wa
 	ld de, wa
 	add de, 0x1D8
-	ldada_24 xhl, 0x044fce
+	lda_24 xhl, 0x044fce
 	ldto_berp A, 0xFB
 	extz wa
-	ldada_24 xbc, 0x00f95d
+	lda_24 xbc, 0x00f95d
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	lda_dri3 XBC, 0x07, 0xEC, 0xE8
 	inc1_berp 0xFB
@@ -31469,7 +31469,7 @@ LABEL_02E480:
 	extz wa
 	muls wa, 0x51
 	add wa, 0x66
-	ldada_24 xde, 0x044fd4
+	lda_24 xde, 0x044fd4
 	ld_srib3 A, 0x07, 0xE8, 0xE0
 	and a, 0xC0
 	jr nz, LABEL_02E4B7
@@ -31477,7 +31477,7 @@ LABEL_02E480:
 	extz wa
 	muls wa, 0x51
 	add wa, 0x66
-	ldada_24 xde, 0x044fd4
+	lda_24 xde, 0x044fd4
 	bit_dri 5, 0x07, 0xE8, 0xE0
 	jr nz, LABEL_02E4B7
 	inc 1, c
@@ -31490,7 +31490,7 @@ LABEL_02E4B7:
 LABEL_02E4BF:
 	cps c, 4
 	jr z, LABEL_02E4C9
-	stdi8_24 0x0451a7, 0x00
+	sti8_24 0x0451a7, 0x00
 
 LABEL_02E4C9:
 	ldi_berp 0xFB, 0
@@ -31506,7 +31506,7 @@ LABEL_02E4D2:
 	ld a, (xsp + 4)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041368
+	lda_24 xbc, 0x041368
 	exts xwa
 	add xwa, xbc
 	ld_sril3 XWA, 0x07, 0xE0, 0xE8
@@ -31517,7 +31517,7 @@ LABEL_02E4D2:
 	extz wa
 	muls wa, 0x5
 	add wa, 0x1E0
-	ldada_24 xbc, 0x044fce
+	lda_24 xbc, 0x044fce
 	lda_dri3 XIY, 0x07, 0xE4, 0xE0
 	ldb c, 0x0
 	cps c, 4
@@ -31531,7 +31531,7 @@ LABEL_02E51D:
 	muls wa, 0x5
 	ld de, wa
 	add de, hl
-	ldada_24 xhl, 0x0451af
+	lda_24 xhl, 0x0451af
 	ldto_berp A, 0xFB
 	extz wa
 	muls wa, 0x25
@@ -31540,7 +31540,7 @@ LABEL_02E51D:
 	ld a, (xsp + 4)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xix, 0x041368
+	lda_24 xix, 0x041368
 	st_dri3b D, 0x07, 0xF0, 0xE0
 	ld a, c
 	extz wa
@@ -31778,7 +31778,7 @@ LABEL_02E581:
 LABEL_02EC0A:
 	dec 2, xsp
 	ld (xsp), a
-	ldda8_24 a, 0x0451a4
+	ld8_24 a, 0x0451a4
 	cp a, (xsp)
 	jrl nz, LABEL_02ECBB
 	cpmi8 (xsp), 0x2
@@ -31786,7 +31786,7 @@ LABEL_02EC0A:
 	ld a, (xsp)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041368
+	lda_24 xbc, 0x041368
 	ld_sriw3 WA, 0x07, 0xE4, 0xE0
 	and wa, 0x3
 	cps wa, 3
@@ -31796,14 +31796,14 @@ LABEL_02EC38:
 	ld a, (xsp)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041368
+	lda_24 xbc, 0x041368
 	ld_sriw3 WA, 0x07, 0xE4, 0xE0
 	bit 0, wa
 	jr z, LABEL_02EC65
 	ld a, (xsp)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041368
+	lda_24 xbc, 0x041368
 	or_sriw_im 0x07, 0xE4, 0xE0, 0x01, 0x00
 	jr LABEL_02ECBB
 
@@ -31811,7 +31811,7 @@ LABEL_02EC65:
 	ld a, (xsp)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041368
+	lda_24 xbc, 0x041368
 	or_sriw_im 0x07, 0xE4, 0xE0, 0x01, 0x00
 	ld a, (xsp)
 	extz wa
@@ -31822,14 +31822,14 @@ LABEL_02EC65:
 	ld a, (xsp)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041381
+	lda_24 xbc, 0x041381
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	ldfr_berp A, 0xF0
 	extz ix
 	ld a, (xsp)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041382
+	lda_24 xbc, 0x041382
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	ld e, a
 	extz de
@@ -32673,7 +32673,7 @@ LABEL_02F52A:
 LABEL_030618:
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xde, 0x041368
+	lda_24 xde, 0x041368
 	ld_sriw3 WA, 0x07, 0xE8, 0xE0
 	bit 0, wa
 	jr z, LABEL_030632
@@ -32691,15 +32691,15 @@ LABEL_030638:
 	lda xsp, (xsp - 10)
 	push xiz
 	ld (xsp + 10), xwa
-	ldda8_24 a, 0x0451a6
+	ld8_24 a, 0x0451a6
 	sla a, 2
 	exts wa
 	ld (xsp + 4), wa
-	ldda8_24 a, 0x0451ab
+	ld8_24 a, 0x0451ab
 	sla a, 2
 	exts wa
 	ld (xsp + 6), wa
-	ldda8_24 a, 0x0451ac
+	ld8_24 a, 0x0451ac
 	sla a, 2
 	exts wa
 	ld (xsp + 8), wa
@@ -32848,9 +32848,9 @@ LABEL_030778:
 	jrl c, LABEL_03066F
 
 LABEL_030817:
-	cpdi8_24 0x0451a7, 0xf5
+	cpi8_24 0x0451a7, 0xf5
 	jr z, LABEL_03087F
-	ldda8_24 a, 0x0451a7
+	ld8_24 a, 0x0451a7
 	sla a, 1
 	ld c, a
 	exts bc
@@ -32867,7 +32867,7 @@ LABEL_030817:
 	ld xwa, (xwa + 6)
 	ldto_berp C, 0xF8
 	ld (xwa + 43), c
-	ldda8_24 a, 0x0451a7
+	ld8_24 a, 0x0451a7
 	sla a, 1
 	ld c, a
 	exts bc
@@ -32886,7 +32886,7 @@ LABEL_030817:
 	ld (xwa + 59), c
 
 LABEL_03087F:
-	ldda8_24 a, 0x0451a8
+	ld8_24 a, 0x0451a8
 	sla a, 1
 	ld c, a
 	exts bc
@@ -32903,7 +32903,7 @@ LABEL_03087F:
 	ld xwa, (xwa + 6)
 	ldto_berp C, 0xF8
 	ld (xwa + 44), c
-	ldda8_24 a, 0x0451a8
+	ld8_24 a, 0x0451a8
 	sla a, 1
 	ld c, a
 	exts bc
@@ -32926,7 +32926,7 @@ LABEL_03087F:
 	and a, 0x3F
 	ldfr_berp A, 0xF8
 	extz iz
-	ldda8_24 a, 0x0451a9
+	ld8_24 a, 0x0451a9
 	sla a, 1
 	exts wa
 	add wa, iz
@@ -32947,7 +32947,7 @@ LABEL_03087F:
 	and a, 0x3F
 	ldfr_berp A, 0xF8
 	extz iz
-	ldda8_24 a, 0x0451a9
+	ld8_24 a, 0x0451a9
 	sla a, 1
 	exts wa
 	add wa, iz
@@ -32977,7 +32977,7 @@ LABEL_030960:
 	ld a, (xsp + 10)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041368
+	lda_24 xbc, 0x041368
 	st_dri3b H, 0x07, 0xE4, 0xE0
 	ld wa, (xiz)
 	bit 0, wa
@@ -33364,13 +33364,13 @@ LABEL_03111A:
 	ld c, a
 	extz bc
 	muls bc, 0x11F
-	ldada_24 xde, 0x041381
+	lda_24 xde, 0x041381
 	ld_srib3 C, 0x07, 0xE8, 0xE4
 	ld e, c
 	extz de
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041382
+	lda_24 xbc, 0x041382
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	ld c, a
 	extz bc
@@ -33413,7 +33413,7 @@ LABEL_03111A:
 	jr nz, LABEL_0311C7
 
 LABEL_0311BC:
-	ldda32_24 xwa, 0x045314
+	ld32_24 xwa, 0x045314
 	ld xwa, (xwa + 124)
 	ld (xsp + 4), xwa
 
@@ -33427,10 +33427,10 @@ LABEL_0311C7:
 	addda32_24 xwa, 283408
 	ld xwa, (xwa)
 	ld bc, wa
-	ldda32_24 xwa, 0x045314
+	ld32_24 xwa, 0x045314
 	ld_sril XWA, (xwa + 0x00b0)
 	ld (xsp + 4), xwa
-	ldda32_24 xiz, 0x045310
+	ld32_24 xiz, 0x045310
 	add xiz, (xsp + 4)
 	ld wa, bc
 	mul wa, 0xA
@@ -33759,9 +33759,9 @@ Voice_ParamFinalize:
 	cps wa, 7
 	jrl gt, LABEL_031E68
 	add wa, wa
-	ldada_24 xix, 0x00fb2e
+	lda_24 xix, 0x00fb2e
 	ld_sriw3 WA, 0x07, 0xF0, 0xE0
-	ldada_24 xix, 0x031aa1
+	lda_24 xix, 0x031aa1
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
 LABEL_031AA1:
@@ -33792,9 +33792,9 @@ LABEL_031B39:
 	cps wa, 7
 	jrl gt, LABEL_031E2D
 	add wa, wa
-	ldada_24 xix, 0x00fb1e
+	lda_24 xix, 0x00fb1e
 	ld_sriw3 WA, 0x07, 0xF0, 0xE0
-	ldada_24 xix, 0x031b5b
+	lda_24 xix, 0x031b5b
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
 LABEL_031B5B:
@@ -33917,7 +33917,7 @@ LABEL_031E50:
 	ld c, a
 	extz bc
 	inc 6, hl
-	ldada_24 xwa, 0x045210
+	lda_24 xwa, 0x045210
 	ld xde, xwa
 	ld wa, bc
 	ld bc, hl
@@ -33937,7 +33937,7 @@ LABEL_031E6A:
 	extz xwa
 	ld xbc, 0x11F
 	call LABEL_03D8CA
-	ldada_24 xwa, 0x04136e
+	lda_24 xwa, 0x04136e
 	add xwa, xhl
 	ld xwa, (xwa)
 	ld a, (xwa + 16)
@@ -33954,7 +33954,7 @@ LABEL_031E6A:
 	extz xwa
 	ld xbc, 0x11F
 	call LABEL_03D8CA
-	ldada_24 xwa, 0x04136e
+	lda_24 xwa, 0x04136e
 	add xwa, xhl
 	ld xbc, (xwa)
 	ld wa, (xsp + 4)
@@ -33975,7 +33975,7 @@ LABEL_031ED3:
 	extz xwa
 	ld xbc, 0x11F
 	call LABEL_03D8CA
-	ldada_24 xwa, 0x04136e
+	lda_24 xwa, 0x04136e
 	add xwa, xhl
 	ld xbc, (xwa)
 	ld wa, (xsp + 4)
@@ -34008,13 +34008,13 @@ LABEL_031F06:
 LABEL_031F16:
 	ld de, bc
 	extz xde
-	ldda32_24 xbc, 0x045314
+	ld32_24 xbc, 0x045314
 	ld xbc, (xbc + 108)
 	add xbc, xde
 	addda32_24 xbc, 283408
 	ld c, (xbc)
 	extz bc
-	ldda32_24 xde, 0x045314
+	ld32_24 xde, 0x045314
 	ld xhl, (xde + 108)
 	add xhl, 0x80
 	sll bc, 7
@@ -34025,7 +34025,7 @@ LABEL_031F16:
 	add xwa, xhl
 	addda32_24 xwa, 283408
 	ld bc, (xwa)
-	ldda32_24 xwa, 0x045314
+	ld32_24 xwa, 0x045314
 	ld xhl, (xwa + 8)
 	ld wa, bc
 	sll wa, 2
@@ -34033,7 +34033,7 @@ LABEL_031F16:
 	add xwa, xhl
 	addda32_24 xwa, 283408
 	ld xhl, (xwa)
-	ldda32_24 xwa, 0x045310
+	ld32_24 xwa, 0x045310
 	add xwa, xhl
 	ld xhl, xwa
 	ret
@@ -34051,13 +34051,13 @@ LABEL_031F71:
 LABEL_031F87:
 	ld de, bc
 	extz xde
-	ldda32_24 xbc, 0x045314
+	ld32_24 xbc, 0x045314
 	ld xbc, (xbc + 4)
 	add xbc, xde
 	addda32_24 xbc, 283408
 	ld c, (xbc)
 	extz bc
-	ldda32_24 xde, 0x045314
+	ld32_24 xde, 0x045314
 	ld xhl, (xde + 4)
 	add xhl, 0x80
 	sll bc, 7
@@ -34068,7 +34068,7 @@ LABEL_031F87:
 	add xwa, xhl
 	addda32_24 xwa, 283408
 	ld bc, (xwa)
-	ldda32_24 xwa, 0x045314
+	ld32_24 xwa, 0x045314
 	ld xhl, (xwa + 8)
 	ld wa, bc
 	sll wa, 2
@@ -34076,7 +34076,7 @@ LABEL_031F87:
 	add xwa, xhl
 	addda32_24 xwa, 283408
 	ld xhl, (xwa)
-	ldda32_24 xwa, 0x045310
+	ld32_24 xwa, 0x045310
 	add xwa, xhl
 	ld xhl, xwa
 	jrl LABEL_03206E
@@ -34104,7 +34104,7 @@ LABEL_032002:
 LABEL_032020:
 	cp bc, 0x50
 	jr nz, LABEL_032032
-	ldda32_24 xwa, 0x04531c
+	ld32_24 xwa, 0x04531c
 	st_dri3b C, 0xE1, 0x80, 0x49
 	jr LABEL_03206E
 
@@ -34120,12 +34120,12 @@ LABEL_032032:
 	jr LABEL_03206E
 
 LABEL_032054:
-	ldda32_24 xwa, 0x045314
+	ld32_24 xwa, 0x045314
 	ld xhl, (xwa + 8)
-	ldda32_24 xwa, 0x045310
+	ld32_24 xwa, 0x045310
 	add xwa, xhl
 	ld xhl, (xwa)
-	ldda32_24 xwa, 0x045310
+	ld32_24 xwa, 0x045310
 	add xwa, xhl
 	ld xhl, xwa
 
@@ -34133,7 +34133,7 @@ LABEL_03206E:
 	ret
 
 LABEL_03206F:
-	ldda16_24 xde, 0x041343
+	ld16_24 xde, 0x041343
 	bit 0, de
 	jr z, LABEL_03207E
 	calr LABEL_031F16
@@ -34149,7 +34149,7 @@ LABEL_032082:
 	ld e, a
 	extz de
 	muls de, 0x11F
-	ldada_24 xhl, 0x041382
+	lda_24 xhl, 0x041382
 	cp_srib_im 0x07, 0xEC, 0xE8, 0x10
 	jr c, LABEL_03209B
 	cps c, 0
@@ -34160,11 +34160,11 @@ LABEL_03209B:
 	extz de
 	ld ix, de
 	add ix, ix
-	ldada_24 xiy, 0x00fb4e
+	lda_24 xiy, 0x00fb4e
 	ld e, a
 	extz de
 	muls de, 0x11F
-	ldada_24 xhl, 0x04136e
+	lda_24 xhl, 0x04136e
 	ld_sril3 XDE, 0x07, 0xEC, 0xE8
 	ld e, (xde + 17)
 	extz de
@@ -34182,11 +34182,11 @@ LABEL_0320D2:
 	extz de
 	ld ix, de
 	add ix, ix
-	ldada_24 xiy, 0x00fb4e
+	lda_24 xiy, 0x00fb4e
 	ld e, a
 	extz de
 	muls de, 0x11F
-	ldada_24 xhl, 0x04136e
+	lda_24 xhl, 0x04136e
 	ld_sril3 XDE, 0x07, 0xEC, 0xE8
 	ld e, (xde + 17)
 	extz de
@@ -34219,7 +34219,7 @@ LABEL_032112:
 	ld a, (xsp + 2)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xhl, 0x041368
+	lda_24 xhl, 0x041368
 	ld_sriw3 WA, 0x07, 0xEC, 0xE0
 	bit 0, wa
 	jrl z, LABEL_0321E5
@@ -34235,8 +34235,8 @@ LABEL_032145:
 	extz wa
 	muls wa, 0x11F
 	ld bc, wa
-	ldada_24 xde, 0x04136e
-	ldda32_24 xwa, 0x04531c
+	lda_24 xde, 0x04136e
+	ld32_24 xwa, 0x04531c
 	st_dri3b W, 0xE1, 0x80, 0x49
 	st_dri3l XWA, 0x07, 0xE8, 0xE4
 	jrl LABEL_0323DF
@@ -34246,8 +34246,8 @@ LABEL_032167:
 	extz wa
 	muls wa, 0x11F
 	ld bc, wa
-	ldada_24 xde, 0x04136e
-	ldada_24 xwa, 0x044fce
+	lda_24 xde, 0x04136e
+	lda_24 xwa, 0x044fce
 	st_dri3l XWA, 0x07, 0xE8, 0xE4
 	ldi_berp 0xFB, 0
 	cpi_berp 0xFB, 4
@@ -34262,13 +34262,13 @@ LABEL_03218A:
 	ld a, (xsp + 2)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041368
+	lda_24 xbc, 0x041368
 	st_dri3b C, 0x07, 0xE4, 0xE0
 	ld a, (xsp + 2)
 	extz wa
 	muls wa, 0x11F
 	ld bc, wa
-	ldada_24 xix, 0x04136e
+	lda_24 xix, 0x04136e
 	ldto_berp A, 0xFB
 	extz wa
 	muls wa, 0x51
@@ -34286,7 +34286,7 @@ LABEL_0321E5:
 	ld a, (xsp + 2)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xhl, 0x041368
+	lda_24 xhl, 0x041368
 	ld_sriw3 WA, 0x07, 0xEC, 0xE0
 	bit 1, wa
 	jrl z, LABEL_0322F0
@@ -34298,7 +34298,7 @@ LABEL_0321E5:
 	ld a, (xsp + 2)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x04136e
+	lda_24 xbc, 0x04136e
 	st_dri3l XHL, 0x07, 0xE4, 0xE0
 	jr LABEL_03223A
 
@@ -34309,7 +34309,7 @@ LABEL_032220:
 	ld a, (xsp + 2)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x04136e
+	lda_24 xbc, 0x04136e
 	st_dri3l XHL, 0x07, 0xE4, 0xE0
 
 LABEL_03223A:
@@ -34336,10 +34336,10 @@ LABEL_032243:
 	ld a, (xsp + 2)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041368
+	lda_24 xbc, 0x041368
 	st_dri3b C, 0x07, 0xE4, 0xE0
-	ldda32_24 xbc, 0x045310
-	ldda32_24 xwa, 0x045314
+	ld32_24 xbc, 0x045310
+	ld32_24 xwa, 0x045314
 	ld_sril XWA, (xwa + 0x00ac)
 	add xwa, xbc
 	st_dri3l XWA, 0x07, 0xEC, 0xE8
@@ -34354,13 +34354,13 @@ LABEL_032295:
 	ld a, (xsp + 2)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041368
+	lda_24 xbc, 0x041368
 	st_dri3b D, 0x07, 0xE4, 0xE0
 	ld a, (xsp + 2)
 	extz wa
 	muls wa, 0x11F
 	ld bc, wa
-	ldada_24 xiy, 0x04136e
+	lda_24 xiy, 0x04136e
 	ld a, l
 	extz wa
 	muls wa, 0x51
@@ -34385,7 +34385,7 @@ LABEL_0322F0:
 	ld a, (xsp + 2)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x04136e
+	lda_24 xbc, 0x04136e
 	st_dri3l XHL, 0x07, 0xE4, 0xE0
 	jr LABEL_03232C
 
@@ -34396,7 +34396,7 @@ LABEL_032312:
 	ld a, (xsp + 2)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x04136e
+	lda_24 xbc, 0x04136e
 	st_dri3l XHL, 0x07, 0xE4, 0xE0
 
 LABEL_03232C:
@@ -34423,10 +34423,10 @@ LABEL_032335:
 	ld a, (xsp + 2)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041368
+	lda_24 xbc, 0x041368
 	st_dri3b C, 0x07, 0xE4, 0xE0
-	ldda32_24 xbc, 0x045310
-	ldda32_24 xwa, 0x045314
+	ld32_24 xbc, 0x045310
+	ld32_24 xwa, 0x045314
 	ld_sril XWA, (xwa + 0x00ac)
 	add xwa, xbc
 	st_dri3l XWA, 0x07, 0xEC, 0xE8
@@ -34441,13 +34441,13 @@ LABEL_032387:
 	ld a, (xsp + 2)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041368
+	lda_24 xbc, 0x041368
 	st_dri3b D, 0x07, 0xE4, 0xE0
 	ld a, (xsp + 2)
 	extz wa
 	muls wa, 0x11F
 	ld bc, wa
-	ldada_24 xiy, 0x04136e
+	lda_24 xiy, 0x04136e
 	ld a, l
 	extz wa
 	muls wa, 0x51
@@ -34476,38 +34476,38 @@ LABEL_0323E5:
 	jr z, LABEL_032417
 	cps de, 0
 	jr nz, LABEL_032469
-	ldda32_24 xde, 0x045314
+	ld32_24 xde, 0x045314
 	ld xhl, (xde + 12)
-	ldda32_24 xde, 0x045314
+	ld32_24 xde, 0x045314
 	ld xix, (xde + 24)
-	ldda32_24 xde, 0x045314
+	ld32_24 xde, 0x045314
 	ld_sriw IY, (xde + 0x00ea)
 	jr LABEL_032469
 
 LABEL_032417:
-	ldda32_24 xde, 0x045314
+	ld32_24 xde, 0x045314
 	ld xhl, (xde + 20)
-	ldda32_24 xde, 0x045314
+	ld32_24 xde, 0x045314
 	ld xix, (xde + 32)
-	ldda32_24 xde, 0x045314
+	ld32_24 xde, 0x045314
 	ld_sriw IY, (xde + 0x00f0)
 	jr LABEL_032469
 
 LABEL_032433:
-	ldda32_24 xde, 0x045314
+	ld32_24 xde, 0x045314
 	ld xhl, (xde + 16)
-	ldda32_24 xde, 0x045314
+	ld32_24 xde, 0x045314
 	ld xix, (xde + 28)
-	ldda32_24 xde, 0x045314
+	ld32_24 xde, 0x045314
 	ld_sriw IY, (xde + 0x00ea)
 	jr LABEL_032469
 
 LABEL_03244F:
-	ldda32_24 xde, 0x045314
+	ld32_24 xde, 0x045314
 	ld xhl, (xde + 12)
-	ldda32_24 xde, 0x045314
+	ld32_24 xde, 0x045314
 	ld xix, (xde + 24)
-	ldda32_24 xde, 0x045314
+	ld32_24 xde, 0x045314
 	ld_sriw IY, (xde + 0x00ea)
 
 LABEL_032469:
@@ -34575,9 +34575,9 @@ LABEL_0324F7:
 	ld c, a
 	extz bc
 	muls bc, 0x11F
-	ldada_24 xde, 0x04136e
+	lda_24 xde, 0x04136e
 	ld_sril3 XDE, 0x07, 0xE8, 0xE4
-	ldada_24 xbc, 0x045318
+	lda_24 xbc, 0x045318
 	cp xde, xbc
 	jr c, LABEL_032517
 	cp a, 0xFF
@@ -34593,7 +34593,7 @@ LABEL_032517:
 	muls wa, 0x1D6
 	ld de, wa
 	add de, bc
-	ldda32_24 xwa, 0x04531c
+	ld32_24 xwa, 0x04531c
 	st_dri3b C, 0x07, 0xE0, 0xE8
 	st_dri3b C, 0xED, 0xBA, 0x01
 	jrl LABEL_0325F6
@@ -34608,7 +34608,7 @@ LABEL_032540:
 	muls wa, 0x1D6
 	ld de, wa
 	add de, bc
-	ldda32_24 xwa, 0x045318
+	ld32_24 xwa, 0x045318
 	st_dri3b C, 0x07, 0xE0, 0xE8
 	st_dri3b C, 0xED, 0xBA, 0x01
 	jrl LABEL_0325F6
@@ -34617,9 +34617,9 @@ LABEL_032569:
 	ld c, a
 	extz bc
 	muls bc, 0x11F
-	ldada_24 xde, 0x04136e
+	lda_24 xde, 0x04136e
 	ld_sril3 XDE, 0x07, 0xE8, 0xE4
-	ldada_24 xbc, 0x045318
+	lda_24 xbc, 0x045318
 	cp xde, xbc
 	jr c, LABEL_032589
 	cp a, 0xFF
@@ -34635,7 +34635,7 @@ LABEL_032589:
 	muls wa, 0x50
 	ld de, wa
 	add de, bc
-	ldda32_24 xwa, 0x04531c
+	ld32_24 xwa, 0x04531c
 	st_dri3b C, 0x07, 0xE0, 0xE8
 	st_dri3b C, 0xED, 0xE1, 0x4A
 	jr LABEL_0325F6
@@ -34647,7 +34647,7 @@ LABEL_0325B1:
 	ld iz, bc
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041381
+	lda_24 xbc, 0x041381
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	extz wa
 	extz xwa
@@ -34676,7 +34676,7 @@ LABEL_0325FC:
 	ld e, a
 	extz de
 	muls de, 0x11F
-	ldada_24 xhl, 0x041368
+	lda_24 xhl, 0x041368
 	exts xde
 	add xde, xhl
 	ld_sril3 XDE, 0x07, 0xE8, 0xF0
@@ -34691,7 +34691,7 @@ LABEL_0325FC:
 	ld e, a
 	extz de
 	muls de, 0x11F
-	ldada_24 xix, 0x041368
+	lda_24 xix, 0x041368
 	exts xde
 	add xde, xix
 	ld_sril3 XDE, 0x07, 0xE8, 0xF4
@@ -34707,7 +34707,7 @@ LABEL_0325FC:
 	ld c, a
 	extz bc
 	muls bc, 0x11F
-	ldada_24 xde, 0x041381
+	lda_24 xde, 0x041381
 	ld_srib3 C, 0x07, 0xE8, 0xE4
 	extz bc
 	pushw bc
@@ -34751,7 +34751,7 @@ LABEL_0326B6:
 	ld a, (xsp + 2)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041368
+	lda_24 xbc, 0x041368
 	ld_sriw3 WA, 0x07, 0xE4, 0xE0
 	bit 0, wa
 	jr z, LABEL_032713
@@ -34763,7 +34763,7 @@ LABEL_0326B6:
 	ld a, (xsp + 2)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041368
+	lda_24 xbc, 0x041368
 	exts xwa
 	add xwa, xbc
 	exts xde
@@ -34772,7 +34772,7 @@ LABEL_0326B6:
 	extz wa
 	muls wa, 0xB
 	add wa, 0x1AA
-	ldada_24 xbc, 0x044fce
+	lda_24 xbc, 0x044fce
 	exts xwa
 	add xwa, xbc
 	ld (xde + 4), xwa
@@ -34795,7 +34795,7 @@ LABEL_032713:
 	ld a, (xsp + 2)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041368
+	lda_24 xbc, 0x041368
 	exts xwa
 	add xwa, xbc
 	st_dri3b W, 0x07, 0xE0, 0xE8
@@ -34826,59 +34826,59 @@ LABEL_032750:
 	jrl nz, LABEL_032814
 
 LABEL_032780:
-	ldda16_24 xwa, 0x041343
+	ld16_24 xwa, 0x041343
 	bit 2, wa
 	jr z, LABEL_032796
-	ldda32_24 xwa, 0x045314
+	ld32_24 xwa, 0x045314
 	ld_sril XIX, (xwa + 0x009c)
 	jr LABEL_03279E
 
 LABEL_032796:
-	ldda32_24 xwa, 0x045314
+	ld32_24 xwa, 0x045314
 	ld xix, (xwa + 36)
 
 LABEL_03279E:
-	ldda32_24 xwa, 0x045314
+	ld32_24 xwa, 0x045314
 	ld xiy, (xwa + 48)
-	ldda32_24 xwa, 0x045314
+	ld32_24 xwa, 0x045314
 	ld_sriw IZ, (xwa + 0x00ec)
 	jr LABEL_032814
 
 LABEL_0327B2:
-	ldda16_24 xwa, 0x041343
+	ld16_24 xwa, 0x041343
 	bit 2, wa
 	jr z, LABEL_0327C8
-	ldda32_24 xwa, 0x045314
+	ld32_24 xwa, 0x045314
 	ld_sril XIX, (xwa + 0x00a4)
 	jr LABEL_0327D0
 
 LABEL_0327C8:
-	ldda32_24 xwa, 0x045314
+	ld32_24 xwa, 0x045314
 	ld xix, (xwa + 44)
 
 LABEL_0327D0:
-	ldda32_24 xwa, 0x045314
+	ld32_24 xwa, 0x045314
 	ld xiy, (xwa + 56)
-	ldda32_24 xwa, 0x045314
+	ld32_24 xwa, 0x045314
 	ld_sriw IZ, (xwa + 0x00f2)
 	jr LABEL_032814
 
 LABEL_0327E4:
-	ldda16_24 xwa, 0x041343
+	ld16_24 xwa, 0x041343
 	bit 2, wa
 	jr z, LABEL_0327FA
-	ldda32_24 xwa, 0x045314
+	ld32_24 xwa, 0x045314
 	ld_sril XIX, (xwa + 0x00a0)
 	jr LABEL_032802
 
 LABEL_0327FA:
-	ldda32_24 xwa, 0x045314
+	ld32_24 xwa, 0x045314
 	ld xix, (xwa + 40)
 
 LABEL_032802:
-	ldda32_24 xwa, 0x045314
+	ld32_24 xwa, 0x045314
 	ld xiy, (xwa + 52)
-	ldda32_24 xwa, 0x045314
+	ld32_24 xwa, 0x045314
 	ld_sriw IZ, (xwa + 0x00ec)
 
 LABEL_032814:
@@ -34908,7 +34908,7 @@ LABEL_032839:
 	ld l, a
 	extz hl
 	muls hl, 0x11F
-	ldada_24 xix, 0x041368
+	lda_24 xix, 0x041368
 	exts xhl
 	add xhl, xix
 	st_dri3b D, 0x07, 0xEC, 0xF4
@@ -34926,7 +34926,7 @@ LABEL_032839:
 	add ix, 0x6E
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041368
+	lda_24 xbc, 0x041368
 	exts xwa
 	add xwa, xbc
 	st_dri3b A, 0x07, 0xE0, 0xF0
@@ -34996,7 +34996,7 @@ LABEL_0328E2:
 	ld a, (xsp + 4)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041368
+	lda_24 xbc, 0x041368
 	exts xwa
 	add xwa, xbc
 	st_dri3b W, 0x07, 0xE0, 0xE8
@@ -35016,7 +35016,7 @@ LABEL_032938:
 	ld a, (xsp + 2)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x04136e
+	lda_24 xbc, 0x04136e
 	ld_sril3 XWA, 0x07, 0xE4, 0xE0
 	ld a, (xwa + 16)
 	and a, 0xC0
@@ -35111,11 +35111,11 @@ LABEL_032A08:
 	jr z, LABEL_032A68
 	cps wa, 0
 	jrl nz, LABEL_032ADA
-	ldda32_24 xwa, 0x045314
+	ld32_24 xwa, 0x045314
 	ld xde, (xwa + 116)
-	ldda32_24 xwa, 0x045314
+	ld32_24 xwa, 0x045314
 	ld xbc, (xwa + 120)
-	ldda32_24 xwa, 0x045314
+	ld32_24 xwa, 0x045314
 	ld_sriw HL, (xwa + 0x00ee)
 	ld wa, iz
 	sll wa, 7
@@ -35137,9 +35137,9 @@ LABEL_032A68:
 	ld a, l
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x04136e
+	lda_24 xbc, 0x04136e
 	ld_sril3 XBC, 0x07, 0xE4, 0xE0
-	ldada_24 xwa, 0x045318
+	lda_24 xwa, 0x045318
 	cp xbc, xwa
 	jr c, LABEL_032A88
 	cp l, 0xFF
@@ -35151,7 +35151,7 @@ LABEL_032A88:
 	muls wa, 0x50
 	ld bc, wa
 	add bc, 0x4AA7
-	ldda32_24 xwa, 0x04531c
+	ld32_24 xwa, 0x04531c
 	st_dri3b D, 0x07, 0xE0, 0xE4
 	jr LABEL_032ADA
 
@@ -35163,7 +35163,7 @@ LABEL_032AA2:
 	ld a, l
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041381
+	lda_24 xbc, 0x041381
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	extz wa
 	extz xwa
@@ -35209,7 +35209,7 @@ LABEL_032B1E:
 	ld c, a
 	extz bc
 	muls bc, 0x11F
-	ldada_24 xde, 0x04136a
+	lda_24 xde, 0x04136a
 	ld_sriw3 BC, 0x07, 0xE8, 0xE4
 	extz xbc
 	and xbc, 0xFFFF3FF0
@@ -35217,13 +35217,13 @@ LABEL_032B1E:
 	ld c, a
 	extz bc
 	muls bc, 0x11F
-	ldada_24 xhl, 0x04136e
+	lda_24 xhl, 0x04136e
 	ld_sril3 XBC, 0x07, 0xEC, 0xE4
 	ld l, (xbc + 18)
 	ld c, a
 	extz bc
 	muls bc, 0x11F
-	ldada_24 xix, 0x04136e
+	lda_24 xix, 0x04136e
 	ld_sril3 XBC, 0x07, 0xF0, 0xE4
 	bitm 0, (xbc + 17)
 	jr z, LABEL_032B6B
@@ -35234,7 +35234,7 @@ LABEL_032B6B:
 	ld c, a
 	extz bc
 	muls bc, 0x11F
-	ldada_24 xix, 0x041372
+	lda_24 xix, 0x041372
 	ld_sriw3 BC, 0x07, 0xF0, 0xE4
 	extz xbc
 	bit 15, bc
@@ -35242,14 +35242,14 @@ LABEL_032B6B:
 	ld c, a
 	extz bc
 	muls bc, 0x11F
-	ldada_24 xix, 0x04136e
+	lda_24 xix, 0x04136e
 	ld_sril3 XBC, 0x07, 0xF0, 0xE4
 	bitm 2, (xbc + 17)
 	jr z, LABEL_032BC0
 	ld c, a
 	extz bc
 	muls bc, 0x11F
-	ldada_24 xix, 0x04136e
+	lda_24 xix, 0x04136e
 	ld_sril3 XBC, 0x07, 0xF0, 0xE4
 	ld c, (xbc + 93)
 	and c, 0xF
@@ -35267,7 +35267,7 @@ LABEL_032BC0:
 	ld c, a
 	extz bc
 	muls bc, 0x11F
-	ldada_24 xix, 0x0413ee
+	lda_24 xix, 0x0413ee
 	or_sriw_im 0x07, 0xF0, 0xE4, 0x00, 0x80
 	jr LABEL_032BF3
 
@@ -35275,14 +35275,14 @@ LABEL_032BDF:
 	ld c, a
 	extz bc
 	muls bc, 0x11F
-	ldada_24 xix, 0x0413ee
+	lda_24 xix, 0x0413ee
 	and_sriw_im 0x07, 0xF0, 0xE4, 0xFF, 0x7F
 
 LABEL_032BF3:
 	ld c, a
 	extz bc
 	muls bc, 0x11F
-	ldada_24 xix, 0x04136e
+	lda_24 xix, 0x04136e
 	ld_sril3 XBC, 0x07, 0xF0, 0xE4
 	bitm 2, (xbc + 17)
 	jr z, LABEL_032C0F
@@ -35293,7 +35293,7 @@ LABEL_032C0F:
 	ld c, a
 	extz bc
 	muls bc, 0x11F
-	ldada_24 xix, 0x041372
+	lda_24 xix, 0x041372
 	ld_sriw3 BC, 0x07, 0xF0, 0xE4
 	extz xbc
 	bit 15, bc
@@ -35301,14 +35301,14 @@ LABEL_032C0F:
 	ld c, a
 	extz bc
 	muls bc, 0x11F
-	ldada_24 xix, 0x04136e
+	lda_24 xix, 0x04136e
 	ld_sril3 XBC, 0x07, 0xF0, 0xE4
 	bitm 0, (xbc + 17)
 	jr z, LABEL_032C64
 	ld c, a
 	extz bc
 	muls bc, 0x11F
-	ldada_24 xix, 0x04136e
+	lda_24 xix, 0x04136e
 	ld_sril3 XBC, 0x07, 0xF0, 0xE4
 	ld c, (xbc + 93)
 	and c, 0xF
@@ -35326,7 +35326,7 @@ LABEL_032C64:
 	ld c, a
 	extz bc
 	muls bc, 0x11F
-	ldada_24 xix, 0x041413
+	lda_24 xix, 0x041413
 	or_sriw_im 0x07, 0xF0, 0xE4, 0x00, 0x80
 	jr LABEL_032C97
 
@@ -35334,14 +35334,14 @@ LABEL_032C83:
 	ld c, a
 	extz bc
 	muls bc, 0x11F
-	ldada_24 xix, 0x041413
+	lda_24 xix, 0x041413
 	and_sriw_im 0x07, 0xF0, 0xE4, 0xFF, 0x7F
 
 LABEL_032C97:
 	ld c, a
 	extz bc
 	muls bc, 0x11F
-	ldada_24 xix, 0x04136e
+	lda_24 xix, 0x04136e
 	ld_sril3 XBC, 0x07, 0xF0, 0xE4
 	bitm 4, (xbc + 17)
 	jr z, LABEL_032CB1
@@ -35355,7 +35355,7 @@ LABEL_032CB1:
 	ld c, a
 	extz bc
 	muls bc, 0x11F
-	ldada_24 xix, 0x041438
+	lda_24 xix, 0x041438
 	or_sriw_im 0x07, 0xF0, 0xE4, 0x00, 0x80
 	jr LABEL_032CE5
 
@@ -35363,14 +35363,14 @@ LABEL_032CD1:
 	ld c, a
 	extz bc
 	muls bc, 0x11F
-	ldada_24 xix, 0x041438
+	lda_24 xix, 0x041438
 	and_sriw_im 0x07, 0xF0, 0xE4, 0xFF, 0x7F
 
 LABEL_032CE5:
 	ld c, a
 	extz bc
 	muls bc, 0x11F
-	ldada_24 xix, 0x04136e
+	lda_24 xix, 0x04136e
 	ld_sril3 XBC, 0x07, 0xF0, 0xE4
 	bitm 6, (xbc + 17)
 	jr z, LABEL_032CFF
@@ -35384,7 +35384,7 @@ LABEL_032CFF:
 	ld c, a
 	extz bc
 	muls bc, 0x11F
-	ldada_24 xhl, 0x04145d
+	lda_24 xhl, 0x04145d
 	or_sriw_im 0x07, 0xEC, 0xE4, 0x00, 0x80
 	jr LABEL_032D33
 
@@ -35392,13 +35392,13 @@ LABEL_032D1F:
 	ld c, a
 	extz bc
 	muls bc, 0x11F
-	ldada_24 xhl, 0x04145d
+	lda_24 xhl, 0x04145d
 	and_sriw_im 0x07, 0xEC, 0xE4, 0xFF, 0x7F
 
 LABEL_032D33:
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x04136a
+	lda_24 xbc, 0x04136a
 	st_dri3w DE, 0x07, 0xE4, 0xE0
 	ret
 
@@ -35429,13 +35429,13 @@ LABEL_032D58:
 	ld c, a
 	extz bc
 	muls bc, 0x11F
-	ldada_24 xde, 0x04136a
+	lda_24 xde, 0x04136a
 	ld_sriw3 BC, 0x07, 0xE8, 0xE4
 	bit 14, bc
 	jr z, LABEL_032D97
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x0413fb
+	lda_24 xbc, 0x0413fb
 	ld_sril3 XWA, 0x07, 0xE4, 0xE0
 	ld l, (xwa + 1)
 	extz hl
@@ -35444,7 +35444,7 @@ LABEL_032D58:
 LABEL_032D97:
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x0413d6
+	lda_24 xbc, 0x0413d6
 	ld_sril3 XWA, 0x07, 0xE4, 0xE0
 	ld l, (xwa + 1)
 	extz hl
@@ -35454,14 +35454,14 @@ LABEL_032DAD:
 	ld c, a
 	extz bc
 	muls bc, 0x11F
-	ldada_24 xde, 0x04136a
+	lda_24 xde, 0x04136a
 	ld_sriw3 BC, 0x07, 0xE8, 0xE4
 	extz xbc
 	bit 15, bc
 	jr z, LABEL_032DDC
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x0413d6
+	lda_24 xbc, 0x0413d6
 	ld_sril3 XWA, 0x07, 0xE4, 0xE0
 	ld l, (xwa + 1)
 	extz hl
@@ -35470,7 +35470,7 @@ LABEL_032DAD:
 LABEL_032DDC:
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x0413fb
+	lda_24 xbc, 0x0413fb
 	ld_sril3 XWA, 0x07, 0xE4, 0xE0
 	ld l, (xwa + 1)
 	extz hl
@@ -35479,7 +35479,7 @@ LABEL_032DDC:
 LABEL_032DF2:
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041420
+	lda_24 xbc, 0x041420
 	ld_sril3 XWA, 0x07, 0xE4, 0xE0
 	ld l, (xwa + 1)
 	extz hl
@@ -35488,7 +35488,7 @@ LABEL_032DF2:
 LABEL_032E08:
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041445
+	lda_24 xbc, 0x041445
 	ld_sril3 XWA, 0x07, 0xE4, 0xE0
 	ld l, (xwa + 1)
 	extz hl
@@ -35501,14 +35501,14 @@ LABEL_032E1E:
 	ld a, (xsp + 18)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041368
+	lda_24 xbc, 0x041368
 	exts xwa
 	add xwa, xbc
 	ld (xsp + 4), xwa
 	ld a, (xsp + 18)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041376
+	lda_24 xbc, 0x041376
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	sub a, 0x40
 	exts wa
@@ -35583,7 +35583,7 @@ LABEL_032F09:
 	ld a, (xsp + 18)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x04136e
+	lda_24 xbc, 0x04136e
 	ld_sril3 XWA, 0x07, 0xE4, 0xE0
 	ld a, (xwa + 93)
 	ldfr_berp A, 0xFB
@@ -35669,7 +35669,7 @@ LABEL_032FD5:
 	ld l, a
 	extz hl
 	muls hl, 0x11F
-	ldada_24 xix, 0x041368
+	lda_24 xix, 0x041368
 	exts xhl
 	add xhl, xix
 	st_dri3b D, 0x07, 0xEC, 0xF4
@@ -35677,7 +35677,7 @@ LABEL_032FD5:
 	ld l, a
 	extz hl
 	muls hl, 0x11F
-	ldada_24 xiy, 0x04136e
+	lda_24 xiy, 0x04136e
 	ld_sril3 XHL, 0x07, 0xF4, 0xEC
 	andmi8 (xix), 0xFC
 	cpmi8 (xix + 3), 0x0
@@ -35709,7 +35709,7 @@ LABEL_033032:
 	ld l, a
 	extz hl
 	muls hl, 0x11F
-	ldada_24 xiy, 0x041368
+	lda_24 xiy, 0x041368
 	exts xhl
 	add xhl, xiy
 	ld_sril3 XHL, 0x07, 0xEC, 0xF8
@@ -35725,7 +35725,7 @@ LABEL_033069:
 	ld l, a
 	extz hl
 	muls hl, 0x11F
-	ldada_24 xiy, 0x041368
+	lda_24 xiy, 0x041368
 	exts xhl
 	add xhl, xiy
 	ld_sril3 XHL, 0x07, 0xEC, 0xF8
@@ -35741,7 +35741,7 @@ LABEL_033092:
 	ld l, a
 	extz hl
 	muls hl, 0x11F
-	ldada_24 xiy, 0x041368
+	lda_24 xiy, 0x041368
 	exts xhl
 	add xhl, xiy
 	ld_sril3 XHL, 0x07, 0xEC, 0xF8
@@ -35780,7 +35780,7 @@ LABEL_0330D5:
 	ld l, a
 	extz hl
 	muls hl, 0x11F
-	ldada_24 xix, 0x041368
+	lda_24 xix, 0x041368
 	exts xhl
 	add xhl, xix
 	st_dri3b D, 0x07, 0xEC, 0xF4
@@ -35788,7 +35788,7 @@ LABEL_0330D5:
 	ld l, a
 	extz hl
 	muls hl, 0x11F
-	ldada_24 xiy, 0x04136e
+	lda_24 xiy, 0x04136e
 	ld_sril3 XHL, 0x07, 0xF4, 0xEC
 	andmi8 (xix), 0xF3
 	cpmi8 (xix + 2), 0x0
@@ -35820,7 +35820,7 @@ LABEL_033132:
 	ld l, a
 	extz hl
 	muls hl, 0x11F
-	ldada_24 xiy, 0x041368
+	lda_24 xiy, 0x041368
 	exts xhl
 	add xhl, xiy
 	ld_sril3 XHL, 0x07, 0xEC, 0xF8
@@ -35836,7 +35836,7 @@ LABEL_033169:
 	ld l, a
 	extz hl
 	muls hl, 0x11F
-	ldada_24 xiy, 0x041368
+	lda_24 xiy, 0x041368
 	exts xhl
 	add xhl, xiy
 	ld_sril3 XHL, 0x07, 0xEC, 0xF8
@@ -35852,7 +35852,7 @@ LABEL_033192:
 	ld l, a
 	extz hl
 	muls hl, 0x11F
-	ldada_24 xiy, 0x041368
+	lda_24 xiy, 0x041368
 	exts xhl
 	add xhl, xiy
 	ld_sril3 XHL, 0x07, 0xEC, 0xF8
@@ -35887,7 +35887,7 @@ LABEL_0331D5:
 	extz ix
 	ld iy, ix
 	add iy, iy
-	ldada_24 xiz, 0x00fb56
+	lda_24 xiz, 0x00fb56
 	ld w, (xbc + 1)
 	ldfr_berp W, 0xF0
 	extz ix
@@ -35895,7 +35895,7 @@ LABEL_0331D5:
 	jrl z, LABEL_0332D6
 	extz de
 	add de, de
-	ldada_24 xix, 0x00fb5e
+	lda_24 xix, 0x00fb5e
 	ld c, (xbc + 1)
 	extz bc
 	and_sriw_rm BC, 0x07, 0xF0, 0xE8
@@ -36105,7 +36105,7 @@ LABEL_0333BE:
 	ld a, (xsp + 10)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041368
+	lda_24 xbc, 0x041368
 	exts xwa
 	add xwa, xbc
 	st_dri3b W, 0x07, 0xE0, 0xE8
@@ -36134,7 +36134,7 @@ LABEL_033416:
 	ld a, (xsp + 10)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041368
+	lda_24 xbc, 0x041368
 	exts xwa
 	add xwa, xbc
 	st_dri3b A, 0x07, 0xE0, 0xE8
@@ -36180,7 +36180,7 @@ LABEL_033469:
 	ld a, (xsp + 10)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xhl, 0x041368
+	lda_24 xhl, 0x041368
 	exts xwa
 	add xwa, xhl
 	ld_sril3 XWA, 0x07, 0xE0, 0xF0
@@ -36206,7 +36206,7 @@ LABEL_0334C5:
 	ld a, (xsp + 10)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xhl, 0x041368
+	lda_24 xhl, 0x041368
 	exts xwa
 	add xwa, xhl
 	ld_sril3 XWA, 0x07, 0xE0, 0xF0
@@ -36232,7 +36232,7 @@ LABEL_033507:
 	ld a, (xsp + 10)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xhl, 0x041368
+	lda_24 xhl, 0x041368
 	exts xwa
 	add xwa, xhl
 	ld_sril3 XWA, 0x07, 0xE0, 0xF0
@@ -36258,7 +36258,7 @@ LABEL_033557:
 	ld a, (xsp + 2)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xde, 0x04136e
+	lda_24 xde, 0x04136e
 	ld_sril3 XWA, 0x07, 0xE8, 0xE0
 	ld a, (xwa + 93)
 	and a, 0xF
@@ -36268,31 +36268,31 @@ LABEL_033557:
 	ld a, (xsp + 2)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xde, 0x041372
+	lda_24 xde, 0x041372
 	or_sriw_im 0x07, 0xE8, 0xE0, 0x00, 0x80
 	cps c, 0
 	jrl nz, LABEL_033663
 	ld a, (xsp + 2)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041372
+	lda_24 xbc, 0x041372
 	ld_sriw3 WA, 0x07, 0xE4, 0xE0
 	bit 14, wa
 	jr z, LABEL_0335ED
 	ld a, (xsp + 2)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x0413cb
+	lda_24 xbc, 0x0413cb
 	stib_dri 0x07, 0xE4, 0xE0, 0x0F
 	ld a, (xsp + 2)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x0413cc
+	lda_24 xbc, 0x0413cc
 	stib_dri 0x07, 0xE4, 0xE0, 0x4F
 	ld a, (xsp + 2)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x0413cd
+	lda_24 xbc, 0x0413cd
 	stib_dri 0x07, 0xE4, 0xE0, 0x96
 	jr LABEL_033629
 
@@ -36300,17 +36300,17 @@ LABEL_0335ED:
 	ld a, (xsp + 2)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x0413cb
+	lda_24 xbc, 0x0413cb
 	stib_dri 0x07, 0xE4, 0xE0, 0x01
 	ld a, (xsp + 2)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x0413cc
+	lda_24 xbc, 0x0413cc
 	stib_dri 0x07, 0xE4, 0xE0, 0x01
 	ld a, (xsp + 2)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x0413cd
+	lda_24 xbc, 0x0413cd
 	stib_dri 0x07, 0xE4, 0xE0, 0x01
 
 LABEL_033629:
@@ -36342,19 +36342,19 @@ LABEL_033663:
 	ld a, (xsp + 2)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041372
+	lda_24 xbc, 0x041372
 	ld_sriw3 WA, 0x07, 0xE4, 0xE0
 	bit 14, wa
 	jr z, LABEL_0336A4
 	ld a, (xsp + 2)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x0413cb
+	lda_24 xbc, 0x0413cb
 	and_srib_im 0x07, 0xE4, 0xE0, 0x05
 	ld a, (xsp + 2)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x0413cb
+	lda_24 xbc, 0x0413cb
 	set_dri 1, 0x07, 0xE4, 0xE0
 	jr LABEL_0336B8
 
@@ -36362,14 +36362,14 @@ LABEL_0336A4:
 	ld a, (xsp + 2)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x0413cb
+	lda_24 xbc, 0x0413cb
 	and_srib_im 0x07, 0xE4, 0xE0, 0x05
 
 LABEL_0336B8:
 	ld a, (xsp + 2)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x04136a
+	lda_24 xbc, 0x04136a
 	and_sriw_im 0x07, 0xE4, 0xE0, 0xFF, 0xFD
 	jrl LABEL_0337CF
 
@@ -36377,14 +36377,14 @@ LABEL_0336D0:
 	ld a, (xsp + 2)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041372
+	lda_24 xbc, 0x041372
 	ld_sriw3 WA, 0x07, 0xE4, 0xE0
 	bit 14, wa
 	jrl z, LABEL_033769
 	ld a, (xsp + 2)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041372
+	lda_24 xbc, 0x041372
 	or_sriw_im 0x07, 0xE4, 0xE0, 0x00, 0x80
 	ld a, (xsp + 2)
 	extz wa
@@ -36413,7 +36413,7 @@ LABEL_0336D0:
 	ld a, (xsp + 2)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x04136a
+	lda_24 xbc, 0x04136a
 	or_sriw_im 0x07, 0xE4, 0xE0, 0x00, 0x02
 	jr LABEL_033793
 
@@ -36421,7 +36421,7 @@ LABEL_033752:
 	ld a, (xsp + 2)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x04136a
+	lda_24 xbc, 0x04136a
 	and_sriw_im 0x07, 0xE4, 0xE0, 0xFF, 0xFD
 	jr LABEL_033793
 
@@ -36429,29 +36429,29 @@ LABEL_033769:
 	ld a, (xsp + 2)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041372
+	lda_24 xbc, 0x041372
 	and_sriw_im 0x07, 0xE4, 0xE0, 0xFF, 0x7F
 	ld a, (xsp + 2)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x04136a
+	lda_24 xbc, 0x04136a
 	and_sriw_im 0x07, 0xE4, 0xE0, 0xFF, 0xFD
 
 LABEL_033793:
 	ld a, (xsp + 2)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x0413cb
+	lda_24 xbc, 0x0413cb
 	stib_dri 0x07, 0xE4, 0xE0, 0x00
 	ld a, (xsp + 2)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x0413cc
+	lda_24 xbc, 0x0413cc
 	stib_dri 0x07, 0xE4, 0xE0, 0x00
 	ld a, (xsp + 2)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x0413cd
+	lda_24 xbc, 0x0413cd
 	stib_dri 0x07, 0xE4, 0xE0, 0x00
 
 LABEL_0337CF:
@@ -36463,7 +36463,7 @@ LABEL_0337D2:
 	ld e, a
 	extz de
 	muls de, 0x11F
-	ldada_24 xix, 0x04136e
+	lda_24 xix, 0x04136e
 	ld_sril3 XDE, 0x07, 0xF0, 0xE8
 	ld e, (xde + 93)
 	and e, 0xF
@@ -36474,9 +36474,9 @@ LABEL_0337D2:
 	cp de, 0xB
 	jrl gt, LABEL_03397E
 	add de, de
-	ldada_24 xix, 0x00fb66
+	lda_24 xix, 0x00fb66
 	ld_sriw3 DE, 0x07, 0xF0, 0xE8
-	ldada_24 xix, 0x033812
+	lda_24 xix, 0x033812
 	jp_dri 8, 0x07, 0xF0, 0xE8
 
 LABEL_033812:
@@ -36534,7 +36534,7 @@ LABEL_03397E:
 	add de, 0x57
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041368
+	lda_24 xbc, 0x041368
 	exts xwa
 	add xwa, xbc
 	st_dri3w HL, 0x07, 0xE0, 0xE8
@@ -36545,7 +36545,7 @@ LABEL_03399E:
 	ld e, a
 	extz de
 	muls de, 0x11F
-	ldada_24 xix, 0x04136e
+	lda_24 xix, 0x04136e
 	ld_sril3 XDE, 0x07, 0xF0, 0xE8
 	ld e, (xde + 93)
 	and e, 0xF
@@ -36556,9 +36556,9 @@ LABEL_03399E:
 	cp de, 0xB
 	jrl gt, LABEL_033B29
 	add de, de
-	ldada_24 xix, 0x00fb7e
+	lda_24 xix, 0x00fb7e
 	ld_sriw3 DE, 0x07, 0xF0, 0xE8
-	ldada_24 xix, 0x0339de
+	lda_24 xix, 0x0339de
 	jp_dri 8, 0x07, 0xF0, 0xE8
 
 LABEL_0339DE:
@@ -36612,7 +36612,7 @@ LABEL_033B29:
 	add de, 0x57
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041368
+	lda_24 xbc, 0x041368
 	exts xwa
 	add xwa, xbc
 	st_dri3b W, 0x07, 0xE0, 0xE8
@@ -36624,7 +36624,7 @@ LABEL_033B4C:
 	ld c, a
 	extz bc
 	muls bc, 0x11F
-	ldada_24 xde, 0x04136e
+	lda_24 xde, 0x04136e
 	ld_sril3 XBC, 0x07, 0xE8, 0xE4
 	ld c, (xbc + 93)
 	and c, 0xF
@@ -36636,7 +36636,7 @@ LABEL_033B4C:
 LABEL_033B70:
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x04136e
+	lda_24 xbc, 0x04136e
 	ld_sril3 XWA, 0x07, 0xE4, 0xE0
 	ld a, (xwa + 95)
 	and a, 0x3F
@@ -36648,7 +36648,7 @@ LABEL_033B8B:
 	ld c, a
 	extz bc
 	muls bc, 0x11F
-	ldada_24 xde, 0x04136e
+	lda_24 xde, 0x04136e
 	ld_sril3 XBC, 0x07, 0xE8, 0xE4
 	ld c, (xbc + 93)
 	and c, 0xF
@@ -36660,12 +36660,12 @@ LABEL_033B8B:
 	ld c, l
 	extz bc
 	muls bc, 0x6
-	ldada_24 xde, 0x010fd2
+	lda_24 xde, 0x010fd2
 	ld_srib3 W, 0x07, 0xE8, 0xE4
 	ld c, a
 	extz bc
 	muls bc, 0x11F
-	ldada_24 xde, 0x04136e
+	lda_24 xde, 0x04136e
 	ld_sril3 XBC, 0x07, 0xE8, 0xE4
 	ld c, (xbc + 94)
 	extz bc
@@ -36674,19 +36674,19 @@ LABEL_033B8B:
 	ld c, w
 	extz bc
 	muls bc, 0x66
-	ldada_24 xde, 0x011478
+	lda_24 xde, 0x011478
 	exts xbc
 	add xbc, xde
 	ld_sriw3 HL, 0x07, 0xE4, 0xEC
 	ld c, a
 	extz bc
 	muls bc, 0x11F
-	ldada_24 xde, 0x04136e
+	lda_24 xde, 0x04136e
 	ld_sril3 XBC, 0x07, 0xE8, 0xE4
 	ld c, (xbc + 96)
 	extz bc
 	add bc, bc
-	ldada_24 xde, 0x011511
+	lda_24 xde, 0x011511
 	or_sriw_rm HL, 0x07, 0xE8, 0xE4
 	jr LABEL_033C5A
 
@@ -36694,12 +36694,12 @@ LABEL_033C16:
 	ld c, l
 	extz bc
 	muls bc, 0x6
-	ldada_24 xde, 0x010fd2
+	lda_24 xde, 0x010fd2
 	ld_srib3 W, 0x07, 0xE8, 0xE4
 	ld c, l
 	extz bc
 	muls bc, 0x27
-	ldada_24 xde, 0x011e1c
+	lda_24 xde, 0x011e1c
 	ld_srib3 C, 0x07, 0xE8, 0xE4
 	extz bc
 	ld hl, bc
@@ -36707,7 +36707,7 @@ LABEL_033C16:
 	ld c, w
 	extz bc
 	muls bc, 0x66
-	ldada_24 xde, 0x011478
+	lda_24 xde, 0x011478
 	exts xbc
 	add xbc, xde
 	ld_sriw3 HL, 0x07, 0xE4, 0xEC
@@ -36719,7 +36719,7 @@ LABEL_033C58:
 LABEL_033C5A:
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x0413c7
+	lda_24 xbc, 0x0413c7
 	st_dri3w HL, 0x07, 0xE4, 0xE0
 	ret
 
@@ -36727,7 +36727,7 @@ LABEL_033C6B:
 	ld c, a
 	extz bc
 	muls bc, 0x11F
-	ldada_24 xde, 0x04136e
+	lda_24 xde, 0x04136e
 	ld_sril3 XBC, 0x07, 0xE8, 0xE4
 	ld c, (xbc + 93)
 	and c, 0xF
@@ -36741,12 +36741,12 @@ LABEL_033C8D:
 	ld c, e
 	extz bc
 	muls bc, 0x6
-	ldada_24 xde, 0x010fd3
+	lda_24 xde, 0x010fd3
 	ld_srib3 W, 0x07, 0xE8, 0xE4
 	ld c, a
 	extz bc
 	muls bc, 0x11F
-	ldada_24 xde, 0x04136e
+	lda_24 xde, 0x04136e
 	ld_sril3 XBC, 0x07, 0xE8, 0xE4
 	ld c, (xbc + 95)
 	extz bc
@@ -36755,7 +36755,7 @@ LABEL_033C8D:
 	ld c, w
 	extz bc
 	muls bc, 0x66
-	ldada_24 xde, 0x011016
+	lda_24 xde, 0x011016
 	exts xbc
 	add xbc, xde
 	ld_sriw3 HL, 0x07, 0xE4, 0xEC
@@ -36767,7 +36767,7 @@ LABEL_033CD2:
 LABEL_033CD4:
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x0413c9
+	lda_24 xbc, 0x0413c9
 	st_dri3w HL, 0x07, 0xE4, 0xE0
 	ret
 
@@ -36775,7 +36775,7 @@ LABEL_033CE5:
 	ld c, a
 	extz bc
 	muls bc, 0x11F
-	ldada_24 xde, 0x041372
+	lda_24 xde, 0x041372
 	ld_sriw3 BC, 0x07, 0xE8, 0xE4
 	extz xbc
 	bit 15, bc
@@ -36783,7 +36783,7 @@ LABEL_033CE5:
 	ld c, a
 	extz bc
 	muls bc, 0x11F
-	ldada_24 xde, 0x04136e
+	lda_24 xde, 0x04136e
 	ld_sril3 XBC, 0x07, 0xE8, 0xE4
 	ld c, (xbc + 93)
 	and c, 0xF
@@ -36791,11 +36791,11 @@ LABEL_033CE5:
 	jr nz, LABEL_033D3C
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x04136e
+	lda_24 xbc, 0x04136e
 	ld_sril3 XWA, 0x07, 0xE4, 0xE0
 	ld a, (xwa + 94)
 	extz wa
-	ldada_24 xbc, 0x012038
+	lda_24 xbc, 0x012038
 	ld_srib3 L, 0x07, 0xE4, 0xE0
 	jr LABEL_033D42
 
@@ -36814,7 +36814,7 @@ LABEL_033D43:
 	ld c, a
 	extz bc
 	muls bc, 0x11F
-	ldada_24 xde, 0x041372
+	lda_24 xde, 0x041372
 	ld_sriw3 BC, 0x07, 0xE8, 0xE4
 	extz xbc
 	bit 15, bc
@@ -36822,7 +36822,7 @@ LABEL_033D43:
 	ld c, a
 	extz bc
 	muls bc, 0x11F
-	ldada_24 xde, 0x04136e
+	lda_24 xde, 0x04136e
 	ld_sril3 XBC, 0x07, 0xE8, 0xE4
 	ld c, (xbc + 93)
 	and c, 0xF
@@ -36836,20 +36836,20 @@ LABEL_033D82:
 	ld c, l
 	extz bc
 	muls bc, 0x27
-	ldada_24 xde, 0x011e23
+	lda_24 xde, 0x011e23
 	bit_dri 7, 0x07, 0xE8, 0xE4
 	jr z, LABEL_033DAA
 	ld a, l
 	extz wa
 	muls wa, 0x27
-	ldada_24 xbc, 0x011e24
+	lda_24 xbc, 0x011e24
 	ld_srib3 L, 0x07, 0xE4, 0xE0
 	jr LABEL_033DD2
 
 LABEL_033DAA:
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x04136e
+	lda_24 xbc, 0x04136e
 	ld_sril3 XWA, 0x07, 0xE4, 0xE0
 	ld l, (xwa + 100)
 	jr LABEL_033DD2
@@ -36857,7 +36857,7 @@ LABEL_033DAA:
 LABEL_033DBF:
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x04136e
+	lda_24 xbc, 0x04136e
 	ld_sril3 XWA, 0x07, 0xE4, 0xE0
 	ld l, (xwa + 100)
 
@@ -36869,14 +36869,14 @@ LABEL_033DD3:
 	ld c, a
 	extz bc
 	muls bc, 0x11F
-	ldada_24 xde, 0x041372
+	lda_24 xde, 0x041372
 	ld_sriw3 BC, 0x07, 0xE8, 0xE4
 	extz xbc
 	bit 15, bc
 	ret z
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x04136e
+	lda_24 xbc, 0x04136e
 	ld_sril3 XWA, 0x07, 0xE4, 0xE0
 	ld l, (xwa + 101)
 	ret
@@ -36886,7 +36886,7 @@ LABEL_033E02:
 	ldfr_berp A, 0xF0
 	extz ix
 	muls ix, 0x11F
-	ldada_24 xiy, 0x04136e
+	lda_24 xiy, 0x04136e
 	ld_sril3 XIX, 0x07, 0xF4, 0xF0
 	ld w, (xix + 93)
 	and w, 0xF
@@ -36898,9 +36898,9 @@ LABEL_033E02:
 	cp iy, 0xB
 	ret gt
 	add iy, iy
-	ldada_24 xix, 0x00fb96
+	lda_24 xix, 0x00fb96
 	ld_sriw3 IY, 0x07, 0xF0, 0xF4
-	ldada_24 xix, 0x033e44
+	lda_24 xix, 0x033e44
 	jp_dri 8, 0x07, 0xF0, 0xF4
 
 LABEL_033E44:
@@ -36950,7 +36950,7 @@ LABEL_033F74:
 	ld e, a
 	extz de
 	muls de, 0x11F
-	ldada_24 xix, 0x04136e
+	lda_24 xix, 0x04136e
 	ld_sril3 XDE, 0x07, 0xF0, 0xE8
 	ld e, (xde + 93)
 	and e, 0xF
@@ -36969,14 +36969,14 @@ LABEL_033F98:
 	ld e, b
 	extz de
 	muls de, 0x27
-	ldada_24 xix, 0x011e16
+	lda_24 xix, 0x011e16
 	exts xde
 	add xde, xix
 	bit_dri 5, 0x07, 0xE8, 0xF4
 	ret z
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xde, 0x04136e
+	lda_24 xde, 0x04136e
 	ld_sril3 XWA, 0x07, 0xE8, 0xE0
 	bitm 6, (xwa + 93)
 	jr z, LABEL_034003
@@ -36988,7 +36988,7 @@ LABEL_033F98:
 	ld a, b
 	extz wa
 	muls wa, 0x27
-	ldada_24 xbc, 0x011e16
+	lda_24 xbc, 0x011e16
 	exts xwa
 	add xwa, xbc
 	bit_dri 1, 0x07, 0xE0, 0xE8
@@ -37010,7 +37010,7 @@ LABEL_034007:
 	ld e, a
 	extz de
 	muls de, 0x11F
-	ldada_24 xhl, 0x04136e
+	lda_24 xhl, 0x04136e
 	ld_sril3 XDE, 0x07, 0xEC, 0xE8
 	ld e, (xde + 93)
 	and e, 0xF
@@ -37023,7 +37023,7 @@ LABEL_034007:
 	ld e, w
 	extz de
 	muls de, 0x27
-	ldada_24 xhl, 0x011e16
+	lda_24 xhl, 0x011e16
 	exts xde
 	add xde, xhl
 	st_dri3b B, 0x07, 0xE8, 0xF0
@@ -37035,7 +37035,7 @@ LABEL_034007:
 	ret nz
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x04136e
+	lda_24 xbc, 0x04136e
 	ld_sril3 XWA, 0x07, 0xE4, 0xE0
 	ld l, (xwa + 96)
 	ret
@@ -37044,7 +37044,7 @@ LABEL_034067:
 	ld e, a
 	extz de
 	muls de, 0x11F
-	ldada_24 xhl, 0x04136e
+	lda_24 xhl, 0x04136e
 	ld_sril3 XDE, 0x07, 0xEC, 0xE8
 	ld e, (xde + 93)
 	and e, 0xF
@@ -37057,7 +37057,7 @@ LABEL_034067:
 	ld e, w
 	extz de
 	muls de, 0x27
-	ldada_24 xhl, 0x011e16
+	lda_24 xhl, 0x011e16
 	exts xde
 	add xde, xhl
 	st_dri3b B, 0x07, 0xE8, 0xF0
@@ -37069,9 +37069,9 @@ LABEL_034067:
 	cp de, 0x8
 	ret gt
 	add de, de
-	ldada_24 xix, 0x00fbae
+	lda_24 xix, 0x00fbae
 	ld_sriw3 DE, 0x07, 0xF0, 0xE8
-	ldada_24 xix, 0x0340cc
+	lda_24 xix, 0x0340cc
 	jp_dri 8, 0x07, 0xF0, 0xE8
 
 LABEL_0340CC:
@@ -37098,7 +37098,7 @@ LABEL_034153:
 	ld e, a
 	extz de
 	muls de, 0x11F
-	ldada_24 xhl, 0x04136e
+	lda_24 xhl, 0x04136e
 	ld_sril3 XDE, 0x07, 0xEC, 0xE8
 	ld e, (xde + 93)
 	and e, 0xF
@@ -37111,7 +37111,7 @@ LABEL_034153:
 	ld e, w
 	extz de
 	muls de, 0x27
-	ldada_24 xhl, 0x011e16
+	lda_24 xhl, 0x011e16
 	exts xde
 	add xde, xhl
 	st_dri3b B, 0x07, 0xE8, 0xF0
@@ -37124,9 +37124,9 @@ LABEL_034153:
 	cp de, 0x8
 	jr gt, LABEL_034217
 	add de, de
-	ldada_24 xix, 0x00fbc0
+	lda_24 xix, 0x00fbc0
 	ld_sriw3 DE, 0x07, 0xF0, 0xE8
-	ldada_24 xix, 0x0341be
+	lda_24 xix, 0x0341be
 	jp_dri 8, 0x07, 0xF0, 0xE8
 
 LABEL_0341BE:
@@ -37152,7 +37152,7 @@ LABEL_03421E:
 	ld e, a
 	extz de
 	muls de, 0x11F
-	ldada_24 xhl, 0x041372
+	lda_24 xhl, 0x041372
 	ld_sriw3 DE, 0x07, 0xEC, 0xE8
 	extz xde
 	bit 15, de
@@ -37160,7 +37160,7 @@ LABEL_03421E:
 	ld e, a
 	extz de
 	muls de, 0x11F
-	ldada_24 xhl, 0x04136e
+	lda_24 xhl, 0x04136e
 	ld_sril3 XDE, 0x07, 0xEC, 0xE8
 	ld e, (xde + 93)
 	and e, 0xF
@@ -37173,7 +37173,7 @@ LABEL_03421E:
 	ld e, w
 	extz de
 	muls de, 0x27
-	ldada_24 xhl, 0x011e16
+	lda_24 xhl, 0x011e16
 	exts xde
 	add xde, xhl
 	st_dri3b B, 0x07, 0xE8, 0xF0
@@ -37185,9 +37185,9 @@ LABEL_03421E:
 	cp de, 0x8
 	ret gt
 	add de, de
-	ldada_24 xix, 0x00fbd2
+	lda_24 xix, 0x00fbd2
 	ld_sriw3 DE, 0x07, 0xF0, 0xE8
-	ldada_24 xix, 0x03429d
+	lda_24 xix, 0x03429d
 	jp_dri 8, 0x07, 0xF0, 0xE8
 
 LABEL_03429D:
@@ -37217,7 +37217,7 @@ LABEL_03430F:
 	ld a, (xsp + 2)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041372
+	lda_24 xbc, 0x041372
 	ld_sriw3 WA, 0x07, 0xE4, 0xE0
 	extz xwa
 	bit 15, wa
@@ -37243,7 +37243,7 @@ LABEL_03433B:
 	ld a, (xsp + 2)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041368
+	lda_24 xbc, 0x041368
 	exts xwa
 	add xwa, xbc
 	st_dri3b W, 0x07, 0xE0, 0xE8
@@ -37264,7 +37264,7 @@ LABEL_03433B:
 	ld a, (xsp + 2)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041368
+	lda_24 xbc, 0x041368
 	exts xwa
 	add xwa, xbc
 	st_dri3b W, 0x07, 0xE0, 0xE8
@@ -37285,7 +37285,7 @@ LABEL_03433B:
 	ld a, (xsp + 2)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041368
+	lda_24 xbc, 0x041368
 	exts xwa
 	add xwa, xbc
 	st_dri3b W, 0x07, 0xE0, 0xE8
@@ -37309,7 +37309,7 @@ LABEL_034404:
 	ld a, (xsp + 2)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041368
+	lda_24 xbc, 0x041368
 	exts xwa
 	add xwa, xbc
 	st_dri3b W, 0x07, 0xE0, 0xE8
@@ -37322,7 +37322,7 @@ LABEL_034404:
 	ld a, (xsp + 2)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041368
+	lda_24 xbc, 0x041368
 	exts xwa
 	add xwa, xbc
 	st_dri3b W, 0x07, 0xE0, 0xE8
@@ -37335,7 +37335,7 @@ LABEL_034404:
 	ld a, (xsp + 2)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041368
+	lda_24 xbc, 0x041368
 	exts xwa
 	add xwa, xbc
 	st_dri3b W, 0x07, 0xE0, 0xE8
@@ -37356,14 +37356,14 @@ LABEL_034491:
 	ld a, (xsp + 2)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041368
+	lda_24 xbc, 0x041368
 	ld_sriw3 WA, 0x07, 0xE4, 0xE0
 	bit 0, wa
 	jr z, LABEL_0344C5
-	ldda8_24 a, 0x0451a4
+	ld8_24 a, 0x0451a4
 	cp a, (xsp + 2)
 	jr nz, LABEL_0344C5
-	ldda8_24 a, 0x0451a6
+	ld8_24 a, 0x0451a6
 	sla a, 2
 	ld (xsp), a
 
@@ -37371,7 +37371,7 @@ LABEL_0344C5:
 	ld a, (xsp + 2)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041372
+	lda_24 xbc, 0x041372
 	ld_sriw3 WA, 0x07, 0xE4, 0xE0
 	extz xwa
 	bit 15, wa
@@ -37386,7 +37386,7 @@ LABEL_0344E9:
 	extz wa
 	muls wa, 0x11F
 	ld bc, wa
-	ldada_24 xde, 0x0413cf
+	lda_24 xde, 0x0413cf
 	ld a, (xsp)
 	lda_dri3 XBC, 0x07, 0xE8, 0xE4
 	inc 4, xsp
@@ -37431,7 +37431,7 @@ LABEL_034606:
 	ld c, a
 	extz bc
 	muls bc, 0x11F
-	ldada_24 xde, 0x041368
+	lda_24 xde, 0x041368
 	ld_sriw3 BC, 0x07, 0xE8, 0xE4
 	bit 0, bc
 	jr z, LABEL_03463F
@@ -37440,8 +37440,8 @@ LABEL_034606:
 	extz wa
 	muls wa, 0x11F
 	ld bc, wa
-	ldada_24 xde, 0x0413d0
-	ldda8_24 a, 0x0451a7
+	lda_24 xde, 0x0413d0
+	ld8_24 a, 0x0451a7
 	sla a, 1
 	lda_dri3 XBC, 0x07, 0xE8, 0xE4
 	ret
@@ -37449,7 +37449,7 @@ LABEL_034606:
 LABEL_03463F:
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x0413d0
+	lda_24 xbc, 0x0413d0
 	stib_dri 0x07, 0xE4, 0xE0, 0x00
 	ret
 
@@ -37457,7 +37457,7 @@ LABEL_034651:
 	ld c, a
 	extz bc
 	muls bc, 0x11F
-	ldada_24 xde, 0x041368
+	lda_24 xde, 0x041368
 	ld_sriw3 BC, 0x07, 0xE8, 0xE4
 	bit 0, bc
 	jr z, LABEL_03468A
@@ -37466,8 +37466,8 @@ LABEL_034651:
 	extz wa
 	muls wa, 0x11F
 	ld bc, wa
-	ldada_24 xde, 0x0413d1
-	ldda8_24 a, 0x0451a8
+	lda_24 xde, 0x0413d1
+	ld8_24 a, 0x0451a8
 	sla a, 1
 	lda_dri3 XBC, 0x07, 0xE8, 0xE4
 	ret
@@ -37475,7 +37475,7 @@ LABEL_034651:
 LABEL_03468A:
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x0413d1
+	lda_24 xbc, 0x0413d1
 	stib_dri 0x07, 0xE4, 0xE0, 0x00
 	ret
 
@@ -37483,7 +37483,7 @@ LABEL_03469C:
 	ld c, a
 	extz bc
 	muls bc, 0x11F
-	ldada_24 xde, 0x041368
+	lda_24 xde, 0x041368
 	ld_sriw3 BC, 0x07, 0xE8, 0xE4
 	bit 0, bc
 	jr z, LABEL_0346D5
@@ -37492,8 +37492,8 @@ LABEL_03469C:
 	extz wa
 	muls wa, 0x11F
 	ld bc, wa
-	ldada_24 xde, 0x0413d2
-	ldda8_24 a, 0x0451a9
+	lda_24 xde, 0x0413d2
+	ld8_24 a, 0x0451a9
 	sla a, 1
 	lda_dri3 XBC, 0x07, 0xE8, 0xE4
 	ret
@@ -37501,7 +37501,7 @@ LABEL_03469C:
 LABEL_0346D5:
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x0413d2
+	lda_24 xbc, 0x0413d2
 	stib_dri 0x07, 0xE4, 0xE0, 0x00
 	ret
 
@@ -37509,7 +37509,7 @@ LABEL_0346E7:
 	ld c, a
 	extz bc
 	muls bc, 0x11F
-	ldada_24 xde, 0x041368
+	lda_24 xde, 0x041368
 	ld_sriw3 BC, 0x07, 0xE8, 0xE4
 	bit 0, bc
 	jr z, LABEL_034720
@@ -37518,8 +37518,8 @@ LABEL_0346E7:
 	extz wa
 	muls wa, 0x11F
 	ld bc, wa
-	ldada_24 xde, 0x0413d3
-	ldda8_24 a, 0x0451ab
+	lda_24 xde, 0x0413d3
+	ld8_24 a, 0x0451ab
 	sla a, 2
 	lda_dri3 XBC, 0x07, 0xE8, 0xE4
 	ret
@@ -37527,7 +37527,7 @@ LABEL_0346E7:
 LABEL_034720:
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x0413d3
+	lda_24 xbc, 0x0413d3
 	stib_dri 0x07, 0xE4, 0xE0, 0x00
 	ret
 
@@ -37535,7 +37535,7 @@ LABEL_034732:
 	ld c, a
 	extz bc
 	muls bc, 0x11F
-	ldada_24 xde, 0x041368
+	lda_24 xde, 0x041368
 	ld_sriw3 BC, 0x07, 0xE8, 0xE4
 	bit 0, bc
 	jr z, LABEL_03476B
@@ -37544,8 +37544,8 @@ LABEL_034732:
 	extz wa
 	muls wa, 0x11F
 	ld bc, wa
-	ldada_24 xde, 0x0413d4
-	ldda8_24 a, 0x0451ac
+	lda_24 xde, 0x0413d4
+	ld8_24 a, 0x0451ac
 	sla a, 2
 	lda_dri3 XBC, 0x07, 0xE8, 0xE4
 	ret
@@ -37553,7 +37553,7 @@ LABEL_034732:
 LABEL_03476B:
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x0413d4
+	lda_24 xbc, 0x0413d4
 	stib_dri 0x07, 0xE4, 0xE0, 0x00
 	ret
 
@@ -37561,47 +37561,47 @@ LABEL_03477D:
 	ld c, a
 	extz bc
 	muls bc, 0x11F
-	ldada_24 xde, 0x041368
+	lda_24 xde, 0x041368
 	and_sriw_im 0x07, 0xE8, 0xE4, 0xFC, 0xFF
 	ld c, a
 	extz bc
 	muls bc, 0x11F
-	ldada_24 xde, 0x041368
+	lda_24 xde, 0x041368
 	or_sriw_im 0x07, 0xE8, 0xE4, 0x04, 0x00
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x04136c
+	lda_24 xbc, 0x04136c
 	stib_dri 0x07, 0xE4, 0xE0, 0x00
 	ret
 
 LABEL_0347B7:
-	ldda16_24 xbc, 0x041343
+	ld16_24 xbc, 0x041343
 	bit 0, bc
 	ret nz
 	ld c, a
 	extz bc
 	muls bc, 0x11F
-	ldada_24 xde, 0x041385
+	lda_24 xde, 0x041385
 	stiw_dri 0x07, 0xE8, 0xE4, 0x00, 0x00
 	ld c, a
 	extz bc
 	muls bc, 0x11F
-	ldada_24 xde, 0x041387
+	lda_24 xde, 0x041387
 	stib_dri 0x07, 0xE8, 0xE4, 0x00
 	ld c, a
 	extz bc
 	muls bc, 0x11F
-	ldada_24 xde, 0x041388
+	lda_24 xde, 0x041388
 	stib_dri 0x07, 0xE8, 0xE4, 0x00
 	ld c, a
 	extz bc
 	muls bc, 0x11F
-	ldada_24 xde, 0x041383
+	lda_24 xde, 0x041383
 	stib_dri 0x07, 0xE8, 0xE4, 0x40
 	ld c, a
 	extz bc
 	muls bc, 0x11F
-	ldada_24 xde, 0x041384
+	lda_24 xde, 0x041384
 	stib_dri 0x07, 0xE8, 0xE4, 0x40
 	lds ix, 0
 	cps ix, 4
@@ -37625,7 +37625,7 @@ LABEL_03482D:
 	ld c, a
 	extz bc
 	muls bc, 0x11F
-	ldada_24 xde, 0x041368
+	lda_24 xde, 0x041368
 	exts xbc
 	add xbc, xde
 	add xbc, xiy
@@ -37642,7 +37642,7 @@ LABEL_03482D:
 	ld c, a
 	extz bc
 	muls bc, 0x11F
-	ldada_24 xde, 0x041368
+	lda_24 xde, 0x041368
 	exts xbc
 	add xbc, xde
 	add xbc, xiy
@@ -37874,7 +37874,7 @@ Voice_ProgChange:
 	extz wa
 	muls wa, 0x11F
 	ld bc, wa
-	ldada_24 xde, 0x041381
+	lda_24 xde, 0x041381
 	ld xwa, (xsp + 2)
 	ld a, (xwa + 2)
 	lda_dri3 XBC, 0x07, 0xE8, 0xE4
@@ -37882,7 +37882,7 @@ Voice_ProgChange:
 	extz wa
 	muls wa, 0x11F
 	ld bc, wa
-	ldada_24 xde, 0x041382
+	lda_24 xde, 0x041382
 	ld xwa, (xsp + 2)
 	ld a, (xwa + 3)
 	lda_dri3 XBC, 0x07, 0xE8, 0xE4
@@ -37892,7 +37892,7 @@ Voice_ProgChange:
 	ldto_berp A, 0xFB
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041372
+	lda_24 xbc, 0x041372
 	or_sriw_im 0x07, 0xE4, 0xE0, 0x00, 0x40
 	jr LABEL_034ACD
 
@@ -37900,7 +37900,7 @@ LABEL_034AB8:
 	ldto_berp A, 0xFB
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041372
+	lda_24 xbc, 0x041372
 	and_sriw_im 0x07, 0xE4, 0xE0, 0xFF, 0xBF
 
 LABEL_034ACD:
@@ -37925,7 +37925,7 @@ LABEL_034ACD:
 	ldto_berp A, 0xFB
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x04136e
+	lda_24 xbc, 0x04136e
 	ld_sril3 XWA, 0x07, 0xE4, 0xE0
 	ld a, (xwa + 16)
 	and a, 0xC0
@@ -37987,7 +37987,7 @@ LABEL_034B72:
 	ld a, (xsp + 8)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041368
+	lda_24 xbc, 0x041368
 	exts xwa
 	add xwa, xbc
 	add xwa, xde
@@ -38004,7 +38004,7 @@ LABEL_034B72:
 	ld a, (xsp + 8)
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041368
+	lda_24 xbc, 0x041368
 	exts xwa
 	add xwa, xbc
 	add xwa, xhl
@@ -38055,7 +38055,7 @@ LABEL_034C31:
 	jr c, LABEL_034C07
 
 LABEL_034C3B:
-	stdi8_24 0x0451a4, 0xff
+	sti8_24 0x0451a4, 0xff
 	pop xiz
 	inc 6, xsp
 	ret
@@ -38071,7 +38071,7 @@ LABEL_034C3B:
 ; ----------------------------------------------------------------------------
 DSP_System_Init:	; 034C45h
 	lds bc, 0
-	ldada_24 xwa, 0x041342                  ; DSP state buffer 1
+	lda_24 xwa, 0x041342                  ; DSP state buffer 1
 	cp bc, 0x26	; 38 bytes
 	jr nc, DSP_System_Init_Clear2
 
@@ -38083,7 +38083,7 @@ DSP_System_Init_Clear1:
 
 DSP_System_Init_Clear2:
 	lds bc, 0
-	ldada_24 xwa, 0x041368                  ; DSP state buffer 2
+	lda_24 xwa, 0x041368                  ; DSP state buffer 2
 	cp bc, 0x1D26	; 7462 bytes
 	jr nc, DSP_System_Init_Vars
 
@@ -38108,24 +38108,24 @@ DSP_System_Init_SetBit:
 
 DSP_System_Init_Continue:
 	ld xwa, 0x50000
-	stda32_24 0x045310, xwa
+	st32_24 0x045310, xwa
 	ld xwa, 0x50000
-	stda32_24 0x045314, xwa
-	ldada_24 xwa, 0x0a0000
-	stda32_24 0x045318, xwa
+	st32_24 0x045314, xwa
+	lda_24 xwa, 0x0a0000
+	st32_24 0x045318, xwa
 	call 0x2DFA8
 	call 0x360A7
 	lds wa, 0
 	call LABEL_021ECB
 	call LABEL_03555F
 	call LABEL_034B4B
-	stdi8_24 0x041342, 0x00
+	sti8_24 0x041342, 0x00
 	jp LABEL_02A8F3
 LABEL_034CDA:
 	.byte 0x0e
 
 Audio_Process_Init:
-	cpdi8_24 0x041342, 0x00
+	cpi8_24 0x041342, 0x00
 	jr nz, LABEL_034CED
 	call LABEL_027A46
 	call LABEL_03611E
@@ -38490,7 +38490,7 @@ MIDI_Dispatch_Exit:
 LABEL_034FE6:
 	ldw bc, 0x4970
 	srl bc, 1
-	ldda32_24 xwa, 0x04531c
+	ld32_24 xwa, 0x04531c
 	lda xwa, (xwa + 16)
 	lds de, 0
 	cps bc, 0
@@ -38604,7 +38604,7 @@ LABEL_0350FA:
 	extz bc
 	call LABEL_03206F
 	ld (xsp + 2), xhl
-	ldda32_24 xde, 0x04531c
+	ld32_24 xde, 0x04531c
 	ld xwa, (xsp + 2)
 	ld xiy, xwa
 	st_dri3b D, 0xE9, 0x80, 0x49
@@ -38667,7 +38667,7 @@ LABEL_035176:
 	jr c, LABEL_035176
 
 LABEL_03519E:
-	ldada_24 xwa, 0x007800
+	lda_24 xwa, 0x007800
 	ldw bc, 0x72AA
 	ld xde, 0x1E0000
 	call 0x20DB3
@@ -38737,11 +38737,11 @@ LABEL_035240:
 	muls bc, 0x1D6
 	ld iz, bc
 	add iz, 0x10
-	ldda32_24 xhl, 0x04531c
+	ld32_24 xhl, 0x04531c
 	ld c, a
 	extz bc
 	muls bc, 0x11F
-	ldada_24 xix, 0x04136e
+	lda_24 xix, 0x04136e
 	ld_sril3 XIY, 0x07, 0xF0, 0xE4
 	st_dri3b D, 0x07, 0xEC, 0xF8
 	ldw bc, 0xD5
@@ -38760,7 +38760,7 @@ LABEL_035276:
 	muls bc, 0x1D6
 	ld iy, bc
 	add iy, ix
-	ldda32_24 xbc, 0x04531c
+	ld32_24 xbc, 0x04531c
 	st_dri3b H, 0x07, 0xE4, 0xF4
 	ld c, l
 	extz bc
@@ -38770,7 +38770,7 @@ LABEL_035276:
 	ld c, a
 	extz bc
 	muls bc, 0x11F
-	ldada_24 xix, 0x041368
+	lda_24 xix, 0x041368
 	exts xbc
 	add xbc, xix
 	st_dri3b A, 0x07, 0xE4, 0xF4
@@ -38788,7 +38788,7 @@ LABEL_035276:
 	muls bc, 0x1D6
 	ld iy, bc
 	add iy, ix
-	ldda32_24 xbc, 0x04531c
+	ld32_24 xbc, 0x04531c
 	st_dri3b D, 0x07, 0xE4, 0xF4
 	lda xix, (xix + 121)
 	ld c, (xix)
@@ -38805,9 +38805,9 @@ LABEL_0352FA:
 
 LABEL_035301:
 	calr LABEL_034FE6
-	ldda32_24 xwa, 0x04531c
+	ld32_24 xwa, 0x04531c
 	st_dri3w HL, 0xE1, 0xA8, 0x72
-	ldada_24 xwa, 0x007800
+	lda_24 xwa, 0x007800
 	ldw bc, 0x72AA
 	ld xde, 0x1E0000
 	call 0x20DB3
@@ -38882,7 +38882,7 @@ LABEL_03538B:
 
 LABEL_0353C9:
 	calr LABEL_034FE6
-	ldda32_24 xwa, 0x04531c
+	ld32_24 xwa, 0x04531c
 	st_dri3w HL, 0xE1, 0xA8, 0x72
 	jrl LABEL_03547B
 
@@ -38891,7 +38891,7 @@ LABEL_0353D9:
 	jr z, LABEL_035427
 	cp c, 0xFF
 	jr z, LABEL_0353F4
-	ldda32_24 xwa, 0x04531c
+	ld32_24 xwa, 0x04531c
 	st_dri3b W, 0xE1, 0x80, 0x49
 	extz bc
 	calr LABEL_035007
@@ -38903,7 +38903,7 @@ LABEL_0353F4:
 	jr nc, LABEL_035418
 
 LABEL_0353FE:
-	ldda32_24 xwa, 0x04531c
+	ld32_24 xwa, 0x04531c
 	st_dri3b W, 0xE1, 0x80, 0x49
 	ldto_werp BC, 0xFA
 	calr LABEL_035007
@@ -38913,7 +38913,7 @@ LABEL_0353FE:
 
 LABEL_035418:
 	calr LABEL_034FE6
-	ldda32_24 xwa, 0x04531c
+	ld32_24 xwa, 0x04531c
 	st_dri3w HL, 0xE1, 0xA8, 0x72
 	jr LABEL_03547B
 
@@ -38947,11 +38947,11 @@ LABEL_035466:
 	ldw bc, 0x40
 	calr LABEL_0350FA
 	calr LABEL_034FE6
-	ldda32_24 xwa, 0x04531c
+	ld32_24 xwa, 0x04531c
 	st_dri3w HL, 0xE1, 0xA8, 0x72
 
 LABEL_03547B:
-	ldada_24 xwa, 0x007800
+	lda_24 xwa, 0x007800
 	ldw bc, 0x72AA
 	ld xde, 0x1E0000
 	call 0x20DB3
@@ -38969,13 +38969,13 @@ LABEL_03549D:
 	ldto_berp A, 0xFB
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041382
+	lda_24 xbc, 0x041382
 	cp_srib_im 0x07, 0xE4, 0xE0, 0x10
 	jr z, LABEL_0354CA
 	ldto_berp A, 0xFB
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041382
+	lda_24 xbc, 0x041382
 	cp_srib_im 0x07, 0xE4, 0xE0, 0x50
 	jrl nz, LABEL_035551
 
@@ -38986,14 +38986,14 @@ LABEL_0354CA:
 	ldto_berp A, 0xFB
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041381
+	lda_24 xbc, 0x041381
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	ldfr_berp A, 0xF0
 	extz ix
 	ldto_berp A, 0xFB
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x041382
+	lda_24 xbc, 0x041382
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	ld e, a
 	extz de
@@ -39003,7 +39003,7 @@ LABEL_0354CA:
 	ldto_berp A, 0xFB
 	extz wa
 	muls wa, 0x11F
-	ldada_24 xbc, 0x04136e
+	lda_24 xbc, 0x04136e
 	ld_sril3 XWA, 0x07, 0xE4, 0xE0
 	ld a, (xwa + 16)
 	and a, 0xC0
@@ -39040,10 +39040,10 @@ LABEL_03555B:
 	ret
 
 LABEL_03555F:
-	ldada_24 xwa, 0x007800
-	stda32_24 0x045320, xwa
-	ldada_24 xwa, 0x007800
-	stda32_24 0x04531c, xwa
+	lda_24 xwa, 0x007800
+	st32_24 0x045320, xwa
+	lda_24 xwa, 0x007800
+	st32_24 0x04531c, xwa
 	ret
 
 LABEL_035574:
@@ -39065,17 +39065,17 @@ LABEL_035577:
 
 LABEL_035585:
 	lds hl, 0
-	cpdi8_24 0x041377, 0x00
+	cpi8_24 0x041377, 0x00
 	jr z, LABEL_03559B
-	ldda8_24 a, 0x041377
+	ld8_24 a, 0x041377
 	extz wa
 	sll wa, 8
 	or hl, wa
 
 LABEL_03559B:
-	cpdi8_24 0x04137a, 0x00
+	cpi8_24 0x04137a, 0x00
 	ret z
-	ldda8_24 a, 0x041377
+	ld8_24 a, 0x041377
 	extz wa
 	or hl, wa
 	ret
@@ -39091,7 +39091,7 @@ LABEL_0355AD:
 	ldirw
 	ld a, e
 	extz wa
-	ldada_24 xbc, 0x012171
+	lda_24 xbc, 0x012171
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	add a, (xsp)
 	ld (xsp), a
@@ -39103,12 +39103,12 @@ LABEL_0355AD:
 	stda16 15146, xwa
 	ld a, e
 	extz wa
-	ldada_24 xbc, 0x012177
+	lda_24 xbc, 0x012177
 	cp_srib_im 0x07, 0xE4, 0xE0, 0x00
 	jr z, LABEL_035609
 	ld a, e
 	extz wa
-	ldada_24 xbc, 0x012177
+	lda_24 xbc, 0x012177
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	ld (xsp + 8), a
 
@@ -39125,7 +39125,7 @@ LABEL_035609:
 	ld a, w
 	extz wa
 	add wa, wa
-	ldada_24 xbc, 0x01217d
+	lda_24 xbc, 0x01217d
 	ld_sriw3 WA, 0x07, 0xE4, 0xE0
 	stda16 15134, xwa
 	ld a, (xsp + 2)
@@ -39159,13 +39159,13 @@ LABEL_035656:
 	ld a, c
 	extz wa
 	add wa, wa
-	ldada_24 xbc, 0x012195
+	lda_24 xbc, 0x012195
 	ld_sriw3 WA, 0x07, 0xE4, 0xE0
 	orddm16 15132, xwa
 	calr LABEL_035585
 	orddm16 15138, xhl
 	ordi16 15136, 4095
-	ldda16_24 xwa, 0x01217d
+	ld16_24 xwa, 0x01217d
 	stda16 15134, xwa
 	ld a, (xsp)
 	extz wa
@@ -39207,10 +39207,10 @@ LABEL_0356E3:
 	ldda8 a, 15123
 	extz wa
 	add wa, 0x840
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	stdi16_24 0x100002, 0xff00
+	sti16_24 0x100002, 0xff00
 	jr __jrt_nop_035727
 __jrt_nop_035727:
 
@@ -39222,10 +39222,10 @@ LABEL_035727:
 	ldda8 a, 15123
 	extz wa
 	add wa, 0x800
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	stdi16_24 0x100002, 0xff80
+	sti16_24 0x100002, 0xff80
 	jr __jrt_nop_035749
 __jrt_nop_035749:
 
@@ -39249,7 +39249,7 @@ LABEL_035749:
 	ldto_berp L, 0xFB
 	extz hl
 	sla hl, 2
-	ldada_24 xix, 0x012159
+	lda_24 xix, 0x012159
 	exts xhl
 	add xhl, xix
 	ld xhl, (xhl)
@@ -39284,10 +39284,10 @@ LABEL_0357A6:
 	ldto_berp A, 0xFB
 	extz wa
 	add wa, 0x840
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	stdi16_24 0x100002, 0xa200
+	sti16_24 0x100002, 0xa200
 	jr __jrt_nop_0357D8
 __jrt_nop_0357D8:
 
@@ -39299,10 +39299,10 @@ LABEL_0357D8:
 	ldto_berp A, 0xFB
 	extz wa
 	add wa, 0x800
-	stda16_24 0x100000, xwa
+	st16_24 0x100000, xwa
 	nop
 	set_dd8 7, 0x18
-	stdi16_24 0x100002, 0xa280
+	sti16_24 0x100002, 0xa280
 	jr __jrt_nop_0357F9
 __jrt_nop_0357F9:
 
@@ -39742,9 +39742,9 @@ LABEL_035B1B:
 	cps wa, 7
 	jrl gt, LABEL_035D14
 	add wa, wa
-	ldada_24 xix, 0x0121db
+	lda_24 xix, 0x0121db
 	ld_sriw3 WA, 0x07, 0xF0, 0xE0
-	ldada_24 xix, 0x035bc6
+	lda_24 xix, 0x035bc6
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
 LABEL_035BC6:
@@ -39953,9 +39953,9 @@ LABEL_035D78:
 
 LABEL_035DBC:
 	add wa, wa
-	ldada_24 xix, 0x0121bd
+	lda_24 xix, 0x0121bd
 	ld_sriw3 WA, 0x07, 0xF0, 0xE0
-	ldada_24 xix, 0x035dd2
+	lda_24 xix, 0x035dd2
 	jp_dri 8, 0x07, 0xF0, 0xE0
 LABEL_035DD2:
 	.byte 0xc1, 0x70, 0x43, 0x21, 0xd8, 0x13, 0x1d, 0x23
@@ -40183,7 +40183,7 @@ LABEL_036049:
 	ld wa, hl
 	cps wa, 2
 	jr nz, LABEL_036064
-	ldada_24 xwa, 0x0121f3
+	lda_24 xwa, 0x0121f3
 	push xwa
 	pushw 0x4
 	call 0x34D5F
@@ -40193,7 +40193,7 @@ LABEL_036049:
 LABEL_036064:
 	cps wa, 1
 	jr nz, LABEL_036079
-	ldada_24 xwa, 0x0121ef
+	lda_24 xwa, 0x0121ef
 	push xwa
 	pushw 0x4
 	call 0x34D5F
@@ -40201,7 +40201,7 @@ LABEL_036064:
 	jr LABEL_036088
 
 LABEL_036079:
-	ldada_24 xwa, 0x0121eb
+	lda_24 xwa, 0x0121eb
 	push xwa
 	pushw 0x4
 	call 0x34D5F
@@ -40262,7 +40262,7 @@ LABEL_03611E:
 	call LABEL_036DF5
 	cps hl, 3
 	jr nz, LABEL_03613B
-	ldada_24 xwa, 0x0121f3
+	lda_24 xwa, 0x0121f3
 	push xwa
 	pushw 0x4
 	call 0x34D5F
@@ -40272,7 +40272,7 @@ LABEL_03611E:
 LABEL_03613B:
 	cps hl, 2
 	jr nz, LABEL_036152
-	ldada_24 xwa, 0x0121ef
+	lda_24 xwa, 0x0121ef
 	push xwa
 	pushw 0x4
 	call 0x34D5F
@@ -40282,7 +40282,7 @@ LABEL_03613B:
 LABEL_036152:
 	cps hl, 1
 	ret nz
-	ldada_24 xwa, 0x0121eb
+	lda_24 xwa, 0x0121eb
 	push xwa
 	pushw 0x4
 	call 0x34D5F
@@ -40508,12 +40508,12 @@ DSP_Send_Cmd_Cleanup:
 	call 0x383B3
 	call 0x383AB
 	ei 0
-	ldada_24 xwa, 0x012207
+	lda_24 xwa, 0x012207
 	call 0x38365
 	ld a, (xsp + 8)
 	extz wa
 	call 0x3836C
-	ldada_24 xwa, 0x01220a
+	lda_24 xwa, 0x01220a
 	call 0x38365
 	ld hl, (xsp + 4)	; Return result
 	popw iz
@@ -40800,7 +40800,7 @@ __jrt_nop_0364BA:
 
 LABEL_0364BA:
 	nop
-	ldada_24 xwa, 0x01220d
+	lda_24 xwa, 0x01220d
 	jp 0x38365
 
 LABEL_0364C4:
@@ -41478,7 +41478,7 @@ __jrt_nop_036661:
 
 LABEL_036661:
 	nop
-	ldada_24 xwa, 0x012215
+	lda_24 xwa, 0x012215
 	jp 0x38365
 
 DSP2_Send_Command:
@@ -41960,12 +41960,12 @@ __jrt_nop_0367C9:
 LABEL_0367C9:
 	nop
 	ei 0
-	ldada_24 xwa, 0x01221d
+	lda_24 xwa, 0x01221d
 	call 0x38365
 	ld a, (xsp + 8)
 	extz wa
 	call 0x3836C
-	ldada_24 xwa, 0x01221f
+	lda_24 xwa, 0x01221f
 	call 0x38365
 	ld hl, (xsp + 4)
 	pop xiz
@@ -42051,7 +42051,7 @@ DSP_Send_Data_Cleanup:
 	ld a, (xsp + 8)
 	extz wa
 	call 0x3836C
-	ldada_24 xwa, 0x012222
+	lda_24 xwa, 0x012222
 	call 0x38365
 	ld hl, (xsp + 4)	; Return result
 	popw iz
@@ -42538,7 +42538,7 @@ LABEL_036A12:
 	ld a, (xsp + 8)
 	extz wa
 	call 0x3836C
-	ldada_24 xwa, 0x012224
+	lda_24 xwa, 0x012224
 	call 0x38365
 	ld hl, (xsp + 4)
 	pop xiz
@@ -44175,7 +44175,7 @@ LABEL_03790C:
 	ld wa, (xbc + 30)
 	and wa, 0x1
 	muls wa, 0xB
-	ldada_24 xbc, 0x0122a6
+	lda_24 xbc, 0x0122a6
 	st_dri3b H, 0x07, 0xE4, 0xE0
 	cpmi8 (xiz), 0xC
 	jr z, LABEL_037987
@@ -44355,7 +44355,7 @@ LABEL_037A92:
 	jr nz, LABEL_037AC6
 
 LABEL_037AAF:
-	ldada_24 xwa, 0x01ed72
+	lda_24 xwa, 0x01ed72
 	ld_srib3 A, 0x07, 0xE0, 0xF8
 	ld c, a
 	extz bc
@@ -44498,7 +44498,7 @@ LABEL_037BAC:
 
 LABEL_037BF6:
 	ld de, iz
-	ldada_24 xwa, 0x01ed72
+	lda_24 xwa, 0x01ed72
 	ld_srib3 A, 0x07, 0xE0, 0xFA
 	ld c, a
 	extz bc
@@ -44585,7 +44585,7 @@ LABEL_037C32:
 	sll xbc, 3
 	inc 8, xbc
 	add xbc, (xsp + 2)
-	ldada_24 xhl, 0x0122c4
+	lda_24 xhl, 0x0122c4
 	ld wa, (xbc + 6)
 	ld_srib3 A, 0x07, 0xEC, 0xE0
 	extz wa
@@ -44783,11 +44783,11 @@ DSP_State_Dispatcher_Data:
 DSP_Reset_WithDebug:
 	pushw iz
 	ld iz, wa
-	ldada_24 xwa, 0x0122cc
+	lda_24 xwa, 0x0122cc
 	call 0x38365
 	ld wa, iz
 	call 0x3836C
-	ldada_24 xwa, 0x0122d2
+	lda_24 xwa, 0x0122d2
 	call 0x38365
 	call 0x3839A
 	call 0x383A2
@@ -44800,11 +44800,11 @@ DSP_Reset_WithDebug:
 DSP_AntiReset_WithDebug:
 	pushw iz
 	ld iz, wa
-	ldada_24 xwa, 0x0122da
+	lda_24 xwa, 0x0122da
 	call 0x38365
 	ld wa, iz
 	call 0x3836C
-	ldada_24 xwa, 0x0122e0
+	lda_24 xwa, 0x0122e0
 	call 0x38365
 	call 0x383A2
 	popw iz
@@ -44813,12 +44813,12 @@ DSP_AntiReset_WithDebug:
 EFF_Mute_WithDebug:
 	pushw iz
 	ld iz, wa
-	ldada_24 xwa, 0x0122ed
+	lda_24 xwa, 0x0122ed
 	call 0x38365
 	ld wa, iz
 	inc 1, wa
 	call 0x3836C
-	ldada_24 xwa, 0x0122f3
+	lda_24 xwa, 0x0122f3
 	call 0x38365
 	ld wa, iz
 	extz xwa
@@ -44834,11 +44834,11 @@ EFF_Mute_WithDebug:
 DSP_Mute_WithDebug:
 	pushw iz
 	ld iz, wa
-	ldada_24 xwa, 0x0122fa
+	lda_24 xwa, 0x0122fa
 	call 0x38365
 	ld wa, iz
 	call 0x3836C
-	ldada_24 xwa, 0x012300
+	lda_24 xwa, 0x012300
 	call 0x38365
 	ld wa, iz
 	extz xwa
@@ -44854,11 +44854,11 @@ DSP_Mute_WithDebug:
 DSP_Unmute_WithDebug:
 	pushw iz
 	ld iz, wa
-	ldada_24 xwa, 0x012307
+	lda_24 xwa, 0x012307
 	call 0x38365
 	ld wa, iz
 	call 0x3836C
-	ldada_24 xwa, 0x01230d
+	lda_24 xwa, 0x01230d
 	call 0x38365
 	ld wa, iz
 	extz xwa
@@ -44876,12 +44876,12 @@ EFF_Disconnect:
 	pushw iz
 	ld (xsp + 2), bc
 	ld iz, wa
-	ldada_24 xwa, 0x012318
+	lda_24 xwa, 0x012318
 	call 0x38365
 	ld wa, iz
 	inc 1, wa
 	call 0x3836C
-	ldada_24 xwa, 0x01231e
+	lda_24 xwa, 0x01231e
 	call 0x38365
 	ld wa, iz
 	extz xwa
@@ -44915,12 +44915,12 @@ EFF_Link:
 	pushw iz
 	ld (xsp + 2), bc
 	ld iz, wa
-	ldada_24 xwa, 0x01232b
+	lda_24 xwa, 0x01232b
 	call 0x38365
 	ld wa, iz
 	inc 1, wa
 	call 0x3836C
-	ldada_24 xwa, 0x012331
+	lda_24 xwa, 0x012331
 	call 0x38365
 	ld wa, iz
 	extz xwa
@@ -44953,13 +44953,13 @@ DSP_AlgorithmChange:
 	dec 4, xsp
 	pushw iz
 	ld (xsp + 2), xwa
-	ldada_24 xwa, 0x012338
+	lda_24 xwa, 0x012338
 	call 0x38365
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 6)
 	call 0x3836C
 	lds iz, 0
-	ldada_24 xwa, 0x01e63c
+	lda_24 xwa, 0x01e63c
 	ld xbc, xwa
 	ld wa, iz
 	call 0x3C181
@@ -44970,34 +44970,34 @@ DSP_AlgorithmChange:
 	calr DSP_AntiReset_WithDebug
 
 LABEL_038044:
-	ldada_24 xwa, 0x01e6be
+	lda_24 xwa, 0x01e6be
 	ld xbc, xwa
 	ld wa, iz
 	call 0x3C181
 	lds iz, 1
-	ldada_24 xwa, 0x01e996
+	lda_24 xwa, 0x01e996
 	ld xbc, xwa
 	ld wa, iz
 	call 0x3C181
-	ldada_24 xwa, 0x01ea12
+	lda_24 xwa, 0x01ea12
 	ld xbc, xwa
 	ld wa, iz
 	call 0x3C181
 	lds wa, 1
 	call 0x36305
-	ldada_24 xwa, 0x01e7c5
+	lda_24 xwa, 0x01e7c5
 	ld xbc, xwa
 	ld wa, iz
 	call 0x3C181
-	ldada_24 xwa, 0x01e8a7
+	lda_24 xwa, 0x01e8a7
 	ld xbc, xwa
 	ld wa, iz
 	call 0x3C181
-	ldada_24 xwa, 0x01e891
+	lda_24 xwa, 0x01e891
 	ld xbc, xwa
 	ld wa, iz
 	call 0x3C181
-	ldada_24 xwa, 0x01e947
+	lda_24 xwa, 0x01e947
 	ld xbc, xwa
 	ld wa, iz
 	call 0x3C181
@@ -45008,12 +45008,12 @@ LABEL_038044:
 EFF_WriteHeader:
 	pushw iz
 	ld iz, wa
-	ldada_24 xwa, 0x012346
+	lda_24 xwa, 0x012346
 	call 0x38365
 	ld wa, iz
 	inc 1, wa
 	call 0x3836C
-	ldada_24 xwa, 0x01234c
+	lda_24 xwa, 0x01234c
 	call 0x38365
 	ld wa, iz
 	extz xwa
@@ -45024,7 +45024,7 @@ EFF_WriteHeader:
 	extz de
 	cps de, 0
 	jr nz, LABEL_0380EA
-	ldada_24 xwa, 0x01e496
+	lda_24 xwa, 0x01e496
 	ld xbc, xwa
 	ld wa, de
 	call 0x3C181
@@ -45038,12 +45038,12 @@ EFF_Change_WithDebug:
 	pushw iz
 	ld (xsp + 2), bc
 	ld iz, wa
-	ldada_24 xwa, 0x012355
+	lda_24 xwa, 0x012355
 	call 0x38365
 	ld wa, iz
 	inc 1, wa
 	call 0x3836C
-	ldada_24 xwa, 0x01235b
+	lda_24 xwa, 0x01235b
 	call 0x38365
 	ld wa, (xsp + 2)
 	call 0x3836C
@@ -45056,19 +45056,19 @@ EFF_Change_WithDebug:
 	cp wa, 0x9
 	jr nz, LABEL_03815A
 	ld wa, iz
-	ldada_24 xbc, 0x01dfa5
+	lda_24 xbc, 0x01dfa5
 	call 0x3C161
 	ld wa, iz
-	ldada_24 xbc, 0x01e0b9
+	lda_24 xbc, 0x01e0b9
 	call 0x3C161
 	jr LABEL_0381B8
 
 LABEL_038142:
 	ld wa, iz
-	ldada_24 xbc, 0x01e1de
+	lda_24 xbc, 0x01e1de
 	call 0x3C161
 	ld wa, iz
-	ldada_24 xbc, 0x01e342
+	lda_24 xbc, 0x01e342
 	call 0x3C161
 	jr LABEL_0381B8
 
@@ -45119,12 +45119,12 @@ EFF_DataChange_WithDebug:
 	pushw iz
 	ld iz, bc
 	ld (xsp + 2), wa
-	ldada_24 xwa, 0x012364
+	lda_24 xwa, 0x012364
 	call 0x38365
 	ld wa, (xsp + 2)
 	inc 1, wa
 	call 0x3836C
-	ldada_24 xwa, 0x01236a
+	lda_24 xwa, 0x01236a
 	call 0x38365
 	ld wa, iz
 	call 0x3836C
@@ -45146,16 +45146,16 @@ EFF_ParamEdit_WithDebug:
 	ld (xsp + 2), de
 	ld (xsp + 4), bc
 	ld iz, wa
-	ldada_24 xwa, 0x012378
+	lda_24 xwa, 0x012378
 	call 0x38365
 	ld wa, iz
 	inc 1, wa
 	call 0x3836C
-	ldada_24 xwa, 0x01237e
+	lda_24 xwa, 0x01237e
 	call 0x38365
 	ld wa, (xsp + 2)
 	call 0x3836C
-	ldada_24 xwa, 0x012384
+	lda_24 xwa, 0x012384
 	call 0x38365
 	ld wa, (xsp + 2)
 	extz xwa
@@ -45189,12 +45189,12 @@ EFF_VolumeUpdate_WithDebug:
 	ld iz, wa
 	cpmi16 (xsp + 4), 0x63
 	jrl z, LABEL_03835F
-	ldada_24 xwa, 0x01238b
+	lda_24 xwa, 0x01238b
 	call 0x38365
 	ld wa, iz
 	inc 1, wa
 	call 0x3836C
-	ldada_24 xwa, 0x012391
+	lda_24 xwa, 0x012391
 	call 0x38365
 	ld wa, (xsp + 4)
 	extz xwa
@@ -45715,17 +45715,17 @@ LABEL_03869B:
 	jr z, LABEL_0386E0
 	cp xde, 0x1
 	jr z, LABEL_0386D6
-	ldada_24 xwa, 0x01eafa
+	lda_24 xwa, 0x01eafa
 	ld (xsp + 10), xwa
 	jr LABEL_03871B
 
 LABEL_0386D6:
-	ldada_24 xwa, 0x01eb67
+	lda_24 xwa, 0x01eb67
 	ld (xsp + 10), xwa
 	jr LABEL_03871B
 
 LABEL_0386E0:
-	ldada_24 xwa, 0x01ebd4
+	lda_24 xwa, 0x01ebd4
 	ld (xsp + 10), xwa
 	jr LABEL_03871B
 
@@ -45735,17 +45735,17 @@ LABEL_0386EA:
 	jr z, LABEL_038713
 	cp xde, 0x1
 	jr z, LABEL_038709
-	ldada_24 xwa, 0x01ec41
+	lda_24 xwa, 0x01ec41
 	ld (xsp + 10), xwa
 	jr LABEL_03871B
 
 LABEL_038709:
-	ldada_24 xwa, 0x01eca5
+	lda_24 xwa, 0x01eca5
 	ld (xsp + 10), xwa
 	jr LABEL_03871B
 
 LABEL_038713:
-	ldada_24 xwa, 0x01ed09
+	lda_24 xwa, 0x01ed09
 	ld (xsp + 10), xwa
 
 LABEL_03871B:
@@ -46391,11 +46391,11 @@ LABEL_038CF9:
 LABEL_038DEF:
 	lds wa, 3
 	call LABEL_01FFFD
-	ldada_24 xwa, 0x045324
+	lda_24 xwa, 0x045324
 	ld xbc, xwa
 	lds wa, 1
 	call LABEL_0204D1
-	ldada_24 xwa, 0x045446
+	lda_24 xwa, 0x045446
 	ld xbc, xwa
 	lds wa, 1
 	jp LABEL_0204D1
@@ -46432,7 +46432,7 @@ LABEL_038E4C:
 	ret
 
 LABEL_038E6E:
-	ldada_24 xde, 0x045324
+	lda_24 xde, 0x045324
 	stda32 19006, xde
 	ld xiy, xwa
 	ld xix, xde
@@ -46515,7 +46515,7 @@ LABEL_038EF6:
 	lda xwa, (xsp + 12)
 	call LABEL_03DCF2
 	lda xbc, (xsp + 12)
-	ldada_24 xde, 0x012cc3
+	lda_24 xde, 0x012cc3
 	lda xwa, (xsp + 12)
 	call LABEL_03E290
 	lda xbc, (xsp + 12)
@@ -46534,7 +46534,7 @@ LABEL_038F50:
 	lda xwa, (xsp + 12)
 	call LABEL_03DCF2
 	lda xbc, (xsp + 12)
-	ldada_24 xde, 0x012ccb
+	lda_24 xde, 0x012ccb
 	lda xwa, (xsp + 12)
 	call LABEL_03E290
 	lda xbc, (xsp + 12)
@@ -46873,22 +46873,22 @@ LABEL_0392F2:
 	lda xwa, (xsp + 36)
 	call LABEL_03DDCA
 	lda xbc, (xsp + 36)
-	ldada_24 xde, 0x012cd3
+	lda_24 xde, 0x012cd3
 	lda xwa, (xsp + 36)
 	call LABEL_03E2C0
 	lda xbc, (xsp + 36)
-	ldada_24 xde, 0x012cd7
+	lda_24 xde, 0x012cd7
 	lda xwa, (xsp + 36)
 	call LABEL_03E2C0
 	lda xbc, (xsp + 36)
-	ldada_24 xde, 0x012cdb
+	lda_24 xde, 0x012cdb
 	lda xwa, (xsp + 36)
 	call LABEL_03E15A
-	ldada_24 xbc, 0x012cdf
+	lda_24 xbc, 0x012cdf
 	lda xde, (xsp + 36)
 	lda xwa, (xsp + 36)
 	call LABEL_03D92C
-	ldada_24 xbc, 0x012ce3
+	lda_24 xbc, 0x012ce3
 	lda xde, (xsp + 36)
 	lda xwa, (xsp + 36)
 	call LABEL_03D3D4
@@ -46900,7 +46900,7 @@ LABEL_0392F2:
 	push xix
 	ld xix, (xiy)
 	push xix
-	ldada_24 xiy, 0x012ce7
+	lda_24 xiy, 0x012ce7
 	ld xix, (xiy + 4)
 	push xix
 	ld xix, (xiy)
@@ -46919,22 +46919,22 @@ LABEL_039391:
 	lda xwa, (xsp + 36)
 	call LABEL_03DDCA
 	lda xbc, (xsp + 36)
-	ldada_24 xde, 0x012cef
+	lda_24 xde, 0x012cef
 	lda xwa, (xsp + 36)
 	call LABEL_03E2C0
 	lda xbc, (xsp + 36)
-	ldada_24 xde, 0x012cf3
+	lda_24 xde, 0x012cf3
 	lda xwa, (xsp + 36)
 	call LABEL_03E2C0
 	lda xbc, (xsp + 36)
-	ldada_24 xde, 0x012cf7
+	lda_24 xde, 0x012cf7
 	lda xwa, (xsp + 36)
 	call LABEL_03D92C
-	ldada_24 xbc, 0x012cfb
+	lda_24 xbc, 0x012cfb
 	lda xde, (xsp + 36)
 	lda xwa, (xsp + 36)
 	call LABEL_03D92C
-	ldada_24 xbc, 0x012cff
+	lda_24 xbc, 0x012cff
 	lda xde, (xsp + 36)
 	lda xwa, (xsp + 36)
 	call LABEL_03D3D4
@@ -46946,7 +46946,7 @@ LABEL_039391:
 	push xix
 	ld xix, (xiy)
 	push xix
-	ldada_24 xiy, 0x012d03
+	lda_24 xiy, 0x012d03
 	ld xix, (xiy + 4)
 	push xix
 	ld xix, (xiy)
@@ -46961,7 +46961,7 @@ LABEL_039391:
 
 LABEL_03941B:
 	lda xbc, (xsp + 60)
-	ldada_24 xde, 0x012d0b
+	lda_24 xde, 0x012d0b
 	lda xwa, (xsp + 36)
 	call LABEL_03E2C0
 	lda xbc, (xsp + 36)
@@ -47113,17 +47113,17 @@ LABEL_039599:
 	lda xwa, (xsp + 28)
 	call LABEL_03DDCA
 	lda xbc, (xsp + 28)
-	ldada_24 xde, 0x012d0f
+	lda_24 xde, 0x012d0f
 	lda xwa, (xsp + 28)
 	call LABEL_03E15A
 	lda xbc, (xsp + 28)
 	lda xwa, (xsp + 40)
 	call LABEL_03DCF2
 	lda xbc, (xsp + 40)
-	ldada_24 xde, 0x012d13
+	lda_24 xde, 0x012d13
 	lda xwa, (xsp + 40)
 	call LABEL_03E290
-	ldada_24 xbc, 0x012d1b
+	lda_24 xbc, 0x012d1b
 	lda xde, (xsp + 40)
 	lda xwa, (xsp + 40)
 	call LABEL_03D3A4
@@ -47132,7 +47132,7 @@ LABEL_039599:
 	push xix
 	ld xix, (xiy)
 	push xix
-	ldada_24 xiy, 0x012d23
+	lda_24 xiy, 0x012d23
 	ld xix, (xiy + 4)
 	push xix
 	ld xix, (xiy)
@@ -47141,7 +47141,7 @@ LABEL_039599:
 	push xwa
 	call LABEL_03D533
 	lda xsp, (xsp + 20)
-	ldada_24 xbc, 0x012d2b
+	lda_24 xbc, 0x012d2b
 	lda xde, (xsp + 48)
 	lda xwa, (xsp + 40)
 	call LABEL_03D8E0
@@ -47155,14 +47155,14 @@ LABEL_039627:
 	lda xwa, (xsp + 28)
 	call LABEL_03DDCA
 	lda xbc, (xsp + 28)
-	ldada_24 xde, 0x012d33
+	lda_24 xde, 0x012d33
 	lda xwa, (xsp + 28)
 	call LABEL_03E2C0
 	lda xbc, (xsp + 28)
-	ldada_24 xde, 0x012d37
+	lda_24 xde, 0x012d37
 	lda xwa, (xsp + 28)
 	call LABEL_03D92C
-	ldada_24 xbc, 0x012d3b
+	lda_24 xbc, 0x012d3b
 	lda xde, (xsp + 28)
 	lda xwa, (xsp + 28)
 	call LABEL_03D3D4
@@ -47174,7 +47174,7 @@ LABEL_039627:
 	push xix
 	ld xix, (xiy)
 	push xix
-	ldada_24 xiy, 0x012d3f
+	lda_24 xiy, 0x012d3f
 	ld xix, (xiy + 4)
 	push xix
 	ld xix, (xiy)
@@ -47183,7 +47183,7 @@ LABEL_039627:
 	push xwa
 	call LABEL_03D533
 	lda xsp, (xsp + 20)
-	ldada_24 xbc, 0x012d47
+	lda_24 xbc, 0x012d47
 	lda xde, (xsp + 32)
 	lda xwa, (xsp + 40)
 	call LABEL_03D8E0
@@ -47193,7 +47193,7 @@ LABEL_039627:
 
 LABEL_0396A2:
 	lda xbc, (xsp + 60)
-	ldada_24 xde, 0x012d4f
+	lda_24 xde, 0x012d4f
 	lda xwa, (xsp + 28)
 	call LABEL_03E2C0
 	lda xbc, (xsp + 28)
@@ -47219,11 +47219,11 @@ LABEL_0396C2:
 	lda xwa, (xsp + 20)
 	call LABEL_03DDCA
 	lda xbc, (xsp + 20)
-	ldada_24 xde, 0x012d53
+	lda_24 xde, 0x012d53
 	lda xwa, (xsp + 20)
 	call LABEL_03D3D4
 	lda xbc, (xsp + 20)
-	ldada_24 xde, 0x012d57
+	lda_24 xde, 0x012d57
 	lda xwa, (xsp + 28)
 	call LABEL_03D3D4
 	lda xwa, (xsp + 36)
@@ -47250,7 +47250,7 @@ LABEL_0396C2:
 	lda xwa, (xsp + 24)
 	call LABEL_03E2C0
 	lda xbc, (xsp + 28)
-	ldada_24 xde, 0x012d5b
+	lda_24 xde, 0x012d5b
 	lda xwa, (xsp + 20)
 	call LABEL_03E2C0
 	lda xbc, (xsp + 20)
@@ -47258,14 +47258,14 @@ LABEL_0396C2:
 	lda xwa, (xsp + 24)
 	call LABEL_03E15A
 	lda xbc, (xsp + 24)
-	ldada_24 xde, 0x012d5f
+	lda_24 xde, 0x012d5f
 	lda xwa, (xsp + 24)
 	call LABEL_03E2C0
-	ldada_24 xbc, 0x012d63
+	lda_24 xbc, 0x012d63
 	lda xde, (xsp + 24)
 	lda xwa, (xsp + 24)
 	call LABEL_03D92C
-	ldada_24 xbc, 0x012d67
+	lda_24 xbc, 0x012d67
 	lda xde, (xsp + 24)
 	lda xwa, (xsp + 24)
 	call LABEL_03D3D4
@@ -47277,7 +47277,7 @@ LABEL_0396C2:
 	push xix
 	ld xix, (xiy)
 	push xix
-	ldada_24 xiy, 0x012d6b
+	lda_24 xiy, 0x012d6b
 	ld xix, (xiy + 4)
 	push xix
 	ld xix, (xiy)
@@ -47292,7 +47292,7 @@ LABEL_0396C2:
 	ld xwa, (xsp + 52)
 	ld (xwa), xiz
 	lda xbc, (xsp + 44)
-	ldada_24 xde, 0x012d73
+	lda_24 xde, 0x012d73
 	lda xwa, (xsp + 24)
 	call LABEL_03E2C0
 	lda xbc, (xsp + 24)
@@ -47410,7 +47410,7 @@ LABEL_03990A:
 	lda xwa, (xsp + 36)
 	call LABEL_03DDCA
 	lda xbc, (xsp + 36)
-	ldada_24 xde, 0x012d77
+	lda_24 xde, 0x012d77
 	lda xwa, (xsp + 68)
 	call LABEL_03E2C0
 	jrl LABEL_039A28
@@ -47447,11 +47447,11 @@ LABEL_03995C:
 	lda xwa, (xsp + 36)
 	call LABEL_03DDCA
 	lda xbc, (xsp + 36)
-	ldada_24 xde, 0x012d7b
+	lda_24 xde, 0x012d7b
 	lda xwa, (xsp + 36)
 	call LABEL_03E2C0
 	lda xbc, (xsp + 36)
-	ldada_24 xde, 0x012d7f
+	lda_24 xde, 0x012d7f
 	lda xwa, (xsp + 68)
 	call LABEL_03D92C
 	jrl LABEL_039A28
@@ -47488,11 +47488,11 @@ LABEL_0399BD:
 	lda xwa, (xsp + 36)
 	call LABEL_03DDCA
 	lda xbc, (xsp + 36)
-	ldada_24 xde, 0x012d83
+	lda_24 xde, 0x012d83
 	lda xwa, (xsp + 36)
 	call LABEL_03E2C0
 	lda xbc, (xsp + 36)
-	ldada_24 xde, 0x012d87
+	lda_24 xde, 0x012d87
 	lda xwa, (xsp + 68)
 	call LABEL_03D92C
 	jr LABEL_039A28
@@ -47515,11 +47515,11 @@ LABEL_039A00:
 	lda xwa, (xsp + 36)
 	call LABEL_03DDCA
 	lda xbc, (xsp + 36)
-	ldada_24 xde, 0x012d8b
+	lda_24 xde, 0x012d8b
 	lda xwa, (xsp + 36)
 	call LABEL_03E2C0
 	lda xbc, (xsp + 36)
-	ldada_24 xde, 0x012d8f
+	lda_24 xde, 0x012d8f
 	lda xwa, (xsp + 68)
 	call LABEL_03D92C
 
@@ -47532,7 +47532,7 @@ LABEL_039A28:
 
 LABEL_039A3A:
 	lda xbc, (xsp + 68)
-	ldada_24 xde, 0x012d93
+	lda_24 xde, 0x012d93
 	lda xwa, (xsp + 36)
 	call LABEL_03D3D4
 	lda xbc, (xsp + 36)
@@ -47543,7 +47543,7 @@ LABEL_039A3A:
 	push xix
 	ld xix, (xiy)
 	push xix
-	ldada_24 xiy, 0x012d97
+	lda_24 xiy, 0x012d97
 	ld xix, (xiy + 4)
 	push xix
 	ld xix, (xiy)
@@ -47552,19 +47552,19 @@ LABEL_039A3A:
 	push xwa
 	call LABEL_03D533
 	lda xsp, (xsp + 20)
-	ldada_24 xbc, 0x012d9f
+	lda_24 xbc, 0x012d9f
 	lda xde, (xsp + 40)
 	lda xwa, (xsp + 28)
 	call LABEL_03D8E0
 	lda xbc, (xsp + 28)
-	ldada_24 xde, 0x012da7
+	lda_24 xde, 0x012da7
 	lda xwa, (xsp + 28)
 	call LABEL_03D3A4
 	lda xbc, (xsp + 28)
 	lda xwa, (xsp + 72)
 	call LABEL_03DD6C
 	lda xbc, (xsp + 72)
-	ldada_24 xde, 0x012daf
+	lda_24 xde, 0x012daf
 	lda xwa, (xsp + 36)
 	call LABEL_03E2C0
 	lda xbc, (xsp + 36)
@@ -47632,7 +47632,7 @@ LABEL_039B1A:
 	lda xwa, (xsp + 58)
 	call LABEL_03DD36
 	lda xbc, (xsp + 58)
-	ldada_24 xde, 0x012db3
+	lda_24 xde, 0x012db3
 	lda xwa, (xsp + 58)
 	call LABEL_03E290
 	lda xiy, (xsp + 58)
@@ -47640,7 +47640,7 @@ LABEL_039B1A:
 	push xix
 	ld xix, (xiy)
 	push xix
-	ldada_24 xiy, 0x012dbb
+	lda_24 xiy, 0x012dbb
 	ld xix, (xiy + 4)
 	push xix
 	ld xix, (xiy)
@@ -47650,7 +47650,7 @@ LABEL_039B1A:
 	call LABEL_03D533
 	lda xsp, (xsp + 20)
 	lda xbc, (xsp + 50)
-	ldada_24 xde, 0x012dc3
+	lda_24 xde, 0x012dc3
 	lda xwa, (xsp + 58)
 	call LABEL_03E290
 	lda xbc, (xsp + 58)
@@ -47664,7 +47664,7 @@ LABEL_039B1A:
 	lda xwa, (xsp + 58)
 	call LABEL_03DD36
 	lda xbc, (xsp + 58)
-	ldada_24 xde, 0x012dcb
+	lda_24 xde, 0x012dcb
 	lda xwa, (xsp + 58)
 	call LABEL_03E290
 	lda xiy, (xsp + 58)
@@ -47672,7 +47672,7 @@ LABEL_039B1A:
 	push xix
 	ld xix, (xiy)
 	push xix
-	ldada_24 xiy, 0x012dd3
+	lda_24 xiy, 0x012dd3
 	ld xix, (xiy + 4)
 	push xix
 	ld xix, (xiy)
@@ -47682,7 +47682,7 @@ LABEL_039B1A:
 	call LABEL_03D533
 	lda xsp, (xsp + 20)
 	lda xbc, (xsp + 42)
-	ldada_24 xde, 0x012ddb
+	lda_24 xde, 0x012ddb
 	lda xwa, (xsp + 58)
 	call LABEL_03E290
 	lda xbc, (xsp + 58)
@@ -47691,11 +47691,11 @@ LABEL_039B1A:
 	ld xwa, 0x40400000
 	ld (xsp + 78), xwa
 	lda xbc, (xsp + 82)
-	ldada_24 xde, 0x012de3
+	lda_24 xde, 0x012de3
 	lda xwa, (xsp + 10)
 	call LABEL_03D92C
 	lda xbc, (xsp + 82)
-	ldada_24 xde, 0x012de7
+	lda_24 xde, 0x012de7
 	lda xwa, (xsp + 6)
 	call LABEL_03D92C
 	lda xbc, (xsp + 6)
@@ -47703,7 +47703,7 @@ LABEL_039B1A:
 	lda xwa, (xsp + 6)
 	call LABEL_03E2C0
 	lda xbc, (xsp + 6)
-	ldada_24 xde, 0x012deb
+	lda_24 xde, 0x012deb
 	lda xwa, (xsp + 6)
 	call LABEL_03D92C
 	lda xbc, (xsp + 78)
@@ -47715,7 +47715,7 @@ LABEL_039B1A:
 	lda xwa, (xsp + 70)
 	call LABEL_03D3D4
 	lda xbc, (xsp + 70)
-	ldada_24 xde, 0x012def
+	lda_24 xde, 0x012def
 	lda xwa, (xsp + 6)
 	call LABEL_03E2C0
 	lda xbc, (xsp + 6)
@@ -47723,7 +47723,7 @@ LABEL_039B1A:
 	lda xwa, (xsp + 66)
 	call LABEL_03E15A
 	lda xbc, (xsp + 78)
-	ldada_24 xde, 0x012df3
+	lda_24 xde, 0x012df3
 	lda xwa, (xsp + 6)
 	call LABEL_03E2C0
 	lda xbc, (xsp + 6)
@@ -47735,7 +47735,7 @@ LABEL_039B1A:
 	ld de, (xsp + 98)
 	call LABEL_0387E6
 	lda xbc, (xsp + 82)
-	ldada_24 xde, 0x012df7
+	lda_24 xde, 0x012df7
 	lda xwa, (xsp + 6)
 	call LABEL_03E2C0
 	lda xbc, (xsp + 6)
@@ -47749,7 +47749,7 @@ LABEL_039B1A:
 	lda xwa, (xsp + 6)
 	call LABEL_03D41C
 	lda xbc, (xsp + 6)
-	ldada_24 xde, 0x012dfb
+	lda_24 xde, 0x012dfb
 	lda xwa, (xsp + 6)
 	call LABEL_03E2C0
 	lda xbc, (xsp + 6)
@@ -47760,7 +47760,7 @@ LABEL_039B1A:
 	ld de, (xsp + 94)
 	call LABEL_0388B3
 	lda xbc, (xsp + 70)
-	ldada_24 xde, 0x012dff
+	lda_24 xde, 0x012dff
 	lda xwa, (xsp + 6)
 	call LABEL_03E2C0
 	lda xbc, (xsp + 6)
@@ -47771,7 +47771,7 @@ LABEL_039B1A:
 	ld de, (xsp + 94)
 	call LABEL_0388B3
 	lda xbc, (xsp + 66)
-	ldada_24 xde, 0x012e03
+	lda_24 xde, 0x012e03
 	lda xwa, (xsp + 6)
 	call LABEL_03E2C0
 	lda xbc, (xsp + 6)
@@ -47846,11 +47846,11 @@ LABEL_039D98:
 	lda xwa, (xsp + 12)
 	call LABEL_03DDCA
 	lda xbc, (xsp + 12)
-	ldada_24 xde, 0x012e07
+	lda_24 xde, 0x012e07
 	lda xwa, (xsp + 12)
 	call LABEL_03D3D4
 	lda xbc, (xsp + 12)
-	ldada_24 xde, 0x012e0b
+	lda_24 xde, 0x012e0b
 	lda xwa, (xsp + 80)
 	call LABEL_03D3D4
 	ld xwa, (xsp + 96)
@@ -47863,14 +47863,14 @@ LABEL_039D98:
 	lda xwa, (xsp + 40)
 	call LABEL_03DCF2
 	lda xbc, (xsp + 40)
-	ldada_24 xde, 0x012e0f
+	lda_24 xde, 0x012e0f
 	lda xwa, (xsp + 40)
 	call LABEL_03E290
 	lda xbc, (xsp + 40)
-	ldada_24 xde, 0x012e17
+	lda_24 xde, 0x012e17
 	lda xwa, (xsp + 40)
 	call LABEL_03E10E
-	ldada_24 xbc, 0x012e1f
+	lda_24 xbc, 0x012e1f
 	lda xde, (xsp + 40)
 	lda xwa, (xsp + 40)
 	call LABEL_03D3A4
@@ -47888,7 +47888,7 @@ LABEL_039D98:
 	lda xwa, (xsp + 64)
 	call LABEL_03E290
 	lda xbc, (xsp + 64)
-	ldada_24 xde, 0x012e27
+	lda_24 xde, 0x012e27
 	lda xwa, (xsp + 64)
 	call LABEL_03E290
 	lda xbc, (xsp + 64)
@@ -47898,7 +47898,7 @@ LABEL_039D98:
 	lda xwa, (xsp + 64)
 	call LABEL_03DCF2
 	lda xwa, (xsp + 64)
-	ldada_24 xbc, 0x012e2f
+	lda_24 xbc, 0x012e2f
 	lds de, 1
 	call 0x3D2AC
 	cps hl, 0
@@ -47911,7 +47911,7 @@ LABEL_039D98:
 	push xix
 	ld xix, (xiy)
 	push xix
-	ldada_24 xiy, 0x012e37
+	lda_24 xiy, 0x012e37
 	ld xix, (xiy + 4)
 	push xix
 	ld xix, (xiy)
@@ -47924,7 +47924,7 @@ LABEL_039D98:
 	lda xwa, (xsp + 64)
 	call LABEL_03D404
 	lda xbc, (xsp + 64)
-	ldada_24 xde, 0x012e3f
+	lda_24 xde, 0x012e3f
 	lda xwa, (xsp + 64)
 	call LABEL_03D3A4
 	lda xbc, (xsp + 64)
@@ -47934,7 +47934,7 @@ LABEL_039D98:
 
 LABEL_039EDA:
 	lda xbc, (xsp + 72)
-	ldada_24 xde, 0x012e47
+	lda_24 xde, 0x012e47
 	lda xwa, (xsp + 12)
 	call LABEL_03E15A
 	lda xbc, (xsp + 12)
@@ -47945,7 +47945,7 @@ LABEL_039EDA:
 	push xix
 	ld xix, (xiy)
 	push xix
-	ldada_24 xiy, 0x012e4b
+	lda_24 xiy, 0x012e4b
 	ld xix, (xiy + 4)
 	push xix
 	ld xix, (xiy)
@@ -47958,11 +47958,11 @@ LABEL_039EDA:
 	lda xwa, (xsp + 64)
 	call LABEL_03D404
 	lda xbc, (xsp + 64)
-	ldada_24 xde, 0x012e53
+	lda_24 xde, 0x012e53
 	lda xwa, (xsp + 64)
 	call LABEL_03E290
 	lda xbc, (xsp + 64)
-	ldada_24 xde, 0x012e5b
+	lda_24 xde, 0x012e5b
 	lda xwa, (xsp + 64)
 	call LABEL_03D3A4
 	lda xbc, (xsp + 64)
@@ -47978,25 +47978,25 @@ LABEL_039F49:
 	lda xwa, (xsp + 12)
 	call LABEL_03DDCA
 	lda xbc, (xsp + 12)
-	ldada_24 xde, 0x012e63
+	lda_24 xde, 0x012e63
 	lda xwa, (xsp + 12)
 	call LABEL_03D92C
 	lda xbc, (xsp + 12)
 	lda xwa, (xsp + 64)
 	call LABEL_03DCF2
 	lda xbc, (xsp + 64)
-	ldada_24 xde, 0x012e67
+	lda_24 xde, 0x012e67
 	lda xwa, (xsp + 64)
 	call LABEL_03E290
 	lda xbc, (xsp + 64)
-	ldada_24 xde, 0x012e6f
+	lda_24 xde, 0x012e6f
 	lda xwa, (xsp + 64)
 	call LABEL_03E10E
 	lda xbc, (xsp + 80)
 	lda xwa, (xsp + 40)
 	call LABEL_03DCF2
 	lda xbc, (xsp + 40)
-	ldada_24 xde, 0x012e77
+	lda_24 xde, 0x012e77
 	lda xwa, (xsp + 40)
 	call LABEL_03E290
 	lda xbc, (xsp + 40)
@@ -48008,7 +48008,7 @@ LABEL_039F49:
 	push xix
 	ld xix, (xiy)
 	push xix
-	ldada_24 xiy, 0x012e7f
+	lda_24 xiy, 0x012e7f
 	ld xix, (xiy + 4)
 	push xix
 	ld xix, (xiy)
@@ -48021,7 +48021,7 @@ LABEL_039F49:
 	lda xwa, (xsp + 64)
 	call LABEL_03D404
 	lda xbc, (xsp + 64)
-	ldada_24 xde, 0x012e87
+	lda_24 xde, 0x012e87
 	lda xwa, (xsp + 64)
 	call LABEL_03D3A4
 	lda xbc, (xsp + 64)
@@ -48037,25 +48037,25 @@ LABEL_03A003:
 	lda xwa, (xsp + 12)
 	call LABEL_03DDCA
 	lda xbc, (xsp + 12)
-	ldada_24 xde, 0x012e8f
+	lda_24 xde, 0x012e8f
 	lda xwa, (xsp + 12)
 	call LABEL_03D92C
 	lda xbc, (xsp + 12)
 	lda xwa, (xsp + 64)
 	call LABEL_03DCF2
 	lda xbc, (xsp + 64)
-	ldada_24 xde, 0x012e93
+	lda_24 xde, 0x012e93
 	lda xwa, (xsp + 64)
 	call LABEL_03E290
 	lda xbc, (xsp + 64)
-	ldada_24 xde, 0x012e9b
+	lda_24 xde, 0x012e9b
 	lda xwa, (xsp + 64)
 	call LABEL_03E10E
 	lda xbc, (xsp + 80)
 	lda xwa, (xsp + 40)
 	call LABEL_03DCF2
 	lda xbc, (xsp + 40)
-	ldada_24 xde, 0x012ea3
+	lda_24 xde, 0x012ea3
 	lda xwa, (xsp + 40)
 	call LABEL_03E290
 	lda xbc, (xsp + 40)
@@ -48067,7 +48067,7 @@ LABEL_03A003:
 	push xix
 	ld xix, (xiy)
 	push xix
-	ldada_24 xiy, 0x012eab
+	lda_24 xiy, 0x012eab
 	ld xix, (xiy + 4)
 	push xix
 	ld xix, (xiy)
@@ -48080,7 +48080,7 @@ LABEL_03A003:
 	lda xwa, (xsp + 64)
 	call LABEL_03D404
 	lda xbc, (xsp + 64)
-	ldada_24 xde, 0x012eb3
+	lda_24 xde, 0x012eb3
 	lda xwa, (xsp + 64)
 	call LABEL_03D3A4
 	lda xbc, (xsp + 64)
@@ -48096,25 +48096,25 @@ LABEL_03A0BD:
 	lda xwa, (xsp + 12)
 	call LABEL_03DDCA
 	lda xbc, (xsp + 12)
-	ldada_24 xde, 0x012ebb
+	lda_24 xde, 0x012ebb
 	lda xwa, (xsp + 12)
 	call LABEL_03D92C
 	lda xbc, (xsp + 12)
 	lda xwa, (xsp + 64)
 	call LABEL_03DCF2
 	lda xbc, (xsp + 64)
-	ldada_24 xde, 0x012ebf
+	lda_24 xde, 0x012ebf
 	lda xwa, (xsp + 64)
 	call LABEL_03E290
 	lda xbc, (xsp + 64)
-	ldada_24 xde, 0x012ec7
+	lda_24 xde, 0x012ec7
 	lda xwa, (xsp + 64)
 	call LABEL_03E10E
 	lda xbc, (xsp + 80)
 	lda xwa, (xsp + 40)
 	call LABEL_03DCF2
 	lda xbc, (xsp + 40)
-	ldada_24 xde, 0x012ecf
+	lda_24 xde, 0x012ecf
 	lda xwa, (xsp + 40)
 	call LABEL_03E290
 	lda xbc, (xsp + 40)
@@ -48126,7 +48126,7 @@ LABEL_03A0BD:
 	push xix
 	ld xix, (xiy)
 	push xix
-	ldada_24 xiy, 0x012ed7
+	lda_24 xiy, 0x012ed7
 	ld xix, (xiy + 4)
 	push xix
 	ld xix, (xiy)
@@ -48139,7 +48139,7 @@ LABEL_03A0BD:
 	lda xwa, (xsp + 64)
 	call LABEL_03D404
 	lda xbc, (xsp + 64)
-	ldada_24 xde, 0x012edf
+	lda_24 xde, 0x012edf
 	lda xwa, (xsp + 64)
 	call LABEL_03D3A4
 	lda xbc, (xsp + 64)
@@ -48152,7 +48152,7 @@ LABEL_03A177:
 	lda xwa, (xsp + 12)
 	call LABEL_03DDCA
 	lda xbc, (xsp + 12)
-	ldada_24 xde, 0x012ee7
+	lda_24 xde, 0x012ee7
 	lda xwa, (xsp + 12)
 	call LABEL_03D92C
 	lda xbc, (xsp + 12)
@@ -48162,7 +48162,7 @@ LABEL_03A177:
 	lda xwa, (xsp + 40)
 	call LABEL_03DCF2
 	lda xbc, (xsp + 40)
-	ldada_24 xde, 0x012eeb
+	lda_24 xde, 0x012eeb
 	lda xwa, (xsp + 40)
 	call LABEL_03E290
 	lda xbc, (xsp + 40)
@@ -48174,7 +48174,7 @@ LABEL_03A177:
 	push xix
 	ld xix, (xiy)
 	push xix
-	ldada_24 xiy, 0x012ef3
+	lda_24 xiy, 0x012ef3
 	ld xix, (xiy + 4)
 	push xix
 	ld xix, (xiy)
@@ -48187,7 +48187,7 @@ LABEL_03A177:
 	lda xwa, (xsp + 64)
 	call LABEL_03D404
 	lda xbc, (xsp + 64)
-	ldada_24 xde, 0x012efb
+	lda_24 xde, 0x012efb
 	lda xwa, (xsp + 64)
 	call LABEL_03D3A4
 	lda xbc, (xsp + 64)
@@ -48198,7 +48198,7 @@ LABEL_03A204:
 	ld xwa, (xsp + 100)
 	ld (xwa), xiz
 	lda xbc, (xsp + 92)
-	ldada_24 xde, 0x012f03
+	lda_24 xde, 0x012f03
 	lda xwa, (xsp + 12)
 	call LABEL_03E2C0
 	lda xbc, (xsp + 12)
@@ -48634,7 +48634,7 @@ LABEL_03A620:
 	add xwa, (xsp + 60)
 	ld wa, (xwa)
 	sla wa, 2
-	ldada_24 xbc, 0x012397
+	lda_24 xbc, 0x012397
 	st_dri3b A, 0x07, 0xE4, 0xE0
 	lda xwa, (xsp + 40)
 	call LABEL_03DDC4
@@ -48645,7 +48645,7 @@ LABEL_03A620:
 	add xwa, (xsp + 60)
 	ld wa, (xwa)
 	sla wa, 2
-	ldada_24 xbc, 0x012403
+	lda_24 xbc, 0x012403
 	st_dri3b A, 0x07, 0xE4, 0xE0
 	lda xwa, (xsp + 36)
 	call LABEL_03DDC4
@@ -48661,11 +48661,11 @@ LABEL_03A620:
 	lda xwa, (xsp + 24)
 	call LABEL_03DD36
 	lda xbc, (xsp + 24)
-	ldada_24 xde, 0x012f07
+	lda_24 xde, 0x012f07
 	lda xwa, (xsp + 24)
 	call LABEL_03E290
 	lda xbc, (xsp + 24)
-	ldada_24 xde, 0x012f0f
+	lda_24 xde, 0x012f0f
 	lda xwa, (xsp + 24)
 	call LABEL_03E10E
 	lda xbc, (xsp + 24)
@@ -48681,7 +48681,7 @@ LABEL_03A6F5:
 	add xwa, (xsp + 60)
 	ld wa, (xwa)
 	sla wa, 2
-	ldada_24 xbc, 0x012397
+	lda_24 xbc, 0x012397
 	st_dri3b A, 0x07, 0xE4, 0xE0
 	lda xwa, (xsp + 40)
 	call LABEL_03DDC4
@@ -48691,7 +48691,7 @@ LABEL_03A6F5:
 	add xwa, (xsp + 60)
 	ld wa, (xwa)
 	sla wa, 2
-	ldada_24 xbc, 0x012403
+	lda_24 xbc, 0x012403
 	st_dri3b A, 0x07, 0xE4, 0xE0
 	lda xwa, (xsp + 36)
 	call LABEL_03DDC4
@@ -48707,11 +48707,11 @@ LABEL_03A6F5:
 	lda xwa, (xsp + 24)
 	call LABEL_03DD36
 	lda xbc, (xsp + 24)
-	ldada_24 xde, 0x012f17
+	lda_24 xde, 0x012f17
 	lda xwa, (xsp + 24)
 	call LABEL_03E290
 	lda xbc, (xsp + 24)
-	ldada_24 xde, 0x012f1f
+	lda_24 xde, 0x012f1f
 	lda xwa, (xsp + 24)
 	call LABEL_03E10E
 	lda xbc, (xsp + 24)
@@ -48727,7 +48727,7 @@ LABEL_03A77C:
 	add xwa, (xsp + 60)
 	ld wa, (xwa)
 	sla wa, 2
-	ldada_24 xbc, 0x012397
+	lda_24 xbc, 0x012397
 	st_dri3b A, 0x07, 0xE4, 0xE0
 	lda xwa, (xsp + 40)
 	call LABEL_03DDC4
@@ -48738,7 +48738,7 @@ LABEL_03A77C:
 	add xwa, (xsp + 60)
 	ld wa, (xwa)
 	sla wa, 2
-	ldada_24 xbc, 0x012403
+	lda_24 xbc, 0x012403
 	st_dri3b A, 0x07, 0xE4, 0xE0
 	lda xwa, (xsp + 36)
 	call LABEL_03DDC4
@@ -48753,11 +48753,11 @@ LABEL_03A77C:
 	lda xwa, (xsp + 24)
 	call LABEL_03DD36
 	lda xbc, (xsp + 24)
-	ldada_24 xde, 0x012f27
+	lda_24 xde, 0x012f27
 	lda xwa, (xsp + 24)
 	call LABEL_03E290
 	lda xbc, (xsp + 24)
-	ldada_24 xde, 0x012f2f
+	lda_24 xde, 0x012f2f
 	lda xwa, (xsp + 24)
 	call LABEL_03E10E
 	lda xbc, (xsp + 24)
@@ -48774,7 +48774,7 @@ LABEL_03A803:
 	add xwa, (xsp + 60)
 	ld wa, (xwa)
 	sla wa, 2
-	ldada_24 xbc, 0x012397
+	lda_24 xbc, 0x012397
 	st_dri3b A, 0x07, 0xE4, 0xE0
 	lda xwa, (xsp + 40)
 	call LABEL_03DDC4
@@ -48794,7 +48794,7 @@ LABEL_03A82D:
 	add xwa, (xsp + 60)
 	ld wa, (xwa)
 	sla wa, 2
-	ldada_24 xbc, 0x012397
+	lda_24 xbc, 0x012397
 	st_dri3b A, 0x07, 0xE4, 0xE0
 	lda xwa, (xsp + 40)
 	call LABEL_03DDC4
@@ -48810,11 +48810,11 @@ LABEL_03A82D:
 	lda xwa, (xsp + 24)
 	call LABEL_03DD36
 	lda xbc, (xsp + 24)
-	ldada_24 xde, 0x012f37
+	lda_24 xde, 0x012f37
 	lda xwa, (xsp + 24)
 	call LABEL_03E290
 	lda xbc, (xsp + 24)
-	ldada_24 xde, 0x012f3f
+	lda_24 xde, 0x012f3f
 	lda xwa, (xsp + 24)
 	call LABEL_03E10E
 	lda xbc, (xsp + 24)
@@ -48830,7 +48830,7 @@ LABEL_03A8A6:
 	add xwa, (xsp + 60)
 	ld wa, (xwa)
 	sla wa, 2
-	ldada_24 xbc, 0x012397
+	lda_24 xbc, 0x012397
 	st_dri3b A, 0x07, 0xE4, 0xE0
 	lda xwa, (xsp + 40)
 	call LABEL_03DDC4
@@ -48845,11 +48845,11 @@ LABEL_03A8A6:
 	lda xwa, (xsp + 24)
 	call LABEL_03DD36
 	lda xbc, (xsp + 24)
-	ldada_24 xde, 0x012f47
+	lda_24 xde, 0x012f47
 	lda xwa, (xsp + 24)
 	call LABEL_03E290
 	lda xbc, (xsp + 24)
-	ldada_24 xde, 0x012f4f
+	lda_24 xde, 0x012f4f
 	lda xwa, (xsp + 24)
 	call LABEL_03E10E
 	lda xbc, (xsp + 24)
@@ -48902,7 +48902,7 @@ LABEL_03A933:
 	lda xwa, (xsp + 78)
 	call LABEL_03DCF2
 	lda xbc, (xsp + 78)
-	ldada_24 xde, 0x012f57
+	lda_24 xde, 0x012f57
 	lda xwa, (xsp + 78)
 	call LABEL_03E290
 	lda xiy, (xsp + 78)
@@ -48930,15 +48930,15 @@ LABEL_03A933:
 	lda xwa, (xsp + 86)
 	call LABEL_03E15A
 	lda xbc, (xsp + 86)
-	ldada_24 xde, 0x012f5f
+	lda_24 xde, 0x012f5f
 	st_dri3b W, 0xFD, 0xD6, 0x00
 	call LABEL_03E15A
-	ldada_24 xbc, 0x012f63
+	lda_24 xbc, 0x012f63
 	st_dri3b B, 0xFD, 0xA6, 0x00
 	lda xwa, (xsp + 86)
 	call LABEL_03D92C
 	lda xbc, (xsp + 86)
-	ldada_24 xde, 0x012f67
+	lda_24 xde, 0x012f67
 	st_dri3b W, 0xFD, 0xD2, 0x00
 	call LABEL_03E2C0
 	st_dri3b A, 0xFD, 0xA6, 0x00
@@ -48946,7 +48946,7 @@ LABEL_03A933:
 	lda xwa, (xsp + 86)
 	call LABEL_03D92C
 	lda xbc, (xsp + 86)
-	ldada_24 xde, 0x012f6b
+	lda_24 xde, 0x012f6b
 	st_dri3b W, 0xFD, 0xCE, 0x00
 	call LABEL_03E15A
 	st_dri3b W, 0xFD, 0xDE, 0x00
@@ -48965,7 +48965,7 @@ LABEL_03AA65:
 
 LABEL_03AA73:
 	st_dri3b A, 0xFD, 0x8A, 0x00
-	ldada_24 xde, 0x012f6f
+	lda_24 xde, 0x012f6f
 	lda xwa, (xsp + 86)
 	call LABEL_03D3D4
 	lda xbc, (xsp + 86)
@@ -48976,7 +48976,7 @@ LABEL_03AA73:
 	push xix
 	ld xix, (xiy)
 	push xix
-	ldada_24 xiy, 0x012f73
+	lda_24 xiy, 0x012f73
 	ld xix, (xiy + 4)
 	push xix
 	ld xix, (xiy)
@@ -48993,7 +48993,7 @@ LABEL_03AA73:
 	lda xwa, (xsp + 78)
 	call LABEL_03E290
 	lda xbc, (xsp + 78)
-	ldada_24 xde, 0x012f7b
+	lda_24 xde, 0x012f7b
 	lda xwa, (xsp + 78)
 	call LABEL_03E10E
 	st_dri3b A, 0xFD, 0xA6, 0x00
@@ -49024,7 +49024,7 @@ LABEL_03AB23:
 
 LABEL_03AB2F:
 	lda xbc, (xsp + 126)
-	ldada_24 xde, 0x012f83
+	lda_24 xde, 0x012f83
 	lda xwa, (xsp + 86)
 	call LABEL_03D3D4
 	lda xbc, (xsp + 86)
@@ -49035,7 +49035,7 @@ LABEL_03AB2F:
 	push xix
 	ld xix, (xiy)
 	push xix
-	ldada_24 xiy, 0x012f87
+	lda_24 xiy, 0x012f87
 	ld xix, (xiy + 4)
 	push xix
 	ld xix, (xiy)
@@ -49051,7 +49051,7 @@ LABEL_03AB2F:
 	st_dri3b B, 0xFD, 0x82, 0x00
 	lda xwa, (xsp + 118)
 	call LABEL_03E290
-	ldada_24 xbc, 0x012f8f
+	lda_24 xbc, 0x012f8f
 	lda xde, (xsp + 118)
 	lda xwa, (xsp + 118)
 	call LABEL_03D8E0
@@ -49135,7 +49135,7 @@ LABEL_03ACB1:
 	st_dri3b B, 0xFD, 0xB6, 0x00
 	lda xwa, (xsp + 86)
 	call LABEL_03E15A
-	ldada_24 xbc, 0x012f97
+	lda_24 xbc, 0x012f97
 	st_dri3b B, 0xFD, 0xB2, 0x00
 	lda xwa, (xsp + 2)
 	call LABEL_03D92C
@@ -49148,7 +49148,7 @@ LABEL_03ACB1:
 	st_dri3b W, 0xFD, 0x9E, 0x00
 	call LABEL_03D3D4
 	st_dri3b W, 0xFD, 0x9E, 0x00
-	ldada_24 xbc, 0x012f9b
+	lda_24 xbc, 0x012f9b
 	lds de, 0
 	call 0x3D306
 	cps hl, 0
@@ -49162,7 +49162,7 @@ LABEL_03AD1E:
 	lda xwa, (xsp + 2)
 	call LABEL_03E2C0
 	lda xbc, (xsp + 2)
-	ldada_24 xde, 0x012f9f
+	lda_24 xde, 0x012f9f
 	st_dri3b W, 0xFD, 0xBE, 0x00
 	call LABEL_03D3D4
 	st_dri3b A, 0xFD, 0x9E, 0x00
@@ -49170,7 +49170,7 @@ LABEL_03AD1E:
 	lda xwa, (xsp + 2)
 	call LABEL_03E2C0
 	lda xbc, (xsp + 2)
-	ldada_24 xde, 0x012fa3
+	lda_24 xde, 0x012fa3
 	st_dri3b W, 0xFD, 0xBA, 0x00
 	call LABEL_03D3D4
 	st_dri3b A, 0xFD, 0x9E, 0x00
@@ -49178,11 +49178,11 @@ LABEL_03AD1E:
 	lda xwa, (xsp + 2)
 	call LABEL_03E2C0
 	lda xbc, (xsp + 2)
-	ldada_24 xde, 0x012fa7
+	lda_24 xde, 0x012fa7
 	st_dri3b W, 0xFD, 0xB6, 0x00
 	call LABEL_03D3D4
 	st_dri3b A, 0xFD, 0xBA, 0x00
-	ldada_24 xde, 0x012fab
+	lda_24 xde, 0x012fab
 	lda xwa, (xsp + 2)
 	call LABEL_03E2C0
 	lda xbc, (xsp + 2)
@@ -49195,7 +49195,7 @@ LABEL_03AD1E:
 	call LABEL_0387E6
 	ld iz, hl
 	st_dri3b A, 0xFD, 0xBE, 0x00
-	ldada_24 xde, 0x012faf
+	lda_24 xde, 0x012faf
 	lda xwa, (xsp + 2)
 	call LABEL_03E2C0
 	lda xbc, (xsp + 2)
@@ -49207,7 +49207,7 @@ LABEL_03AD1E:
 	call LABEL_0388B3
 	ld iz, hl
 	st_dri3b A, 0xFD, 0xB6, 0x00
-	ldada_24 xde, 0x012fb3
+	lda_24 xde, 0x012fb3
 	lda xwa, (xsp + 2)
 	call LABEL_03E2C0
 	lda xbc, (xsp + 2)
@@ -49219,7 +49219,7 @@ LABEL_03AD1E:
 	call LABEL_0388B3
 	ld iz, hl
 	st_dri3b A, 0xFD, 0xB2, 0x00
-	ldada_24 xde, 0x012fb7
+	lda_24 xde, 0x012fb7
 	lda xwa, (xsp + 2)
 	call LABEL_03E2C0
 	lda xbc, (xsp + 2)
@@ -49231,7 +49231,7 @@ LABEL_03AD1E:
 	call LABEL_0388B3
 	ld iz, hl
 	st_dri3b A, 0xFD, 0xAE, 0x00
-	ldada_24 xde, 0x012fbb
+	lda_24 xde, 0x012fbb
 	lda xwa, (xsp + 2)
 	call LABEL_03E2C0
 	lda xbc, (xsp + 2)
@@ -49249,7 +49249,7 @@ LABEL_03AE72:
 	lda xwa, (xsp + 118)
 	call LABEL_03DCF2
 	lda xbc, (xsp + 118)
-	ldada_24 xde, 0x012fbf
+	lda_24 xde, 0x012fbf
 	lda xwa, (xsp + 118)
 	call LABEL_03E290
 	lda xiy, (xsp + 118)
@@ -49277,15 +49277,15 @@ LABEL_03AE72:
 	lda xwa, (xsp + 2)
 	call LABEL_03E15A
 	lda xbc, (xsp + 2)
-	ldada_24 xde, 0x012fc7
+	lda_24 xde, 0x012fc7
 	st_dri3b W, 0xFD, 0xD6, 0x00
 	call LABEL_03E15A
-	ldada_24 xbc, 0x012fcb
+	lda_24 xbc, 0x012fcb
 	st_dri3b B, 0xFD, 0xA6, 0x00
 	lda xwa, (xsp + 2)
 	call LABEL_03D92C
 	lda xbc, (xsp + 2)
-	ldada_24 xde, 0x012fcf
+	lda_24 xde, 0x012fcf
 	st_dri3b W, 0xFD, 0xD2, 0x00
 	call LABEL_03E2C0
 	st_dri3b A, 0xFD, 0xA6, 0x00
@@ -49293,7 +49293,7 @@ LABEL_03AE72:
 	lda xwa, (xsp + 2)
 	call LABEL_03D92C
 	lda xbc, (xsp + 2)
-	ldada_24 xde, 0x012fd3
+	lda_24 xde, 0x012fd3
 	st_dri3b W, 0xFD, 0xCE, 0x00
 	call LABEL_03E15A
 	st_dri3b A, 0xFD, 0xAA, 0x00
@@ -49320,7 +49320,7 @@ LABEL_03AE72:
 	st_dri3b W, 0xFD, 0xAE, 0x00
 	call LABEL_03D3D4
 	st_dri3b A, 0xFD, 0xBA, 0x00
-	ldada_24 xde, 0x012fd7
+	lda_24 xde, 0x012fd7
 	lda xwa, (xsp + 2)
 	call LABEL_03E2C0
 	lda xbc, (xsp + 2)
@@ -49333,7 +49333,7 @@ LABEL_03AE72:
 	call LABEL_0387E6
 	ld iz, hl
 	st_dri3b A, 0xFD, 0xBE, 0x00
-	ldada_24 xde, 0x012fdb
+	lda_24 xde, 0x012fdb
 	lda xwa, (xsp + 2)
 	call LABEL_03E2C0
 	lda xbc, (xsp + 2)
@@ -49345,7 +49345,7 @@ LABEL_03AE72:
 	call LABEL_0388B3
 	ld iz, hl
 	st_dri3b A, 0xFD, 0xB6, 0x00
-	ldada_24 xde, 0x012fdf
+	lda_24 xde, 0x012fdf
 	lda xwa, (xsp + 2)
 	call LABEL_03E2C0
 	lda xbc, (xsp + 2)
@@ -49357,7 +49357,7 @@ LABEL_03AE72:
 	call LABEL_0388B3
 	ld iz, hl
 	st_dri3b A, 0xFD, 0xB2, 0x00
-	ldada_24 xde, 0x012fe3
+	lda_24 xde, 0x012fe3
 	lda xwa, (xsp + 2)
 	call LABEL_03E2C0
 	lda xbc, (xsp + 2)
@@ -49369,7 +49369,7 @@ LABEL_03AE72:
 	call LABEL_0388B3
 	ld iz, hl
 	st_dri3b A, 0xFD, 0xAE, 0x00
-	ldada_24 xde, 0x012fe7
+	lda_24 xde, 0x012fe7
 	lda xwa, (xsp + 2)
 	call LABEL_03E2C0
 	lda xbc, (xsp + 2)
@@ -49387,7 +49387,7 @@ LABEL_03B08A:
 	lda xwa, (xsp + 118)
 	call LABEL_03DCF2
 	lda xbc, (xsp + 118)
-	ldada_24 xde, 0x012feb
+	lda_24 xde, 0x012feb
 	lda xwa, (xsp + 118)
 	call LABEL_03E290
 	lda xiy, (xsp + 118)
@@ -49400,7 +49400,7 @@ LABEL_03B08A:
 	call LABEL_03D4C9
 	lda xsp, (xsp + 12)
 	lda xbc, (xsp + 50)
-	ldada_24 xde, 0x012ff3
+	lda_24 xde, 0x012ff3
 	lda xwa, (xsp + 118)
 	call LABEL_03D3A4
 	lda xbc, (xsp + 118)
@@ -49414,7 +49414,7 @@ LABEL_03B08A:
 	lda xwa, (xsp + 118)
 	call LABEL_03DCF2
 	lda xbc, (xsp + 118)
-	ldada_24 xde, 0x012ffb
+	lda_24 xde, 0x012ffb
 	lda xwa, (xsp + 118)
 	call LABEL_03E290
 	lda xbc, (xsp + 118)
@@ -49424,7 +49424,7 @@ LABEL_03B08A:
 	lda xwa, (xsp + 118)
 	call LABEL_03DCF2
 	lda xbc, (xsp + 118)
-	ldada_24 xde, 0x013003
+	lda_24 xde, 0x013003
 	lda xwa, (xsp + 118)
 	call LABEL_03E290
 	st_dri3b A, 0xFD, 0xDA, 0x00
@@ -49435,7 +49435,7 @@ LABEL_03B08A:
 	lda xwa, (xsp + 118)
 	call LABEL_03E290
 	lda xbc, (xsp + 118)
-	ldada_24 xde, 0x01300b
+	lda_24 xde, 0x01300b
 	lda xwa, (xsp + 118)
 	call LABEL_03E290
 	lda xbc, (xsp + 118)
@@ -49446,15 +49446,15 @@ LABEL_03B08A:
 	lda xwa, (xsp + 2)
 	call LABEL_03E15A
 	lda xbc, (xsp + 2)
-	ldada_24 xde, 0x013013
+	lda_24 xde, 0x013013
 	st_dri3b W, 0xFD, 0xD6, 0x00
 	call LABEL_03E15A
-	ldada_24 xbc, 0x013017
+	lda_24 xbc, 0x013017
 	st_dri3b B, 0xFD, 0xA2, 0x00
 	lda xwa, (xsp + 2)
 	call LABEL_03D92C
 	lda xbc, (xsp + 2)
-	ldada_24 xde, 0x01301b
+	lda_24 xde, 0x01301b
 	st_dri3b W, 0xFD, 0xD2, 0x00
 	call LABEL_03E2C0
 	st_dri3b A, 0xFD, 0xA2, 0x00
@@ -49462,7 +49462,7 @@ LABEL_03B08A:
 	lda xwa, (xsp + 2)
 	call LABEL_03D92C
 	lda xbc, (xsp + 2)
-	ldada_24 xde, 0x01301f
+	lda_24 xde, 0x01301f
 	st_dri3b W, 0xFD, 0xCE, 0x00
 	call LABEL_03E15A
 	st_dri3b W, 0xFD, 0xDE, 0x00
@@ -49481,7 +49481,7 @@ LABEL_03B1D9:
 
 LABEL_03B1E5:
 	lda xbc, (xsp + 38)
-	ldada_24 xde, 0x013023
+	lda_24 xde, 0x013023
 	lda xwa, (xsp + 2)
 	call LABEL_03D3D4
 	lda xbc, (xsp + 2)
@@ -49492,7 +49492,7 @@ LABEL_03B1E5:
 	push xix
 	ld xix, (xiy)
 	push xix
-	ldada_24 xiy, 0x013027
+	lda_24 xiy, 0x013027
 	ld xix, (xiy + 4)
 	push xix
 	ld xix, (xiy)
@@ -49509,7 +49509,7 @@ LABEL_03B1E5:
 	lda xwa, (xsp + 118)
 	call LABEL_03E290
 	lda xbc, (xsp + 118)
-	ldada_24 xde, 0x01302f
+	lda_24 xde, 0x01302f
 	lda xwa, (xsp + 118)
 	call LABEL_03E10E
 	st_dri3b A, 0xFD, 0xA2, 0x00
@@ -49540,7 +49540,7 @@ LABEL_03B28F:
 
 LABEL_03B29B:
 	lda xbc, (xsp + 26)
-	ldada_24 xde, 0x013037
+	lda_24 xde, 0x013037
 	lda xwa, (xsp + 2)
 	call LABEL_03D3D4
 	lda xbc, (xsp + 2)
@@ -49551,7 +49551,7 @@ LABEL_03B29B:
 	push xix
 	ld xix, (xiy)
 	push xix
-	ldada_24 xiy, 0x01303b
+	lda_24 xiy, 0x01303b
 	ld xix, (xiy + 4)
 	push xix
 	ld xix, (xiy)
@@ -49567,7 +49567,7 @@ LABEL_03B29B:
 	lda xde, (xsp + 30)
 	lda xwa, (xsp + 118)
 	call LABEL_03E290
-	ldada_24 xbc, 0x013043
+	lda_24 xbc, 0x013043
 	lda xde, (xsp + 118)
 	lda xwa, (xsp + 118)
 	call LABEL_03D8E0
@@ -49644,7 +49644,7 @@ LABEL_03B3A6:
 
 LABEL_03B419:
 	st_dri3b A, 0xFD, 0xBA, 0x00
-	ldada_24 xde, 0x01304b
+	lda_24 xde, 0x01304b
 	lda xwa, (xsp + 2)
 	call LABEL_03E2C0
 	lda xbc, (xsp + 2)
@@ -49657,7 +49657,7 @@ LABEL_03B419:
 	call LABEL_0387E6
 	ld iz, hl
 	st_dri3b A, 0xFD, 0xB6, 0x00
-	ldada_24 xde, 0x01304f
+	lda_24 xde, 0x01304f
 	lda xwa, (xsp + 2)
 	call LABEL_03E2C0
 	lda xbc, (xsp + 2)
@@ -49668,7 +49668,7 @@ LABEL_03B419:
 	call LABEL_038405
 	ld iz, hl
 	st_dri3b A, 0xFD, 0xAE, 0x00
-	ldada_24 xde, 0x013053
+	lda_24 xde, 0x013053
 	lda xwa, (xsp + 2)
 	call LABEL_03E2C0
 	lda xbc, (xsp + 2)
@@ -49679,7 +49679,7 @@ LABEL_03B419:
 	call LABEL_038405
 	ld iz, hl
 	st_dri3b A, 0xFD, 0xBE, 0x00
-	ldada_24 xde, 0x013057
+	lda_24 xde, 0x013057
 	lda xwa, (xsp + 2)
 	call LABEL_03E2C0
 	lda xbc, (xsp + 2)
@@ -49690,7 +49690,7 @@ LABEL_03B419:
 	call LABEL_038405
 	ld iz, hl
 	st_dri3b A, 0xFD, 0xB2, 0x00
-	ldada_24 xde, 0x01305b
+	lda_24 xde, 0x01305b
 	lda xwa, (xsp + 2)
 	call LABEL_03E2C0
 	lda xbc, (xsp + 2)
@@ -49733,7 +49733,7 @@ LABEL_03B505:
 	add xwa, (xsp + 44)
 	ld wa, (xwa)
 	sla wa, 2
-	ldada_24 xbc, 0x012397
+	lda_24 xbc, 0x012397
 	st_dri3b A, 0x07, 0xE4, 0xE0
 	lda xwa, (xsp + 24)
 	call LABEL_03DDC4
@@ -49749,11 +49749,11 @@ LABEL_03B505:
 	lda xwa, (xsp + 12)
 	call LABEL_03DD36
 	lda xbc, (xsp + 12)
-	ldada_24 xde, 0x01305f
+	lda_24 xde, 0x01305f
 	lda xwa, (xsp + 12)
 	call LABEL_03E290
 	lda xbc, (xsp + 12)
-	ldada_24 xde, 0x013067
+	lda_24 xde, 0x013067
 	lda xwa, (xsp + 12)
 	call LABEL_03E10E
 	lda xbc, (xsp + 12)
@@ -49769,7 +49769,7 @@ LABEL_03B596:
 	add xwa, (xsp + 44)
 	ld wa, (xwa)
 	sla wa, 2
-	ldada_24 xbc, 0x012397
+	lda_24 xbc, 0x012397
 	st_dri3b A, 0x07, 0xE4, 0xE0
 	lda xwa, (xsp + 24)
 	call LABEL_03DDC4
@@ -49784,11 +49784,11 @@ LABEL_03B596:
 	lda xwa, (xsp + 12)
 	call LABEL_03DD36
 	lda xbc, (xsp + 12)
-	ldada_24 xde, 0x01306f
+	lda_24 xde, 0x01306f
 	lda xwa, (xsp + 12)
 	call LABEL_03E290
 	lda xbc, (xsp + 12)
-	ldada_24 xde, 0x013077
+	lda_24 xde, 0x013077
 	lda xwa, (xsp + 12)
 	call LABEL_03E10E
 	lda xbc, (xsp + 12)
@@ -49806,7 +49806,7 @@ LABEL_03B5F9:
 	ld a, c
 	extz wa
 	sla wa, 2
-	ldada_24 xbc, 0x012397
+	lda_24 xbc, 0x012397
 	st_dri3b A, 0x07, 0xE4, 0xE0
 	lda xwa, (xsp + 24)
 	call LABEL_03DDC4
@@ -49849,7 +49849,7 @@ LABEL_03B646:
 	cps wa, 0
 	jrl nz, LABEL_03C04F
 	st_dri3b A, 0xFD, 0xCE, 0x00
-	ldada_24 xde, 0x01307f
+	lda_24 xde, 0x01307f
 	lda xwa, (xsp + 56)
 	call LABEL_03D3D4
 	lda xbc, (xsp + 56)
@@ -49860,7 +49860,7 @@ LABEL_03B646:
 	push xix
 	ld xix, (xiy)
 	push xix
-	ldada_24 xiy, 0x013083
+	lda_24 xiy, 0x013083
 	ld xix, (xiy + 4)
 	push xix
 	ld xix, (xiy)
@@ -49881,7 +49881,7 @@ LABEL_03B646:
 	lda xwa, (xsp + 72)
 	call LABEL_03DCF2
 	lda xbc, (xsp + 72)
-	ldada_24 xde, 0x01308b
+	lda_24 xde, 0x01308b
 	lda xwa, (xsp + 72)
 	call LABEL_03E290
 	lda xiy, (xsp + 72)
@@ -49896,7 +49896,7 @@ LABEL_03B646:
 	lda xwa, (xsp + 84)
 	call LABEL_03DCF2
 	lda xbc, (xsp + 84)
-	ldada_24 xde, 0x013093
+	lda_24 xde, 0x013093
 	lda xwa, (xsp + 84)
 	call LABEL_03E290
 	lda xiy, (xsp + 84)
@@ -49909,7 +49909,7 @@ LABEL_03B646:
 	call LABEL_03D84F
 	lda xsp, (xsp + 24)
 	st_dri3b A, 0xFD, 0x98, 0x00
-	ldada_24 xde, 0x01309b
+	lda_24 xde, 0x01309b
 	lda xwa, (xsp + 72)
 	call LABEL_03D8E0
 	lda xbc, (xsp + 72)
@@ -49919,12 +49919,12 @@ LABEL_03B646:
 	lda xbc, (xsp + 72)
 	st_dri3b W, 0xFD, 0xCA, 0x00
 	call LABEL_03DD6C
-	ldada_24 xbc, 0x0130a3
+	lda_24 xbc, 0x0130a3
 	st_dri3b B, 0xFD, 0xCA, 0x00
 	lda xwa, (xsp + 56)
 	call LABEL_03D92C
 	st_dri3b A, 0xFD, 0xCA, 0x00
-	ldada_24 xde, 0x0130a7
+	lda_24 xde, 0x0130a7
 	lda xwa, (xsp + 120)
 	call LABEL_03E15A
 	lda xbc, (xsp + 120)
@@ -49935,7 +49935,7 @@ LABEL_03B646:
 	st_dri3b B, 0xFD, 0xB6, 0x00
 	lda xwa, (xsp + 120)
 	call LABEL_03D3D4
-	ldada_24 xbc, 0x0130ab
+	lda_24 xbc, 0x0130ab
 	lda xde, (xsp + 120)
 	lda xwa, (xsp + 120)
 	call LABEL_03D92C
@@ -49944,7 +49944,7 @@ LABEL_03B646:
 	lda xwa, (xsp + 56)
 	call LABEL_03D3D4
 	lda xbc, (xsp + 56)
-	ldada_24 xde, 0x0130af
+	lda_24 xde, 0x0130af
 	lda xwa, (xsp + 56)
 	call LABEL_03E15A
 	lda xbc, (xsp + 120)
@@ -49958,7 +49958,7 @@ LABEL_03B7F4:
 	lda xwa, (xsp + 72)
 	call LABEL_03DCF2
 	lda xbc, (xsp + 72)
-	ldada_24 xde, 0x0130b3
+	lda_24 xde, 0x0130b3
 	lda xwa, (xsp + 72)
 	call LABEL_03E290
 	lda xiy, (xsp + 72)
@@ -49973,7 +49973,7 @@ LABEL_03B7F4:
 	lda xwa, (xsp + 84)
 	call LABEL_03DCF2
 	lda xbc, (xsp + 84)
-	ldada_24 xde, 0x0130bb
+	lda_24 xde, 0x0130bb
 	lda xwa, (xsp + 84)
 	call LABEL_03E290
 	lda xiy, (xsp + 84)
@@ -49986,7 +49986,7 @@ LABEL_03B7F4:
 	call LABEL_03D84F
 	lda xsp, (xsp + 24)
 	st_dri3b A, 0xFD, 0x88, 0x00
-	ldada_24 xde, 0x0130c3
+	lda_24 xde, 0x0130c3
 	lda xwa, (xsp + 72)
 	call LABEL_03D8E0
 	lda xbc, (xsp + 72)
@@ -49997,10 +49997,10 @@ LABEL_03B7F4:
 	st_dri3b W, 0xFD, 0xC6, 0x00
 	call LABEL_03DD6C
 	st_dri3b A, 0xFD, 0xC6, 0x00
-	ldada_24 xde, 0x0130cb
+	lda_24 xde, 0x0130cb
 	lda xwa, (xsp + 120)
 	call LABEL_03E15A
-	ldada_24 xbc, 0x0130cf
+	lda_24 xbc, 0x0130cf
 	st_dri3b B, 0xFD, 0xC6, 0x00
 	lda xwa, (xsp + 56)
 	call LABEL_03D92C
@@ -50013,7 +50013,7 @@ LABEL_03B7F4:
 	lda xwa, (xsp + 120)
 	call LABEL_03D3D4
 	lda xbc, (xsp + 120)
-	ldada_24 xde, 0x0130d3
+	lda_24 xde, 0x0130d3
 	lda xwa, (xsp + 120)
 	call LABEL_03E15A
 	st_dri3b A, 0xFD, 0xB2, 0x00
@@ -50021,7 +50021,7 @@ LABEL_03B7F4:
 	lda xwa, (xsp + 56)
 	call LABEL_03D3D4
 	lda xbc, (xsp + 56)
-	ldada_24 xde, 0x0130d7
+	lda_24 xde, 0x0130d7
 	lda xwa, (xsp + 56)
 	call LABEL_03D92C
 	lda xbc, (xsp + 56)
@@ -50030,11 +50030,11 @@ LABEL_03B7F4:
 	call LABEL_03D3D4
 
 LABEL_03B901:
-	ldada_24 xbc, 0x0130db
+	lda_24 xbc, 0x0130db
 	st_dri3b B, 0xFD, 0xCA, 0x00
 	lda xwa, (xsp + 120)
 	call LABEL_03D92C
-	ldada_24 xbc, 0x0130df
+	lda_24 xbc, 0x0130df
 	st_dri3b B, 0xFD, 0xC6, 0x00
 	lda xwa, (xsp + 56)
 	call LABEL_03D92C
@@ -50050,7 +50050,7 @@ LABEL_03B901:
 	st_dri3b W, 0xFD, 0xBA, 0x00
 	call LABEL_03D41C
 	st_dri3b A, 0xFD, 0xBE, 0x00
-	ldada_24 xde, 0x0130e3
+	lda_24 xde, 0x0130e3
 	lda xwa, (xsp + 120)
 	call LABEL_03E2C0
 	lda xbc, (xsp + 120)
@@ -50063,7 +50063,7 @@ LABEL_03B901:
 	call LABEL_0387E6
 	ldfr_werp HL, 0xFA
 	st_dri3b A, 0xFD, 0xBA, 0x00
-	ldada_24 xde, 0x0130e7
+	lda_24 xde, 0x0130e7
 	lda xwa, (xsp + 120)
 	call LABEL_03E2C0
 	lda xbc, (xsp + 120)
@@ -50074,7 +50074,7 @@ LABEL_03B901:
 	call LABEL_038405
 	ldfr_werp HL, 0xFA
 	st_dri3b A, 0xFD, 0xC2, 0x00
-	ldada_24 xde, 0x0130eb
+	lda_24 xde, 0x0130eb
 	lda xwa, (xsp + 120)
 	call LABEL_03E2C0
 	lda xbc, (xsp + 120)
@@ -50088,7 +50088,7 @@ LABEL_03B901:
 
 LABEL_03B9DD:
 	st_dri3b A, 0xFD, 0xCE, 0x00
-	ldada_24 xde, 0x0130ef
+	lda_24 xde, 0x0130ef
 	lda xwa, (xsp + 120)
 	call LABEL_03D3D4
 	lda xbc, (xsp + 120)
@@ -50099,7 +50099,7 @@ LABEL_03B9DD:
 	push xix
 	ld xix, (xiy)
 	push xix
-	ldada_24 xiy, 0x0130f3
+	lda_24 xiy, 0x0130f3
 	ld xix, (xiy + 4)
 	push xix
 	ld xix, (xiy)
@@ -50120,7 +50120,7 @@ LABEL_03B9DD:
 	lda xwa, (xsp + 72)
 	call LABEL_03DCF2
 	lda xbc, (xsp + 72)
-	ldada_24 xde, 0x0130fb
+	lda_24 xde, 0x0130fb
 	lda xwa, (xsp + 72)
 	call LABEL_03E290
 	lda xiy, (xsp + 72)
@@ -50135,7 +50135,7 @@ LABEL_03B9DD:
 	lda xwa, (xsp + 84)
 	call LABEL_03DCF2
 	lda xbc, (xsp + 84)
-	ldada_24 xde, 0x013103
+	lda_24 xde, 0x013103
 	lda xwa, (xsp + 84)
 	call LABEL_03E290
 	lda xiy, (xsp + 84)
@@ -50148,7 +50148,7 @@ LABEL_03B9DD:
 	call LABEL_03D84F
 	lda xsp, (xsp + 24)
 	lda xbc, (xsp + 96)
-	ldada_24 xde, 0x01310b
+	lda_24 xde, 0x01310b
 	lda xwa, (xsp + 72)
 	call LABEL_03D8E0
 	lda xbc, (xsp + 72)
@@ -50159,10 +50159,10 @@ LABEL_03B9DD:
 	st_dri3b W, 0xFD, 0xCA, 0x00
 	call LABEL_03DD6C
 	st_dri3b A, 0xFD, 0xCA, 0x00
-	ldada_24 xde, 0x013113
+	lda_24 xde, 0x013113
 	lda xwa, (xsp + 120)
 	call LABEL_03E15A
-	ldada_24 xbc, 0x013117
+	lda_24 xbc, 0x013117
 	st_dri3b B, 0xFD, 0xCA, 0x00
 	lda xwa, (xsp + 56)
 	call LABEL_03D92C
@@ -50175,7 +50175,7 @@ LABEL_03B9DD:
 	lda xwa, (xsp + 120)
 	call LABEL_03D3D4
 	lda xbc, (xsp + 120)
-	ldada_24 xde, 0x01311b
+	lda_24 xde, 0x01311b
 	lda xwa, (xsp + 120)
 	call LABEL_03E15A
 	st_dri3b A, 0xFD, 0xB2, 0x00
@@ -50183,7 +50183,7 @@ LABEL_03B9DD:
 	lda xwa, (xsp + 56)
 	call LABEL_03D3D4
 	lda xbc, (xsp + 56)
-	ldada_24 xde, 0x01311f
+	lda_24 xde, 0x01311f
 	lda xwa, (xsp + 56)
 	call LABEL_03D92C
 	lda xbc, (xsp + 56)
@@ -50197,7 +50197,7 @@ LABEL_03BB3F:
 	lda xwa, (xsp + 72)
 	call LABEL_03DCF2
 	lda xbc, (xsp + 72)
-	ldada_24 xde, 0x013123
+	lda_24 xde, 0x013123
 	lda xwa, (xsp + 72)
 	call LABEL_03E290
 	lda xiy, (xsp + 72)
@@ -50212,7 +50212,7 @@ LABEL_03BB3F:
 	lda xwa, (xsp + 84)
 	call LABEL_03DCF2
 	lda xbc, (xsp + 84)
-	ldada_24 xde, 0x01312b
+	lda_24 xde, 0x01312b
 	lda xwa, (xsp + 84)
 	call LABEL_03E290
 	lda xiy, (xsp + 84)
@@ -50225,7 +50225,7 @@ LABEL_03BB3F:
 	call LABEL_03D84F
 	lda xsp, (xsp + 24)
 	lda xbc, (xsp + 80)
-	ldada_24 xde, 0x013133
+	lda_24 xde, 0x013133
 	lda xwa, (xsp + 72)
 	call LABEL_03D8E0
 	lda xbc, (xsp + 72)
@@ -50235,12 +50235,12 @@ LABEL_03BB3F:
 	lda xbc, (xsp + 72)
 	st_dri3b W, 0xFD, 0xC6, 0x00
 	call LABEL_03DD6C
-	ldada_24 xbc, 0x01313b
+	lda_24 xbc, 0x01313b
 	st_dri3b B, 0xFD, 0xC6, 0x00
 	lda xwa, (xsp + 120)
 	call LABEL_03D92C
 	st_dri3b A, 0xFD, 0xC6, 0x00
-	ldada_24 xde, 0x01313f
+	lda_24 xde, 0x01313f
 	lda xwa, (xsp + 56)
 	call LABEL_03E15A
 	lda xbc, (xsp + 56)
@@ -50251,7 +50251,7 @@ LABEL_03BB3F:
 	st_dri3b B, 0xFD, 0xB6, 0x00
 	lda xwa, (xsp + 120)
 	call LABEL_03D3D4
-	ldada_24 xbc, 0x013143
+	lda_24 xbc, 0x013143
 	lda xde, (xsp + 120)
 	lda xwa, (xsp + 120)
 	call LABEL_03D92C
@@ -50260,7 +50260,7 @@ LABEL_03BB3F:
 	lda xwa, (xsp + 56)
 	call LABEL_03D3D4
 	lda xbc, (xsp + 56)
-	ldada_24 xde, 0x013147
+	lda_24 xde, 0x013147
 	lda xwa, (xsp + 56)
 	call LABEL_03E15A
 	lda xbc, (xsp + 120)
@@ -50270,11 +50270,11 @@ LABEL_03BB3F:
 
 LABEL_03BC44:
 	st_dri3b A, 0xFD, 0xCA, 0x00
-	ldada_24 xde, 0x01314b
+	lda_24 xde, 0x01314b
 	lda xwa, (xsp + 120)
 	call LABEL_03E15A
 	st_dri3b A, 0xFD, 0xC6, 0x00
-	ldada_24 xde, 0x01314f
+	lda_24 xde, 0x01314f
 	lda xwa, (xsp + 56)
 	call LABEL_03E15A
 	lda xbc, (xsp + 56)
@@ -50289,7 +50289,7 @@ LABEL_03BC44:
 	st_dri3b W, 0xFD, 0xBA, 0x00
 	call LABEL_03D41C
 	st_dri3b A, 0xFD, 0xBE, 0x00
-	ldada_24 xde, 0x013153
+	lda_24 xde, 0x013153
 	lda xwa, (xsp + 120)
 	call LABEL_03E2C0
 	lda xbc, (xsp + 120)
@@ -50302,7 +50302,7 @@ LABEL_03BC44:
 	call LABEL_0387E6
 	ldfr_werp HL, 0xFA
 	st_dri3b A, 0xFD, 0xBA, 0x00
-	ldada_24 xde, 0x013157
+	lda_24 xde, 0x013157
 	lda xwa, (xsp + 120)
 	call LABEL_03E2C0
 	lda xbc, (xsp + 120)
@@ -50313,7 +50313,7 @@ LABEL_03BC44:
 	call LABEL_038405
 	ldfr_werp HL, 0xFA
 	st_dri3b A, 0xFD, 0xC2, 0x00
-	ldada_24 xde, 0x01315b
+	lda_24 xde, 0x01315b
 	lda xwa, (xsp + 120)
 	call LABEL_03E2C0
 	lda xbc, (xsp + 120)
@@ -50327,7 +50327,7 @@ LABEL_03BC44:
 
 LABEL_03BD18:
 	st_dri3b A, 0xFD, 0xCE, 0x00
-	ldada_24 xde, 0x01315f
+	lda_24 xde, 0x01315f
 	lda xwa, (xsp + 120)
 	call LABEL_03D3D4
 	lda xbc, (xsp + 120)
@@ -50338,7 +50338,7 @@ LABEL_03BD18:
 	push xix
 	ld xix, (xiy)
 	push xix
-	ldada_24 xiy, 0x013163
+	lda_24 xiy, 0x013163
 	ld xix, (xiy + 4)
 	push xix
 	ld xix, (xiy)
@@ -50359,7 +50359,7 @@ LABEL_03BD18:
 	lda xwa, (xsp + 72)
 	call LABEL_03DCF2
 	lda xbc, (xsp + 72)
-	ldada_24 xde, 0x01316b
+	lda_24 xde, 0x01316b
 	lda xwa, (xsp + 72)
 	call LABEL_03E290
 	lda xiy, (xsp + 72)
@@ -50374,7 +50374,7 @@ LABEL_03BD18:
 	lda xwa, (xsp + 84)
 	call LABEL_03DCF2
 	lda xbc, (xsp + 84)
-	ldada_24 xde, 0x013173
+	lda_24 xde, 0x013173
 	lda xwa, (xsp + 84)
 	call LABEL_03E290
 	lda xiy, (xsp + 84)
@@ -50387,7 +50387,7 @@ LABEL_03BD18:
 	call LABEL_03D84F
 	lda xsp, (xsp + 24)
 	lda xbc, (xsp + 32)
-	ldada_24 xde, 0x01317b
+	lda_24 xde, 0x01317b
 	lda xwa, (xsp + 72)
 	call LABEL_03D8E0
 	lda xbc, (xsp + 72)
@@ -50398,10 +50398,10 @@ LABEL_03BD18:
 	st_dri3b W, 0xFD, 0xCA, 0x00
 	call LABEL_03DD6C
 	st_dri3b A, 0xFD, 0xCA, 0x00
-	ldada_24 xde, 0x013183
+	lda_24 xde, 0x013183
 	lda xwa, (xsp + 120)
 	call LABEL_03E15A
-	ldada_24 xbc, 0x013187
+	lda_24 xbc, 0x013187
 	st_dri3b B, 0xFD, 0xCA, 0x00
 	lda xwa, (xsp + 56)
 	call LABEL_03D92C
@@ -50414,7 +50414,7 @@ LABEL_03BD18:
 	lda xwa, (xsp + 120)
 	call LABEL_03D3D4
 	lda xbc, (xsp + 120)
-	ldada_24 xde, 0x01318b
+	lda_24 xde, 0x01318b
 	lda xwa, (xsp + 120)
 	call LABEL_03E15A
 	st_dri3b A, 0xFD, 0xB2, 0x00
@@ -50422,7 +50422,7 @@ LABEL_03BD18:
 	lda xwa, (xsp + 56)
 	call LABEL_03D3D4
 	lda xbc, (xsp + 56)
-	ldada_24 xde, 0x01318f
+	lda_24 xde, 0x01318f
 	lda xwa, (xsp + 56)
 	call LABEL_03D92C
 	lda xbc, (xsp + 56)
@@ -50436,7 +50436,7 @@ LABEL_03BE78:
 	lda xwa, (xsp + 72)
 	call LABEL_03DCF2
 	lda xbc, (xsp + 72)
-	ldada_24 xde, 0x013193
+	lda_24 xde, 0x013193
 	lda xwa, (xsp + 72)
 	call LABEL_03E290
 	lda xiy, (xsp + 72)
@@ -50451,7 +50451,7 @@ LABEL_03BE78:
 	lda xwa, (xsp + 84)
 	call LABEL_03DCF2
 	lda xbc, (xsp + 84)
-	ldada_24 xde, 0x01319b
+	lda_24 xde, 0x01319b
 	lda xwa, (xsp + 84)
 	call LABEL_03E290
 	lda xiy, (xsp + 84)
@@ -50464,7 +50464,7 @@ LABEL_03BE78:
 	call LABEL_03D84F
 	lda xsp, (xsp + 24)
 	lda xbc, (xsp + 16)
-	ldada_24 xde, 0x0131a3
+	lda_24 xde, 0x0131a3
 	lda xwa, (xsp + 72)
 	call LABEL_03D8E0
 	lda xbc, (xsp + 72)
@@ -50474,12 +50474,12 @@ LABEL_03BE78:
 	lda xbc, (xsp + 72)
 	st_dri3b W, 0xFD, 0xC6, 0x00
 	call LABEL_03DD6C
-	ldada_24 xbc, 0x0131ab
+	lda_24 xbc, 0x0131ab
 	st_dri3b B, 0xFD, 0xC6, 0x00
 	lda xwa, (xsp + 120)
 	call LABEL_03D92C
 	st_dri3b A, 0xFD, 0xC6, 0x00
-	ldada_24 xde, 0x0131af
+	lda_24 xde, 0x0131af
 	lda xwa, (xsp + 56)
 	call LABEL_03E15A
 	lda xbc, (xsp + 56)
@@ -50490,7 +50490,7 @@ LABEL_03BE78:
 	st_dri3b B, 0xFD, 0xB6, 0x00
 	lda xwa, (xsp + 120)
 	call LABEL_03D3D4
-	ldada_24 xbc, 0x0131b3
+	lda_24 xbc, 0x0131b3
 	lda xde, (xsp + 120)
 	lda xwa, (xsp + 120)
 	call LABEL_03D92C
@@ -50499,7 +50499,7 @@ LABEL_03BE78:
 	lda xwa, (xsp + 56)
 	call LABEL_03D3D4
 	lda xbc, (xsp + 56)
-	ldada_24 xde, 0x0131b7
+	lda_24 xde, 0x0131b7
 	lda xwa, (xsp + 56)
 	call LABEL_03E15A
 	lda xbc, (xsp + 120)
@@ -50509,11 +50509,11 @@ LABEL_03BE78:
 
 LABEL_03BF7D:
 	st_dri3b A, 0xFD, 0xCA, 0x00
-	ldada_24 xde, 0x0131bb
+	lda_24 xde, 0x0131bb
 	lda xwa, (xsp + 120)
 	call LABEL_03E15A
 	st_dri3b A, 0xFD, 0xC6, 0x00
-	ldada_24 xde, 0x0131bf
+	lda_24 xde, 0x0131bf
 	lda xwa, (xsp + 56)
 	call LABEL_03E15A
 	lda xbc, (xsp + 56)
@@ -50526,7 +50526,7 @@ LABEL_03BF7D:
 	st_dri3b W, 0xFD, 0xBA, 0x00
 	call LABEL_03D41C
 	st_dri3b A, 0xFD, 0xBA, 0x00
-	ldada_24 xde, 0x0131c3
+	lda_24 xde, 0x0131c3
 	lda xwa, (xsp + 120)
 	call LABEL_03E2C0
 	lda xbc, (xsp + 120)
@@ -50539,7 +50539,7 @@ LABEL_03BF7D:
 	call LABEL_0387E6
 	ldfr_werp HL, 0xFA
 	st_dri3b A, 0xFD, 0xC2, 0x00
-	ldada_24 xde, 0x0131c7
+	lda_24 xde, 0x0131c7
 	lda xwa, (xsp + 120)
 	call LABEL_03E2C0
 	lda xbc, (xsp + 120)
@@ -50551,7 +50551,7 @@ LABEL_03BF7D:
 	call LABEL_0388B3
 	ldfr_werp HL, 0xFA
 	st_dri3b A, 0xFD, 0xBE, 0x00
-	ldada_24 xde, 0x0131cb
+	lda_24 xde, 0x0131cb
 	lda xwa, (xsp + 120)
 	call LABEL_03E2C0
 	lda xbc, (xsp + 120)
@@ -50671,7 +50671,7 @@ DSP_WriteEFFConfig:
 	push xbc
 	ld hl, de
 	ld bc, wa
-	ldada_24 xde, 0x014777
+	lda_24 xde, 0x014777
 	ld wa, hl
 	call 0x3C259
 	ret
@@ -50680,7 +50680,7 @@ DSP_WriteGlobalConfig:
 	lds de, 0
 	push xbc
 	ld bc, de
-	ldada_24 xde, 0x0147b3
+	lda_24 xde, 0x0147b3
 	call 0x3C259
 	ret
 
@@ -50698,8 +50698,8 @@ LABEL_03C1A3:
 	jr z, LABEL_03C1DF
 	cp bc, 0x9
 	jrl nz, LABEL_03C24F
-	ldada_24 xhl, 0x01e17f
-	ldada_24 xbc, 0x01e19e
+	lda_24 xhl, 0x01e17f
+	lda_24 xbc, 0x01e19e
 	push xbc
 	pushw de
 	ld bc, wa
@@ -50712,14 +50712,14 @@ LABEL_03C1A3:
 	add xde, xix
 	lda xbc, (xde + 4)
 	push xbc
-	ldada_24 xbc, 0x014777
+	lda_24 xbc, 0x014777
 	ld xde, xhl
 	call 0x3C9E6
 	jr LABEL_03C24F
 
 LABEL_03C1DF:
-	ldada_24 xhl, 0x01e40a
-	ldada_24 xbc, 0x01e42d
+	lda_24 xhl, 0x01e40a
+	lda_24 xbc, 0x01e42d
 	push xbc
 	pushw de
 	ld bc, wa
@@ -50732,7 +50732,7 @@ LABEL_03C1DF:
 	add xde, xix
 	lda xbc, (xde + 4)
 	push xbc
-	ldada_24 xbc, 0x014777
+	lda_24 xbc, 0x014777
 	ld xde, xhl
 	call 0x3C9E6
 	jr LABEL_03C24F
@@ -50761,7 +50761,7 @@ LABEL_03C20E:
 	add xde, xix
 	lda xbc, (xde + 4)
 	push xbc
-	ldada_24 xbc, 0x014777
+	lda_24 xbc, 0x014777
 	ld xde, xhl
 	call 0x3C9E6
 
@@ -50855,9 +50855,9 @@ DSP_BytecodeInterpreter_Loop:
 	cps wa, 5
 	jrl ugt, DSP_BytecodeInterpreter_CheckEnd
 	add wa, wa
-	ldada_24 xix, 0x014739
+	lda_24 xix, 0x014739
 	ld_sriw3 WA, 0x07, 0xF0, 0xE0
-	ldada_24 xix, 0x03c32e
+	lda_24 xix, 0x03c32e
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
 
@@ -51279,9 +51279,9 @@ LABEL_03CB18:
 	cp wa, 0x18
 	jrl ugt, LABEL_03CEFF
 	add wa, wa
-	ldada_24 xix, 0x014745
+	lda_24 xix, 0x014745
 	ld_sriw3 WA, 0x07, 0xF0, 0xE0
-	ldada_24 xix, 0x03cb8e
+	lda_24 xix, 0x03cb8e
 	jp_dri 8, 0x07, 0xF0, 0xE0
 LABEL_03CB8E:
 	.byte 0xbf, 0x2a, 0x30, 0xea, 0x89, 0x1d, 0x9f, 0x8e
@@ -51850,12 +51850,12 @@ ToneGen_Read_Voice_Data:	; 03D0C5h
 	ld xiz, xwa
 	set_dd8 7, 0x18	; Assert A23 for status read
 	nop
-	ldda16_24 xbc, 0x110002                 ; Read status register
+	ld16_24 xbc, 0x110002                 ; Read status register
 	bit 0, bc	; Check data ready bit
 	jr z, ToneGen_Read_Not_Ready
 	res_dd8 7, 0x18	; Deassert A23 for data read
 	nop
-	ldda16_24 xwa, 0x110000                 ; Read voice data (16-bit)
+	ld16_24 xwa, 0x110000                 ; Read voice data (16-bit)
 	ld l, a	; L = note byte (low)
 	and l, 0xFF
 	srl wa, 8
@@ -51910,29 +51910,29 @@ ToneGen_Calc_Pitch:	; 03D11Fh
 	jrl z, ToneGen_Calc_NoVel
 	ld c, e
 	extz bc
-	ldada_24 xde, 0x01f43e
+	lda_24 xde, 0x01f43e
 	ld_srib3 C, 0x07, 0xE8, 0xE4
 	extz bc
 	extz xbc
 	ld xde, xbc
-	ldda16_24 xbc, 0x01f418
+	ld16_24 xbc, 0x01f418
 	ld hl, de
 	sub hl, bc
 	ldda8 c, 19016
 	extz bc
 	muls bc, 0x3
-	ldada_24 xde, 0x01f420
+	lda_24 xde, 0x01f420
 	ld_srib3 C, 0x07, 0xE8, 0xE4
 	extz bc
 	muls xbc, xhl
-	ldda16_24 xde, 0x01f41a
+	ld16_24 xde, 0x01f41a
 	exts xbc
 	divs xbc, xde
 	ld hl, bc
 	ldda8 c, 19016
 	extz bc
 	muls bc, 0x3
-	ldada_24 xde, 0x01f421
+	lda_24 xde, 0x01f421
 	ld_srib3 C, 0x07, 0xE8, 0xE4
 	extz bc
 	add bc, hl
@@ -51957,7 +51957,7 @@ ToneGen_Pitch_Adjust:	; 03D1AAh - apply mode-specific pitch offset
 	ldda8 c, 19016	; Get tone gen mode
 	extz bc
 	muls bc, 0x3	; mode * 3 for table index
-	ldada_24 xhl, 0x01f422                  ; Pitch offset table
+	lda_24 xhl, 0x01f422                  ; Pitch offset table
 	ld_srib3 C, 0x07, 0xEC, 0xE4
 	extz bc
 	extz xbc
@@ -51980,7 +51980,7 @@ ToneGen_Pitch_ClampLo:	; 03D1E1h
 	ld xde, xbc
 	ld c, e
 	extz bc
-	ldada_24 xde, 0x01f53e                  ; Velocity lookup table
+	lda_24 xde, 0x01f53e                  ; Velocity lookup table
 	ld_srib3 C, 0x07, 0xE8, 0xE4
 	ld (xwa + 1), c	; Store velocity
 	ret
@@ -52037,10 +52037,10 @@ ToneGen_Poll_Delay:	; 03D227h
 ToneGen_Poll_Read:	; 03D230h
 	set_dd8 7, 0x18	; A23 pin tied to D5VNAD (both pins "NAD" and "EXADL0" of of tone generator)
 	nop
-	ldda16_24 xwa, 0x110002
+	ld16_24 xwa, 0x110002
 	res_dd8 7, 0x18
 	nop
-	ldda16_24 xwa, 0x110000
+	ld16_24 xwa, 0x110000
 	ld c, a
 	and c, 0xFF
 	srl wa, 8
@@ -52057,7 +52057,7 @@ ToneGen_Poll_Read:	; 03D230h
 	ld a, e	; Note ON - set voice bit
 	ldfr_berp A, 0xF0
 	extz ix
-	ldda32_24 xbc, 0x01f41c                 ; Voice status buffer
+	ld32_24 xbc, 0x01f41c                 ; Voice status buffer
 	lds de, 1
 	ld a, w
 	and a, 0xF
@@ -52072,7 +52072,7 @@ ToneGen_Poll_NoteOff:	; 03D281h - Note OFF - clear voice bit
 	ld a, e
 	ldfr_berp A, 0xF0
 	extz ix
-	ldda32_24 xbc, 0x01f41c
+	ld32_24 xbc, 0x01f41c
 	lds de, 1
 	ld a, w
 	and a, 0xF
@@ -52107,7 +52107,7 @@ ToneGen_Compare_Voice:	; 03D2ACh
 	ld xiy, (xwa)	; Compare low 4 bytes
 	cp xiy, (xbc)
 	jr nz, ToneGen_Compare_Result
-	ldada_24 xix, 0x03d978                  ; Exact match - lookup result
+	lda_24 xix, 0x03d978                  ; Exact match - lookup result
 	ld_srib3 L, 0x07, 0xF0, 0xE8
 	ldb h, 0x0
 	ret
@@ -52137,12 +52137,12 @@ ToneGen_Compare_Sign:	; 03D2E6h
 	jr ugt, ToneGen_Cmp_Greater
 
 ToneGen_Cmp_Less:	; 03D2F0h - voice 1 < voice 2
-	ldada_24 xix, 0x03d97e                  ; Less-than lookup table
+	lda_24 xix, 0x03d97e                  ; Less-than lookup table
 	xor_srib_rm L, 0x07, 0xF0, 0xE8
 	ret
 
 ToneGen_Cmp_Greater:	; 03D2FBh - voice 1 > voice 2
-	ldada_24 xix, 0x03d984                  ; Greater-than lookup table
+	lda_24 xix, 0x03d984                  ; Greater-than lookup table
 	xor_srib_rm L, 0x07, 0xF0, 0xE8
 	ret
 
@@ -52158,7 +52158,7 @@ ToneGen_Compare_Voice_32:	; 03D306h
 	ld xbc, (xbc)	; Load 32-bit value from voice 2
 	cp xwa, xbc
 	jr nz, ToneGen_Cmp32_NotEqual
-	ldada_24 xix, 0x03d978                  ; Equal - lookup result
+	lda_24 xix, 0x03d978                  ; Equal - lookup result
 	ld_srib3 L, 0x07, 0xF0, 0xE8
 	ret
 
@@ -52177,12 +52177,12 @@ ToneGen_Cmp32_NotEqual:	; 03D31Bh
 ToneGen_Cmp32_Sign:	; 03D333h
 	cp xwa, xbc
 	jr gt, ToneGen_Cmp32_Greater
-	ldada_24 xix, 0x03d97e
+	lda_24 xix, 0x03d97e
 	xor_srib_rm L, 0x07, 0xF0, 0xE8
 	ret
 
 ToneGen_Cmp32_Greater:	; 03D342h
-	ldada_24 xix, 0x03d984
+	lda_24 xix, 0x03d984
 	xor_srib_rm L, 0x07, 0xF0, 0xE8
 	ret
 
@@ -52198,7 +52198,7 @@ LABEL_03D34D:
 	push xwa
 	call LABEL_03D42E
 	lda xsp, (xsp + 12)
-	ldada_24 xbc, 0x00f3ca
+	lda_24 xbc, 0x00f3ca
 	lda xde, (xsp + 26)
 	lda xwa, (xsp + 34)
 	call LABEL_03E10E
@@ -52334,17 +52334,17 @@ LABEL_03D466:
 	ld xiy, (xwa)
 	cp xiy, xde
 	jr nz, LABEL_03D48F
-	ldada_24 xde, 0x03d978
+	lda_24 xde, 0x03d978
 	ld_srib3 L, 0x07, 0xE8, 0xE4
 	ret
 
 LABEL_03D484:
-	ldada_24 xde, 0x03d97e
+	lda_24 xde, 0x03d97e
 	ld_srib3 L, 0x07, 0xE8, 0xE4
 	ret
 
 LABEL_03D48F:
-	ldada_24 xde, 0x03d984
+	lda_24 xde, 0x03d984
 	ld_srib3 L, 0x07, 0xE8, 0xE4
 	ret
 
@@ -52354,17 +52354,17 @@ LABEL_03D49A:
 	cp xde, 0x0
 	jr lt, LABEL_03D4B3
 	jr gt, LABEL_03D4BE
-	ldada_24 xde, 0x03d978
+	lda_24 xde, 0x03d978
 	ld_srib3 L, 0x07, 0xE8, 0xE4
 	ret
 
 LABEL_03D4B3:
-	ldada_24 xde, 0x03d97e
+	lda_24 xde, 0x03d97e
 	ld_srib3 L, 0x07, 0xE8, 0xE4
 	ret
 
 LABEL_03D4BE:
-	ldada_24 xde, 0x03d984
+	lda_24 xde, 0x03d984
 	ld_srib3 L, 0x07, 0xE8, 0xE4
 	ret
 
@@ -52376,9 +52376,9 @@ LABEL_03D4C9:
 	and wa, 0x7FF0
 	cp wa, 0x41E0
 	jr c, LABEL_03D4F1
-	stdi16_24 0x040c22, 0x0022
+	sti16_24 0x040c22, 0x0022
 	ld xwa, xiz
-	ldada_24 xbc, 0x01f63e
+	lda_24 xbc, 0x01f63e
 	call LABEL_03DCE6
 	jr LABEL_03D52E
 
@@ -52417,13 +52417,13 @@ LABEL_03D533:
 	lda xsp, (xsp - 56)
 	pushw iz
 	lda xwa, (xsp + 74)
-	ldada_24 xbc, 0x01f646
+	lda_24 xbc, 0x01f646
 	lds de, 1
 	call 0x3D2AC
 	cps hl, 0
 	jr nz, LABEL_03D567
 	lda xwa, (xsp + 74)
-	ldada_24 xbc, 0x01f64e
+	lda_24 xbc, 0x01f64e
 	lds de, 3
 	call 0x3D2AC
 	cps hl, 0
@@ -52452,9 +52452,9 @@ LABEL_03D56F:
 	call 0x3D2AC
 	cps hl, 0
 	jr nz, LABEL_03D5AC
-	stdi16_24 0x040c22, 0x0021
+	sti16_24 0x040c22, 0x0021
 	ld xwa, (xsp + 62)
-	ldada_24 xbc, 0x01f656
+	lda_24 xbc, 0x01f656
 	call LABEL_03DCE6
 	jrl LABEL_03D84A
 
@@ -52469,9 +52469,9 @@ LABEL_03D5AC:
 	call LABEL_03D466
 	cps hl, 0
 	jr nz, LABEL_03D5DC
-	stdi16_24 0x040c22, 0x0021
+	sti16_24 0x040c22, 0x0021
 	ld xwa, (xsp + 62)
-	ldada_24 xbc, 0x01f65e
+	lda_24 xbc, 0x01f65e
 	call LABEL_03DCE6
 	jrl LABEL_03D84A
 
@@ -52495,7 +52495,7 @@ LABEL_03D5DC:
 	ld (xsp + 54), xwa
 
 LABEL_03D60F:
-	ldada_24 xbc, 0x01f666
+	lda_24 xbc, 0x01f666
 	lda xwa, (xsp + 46)
 	call LABEL_03DCE6
 	jrl LABEL_03D6FB
@@ -52521,11 +52521,11 @@ LABEL_03D61E:
 	call LABEL_03D466
 	cps hl, 0
 	jr nz, LABEL_03D67A
-	stdi16_24 0x040c22, 0x0022
+	sti16_24 0x040c22, 0x0022
 	lda xwa, (xsp + 66)
 	lds bc, 2
 	call LABEL_03D466
-	ldada_24 xbc, 0x00f420
+	lda_24 xbc, 0x00f420
 	cps hl, 0
 	jr nz, LABEL_03D671
 	lda xwa, (xsp + 46)
@@ -52538,7 +52538,7 @@ LABEL_03D671:
 	jr LABEL_03D686
 
 LABEL_03D67A:
-	ldada_24 xbc, 0x01f66e
+	lda_24 xbc, 0x01f66e
 	lda xwa, (xsp + 46)
 	call LABEL_03DCE6
 
@@ -52552,19 +52552,19 @@ LABEL_03D693:
 	lda xde, (xsp + 66)
 	cp wa, 0x400
 	jr le, LABEL_03D6D6
-	stdi16_24 0x040c22, 0x0022
+	sti16_24 0x040c22, 0x0022
 	ld xwa, xde
 	lds bc, 2
 	call LABEL_03D466
 	cps hl, 0
 	jr nz, LABEL_03D6BD
-	ldada_24 xbc, 0x00f420
+	lda_24 xbc, 0x00f420
 	lda xwa, (xsp + 46)
 	call LABEL_03D404
 	jr LABEL_03D6C9
 
 LABEL_03D6BD:
-	ldada_24 xbc, 0x00f420
+	lda_24 xbc, 0x00f420
 	lda xwa, (xsp + 46)
 	call LABEL_03DCE6
 
@@ -52607,14 +52607,14 @@ LABEL_03D6FB:
 
 LABEL_03D71D:
 	ld xwa, (xsp + 62)
-	ldada_24 xbc, 0x01f676
+	lda_24 xbc, 0x01f676
 	lda xde, (xsp + 46)
 	call LABEL_03D3A4
 	jrl LABEL_03D84A
 
 LABEL_03D72F:
-	ldda16_24 xiz, 0x040c22
-	stdi16_24 0x040c22, 0x0000
+	ld16_24 xiz, 0x040c22
+	sti16_24 0x040c22, 0x0000
 	lda xiy, (xsp + 66)
 	ld xix, (xiy + 4)
 	push xix
@@ -52627,12 +52627,12 @@ LABEL_03D72F:
 	cpdi16_24 265250, 33
 	jr nz, LABEL_03D768
 	ld xwa, (xsp + 62)
-	ldada_24 xbc, 0x01f67e
+	lda_24 xbc, 0x01f67e
 	call LABEL_03DCE6
 	jrl LABEL_03D84A
 
 LABEL_03D768:
-	stda16_24 0x040c22, xiz
+	st16_24 0x040c22, xiz
 	lda xwa, (xsp + 36)
 	push xwa
 	lda xiy, (xsp + 70)
@@ -52677,12 +52677,12 @@ LABEL_03D7B2:
 LABEL_03D7CB:
 	cp iz, 0x400
 	jr le, LABEL_03D803
-	stdi16_24 0x040c22, 0x0022
+	sti16_24 0x040c22, 0x0022
 	lda xwa, (xsp + 66)
 	lds bc, 2
 	call LABEL_03D466
 	lda xwa, (xsp + 46)
-	ldada_24 xbc, 0x00f420
+	lda_24 xbc, 0x00f420
 	cps hl, 0
 	jr nz, LABEL_03D7F3
 	call LABEL_03D404
@@ -52700,9 +52700,9 @@ LABEL_03D7F7:
 LABEL_03D803:
 	cp iz, 0xFC03
 	jr ge, LABEL_03D81E
-	stdi16_24 0x040c22, 0x0022
+	sti16_24 0x040c22, 0x0022
 	ld xwa, (xsp + 62)
-	ldada_24 xbc, 0x01f686
+	lda_24 xbc, 0x01f686
 	call LABEL_03DCE6
 	jr LABEL_03D84A
 
@@ -52893,16 +52893,16 @@ LABEL_03D98A:
 	and wa, 0x7FF0
 	cp wa, 0x41E0
 	jr c, LABEL_03D9B5
-	stdi16_24 0x040c22, 0x0022
+	sti16_24 0x040c22, 0x0022
 	ld_sril XWA, (xsp + 0x0088)
-	ldada_24 xbc, 0x01f68e
+	lda_24 xbc, 0x01f68e
 	call LABEL_03DCE6
 	jrl LABEL_03DC0D
 
 LABEL_03D9B5:
 	lda xwa, (xsp + 116)
 	push xwa
-	ldada_24 xde, 0x00f396
+	lda_24 xde, 0x00f396
 	st_dri3b A, 0xFD, 0x98, 0x00
 	lda xwa, (xsp + 72)
 	call LABEL_03E290
@@ -52916,14 +52916,14 @@ LABEL_03D9B5:
 	call LABEL_03E1A5
 	lda xsp, (xsp + 16)
 	lda xwa, (xsp + 100)
-	ldada_24 xbc, 0x01f696
+	lda_24 xbc, 0x01f696
 	lds de, 1
 	call 0x3D2AC
 	cps hl, 0
 	jr nz, LABEL_03D9FF
 	lda xwa, (xsp + 116)
 	ld xbc, xwa
-	ldada_24 xde, 0x01f69e
+	lda_24 xde, 0x01f69e
 	call LABEL_03E10E
 
 LABEL_03D9FF:
@@ -52955,7 +52955,7 @@ LABEL_03DA1F:
 	jr nz, LABEL_03DA56
 	lda xwa, (xsp + 116)
 	ld xbc, xwa
-	ldada_24 xde, 0x01f6a6
+	lda_24 xde, 0x01f6a6
 	call LABEL_03D8E0
 
 LABEL_03DA56:
@@ -52978,7 +52978,7 @@ LABEL_03DA56:
 	lda xwa, (xsp + 120)
 	push xwa
 	call LABEL_03E1A5
-	ldada_24 xde, 0x00f39e
+	lda_24 xde, 0x00f39e
 	st_dri3b A, 0xFD, 0x84, 0x00
 	lda xwa, (xsp + 84)
 	call LABEL_03E290
@@ -52990,7 +52990,7 @@ LABEL_03DA56:
 	ld xbc, xwa
 	lda xde, (xsp + 124)
 	call LABEL_03E10E
-	ldada_24 xbc, 0x00f38e
+	lda_24 xbc, 0x00f38e
 	lda xwa, (xsp + 72)
 	call LABEL_03D404
 	lda xwa, (xsp + 72)
@@ -53010,7 +53010,7 @@ LABEL_03DA56:
 	push xwa
 	call LABEL_03D42E
 	lda xsp, (xsp + 28)
-	ldada_24 xbc, 0x00f3a6
+	lda_24 xbc, 0x00f3a6
 	lda xwa, (xsp + 76)
 	lds de, 0
 	call 0x3D2AC
@@ -53020,7 +53020,7 @@ LABEL_03DA56:
 	ld xbc, xde
 	lda xwa, (xsp + 108)
 	call LABEL_03E290
-	ldada_24 xwa, 0x00f34e
+	lda_24 xwa, 0x00f34e
 	lda xiz, (xwa + 48)
 	lda xbc, (xwa + 56)
 	lda xde, (xsp + 108)
@@ -53034,7 +53034,7 @@ LABEL_03DA56:
 	ld xbc, xwa
 	lda xde, (xsp + 108)
 	call LABEL_03E290
-	ldada_24 xbc, 0x00f376
+	lda_24 xbc, 0x00f376
 	lda xwa, (xsp + 56)
 	ld xde, xwa
 	call LABEL_03E10E
@@ -53042,7 +53042,7 @@ LABEL_03DA56:
 	ld xbc, xwa
 	lda xde, (xsp + 108)
 	call LABEL_03E290
-	ldada_24 xde, 0x00f36e
+	lda_24 xde, 0x00f36e
 	lda xwa, (xsp + 56)
 	ld xbc, xwa
 	call LABEL_03D8E0
@@ -53050,7 +53050,7 @@ LABEL_03DA56:
 	ld xbc, xwa
 	lda xde, (xsp + 108)
 	call LABEL_03E290
-	ldada_24 xbc, 0x00f366
+	lda_24 xbc, 0x00f366
 	lda xwa, (xsp + 56)
 	ld xde, xwa
 	call LABEL_03E10E
@@ -53058,7 +53058,7 @@ LABEL_03DA56:
 	ld xbc, xwa
 	lda xde, (xsp + 108)
 	call LABEL_03E290
-	ldada_24 xde, 0x00f35e
+	lda_24 xde, 0x00f35e
 	lda xwa, (xsp + 56)
 	ld xbc, xwa
 	call LABEL_03D8E0
@@ -53066,7 +53066,7 @@ LABEL_03DA56:
 	ld xbc, xwa
 	lda xde, (xsp + 108)
 	call LABEL_03E290
-	ldada_24 xbc, 0x00f356
+	lda_24 xbc, 0x00f356
 	lda xwa, (xsp + 56)
 	ld xde, xwa
 	call LABEL_03E10E
@@ -53074,7 +53074,7 @@ LABEL_03DA56:
 	ld xbc, xwa
 	lda xde, (xsp + 108)
 	call LABEL_03E290
-	ldada_24 xde, 0x00f34e
+	lda_24 xde, 0x00f34e
 	lda xwa, (xsp + 56)
 	ld xbc, xwa
 	call LABEL_03D8E0
@@ -53507,7 +53507,7 @@ LABEL_03DEDB:
 	dec 1, xhl
 
 LABEL_03DEDF:
-	stdi16_24 0x040c22, 0x0022
+	sti16_24 0x040c22, 0x0022
 	ret
 
 LABEL_03DEE7:
@@ -53713,7 +53713,7 @@ LABEL_03E07F:
 	jr nz, LABEL_03E079
 
 LABEL_03E085:
-	stdi16_24 0x040c22, 0x0022
+	sti16_24 0x040c22, 0x0022
 	lds32 xde, 0
 	dec 1, xde
 	ld (xwa), xde
@@ -53726,7 +53726,7 @@ LABEL_03E085:
 __jrt_nop_03E0A5:
 
 LABEL_03E0A5:
-	ldda32_24 xbc, 0x00f428
+	ld32_24 xbc, 0x00f428
 	or xbc, xbc
 	mrid2 0xB1, 0xEE
 	ret
@@ -53772,9 +53772,9 @@ LABEL_03E0EF:
 	ldfr_werp BC, 0xEA
 
 LABEL_03E0FB:
-	stdi16_24 0x040c22, 0x0022
+	sti16_24 0x040c22, 0x0022
 	ld (xwa), xde
-	ldda32_24 xbc, 0x00f428
+	ld32_24 xbc, 0x00f428
 	or xbc, xbc
 	mrid2 0xB1, 0xEE
 	ret
@@ -53859,7 +53859,7 @@ LABEL_03E197:
 LABEL_03E1A5:
 	lda xsp, (xsp - 24)
 	push xiz
-	ldada_24 xbc, 0x01f6ae
+	lda_24 xbc, 0x01f6ae
 	lda xwa, (xsp + 20)
 	call LABEL_03DCE6
 	lda xiy, (xsp + 36)
@@ -54436,7 +54436,7 @@ LABEL_03E642:
 LABEL_03E64B:
 	lda xsp, (xsp - 48)
 	pushw iz
-	ldada_24 xbc, 0x01f6b6
+	lda_24 xbc, 0x01f6b6
 	lda xwa, (xsp + 34)
 	call LABEL_03DCE6
 	lda xwa, (xsp + 58)
@@ -54450,30 +54450,30 @@ LABEL_03E64B:
 	jrl LABEL_03E72C
 
 LABEL_03E675:
-	ldada_24 xbc, 0x01f6be
+	lda_24 xbc, 0x01f6be
 	lda xwa, (xsp + 42)
 	call LABEL_03DCE6
 	lda xwa, (xsp + 58)
-	ldada_24 xbc, 0x01f6c6
+	lda_24 xbc, 0x01f6c6
 	lds de, 0
 	call 0x3D2AC
 	cps hl, 0
 	jr nz, LABEL_03E6A9
-	stdi16_24 0x040c22, 0x0022
+	sti16_24 0x040c22, 0x0022
 	ld xwa, (xsp + 54)
-	ldada_24 xbc, 0x00f420
+	lda_24 xbc, 0x00f420
 	call LABEL_03DCE6
 	jrl LABEL_03E72C
 
 LABEL_03E6A9:
 	lda xwa, (xsp + 58)
-	ldada_24 xbc, 0x01f6ce
+	lda_24 xbc, 0x01f6ce
 	lds de, 2
 	call 0x3D2AC
 	cps hl, 0
 	jr nz, LABEL_03E6C9
 	ld xwa, (xsp + 54)
-	ldada_24 xbc, 0x01f6d6
+	lda_24 xbc, 0x01f6d6
 	call LABEL_03DCE6
 	jr LABEL_03E72C
 
@@ -54530,16 +54530,16 @@ LABEL_03E731:
 	call LABEL_03D466
 	cps hl, 0
 	jr nz, LABEL_03E758
-	stdi16_24 0x040c22, 0x0021
+	sti16_24 0x040c22, 0x0021
 	ld xwa, (xsp + 110)
-	ldada_24 xbc, 0x01f6de
+	lda_24 xbc, 0x01f6de
 	call LABEL_03DCE6
 	jrl LABEL_03E87E
 
 LABEL_03E758:
 	lda xwa, (xsp + 104)
 	push xwa
-	ldada_24 xde, 0x00f42c
+	lda_24 xde, 0x00f42c
 	lda xbc, (xsp + 118)
 	lda xwa, (xsp + 52)
 	call LABEL_03D3A4
@@ -54552,7 +54552,7 @@ LABEL_03E758:
 	push xwa
 	call LABEL_03E1F1
 	pushm (xsp + 120)
-	ldada_24 xiy, 0x01f6e6
+	lda_24 xiy, 0x01f6e6
 	ld xix, (xiy + 4)
 	push xix
 	ld xix, (xiy)
@@ -54566,11 +54566,11 @@ LABEL_03E758:
 	lda xde, (xsp + 56)
 	call LABEL_03D3A4
 	lda xbc, (xsp + 114)
-	ldada_24 xde, 0x01f6ee
+	lda_24 xde, 0x01f6ee
 	lda xwa, (xsp + 48)
 	call LABEL_03E10E
 	lda xbc, (xsp + 114)
-	ldada_24 xde, 0x01f6f6
+	lda_24 xde, 0x01f6f6
 	lda xwa, (xsp + 72)
 	call LABEL_03D8E0
 	lda xbc, (xsp + 72)
@@ -54615,7 +54615,7 @@ LABEL_03E7E6:
 	call 0x3D2AC
 	cps hl, 0
 	jr nz, LABEL_03E7E6
-	ldada_24 xiz, 0x00f3d2
+	lda_24 xiz, 0x00f3d2
 	ld wa, (xsp + 104)
 	exts xwa
 	ld (xsp + 44), xwa
@@ -54627,7 +54627,7 @@ LABEL_03E7E6:
 	ld xde, xiz
 	call LABEL_03E290
 	lda xbc, (xsp + 88)
-	ldada_24 xde, 0x01f6fe
+	lda_24 xde, 0x01f6fe
 	lda xwa, (xsp + 48)
 	call LABEL_03E290
 	lda xbc, (xsp + 48)
@@ -54676,7 +54676,7 @@ LABEL_03E894:
 
 LABEL_03E8C7:
 	ld xwa, (xsp + 36)
-	ldada_24 xbc, 0x01f70e
+	lda_24 xbc, 0x01f70e
 	call LABEL_03DCE6
 	jrl LABEL_03E9FC
 
@@ -54710,7 +54710,7 @@ LABEL_03E920:
 	cps wa, 0
 	jr ge, LABEL_03E933
 	ld xwa, (xsp + 36)
-	ldada_24 xbc, 0x01f716
+	lda_24 xbc, 0x01f716
 	call LABEL_03DCE6
 	jrl LABEL_03E9FC
 
@@ -54903,7 +54903,7 @@ LABEL_03EA8D:
 	dec 1, xhl
 
 LABEL_03EA91:
-	stdi16_24 0x040c22, 0x0022
+	sti16_24 0x040c22, 0x0022
 	ret
 
 LABEL_03EA99:
@@ -54922,7 +54922,7 @@ LABEL_03EA9C:
 	ld xde, (xsp + 22)
 	cps hl, 0
 	jr nz, LABEL_03EAC8
-	ldada_24 xbc, 0x01f71e
+	lda_24 xbc, 0x01f71e
 	ld xwa, xde
 	call LABEL_03DCE6
 	jrl LABEL_03EBC8
@@ -54933,8 +54933,8 @@ LABEL_03EAC8:
 	lda xhl, (xwa + 7)
 	cp bc, 0x7FF
 	jr le, LABEL_03EAF9
-	stdi16_24 0x040c22, 0x0022
-	ldada_24 xbc, 0x00f420
+	sti16_24 0x040c22, 0x0022
+	lda_24 xbc, 0x00f420
 	bitm 7, (xhl)
 	jr z, LABEL_03EAF0
 	ld xwa, xde
@@ -54949,7 +54949,7 @@ LABEL_03EAF0:
 LABEL_03EAF9:
 	cp bc, 0xF801
 	jr ge, LABEL_03EB0D
-	ldada_24 xbc, 0x01f726
+	lda_24 xbc, 0x01f726
 	ld xwa, xde
 	call LABEL_03DCE6
 	jrl LABEL_03EBC8
@@ -54983,8 +54983,8 @@ LABEL_03EB40:
 	inc 1, wa
 	cp wa, 0x7FF
 	jr c, LABEL_03EB6D
-	stdi16_24 0x040c22, 0x0022
-	ldada_24 xbc, 0x00f420
+	sti16_24 0x040c22, 0x0022
+	lda_24 xbc, 0x00f420
 	ld a, (xix)
 	bit 7, a
 	jr z, LABEL_03EB65
@@ -55012,8 +55012,8 @@ LABEL_03EB7B:
 	ld wa, iy
 	sub wa, 0x1
 	jr nz, LABEL_03EB97
-	stdi16_24 0x040c22, 0x0022
-	ldada_24 xbc, 0x01f72e
+	sti16_24 0x040c22, 0x0022
+	lda_24 xbc, 0x01f72e
 	ld xwa, xde
 	call LABEL_03DCE6
 	jr LABEL_03EBC8
