@@ -11359,93 +11359,120 @@ HDAE5000_FS_Init:	; 0x2870D6 (3711 bytes)
 
 
 HDAE5000_FS_Read_FSB:	; 0x287F55 (832 bytes)
-	; Read File System Block from HD
-	; Part 1: Init loop — read 24 directory entries
+	; FS_Read_FSB: Initialize the FSB directory listing display.
+	; Populates 24 display tile entries in RAM from a ROM template, formats
+	; entry numbers (1-24 per page), copies 16-byte tiles to VRAM, then
+	; registers two event handlers for the left/right file browser panes.
+	;
+	; The FSB supports 5 pages x 24 entries = 120 total directory slots.
+	; Page selector at 0x23A090 steps by 24 (values: 0, 24, 48, 72, 96).
+	;
+	; 21-byte in-RAM directory entry layout (at 0x22A2CA + IZ*21):
+	;   [0-3]   Header: " N:" where N=entry number (formatted by PPI_Block_Copy)
+	;   [4-19]  Display tile: 16-byte text block (filename, initially spaces)
+	;   [20]    Terminator: 0x09 (tab character)
+	;
+	; Part 1: Init loop — populate 24 directory entries from ROM template
 	lda	xsp, (xsp-22)
 	pushw iz                                ; push iz (compact)
-	pushw 0x0781
+	pushw 0x0781                            ; MemFill pattern (clear display buffer)
 	pushw 0x0000
-	lda_24 xwa, 0x22a2ca
+	lda_24 xwa, 0x22a2ca                    ; dest = FSB display buffer base
 	push xwa
-	call 0x29aec7			; MemFill
+	call 0x29aec7			; MemFill — clear all 24 entries
 	inc 0, xsp			; dealloc 8 bytes
-	lds iz, 0			; IZ = 0 (loop counter)
+	lds iz, 0			; IZ = 0 (entry index, 0-23)
 	cp iz, 0x0018			; pre-check: 24 iterations?
 	jrl nc, .LFS_RdFSB__loop_done
-.LFS_RdFSB__loop:			; loop body start
-	pushw 0x0015
-	lda_24 xwa, 0x2e2e60
+.LFS_RdFSB__loop:			; --- per-entry initialization ---
+	pushw 0x0015                            ; size = 21 bytes
+	lda_24 xwa, 0x2e2e60                    ; src = ROM template "   :                \t"
 	push xwa
 	ldw wa, 0x0015			; 21 bytes per entry
 	mul xwa, xiz			; offset = IZ * 21
-	ld xbc, 0x0022a2ca
+	ld xbc, 0x0022a2ca                      ; dest = display buffer + offset
 	add xbc, xwa
 	push xbc
-	call 0x29ae9f			; MemCopy
-	ld16_24 xwa, 0x23a090
-	add wa, iz
-	inc 1, wa
-	pushw wa                                ; push wa (compact)
-	pushw 0x002e		; push 0x002E
-	pushw 0x2e76		; push 0x2E76
-	lda xwa, (xsp + 0x12)
+	call 0x29ae9f			; MemCopy — copy ROM template to entry slot
+	ld16_24 xwa, 0x23a090                   ; WA = page_base (0/24/48/72/96)
+	add wa, iz                              ; WA = page_base + index
+	inc 1, wa                               ; WA = entry_number (1-based)
+	pushw wa                                ; push entry number
+	pushw 0x002e		; format spec offset (decimal number formatting)
+	pushw 0x2e76		; format handler ROM address
+	lda xwa, (xsp + 0x12)                   ; XWA = entry buffer ptr
 	push xwa
-	call HDAE5000_PPI_Block_Copy
-	lda xwa, (xsp + 0x16)
+	call HDAE5000_PPI_Block_Copy            ; format entry number into header bytes [0-2]
+	lda xwa, (xsp + 0x16)                   ; XWA = entry buffer ptr
 	push xwa
-	call 0x29af71			; Display_Buffer_Validate
+	call 0x29af71			; Display_Buffer_Validate — validate display string
 	lda xsp, (xsp + 0x18)
-	pushw hl                                ; push hl (compact)
-	lda xwa, (xsp + 0x04)
+	pushw hl                                ; push validated length
+	lda xwa, (xsp + 0x04)                   ; XWA = validated string ptr
 	push xwa
 	ldw wa, 0x0015
 	mul xwa, xiz
 	ld xbc, 0x0022a2ca
 	add xbc, xwa
-	push xbc
-	call 0x29ae9f
+	push xbc                                ; dest = entry buffer
+	call 0x29ae9f                           ; MemCopy — copy validated data back
 	lda xsp, (xsp + 0x0a)
-	ld16_24 xwa, 0x23a090
-	add wa, iz
-	call HDAE5000_Calculate_Tile_Address
-	pushw 0x0010
-	push xhl
+	ld16_24 xwa, 0x23a090                   ; WA = page_base
+	add wa, iz                              ; WA = page_base + index (0-based display row)
+	call HDAE5000_Calculate_Tile_Address     ; XHL = VRAM address for this tile row
+	pushw 0x0010                            ; size = 16 bytes (display tile only)
+	push xhl                                ; dest = VRAM tile address
 	ldw wa, 0x0015
 	mul xwa, xiz
-	inc 4, wa			; offset + 4
+	inc 4, wa			; offset + 4 → skip 4-byte header, point to tile data
 	extz xwa
 	ld xbc, 0x0022a2ca
-	add xbc, xwa
+	add xbc, xwa                            ; src = entry[4..19] = 16-byte display tile
 	push xbc
-	call 0x29ae9f
+	call 0x29ae9f                           ; MemCopy — copy tile to VRAM
 	lda xsp, (xsp + 0x0a)
-	inc 1, iz			; IZ++
+	inc 1, iz			; IZ++ (next entry)
 	cp iz, 0x0018
 	jrl c, .LFS_RdFSB__loop	; loop while IZ < 24
 .LFS_RdFSB__loop_done:
-	lda_24 xwa, 0x22a2ca
+	; --- Register event handlers with UI framework ---
+	; The UI framework uses a vtable-based dispatch system:
+	;   0x23A1A2 → UI framework object pointer
+	;   object + 0x0E0A → active display context
+	;   context + 0x0124 → RegisterEventHandler method
+	;   context + 0x050C → GetCurrentSelection method
+	;   context + 0x0100 → SetDisplayCell method
+	lda_24 xwa, 0x22a2ca                    ; XWA = display buffer base (handler data ptr)
 	ld xde, xwa
-	ld32_24 xwa, 0x23a1a2
-	ld_sril xwa, (xwa + 0x0e0a)
-	ld_sril xhl, (xwa + 0x0124)             ; ld XHL, (XWA + 0x0124)
-	ld xwa, 0x007f00fb
-	ld xbc, 0x01ea000a
-	call (xhl)
+	ld32_24 xwa, 0x23a1a2                   ; XWA = UI framework ptr
+	ld_sril xwa, (xwa + 0x0e0a)             ; XWA = active display context
+	ld_sril xhl, (xwa + 0x0124)             ; XHL = RegisterEventHandler method
+	ld xwa, 0x007f00fb                      ; params: handlerA, VRAM tile ID 0xFB
+	ld xbc, 0x01ea000a                      ; event mask: register handler A
+	call (xhl)                              ; RegisterEventHandler(handlerA)
 	ld32_24 xwa, 0x23a1a2
 	ld_sril xwa, (xwa + 0x0e0a)
 	ld_sril xhl, (xwa + 0x0124)
-	ld xwa, 0x007f00fb
-	ld xbc, 0x01c0000f
-	ld xde, 0xffffffff
-	call (xhl)
+	ld xwa, 0x007f00fb                      ; params: same tile ID
+	ld xbc, 0x01c0000f                      ; event mask: register completion handler
+	ld xde, 0xffffffff                      ; no filter
+	call (xhl)                              ; RegisterEventHandler(completion)
 	popw iz                                 ; pop iz (compact)
 	lda xsp, (xsp + 0x16)		; dealloc stack frame
 	ret
 	;
-	; Part 2: Event handler A (0x288041)
+	; Part 2: Event handler A — left pane of file browser (0x288041)
+	; Called by UI framework when user interacts with left column.
+	; Input: XWA=context, XBC=event_code, XDE=event_param
+	; Events handled:
+	;   0x01C00007: Action event (sub-codes: 0x0B=navigate, 0x8A=validate string)
+	;   0x01E0003A: Copy display tile data (16 bytes from tile buffer)
+	;   0x01E0007C: Query tile size → returns 16
+	;   0x01E00084: Acknowledge/no-op → returns 0
+	;   0x01E00086: Copy display tile data + clear dirty flag
 .LFS_RdFSB__handlerA:
 	push xiz
-	ld xiz, xwa			; save context
+	ld xiz, xwa			; save UI context
 	cp xbc, 0x01c00007
 	jr z, .LFS_RdFSB__a_evt07
 	cp xbc, 0x01e0007c
@@ -11456,71 +11483,71 @@ HDAE5000_FS_Read_FSB:	; 0x287F55 (832 bytes)
 	jr z, .LFS_RdFSB__a_evt86
 	cp xbc, 0x01e0003a
 	jr z, .LFS_RdFSB__a_evt3a
-	lds32 xhl, 0			; unrecognized event
+	lds32 xhl, 0			; unrecognized event → return 0
 	jrl t, .LFS_RdFSB__a_exit
-.LFS_RdFSB__a_evt3a:			; event 0x3A: copy display data
-	pushw 0x0010
-	lda_24 xwa, 0x23a06e
+.LFS_RdFSB__a_evt3a:			; EVT 0x3A: Read tile — copy 16-byte tile to caller
+	pushw 0x0010                            ; size = 16 bytes (tile data)
+	lda_24 xwa, 0x23a06e                    ; src = current tile buffer
 	push xwa
-	push xde
+	push xde                                ; dest = caller's buffer (from event param)
 	call HDAE5000_MemCopy_Reverse
 	lda xsp, (xsp + 0x0a)
-	ld xhl, xiz
+	ld xhl, xiz                             ; return context pointer
 	jrl t, .LFS_RdFSB__a_exit
-.LFS_RdFSB__a_evt86:			; event 0x86: copy + clear flag
-	pushw 0x0010
-	push xde
+.LFS_RdFSB__a_evt86:			; EVT 0x86: Write tile + clear dirty flag
+	pushw 0x0010                            ; size = 16 bytes
+	push xde                                ; src = caller's new tile data
 	pushw 0x0023
-	pushw 0xa06e		; push 0xA06E
+	pushw 0xa06e		; dest = tile buffer at 0x23A06E
 	call HDAE5000_MemCopy_Reverse
 	lda xsp, (xsp + 0x0a)
-	sti8_24 0x23a07e, 0x00	; clear byte
+	sti8_24 0x23a07e, 0x00	; clear dirty flag (tile updated)
 	ld xhl, xiz
 	jrl t, .LFS_RdFSB__a_exit
-.LFS_RdFSB__a_evt84:
+.LFS_RdFSB__a_evt84:                           ; EVT 0x84: Acknowledge — no action needed
 	lds32 xhl, 0
 	jrl t, .LFS_RdFSB__a_exit
-.LFS_RdFSB__a_evt7c:
+.LFS_RdFSB__a_evt7c:                           ; EVT 0x7C: Query tile size → 16 bytes
 	ld xhl, 0x00000010
 	jrl t, .LFS_RdFSB__a_exit
-.LFS_RdFSB__a_evt07:			; event 0x07: file operation
+.LFS_RdFSB__a_evt07:			; EVT 0x07: Action — dispatch on sub-code in XDE
 	cp xde, 0x0000000b
 	jr z, .LFS_RdFSB__a_case0b
 	cp xde, 0x0000008a
 	jrl nz, .LFS_RdFSB__a_done
-	; Case 0x8A: validate string and display
-	lda_24 xwa, 0x22ad0a
-	calr HDAE5000_Validate_String
-	ld xiz, xhl
+	; Sub-code 0x8A: Validate filename string and update display
+	lda_24 xwa, 0x22ad0a                    ; XWA = filename string buffer
+	calr HDAE5000_Validate_String            ; validate/sanitize string
+	ld xiz, xhl                              ; XIZ = validated string ptr (or NULL)
 	ld xwa, xiz
 	or xwa, xwa
-	jrl z, .LFS_RdFSB__a_done
+	jrl z, .LFS_RdFSB__a_done               ; skip if validation failed (NULL)
 	ld xwa, xiz
 	push xwa
-	call 0x29af71
-	pushw hl                                ; push hl
+	call 0x29af71                            ; Display_Buffer_Validate
+	pushw hl                                ; push validated length
 	ld xwa, xiz
 	push xwa
-	lda_24 xwa, 0x23a06e
+	lda_24 xwa, 0x23a06e                    ; dest = current tile buffer
 	push xwa
-	call 0x29ae9f
+	call 0x29ae9f                            ; MemCopy — copy validated name to tile
 	lda xsp, (xsp + 0x0e)
-	ld32_24 xwa, 0x23a1a2
+	ld32_24 xwa, 0x23a1a2                   ; UI framework → GetCurrentSelection
 	ld_sril xwa, (xwa + 0x0e0a)
-	ld_sril xix, (xwa + 0x050c)             ; ld XIX, (XWA + 0x050C)
-	call (xix)
-	lda_24 xwa, 0x23a06e
+	ld_sril xix, (xwa + 0x050c)             ; XIX = GetCurrentSelection method
+	call (xix)                               ; XHL = current selection index
+	lda_24 xwa, 0x23a06e                    ; XDE = tile buffer ptr
 	ld xbc, xwa
-	ld xwa, xhl
-	ld xde, xbc
-	ld32_24 xbc, 0x23a1a2
+	ld xwa, xhl                              ; XWA = selection index
+	ld xde, xbc                              ; XDE = tile data
+	ld32_24 xbc, 0x23a1a2                   ; UI framework → SetDisplayCell
 	ld_sril xbc, (xbc + 0x0e0a)
-	ld_sril xhl, (xbc + 0x0100)             ; ld XHL, (XBC + 0x0100)
-	ld xbc, 0x01e00086
-	call (xhl)
+	ld_sril xhl, (xbc + 0x0100)             ; XHL = SetDisplayCell method
+	ld xbc, 0x01e00086                       ; event code = write tile + clear dirty
+	call (xhl)                               ; SetDisplayCell(selection, tile, 0x86)
 	jr t, .LFS_RdFSB__a_done
-.LFS_RdFSB__a_case0b:			; case 0x0B: sector list display
-	ld32_24 xwa, 0x23a1a2
+.LFS_RdFSB__a_case0b:			; Sub-code 0x0B: Navigate to item — refresh display
+	ld32_24 xwa, 0x23a1a2                   ; GetCurrentSelection
 	ld_sril xwa, (xwa + 0x0e0a)
 	ld_sril xix, (xwa + 0x050c)
 	call (xix)
@@ -11528,26 +11555,29 @@ HDAE5000_FS_Read_FSB:	; 0x287F55 (832 bytes)
 	ld xbc, xwa
 	ld xwa, xhl
 	ld xde, xbc
-	ld32_24 xbc, 0x23a1a2
+	ld32_24 xbc, 0x23a1a2                   ; SetDisplayCell with evt 0x3A (read tile)
 	ld_sril xbc, (xbc + 0x0e0a)
 	ld_sril xhl, (xbc + 0x0100)
 	ld xbc, 0x01e0003a
 	call (xhl)
-	ld16_24 xwa, 0x23a096
-	lda_24 xbc, 0x23a06e
-	ld xde, 0x007f00f0
-	calr HDAE5000_Menu_Callback
-	calr HDAE5000_FS_Read_FSB	; recursive call
+	ld16_24 xwa, 0x23a096                   ; WA = display row base
+	lda_24 xbc, 0x23a06e                    ; XBC = tile buffer
+	ld xde, 0x007f00f0                       ; params: left pane tile ID 0xF0
+	calr HDAE5000_Menu_Callback              ; update menu display
+	calr HDAE5000_FS_Read_FSB	; recursive call — refresh page
 .LFS_RdFSB__a_done:
 	lds32 xhl, 0
 .LFS_RdFSB__a_exit:
 	pop xiz
 	ret
 	;
-	; Part 3: Event handler B (0x288169) — same structure, different data
+	; Part 3: Event handler B — right pane of file browser (0x288169)
+	; Same event handling as handler A, but operates on the right display column.
+	; Key differences: uses tile ID 0x0163 (right pane), and sub-code 0x0B
+	; calls FS_Write_FSB instead of FS_Read_FSB (save operation).
 .LFS_RdFSB__handlerB:
 	push xiz
-	ld xiz, xwa
+	ld xiz, xwa			; save UI context
 	cp xbc, 0x01c00007
 	jr z, .LFS_RdFSB__b_evt07
 	cp xbc, 0x01e0007c
@@ -11558,9 +11588,9 @@ HDAE5000_FS_Read_FSB:	; 0x287F55 (832 bytes)
 	jr z, .LFS_RdFSB__b_evt86
 	cp xbc, 0x01e0003a
 	jr z, .LFS_RdFSB__b_evt3a
-	lds32 xhl, 0
+	lds32 xhl, 0			; unrecognized event → return 0
 	jrl t, .LFS_RdFSB__b_exit
-.LFS_RdFSB__b_evt3a:
+.LFS_RdFSB__b_evt3a:			; EVT 0x3A: Read tile — copy 16-byte tile to caller
 	pushw 0x0010
 	lda_24 xwa, 0x23a06e
 	push xwa
@@ -11569,28 +11599,29 @@ HDAE5000_FS_Read_FSB:	; 0x287F55 (832 bytes)
 	lda xsp, (xsp + 0x0a)
 	ld xhl, xiz
 	jrl t, .LFS_RdFSB__b_exit
-.LFS_RdFSB__b_evt86:
+.LFS_RdFSB__b_evt86:			; EVT 0x86: Write tile + clear dirty flag
 	pushw 0x0010
 	push xde
 	pushw 0x0023
-	pushw 0xa06e		; push 0xA06E
+	pushw 0xa06e		; dest = tile buffer at 0x23A06E
 	call HDAE5000_MemCopy_Reverse
 	lda xsp, (xsp + 0x0a)
-	sti8_24 0x23a07e, 0x00
+	sti8_24 0x23a07e, 0x00	; clear dirty flag
 	ld xhl, xiz
 	jrl t, .LFS_RdFSB__b_exit
-.LFS_RdFSB__b_evt84:
+.LFS_RdFSB__b_evt84:                           ; EVT 0x84: Acknowledge — no-op
 	lds32 xhl, 0
 	jrl t, .LFS_RdFSB__b_exit
-.LFS_RdFSB__b_evt7c:
+.LFS_RdFSB__b_evt7c:                           ; EVT 0x7C: Query tile size → 16 bytes
 	ld xhl, 0x00000010
 	jrl t, .LFS_RdFSB__b_exit
-.LFS_RdFSB__b_evt07:
+.LFS_RdFSB__b_evt07:			; EVT 0x07: Action — dispatch on sub-code
 	cp xde, 0x0000000b
 	jr z, .LFS_RdFSB__b_case0b
 	cp xde, 0x0000008a
 	jrl nz, .LFS_RdFSB__b_done
-	lda_24 xwa, 0x22ad0a
+	; Sub-code 0x8A: Validate filename and update display (same as handler A)
+	lda_24 xwa, 0x22ad0a                    ; filename string buffer
 	calr HDAE5000_Validate_String
 	ld xiz, xhl
 	ld xwa, xiz
@@ -11598,15 +11629,15 @@ HDAE5000_FS_Read_FSB:	; 0x287F55 (832 bytes)
 	jrl z, .LFS_RdFSB__b_done
 	ld xwa, xiz
 	push xwa
-	call 0x29af71
-	pushw hl                                ; push hl
+	call 0x29af71                            ; Display_Buffer_Validate
+	pushw hl                                ; validated length
 	ld xwa, xiz
 	push xwa
 	lda_24 xwa, 0x23a06e
 	push xwa
-	call 0x29ae9f
+	call 0x29ae9f                            ; MemCopy — name to tile buffer
 	lda xsp, (xsp + 0x0e)
-	ld32_24 xwa, 0x23a1a2
+	ld32_24 xwa, 0x23a1a2                   ; GetCurrentSelection
 	ld_sril xwa, (xwa + 0x0e0a)
 	ld_sril xix, (xwa + 0x050c)
 	call (xix)
@@ -11614,14 +11645,14 @@ HDAE5000_FS_Read_FSB:	; 0x287F55 (832 bytes)
 	ld xbc, xwa
 	ld xwa, xhl
 	ld xde, xbc
-	ld32_24 xbc, 0x23a1a2
+	ld32_24 xbc, 0x23a1a2                   ; SetDisplayCell(selection, tile, 0x86)
 	ld_sril xbc, (xbc + 0x0e0a)
 	ld_sril xhl, (xbc + 0x0100)
 	ld xbc, 0x01e00086
 	call (xhl)
 	jr t, .LFS_RdFSB__b_done
-.LFS_RdFSB__b_case0b:
-	ld32_24 xwa, 0x23a1a2
+.LFS_RdFSB__b_case0b:			; Sub-code 0x0B: Navigate — save and refresh
+	ld32_24 xwa, 0x23a1a2                   ; GetCurrentSelection
 	ld_sril xwa, (xwa + 0x0e0a)
 	ld_sril xix, (xwa + 0x050c)
 	call (xix)
@@ -11629,18 +11660,18 @@ HDAE5000_FS_Read_FSB:	; 0x287F55 (832 bytes)
 	ld xbc, xwa
 	ld xwa, xhl
 	ld xde, xbc
-	ld32_24 xbc, 0x23a1a2
+	ld32_24 xbc, 0x23a1a2                   ; SetDisplayCell with evt 0x3A
 	ld_sril xbc, (xbc + 0x0e0a)
 	ld_sril xhl, (xbc + 0x0100)
 	ld xbc, 0x01e0003a
 	call (xhl)
-	ld16_24 xwa, 0x23a096
-	lda_24 xbc, 0x23a06e
-	ld xde, 0x007f0163
-	calr HDAE5000_Menu_Callback
-	lds wa, 1
-	lds bc, 2
-	calr HDAE5000_FS_Write_FSB
+	ld16_24 xwa, 0x23a096                   ; WA = display row base
+	lda_24 xbc, 0x23a06e                    ; XBC = tile buffer
+	ld xde, 0x007f0163                       ; params: right pane tile ID 0x0163
+	calr HDAE5000_Menu_Callback              ; update menu display
+	lds wa, 1                                ; WA = operation mode 1
+	lds bc, 2                                ; BC = sector count 2
+	calr HDAE5000_FS_Write_FSB               ; → write FSB to disk (save operation)
 .LFS_RdFSB__b_done:
 	lds32 xhl, 0
 .LFS_RdFSB__b_exit:
