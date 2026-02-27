@@ -91139,6 +91139,20 @@ LABEL_EF185A:
 	.byte 0x42, 0x49, 0x48, 0x5d
 	.byte 0x0e
 
+; =============================================================================
+; Copy_DE_words_from_XBC_to_XWA - Block memory copy (word-granularity)
+;
+; Copies DE 16-bit words from source to destination using LDIRW (block move).
+; Used for blitting offscreen buffers to VRAM and general-purpose memory copy.
+;
+; Input:
+;   XWA = destination address (24-bit)
+;   XBC = source address (24-bit)
+;   DE  = word count
+;
+; Example: Blit full screen (320x240 @ 8bpp = 38400 words):
+;   XWA = 0x1A0000 (VRAM), XBC = 0x43C00 (offscreen), DE = 0x9600
+; =============================================================================
 Copy_DE_words_from_XBC_to_XWA:	; ef18d7
 	ld xix, xwa
 	ld xiy, xbc
@@ -91146,6 +91160,17 @@ Copy_DE_words_from_XBC_to_XWA:	; ef18d7
 	ldirw
 	ret
 
+; =============================================================================
+; Fill_memory_at_XWA_with_DE_words_of_BC_value - Block memory fill
+;
+; Fills memory with a repeating 16-bit pattern. Used for clearing VRAM or
+; offscreen buffers to a solid color (duplicate color byte in both halves).
+;
+; Input:
+;   XWA = destination address (24-bit, auto-increments via SFR post-increment)
+;   XDE = word count (decrements to zero)
+;   BC  = 16-bit fill pattern (e.g., color | (color << 8) for 8bpp)
+; =============================================================================
 Fill_memory_at_XWA_with_DE_words_of_BC_value:	; ef18e0
 	st_dpiw BC, 0xE1
 	djnz xde, Fill_memory_at_XWA_with_DE_words_of_BC_value
@@ -96982,6 +97007,25 @@ flash_update__not_today:	; EF503C
 	pop_werp 0xFA
 	ret
 
+; =============================================================================
+; Draw_FlashMemUpdate_message_bitmap - Draw 224x22 monochrome bitmap
+;
+; Renders a 1bpp monochrome bitmap (224 pixels wide × 22 pixels tall) to the
+; offscreen buffer at 0x43C00, then blits the entire buffer to VRAM.
+; Used to display firmware update status messages on the LCD.
+;
+; The bitmap is stored as packed 1bpp data (28 bytes per row × 22 rows = 616
+; bytes total). Each bit is unpacked to an 8bpp pixel using a bit mask table.
+;
+; Input:
+;   XWA = pointer to bitmap data (24-bit, in ROM)
+;   BC  = X start coordinate (left edge)
+;   DE  = Y start coordinate (top edge)
+;   Stack: foreground color (byte), background color (byte)
+;
+; Output:
+;   Screen updated with rendered bitmap
+; =============================================================================
 Draw_FlashMemUpdate_message_bitmap:	; EF5040
 	dec 4, xsp
 	pushw iz
@@ -97020,11 +97064,13 @@ LABEL_EF5066:
 	extz xde
 	lda_24 xbc, 0x043c00                  ; aparentemente isso é um buffer offscreen
 
+; Convert Y coordinate to framebuffer row offset: XWA = XDE * 320
+; Uses shift-add: (XDE << 2 + XDE) << 6 = XDE * 5 * 64 = XDE * 320
 Set_XWA_to_320_times_XDE:
 	ld xwa, xde
-	sll xwa, 2
-	add xwa, xde
-	sll xwa, 6
+	sll xwa, 2		; XWA = Y * 4
+	add xwa, xde		; XWA = Y * 5
+	sll xwa, 6		; XWA = Y * 320
 	cpi_berp 0xF2, 0
 	jr z, LABEL_EF50AA
 	ld de, iy
@@ -305499,6 +305545,17 @@ LABEL_FAA761:
 SetNeedUpdate:
 	ret
 
+; =============================================================================
+; SetChangeRect - Update bounding box of changed screen region
+;
+; Expands the dirty rectangle to include the region described by a 4-word
+; structure pointed to by XWA: {x_min, y_min, x_max, y_max}.
+; The bounding box is maintained at 0x030456-0x03045C and an update flag
+; is set at 0x03045E.
+;
+; Input:
+;   XWA = pointer to 8-byte rect structure {x_min, y_min, x_max, y_max}
+; =============================================================================
 SetChangeRect:
 	push xiz
 	ld xiz, xwa
@@ -305542,6 +305599,18 @@ LABEL_FAA7B0:
 	pop xiz
 	ret
 
+; =============================================================================
+; ReadPixel - Read a pixel color from offscreen buffer 1
+;
+; Reads the 8-bit color index at (x, y) from OFFSCREEN_BUFFER_1 (0x43C00).
+;
+; Input:
+;   XWA = pointer to coordinate pair: word[0]=x, word[2]=y
+;
+; Output:
+;   HL = pixel color (8-bit index, zero-extended to 16-bit)
+;        Returns 0 if coordinates fail validation
+; =============================================================================
 ReadPixel:
 	push xiz
 	ld xiz, xwa
@@ -305571,6 +305640,19 @@ LABEL_FAA7E2:
 	pop xiz
 	ret
 
+; =============================================================================
+; ModifyPixel - Write a pixel to offscreen buffer 1
+;
+; Sets a single pixel at (x, y) in OFFSCREEN_BUFFER_1 (0x43C00).
+; Color 0xF7 is treated as transparent (no-op). Color 0xF5 triggers a
+; read-back from a secondary buffer (at address stored at 0x0304B2).
+;
+; Input:
+;   XWA = pointer to coordinate pair: word[0]=x, word[2]=y
+;   BC  = color index (low byte)
+;
+; Address calculation: OFFSCREEN_BUFFER_1 + y*320 + x
+; =============================================================================
 ModifyPixel:
 	dec 4, xsp
 	pushw iz
@@ -305615,6 +305697,27 @@ LABEL_FAA840:
 	inc 4, xsp
 	ret
 
+; =============================================================================
+; ModifyPixelEx - Extended pixel operation with multiple drawing modes
+;
+; Performs a pixel operation at (x, y) in OFFSCREEN_BUFFER_1 (0x43C00)
+; using one of several drawing modes specified by DE.
+;
+; Input:
+;   XWA = pointer to coordinate pair: word[0]=x, word[2]=y
+;   BC  = color index (low byte)
+;   DE  = drawing mode:
+;         < 0x201: use translated buffer pointer
+;         0x201: direct write  — buffer[y*320+x] = color
+;         0x202: clear pixel   — buffer[y*320+x] = 0x00
+;         0x203: OR operation  — buffer[y*320+x] |= color
+;         0x204: AND operation — buffer[y*320+x] &= color
+;         0x205: XOR operation — buffer[y*320+x] ^= color
+;
+; Special colors:
+;   0xF7 = transparent (no-op)
+;   0xF5 = read-back from secondary buffer (0x0304B2)
+; =============================================================================
 ModifyPixelEx:
 	dec 6, xsp
 	pushw iz
@@ -305757,6 +305860,23 @@ LABEL_FAA986:
 	inc 6, xsp
 	ret
 
+; =============================================================================
+; DrawLine - Draw a line between two points (Bresenham algorithm)
+;
+; Draws a line from point A to point B on OFFSCREEN_BUFFER_1 (0x43C00).
+; Uses Bresenham's line algorithm with separate fast paths for horizontal,
+; vertical, and diagonal lines.
+;
+; Input:
+;   XWA = pointer to point A: word[0]=x1, word[2]=y1
+;   XBC = pointer to point B: word[0]=x2, word[2]=y2
+;   DE  = color index (low byte)
+;
+; Special color 0xF5 reads the pixel from a secondary buffer instead of
+; using a fixed color (used for pattern/texture line drawing).
+;
+; Calls SetChangeRect on completion to mark the drawn region as dirty.
+; =============================================================================
 DrawLine:
 	dec 6, xsp
 	push xiz
@@ -306331,6 +306451,21 @@ LABEL_FAAF0D:
 	lda xsp, (xsp + 66)
 	ret
 
+; =============================================================================
+; DrawLineEx - Extended line drawing with multiple drawing modes
+;
+; Like DrawLine, but supports all drawing modes from ModifyPixelEx:
+; direct write, clear, OR, AND, XOR. Also supports the 0xF5 pattern mode
+; which reads pixel colors from a secondary buffer.
+;
+; Input:
+;   XWA = pointer to point A: word[0]=x1, word[2]=y1
+;   XBC = pointer to point B: word[0]=x2, word[2]=y2
+;   DE  = drawing mode (same codes as ModifyPixelEx: 0x201-0x205)
+;
+; Uses Bresenham's algorithm with optimized paths for axis-aligned and
+; diagonal lines. Calls SetChangeRect to update dirty region.
+; =============================================================================
 DrawLineEx:
 	lda xsp, (xsp - 50)
 	push xiz
@@ -307578,6 +307713,21 @@ LABEL_FABA4E:
 	lda xsp, (xsp + 14)
 	ret
 
+; =============================================================================
+; MovePixels - Copy a rectangular pixel region within the offscreen buffer
+;
+; Copies a rectangular block of pixels from a source region to a destination
+; region within OFFSCREEN_BUFFER_1 (0x43C00). Used for scrolling, sprite
+; movement, and UI element repositioning.
+;
+; Input:
+;   XWA = pointer to source rect: word[0]=src_x, word[2]=src_y,
+;         word[4]=dest_x, word[6]=dest_y
+;   XBC = pointer to size: word[0]=width, word[2]=height
+;
+; Copies pixel-by-pixel with nested row/column loops.
+; Calls SetChangeRect on completion.
+; =============================================================================
 MovePixels:
 	dec 4, xsp
 	push xiz
@@ -307706,6 +307856,15 @@ LABEL_FABB6E:
 	lda xsp, (xsp + 22)
 	ret
 
+; =============================================================================
+; DrawWall - Fill entire screen / draw wallpaper
+;
+; Copies the full framebuffer (2 × 38400 words = 2 half-screens) from a
+; source address at 0x030452 to OFFSCREEN_BUFFER_1 (0x43C00), then marks
+; the entire screen as changed (0,0)-(319,239).
+;
+; This is used for drawing full-screen backgrounds (wallpaper/splash).
+; =============================================================================
 DrawWall:
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
 	cps hl, 0
@@ -307779,6 +307938,25 @@ LABEL_FABBE7:
 	lda xsp, (xsp + 12)
 	ret
 
+; =============================================================================
+; DrawBitmap - Draw an indexed bitmap/sprite from the bitmap table
+;
+; Draws a bitmap from the ROM bitmap descriptor table at 0x913000.
+; Each descriptor is 8 bytes: {word width, word height, long pixel_data_ptr}.
+; Pixel data is stored as packed 16-bit entries (2 pixels per word).
+; Color 0xF7 is treated as transparent (pixel skipped).
+;
+; Input:
+;   XWA = pointer to position: word[0]=x, word[2]=y
+;   XBC = bitmap index (used as: table[index * 8])
+;
+; Output:
+;   Bitmap rendered to OFFSCREEN_BUFFER_1 (0x43C00)
+;   SetChangeRect called with bitmap bounding box
+;
+; Returns immediately if bitmap index is 0xFFFFFFFF (no bitmap).
+; Clips against screen bottom edge (y >= 240 → skip row).
+; =============================================================================
 DrawBitmap:
 	dec 4, xsp
 	push xiz
@@ -307995,6 +308173,16 @@ LABEL_FABE0E:
 	lda xsp, (xsp + 26)
 	ret
 
+; =============================================================================
+; DrawBitmapFast - Optimized bitmap drawing (no transparency check)
+;
+; Like DrawBitmap but skips the per-pixel 0xF7 transparency check.
+; Faster for opaque bitmaps that don't require transparency.
+;
+; Input:
+;   XWA = pointer to position: word[0]=x, word[2]=y
+;   XBC = bitmap index (table at 0x913000, 8 bytes per entry)
+; =============================================================================
 DrawBitmapFast:
 	dec 4, xsp
 	push xiz
@@ -309339,6 +309527,32 @@ LABEL_FACAC3:
 	st_dri3b L, 0xFD, 0x38, 0x04
 	ret
 
+; =============================================================================
+; DrawString - Render a text string to the offscreen buffer
+;
+; Core text rendering function. Draws a null-terminated string using the
+; font glyph table at 0x945C00. Each font entry is 16 bytes:
+;   +0x00: word width (pixels)
+;   +0x02: word height (pixels)
+;   +0x04: word descent
+;   +0x06: word ascent
+;   +0x08: long glyph_data_ptr (pointer to glyph bitmap)
+;   +0x0C: long kerning_table_ptr (0 = fixed-width)
+;
+; Characters are rendered as 1bpp bitmaps (8 pixels per byte, MSB first).
+; Each glyph is divided into 8-pixel-wide columns, rendered left-to-right.
+; Supports clipping against a clip rectangle.
+;
+; Input:
+;   XWA = pointer to position/clip rect (8 words)
+;   XBC = pointer to cursor state (2 words: x_cursor, y_cursor)
+;   XDE = pointer to null-terminated string
+;   Stack: font_id (word), foreground_color (word), background_color (word)
+;
+; Output:
+;   Text rendered to OFFSCREEN_BUFFER_1 (0x43C00)
+;   SetChangeRect called with text bounding box
+; =============================================================================
 DrawString:
 	lda xsp, (xsp - 16)
 	push xiz
@@ -309768,6 +309982,19 @@ LABEL_FACEA3:
 	st_dri3b L, 0xFD, 0x3C, 0x01
 	retd 0x8
 
+; =============================================================================
+; DrawStringCentered - Draw text centered within a bounding rectangle
+;
+; Calculates the text width using CalcTotalWidth, then offsets the x/y
+; position to center the string both horizontally and vertically within
+; the specified rectangle.
+;
+; Input:
+;   XWA = pointer to bounding rectangle
+;   XBC = pointer to cursor state
+;   XDE = pointer to null-terminated string
+;   Stack: font_id (word), foreground_color (word), background_color (word)
+; =============================================================================
 DrawStringCentered:
 	st_dri3b L, 0xFD, 0xF2, 0xFE
 	pushw iz
@@ -309815,6 +310042,11 @@ DrawStringCentered:
 	st_dri3b L, 0xFD, 0x0E, 0x01
 	retd 0x8
 
+; =============================================================================
+; DrawStringLeftJustify - Draw text left-aligned, vertically centered
+;
+; Positions text at x = rect.left + 4, vertically centered within the rect.
+; =============================================================================
 DrawStringLeftJustify:
 	lda xsp, (xsp - 14)
 	push xiz
@@ -309855,6 +310087,11 @@ DrawStringLeftJustify:
 	lda xsp, (xsp + 14)
 	retd 0x8
 
+; =============================================================================
+; DrawStringRightJustify - Draw text right-aligned, vertically centered
+;
+; Positions text at x = rect.right - 4 - text_width, vertically centered.
+; =============================================================================
 DrawStringRightJustify:
 	st_dri3b L, 0xFD, 0xF0, 0xFE
 	push xiz
@@ -309903,6 +310140,15 @@ DrawStringRightJustify:
 	st_dri3b L, 0xFD, 0x10, 0x01
 	retd 0x8
 
+; =============================================================================
+; DrawStringAlignment - Draw text with specified alignment mode
+;
+; Dispatches to the appropriate aligned text drawing function based on mode.
+;
+; Input:
+;   Stack byte: alignment mode (0=center, 1=left, 2=right)
+;   Other args forwarded to the selected DrawString* variant
+; =============================================================================
 DrawStringAlignment:
 	push xiz
 	ld xiy, xbc
@@ -309910,11 +310156,11 @@ DrawStringAlignment:
 	ld ix, (xsp + 12)
 	ld xiz, (xsp + 14)
 	ld c, (xsp + 8)
-	cps c, 2
+	cps c, 2		; mode 2 = right-justify
 	jr z, LABEL_FAD078
-	cps c, 1
+	cps c, 1		; mode 1 = left-justify
 	jr z, LABEL_FAD06E
-	cps c, 0
+	cps c, 0		; mode 0 = centered
 	jr nz, LABEL_FAD080
 	push xiz
 	pushw ix
@@ -309942,6 +310188,19 @@ LABEL_FAD080:
 	pop xiz
 	retd 0xA
 
+; =============================================================================
+; DrawStringReverse - Draw text with inverted/reverse video appearance
+;
+; Renders text with swapped foreground and background colors relative to
+; normal rendering. Supports all three alignment modes (0=center, 1=left,
+; 2=right). Used for selected/highlighted menu items.
+;
+; Input:
+;   XWA = pointer to bounding rectangle
+;   XBC = pointer to cursor state
+;   XDE = pointer to null-terminated string
+;   Stack: alignment (byte), font_id, foreground, background
+; =============================================================================
 DrawStringReverse:
 	lda xsp, (xsp - 24)
 	push xiz
