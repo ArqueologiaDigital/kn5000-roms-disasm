@@ -18440,7 +18440,7 @@ HDAE5000_UI_Main_Handler:	; 0x28B3EA (8731 bytes)
 	add	xwa, 0x00000010
 	ld	xbc, 0x002304d8
 	add	xbc, xwa
-	.byte 0xb1, 0x47                       ; ld (XBC),L
+	ld_dst8_ri xbc, l		; ld (XBC),L
 	ld16_24	wa, 0x230806
 	ld (xsp + 0x02), wa                     ; ld (XSP+0x02),WA
 	ld	wa, iz
@@ -21761,7 +21761,7 @@ HDAE5000_VarInt_Encode:		; 0x28F36B
 .Lve_copy_last:
 	ld de, hl
 	dec 1, de
-	.byte 0x8f, 0x00, 0x21		; ld a, (xsp + 0x00) — first temp byte
+	ld8_src_rid8 xsp, 0x00, a		; ld a, (xsp + 0x00) — first temp byte
 	lda_dri3 xbc, 0x07, 0xe4, 0xe8	; (XBC+DE) = A
 	exts xhl
 	inc 6, xsp			; free temp buffer
@@ -39666,7 +39666,7 @@ HDAE5000_MemCopy_Reverse:	; 0x29AFF0
 	ld	xde, xix
 .LMCR_b036:
 	ld	a, (xbc)
-	.byte 0x82, 0x27                       ; ld L,(XDE)
+	ld8_src_ri xde, l		; ld L,(XDE)
 	lda_dpi xsp, 0xe4		; ld (XBC+),L
 	ld	(xde), a
 	inc 1, xiz                              ; inc 1,XIZ
@@ -39766,7 +39766,7 @@ HDAE5000_MemCopy_Reverse:	; 0x29AFF0
 	cp	(xbc), 0x00
 	jr z, .LMCR_b137                       ; [66 0c] jr Z,0x29b137
 .LMCR_b12b:
-	.byte 0x81, 0x27                       ; ld L,(XBC)
+	ld8_src_ri xbc, l		; ld L,(XBC)
 	extz hl                                 ; extz HL
 	ldw	wa, 0x0008
 	ldw	bc, 0x4000
@@ -39777,7 +39777,7 @@ HDAE5000_MemCopy_Reverse:	; 0x29AFF0
 	cp	(xbc), 0x00
 	jr z, .LMCR_b164                       ; [66 23] jr Z,0x29b164
 .LMCR_b141:
-	.byte 0x81, 0x27                       ; ld L,(XBC)
+	ld8_src_ri xbc, l		; ld L,(XBC)
 	and l, 0xf0		; and L,0xf0
 	extz hl                                 ; extz HL
 	sra	hl, 0x04
@@ -39834,7 +39834,7 @@ HDAE5000_MemCopy_Reverse:	; 0x29AFF0
 	cpw	qiz, 0x0008
 	jr lt, .LMCR_b1ac                      ; [61 e7] jr LT,0x29b1ac
 .LMCR_b1c5:
-	.byte 0x89, 0x01, 0x3c, 0x0f           ; and (XBC+0x01),0x0f
+	and8_imm_rid8 xbc, 0x01, 0x0f		; and (XBC+0x01),0x0f
 	ld	qiz, 1
 .LMCR_b1cc:
 	ld_srib3 a, 0x07, 0xE4, 0xFA	; ld A,(XBC+QIZ)
@@ -39850,7 +39850,7 @@ HDAE5000_MemCopy_Reverse:	; 0x29AFF0
 	jr lt, .LMCR_b1cc                      ; [61 db] jr LT,0x29b1cc
 	cps	ix, 0
 	jr z, .LMCR_b1f9                       ; [66 04] jr Z,0x29b1f9
-	.byte 0x92, 0x3e, 0x10, 0x00           ; or (XDE),0x0010
+	or16_imm_ri xde, 0x10, 0x00		; or (XDE),0x0010
 .LMCR_b1f9:
 	pushm	(xsp+8)
 	pushw 0x0023
@@ -40065,7 +40065,7 @@ HDAE5000_MemCopy_Reverse:	; 0x29AFF0
 	ret
 
 	ld xiy, (xsp + 0x04)                    ; ld XIY,(XSP+0x04)
-	.byte 0x95, 0x3c, 0xff, 0x00           ; and (XIY),0x00ff
+	and16_imm_ri xiy, 0xff, 0x00		; and (XIY),0x00ff
 	lds	ix, 1
 	ld	hl, (xsp+8)
 	add	hl, hl
@@ -40091,7 +40091,7 @@ HDAE5000_MemCopy_Reverse:	; 0x29AFF0
 	ld	wa, (xde)
 	srl	wa, 0x08
 	add	(xbc), wa
-	.byte 0x92, 0x3c, 0xff, 0x00           ; and (XDE),0x00ff
+	and16_imm_ri xde, 0xff, 0x00		; and (XDE),0x00ff
 	inc	1, ix
 .LMCR_b429:
 	cp	ix, hl
@@ -40226,7 +40226,7 @@ HDAE5000_MemCopy_Reverse:	; 0x29AFF0
 	add	xiy, xhl
 	srl	wa, 0x08
 	add	(xiy), wa
-	.byte 0x92, 0x3c, 0xff, 0x00           ; and (XDE),0x00ff
+	and16_imm_ri xde, 0xff, 0x00		; and (XDE),0x00ff
 	dec	1, iz
 .LMCR_b56f:
 	cps	iz, 0
@@ -40276,7 +40276,7 @@ HDAE5000_MemCopy_Reverse:	; 0x29AFF0
 	dec	2, ix
 	srl	wa, 0x08
 	add_sriw_mr wa, 0x07, 0xEC, 0xF0	; add (XHL+IX),WA
-	.byte 0x91, 0x3c, 0xff, 0x00           ; and (XBC),0x00ff
+	and16_imm_ri xbc, 0xff, 0x00		; and (XBC),0x00ff
 .LMCR_b5dc:
 	dec	2, de
 	dec	2, xbc
@@ -40529,7 +40529,7 @@ HDAE5000_Multiply:	; 0x29B72D
 	ld (xwa), xde                           ; ld (XWA),XDE
 	ld	xbc, (0x23a1a8)
 	or xbc, xbc                             ; or XBC,XBC
-	.byte 0xb1, 0xee                       ; call NZ,XBC
+	call_cc_ri xbc, 14		; call NZ,XBC
 	ret
 
 	ld xix, (xbc)                           ; ld XIX,(XBC)
@@ -40575,7 +40575,7 @@ HDAE5000_Multiply:	; 0x29B72D
 	ret
 
 	ld	h, (xwa+2)
-	.byte 0x89, 0x02, 0x27                 ; ld L,(XBC+0x02)
+	ld8_src_rid8 xbc, 0x02, l		; ld L,(XBC+0x02)
 	bit 0x00, l		; bit 0x00,L
 	ret z                                   ; ret Z
 
@@ -40774,7 +40774,7 @@ HDAE5000_Divide_Signed:	; 0x29B8C5
 .LDIV_b9a1:
 	ld	xbc, (0x23a1a8)
 	or xbc, xbc                             ; or XBC,XBC
-	.byte 0xb1, 0xee                       ; call NZ,XBC
+	call_cc_ri xbc, 14		; call NZ,XBC
 	ret
 
 	nop                                     ; nop
@@ -40803,7 +40803,7 @@ HDAE5000_Divide_Signed:	; 0x29B8C5
 	lds	hl, 0
 	ld (xiy + 0x02), hl                     ; ld (XIY+0x02),HL
 	ld l, a		; ld L,A
-	.byte 0xbd, 0x00, 0x53                 ; ld (XIY+0x00),HL
+	ld_dst16_rid8 xiy, 0x00, hl		; ld (XIY+0x00),HL
 	cp l, 0x17		; cp L,0x17
 	jr z, .LDIV_ba16                       ; [66 30] jr Z,0x29ba16
 	jr lt, .LDIV_ba01                      ; [61 19] jr LT,0x29ba01
@@ -40815,7 +40815,7 @@ HDAE5000_Divide_Signed:	; 0x29B8C5
 	bit_erpb 0xe7, 0x00		; bit 0x00,QB
 	jr z, .LDIV_ba16                       ; [66 1d] jr Z,0x29ba16
 	srl	xbc, 0x01
-	.byte 0x8d, 0x00, 0x61                 ; inc 1,(XIY+0x00)
+	inc1_8_rid8 xiy, 0x00		; inc 1,(XIY+0x00)
 	jr t, .LDIV_ba16                       ; [68 15] jr T,0x29ba16
 .LDIV_ba01:
 	ldb	a, 0x17
@@ -40871,10 +40871,10 @@ HDAE5000_Divide_Signed:	; 0x29B8C5
 	jp_24	nz, 0x29B830
 	push xiz
 	push xwa
-	.byte 0x99, 0x00, 0x23                 ; ld HL,(XBC+0x00)
-	.byte 0x98, 0x00, 0xab                 ; sub (XWA+0x00),HL
-	.byte 0x89, 0x03, 0x27                 ; ld L,(XBC+0x03)
-	.byte 0x88, 0x03, 0xdf                 ; xor (XWA+0x03),L
+	ld16_src_rid8 xbc, 0x00, hl		; ld HL,(XBC+0x00)
+	sub16_mem_rid8 xwa, 0x00, hl		; sub (XWA+0x00),HL
+	ld8_src_rid8 xbc, 0x03, l		; ld L,(XBC+0x03)
+	xor8_mem_rid8 xwa, 0x03, l		; xor (XWA+0x03),L
 	ld xwa, (xwa + 0x04)                    ; ld XWA,(XWA+0x04)
 	ld xbc, (xbc + 0x04)                    ; ld XBC,(XBC+0x04)
 	cp	xbc, 0x00800000
@@ -40919,7 +40919,7 @@ HDAE5000_Divide_Signed:	; 0x29B8C5
 	bit	0x0f, qhl
 	jr nz, .LDIV_badc                      ; [6e 06] jr NZ,0x29badc
 	sll	xhl, 0x01
-	.byte 0x98, 0x00, 0x69                 ; decw 1,(XWA+0x00)
+	dec1_16_rid8 xwa, 0x00		; decw 1,(XWA+0x00)
 .LDIV_badc:
 	cp l, 0x80		; cp L,0x80
 	jr c, .LDIV_baef                       ; [67 0e] jr C,0x29baef
@@ -41756,7 +41756,7 @@ HDAE5000_RECORD_TABLE:	; 0x29C0AA
 	cps	h, 0
 	pushw bc                                ; push BC
 	nop                                     ; nop
-	.byte 0xba, 0x97, 0x23                 ; lda HL,XDE+0x97
+	lda_rid8 xde, 0x97, xhl		; lda HL,XDE+0x97
 	nop                                     ; nop
 	.byte 0x08, 0xcd, 0x28                 ; ld (0xcd),0x28
 	nop                                     ; nop
@@ -41772,7 +41772,7 @@ HDAE5000_RECORD_TABLE:	; 0x29C0AA
 	nop                                     ; nop
 	orcfa_rid8 xix, 0xd8		; orcf A,(XIX+0xd8)
 	nop                                     ; nop
-	.byte 0xbe, 0x97, 0x23                 ; lda HL,XIZ+0x97
+	lda_rid8 xiz, 0x97, xhl		; lda HL,XIZ+0x97
 	nop                                     ; nop
 	jp 0x0028e6                             ; jp 0x0028e6
 	ldb	l, 0x00
@@ -68803,7 +68803,7 @@ HDAE5000_GFX_DATA_1:	; 0x2A5D2C
 	nop                                     ; nop
 	ld_s	(xwa-35), a
 	nop                                     ; nop
-	.byte 0xb2, 0xdd                       ; jp P/PL,XDE
+	jp_cc_ri xde, 13		; jp P/PL,XDE
 	pushw bc                                ; push BC
 	nop                                     ; nop
 	cps	xde, 5
@@ -68873,7 +68873,7 @@ HDAE5000_GFX_DATA_1:	; 0x2A5D2C
 	or	b, (xix)
 	pushw bc                                ; push BC
 	nop                                     ; nop
-	.byte 0xb6, 0xe2                       ; call LE,XIZ
+	call_cc_ri xiz, 2		; call LE,XIZ
 	pushw bc                                ; push BC
 	nop                                     ; nop
 	or	xde, xwa
@@ -68888,7 +68888,7 @@ HDAE5000_GFX_DATA_1:	; 0x2A5D2C
 	nop                                     ; nop
 	ld_s	(xde-29), bc
 	nop                                     ; nop
-	.byte 0xb4, 0xe3                       ; call ULE,XIX
+	call_cc_ri xix, 3		; call ULE,XIX
 	pushw bc                                ; push BC
 	nop                                     ; nop
 	.byte 0xe0, 0xe3, 0x29                 ; db
@@ -68941,7 +68941,7 @@ HDAE5000_GFX_DATA_1:	; 0x2A5D2C
 	.byte 0xe7, 0x29, 0x00                 ; db
 	ld	xwa, 0x7c0029e7
 	.byte 0xe7, 0x29, 0x00                 ; db
-	.byte 0xb4, 0xe7                       ; call C,XIX
+	call_cc_ri xix, 7		; call C,XIX
 	pushw bc                                ; push BC
 	nop                                     ; nop
 	or l, h		; or L,H
@@ -68992,7 +68992,7 @@ HDAE5000_GFX_DATA_1:	; 0x2A5D2C
 	nop                                     ; nop
 	ld_s	(xwa-22), bc
 	nop                                     ; nop
-	.byte 0xb2, 0xea                       ; call GT,XDE
+	call_cc_ri xde, 10		; call GT,XDE
 	pushw bc                                ; push BC
 	nop                                     ; nop
 	.byte 0xde, 0xea, 0x29                 ; rl 0x29,IZ
@@ -69055,7 +69055,7 @@ HDAE5000_GFX_DATA_1:	; 0x2A5D2C
 	nop                                     ; nop
 	ldw	iz, 0x29ef
 	nop                                     ; nop
-	.byte 0x80, 0xef                       ; or (XWA),L
+	or8_mem_ri xwa, l		; or (XWA),L
 	pushw bc                                ; push BC
 	nop                                     ; nop
 	orcfa_rid8 xix, 0xef		; orcf A,(XIX+0xef)
@@ -69233,7 +69233,7 @@ HDAE5000_GFX_DATA_1:	; 0x2A5D2C
 	nop                                     ; nop
 	ld_s	(xwa-3), a
 	nop                                     ; nop
-	.byte 0xb0, 0xfd                       ; ret P/PL
+	ret_cc_ri xwa, 13		; ret P/PL
 
 	pushw bc                                ; push BC
 	nop                                     ; nop
@@ -69251,7 +69251,7 @@ HDAE5000_GFX_DATA_1:	; 0x2A5D2C
 	nop                                     ; nop
 	ld_s	(xiz-2), a
 	nop                                     ; nop
-	.byte 0xb6, 0xfe                       ; ret NZ
+	ret_cc_ri xiz, 14		; ret NZ
 
 	pushw bc                                ; push BC
 	nop                                     ; nop
@@ -69532,7 +69532,7 @@ HDAE5000_GFX_DATA_1:	; 0x2A5D2C
 	.byte 0x10                             ; rcf
 	pushw de                                ; push DE
 	nop                                     ; nop
-	.byte 0x90, 0x10                       ; ldiw
+	ldiw_ri xwa		; ldiw
 	pushw de                                ; push DE
 	nop                                     ; nop
 	ld_s	(xde+16), xde
@@ -69631,7 +69631,7 @@ HDAE5000_GFX_DATA_1:	; 0x2A5D2C
 	.byte 0x16                             ; ex F,F'
 	pushw de                                ; push DE
 	nop                                     ; nop
-	.byte 0x96, 0x16                       ; cpdw
+	cpdw_ri xiz		; cpdw
 	pushw de                                ; push DE
 	nop                                     ; nop
 	xorcfa_rid8 xiz, 0x16		; xorcf A,(XIZ+0x16)
@@ -69646,7 +69646,7 @@ HDAE5000_GFX_DATA_1:	; 0x2A5D2C
 	popw de                                 ; pop DE
 	.byte 0x17, 0x2a                       ; ldf 0x2a
 	nop                                     ; nop
-	.byte 0x80, 0x17                       ; cpdr
+	cpdr_ri xwa		; cpdr
 	pushw de                                ; push DE
 	nop                                     ; nop
 	ld_s	(xde+23), de
@@ -69793,7 +69793,7 @@ HDAE5000_GFX_DATA_1:	; 0x2A5D2C
 	nop                                     ; nop
 	ld_s	(xix+34), b
 	nop                                     ; nop
-	.byte 0xb2, 0x22                       ; lda DE,XDE
+	lda_ri xde, xde		; lda DE,XDE
 	pushw de                                ; push DE
 	nop                                     ; nop
 	.byte 0xda, 0x22, 0x2a                 ; xorcf 0x2a,DE
@@ -69837,7 +69837,7 @@ HDAE5000_GFX_DATA_1:	; 0x2A5D2C
 	nop                                     ; nop
 	ld_s	(xix+37), b
 	nop                                     ; nop
-	.byte 0xb4, 0x25                       ; lda IY,XIX
+	lda_ri xix, xiy		; lda IY,XIX
 	pushw de                                ; push DE
 	nop                                     ; nop
 	.byte 0xdc, 0x25                       ; db
@@ -69868,7 +69868,7 @@ HDAE5000_GFX_DATA_1:	; 0x2A5D2C
 	ld	xix, 0x5e002a27
 	ldb	l, 0x2a
 	nop                                     ; nop
-	.byte 0x82, 0x27                       ; ld L,(XDE)
+	ld8_src_ri xde, l		; ld L,(XDE)
 	pushw de                                ; push DE
 	nop                                     ; nop
 	ld_s	(xwa+39), xde
@@ -70008,7 +70008,7 @@ HDAE5000_GFX_DATA_1:	; 0x2A5D2C
 	ldw	wa, 0x002a
 	ld	xiz, 0x70002a30
 	ldw	wa, 0x002a
-	.byte 0x94, 0x30                       ; ex (XIX),WA
+	ex16_ri xix, wa		; ex (XIX),WA
 	pushw de                                ; push DE
 	nop                                     ; nop
 	.byte 0xd6                             ; db
@@ -70062,7 +70062,7 @@ HDAE5000_GFX_DATA_1:	; 0x2A5D2C
 	jr	nov, 0x34
 	pushw de                                ; push DE
 	nop                                     ; nop
-	.byte 0x96, 0x34                       ; ex (XIZ),IX
+	ex16_ri xiz, ix		; ex (XIZ),IX
 	pushw de                                ; push DE
 	nop                                     ; nop
 	.byte 0xc6                             ; db
@@ -70098,7 +70098,7 @@ HDAE5000_GFX_DATA_1:	; 0x2A5D2C
 	jr	gt, 0x37
 	pushw de                                ; push DE
 	nop                                     ; nop
-	.byte 0x84, 0x37                       ; ex (XIX),L
+	ex8_ri xix, l		; ex (XIX),L
 	pushw de                                ; push DE
 	nop                                     ; nop
 	ld_s	(xwa+55), xde
@@ -70170,7 +70170,7 @@ HDAE5000_GFX_DATA_1:	; 0x2A5D2C
 	push xhl
 	pushw de                                ; push DE
 	nop                                     ; nop
-	.byte 0x84, 0x3b, 0x2a                 ; sbc (XIX),0x2a
+	sbc8_imm_ri xix, 0x2a		; sbc (XIX),0x2a
 	nop                                     ; nop
 	ld_s	(xiz+59), de
 	nop                                     ; nop
@@ -70208,7 +70208,7 @@ HDAE5000_GFX_DATA_1:	; 0x2A5D2C
 	jr t, .LGD1_668b                       ; [68 3d] jr T,0x2a668b
 	pushw de                                ; push DE
 	nop                                     ; nop
-	.byte 0x94, 0x3d, 0x2a, 0x00           ; xor (XIX),0x002a
+	xor16_imm_ri xix, 0x2a, 0x00		; xor (XIX),0x002a
 	xorcfa_rid8 xwa, 0x3d		; xorcf A,(XWA+0x3d)
 	nop                                     ; nop
 	.byte 0xe4, 0x3d, 0x2a                 ; db
@@ -70225,7 +70225,7 @@ HDAE5000_GFX_DATA_1:	; 0x2A5D2C
 	push xiz
 	pushw de                                ; push DE
 	nop                                     ; nop
-	.byte 0x82, 0x3e, 0x2a                 ; or (XDE),0x2a
+	or8_imm_ri xde, 0x2a		; or (XDE),0x2a
 	nop                                     ; nop
 	ld_s	(xix+62), xde
 	nop                                     ; nop
