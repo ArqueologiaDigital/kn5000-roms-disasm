@@ -10419,7 +10419,7 @@ HDAE5000_FS_Init:	; 0x2870D6 (3711 bytes)
 	ld	hl, (xsp+2)
 	popw iz                                 ; pop IZ
 	lda	xsp, (xsp+36)
-	.byte 0x0f, 0x02, 0x00                 ; retd 0x0002
+	retd 0x0002		; retd 0x0002
 
 	dec	4, xsp
 	push xiz
@@ -23379,7 +23379,7 @@ HDAE5000_Cell_In_Bounds:	; 0x28FBB1 (1497 bytes)
 	ld	(xbc), a
 	ld	wa, (xsp+4)
 	calr	0x3d6f
-	.byte 0x0f, 0x02, 0x00                 ; retd 0x0002
+	retd 0x0002		; retd 0x0002
 
 	extz xbc                                ; extz XBC
 	extz xwa
@@ -25158,7 +25158,7 @@ HDAE5000_Table_Sub_29103D:	; 0x29103D (1023 bytes)
 .LTS_1435:
 	pop xiz                                 ; pop XIZ
 	lda	xsp, (xsp+10)
-	.byte 0x0f, 0x06, 0x00                 ; retd 0x0006
+	retd 0x0006		; retd 0x0006
 
 
 HDAE5000_Table_Init_Entry:	; 0x29143C (359 bytes)
@@ -26531,7 +26531,7 @@ HDAE5000_Table_Complex_Init:	; 0x291C0D (2171 bytes)
 	ld	hl, (xsp+4)
 	pop xiz                                 ; pop XIZ
 	lda	xsp, (xsp+52)
-	.byte 0x0f, 0x06, 0x00                 ; retd 0x0006
+	retd 0x0006		; retd 0x0006
 
 
 HDAE5000_Table_Sub_292488:	; 0x292488 (359 bytes)
@@ -69390,20 +69390,20 @@ HDAE5000_GFX_DATA_1:	; 0x2A5D2C
 	pushw de                                ; push DE
 	nop                                     ; nop
 	.byte 0x18                             ; push F
-	.byte 0x06, 0x2a                       ; ei 0x2a
+	ei 0x2a		; ei 0x2a
 	nop                                     ; nop
 	ldw	de, 0x2a06
 	nop                                     ; nop
 	pop xiz                                 ; pop XIZ
-	.byte 0x06, 0x2a                       ; ei 0x2a
+	ei 0x2a		; ei 0x2a
 	nop                                     ; nop
 	jrl	t, 0x2a06
 	nop                                     ; nop
 	.byte 0xc2, 0x9d, 0x23, 0x00, 0x9c     ; adc (0x00239d),D
-	.byte 0x06, 0x2a                       ; ei 0x2a
+	ei 0x2a		; ei 0x2a
 	nop                                     ; nop
 	cpdm8_24	0x002A06, h
-	.byte 0x06, 0x2a                       ; ei 0x2a
+	ei 0x2a		; ei 0x2a
 	nop                                     ; nop
 	push xde
 	.byte 0x07                             ; reti
@@ -69505,10 +69505,10 @@ HDAE5000_GFX_DATA_1:	; 0x2A5D2C
 	calr	0x2a0f
 	nop                                     ; nop
 	push xwa
-	.byte 0x0f, 0x2a, 0x00                 ; retd 0x002a
+	retd 0x002a		; retd 0x002a
 
 	.byte 0x52                             ; db
-	.byte 0x0f, 0x2a, 0x00                 ; retd 0x002a
+	retd 0x002a		; retd 0x002a
 
 	jr	nov, 0x0f
 	pushw de                                ; push DE
@@ -70013,7 +70013,7 @@ HDAE5000_GFX_DATA_1:	; 0x2A5D2C
 	nop                                     ; nop
 	.byte 0xd6                             ; db
 	ldw	wa, 0x002a
-	.byte 0x06, 0x31                       ; ei 0x31
+	ei 0x31		; ei 0x31
 	pushw de                                ; push DE
 	nop                                     ; nop
 	ldw	de, 0x2a31
@@ -70863,7 +70863,7 @@ HDAE5000_GFX_DATA_2:	; 0x2A6984
 	nop                                     ; nop
 	.byte 0x08, 0x84, 0x2a                 ; ld (0x84),0x2a
 	nop                                     ; nop
-	.byte 0x06, 0x84                       ; ei 0x84
+	ei 0x84		; ei 0x84
 	pushw de                                ; push DE
 	nop                                     ; nop
 	.byte 0x04                             ; max
@@ -71359,7 +71359,7 @@ HDAE5000_GFX_DATA_2:	; 0x2A6984
 	nop                                     ; nop
 	.byte 0x08, 0x81, 0x2a                 ; ld (0x81),0x2a
 	nop                                     ; nop
-	.byte 0x06, 0x81                       ; ei 0x81
+	ei 0x81		; ei 0x81
 .LGD2_6d0a:
 	pushw de                                ; push DE
 	nop                                     ; nop
@@ -72189,7 +72189,7 @@ HDAE5000_GFX_DATA_2:	; 0x2A6984
 	.byte 0x0a, 0x7a, 0x2a, 0x00           ; ld (0x7a),0x002a
 	.byte 0x08, 0x7a, 0x2a                 ; ld (0x7a),0x2a
 	nop                                     ; nop
-	.byte 0x06, 0x7a                       ; ei 0x7a
+	ei 0x7a		; ei 0x7a
 .LGD2_72aa:
 	pushw de                                ; push DE
 	nop                                     ; nop
@@ -72337,7 +72337,7 @@ HDAE5000_GFX_DATA_2:	; 0x2A6984
 	.byte 0x0a, 0x79, 0x2a, 0x00           ; ld (0x79),0x002a
 	.byte 0x08, 0x79, 0x2a                 ; ld (0x79),0x2a
 	nop                                     ; nop
-	.byte 0x06, 0x79                       ; ei 0x79
+	ei 0x79		; ei 0x79
 	pushw de                                ; push DE
 	nop                                     ; nop
 	.byte 0x04                             ; max
@@ -72525,7 +72525,7 @@ HDAE5000_GFX_DATA_2:	; 0x2A6984
 	jrl	c, 0x002a
 	.byte 0x14                             ; push A
 	jrl	c, 0x002a
-	.byte 0x06, 0x77                       ; ei 0x77
+	ei 0x77		; ei 0x77
 	pushw de                                ; push DE
 	nop                                     ; nop
 	.byte 0x04                             ; max
