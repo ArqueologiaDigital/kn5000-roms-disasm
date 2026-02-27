@@ -715,7 +715,7 @@ LABEL_FCF781:
 
 MIDI_QUEUE_EVENT_TO_SEQUENCER:
 	ld xix, 0x1F37B
-	cpmi16 (xix - 2), 0x3
+	cpw (xix - 2), 0x3
 	jr c, LABEL_FCF79F
 	ld a, d
 	pushw wa
@@ -743,7 +743,7 @@ LABEL_FCF7AF:
 
 LABEL_FCF7B7:
 	ld xix, 0x1F37B
-	cpmi16 (xix - 2), 0x40
+	cpw (xix - 2), 0x40
 	jr ugt, LABEL_FCF7D1
 	pushw de
 	and d, 0xF0
@@ -754,7 +754,7 @@ LABEL_FCF7B7:
 	jr nz, LABEL_FCF7F6
 
 LABEL_FCF7D1:
-	cpmi16 (xix - 2), 0x4
+	cpw (xix - 2), 0x4
 	jr c, LABEL_FCF7F7
 	ld a, d
 	pushw wa

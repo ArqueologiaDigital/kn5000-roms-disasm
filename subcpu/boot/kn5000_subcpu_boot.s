@@ -99754,7 +99754,7 @@ MEM_TEST_ROUTINE:
 	lda xsp, (xsp - 12)	; Reserve 12 bytes on stack
 	push xiz
 	ld (xsp + 14), a	; Save error accumulator
-	ldmi8 (xsp + 4), 0x0	; Test index = 0
+	ld (xsp + 4), 0x0	; Test index = 0
 MEM_TEST_ROUTINE__next_region:
 	ld a, (xsp + 4)
 	extz wa
@@ -99822,7 +99822,7 @@ MEM_TEST_ROUTINE__high2_ok:
 	jr nz, MEM_TEST_ROUTINE__test_loop
 MEM_TEST_ROUTINE__region_done:
 	incm8 1, (xsp + 4)
-	cpmi8 (xsp + 4), 0x1	; Only 1 region in boot ROM
+	cp (xsp + 4), 0x1	; Only 1 region in boot ROM
 	jrl nz, MEM_TEST_ROUTINE__next_region	; Long relative jump needed (distance > 127)
 	ld l, (xsp + 14)
 	extz hl
@@ -99951,7 +99951,7 @@ CONTROL_PANEL_BIT_SET_CLEAR__loop:
 CONTROL_PANEL_BIT_SET_CLEAR__skip_shift:
 	extz xde	; Zero-extend XDE (32-bit offset)
 	add xde, xix	; XDE = buffer base + byte offset
-	cpmi8 (xbc + 1), 0x0	; Check action parameter
+	cp (xbc + 1), 0x0	; Check action parameter
 	jr z, CONTROL_PANEL_BIT_SET_CLEAR__clear_bit	; If 0, clear the bit
 	or (xde), l	; Set bit: buffer[offset] |= mask
 	jr CONTROL_PANEL_BIT_SET_CLEAR__next	; Jump to next iteration (always)
@@ -100004,7 +100004,7 @@ INTER_CPU_LATCH_READ_DISPATCH__check_bit7:
 	jr nz, INTER_CPU_LATCH_READ_DISPATCH__error	; If set, return error
 	ld xwa, xiz	; Restore parameter pointer
 	calr NOTE_VELOCITY_LOOKUP_CALCULATE	; Call processing routine
-	ldmi8 (xiz + 1), 0x0	; Clear byte at param+1
+	ld (xiz + 1), 0x0	; Clear byte at param+1
 	jr INTER_CPU_LATCH_READ_DISPATCH__success	; Jump to success (always)
 
 INTER_CPU_LATCH_READ_DISPATCH__process_normal:
@@ -100107,7 +100107,7 @@ NOTE_VELOCITY_LOOKUP_CALCULATE__use_min:
 	ret
 
 NOTE_VELOCITY_LOOKUP_CALCULATE__zero_velocity:
-	ldmi8 (xwa + 1), 0x0	; Store 0 velocity to output[1]
+	ld (xwa + 1), 0x0	; Store 0 velocity to output[1]
 	ret
 
 ; ==============================================================================

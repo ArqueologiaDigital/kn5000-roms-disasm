@@ -494,7 +494,7 @@ WP_GetConfigName:
 	ld xbc, xhl
 	ldw de, 0x10	; Copy 16 bytes
 	call LABEL_F890F2
-	ldmi8 (xiz + 16), 0x0	; Null terminate
+	ld (xiz + 16), 0x0	; Null terminate
 	ld xwa, xiz
 	ldw bc, 0x10
 	calr TrimAndPadSmfFilename
@@ -516,7 +516,7 @@ WP_GetNameByOffset:
 	ld xwa, xiz
 	ldw de, 0x10
 	call LABEL_F890F2
-	ldmi8 (xiz + 16), 0x0
+	ld (xiz + 16), 0x0
 	ld xwa, xiz
 	ldw bc, 0x10
 	calr TrimAndPadSmfFilename
@@ -574,7 +574,7 @@ WP_GetBankMemName:
 	ld xwa, xiz
 	ldw de, 0xD	; Copy 13 bytes
 	call LABEL_F890F2
-	ldmi8 (xiz + 13), 0x0
+	ld (xiz + 13), 0x0
 	jr WP_GetBankMemName_Format
 WP_GetBankMemName_FromROM:
 	extz xde
@@ -625,7 +625,7 @@ WP_GetUserName1:
 	ld xbc, xhl
 	ldw de, 0x10
 	call LABEL_F890F2
-	ldmi8 (xiz + 16), 0x0
+	ld (xiz + 16), 0x0
 	ld xwa, xiz
 	ldw bc, 0x10
 	calr TrimAndPadSmfFilename
@@ -643,7 +643,7 @@ WP_GetUserName2:
 	ld xwa, xiz
 	ldw de, 0x10
 	call LABEL_F890F2
-	ldmi8 (xiz + 16), 0x0
+	ld (xiz + 16), 0x0
 	ld xwa, xiz
 	ldw bc, 0x10
 	calr TrimAndPadSmfFilename
@@ -664,7 +664,7 @@ WP_GetUserName3:
 	ld xbc, xhl
 	ldw de, 0xD	; Copy 13 bytes
 	call LABEL_F890F2
-	ldmi8 (xiz + 13), 0x0
+	ld (xiz + 13), 0x0
 	ld xwa, xiz
 	ldw bc, 0xF
 	calr TrimAndPadSmfFilename

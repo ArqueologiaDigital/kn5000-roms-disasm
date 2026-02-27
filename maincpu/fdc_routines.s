@@ -1034,7 +1034,7 @@ FDC_INTERRUPT_HANDLER:
 LABEL_F97CCA:
 	push xiz
 	ld xiz, (xsp + 8)
-	cpmi16 (xiz), 0x0
+	cpw (xiz), 0x0
 	jr nz, LABEL_F97CD9
 	stdi8 35350, 0
 

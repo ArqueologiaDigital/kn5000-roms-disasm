@@ -74,14 +74,14 @@ CPanel_ScanButtons:	; FC3EE5
 
 CPanel_InitHardware:
 	ld xhl, 0x200AD
-	ldmw (xhl - 4), 0x0
-	ldmw (xhl - 8), 0x0
-	ldmw (xhl - 2), 0x80
+	ldw (xhl - 4), 0x0
+	ldw (xhl - 8), 0x0
+	ldw (xhl - 2), 0x80
 
 	ld xhl, 0x20137
-	ldmw (xhl - 4), 0x0
-	ldmw (xhl - 8), 0x0
-	ldmw (xhl - 2), 0x80
+	ldw (xhl - 4), 0x0
+	ldw (xhl - 8), 0x0
+	ldw (xhl - 2), 0x80
 
 	ldb a, 0x3	; PF2=SCK0 Disabled, PF0=TxD0 and PF1=RXD0 (MIDI)
 	and a, 0xAF	; PF6=SCK1 Disabled, PF4=TxD1 and PF5=RXD1 (Control Panel)
@@ -435,9 +435,9 @@ LABEL_FC41F7:
 
 CPanel_ReadAllButtons:
 	ld xhl, 0x200AD
-	ldmw (xhl - 4), 0x0
-	ldmw (xhl - 8), 0x0
-	ldmw (xhl - 2), 0x80
+	ldw (xhl - 4), 0x0
+	ldw (xhl - 8), 0x0
+	ldw (xhl - 2), 0x80
 
 	ei 6
 	ldda16 xwa, 36253
@@ -480,9 +480,9 @@ CPanel_ReadAllButtons:
 
 CPanel_PollStartup:
 	ld xhl, 0x200AD
-	ldmw (xhl - 4), 0x0
-	ldmw (xhl - 8), 0x0
-	ldmw (xhl - 2), 0x80
+	ldw (xhl - 4), 0x0
+	ldw (xhl - 8), 0x0
+	ldw (xhl - 2), 0x80
 	ei 6
 	stdi16 36253, 0
 	stdi16 36255, 0
@@ -512,9 +512,9 @@ CPanel_EncoderCheck:
 	jr nz, CPanel_ButtonPollLoop
 	stda8 36458, w
 	ld xhl, 0x200AD
-	ldmw (xhl - 4), 0x0
-	ldmw (xhl - 8), 0x0
-	ldmw (xhl - 2), 0x80
+	ldw (xhl - 4), 0x0
+	ldw (xhl - 8), 0x0
+	ldw (xhl - 2), 0x80
 	ei 6
 	stdi16 36349, 0
 	stdi16 36351, 0
@@ -527,9 +527,9 @@ CPanel_EncoderCheck:
 
 CPanel_InitButtonState:	; do that
 	ld xhl, 0x200AD
-	ldmw (xhl - 4), 0x0
-	ldmw (xhl - 8), 0x0
-	ldmw (xhl - 2), 0x80
+	ldw (xhl - 4), 0x0
+	ldw (xhl - 8), 0x0
+	ldw (xhl - 2), 0x80
 
 	ei 6
 	stdi8 36253, 0
@@ -1166,7 +1166,7 @@ CPanel_RX_DispatchLoop:
 	ld ix, (xiz - 4)
 
 CPanel_RX_ParseNext:
-	cpmi16 (xiz - 2), 0x4
+	cpw (xiz - 2), 0x4
 	jrl c, CPanel_RX_Done
 
 	ldda16 xwa, 36255
@@ -1402,7 +1402,7 @@ CPanel_UpdateLEDs:	; do this
 	ld wa, (xiz - 4)
 	cp wa, (xiz - 8)
 	jr nz, LABEL_FC4B4E
-	cpmi16 (xiz - 2), 0x0
+	cpw (xiz - 2), 0x0
 	jrl nz, LABEL_FC4C07
 
 LABEL_FC4B4E:

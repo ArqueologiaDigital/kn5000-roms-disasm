@@ -25,9 +25,9 @@ TtMdPcgOut:
 	ld xwa, 0x590001
 	call 0xFA6266
 	ld xwa, (xhl + 42)
-	ldmw (xwa), 0x0
+	ldw (xwa), 0x0
 	ld xwa, (xhl + 46)
-	ldmw (xwa), 0x1
+	ldw (xwa), 0x1
 
 LABEL_F773D7:
 	lds32 xhl, 0
@@ -456,7 +456,7 @@ PcgOutCheckGridDataStructure:
 	ld (xbc), ix
 	ld xbc, xiy
 	ld (xde), xiy
-	cpmi16 (xhl), 0x1
+	cpw (xhl), 0x1
 	jrl nz, PcgOutGridCheckComplete
 	ld de, (xwa)
 	cps de, 3
@@ -511,7 +511,7 @@ LABEL_F77BC7:
 	lda xde, (xsp + 4)
 	ld xbc, 0x1E0008C
 	call 0xFA9660
-	ldmw (xsp + 6), 0x4
+	ldw (xsp + 6), 0x4
 	pushw 0xE7
 	pushw 0xFFB0
 	lda xwa, (xsp + 16)
@@ -538,7 +538,7 @@ LABEL_F77C14:
 	lda xde, (xsp + 4)
 	ld xbc, 0x1E0008C
 	call 0xFA9660
-	ldmw (xsp + 6), 0x4
+	ldw (xsp + 6), 0x4
 	ld8_24 c, 0x024770
 	exts bc
 	ld8_24 a, 0x02476e
@@ -559,7 +559,7 @@ LABEL_F77C14:
 	jrl LABEL_F77D7F
 
 LABEL_F77C77:
-	ldmw (xwa), 0x2
+	ldw (xwa), 0x2
 	cpi8_24 0x024770, 0xff
 	jr nz, LABEL_F77CEF
 	pushw 0xE7
@@ -572,7 +572,7 @@ LABEL_F77C77:
 	lda xde, (xsp + 4)
 	ld xbc, 0x1E0008C
 	call 0xFA9660
-	ldmw (xsp + 6), 0x3
+	ldw (xsp + 6), 0x3
 	pushw 0xE7
 	pushw 0xFFCC
 	lda xwa, (xsp + 16)
@@ -584,7 +584,7 @@ LABEL_F77C77:
 	lda xde, (xsp + 4)
 	ld xbc, 0x1E0008C
 	call 0xFA9660
-	ldmw (xsp + 6), 0x4
+	ldw (xsp + 6), 0x4
 	pushw 0xE7
 	pushw 0xFFD2
 	lda xwa, (xsp + 16)
@@ -611,7 +611,7 @@ LABEL_F77CEF:
 	lda xde, (xsp + 4)
 	ld xbc, 0x1E0008C
 	call 0xFA9660
-	ldmw (xsp + 6), 0x3
+	ldw (xsp + 6), 0x3
 	ld8_24 a, 0x024770
 	exts wa
 	pushw wa
@@ -626,7 +626,7 @@ LABEL_F77CEF:
 	lda xde, (xsp + 4)
 	ld xbc, 0x1E0008C
 	call 0xFA9660
-	ldmw (xsp + 6), 0x4
+	ldw (xsp + 6), 0x4
 	ld8_24 c, 0x024770
 	exts bc
 	ld8_24 a, 0x02476e
@@ -666,7 +666,7 @@ PcgOutSendFunc:
 	ld8_24 l, 0x024770
 	cp l, 0xFF
 	jr nz, LABEL_F77DB9
-	ldmw (xbc), 0xFFFF
+	ldw (xbc), 0xFFFF
 	jr LABEL_F77DC9
 
 LABEL_F77DB9:

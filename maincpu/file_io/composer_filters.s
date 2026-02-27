@@ -323,7 +323,7 @@ RenderFilterDisplay:
 	ld c, (xsp)
 	lda_dpi XHL, 0xE0
 	ld (xsp + 2), xwa
-	cpmi8 (xsp), 0x0
+	cp (xsp), 0x0
 	jr nz, LABEL_F8D4FA
 	call LABEL_F8964C
 	cps l, 0
@@ -333,7 +333,7 @@ RenderFilterDisplay:
 	jrl LABEL_F8D5A9
 
 LABEL_F8D4FA:
-	cpmi8 (xsp), 0x1
+	cp (xsp), 0x1
 	jr nz, LABEL_F8D53A
 	call LABEL_F8964C
 	cps l, 0
@@ -381,7 +381,7 @@ LABEL_F8D55C:
 	jr LABEL_F8D5A9
 
 LABEL_F8D566:
-	cpmi8 (xsp), 0x2
+	cp (xsp), 0x2
 	jr nz, LABEL_F8D5A1
 	ldw wa, 0x8
 	call LABEL_F893D1
@@ -430,7 +430,7 @@ FmmLoadFilterFunc:
 	jrl LABEL_F8D77F
 
 LABEL_F8D5E0:
-	ldmw (xsp), 0x0
+	ldw (xsp), 0x0
 
 LABEL_F8D5E4:
 	ld wa, (xsp)
@@ -450,7 +450,7 @@ LABEL_F8D5E4:
 	ld xbc, 0x1C0000F
 	call 0xFA9D58
 	incm 1, (xsp)
-	cpmi16 (xsp), 0x8
+	cpw (xsp), 0x8
 	jr lt, LABEL_F8D5E4
 	jrl LABEL_F8D77F
 
@@ -612,7 +612,7 @@ RenderSaveFilterDisplay:
 	call LABEL_F89353
 	cps l, 0
 	jr z, LABEL_F8D7C3
-	cpmi8 (xsp), 0x1
+	cp (xsp), 0x1
 	jr nz, LABEL_F8D7B9
 	call LABEL_F893AB
 	cps l, 0
@@ -651,7 +651,7 @@ FmmSaveFilterFunc:
 	jrl LABEL_F8DB48
 
 LABEL_F8D802:
-	ldmw (xsp), 0x0
+	ldw (xsp), 0x0
 
 LABEL_F8D806:
 	ld wa, (xsp)
@@ -671,7 +671,7 @@ LABEL_F8D806:
 	ld xbc, 0x1C0000F
 	call 0xFA9D58
 	incm 1, (xsp)
-	cpmi16 (xsp), 0x8
+	cpw (xsp), 0x8
 	jr lt, LABEL_F8D806
 	jrl LABEL_F8DB48
 
@@ -755,12 +755,12 @@ LABEL_F8D8EF:
 	cp xwa, 0x8
 	jr nz, LABEL_F8D94F
 	call LABEL_F893CA
-	ldmw (xsp), 0x0
+	ldw (xsp), 0x0
 
 LABEL_F8D902:
 	ld wa, (xsp)
 	extz wa
-	cpmi16 (xsp), 0x6
+	cpw (xsp), 0x6
 	jr ge, LABEL_F8D912
 	call LABEL_F8937F
 	jr LABEL_F8D916
@@ -786,7 +786,7 @@ LABEL_F8D916:
 	ld xbc, 0x1C0000F
 	call 0xFA9D58
 	incm 1, (xsp)
-	cpmi16 (xsp), 0x8
+	cpw (xsp), 0x8
 	jr lt, LABEL_F8D902
 	jrl LABEL_F8DB48
 
@@ -795,7 +795,7 @@ LABEL_F8D94F:
 	cp xwa, 0x9
 	jr nz, LABEL_F8D9A3
 	call LABEL_F893CA
-	ldmw (xsp), 0x0
+	ldw (xsp), 0x0
 
 LABEL_F8D962:
 	ld wa, (xsp)
@@ -818,7 +818,7 @@ LABEL_F8D962:
 	ld xbc, 0x1C0000F
 	call 0xFA9D58
 	incm 1, (xsp)
-	cpmi16 (xsp), 0x8
+	cpw (xsp), 0x8
 	jr lt, LABEL_F8D962
 	jrl LABEL_F8DB48
 
@@ -935,7 +935,7 @@ LABEL_F8DAF7:
 	cp xwa, 0xB
 	jr nz, LABEL_F8DB48
 	call LABEL_F893CA
-	ldmw (xsp), 0x0
+	ldw (xsp), 0x0
 
 LABEL_F8DB0A:
 	ld wa, (xsp)
@@ -958,7 +958,7 @@ LABEL_F8DB0A:
 	ld xbc, 0x1C0000F
 	call 0xFA9D58
 	incm 1, (xsp)
-	cpmi16 (xsp), 0x8
+	cpw (xsp), 0x8
 	jr lt, LABEL_F8DB0A
 
 LABEL_F8DB48:

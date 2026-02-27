@@ -259,7 +259,7 @@ LABEL_F8BE5D:
 	ld_srib3 C, 0x07, 0xF0, 0xE4
 	and c, 0x7
 	jr nz, LABEL_F8BE6C
-	ldmi8 (xde), 0x5F
+	ld (xde), 0x5F
 
 LABEL_F8BE6C:
 	inc 1, iy
@@ -284,7 +284,7 @@ LABEL_F8BE83:
 	jr lt, LABEL_F8BE83
 
 LABEL_F8BE8F:
-	ldmi8 (xwa + 6), 0x0
+	ld (xwa + 6), 0x0
 	jr LABEL_F8BEA3
 
 LABEL_F8BE95:
@@ -362,7 +362,7 @@ LABEL_F8BF5C:
 	ld_srib3 C, 0x07, 0xF0, 0xE4
 	and c, 0x7
 	jr nz, LABEL_F8BF6B
-	ldmi8 (xde), 0x5F
+	ld (xde), 0x5F
 
 LABEL_F8BF6B:
 	inc 1, iy
@@ -387,7 +387,7 @@ LABEL_F8BF86:
 	jr lt, LABEL_F8BF86
 
 LABEL_F8BF94:
-	ldmi8 (xwa + 8), 0x0
+	ld (xwa + 8), 0x0
 	jr LABEL_F8BFA8
 
 LABEL_F8BF9A:
@@ -921,7 +921,7 @@ LABEL_F8C594:
 	ld_srib3 A, 0x07, 0xF8, 0xE0
 	and a, 0x7
 	jr nz, LABEL_F8C5A8
-	ldmi8 (xbc), 0x5F
+	ld (xbc), 0x5F
 
 LABEL_F8C5A8:
 	inc 1, iy
@@ -930,7 +930,7 @@ LABEL_F8C5AA:
 	cp iy, 0xB
 	jr ge, LABEL_F8C5BA
 	st_dri3b A, 0x07, 0xEC, 0xF4
-	cpmi8 (xbc), 0x0
+	cp (xbc), 0x0
 	jr nz, LABEL_F8C594
 
 LABEL_F8C5BA:
@@ -945,7 +945,7 @@ LABEL_F8C5C2:
 	jr lt, LABEL_F8C5C2
 
 LABEL_F8C5D0:
-	ldmi8 (xde + 11), 0x0
+	ld (xde + 11), 0x0
 	ld xwa, (xsp + 4)
 	ld xbc, 0x1E00086
 
@@ -1103,14 +1103,14 @@ SongNameFunc:
 	ld xwa, (xsp + 2)
 	call LABEL_F890DC
 	ldada xwa, 34830
-	ldmi8 (xwa + 30), 0x0
+	ld (xwa + 30), 0x0
 	lda xbc, (xwa + 29)
 	ld xde, xbc
 	lda xhl, (xbc - 29)
 	jr LABEL_F8C786
 
 LABEL_F8C781:
-	ldmi8 (xde), 0x0
+	ld (xde), 0x0
 	dec 1, xde
 
 LABEL_F8C786:
@@ -1213,7 +1213,7 @@ LABEL_F8C869:
 	ld_srib3 A, 0x07, 0xF0, 0xE0
 	and a, 0x7
 	jr nz, LABEL_F8C878
-	ldmi8 (xbc), 0x5F
+	ld (xbc), 0x5F
 
 LABEL_F8C878:
 	inc 1, iy
@@ -1238,7 +1238,7 @@ LABEL_F8C88F:
 	jr lt, LABEL_F8C88F
 
 LABEL_F8C89B:
-	ldmi8 (xde + 6), 0x0
+	ld (xde + 6), 0x0
 	ld xwa, (xsp + 4)
 	ld xbc, 0x1E00086
 

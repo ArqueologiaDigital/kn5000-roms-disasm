@@ -212,7 +212,7 @@ LABEL_F8DD86:
 	ld_srib3 C, 0x07, 0xEC, 0xE4
 	and c, 0x7
 	jr nz, LABEL_F8DD95
-	ldmi8 (xde), 0x5F
+	ld (xde), 0x5F
 
 LABEL_F8DD95:
 	inc 1, ix
@@ -254,7 +254,7 @@ SaveFileNameSmfFunc:
 	jrl LABEL_F8DE74
 
 LABEL_F8DDF2:
-	ldmi8 (xwa), 0x0
+	ld (xwa), 0x0
 	lda xiz, (xwa + 1)
 	call LABEL_F892D5
 	ld xbc, xhl
@@ -457,7 +457,7 @@ LABEL_F8DFC4:
 	jr c, LABEL_F8DFC4
 
 LABEL_F8DFCE:
-	ldmi8 (xwa), 0x0
+	ld (xwa), 0x0
 	ret
 
 DisplaySmfFileList:
@@ -711,7 +711,7 @@ LABEL_F8E23C:
 	call 0xF88005
 	ld (xsp + 6), hl
 	calr SignalProgressUpdate
-	cpmi16 (xsp + 6), 0x0
+	cpw (xsp + 6), 0x0
 	jr lt, LABEL_F8E2F3
 	ldda16 xwa, 33196
 	call LABEL_F8A07F

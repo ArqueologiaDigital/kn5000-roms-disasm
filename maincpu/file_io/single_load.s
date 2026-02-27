@@ -2266,10 +2266,10 @@ LABEL_F919E3:
 	lda_dpi XSP, 0xF8
 	cps e, 0
 	jr z, LABEL_F91A39
-	cpmi16 (xsp + 4), 0x9
+	cpw (xsp + 4), 0x9
 	jr nz, LABEL_F91A27
 	stib_dpi 0xF8, 0x31
-	ldmi8 (xiz), 0x30
+	ld (xiz), 0x30
 	jr LABEL_F91A33
 
 LABEL_F91A27:
@@ -2286,7 +2286,7 @@ LABEL_F91A39:
 	ld xwa, xiz
 	ldw de, 0x10
 	call LABEL_F890F2
-	ldmi8 (xiz + 16), 0x0
+	ld (xiz + 16), 0x0
 	ld wa, (xsp + 4)
 	mul wa, 0x15
 	ldada xbc, 33282

@@ -47,7 +47,7 @@ LABEL_F8C969:
 	jrl LABEL_F8CAA6
 
 LABEL_F8C980:
-	cpmi8 (xde), 0x3
+	cp (xde), 0x3
 	jr nz, LABEL_F8C9AB
 	call CheckSlotIsSelected
 	cps l, 0
@@ -99,7 +99,7 @@ LABEL_F8C9F1:
 	jrl LABEL_F8CAA2
 
 LABEL_F8C9FC:
-	cpmi8 (xde), 0x3
+	cp (xde), 0x3
 	jr nz, LABEL_F8CA2A
 	call CheckSlotIsSelected
 	cps l, 0
@@ -222,7 +222,7 @@ LABEL_F8CB0B:
 	ldada xbc, 35340
 	cpi_berp 0xFA, 0
 	jr z, LABEL_F8CB19
-	ldmi8 (xbc), 0x1
+	ld (xbc), 0x1
 	jr LABEL_F8CB24
 
 LABEL_F8CB19:
@@ -281,7 +281,7 @@ LABEL_F8CB95:
 	jrl LABEL_F8D16D
 
 LABEL_F8CBA2:
-	ldmw (xsp + 6), 0x0
+	ldw (xsp + 6), 0x0
 
 LABEL_F8CBA7:
 	ld wa, (xsp + 6)
@@ -316,7 +316,7 @@ LABEL_F8CBA7:
 	ld xbc, 0x1C0000F
 	call 0xFA9D58
 	incm 1, (xsp + 6)
-	cpmi16 (xsp + 6), 0x14
+	cpw (xsp + 6), 0x14
 	jr lt, LABEL_F8CBA7
 	jrl LABEL_F8D16D
 
@@ -329,7 +329,7 @@ LABEL_F8CC0C:
 	ld xwa, (xsp + 8)
 	cp xwa, 0x1C00018
 	jr nz, LABEL_F8CC33
-	cpmi16 (xsp + 6), 0x13
+	cpw (xsp + 6), 0x13
 	jrl ge, LABEL_F8CFF8
 	incm 1, (xsp + 6)
 	jr LABEL_F8CC7B
@@ -337,7 +337,7 @@ LABEL_F8CC0C:
 LABEL_F8CC33:
 	cp xwa, 0x1C00017
 	jrl nz, LABEL_F8CFF8
-	cpmi16 (xsp + 6), 0x0
+	cpw (xsp + 6), 0x0
 	jrl le, LABEL_F8CFF8
 	decm 1, (xsp + 6)
 	jr LABEL_F8CC7B
@@ -345,7 +345,7 @@ LABEL_F8CC33:
 LABEL_F8CC49:
 	cp xiz, 0x1
 	jr nz, LABEL_F8CC60
-	cpmi16 (xsp + 6), 0xA
+	cpw (xsp + 6), 0xA
 	jrl lt, LABEL_F8CFF8
 	submi16 (xsp + 6), 0xA
 	jr LABEL_F8CC7B
@@ -680,7 +680,7 @@ LABEL_F8CFFC:
 	ldda32 xwa, 32626
 	ld xbc, 0x1C0000F
 	call 0xFA9D58
-	ldmw (xsp + 6), 0x0
+	ldw (xsp + 6), 0x0
 
 LABEL_F8D05A:
 	ld wa, (xsp + 6)
@@ -698,7 +698,7 @@ LABEL_F8D072:
 
 LABEL_F8D076:
 	incm 1, (xsp + 6)
-	cpmi16 (xsp + 6), 0x8
+	cpw (xsp + 6), 0x8
 	jr lt, LABEL_F8D05A
 	ldw wa, 0x8
 	call LABEL_F893D1

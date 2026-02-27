@@ -101,7 +101,7 @@ SeqName_HandlePlayAction:
 	ldada xwa, 35340
 	bitm 7, (xwa + 1)
 	jr nz, SeqName_CheckDiskAvail
-	ldmi8 (xwa), 0x1
+	ld (xwa), 0x1
 	lds32 xde, 1
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C50004
@@ -258,7 +258,7 @@ FmtNum_CheckMarked:
 FmtNum_WriteSpacePad:
 	lda_dpi XHL, 0xE0
 	stib_dpi 0xE0, 0x20
-	ldmi8 (xwa), 0x20
+	ld (xwa), 0x20
 	ret
 
 FmtNum_FormatNumber:
@@ -351,7 +351,7 @@ IntMed_MarkSlotEmpty:
 	ld bc, iz
 	extz xbc
 	add xbc, xwa
-	ldmi8 (xbc), 0xFF
+	ld (xbc), 0xFF
 
 IntMed_NextSlot:
 	inc 1, iz
@@ -411,7 +411,7 @@ IntMed_PlayFromStart:
 	ld bc, iz
 	extz xbc
 	add xbc, xwa
-	cpmi8 (xbc), 0x0
+	cp (xbc), 0x0
 	jr nz, IntMed_NextSongLoop
 	ld de, iz
 	extz xde
@@ -505,7 +505,7 @@ IntMed_FindMarkedSlot:
 	ld bc, iz
 	extz xbc
 	add xbc, xwa
-	cpmi8 (xbc), 0xFE
+	cp (xbc), 0xFE
 	jr z, IntMed_CheckAllMarked
 	inc 1, iz
 	cp iz, 0xA
@@ -562,7 +562,7 @@ IntMed_UnmarkSlotLoop:
 	ld a, (xbc)
 	cp a, 0xFD
 	jr ugt, IntMed_NextUnmark
-	ldmi8 (xbc), 0xFE
+	ld (xbc), 0xFE
 	decdi8 1, 34970
 	ld wa, iz
 	sll wa, 3
@@ -631,7 +631,7 @@ IntMed_RemoveFromOrder:
 	cp c, 0xFD
 	jrl ugt, IntMed_Exit
 	ld (xsp + 4), c
-	ldmi8 (xde), 0xFE
+	ld (xde), 0xFE
 	decdi8 1, 34970
 	ld c, (xde)
 	extz bc
@@ -645,7 +645,7 @@ IntMed_RemoveFromOrder:
 	ldda32 xwa, 33498
 	ld xbc, 0x1C0000F
 	call 0xFA9D58
-	ldmw (xsp + 2), 0x0
+	ldw (xsp + 2), 0x0
 	lds iz, 0
 	ldda8 a, 34970
 	extz wa
@@ -714,7 +714,7 @@ IntMed_StartPlayLoop:
 	ld bc, iz
 	extz xbc
 	add xbc, xwa
-	cpmi8 (xbc), 0x0
+	cp (xbc), 0x0
 	jr nz, IntMed_NextPlaySlot
 	stdi8 34046, 1
 	ld de, iz
@@ -906,11 +906,11 @@ DiskMed_CheckSlotLoop:
 	add xwa, xbc
 	cps l, 0
 	jr z, DiskMed_MarkUnused
-	ldmi8 (xwa), 0xFE
+	ld (xwa), 0xFE
 	jr DiskMed_NextSlotCheck
 
 DiskMed_MarkUnused:
-	ldmi8 (xwa), 0xFF
+	ld (xwa), 0xFF
 
 DiskMed_NextSlotCheck:
 	inc 1, iz
@@ -954,7 +954,7 @@ DiskMed_NextFirst:
 
 DiskMed_SingleSlotCheck:
 	ldada xbc, 34960
-	cpmi8 (xbc), 0xFE
+	cp (xbc), 0xFE
 	jr nz, DiskMed_SingleSlotInit
 	ldmi16 (xbc), 0x889A
 	incdi8 1, 34970
@@ -1539,7 +1539,7 @@ DiskSel_UnmarkLoop:
 	ld a, (xhl)
 	cp a, 0xFD
 	jr ugt, DiskSel_NextUnmark
-	ldmi8 (xhl), 0xFE
+	ld (xhl), 0xFE
 	decdi8 1, 35130
 
 DiskSel_NextUnmark:
@@ -1577,7 +1577,7 @@ DiskSel_RemoveSelect:
 	jr ugt, DiskSel_RefreshAfterSelect
 	cp de, 0x14
 	jr ge, DiskSel_ReorderSlots
-	ldmi8 (xbc), 0xFE
+	ld (xbc), 0xFE
 	decdi8 1, 35130
 
 DiskSel_ReorderSlots:
@@ -1777,9 +1777,9 @@ NavigateSongList:
 	dec 2, xsp
 	pushw iz
 	ld (xsp + 2), wa
-	cpmi16 (xsp + 2), 0x1
+	cpw (xsp + 2), 0x1
 	jr z, NavSong_CheckBounds
-	cpmi16 (xsp + 2), 0xFFFF
+	cpw (xsp + 2), 0xFFFF
 	jr nz, NavSong_Exit
 
 NavSong_CheckBounds:
@@ -1899,7 +1899,7 @@ SmfMed_FormatSlotList:
 	ldfr_werp WA, 0xFA
 	mul wa, 0xA
 	ldfr_werp WA, 0xFA
-	ldmw (xsp + 4), 0xA
+	ldw (xsp + 4), 0xA
 	ldto_werp WA, 0xFA
 	add wa, 0xA
 	cp wa, iz
@@ -1910,7 +1910,7 @@ SmfMed_FormatSlotList:
 
 SmfFmt_CalcVisible:
 	lds iz, 0
-	cpmi16 (xsp + 4), 0x0
+	cpw (xsp + 4), 0x0
 	jr ule, SmfFmt_FillEmpty
 
 SmfFmt_FormatLoop:
@@ -2122,7 +2122,7 @@ SmfMed_RepeatFindLoop:
 	ld de, iz
 	extz xde
 	add xde, xbc
-	cpmi8 (xde), 0x0
+	cp (xde), 0x0
 	jr nz, SmfMed_RepeatNext
 	ld de, iz
 	extz xde
@@ -2211,7 +2211,7 @@ SmfMed_ClearSlotsLoop:
 	ld bc, iz
 	extz xbc
 	add xbc, xwa
-	ldmi8 (xbc), 0xFF
+	ld (xbc), 0xFF
 	inc 1, iz
 	cpda16 xiz, 33848
 	jr c, SmfMed_ClearSlotsLoop
@@ -2262,7 +2262,7 @@ SmfMed_FindUnmarkedLoop:
 	ld bc, iz
 	extz xbc
 	add xbc, xwa
-	cpmi8 (xbc), 0xFF
+	cp (xbc), 0xFF
 	jr z, SmfMed_CheckAllUnmarked
 	inc 1, iz
 	cp iz, de
@@ -2305,7 +2305,7 @@ SmfMed_UnmarkLoop:
 	ld a, (xbc)
 	cp a, 0xFD
 	jr ugt, SmfMed_NextUnmark
-	ldmi8 (xbc), 0xFF
+	ld (xbc), 0xFF
 	decdi8 1, 35104
 
 SmfMed_NextUnmark:
@@ -2342,7 +2342,7 @@ SmfMed_HandleSelectToggle:
 SmfMed_RemoveFromOrder:
 	cp c, 0xFD
 	jr ugt, SmfMed_RefreshAfterSelect
-	ldmi8 (xwa), 0xFF
+	ld (xwa), 0xFF
 	ldda8 a, 35104
 	dec 1, a
 	stda8 35104, a
@@ -2407,7 +2407,7 @@ SmfMed_PlayFindLoop:
 	ld de, iz
 	extz xde
 	add xde, xwa
-	cpmi8 (xde), 0x0
+	cp (xde), 0x0
 	jr nz, SmfMed_PlayNextLoop
 	stdi8 34046, 1
 	ld de, iz
@@ -2732,7 +2732,7 @@ PdMed_FormatSlotList:
 	ldfr_werp WA, 0xFA
 	mul wa, 0xA
 	ldfr_werp WA, 0xFA
-	ldmw (xsp + 4), 0xA
+	ldw (xsp + 4), 0xA
 	ldto_werp WA, 0xFA
 	add wa, 0xA
 	cp wa, iz
@@ -2743,7 +2743,7 @@ PdMed_FormatSlotList:
 
 PdFmtSlot_CalcVisible:
 	lds iz, 0
-	cpmi16 (xsp + 4), 0x0
+	cpw (xsp + 4), 0x0
 	jr ule, PdFmtSlot_FillEmpty
 
 PdFmtSlot_FormatLoop:
@@ -2899,7 +2899,7 @@ PdMed_RepeatFindLoop:
 	ld de, hl
 	extz xde
 	add xde, xwa
-	cpmi8 (xde), 0x0
+	cp (xde), 0x0
 	jr nz, PdMed_RepeatNext
 	extz xhl
 	ld xwa, xiz
@@ -2983,7 +2983,7 @@ PdMed_ClearSlotsLoop:
 	ld bc, hl
 	extz xbc
 	add xbc, xwa
-	ldmi8 (xbc), 0xFF
+	ld (xbc), 0xFF
 	inc 1, hl
 	cpda16 xhl, 33948
 	jr c, PdMed_ClearSlotsLoop
@@ -3029,7 +3029,7 @@ PdMed_FindUnmarkedLoop:
 	ld de, hl
 	extz xde
 	add xde, xbc
-	cpmi8 (xde), 0xFF
+	cp (xde), 0xFF
 	jr z, PdMed_CheckAllUnmarked
 	inc 1, hl
 	cp hl, wa
@@ -3072,7 +3072,7 @@ PdMed_UnmarkLoop:
 	ld a, (xbc)
 	cp a, 0xFD
 	jr ugt, PdMed_NextUnmark
-	ldmi8 (xbc), 0xFF
+	ld (xbc), 0xFF
 	decdi8 1, 35104
 
 PdMed_NextUnmark:
@@ -3107,7 +3107,7 @@ PdMed_HandleSelectToggle:
 PdMed_RemoveFromOrder:
 	cp c, 0xFD
 	jr ugt, PdMed_RefreshAfterSelect
-	ldmi8 (xhl), 0xFF
+	ld (xhl), 0xFF
 	ldda8 a, 35104
 	dec 1, a
 	stda8 35104, a
@@ -3172,7 +3172,7 @@ PdMed_PlayFindLoop:
 	ld de, hl
 	extz xde
 	add xde, xbc
-	cpmi8 (xde), 0x0
+	cp (xde), 0x0
 	jr nz, PdMed_PlayNextLoop
 	stdi8 34046, 1
 	extz xhl
@@ -3236,7 +3236,7 @@ DocDiskNameFunc:
 	jr DocDisk_CopyLoop
 
 DocDisk_CopyCharLoop:
-	cpmi8 (xhl), 0x20
+	cp (xhl), 0x20
 	jr z, DocDisk_SkipSpace
 	ld de, ix
 	inc 1, ix
@@ -3248,7 +3248,7 @@ DocDisk_SkipSpace:
 
 DocDisk_CopyLoop:
 	ldada xbc, 34700
-	cpmi8 (xhl), 0x0
+	cp (xhl), 0x0
 	jr z, DocDisk_TerminateStr
 	cp ix, 0x1E
 	jr lt, DocDisk_CopyCharLoop
@@ -3259,12 +3259,12 @@ DocDisk_TerminateStr:
 	jr DocDisk_TrimLoop
 
 DocDisk_ClearTrailing:
-	ldmi8 (xwa), 0x0
+	ld (xwa), 0x0
 
 DocDisk_TrimLoop:
 	dec 1, ix
 	st_dri3b W, 0x07, 0xE8, 0xF0
-	cpmi8 (xwa), 0x20
+	cp (xwa), 0x20
 	jr nz, DocDisk_PostEvent
 	cps ix, 0
 	jr gt, DocDisk_ClearTrailing
@@ -3540,7 +3540,7 @@ DocMed_FormatSlotList:
 	ldfr_werp WA, 0xFA
 	mul wa, 0xA
 	ldfr_werp WA, 0xFA
-	ldmw (xsp + 4), 0xA
+	ldw (xsp + 4), 0xA
 	ldto_werp WA, 0xFA
 	add wa, 0xA
 	cp wa, iz
@@ -3551,7 +3551,7 @@ DocMed_FormatSlotList:
 
 DocFmtSlot_CalcVisible:
 	lds iz, 0
-	cpmi16 (xsp + 4), 0x0
+	cpw (xsp + 4), 0x0
 	jr ule, DocFmtSlot_FillEmpty
 
 DocFmtSlot_FormatLoop:
@@ -3706,7 +3706,7 @@ DocMed_RepeatFindLoop:
 	ld de, hl
 	extz xde
 	add xde, xwa
-	cpmi8 (xde), 0x0
+	cp (xde), 0x0
 	jr nz, DocMed_RepeatNext
 	extz xhl
 	ld xwa, xiz
@@ -3795,7 +3795,7 @@ DocMed_ClearSlotsLoop:
 	ld bc, hl
 	extz xbc
 	add xbc, xwa
-	ldmi8 (xbc), 0xFF
+	ld (xbc), 0xFF
 	inc 1, hl
 	cpda16 xhl, 34044
 	jr c, DocMed_ClearSlotsLoop
@@ -3841,7 +3841,7 @@ DocMed_FindUnmarkedLoop:
 	ld de, hl
 	extz xde
 	add xde, xbc
-	cpmi8 (xde), 0xFF
+	cp (xde), 0xFF
 	jr z, DocMed_CheckAllUnmarked
 	inc 1, hl
 	cp hl, wa
@@ -3884,7 +3884,7 @@ DocMed_UnmarkLoop:
 	ld a, (xbc)
 	cp a, 0xFD
 	jr ugt, DocMed_NextUnmark
-	ldmi8 (xbc), 0xFF
+	ld (xbc), 0xFF
 	decdi8 1, 35104
 
 DocMed_NextUnmark:
@@ -3919,7 +3919,7 @@ DocMed_HandleSelectToggle:
 DocMed_RemoveFromOrder:
 	cp c, 0xFD
 	jr ugt, DocMed_RefreshAfterSelect
-	ldmi8 (xhl), 0xFF
+	ld (xhl), 0xFF
 	ldda8 a, 35104
 	dec 1, a
 	stda8 35104, a
@@ -3984,7 +3984,7 @@ DocMed_PlayFindLoop:
 	ld de, hl
 	extz xde
 	add xde, xbc
-	cpmi8 (xde), 0x0
+	cp (xde), 0x0
 	jr nz, DocMed_PlayNextLoop
 	stdi8 34046, 1
 	extz xhl
