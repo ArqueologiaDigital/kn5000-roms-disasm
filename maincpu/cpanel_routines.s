@@ -63,7 +63,7 @@ CPanel_ScanButtons:	; FC3EE5
 	push xiz
 	push xhl
 	push xde
-	call 0xFC41FC
+	call CPanel_ReadAllButtons
 	pop xde
 	pop xhl
 	pop xiz
@@ -253,7 +253,7 @@ CPanel_InitLEDBuffer:
 ; But these values are also suspiciously similar to proportions
 ; between typical baudrates, but this is just a hunch for now...
 
-LABEL_FC0DE:
+DELAY_2_LOOPS:	; FC40DE
 	lds wa, 2
 
 LABEL_FC40E0:
@@ -266,7 +266,7 @@ LABEL_FC40E8:
 	ret
 
 
-Delay_6_Loops:
+DELAY_6_LOOPS:	; FC40E9
 	lds wa, 6
 
 LABEL_FC40EB:
@@ -331,10 +331,16 @@ LABEL_FC4123:
 	ret
 
 
-LABEL_FC4124:
-	.byte 0xd1, 0x09, 0x04, 0x20, 0xf1, 0x9b, 0x8d, 0x50
-	.byte 0xd1, 0x09, 0x04, 0x20, 0xd1, 0x9b, 0x8d, 0xa0
-	.byte 0xd8, 0xda, 0x61, 0xf4, 0x0e
+DELAY_2_TICKS:	; FC4124 - Wait for 2 system timer ticks
+	ldda16 xwa, 1033
+	stda16 36251, xwa
+
+DELAY_2_TICKS__loop:
+	ldda16 xwa, 1033
+	subda16 xwa, 36251
+	cps wa, 2
+	jr lt, DELAY_2_TICKS__loop
+	ret
 
 
 DELAY_6_TICKS:
@@ -445,10 +451,10 @@ CPanel_ReadAllButtons:
 	ordi8 36242, 1	; CP_Flags_B.0 = 1
 	ei 0
 
-	call 0xFC4375
+	call CPanel_WaitTXReady
 	ldb a, 0x25
 	ldb w, 0x1
-	call 0xFC43C7
+	call CPanel_SendCommand
 	calr DELAY_6_TICKS
 	calr DELAY_6_TICKS
 	calr DELAY_6_TICKS

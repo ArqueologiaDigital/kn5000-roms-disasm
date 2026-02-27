@@ -159,4 +159,39 @@
 ;		      -2:	EQU 00020135h (word)
 .equ CPANEL_LED_EVENT_QUEUE, 0x20137	; (128 bytes), Also not sure yet here.
 
+; =============================================================================
+; Control Panel Serial Command Bytes
+; =============================================================================
+; All commands are 2-byte sequences: command_byte (register A) + parameter (register W)
+; sent via CPanel_SendCommand. High 3 bits of command_byte select target panel:
+;   bits 7-5 = 000-011: Left panel (CPL)
+;   bits 7-5 = 100-111: Right panel (CPR)
+;
+; Initialization commands (sent during CPanel_InitHardware / CPanel_SendInitSequence):
+.equ CPANEL_CMD_INIT_HWRESET,     0x1F	; param 0xDA: hardware reset/sync left panel
+.equ CPANEL_CMD_INIT_CONFIGURE,   0x1F	; param 0x1A: configure left panel
+.equ CPANEL_CMD_INIT_LEFT,        0x1D	; param 0x00: initialize left panel
+.equ CPANEL_CMD_INIT_BOTH,        0xDD	; param 0x03: setup mode, configure both panels
+.equ CPANEL_CMD_INIT_FINAL,       0x1E	; param 0x80: final initialization
+;
+; Panel detection / ping commands:
+.equ CPANEL_CMD_PING_LEFT,        0x20	; param 0x00: test left panel communication
+.equ CPANEL_CMD_PING_RIGHT,       0xE0	; param 0x00: test right panel communication
+;
+; Button/status query commands:
+.equ CPANEL_CMD_POLL_LEFT,        0x20	; param 0x0B: poll left panel buttons (seg 0x0B)
+.equ CPANEL_CMD_QUERY_LEFT,       0x20	; param 0x10: query left panel status/sync
+.equ CPANEL_CMD_QUERY_RIGHT_04,   0xE2	; param 0x04: query right panel register
+.equ CPANEL_CMD_QUERY_RIGHT_11,   0xE2	; param 0x11: query right panel register
+.equ CPANEL_CMD_QUERY_RIGHT_EXT,  0xE3	; param 0x10: extended read from right panel
+;
+; Data/configuration commands:
+.equ CPANEL_CMD_LEFT_DATA,        0x25	; param 0x01: set/request left panel data mode
+.equ CPANEL_CMD_INIT_LEFT_STATE,  0x2B	; param 0x00: init left button state array (22-byte response)
+.equ CPANEL_CMD_INIT_RIGHT_STATE, 0xEB	; param 0x00: init right button state array (22-byte response)
+;
+; Steady-state polling (queued via LED TX buffer, every 42 main loop iterations):
+; Command E0 13 = right panel segment 3 status query
+.equ CPANEL_CMD_STEADYPOLL_RIGHT, 0xE0	; param 0x13: poll right panel seg 3
+
 ; End of control panel constants
