@@ -63249,6 +63249,16 @@ LABEL_EB7688:
 	.byte 0x03, 0x00, 0x03, 0x00, 0x03, 0x00, 0x03, 0x00
 	.byte 0x03, 0x00
 
+; =============================================================================
+; Bitmap_FadeIn/FadeOut data - Pre-computed fade transition lookup tables
+;
+; Four data blobs used by the fade-in/fade-out transition effects.
+; "Picture" variants are used for graphical screen transitions,
+; "Text" variants for text-mode screen transitions.
+;
+; Sizes:  FadeInPicture=2800, FadeInText=1440,
+;         FadeOutPicture=2850, FadeOutText=2160
+; =============================================================================
 Bitmap_FadeInPicture:	; eb8072
 	.incbin "images/BitmapFadeInPicture.bin"
 
@@ -247913,6 +247923,21 @@ LABEL_F751E7:
 	inc 4, xsp
 	ret
 
+; =============================================================================
+; TtFadeInOut - Fade-in/fade-out state machine handler
+;
+; Event-driven handler for managing fade animation lifecycle.
+; Responds to create (0x01), suspend (0x0B), re-enable (0x02),
+; and destroy (0x0C) events. On create, initializes animation state
+; variables at workspace offsets +42 and +46 to 1 (start animation).
+;
+; Input:
+;   XWA = workspace ID (0xD80001)
+;   XBC = event code
+;   XDE = event parameter (must be 0 for create)
+;
+; Used by: Entertainer mode tone fade effects (TT_ETFADEIN)
+; =============================================================================
 TtFadeInOut:
 	cp xbc, 0x1C0000C
 	jr z, LABEL_F75226
@@ -247935,6 +247960,28 @@ LABEL_F75226:
 	lds32 xhl, 0
 	ret
 
+; =============================================================================
+; AcFadeSetGridBoxProc - Grid-based fade effect processor
+;
+; Complex event-driven handler implementing grid-based screen fade transitions.
+; Uses two lookup tables for fade timing/interpolation:
+;   0xE7F948 - Fade-in grid timing table
+;   0xE7F956 - Fade-out grid timing table
+; Jump table at 0xE7F964 dispatches to 7 sub-handlers (events 0x17-0x1D).
+;
+; Handles events:
+;   0x1C00001 - Create: initialize grid box, set up animation parameters
+;   0x1C00017-0x1C0001D - Animation step events (via jump table)
+;   0x1E0008A - Get property at workspace offset +0x3E
+;   0x1E0008B - Get property at workspace offset +0x42
+;   0x1E0008D - Forward to child widget handler
+;   0x1E0008F - Query animation progress counter
+;   0x1E00050 - Check fade-in progress
+;   0x1E00091 - Check fade-out progress
+;
+; The grid effect divides the screen into cells and fades them
+; individually with staggered timing for a "dissolve" appearance.
+; =============================================================================
 AcFadeSetGridBoxProc:
 	lda xsp, (xsp - 16)
 	push xiz
@@ -248172,6 +248219,18 @@ LABEL_F754B9:
 	lda xsp, (xsp + 16)
 	ret
 
+; =============================================================================
+; FadeSetGridCheck - Validate and initialize grid fade parameters
+;
+; Copies grid configuration from workspace into local buffers:
+;   0xE7F98E - 16-byte grid parameter buffer (8 words from workspace)
+;   0xE7ED44 - 8-byte grid config buffer (4 words)
+; Dispatches to specific grid effect handlers via jump table at 0xE7F9D2.
+;
+; Input:
+;   XBC = event code (0x1E0008D or 0x1C00017-0x1C0001D)
+;   XDE = event parameter
+; =============================================================================
 FadeSetGridCheck:
 	lda xsp, (xsp - 28)
 	push xiz
@@ -275823,6 +275882,22 @@ IvFocus_Return:
 	lda xsp, (xsp + 12)
 	ret
 
+; =============================================================================
+; IvOneShotTimerProc - Single-shot timer event processor
+;
+; Manages timer-driven animation events. Used for delayed UI updates,
+; animation frame ticks, and timed transitions.
+;
+; Events handled:
+;   0x1C00001 - Create: set up timer, register tick event (0x1E50008)
+;   0x1C0000D - Destroy: cancel timer (event 0x1C0000F)
+;   0x1E0003A - Timer query: call LABEL_FF0F4D with params (0x9894, 0xEA)
+;   0x1E50009 - Schedule next tick: queue event 0x1E5000A
+;   0x1E5000A - Timer fired: invoke registered callback via workspace +22
+;
+; Workspace layout:
+;   +22: long - callback function pointer
+; =============================================================================
 IvOneShotTimerProc:
 	lda xsp, (xsp - 12)
 	push xiz
@@ -276637,6 +276712,26 @@ Slider_Exit:
 	lda xsp, (xsp + 12)
 	ret
 
+; =============================================================================
+; AcRotStrBoxProc - Scrollbar/rotary control animation handler
+;
+; Event-driven handler for smooth scrollbar and rotary encoder UI animations.
+; Manages timer-based scrolling with auto-repeat functionality.
+;
+; Events handled:
+;   0x1C00001 - Create: initialize scrollbar, set workspace +44 flag to 1
+;   0x1C00002 - Re-enable: reset tracking state at +44 to 0
+;   0x1C0000B - Suspend: forward event to parent
+;   0x1C0000F - Timer tick: auto-scroll if flag at +44 is set
+;   0x1C50000 - Init: set workspace +44 flag based on DE parameter
+;   0x1E5000A - Timer event: schedule next auto-scroll tick
+;
+; Workspace layout:
+;   +36: long - child widget pointer (forwarded events)
+;   +40: word - scroll step size / timer interval
+;   +42: word - scroll direction
+;   +44: long - pointer to auto-repeat flag (0=stopped, 1=running)
+; =============================================================================
 AcRotStrBoxProc:
 	lda xsp, (xsp - 16)
 	push xiz
@@ -278774,6 +278869,20 @@ MainTitleControl:
 	st32_24 0x02749a, xwa
 	jrl LABEL_F99436
 
+; =============================================================================
+; SeqState_TransitionMode - Screen transition state handler
+;
+; Manages state transitions for the sequencer/demo screen mode changes.
+; Saves current display state bytes (SFR 36150-36153) and clears animation
+; state variables at 0x0274A2, 0x02749E, 0x02749A. Calls LABEL_FC793D
+; to initiate the actual screen transition, then LABEL_FDDFA7 for cleanup.
+;
+; Animation state addresses:
+;   0x02749A - Transition progress counter
+;   0x02749E - Transition timer
+;   0x0274A2 - Transition type/flags
+;   0x0274A8-0x0274AE - Additional transition parameters
+; =============================================================================
 SeqState_TransitionMode:
 	stda8 36151, a
 	ldmm8 36153, 36152
@@ -305422,6 +305531,28 @@ LABEL_FAA60F:
 LABEL_FAA61D:
 
 
+; =============================================================================
+; UpdateScreen - Blit offscreen buffer to VRAM (main display update)
+;
+; Called from the main loop to copy changed regions from OFFSCREEN_BUFFER_1
+; (0x43C00) to VIDEO_RAM (0x1A0000). The actual blit is performed by
+; LABEL_FAA65A which:
+;
+; 1. Checks if palette update is pending (0x03EF9E palette index)
+;    - Full palette update: iterates all 256 DAC entries (0x00-0xFF)
+;    - Partial palette update: iterates entries 0xE0-0xEF only
+; 2. Examines dirty bounding box at 0x030456:
+;    - If full screen (0,0)-(319,239): calls full-screen blit (0xFB30A9)
+;    - Otherwise: calls partial blit (LABEL_FB30D3) for dirty rows only
+; 3. Resets dirty state: clears bounding box, update flags
+;
+; Dirty bounding box (0x030456): {x_min, y_min, x_max, y_max}
+; Frame counter at 0x030450 gates updates (0 = update allowed)
+;
+; LABEL_FB30D3 (partial blit): copies row-by-row from offscreen to VRAM,
+; only for rows within the dirty bounding box. Processes rows in two passes
+; (even lines first, then remaining) for potential interlace support.
+; =============================================================================
 UpdateScreen:	; FAA61D
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
 	cps hl, 0
@@ -313399,6 +313530,26 @@ LABEL_FAF2C5:
 	pop xiz
 	ret
 
+; =============================================================================
+; ChangePalette - Switch VGA DAC palette
+;
+; Loads a new 256-color palette from the palette table at 0xEAAE66.
+; Each palette entry in the table is 10 bytes. The function iterates
+; over all 256 DAC entries, loading RGB values from the selected palette
+; and writing them to VGA DAC registers.
+;
+; Input:
+;   WA = palette index (low byte selects palette from table)
+;
+; Key addresses:
+;   0xEAAE66 - Palette table base (10 bytes per palette entry)
+;   0x03EF94 - Current palette data pointer (cached)
+;   0x03EF9E - Current palette index (cached)
+;   0x030460 - Palette update flag (set to 1 to trigger VRAM update)
+;
+; The palette loop at LABEL_FAF316 iterates 0x20..0xE0 (palette entries),
+; looking up each entry's RGB values via a secondary table at 0x03EF14.
+; =============================================================================
 ChangePalette:
 	pushw iz
 	ld iz, wa
@@ -313462,6 +313613,26 @@ LABEL_FAF344:
 LABEL_FAF345:
 	ret
 
+; =============================================================================
+; LABEL_FAF346 - Palette bank rotation fade effect
+;
+; Creates a fade effect by rotating pixel color indices through palette banks.
+; The KN5000 uses 16 palette banks of 16 colors each (0x00-0x0F, 0x10-0x1F,
+; ..., 0xE0-0xEF). This function:
+;
+; 1. Saves OFFSCREEN_BUFFER_1 (0x43C00) → temp buffer at 0x56800 (full screen)
+; 2. Saves next 38400 words → temp at 0x5FE00
+; 3. Iterates over all 76800 pixels (320×240):
+;    - If pixel >= 0xE0: subtract 0x90 (wrap to lower bank)
+;    - If pixel < 0xE0: add 0x10 (shift to next higher bank)
+; 4. Saves modified buffer → 0x69800 and 0x72E00
+;
+; This shifts all pixels one palette bank forward, creating a brightness
+; or color transition when combined with palette interpolation. The effect
+; is applied uniformly across the entire screen buffer.
+;
+; Screen iteration: outer loop DE=0..0xEF (rows), inner loop HL=0..0x13F (cols)
+; =============================================================================
 LABEL_FAF346:
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
 	cps hl, 0
@@ -317274,6 +317445,13 @@ LABEL_FB3179:
 	ret
 
 
+; =============================================================================
+; VGA_ScreenUnblank (LABEL_FB318A) - Enable display output
+;
+; Writes VGA Sequencer register 01h = 01h (screen on, no blanking).
+; Sequencer register 01h bit 5: 0=display on, 1=display blanked.
+; Value 0x01 = 8-dot character clocks, display active.
+; =============================================================================
 LABEL_FB318A:
 	; For byte-matching purposes:
 	; This is equivalent to:
@@ -317286,7 +317464,13 @@ LABEL_FB318A:
 	lds bc, 1
 	jrl _Write_VGA_Register
 
-
+; =============================================================================
+; VGA_ScreenBlank (LABEL_FB319A) - Blank display output
+;
+; Writes VGA Sequencer register 01h = 21h (screen blanked).
+; Bit 5 = 1: blanks display during VRAM updates to prevent tearing.
+; Used during large screen updates and palette changes.
+; =============================================================================
 LABEL_FB319A:
 	; For byte-matching purposes:
 	; This is equivalent to:
