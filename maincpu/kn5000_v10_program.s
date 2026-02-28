@@ -305363,6 +305363,7 @@ InitializeGraphics:
 	inc 8, xsp
 	ret
 
+; LcdOn - Enable LCD display output (sets flag at 0x030464)
 LcdOn:
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
 	cps hl, 0
@@ -305382,6 +305383,7 @@ LABEL_FAA5D0:
 	sti16_24 0x030464, 0x0001
 	jp LABEL_FB318A
 
+; LcdOff - Disable LCD display output (clears flag at 0x030464)
 LcdOff:	; faa5db
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
 	cps hl, 0
@@ -306837,6 +306839,20 @@ LABEL_FAB26C:
 	lda xsp, (xsp + 50)
 	retd 0x2
 
+; =============================================================================
+; DrawBox - Draw a filled rectangle on the offscreen buffer
+;
+; Fills a rectangular area defined by a 4-word bounding box with a solid color.
+; Clips to screen bounds (0,0)-(319,239).
+;
+; Input:
+;   XWA = pointer to bounding box: {x_min, y_min, x_max, y_max} (4 words)
+;   BC  = fill color (low byte)
+;
+; Output:
+;   Rectangle filled in OFFSCREEN_BUFFER_1 (0x43C00)
+;   SetChangeRect called with filled region
+; =============================================================================
 DrawBox:
 	dec 2, xsp
 	push xiz
@@ -306995,6 +307011,16 @@ LABEL_FAB3D9:
 	lda xsp, (xsp + 16)
 	ret
 
+; =============================================================================
+; DrawFrame - Draw a rectangle outline (border only, no fill)
+;
+; Draws the border of a rectangle defined by a 4-word bounding box.
+; Renders 4 lines (top, bottom, left, right edges) using the specified color.
+;
+; Input:
+;   XWA = pointer to bounding box: {x_min, y_min, x_max, y_max} (4 words)
+;   BC  = border color (low byte)
+; =============================================================================
 DrawFrame:
 	dec 2, xsp
 	push xiz
@@ -307441,6 +307467,18 @@ LABEL_FAB7FE:
 	lda xsp, (xsp + 44)
 	ret
 
+; =============================================================================
+; DrawFrameEx - Draw styled rectangle frame with XOR support
+;
+; Extended frame drawing that supports multiple rendering styles.
+; Clips bounding box to screen (0,0)-(319,239) before drawing.
+; Supports XOR mode for invertible selection rectangles.
+;
+; Input:
+;   XWA = pointer to bounding box: {x_min, y_min, x_max, y_max} (4 words)
+;   BC  = border color (low byte)
+;   DE  = drawing mode (0x201=write, 0x205=XOR, etc.)
+; =============================================================================
 DrawFrameEx:
 	lda xsp, (xsp - 14)
 	push xiz
@@ -308313,6 +308351,19 @@ LABEL_FABF3A:
 	lda xsp, (xsp + 24)
 	ret
 
+; =============================================================================
+; DrawIcons - Draw icon sprite from the icon descriptor table
+;
+; Draws an icon from the ROM icon descriptor table at 0x938000.
+; Same format as bitmap table (8 bytes/entry: width, height, data_ptr)
+; but uses a separate base address for UI icons.
+;
+; Input:
+;   XWA = pointer to position: word[0]=x, word[2]=y
+;   XBC = icon index (used as: table[index * 8])
+;
+; Returns immediately if icon index is 0 (no icon).
+; =============================================================================
 DrawIcons:
 	dec 4, xsp
 	push xiz
@@ -308609,6 +308660,17 @@ LABEL_FAC1E8:
 	lda xsp, (xsp + 34)
 	ret
 
+; =============================================================================
+; DrawBitmapSP - Draw bitmap with special positioning/effects
+;
+; Like DrawBitmap but with additional parameters for sprite-like rendering
+; with per-pixel color mapping and separate foreground/background handling.
+;
+; Input:
+;   XWA = pointer to position: word[0]=x, word[2]=y
+;   XBC = bitmap index
+;   Stack: additional rendering parameters
+; =============================================================================
 DrawBitmapSP:
 	dec 6, xsp
 	push xiz
