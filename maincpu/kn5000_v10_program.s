@@ -316325,16 +316325,37 @@ GetFrameSPSize:
 	ld (xde), wa
 	ret
 
+; =============================================================================
+; Font Glyph Table Access Functions
+;
+; The font glyph table is in ROM at 0x945C00 (Table Data ROM).
+; Each entry is 16 bytes:
+;   +0x00: word  char_width    (pixels per character)
+;   +0x02: word  char_height   (pixels)
+;   +0x04: word  descent       (below baseline)
+;   +0x06: word  ascent        (above baseline)
+;   +0x08: long  glyph_ptr     (pointer to 1bpp bitmap data)
+;   +0x0C: long  kerning_ptr   (0 = fixed-width; else per-char width table)
+;
+; Lookup: entry_addr = 0x945C00 + (font_id << 4)
+; =============================================================================
+
+; GetCharHeight - Return character height for a font
+; Input:  XWA = font_id
+; Output: HL = character height in pixels
 GetCharHeight:
-	sll xwa, 4
-	add xwa, 0x945C00
-	ld hl, (xwa + 2)
+	sll xwa, 4		; font_id * 16
+	add xwa, 0x945C00	; + table base
+	ld hl, (xwa + 2)	; height at offset +2
 	ret
 
+; GetCharDescent - Return character descent for a font
+; Input:  XWA = font_id
+; Output: HL = descent in pixels (below baseline)
 GetCharDescent:
-	sll xwa, 4
-	add xwa, 0x945C00
-	ld hl, (xwa + 4)
+	sll xwa, 4		; font_id * 16
+	add xwa, 0x945C00	; + table base
+	ld hl, (xwa + 4)	; descent at offset +4
 	ret
 
 GetCenteredDelta:
@@ -316355,6 +316376,21 @@ LABEL_FB263D:
 LABEL_FB263F:
 	ret
 
+; =============================================================================
+; ConvertStrings - Convert control-code strings to displayable characters
+;
+; Processes a null-terminated input string (XWA) and outputs displayable
+; characters to the buffer (XBC). Handles:
+;   - 0x7E escape prefix: next two bytes are hex digits forming a char code
+;     e.g., 0x7E 0x33 0x41 → character 0x3A (colon)
+;   - Characters < 0x20: mapped to 0x20 (space)
+;   - Characters >= 0x20: copied as-is
+;   - 0x00: null terminator (copied and returns)
+;
+; Input:
+;   XWA = pointer to source string (null-terminated)
+;   XBC = pointer to output buffer
+; =============================================================================
 ConvertStrings:
 	dec 4, xsp
 	push xiz
@@ -316362,7 +316398,7 @@ ConvertStrings:
 	ld xiz, xwa
 
 LABEL_FB2648:
-	cp (xiz), 0x7E
+	cp (xiz), 0x7E		; Check for escape prefix
 	jr nz, LABEL_FB2680
 	inc 1, xiz
 	cp (xiz), 0x0
@@ -316441,6 +316477,24 @@ LABEL_FB26CB:
 	inc 1, xbc
 	jr LABEL_FB26AF
 
+; =============================================================================
+; CalcTotalWidth - Calculate pixel width of a rendered string
+;
+; Computes the total width in pixels that a string will occupy when rendered
+; with the specified font. Supports both fixed-width and kerning-enabled fonts.
+;
+; For fixed-width fonts: width = char_count * char_width
+; For kerning fonts: width = sum of per-character kerning values
+;
+; Characters are offset by 0x20 before kerning table lookup.
+;
+; Input:
+;   XWA = pointer to null-terminated string
+;   XBC = font_id
+;
+; Output:
+;   HL = total width in pixels
+; =============================================================================
 CalcTotalWidth:
 	lda xsp, (xsp - 12)
 	push xiz
@@ -316504,6 +316558,21 @@ LABEL_FB2749:
 	lda xsp, (xsp + 12)
 	ret
 
+; =============================================================================
+; WordwrapStrings - Find word-wrap break point for text layout
+;
+; Scans a string to find the longest substring that fits within a specified
+; pixel width when rendered with the given font. Breaks at word boundaries
+; (spaces, 0x20). Used for multi-line text layout.
+;
+; Input:
+;   XWA = pointer to null-terminated string
+;   XBC = font_id
+;   DE  = maximum width in pixels
+;
+; Output:
+;   HL = character offset of the word-wrap break point
+; =============================================================================
 WordwrapStrings:
 	lda xsp, (xsp - 22)
 	push xiz
@@ -316581,35 +316650,38 @@ LABEL_FB27EB:
 	lda xsp, (xsp + 22)
 	ret
 
+; HexDigitToValue - Convert ASCII hex digit to 4-bit value
+; Input:  A = ASCII character ('0'-'9', 'a'-'f', 'A'-'F')
+; Output: L = 0x00-0x0F (value), or 0x00 if invalid
 LABEL_FB27FD:
-	cp a, 0x30
+	cp a, 0x30		; '0'
 	jr c, LABEL_FB280D
-	cp a, 0x39
+	cp a, 0x39		; '9'
 	jr ugt, LABEL_FB280D
-	sub a, 0x30
+	sub a, 0x30		; '0'-'9' → 0-9
 	ld l, a
 	ret
 
 LABEL_FB280D:
-	cp a, 0x61
+	cp a, 0x61		; 'a'
 	jr c, LABEL_FB281D
-	cp a, 0x66
+	cp a, 0x66		; 'f'
 	jr ugt, LABEL_FB281D
-	sub a, 0x57
+	sub a, 0x57		; 'a'-'f' → 10-15
 	ld l, a
 	ret
 
 LABEL_FB281D:
-	cp a, 0x41
+	cp a, 0x41		; 'A'
 	jr c, LABEL_FB282D
-	cp a, 0x46
+	cp a, 0x46		; 'F'
 	jr ugt, LABEL_FB282D
-	sub a, 0x37
+	sub a, 0x37		; 'A'-'F' → 10-15
 	ld l, a
 	ret
 
 LABEL_FB282D:
-	ldb l, 0x0
+	ldb l, 0x0		; Invalid → 0
 	ret
 
 LABEL_FB2830:
@@ -316624,6 +316696,12 @@ LABEL_FB2830:
 	.byte 0xcf, 0x00, 0x01, 0xb0, 0xfe, 0xb1, 0x00, 0x20
 	.byte 0x0e
 
+; =============================================================================
+; InitPaletteRGB - Initialize 256-color palette from ROM data
+;
+; Copies palette RGB data from ROM (0xEB37DE) to RAM (0x0324FC).
+; The palette data is stored as packed RGB bytes.
+; =============================================================================
 InitPaletteRGB:
 	lda_24 xde, 0x0324fc
 	lda_24 xwa, 0xeb37de
