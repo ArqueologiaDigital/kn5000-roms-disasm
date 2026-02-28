@@ -97475,6 +97475,8 @@ LABEL_EF5CF0:
 	call LABEL_FB1594
 	ret
 
+; Render UI element from two ROM descriptor tables (general renderer)
+; Input: XIY = descriptor table 1, XIX = descriptor table 2
 LABEL_EF5CF9:
 	bitda_24 0, 132582
 	jr nz, LABEL_EF5D01
@@ -97483,9 +97485,11 @@ LABEL_EF5CF9:
 LABEL_EF5D01:
 	ld xwa, xiy
 	ld xbc, xix
-	call LABEL_F0212C
+	call LABEL_F0212C		; General UI element renderer
 	ret
 
+; Render UI element from two ROM descriptor tables (paired renderer)
+; Input: XIY = descriptor table 1, XIX = descriptor table 2
 LABEL_EF5D0A:
 	bitda_24 0, 132582
 	jr nz, LABEL_EF5D12
@@ -97496,7 +97500,7 @@ LABEL_EF5D12:
 	push xbc
 	ld xwa, xiy
 	ld xbc, xix
-	call LABEL_FB15F6
+	call LABEL_FB15F6		; Two-descriptor pair renderer
 	pop xbc
 	pop xwa
 	ret
