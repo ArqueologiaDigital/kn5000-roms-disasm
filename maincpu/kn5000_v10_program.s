@@ -5237,7 +5237,7 @@ LABEL_E1342A:
 ; ======================================================================
 
 
-LABEL_E1344E:
+NAKA_UIObjectTable:
 	.long LABEL_E0E974
 	.long FTDEMO_SCREEN01_TECHNICS_GLOBE
 	.long LABEL_E0E9C2
@@ -119394,7 +119394,7 @@ InitializeNaka:
 	RegObjTabl 0x1600001, 0xFA48A9, 0x0, 0xE0E96E, 0x40b
 	RegObjTabl 0x1600003, 0xFA4A18, 0x0, 0xE14824, 0x14b
 	RegObjTabl 0x1600003, 0xFA4A18, 0x0, 0xE14828, 0x44b
-	RegObjTabl 0x1600010, 0xFA5995, 0x1de, 0xE1344E, 0xfd
+	RegObjTabl 0x1600010, 0xFA5995, 0x1de, NAKA_UIObjectTable, 0xfd
 	RegObjTabl 0x160000f, 0xFA62CB, 0x1de, 0xE13BCA, 0x3fd
 
 	RegTitle 0xb, 0xe1, 0x481a, 0xfd, 0x1200000, 0xfd0000
@@ -268139,7 +268139,7 @@ DemoMode_Main_Operation:
 	resda 3, 10413
 	call 0xF229F1
 	call 0xF22A4D
-	jp 0xF846BF
+	jp Seq_StartMainControl
 
 LABEL_F869D2:
 	ldw wa, 0x22
