@@ -264554,16 +264554,16 @@ MainMemDrawControl:
 	call LABEL_F84C61
 	ldw wa, 0xD
 	lds bc, 0
-	calr LABEL_F83CEA
+	calr DemoMenu_BuildItemWorkspace
 	ldw wa, 0xE
 	lds bc, 0
-	calr LABEL_F83CEA
+	calr DemoMenu_BuildItemWorkspace
 	ldw wa, 0xB
 	lds bc, 0
-	calr LABEL_F83CEA
+	calr DemoMenu_BuildItemWorkspace
 	ldw wa, 0xC
 	lds bc, 0
-	calr LABEL_F83CEA
+	calr DemoMenu_BuildItemWorkspace
 	jrl LABEL_F83CE4
 
 LABEL_F83C43:
@@ -264580,7 +264580,7 @@ LABEL_F83C45:
 	call LABEL_FCD437
 	ld bc, hl
 	ld wa, iz
-	calr LABEL_F83CEA
+	calr DemoMenu_BuildItemWorkspace
 	inc 1, iz
 	cp iz, 0xE
 	jr ule, LABEL_F83C45
@@ -264591,7 +264591,7 @@ LABEL_F83C6B:
 	srl xwa, 0
 	ldi_werp 0xE2, 0
 	ld xbc, (xsp + 2)
-	calr LABEL_F83CEA
+	calr DemoMenu_BuildItemWorkspace
 	ld xwa, (xsp + 2)
 	srl xwa, 0
 	ldi_werp 0xE2, 0
@@ -264618,7 +264618,7 @@ LABEL_F83CA7:
 	calr LABEL_F83DB3
 	ld bc, hl
 	ld wa, iz
-	calr LABEL_F83CEA
+	calr DemoMenu_BuildItemWorkspace
 	inc 1, iz
 	cp iz, 0xE
 	jr ule, LABEL_F83CA7
@@ -264645,7 +264645,30 @@ LABEL_F83CE4:
 	inc 4, xsp
 	ret
 
-LABEL_F83CEA:
+; =============================================================================
+; DemoMenu_BuildItemWorkspace (0xF83CEA)
+; =============================================================================
+; Allocates a 12-byte workspace for one demo menu item and posts it as an
+; event 0x1C0001C parameter.
+;
+; Called in a loop for each of the ~15 demo menu items (iz = item index,
+; wa = item type selector).  Each call:
+;   1. Allocates a 12-byte workspace block from the firmware heap (FF0E80).
+;   2. Reads the current "part select" index from DRAM address 0x8D3A via
+;      GetPartSelect(), let R = that byte.
+;   3. Computes workspace[0] = table[0xE9F88C + iz*2] + R*1024.
+;      The table values are all in the 0x82xx–0x82CC range; this formula
+;      CANNOT produce 0xB80A for any R.
+;   4. Posts event 0x1C0001C (queued via PostEventWithParam/FA9D58) to
+;      target 0xFFFFFFFF, with the workspace pointer as the event parameter.
+;   5. Also posts event 0x1E00023 with the same workspace.
+;
+; NOTE: This queued-event path is DISTINCT from GroupBoxProc_StartSSFPresentation
+; (0xF9A273), which sends 0x1C0001C via the direct SendEvent (FA9660) with a
+; workspace byte-pattern of 0x0000B80A that passes AcPresentationControlProc's
+; type-tag check. The path here (queued, wrong tag) never starts SSF playback.
+; =============================================================================
+DemoMenu_BuildItemWorkspace:
 	dec 6, xsp
 	pushw iz
 	ld iz, bc
@@ -264674,15 +264697,15 @@ LABEL_F83CEA:
 	ld xwa, 0x247CE
 	add xwa, xde
 	ld (xwa), iz
-	jr LABEL_F83D8D
+	jr DemoMenu_BuildItemWorkspace_Post
 
 LABEL_F83D37:
 	ld wa, (xsp + 6)
 	sub wa, 0x9
 	cps wa, 0
-	jr c, LABEL_F83D8D
+	jr c, DemoMenu_BuildItemWorkspace_Post
 	cps wa, 5
-	jr ugt, LABEL_F83D8D
+	jr ugt, DemoMenu_BuildItemWorkspace_Post
 	add wa, wa
 	lda_24 xix, 0xe9f984
 	ld_sriw3 WA, 0x07, 0xF0, 0xE0
@@ -264698,7 +264721,9 @@ LABEL_F83D5C:
 	.byte 0x91, 0x21, 0xe9, 0x12, 0xaf, 0x02, 0x20, 0xb0
 	.byte 0x61
 
-LABEL_F83D8D:
+; Exit path for DemoMenu_BuildItemWorkspace: posts queued events 0x1C0001C
+; and 0x1E00023 with the allocated workspace pointer, then returns.
+DemoMenu_BuildItemWorkspace_Post:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C0001C
 	ld xde, (xsp + 2)
@@ -265424,7 +265449,7 @@ AcPresentationControlProc:
 	ld xiz, xwa
 	ld xbc, (xsp + 8)
 	cp xbc, 0x1C0001C
-	jrl z, LABEL_F84625
+	jrl z, AcPresentCtrl_CheckSSFStart
 	ld xwa, (xsp + 8)
 	cp xwa, 0x1C10006
 	jrl z, LABEL_F845F6
@@ -265485,7 +265510,17 @@ LABEL_F845F6:
 	lds32 xde, 0
 	jr LABEL_F8464A
 
-LABEL_F84625:
+; Handler for event 0x1C0001C within AcPresentationControlProc.
+; Checks the workspace type-tag: *(XDE) must equal 0x0000B80A for SSF to start.
+; If the check passes, sends event 0x1C00006 to begin SSF presentation parsing.
+; If it fails (wrong type-tag), the SSF system never starts and no demo images appear.
+;
+; MAME investigation (Feb 2026): this check ALWAYS fails because the workspace
+; value 0x0000B80A is only produced by GroupBoxProc_StartSSFPresentation (FA9660
+; direct path), which is not reached during Feature Demo navigation in MAME.
+; The events that DO arrive here come from DemoMenu_BuildItemWorkspace (queued via
+; FA9D58), whose workspace values are in the 0x82xx-range and never equal 0xB80A.
+AcPresentCtrl_CheckSSFStart:
 	ld xwa, xiz
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
@@ -266025,14 +266060,14 @@ LABEL_F84B6F:
 	cps e, 2
 	jr nz, LABEL_F84BF9
 	lds wa, 6
-	call LABEL_F83CEA
+	call DemoMenu_BuildItemWorkspace
 	ld8_24 a, 0x020c39
 	srl a, 4
 	and a, 0xF
 	ld c, a
 	extz bc
 	lds wa, 2
-	call LABEL_F83CEA
+	call DemoMenu_BuildItemWorkspace
 	ld8_24 c, 0x020c39
 	and c, 0xF
 	extz bc
@@ -266041,21 +266076,21 @@ LABEL_F84B6F:
 
 LABEL_F84BCD:
 	ldw wa, 0x8
-	call LABEL_F83CEA
+	call DemoMenu_BuildItemWorkspace
 	ld8_24 a, 0x020c39
 	srl a, 4
 	and a, 0xF
 	ld c, a
 	extz bc
 	lds wa, 5
-	call LABEL_F83CEA
+	call DemoMenu_BuildItemWorkspace
 	ld8_24 c, 0x020c39
 	and c, 0xF
 	extz bc
 	lds wa, 3
 
 LABEL_F84BF5:
-	call LABEL_F83CEA
+	call DemoMenu_BuildItemWorkspace
 
 LABEL_F84BF9:
 	lda_24 xwa, 0x020c33
@@ -266068,14 +266103,14 @@ LABEL_F84BF9:
 	and c, 0xF
 	extz bc
 	lds wa, 7
-	call LABEL_F83CEA
+	call DemoMenu_BuildItemWorkspace
 	ld8_24 a, 0x020c39
 	srl a, 4
 	and a, 0xF
 	ld c, a
 	extz bc
 	lds wa, 4
-	call LABEL_F83CEA
+	call DemoMenu_BuildItemWorkspace
 	ld8_24 c, 0x020c39
 	and c, 0xF
 	extz bc
@@ -266087,7 +266122,7 @@ LABEL_F84C3B:
 	and c, 0x1
 	extz bc
 	ldw wa, 0xA
-	call LABEL_F83CEA
+	call DemoMenu_BuildItemWorkspace
 	ld8_24 a, 0x020c39
 	srl a, 1
 	and a, 0x1
@@ -266096,7 +266131,7 @@ LABEL_F84C3B:
 	ldw wa, 0x9
 
 LABEL_F84C5C:
-	call LABEL_F83CEA
+	call DemoMenu_BuildItemWorkspace
 	ret
 
 LABEL_F84C61:
@@ -279443,6 +279478,28 @@ LABEL_F9983C:
 	lds hl, 0
 	ret
 
+; =============================================================================
+; GroupBoxProc (approx. 0xF998xx)
+; =============================================================================
+; Event handler for a "group box" UI container widget.  Dispatches on XBC
+; (event code) to one of ~20 sub-handlers covering layout, focus, display,
+; and interactive item events.
+;
+; Key event dispatch entries relevant to the Feature Demo / SSF system:
+;   0x1C00038 → GroupBoxProc_StartSSFPresentation (direct)
+;   0x1C00030 → GroupBoxProc_Ev1C00030 → GroupBoxProc_StartSSFPresentation
+;
+; GroupBoxProc_StartSSFPresentation (0xF9A273) is the CORRECT code path that
+; initiates SSF presentation playback: it builds a workspace with type-tag
+; 0x0000B80A and sends event 0x1C0001C via direct SendEvent (FA9660), causing
+; AcPresentationControlProc to pass its B80A check and send 0x1C00006
+; (which starts SSF parsing and loading FTBMP images).
+;
+; MAME investigation (Feb 2026): event 0x1C00038 is never routed to
+; GroupBoxProc during Feature Demo navigation, so GroupBoxProc_StartSSFPresentation
+; never fires.  This is the confirmed root cause of the Feature Demo image
+; display failure.
+; =============================================================================
 GroupBoxProc:
 	lda xsp, (xsp - 40)
 	pushw iz
@@ -279472,9 +279529,9 @@ GroupBoxProc:
 	cp xde, 0x1E0006E
 	jrl z, LABEL_F9A2FB
 	cp xde, 0x1C00038
-	jrl z, LABEL_F9A273
+	jrl z, GroupBoxProc_StartSSFPresentation
 	cp xde, 0x1C00030
-	jrl z, LABEL_F9A21E
+	jrl z, GroupBoxProc_Ev1C00030
 	cp xde, 0x1C00026
 	jrl z, LABEL_F9A17E
 	cp xde, 0x1C0001F
@@ -280260,7 +280317,10 @@ LABEL_F9A17E:
 	lds32 xde, 0
 	jrl LABEL_F9A4A9
 
-LABEL_F9A21E:
+; Handler for event 0x1C00030 within GroupBoxProc.
+; Calls BoxProc, then queries widget status (event 0x1E00024).
+; Falls through to GroupBoxProc_StartSSFPresentation regardless of result.
+GroupBoxProc_Ev1C00030:
 	ld xde, (xsp + 30)
 	ld xwa, (xsp + 38)
 	ld xbc, (xsp + 34)
@@ -280270,7 +280330,7 @@ LABEL_F9A21E:
 	ld xde, 0x1600029
 	call 0xFA9660
 	or xhl, xhl
-	jr z, LABEL_F9A273
+	jr z, GroupBoxProc_StartSSFPresentation
 	ld xde, (xsp + 30)
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00009
@@ -280285,7 +280345,19 @@ LABEL_F9A21E:
 	ld xbc, 0x1C00034
 	call 0xFA9660
 
-LABEL_F9A273:
+; Builds an SSF presentation workspace and sends event 0x1C0001C via direct
+; SendEvent (FA9660).  This is the CRITICAL path that allows
+; AcPresentationControlProc to pass its 0xB80A type-tag check and start
+; SSF playback.
+;
+; The workspace (at XSP+14) is populated byte-by-byte from XSP+30/31:
+;   workspace[0] = byte at (XSP+31)   -- must be 0x0A for tag 0x0000B80A
+;   workspace[1] = byte at (XSP+30)   -- must be 0xB8
+;   workspace[2..3] = shifted/zero bytes
+;
+; Reached via event 0x1C00038 (direct) or event 0x1C00030 (via
+; GroupBoxProc_Ev1C00030 fall-through).
+GroupBoxProc_StartSSFPresentation:
 	ld xwa, (xsp + 38)
 	call 0xFA44BE
 	ld xwa, 0x1C0001C
@@ -280310,7 +280382,10 @@ LABEL_F9A273:
 	cp hl, 0xFFFF
 	jrl z, LABEL_F9A526
 
-LABEL_F9A2BA:
+; Loop body: iterates over SSF items via FCD437, builds workspace fields,
+; and sends event 0x1C0001C for each item via direct SendEvent.
+; Loops until FCD4FF reports no more items (HL == 0xFFFF).
+GroupBoxProc_SSFItemLoop:
 	ld xwa, (xsp + 10)
 	ld (xsp + 18), xwa
 	ld xwa, (xsp + 10)
@@ -280328,7 +280403,7 @@ LABEL_F9A2BA:
 	lda xde, (xsp + 8)
 	call LABEL_FCD4FF
 	cp hl, 0xFFFF
-	jr nz, LABEL_F9A2BA
+	jr nz, GroupBoxProc_SSFItemLoop
 	jrl LABEL_F9A526
 
 LABEL_F9A2FB:
