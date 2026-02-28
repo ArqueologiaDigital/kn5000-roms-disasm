@@ -89022,7 +89022,7 @@ LABEL_EF050F:
 	stdi8 306, 3
 	ldio 0x3A, 0x20
 	ld xsp, 0xC00
-	calr Seems_to_copy_some_data_buffers
+	calr Boot_InitWorkRAM
 
 LABEL_EF0529:
 	call MainCPU_self_test_routines
@@ -89630,7 +89630,29 @@ LABEL_EF0B21:
 	calr LABEL_EF09A8
 	jp 0xEF23E8
 
-Seems_to_copy_some_data_buffers:
+; Boot_InitWorkRAM -- Early-boot DRAM initialisation
+;
+; Called once from RESET_HANDLER before any other firmware subsystem is set up.
+; Performs two passes over DRAM to prepare a clean working environment:
+;
+;   1. Zero-fill block 1: 0x010000 .. 0x03D523  (0x2D524 bytes, ~181 KB)
+;      General-purpose work RAM used by the event dispatcher and subsystem state.
+;
+;   2. Zero-fill block 2: 0x000400 .. 0x00E35D  (0xDF5D bytes, ~55 KB)
+;      Low DRAM including the control-panel button state array (0x8E4A),
+;      the combo-code cell (0x402), and other low-DRAM variables.
+;
+;   3. ROM copy block 1: ROM 0xEED8C8 -> DRAM 0x03D524  (0x219E bytes, ~8.5 KB)
+;      Copies a constant data block from Program ROM into work RAM.
+;
+;   4. ROM copy block 2: ROM 0xEEFA66 -> DRAM 0x00E35E  (0x95B bytes, ~2.4 KB)
+;      Copies a second constant data block from Program ROM into work RAM.
+;
+; Each block uses the firmware's block-transfer helper (ldirw93 / ldir83) which
+; can transfer data in batches via the WA loop counter register.
+;
+; Returns: no return value; falls through to the next boot stage.
+Boot_InitWorkRAM:
 	ld xde, 0x10000
 	ld xbc, 0x2D524
 	ld ix, bc
