@@ -89380,7 +89380,7 @@ INTT2_HANDLER:	; EF08A4
 
 NMI_HANDLER:	; EF08A5
 	sti16_24 0x00ffca, 0x0000
-	calr LABEL_EF08D4
+	calr NMI_StorePayloadChecksums
 	bitda 2, 64941
 	jr z, LABEL_EF08BE
 	sti16_24 0x00ffcc, 0x5a5a
@@ -89397,6 +89397,22 @@ LABEL_EF08C5:
 LABEL_EF08D2:
 	jr	t, 0xfd
 
+; ===========================================================================
+; NMI_StorePayloadChecksums - Power-off NMI: save checksums and copy payload
+; ===========================================================================
+; Called by: NMI_HANDLER
+; Entry: Machine is powering off; NMI has been triggered by SNS signal
+; Exit:  DRAM[0xFFD4] = one's-complement checksum of region 1 (0xF180, 0x800 words)
+;        DRAM[0xFFD2] = one's-complement checksum of region 2 (0xF980, 0x280 words)
+;        SRAM[0x1E8000..] = copy of DRAM[0xF980..]
+;        CPU halts (machine powers off)
+; Notes: Guards against running without being armed:
+;          - Checks internal RAM[0x0400] == 0x80 (NMI guard set by Boot_DisplayScreen)
+;          - If guard not set, returns immediately (no-op)
+;        On success the checksums are stored so SubCPU_Payload_Verify can verify
+;        the payload on the next boot and show the splash screen (not "ALL INITIAL SETTING!").
+; ===========================================================================
+NMI_StorePayloadChecksums:	; EF08D4
 LABEL_EF08D4:
 	cpdi8 1024, 128
 	ret nz
