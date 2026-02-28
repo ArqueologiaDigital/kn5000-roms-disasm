@@ -1239,7 +1239,7 @@ LABEL_E0E99E:
 	.byte 0x00, 0xff
 
 
-LABEL_E0E9A0:
+FTDEMO_SCREEN01_TECHNICS_GLOBE:
 	.byte 0x6c, 0x00, 0x60, 0x01
 	.byte 0x00, 0x00, 0xff, 0xff
 	.byte 0xff, 0xff, 0xff, 0xff
@@ -2075,7 +2075,7 @@ LABEL_E0F650:
 	.byte 0x00, 0x00, 0x00, 0xff
 
 
-LABEL_E0F67C:
+FTDEMO_SCREEN02_SUBWOOFERS:
 	.byte 0x6c, 0x00, 0x60, 0x01
 	.byte 0x6d, 0x00, 0xff, 0xff
 	.byte 0x6f, 0x00, 0xff, 0xff
@@ -2168,7 +2168,7 @@ LABEL_E0F7E2:
 	.byte 0x00, 0x00, 0xff, 0x00, 0x00, 0x00, 0x04, 0x00
 	.byte 0x05, 0x00, 0x2b, 0x01
 
-LABEL_E0F80C:
+FTDEMO_SCREEN03_FLOPPY_DISKS:
 	.byte 0x6c, 0x00, 0x60, 0x01
 	.byte 0x76, 0x00, 0xff, 0xff
 	.byte 0xff, 0xff, 0x77, 0x00
@@ -2191,7 +2191,7 @@ LABEL_E0F82E:
 	.byte 0x00, 0xff
 
 
-LABEL_E0F85A:
+FTDEMO_SCREEN04_DISK_INSERT:
 	.byte 0x6c, 0x00, 0x60, 0x01
 	.byte 0x79, 0x00, 0xff, 0xff
 	.byte 0x7b, 0x00, 0xff, 0xff
@@ -2313,7 +2313,7 @@ LABEL_E0FA52:
 	.byte 0x0d, 0x00, 0x2b, 0x01
 
 
-LABEL_E0FA7C:
+FTDEMO_SCREEN05_SURROUND_ARROWS:
 	.byte 0x6c, 0x00, 0x60, 0x01
 	.byte 0x84, 0x00, 0xff, 0xff
 	.byte 0xff, 0xff, 0x86, 0x00
@@ -3089,7 +3089,7 @@ LABEL_E1086C:
 	.byte 0xe1, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff
 
 
-LABEL_E10898:
+FTDEMO_SCREEN06_KN5000_RAINBOW:
 	.byte 0x6c, 0x00, 0x60, 0x01
 	.byte 0xe0, 0x00, 0xff, 0xff
 	.byte 0xff, 0xff, 0xff, 0xff
@@ -5239,7 +5239,7 @@ LABEL_E1342A:
 
 LABEL_E1344E:
 	.long LABEL_E0E974
-	.long LABEL_E0E9A0
+	.long FTDEMO_SCREEN01_TECHNICS_GLOBE
 	.long LABEL_E0E9C2
 	.long LABEL_E0E9EE
 	.long LABEL_E0EA08
@@ -5348,7 +5348,7 @@ LABEL_E1344E:
 	.long LABEL_E0F5EC
 	.long LABEL_E0F61A
 	.long LABEL_E0F650
-	.long LABEL_E0F67C
+	.long FTDEMO_SCREEN02_SUBWOOFERS
 	.long LABEL_E0F69E
 	.long LABEL_E0F6C8
 	.long LABEL_E0F6E2
@@ -5358,9 +5358,9 @@ LABEL_E1344E:
 	.long LABEL_E0F78C
 	.long LABEL_E0F7B6
 	.long LABEL_E0F7E2
-	.long LABEL_E0F80C
+	.long FTDEMO_SCREEN03_FLOPPY_DISKS
 	.long LABEL_E0F82E
-	.long LABEL_E0F85A
+	.long FTDEMO_SCREEN04_DISK_INSERT
 	.long LABEL_E0F87C
 	.long LABEL_E0F8A6
 	.long LABEL_E0F8D2
@@ -5373,7 +5373,7 @@ LABEL_E1344E:
 	.long LABEL_E0F9FC
 	.long LABEL_E0FA28
 	.long LABEL_E0FA52
-	.long LABEL_E0FA7C
+	.long FTDEMO_SCREEN05_SURROUND_ARROWS
 	.long LABEL_E0FA9E
 	.long LABEL_E0FACA
 	.long LABEL_E0FAF4
@@ -5463,7 +5463,7 @@ LABEL_E1344E:
 	.long LABEL_E1082A
 	.long LABEL_E10850
 	.long LABEL_E1086C
-	.long LABEL_E10898
+	.long FTDEMO_SCREEN06_KN5000_RAINBOW
 	.long LABEL_E108BA
 	.long LABEL_E108F8
 	.long LABEL_E10912
