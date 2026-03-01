@@ -277748,6 +277748,36 @@ LABEL_F98695:
 	pop xiz
 	ret
 
+; =============================================================================
+; GroupBoxNotify_SendSSFEvent (0xF98697)  [UNDECODED — still in .byte form]
+; =============================================================================
+; Sends event 0x1C00038 to trigger GroupBoxProc_StartSSFPresentation.
+;
+; This function appears as a function-pointer entry in many widget handler
+; chains (tables at LABEL_EE7FA8, LABEL_EE7FD4, LABEL_EE7FFC, etc.).
+; It fires when a widget in one of those chains processes user-interaction events.
+;
+; Logic (decoded via unidasm):
+;   1. Call 0xEF0797 — check bit 7 of DRAM 0x0406 (set once after boot by
+;      Boot_DisplayScreen, cleared only during flash update). Returns HL=1
+;      if set; returns early (HL=0) if not.
+;   2. Read *(0x8D38) = index R into ROM table at 0xE01F80.
+;   3. Read P = ROM[0xE01F80 + R*4] — base of a ROM state-value array.
+;   4. If P == 0 (null), return.
+;   5. Walk the 16-bit array at P:
+;      - If first entry == 0xFFFE: send event unconditionally.
+;      - If first entry == 0xFFFF: no entries, return.
+;      - Otherwise: compare each entry to BC=(0xC080<<8)|(0xC07D) until match
+;        or 0xFFFF sentinel. If match found, send event.
+;   6. Send: XWA=0xFFFFFFFF XBC=0x1C00038 XDE=(0xC07D-0xC080 packed), jp FA9945.
+;
+; FA9945 routes 0x1C00038 to widgets registered via FA9752 whose match value
+; (upper 16 bits of XDE) matches (0xC080<<8)|(0xC07D).
+;
+; MAME investigation: this function's body is in the .byte block below and has
+; NOT yet been decoded to native LLVM instructions. Two ROM entry points exist
+; within this block: 0xF98697 (main entry) and 0xF98748 (alternate/secondary).
+; =============================================================================
 LABEL_F98697:
 	.byte 0x1d, 0x97, 0x07, 0xef, 0xdb, 0xd8, 0xb0, 0xf6
 	.byte 0xc1, 0x38, 0x8d, 0x21, 0xd8, 0x12, 0xd8, 0xec
