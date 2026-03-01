@@ -370,34 +370,52 @@ LABEL_FC4156:
 ; ???? 25 (001 00101): 01 | e2 (111 00010): 04
 ; ???? 20 (001 00000): 10 | e2 (111 00010): 11
 
+; =============================================================================
+; CPanel_CheckSpecialCombos - Detect special button combos held at power-on
+; =============================================================================
+; Called during boot by CPanel_ScanButtons. Checks four specific button
+; combinations on the control panel and returns a combo code in HL:
+;   0 = No special combo (normal boot)
+;   1 = Factory Reset / Initial Setting (service manual p I-3)
+;   2 = "ALL INITIAL SETTING!" screen + firmware version on LEDs
+;   3 = Software version / internal build numbers screen
+;   4 = Flash Memory Update mode (requires floppy + first-boot condition)
+;
+; See: docs/test-modes.md for full documentation
+; =============================================================================
 CPanel_CheckSpecialCombos:
-	cpdi8 36446, 108	;  CPL_SEG4 = 0110 1100 = AUTO PLAY CHORD + SPLIT POINT + VARIATION 4 + VARIATION 3 => display sw internal build numbers
-	jr nz, CPanel_SpecialCombo_FirmwareVersion
-	lds hl, 3	; SOFT VERSION SCREEN
-	jr LABEL_FC4193
+	cpdi8 36446, 108	; CPL_SEG4 == 0x6C (0110 1100)?
+				; = AUTO PLAY CHORD + SPLIT POINT + VARIATION 4 + VARIATION 3
+	jr nz, CPanel_Combo_CheckAllInitSetting
+	lds hl, 3		; Combo 3: Software version / build numbers screen
+	jr CPanel_CheckSpecialCombos_Return
 
-CPanel_SpecialCombo_FirmwareVersion:
-	cpdi8 36427, 112	; CPR_SEG1 = 0111 0000 = GM SPECIAL + ACCORDION REGISTER + DIGITAL DRAWBAR => display fw version on screen & LEDs
-	jr nz, CPanel_SpecialCombo_SoftVersion
-	lds hl, 2
-	jr LABEL_FC4193
+CPanel_Combo_CheckAllInitSetting:
+	cpdi8 36427, 112	; CPR_SEG1 == 0x70 (0111 0000)?
+				; = GM SPECIAL + ACCORDION REGISTER + DIGITAL DRAWBAR
+	jr nz, CPanel_Combo_CheckFactoryReset
+	lds hl, 2		; Combo 2: "ALL INITIAL SETTING!" + LED version display
+	jr CPanel_CheckSpecialCombos_Return
 
-CPanel_SpecialCombo_SoftVersion:
-	cpdi8 36448, 56	; CPL_SEG6 = 0011 1000 = SHOWTIME & TRAD DANCE + PARTY TIME + MARCH & WALTZ => ?
-	jr nz, CPanel_SpecialCombo_BuildInfo
-	lds hl, 1
-	jr LABEL_FC4193
+CPanel_Combo_CheckFactoryReset:
+	cpdi8 36448, 56		; CPL_SEG6 == 0x38 (0011 1000)?
+				; = SHOWTIME & TRAD DANCE + PARTY TIME + MARCH & WALTZ
+				; (three leftmost RHYTHM GROUP buttons)
+	jr nz, CPanel_Combo_CheckFlashUpdate
+	lds hl, 1		; Combo 1: Factory Reset (Initial Setting)
+	jr CPanel_CheckSpecialCombos_Return
 
-CPanel_SpecialCombo_BuildInfo:
-	cpdi8 36432, 15	; CPR_SEG6 = 0000 1111 = 4 panel memory buttons (PM 4 + PM 3 + PM 2 + PM 1) => fw update
-	jr nz, CPanel_SpecialCombo_FirmwareUpdate
-	lds hl, 4
-	jr LABEL_FC4193
+CPanel_Combo_CheckFlashUpdate:
+	cpdi8 36432, 15		; CPR_SEG6 == 0x0F (0000 1111)?
+				; = PM 1 + PM 2 + PM 3 + PM 4 (all 4 Panel Memory buttons)
+	jr nz, CPanel_Combo_NormalBoot
+	lds hl, 4		; Combo 4: Flash Memory Update
+	jr CPanel_CheckSpecialCombos_Return
 
-CPanel_SpecialCombo_FirmwareUpdate:
-	lds hl, 0
+CPanel_Combo_NormalBoot:
+	lds hl, 0		; No combo: normal boot
 
-LABEL_FC4193:
+CPanel_CheckSpecialCombos_Return:
 	ret
 
 

@@ -89026,7 +89026,7 @@ LABEL_EF050F:
 
 LABEL_EF0529:
 	call MainCPU_self_test_routines
-	call 0xFFFEE5
+	call Get_Firmware_Version
 	cp l, 0xFF
 	jr nz, LABEL_EF054F
 
@@ -89083,7 +89083,7 @@ LABEL_EF05B5:
 	call (xhl)
 	call CPanel_ScanButtons
 	stda8 1026, l
-	call 0xFFFEE5
+	call Get_Firmware_Version
 	cp l, 0xFF
 	jr nz, User_didnt_request_flash_mem_update
 	call Check_for_Floppy_Disk_Change
@@ -89122,9 +89122,9 @@ LABEL_EF05E6:
 ;   - ErrorDialog_CPUTransmissionError - Error dialog widget
 ; ===========================================================================
 User_didnt_request_flash_mem_update:	; EF05E8
-	ldda8 a, 1026
+	ldda8 a, 1026		; Load boot combo code
 	extz wa
-	calr LABEL_EF07F3
+	calr Boot_HandleFactoryReset	; Reset if combo 1 + invalid checksums
 	sti16_24 0x00ffca, 0x0000
 	set_dd8 0, 0x28	; Release Sub-CPU from reset
 	call 0xEF329E	; Initialize DMA for inter-CPU comm
@@ -89152,11 +89152,11 @@ Boot_DisplayScreen:	; EF0620
 	call ScreenGroup_Dispatch
 	stdi8 1024, 128
 	sti16_24 0x00ffd4, 0x0000
-	ldda8 a, 1026
+	ldda8 a, 1026		; Load boot combo code
 	extz wa
-	calr LABEL_EF07A2
+	calr Boot_HandleComboDisplay	; Handle combo 2 (LEDs) or combo 3 (version screen)
 	lds wa, 4
-	call Show_ScreenGroup	; Show screen group 4 (may lead to error dialog)
+	call Show_ScreenGroup	; Show screen group 4 (main UI initialization)
 	calr LABEL_EF0792
 	jp 0xEF1245
 
@@ -89285,27 +89285,38 @@ LABEL_EF0797:
 	scc16 z, hl
 	ret
 
-LABEL_EF07A2:
+; ===========================================================================
+; Boot_HandleComboDisplay - Handle boot-time combo display modes
+; ===========================================================================
+; Entry: A = combo code from CPanel_CheckSpecialCombos (0-4)
+; Called from Boot_DisplayScreen after subsystems are initialized.
+;   Combo 2: Show firmware version on control panel LEDs
+;   Combo 3: Show software version / internal build numbers screen
+;   Others: return (no special display)
+; ===========================================================================
+Boot_HandleComboDisplay:
 	cps a, 2
-	jr nz, LABEL_EF07C8
-	call 0xFFFEE5
+	jr nz, Boot_HandleComboDisplay_Check3
+	; --- Combo 2: Firmware version on LEDs ---
+	call Get_Firmware_Version	; Returns version byte in L (0x0A = v10)
 	and l, 0xF
 	extz hl
-	lda_24 xbc, 0xe00000
-	ld_srib3 C, 0x07, 0xE4, 0xEC
+	lda_24 xbc, 0xe00000		; LED_patterns_indicating_firmware_version table
+	ld_srib3 C, 0x07, 0xE4, 0xEC	; Read LED pattern from table
 	extz bc
 	lds wa, 7
-	call Set_LEDs
+	call Set_LEDs			; Display version on control panel LEDs
 	push xiz
-	call LABEL_FC3ECC
+	call LABEL_FC3ECC		; Poll control panel (keep LEDs updated)
 	pop xiz
 	ret
 
-LABEL_EF07C8:
+Boot_HandleComboDisplay_Check3:
 	cps a, 3
 	ret nz
+	; --- Combo 3: Software version screen ---
 	ldw wa, 0xF0
-	call LABEL_F994BD
+	call LABEL_F994BD		; Display SOFT VERSION screen
 	ret
 
 LABEL_EF07D4:
@@ -89326,14 +89337,24 @@ LABEL_EF07E6:
 	inc 4, xsp
 	ret
 
-LABEL_EF07F3:
-	cpdi16_24 65482, 23205
-	ret z
-	cps a, 1
-	ret nz
+; ===========================================================================
+; Boot_HandleFactoryReset - Factory reset if combo 1 AND checksums invalid
+; ===========================================================================
+; Entry: A = combo code from CPanel_CheckSpecialCombos
+; If combo code == 1 (Initial Setting) AND DRAM[0xFFCA] != 0x5AA5
+; (payload checksums invalid, e.g. after Flash ROM replacement),
+; zero-fills all work DRAM and SRAM, then restarts the boot sequence.
+; Otherwise returns immediately (normal boot continues).
+; ===========================================================================
+Boot_HandleFactoryReset:
+	cpdi16_24 65482, 23205	; DRAM[0xFFCA] == 0x5AA5 (valid checksums)?
+	ret z			; Yes → checksums valid, skip reset
+	cps a, 1		; Combo code == 1 (Initial Setting)?
+	ret nz			; No → not requesting reset, return
+	; --- Factory Reset: clear all DRAM and SRAM ---
 	call LABEL_FC54B2
 	ei 7
-	calr LABEL_EF0656
+	calr LABEL_EF0656	; Clear all interrupt enables
 	ld xbc, 0x400
 
 LABEL_EF080E:
@@ -89374,6 +89395,8 @@ LABEL_EF0839:
 
 ; Alias labels for backward compatibility with existing code
 .equ LABEL_EF086F, Boot_CallInitHandlers
+.equ LABEL_EF07A2, Boot_HandleComboDisplay
+.equ LABEL_EF07F3, Boot_HandleFactoryReset
 
 INTT2_HANDLER:	; EF08A4
 	reti
@@ -168872,7 +168895,7 @@ LABEL_F3AE73:
 	push_werp 0xFA
 	ld (xsp + 18), a
 	ldi_berp 0xFB, 0
-	call 0xFFFEE5
+	call Get_Firmware_Version
 	cp l, 0xFF
 	jr z, LABEL_F3AEFE
 	ld a, (xsp + 18)
@@ -259725,7 +259748,7 @@ IvMPverProc:
 LABEL_F7F450:
 	ld xwa, xiz
 	call 0xFA4409
-	call 0xFFFEE5
+	call Get_Firmware_Version
 	extz hl
 	pushw hl
 	pushw 0xE9
@@ -277407,7 +277430,7 @@ LABEL_F98302:
 	jr LABEL_F98314
 
 LABEL_F98308:
-	call 0xFFFEE5
+	call Get_Firmware_Version
 	cp l, 0xFF
 	call_24 z, 0xFAF030
 
@@ -277494,7 +277517,7 @@ LABEL_F983C1:
 	ld32_24 xwa, 0x027490
 	cp xwa, 0x1
 	jrl nz, LABEL_F98695
-	call 0xFFFEE5
+	call Get_Firmware_Version
 	cp l, 0xFF
 	call_24 z, 0xFAF030
 
@@ -323775,7 +323798,7 @@ LABEL_FB76D1:
 
 LABEL_FB76D8:
 	push_werp 0xFA
-	call 0xFFFEE5
+	call Get_Firmware_Version
 	cp l, 0x77
 	jr nz, LABEL_FB76F7
 	ldw wa, 0xFB
