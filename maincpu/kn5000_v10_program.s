@@ -74,24 +74,15 @@ LABEL_E00012:
 	.long LABEL_EF31A5
 	.long LABEL_EF31A5
 
-SLIDE_STRING:
-	.asciz "SLIDE"
-FILETYPE_SIG_PROGRAM_1:	; E00038
-	aligned_string "Technics KN5000 Program  DATA FILE 1/2"
-FILETYPE_SIG_PROGRAM_2:	; E00060
-	aligned_string "Technics KN5000 Program  DATA FILE 2/2"
-FILETYPE_SIG_PROGRAM_PCK:	; E00088
-	aligned_string "Technics KN5000 Program  DATA FILE PCK"
-FILETYPE_SIG_TABLE_1:	; E000B0
-	aligned_string "Technics KN5000 Table    DATA FILE 1/2"
-FILETYPE_SIG_TABLE_2:	; E000D8
-	aligned_string "Technics KN5000 Table    DATA FILE 2/2"
-FILETYPE_SIG_TABLE_PCK:	; E00100
-	aligned_string "Technics KN5000 Table    DATA FILE PCK"
-FILETYPE_SIG_CMPCUSTOM:	; E00128
-	aligned_string "Technics KN5000 CMPCUSTOMDATA FILE    "
-FILETYPE_SIG_HDAE_PRG:	; E00150
-	aligned_string "Technics KN5000 HD-AEPRG DATA FILE    "
+SLIDE_STRING:	aligned_string "SLIDE"
+FILETYPE_SIG_PROGRAM_1:	aligned_string "Technics KN5000 Program  DATA FILE 1/2"
+FILETYPE_SIG_PROGRAM_2:	aligned_string "Technics KN5000 Program  DATA FILE 2/2"
+FILETYPE_SIG_PROGRAM_PCK:	aligned_string "Technics KN5000 Program  DATA FILE PCK"
+FILETYPE_SIG_TABLE_1:	aligned_string "Technics KN5000 Table    DATA FILE 1/2"
+FILETYPE_SIG_TABLE_2:	aligned_string "Technics KN5000 Table    DATA FILE 2/2"
+FILETYPE_SIG_TABLE_PCK:	aligned_string "Technics KN5000 Table    DATA FILE PCK"
+FILETYPE_SIG_CMPCUSTOM:	aligned_string "Technics KN5000 CMPCUSTOMDATA FILE    "
+FILETYPE_SIG_HDAE_PRG:	aligned_string "Technics KN5000 HD-AEPRG DATA FILE    "
 
 .equ HANDLE_UPDATE_BASE_ADDR, HANDLE_UPDATE_FILE_TYPE_ID_001h
 
@@ -106,7 +97,7 @@ HANDLE_UPDATE_OFFSETS:	; E00178
 	.short HANDLE_UPDATE_FILE_TYPE_ID_008h - HANDLE_UPDATE_BASE_ADDR	; "Technics KN5000 Table DATA FILE PCK"
 
 SLIDE_STRING_2:
-	.asciz "SLIDE"
+	aligned_string "SLIDE"
 
 Bitmap_1bit_Flash_Memory_Update:	; e0018e
 	.incbin "images/Bitmap_1bit_Flash_Memory_Update.bin"
@@ -1295,7 +1286,7 @@ LABEL_E0EA4E:
 	.long UI_CATEGORY_PERFORMANCE
 	.zero 6
 UI_CATEGORY_PERFORMANCE:
-	.asciz "Performance"
+	aligned_string "Performance"
 
 
 LABEL_E0EA7A:
@@ -1314,7 +1305,7 @@ LABEL_E0EA94:
 	.byte 0x01, 0x00
 	.byte 0x00, 0x00, 0xfc, 0x00
 UI_CATEGORY_20_CUSTOM:
-	.asciz "20 Custom"
+	aligned_string "20 Custom"
 
 
 LABEL_E0EABE:
@@ -1342,7 +1333,7 @@ LABEL_E0EB04:
 	.byte 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00
 UI_CATEGORY_BACKUP:
-	.asciz "Back-up"
+	aligned_string "Back-up"
 
 
 LABEL_E0EB2C:
@@ -1535,7 +1526,7 @@ LABEL_E0EDFC:
 	.byte 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00
 UI_CATEGORY_PLAY_ONLY:
-	.asciz "Play Only"
+	aligned_string "Play Only"
 
 
 LABEL_E0EE26:
@@ -1772,7 +1763,7 @@ LABEL_E0F194:
 	.byte 0x01, 0x00
 	.byte 0x00, 0x00, 0xfc, 0x00
 UI_CATEGORY_20_CUSTOM_2:
-	.asciz "20 Custom"
+	aligned_string "20 Custom"
 
 
 LABEL_E0F1BE:
@@ -1867,7 +1858,7 @@ LABEL_E0F312:
 	.byte 0x32, 0xf3, 0xe0, 0x00
 	.byte 0x04, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00
-	.asciz "Style Convert"
+	aligned_string "Style Convert"
 
 LABEL_E0F340:
 	.byte 0x2e, 0x00, 0x60, 0x01, 0x42, 0x00, 0xff, 0xff
@@ -2063,7 +2054,7 @@ LABEL_E0F61A:
 	.byte 0x3a, 0xf6, 0xe0, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0xf9, 0x00
-	.asciz "various instruments !"
+	aligned_string "various instruments !"
 
 
 LABEL_E0F650:
@@ -2352,7 +2343,7 @@ LABEL_E0FAF4:
 	.byte 0xef, 0x00, 0xff, 0x00, 0x03, 0x00, 0x00, 0x00
 	.byte 0xa0, 0x01, 0xe0, 0xd5, 0x03, 0x00, 0x1e, 0xfb
 	.byte 0xe0, 0x00, 0x9a, 0x00, 0x00, 0x00
-	.asciz "BANK VIEW"
+	aligned_string "BANK VIEW"
 
 
 LABEL_E0FB28:
@@ -2460,7 +2451,7 @@ LABEL_E0FCF8:
 	.byte 0x98, 0x00, 0x96, 0x00, 0x08, 0x00, 0x2a, 0x00
 	.byte 0xc0, 0x00, 0xb5, 0x00, 0xd2, 0x00, 0x18, 0xfd
 	.byte 0xe0, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0x00
-	.asciz "8:Curtain Call !!"
+	aligned_string "8:Curtain Call !!"
 
 
 
@@ -2471,7 +2462,7 @@ LABEL_E0FD2A:
 	.byte 0x4a, 0xfd, 0xe0, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00
-	.asciz "3:Hotel Combo"
+	aligned_string "3:Hotel Combo"
 
 
 LABEL_E0FD58:
@@ -2499,7 +2490,7 @@ LABEL_E0FDBA:
 	.byte 0xda, 0xfd, 0xe0, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00
-	.asciz "5:Casino Lights"
+	aligned_string "5:Casino Lights"
 
 
 LABEL_E0FDEA:
@@ -2527,7 +2518,7 @@ LABEL_E0FE4A:
 	.byte 0x6a, 0xfe, 0xe0, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00
-	.asciz "2:Late At Night"
+	aligned_string "2:Late At Night"
 
 
 LABEL_E0FE7A:
@@ -2564,7 +2555,7 @@ LABEL_E0FEE4:
 	.byte 0xef, 0x00, 0xff, 0x00, 0x03, 0x00, 0x00, 0x00
 	.byte 0xa0, 0x01, 0xe4, 0xd5, 0x03, 0x00, 0x0e, 0xff
 	.byte 0xe0, 0x00, 0x2e, 0x00, 0x00, 0x00, 0x53, 0x4d
-	.asciz "F DIRECT PLAY  "
+	aligned_string "F DIRECT PLAY  "
 
 
 LABEL_E0FF20:
@@ -2572,7 +2563,7 @@ LABEL_E0FF20:
 	.byte 0xa4, 0x00, 0xff, 0xff, 0x08, 0x00, 0x00, 0x01
 	.byte 0x08, 0x00, 0x3a, 0x01, 0x1a, 0x00, 0x40, 0xff
 	.byte 0xe0, 0x00, 0x04, 0x00, 0x00, 0x00, 0xff, 0x00
-	.asciz "~aa=115"
+	aligned_string "~aa=115"
 
 
 LABEL_E0FF48:
@@ -2606,7 +2597,7 @@ LABEL_E0FFAA:
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00
 LYRICS_SAINTS_PART1:
-	.asciz "Oh,I want to be in that num"
+	aligned_string "Oh,I want to be in that num"
 
 
 LABEL_E0FFE6:
@@ -2653,7 +2644,7 @@ LABEL_E100B0:
 	.byte 0xad, 0x00, 0xa6, 0x00, 0x08, 0x00, 0x4e, 0x00
 	.byte 0x2b, 0x00, 0xf6, 0x00, 0x3d, 0x00, 0xd0, 0x00
 	.byte 0xe1, 0x00, 0x09, 0x00, 0x00, 0x00, 0xfb, 0x00
-	.asciz "When The Saints"
+	aligned_string "When The Saints"
 
 
 LABEL_E100E0:
@@ -2786,7 +2777,7 @@ LABEL_E102EA:
 	.byte 0x0a, 0x03, 0xe1, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00
-	.asciz "MIC BALANCE :       100"
+	aligned_string "MIC BALANCE :       100"
 
 
 LABEL_E10322:
@@ -2858,7 +2849,7 @@ LABEL_E104B0:
 	.byte 0xff, 0xff, 0xff, 0xff, 0x08, 0x00, 0xfa, 0x00
 	.byte 0x60, 0x00, 0x25, 0x01, 0x72, 0x00, 0xd0, 0x04
 	.byte 0xe1, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	.asciz "STAGE"
+	aligned_string "STAGE"
 
 
 LABEL_E104D6:
@@ -2927,7 +2918,7 @@ LABEL_E105E0:
 	.byte 0xcf, 0x00, 0xcb, 0x00, 0x08, 0x00, 0x0a, 0x00
 	.byte 0x46, 0x00, 0x65, 0x00, 0x58, 0x00, 0x00, 0x06
 	.byte 0xe1, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0x00
-	.asciz "FADE IN/OUT"
+	aligned_string "FADE IN/OUT"
 
 
 LABEL_E1060C:
@@ -2955,7 +2946,7 @@ LABEL_E1065A:
 	.byte 0x7a, 0x06, 0xe1, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00
-	.asciz "DISK LOAD"
+	aligned_string "DISK LOAD"
 
 
 LABEL_E10684:
@@ -2970,7 +2961,7 @@ LABEL_E1069E:
 	.byte 0xff, 0xff, 0x08, 0x00, 0x0a, 0x00, 0xcc, 0x00
 	.byte 0x75, 0x00, 0xde, 0x00, 0xbe, 0x06, 0xe1, 0x00
 	.zero 6
-	.asciz "MUTE KEYS:OFF"
+	aligned_string "MUTE KEYS:OFF"
 
 
 LABEL_E106CC:
@@ -3068,7 +3059,7 @@ LABEL_E1082A:
 	.byte 0x4a, 0x08, 0xe1, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00
-	.asciz "VALUE"
+	aligned_string "VALUE"
 
 
 LABEL_E10850:
@@ -3108,7 +3099,7 @@ LABEL_E108BA:
 	.byte 0xff, 0x00, 0x00, 0x00, 0x00, 0x00, 0xa0, 0x01
 	.byte 0xf0, 0xd5, 0x03, 0x00, 0xe4, 0x08, 0xe1, 0x00
 	.byte 0x01, 0x00, 0x00, 0x00
-	.asciz "FADE IN/OUT SETTING"
+	aligned_string "FADE IN/OUT SETTING"
 
 
 LABEL_E108F8:
@@ -3126,7 +3117,7 @@ LABEL_E10912:
 	.byte 0x32, 0x09, 0xe1, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0xfb, 0x00
-	.asciz "FADE IN"
+	aligned_string "FADE IN"
 
 
 LABEL_E1093A:
@@ -3212,7 +3203,7 @@ LABEL_E10AC4:
 	.byte 0x08, 0x00, 0xb6, 0x00, 0x45, 0x00, 0x01, 0x01
 	.byte 0x57, 0x00, 0xe4, 0x0a, 0xe1, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00
-	.asciz "2 measure"
+	aligned_string "2 measure"
 
 
 LABEL_E10AEE:
@@ -3312,7 +3303,7 @@ LABEL_E10C5E:
 	.byte 0xff, 0xff, 0x08, 0x00, 0x50, 0x00, 0x1c, 0x00
 	.byte 0xe2, 0x00, 0x2e, 0x00, 0x7e, 0x0c, 0xe1, 0x00
 	.byte 0x04, 0x00, 0x00, 0x00, 0x00, 0x00
-	.asciz "Music Stylist"
+	aligned_string "Music Stylist"
 
 
 LABEL_E10C8C:
@@ -3321,7 +3312,7 @@ LABEL_E10C8C:
 	.byte 0x08, 0x00, 0x12, 0x00, 0x64, 0x00, 0x2d, 0x01
 	.byte 0x76, 0x00, 0xac, 0x0c, 0xe1, 0x00, 0x01, 0x00
 	.byte 0x00, 0x00, 0xfc, 0x00
-	.asciz "> 1000 Styles of World wide Music !"
+	aligned_string "> 1000 Styles of World wide Music !"
 
 
 LABEL_E10CD0:
@@ -3329,7 +3320,7 @@ LABEL_E10CD0:
 	.byte 0xfc, 0x00, 0xfa, 0x00, 0x08, 0x00, 0x12, 0x00
 	.byte 0x8c, 0x00, 0xdd, 0x00, 0x9e, 0x00, 0xf0, 0x0c
 	.byte 0xe1, 0x00, 0x01, 0x00, 0x00, 0x00, 0xfc, 0x00
-	.asciz "> Style explorer by Genre"
+	aligned_string "> Style explorer by Genre"
 
 
 LABEL_E10D0A:
@@ -3339,7 +3330,7 @@ LABEL_E10D0A:
 	.byte 0x2a, 0x0d, 0xe1, 0x00
 	.byte 0x01, 0x00, 0x00, 0x00
 	.byte 0xfc, 0x00
-	.asciz "> Alphabetical style select"
+	aligned_string "> Alphabetical style select"
 
 
 LABEL_E10D46:
@@ -3385,7 +3376,7 @@ LABEL_E10DF6:
 	.byte 0x00, 0x01, 0x08, 0x00, 0x06, 0x00, 0x64, 0x00
 	.byte 0x61, 0x00, 0x70, 0x00, 0x16, 0x0e, 0xe1, 0x00
 	.byte 0x06, 0x00, 0x00, 0x00, 0xff, 0x00
-	.asciz "Party Music"
+	aligned_string "Party Music"
 
 
 LABEL_E10E22:
@@ -3395,7 +3386,7 @@ LABEL_E10E22:
 	.byte 0x42, 0x0e, 0xe1, 0x00
 	.byte 0x06, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00
-	.asciz "Dance Pop"
+	aligned_string "Dance Pop"
 
 
 LABEL_E10E4C:
@@ -3421,7 +3412,7 @@ LABEL_E10EAC:
 	.byte 0x08, 0x00, 0x06, 0x00, 0x94, 0x00, 0x81, 0x00
 	.byte 0xa0, 0x00, 0xcc, 0x0e, 0xe1, 0x00, 0x06, 0x00
 	.byte 0x00, 0x00, 0xff, 0x00
-	.asciz "Show/Trad Dance"
+	aligned_string "Show/Trad Dance"
 
 
 LABEL_E10EDC:
@@ -3430,7 +3421,7 @@ LABEL_E10EDC:
 	.byte 0x08, 0x00, 0x06, 0x00, 0xa4, 0x00, 0x61, 0x00
 	.byte 0xb0, 0x00, 0xfc, 0x0e, 0xe1, 0x00, 0x06, 0x00
 	.byte 0x00, 0x00, 0xff, 0x00
-	.asciz "Trad / Folk"
+	aligned_string "Trad / Folk"
 
 
 LABEL_E10F08:
@@ -3438,7 +3429,7 @@ LABEL_E10F08:
 	.byte 0x08, 0x01, 0x06, 0x01, 0x08, 0x00, 0x06, 0x00
 	.byte 0xb4, 0x00, 0x41, 0x00, 0xc0, 0x00, 0x28, 0x0f
 	.byte 0xe1, 0x00, 0x06, 0x00, 0x00, 0x00, 0xff, 0x00
-	.asciz "Country"
+	aligned_string "Country"
 
 
 LABEL_E10F30:
@@ -3446,7 +3437,7 @@ LABEL_E10F30:
 	.byte 0x09, 0x01, 0x07, 0x01, 0x08, 0x00, 0x06, 0x00
 	.byte 0xc4, 0x00, 0x71, 0x00, 0xd0, 0x00, 0x50, 0x0f
 	.byte 0xe1, 0x00, 0x06, 0x00, 0x00, 0x00, 0xff, 0x00
-	.asciz "Latin / World"
+	aligned_string "Latin / World"
 
 
 LABEL_E10F5E:
@@ -3546,7 +3537,7 @@ LABEL_E110D4:
 	.byte 0x08, 0x00, 0x12, 0x00, 0x1e, 0x00, 0x7d, 0x00
 	.byte 0x30, 0x00, 0xf4, 0x10, 0xe1, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0xfb, 0x00
-	.asciz "MAIN CATEGORY"
+	aligned_string "MAIN CATEGORY"
 
 
 LABEL_E11102:
@@ -3571,7 +3562,7 @@ LABEL_E1114C:
 	.byte 0x08, 0x00, 0x96, 0x00, 0x44, 0x00, 0xe1, 0x00
 	.byte 0x50, 0x00, 0x6c, 0x11, 0xe1, 0x00, 0x06, 0x00
 	.byte 0x00, 0x00, 0xff, 0x00
-	.asciz "70's Hits"
+	aligned_string "70's Hits"
 
 
 LABEL_E11176:
@@ -3587,7 +3578,7 @@ LABEL_E111A8:
 	.byte 0x1a, 0x01, 0x18, 0x01, 0x08, 0x00, 0x96, 0x00
 	.byte 0x54, 0x00, 0x11, 0x01, 0x60, 0x00, 0xc8, 0x11
 	.byte 0xe1, 0x00, 0x06, 0x00, 0x00, 0x00, 0xff, 0x00
-	.asciz "70's Power Rock"
+	aligned_string "70's Power Rock"
 
 
 LABEL_E111D8:
@@ -3595,7 +3586,7 @@ LABEL_E111D8:
 	.byte 0x1b, 0x01, 0x19, 0x01, 0x08, 0x00, 0x96, 0x00
 	.byte 0x74, 0x00, 0x11, 0x01, 0x80, 0x00, 0xf8, 0x11
 	.byte 0xe1, 0x00, 0x06, 0x00, 0x00, 0x00, 0xff, 0x00
-	.asciz "80's Love Songs"
+	aligned_string "80's Love Songs"
 
 
 LABEL_E11208:
@@ -3603,7 +3594,7 @@ LABEL_E11208:
 	.byte 0x1c, 0x01, 0x1a, 0x01, 0x08, 0x00, 0x96, 0x00
 	.byte 0x84, 0x00, 0x11, 0x01, 0x90, 0x00, 0x28, 0x12
 	.byte 0xe1, 0x00, 0x06, 0x00, 0x00, 0x00, 0xff, 0x00
-	.asciz "In The Eighties"
+	aligned_string "In The Eighties"
 
 
 LABEL_E11238:
@@ -3621,7 +3612,7 @@ LABEL_E11262:
 	.byte 0x82, 0x12, 0xe1, 0x00
 	.byte 0x06, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00
-	.asciz "8 Beat Groove"
+	aligned_string "8 Beat Groove"
 
 
 LABEL_E11290:
@@ -3705,7 +3696,7 @@ LABEL_E1140A:
 	.byte 0x2a, 0x14, 0xe1, 0x00
 	.byte 0x06, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00
-	.asciz "Party Music"
+	aligned_string "Party Music"
 
 
 LABEL_E11436:
@@ -3713,7 +3704,7 @@ LABEL_E11436:
 	.byte 0x27, 0x01, 0x08, 0x00, 0x06, 0x00, 0x54, 0x00
 	.byte 0x51, 0x00, 0x60, 0x00, 0x56, 0x14, 0xe1, 0x00
 	.byte 0x06, 0x00, 0x00, 0x00, 0xff, 0x00, 0x44, 0x61
-	.asciz "nce Pop"
+	aligned_string "nce Pop"
 
 
 LABEL_E11460:
@@ -3739,14 +3730,14 @@ LABEL_E114C0:
 	.byte 0x2c, 0x01, 0x2a, 0x01, 0x08, 0x00, 0x06, 0x00
 	.byte 0x94, 0x00, 0x81, 0x00, 0xa0, 0x00, 0xe0, 0x14
 	.byte 0xe1, 0x00, 0x06, 0x00, 0x00, 0x00, 0xff, 0x00
-	.asciz "Show/Trad Dance"
+	aligned_string "Show/Trad Dance"
 
 LABEL_E114F0:
 	.byte 0x2b, 0x00, 0x60, 0x01, 0x24, 0x01, 0xff, 0xff
 	.byte 0x2d, 0x01, 0x2b, 0x01, 0x08, 0x00, 0x06, 0x00
 	.byte 0xa4, 0x00, 0x61, 0x00, 0xb0, 0x00, 0x10, 0x15
 	.byte 0xe1, 0x00, 0x06, 0x00, 0x00, 0x00, 0xff, 0x00
-	.asciz "Trad / Folk"
+	aligned_string "Trad / Folk"
 
 
 LABEL_E1151C:
@@ -3755,7 +3746,7 @@ LABEL_E1151C:
 	.byte 0x08, 0x00, 0x06, 0x00, 0xb4, 0x00, 0x41, 0x00
 	.byte 0xc0, 0x00, 0x3c, 0x15, 0xe1, 0x00, 0x06, 0x00
 	.byte 0x00, 0x00, 0xff, 0x00
-	.asciz "Country"
+	aligned_string "Country"
 
 
 LABEL_E11544:
@@ -3764,7 +3755,7 @@ LABEL_E11544:
 	.byte 0x08, 0x00, 0x06, 0x00, 0xc4, 0x00, 0x71, 0x00
 	.byte 0xd0, 0x00, 0x64, 0x15, 0xe1, 0x00, 0x06, 0x00
 	.byte 0x00, 0x00, 0xff, 0x00
-	.asciz "Latin / World"
+	aligned_string "Latin / World"
 
 
 LABEL_E11572:
@@ -3864,7 +3855,7 @@ LABEL_E116E8:
 	.byte 0x3b, 0x01, 0x36, 0x01, 0x08, 0x00, 0x12, 0x00
 	.byte 0x1e, 0x00, 0x7d, 0x00, 0x30, 0x00, 0x08, 0x17
 	.byte 0xe1, 0x00, 0x00, 0x00, 0x00, 0x00, 0xfb, 0x00
-	.asciz "MAIN CATEGORY"
+	aligned_string "MAIN CATEGORY"
 
 
 LABEL_E11716:
@@ -3887,7 +3878,7 @@ LABEL_E11760:
 	.byte 0x44, 0x00, 0xe1, 0x00
 	.byte 0x50, 0x00, 0x80, 0x17
 	.byte 0xe1, 0x00, 0x06, 0x00, 0x00, 0x00, 0xff, 0x00
-	.asciz "70's Hits"
+	aligned_string "70's Hits"
 
 
 LABEL_E1178A:
@@ -3906,7 +3897,7 @@ LABEL_E117BC:
 	.byte 0x08, 0x00, 0x96, 0x00, 0x54, 0x00, 0x11, 0x01
 	.byte 0x60, 0x00, 0xdc, 0x17, 0xe1, 0x00, 0x06, 0x00
 	.byte 0x00, 0x00, 0xff, 0x00
-	.asciz "70's Power Rock"
+	aligned_string "70's Power Rock"
 
 
 LABEL_E117EC:
@@ -3915,7 +3906,7 @@ LABEL_E117EC:
 	.byte 0x08, 0x00, 0x96, 0x00, 0x74, 0x00, 0x11, 0x01
 	.byte 0x80, 0x00, 0x0c, 0x18, 0xe1, 0x00, 0x06, 0x00
 	.byte 0x00, 0x00, 0xff, 0x00
-	.asciz "80's Love Songs"
+	aligned_string "80's Love Songs"
 
 
 LABEL_E1181C:
@@ -3924,7 +3915,7 @@ LABEL_E1181C:
 	.byte 0x08, 0x00, 0x96, 0x00, 0x84, 0x00, 0x11, 0x01
 	.byte 0x90, 0x00, 0x3c, 0x18, 0xe1, 0x00, 0x06, 0x00
 	.byte 0x00, 0x00, 0xff, 0x00
-	.asciz "In The Eighties"
+	aligned_string "In The Eighties"
 
 
 LABEL_E1184C:
@@ -3941,7 +3932,7 @@ LABEL_E11876:
 	.byte 0x42, 0x01, 0x08, 0x00, 0x96, 0x00, 0xa4, 0x00
 	.byte 0x01, 0x01, 0xb0, 0x00, 0x96, 0x18, 0xe1, 0x00
 	.byte 0x06, 0x00, 0x00, 0x00, 0xff, 0x00, 0x38, 0x20
-	.asciz "Beat Groove"
+	aligned_string "Beat Groove"
 
 
 LABEL_E118A4:
@@ -4019,7 +4010,7 @@ LABEL_E11A08:
 	.byte 0x4d, 0x01, 0x4b, 0x01, 0x08, 0x00, 0x32, 0x00
 	.byte 0x44, 0x00, 0x2d, 0x01, 0x50, 0x00, 0x28, 0x1a
 	.byte 0xe1, 0x00, 0x06, 0x00, 0x00, 0x00, 0xff, 0x00
-	.asciz "Shuffle Synth               144"
+	aligned_string "Shuffle Synth               144"
 
 
 LABEL_E11A48:
@@ -4027,7 +4018,7 @@ LABEL_E11A48:
 	.byte 0x4e, 0x01, 0x4c, 0x01, 0x08, 0x00, 0x32, 0x00
 	.byte 0x64, 0x00, 0x2d, 0x01, 0x70, 0x00, 0x68, 0x1a
 	.byte 0xe1, 0x00, 0x06, 0x00, 0x00, 0x00, 0xff, 0x00
-	.asciz "Jump Brass                  144"
+	aligned_string "Jump Brass                  144"
 
 
 LABEL_E11A88:
@@ -4035,7 +4026,7 @@ LABEL_E11A88:
 	.byte 0x4f, 0x01, 0x4d, 0x01, 0x08, 0x00, 0x32, 0x00
 	.byte 0x54, 0x00, 0x2d, 0x01, 0x60, 0x00, 0xa8, 0x1a
 	.byte 0xe1, 0x00, 0x06, 0x00, 0x00, 0x00, 0xff, 0x00
-	.asciz "Pop Leader                  144"
+	aligned_string "Pop Leader                  144"
 
 
 LABEL_E11AC8:
@@ -4043,7 +4034,7 @@ LABEL_E11AC8:
 	.byte 0x50, 0x01, 0x4e, 0x01, 0x08, 0x00, 0x32, 0x00
 	.byte 0x74, 0x00, 0x2d, 0x01, 0x80, 0x00, 0xe8, 0x1a
 	.byte 0xe1, 0x00, 0x06, 0x00, 0x00, 0x00, 0xff, 0x00
-	.asciz "Shuffle Organ               144"
+	aligned_string "Shuffle Organ               144"
 
 
 LABEL_E11B08:
@@ -4059,7 +4050,7 @@ LABEL_E11B4E:
 	.byte 0x50, 0x01, 0x08, 0x00, 0x32, 0x00, 0x94, 0x00
 	.byte 0x2d, 0x01, 0xa0, 0x00, 0x6e, 0x1b, 0xe1, 0x00
 	.byte 0x06, 0x00, 0x00, 0x00, 0xff, 0x00, 0x41, 0x6e
-	.asciz "alogue Ballad             106"
+	aligned_string "alogue Ballad             106"
 
 
 LABEL_E11B8E:
@@ -4067,7 +4058,7 @@ LABEL_E11B8E:
 	.byte 0x51, 0x01, 0x08, 0x00, 0x32, 0x00, 0xa4, 0x00
 	.byte 0x2d, 0x01, 0xb0, 0x00, 0xae, 0x1b, 0xe1, 0x00
 	.byte 0x06, 0x00, 0x00, 0x00, 0xff, 0x00, 0x44, 0x6f
-	.asciz "n't Fret!                 106"
+	aligned_string "n't Fret!                 106"
 
 
 LABEL_E11BCE:
@@ -4075,7 +4066,7 @@ LABEL_E11BCE:
 	.byte 0x52, 0x01, 0x08, 0x00, 0x32, 0x00, 0xb4, 0x00
 	.byte 0x2d, 0x01, 0xc0, 0x00, 0xee, 0x1b, 0xe1, 0x00
 	.byte 0x06, 0x00, 0x00, 0x00, 0xff, 0x00, 0x45, 0x50
-	.asciz " Of The 80's              106"
+	aligned_string " Of The 80's              106"
 
 
 LABEL_E11C0E:
@@ -4083,7 +4074,7 @@ LABEL_E11C0E:
 	.byte 0x53, 0x01, 0x08, 0x00, 0x32, 0x00, 0xc4, 0x00
 	.byte 0x2d, 0x01, 0xd0, 0x00, 0x2e, 0x1c, 0xe1, 0x00
 	.byte 0x06, 0x00, 0x00, 0x00, 0xff, 0x00, 0x53, 0x61
-	.asciz "x Production              106"
+	aligned_string "x Production              106"
 
 
 LABEL_E11C4E:
@@ -4175,7 +4166,7 @@ LABEL_E11DA0:
 	.byte 0x1e, 0x00, 0xe1, 0x00
 	.byte 0x30, 0x00, 0xc0, 0x1d
 	.byte 0xe1, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0x00
-	.asciz "CATEGORY : Rock & Pop"
+	aligned_string "CATEGORY : Rock & Pop"
 
 
 LABEL_E11DD6:
@@ -4211,7 +4202,7 @@ LABEL_E11E70:
 	.byte 0x64, 0x01, 0x62, 0x01, 0x08, 0x00, 0x32, 0x00
 	.byte 0x44, 0x00, 0x2d, 0x01, 0x50, 0x00, 0x90, 0x1e
 	.byte 0xe1, 0x00, 0x06, 0x00, 0x00, 0x00, 0xff, 0x00
-	.asciz "Shuffle Synth               144"
+	aligned_string "Shuffle Synth               144"
 
 
 LABEL_E11EB0:
@@ -4219,7 +4210,7 @@ LABEL_E11EB0:
 	.byte 0x65, 0x01, 0x63, 0x01, 0x08, 0x00, 0x32, 0x00
 	.byte 0x64, 0x00, 0x2d, 0x01, 0x70, 0x00, 0xd0, 0x1e
 	.byte 0xe1, 0x00, 0x06, 0x00, 0x00, 0x00, 0xff, 0x00
-	.asciz "Jump Brass                  144"
+	aligned_string "Jump Brass                  144"
 
 
 LABEL_E11EF0:
@@ -4227,7 +4218,7 @@ LABEL_E11EF0:
 	.byte 0x66, 0x01, 0x64, 0x01, 0x08, 0x00, 0x32, 0x00
 	.byte 0x54, 0x00, 0x2d, 0x01, 0x60, 0x00, 0x10, 0x1f
 	.byte 0xe1, 0x00, 0x06, 0x00, 0x00, 0x00, 0xff, 0x00
-	.asciz "Pop Leader                  144"
+	aligned_string "Pop Leader                  144"
 
 
 LABEL_E11F30:
@@ -4235,7 +4226,7 @@ LABEL_E11F30:
 	.byte 0x67, 0x01, 0x65, 0x01, 0x08, 0x00, 0x32, 0x00
 	.byte 0x74, 0x00, 0x2d, 0x01, 0x80, 0x00, 0x50, 0x1f
 	.byte 0xe1, 0x00, 0x06, 0x00, 0x00, 0x00, 0xff, 0x00
-	.asciz "Shuffle Organ               144"
+	aligned_string "Shuffle Organ               144"
 
 
 LABEL_E11F70:
@@ -4251,7 +4242,7 @@ LABEL_E11FB6:
 	.byte 0x67, 0x01, 0x08, 0x00, 0x32, 0x00, 0x94, 0x00
 	.byte 0x2d, 0x01, 0xa0, 0x00, 0xd6, 0x1f, 0xe1, 0x00
 	.byte 0x06, 0x00, 0x00, 0x00, 0xff, 0x00, 0x41, 0x6e
-	.asciz "alogue Ballad             106"
+	aligned_string "alogue Ballad             106"
 
 
 LABEL_E11FF6:
@@ -4259,7 +4250,7 @@ LABEL_E11FF6:
 	.byte 0x68, 0x01, 0x08, 0x00, 0x32, 0x00, 0xa4, 0x00
 	.byte 0x2d, 0x01, 0xb0, 0x00, 0x16, 0x20, 0xe1, 0x00
 	.byte 0x06, 0x00, 0x00, 0x00, 0xff, 0x00, 0x44, 0x6f
-	.asciz "n't Fret!                 106"
+	aligned_string "n't Fret!                 106"
 
 
 LABEL_E12036:
@@ -4267,7 +4258,7 @@ LABEL_E12036:
 	.byte 0x69, 0x01, 0x08, 0x00, 0x32, 0x00, 0xb4, 0x00
 	.byte 0x2d, 0x01, 0xc0, 0x00, 0x56, 0x20, 0xe1, 0x00
 	.byte 0x06, 0x00, 0x00, 0x00, 0xff, 0x00, 0x45, 0x50
-	.asciz " Of The 80's              106"
+	aligned_string " Of The 80's              106"
 
 
 LABEL_E12076:
@@ -4275,7 +4266,7 @@ LABEL_E12076:
 	.byte 0x6a, 0x01, 0x08, 0x00, 0x32, 0x00, 0xc4, 0x00
 	.byte 0x2d, 0x01, 0xd0, 0x00, 0x96, 0x20, 0xe1, 0x00
 	.byte 0x06, 0x00, 0x00, 0x00, 0xff, 0x00, 0x53, 0x61
-	.asciz "x Production              106"
+	aligned_string "x Production              106"
 
 
 LABEL_E120B6:
@@ -4367,7 +4358,7 @@ LABEL_E12208:
 	.byte 0x1e, 0x00, 0xe1, 0x00
 	.byte 0x30, 0x00, 0x28, 0x22
 	.byte 0xe1, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0x00
-	.asciz "CATEGORY : Rock & Pop"
+	aligned_string "CATEGORY : Rock & Pop"
 
 
 LABEL_E1223E:
@@ -4378,7 +4369,7 @@ LABEL_E1223E:
 	.byte 0x00, 0x00, 0xa0, 0x01, 0x08, 0xd6, 0x03, 0x00
 	.byte 0x68, 0x22, 0xe1, 0x00
 	.byte 0x01, 0x00, 0x00, 0x00
-	.asciz "ALPHABETICAL EXPLORER"
+	aligned_string "ALPHABETICAL EXPLORER"
 
 
 LABEL_E1227E:
@@ -4567,7 +4558,7 @@ LABEL_E12692:
 	.byte 0xff, 0x00, 0x00, 0x00, 0x00, 0x00, 0xa0, 0x01
 	.byte 0x0c, 0xd6, 0x03, 0x00, 0xbc, 0x26, 0xe1, 0x00
 	.byte 0x01, 0x00, 0x00, 0x00
-	.asciz "ALPHABETICAL EXPLORER"
+	aligned_string "ALPHABETICAL EXPLORER"
 
 
 LABEL_E126D2:
@@ -4741,7 +4732,7 @@ LABEL_E12A66:
 	.byte 0x00, 0x00, 0xa0, 0x01, 0x10, 0xd6, 0x03, 0x00
 	.byte 0x90, 0x2a, 0xe1, 0x00
 	.byte 0x01, 0x00, 0x00, 0x00
-	.asciz "ALPHABETICAL EXPLORER"
+	aligned_string "ALPHABETICAL EXPLORER"
 
 
 LABEL_E12AA6:
@@ -4954,7 +4945,7 @@ LABEL_E12EEA:
 	.byte 0x0a, 0x2f, 0xe1, 0x00
 	.byte 0x06, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00
-	.asciz "Party Music"
+	aligned_string "Party Music"
 
 
 LABEL_E12F16:
@@ -4962,7 +4953,7 @@ LABEL_E12F16:
 	.byte 0xbc, 0x01, 0x08, 0x00, 0x06, 0x00, 0x54, 0x00
 	.byte 0x51, 0x00, 0x60, 0x00, 0x36, 0x2f, 0xe1, 0x00
 	.byte 0x06, 0x00, 0x00, 0x00, 0xff, 0x00, 0x44, 0x61
-	.asciz "nce Pop"
+	aligned_string "nce Pop"
 
 
 LABEL_E12F40:
@@ -4988,7 +4979,7 @@ LABEL_E12FA0:
 	.byte 0xc1, 0x01, 0xbf, 0x01, 0x08, 0x00, 0x06, 0x00
 	.byte 0x94, 0x00, 0x81, 0x00, 0xa0, 0x00, 0xc0, 0x2f
 	.byte 0xe1, 0x00, 0x06, 0x00, 0x00, 0x00, 0xff, 0x00
-	.asciz "Show/Trad Dance"
+	aligned_string "Show/Trad Dance"
 
 
 LABEL_E12FD0:
@@ -4996,7 +4987,7 @@ LABEL_E12FD0:
 	.byte 0xc2, 0x01, 0xc0, 0x01, 0x08, 0x00, 0x06, 0x00
 	.byte 0xa4, 0x00, 0x61, 0x00, 0xb0, 0x00, 0xf0, 0x2f
 	.byte 0xe1, 0x00, 0x06, 0x00, 0x00, 0x00, 0xff, 0x00
-	.asciz "Trad / Folk"
+	aligned_string "Trad / Folk"
 
 
 LABEL_E12FFC:
@@ -5005,7 +4996,7 @@ LABEL_E12FFC:
 	.byte 0x08, 0x00, 0x06, 0x00, 0xb4, 0x00, 0x41, 0x00
 	.byte 0xc0, 0x00, 0x1c, 0x30, 0xe1, 0x00, 0x06, 0x00
 	.byte 0x00, 0x00, 0xff, 0x00
-	.asciz "Country"
+	aligned_string "Country"
 
 
 LABEL_E13024:
@@ -5014,7 +5005,7 @@ LABEL_E13024:
 	.byte 0x08, 0x00, 0x06, 0x00, 0xc4, 0x00, 0x71, 0x00
 	.byte 0xd0, 0x00, 0x44, 0x30, 0xe1, 0x00, 0x06, 0x00
 	.byte 0x00, 0x00, 0xff, 0x00
-	.asciz "Latin / World"
+	aligned_string "Latin / World"
 
 
 LABEL_E13052:
@@ -5114,7 +5105,7 @@ LABEL_E131C8:
 	.byte 0xd0, 0x01, 0xcb, 0x01, 0x08, 0x00, 0x12, 0x00
 	.byte 0x1e, 0x00, 0x7d, 0x00, 0x30, 0x00, 0xe8, 0x31
 	.byte 0xe1, 0x00, 0x00, 0x00, 0x00, 0x00, 0xfb, 0x00
-	.asciz "MAIN CATEGORY"
+	aligned_string "MAIN CATEGORY"
 
 
 LABEL_E131F6:
@@ -5137,7 +5128,7 @@ LABEL_E13240:
 	.byte 0x44, 0x00, 0xe1, 0x00
 	.byte 0x50, 0x00, 0x60, 0x32
 	.byte 0xe1, 0x00, 0x06, 0x00, 0x00, 0x00, 0xff, 0x00
-	.asciz "70's Hits"
+	aligned_string "70's Hits"
 
 
 LABEL_E1326A:
@@ -5156,7 +5147,7 @@ LABEL_E1329C:
 	.byte 0x08, 0x00, 0x96, 0x00, 0x54, 0x00, 0x11, 0x01
 	.byte 0x60, 0x00, 0xbc, 0x32, 0xe1, 0x00, 0x06, 0x00
 	.byte 0x00, 0x00, 0xff, 0x00
-	.asciz "70's Power Rock"
+	aligned_string "70's Power Rock"
 
 
 LABEL_E132CC:
@@ -5165,7 +5156,7 @@ LABEL_E132CC:
 	.byte 0x08, 0x00, 0x96, 0x00, 0x74, 0x00, 0x11, 0x01
 	.byte 0x80, 0x00, 0xec, 0x32, 0xe1, 0x00, 0x06, 0x00
 	.byte 0x00, 0x00, 0xff, 0x00
-	.asciz "80's Love Songs"
+	aligned_string "80's Love Songs"
 
 
 LABEL_E132FC:
@@ -5174,7 +5165,7 @@ LABEL_E132FC:
 	.byte 0x08, 0x00, 0x96, 0x00, 0x84, 0x00, 0x11, 0x01
 	.byte 0x90, 0x00, 0x1c, 0x33, 0xe1, 0x00, 0x06, 0x00
 	.byte 0x00, 0x00, 0xff, 0x00
-	.asciz "In The Eighties"
+	aligned_string "In The Eighties"
 
 
 LABEL_E1332C:
@@ -5191,7 +5182,7 @@ LABEL_E13356:
 	.byte 0xd7, 0x01, 0x08, 0x00, 0x96, 0x00, 0xa4, 0x00
 	.byte 0x01, 0x01, 0xb0, 0x00, 0x76, 0x33, 0xe1, 0x00
 	.byte 0x06, 0x00, 0x00, 0x00, 0xff, 0x00, 0x38, 0x20
-	.asciz "Beat Groove"
+	aligned_string "Beat Groove"
 
 
 LABEL_E13384:
@@ -6569,7 +6560,7 @@ LABEL_E146B0:
 	.byte 0xff, 0x00, 0xff
 	aligned_string "ftdemobmpcnv"
 	aligned_string "ftdemo07"
-	.asciz "ftdemobmpsoft"
+	aligned_string "ftdemobmpsoft"
 	.byte 0x00, 0xff
 	aligned_string "ftdemo06"
 LABEL_E146F0:
@@ -6578,7 +6569,7 @@ LABEL_E146F0:
 	.byte 0xff, 0x00, 0xff
 LABEL_E14700:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
-	.asciz "ftdemobmp3D"
+	aligned_string "ftdemobmp3D"
 	.asciz "ftdemo04"
 	.byte 0xff, 0x00, 0xff, 0x00, 0xff
 LABEL_E14720:
@@ -6663,18 +6654,13 @@ LABEL_E1482E:
 	.long MSG_BASS_PORT_DE
 	.long MSG_BASS_PORT_EN
 
-MSG_BASS_PORT_EN:
-	.asciz "Bass Port Speaker"
-MSG_BASS_PORT_DE:
-	.asciz "Italian"	; NOTE: Appears to be mislabeled in ROM
+MSG_BASS_PORT_EN:	aligned_string "Bass Port Speaker"
+MSG_BASS_PORT_DE:	.asciz "Italian"	; NOTE: Appears to be mislabeled in ROM
 MSG_BASS_PORT_ES_UNUSED:
 	.byte 0x00, 0xff
-MSG_BASS_PORT_FR:
-	aligned_string "Amplification des graves"
-MSG_BASS_PORT_EN2:
-	.asciz "Bass Port Speaker"
-MSG_BASS_PORT_ID:
-	.asciz "Bass Port Speaker"
+MSG_BASS_PORT_FR:	aligned_string "Amplification des graves"
+MSG_BASS_PORT_EN2:	aligned_string "Bass Port Speaker"
+MSG_BASS_PORT_ID:	aligned_string "Bass Port Speaker"
 
 LABEL_E148A0:
 	.long LABEL_E148DE
@@ -6709,7 +6695,7 @@ LABEL_E148F8:
 	aligned_string "Special Woofer dan Bass Port yang terdapat pada KN-5000 menghasilkan suara yang kuat dan baik."
 LABEL_E14958:
 
-	.asciz "Italian"
+	aligned_string "Italian"
 LABEL_E14960:
 
 	.byte 0xa1
@@ -6733,18 +6719,18 @@ LABEL_E14A88:
 	.long LABEL_E14AF6
 	.long LABEL_E14AEA
 LABEL_E14AEA:
-	.asciz "Huge Styles"
+	aligned_string "Huge Styles"
 	.byte 0x49, 0x74
-	.asciz "alian"
+	aligned_string "alian"
 	.byte 0x45, 0x73
-	.asciz "tilos enormes"
+	aligned_string "tilos enormes"
 	.byte 0x44, 0x69
 	.ascii "versit"
 	.byte 0xe9, 0x20
 	aligned_string "des styles"
-	.asciz "Riesige Auswahl an Styles"
+	aligned_string "Riesige Auswahl an Styles"
 	.byte 0x48, 0x75
-	.asciz "ge Styles"
+	aligned_string "ge Styles"
 	.long LABEL_E14C86
 	.long LABEL_E14C32
 	.long LABEL_E14BDC
@@ -6753,7 +6739,7 @@ LABEL_E14AEA:
 	.long LABEL_E14B62
 LABEL_E14B62:
 	aligned_string "Menghasilkan 1000 gaya permainan dengan Music Stylist."
-	.asciz "Italian"
+	aligned_string "Italian"
 	.asciz "Explore los 1000 estilos musicales con el Music Stylist."
 	.byte 0xff, 0x47, 0x72, 0xe2, 0x63
 	.ascii "e au "
@@ -6765,17 +6751,15 @@ LABEL_E14B62:
 	.asciz "s l'autre les 1000 styles disponibles."
 	.byte 0xff, 0x57, 0xe4
 	aligned_string "hlen Sie aus 1000 stilistisch sortierten Gesamtregistrierungen im MUSIC STYLIST."
-	.asciz "Explore 1000 Musical Styles with the Music Stylist."
+	aligned_string "Explore 1000 Musical Styles with the Music Stylist."
 	.long LABEL_E14E0E
 	.long LABEL_E14DB6
 	.long LABEL_E14D70
 	.long LABEL_E14D28
 	.long LABEL_E14D20
 	.long LABEL_E14CD2
-LABEL_E14CD2:
-	.asciz "Tambahkan kesenangan Anda dengan berbagai jenis Software Music dari Technics."
-LABEL_E14D20:
-	.asciz "Italian"
+LABEL_E14CD2:	aligned_string "Tambahkan kesenangan Anda dengan berbagai jenis Software Music dari Technics."
+LABEL_E14D20:	aligned_string "Italian"
 LABEL_E14D28:
 	.ascii "Disfrute m"
 	.byte 0xe1
@@ -6788,7 +6772,7 @@ LABEL_E14D70:
 	.byte 0x65, 0x20, 0xe0
 	.ascii " la diversit"
 	.byte 0xe9
-	.asciz " du software Technics"
+	aligned_string " du software Technics"
 	.byte 0x4e, 0x75
 	.ascii "tzen Sie das gro"
 	.byte 0xdf
@@ -6802,8 +6786,8 @@ LABEL_E14D70:
 	.long LABEL_E14EB2
 	.long LABEL_E14E64
 LABEL_E14E64:
-	.asciz "Dan dapat mengubah hampir semua software yang dihasilkan oleh pabrik manapun!"
-	.asciz "Italian"
+	aligned_string "Dan dapat mengubah hampir semua software yang dihasilkan oleh pabrik manapun!"
+	aligned_string "Italian"
 	.byte 0xa1
 	.asciz "Y convierta el software de casi todos los fabricantes!"
 	aligned_string "Et vous pouvez convertir les softwares de la plupart des autres principaux fabricants!"
@@ -6816,8 +6800,8 @@ LABEL_E14E64:
 	.long LABEL_E1504A
 	.long LABEL_E14FF0
 LABEL_E14FF0:
-	.asciz "Simpan pola-pola software favorit Anda kedalam Custom Rhythm Group ..... secara permanen!"
-	.asciz "Italian"
+	aligned_string "Simpan pola-pola software favorit Anda kedalam Custom Rhythm Group ..... secara permanen!"
+	aligned_string "Italian"
 	.byte 0xa1
 	aligned_string "Memorice sus patrones de software favoritos con el Custom Rhythm Group ... permanentemente!"
 LABEL_E150B0:
@@ -6830,22 +6814,17 @@ LABEL_E150B0:
 	.ascii "...de fa"
 	.byte 0xe7
 	.asciz "on permanente!"
-LABEL_E15110:
-	.asciz "Speichern Sie Ihre Lieblings Software-Rhythmen permanent in der CUSTOM-Rhythmus Gruppe!"
-LABEL_E15168:
-	.asciz "Store your favorite software patterns in the Custom Rhythm Group .....permanently!"
+LABEL_E15110:	aligned_string "Speichern Sie Ihre Lieblings Software-Rhythmen permanent in der CUSTOM-Rhythmus Gruppe!"
+LABEL_E15168:	.asciz "Store your favorite software patterns in the Custom Rhythm Group .....permanently!"
 	.byte 0xff, 0x2c, 0x52, 0xe1, 0x00
 	.long LABEL_E15218
 	.long LABEL_E15204
 	.long LABEL_E151F0
 	.long LABEL_E151E8
 	.long LABEL_E151D4
-LABEL_E151D4:
-	aligned_string "Accordion Register"
-LABEL_E151E8:
-	.asciz "Italian"
-LABEL_E151F0:
-	aligned_string "Accordion Register"
+LABEL_E151D4:	aligned_string "Accordion Register"
+LABEL_E151E8:	aligned_string "Italian"
+LABEL_E151F0:	aligned_string "Accordion Register"
 	aligned_string "Accordion Register"
 LABEL_E15218:
 	aligned_string "Accordion Register"
@@ -6856,10 +6835,8 @@ LABEL_E15218:
 	.long LABEL_E152A8
 	.long LABEL_E152A0
 	.long LABEL_E15258
-LABEL_E15258:
-	aligned_string "Suara-suara akordion pada ujung jari Anda ada pada Accordion Register!"
-LABEL_E152A0:
-	.asciz "Italian"
+LABEL_E15258:	aligned_string "Suara-suara akordion pada ujung jari Anda ada pada Accordion Register!"
+LABEL_E152A0:	aligned_string "Italian"
 LABEL_E152A8:
 	.byte 0xa1
 	.ascii "Un mundo de sonidos de acorde"
@@ -6878,7 +6855,7 @@ LABEL_E152A8:
 	.ascii "ffnet Ihnen die Welt der Akkordeon Kl"
 	.byte 0xe4
 	aligned_string "nge!"
-	.asciz "A World of Accordion Sounds at your fingertips with the Accordion Register!"
+	aligned_string "A World of Accordion Sounds at your fingertips with the Accordion Register!"
 	.long LABEL_E15442
 	.long LABEL_E15432
 	.long LABEL_E15422
@@ -6886,12 +6863,12 @@ LABEL_E152A8:
 	.long LABEL_E1540A
 	.long LABEL_E153FA
 LABEL_E153FA:
-	.asciz "Digital Drawbar"
-	.asciz "Italian"
-	.asciz "Digital Drawbar"
-	.asciz "Digital Drawbar"
-	.asciz "Digital Drawbar"
-	.asciz "Digital Drawbar"
+	aligned_string "Digital Drawbar"
+	aligned_string "Italian"
+	aligned_string "Digital Drawbar"
+	aligned_string "Digital Drawbar"
+	aligned_string "Digital Drawbar"
+	aligned_string "Digital Drawbar"
 	.long LABEL_E15582
 	.long LABEL_E1553C
 	.long LABEL_E154E6
@@ -6900,7 +6877,7 @@ LABEL_E153FA:
 	.long LABEL_E1546A
 LABEL_E1546A:
 	aligned_string "Suara-suara Organ Classic dengan Jazz dan Rock Drawbars!"
-	.asciz "Italian"
+	aligned_string "Italian"
 	.byte 0xa1, 0x53, 0x6f, 0x6e
 	.ascii "idos de "
 	.byte 0xf3
@@ -6913,8 +6890,8 @@ LABEL_E1546A:
 	.asciz "s d'Orgues Classiques, de Jazz et de Rock!"
 	.ascii "Erzeugen Sie legend"
 	.byte 0xe4
-	.asciz "re Orgelsounds mit den Jazz- und Rock-Zugriegeln!"
-	.asciz "Classic Organ Sounds with Jazz and Rock Drawbars!"
+	aligned_string "re Orgelsounds mit den Jazz- und Rock-Zugriegeln!"
+	aligned_string "Classic Organ Sounds with Jazz and Rock Drawbars!"
 	.byte 0x1c, 0x56, 0xe1, 0x00
 	.long LABEL_E1560A
 	.long LABEL_E155F8
@@ -6922,15 +6899,15 @@ LABEL_E1546A:
 	.long LABEL_E155DE
 	.long LABEL_E155CC
 LABEL_E155CC:
-	.asciz "Acoustic Illusion"
+	aligned_string "Acoustic Illusion"
 	.byte 0x49, 0x74
-	.asciz "alian"
+	aligned_string "alian"
 	.byte 0x41, 0x63
-	.asciz "oustic Illusion"
+	aligned_string "oustic Illusion"
 LABEL_E155F8:
-	.asciz "Acoustic Illusion"
-	.asciz "Acoustic Illusion"
-	.asciz "Acoustic Illusion"
+	aligned_string "Acoustic Illusion"
+	aligned_string "Acoustic Illusion"
+	aligned_string "Acoustic Illusion"
 	.long LABEL_E15758
 	.long LABEL_E15712
 	.long LABEL_E156C2
@@ -6940,11 +6917,11 @@ LABEL_E155F8:
 LABEL_E15646:
 	.byte 0x41, 0x63
 	aligned_string "oustic Illusion memperluas musik Anda kedalam 3 Dimensi!"
-	.asciz "Italian"
+	aligned_string "Italian"
 	.byte 0xa1
 	.ascii "El Acoustic Illusion amplia su m"
 	.byte 0xfa
-	.asciz "sica a 3 dimensiones!"
+	aligned_string "sica a 3 dimensiones!"
 	.ascii "La fonction "
 	.byte 0xab, 0x20
 	.ascii "Acoustic Illusion "
@@ -6967,7 +6944,7 @@ LABEL_E15758:
 	.long LABEL_E157A8
 LABEL_E157A8:
 	aligned_string "Satu pilihan daripada gambar-gambar untuk disesuaikan ke gaya permainan!"
-	.asciz "Italian"
+	aligned_string "Italian"
 	.byte 0xa1
 	.ascii "Una serie de funciones apropiadas para cualquier estilo y ejecuci"
 	.byte 0xf3, 0x6e, 0x21, 0x00
@@ -6986,13 +6963,13 @@ LABEL_E15840:
 	.long LABEL_E15924
 	.long LABEL_E15918
 LABEL_E15918:
-	.asciz "Huge Styles"
-	.asciz "Italian"
-	.asciz "Huge Styles"
+	aligned_string "Huge Styles"
+	aligned_string "Italian"
+	aligned_string "Huge Styles"
 LABEL_E15938:
-	.asciz "Huge Styles"
+	aligned_string "Huge Styles"
 	aligned_string "Huge Styles(G)"
-	.asciz "Huge Styles"
+	aligned_string "Huge Styles"
 	.long LABEL_E159B4
 	.long LABEL_E159A4
 	.long LABEL_E15998
@@ -7000,13 +6977,13 @@ LABEL_E15938:
 	.long LABEL_E15984
 	.long LABEL_E15978
 LABEL_E15978:
-	.asciz "Huge Styles"
-	.asciz "Italian"
-	.asciz "Huge Styles"
+	aligned_string "Huge Styles"
+	aligned_string "Italian"
+	aligned_string "Huge Styles"
 LABEL_E15998:
-	.asciz "Huge Styles"
+	aligned_string "Huge Styles"
 	aligned_string "Huge Styles(G)"
-	.asciz "Huge Styles"
+	aligned_string "Huge Styles"
 	.long LABEL_E15A14
 	.long LABEL_E15A04
 	.long LABEL_E159F8
@@ -7014,15 +6991,12 @@ LABEL_E15998:
 	.long LABEL_E159E4
 	.long LABEL_E159D8
 LABEL_E159D8:
-	.asciz "Huge Styles"
-	.asciz "Italian"
-	.asciz "Huge Styles"
-LABEL_E159F8:
-	.asciz "Huge Styles"
-LABEL_E15A04:
-	aligned_string "Huge Styles(G)"
-LABEL_E15A14:
-	.asciz "Huge Styles"
+	aligned_string "Huge Styles"
+	aligned_string "Italian"
+	aligned_string "Huge Styles"
+LABEL_E159F8:	aligned_string "Huge Styles"
+LABEL_E15A04:	aligned_string "Huge Styles(G)"
+LABEL_E15A14:	aligned_string "Huge Styles"
 
 LABEL_E15A20:
 	.byte 0x80, 0xff, 0xff, 0xff, 0xff, 0x87, 0x90, 0x00
@@ -7329,104 +7303,95 @@ LABEL_E16184:
 LABEL_E164D4:
 	.byte 0x00, 0xff
 	aligned_string "PsStylCnvVerProc"
-LABEL_E164E8:
-	.asciz "SndArrLangCheck"
-LABEL_E164F8:
-	aligned_string "StylCnvLangCheck"
+LABEL_E164E8:	aligned_string "SndArrLangCheck"
+LABEL_E164F8:	aligned_string "StylCnvLangCheck"
 	aligned_string "Memful2LangCheck"
-	.asciz "MemfulLangCheck"
+	aligned_string "MemfulLangCheck"
 	aligned_string "SndMem1LangCheck"
-	.asciz "SndMemLangCheck"
+	aligned_string "SndMemLangCheck"
 	.byte 0x53, 0x75
 	.asciz "reLangCheck"
 	aligned_string "AttLangCheck"
 	aligned_string "S2cGridBoxProc"
 	aligned_string "PsCtmAttStrBoxProc"
 	aligned_string "CmpNameMenuBoxProc"
-	.asciz "PsSCTxtBox2Proc"
+	aligned_string "PsSCTxtBox2Proc"
 	aligned_string "PsSCTxtBoxProc"
-	.asciz "PsParaListBoxProc"
-	.asciz "AcSndArgGridBoxProc"
+	aligned_string "PsParaListBoxProc"
+	aligned_string "AcSndArgGridBoxProc"
 LABEL_E165E8:
 	aligned_string "PsMspNameBnkProc"
-	.asciz "AcApcToggleProc"
-	.asciz "PsCstmCpNameBoxProc"
+	aligned_string "AcApcToggleProc"
+	aligned_string "PsCstmCpNameBoxProc"
 	.byte 0x50, 0x73
 	aligned_string "MspRecBnkBoxProc"
 	aligned_string "PsMspRecPadBoxProc"
-	.asciz "PsMspMemBoxProc"
+	aligned_string "PsMspMemBoxProc"
 	.byte 0x50, 0x73
 	aligned_string "MspMeasBoxProc"
 LABEL_E16668:
 	aligned_string "AcEasyCmpGridBoxProc"
-	.asciz "PsMspBnkNameBoxProc"
+	aligned_string "PsMspBnkNameBoxProc"
 	aligned_string "PsRgpSetBnkBoxProc"
-	.asciz "AcCmpSetGridBoxProc"
+	aligned_string "AcCmpSetGridBoxProc"
 	aligned_string "PsNameMemBoxProc"
 	aligned_string "PsCmpCpFPtnBoxProc"
 LABEL_E166E0:
-	.asciz "PsCmpCpFVariBoxProc"
+	aligned_string "PsCmpCpFVariBoxProc"
 	aligned_string "PsCmpCpFGrpBoxProc"
 LABEL_E16708:
-	.asciz "PsCstmCpSwBoxProc"
+	aligned_string "PsCstmCpSwBoxProc"
 	aligned_string "PsCstmCpBnkBoxProc"
-	.asciz "AcS2cMemNoBoxProc"
+	aligned_string "AcS2cMemNoBoxProc"
 LABEL_E16740:
-	.asciz "PsS2cTransBoxProc"
+	aligned_string "PsS2cTransBoxProc"
 	aligned_string "PsSeqSongNoBoxProc"
-	.asciz "PsS2cLmeasBoxProc"
+	aligned_string "PsS2cLmeasBoxProc"
 LABEL_E16778:
-	.asciz "PsS2cFmeasBoxProc"
-	.asciz "PsCmpMemBoxProc"
+	aligned_string "PsS2cFmeasBoxProc"
+	aligned_string "PsCmpMemBoxProc"
 	aligned_string "PsCmpMeasBoxProc"
-	.asciz "PsCmpQtzBoxProc"
-	.asciz "AcCmpRecBoxProc"
-	.asciz "AcCmpTempoBoxProc"
+	aligned_string "PsCmpQtzBoxProc"
+	aligned_string "AcCmpRecBoxProc"
+	aligned_string "AcCmpTempoBoxProc"
 	.byte 0x56, 0x77
-	.asciz "VariBoxProc"
-	.asciz "AcMspBnkSlBoxProc"
+	aligned_string "VariBoxProc"
+	aligned_string "AcMspBnkSlBoxProc"
 	.byte 0x41, 0x63
 	aligned_string "ApcMdBoxProc"
 	aligned_string "AcCmpMdBoxProc"
 	aligned_string "AcMemNoBoxProc"
 	aligned_string "MspRgpShowHideFunc"
-	.asciz "S2cShowHideFunc"
+	aligned_string "S2cShowHideFunc"
 	aligned_string "MspBnkShow"
-	.asciz "StylCnvStorOkFunc"
-LABEL_E16870:
-	aligned_string "CmpSetPageFunc"
-LABEL_E16880:
-	.asciz "StylCnvStorBnkSel"
-	.asciz "SndArgGridCheck"
+	aligned_string "StylCnvStorOkFunc"
+LABEL_E16870:	aligned_string "CmpSetPageFunc"
+LABEL_E16880:	aligned_string "StylCnvStorBnkSel"
+	aligned_string "SndArgGridCheck"
 	aligned_string "SndArgTtlCheck"
 	aligned_string "ApcOnBasFunc"
 LABEL_E168C0:
 	aligned_string "ApcOnOffFunc"
 	aligned_string "EasyCmpGridCheck"
-LABEL_E168E0:
-	.asciz "MspPlayModeFunc"
-LABEL_E168F0:
-	aligned_string "MspNameBnkFunc"
-LABEL_E16900:
-	.asciz "MspRGrpSetBnkFunc"
-	.asciz "MspRGrpSetGridCheck"
+LABEL_E168E0:	aligned_string "MspPlayModeFunc"
+LABEL_E168F0:	aligned_string "MspNameBnkFunc"
+LABEL_E16900:	aligned_string "MspRGrpSetBnkFunc"
+	aligned_string "MspRGrpSetGridCheck"
 	.byte 0x53, 0x32
 	aligned_string "cGridCheck"
-	.asciz "CmpSetGridCheck"
-	.asciz "CmpSetP1GridCheck"
+	aligned_string "CmpSetGridCheck"
+	aligned_string "CmpSetP1GridCheck"
 	.byte 0x43, 0x6d
 	aligned_string "pClrNoFunc"
-	.asciz "CmpClrYesFunc"
-	.asciz "MspNameOkFunc"
-LABEL_E16980:
-	aligned_string "MspNamingCheck"
-LABEL_E16990:
-	.asciz "CmpNameOkFunc"
+	aligned_string "CmpClrYesFunc"
+	aligned_string "MspNameOkFunc"
+LABEL_E16980:	aligned_string "MspNamingCheck"
+LABEL_E16990:	aligned_string "CmpNameOkFunc"
 	.byte 0x43, 0x6d
 	aligned_string "pNamingCheck"
 LABEL_E169AE:
 	.byte 0x43, 0x6d
-	.asciz "pBndRngFunc"
+	aligned_string "pBndRngFunc"
 	.byte 0xc0, 0x69, 0xe1, 0x00
 	.byte 0x00, 0xff
 LABEL_E169C2:
@@ -7435,10 +7400,8 @@ LABEL_E169C2:
 	.long LABEL_E169CE
 LABEL_E169CE:
 	.byte 0x00, 0xff
-LABEL_E169D0:
-	.asciz "solobit"
-LABEL_E169D8:
-	aligned_string "recbit"
+LABEL_E169D0:	aligned_string "solobit"
+LABEL_E169D8:	aligned_string "recbit"
 LABEL_E169E0:
 	.long LABEL_E169E4
 LABEL_E169E4:
@@ -7483,7 +7446,7 @@ LABEL_E16A3E:
 	.long LABEL_E16A4C
 LABEL_E16A4C:
 	.byte 0x00, 0xff
-	.asciz "apcdata"
+	aligned_string "apcdata"
 	jr	f, 0x6a
 	.byte 0xe1, 0x00
 	.long LABEL_E16A5E
@@ -7557,7 +7520,7 @@ LABEL_E16B1C:
 	.long LABEL_E16B32
 LABEL_E16B32:
 	.byte 0x00, 0xff
-	.asciz "pman_ad"
+	aligned_string "pman_ad"
 	aligned_string "func"
 LABEL_E16B42:
 	.long LABEL_E16B64
@@ -7579,11 +7542,11 @@ LABEL_E16B6E:
 LABEL_E16B86:
 	.byte 0x00, 0xff
 LABEL_E16B88:
-	.asciz "sel_num"
+	aligned_string "sel_num"
 LABEL_E16B90:
 	.byte 0x72, 0x6f, 0x77, 0x00
 	aligned_string "column"
-	.asciz "fontcolor"
+	aligned_string "fontcolor"
 	jr	z, 0x6f
 	.byte 0x6e, 0x74, 0x00, 0xff, 0xb0, 0x6b, 0xe1, 0x00
 	.byte 0x00, 0xff
@@ -7603,12 +7566,10 @@ LABEL_E16BD4:
 	.byte 0x00, 0xff
 	aligned_string "mspbnk"
 	aligned_string "selected"
-LABEL_E16BE8:
-	aligned_string "editsw"
-LABEL_E16BF0:
-	.asciz "align"
+LABEL_E16BE8:	aligned_string "editsw"
+LABEL_E16BF0:	aligned_string "align"
 	jr	z, 0x6f
-	.asciz "ntcolor"
+	aligned_string "ntcolor"
 LABEL_E16C00:
 	aligned_string "font"
 LABEL_E16C06:
@@ -7621,13 +7582,13 @@ LABEL_E16C06:
 LABEL_E16C1E:
 	.byte 0x00, 0xff
 LABEL_E16C20:
-	.asciz "tail_y_rate"
-	.asciz "tail_x_rate"
+	aligned_string "tail_y_rate"
+	aligned_string "tail_x_rate"
 LABEL_E16C38:
 	.byte 0x64, 0x69, 0x72, 0x00
 	aligned_string "frame_only"
 LABEL_E16C48:
-	.asciz "color"
+	aligned_string "color"
 	.byte 0x52, 0x6c
 	.byte 0xe1, 0x00, 0x00, 0xff, 0x76, 0x6c, 0xe1, 0x00
 	.long LABEL_E16C6C
@@ -7898,32 +7859,28 @@ LABEL_E17078:
 	jr	gt, 0x00
 	.asciz "S2cGridBox"
 	.byte 0xff, 0x00, 0xff
-LABEL_E17098:
-	aligned_string "CmpNameMenuBox"
-LABEL_E170A8:
-	.asciz "^GBBB"
+LABEL_E17098:	aligned_string "CmpNameMenuBox"
+LABEL_E170A8:	aligned_string "^GBBB"
 	.byte 0x59, 0x61
-	.asciz "jirushi"
-LABEL_E170B8:
-	aligned_string "c^demC"
-LABEL_E170C0:
-	.asciz "VwVariBox"
+	aligned_string "jirushi"
+LABEL_E170B8:	aligned_string "c^demC"
+LABEL_E170C0:	aligned_string "VwVariBox"
 	.byte 0x00, 0xff
-	.asciz "PSSCTxtBox2"
+	aligned_string "PSSCTxtBox2"
 LABEL_E170D8:
 	.byte 0x00, 0xff
 	.asciz "PsSCTxtBox"
 	.byte 0xff, 0x63, 0x5e
 	.byte 0x41, 0x41, 0x6e, 0x00
-	.asciz "PsParaListBox"
+	aligned_string "PsParaListBox"
 	.byte 0x58, 0x58, 0x6a, 0x00, 0x41, 0x63
-	.asciz "SndArgGridBox"
+	aligned_string "SndArgGridBox"
 	jr	gt, 0x46
 	.byte 0x00, 0xff
-	.asciz "AcApcToggle"
+	aligned_string "AcApcToggle"
 	.byte 0x43, 0x00
 LABEL_E17120:
-	.asciz "PsCstmCpNameBox"
+	aligned_string "PsCstmCpNameBox"
 LABEL_E17130:
 	.byte 0x00, 0xff
 	aligned_string "PsMspNameBnk"
@@ -7933,7 +7890,7 @@ LABEL_E17140:
 	.byte 0xff, 0x00, 0xff
 	.asciz "PsMspRecPadBox"
 	.byte 0xff, 0x00, 0xff
-	.asciz "PsMspMemBox"
+	aligned_string "PsMspMemBox"
 	.byte 0x00, 0xff
 	.asciz "PsMspMeasBox"
 	.byte 0xff, 0x58, 0x58, 0x6a, 0x00, 0x41, 0x63
@@ -7942,7 +7899,7 @@ LABEL_E17198:
 	.byte 0x00, 0xff
 	.asciz "PsRgpSetBnkBox"
 	.byte 0xff, 0x58, 0x58, 0x6a, 0x00, 0x41, 0x63
-	.asciz "CmpSetGridBox"
+	aligned_string "CmpSetGridBox"
 	.byte 0x00, 0xff
 LABEL_E171C0:
 	.asciz "PsNameMemBox"
@@ -7951,16 +7908,16 @@ LABEL_E171D0:
 	aligned_string "PsCmpCpFPtnBox"
 LABEL_E171E0:
 	.byte 0x00, 0xff
-	.asciz "PsCmpCpFVariBox"
+	aligned_string "PsCmpCpFVariBox"
 	.byte 0x00, 0xff
 	.asciz "PsCmpCpFGrpBox"
 	.byte 0xff, 0x00, 0xff
-	.asciz "AcCmpTempoBox"
+	aligned_string "AcCmpTempoBox"
 	.byte 0x43, 0x00, 0x50, 0x73
-	.asciz "MspBnkNameBox"
+	aligned_string "MspBnkNameBox"
 	.byte 0x43, 0x00
 LABEL_E17228:
-	.asciz "AcMspBnkSlBox"
+	aligned_string "AcMspBnkSlBox"
 	.byte 0x43, 0x00
 LABEL_E17238:
 	.asciz "AcApcMdBox"
@@ -7969,36 +7926,36 @@ LABEL_E17238:
 	.byte 0xff, 0x00, 0xff
 	.asciz "PsCtmAttStrBox"
 	.byte 0xff, 0x43, 0x00, 0x50, 0x73
-	.asciz "CstmCpSwBox"
+	aligned_string "CstmCpSwBox"
 	.byte 0x43, 0x00, 0x50, 0x73
 	.asciz "CstmCpBnkBox"
 	.byte 0xff, 0x00, 0xff
 LABEL_E17288:
-	.asciz "PsS2cTransBox"
+	aligned_string "PsS2cTransBox"
 	.byte 0x00, 0xff
 LABEL_E17298:
 	aligned_string "PsSeqSongNoBox"
 LABEL_E172A8:
 	.byte 0x00, 0xff
-	.asciz "PsS2cLmeasBox"
+	aligned_string "PsS2cLmeasBox"
 LABEL_E172B8:
 	.byte 0x00, 0xff
-	.asciz "PsS2cFmeasBox"
+	aligned_string "PsS2cFmeasBox"
 LABEL_E172C8:
 	.byte 0x00, 0xff
-	.asciz "AcS2cMemNoBox"
+	aligned_string "AcS2cMemNoBox"
 LABEL_E172D8:
 	.byte 0x00, 0xff
-	.asciz "PsCmpMemBox"
+	aligned_string "PsCmpMemBox"
 	.byte 0x00, 0xff
 LABEL_E172E8:
 	.asciz "PsCmpMeasBox"
 	.byte 0xff, 0x00, 0xff
 LABEL_E172F8:
-	.asciz "PsCmpQtzBox"
+	aligned_string "PsCmpQtzBox"
 	.byte 0x43, 0x43, 0x00, 0xff
 LABEL_E17308:
-	.asciz "AcCmpRecBox"
+	aligned_string "AcCmpRecBox"
 	.byte 0x00, 0xff
 	.asciz "AcMemNoBox"
 	.byte 0xff, 0x29, 0x00, 0x00, 0x00, 0x00, 0x00
@@ -8055,74 +8012,63 @@ LABEL_E17308:
 	.long LABEL_E173F6
 	.byte 0x00, 0x00, 0x00, 0x00, 0x4d, 0x54
 	aligned_string "_ClrGridHanten"
-LABEL_E17408:
-	aligned_string "MT_StylCnvStor"
-LABEL_E17418:
-	aligned_string "MT_SetSelectedLine"
+LABEL_E17408:	aligned_string "MT_StylCnvStor"
+LABEL_E17418:	aligned_string "MT_SetSelectedLine"
 	aligned_string "MT_CstmTNmDisp"
 	aligned_string "MT_CstmFNmDisp"
-	.asciz "MT_CstmTNmGet"
-	.asciz "MT_CstmFNmGet"
-LABEL_E17468:
-	aligned_string "MT_EsCmpVariDn"
-LABEL_E17478:
-	aligned_string "MT_EsCmpVariUp"
-LABEL_E17488:
-	aligned_string "MT_EsCmpStylDn"
-LABEL_E17498:
-	aligned_string "MT_EsCmpStylUp"
-LABEL_E174A8:
-	aligned_string "MT_EsCmpPartDn"
-LABEL_E174B8:
-	aligned_string "MT_EsCmpPartUp"
-LABEL_E174C8:
-	.asciz "MT_SetPtSel"
-	.asciz "MT_ArgChoDisp"
+	aligned_string "MT_CstmTNmGet"
+	aligned_string "MT_CstmFNmGet"
+LABEL_E17468:	aligned_string "MT_EsCmpVariDn"
+LABEL_E17478:	aligned_string "MT_EsCmpVariUp"
+LABEL_E17488:	aligned_string "MT_EsCmpStylDn"
+LABEL_E17498:	aligned_string "MT_EsCmpStylUp"
+LABEL_E174A8:	aligned_string "MT_EsCmpPartDn"
+LABEL_E174B8:	aligned_string "MT_EsCmpPartUp"
+LABEL_E174C8:	aligned_string "MT_SetPtSel"
+	aligned_string "MT_ArgChoDisp"
 	aligned_string "MT_ArgToneNmDisp"
 	aligned_string "MT_ArgChoGet"
-	.asciz "MT_ArgToneNmGet"
+	aligned_string "MT_ArgToneNmGet"
 	aligned_string "MT_MspPlyMdSet"
 	aligned_string "MT_MspRgp2NmDisp"
 	aligned_string "MT_MspRgp1NmDisp"
 	aligned_string "MT_MspUsr2NmDisp"
 LABEL_E17558:
 	aligned_string "MT_MspUsr1NmDisp"
-	.asciz "MT_MspRgp2NmGet"
-	.asciz "MT_MspRgp1NmGet"
-	.asciz "MT_MspUsr2NmGet"
-	.asciz "MT_MspUsr1NmGet"
-	.asciz "MT_CstmCpOk"
+	aligned_string "MT_MspRgp2NmGet"
+	aligned_string "MT_MspRgp1NmGet"
+	aligned_string "MT_MspUsr2NmGet"
+	aligned_string "MT_MspUsr1NmGet"
+	aligned_string "MT_CstmCpOk"
 	.byte 0x4d, 0x54
-	.asciz "_RgpPadDn"
-	.asciz "MT_RgpPadUp"
+	aligned_string "_RgpPadDn"
+	aligned_string "MT_RgpPadUp"
 	.byte 0x4d, 0x54
-	.asciz "_RgpBnkDn"
-	.asciz "MT_RgpBnkUp"
+	aligned_string "_RgpBnkDn"
+	aligned_string "MT_RgpBnkUp"
 	.byte 0x4d, 0x54
 	aligned_string "_S2cTrDn"
 	aligned_string "MT_S2cTrUp"
-	.asciz "MT_CmpSetP1Dn"
-	.asciz "MT_CmpSetP1Up"
-	.asciz "MT_RLmtValGet"
+	aligned_string "MT_CmpSetP1Dn"
+	aligned_string "MT_CmpSetP1Up"
+	aligned_string "MT_RLmtValGet"
 LABEL_E17628:
 	aligned_string "MT_PanValGet"
-	.asciz "MT_RLmtDn"
+	aligned_string "MT_RLmtDn"
 LABEL_E17640:
-	.asciz "MT_RLmtUp"
+	aligned_string "MT_RLmtUp"
 	aligned_string "MT_PanDn"
 	aligned_string "MT_PanUp"
-	.asciz "MT_CmpClrNo"
+	aligned_string "MT_CmpClrNo"
 	aligned_string "MT_CmpClrYes"
-LABEL_E17678:
-	aligned_string "MT_APRHYVARINM"
-LABEL_E17688:
-	.asciz "MT_APRHYGRPNM"
+LABEL_E17678:	aligned_string "MT_APRHYVARINM"
+LABEL_E17688:	aligned_string "MT_APRHYGRPNM"
 	.byte 0x4d, 0x54
-	.asciz "_RhyVariNmGet"
+	aligned_string "_RhyVariNmGet"
 	.byte 0x4d, 0x54
 	aligned_string "_RhyGrpNmGet"
-	.asciz "MT_MspNameSet"
-	.asciz "MT_CmpNameSet"
+	aligned_string "MT_MspNameSet"
+	aligned_string "MT_CmpNameSet"
 	.byte 0x32, 0x00, 0xb1, 0xdf, 0xf1, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0xe6, 0x76, 0xe1, 0x00
 	.long LABEL_E176E4
@@ -8140,7 +8086,7 @@ LABEL_E176F6:
 	.long LABEL_E17720
 	.byte 0x98, 0x00, 0x00, 0x00
 LABEL_E17720:
-	.asciz "STYLE CONVERT"
+	aligned_string "STYLE CONVERT"
 LABEL_E1772E:
 
 
@@ -8166,7 +8112,7 @@ LABEL_E17774:
 	.byte 0xef, 0x00, 0xff, 0x00, 0x00, 0x00, 0x60, 0x00
 	.byte 0xa0, 0x01, 0x1c, 0xd6, 0x03, 0x00, 0x9e, 0x77
 	.byte 0xe1, 0x00, 0x98, 0x00, 0x00, 0x00, 0x53, 0x54
-	.asciz "YLE TYPE SELECT"
+	aligned_string "YLE TYPE SELECT"
 LABEL_E177B0:
 
 
@@ -8237,7 +8183,7 @@ LABEL_E178DA:
 	.byte 0xff, 0x00, 0x00, 0x00, 0x10, 0x00, 0xa0, 0x01
 	.byte 0x22, 0xd6, 0x03, 0x00, 0x04, 0x79, 0xe1, 0x00
 	.byte 0x98, 0x00, 0x00, 0x00
-	.asciz "STYLE CONVERT"
+	aligned_string "STYLE CONVERT"
 LABEL_E17912:
 
 
@@ -8325,7 +8271,7 @@ LABEL_E17A50:
 	.byte 0x0a, 0x00, 0xff, 0x00, 0x01, 0x00, 0x2c, 0xd6
 	.byte 0x03, 0x00, 0x13, 0x00, 0x24, 0x01, 0x2e, 0xd6
 	.byte 0x03, 0x00
-	.asciz "  Data Storage to :"
+	aligned_string "  Data Storage to :"
 LABEL_E17A9E:
 
 
@@ -8353,7 +8299,7 @@ LABEL_E17AF4:
 	.byte 0xef, 0x00, 0xff, 0x00, 0x00, 0x00, 0x10, 0x00
 	.byte 0xa0, 0x01, 0x32, 0xd6, 0x03, 0x00, 0x1e, 0x7b
 	.byte 0xe1, 0x00, 0x98, 0x00, 0x00, 0x00
-	.asciz "STYLE CONVERT"
+	aligned_string "STYLE CONVERT"
 LABEL_E17B2C:
 
 
@@ -8386,7 +8332,7 @@ LABEL_E17B88:
 	.long LABEL_E17BB2
 	.byte 0x98, 0x00
 	.byte 0x00, 0x00
-	.asciz "STYLE CONVERT"
+	aligned_string "STYLE CONVERT"
 LABEL_E17BC0:
 
 
@@ -8457,7 +8403,7 @@ LABEL_E17CEA:
 	.byte 0xff, 0x00, 0x00, 0x00, 0x10, 0x00, 0xa0, 0x01
 	.byte 0x3c, 0xd6, 0x03, 0x00, 0x14, 0x7d, 0xe1, 0x00
 	.byte 0x98, 0x00, 0x00, 0x00
-	.asciz "STYLE CONVERT"
+	aligned_string "STYLE CONVERT"
 LABEL_E17D22:
 
 
@@ -8531,7 +8477,7 @@ LABEL_E17E06:
 	.byte 0x4d, 0x00, 0x00, 0x00
 
 String_COMPOSER_MENU:	; E17E30
-	.asciz "COMPOSER MENU"
+	aligned_string "COMPOSER MENU"
 LABEL_E17E3E:
 
 	.byte 0x1d, 0x00
@@ -8559,7 +8505,7 @@ LABEL_E17E84:
 	.byte 0x00, 0x00
 
 String_EASY_COMPOSER:	; E17EBA
-	.asciz "EASY COMPOSER"
+	aligned_string "EASY COMPOSER"
 LABEL_E17EC8:
 
 	.byte 0x1d, 0x00, 0x60, 0x01, 0x00, 0x00, 0xff, 0xff
@@ -8583,7 +8529,7 @@ LABEL_E17F0C:
 	.byte 0x0a, 0x00, 0x4a, 0xd6, 0x03, 0x00, 0x42, 0x7f
 	.byte 0xe1, 0x00, 0xbe, 0x00, 0xa0, 0x01, 0xa1, 0x00
 	.byte 0x00, 0x00
-	.asciz "CUSTOM COPY"
+	aligned_string "CUSTOM COPY"
 LABEL_E17F4E:
 
 
@@ -8708,7 +8654,7 @@ LABEL_E18170:
 	.long LABEL_E1819A
 	.byte 0x4d, 0x00
 	.byte 0x00, 0x00
-	.asciz "RECORD MEMORY"
+	aligned_string "RECORD MEMORY"
 LABEL_E181A8:
 
 
@@ -8726,7 +8672,7 @@ LABEL_E181C2:
 	.byte 0x00, 0x00, 0xff, 0x00, 0x00, 0x00, 0x88, 0x00
 	.byte 0x5a, 0xd6, 0x03, 0x00, 0xf4, 0x81, 0xe1, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00
-	.asciz "VARIATION 1"
+	aligned_string "VARIATION 1"
 LABEL_E18200:
 
 
@@ -8739,7 +8685,7 @@ LABEL_E18200:
 	.long LABEL_E18232
 	.byte 0x00, 0x00
 	.byte 0x00, 0x00
-	.asciz "VARIATION 3"
+	aligned_string "VARIATION 3"
 LABEL_E1823E:
 
 
@@ -8751,7 +8697,7 @@ LABEL_E1823E:
 	.long LABEL_E18270
 	.byte 0x00, 0x00, 0x00, 0x00
 LABEL_E18270:
-	.asciz "INTRO 1"
+	aligned_string "INTRO 1"
 LABEL_E18278:
 
 
@@ -8764,7 +8710,7 @@ LABEL_E18278:
 	.long LABEL_E182AA
 	.byte 0x00, 0x00
 	.byte 0x00, 0x00
-	.asciz "FILL IN 1"
+	aligned_string "FILL IN 1"
 LABEL_E182B4:
 
 
@@ -8788,7 +8734,7 @@ LABEL_E182F0:
 	.long LABEL_E18322
 	.byte 0x00, 0x00
 	.byte 0x00, 0x00
-	.asciz "      VARIATION 2"
+	aligned_string "      VARIATION 2"
 LABEL_E18334:
 
 
@@ -8799,7 +8745,7 @@ LABEL_E18334:
 	.byte 0x00, 0x00, 0x00, 0x00, 0xff, 0x00, 0x00, 0x00
 	.byte 0x09, 0x00, 0x66, 0xd6, 0x03, 0x00, 0x66, 0x83
 	.byte 0xe1, 0x00, 0x00, 0x00, 0x00, 0x00, 0x20, 0x20
-	.asciz "    VARIATION 4"
+	aligned_string "    VARIATION 4"
 LABEL_E18378:
 
 
@@ -8812,7 +8758,7 @@ LABEL_E18378:
 	.long LABEL_E183AA
 	.byte 0x00, 0x00
 	.byte 0x00, 0x00
-	.asciz "INTRO 2"
+	aligned_string "INTRO 2"
 LABEL_E183B2:
 
 
@@ -8823,7 +8769,7 @@ LABEL_E183B2:
 	.byte 0x00, 0x00, 0xff, 0x00, 0x02, 0x00, 0x0b, 0x00
 	.byte 0x6a, 0xd6, 0x03, 0x00, 0xe4, 0x83, 0xe1, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00
-	.asciz "FILL IN 2"
+	aligned_string "FILL IN 2"
 LABEL_E183EE:
 
 
@@ -8861,7 +8807,7 @@ LABEL_E18478:
 	.byte 0x03, 0x00, 0x01, 0x00, 0x08, 0x00, 0xb7, 0x00
 	.byte 0x50, 0x00, 0xf2, 0x00, 0x62, 0x00, 0x98, 0x84
 	.byte 0xe1, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0x00
-	.asciz "Memory:"
+	aligned_string "Memory:"
 LABEL_E184A0:
 
 
@@ -8941,7 +8887,7 @@ LABEL_E18610:
 	.byte 0x0c, 0x00, 0x0a, 0x00, 0x08, 0x00, 0x28, 0x00
 	.byte 0xc0, 0x00, 0xa3, 0x00, 0xd2, 0x00, 0x30, 0x86
 	.byte 0xe1, 0x00, 0x00, 0x00, 0x00, 0x00, 0xf2, 0x00
-	.asciz "START RECORDING"
+	aligned_string "START RECORDING"
 LABEL_E18640:
 
 
@@ -9135,7 +9081,7 @@ LABEL_E18978:
 	.long LABEL_E18A4C
 	.long LABEL_E189E6
 	.byte 0x07, 0x00, 0x24, 0x01, 0x7c, 0x4d
-	.asciz "EASURE      :|TIME SIGNATURE:|-|     | KEY          : |CHORD        :|BASS TYPE    :|ACCOMP TYPE  :"
+	aligned_string "EASURE      :|TIME SIGNATURE:|-|     | KEY          : |CHORD        :|BASS TYPE    :|ACCOMP TYPE  :"
 	aligned_string "   MEASURE  &|TIME SIGNATURE"
 LABEL_E18A6A:
 
@@ -9208,8 +9154,8 @@ LABEL_E18B5E:
 	.long LABEL_E18BA8
 	.byte 0x08, 0x00, 0x24, 0x01
 LABEL_E18BA8:
-	.asciz "|-|BASS|ACCOMP1|ACCOMP2|ACCOMP3"
-	.asciz "  PART  | PANPOT |PITCH POINT"
+	aligned_string "|-|BASS|ACCOMP1|ACCOMP2|ACCOMP3"
+	aligned_string "  PART  | PANPOT |PITCH POINT"
 LABEL_E18BE6:
 
 
@@ -9279,7 +9225,7 @@ LABEL_E18D02:
 	.long LABEL_E18D22
 	.byte 0x01, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00
-	.asciz "PATTERN ="
+	aligned_string "PATTERN ="
 LABEL_E18D2C:
 
 
@@ -9290,7 +9236,7 @@ LABEL_E18D2C:
 	.long LABEL_E18D4C
 	.byte 0x01, 0x00
 	.byte 0x00, 0x00, 0xff, 0x00
-	.asciz "TEMPO   ="
+	aligned_string "TEMPO   ="
 LABEL_E18D56:
 
 
@@ -9298,7 +9244,7 @@ LABEL_E18D56:
 	.byte 0x05, 0x00, 0x08, 0x00, 0x3e, 0x00, 0x6e, 0x00
 	.byte 0x89, 0x00, 0x80, 0x00, 0x76, 0x8d, 0xe1, 0x00
 	.byte 0x01, 0x00, 0x00, 0x00, 0xff, 0x00, 0x51, 0x55
-	.asciz "ANTIZE="
+	aligned_string "ANTIZE="
 LABEL_E18D80:
 
 
@@ -9306,7 +9252,7 @@ LABEL_E18D80:
 	.byte 0x08, 0x00, 0x06, 0x00, 0x08, 0x00, 0x3e, 0x00
 	.byte 0x87, 0x00, 0x89, 0x00, 0x99, 0x00, 0xa0, 0x8d
 	.byte 0xe1, 0x00, 0x01, 0x00, 0x00, 0x00, 0xff, 0x00
-	.asciz "MEASURE ="
+	aligned_string "MEASURE ="
 LABEL_E18DAA:
 
 
@@ -9316,7 +9262,7 @@ LABEL_E18DAA:
 	.long LABEL_E18DCA
 	.byte 0x01, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00
-	.asciz "MEMORY  ="
+	aligned_string "MEMORY  ="
 LABEL_E18DD4:
 
 
@@ -9619,7 +9565,7 @@ LABEL_E1931A:
 	.long LABEL_E1933A
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00
-	.asciz "ITEM      VALUE     ITEM      VALUE"
+	aligned_string "ITEM      VALUE     ITEM      VALUE"
 LABEL_E1935E:
 
 
@@ -9721,7 +9667,7 @@ LABEL_E194BA:
 	.long LABEL_E194DA
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0xf1, 0x00
-	.asciz "RHYTHM:"
+	aligned_string "RHYTHM:"
 LABEL_E194E2:
 
 
@@ -9778,7 +9724,7 @@ LABEL_E1959E:
 	.byte 0x19, 0x00, 0x08, 0x00, 0xc8, 0x00, 0x3c, 0x00
 	.byte 0x03, 0x01, 0x4e, 0x00, 0xbe, 0x95, 0xe1, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0xf1, 0x00, 0x4d, 0x45
-	.asciz "MORY:"
+	aligned_string "MORY:"
 LABEL_E195C6:
 
 
@@ -9933,7 +9879,7 @@ LABEL_E1983A:
 	.long LABEL_E1985A
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00
-	.asciz "TRANS"
+	aligned_string "TRANS"
 LABEL_E19860:
 
 
@@ -9941,7 +9887,7 @@ LABEL_E19860:
 	.byte 0x10, 0x00, 0x0e, 0x00, 0x08, 0x00, 0x56, 0x00
 	.byte 0xc8, 0x00, 0x81, 0x00, 0xda, 0x00, 0x80, 0x98
 	.byte 0xe1, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0x00
-	.asciz "-POSE"
+	aligned_string "-POSE"
 LABEL_E19886:
 
 
@@ -9949,7 +9895,7 @@ LABEL_E19886:
 	.byte 0x0f, 0x00, 0x08, 0x00, 0x0a, 0x00, 0x4a, 0x00
 	.byte 0x55, 0x00, 0x5c, 0x00, 0xa6, 0x98, 0xe1, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0xff, 0x00, 0x53, 0x45
-	.asciz "QUENCER"
+	aligned_string "QUENCER"
 LABEL_E198B0:
 
 
@@ -9985,7 +9931,7 @@ LABEL_E1990A:
 	.long LABEL_E1992A
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00
-	.asciz "MEAS:"
+	aligned_string "MEAS:"
 LABEL_E19930:
 
 
@@ -10033,7 +9979,7 @@ LABEL_E199DE:
 	.byte 0x1a, 0x00, 0x08, 0x00, 0x8c, 0x00, 0x30, 0x00
 	.byte 0x07, 0x01, 0x42, 0x00, 0xfe, 0x99, 0xe1, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0xff, 0x00
-	.asciz "COMPOSER MEMORY"
+	aligned_string "COMPOSER MEMORY"
 	.byte 0x08, 0x00
 	.byte 0x64, 0x01, 0x00, 0x00, 0xff, 0xff, 0x1e, 0x00
 	.byte 0x1c, 0x00, 0x08, 0x00, 0x0a, 0x00, 0x59, 0x00
@@ -10059,7 +10005,7 @@ LABEL_E199DE:
 	.long LABEL_E19AC0
 	.byte 0x09, 0x00, 0x24, 0x01
 LABEL_E19AC0:
-	.asciz "|-|DRUMS|BASS|ACCOMP1|ACCOMP2|ACCOMP3"
+	aligned_string "|-|DRUMS|BASS|ACCOMP1|ACCOMP2|ACCOMP3"
 	ldb	w, 0x50
 	aligned_string "ART |TRACK"
 LABEL_E19AF4:
@@ -10098,7 +10044,7 @@ LABEL_E19B5E:
 	.long LABEL_E19B88
 	.byte 0x51, 0x00, 0x00, 0x00
 LABEL_E19B88:
-	.asciz "EASY COMPOSER"
+	aligned_string "EASY COMPOSER"
 LABEL_E19B96:
 
 
@@ -10158,7 +10104,7 @@ LABEL_E19C74:
 	.long LABEL_E19C94
 	.byte 0x00, 0x00
 	.byte 0x00, 0x00, 0xff, 0x00
-	.asciz "COMPOSER MEMORY :"
+	aligned_string "COMPOSER MEMORY :"
 LABEL_E19CA6:
 
 
@@ -10189,7 +10135,7 @@ LABEL_E19CCA:
 	.long LABEL_E19D96
 	.long LABEL_E19D54
 	.byte 0x0e, 0x00, 0x24, 0x01
-	.asciz "|-|BsDr&Snare|HHat&Cymbal|Percussion|Bass|Accomp1|Accomp2|Accomp3"
+	aligned_string "|-|BsDr&Snare|HHat&Cymbal|Percussion|Bass|Accomp1|Accomp2|Accomp3"
 	ldb	w, 0x20
 	aligned_string " PART    |      STYLE      |VARI"
 LABEL_E19DBA:
@@ -10230,7 +10176,7 @@ LABEL_E19E36:
 	.long LABEL_E19E60
 	.byte 0x0b, 0x00, 0x00, 0x00
 LABEL_E19E60:
-	.asciz "COMPOSER PITCH BEND RANGE SETTING"
+	aligned_string "COMPOSER PITCH BEND RANGE SETTING"
 LABEL_E19E82:
 
 
@@ -10262,7 +10208,7 @@ LABEL_E19EFA:
 	.long LABEL_E19F1A
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00
-	.asciz "VALUE"
+	aligned_string "VALUE"
 LABEL_E19F20:
 
 
@@ -10277,7 +10223,7 @@ LABEL_E19F20:
 	.long LABEL_E19F4A
 	.byte 0x55, 0x00
 	.byte 0x00, 0x00
-	.asciz "MODE SELECT"
+	aligned_string "MODE SELECT"
 LABEL_E19F56:
 
 
@@ -10285,7 +10231,7 @@ LABEL_E19F56:
 	.byte 0xff, 0xff, 0x08, 0x00, 0x14, 0x00, 0x39, 0x00
 	.byte 0xff, 0x00, 0x4b, 0x00, 0x76, 0x9f, 0xe1, 0x00
 	.byte 0x01, 0x00, 0x00, 0x00, 0xf1, 0x00, 0x54, 0x68
-	.asciz "e Intro,Fill-Ins and Ending"
+	aligned_string "e Intro,Fill-Ins and Ending"
 LABEL_E19F94:
 
 
@@ -10296,7 +10242,7 @@ LABEL_E19F94:
 	.long LABEL_E19FB4
 	.byte 0x01, 0x00
 	.byte 0x00, 0x00, 0xf1, 0x00
-	.asciz "for each Composer Pattern can"
+	aligned_string "for each Composer Pattern can"
 LABEL_E19FD2:
 
 
@@ -10314,7 +10260,7 @@ LABEL_E1A016:
 	.byte 0x03, 0x00, 0x08, 0x00, 0x14, 0x00, 0x8c, 0x00
 	.byte 0xff, 0x00, 0x9e, 0x00, 0x36, 0xa0, 0xe1, 0x00
 	.byte 0x01, 0x00, 0x00, 0x00, 0xf1, 0x00, 0x41, 0x20
-	.asciz "Composer Memory is assigned"
+	aligned_string "Composer Memory is assigned"
 LABEL_E1A054:
 
 
@@ -10325,7 +10271,7 @@ LABEL_E1A054:
 	.long LABEL_E1A074
 	.byte 0x01, 0x00
 	.byte 0x00, 0x00, 0xf1, 0x00
-	.asciz "to each of The Intro Fill-In 1,"
+	aligned_string "to each of The Intro Fill-In 1,"
 LABEL_E1A094:
 
 
@@ -10363,7 +10309,7 @@ LABEL_E1A110:
 	.byte 0xe1, 0x00, 0x01, 0x00, 0x00, 0x00, 0xff, 0x00
 	.byte 0x01, 0x00, 0x00, 0x00, 0x88, 0x00, 0x01, 0x00
 	.byte 0x0e, 0xd7, 0x03, 0x00, 0x00, 0x00, 0x20, 0x4e
-	.asciz "ORMAL MODE:"
+	aligned_string "ORMAL MODE:"
 	.byte 0x0d, 0x00, 0x64, 0x01
 	.byte 0x00, 0x00, 0xff, 0xff, 0xff, 0xff, 0x09, 0x00
 	.byte 0x08, 0x00, 0x0e, 0x00, 0x72, 0x00, 0x7b, 0x00
@@ -10373,7 +10319,7 @@ LABEL_E1A110:
 	.byte 0xff, 0x00, 0x01, 0x00, 0x00, 0x00, 0x8a, 0x00
 	.byte 0x01, 0x00, 0x10, 0xd7, 0x03, 0x00, 0x01, 0x00
 LABEL_E1A1C0:
-	.asciz " EXPAND MODE:"
+	aligned_string " EXPAND MODE:"
 LABEL_E1A1CE:
 
 	.byte 0x34, 0x00
@@ -10387,7 +10333,7 @@ LABEL_E1A1CE:
 LABEL_E1A1F8:
 
 String_CUSTOM_COPY:	; 1A1F8
-	.asciz "CUSTOM COPY"
+	aligned_string "CUSTOM COPY"
 LABEL_E1A204:
 
 
@@ -10459,7 +10405,7 @@ LABEL_E1A31C:
 	.zero 8
 	.byte 0x03, 0x00, 0x04, 0x00, 0x00, 0x00, 0x4a, 0xa3
 	.byte 0xe1, 0x00
-	.asciz "DIRECTION"
+	aligned_string "DIRECTION"
 LABEL_E1A354:
 
 
@@ -10562,7 +10508,7 @@ LABEL_E1A556:
 	.byte 0xff, 0xff, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x09, 0x00, 0x00, 0x00, 0x82, 0xa5
 	.byte 0xe1, 0x00
-	.asciz "EXECUTE"
+	aligned_string "EXECUTE"
 LABEL_E1A58A:
 
 
@@ -10634,7 +10580,7 @@ LABEL_E1A69E:
 	.long String_EXECUTE
 
 String_EXECUTE:	; E1A6CA
-	.asciz "EXECUTE"
+	aligned_string "EXECUTE"
 LABEL_E1A6D2:
 
 
@@ -10648,7 +10594,7 @@ LABEL_E1A6D2:
 	.long String_ABORT
 
 String_ABORT:	; E1A6FE
-	.asciz "ABORT"
+	aligned_string "ABORT"
 
 
 LABEL_E1A704:
@@ -10662,7 +10608,7 @@ LABEL_E1A704:
 	.long 0xA5
 
 String_MSP_BANK_SELECT:	; E1A72E
-	.asciz "MSP BANK SELECT"
+	aligned_string "MSP BANK SELECT"
 
 LABEL_E1A73E:
 	.byte 0x25, 0x00, 0x60, 0x01, 0x00, 0x00, 0xff, 0xff, 0x02, 0x00
@@ -10893,7 +10839,7 @@ LABEL_E1AC72:
 	.long LABEL_E1AC92
 	.byte 0x01, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00
-	.asciz "TEMPO   ="
+	aligned_string "TEMPO   ="
 	.byte 0x11, 0x00, 0x64, 0x01
 	.byte 0x06, 0x00, 0xff, 0xff, 0x09, 0x00, 0x07, 0x00
 	.byte 0x08, 0x00, 0x74, 0x00, 0x7c, 0x00, 0x9b, 0x00
@@ -10936,7 +10882,7 @@ LABEL_E1AD52:
 	.byte 0x01, 0x00, 0x14, 0x00, 0xff, 0x00, 0x01, 0x00
 	.byte 0x66, 0xd7, 0x03, 0x00, 0x0d, 0x00, 0x24, 0x01
 	.byte 0x68, 0xd7, 0x03, 0x00
-	.asciz "play mode :"
+	aligned_string "play mode :"
 LABEL_E1AD98:
 
 
@@ -10977,7 +10923,7 @@ LABEL_E1AE10:
 	.byte 0xcc, 0x00
 	.byte 0xa0, 0x01, 0xa7, 0x00, 0x00, 0x00
 LABEL_E1AE46:
-	.asciz "COMPILE SET"
+	aligned_string "COMPILE SET"
 LABEL_E1AE52:
 
 
@@ -10988,7 +10934,7 @@ LABEL_E1AE52:
 	.byte 0x00, 0x00, 0xff, 0x00, 0x00, 0x00, 0x8a, 0x00
 	.byte 0x72, 0xd7, 0x03, 0x00, 0x88, 0xae, 0xe1, 0x00
 	.byte 0xcb, 0x00, 0xa0, 0x01, 0x99, 0x00, 0x00, 0x00
-	.asciz "Naming for User&COMPILE Banks"
+	aligned_string "Naming for User&COMPILE Banks"
 LABEL_E1AEA6:
 
 
@@ -11006,7 +10952,7 @@ LABEL_E1AEC0:
 	.byte 0x08, 0x00, 0xff, 0x00, 0x01, 0x00, 0x74, 0xd7
 	.byte 0x03, 0x00, 0x0c, 0x00, 0x24, 0x01, 0x76, 0xd7
 	.byte 0x03, 0x00
-	.asciz "Naming Bank :"
+	aligned_string "Naming Bank :"
 LABEL_E1AF08:
 
 
@@ -11191,7 +11137,7 @@ LABEL_E1B250:
 	.long LABEL_E1B2DA
 	.long LABEL_E1B2B4
 	.byte 0x12, 0x00, 0x24, 0x01
-	.asciz "|-|DRUMS|BASS|ACCOMP1|ACCOMP2|ACCOMP3"
+	aligned_string "|-|DRUMS|BASS|ACCOMP1|ACCOMP2|ACCOMP3"
 	aligned_string "   PART  |       SOUND       |D.EFFECT"
 LABEL_E1B302:
 
@@ -11222,7 +11168,7 @@ LABEL_E1B356:
 	.long LABEL_E1B380
 	.byte 0x71, 0x00, 0x00, 0x00
 LABEL_E1B380:
-	.asciz "AUTO PLAY CHORD"
+	aligned_string "AUTO PLAY CHORD"
 LABEL_E1B390:
 	.byte 0x0e, 0x00, 0x64, 0x01, 0x00, 0x00, 0xff, 0xff
 	.byte 0x02, 0x00, 0xff, 0xff, 0x08, 0x00, 0x08, 0x00
@@ -11251,7 +11197,7 @@ LABEL_E1B3D0:
 	.byte 0x00, 0x00, 0xff, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x8b, 0x00, 0x01, 0x00, 0xae, 0xd7, 0x03, 0x00
 	.byte 0x03, 0x00
-	.asciz "PIANIST"
+	aligned_string "PIANIST"
 	.byte 0x1f, 0x00, 0x64, 0x01, 0x00, 0x00
 	.byte 0xff, 0xff, 0x05, 0x00, 0x03, 0x00, 0x08, 0x00
 	.byte 0xc4, 0x00, 0x4c, 0x00, 0x37, 0x01, 0x5d, 0x00
@@ -11260,7 +11206,7 @@ LABEL_E1B3D0:
 	.byte 0xb0, 0xd7, 0x03, 0x00
 	.byte 0x09, 0x00, 0x0f, 0x00, 0x24, 0x01, 0x00, 0x00
 	.byte 0x00, 0x00
-	.asciz " MEMORY : OFF"
+	aligned_string " MEMORY : OFF"
 	.asciz " MEMORY : ON"
 	.byte 0xff, 0x1f, 0x00
 	.byte 0x64, 0x01, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff
@@ -11270,7 +11216,7 @@ LABEL_E1B3D0:
 	.long LABEL_E1B4C6
 	.byte 0xb2, 0xd7, 0x03, 0x00, 0x0a, 0x00, 0x10, 0x00
 	.byte 0x24, 0x01, 0x01, 0x00, 0x00, 0x00, 0x4f, 0x4e
-	.asciz " BASS : OFF"
+	aligned_string " BASS : OFF"
 	aligned_string "ON BASS : ON"
 	.long LABEL_E176F6
 	.long LABEL_E1772E
@@ -11684,7 +11630,7 @@ LABEL_E1B3D0:
 LABEL_E1BB0A:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 LABEL_E1BB10:
-	.asciz "StylCnvWaitScreen"
+	aligned_string "StylCnvWaitScreen"
 	.long LABEL_E1BB6E
 	.long LABEL_E1BB6C
 	.long LABEL_E1BB5C
@@ -11703,7 +11649,7 @@ LABEL_E1BB58:
 	.byte 0x00, 0xff, 0x00, 0xff
 	.asciz "StylCnvModlBox"
 	.byte 0xff, 0x00, 0xff
-	.asciz "StylCnvModlScreen"
+	aligned_string "StylCnvModlScreen"
 	.long LABEL_E1BBBC
 	.long LABEL_E1BBBA
 	.long LABEL_E1BBAA
@@ -11718,7 +11664,7 @@ LABEL_E1BBA8:
 	.byte 0x00, 0xff
 	.asciz "StylCnvCnvtBox"
 	.byte 0xff, 0x00, 0xff
-	.asciz "StylCnvCnvtScreen"
+	aligned_string "StylCnvCnvtScreen"
 	.byte 0xea, 0xbb
 	.byte 0xe1, 0x00
 	.long LABEL_E1BBE8
@@ -11729,7 +11675,7 @@ LABEL_E1BBE2:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 LABEL_E1BBE8:
 	.byte 0x00, 0xff
-	.asciz "StylCnvStorScreen"
+	aligned_string "StylCnvStorScreen"
 	.byte 0x18, 0xbc, 0xe1, 0x00
 	.long LABEL_E1BC16
 	.long LABEL_E1BC14
@@ -11753,7 +11699,7 @@ LABEL_E1BC50:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 LABEL_E1BC58:
 	.byte 0x00, 0xff
-	.asciz "StylCnvSelBox"
+	aligned_string "StylCnvSelBox"
 LABEL_E1BC68:
 	.byte 0x00, 0xff
 	.asciz "StylCnvSelScreen"
@@ -11771,7 +11717,7 @@ LABEL_E1BCA0:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 LABEL_E1BCA8:
 	.byte 0x00, 0xff
-	.asciz "StylCnvContScreen"
+	aligned_string "StylCnvContScreen"
 	.byte 0x2c, 0xbd, 0xe1, 0x00
 	.long LABEL_E1BD2A
 	.long LABEL_E1BD28
@@ -11801,7 +11747,7 @@ LABEL_E1BD20:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 LABEL_E1BD28:
 	.byte 0x00, 0xff, 0x00, 0xff
-	.asciz "CmpMenuScreen"
+	aligned_string "CmpMenuScreen"
 	.long LABEL_E1BD86
 	.long LABEL_E1BD84
 	.long LABEL_E1BD82
@@ -11823,7 +11769,7 @@ LABEL_E1BD78:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 LABEL_E1BD80:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
-	.asciz "CmpBkslScreen"
+	aligned_string "CmpBkslScreen"
 	.byte 0x44, 0xbe, 0xe1, 0x00
 	.long LABEL_E1BE42
 	.long LABEL_E1BE40
@@ -11851,11 +11797,11 @@ LABEL_E1BDF0:
 	.byte 0x00, 0xff, 0x00, 0xff
 	aligned_string "CmpClrNoSw"
 LABEL_E1BE00:
-	.asciz "CmpClrYesSw"
+	aligned_string "CmpClrYesSw"
 	aligned_string "CmpClrSure"
 LABEL_E1BE18:
 	.byte 0x00, 0xff
-	.asciz "CmpNameMenu"
+	aligned_string "CmpNameMenu"
 	.byte 0x00, 0xff
 LABEL_E1BE28:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
@@ -11874,13 +11820,13 @@ LABEL_E1BE40:
 	.long LABEL_E1BE6C
 LABEL_E1BE6C:
 	.byte 0x00, 0xff
-	.asciz "NamingMem"
+	aligned_string "NamingMem"
 LABEL_E1BE78:
 	.asciz "NameMemLabel"
 	.byte 0xff, 0x00, 0xff
 LABEL_E1BE88:
 	.byte 0x00, 0xff
-	.asciz "CmpNamingScreen"
+	aligned_string "CmpNamingScreen"
 	.long LABEL_E1BF6C
 	.long LABEL_E1BF6A
 	.long LABEL_E1BF60
@@ -11903,24 +11849,24 @@ LABEL_E1BE88:
 LABEL_E1BEE6:
 	.byte 0x00, 0xff
 LABEL_E1BEE8:
-	.asciz "CmSetRLmtSw"
+	aligned_string "CmSetRLmtSw"
 	aligned_string "CmSetPanSw"
 LABEL_E1BF00:
-	.asciz "CmSetPartSw"
+	aligned_string "CmSetPartSw"
 	aligned_string "CmpSetGrid"
 LABEL_E1BF18:
 	.asciz "CmSetPage2"
 	.byte 0xff, 0x00, 0xff, 0x00, 0xff
 LABEL_E1BF28:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
-	.asciz "CmSetP1Grid"
+	aligned_string "CmSetP1Grid"
 	.asciz "CmSetPage1"
 	.byte 0xff, 0x00, 0xff
 LABEL_E1BF48:
 	aligned_string "CmSetP2Ctl"
 	aligned_string "CmSetP1Ctl"
 LABEL_E1BF60:
-	.asciz "CmSetPage"
+	aligned_string "CmSetPage"
 	.byte 0x00, 0xff
 	aligned_string "CmpSetScreen"
 	.long LABEL_E1C068
@@ -11957,7 +11903,7 @@ LABEL_E1BF60:
 	.long LABEL_E1BFFA
 LABEL_E1BFFA:
 	.byte 0x00, 0xff
-	.asciz "CmpMeas"
+	aligned_string "CmpMeas"
 	aligned_string "CmpQtz"
 	aligned_string "BasRec"
 	aligned_string "Ac1Rec"
@@ -11978,7 +11924,7 @@ LABEL_E1C058:
 	.asciz "CmpMem"
 	.byte 0xff, 0x00, 0xff
 LABEL_E1C068:
-	.asciz "CmpRealScreen"
+	aligned_string "CmpRealScreen"
 	and	w, (xwa)
 	.byte 0xe1, 0x00
 	.long LABEL_E1C07E
@@ -11995,13 +11941,13 @@ LABEL_E1C07E:
 LABEL_E1C09E:
 	.byte 0x00, 0xff
 LABEL_E1C0A0:
-	.asciz "CmpBasVol"
-	.asciz "CmpAc1Vol"
-	.asciz "CmpAc2Vol"
+	aligned_string "CmpBasVol"
+	aligned_string "CmpAc1Vol"
+	aligned_string "CmpAc2Vol"
 	.byte 0x43, 0x6d
-	.asciz "pAc3Vol"
+	aligned_string "pAc3Vol"
 LABEL_E1C0C8:
-	.asciz "CmpDrmVol"
+	aligned_string "CmpDrmVol"
 	aligned_string "CmpBalScreen"
 	.long LABEL_E1C1EC
 	.long LABEL_E1C1EA
@@ -12041,16 +11987,16 @@ LABEL_E1C168:
 	.byte 0x00, 0xff, 0x00, 0xff
 	aligned_string "CmpCpFVari"
 LABEL_E1C178:
-	.asciz "CmpCpFGrp"
+	aligned_string "CmpCpFGrp"
 	.byte 0x00, 0xff, 0x00, 0xff
-	.asciz "CmpCpTPtn"
+	aligned_string "CmpCpTPtn"
 LABEL_E1C190:
-	.asciz "CmpCpTMem"
+	aligned_string "CmpCpTMem"
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 LABEL_E1C1A0:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 LABEL_E1C1A8:
-	.asciz "CmpCpFPtn"
+	aligned_string "CmpCpFPtn"
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 LABEL_E1C1B8:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
@@ -12105,7 +12051,7 @@ LABEL_E1C292:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 LABEL_E1C298:
 	.byte 0x00, 0xff
-	.asciz "S2cGrid"
+	aligned_string "S2cGrid"
 	.byte 0x00, 0xff
 	aligned_string "S2cLmeas"
 	aligned_string "S2cMemNo"
@@ -12127,7 +12073,7 @@ LABEL_E1C300:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 LABEL_E1C308:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
-	.asciz "S2CScreen"
+	aligned_string "S2CScreen"
 	.long LABEL_E1C384
 	.long LABEL_E1C382
 	.long LABEL_E1C380
@@ -12147,7 +12093,7 @@ LABEL_E1C354:
 	.byte 0x00, 0xff, 0x00, 0xff
 LABEL_E1C358:
 	.byte 0x00, 0xff, 0x00, 0xff
-	.asciz "EasyCmpGrid"
+	aligned_string "EasyCmpGrid"
 LABEL_E1C368:
 	.asciz "EsCmpMemNo"
 	.byte 0xff, 0x00, 0xff, 0x00, 0xff
@@ -12155,7 +12101,7 @@ LABEL_E1C378:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 LABEL_E1C380:
 	.byte 0x00, 0xff, 0x00, 0xff
-	.asciz "CmpEasyScreen"
+	aligned_string "CmpEasyScreen"
 	.long LABEL_E1C3AE
 	.long LABEL_E1C3AC
 	.long LABEL_E1C3AA
@@ -12165,7 +12111,7 @@ LABEL_E1C3A6:
 	.byte 0x00, 0xff
 LABEL_E1C3A8:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
-	.asciz "CmpBendScreen"
+	aligned_string "CmpBendScreen"
 	.byte 0x02, 0xc4, 0xe1, 0x00
 	.long LABEL_E1C400
 	.long LABEL_E1C3FE
@@ -12186,7 +12132,7 @@ LABEL_E1C3F8:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 LABEL_E1C400:
 	.byte 0x00, 0xff
-	.asciz "CmpModeScreen"
+	aligned_string "CmpModeScreen"
 	.long LABEL_E1C550
 	.long LABEL_E1C54E
 	.long LABEL_E1C54C
@@ -12233,27 +12179,27 @@ LABEL_E1C4B0:
 	.byte 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 LABEL_E1C4D8:
 	.byte 0x00, 0xff
-	.asciz "CstmMemFulWin"
+	aligned_string "CstmMemFulWin"
 LABEL_E1C4E8:
 	.byte 0x00, 0xff
-	.asciz "CstmCpTName"
+	aligned_string "CstmCpTName"
 	.byte 0x43, 0x73
-	.asciz "tmCpTChar"
-	.asciz "CstmCpFChar"
+	aligned_string "tmCpTChar"
+	aligned_string "CstmCpFChar"
 	.byte 0x00, 0xff
 LABEL_E1C510:
-	.asciz "CstmCpToVal"
+	aligned_string "CstmCpToVal"
 	aligned_string "CstmCpToSw"
 LABEL_E1C528:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 LABEL_E1C530:
 	.byte 0x00, 0xff
-	.asciz "CstmCpFName"
+	aligned_string "CstmCpFName"
 	.byte 0x43, 0x73
 	.asciz "tmCpFrmVal"
 	.byte 0xff, 0x00, 0xff, 0x00, 0xff
 LABEL_E1C550:
-	.asciz "CmpCstmCpScreen"
+	aligned_string "CmpCstmCpScreen"
 	.long LABEL_E1C6CE
 	.long LABEL_E1C6C2
 	.long LABEL_E1C6B6
@@ -12293,31 +12239,28 @@ LABEL_E1C608:
 	aligned_string "User1Bnk"
 	aligned_string "HitBnk"
 	aligned_string "LatinBnk"
-	.asciz "JazzBnk"
+	aligned_string "JazzBnk"
 	aligned_string "MspBkslP2Win"
-	.asciz "FunkBnk"
+	aligned_string "FunkBnk"
 	aligned_string "DanceBnk"
 	aligned_string "Rock2Bnk"
 	aligned_string "Rock1Bnk"
 LABEL_E1C660:
-	.asciz "ArpgioBnk"
+	aligned_string "ArpgioBnk"
 	aligned_string "EnterBnk"
 	aligned_string "MovieBnk"
 	aligned_string "ComicBnk"
-LABEL_E1C688:
-	.asciz "Eff2Bnk"
-LABEL_E1C690:
-	.asciz "Eff1Bnk"
-LABEL_E1C698:
-	.asciz "MspBkslP1Win"
+LABEL_E1C688:	aligned_string "Eff2Bnk"
+LABEL_E1C690:	aligned_string "Eff1Bnk"
+LABEL_E1C698:	.asciz "MspBkslP1Win"
 	.byte 0xff, 0x00, 0xff
 LABEL_E1C6A8:
 	.byte 0x00, 0xff
-	.asciz "MspBnkP2Ctl"
+	aligned_string "MspBnkP2Ctl"
 	.byte 0x4d, 0x73
-	.asciz "pBnkP1Ctl"
+	aligned_string "pBnkP1Ctl"
 	aligned_string "MspBkslWin"
-	.asciz "MspBkslScreen"
+	aligned_string "MspBkslScreen"
 	.byte 0x8a, 0xc7, 0xe1, 0x00
 	.long LABEL_E1C77E
 	.long LABEL_E1C77C
@@ -12338,18 +12281,18 @@ LABEL_E1C6A8:
 LABEL_E1C720:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 LABEL_E1C728:
-	.asciz "MspPadLbl"
+	aligned_string "MspPadLbl"
 	.byte 0x00, 0xff
 	aligned_string "MspMem"
-	.asciz "MspMeas"
+	aligned_string "MspMeas"
 	.asciz "MspTempo"
 	.byte 0xff, 0x00, 0xff
 LABEL_E1C750:
 	aligned_string "MspRecBox2"
-	.asciz "RecBankName"
+	aligned_string "RecBankName"
 LABEL_E1C768:
 	aligned_string "RecPadNo"
-	.asciz "MspBnkLbl"
+	aligned_string "MspBnkLbl"
 	.byte 0x00, 0xff
 	aligned_string "MspRecBox1"
 	aligned_string "MspRecScreen"
@@ -12365,7 +12308,7 @@ LABEL_E1C7B4:
 LABEL_E1C7B8:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 LABEL_E1C7C0:
-	.asciz "MspMenuScreen"
+	aligned_string "MspMenuScreen"
 	and	xsp, xde
 	.byte 0xe1, 0x00
 	.long LABEL_E1C7E8
@@ -12376,7 +12319,7 @@ LABEL_E1C7E2:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 LABEL_E1C7E8:
 	.byte 0x00, 0xff
-	.asciz "MspNamingScreen"
+	aligned_string "MspNamingScreen"
 	.long LABEL_E1C84E
 	.long LABEL_E1C844
 	.long LABEL_E1C842
@@ -12389,12 +12332,12 @@ LABEL_E1C7E8:
 	.long LABEL_E1C822
 LABEL_E1C822:
 	.byte 0x00, 0xff, 0x00, 0xff
-	.asciz "RgpSetBnk"
+	aligned_string "RgpSetBnk"
 LABEL_E1C830:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
-	.asciz "MspRGrpGrid"
+	aligned_string "MspRGrpGrid"
 	.byte 0x00, 0xff
-	.asciz "RGrpBnkSw"
+	aligned_string "RGrpBnkSw"
 	.byte 0x4d, 0x73
 	aligned_string "pReGrpScreen"
 	.long LABEL_E1C8A8
@@ -12409,13 +12352,13 @@ LABEL_E1C830:
 LABEL_E1C882:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 LABEL_E1C888:
-	.asciz "SndArgrGrid"
+	aligned_string "SndArgrGrid"
 	.byte 0x00, 0xff, 0x00, 0xff
 LABEL_E1C898:
-	.asciz "SndArgRhyName"
+	aligned_string "SndArgRhyName"
 	.byte 0x00, 0xff
 LABEL_E1C8A8:
-	.asciz "SndArgrScreen"
+	aligned_string "SndArgrScreen"
 	.long LABEL_E1C8EC
 	.long LABEL_E1C8EA
 	.long LABEL_E1C8E8
@@ -12427,7 +12370,7 @@ LABEL_E1C8D2:
 	.byte 0x00, 0xff
 LABEL_E1C8D4:
 
-	.asciz "ApcOnBass"
+	aligned_string "ApcOnBass"
 LABEL_E1C8DE:
 	aligned_string "ApcMem"
 LABEL_E1C8E6:
@@ -12446,30 +12389,30 @@ LABEL_E1C8EC:
 	aligned_string "TT_STYLCNVMODL"
 	aligned_string "TT_STYLCNVCNVT"
 	aligned_string "TT_STYLCNVSTOR"
-	.asciz "TT_STYLCNVTXT"
-	.asciz "TT_STYLCNVSEL"
+	aligned_string "TT_STYLCNVTXT"
+	aligned_string "TT_STYLCNVSEL"
 	aligned_string "TT_STYLCNVCONT"
-	.asciz "TT_CMMENU"
-	.asciz "TT_CMBKSL"
-	.asciz "TT_CMBKSL_S"
-	.asciz "TT_CMNAME"
+	aligned_string "TT_CMMENU"
+	aligned_string "TT_CMBKSL"
+	aligned_string "TT_CMBKSL_S"
+	aligned_string "TT_CMNAME"
 	aligned_string "TT_CMSET"
-	.asciz "TT_CMREAL"
-	.asciz "TT_CMSTEP"
+	aligned_string "TT_CMREAL"
+	aligned_string "TT_CMSTEP"
 	aligned_string "TT_CMBAL"
-	.asciz "TT_CMPNCP"
+	aligned_string "TT_CMPNCP"
 	aligned_string "TT_CMSEQCP"
-	.asciz "TT_CMEASY"
-	.asciz "TT_CMBEND"
-	.asciz "TT_CMMODE"
-	.asciz "TT_CMCSTMCP"
+	aligned_string "TT_CMEASY"
+	aligned_string "TT_CMBEND"
+	aligned_string "TT_CMMODE"
+	aligned_string "TT_CMCSTMCP"
 	aligned_string "TT_MSPBKSL"
-	.asciz "TT_MSPREC"
+	aligned_string "TT_MSPREC"
 	aligned_string "TT_MSPMENU"
 	aligned_string "TT_MSPNAME"
-	.asciz "TT_MSPGROUP"
-	.asciz "TT_SNDARG"
-	.asciz "TT_APCSEL"
+	aligned_string "TT_MSPGROUP"
+	aligned_string "TT_SNDARG"
+	aligned_string "TT_APCSEL"
 
 	.long CmpModeFunc
 	.long CmpSetTtlFunc
@@ -12550,77 +12493,42 @@ LABEL_E1CB96:
 	.byte 0x00, 0xff
 LABEL_E1CB98:
 
-	.asciz "MainStylCnvFunc"
-LABEL_E1CBA8:
-	aligned_string "StylCnvStorTtlFunc"
-LABEL_E1CBBC:
-	aligned_string "StylCnvContTtlFunc"
-LABEL_E1CBD0:
-	.asciz "StylCnvSelTtlFunc"
-LABEL_E1CBE2:
-	aligned_string "StylCnvCnvtTtlFunc"
-LABEL_E1CBF6:
-	aligned_string "StylCnvModlTtlFunc"
-LABEL_E1CC0A:
-	.asciz "StylCnvTxtTtlFunc"
-LABEL_E1CC1C:
-	aligned_string "StylCnvWaitTtlFunc"
-LABEL_E1CC30:
-	.asciz "SndArgNmGet"
-LABEL_E1CC3C:
-	aligned_string "MainCstmNameFunc"
-LABEL_E1CC4E:
-	aligned_string "CmpStepTitleFunc"
-LABEL_E1CC60:
-	.asciz "MainEsCmpFunc"
-LABEL_E1CC6E:
-	.asciz "SndArgTtlFunc"
-LABEL_E1CC7C:
-	aligned_string "SndArgModeFunc"
-LABEL_E1CC8C:
-	.asciz "MspRecTtlFunc"
-LABEL_E1CC9A:
-	aligned_string "MspRecModeFunc"
-LABEL_E1CCAA:
-	aligned_string "MspNameTtlFunc"
-LABEL_E1CCBA:
-	aligned_string "MspMenuTtlFunc"
-LABEL_E1CCCA:
-	aligned_string "MspBkslTtlFunc"
-LABEL_E1CCDA:
-	aligned_string "MainMspBnkNameFunc"
-LABEL_E1CCEE:
-	.asciz "MainMspRgpSetFunc"
-LABEL_E1CD00:
-	.asciz "MainS2cFunc"
-LABEL_E1CD0C:
-	aligned_string "MainCmpSetFunc"
-LABEL_E1CD1C:
-	aligned_string "MiddleCmpClrFunc"
-LABEL_E1CD2E:
-	.asciz "MainCmpCpFunc"
-LABEL_E1CD3C:
-	aligned_string "MiddleNameFunc"
-LABEL_E1CD4C:
-	.asciz "CstmCpTtlFunc"
-LABEL_E1CD5A:
-	aligned_string "S2cTtlFunc"
-LABEL_E1CD66:
-	aligned_string "CmEsyTtlFunc"
-LABEL_E1CD74:
-	.asciz "CmpNcpTtlFunc"
-LABEL_E1CD82:
-	aligned_string "CmpMenuTtlFunc"
-LABEL_E1CD92:
-	aligned_string "CmpBksl_STtlFunc"
-LABEL_E1CDA4:
-	aligned_string "CmpBkslTtlFunc"
-LABEL_E1CDB4:
-	aligned_string "CmpRealTtlFunc"
-LABEL_E1CDC4:
-	.asciz "CmpSetTtlFunc"
-LABEL_E1CDD2:
-	.asciz "CmpModeFunc"
+	aligned_string "MainStylCnvFunc"
+LABEL_E1CBA8:	aligned_string "StylCnvStorTtlFunc"
+LABEL_E1CBBC:	aligned_string "StylCnvContTtlFunc"
+LABEL_E1CBD0:	aligned_string "StylCnvSelTtlFunc"
+LABEL_E1CBE2:	aligned_string "StylCnvCnvtTtlFunc"
+LABEL_E1CBF6:	aligned_string "StylCnvModlTtlFunc"
+LABEL_E1CC0A:	aligned_string "StylCnvTxtTtlFunc"
+LABEL_E1CC1C:	aligned_string "StylCnvWaitTtlFunc"
+LABEL_E1CC30:	aligned_string "SndArgNmGet"
+LABEL_E1CC3C:	aligned_string "MainCstmNameFunc"
+LABEL_E1CC4E:	aligned_string "CmpStepTitleFunc"
+LABEL_E1CC60:	aligned_string "MainEsCmpFunc"
+LABEL_E1CC6E:	aligned_string "SndArgTtlFunc"
+LABEL_E1CC7C:	aligned_string "SndArgModeFunc"
+LABEL_E1CC8C:	aligned_string "MspRecTtlFunc"
+LABEL_E1CC9A:	aligned_string "MspRecModeFunc"
+LABEL_E1CCAA:	aligned_string "MspNameTtlFunc"
+LABEL_E1CCBA:	aligned_string "MspMenuTtlFunc"
+LABEL_E1CCCA:	aligned_string "MspBkslTtlFunc"
+LABEL_E1CCDA:	aligned_string "MainMspBnkNameFunc"
+LABEL_E1CCEE:	aligned_string "MainMspRgpSetFunc"
+LABEL_E1CD00:	aligned_string "MainS2cFunc"
+LABEL_E1CD0C:	aligned_string "MainCmpSetFunc"
+LABEL_E1CD1C:	aligned_string "MiddleCmpClrFunc"
+LABEL_E1CD2E:	aligned_string "MainCmpCpFunc"
+LABEL_E1CD3C:	aligned_string "MiddleNameFunc"
+LABEL_E1CD4C:	aligned_string "CstmCpTtlFunc"
+LABEL_E1CD5A:	aligned_string "S2cTtlFunc"
+LABEL_E1CD66:	aligned_string "CmEsyTtlFunc"
+LABEL_E1CD74:	aligned_string "CmpNcpTtlFunc"
+LABEL_E1CD82:	aligned_string "CmpMenuTtlFunc"
+LABEL_E1CD92:	aligned_string "CmpBksl_STtlFunc"
+LABEL_E1CDA4:	aligned_string "CmpBkslTtlFunc"
+LABEL_E1CDB4:	aligned_string "CmpRealTtlFunc"
+LABEL_E1CDC4:	aligned_string "CmpSetTtlFunc"
+LABEL_E1CDD2:	aligned_string "CmpModeFunc"
 
 LABEL_E1CDDE:
 	ldb	w, 0x31
@@ -12649,12 +12557,9 @@ LABEL_E1CE68:
 	.byte 0x45, 0x62, 0x00, 0xff, 0x44, 0x20, 0x00, 0xff
 LABEL_E1CE70:
 	.byte 0x44, 0x62, 0x00, 0xff, 0x43, 0x20, 0x00, 0xff
-LABEL_E1CE78:
-	.asciz "ENABLE "
-LABEL_E1CE80:
-	.asciz "DISABLE"
-LABEL_E1CE88:
-	.asciz "MINOR"
+LABEL_E1CE78:	aligned_string "ENABLE "
+LABEL_E1CE80:	aligned_string "DISABLE"
+LABEL_E1CE88:	aligned_string "MINOR"
 	.byte 0x4d, 0x41
 	.byte 0x4a, 0x4f, 0x52, 0x00
 	aligned_string "7th   "
@@ -12676,7 +12581,7 @@ LABEL_E1CED8:
 	.byte 0x33, 0x2f, 0x32, 0x00, 0x32, 0x2f, 0x32, 0x00
 LABEL_E1CEE0:
 	.byte 0x31, 0x2f, 0x32, 0x00, 0x25, 0x64, 0x00, 0xff
-	.asciz "%s (%s)"
+	aligned_string "%s (%s)"
 	.byte 0x00, 0x00, 0x1a, 0x00, 0xa4, 0x00, 0xa4, 0x00
 	.byte 0x55, 0x00, 0x60, 0x00, 0x7e, 0x00, 0x82, 0x00
 	.byte 0x00, 0x00, 0x38, 0x00, 0x00, 0x00, 0x38, 0x00
@@ -12873,65 +12778,36 @@ LABEL_E1D3F0:
 	.long LABEL_E1D4A4
 	.long LABEL_E1D49C
 	.long LABEL_E1D494
-LABEL_E1D494:
-	.asciz "C-END2 "
-LABEL_E1D49C:
-	.asciz "C-END1 "
-LABEL_E1D4A4:
-	.asciz "C-FILL2"
-LABEL_E1D4AC:
-	.asciz "C-FILL1"
-LABEL_E1D4B4:
-	.asciz "C-INT2 "
-LABEL_E1D4BC:
-	.asciz "C-INT1 "
-LABEL_E1D4C4:
-	.asciz "B-END2 "
-LABEL_E1D4CC:
-	.asciz "B-END1 "
-LABEL_E1D4D4:
-	.asciz "B-FILL2"
-LABEL_E1D4DC:
-	.asciz "B-FILL1"
-LABEL_E1D4E4:
-	.asciz "B-INT2 "
-LABEL_E1D4EC:
-	.asciz "B-INT1 "
-LABEL_E1D4F4:
-	.asciz "A-END2 "
-LABEL_E1D4FC:
-	.asciz "A-END1 "
-LABEL_E1D504:
-	.asciz "A-FILL2"
-LABEL_E1D50C:
-	.asciz "A-FILL1"
-LABEL_E1D514:
-	.asciz "A-INT2 "
-LABEL_E1D51C:
-	.asciz "A-INT1 "
-LABEL_E1D524:
-	.asciz "C-vari4"
-LABEL_E1D52C:
-	.asciz "C-vari3"
-LABEL_E1D534:
-	.asciz "C-vari2"
-LABEL_E1D53C:
-	.asciz "C-vari1"
-LABEL_E1D544:
-	.asciz "B-vari4"
-LABEL_E1D54C:
-	.asciz "B-vari3"
-LABEL_E1D554:
-	.asciz "B-vari2"
-LABEL_E1D55C:
-	.asciz "B-vari1"
-LABEL_E1D564:
-	.asciz "A-vari4"
-LABEL_E1D56C:
-	.asciz "A-vari3"
-LABEL_E1D574:
-	.asciz "A-vari2"
-	.asciz "A-vari1"
+LABEL_E1D494:	aligned_string "C-END2 "
+LABEL_E1D49C:	aligned_string "C-END1 "
+LABEL_E1D4A4:	aligned_string "C-FILL2"
+LABEL_E1D4AC:	aligned_string "C-FILL1"
+LABEL_E1D4B4:	aligned_string "C-INT2 "
+LABEL_E1D4BC:	aligned_string "C-INT1 "
+LABEL_E1D4C4:	aligned_string "B-END2 "
+LABEL_E1D4CC:	aligned_string "B-END1 "
+LABEL_E1D4D4:	aligned_string "B-FILL2"
+LABEL_E1D4DC:	aligned_string "B-FILL1"
+LABEL_E1D4E4:	aligned_string "B-INT2 "
+LABEL_E1D4EC:	aligned_string "B-INT1 "
+LABEL_E1D4F4:	aligned_string "A-END2 "
+LABEL_E1D4FC:	aligned_string "A-END1 "
+LABEL_E1D504:	aligned_string "A-FILL2"
+LABEL_E1D50C:	aligned_string "A-FILL1"
+LABEL_E1D514:	aligned_string "A-INT2 "
+LABEL_E1D51C:	aligned_string "A-INT1 "
+LABEL_E1D524:	aligned_string "C-vari4"
+LABEL_E1D52C:	aligned_string "C-vari3"
+LABEL_E1D534:	aligned_string "C-vari2"
+LABEL_E1D53C:	aligned_string "C-vari1"
+LABEL_E1D544:	aligned_string "B-vari4"
+LABEL_E1D54C:	aligned_string "B-vari3"
+LABEL_E1D554:	aligned_string "B-vari2"
+LABEL_E1D55C:	aligned_string "B-vari1"
+LABEL_E1D564:	aligned_string "A-vari4"
+LABEL_E1D56C:	aligned_string "A-vari3"
+LABEL_E1D574:	aligned_string "A-vari2"
+	aligned_string "A-vari1"
 	.byte 0x25, 0x33, 0x64, 0x00
 	.byte 0x25, 0x33, 0x64, 0x00
 	aligned_string "(SONG:%2d)"
@@ -13076,58 +12952,32 @@ LABEL_E1D720:
 	.long LABEL_E1D828
 	.long LABEL_E1D818
 	.long LABEL_E1D808
-LABEL_E1D808:
-	aligned_string "     ALL      "
-LABEL_E1D818:
-	aligned_string "   ENDING2    "
-LABEL_E1D828:
-	aligned_string "   ENDING1    "
-LABEL_E1D838:
-	aligned_string "   FILL IN 2  "
-LABEL_E1D848:
-	aligned_string "   FILL IN 1  "
-LABEL_E1D858:
-	aligned_string "    INTRO2    "
-LABEL_E1D868:
-	aligned_string "    INTRO1    "
-LABEL_E1D878:
-	aligned_string "    Vari4     "
-LABEL_E1D888:
-	aligned_string "    Vari3     "
-LABEL_E1D898:
-	aligned_string "    Vari2     "
-LABEL_E1D8A8:
-	aligned_string "    Vari1     "
-LABEL_E1D8B8:
-	aligned_string "Vari4 FILL IN2"
-LABEL_E1D8C8:
-	aligned_string "Vari4 FILL IN1"
-LABEL_E1D8D8:
-	aligned_string "Vari3 FILL IN2"
-LABEL_E1D8E8:
-	aligned_string "Vari3 FILL IN1"
-LABEL_E1D8F8:
-	aligned_string "Vari2 FILL IN2"
-LABEL_E1D908:
-	aligned_string "Vari2 FILL IN1"
-LABEL_E1D918:
-	aligned_string "Vari1 FILL IN2"
-LABEL_E1D928:
-	aligned_string "Vari1 FILL IN1"
-LABEL_E1D938:
-	aligned_string "   ENDING2    "
-LABEL_E1D948:
-	aligned_string "   ENDING1    "
-LABEL_E1D958:
-	aligned_string "    INTRO2    "
-LABEL_E1D968:
-	aligned_string "    INTRO1    "
-LABEL_E1D978:
-	aligned_string "    Vari4     "
-LABEL_E1D988:
-	aligned_string "    Vari3     "
-LABEL_E1D998:
-	aligned_string "    Vari2     "
+LABEL_E1D808:	aligned_string "     ALL      "
+LABEL_E1D818:	aligned_string "   ENDING2    "
+LABEL_E1D828:	aligned_string "   ENDING1    "
+LABEL_E1D838:	aligned_string "   FILL IN 2  "
+LABEL_E1D848:	aligned_string "   FILL IN 1  "
+LABEL_E1D858:	aligned_string "    INTRO2    "
+LABEL_E1D868:	aligned_string "    INTRO1    "
+LABEL_E1D878:	aligned_string "    Vari4     "
+LABEL_E1D888:	aligned_string "    Vari3     "
+LABEL_E1D898:	aligned_string "    Vari2     "
+LABEL_E1D8A8:	aligned_string "    Vari1     "
+LABEL_E1D8B8:	aligned_string "Vari4 FILL IN2"
+LABEL_E1D8C8:	aligned_string "Vari4 FILL IN1"
+LABEL_E1D8D8:	aligned_string "Vari3 FILL IN2"
+LABEL_E1D8E8:	aligned_string "Vari3 FILL IN1"
+LABEL_E1D8F8:	aligned_string "Vari2 FILL IN2"
+LABEL_E1D908:	aligned_string "Vari2 FILL IN1"
+LABEL_E1D918:	aligned_string "Vari1 FILL IN2"
+LABEL_E1D928:	aligned_string "Vari1 FILL IN1"
+LABEL_E1D938:	aligned_string "   ENDING2    "
+LABEL_E1D948:	aligned_string "   ENDING1    "
+LABEL_E1D958:	aligned_string "    INTRO2    "
+LABEL_E1D968:	aligned_string "    INTRO1    "
+LABEL_E1D978:	aligned_string "    Vari4     "
+LABEL_E1D988:	aligned_string "    Vari3     "
+LABEL_E1D998:	aligned_string "    Vari2     "
 	aligned_string "    Vari1     "
 	.long LABEL_E1DB52
 	.long LABEL_E1DB48
@@ -13160,51 +13010,48 @@ LABEL_E1D998:
 	.long LABEL_E1DA3A
 	.long LABEL_E1DA30
 LABEL_E1DA30:
-	.asciz "CUSTOM:20"
-	.asciz "CUSTOM:19"
-	.asciz "CUSTOM:18"
+	aligned_string "CUSTOM:20"
+	aligned_string "CUSTOM:19"
+	aligned_string "CUSTOM:18"
 	.byte 0x43, 0x55
-	.asciz "STOM:17"
+	aligned_string "STOM:17"
 LABEL_E1DA58:
-	.asciz "CUSTOM:16"
-	.asciz "CUSTOM:15"
-	.asciz "CUSTOM:14"
+	aligned_string "CUSTOM:16"
+	aligned_string "CUSTOM:15"
+	aligned_string "CUSTOM:14"
 	.byte 0x43, 0x55
-	.asciz "STOM:13"
+	aligned_string "STOM:13"
 LABEL_E1DA80:
-	.asciz "CUSTOM:12"
-	.asciz "CUSTOM:11"
-	.asciz "CUSTOM:10"
+	aligned_string "CUSTOM:12"
+	aligned_string "CUSTOM:11"
+	aligned_string "CUSTOM:10"
 	.byte 0x43, 0x55
-	.asciz "STOM: 9"
+	aligned_string "STOM: 9"
 LABEL_E1DAA8:
-	.asciz "CUSTOM: 8"
-	.asciz "CUSTOM: 7"
-	.asciz "CUSTOM: 6"
+	aligned_string "CUSTOM: 8"
+	aligned_string "CUSTOM: 7"
+	aligned_string "CUSTOM: 6"
 	.byte 0x43, 0x55
-	.asciz "STOM: 5"
+	aligned_string "STOM: 5"
 LABEL_E1DAD0:
-	.asciz "CUSTOM: 4"
-	.asciz "CUSTOM: 3"
-	.asciz "CUSTOM: 2"
+	aligned_string "CUSTOM: 4"
+	aligned_string "CUSTOM: 3"
+	aligned_string "CUSTOM: 2"
 	.byte 0x43, 0x55
-	.asciz "STOM: 1"
+	aligned_string "STOM: 1"
 LABEL_E1DAF8:
-	.asciz " aki     "
-	.asciz " aki     "
-	.asciz " aki     "
+	aligned_string " aki     "
+	aligned_string " aki     "
+	aligned_string " aki     "
 	ldb	w, 0x61
-	.asciz "ki     "
+	aligned_string "ki     "
 LABEL_E1DB20:
-	.asciz " aki     "
-	.asciz " aki     "
-	.asciz " aki     "
-LABEL_E1DB3E:
-	.asciz "MEMORY C "
-LABEL_E1DB48:
-	.asciz "MEMORY B "
-LABEL_E1DB52:
-	.asciz "MEMORY A "
+	aligned_string " aki     "
+	aligned_string " aki     "
+	aligned_string " aki     "
+LABEL_E1DB3E:	aligned_string "MEMORY C "
+LABEL_E1DB48:	aligned_string "MEMORY B "
+LABEL_E1DB52:	aligned_string "MEMORY A "
 	aligned_string "MEMORY"
 	aligned_string "CUSTOM"
 	.byte 0x4d, 0x45, 0x4d, 0x4f
@@ -13243,71 +13090,39 @@ LABEL_E1DB52:
 	.long LABEL_E1DC10
 	.long LABEL_E1DC08
 	.long LABEL_E1DC00
-LABEL_E1DC00:
-	.asciz "C-ALL  "
-LABEL_E1DC08:
-	.asciz "B-ALL  "
-LABEL_E1DC10:
-	.asciz "A-ALL  "
-LABEL_E1DC18:
-	.asciz "C-END2 "
-LABEL_E1DC20:
-	.asciz "C-END1 "
-LABEL_E1DC28:
-	.asciz "C-FILL2"
-LABEL_E1DC30:
-	.asciz "C-FILL1"
-LABEL_E1DC38:
-	.asciz "C-INT2 "
-LABEL_E1DC40:
-	.asciz "C-INT1 "
-LABEL_E1DC48:
-	.asciz "B-END2 "
-LABEL_E1DC50:
-	.asciz "B-END1 "
-LABEL_E1DC58:
-	.asciz "B-FILL2"
-LABEL_E1DC60:
-	.asciz "B-FILL1"
-LABEL_E1DC68:
-	.asciz "B-INT2 "
-LABEL_E1DC70:
-	.asciz "B-INT1 "
-LABEL_E1DC78:
-	.asciz "A-END2 "
-LABEL_E1DC80:
-	.asciz "A-END1 "
-LABEL_E1DC88:
-	.asciz "A-FILL2"
-LABEL_E1DC90:
-	.asciz "A-FILL1"
-LABEL_E1DC98:
-	.asciz "A-INT2 "
-LABEL_E1DCA0:
-	.asciz "A-INT1 "
-LABEL_E1DCA8:
-	.asciz "C-vari4"
-LABEL_E1DCB0:
-	.asciz "C-vari3"
-LABEL_E1DCB8:
-	.asciz "C-vari2"
-LABEL_E1DCC0:
-	.asciz "C-vari1"
-LABEL_E1DCC8:
-	.asciz "B-vari4"
-LABEL_E1DCD0:
-	.asciz "B-vari3"
-LABEL_E1DCD8:
-	.asciz "B-vari2"
-LABEL_E1DCE0:
-	.asciz "B-vari1"
-LABEL_E1DCE8:
-	.asciz "A-vari4"
-LABEL_E1DCF0:
-	.asciz "A-vari3"
-LABEL_E1DCF8:
-	.asciz "A-vari2"
-	.asciz "A-vari1"
+LABEL_E1DC00:	aligned_string "C-ALL  "
+LABEL_E1DC08:	aligned_string "B-ALL  "
+LABEL_E1DC10:	aligned_string "A-ALL  "
+LABEL_E1DC18:	aligned_string "C-END2 "
+LABEL_E1DC20:	aligned_string "C-END1 "
+LABEL_E1DC28:	aligned_string "C-FILL2"
+LABEL_E1DC30:	aligned_string "C-FILL1"
+LABEL_E1DC38:	aligned_string "C-INT2 "
+LABEL_E1DC40:	aligned_string "C-INT1 "
+LABEL_E1DC48:	aligned_string "B-END2 "
+LABEL_E1DC50:	aligned_string "B-END1 "
+LABEL_E1DC58:	aligned_string "B-FILL2"
+LABEL_E1DC60:	aligned_string "B-FILL1"
+LABEL_E1DC68:	aligned_string "B-INT2 "
+LABEL_E1DC70:	aligned_string "B-INT1 "
+LABEL_E1DC78:	aligned_string "A-END2 "
+LABEL_E1DC80:	aligned_string "A-END1 "
+LABEL_E1DC88:	aligned_string "A-FILL2"
+LABEL_E1DC90:	aligned_string "A-FILL1"
+LABEL_E1DC98:	aligned_string "A-INT2 "
+LABEL_E1DCA0:	aligned_string "A-INT1 "
+LABEL_E1DCA8:	aligned_string "C-vari4"
+LABEL_E1DCB0:	aligned_string "C-vari3"
+LABEL_E1DCB8:	aligned_string "C-vari2"
+LABEL_E1DCC0:	aligned_string "C-vari1"
+LABEL_E1DCC8:	aligned_string "B-vari4"
+LABEL_E1DCD0:	aligned_string "B-vari3"
+LABEL_E1DCD8:	aligned_string "B-vari2"
+LABEL_E1DCE0:	aligned_string "B-vari1"
+LABEL_E1DCE8:	aligned_string "A-vari4"
+LABEL_E1DCF0:	aligned_string "A-vari3"
+LABEL_E1DCF8:	aligned_string "A-vari2"
+	aligned_string "A-vari1"
 	.long LABEL_E1DD20
 	.long LABEL_E1DD1A
 	.long LABEL_E1DD14
@@ -13327,15 +13142,13 @@ LABEL_E1DD20:
 LABEL_E1DD46:
 	ldb	w, 0x7e
 	.byte 0x61, 0x61, 0x20, 0x00
-	.asciz " ~ab "
-	.asciz " ~ab~b8"
-	.asciz " ~ac "
-LABEL_E1DD60:
-	.asciz " ~ac~b8"
-LABEL_E1DD68:
-	.asciz " ~ad "
+	aligned_string " ~ab "
+	aligned_string " ~ab~b8"
+	aligned_string " ~ac "
+LABEL_E1DD60:	aligned_string " ~ac~b8"
+LABEL_E1DD68:	aligned_string " ~ad "
 	ldb	w, 0x7e
-	.asciz "ad~b8"
+	aligned_string "ad~b8"
 	.byte 0x4f, 0x46
 	.byte 0x46, 0x00, 0x25, 0x64, 0x00, 0xff, 0x25, 0x32
 	.byte 0x64, 0x00, 0x25, 0x33, 0x64, 0x00
@@ -13411,12 +13224,9 @@ LABEL_E1DED8:
 	.long LABEL_E1DF48
 	.long LABEL_E1DF3E
 	.long LABEL_E1DF34
-LABEL_E1DF34:
-	aligned_string "COMPILE2"
-LABEL_E1DF3E:
-	aligned_string "COMPILE1"
-LABEL_E1DF48:
-	aligned_string "User2   "
+LABEL_E1DF34:	aligned_string "COMPILE2"
+LABEL_E1DF3E:	aligned_string "COMPILE1"
+LABEL_E1DF48:	aligned_string "User2   "
 	.asciz "User1   "
 	.byte 0xff, 0x1c, 0x00, 0x1c, 0x00
 	.byte 0x69, 0x00, 0x69, 0x00, 0x69, 0x00, 0x20, 0x00
@@ -13425,14 +13235,10 @@ LABEL_E1DF48:
 	.long LABEL_E1DFA8
 	.long LABEL_E1DF94
 	.long LABEL_E1DF80
-LABEL_E1DF80:
-	aligned_string "MSP COMPILE Bank2:"
-LABEL_E1DF94:
-	aligned_string "MSP COMPILE Bank1:"
-LABEL_E1DFA8:
-	aligned_string "MSP User Bank 2:  "
-LABEL_E1DFBC:
-	aligned_string "MSP User Bank 1:  "
+LABEL_E1DF80:	aligned_string "MSP COMPILE Bank2:"
+LABEL_E1DF94:	aligned_string "MSP COMPILE Bank1:"
+LABEL_E1DFA8:	aligned_string "MSP User Bank 2:  "
+LABEL_E1DFBC:	aligned_string "MSP User Bank 1:  "
 	.long LABEL_E1E160
 	.long LABEL_E1E14E
 	.long LABEL_E1E13C
@@ -13518,18 +13324,16 @@ LABEL_E1E298:
 	.byte 0x48, 0x00, 0x41, 0x01, 0x41, 0x01, 0x41, 0x01
 	.long LABEL_E1E2E8
 	.long LABEL_E1E2D8
-LABEL_E1E2D8:
-	aligned_string "COMPILE BANK:2"
-LABEL_E1E2E8:
-	aligned_string "COMPILE BANK:1"
+LABEL_E1E2D8:	aligned_string "COMPILE BANK:2"
+LABEL_E1E2E8:	aligned_string "COMPILE BANK:1"
 	aligned_string "MEASURE = %d"
 	.asciz "MEMORY = %2d"
 	.byte 0xff, 0x25, 0x64, 0x00, 0xff
 	.long LABEL_E1E332
 	.long LABEL_E1E320
 LABEL_E1E320:
-	.asciz "SYNC TO RHYTHM   "
-	.asciz "INSTANT START    "
+	aligned_string "SYNC TO RHYTHM   "
+	aligned_string "INSTANT START    "
 	.byte 0x23, 0x00, 0x23, 0x00
 	.byte 0x4c, 0x00, 0x4c, 0x00, 0x4c, 0x00, 0x32, 0x00
 	.byte 0x4c, 0x00, 0x36, 0x00, 0x32, 0x00, 0x00, 0x00
@@ -13566,72 +13370,44 @@ SLOT_NAME_PTRS:	; Pointer table for rhythm slot names
 	.long SLOT_NAME_CUSTOM_19
 	.long SLOT_NAME_CUSTOM_20
 
-SLOT_NAME_CUSTOM_20:
-	.asciz "CUSTOM 20"
-SLOT_NAME_CUSTOM_19:
-	.asciz "CUSTOM 19"
-SLOT_NAME_CUSTOM_18:
-	.asciz "CUSTOM 18"
-SLOT_NAME_CUSTOM_17:
-	.asciz "CUSTOM 17"
-SLOT_NAME_CUSTOM_16:
-	.asciz "CUSTOM 16"
-SLOT_NAME_CUSTOM_15:
-	.asciz "CUSTOM 15"
-SLOT_NAME_CUSTOM_14:
-	.asciz "CUSTOM 14"
-SLOT_NAME_CUSTOM_13:
-	.asciz "CUSTOM 13"
-SLOT_NAME_CUSTOM_12:
-	.asciz "CUSTOM 12"
-SLOT_NAME_CUSTOM_11:
-	.asciz "CUSTOM 11"
-SLOT_NAME_CUSTOM_10:
-	.asciz "CUSTOM 10"
-SLOT_NAME_CUSTOM_09:
-	.asciz "CUSTOM 9 "
-SLOT_NAME_CUSTOM_08:
-	.asciz "CUSTOM 8 "
-SLOT_NAME_CUSTOM_07:
-	.asciz "CUSTOM 7 "
-SLOT_NAME_CUSTOM_06:
-	.asciz "CUSTOM 6 "
-SLOT_NAME_CUSTOM_05:
-	.asciz "CUSTOM 5 "
-SLOT_NAME_CUSTOM_04:
-	.asciz "CUSTOM 4 "
-SLOT_NAME_CUSTOM_03:
-	.asciz "CUSTOM 3 "
-SLOT_NAME_CUSTOM_02:
-	.asciz "CUSTOM 2 "
-SLOT_NAME_CUSTOM_01:
-	.asciz "CUSTOM 1 "
-SLOT_NAME_MEMORY_C:
-	.asciz "MEMORY C "
-SLOT_NAME_MEMORY_B:
-	.asciz "MEMORY B "
-SLOT_NAME_MEMORY_A:
-	.asciz "MEMORY A "
+SLOT_NAME_CUSTOM_20:	aligned_string "CUSTOM 20"
+SLOT_NAME_CUSTOM_19:	aligned_string "CUSTOM 19"
+SLOT_NAME_CUSTOM_18:	aligned_string "CUSTOM 18"
+SLOT_NAME_CUSTOM_17:	aligned_string "CUSTOM 17"
+SLOT_NAME_CUSTOM_16:	aligned_string "CUSTOM 16"
+SLOT_NAME_CUSTOM_15:	aligned_string "CUSTOM 15"
+SLOT_NAME_CUSTOM_14:	aligned_string "CUSTOM 14"
+SLOT_NAME_CUSTOM_13:	aligned_string "CUSTOM 13"
+SLOT_NAME_CUSTOM_12:	aligned_string "CUSTOM 12"
+SLOT_NAME_CUSTOM_11:	aligned_string "CUSTOM 11"
+SLOT_NAME_CUSTOM_10:	aligned_string "CUSTOM 10"
+SLOT_NAME_CUSTOM_09:	aligned_string "CUSTOM 9 "
+SLOT_NAME_CUSTOM_08:	aligned_string "CUSTOM 8 "
+SLOT_NAME_CUSTOM_07:	aligned_string "CUSTOM 7 "
+SLOT_NAME_CUSTOM_06:	aligned_string "CUSTOM 6 "
+SLOT_NAME_CUSTOM_05:	aligned_string "CUSTOM 5 "
+SLOT_NAME_CUSTOM_04:	aligned_string "CUSTOM 4 "
+SLOT_NAME_CUSTOM_03:	aligned_string "CUSTOM 3 "
+SLOT_NAME_CUSTOM_02:	aligned_string "CUSTOM 2 "
+SLOT_NAME_CUSTOM_01:	aligned_string "CUSTOM 1 "
+SLOT_NAME_MEMORY_C:	aligned_string "MEMORY C "
+SLOT_NAME_MEMORY_B:	aligned_string "MEMORY B "
+SLOT_NAME_MEMORY_A:	aligned_string "MEMORY A "
 
 LABEL_E1E4BC:
 	; Control codes/header
 	.byte 0x1c, 0x00, 0x1c, 0x00, 0x2d, 0x00, 0x2d, 0x00, 0x2d, 0x00, 0x20, 0x00
 	.byte 0x2d, 0x00, 0x27, 0x00, 0x1c, 0x00, 0x00, 0x00
 	; Localization: Attention (6 languages)
-MSG_ATTENTION_EN:
-	aligned_string "ATTENTION!"	; English (12 bytes)
-MSG_ATTENTION_DE:
-	.asciz "ACHTUNG !"	; German (10 bytes)
-MSG_ATTENTION_FR:
-	aligned_string "ATTENTION!"	; French (12 bytes)
+MSG_ATTENTION_EN:	aligned_string "ATTENTION!"	; English (12 bytes)
+MSG_ATTENTION_DE:	.asciz "ACHTUNG !"	; German (10 bytes)
+MSG_ATTENTION_FR:	aligned_string "ATTENTION!"	; French (12 bytes)
 MSG_ATTENTION_ES:
 	.byte 0xa1
 	.ascii "ATENCI"
 	.byte 0xd3, 0x4e, 0x21, 0x00, 0xff	; Spanish (12 bytes)
-MSG_ATTENTION_EN2:
-	aligned_string "ATTENTION!"	; Duplicate (12 bytes)
-MSG_ATTENTION_ID:
-	.asciz "Perhatian !"	; Indonesian (12 bytes)
+MSG_ATTENTION_EN2:	aligned_string "ATTENTION!"	; Duplicate (12 bytes)
+MSG_ATTENTION_ID:	.asciz "Perhatian !"	; Indonesian (12 bytes)
 	; Pointer table at 0xE1E516
 	.long MSG_ATTENTION_EN
 	.long MSG_ATTENTION_DE
@@ -13642,20 +13418,16 @@ MSG_ATTENTION_ID:
 
 
 	; Localization: AreYouSure (6 languages)
-MSG_ARE_YOU_SURE_EN:
-	.asciz "Are You Sure?"	; English (14 bytes)
-MSG_ARE_YOU_SURE_DE:
-	.asciz "Sind Sie sicher ?"	; German (18 bytes)
+MSG_ARE_YOU_SURE_EN:	.asciz "Are You Sure?"	; English (14 bytes)
+MSG_ARE_YOU_SURE_DE:	.asciz "Sind Sie sicher ?"	; German (18 bytes)
 MSG_ARE_YOU_SURE_FR:
 	.ascii "Etes vous s"
 	.byte 0xfb, 0x72, 0x3f, 0x00, 0xff	; French (16 bytes)
 MSG_ARE_YOU_SURE_ES:
 	.byte 0xbf, 0x45, 0x73, 0x74, 0xe1
 	.asciz " seguro?"	; Spanish (14 bytes)
-MSG_ARE_YOU_SURE_EN2:
-	.asciz "Are You Sure?"	; Duplicate (14 bytes)
-MSG_ARE_YOU_SURE_ID:
-	.asciz "Apakah yakin akan dihapus ?"	; Indonesian (28 bytes)
+MSG_ARE_YOU_SURE_EN2:	.asciz "Are You Sure?"	; Duplicate (14 bytes)
+MSG_ARE_YOU_SURE_ID:	.asciz "Apakah yakin akan dihapus ?"	; Indonesian (28 bytes)
 	; Pointer table at 0xE1E596
 	.long MSG_ARE_YOU_SURE_EN
 	.long MSG_ARE_YOU_SURE_DE
@@ -13698,10 +13470,8 @@ MSG_CUSTOM_SOUND_COPY_ES:
 	.ascii "n reemplazadas. "
 	.byte 0xbf, 0x45, 0x73, 0x74, 0xe1
 	.asciz " de acuerdo?"	; Spanish (194 bytes)
-MSG_CUSTOM_SOUND_COPY_EN2:
-	.asciz "The Custom sound memories included with this pattern will be copied into the Sound Group memories. Some of the Sound Group memories will be replaced by them. OK?"	; Duplicate (162 bytes)
-MSG_CUSTOM_SOUND_COPY_ID:
-	.asciz "Custom Sound Memory termasuk dengan Pattern yang akan digandakan kedalam SOUND GROUP MEMORIES. Beberapa Sound Group Memory dikembalikan. OK ?"	; Indonesian (142 bytes)
+MSG_CUSTOM_SOUND_COPY_EN2:	.asciz "The Custom sound memories included with this pattern will be copied into the Sound Group memories. Some of the Sound Group memories will be replaced by them. OK?"	; Duplicate (162 bytes)
+MSG_CUSTOM_SOUND_COPY_ID:	.asciz "Custom Sound Memory termasuk dengan Pattern yang akan digandakan kedalam SOUND GROUP MEMORIES. Beberapa Sound Group Memory dikembalikan. OK ?"	; Indonesian (142 bytes)
 	; Pointer table at 0xE1E994
 	.long MSG_CUSTOM_SOUND_COPY_EN
 	.long MSG_CUSTOM_SOUND_COPY_DE
@@ -13712,10 +13482,8 @@ MSG_CUSTOM_SOUND_COPY_ID:
 
 
 	; Localization: SoundGroupAffected (6 languages)
-MSG_SOUND_GROUP_AFFECTED_EN:
-	aligned_string "Sound Group memories affected:"	; English (32 bytes)
-MSG_SOUND_GROUP_AFFECTED_DE:
-	aligned_string "Betroffene Sounds:"	; German (20 bytes)
+MSG_SOUND_GROUP_AFFECTED_EN:	aligned_string "Sound Group memories affected:"	; English (32 bytes)
+MSG_SOUND_GROUP_AFFECTED_DE:	aligned_string "Betroffene Sounds:"	; German (20 bytes)
 MSG_SOUND_GROUP_AFFECTED_FR:
 	.ascii "Les m"
 	.byte 0xe9
@@ -13724,12 +13492,9 @@ MSG_SOUND_GROUP_AFFECTED_FR:
 	.ascii "s rep"
 	.byte 0xe9, 0x72, 0xe9
 	aligned_string "es :"	; French (48 bytes)
-MSG_SOUND_GROUP_AFFECTED_ES:
-	.asciz "Las memorias de los grupos de sonido afectadas son:"	; Spanish (52 bytes)
-MSG_SOUND_GROUP_AFFECTED_EN2:
-	aligned_string "Sound Group memories affected:"	; Duplicate (32 bytes)
-MSG_SOUND_GROUP_AFFECTED_ID:
-	aligned_string "Sound Group memory sudah bekerja :"	; Indonesian (36 bytes)
+MSG_SOUND_GROUP_AFFECTED_ES:	.asciz "Las memorias de los grupos de sonido afectadas son:"	; Spanish (52 bytes)
+MSG_SOUND_GROUP_AFFECTED_EN2:	aligned_string "Sound Group memories affected:"	; Duplicate (32 bytes)
+MSG_SOUND_GROUP_AFFECTED_ID:	aligned_string "Sound Group memory sudah bekerja :"	; Indonesian (36 bytes)
 	; Pointer table at 0xE1EA88
 	.long MSG_SOUND_GROUP_AFFECTED_EN
 	.long MSG_SOUND_GROUP_AFFECTED_DE
@@ -13772,10 +13537,8 @@ MSG_CUSTOM_SOUND_FULL_ES:
 	.ascii "n borrados. "
 	.byte 0xbf, 0x45, 0x73, 0x74, 0xe1
 	.asciz " de acuerdo?"	; Spanish (146 bytes)
-MSG_CUSTOM_SOUND_FULL_EN2:
-	.asciz "The Custom sound memory is full.Some sounds which are used by current Custom Rhythms will be deleted. OK?"	; Duplicate (106 bytes)
-MSG_CUSTOM_SOUND_FULL_ID:
-	.asciz "Custom Sound memory sudah penuh.Beberapa suara (Sounds) yang digunakan dengan Custom Rhythms sekarang akan dihapus. Benar ?"	; Indonesian (124 bytes)
+MSG_CUSTOM_SOUND_FULL_EN2:	.asciz "The Custom sound memory is full.Some sounds which are used by current Custom Rhythms will be deleted. OK?"	; Duplicate (106 bytes)
+MSG_CUSTOM_SOUND_FULL_ID:	.asciz "Custom Sound memory sudah penuh.Beberapa suara (Sounds) yang digunakan dengan Custom Rhythms sekarang akan dihapus. Benar ?"	; Indonesian (124 bytes)
 	; Pointer table at 0xE1ED64
 	.long MSG_CUSTOM_SOUND_FULL_EN
 	.long MSG_CUSTOM_SOUND_FULL_DE
@@ -13786,19 +13549,14 @@ MSG_CUSTOM_SOUND_FULL_ID:
 
 
 	; Localization: CustomRhythmsAffected (6 languages)
-MSG_CUSTOM_RHYTHMS_AFFECTED_EN:
-	aligned_string "Custom Rhythms affected:"	; English (26 bytes)
-MSG_CUSTOM_RHYTHMS_AFFECTED_DE:
-	.asciz "Betroffene Custom Rhythmen:"	; German (28 bytes)
+MSG_CUSTOM_RHYTHMS_AFFECTED_EN:	aligned_string "Custom Rhythms affected:"	; English (26 bytes)
+MSG_CUSTOM_RHYTHMS_AFFECTED_DE:	.asciz "Betroffene Custom Rhythmen:"	; German (28 bytes)
 MSG_CUSTOM_RHYTHMS_AFFECTED_FR:
 	.ascii "Custom Rhythms rep"
 	.byte 0xe9, 0x72, 0xe9, 0x73, 0x3a, 0x00	; French (24 bytes)
-MSG_CUSTOM_RHYTHMS_AFFECTED_ES:
-	aligned_string "Los ritmos personalizados afectados son:"	; Spanish (42 bytes)
-MSG_CUSTOM_RHYTHMS_AFFECTED_EN2:
-	aligned_string "Custom Rhythms affected:"	; Duplicate (26 bytes)
-MSG_CUSTOM_RHYTHMS_AFFECTED_ID:
-	.asciz "Custom Rhythm sudah bekerja :"	; Indonesian (30 bytes)
+MSG_CUSTOM_RHYTHMS_AFFECTED_ES:	aligned_string "Los ritmos personalizados afectados son:"	; Spanish (42 bytes)
+MSG_CUSTOM_RHYTHMS_AFFECTED_EN2:	aligned_string "Custom Rhythms affected:"	; Duplicate (26 bytes)
+MSG_CUSTOM_RHYTHMS_AFFECTED_ID:	.asciz "Custom Rhythm sudah bekerja :"	; Indonesian (30 bytes)
 	; Pointer table at 0xE1EE2C
 	.long MSG_CUSTOM_RHYTHMS_AFFECTED_EN
 	.long MSG_CUSTOM_RHYTHMS_AFFECTED_DE
@@ -13809,18 +13567,12 @@ MSG_CUSTOM_RHYTHMS_AFFECTED_ID:
 
 
 	; Localization: InsertStyleConvertDisk (6 languages)
-MSG_INSERT_STYLE_CONVERT_EN:
-	.asciz "Please Insert the Style Convert Disk!"	; English (38 bytes)
-MSG_INSERT_STYLE_CONVERT_DE:
-	.asciz "Bitte legen Sie die Style Convert Diskette in das Laufwerk ein."	; German (64 bytes)
-MSG_INSERT_STYLE_CONVERT_FR:
-	.asciz "Please Insert the Style Convert Disk!"	; French (38 bytes)
-MSG_INSERT_STYLE_CONVERT_ES:
-	.asciz "Please Insert the Style Convert Disk!"	; Spanish (38 bytes)
-MSG_INSERT_STYLE_CONVERT_EN2:
-	.asciz "Please Insert the Style Convert Disk!"	; Duplicate (38 bytes)
-MSG_INSERT_STYLE_CONVERT_ID:
-	.asciz "Please Insert the Style Convert Disk!"	; Indonesian (38 bytes)
+MSG_INSERT_STYLE_CONVERT_EN:	.asciz "Please Insert the Style Convert Disk!"	; English (38 bytes)
+MSG_INSERT_STYLE_CONVERT_DE:	.asciz "Bitte legen Sie die Style Convert Diskette in das Laufwerk ein."	; German (64 bytes)
+MSG_INSERT_STYLE_CONVERT_FR:	.asciz "Please Insert the Style Convert Disk!"	; French (38 bytes)
+MSG_INSERT_STYLE_CONVERT_ES:	.asciz "Please Insert the Style Convert Disk!"	; Spanish (38 bytes)
+MSG_INSERT_STYLE_CONVERT_EN2:	.asciz "Please Insert the Style Convert Disk!"	; Duplicate (38 bytes)
+MSG_INSERT_STYLE_CONVERT_ID:	.asciz "Please Insert the Style Convert Disk!"	; Indonesian (38 bytes)
 	; Pointer table at 0xE1EF42
 	.long MSG_INSERT_STYLE_CONVERT_EN
 	.long MSG_INSERT_STYLE_CONVERT_DE
@@ -13832,17 +13584,17 @@ LABEL_E1EF5A:
 
 
 
-	.asciz "Select the sound for each part."
+	aligned_string "Select the sound for each part."
 	.byte 0x57, 0xe4
 	.ascii "hlen Sie einen Klang f"
 	.byte 0xfc
 	.ascii "r jede gew"
 	.byte 0xfc, 0x6e, 0x73
 	aligned_string "chte Klanggruppe"
-	.asciz "Select the sound for each part."
-	.asciz "Select the sound for each part."
-	.asciz "Select the sound for each part."
-	.asciz "Select the sound for each part."
+	aligned_string "Select the sound for each part."
+	aligned_string "Select the sound for each part."
+	aligned_string "Select the sound for each part."
+	aligned_string "Select the sound for each part."
 	.long LABEL_E1EF5A
 	.long LABEL_E1EF5A
 	.long LABEL_E1EFB2
@@ -13856,8 +13608,8 @@ LABEL_E1EF5A:
 	.long LABEL_E1F062
 LABEL_E1F062:
 	.byte 0x00, 0xff
-	.asciz "hamadeb"
-	.asciz "HamaPage1Func"
+	aligned_string "hamadeb"
+	aligned_string "HamaPage1Func"
 LABEL_E1F07A:
 	.long LABEL_E1F07E
 LABEL_E1F07E:
@@ -13877,10 +13629,10 @@ LABEL_E1F0B0:
 	.asciz "HamaList"
 	.byte 0xff, 0x01, 0x00, 0xc6, 0xf0
 	.byte 0xe1, 0x00, 0x00, 0x00, 0x00, 0x00, 0x45, 0x56
-	.asciz "_INDEX_PUTS"
+	aligned_string "_INDEX_PUTS"
 	.byte 0x01, 0x00, 0xde, 0xf0
 	.byte 0xe1, 0x00, 0x00, 0x00, 0x00, 0x00, 0x4d, 0x54
-	.asciz "_CONTINUE"
+	aligned_string "_CONTINUE"
 	.byte 0x01, 0x00, 0x70, 0xe8, 0xf1, 0x00
 	.byte 0xda, 0xe5, 0xf1, 0x00, 0xec, 0x25, 0xf5, 0x00
 	.byte 0x34, 0xb4, 0xfd, 0x00, 0x3b, 0xb4, 0xfd, 0x00
@@ -14015,119 +13767,115 @@ LABEL_E1F0B0:
 LABEL_E1F394:
 	.byte 0x00, 0xff
 	aligned_string "ferror_ext"
-	.asciz "SetWall_X"
-	.asciz "AllBOut"
-	.asciz "BitMapOut"
+	aligned_string "SetWall_X"
+	aligned_string "AllBOut"
+	aligned_string "BitMapOut"
 	.byte 0x43, 0x68
 	aligned_string "angeWall"
-	.asciz "ChangePalette"
-LABEL_E1F3D8:
-	aligned_string "free_X"
-LABEL_E1F3E0:
-	aligned_string "malloc_X"
+	aligned_string "ChangePalette"
+LABEL_E1F3D8:	aligned_string "free_X"
+LABEL_E1F3E0:	aligned_string "malloc_X"
 	aligned_string "SetGlobalError"
 	aligned_string "assswb_out"
-	.asciz "assswb_op"
-LABEL_E1F410:
-	aligned_string "SwbtWr"
-LABEL_E1F418:
-	aligned_string "AddswbWr"
+	aligned_string "assswb_op"
+LABEL_E1F410:	aligned_string "SwbtWr"
+LABEL_E1F418:	aligned_string "AddswbWr"
 	aligned_string "AssswbWr"
 	aligned_string "sendCOMM"
-	.asciz "LoadFileSMF"
-	.asciz "GetAdr_rtmcfg"
+	aligned_string "LoadFileSMF"
+	aligned_string "GetAdr_rtmcfg"
 LABEL_E1F450:
-	.asciz "GetAdr_sqsrtc"
+	aligned_string "GetAdr_sqsrtc"
 	.byte 0x47, 0x65
-	.asciz "tAdr_sq_beadt"
+	aligned_string "tAdr_sq_beadt"
 	.byte 0x47, 0x65
-	.asciz "tAdr_sqbtof"
-	.asciz "midi_out_en_X"
-	.asciz "putc_mrx_bf_X"
+	aligned_string "tAdr_sqbtof"
+	aligned_string "midi_out_en_X"
+	aligned_string "putc_mrx_bf_X"
 LABEL_E1F498:
-	.asciz "putc_mtx_bf_X"
+	aligned_string "putc_mtx_bf_X"
 	.byte 0x45, 0x64
-	.asciz "itSwRefresh"
-	.asciz "PlayStandBy"
+	aligned_string "itSwRefresh"
+	aligned_string "PlayStandBy"
 LABEL_E1F4C0:
 	aligned_string "PlayHalt"
 	aligned_string "pdly_tim_X"
-	.asciz "get_tid_X"
+	aligned_string "get_tid_X"
 LABEL_E1F4E0:
 	aligned_string "prcv_msg_X"
-	.asciz "rcv_msg_X"
+	aligned_string "rcv_msg_X"
 	.byte 0x73, 0x6e
-	.asciz "d_msg_X"
+	aligned_string "d_msg_X"
 LABEL_E1F500:
-	.asciz "ref_sem_X"
-	.asciz "wai_sem_X"
+	aligned_string "ref_sem_X"
+	aligned_string "wai_sem_X"
 	aligned_string "preq_sem_X"
 LABEL_E1F520:
-	.asciz "sig_sem_X"
-	.asciz "wai_flg_X"
-	.asciz "set_flg_X"
+	aligned_string "sig_sem_X"
+	aligned_string "wai_flg_X"
+	aligned_string "set_flg_X"
 	.byte 0x72, 0x6f
-	.asciz "t_rdq_X"
+	aligned_string "t_rdq_X"
 LABEL_E1F548:
-	.asciz "rcm_sv_XAPR_j"
+	aligned_string "rcm_sv_XAPR_j"
 	.byte 0x72, 0x63
-	.asciz "m_ld_XAPR_j"
+	aligned_string "m_ld_XAPR_j"
 	aligned_string "fclose_ext"
 LABEL_E1F570:
-	.asciz "fread_ext"
+	aligned_string "fread_ext"
 	aligned_string "fwrite_ext"
-	.asciz "fopen_ext"
+	aligned_string "fopen_ext"
 LABEL_E1F590:
 	aligned_string "_findclose"
-	.asciz "_findnext"
+	aligned_string "_findnext"
 	.byte 0x5f, 0x66
 	aligned_string "indfirst"
 	aligned_string "GetVolumeLabel"
 	aligned_string "GetDiskFreeSpace"
-	.asciz "format_FD"
+	aligned_string "format_FD"
 	.byte 0x53, 0x65
 	aligned_string "tSepaOutMode"
 	aligned_string "GetResouceInfo"
 	aligned_string "FlashWrite"
 	aligned_string "PostMidiSave"
 LABEL_E1F618:
-	.asciz "PreMidiSave"
+	aligned_string "PreMidiSave"
 	aligned_string "PostMidiLoad"
-	.asciz "PreMidiLoad"
+	aligned_string "PreMidiLoad"
 	jr	pl, 0x73
 	aligned_string "p_sv_ato"
 	aligned_string "msp_sv_mae"
 	aligned_string "msp_ld_ato"
 	aligned_string "msp_ld_mae"
 	aligned_string "PostTmSave"
-	.asciz "PreTmSave"
+	aligned_string "PreTmSave"
 	aligned_string "PostTmLoad"
 LABEL_E1F690:
-	.asciz "PreTmLoad"
+	aligned_string "PreTmLoad"
 	aligned_string "cmp_sv_ato"
 	aligned_string "cmp_sv_mae"
 	aligned_string "cmp_ld_ato"
 	aligned_string "cmp_ld_mae"
-	.asciz "SeqSavePost"
+	aligned_string "SeqSavePost"
 	.byte 0x53, 0x65
 	aligned_string "qSavePre"
-	.asciz "SeqLoadPost"
+	aligned_string "SeqLoadPost"
 	.byte 0x53, 0x65
 	aligned_string "qLoadPre"
 	aligned_string "PostPmSave"
-	.asciz "PrePmSave"
+	aligned_string "PrePmSave"
 LABEL_E1F710:
 	aligned_string "PostPmLoad"
-	.asciz "PrePmLoad"
+	aligned_string "PrePmLoad"
 	.byte 0x50, 0x6f
-	.asciz "stLswSave"
+	aligned_string "stLswSave"
 	aligned_string "PreLswSave"
-	.asciz "PostLswLoad"
+	aligned_string "PostLswLoad"
 	aligned_string "PreLswLoad"
 	aligned_string "GetMediaType"
 	aligned_string "FDLoadSaveTest"
 	aligned_string "HamaListProc"
-	.asciz "FD SAVE/LOAD TEST"
+	aligned_string "FD SAVE/LOAD TEST"
 LABEL_E1F794:
 
 
@@ -14275,14 +14023,14 @@ LABEL_E1F9F8:
 	.long LABEL_E1FA2E
 	.long LABEL_FC0012
 	.byte 0x00, 0x00, 0x00, 0x00, 0x43, 0x4f
-	.asciz "NSOLE"
+	aligned_string "NSOLE"
 LABEL_E1FA36:
 
 	.byte 0x2b, 0x00, 0x60, 0x01, 0x0f, 0x00, 0xff, 0xff, 0xff, 0xff
 	.byte 0xff, 0xff, 0x08, 0x00, 0x86, 0x00, 0x2a, 0x00
 	.byte 0xe1, 0x00, 0x3c, 0x00, 0x56, 0xfa, 0xe1, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0xff, 0x00
-	.asciz "MEMORY DUMP"
+	aligned_string "MEMORY DUMP"
 LABEL_E1FA62:
 
 
@@ -14362,7 +14110,7 @@ LABEL_E1FBA8:
 	.byte 0xff, 0x00
 
 String_CONSOLE:	; E1FBC8
-	.asciz "CONSOLE"
+	aligned_string "CONSOLE"
 	.byte 0x00, 0x00, 0x00, 0x00, 0xd4, 0xdc, 0x03, 0x00
 
 	.long LABEL_E1F794
@@ -14427,7 +14175,7 @@ LABEL_E1FCB8:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 LABEL_E1FCC0:
 	.byte 0x00, 0xff
-	.asciz "DebugForHDAE2"
+	aligned_string "DebugForHDAE2"
 LABEL_E1FCD0:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 LABEL_E1FCD8:
@@ -14438,42 +14186,42 @@ LABEL_E1FCF0:
 	.asciz "STOP"
 	.byte 0xff, 0x00, 0xff
 LABEL_E1FCF8:
-	.asciz "START"
+	aligned_string "START"
 	.byte 0x00, 0xff
 LABEL_E1FD00:
 	.byte 0x4f, 0x4b, 0x00, 0xff, 0x4e, 0x47, 0x00, 0xff	; DB "OK", 000h, 0FFh, "NG", 000h, 0FFh
 LABEL_E1FD08:
-	.asciz "TOTAL"
+	aligned_string "TOTAL"
 	.byte 0x46, 0x44
 	aligned_string "D_TEST"
-	.asciz "TT_HDDEXT"
-	.asciz "TT_EXTAPR"
+	aligned_string "TT_HDDEXT"
+	aligned_string "TT_EXTAPR"
 	.byte 0x9a, 0xe3, 0xf1, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x3e, 0xfd, 0xe1, 0x00
 	.long LABEL_E1FD3C
 LABEL_E1FD3C:
 	.byte 0x00, 0xff
-	.asciz "TestTitleFunc"
+	aligned_string "TestTitleFunc"
 	.byte 0x0a, 0x54, 0x69, 0x74
 	aligned_string "le new"
 	.byte 0x0a
 	.asciz "Title old"
 	.byte 0xff, 0x0a, 0x54, 0x69, 0x74
-	.asciz "le Activate"
+	aligned_string "le Activate"
 	.byte 0x0a, 0x54, 0x69, 0x74
-	.asciz "le Inactivate"
+	aligned_string "le Inactivate"
 	.byte 0x0a, 0x54
-	.asciz "itle INTERUPT"
+	aligned_string "itle INTERUPT"
 	.byte 0x0a, 0x54
 	.asciz "itle INTERUPT RETURN"
 	.byte 0xff, 0x0a, 0x54
-	.asciz "BIOS Test"
+	aligned_string "BIOS Test"
 	.byte 0x0a
 	.asciz "STOP FDD TEST"
 	.byte 0xff, 0x0a
 	aligned_string "START FDD TEST LOOP"
 	.byte 0x0a, 0x44, 0x49, 0x52, 0x00, 0xff, 0x0a, 0x44
-	.asciz "ebug Test"
+	aligned_string "ebug Test"
 	.byte 0x0a
 	.asciz "Debug Test"
 	.byte 0x00, 0x00
@@ -14481,7 +14229,7 @@ LABEL_E1FD3C:
 	.byte 0x72, 0x00, 0x7f, 0x00, 0x82, 0x00, 0x00, 0x00
 	.byte 0x0b, 0x00, 0x21, 0x00, 0x16, 0x00, 0x2c, 0x00
 	.byte 0x37, 0x00
-	.asciz "A:\\HAMA\\*.LSW"
+	aligned_string "A:\\HAMA\\*.LSW"
 	.byte 0x0a
 	.asciz "TEST Finishd!!"
 	.asciz "init"
@@ -14489,7 +14237,7 @@ LABEL_E1FD3C:
 	.byte 0x00, 0xff, 0x4e, 0x47, 0x00, 0xff
 	.asciz "A:IMMUNITY.TST"
 	.byte 0xff, 0x0a, 0x46
-	.asciz "ile remove =>"
+	aligned_string "ile remove =>"
 	ldb	w, 0x65
 	.asciz "rror"
 	.byte 0xff, 0x20, 0x4f
@@ -14502,7 +14250,7 @@ LABEL_E1FD3C:
 	aligned_string "File Write =>"
 	.asciz " Error"
 	.byte 0xff, 0x20, 0x4f, 0x4b, 0x00, 0x0a, 0x46
-	.asciz "ile Read =>"
+	aligned_string "ile Read =>"
 	.byte 0x72, 0x62, 0x00, 0xff
 	.byte 0x0a
 	aligned_string "cannot open read file"
@@ -14516,16 +14264,16 @@ LABEL_E1FD3C:
 	.byte 0xff, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x33, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00
-	.asciz "TEST_HAMA"
-	.asciz "TESTHAMA2HD"
+	aligned_string "TEST_HAMA"
+	aligned_string "TESTHAMA2HD"
 	aligned_string "LOAD"
 	aligned_string "LOAD END"
 	.byte 0x47, 0x4f, 0x00, 0xff
-	.asciz "Finishd"
-	.asciz "Media Error"
+	aligned_string "Finishd"
+	aligned_string "Media Error"
 	.byte 0x72, 0x62, 0x00, 0xff
-	.asciz "A:HKEXT.XAP"
-	.asciz "Cannot open"
+	aligned_string "A:HKEXT.XAP"
+	aligned_string "Cannot open"
 	.byte 0x58, 0x41, 0x50, 0x52
 	.byte 0x00, 0xff
 	aligned_string "Different ID"
@@ -14605,10 +14353,10 @@ LABEL_E20058:
 	.byte 0x49, 0x00, 0xa7, 0x00, 0x5a, 0x00, 0xa7, 0x00
 	.byte 0xa7, 0x00
 	aligned_string "%2d : %s"
-	.asciz "FILE%02d:%s"
-	.asciz "%03d:%s"
-	.asciz "%02d:%s"
-	.asciz "%02d:%s"
+	aligned_string "FILE%02d:%s"
+	aligned_string "%03d:%s"
+	aligned_string "%02d:%s"
+	aligned_string "%02d:%s"
 	.byte 0x00, 0x00, 0x48, 0x00, 0x81, 0x00, 0xc1, 0x00
 	.byte 0xb9, 0x02, 0x3b, 0x01, 0x0d, 0x01, 0xb5, 0x01
 	.byte 0x87, 0x01, 0xb9, 0x02, 0xb9, 0x02, 0xb9, 0x02
@@ -14646,7 +14394,7 @@ LABEL_E20058:
 	.byte 0x2e, 0x00, 0x3c, 0x00, 0x66, 0x00, 0x74, 0x00
 	.byte 0x4a, 0x00, 0x58, 0x00, 0x82, 0x00, 0x88, 0x00
 	.byte 0x8d, 0x00
-	.asciz "%3d%%"
+	aligned_string "%3d%%"
 	.byte 0x01, 0x00, 0xe1, 0x00, 0x02, 0x00, 0xe1, 0x00
 	.byte 0x03, 0x00, 0xe1, 0x00, 0x04, 0x00, 0xe1, 0x00
 	.byte 0x05, 0x00, 0xe1, 0x00, 0x06, 0x00, 0xe1, 0x00
@@ -14730,64 +14478,64 @@ LABEL_E20058:
 	.long LABEL_E203D8
 LABEL_E203D8:
 	.byte 0x00, 0xff
-	.asciz "IvExitModeTrSelProc"
+	aligned_string "IvExitModeTrSelProc"
 	.byte 0x41, 0x63
-	.asciz "DemoMedleyDispBoxProc"
+	aligned_string "DemoMedleyDispBoxProc"
 	.byte 0x43, 0x6f
 	aligned_string "mporserNameBoxProc"
 	.asciz "SongNameBoxProc"
-	.asciz "LyricsBoxFuncProc"
+	aligned_string "LyricsBoxFuncProc"
 	.byte 0x4c, 0x79
-	.asciz "ricsBoxProc"
-	.asciz "AcMuteToggleBoxProc"
+	aligned_string "ricsBoxProc"
+	aligned_string "AcMuteToggleBoxProc"
 LABEL_E20460:
-	.asciz "AcTrAsGridBoxProc"
-	.asciz "AcDemoSongBoxProc"
+	aligned_string "AcTrAsGridBoxProc"
+	aligned_string "AcDemoSongBoxProc"
 	aligned_string "AcCurSongNameBoxProc"
 	aligned_string "AcCurrentSongBoxProc"
 LABEL_E204B0:
 	aligned_string "AcModeSelBoxProc"
 	aligned_string "IvNamingExitProc"
-	.asciz "AcPDSongNameBoxProc"
+	aligned_string "AcPDSongNameBoxProc"
 LABEL_E204E8:
 	aligned_string "AcDocSongNameBoxProc"
 	aligned_string "AcSmfSongNameBoxProc"
-	.asciz "AcPDFileNoBoxProc"
+	aligned_string "AcPDFileNoBoxProc"
 	.byte 0x41, 0x63
 	aligned_string "DocFileNoBoxProc"
 	aligned_string "AcSmfFileNameBoxProc"
 LABEL_E20550:
-	.asciz "AcDiskFileNameBoxProc"
+	aligned_string "AcDiskFileNameBoxProc"
 	.byte 0x4d, 0x65
 	aligned_string "asureBoxFunc"
 	aligned_string "MeasureBoxProc"
-	.asciz "DPPauseDspCheck"
+	aligned_string "DPPauseDspCheck"
 	.byte 0x44, 0x50
 	aligned_string "PlayDspCheck"
-	.asciz "DemoMedDspCheck"
+	aligned_string "DemoMedDspCheck"
 	.byte 0x54, 0x72
-	.asciz "AsGridCheck"
-	.asciz "SeqNameOKFunc"
+	aligned_string "AsGridCheck"
+	aligned_string "SeqNameOKFunc"
 	aligned_string "SeqNamingCheck"
 	aligned_string "PdOrchMuteFunc"
-	.asciz "DocOrchMuteFunc"
-	.asciz "Rt2MuteFunc"
+	aligned_string "DocOrchMuteFunc"
+	aligned_string "Rt2MuteFunc"
 	.byte 0x52, 0x74
-	.asciz "1MuteFunc"
+	aligned_string "1MuteFunc"
 	aligned_string "SMFMuteOnOffFunc"
-	.asciz "MuteChSetFunc"
+	aligned_string "MuteChSetFunc"
 	aligned_string "SqAftSetFunc"
 LABEL_E20648:
 	aligned_string "SmfMuteChSelFunc"
-	.asciz "DemoSongSelFunc"
+	aligned_string "DemoSongSelFunc"
 	aligned_string "SqTrAsPsSongFunc"
-	.asciz "TrAsSureLangCheck"
+	aligned_string "TrAsSureLangCheck"
 	.byte 0x47, 0x6d
 	aligned_string "OffSureLangCheck"
-	.asciz "GmOnSureLangCheck"
-	.asciz "AreYouSureLangCheck"
+	aligned_string "GmOnSureLangCheck"
+	aligned_string "AreYouSureLangCheck"
 LABEL_E206C8:
-	.asciz "AtentionLangCheck"
+	aligned_string "AtentionLangCheck"
 	aligned_string "TrAsPreLangCheck"
 	aligned_string "AfterLangCheck"
 	.asciz "PartSelLangCheck"
@@ -14805,12 +14553,12 @@ LABEL_E20738:
 	.byte 0x00, 0xff
 	aligned_string "auto_inc"
 	aligned_string "dial"
-	.asciz "sel_num"
+	aligned_string "sel_num"
 	.byte 0x72, 0x6f, 0x77, 0x00, 0x63, 0x6f
 	aligned_string "lumn"
-	.asciz "main_func"
+	aligned_string "main_func"
 LABEL_E20768:
-	.asciz "fontcolor"
+	aligned_string "fontcolor"
 	aligned_string "font"
 LABEL_E20778:
 	.long LABEL_E20782
@@ -14861,8 +14609,8 @@ LABEL_E20808:
 	.byte 0x00, 0xff
 	aligned_string "func"
 LABEL_E20810:
-	.asciz "fontcolor"
-	.asciz "color"
+	aligned_string "fontcolor"
+	aligned_string "color"
 LABEL_E20820:
 	.long LABEL_E20824
 LABEL_E20824:
@@ -14877,12 +14625,12 @@ LABEL_E20826:
 LABEL_E2083E:
 	.byte 0x00, 0xff
 LABEL_E20840:
-	.asciz "lines"
+	aligned_string "lines"
 	jr	lt, 0x6c
-	.asciz "ignment"
+	aligned_string "ignment"
 LABEL_E20850:
 	aligned_string "reversecolor"
-	.asciz "fontcolor"
+	aligned_string "fontcolor"
 LABEL_E20868:
 	aligned_string "font"
 LABEL_E2086E:
@@ -14893,9 +14641,9 @@ LABEL_E2086E:
 	.long LABEL_E20882
 LABEL_E20882:
 	.byte 0x00, 0xff
-	.asciz "lines"
-	.asciz "alignment"
-	.asciz "fontcolor"
+	aligned_string "lines"
+	aligned_string "alignment"
+	aligned_string "fontcolor"
 	jr	z, 0x6f
 	.byte 0x6e, 0x74, 0x00, 0xff, 0xd4, 0x08, 0xe2, 0x00
 	.long LABEL_E208CA
@@ -14904,10 +14652,10 @@ LABEL_E20882:
 	.long LABEL_E208B8
 LABEL_E208B8:
 	.byte 0x00, 0xff
-	.asciz "lines"
+	aligned_string "lines"
 LABEL_E208C0:
-	.asciz "alignment"
-	.asciz "fontcolor"
+	aligned_string "alignment"
+	aligned_string "fontcolor"
 	aligned_string "font"
 LABEL_E208DA:
 	.long LABEL_E208DE
@@ -15033,45 +14781,45 @@ LABEL_E208E4:
 	.zero 8
 	.zero 8
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0xff
-	.asciz "IvExitModeTrSel"
+	aligned_string "IvExitModeTrSel"
 	.byte 0x00, 0xff
 LABEL_E20B28:
-	.asciz "AcDemoMedleyDispBox"
+	aligned_string "AcDemoMedleyDispBox"
 	.byte 0x00, 0xff
-	.asciz "LyeicsBoxFunc"
+	aligned_string "LyeicsBoxFunc"
 	aligned_string "c^dB"
 	aligned_string "ComporserNameBox"
 	aligned_string "c^dB"
 	.asciz "SongNameBox"
 	jr	ule, 0x5e
 	.byte 0x5e, 0x64, 0x42, 0x00
-	.asciz "LyricsBox"
+	aligned_string "LyricsBox"
 	.byte 0x00, 0xff
 LABEL_E20B88:
-	.asciz "AcMuteToggleBox"
+	aligned_string "AcMuteToggleBox"
 LABEL_E20B98:
 	.byte 0x5e, 0x5e, 0x6a, 0x00
 	aligned_string "MeasureBox"
 LABEL_E20BA8:
 	.byte 0x00, 0xff
-	.asciz "AcPDSongNameBox"
+	aligned_string "AcPDSongNameBox"
 	.byte 0x00, 0xff
 	.asciz "AcDocSongNameBox"
 	.byte 0xff, 0x00, 0xff
 LABEL_E20BD0:
 	.asciz "AcSmfSongNameBox"
 	.byte 0xff, 0x00, 0xff
-	.asciz "AcPDFileNoBox"
+	aligned_string "AcPDFileNoBox"
 	.byte 0x00, 0xff
 	.asciz "AcDocFileNoBox"
 	.byte 0xff, 0x00, 0xff
 	aligned_string "AcSmfFileNameBox"
 LABEL_E20C18:
 	.byte 0x00, 0xff
-	.asciz "AcDiskFileNameBox"
+	aligned_string "AcDiskFileNameBox"
 	.byte 0x58, 0x58, 0x6a, 0x00
 LABEL_E20C30:
-	.asciz "AcTrAsGridBox"
+	aligned_string "AcTrAsGridBox"
 	.byte 0x00, 0xff
 LABEL_E20C40:
 	.asciz "AcCurSongNameBox"
@@ -15079,7 +14827,7 @@ LABEL_E20C40:
 	.asciz "AcCurrentSongBox"
 	.byte 0xff, 0x6a, 0x00
 LABEL_E20C68:
-	.asciz "AcDemoSongBox"
+	aligned_string "AcDemoSongBox"
 	.byte 0x43, 0x00
 LABEL_E20C78:
 	aligned_string "AcModeSelBox"
@@ -15112,30 +14860,27 @@ LABEL_E20CA0:
 	.long LABEL_E20D04
 	.byte 0x00, 0x00, 0x00, 0x00
 	aligned_string "EV_ChangeColor"
-	.asciz "EV_GetEvent"
-LABEL_E20D20:
-	aligned_string "EV_PlayRequest"
-LABEL_E20D30:
-	.asciz "EV_PlayStartIni"
-LABEL_E20D40:
-	aligned_string "EV_SONGWRITE"
-	.asciz "EV_COMPORSERWRITE"
+	aligned_string "EV_GetEvent"
+LABEL_E20D20:	aligned_string "EV_PlayRequest"
+LABEL_E20D30:	aligned_string "EV_PlayStartIni"
+LABEL_E20D40:	aligned_string "EV_SONGWRITE"
+	aligned_string "EV_COMPORSERWRITE"
 LABEL_E20D60:
-	.asciz "EV_SCROLLUP"
+	aligned_string "EV_SCROLLUP"
 	aligned_string "EV_REVERSE"
 LABEL_E20D78:
 	aligned_string "EV_RENEW"
 	aligned_string "EV_ALLDRAW"
-	.asciz "EV_ALLCLEAR"
-	.asciz "EV_PDFILENO"
+	aligned_string "EV_ALLCLEAR"
+	aligned_string "EV_PDFILENO"
 	.byte 0x45, 0x56
-	.asciz "_PDSONGNAME"
+	aligned_string "_PDSONGNAME"
 	aligned_string "EV_DOCFILENO"
 	aligned_string "EV_DOCSONGNAME"
 	aligned_string "EV_DOCFILENAME"
 	aligned_string "EV_SMFSONGNAME"
 	aligned_string "EV_SMFFILENAME"
-	.asciz "EV_DISKFILENAME"
+	aligned_string "EV_DISKFILENAME"
 	.asciz "EV_CURSONGNAME"
 	.byte 0xff, 0x14, 0x00, 0x5a, 0x10, 0xe2, 0x00
 	.long LABEL_E2104A
@@ -15165,39 +14910,37 @@ LABEL_E20D78:
 	.long LABEL_E20EA8
 	.long LABEL_E20E94
 	.byte 0x00, 0x00, 0x00, 0x00
-	.asciz "MT_GetComporserName"
+	aligned_string "MT_GetComporserName"
 LABEL_E20EA8:
 	aligned_string "MT_GetLyricsSongName"
-	.asciz "MT_LyricsCharaReq"
-LABEL_E20ED0:
-	aligned_string "MT_GetToggleSw"
-LABEL_E20EE0:
-	aligned_string "MT_GetMeasString"
+	aligned_string "MT_LyricsCharaReq"
+LABEL_E20ED0:	aligned_string "MT_GetToggleSw"
+LABEL_E20EE0:	aligned_string "MT_GetMeasString"
 	aligned_string "MT_GetPDFileNo"
 	aligned_string "MT_GetPDSongName"
-	.asciz "MT_GetDocFileNo"
-	.asciz "MT_GetDocSongName"
+	aligned_string "MT_GetDocFileNo"
+	aligned_string "MT_GetDocSongName"
 	.byte 0x4d, 0x54
-	.asciz "_GetDocFileName"
+	aligned_string "_GetDocFileName"
 LABEL_E20F48:
-	.asciz "MT_GetSmfSongName"
-	.asciz "MT_GetSmfFileName"
+	aligned_string "MT_GetSmfSongName"
+	aligned_string "MT_GetSmfFileName"
 	aligned_string "MT_GetDiskFileName"
 LABEL_E20F80:
-	.asciz "MT_GetCurSongName"
+	aligned_string "MT_GetCurSongName"
 	aligned_string "MT_TrackMidiCall"
-	.asciz "MT_DirectPlayMute"
+	aligned_string "MT_DirectPlayMute"
 	.byte 0x4d, 0x54
 	aligned_string "_AmdCall"
 	aligned_string "MT_TrAsPageDec"
 	aligned_string "MT_TrAsPageInc"
 	aligned_string "MT_TrAsPartDec"
 	aligned_string "MT_TrAsPartInc"
-	.asciz "MT_TrAsTrackDec"
-	.asciz "MT_TrAsTrackInc"
-	.asciz "MT_SetSelectedFileNum"
+	aligned_string "MT_TrAsTrackDec"
+	aligned_string "MT_TrAsTrackInc"
+	aligned_string "MT_SetSelectedFileNum"
 LABEL_E21038:
-	.asciz "MT_PsSongSelBoxID"
+	aligned_string "MT_PsSongSelBoxID"
 	aligned_string "MT_SongNameSet"
 	.asciz "MT_DemoSongSel"
 	.byte 0xff, 0x1b, 0x00, 0xf9, 0xbb, 0xf2, 0x00
@@ -15219,7 +14962,7 @@ LABEL_E2107C:
 	.byte 0x2e, 0x00
 	.byte 0x00, 0x00
 LABEL_E210BA:
-	.asciz "SMF DIRECT PLAY  "
+	aligned_string "SMF DIRECT PLAY  "
 LABEL_E210CC:
 
 
@@ -15334,7 +15077,7 @@ LABEL_E212CA:
 	.long LABEL_E212EA
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00
-	.asciz "-MUTE CH-"
+	aligned_string "-MUTE CH-"
 LABEL_E212F4:
 
 
@@ -15344,7 +15087,7 @@ LABEL_E212F4:
 	.byte 0xef, 0x00, 0xff, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0xa0, 0x01, 0x18, 0xdd, 0x03, 0x00, 0x1e, 0x13
 	.byte 0xe2, 0x00, 0x3a, 0x00, 0x00, 0x00, 0x53, 0x4d
-	.asciz "F MEDLEY   "
+	aligned_string "F MEDLEY   "
 LABEL_E2132C:
 
 
@@ -15604,7 +15347,7 @@ LABEL_E21748:
 	.long LABEL_E21798
 	.byte 0x2e, 0x00, 0x00, 0x00
 LABEL_E21798:
-	.asciz "DOC DIRECT PLAY  "
+	aligned_string "DOC DIRECT PLAY  "
 LABEL_E217AA:
 
 
@@ -15771,7 +15514,7 @@ LABEL_E21ADE:
 	.long LABEL_E21B10
 	.byte 0x00, 0x00, 0x00, 0x00
 LABEL_E21B10:
-	.asciz "MIXER"
+	aligned_string "MIXER"
 LABEL_E21B16:
 
 
@@ -15793,7 +15536,7 @@ LABEL_E21B4C:
 	.byte 0xef, 0x00, 0xf8, 0x00, 0x00, 0x00, 0x6f, 0x00
 	.byte 0xa0, 0x01, 0x54, 0xdd, 0x03, 0x00, 0x76, 0x1b
 	.byte 0xe2, 0x00, 0x2e, 0x00, 0x00, 0x00, 0x53, 0x4d
-	.asciz "F DIRECT PLAY  "
+	aligned_string "F DIRECT PLAY  "
 LABEL_E21B88:
 
 
@@ -15980,7 +15723,7 @@ LABEL_E21ECA:
 	.long LABEL_E21EEA
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00
-	.asciz "-MUTE CH-"
+	aligned_string "-MUTE CH-"
 
 
 	.byte 0x34, 0x00, 0x60, 0x01
@@ -16116,7 +15859,7 @@ LABEL_E22142:
 	.long LABEL_E221A2
 	.byte 0x2e, 0x00
 	.byte 0x00, 0x00
-	.asciz "PIANO DISC MEDLEY    "
+	aligned_string "PIANO DISC MEDLEY    "
 LABEL_E221B8:
 
 
@@ -16203,7 +15946,7 @@ LABEL_E2232E:
 	.long LABEL_E22360
 	.byte 0x00, 0x00, 0x00, 0x00
 LABEL_E22360:
-	.asciz "MIXER"
+	aligned_string "MIXER"
 LABEL_E22366:
 
 
@@ -16535,7 +16278,7 @@ LABEL_E228E2:
 	.long LABEL_E22930
 	.byte 0x89, 0x00, 0x00, 0x00
 LABEL_E22930:
-	.asciz "SONG MEDLEY"
+	aligned_string "SONG MEDLEY"
 LABEL_E2293C:
 
 
@@ -16634,7 +16377,7 @@ LABEL_E22AF0:
 	.byte 0x02, 0x00, 0xff, 0xff, 0x08, 0x00, 0xc8, 0x00
 	.byte 0x0a, 0x00, 0x33, 0x01, 0x1c, 0x00, 0x10, 0x2b
 	.byte 0xe2, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0x00
-	.asciz ": PART SELECT"
+	aligned_string ": PART SELECT"
 LABEL_E22B1E:
 
 
@@ -16672,7 +16415,7 @@ LABEL_E22B96:
 	.long LABEL_E22BC0
 	.byte 0x39, 0x00, 0x00, 0x00
 LABEL_E22BC0:
-	.asciz "TRACK ASSIGN   "
+	aligned_string "TRACK ASSIGN   "
 LABEL_E22BD0:
 
 
@@ -16704,7 +16447,7 @@ LABEL_E22BD0:
 	.long LABEL_E22C7E
 	.byte 0x14, 0x00, 0x27, 0x01, 0x7c, 0x2d
 	aligned_string "|TR 1|TR 2|TR 3|TR 4|TR 5|TR 6|TR 7|TR 8"
-	.asciz "    |    |  |  "
+	aligned_string "    |    |  |  "
 LABEL_E22CBA:
 
 
@@ -16724,7 +16467,7 @@ LABEL_E22CF2:
 	.byte 0xf5, 0x00, 0x00, 0x00, 0x1a, 0x2d, 0xe2, 0x00
 	.byte 0x03, 0x00, 0x00, 0x00, 0xf1, 0x00, 0x00, 0x00
 	.byte 0x02, 0x00
-	.asciz "LOCAL~0DCONT."
+	aligned_string "LOCAL~0DCONT."
 LABEL_E22D28:
 
 
@@ -16868,7 +16611,7 @@ LABEL_E22F36:
 	.long LABEL_E22F7A
 	.byte 0x39, 0x00
 	.byte 0x00, 0x00
-	.asciz "TRACK ASSIGN PRESET"
+	aligned_string "TRACK ASSIGN PRESET"
 LABEL_E22F8E:
 
 	.byte 0x2b, 0x00
@@ -16900,7 +16643,7 @@ LABEL_E22FDE:
 	.byte 0xff, 0x00, 0x01, 0x00, 0x2a, 0xde, 0x03, 0x00
 	.byte 0x08, 0x00, 0x27, 0x01, 0x2c, 0xde, 0x03, 0x00
 LABEL_E23018:
-	.asciz "SONG   : "
+	aligned_string "SONG   : "
 	.byte 0x02, 0x00, 0x67, 0x01, 0x00, 0x00
 	.byte 0xff, 0xff, 0x05, 0x00, 0x03, 0x00, 0x08, 0x00
 	.byte 0x08, 0x00, 0x1e, 0x00, 0xd5, 0x00, 0x37, 0x00
@@ -17042,7 +16785,7 @@ LABEL_E232CC:
 	.byte 0xef, 0x00, 0xf9, 0x00, 0x00, 0x00, 0x8c, 0x00
 	.byte 0xa0, 0x01, 0x3a, 0xde, 0x03, 0x00, 0xf6, 0x32
 	.byte 0xe2, 0x00, 0x39, 0x00, 0x00, 0x00, 0x54, 0x52
-	.asciz "ACK ASSIGN PRESET"
+	aligned_string "ACK ASSIGN PRESET"
 LABEL_E2330A:
 
 
@@ -17182,7 +16925,7 @@ LABEL_E23592:
 	.long LABEL_E235B2
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00
-	.asciz "SEQUENCER       :"
+	aligned_string "SEQUENCER       :"
 LABEL_E235C4:
 
 
@@ -17213,7 +16956,7 @@ LABEL_E235DE:
 	.long LABEL_E2364A
 	jr	nz, 0x00
 	.byte 0x00, 0x00
-	.asciz "AFTER TOUCH SETTING"
+	aligned_string "AFTER TOUCH SETTING"
 LABEL_E2365E:
 
 
@@ -17234,7 +16977,7 @@ LABEL_E23688:
 	.byte 0x0a, 0x00, 0xff, 0x00, 0x01, 0x00, 0x50, 0xde
 	.byte 0x03, 0x00, 0x0b, 0x00, 0x27, 0x01, 0x52, 0xde
 	.byte 0x03, 0x00
-	.asciz "  AFTER TOUCH RECORD  :"
+	aligned_string "  AFTER TOUCH RECORD  :"
 LABEL_E236DA:
 
 
@@ -17302,7 +17045,7 @@ LABEL_E237DC:
 	.byte 0xef, 0x00, 0xfc, 0x00, 0x02, 0x00, 0x01, 0x00
 	.byte 0xa0, 0x01, 0x58, 0xde, 0x03, 0x00, 0x06, 0x38
 	.byte 0xe2, 0x00, 0xa9, 0x00, 0x00, 0x00, 0x44, 0x45
-	.asciz "MONSTRATION"
+	aligned_string "MONSTRATION"
 LABEL_E23814:
 
 
@@ -17356,7 +17099,7 @@ LABEL_E238E8:
 	.byte 0x00, 0x00, 0xff, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x89, 0x00, 0x00, 0x00, 0x64, 0xde, 0x03, 0x00
 	.byte 0x09, 0x00, 0x27, 0x01
-	.asciz "Main Medley"
+	aligned_string "Main Medley"
 LABEL_E23938:
 	.byte 0x03, 0x00, 0x67, 0x01, 0x00, 0x00, 0xff, 0xff
 	.byte 0x03, 0x00, 0x01, 0x00, 0x08, 0x00, 0x08, 0x00
@@ -17374,7 +17117,7 @@ LABEL_E23980:
 	.byte 0x01, 0x00, 0x00, 0x00, 0xff, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x8b, 0x00, 0x00, 0x00, 0x68, 0xde
 	.byte 0x03, 0x00, 0x09, 0x00, 0x27, 0x01, 0x46, 0x6f
-	.asciz "lk Medley"
+	aligned_string "lk Medley"
 	.byte 0x03, 0x00, 0x67, 0x01, 0x00, 0x00
 	.byte 0xff, 0xff, 0x05, 0x00, 0x03, 0x00, 0x08, 0x00
 	.byte 0xa3, 0x00, 0x48, 0x00, 0x37, 0x01, 0x61, 0x00
@@ -17382,7 +17125,7 @@ LABEL_E23980:
 	.byte 0xe2, 0x00, 0x01, 0x00, 0x00, 0x00, 0xff, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x09, 0x00, 0x00, 0x00
 	.byte 0x6a, 0xde, 0x03, 0x00, 0x09, 0x00, 0x27, 0x01
-	.asciz "Classical"
+	aligned_string "Classical"
 	.byte 0x03, 0x00, 0x67, 0x01, 0x00, 0x00
 	.byte 0xff, 0xff, 0x06, 0x00, 0x04, 0x00, 0x08, 0x00
 	.byte 0xa3, 0x00, 0x72, 0x00, 0x37, 0x01, 0x8b, 0x00
@@ -17430,7 +17173,7 @@ LABEL_E23AB8:
 	.byte 0x04, 0x00
 	.asciz "SOUND"
 LABEL_E23AE8:
-	.asciz "SOUND"
+	aligned_string "SOUND"
 LABEL_E23AEE:
 
 
@@ -17441,10 +17184,8 @@ LABEL_E23AEE:
 	.long LABEL_E23B20
 	.long LABEL_E23B18
 	.byte 0x74, 0xde, 0x03, 0x00, 0x06, 0x00, 0x07, 0x00
-LABEL_E23B18:
-	aligned_string "RHYTHM"
-LABEL_E23B20:
-	aligned_string "RHYTHM"
+LABEL_E23B18:	aligned_string "RHYTHM"
+LABEL_E23B20:	aligned_string "RHYTHM"
 LABEL_E23B28:
 
 
@@ -17488,7 +17229,7 @@ LABEL_E23B90:
 	.byte 0xff, 0x00, 0x00, 0x00, 0x00, 0x00, 0x8a, 0x00
 	.byte 0x00, 0x00, 0x7c, 0xde, 0x03, 0x00, 0x09, 0x00
 	ldb	l, 0x01
-	.asciz "Gamelan"
+	aligned_string "Gamelan"
 	.byte 0x03, 0x00, 0x67, 0x01, 0x00, 0x00
 	.byte 0xff, 0xff, 0x04, 0x00, 0x02, 0x00, 0x08, 0x00
 	.byte 0x08, 0x00, 0x9c, 0x00, 0x9c, 0x00, 0xb5, 0x00
@@ -17514,7 +17255,7 @@ LABEL_E23C58:
 	.byte 0xff, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0a, 0x00
 	.byte 0x00, 0x00, 0x82, 0xde, 0x03, 0x00, 0x09, 0x00
 	ldb	l, 0x01
-	.asciz "Sax&Brass"
+	aligned_string "Sax&Brass"
 	.byte 0x03, 0x00, 0x67, 0x01
 	.byte 0x00, 0x00, 0xff, 0xff, 0x07, 0x00, 0x05, 0x00
 	.byte 0x08, 0x00, 0xa3, 0x00, 0x9c, 0x00, 0x37, 0x01
@@ -17524,7 +17265,7 @@ LABEL_E23C58:
 	.byte 0xff, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0b, 0x00
 	.byte 0x00, 0x00, 0x84, 0xde, 0x03, 0x00, 0x09, 0x00
 	ldb	l, 0x01
-	.asciz "Organ"
+	aligned_string "Organ"
 LABEL_E23D10:
 
 
@@ -17540,7 +17281,7 @@ LABEL_E23D10:
 	.byte 0x01, 0x00
 	.asciz "STYLE"
 LABEL_E23D40:
-	.asciz "STYLE"
+	aligned_string "STYLE"
 LABEL_E23D46:
 
 
@@ -17552,7 +17293,7 @@ LABEL_E23D46:
 	.long LABEL_E23D70
 	.byte 0x88, 0xde, 0x03, 0x00, 0x03, 0x00, 0x04, 0x00
 LABEL_E23D70:
-	.asciz "SOUND"
+	aligned_string "SOUND"
 	.byte 0x53, 0x4f
 	.byte 0x55, 0x4e, 0x44, 0x00
 LABEL_E23D7C:
@@ -17598,7 +17339,7 @@ LABEL_E23DD0:
 	.byte 0xff, 0x00, 0x00, 0x00, 0x00, 0x00, 0x89, 0x00
 	.byte 0x00, 0x00, 0x90, 0xde, 0x03, 0x00, 0x09, 0x00
 	ldb	l, 0x01
-	.asciz "Hokie Dance"
+	aligned_string "Hokie Dance"
 	.byte 0x03, 0x00
 	.byte 0x67, 0x01, 0x00, 0x00, 0xff, 0xff, 0x03, 0x00
 	.byte 0x01, 0x00, 0x08, 0x00, 0x08, 0x00, 0x72, 0x00
@@ -17619,7 +17360,7 @@ LABEL_E23DD0:
 	.byte 0xff, 0x00, 0x00, 0x00, 0x00, 0x00, 0x8b, 0x00
 	.byte 0x00, 0x00, 0x94, 0xde, 0x03, 0x00, 0x09, 0x00
 	ldb	l, 0x01
-	.asciz "Organ Combo"
+	aligned_string "Organ Combo"
 	.byte 0x03, 0x00
 	.byte 0x67, 0x01, 0x00, 0x00, 0xff, 0xff, 0x05, 0x00
 	.byte 0x03, 0x00, 0x08, 0x00, 0xa3, 0x00, 0x48, 0x00
@@ -17663,7 +17404,7 @@ LABEL_E23FC8:
 	.byte 0x01, 0x00
 	.asciz "STYLE"
 LABEL_E23FF8:
-	.asciz "STYLE"
+	aligned_string "STYLE"
 LABEL_E23FFE:
 
 
@@ -17675,7 +17416,7 @@ LABEL_E23FFE:
 	.long LABEL_E24028
 	.byte 0x9e, 0xde, 0x03, 0x00, 0x03, 0x00, 0x04, 0x00
 LABEL_E24028:
-	.asciz "SOUND"
+	aligned_string "SOUND"
 	.byte 0x53, 0x4f
 	.byte 0x55, 0x4e, 0x44, 0x00
 LABEL_E24034:
@@ -18045,7 +17786,7 @@ LABEL_E24088:
 	.long LABEL_E24628
 LABEL_E24628:
 	.byte 0x00, 0xff
-	.asciz "Comporser"
+	aligned_string "Comporser"
 	aligned_string "LyricsSong"
 LABEL_E24640:
 	.byte 0x00, 0xff
@@ -18053,7 +17794,7 @@ LABEL_E24640:
 	aligned_string "Lyrics"
 	aligned_string "PlayDisp"
 LABEL_E24660:
-	.asciz "PauseDisp"
+	aligned_string "PauseDisp"
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 LABEL_E24670:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
@@ -18068,14 +17809,14 @@ LABEL_E24698:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 LABEL_E246A0:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
-	.asciz "SMFMuteSw"
+	aligned_string "SMFMuteSw"
 LABEL_E246B0:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 LABEL_E246B8:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 LABEL_E246C0:
 	.byte 0x00, 0xff
-	.asciz "DpSmf"
+	aligned_string "DpSmf"
 	.long LABEL_E24728
 	.long LABEL_E24726
 	.long LABEL_E24724
@@ -18093,7 +17834,7 @@ LABEL_E246FC:
 	.byte 0x00, 0xff, 0x00, 0xff
 LABEL_E24700:
 	.byte 0x00, 0xff
-	.asciz "DOCOrchSw"
+	aligned_string "DOCOrchSw"
 	.byte 0x44, 0x4f, 0x43, 0x52
 	.byte 0x32, 0x53, 0x77, 0x00
 	.byte 0x44, 0x4f, 0x43, 0x52
@@ -18101,7 +17842,7 @@ LABEL_E24700:
 LABEL_E24720:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 LABEL_E24728:
-	.asciz "DpDoc"
+	aligned_string "DpDoc"
 	.long LABEL_E24782
 	.long LABEL_E24780
 	.long LABEL_E2477E
@@ -18171,7 +17912,7 @@ LABEL_E24830:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 LABEL_E24838:
 	.byte 0x00, 0xff
-	.asciz "DpMdlySmf"
+	aligned_string "DpMdlySmf"
 	.byte 0xca, 0x48, 0xe2, 0x00
 	.long LABEL_E248C0
 	.long LABEL_E248BE
@@ -18201,7 +17942,7 @@ LABEL_E248B0:
 LABEL_E248B8:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 LABEL_E248C0:
-	.asciz "DpMdlyDoc"
+	aligned_string "DpMdlyDoc"
 	.byte 0x00, 0xff, 0x30, 0x49, 0xe2, 0x00
 	.long LABEL_E2492E
 	.long LABEL_E2492C
@@ -18220,7 +17961,7 @@ LABEL_E24904:
 	.byte 0x00, 0xff, 0x00, 0xff
 LABEL_E24908:
 	.byte 0x00, 0xff
-	.asciz "PDMedOrchSw"
+	aligned_string "PDMedOrchSw"
 	.byte 0x50, 0x44
 	.asciz "MedR1Sw"
 LABEL_E24920:
@@ -18291,7 +18032,7 @@ LABEL_E24A28:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 LABEL_E24A30:
 	.byte 0x00, 0xff, 0x00, 0xff
-	.asciz "DkMdlyPly"
+	aligned_string "DkMdlyPly"
 	.long LABEL_E24A8A
 	.long LABEL_E24A88
 	.long LABEL_E24A86
@@ -18313,7 +18054,7 @@ LABEL_E24A80:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 LABEL_E24A88:
 	.byte 0x00, 0xff
-	.asciz "SqMdlyPly"
+	aligned_string "SqMdlyPly"
 	.byte 0xb6, 0x4a, 0xe2, 0x00
 	.long LABEL_E24AB4
 	.long LABEL_E24AB2
@@ -18324,7 +18065,7 @@ LABEL_E24AAC:
 	.byte 0x00, 0xff, 0x00, 0xff
 LABEL_E24AB0:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
-	.asciz "SqTrSel"
+	aligned_string "SqTrSel"
 	muls8rr b, w
 	.byte 0xe2, 0x00
 	.long LABEL_E24AC6
@@ -18365,7 +18106,7 @@ LABEL_E24B38:
 	.byte 0xff, 0x00, 0xff, 0x00, 0xff
 LABEL_E24B48:
 	.byte 0x00, 0xff
-	.asciz "TrAsPartSelSw"
+	aligned_string "TrAsPartSelSw"
 LABEL_E24B58:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 LABEL_E24B60:
@@ -18409,17 +18150,17 @@ LABEL_E24BF8:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 LABEL_E24C00:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
-	.asciz "SqTrAsPsSure2"
+	aligned_string "SqTrAsPsSure2"
 	.byte 0x00, 0xff, 0x00, 0xff
 LABEL_E24C18:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 LABEL_E24C20:
 	.byte 0x00, 0xff, 0x00, 0xff
-	.asciz "SqTrAsPsSure1"
+	aligned_string "SqTrAsPsSure1"
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 LABEL_E24C38:
-	.asciz "TrAsPsGmSel"
-	.asciz "TrAsPsTechSel"
+	aligned_string "TrAsPsGmSel"
+	aligned_string "TrAsPsTechSel"
 	aligned_string "TrAsPsIniSel"
 LABEL_E24C60:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
@@ -18446,7 +18187,7 @@ LABEL_E24CB8:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 LABEL_E24CC0:
 	.byte 0x00, 0xff, 0x00, 0xff
-	.asciz "SqNameing"
+	aligned_string "SqNameing"
 	.long LABEL_E24CEA
 	.long LABEL_E24CE8
 	.long LABEL_E24CE6
@@ -18456,7 +18197,7 @@ LABEL_E24CE2:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 LABEL_E24CE8:
 	.byte 0x00, 0xff
-	.asciz "AfterTouchSet"
+	aligned_string "AfterTouchSet"
 	.long LABEL_E24CFC
 LABEL_E24CFC:
 	.byte 0x00, 0xff
@@ -18471,7 +18212,7 @@ LABEL_E24D1A:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 LABEL_E24D20:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
-	.asciz "StepPartBal"
+	aligned_string "StepPartBal"
 	.long LABEL_E24D4E
 	.long LABEL_E24D4C
 	.long LABEL_E24D4A
@@ -18501,15 +18242,15 @@ LABEL_E24D8C:
 LABEL_E24D98:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 LABEL_E24DA0:
-	.asciz "DemoSong5"
-	.asciz "DemoSong4"
-	.asciz "DemoSong3"
+	aligned_string "DemoSong5"
+	aligned_string "DemoSong4"
+	aligned_string "DemoSong3"
 	.byte 0x44, 0x65
-	.asciz "moSong2"
+	aligned_string "moSong2"
 LABEL_E24DC8:
-	.asciz "DemoSong1"
-	.asciz "DemoSong0"
-	.asciz "DemoStyle"
+	aligned_string "DemoSong1"
+	aligned_string "DemoSong0"
+	aligned_string "DemoStyle"
 	.long LABEL_E24E6E
 	.long LABEL_E24E64
 	.long LABEL_E24E5A
@@ -18531,13 +18272,13 @@ LABEL_E24E28:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 	aligned_string "DemoSong11"
 	aligned_string "DemoSong10"
-	.asciz "DemoSong9"
+	aligned_string "DemoSong9"
 LABEL_E24E50:
-	.asciz "DemoSong8"
-	.asciz "DemoSong7"
-	.asciz "DemoSong6"
+	aligned_string "DemoSong8"
+	aligned_string "DemoSong7"
+	aligned_string "DemoSong6"
 	.byte 0x44, 0x65
-	.asciz "moSound"
+	aligned_string "moSound"
 	.long LABEL_E24F08
 	.long LABEL_E24EFC
 	.long LABEL_E24EF0
@@ -18566,31 +18307,31 @@ LABEL_E24EF0:
 	aligned_string "DemoSong13"
 	aligned_string "DemoSong12"
 LABEL_E24F08:
-	.asciz "DemoRhy"
-	.asciz "MD_SEQ_STEP"
+	aligned_string "DemoRhy"
+	aligned_string "MD_SEQ_STEP"
 	.byte 0x4d, 0x44, 0x5f, 0x44
 	.byte 0x45, 0x4d, 0x4f, 0x00
 	aligned_string "TT_DPSMF"
 	aligned_string "TT_DPDOC"
-	.asciz "TT_DPPD"
-	.asciz "TT_DPSMFLYR"
+	aligned_string "TT_DPPD"
+	aligned_string "TT_DPSMFLYR"
 	aligned_string "TT_DPMDLYSMF"
 	aligned_string "TT_DPMDLYDOC"
-	.asciz "TT_DPMDLYPD"
-	.asciz "TT_DPMDLYSMFLYR"
+	aligned_string "TT_DPMDLYPD"
+	aligned_string "TT_DPMDLYSMFLYR"
 	aligned_string "TT_DKMDLYPLY"
 	aligned_string "TT_SQMDLYPLY"
 	aligned_string "TT_SQTRSEL"
-	.asciz "TT_SQSTEP"
+	aligned_string "TT_SQSTEP"
 	.byte 0x54, 0x54
-	.asciz "_SQTRAS"
-	.asciz "TT_SQTRASPS"
-	.asciz "TT_SQSNGSEL"
+	aligned_string "_SQTRAS"
+	aligned_string "TT_SQTRASPS"
+	aligned_string "TT_SQSNGSEL"
 	aligned_string "TT_SQSNGNAME"
-	.asciz "TT_SQAFTSET"
-	.asciz "TT_SQEASYNAME"
+	aligned_string "TT_SQAFTSET"
+	aligned_string "TT_SQEASYNAME"
 	aligned_string "TT_SQSTEPBAL"
-	.asciz "TT_DEMOMENU"
+	aligned_string "TT_DEMOMENU"
 	aligned_string "TT_DEMOSTYLE"
 	aligned_string "TT_DEMOSOUND"
 	.asciz "TT_DEMORHY"
@@ -18645,55 +18386,45 @@ LABEL_E24F08:
 	.long LABEL_E25142
 LABEL_E25142:
 	.byte 0x00, 0xff
-	.asciz "ApPlaySyori"
-LABEL_E25150:
-	.asciz "NameGetFuncCall"
-LABEL_E25160:
-	aligned_string "MiddleFuncCall"
-LABEL_E25170:
-	aligned_string "DemoRhyTtlFunc"
-LABEL_E25180:
-	aligned_string "DemoSoundTtlFunc"
+	aligned_string "ApPlaySyori"
+LABEL_E25150:	aligned_string "NameGetFuncCall"
+LABEL_E25160:	aligned_string "MiddleFuncCall"
+LABEL_E25170:	aligned_string "DemoRhyTtlFunc"
+LABEL_E25180:	aligned_string "DemoSoundTtlFunc"
 	aligned_string "DemoStyleTtlFunc"
-	.asciz "DemoMenuTtlFunc"
+	aligned_string "DemoMenuTtlFunc"
 	aligned_string "DemoModeFunc"
-	.asciz "SqStepTtlFunc"
-LABEL_E251D0:
-	aligned_string "SqTrSelTtlFunc"
-LABEL_E251E0:
-	.asciz "SeqStepModeFunc"
-LABEL_E251F0:
-	.asciz "DpSmfLyrTtlFunc"
-LABEL_E25200:
-	aligned_string "DpSmfTtlFunc"
-	.asciz "DpPdTtlFunc"
+	aligned_string "SqStepTtlFunc"
+LABEL_E251D0:	aligned_string "SqTrSelTtlFunc"
+LABEL_E251E0:	aligned_string "SeqStepModeFunc"
+LABEL_E251F0:	aligned_string "DpSmfLyrTtlFunc"
+LABEL_E25200:	aligned_string "DpSmfTtlFunc"
+	aligned_string "DpPdTtlFunc"
 	aligned_string "DpDocTtlFunc"
 LABEL_E25228:
-	.asciz "DpMdlySmfLyrTtlFunc"
+	aligned_string "DpMdlySmfLyrTtlFunc"
 	aligned_string "DpMdlySmfTtlFunc"
-	.asciz "DpMdlyPdTtlFunc"
+	aligned_string "DpMdlyPdTtlFunc"
 	.byte 0x44, 0x70
 	aligned_string "MdlyDocTtlFunc"
 LABEL_E25270:
 	aligned_string "DkMdlyPlyTtlFunc"
 	aligned_string "SqMdlyPlyTtlFunc"
 	aligned_string "SqTrAsPsSureFunc"
-	.asciz "SqTrAsPsTtlFunc"
+	aligned_string "SqTrAsPsTtlFunc"
 	.byte 0x53, 0x71
 	aligned_string "TrAsSureFunc"
-	.asciz "SqTrAsTtlFunc"
+	aligned_string "SqTrAsTtlFunc"
 	aligned_string "SqSngNameTtlFunc"
-	.asciz "SqSngSelTtlFunc"
+	aligned_string "SqSngSelTtlFunc"
 	.byte 0x53, 0x71
-	.asciz "AftSetTtlFunc"
+	aligned_string "AftSetTtlFunc"
 	.byte 0x43, 0x44
-	.asciz "likeSwTtlFunc"
+	aligned_string "likeSwTtlFunc"
 	.byte 0x53, 0x65
-	.asciz "qSongMemoryFunc"
-LABEL_E25328:
-	.asciz "SeqSongNameFunc"
-LABEL_E25338:
-	.asciz "Press the up/down button under the screen corresponding to the track that you want to STEP RECORD."
+	aligned_string "qSongMemoryFunc"
+LABEL_E25328:	aligned_string "SeqSongNameFunc"
+LABEL_E25338:	.asciz "Press the up/down button under the screen corresponding to the track that you want to STEP RECORD."
 	.byte 0xff, 0x44, 0x72, 0xfc, 0x63
 	.ascii "ken Sie eine der Doppeltasten unter dem Display, entsprechend der Spur, die Sie per STEP RECORD aufnehmen m"
 	.byte 0xf6
@@ -18704,18 +18435,18 @@ LABEL_E25478:
 	aligned_string "Press the up/down button under the screen corresponding to the track that you want to STEP RECORD."
 LABEL_E25540:
 	aligned_string "Press the up/down button under the screen corresponding to the track that you want to STEP RECORD."
-	.asciz "Select whether or not After Touch is recorded by Sequencer."
+	aligned_string "Select whether or not After Touch is recorded by Sequencer."
 LABEL_E255E0:
 	.byte 0x57, 0xe4
-	.asciz "hlen Sie, ob After Touch Effekte vom Sequenzer aufgezeichnet werden sollen."
+	aligned_string "hlen Sie, ob After Touch Effekte vom Sequenzer aufgezeichnet werden sollen."
 	.byte 0x53, 0x65
-	.asciz "lect whether or not After Touch is recorded by Sequencer."
-	.asciz "Select whether or not After Touch is recorded by Sequencer."
+	aligned_string "lect whether or not After Touch is recorded by Sequencer."
+	aligned_string "Select whether or not After Touch is recorded by Sequencer."
 	.byte 0x53, 0x65
-	.asciz "lect whether or not After Touch is recorded by Sequencer."
-	.asciz "Select whether or not After Touch is recorded by Sequencer."
+	aligned_string "lect whether or not After Touch is recorded by Sequencer."
+	aligned_string "Select whether or not After Touch is recorded by Sequencer."
 	.byte 0x41, 0x6e
-	.asciz "y existing song will be cleared. Press OK to proceed."
+	aligned_string "y existing song will be cleared. Press OK to proceed."
 	.byte 0x4a, 0x65
 	.ascii "der Song im Arbeitsspeicher wird gel"
 	.byte 0xf6, 0x73, 0x63, 0x68
@@ -18724,32 +18455,32 @@ LABEL_E255E0:
 	.ascii "en Sie OK zur Best"
 	.byte 0xe4
 	aligned_string "tigung."
-	.asciz "Any existing song will be cleared. Press OK to proceed."
-	.asciz "Any existing song will be cleared. Press OK to proceed."
-	.asciz "Any existing song will be cleared. Press OK to proceed."
-	.asciz "Any existing song will be cleared. Press OK to proceed."
+	aligned_string "Any existing song will be cleared. Press OK to proceed."
+	aligned_string "Any existing song will be cleared. Press OK to proceed."
+	aligned_string "Any existing song will be cleared. Press OK to proceed."
+	aligned_string "Any existing song will be cleared. Press OK to proceed."
 	aligned_string "ATTENTION!"
 LABEL_E25890:
-	.asciz "ACHTUNG !"
+	aligned_string "ACHTUNG !"
 	.asciz "ATTENTION!"
 	.byte 0xff, 0xa1, 0x41
 	.byte 0x54, 0x45, 0x4e, 0x43, 0x49
 	.byte 0xd3, 0x4e, 0x21
 	.byte 0x00, 0xff
 	aligned_string "ATTENTION!"
-	.asciz "Perhatian !"
-	.asciz "Are You Sure?"
+	aligned_string "Perhatian !"
+	aligned_string "Are You Sure?"
 LABEL_E258D8:
-	.asciz "Sind Sie sicher ?"
+	aligned_string "Sind Sie sicher ?"
 	.ascii "Etes vous s"
 	.byte 0xfb, 0x72, 0x3f
 	.byte 0x00, 0xff, 0xbf, 0x45, 0x73, 0x74, 0xe1, 0x20
-	.asciz "seguro?"
+	aligned_string "seguro?"
 LABEL_E25908:
-	.asciz "Are You Sure?"
+	aligned_string "Are You Sure?"
 	.byte 0x41, 0x70
-	.asciz "akah yakin akan dihapus ?"
-	.asciz "Turning on GENERAL MIDI MODE will replace your current settings with GENERAL MIDI settings!"
+	aligned_string "akah yakin akan dihapus ?"
+	aligned_string "Turning on GENERAL MIDI MODE will replace your current settings with GENERAL MIDI settings!"
 	.byte 0x44, 0x75
 	.ascii "rch das Einschalten des GENERAL MIDI MODE werden alle Einstellungen zu GENERAL MIDI Einstellungen ge"
 	.byte 0xe4, 0x6e, 0x64, 0x65
@@ -18763,12 +18494,12 @@ LABEL_E25A68:
 	.byte 0xa1
 	.asciz "Al activar el modo MIDI General se reemplazan las configuraciones actuales por configuraciones MIDI Generales!"
 LABEL_E25AD8:
-	.asciz "Turning on GENERAL MIDI MODE will replace your current settings with GENERAL MIDI settings!"
-	.asciz "Aktifkan GENERAL MIDI MODE untuk kembali ke  susunan GENERAL MIDI yang sekarang. "
+	aligned_string "Turning on GENERAL MIDI MODE will replace your current settings with GENERAL MIDI settings!"
+	aligned_string "Aktifkan GENERAL MIDI MODE untuk kembali ke  susunan GENERAL MIDI yang sekarang. "
 	.byte 0x54, 0x75
 	aligned_string "rning off GENERAL MIDI MODE will replace the GENERAL MIDI settings with the original factory settings!"
 LABEL_E25BF0:
-	.asciz "Durch das Ausschalten des GENERAL MIDI MODE werden die GENERAL MIDI Einstellungen durch die Werkseinstellungen ersetzt."
+	aligned_string "Durch das Ausschalten des GENERAL MIDI MODE werden die GENERAL MIDI Einstellungen durch die Werkseinstellungen ersetzt."
 LABEL_E25C68:
 	.ascii "La d"
 	.byte 0xe9, 0x73, 0x61, 0x63
@@ -18776,7 +18507,7 @@ LABEL_E25C68:
 	.byte 0xe9
 	.ascii "glages GENERAL MIDI par les r"
 	inc	7, xbc
-	.asciz "lages d'usines!"
+	aligned_string "lages d'usines!"
 LABEL_E25CD8:
 	.byte 0xa1
 	.ascii "Al desconectar el modo MIDI General se reemplazan las configuraciones MIDI Generales por las configuraciones originales de f"
@@ -18792,14 +18523,14 @@ LABEL_E25DC8:
 	.long LABEL_E25EC2
 	.long LABEL_E25E68
 LABEL_E25E68:
-	.asciz "Ubahlah assignment dari Tracks %2d dari %s ke %s akan menghapus semua data yang sekarang."
-	.asciz "Changing the assignment of Track %2d from %s to %s will erase all the current data."
+	aligned_string "Ubahlah assignment dari Tracks %2d dari %s ke %s akan menghapus semua data yang sekarang."
+	aligned_string "Changing the assignment of Track %2d from %s to %s will erase all the current data."
 	.byte 0x41, 0x6c
 	.ascii " cambiar la asignaci"
 	.byte 0xf3, 0x6e, 0x20, 0x64
 	.ascii "e pistas %2d de %s a %s se borrar"
 	.byte 0xe1
-	.asciz "n todos los datos actuales."
+	aligned_string "n todos los datos actuales."
 	.byte 0x54, 0x6f
 	.ascii "ut changement d'assignation des pistes %2d de%s "
 	.byte 0xe0
@@ -18809,7 +18540,7 @@ LABEL_E25E68:
 	.ascii "Das "
 	.byte 0xc4
 	aligned_string "ndern der Spurzuordnung %2d von %s nach %s hat einen Verlust der Daten zur folge."
-	.asciz "Changing the assignment of Track %2d from %s to %s will erase all the current data."
+	aligned_string "Changing the assignment of Track %2d from %s to %s will erase all the current data."
 	.long LABEL_E25338
 	.long LABEL_E2539C
 	.long LABEL_E25414
@@ -18872,36 +18603,27 @@ LABEL_E25E68:
 	.long LABEL_E26180
 	.long LABEL_E26178
 	.long LABEL_E26170
-LABEL_E26170:
-	aligned_string "PART15"
-LABEL_E26178:
-	aligned_string "PART14"
-LABEL_E26180:
-	aligned_string "PART13"
-LABEL_E26188:
-	aligned_string "RHYTHM"
-LABEL_E26190:
-	.asciz "CONTROL"
+LABEL_E26170:	aligned_string "PART15"
+LABEL_E26178:	aligned_string "PART14"
+LABEL_E26180:	aligned_string "PART13"
+LABEL_E26188:	aligned_string "RHYTHM"
+LABEL_E26190:	aligned_string "CONTROL"
 LABEL_E26198:
 	.byte 0x41, 0x50, 0x43, 0x00
 	.byte 0x43, 0x48, 0x4f, 0x52
 	.byte 0x44, 0x00
-	.asciz "DRUMS"
+	aligned_string "DRUMS"
 LABEL_E261A8:
-	.asciz "PART4"
+	aligned_string "PART4"
 	.byte 0x50, 0x41
 	.byte 0x52, 0x54, 0x37, 0x00
 	.byte 0x50, 0x41, 0x52, 0x54
 	.byte 0x36, 0x00
-	.asciz "PART5"
-LABEL_E261C0:
-	aligned_string "PART12"
-LABEL_E261C8:
-	aligned_string "PART11"
-LABEL_E261D0:
-	aligned_string "PART10"
-LABEL_E261D8:
-	.asciz "PART9"
+	aligned_string "PART5"
+LABEL_E261C0:	aligned_string "PART12"
+LABEL_E261C8:	aligned_string "PART11"
+LABEL_E261D0:	aligned_string "PART10"
+LABEL_E261D8:	aligned_string "PART9"
 	.byte 0x50, 0x41
 	.byte 0x52, 0x54, 0x38, 0x00
 	.byte 0x52, 0x49, 0x47, 0x48
@@ -18910,7 +18632,7 @@ LABEL_E261D8:
 	.byte 0x00, 0xff
 	aligned_string "RIGHT1"
 	aligned_string "Lyrc"
-	.asciz "MEASURE = %3d"
+	aligned_string "MEASURE = %3d"
 	ldb	w, 0x20
 	.asciz "                       "
 	.asciz "                         "
@@ -18942,36 +18664,36 @@ LABEL_E261D8:
 	.long LABEL_E26324
 	.long LABEL_E2631A
 LABEL_E2631A:
-	.asciz " PART 15 "
-	.asciz " PART 14 "
+	aligned_string " PART 15 "
+	aligned_string " PART 14 "
 	ldb	w, 0x50
-	.asciz "ART 13 "
+	aligned_string "ART 13 "
 LABEL_E26338:
-	.asciz " RHYTHM  "
-	.asciz " CONTROL "
-	.asciz " APC     "
+	aligned_string " RHYTHM  "
+	aligned_string " CONTROL "
+	aligned_string " APC     "
 	ldb	w, 0x43
 	.asciz "HORD   "
 LABEL_E26360:
-	.asciz " DRUMS   "
-	.asciz " PART 4  "
-	.asciz " PART 7  "
+	aligned_string " DRUMS   "
+	aligned_string " PART 4  "
+	aligned_string " PART 7  "
 	ldb	w, 0x50
 	.asciz "ART 6  "
 LABEL_E26388:
-	.asciz " PART 5  "
-	.asciz " PART 12 "
-	.asciz " PART 11 "
+	aligned_string " PART 5  "
+	aligned_string " PART 12 "
+	aligned_string " PART 11 "
 	ldb	w, 0x50
-	.asciz "ART 10 "
+	aligned_string "ART 10 "
 LABEL_E263B0:
-	.asciz " PART 9  "
-	.asciz " PART 8  "
-	.asciz " RIGHT2  "
+	aligned_string " PART 9  "
+	aligned_string " PART 8  "
+	aligned_string " RIGHT2  "
 	ldb	w, 0x4c
-	.asciz "EFT    "
+	aligned_string "EFT    "
 LABEL_E263D8:
-	.asciz " RIGHT1  "
+	aligned_string " RIGHT1  "
 	aligned_string "|-|TR 1|TR 2|TR 3|TR 4|TR 5|TR 6|TR 7|TR 8"
 	.asciz "|-|TR 9|TR10|TR11|TR12|TR13|TR14|TR15|TR16"
 	.byte 0xff, 0x8d, 0x00, 0xfa, 0x01, 0x8d, 0x00
@@ -18997,7 +18719,7 @@ LABEL_E263D8:
 	.byte 0xe2, 0x04, 0xe2, 0x04, 0xe2, 0x04, 0x00, 0x01
 	.byte 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09
 	.byte 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f, 0x10, 0x11
-	.asciz "SONG%2d"
+	aligned_string "SONG%2d"
 	aligned_string "                      "
 	.long LABEL_E265AA
 	.long LABEL_E265A4
@@ -19072,10 +18794,8 @@ LABEL_E26640:
 	.byte 0x00, 0x00
 	.long LABEL_E26680
 	.long LABEL_E2667A
-LABEL_E2667A:
-	.asciz " ON  "
-LABEL_E26680:
-	.asciz " OFF "
+LABEL_E2667A:	aligned_string " ON  "
+LABEL_E26680:	aligned_string " OFF "
 	.byte 0x01, 0x00
 	.byte 0x02, 0x00, 0x04, 0x00, 0x08, 0x00, 0x10, 0x00
 	.byte 0x20, 0x00, 0x40, 0x00, 0x80, 0x00, 0x00, 0x01
@@ -19250,104 +18970,98 @@ LABEL_E266E6:
 LABEL_E26A54:
 	.byte 0x00, 0xff
 	aligned_string "AutoPunchTtlRqFunc"
-	.asciz "PanicFunc"
-	.asciz "SureJudgeFunc"
+	aligned_string "PanicFunc"
+	aligned_string "SureJudgeFunc"
 	aligned_string "EdMenuPageFunc"
-	.asciz "StsAtPunchCheck"
-	.asciz "HelpFuncChkFunc"
+	aligned_string "StsAtPunchCheck"
+	aligned_string "HelpFuncChkFunc"
 	aligned_string "HelpOkSwFunc"
 LABEL_E26AC0:
-	.asciz "HelpMenuCheck"
+	aligned_string "HelpMenuCheck"
 	.byte 0x48, 0x65
 	aligned_string "lpStsP4Check"
 	aligned_string "HelpStsP3Check"
 	aligned_string "HelpStsP2Check"
 	aligned_string "HelpStsCheck"
-	.asciz "HelpLangChkFunc"
-	.asciz "HelpTtlFunc"
+	aligned_string "HelpLangChkFunc"
+	aligned_string "HelpTtlFunc"
 LABEL_E26B28:
-	.asciz "AcIndexWideToggleFunc"
+	aligned_string "AcIndexWideToggleFunc"
 	.byte 0x41, 0x74
-	.asciz "tSongClrCheck"
+	aligned_string "tSongClrCheck"
 	.byte 0x41, 0x74
 	aligned_string "tTrkClrCheck"
 	aligned_string "StsNtDrEditCheck"
-LABEL_E26B70:
-	.asciz "StsTrkClr2Check"
-LABEL_E26B80:
-	.asciz "StsTrkClr1Check"
-LABEL_E26B90:
-	aligned_string "StsPnlWrtCheck"
-LABEL_E26BA0:
-	aligned_string "StsEasyRec2Check"
+LABEL_E26B70:	aligned_string "StsTrkClr2Check"
+LABEL_E26B80:	aligned_string "StsTrkClr1Check"
+LABEL_E26B90:	aligned_string "StsPnlWrtCheck"
+LABEL_E26BA0:	aligned_string "StsEasyRec2Check"
 	aligned_string "StsEasyRec1Check"
 	aligned_string "StsSeqMenu2Check"
 	aligned_string "StsSeqMenu1Check"
 LABEL_E26BE8:
-	.asciz "AttAttentionCheck"
+	aligned_string "AttAttentionCheck"
 	aligned_string "AttAreYouSureCheck"
-	.asciz "MimeOnOffFunc"
-	.asciz "BitmapDredt0k"
-	.asciz "BitmapDredt0d"
+	aligned_string "MimeOnOffFunc"
+	aligned_string "BitmapDredt0k"
+	aligned_string "BitmapDredt0d"
 LABEL_E26C38:
-	.asciz "BitmapNtedt0k"
+	aligned_string "BitmapNtedt0k"
 	.byte 0x42, 0x69
-	.asciz "tmapNtedt0d"
+	aligned_string "tmapNtedt0d"
 	aligned_string "TrkMixerIntTtlFunc"
 LABEL_E26C68:
-	.asciz "EqInOutFunc"
+	aligned_string "EqInOutFunc"
 	aligned_string "NoteEditFunc"
 	aligned_string "PunchInOutFunc"
 	aligned_string "PlySngSel2Func"
-	.asciz "PlySngSelFunc"
+	aligned_string "PlySngSelFunc"
 LABEL_E26CB0:
 	aligned_string "SngSelFunc"
 	aligned_string "EntertainerGridCheck"
-	.asciz "SqplyFunc"
+	aligned_string "SqplyFunc"
 	aligned_string "MetroOnOffFunc"
 	aligned_string "CycleOnOffFunc"
-	.asciz "MainExeFunc"
+	aligned_string "MainExeFunc"
 LABEL_E26D08:
-	.asciz "SqedtFunc"
+	aligned_string "SqedtFunc"
 	aligned_string "EqualizerCngFunc"
-	.asciz "DspItem0CngFunc"
-	.asciz "IvRealRecExitProc"
+	aligned_string "DspItem0CngFunc"
+	aligned_string "IvRealRecExitProc"
 	.byte 0x41, 0x63
-	.asciz "PanicEditSwProc"
+	aligned_string "PanicEditSwProc"
 LABEL_E26D58:
-	.asciz "IvAutoPunchExitProc"
-	.asciz "IvPunchExitProc"
-	.asciz "IvSdaccProc"
+	aligned_string "IvAutoPunchExitProc"
+	aligned_string "IvPunchExitProc"
+	aligned_string "IvSdaccProc"
 LABEL_E26D88:
-	.asciz "IvSddspProc"
-	.asciz "IvSdrevProc"
-LABEL_E26DA0:
-	.asciz "IvPnlWrExitProc"
-LABEL_E26DB0:
-	.asciz "HelpTtlProc"
+	aligned_string "IvSddspProc"
+	aligned_string "IvSdrevProc"
+LABEL_E26DA0:	aligned_string "IvPnlWrExitProc"
+LABEL_E26DB0:	aligned_string "HelpTtlProc"
 	aligned_string "IvPlayExitProc"
-	.asciz "AcIndexWideToggleProc"
+	aligned_string "AcIndexWideToggleProc"
 	aligned_string "MsgToTtlProc"
 LABEL_E26DF0:
-	.asciz "EqOnOffFuncToggleProc"
+	aligned_string "EqOnOffFuncToggleProc"
 	.byte 0x4e, 0x6f
-	.asciz "teEditBoxProc"
+	aligned_string "teEditBoxProc"
 	.byte 0x53, 0x6e
-	.asciz "gSel2Proc"
+	aligned_string "gSel2Proc"
 	aligned_string "SngSelProc"
 	aligned_string "AcEntertainerGridBoxProc"
 LABEL_E26E48:
 	aligned_string "AccIllProc"
-	.asciz "SqedtVal3Proc"
+	aligned_string "SqedtVal3Proc"
 	aligned_string "SqplyValProc"
 LABEL_E26E70:
 	aligned_string "IvSongCopyExitProc"
 	aligned_string "SqedtFixProc"
-	.asciz "SqedtVal2Proc"
+	aligned_string "SqedtVal2Proc"
 LABEL_E26EA0:
 	aligned_string "SqedtValProc"
 	aligned_string "EqualizerBoxProc"
-	.asciz "EffectBoxProc"
+	aligned_string "EffectBoxProc"
 LABEL_E26ECE:
 	.long LABEL_E26EF8
 	.long LABEL_E26EF2
@@ -19357,7 +19071,7 @@ LABEL_E26ECE:
 LABEL_E26EE2:
 	.byte 0x00, 0xff
 	aligned_string "ttl_no"
-	.asciz "data2"
+	aligned_string "data2"
 	aligned_string "data"
 LABEL_E26EF8:
 	.asciz "func"
@@ -19377,13 +19091,11 @@ LABEL_E26F1A:
 	.long LABEL_E26F2E
 LABEL_E26F2E:
 	.byte 0x00, 0xff
-LABEL_E26F30:
-	aligned_string "ttl_no"
-LABEL_E26F38:
-	aligned_string "func"
-	.asciz "fontcolor"
+LABEL_E26F30:	aligned_string "ttl_no"
+LABEL_E26F38:	aligned_string "func"
+	aligned_string "fontcolor"
 LABEL_E26F48:
-	.asciz "color"
+	aligned_string "color"
 LABEL_E26F4E:
 	.long LABEL_E26F70
 	.long LABEL_E26F66
@@ -19393,9 +19105,9 @@ LABEL_E26F5E:
 	.byte 0x00, 0xff
 LABEL_E26F60:
 	aligned_string "func"
-	.asciz "fontcolor"
+	aligned_string "fontcolor"
 LABEL_E26F70:
-	.asciz "color"
+	aligned_string "color"
 LABEL_E26F76:
 	.long LABEL_E26F9A
 	.long LABEL_E26F90
@@ -19403,11 +19115,9 @@ LABEL_E26F76:
 	.long LABEL_E26F86
 LABEL_E26F86:
 	.byte 0x00, 0xff
-LABEL_E26F88:
-	aligned_string "border"
-LABEL_E26F90:
-	.asciz "fontcolor"
-	.asciz "color"
+LABEL_E26F88:	aligned_string "border"
+LABEL_E26F90:	aligned_string "fontcolor"
+	aligned_string "color"
 LABEL_E26FA0:
 	.long LABEL_E26FA4
 LABEL_E26FA4:
@@ -19422,7 +19132,7 @@ LABEL_E26FBA:
 	.byte 0x00, 0xff
 	aligned_string "ttl_no"
 	aligned_string "func"
-	.asciz "fontcolor"
+	aligned_string "fontcolor"
 	.asciz "color"
 LABEL_E26FDA:
 	.long LABEL_E26FFC
@@ -19432,7 +19142,7 @@ LABEL_E26FDA:
 LABEL_E26FEA:
 	.byte 0x00, 0xff
 	aligned_string "func"
-	.asciz "fontcolor"
+	aligned_string "fontcolor"
 	.asciz "color"
 LABEL_E27002:
 	.long LABEL_E27030
@@ -19442,13 +19152,11 @@ LABEL_E27002:
 	.long LABEL_E27016
 LABEL_E27016:
 	.byte 0x00, 0xff
-LABEL_E27018:
-	aligned_string "ttl_no"
-LABEL_E27020:
-	aligned_string "func"
-	.asciz "fontcolor"
+LABEL_E27018:	aligned_string "ttl_no"
+LABEL_E27020:	aligned_string "func"
+	aligned_string "fontcolor"
 LABEL_E27030:
-	.asciz "color"
+	aligned_string "color"
 LABEL_E27036:
 	.long LABEL_E27058
 	.long LABEL_E2704E
@@ -19472,7 +19180,7 @@ LABEL_E2707A:
 	.byte 0x00, 0xff
 	aligned_string "ttl_no"
 	aligned_string "func"
-	.asciz "fontcolor"
+	aligned_string "fontcolor"
 	.asciz "color"
 	aligned_string "font"
 LABEL_E270A0:
@@ -19527,7 +19235,7 @@ LABEL_E27120:
 	.asciz "page"
 	.byte 0xff, 0x66, 0x6f
 	.byte 0x6e, 0x74, 0x00, 0xff
-	.asciz "fontcolor"
+	aligned_string "fontcolor"
 	jr	ule, 0x6f
 	.byte 0x6c, 0x6f, 0x72, 0x00, 0x40, 0x71, 0xe2, 0x00
 	.byte 0x00, 0xff
@@ -19558,7 +19266,7 @@ LABEL_E27160:
 LABEL_E2716C:
 	.byte 0x00, 0xff, 0x66, 0x75
 	.byte 0x6e, 0x63, 0x00, 0xff
-	.asciz "style"
+	aligned_string "style"
 LABEL_E2717A:
 	.long LABEL_E2717E
 LABEL_E2717E:
@@ -19750,42 +19458,42 @@ LABEL_E2717E:
 	.zero 8
 LABEL_E27408:
 	.byte 0x00, 0xff
-	.asciz "IvRealRecExit"
+	aligned_string "IvRealRecExit"
 LABEL_E27418:
 	.byte 0x66, 0x6a, 0x00, 0xff
-	.asciz "AcPanicEditSw"
+	aligned_string "AcPanicEditSw"
 	.byte 0x00, 0xff
-	.asciz "IvAutoPunchExit"
+	aligned_string "IvAutoPunchExit"
 	.byte 0x00, 0xff
-	.asciz "IvPunchExit"
+	aligned_string "IvPunchExit"
 	.byte 0x00, 0xff
-	.asciz "IvSdacc"
+	aligned_string "IvSdacc"
 	.byte 0x00, 0xff
-	.asciz "IvSddsp"
+	aligned_string "IvSddsp"
 	.byte 0x00, 0xff
-	.asciz "IvSdrev"
+	aligned_string "IvSdrev"
 LABEL_E27468:
 	.byte 0x00, 0xff
-	.asciz "IvPnlWrExit"
+	aligned_string "IvPnlWrExit"
 	.byte 0x5e, 0x5e
 	.byte 0x63, 0x47, 0x6a, 0x00
-	.asciz "HelpTtl"
+	aligned_string "HelpTtl"
 	.byte 0x60, 0x00, 0x49, 0x76
 	.asciz "PlayExit"
 	.byte 0xff, 0x41, 0x41, 0x6a, 0x00, 0x41, 0x63
-	.asciz "IndexWideToggle"
+	aligned_string "IndexWideToggle"
 LABEL_E274A8:
 	.byte 0x00, 0xff
 	.asciz "MsgToTtl"
 	.byte 0xff, 0x00, 0xff
-	.asciz "EqOnOffFuncToggle"
+	aligned_string "EqOnOffFuncToggle"
 LABEL_E274C8:
 	.byte 0x6a, 0x43, 0x00, 0xff
-	.asciz "NoteEditBox"
+	aligned_string "NoteEditBox"
 LABEL_E274D8:
 	.byte 0x00, 0xff
-	.asciz "SngSel2"
-	.asciz "c^^jC"
+	aligned_string "SngSel2"
+	aligned_string "c^^jC"
 	aligned_string "SngSel"
 LABEL_E274F0:
 	.byte 0x58, 0x58, 0x6a, 0x00
@@ -19794,7 +19502,7 @@ LABEL_E274F0:
 	aligned_string "AccIll"
 LABEL_E27518:
 	.byte 0x5e, 0x5e, 0x6a, 0x00
-	.asciz "SqedtVal3"
+	aligned_string "SqedtVal3"
 	.byte 0x5e, 0x5e
 	.byte 0x6a, 0x43, 0x00, 0xff
 	.asciz "SqplyVal"
@@ -19805,14 +19513,14 @@ LABEL_E27548:
 	.asciz "SqedtFix"
 	.byte 0xff, 0x5e, 0x5e
 	jr	gt, 0x00
-	.asciz "SqedtVal2"
+	aligned_string "SqedtVal2"
 	aligned_string "^^jC"
 	.asciz "SqedtVal"
 	.byte 0xff, 0x6a, 0x43, 0x00, 0xff
 	.asciz "EqualizerBox"
 	.byte 0xff, 0x6a, 0x42
 	.byte 0x42, 0x43, 0x00, 0xff
-	.asciz "EffectBox"
+	aligned_string "EffectBox"
 	.byte 0x1a, 0x00
 	.long LABEL_E275EA
 	.long LABEL_E275DA
@@ -19823,9 +19531,9 @@ LABEL_E27548:
 LABEL_E275B0:
 	aligned_string "EV_GRAPHDRAW"
 	aligned_string "EV_EQSTRDRAW"
-	.asciz "EV_EQLINEDRAW"
+	aligned_string "EV_EQLINEDRAW"
 	aligned_string "EV_EFFPARADRAW"
-	.asciz "EV_EFFFIXDRAW"
+	aligned_string "EV_EFFFIXDRAW"
 	.byte 0x05, 0x00
 
 	.long LABEL_E27F8E
@@ -19951,7 +19659,7 @@ LABEL_E275B0:
 	.byte 0x00, 0x00
 	aligned_string "MT_PANIC"
 	aligned_string "MT_FLASHLOAD"
-	.asciz "MT_FLASHWRITE"
+	aligned_string "MT_FLASHWRITE"
 LABEL_E27800:
 	aligned_string "MT_GetTSngNameString"
 	aligned_string "MT_GetFSngNameString"
@@ -19963,7 +19671,7 @@ LABEL_E27850:
 	aligned_string "MT_ChkToggleEditSw"
 	aligned_string "MT_GetDrNameString"
 LABEL_E27878:
-	.asciz "MT_GetDrNumString"
+	aligned_string "MT_GetDrNumString"
 	aligned_string "MT_GetKb2Str"
 LABEL_E27898:
 	aligned_string "MT_GetKb1Str"
@@ -19979,97 +19687,88 @@ LABEL_E27908:
 	aligned_string "MT_GetEq1Str"
 	aligned_string "MT_GetEq0Str"
 	aligned_string "MT_NoteHilightDisp"
-LABEL_E27938:
-	.asciz "MT_NoteBarDisp2"
-LABEL_E27948:
-	aligned_string "MT_NoteBarDisp"
-LABEL_E27958:
-	.asciz "MT_GetMeasCngSv"
-LABEL_E27968:
-	aligned_string "MT_GetMeasTopNumSv"
+LABEL_E27938:	aligned_string "MT_NoteBarDisp2"
+LABEL_E27948:	aligned_string "MT_NoteBarDisp"
+LABEL_E27958:	aligned_string "MT_GetMeasCngSv"
+LABEL_E27968:	aligned_string "MT_GetMeasTopNumSv"
 	aligned_string "MT_GetInputLenString"
-	.asciz "MT_GetLenString"
+	aligned_string "MT_GetLenString"
 	aligned_string "MT_GetInputVelString"
-LABEL_E279B8:
-	.asciz "MT_GetVelString"
-LABEL_E279C8:
-	aligned_string "MT_GetNoteString"
-	.asciz "MT_GetIncString"
-	.asciz "MT_GetPosString"
+LABEL_E279B8:	aligned_string "MT_GetVelString"
+LABEL_E279C8:	aligned_string "MT_GetNoteString"
+	aligned_string "MT_GetIncString"
+	aligned_string "MT_GetPosString"
 	aligned_string "MT_GetHakuString"
-	.asciz "MT_GetLinePos"
+	aligned_string "MT_GetLinePos"
 	aligned_string "MT_GetTriPos"
 LABEL_E27A28:
 	aligned_string "MT_GetEndPos"
 	aligned_string "MT_GetPCntInString"
 	aligned_string "MT_GetPOutMeasString"
 LABEL_E27A60:
-	.asciz "MT_GetPInMeasString"
-	.asciz "MT_GetPMeasString"
+	aligned_string "MT_GetPInMeasString"
+	aligned_string "MT_GetPMeasString"
 	.byte 0x4d, 0x54
-	.asciz "_GetAccLvlStr"
+	aligned_string "_GetAccLvlStr"
 	.byte 0x4d, 0x54
-	.asciz "_GetSclrPerString"
+	aligned_string "_GetSclrPerString"
 	aligned_string "MT_GetSclrKbString"
 	aligned_string "MT_GetSclrNameString"
 	aligned_string "MT_GetSclrNoString"
 LABEL_E27AE8:
 	aligned_string "MT_GetSoloEnString"
-	.asciz "MT_SetPunch"
+	aligned_string "MT_SetPunch"
 LABEL_E27B08:
-	.asciz "MT_SetMetro"
-	.asciz "MT_SetCycle"
+	aligned_string "MT_SetMetro"
+	aligned_string "MT_SetCycle"
 LABEL_E27B20:
-	.asciz "MT_GetCycEndMString"
-	.asciz "MT_GetCycSrtMString"
+	aligned_string "MT_GetCycEndMString"
+	aligned_string "MT_GetCycSrtMString"
 LABEL_E27B48:
-	.asciz "MT_GetCycEnString"
-	.asciz "MT_GetMemString"
+	aligned_string "MT_GetCycEnString"
+	aligned_string "MT_GetMemString"
 	aligned_string "MT_GetBeatString"
 	aligned_string "MT_GetMeasString"
-	.asciz "MT_SetToCur"
-	.asciz "MT_GetToCur"
+	aligned_string "MT_SetToCur"
+	aligned_string "MT_GetToCur"
 	.byte 0x4d, 0x54
-	.asciz "_SetFromCur"
-	.asciz "MT_GetFromCur"
+	aligned_string "_SetFromCur"
+	aligned_string "MT_GetFromCur"
 	aligned_string "MT_ChkCur2"
-	.asciz "MT_ChkCur"
+	aligned_string "MT_ChkCur"
 LABEL_E27BD8:
-	.asciz "MT_CurToParam"
+	aligned_string "MT_CurToParam"
 	.byte 0x4d, 0x54
 	aligned_string "_GetCurPos"
 	aligned_string "MT_SetCurPos"
 	aligned_string "MT_GetScpTtrString"
-	.asciz "MT_GetScpTsngString"
+	aligned_string "MT_GetScpTsngString"
 	aligned_string "MT_GetScpFtrString"
-	.asciz "MT_GetScpFsngString"
-	.asciz "MT_GetMinsRepString"
+	aligned_string "MT_GetScpFsngString"
+	aligned_string "MT_GetMinsRepString"
 	.byte 0x4d, 0x54
 	aligned_string "_GetMinsSMString"
-	.asciz "MT_GetMinsTrBString"
+	aligned_string "MT_GetMinsTrBString"
 	.byte 0x4d, 0x54
 	aligned_string "_GetMinsLMString"
 	aligned_string "MT_GetMinsFMString"
-	.asciz "MT_GetMinsTrAString"
+	aligned_string "MT_GetMinsTrAString"
 	aligned_string "MT_GetMcpRepString"
-	.asciz "MT_GetMcpSMString"
+	aligned_string "MT_GetMcpSMString"
 LABEL_E27CF0:
 	aligned_string "MT_GetMcpTrBString"
-	.asciz "MT_GetMcpLMString"
+	aligned_string "MT_GetMcpLMString"
 	.byte 0x4d, 0x54
-	.asciz "_GetMcpFMString"
+	aligned_string "_GetMcpFMString"
 LABEL_E27D28:
 	aligned_string "MT_GetMcpTrAString"
 	aligned_string "MT_GetMrgTrCString"
 LABEL_E27D50:
 	aligned_string "MT_GetMrgTrBString"
 	aligned_string "MT_GetMrgTrAString"
-LABEL_E27D78:
-	aligned_string "MT_GetCnString"
-LABEL_E27D88:
-	aligned_string "MT_GetTnString"
-LABEL_E27D98:
-	aligned_string "MT_GetQtzWinString"
+LABEL_E27D78:	aligned_string "MT_GetCnString"
+LABEL_E27D88:	aligned_string "MT_GetTnString"
+LABEL_E27D98:	aligned_string "MT_GetQtzWinString"
 	aligned_string "MT_GetQtzStrString"
 LABEL_E27DC0:
 	aligned_string "MT_GetQtzValString"
@@ -20080,26 +19779,26 @@ LABEL_E27DF8:
 	aligned_string "MT_GetAdlyString"
 	aligned_string "MT_GetLMString"
 	aligned_string "MT_GetFMString"
-	.asciz "MT_GetTrkString"
-	.asciz "MT_DecVal"
+	aligned_string "MT_GetTrkString"
+	aligned_string "MT_DecVal"
 	.byte 0x4d, 0x54
-	.asciz "_IncVal"
+	aligned_string "_IncVal"
 LABEL_E27E60:
-	.asciz "MT_GetDispPos"
+	aligned_string "MT_GetDispPos"
 	.byte 0x4d, 0x54
-	.asciz "_CngEffPara"
-	.asciz "MT_CngEffType"
+	aligned_string "_CngEffPara"
+	aligned_string "MT_CngEffType"
 	aligned_string "MT_GetParaSize"
-	.asciz "MT_RetEffPara"
+	aligned_string "MT_RetEffPara"
 LABEL_E27EA8:
 	aligned_string "MT_RetEffFix"
-	.asciz "MT_GetItemTop"
-	.asciz "MT_SetItemTop"
-	.asciz "MT_GetItemOff"
+	aligned_string "MT_GetItemTop"
+	aligned_string "MT_SetItemTop"
+	aligned_string "MT_GetItemOff"
 LABEL_E27EE0:
-	.asciz "MT_SetItemOff"
+	aligned_string "MT_SetItemOff"
 	.byte 0x4d, 0x54
-	.asciz "_GetItemExist"
+	aligned_string "_GetItemExist"
 	.byte 0x4d, 0x54
 	aligned_string "_GetEffDlt7Str"
 LABEL_E27F10:
@@ -20175,7 +19874,7 @@ LABEL_E2807C:
 	.long LABEL_E2809C
 	.byte 0x00, 0x00
 	.byte 0x00, 0x00, 0xff, 0x00
-	.asciz "PARAMETER"
+	aligned_string "PARAMETER"
 LABEL_E280A6:
 
 	.byte 0x2b, 0x00
@@ -20281,7 +19980,7 @@ LABEL_E28262:
 	.long LABEL_E28282
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00
-	.asciz "PARAMETER"
+	aligned_string "PARAMETER"
 LABEL_E2828C:
 
 	.byte 0x2b, 0x00, 0x60, 0x01
@@ -20483,7 +20182,7 @@ LABEL_E285E8:
 	.byte 0x13, 0x00, 0x11, 0x00, 0x08, 0x00, 0x60, 0x00
 	.byte 0xc2, 0x00, 0x8d, 0x00, 0xcc, 0x00, 0x08, 0x86
 	.byte 0xe2, 0x00, 0x03, 0x00, 0x00, 0x00, 0xff, 0x00
-	.asciz "MID-LOW"
+	aligned_string "MID-LOW"
 LABEL_E28610:
 
 	.byte 0x2b, 0x00, 0x60, 0x01, 0x00, 0x00, 0xff, 0xff
@@ -20582,7 +20281,7 @@ LABEL_E2877C:
 	.byte 0x00, 0x00, 0xf1, 0x00
 
 LABEL_E2879C:
-	.asciz "MID-LOW"
+	aligned_string "MID-LOW"
 LABEL_E287A4:
 
 	.byte 0x2b, 0x00, 0x60, 0x01
@@ -20629,7 +20328,7 @@ LABEL_E28828:
 	.byte 0x24, 0xdf, 0x03, 0x00, 0x08, 0x00, 0x27, 0x00
 	.byte 0x28, 0x01
 	aligned_string "EQ:OFF"
-	.asciz "EQ:ON"
+	aligned_string "EQ:ON"
 
 	.byte 0x34, 0x00, 0x60, 0x01, 0xff, 0xff, 0x01, 0x00
 	.byte 0xff, 0xff, 0xff, 0xff, 0x0a, 0x00, 0x00, 0x00
@@ -20641,7 +20340,7 @@ LABEL_E28828:
 	.long LABEL_E288B2
 	.byte 0x92, 0x00
 	.byte 0x00, 0x00
-	.asciz "ACOUSTIC ILLUSION"
+	aligned_string "ACOUSTIC ILLUSION"
 LABEL_E288C4:
 
 	.byte 0x22, 0x00, 0x60, 0x01
@@ -20694,14 +20393,14 @@ LABEL_E289B8:
 	.byte 0xff, 0xff, 0xff, 0xff, 0x08, 0x00, 0x28, 0x00
 	.byte 0x90, 0x00, 0xa3, 0x00, 0xa2, 0x00, 0xd8, 0x89
 	.byte 0xe2, 0x00, 0x01, 0x00, 0x00, 0x00, 0xff, 0x00
-	.asciz "ILLUSION LEVEL:"
+	aligned_string "ILLUSION LEVEL:"
 LABEL_E289E8:
 
 	.byte 0x2b, 0x00, 0x60, 0x01, 0x00, 0x00, 0xff, 0xff
 	.byte 0x0a, 0x00, 0x07, 0x00, 0x08, 0x00, 0x28, 0x00
 	.byte 0x60, 0x00, 0x62, 0x00, 0x72, 0x00, 0x08, 0x8a
 	.byte 0xe2, 0x00, 0x04, 0x00, 0x00, 0x00, 0xff, 0x00
-	.asciz "TYPE:"
+	aligned_string "TYPE:"
 
 LABEL_E28A0E:
 	.byte 0x15, 0x00, 0x68, 0x01, 0x00, 0x00, 0xff, 0xff
@@ -20813,7 +20512,7 @@ LABEL_E28C12:
 	.byte 0x00, 0x00, 0xff, 0x00, 0x00, 0x00, 0x0b, 0x00
 	.byte 0x32, 0xdf, 0x03, 0x00, 0x48, 0x8c, 0xe2, 0x00
 	.byte 0xaa, 0x00, 0xa0, 0x01, 0x46, 0x00, 0x00, 0x00
-	.asciz "PANEL WRITE"
+	aligned_string "PANEL WRITE"
 
 	.byte 0x34, 0x00, 0x60, 0x01
 	.byte 0xff, 0xff, 0x01, 0x00, 0xff, 0xff, 0xff, 0xff
@@ -20844,7 +20543,7 @@ LABEL_E28CCA:
 	.long LABEL_E28CF6
 	.byte 0x38, 0xdf, 0x03, 0x00
 	.byte 0x0a, 0x00, 0x1e, 0x00, 0x28, 0x01, 0x43, 0x59
-	.asciz "CLE:OFF"
+	aligned_string "CLE:OFF"
 	aligned_string "CYCLE:ON"
 LABEL_E28D0A:
 
@@ -20893,7 +20592,7 @@ LABEL_E28DD2:
 	.long LABEL_E28DF2
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00
-	.asciz "TIME SIG. ="
+	aligned_string "TIME SIG. ="
 LABEL_E28DFE:
 
 	.byte 0x14, 0x00, 0x60, 0x01, 0x00, 0x00, 0xff, 0xff, 0x0c, 0x00
@@ -21046,7 +20745,7 @@ LABEL_E290D6:
 	.byte 0x00, 0x00, 0xff, 0x00, 0x01, 0x00, 0x04, 0x00
 	.byte 0x8a, 0x00, 0x01, 0x00, 0x50, 0xdf, 0x03, 0x00
 LABEL_E29108:
-	.asciz "CYCLE START MEASURE :"
+	aligned_string "CYCLE START MEASURE :"
 LABEL_E2911E:
 
 
@@ -21054,7 +20753,7 @@ LABEL_E2911E:
 	.byte 0x01, 0x00, 0x08, 0x00, 0x2a, 0x00, 0x2a, 0x00
 	.byte 0xb5, 0x00, 0x3c, 0x00, 0x3e, 0x91, 0xe2, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0xff, 0x00, 0x43, 0x55
-	.asciz "RRENT MEASURE :"
+	aligned_string "RRENT MEASURE :"
 LABEL_E29150:
 
 
@@ -21065,7 +20764,7 @@ LABEL_E29150:
 	.byte 0x00, 0x00, 0x00, 0x00, 0xff, 0x00, 0x01, 0x00
 	.byte 0x04, 0x00, 0x89, 0x00, 0x01, 0x00, 0x52, 0xdf
 	.byte 0x03, 0x00
-	.asciz "CYCLE :"
+	aligned_string "CYCLE :"
 LABEL_E2918A:
 
 
@@ -21078,7 +20777,7 @@ LABEL_E2918A:
 	.byte 0xe2, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0x00
 	.byte 0x01, 0x00, 0x04, 0x00, 0x8b, 0x00, 0x01, 0x00
 	.byte 0x54, 0xdf, 0x03, 0x00
-	.asciz "CYCLE END MEASURE   :"
+	aligned_string "CYCLE END MEASURE   :"
 LABEL_E291D2:
 
 
@@ -21108,7 +20807,7 @@ LABEL_E291FC:
 	.byte 0xf9, 0x00, 0x00, 0x00, 0x00, 0x00, 0xa0, 0x01
 	.byte 0x56, 0xdf, 0x03, 0x00, 0x4c, 0x92, 0xe2, 0x00
 	.byte 0x7f, 0x00, 0x00, 0x00
-	.asciz "EASY RECORD"
+	aligned_string "EASY RECORD"
 LABEL_E29258:
 
 
@@ -21267,7 +20966,7 @@ LABEL_E2950E:
 	.long LABEL_E29544
 	.byte 0x8d, 0x00, 0xa0, 0x01
 	.byte 0x46, 0x00, 0x00, 0x00
-	.asciz "PANEL WRITE"
+	aligned_string "PANEL WRITE"
 LABEL_E29550:
 
 
@@ -21280,7 +20979,7 @@ LABEL_E29550:
 	.long LABEL_E29586
 	.byte 0x8e, 0x00
 	.byte 0xa0, 0x01, 0x37, 0x00, 0x00, 0x00, 0x53, 0x4f
-	.asciz "NG SELECT /NAMING"
+	aligned_string "NG SELECT /NAMING"
 LABEL_E2959A:
 
 
@@ -21303,7 +21002,7 @@ LABEL_E295DC:
 	.byte 0x0a, 0x00, 0x86, 0xdf, 0x03, 0x00, 0x12, 0x96
 	.byte 0xe2, 0x00, 0xa8, 0x00, 0xa0, 0x01, 0x43, 0x00
 	.byte 0x00, 0x00
-	.asciz "SONG/TRACK COPY"
+	aligned_string "SONG/TRACK COPY"
 LABEL_E29622:
 
 
@@ -21314,7 +21013,7 @@ LABEL_E29622:
 	.byte 0x00, 0x00, 0xff, 0x00, 0x00, 0x00, 0x0b, 0x00
 	.byte 0x88, 0xdf, 0x03, 0x00, 0x58, 0x96, 0xe2, 0x00
 	.byte 0x92, 0x00, 0xa0, 0x01, 0x6e, 0x00, 0x00, 0x00
-	.asciz "AFTER TOUCH SET"
+	aligned_string "AFTER TOUCH SET"
 LABEL_E29668:
 
 
@@ -21327,7 +21026,7 @@ LABEL_E29668:
 	.long LABEL_E2969E
 	.byte 0x0b, 0x00
 	.byte 0x80, 0x01, 0x34, 0x00, 0x00, 0x00, 0x52, 0x45
-	.asciz "ALTIME RECORD"
+	aligned_string "ALTIME RECORD"
 LABEL_E296AE:
 
 
@@ -21339,7 +21038,7 @@ LABEL_E296AE:
 	.long LABEL_E296E4
 	.byte 0x0d, 0x00, 0x80, 0x01
 	.byte 0x36, 0x00, 0x00, 0x00
-	.asciz "STEP RECORD"
+	aligned_string "STEP RECORD"
 LABEL_E296F0:
 
 
@@ -21361,7 +21060,7 @@ LABEL_E296F0:
 	.byte 0xef, 0x00, 0xf9, 0x00, 0x00, 0x00, 0x84, 0x00
 	.byte 0xa0, 0x01, 0x90, 0xdf, 0x03, 0x00, 0x5e, 0x97
 	.byte 0xe2, 0x00, 0x34, 0x00, 0x00, 0x00, 0x52, 0x45
-	.asciz "ALTIME RECORD"
+	aligned_string "ALTIME RECORD"
 LABEL_E2976E:
 
 
@@ -21396,7 +21095,7 @@ LABEL_E297DA:
 	.long LABEL_E29806
 	.byte 0x94, 0xdf, 0x03, 0x00
 	.byte 0x09, 0x00, 0x1e, 0x00, 0x28, 0x01, 0x43, 0x59
-	.asciz "CLE:OFF"
+	aligned_string "CLE:OFF"
 	aligned_string "CYCLE:ON"
 LABEL_E2981A:
 
@@ -21418,7 +21117,7 @@ LABEL_E29834:
 	.byte 0x03, 0x00, 0x08, 0x00, 0x1f, 0x00, 0x28, 0x01
 LABEL_E29860:
 	aligned_string "~a4OFF"
-	.asciz "~a4ON"
+	aligned_string "~a4ON"
 	.byte 0x06, 0x00
 	.byte 0x68, 0x01, 0x00, 0x00, 0xff, 0xff, 0x08, 0x00
 	.byte 0x06, 0x00, 0x08, 0x00, 0x3c, 0x00, 0x54, 0x00
@@ -21448,7 +21147,7 @@ LABEL_E298D4:
 	.long LABEL_E298F4
 	.byte 0x00, 0x00
 	.byte 0x00, 0x00, 0xff, 0x00
-	.asciz "TIME SIG. ="
+	aligned_string "TIME SIG. ="
 LABEL_E29900:
 
 
@@ -21556,7 +21255,7 @@ LABEL_E29A9C:
 	.byte 0xf9, 0x00, 0x00, 0x00, 0x85, 0x00, 0xa0, 0x01
 	.byte 0xa0, 0xdf, 0x03, 0x00, 0xec, 0x9a, 0xe2, 0x00
 	.byte 0x34, 0x00, 0x00, 0x00
-	.asciz "REALTIME RECORD"
+	aligned_string "REALTIME RECORD"
 	.byte 0x06, 0x00, 0x68, 0x01
 	.byte 0x00, 0x00, 0x02, 0x00, 0x03, 0x00, 0xff, 0xff
 	.byte 0x08, 0x00, 0x3c, 0x00, 0x54, 0x00, 0x03, 0x01
@@ -21573,7 +21272,7 @@ LABEL_E29B1C:
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00, 0x01, 0x00, 0x04, 0x00, 0x8a, 0x00
 	.byte 0x00, 0x00, 0xa4, 0xdf, 0x03, 0x00, 0x43, 0x59
-	.asciz "CLE START MEASURE :"
+	aligned_string "CLE START MEASURE :"
 LABEL_E29B64:
 
 
@@ -21584,7 +21283,7 @@ LABEL_E29B64:
 	.long LABEL_E29B84
 	.byte 0x00, 0x00
 	.byte 0x00, 0x00, 0xff, 0x00
-	.asciz "CURRENT MEASURE :"
+	aligned_string "CURRENT MEASURE :"
 LABEL_E29B96:
 
 
@@ -21597,7 +21296,7 @@ LABEL_E29B96:
 	.byte 0x00, 0x00, 0xff, 0x00, 0x01, 0x00, 0x04, 0x00
 	.byte 0x8b, 0x00, 0x00, 0x00, 0xa6, 0xdf, 0x03, 0x00
 LABEL_E29BC8:
-	.asciz "CYCLE END MEASURE   :"
+	aligned_string "CYCLE END MEASURE   :"
 LABEL_E29BDE:
 
 
@@ -21614,7 +21313,7 @@ LABEL_E29C08:
 	.byte 0x07, 0x00, 0x05, 0x00, 0x08, 0x00, 0x02, 0x01
 	.byte 0xc8, 0x00, 0x2d, 0x01, 0xda, 0x00, 0x28, 0x9c
 	.byte 0xe2, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0x00
-	.asciz "VALUE"
+	aligned_string "VALUE"
 LABEL_E29C2E:
 
 
@@ -21626,7 +21325,7 @@ LABEL_E29C2E:
 	.byte 0xa8, 0xdf, 0x03, 0x00, 0x08, 0x00, 0x1f, 0x00
 	.byte 0x28, 0x01
 	aligned_string "~a4OFF"
-	.asciz "~a4ON"
+	aligned_string "~a4ON"
 LABEL_E29C68:
 
 
@@ -21711,7 +21410,7 @@ LABEL_E29DC2:
 	.long LABEL_E29DE2
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00
-	.asciz "TIME SIG. ="
+	aligned_string "TIME SIG. ="
 LABEL_E29DEE:
 
 
@@ -21772,7 +21471,7 @@ LABEL_E29ECC:
 	.byte 0x03, 0x00, 0x08, 0x00, 0x1f, 0x00, 0x28, 0x01
 LABEL_E29EF8:
 	aligned_string "~a4OFF"
-	.asciz "~a4ON"
+	aligned_string "~a4ON"
 LABEL_E29F06:
 
 
@@ -21786,7 +21485,7 @@ LABEL_E29F06:
 	.byte 0xb2, 0xdf, 0x03, 0x00, 0x0a, 0x00, 0x25, 0x00
 	.byte 0x28, 0x01
 	aligned_string "PUNCH IN"
-	.asciz "PUNCH OUT"
+	aligned_string "PUNCH OUT"
 LABEL_E29F46:
 
 
@@ -21868,7 +21567,7 @@ LABEL_E2A09C:
 	.byte 0xef, 0x00, 0xf9, 0x00, 0x00, 0x00, 0x87, 0x00
 	.byte 0xa0, 0x01, 0xb4, 0xdf, 0x03, 0x00, 0xc6, 0xa0
 	.byte 0xe2, 0x00, 0x35, 0x00, 0x00, 0x00
-	.asciz "AUTO PUNCH RECORD"
+	aligned_string "AUTO PUNCH RECORD"
 LABEL_E2A0D8:
 
 
@@ -21897,7 +21596,7 @@ LABEL_E2A128:
 	.byte 0x04, 0x00, 0x02, 0x00, 0x08, 0x00, 0x1a, 0x00
 	.byte 0x2a, 0x00, 0xa5, 0x00, 0x3c, 0x00, 0x48, 0xa1
 	.byte 0xe2, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0x00
-	.asciz "CURRENT MEASURE :"
+	aligned_string "CURRENT MEASURE :"
 LABEL_E2A15A:
 
 
@@ -21926,7 +21625,7 @@ LABEL_E2A1B4:
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00, 0x01, 0x00, 0x04, 0x00, 0x89, 0x00
 	.byte 0x00, 0x00, 0xba, 0xdf, 0x03, 0x00, 0x50, 0x55
-	.asciz "NCH IN MEASURE  :"
+	aligned_string "NCH IN MEASURE  :"
 LABEL_E2A1FA:
 
 
@@ -21937,7 +21636,7 @@ LABEL_E2A1FA:
 	.byte 0xe2, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0x00
 	.byte 0x01, 0x00, 0x04, 0x00, 0x8a, 0x00, 0x00, 0x00
 	.byte 0xbc, 0xdf, 0x03, 0x00
-	.asciz "PUNCH OUT MEASURE :"
+	aligned_string "PUNCH OUT MEASURE :"
 LABEL_E2A240:
 
 
@@ -21948,7 +21647,7 @@ LABEL_E2A240:
 	.byte 0x00, 0x00, 0x00, 0x00, 0xff, 0x00, 0x01, 0x00
 	.byte 0x04, 0x00, 0x8b, 0x00, 0x00, 0x00, 0xbe, 0xdf
 	.byte 0x03, 0x00
-	.asciz "MEASURE COUNT IN  :"
+	aligned_string "MEASURE COUNT IN  :"
 LABEL_E2A286:
 
 
@@ -21972,7 +21671,7 @@ LABEL_E2A2C6:
 	.long LABEL_E2A2F0
 	.byte 0x35, 0x00, 0x00, 0x00
 LABEL_E2A2F0:
-	.asciz "AUTO PUNCH RECORD"
+	aligned_string "AUTO PUNCH RECORD"
 
 
 	.byte 0x34, 0x00, 0x60, 0x01, 0xff, 0xff
@@ -21981,7 +21680,7 @@ LABEL_E2A2F0:
 	.byte 0xf9, 0x00, 0x00, 0x00, 0x84, 0x00, 0xa0, 0x01
 	.byte 0xc4, 0xdf, 0x03, 0x00, 0x2c, 0xa3, 0xe2, 0x00
 	.byte 0x46, 0x00, 0x00, 0x00
-	.asciz "PANEL WRITE"
+	aligned_string "PANEL WRITE"
 LABEL_E2A338:
 
 
@@ -22032,7 +21731,7 @@ LABEL_E2A404:
 	.long LABEL_E2A424
 	.byte 0x00, 0x00
 	.byte 0x00, 0x00, 0xff, 0x00
-	.asciz "SONG NO/ALL"
+	aligned_string "SONG NO/ALL"
 LABEL_E2A430:
 	.byte 0x07, 0x00, 0x68, 0x01, 0x00, 0x00, 0x04, 0x00
 	.byte 0x07, 0x00, 0x02, 0x00, 0x08, 0x00, 0x3c, 0x00
@@ -22155,7 +21854,7 @@ LABEL_E2A62A:
 	.byte 0xf9, 0x00, 0x00, 0x00, 0x84, 0x00, 0xa0, 0x01
 	.byte 0xd6, 0xdf, 0x03, 0x00, 0x54, 0xa6, 0xe2, 0x00
 	.byte 0x43, 0x00, 0x00, 0x00
-	.asciz "SONG/TRACK COPY"
+	aligned_string "SONG/TRACK COPY"
 	.byte 0x03, 0x00, 0x68, 0x01
 	.byte 0x00, 0x00, 0xff, 0xff, 0x02, 0x00, 0xff, 0xff
 	.byte 0x08, 0x00, 0x3c, 0x00, 0x54, 0x00, 0x03, 0x01
@@ -22356,7 +22055,7 @@ LABEL_E2A9B4:
 	.byte 0x88, 0x00, 0xf2, 0xdf, 0x03, 0x00, 0xea, 0xa9
 	.byte 0xe2, 0x00, 0x94, 0x00, 0xa0, 0x01, 0x04, 0x00
 	.byte 0x00, 0x00
-	.asciz "NOTE EDIT"
+	aligned_string "NOTE EDIT"
 LABEL_E2A9F4:
 
 
@@ -22368,7 +22067,7 @@ LABEL_E2A9F4:
 	.byte 0x89, 0x00, 0xf4, 0xdf, 0x03, 0x00, 0x2a, 0xaa
 	.byte 0xe2, 0x00, 0x97, 0x00, 0xa0, 0x01, 0x11, 0x00
 	.byte 0x00, 0x00
-	.asciz "DRUM EDIT"
+	aligned_string "DRUM EDIT"
 LABEL_E2AA34:
 
 
@@ -22380,7 +22079,7 @@ LABEL_E2AA34:
 	.byte 0x8a, 0x00, 0xf6, 0xdf, 0x03, 0x00, 0x6a, 0xaa
 	.byte 0xe2, 0x00, 0x91, 0x00, 0xa0, 0x01, 0x43, 0x00
 	.byte 0x00, 0x00
-	.asciz "SONG/TRACK COPY"
+	aligned_string "SONG/TRACK COPY"
 LABEL_E2AA7A:
 
 
@@ -22391,7 +22090,7 @@ LABEL_E2AA7A:
 	.byte 0x00, 0x00, 0xff, 0x00, 0x00, 0x00, 0x8b, 0x00
 	.byte 0xf8, 0xdf, 0x03, 0x00, 0xb0, 0xaa, 0xe2, 0x00
 	.byte 0x9a, 0x00, 0xa0, 0x01, 0x40, 0x00, 0x00, 0x00
-	.asciz "TRACK CLEAR"
+	aligned_string "TRACK CLEAR"
 LABEL_E2AABC:
 
 
@@ -22403,7 +22102,7 @@ LABEL_E2AABC:
 	.byte 0x8c, 0x00, 0xfa, 0xdf, 0x03, 0x00, 0xf2, 0xaa
 	.byte 0xe2, 0x00, 0x9b, 0x00, 0xa0, 0x01, 0x45, 0x00
 	.byte 0x00, 0x00
-	.asciz "TRACK MERGE"
+	aligned_string "TRACK MERGE"
 LABEL_E2AAFE:
 
 
@@ -22427,7 +22126,7 @@ LABEL_E2AB3E:
 	.long LABEL_E2AB74
 	.byte 0x9d, 0x00, 0xa0, 0x01
 	.byte 0x3e, 0x00, 0x00, 0x00
-	.asciz "TRANSPOSE"
+	aligned_string "TRANSPOSE"
 LABEL_E2AB7E:
 
 
@@ -22439,7 +22138,7 @@ LABEL_E2AB7E:
 	.long LABEL_E2ABB4
 	.byte 0x9e, 0x00, 0xa0, 0x01
 	.byte 0x8b, 0x00, 0x00, 0x00
-	.asciz "VELOCITY CHANGE"
+	aligned_string "VELOCITY CHANGE"
 LABEL_E2ABC4:
 
 
@@ -22451,7 +22150,7 @@ LABEL_E2ABC4:
 	.byte 0x0b, 0x00, 0x02, 0xe0, 0x03, 0x00, 0xfa, 0xab
 	.byte 0xe2, 0x00, 0x9f, 0x00, 0xa0, 0x01, 0x41, 0x00
 	.byte 0x00, 0x00
-	.asciz "NOTE CHANGE"
+	aligned_string "NOTE CHANGE"
 LABEL_E2AC06:
 
 
@@ -22464,7 +22163,7 @@ LABEL_E2AC06:
 	.byte 0xa0, 0x00, 0xa0, 0x01
 	.byte 0x42, 0x00, 0x00, 0x00	; DB "B", 000h, 000h, 000h
 LABEL_E2AC3C:
-	.asciz "ADVANCE/DELAY"
+	aligned_string "ADVANCE/DELAY"
 LABEL_E2AC4A:
 
 
@@ -22504,7 +22203,7 @@ LABEL_E2ACC4:
 	.byte 0x89, 0x00, 0x10, 0xe0, 0x03, 0x00, 0xfa, 0xac
 	.byte 0xe2, 0x00, 0xa1, 0x00, 0xa0, 0x01, 0x48, 0x00
 	.byte 0x00, 0x00
-	.asciz "ERASE"
+	aligned_string "ERASE"
 LABEL_E2AD00:
 
 
@@ -22568,7 +22267,7 @@ LABEL_E2ADBE:
 	.long LABEL_E2AE02
 	.byte 0x04, 0x00
 	.byte 0x00, 0x00
-	.asciz "NOTE EDIT  "
+	aligned_string "NOTE EDIT  "
 LABEL_E2AE0E:
 
 
@@ -22602,7 +22301,7 @@ LABEL_E2AE7C:
 	.byte 0xef, 0x00, 0xf9, 0x00, 0x00, 0x00, 0x94, 0x00
 	.byte 0xa0, 0x01, 0x1a, 0xe0, 0x03, 0x00, 0xa6, 0xae
 	.byte 0xe2, 0x00, 0x04, 0x00, 0x00, 0x00, 0x4e, 0x4f
-	.asciz "TE EDIT"
+	aligned_string "TE EDIT"
 LABEL_E2AEB0:
 
 
@@ -22853,7 +22552,7 @@ LABEL_E2B2A8:
 	.byte 0x02, 0x00, 0xff, 0xff, 0x08, 0x00, 0x2a, 0x00
 	.byte 0x2a, 0x00, 0xb5, 0x00, 0x3c, 0x00, 0xc8, 0xb2
 	.byte 0xe2, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0x00
-	.asciz "CURRENT MEASURE :"
+	aligned_string "CURRENT MEASURE :"
 LABEL_E2B2DA:
 
 
@@ -22902,7 +22601,7 @@ LABEL_E2B384:
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00, 0x01, 0x00, 0x04, 0x00, 0x8a, 0x00
 	.byte 0x00, 0x00, 0x24, 0xe0, 0x03, 0x00, 0x43, 0x59
-	.asciz "CLE START MEASURE :"
+	aligned_string "CLE START MEASURE :"
 LABEL_E2B3CC:
 
 
@@ -22914,7 +22613,7 @@ LABEL_E2B3CC:
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00, 0x01, 0x00, 0x04, 0x00, 0x8b, 0x00
 	.byte 0x00, 0x00, 0x26, 0xe0, 0x03, 0x00, 0x43, 0x59
-	.asciz "CLE END MEASURE   :"
+	aligned_string "CLE END MEASURE   :"
 
 
 	.byte 0x34, 0x00, 0x60, 0x01
@@ -22923,7 +22622,7 @@ LABEL_E2B3CC:
 	.byte 0xef, 0x00, 0xf9, 0x00, 0x00, 0x00, 0x93, 0x00
 	.byte 0xa0, 0x01, 0x28, 0xe0, 0x03, 0x00, 0x3e, 0xb4
 	.byte 0xe2, 0x00, 0x11, 0x00, 0x00, 0x00, 0x44, 0x52
-	.asciz "UM EDIT  "
+	aligned_string "UM EDIT  "
 LABEL_E2B44A:
 
 
@@ -22961,7 +22660,7 @@ LABEL_E2B4B8:
 	.long LABEL_E2B4E2
 	.byte 0x11, 0x00
 	.byte 0x00, 0x00
-	.asciz "DRUM EDIT"
+	aligned_string "DRUM EDIT"
 LABEL_E2B4EC:
 
 
@@ -23197,7 +22896,7 @@ LABEL_E2B8BC:
 	.long LABEL_E2B8DC
 	.byte 0x00, 0x00
 	.byte 0x00, 0x00, 0xff, 0x00
-	.asciz "CURRENT MEASURE :"
+	aligned_string "CURRENT MEASURE :"
 LABEL_E2B8EE:
 
 
@@ -23214,7 +22913,7 @@ LABEL_E2B918:
 	.byte 0x04, 0x00, 0x02, 0x00, 0x08, 0x00, 0x02, 0x01
 	.byte 0xc8, 0x00, 0x2d, 0x01, 0xda, 0x00, 0x38, 0xb9
 	.byte 0xe2, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0x00
-	.asciz "VALUE"
+	aligned_string "VALUE"
 	.byte 0x06, 0x00
 	.byte 0x68, 0x01, 0x00, 0x00, 0xff, 0xff, 0x05, 0x00
 	.byte 0x03, 0x00, 0x08, 0x00, 0x3c, 0x00, 0x54, 0x00
@@ -23244,7 +22943,7 @@ LABEL_E2B998:
 	.byte 0x00, 0x00, 0x00, 0x00, 0xff, 0x00, 0x01, 0x00
 	.byte 0x04, 0x00, 0x8a, 0x00, 0x00, 0x00, 0x36, 0xe0
 	.byte 0x03, 0x00
-	.asciz "CYCLE START MEASURE :"
+	aligned_string "CYCLE START MEASURE :"
 LABEL_E2B9E0:
 
 
@@ -23256,7 +22955,7 @@ LABEL_E2B9E0:
 	.byte 0x00, 0x00, 0x00, 0x00, 0xff, 0x00, 0x01, 0x00
 	.byte 0x04, 0x00, 0x8b, 0x00, 0x00, 0x00, 0x38, 0xe0
 	.byte 0x03, 0x00
-	.asciz "CYCLE END MEASURE   :"
+	aligned_string "CYCLE END MEASURE   :"
 LABEL_E2BA28:
 
 
@@ -23270,7 +22969,7 @@ LABEL_E2BA28:
 	.long LABEL_E2BA52
 	.byte 0x40, 0x00
 	.byte 0x00, 0x00
-	.asciz "TRACK CLEAR"
+	aligned_string "TRACK CLEAR"
 LABEL_E2BA5E:
 
 
@@ -23387,7 +23086,7 @@ LABEL_E2BC1E:
 	.long LABEL_E2BC72
 	.byte 0x45, 0x00
 	.byte 0x00, 0x00
-	.asciz "TRACK MERGE"
+	aligned_string "TRACK MERGE"
 LABEL_E2BC7E:
 
 
@@ -23476,7 +23175,7 @@ LABEL_E2BDC4:
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00, 0x01, 0x00, 0x04, 0x00, 0x88, 0x00
 	.byte 0x01, 0x00, 0x4e, 0xe0, 0x03, 0x00, 0x54, 0x52
-	.asciz "ACK :"
+	aligned_string "ACK :"
 LABEL_E2BDFE:
 
 
@@ -23489,7 +23188,7 @@ LABEL_E2BDFE:
 	.byte 0x00, 0x00, 0xff, 0x00, 0x01, 0x00, 0x04, 0x00
 	.byte 0x09, 0x00, 0x01, 0x00, 0x50, 0xe0, 0x03, 0x00
 LABEL_E2BE30:
-	.asciz "TRACK :"
+	aligned_string "TRACK :"
 LABEL_E2BE38:
 	.byte 0x0e, 0x00, 0x68, 0x01, 0x00, 0x00, 0xff, 0xff
 	.byte 0x0e, 0x00, 0x0c, 0x00, 0x08, 0x00, 0x3c, 0x00
@@ -23577,7 +23276,7 @@ LABEL_E2BFB0:
 	.byte 0x02, 0x00, 0xff, 0xff, 0x08, 0x00, 0x00, 0x01
 	.byte 0xca, 0x00, 0x2b, 0x01, 0xdc, 0x00, 0xd0, 0xbf
 	.byte 0xe2, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0x00
-	.asciz "VALUE"
+	aligned_string "VALUE"
 LABEL_E2BFD6:
 
 
@@ -23613,7 +23312,7 @@ LABEL_E2C062:
 	.byte 0xe2, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0x00
 	.byte 0x01, 0x00, 0x04, 0x00, 0x09, 0x00, 0x00, 0x00
 	.byte 0x62, 0xe0, 0x03, 0x00
-	.asciz "WINDOW  :"
+	aligned_string "WINDOW  :"
 LABEL_E2C09E:
 
 
@@ -23667,7 +23366,7 @@ LABEL_E2C186:
 	.byte 0x00, 0x00, 0xff, 0x00, 0x01, 0x00, 0x04, 0x00
 	.byte 0x08, 0x00, 0x00, 0x00, 0x6a, 0xe0, 0x03, 0x00
 LABEL_E2C1B8:
-	.asciz "STRENGTH:"
+	aligned_string "STRENGTH:"
 LABEL_E2C1C2:
 
 
@@ -23761,7 +23460,7 @@ LABEL_E2C328:
 	.long LABEL_E2C352
 	.byte 0x3e, 0x00
 	.byte 0x00, 0x00
-	.asciz "TRANSPOSE"
+	aligned_string "TRANSPOSE"
 LABEL_E2C35C:
 
 
@@ -23833,7 +23532,7 @@ LABEL_E2C492:
 	.byte 0xe2, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0x00
 	.byte 0x01, 0x00, 0x04, 0x00, 0x8b, 0x00, 0x01, 0x00
 	.byte 0x80, 0xe0, 0x03, 0x00
-	.asciz "TRANSPOSE   :"
+	aligned_string "TRANSPOSE   :"
 	.byte 0x0e, 0x00, 0x68, 0x01, 0x00, 0x00
 	.byte 0xff, 0xff, 0x09, 0x00, 0x07, 0x00, 0x08, 0x00
 	.byte 0x3c, 0x00, 0x54, 0x00, 0x03, 0x01, 0x83, 0x00
@@ -23906,7 +23605,7 @@ LABEL_E2C5D2:
 	.byte 0xef, 0x00, 0xf9, 0x00, 0x00, 0x00, 0x93, 0x00
 	.byte 0xa0, 0x01, 0x8c, 0xe0, 0x03, 0x00, 0x26, 0xc6
 	.byte 0xe2, 0x00, 0x8b, 0x00, 0x00, 0x00, 0x56, 0x45
-	.asciz "LOCITY CHANGE"
+	aligned_string "LOCITY CHANGE"
 LABEL_E2C636:
 
 
@@ -23974,7 +23673,7 @@ LABEL_E2C76C:
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00, 0x01, 0x00, 0x04, 0x00, 0x8b, 0x00
 	.byte 0x01, 0x00, 0x96, 0xe0, 0x03, 0x00, 0x56, 0x45
-	.asciz "LOCITY    :"
+	aligned_string "LOCITY    :"
 	.byte 0x0e, 0x00, 0x68, 0x01
 	.byte 0x00, 0x00, 0xff, 0xff, 0x09, 0x00, 0x07, 0x00
 	.byte 0x08, 0x00, 0x3c, 0x00, 0x54, 0x00, 0x03, 0x01
@@ -24051,7 +23750,7 @@ LABEL_E2C8D6:
 	.long LABEL_E2C900
 	.byte 0x41, 0x00, 0x00, 0x00
 LABEL_E2C900:
-	.asciz "NOTE CHANGE"
+	aligned_string "NOTE CHANGE"
 	.byte 0x02, 0x00, 0x68, 0x01
 	.byte 0x00, 0x00, 0x02, 0x00, 0x04, 0x00, 0xff, 0xff
 	.byte 0x08, 0x00, 0x3c, 0x00, 0x54, 0x00, 0x03, 0x01
@@ -24075,7 +23774,7 @@ LABEL_E2C960:
 	.byte 0xff, 0xff, 0xff, 0xff, 0x08, 0x00, 0xde, 0x00
 	.byte 0x4e, 0x00, 0x29, 0x01, 0x60, 0x00, 0x80, 0xc9
 	.byte 0xe2, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0x00
-	.asciz "CHANGE TO"
+	aligned_string "CHANGE TO"
 LABEL_E2C98A:
 
 
@@ -24126,7 +23825,7 @@ LABEL_E2CA50:
 	.byte 0xff, 0xff, 0xff, 0xff, 0x08, 0x00, 0xda, 0x00
 	.byte 0x24, 0x00, 0x35, 0x01, 0x36, 0x00, 0x70, 0xca
 	.byte 0xe2, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0x00
-	.asciz "TARGET NOTE"
+	aligned_string "TARGET NOTE"
 LABEL_E2CA7C:
 
 
@@ -24267,7 +23966,7 @@ LABEL_E2CCC6:
 	.long LABEL_E2CCF0
 	.byte 0x42, 0x00, 0x00, 0x00
 LABEL_E2CCF0:
-	.asciz "ADVANCE/DELAY"
+	aligned_string "ADVANCE/DELAY"
 LABEL_E2CCFE:
 
 
@@ -24284,7 +23983,7 @@ LABEL_E2CD28:
 	.byte 0x03, 0x00, 0x01, 0x00, 0x08, 0x00, 0x00, 0x01
 	.byte 0xca, 0x00, 0x2b, 0x01, 0xdc, 0x00, 0x48, 0xcd
 	.byte 0xe2, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0x00
-	.asciz "VALUE"
+	aligned_string "VALUE"
 	.byte 0x02, 0x00
 	.byte 0x68, 0x01, 0x00, 0x00, 0x04, 0x00, 0x06, 0x00
 	.byte 0x02, 0x00, 0x08, 0x00, 0x3c, 0x00, 0x54, 0x00
@@ -24417,7 +24116,7 @@ LABEL_E2CF76:
 	.long LABEL_E2CFCA
 	.byte 0x48, 0x00
 	.byte 0x00, 0x00
-	.asciz "MEASURE ERASE"
+	aligned_string "MEASURE ERASE"
 LABEL_E2CFD8:
 
 
@@ -24438,7 +24137,7 @@ LABEL_E2D002:
 	.long LABEL_E2D022
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00
-	.asciz "VALUE"
+	aligned_string "VALUE"
 LABEL_E2D028:
 	.byte 0x02, 0x00, 0x68, 0x01, 0x00, 0x00, 0xff, 0xff
 	.byte 0x04, 0x00, 0x02, 0x00, 0x08, 0x00, 0x3c, 0x00
@@ -24971,7 +24670,7 @@ LABEL_E2DA04:
 	.byte 0xef, 0x00, 0xf9, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0xa0, 0x01, 0x16, 0xe1, 0x03, 0x00, 0x2e, 0xda
 	.byte 0xe2, 0x00, 0x8f, 0x00, 0x00, 0x00, 0x4d, 0x45
-	.asciz "TRONOME BALANCE"
+	aligned_string "TRONOME BALANCE"
 LABEL_E2DA40:
 
 
@@ -24994,7 +24693,7 @@ LABEL_E2DA40:
 	.byte 0x9b, 0x00
 	.byte 0x00, 0x00
 LABEL_E2DA8A:
-	.asciz "ENTERTAINER"
+	aligned_string "ENTERTAINER"
 	.byte 0x09, 0x00
 	.byte 0x68, 0x01, 0x00, 0x00, 0x02, 0x00, 0x03, 0x00
 	.byte 0xff, 0xff, 0x08, 0x00, 0x6e, 0x00, 0x1e, 0x00
@@ -25007,7 +24706,7 @@ LABEL_E2DA8A:
 	.long LABEL_E2DAE0
 	.byte 0x21, 0x00, 0x28, 0x01
 LABEL_E2DAE0:
-	.asciz "MIC BALANCE :|-|| ON/OFF     :| TYPE       :| REVERB TIME:| EXCITER FC :| EXCITER G  :| VOLUME     :|"
+	aligned_string "MIC BALANCE :|-|| ON/OFF     :| TYPE       :| REVERB TIME:| EXCITER FC :| EXCITER G  :| VOLUME     :|"
 	ldb	w, 0x20
 	aligned_string "   |    "
 LABEL_E2DB52:
@@ -25021,9 +24720,9 @@ LABEL_E2DB52:
 	.byte 0xf1, 0x00
 	aligned_string "VOCAL REVERB"
 	aligned_string "VOCALIST WORKSTATION"
-	.asciz "FADE IN/OUT SETTING"
+	aligned_string "FADE IN/OUT SETTING"
 	.asciz "MIXER"
-	.asciz "DISK LOAD"
+	aligned_string "DISK LOAD"
 LABEL_E2DBBA:
 
 
@@ -25081,9 +24780,9 @@ LABEL_E2DC74:
 	.byte 0x36, 0xe1
 	.byte 0x03, 0x00, 0x8c, 0x00, 0x2d, 0x00, 0x28, 0x01
 LABEL_E2DCA0:
-	.asciz "MUTE KEYS:OFF"
+	aligned_string "MUTE KEYS:OFF"
 	.byte 0x4d, 0x55
-	.asciz "TE KEYS:ON "
+	aligned_string "TE KEYS:ON "
 	.byte 0x18, 0x00, 0x68, 0x01
 	.byte 0x00, 0x00, 0xff, 0xff, 0x0e, 0x00, 0x0c, 0x00
 	.byte 0x08, 0x00, 0x04, 0x00, 0xde, 0x00, 0x4b, 0x00
@@ -25111,7 +24810,7 @@ LABEL_E2DCEA:
 	.byte 0x00, 0x00, 0x00, 0x00, 0xa0, 0x01, 0x38, 0xe1
 	.byte 0x03, 0x00, 0x3a, 0xdd, 0xe2, 0x00, 0x5b, 0x00
 	.byte 0x00, 0x00
-	.asciz "HELP FUNCTION"
+	aligned_string "HELP FUNCTION"
 LABEL_E2DD48:
 
 
@@ -25160,10 +24859,8 @@ LABEL_E2DDD2:
 	.long LABEL_E2DE28
 	.byte 0x44, 0xe1, 0x03, 0x00, 0x00, 0x00, 0x01, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x3a, 0x00, 0x28, 0x01
-LABEL_E2DE28:
-	.asciz "ENGLISH"
-LABEL_E2DE30:
-	.asciz "ENGLISH"
+LABEL_E2DE28:	aligned_string "ENGLISH"
+LABEL_E2DE30:	aligned_string "ENGLISH"
 LABEL_E2DE38:
 	.byte 0x0f, 0x00, 0x68, 0x01, 0x05, 0x00, 0xff, 0xff
 	.byte 0x08, 0x00, 0x06, 0x00, 0x08, 0x00, 0x54, 0x00
@@ -25192,9 +24889,9 @@ LABEL_E2DE38:
 	.byte 0xe2, 0x00, 0xee, 0xde, 0xe2, 0x00, 0x4a, 0xe1
 	.byte 0x03, 0x00, 0x06, 0x00, 0x07, 0x00, 0x00, 0x00
 	.byte 0x03, 0x00, 0x3a, 0x00, 0x28, 0x01, 0x53, 0x50
-	.asciz "ANISH"
+	aligned_string "ANISH"
 	.byte 0x53, 0x50
-	.asciz "ANISH"
+	aligned_string "ANISH"
 LABEL_E2DEFE:
 
 
@@ -25221,9 +24918,9 @@ LABEL_E2DEFE:
 	.byte 0xe2, 0x00, 0x96, 0xdf, 0xe2, 0x00, 0x56, 0xe1
 	.byte 0x03, 0x00, 0x03, 0x00, 0x04, 0x00, 0x00, 0x00
 	.byte 0x03, 0x00, 0x3a, 0x00, 0x28, 0x01, 0x53, 0x50
-	.asciz "ANISH"
+	aligned_string "ANISH"
 	.byte 0x53, 0x50
-	.asciz "ANISH"
+	aligned_string "ANISH"
 	.byte 0x0f, 0x00
 	.byte 0x68, 0x01, 0x0a, 0x00, 0xff, 0xff, 0xff, 0xff
 	.byte 0x0c, 0x00, 0x08, 0x00, 0xec, 0x00, 0xdf, 0x00
@@ -25234,8 +24931,8 @@ LABEL_E2DEFE:
 	.byte 0x58, 0xe1, 0x03, 0x00, 0x06, 0x00, 0x07, 0x00
 	.byte 0x00, 0x00, 0x05, 0x00, 0x3a, 0x00, 0x28, 0x01
 LABEL_E2DFD8:
-	.asciz "INDONESIA"
-	.asciz "INDONESIA"
+	aligned_string "INDONESIA"
+	aligned_string "INDONESIA"
 LABEL_E2DFEC:
 
 
@@ -26311,7 +26008,7 @@ LABEL_E2F0F0:
 	.long LABEL_E2F1E0
 LABEL_E2F1E0:
 	.byte 0x00, 0xff
-	.asciz "EqOnOff"
+	aligned_string "EqOnOff"
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 LABEL_E2F1F0:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
@@ -26380,12 +26077,12 @@ LABEL_E2F2C8:
 	.asciz "SngSelWin2"
 	.byte 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 	aligned_string "SngSelWin1"
-	.asciz "PlySngSel"
+	aligned_string "PlySngSel"
 	.byte 0x00, 0xff
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 	.byte 0x00, 0xff, 0x00, 0xff
-	.asciz "SqPlayGamen"
+	aligned_string "SqPlayGamen"
 	.byte 0x00, 0xff
 	.asciz "CycPlySw"
 	.byte 0xff, 0x00, 0xff, 0x00, 0xff
@@ -26464,7 +26161,7 @@ LABEL_E2F500:
 	.byte 0x00, 0xff
 	aligned_string "CycRecClrStr"
 LABEL_E2F510:
-	.asciz "CycRecClrSw"
+	aligned_string "CycRecClrSw"
 	.byte 0x00, 0xff, 0x00, 0xff
 LABEL_E2F520:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
@@ -26493,7 +26190,7 @@ LABEL_E2F558:
 LABEL_E2F590:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 LABEL_E2F598:
-	.asciz "MetCycRecSw"
+	aligned_string "MetCycRecSw"
 	.byte 0x00, 0xff, 0x00, 0xff
 LABEL_E2F5A8:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
@@ -26530,7 +26227,7 @@ LABEL_E2F5B0:
 	.byte 0xe2, 0x00, 0x9e, 0xf6, 0xe2, 0x00, 0x00, 0xff
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
-	.asciz "MetPunchmSw"
+	aligned_string "MetPunchmSw"
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 	.byte 0x00, 0xff, 0xde, 0xf6, 0xe2, 0x00, 0xdc, 0xf6
 	.byte 0xe2, 0x00, 0xda, 0xf6, 0xe2, 0x00, 0xd8, 0xf6
@@ -26590,7 +26287,7 @@ LABEL_E2F7A8:
 LABEL_E2F7B0:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 LABEL_E2F7B8:
-	.asciz "SngCpSureDisp"
+	aligned_string "SngCpSureDisp"
 	.byte 0x00, 0xff
 LABEL_E2F7C8:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
@@ -26630,14 +26327,14 @@ LABEL_E2F850:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 LABEL_E2F858:
 	.byte 0x00, 0xff
-	.asciz "SQEMENU_2"
+	aligned_string "SQEMENU_2"
 	.byte 0x00, 0xff, 0x00, 0xff
 LABEL_E2F868:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 LABEL_E2F870:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 LABEL_E2F878:
-	.asciz "SQEMENU_1"
+	aligned_string "SQEMENU_1"
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 LABEL_E2F888:
 	.asciz "EdMenuPage"
@@ -26766,7 +26463,7 @@ LABEL_E2FA90:
 	.byte 0xe2, 0x00, 0xf4, 0xfb, 0xe2, 0x00, 0xf2, 0xfb
 	.byte 0xe2, 0x00, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
-	.asciz "QtzSureDisp"
+	aligned_string "QtzSureDisp"
 	.byte 0x00, 0xff, 0x00, 0xff
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
@@ -26877,7 +26574,7 @@ LABEL_E2FDF8:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 LABEL_E2FE00:
 	.byte 0x00, 0xff, 0x00, 0xff
-	.asciz "AdvSureDisp"
+	aligned_string "AdvSureDisp"
 LABEL_E2FE10:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 LABEL_E2FE18:
@@ -26921,7 +26618,7 @@ LABEL_E2FE90:
 	.byte 0xe2, 0x00, 0xde, 0xfe, 0xe2, 0x00, 0x00, 0xff
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
-	.asciz "McpSureDisp"
+	aligned_string "McpSureDisp"
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 	.byte 0x00, 0xff, 0x00, 0xff, 0x76, 0xff, 0xe2, 0x00
@@ -27000,9 +26697,9 @@ LABEL_E30008:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 	aligned_string "DiskLoadSw"
-	.asciz "MixerSw"
-	.asciz "FadeInOutSw"
-	.asciz "VocWorkSw"
+	aligned_string "MixerSw"
+	aligned_string "FadeInOutSw"
+	aligned_string "VocWorkSw"
 	.byte 0x00, 0xff, 0x00, 0xff
 	.asciz "EnterTainerScr"
 	.byte 0xff, 0xf6, 0x02
@@ -27040,108 +26737,108 @@ LABEL_E30108:
 	.byte 0xe3, 0x00, 0x9a, 0x01, 0xe3, 0x00, 0x98, 0x01
 	.byte 0xe3, 0x00, 0x96, 0x01, 0xe3, 0x00, 0x00, 0xff
 	.byte 0x00, 0xff
-	.asciz "HelpLang4P4"
+	aligned_string "HelpLang4P4"
 	.byte 0x00, 0xff
-	.asciz "HelpLang4P3"
+	aligned_string "HelpLang4P3"
 	.byte 0x00, 0xff
-	.asciz "HelpLang4P2"
+	aligned_string "HelpLang4P2"
 	.byte 0x00, 0xff
-	.asciz "HelpLang4P1"
+	aligned_string "HelpLang4P1"
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 	.byte 0x00, 0xff
-	.asciz "HelpTtlStr4"
+	aligned_string "HelpTtlStr4"
 	.byte 0x48, 0x65
-	.asciz "lp_P4"
+	aligned_string "lp_P4"
 	.byte 0x00, 0xff
-	.asciz "HelpSwTtl4Scr"
+	aligned_string "HelpSwTtl4Scr"
 	.byte 0x00, 0xff
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
-	.asciz "Help_P3"
+	aligned_string "Help_P3"
 	.byte 0x48, 0x65
-	.asciz "lpTtlStr3"
+	aligned_string "lpTtlStr3"
 	.byte 0x00, 0xff
-	.asciz "HelpSwTtl3Scr"
+	aligned_string "HelpSwTtl3Scr"
 	.byte 0x00, 0xff
-	.asciz "HelpLang3P3"
+	aligned_string "HelpLang3P3"
 	.byte 0x00, 0xff
-	.asciz "HelpLang3P2"
+	aligned_string "HelpLang3P2"
 	.byte 0x00, 0xff
-	.asciz "HelpLang3P1"
+	aligned_string "HelpLang3P1"
 	.byte 0x00, 0xff
-	.asciz "Help_P2"
+	aligned_string "Help_P2"
 	.byte 0x00, 0xff
 	.byte 0x00, 0xff
-	.asciz "HelpTtlStr2"
+	aligned_string "HelpTtlStr2"
 	.byte 0x00, 0xff
-	.asciz "HelpSwTtl2Scr"
+	aligned_string "HelpSwTtl2Scr"
 	.byte 0x00, 0xff
-	.asciz "HelpLang2P2"
+	aligned_string "HelpLang2P2"
 	.byte 0x00, 0xff
-	.asciz "HelpLang2P1"
+	aligned_string "HelpLang2P1"
 	.byte 0x00, 0xff
-	.asciz "HelpLang1"
+	aligned_string "HelpLang1"
 	.byte 0x48, 0x65
-	.asciz "lpTtlStr1"
+	aligned_string "lpTtlStr1"
 	.byte 0x00, 0xff
-	.asciz "HelpSwTtl1Scr"
+	aligned_string "HelpSwTtl1Scr"
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 	.asciz "HelpXWin"
 	.byte 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 	.byte 0x00, 0xff
-	.asciz "HelpNotXWin"
+	aligned_string "HelpNotXWin"
 	.byte 0x00, 0xff
 	.byte 0x00, 0xff
 	.asciz "HelpMenu"
 	.byte 0xff, 0x00, 0xff, 0x00, 0xff
 	aligned_string "MD_ENTERTAINER"
 	aligned_string "MD_SEQ"
-	.asciz "MD_SEQ_EREC"
-	.asciz "MD_SEQ_PLAY"
-	.asciz "MD_SEQ_REAL"
-	.asciz "MD_SEQ_EDIT"
-	.asciz "MD_HELP"
-	.asciz "TT_SDREVSET"
-	.asciz "TT_SDDSPEFF"
+	aligned_string "MD_SEQ_EREC"
+	aligned_string "MD_SEQ_PLAY"
+	aligned_string "MD_SEQ_REAL"
+	aligned_string "MD_SEQ_EDIT"
+	aligned_string "MD_HELP"
+	aligned_string "TT_SDREVSET"
+	aligned_string "TT_SDDSPEFF"
 	aligned_string "TT_SDEQUALIZER"
-	.asciz "TT_SDACCILL"
-	.asciz "TT_SQMENU"
+	aligned_string "TT_SDACCILL"
+	aligned_string "TT_SQMENU"
 	.byte 0x54, 0x54
-	.asciz "_SQPLAY"
-	.asciz "TT_SQCYCPLY"
+	aligned_string "_SQPLAY"
+	aligned_string "TT_SQCYCPLY"
 	aligned_string "TT_SQEASYREC"
 	aligned_string "TT_SQCMENU"
 	aligned_string "TT_SQREALREC"
-	.asciz "TT_SQCYCREC"
+	aligned_string "TT_SQCYCREC"
 	aligned_string "TT_SQPUNCH"
-	.asciz "TT_SQPUNCHM"
+	aligned_string "TT_SQPUNCHM"
 	aligned_string "TT_SQPNLWR"
-	.asciz "TT_SQSNGCLR"
+	aligned_string "TT_SQSNGCLR"
 	aligned_string "TT_SQSNGCP"
 	aligned_string "TT_SQEMENU"
 	aligned_string "TT_SQNOTESEL"
 	aligned_string "TT_SQNOTEEDT"
-	.asciz "TT_SQNOTECYCP"
-	.asciz "TT_SQDRMSEL"
+	aligned_string "TT_SQNOTECYCP"
+	aligned_string "TT_SQDRMSEL"
 	.byte 0x54, 0x54
-	.asciz "_SQDRMEDT"
+	aligned_string "_SQDRMEDT"
 	aligned_string "TT_SQDRMCYCP"
-	.asciz "TT_SQTRKCLR"
-	.asciz "TT_SQTRKMRG"
+	aligned_string "TT_SQTRKCLR"
+	aligned_string "TT_SQTRKMRG"
 	aligned_string "TT_SQQTZ"
-	.asciz "TT_SQTRNS"
+	aligned_string "TT_SQTRNS"
 	aligned_string "TT_SQVELOCNG"
 	aligned_string "TT_SQNOTECNG"
-	.asciz "TT_SQADVDLY"
-	.asciz "TT_SQMERS"
+	aligned_string "TT_SQADVDLY"
+	aligned_string "TT_SQMERS"
 	.byte 0x54, 0x54
 	aligned_string "_SQMCP"
-	.asciz "TT_SQMDEL"
-	.asciz "TT_SQMINS"
-	.asciz "TT_SQSNGCPC"
-	.asciz "TT_SQPNLWRM"
-	.asciz "TT_SQMETBAL"
-	.asciz "TT_ETMENU"
-	.asciz "TT_SWHELP"
+	aligned_string "TT_SQMDEL"
+	aligned_string "TT_SQMINS"
+	aligned_string "TT_SQSNGCPC"
+	aligned_string "TT_SQPNLWRM"
+	aligned_string "TT_SQMETBAL"
+	aligned_string "TT_ETMENU"
+	aligned_string "TT_SWHELP"
 	.byte 0x1c, 0x3d, 0xf4, 0x00
 	.byte 0xa4, 0x70, 0xf4, 0x00, 0xc1, 0x52, 0xf4, 0x00
 	.byte 0xb8, 0x5a, 0xf4, 0x00, 0x59, 0x6a, 0xf4, 0x00
@@ -27215,96 +26912,53 @@ LABEL_E30684:
 	.byte 0x00, 0xff
 LABEL_E30686:
 
-	.asciz "MainPanic"
-LABEL_E30690:
-	.asciz "EtmenuTitleFunc"
-LABEL_E306A0:
-	.asciz "HelpFlashFunc"
-LABEL_E306AE:
-	.asciz "HelpLangChkMain"
-LABEL_E306BE:
-	.asciz "HelpTitleFunc"
-LABEL_E306CC:
-	aligned_string "HelpModeFunc"
-LABEL_E306DA:
-	aligned_string "SqDrmCycpTitleFunc"
-LABEL_E306EE:
-	.asciz "SqNoteCycpTitleFunc"
-LABEL_E30702:
-	.asciz "MimeSyori"
-LABEL_E3070C:
-	.asciz "SdAccillTitleFunc"
-LABEL_E3071E:
-	.asciz "SdDspeffTitleFunc"
-LABEL_E30730:
-	.asciz "SdRevsetTitleFunc"
-LABEL_E30742:
-	.asciz "NoteEditSyori"
-LABEL_E30750:
-	.asciz "SngSelSyori"
-LABEL_E3075C:
-	aligned_string "SqNoteSelTitleFunc"
-LABEL_E30770:
-	aligned_string "SqNoteEdtTitleFunc"
-LABEL_E30784:
-	.asciz "SqDrmSelTitleFunc"
-LABEL_E30796:
-	.asciz "SqDrmEdtTitleFunc"
-LABEL_E307A8:
-	.asciz "SqAdlyTitleFunc"
-LABEL_E307B8:
-	.asciz "SqTrmgTitleFunc"
-LABEL_E307C8:
-	aligned_string "SqSngcpTitleFunc"
-LABEL_E307DA:
-	.asciz "SqTrclTitleFunc"
-LABEL_E307EA:
-	.asciz "SqMinsTitleFunc"
-LABEL_E307FA:
-	.asciz "SqMcpyTitleFunc"
-LABEL_E3080A:
-	.asciz "SqSoclTitleFunc"
-LABEL_E3081A:
-	.asciz "SqNcngTitleFunc"
-LABEL_E3082A:
-	.asciz "SqTrnsTitleFunc"
-LABEL_E3083A:
-	.asciz "SqVcngTitleFunc"
-LABEL_E3084A:
-	.asciz "SqMersTitleFunc"
-LABEL_E3085A:
-	.asciz "SqMdelTitleFunc"
-LABEL_E3086A:
-	aligned_string "SqQtzTitleFunc"
-LABEL_E3087A:
-	.asciz "SqPunchmTitleFunc"
-LABEL_E3088C:
-	aligned_string "SqPunchTitleFunc"
-LABEL_E3089E:
-	.asciz "SqPlayTitleFunc"
-LABEL_E308AE:
-	aligned_string "SqRealRecTitleFunc"
-LABEL_E308C2:
-	.asciz "SeqEditModeFunc"
-LABEL_E308D2:
-	.asciz "SeqErecModeFunc"
-LABEL_E308E2:
-	.asciz "SeqPlayModeFunc"
-LABEL_E308F2:
-	.asciz "SeqRealModeFunc"
-LABEL_E30902:
-	.asciz "SeqModeFunc"
-LABEL_E3090E:
-	.asciz "ApPlaySyori"
-LABEL_E3091A:
-	.asciz "EffEditMain"
-LABEL_E30926:
-	.asciz "MainExeCall"
-LABEL_E30932:
-	.asciz "ApEditSyori"
+	aligned_string "MainPanic"
+LABEL_E30690:	aligned_string "EtmenuTitleFunc"
+LABEL_E306A0:	aligned_string "HelpFlashFunc"
+LABEL_E306AE:	aligned_string "HelpLangChkMain"
+LABEL_E306BE:	aligned_string "HelpTitleFunc"
+LABEL_E306CC:	aligned_string "HelpModeFunc"
+LABEL_E306DA:	aligned_string "SqDrmCycpTitleFunc"
+LABEL_E306EE:	aligned_string "SqNoteCycpTitleFunc"
+LABEL_E30702:	aligned_string "MimeSyori"
+LABEL_E3070C:	aligned_string "SdAccillTitleFunc"
+LABEL_E3071E:	aligned_string "SdDspeffTitleFunc"
+LABEL_E30730:	aligned_string "SdRevsetTitleFunc"
+LABEL_E30742:	aligned_string "NoteEditSyori"
+LABEL_E30750:	aligned_string "SngSelSyori"
+LABEL_E3075C:	aligned_string "SqNoteSelTitleFunc"
+LABEL_E30770:	aligned_string "SqNoteEdtTitleFunc"
+LABEL_E30784:	aligned_string "SqDrmSelTitleFunc"
+LABEL_E30796:	aligned_string "SqDrmEdtTitleFunc"
+LABEL_E307A8:	aligned_string "SqAdlyTitleFunc"
+LABEL_E307B8:	aligned_string "SqTrmgTitleFunc"
+LABEL_E307C8:	aligned_string "SqSngcpTitleFunc"
+LABEL_E307DA:	aligned_string "SqTrclTitleFunc"
+LABEL_E307EA:	aligned_string "SqMinsTitleFunc"
+LABEL_E307FA:	aligned_string "SqMcpyTitleFunc"
+LABEL_E3080A:	aligned_string "SqSoclTitleFunc"
+LABEL_E3081A:	aligned_string "SqNcngTitleFunc"
+LABEL_E3082A:	aligned_string "SqTrnsTitleFunc"
+LABEL_E3083A:	aligned_string "SqVcngTitleFunc"
+LABEL_E3084A:	aligned_string "SqMersTitleFunc"
+LABEL_E3085A:	aligned_string "SqMdelTitleFunc"
+LABEL_E3086A:	aligned_string "SqQtzTitleFunc"
+LABEL_E3087A:	aligned_string "SqPunchmTitleFunc"
+LABEL_E3088C:	aligned_string "SqPunchTitleFunc"
+LABEL_E3089E:	aligned_string "SqPlayTitleFunc"
+LABEL_E308AE:	aligned_string "SqRealRecTitleFunc"
+LABEL_E308C2:	aligned_string "SeqEditModeFunc"
+LABEL_E308D2:	aligned_string "SeqErecModeFunc"
+LABEL_E308E2:	aligned_string "SeqPlayModeFunc"
+LABEL_E308F2:	aligned_string "SeqRealModeFunc"
+LABEL_E30902:	aligned_string "SeqModeFunc"
+LABEL_E3090E:	aligned_string "ApPlaySyori"
+LABEL_E3091A:	aligned_string "EffEditMain"
+LABEL_E30926:	aligned_string "MainExeCall"
+LABEL_E30932:	aligned_string "ApEditSyori"
 
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x7e, 0x34
-	.asciz "3~2d~32~44~a0~bc~44~2d~32~45~a0~bc~45~2d~32~46~2d~32~46~9e~bc~47~2d~32~41~a0~bc~41~2d~32~42~a0~bc~42~2d~32~43~2d~31~44~a0~bb~44~2d~31~45~a0~bb~45~2d~31~46~2d~31~46~9e~bb~47~2d~31~41~a0~bb~41~2d~31~42~a0~bb~42~2d~31~43~30~20~44~a0~30~44~30~20~45~a0~30~45~30~20~46~30~20~46~9e~30~47~30~20~41~a0~30~41~30~20~42~a0~30~42~30~20~43~31~20~44~a0~31~44~31~20~45~a0~31~45~31~20~46~31~20~46~9e~31~47~31~20~41~a0~31~41~31~20~42~a0~31~42~31~20~43~32~20~44~a0~32~44~32~20~45~a0~32~45~32~20~46~32~20~46~9e~32~47~32~20~41~a0~32~41~32~20~42~a0~32~42~32~20~43~33~20~44~a0~33~44~33~20~45~a0~33~45~33~20~46~33~20~46~9e~33~47~33~20~41~a0~33~41~33~20~42~a0~33~42~33~20~43~34~20~44~a0~34~44~34~20~45~a0~34~45~34~20~46~34~20~46~9e~34~47~34~20~41~a0~34~41~34~20~42~a0~34~42~34~20~43~35~20~44~a0~35~44~35~20~45~a0~35~45~35~20~46~35~20~46~9e~35~47~35~20~41~a0~35~41~35~20~42~a0~35~42~35~20~43~36~20~44~a0~36~44~36~20~45~a0~36~45~36~20~46~36~20~46~9e~36~47~36~20~41~a0~36~41~36~20~42~a0~36~42~36~20~43~37~20~44~a0~37~44~37~20~45~a0~37~45~37~20~46~37~20~46~9e~37~47~37~20~41~a0~37~41~37~20~42~a0~37~42~37~20~43~38~20~44~a0~38~44~38~20~45~a0~38~45~38~20~46~38~20~46~9e~38~47~38~200"
+	aligned_string "3~2d~32~44~a0~bc~44~2d~32~45~a0~bc~45~2d~32~46~2d~32~46~9e~bc~47~2d~32~41~a0~bc~41~2d~32~42~a0~bc~42~2d~32~43~2d~31~44~a0~bb~44~2d~31~45~a0~bb~45~2d~31~46~2d~31~46~9e~bb~47~2d~31~41~a0~bb~41~2d~31~42~a0~bb~42~2d~31~43~30~20~44~a0~30~44~30~20~45~a0~30~45~30~20~46~30~20~46~9e~30~47~30~20~41~a0~30~41~30~20~42~a0~30~42~30~20~43~31~20~44~a0~31~44~31~20~45~a0~31~45~31~20~46~31~20~46~9e~31~47~31~20~41~a0~31~41~31~20~42~a0~31~42~31~20~43~32~20~44~a0~32~44~32~20~45~a0~32~45~32~20~46~32~20~46~9e~32~47~32~20~41~a0~32~41~32~20~42~a0~32~42~32~20~43~33~20~44~a0~33~44~33~20~45~a0~33~45~33~20~46~33~20~46~9e~33~47~33~20~41~a0~33~41~33~20~42~a0~33~42~33~20~43~34~20~44~a0~34~44~34~20~45~a0~34~45~34~20~46~34~20~46~9e~34~47~34~20~41~a0~34~41~34~20~42~a0~34~42~34~20~43~35~20~44~a0~35~44~35~20~45~a0~35~45~35~20~46~35~20~46~9e~35~47~35~20~41~a0~35~41~35~20~42~a0~35~42~35~20~43~36~20~44~a0~36~44~36~20~45~a0~36~45~36~20~46~36~20~46~9e~36~47~36~20~41~a0~36~41~36~20~42~a0~36~42~36~20~43~37~20~44~a0~37~44~37~20~45~a0~37~45~37~20~46~37~20~46~9e~37~47~37~20~41~a0~37~41~37~20~42~a0~37~42~37~20~43~38~20~44~a0~38~44~38~20~45~a0~38~45~38~20~46~38~20~46~9e~38~47~38~200"
 	.byte 0x37, 0x00, 0x3e, 0x00, 0x45, 0x00, 0x4c, 0x00
 	.byte 0x53, 0x00, 0x5a, 0x00, 0x61, 0x00, 0x68, 0x00
 	.byte 0x6f, 0x00, 0x76, 0x00, 0x7d, 0x00, 0x84, 0x00
@@ -27617,32 +27271,32 @@ LABEL_E30932:
 	.byte 0x50, 0x00, 0x6a, 0x00, 0x82, 0x00, 0x99, 0x00
 	.byte 0xb2, 0x00, 0xc9, 0x00, 0xe0, 0x00, 0xf9, 0x00
 	.byte 0xf9, 0x00
-	.asciz "~43~bc~43~bb~43~30~43~31~43~32~43~33~43~34~43~35~43~36~43~37~43~38ITALIAN"
+	aligned_string "~43~bc~43~bb~43~30~43~31~43~32~43~33~43~34~43~35~43~36~43~37~43~38ITALIAN"
 	aligned_string "ATTENTION!"
 LABEL_E33838:
-	.asciz "ACHTUNG !"
+	aligned_string "ACHTUNG !"
 	.asciz "ATTENTION!"
 	.byte 0xff, 0xa1, 0x41
 	.byte 0x54, 0x45, 0x4e, 0x43, 0x49
 	.byte 0xd3, 0x4e, 0x21
 	.byte 0x00, 0xff
-	.asciz "Perhatian !"
+	aligned_string "Perhatian !"
 	.byte 0x41, 0x72
-	.asciz "e You Sure?"
-	.asciz "Sind Sie sicher ?"
+	aligned_string "e You Sure?"
+	aligned_string "Sind Sie sicher ?"
 	.byte 0x45, 0x74
 	.ascii "es-vous s"
 	.byte 0x95, 0xd3, 0x3f, 0x20, 0x00, 0xbf, 0x45
 	jrl	ule, 0xe174
 	aligned_string " seguro? "
-	.asciz "Apakah yakin akan dihapus ?"
+	aligned_string "Apakah yakin akan dihapus ?"
 	aligned_string "Features for creating a song. "
-	.asciz "Funktionen zur Erstellung eines Songs"
+	aligned_string "Funktionen zur Erstellung eines Songs"
 LABEL_E33908:
 	aligned_string "Features for editing a song."
-	.asciz "Funktionen zur Bearbeitung eines Songs."
+	aligned_string "Funktionen zur Bearbeitung eines Songs."
 	.byte 0x45, 0x41
-	.asciz "SY RECORD sets the Sequencer to record your complete performance including Auto Play Chord. The selected song will be cleared. "
+	aligned_string "SY RECORD sets the Sequencer to record your complete performance including Auto Play Chord. The selected song will be cleared. "
 LABEL_E339D0:
 	.ascii "EASY RECORD aktiviert die wichtigsten Spuren, um ein komplettes St"
 	.byte 0xfc
@@ -27653,7 +27307,7 @@ LABEL_E339D0:
 LABEL_E33A78:
 	.ascii "Best"
 	.byte 0xe4, 0x74, 0x69, 0x67
-	.asciz "en Sie mit OK. "
+	aligned_string "en Sie mit OK. "
 LABEL_E33A90:
 	aligned_string "PANEL WRITE replaces the sounds and settings at the beginning of your song, which are selected when you press SEQUENCER RESET. Make the desired changes and press OK to store your new settings."
 	.ascii "PANEL WRITE ersetzt alle Kl"
@@ -27668,7 +27322,7 @@ LABEL_E33A90:
 	.byte 0xe4
 	aligned_string "tigen mit OK um diese zu speichern. "
 LABEL_E33C30:
-	.asciz "Press the up/down buttons under the screen corresponding to the tracks that you want to clear. "
+	aligned_string "Press the up/down buttons under the screen corresponding to the tracks that you want to clear. "
 LABEL_E33C90:
 	.byte 0x44, 0x72, 0xfc
 	.ascii "cken Sie einer der Doppeltasten unter dem Display, entsprechend der Spuren, die Sie l"
@@ -27677,13 +27331,13 @@ LABEL_E33C90:
 	.byte 0xf6
 	.asciz "chten "
 LABEL_E33CF8:
-	.asciz "Press OK to complete TRACK CLEAR."
+	aligned_string "Press OK to complete TRACK CLEAR."
 	.byte 0x44, 0x72, 0xfc, 0x63, 0x6b, 0x65
 	.ascii "n Sie OK um TRACK CLEAR auszuf"
 	.byte 0xfc, 0x68
 	.asciz "ren. "
 	.byte 0x50, 0x72
-	.asciz "ess the up/down button under the screen corresponding to the track that you want to edit."
+	aligned_string "ess the up/down button under the screen corresponding to the track that you want to edit."
 	.byte 0x44, 0x72, 0xfc, 0x63, 0x6b, 0x65
 	.ascii "n Sie eine der Doppeltasten unter dem Display, entsprechend der Spur, die Sie editieren m"
 	.byte 0xf6
@@ -27692,7 +27346,7 @@ LABEL_E33CF8:
 LABEL_E33E50:
 	.ascii "SONG CLEAR l"
 	.byte 0xf6, 0x73, 0x63, 0x68
-	.asciz "t alle aufgenommenen Daten in diesem Song. "
+	aligned_string "t alle aufgenommenen Daten in diesem Song. "
 	.ascii "L'utilisation de SONG CLEAR effacera tout enregistrement pr"
 	.byte 0xe9
 	jr	ule, 0xe9
@@ -27703,7 +27357,7 @@ LABEL_E33E50:
 	.byte 0xf3, 0x6e
 	.ascii " se borra la grabaci"
 	.byte 0xf3, 0x6e, 0x20, 0x64
-	.asciz "el secuenciador. "
+	aligned_string "el secuenciador. "
 	aligned_string "Gunakan SONG CLEAR untuk menghapus suatu rekaman yang ada didalam Sequencer."
 LABEL_E33F70:
 	.asciz "Using TRACK CLEAR will erase any existing recordings in the selected Tracks."
@@ -27725,43 +27379,43 @@ LABEL_E33F70:
 	.ascii " anular la pista se borra la grabaci"
 	.byte 0xf3, 0x6e, 0x20, 0x64
 	aligned_string "e las pistas seleccionadas. "
-	.asciz "Gunakan TRACK CLEAR bila akan menghapus suatu rekaman yang ada didalam Track yang terseleksi."
-	.asciz "Press the START/STOP button to begin."
+	aligned_string "Gunakan TRACK CLEAR bila akan menghapus suatu rekaman yang ada didalam Track yang terseleksi."
+	aligned_string "Press the START/STOP button to begin."
 	.byte 0x42, 0x65, 0x74, 0xe4, 0x74, 0x69
 	aligned_string "gen Sie die START/STOP-Taste um den Vorgang zu beginnen."
 	aligned_string "ExRe"
-	.asciz "AUTO PLAY CHORD"
-	.asciz "SOUND ARRANGER ON/OFF"
+	aligned_string "AUTO PLAY CHORD"
+	aligned_string "SOUND ARRANGER ON/OFF"
 	.byte 0x53, 0x4f
 	aligned_string "UND ARRANGER SET"
 	aligned_string "RHYTHM GROUP"
-	.asciz "COMPOSER MEMORY"
-	.asciz "COMPOSER MENU"
+	aligned_string "COMPOSER MEMORY"
+	aligned_string "COMPOSER MENU"
 	.byte 0x54, 0x52
-	.asciz "ANSPOSE"
-	.asciz "TEMPO/PROGRAM"
+	aligned_string "ANSPOSE"
+	aligned_string "TEMPO/PROGRAM"
 	.byte 0x4d, 0x41
 	aligned_string "NUAL SEQ PAD"
 	aligned_string "MSP BANK"
-	.asciz "MSP STOP/RECORD"
+	aligned_string "MSP STOP/RECORD"
 	aligned_string "MSP MENU"
 
-	.asciz "SPLIT POINT"
+	aligned_string "SPLIT POINT"
 	.byte 0x4f, 0x54
-	.asciz "P / MUSIC STYLIST"
+	aligned_string "P / MUSIC STYLIST"
 	aligned_string "MUSIC STYLE ARRANGER"
-	.asciz "VARIATION & MSA"
+	aligned_string "VARIATION & MSA"
 	aligned_string "FILL IN 1, 2"
-	.asciz "INTRO & ENDING 1, 2"
-	.asciz "SYNCHRO & BREAK"
+	aligned_string "INTRO & ENDING 1, 2"
+	aligned_string "SYNCHRO & BREAK"
 	aligned_string "START/STOP"
-	.asciz "TAP TEMPO"
+	aligned_string "TAP TEMPO"
 	.asciz "TECHNI-CHORD"
 	.byte 0xff, 0x50, 0x41
 	.asciz "NEL MEMORY"	; DB 052h, 059h, 000h, 0FFh, "SET", 000h
 	.byte 0xff, 0x53, 0x45, 0x54, 0x00
-	.asciz "NEXT BANK"
-	.asciz "BANK VIEW"
+	aligned_string "NEXT BANK"
+	aligned_string "BANK VIEW"
 	aligned_string "SEQUENCER PLAY"
 	aligned_string "EASY REC"
 	.asciz "SEQUENCER MENU"
@@ -27777,9 +27431,9 @@ LABEL_E33F70:
 	.byte 0x53, 0x55, 0x53, 0x54
 	.byte 0x41, 0x49, 0x4e, 0x00
 	aligned_string "DIGITAL REVERB"
-	.asciz "SOUND GROUP"
+	aligned_string "SOUND GROUP"
 	.asciz "PART SELECT"
-	.asciz "CONDUCTOR"
+	aligned_string "CONDUCTOR"
 	.byte 0x44, 0x49
 	aligned_string "SPLAY HOLD"
 	.byte 0x42, 0x41, 0x4c, 0x41
@@ -27789,8 +27443,8 @@ LABEL_E33F70:
 	aligned_string "R1/R2 OCTAVE"
 	aligned_string "EXIT"
 	aligned_string "OTHER PARTS/TR"
-	.asciz "ACOUSTIC ILLUSION"
-	.asciz "FADE IN/OUT"
+	aligned_string "ACOUSTIC ILLUSION"
+	aligned_string "FADE IN/OUT"
 	.asciz "ENTERTAINER"
 	.asciz "DEMO"
 	.byte 0xff, 0x70, 0x41
@@ -27953,15 +27607,15 @@ LABEL_E33F70:
 	.byte 0x11, 0x4e, 0x00, 0x00, 0x12, 0x4e, 0x00, 0x00
 	.byte 0x13, 0x4e, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x20, 0x20
-	.asciz "   %3d "
-	.asciz "      ON "
-	.asciz "     OFF "
-	.asciz "     %3d "
+	aligned_string "   %3d "
+	aligned_string "      ON "
+	aligned_string "     OFF "
+	aligned_string "     %3d "
 	ldb	w, 0x20
-	.asciz "    ON "
-	.asciz "     OFF "
-	.asciz "     %3d "
-	.asciz "     %3d "
+	aligned_string "    ON "
+	aligned_string "     OFF "
+	aligned_string "     %3d "
+	aligned_string "     %3d "
 	.byte 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x2b, 0x00
 	.byte 0x3c, 0x00, 0x3c, 0x00, 0x3c, 0x00, 0x3c, 0x00
@@ -27992,13 +27646,13 @@ LABEL_E33F70:
 	.byte 0x54, 0x4f, 0x00, 0xff
 	.byte 0x49, 0x54, 0x45, 0x4d
 	.byte 0x00, 0xff
-	.asciz "VALUE"
+	aligned_string "VALUE"
 	.asciz "TRACK"
 	.byte 0x3a, 0x00
-	.asciz "FIRST MEASURE"
+	aligned_string "FIRST MEASURE"
 	.byte 0x4c, 0x41
 	aligned_string "ST MEASURE"
-	.asciz "START MEASURE"
+	aligned_string "START MEASURE"
 	aligned_string "REPEAT"
 	aligned_string "SONG"
 	.byte 0x00, 0x00, 0x37, 0x00, 0x40, 0x00, 0x49, 0x00
@@ -28022,26 +27676,26 @@ LABEL_E33F70:
 	.asciz "%d/4"
 	.byte 0xff, 0x25, 0x32
 	jr	ov, 0x00
-	.asciz " ON  "
-	.asciz " OFF "
+	aligned_string " ON  "
+	aligned_string " OFF "
 	ldb	w, 0x4f
 	.byte 0x4e, 0x20, 0x20, 0x00
-	.asciz " OFF "
-	.asciz " ON  "
-	.asciz " OFF "
+	aligned_string " OFF "
+	aligned_string " ON  "
+	aligned_string " OFF "
 	ldb	w, 0x25
 	.byte 0x33, 0x64, 0x20, 0x00
-	.asciz " %3d "
-	.asciz " %3d "
-	.asciz " %3d "
+	aligned_string " %3d "
+	aligned_string " %3d "
+	aligned_string " %3d "
 	ldb	w, 0x20
 	.byte 0x2d, 0x32, 0x20, 0x00
-	.asciz "  -1 "
-	.asciz " %3d "
-	.asciz " %3d "
+	aligned_string "  -1 "
+	aligned_string " %3d "
+	aligned_string " %3d "
 	ldb	w, 0x25
 	.byte 0x33, 0x64, 0x20, 0x00
-	.asciz " %3d "
+	aligned_string " %3d "
 	.byte 0x00, 0x00, 0x0f, 0x00, 0x13, 0x00
 	.byte 0x6b, 0xff, 0x00, 0x00, 0x0f, 0x00, 0x13, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0a, 0x00
@@ -28050,27 +27704,27 @@ LABEL_E33F70:
 	.byte 0x00, 0x00, 0x39, 0x00, 0x4d, 0x00, 0x61, 0x00
 	.byte 0xcb, 0x00, 0xf0, 0x00, 0x2e, 0x02, 0x2e, 0x02
 	.byte 0x2e, 0x02, 0xa4, 0x00
-	.asciz " %3d "
-	.asciz " %3d "
-	.asciz " %3d "
+	aligned_string " %3d "
+	aligned_string " %3d "
+	aligned_string " %3d "
 	ldb	w, 0x25
 	.byte 0x33, 0x64, 0x20, 0x00
-	.asciz " %3d "
-	.asciz " %3d "
-	.asciz " %3d "
+	aligned_string " %3d "
+	aligned_string " %3d "
+	aligned_string " %3d "
 	ldb	w, 0x25
 	.byte 0x33, 0x64, 0x20, 0x00
-	.asciz " %3d "
-	.asciz " %3d "
+	aligned_string " %3d "
+	aligned_string " %3d "
 LABEL_E34B88:
-	.asciz " %3d "
+	aligned_string " %3d "
 	ldb	w, 0x25
 	.byte 0x33, 0x64, 0x20, 0x00
-	.asciz " %3d "
-	.asciz " %3d "
+	aligned_string " %3d "
+	aligned_string " %3d "
 	aligned_string " +%2d "
 	aligned_string " -%2d "
-	.asciz " %3d "
+	aligned_string " %3d "
 	ldb	w, 0x2b
 	aligned_string "%3d "
 	.asciz " -%3d "
@@ -28078,34 +27732,34 @@ LABEL_E34B88:
 	.byte 0x34, 0x64, 0x20, 0x00
 	aligned_string " +%3d "
 	aligned_string " -%3d "
-	.asciz " %4d "
-	.asciz " %3d "
+	aligned_string " %4d "
+	aligned_string " %3d "
 	aligned_string " +%3d "
 	aligned_string " -%3d "
-	.asciz " %3d "
+	aligned_string " %3d "
 	.byte 0x28, 0x25
 	aligned_string "3d) "
 	.asciz "(%3d) "
 	.byte 0xff, 0x20, 0x25
 	.byte 0x32, 0x64, 0x20, 0x00
-	.asciz " %2d "
-	.asciz " %2d "
-	.asciz " %3d "
+	aligned_string " %2d "
+	aligned_string " %2d "
+	aligned_string " %3d "
 	ldb	w, 0x25
 	.byte 0x33, 0x64, 0x20, 0x00
-	.asciz " %3d "
-	.asciz " %3d "
-	.asciz " %3d "
+	aligned_string " %3d "
+	aligned_string " %3d "
+	aligned_string " %3d "
 	ldb	w, 0x25
 	.byte 0x33, 0x64, 0x20, 0x00
-	.asciz " %3d "
-	.asciz " %3d "
+	aligned_string " %3d "
+	aligned_string " %3d "
 LABEL_E34C50:
-	.asciz " %2d "
+	aligned_string " %2d "
 	ldb	w, 0x25
 	.byte 0x32, 0x64, 0x20, 0x00
 	.asciz "     "
-	.asciz "%3dKB"
+	aligned_string "%3dKB"
 	.byte 0x31, 0x30, 0x30, 0x00, 0x25, 0x33, 0x64, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x10, 0x00
 	.byte 0x10, 0x00, 0x10, 0x00, 0x20, 0x00, 0x20, 0x00
@@ -28143,7 +27797,7 @@ LABEL_E34C50:
 	.byte 0x34, 0x00, 0x7d, 0x02, 0xd0, 0x00, 0xaf, 0x01
 	.byte 0xab, 0x00, 0x01, 0x02, 0x7d, 0x02, 0x7d, 0x02
 	.byte 0x7d, 0x02, 0x4d, 0x02
-	.asciz " %3d "
+	aligned_string " %3d "
 	.byte 0x00, 0x00, 0x07, 0x00, 0x15, 0x00
 	.byte 0x25, 0x00, 0x36, 0x00, 0x45, 0x00, 0x54, 0x00
 	.byte 0x63, 0x00, 0x72, 0x00, 0x25, 0x00, 0xc6, 0x00
@@ -28160,9 +27814,9 @@ LABEL_E34C50:
 	.byte 0x65, 0x00, 0x73, 0x00, 0xab, 0x00, 0x81, 0x00
 	.byte 0x8f, 0x00, 0x9d, 0x00, 0xbb, 0x00, 0xbb, 0x00
 	.byte 0xbb, 0x00, 0x0f, 0x00
-	.asciz " -%3d"
-	.asciz " +%3d"
-	.asciz "  %3d"
+	aligned_string " -%3d"
+	aligned_string " +%3d"
+	aligned_string "  %3d"
 	ldb	w, 0x20
 	.byte 0x20, 0x20, 0x20, 0x00, 0x25, 0x35, 0x64, 0x00
 	.byte 0x0d, 0x0d, 0x01, 0x0c, 0x01, 0x0e, 0x0f, 0x0f
@@ -28552,7 +28206,7 @@ LABEL_E44DF8:
 	.byte 0x00, 0xff, 0x64, 0x00, 0x77, 0x62, 0x00, 0xff
 	.byte 0x72, 0x00, 0x64, 0x00, 0x72, 0x00, 0x61, 0x00
 	jr	ov, 0x00
-	.asciz ".          "
+	aligned_string ".          "
 	.byte 0x72, 0x00
 	.zero 8
 	.byte 0x00, 0x00, 0x00, 0x00, 0x02, 0x02, 0x01, 0x00
@@ -28588,7 +28242,7 @@ LABEL_E44DF8:
 	.byte 0x05, 0x00, 0x00, 0x00, 0x00, 0x00, 0x41, 0x3a
 	.byte 0x5c, 0x00, 0x2b, 0x77, 0x62, 0x00, 0x5c, 0x00
 	.byte 0x64, 0x00, 0x72, 0x62, 0x00, 0xff
-	.asciz "1 PianoDisc"
+	aligned_string "1 PianoDisc"
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.zero 8
 	.byte 0x00, 0x00, 0x04, 0x00, 0x00, 0xc0, 0x00, 0x00
@@ -29583,7 +29237,7 @@ LABEL_E44DF8:
 	.byte 0x00, 0x04, 0x00, 0x02, 0x00, 0x04, 0x00, 0x08
 	.byte 0x00, 0x04, 0x00, 0x05, 0x00, 0x04, 0x00, 0x04
 	.byte 0x00, 0x04, 0x00, 0x05, 0x00, 0x08, 0x00, 0x20
-	.asciz "STANDARD ROCK   R&ROLL & BLUES   POP & BALLAD   FUNK & FUSION  SOUL&MOD. DANCE BIG BAND & SWING   JAZZ COMBO       U.S.TRAD        COUNTRY          LATIN       MARCH & WALTZ     PARTY TIME   SHOWTIME & TRAD      WORLD           CUSTOM         COMPOSER    8Bt Standard Simple 8 Beat8 Beat Rock 18 Beat Rock 28 Beat Rock 3  16 Beat 1    16 Beat 2  Simple 16Beat16 Beat Slow   Hard Rock   8 Beat Slow   70's Rock  70'sPianoRockShuffleH.RockSwing Rock 1 Swing Rock 2       !            !            !            !      Rock 'n' RollPiano R&Roll  60's R&Roll Modern R&RollBlues R&Roll ShuffleR&Roll70's Shuffle    Oldies    Rhythm&Blues ShuffleBoogie    Twist    Boogie Woogie60s HitParade      !            !            !            !            !            !            !       8 Beat Pop    80's Pop   Orch. Ballad  E.P. Ballad 8BtPopBallad  8Bt Ballad   Rock Ballad German Ballad R&B Ballad  SlowSwingRockShuffleBallad  60's Pop     Piano Pop  H.Rock Ballad16Bt Ballad 116Bt Ballad 216BtPopBallad      !            !            !          Funk     Swingy Funk 1Swingy Funk 2  Slow Funk    Jazz Rock    Jazz Pop    Pop Groove  CaribbeanRockSamba Rock 1 Samba Rock 2       !            !            !            !            !            !            !            !            !            !          Soul     Soul Shuffle   8Bt Soul    Soul Ballad  Caribarena     Dance 1   Dance Reggae Swingy Disco  Disco Samba    Techno      Soul Rock    16Bt Soul       Rap         House       Hip Hop      Dance 2    Euro Disco     Disco 1      Disco 2         !      Big Band FastBig Band Mid BigBand Slow1BigBand Slow2  Show Band   Swing Combo Orch. Swing 1Orch. Swing 2RomanticSwingJazz Waltz 1  Dance Band  Jazz Waltz 2 Simple Swing SimpleJazz3/4      !            !            !            !            !            !       Jazz Combo   Club Combo   Organ Combo AccordionJazz Gypsy Jazz  Jazz Quartet   Jazz Trio  Lounge Piano  Modern Jazz Jazz Ballad 1 Euro Combo  Jazz Quintet Jazz Ballad 2      !            !            !            !            !            !            !       Dixie Band  Dixie PianistFast Ragtime Slow Ragtime   Hawaiian   GospelRevivalChapel Gospel Gospel 4/4   Gospel 3/4  HawaiiShuffle Organ Blues  Slow Blues  Roaring 20's GospelShuffleGospel Ballad      !            !            !            !            !      Country BluesCountry 2Step Country Pop Country Rock1 Saloon Bar    Bluegrass  Mod.BluegrassCountryBallad  Folk Rock  Country WaltzCountry Rock2Country Rock3Country Piano      !            !            !            !            !            !            !         Rhumba       Beguine      Cumbia       Cha Cha       Mambo     Bossanova 1  Piano Bossa     Samba        Salsa    Tango Europe RhumbaPianistModern Mambo     Carib     Tango Piano    Bolero     Bossanova 2 Modern Samba   Merengue     Pasodoble        !      USA March 2/4USA March 6/8German March   Polka 2/4  BavarianPolka    Waltz    Simple Waltz Vienna Dance BavarianWaltzMusette WaltzClassicViennaGerman Waltz       !            !            !            !            !            !            !            !       Hokie Dance   Party Pop   Bird Dance   German Pop   Pop March 1  70's Party   Line Dance  Square Dance TechnoCountryBigBand Train Pop March 2 Christmastime      !            !            !            !            !            !            !            !      Broadway ShowVegas PianistPiano Showman Show Stride   Hollywood  Ballroom Fox Quick Foxtrot  Quickstep  Paris Ballad    Cabaret     Soft Shoe  Euro Foxtrot     Jive           !            !            !            !            !            !            !         Sirtaki   Russian Dance  Mariachi    Gypsy Dance    Mazurka     Irish Jig  Scottish Reel Tarantella    Keroncong     Dangdut   Swingy ReggaeModern Reggae  Talempong     Calypso         !            !            !            !            !            !      ZZZH"
+	aligned_string "STANDARD ROCK   R&ROLL & BLUES   POP & BALLAD   FUNK & FUSION  SOUL&MOD. DANCE BIG BAND & SWING   JAZZ COMBO       U.S.TRAD        COUNTRY          LATIN       MARCH & WALTZ     PARTY TIME   SHOWTIME & TRAD      WORLD           CUSTOM         COMPOSER    8Bt Standard Simple 8 Beat8 Beat Rock 18 Beat Rock 28 Beat Rock 3  16 Beat 1    16 Beat 2  Simple 16Beat16 Beat Slow   Hard Rock   8 Beat Slow   70's Rock  70'sPianoRockShuffleH.RockSwing Rock 1 Swing Rock 2       !            !            !            !      Rock 'n' RollPiano R&Roll  60's R&Roll Modern R&RollBlues R&Roll ShuffleR&Roll70's Shuffle    Oldies    Rhythm&Blues ShuffleBoogie    Twist    Boogie Woogie60s HitParade      !            !            !            !            !            !            !       8 Beat Pop    80's Pop   Orch. Ballad  E.P. Ballad 8BtPopBallad  8Bt Ballad   Rock Ballad German Ballad R&B Ballad  SlowSwingRockShuffleBallad  60's Pop     Piano Pop  H.Rock Ballad16Bt Ballad 116Bt Ballad 216BtPopBallad      !            !            !          Funk     Swingy Funk 1Swingy Funk 2  Slow Funk    Jazz Rock    Jazz Pop    Pop Groove  CaribbeanRockSamba Rock 1 Samba Rock 2       !            !            !            !            !            !            !            !            !            !          Soul     Soul Shuffle   8Bt Soul    Soul Ballad  Caribarena     Dance 1   Dance Reggae Swingy Disco  Disco Samba    Techno      Soul Rock    16Bt Soul       Rap         House       Hip Hop      Dance 2    Euro Disco     Disco 1      Disco 2         !      Big Band FastBig Band Mid BigBand Slow1BigBand Slow2  Show Band   Swing Combo Orch. Swing 1Orch. Swing 2RomanticSwingJazz Waltz 1  Dance Band  Jazz Waltz 2 Simple Swing SimpleJazz3/4      !            !            !            !            !            !       Jazz Combo   Club Combo   Organ Combo AccordionJazz Gypsy Jazz  Jazz Quartet   Jazz Trio  Lounge Piano  Modern Jazz Jazz Ballad 1 Euro Combo  Jazz Quintet Jazz Ballad 2      !            !            !            !            !            !            !       Dixie Band  Dixie PianistFast Ragtime Slow Ragtime   Hawaiian   GospelRevivalChapel Gospel Gospel 4/4   Gospel 3/4  HawaiiShuffle Organ Blues  Slow Blues  Roaring 20's GospelShuffleGospel Ballad      !            !            !            !            !      Country BluesCountry 2Step Country Pop Country Rock1 Saloon Bar    Bluegrass  Mod.BluegrassCountryBallad  Folk Rock  Country WaltzCountry Rock2Country Rock3Country Piano      !            !            !            !            !            !            !         Rhumba       Beguine      Cumbia       Cha Cha       Mambo     Bossanova 1  Piano Bossa     Samba        Salsa    Tango Europe RhumbaPianistModern Mambo     Carib     Tango Piano    Bolero     Bossanova 2 Modern Samba   Merengue     Pasodoble        !      USA March 2/4USA March 6/8German March   Polka 2/4  BavarianPolka    Waltz    Simple Waltz Vienna Dance BavarianWaltzMusette WaltzClassicViennaGerman Waltz       !            !            !            !            !            !            !            !       Hokie Dance   Party Pop   Bird Dance   German Pop   Pop March 1  70's Party   Line Dance  Square Dance TechnoCountryBigBand Train Pop March 2 Christmastime      !            !            !            !            !            !            !            !      Broadway ShowVegas PianistPiano Showman Show Stride   Hollywood  Ballroom Fox Quick Foxtrot  Quickstep  Paris Ballad    Cabaret     Soft Shoe  Euro Foxtrot     Jive           !            !            !            !            !            !            !         Sirtaki   Russian Dance  Mariachi    Gypsy Dance    Mazurka     Irish Jig  Scottish Reel Tarantella    Keroncong     Dangdut   Swingy ReggaeModern Reggae  Talempong     Calypso         !            !            !            !            !            !      ZZZH"
 	.byte 0x4b, 0xc8, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x09
 	.byte 0x00, 0x2a, 0x81, 0x01, 0x00, 0x6b, 0x82, 0x6a
@@ -31670,10 +31324,10 @@ LABEL_E44DF8:
 	.long LABEL_E4C052
 	.long LABEL_E4C044
 LABEL_E4C044:
-	.asciz "  MEMORY-C   "
-	.asciz "  MEMORY-B   "
+	aligned_string "  MEMORY-C   "
+	aligned_string "  MEMORY-B   "
 LABEL_E4C060:
-	.asciz "  MEMORY-A   "
+	aligned_string "  MEMORY-A   "
 	.byte 0x00, 0x00
 	.byte 0x34, 0x00, 0x67, 0x00, 0x9b, 0x00, 0x3b, 0x01
 	.byte 0x3b, 0x01, 0xcd, 0x00, 0x03, 0x01, 0x01, 0x02
@@ -31700,9 +31354,9 @@ LABEL_E4C060:
 	.byte 0x0c, 0x12, 0x18, 0x0d, 0x13, 0x19, 0x0e, 0x14
 	.byte 0x1a, 0x0f, 0x15, 0x1b, 0x10, 0x16, 0x1c, 0x11
 	.byte 0x17, 0x1d, 0x02, 0x00
-	.asciz "*.CNV,***"
+	aligned_string "*.CNV,***"
 	.byte 0x02, 0x00
-	.asciz "*.VER,***"
+	aligned_string "*.VER,***"
 	.byte 0x72, 0x62, 0x00, 0xff, 0x2a, 0x2a
 	.byte 0x2a, 0x00, 0x72, 0x62, 0x00, 0xff, 0x72, 0x62
 	.byte 0x00, 0xff, 0x72, 0x62, 0x00, 0xff, 0x72, 0x62
@@ -36750,86 +36404,75 @@ LABEL_E553F8:
 	aligned_string "RevEqOnOffFunc"
 	aligned_string "RevEqSelFunc"
 LABEL_E55418:
-	.asciz "EqOnOffFunc"
-	.asciz "EqSelFunc"
+	aligned_string "EqOnOffFunc"
+	aligned_string "EqSelFunc"
 	.byte 0x52, 0x65
 	aligned_string "vSelFunc"
 	aligned_string "SplitPointFunc"
-	.asciz "StsSplitCheck"
-LABEL_E55458:
-	aligned_string "InOutGridCheck"
-LABEL_E55468:
-	.asciz "TtMdInOut"
+	aligned_string "StsSplitCheck"
+LABEL_E55458:	aligned_string "InOutGridCheck"
+LABEL_E55468:	aligned_string "TtMdInOut"
 	aligned_string "FadeSetGridCheck"
-	.asciz "TtFadeInOut"
+	aligned_string "TtFadeInOut"
 LABEL_E55490:
-	.asciz "VocalistPage2OKFunc"
-	.asciz "VocalistPage1OKFunc"
+	aligned_string "VocalistPage2OKFunc"
+	aligned_string "VocalistPage1OKFunc"
 LABEL_E554B8:
-	.asciz "VocalistGridCheck"
-	.asciz "TtVocalistWorkstation"
+	aligned_string "VocalistGridCheck"
+	aligned_string "TtVocalistWorkstation"
 LABEL_E554E0:
-	.asciz "HarmOnOffFunc"
+	aligned_string "HarmOnOffFunc"
 	.byte 0x47, 0x4d
 	aligned_string "NoFunc"
 LABEL_E554F8:
-	.asciz "GMYesFunc"
+	aligned_string "GMYesFunc"
 	aligned_string "StsAreYouSureCheck"
-	.asciz "StsGMOffCheck"
+	aligned_string "StsGMOffCheck"
 	aligned_string "StsGMOnCheck"
-	.asciz "StsAttentionCheck"
+	aligned_string "StsAttentionCheck"
 	aligned_string "GMOKFunc"
 	aligned_string "TtMdGm"
-	.asciz "BitmapBmphk"
+	aligned_string "BitmapBmphk"
 	aligned_string "MdPresetWithFunc"
-	.asciz "MdPresetWithoutFunc"
-LABEL_E55588:
-	aligned_string "MdPresetOKFunc"
-LABEL_E55598:
-	aligned_string "TtMdPreset"
+	aligned_string "MdPresetWithoutFunc"
+LABEL_E55588:	aligned_string "MdPresetOKFunc"
+LABEL_E55598:	aligned_string "TtMdPreset"
 	aligned_string "ExcMspFunc"
 LABEL_E555B0:
 	aligned_string "ExcSeqFunc"
-	.asciz "ExcCompFunc"
+	aligned_string "ExcCompFunc"
 LABEL_E555C8:
-	.asciz "ExcSmemFunc"
-	.asciz "ExcPmemFunc"
+	aligned_string "ExcSmemFunc"
+	aligned_string "ExcPmemFunc"
 LABEL_E555E0:
 	aligned_string "ExcDotFunc"
-	.asciz "ExcSendFunc"
-LABEL_E555F8:
-	.asciz "TtMdExc"
-LABEL_E55600:
-	.asciz "MidiPartGridCheck"
+	aligned_string "ExcSendFunc"
+LABEL_E555F8:	aligned_string "TtMdExc"
+LABEL_E55600:	aligned_string "MidiPartGridCheck"
 	aligned_string "TtMdPart"
-	.asciz "CtlMsgGridCheck"
+	aligned_string "CtlMsgGridCheck"
 	aligned_string "TtMdCtlMsg"
 LABEL_E55638:
-	.asciz "PmemOutRGridCheck"
-	.asciz "PmemOutLGridCheck"
-	.asciz "TtMdPmemOut"
-LABEL_E55668:
-	.asciz "ComSetGridCheck"
-LABEL_E55678:
-	aligned_string "TtComSet"
+	aligned_string "PmemOutRGridCheck"
+	aligned_string "PmemOutLGridCheck"
+	aligned_string "TtMdPmemOut"
+LABEL_E55668:	aligned_string "ComSetGridCheck"
+LABEL_E55678:	aligned_string "TtComSet"
 	aligned_string "PcgOutSendFunc"
-	.asciz "PcgOutGridCheck"
+	aligned_string "PcgOutGridCheck"
 	aligned_string "TtMdPcgOut"
-	.asciz "ParaLoadOptOKFunc"
+	aligned_string "ParaLoadOptOKFunc"
 LABEL_E556C0:
 	aligned_string "ParaLoadOptGridCheck"
 	aligned_string "TtMdParaLoad"
-	.asciz "R12OctaveFunc"
+	aligned_string "R12OctaveFunc"
 	aligned_string "MdCmptCnctFunc"
 	aligned_string "TtComputerConnection"
-LABEL_E55718:
-	.asciz "MdSetupLoadFunc"
-LABEL_E55728:
-	aligned_string "MdDrumTypeFunc"
-LABEL_E55738:
-	.asciz "MdPcgModeFunc"
+LABEL_E55718:	aligned_string "MdSetupLoadFunc"
+LABEL_E55728:	aligned_string "MdDrumTypeFunc"
+LABEL_E55738:	aligned_string "MdPcgModeFunc"
 	.byte 0x54, 0x74
-	.asciz "MdRealMsg"
+	aligned_string "MdRealMsg"
 	.asciz "TtMdmenu"
 	.byte 0xff, 0x60, 0x57, 0xe5, 0x00
 	.byte 0x00, 0xff, 0x66, 0x57, 0xe5, 0x00, 0x00, 0xff
@@ -36839,8 +36482,8 @@ LABEL_E55738:
 	.long LABEL_E55778
 LABEL_E55778:
 	.byte 0x00, 0xff
-	.asciz "window1"
-	.asciz "window0"
+	aligned_string "window1"
+	aligned_string "window0"
 	aligned_string "page"
 	.long LABEL_E557B6
 	.long LABEL_E557B0
@@ -36860,7 +36503,7 @@ LABEL_E557B0:
 	.byte 0xe5, 0x00, 0x00, 0xff
 	aligned_string "pman_out"
 	aligned_string "pman_adr"
-	.asciz "off_str"
+	aligned_string "off_str"
 	aligned_string "on_str"
 	.asciz "data"
 	.byte 0xff, 0x44, 0x58
@@ -36869,7 +36512,7 @@ LABEL_E557B0:
 	.byte 0xe5, 0x00, 0x1e, 0x58, 0xe5, 0x00, 0x00, 0xff
 	aligned_string "pman_out"
 	aligned_string "pman_adr"
-	.asciz "off_str"
+	aligned_string "off_str"
 	aligned_string "on_str"
 	.asciz "data"
 	.byte 0xff, 0x6c, 0x58, 0xe5, 0x00, 0x62, 0x58
@@ -37019,16 +36662,16 @@ LABEL_E559D0:
 	.zero 8
 	.byte 0x00, 0x00
 	aligned_string "XXjn"
-	.asciz "AcMidiPartGridBox"
+	aligned_string "AcMidiPartGridBox"
 	aligned_string "XXjn"
-	.asciz "AcCtlMsgGridBox"
+	aligned_string "AcCtlMsgGridBox"
 	.byte 0x58, 0x58, 0x6a, 0x00
-	.asciz "AcPmemOutRGridBox"
+	aligned_string "AcPmemOutRGridBox"
 	.byte 0x58, 0x58
 	jr	gt, 0x00
-	.asciz "AcPmemOutLGridBox"
+	aligned_string "AcPmemOutLGridBox"
 	.byte 0x58, 0x58, 0x6a, 0x00
-	.asciz "AcPcgOutGridBox"
+	aligned_string "AcPcgOutGridBox"
 	.byte 0x58, 0x58, 0x6a, 0x00
 	.asciz "AcParaLoadOptGridBox"
 	.byte 0xff, 0x58, 0x58, 0x6a, 0x00, 0x41, 0x63
@@ -37038,19 +36681,19 @@ LABEL_E559D0:
 	.asciz "AcVocalGridBox"
 	.byte 0xff, 0x58, 0x58, 0x6a, 0x00, 0x41, 0x63
 	aligned_string "FadeSetGridBox"
-	.asciz "nXXFB"
+	aligned_string "nXXFB"
 	.byte 0x41, 0x63
 	aligned_string "LswFuncBox"
-	.asciz "nXXFB"
+	aligned_string "nXXFB"
 	.asciz "AcLswFuncEditBox"
 	.byte 0xff, 0x00, 0xff
 	aligned_string "AcGMOnOffBox"
 	aligned_string "fjXn"
 	aligned_string "AcSendEditSw"
 	.byte 0x41, 0x74, 0x74, 0x00
-	.asciz "IvMpstPageControl"
+	aligned_string "IvMpstPageControl"
 	.byte 0x00, 0xff
-	.asciz "AcVocalistListBox"
+	aligned_string "AcVocalistListBox"
 	.byte 0x00, 0xff
 	.asciz "PsHarmOnOffBox"
 	.byte 0xff, 0x10, 0x00, 0x00, 0x00
@@ -37069,17 +36712,17 @@ LABEL_E559D0:
 	.byte 0x00, 0x00, 0x00, 0x00
 LABEL_E55D10:
 	aligned_string "MT_REVEQLOAD"
-	.asciz "MT_EQLOAD"
+	aligned_string "MT_EQLOAD"
 LABEL_E55D28:
 	aligned_string "MT_REVLOAD"
 	aligned_string "MT_VST_SEND_OK"
-	.asciz "MT_VST_PST_OK"
+	aligned_string "MT_VST_PST_OK"
 	aligned_string "MT_FLASHLOAD"
 LABEL_E55D60:
-	.asciz "MT_FLASHWRITE"
+	aligned_string "MT_FLASHWRITE"
 	.byte 0x4d, 0x54
 	aligned_string "_MPSTWRITE"
-	.asciz "MT_MPSTLOAD"
+	aligned_string "MT_MPSTLOAD"
 LABEL_E55D88:
 	aligned_string "MT_DRAWKEY"
 	aligned_string "MT_EXCSEND"
@@ -37102,13 +36745,13 @@ LABEL_E55D88:
 	.byte 0xe5, 0x00, 0x78, 0x5e, 0xe5, 0x00, 0x62, 0x5e
 	.byte 0xe5, 0x00, 0x4e, 0x5e, 0xe5, 0x00, 0x38, 0x5e
 	.byte 0xe5, 0x00, 0x36, 0x5e, 0xe5, 0x00, 0x00, 0xff
-	.asciz "AcMidiPartGridBoxProc"
+	aligned_string "AcMidiPartGridBoxProc"
 	.byte 0x41, 0x63
-	.asciz "CtlMsgGridBoxProc"
-	.asciz "AcPmemOutRGridBoxProc"
-	.asciz "AcPmemOutLGridBoxProc"
+	aligned_string "CtlMsgGridBoxProc"
+	aligned_string "AcPmemOutRGridBoxProc"
+	aligned_string "AcPmemOutLGridBoxProc"
 	.byte 0x41, 0x63
-	.asciz "PcgOutGridBoxProc"
+	aligned_string "PcgOutGridBoxProc"
 	aligned_string "AcParaLoadOptGridBoxProc"
 	aligned_string "AcInOutGridBoxProc"
 	aligned_string "AcVocalGridBoxProc"
@@ -37117,9 +36760,9 @@ LABEL_E55D88:
 	aligned_string "AcLswFuncBoxProc"
 	aligned_string "AcGMOnOffBoxProc"
 	aligned_string "AcSendEditSwProc"
-	.asciz "IvMpstPageControlProc"
+	aligned_string "IvMpstPageControlProc"
 	aligned_string "PsHarmOnOffBoxProc"
-	.asciz "AcVocalistListBoxProc"
+	aligned_string "AcVocalistListBoxProc"
 
 
 	.byte 0x34, 0x00, 0x60, 0x01, 0xff, 0xff, 0x01, 0x00, 0xff, 0xff
@@ -37208,7 +36851,7 @@ LABEL_E55FB0:
 	.byte 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0x00
 	.byte 0x00, 0x00, 0x88, 0x00, 0x08, 0xe4, 0x03, 0x00
 	.byte 0x00, 0x00, 0xc6, 0x61, 0xe5, 0x00, 0x48, 0x75
-	.asciz "ge Room"
+	aligned_string "ge Room"
 
 
 	.byte 0x51, 0x00, 0x60, 0x01, 0x00, 0x00, 0xff, 0xff
@@ -37234,7 +36877,7 @@ LABEL_E55FB0:
 	.byte 0x8a, 0x00, 0x0c, 0xe4, 0x03, 0x00, 0x02, 0x00
 	.long LABEL_E56254
 LABEL_E56254:
-	.asciz "Small Plate"
+	aligned_string "Small Plate"
 
 
 	.byte 0x51, 0x00, 0x60, 0x01, 0x00, 0x00, 0xff, 0xff
@@ -37243,7 +36886,7 @@ LABEL_E56254:
 	.byte 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00, 0x00, 0x00, 0x8b, 0x00, 0x0e, 0xe4
 	.byte 0x03, 0x00, 0x03, 0x00, 0x90, 0x62, 0xe5, 0x00
-	.asciz "Sports Hall"
+	aligned_string "Sports Hall"
 
 
 	.byte 0x51, 0x00, 0x60, 0x01
@@ -37254,7 +36897,7 @@ LABEL_E56254:
 	.byte 0x8c, 0x00, 0x10, 0xe4, 0x03, 0x00, 0x04, 0x00
 	.long LABEL_E562CC
 LABEL_E562CC:
-	.asciz "Bright Hall"
+	aligned_string "Bright Hall"
 
 
 	.byte 0x51, 0x00, 0x60, 0x01, 0x00, 0x00, 0xff, 0xff
@@ -37263,7 +36906,7 @@ LABEL_E562CC:
 	.byte 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00, 0x00, 0x00, 0x08, 0x00, 0x12, 0xe4
 	.byte 0x03, 0x00, 0x05, 0x00, 0x08, 0x63, 0xe5, 0x00
-	.asciz "Dark Confines"
+	aligned_string "Dark Confines"
 
 
 	.byte 0x51, 0x00, 0x60, 0x01, 0x00, 0x00, 0xff, 0xff, 0x09, 0x00
@@ -37282,7 +36925,7 @@ LABEL_E562CC:
 	.byte 0x00, 0x00, 0xff, 0x00, 0x00, 0x00, 0x0a, 0x00
 	.byte 0x16, 0xe4, 0x03, 0x00, 0x07, 0x00, 0x82, 0x63
 	.byte 0xe5, 0x00
-	.asciz "High & Open"
+	aligned_string "High & Open"
 
 
 	.byte 0x51, 0x00, 0x60, 0x01, 0x00, 0x00, 0xff, 0xff, 0x0b, 0x00
@@ -37291,7 +36934,7 @@ LABEL_E562CC:
 	.byte 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0x00
 	.byte 0x00, 0x00, 0x0b, 0x00, 0x18, 0xe4, 0x03, 0x00
 	.byte 0x08, 0x00, 0xbe, 0x63, 0xe5, 0x00
-	.asciz "Left To Right"
+	aligned_string "Left To Right"
 
 
 	.byte 0x51, 0x00, 0x60, 0x01
@@ -37302,7 +36945,7 @@ LABEL_E562CC:
 	.byte 0x0c, 0x00, 0x1a, 0xe4, 0x03, 0x00, 0x09, 0x00
 	.long LABEL_E563FC
 LABEL_E563FC:
-	.asciz "Cavernous"
+	aligned_string "Cavernous"
 
 
 	.byte 0x34, 0x00, 0x60, 0x01, 0xff, 0xff, 0x01, 0x00, 0xff, 0xff
@@ -37313,7 +36956,7 @@ LABEL_E563FC:
 	.long LABEL_E56430
 	.byte 0x91, 0x00, 0x00, 0x00
 LABEL_E56430:
-	.asciz "EQUALIZER PRESETS"
+	aligned_string "EQUALIZER PRESETS"
 
 
 	.byte 0x51, 0x00, 0x60, 0x01, 0x00, 0x00
@@ -37323,7 +36966,7 @@ LABEL_E56430:
 	.byte 0x00, 0x00, 0xff, 0x00, 0x00, 0x00, 0x88, 0x00
 	.byte 0x20, 0xe4, 0x03, 0x00, 0x00, 0x00, 0x72, 0x64
 	.byte 0xe5, 0x00
-	.asciz "Make Up"
+	aligned_string "Make Up"
 
 
 	.byte 0x51, 0x00, 0x60, 0x01, 0x00, 0x00
@@ -37370,7 +37013,7 @@ LABEL_E56430:
 	.byte 0x00, 0x00, 0xff, 0x00, 0x00, 0x00, 0x08, 0x00
 	.byte 0x2a, 0xe4, 0x03, 0x00, 0x05, 0x00, 0xa2, 0x65
 	.byte 0xe5, 0x00
-	.asciz "No Hi Hat"
+	aligned_string "No Hi Hat"
 
 
 	.byte 0x51, 0x00, 0x60, 0x01
@@ -37415,7 +37058,7 @@ LABEL_E565DC:
 	.byte 0xe5, 0x00, 0x32, 0xe4, 0x03, 0x00, 0x0c, 0x00
 	.byte 0x39, 0x00, 0x23, 0x01
 	aligned_string "EQ : OFF"
-	.asciz "EQ : ON"
+	aligned_string "EQ : ON"
 
 
 	.byte 0x34, 0x00, 0x60, 0x01, 0xff, 0xff, 0x01, 0x00, 0xff, 0xff
@@ -37437,7 +37080,7 @@ LABEL_E566E0:
 	.byte 0x88, 0x00, 0x38, 0xe4, 0x03, 0x00, 0x00, 0x00
 	.long LABEL_E5672C
 LABEL_E5672C:
-	.asciz "Warm & Wide"
+	aligned_string "Warm & Wide"
 
 
 	.byte 0x51, 0x00, 0x60, 0x01, 0x00, 0x00, 0xff, 0xff
@@ -37475,7 +37118,7 @@ LABEL_E5672C:
 	.byte 0x8c, 0x00, 0x40, 0xe4, 0x03, 0x00, 0x04, 0x00
 	.long LABEL_E5681C
 LABEL_E5681C:
-	.asciz "Light & Shade"
+	aligned_string "Light & Shade"
 
 
 	.byte 0x51, 0x00, 0x60, 0x01, 0x00, 0x00
@@ -37494,7 +37137,7 @@ LABEL_E5681C:
 	.byte 0x00, 0x00, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00, 0x00, 0x00, 0x09, 0x00, 0x44, 0xe4
 	.byte 0x03, 0x00, 0x06, 0x00, 0x98, 0x68, 0xe5, 0x00
-	.asciz "Ice Box"
+	aligned_string "Ice Box"
 
 
 	.byte 0x51, 0x00, 0x60, 0x01, 0x00, 0x00, 0xff, 0xff
@@ -37503,7 +37146,7 @@ LABEL_E5681C:
 	.byte 0x00, 0x00, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00, 0x00, 0x00, 0x0a, 0x00, 0x46, 0xe4
 	.byte 0x03, 0x00, 0x07, 0x00, 0xd0, 0x68, 0xe5, 0x00
-	.asciz "Stadium"
+	aligned_string "Stadium"
 
 
 	.byte 0x51, 0x00, 0x60, 0x01, 0x00, 0x00, 0xff, 0xff
@@ -37512,7 +37155,7 @@ LABEL_E5681C:
 	.byte 0x00, 0x00, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00, 0x00, 0x00, 0x0b, 0x00, 0x48, 0xe4
 	.byte 0x03, 0x00, 0x08, 0x00, 0x08, 0x69, 0xe5, 0x00
-	.asciz "Live Room"
+	aligned_string "Live Room"
 
 
 	.byte 0x44, 0x00, 0x60, 0x01, 0x00, 0x00
@@ -37528,7 +37171,7 @@ String_EQ_OFF:	; E5693E
 	aligned_string "EQ : OFF"
 
 String_EQ_ON:	; E56948
-	.asciz "EQ : ON"
+	aligned_string "EQ : ON"
 
 
 	.byte 0x52, 0x00, 0x60, 0x01, 0x00, 0x00, 0xff, 0xff
@@ -37546,7 +37189,7 @@ String_EQ_ON:	; E56948
 	.byte 0x19, 0x00, 0x00, 0x00
 
 String_MIDI_MENU:	; E56994
-	.asciz "MIDI MENU"
+	aligned_string "MIDI MENU"
 	ldb	e, 0x00
 	.byte 0x60, 0x01, 0x00, 0x00, 0xff, 0xff, 0x02, 0x00
 	.byte 0xff, 0xff, 0x08, 0x00, 0xf5, 0x00, 0x06, 0x00
@@ -37615,7 +37258,7 @@ String_MIDI_MENU:	; E56994
 	.long LABEL_E56B14
 	.byte 0x53, 0x00, 0xa0, 0x01
 	.byte 0x1b, 0x00, 0x00, 0x00
-	.asciz "REALTIME MESSAGES"
+	aligned_string "REALTIME MESSAGES"
 
 
 	.byte 0x1d, 0x00, 0x60, 0x01, 0x06, 0x00, 0xff, 0xff, 0x0b, 0x00
@@ -37658,7 +37301,7 @@ String_MIDI_MENU:	; E56994
 	.byte 0x09, 0x00, 0x66, 0xe4, 0x03, 0x00, 0x32, 0x6c
 	.byte 0xe5, 0x00, 0x57, 0x00, 0xa0, 0x01, 0x1f, 0x00
 	.byte 0x00, 0x00
-	.asciz "SYSEX BULK DUMP"
+	aligned_string "SYSEX BULK DUMP"
 
 
 	.byte 0x1d, 0x00, 0x60, 0x01, 0x06, 0x00
@@ -37707,7 +37350,7 @@ String_MIDI_MENU:	; E56994
 	.byte 0x00, 0x00, 0xff, 0x00, 0x00, 0x00, 0x8a, 0x00
 	.byte 0x76, 0xe4, 0x03, 0x00, 0x70, 0x6d, 0xe5, 0x00
 	.byte 0x5a, 0x00, 0xa0, 0x01, 0x87, 0x00, 0x00, 0x00
-	.asciz "COMPUTER CONNECTION"
+	aligned_string "COMPUTER CONNECTION"
 
 
 	.byte 0x1d, 0x00, 0x60, 0x01
@@ -37718,7 +37361,7 @@ String_MIDI_MENU:	; E56994
 	.byte 0x0a, 0x00, 0x78, 0xe4, 0x03, 0x00, 0xba, 0x6d
 	.byte 0xe5, 0x00, 0x5c, 0x00, 0xa0, 0x01, 0x88, 0x00
 	.byte 0x00, 0x00
-	.asciz "MIDI SETTINGS LOAD OPTION"
+	aligned_string "MIDI SETTINGS LOAD OPTION"
 
 
 	.byte 0x34, 0x00, 0x60, 0x01
@@ -37739,7 +37382,7 @@ String_MIDI_MENU:	; E56994
 	.byte 0x03, 0x00, 0x8e, 0x6e, 0xe5, 0x00, 0x5a, 0x6e
 	.byte 0xe5, 0x00, 0x16, 0x00, 0x23, 0x01, 0x8e, 0xe4
 	.byte 0x03, 0x00
-	.asciz "|-|RIGHT1|RIGHT2|LEFT|PART4|PART5|PART6|PART7|PART8"
+	aligned_string "|-|RIGHT1|RIGHT2|LEFT|PART4|PART5|PART6|PART7|PART8"
 	ldb	w, 0x50
 	aligned_string "ART |CHANNEL|OCTAVE| LOCAL"
 
@@ -37809,10 +37452,8 @@ LABEL_E56F98:
 	.long LABEL_E57068
 	.long LABEL_E57018
 	.byte 0x14, 0x00, 0x23, 0x01, 0xa6, 0xe4, 0x03, 0x00
-LABEL_E57018:
-	.asciz "PRG.CHANGE|BANK SELECT|PITCH BEND|VOLUME|EXPRESSION|PAN|SUSTAIN|EFFECT & REVERB"
-LABEL_E57068:
-	.asciz "     |   "
+LABEL_E57018:	aligned_string "PRG.CHANGE|BANK SELECT|PITCH BEND|VOLUME|EXPRESSION|PAN|SUSTAIN|EFFECT & REVERB"
+LABEL_E57068:	aligned_string "     |   "
 
 
 	.byte 0x22, 0x00, 0x60, 0x01, 0x02, 0x00
@@ -37860,7 +37501,7 @@ LABEL_E57068:
 	.byte 0x02, 0x00, 0x50, 0x00, 0xa0, 0x01, 0xa8, 0xe4
 	.byte 0x03, 0x00, 0x5a, 0x71, 0xe5, 0x00, 0x1b, 0x00
 	.byte 0x00, 0x00
-	.asciz "REALTIME MESSAGES"
+	aligned_string "REALTIME MESSAGES"
 
 
 	.byte 0x22, 0x00, 0x60, 0x01
@@ -37879,10 +37520,10 @@ LABEL_E57068:
 	.long LABEL_E571DA
 	.byte 0x81, 0x22, 0x00, 0x00
 	.byte 0x01, 0x00
-	.asciz " OFF "
-	.asciz " ON  "
+	aligned_string " OFF "
+	aligned_string " ON  "
 	.byte 0x52, 0x45
-	.asciz "ALTIME COMMANDS :"
+	aligned_string "ALTIME COMMANDS :"
 	.byte 0x05, 0x00, 0x63, 0x01, 0x00, 0x00
 	.byte 0xff, 0xff, 0x04, 0x00, 0x02, 0x00, 0x08, 0x00
 	.byte 0x08, 0x00, 0x9c, 0x00, 0x01, 0x01, 0xbb, 0x00
@@ -38071,7 +37712,7 @@ LABEL_E575C0:
 	.byte 0x0b, 0x00, 0x09, 0x00, 0x08, 0x00, 0x02, 0x01
 	.byte 0xc6, 0x00, 0x2d, 0x01, 0xd8, 0x00, 0xc0, 0x77
 	.byte 0xe5, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0x00
-	.asciz "VALUE"
+	aligned_string "VALUE"
 
 
 	.byte 0x11, 0x00, 0x60, 0x01, 0x07, 0x00, 0x0c, 0x00, 0x0d, 0x00
@@ -38089,7 +37730,7 @@ LABEL_E575C0:
 	.byte 0x01, 0x00
 	.ascii "Organ             ~95|Organ Fixed Touch ~95|PX Piano          ~95|Accordion   "
 LABEL_E57860:
-	.asciz "      ~95|Bass Pedals       ~95|Ext. Sequencer    ~95"
+	aligned_string "      ~95|Bass Pedals       ~95|Ext. Sequencer    ~95"
 
 
 	.byte 0x23, 0x00, 0x60, 0x01, 0x07, 0x00, 0x0e, 0x00, 0x0f, 0x00
@@ -38106,7 +37747,7 @@ LABEL_E57860:
 	.byte 0x08, 0x00, 0x0e, 0x00, 0xdb, 0x00, 0x69, 0x00
 	.byte 0xed, 0x00, 0xe4, 0x78, 0xe5, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0xff, 0x00
-	.asciz "WITHOUT APC"
+	aligned_string "WITHOUT APC"
 
 
 	.byte 0x23, 0x00, 0x60, 0x01, 0x07, 0x00, 0x10, 0x00
@@ -38222,7 +37863,7 @@ LABEL_E57860:
 	.byte 0xff, 0xff, 0xff, 0xff, 0x08, 0x00, 0x0e, 0x00
 	.byte 0xdb, 0x00, 0x69, 0x00, 0xed, 0x00, 0x08, 0x7c
 	.byte 0xe5, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	.asciz "WITHOUT APC"
+	aligned_string "WITHOUT APC"
 
 
 	.byte 0x2b, 0x00, 0x60, 0x01
@@ -38271,7 +37912,7 @@ LABEL_E57860:
 	.byte 0xff, 0xff, 0x22, 0x00, 0x08, 0x00, 0x02, 0x01
 	.byte 0xc6, 0x00, 0x2d, 0x01, 0xd8, 0x00, 0x38, 0x7d
 	.byte 0xe5, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0x00
-	.asciz "VALUE"
+	aligned_string "VALUE"
 
 
 	.byte 0x35, 0x00, 0x60, 0x01, 0xff, 0xff, 0x25, 0x00, 0xff, 0xff
@@ -38323,7 +37964,7 @@ LABEL_E57860:
 	.long LABEL_E57E6E
 	.byte 0x0a, 0xe5, 0x03, 0x00
 	.byte 0x88, 0x00, 0x00, 0x00, 0x20, 0x01, 0x57, 0x49
-	.asciz "TH SPLIT POINT ? : NO"
+	aligned_string "TH SPLIT POINT ? : NO"
 	.byte 0x57, 0x49
 	aligned_string "TH SPLIT POINT ? : YES"
 
@@ -38332,7 +37973,7 @@ LABEL_E57860:
 	.byte 0xff, 0xff, 0x29, 0x00, 0x08, 0x00, 0x02, 0x01
 	.byte 0xc6, 0x00, 0x2d, 0x01, 0xd8, 0x00, 0xc0, 0x7e
 	.byte 0xe5, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0x00
-	.asciz "VALUE"
+	aligned_string "VALUE"
 
 
 	.byte 0x35, 0x00, 0x60, 0x01, 0xff, 0xff, 0x2c, 0x00, 0xff, 0xff
@@ -38419,7 +38060,7 @@ LABEL_E57860:
 	.long LABEL_ED0069
 	.long LABEL_E580A6
 	.byte 0x00, 0x00, 0x00, 0x00, 0xff, 0x00, 0x57, 0x49
-	.asciz "THOUT APC"
+	aligned_string "THOUT APC"
 
 
 	.byte 0x2b, 0x00, 0x60, 0x01, 0x2b, 0x00
@@ -38428,7 +38069,7 @@ LABEL_E57860:
 	.long LABEL_E580D2
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00
-	.asciz "VALUE"
+	aligned_string "VALUE"
 
 
 	.byte 0x35, 0x00, 0x60, 0x01, 0xff, 0xff, 0x38, 0x00
@@ -38499,7 +38140,7 @@ LABEL_E57860:
 	.long LABEL_ED0069
 	.long LABEL_E58276
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x57, 0x49
-	.asciz "THOUT APC"
+	aligned_string "THOUT APC"
 
 
 	.byte 0x2b, 0x00, 0x60, 0x01, 0x37, 0x00
@@ -38508,7 +38149,7 @@ LABEL_E57860:
 	.long LABEL_E582A2
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00
-	.asciz "VALUE"
+	aligned_string "VALUE"
 
 
 	.byte 0x69, 0x00, 0x60, 0x01, 0x37, 0x00, 0x42, 0x00
@@ -38532,7 +38173,7 @@ LABEL_E57860:
 	.byte 0xf8, 0x00, 0x02, 0x00, 0x50, 0x00, 0xa0, 0x01
 	.byte 0x20, 0xe5, 0x03, 0x00, 0x14, 0x83, 0xe5, 0x00
 	.byte 0x1f, 0x00, 0x00, 0x00
-	.asciz "SYSEX BULK DUMP"
+	aligned_string "SYSEX BULK DUMP"
 
 
 	.byte 0x20, 0x00, 0x60, 0x01
@@ -38557,7 +38198,7 @@ LABEL_E57860:
 	.byte 0x01, 0x00, 0x06, 0x00, 0x24, 0xe5, 0x03, 0x00
 	.long LABEL_E583A6
 	.byte 0x01, 0x00, 0x20, 0x50
-	.asciz "ERFORMANCE | CURRENT PANEL + PANEL MEMORY | COMPOSER | SEQUENCER | MSP USER | SOUND MEMORY "
+	aligned_string "ERFORMANCE | CURRENT PANEL + PANEL MEMORY | COMPOSER | SEQUENCER | MSP USER | SOUND MEMORY "
 
 
 	.byte 0x22, 0x00, 0x60, 0x01
@@ -38592,7 +38233,7 @@ LABEL_E57860:
 	.byte 0x07, 0x00, 0x08, 0x00, 0x5a, 0x00, 0x26, 0x00
 	.byte 0xcd, 0x00, 0x38, 0x00, 0xbe, 0x84, 0xe5, 0x00
 	.byte 0x02, 0x00, 0x00, 0x00, 0xff, 0x00, 0x53, 0x45
-	.asciz "NDING"
+	aligned_string "NDING"
 
 
 	.byte 0x2b, 0x00, 0x60, 0x01, 0x06, 0x00, 0xff, 0xff, 0x0a, 0x00
@@ -38928,7 +38569,7 @@ LABEL_E57860:
 	.byte 0xf8, 0x00, 0x02, 0x00, 0x50, 0x00, 0xa0, 0x01
 	.byte 0x92, 0xe5, 0x03, 0x00, 0xc4, 0x8c, 0xe5, 0x00
 	.byte 0x1d, 0x00, 0x00, 0x00
-	.asciz "PROGRAM CHANGE MIDI OUT"
+	aligned_string "PROGRAM CHANGE MIDI OUT"
 	.byte 0x0b, 0x00, 0x63, 0x01
 	.byte 0x00, 0x00, 0xff, 0xff, 0x02, 0x00, 0xff, 0xff
 	.byte 0x08, 0x00, 0x14, 0x00, 0x1e, 0x00, 0x04, 0x01
@@ -38939,8 +38580,8 @@ LABEL_E57860:
 	.byte 0x03, 0x00, 0x9e, 0xe5, 0x03, 0x00, 0xa2, 0xe5
 	.byte 0x03, 0x00, 0x84, 0x8d, 0xe5, 0x00, 0x26, 0x8d
 	.byte 0xe5, 0x00, 0x0c, 0x00, 0x23, 0x01, 0x20, 0x20
-	.asciz "MIDI CHANNEL   :|  PROGRAM CHANGE :|  BANK MSB       :|  BANK LSB       :| ( BANK SELECT #="
-	.asciz "     |   "
+	aligned_string "MIDI CHANNEL   :|  PROGRAM CHANGE :|  BANK MSB       :|  BANK LSB       :| ( BANK SELECT #="
+	aligned_string "     |   "
 
 
 	.byte 0x22, 0x00, 0x60, 0x01, 0x00, 0x00, 0xff, 0xff, 0x03, 0x00
@@ -38973,7 +38614,7 @@ LABEL_E57860:
 	.byte 0xf8, 0x00, 0x02, 0x00, 0x50, 0x00, 0xa0, 0x01
 	.byte 0xa8, 0xe5, 0x03, 0x00, 0x2c, 0x8e, 0xe5, 0x00
 	.byte 0x87, 0x00, 0x00, 0x00
-	.asciz "COMPUTER CONNECTION"
+	aligned_string "COMPUTER CONNECTION"
 
 
 	.byte 0x1a, 0x00, 0x60, 0x01, 0x00, 0x00, 0xff, 0xff
@@ -39005,7 +38646,7 @@ LABEL_E57860:
 	.byte 0x05, 0x00, 0x03, 0x00, 0x08, 0x00, 0x02, 0x01
 	.byte 0xc6, 0x00, 0x2d, 0x01, 0xd8, 0x00, 0xe8, 0x8e
 	.byte 0xe5, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0x00
-	.asciz "VALUE"
+	aligned_string "VALUE"
 
 
 	.byte 0x64, 0x00, 0x60, 0x01, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff
@@ -39019,7 +38660,7 @@ LABEL_E57860:
 	.byte 0x02, 0x00, 0x50, 0x00, 0xa0, 0x01, 0xb0, 0xe5
 	.byte 0x03, 0x00, 0x32, 0x8f, 0xe5, 0x00, 0x69, 0x00
 	.byte 0x00, 0x00
-	.asciz "PANEL MEMORY OUTPUT"
+	aligned_string "PANEL MEMORY OUTPUT"
 
 
 	.byte 0x2b, 0x00, 0x60, 0x01, 0x00, 0x00, 0xff, 0xff, 0x02, 0x00
@@ -39053,7 +38694,7 @@ LABEL_E57860:
 	.long LABEL_E58FDA
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00
-	.asciz "P.CNG"
+	aligned_string "P.CNG"
 
 
 	.byte 0x2b, 0x00, 0x60, 0x01, 0x00, 0x00, 0xff, 0xff
@@ -39157,7 +38798,7 @@ LABEL_E59098:
 	.byte 0xf8, 0x00, 0x02, 0x00, 0x50, 0x00, 0xa0, 0x01
 	.byte 0xd4, 0xe5, 0x03, 0x00, 0x54, 0x92, 0xe5, 0x00
 	.byte 0x88, 0x00, 0x00, 0x00
-	.asciz "MIDI SETTINGS LOAD OPTION"
+	aligned_string "MIDI SETTINGS LOAD OPTION"
 	.byte 0x0a, 0x00
 	.byte 0x63, 0x01, 0x00, 0x00, 0x02, 0x00, 0x04, 0x00
 	.byte 0xff, 0xff, 0x08, 0x00, 0x04, 0x00, 0x1e, 0x00
@@ -39170,16 +38811,16 @@ LABEL_E59098:
 	.long LABEL_E592B8
 	.byte 0x09, 0x00, 0x23, 0x01
 LABEL_E592B8:
-	.asciz " |-|From Registration file :|From Sequencer song    :|-| |-|GM mode is ON          :|GM mode is OFF         :"
+	aligned_string " |-|From Registration file :|From Sequencer song    :|-| |-|GM mode is ON          :|GM mode is OFF         :"
 	ldb	w, 0x20
-	.asciz "  |  "
+	aligned_string "  |  "
 
 
 	.byte 0x2b, 0x00, 0x60, 0x01, 0x01, 0x00, 0xff, 0xff, 0x03, 0x00
 	.byte 0xff, 0xff, 0x08, 0x00, 0x4a, 0x00, 0x26, 0x00
 	.byte 0xf5, 0x00, 0x38, 0x00, 0x4e, 0x93, 0xe5, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0xfb, 0x00, 0x4c, 0x6f
-	.asciz "ad MIDI parameters?"
+	aligned_string "ad MIDI parameters?"
 
 
 	.byte 0x2b, 0x00, 0x60, 0x01
@@ -39266,7 +38907,7 @@ LABEL_E592B8:
 	.long LABEL_E59532
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0xfb, 0x00
-	.asciz "PRESET SETTINGS"
+	aligned_string "PRESET SETTINGS"
 
 
 	.byte 0x11, 0x00, 0x60, 0x01, 0x05, 0x00
@@ -39279,7 +38920,7 @@ LABEL_E592B8:
 	.byte 0xff, 0xff, 0x08, 0x00, 0x10, 0x00, 0x30, 0x00
 	.byte 0xfb, 0x00, 0x42, 0x00, 0x7e, 0x95, 0xe5, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0xfb, 0x00, 0x4b, 0x4e
-	.asciz "5000 ~95 VOCALIST WORKSTATION"
+	aligned_string "5000 ~95 VOCALIST WORKSTATION"
 
 
 	.byte 0x20, 0x00, 0x60, 0x01, 0x05, 0x00, 0xff, 0xff, 0x0a, 0x00
@@ -39294,7 +38935,7 @@ LABEL_E592B8:
 	.byte 0x00, 0x00, 0xff, 0x00, 0x01, 0x00, 0x06, 0x00
 	.byte 0xf6, 0xe5, 0x03, 0x00, 0xfa, 0x95, 0xe5, 0x00
 	.byte 0x01, 0x00
-	.asciz " CHORD  ~95 CHORDAL PROGRAM      | RIGHT1 ~95 CHORDAL PROGRAM      | CHORD  ~95 VOCODER PROGRAM      | RIGHT1 ~95 VOCODER PROGRAM      | TECHNI-CHORD(PART4) ~95 VOCODER | SMF HARMONY CHANNEL ~95 VOCODER "
+	aligned_string " CHORD  ~95 CHORDAL PROGRAM      | RIGHT1 ~95 CHORDAL PROGRAM      | CHORD  ~95 VOCODER PROGRAM      | RIGHT1 ~95 VOCODER PROGRAM      | TECHNI-CHORD(PART4) ~95 VOCODER | SMF HARMONY CHANNEL ~95 VOCODER "
 
 
 	.byte 0x22, 0x00, 0x60, 0x01, 0x05, 0x00, 0xff, 0xff, 0x0c, 0x00
@@ -39309,7 +38950,7 @@ LABEL_E592B8:
 	.byte 0x00, 0x00, 0x34, 0x97, 0xe5, 0x00, 0x1c, 0x97
 	.byte 0xe5, 0x00, 0xf8, 0xe5, 0x03, 0x00, 0x8c, 0x00
 	.byte 0x2c, 0x00, 0x23, 0x01
-	.asciz "HARMONY PART LOCAL: OFF"
+	aligned_string "HARMONY PART LOCAL: OFF"
 	aligned_string "HARMONY PART LOCAL: ON"
 
 
@@ -39328,7 +38969,7 @@ LABEL_E592B8:
 	.byte 0x03, 0x00, 0x0e, 0xe6, 0x03, 0x00, 0x2a, 0x98
 	.byte 0xe5, 0x00, 0xba, 0x97, 0xe5, 0x00, 0x2e, 0x00
 	ldb	c, 0x01
-	.asciz " |-|MIDI CHANNEL|PROGRAM     |HARMONY     |KEY         |P.CNG OPTION|CONTROL VOL.|-| |VOCODER     |CHORDAL     "
+	aligned_string " |-|MIDI CHANNEL|PROGRAM     |HARMONY     |KEY         |P.CNG OPTION|CONTROL VOL.|-| |VOCODER     |CHORDAL     "
 	aligned_string "     |    |   "
 
 
@@ -39345,7 +38986,7 @@ LABEL_E592B8:
 	.byte 0x11, 0x00, 0x0f, 0x00, 0x08, 0x00, 0x8a, 0x00
 	.byte 0x22, 0x00, 0xb5, 0x00, 0x34, 0x00, 0x80, 0x98
 	.byte 0xe5, 0x00, 0x00, 0x00, 0x00, 0x00, 0xfb, 0x00
-	.asciz "VALUE"
+	aligned_string "VALUE"
 
 
 	.byte 0x2b, 0x00, 0x60, 0x01, 0x0e, 0x00, 0xff, 0xff, 0x12, 0x00
@@ -39360,7 +39001,7 @@ LABEL_E592B8:
 	.byte 0x08, 0x00, 0x12, 0x00, 0xa2, 0x00, 0x5d, 0x00
 	.byte 0xb4, 0x00, 0xcc, 0x98, 0xe5, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0xfb, 0x00
-	.asciz "KEY SPLIT"
+	aligned_string "KEY SPLIT"
 
 
 	.byte 0x2b, 0x00, 0x60, 0x01, 0x0e, 0x00, 0xff, 0xff, 0x14, 0x00
@@ -39408,7 +39049,7 @@ LABEL_E592B8:
 	.byte 0x02, 0x00, 0xd6, 0x00, 0xa0, 0x01, 0x12, 0xe6
 	.byte 0x03, 0x00, 0xd2, 0x99, 0xe5, 0x00, 0x9c, 0x00
 	.byte 0x00, 0x00
-	.asciz "FADE IN/OUT SETTING"
+	aligned_string "FADE IN/OUT SETTING"
 	.byte 0x07, 0x00
 	.byte 0x63, 0x01, 0x00, 0x00, 0x02, 0x00, 0x04, 0x00
 	.byte 0xff, 0xff, 0x08, 0x00, 0x14, 0x00, 0x1e, 0x00
@@ -39429,7 +39070,7 @@ LABEL_E59A30:
 	.byte 0xff, 0xff, 0x08, 0x00, 0x1e, 0x00, 0x26, 0x00
 	.byte 0x59, 0x00, 0x38, 0x00, 0xc6, 0x9a, 0xe5, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0xfb, 0x00, 0x46, 0x41
-	.asciz "DE IN"
+	aligned_string "DE IN"
 
 
 	.byte 0x2b, 0x00, 0x60, 0x01, 0x01, 0x00, 0xff, 0xff, 0xff, 0xff
@@ -39475,7 +39116,7 @@ LABEL_E59A30:
 	.long LABEL_E59BA8
 	.byte 0x9e, 0x00, 0x00, 0x00
 LABEL_E59BA8:
-	.asciz "SPLIT POINT"
+	aligned_string "SPLIT POINT"
 
 
 	.byte 0x11, 0x00, 0x60, 0x01
@@ -39665,7 +39306,7 @@ LABEL_E59BA8:
 	.byte 0xe5, 0x00, 0x3a, 0xa1, 0xe5, 0x00, 0x38, 0xa1
 	.byte 0xe5, 0x00, 0x36, 0xa1, 0xe5, 0x00, 0x00, 0xff
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
-	.asciz "ReverbEqualizerMenu"
+	aligned_string "ReverbEqualizerMenu"
 	.byte 0x68, 0xa1, 0xe5, 0x00, 0x66, 0xa1
 	.byte 0xe5, 0x00, 0x64, 0xa1, 0xe5, 0x00, 0x62, 0xa1
 	.byte 0xe5, 0x00, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
@@ -39704,7 +39345,7 @@ LABEL_E5A220:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 LABEL_E5A228:
 	.byte 0x00, 0xff
-	.asciz "EqualizerPreset"
+	aligned_string "EqualizerPreset"
 	.byte 0x92, 0xa2, 0xe5, 0x00, 0x90, 0xa2
 	.byte 0xe5, 0x00, 0x8e, 0xa2, 0xe5, 0x00, 0x8c, 0xa2
 	.byte 0xe5, 0x00, 0x8a, 0xa2, 0xe5, 0x00, 0x88, 0xa2
@@ -39713,11 +39354,11 @@ LABEL_E5A228:
 	.byte 0xe5, 0x00, 0x72, 0xa2, 0xe5, 0x00, 0x70, 0xa2
 	.byte 0xe5, 0x00, 0x6e, 0xa2, 0xe5, 0x00, 0x00, 0xff
 	.byte 0x00, 0xff
-	.asciz "RevEqOnOffBox"
+	aligned_string "RevEqOnOffBox"
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 	.byte 0x00, 0xff
-	.asciz "ReverbEqualizerPreset"
+	aligned_string "ReverbEqualizerPreset"
 	.long LABEL_E5A346
 	.long LABEL_E5A33A
 	.long LABEL_E5A338
@@ -39743,14 +39384,14 @@ LABEL_E5A2FC:
 	.byte 0x00, 0xff, 0x00, 0xff
 LABEL_E5A300:
 	.byte 0x00, 0xff
-	.asciz "MidiMenuPage2"
+	aligned_string "MidiMenuPage2"
 LABEL_E5A310:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 LABEL_E5A318:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 LABEL_E5A320:
 	.byte 0x00, 0xff, 0x00, 0xff
-	.asciz "MidiMenuPage1"
+	aligned_string "MidiMenuPage1"
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 LABEL_E5A338:
 	.byte 0x00, 0xff
@@ -39769,7 +39410,7 @@ LABEL_E5A370:
 LABEL_E5A378:
 	.byte 0x00, 0xff, 0x00, 0xff
 	aligned_string "MdPartSetGridBox"
-	.asciz "MidiPartSetting"
+	aligned_string "MidiPartSetting"
 	sub	hl, iz
 	.byte 0xe5, 0x00, 0xdc, 0xa3, 0xe5, 0x00, 0xce, 0xa3
 	.byte 0xe5, 0x00, 0xcc, 0xa3, 0xe5, 0x00, 0xca, 0xa3
@@ -39777,7 +39418,7 @@ LABEL_E5A378:
 	.byte 0xe5, 0x00, 0xc4, 0xa3, 0xe5, 0x00, 0xc2, 0xa3
 	.byte 0xe5, 0x00, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
-	.asciz "CtlMsgGridBox"
+	aligned_string "CtlMsgGridBox"
 	.byte 0x00, 0xff
 	.asciz "MidiControlMessage"
 	.byte 0xff, 0x34, 0xa4, 0xe5, 0x00, 0x32, 0xa4
@@ -39788,7 +39429,7 @@ LABEL_E5A378:
 	aligned_string "ClockBox"
 	.asciz "RealtimeCommandBox"
 	.byte 0xff, 0x00, 0xff
-	.asciz "MidiRealtimeMessage"
+	aligned_string "MidiRealtimeMessage"
 	.long LABEL_E5A476
 	.long LABEL_E5A468
 	.long LABEL_E5A466
@@ -39798,9 +39439,9 @@ LABEL_E5A378:
 LABEL_E5A460:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 LABEL_E5A468:
-	.asciz "ComSetGridBox"
+	aligned_string "ComSetGridBox"
 	.byte 0x4d, 0x69
-	.asciz "diCommonSetting"
+	aligned_string "diCommonSetting"
 	.long LABEL_E5A4B6
 	.long LABEL_E5A4A8
 	.long LABEL_E5A4A6
@@ -39896,31 +39537,31 @@ LABEL_E5A620:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 LABEL_E5A628:
 	.byte 0x00, 0xff
-	.asciz "MpstMasterWithoutList"
+	aligned_string "MpstMasterWithoutList"
 LABEL_E5A640:
 	.byte 0x00, 0xff
-	.asciz "MidiPresetMasterWithout"
+	aligned_string "MidiPresetMasterWithout"
 	.byte 0x00, 0xff
-	.asciz "MdpstSplitBox"
+	aligned_string "MdpstSplitBox"
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 LABEL_E5A670:
-	.asciz "MdPresetUserWriteList"
+	aligned_string "MdPresetUserWriteList"
 	.byte 0x4d, 0x69
-	.asciz "diPresetPage4"
+	aligned_string "diPresetPage4"
 	.byte 0x00, 0xff
 LABEL_E5A698:
 	.byte 0x00, 0xff, 0x00, 0xff
 	aligned_string "MdPresetUserLoadList"
-	.asciz "MidiPresetPage3"
+	aligned_string "MidiPresetPage3"
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 LABEL_E5A6C8:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 LABEL_E5A6D0:
 	.byte 0x00, 0xff, 0x00, 0xff
-	.asciz "MpstSlaveWithList"
+	aligned_string "MpstSlaveWithList"
 	.byte 0x00, 0xff
 LABEL_E5A6E8:
-	.asciz "MidiPresetSlaveWith"
+	aligned_string "MidiPresetSlaveWith"
 	.byte 0x00, 0xff, 0x00, 0xff
 LABEL_E5A700:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
@@ -39935,10 +39576,8 @@ LABEL_E5A740:
 	aligned_string "MpstPageCtl2"
 	.asciz "MpstPageCtl1"
 	.byte 0xff, 0x00, 0xff, 0x00, 0xff
-LABEL_E5A760:
-	.asciz "MdPresetPageBox"
-LABEL_E5A770:
-	.asciz "MidiPresets"
+LABEL_E5A760:	aligned_string "MdPresetPageBox"
+LABEL_E5A770:	aligned_string "MidiPresets"
 	.byte 0xf8, 0xa8, 0xe5, 0x00
 	.long LABEL_E5A8F6
 	.long LABEL_E5A8F4
@@ -39975,35 +39614,32 @@ LABEL_E5A800:
 	aligned_string "ExcRcvMspBox"
 	aligned_string "ExcRcvSeqBox"
 	aligned_string "ExcRcvCmpBox"
-	.asciz "ExcRcvSmemBox"
+	aligned_string "ExcRcvSmemBox"
 LABEL_E5A838:
-	.asciz "ExcRcvPmemBox"
+	aligned_string "ExcRcvPmemBox"
 	.byte 0x45, 0x78
-	.asciz "cRcvShowBox"
+	aligned_string "cRcvShowBox"
 	.byte 0x00, 0xff, 0x00, 0xff
 LABEL_E5A858:
 	.byte 0x00, 0xff
 	aligned_string "ExcRcvWindow"
 LABEL_E5A868:
-	.asciz "ExcSendDotBox"
+	aligned_string "ExcSendDotBox"
 	.byte 0x45, 0x78
-	.asciz "cSendMspBox"
-	.asciz "ExcSendSeqBox"
-	.asciz "ExcSendCmpBox"
-LABEL_E5A8A0:
-	aligned_string "ExcSendSmemBox"
-LABEL_E5A8B0:
-	aligned_string "ExcSendPmemBox"
-LABEL_E5A8C0:
-	aligned_string "ExcSendShowBox"
+	aligned_string "cSendMspBox"
+	aligned_string "ExcSendSeqBox"
+	aligned_string "ExcSendCmpBox"
+LABEL_E5A8A0:	aligned_string "ExcSendSmemBox"
+LABEL_E5A8B0:	aligned_string "ExcSendPmemBox"
+LABEL_E5A8C0:	aligned_string "ExcSendShowBox"
 LABEL_E5A8D0:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
-	.asciz "ExcSendWindow"
+	aligned_string "ExcSendWindow"
 	.byte 0x00, 0xff, 0x00, 0xff
 LABEL_E5A8E8:
 	.asciz "ExcListBox"
 	.byte 0xff, 0x00, 0xff, 0x00, 0xff
-	.asciz "MidiExclusive"
+	aligned_string "MidiExclusive"
 	sub	(xde), xbc
 	.byte 0xe5, 0x00, 0x96, 0xa9, 0xe5, 0x00, 0x94, 0xa9
 	.byte 0xe5, 0x00, 0x92, 0xa9, 0xe5, 0x00, 0x90, 0xa9
@@ -40018,7 +39654,7 @@ LABEL_E5A8E8:
 	.byte 0xe5, 0x00, 0x5e, 0xa9, 0xe5, 0x00, 0x00, 0xff
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
-	.asciz "GMOFFSure"
+	aligned_string "GMOFFSure"
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 	aligned_string "GMONSure"
@@ -40031,8 +39667,8 @@ LABEL_E5A8E8:
 	.byte 0xe5, 0x00, 0xcc, 0xa9, 0xe5, 0x00, 0xca, 0xa9
 	.byte 0xe5, 0x00, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 	.byte 0x00, 0xff, 0x00, 0xff
-	.asciz "PcgOutGridBox"
-	.asciz "MidiPcgOutput"
+	aligned_string "PcgOutGridBox"
+	aligned_string "MidiPcgOutput"
 	.long LABEL_E5AA18
 	.long LABEL_E5AA16
 	.long LABEL_E5AA14
@@ -40070,12 +39706,12 @@ LABEL_E5AA80:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 LABEL_E5AA88:
 	aligned_string "PmemOutRight"
-	.asciz "PmemOutLeft"
+	aligned_string "PmemOutLeft"
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 LABEL_E5AAA8:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 LABEL_E5AAB0:
-	.asciz "MidiPanelMemoryOutput"
+	aligned_string "MidiPanelMemoryOutput"
 	.byte 0x08, 0xab
 	.byte 0xe5, 0x00, 0xf8, 0xaa, 0xe5, 0x00, 0xf6, 0xaa
 	.byte 0xe5, 0x00, 0xf4, 0xaa, 0xe5, 0x00, 0xf2, 0xaa
@@ -40083,8 +39719,8 @@ LABEL_E5AAB0:
 	.byte 0xe5, 0x00, 0xec, 0xaa, 0xe5, 0x00, 0xea, 0xaa
 	.byte 0xe5, 0x00, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
-	.asciz "MdSetOptGridBox"
-	.asciz "MidiSetup"
+	aligned_string "MdSetOptGridBox"
+	aligned_string "MidiSetup"
 	.byte 0xf4, 0xab, 0xe5, 0x00, 0xf2, 0xab
 	.byte 0xe5, 0x00, 0xf0, 0xab, 0xe5, 0x00, 0xe2, 0xab
 	.byte 0xe5, 0x00, 0xe0, 0xab, 0xe5, 0x00, 0xd2, 0xab
@@ -40102,13 +39738,13 @@ LABEL_E5AAB0:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 	.byte 0x00, 0xff
 	aligned_string "VocalistPage2Box"
-	.asciz "VocalistPage2"
+	aligned_string "VocalistPage2"
 	aligned_string "HarmOnOffBox"
 	.byte 0x00, 0xff
-	.asciz "VocalistListBox"
+	aligned_string "VocalistListBox"
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 	.byte 0x00, 0xff
-	.asciz "VocalistPage1"
+	aligned_string "VocalistPage1"
 	.byte 0x00, 0xff
 	aligned_string "VocalistPage"
 	.byte 0x00, 0xff, 0x00, 0xff
@@ -40121,7 +39757,7 @@ LABEL_E5AAB0:
 	.byte 0xe5, 0x00, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 	aligned_string "FadeInOutGridBox"
-	.asciz "EntertainerFade"
+	aligned_string "EntertainerFade"
 	.byte 0x82, 0xac, 0xe5, 0x00, 0x80, 0xac
 	.byte 0xe5, 0x00, 0x7e, 0xac, 0xe5, 0x00, 0x7c, 0xac
 	.byte 0xe5, 0x00, 0x7a, 0xac, 0xe5, 0x00, 0x78, 0xac
@@ -40129,29 +39765,29 @@ LABEL_E5AAB0:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 	.byte 0x00, 0xff
 	aligned_string "SplitSetting"
-	.asciz "MD_MIDI"
+	aligned_string "MD_MIDI"
 	aligned_string "TT_REVEQMENU"
 	aligned_string "TT_SDOCT"
 	aligned_string "TT_REVPRESET"
-	.asciz "TT_EQPRESET"
+	aligned_string "TT_EQPRESET"
 	aligned_string "TT_REVEQPRESET"
-	.asciz "TT_MDMENU"
-	.asciz "TT_MDPART"
+	aligned_string "TT_MDMENU"
+	aligned_string "TT_MDPART"
 	.byte 0x54, 0x54
-	.asciz "_MDCTRL"
-	.asciz "TT_MDREAL"
+	aligned_string "_MDCTRL"
+	aligned_string "TT_MDREAL"
 	aligned_string "TT_MDCOM"
 	aligned_string "TT_MDINOUT"
-	.asciz "TT_MDPRESET"
+	aligned_string "TT_MDPRESET"
 	aligned_string "TT_MDEXC"
-	.asciz "TT_MDGMMODE"
+	aligned_string "TT_MDGMMODE"
 	aligned_string "TT_MDTXPCG"
-	.asciz "TT_MDCOMP"
-	.asciz "TT_MDPMLCTL"
+	aligned_string "TT_MDCOMP"
+	aligned_string "TT_MDPMLCTL"
 	aligned_string "TT_MDSETUP"
 	aligned_string "TT_ETVOCAL"
-	.asciz "TT_ETFADEIN"
-	.asciz "TT_SPLITSEL"
+	aligned_string "TT_ETFADEIN"
+	aligned_string "TT_SPLITSEL"
 	.byte 0xda, 0x7d, 0xf7, 0x00
 	.byte 0x4a, 0x66, 0xf7, 0x00, 0x5f, 0x65, 0xf7, 0x00
 	.byte 0x4b, 0x73, 0xf7, 0x00, 0x01, 0x42, 0xf7, 0x00
@@ -40166,13 +39802,13 @@ LABEL_E5AAB0:
 	.long LABEL_E5ADCC
 LABEL_E5ADCC:
 	.byte 0x00, 0xff
-	.asciz "MainRevEqPresetLoad"
-	.asciz "MainVocalistPage2OKFunc"
-	.asciz "MainVocalistPage1OKFunc"
-	.asciz "MainFlashFunc"
+	aligned_string "MainRevEqPresetLoad"
+	aligned_string "MainVocalistPage2OKFunc"
+	aligned_string "MainVocalistPage1OKFunc"
+	aligned_string "MainFlashFunc"
 LABEL_E5AE20:
 	aligned_string "MainMpstFunc"
-	.asciz "MainExcSend"
+	aligned_string "MainExcSend"
 	aligned_string "MainPcgOutSend"
 
 Bitmap_SplitPoint_no_split:	; e5ae4a
@@ -40248,8 +39884,8 @@ LABEL_E7ECF2:
 	.byte 0x6a, 0x00, 0x1c, 0x01, 0x1e, 0x02, 0xf6, 0x01
 	.byte 0xf6, 0x01, 0x98, 0xed, 0xe7, 0x00, 0x92, 0xed
 	.byte 0xe7, 0x00
-	.asciz "ABOVE"
-	.asciz "BELOW"
+	aligned_string "ABOVE"
+	aligned_string "BELOW"
 	.byte 0x04, 0xee
 	.byte 0xe7, 0x00, 0xfe, 0xed, 0xe7, 0x00, 0xfa, 0xed
 	.byte 0xe7, 0x00, 0xf4, 0xed, 0xe7, 0x00, 0xf0, 0xed
@@ -40308,9 +39944,9 @@ LABEL_E7EE58:
 	.zero 8
 	aligned_string "   OFF    "
 	aligned_string "   OMNI   "
-	.asciz "    %2d    "
+	aligned_string "    %2d    "
 	aligned_string "   %3d    "
-	.asciz "     %d    "
+	aligned_string "     %d    "
 	aligned_string "     %s   "
 	aligned_string "   OFF    "
 	aligned_string "   Recv   "
@@ -40319,14 +39955,14 @@ LABEL_E7EE58:
 	aligned_string "   NONE   "
 	aligned_string "  AFTER   "
 	aligned_string "  CC%3d   "
-	.asciz "%s %s%s"
-	.asciz " ON  "
-	.asciz " OFF "
+	aligned_string "%s %s%s"
+	aligned_string " ON  "
+	aligned_string " OFF "
 	aligned_string "   OFF    "
 	aligned_string "   OMNI   "
-	.asciz "    %2d    "
+	aligned_string "    %2d    "
 	aligned_string "   %3d    "
-	.asciz "     %d    "
+	aligned_string "     %d    "
 	aligned_string "     %s   "
 	aligned_string "   OFF    "
 	aligned_string "   Recv   "
@@ -40335,10 +39971,10 @@ LABEL_E7EE58:
 	aligned_string "   NONE   "
 	aligned_string "  AFTER   "
 	aligned_string "  CC%3d   "
-	.asciz "%s %s%s"
-	.asciz "%s %s%s"
-	.asciz " ON  "
-	.asciz " OFF "
+	aligned_string "%s %s%s"
+	aligned_string "%s %s%s"
+	aligned_string " ON  "
+	aligned_string " OFF "
 	.byte 0x00, 0x00, 0x85, 0x02, 0x5c, 0x00, 0x85, 0x02
 	.byte 0x8a, 0x00, 0x85, 0x02, 0xb8, 0x00, 0x85, 0x02
 	.byte 0xf1, 0x00, 0x85, 0x02, 0x40, 0x01, 0x85, 0x02
@@ -40354,7 +39990,7 @@ LABEL_E7F070:
 	.byte 0x76, 0x06, 0xd4, 0x00, 0x76, 0x06, 0x00, 0x00
 	.byte 0x0e, 0x00, 0x00, 0x00, 0x0e, 0x00, 0x00, 0x00
 	.byte 0x0e, 0x00, 0xb6, 0xf0, 0xe7, 0x00, 0x48, 0x41
-	.asciz "RMONY PART LOCAL: ---"
+	aligned_string "RMONY PART LOCAL: ---"
 	.byte 0x00, 0x00
 	.zero 8
 	.byte 0x00, 0x00, 0x00, 0x00, 0x60, 0x00, 0x00, 0x00
@@ -40369,7 +40005,7 @@ LABEL_E7F070:
 	.long LABEL_E7F11C
 	.long LABEL_E7F110
 LABEL_E7F110:
-	.asciz "Perhatian !"
+	aligned_string "Perhatian !"
 	aligned_string "ATTENTION!"
 LABEL_E7F128:
 	.byte 0xa1
@@ -40378,9 +40014,9 @@ LABEL_E7F128:
 	.byte 0x4e, 0x21, 0x00, 0xff
 	aligned_string "ATTENTION!"
 LABEL_E7F140:
-	.asciz "ACHTUNG !"
+	aligned_string "ACHTUNG !"
 	aligned_string "ATTENTION!"
-	.asciz "Turning on GENERAL MIDI MODE will replace your current settings with GENERAL MIDI settings!"
+	aligned_string "Turning on GENERAL MIDI MODE will replace your current settings with GENERAL MIDI settings!"
 	.ascii "Durch das Einschalten des GENERAL MIDI MODE werden alle Einstellungen zu GENERAL MIDI Einstellungen ge"
 	.byte 0xe4
 	.asciz "ndert!"
@@ -40390,21 +40026,21 @@ LABEL_E7F140:
 	.byte 0xe9, 0x67, 0x6c
 	.asciz "ages GENERAL MIDI!"
 	.byte 0xff, 0xa1, 0x41, 0x6c, 0x20
-	.asciz "activar el modo MIDI General se reemplazan las configuraciones actuales por configuraciones MIDI Generales!"
+	aligned_string "activar el modo MIDI General se reemplazan las configuraciones actuales por configuraciones MIDI Generales!"
 	.asciz "Aktifkan GENERAL MIDI MODE untuk kembali ke  susunan GENERAL MIDI yang sekarang."
 	.byte 0xff, 0x56, 0xf1
 	.byte 0xe7, 0x00, 0xb2, 0xf1, 0xe7, 0x00, 0x20, 0xf2
 	.byte 0xe7, 0x00, 0x8c, 0xf2, 0xe7, 0x00, 0x56, 0xf1
 	.byte 0xe7, 0x00, 0xfc, 0xf2, 0xe7, 0x00, 0x54, 0x75
 	aligned_string "rning off GENERAL MIDI MODE will replace the GENERAL MIDI settings with the original factory settings!"
-	.asciz "Durch das Ausschalten des GENERAL MIDI MODE werden die GENERAL MIDI Einstellungen durch die Werkseinstellungen ersetzt."
+	aligned_string "Durch das Ausschalten des GENERAL MIDI MODE werden die GENERAL MIDI Einstellungen durch die Werkseinstellungen ersetzt."
 	.ascii "La d"
 	.byte 0xe9, 0x73, 0x61, 0x63
 	.ascii "tivation du mode GENERAL MIDI MODE remplacera tous les r"
 	.byte 0xe9
 	.ascii "glages GENERAL MIDI par les r"
 	inc	7, xbc
-	.asciz "lages d'usines!"
+	aligned_string "lages d'usines!"
 	.byte 0xa1
 	.ascii "Al desconectar el modo MIDI General se reemplazan las configuraciones MIDI Generales por las configuraciones originales de f"
 	.byte 0xe1, 0x62, 0x72
@@ -40417,15 +40053,15 @@ LABEL_E7F140:
 	.byte 0xe7, 0x00, 0x3e, 0xf6, 0xe7, 0x00, 0x2e, 0xf6
 	.byte 0xe7, 0x00, 0x20, 0xf6, 0xe7, 0x00, 0x12, 0xf6
 	.byte 0xe7, 0x00, 0xf6, 0xf5, 0xe7, 0x00, 0x41, 0x70
-	.asciz "akah yakin akan dihapus ?"
-	.asciz "Are You Sure?"
+	aligned_string "akah yakin akan dihapus ?"
+	aligned_string "Are You Sure?"
 	.byte 0xbf, 0x45, 0x73, 0x74, 0xe1, 0x20, 0x73, 0x65
-	.asciz "guro?"
+	aligned_string "guro?"
 	.byte 0x45, 0x74
 	.ascii "es vous s"
 	.byte 0xfb, 0x72, 0x3f, 0x00, 0xff
-	.asciz "Sind Sie sicher ?"
-	.asciz "Are You Sure?"
+	aligned_string "Sind Sie sicher ?"
+	aligned_string "Are You Sure?"
 	.byte 0x50, 0xf7
 	.byte 0xe7, 0x00, 0x16, 0xf7, 0xe7, 0x00, 0xee, 0xf6
 	.byte 0xe7, 0x00, 0xc6, 0xf6, 0xe7, 0x00, 0x9e, 0xf6
@@ -40434,7 +40070,7 @@ LABEL_E7F140:
 	aligned_string "Press a key to select the split point."
 	aligned_string "Press a key to select the split point."
 	aligned_string "Press a key to select the split point."
-	.asciz "Dr~fcken Sie eine Taste, um den Split-Punkt zu bestimmen."
+	aligned_string "Dr~fcken Sie eine Taste, um den Split-Punkt zu bestimmen."
 	aligned_string "Press a key to select the split point."
 	.long LABEL_E7F7DE
 	.long LABEL_E7F7D8
@@ -40469,13 +40105,13 @@ LABEL_E7F7D8:
 	.byte 0xe6, 0x00, 0x1a, 0x24, 0xe6, 0x00, 0xe2, 0x2f
 	.byte 0xe6, 0x00, 0xaa, 0x3b, 0xe6, 0x00, 0x0f, 0x00
 	.byte 0x9c, 0x00
-	.asciz "%s%2d"
-	.asciz " - 2 "
+	aligned_string "%s%2d"
+	aligned_string " - 2 "
 	ldb	w, 0x2d
 	.byte 0x20, 0x31, 0x20, 0x00
-	.asciz "   0 "
-	.asciz " + 1 "
-	.asciz " + 2 "
+	aligned_string "   0 "
+	aligned_string " + 1 "
+	aligned_string " + 2 "
 	.byte 0x45, 0x72
 	.byte 0x72, 0x6f, 0x72, 0x00, 0x0a, 0x00, 0x52, 0x00
 	aligned_string "         NORMAL         "
@@ -40495,11 +40131,11 @@ LABEL_E7F7D8:
 	.long LABEL_E7F916
 	.long LABEL_E7F910
 LABEL_E7F910:
-	.asciz " ON  "
+	aligned_string " ON  "
 	ldb	w, 0x4f
 	.byte 0x4e, 0x20, 0x20, 0x00
-	.asciz " OFF "
-	.asciz " OFF "
+	aligned_string " OFF "
+	aligned_string " OFF "
 	.byte 0x22, 0x00, 0x22, 0x00, 0x2a, 0x00, 0x2a, 0x00
 	.byte 0x2a, 0x00, 0x26, 0x00, 0x2a, 0x00, 0x2e, 0x00
 	.byte 0x35, 0x00, 0x00, 0x00
@@ -40516,13 +40152,13 @@ LABEL_E7F910:
 	.byte 0x00, 0x00, 0x11, 0x2a, 0x00, 0x00, 0x00, 0x00
 	.zero 8
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x20, 0x25
-	.asciz "2d measure "
-	.asciz " ON  "
-	.asciz " OFF "
-	.asciz " %2d measure "
+	aligned_string "2d measure "
+	aligned_string " ON  "
+	aligned_string " OFF "
+	aligned_string " %2d measure "
 	ldb	w, 0x4f
 	.byte 0x4e, 0x20, 0x20, 0x00
-	.asciz " OFF "
+	aligned_string " OFF "
 	.byte 0x00, 0x00, 0x4b, 0x00, 0x00, 0x00
 	.byte 0x4b, 0x00, 0xfe, 0x01, 0x9c, 0x00, 0x9c, 0x00
 	.byte 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00
@@ -40534,21 +40170,21 @@ LABEL_E7F910:
 	.byte 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00
 	.byte 0x01, 0x00, 0x01, 0x00, 0x02, 0x00, 0x01, 0x00
 	.byte 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00
-	.asciz " RIGHT 1 INPUT          :| AUTO PLAY CHORD INPUT  :| VELOCITY INPUT         :| |-| TECHNI-CHORD OUTPUT    :| TRANSPOSE OUTPUT       :| DRUM PATTERN OUTPUT    :| AUTO PLAY CHORD OUTPUT :"
-	.asciz " RIGHT 1 INPUT          :| AUTO PLAY CHORD INPUT  :| VELOCITY INPUT         :| VELOCITY OFFSET VALUE  :|-| TECHNI-CHORD OUTPUT    :| TRANSPOSE OUTPUT       :| DRUM PATTERN OUTPUT    :| AUTO PLAY CHORD OUTPUT :"
-	.asciz " RIGHT 1 INPUT          :| AUTO PLAY CHORD INPUT  :| VELOCITY INPUT         :| VELOCITY FIXED VALUE   :|-| TECHNI-CHORD OUTPUT    :| TRANSPOSE OUTPUT       :| DRUM PATTERN OUTPUT    :| AUTO PLAY CHORD OUTPUT :"
+	aligned_string " RIGHT 1 INPUT          :| AUTO PLAY CHORD INPUT  :| VELOCITY INPUT         :| |-| TECHNI-CHORD OUTPUT    :| TRANSPOSE OUTPUT       :| DRUM PATTERN OUTPUT    :| AUTO PLAY CHORD OUTPUT :"
+	aligned_string " RIGHT 1 INPUT          :| AUTO PLAY CHORD INPUT  :| VELOCITY INPUT         :| VELOCITY OFFSET VALUE  :|-| TECHNI-CHORD OUTPUT    :| TRANSPOSE OUTPUT       :| DRUM PATTERN OUTPUT    :| AUTO PLAY CHORD OUTPUT :"
+	aligned_string " RIGHT 1 INPUT          :| AUTO PLAY CHORD INPUT  :| VELOCITY INPUT         :| VELOCITY FIXED VALUE   :|-| TECHNI-CHORD OUTPUT    :| TRANSPOSE OUTPUT       :| DRUM PATTERN OUTPUT    :| AUTO PLAY CHORD OUTPUT :"
 	jr	nov, 0x00
 	.byte 0x5b, 0x01, 0x6c, 0x00, 0x5b, 0x01, 0xb5, 0x02
 	.byte 0x8b, 0x02, 0x8b, 0x02, 0xa2, 0xfc, 0xe7, 0x00
 	.long LABEL_E7FC9C
 LABEL_E7FC9C:
-	.asciz " ON  "
-	.asciz " OFF "
+	aligned_string " ON  "
+	aligned_string " OFF "
 	.long LABEL_E7FCBA
 	.long LABEL_E7FCB0
 LABEL_E7FCB0:
-	.asciz " DIRECT  "
-	.asciz "CONDUCTOR"
+	aligned_string " DIRECT  "
+	aligned_string "CONDUCTOR"
 	.byte 0xe4, 0xfc, 0xe7, 0x00
 	.long LABEL_E7FCDA
 	.long LABEL_E7FCD0
@@ -40561,16 +40197,16 @@ LABEL_E7FCD0:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x20, 0x25
 	.byte 0x33, 0x64, 0x20, 0x00
 	.asciz "     "
-	.asciz " %3d "
+	aligned_string " %3d "
 	.asciz "     "
 	ldb	w, 0x20
 	.byte 0x20, 0x20, 0x20, 0x00
-	.asciz " %3d "
-	.asciz " %3d "
+	aligned_string " %3d "
+	aligned_string " %3d "
 	.asciz "     "
 	ldb	w, 0x25
 	.byte 0x33, 0x64, 0x20, 0x00
-	.asciz " %3d "
+	aligned_string " %3d "
 	.byte 0x00, 0x00, 0x32, 0x00, 0x64, 0x00
 	.byte 0x38, 0x01, 0x90, 0x02, 0xc9, 0x01, 0xfb, 0x01
 	.byte 0x2c, 0x02, 0x5d, 0x02, 0x00, 0x00, 0x0c, 0x00
@@ -40586,9 +40222,9 @@ LABEL_E7FCD0:
 	.byte 0x3d, 0x00, 0x31, 0x00, 0x00, 0x00, 0xcc, 0xfd
 	.byte 0xe7, 0x00, 0xc2, 0xfd, 0xe7, 0x00, 0xb8, 0xfd
 	.byte 0xe7, 0x00, 0xae, 0xfd, 0xe7, 0x00, 0x43, 0x4f
-	.asciz "MPLETED"
-	.asciz "RECIEVING"
-	.asciz " SENDING "
+	aligned_string "MPLETED"
+	aligned_string "RECIEVING"
+	aligned_string " SENDING "
 	.asciz "         "
 	.byte 0x1e, 0x00
 	.byte 0x1e, 0x00, 0x26, 0x00, 0x26, 0x00, 0x26, 0x00
@@ -40623,15 +40259,15 @@ LABEL_E7FEA0:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xc4, 0xfe
 	.byte 0xe7, 0x00, 0xbe, 0xfe, 0xe7, 0x00, 0x20, 0x59
 	.byte 0x45, 0x53, 0x20, 0x00
-	.asciz " NO  "
+	aligned_string " NO  "
 	.byte 0xf8, 0xfe, 0xe7, 0x00, 0xee, 0xfe
 	.byte 0xe7, 0x00, 0xe4, 0xfe, 0xe7, 0x00, 0xda, 0xfe
 	.byte 0xe7, 0x00
-	.asciz "  USER3  "
-	.asciz "  USER2  "
+	aligned_string "  USER3  "
+	aligned_string "  USER2  "
 	ldb	w, 0x20
-	.asciz "USER1  "
-	.asciz " INITIAL "
+	aligned_string "USER1  "
+	aligned_string " INITIAL "
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.zero 8
 	.byte 0x00, 0x00, 0x00, 0x00, 0xb7, 0x00, 0x00, 0x00
@@ -40643,34 +40279,34 @@ LABEL_E7FEA0:
 	.zero 8
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x20, 0x25
 	.byte 0x33, 0x64, 0x20, 0x00
-	.asciz " %3d "
-	.asciz " --- "
-	.asciz "  OFF  "
-	.asciz " %3d "
+	aligned_string " %3d "
+	aligned_string " --- "
+	aligned_string "  OFF  "
+	aligned_string " %3d "
 	ldb	w, 0x25
 	.asciz "5d )"
 	.byte 0xff, 0x20, 0x2d
 	.byte 0x2d, 0x2d, 0x20, 0x00
-	.asciz " OFF "
-	.asciz "  OFF  "
-	.asciz " %3d "
-	.asciz " %3d "
+	aligned_string " OFF "
+	aligned_string "  OFF  "
+	aligned_string " %3d "
+	aligned_string " %3d "
 	ldb	w, 0x25
 	.asciz "5d )"
 	.byte 0xff, 0x20, 0x25
 	.byte 0x33, 0x64, 0x20, 0x00
-	.asciz " %3d "
-	.asciz " --- "
-	.asciz "  OFF  "
-	.asciz " %3d "
+	aligned_string " %3d "
+	aligned_string " --- "
+	aligned_string "  OFF  "
+	aligned_string " %3d "
 	ldb	w, 0x25
 	.asciz "5d )"
 	.byte 0xff, 0x20, 0x2d
 	.byte 0x2d, 0x2d, 0x20, 0x00
-	.asciz " OFF "
-	.asciz "  OFF  "
-	.asciz " %3d "
-	.asciz " %3d "
+	aligned_string " OFF "
+	aligned_string "  OFF  "
+	aligned_string " %3d "
+	aligned_string " %3d "
 	ldb	w, 0x25
 	.asciz "5d )"
 	.byte 0xff, 0x00, 0x00
@@ -40690,7 +40326,7 @@ LABEL_E80040:
 	.ascii " ON "
 LABEL_E80048:
 	ldb	w, 0x00
-	.asciz " OFF "
+	aligned_string " OFF "
 	aligned_string "  ----  "
 	aligned_string " NORMAL "
 	.asciz "  TECH  "
@@ -40698,8 +40334,8 @@ LABEL_E80048:
 LABEL_E80070:
 	aligned_string " GM   "
 	aligned_string " Error! "
-	.asciz " ON  "
-	.asciz " OFF "
+	aligned_string " ON  "
+	aligned_string " OFF "
 	ldb	w, 0x20
 	aligned_string "----  "
 	aligned_string " NORMAL "
@@ -40715,11 +40351,11 @@ LABEL_E80070:
 LABEL_E800E8:
 	.byte 0x6e, 0x02, 0x06, 0x01, 0xe8, 0x00, 0xfe, 0x00
 	.byte 0xe8, 0x00, 0xf6, 0x00, 0xe8, 0x00, 0x20, 0x4c
-	.asciz "EFT  "
+	aligned_string "EFT  "
 	.byte 0x52, 0x49
-	.asciz "GHT 2"
+	aligned_string "GHT 2"
 	.byte 0x52, 0x49
-	.asciz "GHT 1"
+	aligned_string "GHT 1"
 	.byte 0x00, 0x00
 	.byte 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00
@@ -40729,32 +40365,32 @@ LABEL_E800E8:
 	.asciz " %2d-%d "
 	.byte 0xff, 0x20, 0x4f
 	.byte 0x4e, 0x20, 0x20, 0x00
-	.asciz " OFF "
-	.asciz " OFF "
-	.asciz " %3d "
+	aligned_string " OFF "
+	aligned_string " OFF "
+	aligned_string " %3d "
 	ldb	w, 0x25
 	.byte 0x33, 0x64, 0x20, 0x00
-	.asciz " OFF "
-	.asciz " %3d "
+	aligned_string " OFF "
+	aligned_string " %3d "
 LABEL_E80168:
-	.asciz " ON  "
+	aligned_string " ON  "
 	ldb	w, 0x4f
 	.byte 0x46, 0x46, 0x20, 0x00
-	.asciz " OFF "
-	.asciz " %3d "
-	.asciz " %3d "
+	aligned_string " OFF "
+	aligned_string " %3d "
+	aligned_string " %3d "
 	ldb	w, 0x4f
 	.byte 0x46, 0x46, 0x20, 0x00
-	.asciz " %3d "
-	.asciz " OFF "
-	.asciz " %3d "
+	aligned_string " %3d "
+	aligned_string " OFF "
+	aligned_string " %3d "
 	ldb	w, 0x25
 	.byte 0x33, 0x64, 0x20, 0x00
-	.asciz " OFF "
-	.asciz " %3d "
+	aligned_string " OFF "
+	aligned_string " %3d "
 	aligned_string " %2d-%d "
-	.asciz " ON  "
-	.asciz " OFF "
+	aligned_string " ON  "
+	aligned_string " OFF "
 	.byte 0x00, 0x00
 	.byte 0xc7, 0x00, 0x00, 0x00, 0xc7, 0x00, 0xcc, 0x07
 	.byte 0xcc, 0x07, 0xa6, 0x01, 0x00, 0x00, 0x00, 0x00
@@ -40763,38 +40399,38 @@ LABEL_E80168:
 	.zero 8
 	.zero 8
 	.byte 0x00, 0x00
-	.asciz " OFF "
-	.asciz " %3d "
+	aligned_string " OFF "
+	aligned_string " %3d "
 	ldb	w, 0x25
 	.byte 0x33, 0x64, 0x20, 0x00
-	.asciz " OFF "
-	.asciz " %3d "
-	.asciz " OFF "
+	aligned_string " OFF "
+	aligned_string " %3d "
+	aligned_string " OFF "
 	ldb	w, 0x25
 	.byte 0x33, 0x64, 0x20, 0x00
-	.asciz " %3d "
-	.asciz " OFF "
-	.asciz " %3d "
+	aligned_string " %3d "
+	aligned_string " OFF "
+	aligned_string " %3d "
 	ldb	w, 0x4f
 	.byte 0x46, 0x46, 0x20, 0x00
-	.asciz " %3d "
-	.asciz " %3d "
-	.asciz " OFF "
+	aligned_string " %3d "
+	aligned_string " %3d "
+	aligned_string " OFF "
 	ldb	w, 0x25
 	.byte 0x33, 0x64, 0x20, 0x00
-	.asciz " OFF "
-	.asciz " %3d "
-	.asciz " %3d "
+	aligned_string " OFF "
+	aligned_string " %3d "
+	aligned_string " %3d "
 	ldb	w, 0x4f
 	.byte 0x46, 0x46, 0x20, 0x00
-	.asciz " %3d "
+	aligned_string " %3d "
 	.byte 0x00, 0x00, 0x69, 0x01, 0x00, 0x00
 	.byte 0x69, 0x01, 0x31, 0x08, 0x31, 0x08, 0x02, 0x03
 	.byte 0x08, 0x07, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.zero 8
 	.byte 0x00, 0x00
 	aligned_string " |-| PRG.CHANGE     | BANK SELECT    | PITCH BEND     | VOLUME         | EXPRESSION     | PAN            | SUSTAIN        "
-	.asciz " |-| EFFECT & REVERB| MODULATION     | TUNING         | BEND RANGE     | AFTER TOUCH    | RESET ALL CONT."
+	aligned_string " |-| EFFECT & REVERB| MODULATION     | TUNING         | BEND RANGE     | AFTER TOUCH    | RESET ALL CONT."
 	.byte 0x7e, 0x01, 0x9c, 0x02, 0x7e, 0x01, 0x9c, 0x02
 	.byte 0x19, 0x04, 0xef, 0x03, 0xef, 0x03, 0xff, 0xff
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x8a, 0x22
@@ -40807,11 +40443,11 @@ LABEL_E80168:
 	.byte 0x00, 0x00, 0x8b, 0x22, 0x00, 0x00, 0x99, 0x22
 	.byte 0x00, 0x00, 0xff, 0xff, 0xff, 0xff, 0x00, 0x00
 	.zero 8
-	.asciz " ON  "
+	aligned_string " ON  "
 	ldb	w, 0x4f
 	.byte 0x46, 0x46, 0x20, 0x00
-	.asciz " ON  "
-	.asciz " OFF "
+	aligned_string " ON  "
+	aligned_string " OFF "
 	.byte 0x00, 0x00, 0x53, 0x00, 0x00, 0x00, 0x53, 0x00
 	.byte 0x94, 0x01, 0xac, 0x00, 0x94, 0x01, 0x00, 0x00
 	.byte 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07
@@ -40825,8 +40461,8 @@ LABEL_E80168:
 	.byte 0x01, 0x00, 0x09, 0x09, 0x09, 0xff, 0x00, 0x00
 	.zero 8
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x7c, 0x2d
-	.asciz "| RIGHT1| RIGHT2| LEFT| PART4| PART5| PART6| PART7| PART8"
-	.asciz "|-| PART9| PART10| PART11| PART12| PART13| PART14| PART15| PART16"
+	aligned_string "| RIGHT1| RIGHT2| LEFT| PART4| PART5| PART6| PART7| PART8"
+	aligned_string "|-| PART9| PART10| PART11| PART12| PART13| PART14| PART15| PART16"
 	.asciz "|-| CONTROL| | ACCOMP1| ACCOMP2| ACCOMP3| BASS| DRUMS| CHORD"
 	.byte 0xff, 0xc8, 0x01, 0xb3, 0x03, 0xc8, 0x01
 	.byte 0xb3, 0x03, 0xe2, 0x05, 0xb8, 0x05, 0xde, 0x05
@@ -40879,30 +40515,30 @@ LABEL_E80168:
 	.long LABEL_E80686
 	.long LABEL_E80680
 LABEL_E80680:
-	.asciz " -1  "
+	aligned_string " -1  "
 	ldb	w, 0x2d
 	.byte 0x32, 0x20, 0x20, 0x00
-	.asciz " -3  "
+	aligned_string " -3  "
 	.asciz "Error"
 LABEL_E80698:
-	.asciz "  3  "
+	aligned_string "  3  "
 	ldb	w, 0x20
 	.byte 0x32, 0x20, 0x20, 0x00
-	.asciz "  1  "
-	.asciz "  0  "
+	aligned_string "  1  "
+	aligned_string "  0  "
 	.zero 8
 	.byte 0x00, 0x00
-	.asciz " OFF "
+	aligned_string " OFF "
 	aligned_string " %2d  "
-	.asciz " OFF "
+	aligned_string " OFF "
 	ldb	w, 0x25
 	.asciz "2d  "
 	.byte 0xff, 0x20, 0x4f
 	.byte 0x4e, 0x20, 0x20, 0x00
-	.asciz " OFF "
-	.asciz " OFF "
+	aligned_string " OFF "
+	aligned_string " OFF "
 	aligned_string " %2d  "
-	.asciz " ON  "
+	aligned_string " ON  "
 	ldb	w, 0x4f
 	.byte 0x46, 0x46, 0x20, 0x00, 0x00, 0x00, 0xe4, 0x00
 	.long LABEL_E40000
@@ -40953,7 +40589,7 @@ LABEL_E80698:
 	.byte 0xe8, 0x00, 0x8c, 0x08, 0xe8, 0x00, 0x7e, 0x08
 	.byte 0xe8, 0x00, 0x74, 0x08, 0xe8, 0x00, 0x72, 0x08
 	.byte 0xe8, 0x00, 0x00, 0xff
-	.asciz "FDemoText"
+	aligned_string "FDemoText"
 	.byte 0x42, 0x69
 	aligned_string "tmapKn5000"
 	aligned_string "BitmapTechnics"
@@ -40961,45 +40597,45 @@ LABEL_E80698:
 	aligned_string "LswSound"
 	aligned_string "BitmapDrawsw"
 	aligned_string "LswDrawRelease"
-	.asciz "LswDrawAttack"
+	aligned_string "LswDrawAttack"
 	aligned_string "LswPercLevel"
 	aligned_string "LswPercDecay"
 	aligned_string "BitmapAccita16"
 	aligned_string "BitmapAccger16"
 	aligned_string "LswMidiChannel"
-	.asciz "LswLocalControl"
+	aligned_string "LswLocalControl"
 	aligned_string "TtSdscltyp"
 	aligned_string "LswScalingKeyX"
 	aligned_string "LswScalingShift2"
 	aligned_string "LswScalingMode"
-	.asciz "LswScalingShift"
+	aligned_string "LswScalingShift"
 	aligned_string "LswScalingType"
-	.asciz "LswMasterTuning"
-	.asciz "LswOrchestrator"
-	.asciz "MessageText"
+	aligned_string "LswMasterTuning"
+	aligned_string "LswOrchestrator"
+	aligned_string "MessageText"
 	.byte 0x4d, 0x65
-	.asciz "ssageHeader"
+	aligned_string "ssageHeader"
 	aligned_string "CheckMessage"
-	.asciz "CheckLanguage"
-	.asciz "LswMute"
+	aligned_string "CheckLanguage"
+	aligned_string "LswMute"
 	aligned_string "LswPartExp"
-	.asciz "LswAfterTouch"
-	.asciz "LswKeyScaling"
-	.asciz "LswSustainPedal"
-	.asciz "LswGlidePedal"
+	aligned_string "LswAfterTouch"
+	aligned_string "LswKeyScaling"
+	aligned_string "LswSustainPedal"
+	aligned_string "LswGlidePedal"
 	.byte 0x4c, 0x73
 	aligned_string "wBendRange"
-	.asciz "LswTuning"
+	aligned_string "LswTuning"
 	.byte 0x4c, 0x73
-	.asciz "wKeyShift"
+	aligned_string "wKeyShift"
 	aligned_string "LswSustainLength"
 	aligned_string "LswSustain"
 	aligned_string "LswDigitalEffect"
 	aligned_string "LswDSPEffect"
-	.asciz "LswReverb"
+	aligned_string "LswReverb"
 	aligned_string "LswPan"
-	.asciz "LswVolume"
-	.asciz "LswLeftHold"
+	aligned_string "LswVolume"
+	aligned_string "LswLeftHold"
 	.asciz "TtSdmenu"
 	.byte 0xff, 0xd6, 0x0a, 0xe8, 0x00, 0x00, 0xff
 	.long LABEL_E80AEC
@@ -41014,7 +40650,7 @@ LABEL_E80AE4:
 LABEL_E80B00:
 	.byte 0xe8, 0x00, 0x00, 0xff
 	aligned_string "data"
-	.asciz "fmute"
+	aligned_string "fmute"
 	.asciz "fvol"
 	.byte 0xff, 0x1a, 0x0b
 	.byte 0xe8, 0x00, 0x00, 0xff, 0x20, 0x0b, 0xe8, 0x00
@@ -41031,10 +40667,10 @@ LABEL_E80B34:
 	.byte 0xe8, 0x00, 0x7a, 0x0b, 0xe8, 0x00, 0x74, 0x0b
 	.byte 0xe8, 0x00, 0x6a, 0x0b, 0xe8, 0x00, 0x60, 0x0b
 	.byte 0xe8, 0x00, 0x5e, 0x0b, 0xe8, 0x00, 0x00, 0xff
-	.asciz "dialfocus"
+	aligned_string "dialfocus"
 	aligned_string "selected"
-	.asciz "align"
-	.asciz "fontcolor"
+	aligned_string "align"
+	aligned_string "fontcolor"
 	.asciz "font"
 	.byte 0xff, 0x73, 0x74, 0x72, 0x00, 0x92, 0x0b
 	.byte 0xe8, 0x00, 0x00, 0xff, 0x98, 0x0b, 0xe8, 0x00
@@ -41065,8 +40701,8 @@ LABEL_E80BFC:
 	.byte 0xe8, 0x00, 0x16, 0x0c, 0xe8, 0x00, 0x00, 0xff
 	aligned_string "selected"
 	aligned_string "editsw"
-	.asciz "align"
-	.asciz "fontcolor"
+	aligned_string "align"
+	aligned_string "fontcolor"
 	aligned_string "font"
 	.long LABEL_E80C44
 LABEL_E80C44:
@@ -41322,61 +40958,61 @@ LABEL_E80CF4:
 	.zero 8
 	.zero 8
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff
-	.asciz "IvMPver"
+	aligned_string "IvMPver"
 	.byte 0x75, 0x65, 0x00, 0xff
-	.asciz "AcDrawbarName"
+	aligned_string "AcDrawbarName"
 	.byte 0x41, 0x41, 0x00, 0xff
-	.asciz "AcDrawSetting"
+	aligned_string "AcDrawSetting"
 	.byte 0x00, 0xff
 	.asciz "AcPleaseWait"
 	.byte 0xff, 0x00, 0xff
 	.asciz "AcSndEMenu"
 	.byte 0xff, 0x00, 0xff
-	.asciz "AcFdemoScreen"
+	aligned_string "AcFdemoScreen"
 	.byte 0x00, 0xff
 	aligned_string "VwUserBitmapSp"
 	aligned_string "XemA"
-	.asciz "AcPresentationBox"
+	aligned_string "AcPresentationBox"
 	.byte 0x6a, 0x6e, 0x00, 0xff
 	.asciz "AcLswPartPan"
 	.byte 0xff, 0x00, 0xff
-	.asciz "AcDrawEditBox"
+	aligned_string "AcDrawEditBox"
 	.byte 0x00, 0xff
 	aligned_string "IvDemofeature2"
 	.byte 0x00, 0xff
 	.asciz "IvDemofeature1"
 	.byte 0xff, 0x00, 0xff
-	.asciz "AcPresentationControl"
-	.asciz "c^dem"
-	.asciz "PsVariBox"
+	aligned_string "AcPresentationControl"
+	aligned_string "c^dem"
+	aligned_string "PsVariBox"
 	.byte 0x00, 0xff
-	.asciz "AcResetPage"
+	aligned_string "AcResetPage"
 	.byte 0x00, 0xff
-	.asciz "IvDrawbarSndE"
+	aligned_string "IvDrawbarSndE"
 	.byte 0x00, 0xff
-	.asciz "IvDrawbarNorm"
+	aligned_string "IvDrawbarNorm"
 	.byte 0x00, 0xff
 	.asciz "IvDrawbar2"
 	.byte 0xff, 0x00, 0xff
 	.asciz "IvDrawbar1"
 	.byte 0xff, 0x00, 0xff
-	.asciz "IvDrawbar"
+	aligned_string "IvDrawbar"
 	.byte 0x41, 0x74, 0x00, 0xff
-	.asciz "IvPageOverWrite"
+	aligned_string "IvPageOverWrite"
 	.byte 0x00, 0xff
-	.asciz "IvSoftver"
+	aligned_string "IvSoftver"
 	.byte 0x00, 0xff
 	aligned_string "AcTrackMixer"
 	.byte 0x00, 0xff
-	.asciz "AcPartMixer"
+	aligned_string "AcPartMixer"
 	.byte 0x00, 0xff
 	aligned_string "PsMixerControl"
 	.byte 0x00, 0xff
 	.asciz "AcWelcomScreen"
 	.byte 0xff, 0x00, 0xff
-	.asciz "IvSdscltyp2"
+	aligned_string "IvSdscltyp2"
 	.byte 0x00, 0xff
-	.asciz "IvSdtecd1"
+	aligned_string "IvSdtecd1"
 	.byte 0x00, 0xff
 	aligned_string "IvSdtecd"
 	aligned_string "Xc^dmm"
@@ -41386,7 +41022,7 @@ LABEL_E80CF4:
 	.byte 0x00, 0xff
 	aligned_string "IvAccordionX"
 	.byte 0x00, 0xff
-	.asciz "IvAccordion"
+	aligned_string "IvAccordion"
 	.byte 0x00, 0xff
 	.asciz "IvMesage"
 	.byte 0xff, 0x6a, 0x6a, 0x6e, 0x00, 0x41, 0x63
@@ -41408,19 +41044,19 @@ LABEL_E80CF4:
 	.byte 0x00, 0x00, 0x00, 0x00
 LABEL_E81310:
 	aligned_string "EV_MPVERSION"
-	.asciz "EV_TONEMODE"
-	.asciz "EV_EXECPRESENTATION"
+	aligned_string "EV_TONEMODE"
+	aligned_string "EV_EXECPRESENTATION"
 	.byte 0x45, 0x56
 	aligned_string "_ENDSONG"
 	aligned_string "EV_STARTSONG"
 LABEL_E81358:
-	.asciz "EV_ALLINITIAL"
+	aligned_string "EV_ALLINITIAL"
 	.byte 0x45, 0x56
-	.asciz "_READSONG"
-	.asciz "EV_READACTION"
+	aligned_string "_READSONG"
+	aligned_string "EV_READACTION"
 LABEL_E81380:
-	.asciz "EV_READPRESENTATION"
-	.asciz "EV_ACCORDIONTAB"
+	aligned_string "EV_READPRESENTATION"
+	aligned_string "EV_ACCORDIONTAB"
 	.byte 0x0a, 0x00, 0xe6, 0x14
 	.byte 0xe8, 0x00, 0xd6, 0x14, 0xe8, 0x00, 0xc8, 0x14
 	.byte 0xe8, 0x00, 0xb4, 0x14, 0xe8, 0x00, 0xa6, 0x14
@@ -41431,21 +41067,21 @@ LABEL_E81380:
 	.byte 0xe8, 0x00, 0xf6, 0x13, 0xe8, 0x00, 0xe6, 0x13
 	.byte 0xe8, 0x00, 0x00, 0x00, 0x00, 0x00, 0x4d, 0x54
 	aligned_string "_GetToneMode"
-	.asciz "MT_ExitPresentation"
-	.asciz "MT_InitPresentation"
+	aligned_string "MT_ExitPresentation"
+	aligned_string "MT_InitPresentation"
 	.byte 0x4d, 0x54
 	aligned_string "_ExistPresentation"
-	.asciz "MT_SetMemoryDrawbar"
-	.asciz "MT_RequestMemoryDrawbar"
-	.asciz "MT_RefreshParam"
-	.asciz "MT_ExecPresentation"
+	aligned_string "MT_SetMemoryDrawbar"
+	aligned_string "MT_RequestMemoryDrawbar"
+	aligned_string "MT_RefreshParam"
+	aligned_string "MT_ExecPresentation"
 	aligned_string "MT_StartPresentation"
-	.asciz "MT_ReadSong"
+	aligned_string "MT_ReadSong"
 	.byte 0x4d, 0x54
-	.asciz "_ReadAction"
-	.asciz "MT_ReadPresentation"
+	aligned_string "_ReadAction"
+	aligned_string "MT_ReadPresentation"
 	aligned_string "MT_CheckPart"
-	.asciz "MT_GetLswDataNo"
+	aligned_string "MT_GetLswDataNo"
 	.byte 0x4d, 0x54
 	.asciz "_GetPart"
 	.byte 0xff, 0x0f, 0x00, 0x25, 0xb7, 0xf7, 0x00
@@ -41507,52 +41143,46 @@ LABEL_E81380:
 	.long LABEL_E81624
 LABEL_E81624:
 	.byte 0x00, 0xff
-	.asciz "IvMPverProc"
-	.asciz "AcDrawbarNameProc"
-	.asciz "AcDrawSettingProc"
+	aligned_string "IvMPverProc"
+	aligned_string "AcDrawbarNameProc"
+	aligned_string "AcDrawSettingProc"
 	.byte 0x41, 0x63
 	aligned_string "PleaseWaitProc"
-LABEL_E81668:
-	aligned_string "AcSndEMenuProc"
-LABEL_E81678:
-	.asciz "AcFdemoScreenProc"
+LABEL_E81668:	aligned_string "AcSndEMenuProc"
+LABEL_E81678:	aligned_string "AcFdemoScreenProc"
 	aligned_string "VwUserBitmapSpProc"
-	.asciz "AcPresentationBoxProc"
+	aligned_string "AcPresentationBoxProc"
 	aligned_string "AcLswPartPanProc"
-	.asciz "AcDrawEditBoxProc"
+	aligned_string "AcDrawEditBoxProc"
 LABEL_E816D8:
 	aligned_string "IvDemofeature2Proc"
 	aligned_string "IvDemofeature1Proc"
 LABEL_E81700:
-	.asciz "AcPresentationControlProc"
-	.asciz "PsVariBoxProc"
-LABEL_E81728:
-	.asciz "AcResetPageProc"
-LABEL_E81738:
-	.asciz "IvDrawbarSndEProc"
-	.asciz "IvDrawbarNormProc"
+	aligned_string "AcPresentationControlProc"
+	aligned_string "PsVariBoxProc"
+LABEL_E81728:	aligned_string "AcResetPageProc"
+LABEL_E81738:	aligned_string "IvDrawbarSndEProc"
+	aligned_string "IvDrawbarNormProc"
 	aligned_string "IvDrawbar2Proc"
 	aligned_string "IvDrawbar1Proc"
-	.asciz "IvDrawbarProc"
-	.asciz "IvPageOverWriteProc"
+	aligned_string "IvDrawbarProc"
+	aligned_string "IvPageOverWriteProc"
 	.byte 0x49, 0x76
-	.asciz "SoftverProc"
+	aligned_string "SoftverProc"
 	aligned_string "AcTrackMixerProc"
-	.asciz "AcPartMixerProc"
+	aligned_string "AcPartMixerProc"
 	.byte 0x50, 0x73
 	aligned_string "MixerControlProc"
 	aligned_string "AcWelcomScreenProc"
-	.asciz "IvSdscltyp2Proc"
+	aligned_string "IvSdscltyp2Proc"
 	.byte 0x49, 0x76
-	.asciz "Sdtecd1Proc"
+	aligned_string "Sdtecd1Proc"
 	aligned_string "IvSdtecdProc"
 	aligned_string "PsLabelBoxProc"
 	aligned_string "AcAccordionTabProc"
 	aligned_string "IvAccordionXProc"
-LABEL_E81858:
-	.asciz "IvAccordionProc"
-LABEL_E81868:
-	aligned_string "IvMesageProc"
+LABEL_E81858:	aligned_string "IvAccordionProc"
+LABEL_E81868:	aligned_string "IvMesageProc"
 	aligned_string "AcVolPartEditBoxProc"
 	aligned_string "AcLswPartEditBoxProc"
 	aligned_string "IvSdpartProc"
@@ -41690,7 +41320,7 @@ LABEL_E819DE:
 	.long 0x7	; <== Select Icon (0 = no-icon, 1=worm, 2=... etc)
 
 LABEL_E81A14:
-	.asciz "MIXER"
+	aligned_string "MIXER"
 
 
 LABEL_E81A1A:
@@ -41701,7 +41331,7 @@ LABEL_E81A1A:
 	.byte 0x00, 0x00, 0xff, 0x00, 0x00, 0x00, 0x8b, 0x00
 	.byte 0x72, 0xe6, 0x03, 0x00, 0x50, 0x1a, 0xe8, 0x00
 	.byte 0x04, 0x00, 0xa0, 0x01, 0x09, 0x00, 0x00, 0x00
-	.asciz "MASTER TUNING"
+	aligned_string "MASTER TUNING"
 LABEL_E81A5E:
 
 	.byte 0x1d, 0x00, 0x60, 0x01, 0x06, 0x00
@@ -41717,7 +41347,7 @@ LABEL_E81A5E:
 	.byte 0x05, 0x00, 0xa0, 0x01
 	.byte 0x84, 0x00, 0x00, 0x00
 LABEL_E81A94:
-	.asciz "KEY SCALING"
+	aligned_string "KEY SCALING"
 LABEL_E81AA0:
 
 	.byte 0x1d, 0x00, 0x60, 0x01, 0x06, 0x00
@@ -41734,7 +41364,7 @@ LABEL_E81AA0:
 	.byte 0xa0, 0x01, 0x91, 0x00, 0x00, 0x00
 
 LABEL_E81AD6:
-	.asciz "REVERB & EQ PRESETS"
+	aligned_string "REVERB & EQ PRESETS"
 LABEL_E81AEA:
 
 	.byte 0x1d, 0x00, 0x60, 0x01, 0x06, 0x00
@@ -41777,7 +41407,7 @@ LABEL_E81BAA:
 	.byte 0x0e, 0x00, 0xa0, 0x01, 0x92, 0x00, 0x00, 0x00
 
 LABEL_E81BE0:
-	.asciz "ACOUSTIC ILLUSION"
+	aligned_string "ACOUSTIC ILLUSION"
 LABEL_E81BF2:
 
 	.byte 0x20, 0x00, 0x61, 0x01, 0x06, 0x00
@@ -41819,7 +41449,7 @@ LABEL_E81C58:
 	.byte 0xff, 0x00, 0x00, 0x00, 0x8a, 0x00, 0x8a, 0xe6
 	.byte 0x03, 0x00, 0x8e, 0x1c, 0xe8, 0x00, 0x07, 0x00
 	.byte 0xa0, 0x01, 0x16, 0x00, 0x00, 0x00, 0x4c, 0x45
-	.asciz "FT HOLD"
+	aligned_string "FT HOLD"
 LABEL_E81C98:
 
 	.byte 0x1d, 0x00, 0x60, 0x01, 0x11, 0x00
@@ -41914,7 +41544,7 @@ LABEL_E81E06:
 	.byte 0x08, 0x00, 0x08, 0x00, 0x3a, 0x00, 0x40, 0x00
 	.byte 0xa5, 0x00, 0x52, 0x00, 0x26, 0x1e, 0xe8, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0xff, 0x00, 0x50, 0x41
-	.asciz "RT SELECT :"
+	aligned_string "RT SELECT :"
 LABEL_E81E34:
 
 
@@ -42290,7 +41920,7 @@ LABEL_E8267C:
 	.byte 0x08, 0x00, 0x32, 0x00, 0x80, 0x00, 0x0d, 0x01
 	.byte 0x92, 0x00, 0x9c, 0x26, 0xe8, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0xff, 0x00
-	.asciz "LEFT      CENTER      RIGHT"
+	aligned_string "LEFT      CENTER      RIGHT"
 LABEL_E826B8:
 	.byte 0x1c, 0x00, 0x61, 0x01, 0x30, 0x00, 0xff, 0xff
 	.byte 0xff, 0xff, 0x32, 0x00, 0x08, 0x00, 0x34, 0x00
@@ -42329,7 +41959,7 @@ LABEL_E82720:
 	.byte 0xff, 0x00, 0x00, 0x00, 0x04, 0x00, 0x8a, 0x00
 	.byte 0x01, 0x00, 0xfc, 0xe6, 0x03, 0x00, 0x04, 0x00
 	.byte 0x21, 0x01, 0xfe, 0xe6, 0x03, 0x00, 0x52, 0x45
-	.asciz "VERB DEPTH:"
+	aligned_string "VERB DEPTH:"
 	.byte 0x01, 0x00, 0x61, 0x01
 	.byte 0x36, 0x00, 0xff, 0xff, 0x39, 0x00, 0x37, 0x00
 	.byte 0x08, 0x00, 0x08, 0x00, 0x9c, 0x00, 0x9c, 0x00
@@ -42339,7 +41969,7 @@ LABEL_E82720:
 	.byte 0xff, 0x00, 0x00, 0x00, 0x04, 0x00, 0x8b, 0x00
 	.byte 0x01, 0x00, 0x00, 0xe7, 0x03, 0x00, 0x05, 0x00
 	.byte 0x21, 0x01, 0x02, 0xe7, 0x03, 0x00, 0x44, 0x53
-	.asciz "P EFFECT  :"
+	aligned_string "P EFFECT  :"
 	.byte 0x01, 0x00, 0x61, 0x01
 	.byte 0x36, 0x00, 0xff, 0xff, 0x3a, 0x00, 0x38, 0x00
 	.byte 0x08, 0x00, 0xa3, 0x00, 0x72, 0x00, 0x37, 0x01
@@ -42349,7 +41979,7 @@ LABEL_E82720:
 	.byte 0xff, 0x00, 0x00, 0x00, 0x04, 0x00, 0x0a, 0x00
 	.byte 0x01, 0x00, 0x04, 0xe7, 0x03, 0x00, 0x06, 0x00
 	.byte 0x21, 0x01, 0x06, 0xe7, 0x03, 0x00, 0x44, 0x49
-	.asciz "GITAL EFF.:"
+	aligned_string "GITAL EFF.:"
 LABEL_E8281C:
 
 
@@ -42522,7 +42152,7 @@ LABEL_E82B7E:
 	.byte 0x00, 0x00, 0x04, 0x00, 0x8a, 0x00, 0x01, 0x00
 	.byte 0x44, 0xe7, 0x03, 0x00, 0x0c, 0x00, 0x21, 0x01
 	.byte 0x46, 0xe7, 0x03, 0x00
-	.asciz "GLIDE PEDAL :"
+	aligned_string "GLIDE PEDAL :"
 	.byte 0x01, 0x00, 0x61, 0x01, 0x4d, 0x00
 	.byte 0xff, 0xff, 0x50, 0x00, 0x4e, 0x00, 0x08, 0x00
 	.byte 0x08, 0x00, 0x9c, 0x00, 0x9c, 0x00, 0xb5, 0x00
@@ -42531,7 +42161,7 @@ LABEL_E82B7E:
 	.byte 0x00, 0x00, 0x04, 0x00, 0x8b, 0x00, 0x01, 0x00
 	.byte 0x48, 0xe7, 0x03, 0x00, 0x0d, 0x00, 0x21, 0x01
 	.byte 0x4a, 0xe7, 0x03, 0x00
-	.asciz "SUSTAIN PDL :"
+	aligned_string "SUSTAIN PDL :"
 	.byte 0x01, 0x00, 0x61, 0x01, 0x4d, 0x00
 	.byte 0xff, 0xff, 0x51, 0x00, 0x4f, 0x00, 0x08, 0x00
 	.byte 0xa3, 0x00, 0x72, 0x00, 0x37, 0x01, 0x8b, 0x00
@@ -42540,7 +42170,7 @@ LABEL_E82B7E:
 	.byte 0x00, 0x00, 0x04, 0x00, 0x0a, 0x00, 0x01, 0x00
 	.byte 0x4c, 0xe7, 0x03, 0x00, 0x0f, 0x00, 0x21, 0x01
 	.byte 0x4e, 0xe7, 0x03, 0x00
-	.asciz "AFTER TOUCH :"
+	aligned_string "AFTER TOUCH :"
 LABEL_E82C7A:
 
 
@@ -42557,7 +42187,7 @@ LABEL_E82C7A:
 	.byte 0x00, 0x00, 0x04, 0x00, 0x0b, 0x00, 0x01, 0x00
 	.byte 0x50, 0xe7, 0x03, 0x00, 0x0e, 0x00, 0x21, 0x01
 	.byte 0x52, 0xe7, 0x03, 0x00
-	.asciz "KEY SCALING :"
+	aligned_string "KEY SCALING :"
 	.byte 0x01, 0x00, 0x61, 0x01, 0x4d, 0x00
 	.byte 0xff, 0xff, 0xff, 0xff, 0x52, 0x00, 0x08, 0x00
 	.byte 0xa3, 0x00, 0x50, 0x00, 0x37, 0x01, 0x69, 0x00
@@ -42566,7 +42196,7 @@ LABEL_E82C7A:
 	.byte 0x00, 0x00, 0x04, 0x00, 0x09, 0x00, 0x01, 0x00
 	.byte 0x54, 0xe7, 0x03, 0x00, 0x10, 0x00, 0x21, 0x01
 	.byte 0x56, 0xe7, 0x03, 0x00
-	.asciz "PART EXP PDL:"
+	aligned_string "PART EXP PDL:"
 LABEL_E82D32:
 
 
@@ -42576,7 +42206,7 @@ LABEL_E82D32:
 	.byte 0xf8, 0x00, 0x00, 0x00, 0x02, 0x00, 0xa0, 0x01
 	.byte 0x58, 0xe7, 0x03, 0x00, 0x5c, 0x2d, 0xe8, 0x00
 	.byte 0x09, 0x00, 0x00, 0x00
-	.asciz "MASTER TUNING"
+	aligned_string "MASTER TUNING"
 LABEL_E82D6A:
 
 
@@ -42671,7 +42301,7 @@ LABEL_E82EFE:
 	.byte 0x00, 0x00, 0xff, 0x00, 0x01, 0x00, 0x0c, 0x00
 	.byte 0x89, 0x00, 0x01, 0x00, 0x6e, 0xe7, 0x03, 0x00
 	.byte 0x18, 0x00, 0x21, 0x01, 0x70, 0xe7, 0x03, 0x00
-	.asciz "SCALING TYPE  :"
+	aligned_string "SCALING TYPE  :"
 LABEL_E82F48:
 
 
@@ -42683,7 +42313,7 @@ LABEL_E82F48:
 	.byte 0x0c, 0x00, 0x8a, 0x00, 0x01, 0x00, 0x72, 0xe7
 	.byte 0x03, 0x00, 0x19, 0x00, 0x21, 0x01, 0x74, 0xe7
 	.byte 0x03, 0x00
-	.asciz "SCALING SHIFT :"
+	aligned_string "SCALING SHIFT :"
 LABEL_E82F92:
 
 
@@ -42703,7 +42333,7 @@ LABEL_E82FBE:
 	.byte 0x00, 0x00, 0xff, 0x00, 0x01, 0x00, 0x07, 0x00
 	.byte 0x8b, 0x00, 0x01, 0x00, 0x78, 0xe7, 0x03, 0x00
 	.byte 0x1a, 0x00, 0x21, 0x01, 0x7a, 0xe7, 0x03, 0x00
-	.asciz "SCALING MODE  :"
+	aligned_string "SCALING MODE  :"
 LABEL_E83008:
 
 
@@ -43065,7 +42695,7 @@ LABEL_E83664:
 	.byte 0xef, 0x00, 0xf8, 0x00, 0x00, 0x00, 0x02, 0x00
 	.byte 0xa0, 0x01, 0xb4, 0xe7, 0x03, 0x00, 0x8e, 0x36
 	.byte 0xe8, 0x00, 0x16, 0x00, 0x00, 0x00, 0x4c, 0x45
-	.asciz "FT HOLD SETTING"
+	aligned_string "FT HOLD SETTING"
 LABEL_E836A0:
 
 
@@ -43098,7 +42728,7 @@ LABEL_E83716:
 	.long LABEL_E83740
 	.byte 0x07, 0x00, 0x00, 0x00
 LABEL_E83740:
-	.asciz "MIXER"
+	aligned_string "MIXER"
 	.byte 0x16, 0x00
 	.byte 0x61, 0x01, 0x00, 0x00, 0xff, 0xff, 0x02, 0x00
 	.byte 0xff, 0xff, 0x08, 0x00, 0xf5, 0x00, 0x06, 0x00
@@ -43239,7 +42869,7 @@ LABEL_E838DC:
 	.byte 0xe8, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0x00
 	.byte 0x01, 0x00, 0xe4, 0xe7, 0x03, 0x00, 0xe6, 0xe7
 	.byte 0x03, 0x00
-	.asciz "COUNTRY"
+	aligned_string "COUNTRY"
 	.byte 0x07, 0x00, 0x61, 0x01, 0x06, 0x00
 	.byte 0xff, 0xff, 0x11, 0x00, 0x0f, 0x00, 0x08, 0x00
 	.byte 0x3c, 0x00, 0xb0, 0x00, 0x7f, 0x00, 0xbf, 0x00
@@ -43247,7 +42877,7 @@ LABEL_E838DC:
 	.byte 0xe8, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0x00
 	.byte 0x01, 0x00, 0xe8, 0xe7, 0x03, 0x00, 0xea, 0xe7
 	.byte 0x03, 0x00
-	.asciz "THEATRE"
+	aligned_string "THEATRE"
 	.byte 0x07, 0x00, 0x61, 0x01, 0x06, 0x00
 	.byte 0xff, 0xff, 0x12, 0x00, 0x10, 0x00, 0x08, 0x00
 	.byte 0x94, 0x00, 0x38, 0x00, 0xbf, 0x00, 0x47, 0x00
@@ -43287,7 +42917,7 @@ LABEL_E83B78:
 	.byte 0x00, 0x00, 0x02, 0x00, 0xa8, 0x3b, 0xe8, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0xff, 0x00, 0x01, 0x00
 	.byte 0xfc, 0xe7, 0x03, 0x00, 0xfe, 0xe7, 0x03, 0x00
-	.asciz "BLOCK"
+	aligned_string "BLOCK"
 	.byte 0x07, 0x00
 	.byte 0x61, 0x01, 0x06, 0x00, 0xff, 0xff, 0x17, 0x00
 	.byte 0x15, 0x00, 0x08, 0x00, 0x94, 0x00, 0x9c, 0x00
@@ -43295,7 +42925,7 @@ LABEL_E83B78:
 	.byte 0x02, 0x00, 0xde, 0x3b, 0xe8, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0xff, 0x00, 0x01, 0x00, 0x00, 0xe8
 	.byte 0x03, 0x00, 0x02, 0xe8, 0x03, 0x00, 0x48, 0x41
-	.asciz "RD ROCK"
+	aligned_string "RD ROCK"
 LABEL_E83BE8:
 	.byte 0x07, 0x00, 0x61, 0x01, 0x06, 0x00, 0xff, 0xff
 	.byte 0x18, 0x00, 0x16, 0x00, 0x08, 0x00, 0x94, 0x00
@@ -43303,7 +42933,7 @@ LABEL_E83BE8:
 	.byte 0x00, 0x00, 0x02, 0x00, 0x18, 0x3c, 0xe8, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0xff, 0x00, 0x01, 0x00
 	.byte 0x04, 0xe8, 0x03, 0x00, 0x06, 0xe8, 0x03, 0x00
-	.asciz "FANFARE"
+	aligned_string "FANFARE"
 LABEL_E83C20:
 	.byte 0x09, 0x00, 0x61, 0x01, 0x06, 0x00, 0xff, 0xff
 	.byte 0xff, 0xff, 0x17, 0x00, 0x18, 0x00, 0x60, 0x00
@@ -43337,7 +42967,7 @@ LABEL_E83C84:
 	.byte 0xff, 0x00, 0x00, 0x00, 0x09, 0x00, 0xff, 0x00
 	.byte 0x01, 0x00, 0x10, 0xe8, 0x03, 0x00, 0x16, 0x00
 	.byte 0x21, 0x01, 0x12, 0xe8, 0x03, 0x00, 0x4f, 0x52
-	.asciz "CHESTRATOR  :"
+	aligned_string "CHESTRATOR  :"
 LABEL_E83CCE:
 
 
@@ -43354,7 +42984,7 @@ LABEL_E83CCE:
 	.byte 0xef, 0x00, 0xf8, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0xa0, 0x01, 0x14, 0xe8, 0x03, 0x00, 0x1e, 0x3d
 	.byte 0xe8, 0x00, 0x07, 0x00, 0x00, 0x00, 0x54, 0x52
-	.asciz "ACK MIXER"
+	aligned_string "ACK MIXER"
 	.byte 0x16, 0x00, 0x61, 0x01, 0x00, 0x00
 	.byte 0xff, 0xff, 0x02, 0x00, 0xff, 0xff, 0x08, 0x00
 	.byte 0xf5, 0x00, 0x06, 0x00, 0x3b, 0x01, 0x17, 0x00
@@ -43387,7 +43017,7 @@ LABEL_E83DC8:
 	.zero 8
 	.byte 0xff, 0x00, 0x00, 0x00, 0xf8, 0x3d, 0xe8, 0x00
 	.byte 0x89, 0x00, 0x1e, 0xe8, 0x03, 0x00, 0x12, 0x00
-	.asciz "Start the internal DEMO"
+	aligned_string "Start the internal DEMO"
 LABEL_E83E10:
 
 
@@ -43426,7 +43056,7 @@ LABEL_E83E98:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0x00
 	.byte 0x00, 0x00, 0xde, 0x3e, 0xe8, 0x00, 0x8b, 0x00
 	.byte 0x30, 0xe8, 0x03, 0x00, 0x13, 0x00, 0x53, 0x74
-	.asciz "art the loaded DEMO"
+	aligned_string "art the loaded DEMO"
 LABEL_E83EF4:
 
 
@@ -43454,7 +43084,7 @@ LABEL_E83F5E:
 	.byte 0xff, 0xff, 0x08, 0x00, 0xb0, 0x00, 0xde, 0x00
 	.byte 0x38, 0x01, 0xf0, 0x00, 0x7e, 0x3f, 0xe8, 0x00
 	.byte 0x05, 0x00, 0x00, 0x00, 0x00, 0x00, 0x50, 0x72
-	.asciz "esentation Mode"
+	aligned_string "esentation Mode"
 LABEL_E83F90:
 
 
@@ -43472,7 +43102,7 @@ LABEL_E83FB2:
 	.long LABEL_E83FD2
 	.byte 0x05, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00
-	.asciz "Loading Now...."
+	aligned_string "Loading Now...."
 LABEL_E83FE2:
 
 
@@ -43579,8 +43209,8 @@ LABEL_E84140:
 	.byte 0x5d, 0x00, 0x00, 0x00, 0x00, 0x00, 0xf0, 0x41
 	.byte 0xe8, 0x00, 0xe0, 0x41, 0xe8, 0x00, 0x4a, 0xe8
 	.byte 0x03, 0x00, 0x89, 0x00, 0x01, 0x00, 0x01, 0x00
-	.asciz "DRAWBAR SETTING"
-	.asciz "DRAWBAR SETTING"
+	aligned_string "DRAWBAR SETTING"
+	aligned_string "DRAWBAR SETTING"
 LABEL_E84200:
 
 
@@ -43604,7 +43234,7 @@ LABEL_E84240:
 	.byte 0x62, 0x00, 0x37, 0x01, 0x71, 0x00, 0x07, 0x00
 	.byte 0xc1, 0x00, 0x66, 0x42, 0xe8, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x31, 0x36
-	.asciz "' 5  ' 8'  4' 2  ' 2' 1  '1  ' 1'"
+	aligned_string "' 5  ' 8'  4' 2  ' 2' 1  '1  ' 1'"
 LABEL_E8428A:
 
 
@@ -43661,7 +43291,7 @@ LABEL_E8434A:
 	.byte 0x00, 0x00, 0xff, 0x00, 0x00, 0x00, 0x03, 0x00
 	.byte 0x0a, 0x00, 0x01, 0x00, 0x5c, 0xe8, 0x03, 0x00
 	.byte 0x22, 0x00, 0x21, 0x01, 0x5e, 0xe8, 0x03, 0x00
-	.asciz "DECAY :"
+	aligned_string "DECAY :"
 LABEL_E843B0:
 	.byte 0x1b, 0x00, 0x61, 0x01, 0x16, 0x00, 0xff, 0xff
 	.byte 0x19, 0x00, 0x17, 0x00, 0x08, 0x00, 0xd3, 0x00
@@ -43671,7 +43301,7 @@ LABEL_E843B0:
 	.byte 0x03, 0x00, 0x0b, 0x00, 0x01, 0x00, 0x60, 0xe8
 	.byte 0x03, 0x00, 0x23, 0x00, 0x21, 0x01, 0x62, 0xe8
 	.byte 0x03, 0x00
-	.asciz "LEVEL :"
+	aligned_string "LEVEL :"
 	.byte 0x1b, 0x00, 0x61, 0x01, 0x16, 0x00
 	.byte 0xff, 0xff, 0x1a, 0x00, 0x18, 0x00, 0x08, 0x00
 	.byte 0x08, 0x00, 0x72, 0x00, 0x9c, 0x00, 0x8b, 0x00
@@ -43746,7 +43376,7 @@ LABEL_E8456E:
 	.byte 0x20, 0x00, 0x08, 0x00, 0x36, 0x00, 0x23, 0x00
 	.byte 0x71, 0x00, 0x35, 0x00, 0x8e, 0x45, 0xe8, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0xff, 0x00, 0x54, 0x52
-	.asciz "EMOLO"
+	aligned_string "EMOLO"
 	.byte 0x14, 0x00
 	.byte 0x61, 0x01, 0x1e, 0x00, 0xff, 0xff, 0x23, 0x00
 	.byte 0x21, 0x00, 0x18, 0x00, 0x88, 0x00, 0x20, 0x00
@@ -43901,7 +43531,7 @@ LABEL_E84840:
 	.byte 0x0b, 0x00, 0xff, 0xff, 0x08, 0x00, 0x66, 0x00
 	.byte 0x28, 0x00, 0xd1, 0x00, 0x3a, 0x00, 0x60, 0x48
 	.byte 0xe8, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0x00
-	.asciz "TYPE : GERMAN"
+	aligned_string "TYPE : GERMAN"
 	.byte 0x1e, 0x00
 	.byte 0x61, 0x01, 0x09, 0x00, 0xff, 0xff, 0x0c, 0x00
 	.byte 0x0a, 0x00, 0x08, 0x00, 0x65, 0x00, 0x44, 0x00
@@ -43917,7 +43547,7 @@ LABEL_E84888:
 	.byte 0x01, 0x00, 0x08, 0x00
 	.byte 0x42, 0x41, 0x53, 0x53
 	.byte 0x31, 0x00
-	.asciz "BASS1"
+	aligned_string "BASS1"
 LABEL_E848C0:
 
 
@@ -43929,7 +43559,7 @@ LABEL_E848C0:
 	.byte 0x01, 0x00, 0x09, 0x00
 	.byte 0x42, 0x41, 0x53, 0x53
 	.byte 0x32, 0x00
-	.asciz "BASS2"
+	aligned_string "BASS2"
 LABEL_E848F8:
 	.byte 0x06, 0x00, 0x61, 0x01, 0x09, 0x00, 0xff, 0xff
 	.byte 0x0f, 0x00, 0x0d, 0x00, 0x08, 0x00, 0x2c, 0x00
@@ -43972,8 +43602,8 @@ LABEL_E84970:
 	.byte 0x03, 0x00, 0xf6, 0x49, 0xe8, 0x00, 0xf2, 0x49
 	.byte 0xe8, 0x00, 0x7e, 0x39, 0x35, 0x00, 0x7e, 0x39
 	.byte 0x35, 0x00
-	.asciz "~95~95~95"
-	.asciz "~95~95~95"
+	aligned_string "~95~95~95"
+	aligned_string "~95~95~95"
 	.byte 0x06, 0x00
 	.byte 0x61, 0x01, 0x09, 0x00, 0xff, 0xff, 0x13, 0x00
 	.byte 0x11, 0x00, 0x08, 0x00, 0xa4, 0x00, 0xb8, 0x00
@@ -43984,10 +43614,8 @@ LABEL_E84970:
 	.byte 0x98, 0xe8, 0x03, 0x00, 0x04, 0x00, 0x01, 0x00
 	.byte 0x04, 0x00, 0x44, 0x4a, 0xe8, 0x00, 0x42, 0x4a
 	.byte 0xe8, 0x00, 0x00, 0xff, 0x7e, 0x39, 0x35, 0x00
-LABEL_E84A48:
-	.asciz "~95 ~95"
-LABEL_E84A50:
-	.asciz "~95 ~95"
+LABEL_E84A48:	aligned_string "~95 ~95"
+LABEL_E84A50:	aligned_string "~95 ~95"
 LABEL_E84A58:
 	.byte 0x06, 0x00, 0x61, 0x01, 0x09, 0x00, 0xff, 0xff
 	.byte 0x14, 0x00, 0x12, 0x00, 0x08, 0x00, 0xcc, 0x00
@@ -43999,8 +43627,8 @@ LABEL_E84A58:
 	.long LABEL_E84A8C
 LABEL_E84A8C:
 	.byte 0x00, 0xff, 0x00, 0xff
-	.asciz "~95~95~95"
-	.asciz "~95~95~95"
+	aligned_string "~95~95~95"
+	aligned_string "~95~95~95"
 	.byte 0x06, 0x00, 0x61, 0x01
 	.byte 0x09, 0x00, 0xff, 0xff, 0x15, 0x00, 0x13, 0x00
 	.byte 0x08, 0x00, 0xf4, 0x00, 0xb8, 0x00, 0x13, 0x01
@@ -44108,9 +43736,9 @@ LABEL_E84C90:
 	.byte 0x03, 0x00, 0x01, 0x00, 0x0d, 0x00, 0x12, 0x4d
 	.byte 0xe8, 0x00, 0x0e, 0x4d, 0xe8, 0x00, 0x7e, 0x39
 	.byte 0x35, 0x00, 0x7e, 0x39, 0x35, 0x00, 0x7e, 0x39
-	.asciz "5 ~95"
+	aligned_string "5 ~95"
 	.byte 0x7e, 0x39
-	.asciz "5 ~95"
+	aligned_string "5 ~95"
 	.byte 0x06, 0x00
 	.byte 0x61, 0x01, 0x17, 0x00, 0xff, 0xff, 0x21, 0x00
 	.byte 0x1f, 0x00, 0x08, 0x00, 0xa4, 0x00, 0xb8, 0x00
@@ -44121,10 +43749,8 @@ LABEL_E84C90:
 	.byte 0xb4, 0xe8, 0x03, 0x00, 0x04, 0x00, 0x01, 0x00
 	.byte 0x0e, 0x00, 0x5c, 0x4d, 0xe8, 0x00, 0x5a, 0x4d
 	.byte 0xe8, 0x00, 0x00, 0xff, 0x7e, 0x39, 0x35, 0x00
-LABEL_E84D60:
-	.asciz "~95 ~95"
-LABEL_E84D68:
-	.asciz "~95 ~95"
+LABEL_E84D60:	aligned_string "~95 ~95"
+LABEL_E84D68:	aligned_string "~95 ~95"
 LABEL_E84D70:
 	.byte 0x06, 0x00, 0x61, 0x01, 0x17, 0x00, 0xff, 0xff
 	.byte 0x22, 0x00, 0x20, 0x00, 0x08, 0x00, 0xcc, 0x00
@@ -44136,8 +43762,8 @@ LABEL_E84D70:
 	.long LABEL_E84DA4
 LABEL_E84DA4:
 	.byte 0x00, 0xff, 0x00, 0xff
-	.asciz "~95 ~95"
-	.asciz "~95 ~95"
+	aligned_string "~95 ~95"
+	aligned_string "~95 ~95"
 LABEL_E84DB8:
 	.byte 0x06, 0x00, 0x61, 0x01, 0x17, 0x00, 0xff, 0xff
 	.byte 0x23, 0x00, 0x21, 0x00, 0x08, 0x00, 0xf4, 0x00
@@ -44844,7 +44470,7 @@ LABEL_E85418:
 	.long LABEL_E85A48
 LABEL_E85A48:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
-	.asciz "Sdmenu2"
+	aligned_string "Sdmenu2"
 	.byte 0x00, 0xff
 LABEL_E85A58:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
@@ -44852,7 +44478,7 @@ LABEL_E85A60:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 LABEL_E85A68:
 	.byte 0x00, 0xff
-	.asciz "Sdmenu1"
+	aligned_string "Sdmenu1"
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 LABEL_E85A78:
 	.byte 0x00, 0xff
@@ -44903,25 +44529,25 @@ LABEL_E85A78:
 	.byte 0xe8, 0x00, 0xe4, 0x5b, 0xe8, 0x00, 0xe2, 0x5b
 	.byte 0xe8, 0x00, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
-	.asciz "SdpartOth"
+	aligned_string "SdpartOth"
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
-	.asciz "SdpartBnd"
+	aligned_string "SdpartBnd"
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
-	.asciz "SdpartTun"
+	aligned_string "SdpartTun"
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
-	.asciz "SdpartKey"
+	aligned_string "SdpartKey"
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 	.byte 0x00, 0xff
-	.asciz "SdpartSus"
+	aligned_string "SdpartSus"
 	.byte 0x00, 0xff, 0x00, 0xff
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
-	.asciz "SdpartEff"
+	aligned_string "SdpartEff"
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 	.byte 0x00, 0xff, 0x00, 0xff
-	.asciz "SdpartPan"
+	aligned_string "SdpartPan"
 	.byte 0x00, 0xff
 	.byte 0x00, 0xff, 0x00, 0xff
-	.asciz "SdpartVol"
+	aligned_string "SdpartVol"
 	.byte 0x00, 0xff
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
@@ -44933,7 +44559,7 @@ LABEL_E85A78:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 	aligned_string "SdpartPart"
-	.asciz "SdpartSound"
+	aligned_string "SdpartSound"
 	.byte 0x00, 0xff
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
@@ -44947,7 +44573,7 @@ LABEL_E85D04:
 	.byte 0x00, 0xff, 0x00, 0xff
 LABEL_E85D08:
 	.byte 0x00, 0xff, 0x00, 0xff
-	.asciz "Sdmtune"
+	aligned_string "Sdmtune"
 	.byte 0x00, 0x5f, 0xe8, 0x00
 	.long LABEL_E85EF2
 	.long LABEL_E85EF0
@@ -45021,30 +44647,30 @@ LABEL_E85E20:
 	aligned_string "ScalingKey11"
 LABEL_E85E40:
 	aligned_string "ScalingKey10"
-	.asciz "ScalingKey9"
-	.asciz "ScalingKey8"
+	aligned_string "ScalingKey9"
+	aligned_string "ScalingKey8"
 	.byte 0x53, 0x63
-	.asciz "alingKey7"
-	.asciz "ScalingKey6"
+	aligned_string "alingKey7"
+	aligned_string "ScalingKey6"
 	.byte 0x53, 0x63
-	.asciz "alingKey5"
-	.asciz "ScalingKey4"
+	aligned_string "alingKey5"
+	aligned_string "ScalingKey4"
 	.byte 0x53, 0x63
-	.asciz "alingKey3"
-	.asciz "ScalingKey2"
+	aligned_string "alingKey3"
+	aligned_string "ScalingKey2"
 	.byte 0x53, 0x63
-	.asciz "alingKey1"
+	aligned_string "alingKey1"
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 LABEL_E85EC0:
 	.byte 0x00, 0xff, 0x00, 0xff
-	.asciz "Sdscltyp2"
+	aligned_string "Sdscltyp2"
 	.byte 0x00, 0xff
 LABEL_E85ED0:
 	.byte 0x00, 0xff, 0x00, 0xff
-	.asciz "ScalingType"
+	aligned_string "ScalingType"
 LABEL_E85EE0:
 	.byte 0x00, 0xff
-	.asciz "Sdscltyp1"
+	aligned_string "Sdscltyp1"
 	.byte 0x00, 0xff, 0x00, 0xff
 LABEL_E85EF0:
 	.byte 0x00, 0xff
@@ -45058,7 +44684,7 @@ LABEL_E85EF0:
 	.byte 0xe8, 0x00, 0x42, 0x5f, 0xe8, 0x00, 0x40, 0x5f
 	.byte 0xe8, 0x00, 0x3e, 0x5f, 0xe8, 0x00, 0x00, 0xff
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
-	.asciz "Sdmixer"
+	aligned_string "Sdmixer"
 	incm8	8, (xiz)
 	.byte 0xe8, 0x00, 0x7a, 0x60, 0xe8, 0x00, 0x78, 0x60
 	.byte 0xe8, 0x00, 0x76, 0x60, 0xe8, 0x00, 0x74, 0x60
@@ -45076,26 +44702,26 @@ LABEL_E85EF0:
 	.byte 0xe8, 0x00, 0xca, 0x5f, 0xe8, 0x00, 0xc8, 0x5f
 	.byte 0xe8, 0x00, 0xc6, 0x5f, 0xe8, 0x00, 0x00, 0xff
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
-	.asciz "Sdtecd2"
+	aligned_string "Sdtecd2"
 	.byte 0x00, 0xff
-	.asciz "TcFanfare"
+	aligned_string "TcFanfare"
 	aligned_string "TcHardRock"
-	.asciz "TcBlock"
+	aligned_string "TcBlock"
 	.byte 0x54, 0x63
 	aligned_string "Octave"
 	aligned_string "TcBigBandReeds"
 	aligned_string "TcBigBandBrass"
 	aligned_string "TcHymn"
-	.asciz "TcTheatre"
-	.asciz "TcCountry"
-	.asciz "TcDuet2"
-	.asciz "TcDuet1"
-	.asciz "TcOpen2"
-	.asciz "TcOpen1"
-	.asciz "TcClose"
+	aligned_string "TcTheatre"
+	aligned_string "TcCountry"
+	aligned_string "TcDuet2"
+	aligned_string "TcDuet1"
+	aligned_string "TcOpen2"
+	aligned_string "TcOpen1"
+	aligned_string "TcClose"
 	.byte 0x00, 0xff, 0x00, 0xff
 	.byte 0x00, 0xff
-	.asciz "Sdtecd1"
+	aligned_string "Sdtecd1"
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 	.byte 0x00, 0xff
 	aligned_string "SdtecdPage"
@@ -45105,7 +44731,7 @@ LABEL_E85EF0:
 	.byte 0xe8, 0x00, 0xa4, 0x60, 0xe8, 0x00, 0xa2, 0x60
 	.byte 0xe8, 0x00, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 	.byte 0x00, 0xff
-	.asciz "Sqmixer"
+	aligned_string "Sqmixer"
 	.byte 0x72, 0x61, 0xe8, 0x00, 0x70, 0x61
 	.byte 0xe8, 0x00, 0x62, 0x61, 0xe8, 0x00, 0x60, 0x61
 	.byte 0xe8, 0x00, 0x5e, 0x61, 0xe8, 0x00, 0x50, 0x61
@@ -45115,21 +44741,21 @@ LABEL_E85EF0:
 	.byte 0xe8, 0x00, 0x08, 0x61, 0xe8, 0x00, 0x06, 0x61
 	.byte 0xe8, 0x00, 0xf4, 0x60, 0xe8, 0x00, 0xf2, 0x60
 	.byte 0xe8, 0x00, 0x00, 0xff
-	.asciz "PresentationTitle"
+	aligned_string "PresentationTitle"
 	.byte 0x00, 0xff
-	.asciz "LoadingPresentation"
+	aligned_string "LoadingPresentation"
 	.byte 0x00, 0xff
-	.asciz "PresentationControl"
-	.asciz "PlainScreen"
+	aligned_string "PresentationControl"
+	aligned_string "PlainScreen"
 	.byte 0x46, 0x44
-	.asciz "emoTitleBox"
+	aligned_string "emoTitleBox"
 	.byte 0x00, 0xff, 0x00, 0xff
 	.asciz "Demofeature2"
 	.byte 0xff, 0x00, 0xff
 	.byte 0x00, 0xff
 	aligned_string "Demofeature1"
 	.byte 0x00, 0xff
-	.asciz "Demofeature"
+	aligned_string "Demofeature"
 	inc	2, xde
 	.byte 0xe8, 0x00, 0xe8, 0x62, 0xe8, 0x00, 0xde, 0x62
 	.byte 0xe8, 0x00, 0xd2, 0x62, 0xe8, 0x00, 0xca, 0x62
@@ -45155,29 +44781,29 @@ LABEL_E85EF0:
 	.byte 0xe8, 0x00, 0x34, 0x62, 0xe8, 0x00, 0x32, 0x62
 	.byte 0xe8, 0x00, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
-	.asciz "DrawbarSndE"
+	aligned_string "DrawbarSndE"
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 	.byte 0x00, 0xff, 0x00, 0xff
-	.asciz "DrawTremolo"
-	.asciz "DrawbarPart"
-	.asciz "DrawbarNorm"
+	aligned_string "DrawTremolo"
+	aligned_string "DrawbarPart"
+	aligned_string "DrawbarNorm"
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 	aligned_string "Drawbar2"
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 	aligned_string "Drawbar1"
-	.asciz "DrawSetting"
+	aligned_string "DrawSetting"
 	.byte 0x00, 0xff
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 	.byte 0x00, 0xff
-	.asciz "Black23"
-	.asciz "White23"
-	.asciz "DrawPerc223"
+	aligned_string "Black23"
+	aligned_string "White23"
+	aligned_string "DrawPerc223"
 	.byte 0x44, 0x72
-	.asciz "awPerc4"
+	aligned_string "awPerc4"
 	.byte 0x00, 0xff
-	.asciz "Drawbar"
+	aligned_string "Drawbar"
 	.byte 0xf4, 0x63, 0xe8, 0x00, 0xf2, 0x63
 	.byte 0xe8, 0x00, 0xf0, 0x63, 0xe8, 0x00, 0xee, 0x63
 	.byte 0xe8, 0x00, 0xec, 0x63, 0xe8, 0x00, 0xea, 0x63
@@ -45208,10 +44834,10 @@ LABEL_E85EF0:
 	.byte 0x00, 0xff, 0x00, 0xff
 	aligned_string "Accordion1"
 	.byte 0x00, 0xff
-	.asciz "AccordionPart"
+	aligned_string "AccordionPart"
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 	.byte 0x00, 0xff, 0x00, 0xff
-	.asciz "Accordion"
+	aligned_string "Accordion"
 	inc	4, w
 	.byte 0xe8, 0x00, 0xc6, 0x64, 0xe8, 0x00, 0xbc, 0x64
 	.byte 0xe8, 0x00, 0xba, 0x64, 0xe8, 0x00, 0xb8, 0x64
@@ -45228,7 +44854,7 @@ LABEL_E85EF0:
 	.byte 0xe8, 0x00, 0x00, 0xff, 0x00, 0xff
 	.asciz "PleaseWait"
 	.byte 0xff, 0x00, 0xff
-	.asciz "NoMessage"
+	aligned_string "NoMessage"
 	.byte 0x00, 0xff
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 	.asciz "CheckMessage"
@@ -45239,7 +44865,7 @@ LABEL_E85EF0:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 	aligned_string "Reminder"
 	.byte 0x00, 0xff, 0x00, 0xff
-	.asciz "Completed"
+	aligned_string "Completed"
 	.byte 0x00, 0xff
 	aligned_string "Mesage"
 	.long LABEL_E8652C
@@ -45256,10 +44882,10 @@ LABEL_E85EF0:
 	.long LABEL_E86500
 LABEL_E86500:
 	.byte 0x00, 0xff
-	.asciz "MPver"
+	aligned_string "MPver"
 LABEL_E86508:
 	.byte 0x00, 0xff, 0x00, 0xff
-	.asciz "MPVersion"
+	aligned_string "MPVersion"
 	.byte 0x00, 0xff
 LABEL_E86518:
 	.byte 0x00, 0xff
@@ -45280,25 +44906,25 @@ LABEL_E86550:
 	aligned_string "SoundTable"
 LABEL_E86560:
 	aligned_string "SubProgram"
-	.asciz "MainTable"
+	aligned_string "MainTable"
 	.byte 0x4d, 0x61
-	.asciz "inProgram"
-	.asciz "Softver"
+	aligned_string "inProgram"
+	aligned_string "Softver"
 	aligned_string "MD_SOUND"
-	.asciz "TT_SDMENU"
+	aligned_string "TT_SDMENU"
 	.byte 0x54, 0x54
-	.asciz "_SDPART"
+	aligned_string "_SDPART"
 	aligned_string "TT_SDMTUNE"
-	.asciz "TT_SDSCLTYP"
-	.asciz "TT_SDLFTHLD"
+	aligned_string "TT_SDSCLTYP"
+	aligned_string "TT_SDLFTHLD"
 	aligned_string "TT_SDMIXER"
-	.asciz "TT_SDTECD"
+	aligned_string "TT_SDTECD"
 	aligned_string "TT_SQMIXER"
 	aligned_string "TT_DEMOFEATURE"
 	aligned_string "TT_DRAWBAR"
 	aligned_string "TT_ACCORDION"
-	.asciz "TT_MESAGE"
-	.asciz "TT_WELCOM"
+	aligned_string "TT_MESAGE"
+	aligned_string "TT_WELCOM"
 	aligned_string "TT_SOFTVER"
 	.byte 0xfb, 0x65, 0xf8, 0x00, 0xda, 0x3b, 0xf8, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x66, 0x66, 0xe8, 0x00
@@ -45387,33 +45013,33 @@ LABEL_E9529E:
 	.asciz "         "
 	aligned_string "  RHYTHM  "
 LABEL_E95420:
-	.asciz " CONTROL "
-	.asciz "   APC   "
-	.asciz "   MIC   "
+	aligned_string " CONTROL "
+	aligned_string "   APC   "
+	aligned_string "   MIC   "
 	.byte 0x4d, 0x45
-	.asciz "TRONOME"
+	aligned_string "TRONOME"
 LABEL_E95448:
-	.asciz "   MSP   "
-	.asciz "  DRUMS  "
+	aligned_string "   MSP   "
+	aligned_string "  DRUMS  "
 	aligned_string "   BASS   "
 LABEL_E95468:
-	.asciz " ACCOMP3 "
-	.asciz " ACCOMP2 "
-	.asciz " ACCOMP1 "
+	aligned_string " ACCOMP3 "
+	aligned_string " ACCOMP2 "
+	aligned_string " ACCOMP1 "
 	ldb	w, 0x20
 	aligned_string "R.BASS  "
-	.asciz "  CHORD  "
-	.asciz " PART 16 "
+	aligned_string "  CHORD  "
+	aligned_string " PART 16 "
 	ldb	w, 0x50
-	.asciz "ART 15 "
+	aligned_string "ART 15 "
 LABEL_E954B0:
-	.asciz " PART 14 "
-	.asciz " PART 13 "
-	.asciz " PART 12 "
+	aligned_string " PART 14 "
+	aligned_string " PART 13 "
+	aligned_string " PART 12 "
 	ldb	w, 0x50
-	.asciz "ART 11 "
+	aligned_string "ART 11 "
 LABEL_E954D8:
-	.asciz " PART 10 "
+	aligned_string " PART 10 "
 	aligned_string "  PART 9  "
 	aligned_string "  PART 8  "
 	aligned_string "  PART 7  "
@@ -45421,9 +45047,9 @@ LABEL_E954D8:
 	aligned_string "  PART 5  "
 	aligned_string "  PART 4  "
 	aligned_string "   LEFT   "
-	.asciz " RIGHT 2 "
+	aligned_string " RIGHT 2 "
 LABEL_E95540:
-	.asciz " RIGHT 1 "
+	aligned_string " RIGHT 1 "
 	aligned_string "SdPT"
 	.byte 0xd5, 0x01, 0xd5, 0x01, 0xd5, 0x01, 0xd5, 0x01
 	.byte 0xb1, 0x03, 0xff, 0x02, 0xb1, 0x03, 0xb1, 0x03
@@ -45473,12 +45099,12 @@ LABEL_E95540:
 	.byte 0xe9, 0x00, 0xc6, 0x56, 0xe9, 0x00, 0xb8, 0x56
 	.byte 0xe9, 0x00, 0xa8, 0x56, 0xe9, 0x00, 0x98, 0x56
 	.byte 0xe9, 0x00, 0x86, 0x56, 0xe9, 0x00, 0x49, 0x6e
-	.asciz "donesian Header"
+	aligned_string "donesian Header"
 	aligned_string "Italian Header"
 	aligned_string "Spanish Header"
-	.asciz "French Header"
+	aligned_string "French Header"
 	.byte 0x47, 0x65
-	.asciz "rman Header"
+	aligned_string "rman Header"
 	.asciz "English Header"
 	.byte 0xff, 0x40, 0x57, 0xe9, 0x00
 	.long LABEL_E95734
@@ -45487,12 +45113,12 @@ LABEL_E95540:
 	.long LABEL_E9570C
 	.long LABEL_E956FC
 LABEL_E956FC:
-	.asciz "Indonesian Text"
+	aligned_string "Indonesian Text"
 	aligned_string "Italian Text"
 	aligned_string "Spanish Text"
 LABEL_E95728:
-	.asciz "French Text"
-	.asciz "German Text"
+	aligned_string "French Text"
+	aligned_string "German Text"
 	.asciz "English Text"
 	.byte 0xff, 0x86, 0x57
 	.byte 0xe9, 0x00, 0x80, 0x57, 0xe9, 0x00, 0x78, 0x57
@@ -45501,9 +45127,9 @@ LABEL_E95728:
 	.byte 0x52, 0x4f, 0x52, 0x00
 	.byte 0x45, 0x52, 0x52, 0x4f
 	.byte 0x52, 0x00
-	.asciz "ERROR"
+	aligned_string "ERROR"
 	aligned_string "ERREUR"
-	.asciz "ERROR"
+	aligned_string "ERROR"
 	.byte 0x45, 0x52
 	.byte 0x52, 0x4f, 0x52, 0x00, 0xde, 0x57, 0xe9, 0x00
 	.long LABEL_E957D2
@@ -45511,16 +45137,12 @@ LABEL_E95728:
 	.long LABEL_E957BC
 	.long LABEL_E957B0
 	.long LABEL_E957A4
-LABEL_E957A4:
-	aligned_string "REMINDER !"
-LABEL_E957B0:
-	.asciz "REMINDER! "
+LABEL_E957A4:	aligned_string "REMINDER !"
+LABEL_E957B0:	.asciz "REMINDER! "
 	.byte 0xff, 0xa1, 0x52, 0x45, 0x43
 	aligned_string "UERDE!"
-LABEL_E957C8:
-	aligned_string "RAPPEL! "
-LABEL_E957D2:
-	aligned_string "HINWEIS ! "
+LABEL_E957C8:	aligned_string "RAPPEL! "
+LABEL_E957D2:	aligned_string "HINWEIS ! "
 	.asciz "REMINDER! "
 	.byte 0xff, 0x46, 0x58, 0xe9, 0x00, 0x34, 0x58
 	.byte 0xe9, 0x00, 0x2a, 0x58, 0xe9, 0x00, 0x1c, 0x58
@@ -45543,20 +45165,20 @@ LABEL_E957D2:
 	.asciz "POR FAVOR, ESPERE!"
 	.byte 0x56, 0x45
 	.asciz "UILLEZ PATIENTER!"	; DB "!", 000h
-	.asciz "BITTE WARTEN!"
+	aligned_string "BITTE WARTEN!"
 	.asciz "PLEASE WAIT!"
 	.byte 0xff, 0x16, 0x5b
 	.byte 0xe9, 0x00, 0x94, 0x5a, 0xe9, 0x00, 0xec, 0x59
 	.byte 0xe9, 0x00, 0x6a, 0x59, 0xe9, 0x00, 0x60, 0x59
 	.byte 0xe9, 0x00, 0xe6, 0x58, 0xe9, 0x00, 0x4d, 0x65
-	.asciz "mori internal diterima untuk selama 80 menit setelah power dimatikan. Simpan hasil pekerjaan anda kedalam  Floppy Disk."
+	aligned_string "mori internal diterima untuk selama 80 menit setelah power dimatikan. Simpan hasil pekerjaan anda kedalam  Floppy Disk."
 	aligned_string "REMINDER"
 	.ascii "La memoria interna es retenida alrededor de 80 minutos despu"
 	.byte 0xe9, 0x73
 	.ascii " de interrumpir la alimentaci"
 	.byte 0xf3, 0x6e, 0x2e
 	ldb	w, 0xa1
-	.asciz "Guarde su trabajo en un disquete!"
+	aligned_string "Guarde su trabajo en un disquete!"
 	.ascii "La m"
 	.byte 0xe9
 	.ascii "moire interne est conserv"
@@ -45565,7 +45187,7 @@ LABEL_E957D2:
 	.byte 0xe8
 	.ascii "s la coupure de l'alimentation g"
 	.byte 0xe9, 0x6e, 0xe9, 0x72
-	.asciz "ale de l'instrument. Sauvegardez SAVE votre travail sur disquette !"
+	aligned_string "ale de l'instrument. Sauvegardez SAVE votre travail sur disquette !"
 	aligned_string "Der Speicherinhalt bleibt etwa 80 Minuten nach Ausschalten des Keyboards erhalten. Speichern Sie Ihre Daten daher auf Diskette !"
 	aligned_string "The internal memory is retained for about 80 minutes after turning off the power. SAVE your work on Floppy Disk!"
 	.long LABEL_E95E52
@@ -45583,7 +45205,7 @@ LABEL_E95BA0:
 	.byte 0xf3, 0x6e, 0x20, 0x4f
 	.ascii "K. Por favor, vuelva a ingresar las configuraciones y presione el bot"
 	.byte 0xf3, 0x6e, 0x20
-	.asciz "OK para almacenarlas."
+	aligned_string "OK para almacenarlas."
 	.byte 0x56, 0x6f
 	.ascii "us n'avez pas press"
 	.byte 0xe9
@@ -45597,13 +45219,13 @@ LABEL_E95BA0:
 	.byte 0xe0
 	.ascii " nouveau les r"
 	.byte 0xe9
-	.asciz "glages et presser OK pour les enregistrer. "
+	aligned_string "glages et presser OK pour les enregistrer. "
 	.ascii "Die Einstellungen wurden nicht gespeichert da die Speicherung nicht mit OK best"
 	.byte 0xe4
 	.ascii "tigt wurde. Nehmen Sie die Einstellungen noch einmal vor und best"
 	.byte 0xe4, 0x74, 0x69
 	aligned_string "gen dann mit OK."
-	.asciz "The settings have been canceled because the storage procedure was not completed by pressing the OK button. Please enter the settings again and press OK to store them. "
+	aligned_string "The settings have been canceled because the storage procedure was not completed by pressing the OK button. Please enter the settings again and press OK to store them. "
 	.byte 0x3a, 0x5f, 0xe9, 0x00, 0x32, 0x5f
 	.byte 0xe9, 0x00, 0x2a, 0x5f, 0xe9, 0x00, 0x22, 0x5f
 	.byte 0xe9, 0x00, 0x1a, 0x5f, 0xe9, 0x00, 0x12, 0x5f
@@ -45611,7 +45233,7 @@ LABEL_E95BA0:
 	aligned_string "ERROR!"
 	aligned_string "ERROR!"
 	aligned_string "ERROR!"
-	.asciz "ERREUR!"
+	aligned_string "ERREUR!"
 	aligned_string "ERROR!"
 	.asciz "ERROR!"
 	.byte 0xff, 0x94, 0x60, 0xe9, 0x00, 0x54, 0x60
@@ -45629,7 +45251,7 @@ LABEL_E95BA0:
 	.ascii "Die Daten auf dieser Diskette stammen von einem anderen Ger"
 	.byte 0xe4
 	.byte 0x74, 0x2e, 0x00, 0xff
-	.asciz "The data on the disk that you are using is for a different product."
+	aligned_string "The data on the disk that you are using is for a different product."
 LABEL_E960D8:
 	.long LABEL_E96232
 	.long LABEL_E961DC
@@ -45640,23 +45262,23 @@ LABEL_E960D8:
 LABEL_E960F0:
 	aligned_string "Kesalahan sudah terjadi ketika disket sedang dipanggil. Harap dicoba lagi."
 	aligned_string "ERROR 01"
-	.asciz "Se ha producido un error mientras se cargaba el disco. Pruebe otra vez."
+	aligned_string "Se ha producido un error mientras se cargaba el disco. Pruebe otra vez."
 	.byte 0x55, 0x6e
 	.ascii "e erreur s'est produite pendant la proc"
 	.byte 0xe9
-	.asciz "dure de chargement. Essayez encore!"
+	aligned_string "dure de chargement. Essayez encore!"
 	aligned_string "Beim Laden von der Diskette ist ein Fehler aufgetreten. Bitte noch einmal versuchen."
-	.asciz "An error has occurred while the disk was loading. Please try again!"
+	aligned_string "An error has occurred while the disk was loading. Please try again!"
 	ldb	w, 0x63
 	.byte 0xe9, 0x00, 0x04, 0x63, 0xe9, 0x00, 0xd8, 0x62
 	.byte 0xe9, 0x00, 0xbc, 0x62, 0xe9, 0x00, 0xb2, 0x62
 	.byte 0xe9, 0x00, 0x8e, 0x62, 0xe9, 0x00, 0x54, 0x69
 	aligned_string "dak ada disket dalam disk drive."
 	aligned_string "ERROR 02"
-	.asciz "No hay disco en Disk Drive."
+	aligned_string "No hay disco en Disk Drive."
 	aligned_string "Il n'y a pas de disquette dans le lecteur."
-	.asciz "Keine Diskette im Laufwerk!"
-	.asciz "There is no disk in the disk drive."
+	aligned_string "Keine Diskette im Laufwerk!"
+	aligned_string "There is no disk in the disk drive."
 	.byte 0x58, 0x64, 0xe9, 0x00
 	.long LABEL_E9641E
 	.long LABEL_E963E8
@@ -45664,7 +45286,7 @@ LABEL_E960F0:
 	.long LABEL_E963B2
 	.long LABEL_E9635C
 LABEL_E9635C:
-	.asciz "File yang dicoba untuk dikeluarkan/ditampilkan, kosong.( File didalam disket kosong )"
+	aligned_string "File yang dicoba untuk dikeluarkan/ditampilkan, kosong.( File didalam disket kosong )"
 	aligned_string "ERROR 03"
 	.ascii "El disco que trat"
 	.byte 0xf3, 0x20, 0x64
@@ -45674,8 +45296,8 @@ LABEL_E963E8:
 	.ascii "Le fichier que vous avez essay"
 	.byte 0xe9, 0x20
 	aligned_string "de charger est vide!"
-	.asciz "Die Diskettenbank, die Sie gerade laden wollen, ist leer."
-	.asciz "The file that you tried to load is empty."
+	aligned_string "Die Diskettenbank, die Sie gerade laden wollen, ist leer."
+	aligned_string "The file that you tried to load is empty."
 	.byte 0xe4, 0x65, 0xe9, 0x00, 0x8a, 0x65
 	.byte 0xe9, 0x00, 0x3c, 0x65, 0xe9, 0x00, 0xe6, 0x64
 	.byte 0xe9, 0x00, 0xdc, 0x64, 0xe9, 0x00, 0x9a, 0x64
@@ -45685,7 +45307,7 @@ LABEL_E963E8:
 	aligned_string "Se ha producido un error mientras se almacenaban datos en el disco. Pruebe otra vez."
 	.ascii "Une erreur s'est produite pendant la proc"
 	.byte 0xe9, 0x64, 0x75
-	.asciz "re de sauvegarde. Essayez encore!"
+	aligned_string "re de sauvegarde. Essayez encore!"
 	aligned_string "Beim Speichern auf die Diskette ist ein Fehler aufgetreten. Bitte noch einmal versuchen."
 	aligned_string "An error has occurred while the disk was saving. Please try again!"
 	.long LABEL_E967FC
@@ -45695,7 +45317,7 @@ LABEL_E963E8:
 	.long LABEL_E966A2
 	.long LABEL_E96640
 LABEL_E96640:
-	.asciz "Disket yang Anda pergunakan sedang dikunci/diprotek. Bukalah proteksinya dan silahkan coba lagi. "
+	aligned_string "Disket yang Anda pergunakan sedang dikunci/diprotek. Bukalah proteksinya dan silahkan coba lagi. "
 	aligned_string "ERROR 06"
 	.ascii "El disco que est"
 	.byte 0xe1, 0x20, 0x75, 0x74
@@ -45715,7 +45337,7 @@ LABEL_E96640:
 	.ascii ". Schieben Sie den Schreibschutz zur"
 	.byte 0xfc, 0x63, 0x6b, 0x20
 	aligned_string "und speichern noch einmal."
-	.asciz "The disk that you are using is write protected. Please remove the write protection and try again."
+	aligned_string "The disk that you are using is write protected. Please remove the write protection and try again."
 	.byte 0x8a, 0x69
 	.byte 0xe9, 0x00, 0x52, 0x69, 0xe9, 0x00, 0x08, 0x69
 	.byte 0xe9, 0x00, 0xca, 0x68, 0xe9, 0x00, 0xc0, 0x68
@@ -45730,8 +45352,8 @@ LABEL_E96640:
 	.ascii "La disquette que vous utilisez est satur"
 	.byte 0xe9
 	.asciz "e. Utilisez une autre disquette!"
-	.asciz "Ihre Diskette ist voll. Benutzen Sie bette eine andere."
-	.asciz "The disk that you are using is full. Please use another disk."
+	aligned_string "Ihre Diskette ist voll. Benutzen Sie bette eine andere."
+	aligned_string "The disk that you are using is full. Please use another disk."
 	.long LABEL_E96BF4
 	.long LABEL_E96BA6
 	.long LABEL_E96B06
@@ -45739,7 +45361,7 @@ LABEL_E96640:
 	.long LABEL_E96A5E
 	.long LABEL_E969E0
 LABEL_E969E0:
-	.asciz "Kesalahan sudah terjadi ketika disket sedang diformat. Disket yang anda pergunakan mungkin rusak. Cobalah format disket lain."
+	aligned_string "Kesalahan sudah terjadi ketika disket sedang diformat. Disket yang anda pergunakan mungkin rusak. Cobalah format disket lain."
 	.byte 0x45, 0x52
 	aligned_string "ROR 08"
 LABEL_E96A68:
@@ -45747,7 +45369,7 @@ LABEL_E96A68:
 	.byte 0xed
 	.ascii "a el formato del disco. El disco que est"
 	.byte 0xe1
-	.asciz " utilizando puede estar defectuoso. Intente hacer el formato de otro disco."
+	aligned_string " utilizando puede estar defectuoso. Intente hacer el formato de otro disco."
 	.byte 0x55, 0x6e
 	.ascii "e erreur s'est produite pendant la proc"
 	.byte 0xe9
@@ -45759,7 +45381,7 @@ LABEL_E96A68:
 	.byte 0xe9
 	aligned_string "e. Essayez de formater une autre disquette."
 	aligned_string "Beim Formatieren ist ein Fehler aufgetreten. Benutzen Sie bette eine andere."
-	.asciz "An error has occurred while the disk was formatting. The disk that you are using may be faulty. Please try formatting another disk."
+	aligned_string "An error has occurred while the disk was formatting. The disk that you are using may be faulty. Please try formatting another disk."
 LABEL_E96C78:
 	.long LABEL_E96DDC
 	.long LABEL_E96D84
@@ -45767,10 +45389,8 @@ LABEL_E96C78:
 	.long LABEL_E96CEC
 	.long LABEL_E96CD8
 	.long LABEL_E96C90
-LABEL_E96C90:
-	aligned_string "Data didalam disk diprotek, tidak bisa dicopy. Masukkan kode password."
-LABEL_E96CD8:
-	aligned_string "(ERROR 09)cp_prtct"
+LABEL_E96C90:	aligned_string "Data didalam disk diprotek, tidak bisa dicopy. Masukkan kode password."
+LABEL_E96CD8:	aligned_string "(ERROR 09)cp_prtct"
 	.ascii "Los datos del disco est"
 	.byte 0xe1
 	.ascii "n protegidos contra copia. Por favor, ingrese la contrase"
@@ -45778,7 +45398,7 @@ LABEL_E96CD8:
 	.byte 0x00, 0xff
 	.ascii "Cette disquette est prot"
 	.byte 0xe9, 0x67, 0xe9, 0x65, 0x2e, 0x20
-	.asciz "Veuillez entrer votre mot de passe."
+	aligned_string "Veuillez entrer votre mot de passe."
 	.ascii "Die Daten auf dieser Diskette sind schreibgesch"
 	.byte 0xfc
 	aligned_string "tzt. Bitte geben Sie das Password ein."
@@ -45790,7 +45410,7 @@ LABEL_E96CD8:
 	.long LABEL_E96E4E
 	.long LABEL_E96E38
 LABEL_E96E38:
-	.asciz "Data  sudah diprotek."
+	aligned_string "Data  sudah diprotek."
 	.byte 0x45, 0x52
 	aligned_string "ROR 10"
 LABEL_E96E58:
@@ -45802,12 +45422,12 @@ LABEL_E96E88:
 	.byte 0xe9
 	.ascii "es sont prot"
 	.byte 0xe9, 0x67, 0xe9
-	.asciz "es contre la copie!"
+	aligned_string "es contre la copie!"
 	.ascii "Diese Daten sind bereits kopiergesch"
 	.byte 0xfc
 	.asciz "tzt."
 	.byte 0x54, 0x68
-	.asciz "e data is already copy protected."
+	aligned_string "e data is already copy protected."
 	.byte 0xb8, 0x6f, 0xe9, 0x00, 0x92, 0x6f
 	.byte 0xe9, 0x00, 0x70, 0x6f, 0xe9, 0x00, 0x48, 0x6f
 	.byte 0xe9, 0x00, 0x3e, 0x6f, 0xe9, 0x00, 0x1a, 0x6f
@@ -45819,17 +45439,15 @@ LABEL_E96E88:
 	aligned_string "a ingresada es incorrecta."
 	aligned_string "Votre mot de passe est incorrect"
 	aligned_string "Das eingegebene Password ist falsch."
-	.asciz "The password that you entered is incorrect."
+	aligned_string "The password that you entered is incorrect."
 	.byte 0x80, 0x71, 0xe9, 0x00
 	.long LABEL_E97114
 	.long LABEL_E970BA
 	.long LABEL_E97052
 	.long LABEL_E97048
 	.long LABEL_E96FFC
-LABEL_E96FFC:
-	.asciz "Batu Baterei sudah lemah. Ganti segera semua batu baterei dengan yang baru."
-LABEL_E97048:
-	aligned_string "ERROR 12"
+LABEL_E96FFC:	aligned_string "Batu Baterei sudah lemah. Ganti segera semua batu baterei dengan yang baru."
+LABEL_E97048:	aligned_string "ERROR 12"
 	.ascii "La carga de las bater"
 	.byte 0xed
 	.ascii "as es muy baja. Reemplace inmediatamente todas las bater"
@@ -45846,14 +45464,14 @@ LABEL_E97048:
 	.asciz "diatement."
 	.ascii "Die verbleibende Kapazit"
 	.byte 0xe4, 0x74, 0x20, 0x64
-	.asciz "er Batterien ist sehr schwach. Ersetzen Sie umgehend alle Batterien gegen neue."
-	.asciz "The remaining battery power is very low. Replace all the batteries with new ones immediately."
+	aligned_string "er Batterien ist sehr schwach. Ersetzen Sie umgehend alle Batterien gegen neue."
+	aligned_string "The remaining battery power is very low. Replace all the batteries with new ones immediately."
 	.byte 0xd2, 0x72
 	.byte 0xe9, 0x00, 0xa4, 0x72, 0xe9, 0x00, 0x6e, 0x72
 	.byte 0xe9, 0x00, 0x44, 0x72, 0xe9, 0x00, 0x32, 0x72
 	.byte 0xe9, 0x00, 0xf6, 0x71, 0xe9, 0x00, 0x4c, 0x61
-	.asciz "gu yang anda sedang coba untuk disimpan tidak ada isinya."
-	.asciz "(ERROR 15)err_seq"
+	aligned_string "gu yang anda sedang coba untuk disimpan tidak ada isinya."
+	aligned_string "(ERROR 15)err_seq"
 	.ascii "La canci"
 	.byte 0xf3, 0x6e, 0x20, 0x71
 	.ascii "ue intenta grabar est"
@@ -45864,7 +45482,7 @@ LABEL_E97048:
 	.ascii "Der Song den Sie speichern m"
 	.byte 0xf6
 	aligned_string "chten ist leer."
-	.asciz "The song you are trying to save is empty."
+	aligned_string "The song you are trying to save is empty."
 	.byte 0x86, 0x74, 0xe9, 0x00
 	.long LABEL_E97424
 	.long LABEL_E973C8
@@ -45872,8 +45490,8 @@ LABEL_E97048:
 	.long LABEL_E97364
 	.long LABEL_E97314
 LABEL_E97314:
-	.asciz "Standard MIDI File tidak kompatibel dengan KN-5000 dan tidak bisa dimuat/diisi."
-	.asciz "(ERROR 16)err_cnv"
+	aligned_string "Standard MIDI File tidak kompatibel dengan KN-5000 dan tidak bisa dimuat/diisi."
+	aligned_string "(ERROR 16)err_cnv"
 	.byte 0x45, 0x73
 	.ascii "te archivo MIDI est"
 	.byte 0xe1
@@ -45886,9 +45504,9 @@ LABEL_E973C8:
 	.ascii "e charg"
 	.byte 0xe9
 	.byte 0x65, 0x2e, 0x00, 0xff
-	.asciz "Dieses STANDARD MIDI FILE ist nicht kompatibel zum SX-KN5000 und kann daher nicht geladen werden."
+	aligned_string "Dieses STANDARD MIDI FILE ist nicht kompatibel zum SX-KN5000 und kann daher nicht geladen werden."
 	.byte 0x54, 0x68
-	.asciz "is Standard MIDI File is incompatible with the KN5000 and cannot be loaded."
+	aligned_string "is Standard MIDI File is incompatible with the KN5000 and cannot be loaded."
 	.byte 0x98, 0x75, 0xe9, 0x00
 	.long LABEL_E97576
 	.long LABEL_E97546
@@ -45896,8 +45514,8 @@ LABEL_E973C8:
 	.long LABEL_E9750A
 	.long LABEL_E974EC
 LABEL_E974EC:
-	.asciz "Ini tidak STANDARD MIDI FILE."
-	.asciz "(ERROR 17)err_no_midi"
+	aligned_string "Ini tidak STANDARD MIDI FILE."
+	aligned_string "(ERROR 17)err_no_midi"
 LABEL_E97520:
 	.ascii "Este no es un archivo MIDI est"
 	.byte 0xe1, 0x6e
@@ -45907,13 +45525,13 @@ LABEL_E97520:
 	.byte 0xe9
 	.asciz "quence STANDARD MIDI FILE."
 	.byte 0x44, 0x69
-	.asciz "es ist kein STANDARD MIDI FILE."
-	.asciz "This is not a STANDARD MIDI FILE."
+	aligned_string "es ist kein STANDARD MIDI FILE."
+	aligned_string "This is not a STANDARD MIDI FILE."
 	.byte 0x58, 0x77, 0xe9, 0x00, 0xf0, 0x76
 	.byte 0xe9, 0x00, 0x98, 0x76, 0xe9, 0x00, 0x3e, 0x76
 	.byte 0xe9, 0x00, 0x26, 0x76, 0xe9, 0x00, 0xd2, 0x75
 	.byte 0xe9, 0x00
-	.asciz "Timebase (resolusi PPQ) yang anda coba untuk dimuat bukan 24/48/96/192/288/384 PPQ."
+	aligned_string "Timebase (resolusi PPQ) yang anda coba untuk dimuat bukan 24/48/96/192/288/384 PPQ."
 	.byte 0x28, 0x45
 	.asciz "RROR 18)err_timebase"
 	.byte 0xff, 0x4c, 0x61
@@ -45924,16 +45542,16 @@ LABEL_E97520:
 	.byte 0xe9, 0x73, 0x6f, 0x6c
 	.ascii "ution {PPQ} que vous avez essay"
 	.byte 0xe9
-	.asciz " de charger n'est pas 24/48/96/192/288/384 PPQ."
+	aligned_string " de charger n'est pas 24/48/96/192/288/384 PPQ."
 	.ascii "Die Zeiteinheit (PPQ Aufl"
 	.byte 0xf6
 	aligned_string "sung) die Sie zu laden versuchten entspricht nicht 24/48/96/192/288/384 PPQ."
-	.asciz "The timebase {PPQ resolution} that you tried to load is not 24/48/96/192/288/384 PPQ."
+	aligned_string "The timebase {PPQ resolution} that you tried to load is not 24/48/96/192/288/384 PPQ."
 	.byte 0x4c, 0x79
 	.byte 0xe9, 0x00, 0xd2, 0x78, 0xe9, 0x00, 0x70, 0x78
 	.byte 0xe9, 0x00, 0x2e, 0x78, 0xe9, 0x00, 0x1e, 0x78
 	.byte 0xe9, 0x00, 0xc6, 0x77, 0xe9, 0x00, 0x44, 0x69
-	.asciz "sket ini adalah satu FORMAT 1 MIDI FILE dan tidak dapat dimainkan kembali (Play Back)"
+	aligned_string "sket ini adalah satu FORMAT 1 MIDI FILE dan tidak dapat dimainkan kembali (Play Back)"
 	.byte 0x28, 0x45
 	aligned_string "RROR 19)dctp"
 	aligned_string "Este es un archivo MIDI de FORMATO 1 y no puede ser reproducido."
@@ -45941,14 +45559,14 @@ LABEL_E97520:
 	.byte 0xe9, 0x71
 	.ascii "uence STANDARD MIDI FILE au FORMAT 1 et ne peut pas "
 	.byte 0xea, 0x74, 0x72, 0x65
-	.asciz " reproduite dans ce mode."
+	aligned_string " reproduite dans ce mode."
 	aligned_string "Dies ist ein FORMAT 1 MIDI FILE und kann daher nicht direkt abgespielt werden. Bitte laden Sie diesen Song komplett ein."
 	.asciz "This is a FORMAT 1 MIDI FILE disk and cannot be played back."
 	.byte 0xff, 0x7e, 0x7b, 0xe9, 0x00, 0x12, 0x7b
 	.byte 0xe9, 0x00, 0x80, 0x7a, 0xe9, 0x00, 0x18, 0x7a
 	.byte 0xe9, 0x00, 0x0e, 0x7a, 0xe9, 0x00, 0xa2, 0x79
 	.byte 0xe9, 0x00
-	.asciz "Satu masalah  terjadi terhadap data Sequencer anda. Ini mungkin berhubungan dengan dikset salah atau rusak."
+	aligned_string "Satu masalah  terjadi terhadap data Sequencer anda. Ini mungkin berhubungan dengan dikset salah atau rusak."
 	.byte 0x45, 0x52
 	aligned_string "ROR 20"
 	.ascii "Se ha producido un problema con sus datos SEQUENCER. Esto puede deberse a que el disco est"
@@ -45962,25 +45580,25 @@ LABEL_E97520:
 	.byte 0xe0, 0x20, 0x75
 	.ascii "ne d"
 	.byte 0xe9, 0x74, 0xe9, 0x72
-	.asciz "ioration de la disquette."
+	aligned_string "ioration de la disquette."
 	.ascii "Die Sequenzerdaten sind nicht in Ordnung. Das kann an einer besch"
 	.byte 0xe4
-	.asciz "digten oder fehlerhaften Diskette liegen."
+	aligned_string "digten oder fehlerhaften Diskette liegen."
 	.byte 0x41, 0x20
-	.asciz "problem has occurred with your Sequencer Data. This might be due to a damaged or faulty Disk."
+	aligned_string "problem has occurred with your Sequencer Data. This might be due to a damaged or faulty Disk."
 	.byte 0x5e, 0x7c
 	.byte 0xe9, 0x00, 0x4e, 0x7c, 0xe9, 0x00, 0x3c, 0x7c
 	.byte 0xe9, 0x00, 0x2e, 0x7c, 0xe9, 0x00, 0x24, 0x7c
 	.byte 0xe9, 0x00, 0xf6, 0x7b, 0xe9, 0x00, 0x4b, 0x61
 	aligned_string "pasitas penyimpanan penuh. (Memory penuh)."
 	aligned_string "ERROR 21"
-	.asciz "Memoria llena"
+	aligned_string "Memoria llena"
 	.byte 0x4d, 0xe9, 0x6d, 0x6f
 	.ascii "ire staur"
 	.byte 0xe9, 0x65, 0x21, 0x00, 0xff
-	.asciz "Speicher voll !"
+	aligned_string "Speicher voll !"
 	.byte 0x4d, 0x65
-	.asciz "mory full"
+	aligned_string "mory full"
 	.byte 0x82, 0x7d, 0xe9, 0x00, 0x3c, 0x7d
 	.byte 0xe9, 0x00, 0x00, 0x7d, 0xe9, 0x00, 0xbe, 0x7c
 	.byte 0xe9, 0x00, 0xb4, 0x7c, 0xe9, 0x00, 0x82, 0x7c
@@ -46023,7 +45641,7 @@ LABEL_E97520:
 	.byte 0xe4
 	.asciz "ndern, da dieses bereits festgelegt wurde."
 	.byte 0x49, 0x74
-	.asciz " is impossible to change the Time Signature because it has already been set in the existing Tracks."
+	aligned_string " is impossible to change the Time Signature because it has already been set in the existing Tracks."
 	.byte 0x68, 0x81, 0xe9, 0x00
 	.long LABEL_E9810C
 	.long LABEL_E980A8
@@ -46043,7 +45661,7 @@ LABEL_E980A8:
 	.ascii "Es ist nicht m"
 	.byte 0xf6
 	.asciz "glich, zwei RHYTHM-Spuren die gleiche Spurzuweisung (TRACK ASSIGN) zu geben."
-	.asciz "A Rhythm Track already exists. It is impossible to assign two Tracks to Rhythm."
+	aligned_string "A Rhythm Track already exists. It is impossible to assign two Tracks to Rhythm."
 	.long LABEL_E98334
 	.long LABEL_E982D8
 	.long LABEL_E98274
@@ -46065,7 +45683,7 @@ LABEL_E982D8:
 	.ascii "Es ist nicht m"
 	.byte 0xf6, 0x67
 	aligned_string "lich, zwei CHORD-Spuren die gleiche Spurzuweisung (TRACK ASSIGN) zu geben."
-	.asciz "A Chord Track already exists. It is impossible to assign two Tracks to Chord."
+	aligned_string "A Chord Track already exists. It is impossible to assign two Tracks to Chord."
 	.byte 0x0a, 0x85, 0xe9, 0x00, 0xac, 0x84
 	.byte 0xe9, 0x00, 0x46, 0x84, 0xe9, 0x00, 0xf6, 0x83
 	.byte 0xe9, 0x00, 0xec, 0x83, 0xe9, 0x00, 0x9a, 0x83
@@ -46085,7 +45703,7 @@ LABEL_E982D8:
 	.ascii "Es ist nicht m"
 	.byte 0xf6
 	aligned_string "glich, zwei CONTROL-Spuren die gleiche Spurzuweisung (TRACK ASSIGN) zu geben."
-	.asciz "A Control Track already exists. It is impossible to assign two Tracks to Control."
+	aligned_string "A Control Track already exists. It is impossible to assign two Tracks to Control."
 	.byte 0xd0, 0x86, 0xe9, 0x00
 	.long LABEL_E98676
 	.long LABEL_E98614
@@ -46107,12 +45725,12 @@ LABEL_E985C8:
 	.ascii " ist nicht m"
 	.byte 0xf6, 0x67, 0x6c, 0x69
 	aligned_string "ch, zwei APC-Spuren die gleiche Spurzuweisung (TRACK ASSIGN) zu geben."
-	.asciz "A APC Track already exists. It is impossible to assign two Tracks to APC."
+	aligned_string "A APC Track already exists. It is impossible to assign two Tracks to APC."
 	.byte 0x54, 0x88, 0xe9, 0x00, 0xfe, 0x87
 	.byte 0xe9, 0x00, 0xb8, 0x87, 0xe9, 0x00, 0x7a, 0x87
 	.byte 0xe9, 0x00, 0x70, 0x87, 0xe9, 0x00, 0x32, 0x87
 	.byte 0xe9, 0x00
-	.asciz "Ini hanya mungkin untuk mengubah kecepatan pada Melody Track."
+	aligned_string "Ini hanya mungkin untuk mengubah kecepatan pada Melody Track."
 	.asciz "ERROR 25"
 	.byte 0xff, 0x53, 0xf3
 	.ascii "lo es posible cambiar la velocidad en una pista de melod"
@@ -46123,7 +45741,7 @@ LABEL_E985C8:
 	.byte 0xe9, 0x20, 0x71
 	.ascii "ue d'une piste contenant une m"
 	dec	4, xbc
-	.asciz "odie."
+	aligned_string "odie."
 	.byte 0x45, 0x73
 	.ascii " ist nicht m"
 	.byte 0xf6, 0x67, 0x6c, 0x69
@@ -46132,12 +45750,12 @@ LABEL_E985C8:
 	.ascii "er der Melodie-Spur zu ver"
 	.byte 0xe4, 0x6e, 0x64, 0x65
 	.byte 0x72, 0x6e, 0x2e, 0x00
-	.asciz "It is only possible to change the velocity on a Melody Track."
+	aligned_string "It is only possible to change the velocity on a Melody Track."
 	.byte 0x86, 0x8a, 0xe9, 0x00, 0x1e, 0x8a
 	.byte 0xe9, 0x00, 0x92, 0x89, 0xe9, 0x00, 0x2a, 0x89
 	.byte 0xe9, 0x00, 0x20, 0x89, 0xe9, 0x00, 0xaa, 0x88
 	.byte 0xe9, 0x00
-	.asciz "Ini hanya mungkin untuk menggabungkan Melody Tracks. Track seperti Rhythm, Chord dan Control tidak dapat digabungkan."
+	aligned_string "Ini hanya mungkin untuk menggabungkan Melody Tracks. Track seperti Rhythm, Chord dan Control tidak dapat digabungkan."
 	.asciz "ERROR 26"
 	.byte 0xff, 0x53, 0xf3
 	.ascii "lo es posible mezclar pistas de melod"
@@ -46190,7 +45808,7 @@ LABEL_E985C8:
 	.ascii "puren zu kopieren. Spuren wie RHYTHM, CHORD und CONTROL k"
 	.byte 0xf6
 	aligned_string "nnen nicht kopiert werden."
-	.asciz "It is only possible to copy Melody Tracks. Tracks such as Rhythm, Chord and Control cannot be copied."
+	aligned_string "It is only possible to copy Melody Tracks. Tracks such as Rhythm, Chord and Control cannot be copied."
 	.byte 0x94, 0x8e, 0xe9, 0x00
 	.long LABEL_E98E52
 	.long LABEL_E98DFA
@@ -46211,13 +45829,13 @@ LABEL_E98DB0:
 	.ascii "re sauvegard"
 	.byte 0xe9, 0x65, 0x20, 0x73
 	aligned_string "ous le format MIDI File."
-	.asciz "Dieser Titel ist zu lang, um als MIDI File gespeichert zu werden."
-	.asciz "This song is too long to be saved as a MIDI FILE."
+	aligned_string "Dieser Titel ist zu lang, um als MIDI File gespeichert zu werden."
+	aligned_string "This song is too long to be saved as a MIDI FILE."
 	.byte 0x5c, 0x91
 	.byte 0xe9, 0x00, 0xc4, 0x90, 0xe9, 0x00, 0x0e, 0x90
 	.byte 0xe9, 0x00, 0x72, 0x8f, 0xe9, 0x00, 0x68, 0x8f
 	.byte 0xe9, 0x00, 0xde, 0x8e, 0xe9, 0x00, 0x4d, 0x49
-	.asciz "DI FILE yang anda coba untuk dimuat melampaui kapasitas memori dari KN-5000 dan tidak dapat dimainkan.  Memori Sequencer sudah dihapus."
+	aligned_string "DI FILE yang anda coba untuk dimuat melampaui kapasitas memori dari KN-5000 dan tidak dapat dimainkan.  Memori Sequencer sudah dihapus."
 	aligned_string "ERROR 29"
 	.asciz "El fichero MIDI que usted ha tratado de cargar excede la capacidad de la memoria del KN3000 y no puede reproducirse. La memoria SEQUENCER ha sido borrada."
 	.byte 0xff, 0x4c, 0x61
@@ -46278,7 +45896,7 @@ LABEL_E98DB0:
 	.byte 0xe9, 0x65, 0x73
 	.ascii " vous devez effacer la totalit"
 	.byte 0xe9, 0x20
-	.asciz "du style et recommencer l'enregistrement."
+	aligned_string "du style et recommencer l'enregistrement."
 	.ascii "Nach einer Aufnahme im COMPOSER ist es nicht mehr m"
 	.byte 0xf6, 0x67, 0x6c
 	.ascii "ich, das Takt-Ma"
@@ -46288,7 +45906,7 @@ LABEL_E98DB0:
 	.ascii " zu "
 	.byte 0xe4, 0x6e, 0x64, 0x65
 	.byte 0x72, 0x6e, 0x2e, 0x00
-	.asciz "It is not possible to change the Time Signature or measure length of a Composer Pattern after it has been recorded. If you want to proceed, you must first clear the entire Composer Pattern."
+	aligned_string "It is not possible to change the Time Signature or measure length of a Composer Pattern after it has been recorded. If you want to proceed, you must first clear the entire Composer Pattern."
 	.byte 0x24, 0x99, 0xe9, 0x00, 0x78, 0x98
 	.byte 0xe9, 0x00, 0x98, 0x97, 0xe9, 0x00, 0xa4, 0x96
 	.byte 0xe9, 0x00, 0x9a, 0x96, 0xe9, 0x00, 0xaa, 0x95
@@ -46305,7 +45923,7 @@ LABEL_E98DB0:
 	.byte 0xe1, 0x20
 	.ascii "utilizando. Bien: Cambie la signatura de tiempode la memoria COMPOSER o: Copie un patr"
 	.byte 0xf3, 0x6e
-	.asciz " que tenga la misma signatura de tiempo"
+	aligned_string " que tenga la misma signatura de tiempo"
 	.ascii "La mesure du style que vous d"
 	.byte 0xe9, 0x73, 0x69
 	.ascii "rez copier est diff"
@@ -46326,32 +45944,32 @@ LABEL_E98DB0:
 	.byte 0xdf
 	.ascii " im COMPOSER. oder: Sie kopieren ein Pattern mit gleichem Takt-Ma"
 	.byte 0xdf, 0x2e, 0x00
-	.asciz "The Time Signature of the Pattern from which you are copying is different from the Composer Memory that you are using. Either: Change the Time Signature of the Composer Memory or: Copy from a Pattern that has the same Time Signature."
+	aligned_string "The Time Signature of the Pattern from which you are copying is different from the Composer Memory that you are using. Either: Change the Time Signature of the Composer Memory or: Copy from a Pattern that has the same Time Signature."
 	jr	nz, 0x9a
 	.byte 0xe9, 0x00, 0x5e, 0x9a, 0xe9, 0x00, 0x4c, 0x9a
 	.byte 0xe9, 0x00, 0x3e, 0x9a, 0xe9, 0x00, 0x34, 0x9a
 	.byte 0xe9, 0x00, 0x26, 0x9a, 0xe9, 0x00, 0x4d, 0x65
-	.asciz "mory penuh."
+	aligned_string "mory penuh."
 	aligned_string "ERROR 32"
-	.asciz "Memoria llena"
+	aligned_string "Memoria llena"
 	.byte 0x4d, 0xe9, 0x6d, 0x6f
 	.ascii "ire satur"
 	.byte 0xe9, 0x65, 0x21, 0x00, 0xff
-	.asciz "Speicher voll !"
+	aligned_string "Speicher voll !"
 	.byte 0x4d, 0x65
-	.asciz "mory full"
+	aligned_string "mory full"
 	.byte 0x6c, 0x9c, 0xe9, 0x00, 0xfc, 0x9b
 	.byte 0xe9, 0x00, 0x74, 0x9b, 0xe9, 0x00, 0xf8, 0x9a
 	.byte 0xe9, 0x00, 0xee, 0x9a, 0xe9, 0x00, 0x92, 0x9a
 	.byte 0xe9, 0x00
-	.asciz "Kode identifikasi (ID) dari data System Exclusive produk yang berbeda diterima oleh KN-5000"
+	aligned_string "Kode identifikasi (ID) dari data System Exclusive produk yang berbeda diterima oleh KN-5000"
 	.byte 0x45, 0x52
 	aligned_string "ROR 40"
 	.ascii "El c"
 	.byte 0xf3, 0x64, 0x69, 0x67
 	.ascii "o de identificaci"
 	.byte 0xf3
-	.asciz "n (ID) de los datos exclusivos del sistema recibidos por el KN3000 son para un aparato diferente."
+	aligned_string "n (ID) de los datos exclusivos del sistema recibidos por el KN3000 son para un aparato diferente."
 	.ascii "Le code d'identificaiton (ID) de donn"
 	.byte 0xe9
 	.ascii "es de Syst"
@@ -46408,11 +46026,11 @@ LABEL_E99D90:
 	.byte 0xe9, 0x00, 0x1e, 0xa1, 0xe9, 0x00, 0x9a, 0xa0
 	.byte 0xe9, 0x00, 0x90, 0xa0, 0xe9, 0x00, 0x12, 0xa0
 	.byte 0xe9, 0x00
-	.asciz "Satu kesalahan sudah terjadi sejak System Exclusive ditransfer. Data masih belum diterima dengan benar. Harap dicoba kembali."
+	aligned_string "Satu kesalahan sudah terjadi sejak System Exclusive ditransfer. Data masih belum diterima dengan benar. Harap dicoba kembali."
 	aligned_string "ERROR 42"
 	.ascii "Se ha producido un error durante la transmisi"
 	.byte 0xf3
-	.asciz "n exclusiva del sistema. Los datos no se han recibido correctamente. Pruebe otra vez."
+	aligned_string "n exclusiva del sistema. Los datos no se han recibido correctamente. Pruebe otra vez."
 	.byte 0x55, 0x6e
 	.ascii "e erreur s'est produite lors de la transmission des donn"
 	.byte 0xe9
@@ -46430,17 +46048,15 @@ LABEL_E99D90:
 	.ascii "ertragung der System Exclusive Daten ist ein Fehler aufgetreten. Die Daten wurden vom empfangenden Ger"
 	.byte 0xe4, 0x74
 	aligned_string " nicht korrekt verstanden."
-	.asciz "An error has occurred during System Exclusive transmission. The data has not been received correctly. Please try again."
+	aligned_string "An error has occurred during System Exclusive transmission. The data has not been received correctly. Please try again."
 	.byte 0x42, 0xa5, 0xe9, 0x00
 	.long LABEL_E9A494
 	.long LABEL_E9A3FE
 	.long LABEL_E9A382
 	.long LABEL_E9A378
 	.long LABEL_E9A2DC
-LABEL_E9A2DC:
-	aligned_string "File yang sedang anda coba untuk dimuat/disimpan sudah disimpan pada keyboard  KN terdahulu.Hanya mungkin menyimpan dengan menggunakan tambahan PERMAINAN."
-LABEL_E9A378:
-	aligned_string "ERROR 43"
+LABEL_E9A2DC:	aligned_string "File yang sedang anda coba untuk dimuat/disimpan sudah disimpan pada keyboard  KN terdahulu.Hanya mungkin menyimpan dengan menggunakan tambahan PERMAINAN."
+LABEL_E9A378:	aligned_string "ERROR 43"
 	.ascii "El fichero que trata de cargar fue almacenado en un teclado KN anterior. S"
 	.byte 0xf3, 0x6c, 0x6f, 0x20
 	.ascii "es posible cargar utilizando la opci"
@@ -46463,8 +46079,8 @@ LABEL_E9A378:
 	.ascii "lteren KN-Keybord gespeichert. In diesem Fall kann nur unter Verwendung der "
 	.byte 0x84, 0x41, 0x4c
 	.byte 0x4c, 0x93
-	.asciz "-Option geladen werden."
-	.asciz "The file that you are trying to load was saved on a previous KN keyboard. It is only possible to load using the \"PERFORMANCE\" option."
+	aligned_string "-Option geladen werden."
+	aligned_string "The file that you are trying to load was saved on a previous KN keyboard. It is only possible to load using the \"PERFORMANCE\" option."
 LABEL_E9A5C8:
 	.long LABEL_E9A7FA
 	.long LABEL_E9A778
@@ -46488,14 +46104,14 @@ LABEL_E9A5E0:
 	.byte 0xe9, 0x20, 0x64
 	.ascii "'un autre groupe except"
 	.byte 0xe9
-	.asciz " \"Keyboard Percussion\"."
+	aligned_string " \"Keyboard Percussion\"."
 LABEL_E9A778:
 	.ascii "Es ist nicht m"
 	.byte 0xf6, 0x67
 	.ascii "lich ein Drum Kit zu editieren. Bitte w"
 	.byte 0xe4
-	.asciz "hlen Sie einen Klang aus einer anderen Gruppe ausser Keyboard Percussion."
-	.asciz "It is impossible to edit a Drum Kit. Please select a different sound from any group except Keyboard Percussion."
+	aligned_string "hlen Sie einen Klang aus einer anderen Gruppe ausser Keyboard Percussion."
+	aligned_string "It is impossible to edit a Drum Kit. Please select a different sound from any group except Keyboard Percussion."
 	.byte 0x72, 0xaa, 0xe9, 0x00, 0xfe, 0xa9
 	.byte 0xe9, 0x00, 0x6c, 0xa9, 0xe9, 0x00, 0xf6, 0xa8
 	.byte 0xe9, 0x00, 0xec, 0xa8, 0xe9, 0x00, 0x82, 0xa8
@@ -46526,17 +46142,15 @@ LABEL_E9A778:
 	.ascii "nnen nicht eingef"
 	.byte 0xfc, 0x67, 0x74
 	aligned_string " werden."
-	.asciz "It is only possible to insert Melody Tracks. Tracks such as Rhythm, Chord and Control cannot be inserted."
+	aligned_string "It is only possible to insert Melody Tracks. Tracks such as Rhythm, Chord and Control cannot be inserted."
 	.byte 0xe2, 0xac, 0xe9, 0x00
 	.long LABEL_E9AC6C
 	.long LABEL_E9ABF8
 	.long LABEL_E9AB7A
 	.long LABEL_E9AB70
 	.long LABEL_E9AAF4
-LABEL_E9AAF4:
-	.asciz "Tidak mungkin untuk menggunakan Sound Arranger dengan Composer Pattern. Silahkan pilih satu contoh preset (Preset Pattern)."
-LABEL_E9AB70:
-	aligned_string "ERROR 47"
+LABEL_E9AAF4:	aligned_string "Tidak mungkin untuk menggunakan Sound Arranger dengan Composer Pattern. Silahkan pilih satu contoh preset (Preset Pattern)."
+LABEL_E9AB70:	aligned_string "ERROR 47"
 	aligned_string "No es posible utilizar el arreglador musical con un esquema del compositor. Por favor, seleccione un esquema preconfigurado."
 LABEL_E9ABF8:
 	.ascii "L'utilisation du \"Sound Arranger\" n'est pas possible avec un \"Composer\". Veuillez choisir un rythme pr"
@@ -46547,7 +46161,7 @@ LABEL_E9ABF8:
 	.ascii "Der Sound Arranger kann nicht mit einem Composer Pattern verwendet werden. Bitte w"
 	.byte 0xe4, 0x68
 	aligned_string "len Sie einen Werksrhythmus aus."
-	.asciz "It is not possible to use the Sound Arranger with a composer pattern. Please select a preset pattern."
+	aligned_string "It is not possible to use the Sound Arranger with a composer pattern. Please select a preset pattern."
 LABEL_E9AD48:
 	.long LABEL_E9AF02
 	.long LABEL_E9AE9A
@@ -46555,10 +46169,8 @@ LABEL_E9AD48:
 	.long LABEL_E9ADCA
 	.long LABEL_E9ADC0
 	.long LABEL_E9AD60
-LABEL_E9AD60:
-	aligned_string "Tipe disket yang digunakan \" 2HD \".  Model ini hanya bisa digunakan untuk disket tipe \" 2DD \"."
-LABEL_E9ADC0:
-	aligned_string "ERR0R 48"
+LABEL_E9AD60:	aligned_string "Tipe disket yang digunakan \" 2HD \".  Model ini hanya bisa digunakan untuk disket tipe \" 2DD \"."
+LABEL_E9ADC0:	aligned_string "ERR0R 48"
 	.ascii "El disquete insertado es de tipo \"2HD\". En este modo s"
 	.byte 0xf3
 	aligned_string "lo pueden usarse los disquetes de tipo \"2DD\"."
@@ -46578,7 +46190,7 @@ LABEL_E9AE30:
 	.byte 0xe9, 0x00, 0x36, 0xb1, 0xe9, 0x00, 0x8a, 0xb0
 	.byte 0xe9, 0x00, 0xf0, 0xaf, 0xe9, 0x00, 0xe6, 0xaf
 	.byte 0xe9, 0x00, 0x6e, 0xaf, 0xe9, 0x00, 0x4a, 0x75
-	.asciz "mlah lagu melebihi kapasitas KN-5000. Coba lagi sesudah dikurangi jumlahnya seperti menghilangkan TRACK atau MEASURE."
+	aligned_string "mlah lagu melebihi kapasitas KN-5000. Coba lagi sesudah dikurangi jumlahnya seperti menghilangkan TRACK atau MEASURE."
 	.byte 0x45, 0x52
 	aligned_string "ROR 49"
 	.ascii "La longitud de esta canci"
@@ -46621,7 +46233,7 @@ LABEL_E9AE30:
 	.long LABEL_E9B31C
 	.long LABEL_E9B294
 LABEL_E9B294:
-	.asciz "Tidak mungkin merekam dengan menggunakan Preset Banks, Compile banks atau Control Banks.  Silahkan pilih satu dari User Banks yang ada."
+	aligned_string "Tidak mungkin merekam dengan menggunakan Preset Banks, Compile banks atau Control Banks.  Silahkan pilih satu dari User Banks yang ada."
 	aligned_string "ERROR 54"
 	aligned_string "No es posible grabar sobre los bancos preconfigurados, los bancos del compilador o los bancos de control. Por favor seleccione uno de los bancos de usuario."
 	.ascii "Il n'est pas possible d'effectuer un enregistrement en utilisant des banques pr"
@@ -46637,7 +46249,7 @@ LABEL_E9B294:
 	.ascii "lectionner l'une des banques r"
 	.byte 0xe9, 0x73
 	.byte 0x65, 0x72, 0x76, 0xe9, 0x65, 0x73, 0x20, 0xe0
-	.asciz " l'utilisateur."
+	aligned_string " l'utilisateur."
 LABEL_E9B480:
 	.ascii "Es ist nicht m"
 	.byte 0xf6, 0x67
@@ -46649,12 +46261,12 @@ LABEL_E9B480:
 	.byte 0xe4, 0x6e, 0x6b, 0x65
 	.asciz " aus."
 	.byte 0x49, 0x74
-	.asciz " is not possible to record using preset banks, compile banks, or control banks.  Please select one of the user banks."
+	aligned_string " is not possible to record using preset banks, compile banks, or control banks.  Please select one of the user banks."
 	.byte 0x7e, 0xb8
 	.byte 0xe9, 0x00, 0xc4, 0xb7, 0xe9, 0x00, 0x1c, 0xb7
 	.byte 0xe9, 0x00, 0x3e, 0xb6, 0xe9, 0x00, 0x34, 0xb6
 	.byte 0xe9, 0x00, 0x86, 0xb5, 0xe9, 0x00, 0x53, 0x70
-	.asciz "ecial Tracks seperti Chord/APC, Rhythm dan Control sudah tersedia dari lagu yang sedang anda gandakan dan tidak kompatibel dengan tujuan lagu karena ini ada dalam GM Mode."
+	aligned_string "ecial Tracks seperti Chord/APC, Rhythm dan Control sudah tersedia dari lagu yang sedang anda gandakan dan tidak kompatibel dengan tujuan lagu karena ini ada dalam GM Mode."
 	.asciz "ERROR 55"
 	.byte 0xff, 0x45, 0x6e
 	.ascii " la canci"
@@ -46677,12 +46289,12 @@ LABEL_E9B480:
 	.byte 0xe9, 0x73, 0x69, 0x72
 	.ascii "ez copier et sont incompatibles avec la s"
 	.byte 0xe9
-	.asciz "quence de destination en mode GM."
+	aligned_string "quence de destination en mode GM."
 	.ascii "In dem Song den Sie kopieren m"
 	.byte 0xf6
 	.asciz "chten befinden sich Spuren wie Chord/APC, Rhythm und Control. Diese Spuren sind mit dem Ziel-Song nicht kompatibel, da dieser im GM-Modus gespeichert ist."
 	.byte 0x53, 0x70
-	.asciz "ecial Tracks such as Chord/APC, Rhythm and Control exist in the song from which you are copying and are  incompatible with the destination song because it is in GM mode."
+	aligned_string "ecial Tracks such as Chord/APC, Rhythm and Control exist in the song from which you are copying and are  incompatible with the destination song because it is in GM mode."
 	.byte 0x74, 0xbb, 0xe9, 0x00, 0xd2, 0xba
 	.byte 0xe9, 0x00, 0x48, 0xba, 0xe9, 0x00, 0xbe, 0xb9
 	.byte 0xe9, 0x00, 0xb4, 0xb9, 0xe9, 0x00, 0x42, 0xb9
@@ -46717,7 +46329,7 @@ LABEL_E9B480:
 	.byte 0xe9, 0x00, 0xfe, 0xbd, 0xe9, 0x00, 0x70, 0xbd
 	.byte 0xe9, 0x00, 0xc6, 0xbc, 0xe9, 0x00, 0xbc, 0xbc
 	.byte 0xe9, 0x00, 0x0e, 0xbc, 0xe9, 0x00, 0x43, 0x6f
-	.asciz "ntoh-contoh Composer yang sudah dipilih mempunyai satu perbedaan tanda waktu (perbedaan Time Signature) atau nomor-nomor ukuran dari pattern lain dalam COMPOSER CHORD MAP."
+	aligned_string "ntoh-contoh Composer yang sudah dipilih mempunyai satu perbedaan tanda waktu (perbedaan Time Signature) atau nomor-nomor ukuran dari pattern lain dalam COMPOSER CHORD MAP."
 	.asciz "ERROR 57"
 	.byte 0xff, 0x45, 0x6c
 	.ascii " patr"
@@ -46731,14 +46343,14 @@ LABEL_E9B480:
 	aligned_string "mero de compases diferente de los otros patrones de este mapa de acordes del Composer."
 	.ascii "Le motif COMPOSER que vous avez choisi a une fraction de mesure ou un nombre de mesures diff"
 	.byte 0xe9, 0x72, 0x65, 0x6e
-	.asciz "t des autres motifs de ce COMPOSER CHORD MAP."
+	aligned_string "t des autres motifs de ce COMPOSER CHORD MAP."
 	.byte 0x44, 0x61
 	.ascii "s gew"
 	.byte 0xe4, 0x68, 0x6c
 	.ascii "te COMPOSER-Muster weist ein unterschiedliches Taktvorzeichen oder eine unterschiedliche Anzahl von Taktma"
 	.byte 0xdf
 	aligned_string "en als andere Muster in dieser COMPOSER CHORD MAP auf. "
-	.asciz "The COMPOSER pattern you have chosen has a different time signature or number of measures from the other patterns in this COMPOSER CHORD MAP."
+	aligned_string "The COMPOSER pattern you have chosen has a different time signature or number of measures from the other patterns in this COMPOSER CHORD MAP."
 	.byte 0xe8, 0xc1, 0xe9, 0x00, 0x1e, 0xc1
 	.byte 0xe9, 0x00, 0x76, 0xc0, 0xe9, 0x00, 0xe0, 0xbf
 	.byte 0xe9, 0x00, 0xd6, 0xbf, 0xe9, 0x00, 0x52, 0xbf
@@ -46749,7 +46361,7 @@ LABEL_E9B480:
 	.byte 0xf3
 	.ascii "n que ha tratado de cargar supera la memoria disponible del KN3000 y no puede cargarse. Se ha borrado la memoria de la canci"
 	.byte 0xf3, 0x6e, 0x20
-	.asciz "seleccionada."
+	aligned_string "seleccionada."
 	.byte 0x4c, 0x65
 	.ascii " morceau que vous avez essay"
 	.byte 0xe9, 0x20, 0x64, 0x65
@@ -46823,7 +46435,7 @@ LABEL_E9B480:
 	.byte 0xf6
 	.asciz "nnen nicht aufgenommen oder editiert werden."
 	.byte 0x52, 0x4b
-	.asciz "B and LKB are special tracks for compatibility with sequencer data from previous PR products. They cannot be edited or recorded on."
+	aligned_string "B and LKB are special tracks for compatibility with sequencer data from previous PR products. They cannot be edited or recorded on."
 	.byte 0xe0, 0xc7, 0xe9, 0x00
 	.long LABEL_E9C6FC
 	.long LABEL_E9C62A
@@ -46861,7 +46473,7 @@ LABEL_E9C53C:
 	.byte 0xe9, 0x00, 0xae, 0xc9, 0xe9, 0x00, 0x20, 0xc9
 	.byte 0xe9, 0x00, 0x10, 0xc9, 0xe9, 0x00, 0xa2, 0xc8
 	.byte 0xe9, 0x00
-	.asciz "Tidak mungkin untuk meng-edit Orchestral Kit dan Sound Effect Kit. Silahkan pilih satu Drum Kit yang berbeda."
+	aligned_string "Tidak mungkin untuk meng-edit Orchestral Kit dan Sound Effect Kit. Silahkan pilih satu Drum Kit yang berbeda."
 	aligned_string "(ERROR 61)dkit"
 	.ascii "No es posible editar ni el conjunto de orquesta ni el conjunto de efectos de sonido. Por favor, seleccione un conjunto de bater"
 	.byte 0xed
@@ -46873,7 +46485,7 @@ LABEL_E9C53C:
 	.byte 0xe9
 	.ascii "lectionner un kit de percussions diff"
 	.byte 0xe9
-	.asciz "rent."
+	aligned_string "rent."
 	.ascii "Das Orchestral Kit und das Sound Effect Kit k"
 	.byte 0xf6, 0x6e, 0x6e
 	.ascii "en nicht editiert werden. Bitte w"
@@ -46884,7 +46496,7 @@ LABEL_E9C53C:
 	.byte 0xe9, 0x00, 0x98, 0xcd, 0xe9, 0x00, 0xc8, 0xcc
 	.byte 0xe9, 0x00, 0xe4, 0xcb, 0xe9, 0x00, 0xda, 0xcb
 	.byte 0xe9, 0x00, 0x1e, 0xcb, 0xe9, 0x00, 0x48, 0x75
-	.asciz "bungan komputer tidak aktif karena \" pintu masuk \" komputer diset ke MIDI.  Silahkan matikan arus listrik (power off), dan atur posisi seting yang dikehendaki kemudian hidupkan kembali."
+	aligned_string "bungan komputer tidak aktif karena \" pintu masuk \" komputer diset ke MIDI.  Silahkan matikan arus listrik (power off), dan atur posisi seting yang dikehendaki kemudian hidupkan kembali."
 	aligned_string "ERROR 62"
 	.ascii "La conexi"
 	.byte 0xf3, 0x6e, 0x20
@@ -46911,7 +46523,7 @@ LABEL_E9C53C:
 	.byte 0xe9
 	aligned_string "rale de l'instrument."
 	aligned_string "Die Computerverbindung ist nicht aktiv, da der Anschluss auf MIDI eingestellt ist. Schalten Sie das Keyboard aus, stellen den Schalter auf die richtige Position und schalten das Keyboard wieder ein."
-	.asciz "The computer connection is not active because the computer port switch is set to MIDI. Please turn the power off, set the switch to the desired setting and turn the power back on."
+	aligned_string "The computer connection is not active because the computer port switch is set to MIDI. Please turn the power off, set the switch to the desired setting and turn the power back on."
 	.byte 0x60, 0xd1, 0xe9, 0x00
 	.long LABEL_E9D0E0
 	.long LABEL_E9D04A
@@ -46919,13 +46531,13 @@ LABEL_E9C53C:
 	.long LABEL_E9CFAE
 	.long LABEL_E9CF2C
 LABEL_E9CF2C:
-	.asciz "Bitmap adalah salah format dari KN-5000 dan disket tidak dapat dipanggil. Lihat Pedoman Pemakaian untuk penjelasan yang mendetil."
+	aligned_string "Bitmap adalah salah format dari KN-5000 dan disket tidak dapat dipanggil. Lihat Pedoman Pemakaian untuk penjelasan yang mendetil."
 	.byte 0x45, 0x52
 	aligned_string "ROR 63"
 LABEL_E9CFB8:
 	.ascii "Este mapa de bits tiene en un formato incorrecto para el KN5000 y no puede ser cargado. Para obtener m"
 	.byte 0xe1, 0x73
-	.asciz " detalles, vea el Manual del Propietario."
+	aligned_string " detalles, vea el Manual del Propietario."
 	.ascii "Cette configuration Bitmap n'est pas au bon format pour le KN5000 et ne peut pas "
 	.byte 0xea
 	.ascii "tre charg"
@@ -46936,16 +46548,16 @@ LABEL_E9CFB8:
 LABEL_E9D0E0:
 	.ascii "Das Format dieses Bitmaps kann vom SX-KN5000 nicht geladen werden. Lesen Sie die Bedienungsanleitung f"
 	.byte 0xfc, 0x72
-	.asciz " weitere Informationen."
+	aligned_string " weitere Informationen."
 	.asciz "This Bitmap is in the wrong format for the KN5000 and cannot be loaded. See the Owners Manual for more details. "
 	.byte 0xff, 0x0a, 0xd3, 0xe9, 0x00, 0xb6, 0xd2
 	.byte 0xe9, 0x00, 0x66, 0xd2, 0xe9, 0x00, 0x28, 0xd2
 	.byte 0xe9, 0x00, 0x1e, 0xd2, 0xe9, 0x00, 0xea, 0xd1
 	.byte 0xe9, 0x00
-	.asciz "Pilihlah Panel Memory yang ingin anda berikan nama."
+	aligned_string "Pilihlah Panel Memory yang ingin anda berikan nama."
 	.byte 0x45, 0x52
 	aligned_string "ROR 64"
-	.asciz "Por favor seleccione el Panel Memory al que desea dar nombre."
+	aligned_string "Por favor seleccione el Panel Memory al que desea dar nombre."
 	.byte 0x56, 0x65
 	.ascii "uillez s"
 	.byte 0xe9
@@ -46962,7 +46574,7 @@ LABEL_E9D0E0:
 	.ascii "en Sie den Panel Memory-Platz, dem Sie gern einen Namen vergeben m"
 	.byte 0xf6
 	.asciz "chten."
-	.asciz "Please select the Panel Memory that you want to name."
+	aligned_string "Please select the Panel Memory that you want to name."
 	.byte 0x03, 0x00, 0xff, 0xff, 0x00, 0x00, 0x4e, 0x57
 	.byte 0xe9, 0x00, 0x42, 0x5f, 0xe9, 0x00, 0x03, 0x00
 	.byte 0xff, 0xff, 0x01, 0x00, 0x4e, 0x57, 0xe9, 0x00
@@ -47158,19 +46770,19 @@ LABEL_E9D0E0:
 	.asciz "POR FAVOR, ESPERE!"
 	.byte 0x56, 0x45
 	.asciz "UILLEZ PATIENTER!"	; DB "!", 000h
-	.asciz "BITTE WARTEN!"
+	aligned_string "BITTE WARTEN!"
 	.asciz "PLEASE WAIT!"
 	.byte 0xff, 0x8a, 0xd8
 	.byte 0xe9, 0x00, 0x82, 0xd8, 0xe9, 0x00, 0x7a, 0xd8
 	.byte 0xe9, 0x00, 0x72, 0xd8, 0xe9, 0x00, 0x6a, 0xd8
 	.byte 0xe9, 0x00, 0x5e, 0xd8, 0xe9, 0x00, 0x49, 0x6e
 	aligned_string "donesian"
-	.asciz "Italian"
-	.asciz "Spanish"
+	aligned_string "Italian"
+	aligned_string "Spanish"
 	aligned_string "French"
 	aligned_string "German"
-	.asciz "English"
-	.asciz "MessageID : %3d"
+	aligned_string "English"
+	aligned_string "MessageID : %3d"
 	aligned_string "%s %02d!"
 	aligned_string "METRO  :"
 	aligned_string "CONTROL:"
@@ -47240,33 +46852,33 @@ LABEL_E9D9B0:
 	.long LABEL_E9DA76
 	.long LABEL_E9DA6C
 LABEL_E9DA6C:
-	.asciz "CONDUCTOR"
+	aligned_string "CONDUCTOR"
 	ldb	w, 0x50
-	.asciz "ART 16 "
+	aligned_string "ART 16 "
 LABEL_E9DA80:
-	.asciz " PART 15 "
-	.asciz " PART 14 "
-	.asciz " PART 13 "
+	aligned_string " PART 15 "
+	aligned_string " PART 14 "
+	aligned_string " PART 13 "
 	ldb	w, 0x50
-	.asciz "ART 12 "
+	aligned_string "ART 12 "
 LABEL_E9DAA8:
-	.asciz " PART 11 "
-	.asciz " PART 10 "
-	.asciz " PART 9  "
+	aligned_string " PART 11 "
+	aligned_string " PART 10 "
+	aligned_string " PART 9  "
 	ldb	w, 0x50
 	.asciz "ART 8  "
 LABEL_E9DAD0:
-	.asciz " PART 7  "
-	.asciz " PART 6  "
-	.asciz " PART 5  "
+	aligned_string " PART 7  "
+	aligned_string " PART 6  "
+	aligned_string " PART 5  "
 	ldb	w, 0x50
 	.asciz "ART 4  "
 LABEL_E9DAF8:
-	.asciz "  LEFT   "
-	.asciz " RIGHT 2 "
-	.asciz " RIGHT 1 "
+	aligned_string "  LEFT   "
+	aligned_string " RIGHT 2 "
+	aligned_string " RIGHT 1 "
 	.byte 0x43, 0x4f
-	.asciz "NDUCTOR"
+	aligned_string "NDUCTOR"
 	.byte 0xc0, 0xc0, 0xc1, 0xc3, 0xc4, 0xc6, 0xc8, 0xca
 	.byte 0xcb, 0xcd, 0xcf, 0xd0, 0xd2, 0xd4, 0xd6, 0xd7
 	.byte 0xd9, 0xdb, 0xdc, 0xde, 0xe0, 0xe2, 0xe3, 0xe5
@@ -47277,7 +46889,7 @@ LABEL_E9DAF8:
 	.byte 0x1c, 0x1e
 	.ascii " !#%&(*+-/023578:<=>?"
 	.byte 0xff
-	.asciz "440.0"
+	aligned_string "440.0"
 	.byte 0x34, 0x25
 	.byte 0x64, 0x2e, 0x30, 0x00, 0x11, 0x00, 0x05, 0x00
 	.byte 0x12, 0x00, 0x05, 0x00, 0x13, 0x00, 0x05, 0x00
@@ -48014,10 +47626,10 @@ LABEL_E9F1FC:
 	.byte 0x4d, 0x49, 0x44, 0x49
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 LABEL_E9F210:
-	.asciz "KEY SHIFT"
-	.asciz "DIGITAL EFF"
+	aligned_string "KEY SHIFT"
+	aligned_string "DIGITAL EFF"
 	.byte 0x44, 0x53
-	.asciz "P EFF"
+	aligned_string "P EFF"
 	.byte 0x52, 0x45
 	.asciz "VERB"
 	.byte 0xff, 0x00, 0xff
@@ -48138,56 +47750,31 @@ LABEL_E9F418:
 	.byte 0x46, 0x54, 0x00, 0xff
 	aligned_string "RT 2"
 	aligned_string "RT 1"
-LABEL_E9F430:
-	aligned_string "CHORD "
-LABEL_E9F438:
-	aligned_string "R.BASS"
-LABEL_E9F440:
-	aligned_string "MSP   "
-LABEL_E9F448:
-	aligned_string "BASS  "
-LABEL_E9F450:
-	aligned_string "ACOMP1"
-LABEL_E9F458:
-	aligned_string "ACOMP2"
-LABEL_E9F460:
-	aligned_string "ACOMP3"
-LABEL_E9F468:
-	aligned_string "DRUMS "
-LABEL_E9F470:
-	aligned_string " TR16 "
-LABEL_E9F478:
-	aligned_string " TR15 "
-LABEL_E9F480:
-	aligned_string " TR14 "
-LABEL_E9F488:
-	aligned_string " TR13 "
-LABEL_E9F490:
-	aligned_string " TR12 "
-LABEL_E9F498:
-	aligned_string " TR11 "
-LABEL_E9F4A0:
-	aligned_string " TR10 "
-LABEL_E9F4A8:
-	aligned_string " TR 9 "
-LABEL_E9F4B0:
-	aligned_string " TR 8 "
-LABEL_E9F4B8:
-	aligned_string " TR 7 "
-LABEL_E9F4C0:
-	aligned_string " TR 6 "
-LABEL_E9F4C8:
-	aligned_string " TR 5 "
-LABEL_E9F4D0:
-	aligned_string " TR 4 "
-LABEL_E9F4D8:
-	aligned_string " TR 3 "
-LABEL_E9F4E0:
-	aligned_string " TR 2 "
-LABEL_E9F4E8:
-	aligned_string " TR 1 "
-LABEL_E9F4F0:
-	.asciz " -- "
+LABEL_E9F430:	aligned_string "CHORD "
+LABEL_E9F438:	aligned_string "R.BASS"
+LABEL_E9F440:	aligned_string "MSP   "
+LABEL_E9F448:	aligned_string "BASS  "
+LABEL_E9F450:	aligned_string "ACOMP1"
+LABEL_E9F458:	aligned_string "ACOMP2"
+LABEL_E9F460:	aligned_string "ACOMP3"
+LABEL_E9F468:	aligned_string "DRUMS "
+LABEL_E9F470:	aligned_string " TR16 "
+LABEL_E9F478:	aligned_string " TR15 "
+LABEL_E9F480:	aligned_string " TR14 "
+LABEL_E9F488:	aligned_string " TR13 "
+LABEL_E9F490:	aligned_string " TR12 "
+LABEL_E9F498:	aligned_string " TR11 "
+LABEL_E9F4A0:	aligned_string " TR10 "
+LABEL_E9F4A8:	aligned_string " TR 9 "
+LABEL_E9F4B0:	aligned_string " TR 8 "
+LABEL_E9F4B8:	aligned_string " TR 7 "
+LABEL_E9F4C0:	aligned_string " TR 6 "
+LABEL_E9F4C8:	aligned_string " TR 5 "
+LABEL_E9F4D0:	aligned_string " TR 4 "
+LABEL_E9F4D8:	aligned_string " TR 3 "
+LABEL_E9F4E0:	aligned_string " TR 2 "
+LABEL_E9F4E8:	aligned_string " TR 1 "
+LABEL_E9F4F0:	.asciz " -- "
 	.byte 0xff, 0x20, 0x2d
 	.byte 0x2d, 0x20, 0x00, 0xff
 	aligned_string " -- "
@@ -48224,9 +47811,9 @@ LABEL_E9F568:
 	.byte 0x20, 0x33, 0x00, 0xff
 	aligned_string "TR 2"
 	aligned_string "TR 1"
-	.asciz "%s SOUND : %s"
+	aligned_string "%s SOUND : %s"
 	.byte 0x52, 0x49
-	.asciz "GHT 1: Sound Name xxxxx"
+	aligned_string "GHT 1: Sound Name xxxxx"
 	.byte 0x70, 0x07, 0x70, 0x07, 0x70, 0x07, 0x70, 0x07
 	.byte 0x23, 0x0c, 0xaf, 0x07, 0x23, 0x0c, 0x9e, 0x02
 	.byte 0x23, 0x0c, 0x47, 0x0b, 0x20, 0x00, 0x00, 0x00
@@ -48264,16 +47851,16 @@ LABEL_E9F568:
 	.asciz "MIDI"
 	.byte 0xff, 0x00, 0xff
 	.byte 0x00, 0xff, 0x00, 0xff
-	.asciz "KEY SHIFT"
+	aligned_string "KEY SHIFT"
 	.byte 0x44, 0x49
-	.asciz "GITAL EFF"
-	.asciz "DSP EFF"
+	aligned_string "GITAL EFF"
+	aligned_string "DSP EFF"
 	.asciz "REVERB"
 	.byte 0xff, 0x00, 0xff
 	.byte 0x56, 0x4f, 0x4c, 0x55
 	.byte 0x4d, 0x45, 0x00, 0xff, 0x50, 0x41, 0x4e, 0x00	; DB 04Dh, 045h, 000h, 0FFh, "PAN", 000h
 LABEL_E9F6B8:
-	.asciz "SOUND"
+	aligned_string "SOUND"
 	.byte 0x00, 0xff
 	.byte 0x00, 0x00, 0x01, 0x00, 0x02, 0x00, 0x03, 0x00
 	.byte 0x04, 0x00, 0x05, 0x00, 0x06, 0x00, 0x07, 0x00
@@ -48319,10 +47906,10 @@ LABEL_E9F7B4:
 	.byte 0x4d, 0x49, 0x44, 0x49
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 LABEL_E9F7C8:
-	.asciz "KEY SHIFT"
-	.asciz "DIGITAL EFF"
+	aligned_string "KEY SHIFT"
+	aligned_string "DIGITAL EFF"
 	.byte 0x44, 0x53
-	.asciz "P EFF"
+	aligned_string "P EFF"
 	.byte 0x52, 0x45
 	.asciz "VERB"
 	.byte 0xff, 0x00, 0xff
@@ -48403,16 +47990,16 @@ LABEL_E9F7F8:
 	.long LABEL_E9F9E0
 LABEL_E9F9E0:
 	aligned_string "Untuk memulai suatu DEMO eksternal, masukkanlah disket fasilitas Demo.~0dMemanggil satu data demo eksternal akan menghapus seluruh data yang ada Data Sequencer."
-	.asciz "Italian"
-	.asciz "To Starting an external DEMO, please insert a feature demo disk.~0dLoading external demo data will erase any existing Sequencer data."
+	aligned_string "Italian"
+	aligned_string "To Starting an external DEMO, please insert a feature demo disk.~0dLoading external demo data will erase any existing Sequencer data."
 LABEL_E9FB10:
-	.asciz "To Starting an external DEMO, please insert a feature demo disk.~0dLoading external demo data will erase any existing Sequencer data."
+	aligned_string "To Starting an external DEMO, please insert a feature demo disk.~0dLoading external demo data will erase any existing Sequencer data."
 	.byte 0x55, 0x6d
 	.ascii " eine externe DEMO zu starten, legen Sie bitte eine Feature-Demo-Disk in das Laufwerk ein.~0dDurch das Laden einer externen Demo werden alle Sequenzerdaten gel"
 	.byte 0xf6
 	.asciz "scht."
 	.byte 0x54, 0x6f
-	.asciz " Starting an external DEMO, please insert a feature demo disk.~0dLoading external demo data will erase any existing Sequencer data."
+	aligned_string " Starting an external DEMO, please insert a feature demo disk.~0dLoading external demo data will erase any existing Sequencer data."
 	.byte 0x01, 0x02, 0x04, 0xff
 	.byte 0x08, 0x10, 0x20, 0xff, 0x01, 0x04, 0x10, 0xff
 	.byte 0x02, 0x08, 0x20, 0xff, 0x00, 0x00, 0x00, 0x00
@@ -48435,16 +48022,16 @@ LABEL_E9FB10:
 	.byte 0x00, 0x00, 0x6a, 0xfd, 0xe9, 0x00, 0x00, 0x00
 	.zero 8
 	.byte 0x00, 0x00
-	.asciz "/ACTION"
+	aligned_string "/ACTION"
 	aligned_string "ACTION"
-	.asciz "/PRESENTATION"
+	aligned_string "/PRESENTATION"
 	.asciz "PRESENTATION"
 	.byte 0xff, 0x2f, 0x41
 	.byte 0x43, 0x54, 0x00, 0xff, 0x41, 0x43, 0x54, 0x00
 	.asciz "EXEC"
 	.byte 0xff, 0x53, 0x48
 	.byte 0x4f, 0x57, 0x00, 0xff, 0x49, 0x4d, 0x47, 0x00
-	.asciz "/FONT"
+	aligned_string "/FONT"
 	.byte 0x46, 0x4f
 	.byte 0x4e, 0x54, 0x00, 0xff
 	.byte 0x2f, 0x43, 0x45, 0x4e
@@ -48505,7 +48092,7 @@ LABEL_E9FE8C:
 	.byte 0x48, 0x00
 	aligned_string "HSPACE"
 	aligned_string "VSPACE"
-	.asciz "ALIGN"
+	aligned_string "ALIGN"
 	.byte 0x41, 0x4c, 0x54, 0x00, 0x53, 0x52, 0x43, 0x00	; DB "ALT", 000h, "SRC", 000h
 	.zero 8
 	.zero 8
@@ -48541,7 +48128,7 @@ LABEL_EA0000:
 	.byte 0x00, 0xff, 0x00, 0xff
 LABEL_EA0008:
 	aligned_string "<PRESENTATION>"
-	.asciz "</PRESENTATION>"
+	aligned_string "</PRESENTATION>"
 	.zero 8
 	.zero 8
 	.zero 8
@@ -48550,7 +48137,7 @@ LABEL_EA0008:
 	.byte 0xff, 0x72, 0x74
 	.byte 0x00, 0xff
 	aligned_string "<ACTION>"
-	.asciz "</ACTION>"
+	aligned_string "</ACTION>"
 	.byte 0x2e, 0x41
 	.byte 0x43, 0x54, 0x00, 0xff, 0x72, 0x74, 0x00, 0xff
 	.asciz ".SQT"
@@ -48693,7 +48280,7 @@ LABEL_EA0448:
 	aligned_string "______"
 	aligned_string "________.MID"
 	.byte 0x2e, 0x00
-	.asciz "___________"
+	aligned_string "___________"
 	.byte 0x00, 0x00
 	.zero 8
 	.zero 8
@@ -48712,12 +48299,12 @@ LABEL_EA0448:
 	.byte 0x00, 0xff, 0x72, 0x62, 0x00, 0xff, 0x72, 0x62
 	.byte 0x00, 0xff, 0x72, 0x62, 0x00, 0xff, 0x2a, 0x00
 	.byte 0x72, 0x62, 0x00, 0xff
-	.asciz "MUSIC.DIR"
+	aligned_string "MUSIC.DIR"
 	.byte 0x72, 0x62
 	.byte 0x00, 0xff
 	aligned_string "PIANODIR.FIL"
 	.byte 0x72, 0x62, 0x00, 0xff
-	.asciz "MUSIC.DIR"
+	aligned_string "MUSIC.DIR"
 	.byte 0x72, 0x62
 	.byte 0x00, 0xff
 	aligned_string "PIANODIR.FIL"
@@ -48755,14 +48342,14 @@ LABEL_EA0590:
 	.long LABEL_EA05AC
 LABEL_EA05AC:
 	.byte 0x00, 0x20, 0x20, 0x20
-	.asciz "         "
+	aligned_string "         "
 	.byte 0x00
 	.asciz "SOUND MEMORY"
 LABEL_EA05C8:
 	.byte 0x00
 	.asciz "  COMPOSER  "
 	.byte 0x00, 0x20
-	.asciz "SEQUENCER  "
+	aligned_string "SEQUENCER  "
 	.byte 0x00, 0x50, 0x41, 0x4e
 	.asciz "EL MEMORY"
 	.byte 0x1e, 0x06, 0xea, 0x00, 0x18, 0x06
@@ -48781,7 +48368,7 @@ LABEL_EA05C8:
 	.long LABEL_EA0638
 LABEL_EA0638:
 	.byte 0x00
-	.asciz " ----- "
+	aligned_string " ----- "
 	.byte 0xff, 0x00
 	.byte 0x4d, 0x45, 0x4d, 0x4f, 0x52
 	.byte 0x59, 0x20, 0x00, 0xff, 0x00, 0x50, 0x41, 0x54
@@ -48805,24 +48392,24 @@ LABEL_EA0638:
 	.asciz ".MID"
 	.byte 0xff, 0x20, 0x3a
 	ldb	w, 0x00
-	.asciz "KB free ("
-	.asciz "% used)"
+	aligned_string "KB free ("
+	aligned_string "% used)"
 	.byte 0x00, 0xff, 0x2d, 0x2d
 	.byte 0x2d, 0x2d, 0x2d, 0x00
-	.asciz " YES "
+	aligned_string " YES "
 	aligned_string " NO "
-	.asciz "-----"
+	aligned_string "-----"
 	ldb	w, 0x59
 	.byte 0x45, 0x53, 0x20, 0x00
 	aligned_string " NO "
-	.asciz " YES "
+	aligned_string " YES "
 	.asciz " NO "
 	.byte 0xff, 0x2d, 0x2d
 	.byte 0x2d, 0x2d, 0x2d, 0x00
 	.byte 0x31, 0x42, 0x41, 0x4e
 	.byte 0x4b, 0x00
-	.asciz " YES "
-	.asciz " NO  "
+	aligned_string " YES "
+	aligned_string " NO  "
 	.byte 0x2e, 0x4d
 	.byte 0x49, 0x44, 0x00, 0xff
 	aligned_string "TO SONG : "
@@ -48844,9 +48431,9 @@ LABEL_EA0770:
 	.byte 0xae, 0x07, 0x01, 0x02, 0x03, 0x04, 0xda, 0x07
 	.byte 0xea, 0x00, 0xca, 0x07, 0xea, 0x00, 0xba, 0x07
 	.byte 0xea, 0x00
-	.asciz "   MEMORY-C    "
-	.asciz "   MEMORY-B    "
-	.asciz "   MEMORY-A    "
+	aligned_string "   MEMORY-C    "
+	aligned_string "   MEMORY-B    "
+	aligned_string "   MEMORY-A    "
 	.byte 0x36, 0x08, 0xea, 0x00, 0x2e, 0x08
 	.byte 0xea, 0x00, 0x26, 0x08, 0xea, 0x00, 0x1e, 0x08
 	.byte 0xea, 0x00, 0x1c, 0x08, 0xea, 0x00, 0x1a, 0x08
@@ -48946,33 +48533,33 @@ LABEL_EA0B00:
 	.byte 0xea, 0x00, 0x7a, 0x0b, 0xea, 0x00, 0x68, 0x0b
 	.byte 0xea, 0x00, 0x58, 0x0b, 0xea, 0x00, 0x48, 0x0b
 	.byte 0xea, 0x00, 0x46, 0x0b, 0xea, 0x00, 0x00, 0xff
-	.asciz "CheckPasswordNo"
-	.asciz "CheckPasswordOk"
-	.asciz "CheckPasswordText"
+	aligned_string "CheckPasswordNo"
+	aligned_string "CheckPasswordOk"
+	aligned_string "CheckPasswordText"
 	aligned_string "PasswordText"
 	aligned_string "PasswordNo"
 	aligned_string "PasswordOk"
 	aligned_string "WakeUpPassword"
 	aligned_string "SaveNo"
-	.asciz "SaveYes"
+	aligned_string "SaveYes"
 	aligned_string "DeleteNo"
-	.asciz "DeleteYes"
+	aligned_string "DeleteYes"
 	aligned_string "SaveText"
 	aligned_string "DeleteText"
 	aligned_string "FormatText"
 	aligned_string "DiskSure"
-	.asciz "DiskAttention"
+	aligned_string "DiskAttention"
 	.byte 0x44, 0x69
 	aligned_string "skMedleyShowHideFunc"
-	.asciz "WaitingFunc"
+	aligned_string "WaitingFunc"
 	aligned_string "FormatDiskNaming"
-	.asciz "SmfFileNaming"
-	.asciz "SmfFileRename"
+	aligned_string "SmfFileNaming"
+	aligned_string "SmfFileRename"
 	aligned_string "TechnicsFileRename"
 	aligned_string "TechnicsFileNaming"
-	.asciz "SetupExitFunc"
+	aligned_string "SetupExitFunc"
 	.byte 0x53, 0x65
-	.asciz "tupOkFunc"
+	aligned_string "tupOkFunc"
 	aligned_string "FilePriorityFunc"
 	aligned_string "JumpInsertFunc"
 	aligned_string "TypePriorityText"
@@ -48991,22 +48578,20 @@ LABEL_EA0B00:
 LABEL_EA0D14:
 	.byte 0x00, 0xff, 0x61, 0x69
 	.byte 0x63, 0x6f, 0x6b, 0x00
-	.asciz "paintok"
+	aligned_string "paintok"
 	.asciz "auto_inc"
 	.byte 0xff, 0x64, 0x69
 	.byte 0x61, 0x6c, 0x00, 0xff
-	.asciz "sel_num"
+	aligned_string "sel_num"
 	.byte 0x72, 0x6f, 0x77, 0x00
-LABEL_EA0D40:
-	aligned_string "column"
-LABEL_EA0D48:
-	.asciz "main_func"
-	.asciz "fontcolor"
+LABEL_EA0D40:	aligned_string "column"
+LABEL_EA0D48:	aligned_string "main_func"
+	aligned_string "fontcolor"
 	.asciz "font"
 	.byte 0xff, 0x86, 0x0d, 0xea, 0x00, 0x7e, 0x0d
 	.byte 0xea, 0x00, 0x74, 0x0d, 0xea, 0x00, 0x72, 0x0d
 	.byte 0xea, 0x00, 0x00, 0xff
-	.asciz "main_func"
+	aligned_string "main_func"
 	jr	nc, 0x66
 	.asciz "fwin"
 	.byte 0xff, 0x6f, 0x6e
@@ -49014,43 +48599,43 @@ LABEL_EA0D48:
 	.long LABEL_EA0D94
 LABEL_EA0D94:
 	.byte 0x00, 0xff
-	.asciz "main_func"
+	aligned_string "main_func"
 	.long LABEL_EA0DB6
 	.long LABEL_EA0DAE
 	.long LABEL_EA0DAC
 LABEL_EA0DAC:
 	.byte 0x00, 0xff
-	.asciz "paintok"
+	aligned_string "paintok"
 	jr	pl, 0x61
-	.asciz "in_func"
+	aligned_string "in_func"
 	.long LABEL_EA0DE4
 	.long LABEL_EA0DDA
 	.long LABEL_EA0DD2
 	.long LABEL_EA0DD0
 LABEL_EA0DD0:
 	.byte 0x00, 0xff
-	.asciz "paintok"
-	.asciz "main_func"
+	aligned_string "paintok"
+	aligned_string "main_func"
 	.asciz "font"
 	.byte 0xff, 0xf4, 0x0d, 0xea, 0x00, 0xf2, 0x0d
 	.byte 0xea, 0x00, 0x00, 0xff
 	.asciz "index"
 	.byte 0x04, 0x0e, 0xea, 0x00, 0x02, 0x0e
 	.byte 0xea, 0x00, 0x00, 0xff
-	.asciz "main_func"
+	aligned_string "main_func"
 	.byte 0x2c, 0x0e
 	.byte 0xea, 0x00, 0x26, 0x0e, 0xea, 0x00, 0x20, 0x0e
 	.byte 0xea, 0x00, 0x1e, 0x0e, 0xea, 0x00, 0x00, 0xff
 	.asciz "page"
 	.byte 0xff, 0x69, 0x63
 	.byte 0x6f, 0x6e, 0x00, 0xff
-	.asciz "title"
+	aligned_string "title"
 	.byte 0x74, 0x0e, 0xea, 0x00, 0x68, 0x0e
 	.byte 0xea, 0x00, 0x64, 0x0e, 0xea, 0x00, 0x58, 0x0e
 	.byte 0xea, 0x00, 0x4c, 0x0e, 0xea, 0x00, 0x4a, 0x0e
 	.byte 0xea, 0x00, 0x00, 0xff
-	.asciz "tail_y_rate"
-	.asciz "tail_x_rate"
+	aligned_string "tail_y_rate"
+	aligned_string "tail_x_rate"
 	.byte 0x64, 0x69, 0x72, 0x00
 	aligned_string "frame_only"
 	.asciz "color"
@@ -49061,12 +48646,12 @@ LABEL_EA0DD0:
 	aligned_string "auto_inc"
 	aligned_string "dial_inv"
 	aligned_string "dial"
-	.asciz "index_max"
-	.asciz "index_min"
+	aligned_string "index_max"
+	aligned_string "index_min"
 	.byte 0xf2, 0x0e, 0xea, 0x00, 0xe8, 0x0e
 	.byte 0xea, 0x00, 0xe0, 0x0e, 0xea, 0x00, 0xd8, 0x0e
 	.byte 0xea, 0x00, 0xd6, 0x0e, 0xea, 0x00, 0x00, 0xff
-	.asciz "paintok"
+	aligned_string "paintok"
 	aligned_string "length"
 	aligned_string "interval"
 	aligned_string "func"
@@ -49079,9 +48664,9 @@ LABEL_EA0F0C:
 	.byte 0x00, 0xff
 	aligned_string "send_index"
 	aligned_string "interval"
-	.asciz "index_max"
+	aligned_string "index_max"
 	jr	ge, 0x6e
-	.asciz "dex_min"
+	aligned_string "dex_min"
 	.long LABEL_EA0F42
 	.long LABEL_EA0F40
 LABEL_EA0F40:
@@ -49172,19 +48757,19 @@ LABEL_EA0F40:
 	.byte 0x42, 0x41, 0x00, 0xff
 	aligned_string "IvIndexSwDelay"
 	aligned_string "jBBm"
-	.asciz "AcRotStrBox"
+	aligned_string "AcRotStrBox"
 	.byte 0x42, 0x42
 	.byte 0x47, 0x47, 0x47, 0x00
-	.asciz "IvIndexSwCtrl"
-	.asciz "^GBBB"
-	.asciz "Arrow"
+	aligned_string "IvIndexSwCtrl"
+	aligned_string "^GBBB"
+	aligned_string "Arrow"
 	.byte 0x58, 0x62
 	.byte 0x47, 0x00
-	.asciz "VwScreenTitle"
+	aligned_string "VwScreenTitle"
 	jr	ugt, 0x00
 	.asciz "IvOneShotTimer"
 	.byte 0xff, 0x41, 0x00
-	.asciz "AcMonoIndexToggle"
+	aligned_string "AcMonoIndexToggle"
 	jr	ule, 0x6b
 	jr	pl, 0x00
 	aligned_string "AcFileSfxBox"
@@ -49195,7 +48780,7 @@ LABEL_EA0F40:
 	.byte 0x74, 0x74, 0x6b, 0x00
 	aligned_string "PsWindowToggle"
 	aligned_string "c^kAAnGGmm"
-	.asciz "PsFileNameBox"
+	aligned_string "PsFileNameBox"
 	.byte 0x0d, 0x00
 	.long LABEL_EA11E2
 	.long LABEL_EA11D4
@@ -49204,10 +48789,10 @@ LABEL_EA0F40:
 	.long LABEL_EA11A0
 	.byte 0x00, 0x00, 0x00, 0x00
 LABEL_EA11A0:
-	.asciz "EV_WAKEUPPASSWORD"
-	.asciz "EV_INDEXSW_DOWN_D"
-	.asciz "EV_INDEXSW_UP_D"
-	.asciz "EV_NOTPOSTAIC"
+	aligned_string "EV_WAKEUPPASSWORD"
+	aligned_string "EV_INDEXSW_DOWN_D"
+	aligned_string "EV_INDEXSW_UP_D"
+	aligned_string "EV_NOTPOSTAIC"
 	.asciz "EV_NOTPARADRAW"
 	.byte 0xff, 0x05, 0x00, 0x4a, 0x13, 0xea, 0x00
 	.long LABEL_EA133C
@@ -49227,29 +48812,29 @@ LABEL_EA11A0:
 	.long LABEL_EA124E
 	.long LABEL_EA123C
 	.byte 0x00, 0x00, 0x00, 0x00
-	.asciz "MT_CheckPassword3"
+	aligned_string "MT_CheckPassword3"
 	.byte 0x4d, 0x54
-	.asciz "_CheckPassword2"
+	aligned_string "_CheckPassword2"
 LABEL_EA1260:
 	aligned_string "MT_CheckPassword"
 	aligned_string "MT_SetPassword"
 	aligned_string "MT_FlashLoad"
 LABEL_EA1290:
-	.asciz "MT_FlashWrite"
+	aligned_string "MT_FlashWrite"
 	.byte 0x4d, 0x54
 	aligned_string "_WakeUpNow"
-	.asciz "MT_WakeUpTime"
+	aligned_string "MT_WakeUpTime"
 	aligned_string "MT_IWillWakeUp"
 	aligned_string "MT_WhichWindow"
 	aligned_string "MT_OffWindow"
 LABEL_EA12E8:
-	.asciz "MT_OnWindow"
+	aligned_string "MT_OnWindow"
 	aligned_string "MT_PsFileNameBoxID"
 LABEL_EA1308:
 	aligned_string "MT_GetSelectedFileNumber"
 	aligned_string "MT_SetSelectedFileNumber"
-	.asciz "MT_SetFileSfx"
-	.asciz "MT_GetFileSfx"
+	aligned_string "MT_SetFileSfx"
+	aligned_string "MT_GetFileSfx"
 	.byte 0x11, 0x00, 0x57, 0x55, 0xf9, 0x00, 0x01, 0x5c
 	.byte 0xf9, 0x00, 0xca, 0x5a, 0xf9, 0x00, 0x2a, 0x5b
 	.byte 0xf9, 0x00, 0xd6, 0x5d, 0xf9, 0x00, 0x54, 0x5f
@@ -49267,18 +48852,18 @@ LABEL_EA1308:
 	.byte 0xea, 0x00, 0x00, 0xff
 	aligned_string "IvWaitWinCtlProc"
 	aligned_string "IvIndexSwDelayProc"
-	.asciz "AcRotStrBoxProc"
-	.asciz "IvIndexSwCtrlProc"
+	aligned_string "AcRotStrBoxProc"
+	aligned_string "IvIndexSwCtrlProc"
 	.asciz "ArrowProc"
 	.byte 0x56, 0x77
-	.asciz "ScreenTitleProc"
+	aligned_string "ScreenTitleProc"
 	aligned_string "IvOneShotTimerProc"
-	.asciz "AcMonoIndexToggleProc"
+	aligned_string "AcMonoIndexToggleProc"
 	aligned_string "AcFileSfxBoxProc"
 	aligned_string "AcParaStrBoxProc"
 	aligned_string "AcTtlJgBoxProc"
 	aligned_string "PsWindowToggleProc"
-	.asciz "PsFileNameBoxProc"
+	aligned_string "PsFileNameBoxProc"
 
 
 	.byte 0x34, 0x00, 0x60, 0x01
@@ -49287,7 +48872,7 @@ LABEL_EA1308:
 	.byte 0xef, 0x00, 0xf8, 0x00, 0x02, 0x00, 0x00, 0x00
 	.byte 0xa0, 0x01, 0x50, 0xec, 0x03, 0x00, 0xde, 0x14
 	.byte 0xea, 0x00, 0x95, 0x00, 0x00, 0x00, 0x44, 0x49
-	.asciz "SK MENU"
+	aligned_string "SK MENU"
 
 
 	.byte 0x1d, 0x00, 0x60, 0x01, 0x00, 0x00, 0xff, 0xff
@@ -49297,8 +48882,8 @@ LABEL_EA1308:
 	.byte 0xff, 0x00, 0x00, 0x00, 0x8a, 0x00, 0x54, 0xec
 	.byte 0x03, 0x00, 0x1e, 0x15, 0xea, 0x00, 0x10, 0x00
 	.byte 0xa0, 0x01, 0x98, 0x00, 0x00, 0x00, 0x53, 0x54
-	.asciz "YLE CONVERT"
-	.asciz "HARD DISK MAIN MENU"
+	aligned_string "YLE CONVERT"
+	aligned_string "HARD DISK MAIN MENU"
 
 
 	.byte 0x1d, 0x00, 0x60, 0x01, 0x00, 0x00, 0xff, 0xff
@@ -49308,7 +48893,7 @@ LABEL_EA1308:
 	.byte 0xff, 0x00, 0x00, 0x00, 0x89, 0x00, 0x58, 0xec
 	.byte 0x03, 0x00, 0x76, 0x15, 0xea, 0x00, 0x7e, 0x00
 	.byte 0xa0, 0x01, 0x97, 0x00, 0x00, 0x00, 0x50, 0x52
-	.asciz "EFERENCES"
+	aligned_string "EFERENCES"
 
 
 	.byte 0x1d, 0x00, 0x60, 0x01, 0x00, 0x00
@@ -49495,7 +49080,7 @@ LABEL_EA1308:
 	.byte 0xef, 0x00, 0xf9, 0x00, 0x00, 0x00, 0x60, 0x00
 	.byte 0xa0, 0x01, 0x7a, 0xec, 0x03, 0x00, 0xd6, 0x19
 	.byte 0xea, 0x00, 0x2c, 0x00, 0x00, 0x00, 0x43, 0x4f
-	.asciz "MPOSER LOAD"
+	aligned_string "MPOSER LOAD"
 
 
 	.byte 0x1f, 0x00, 0x60, 0x01
@@ -50062,7 +49647,7 @@ LABEL_EA1308:
 	.byte 0x1f, 0x00, 0x1d, 0x00, 0x08, 0x00, 0x2c, 0x00
 	.byte 0xce, 0x00, 0x4d, 0x00, 0xd8, 0x00, 0xf0, 0x25
 	.byte 0xea, 0x00, 0x03, 0x00, 0x00, 0x00, 0xff, 0x00
-	.asciz "P.MEM"
+	aligned_string "P.MEM"
 
 
 	.byte 0x2b, 0x00, 0x60, 0x01, 0x14, 0x00, 0xff, 0xff, 0x20, 0x00
@@ -50129,7 +49714,7 @@ LABEL_EA1308:
 	.byte 0x28, 0x00, 0xff, 0xff, 0x08, 0x00, 0x3c, 0x00
 	.byte 0x45, 0x00, 0xa7, 0x00, 0x57, 0x00, 0x40, 0x27
 	.byte 0xea, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0x00
-	.asciz "CURRENT PANEL"
+	aligned_string "CURRENT PANEL"
 
 
 	.byte 0x2b, 0x00, 0x60, 0x01, 0x26, 0x00, 0xff, 0xff, 0x29, 0x00
@@ -50145,7 +49730,7 @@ LABEL_EA1308:
 	.long LABEL_EA27A2
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00
-	.asciz "RHYTHM CUSTOM"
+	aligned_string "RHYTHM CUSTOM"
 
 
 	.byte 0x2b, 0x00, 0x60, 0x01, 0x26, 0x00, 0xff, 0xff
@@ -50177,7 +49762,7 @@ LABEL_EA1308:
 	.byte 0x08, 0x00, 0x3c, 0x00, 0x65, 0x00, 0x87, 0x00
 	.byte 0x77, 0x00, 0x4c, 0x28, 0xea, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0xff, 0x00
-	.asciz "SEQUENCER"
+	aligned_string "SEQUENCER"
 
 
 	.byte 0x2b, 0x00, 0x60, 0x01, 0x26, 0x00, 0xff, 0xff, 0x2f, 0x00
@@ -50210,7 +49795,7 @@ LABEL_EA1308:
 	.byte 0x00, 0x00, 0xf4, 0x00, 0x1f, 0x00, 0xf5, 0x00
 	.byte 0x00, 0x00, 0xff, 0xff, 0x26, 0x29, 0xea, 0x00
 	.byte 0x2c, 0x00, 0x00, 0x00, 0x01, 0x00, 0x4c, 0x4f
-	.asciz "AD OPTION"
+	aligned_string "AD OPTION"
 
 
 	.byte 0x2b, 0x00, 0x60, 0x01, 0x14, 0x00
@@ -50233,7 +49818,7 @@ LABEL_EA1308:
 	.long LABEL_EA29A2
 	.byte 0x54, 0x00, 0x00, 0x00
 	.byte 0x01, 0x00
-	.asciz "SINGLE LOAD"
+	aligned_string "SINGLE LOAD"
 	.byte 0x09, 0x00
 	.byte 0x65, 0x01, 0x35, 0x00, 0xff, 0xff, 0x37, 0x00
 	.byte 0xff, 0xff, 0x18, 0x00, 0x00, 0x00, 0x00, 0x00
@@ -50469,7 +50054,7 @@ LABEL_EA1308:
 	.long LABEL_EA2F3A
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00
-	.asciz "LOAD AS"
+	aligned_string "LOAD AS"
 
 
 	.byte 0x1f, 0x00, 0x60, 0x01, 0x4b, 0x00
@@ -50718,10 +50303,8 @@ LABEL_EA1308:
 	.long LABEL_EA3540
 	.long LABEL_EA3538
 	.byte 0x6a, 0xed, 0x03, 0x00, 0x09, 0x00, 0x03, 0x00
-LABEL_EA3538:
-	aligned_string "SINGLE"
-LABEL_EA3540:
-	.asciz "BANK"
+LABEL_EA3538:	aligned_string "SINGLE"
+LABEL_EA3540:	.asciz "BANK"
 	.byte 0xff, 0x00, 0x00
 	.byte 0x65, 0x01, 0x69, 0x00, 0xff, 0xff, 0x7b, 0x00
 	.byte 0x79, 0x00, 0x08, 0x00, 0x5a, 0x00, 0xc8, 0x00
@@ -50776,7 +50359,7 @@ LABEL_EA3540:
 	.byte 0x09, 0x00, 0x88, 0xed, 0x03, 0x00, 0xd2, 0x36
 	.byte 0xea, 0x00, 0x00, 0x00, 0x00, 0x00, 0x06, 0x00
 	.byte 0x45, 0x01
-	.asciz "TECHNICS FORMAT"
+	aligned_string "TECHNICS FORMAT"
 	.byte 0x02, 0x00, 0x65, 0x01, 0x00, 0x00
 	.byte 0xff, 0xff, 0xff, 0xff, 0x01, 0x00, 0x08, 0x00
 	.byte 0xa3, 0x00, 0x9c, 0x00, 0x37, 0x01, 0xb5, 0x00
@@ -50874,7 +50457,7 @@ LABEL_EA3750:
 	.byte 0x08, 0x00, 0x3e, 0x00, 0x23, 0x00, 0x77, 0x00
 	.byte 0x2d, 0x00, 0xe4, 0x38, 0xea, 0x00, 0x03, 0x00
 	.byte 0x00, 0x00, 0xff, 0x00
-	.asciz "SAVE AS :"
+	aligned_string "SAVE AS :"
 	.byte 0x03, 0x00
 	.byte 0x65, 0x01, 0x07, 0x00, 0xff, 0xff, 0x0e, 0x00
 	.byte 0x0b, 0x00, 0x08, 0x00, 0x3c, 0x00, 0x36, 0x00
@@ -50950,7 +50533,7 @@ LABEL_EA3750:
 	.byte 0xff, 0xff, 0x08, 0x00, 0x2e, 0x00, 0x45, 0x00
 	.byte 0x99, 0x00, 0x57, 0x00, 0xa6, 0x3a, 0xea, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0xff, 0x00, 0x43, 0x55
-	.asciz "RRENT PANEL"
+	aligned_string "RRENT PANEL"
 
 
 	.byte 0x2b, 0x00, 0x60, 0x01
@@ -50965,7 +50548,7 @@ LABEL_EA3750:
 	.byte 0x1a, 0x00, 0x18, 0x00, 0x08, 0x00, 0x2e, 0x00
 	.byte 0xa5, 0x00, 0x99, 0x00, 0xb7, 0x00, 0x08, 0x3b
 	.byte 0xea, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0x00
-	.asciz "RHYTHM CUSTOM"
+	aligned_string "RHYTHM CUSTOM"
 
 
 	.byte 0x2b, 0x00, 0x60, 0x01, 0x16, 0x00, 0xff, 0xff, 0x1b, 0x00
@@ -50997,7 +50580,7 @@ LABEL_EA3750:
 	.long LABEL_EA3BB2
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00
-	.asciz "SEQUENCER"
+	aligned_string "SEQUENCER"
 
 
 	.byte 0x2b, 0x00, 0x60, 0x01
@@ -51045,7 +50628,7 @@ LABEL_EA3750:
 	.byte 0xff, 0xff, 0xff, 0xff, 0x08, 0x00, 0x2e, 0x00
 	.byte 0x28, 0x00, 0x67, 0x00, 0x32, 0x00, 0xd8, 0x3c
 	.byte 0xea, 0x00, 0x03, 0x00, 0x00, 0x00, 0xff, 0x00
-	.asciz "SAVE AS :"
+	aligned_string "SAVE AS :"
 
 
 	.byte 0x1f, 0x00, 0x60, 0x01, 0x15, 0x00
@@ -51062,7 +50645,7 @@ LABEL_EA3750:
 	.long LABEL_EA3D2A
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00
-	.asciz "PERFORM"
+	aligned_string "PERFORM"
 
 
 	.byte 0x1f, 0x00, 0x60, 0x01, 0x15, 0x00
@@ -51115,7 +50698,7 @@ LABEL_EA3750:
 	.byte 0x2e, 0x00, 0x2c, 0x00, 0x08, 0x00, 0x2a, 0x00
 	.byte 0xce, 0x00, 0x4b, 0x00, 0xd8, 0x00, 0x30, 0x3e
 	.byte 0xea, 0x00, 0x03, 0x00, 0x00, 0x00, 0xff, 0x00
-	.asciz "P.MEM"
+	aligned_string "P.MEM"
 
 
 	.byte 0x1f, 0x00, 0x60, 0x01, 0x15, 0x00, 0xff, 0xff, 0x2f, 0x00
@@ -51220,7 +50803,7 @@ LABEL_EA3750:
 	.byte 0x00, 0x00, 0xf4, 0x00, 0x1f, 0x00, 0xf5, 0x00
 	.byte 0x00, 0x00, 0xff, 0xff, 0x2e, 0x40, 0xea, 0x00
 	.byte 0x2d, 0x00, 0x00, 0x00, 0x01, 0x00, 0x53, 0x41
-	.asciz "VE OPTION"
+	aligned_string "VE OPTION"
 
 
 	.byte 0x1f, 0x00, 0x60, 0x01, 0x15, 0x00
@@ -51237,7 +50820,7 @@ LABEL_EA3750:
 	.long LABEL_EA4082
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00
-	.asciz "ALL OFF"
+	aligned_string "ALL OFF"
 
 
 	.byte 0x35, 0x00, 0x60, 0x01, 0xff, 0xff
@@ -51303,7 +50886,7 @@ LABEL_EA3750:
 	.byte 0x00, 0x00, 0xf4, 0x00, 0x1f, 0x00, 0xf5, 0x00
 	.byte 0x00, 0x00, 0xff, 0xff, 0xfe, 0x41, 0xea, 0x00
 	.byte 0x2d, 0x00, 0x00, 0x00, 0x01, 0x00, 0x53, 0x45
-	.asciz "QUENCER SONG SAVE"
+	aligned_string "QUENCER SONG SAVE"
 
 
 	.byte 0x52, 0x00, 0x60, 0x01, 0x3d, 0x00
@@ -51431,7 +51014,7 @@ LABEL_EA3750:
 	.byte 0x0f, 0x00, 0x0c, 0x00, 0x08, 0x00, 0xc4, 0x00
 	.byte 0xba, 0x00, 0x3f, 0x01, 0xcc, 0x00, 0xc8, 0x44
 	.byte 0xea, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0x00
-	.asciz "1 MEASURE SPACE"
+	aligned_string "1 MEASURE SPACE"
 	.byte 0x00, 0x00, 0x65, 0x01, 0x00, 0x00, 0xff, 0xff
 	.byte 0x10, 0x00, 0x0e, 0x00, 0x08, 0x00, 0xd0, 0x00
 	.byte 0x61, 0x00, 0x37, 0x01, 0x72, 0x00, 0xf5, 0x00
@@ -51485,7 +51068,7 @@ LABEL_EA3750:
 	.byte 0xff, 0x00, 0x00, 0x00, 0x60, 0x00, 0xa0, 0x01
 	.byte 0xec, 0xed, 0x03, 0x00, 0x24, 0x46, 0xea, 0x00
 	.byte 0x2e, 0x00, 0x00, 0x00
-	.asciz "SMF DIRECT PLAY"
+	aligned_string "SMF DIRECT PLAY"
 	.byte 0x00, 0x00, 0x65, 0x01
 	.byte 0x00, 0x00, 0x02, 0x00, 0x03, 0x00, 0xff, 0xff
 	.byte 0x08, 0x00, 0x4d, 0x00, 0x42, 0x00, 0xf2, 0x00
@@ -51598,7 +51181,7 @@ LABEL_EA4880:
 	.long LABEL_EA48AA
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00
-	.asciz "PLAY AS"
+	aligned_string "PLAY AS"
 
 
 	.byte 0x2e, 0x00, 0x60, 0x01, 0x00, 0x00
@@ -51757,7 +51340,7 @@ LABEL_EA4880:
 	.long LABEL_EA4BFA
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00
-	.asciz "START"
+	aligned_string "START"
 
 
 	.byte 0x34, 0x00, 0x60, 0x01, 0xff, 0xff, 0x27, 0x00
@@ -51766,7 +51349,7 @@ LABEL_EA4880:
 	.byte 0x00, 0x00, 0x60, 0x00, 0xa0, 0x01, 0x1a, 0xee
 	.byte 0x03, 0x00, 0x2a, 0x4c, 0xea, 0x00, 0x2e, 0x00
 	.byte 0x00, 0x00
-	.asciz "DOC DIRECT PLAY"
+	aligned_string "DOC DIRECT PLAY"
 	.byte 0x00, 0x00, 0x65, 0x01, 0x26, 0x00
 	.byte 0x28, 0x00, 0x29, 0x00, 0xff, 0xff, 0x08, 0x00
 	.byte 0x4d, 0x00, 0x42, 0x00, 0xf2, 0x00, 0xd5, 0x00
@@ -51906,7 +51489,7 @@ LABEL_EA4880:
 	.long LABEL_EA4F3A
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00
-	.asciz "START"
+	aligned_string "START"
 
 
 	.byte 0x2b, 0x00, 0x60, 0x01, 0x26, 0x00, 0xff, 0xff
@@ -52208,7 +51791,7 @@ LABEL_EA5198:
 	.long LABEL_EA5610
 	.byte 0x5c, 0xee, 0x03, 0x00, 0x0c, 0x00, 0x0e, 0x00
 LABEL_EA5610:
-	.asciz "1SONG"
+	aligned_string "1SONG"
 	.byte 0x31, 0x30
 	aligned_string "SNGS"
 
@@ -52404,7 +51987,7 @@ LABEL_EA5610:
 	.byte 0x3f, 0x01, 0x1f, 0x00, 0xf5, 0x00, 0x00, 0x00
 	.byte 0xff, 0xff, 0x4c, 0x5a, 0xea, 0x00, 0x99, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00
-	.asciz "FILE RENAME"
+	aligned_string "FILE RENAME"
 
 
 	.byte 0x4d, 0x00, 0x60, 0x01, 0x15, 0x00, 0xff, 0xff
@@ -52729,7 +52312,7 @@ LABEL_EA5AC8:
 	.byte 0x42, 0x00, 0x40, 0x00, 0x08, 0x00, 0x0a, 0x00
 	.byte 0x48, 0x00, 0x35, 0x01, 0x5a, 0x00, 0x50, 0x61
 	.byte 0xea, 0x00, 0x01, 0x00, 0x00, 0x00, 0xf1, 0x00
-	.asciz "Select the FORMAT type for your disk."
+	aligned_string "Select the FORMAT type for your disk."
 
 
 	.byte 0x3d, 0x00, 0x60, 0x01, 0x3f, 0x00, 0xff, 0xff, 0x43, 0x00
@@ -52740,7 +52323,7 @@ LABEL_EA5AC8:
 	.long LABEL_EA61A8
 	.byte 0x00, 0x00, 0x00, 0x00
 LABEL_EA61A8:
-	.asciz "     720K Byte format : 2DD"
+	aligned_string "     720K Byte format : 2DD"
 
 
 	.byte 0x3d, 0x00, 0x60, 0x01
@@ -52750,7 +52333,7 @@ LABEL_EA61A8:
 	.byte 0x04, 0x00, 0x00, 0x00, 0xff, 0x00, 0x00, 0x00
 	.byte 0x0a, 0x00, 0xbe, 0xee, 0x03, 0x00, 0xf6, 0x61
 	.byte 0xea, 0x00, 0x00, 0x00, 0x00, 0x00, 0x20, 0x20
-	.asciz "  1.44M Byte format : 2HD"
+	aligned_string "  1.44M Byte format : 2HD"
 
 
 	.byte 0x33, 0x00, 0x60, 0x01, 0xff, 0xff
@@ -52764,7 +52347,7 @@ LABEL_EA61A8:
 	.long LABEL_EA625A
 	.byte 0x96, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00
-	.asciz "FILE COPY"
+	aligned_string "FILE COPY"
 	.byte 0x08, 0x00, 0x65, 0x01
 	.byte 0x44, 0x00, 0xff, 0xff, 0x47, 0x00, 0x45, 0x00
 	.byte 0x08, 0x00, 0x96, 0x00, 0x76, 0x00, 0xa9, 0x00
@@ -52827,7 +52410,7 @@ LABEL_EA61A8:
 	.byte 0x00, 0x00, 0x3f, 0x01, 0x1f, 0x00, 0xf5, 0x00
 	.byte 0x00, 0x00, 0xff, 0xff, 0xce, 0x63, 0xea, 0x00
 	.byte 0x99, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46, 0x49
-	.asciz "LE RENAME"
+	aligned_string "LE RENAME"
 
 
 	.byte 0x4d, 0x00, 0x60, 0x01, 0x4e, 0x00
@@ -52921,7 +52504,7 @@ LABEL_EA61A8:
 	.byte 0xff, 0xff, 0x08, 0x00, 0x0a, 0x00, 0x0a, 0x00
 	.byte 0x65, 0x00, 0x1c, 0x00, 0xbe, 0x65, 0xea, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0xff, 0x00, 0x44, 0x45
-	.asciz "LETE SURE"
+	aligned_string "LETE SURE"
 
 
 	.byte 0x33, 0x00, 0x60, 0x01, 0xff, 0xff
@@ -52945,7 +52528,7 @@ LABEL_EA61A8:
 	.byte 0xef, 0x00, 0xf8, 0x00, 0x00, 0x00, 0x60, 0x00
 	.byte 0xa0, 0x01, 0xe0, 0xee, 0x03, 0x00, 0x46, 0x66
 	.byte 0xea, 0x00, 0x97, 0x00, 0x00, 0x00, 0x50, 0x52
-	.asciz "EFERENCES"
+	aligned_string "EFERENCES"
 
 
 	.byte 0x22, 0x00, 0x60, 0x01, 0x00, 0x00
@@ -53315,16 +52898,16 @@ LABEL_EA61A8:
 	.byte 0x00, 0xff
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
-	.asciz "DiskSaveSureWin"
+	aligned_string "DiskSaveSureWin"
 	.byte 0x00, 0xff
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 	.byte 0x00, 0xff, 0x00, 0xff
-	.asciz "WallpaperLoad"
+	aligned_string "WallpaperLoad"
 	.byte 0x00, 0xff, 0x00, 0xff
-	.asciz "DiskSaveNameSMF"
+	aligned_string "DiskSaveNameSMF"
 	.byte 0x00, 0xff
-	.asciz "DiskWaitWin"
+	aligned_string "DiskWaitWin"
 	.byte 0x00, 0xff, 0x00, 0xff
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
@@ -53336,7 +52919,7 @@ LABEL_EA61A8:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 	.byte 0x00, 0xff
-	.asciz "IntSongMedley"
+	aligned_string "IntSongMedley"
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 	.asciz "HardDiskMenu"
@@ -53486,7 +53069,7 @@ LABEL_EA7460:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 LABEL_EA7468:
 	.byte 0x00, 0xff, 0x00, 0xff
-	.asciz "CmpSingleLoad"
+	aligned_string "CmpSingleLoad"
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 LABEL_EA7480:
 	.byte 0x00, 0xff, 0x00, 0xff
@@ -53506,7 +53089,7 @@ LABEL_EA74C8:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 LABEL_EA74D0:
 	.byte 0x00, 0xff, 0x00, 0xff
-	.asciz "DiskLoadSMF"
+	aligned_string "DiskLoadSMF"
 LABEL_EA74E0:
 	.asciz "SingleBankToggle"
 	.byte 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
@@ -53519,7 +53102,7 @@ LABEL_EA7508:
 LABEL_EA7510:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 LABEL_EA7518:
-	.asciz "SingleLoadSwCtl"
+	aligned_string "SingleLoadSwCtl"
 LABEL_EA7528:
 	.byte 0x00, 0xff
 	.asciz "DiskLoadP3"
@@ -53643,7 +53226,7 @@ LABEL_EA75E8:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 	.byte 0x00, 0xff, 0x00, 0xff
-	.asciz "DiskSmfSave"
+	aligned_string "DiskSmfSave"
 	.long LABEL_EA7AB8
 	.long LABEL_EA7AB6
 	.long LABEL_EA7AB4
@@ -53754,7 +53337,7 @@ LABEL_EA7A28:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 LABEL_EA7A30:
 	.byte 0x00, 0xff
-	.asciz "DiskDocDirectPlay"
+	aligned_string "DiskDocDirectPlay"
 	.byte 0x00, 0xff, 0x00, 0xff
 LABEL_EA7A48:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
@@ -53777,7 +53360,7 @@ LABEL_EA7AA8:
 LABEL_EA7AB0:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 LABEL_EA7AB8:
-	.asciz "DiskSmfDirectPlay"
+	aligned_string "DiskSmfDirectPlay"
 	.byte 0xce, 0x7a, 0xea, 0x00, 0x00, 0xff
 	.long LABEL_EA7AD4
 LABEL_EA7AD4:
@@ -53852,36 +53435,36 @@ LABEL_EA7AD4:
 	.byte 0xea, 0x00, 0x12, 0x7d, 0xea, 0x00, 0x10, 0x7d
 	.byte 0xea, 0x00, 0x0e, 0x7d, 0xea, 0x00, 0x00, 0xff
 	.byte 0x00, 0xff
-	.asciz "DiskSaveSureScr"
+	aligned_string "DiskSaveSureScr"
 	.byte 0x00, 0xff
-	.asciz "DiskDeleteSureScr"
+	aligned_string "DiskDeleteSureScr"
 	.byte 0x00, 0xff
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
-	.asciz "DiskDeleteSureWin"
+	aligned_string "DiskDeleteSureWin"
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
-	.asciz "FileRenameSMF"
+	aligned_string "FileRenameSMF"
 	.byte 0x00, 0xff, 0x00, 0xff
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 	.byte 0x00, 0xff, 0x00, 0xff
 	.asciz "FileCopy"
 	.byte 0xff, 0x00, 0xff
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
-	.asciz "DiskFormatSelectWin"
+	aligned_string "DiskFormatSelectWin"
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 	.byte 0x00, 0xff
-	.asciz "DiskFormatSureWin"
+	aligned_string "DiskFormatSureWin"
 	.byte 0x00, 0xff, 0x00, 0xff
 	.byte 0x00, 0xff, 0x00, 0xff
-	.asciz "DiskFormatNamingWin"
+	aligned_string "DiskFormatNamingWin"
 	.byte 0x00, 0xff
-	.asciz "SongNameWin"
+	aligned_string "SongNameWin"
 	.byte 0x00, 0xff
 	.byte 0x00, 0xff, 0x00, 0xff
-	.asciz "DiskInfoWin"
+	aligned_string "DiskInfoWin"
 LABEL_EA7E00:
-	.asciz "WaitWinCtlSmf"
+	aligned_string "WaitWinCtlSmf"
 	.byte 0x00, 0xff
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
@@ -53897,7 +53480,7 @@ LABEL_EA7E00:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 	.byte 0x00, 0xff, 0x00, 0xff
-	.asciz "DiskUtility"
+	aligned_string "DiskUtility"
 	.long LABEL_EA7E9C
 LABEL_EA7E9C:
 	.byte 0x00, 0xff, 0xa2, 0x7e
@@ -53914,30 +53497,30 @@ LABEL_EA7EC8:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 LABEL_EA7ED0:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
-	.asciz "DiskSetup"
+	aligned_string "DiskSetup"
 	.byte 0xe6, 0x7e, 0xea, 0x00, 0x00, 0xff
-	.asciz "MD_DISK"
-	.asciz "TT_DKMENU"
-	.asciz "TT_DKLD"
+	aligned_string "MD_DISK"
+	aligned_string "TT_DKMENU"
+	aligned_string "TT_DKLD"
 	aligned_string "TT_CMPLDSNGL"
-	.asciz "TT_DKWPLD"
+	aligned_string "TT_DKWPLD"
 	aligned_string "TT_DKLDSMF"
-	.asciz "TT_DKSVMENU"
-	.asciz "TT_DKSVNAME"
+	aligned_string "TT_DKSVMENU"
+	aligned_string "TT_DKSVNAME"
 	.byte 0x54, 0x54
-	.asciz "_DKSV"
+	aligned_string "_DKSV"
 	.byte 0x54, 0x54
 	aligned_string "_DKSVNAMESMF"
 	aligned_string "TT_DKSVSMF"
 	aligned_string "TT_DKDPSMF"
 	aligned_string "TT_DKDPDOC"
-	.asciz "TT_DKDPPD"
-	.asciz "TT_DKMDLY"
+	aligned_string "TT_DKDPPD"
+	aligned_string "TT_DKMDLY"
 	.byte 0x54, 0x54
-	.asciz "_SQMDLY"
-	.asciz "TT_DKUT"
+	aligned_string "_SQMDLY"
+	aligned_string "TT_DKUT"
 	aligned_string "TT_DKUTSMF"
-	.asciz "TT_DKUTFRMT"
+	aligned_string "TT_DKUTFRMT"
 	aligned_string "TT_DKSETUP"
 	.asciz "TT_CMPLD"
 	.byte 0xff, 0x2c, 0xcb
@@ -53999,71 +53582,71 @@ LABEL_EA7ED0:
 	.byte 0xea, 0x00, 0xdc, 0x81, 0xea, 0x00, 0xc6, 0x81
 	.byte 0xea, 0x00, 0xb0, 0x81, 0xea, 0x00, 0xa0, 0x81
 	.byte 0xea, 0x00, 0x9e, 0x81, 0xea, 0x00, 0x00, 0xff
-	.asciz "FmmPasswordFunc"
+	aligned_string "FmmPasswordFunc"
 	aligned_string "FmmWallpaperLoadFunc"
 	aligned_string "FmmCmpSingleLoadFunc"
 	aligned_string "CmpSingleLoadDstFunc"
 	aligned_string "CmpSingleLoadSrcFunc"
-	.asciz "CmpSingleLoadFileFunc"
+	aligned_string "CmpSingleLoadFileFunc"
 	.byte 0x46, 0x6d
 	aligned_string "mSmfUtilityTitleFunc"
-	.asciz "FmmUtilityTitleFunc"
+	aligned_string "FmmUtilityTitleFunc"
 	aligned_string "SetupFlashFunc"
-	.asciz "SaveFileNameSmfFunc"
+	aligned_string "SaveFileNameSmfFunc"
 	.byte 0x53, 0x6d
-	.asciz "fSeqFromSongNumFunc"
-	.asciz "FmmSmfSaveTitleFunc"
-	.asciz "SmfSeqToSongNumFunc"
+	aligned_string "fSeqFromSongNumFunc"
+	aligned_string "FmmSmfSaveTitleFunc"
+	aligned_string "SmfSeqToSongNumFunc"
 	aligned_string "SmfSeqSongNameFunc"
-	.asciz "SmfLoadAsFunc"
+	aligned_string "SmfLoadAsFunc"
 	.byte 0x46, 0x6d
-	.asciz "mSmfLoadTitleFunc"
+	aligned_string "mSmfLoadTitleFunc"
 	aligned_string "FmmSaveTitleFunc"
 	aligned_string "FmmLoadTitleFunc"
-	.asciz "FmmDiskMedleySelectFunc"
+	aligned_string "FmmDiskMedleySelectFunc"
 	.byte 0x46, 0x6d
-	.asciz "mComposerLoadFunc"
+	aligned_string "mComposerLoadFunc"
 	aligned_string "FileCopyFunc"
-	.asciz "FileRenameSmfFunc"
+	aligned_string "FileRenameSmfFunc"
 	aligned_string "FileRenameFunc"
-	.asciz "FmmFormatFunc"
+	aligned_string "FmmFormatFunc"
 	aligned_string "FmmDiskMedley2Func"
 	aligned_string "FmmDiskMedley1Func"
 	aligned_string "FmmDocMedleyFunc"
-	.asciz "FmmPdMedleyFunc"
+	aligned_string "FmmPdMedleyFunc"
 	aligned_string "FmmSmfMedleyFunc"
 	.asciz "SingleLoadDstFunc"
 	.byte 0x53, 0x69
 	aligned_string "ngleLoadDstMemFunc"
-	.asciz "SingleLoadDstBankFunc"
+	aligned_string "SingleLoadDstBankFunc"
 	.asciz "SingleLoadSrcFunc"
 	aligned_string "SingleLoadSrcMemFunc"
-	.asciz "SingleLoadSrcBankFunc"
+	aligned_string "SingleLoadSrcBankFunc"
 	aligned_string "SingleLoadModeFunc"
-	.asciz "FmmSaveFilterFunc"
+	aligned_string "FmmSaveFilterFunc"
 	.byte 0x46, 0x6d
-	.asciz "mLoadFilterFunc"
-	.asciz "CurFileNameFunc"
+	aligned_string "mLoadFilterFunc"
+	aligned_string "CurFileNameFunc"
 	aligned_string "FmmIntMedleyFunc"
 	aligned_string "FmmSeqSongNameFunc"
-	.asciz "SaveFileNameNumFunc"
+	aligned_string "SaveFileNameNumFunc"
 	aligned_string "SaveFileNameFunc"
 	aligned_string "SongNameFunc"
 	aligned_string "DiskInfoFunc"
 	aligned_string "DiskNameFunc"
 	aligned_string "UtilityTtlJgFunc"
-	.asciz "SongMedleyTtlJgFunc"
-	.asciz "DirectPlayTtlJgFunc"
+	aligned_string "SongMedleyTtlJgFunc"
+	aligned_string "DirectPlayTtlJgFunc"
 	aligned_string "SaveSmfTtlJgFunc"
-	.asciz "SaveTtlJgFunc"
-	.asciz "LoadTtlJgFunc"
+	aligned_string "SaveTtlJgFunc"
+	aligned_string "LoadTtlJgFunc"
 	.byte 0x44, 0x6f
-	.asciz "cDiskNameFunc"
+	aligned_string "cDiskNameFunc"
 	.byte 0x46, 0x6d
 	aligned_string "mDocFileNameFunc"
-	.asciz "FmmPdFileNameFunc"
+	aligned_string "FmmPdFileNameFunc"
 	aligned_string "FmmSmfFileNameFunc"
-	.asciz "FmmFileNameFunc"
+	aligned_string "FmmFileNameFunc"
 	.long LABEL_EA8672
 	.long LABEL_EA8650
 	.long LABEL_EA8634
@@ -54077,7 +53660,7 @@ LABEL_EA8618:
 	aligned_string "Please enter the password."
 	aligned_string "Please enter the password."
 LABEL_EA8650:
-	.asciz "Bitte geben Sie das Password ein."
+	aligned_string "Bitte geben Sie das Password ein."
 	.asciz "Please enter the password."
 	.byte 0xff, 0xf2, 0x87
 	.byte 0xea, 0x00, 0xa6, 0x87, 0xea, 0x00, 0x66, 0x87
@@ -54096,46 +53679,44 @@ LABEL_EA8650:
 	.byte 0xea, 0x00, 0x28, 0x89, 0xea, 0x00, 0xde, 0x88
 	.byte 0xea, 0x00, 0x94, 0x88, 0xea, 0x00, 0x4a, 0x88
 	.byte 0xea, 0x00
-	.asciz "The songs in the Sequencer are copy protected. Please enter the password."
-	.asciz "The songs in the Sequencer are copy protected. Please enter the password."
+	aligned_string "The songs in the Sequencer are copy protected. Please enter the password."
+	aligned_string "The songs in the Sequencer are copy protected. Please enter the password."
 	.byte 0x54, 0x68
-	.asciz "e songs in the Sequencer are copy protected. Please enter the password."
-	.asciz "The songs in the Sequencer are copy protected. Please enter the password."
+	aligned_string "e songs in the Sequencer are copy protected. Please enter the password."
+	aligned_string "The songs in the Sequencer are copy protected. Please enter the password."
 	.ascii "Die Songs im Sequenzer sind kopiergesch"
 	.byte 0xfc
 	aligned_string "tzt. Bitte geben Sie das Password ein."
-	.asciz "The songs in the Sequencer are copy protected. Please enter the password."
+	aligned_string "The songs in the Sequencer are copy protected. Please enter the password."
 	.byte 0xa4, 0x8b, 0xea, 0x00
 	.long LABEL_EA8B54
 	.long LABEL_EA8B08
 	.long LABEL_EA8ABC
 	.long LABEL_EA8A70
 	.long LABEL_EA8A24
-LABEL_EA8A24:
-	.asciz "The patterns in the Composer are copy protected. Please enter the password."
-LABEL_EA8A70:
-	.asciz "The patterns in the Composer are copy protected. Please enter the password."
-	.asciz "The patterns in the Composer are copy protected. Please enter the password."
+LABEL_EA8A24:	aligned_string "The patterns in the Composer are copy protected. Please enter the password."
+LABEL_EA8A70:	aligned_string "The patterns in the Composer are copy protected. Please enter the password."
+	aligned_string "The patterns in the Composer are copy protected. Please enter the password."
 LABEL_EA8B08:
-	.asciz "The patterns in the Composer are copy protected. Please enter the password."
+	aligned_string "The patterns in the Composer are copy protected. Please enter the password."
 	.ascii "Die Pattern im Composer sind kopiergesch"
 	.byte 0xfc, 0x74, 0x7a, 0x74
 	.asciz ". Bitte geben Sie das Password ein."
-	.asciz "The patterns in the Composer are copy protected. Please enter the password."
+	aligned_string "The patterns in the Composer are copy protected. Please enter the password."
 	.asciz "CcEv"
 	.byte 0xff, 0x3f, 0x3f
 	.byte 0x00, 0xff, 0x3f, 0x3f, 0x00, 0xff, 0x50, 0x8c
 	.byte 0xea, 0x00, 0x46, 0x8c, 0xea, 0x00, 0x3a, 0x8c
 	.byte 0xea, 0x00, 0x2e, 0x8c, 0xea, 0x00, 0x22, 0x8c
 	.byte 0xea, 0x00, 0x16, 0x8c, 0xea, 0x00, 0x50, 0x65
-	.asciz "rhatian !"
+	aligned_string "rhatian !"
 	.asciz "ATTENTION!"
 	.byte 0xff, 0xa1, 0x41
 	.byte 0x54, 0x45, 0x4e, 0x43, 0x49
 	.byte 0xd3, 0x4e, 0x21
 	.byte 0x00, 0xff
 	aligned_string "ATTENTION!"
-	.asciz "ACHTUNG !"
+	aligned_string "ACHTUNG !"
 	.asciz "ATTENTION!"
 	.byte 0xff, 0xce, 0x8c, 0xea, 0x00
 	.long LABEL_EA8CBC
@@ -54143,19 +53724,17 @@ LABEL_EA8B08:
 	.long LABEL_EA8C9E
 	.long LABEL_EA8C90
 	.long LABEL_EA8C74
-LABEL_EA8C74:
-	.asciz "Apakah yakin akan dihapus ?"
-LABEL_EA8C90:
-	.asciz "Are You Sure?"
+LABEL_EA8C74:	aligned_string "Apakah yakin akan dihapus ?"
+LABEL_EA8C90:	aligned_string "Are You Sure?"
 	.byte 0xbf, 0x45
 	jrl	ule, 0xe174
 	.asciz " seguro?"
 	.ascii "Etes vous s"
 	.byte 0xfb
 	.byte 0x72, 0x3f, 0x00, 0xff
-	.asciz "Sind Sie sicher ?"
+	aligned_string "Sind Sie sicher ?"
 	.byte 0x41, 0x72
-	.asciz "e You Sure?"
+	aligned_string "e You Sure?"
 	.byte 0x34, 0x8e, 0xea, 0x00
 	.long LABEL_EA8E04
 	.long LABEL_EA8DB6
@@ -54166,14 +53745,14 @@ LABEL_EA8CF4:
 	aligned_string "Gunakan Disk Format untuk menghapus suatu data yang ada sekarang didalam disk."
 	aligned_string "Using DISK FORMAT will erase any current data on the disk."
 LABEL_EA8D80:
-	.asciz "Al formatear el disco  se borran los datos del disco."
+	aligned_string "Al formatear el disco  se borran los datos del disco."
 	.byte 0x4c, 0x27
 	.ascii "utilisation deDISK FORMAT effacera toute donn"
 	.byte 0xe9, 0x65, 0x20
-	.asciz "existante sur la disquette."
+	aligned_string "existante sur la disquette."
 	.ascii "DISK FORMAT l"
 	.byte 0xf6
-	.asciz "scht alle Daten auf der Diskette."
+	aligned_string "scht alle Daten auf der Diskette."
 	aligned_string "Using DISK FORMAT will erase any current data on the disk."
 	.long LABEL_EA90B6
 	.long LABEL_EA9082
@@ -54185,14 +53764,14 @@ LABEL_EA8E88:
 	.ascii "Usando FILE DELETE si canceller"
 	.byte 0xe0
 	aligned_string "il file completamente. Se sei incerto per favore conferma la tua selezione del file."
-	.asciz "Using FILE DELETE will erase the selected file completely. If you are uncertain please confirm your file selection."
+	aligned_string "Using FILE DELETE will erase the selected file completely. If you are uncertain please confirm your file selection."
 	.ascii "El uso del FILE DELETE borrar"
 	.byte 0xe1
 	.ascii " completamente el archivo seleccionado. Si no est"
 	.byte 0xe1
 	.ascii " seguro, confirme la selecci"
 	.byte 0xf3, 0x6e
-	.asciz " del archivo."
+	aligned_string " del archivo."
 	.byte 0x4c, 0x61
 	.ascii " fonction FILE DELETE va effacer compl"
 	.byte 0xe8, 0x74
@@ -54209,7 +53788,7 @@ LABEL_EA8E88:
 	.byte 0xf6
 	.asciz "scht."
 	.byte 0x55, 0x73
-	.asciz "ing FILE DELETE will erase the selected file completely. If you are uncertain please confirm your file selection."
+	aligned_string "ing FILE DELETE will erase the selected file completely. If you are uncertain please confirm your file selection."
 	.byte 0xca, 0x93, 0xea, 0x00, 0x44, 0x93
 	.byte 0xea, 0x00, 0xa6, 0x92, 0xea, 0x00, 0x2c, 0x92
 	.byte 0xea, 0x00, 0xba, 0x91, 0xea, 0x00, 0x42, 0x91
@@ -54219,14 +53798,14 @@ LABEL_EA8E88:
 	.ascii " un file nella locazione scelta, Procedendo. il file presente verr"
 	.byte 0xe0, 0x20
 	aligned_string "sostituito da quello che state salvando."
-	.asciz "A file already exists at the chosen location. If you proceed it will be replaced by the file that you are saving."
+	aligned_string "A file already exists at the chosen location. If you proceed it will be replaced by the file that you are saving."
 	.ascii "Ya existe un archivo en el lugar seleccionado. Si contin"
 	.byte 0xfa, 0x61, 0x2c, 0x20
 	.ascii "este archivo se ver"
 	.byte 0xe1
 	.ascii " reemplazado por el que est"
 	.byte 0xe1
-	.asciz " memorizando."
+	aligned_string " memorizando."
 	.byte 0x55, 0x6e
 	.ascii " fichier existe d"
 	.byte 0xe9, 0x6a, 0xe0
@@ -54238,13 +53817,13 @@ LABEL_EA8E88:
 	.byte 0xe9
 	.ascii " et remplac"
 	.byte 0xe9, 0x20
-	.asciz "par le fichier que vous me demandez de sauvegarder."
+	aligned_string "par le fichier que vous me demandez de sauvegarder."
 	.ascii "Die soeben gew"
 	.byte 0xe4
 	.ascii "hlte Disketten-Bank ist bereits wit Daten belegt. Wenn Sie jetzt trotzdem speichern, werden die alten Daten gel"
 	.byte 0xf6
 	aligned_string "scht."
-	.asciz "A file already exists at the chosen location. If you proceed it will be replaced by the file that you are saving."
+	aligned_string "A file already exists at the chosen location. If you proceed it will be replaced by the file that you are saving."
 	.byte 0x30, 0x95, 0xea, 0x00
 	.long LABEL_EA94F4
 	.long LABEL_EA94CC
@@ -54252,14 +53831,14 @@ LABEL_EA8E88:
 	.long LABEL_EA947C
 	.long LABEL_EA9454
 LABEL_EA9454:
-	.asciz "When a disk is inserted open this page."
-	.asciz "When a disk is inserted open this page."
-	.asciz "When a disk is inserted open this page."
-	.asciz "When a disk is inserted open this page."
+	aligned_string "When a disk is inserted open this page."
+	aligned_string "When a disk is inserted open this page."
+	aligned_string "When a disk is inserted open this page."
+	aligned_string "When a disk is inserted open this page."
 	.ascii "Diese Seite wird ge"
 	.byte 0xf6
-	.asciz "ffnet, wenn Sie eine Diskette einlegen."
-	.asciz "When a disk is inserted open this page."
+	aligned_string "ffnet, wenn Sie eine Diskette einlegen."
+	aligned_string "When a disk is inserted open this page."
 	.long LABEL_EA965E
 	.long LABEL_EA9620
 	.long LABEL_EA95F4
@@ -54281,10 +53860,10 @@ LABEL_EA9620:
 	.byte 0xff, 0xd6, 0x96, 0xea, 0x00, 0xc8, 0x96
 	.byte 0xea, 0x00, 0xba, 0x96, 0xea, 0x00, 0xac, 0x96
 	.byte 0xea, 0x00, 0x9e, 0x96, 0xea, 0x00, 0x20, 0x53
-	.asciz "ONG MEDLEY "
-	.asciz " DIRECT PLAY "
-	.asciz "    LOAD     "
-	.asciz "  DISK MENU  "
+	aligned_string "ONG MEDLEY "
+	aligned_string " DIRECT PLAY "
+	aligned_string "    LOAD     "
+	aligned_string "  DISK MENU  "
 	ldb	w, 0x20
 	.asciz "   OFF     "
 	.byte 0x1e, 0x00, 0x1e, 0x00
@@ -54315,18 +53894,18 @@ LABEL_EA97D8:
 	.byte 0xea, 0x00, 0x4e, 0x98, 0xea, 0x00, 0x40, 0x98
 	.byte 0xea, 0x00, 0x32, 0x98, 0xea, 0x00, 0x24, 0x98
 	.byte 0xea, 0x00, 0x16, 0x98, 0xea, 0x00, 0x20, 0x20
-	.asciz "USER MIDI  "
-	.asciz "RHYTHM CUSTOM"
-	.asciz "     MSP     "
-	.asciz "SOUND MEMORY "
+	aligned_string "USER MIDI  "
+	aligned_string "RHYTHM CUSTOM"
+	aligned_string "     MSP     "
+	aligned_string "SOUND MEMORY "
 	ldb	w, 0x20
-	.asciz "COMPOSER   "
-	.asciz "  SEQUENCER  "
-	.asciz "PANEL MEMORY "
-	.asciz "CURRENT PANEL"
+	aligned_string "COMPOSER   "
+	aligned_string "  SEQUENCER  "
+	aligned_string "PANEL MEMORY "
+	aligned_string "CURRENT PANEL"
 	ldb	w, 0x20
 	.asciz "           "
-	.asciz "1shot"
+	aligned_string "1shot"
 	.byte 0x49, 0x53, 0x43, 0x00, 0x49, 0x53
 	.byte 0x44, 0x00, 0x57, 0x57, 0x43, 0x00, 0x00, 0x00
 	.byte 0x15, 0x00, 0x2b, 0x00, 0x41, 0x00, 0x57, 0x00
@@ -54628,8 +54207,8 @@ LABEL_EA9ED0:
 	.byte 0xea, 0x00, 0x5f, 0x00, 0x20, 0x00, 0x00, 0x00
 	.byte 0x2d, 0x00, 0x61, 0x00, 0xdd, 0x00, 0xae, 0x02
 	.byte 0x69, 0x03, 0xdf, 0x03, 0x55, 0x04, 0x9e, 0x05
-	.asciz "0x%02X : %s"
-	.asciz "0x%02X : %s"
+	aligned_string "0x%02X : %s"
+	aligned_string "0x%02X : %s"
 
 Bitmap_WormWearingHat:	; ea9f20
 	.incbin "images/BitmapWormWearingHat.bin"
@@ -54640,11 +54219,11 @@ LABEL_EAA160:
 	.byte 0x66, 0x00, 0x7e, 0x38, 0x30, 0x00, 0x7e, 0x38
 	.byte 0x31, 0x00, 0x7e, 0x37, 0x66, 0x00, 0x7e, 0x38
 	.byte 0x30, 0x00, 0x7e, 0x38, 0x31, 0x00, 0x0d, 0x00
-	.asciz "~aa=%3d"
-	.asciz "~aa=---"
+	aligned_string "~aa=%3d"
+	aligned_string "~aa=---"
 	aligned_string "No My Car Day|Memory|AyaSam|Sweet Home Town|I am Rocker|Sunday Song|Two Day Drunk?|Samba 2"
-	.asciz "%d-%d"
-	.asciz " PART  |CHANNEL|OCTAVE | LOCAL "
+	aligned_string "%d-%d"
+	aligned_string " PART  |CHANNEL|OCTAVE | LOCAL "
 	aligned_string "|-|RIGHT1|RIGHT2|LEFT|PART4|PART5|PART6|PART7|PART8|"
 	.byte 0xc3, 0x09, 0xca, 0x09, 0x87, 0x08, 0x81, 0x09
 	.byte 0xdf, 0x09, 0xbb, 0x0a, 0x0b, 0x0b, 0xdb, 0x0a
@@ -54655,8 +54234,8 @@ LABEL_EAA160:
 	.byte 0x00, 0x00, 0x25, 0x00, 0x25, 0x64, 0x00, 0xff
 	.byte 0x64, 0x00, 0x92, 0xa2, 0xea, 0x00, 0x8a, 0xa2
 	.byte 0xea, 0x00
-	.asciz "ACTIVE "
-	.asciz "PASSIVE"
+	aligned_string "ACTIVE "
+	aligned_string "PASSIVE"
 	.byte 0xa6, 0xa2, 0xea, 0x00, 0xa2, 0xa2
 	.byte 0xea, 0x00, 0x4f, 0x4e, 0x20, 0x00, 0x4f, 0x46
 	.byte 0x46, 0x00, 0x25, 0x00, 0x25, 0x64, 0x00, 0xff
@@ -54708,9 +54287,9 @@ LABEL_EAA160:
 	.byte 0xff, 0x53, 0x68
 	.byte 0x6f, 0x77, 0x00, 0xff
 	aligned_string "PMEM:%2d-%d %16s"
-	.asciz "PMEM:%2d-  %16s"
+	aligned_string "PMEM:%2d-  %16s"
 	.byte 0x50, 0x4d
-	.asciz "EM:%2d-                  "
+	aligned_string "EM:%2d-                  "
 	.byte 0x08, 0xa5, 0xea, 0x00, 0x04, 0xa5
 	.byte 0xea, 0x00, 0xfe, 0xa4, 0xea, 0x00, 0xfa, 0xa4
 	.byte 0xea, 0x00, 0xf6, 0xa4, 0xea, 0x00, 0xf2, 0xa4
@@ -54811,10 +54390,10 @@ LABEL_EAA160:
 	.byte 0x25, 0x33, 0x64, 0x00
 	.byte 0x4d, 0x55, 0x54, 0x45
 	.byte 0x00, 0xff
-	.asciz "Debug Time!"
+	aligned_string "Debug Time!"
 	ldb	e, 0x30
 	aligned_string "2X%04X  "
-	.asciz "%02X %02X %02X %02X %02X %02X %02X %02X"
+	aligned_string "%02X %02X %02X %02X %02X %02X %02X %02X"
 	.byte 0x00, 0x00, 0x10, 0x00, 0x00, 0x00
 	.byte 0x01, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00, 0x01
 	.byte 0x00, 0x00, 0x10, 0x00, 0x00, 0x00, 0x01, 0x00
@@ -54823,7 +54402,7 @@ LABEL_EAA160:
 	.byte 0xea, 0x00, 0x00, 0xff
 	aligned_string "-DEBUG3-"
 	aligned_string "-MEMO-"
-	.asciz "-MEMORY DUMP-"
+	aligned_string "-MEMORY DUMP-"
 	.byte 0x31, 0x00, 0x00, 0x00
 	.byte 0x1e, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff
 	.long LABEL_EAA7EC
@@ -54881,7 +54460,7 @@ LABEL_EAA818:
 	.byte 0x00, 0xff, 0xf5, 0x00, 0x0a, 0x00, 0x0d, 0x00
 	.byte 0xff, 0x00, 0xff, 0x00, 0x25, 0x64, 0x00, 0xff
 	.byte 0x0d, 0x00
-	.asciz "PsTextBox"
+	aligned_string "PsTextBox"
 	.asciz "AcLanguageText"
 	.byte 0xff, 0x88, 0xa8, 0xea, 0x00
 	.long LABEL_EAA880
@@ -54889,17 +54468,12 @@ LABEL_EAA818:
 	.long LABEL_EAA870
 	.long LABEL_EAA868
 	.long LABEL_EAA85C
-LABEL_EAA85C:
-	aligned_string "Indonesian"
-LABEL_EAA868:
-	.asciz "Italian"
-LABEL_EAA870:
-	.asciz "Spanish"
-LABEL_EAA878:
-	aligned_string "French"
-LABEL_EAA880:
-	aligned_string "German"
-	.asciz "English"
+LABEL_EAA85C:	aligned_string "Indonesian"
+LABEL_EAA868:	aligned_string "Italian"
+LABEL_EAA870:	aligned_string "Spanish"
+LABEL_EAA878:	aligned_string "French"
+LABEL_EAA880:	aligned_string "German"
+	aligned_string "English"
 	.byte 0x59, 0x5a, 0x00, 0xff
 	aligned_string "name"
 	.asciz "romram"
@@ -54954,15 +54528,15 @@ LABEL_EAA880:
 	.ascii "sword"
 	.byte 0x09
 	aligned_string "%s%d"
-	.asciz "&%s%d"
+	aligned_string "&%s%d"
 	.byte 0x75, 0x77
 	.byte 0x6f, 0x72, 0x64, 0x09
 	aligned_string "%s%d"
-	.asciz "&%s%d"
+	aligned_string "&%s%d"
 	.ascii "schar"
 	.byte 0x09, 0x25, 0x73
 	.byte 0x25, 0x64, 0x00, 0xff
-	.asciz "&%s%d"
+	aligned_string "&%s%d"
 	.ascii "uchar"
 	.byte 0x09
 	.asciz "%s%d"
@@ -54971,63 +54545,63 @@ LABEL_EAA880:
 	.ascii "slong"
 	.byte 0x09
 	aligned_string "%s%d"
-	.asciz "&%s%d"
+	aligned_string "&%s%d"
 	.byte 0x75, 0x6c
 	.byte 0x6f, 0x6e, 0x67, 0x09
 	aligned_string "%s%d"
-	.asciz "&%s%d"
-	.asciz ".left"
+	aligned_string "&%s%d"
+	aligned_string ".left"
 	.byte 0x7b, 0x00
 	aligned_string ".top"
 	aligned_string ".width"
-	.asciz ".height"
+	aligned_string ".height"
 	.byte 0x7d, 0x00
 	.byte 0x2e, 0x78, 0x00, 0xff, 0x7b, 0x00, 0x2e, 0x79
 	.byte 0x00, 0xff, 0x7d, 0x00, 0x69, 0x64, 0x63, 0x00
 	.byte 0x22, 0x00, 0x22, 0x00, 0x69, 0x64, 0x00, 0xff
-	.asciz "idICON_"
+	aligned_string "idICON_"
 	.byte 0x69, 0x64, 0x00, 0xff, 0x69, 0x64, 0x66, 0x00
 	.byte 0x69, 0x64, 0x66, 0x00
 	aligned_string "idNONE"
-	.asciz "idi%s"
-	.asciz "idi%s%d"
-	.asciz "(sword)"
-	.asciz "idi%s"
-	.asciz "idi%s%d"
+	aligned_string "idi%s"
+	aligned_string "idi%s%d"
+	aligned_string "(sword)"
+	aligned_string "idi%s"
+	aligned_string "idi%s%d"
 	aligned_string "idNONE"
 	aligned_string "idNONE"
-	.asciz "idi%s"
+	aligned_string "idi%s"
 	jr	ge, 0x64
-	.asciz "i%s%d"
+	aligned_string "i%s%d"
 	jr	ge, 0x64
 	.byte 0x69, 0x25, 0x73, 0x00
-	.asciz "idi%s%d"
+	aligned_string "idi%s%d"
 	aligned_string "idNONE"
-	.asciz "idi%s"
-	.asciz "idi%s%d"
+	aligned_string "idi%s"
+	aligned_string "idi%s%d"
 	aligned_string "idNONE"
 	aligned_string "idNONE"
-	.asciz "idi%s"
-	.asciz "idi%s%d"
-	.asciz "idi%s"
+	aligned_string "idi%s"
+	aligned_string "idi%s%d"
+	aligned_string "idi%s"
 	jr	ge, 0x64
-	.asciz "i%s%d"
+	aligned_string "i%s%d"
 	jr	ge, 0x64
 	.asciz "NONE"
 	.byte 0xff, 0x69, 0x64
 	.byte 0x69, 0x25, 0x73, 0x00
-	.asciz "idi%s%d"
+	aligned_string "idi%s%d"
 	aligned_string "idNONE"
 	.asciz "Mode%d"
 	.byte 0xff, 0x25, 0x64, 0x00, 0xff
 	aligned_string "MAKEMODEID(%s)"
 	aligned_string "Mode%d"
 	aligned_string "Mode%d"
-	.asciz "Title%d"
+	aligned_string "Title%d"
 	.byte 0x25, 0x64, 0x00, 0xff
-	.asciz "MAKETITLEID(%s)"
-	.asciz "Title%d"
-	.asciz "Title%d"
+	aligned_string "MAKETITLEID(%s)"
+	aligned_string "Title%d"
+	aligned_string "Title%d"
 	.asciz "name"
 	.byte 0xff, 0x00, 0xff, 0x00, 0xff
 	.asciz "romram"
@@ -55110,7 +54684,7 @@ LABEL_EAA880:
 	.byte 0xe7, 0x01, 0xec, 0x01, 0xe7, 0x01, 0x65, 0x0f
 	.byte 0x77, 0x09, 0x77, 0x09, 0xe1, 0x0b, 0x9c, 0x0d
 	.byte 0x42, 0x4d, 0x00, 0xff, 0x42, 0x4d, 0x00, 0xff
-	.asciz "HKLCD%03d.BMP"
+	aligned_string "HKLCD%03d.BMP"
 	.byte 0x77, 0x62
 	.byte 0x00, 0xff, 0x00, 0xd0, 0x8e, 0x00, 0x00, 0xfc
 	.byte 0x8f, 0x00, 0x00, 0x00, 0x00, 0x00, 0x90, 0x00
@@ -55268,20 +54842,20 @@ LABEL_EAB1A0:
 	.long LABEL_EAB31C
 LABEL_EAB31C:
 	.byte 0x00, 0xff
-	.asciz "ApTaskControl"
-	.asciz "CaptureLcdCheck"
-	.asciz "UserBitmapCheck"
-	.asciz "LanguageCheck"
+	aligned_string "ApTaskControl"
+	aligned_string "CaptureLcdCheck"
+	aligned_string "UserBitmapCheck"
+	aligned_string "LanguageCheck"
 	.asciz "GridCheck"
 	aligned_string "DefaultClassProc"
 	.asciz "NamingCheck"
 	aligned_string "BitEditCheck"
 LABEL_EAB390:
-	.asciz "PasTableCheck"
+	aligned_string "PasTableCheck"
 	.byte 0x52, 0x61
 	aligned_string "mEditCheck"
 	aligned_string "LswEditCheck"
-	.asciz "DefaultFunction"
+	aligned_string "DefaultFunction"
 	.byte 0x22, 0x00, 0xfa, 0xb8, 0xea, 0x00
 	.long LABEL_EAB8EC
 	.long LABEL_EAB8E2
@@ -55429,51 +55003,47 @@ LABEL_EAB390:
 	.zero 8
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0x4c, 0x69
 	.byte 0x4d, 0x49, 0x43, 0x00
-	.asciz "LiMetronome"
+	aligned_string "LiMetronome"
 LABEL_EAB7E0:
-	.asciz "LiGMSpecial"
+	aligned_string "LiGMSpecial"
 	aligned_string "LedSwOff"
-	.asciz "LedSwOn"
+	aligned_string "LedSwOn"
 	.byte 0x4c, 0x69
-	.asciz "Accordion"
-	.asciz "LiDrawbar"
-	.asciz "LiSynth"
-	.asciz "LiStrings"
+	aligned_string "Accordion"
+	aligned_string "LiDrawbar"
+	aligned_string "LiSynth"
+	aligned_string "LiStrings"
 	.byte 0x4c, 0x69
 	.byte 0x53, 0x61, 0x78, 0x00
-	.asciz "LiPiano"
-	.asciz "LiOrchPad"
+	aligned_string "LiPiano"
+	aligned_string "LiOrchPad"
 	.byte 0x4c, 0x69
-	.asciz "Organ"
+	aligned_string "Organ"
 	.byte 0x4c, 0x69
 	aligned_string "MemB"
 	aligned_string "LiMemA"
 	aligned_string "LiMallet"
-LABEL_EAB860:
-	.asciz "LiWorld"
-LABEL_EAB868:
-	aligned_string "LiGuitar"
-	.asciz "LiFlute"
+LABEL_EAB860:	aligned_string "LiWorld"
+LABEL_EAB868:	aligned_string "LiGuitar"
+	aligned_string "LiFlute"
 	aligned_string "LiDrum"
-	.asciz "LiBrass"
+	aligned_string "LiBrass"
 	aligned_string "LiBass"
 	aligned_string "Next"
-LABEL_EAB898:
-	aligned_string "Before"
-LABEL_EAB8A0:
-	.asciz "Start"
+LABEL_EAB898:	aligned_string "Before"
+LABEL_EAB8A0:	aligned_string "Start"
 	.byte 0x50, 0x61
 	.byte 0x75, 0x73, 0x65, 0x00
 	aligned_string "Backward"
-	.asciz "Forward"
+	aligned_string "Forward"
 	.byte 0x4d, 0x69
 	aligned_string "xerPoint"
 	aligned_string "MixerControl"
 LABEL_EAB8D8:
-	.asciz "SlideMove"
-	.asciz "SlideBase"
+	aligned_string "SlideMove"
+	aligned_string "SlideBase"
 	aligned_string "GoldTechnics"
-	.asciz "TrashIcon"
+	aligned_string "TrashIcon"
 	.byte 0x8a, 0xbe, 0xea, 0x00
 	.long LABEL_EABE7C
 	.long LABEL_EABE72
@@ -55620,49 +55190,49 @@ LABEL_EAB8D8:
 	.zero 8
 	.zero 8
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0xff
-	.asciz "19mic.bmp"
+	aligned_string "19mic.bmp"
 LABEL_EABD10:
-	.asciz "18metro.bmp"
+	aligned_string "18metro.bmp"
 	aligned_string "14gmsp.bmp"
 LABEL_EABD28:
 	aligned_string "ledswoff.bmp"
-	.asciz "ledswon.bmp"
-	.asciz "13accod.bmp"
+	aligned_string "ledswon.bmp"
+	aligned_string "13accod.bmp"
 	.byte 0x31, 0x32
 	aligned_string "draw.bmp"
-	.asciz "10synth.bmp"
+	aligned_string "10synth.bmp"
 	.byte 0x30, 0x32
 	aligned_string "string.bmp"
-	.asciz "05sax.bmp"
+	aligned_string "05sax.bmp"
 	.byte 0x30, 0x30
-	.asciz "piano.bmp"
+	aligned_string "piano.bmp"
 	aligned_string "09orch.bmp"
-	.asciz "08organ.bmp"
+	aligned_string "08organ.bmp"
 	aligned_string "17memb.bmp"
 	aligned_string "16mema.bmp"
 	aligned_string "06mallet.bmp"
 LABEL_EABDC8:
-	.asciz "07world.bmp"
+	aligned_string "07world.bmp"
 	aligned_string "01guitar.bmp"
-	.asciz "04flute.bmp"
+	aligned_string "04flute.bmp"
 	.byte 0x31, 0x35
 	aligned_string "drum.bmp"
-	.asciz "03brass.bmp"
+	aligned_string "03brass.bmp"
 	.byte 0x31, 0x31
 	aligned_string "bass.bmp"
 	aligned_string "next.bmp"
 	aligned_string "before.bmp"
 LABEL_EABE28:
-	.asciz "start.bmp"
-	.asciz "pause.bmp"
-	.asciz "bwd.bmp"
-	.asciz "fwd.bmp"
+	aligned_string "start.bmp"
+	aligned_string "pause.bmp"
+	aligned_string "bwd.bmp"
+	aligned_string "fwd.bmp"
 	aligned_string "mixpoint.bmp"
 	aligned_string "mixctr.bmp"
 	aligned_string "slmove.bmp"
-	.asciz "slide.bmp"
+	aligned_string "slide.bmp"
 	aligned_string "technics.bmp"
-	.asciz "trash.bmp"
+	aligned_string "trash.bmp"
 	.byte 0x98, 0xbe, 0xea, 0x00
 	.byte 0x00, 0xff, 0xa4, 0xbe, 0xea, 0x00, 0xa2, 0xbe
 	.byte 0xea, 0x00, 0x00, 0xff
@@ -55679,7 +55249,7 @@ LABEL_EABEB4:
 	aligned_string "propdata"
 	aligned_string "name"
 	aligned_string "selfsize"
-	.asciz "allsize"
+	aligned_string "allsize"
 	aligned_string "parent"
 	.asciz "proc"
 	.byte 0xff, 0x3a, 0xbf, 0xea, 0x00, 0x34, 0xbf
@@ -55688,7 +55258,7 @@ LABEL_EABEB4:
 	.asciz "prop"
 	.byte 0xff, 0x73, 0x69
 	.byte 0x7a, 0x65, 0x00, 0xff
-	.asciz "count"
+	aligned_string "count"
 	aligned_string "proc"
 	.long LABEL_EABF68
 	.long LABEL_EABF62
@@ -55699,7 +55269,7 @@ LABEL_EABF54:
 	.byte 0x00, 0xff, 0x6e, 0x61
 	.byte 0x6d, 0x65, 0x00, 0xff
 	aligned_string "user"
-	.asciz "title"
+	aligned_string "title"
 LABEL_EABF68:
 	.asciz "proc"
 	.byte 0xff, 0xb0, 0xbf
@@ -55749,25 +55319,23 @@ LABEL_EABF68:
 	aligned_string "prev"
 	aligned_string "next"
 	.byte 0x73, 0x75, 0x62, 0x00
-	.asciz "super"
-	.asciz "class"
+	aligned_string "super"
+	aligned_string "class"
 	.long LABEL_EAC0A0
 	.long LABEL_EAC098
 	.long LABEL_EAC092
 	.long LABEL_EAC090
 LABEL_EAC090:
 	.byte 0x00, 0xff
-	.asciz "index"
-LABEL_EAC098:
-	aligned_string "border"
-LABEL_EAC0A0:
-	.asciz "color"
+	aligned_string "index"
+LABEL_EAC098:	aligned_string "border"
+LABEL_EAC0A0:	aligned_string "color"
 	and	w, w
 	.byte 0xea, 0x00, 0xbe, 0xc0, 0xea, 0x00, 0xb8, 0xc0
 	.byte 0xea, 0x00, 0xb6, 0xc0, 0xea, 0x00, 0x00, 0xff
-	.asciz "align"
+	aligned_string "align"
 	jr	z, 0x6f
-	.asciz "ntcolor"
+	aligned_string "ntcolor"
 	.asciz "font"
 	.byte 0xff, 0xe2, 0xc0
 	.byte 0xea, 0x00, 0xdc, 0xc0, 0xea, 0x00, 0xda, 0xc0
@@ -55787,13 +55355,13 @@ LABEL_EAC0EC:
 	.byte 0x61, 0x6c, 0x00, 0xff
 	aligned_string "editsw"
 	aligned_string "length"
-	.asciz "align"
-	.asciz "fontcolor"
+	aligned_string "align"
+	aligned_string "fontcolor"
 	aligned_string "font"
-	.asciz "caption"
+	aligned_string "caption"
 	.byte 0x5c, 0xc1, 0xea, 0x00, 0x5a, 0xc1
 	.byte 0xea, 0x00, 0x00, 0xff
-	.asciz "figures"
+	aligned_string "figures"
 	.byte 0x6e, 0xc1, 0xea, 0x00
 	.long LABEL_EAC16C
 LABEL_EAC16C:
@@ -55811,11 +55379,11 @@ LABEL_EAC17C:
 	.long LABEL_EAC1A0
 LABEL_EAC1A0:
 	.byte 0x00, 0xff
-	.asciz "smallstep"
-	.asciz "largestep"
+	aligned_string "smallstep"
+	aligned_string "largestep"
 	jr	pl, 0x69
 	.byte 0x6e, 0x00, 0x6d, 0x61, 0x78, 0x00, 0x66, 0x69
-	.asciz "gures"
+	aligned_string "gures"
 	jr	nz, 0x75
 	.byte 0x6d, 0x00, 0xde, 0xc1, 0xea, 0x00, 0xd8, 0xc1
 	.byte 0xea, 0x00, 0xd6, 0xc1, 0xea, 0x00, 0x00, 0xff
@@ -55834,8 +55402,8 @@ LABEL_EAC1F0:
 	.byte 0xea, 0x00, 0x16, 0xc2, 0xea, 0x00, 0x00, 0xff
 	aligned_string "selected"
 	aligned_string "editsw"
-	.asciz "align"
-	.asciz "fontcolor"
+	aligned_string "align"
+	aligned_string "fontcolor"
 	aligned_string "font"
 	.long LABEL_EAC25E
 	.long LABEL_EAC258
@@ -55845,15 +55413,15 @@ LABEL_EAC250:
 	.byte 0x00, 0xff
 	aligned_string "icon"
 LABEL_EAC258:
-	.asciz "title"
+	aligned_string "title"
 	.byte 0x73, 0x74
 	.byte 0x72, 0x00, 0x90, 0xc2, 0xea, 0x00, 0x86, 0xc2
 	.byte 0xea, 0x00, 0x80, 0xc2, 0xea, 0x00, 0x78, 0xc2
 	.byte 0xea, 0x00, 0x76, 0xc2, 0xea, 0x00, 0x00, 0xff
 	aligned_string "editsw"
-	.asciz "align"
+	aligned_string "align"
 	jr	z, 0x6f
-	.asciz "ntcolor"
+	aligned_string "ntcolor"
 	.asciz "font"
 	.byte 0xff, 0xa0, 0xc2
 	.byte 0xea, 0x00, 0x9e, 0xc2, 0xea, 0x00, 0x00, 0xff
@@ -55867,7 +55435,7 @@ LABEL_EAC258:
 	.long LABEL_EAC2C8
 LABEL_EAC2C8:
 	.byte 0x00, 0xff
-	.asciz "editsw2"
+	aligned_string "editsw2"
 	.byte 0xdc, 0xc2, 0xea, 0x00, 0xda, 0xc2
 	.byte 0xea, 0x00, 0x00, 0xff
 	.asciz "style"
@@ -55884,16 +55452,16 @@ LABEL_EAC304:
 	.long LABEL_EAC318
 LABEL_EAC318:
 	.byte 0x00, 0xff
-	.asciz "pagemax"
-	.asciz "pagemin"
+	aligned_string "pagemax"
+	aligned_string "pagemin"
 	.byte 0x60, 0xc3, 0xea, 0x00, 0x5a, 0xc3
 	.byte 0xea, 0x00, 0x52, 0xc3, 0xea, 0x00, 0x4c, 0xc3
 	.byte 0xea, 0x00, 0x44, 0xc3, 0xea, 0x00, 0x42, 0xc3
 	.byte 0xea, 0x00, 0x00, 0xff
 	aligned_string "editsw"
-	.asciz "onoff"
+	aligned_string "onoff"
 	aligned_string "stroff"
-	.asciz "stron"
+	aligned_string "stron"
 	.asciz "font"
 	.byte 0xff, 0x6a, 0xc3
 	.byte 0xea, 0x00, 0x00, 0xff, 0x82, 0xc3, 0xea, 0x00
@@ -55919,7 +55487,7 @@ LABEL_EAC3A0:
 	.long LABEL_EAC3B8
 LABEL_EAC3B8:
 	.byte 0x00, 0xff
-	.asciz "fontcolor"
+	aligned_string "fontcolor"
 	.asciz "font"
 	.byte 0xff, 0x73, 0x74, 0x72, 0x00, 0xd8, 0xc3
 	.byte 0xea, 0x00, 0xd6, 0xc3, 0xea, 0x00, 0x00, 0xff
@@ -55933,13 +55501,13 @@ LABEL_EAC3E4:
 LABEL_EAC3F8:
 	.byte 0x00, 0xff
 	aligned_string "linemode"
-	.asciz "color"
+	aligned_string "color"
 	.byte 0x28, 0xc4, 0xea, 0x00, 0x22, 0xc4
 	.byte 0xea, 0x00, 0x1c, 0xc4, 0xea, 0x00, 0x1a, 0xc4
 	.byte 0xea, 0x00, 0x00, 0xff
 	.asciz "color"
 	.asciz "width"
-	.asciz "frame"
+	aligned_string "frame"
 	.byte 0x4c, 0xc4
 	.byte 0xea, 0x00, 0x46, 0xc4, 0xea, 0x00, 0x40, 0xc4
 	.byte 0xea, 0x00, 0x3e, 0xc4, 0xea, 0x00, 0x00, 0xff
@@ -55953,7 +55521,7 @@ LABEL_EAC3F8:
 LABEL_EAC460:
 	.byte 0x00, 0xff
 	aligned_string "border"
-	.asciz "color"
+	aligned_string "color"
 	.long LABEL_EAC474
 LABEL_EAC474:
 	.byte 0x00, 0xff, 0x8c, 0xc4
@@ -55973,22 +55541,22 @@ LABEL_EAC4BC:
 	.byte 0x00, 0xff, 0x63, 0x68
 	.byte 0x69, 0x6c, 0x64, 0x00
 	aligned_string "parent"
-	.asciz "modal"
+	aligned_string "modal"
 	.byte 0x0c, 0xc5, 0xea, 0x00, 0x06, 0xc5
 	.byte 0xea, 0x00, 0xfc, 0xc4, 0xea, 0x00, 0xf2, 0xc4
 	.byte 0xea, 0x00, 0xec, 0xc4, 0xea, 0x00, 0xea, 0xc4
 	.byte 0xea, 0x00, 0x00, 0xff
-	.asciz "lines"
-	.asciz "alignment"
-	.asciz "fontcolor"
+	aligned_string "lines"
+	aligned_string "alignment"
+	aligned_string "fontcolor"
 	jr	z, 0x6f
 	.byte 0x6e, 0x74, 0x00, 0xff
 	.asciz "text"
 	.byte 0xff, 0x42, 0xc5, 0xea, 0x00, 0x3c, 0xc5
 	.byte 0xea, 0x00, 0x32, 0xc5, 0xea, 0x00, 0x28, 0xc5
 	.byte 0xea, 0x00, 0x26, 0xc5, 0xea, 0x00, 0x00, 0xff
-	.asciz "alignment"
-	.asciz "fontcolor"
+	aligned_string "alignment"
+	aligned_string "fontcolor"
 	.asciz "font"
 	.byte 0xff, 0x73, 0x74, 0x72, 0x00, 0x78, 0xc5
 	.byte 0xea, 0x00, 0x72, 0xc5, 0xea, 0x00, 0x6c, 0xc5
@@ -55997,7 +55565,7 @@ LABEL_EAC4BC:
 	.asciz "name"
 	.byte 0xff, 0x75, 0x73
 	.byte 0x65, 0x72, 0x00, 0xff
-	.asciz "title"
+	aligned_string "title"
 	aligned_string "proc"
 	.asciz "mode"
 	.byte 0xff, 0xae, 0xc5
@@ -56067,7 +55635,7 @@ LABEL_EAC6B0:
 	.long LABEL_EAC6C0
 LABEL_EAC6C0:
 	.byte 0x00, 0xff
-	.asciz "editsw2"
+	aligned_string "editsw2"
 	.byte 0xce, 0xc6, 0xea, 0x00, 0x00, 0xff
 	.long LABEL_EAC6D4
 LABEL_EAC6D4:
@@ -56109,12 +55677,10 @@ LABEL_EAC718:
 LABEL_EAC780:
 	.byte 0x00, 0xff, 0x74, 0x61, 0x67, 0x00, 0x73, 0x65
 	aligned_string "lected"
-LABEL_EAC790:
-	aligned_string "editsw"
-LABEL_EAC798:
-	.asciz "align"
+LABEL_EAC790:	aligned_string "editsw"
+LABEL_EAC798:	aligned_string "align"
 	jr	z, 0x6f
-	.asciz "ntcolor"
+	aligned_string "ntcolor"
 	.asciz "font"
 	.byte 0xff, 0xb8, 0xc7
 	.byte 0xea, 0x00, 0xb6, 0xc7, 0xea, 0x00, 0x00, 0xff
@@ -56133,8 +55699,8 @@ LABEL_EAC7E4:
 	aligned_string "selected"
 LABEL_EAC7F0:
 	.byte 0x72, 0x6f, 0x77, 0x00
-	.asciz "align"
-	.asciz "fontcolor"
+	aligned_string "align"
+	aligned_string "fontcolor"
 	.asciz "font"
 	.byte 0xff, 0x80, 0xc8, 0xea, 0x00, 0x76, 0xc8
 	.byte 0xea, 0x00, 0x70, 0xc8, 0xea, 0x00, 0x6c, 0xc8
@@ -56150,9 +55716,9 @@ LABEL_EAC7F0:
 	aligned_string "selrow"
 	aligned_string "vertline"
 	.byte 0x63, 0x6f, 0x6c, 0x00, 0x72, 0x6f, 0x77, 0x00
-	.asciz "align"
+	aligned_string "align"
 	jr	z, 0x6f
-	.asciz "ntcolor"
+	aligned_string "ntcolor"
 	.asciz "font"
 	.byte 0xff, 0x9a, 0xc8
 	.byte 0xea, 0x00, 0x94, 0xc8, 0xea, 0x00, 0x92, 0xc8
@@ -56180,10 +55746,10 @@ LABEL_EAC8D4:
 	.long LABEL_EAC8F0
 LABEL_EAC8F0:
 	.byte 0x00, 0xff
-	.asciz "recplay"
+	aligned_string "recplay"
 	aligned_string "part"
 LABEL_EAC900:
-	.asciz "onoff"
+	aligned_string "onoff"
 	.byte 0x74, 0x72
 	.byte 0x61, 0x63, 0x6b, 0x00, 0x10, 0xc9, 0xea, 0x00
 	.byte 0x00, 0xff, 0x16, 0xc9, 0xea, 0x00, 0x00, 0xff
@@ -56216,9 +55782,9 @@ LABEL_EAC968:
 LABEL_EAC984:
 	.byte 0x00, 0xff, 0x6c, 0x69
 	.byte 0x6e, 0x65, 0x73, 0x00
-	.asciz "alignment"
+	aligned_string "alignment"
 	jr	z, 0x6f
-	.asciz "ntcolor"
+	aligned_string "ntcolor"
 LABEL_EAC9A0:
 	.asciz "font"
 	.byte 0xff, 0xb0, 0xc9
@@ -56904,59 +56470,59 @@ LABEL_EAC9DC:
 	jr	gt, 0x00
 	aligned_string "AcLanguageText"
 	aligned_string "c^dB"
-	.asciz "PsTextBox"
+	aligned_string "PsTextBox"
 	jr	gt, 0x00
 	aligned_string "IvShowHide"
 	.byte 0x00, 0xff
 	aligned_string "IvIntEasySet"
 	.byte 0x00, 0xff
-	.asciz "IvIntVari"
+	aligned_string "IvIntVari"
 	.byte 0x00, 0xff
-	.asciz "IvIntComplete"
+	aligned_string "IvIntComplete"
 	.byte 0x00, 0xff
 	.asciz "IvIntError"
 	.byte 0xff, 0x00, 0xff
-	.asciz "IvIntReminder"
+	aligned_string "IvIntReminder"
 	.byte 0x77, 0x00
-	.asciz "IvInterrupt"
+	aligned_string "IvInterrupt"
 	.byte 0x73, 0x00
 	aligned_string "DbMemoryDump"
 	.byte 0x00, 0xff
 	aligned_string "IvExitWindow"
 	.byte 0x00, 0xff
-	.asciz "IvTrackSwitch"
+	aligned_string "IvTrackSwitch"
 	.byte 0x00, 0xff
-	.asciz "IvDirmdScreen"
+	aligned_string "IvDirmdScreen"
 	.byte 0x00, 0xff
-	.asciz "AcTrackSwitch"
+	aligned_string "AcTrackSwitch"
 	aligned_string "vmnn"
-	.asciz "PsTrackSwitch"
+	aligned_string "PsTrackSwitch"
 	.byte 0x6e, 0x00, 0x44, 0x62
-	.asciz "DebugMenu"
+	aligned_string "DebugMenu"
 	.byte 0x58, 0x58, 0x6a, 0x00, 0x41, 0x63
 	.asciz "GridBox"
 	.byte 0x58, 0x47, 0x00, 0xff
-	.asciz "AcListBox"
+	aligned_string "AcListBox"
 	jr	ule, 0x5e
-	.asciz "dBBGnnsss"
-	.asciz "PsGridBox"
-	.asciz "c^dBn"
-	.asciz "PsListBox"
+	aligned_string "dBBGnnsss"
+	aligned_string "PsGridBox"
+	aligned_string "c^dBn"
+	aligned_string "PsListBox"
 	.byte 0x6a, 0x00, 0x49, 0x76
 	.asciz "CatchEvent"
 	.byte 0xff, 0x58, 0x00, 0x41, 0x63
-	.asciz "StrRadioBox"
+	aligned_string "StrRadioBox"
 	aligned_string "c^demA"
 	aligned_string "PsRadioBox"
 	.byte 0x6a, 0x72, 0x00, 0xff
 	.asciz "AcRamBox"
 	.byte 0xff, 0x41, 0x41
 	.byte 0x00, 0xff
-	.asciz "AcIndexToggle"
+	aligned_string "AcIndexToggle"
 	jr	gt, 0x00
 	.asciz "IvNaming"
 	.byte 0xff, 0x6e, 0x00, 0x50, 0x73
-	.asciz "CursorBox"
+	aligned_string "CursorBox"
 	.byte 0x00, 0xff
 	.asciz "AcNamingWindow"
 	.byte 0xff, 0x74, 0x00, 0x49, 0x76
@@ -56983,11 +56549,11 @@ LABEL_EAC9DC:
 	.byte 0x58, 0x60, 0x62, 0x00
 	aligned_string "AcModeMenu"
 	.byte 0x66, 0x58, 0x00, 0xff
-	.asciz "VwWideESBox"
+	aligned_string "VwWideESBox"
 	.byte 0x66, 0x58, 0x00, 0xff
-	.asciz "VwEditSwBox"
+	aligned_string "VwEditSwBox"
 	.byte 0x58, 0x62, 0x00, 0xff
-	.asciz "VwMenuBox"
+	aligned_string "VwMenuBox"
 	.byte 0x75, 0x65
 	.byte 0x00, 0xff
 	.asciz "AcMixerVol"
@@ -56995,19 +56561,19 @@ LABEL_EAC9DC:
 	.asciz "AcPmemName"
 	.byte 0xff, 0x00, 0xff
 	aligned_string "AcRhythmName"
-	.asciz "akNlX"
-	.asciz "TitleEdit"
-	.asciz "`kalX"
+	aligned_string "akNlX"
+	aligned_string "TitleEdit"
+	aligned_string "`kalX"
 	aligned_string "ModeEdit"
 	aligned_string "Xc^d"
-	.asciz "StringBox"
-	.asciz "Xc^dB"
-	.asciz "TextBox"
+	aligned_string "StringBox"
+	aligned_string "Xc^dB"
+	aligned_string "TextBox"
 	.byte 0x47, 0x72, 0x72, 0x00, 0x57, 0x69
 	.asciz "ndow"
 	.byte 0xff, 0x58, 0x62
 	.byte 0x00, 0xff
-	.asciz "TtlScreen"
+	aligned_string "TtlScreen"
 	.byte 0x61, 0x72, 0x00, 0xff
 	aligned_string "Screen"
 	.byte 0x00, 0xff
@@ -57025,38 +56591,38 @@ LABEL_EAC9DC:
 	.byte 0x5e, 0x00
 	.asciz "Label"
 	.byte 0x75, 0x00
-	.asciz "AcSoundName"
+	aligned_string "AcSoundName"
 	jr	ugt, 0x00
 	.asciz "IvMainEditSw"
 	.byte 0xff, 0x41, 0x74
 	.byte 0x00, 0xff
-	.asciz "IvPageControl"
+	aligned_string "IvPageControl"
 	.byte 0x00, 0xff
 	aligned_string "PsInvisibleBox"
-	.asciz "cXXme"
-	.asciz "PsToggleBox"
+	aligned_string "cXXme"
+	aligned_string "PsToggleBox"
 	.byte 0x41, 0x41, 0x00, 0xff
 	.asciz "AcWindowPage"
 	.byte 0xff, 0x6e, 0x00
-	.asciz "PsPageBox"
+	aligned_string "PsPageBox"
 	.byte 0x66, 0x6a, 0x00, 0xff
 	.asciz "AcFuncWideES"
 	.byte 0xff, 0x66, 0x00, 0x41, 0x63
-	.asciz "IndexWideES"
+	aligned_string "IndexWideES"
 	.byte 0x65, 0x00, 0x50, 0x73
-	.asciz "WideESBox"
+	aligned_string "WideESBox"
 	.byte 0x66, 0x6a, 0x00, 0xff
 	.asciz "AcFuncEditSw"
 	.byte 0xff, 0x66, 0x00, 0x41, 0x63
-	.asciz "IndexEditSw"
+	aligned_string "IndexEditSw"
 	aligned_string "c^de"
-	.asciz "PsEditSwBox"
+	aligned_string "PsEditSwBox"
 	.byte 0x58, 0x61
 	jr	le, 0x00
-	.asciz "AcTitleMenu"
+	aligned_string "AcTitleMenu"
 	jr	ule, 0x5e
 	.byte 0x64, 0x65, 0x6d, 0x00
-	.asciz "PsMenuBox"
+	aligned_string "PsMenuBox"
 	jr	gt, 0x72
 	.byte 0x00, 0xff
 	aligned_string "AcRamEditBox"
@@ -57071,37 +56637,37 @@ LABEL_EAC9DC:
 	.byte 0xff, 0x41, 0x00
 	aligned_string "PsNumEditBox"
 	aligned_string "Xc^dBeGm"
-	.asciz "PsEditBox"
+	aligned_string "PsEditBox"
 	.byte 0x00, 0xff
 	aligned_string "AcTempoBox"
 	.byte 0x6a, 0x6e, 0x00, 0xff
 	.asciz "AcLswBox"
 	.byte 0xff, 0x63, 0x5e
 	jr	ov, 0x00
-	.asciz "PsParaBox"
+	aligned_string "PsParaBox"
 	.byte 0x5e, 0x5f, 0x41, 0x00
-	.asciz "VwBox"
+	aligned_string "VwBox"
 	.byte 0x4d, 0x5b
-	.asciz "[[[]P"
+	aligned_string "[[[]P"
 	.byte 0x56, 0x69
 	aligned_string "ewable"
 	.byte 0x58, 0x00
-	.asciz "ResName"
+	aligned_string "ResName"
 	.byte 0x42, 0x00
-	.asciz "ResString"
+	aligned_string "ResString"
 	.byte 0x58, 0x00
-	.asciz "ResMethod"
+	aligned_string "ResMethod"
 	.byte 0x58, 0x00
 	.asciz "ResEvent"
 	.byte 0xff, 0x42, 0x00
-	.asciz "ResFont"
+	aligned_string "ResFont"
 	.byte 0x42, 0x00
-	.asciz "ResIcon"
+	aligned_string "ResIcon"
 	.byte 0x42, 0x00
 	.asciz "ResFrame"
 	.byte 0xff, 0x42, 0x00
-	.asciz "ResBitmap"
-	.asciz "kNlXNAA"
+	aligned_string "ResBitmap"
+	aligned_string "kNlXNAA"
 	.asciz "Title"
 	.asciz "kalX"
 	.byte 0xff, 0x4d, 0x6f
@@ -57109,7 +56675,7 @@ LABEL_EAC9DC:
 	.byte 0x4a, 0x42, 0x42, 0x4b
 	.byte 0x00, 0xff
 	aligned_string "SupportClass"
-	.asciz "JMBBXXL"
+	aligned_string "JMBBXXL"
 	.asciz "Class"
 	.byte 0x00, 0xff
 	.asciz "MainFunction"
@@ -57120,35 +56686,25 @@ LABEL_EAC9DC:
 	.byte 0x00, 0xff
 	.asciz "Object"
 	.byte 0xff, 0x6d, 0x00, 0x0a, 0x00, 0x00, 0xff
-LABEL_EADA98:
-	.asciz "CHARA5W"
-LABEL_EADAA0:
-	.asciz "CHARA2W"
-LABEL_EADAA8:
-	.asciz "CHARA1W"
-LABEL_EADAB0:
-	aligned_string "CHARA6"
-LABEL_EADAB8:
-	.asciz "CHARA1P"
-LABEL_EADAC0:
-	aligned_string "CHARA5"
-LABEL_EADAC8:
-	aligned_string "CHARA4"
-LABEL_EADAD0:
-	aligned_string "CHARA3"
-LABEL_EADAD8:
-	aligned_string "CHARA2"
-LABEL_EADAE0:
-	aligned_string "CHARA1"
+LABEL_EADA98:	aligned_string "CHARA5W"
+LABEL_EADAA0:	aligned_string "CHARA2W"
+LABEL_EADAA8:	aligned_string "CHARA1W"
+LABEL_EADAB0:	aligned_string "CHARA6"
+LABEL_EADAB8:	aligned_string "CHARA1P"
+LABEL_EADAC0:	aligned_string "CHARA5"
+LABEL_EADAC8:	aligned_string "CHARA4"
+LABEL_EADAD0:	aligned_string "CHARA3"
+LABEL_EADAD8:	aligned_string "CHARA2"
+LABEL_EADAE0:	aligned_string "CHARA1"
 LABEL_EADAE8:
 	.byte 0x00, 0xff
-	.asciz "chara5w.fnt"
+	aligned_string "chara5w.fnt"
 	jr	ule, 0x68
-	.asciz "ara2w.fnt"
-	.asciz "chara1w.fnt"
+	aligned_string "ara2w.fnt"
+	aligned_string "chara1w.fnt"
 	jr	ule, 0x68
 	aligned_string "ara6.fnt"
-	.asciz "chara1p.fnt"
+	aligned_string "chara1p.fnt"
 	jr	ule, 0x68
 	aligned_string "ara5.fnt"
 	aligned_string "chara4.fnt"
@@ -57289,20 +56845,20 @@ LABEL_EADAE8:
 	aligned_string "EditDC"
 	aligned_string "EditDB"
 	aligned_string "EditDA"
-	.asciz "Edit95D"
+	aligned_string "Edit95D"
 	.byte 0x45, 0x64
-	.asciz "it95C"
+	aligned_string "it95C"
 	.byte 0x45, 0x64
-	.asciz "it95B"
+	aligned_string "it95B"
 	.byte 0x45, 0x64
-	.asciz "it95A"
+	aligned_string "it95A"
 	.byte 0x45, 0x64
 	.byte 0x69, 0x74, 0x44, 0x00
-	.asciz "EditC"
-	.asciz "EditB"
-	.asciz "EditA"
+	aligned_string "EditC"
+	aligned_string "EditB"
+	aligned_string "EditA"
 	.byte 0x52, 0x69
-	.asciz "ghtSwitch"
+	aligned_string "ghtSwitch"
 	aligned_string "LeftSwitch"
 	aligned_string "ROnOff48"
 	aligned_string "ROnOff32"
@@ -57317,51 +56873,51 @@ LABEL_EADAE8:
 	aligned_string "Left24"
 	aligned_string "Left16"
 	aligned_string "Left12"
-	.asciz "Right48"
+	aligned_string "Right48"
 	.byte 0x52, 0x69
-	.asciz "ght32"
+	aligned_string "ght32"
 	.byte 0x52, 0x69
-	.asciz "ght24"
+	aligned_string "ght24"
 	.byte 0x52, 0x69
-	.asciz "ght16"
+	aligned_string "ght16"
 	.byte 0x52, 0x69
-	.asciz "ght12"
+	aligned_string "ght12"
 	.byte 0x52, 0x6f
 	aligned_string "und14d"
 	aligned_string "Round14c"
 	aligned_string "Round14b"
 	aligned_string "Round14a"
-	.asciz "Round9d"
+	aligned_string "Round9d"
 	.byte 0x52, 0x6f
-	.asciz "und9c"
+	aligned_string "und9c"
 	.byte 0x52, 0x6f
-	.asciz "und9b"
+	aligned_string "und9b"
 	.byte 0x52, 0x6f
-	.asciz "und9a"
+	aligned_string "und9a"
 	.byte 0x52, 0x6f
-	.asciz "und5d"
+	aligned_string "und5d"
 	.byte 0x52, 0x6f
-	.asciz "und5c"
+	aligned_string "und5c"
 	.byte 0x52, 0x6f
-	.asciz "und5b"
+	aligned_string "und5b"
 	.byte 0x52, 0x6f
-	.asciz "und5a"
+	aligned_string "und5a"
 	.byte 0x52, 0x6f
-	.asciz "und2d"
+	aligned_string "und2d"
 	.byte 0x52, 0x6f
-	.asciz "und2c"
+	aligned_string "und2c"
 	.byte 0x52, 0x6f
-	.asciz "und2b"
+	aligned_string "und2b"
 	.byte 0x52, 0x6f
-	.asciz "und2a"
+	aligned_string "und2a"
 	.byte 0x52, 0x6f
-	.asciz "und1d"
+	aligned_string "und1d"
 	.byte 0x52, 0x6f
-	.asciz "und1c"
+	aligned_string "und1c"
 	.byte 0x52, 0x6f
-	.asciz "und1b"
+	aligned_string "und1b"
 	.byte 0x52, 0x6f
-	.asciz "und1a"
+	aligned_string "und1a"
 	.byte 0xaa, 0xe7
 	.byte 0xea, 0x00, 0x9e, 0xe7, 0xea, 0x00, 0x92, 0xe7
 	.byte 0xea, 0x00, 0x86, 0xe7, 0xea, 0x00, 0x7a, 0xe7
@@ -57496,18 +57052,18 @@ LABEL_EADAE8:
 	aligned_string "EditDC.bmp"
 	aligned_string "EditDB.bmp"
 	aligned_string "EditDA.bmp"
-	.asciz "Edit95D.bmp"
-	.asciz "Edit95C.bmp"
+	aligned_string "Edit95D.bmp"
+	aligned_string "Edit95C.bmp"
 	.byte 0x45, 0x64
-	.asciz "it95B.bmp"
-	.asciz "Edit95A.bmp"
+	aligned_string "it95B.bmp"
+	aligned_string "Edit95A.bmp"
 	.byte 0x45, 0x64
-	.asciz "itD.bmp"
-	.asciz "EditC.bmp"
-	.asciz "EditB.bmp"
-	.asciz "EditA.bmp"
+	aligned_string "itD.bmp"
+	aligned_string "EditC.bmp"
+	aligned_string "EditB.bmp"
+	aligned_string "EditA.bmp"
 	.byte 0x52, 0x69
-	.asciz "ghtSw.bmp"
+	aligned_string "ghtSw.bmp"
 	aligned_string "LeftSw.bmp"
 	aligned_string "ROnOff48.bmp"
 	aligned_string "ROnOff32.bmp"
@@ -57522,35 +57078,35 @@ LABEL_EADAE8:
 	aligned_string "Left24.bmp"
 	aligned_string "Left16.bmp"
 	aligned_string "Left12.bmp"
-	.asciz "Right48.bmp"
+	aligned_string "Right48.bmp"
 	.byte 0x52, 0x69
-	.asciz "ght32.bmp"
-	.asciz "Right24.bmp"
+	aligned_string "ght32.bmp"
+	aligned_string "Right24.bmp"
 	.byte 0x52, 0x69
-	.asciz "ght16.bmp"
-	.asciz "Right12.bmp"
+	aligned_string "ght16.bmp"
+	aligned_string "Right12.bmp"
 	.byte 0x52, 0x6f
 	aligned_string "und14d.bmp"
 	aligned_string "Round14c.bmp"
 	aligned_string "Round14b.bmp"
 	aligned_string "Round14a.bmp"
-	.asciz "Round9d.bmp"
-	.asciz "Round9c.bmp"
+	aligned_string "Round9d.bmp"
+	aligned_string "Round9c.bmp"
 	.byte 0x52, 0x6f
-	.asciz "und9b.bmp"
-	.asciz "Round9a.bmp"
+	aligned_string "und9b.bmp"
+	aligned_string "Round9a.bmp"
 	.byte 0x52, 0x6f
-	.asciz "und5d.bmp"
-	.asciz "Round5c.bmp"
+	aligned_string "und5d.bmp"
+	aligned_string "Round5c.bmp"
 	.byte 0x52, 0x6f
-	.asciz "und5b.bmp"
-	.asciz "Round5a.bmp"
+	aligned_string "und5b.bmp"
+	aligned_string "Round5a.bmp"
 	.byte 0x52, 0x6f
-	.asciz "und2d.bmp"
-	.asciz "Round2c.bmp"
+	aligned_string "und2d.bmp"
+	aligned_string "Round2c.bmp"
 	.byte 0x52, 0x6f
-	.asciz "und2b.bmp"
-	.asciz "Round2a.bmp"
+	aligned_string "und2b.bmp"
+	aligned_string "Round2a.bmp"
 	.byte 0x52, 0x6f
 	aligned_string "und1.bmp"
 	aligned_string "Round1.bmp"
@@ -57591,73 +57147,73 @@ LABEL_EADAE8:
 	aligned_string "EV_SWIN_MODE"
 	aligned_string "EV_OLD_TITLE"
 	aligned_string "EV_NEW_TITLE"
-	.asciz "EV_ASSSWB"
+	aligned_string "EV_ASSSWB"
 	.byte 0x45, 0x56
 	aligned_string "_DELIVERYEVENT"
-	.asciz "EV_UPDATESCREEN"
-	.asciz "EV_PAGEINIT"
-	.asciz "EV_SENDSWBOTH"
+	aligned_string "EV_UPDATESCREEN"
+	aligned_string "EV_PAGEINIT"
+	aligned_string "EV_SENDSWBOTH"
 	aligned_string "EV_SENDSWOFF"
-	.asciz "EV_SENDSWON"
-	.asciz "EV_INDEXSW_BOTH"
-	.asciz "EV_SWBOTH"
+	aligned_string "EV_SENDSWON"
+	aligned_string "EV_INDEXSW_BOTH"
+	aligned_string "EV_SWBOTH"
 	.byte 0x45, 0x56
-	.asciz "_PARTSELECT"
+	aligned_string "_PARTSELECT"
 	aligned_string "EV_TRSWCOMMAND"
-	.asciz "EV_TRSWPART"
+	aligned_string "EV_TRSWPART"
 	aligned_string "EV_CHANGEDIALFOCUS"
-	.asciz "EV_SENDSWIN"
-	.asciz "EV_YOUARESELECTED"
+	aligned_string "EV_SENDSWIN"
+	aligned_string "EV_YOUARESELECTED"
 	aligned_string "EV_IAMSELECTED"
-	.asciz "EV_RETURN_TITLE"
-	.asciz "EV_SWIN_AIC"
+	aligned_string "EV_RETURN_TITLE"
+	aligned_string "EV_SWIN_AIC"
 	.byte 0x45, 0x56
 	aligned_string "_AUTOINC"
-	.asciz "EV_MEMODRAW"
+	aligned_string "EV_MEMODRAW"
 	.byte 0x45, 0x56
 	aligned_string "_BITDATA"
 	aligned_string "EV_SOUNDSWNO"
-	.asciz "EV_PMEMNAME"
-	.asciz "EV_RHYTHMNAME"
+	aligned_string "EV_PMEMNAME"
+	aligned_string "EV_RHYTHMNAME"
 	aligned_string "EV_SOUNDNAME"
-	.asciz "EV_DIAL"
-	.asciz "EV_PAGECHANGE"
+	aligned_string "EV_DIAL"
+	aligned_string "EV_PAGECHANGE"
 	.byte 0x45, 0x56
 	aligned_string "_RAMDATA"
 	aligned_string "EV_LSWDATA"
 	aligned_string "EV_INDEXSELECT"
-	.asciz "EV_INDEXSW_DOWN_AIC"
-	.asciz "EV_INDEXSW_UP_AIC"
-	.asciz "EV_INDEXSW_DOWN"
-	.asciz "EV_INDEXSW_UP"
+	aligned_string "EV_INDEXSW_DOWN_AIC"
+	aligned_string "EV_INDEXSW_UP_AIC"
+	aligned_string "EV_INDEXSW_DOWN"
+	aligned_string "EV_INDEXSW_UP"
 	aligned_string "EV_INTERRUPT_TITLE"
-	.asciz "EV_CHANGE_TITLE"
+	aligned_string "EV_CHANGE_TITLE"
 	.byte 0x45, 0x56
 	aligned_string "_CHANGE_MODE"
-	.asciz "EV_ACTIVATE"
+	aligned_string "EV_ACTIVATE"
 	aligned_string "EV_TIMER"
-	.asciz "EV_CHANGEPROPERTY"
+	aligned_string "EV_CHANGEPROPERTY"
 	.byte 0x45, 0x56
 	aligned_string "_RESET"
-	.asciz "EV_PARADRAW"
-	.asciz "EV_SELEDRAW"
-	.asciz "EV_DRAW"
+	aligned_string "EV_PARADRAW"
+	aligned_string "EV_SELEDRAW"
+	aligned_string "EV_DRAW"
 	aligned_string "EV_REPAINT"
 	aligned_string "EV_PAINT"
-	.asciz "EV_ALLPAINT"
+	aligned_string "EV_ALLPAINT"
 	aligned_string "EV_SWOFF"
 	.byte 0x45, 0x56, 0x5f, 0x53
 	.byte 0x57, 0x4f, 0x4e, 0x00
 	.byte 0x45, 0x56, 0x5f, 0x53
 	.byte 0x57, 0x49, 0x4e, 0x00
-	.asciz "EV_ACTION"
+	aligned_string "EV_ACTION"
 	.byte 0x45, 0x56
-	.asciz "_RESIZE"
-	.asciz "EV_MOVE"
-	.asciz "EV_INIT"
-	.asciz "EV_HIDE"
-	.asciz "EV_SHOW"
-	.asciz "EV_NONE"
+	aligned_string "_RESIZE"
+	aligned_string "EV_MOVE"
+	aligned_string "EV_INIT"
+	aligned_string "EV_HIDE"
+	aligned_string "EV_SHOW"
+	aligned_string "EV_NONE"
 	.byte 0x3c, 0x00, 0x5e, 0xfa, 0xea, 0x00, 0x4a, 0xfa
 	.byte 0xea, 0x00, 0x38, 0xfa, 0xea, 0x00, 0x22, 0xfa
 	.byte 0xea, 0x00, 0x12, 0xfa, 0xea, 0x00, 0xfe, 0xf9
@@ -57754,215 +57310,215 @@ LABEL_EADAE8:
 	.byte 0xea, 0x00, 0xb8, 0xee, 0xea, 0x00, 0xa6, 0xee
 	.byte 0xea, 0x00, 0x00, 0x00, 0x00, 0x00, 0x4d, 0x54
 	aligned_string "_MainLoopCount"
-	.asciz "MT_SetTitleFlag"
+	aligned_string "MT_SetTitleFlag"
 	aligned_string "MT_GetInitData"
 	aligned_string "MT_CheckInitData"
 	aligned_string "MT_EasySetGo"
-	.asciz "MT_InterruptOff"
-	.asciz "MT_SearchLink"
+	aligned_string "MT_InterruptOff"
+	aligned_string "MT_SearchLink"
 	.byte 0x4d, 0x54
-	.asciz "_RefreshSwEvent"
+	aligned_string "_RefreshSwEvent"
 	aligned_string "MT_SetKeep"
 	aligned_string "MT_GetBoxColor"
-	.asciz "MT_GetBoxBorder"
+	aligned_string "MT_GetBoxBorder"
 	aligned_string "MT_RefreshApTask"
-	.asciz "MT_WakeUpApTask"
+	aligned_string "MT_WakeUpApTask"
 	.byte 0x4d, 0x54
 	aligned_string "_SleepApTask"
-	.asciz "MT_WakeUpMainTask"
+	aligned_string "MT_WakeUpMainTask"
 	aligned_string "MT_SleepMainTask"
-	.asciz "MT_OtherPartLed"
+	aligned_string "MT_OtherPartLed"
 	aligned_string "MT_CheckHold"
-	.asciz "MT_AddSoundSwNo"
-	.asciz "MT_SetSoundSwNo"
+	aligned_string "MT_AddSoundSwNo"
+	aligned_string "MT_SetSoundSwNo"
 	aligned_string "MT_RefreshParaDraw"
-	.asciz "MT_EasySetOff"
+	aligned_string "MT_EasySetOff"
 	aligned_string "MT_EasySetOn"
-	.asciz "MT_GetBitmapPalette"
+	aligned_string "MT_GetBitmapPalette"
 	aligned_string "MT_GetBitmapHeight"
-	.asciz "MT_GetBitmapWidth"
+	aligned_string "MT_GetBitmapWidth"
 	aligned_string "MT_GetBitmapData"
 	aligned_string "MT_PartSelectPut"
-	.asciz "MT_GetLanguagePtr"
-	.asciz "MT_SetNotDrawFlag"
-	.asciz "MT_GetInterruptTime"
+	aligned_string "MT_GetLanguagePtr"
+	aligned_string "MT_SetNotDrawFlag"
+	aligned_string "MT_GetInterruptTime"
 	.byte 0x4d, 0x54
-	.asciz "_SetVisible"
-	.asciz "MT_ToggleHold"
+	aligned_string "_SetVisible"
+	aligned_string "MT_ToggleHold"
 	aligned_string "MT_SetHold"
-	.asciz "MT_SetInterruptTime"
+	aligned_string "MT_SetInterruptTime"
 	aligned_string "MT_InterruptHold"
 	aligned_string "MT_PopWall"
-	.asciz "MT_PushWall"
-	.asciz "MT_ChangeWall"
+	aligned_string "MT_PushWall"
+	aligned_string "MT_ChangeWall"
 	aligned_string "MT_CheckShowWindow"
 	aligned_string "MT_ToggleTrackSwitch"
-	.asciz "MT_RequestTrackSwitch"
-	.asciz "MT_CheckGridIndex"
+	aligned_string "MT_RequestTrackSwitch"
+	aligned_string "MT_CheckGridIndex"
 	aligned_string "MT_GetSelected"
-	.asciz "MT_GetSelectedCel"
+	aligned_string "MT_GetSelectedCel"
 	.byte 0x4d, 0x54
-	.asciz "_SetSelectedCel"
+	aligned_string "_SetSelectedCel"
 	aligned_string "MT_RequestGridDraw"
-	.asciz "MT_GridDraw"
-	.asciz "MT_GetFixedRowStr"
-	.asciz "MT_GetFixedColStr"
+	aligned_string "MT_GridDraw"
+	aligned_string "MT_GetFixedRowStr"
+	aligned_string "MT_GetFixedColStr"
 	aligned_string "MT_GetStrPtr"
-	.asciz "MT_GetDialFocus"
-	.asciz "MT_SetDialFocus"
+	aligned_string "MT_GetDialFocus"
+	aligned_string "MT_SetDialFocus"
 	aligned_string "MT_SetString"
 	aligned_string "MT_AreYouClassProc"
 	aligned_string "MT_GetNamingMode"
 	aligned_string "MT_LswData"
 	aligned_string "MT_RamData"
-	.asciz "MT_SetChara"
+	aligned_string "MT_SetChara"
 	aligned_string "MT_SetCursor"
 	aligned_string "MT_SetPage"
 	aligned_string "MT_RequestString"
-	.asciz "MT_ReturnString"
+	aligned_string "MT_ReturnString"
 	.byte 0x4d, 0x54
 	aligned_string "_GetStringLength"
 	aligned_string "MT_SetApFunction"
 	aligned_string "MT_IsInterrupt"
 	aligned_string "MT_InterruptExit"
-	.asciz "MT_ResetInterruptTime"
+	aligned_string "MT_ResetInterruptTime"
 	aligned_string "MT_SetReturnScreen"
 	aligned_string "MT_GetReturnScreen"
-	.asciz "MT_GetChildScreen"
+	aligned_string "MT_GetChildScreen"
 	.byte 0x4d, 0x54
 	aligned_string "_GetParentScreen"
-	.asciz "MT_SetChildScreen"
+	aligned_string "MT_SetChildScreen"
 	aligned_string "MT_SetParentScreen"
 	aligned_string "MT_EditUpSet"
 	aligned_string "MT_EditDownSet"
-	.asciz "MT_ValenSet"
-	.asciz "MT_AicenSet"
+	aligned_string "MT_ValenSet"
+	aligned_string "MT_AicenSet"
 	.byte 0x4d, 0x54
-	.asciz "_DrawMemo"
+	aligned_string "_DrawMemo"
 	aligned_string "MT_ToggleParam"
-	.asciz "MT_GetParam"
+	aligned_string "MT_GetParam"
 	.byte 0x4d, 0x54
-	.asciz "_RamAdd"
-	.asciz "MT_RamPut"
-	.asciz "MT_RamGet"
-	.asciz "MT_BitPut"
+	aligned_string "_RamAdd"
+	aligned_string "MT_RamPut"
+	aligned_string "MT_RamGet"
+	aligned_string "MT_BitPut"
 	.byte 0x4d, 0x54
-	.asciz "_BitGet"
-	.asciz "MT_GetDirection"
-	.asciz "MT_GetBit"
+	aligned_string "_BitGet"
+	aligned_string "MT_GetDirection"
+	aligned_string "MT_GetBit"
 	aligned_string "MT_GetBitAddress"
-	.asciz "MT_GetBitString"
-	.asciz "MT_GetSoundSwNo"
+	aligned_string "MT_GetBitString"
+	aligned_string "MT_GetSoundSwNo"
 	aligned_string "MT_GetPmemName"
 	aligned_string "MT_GetRhythmName"
-	.asciz "MT_GetSoundName"
+	aligned_string "MT_GetSoundName"
 	.byte 0x4d, 0x54
-	.asciz "_SetWallPalette"
-	.asciz "MT_LswPartGet"
+	aligned_string "_SetWallPalette"
+	aligned_string "MT_LswPartGet"
 	.byte 0x4d, 0x54
-	.asciz "_LswPartAdd"
-	.asciz "MT_LswPartPut"
-	.asciz "MT_LswGet"
-	.asciz "MT_LswAdd"
+	aligned_string "_LswPartAdd"
+	aligned_string "MT_LswPartPut"
+	aligned_string "MT_LswGet"
+	aligned_string "MT_LswAdd"
 	.byte 0x4d, 0x54
-	.asciz "_LswPut"
-	.asciz "MT_GetPageNow"
+	aligned_string "_LswPut"
+	aligned_string "MT_GetPageNow"
 	.byte 0x4d, 0x54
-	.asciz "_GetPageMax"
-	.asciz "MT_GetPageMin"
+	aligned_string "_GetPageMax"
+	aligned_string "MT_GetPageMin"
 	aligned_string "MT_CheckEditSw"
 	aligned_string "MT_SetEditSwRect"
-	.asciz "MT_GetIndex"
-	.asciz "MT_CheckIndex"
+	aligned_string "MT_GetIndex"
+	aligned_string "MT_CheckIndex"
 	.byte 0x4d, 0x54
 	aligned_string "_SetMenuRect"
-	.asciz "MT_DrawSelected"
+	aligned_string "MT_DrawSelected"
 	.byte 0x4d, 0x54
 	aligned_string "_SetSelected"
-	.asciz "MT_GetTableString"
-	.asciz "MT_GetChildWindow"
+	aligned_string "MT_GetTableString"
+	aligned_string "MT_GetChildWindow"
 	aligned_string "MT_GetParentWindow"
-	.asciz "MT_SetChildWindow"
+	aligned_string "MT_SetChildWindow"
 	aligned_string "MT_SetParentWindow"
-	.asciz "MT_GetRamString"
-	.asciz "MT_GetRamSize"
+	aligned_string "MT_GetRamString"
+	aligned_string "MT_GetRamSize"
 	aligned_string "MT_GetRamAddress"
-	.asciz "MT_GetMin"
+	aligned_string "MT_GetMin"
 	.byte 0x4d, 0x54
-	.asciz "_GetMax"
-	.asciz "MT_GetLswString"
-	.asciz "MT_GetLswOutput"
+	aligned_string "_GetMax"
+	aligned_string "MT_GetLswString"
+	aligned_string "MT_GetLswOutput"
 	aligned_string "MT_GetLswAddress"
-	.asciz "MT_GetSmallStep"
-	.asciz "MT_GetLargeStep"
+	aligned_string "MT_GetSmallStep"
+	aligned_string "MT_GetLargeStep"
 	aligned_string "MT_CalcParam"
 	aligned_string "MT_CheckSelected"
-	.asciz "MT_SetParam"
+	aligned_string "MT_SetParam"
 	.byte 0x4d, 0x54
 	aligned_string "_GetString"
 	aligned_string "MT_GetPrevview"
 	aligned_string "MT_GetNextview"
-	.asciz "MT_GetSubview"
-	.asciz "MT_GetSuperview"
+	aligned_string "MT_GetSubview"
+	aligned_string "MT_GetSuperview"
 	aligned_string "MT_GetTitleOld"
 	aligned_string "MT_GetTitleNow"
-	.asciz "MT_GetStartScreen"
-	.asciz "MT_GetTitleProcID"
+	aligned_string "MT_GetStartScreen"
+	aligned_string "MT_GetTitleProcID"
 	.byte 0x4d, 0x54
-	.asciz "_GetTitleProc"
+	aligned_string "_GetTitleProc"
 	.byte 0x4d, 0x54
 	aligned_string "_GetUserID"
-	.asciz "MT_GetModeOld"
-	.asciz "MT_GetModeNow"
+	aligned_string "MT_GetModeOld"
+	aligned_string "MT_GetModeNow"
 	aligned_string "MT_GetStartTitle"
 	aligned_string "MT_GetModeProcID"
 	aligned_string "MT_GetModeProc"
 	aligned_string "MT_GetFunction"
-	.asciz "MT_MakeEditSwID"
-	.asciz "MT_MakeDump"
+	aligned_string "MT_MakeEditSwID"
+	aligned_string "MT_MakeDump"
 	aligned_string "MT_GetPropSize"
 	aligned_string "MT_GetPropMember"
 	aligned_string "MT_CheckPropString"
 	aligned_string "MT_SearchClass"
-	.asciz "MT_AutoFree"
+	aligned_string "MT_AutoFree"
 	aligned_string "MT_GetPropChar"
 	aligned_string "MT_GetInstanceSize"
-	.asciz "MT_GetPropDataCount"
+	aligned_string "MT_GetPropDataCount"
 	aligned_string "MT_GetPropData"
 	aligned_string "MT_SetProperty"
 	aligned_string "MT_GetProperty"
 	aligned_string "MT_DumpPointer"
-	.asciz "MT_DumpProperty"
-	.asciz "MT_CopyProperty"
+	aligned_string "MT_DumpProperty"
+	aligned_string "MT_CopyProperty"
 	aligned_string "MT_GetPropString"
 	aligned_string "MT_GetPropName"
-	.asciz "MT_GetPropCount"
+	aligned_string "MT_GetPropCount"
 	aligned_string "MT_SetName"
 	aligned_string "MT_GetName"
-	.asciz "MT_CheckClass"
-	.asciz "MT_GetProcedure"
-	.asciz "MT_GetClassName"
-	.asciz "MT_GetParentClass"
-	.asciz "MT_GetClass"
+	aligned_string "MT_CheckClass"
+	aligned_string "MT_GetProcedure"
+	aligned_string "MT_GetClassName"
+	aligned_string "MT_GetParentClass"
+	aligned_string "MT_GetClass"
 	aligned_string "MT_GetInstance"
-	.asciz "MT_GetPropDataCountSp"
+	aligned_string "MT_GetPropDataCountSp"
 	.byte 0x4d, 0x54
 	aligned_string "_GetPropDataSp"
 	aligned_string "MT_SetPropertyEx"
 	aligned_string "MT_GetPropertyEx"
 	aligned_string "MT_DumpPointerEx"
-	.asciz "MT_DumpPropertyEx"
-	.asciz "MT_CopyPropertyEx"
+	aligned_string "MT_DumpPropertyEx"
+	aligned_string "MT_CopyPropertyEx"
 	aligned_string "MT_GetPropNameSp"
-	.asciz "MT_GetPropCountSp"
+	aligned_string "MT_GetPropCountSp"
 	.byte 0x4d, 0x54
 	aligned_string "_GetPropStringEx"
-	.asciz "MT_CheckClassSp"
+	aligned_string "MT_CheckClassSp"
 	aligned_string "MT_GetInstanceSizeSp"
-	.asciz "MT_GetProcedureSp"
-	.asciz "MT_GetParentClassSp"
+	aligned_string "MT_GetProcedureSp"
+	aligned_string "MT_GetParentClassSp"
 	.byte 0x4d, 0x54
-	.asciz "_GetClassSp"
+	aligned_string "_GetClassSp"
 	.byte 0xbc, 0x00, 0xcb, 0x28
 	.byte 0xfb, 0x00, 0x77, 0xad, 0xf7, 0x00, 0x1a, 0x31
 	.byte 0xfc, 0x00, 0xac, 0x2b, 0xf7, 0x00, 0x36, 0x96
@@ -58322,22 +57878,22 @@ LABEL_EB00D8:
 	.byte 0xeb, 0x00, 0xae, 0x05, 0xeb, 0x00, 0x96, 0x05
 	.byte 0xeb, 0x00, 0x86, 0x05, 0xeb, 0x00, 0x78, 0x05
 	.byte 0xeb, 0x00, 0x76, 0x05, 0xeb, 0x00, 0x00, 0xff
-	.asciz "DrawBitmapSP2"
+	aligned_string "DrawBitmapSP2"
 	.byte 0x4d, 0x61
-	.asciz "inDeleteEvent"
+	aligned_string "inDeleteEvent"
 	.byte 0x4d, 0x61
-	.asciz "inDeleteSpecificEvent"
+	aligned_string "inDeleteSpecificEvent"
 	.byte 0x44, 0x72
 	aligned_string "awFunc"
 	aligned_string "SetRootParam"
 	aligned_string "SetRootEvent"
 	aligned_string "InitDrawTask"
 	aligned_string "RefreshSwEvent"
-	.asciz "LcdOn"
+	aligned_string "LcdOn"
 	aligned_string "LcdOff"
 	aligned_string "DrawBitmapFile"
 	aligned_string "VwUserBitmapByNameProc"
-	.asciz "ApDeliveryEvent"
+	aligned_string "ApDeliveryEvent"
 	.asciz "RefreshApTask"
 	.byte 0x57, 0x61
 	aligned_string "keUpApTask"
@@ -58345,122 +57901,122 @@ LABEL_EB00D8:
 	aligned_string "WakeUpMainTask"
 	.asciz "SleepMainTask"
 	.byte 0x44, 0x65
-	.asciz "leteEvent"
-	.asciz "DeleteSpecificEvent"
+	aligned_string "leteEvent"
+	aligned_string "DeleteSpecificEvent"
 	.byte 0x46, 0x75
 	aligned_string "ncCall"
 	aligned_string "IvIntWelcomeProc"
 	aligned_string "SetWallColor"
 	aligned_string "SetWallPaper"
 	aligned_string "InitPaletteRGB"
-	.asciz "SetPaletteRGB"
+	aligned_string "SetPaletteRGB"
 	aligned_string "DrawBitmapFast"
 	aligned_string "DrawBitmapSPFast"
-	.asciz "GetNamingWindowID"
+	aligned_string "GetNamingWindowID"
 	aligned_string "IvScreenProc"
 	aligned_string "CaptureLcd"
 	aligned_string "VwUserBitmapProc"
 	aligned_string "DrawBitmapSP"
-	.asciz "GetPartSelect"
+	aligned_string "GetPartSelect"
 	aligned_string "TrChordBoxProc"
 	aligned_string "TrTransposeBoxProc"
 	aligned_string "AcLanguageTextProc"
-	.asciz "PsTextBoxProc"
+	aligned_string "PsTextBoxProc"
 	.byte 0x49, 0x76
 	aligned_string "ShowHideProc"
 	aligned_string "SetNotDrawFlag"
 	aligned_string "ConvertStringsEx"
-	.asciz "SetVariFlag"
+	aligned_string "SetVariFlag"
 	aligned_string "IvIntEasySetProc"
-	.asciz "IvIntVariProc"
-	.asciz "IvIntCompleteProc"
+	aligned_string "IvIntVariProc"
+	aligned_string "IvIntCompleteProc"
 	.byte 0x49, 0x76
 	aligned_string "IntErrorProc"
-	.asciz "IvIntReminderProc"
+	aligned_string "IvIntReminderProc"
 	aligned_string "CheckNotDrawFlag"
 	aligned_string "SetInterruptTime"
-	.asciz "IvInterruptProc"
-	.asciz "IntTimeIDProc"
+	aligned_string "IvInterruptProc"
+	aligned_string "IntTimeIDProc"
 	aligned_string "DbMemoryDumpProc"
 	aligned_string "IvExitWindowProc"
-	.asciz "IvTrackSwitchProc"
+	aligned_string "IvTrackSwitchProc"
 	aligned_string "GetDirmdFlag"
-	.asciz "DirmdEmulator"
-	.asciz "IvDirmdScreenProc"
+	aligned_string "DirmdEmulator"
+	aligned_string "IvDirmdScreenProc"
 	.byte 0x41, 0x63
-	.asciz "TrackSwitchProc"
-	.asciz "PsTrackSwitchProc"
-	.asciz "DbDebugMenuProc"
-	.asciz "AcGridBoxProc"
-	.asciz "AcListBoxProc"
+	aligned_string "TrackSwitchProc"
+	aligned_string "PsTrackSwitchProc"
+	aligned_string "DbDebugMenuProc"
+	aligned_string "AcGridBoxProc"
+	aligned_string "AcListBoxProc"
 	.byte 0x50, 0x73
 	.asciz "GridBoxProc"
-	.asciz "PsListBoxProc"
+	aligned_string "PsListBoxProc"
 	aligned_string "GetDialFocus"
 	aligned_string "SetDialFocus"
 	aligned_string "IvCatchEventProc"
-	.asciz "AcStrRadioBoxProc"
+	aligned_string "AcStrRadioBoxProc"
 	aligned_string "PsRadioBoxProc"
 	aligned_string "AcRamBoxProc"
-	.asciz "AcIndexToggleProc"
+	aligned_string "AcIndexToggleProc"
 	aligned_string "IvNamingProc"
-	.asciz "PsCursorBoxProc"
+	aligned_string "PsCursorBoxProc"
 	aligned_string "AcNamingWindowProc"
 	aligned_string "IvFixWinProc"
 	aligned_string "GetBoxCenter"
-	.asciz "DrawStringReverse"
+	aligned_string "DrawStringReverse"
 	aligned_string "IvExitScreenProc"
 	aligned_string "IvExitModeProc"
 	aligned_string "IvExitProc"
-	.asciz "GetFocusParam"
+	aligned_string "GetFocusParam"
 	.byte 0x47, 0x65
-	.asciz "tFocusEvent"
+	aligned_string "tFocusEvent"
 	aligned_string "GetFocusObject"
-	.asciz "SetRootObject"
+	aligned_string "SetRootObject"
 	aligned_string "SetAutoInc"
-	.asciz "SetAutoIncDefault"
+	aligned_string "SetAutoIncDefault"
 	aligned_string "GetRootParam"
 	aligned_string "GetRootEvent"
-	.asciz "GetRootObject"
-	.asciz "KillApTimer"
+	aligned_string "GetRootObject"
+	aligned_string "KillApTimer"
 	.byte 0x52, 0x65
 	aligned_string "setApTimer"
 	aligned_string "SetApTimer"
 	.asciz "ApTimer"
-	.asciz "InitializeTimer"
+	aligned_string "InitializeTimer"
 	aligned_string "DbMemoProc"
 	aligned_string "PsWideToggleProc"
 	aligned_string "AcFuncToggleProc"
 	aligned_string "MainBitGet"
 	aligned_string "MainBitPut"
 	aligned_string "AcBitEditBoxProc"
-	.asciz "VwEditSwBoxProc"
-	.asciz "VwMenuBoxProc"
+	aligned_string "VwEditSwBoxProc"
+	aligned_string "VwMenuBoxProc"
 	aligned_string "AcMixerVolProc"
 	aligned_string "AcPmemNameProc"
 	aligned_string "AcRhythmNameProc"
-	.asciz "AcSoundNameProc"
-	.asciz "GetWallPaletteRGB"
-	.asciz "ChangeWallPalette"
+	aligned_string "AcSoundNameProc"
+	aligned_string "GetWallPaletteRGB"
+	aligned_string "ChangeWallPalette"
 	.byte 0x53, 0x65
-	.asciz "tDialDown"
-	.asciz "SetDialUp"
-	.asciz "SetDialEnable"
+	aligned_string "tDialDown"
+	aligned_string "SetDialUp"
+	aligned_string "SetDialEnable"
 	aligned_string "IvMainEditSwProc"
-	.asciz "IvPageControlProc"
+	aligned_string "IvPageControlProc"
 	.byte 0x50, 0x73
 	aligned_string "InvisibleBoxProc"
-	.asciz "PsToggleBoxProc"
+	aligned_string "PsToggleBoxProc"
 	aligned_string "AcWindowPageProc"
-	.asciz "PsPageBoxProc"
+	aligned_string "PsPageBoxProc"
 	aligned_string "AcFuncEditSwProc"
-	.asciz "AcIndexEditSwProc"
+	aligned_string "AcIndexEditSwProc"
 	.byte 0x50, 0x73
-	.asciz "WideESBoxProc"
+	aligned_string "WideESBoxProc"
 	.byte 0x50, 0x73
-	.asciz "EditSwBoxProc"
+	aligned_string "EditSwBoxProc"
 	.byte 0x41, 0x63
-	.asciz "TitleMenuProc"
+	aligned_string "TitleMenuProc"
 	.byte 0x50, 0x73
 	.asciz "MenuBoxProc"
 	aligned_string "AcRamEditBoxProc"
@@ -58469,22 +58025,22 @@ LABEL_EB00D8:
 	aligned_string "AcOnOffBoxProc"
 	aligned_string "PsTblEditBoxProc"
 	aligned_string "PsNumEditBoxProc"
-	.asciz "PsEditBoxProc"
+	aligned_string "PsEditBoxProc"
 	aligned_string "AcTempoBoxProc"
 	aligned_string "AcLswBoxProc"
-	.asciz "PsParaBoxProc"
-	.asciz "VwBoxProc"
-	.asciz "TextBoxProc"
+	aligned_string "PsParaBoxProc"
+	aligned_string "VwBoxProc"
+	aligned_string "TextBoxProc"
 	.byte 0x4c, 0x69
 	aligned_string "neProc"
 	aligned_string "IconProc"
 	aligned_string "BitmapProc"
-	.asciz "LabelProc"
-	.asciz "StringBoxProc"
+	aligned_string "LabelProc"
+	aligned_string "StringBoxProc"
 	.byte 0x57, 0x69
 	aligned_string "ndowProc"
 	aligned_string "GroupBoxProc"
-	.asciz "TitleEditProc"
+	aligned_string "TitleEditProc"
 	.byte 0x4d, 0x6f
 	aligned_string "deEditProc"
 	aligned_string "MainRamGet"
@@ -58501,32 +58057,32 @@ LABEL_EB00D8:
 	aligned_string "DrawEditSw"
 	aligned_string "EditSwProc"
 	aligned_string "DrawTitleBar"
-	.asciz "TtlScreenProc"
+	aligned_string "TtlScreenProc"
 	.byte 0x44, 0x72
-	.asciz "awDesignFrame"
+	aligned_string "awDesignFrame"
 	.byte 0x47, 0x65
-	.asciz "tClientFrame2"
+	aligned_string "tClientFrame2"
 	.byte 0x47, 0x65
 	aligned_string "tClientFrame"
 	.asciz "FrameProc"
 	aligned_string "GetEditSwPoint"
 	aligned_string "ScreenProc"
-	.asciz "BoxRightCheck"
+	aligned_string "BoxRightCheck"
 	aligned_string "BoxLeftCheck"
-	.asciz "GetFrameColor"
+	aligned_string "GetFrameColor"
 	.byte 0x44, 0x72
-	.asciz "awDesignBox"
-	.asciz "GetClientBox2"
+	aligned_string "awDesignBox"
+	aligned_string "GetClientBox2"
 	aligned_string "GetClientBox"
 	.asciz "BoxProc"
 	aligned_string "SetBox"
 	aligned_string "GetBox"
-	.asciz "GetViewInstance"
-	.asciz "GetLinkView"
+	aligned_string "GetViewInstance"
+	aligned_string "GetLinkView"
 	aligned_string "SetSuperView"
 	aligned_string "Unlink"
 	aligned_string "Link"
-	.asciz "SubView"
+	aligned_string "SubView"
 	.asciz "SuperView"
 	aligned_string "PrevView"
 	aligned_string "NextView"
@@ -58534,17 +58090,17 @@ LABEL_EB00D8:
 	aligned_string "SetMovable"
 	aligned_string "GetVisible"
 	aligned_string "SetVisible"
-	.asciz "GetChange"
-	.asciz "SetChange"
+	aligned_string "GetChange"
+	aligned_string "SetChange"
 	aligned_string "GetConst"
 	aligned_string "SetConst"
 	aligned_string "ViewableProc"
 	.asciz "GetTitleOld"
 	.asciz "GetTitleNow"
-	.asciz "UnregisteredTitle"
+	aligned_string "UnregisteredTitle"
 	.byte 0x52, 0x65
-	.asciz "gisterTitle"
-	.asciz "TitleProc"
+	aligned_string "gisterTitle"
+	aligned_string "TitleProc"
 	.byte 0x47, 0x65
 	aligned_string "tModeOld"
 	aligned_string "GetModeNow"
@@ -58556,29 +58112,29 @@ LABEL_EB00D8:
 	aligned_string "MainFunctionProc"
 	aligned_string "ApFunctionProc"
 	aligned_string "FunctionProc"
-	.asciz "TrackIDProc"
+	aligned_string "TrackIDProc"
 	.byte 0x50, 0x61
 	aligned_string "rtIDProc"
 	aligned_string "UserIDProc"
 	aligned_string "MainFuncIDProc"
 	aligned_string "ApFuncIDProc"
 	aligned_string "BitmapIDProc"
-	.asciz "FrameIDProc"
+	aligned_string "FrameIDProc"
 	.byte 0x4c, 0x69
 	aligned_string "neModeIDProc"
-	.asciz "EditSwStyleIDProc"
+	aligned_string "EditSwStyleIDProc"
 	aligned_string "EditSwIDProc"
-	.asciz "AlignmentIDProc"
+	aligned_string "AlignmentIDProc"
 	.byte 0x46, 0x6f
 	aligned_string "ntIDProc"
 	aligned_string "IconIDProc"
-	.asciz "TitleIDProc"
+	aligned_string "TitleIDProc"
 	aligned_string "ModeIDProc"
 	aligned_string "BorderIDProc"
-	.asciz "ColorIDProc"
+	aligned_string "ColorIDProc"
 	aligned_string "ViewFlagProc"
 	aligned_string "ViewIDProc"
-	.asciz "ConstFlagProc"
+	aligned_string "ConstFlagProc"
 	aligned_string "NameProc"
 	aligned_string "StringProc"
 	aligned_string "PointYProc"
@@ -58588,16 +58144,16 @@ LABEL_EB00D8:
 	aligned_string "RectX2Proc"
 	aligned_string "RectY1Proc"
 	aligned_string "RectX1Proc"
-	.asciz "RECTWProc"
-	.asciz "EventIDProc"
+	aligned_string "RECTWProc"
+	aligned_string "EventIDProc"
 	aligned_string "WindowIDProc"
 	aligned_string "ScreenIDProc"
-	.asciz "ClassIDProc"
-	.asciz "pStringProc"
-	.asciz "pPropProc"
+	aligned_string "ClassIDProc"
+	aligned_string "pStringProc"
+	aligned_string "pPropProc"
 	.byte 0x70, 0x50
-	.asciz "rocProc"
-	.asciz "pFuncProc"
+	aligned_string "rocProc"
+	aligned_string "pFuncProc"
 	aligned_string "ObjectIDProc"
 	aligned_string "pUlongProc"
 	aligned_string "pSlongProc"
@@ -58605,81 +58161,81 @@ LABEL_EB00D8:
 	aligned_string "pScharProc"
 	aligned_string "pUwordProc"
 	aligned_string "pSwordProc"
-	.asciz "pBoolProc"
+	aligned_string "pBoolProc"
 	aligned_string "boolProc"
-	.asciz "ulongProc"
+	aligned_string "ulongProc"
 	.byte 0x73, 0x6c
 	.asciz "ongProc"
-	.asciz "scharProc"
-	.asciz "ucharProc"
-	.asciz "uwordProc"
+	aligned_string "scharProc"
+	aligned_string "ucharProc"
+	aligned_string "uwordProc"
 	.byte 0x73, 0x77
 	.asciz "ordProc"
 	aligned_string "SupportClassProc"
 	.asciz "ClassProc"
-	.asciz "WordwrapStrings"
+	aligned_string "WordwrapStrings"
 	aligned_string "CalcTotalWidth"
 	aligned_string "ConvertStrings"
 	aligned_string "GetCenteredDelta"
 	aligned_string "GetCharDescent"
-	.asciz "GetCharHeight"
+	aligned_string "GetCharHeight"
 	aligned_string "GetFrameSPSize"
-	.asciz "ResNameProc"
-	.asciz "ResStringProc"
+	aligned_string "ResNameProc"
+	aligned_string "ResStringProc"
 	.byte 0x52, 0x65
-	.asciz "sMethodProc"
+	aligned_string "sMethodProc"
 	aligned_string "ResEventProc"
-	.asciz "ResFontProc"
+	aligned_string "ResFontProc"
 	.byte 0x52, 0x65
-	.asciz "sIconProc"
+	aligned_string "sIconProc"
 	aligned_string "ResFrameProc"
-	.asciz "ResBitmapProc"
+	aligned_string "ResBitmapProc"
 	.byte 0x52, 0x65
 	aligned_string "sourceProc"
-	.asciz "ApPostEvent"
+	aligned_string "ApPostEvent"
 	aligned_string "MainGetEvent"
-	.asciz "MainPostEvent"
-	.asciz "MainSendEvent"
-	.asciz "MainDispatchEvent"
+	aligned_string "MainPostEvent"
+	aligned_string "MainSendEvent"
+	aligned_string "MainDispatchEvent"
 	aligned_string "SetCurrentTarget"
 	aligned_string "GetCurrentTarget"
 	aligned_string "GetEvent"
-	.asciz "PostEvent"
-	.asciz "SendEvent"
+	aligned_string "PostEvent"
+	aligned_string "SendEvent"
 	.byte 0x44, 0x69
-	.asciz "spatchEvent"
+	aligned_string "spatchEvent"
 	aligned_string "InitializeEventQueue"
-	.asciz "CheckViewObject"
-	.asciz "CountObject"
+	aligned_string "CheckViewObject"
+	aligned_string "CountObject"
 	.byte 0x55, 0x6e
 	aligned_string "RegisterObject"
 	aligned_string "RegisterObject"
-	.asciz "RegisterObjectTable"
-	.asciz "InitializeObjectTable"
-	.asciz "InheritedProc"
+	aligned_string "RegisterObjectTable"
+	aligned_string "InitializeObjectTable"
+	aligned_string "InheritedProc"
 	aligned_string "ObjectProc"
-	.asciz "DrawStringAlignment"
+	aligned_string "DrawStringAlignment"
 	aligned_string "DrawStringRightJustify"
-	.asciz "DrawStringLeftJustify"
+	aligned_string "DrawStringLeftJustify"
 	.byte 0x44, 0x72
 	aligned_string "awStringCentered"
 	aligned_string "DrawString"
-	.asciz "DrawFrameSP"
-	.asciz "DrawIcons"
+	aligned_string "DrawFrameSP"
+	aligned_string "DrawIcons"
 	aligned_string "DrawBitmap"
 	aligned_string "DrawWall"
 	aligned_string "MovePixels"
-	.asciz "DrawFrameEx"
-	.asciz "DrawFrame"
-	.asciz "DrawBox"
+	aligned_string "DrawFrameEx"
+	aligned_string "DrawFrame"
+	aligned_string "DrawBox"
 	aligned_string "DrawLineEx"
 	aligned_string "DrawLine"
-	.asciz "ModifyPixelEx"
-	.asciz "ModifyPixel"
-	.asciz "ReadPixel"
+	aligned_string "ModifyPixelEx"
+	aligned_string "ModifyPixel"
+	aligned_string "ReadPixel"
 	.byte 0x53, 0x65
-	.asciz "tChangeRect"
-	.asciz "SetNeedUpdate"
+	aligned_string "tChangeRect"
+	aligned_string "SetNeedUpdate"
 	aligned_string "UpdateScreen"
 	aligned_string "InitializeGraphics"
 	aligned_string "InitializeUser31"
@@ -58703,16 +58259,16 @@ LABEL_EB00D8:
 	aligned_string "InitializeUser13"
 	aligned_string "InitializeUser12"
 	aligned_string "InitializeNaka"
-	.asciz "InitializeKSS"
+	aligned_string "InitializeKSS"
 	aligned_string "InitializeHama"
 	aligned_string "InitializeKubo"
 	aligned_string "InitializeYoko"
-	.asciz "InitializeScoop"
-	.asciz "InitializeCheap"
+	aligned_string "InitializeScoop"
+	aligned_string "InitializeCheap"
 	aligned_string "InitializeSuna"
 	aligned_string "InitializeEast"
-	.asciz "InitializeToshi"
-	.asciz "InitializeMurai"
+	aligned_string "InitializeToshi"
+	aligned_string "InitializeMurai"
 	.asciz "InitializeRoot"
 	.byte 0xff, 0xb0, 0x00, 0x92, 0x20, 0xeb, 0x00
 	.long LABEL_EB208A
@@ -59395,7 +58951,7 @@ LABEL_EB2710:
 	aligned_string "i110.bmp"
 	aligned_string "i109.bmp"
 	aligned_string "i108.bmp"
-	.asciz "i107o.bmp"
+	aligned_string "i107o.bmp"
 LABEL_EB2738:
 	aligned_string "i106.bmp"
 	aligned_string "i105.bmp"
@@ -59405,46 +58961,37 @@ LABEL_EB2760:
 	aligned_string "i102.bmp"
 	aligned_string "i101.bmp"
 	aligned_string "i100.bmp"
-	.asciz "i99.bmp"
+	aligned_string "i99.bmp"
 	jr	ge, 0x39
 	.asciz "8.bmp"
 	jr	ge, 0x39
 	.asciz "7.bmp"
 	jr	ge, 0x39
 	aligned_string "6o.bmp"
-LABEL_EB27A0:
-	.asciz "i95.bmp"
-LABEL_EB27A8:
-	.asciz "i94.bmp"
-LABEL_EB27B0:
-	aligned_string "i93o.bmp"
+LABEL_EB27A0:	aligned_string "i95.bmp"
+LABEL_EB27A8:	aligned_string "i94.bmp"
+LABEL_EB27B0:	aligned_string "i93o.bmp"
 	aligned_string "i92o.bmp"
 	aligned_string "i91o.bmp"
 	aligned_string "i90o.bmp"
-LABEL_EB27D8:
-	.asciz "i89.bmp"
-LABEL_EB27E0:
-	.asciz "i88.bmp"
-LABEL_EB27E8:
-	.asciz "i87.bmp"
-LABEL_EB27F0:
-	.asciz "i86.bmp"
-LABEL_EB27F8:
-	.asciz "i85.bmp"
-LABEL_EB2800:
-	aligned_string "i84o.bmp"
-	.asciz "i83.bmp"
-	.asciz "i82.bmp"
-	.asciz "i81.bmp"
-	.asciz "i80.bmp"
-	.asciz "i79.bmp"
-	.asciz "i78.bmp"
-	.asciz "i77.bmp"
-	.asciz "i76.bmp"
-	.asciz "i75.bmp"
+LABEL_EB27D8:	aligned_string "i89.bmp"
+LABEL_EB27E0:	aligned_string "i88.bmp"
+LABEL_EB27E8:	aligned_string "i87.bmp"
+LABEL_EB27F0:	aligned_string "i86.bmp"
+LABEL_EB27F8:	aligned_string "i85.bmp"
+LABEL_EB2800:	aligned_string "i84o.bmp"
+	aligned_string "i83.bmp"
+	aligned_string "i82.bmp"
+	aligned_string "i81.bmp"
+	aligned_string "i80.bmp"
+	aligned_string "i79.bmp"
+	aligned_string "i78.bmp"
+	aligned_string "i77.bmp"
+	aligned_string "i76.bmp"
+	aligned_string "i75.bmp"
 	aligned_string "i74o.bmp"
 	aligned_string "i73o.bmp"
-	.asciz "i72.bmp"
+	aligned_string "i72.bmp"
 	jr	ge, 0x37
 	.asciz "1.bmp"
 	jr	ge, 0x37
@@ -59573,19 +59120,19 @@ LABEL_EB2800:
 	aligned_string ".bmp"
 	aligned_string "i8.bmp"
 	aligned_string "i7.bmp"
-	.asciz "i6o.bmp"
+	aligned_string "i6o.bmp"
 	jr	ge, 0x35
 	aligned_string ".bmp"
-	.asciz "i4o.bmp"
+	aligned_string "i4o.bmp"
 	jr	ge, 0x33
 	.asciz "o.bmp"
 	jr	ge, 0x32
 	aligned_string ".bmp"
 	aligned_string "i1.bmp"
 	aligned_string "i0.bmp"
-	.asciz "trash.bmp"
+	aligned_string "trash.bmp"
 LABEL_EB2AB8:
-	.asciz "trash.bmp"
+	aligned_string "trash.bmp"
 
 
 	.byte 0x33, 0x00, 0x60, 0x01, 0xff, 0xff
@@ -59619,7 +59166,7 @@ LABEL_EB2B36:
 	.long LABEL_EB2B6C
 	.byte 0xff, 0x00, 0xa0, 0x01
 	.byte 0x01, 0x00, 0x00, 0x00
-	.asciz "CHECK TITLE"
+	aligned_string "CHECK TITLE"
 LABEL_EB2B78:
 
 
@@ -59745,7 +59292,7 @@ LABEL_EB2DA8:
 	.byte 0xff, 0xff, 0xff, 0xff, 0x08, 0x00, 0x1a, 0x01
 	.byte 0x4d, 0x00, 0x35, 0x01, 0x5f, 0x00, 0xc8, 0x2d
 	.byte 0xeb, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	.asciz "~8d ~8b"
+	aligned_string "~8d ~8b"
 LABEL_EB2DD0:
 
 
@@ -59991,7 +59538,7 @@ LABEL_EB31E8:
 	.byte 0xfc, 0x00, 0x02, 0x00, 0x00, 0x00, 0xa0, 0x01
 	.byte 0x50, 0xf1, 0x03, 0x00, 0x2c, 0x32, 0xeb, 0x00
 	.byte 0x01, 0x00, 0x00, 0x00
-	.asciz "CHECK TITLE"
+	aligned_string "CHECK TITLE"
 LABEL_EB3238:
 
 
@@ -60171,7 +59718,7 @@ LABEL_EB335A:
 LABEL_EB353C:
 	.byte 0x00, 0xff, 0x00, 0xff
 LABEL_EB3540:
-	.asciz "MemDumpWindow"
+	aligned_string "MemDumpWindow"
 	.byte 0x00, 0xff
 LABEL_EB3550:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
@@ -60181,18 +59728,18 @@ LABEL_EB3560:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 LABEL_EB3568:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
-	.asciz "TrackSwitchWindow"
+	aligned_string "TrackSwitchWindow"
 LABEL_EB3580:
 	.byte 0x00, 0xff
 	aligned_string "MemoWindow"
-	.asciz "NamingLabel"
+	aligned_string "NamingLabel"
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 LABEL_EB35A0:
 	aligned_string "NamingSymbol"
-	.asciz "Namingabc"
+	aligned_string "Namingabc"
 LABEL_EB35B8:
-	.asciz "NamingABC"
-	.asciz "NamingCursorBox"
+	aligned_string "NamingABC"
+	aligned_string "NamingCursorBox"
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 LABEL_EB35D8:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
@@ -60203,9 +59750,9 @@ LABEL_EB35E8:
 	.byte 0xff, 0x00, 0xff
 LABEL_EB35F8:
 	.byte 0x00, 0xff
-	.asciz "DebugWindow"
+	aligned_string "DebugWindow"
 	.byte 0x43, 0x6c
-	.asciz "ipBoard"
+	aligned_string "ipBoard"
 LABEL_EB3610:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 LABEL_EB3618:
@@ -60217,13 +59764,13 @@ LABEL_EB3618:
 	.byte 0xeb, 0x00, 0x60, 0x36, 0xeb, 0x00, 0x56, 0x36
 	.byte 0xeb, 0x00, 0x54, 0x36, 0xeb, 0x00, 0x52, 0x36
 	.byte 0xeb, 0x00, 0x00, 0xff, 0x00, 0xff
-	.asciz "CheckWall"
+	aligned_string "CheckWall"
 	.byte 0x00, 0xff, 0x00, 0xff
-	.asciz "CheckNaming"
+	aligned_string "CheckNaming"
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 	aligned_string "CheckTitle"
-	.asciz "MD_PS"
-	.asciz "TT_PS"
+	aligned_string "MD_PS"
+	aligned_string "TT_PS"
 	.byte 0x54, 0x54
 	aligned_string "_CHECK"
 	.byte 0x6a, 0x4a, 0xfa, 0x00, 0xf5, 0x92, 0xf9, 0x00
@@ -60249,19 +59796,19 @@ LABEL_EB3618:
 	.long LABEL_EB3708
 LABEL_EB3708:
 	.byte 0x00, 0xff
-	.asciz "MainTaskControl"
+	aligned_string "MainTaskControl"
 	aligned_string "DirmdTitleFunc"
-	.asciz "MainTrSwControl"
+	aligned_string "MainTrSwControl"
 	aligned_string "CheckTitleFunc"
 	aligned_string "MainRamControl"
 	aligned_string "MainBitControl"
-	.asciz "MainGetPmemName"
-	.asciz "MainGetRhythmName"
+	aligned_string "MainGetPmemName"
+	aligned_string "MainGetRhythmName"
 	aligned_string "MainGetSoundName"
 	aligned_string "MainAutoFree"
-	.asciz "MainPmanControl"
+	aligned_string "MainPmanControl"
 	aligned_string "MainTitleControl"
-	.asciz "DefMainFunction"
+	aligned_string "DefMainFunction"
 	.byte 0x00, 0x00
 	.byte 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x80
 	.byte 0x00, 0x00, 0x80, 0x80, 0x00, 0x00, 0x00, 0x00
@@ -61814,7 +61361,7 @@ LABEL_EB6818:
 	.byte 0x00, 0x00, 0x34, 0x68, 0xeb, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x32, 0x68, 0xeb, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0xff
-	.asciz "False"
+	aligned_string "False"
 	aligned_string "True"
 	.long LABEL_EB6848
 	.byte 0x00, 0x00, 0x00, 0x00
@@ -61852,8 +61399,8 @@ LABEL_EB68E8:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x0e, 0x69, 0xeb, 0x00
 	.byte 0x01, 0x00, 0x00, 0x00, 0x0c, 0x69, 0xeb, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0xff
-	.asciz "CF_AllRom"
-	.asciz "CF_AllRam"
+	aligned_string "CF_AllRom"
+	aligned_string "CF_AllRam"
 	.byte 0x2a, 0x69, 0xeb, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0xff, 0xa2, 0x69, 0xeb, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x94, 0x69, 0xeb, 0x00
@@ -61863,13 +61410,13 @@ LABEL_EB68E8:
 	.byte 0x08, 0x00, 0x00, 0x00, 0x66, 0x69, 0xeb, 0x00
 	.byte 0x10, 0x00, 0x00, 0x00, 0x64, 0x69, 0xeb, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0xff
-	.asciz "VF_InvisibleBox"
+	aligned_string "VF_InvisibleBox"
 	.byte 0x56, 0x46
 	aligned_string "_Const"
-	.asciz "VF_Change"
+	aligned_string "VF_Change"
 	aligned_string "VF_Fixed"
 	aligned_string "VF_Invisible"
-	.asciz "VF_None"
+	aligned_string "VF_None"
 	.byte 0xc6, 0x6b, 0xeb, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0xbc, 0x6b, 0xeb, 0x00, 0x01, 0x00
 	.byte 0x00, 0x00, 0xb2, 0x6b, 0xeb, 0x00, 0x02, 0x00
@@ -61902,39 +61449,39 @@ LABEL_EB68E8:
 	.byte 0x00, 0x00, 0x9a, 0x6a, 0xeb, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0xff
 	aligned_string "CL_WallPattern"
-	.asciz "CL_HairLine"
+	aligned_string "CL_HairLine"
 	aligned_string "CL_Transparent"
-	.asciz "CL_EditSw"
-	.asciz "CL_PageBack"
+	aligned_string "CL_EditSw"
+	aligned_string "CL_PageBack"
 	.byte 0x43, 0x4c
-	.asciz "_Selected"
-	.asciz "CL_Text"
-	.asciz "CL_IconBack"
+	aligned_string "_Selected"
+	aligned_string "CL_Text"
+	aligned_string "CL_IconBack"
 	.byte 0x43, 0x4c
 	aligned_string "_White"
-	.asciz "CL_LightGreen"
+	aligned_string "CL_LightGreen"
 	.byte 0x43, 0x4c
-	.asciz "_DarkYellow"
+	aligned_string "_DarkYellow"
 	aligned_string "CL_FireRed"
-	.asciz "CL_Orange"
-	.asciz "CL_Aqua"
+	aligned_string "CL_Orange"
+	aligned_string "CL_Aqua"
 	aligned_string "CL_Fuchsia"
-	.asciz "CL_Blue"
+	aligned_string "CL_Blue"
 	.byte 0x43, 0x4c
-	.asciz "_Yellow"
-	.asciz "CL_Lime"
+	aligned_string "_Yellow"
+	aligned_string "CL_Lime"
 	aligned_string "CL_Red"
-	.asciz "CL_Silver"
-	.asciz "CL_Gray"
-	.asciz "CL_DarkGray"
+	aligned_string "CL_Silver"
+	aligned_string "CL_Gray"
+	aligned_string "CL_DarkGray"
 	.byte 0x43, 0x4c
-	.asciz "_Teal"
+	aligned_string "_Teal"
 	.byte 0x43, 0x4c
-	.asciz "_Purple"
-	.asciz "CL_Navy"
+	aligned_string "_Purple"
+	aligned_string "CL_Navy"
 	aligned_string "CL_Olive"
 	aligned_string "CL_Green"
-	.asciz "CL_Maroon"
+	aligned_string "CL_Maroon"
 	.byte 0x43, 0x4c
 	aligned_string "_Black"
 LABEL_EB6BD0:
@@ -61985,31 +61532,31 @@ LABEL_EB6C78:
 	aligned_string "BD_TrackSwDown"
 	aligned_string "BD_TrackSwUp"
 LABEL_EB6C98:
-	.asciz "BD_EditSwDown"
+	aligned_string "BD_EditSwDown"
 	.byte 0x42, 0x44
-	.asciz "_EditSwitch"
-	.asciz "BD_3D_DOWN2"
+	aligned_string "_EditSwitch"
+	aligned_string "BD_3D_DOWN2"
 LABEL_EB6CC0:
-	.asciz "BD_3D_DOWN1"
-	.asciz "BD_3D_UP2"
+	aligned_string "BD_3D_DOWN1"
+	aligned_string "BD_3D_UP2"
 	.byte 0x42, 0x44
-	.asciz "_3D_UP1"
+	aligned_string "_3D_UP1"
 LABEL_EB6CE0:
 	aligned_string "BD_Round14"
-	.asciz "BD_Round9"
+	aligned_string "BD_Round9"
 	.byte 0x42, 0x44
-	.asciz "_Round5"
+	aligned_string "_Round5"
 LABEL_EB6D00:
-	.asciz "BD_Round2"
-	.asciz "BD_Round1"
-	.asciz "BD_Round0"
+	aligned_string "BD_Round2"
+	aligned_string "BD_Round1"
+	aligned_string "BD_Round0"
 	.byte 0x42, 0x44
 	aligned_string "_Shadow2"
 	aligned_string "BD_Shadow1"
 	aligned_string "BD_Double1"
 	aligned_string "BD_Single2"
 	aligned_string "BD_Single1"
-	.asciz "BD_None"
+	aligned_string "BD_None"
 	.byte 0x6a, 0x6d, 0xeb, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0xff, 0x74, 0x6d, 0xeb, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0x7e, 0x6d
@@ -62023,9 +61570,9 @@ LABEL_EB6D88:
 	.byte 0x00, 0x00, 0xac, 0x6d, 0xeb, 0x00, 0x02, 0x00
 	.byte 0x00, 0x00, 0xaa, 0x6d, 0xeb, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0xff
-	.asciz "AL_RightJustify"
+	aligned_string "AL_RightJustify"
 	aligned_string "AL_LeftJustify"
-	.asciz "AL_Center"
+	aligned_string "AL_Center"
 	.byte 0x48, 0x6f
 	.byte 0xeb, 0x00, 0x00, 0x00, 0x00, 0x00, 0x3c, 0x6f
 	.byte 0xeb, 0x00, 0x01, 0x00, 0x00, 0x00, 0x30, 0x6f
@@ -62048,14 +61595,14 @@ LABEL_EB6D88:
 	.byte 0xeb, 0x00, 0x0f, 0x00, 0x00, 0x00, 0x80, 0x6e
 	.byte 0xeb, 0x00, 0xff, 0x00, 0x00, 0x00, 0x7e, 0x6e
 	.byte 0xeb, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff
-	.asciz "ES_None"
-	.asciz "ES_Exit"
-	.asciz "ES_Right5"
-	.asciz "ES_Right4"
-	.asciz "ES_Right3"
+	aligned_string "ES_None"
+	aligned_string "ES_Exit"
+	aligned_string "ES_Right5"
+	aligned_string "ES_Right4"
+	aligned_string "ES_Right3"
 	.byte 0x45, 0x53
-	.asciz "_Right2"
-	.asciz "ES_Right1"
+	aligned_string "_Right2"
+	aligned_string "ES_Right1"
 	aligned_string "ES_Left5"
 	aligned_string "ES_Left4"
 	aligned_string "ES_Left3"
@@ -62088,23 +61635,23 @@ LABEL_EB6D88:
 	.byte 0x0f, 0x00, 0x00, 0x00, 0xe6, 0x6f, 0xeb, 0x00
 	.byte 0x10, 0x00, 0x00, 0x00, 0xe4, 0x6f, 0xeb, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0xff
-	.asciz "SS_Right2"
+	aligned_string "SS_Right2"
 	aligned_string "SS_Left2"
 	aligned_string "SS_UpDown2"
 	aligned_string "SS_Down2"
 	aligned_string "SS_Up2"
 	aligned_string "SS_OnOff"
-	.asciz "SS_No"
+	aligned_string "SS_No"
 	aligned_string "SS_Yes"
 	aligned_string "SS_Right"
-	.asciz "SS_Left"
-	.asciz "SS_OK"
+	aligned_string "SS_Left"
+	aligned_string "SS_OK"
 	aligned_string "SS_Off"
-	.asciz "SS_On"
+	aligned_string "SS_On"
 	.byte 0x53, 0x53
-	.asciz "_UpDown"
-	.asciz "SS_Down"
-	.asciz "SS_Up"
+	aligned_string "_UpDown"
+	aligned_string "SS_Down"
+	aligned_string "SS_Up"
 	.byte 0x53, 0x53
 	.asciz "_Special"
 	.byte 0xff, 0xa2, 0x70, 0xeb, 0x00, 0x00, 0x00
@@ -62117,8 +61664,8 @@ LABEL_EB6D88:
 	.byte 0xeb, 0x00, 0x00, 0x00, 0x00, 0x00, 0xc8, 0x70
 	.byte 0xeb, 0x00, 0x01, 0x00, 0x00, 0x00, 0xc6, 0x70
 	.byte 0xeb, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff
-	.asciz "FR_Single"
-	.asciz "FR_None"
+	aligned_string "FR_Single"
+	aligned_string "FR_None"
 	.byte 0xe2, 0x70, 0xeb, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0xff, 0xec, 0x70, 0xeb, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0xf6, 0x70
@@ -62153,27 +61700,27 @@ LABEL_EB6D88:
 	.byte 0x00, 0x00, 0x00, 0x00
 LABEL_EB7168:
 	.byte 0x00, 0xff
-	.asciz "iduNone"
-	.asciz "iduNaka"
+	aligned_string "iduNone"
+	aligned_string "iduNaka"
 	aligned_string "iduKSS"
-	.asciz "iduHama"
-	.asciz "iduKubo"
-	.asciz "iduYoko"
+	aligned_string "iduHama"
+	aligned_string "iduKubo"
+	aligned_string "iduYoko"
 	aligned_string "iduScoop"
 	aligned_string "iduCheap"
-	.asciz "iduSuna"
+	aligned_string "iduSuna"
 	jr	ge, 0x64
-	.asciz "uEast"
+	aligned_string "uEast"
 	jr	ge, 0x64
 	aligned_string "uToshi"
 LABEL_EB71C8:
 	aligned_string "iduMurai"
-	.asciz "iduRoot"
+	aligned_string "iduRoot"
 	.byte 0xfa, 0x71, 0xeb, 0x00, 0x01, 0x00
 	.byte 0x00, 0x00, 0xf4, 0x71, 0xeb, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0xf2, 0x71, 0xeb, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0xff
-	.asciz "False"
+	aligned_string "False"
 	aligned_string "True"
 	.long LABEL_EB7208
 	.byte 0x00, 0x00, 0x00, 0x00
@@ -62218,16 +61765,16 @@ LABEL_EB7230:
 	.byte 0xeb, 0x00, 0x1b, 0x00, 0x00, 0x00, 0x38, 0x73
 	.byte 0xeb, 0x00, 0xff, 0x00, 0x00, 0x00, 0x36, 0x73
 	.byte 0xeb, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff
-	.asciz "PT_PartSelect"
+	aligned_string "PT_PartSelect"
 	.byte 0x50, 0x54
-	.asciz "_Microphone"
+	aligned_string "_Microphone"
 	aligned_string "PT_Metronome"
 	aligned_string "PT_Control"
-	.asciz "PT_Msp2"
+	aligned_string "PT_Msp2"
 	.byte 0x50, 0x54
-	.asciz "_Msp1"
+	aligned_string "_Msp1"
 	.byte 0x50, 0x54
-	.asciz "_RootBass"
+	aligned_string "_RootBass"
 	aligned_string "PT_Chord"
 	.byte 0x50, 0x54, 0x5f, 0x44
 	.byte 0x72, 0x75, 0x6d, 0x00
@@ -62236,14 +61783,14 @@ LABEL_EB7230:
 	aligned_string "PT_Accomp3"
 	aligned_string "PT_Accomp2"
 	aligned_string "PT_Accomp1"
-	.asciz "PT_Part16"
-	.asciz "PT_Part15"
-	.asciz "PT_Part14"
+	aligned_string "PT_Part16"
+	aligned_string "PT_Part15"
+	aligned_string "PT_Part14"
 	.byte 0x50, 0x54
-	.asciz "_Part13"
-	.asciz "PT_Part12"
-	.asciz "PT_Part11"
-	.asciz "PT_Part10"
+	aligned_string "_Part13"
+	aligned_string "PT_Part12"
+	aligned_string "PT_Part11"
+	aligned_string "PT_Part10"
 	.byte 0x50, 0x54
 	aligned_string "_Part9"
 	aligned_string "PT_Part8"
@@ -62300,19 +61847,19 @@ LABEL_EB74F8:
 	aligned_string "TR_Track12"
 	aligned_string "TR_Track11"
 	aligned_string "TR_Track10"
-	.asciz "TR_Track9"
+	aligned_string "TR_Track9"
 LABEL_EB7560:
-	.asciz "TR_Track8"
-	.asciz "TR_Track7"
-	.asciz "TR_Track6"
+	aligned_string "TR_Track8"
+	aligned_string "TR_Track7"
+	aligned_string "TR_Track6"
 	.byte 0x54, 0x52
-	.asciz "_Track5"
+	aligned_string "_Track5"
 LABEL_EB7588:
-	.asciz "TR_Track4"
-	.asciz "TR_Track3"
-	.asciz "TR_Track2"
+	aligned_string "TR_Track4"
+	aligned_string "TR_Track3"
+	aligned_string "TR_Track2"
 	.byte 0x54, 0x52
-	.asciz "_Track1"
+	aligned_string "_Track1"
 LABEL_EB75B0:
 	.long LABEL_EB7688
 	.byte 0x00, 0x00, 0x00, 0x00
@@ -68030,51 +67577,51 @@ LABEL_ED0038:
 	.asciz "     "
 	jr	pl, 0x61
 	.byte 0x64, 0x64, 0x39, 0x00
-	.asciz " add9"
-	.asciz "+7~9e11"
-	.asciz "m7 11"
-	.asciz "7 ~9e11"
-	.asciz "  ~a013"
-	.asciz "   13"
+	aligned_string " add9"
+	aligned_string "+7~9e11"
+	aligned_string "m7 11"
+	aligned_string "7 ~9e11"
+	aligned_string "  ~a013"
+	aligned_string "   13"
 	.byte 0x7e, 0x39
-	.asciz "e9~a013"
+	aligned_string "e9~a013"
 LABEL_ED0128:
-	.asciz "~a09~a013"
-	.asciz "  ~a013"
-	.asciz "~9e9 13"
-	.asciz "~a09 13"
-	.asciz "9~9e5  "
-	.asciz "   13"
-	.asciz "mM7~a05"
-	.asciz "M7~9e5 "
-	.asciz "M7~a05 "
-	.asciz "7 ~9e9 "
-	.asciz "sus4 "
+	aligned_string "~a09~a013"
+	aligned_string "  ~a013"
+	aligned_string "~9e9 13"
+	aligned_string "~a09 13"
+	aligned_string "9~9e5  "
+	aligned_string "   13"
+	aligned_string "mM7~a05"
+	aligned_string "M7~9e5 "
+	aligned_string "M7~a05 "
+	aligned_string "7 ~9e9 "
+	aligned_string "sus4 "
 	jr	pl, 0x36
 	.byte 0x39, 0x20, 0x20, 0x00
-	.asciz "m79  "
-	.asciz "m ~a05 "
-	.asciz "m6   "
-	.asciz "69   "
+	aligned_string "m79  "
+	aligned_string "m ~a05 "
+	aligned_string "m6   "
+	aligned_string "69   "
 	.byte 0x4d, 0x37
 	.byte 0x39, 0x20, 0x20, 0x00
-	.asciz "7 ~a09 "
-	.asciz "79   "
-	.asciz "7 ~a05 "
-	.asciz "  ~a05 "
-	.asciz "aug7 "
-	.asciz "6    "
+	aligned_string "7 ~a09 "
+	aligned_string "79   "
+	aligned_string "7 ~a05 "
+	aligned_string "  ~a05 "
+	aligned_string "aug7 "
+	aligned_string "6    "
 	.byte 0x37, 0x73
 	.byte 0x75, 0x73, 0x34, 0x00
-	.asciz "mM7  "
-	.asciz "m7~a05 "
-	.asciz "dim  "
-	.asciz "min7 "
+	aligned_string "mM7  "
+	aligned_string "m7~a05 "
+	aligned_string "dim  "
+	aligned_string "min7 "
 	jr	pl, 0x69
 	.byte 0x6e, 0x20, 0x20, 0x00
-	.asciz "aug  "
-	.asciz "Maj7 "
-	.asciz "7    "
+	aligned_string "aug  "
+	aligned_string "Maj7 "
+	aligned_string "7    "
 	ldb	w, 0x20
 	.byte 0x20, 0x20, 0x20, 0x00
 	.asciz "     "
@@ -68215,12 +67762,9 @@ LABEL_ED0428:
 	.long LABEL_ED04F0
 	.long LABEL_ED04E8
 	.long LABEL_ED04DC
-LABEL_ED04DC:
-	aligned_string "PERHATIAN!"
-LABEL_ED04E8:
-	.asciz "Italian"
-LABEL_ED04F0:
-	aligned_string "ATTENCI0N!"
+LABEL_ED04DC:	aligned_string "PERHATIAN!"
+LABEL_ED04E8:	aligned_string "Italian"
+LABEL_ED04F0:	aligned_string "ATTENCI0N!"
 	aligned_string "ATTENTION!"
 LABEL_ED0508:
 	aligned_string "ACHTUNG!"
@@ -68230,12 +67774,12 @@ LABEL_ED0508:
 	.byte 0xed, 0x00, 0xac, 0x05, 0xed, 0x00, 0xa4, 0x05
 	.byte 0xed, 0x00, 0x36, 0x05, 0xed, 0x00, 0x4d, 0x65
 	aligned_string "nggunakan Initial Setting akan menghapus semua data yang telah diset dengan susunan data asli dari pabrik."
-	.asciz "Italian"
+	aligned_string "Italian"
 	.ascii "El uso del ajuste inicial har"
 	.byte 0xe1
 	.ascii " que se reemplacen los datos actuales por los ajustes originales de f"
 	.byte 0xe1
-	.asciz " brica!"
+	aligned_string " brica!"
 	.ascii "La proc"
 	.byte 0xe9
 	.ascii "dure d'initialisation va remplacer tous les r"
@@ -68248,22 +67792,22 @@ LABEL_ED0508:
 	.byte 0xff, 0x44, 0x75
 	.ascii "rch das Initialisieren werden alle aktuellen Einstellungen wieder in den Werkszustand zur"
 	.byte 0xfc
-	.asciz "ckversetzt."
+	aligned_string "ckversetzt."
 	.byte 0x55, 0x73
-	.asciz "ing Initial Setting will replace any current data with the original factory settings!"
+	aligned_string "ing Initial Setting will replace any current data with the original factory settings!"
 	.byte 0xa8, 0x07
 	.byte 0xed, 0x00, 0x96, 0x07, 0xed, 0x00, 0x86, 0x07
 	.byte 0xed, 0x00, 0x78, 0x07, 0xed, 0x00, 0x70, 0x07
 	.byte 0xed, 0x00, 0x56, 0x07, 0xed, 0x00, 0x41, 0x70
-	.asciz "akah Anda sudah yakin ?"
-	.asciz "Italian"
+	aligned_string "akah Anda sudah yakin ?"
+	aligned_string "Italian"
 	.byte 0xbf, 0x45, 0x73, 0x74, 0xe1, 0x20, 0x73, 0x65
-	.asciz "guro?"
+	aligned_string "guro?"
 	.byte 0x45, 0x74
 	.ascii "es vous s"
 	.byte 0xfb, 0x72, 0x3f, 0x00, 0xff
 	aligned_string "SIND SIE SICHER?"
-	.asciz "Are You Sure?"
+	aligned_string "Are You Sure?"
 	.byte 0x04, 0x0a
 	.byte 0xed, 0x00, 0x8e, 0x09, 0xed, 0x00, 0x1e, 0x09
 	.byte 0xed, 0x00, 0xae, 0x08, 0xed, 0x00, 0x3e, 0x08
@@ -68284,17 +67828,17 @@ LABEL_ED0508:
 	.long LABEL_ED0AB2
 	.long LABEL_ED0A8C
 LABEL_ED0A8C:
-	.asciz "Stores sound & balance settings only."
-	.asciz "Stores sound & balance settings only."
+	aligned_string "Stores sound & balance settings only."
+	aligned_string "Stores sound & balance settings only."
 LABEL_ED0AD8:
-	.asciz "Stores sound & balance settings only."
+	aligned_string "Stores sound & balance settings only."
 	.byte 0x53, 0x74
-	.asciz "ores sound & balance settings only."
+	aligned_string "ores sound & balance settings only."
 	.ascii "Speichert nur Klang- und Lautst"
 	.byte 0xe4
-	.asciz "rkeeinstellungen."
+	aligned_string "rkeeinstellungen."
 	.byte 0x53, 0x74
-	.asciz "ores sound & balance settings only."
+	aligned_string "ores sound & balance settings only."
 	.byte 0xda, 0x0c, 0xed, 0x00
 	.long LABEL_ED0C8C
 	.long LABEL_ED0C4E
@@ -68309,7 +67853,7 @@ LABEL_ED0C10:
 	aligned_string "Stores to total setting including Rhythm, Transpose & tempo."
 	.ascii "Speichert die gesamte Einstellung einschlie"
 	.byte 0xdf
-	.asciz "lich Rhythmus, Transpose & Tempo."
+	aligned_string "lich Rhythmus, Transpose & Tempo."
 	aligned_string "Stores to total setting including Rhythm, Transpose & tempo."
 	.asciz "%c:%d/%d  "
 	.byte 0xff, 0xef, 0x02, 0x1d, 0x05
@@ -68456,20 +68000,18 @@ LABEL_ED11B8:
 	.long LABEL_ED128C
 	.long LABEL_ED1278
 	.long LABEL_ED1264
-LABEL_ED1264:
-	.asciz "   R1/R2 OCTAVE    "
-LABEL_ED1278:
-	.asciz "FADE IN/OUT SETTING"
-	.asciz "MIC LEVEL & REVERB "
+LABEL_ED1264:	aligned_string "   R1/R2 OCTAVE    "
+LABEL_ED1278:	aligned_string "FADE IN/OUT SETTING"
+	aligned_string "MIC LEVEL & REVERB "
 LABEL_ED12A0:
-	.asciz "FOOT CONT. SETTING "
-	.asciz "     TRANSPOSE     "
+	aligned_string "FOOT CONT. SETTING "
+	aligned_string "     TRANSPOSE     "
 LABEL_ED12C8:
-	.asciz "    SPLIT POINT    "
-	.asciz "   APC & MEMORY    "
+	aligned_string "    SPLIT POINT    "
+	aligned_string "   APC & MEMORY    "
 LABEL_ED12F0:
-	.asciz "       TEMPO       "
-	.asciz " RHYTHM SELECTION  "
+	aligned_string "       TEMPO       "
+	aligned_string " RHYTHM SELECTION  "
 	.long LABEL_ED13DC
 	.long LABEL_ED13C8
 	.long LABEL_ED13B4
@@ -68479,21 +68021,19 @@ LABEL_ED12F0:
 	.long LABEL_ED1364
 	.long LABEL_ED1350
 	.long LABEL_ED133C
-LABEL_ED133C:
-	.asciz "     MSP BANK      "
-LABEL_ED1350:
-	.asciz "     KEY SCALE     "
-	.asciz " PART4-16 SETTING  "
+LABEL_ED133C:	aligned_string "     MSP BANK      "
+LABEL_ED1350:	aligned_string "     KEY SCALE     "
+	aligned_string " PART4-16 SETTING  "
 LABEL_ED1378:
-	.asciz "     EQUALIZER     "
-	.asciz " ACOUSTIC ILLUSION "
+	aligned_string "     EQUALIZER     "
+	aligned_string " ACOUSTIC ILLUSION "
 LABEL_ED13A0:
-	.asciz "    DSP EFFECT     "
-	.asciz "      REVERB       "
+	aligned_string "    DSP EFFECT     "
+	aligned_string "      REVERB       "
 LABEL_ED13C8:
-	.asciz "       MIDI        "
-	.asciz "     VOCALIST      "
-	.asciz "FILTER TYPE"
+	aligned_string "       MIDI        "
+	aligned_string "     VOCALIST      "
+	aligned_string "FILTER TYPE"
 	.byte 0x4f, 0x4e, 0x2f, 0x4f
 	.byte 0x46, 0x46, 0x00, 0xff, 0x25, 0x73, 0x00, 0xff
 	.asciz "PAGE 2/3"
@@ -68525,19 +68065,19 @@ LABEL_ED13C8:
 	.byte 0xed, 0x00, 0x02, 0x15, 0xed, 0x00, 0xfa, 0x14
 	.byte 0xed, 0x00, 0xf2, 0x14, 0xed, 0x00, 0xea, 0x14
 	.byte 0xed, 0x00
-	.asciz "10 sec "
-	.asciz " 9 sec "
-	.asciz " 8 sec "
-	.asciz " 7 sec "
-	.asciz " 6 sec "
-	.asciz " 5 sec "
-	.asciz " 4 sec "
-	.asciz " 3 sec "
-	.asciz " 2 sec "
-	.asciz " 1 sec "
-	.asciz " HOLD  "
-	.asciz "DEFAULT"
-	.asciz "  OFF  "
+	aligned_string "10 sec "
+	aligned_string " 9 sec "
+	aligned_string " 8 sec "
+	aligned_string " 7 sec "
+	aligned_string " 6 sec "
+	aligned_string " 5 sec "
+	aligned_string " 4 sec "
+	aligned_string " 3 sec "
+	aligned_string " 2 sec "
+	aligned_string " 1 sec "
+	aligned_string " HOLD  "
+	aligned_string "DEFAULT"
+	aligned_string "  OFF  "
 	.byte 0x25, 0x73, 0x00, 0xff, 0x25, 0x73
 	.byte 0x00, 0xff, 0x25, 0x73, 0x00, 0xff, 0x25, 0x73
 	.byte 0x00, 0xff, 0x25, 0x73, 0x00, 0xff, 0x25, 0x73
@@ -68607,39 +68147,39 @@ LABEL_ED13C8:
 	aligned_string "(%s%2d, %3d)"
 	aligned_string "CHECK BY SINE WAVE"
 	aligned_string "Select the mode by sound button of highest line."
-	.asciz "CHECK MODE:"
+	aligned_string "CHECK MODE:"
 	aligned_string "KEY DOWN INFORMATION ="
-	.asciz "(1)SINE WAVE & ROM check(w/o TOUCH)"
+	aligned_string "(1)SINE WAVE & ROM check(w/o TOUCH)"
 	aligned_string "C-key=IC304&305,C#~7eB-key=IC306&307"
-	.asciz "(2)GENERATOR LSI OUTSEL check"
-	.asciz "C-key=DIRECT+REV/DSP,C#~7eB-key=REV/DSP"
-	.asciz "(3)HIGH SOUND check(+2octave)"
+	aligned_string "(2)GENERATOR LSI OUTSEL check"
+	aligned_string "C-key=DIRECT+REV/DSP,C#~7eB-key=REV/DSP"
+	aligned_string "(3)HIGH SOUND check(+2octave)"
 	.byte 0x28, 0x34
 	aligned_string ")LOW SOUND check(-2octave)"
 	aligned_string "(5)NORMAL SOUND check with TOUCH"
 	.asciz "(6)SINE WAVE & ROM check 16dB DOWN"
 	.byte 0xff, 0x00, 0x00, 0x56, 0x00, 0xae, 0x00
 	.byte 0xdd, 0x00, 0x0b, 0x01, 0x39, 0x01, 0x44, 0x45
-	.asciz "FAULT"
+	aligned_string "FAULT"
 	ldb	w, 0x55
-	.asciz "SER  "
+	aligned_string "SER  "
 	ldb	w, 0x45
-	.asciz "RROR "
+	aligned_string "RROR "
 	.byte 0x9c, 0x00
 	.byte 0x9c, 0x00, 0x60, 0x00, 0x60, 0x00, 0x60, 0x00
 	.byte 0x9c, 0x00, 0x60, 0x00, 0xa0, 0x00, 0xa7, 0x00
 	jr	ov, 0x00
-	.asciz "DEFAULT"
-	.asciz " USER  "
-	.asciz " ERROR "
+	aligned_string "DEFAULT"
+	aligned_string " USER  "
+	aligned_string " ERROR "
 	.byte 0x31, 0x00, 0x31, 0x00, 0x40, 0x00
 	.byte 0x40, 0x00, 0x40, 0x00, 0x31, 0x00, 0x40, 0x00
 	.byte 0x35, 0x00, 0x3c, 0x00, 0x00, 0x00, 0x44, 0x45
-	.asciz "FAULT"
+	aligned_string "FAULT"
 	ldb	w, 0x55
-	.asciz "SER  "
+	aligned_string "SER  "
 	ldb	w, 0x45
-	.asciz "RROR "
+	aligned_string "RROR "
 	.byte 0x31, 0x00
 	.byte 0x31, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00
 	.byte 0x31, 0x00, 0x40, 0x00, 0x35, 0x00, 0x3c, 0x00
@@ -68648,7 +68188,7 @@ LABEL_ED13C8:
 	.byte 0xed, 0x00, 0xd0, 0x19, 0xed, 0x00, 0x4a, 0x19
 	.byte 0xed, 0x00
 	aligned_string "USER INITIAL akan menggantikan penggunaan kertas tempel (stiker) yang sekarang dengan sticker/kertas tempel yg hitam-licin dan rata!"
-	.asciz "Italian"
+	aligned_string "Italian"
 	.byte 0xa1
 	.ascii "El USER INITIAL cambiar"
 	.byte 0xe1
@@ -68702,9 +68242,9 @@ LABEL_ED1BA0:
 	.byte 0x33, 0x00, 0x32, 0x00, 0x31, 0x00, 0x30, 0x00
 	.byte 0x30, 0x00, 0x30, 0x00
 	aligned_string "          "
-	.asciz "SPLIT<%s%s>"
+	aligned_string "SPLIT<%s%s>"
 	aligned_string "          "
-	.asciz "SPLIT<%s%s>"
+	aligned_string "SPLIT<%s%s>"
 	.byte 0x82, 0x1c, 0xed, 0x00
 	.long LABEL_ED1C7C
 	.long LABEL_ED1C78
@@ -68779,54 +68319,54 @@ LABEL_ED1C78:
 	.byte 0xed, 0x00, 0x2a, 0x1e, 0xed, 0x00, 0x1a, 0x1e
 	.byte 0xed, 0x00, 0x08, 0x1e, 0xed, 0x00, 0xf8, 0x1d
 	.byte 0xed, 0x00, 0xf6, 0x1d, 0xed, 0x00, 0x00, 0xff
-	.asciz "PmemExpLngCheck"
+	aligned_string "PmemExpLngCheck"
 	aligned_string "PmemNormLngCheck"
 	aligned_string "CtlIniLngCheck"
 	aligned_string "WallSureLngCheck"
 	aligned_string "WallSureShowHideFunc"
-	.asciz "WallUsrShowHideFunc"
+	aligned_string "WallUsrShowHideFunc"
 	.byte 0x57, 0x61
-	.asciz "llUsrIniYesFunc"
+	aligned_string "llUsrIniYesFunc"
 	aligned_string "WallUsrIniNoFunc"
 	aligned_string "WallUsrIniFunc"
-	.asciz "WallSetOKFunc"
+	aligned_string "WallSetOKFunc"
 	aligned_string "WallOthEditCheck"
-	.asciz "WallMenuEditCheck"
-	.asciz "WallHomeEditCheck"
+	aligned_string "WallMenuEditCheck"
+	aligned_string "WallHomeEditCheck"
 	.byte 0x53, 0x79
 	aligned_string "stemInitMDFunc"
-	.asciz "DispTimeSetOKFunc"
-	.asciz "GmOnOffFunc"
+	aligned_string "DispTimeSetOKFunc"
+	aligned_string "GmOnOffFunc"
 	.byte 0x42, 0x69
 	aligned_string "tmapFoutst"
-	.asciz "BitmapFoutpic"
-	.asciz "BitmapFinst"
+	aligned_string "BitmapFoutpic"
+	aligned_string "BitmapFinst"
 	.byte 0x42, 0x69
 	aligned_string "tmapFinpic"
-	.asciz "MstSong2GridCheck"
+	aligned_string "MstSong2GridCheck"
 	.byte 0x4d, 0x73
-	.asciz "tSong1GridCheck"
+	aligned_string "tSong1GridCheck"
 	aligned_string "MstStyle2GridCheck"
-	.asciz "MstStyle1SubGridCheck"
+	aligned_string "MstStyle1SubGridCheck"
 	aligned_string "MstStyle1GridCheck"
 	aligned_string "MstStyleAlpGridCheck"
 	aligned_string "MstSugAlpGridCheck"
 	aligned_string "DispTimeSetGridCheck"
 	aligned_string "PmExpFilterGridCheck"
-	.asciz "FSWAssGridCheck"
+	aligned_string "FSWAssGridCheck"
 	aligned_string "TchSensGridCheck"
 	aligned_string "SureLngCheck"
-	.asciz "SysSureLngCheck"
+	aligned_string "SysSureLngCheck"
 	aligned_string "AttnLngCheck"
-	.asciz "SysSureShowHideFunc"
+	aligned_string "SysSureShowHideFunc"
 	.byte 0x53, 0x79
-	.asciz "sIniYesFunc"
+	aligned_string "sIniYesFunc"
 	aligned_string "SysIniNoFunc"
 	aligned_string "SystemInitOkFunc"
-	.asciz "MssNameFunc"
-	.asciz "PmNamingCheck"
+	aligned_string "MssNameFunc"
+	aligned_string "PmNamingCheck"
 	.byte 0x50, 0x6d
-	.asciz "BankNamingCheck"
+	aligned_string "BankNamingCheck"
 	.asciz "PmBkNameFunc"
 	.byte 0xff, 0xca, 0x20
 	.byte 0xed, 0x00, 0x00, 0xff, 0x32, 0x21, 0xed, 0x00
@@ -68841,17 +68381,17 @@ LABEL_ED1C78:
 	.long LABEL_ED20F4
 LABEL_ED20F4:
 	.byte 0x00, 0xff
-	.asciz "oldvari"
+	aligned_string "oldvari"
 	jr	nz, 0x6f
-	.asciz "wvari"
+	aligned_string "wvari"
 	jr	nz, 0x6f
-	.asciz "wswno"
+	aligned_string "wswno"
 	.byte 0x76, 0x61
 	.asciz "risu"
 	.byte 0xff, 0x70, 0x61
 	.byte 0x72, 0x74, 0x00, 0xff
 	aligned_string "page"
-	.asciz "fontcolor"
+	aligned_string "fontcolor"
 	aligned_string "font"
 	aligned_string "func"
 LABEL_ED2138:
@@ -68867,14 +68407,14 @@ LABEL_ED2138:
 	.long LABEL_ED2160
 LABEL_ED2160:
 	.byte 0x00, 0xff
-	.asciz "oldvari"
-	.asciz "nowvari"
-	.asciz "nowswno"
+	aligned_string "oldvari"
+	aligned_string "nowvari"
+	aligned_string "nowswno"
 	aligned_string "varisu"
 	aligned_string "part"
 LABEL_ED2188:
 	aligned_string "page"
-	.asciz "fontcolor"
+	aligned_string "fontcolor"
 LABEL_ED2198:
 	.asciz "font"
 	.byte 0xff, 0x66, 0x75
@@ -68889,10 +68429,10 @@ LABEL_ED21B4:
 	.byte 0xed, 0x00, 0xf6, 0x21, 0xed, 0x00, 0xf0, 0x21
 	.byte 0xed, 0x00, 0xe8, 0x21, 0xed, 0x00, 0xe0, 0x21
 	.byte 0xed, 0x00, 0xde, 0x21, 0xed, 0x00, 0x00, 0xff
-	.asciz "oldbank"
-	.asciz "nowbank"
+	aligned_string "oldbank"
+	aligned_string "nowbank"
 	aligned_string "page"
-	.asciz "fontcolor"
+	aligned_string "fontcolor"
 	.asciz "font"
 	.byte 0xff, 0x66, 0x75
 	.byte 0x6e, 0x63, 0x00, 0xff, 0x20, 0x22, 0xed, 0x00
@@ -68908,15 +68448,15 @@ LABEL_ED2218:
 	.byte 0xed, 0x00, 0x3e, 0x22, 0xed, 0x00, 0x00, 0xff
 	aligned_string "oldmsamode"
 	aligned_string "newmsamode"
-	.asciz "fontcolor"
+	aligned_string "fontcolor"
 	aligned_string "font"
 	.asciz "func"
 	.byte 0xff, 0xb0, 0x22
 	.byte 0xed, 0x00, 0xaa, 0x22, 0xed, 0x00, 0xa0, 0x22
 	.byte 0xed, 0x00, 0x94, 0x22, 0xed, 0x00, 0x88, 0x22
 	.byte 0xed, 0x00, 0x86, 0x22, 0xed, 0x00, 0x00, 0xff
-	.asciz "oldpmemmode"
-	.asciz "newpmemmode"
+	aligned_string "oldpmemmode"
+	aligned_string "newpmemmode"
 	aligned_string "fontcolo"
 	aligned_string "font"
 	.asciz "func"
@@ -68960,14 +68500,14 @@ LABEL_ED2218:
 	.byte 0xed, 0x00, 0xe2, 0x23, 0xed, 0x00, 0xd2, 0x23
 	.byte 0xed, 0x00, 0xc4, 0x23, 0xed, 0x00, 0xc2, 0x23
 	.byte 0xed, 0x00, 0x00, 0xff
-	.asciz "nowttlselsong"
+	aligned_string "nowttlselsong"
 	aligned_string "nowalphselsong"
-	.asciz "nowalphpage"
+	aligned_string "nowalphpage"
 	jr	nz, 0x6f
 	aligned_string "walphmaxpage"
-	.asciz "nowalphdtno"
+	aligned_string "nowalphdtno"
 	aligned_string "nowalphtop"
-	.asciz "nowalph"
+	aligned_string "nowalph"
 	jr	z, 0x75
 	.byte 0x6e, 0x63, 0x00, 0xff
 	aligned_string "fixedrow"
@@ -68984,12 +68524,12 @@ LABEL_ED2438:
 	.long LABEL_ED245C
 LABEL_ED245C:
 	.byte 0x00, 0xff
-	.asciz "nowalphpage"
+	aligned_string "nowalphpage"
 	aligned_string "nowalphmaxpage"
-	.asciz "nowalphdtno"
+	aligned_string "nowalphdtno"
 	jr	nz, 0x6f
 	aligned_string "walphtop"
-	.asciz "nowalph"
+	aligned_string "nowalph"
 	aligned_string "func"
 LABEL_ED24A0:
 	aligned_string "fixedrow"
@@ -69003,9 +68543,9 @@ LABEL_ED24A0:
 	.long LABEL_ED24D0
 LABEL_ED24D0:
 	.byte 0x00, 0xff
-	.asciz "nowstylectgpage"
+	aligned_string "nowstylectgpage"
 	aligned_string "nowstylectgmaxpage"
-	.asciz "nowstylectgdtno"
+	aligned_string "nowstylectgdtno"
 	jr	z, 0x75
 	.byte 0x6e, 0x63, 0x00, 0xff
 	aligned_string "fixedrow"
@@ -69021,7 +68561,7 @@ LABEL_ED2520:
 LABEL_ED253C:
 	.byte 0x00, 0xff
 	aligned_string "nowstylesubctgpage"
-	.asciz "nowstylesubctgmaxpage"
+	aligned_string "nowstylesubctgmaxpage"
 LABEL_ED2568:
 	aligned_string "nowstylesubctgdtno"
 	aligned_string "func"
@@ -69034,12 +68574,12 @@ LABEL_ED2568:
 	.byte 0xed, 0x00, 0xec, 0x25, 0xed, 0x00, 0xd8, 0x25
 	.byte 0xed, 0x00, 0xc4, 0x25, 0xed, 0x00, 0xc2, 0x25
 	.byte 0xed, 0x00, 0x00, 0xff
-	.asciz "nowstylesubsubdtno2"
-	.asciz "nowstylesubsubdtno1"
+	aligned_string "nowstylesubsubdtno2"
+	aligned_string "nowstylesubsubdtno1"
 	aligned_string "nowstyle"
 	aligned_string "nowstylesubctg"
 	aligned_string "nowstylesubctgpage"
-	.asciz "nowstylesubctgmaxpage"
+	aligned_string "nowstylesubctgmaxpage"
 	aligned_string "nowstylesubctgdtno"
 	aligned_string "func"
 	aligned_string "fixedrow"
@@ -69050,7 +68590,7 @@ LABEL_ED2568:
 	.byte 0xed, 0x00, 0x7c, 0x26, 0xed, 0x00, 0x7a, 0x26
 	.byte 0xed, 0x00, 0x00, 0xff
 	aligned_string "nowsongctgpage"
-	.asciz "nowsongctgmaxpage"
+	aligned_string "nowsongctgmaxpage"
 	jr	nz, 0x6f
 	.asciz "wsongctgdtno"
 	.byte 0xff, 0x66, 0x75
@@ -69073,13 +68613,13 @@ LABEL_ED26F4:
 	.byte 0x00, 0xff
 	aligned_string "nowsongsubsubdtno2"
 	aligned_string "nowsongsubsubdtno1"
-	.asciz "nowsong"
+	aligned_string "nowsong"
 	jr	nz, 0x6f
-	.asciz "wsongsubctg"
-	.asciz "nowsongsubctgpage"
+	aligned_string "wsongsubctg"
+	aligned_string "nowsongsubctgpage"
 	jr	nz, 0x6f
 	aligned_string "wsongsubctgmaxpage"
-	.asciz "nowsongsubctgdtno"
+	aligned_string "nowsongsubctgdtno"
 	jr	z, 0x75
 	.byte 0x6e, 0x63, 0x00, 0xff
 	aligned_string "fixedrow"
@@ -69093,26 +68633,19 @@ LABEL_ED2788:
 	.long LABEL_ED27A0
 LABEL_ED27A0:
 	.byte 0x00, 0xff
-LABEL_ED27A2:
-	.asciz "oldswno"
-LABEL_ED27AA:
-	.asciz "nowswno"
-LABEL_ED27B2:
-	.asciz "fontcolor"
-LABEL_ED27BC:
-	aligned_string "font"
-LABEL_ED27C2:
-	aligned_string "func"
+LABEL_ED27A2:	aligned_string "oldswno"
+LABEL_ED27AA:	aligned_string "nowswno"
+LABEL_ED27B2:	aligned_string "fontcolor"
+LABEL_ED27BC:	aligned_string "font"
+LABEL_ED27C2:	aligned_string "func"
 LABEL_ED27C8:
 	.long LABEL_ED27DE
 	.long LABEL_ED27D6
 	.long LABEL_ED27D4
 LABEL_ED27D4:
 	.byte 0x00, 0xff
-LABEL_ED27D6:
-	aligned_string "window"
-LABEL_ED27DE:
-	aligned_string "page"
+LABEL_ED27D6:	aligned_string "window"
+LABEL_ED27DE:	aligned_string "page"
 
 LABEL_ED27E4:
 	.long NormScreenProc
@@ -69266,14 +68799,14 @@ LABEL_ED2AA0:
 	aligned_string "SineWaveScreen"
 	aligned_string "XXjnnnnnnn"
 LABEL_ED2AD0:
-	.asciz "AcMstSong2GridBox"
+	aligned_string "AcMstSong2GridBox"
 	aligned_string "XXjnnn"
-	.asciz "AcMstSong1GridBox"
+	aligned_string "AcMstSong1GridBox"
 	aligned_string "XXjnnnnnnn"
 LABEL_ED2B08:
 	aligned_string "AcMstStyle2GridBox"
 	aligned_string "XXjnnn"
-	.asciz "AcMstStyle1SubGridBox"
+	aligned_string "AcMstStyle1SubGridBox"
 	aligned_string "XXjnnn"
 	aligned_string "AcMstStyle1GridBox"
 	aligned_string "XXjnnnnn"
@@ -69288,35 +68821,33 @@ LABEL_ED2BB0:
 	.byte 0x58, 0x58, 0x6a, 0x00
 	.asciz "AcPmExpFilterGridBox"
 	.byte 0xff, 0x58, 0x58, 0x6a, 0x00, 0x41, 0x63
-	.asciz "FSWAssGridBox"
+	aligned_string "FSWAssGridBox"
 	.byte 0x58, 0x58
 	jr	gt, 0x00
 	.asciz "AcTchSensGridBox"
 	.byte 0xff, 0x6e, 0x00, 0x49, 0x76
-	.asciz "MstStyleWindowPgCtl"
+	aligned_string "MstStyleWindowPgCtl"
 	.byte 0x6e, 0x00, 0x49, 0x76
-	.asciz "PmemWindowPageCtl"
+	aligned_string "PmemWindowPageCtl"
 	jr	nz, 0x00
-	.asciz "IvWindowPageControl"
+	aligned_string "IvWindowPageControl"
 LABEL_ED2C38:
-	.asciz "kc^nn"
+	aligned_string "kc^nn"
 	.byte 0x50, 0x6d
-	.asciz "emModeBox"
-	.asciz "kc^nn"
+	aligned_string "emModeBox"
+	aligned_string "kc^nn"
 LABEL_ED2C50:
-	.asciz "MsaModeScreen"
+	aligned_string "MsaModeScreen"
 	jr	gt, 0x72
 	.byte 0x00, 0xff
-	.asciz "AcPmBkEditBox"
-LABEL_ED2C70:
-	aligned_string "kc^nnn"
-LABEL_ED2C78:
-	.asciz "PmBankScreen"
+	aligned_string "AcPmBkEditBox"
+LABEL_ED2C70:	aligned_string "kc^nnn"
+LABEL_ED2C78:	.asciz "PmBankScreen"
 	.byte 0xff, 0x00, 0xff
 LABEL_ED2C88:
-	.asciz "PmBkNoBox"
+	aligned_string "PmBkNoBox"
 	.byte 0x00, 0xff
-	.asciz "BkNoBox"
+	aligned_string "BkNoBox"
 	.byte 0x00, 0xff
 	.asciz "FreeSplitBox"
 	.byte 0xff, 0x00, 0xff
@@ -69325,10 +68856,10 @@ LABEL_ED2CB8:
 	.byte 0x00, 0xff
 	aligned_string "TransposeBox"
 LABEL_ED2CC8:
-	.asciz "kc^nnnnnn"
-	.asciz "RVariScreen"
+	aligned_string "kc^nnnnnn"
+	aligned_string "RVariScreen"
 	jr	ugt, 0x63
-	.asciz "^nnnnnn"
+	aligned_string "^nnnnnn"
 LABEL_ED2CE8:
 	.asciz "VariScreen"
 	.byte 0xff, 0x00, 0xff
@@ -69343,16 +68874,16 @@ LABEL_ED2CE8:
 	.long LABEL_ED2D28
 	.byte 0x00, 0x00, 0x00, 0x00
 LABEL_ED2D28:
-	.asciz "EV_TVARIPAINT"
+	aligned_string "EV_TVARIPAINT"
 	.byte 0x45, 0x56
 	aligned_string "_PAGESET"
 	aligned_string "EV_SUBCTSHOW"
 LABEL_ED2D50:
 	aligned_string "EV_FRTPAGECHANGE"
-	.asciz "EV_PMNAME"
-	.asciz "EV_PMBKNAME"
+	aligned_string "EV_PMNAME"
+	aligned_string "EV_PMBKNAME"
 LABEL_ED2D78:
-	.asciz "EV_CHORDDSP"
+	aligned_string "EV_CHORDDSP"
 	.asciz "EV_CHORDSHOW"
 	.byte 0xff, 0x08, 0x00, 0x56, 0x2f, 0xed, 0x00
 	.long LABEL_ED2F4A
@@ -69381,42 +68912,38 @@ LABEL_ED2D78:
 	.long LABEL_ED2E10
 	.long LABEL_ED2E00
 	.byte 0x00, 0x00, 0x00, 0x00
-LABEL_ED2E00:
-	aligned_string "MT_OTPCNTRESET"
-LABEL_ED2E10:
-	aligned_string "MT_OTPCNTSET"
+LABEL_ED2E00:	aligned_string "MT_OTPCNTRESET"
+LABEL_ED2E10:	aligned_string "MT_OTPCNTSET"
 	aligned_string "MT_KEYINFO"
 	aligned_string "MT_WALLINI"
 	aligned_string "MT_FLASHLOAD"
-	.asciz "MT_FLASHWRITE"
-	.asciz "MT_SYSINI"
-	.asciz "MT_PmName"
+	aligned_string "MT_FLASHWRITE"
+	aligned_string "MT_SYSINI"
+	aligned_string "MT_PmName"
 	.byte 0x4d, 0x54
-	.asciz "_PmBankMk"
-	.asciz "MT_PmBankName"
+	aligned_string "_PmBankMk"
+	aligned_string "MT_PmBankName"
 LABEL_ED2E80:
 	aligned_string "MT_PmBankSet"
 	aligned_string "MT_PMBANKSET"
-	.asciz "MT_ChordPre"
+	aligned_string "MT_ChordPre"
 LABEL_ED2EA8:
 	aligned_string "MT_RHYTHMGRPNAME"
-	.asciz "MT_RHYTHMNAME"
+	aligned_string "MT_RHYTHMNAME"
 LABEL_ED2EC8:
 	aligned_string "MT_GetRhyGrpName"
-	.asciz "MT_GetRhyName"
+	aligned_string "MT_GetRhyName"
 LABEL_ED2EE8:
-	.asciz "MT_RvariSet"
-	.asciz "MT_RvariIni"
-LABEL_ED2F00:
-	.asciz "MT_SOUNDGRPNAME"
-LABEL_ED2F10:
-	aligned_string "MT_SOUNDNAME"
+	aligned_string "MT_RvariSet"
+	aligned_string "MT_RvariIni"
+LABEL_ED2F00:	aligned_string "MT_SOUNDGRPNAME"
+LABEL_ED2F10:	aligned_string "MT_SOUNDNAME"
 	aligned_string "MT_GetSndGrpName"
 LABEL_ED2F30:
-	.asciz "MT_GetSndName"
+	aligned_string "MT_GetSndName"
 	.byte 0x4d, 0x54
-	.asciz "_SvariSet"
-	.asciz "MT_SvariIni"
+	aligned_string "_SvariSet"
+	aligned_string "MT_SvariIni"
 	.byte 0x4d, 0x54
 	.asciz "_VariWrite"
 	.byte 0xff, 0x1a, 0x00, 0x62, 0xcd
@@ -69451,35 +68978,35 @@ LABEL_ED2F30:
 	.byte 0xed, 0x00, 0x4e, 0x30, 0xed, 0x00, 0x00, 0xff
 	aligned_string "IvPageOverWrProc"
 	aligned_string "SineWaveScreenProc"
-	.asciz "AcMstSong2GridBoxProc"
-	.asciz "AcMstSong1GridBoxProc"
+	aligned_string "AcMstSong2GridBoxProc"
+	aligned_string "AcMstSong1GridBoxProc"
 	aligned_string "AcMstStyle2GridBoxProc"
-	.asciz "AcMstStyle1SubGridBoxProc"
+	aligned_string "AcMstStyle1SubGridBoxProc"
 	aligned_string "AcMstStyle1GridBoxProc"
-	.asciz "IvMstStyleWindowPgCtlProc"
+	aligned_string "IvMstStyleWindowPgCtlProc"
 	.byte 0x41, 0x63
 	aligned_string "MstStyleAlpGridBoxProc"
 	aligned_string "AcMstSugAlpGridBoxProc"
 	aligned_string "AcDispTimeSetGridBoxProc"
 	aligned_string "AcPmExpFilterGridBoxProc"
-	.asciz "AcFSWAssGridBoxProc"
+	aligned_string "AcFSWAssGridBoxProc"
 	aligned_string "AcTchSensGridBoxProc"
-	.asciz "IvPmemWindowPageCtlProc"
+	aligned_string "IvPmemWindowPageCtlProc"
 	.byte 0x49, 0x76
-	.asciz "WindowPageControlProc"
+	aligned_string "WindowPageControlProc"
 	.byte 0x41, 0x63
-	.asciz "PmBkNoBoxProc"
+	aligned_string "PmBkNoBoxProc"
 	.byte 0x41, 0x63
-	.asciz "BkNoBoxProc"
-	.asciz "PmemModeBoxProc"
-	.asciz "MsaModeScreenProc"
+	aligned_string "BkNoBoxProc"
+	aligned_string "PmemModeBoxProc"
+	aligned_string "MsaModeScreenProc"
 	.byte 0x41, 0x63
-	.asciz "PmBkEditBoxProc"
+	aligned_string "PmBkEditBoxProc"
 	aligned_string "PmBankScreenProc"
 	aligned_string "AcChordBoxProc"
 	aligned_string "AcFreeSplitBoxProc"
 	aligned_string "AcTransposeBoxProc"
-	.asciz "RVariScreenProc"
+	aligned_string "RVariScreenProc"
 	aligned_string "VariScreenProc"
 	.asciz "NormScreenProc"
 	.byte 0xff, 0xd9, 0x27, 0xfc, 0x00, 0x15, 0x28
@@ -69504,27 +69031,27 @@ LABEL_ED2F30:
 	.byte 0xed, 0x00, 0x50, 0x33, 0xed, 0x00, 0x46, 0x33
 	.byte 0xed, 0x00, 0x3c, 0x33, 0xed, 0x00, 0x3a, 0x33
 	.byte 0xed, 0x00, 0x00, 0xff
-	.asciz "TEST6FUNC"
+	aligned_string "TEST6FUNC"
 	.byte 0x54, 0x45
-	.asciz "ST4FUNC"
-	.asciz "TEST3FUNC"
-	.asciz "TEST2FUNC"
+	aligned_string "ST4FUNC"
+	aligned_string "TEST3FUNC"
+	aligned_string "TEST2FUNC"
 	aligned_string "MainWallSetFlashFunc"
-	.asciz "MainTimeFlashFunc"
+	aligned_string "MainTimeFlashFunc"
 	aligned_string "MainMssSetUp"
 	aligned_string "FswAsIniFunc"
 	aligned_string "CntIniFunc"
 	aligned_string "MainSysControl"
 	aligned_string "OneTchFUNC"
-	.asciz "MainPmGet"
+	aligned_string "MainPmGet"
 	aligned_string "MainChordPre"
-	.asciz "MainGetRhyGrpName"
-	.asciz "MainGetSndGrpName"
+	aligned_string "MainGetRhyGrpName"
+	aligned_string "MainGetSndGrpName"
 	aligned_string "MainGetRhyName"
 	aligned_string "MainRvariIni"
 	aligned_string "MainGetSndName"
 	aligned_string "MainSvariIni"
-	.asciz "MainVariSet"
+	aligned_string "MainVariSet"
 
 
 	.byte 0x34, 0x00, 0x60, 0x01
@@ -69979,7 +69506,7 @@ LABEL_ED3CC0:
 	.byte 0x89, 0x00, 0x3a, 0xf4, 0x03, 0x00, 0x42, 0x3d
 	.byte 0xed, 0x00, 0x43, 0x00, 0xa0, 0x01, 0x0a, 0x00
 	.byte 0x00, 0x00
-	.asciz "OVERALL TOUCH SENSITIVITY"
+	aligned_string "OVERALL TOUCH SENSITIVITY"
 
 
 	.byte 0x1d, 0x00, 0x60, 0x01
@@ -70012,7 +69539,7 @@ LABEL_ED3CC0:
 	.byte 0x09, 0x00, 0x40, 0xf4, 0x03, 0x00, 0x22, 0x3e
 	.byte 0xed, 0x00, 0x45, 0x00, 0xa0, 0x01, 0x31, 0x00
 	.byte 0x00, 0x00
-	.asciz "PANEL MEMORY MODE"
+	aligned_string "PANEL MEMORY MODE"
 
 
 	.byte 0x48, 0x00, 0x60, 0x01
@@ -70029,7 +69556,7 @@ LABEL_ED3CC0:
 	.long LABEL_ED3E84
 	.byte 0x44, 0x00, 0xa0, 0x01
 	.byte 0x32, 0x00, 0x00, 0x00
-	.asciz "MUSIC STYLE ARRANGER MODE"
+	aligned_string "MUSIC STYLE ARRANGER MODE"
 
 
 	.byte 0x1d, 0x00, 0x60, 0x01, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff
@@ -70040,7 +69567,7 @@ LABEL_ED3CC0:
 	.long LABEL_ED3ED4
 	.byte 0x48, 0x00, 0xa0, 0x01
 	.byte 0x85, 0x00, 0x00, 0x00
-	.asciz "WALLPAPER SETTING"
+	aligned_string "WALLPAPER SETTING"
 
 
 	.byte 0x34, 0x00, 0x60, 0x01, 0xff, 0xff, 0x01, 0x00, 0xff, 0xff
@@ -70051,7 +69578,7 @@ LABEL_ED3CC0:
 	.long LABEL_ED3F10
 	.byte 0x0e, 0x00, 0x00, 0x00
 LABEL_ED3F10:
-	.asciz "INITIAL"
+	aligned_string "INITIAL"
 
 
 	.byte 0x22, 0x00, 0x60, 0x01, 0x00, 0x00, 0xff, 0xff
@@ -70069,7 +69596,7 @@ LABEL_ED3F10:
 	.byte 0x00, 0x00, 0xff, 0x00, 0x01, 0x00, 0x09, 0x00
 	.byte 0x4a, 0xf4, 0x03, 0x00, 0x72, 0x3f, 0xed, 0x00
 	.byte 0x01, 0x00
-	.asciz "PERFORMANCE        |  CURRENT PANEL   |    PART SETTING  |    MIDI SETTING  |  PANEL MEMORY    |  COMPOSER        |  SEQUENCER       |  MSP USER        |  SOUND MEMORY    "
+	aligned_string "PERFORMANCE        |  CURRENT PANEL   |    PART SETTING  |    MIDI SETTING  |  PANEL MEMORY    |  COMPOSER        |  SEQUENCER       |  MSP USER        |  SOUND MEMORY    "
 
 
 	.byte 0x20, 0x00, 0x60, 0x01, 0x00, 0x00, 0xff, 0xff, 0x04, 0x00
@@ -70102,7 +69629,7 @@ LABEL_ED3F10:
 	.long LABEL_ED40B8
 	.byte 0x01, 0x00, 0x00, 0x00
 LABEL_ED40B8:
-	.asciz "INITIAL"
+	aligned_string "INITIAL"
 
 
 	.byte 0x33, 0x00, 0x60, 0x01, 0xff, 0xff, 0x08, 0x00
@@ -70198,7 +69725,7 @@ LABEL_ED4258:
 	.long LABEL_ED4320
 	.long LABEL_ED42B4
 	.byte 0x0c, 0x00, 0x22, 0x01
-	.asciz "|-|FOOT SWITCH 1 |FOOT SWITCH 2 |FOOT CONT.SW 1|FOOT CONT.SW 2|FOOT CONT.SW 3|FOOT CONT.SW 4|EXPRESS. PEDAL"
+	aligned_string "|-|FOOT SWITCH 1 |FOOT SWITCH 2 |FOOT CONT.SW 1|FOOT CONT.SW 2|FOOT CONT.SW 3|FOOT CONT.SW 4|EXPRESS. PEDAL"
 LABEL_ED4320:
 	aligned_string "              |               "
 
@@ -70240,7 +69767,7 @@ LABEL_ED4320:
 	.byte 0xf8, 0x00, 0x00, 0x00, 0x40, 0x00, 0xa0, 0x01
 	.byte 0x68, 0xf4, 0x03, 0x00, 0x14, 0x44, 0xed, 0x00
 	.byte 0x0a, 0x00, 0x00, 0x00
-	.asciz "OVERALL TOUCH SENSITIVITY"
+	aligned_string "OVERALL TOUCH SENSITIVITY"
 	.byte 0x0f, 0x00
 	.byte 0x62, 0x01, 0x00, 0x00, 0x02, 0x00, 0x04, 0x00
 	.byte 0xff, 0xff, 0x08, 0x00, 0x38, 0x00, 0x26, 0x00
@@ -70253,7 +69780,7 @@ LABEL_ED4320:
 	.long LABEL_ED4478
 	.byte 0x0b, 0x00, 0x22, 0x01
 LABEL_ED4478:
-	.asciz "|        VELOCITY SENSE :       |-||      ON/OFF         :     |      CURVE          :     |       THRESHOLD      :      "
+	aligned_string "|        VELOCITY SENSE :       |-||      ON/OFF         :     |      CURVE          :     |       THRESHOLD      :      "
 	aligned_string "     |  "
 
 
@@ -70262,7 +69789,7 @@ LABEL_ED4478:
 	.byte 0x08, 0x00, 0x6e, 0x00, 0x2e, 0x00, 0xd9, 0x00
 	.byte 0x40, 0x00, 0x1c, 0x45, 0xed, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0xfb, 0x00
-	.asciz "INITIAL TOUCH"
+	aligned_string "INITIAL TOUCH"
 
 
 	.byte 0x2b, 0x00, 0x60, 0x01, 0x01, 0x00
@@ -70271,7 +69798,7 @@ LABEL_ED4478:
 	.long LABEL_ED454A
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0xfb, 0x00
-	.asciz "AFTER TOUCH"
+	aligned_string "AFTER TOUCH"
 
 
 	.byte 0x22, 0x00, 0x60, 0x01, 0x00, 0x00, 0xff, 0xff, 0x05, 0x00
@@ -70303,7 +69830,7 @@ LABEL_ED4478:
 	.byte 0xff, 0xff, 0x06, 0x00, 0x08, 0x00, 0xd6, 0x00
 	.byte 0xc6, 0x00, 0x01, 0x01, 0xd8, 0x00, 0xf0, 0x45
 	.byte 0xed, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0x00
-	.asciz "VALUE"
+	aligned_string "VALUE"
 	.byte 0x0a, 0x00
 	.byte 0x62, 0x01, 0xff, 0xff, 0x01, 0x00, 0xff, 0xff
 	.byte 0xff, 0xff, 0x0a, 0x00, 0x00, 0x00, 0x00, 0x00
@@ -70321,7 +69848,7 @@ LABEL_ED4478:
 	.long LABEL_ED464A
 	.byte 0x04, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00
-	.asciz "MUSIC STYLE ARRANGER MODE"
+	aligned_string "MUSIC STYLE ARRANGER MODE"
 
 
 	.byte 0x2d, 0x00, 0x60, 0x01
@@ -70399,7 +69926,7 @@ LABEL_ED4478:
 	.byte 0x08, 0x00, 0x21, 0x00, 0x06, 0x00, 0x37, 0x01
 	.byte 0x18, 0x00, 0xf4, 0x47, 0xed, 0x00, 0x04, 0x00
 	.byte 0x00, 0x00, 0xff, 0x00
-	.asciz "MUSIC STYLE ARRENGER MODE"
+	aligned_string "MUSIC STYLE ARRENGER MODE"
 
 
 	.byte 0x2d, 0x00, 0x60, 0x01, 0x0a, 0x00, 0xff, 0xff, 0x0d, 0x00
@@ -70564,7 +70091,7 @@ LABEL_ED4478:
 	.byte 0x0d, 0x00, 0x22, 0x01
 LABEL_ED4B98:
 	aligned_string "|-|RHYTHM SELECT|TEMPO|APC&MEMORY|SPLIT POINT|TRANSPOSE|FOOT CONT. SETTING|MIC LEVEL & REVERB|FADE IN/OUT SETTING|R1/R2 OCTAVE"
-	.asciz "     |   "
+	aligned_string "     |   "
 
 
 	.byte 0x22, 0x00, 0x60, 0x01, 0x0e, 0x00
@@ -70616,7 +70143,7 @@ LABEL_ED4B98:
 	.byte 0x03, 0x00, 0xce, 0xf4, 0x03, 0x00, 0xbc, 0x4d
 	.byte 0xed, 0x00, 0x5a, 0x4d, 0xed, 0x00, 0x0e, 0x00
 	ldb	b, 0x01
-	.asciz "|-|SAVE REMINDER|'COMPLETED' MESSAGE|ARE YOU SURE?|ERROR MESSAGE|SOUND/RHYTHM SELECT|EASY SETTING"
+	aligned_string "|-|SAVE REMINDER|'COMPLETED' MESSAGE|ARE YOU SURE?|ERROR MESSAGE|SOUND/RHYTHM SELECT|EASY SETTING"
 	aligned_string "  | "
 
 
@@ -70668,7 +70195,7 @@ LABEL_ED4B98:
 	.long LABEL_ED4EC0
 	.byte 0x01, 0x00, 0x00, 0x00
 LABEL_ED4EC0:
-	.asciz "WALLPAPER SETTING"
+	aligned_string "WALLPAPER SETTING"
 
 
 	.byte 0x1d, 0x00, 0x60, 0x01, 0x00, 0x00
@@ -70689,7 +70216,7 @@ LABEL_ED4EC0:
 	.long LABEL_ED4F38
 	.byte 0x85, 0x00, 0x00, 0x00
 LABEL_ED4F38:
-	.asciz "WALLPAPER SETTING"
+	aligned_string "WALLPAPER SETTING"
 
 
 	.byte 0x1d, 0x00, 0x60, 0x01, 0x02, 0x00
@@ -70709,7 +70236,7 @@ LABEL_ED4F38:
 	.byte 0x00, 0x00, 0xff, 0x00, 0x01, 0x00, 0x08, 0x00
 	.byte 0x89, 0x00, 0x01, 0x00, 0xde, 0xf4, 0x03, 0x00
 	.byte 0x1d, 0x00, 0x22, 0x01, 0xe0, 0xf4, 0x03, 0x00
-	.asciz "                    :"
+	aligned_string "                    :"
 
 
 	.byte 0x2b, 0x00, 0x60, 0x01, 0x04, 0x00, 0xff, 0xff, 0x06, 0x00
@@ -70725,7 +70252,7 @@ LABEL_ED4F38:
 	.long LABEL_ED5022
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00
-	.asciz "SOUND&RHYTHM SELECT"
+	aligned_string "SOUND&RHYTHM SELECT"
 
 
 	.byte 0x1b, 0x00, 0x60, 0x01, 0x02, 0x00, 0xff, 0xff, 0x08, 0x00
@@ -70735,7 +70262,7 @@ LABEL_ED4F38:
 	.byte 0x00, 0x00, 0xff, 0x00, 0x01, 0x00, 0x08, 0x00
 	.byte 0x8a, 0x00, 0x01, 0x00, 0xe4, 0xf4, 0x03, 0x00
 	.byte 0x1e, 0x00, 0x22, 0x01, 0xe6, 0xf4, 0x03, 0x00
-	.asciz "MENU PAGES          :"
+	aligned_string "MENU PAGES          :"
 
 
 	.byte 0x1b, 0x00, 0x60, 0x01, 0x02, 0x00, 0xff, 0xff, 0x09, 0x00
@@ -70745,7 +70272,7 @@ LABEL_ED4F38:
 	.byte 0x00, 0x00, 0xff, 0x00, 0x01, 0x00, 0x08, 0x00
 	.byte 0x8b, 0x00, 0x01, 0x00, 0xea, 0xf4, 0x03, 0x00
 	.byte 0x1f, 0x00, 0x22, 0x01, 0xec, 0xf4, 0x03, 0x00
-	.asciz "OTHERS              :"
+	aligned_string "OTHERS              :"
 
 
 	.byte 0x20, 0x00, 0x60, 0x01, 0x02, 0x00, 0x0a, 0x00, 0x0b, 0x00
@@ -70779,7 +70306,7 @@ LABEL_ED4F38:
 	.long LABEL_ED517A
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00
-	.asciz "VALUE"
+	aligned_string "VALUE"
 
 
 	.byte 0x20, 0x00, 0x60, 0x01, 0x02, 0x00, 0xff, 0xff
@@ -70865,7 +70392,7 @@ LABEL_ED4F38:
 	.byte 0x08, 0x00, 0x4d, 0x00, 0x06, 0x00, 0x0b, 0x01
 	.byte 0x18, 0x00, 0x2c, 0x53, 0xed, 0x00, 0x04, 0x00
 	.byte 0x00, 0x00, 0xff, 0x00
-	.asciz "WALLPAPER SETTING"
+	aligned_string "WALLPAPER SETTING"
 
 
 	.byte 0x34, 0x00, 0x60, 0x01, 0xff, 0xff, 0x01, 0x00, 0xff, 0xff
@@ -70907,7 +70434,7 @@ LABEL_ED5368:
 	.byte 0x02, 0x00, 0x00, 0x00, 0xa0, 0x01, 0xfc, 0xf4
 	.byte 0x03, 0x00, 0x0a, 0x54, 0xed, 0x00, 0xa2, 0x00
 	.byte 0x00, 0x00
-	.asciz "MUSIC STYLIST"
+	aligned_string "MUSIC STYLIST"
 
 
 	.byte 0x1d, 0x00, 0x60, 0x01, 0x00, 0x00, 0xff, 0xff
@@ -70978,7 +70505,7 @@ LABEL_ED5368:
 	.byte 0x11, 0x00, 0x22, 0x01, 0x22, 0xf5, 0x03, 0x00
 	.byte 0x24, 0xf5, 0x03, 0x00, 0x26, 0xf5, 0x03, 0x00
 LABEL_ED55C8:
-	.asciz " | | | | | | | | | "
+	aligned_string " | | | | | | | | | "
 	.byte 0x7c, 0x20, 0x00, 0xff
 
 
@@ -71002,7 +70529,7 @@ LABEL_ED55C8:
 	.byte 0x09, 0x00, 0x07, 0x00, 0x08, 0x00, 0x0e, 0x00
 	.byte 0x20, 0x00, 0x79, 0x00, 0x32, 0x00, 0x58, 0x56
 	.byte 0xed, 0x00, 0x00, 0x00, 0x00, 0x00, 0xfb, 0x00
-	.asciz "MAIN CATEGORY"
+	aligned_string "MAIN CATEGORY"
 	.byte 0x16, 0x00
 	.byte 0x62, 0x01, 0x04, 0x00, 0xff, 0xff, 0x0a, 0x00
 	.byte 0x08, 0x00, 0x08, 0x00, 0x91, 0x00, 0x30, 0x00
@@ -71016,7 +70543,7 @@ LABEL_ED55C8:
 	.byte 0x12, 0x00, 0x22, 0x01
 	.byte 0x38, 0xf5, 0x03, 0x00, 0x3a, 0xf5, 0x03, 0x00
 	.byte 0x3c, 0xf5, 0x03, 0x00
-	.asciz " | | | | | | | | | "
+	aligned_string " | | | | | | | | | "
 	.byte 0x7c, 0x20, 0x00, 0xff
 
 
@@ -71053,7 +70580,7 @@ LABEL_ED55C8:
 	.byte 0x03, 0x00, 0x5a, 0xf5, 0x03, 0x00, 0x5c, 0xf5
 	.byte 0x03, 0x00, 0x5e, 0xf5, 0x03, 0x00, 0x60, 0xf5
 	.byte 0x03, 0x00, 0x62, 0xf5, 0x03, 0x00, 0x20, 0x7c
-	.asciz " | | || | | | |"
+	aligned_string " | | || | | | |"
 	.byte 0x7c, 0x20, 0x00, 0xff
 
 
@@ -71108,7 +70635,7 @@ LABEL_ED55C8:
 	.long LABEL_ED58E0
 	.byte 0x01, 0x00, 0x00, 0x00
 LABEL_ED58E0:
-	.asciz "SUGGESTED SONG LIST"
+	aligned_string "SUGGESTED SONG LIST"
 	.byte 0x0e, 0x00, 0x62, 0x01
 	.byte 0x00, 0x00, 0xff, 0xff, 0x02, 0x00, 0xff, 0xff
 	.byte 0x18, 0x00, 0x00, 0x00, 0x00, 0x00, 0x1f, 0x00
@@ -71173,7 +70700,7 @@ LABEL_ED59C0:
 	.long LABEL_ED5A52
 	.byte 0x03, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00
-	.asciz "(BY CATEGORY)"
+	aligned_string "(BY CATEGORY)"
 
 
 	.byte 0x35, 0x00, 0x60, 0x01, 0xff, 0xff, 0x0a, 0x00
@@ -71254,7 +70781,7 @@ LABEL_ED59C0:
 	.byte 0xff, 0x00, 0x00, 0x00, 0xc1, 0x00, 0xa0, 0x01
 	.byte 0xae, 0xf5, 0x03, 0x00, 0x14, 0x5c, 0xed, 0x00
 	.byte 0x01, 0x00, 0x00, 0x00
-	.asciz "SUGGESTED SONG LIST"
+	aligned_string "SUGGESTED SONG LIST"
 	.byte 0x13, 0x00, 0x62, 0x01, 0x00, 0x00, 0xff, 0xff
 	.byte 0x02, 0x00, 0xff, 0xff, 0x08, 0x00, 0x28, 0x00
 	.byte 0x3e, 0x00, 0x35, 0x01, 0xd3, 0x00, 0xf5, 0x00
@@ -71276,7 +70803,7 @@ LABEL_ED59C0:
 	.byte 0x03, 0x00, 0x01, 0x00, 0x08, 0x00, 0x72, 0x00
 	.byte 0x22, 0x00, 0xc3, 0x00, 0x2c, 0x00, 0xc8, 0x5c
 	.byte 0xed, 0x00, 0x03, 0x00, 0x00, 0x00, 0xff, 0x00
-	.asciz "(ALPHBETICAL)"
+	aligned_string "(ALPHBETICAL)"
 
 
 	.byte 0x22, 0x00, 0x60, 0x01, 0x00, 0x00, 0xff, 0xff, 0x04, 0x00
@@ -71436,7 +70963,7 @@ LABEL_ED5E30:
 	.byte 0xef, 0x00, 0xff, 0x00, 0x00, 0x00, 0x01, 0x00
 	.byte 0xa0, 0x01, 0xfa, 0xf5, 0x03, 0x00, 0x1e, 0x60
 	.byte 0xed, 0x00, 0x9a, 0x00, 0x00, 0x00
-	.asciz "BANK VIEW"
+	aligned_string "BANK VIEW"
 	.byte 0x09, 0x00, 0x62, 0x01, 0x00, 0x00, 0xff, 0xff
 	.byte 0x02, 0x00, 0xff, 0xff, 0x08, 0x00, 0x05, 0x00
 	.byte 0x34, 0x00, 0xe1, 0x00
@@ -71686,14 +71213,14 @@ LABEL_ED6528:
 	.byte 0xff, 0xff, 0x08, 0x00, 0x4e, 0x00, 0x0a, 0x00
 	.byte 0xe1, 0x00, 0x1c, 0x00, 0x6e, 0x65, 0xed, 0x00
 	.byte 0x02, 0x00, 0x00, 0x00, 0xf9, 0x00, 0x43, 0x41
-	.asciz "UTION!!"
+	aligned_string "UTION!!"
 
 
 	.byte 0x2b, 0x00, 0x60, 0x01, 0x01, 0x00, 0xff, 0xff
 	.byte 0x04, 0x00, 0x02, 0x00, 0x08, 0x00, 0x2a, 0x00
 	.byte 0x1e, 0x00, 0x05, 0x01, 0x30, 0x00, 0x98, 0x65
 	.byte 0xed, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0x00
-	.asciz "** ERROR in back-up SRAM **"
+	aligned_string "** ERROR in back-up SRAM **"
 
 
 	.byte 0x2b, 0x00, 0x60, 0x01
@@ -71913,7 +71440,7 @@ ErrorDialog_RecoveryLine3:
 	.byte 0x04, 0x00, 0x08, 0x00, 0x0e, 0x00, 0xbe, 0x00
 	.byte 0xa9, 0x00, 0xd0, 0x00, 0x6e, 0x69, 0xed, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0xff, 0x00, 0x49, 0x66
-	.asciz " both CPU are NO,"
+	aligned_string " both CPU are NO,"
 
 
 	.byte 0x2b, 0x00, 0x60, 0x01, 0x00, 0x00
@@ -71922,7 +71449,7 @@ ErrorDialog_RecoveryLine3:
 	.long LABEL_ED69A2
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00
-	.asciz "it is better to check the MAIN PCB."
+	aligned_string "it is better to check the MAIN PCB."
 
 
 	.byte 0x28, 0x00, 0x60, 0x01, 0x00, 0x00, 0xff, 0xff, 0x08, 0x00
@@ -72280,7 +71807,7 @@ ErrorDialog_RecoveryLine3:
 	.byte 0x21, 0x00, 0xff, 0xff, 0x08, 0x00, 0x0d, 0x00
 	.byte 0xbf, 0x00, 0x48, 0x00, 0xd1, 0x00, 0x68, 0x71
 	.byte 0xed, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0x00
-	.asciz "HHHHHHH"
+	aligned_string "HHHHHHH"
 
 
 	.byte 0x2b, 0x00, 0x60, 0x01, 0x1e, 0x00, 0x20, 0x00
@@ -72421,7 +71948,7 @@ ErrorDialog_RecoveryLine3:
 	.byte 0x35, 0x00, 0xff, 0xff, 0x08, 0x00, 0xf7, 0x00
 	.byte 0xbf, 0x00, 0x32, 0x01, 0xd1, 0x00, 0x10, 0x74
 	.byte 0xed, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0x00
-	.asciz "HHHHHHH"
+	aligned_string "HHHHHHH"
 
 
 	.byte 0x2b, 0x00, 0x60, 0x01, 0x32, 0x00, 0x34, 0x00
@@ -72551,7 +72078,7 @@ ErrorDialog_RecoveryLine3:
 	.byte 0x08, 0x00, 0x16, 0x00, 0x42, 0x00, 0x16, 0x01
 	.byte 0x54, 0x00, 0x84, 0x76, 0xed, 0x00, 0x04, 0x00
 	.byte 0x00, 0x00, 0xff, 0x00
-	.asciz "PERIPHERAL DEVICE CHECK"
+	aligned_string "PERIPHERAL DEVICE CHECK"
 
 
 	.byte 0x2b, 0x00, 0x60, 0x01
@@ -72585,7 +72112,7 @@ ErrorDialog_RecoveryLine3:
 	.byte 0xff, 0xff, 0x08, 0x00, 0xb2, 0x00, 0x86, 0x00
 	.byte 0x2e, 0x01, 0x98, 0x00, 0x56, 0x77, 0xed, 0x00
 	.byte 0x04, 0x00, 0x00, 0x00, 0xff, 0x00, 0x3d, 0x20
-	.asciz "may be OK"
+	aligned_string "may be OK"
 
 
 	.byte 0x35, 0x00, 0x60, 0x01, 0xff, 0xff
@@ -72877,7 +72404,7 @@ ErrorDialog_RecoveryLine3:
 	.byte 0xed, 0x00, 0x1e, 0x80, 0xed, 0x00, 0x00, 0xff
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
-	.asciz "ControlMenu"
+	aligned_string "ControlMenu"
 	.byte 0xb6, 0x80, 0xed, 0x00
 	.long LABEL_ED80B4
 	.long LABEL_ED80AC
@@ -72954,7 +72481,7 @@ LABEL_ED80A8:
 	.byte 0xed, 0x00, 0xfe, 0x81, 0xed, 0x00, 0x00, 0xff
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 	.byte 0x00, 0xff
-	.asciz "PMEM2"
+	aligned_string "PMEM2"
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x50, 0x4d
 	.byte 0x45, 0x4d, 0x31, 0x00, 0x00, 0xff, 0x00, 0xff
@@ -72991,7 +72518,7 @@ LABEL_ED8260:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 	.byte 0x00, 0xff
-	.asciz "WALLSETSURE"
+	aligned_string "WALLSETSURE"
 	.byte 0x00, 0xff
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
@@ -73073,7 +72600,7 @@ LABEL_ED8450:
 	.byte 0x32, 0x00, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 LABEL_ED8460:
 	.byte 0x00, 0xff
-	.asciz "SONG1"
+	aligned_string "SONG1"
 LABEL_ED8468:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 	aligned_string "MSSCTSEL"
@@ -73168,7 +72695,7 @@ LABEL_ED85D8:
 LABEL_ED85F4:
 	.byte 0x00, 0xff, 0x00, 0xff
 LABEL_ED85F8:
-	.asciz "SVARI"
+	aligned_string "SVARI"
 	.byte 0x14, 0x86
 	.byte 0xed, 0x00, 0x12, 0x86, 0xed, 0x00, 0x10, 0x86
 	.byte 0xed, 0x00, 0x0e, 0x86, 0xed, 0x00, 0x00, 0xff
@@ -73201,14 +72728,14 @@ LABEL_ED85F8:
 	.byte 0xed, 0x00, 0xe8, 0x86, 0xed, 0x00, 0xe6, 0x86
 	.byte 0xed, 0x00, 0xe4, 0x86, 0xed, 0x00, 0xe2, 0x86
 	.byte 0xed, 0x00, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
-	.asciz "TEST2OKNG"
+	aligned_string "TEST2OKNG"
 	.byte 0x00, 0xff, 0x00, 0xff
-	.asciz "TEST2NGOK"
+	aligned_string "TEST2NGOK"
 	.byte 0x00, 0xff, 0x00, 0xff
-	.asciz "TEST2NGNG"
+	aligned_string "TEST2NGNG"
 	.byte 0x00, 0xff
 	.byte 0x00, 0xff
-	.asciz "TEST2OKOK"
+	aligned_string "TEST2OKOK"
 	.byte 0x00, 0xff, 0x00, 0xff
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
@@ -73288,44 +72815,44 @@ LABEL_ED85F8:
 	.byte 0xed, 0x00, 0x56, 0x89, 0xed, 0x00, 0x4e, 0x89
 	.byte 0xed, 0x00, 0x4c, 0x89, 0xed, 0x00, 0x4a, 0x89
 	.byte 0xed, 0x00, 0x00, 0xff, 0x00, 0xff
-	.asciz "TEST6NG"
+	aligned_string "TEST6NG"
 	.byte 0x00, 0xff
-	.asciz "TEST6OK"
+	aligned_string "TEST6OK"
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 	.asciz "TEST6"
 	.byte 0x78, 0x89
 	.byte 0xed, 0x00, 0x76, 0x89, 0xed, 0x00, 0x00, 0xff
 	.byte 0x45, 0x58, 0x54, 0x00
-	.asciz "MD_NORMAL"
+	aligned_string "MD_NORMAL"
 	.byte 0x4d, 0x44
 	aligned_string "_CONTROL"
 	aligned_string "MD_OTP"
-	.asciz "TT_NORMAL"
-	.asciz "TT_CTMENU"
+	aligned_string "TT_NORMAL"
+	aligned_string "TT_CTMENU"
 	.byte 0x54, 0x54
-	.asciz "_CTINIT"
+	aligned_string "_CTINIT"
 	aligned_string "TT_CTFSWAS"
 	aligned_string "TT_CTTOUCH"
 	aligned_string "TT_MSAMODE"
-	.asciz "TT_CTPMMD"
+	aligned_string "TT_CTPMMD"
 	.byte 0x54, 0x54
-	.asciz "_CTPMPARA"
-	.asciz "TT_CTSYSTEM"
+	aligned_string "_CTPMPARA"
+	aligned_string "TT_CTSYSTEM"
 	.byte 0x54, 0x54
 	aligned_string "_CTWALLSET"
-	.asciz "TT_ONETCH"
+	aligned_string "TT_ONETCH"
 	.byte 0x54, 0x54
 	aligned_string "_MUSICSTYL"
 	aligned_string "TT_MSCTSEL"
-	.asciz "TT_MSSCTSEL"
-	.asciz "TT_MSSONGLIST"
-	.asciz "TT_MSALPSEL"
+	aligned_string "TT_MSSCTSEL"
+	aligned_string "TT_MSSONGLIST"
+	aligned_string "TT_MSALPSEL"
 	.byte 0x54, 0x54
 	aligned_string "_PMBKSEL"
-	.asciz "TT_PMVIEW"
-	.asciz "TT_PMNAME"
+	aligned_string "TT_PMVIEW"
+	aligned_string "TT_PMNAME"
 	.byte 0x54, 0x54
-	.asciz "_PMBKNAME"
+	aligned_string "_PMBKNAME"
 	aligned_string "TT_SVARI"
 	aligned_string "TT_RVARI"
 	aligned_string "TT_TEST1"
@@ -81330,7 +80857,7 @@ LABEL_EE5A40:
 	.zero 8
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x63, 0xff
 LABEL_EE5A58:
-	.asciz " PFTK"
+	aligned_string " PFTK"
 	.byte 0x00, 0x00
 	.zero 8
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x63, 0xff
@@ -131305,7 +130832,7 @@ LABEL_F214A2:
 	.ascii "^\\[Zh"
 	.byte 0x0c, 0x3a
 	.byte 0x3b, 0x3c, 0x3e, 0x1d, 0xf2, 0x09, 0xf2, 0x5e
-	.asciz "\\[Z@&"
+	aligned_string "\\[Z@&"
 	jr	nc, 0x00
 	.byte 0x41, 0x0a, 0x00, 0xc7, 0x01, 0xea, 0xa8, 0x68
 	.byte 0x1d
@@ -233121,7 +232648,7 @@ LABEL_F67717:
 	.byte 0x45, 0x02, 0x7a, 0xf6, 0x00, 0xec, 0xc8, 0x40
 	.byte 0x00, 0x00, 0x00, 0xe9, 0xa8, 0x31, 0x10, 0x00
 	.byte 0x85, 0x11, 0x0e
-	.asciz "Easy            #"
+	aligned_string "Easy            #"
 	.byte 0xf1, 0xd1, 0x38
 	.byte 0x43, 0xc1, 0xd7, 0x34, 0x23, 0xcb, 0xc8, 0x01
 	.byte 0xc1, 0xd1, 0x38, 0xf3, 0x62, 0x13, 0xcb, 0x04
