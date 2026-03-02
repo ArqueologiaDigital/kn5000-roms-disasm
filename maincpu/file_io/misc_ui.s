@@ -61,7 +61,7 @@ FilePriorityFunc:
 	push xwa
 	ld xwa, (xde + 10)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	ld xhl, xiz
 	jr LABEL_F95134
@@ -695,7 +695,7 @@ LABEL_F95777:
 	push xwa
 	lda xwa, (xsp + 22)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	ld xhl, (xsp + 10)
 	ld xbc, (xhl + 42)
@@ -797,7 +797,7 @@ LABEL_F95844:
 	push xwa
 	lda xwa, (xsp + 22)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	ld xwa, (xsp + 10)
 	ld xix, (xwa + 42)

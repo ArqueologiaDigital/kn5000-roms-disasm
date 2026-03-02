@@ -77,7 +77,7 @@ CmptCnctDrawConnectionDiagram:
 	pushw 0xE7
 	pushw 0xF848
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	lda xwa, (xsp + 4)
 	pushw 0x6C
@@ -89,7 +89,7 @@ LABEL_F74BB5:
 	pushw 0xE7
 	pushw 0xF862
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	lda xwa, (xsp + 4)
 	pushw 0x6C
@@ -101,7 +101,7 @@ LABEL_F74BD2:
 	pushw 0xE7
 	pushw 0xF87C
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	lda xwa, (xsp + 4)
 	pushw 0x6C
@@ -113,7 +113,7 @@ LABEL_F74BEF:
 	pushw 0xE7
 	pushw 0xF896
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	lda xwa, (xsp + 4)
 	pushw 0x6C
@@ -186,7 +186,7 @@ LABEL_F74C81:
 	push xbc
 
 LABEL_F74C83:
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	ld xhl, xiz
 	jr LABEL_F74C96
@@ -251,7 +251,7 @@ LABEL_F74CFA:
 	push xbc
 
 LABEL_F74CFC:
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	ld xhl, xiz
 	jr LABEL_F74D0F

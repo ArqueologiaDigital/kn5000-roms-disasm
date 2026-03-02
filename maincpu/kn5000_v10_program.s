@@ -56066,7 +56066,7 @@ LABEL_EF3FAB:
 	ldfr_lerp XBC, 0x38
 	ldfr_lerp XWA, 0x34
 	pushw 0x1000
-	call LABEL_FF0E80
+	call Malloc
 	inc 2, xsp
 	stda32 1570, xhl
 	ld xwa, xhl
@@ -56179,7 +56179,7 @@ LABEL_EF40B3:
 LABEL_EF40B8:
 	ldda32 xwa, 1570
 	push xwa
-	call LABEL_FF0AF2
+	call Free
 	inc 4, xsp
 	popw iz
 	ret
@@ -56189,7 +56189,7 @@ LABEL_EF40C5:
 	ldfr_lerp XBC, 0x38
 	ldfr_lerp XWA, 0x34
 	pushw 0x2000
-	call LABEL_FF0E80
+	call Malloc
 	inc 2, xsp
 	stda32 1570, xhl
 	ld xwa, xhl
@@ -56302,7 +56302,7 @@ LABEL_EF41D1:
 LABEL_EF41D6:
 	ldda32 xwa, 1570
 	push xwa
-	call LABEL_FF0AF2
+	call Free
 	inc 4, xsp
 	popw iz
 	ret
@@ -56435,7 +56435,7 @@ Detect_Disk_Type:	; EF42FE
 	push xiz
 	ld (xsp + 4), 0xFF
 	pushw 0x200
-	call LABEL_FF0E80
+	call Malloc
 	inc 2, xsp
 	ld xiz, xhl
 	ld xwa, 0x21
@@ -56538,7 +56538,7 @@ LABEL_EF43F1:
 
 LABEL_EF440D:
 	push xiz
-	call LABEL_FF0AF2
+	call Free
 	inc 4, xsp
 	ld l, (xsp + 4)
 	pop xiz
@@ -57495,7 +57495,7 @@ LABEL_EF4D95:
 	lda xsp, (xsp - 16)
 	push xiz
 	pushw 0x1000
-	call LABEL_FF0E80
+	call Malloc
 	inc 2, xsp
 	ld (xsp + 16), xhl
 	ld xwa, (xsp + 16)
@@ -57654,7 +57654,7 @@ LABEL_EF4F55:
 LABEL_EF4F60:
 	ld xwa, (xsp + 16)
 	push xwa
-	call LABEL_FF0AF2
+	call Free
 	inc 4, xsp
 	pop xiz
 	lda xsp, (xsp + 16)
@@ -82865,7 +82865,7 @@ LABEL_F1A37A:
 
 LABEL_F1A380:
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	ld xhl, xiz
 	jr LABEL_F1A398
@@ -83169,7 +83169,7 @@ LABEL_F1A69F:
 	push xwa
 	ld xwa, (xsp + 16)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	jr LABEL_F1A6C7
 
@@ -84271,7 +84271,7 @@ LABEL_F1B206:
 	push xwa
 	ld xwa, (xsp + 16)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	jr LABEL_F1B253
 
@@ -84949,7 +84949,7 @@ LABEL_F1B901:
 	push xwa
 	lda xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
@@ -84965,7 +84965,7 @@ LABEL_F1B92A:
 	push xwa
 	lda xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
@@ -85513,7 +85513,7 @@ CmpNamingCheck:
 	pushw 0x0
 	pushw 0x34BC
 	push xde
-	call LABEL_FF0F4D
+	call Strcpy
 	pushw 0xD
 	pushw 0x0
 	pushw 0x34BC
@@ -85849,7 +85849,7 @@ LABEL_F1C266:
 	push xwa
 	ld xwa, (xsp + 16)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	jr LABEL_F1C28E
 
@@ -86051,7 +86051,7 @@ MspNamingCheck:
 	pushw 0x0
 	pushw 0x34BC
 	push xde
-	call LABEL_FF0F4D
+	call Strcpy
 	pushw 0x10
 	pushw 0x0
 	pushw 0x34BC
@@ -87602,7 +87602,7 @@ LABEL_F1D52E:
 	push xwa
 	ld xwa, (xsp + 22)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	jrl LABEL_F1D67D
 	ld xwa, (xsp + 22)
@@ -87823,7 +87823,7 @@ LABEL_F1D76D:
 LABEL_F1D771:
 	push xwa
 	push xbc
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 
 LABEL_F1D779:
@@ -88060,7 +88060,7 @@ LABEL_F1D8F9:
 	push xwa
 	lda xwa, (xsp + 18)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	ld xbc, (xsp + 6)
 	ld xix, (xbc + 38)
@@ -88177,7 +88177,7 @@ LABEL_F1DAD2:
 	pushw 0x3D68
 	lda xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
@@ -88233,7 +88233,7 @@ LABEL_F1DB49:
 	pushw 0x3D68
 	lda xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
@@ -88558,7 +88558,7 @@ LABEL_F1E119:
 	pushw 0x3F68
 	lda xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
@@ -88667,7 +88667,7 @@ InitializeHama:
 	lda xsp, (xsp + 14)
 	ret
 
-LABEL_F1E396:
+FDTest_PrintDiag:
 	jp LABEL_FFFEA1
 
 TestTitleFunc:
@@ -89302,13 +89302,13 @@ SetGlobalError:
 
 malloc_X:
 	pushw wa
-	call LABEL_FF0E80
+	call Malloc
 	inc 2, xsp
 	ret
 
 free_X:
 	push xwa
-	call LABEL_FF0AF2
+	call Free
 	inc 4, xsp
 	ret
 
@@ -107277,7 +107277,7 @@ LABEL_F2AB15:
 	push xhl
 	pushw 0x2
 	pushw 0xDFE
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	lda xbc, (xsp + 20)
 	lda xwa, (xsp + 40)
@@ -107341,7 +107341,7 @@ LABEL_F2AB6C:
 	push xbc
 	pushw 0x2
 	pushw 0xDFE
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	ld bc, (xsp + 10)
 	sll bc, 3
@@ -107367,7 +107367,7 @@ LABEL_F2AB6C:
 LABEL_F2AC23:
 	push xhl
 	push xbc
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	lda xbc, (xsp + 20)
 	lda xwa, (xsp + 40)
@@ -107956,7 +107956,7 @@ LABEL_F2B256:
 	pushw 0xE2
 	pushw 0x61FA
 	push xde
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	jrl LABEL_F2B3B9
 
@@ -108457,7 +108457,7 @@ LABEL_F2B72C:
 	pushw 0x620E
 	lda xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
@@ -108467,7 +108467,7 @@ LABEL_F2B72C:
 	pushw 0x1C66
 	lda xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
@@ -108528,7 +108528,7 @@ LABEL_F2B7D3:
 	pushw 0x6228
 	lda xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
@@ -108538,7 +108538,7 @@ LABEL_F2B7D3:
 	pushw 0x1C74
 	lda xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
@@ -108599,7 +108599,7 @@ LABEL_F2B87A:
 	pushw 0x6242
 	lda xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
@@ -108609,7 +108609,7 @@ LABEL_F2B87A:
 	pushw 0x1C88
 	lda xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
@@ -108670,7 +108670,7 @@ LABEL_F2B921:
 	pushw 0x625C
 	lda xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
@@ -108680,7 +108680,7 @@ LABEL_F2B921:
 	pushw 0x1C9E
 	lda xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
@@ -108741,7 +108741,7 @@ LABEL_F2B9C8:
 	pushw 0x6276
 	lda xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
@@ -108751,7 +108751,7 @@ LABEL_F2B9C8:
 	pushw 0x1CC2
 	lda xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
@@ -108812,7 +108812,7 @@ LABEL_F2BA6F:
 	pushw 0x6290
 	lda xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
@@ -108822,7 +108822,7 @@ LABEL_F2BA6F:
 	pushw 0x1CAC
 	lda xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
@@ -108883,7 +108883,7 @@ LABEL_F2BB16:
 	pushw 0x62AA
 	lda xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
@@ -108893,7 +108893,7 @@ LABEL_F2BB16:
 	pushw 0x1CC6
 	lda xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
@@ -108928,7 +108928,7 @@ LABEL_F2BB86:
 	pushw 0x62C4
 	ld xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	lds32 xhl, 0
 	jr LABEL_F2BBF5
@@ -109436,7 +109436,7 @@ LABEL_F2C311:
 LABEL_F2C312:
 	ld xwa, (xsp + 12)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	jrl LABEL_F2C3F5
 
@@ -110210,7 +110210,7 @@ LABEL_F2CBCB:
 	pushw 0x64F8
 	lda xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
@@ -110220,7 +110220,7 @@ LABEL_F2CBCB:
 	pushw 0x1C50
 	lda xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
@@ -110320,7 +110320,7 @@ SqAftSetFunc:
 	push xwa
 	ld xwa, (xde + 10)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	ld xhl, xiz
 	jr LABEL_F2CD37
@@ -110606,7 +110606,7 @@ SeqNamingCheck:
 	push xwa
 	ld xwa, (xsp + 18)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	lda xsp, (xsp + 18)
 	ld xhl, xiz
 	jr LABEL_F2D038
@@ -110799,7 +110799,7 @@ LABEL_F2D242:
 	pushw 0x67FE
 	ld xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	lds32 xhl, 0
 	jr LABEL_F2D2C0
@@ -111020,7 +111020,7 @@ LABEL_F2E4B5:
 	pushw 0x416A
 	ld xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	lds32 xhl, 0
 	jr LABEL_F2E52E
@@ -111497,7 +111497,7 @@ LABEL_F2E962:
 	push xwa
 	ld xwa, (xde + 18)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	ld xhl, xiz
 
@@ -111561,7 +111561,7 @@ LABEL_F2EA07:
 	pushw 0x44B6
 	ld xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 
 LABEL_F2EA17:
@@ -111638,7 +111638,7 @@ LABEL_F2EAC1:
 	pushw 0x44BA
 	ld xwa, (xsp + 6)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 
 LABEL_F2EAD1:
@@ -111705,7 +111705,7 @@ LABEL_F2EB60:
 	pushw 0x44BE
 	ld xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 
 LABEL_F2EB70:
@@ -111737,7 +111737,7 @@ LABEL_F2EB9F:
 	pushw 0x44C2
 	ld xwa, (xsp + 12)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	lds32 xhl, 0
 	jr LABEL_F2EBFA
@@ -111796,7 +111796,7 @@ LABEL_F2EC24:
 	pushw 0x44C8
 	ld xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	lds32 xhl, 0
 	jr LABEL_F2EC70
@@ -111848,7 +111848,7 @@ LABEL_F2EC99:
 	pushw 0x44CE
 	ld xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	lds32 xhl, 0
 	jr LABEL_F2ECED
@@ -112811,7 +112811,7 @@ LABEL_F2FAF2:
 	pushw 0x466E
 	ld xwa, (xiz + 18)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	jrl LABEL_F2FD33
 	ld xiz, xde
@@ -112923,7 +112923,7 @@ LABEL_F2FC05:
 	push xwa
 
 LABEL_F2FC0A:
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	jrl LABEL_F2FD33
 
@@ -113247,7 +113247,7 @@ LABEL_F2FF2B:
 	pushw 0x4714
 	ld xwa, (xiz + 18)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	ld8_24 a, 0x00ffe3
 	inc 1, a
 	extz wa
@@ -113569,7 +113569,7 @@ LABEL_F302B6:
 	push xwa
 	ld xwa, (xsp + 16)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	jr LABEL_F30311
 	ld xwa, xiz
@@ -113801,7 +113801,7 @@ LABEL_F3068A:
 	push xwa
 	lda xwa, (xsp + 52)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	call 0xFA44D0
 	ld xwa, xhl
@@ -114089,7 +114089,7 @@ LABEL_F30964:
 	pushw 0x4800
 	ld xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	lds32 xhl, 0
 	jr LABEL_F309D3
@@ -114153,7 +114153,7 @@ LABEL_F309FC:
 	pushw 0x4806
 	ld xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	lds32 xhl, 0
 	jr LABEL_F30A6B
@@ -119298,7 +119298,7 @@ LABEL_F34825:
 	push xwa
 	ld xwa, (xbc)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	jr LABEL_F34881
 
@@ -119748,7 +119748,7 @@ LABEL_F34F46:
 	ld xwa, (xsp + 8)
 	ld xwa, (xwa + 18)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	jr LABEL_F34FE7
 
@@ -119772,7 +119772,7 @@ LABEL_F34F7D:
 	ld xwa, (xsp + 8)
 	ld xwa, (xwa + 18)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	jr LABEL_F34FE7
 
@@ -120331,7 +120331,7 @@ LABEL_F355F3:
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 18)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	jrl LABEL_F35725
 	ld (xsp), xde
@@ -120916,7 +120916,7 @@ LABEL_F35C6F:
 	pushw 0xE3
 	pushw 0x4E1E
 	push xhl
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	jr LABEL_F35C93
 
@@ -122869,7 +122869,7 @@ LABEL_F36F30:
 
 LABEL_F36F5B:
 	pushw 0x6A4
-	call LABEL_FF0E80
+	call Malloc
 	inc 2, xsp
 	stda32 7504, xhl
 	stda32 7508, xhl
@@ -123042,7 +123042,7 @@ LABEL_F37134:
 	ldmm16 10134, 10130
 	ldda32 xwa, 7504
 	push xwa
-	call LABEL_FF0AF2
+	call Free
 	inc 4, xsp
 	cpdi8 36150, 152
 	jr z, LABEL_F37154
@@ -149830,7 +149830,7 @@ LABEL_F47CF9:
 	cp xiz, 0x0
 	jrl lt, LABEL_F47E36
 	pushw 0x2020
-	call LABEL_FF0E80
+	call Malloc
 	inc 2, xsp
 	stda32 10734, xhl
 	or xhl, xhl
@@ -149846,7 +149846,7 @@ LABEL_F47D23:
 	exts xiz
 	ldda32 xwa, 10734
 	push xwa
-	call LABEL_FF0AF2
+	call Free
 	inc 4, xsp
 	cp xiz, 0x0
 	jrl lt, LABEL_F47E36
@@ -160546,7 +160546,7 @@ LABEL_F4EB66:
 	pushw wa
 	pushw 0x0
 	push xiz
-	call LABEL_FF0FFA
+	call Memset
 	inc 8, xsp
 	jr LABEL_F4EB93
 
@@ -160558,7 +160558,7 @@ LABEL_F4EB93:
 	pop xiz
 	ret
 
-LABEL_F4EB97:
+FileOpen:
 	lda xsp, (xsp - 16)
 	push xiz
 	ld xbc, (xsp + 28)
@@ -160638,7 +160638,7 @@ LABEL_F4EC31:
 	push xwa
 	ld xwa, (xsp + 16)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	ld xwa, (xsp + 12)
 	ld (xsp + 16), xwa
@@ -160868,7 +160868,7 @@ LABEL_F4EE6B:
 	lda xsp, (xsp + 16)
 	ret
 
-LABEL_F4EE70:
+FileRead:
 	ld xbc, (xsp + 12)
 	or xbc, xbc
 	jr z, LABEL_F4EE7D
@@ -160905,7 +160905,7 @@ LABEL_F4EE96:
 	ld hl, wa
 	ret
 
-LABEL_F4EEB9:
+FileWrite:
 	ld xbc, (xsp + 12)
 	or xbc, xbc
 	jr z, LABEL_F4EEC6
@@ -161056,7 +161056,7 @@ LABEL_F4F002:
 	.byte 0x20, 0xb0, 0xe8, 0xbf, 0x0a, 0x37, 0xdb, 0x88
 	.byte 0xd8, 0xd8, 0xb0, 0xfe, 0x33, 0xff, 0xff, 0x0e
 
-LABEL_F4F05A:
+FileClose:
 	ld xwa, (xsp + 4)
 	push xwa
 	calr LABEL_F4F067
@@ -161184,7 +161184,7 @@ LABEL_F4F206:
 LABEL_F4F207:
 	ld xwa, (xsp + 4)
 	push xwa
-	call LABEL_FF0AF2
+	call Free
 	inc 4, xsp
 	lds hl, 0
 	ret
@@ -161192,16 +161192,16 @@ LABEL_F4F207:
 LABEL_F4F214:
 	ld xwa, (xsp + 6)
 	pushw wa
-	call LABEL_FF0E80
+	call Malloc
 	inc 2, xsp
 	ret
 
-LABEL_F4F21F:
+FileOpenDefault:
 	pushw 0xE4
 	pushw 0x5016
 	ld xwa, (xsp + 8)
 	push xwa
-	call LABEL_F4EB97
+	call FileOpen
 	inc 8, xsp
 	or xhl, xhl
 	jr nz, LABEL_F4F237
@@ -161378,7 +161378,7 @@ LABEL_F4F421:
 	pushw 0x5020
 	ld xwa, (xsp + 18)
 	push xwa
-	call LABEL_F4EB97
+	call FileOpen
 	inc 8, xsp
 	ld (xsp + 4), xhl
 	ld xwa, (xsp + 4)
@@ -161391,7 +161391,7 @@ LABEL_F4F421:
 	pushw 0x5022
 	ld xwa, (xsp + 18)
 	push xwa
-	call LABEL_F4EB97
+	call FileOpen
 	inc 8, xsp
 	ld (xsp + 4), xhl
 	ld xwa, (xsp + 4)
@@ -161411,16 +161411,16 @@ LABEL_F4F47D:
 	pushw 0x5024
 	ld xwa, (xsp + 22)
 	push xwa
-	call LABEL_F4EB97
+	call FileOpen
 	inc 8, xsp
 	ld xiz, xhl
 	or xiz, xiz
 	jr z, LABEL_F4F4AE
 	ld xwa, (xsp + 4)
 	push xwa
-	call LABEL_F4F05A
+	call FileClose
 	push xiz
-	call LABEL_F4F05A
+	call FileClose
 	inc 8, xsp
 	sti16_24 0x01e53c, 0x0015
 	ldw hl, 0xFFFF
@@ -161432,14 +161432,14 @@ LABEL_F4F4AE:
 	pushw 0x5026
 	ld xwa, (xsp + 22)
 	push xwa
-	call LABEL_F4EB97
+	call FileOpen
 	inc 8, xsp
 	ld xiz, xhl
 	or xiz, xiz
 	jr nz, LABEL_F4F4DA
 	ld xwa, (xsp + 4)
 	push xwa
-	call LABEL_F4F05A
+	call FileClose
 	inc 4, xsp
 	ldw hl, 0xFFFF
 	jr LABEL_F4F526
@@ -161451,12 +161451,12 @@ LABEL_F4F4DA:
 	jr z, LABEL_F4F508
 	ld xwa, (xsp + 4)
 	push xwa
-	call LABEL_F4F05A
+	call FileClose
 	push xiz
-	call LABEL_F4F05A
+	call FileClose
 	ld xwa, (xsp + 26)
 	push xwa
-	calr LABEL_F4F21F
+	calr FileOpenDefault
 	lda xsp, (xsp + 12)
 	sti16_24 0x01e53c, 0x001a
 	ldw hl, 0xFFFF
@@ -161470,9 +161470,9 @@ LABEL_F4F508:
 	ld (xsp + 16), hl
 	ld xwa, (xsp + 12)
 	push xwa
-	call LABEL_F4F05A
+	call FileClose
 	push xiz
-	call LABEL_F4F05A
+	call FileClose
 	lda xsp, (xsp + 16)
 	ld hl, (xsp + 8)
 
@@ -163438,7 +163438,7 @@ LABEL_F51ED7:
 
 LABEL_F51EF8:
 	pushw 0x200
-	call LABEL_FF0E80
+	call Malloc
 	inc 2, xsp
 	ld (xsp + 2), xhl
 	ld xwa, xhl
@@ -163452,7 +163452,7 @@ LABEL_F51F0F:
 	pushw 0x0
 	ld xwa, (xsp + 6)
 	push xwa
-	call LABEL_FF0FFA
+	call Memset
 	pushw 0x20
 	lda_24 xwa, 0xe450b6
 	push xwa
@@ -163479,7 +163479,7 @@ LABEL_F51F0F:
 	calr LABEL_F51E5F
 	ld xwa, (xsp + 2)
 	push xwa
-	call LABEL_FF0AF2
+	call Free
 	inc 4, xsp
 	lds hl, 0
 	jrl LABEL_F5228A
@@ -163489,7 +163489,7 @@ LABEL_F51F7C:
 	pushw 0x0
 	ld xwa, (xsp + 6)
 	push xwa
-	call LABEL_FF0FFA
+	call Memset
 	pushw 0x3
 	lda_24 xwa, 0xe450d6
 	push xwa
@@ -163516,7 +163516,7 @@ LABEL_F51F7C:
 	calr LABEL_F51E5F
 	ld xwa, (xsp + 2)
 	push xwa
-	call LABEL_FF0AF2
+	call Free
 	inc 4, xsp
 	lds hl, 0
 	jrl LABEL_F5228A
@@ -163526,7 +163526,7 @@ LABEL_F51FE9:
 	pushw 0x0
 	ld xwa, (xsp + 6)
 	push xwa
-	call LABEL_FF0FFA
+	call Memset
 	ldw (xsp + 22), 0x3
 	lda xwa, (xsp + 14)
 	push xwa
@@ -163540,7 +163540,7 @@ LABEL_F51FE9:
 	calr LABEL_F51E5F
 	ld xwa, (xsp + 2)
 	push xwa
-	call LABEL_FF0AF2
+	call Free
 	inc 4, xsp
 	lds hl, 0
 	jrl LABEL_F5228A
@@ -163550,7 +163550,7 @@ LABEL_F52026:
 	pushw 0x0
 	ld xwa, (xsp + 6)
 	push xwa
-	call LABEL_FF0FFA
+	call Memset
 	ldw (xsp + 22), 0x4
 	lda xwa, (xsp + 14)
 	push xwa
@@ -163564,7 +163564,7 @@ LABEL_F52026:
 	calr LABEL_F51E5F
 	ld xwa, (xsp + 2)
 	push xwa
-	call LABEL_FF0AF2
+	call Free
 	inc 4, xsp
 	lds hl, 0
 	jrl LABEL_F5228A
@@ -163574,7 +163574,7 @@ LABEL_F52063:
 	pushw 0x0
 	ld xwa, (xsp + 6)
 	push xwa
-	call LABEL_FF0FFA
+	call Memset
 	pushw 0x3
 	lda_24 xwa, 0xe450d6
 	push xwa
@@ -163601,7 +163601,7 @@ LABEL_F52063:
 	calr LABEL_F51E5F
 	ld xwa, (xsp + 2)
 	push xwa
-	call LABEL_FF0AF2
+	call Free
 	inc 4, xsp
 	lds hl, 0
 	jrl LABEL_F5228A
@@ -163611,7 +163611,7 @@ LABEL_F520D0:
 	pushw 0x0
 	ld xwa, (xsp + 6)
 	push xwa
-	call LABEL_FF0FFA
+	call Memset
 	ldw (xsp + 22), 0x6
 	lda xwa, (xsp + 14)
 	push xwa
@@ -163625,7 +163625,7 @@ LABEL_F520D0:
 	calr LABEL_F51E5F
 	ld xwa, (xsp + 2)
 	push xwa
-	call LABEL_FF0AF2
+	call Free
 	inc 4, xsp
 	lds hl, 0
 	jrl LABEL_F5228A
@@ -163635,7 +163635,7 @@ LABEL_F5210D:
 	pushw 0x0
 	ld xwa, (xsp + 6)
 	push xwa
-	call LABEL_FF0FFA
+	call Memset
 	ldw (xsp + 22), 0x7
 	lda xwa, (xsp + 14)
 	push xwa
@@ -163649,7 +163649,7 @@ LABEL_F5210D:
 	calr LABEL_F51E5F
 	ld xwa, (xsp + 2)
 	push xwa
-	call LABEL_FF0AF2
+	call Free
 	inc 4, xsp
 	lds hl, 0
 	jrl LABEL_F5228A
@@ -163659,7 +163659,7 @@ LABEL_F5214A:
 	pushw 0x0
 	ld xwa, (xsp + 6)
 	push xwa
-	call LABEL_FF0FFA
+	call Memset
 	inc 8, xsp
 	ldw (xsp + 6), 0x4
 	ldw (xsp + 8), 0x0
@@ -163684,7 +163684,7 @@ LABEL_F52180:
 	calr LABEL_F51E5F
 	ld xwa, (xsp + 2)
 	push xwa
-	call LABEL_FF0AF2
+	call Free
 	inc 4, xsp
 	lds hl, 0
 	jrl LABEL_F5228A
@@ -163712,7 +163712,7 @@ LABEL_F521BF:
 	calr LABEL_F51E5F
 	ld xwa, (xsp + 2)
 	push xwa
-	call LABEL_FF0AF2
+	call Free
 	inc 4, xsp
 	lds hl, 0
 	jrl LABEL_F5228A
@@ -163743,7 +163743,7 @@ LABEL_F521EB:
 	calr LABEL_F51E5F
 	ld xwa, (xsp + 2)
 	push xwa
-	call LABEL_FF0AF2
+	call Free
 	inc 4, xsp
 	lds hl, 0
 	jr LABEL_F5228A
@@ -163763,7 +163763,7 @@ LABEL_F5223E:
 	ldfr_berp L, 0xFB
 	ld xwa, (xsp + 6)
 	push xwa
-	call LABEL_FF0AF2
+	call Free
 	inc 8, xsp
 	cpi_berp 0xFB, 0
 	jr nz, LABEL_F52280
@@ -163815,7 +163815,7 @@ LABEL_F522BD:
 
 LABEL_F522DE:
 	pushw 0x200
-	call LABEL_FF0E80
+	call Malloc
 	inc 2, xsp
 	ld (xsp + 2), xhl
 	ld xwa, xhl
@@ -163829,7 +163829,7 @@ LABEL_F522F5:
 	pushw 0x0
 	ld xwa, (xsp + 6)
 	push xwa
-	call LABEL_FF0FFA
+	call Memset
 	pushw 0x20
 	lda_24 xwa, 0xe450da
 	push xwa
@@ -163856,7 +163856,7 @@ LABEL_F522F5:
 	calr LABEL_F51E5F
 	ld xwa, (xsp + 2)
 	push xwa
-	call LABEL_FF0AF2
+	call Free
 	inc 4, xsp
 	lds hl, 0
 	jrl LABEL_F525E5
@@ -163866,7 +163866,7 @@ LABEL_F52362:
 	pushw 0x0
 	ld xwa, (xsp + 6)
 	push xwa
-	call LABEL_FF0FFA
+	call Memset
 	pushw 0x3
 	lda_24 xwa, 0xe450fa
 	push xwa
@@ -163893,7 +163893,7 @@ LABEL_F52362:
 	calr LABEL_F51E5F
 	ld xwa, (xsp + 2)
 	push xwa
-	call LABEL_FF0AF2
+	call Free
 	inc 4, xsp
 	lds hl, 0
 	jrl LABEL_F525E5
@@ -163903,7 +163903,7 @@ LABEL_F523CF:
 	pushw 0x0
 	ld xwa, (xsp + 6)
 	push xwa
-	call LABEL_FF0FFA
+	call Memset
 	inc 8, xsp
 	ldw (xsp + 14), 0x3
 	jr LABEL_F52412
@@ -163921,7 +163921,7 @@ LABEL_F523E6:
 	calr LABEL_F51E5F
 	ld xwa, (xsp + 2)
 	push xwa
-	call LABEL_FF0AF2
+	call Free
 	inc 4, xsp
 	lds hl, 0
 	jrl LABEL_F525E5
@@ -163936,7 +163936,7 @@ LABEL_F52412:
 	pushw 0x0
 	ld xwa, (xsp + 6)
 	push xwa
-	call LABEL_FF0FFA
+	call Memset
 	pushw 0x3
 	lda_24 xwa, 0xe450fa
 	push xwa
@@ -163963,7 +163963,7 @@ LABEL_F52412:
 	calr LABEL_F51E5F
 	ld xwa, (xsp + 2)
 	push xwa
-	call LABEL_FF0AF2
+	call Free
 	inc 4, xsp
 	lds hl, 0
 	jrl LABEL_F525E5
@@ -163973,7 +163973,7 @@ LABEL_F52486:
 	pushw 0x0
 	ld xwa, (xsp + 6)
 	push xwa
-	call LABEL_FF0FFA
+	call Memset
 	inc 8, xsp
 	ldw (xsp + 14), 0xC
 	jr LABEL_F524C9
@@ -163991,7 +163991,7 @@ LABEL_F5249D:
 	calr LABEL_F51E5F
 	ld xwa, (xsp + 2)
 	push xwa
-	call LABEL_FF0AF2
+	call Free
 	inc 4, xsp
 	lds hl, 0
 	jrl LABEL_F525E5
@@ -164016,7 +164016,7 @@ LABEL_F524C9:
 	calr LABEL_F51E5F
 	ld xwa, (xsp + 2)
 	push xwa
-	call LABEL_FF0AF2
+	call Free
 	inc 4, xsp
 	lds hl, 0
 	jrl LABEL_F525E5
@@ -164026,7 +164026,7 @@ LABEL_F52503:
 	pushw 0x0
 	ld xwa, (xsp + 6)
 	push xwa
-	call LABEL_FF0FFA
+	call Memset
 	inc 8, xsp
 	ldw (xsp + 14), 0x2
 	jr LABEL_F52546
@@ -164044,7 +164044,7 @@ LABEL_F5251A:
 	calr LABEL_F51E5F
 	ld xwa, (xsp + 2)
 	push xwa
-	call LABEL_FF0AF2
+	call Free
 	inc 4, xsp
 	lds hl, 0
 	jrl LABEL_F525E5
@@ -164075,7 +164075,7 @@ LABEL_F52546:
 	calr LABEL_F51E5F
 	ld xwa, (xsp + 2)
 	push xwa
-	call LABEL_FF0AF2
+	call Free
 	inc 4, xsp
 	lds hl, 0
 	jr LABEL_F525E5
@@ -164095,7 +164095,7 @@ LABEL_F52599:
 	ldfr_berp L, 0xFB
 	ld xwa, (xsp + 6)
 	push xwa
-	call LABEL_FF0AF2
+	call Free
 	inc 8, xsp
 	cpi_berp 0xFB, 0
 	jr nz, LABEL_F525DB
@@ -164118,7 +164118,7 @@ GetMediaType:
 	push_werp 0xFA
 	call Reset_Floppy_Disk_Controller
 	pushw 0x400
-	call LABEL_FF0E80
+	call Malloc
 	inc 2, xsp
 	ld (xsp + 2), xhl
 	ld xwa, xhl
@@ -164252,7 +164252,7 @@ LABEL_F5272E:
 	stdi16 35344, 0
 	ld xwa, (xsp + 2)
 	push xwa
-	call LABEL_FF0AF2
+	call Free
 	ldto_berp A, 0xFB
 	extz wa
 	pushw wa
@@ -164294,7 +164294,7 @@ LABEL_F5279B:
 	pushw 0x50FE
 	pushw 0xE4
 	pushw 0x5100
-	call LABEL_F4EB97
+	call FileOpen
 	inc 8, xsp
 	ld xiz, xhl
 	or xiz, xiz
@@ -164308,7 +164308,7 @@ LABEL_F527B7:
 	ld xwa, (xsp + 8)
 	ld (xwa), xhl
 	push xiz
-	call LABEL_F4F05A
+	call FileClose
 	inc 8, xsp
 	lds hl, 1
 
@@ -164341,7 +164341,7 @@ LABEL_F527FC:
 	pushw 0x5112
 	pushw 0xE4
 	pushw 0x5114
-	call LABEL_F4EB97
+	call FileOpen
 	inc 8, xsp
 	ld xiz, xhl
 	or xiz, xiz
@@ -164355,7 +164355,7 @@ LABEL_F52818:
 	pushw 0x20
 	lda xwa, (xsp + 12)
 	push xwa
-	call LABEL_F4EE70
+	call FileRead
 	lda xsp, (xsp + 12)
 	cps hl, 1
 	jr nz, LABEL_F5288E
@@ -164383,7 +164383,7 @@ LABEL_F5282E:
 	call 0xFF0D99
 	sti8_24 0x02272b, 0x00
 	push xiz
-	call LABEL_F4F05A
+	call FileClose
 	lda xsp, (xsp + 14)
 	lda_24 xhl, 0x022720
 	jr LABEL_F52897
@@ -164394,14 +164394,14 @@ LABEL_F52878:
 	pushw 0x20
 	lda xwa, (xsp + 12)
 	push xwa
-	call LABEL_F4EE70
+	call FileRead
 	lda xsp, (xsp + 12)
 	cps hl, 1
 	jr z, LABEL_F5282E
 
 LABEL_F5288E:
 	push xiz
-	call LABEL_F4F05A
+	call FileClose
 	inc 4, xsp
 	lds32 xhl, 0
 
@@ -164436,7 +164436,7 @@ LABEL_F528AD:
 	pushw 0x512A
 	lda xwa, (xsp + 26)
 	push xwa
-	call LABEL_F4EB97
+	call FileOpen
 	add xsp, 0x18
 	or xhl, xhl
 	jr nz, LABEL_F528E6
@@ -164447,7 +164447,7 @@ LABEL_F528E6:
 	ld (xhl + 64), 0x28
 	setm 7, (xhl + 3)
 	push xhl
-	call LABEL_F4F05A
+	call FileClose
 	inc 4, xsp
 	ld wa, (xsp + 4)
 	and a, 0x8
@@ -164544,7 +164544,7 @@ _findfirst:
 
 LABEL_F529A8:
 	pushw 0x8
-	call LABEL_FF0E80
+	call Malloc
 	inc 2, xsp
 	ld (xsp + 8), xhl
 	ld xwa, xhl
@@ -164555,14 +164555,14 @@ LABEL_F529A8:
 
 LABEL_F529C2:
 	pushw 0x104
-	call LABEL_FF0E80
+	call Malloc
 	inc 2, xsp
 	ld xiz, xhl
 	or xiz, xiz
 	jr nz, LABEL_F529E3
 	ld xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0AF2
+	call Free
 	inc 4, xsp
 	ld xhl, 0xFFFFFFFF
 	jrl LABEL_F52AA5
@@ -164577,10 +164577,10 @@ LABEL_F529E3:
 	jr z, LABEL_F52A0E
 	ld xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0AF2
+	call Free
 	ld xwa, xiz
 	push xwa
-	call LABEL_FF0AF2
+	call Free
 	inc 8, xsp
 	ld xhl, 0xFFFFFFFF
 	jrl LABEL_F52AA5
@@ -164590,7 +164590,7 @@ LABEL_F52A0E:
 	pushw 0x5130
 	ld xwa, xiz
 	push xwa
-	call LABEL_F4EB97
+	call FileOpen
 	inc 8, xsp
 	ld (xsp + 4), xhl
 	ld xwa, (xsp + 4)
@@ -164598,10 +164598,10 @@ LABEL_F52A0E:
 	jr nz, LABEL_F52A3F
 	ld xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0AF2
+	call Free
 	ld xwa, xiz
 	push xwa
-	call LABEL_FF0AF2
+	call Free
 	inc 8, xsp
 	ld xhl, 0xFFFFFFFF
 	jr LABEL_F52AA5
@@ -164609,20 +164609,20 @@ LABEL_F52A0E:
 LABEL_F52A3F:
 	ld xwa, xiz
 	push xwa
-	call LABEL_FF0AF2
+	call Free
 	ld xwa, (xsp + 16)
 	push xwa
 	call LABEL_FF0FA0
 	inc 1, hl
 	pushw hl
-	call LABEL_FF0E80
+	call Malloc
 	lda xsp, (xsp + 10)
 	ld xiz, xhl
 	or xiz, xiz
 	jr nz, LABEL_F52A6F
 	ld xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0AF2
+	call Free
 	inc 4, xsp
 	ld xhl, 0xFFFFFFFF
 	jr LABEL_F52AA5
@@ -164631,7 +164631,7 @@ LABEL_F52A6F:
 	ld xwa, (xsp + 12)
 	push xwa
 	push xiz
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	ld xwa, (xsp + 8)
 	ld (xwa + 4), xiz
@@ -164676,14 +164676,14 @@ LABEL_F52AC7:
 	ld xwa, xiz
 	ld xwa, (xwa)
 	push xwa
-	call LABEL_F4F05A
+	call FileClose
 	ld xwa, xiz
 	ld xwa, (xwa + 4)
 	push xwa
-	call LABEL_FF0AF2
+	call Free
 	ld xwa, xiz
 	push xwa
-	call LABEL_FF0AF2
+	call Free
 	lda xsp, (xsp + 12)
 	lds hl, 0
 
@@ -164717,7 +164717,7 @@ LABEL_F52B0A:
 	pushw 0x20
 	lda xwa, (xsp + 20)
 	push xwa
-	call LABEL_F4EE70
+	call FileRead
 	lda xsp, (xsp + 12)
 	cps hl, 1
 	jrl nz, LABEL_F52BA9
@@ -164770,7 +164770,7 @@ LABEL_F52B90:
 	pushw 0x20
 	lda xwa, (xsp + 20)
 	push xwa
-	call LABEL_F4EE70
+	call FileRead
 	lda xsp, (xsp + 12)
 	cps hl, 1
 	jr z, LABEL_F52B29
@@ -164799,7 +164799,7 @@ LABEL_F52BC6:
 	pushw 0x3F
 	lda xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0FFA
+	call Memset
 	inc 8, xsp
 	ld (xsp + 15), 0x0
 	lda xwa, (xsp + 4)
@@ -165148,7 +165148,7 @@ LABEL_F52F9C:
 	ret nz
 	ld32_24 xwa, 0x02357a
 	push xwa
-	call LABEL_F4F05A
+	call FileClose
 	inc 4, xsp
 	ret
 
@@ -165161,7 +165161,7 @@ LABEL_F52FB1:
 	pushw 0xE4
 	pushw 0x5132
 	push xwa
-	call LABEL_F4EB97
+	call FileOpen
 	inc 8, xsp
 	st32_24 0x02357a, xhl
 	ld32_24 xwa, 0x02357a
@@ -165448,7 +165448,7 @@ LABEL_F53278:
 	exts xwa
 	add xwa, xbc
 	push xwa
-	call LABEL_FF0FFA
+	call Memset
 	inc 8, xsp
 	inc 1, iz
 	cp iz, 0x50
@@ -189160,7 +189160,7 @@ LABEL_F6314F:
 LABEL_F63159:
 	ld xwa, 0x800
 	push xwa
-	call LABEL_FF0E80
+	call Malloc
 	add xsp, 0x4
 	stda32 13668, xhl
 	ldda8 a, 13549
@@ -189234,7 +189234,7 @@ LABEL_F63224:
 	stda8 13550, w
 	ldda32 xwa, 13668
 	push xwa
-	call LABEL_FF0AF2
+	call Free
 	add xsp, 0x4
 
 LABEL_F6323C:
@@ -196382,7 +196382,7 @@ MainCstmNameFunc:
 	cp xde, 0x1E4002B
 	jrl nz, LABEL_F696A4
 	pushw 0x11
-	call LABEL_FF0E80
+	call Malloc
 	ld xiz, xhl
 	ldda8 a, 14774
 	extz wa
@@ -196410,7 +196410,7 @@ MainCstmNameFunc:
 
 LABEL_F69648:
 	pushw 0x11
-	call LABEL_FF0E80
+	call Malloc
 	ld xiz, xhl
 	ldda8 a, 14775
 	extz wa
@@ -196523,7 +196523,7 @@ MiddleNameFunc:
 	jr nz, LABEL_F697FB
 	push xde
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	push xde
 	push xhl
@@ -196540,7 +196540,7 @@ MiddleNameFunc:
 LABEL_F697B5:
 	push xde
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	ldda8 c, 32574
 	ld a, c
@@ -196620,7 +196620,7 @@ MainCmpCpFunc:
 	cp xde, 0x1E40002
 	jrl nz, LABEL_F699B5
 	pushw 0x11
-	call LABEL_FF0E80
+	call Malloc
 	inc 2, xsp
 	ld xiz, xhl
 	ld xwa, 0x28000
@@ -196653,7 +196653,7 @@ MainCmpCpFunc:
 
 LABEL_F698E8:
 	pushw 0xF
-	call LABEL_FF0E80
+	call Malloc
 	inc 2, xsp
 	ld xiz, xhl
 	ld xwa, 0x28000
@@ -198172,7 +198172,7 @@ LABEL_F6B2CB:
 	push xbc
 	ld xwa, 0x400
 	push xwa
-	call LABEL_FF0E80
+	call Malloc
 	add xsp, 0x4
 	stda32 13668, xhl
 	ldw bc, 0x100
@@ -198189,7 +198189,7 @@ LABEL_F6B2CB:
 	ldir85
 	ldda32 xwa, 13668
 	push xwa
-	call LABEL_FF0AF2
+	call Free
 	add xsp, 0x4
 	pop xbc
 	ret
@@ -199352,7 +199352,7 @@ LABEL_F6C387:
 	pushw 0x0
 	pushw 0xE3D2
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 
 LABEL_F6C394:
@@ -200237,7 +200237,7 @@ LABEL_F6CC4B:
 	ld xwa, 0xFFC01
 	push xwa
 	push xbc
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	stdi8 15622, 5
 	ldw wa, 0x14
@@ -200281,7 +200281,7 @@ LABEL_F6CCC6:
 	push xwa
 
 LABEL_F6CCDF:
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	jrl LABEL_F6CF3E
 
@@ -200568,7 +200568,7 @@ LABEL_F6CFA2:
 	push xhl
 	lda xwa, (xsp + 22)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	pushw 0x0
 	pushw 0x488C
 	lda xwa, (xsp + 30)
@@ -200582,7 +200582,7 @@ LABEL_F6CFA2:
 	extz xwa
 	add xwa, xbc
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	lda xsp, (xsp + 24)
 	ld de, (xsp + 4)
 	sll de, 2
@@ -200616,7 +200616,7 @@ LABEL_F6D029:
 	push xwa
 	lda xwa, (xsp + 22)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	lda xwa, (xsp + 18)
 	ld xbc, 0xE4C152
@@ -200659,7 +200659,7 @@ LABEL_F6D029:
 	jr z, LABEL_F6D0C2
 	push xhl
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	jr LABEL_F6D0C5
 
@@ -201008,7 +201008,7 @@ LABEL_F6D431:
 	push xbc
 	lda xwa, (xsp + 22)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	ldda32 xwa, 15708
 	ld (xsp + 10), xwa
@@ -201346,7 +201346,7 @@ LABEL_F6D79E:
 	add xwa, (xsp + 18)
 	inc 1, xwa
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	incdi16 1, 14978
 	jr LABEL_F6D83A
@@ -201367,7 +201367,7 @@ LABEL_F6D7DB:
 	add xwa, (xsp + 18)
 	inc 1, xwa
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	lda xbc, (xsp + 18)
 	ld xwa, xbc
@@ -206455,7 +206455,7 @@ LABEL_F73884:
 	push xwa
 	ld xwa, (xsp + 16)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	jr LABEL_F738BD
 	ld xwa, xiz
@@ -207825,7 +207825,7 @@ LABEL_F74AC6:
 LABEL_F74ACB:
 	push xwa
 	push xbc
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E00078
@@ -207911,7 +207911,7 @@ LABEL_F74E2A:
 LABEL_F74E30:
 	ld xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	jrl LABEL_F74F87
 
@@ -208140,7 +208140,7 @@ LABEL_F7507D:
 LABEL_F75083:
 	ld xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	jrl LABEL_F751DA
 
@@ -208549,7 +208549,7 @@ LABEL_F75470:
 	push xwa
 	ld xwa, (xsp + 16)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	jr LABEL_F754A9
 	ld xwa, xiz
@@ -208723,7 +208723,7 @@ LABEL_F756E6:
 LABEL_F756FB:
 	push xwa
 	push xbc
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	call 0xFA44D0
 	ld xwa, xhl
@@ -209015,7 +209015,7 @@ LABEL_F75A3A:
 LABEL_F75A3B:
 	ld xwa, (xsp + 12)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	jr LABEL_F75A6D
 	ld xwa, (xsp + 16)
@@ -209385,7 +209385,7 @@ LABEL_F76288:
 	pushw 0xFD7E
 	ld xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	jrl LABEL_F7631D
 
@@ -210176,7 +210176,7 @@ LABEL_F76F14:
 	push xwa
 	ld xwa, (xsp + 16)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	jr LABEL_F76F4D
 	ld xwa, xiz
@@ -210361,7 +210361,7 @@ LABEL_F7724E:
 	push xwa
 	ld xwa, (xsp + 20)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	call 0xFA44D0
 	ld xwa, xhl
@@ -210377,7 +210377,7 @@ LABEL_F772AB:
 	push xwa
 	ld xwa, (xsp + 20)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	call 0xFA44D0
 	ld xwa, xhl
@@ -210394,7 +210394,7 @@ LABEL_F772D3:
 	push xwa
 	ld xwa, (xsp + 20)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	call 0xFA44D0
 	ld xwa, xhl
@@ -210411,7 +210411,7 @@ LABEL_F772FE:
 	push xwa
 	ld xwa, (xsp + 20)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	call 0xFA44D0
 	ld xwa, xhl
@@ -210507,7 +210507,7 @@ LABEL_F77E36:
 	push xwa
 	lda xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	ld xbc, (xiz + 48)
 	lda xde, (xsp + 4)
@@ -210759,7 +210759,7 @@ LABEL_F7823C:
 LABEL_F78251:
 	push xwa
 	push xbc
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	call 0xFA44D0
 	ld xwa, xhl
@@ -210805,7 +210805,7 @@ LABEL_F782B7:
 	push xwa
 	lda xwa, (xsp + 16)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	call 0xFA44D0
 	ld xwa, xhl
@@ -211122,7 +211122,7 @@ LABEL_F7862B:
 	push xwa
 	ld xwa, (xsp + 12)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	jr LABEL_F78666
 	ld xwa, (xsp + 16)
@@ -211403,7 +211403,7 @@ LABEL_F78937:
 	push xwa
 	ld xwa, (xsp + 12)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	jr LABEL_F78972
 	ld xwa, (xsp + 16)
@@ -211777,7 +211777,7 @@ LABEL_F79193:
 	push xwa
 	ld xwa, (xsp + 24)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	call 0xFA44D0
 	ld xwa, xhl
@@ -211794,7 +211794,7 @@ LABEL_F791AE:
 	push xwa
 	ld xwa, (xsp + 24)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	call 0xFA44D0
 	ld xwa, xhl
@@ -212122,7 +212122,7 @@ LABEL_F79957:
 	pushw 0x254
 	ld xwa, (xsp + 16)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	jr LABEL_F799E8
 
@@ -212184,7 +212184,7 @@ LABEL_F79A2D:
 	pushw 0x266
 	ld xwa, (xsp + 16)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	jr LABEL_F79A7F
 
@@ -212335,7 +212335,7 @@ LABEL_F79BD8:
 	push xwa
 	lda xwa, (xsp + 12)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	lda xde, (xsp + 8)
 	lds32 xwa, 0
@@ -212632,7 +212632,7 @@ LABEL_F79F3F:
 LABEL_F79F40:
 	ld xwa, (xsp + 28)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	jr LABEL_F79F72
 	ld xwa, (xsp + 32)
@@ -212772,7 +212772,7 @@ LABEL_F7A113:
 LABEL_F7A16A:
 	push xwa
 	push xbc
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	call 0xFA44D0
 	ld xwa, xhl
@@ -212921,7 +212921,7 @@ LABEL_F7A2F0:
 	push xwa
 	lda xwa, (xsp + 12)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	lda xde, (xsp + 8)
 	lds32 xwa, 0
@@ -213355,7 +213355,7 @@ LABEL_F7A820:
 LABEL_F7A821:
 	ld xwa, (xsp + 28)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	jr LABEL_F7A853
 	ld xwa, (xsp + 32)
@@ -213568,7 +213568,7 @@ LABEL_F7AC20:
 	pushw 0x6E2
 	lda xwa, (xsp + 28)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	jr LABEL_F7ACA9
 
@@ -213605,7 +213605,7 @@ LABEL_F7ACBA:
 	push xwa
 	lda xwa, (xsp + 28)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	call 0xFA44D0
 	ld xwa, xhl
@@ -213630,7 +213630,7 @@ LABEL_F7AD25:
 	push xwa
 	lda xwa, (xsp + 28)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	call 0xFA44D0
 	ld xwa, xhl
@@ -213985,7 +213985,7 @@ LABEL_F7B705:
 
 LABEL_F7B70B:
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	ld xhl, xiz
 	jr LABEL_F7B723
@@ -214329,7 +214329,7 @@ LABEL_F7BB4B:
 	pushw 0x554A
 	ld xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 
 LABEL_F7BB5B:
@@ -215835,7 +215835,7 @@ LswSound:
 	pushw 0x5576
 	ld xwa, (xde + 8)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 
 LABEL_F7CC28:
@@ -215944,7 +215944,7 @@ LABEL_F7CD0B:
 LABEL_F7CD10:
 	push xwa
 	push xbc
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 
 LABEL_F7CD18:
@@ -216069,7 +216069,7 @@ LABEL_F7CE19:
 LABEL_F7CE1E:
 	push xwa
 	push xbc
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 
 LABEL_F7CE26:
@@ -216209,7 +216209,7 @@ LABEL_F7CF56:
 LABEL_F7CF5B:
 	push xwa
 	push xbc
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 
 LABEL_F7CF63:
@@ -216309,7 +216309,7 @@ LABEL_F7D028:
 	pushw 0xE9
 	pushw 0x55C0
 	push xbc
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 
 LABEL_F7D035:
@@ -216425,7 +216425,7 @@ LABEL_F7D128:
 	pushw 0xE9
 	pushw 0x55C8
 	push xbc
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 
 LABEL_F7D135:
@@ -216525,7 +216525,7 @@ LABEL_F7D201:
 LABEL_F7D206:
 	push xwa
 	push xbc
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	ld xhl, xiz
 	jr LABEL_F7D255
@@ -216623,7 +216623,7 @@ LABEL_F7D2DA:
 LABEL_F7D2DF:
 	push xwa
 	push xbc
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	ld xhl, xiz
 	jr LABEL_F7D32E
@@ -216720,7 +216720,7 @@ LABEL_F7D3B4:
 	pushw 0xE9
 	pushw 0x55E8
 	push xbc
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 
 LABEL_F7D3C1:
@@ -216830,7 +216830,7 @@ LABEL_F7D4AD:
 LABEL_F7D4B2:
 	push xwa
 	push xbc
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 
 LABEL_F7D4BA:
@@ -216948,7 +216948,7 @@ LABEL_F7D5B1:
 LABEL_F7D5B6:
 	push xwa
 	push xbc
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 
 LABEL_F7D5BE:
@@ -217053,7 +217053,7 @@ LABEL_F7D692:
 	pushw 0xE9
 	pushw 0x5610
 	push xbc
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 
 LABEL_F7D69F:
@@ -217153,7 +217153,7 @@ LABEL_F7D76B:
 LABEL_F7D770:
 	push xwa
 	push xbc
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	ld xhl, xiz
 	jr LABEL_F7D7C3
@@ -217253,7 +217253,7 @@ LABEL_F7D848:
 LABEL_F7D84D:
 	push xwa
 	push xbc
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	ld xhl, xiz
 	jr LABEL_F7D8A0
@@ -217353,7 +217353,7 @@ LABEL_F7D925:
 LABEL_F7D92A:
 	push xwa
 	push xbc
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	ld xhl, xiz
 	jr LABEL_F7D97D
@@ -217453,7 +217453,7 @@ LABEL_F7DA02:
 LABEL_F7DA07:
 	push xwa
 	push xbc
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	ld xhl, xiz
 	jr LABEL_F7DA5A
@@ -217553,7 +217553,7 @@ LABEL_F7DAE0:
 LABEL_F7DAE5:
 	push xwa
 	push xbc
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	ld xhl, xiz
 	jr LABEL_F7DB39
@@ -217653,7 +217653,7 @@ LABEL_F7DBBD:
 LABEL_F7DBC2:
 	push xwa
 	push xbc
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	ld xhl, xiz
 	jr LABEL_F7DC0F
@@ -217774,7 +217774,7 @@ LABEL_F7DCC6:
 	push xwa
 
 LABEL_F7DCD0:
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 
 LABEL_F7DCD6:
@@ -217914,7 +217914,7 @@ LABEL_F7DE2F:
 	pushw 0xE9
 	pushw 0xD7C6
 	push xde
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 
 LABEL_F7DE3C:
@@ -218127,7 +218127,7 @@ LABEL_F7E01D:
 	push xwa
 	ld xwa, (xde + 18)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 
 LABEL_F7E03C:
@@ -218277,7 +218277,7 @@ LABEL_F7E183:
 	cpw (xwa), 0x3
 	jrl nz, LABEL_F7E249
 	pushw 0x18
-	call LABEL_FF0E80
+	call Malloc
 	inc 2, xsp
 	ld (xsp + 4), xhl
 	ld xwa, 0xFFFFFFFF
@@ -218299,7 +218299,7 @@ LABEL_F7E1BF:
 	call LABEL_FF0FA0
 	inc 6, hl
 	pushw hl
-	call LABEL_FF0E80
+	call Malloc
 	ld xiz, xhl
 	ld16_24 xbc, 0x02478c
 	muls bc, 0xE
@@ -218648,7 +218648,7 @@ LABEL_F7E636:
 	pushw 0xE9
 	pushw 0xD9BA
 	push xiz
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 
 LABEL_F7E643:
@@ -218711,7 +218711,7 @@ LABEL_F7E6C0:
 	pushw 0xD9C0
 	ld xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 
 LABEL_F7E6D0:
@@ -218901,7 +218901,7 @@ LABEL_F7E88B:
 	pushw 0xD9C6
 	ld xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 
 LABEL_F7E89B:
@@ -219081,7 +219081,7 @@ LABEL_F7EA9C:
 	pushw 0xE9
 	pushw 0xDA22
 	push xiz
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 
 LABEL_F7EAA9:
@@ -219129,7 +219129,7 @@ LABEL_F7EB09:
 
 LABEL_F7EB0F:
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	ld xhl, xiz
 	jr LABEL_F7EB2B
@@ -219209,7 +219209,7 @@ LABEL_F7EBF2:
 	ld_sril XWA, (xsp + 0x0110)
 	push xwa
 	push xde
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 
 LABEL_F7EBFF:
@@ -219331,7 +219331,7 @@ LABEL_F7ED3E:
 	push xwa
 	ld_sril XWA, (xsp + 0x0114)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 
 LABEL_F7ED57:
@@ -219432,7 +219432,7 @@ LABEL_F7EE3C:
 	ld xwa, (xsp + 12)
 	ld xwa, (xwa + 8)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	ld xhl, (xsp + 12)
 	jr LABEL_F7EE5C
@@ -219616,7 +219616,7 @@ LABEL_F7F061:
 	pushw 0xDBB0
 	ld xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 
 LABEL_F7F071:
@@ -219669,7 +219669,7 @@ LABEL_F7F0E1:
 
 LABEL_F7F0E7:
 	push xbc
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	ld xhl, (xsp + 4)
 	jr LABEL_F7F104
@@ -219716,7 +219716,7 @@ LswScalingShift:
 	push xwa
 	ld xwa, (xde + 8)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	ld xhl, xiz
 	jr LABEL_F7F16B
@@ -219762,7 +219762,7 @@ LswScalingShift2:
 	push xwa
 	ld xwa, (xde + 8)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	ld xhl, xiz
 	jr LABEL_F7F1D0
@@ -219808,7 +219808,7 @@ LswScalingMode:
 	push xwa
 	ld xwa, (xde + 8)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	ld xhl, xiz
 	jr LABEL_F7F235
@@ -219876,7 +219876,7 @@ LABEL_F7F2BD:
 	pushw 0xE9
 	pushw 0xDE38
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 
 LABEL_F7F2CA:
@@ -220020,7 +220020,7 @@ LABEL_F7F40E:
 	pushw 0xE9
 	pushw 0xDE4E
 	push xde
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 
 LABEL_F7F41B:
@@ -220079,7 +220079,7 @@ LABEL_F7F492:
 	pushw 0xE9
 	pushw 0xDE5C
 	push xde
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 
 LABEL_F7F49F:
@@ -221515,7 +221515,7 @@ LABEL_F80713:
 	pushw 0xF58E
 	ld xwa, (xsp + 86)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 
 LABEL_F80723:
@@ -223088,7 +223088,7 @@ LABEL_F82A3A:
 	pushw 0xF92A
 	ld xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 
 LABEL_F82A4A:
@@ -223495,7 +223495,7 @@ LABEL_F82E39:
 	pushw 0xF930
 	ld xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	jrl LABEL_F82EE6
 
@@ -223679,7 +223679,7 @@ LswPercDecay:
 	push xwa
 	ld xwa, (xde + 8)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	ld xhl, xiz
 	jr LABEL_F8307C
@@ -223796,7 +223796,7 @@ LswPercLevel:
 	push xwa
 	ld xwa, (xde + 8)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	ld xhl, xiz
 	jr LABEL_F8318B
@@ -223883,7 +223883,7 @@ LswDrawAttack:
 	push xwa
 	ld xwa, (xde + 8)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	ld xhl, xiz
 	jr LABEL_F8326C
@@ -223970,7 +223970,7 @@ LswDrawRelease:
 	push xwa
 	ld xwa, (xde + 8)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	ld xhl, xiz
 	jr LABEL_F8334D
@@ -224451,7 +224451,7 @@ LABEL_F837C2:
 	pushw 0xF936
 	ld xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 
 LABEL_F837D2:
@@ -224639,7 +224639,7 @@ LABEL_F839C1:
 	pushw 0xF93C
 	ld xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 
 LABEL_F839D1:
@@ -224778,7 +224778,7 @@ LABEL_F83B2D:
 	pushw 0xF942
 	ld xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 
 LABEL_F83B3D:
@@ -224820,7 +224820,7 @@ LABEL_F83B81:
 	pushw 0xE9
 	pushw 0xF948
 	push xde
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 
 LABEL_F83B8E:
@@ -224999,7 +224999,7 @@ DemoMenu_BuildItemWorkspace:
 	ld iz, bc
 	ld (xsp + 6), wa
 	pushw 0xC
-	call LABEL_FF0E80
+	call Malloc
 	inc 2, xsp
 	ld (xsp + 2), xhl
 	call 0xF99457
@@ -225480,7 +225480,7 @@ LABEL_F8421E:
 	pushw 0xE9
 	pushw 0xF9A6
 	push xde
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 
 LABEL_F8422B:
@@ -225539,7 +225539,7 @@ LABEL_F842A3:
 	pushw 0xE9
 	pushw 0xF9AC
 	push xde
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 
 LABEL_F842B0:
@@ -225736,7 +225736,7 @@ LABEL_F844C2:
 	push xwa
 	ld xwa, (xsp + 12)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	jrl LABEL_F84332
 
@@ -227203,7 +227203,7 @@ LABEL_F854AC:
 	ld xwa, xiz
 	inc 1, xwa
 	pushw wa
-	call LABEL_FF0E80
+	call Malloc
 	ld (xsp + 14), xhl
 	ld xbc, (xsp + 14)
 	ld (xsp + 10), xbc
@@ -227280,7 +227280,7 @@ LABEL_F8554A:
 	ld (xsp + 18), hl
 	ld xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0AF2
+	call Free
 	inc 4, xsp
 
 LABEL_F85562:
@@ -227361,7 +227361,7 @@ LABEL_F855E8:
 	ld wa, (xsp + 14)
 	inc 1, wa
 	pushw wa
-	call LABEL_FF0E80
+	call Malloc
 	ld (xsp + 18), xhl
 	pushm (xsp + 16)
 	ld xwa, (xsp + 90)
@@ -227379,7 +227379,7 @@ LABEL_F855E8:
 	calr LABEL_F8571B
 	ld xwa, (xsp + 16)
 	push xwa
-	call LABEL_FF0AF2
+	call Free
 	inc 4, xsp
 
 LABEL_F8562D:
@@ -227860,13 +227860,13 @@ LABEL_F85FED:
 	ldto_werp WA, 0xFA
 	inc 1, wa
 	pushw wa
-	call LABEL_FF0E80
+	call Malloc
 	ld (xsp + 22), xhl
 	ld xwa, (xsp + 38)
 	push xwa
 	ld xwa, (xsp + 26)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	lda xsp, (xsp + 14)
 	ld xwa, (xsp + 16)
 	ld (xsp + 6), xwa
@@ -227967,7 +227967,7 @@ LABEL_F86112:
 LABEL_F86133:
 	ld xwa, (xsp + 16)
 	push xwa
-	call LABEL_FF0AF2
+	call Free
 	inc 4, xsp
 	pop xiz
 	lda xsp, (xsp + 32)
@@ -228024,7 +228024,7 @@ Seq_InitVoiceLoop:
 	lda_24 xwa, 0x0249d8
 	st_dri3b W, 0x07, 0xE0, 0xE4
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	ldto_werp WA, 0xFA
 	muls wa, 0x18
@@ -228093,12 +228093,12 @@ Seq_InitializeAndStart:
 	call LABEL_FF0FA0
 	inc 1, hl
 	pushw hl
-	call LABEL_FF0E80
+	call Malloc
 	ld xiz, xhl
 	ld xwa, (xsp + 10)
 	push xwa
 	push xiz
-	call LABEL_FF0F4D
+	call Strcpy
 	lda xsp, (xsp + 14)
 	ld xwa, 0x1410000
 	ld xbc, 0x1E10003
@@ -228309,12 +228309,12 @@ Seq_StartWithFullInit:
 	call LABEL_FF0FA0
 	inc 1, hl
 	pushw hl
-	call LABEL_FF0E80
+	call Malloc
 	ld xiz, xhl
 	pushw 0x2
 	pushw 0x4878
 	push xiz
-	call LABEL_FF0F4D
+	call Strcpy
 	lda xsp, (xsp + 14)
 	ld xwa, 0x1410000
 	ld xbc, 0x1E10004
@@ -231105,7 +231105,7 @@ LABEL_F88BC7:
 	push xiz
 	lda xwa, (xsp + 8)
 	push xwa
-	call LABEL_F4EB97
+	call FileOpen
 	inc 8, xsp
 	stda32 32580, xhl
 	or xhl, xhl
@@ -231149,7 +231149,7 @@ LABEL_F88C48:
 	or xwa, xwa
 	jr z, LABEL_F88C5D
 	push xwa
-	call LABEL_F4F05A
+	call FileClose
 	inc 4, xsp
 	lds32 xwa, 0
 	stda32 32580, xwa
@@ -231170,7 +231170,7 @@ LABEL_F88C60:
 	call LABEL_F89113
 	lda xwa, (xsp)
 	push xwa
-	call LABEL_F4F21F
+	call FileOpenDefault
 	inc 4, xsp
 	cps hl, 0
 	jr nz, LABEL_F88C8A
@@ -231334,7 +231334,7 @@ LABEL_F88DAB:
 	pushw 0x1
 	ld xwa, (xsp + 26)
 	push xwa
-	call LABEL_F4EE70
+	call FileRead
 	lda xsp, (xsp + 12)
 	exts xhl
 	cp xhl, xiz
@@ -231416,7 +231416,7 @@ LABEL_F88E60:
 	pushw 0x1
 	ld xwa, (xsp + 26)
 	push xwa
-	call LABEL_F4EEB9
+	call FileWrite
 	lda xsp, (xsp + 12)
 	exts xhl
 	cp xhl, xiz
@@ -231572,7 +231572,7 @@ LABEL_F88F75:
 	pushw 0x338
 	lda xwa, (xsp + 20)
 	push xwa
-	call LABEL_F4EB97
+	call FileOpen
 	inc 8, xsp
 	ld (xsp + 6), xhl
 	ld xwa, (xsp + 6)
@@ -231595,7 +231595,7 @@ LABEL_F88FD5:
 	pushw 0x33C
 	lda xwa, (xsp + 36)
 	push xwa
-	call LABEL_F4EB97
+	call FileOpen
 	inc 8, xsp
 	ld (xsp + 2), xhl
 	ld xwa, (xsp + 2)
@@ -231603,7 +231603,7 @@ LABEL_F88FD5:
 	jr nz, LABEL_F89008
 	ld xwa, (xsp + 6)
 	push xwa
-	call LABEL_F4F05A
+	call FileClose
 	inc 4, xsp
 	ldw hl, 0xFFFE
 	jr LABEL_F89057
@@ -231619,7 +231619,7 @@ LABEL_F89010:
 	pushw 0x1
 	ld xwa, (xsp + 20)
 	push xwa
-	call LABEL_F4EE70
+	call FileRead
 	lda xsp, (xsp + 12)
 	ld iz, hl
 	cps iz, 0
@@ -231635,10 +231635,10 @@ LABEL_F89010:
 LABEL_F89042:
 	ld xwa, (xsp + 2)
 	push xwa
-	call LABEL_F4F05A
+	call FileClose
 	ld xwa, (xsp + 10)
 	push xwa
-	call LABEL_F4F05A
+	call FileClose
 	inc 8, xsp
 	ld hl, (xsp + 10)
 
@@ -231654,7 +231654,7 @@ LABEL_F8905C:
 	pushw 0x1
 	ld xwa, (xsp + 20)
 	push xwa
-	call LABEL_F4EEB9
+	call FileWrite
 	lda xsp, (xsp + 12)
 	cp hl, iz
 	jr z, LABEL_F89010
@@ -236292,7 +236292,7 @@ IvFocus_Return:
 ; Events handled:
 ;   0x1C00001 - Create: set up timer, register tick event (0x1E50008)
 ;   0x1C0000D - Destroy: cancel timer (event 0x1C0000F)
-;   0x1E0003A - Timer query: call LABEL_FF0F4D with params (0x9894, 0xEA)
+;   0x1E0003A - Timer query: call Strcpy with params (0x9894, 0xEA)
 ;   0x1E50009 - Schedule next tick: queue event 0x1E5000A
 ;   0x1E5000A - Timer fired: invoke registered callback via workspace +22
 ;
@@ -236349,7 +236349,7 @@ IvTimer_HandleEvent3A:
 	pushw 0x9894
 	ld xwa, (xsp + 12)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	jr IvTimer_ReturnZero
 
@@ -236963,7 +236963,7 @@ Slider_Case1E0006A:
 	pushw 0x989A
 	ld xwa, (xsp + 12)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	jrl Slider_NoChange
 
@@ -237334,7 +237334,7 @@ Bounds_Case1E0006A:
 	pushw 0x989E
 	ld xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	jr Bounds_Done
 
@@ -237418,7 +237418,7 @@ Edit_Case1E00069:
 	pushw 0xEA
 	pushw 0x98A2
 	push xde
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	jr Edit_NoChange
 
@@ -238312,7 +238312,7 @@ LABEL_F98979:
 
 MainAutoFree:
 	push xde
-	call LABEL_FF0AF2
+	call Free
 	inc 4, xsp
 	lds32 xhl, 0
 	ret
@@ -238329,7 +238329,7 @@ MainRamControl:
 	ld xwa, (xde)
 	ld (xsp + 4), xwa
 	pushw 0x16
-	call LABEL_FF0E80
+	call Malloc
 	inc 2, xsp
 	ld (xsp + 12), xhl
 	ld xhl, (xsp)
@@ -238475,7 +238475,7 @@ LABEL_F98ADA:
 
 LABEL_F98ADD:
 	pushw 0x16
-	call LABEL_FF0E80
+	call Malloc
 	inc 2, xsp
 	ld (xsp + 12), xhl
 	ld xhl, (xsp)
@@ -238563,7 +238563,7 @@ LABEL_F98B8C:
 
 LABEL_F98B90:
 	pushw 0x16
-	call LABEL_FF0E80
+	call Malloc
 	inc 2, xsp
 	ld (xsp + 12), xhl
 	ld xwa, (xsp)
@@ -238599,7 +238599,7 @@ MainBitControl:
 	ld xwa, (xiz)
 	ld (xsp + 4), xwa
 	pushw 0xE
-	call LABEL_FF0E80
+	call Malloc
 	inc 2, xsp
 	ld (xsp + 8), xhl
 	ld xwa, (xsp + 8)
@@ -238652,7 +238652,7 @@ LABEL_F98C6B:
 
 LABEL_F98C6F:
 	pushw 0xE
-	call LABEL_FF0E80
+	call Malloc
 	inc 2, xsp
 	ld (xsp + 8), xhl
 	ld xwa, (xsp + 8)
@@ -238691,10 +238691,10 @@ MainGetSoundName:
 	cp xbc, 0x1E0005E
 	jrl nz, LABEL_F98F99
 	pushw 0x6
-	call LABEL_FF0E80
+	call Malloc
 	ld (xsp + 8), xhl
 	pushw 0x12
-	call LABEL_FF0E80
+	call Malloc
 	inc 4, xsp
 	ld (xsp + 10), xhl
 	ld xwa, (xsp + 20)
@@ -238731,7 +238731,7 @@ LABEL_F98D3E:
 	pushw 0x99E6
 	ld xwa, (xsp + 14)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 
 LABEL_F98D4E:
@@ -239030,7 +239030,7 @@ MainGetRhythmName:
 	call LABEL_FCD437
 	ldfr_berp L, 0xFB
 	pushw 0x11
-	call LABEL_FF0E80
+	call Malloc
 	inc 2, xsp
 	ld (xsp + 2), xhl
 	ldada xbc, 37098
@@ -239081,10 +239081,10 @@ MainGetPmemName:
 	dec 8, xsp
 	push_werp 0xFA
 	pushw 0x8
-	call LABEL_FF0E80
+	call Malloc
 	ld (xsp + 4), xhl
 	pushw 0x12
-	call LABEL_FF0E80
+	call Malloc
 	inc 4, xsp
 	ld (xsp + 6), xhl
 	call LABEL_FB6019
@@ -242850,7 +242850,7 @@ LABEL_F9BE36:
 	push xwa
 	pushw 0x2
 	pushw 0x74B0
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	ld xwa, (xsp + 50)
 	ld xbc, 0x1E00080
@@ -242862,7 +242862,7 @@ LABEL_F9BE53:
 	pushw 0x74B0
 	ld xwa, (xsp + 46)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	jrl LABEL_F9C115
 
@@ -243626,7 +243626,7 @@ LABEL_F9C639:
 	push xwa
 	lda xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	pushw 0xEA
 	pushw 0xA160
 	lda xwa, (xsp + 16)
@@ -244049,7 +244049,7 @@ LABEL_F9CAC0:
 LABEL_F9CAC5:
 	push xwa
 	push xbc
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	lda xwa, (xsp + 2)
 	lds32 xbc, 0
@@ -244151,7 +244151,7 @@ LABEL_F9CB7E:
 	ld (xsp + 20), wa
 	inc 1, wa
 	pushw wa
-	call LABEL_FF0E80
+	call Malloc
 	inc 6, xsp
 	ld (xsp + 22), xhl
 	ld xiz, (xsp + 22)
@@ -244267,7 +244267,7 @@ LABEL_F9CC7E:
 LABEL_F9CCD5:
 	ld xwa, (xsp + 22)
 	push xwa
-	call LABEL_FF0AF2
+	call Free
 	inc 4, xsp
 	lds32 xhl, 0
 
@@ -244414,7 +244414,7 @@ LABEL_F9CE3B:
 	ld_sril XWA, (xsp + 0x0110)
 	push xwa
 	push xde
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 
 LABEL_F9CE48:
@@ -244875,7 +244875,7 @@ LABEL_F9D303:
 	pushw 0xA188
 	lda xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 
 LABEL_F9D313:
@@ -244975,7 +244975,7 @@ LABEL_F9D458:
 	ld_sril XWA, (xsp + 0x011c)
 	push xwa
 	push xde
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 
 LABEL_F9D465:
@@ -245229,7 +245229,7 @@ LABEL_F9D71B:
 	ld xwa, (xhl + 44)
 	push xwa
 	push xiz
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	lds32 xhl, 0
 
@@ -245291,7 +245291,7 @@ LABEL_F9D7E5:
 	ld_sril XWA, (xsp + 0x0126)
 	push xwa
 	push xde
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 
 LABEL_F9D7F2:
@@ -245681,7 +245681,7 @@ LABEL_F9DBB6:
 	pushw 0xA190
 	ld_sril XWA, (xsp + 0x012a)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 
 LABEL_F9DBC8:
@@ -245828,7 +245828,7 @@ LABEL_F9DD5E:
 	push xwa
 	ld xwa, (xsp + 12)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 
 LABEL_F9DD73:
@@ -245894,21 +245894,21 @@ LABEL_F9DE32:
 	sll wa, 1
 	inc 2, wa
 	pushw wa
-	call LABEL_FF0E80
+	call Malloc
 	ld xwa, (xiz + 50)
 	ld (xwa), xhl
 	ld wa, (xiz + 36)
 	sll wa, 1
 	inc 2, wa
 	pushw wa
-	call LABEL_FF0E80
+	call Malloc
 	ld xwa, (xiz + 54)
 	ld (xwa), xhl
 	ld wa, (xiz + 36)
 	sll wa, 1
 	inc 2, wa
 	pushw wa
-	call LABEL_FF0E80
+	call Malloc
 	inc 6, xsp
 	ld xwa, (xiz + 58)
 	ld (xwa), xhl
@@ -245933,7 +245933,7 @@ LABEL_F9DE87:
 	ld xwa, (xbc)
 	ld xwa, (xwa)
 	push xwa
-	call LABEL_FF0AF2
+	call Free
 	inc 4, xsp
 	ld xbc, (xiz + 50)
 	lds32 xwa, 0
@@ -245946,7 +245946,7 @@ LABEL_F9DEC1:
 	jr z, LABEL_F9DEDA
 	ld xwa, (xbc)
 	push xwa
-	call LABEL_FF0AF2
+	call Free
 	inc 4, xsp
 	ld xbc, (xiz + 54)
 	lds32 xwa, 0
@@ -245959,7 +245959,7 @@ LABEL_F9DEDA:
 	jr z, LABEL_F9DEF3
 	ld xwa, (xbc)
 	push xwa
-	call LABEL_FF0AF2
+	call Free
 	inc 4, xsp
 	ld xbc, (xiz + 58)
 	lds32 xwa, 0
@@ -246896,7 +246896,7 @@ LABEL_F9E801:
 	push xwa
 	ld_sril XWA, (xsp + 0x014a)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	jrl LABEL_F9DEF3
 	ld_sril XWA, (xsp + 0x014e)
@@ -247215,7 +247215,7 @@ LABEL_F9EB87:
 	push xwa
 	ld xwa, (xsp + 16)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	jr LABEL_F9EBAF
 
@@ -247510,7 +247510,7 @@ LABEL_F9EEEC:
 	ld_sril XWA, (xsp + 0x0218)
 	push xwa
 	push xde
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 
 LABEL_F9EEF9:
@@ -247675,7 +247675,7 @@ LABEL_F9F0A3:
 	pushw 0xA27A
 	lda xwa, (xsp + 28)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	pushm (xiz + 50)
 	pushw 0xEA
 	pushw 0xA27C
@@ -247757,7 +247757,7 @@ PasTableCheck:
 	ld xwa, (xbc)
 	push xwa
 	push xde
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 
 LABEL_F9F18E:
@@ -247802,7 +247802,7 @@ LABEL_F9F1E0:
 	push xwa
 	ld xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	jrl LABEL_F9F288
 
@@ -247916,7 +247916,7 @@ LABEL_F9F308:
 	pushw 0xA2AA
 	lda xwa, (xsp + 22)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	ld xwa, (xsp + 12)
 	pushm (xwa + 54)
 	pushw 0xEA
@@ -248442,7 +248442,7 @@ MainLswPut:
 	ld (xsp + 6), bc
 	ld (xsp + 8), xwa
 	pushw 0xC
-	call LABEL_FF0E80
+	call Malloc
 	inc 2, xsp
 	ld xiz, xhl
 	ld xwa, (xsp + 8)
@@ -248473,7 +248473,7 @@ MainLswPartPut:
 	ld (xsp + 8), bc
 	ld iz, wa
 	pushw 0xC
-	call LABEL_FF0E80
+	call Malloc
 	inc 2, xsp
 	ld (xsp + 2), xhl
 	ld bc, (xsp + 8)
@@ -248510,7 +248510,7 @@ MainLswAdd:
 	ld (xsp + 6), bc
 	ld (xsp + 8), xwa
 	pushw 0xC
-	call LABEL_FF0E80
+	call Malloc
 	inc 2, xsp
 	ld xiz, xhl
 	ld xwa, (xsp + 8)
@@ -248541,7 +248541,7 @@ MainLswPartAdd:
 	ld (xsp + 8), bc
 	ld iz, wa
 	pushw 0xC
-	call LABEL_FF0E80
+	call Malloc
 	inc 2, xsp
 	ld (xsp + 2), xhl
 	ld bc, (xsp + 8)
@@ -248576,7 +248576,7 @@ MainLswGet:
 	push xiz
 	ld (xsp + 4), xwa
 	pushw 0xC
-	call LABEL_FF0E80
+	call Malloc
 	inc 2, xsp
 	ld xiz, xhl
 	ld xwa, (xsp + 4)
@@ -248604,7 +248604,7 @@ MainLswPartGet:
 	ld (xsp + 6), bc
 	ld iz, wa
 	pushw 0xC
-	call LABEL_FF0E80
+	call Malloc
 	inc 2, xsp
 	ld (xsp + 2), xhl
 	ld bc, (xsp + 6)
@@ -248952,7 +248952,7 @@ MainRamPut:
 	push xiz
 	ld xiz, xwa
 	pushw 0x16
-	call LABEL_FF0E80
+	call Malloc
 	inc 2, xsp
 	ld (xsp + 4), xhl
 	ld xwa, (xsp + 4)
@@ -248977,7 +248977,7 @@ MainRamAdd:
 	push xiz
 	ld xiz, xwa
 	pushw 0x16
-	call LABEL_FF0E80
+	call Malloc
 	inc 2, xsp
 	ld (xsp + 4), xhl
 	ld xwa, (xsp + 4)
@@ -249003,7 +249003,7 @@ MainRamGet:
 	ld (xsp + 4), bc
 	ld (xsp + 6), xwa
 	pushw 0x16
-	call LABEL_FF0E80
+	call Malloc
 	inc 2, xsp
 	ld xiz, xhl
 	ld xwa, (xsp + 6)
@@ -249236,7 +249236,7 @@ BitEditCheck:
 	push xwa
 	ld xwa, (xde + 10)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	ld xhl, xiz
 	jr LABEL_FA0185
@@ -249261,7 +249261,7 @@ MainBitPut:
 	push xiz
 	ld xiz, xwa
 	pushw 0xE
-	call LABEL_FF0E80
+	call Malloc
 	ld (xsp + 6), xhl
 	pushw 0xE
 	push xiz
@@ -249287,7 +249287,7 @@ MainBitGet:
 	ld (xsp + 4), xbc
 	ld (xsp + 8), xwa
 	pushw 0xE
-	call LABEL_FF0E80
+	call Malloc
 	inc 2, xsp
 	ld xiz, xhl
 	ld xwa, (xsp + 8)
@@ -249370,7 +249370,7 @@ LABEL_FA02B7:
 	ld_sril XWA, (xsp + 0x0114)
 	push xwa
 	push xde
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 
 LABEL_FA02C4:
@@ -250834,7 +250834,7 @@ LABEL_FA130A:
 	push xwa
 	ld xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 
 LABEL_FA131D:
@@ -251673,7 +251673,7 @@ LABEL_FA1B0C:
 	pushw 0xA360
 	ld xwa, (xsp + 12)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	jr LABEL_FA1B74
 
@@ -251750,7 +251750,7 @@ LABEL_FA1BCB:
 	pushw 0xA366
 	ld xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	jr LABEL_FA1C2B
 
@@ -251828,7 +251828,7 @@ LABEL_FA1C71:
 	pushw 0xEA
 	pushw 0xA36C
 	push xde
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 
 LABEL_FA1C7E:
@@ -251865,7 +251865,7 @@ LABEL_FA1CBA:
 	pushw 0xA372
 	ld xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	lds32 xhl, 0
 	jr LABEL_FA1D40
@@ -251939,7 +251939,7 @@ LABEL_FA1D71:
 	pushw 0xA378
 	ld xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	lds32 xhl, 0
 	jr LABEL_FA1DF4
@@ -252012,7 +252012,7 @@ LABEL_FA1E1F:
 	pushw 0xA37E
 	ld xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	lds32 xhl, 0
 	jr LABEL_FA1EAA
@@ -252205,7 +252205,7 @@ NamingCheck:
 	jr nz, LABEL_FA1FF9
 	push xwa
 	push xde
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	ld xhl, xiz
 	jr LABEL_FA2006
@@ -252422,7 +252422,7 @@ LABEL_FA21D4:
 	pushw 0xA39C
 	ld xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 
 LABEL_FA21E4:
@@ -252458,7 +252458,7 @@ IvIntReminderProc:
 	pushw 0xEA
 	pushw 0xA3A2
 	push xde
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	lds32 xhl, 0
 	ret
@@ -252476,7 +252476,7 @@ IvIntCompleteProc:
 	pushw 0xEA
 	pushw 0xA3A8
 	push xde
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	lds32 xhl, 0
 	ret
@@ -252494,7 +252494,7 @@ IvIntErrorProc:
 	pushw 0xEA
 	pushw 0xA3AE
 	push xde
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	lds32 xhl, 0
 	ret
@@ -252548,7 +252548,7 @@ LABEL_FA22E4:
 	pushw 0xA3B4
 	ld xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 
 LABEL_FA22F4:
@@ -252572,7 +252572,7 @@ IvIntEasySetProc:
 	pushw 0xEA
 	pushw 0xA3BA
 	push xde
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	lds32 xhl, 0
 	ret
@@ -252626,7 +252626,7 @@ LABEL_FA2387:
 	pushw 0xA3C0
 	ld xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 
 LABEL_FA2397:
@@ -253760,12 +253760,12 @@ LABEL_FA2E40:
 	call LABEL_FF0FA0
 	inc 1, hl
 	pushw hl
-	call LABEL_FF0E80
+	call Malloc
 	ld xiz, xhl
 	ld xwa, (xsp + 10)
 	push xwa
 	push xiz
-	call LABEL_FF0F4D
+	call Strcpy
 	lda xsp, (xsp + 14)
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00025
@@ -254114,7 +254114,7 @@ LABEL_FA3236:
 	ld_sril XWA, (xsp + 0x022a)
 	push xwa
 	push xde
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 
 LABEL_FA3243:
@@ -254988,7 +254988,7 @@ LABEL_FA3BC7:
 	ld wa, iz
 	inc 1, wa
 	pushw wa
-	call LABEL_FF0E80
+	call Malloc
 	ld (xsp + 30), xhl
 	ld xbc, (xsp + 30)
 	ld (xsp + 16), xbc
@@ -254997,7 +254997,7 @@ LABEL_FA3BC7:
 	pushw wa
 	pushw 0x0
 	push xbc
-	call LABEL_FF0FFA
+	call Memset
 	lda xsp, (xsp + 14)
 	ld xwa, (xsp + 16)
 	ld xbc, (xsp + 24)
@@ -255099,7 +255099,7 @@ LABEL_FA3CA3:
 LABEL_FA3CFC:
 	ld xwa, (xsp + 24)
 	push xwa
-	call LABEL_FF0AF2
+	call Free
 	inc 4, xsp
 
 LABEL_FA3D06:
@@ -255855,7 +255855,7 @@ LABEL_FA45D1:
 	ld xwa, (xiz + 16)
 	push xwa
 	push xde
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	lds32 xwa, 0
 	ld (xsp + 10), xwa
@@ -255886,7 +255886,7 @@ LABEL_FA463F:
 	push xwa
 	ld_sril XWA, (xsp + 0x011e)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	lda xsp, (xsp + 16)
 	ld wa, (xsp + 8)
 	extz xwa
@@ -255935,7 +255935,7 @@ LABEL_FA46CF:
 	push xwa
 	st_dri3b W, 0xFD, 0x96, 0x00
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	lds32 xwa, 0
 	ld (xsp + 10), xwa
@@ -255978,7 +255978,7 @@ LABEL_FA473A:
 	push xwa
 	lda xwa, (xsp + 22)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	st_dri3b W, 0xFD, 0x92, 0x00
 	add xwa, (xsp + 10)
@@ -255999,7 +255999,7 @@ LABEL_FA473A:
 	push xwa
 	ld xwa, (xbc + 4)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	jr LABEL_FA47BC
 
@@ -257914,7 +257914,7 @@ LABEL_FA5BC5:
 	call LABEL_FF0FA0
 	inc 1, hl
 	pushw hl
-	call LABEL_FF0E80
+	call Malloc
 	inc 6, xsp
 	ld wa, (xsp + 10)
 	extz xwa
@@ -257931,7 +257931,7 @@ LABEL_FA5C0A:
 	add xwa, (xsp + 8)
 	ld xwa, (xwa)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	jrl LABEL_FA5B65
 
@@ -259152,7 +259152,7 @@ pBoolProc:
 	calr LABEL_FA94A8
 	ld xiz, xhl
 	pushw 0x4
-	call LABEL_FF0E80
+	call Malloc
 	inc 2, xsp
 	ld (xiz), xhl
 	ld xwa, (xsp + 4)
@@ -259275,7 +259275,7 @@ pSwordProc:
 	calr LABEL_FA94A8
 	ld xiz, xhl
 	pushw 0x4
-	call LABEL_FF0E80
+	call Malloc
 	inc 2, xsp
 	ld (xiz), xhl
 	ld xwa, (xsp + 4)
@@ -259398,7 +259398,7 @@ pUwordProc:
 	calr LABEL_FA94A8
 	ld xiz, xhl
 	pushw 0x4
-	call LABEL_FF0E80
+	call Malloc
 	inc 2, xsp
 	ld (xiz), xhl
 	ld xwa, (xsp + 4)
@@ -259521,7 +259521,7 @@ pScharProc:
 	calr LABEL_FA94A8
 	ld xiz, xhl
 	pushw 0x4
-	call LABEL_FF0E80
+	call Malloc
 	inc 2, xsp
 	ld (xiz), xhl
 	ld xwa, (xsp + 4)
@@ -259645,7 +259645,7 @@ pUcharProc:
 	calr LABEL_FA94A8
 	ld xiz, xhl
 	pushw 0x4
-	call LABEL_FF0E80
+	call Malloc
 	inc 2, xsp
 	ld (xiz), xhl
 	ld xwa, (xsp + 4)
@@ -259768,7 +259768,7 @@ pSlongProc:
 	calr LABEL_FA94A8
 	ld xiz, xhl
 	pushw 0x4
-	call LABEL_FF0E80
+	call Malloc
 	inc 2, xsp
 	ld (xiz), xhl
 	ld xwa, (xsp + 4)
@@ -259890,7 +259890,7 @@ pUlongProc:
 	calr LABEL_FA94A8
 	ld xiz, xhl
 	pushw 0x4
-	call LABEL_FF0E80
+	call Malloc
 	inc 2, xsp
 	ld (xiz), xhl
 	ld xwa, (xsp + 4)
@@ -259996,7 +259996,7 @@ LABEL_FA6E5F:
 	push xiz
 	lda xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	lds ix, 0
 	lds iy, 0
@@ -260085,7 +260085,7 @@ LABEL_FA6F21:
 	pushw 0xAA76
 	lda xwa, (xsp + 12)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	ld_sril XWA, (xsp + 0x0110)
 	push xwa
 	lda xwa, (xsp + 20)
@@ -260095,7 +260095,7 @@ LABEL_FA6F21:
 	push xwa
 	ld_sril XWA, (xsp + 0x011c)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	lda xsp, (xsp + 24)
 
 LABEL_FA6F4E:
@@ -260425,7 +260425,7 @@ LABEL_FA7206:
 	push xwa
 	lda xwa, (xsp + 6)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	lds iy, 0
 	lds iz, 0
@@ -260505,7 +260505,7 @@ LABEL_FA72BB:
 	pushw 0xAA94
 	lda xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	ld_sril XWA, (xsp + 0x010c)
 	push xwa
 	lda xwa, (xsp + 16)
@@ -260515,7 +260515,7 @@ LABEL_FA72BB:
 	push xwa
 	ld_sril XWA, (xsp + 0x0118)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	lda xsp, (xsp + 24)
 
 LABEL_FA72E8:
@@ -260720,7 +260720,7 @@ LABEL_FA74B9:
 	pushw 0xAA9C
 	lda xwa, (xsp + 20)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	ld_sril XWA, (xsp + 0x1118)
 	push xwa
 	lda xwa, (xsp + 28)
@@ -260750,7 +260750,7 @@ LABEL_FA74FE:
 	push xwa
 
 LABEL_FA7507:
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	lds32 xhl, 0
 	jrl LABEL_FA75A6
@@ -261498,7 +261498,7 @@ LABEL_FA7AE2:
 	call LABEL_FF0FA0
 	inc 1, hl
 	pushw hl
-	call LABEL_FF0E80
+	call Malloc
 	inc 6, xsp
 	ld xwa, (xsp + 10)
 	ld (xwa), xhl
@@ -261513,7 +261513,7 @@ LABEL_FA7B26:
 	pushw 0xAAA0
 	lda xwa, (xsp + 18)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	ld_sril XWA, (xsp + 0x0142)
 	push xwa
 	lda xwa, (xsp + 26)
@@ -261562,7 +261562,7 @@ LABEL_FA7B74:
 	call LABEL_FF0FA0
 	inc 1, hl
 	pushw hl
-	call LABEL_FF0E80
+	call Malloc
 	inc 6, xsp
 	ld xwa, (xsp + 8)
 	ld (xwa), xhl
@@ -261577,7 +261577,7 @@ LABEL_FA7BBD:
 	push xwa
 
 LABEL_FA7BC0:
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	lds32 xhl, 0
 
@@ -261621,7 +261621,7 @@ LABEL_FA7C2D:
 	pushw 0xAAA4
 	lda xwa, (xsp + 12)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	ld_sril XWA, (xsp + 0x0110)
 	push xwa
 	lda xwa, (xsp + 20)
@@ -261653,7 +261653,7 @@ LABEL_FA7C78:
 	push xwa
 
 LABEL_FA7C81:
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	lds32 xhl, 0
 	jr LABEL_FA7CE8
@@ -261746,7 +261746,7 @@ LABEL_FA7D4D:
 	pushw 0xAAA8
 	lda xwa, (xsp + 12)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	ld_sril XWA, (xsp + 0x0110)
 	push xwa
 	lda xwa, (xsp + 20)
@@ -261778,7 +261778,7 @@ LABEL_FA7D98:
 	push xwa
 
 LABEL_FA7DA1:
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	lds32 xhl, 0
 	jr LABEL_FA7E08
@@ -261870,7 +261870,7 @@ LABEL_FA7E6D:
 	pushw 0xAAB0
 	lda xwa, (xsp + 12)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	ld_sril XWA, (xsp + 0x0110)
 	push xwa
 	lda xwa, (xsp + 20)
@@ -261902,7 +261902,7 @@ LABEL_FA7EB8:
 	push xwa
 
 LABEL_FA7EC1:
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	lds32 xhl, 0
 	jr LABEL_FA7F28
@@ -262043,7 +262043,7 @@ LABEL_FA8005:
 	pushw 0xAAB4
 	lda xwa, (xsp + 24)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	ld_sril XWA, (xsp + 0x111c)
 	push xwa
 	lda xwa, (xsp + 32)
@@ -262076,7 +262076,7 @@ LABEL_FA8050:
 	push xwa
 
 LABEL_FA805C:
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	lds32 xhl, 0
 	jrl LABEL_FA810F
@@ -262239,7 +262239,7 @@ LABEL_FA81EC:
 	pushw 0xAAB8
 	lda xwa, (xsp + 24)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	ld_sril XWA, (xsp + 0x111c)
 	push xwa
 	lda xwa, (xsp + 32)
@@ -262272,7 +262272,7 @@ LABEL_FA8237:
 	push xwa
 
 LABEL_FA8243:
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	lds32 xhl, 0
 	jrl LABEL_FA82F6
@@ -262496,7 +262496,7 @@ LABEL_FA8476:
 	pushw 0xAAD2
 	lda xwa, (xsp + 24)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	ld_sril XWA, (xsp + 0x111c)
 	push xwa
 	lda xwa, (xsp + 32)
@@ -262575,7 +262575,7 @@ LABEL_FA8542:
 	push xwa
 
 LABEL_FA854F:
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 
 LABEL_FA8555:
@@ -262866,7 +262866,7 @@ LABEL_FA8834:
 	ld xwa, (xsp + 8)
 	ld xwa, (xwa + 4)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 
 LABEL_FA8847:
@@ -263218,7 +263218,7 @@ LABEL_FA8BC4:
 	ld xwa, (xsp + 8)
 	ld xwa, (xwa + 4)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 
 LABEL_FA8BD7:
@@ -263519,7 +263519,7 @@ LABEL_FA8EA9:
 	push xwa
 
 LABEL_FA8EAD:
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 
 LABEL_FA8EB3:
@@ -263548,7 +263548,7 @@ LABEL_FA8ED5:
 	push xhl
 	lda xwa, (xsp + 20)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	lda xbc, (xsp + 16)
 	cp (xbc), 0x0
@@ -263764,7 +263764,7 @@ LABEL_FA90EF:
 	push xwa
 
 LABEL_FA90F3:
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 
 LABEL_FA90F9:
@@ -263793,7 +263793,7 @@ LABEL_FA911B:
 	push xhl
 	lda xwa, (xsp + 20)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	lda xbc, (xsp + 16)
 	cp (xbc), 0x0
@@ -263906,7 +263906,7 @@ LABEL_FA9224:
 	push xwa
 
 LABEL_FA9227:
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 
 LABEL_FA922D:
@@ -263966,7 +263966,7 @@ LABEL_FA9296:
 	push xwa
 
 LABEL_FA92A3:
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	jr LABEL_FA92CC
 
@@ -264073,7 +264073,7 @@ LABEL_FA938D:
 	ld xwa, (xsp + 8)
 	ld xwa, (xwa + 4)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	jr LABEL_FA9405
 	ld xwa, (xsp + 16)
@@ -264104,7 +264104,7 @@ LABEL_FA93DF:
 	ld xwa, (xsp + 8)
 	ld xwa, (xwa + 4)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	jr LABEL_FA9405
 
@@ -265166,7 +265166,7 @@ LABEL_FA9E2E:
 	cp xiz, 0xFFFFFFFF
 	jr z, LABEL_FA9E80
 	pushw 0xC
-	call LABEL_FF0E80
+	call Malloc
 	inc 2, xsp
 	ld (xsp + 4), xhl
 	ld (xhl), xiz
@@ -265921,12 +265921,12 @@ InitializeGraphics:
 	pushw 0x9600
 	pushw 0x0
 	push xwa
-	call LABEL_FF0FFA
+	call Memset
 	add xiz, 0x9600
 	pushw 0x9600
 	pushw 0x0
 	push xiz
-	call LABEL_FF0FFA
+	call Memset
 	lda xsp, (xsp + 16)
 	lda xwa, (xsp + 4)
 	ldw (xwa + 2), 0x0
@@ -266713,7 +266713,7 @@ LABEL_FAABA2:
 	push xbc
 
 LABEL_FAABB5:
-	call LABEL_FF0FFA
+	call Memset
 	inc 8, xsp
 	jrl LABEL_FAAEEC
 
@@ -267560,7 +267560,7 @@ LABEL_FAB363:
 	pushm (xsp + 14)
 	ld xwa, (xsp + 6)
 	push xwa
-	call LABEL_FF0FFA
+	call Memset
 	inc 8, xsp
 	ld xwa, (xsp + 2)
 	st_dri3b W, 0xE1, 0x40, 0x01
@@ -267729,7 +267729,7 @@ LABEL_FAB490:
 	ld xbc, 0x43C00
 	add xbc, xwa
 	push xbc
-	call LABEL_FF0FFA
+	call Memset
 	inc 8, xsp
 	jrl LABEL_FAB7FE
 
@@ -267747,7 +267747,7 @@ LABEL_FAB4EF:
 	ld xbc, 0x43C00
 	add xbc, xwa
 	push xbc
-	call LABEL_FF0FFA
+	call Memset
 	ld xde, (xsp + 52)
 	ld bc, (xde + 4)
 	sub bc, (xde)
@@ -267768,7 +267768,7 @@ LABEL_FAB4EF:
 	ld xbc, 0x43C00
 	add xbc, xwa
 	push xbc
-	call LABEL_FF0FFA
+	call Memset
 	lda xsp, (xsp + 16)
 	ldw (xsp + 28), 0xFFFF
 	ld xbc, (xsp + 44)
@@ -269961,7 +269961,7 @@ LABEL_FAC821:
 	ld xbc, xiz
 	call LABEL_FF0A5C
 	pushw hl
-	call LABEL_FF0E80
+	call Malloc
 	inc 2, xsp
 	ld (xsp + 40), xhl
 	ld xwa, (xsp + 40)
@@ -270116,7 +270116,7 @@ LABEL_FAC9D4:
 LABEL_FACA00:
 	ld xwa, (xsp + 40)
 	push xwa
-	call LABEL_FF0AF2
+	call Free
 	inc 4, xsp
 	calr LABEL_FAED27
 	ld_sril XWA, (xsp + 0x0438)
@@ -270268,7 +270268,7 @@ LABEL_FACAFF:
 	ld xwa, (xsp + 8)
 	push xwa
 	push xbc
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	ld xwa, (xsp + 28)
 	ld (xiz + 20), xwa
@@ -272951,17 +272951,17 @@ LABEL_FAE837:
 	pushw 0x0
 	ld xwa, 0x56800
 	push xwa
-	call LABEL_FF0FFA
+	call Memset
 	pushw 0x9600
 	pushw 0x0
 	ld xwa, 0x5FE00
 	push xwa
-	call LABEL_FF0FFA
+	call Memset
 	pushw 0x400
 	pushw 0x0
 	ld xwa, 0x69400
 	push xwa
-	call LABEL_FF0FFA
+	call Memset
 	lda xsp, (xsp + 24)
 	jrl LABEL_FAF00B
 
@@ -273092,7 +273092,7 @@ LABEL_FAE997:
 	ld xbc, (xsp + 30)
 	call LABEL_FF0A5C
 	pushw hl
-	call LABEL_FF0E80
+	call Malloc
 	inc 2, xsp
 	ld (xsp + 30), xhl
 	ld xwa, (xsp + 30)
@@ -273160,7 +273160,7 @@ LABEL_FAEA67:
 	push xwa
 
 LABEL_FAEA80:
-	call LABEL_FF0AF2
+	call Free
 	inc 4, xsp
 
 LABEL_FAEA86:
@@ -273301,7 +273301,7 @@ LABEL_FAEBA7:
 	ld xwa, (xsp + 18)
 	ld (xsp + 4), xwa
 	pushw hl
-	call LABEL_FF0E80
+	call Malloc
 	ld (xsp + 16), xhl
 	ld xbc, (xsp + 16)
 	ld (xsp + 12), xbc
@@ -273348,7 +273348,7 @@ LABEL_FAEC4C:
 	ld xwa, (xsp + 18)
 	ld (xsp + 4), xwa
 	pushw hl
-	call LABEL_FF0E80
+	call Malloc
 	ld (xsp + 16), xhl
 	ld xbc, (xsp + 16)
 	ld (xsp + 12), xbc
@@ -273432,7 +273432,7 @@ LABEL_FAED18:
 	push xwa
 
 LABEL_FAED1C:
-	call LABEL_FF0AF2
+	call Free
 	inc 4, xsp
 
 LABEL_FAED22:
@@ -273754,7 +273754,7 @@ CaptureLcd:
 	pushw 0xEA
 	pushw 0xAE4C
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	st_dri3b A, 0xFD, 0x42, 0x04
 	ld xwa, 0x13036
 	ld (xbc + 2), xwa
@@ -275538,7 +275538,7 @@ LABEL_FB0EBF:
 	ld xwa, (xsp + 8)
 	push xwa
 	push xbc
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	ld xwa, (xsp + 28)
 	ld (xiz + 20), xwa
@@ -275698,7 +275698,7 @@ LABEL_FB1074:
 	push xwa
 	lda xwa, (xsp + 42)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	lda xwa, (xsp + 38)
 	ld (xsp + 30), xwa
@@ -277206,7 +277206,7 @@ CalcTotalWidth:
 	call LABEL_FF0FA0
 	inc 1, hl
 	pushw hl
-	call LABEL_FF0E80
+	call Malloc
 	inc 6, xsp
 	ld (xsp + 8), xhl
 	ld xwa, (xsp + 8)
@@ -277253,7 +277253,7 @@ LABEL_FB2726:
 LABEL_FB2749:
 	ld xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0AF2
+	call Free
 	inc 4, xsp
 	ld hl, iz
 	pop xiz
@@ -277288,7 +277288,7 @@ WordwrapStrings:
 	call LABEL_FF0FA0
 	inc 1, hl
 	pushw hl
-	call LABEL_FF0E80
+	call Malloc
 	inc 6, xsp
 	ld (xsp + 12), xhl
 	ld xwa, (xsp + 12)
@@ -277325,7 +277325,7 @@ LABEL_FB27B8:
 	push xwa
 	ld xwa, (xsp + 10)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	ld xwa, (xsp + 6)
 	ld bc, (xsp + 4)
@@ -277345,7 +277345,7 @@ LABEL_FB27E6:
 LABEL_FB27EB:
 	ld xwa, (xsp + 12)
 	push xwa
-	call LABEL_FF0AF2
+	call Free
 	inc 4, xsp
 	ld hl, (xsp + 10)
 	pop xiz
@@ -277760,12 +277760,12 @@ LABEL_FB3063:
 	pushw 0x0
 	pushw 0x1A
 	pushw 0x0
-	call LABEL_FF0FFA
+	call Memset
 	pushw 0x9600
 	pushw 0x0
 	lda_24 xwa, 0x1a9600                  ; Is this a second video page?
 	push xwa
-	call LABEL_FF0FFA
+	call Memset
 	lda xsp, (xsp + 16)
 	ret
 
@@ -285158,7 +285158,7 @@ LABEL_FB816B:
 	push xwa
 	lda xwa, (xsp + 16)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	jr LABEL_FB81DF
 
@@ -285167,7 +285167,7 @@ LABEL_FB81C5:
 	push xwa
 	lda xwa, (xsp + 16)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	ld xwa, (xsp + 8)
 	ld xwa, (xwa + 78)
@@ -285268,7 +285268,7 @@ LABEL_FB828B:
 	ld_sril3 XWA, 0x07, 0xE8, 0xE0
 	push xwa
 	push xbc
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	jr LABEL_FB82E3
 
@@ -285276,7 +285276,7 @@ LABEL_FB82CC:
 	ld32_24 xwa, 0xeba494
 	push xwa
 	push xbc
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	ld xwa, (xsp + 8)
 	ld xwa, (xwa + 78)
@@ -285387,7 +285387,7 @@ LABEL_FB8332:
 	ld_sril3 XWA, 0x07, 0xEC, 0xE0
 	push xwa
 	push xde
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	jr LABEL_FB841D
 
@@ -285395,7 +285395,7 @@ LABEL_FB8406:
 	ld_sril XWA, (xhl + 0x176a)
 	push xwa
 	push xde
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 78)
@@ -285606,7 +285606,7 @@ LABEL_FB8561:
 	push xwa
 	lda xwa, (xsp + 16)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	jr LABEL_FB8671
 
@@ -285615,7 +285615,7 @@ LABEL_FB865A:
 	push xwa
 	lda xwa, (xsp + 16)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	ld xwa, (xsp + 8)
 	ld xwa, (xwa + 78)
@@ -285778,7 +285778,7 @@ LABEL_FB8808:
 	push xwa
 	ld xwa, (xsp + 70)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	jrl LABEL_FB88BF
 
@@ -285790,7 +285790,7 @@ LABEL_FB8820:
 	push xwa
 	ld xwa, (xsp + 70)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	lda xhl, (xsp + 54)
 	ldw (xhl), 0xE
 	lda xbc, (xhl + 2)
@@ -285944,7 +285944,7 @@ LABEL_FB896C:
 	push xwa
 	ld xwa, (xsp + 16)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	ld (xsp + 14), 0x0
 	jr LABEL_FB8A1E
@@ -285989,7 +285989,7 @@ LABEL_FB8A60:
 	pushw 0xD34
 	ld xwa, (xsp + 16)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	jr LABEL_FB8AEB
 
@@ -286003,7 +286003,7 @@ LABEL_FB8A72:
 	push xwa
 	ld xwa, (xsp + 16)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	ld (xsp + 14), 0x0
 	jr LABEL_FB8AAC
@@ -286340,7 +286340,7 @@ LABEL_FB8E50:
 	push xwa
 	ld xwa, (xsp + 12)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	jr LABEL_FB8E79
 
@@ -286435,7 +286435,7 @@ LABEL_FB8ED1:
 	ld_sril3 XWA, 0x07, 0xE0, 0xF0
 	push xwa
 	push xbc
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	ld (xsp + 10), 0x0
 	jr LABEL_FB8F70
@@ -286475,7 +286475,7 @@ LABEL_FB8FA7:
 	pushw 0xED
 	pushw 0xD76
 	push xbc
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	jr LABEL_FB901D
 
@@ -286486,7 +286486,7 @@ LABEL_FB8FB6:
 	ld_sril3 XWA, 0x07, 0xE0, 0xF0
 	push xwa
 	push xbc
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	ld (xsp + 10), 0x0
 	jr LABEL_FB8FE8
@@ -286979,7 +286979,7 @@ LABEL_FB952F:
 	push xwa
 	ld xwa, (xsp + 62)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	jrl LABEL_FB95D6
 
@@ -286992,7 +286992,7 @@ LABEL_FB9547:
 	push xwa
 	ld xwa, (xsp + 62)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	lda xhl, (xsp + 54)
 	ldw (xhl), 0xFE
 	lda xbc, (xhl + 2)
@@ -287119,7 +287119,7 @@ LABEL_FB962D:
 	ld xwa, (xhl)
 	push xwa
 	push xde
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	ldi_berp 0xFB, 0
 	jr LABEL_FB96C2
@@ -287160,7 +287160,7 @@ LABEL_FB96F8:
 	pushw 0xED
 	pushw 0xDAE
 	push xde
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	jr LABEL_FB976D
 
@@ -287172,7 +287172,7 @@ LABEL_FB9707:
 	ld xwa, (xhl)
 	push xwa
 	push xde
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	ldi_berp 0xFB, 0
 	jr LABEL_FB9739
@@ -288233,7 +288233,7 @@ LABEL_FBA19A:
 	push xwa
 	ld xwa, (xsp + 52)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	jrl LABEL_FBA3AB
 
@@ -288245,7 +288245,7 @@ LABEL_FBA1B2:
 	push xwa
 	ld xwa, (xsp + 52)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	lda xhl, (xsp + 44)
 	ldw (xhl), 0xA
 	lda xbc, (xhl + 2)
@@ -288299,7 +288299,7 @@ LABEL_FBA1B2:
 	pushw 0xED
 	pushw 0xDD4
 	push xde
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	ld xwa, 0xED0DE6
 	jr LABEL_FBA2AB
@@ -288338,7 +288338,7 @@ LABEL_FBA2AB:
 	push xwa
 	lda xwa, (xsp + 16)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	lda xbc, (xsp + 36)
 	ldw (xbc), 0xA
@@ -288538,7 +288538,7 @@ LABEL_FBA486:
 	push xwa
 	ld xwa, (xsp + 16)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	ld (xsp + 18), 0x0
 	jr LABEL_FBA534
@@ -288585,7 +288585,7 @@ LABEL_FBA568:
 	push xwa
 	ld xwa, (xsp + 16)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	ld (xsp + 18), 0x0
 	jr LABEL_FBA599
@@ -288634,7 +288634,7 @@ LABEL_FBA5CF:
 	push xwa
 	ld xwa, (xsp + 16)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	ld (xsp + 18), 0x0
 	jr LABEL_FBA601
@@ -288690,7 +288690,7 @@ LABEL_FBA635:
 	push xwa
 	ld xwa, (xsp + 16)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	ld (xsp + 18), 0x0
 	jr LABEL_FBA67D
@@ -288737,7 +288737,7 @@ LABEL_FBA6B6:
 	push xwa
 	ld xwa, (xsp + 16)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 
 LABEL_FBA6C1:
@@ -289075,7 +289075,7 @@ LABEL_FBAA13:
 	push xwa
 	ld xwa, (xsp + 16)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	jr LABEL_FBAA4C
 	ld xwa, xiz
@@ -289238,7 +289238,7 @@ LABEL_FBAD09:
 	push xwa
 	lda xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	call 0xFA44D0
 	ld xwa, xhl
@@ -289487,7 +289487,7 @@ LABEL_FBAFC1:
 	push xwa
 	ld xwa, (xsp + 16)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	jr LABEL_FBAFFA
 	ld xwa, xiz
@@ -290336,7 +290336,7 @@ LABEL_FBBCFC:
 	pushw 0x1408
 	lda xwa, (xsp + 28)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	lda xwa, (xsp + 16)
 	lda xbc, (xsp + 12)
@@ -290404,7 +290404,7 @@ LABEL_FBBDC4:
 	pushw 0x1416
 	lda xwa, (xsp + 28)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	lda xwa, (xsp + 16)
 	lda xbc, (xsp + 12)
@@ -290586,7 +290586,7 @@ LABEL_FBC083:
 	push xwa
 	ld_sril XWA, (xsp + 0x0124)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	jr LABEL_FBC0C6
 	ld xwa, xiz
@@ -290767,7 +290767,7 @@ LABEL_FBC3A0:
 	push xwa
 	lda xwa, (xsp + 4)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	call 0xFA44D0
 	ld xwa, xhl
@@ -290800,7 +290800,7 @@ LABEL_FBC3E9:
 	push xde
 
 LABEL_FBC3F0:
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	call 0xFA44D0
 	ld xwa, xhl
@@ -291041,7 +291041,7 @@ LABEL_FBC6AC:
 	push xwa
 	ld xwa, (xsp + 16)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	jr LABEL_FBC6E5
 	ld xwa, xiz
@@ -291714,7 +291714,7 @@ LABEL_FBD07D:
 	pushw 0x1590
 	ld xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	jrl LABEL_FBD12A
 
@@ -291840,7 +291840,7 @@ LABEL_FBD17D:
 	push xwa
 	pushw 0x0
 	pushw 0xF9A2
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00016
@@ -292046,7 +292046,7 @@ LABEL_FBD47C:
 	pushw 0xED
 	pushw 0x15C0
 	push xde
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	jr LABEL_FBD4D1
 
@@ -292497,7 +292497,7 @@ LABEL_FBD90A:
 	pushw 0x15D6
 	lda xwa, (xsp + 12)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	st_dri3b W, 0xFD, 0x0C, 0x01
 	st_dri3b A, 0xFD, 0x08, 0x01
@@ -298281,7 +298281,7 @@ LABEL_FC19CB:
 	call 0xFA6266
 	ld (xsp + 4), xhl
 	pushw 0x4
-	call LABEL_FF0E80
+	call Malloc
 	inc 2, xsp
 	ld xiz, xhl
 	ld xbc, (xsp + 4)
@@ -299458,7 +299458,7 @@ MainSvariIni:
 	cp xbc, 0x1E20001
 	jr nz, LABEL_FC2883
 	pushw 0x6
-	call LABEL_FF0E80
+	call Malloc
 	inc 2, xsp
 	ld xiz, xhl
 	ldda8 a, 36154
@@ -299498,7 +299498,7 @@ MainRvariIni:
 	cp xbc, 0x1E20007
 	jr nz, LABEL_FC28E8
 	pushw 0x6
-	call LABEL_FF0E80
+	call Malloc
 	inc 2, xsp
 	ld xiz, xhl
 	ld xwa, 0x28000
@@ -299534,7 +299534,7 @@ MainGetSndGrpName:
 	cp xbc, 0x1E20004
 	jr nz, LABEL_FC2958
 	pushw 0x12
-	call LABEL_FF0E80
+	call Malloc
 	inc 2, xsp
 	ld xiz, xhl
 	ldda8 a, 36154
@@ -299576,7 +299576,7 @@ MainGetSndName:
 	cp xbc, 0x1E20003
 	jr nz, LABEL_FC29C4
 	pushw 0x12
-	call LABEL_FF0E80
+	call Malloc
 	inc 2, xsp
 	ld (xsp + 6), xhl
 	ld a, (xiz + 3)
@@ -299615,7 +299615,7 @@ MainGetRhyGrpName:
 	cp xbc, 0x1E2000A
 	jr nz, LABEL_FC2A3E
 	pushw 0x11
-	call LABEL_FF0E80
+	call Malloc
 	inc 2, xsp
 	ld xiz, xhl
 	ld xwa, 0x28000
@@ -299659,7 +299659,7 @@ MainGetRhyName:
 	cp xbc, 0x1E20009
 	jr nz, LABEL_FC2AB3
 	pushw 0xF
-	call LABEL_FF0E80
+	call Malloc
 	inc 2, xsp
 	ld (xsp + 6), xhl
 	ld xbc, xiz
@@ -299720,7 +299720,7 @@ MainPmGet:
 
 LABEL_FC2AFE:
 	pushw 0x12
-	call LABEL_FF0E80
+	call Malloc
 	inc 2, xsp
 	ld (xsp + 2), xhl
 	ld xwa, (xsp + 6)
@@ -299754,7 +299754,7 @@ LABEL_FC2B44:
 
 LABEL_FC2B61:
 	pushw 0x13
-	call LABEL_FF0E80
+	call Malloc
 	inc 2, xsp
 	ld (xsp + 2), xhl
 	ld xwa, (xsp + 6)
@@ -299961,7 +299961,7 @@ LABEL_FC2D9D:
 	pushw 0x1BEC
 	lda xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	jr LABEL_FC2E1E
 
@@ -300007,7 +300007,7 @@ LABEL_FC2E2E:
 	pushw 0x1C04
 	lda xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	jr LABEL_FC2EA3
 
@@ -300118,7 +300118,7 @@ LABEL_FC2F4A:
 	pushw 0xED
 	pushw 0x1C86
 	push xbc
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	jr LABEL_FC2F9B
 
@@ -300210,7 +300210,7 @@ MainChordPre:
 	cp xbc, 0x1E2000D
 	jrl nz, LABEL_FC3110
 	pushw 0x15
-	call LABEL_FF0E80
+	call Malloc
 	ld xiz, xhl
 	ld (xiz), 0x0
 	ldda8 a, 36160
@@ -300595,7 +300595,7 @@ LABEL_FC4CB7:
 	pushw 0x20
 	pushw 0x0
 	pushw 0xF9A2
-	call LABEL_FF0FFA
+	call Memset
 	inc 8, xsp
 	ret
 
@@ -301210,7 +301210,7 @@ LABEL_FC53E9:
 	ldw de, 0xEA
 	call LABEL_EF3C3C
 	pushw 0x50
-	call LABEL_FF0E80
+	call Malloc
 	inc 2, xsp
 	ld xiz, xhl
 	or xiz, xiz
@@ -301218,7 +301218,7 @@ LABEL_FC53E9:
 	pushw 0x0
 	pushw 0x50
 	push xiz
-	call LABEL_FF0FFA
+	call Memset
 	pushw 0x2
 	pushw 0xED
 	pushw 0x931C
@@ -301257,7 +301257,7 @@ LABEL_FC53E9:
 	ldw de, 0x50
 	call LABEL_EF3C3C
 	push xiz
-	call LABEL_FF0AF2
+	call Free
 	inc 4, xsp
 
 LABEL_FC54B0:
@@ -301267,7 +301267,7 @@ LABEL_FC54B0:
 LABEL_FC54B2:
 	push xiz
 	pushw 0x50
-	call LABEL_FF0E80
+	call Malloc
 	inc 2, xsp
 	ld xiz, xhl
 	or xiz, xiz
@@ -301275,7 +301275,7 @@ LABEL_FC54B2:
 	pushw 0x0
 	pushw 0x50
 	push xiz
-	call LABEL_FF0FFA
+	call Memset
 	pushw 0x2
 	ld xwa, 0x3D3400
 	push xwa
@@ -301314,7 +301314,7 @@ LABEL_FC54B2:
 	ldw de, 0x50
 	call LABEL_EF3C3C
 	push xiz
-	call LABEL_FF0AF2
+	call Free
 	inc 4, xsp
 	call LABEL_FAE837
 
@@ -303732,7 +303732,7 @@ LABEL_FC7DD8:
 	ld xwa, 0x1ED400
 	add xwa, xbc
 	push xwa
-	call LABEL_FF0FFA
+	call Memset
 	inc 8, xsp
 	ld iz, (xsp + 4)
 	extz xiz
@@ -313503,7 +313503,7 @@ LABEL_FD2B5C:
 	push xiz
 	ld (xsp + 18), a
 	pushw 0x800
-	call LABEL_FF0E80
+	call Malloc
 	inc 2, xsp
 	ld (xsp + 6), xhl
 	ld xwa, (xsp + 6)
@@ -313645,7 +313645,7 @@ LABEL_FD2C7E:
 	calr LABEL_FD3BF9
 	ld xwa, (xsp + 6)
 	push xwa
-	call LABEL_FF0AF2
+	call Free
 	inc 4, xsp
 	lds hl, 0
 
@@ -314212,7 +314212,7 @@ LABEL_FD3260:
 	pushw 0x0
 	lda xwa, (xbc + 3)
 	push xwa
-	call LABEL_FF0FFA
+	call Memset
 	inc 8, xsp
 	ldada xbc, 64628
 	ld a, (xbc)
@@ -314261,7 +314261,7 @@ LABEL_FD332A:
 	pushw 0x0
 	lda xwa, (xbc + 3)
 	push xwa
-	call LABEL_FF0FFA
+	call Memset
 	inc 8, xsp
 	ldada xbc, 64654
 	ld a, (xbc)
@@ -314327,7 +314327,7 @@ LABEL_FD33A7:
 	pushw 0x0
 	lda xwa, (xbc + 3)
 	push xwa
-	call LABEL_FF0FFA
+	call Memset
 	inc 8, xsp
 	ldada xbc, 64628
 	ld a, (xbc)
@@ -314381,7 +314381,7 @@ LABEL_FD3453:
 	pushw 0x0
 	lda xwa, (xbc + 3)
 	push xwa
-	call LABEL_FF0FFA
+	call Memset
 	inc 8, xsp
 	ldada xbc, 64654
 	ld a, (xbc)
@@ -315341,14 +315341,14 @@ LABEL_FD4625:
 	push xiz
 	ld (xsp + 18), a
 	pushw 0x800
-	call LABEL_FF0E80
+	call Malloc
 	inc 2, xsp
 	ld (xsp + 6), xhl
 	ld xwa, (xsp + 6)
 	or xwa, xwa
 	jr nz, LABEL_FD464C
 	push xwa
-	call LABEL_FF0AF2
+	call Free
 	inc 4, xsp
 	ldw hl, 0xFF38
 	jrl LABEL_FD475F
@@ -315435,7 +315435,7 @@ LABEL_FD46A4:
 	calr LABEL_FD522E
 	ld xwa, (xsp + 6)
 	push xwa
-	call LABEL_FF0AF2
+	call Free
 	inc 4, xsp
 	lds hl, 0
 
@@ -315807,7 +315807,7 @@ LABEL_FD4C0C:
 	pushw 0x0
 	st_dri3b W, 0xE5, 0xF5, 0x02
 	push xwa
-	call LABEL_FF0FFA
+	call Memset
 	inc 8, xsp
 	ldada xbc, 64628
 	ld a, (xbc)
@@ -315866,7 +315866,7 @@ LABEL_FD4CD7:
 	pushw 0x0
 	st_dri3b W, 0xE5, 0x0F, 0x03
 	push xwa
-	call LABEL_FF0FFA
+	call Memset
 	inc 8, xsp
 	ldada xbc, 64654
 	ld a, (xbc)
@@ -316416,7 +316416,7 @@ LABEL_FD55BF:
 	push xiz
 	ld (xsp + 4), a
 	pushw 0xEA
-	call LABEL_FF0E80
+	call Malloc
 	inc 2, xsp
 	ld xiz, xhl
 	or xiz, xiz
@@ -316495,7 +316495,7 @@ LABEL_FD5673:
 
 LABEL_FD5677:
 	push xiz
-	call LABEL_FF0AF2
+	call Free
 	inc 4, xsp
 	pop xiz
 	inc 2, xsp
@@ -316695,7 +316695,7 @@ LABEL_FD57F2:
 	cps hl, 0
 	jrl nz, LABEL_FD5BD9
 	pushw 0xE
-	call LABEL_FF0E80
+	call Malloc
 	inc 2, xsp
 	ld xiz, xhl
 	or xiz, xiz
@@ -317078,7 +317078,7 @@ LABEL_FD5BC7:
 
 LABEL_FD5BD2:
 	push xiz
-	call LABEL_FF0AF2
+	call Free
 	inc 4, xsp
 
 LABEL_FD5BD9:
@@ -324638,7 +324638,7 @@ LABEL_FDB904:
 	ld (xsp + 14), a
 	ldw (xsp + 8), 0x2
 	pushw 0x7
-	call LABEL_FF0E80
+	call Malloc
 	inc 2, xsp
 	ld xiz, xhl
 	ld (xsp + 4), xiz
@@ -324681,7 +324681,7 @@ LABEL_FDB96B:
 	stdi8 1060, 0
 	ld xwa, (xsp + 10)
 	push xwa
-	call LABEL_FF0AF2
+	call Free
 	lda xsp, (xsp + 10)
 
 LABEL_FDB996:
@@ -349652,7 +349652,7 @@ LABEL_FEC0A7:
 	push xwa
 	ldada xwa, 59844
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	lds wa, 6
 	calr LABEL_FEC318
@@ -356516,7 +356516,7 @@ LABEL_FF0AB4:
 	.byte 0x9f, 0x04, 0x20, 0xb1, 0x41, 0xe2, 0x1c, 0xc2
 	.byte 0x03, 0x20, 0xb0, 0x00, 0x00, 0x0e
 
-LABEL_FF0AF2:
+Free:
 	ld xwa, (xsp + 4)
 	or xwa, xwa
 	ret z
@@ -357047,7 +357047,7 @@ LABEL_FF0E6D:
 	.byte 0xb0, 0xf6, 0xc5, 0xec, 0x3f, 0x00, 0x6e, 0xf6
 	.byte 0xeb, 0xa8, 0x0e
 
-LABEL_FF0E80:
+Malloc:
 	dec 6, xsp
 	push xiz
 	ld wa, (xsp + 14)
@@ -357150,7 +357150,7 @@ LABEL_FF0F35:
 	pop xiz
 	ret
 
-LABEL_FF0F4D:
+Strcpy:
 	push xiz
 	pushw 0xFFFE
 	pushw 0x0
@@ -357238,7 +357238,7 @@ LABEL_FF0FEF:
 	lda xsp, (xsp + 10)
 	ret
 
-LABEL_FF0FFA:
+Memset:
 	ld bc, (xsp + 10)
 	ld xhl, (xsp + 4)
 	cps bc, 0
@@ -359377,7 +359377,7 @@ LABEL_FF2139:
 	pushw 0x0
 	pushw 0x3
 	pushw 0xC224
-	call LABEL_FF0FFA
+	call Memset
 	inc 8, xsp
 	ldi_werp 0xFA, 0
 

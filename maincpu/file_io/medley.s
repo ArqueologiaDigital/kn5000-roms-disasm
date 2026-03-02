@@ -4394,7 +4394,7 @@ PasswordOk:
 	pushw 0xEA
 	pushw 0x8BF6
 	push xde
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	ld xhl, xiz
 	jr PwdOk_Exit
@@ -4448,7 +4448,7 @@ CheckPasswordOk:
 	pushw 0xEA
 	pushw 0x8BFA
 	push xde
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	ld xhl, xiz
 	jrl CheckOk_Exit

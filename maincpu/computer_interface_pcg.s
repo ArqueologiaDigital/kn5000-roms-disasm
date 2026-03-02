@@ -227,7 +227,7 @@ LABEL_F77605:
 	push xwa
 	ld xwa, (xsp + 16)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	jr LABEL_F7763E
 	ld xwa, xiz
@@ -504,7 +504,7 @@ LABEL_F77BC7:
 	pushw 0xE7
 	pushw 0xFFAA
 	push xbc
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	call 0xFA44D0
 	ld xwa, xhl
@@ -516,7 +516,7 @@ LABEL_F77BC7:
 	pushw 0xFFB0
 	lda xwa, (xsp + 16)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	call 0xFA44D0
 	ld xwa, xhl
@@ -565,7 +565,7 @@ LABEL_F77C77:
 	pushw 0xE7
 	pushw 0xFFC6
 	push xbc
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	call 0xFA44D0
 	ld xwa, xhl
@@ -577,7 +577,7 @@ LABEL_F77C77:
 	pushw 0xFFCC
 	lda xwa, (xsp + 16)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	call 0xFA44D0
 	ld xwa, xhl
@@ -589,7 +589,7 @@ LABEL_F77C77:
 	pushw 0xFFD2
 	lda xwa, (xsp + 16)
 	push xwa
-	call LABEL_FF0F4D
+	call Strcpy
 	inc 8, xsp
 	call 0xFA44D0
 	ld xwa, xhl
