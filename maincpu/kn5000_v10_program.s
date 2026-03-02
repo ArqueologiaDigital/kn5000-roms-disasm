@@ -304,6 +304,7 @@ LABEL_E0174E:
 LABEL_E0176C:
 	.incbin "includes/e0176c_e01f7f.bin"	; FIXME: describe this data structure
 
+
 LABEL_E01F80:
 	.long LABEL_E014CE
 	.long LABEL_E014D0
@@ -1042,6 +1043,8 @@ SOUND_DATA_MALLET_ORCH_PERC:	; MALLET & ORCH PERC sound data
 	.incbin "includes/e09150_e0adcf.bin"
 
 SOUND_DATA_WORLD_PERC:
+
+
 	.long LABEL_E0AFD0
 	.long LABEL_E0AFD3
 	.long LABEL_E0AFD6
@@ -1525,6 +1528,7 @@ LABEL_E0B99D:
 
 LABEL_E0B9ED:
 	.incbin "includes/e0b9ed_e0ba5f.bin"
+
 
 LABEL_E0BA60:
 	.long LABEL_E0B4ED
@@ -2236,7 +2240,6 @@ LABEL_E0F2C4:
 	.byte 0x68, 0x00, 0x00, 0x00, 0x01, 0x00
 
 
-
 LABEL_E0F2DE:
 	.byte 0x2e, 0x00, 0x60, 0x01, 0x42, 0x00, 0xff, 0xff, 0x51, 0x00
 	.byte 0x4f, 0x00, 0x08, 0x00, 0x9a, 0x00, 0x4d, 0x00
@@ -2248,7 +2251,6 @@ LABEL_E0F2F8:
 	.byte 0x52, 0x00, 0x50, 0x00, 0x08, 0x00, 0x9a, 0x00
 	.byte 0x62, 0x00, 0x9a, 0x00, 0x69, 0x00, 0x00, 0x00
 	.byte 0x01, 0x00
-
 
 
 LABEL_E0F312:
@@ -2300,7 +2302,6 @@ LABEL_E0F3C2:
 	.byte 0x08, 0x00, 0x00, 0x00
 
 
-
 LABEL_E0F3DC:
 	.byte 0x2b, 0x00, 0x60, 0x01
 	.byte 0x55, 0x00, 0xff, 0xff, 0xff, 0xff, 0x57, 0x00
@@ -2321,7 +2322,6 @@ LABEL_E0F41A:
 	.byte 0xff, 0xff, 0x5c, 0x00, 0xff, 0xff, 0x08, 0x00
 	.byte 0xd5, 0x00, 0xb4, 0x00, 0xfc, 0x00, 0xce, 0x00
 	.byte 0xff, 0x00, 0x00, 0x00
-
 
 
 LABEL_E0F434:
@@ -2814,7 +2814,6 @@ LABEL_E0FC40:
 	aligned_string "BANK"
 
 
-
 LABEL_E0FC66:
 	.byte 0x2b, 0x00, 0x60, 0x01, 0x8a, 0x00, 0xff, 0xff, 0x94, 0x00
 	.byte 0x92, 0x00, 0x08, 0x00, 0x02, 0x01, 0x52, 0x00
@@ -2852,7 +2851,6 @@ LABEL_E0FCF8:
 	.byte 0xc0, 0x00, 0xb5, 0x00, 0xd2, 0x00, 0x18, 0xfd
 	.byte 0xe0, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0x00
 	aligned_string "8:Curtain Call !!"
-
 
 
 LABEL_E0FD2A:
@@ -3465,7 +3463,6 @@ LABEL_E10850:
 	.byte 0xff, 0xff, 0xde, 0x00, 0x08, 0x00, 0x71, 0x00
 	.byte 0x5e, 0x00, 0x38, 0x01, 0x73, 0x00, 0x01, 0x00
 	.byte 0x02, 0x00, 0xf2, 0x00
-
 
 
 LABEL_E1086C:
@@ -5627,6 +5624,7 @@ LABEL_E1342A:
 NAKA_UIObjectTable:
 	.long LABEL_E0E974
 	.long FTDEMO_SCREEN01_TECHNICS_GLOBE
+LABEL_E13456:
 	.long LABEL_E0E9C2
 	.long LABEL_E0E9EE
 	.long LABEL_E0EA08
@@ -5736,6 +5734,7 @@ NAKA_UIObjectTable:
 	.long LABEL_E0F61A
 	.long LABEL_E0F650
 	.long FTDEMO_SCREEN02_SUBWOOFERS
+LABEL_E1360A:
 	.long LABEL_E0F69E
 	.long LABEL_E0F6C8
 	.long LABEL_E0F6E2
@@ -5748,6 +5747,7 @@ NAKA_UIObjectTable:
 	.long FTDEMO_SCREEN03_FLOPPY_DISKS
 	.long LABEL_E0F82E
 	.long FTDEMO_SCREEN04_DISK_INSERT
+LABEL_E1363A:
 	.long LABEL_E0F87C
 	.long LABEL_E0F8A6
 	.long LABEL_E0F8D2
@@ -5761,6 +5761,7 @@ NAKA_UIObjectTable:
 	.long LABEL_E0FA28
 	.long LABEL_E0FA52
 	.long FTDEMO_SCREEN05_SURROUND_ARROWS
+LABEL_E1366E:
 	.long LABEL_E0FA9E
 	.long LABEL_E0FACA
 	.long LABEL_E0FAF4
@@ -5851,6 +5852,8 @@ NAKA_UIObjectTable:
 	.long LABEL_E10850
 	.long LABEL_E1086C
 	.long FTDEMO_SCREEN06_KN5000_RAINBOW
+
+
 	.long LABEL_E108BA
 	.long LABEL_E108F8
 	.long LABEL_E10912
@@ -6482,6 +6485,8 @@ NAKA_UIObjectTable:
 	.long LABEL_E14438
 	.long LABEL_E14436
 	.long FTDEMO_FILENAME_46
+
+
 	.long LABEL_E1442A
 	.long LABEL_E14428
 	.long LABEL_E14426
@@ -6505,6 +6510,8 @@ NAKA_UIObjectTable:
 	.long LABEL_E14402
 	.long LABEL_E14400
 	.long FTDEMO_FILENAME_47
+
+
 	.long LABEL_E143F4
 	.long LABEL_E143F2
 	.long LABEL_E143F0
@@ -6526,6 +6533,8 @@ NAKA_UIObjectTable:
 	.long LABEL_E143D0
 	.long LABEL_E143CE
 	.long FTDEMO_FILENAME_48
+
+
 	.long LABEL_E143C2
 	.long LABEL_E143C0
 	.long LABEL_E143BE
@@ -6547,6 +6556,8 @@ NAKA_UIObjectTable:
 	.long LABEL_E1439E
 	.long LABEL_E1439C
 	.long FTDEMO_FILENAME_43
+
+
 	.long LABEL_E14390
 	.long LABEL_E1438E
 	.long LABEL_E1438C
@@ -7109,6 +7120,7 @@ LABEL_E148BC:	.asciz "Altavoz con portón para bajos"
 LABEL_E148DA:	aligned_string ""
 LABEL_E148DC:	aligned_string ""
 LABEL_E148DE:	aligned_string ""
+LABEL_E148E0:
 	.long LABEL_E14A88
 	.long LABEL_E14A2C
 	.long LABEL_E149BC
@@ -7128,6 +7140,7 @@ LABEL_E14960:
 LABEL_E149BC:	aligned_string "Le système spécial d'amplification des graves du KN-5000 donne encore plus de puissance et de richesse sonore!"
 LABEL_E14A2C:	aligned_string "Der spezielle Woofer & Bass Port des SX-KN5000 erzeugt einen kraft- und druckvollen Klang."
 LABEL_E14A88:	aligned_string "The KN5000's Special Woofer & Bass Port produce a Rich & Powerful sound!"
+LABEL_E14AD2:
 	.long LABEL_E14B3E
 	.long LABEL_E14B24
 	.long LABEL_E14B0E
@@ -7140,6 +7153,7 @@ LABEL_E14AFE:	aligned_string "Estilos enormes"
 LABEL_E14B0E:	aligned_string "Diversité des styles"
 LABEL_E14B24:	aligned_string "Riesige Auswahl an Styles"
 LABEL_E14B3E:	aligned_string "Huge Styles"
+LABEL_E14B4A:
 	.long LABEL_E14C86
 	.long LABEL_E14C32
 	.long LABEL_E14BDC
@@ -7154,6 +7168,7 @@ LABEL_E14BDC:
 	.byte 0x57, 0xe4
 	aligned_string "hlen Sie aus 1000 stilistisch sortierten Gesamtregistrierungen im MUSIC STYLIST."
 	aligned_string "Explore 1000 Musical Styles with the Music Stylist."
+LABEL_E14CBA:
 	.long LABEL_E14E0E
 	.long LABEL_E14DB6
 	.long LABEL_E14D70
@@ -7167,6 +7182,7 @@ LABEL_E14D70:	.asciz "Encore plus de possibilités grâce à la diversité du softwa
 LABEL_E14DB6:	.asciz "Nutzen Sie das große Technics-Softwareangebot zur individuellen Gestaltung Ihrer Musik."
 LABEL_E14E0E:	aligned_string "Add to your enjoyment with a wide range of Technics Software"
 	.byte 0x9e, 0x4f, 0xe1, 0x00
+LABEL_E14E50:
 	.long LABEL_E14F4A
 	.long LABEL_E14EF2
 	.long LABEL_E14EBA
@@ -7178,6 +7194,7 @@ LABEL_E14EBA:	.asciz "¡Y convierta el software de casi todos los fabricantes!"
 LABEL_E14EF2:	aligned_string "Et vous pouvez convertir les softwares de la plupart des autres principaux fabricants!"
 LABEL_E14F4A:	aligned_string "Konvertieren Sie Software vieler anderer Hersteller zur Verwendung auf dem KN5000."
 	aligned_string "And convert software from almost any other manufacturer!"
+LABEL_E14FD8:
 	.long LABEL_E15168
 	.long LABEL_E15110
 	.long LABEL_E150B0
@@ -7265,6 +7282,7 @@ LABEL_E155E6:	aligned_string "Acoustic Illusion"
 LABEL_E155F8:	aligned_string "Acoustic Illusion"
 LABEL_E1560A:	aligned_string "Acoustic Illusion"
 LABEL_E1561C:	aligned_string "Acoustic Illusion"
+LABEL_E1562E:
 	.long LABEL_E15758
 	.long LABEL_E15712
 	.long LABEL_E156C2
@@ -7277,6 +7295,7 @@ LABEL_E1568A:	.asciz "¡El Acoustic Illusion amplia su música a 3 dimensiones!"
 LABEL_E156C2:	aligned_string "La fonction « Acoustic Illusion » apporte à votre musique une 3 ème dimension!"
 LABEL_E15712:	aligned_string "ACCOUSTIC ILLUSION verleiht dem Klang dreidimensionale Räumlichkeit."
 LABEL_E15758:	aligned_string "Acoustic Illusion broadens your music to 3-Dimensions!"
+LABEL_E15790:
 	.long LABEL_E158CA
 	.long LABEL_E15874
 	.long LABEL_E15840
@@ -7289,6 +7308,7 @@ LABEL_E157FA:	.asciz "¡Una serie de funciones apropiadas para cualquier estilo y
 LABEL_E15840:	aligned_string "Une grande diversité de fonctions pour tout jouer!"
 LABEL_E15874:	aligned_string "Viele weitere leistungsfähige Funktionen zur Darbietung und Bearbeitung Ihrer Musik!"
 LABEL_E158CA:	aligned_string "A host of features to suit any style of performance!"
+LABEL_E15900:
 	.long LABEL_E15954
 	.long LABEL_E15944
 	.long LABEL_E15938
@@ -7301,6 +7321,7 @@ LABEL_E1592C:	aligned_string "Huge Styles"
 LABEL_E15938:	aligned_string "Huge Styles"
 LABEL_E15944:	aligned_string "Huge Styles(G)"
 LABEL_E15954:	aligned_string "Huge Styles"
+LABEL_E15960:
 	.long LABEL_E159B4
 	.long LABEL_E159A4
 	.long LABEL_E15998
@@ -7313,6 +7334,7 @@ LABEL_E1598C:	aligned_string "Huge Styles"
 LABEL_E15998:	aligned_string "Huge Styles"
 LABEL_E159A4:	aligned_string "Huge Styles(G)"
 LABEL_E159B4:	aligned_string "Huge Styles"
+LABEL_E159C0:
 	.long LABEL_E15A14
 	.long LABEL_E15A04
 	.long LABEL_E159F8
@@ -7479,6 +7501,7 @@ LABEL_E16184:
 	.long SndArrLangCheck
 	.long PsStylCnvVerProc
 	.long 0
+LABEL_E163AC:
 	.long LABEL_E169AE
 	.long LABEL_E1699E
 	.long LABEL_E16990
@@ -7767,6 +7790,8 @@ LABEL_E16B52:	aligned_string ""
 LABEL_E16B54:	aligned_string "func"
 LABEL_E16B5A:	aligned_string "fixedrow"
 LABEL_E16B64:	aligned_string "fixedcol"
+
+
 LABEL_E16B6E:
 	.long LABEL_E16BA6
 	.long LABEL_E16B9C
@@ -7802,6 +7827,8 @@ LABEL_E16BE8:	aligned_string "editsw"
 LABEL_E16BF0:	aligned_string "align"
 LABEL_E16BF6:	aligned_string "fontcolor"
 LABEL_E16C00:	aligned_string "font"
+
+
 LABEL_E16C06:
 	.long LABEL_E16C48
 	.long LABEL_E16C3C
@@ -8176,6 +8203,7 @@ LABEL_E17314:	aligned_string ""
 LABEL_E17316:	aligned_string "AcMemNoBox"
 	.byte 0x29, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00
+LABEL_E1732A:
 	.long LABEL_E176C4
 	.long LABEL_E176B6
 	.long LABEL_E176A6
@@ -8659,10 +8687,6 @@ LABEL_E17DAA:
 	.long LABEL_E17DD6
 LABEL_E17DD6:	aligned_string ""
 LABEL_E17DD8:
-
-
-
-
 
 
 	.byte 0x3e, 0x00, 0x60, 0x01, 0x00, 0x00, 0xff, 0xff
@@ -11499,6 +11523,7 @@ LABEL_E1B4D4:	aligned_string "ON BASS : ON"
 	.long LABEL_E1772E
 	.long LABEL_E1774A
 	.zero 4
+LABEL_E1B4F2:
 	.long LABEL_E17774
 	.long LABEL_E177B0
 	.long LABEL_E177CA
@@ -11508,6 +11533,7 @@ LABEL_E1B4D4:	aligned_string "ON BASS : ON"
 	.long LABEL_E17888
 	.long LABEL_E178B6
 	.byte 0x00, 0x00, 0x00, 0x00
+LABEL_E1B516:
 	.long LABEL_E178DA
 	.long LABEL_E17912
 	.long LABEL_E1792C
@@ -11516,16 +11542,19 @@ LABEL_E1B4D4:	aligned_string "ON BASS : ON"
 	.long LABEL_E179B8
 	.long LABEL_E179EA
 	.byte 0x00, 0x00, 0x00, 0x00
+LABEL_E1B536:
 	.long LABEL_E17A18
 	.long LABEL_E17A50
 	.long LABEL_E17A9E
 	.long LABEL_E17AC8
 	.zero 4
+LABEL_E1B54A:
 	.long LABEL_E17AF4
 	.long LABEL_E17B2C
 	.long LABEL_E17B48
 	.long LABEL_E17B6E
 	.byte 0x00, 0x00, 0x00, 0x00
+LABEL_E1B55E:
 	.long LABEL_E17B88
 	.long LABEL_E17BC0
 	.long LABEL_E17BDA
@@ -11535,6 +11564,7 @@ LABEL_E1B4D4:	aligned_string "ON BASS : ON"
 	.long LABEL_E17C98
 	.long LABEL_E17CC6
 	.zero 4
+LABEL_E1B582:
 	.long LABEL_E17CEA
 	.long LABEL_E17D22
 	.long LABEL_E17D3C
@@ -11543,6 +11573,7 @@ LABEL_E1B4D4:	aligned_string "ON BASS : ON"
 	.long LABEL_E17DAA
 	.long LABEL_E17DD8
 	.zero 4
+LABEL_E1B5A2:
 	.long LABEL_E17E06
 	.long LABEL_E17E3E
 	.long LABEL_E17E84
@@ -11562,6 +11593,7 @@ LABEL_E1B4D4:	aligned_string "ON BASS : ON"
 	.long LABEL_E18122
 	.long LABEL_E18156
 	.byte 0x00, 0x00, 0x00, 0x00
+LABEL_E1B5EE:
 	.long LABEL_E18170
 	.long LABEL_E181A8
 	.long LABEL_E181C2
@@ -11575,6 +11607,7 @@ LABEL_E1B4D4:	aligned_string "ON BASS : ON"
 	.long LABEL_E183B2
 	.long LABEL_E183EE
 	.zero 4
+LABEL_E1B622:
 	.long LABEL_E1842A
 	.long LABEL_E1845E
 	.long LABEL_E18478
@@ -11598,12 +11631,14 @@ LABEL_E1B4D4:	aligned_string "ON BASS : ON"
 	.long LABEL_E18788
 	.long LABEL_E187B4
 	.byte 0x00, 0x00, 0x00, 0x00
+LABEL_E1B67E:
 	.long LABEL_E187DE
 	.long LABEL_E1881A
 	.long LABEL_E18834
 	.long LABEL_E18860
 	.long LABEL_E1888A
 	.byte 0x00, 0x00, 0x00, 0x00
+LABEL_E1B696:
 	.long LABEL_E188AE
 	.long LABEL_E188E8
 	.long LABEL_E18902
@@ -11623,6 +11658,7 @@ LABEL_E1B4D4:	aligned_string "ON BASS : ON"
 	.long LABEL_E18C10
 	.long LABEL_E18C3A
 	.zero 4
+LABEL_E1B6E2:
 	.long LABEL_E18C64
 	.long LABEL_E18CA2
 	.long LABEL_E18CBC
@@ -11655,6 +11691,7 @@ LABEL_E1B4D4:	aligned_string "ON BASS : ON"
 	.zero 4
 	.long LABEL_E1910E
 	.zero 4
+LABEL_E1B76A:
 	.long LABEL_E19130
 	.long LABEL_E19168
 	.long LABEL_E19188
@@ -11662,6 +11699,7 @@ LABEL_E1B4D4:	aligned_string "ON BASS : ON"
 	.long LABEL_E191C8
 	.long LABEL_E191E8
 	.byte 0x00, 0x00, 0x00, 0x00
+LABEL_E1B786:
 	.long LABEL_E19208
 	.long LABEL_E19240
 	.long LABEL_E1925A
@@ -11682,6 +11720,7 @@ LABEL_E1B4D4:	aligned_string "ON BASS : ON"
 	.long LABEL_E19478
 	.byte 0x72, 0xd8
 	.byte 0x03, 0x00
+LABEL_E1B7D2:
 	.long LABEL_E19492
 	.long LABEL_E194BA
 	.long LABEL_E194E2
@@ -11737,6 +11776,8 @@ LABEL_E1B4D4:	aligned_string "ON BASS : ON"
 	.long LABEL_E19B1C
 	.long LABEL_E19B44
 	.byte 0x00, 0x00, 0x00, 0x00
+
+
 	.long LABEL_E19B5E
 	.long LABEL_E19B96
 	.long LABEL_E19BB0
@@ -11752,11 +11793,15 @@ LABEL_E1B4D4:	aligned_string "ON BASS : ON"
 	.long LABEL_E19DE4
 	.long LABEL_E19E0E
 	.zero 4
+
+
 	.long LABEL_E19E36
 	.long LABEL_E19E82
 	.long LABEL_E19EAC
 	.long LABEL_E19EFA
 	.byte 0x00, 0x00, 0x00, 0x00
+
+
 	.long LABEL_E19F20
 	.long LABEL_E19F56
 	.long LABEL_E19F94
@@ -11769,6 +11814,8 @@ LABEL_E1B4D4:	aligned_string "ON BASS : ON"
 	.long LABEL_E1A14A
 	.long LABEL_E1A18C
 	.byte 0x00, 0x00, 0x00, 0x00
+
+
 	.long LABEL_E1A1CE
 	.long LABEL_E1A204
 	.long LABEL_E1A22A
@@ -11803,6 +11850,8 @@ LABEL_E1B4D4:	aligned_string "ON BASS : ON"
 	.long LABEL_E1A69E
 	.long LABEL_E1A6D2
 	.byte 0x00, 0x00, 0x00, 0x00
+
+
 	.long LABEL_E1A704
 	.long LABEL_E1A73E
 	.long LABEL_E1A762
@@ -11849,6 +11898,8 @@ LABEL_E1B4D4:	aligned_string "ON BASS : ON"
 	.long LABEL_E1AD98
 	.long LABEL_E1ADC2
 	.zero 4
+
+
 	.long LABEL_E1ADDC
 	.long LABEL_E1AE10
 	.long LABEL_E1AE52
@@ -11856,11 +11907,15 @@ LABEL_E1B4D4:	aligned_string "ON BASS : ON"
 	.long LABEL_E1AEC0
 	.long LABEL_E1AF08
 	.byte 0x00, 0x00, 0x00, 0x00
+
+
 	.long LABEL_E1AF32
 	.long LABEL_E1AF64
 	.long LABEL_E1AF90
 	.long LABEL_E1AFAA
 	.zero 4
+
+
 	.long LABEL_E1AFCE
 	.long LABEL_E1B00C
 	.long LABEL_E1B038
@@ -11871,6 +11926,8 @@ LABEL_E1B4D4:	aligned_string "ON BASS : ON"
 	.long LABEL_E1B168
 	.long LABEL_E1B18C
 	.zero 4
+
+
 	.long LABEL_E1B1A6
 	.long LABEL_E1B1E0
 	.long LABEL_E1B212
@@ -11880,6 +11937,8 @@ LABEL_E1B4D4:	aligned_string "ON BASS : ON"
 	.long LABEL_E1B302
 	.long LABEL_E1B32C
 	.byte 0x00, 0x00, 0x00, 0x00
+
+
 	.long LABEL_E1B356
 	.long LABEL_E1B390
 	.long LABEL_E1B3D0
@@ -11887,6 +11946,8 @@ LABEL_E1B4D4:	aligned_string "ON BASS : ON"
 	.long LABEL_E1B44A
 	.long LABEL_E1B496
 	.zero 4
+
+
 	.long LABEL_E1BB10
 	.long LABEL_E1BB0E
 	.long LABEL_E1BB0C
@@ -11895,6 +11956,7 @@ LABEL_E1BB0A:	aligned_string ""
 LABEL_E1BB0C:	aligned_string ""
 LABEL_E1BB0E:	aligned_string ""
 LABEL_E1BB10:	aligned_string "StylCnvWaitScreen"
+LABEL_E1BB22:
 	.long LABEL_E1BB6E
 	.long LABEL_E1BB6C
 	.long LABEL_E1BB5C
@@ -11913,6 +11975,7 @@ LABEL_E1BB5A:	aligned_string ""
 LABEL_E1BB5C:	aligned_string "StylCnvModlBox"
 LABEL_E1BB6C:	aligned_string ""
 LABEL_E1BB6E:	aligned_string "StylCnvModlScreen"
+LABEL_E1BB80:
 	.long LABEL_E1BBBC
 	.long LABEL_E1BBBA
 	.long LABEL_E1BBAA
@@ -11931,6 +11994,7 @@ LABEL_E1BBBA:	aligned_string ""
 LABEL_E1BBBC:	aligned_string "StylCnvCnvtScreen"
 	.byte 0xea, 0xbb
 	.byte 0xe1, 0x00
+LABEL_E1BBD2:
 	.long LABEL_E1BBE8
 	.long LABEL_E1BBE6
 	.long LABEL_E1BBE4
@@ -11940,7 +12004,8 @@ LABEL_E1BBE4:	aligned_string ""
 LABEL_E1BBE6:	aligned_string ""
 LABEL_E1BBE8:	aligned_string ""
 LABEL_E1BBEA:	aligned_string "StylCnvStorScreen"
-	.byte 0x18, 0xbc, 0xe1, 0x00
+	.long LABEL_E1BC18
+LABEL_E1BC00:
 	.long LABEL_E1BC16
 	.long LABEL_E1BC14
 	.long LABEL_E1BC12
@@ -11950,6 +12015,7 @@ LABEL_E1BC12:	aligned_string ""
 LABEL_E1BC14:	aligned_string ""
 LABEL_E1BC16:	aligned_string ""
 LABEL_E1BC18:	aligned_string "StylCnvTxtScreen"
+LABEL_E1BC2A:
 	.long LABEL_E1BC6A
 	.long LABEL_E1BC68
 	.long LABEL_E1BC5A
@@ -11968,7 +12034,8 @@ LABEL_E1BC58:	aligned_string ""
 LABEL_E1BC5A:	aligned_string "StylCnvSelBox"
 LABEL_E1BC68:	aligned_string ""
 LABEL_E1BC6A:	aligned_string "StylCnvSelScreen"
-	.byte 0xaa, 0xbc, 0xe1, 0x00
+	.long LABEL_E1BCAA
+LABEL_E1BC80:
 	.long LABEL_E1BCA8
 	.long LABEL_E1BCA6
 	.long LABEL_E1BCA4
@@ -11984,7 +12051,8 @@ LABEL_E1BCA4:	aligned_string ""
 LABEL_E1BCA6:	aligned_string ""
 LABEL_E1BCA8:	aligned_string ""
 LABEL_E1BCAA:	aligned_string "StylCnvContScreen"
-	.byte 0x2c, 0xbd, 0xe1, 0x00
+	.long LABEL_E1BD2C
+LABEL_E1BCC0:
 	.long LABEL_E1BD2A
 	.long LABEL_E1BD28
 	.long LABEL_E1BD26
@@ -12022,6 +12090,7 @@ LABEL_E1BD26:	aligned_string ""
 LABEL_E1BD28:	aligned_string ""
 LABEL_E1BD2A:	aligned_string ""
 LABEL_E1BD2C:	aligned_string "CmpMenuScreen"
+LABEL_E1BD3A:
 	.long LABEL_E1BD86
 	.long LABEL_E1BD84
 	.long LABEL_E1BD82
@@ -12048,7 +12117,8 @@ LABEL_E1BD80:	aligned_string ""
 LABEL_E1BD82:	aligned_string ""
 LABEL_E1BD84:	aligned_string ""
 LABEL_E1BD86:	aligned_string "CmpBkslScreen"
-	.byte 0x44, 0xbe, 0xe1, 0x00
+	.long LABEL_E1BE44
+LABEL_E1BD98:
 	.long LABEL_E1BE42
 	.long LABEL_E1BE40
 	.long LABEL_E1BE3E
@@ -12094,7 +12164,8 @@ LABEL_E1BE3E:	aligned_string ""
 LABEL_E1BE40:	aligned_string ""
 LABEL_E1BE42:	aligned_string ""
 LABEL_E1BE44:	aligned_string "CmpBkslSScreen"
-	.byte 0x8a, 0xbe, 0xe1, 0x00
+	.long LABEL_E1BE8A
+LABEL_E1BE58:
 	.long LABEL_E1BE88
 	.long LABEL_E1BE86
 	.long LABEL_E1BE78
@@ -12106,6 +12177,7 @@ LABEL_E1BE78:	aligned_string "NameMemLabel"
 LABEL_E1BE86:	aligned_string ""
 LABEL_E1BE88:	aligned_string ""
 LABEL_E1BE8A:	aligned_string "CmpNamingScreen"
+LABEL_E1BE9A:
 	.long LABEL_E1BF6C
 	.long LABEL_E1BF6A
 	.long LABEL_E1BF60
@@ -12144,6 +12216,7 @@ LABEL_E1BF54:	aligned_string "CmSetP1Ctl"
 LABEL_E1BF60:	aligned_string "CmSetPage"
 LABEL_E1BF6A:	aligned_string ""
 LABEL_E1BF6C:	aligned_string "CmpSetScreen"
+LABEL_E1BF7A:
 	.long LABEL_E1C068
 	.long LABEL_E1C066
 	.long LABEL_E1C05E
@@ -12213,6 +12286,7 @@ LABEL_E1C068:	aligned_string "CmpRealScreen"
 	.long LABEL_E1C07E
 LABEL_E1C07E:	aligned_string ""
 LABEL_E1C080:	aligned_string ""
+LABEL_E1C082:
 	.long LABEL_E1C0D2
 	.long LABEL_E1C0C8
 	.long LABEL_E1C0BE
@@ -12227,6 +12301,7 @@ LABEL_E1C0B4:	aligned_string "CmpAc2Vol"
 LABEL_E1C0BE:	aligned_string "CmpAc3Vol"
 LABEL_E1C0C8:	aligned_string "CmpDrmVol"
 LABEL_E1C0D2:	aligned_string "CmpBalScreen"
+LABEL_E1C0E0:
 	.long LABEL_E1C1EC
 	.long LABEL_E1C1EA
 	.long LABEL_E1C1DC
@@ -12295,6 +12370,7 @@ LABEL_E1C1DA:	aligned_string ""
 LABEL_E1C1DC:	aligned_string "CmpNcpFitmSw"
 LABEL_E1C1EA:	aligned_string ""
 LABEL_E1C1EC:	aligned_string "CmpNcpScreen"
+LABEL_E1C1FA:
 	.long LABEL_E1C30E
 	.long LABEL_E1C30C
 	.long LABEL_E1C30A
@@ -12371,6 +12447,7 @@ LABEL_E1C308:	aligned_string ""
 LABEL_E1C30A:	aligned_string ""
 LABEL_E1C30C:	aligned_string ""
 LABEL_E1C30E:	aligned_string "S2CScreen"
+LABEL_E1C318:
 	.long LABEL_E1C384
 	.long LABEL_E1C382
 	.long LABEL_E1C380
@@ -12401,6 +12478,7 @@ LABEL_E1C37E:	aligned_string ""
 LABEL_E1C380:	aligned_string ""
 LABEL_E1C382:	aligned_string ""
 LABEL_E1C384:	aligned_string "CmpEasyScreen"
+LABEL_E1C392:
 	.long LABEL_E1C3AE
 	.long LABEL_E1C3AC
 	.long LABEL_E1C3AA
@@ -12411,7 +12489,8 @@ LABEL_E1C3A8:	aligned_string ""
 LABEL_E1C3AA:	aligned_string ""
 LABEL_E1C3AC:	aligned_string ""
 LABEL_E1C3AE:	aligned_string "CmpBendScreen"
-	.byte 0x02, 0xc4, 0xe1, 0x00
+	.long LABEL_E1C402
+LABEL_E1C3C0:
 	.long LABEL_E1C400
 	.long LABEL_E1C3FE
 	.long LABEL_E1C3FC
@@ -12435,6 +12514,7 @@ LABEL_E1C3FC:	aligned_string ""
 LABEL_E1C3FE:	aligned_string ""
 LABEL_E1C400:	aligned_string ""
 LABEL_E1C402:	aligned_string "CmpModeScreen"
+LABEL_E1C410:
 	.long LABEL_E1C550
 	.long LABEL_E1C54E
 	.long LABEL_E1C54C
@@ -12503,6 +12583,7 @@ LABEL_E1C53E:	aligned_string "CstmCpFrmVal"
 LABEL_E1C54C:	aligned_string ""
 LABEL_E1C54E:	aligned_string ""
 LABEL_E1C550:	aligned_string "CmpCstmCpScreen"
+LABEL_E1C560:
 	.long LABEL_E1C6CE
 	.long LABEL_E1C6C2
 	.long LABEL_E1C6B6
@@ -12560,7 +12641,8 @@ LABEL_E1C6AA:	aligned_string "MspBnkP2Ctl"
 LABEL_E1C6B6:	aligned_string "MspBnkP1Ctl"
 LABEL_E1C6C2:	aligned_string "MspBkslWin"
 LABEL_E1C6CE:	aligned_string "MspBkslScreen"
-	.byte 0x8a, 0xc7, 0xe1, 0x00
+	.long LABEL_E1C78A
+LABEL_E1C6E0:
 	.long LABEL_E1C77E
 	.long LABEL_E1C77C
 	.long LABEL_E1C772
@@ -12594,6 +12676,7 @@ LABEL_E1C772:	aligned_string "MspBnkLbl"
 LABEL_E1C77C:	aligned_string ""
 LABEL_E1C77E:	aligned_string "MspRecBox1"
 LABEL_E1C78A:	aligned_string "MspRecScreen"
+LABEL_E1C798:
 	.long LABEL_E1C7C0
 	.long LABEL_E1C7BE
 	.long LABEL_E1C7BC
@@ -12610,6 +12693,8 @@ LABEL_E1C7BE:	aligned_string ""
 LABEL_E1C7C0:	aligned_string "MspMenuScreen"
 	and	xsp, xde
 	.byte 0xe1, 0x00
+
+
 	.long LABEL_E1C7E8
 	.long LABEL_E1C7E6
 	.long LABEL_E1C7E4
@@ -12619,6 +12704,7 @@ LABEL_E1C7E4:	aligned_string ""
 LABEL_E1C7E6:	aligned_string ""
 LABEL_E1C7E8:	aligned_string ""
 LABEL_E1C7EA:	aligned_string "MspNamingScreen"
+LABEL_E1C7FA:
 	.long LABEL_E1C84E
 	.long LABEL_E1C844
 	.long LABEL_E1C842
@@ -12639,6 +12725,7 @@ LABEL_E1C836:	aligned_string "MspRGrpGrid"
 LABEL_E1C842:	aligned_string ""
 LABEL_E1C844:	aligned_string "RGrpBnkSw"
 LABEL_E1C84E:	aligned_string "MspReGrpScreen"
+LABEL_E1C85E:
 	.long LABEL_E1C8A8
 	.long LABEL_E1C8A6
 	.long LABEL_E1C898
@@ -12657,6 +12744,7 @@ LABEL_E1C896:	aligned_string ""
 LABEL_E1C898:	aligned_string "SndArgRhyName"
 LABEL_E1C8A6:	aligned_string ""
 LABEL_E1C8A8:	aligned_string "SndArgrScreen"
+LABEL_E1C8B6:
 	.long LABEL_E1C8EC
 	.long LABEL_E1C8EA
 	.long LABEL_E1C8E8
@@ -12747,6 +12835,7 @@ LABEL_E1C8EC:	aligned_string "ApcSelScreen"
 	.long MainStylCnvFunc
 	.long 0x0
 
+LABEL_E1CB02:
 	.long LABEL_E1CDD2
 	.long LABEL_E1CDC4
 	.long LABEL_E1CDB4
@@ -13037,6 +13126,7 @@ LABEL_E1D404:	aligned_string " Left 64"
 	.byte 0x00, 0x00
 	.byte 0x48, 0x00, 0x00, 0x00, 0x48, 0x00, 0xf3, 0x00
 	.byte 0xf3, 0x00, 0xf3, 0x00, 0x7c, 0xd5, 0xe1, 0x00
+LABEL_E1D420:
 	.long LABEL_E1D574
 	.long LABEL_E1D56C
 	.long LABEL_E1D564
@@ -13099,6 +13189,7 @@ LABEL_E1D57C:	aligned_string "A-vari1"
 	.byte 0x25, 0x33, 0x64, 0x00
 	.byte 0x25, 0x33, 0x64, 0x00
 	aligned_string "(SONG:%2d)"
+LABEL_E1D598:
 	.long LABEL_E1D724
 	.long LABEL_E1D720
 	.long LABEL_E1D71C
@@ -13282,6 +13373,7 @@ LABEL_E1D78A:
 	.byte 0x4f, 0x46, 0x46, 0x00, 0x00, 0x00
 	.byte 0x38, 0x00, 0x00, 0x00, 0x38, 0x00, 0xce, 0x00
 	.byte 0xce, 0x00, 0xce, 0x00, 0xa8, 0xd9, 0xe1, 0x00
+LABEL_E1D7A0:
 	.long LABEL_E1D998
 	.long LABEL_E1D988
 	.long LABEL_E1D978
@@ -13335,6 +13427,7 @@ LABEL_E1D978:	aligned_string "    Vari4     "
 LABEL_E1D988:	aligned_string "    Vari3     "
 LABEL_E1D998:	aligned_string "    Vari2     "
 LABEL_E1D9A8:	aligned_string "    Vari1     "
+LABEL_E1D9B8:
 	.long LABEL_E1DB52
 	.long LABEL_E1DB48
 	.long LABEL_E1DB3E
@@ -13401,6 +13494,7 @@ LABEL_E1DB52:	aligned_string "MEMORY A "
 	.byte 0x52, 0x59, 0x00, 0xff
 	.byte 0x43, 0x55, 0x53, 0x54
 	.byte 0x4f, 0x4d, 0x00, 0xff, 0x00, 0xdd, 0xe1, 0x00
+LABEL_E1DB80:
 	.long LABEL_E1DCF8
 	.long LABEL_E1DCF0
 	.long LABEL_E1DCE8
@@ -13472,6 +13566,7 @@ LABEL_E1DD00:	aligned_string "A-vari1"
 LABEL_E1DD14:	aligned_string "MUTE"
 LABEL_E1DD1A:	aligned_string "REC "
 LABEL_E1DD20:	aligned_string "    "
+LABEL_E1DD26:
 	.long LABEL_E1DD76
 	.long LABEL_E1DD6E
 	.long LABEL_E1DD68
@@ -13493,6 +13588,7 @@ LABEL_E1DD76:
 	.byte 0x4f, 0x46
 	.byte 0x46, 0x00, 0x25, 0x64, 0x00, 0xff, 0x25, 0x32
 	.byte 0x64, 0x00, 0x25, 0x33, 0x64, 0x00
+LABEL_E1DD86:
 	.long LABEL_E1DE4A
 	.long LABEL_E1DE48
 	.long LABEL_E1DE46
@@ -13618,6 +13714,7 @@ LABEL_E1DF52:	aligned_string "User1   "
 	.byte 0x1c, 0x00, 0x1c, 0x00
 	.byte 0x69, 0x00, 0x69, 0x00, 0x69, 0x00, 0x20, 0x00
 	.byte 0x69, 0x00, 0x24, 0x00, 0x1c, 0x00, 0x00, 0x00
+LABEL_E1DF70:
 	.long LABEL_E1DFBC
 	.long LABEL_E1DFA8
 	.long LABEL_E1DF94
@@ -13626,6 +13723,7 @@ LABEL_E1DF80:	aligned_string "MSP COMPILE Bank2:"
 LABEL_E1DF94:	aligned_string "MSP COMPILE Bank1:"
 LABEL_E1DFA8:	aligned_string "MSP User Bank 2:  "
 LABEL_E1DFBC:	aligned_string "MSP User Bank 1:  "
+LABEL_E1DFD0:
 	.long LABEL_E1E160
 	.long LABEL_E1E14E
 	.long LABEL_E1E13C
@@ -13664,6 +13762,7 @@ LABEL_E1E12A:	aligned_string "     Movie      "
 LABEL_E1E13C:	aligned_string "    Comical     "
 LABEL_E1E14E:	aligned_string "    Effect 2    "
 LABEL_E1E160:	aligned_string "    Effect 1    "
+LABEL_E1E172:
 	.long LABEL_E1E2AA
 	.long LABEL_E1E298
 	.long LABEL_E1E286
@@ -13902,7 +14001,6 @@ MSG_INSERT_STYLE_CONVERT_ID:	.asciz "Please Insert the Style Convert Disk!"	; In
 LABEL_E1EF5A:
 
 
-
 	aligned_string "Select the sound for each part."
 	.byte 0x57, 0xe4
 	aligned_string "hlen Sie einen Klang für jede gewünschte Klanggruppe"
@@ -13910,6 +14008,7 @@ LABEL_E1EFB2:	aligned_string "Select the sound for each part."
 LABEL_E1EFD2:	aligned_string "Select the sound for each part."
 LABEL_E1EFF2:	aligned_string "Select the sound for each part."
 LABEL_E1F012:	aligned_string "Select the sound for each part."
+LABEL_E1F032:
 	.long LABEL_E1EF5A
 	.long LABEL_E1EF5A
 	.long LABEL_E1EFB2
@@ -13989,6 +14088,7 @@ LABEL_E1F0B0:	aligned_string ""
 	.byte 0x0b, 0xf2, 0xfa, 0x00, 0x67, 0x3f, 0xfb, 0x00
 	.byte 0xa9, 0x30, 0xfb, 0x00, 0x0b, 0xee, 0xf1, 0x00
 	.byte 0x34, 0xed, 0xf1, 0x00, 0x00, 0x00, 0x00, 0x00
+LABEL_E1F240:
 	.long LABEL_E1F774
 	.long LABEL_E1F764
 	.long LABEL_E1F756
@@ -14421,6 +14521,7 @@ String_CONSOLE:	; E1FBC8
 	.byte 0x00, 0x00, 0x00, 0x00
 	.long LABEL_E1FC44
 LABEL_E1FC44:	aligned_string ""
+LABEL_E1FC46:
 	.long LABEL_E1FD0E
 	.long LABEL_E1FD08
 	.long LABEL_E1FD04
@@ -14673,10 +14774,6 @@ LABEL_E200ED:
 	.byte 0x07, 0x01, 0x07, 0x01, 0x00, 0x00, 0x0e, 0x00
 
 
-
-
-
-
 	.byte 0xd5, 0x00, 0x14, 0x00, 0xd5, 0x00, 0xd5, 0x00
 	.byte 0x00, 0x00, 0x0e, 0x00, 0x1a, 0x00, 0x1a, 0x00
 	.byte 0x1a, 0x00, 0x1a, 0x00, 0x62, 0x22, 0xf2, 0x00
@@ -14726,6 +14823,7 @@ LABEL_E200ED:
 	.byte 0xc5, 0xb3, 0xf2, 0x00, 0xb4, 0xb4, 0xf2, 0x00
 	.byte 0x3c, 0xd0, 0xf2, 0x00, 0x1a, 0xd2, 0xf2, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0xfc, 0x06, 0xe2, 0x00
+LABEL_E20320:
 	.long LABEL_E206EC
 	.long LABEL_E206DA
 	.long LABEL_E206C8
@@ -14914,6 +15012,8 @@ LABEL_E20846:	aligned_string "alignment"
 LABEL_E20850:	aligned_string "reversecolor"
 LABEL_E2085E:	aligned_string "fontcolor"
 LABEL_E20868:	aligned_string "font"
+
+
 LABEL_E2086E:
 	.long LABEL_E2089E
 	.long LABEL_E20894
@@ -14927,6 +15027,8 @@ LABEL_E20894:	aligned_string "fontcolor"
 LABEL_E2089E:
 	jr	z, 0x6f
 	.byte 0x6e, 0x74, 0x00, 0xff, 0xd4, 0x08, 0xe2, 0x00
+
+
 	.long LABEL_E208CA
 	.long LABEL_E208C0
 	.long LABEL_E208BA
@@ -14948,6 +15050,7 @@ LABEL_E208EA:	.byte 0x00, 0xff, 0x61, 0xbb, 0xf2, 0x00
 
 
 	.byte 0x47, 0x00, 0x60, 0x01, 0x16, 0x00, 0x00, 0x00
+LABEL_E208F8:
 	.long LABEL_E20CA0
 	.long LABEL_E20C9E
 	.long LABEL_E2070E
@@ -15108,6 +15211,7 @@ LABEL_E20C90:	aligned_string "PsSongSelBox"
 LABEL_E20C9E:	aligned_string ""
 LABEL_E20CA0:	aligned_string "IvNamingExit"
 	.byte 0x16, 0x00
+LABEL_E20CB0:
 	.long LABEL_E20E12
 	.long LABEL_E20E02
 	.long LABEL_E20DF2
@@ -15150,6 +15254,7 @@ LABEL_E20DF2:	aligned_string "EV_SMFFILENAME"
 LABEL_E20E02:	aligned_string "EV_DISKFILENAME"
 LABEL_E20E12:	aligned_string "EV_CURSONGNAME"
 	.byte 0x14, 0x00, 0x5a, 0x10, 0xe2, 0x00
+LABEL_E20E28:
 	.long LABEL_E2104A
 	.long LABEL_E21038
 	.long LABEL_E21022
@@ -17758,6 +17863,7 @@ LABEL_E24088:
 	.byte 0x28, 0x00, 0xd5, 0x00, 0x3a, 0x00, 0xf5, 0x00
 	.byte 0x00, 0x00, 0xff, 0xff, 0x04, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00, 0x00, 0x00, 0x90, 0x10, 0xe2, 0x00
+LABEL_E240B0:
 	.long LABEL_E210CC
 	.long LABEL_E210F0
 	.long LABEL_E2112E
@@ -17801,6 +17907,7 @@ LABEL_E24088:
 	.long LABEL_E21722
 	.long LABEL_E21748
 	.byte 0x00, 0x00, 0x00, 0x00, 0x6e, 0x17, 0xe2, 0x00
+LABEL_E24160:
 	.long LABEL_E217AA
 	.long LABEL_E217CE
 	.long LABEL_E217E8
@@ -17813,6 +17920,7 @@ LABEL_E24088:
 	.long LABEL_E21904
 	.long LABEL_E2193C
 	.byte 0x00, 0x00, 0x00, 0x00
+LABEL_E24190:
 	.long LABEL_E21972
 	.long LABEL_E219B8
 	.long LABEL_E219DC
@@ -17825,6 +17933,7 @@ LABEL_E24088:
 	.long LABEL_E21ADE
 	.long LABEL_E21B16
 	.byte 0x00, 0x00, 0x00, 0x00
+LABEL_E241C0:
 	.long LABEL_E21B4C
 	.long LABEL_E21B88
 	.long LABEL_E21BAC
@@ -17833,6 +17942,7 @@ LABEL_E24088:
 	.long LABEL_E21C16
 	.long LABEL_E21C30
 	.byte 0x00, 0x00, 0x00, 0x00
+LABEL_E241E0:
 	.long LABEL_E21C46
 	.long LABEL_E21C7C
 	.long LABEL_E21CBA
@@ -17850,6 +17960,7 @@ LABEL_E24088:
 	.long LABEL_E21E94
 	.long LABEL_E21ECA
 	.byte 0x00, 0x00, 0x00, 0x00, 0xf4, 0x1e, 0xe2, 0x00
+LABEL_E24228:
 	.long LABEL_E21F2A
 	.long LABEL_E21F60
 	.long LABEL_E21F7A
@@ -17865,6 +17976,7 @@ LABEL_E24088:
 	.long LABEL_E2210A
 	.long LABEL_E22142
 	.byte 0x00, 0x00, 0x00, 0x00, 0x78, 0x21, 0xe2, 0x00
+LABEL_E24268:
 	.long LABEL_E221B8
 	.long LABEL_E221DC
 	.long LABEL_E221F6
@@ -17878,6 +17990,7 @@ LABEL_E24088:
 	.long LABEL_E2232E
 	.long LABEL_E22366
 	.byte 0x00, 0x00, 0x00, 0x00, 0x9c, 0x23, 0xe2, 0x00
+LABEL_E242A0:
 	.long LABEL_E223D2
 	.long LABEL_E223F6
 	.long LABEL_E22424
@@ -17886,6 +17999,7 @@ LABEL_E24088:
 	.long LABEL_E2247A
 	.long LABEL_E224B0
 	.byte 0x00, 0x00, 0x00, 0x00
+LABEL_E242C0:
 	.long LABEL_E224CA
 	.long LABEL_E22508
 	.long LABEL_E22522
@@ -17917,6 +18031,7 @@ LABEL_E24088:
 	.long LABEL_E228BE
 	.long LABEL_E228E2
 	.byte 0x00, 0x00, 0x00, 0x00, 0x06, 0x29, 0xe2, 0x00
+LABEL_E24340:
 	.long LABEL_E2293C
 	.long LABEL_E22956
 	.long LABEL_E2297A
@@ -17929,6 +18044,7 @@ LABEL_E24088:
 	.long LABEL_E22A64
 	.long LABEL_E22A7A
 	.byte 0x00, 0x00, 0x00, 0x00
+LABEL_E24370:
 	.long LABEL_E22AB2
 	.long LABEL_E22AF0
 	.long LABEL_E22B1E
@@ -17941,12 +18057,14 @@ LABEL_E24088:
 	.long LABEL_E22BD0
 	.long LABEL_E22C0E
 	.byte 0xa2, 0xde, 0x03, 0x00
+LABEL_E243A0:
 	.long LABEL_E22C34
 	.long LABEL_E22CBA
 	.long LABEL_E22CF2
 	.long LABEL_E22D28
 	.long LABEL_E22D5C
 	.byte 0xce, 0xde, 0x03, 0x00
+LABEL_E243B8:
 	.long LABEL_E22D86
 	.long LABEL_E22DAE
 	.long LABEL_E22DD6
@@ -17960,6 +18078,8 @@ LABEL_E24088:
 	.long LABEL_E22F08
 	.long LABEL_E22F36
 	.byte 0x00, 0x00, 0x00, 0x00, 0x50, 0x2f, 0xe2, 0x00
+
+
 	.long LABEL_E22F8E
 	.long LABEL_E22FB4
 	.long LABEL_E22FDE
@@ -17988,12 +18108,16 @@ LABEL_E24088:
 	.long LABEL_E233D6
 	.long LABEL_E23404
 	.byte 0x00, 0x00, 0x00, 0x00
+
+
 	.long LABEL_E23432
 	.long LABEL_E23470
 	.long LABEL_E234AE
 	.long LABEL_E234E0
 	.long LABEL_E23512
 	.byte 0x00, 0x00, 0x00, 0x00
+
+
 	.long LABEL_E2353C
 	.long LABEL_E2356E
 	.long LABEL_E23592
@@ -18012,11 +18136,15 @@ LABEL_E24088:
 	.long LABEL_E2379C
 	.long LABEL_E237BC
 	.byte 0x00, 0x00, 0x00, 0x00
+
+
 	.long LABEL_E237DC
 	.long LABEL_E23814
 	.long LABEL_E23858
 	.long LABEL_E238A4
 	.byte 0x00, 0x00, 0x00, 0x00, 0xbe, 0x38, 0xe2, 0x00
+
+
 	.long LABEL_E238F6
 	.long LABEL_E23938
 	.long LABEL_E23980
@@ -18029,6 +18157,8 @@ LABEL_E24088:
 	.long LABEL_E23B28
 	.long LABEL_E23B42
 	.byte 0x00, 0x00, 0x00, 0x00
+
+
 	.long LABEL_E23B66
 	.long LABEL_E23B9E
 	.long LABEL_E23BDC
@@ -18042,6 +18172,8 @@ LABEL_E24088:
 	.long LABEL_E23DB6
 	.long LABEL_E23DD0
 	.byte 0x00, 0x00, 0x00, 0x00, 0xf4, 0x3d, 0xe2, 0x00
+
+
 	.long LABEL_E23E2C
 	.long LABEL_E23E6E
 	.long LABEL_E23EB4
@@ -18054,6 +18186,8 @@ LABEL_E24088:
 	.long LABEL_E2406E
 	.long LABEL_E24088
 	.byte 0x00, 0x00, 0x00, 0x00
+
+
 	.long LABEL_E246C2
 	.long LABEL_E246C0
 	.long LABEL_E246BE
@@ -18142,6 +18276,7 @@ LABEL_E246BC:	aligned_string ""
 LABEL_E246BE:	aligned_string ""
 LABEL_E246C0:	aligned_string ""
 LABEL_E246C2:	aligned_string "DpSmf"
+LABEL_E246C8:
 	.long LABEL_E24728
 	.long LABEL_E24726
 	.long LABEL_E24724
@@ -18168,6 +18303,7 @@ LABEL_E24722:	aligned_string ""
 LABEL_E24724:	aligned_string ""
 LABEL_E24726:	aligned_string ""
 LABEL_E24728:	aligned_string "DpDoc"
+LABEL_E2472E:
 	.long LABEL_E24782
 	.long LABEL_E24780
 	.long LABEL_E2477E
@@ -18192,6 +18328,7 @@ LABEL_E2477C:	aligned_string ""
 LABEL_E2477E:	aligned_string ""
 LABEL_E24780:	aligned_string ""
 LABEL_E24782:	aligned_string "DpPd"
+LABEL_E24788:
 	.long LABEL_E247C0
 	.long LABEL_E247BE
 	.long LABEL_E247BC
@@ -18208,6 +18345,7 @@ LABEL_E247BA:	aligned_string ""
 LABEL_E247BC:	aligned_string ""
 LABEL_E247BE:	aligned_string ""
 LABEL_E247C0:	aligned_string "DpSmfLyr"
+LABEL_E247CA:
 	.long LABEL_E2483A
 	.long LABEL_E24838
 	.long LABEL_E24836
@@ -18242,7 +18380,8 @@ LABEL_E24834:	aligned_string ""
 LABEL_E24836:	aligned_string ""
 LABEL_E24838:	aligned_string ""
 LABEL_E2483A:	aligned_string "DpMdlySmf"
-	.byte 0xca, 0x48, 0xe2, 0x00
+	.long LABEL_E248CA
+LABEL_E24848:
 	.long LABEL_E248C0
 	.long LABEL_E248BE
 	.long LABEL_E248BC
@@ -18274,6 +18413,7 @@ LABEL_E248BC:	aligned_string ""
 LABEL_E248BE:	aligned_string ""
 LABEL_E248C0:	aligned_string "DpMdlyDoc"
 LABEL_E248CA:	.byte 0x00, 0xff, 0x30, 0x49, 0xe2, 0x00
+LABEL_E248D0:
 	.long LABEL_E2492E
 	.long LABEL_E2492C
 	.long LABEL_E2492A
@@ -18301,6 +18441,7 @@ LABEL_E2492A:	aligned_string ""
 LABEL_E2492C:	aligned_string ""
 LABEL_E2492E:	aligned_string ""
 LABEL_E24930:	aligned_string "DpMdlyPd"
+LABEL_E2493A:
 	.long LABEL_E2496E
 	.long LABEL_E2496C
 	.long LABEL_E2496A
@@ -18319,7 +18460,8 @@ LABEL_E24968:	aligned_string ""
 LABEL_E2496A:	aligned_string ""
 LABEL_E2496C:	aligned_string ""
 LABEL_E2496E:	aligned_string "DpMdlySmfLyr"
-	.byte 0x34, 0x4a, 0xe2, 0x00
+	.long LABEL_E24A34
+LABEL_E24980:
 	.long LABEL_E24A32
 	.long LABEL_E24A30
 	.long LABEL_E24A2E
@@ -18381,6 +18523,7 @@ LABEL_E24A2E:	aligned_string ""
 LABEL_E24A30:	aligned_string ""
 LABEL_E24A32:	aligned_string ""
 LABEL_E24A34:	aligned_string "DkMdlyPly"
+LABEL_E24A3E:
 	.long LABEL_E24A8A
 	.long LABEL_E24A88
 	.long LABEL_E24A86
@@ -18407,7 +18550,8 @@ LABEL_E24A84:	aligned_string ""
 LABEL_E24A86:	aligned_string ""
 LABEL_E24A88:	aligned_string ""
 LABEL_E24A8A:	aligned_string "SqMdlyPly"
-	.byte 0xb6, 0x4a, 0xe2, 0x00
+	.long LABEL_E24AB6
+LABEL_E24A98:
 	.long LABEL_E24AB4
 	.long LABEL_E24AB2
 	.long LABEL_E24AB0
@@ -18424,6 +18568,7 @@ LABEL_E24AB6:	aligned_string "SqTrSel"
 	.long LABEL_E24AC6
 LABEL_E24AC6:	aligned_string ""
 LABEL_E24AC8:	aligned_string ""
+LABEL_E24ACA:
 	.long LABEL_E24B78
 	.long LABEL_E24B76
 	.long LABEL_E24B74
@@ -18470,6 +18615,7 @@ LABEL_E24B6A:	aligned_string "TrAsOkSw"
 LABEL_E24B74:	aligned_string ""
 LABEL_E24B76:	aligned_string ""
 LABEL_E24B78:	aligned_string "SqTrAs"
+LABEL_E24B80:
 	.long LABEL_E24C66
 	.long LABEL_E24C64
 	.long LABEL_E24C62
@@ -18528,6 +18674,7 @@ LABEL_E24C60:	aligned_string ""
 LABEL_E24C62:	aligned_string ""
 LABEL_E24C64:	aligned_string ""
 LABEL_E24C66:	aligned_string "SqTrAsPs"
+LABEL_E24C70:
 	.long LABEL_E24C92
 	.long LABEL_E24C90
 	.long LABEL_E24C8E
@@ -18540,7 +18687,8 @@ LABEL_E24C8C:	aligned_string ""
 LABEL_E24C8E:	aligned_string ""
 LABEL_E24C90:	aligned_string ""
 LABEL_E24C92:	aligned_string "SqSngSel"
-	.byte 0xc4, 0x4c, 0xe2, 0x00
+	.long LABEL_E24CC4
+LABEL_E24CA0:
 	.long LABEL_E24CC2
 	.long LABEL_E24CC0
 	.long LABEL_E24CBE
@@ -18554,6 +18702,7 @@ LABEL_E24CBE:	aligned_string ""
 LABEL_E24CC0:	aligned_string ""
 LABEL_E24CC2:	aligned_string ""
 LABEL_E24CC4:	aligned_string "SqNameing"
+LABEL_E24CCE:
 	.long LABEL_E24CEA
 	.long LABEL_E24CE8
 	.long LABEL_E24CE6
@@ -18566,6 +18715,7 @@ LABEL_E24CE8:	aligned_string ""
 LABEL_E24CEA:	aligned_string "AfterTouchSet"
 	.long LABEL_E24CFC
 LABEL_E24CFC:	aligned_string ""
+LABEL_E24CFE:
 	.long LABEL_E24D26
 	.long LABEL_E24D24
 	.long LABEL_E24D22
@@ -18580,6 +18730,7 @@ LABEL_E24D20:	aligned_string ""
 LABEL_E24D22:	aligned_string ""
 LABEL_E24D24:	aligned_string ""
 LABEL_E24D26:	aligned_string "StepPartBal"
+LABEL_E24D32:
 	.long LABEL_E24D4E
 	.long LABEL_E24D4C
 	.long LABEL_E24D4A
@@ -18590,6 +18741,7 @@ LABEL_E24D48:	aligned_string ""
 LABEL_E24D4A:	aligned_string ""
 LABEL_E24D4C:	aligned_string ""
 LABEL_E24D4E:	aligned_string "DemoMenu"
+LABEL_E24D58:
 	.long LABEL_E24DDC
 	.long LABEL_E24DD2
 	.long LABEL_E24DC8
@@ -18616,6 +18768,7 @@ LABEL_E24DBE:	aligned_string "DemoSong2"
 LABEL_E24DC8:	aligned_string "DemoSong1"
 LABEL_E24DD2:	aligned_string "DemoSong0"
 LABEL_E24DDC:	aligned_string "DemoStyle"
+LABEL_E24DE6:
 	.long LABEL_E24E6E
 	.long LABEL_E24E64
 	.long LABEL_E24E5A
@@ -18642,6 +18795,7 @@ LABEL_E24E50:	aligned_string "DemoSong8"
 LABEL_E24E5A:	aligned_string "DemoSong7"
 LABEL_E24E64:	aligned_string "DemoSong6"
 LABEL_E24E6E:	aligned_string "DemoSound"
+LABEL_E24E78:
 	.long LABEL_E24F08
 	.long LABEL_E24EFC
 	.long LABEL_E24EF0
@@ -18711,6 +18865,7 @@ LABEL_E24F08:	aligned_string "DemoRhy"
 	.byte 0xf2, 0x00, 0x57, 0x25, 0xf2, 0x00, 0x4c, 0x15
 	.byte 0xf2, 0x00, 0xb8, 0x5a, 0xf4, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00
+LABEL_E250C2:
 	.long LABEL_E25328
 	.long LABEL_E25316
 	.long LABEL_E25306
@@ -18818,6 +18973,7 @@ LABEL_E25C68:	aligned_string "La désactivation du mode GENERAL MIDI MODE remplac
 LABEL_E25CD8:	aligned_string "¡Al desconectar el modo MIDI General se reemplazan las configuraciones MIDI Generales por las configuraciones originales de fábrica!"
 LABEL_E25D5E:	aligned_string "Turning off GENERAL MIDI MODE will replace the GENERAL MIDI settings with the original factory settings!"
 LABEL_E25DC8:	aligned_string "Non-aktifkan fungsi GENERAL MIDI MODE bila akan kembali ke susunan GENERAL MIDI sesuai susunan dari pabrik(originil factory settings)."
+LABEL_E25E50:
 	.long LABEL_E26024
 	.long LABEL_E25FCC
 	.long LABEL_E25F6E
@@ -18830,6 +18986,7 @@ LABEL_E25F16:	.asciz "Al cambiar la asignación de pistas %2d de %s a %s se borra
 LABEL_E25F6E:	aligned_string "Tout changement d'assignation des pistes %2d de%s à%s effacera toutes les données actuelles."
 LABEL_E25FCC:	aligned_string "Das Ändern der Spurzuordnung %2d von %s nach %s hat einen Verlust der Daten zur folge."
 LABEL_E26024:	aligned_string "Changing the assignment of Track %2d from %s to %s will erase all the current data."
+LABEL_E26078:
 	.long LABEL_E25338
 	.long LABEL_E2539C
 	.long LABEL_E25414
@@ -18925,6 +19082,8 @@ LABEL_E261F2:	aligned_string "RIGHT1"
 	aligned_string "                         "
 	aligned_string "                         "
 	aligned_string "ExMD"
+
+
 	.long LABEL_E263D8
 	.long LABEL_E263CE
 	.long LABEL_E263C4
@@ -18992,6 +19151,7 @@ LABEL_E263D8:	aligned_string " RIGHT1  "
 	.byte 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f, 0x10, 0x11
 	aligned_string "SONG%2d"
 	aligned_string "                      "
+LABEL_E26510:
 	.long LABEL_E265AA
 	.long LABEL_E265A4
 	.long LABEL_E2659E
@@ -19027,6 +19187,7 @@ LABEL_E265AA:	aligned_string "  1 "
 	.byte 0x1e, 0x00, 0x1e, 0x00, 0x29, 0x00, 0x29, 0x00
 	.byte 0x29, 0x00, 0x22, 0x00, 0x29, 0x00, 0x2d, 0x00
 	.byte 0x1e, 0x00, 0x00, 0x00, 0x54, 0x66, 0xe2, 0x00
+LABEL_E265C8:
 	.long LABEL_E2664A
 	.long LABEL_E26640
 	.long LABEL_E26636
@@ -19061,6 +19222,7 @@ LABEL_E26680:	aligned_string " OFF "
 	.byte 0x20, 0x00, 0x40, 0x00, 0x80, 0x00, 0x00, 0x01
 	.byte 0x00, 0x02, 0x00, 0x04, 0x00, 0x08, 0x00, 0x10
 	.byte 0x00, 0x20, 0x00, 0x40, 0x00, 0x80
+LABEL_E266A6:
 	.long LABEL_E2675E
 	.long LABEL_E26756
 	.long LABEL_E2674E
@@ -19152,6 +19314,7 @@ LABEL_E267DE:	.asciz "     "
 	.byte 0xaf, 0xe7, 0xf2, 0x00, 0xdf, 0x59, 0xf3, 0x00
 	.byte 0x50, 0xe6, 0xf2, 0x00, 0x6c, 0xe4, 0xf2, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0xc0, 0x6e, 0xe2, 0x00
+LABEL_E26930:
 	.long LABEL_E26EAE
 	.long LABEL_E26EA0
 	.long LABEL_E26E92
@@ -19299,6 +19462,8 @@ LABEL_E26E92:	aligned_string "SqedtVal2Proc"
 LABEL_E26EA0:	aligned_string "SqedtValProc"
 LABEL_E26EAE:	aligned_string "EqualizerBoxProc"
 LABEL_E26EC0:	aligned_string "EffectBoxProc"
+
+
 LABEL_E26ECE:
 	.long LABEL_E26EF8
 	.long LABEL_E26EF2
@@ -19328,6 +19493,8 @@ LABEL_E26F30:	aligned_string "ttl_no"
 LABEL_E26F38:	aligned_string "func"
 LABEL_E26F3E:	aligned_string "fontcolor"
 LABEL_E26F48:	aligned_string "color"
+
+
 LABEL_E26F4E:
 	.long LABEL_E26F70
 	.long LABEL_E26F66
@@ -19337,6 +19504,8 @@ LABEL_E26F5E:	aligned_string ""
 LABEL_E26F60:	aligned_string "func"
 LABEL_E26F66:	aligned_string "fontcolor"
 LABEL_E26F70:	aligned_string "color"
+
+
 LABEL_E26F76:
 	.long LABEL_E26F9A
 	.long LABEL_E26F90
@@ -19360,6 +19529,8 @@ LABEL_E26FBC:	aligned_string "ttl_no"
 LABEL_E26FC4:	aligned_string "func"
 LABEL_E26FCA:	aligned_string "fontcolor"
 LABEL_E26FD4:	aligned_string "color"
+
+
 LABEL_E26FDA:
 	.long LABEL_E26FFC
 	.long LABEL_E26FF2
@@ -19369,6 +19540,8 @@ LABEL_E26FEA:	aligned_string ""
 LABEL_E26FEC:	aligned_string "func"
 LABEL_E26FF2:	aligned_string "fontcolor"
 LABEL_E26FFC:	aligned_string "color"
+
+
 LABEL_E27002:
 	.long LABEL_E27030
 	.long LABEL_E27026
@@ -19380,6 +19553,8 @@ LABEL_E27018:	aligned_string "ttl_no"
 LABEL_E27020:	aligned_string "func"
 LABEL_E27026:	aligned_string "fontcolor"
 LABEL_E27030:	aligned_string "color"
+
+
 LABEL_E27036:
 	.long LABEL_E27058
 	.long LABEL_E2704E
@@ -19389,6 +19564,8 @@ LABEL_E27046:	aligned_string ""
 LABEL_E27048:	aligned_string "func"
 LABEL_E2704E:	aligned_string "fixedrow"
 LABEL_E27058:	aligned_string "fixedcol"
+
+
 LABEL_E27062:
 	.long LABEL_E2709A
 	.long LABEL_E27094
@@ -19734,6 +19911,7 @@ LABEL_E275DA:	aligned_string "EV_EFFPARADRAW"
 LABEL_E275EA:	aligned_string "EV_EFFFIXDRAW"
 	.byte 0x05, 0x00
 
+LABEL_E275FA:
 	.long LABEL_E27F8E
 	.long LABEL_E27F7C
 	.long LABEL_E27F6A
@@ -25513,6 +25691,8 @@ LABEL_E2E624:	; registered from InitializeKubo
 	.long LABEL_E28132
 	.long LABEL_E2814A
 	.byte 0x00, 0x00, 0x00, 0x00
+
+
 	.long LABEL_E28160
 	.long LABEL_E28196
 	.long LABEL_E281BE
@@ -25526,6 +25706,8 @@ LABEL_E2E624:	; registered from InitializeKubo
 	.long LABEL_E282F2
 	.long LABEL_E2830A
 	.byte 0x00, 0x00, 0x00, 0x00
+
+
 	.long LABEL_E28320
 	.long LABEL_E28354
 	.long LABEL_E2837C
@@ -25564,6 +25746,8 @@ LABEL_E2E624:	; registered from InitializeKubo
 	.long LABEL_E28828
 	.long LABEL_E2884E
 	.byte 0x00, 0x00, 0x00, 0x00, 0x88, 0x88, 0xe2, 0x00
+
+
 	.long LABEL_E288C4
 	.long LABEL_E288EE
 	.long LABEL_E28918
@@ -25576,6 +25760,8 @@ LABEL_E2E624:	; registered from InitializeKubo
 	.long LABEL_E28A0E
 	.long LABEL_E28A24
 	.byte 0x00, 0x00, 0x00, 0x00
+
+
 	.long LABEL_E28A3C
 	.long LABEL_E28A76
 	.long LABEL_E28AB4
@@ -25589,6 +25775,8 @@ LABEL_E2E624:	; registered from InitializeKubo
 	.long LABEL_E28BE8
 	.long LABEL_E28C12
 	.byte 0x00, 0x00, 0x00, 0x00, 0x54, 0x8c, 0xe2, 0x00
+
+
 	.long LABEL_E28C8E
 	.long LABEL_E28CB4
 	.long LABEL_E28CCA
@@ -25617,6 +25805,8 @@ LABEL_E2E624:	; registered from InitializeKubo
 	.long LABEL_E29050
 	.long LABEL_E2906A
 	.byte 0x00, 0x00, 0x00, 0x00
+
+
 	.long LABEL_E29080
 	.long LABEL_E290B6
 	.long LABEL_E290D6
@@ -25626,6 +25816,8 @@ LABEL_E2E624:	; registered from InitializeKubo
 	.long LABEL_E291D2
 	.long LABEL_E291FC
 	.byte 0x00, 0x00, 0x00, 0x00, 0x22, 0x92, 0xe2, 0x00
+
+
 	.long LABEL_E29258
 	.long LABEL_E2927E
 	.long LABEL_E29298
@@ -25642,6 +25834,8 @@ LABEL_E2E624:	; registered from InitializeKubo
 	.long LABEL_E29444
 	.long LABEL_E2946E
 	.byte 0x00, 0x00, 0x00, 0x00
+
+
 	.long LABEL_E29498
 	.long LABEL_E294CA
 	.long LABEL_E2950E
@@ -25653,6 +25847,8 @@ LABEL_E2E624:	; registered from InitializeKubo
 	.long LABEL_E296AE
 	.long LABEL_E296F0
 	.byte 0x00, 0x00, 0x00, 0x00, 0x34, 0x97, 0xe2, 0x00
+
+
 	.long LABEL_E2976E
 	.long LABEL_E29784
 	.long LABEL_E297B0
@@ -25672,11 +25868,15 @@ LABEL_E2E624:	; registered from InitializeKubo
 	.long LABEL_E299DE
 	.long LABEL_E29A0A
 	.byte 0xb8, 0xe1, 0x03, 0x00, 0xe4, 0xe1, 0x03, 0x00
+
+
 	.long LABEL_E29A36
 	.long LABEL_E29A4C
 	.long LABEL_E29A70
 	.long LABEL_E29A9C
 	.byte 0x00, 0x00, 0x00, 0x00, 0xc2, 0x9a, 0xe2, 0x00
+
+
 	.long LABEL_E29AFC
 	.long LABEL_E29B1C
 	.long LABEL_E29B64
@@ -25688,6 +25888,8 @@ LABEL_E2E624:	; registered from InitializeKubo
 	.long LABEL_E29C94
 	.long LABEL_E29CBA
 	.byte 0x00, 0x00, 0x00, 0x00, 0xf4, 0x9c, 0xe2, 0x00
+
+
 	.long LABEL_E29D2C
 	.long LABEL_E29D42
 	.long LABEL_E29D5C
@@ -25712,6 +25914,8 @@ LABEL_E2E624:	; registered from InitializeKubo
 	.long LABEL_E2A050
 	.long LABEL_E2A076
 	.byte 0x00, 0x00, 0x00, 0x00
+
+
 	.long LABEL_E2A09C
 	.long LABEL_E2A0D8
 	.long LABEL_E2A102
@@ -25747,6 +25951,8 @@ LABEL_E2E624:	; registered from InitializeKubo
 	.long LABEL_E2A5D6
 	.long LABEL_E2A600
 	.byte 0x00, 0x00, 0x00, 0x00
+
+
 	.long LABEL_E2A62A
 	.long LABEL_E2A664
 	.long LABEL_E2A682
@@ -25767,6 +25973,8 @@ LABEL_E2E624:	; registered from InitializeKubo
 	.long LABEL_E2A87A
 	.long LABEL_E2A8A6
 	.byte 0x00, 0x00, 0x00, 0x00
+
+
 	.long LABEL_E2A8D0
 	.long LABEL_E2A900
 	.long LABEL_E2A91C
@@ -25826,6 +26034,8 @@ LABEL_E2E624:	; registered from InitializeKubo
 	.long LABEL_E2B222
 	.long LABEL_E2B24A
 	.byte 0x00, 0x00, 0x00, 0x00
+
+
 	.long LABEL_E2B272
 	.long LABEL_E2B2A8
 	.long LABEL_E2B2DA
@@ -25866,6 +26076,8 @@ LABEL_E2E624:	; registered from InitializeKubo
 	.long LABEL_E2B836
 	.long LABEL_E2B85E
 	.byte 0x00, 0x00, 0x00, 0x00, 0x86, 0xb8, 0xe2, 0x00
+
+
 	.long LABEL_E2B8BC
 	.long LABEL_E2B8EE
 	.long LABEL_E2B918
@@ -25874,6 +26086,8 @@ LABEL_E2E624:	; registered from InitializeKubo
 	.long LABEL_E2B998
 	.long LABEL_E2B9E0
 	.byte 0x00, 0x00, 0x00, 0x00
+
+
 	.long LABEL_E2BA28
 	.long LABEL_E2BA5E
 	.long LABEL_E2BA74
@@ -25889,6 +26103,8 @@ LABEL_E2E624:	; registered from InitializeKubo
 	.long LABEL_E2BBF4
 	.long LABEL_E2BC1E
 	.byte 0x00, 0x00, 0x00, 0x00, 0x48, 0xbc, 0xe2, 0x00
+
+
 	.long LABEL_E2BC7E
 	.long LABEL_E2BC98
 	.long LABEL_E2BCB2
@@ -25911,6 +26127,8 @@ LABEL_E2E624:	; registered from InitializeKubo
 	.long LABEL_E2BF38
 	.long LABEL_E2BF52
 	.byte 0x00, 0x00, 0x00, 0x00
+
+
 	.long LABEL_E2BF7C
 	.long LABEL_E2BFB0
 	.long LABEL_E2BFD6
@@ -25933,6 +26151,8 @@ LABEL_E2E624:	; registered from InitializeKubo
 	.long LABEL_E2C2E4
 	.long LABEL_E2C2FE
 	.byte 0x00, 0x00, 0x00, 0x00
+
+
 	.long LABEL_E2C328
 	.long LABEL_E2C35C
 	.long LABEL_E2C382
@@ -25950,6 +26170,8 @@ LABEL_E2E624:	; registered from InitializeKubo
 	.long LABEL_E2C5B8
 	.long LABEL_E2C5D2
 	.byte 0x00, 0x00, 0x00, 0x00, 0xfc, 0xc5, 0xe2, 0x00
+
+
 	.long LABEL_E2C636
 	.long LABEL_E2C65C
 	.long LABEL_E2C686
@@ -25966,6 +26188,8 @@ LABEL_E2E624:	; registered from InitializeKubo
 	.long LABEL_E2C892
 	.long LABEL_E2C8AC
 	.byte 0x00, 0x00, 0x00, 0x00
+
+
 	.long LABEL_E2C8D6
 	.long LABEL_E2C90C
 	.long LABEL_E2C92C
@@ -25992,6 +26216,8 @@ LABEL_E2E624:	; registered from InitializeKubo
 	.long LABEL_E2CC82
 	.long LABEL_E2CC9C
 	.byte 0x00, 0x00, 0x00, 0x00
+
+
 	.long LABEL_E2CCC6
 	.long LABEL_E2CCFE
 	.long LABEL_E2CD28
@@ -26009,6 +26235,8 @@ LABEL_E2E624:	; registered from InitializeKubo
 	.long LABEL_E2CF5C
 	.long LABEL_E2CF76
 	.byte 0x00, 0x00, 0x00, 0x00, 0xa0, 0xcf, 0xe2, 0x00
+
+
 	.long LABEL_E2CFD8
 	.long LABEL_E2D002
 	.long LABEL_E2D028
@@ -26025,6 +26253,8 @@ LABEL_E2E624:	; registered from InitializeKubo
 	.long LABEL_E2D236
 	.long LABEL_E2D250
 	.byte 0x00, 0x00, 0x00, 0x00
+
+
 	.long LABEL_E2D27A
 	.long LABEL_E2D2B2
 	.long LABEL_E2D2DC
@@ -26043,6 +26273,8 @@ LABEL_E2E624:	; registered from InitializeKubo
 	.long LABEL_E2D48E
 	.long LABEL_E2D4B8
 	.byte 0x00, 0x00, 0x00, 0x00
+
+
 	.long LABEL_E2D4F2
 	.long LABEL_E2D52C
 	.long LABEL_E2D552
@@ -26059,6 +26291,8 @@ LABEL_E2E624:	; registered from InitializeKubo
 	.long LABEL_E2D746
 	.long LABEL_E2D760
 	.byte 0x00, 0x00, 0x00, 0x00
+
+
 	.long LABEL_E2D78A
 	.long LABEL_E2D7C4
 	.long LABEL_E2D7EE
@@ -26093,6 +26327,8 @@ LABEL_E2E624:	; registered from InitializeKubo
 	.long LABEL_E2DCBC
 	.long LABEL_E2DCEA
 	.byte 0x00, 0x00, 0x00, 0x00, 0x10, 0xdd, 0xe2, 0x00
+
+
 	.long LABEL_E2DD48
 	.long LABEL_E2DD62
 	.long LABEL_E2DD8C
@@ -26154,6 +26390,8 @@ LABEL_E2E624:	; registered from InitializeKubo
 	.long LABEL_E2E5D6
 	.long LABEL_E2E5FA
 	.byte 0x00, 0x00, 0x00, 0x00, 0xf8, 0xf0, 0xe2, 0x00
+
+
 	.long LABEL_E2F0F6
 	.long LABEL_E2F0F4
 	.long LABEL_E2F0F2
@@ -26208,6 +26446,7 @@ LABEL_E2F144:
 	.byte 0x00, 0xff
 LABEL_E2F146:
 	.byte 0x00, 0xff
+LABEL_E2F148:
 	.long LABEL_E2F230
 	.long LABEL_E2F22E
 	.long LABEL_E2F22C
@@ -26314,6 +26553,7 @@ LABEL_E2F27C:
 	.byte 0x00, 0xff
 LABEL_E2F27E:
 	.byte 0x00, 0xff
+LABEL_E2F280:
 	.long LABEL_E2F2CC
 	.long LABEL_E2F2CA
 	.long LABEL_E2F2C8
@@ -26420,6 +26660,7 @@ LABEL_E2F3DC:
 	.byte 0x00, 0xff
 LABEL_E2F3DE:
 	.byte 0x00, 0xff
+LABEL_E2F3E0:
 	.long LABEL_E2F444
 	.long LABEL_E2F442
 	.long LABEL_E2F440
@@ -26481,6 +26722,7 @@ LABEL_E2F484:
 	.byte 0x00, 0xff
 LABEL_E2F486:
 	.byte 0x00, 0xff
+LABEL_E2F488:
 	.long LABEL_E2F55E
 	.long LABEL_E2F55C
 	.long LABEL_E2F55A
@@ -26533,6 +26775,7 @@ LABEL_E2F558:	aligned_string ""
 LABEL_E2F55A:	aligned_string ""
 LABEL_E2F55C:	aligned_string ""
 LABEL_E2F55E:	aligned_string ""
+LABEL_E2F560:
 	.long LABEL_E2F5B0
 	.long LABEL_E2F5AE
 	.long LABEL_E2F5AC
@@ -26647,6 +26890,7 @@ LABEL_E2F6DC:
 	.byte 0x00, 0xff
 LABEL_E2F6DE:
 	.byte 0x00, 0xff
+LABEL_E2F6E0:
 	.long LABEL_E2F756
 	.long LABEL_E2F754
 	.long LABEL_E2F752
@@ -26683,6 +26927,7 @@ LABEL_E2F750:	aligned_string ""
 LABEL_E2F752:	aligned_string ""
 LABEL_E2F754:	aligned_string ""
 LABEL_E2F756:	aligned_string ""
+LABEL_E2F758:
 	.long LABEL_E2F7DA
 	.long LABEL_E2F7D8
 	.long LABEL_E2F7D6
@@ -26724,6 +26969,7 @@ LABEL_E2F7D6:	aligned_string ""
 LABEL_E2F7D8:	aligned_string ""
 LABEL_E2F7DA:
 	.byte 0x00, 0xff, 0x96, 0xf8, 0xe2, 0x00
+LABEL_E2F7E0:
 	.long LABEL_E2F894
 	.long LABEL_E2F888
 	.long LABEL_E2F886
@@ -26779,6 +27025,7 @@ LABEL_E2F894:
 	.byte 0x00, 0xff
 LABEL_E2F896:
 	.byte 0x00, 0xff
+LABEL_E2F898:
 	.long LABEL_E2F8B4
 	.long LABEL_E2F8B2
 	.long LABEL_E2F8B0
@@ -26872,6 +27119,7 @@ LABEL_E2F996:
 	.byte 0x00, 0xff
 LABEL_E2F99A:
 	.byte 0x00, 0xff, 0xb8, 0xf9, 0xe2, 0x00
+LABEL_E2F9A0:
 	.long LABEL_E2F9B6
 	.long LABEL_E2F9B4
 	.long LABEL_E2F9B2
@@ -26940,6 +27188,7 @@ LABEL_E2FA5E:
 	.byte 0x00, 0xff
 LABEL_E2FA62:
 	.byte 0x00, 0xff, 0x98, 0xfa, 0xe2, 0x00
+LABEL_E2FA68:
 	.long LABEL_E2FA96
 	.long LABEL_E2FA94
 	.long LABEL_E2FA92
@@ -27086,6 +27335,7 @@ LABEL_E2FC24:
 	.byte 0x00, 0xff
 LABEL_E2FC26:
 	.byte 0x00, 0xff
+LABEL_E2FC28:
 	.long LABEL_E2FC98
 	.long LABEL_E2FC96
 	.long LABEL_E2FC94
@@ -27157,6 +27407,7 @@ LABEL_E2FD06:
 	.byte 0x00, 0xff
 LABEL_E2FD0A:
 	.byte 0x00, 0xff, 0xb2, 0xfd, 0xe2, 0x00
+LABEL_E2FD10:
 	.long LABEL_E2FDB0
 	.long LABEL_E2FDAE
 	.long LABEL_E2FDAC
@@ -27210,6 +27461,7 @@ LABEL_E2FDB0:
 	.byte 0x00, 0xff
 LABEL_E2FDB2:
 	.byte 0x00, 0xff, 0x22, 0xfe, 0xe2, 0x00
+LABEL_E2FDB8:
 	.long LABEL_E2FE20
 	.long LABEL_E2FE1E
 	.long LABEL_E2FE1C
@@ -27245,6 +27497,7 @@ LABEL_E2FE20:
 	.byte 0x00, 0xff
 LABEL_E2FE22:
 	.byte 0x00, 0xff, 0x94, 0xfe, 0xe2, 0x00
+LABEL_E2FE28:
 	.long LABEL_E2FE92
 	.long LABEL_E2FE90
 	.long LABEL_E2FE8E
@@ -27319,6 +27572,7 @@ LABEL_E2FF06:
 	.byte 0x00, 0xff
 LABEL_E2FF0A:
 	.byte 0x00, 0xff, 0x76, 0xff, 0xe2, 0x00
+LABEL_E2FF10:
 	.long LABEL_E2FF74
 	.long LABEL_E2FF72
 	.long LABEL_E2FF70
@@ -27352,6 +27606,7 @@ LABEL_E2FF74:
 	.byte 0x00, 0xff
 LABEL_E2FF76:
 	.byte 0x00, 0xff
+LABEL_E2FF78:
 	.long LABEL_E2FFEE
 	.long LABEL_E2FFEC
 	.long LABEL_E2FFEA
@@ -27404,6 +27659,7 @@ LABEL_E3000C:
 	.byte 0x00, 0xff, 0x8e, 0x00
 	.byte 0xe3, 0x00, 0x8c, 0x00, 0xe3, 0x00, 0x8a, 0x00
 	.byte 0xe3, 0x00
+LABEL_E3001A:
 	.long LABEL_E30080
 	.long LABEL_E30074
 	.long LABEL_E3006C
@@ -27624,6 +27880,7 @@ LABEL_E302F6:
 	.byte 0xda, 0x77, 0xf4, 0x00, 0xf9, 0x6f, 0xf4, 0x00
 	.byte 0x50, 0x76, 0xf4, 0x00, 0x00, 0x00, 0x00, 0x00
 
+LABEL_E305D0:
 	.long LABEL_E30932
 	.long LABEL_E30926
 	.long LABEL_E3091A
@@ -28792,6 +29049,7 @@ LABEL_E44DF8:
 	.byte 0x18, 0x18, 0x18, 0x18
 	.ascii "        ((((((((0000000088888888@@@@@@@@HHHHHHHHPPPPPPPPXXXXXXXX"
 	.byte 0x7f, 0x7f, 0x7f, 0x7f
+LABEL_E44E58:
 	.long LABEL_E44DF8
 	.long LABEL_E44CD8
 	.long LABEL_E44D98
@@ -36909,6 +37167,7 @@ LABEL_E55752:	aligned_string "TtMdmenu"
 	.byte 0x00, 0xff, 0x66, 0x57, 0xe5, 0x00
 LABEL_E55766:
 	.byte 0x00, 0xff
+LABEL_E55768:
 	.long LABEL_E5578A
 	.long LABEL_E55782
 	.long LABEL_E5577A
@@ -36917,6 +37176,7 @@ LABEL_E55778:	aligned_string ""
 LABEL_E5577A:	aligned_string "window1"
 LABEL_E55782:	aligned_string "window0"
 LABEL_E5578A:	aligned_string "page"
+LABEL_E55790:
 	.long LABEL_E557B6
 	.long LABEL_E557B0
 	.long LABEL_E557AC
@@ -36932,12 +37192,13 @@ LABEL_E557B6:
 	.byte 0x57, 0xe5, 0x00
 LABEL_E557C0:
 	.byte 0x00, 0xff
+LABEL_E557C2:
 	.long LABEL_E55800
 	.long LABEL_E557F8
 	.long LABEL_E557F0
 	.long LABEL_E557E6
 	.long LABEL_E557DC
-	.byte 0xda, 0x57, 0xe5, 0x00
+	.long LABEL_E557DA
 LABEL_E557DA:
 	.byte 0x00, 0xff
 LABEL_E557DC:	aligned_string "pman_out"
@@ -36945,12 +37206,13 @@ LABEL_E557E6:	aligned_string "pman_adr"
 LABEL_E557F0:	aligned_string "off_str"
 LABEL_E557F8:	aligned_string "on_str"
 LABEL_E55800:	aligned_string "data"
+LABEL_E55806:
 	.long LABEL_E55844
 	.long LABEL_E5583C
 	.long LABEL_E55834
 	.long LABEL_E5582A
 	.long LABEL_E55820
-	.byte 0x1e, 0x58, 0xe5, 0x00
+	.long LABEL_E5581E
 LABEL_E5581E:
 	.byte 0x00, 0xff
 LABEL_E55820:	aligned_string "pman_out"
@@ -37014,18 +37276,20 @@ LABEL_E55962:
 LABEL_E55964:	aligned_string "func"
 LABEL_E5596A:	aligned_string "fixedrow"
 LABEL_E55974:	aligned_string "fixedcol"
+LABEL_E5597E:
 	.long LABEL_E559AA
 	.long LABEL_E559A0
 	.long LABEL_E5599A
 	.long LABEL_E55994
-	.byte 0x92, 0x59, 0xe5, 0x00
+	.long LABEL_E55992
 LABEL_E55992:
 	.byte 0x00, 0xff
 LABEL_E55994:	aligned_string "page"
 LABEL_E5599A:	aligned_string "func"
 LABEL_E559A0:	aligned_string "fixedrow"
 LABEL_E559AA:	aligned_string "fixedcol"
-	.byte 0xe0, 0x59, 0xe5, 0x00
+	.long LABEL_E559E0
+LABEL_E559B8:
 	.long LABEL_E559D6
 	.long LABEL_E559D0
 	.long LABEL_E559CA
@@ -37153,6 +37417,8 @@ LABEL_E559E0:	aligned_string "fixedcol"
 	aligned_string "PsHarmOnOffBox"
 	.byte 0x10, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0xa0, 0x5d, 0xe5, 0x00
+
+
 	.long LABEL_E55D94
 	.long LABEL_E55D88
 	.long LABEL_E55D7C
@@ -37186,6 +37452,7 @@ LABEL_E55D94:	aligned_string "MT_EXCSEND"
 	.byte 0x73, 0xf7, 0x00, 0x29, 0x83, 0xf7, 0x00, 0x7c
 	.byte 0x86, 0xf7, 0x00, 0xdc, 0x9a, 0xf7, 0x00, 0xf4
 	.byte 0xa1, 0xf7, 0x00, 0x00, 0x00, 0x00, 0x00
+LABEL_E55DF2:
 	.long LABEL_E55F70
 	.long LABEL_E55F5C
 	.long LABEL_E55F46
@@ -37202,7 +37469,7 @@ LABEL_E55D94:	aligned_string "MT_EXCSEND"
 	.long LABEL_E55E62
 	.long LABEL_E55E4E
 	.long LABEL_E55E38
-	.byte 0x36, 0x5e, 0xe5, 0x00
+	.long LABEL_E55E36
 LABEL_E55E36:
 	.byte 0x00, 0xff
 LABEL_E55E38:	aligned_string "AcMidiPartGridBoxProc"
@@ -39791,7 +40058,8 @@ LABEL_E5A1C2:
 LABEL_E5A1C4:
 	.byte 0x00, 0xff
 LABEL_E5A1C6:	aligned_string "ReverbPreset"
-	.byte 0x2a, 0xa2, 0xe5, 0x00
+	.long LABEL_E5A22A
+LABEL_E5A1D8:
 	.long LABEL_E5A228
 	.long LABEL_E5A226
 	.long LABEL_E5A224
@@ -39844,6 +40112,7 @@ LABEL_E5A28E:
 	.byte 0x00, 0xff
 LABEL_E5A290:	aligned_string ""
 LABEL_E5A292:	aligned_string "ReverbEqualizerPreset"
+LABEL_E5A2A8:
 	.long LABEL_E5A346
 	.long LABEL_E5A33A
 	.long LABEL_E5A338
@@ -39886,6 +40155,7 @@ LABEL_E5A336:	aligned_string ""
 LABEL_E5A338:	aligned_string ""
 LABEL_E5A33A:	aligned_string "MdmenuPage"
 LABEL_E5A346:	aligned_string "MidiMenu"
+LABEL_E5A350:
 	.long LABEL_E5A38E
 	.long LABEL_E5A37C
 	.long LABEL_E5A37A
@@ -39921,6 +40191,8 @@ LABEL_E5A38E:	aligned_string "MidiPartSetting"
 	aligned_string "RealtimeCommandBox"
 	.byte 0x00, 0xff
 	aligned_string "MidiRealtimeMessage"
+
+
 	.long LABEL_E5A476
 	.long LABEL_E5A468
 	.long LABEL_E5A466
@@ -39933,6 +40205,7 @@ LABEL_E5A464:	aligned_string ""
 LABEL_E5A466:	aligned_string ""
 LABEL_E5A468:	aligned_string "ComSetGridBox"
 LABEL_E5A476:	aligned_string "MidiCommonSetting"
+LABEL_E5A488:
 	.long LABEL_E5A4B6
 	.long LABEL_E5A4A8
 	.long LABEL_E5A4A6
@@ -39945,6 +40218,7 @@ LABEL_E5A4A4:	aligned_string ""
 LABEL_E5A4A6:	aligned_string ""
 LABEL_E5A4A8:	aligned_string "InOutGridBox"
 LABEL_E5A4B6:	aligned_string "MidiInOutSetting"
+LABEL_E5A4C8:
 	.long LABEL_E5A770
 	.long LABEL_E5A760
 	.long LABEL_E5A75E
@@ -40081,7 +40355,8 @@ LABEL_E5A75C:	aligned_string ""
 LABEL_E5A75E:	aligned_string ""
 LABEL_E5A760:	aligned_string "MdPresetPageBox"
 LABEL_E5A770:	aligned_string "MidiPresets"
-	.byte 0xf8, 0xa8, 0xe5, 0x00
+	.long LABEL_E5A8F8
+LABEL_E5A780:
 	.long LABEL_E5A8F6
 	.long LABEL_E5A8F4
 	.long LABEL_E5A8E8
@@ -40168,6 +40443,8 @@ LABEL_E5A8F8:	aligned_string "MidiExclusive"
 	.byte 0x00, 0xff, 0x00, 0xff
 	aligned_string "PcgOutGridBox"
 	aligned_string "MidiPcgOutput"
+
+
 	.long LABEL_E5AA18
 	.long LABEL_E5AA16
 	.long LABEL_E5AA14
@@ -40182,6 +40459,7 @@ LABEL_E5AA12:	aligned_string ""
 LABEL_E5AA14:	aligned_string ""
 LABEL_E5AA16:	aligned_string ""
 LABEL_E5AA18:	aligned_string "MidiComputerConnection"
+LABEL_E5AA30:
 	.long LABEL_E5AAB0
 	.long LABEL_E5AAAE
 	.long LABEL_E5AAAC
@@ -40350,6 +40628,7 @@ LABEL_E5AC82:	aligned_string "SplitSetting"
 	.byte 0x4b, 0x73, 0xf7, 0x00, 0x01, 0x42, 0xf7, 0x00
 	.byte 0x65, 0x43, 0xf7, 0x00, 0xdd, 0x46, 0xf7, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x3a, 0xae, 0xe5, 0x00
+LABEL_E5ADB0:
 	.long LABEL_E5AE2E
 	.long LABEL_E5AE20
 	.long LABEL_E5AE12
@@ -40441,6 +40720,7 @@ LABEL_E7ED3A:	aligned_string "PAGE 1/3"
 	.byte 0xe7, 0x00
 LABEL_E7ED92:	aligned_string "ABOVE"
 LABEL_E7ED98:	aligned_string "BELOW"
+LABEL_E7ED9E:
 	.long LABEL_E7EE04
 	.long LABEL_E7EDFE
 	.long LABEL_E7EDFA
@@ -40472,6 +40752,7 @@ LABEL_E7EDFA:
 LABEL_E7EDFE:	aligned_string "D~a0"
 LABEL_E7EE04:
 	.byte 0x43, 0x20, 0x00, 0xff
+LABEL_E7EE08:
 	.long LABEL_E7EE5C
 	.long LABEL_E7EE58
 	.long LABEL_E7EE54
@@ -40573,6 +40854,7 @@ LABEL_E7F0B6:	aligned_string "HARMONY PART LOCAL: ---"
 	.byte 0x45, 0x76, 0x00, 0xff
 	aligned_string "CcEv"
 	aligned_string "CcEv"
+LABEL_E7F0F8:
 	.long LABEL_E7F14A
 	.long LABEL_E7F140
 	.long LABEL_E7F134
@@ -40629,6 +40911,8 @@ LABEL_E7F14A:	aligned_string "ATTENTION!"
 	aligned_string "Press a key to select the split point."
 	aligned_string "Dr~fcken Sie eine Taste, um den Split-Punkt zu bestimmen."
 	aligned_string "Press a key to select the split point."
+
+
 	.long LABEL_E7F7DE
 	.long LABEL_E7F7D8
 	.long LABEL_E7F7D4
@@ -40688,6 +40972,8 @@ LABEL_E7F7DE:
 	aligned_string "  TECH  "
 	aligned_string "   GM   "
 	aligned_string " Error! "
+
+
 	.long LABEL_E7F922
 	.long LABEL_E7F91C
 	.long LABEL_E7F916
@@ -40744,7 +41030,7 @@ LABEL_E7FCA2:	aligned_string " OFF "
 	.long LABEL_E7FCB0
 LABEL_E7FCB0:	aligned_string " DIRECT  "
 LABEL_E7FCBA:	aligned_string "CONDUCTOR"
-	.byte 0xe4, 0xfc, 0xe7, 0x00
+	.long LABEL_E7FCE4
 	.long LABEL_E7FCDA
 	.long LABEL_E7FCD0
 LABEL_E7FCD0:	aligned_string "  FIX   "
@@ -40819,6 +41105,7 @@ LABEL_E7FEA0:
 	.byte 0xe7, 0x00, 0xbe, 0xfe, 0xe7, 0x00
 LABEL_E7FEBE:	.asciz " YES "
 LABEL_E7FEC4:	aligned_string " NO  "
+LABEL_E7FECA:
 	.long LABEL_E7FEF8
 	.long LABEL_E7FEEE
 	.long LABEL_E7FEE4
@@ -41219,13 +41506,14 @@ LABEL_E80B28:
 LABEL_E80B34:	aligned_string ""
 LABEL_E80B36:	aligned_string "str3"
 LABEL_E80B3C:	aligned_string "str1"
+LABEL_E80B42:
 	.long LABEL_E80B8A
 	.long LABEL_E80B84
 	.long LABEL_E80B7A
 	.long LABEL_E80B74
 	.long LABEL_E80B6A
 	.long LABEL_E80B60
-	.byte 0x5e, 0x0b, 0xe8, 0x00
+	.long LABEL_E80B5E
 LABEL_E80B5E:
 	.byte 0x00, 0xff
 LABEL_E80B60:	aligned_string "dialfocus"
@@ -41273,12 +41561,13 @@ LABEL_E80BF6:
 	.byte 0x00, 0xff
 	.long LABEL_E80BFC
 LABEL_E80BFC:	aligned_string ""
+LABEL_E80BFE:
 	.long LABEL_E80C3A
 	.long LABEL_E80C30
 	.long LABEL_E80C2A
 	.long LABEL_E80C22
 	.long LABEL_E80C18
-	.byte 0x16, 0x0c, 0xe8, 0x00
+	.long LABEL_E80C16
 LABEL_E80C16:
 	.byte 0x00, 0xff
 LABEL_E80C18:	aligned_string "selected"
@@ -41301,11 +41590,12 @@ LABEL_E80C56:
 LABEL_E80C64:	aligned_string ""
 LABEL_E80C66:	aligned_string "data"
 LABEL_E80C6C:	aligned_string "func"
+LABEL_E80C72:
 	.long LABEL_E80CA0
 	.long LABEL_E80C98
 	.long LABEL_E80C8E
 	.long LABEL_E80C88
-	.byte 0x86, 0x0c, 0xe8, 0x00
+	.long LABEL_E80C86
 LABEL_E80C86:
 	.byte 0x00, 0xff
 LABEL_E80C88:	aligned_string "song"
@@ -41648,6 +41938,7 @@ LABEL_E81372:	aligned_string "EV_READACTION"
 LABEL_E81380:	aligned_string "EV_READPRESENTATION"
 	aligned_string "EV_ACCORDIONTAB"
 	.byte 0x0a, 0x00
+LABEL_E813A6:
 	.long LABEL_E814E6
 	.long LABEL_E814D6
 	.long LABEL_E814C8
@@ -41699,6 +41990,7 @@ LABEL_E814E6:	aligned_string "MT_GetPart"
 	.byte 0x48, 0xde, 0xf7, 0x00, 0x5e, 0x2a, 0xf8, 0x00
 	.byte 0x06, 0x2b, 0xf8, 0x00, 0x22, 0xf4, 0xf7, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0xa2, 0x18, 0xe8, 0x00
+LABEL_E81590:
 	.long LABEL_E8188C
 	.long LABEL_E81876
 	.long LABEL_E81868
@@ -44849,6 +45141,7 @@ LABEL_E8545A:
 	.byte 0x0f, 0x00, 0x61, 0x01, 0x00, 0x00
 	.byte 0xff, 0xff, 0xff, 0xff, 0x04, 0x00, 0x18, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x1f, 0x00, 0x1f, 0x00
+LABEL_E85470:
 	.long LABEL_E818B0
 	.long LABEL_E818E6
 	.long LABEL_E8190A
@@ -44870,6 +45163,7 @@ LABEL_E8545A:
 	.long LABEL_E81C58
 	.long LABEL_E81C98
 	.byte 0x00, 0x00, 0x00, 0x00, 0xdc, 0x1c, 0xe8, 0x00
+LABEL_E854C8:
 	.long LABEL_E81D1A
 	.long LABEL_E81D42
 	.long LABEL_E81D6A
@@ -44954,11 +45248,13 @@ LABEL_E8545A:
 	.long LABEL_E82CA2
 	.long LABEL_E82CEA
 	.byte 0x00, 0x00, 0x00, 0x00
+LABEL_E85618:
 	.long LABEL_E82D32
 	.long LABEL_E82D6A
 	.long LABEL_E82DB6
 	.long LABEL_E82DDA
 	.byte 0x00, 0x00, 0x00, 0x00, 0x04, 0x2e, 0xe8, 0x00
+LABEL_E85630:
 	.long LABEL_E82E3A
 	.long LABEL_E82E5E
 	.long LABEL_E82E7A
@@ -45017,11 +45313,13 @@ LABEL_E8545A:
 	.long LABEL_E836A0
 	.long LABEL_E836CA
 	.byte 0x00, 0x00, 0x00, 0x00
+LABEL_E85718:
 	.long LABEL_E83716
 	.long LABEL_E83746
 	.long LABEL_E8376A
 	.long LABEL_E8378E
 	.byte 0x00, 0x00, 0x00, 0x00, 0xa4, 0x37, 0xe8, 0x00
+LABEL_E85730:
 	.long LABEL_E837DC
 	.long LABEL_E83800
 	.long LABEL_E8381C
@@ -45071,6 +45369,8 @@ LABEL_E8545A:
 	.long LABEL_E83FB2
 	.long LABEL_E83FE2
 	.byte 0x00, 0x00, 0x00, 0x00
+
+
 	.long LABEL_E84006
 	.long LABEL_E84032
 	.long LABEL_E8404A
@@ -45116,6 +45416,8 @@ LABEL_E8545A:
 	.long LABEL_E8469C
 	.long LABEL_E846B6
 	.byte 0x00, 0x00, 0x00, 0x00, 0xe4, 0x46, 0xe8, 0x00
+
+
 	.long LABEL_E84706
 	.long LABEL_E84720
 	.long LABEL_E84738
@@ -45153,6 +45455,8 @@ LABEL_E8545A:
 	.long LABEL_E84DFA
 	.long LABEL_E84E3A
 	.byte 0x00, 0x00, 0x00, 0x00, 0x50, 0x4e, 0xe8, 0x00
+
+
 	.long LABEL_E84E72
 	.long LABEL_E84E88
 	.long LABEL_E84EAC
@@ -45177,6 +45481,8 @@ LABEL_E8545A:
 	.long LABEL_E85180
 	.long LABEL_E851A4
 	.byte 0x00, 0x00, 0x00, 0x00
+
+
 	.long LABEL_E851C8
 	.long LABEL_E851EA
 	.long LABEL_E85202
@@ -45189,6 +45495,8 @@ LABEL_E8545A:
 	.long LABEL_E852DE
 	.long LABEL_E852F6
 	.byte 0x00, 0x00, 0x00, 0x00
+
+
 	.long LABEL_E8531A
 	.long LABEL_E85352
 	.long LABEL_E85394
@@ -45196,6 +45504,8 @@ LABEL_E8545A:
 	.long LABEL_E85418
 	.long LABEL_E8545A
 	.byte 0x00, 0x00, 0x00, 0x00, 0x86, 0x5a, 0xe8, 0x00
+
+
 	.long LABEL_E85A7A
 	.long LABEL_E85A78
 	.long LABEL_E85A76
@@ -45415,6 +45725,7 @@ LABEL_E85CE4:
 LABEL_E85CE6:
 	.byte 0x00, 0xff
 LABEL_E85CE8:	aligned_string "Sdpart"
+LABEL_E85CF0:
 	.long LABEL_E85D0C
 	.long LABEL_E85D0A
 	.long LABEL_E85D08
@@ -45425,7 +45736,8 @@ LABEL_E85D06:	aligned_string ""
 LABEL_E85D08:	aligned_string ""
 LABEL_E85D0A:	aligned_string ""
 LABEL_E85D0C:	aligned_string "Sdmtune"
-	.byte 0x00, 0x5f, 0xe8, 0x00
+	.long LABEL_E85F00
+LABEL_E85D18:
 	.long LABEL_E85EF2
 	.long LABEL_E85EF0
 	.long LABEL_E85EEE
@@ -45562,6 +45874,8 @@ LABEL_E85F46:	aligned_string "Sdmixer"
 	.byte 0xe8, 0x00, 0x72, 0x60, 0xe8, 0x00, 0x6a, 0x60
 	.byte 0xe8, 0x00, 0x68, 0x60, 0xe8, 0x00, 0x66, 0x60
 	.byte 0xe8, 0x00, 0x64, 0x60, 0xe8, 0x00
+
+
 	.long LABEL_E8605C
 	.long LABEL_E86054
 	.long LABEL_E8604C
@@ -45650,6 +45964,8 @@ LABEL_E86170:	aligned_string ""
 LABEL_E86172:	aligned_string "Demofeature"
 	inc	2, xde
 	.byte 0xe8, 0x00, 0xe8, 0x62, 0xe8, 0x00
+
+
 	.long LABEL_E862DE
 	.long LABEL_E862D2
 	.long LABEL_E862CA
@@ -45809,6 +46125,8 @@ LABEL_E863F4:	aligned_string "Accordion"
 	aligned_string "Completed"
 	.byte 0x00, 0xff
 	aligned_string "Mesage"
+
+
 	.long LABEL_E8652C
 	.long LABEL_E8652A
 	.long LABEL_E86528
@@ -45833,7 +46151,8 @@ LABEL_E86526:	aligned_string ""
 LABEL_E86528:	aligned_string ""
 LABEL_E8652A:	aligned_string ""
 LABEL_E8652C:	aligned_string "Welcom"
-	.byte 0x82, 0x65, 0xe8, 0x00
+	.long LABEL_E86582
+LABEL_E86538:
 	.long LABEL_E86576
 	.long LABEL_E8656C
 	.long LABEL_E86560
@@ -46033,6 +46352,8 @@ LABEL_E956A8:	aligned_string "Spanish Header"
 LABEL_E956B8:	aligned_string "French Header"
 LABEL_E956C6:	aligned_string "German Header"
 LABEL_E956D4:	aligned_string "English Header"
+
+
 LABEL_E956E4:
 	.long LABEL_E95740
 	.long LABEL_E95734
@@ -46046,6 +46367,8 @@ LABEL_E9571A:	aligned_string "Spanish Text"
 LABEL_E95728:	aligned_string "French Text"
 LABEL_E95734:	aligned_string "German Text"
 LABEL_E95740:	aligned_string "English Text"
+
+
 LABEL_E9574E:
 	.long LABEL_E95786
 	.long LABEL_E95780
@@ -46063,6 +46386,7 @@ LABEL_E95780:	aligned_string "ERROR"
 LABEL_E95786:
 	.byte 0x45, 0x52
 	.byte 0x52, 0x4f, 0x52, 0x00, 0xde, 0x57, 0xe9, 0x00
+LABEL_E95790:
 	.long LABEL_E957D2
 	.long LABEL_E957C8
 	.long LABEL_E957BC
@@ -46110,6 +46434,7 @@ LABEL_E95960:	aligned_string "REMINDER"
 	aligned_string "La mémoire interne est conservée pendant environ 80 minutes après la coupure de l'alimentation générale de l'instrument. Sauvegardez SAVE votre travail sur disquette !"
 	aligned_string "Der Speicherinhalt bleibt etwa 80 Minuten nach Ausschalten des Keyboards erhalten. Speichern Sie Ihre Daten daher auf Diskette !"
 	aligned_string "The internal memory is retained for about 80 minutes after turning off the power. SAVE your work on Floppy Disk!"
+LABEL_E95B88:
 	.long LABEL_E95E52
 	.long LABEL_E95DAC
 	.long LABEL_E95D0E
@@ -46122,6 +46447,7 @@ LABEL_E95C3C:	.asciz "Las configuraciones fueron canceladas porque no se complet
 LABEL_E95D0E:	.asciz "Vous n'avez pas pressé le bouton OK et les réglages n'ont pas été enregistrés. Veuillez effectuer à nouveau les réglages et presser OK pour les enregistrer. "
 LABEL_E95DAC:	aligned_string "Die Einstellungen wurden nicht gespeichert da die Speicherung nicht mit OK bestätigt wurde. Nehmen Sie die Einstellungen noch einmal vor und bestätigen dann mit OK."
 LABEL_E95E52:	aligned_string "The settings have been canceled because the storage procedure was not completed by pressing the OK button. Please enter the settings again and press OK to store them. "
+LABEL_E95EFA:
 	.long LABEL_E95F3A
 	.long LABEL_E95F32
 	.long LABEL_E95F2A
@@ -46145,6 +46471,8 @@ LABEL_E95FA8:	aligned_string "ERROR 00"
 	.ascii "Die Daten auf dieser Diskette stammen von einem anderen Gerä"
 	.byte 0x74, 0x2e, 0x00, 0xff
 	aligned_string "The data on the disk that you are using is for a different product."
+
+
 LABEL_E960D8:
 	.long LABEL_E96232
 	.long LABEL_E961DC
@@ -46169,6 +46497,8 @@ LABEL_E96232:	aligned_string "An error has occurred while the disk was loading. 
 	aligned_string "Keine Diskette im Laufwerk!"
 	aligned_string "There is no disk in the disk drive."
 	.byte 0x58, 0x64, 0xe9, 0x00
+
+
 	.long LABEL_E9641E
 	.long LABEL_E963E8
 	.long LABEL_E963BC
@@ -46191,6 +46521,7 @@ LABEL_E964E6:	aligned_string "Se ha producido un error mientras se almacenaban d
 	aligned_string "Une erreur s'est produite pendant la procédure de sauvegarde. Essayez encore!"
 	aligned_string "Beim Speichern auf die Diskette ist ein Fehler aufgetreten. Bitte noch einmal versuchen."
 	aligned_string "An error has occurred while the disk was saving. Please try again!"
+LABEL_E96628:
 	.long LABEL_E967FC
 	.long LABEL_E96796
 	.long LABEL_E96724
@@ -46214,6 +46545,7 @@ LABEL_E968C0:	aligned_string "ERROR 07"
 	.asciz "La disquette que vous utilisez est saturée. Utilisez une autre disquette!"
 	aligned_string "Ihre Diskette ist voll. Benutzen Sie bette eine andere."
 	aligned_string "The disk that you are using is full. Please use another disk."
+LABEL_E969C8:
 	.long LABEL_E96BF4
 	.long LABEL_E96BA6
 	.long LABEL_E96B06
@@ -46226,6 +46558,8 @@ LABEL_E96A68:	.asciz "Se ha producido un error mientras se hacía el formato del 
 LABEL_E96B06:	aligned_string "Une erreur s'est produite pendant la procédure de formatage. La disquette que vous utilisez est peut être détériorée. Essayez de formater une autre disquette."
 LABEL_E96BA6:	aligned_string "Beim Formatieren ist ein Fehler aufgetreten. Benutzen Sie bette eine andere."
 LABEL_E96BF4:	aligned_string "An error has occurred while the disk was formatting. The disk that you are using may be faulty. Please try formatting another disk."
+
+
 LABEL_E96C78:
 	.long LABEL_E96DDC
 	.long LABEL_E96D84
@@ -46239,6 +46573,7 @@ LABEL_E96CEC:	aligned_string "Los datos del disco están protegidos contra copia.
 LABEL_E96D42:	.asciz "Cette disquette est protégée. Veuillez entrer votre mot de passe."
 LABEL_E96D84:	aligned_string "Die Daten auf dieser Diskette sind schreibgeschützt. Bitte geben Sie das Password ein."
 LABEL_E96DDC:	aligned_string "The data on the disk is copy protected. Please enter the password."
+LABEL_E96E20:
 	.long LABEL_E96EDE
 	.long LABEL_E96EB4
 	.long LABEL_E96E88
@@ -46263,6 +46598,7 @@ LABEL_E96F3E:	aligned_string "ERROR 11"
 	aligned_string "Das eingegebene Password ist falsch."
 	aligned_string "The password that you entered is incorrect."
 	.byte 0x80, 0x71, 0xe9, 0x00
+LABEL_E96FE8:
 	.long LABEL_E97114
 	.long LABEL_E970BA
 	.long LABEL_E97052
@@ -46287,6 +46623,7 @@ LABEL_E970BA:	.asciz "La batterie interne est pratiquement déchargée. Remplacez 
 	aligned_string "Der Song den Sie speichern möchten ist leer."
 	aligned_string "The song you are trying to save is empty."
 	.byte 0x86, 0x74, 0xe9, 0x00
+LABEL_E97300:
 	.long LABEL_E97424
 	.long LABEL_E973C8
 	.long LABEL_E97376
@@ -46300,6 +46637,7 @@ LABEL_E97424:	aligned_string "Dieses STANDARD MIDI FILE ist nicht kompatibel zum
 	aligned_string "This Standard MIDI File is incompatible with the KN5000 and cannot be loaded."
 LABEL_E974D4:
 	.byte 0x98, 0x75, 0xe9, 0x00
+LABEL_E974D8:
 	.long LABEL_E97576
 	.long LABEL_E97546
 	.long LABEL_E97520
@@ -46380,6 +46718,8 @@ LABEL_E97A0E:	aligned_string "ERROR 20"
 	.asciz "Es ist jetzt nicht mehr möglich das Taktvorzeichen zu ändern, da dieses bereits festgelegt wurde."
 	aligned_string "It is impossible to change the Time Signature because it has already been set in the existing Tracks."
 	.byte 0x68, 0x81, 0xe9, 0x00
+
+
 	.long LABEL_E9810C
 	.long LABEL_E980A8
 	.long LABEL_E9805E
@@ -46391,6 +46731,7 @@ LABEL_E9805E:	aligned_string "Ya existe una pista de ritmo. No es posible asigna
 LABEL_E980A8:	.asciz "Vous avez déjà choisi une piste pour le rythme! Vous ne pouvez pas assigner deux pistes à celui-ci."
 LABEL_E9810C:	.asciz "Es ist nicht möglich, zwei RHYTHM-Spuren die gleiche Spurzuweisung (TRACK ASSIGN) zu geben."
 	aligned_string "A Rhythm Track already exists. It is impossible to assign two Tracks to Rhythm."
+LABEL_E981B8:
 	.long LABEL_E98334
 	.long LABEL_E982D8
 	.long LABEL_E98274
@@ -46416,6 +46757,7 @@ LABEL_E983EC:	aligned_string "ERROR 24"
 	aligned_string "Es ist nicht möglich, zwei CONTROL-Spuren die gleiche Spurzuweisung (TRACK ASSIGN) zu geben."
 	aligned_string "A Control Track already exists. It is impossible to assign two Tracks to Control."
 	.byte 0xd0, 0x86, 0xe9, 0x00
+LABEL_E98560:
 	.long LABEL_E98676
 	.long LABEL_E98614
 	.long LABEL_E985C8
@@ -46471,6 +46813,8 @@ LABEL_E98614:	aligned_string "Vous avez déjà choisi une piste pour le APC! Vous 
 	aligned_string " ist nur möglich die „Melodie“-Spuren zu kopieren. Spuren wie RHYTHM, CHORD und CONTROL können nicht kopiert werden."
 	aligned_string "It is only possible to copy Melody Tracks. Tracks such as Rhythm, Chord and Control cannot be copied."
 	.byte 0x94, 0x8e, 0xe9, 0x00
+
+
 	.long LABEL_E98E52
 	.long LABEL_E98DFA
 	.long LABEL_E98DB0
@@ -46542,6 +46886,8 @@ LABEL_E992D0:	aligned_string "ERROR 30"
 	aligned_string "Der Identifikations (ID) Code der zu empfangenden System Exclusive Daten ist für ein anderes Produkt bestimmt."
 	aligned_string "The Identification (ID) code of the System Exclusive data received by the KN5000 is different product."
 	.byte 0x70, 0x9f, 0xe9, 0x00
+
+
 	.long LABEL_E99EDC
 	.long LABEL_E99E34
 	.long LABEL_E99D90
@@ -46573,6 +46919,8 @@ LABEL_E99E34:	.ascii "Une erreur s'est produite pendant la r"
 	aligned_string "ertragung der System Exclusive Daten ist ein Fehler aufgetreten. Die Daten wurden vom empfangenden Gerät nicht korrekt verstanden."
 	aligned_string "An error has occurred during System Exclusive transmission. The data has not been received correctly. Please try again."
 	.byte 0x42, 0xa5, 0xe9, 0x00
+
+
 	.long LABEL_E9A494
 	.long LABEL_E9A3FE
 	.long LABEL_E9A382
@@ -46584,6 +46932,8 @@ LABEL_E9A382:	.asciz "El fichero que trata de cargar fue almacenado en un teclad
 LABEL_E9A3FE:	.asciz "Le fichier que vous essayez de charger a été sauvegardé à partir d'un clavier KN antérieur. Vous ne pouvez le charger qu'en utilisant l'option “ALL”."
 LABEL_E9A494:	.asciz "Der Datensatz (File), den Sie gerade laden möchten, wurde auf einem älteren KN-Keybord gespeichert. In diesem Fall kann nur unter Verwendung der „ALL“-Option geladen werden."
 	aligned_string "The file that you are trying to load was saved on a previous KN keyboard. It is only possible to load using the \"PERFORMANCE\" option."
+
+
 LABEL_E9A5C8:
 	.long LABEL_E9A7FA
 	.long LABEL_E9A778
@@ -46615,6 +46965,7 @@ LABEL_E9A8EC:	aligned_string "ERROR 46"
 	aligned_string "nnen nur Melodie-Spuren eingefügt werden. Spuren wie Rhythm, Chord und Control können nicht eingefügt werden."
 	aligned_string "It is only possible to insert Melody Tracks. Tracks such as Rhythm, Chord and Control cannot be inserted."
 	.byte 0xe2, 0xac, 0xe9, 0x00
+LABEL_E9AAE0:
 	.long LABEL_E9AC6C
 	.long LABEL_E9ABF8
 	.long LABEL_E9AB7A
@@ -46630,6 +46981,8 @@ LABEL_E9ABF8:	.ascii "L'utilisation du \"Sound Arranger\" n'est pas possible ave
 	.byte 0xe9, 0x2e, 0x00
 LABEL_E9AC6C:	aligned_string "Der Sound Arranger kann nicht mit einem Composer Pattern verwendet werden. Bitte wählen Sie einen Werksrhythmus aus."
 	aligned_string "It is not possible to use the Sound Arranger with a composer pattern. Please select a preset pattern."
+
+
 LABEL_E9AD48:
 	.long LABEL_E9AF02
 	.long LABEL_E9AE9A
@@ -46663,6 +47016,7 @@ LABEL_E9AFE6:	aligned_string "ERROR 49"
 	aligned_string "The quantity of  this song is over the capacity of GN7/GN9/FN3. Please try again after reducing the quantity like omitting the TRACK or MEASURE."
 LABEL_E9B27C:
 	.byte 0xf6, 0xb4, 0xe9, 0x00
+LABEL_E9B280:
 	.long LABEL_E9B480
 	.long LABEL_E9B3C4
 	.long LABEL_E9B326
@@ -46738,6 +47092,8 @@ LABEL_E9B634:	aligned_string "ERROR 55"
 	.asciz "RKB und LKB sind spezielle Spuren für die Kompatibilität mit Sequenzerdaten der aktuellen PR Digital Ensembles. Diese Spuren können nicht aufgenommen oder editiert werden."
 	aligned_string "RKB and LKB are special tracks for compatibility with sequencer data from previous PR products. They cannot be edited or recorded on."
 	.byte 0xe0, 0xc7, 0xe9, 0x00
+
+
 	.long LABEL_E9C6FC
 	.long LABEL_E9C62A
 	.long LABEL_E9C54C
@@ -46778,6 +47134,8 @@ LABEL_E9C62A:	.ascii "RKB et LKB sont des pistes d"
 	aligned_string "Die Computerverbindung ist nicht aktiv, da der Anschluss auf MIDI eingestellt ist. Schalten Sie das Keyboard aus, stellen den Schalter auf die richtige Position und schalten das Keyboard wieder ein."
 	aligned_string "The computer connection is not active because the computer port switch is set to MIDI. Please turn the power off, set the switch to the desired setting and turn the power back on."
 	.byte 0x60, 0xd1, 0xe9, 0x00
+
+
 	.long LABEL_E9D0E0
 	.long LABEL_E9D04A
 	.long LABEL_E9CFB8
@@ -46999,6 +47357,7 @@ LABEL_E9D7F4:	aligned_string "PLEASE WAIT!"
 	.asciz "UILLEZ PATIENTER!"	; DB "!", 000h
 	aligned_string "BITTE WARTEN!"
 	aligned_string "PLEASE WAIT!"
+LABEL_E9D846:
 	.long LABEL_E9D88A
 	.long LABEL_E9D882
 	.long LABEL_E9D87A
@@ -47056,6 +47415,7 @@ LABEL_E9D9B0:	aligned_string "RIGHT 1:"
 	.byte 0x09, 0x00, 0x0a, 0x00, 0x0b, 0x00, 0x0c, 0x00
 	.byte 0xff, 0xff
 	aligned_string "TeC1"
+LABEL_E9DA28:
 	.long LABEL_E9DB0C
 	.long LABEL_E9DB02
 	.long LABEL_E9DAF8
@@ -47114,6 +47474,7 @@ LABEL_E9DB0C:	aligned_string " RIGHT 1 "
 	.byte 0x00, 0x11, 0x00, 0x12, 0x00, 0x13, 0x00, 0x14
 	.byte 0x00, 0x15, 0x00, 0x16, 0x00, 0x80, 0x00, 0xff
 	.byte 0xff
+LABEL_E9DBD6:
 	.long LABEL_E9DCFA
 	.long LABEL_E9DCEC
 	.long LABEL_E9DCDE
@@ -47149,6 +47510,7 @@ LABEL_E9DCDE:	aligned_string "   PIANO    "
 LABEL_E9DCEC:	aligned_string "   RANDOM   "
 LABEL_E9DCFA:	aligned_string "    OFF     "
 	aligned_string " NO TYPE !! "
+LABEL_E9DD16:
 	.long LABEL_E9DD72
 	.long LABEL_E9DD6E
 	.long LABEL_E9DD6A
@@ -47185,6 +47547,7 @@ LABEL_E9DD6E:
 	.byte 0x2b, 0x20, 0x31, 0x00
 LABEL_E9DD72:
 	.byte 0x20, 0x20, 0x30, 0x00
+LABEL_E9DD76:
 	.long LABEL_E9DE14
 	.long LABEL_E9DE0A
 	.long LABEL_E9DE00
@@ -48139,6 +48502,7 @@ LABEL_E9F802:
 	.byte 0x86, 0x82, 0x87, 0x82, 0x88, 0x82, 0xc1, 0x82
 	.byte 0xc0, 0x82, 0xcc, 0x82, 0xcb, 0x82, 0x93, 0x82
 	.byte 0x94, 0x82
+LABEL_E9F8AA:
 	.long LABEL_E9F926
 	.long LABEL_E9F922
 	.long LABEL_E9F91E
@@ -48213,6 +48577,7 @@ LABEL_E9F926:
 	.long LABEL_ED0128
 	.byte 0x1d, 0x00, 0x1d, 0x00
 	.byte 0x1d, 0x00, 0x28, 0x01, 0x24, 0x01, 0x24, 0x01
+LABEL_E9F9C8:
 	.long LABEL_E9FC3E
 	.long LABEL_E9FB96
 	.long LABEL_E9FB10
@@ -48266,7 +48631,7 @@ LABEL_E9FC3E:	aligned_string "To Starting an external DEMO, please insert a feat
 	.byte 0x25, 0x73
 	.byte 0x25, 0x64, 0x00, 0xff
 LABEL_E9FDDC:	aligned_string "Error! (GetInstanceID)"
-	.byte 0x10, 0xfe, 0xe9, 0x00
+	.long LABEL_E9FE10
 	.long LABEL_E9FE0C
 	.long LABEL_E9FE06
 	.long LABEL_E9FE04
@@ -48299,6 +48664,7 @@ LABEL_E9FE94:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00
 	.byte 0x00, 0x00, 0x04, 0x00, 0x00, 0x00, 0x02, 0x00
 	.byte 0x00, 0x00, 0x06, 0x00, 0x00, 0x00
+LABEL_E9FEC2:
 	.long LABEL_E9FF24
 	.long LABEL_E9FF20
 	.long LABEL_E9FF1A
@@ -48308,7 +48674,7 @@ LABEL_E9FE94:
 	.long LABEL_E9FEFC
 	.long LABEL_E9FEF4
 	.long LABEL_E9FEEC
-	.byte 0xea, 0xfe, 0xe9, 0x00
+	.long LABEL_E9FEEA
 LABEL_E9FEEA:
 	.byte 0x00, 0xff
 LABEL_E9FEEC:
@@ -48435,6 +48801,7 @@ LABEL_EA024C:
 	.byte 0x41, 0x3a, 0x5c, 0x00, 0x00, 0x00, 0x00, 0x00
 	.zero 8
 	.byte 0x77, 0x62, 0x00, 0xff, 0x72, 0x62, 0x00, 0xff
+LABEL_EA0340:
 	.long LABEL_EA038C
 	.long LABEL_EA0388
 	.long LABEL_EA0384
@@ -48509,6 +48876,7 @@ LABEL_EA04C2:
 	.byte 0x2a, 0x2e, 0x42, 0x4d
 	.byte 0x50, 0x00
 	.ascii "``alwÿ"
+LABEL_EA0558:
 	.long LABEL_EA0594
 	.long LABEL_EA0590
 	.long LABEL_EA058C
@@ -48533,6 +48901,7 @@ LABEL_EA0590:
 	.byte 0x2d, 0x2d, 0x2d, 0x00
 LABEL_EA0594:
 	.byte 0x2d, 0x2d, 0x2d, 0x00
+LABEL_EA0598:
 	.long LABEL_EA05E4
 	.long LABEL_EA05D6
 	.long LABEL_EA05C8
@@ -48569,6 +48938,7 @@ LABEL_EA0618:	.byte 0x00
 	.asciz "----"
 LABEL_EA061E:	.byte 0x00, 0x42
 	.byte 0x41, 0x4e, 0x4b, 0x00, 0x60, 0x06, 0xea, 0x00
+LABEL_EA0628:
 	.long LABEL_EA0656
 	.long LABEL_EA064C
 	.long LABEL_EA0642
@@ -48627,7 +48997,7 @@ LABEL_EA066C:
 	.byte 0x49, 0x44, 0x00, 0xff
 	aligned_string "TO SONG : "
 	aligned_string "FROM SONG:"
-	.byte 0x80, 0x07, 0xea, 0x00
+	.long LABEL_EA0780
 	.long LABEL_EA0770
 	.long LABEL_EA0760
 LABEL_EA0760:
@@ -48647,6 +49017,7 @@ LABEL_EA0780:	.byte 0x00
 LABEL_EA07BA:	aligned_string "   MEMORY-C    "
 LABEL_EA07CA:	aligned_string "   MEMORY-B    "
 LABEL_EA07DA:	aligned_string "   MEMORY-A    "
+LABEL_EA07EA:
 	.long LABEL_EA0836
 	.long LABEL_EA082E
 	.long LABEL_EA0826
@@ -48671,6 +49042,7 @@ LABEL_EA0836:	aligned_string "VARI 1"
 	.byte 0xd8, 0x08, 0xea, 0x00, 0xd6, 0x08, 0xea
 	.byte 0x00, 0xd4, 0x08, 0xea, 0x00, 0xd2, 0x08, 0xea
 	.byte 0x00
+LABEL_EA084E:
 	.long LABEL_EA08C0
 	.long LABEL_EA08AE
 	.long LABEL_EA089C
@@ -48743,6 +49115,7 @@ LABEL_EA09F0:
 	.byte 0x00, 0xd8, 0x4b, 0xf9, 0x00, 0xe9, 0x4b, 0xf9
 	.byte 0x00, 0xad, 0x4d, 0xf9, 0x00, 0xbf, 0x4e, 0xf9
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00
+LABEL_EA0ACE:
 	.long LABEL_EA0CD6
 	.long LABEL_EA0CC4
 	.long LABEL_EA0CB4
@@ -48799,6 +49172,7 @@ LABEL_EA0CA2:	aligned_string "FilePriorityFunc"
 LABEL_EA0CB4:	aligned_string "JumpInsertFunc"
 LABEL_EA0CC4:	aligned_string "TypePriorityText"
 LABEL_EA0CD6:	aligned_string "InsertOptionText"
+LABEL_EA0CE8:
 	.long LABEL_EA0D5C
 	.long LABEL_EA0D52
 	.long LABEL_EA0D48
@@ -48841,6 +49215,7 @@ LABEL_EA0D96:	aligned_string "main_func"
 LABEL_EA0DAC:	aligned_string ""
 LABEL_EA0DAE:	aligned_string "paintok"
 LABEL_EA0DB6:	aligned_string "main_func"
+LABEL_EA0DC0:
 	.long LABEL_EA0DE4
 	.long LABEL_EA0DDA
 	.long LABEL_EA0DD2
@@ -48867,12 +49242,13 @@ LABEL_EA0E1E:
 LABEL_EA0E20:	aligned_string "page"
 LABEL_EA0E26:	aligned_string "icon"
 LABEL_EA0E2C:	aligned_string "title"
+LABEL_EA0E32:
 	.long LABEL_EA0E74
 	.long LABEL_EA0E68
 	.long LABEL_EA0E64
 	.long LABEL_EA0E58
 	.long LABEL_EA0E4C
-	.byte 0x4a, 0x0e, 0xea, 0x00
+	.long LABEL_EA0E4A
 LABEL_EA0E4A:
 	.byte 0x00, 0xff
 LABEL_EA0E4C:	aligned_string "tail_y_rate"
@@ -48881,12 +49257,13 @@ LABEL_EA0E64:
 	.byte 0x64, 0x69, 0x72, 0x00
 LABEL_EA0E68:	aligned_string "frame_only"
 LABEL_EA0E74:	aligned_string "color"
+LABEL_EA0E7A:
 	.long LABEL_EA0EB8
 	.long LABEL_EA0EAE
 	.long LABEL_EA0EA8
 	.long LABEL_EA0E9E
 	.long LABEL_EA0E94
-	.byte 0x92, 0x0e, 0xea, 0x00
+	.long LABEL_EA0E92
 LABEL_EA0E92:
 	.byte 0x00, 0xff
 LABEL_EA0E94:	aligned_string "auto_inc"
@@ -48894,17 +49271,19 @@ LABEL_EA0E9E:	aligned_string "dial_inv"
 LABEL_EA0EA8:	aligned_string "dial"
 LABEL_EA0EAE:	aligned_string "index_max"
 LABEL_EA0EB8:	aligned_string "index_min"
+LABEL_EA0EC2:
 	.long LABEL_EA0EF2
 	.long LABEL_EA0EE8
 	.long LABEL_EA0EE0
 	.long LABEL_EA0ED8
-	.byte 0xd6, 0x0e, 0xea, 0x00
+	.long LABEL_EA0ED6
 LABEL_EA0ED6:
 	.byte 0x00, 0xff
 LABEL_EA0ED8:	aligned_string "paintok"
 LABEL_EA0EE0:	aligned_string "length"
 LABEL_EA0EE8:	aligned_string "interval"
 LABEL_EA0EF2:	aligned_string "func"
+LABEL_EA0EF8:
 	.long LABEL_EA0F2E
 	.long LABEL_EA0F24
 	.long LABEL_EA0F1A
@@ -49042,6 +49421,7 @@ LABEL_EA11C4:	aligned_string "EV_INDEXSW_UP_D"
 LABEL_EA11D4:	aligned_string "EV_NOTPOSTAIC"
 LABEL_EA11E2:	aligned_string "EV_NOTPARADRAW"
 	.byte 0x05, 0x00, 0x4a, 0x13, 0xea, 0x00
+LABEL_EA11F8:
 	.long LABEL_EA133C
 	.long LABEL_EA1322
 	.long LABEL_EA1308
@@ -49084,6 +49464,7 @@ LABEL_EA133C:	aligned_string "MT_SetFileSfx"
 	.byte 0xf9, 0x00, 0xe8, 0x67, 0xf9, 0x00, 0x5a, 0x69
 	.byte 0xf9, 0x00, 0x80, 0x6a, 0xf9, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00
+LABEL_EA1392:
 	.long LABEL_EA14A2
 	.long LABEL_EA148E
 	.long LABEL_EA147E
@@ -49097,7 +49478,7 @@ LABEL_EA133C:	aligned_string "MT_SetFileSfx"
 	.long LABEL_EA13F2
 	.long LABEL_EA13DE
 	.long LABEL_EA13CC
-	.byte 0xca, 0x13, 0xea, 0x00
+	.long LABEL_EA13CA
 LABEL_EA13CA:
 	.byte 0x00, 0xff
 LABEL_EA13CC:	aligned_string "IvWaitWinCtlProc"
@@ -53431,6 +53812,7 @@ LABEL_EA75CA:
 	.byte 0x00, 0xff, 0xd6, 0x75, 0xea, 0x00
 LABEL_EA75D6:
 	.byte 0x00, 0xff
+LABEL_EA75D8:
 	.long LABEL_EA75EE
 	.long LABEL_EA75EC
 	.long LABEL_EA75EA
@@ -53649,6 +54031,7 @@ LABEL_EA7866:
 LABEL_EA786A:
 	.byte 0x00, 0xff
 LABEL_EA786C:	aligned_string "DiskSmfSave"
+LABEL_EA7878:
 	.long LABEL_EA7AB8
 	.long LABEL_EA7AB6
 	.long LABEL_EA7AB4
@@ -54068,6 +54451,7 @@ LABEL_EA7E9C:
 	.byte 0xea, 0x00
 LABEL_EA7EA2:
 	.byte 0x00, 0xff, 0xd8, 0x7e, 0xea, 0x00
+LABEL_EA7EA8:
 	.long LABEL_EA7ED6
 	.long LABEL_EA7ED4
 	.long LABEL_EA7ED2
@@ -54139,6 +54523,7 @@ LABEL_EA7EE6:
 	.byte 0x00, 0xae, 0x18, 0xf9, 0x00, 0x2f, 0xe9, 0xf8
 	.byte 0x00, 0x19, 0xc9, 0xf8, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00
+LABEL_EA80B6:
 	.long LABEL_EA85B8
 	.long LABEL_EA85A4
 	.long LABEL_EA8592
@@ -54196,7 +54581,7 @@ LABEL_EA7EE6:
 	.long LABEL_EA81C6
 	.long LABEL_EA81B0
 	.long LABEL_EA81A0
-	.byte 0x9e, 0x81, 0xea, 0x00
+	.long LABEL_EA819E
 LABEL_EA819E:
 	.byte 0x00, 0xff
 LABEL_EA81A0:	aligned_string "FmmPasswordFunc"
@@ -54256,6 +54641,7 @@ LABEL_EA857E:	aligned_string "FmmDocFileNameFunc"
 LABEL_EA8592:	aligned_string "FmmPdFileNameFunc"
 LABEL_EA85A4:	aligned_string "FmmSmfFileNameFunc"
 LABEL_EA85B8:	aligned_string "FmmFileNameFunc"
+LABEL_EA85C8:
 	.long LABEL_EA8672
 	.long LABEL_EA8650
 	.long LABEL_EA8634
@@ -54270,6 +54656,7 @@ LABEL_EA8650:	aligned_string "Bitte geben Sie das Password ein."
 LABEL_EA8672:	aligned_string "Please enter the password."
 	.byte 0xf2, 0x87, 0xea, 0x00, 0xa6, 0x87, 0xea
 	.byte 0x00
+LABEL_EA8696:
 	.long LABEL_EA8766
 	.long LABEL_EA8726
 	.long LABEL_EA86E6
@@ -54283,6 +54670,7 @@ LABEL_EA8766:	aligned_string "The data is already copy protected. Please enter t
 	aligned_string "The data is already copy protected. Please enter the password."
 	.byte 0xc2, 0x89, 0xea, 0x00, 0x72, 0x89, 0xea
 	.byte 0x00
+LABEL_EA883A:
 	.long LABEL_EA8928
 	.long LABEL_EA88DE
 	.long LABEL_EA8894
@@ -54294,6 +54682,7 @@ LABEL_EA8928:	aligned_string "The songs in the Sequencer are copy protected. Ple
 	aligned_string "Die Songs im Sequenzer sind kopiergeschützt. Bitte geben Sie das Password ein."
 	aligned_string "The songs in the Sequencer are copy protected. Please enter the password."
 	.byte 0xa4, 0x8b, 0xea, 0x00
+LABEL_EA8A10:
 	.long LABEL_EA8B54
 	.long LABEL_EA8B08
 	.long LABEL_EA8ABC
@@ -54321,6 +54710,7 @@ LABEL_EA8C22:	aligned_string "ATTENTION!"
 	aligned_string "ACHTUNG !"
 	aligned_string "ATTENTION!"
 	.byte 0xce, 0x8c, 0xea, 0x00
+LABEL_EA8C60:
 	.long LABEL_EA8CBC
 	.long LABEL_EA8CAC
 	.long LABEL_EA8C9E
@@ -54335,6 +54725,7 @@ LABEL_EA8C9E:
 	aligned_string "Sind Sie sicher ?"
 	aligned_string "Are You Sure?"
 	.byte 0x34, 0x8e, 0xea, 0x00
+LABEL_EA8CE0:
 	.long LABEL_EA8E04
 	.long LABEL_EA8DB6
 	.long LABEL_EA8D80
@@ -54346,6 +54737,7 @@ LABEL_EA8D80:	aligned_string "Al formatear el disco  se borran los datos del dis
 LABEL_EA8DB6:	.asciz "L'utilisation deDISK FORMAT effacera toute donnée existante sur la disquette."
 LABEL_EA8E04:	.asciz "DISK FORMAT löscht alle Daten auf der Diskette."
 	aligned_string "Using DISK FORMAT will erase any current data on the disk."
+LABEL_EA8E70:
 	.long LABEL_EA90B6
 	.long LABEL_EA9082
 	.long LABEL_EA8FEE
@@ -54370,6 +54762,7 @@ LABEL_EA90B6:	aligned_string "Using FILE DELETE will erase the selected file com
 	aligned_string "Die soeben gewählte Disketten-Bank ist bereits wit Daten belegt. Wenn Sie jetzt trotzdem speichern, werden die alten Daten gelöscht."
 	aligned_string "A file already exists at the chosen location. If you proceed it will be replaced by the file that you are saving."
 	.byte 0x30, 0x95, 0xea, 0x00
+LABEL_EA9440:
 	.long LABEL_EA94F4
 	.long LABEL_EA94CC
 	.long LABEL_EA94A4
@@ -54381,6 +54774,7 @@ LABEL_EA94A4:	aligned_string "When a disk is inserted open this page."
 LABEL_EA94CC:	aligned_string "When a disk is inserted open this page."
 LABEL_EA94F4:	.asciz "Diese Seite wird geöffnet, wenn Sie eine Diskette einlegen."
 	aligned_string "When a disk is inserted open this page."
+LABEL_EA9558:
 	.long LABEL_EA965E
 	.long LABEL_EA9620
 	.long LABEL_EA95F4
@@ -54393,6 +54787,7 @@ LABEL_EA95C8:	aligned_string "When a disk contains Technics & SMF files."
 LABEL_EA95F4:	aligned_string "When a disk contains Technics & SMF files."
 LABEL_EA9620:	.asciz "Priorität, wenn eine Diskette Technics und SMF Files enthält."
 LABEL_EA965E:	aligned_string "When a disk contains Technics & SMF files."
+LABEL_EA968A:
 	.long LABEL_EA96D6
 	.long LABEL_EA96C8
 	.long LABEL_EA96BA
@@ -54410,6 +54805,7 @@ LABEL_EA96D6:	aligned_string "     OFF     "
 	.long LABEL_EA9700
 LABEL_EA9700:	aligned_string "   SMF    "
 LABEL_EA970C:	aligned_string " TECHNICS "
+LABEL_EA9718:
 	.long LABEL_EA97D8
 	.long LABEL_EA97BC
 	.long LABEL_EA9794
@@ -54564,6 +54960,7 @@ LABEL_EA98E2:
 LABEL_EA9BFE:	aligned_string " !#$%&?.... "
 LABEL_EA9C0C:	aligned_string "abc...123..."
 LABEL_EA9C1A:	aligned_string "ABC...123..."
+LABEL_EA9C28:
 	.long LABEL_EA9D12
 	.long LABEL_EA9D10
 	.long LABEL_EA9D0E
@@ -54679,6 +55076,7 @@ LABEL_EA9D10:
 	.byte 0x42, 0x00
 LABEL_EA9D12:
 	.byte 0x41, 0x00, 0xfe, 0x9d, 0xea, 0x00
+LABEL_EA9D18:
 	.long LABEL_EA9DFC
 	.long LABEL_EA9DFA
 	.long LABEL_EA9DF8
@@ -54794,6 +55192,7 @@ LABEL_EA9DFC:
 	.byte 0x62, 0x00
 LABEL_EA9DFE:
 	.byte 0x61, 0x00
+LABEL_EA9E00:
 	.long LABEL_EA9ED0
 	.long LABEL_EA9ECE
 	.long LABEL_EA9ECC
@@ -54990,6 +55389,7 @@ LABEL_EAA316:
 	aligned_string "PMEM:%2d-%d %16s"
 	aligned_string "PMEM:%2d-  %16s"
 	aligned_string "PMEM:%2d-                  "
+LABEL_EAA40A:
 	.long LABEL_EAA508
 	.long LABEL_EAA504
 	.long LABEL_EAA4FE
@@ -55120,6 +55520,8 @@ LABEL_EAA508:
 	aligned_string "-MEMORY DUMP-"
 	.byte 0x31, 0x00, 0x00, 0x00
 	.byte 0x1e, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff
+
+
 	.long LABEL_EAA7EC
 	.long LABEL_EAA7E8
 	.long LABEL_EAA7E4
@@ -55180,6 +55582,7 @@ LABEL_EAA7E8:
 	.byte 0x4c, 0x46, 0x54, 0x00
 LABEL_EAA7EC:
 	.byte 0x52, 0x54, 0x31, 0x00
+LABEL_EAA7F0:
 	.long LABEL_EAA818
 	.long LABEL_EAA814
 	.long LABEL_EAA80E
@@ -55197,7 +55600,8 @@ LABEL_EAA818:
 	.byte 0x0d, 0x00
 	aligned_string "PsTextBox"
 	aligned_string "AcLanguageText"
-	.byte 0x88, 0xa8, 0xea, 0x00
+	.long LABEL_EAA888
+LABEL_EAA848:
 	.long LABEL_EAA880
 	.long LABEL_EAA878
 	.long LABEL_EAA870
@@ -55531,6 +55935,7 @@ LABEL_EAB1A0:
 	.byte 0xc3, 0xeb, 0xf9, 0x00, 0x6c, 0x3d, 0xfa, 0x00
 	.byte 0xd5, 0xc5, 0xf9, 0x00, 0x82, 0x31, 0xfa, 0x00
 	.byte 0xa1, 0x87, 0xf9, 0x00, 0x00, 0x00, 0x00, 0x00
+LABEL_EAB2E8:
 	.long LABEL_EAB3BA
 	.long LABEL_EAB3AC
 	.long LABEL_EAB39E
@@ -55558,6 +55963,7 @@ LABEL_EAB39E:	aligned_string "RamEditCheck"
 LABEL_EAB3AC:	aligned_string "LswEditCheck"
 LABEL_EAB3BA:	aligned_string "DefaultFunction"
 	.byte 0x22, 0x00, 0xfa, 0xb8, 0xea, 0x00
+LABEL_EAB3D0:
 	.long LABEL_EAB8EC
 	.long LABEL_EAB8E2
 	.long LABEL_EAB8D8
@@ -55629,6 +56035,7 @@ LABEL_EAB8E2:	aligned_string "SlideBase"
 LABEL_EAB8EC:	aligned_string "GoldTechnics"
 	aligned_string "TrashIcon"
 	.byte 0x8a, 0xbe, 0xea, 0x00
+LABEL_EAB908:
 	.long LABEL_EABE7C
 	.long LABEL_EABE72
 	.long LABEL_EABE66
@@ -55710,6 +56117,7 @@ LABEL_EABEAE:
 	.byte 0x00, 0xff
 	.long LABEL_EABEB4
 LABEL_EABEB4:	aligned_string ""
+LABEL_EABEB6:
 	.long LABEL_EABF0C
 	.long LABEL_EABF04
 	.long LABEL_EABEFC
@@ -55717,7 +56125,7 @@ LABEL_EABEB4:	aligned_string ""
 	.long LABEL_EABEEC
 	.long LABEL_EABEE2
 	.long LABEL_EABED8
-	.byte 0xd6, 0xbe, 0xea, 0x00
+	.long LABEL_EABED6
 LABEL_EABED6:
 	.byte 0x00, 0xff
 LABEL_EABED8:	aligned_string "propname"
@@ -55727,17 +56135,19 @@ LABEL_EABEF2:	aligned_string "selfsize"
 LABEL_EABEFC:	aligned_string "allsize"
 LABEL_EABF04:	aligned_string "parent"
 LABEL_EABF0C:	aligned_string "proc"
+LABEL_EABF12:
 	.long LABEL_EABF3A
 	.long LABEL_EABF34
 	.long LABEL_EABF2E
 	.long LABEL_EABF28
-	.byte 0x26, 0xbf, 0xea, 0x00
+	.long LABEL_EABF26
 LABEL_EABF26:
 	.byte 0x00, 0xff
 LABEL_EABF28:	aligned_string "prop"
 LABEL_EABF2E:	aligned_string "size"
 LABEL_EABF34:	aligned_string "count"
 LABEL_EABF3A:	aligned_string "proc"
+LABEL_EABF40:
 	.long LABEL_EABF68
 	.long LABEL_EABF62
 	.long LABEL_EABF5C
@@ -55748,6 +56158,7 @@ LABEL_EABF56:	aligned_string "name"
 LABEL_EABF5C:	aligned_string "user"
 LABEL_EABF62:	aligned_string "title"
 LABEL_EABF68:	aligned_string "proc"
+LABEL_EABF6E:
 	.long LABEL_EABFB0
 	.long LABEL_EABFAC
 	.long LABEL_EABFA6
@@ -55755,7 +56166,7 @@ LABEL_EABF68:	aligned_string "proc"
 	.long LABEL_EABF9C
 	.long LABEL_EABF96
 	.long LABEL_EABF90
-	.byte 0x8e, 0xbf, 0xea, 0x00
+	.long LABEL_EABF8E
 LABEL_EABF8E:
 	.byte 0x00, 0xff
 LABEL_EABF90:	aligned_string "next"
@@ -55807,6 +56218,7 @@ LABEL_EAC020:	aligned_string "data"
 LABEL_EAC02E:
 	.byte 0x00, 0xff
 LABEL_EAC030:	aligned_string "name"
+LABEL_EAC036:
 	.long LABEL_EAC07A
 	.long LABEL_EAC074
 	.long LABEL_EAC070
@@ -55814,7 +56226,7 @@ LABEL_EAC030:	aligned_string "name"
 	.long LABEL_EAC064
 	.long LABEL_EAC05E
 	.long LABEL_EAC058
-	.byte 0x56, 0xc0, 0xea, 0x00
+	.long LABEL_EAC056
 LABEL_EAC056:
 	.byte 0x00, 0xff
 LABEL_EAC058:	aligned_string "rect"
@@ -55825,6 +56237,7 @@ LABEL_EAC070:
 	.byte 0x73, 0x75, 0x62, 0x00
 LABEL_EAC074:	aligned_string "super"
 LABEL_EAC07A:	aligned_string "class"
+LABEL_EAC080:
 	.long LABEL_EAC0A0
 	.long LABEL_EAC098
 	.long LABEL_EAC092
@@ -55847,6 +56260,7 @@ LABEL_EAC0A0:	aligned_string "color"
 	aligned_string "func"
 	.long LABEL_EAC0EC
 LABEL_EAC0EC:	aligned_string ""
+LABEL_EAC0EE:
 	.long LABEL_EAC14A
 	.long LABEL_EAC144
 	.long LABEL_EAC13A
@@ -55855,7 +56269,7 @@ LABEL_EAC0EC:	aligned_string ""
 	.long LABEL_EAC124
 	.long LABEL_EAC11E
 	.long LABEL_EAC114
-	.byte 0x12, 0xc1, 0xea, 0x00
+	.long LABEL_EAC112
 LABEL_EAC112:
 	.byte 0x00, 0xff
 LABEL_EAC114:	aligned_string "selected"
@@ -55871,7 +56285,7 @@ LABEL_EAC14A:	aligned_string "caption"
 LABEL_EAC15A:
 	.byte 0x00, 0xff
 LABEL_EAC15C:	aligned_string "figures"
-	.byte 0x6e, 0xc1, 0xea, 0x00
+	.long LABEL_EAC16E
 	.long LABEL_EAC16C
 LABEL_EAC16C:
 	.byte 0x00, 0xff
@@ -55884,6 +56298,7 @@ LABEL_EAC17C:
 LABEL_EAC17E:
 	.byte 0x6f, 0x6e
 	.byte 0x6f, 0x66, 0x66, 0x00, 0xc6, 0xc1, 0xea, 0x00
+LABEL_EAC188:
 	.long LABEL_EAC1BE
 	.long LABEL_EAC1BA
 	.long LABEL_EAC1B6
@@ -55908,12 +56323,13 @@ LABEL_EAC1B6:
 LABEL_EAC1F0:	aligned_string ""
 LABEL_EAC1F2:	aligned_string "data"
 LABEL_EAC1F8:	aligned_string "func"
+LABEL_EAC1FE:
 	.long LABEL_EAC23A
 	.long LABEL_EAC230
 	.long LABEL_EAC22A
 	.long LABEL_EAC222
 	.long LABEL_EAC218
-	.byte 0x16, 0xc2, 0xea, 0x00
+	.long LABEL_EAC216
 LABEL_EAC216:
 	.byte 0x00, 0xff
 LABEL_EAC218:	aligned_string "selected"
@@ -55921,6 +56337,7 @@ LABEL_EAC222:	aligned_string "editsw"
 LABEL_EAC22A:	aligned_string "align"
 LABEL_EAC230:	aligned_string "fontcolor"
 LABEL_EAC23A:	aligned_string "font"
+LABEL_EAC240:
 	.long LABEL_EAC25E
 	.long LABEL_EAC258
 	.long LABEL_EAC252
@@ -55975,12 +56392,13 @@ LABEL_EAC306:
 LABEL_EAC318:	aligned_string ""
 LABEL_EAC31A:	aligned_string "pagemax"
 LABEL_EAC322:	aligned_string "pagemin"
+LABEL_EAC32A:
 	.long LABEL_EAC360
 	.long LABEL_EAC35A
 	.long LABEL_EAC352
 	.long LABEL_EAC34C
 	.long LABEL_EAC344
-	.byte 0x42, 0xc3, 0xea, 0x00
+	.long LABEL_EAC342
 LABEL_EAC342:
 	.byte 0x00, 0xff
 LABEL_EAC344:	aligned_string "editsw"
@@ -56005,6 +56423,7 @@ LABEL_EAC392:	aligned_string "func"
 	.long LABEL_EAC3A0
 LABEL_EAC3A0:	aligned_string ""
 LABEL_EAC3A2:	aligned_string "part"
+LABEL_EAC3A8:
 	.long LABEL_EAC3CA
 	.long LABEL_EAC3C4
 	.long LABEL_EAC3BA
@@ -56046,7 +56465,7 @@ LABEL_EAC440:	aligned_string "index"
 LABEL_EAC446:	jr	z, 0x75
 	.byte 0x6e, 0x63, 0x00, 0xff
 	aligned_string "editsw"
-	.byte 0x6a, 0xc4, 0xea, 0x00
+	.long LABEL_EAC46A
 	.long LABEL_EAC462
 	.long LABEL_EAC460
 LABEL_EAC460:	aligned_string ""
@@ -56075,12 +56494,13 @@ LABEL_EAC4BC:	aligned_string ""
 LABEL_EAC4BE:	.asciz "child"
 LABEL_EAC4C4:	aligned_string "parent"
 LABEL_EAC4CC:	aligned_string "modal"
+LABEL_EAC4D2:
 	.long LABEL_EAC50C
 	.long LABEL_EAC506
 	.long LABEL_EAC4FC
 	.long LABEL_EAC4F2
 	.long LABEL_EAC4EC
-	.byte 0xea, 0xc4, 0xea, 0x00
+	.long LABEL_EAC4EA
 LABEL_EAC4EA:
 	.byte 0x00, 0xff
 LABEL_EAC4EC:	aligned_string "lines"
@@ -56234,6 +56654,7 @@ LABEL_EAC756:
 LABEL_EAC758:	aligned_string "data"
 LABEL_EAC75E:	.byte 0x66, 0x75
 	.byte 0x6e, 0x63, 0x00, 0xff, 0xa8, 0xc7, 0xea, 0x00
+LABEL_EAC768:
 	.long LABEL_EAC79E
 	.long LABEL_EAC798
 	.long LABEL_EAC790
@@ -56259,6 +56680,7 @@ LABEL_EAC7C4:
 LABEL_EAC7C6:
 	.byte 0x66, 0x75
 	.byte 0x6e, 0x63, 0x00, 0xff, 0x04, 0xc8, 0xea, 0x00
+LABEL_EAC7D0:
 	.long LABEL_EAC7FA
 	.long LABEL_EAC7F4
 	.long LABEL_EAC7F0
@@ -56298,6 +56720,8 @@ LABEL_EAC876:	jr	z, 0x6f
 	.byte 0xea, 0x00, 0x00, 0xff
 LABEL_EAC892:	aligned_string "dial"
 	aligned_string "list"
+
+
 	.long LABEL_EAC8C2
 	.long LABEL_EAC8B8
 	.long LABEL_EAC8B2
@@ -56306,13 +56730,14 @@ LABEL_EAC8B0:	aligned_string ""
 LABEL_EAC8B2:	aligned_string "func"
 LABEL_EAC8B8:	aligned_string "fixedrow"
 LABEL_EAC8C2:	aligned_string "fixedcol"
-	.byte 0xd6, 0xc8, 0xea, 0x00
+	.long LABEL_EAC8D6
 	.long LABEL_EAC8D4
 LABEL_EAC8D4:
 	.byte 0x00, 0xff
 LABEL_EAC8D6:
 	.byte 0x70, 0x61
 	.byte 0x67, 0x65, 0x00, 0xff, 0x06, 0xc9, 0xea, 0x00
+LABEL_EAC8E0:
 	.long LABEL_EAC900
 	.long LABEL_EAC8FA
 	.long LABEL_EAC8F2
@@ -56358,6 +56783,7 @@ LABEL_EAC95E:
 	.long LABEL_EAC968
 LABEL_EAC968:	aligned_string ""
 LABEL_EAC96A:	aligned_string "func"
+LABEL_EAC970:
 	.long LABEL_EAC9A0
 	.long LABEL_EAC996
 	.long LABEL_EAC98C
@@ -58591,6 +59017,7 @@ LABEL_EB190A:	aligned_string "InitializeToshi"
 LABEL_EB191A:	aligned_string "InitializeMurai"
 LABEL_EB192A:	aligned_string "InitializeRoot"
 	.byte 0xb0, 0x00, 0x92, 0x20, 0xeb, 0x00
+LABEL_EB1940:
 	.long LABEL_EB208A
 	.long LABEL_EB2086
 	.long LABEL_EB2082
@@ -58995,6 +59422,7 @@ LABEL_EB2082:
 LABEL_EB2086:	aligned_string "i0"
 LABEL_EB208A:	aligned_string "Default"
 	aligned_string "None"
+LABEL_EB2098:
 	.long LABEL_EB2AB8
 	.long LABEL_EB2AAE
 	.long LABEL_EB2AA6
@@ -59896,6 +60324,7 @@ LABEL_EB335A:
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x18, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x1f, 0x00, 0x1f, 0x00
 	.byte 0x00, 0x00, 0xff, 0x00, 0xc2, 0x2a, 0xeb, 0x00
+LABEL_EB3378:
 	.long LABEL_EB2AE4
 	.long LABEL_EB2AFE
 	.long LABEL_EB2B36
@@ -59920,6 +60349,7 @@ LABEL_EB335A:
 	.long LABEL_EB2E4A
 	.byte 0x60, 0xf1, 0x03, 0x00, 0x8c, 0xf1, 0x03, 0x00
 	.byte 0xb8, 0xf1, 0x03, 0x00, 0x8a, 0x2e, 0xeb, 0x00
+LABEL_EB33E0:
 	.long LABEL_EB2EB2
 	.long LABEL_EB2EDA
 	.long LABEL_EB2F02
@@ -59945,6 +60375,7 @@ LABEL_EB335A:
 	.long LABEL_EB31C4
 	.long LABEL_EB31E8
 	.byte 0x00, 0x00, 0x00, 0x00, 0x02, 0x32, 0xeb, 0x00
+LABEL_EB3448:
 	.long LABEL_EB3238
 	.long LABEL_EB3252
 	.long LABEL_EB3290
@@ -59954,6 +60385,7 @@ LABEL_EB335A:
 	.long LABEL_EB3338
 	.long LABEL_EB335A
 	.byte 0x00, 0x00, 0x00, 0x00, 0x1a, 0x36, 0xeb, 0x00
+LABEL_EB3470:
 	.long LABEL_EB3618
 	.long LABEL_EB3616
 	.long LABEL_EB3614
@@ -60088,6 +60520,7 @@ LABEL_EB3676:	aligned_string "CheckTitle"
 	.byte 0x8b, 0x89, 0xf9, 0x00, 0x0c, 0x80, 0xf9, 0x00
 	.byte 0x48, 0x91, 0xf9, 0x00, 0xf6, 0xad, 0xf9, 0x00
 	.byte 0xe9, 0x87, 0xf9, 0x00, 0x00, 0x00, 0x00, 0x00
+LABEL_EB36D0:
 	.long LABEL_EB37CE
 	.long LABEL_EB37BC
 	.long LABEL_EB37AC
@@ -65892,6 +66325,8 @@ LABEL_ECE820:	aligned_string " Ballads"
 	aligned_string "It's Boogie Time"
 	aligned_string "Piano R&Roll    "
 	aligned_string "Fifties Rock    "
+
+
 LABEL_ECE980:
 	.long LABEL_ECEB30
 	.long LABEL_EC6A54
@@ -65986,6 +66421,8 @@ LABEL_ECEB42:
 	aligned_string "German Schlager "
 	aligned_string "Last Arrangement"
 	aligned_string "J.Last Hitparade"
+
+
 LABEL_ECED38:
 	.long LABEL_ECEF02
 	.long LABEL_EC81AC
@@ -66044,6 +66481,7 @@ LABEL_ECEEF0:	aligned_string "Detroit Pop     "
 LABEL_ECEF02:	aligned_string "King Of Soul    "
 LABEL_ECEF14:
 	.byte 0x16, 0xf2, 0xec, 0x00
+LABEL_ECEF18:
 	.long LABEL_EC8D58
 	.long LABEL_ECF204
 	.long LABEL_EC8DFE
@@ -66136,6 +66574,8 @@ LABEL_ECF1E0:	aligned_string "40's Dance Band "
 LABEL_ECF1F2:	aligned_string "All Aboard!     "
 LABEL_ECF204:	aligned_string "Steady Swingband"
 	aligned_string "Up Tempo Bigband"
+
+
 LABEL_ECF228:
 	.long LABEL_ECF544
 	.long LABEL_ECA0CC
@@ -66284,6 +66724,8 @@ LABEL_ECF556:
 	aligned_string "German Tradition"
 	aligned_string "Sousa Marches   "
 	aligned_string "Stadium Events  "
+
+
 LABEL_ECF7E8:
 	.long LABEL_ECF998
 	.long LABEL_ECC51C
@@ -66399,6 +66841,7 @@ LABEL_ECF9AA:
 	aligned_string "Bossa Pianist   "
 	aligned_string "Romantic Bossa  "
 	.byte 0x96, 0xfd, 0xec, 0x00
+LABEL_ECFCA8:
 	.long LABEL_ECE2F0
 	.long LABEL_ECFD84
 	.long LABEL_ECE61E
@@ -66448,6 +66891,7 @@ LABEL_ECFDE0:	aligned_string "MEMORY-C"
 LABEL_ECFDEA:	aligned_string "MEMORY-B"
 LABEL_ECFDF4:	aligned_string "MEMORY-A"
 	aligned_string "RIGHT1 RIGHT2 LEFT   PART4  PART5  PART6  PART7  PART8  PART9  PART10 PART11 PART12 PART13 PART14 PART15 PART16 ACCOMP1ACCOMP2ACCOMP3BASS   DRUMS  CHORD  R.BASS MSP    MSP    CONTROLPART27 PART28 PART29 PART30 PART31 PART32 "
+LABEL_ECFEE0:
 	.long LABEL_ECFF66
 	.long LABEL_ECFF62
 	.long LABEL_ECFF5C
@@ -66668,6 +67112,8 @@ LABEL_ED031E:
 LABEL_ED0322:
 	.byte 0x20, 0x20, 0x00
 	.byte 0xff
+
+
 LABEL_ED0326:
 	.long LABEL_ED03AC
 	.long LABEL_ED03A8
@@ -66711,6 +67157,8 @@ LABEL_ED03A8:
 	.byte 0x43, 0x20, 0x00, 0xff
 LABEL_ED03AC:
 	.byte 0x20, 0x20, 0x00, 0xff
+
+
 LABEL_ED03B0:
 	.long LABEL_ED0436
 	.long LABEL_ED0432
@@ -66754,6 +67202,8 @@ LABEL_ED0432:
 LABEL_ED0436:
 	.byte 0x20, 0x20, 0x00
 	.byte 0xff
+
+
 LABEL_ED043A:
 	.long LABEL_ED04C0
 	.long LABEL_ED04BC
@@ -66798,6 +67248,7 @@ LABEL_ED04BC:
 	.byte 0x43, 0x20, 0x00, 0xff
 LABEL_ED04C0:
 	.byte 0x20, 0x20, 0x00, 0xff, 0x12, 0x05, 0xed, 0x00
+LABEL_ED04C8:
 	.long LABEL_ED0508
 	.long LABEL_ED04FC
 	.long LABEL_ED04F0
@@ -66834,6 +67285,7 @@ LABEL_ED0770:	aligned_string "Italian"
 	aligned_string "SIND SIE SICHER?"
 	aligned_string "Are You Sure?"
 	.byte 0x04, 0x0a, 0xed, 0x00, 0x8e, 0x09, 0xed, 0x00
+LABEL_ED07BE:
 	.long LABEL_ED091E
 	.long LABEL_ED08AE
 	.long LABEL_ED083E
@@ -66847,6 +67299,7 @@ LABEL_ED091E:	aligned_string "                               Resets the PERFORMA
 	.byte 0x6b, 0x2e, 0x00, 0xff
 	aligned_string "                               Resets the PERFORMANCE or individual sections to the original factory settings."
 	.byte 0x56, 0x0b, 0xed, 0x00
+LABEL_ED0A78:
 	.long LABEL_ED0B24
 	.long LABEL_ED0AFE
 	.long LABEL_ED0AD8
@@ -66859,6 +67312,7 @@ LABEL_ED0AFE:	aligned_string "Stores sound & balance settings only."
 LABEL_ED0B24:	.asciz "Speichert nur Klang- und Lautstärkeeinstellungen."
 	aligned_string "Stores sound & balance settings only."
 	.byte 0xda, 0x0c, 0xed, 0x00
+LABEL_ED0B80:
 	.long LABEL_ED0C8C
 	.long LABEL_ED0C4E
 	.long LABEL_ED0C10
@@ -66926,6 +67380,8 @@ LABEL_ED0C8C:	.asciz "Speichert die gesamte Einstellung einschließlich Rhythmus,
 	.byte 0xc7, 0xb2, 0x88, 0x92, 0x93, 0x94, 0x95, 0x40
 	.byte 0x96, 0x99, 0x97, 0x98, 0xad, 0xb0, 0xb1, 0xb8
 	.byte 0xb9, 0xb6, 0xb7, 0xff, 0xdc, 0x11, 0xed, 0x00
+
+
 	.long LABEL_ED11CA
 	.long LABEL_ED11B8
 	.long LABEL_ED11A6
@@ -66998,6 +67454,7 @@ LABEL_ED11DC:	aligned_string "      OFF       "
 	.byte 0x2f, 0x02, 0x00, 0x00, 0x2f, 0x02, 0xea, 0x08
 	.byte 0x5b, 0x04, 0x5b, 0x04, 0x06, 0x00, 0x00, 0x00
 	.byte 0x06, 0x00, 0x06, 0x00, 0x06, 0x00, 0x06, 0x00
+LABEL_ED1240:
 	.long LABEL_ED1304
 	.long LABEL_ED12F0
 	.long LABEL_ED12DC
@@ -67016,6 +67473,7 @@ LABEL_ED12C8:	aligned_string "    SPLIT POINT    "
 LABEL_ED12DC:	aligned_string "   APC & MEMORY    "
 LABEL_ED12F0:	aligned_string "       TEMPO       "
 LABEL_ED1304:	aligned_string " RHYTHM SELECTION  "
+LABEL_ED1318:
 	.long LABEL_ED13DC
 	.long LABEL_ED13C8
 	.long LABEL_ED13B4
@@ -67059,6 +67517,7 @@ LABEL_ED13DC:	aligned_string "     VOCALIST      "
 	.byte 0x7c, 0x00, 0x97, 0x02, 0xfa, 0x00, 0xfa, 0x00
 	.byte 0xd5, 0x00, 0x79, 0x01, 0xd5, 0x00, 0x79, 0x01
 	.byte 0x6d, 0x02, 0x45, 0x02, 0x45, 0x02
+LABEL_ED14B6:
 	.long LABEL_ED154A
 	.long LABEL_ED1542
 	.long LABEL_ED153A
@@ -67114,6 +67573,7 @@ LABEL_ED154A:	aligned_string "  OFF  "
 	aligned_string "PAGE %d/%d"
 	.byte 0x25, 0x64, 0x3a, 0x00, 0x25, 0x64, 0x3a
 	.byte 0x00
+LABEL_ED1626:
 	.long LABEL_ED1642
 	.long LABEL_ED163E
 	.long LABEL_ED163A
@@ -67143,6 +67603,7 @@ LABEL_ED1642:
 	.byte 0xad, 0x00, 0x02, 0x00, 0xae, 0x00, 0x06, 0x01
 	.byte 0xc1, 0x00, 0x02, 0x00, 0xc2, 0x00, 0x16, 0x01
 	.byte 0xd5, 0x00
+LABEL_ED16AE:
 	.long LABEL_ED1714
 	.long LABEL_ED170E
 	.long LABEL_ED170A
@@ -67228,6 +67689,8 @@ LABEL_ED1714:
 	.byte 0x32, 0x00, 0x1a, 0x00, 0x08, 0x00, 0x0e, 0x00
 	.byte 0x20, 0x00, 0x14, 0x00, 0x00, 0x00, 0x08, 0x00
 	.byte 0x08, 0x00, 0x08, 0x00, 0x08, 0x00, 0x08, 0x00
+
+
 	.long LABEL_ED1BA6
 	.long LABEL_ED1BA0
 	.long LABEL_ED1B9C
@@ -67287,7 +67750,8 @@ LABEL_ED1BEA:
 	aligned_string "SPLIT<%s%s>"
 	aligned_string "          "
 	aligned_string "SPLIT<%s%s>"
-	.byte 0x82, 0x1c, 0xed, 0x00
+	.long LABEL_ED1C82
+LABEL_ED1C20:
 	.long LABEL_ED1C7C
 	.long LABEL_ED1C78
 	.long LABEL_ED1C72
@@ -67341,6 +67805,7 @@ LABEL_ED1C82:	.byte 0x47, 0x20, 0x00, 0xff, 0x20, 0x20
 	.byte 0x00, 0xee, 0x7f, 0xfb, 0x00, 0xff, 0x7f, 0xfb
 	.byte 0x00, 0x10, 0x80, 0xfb, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00
+LABEL_ED1D4A:
 	.long LABEL_ED20B8
 	.long LABEL_ED20A6
 	.long LABEL_ED2098
@@ -67383,7 +67848,7 @@ LABEL_ED1C82:	.byte 0x47, 0x20, 0x00, 0xff, 0x20, 0x20
 	.long LABEL_ED1E1A
 	.long LABEL_ED1E08
 	.long LABEL_ED1DF8
-	.byte 0xf6, 0x1d, 0xed, 0x00
+	.long LABEL_ED1DF6
 LABEL_ED1DF6:
 	.byte 0x00, 0xff
 LABEL_ED1DF8:	aligned_string "PmemExpLngCheck"
@@ -67433,6 +67898,7 @@ LABEL_ED20C6:
 LABEL_ED20CA:	aligned_string ""
 LABEL_ED20CC:
 	.byte 0x32, 0x21, 0xed, 0x00
+LABEL_ED20D0:
 	.long LABEL_ED212C
 	.long LABEL_ED2122
 	.long LABEL_ED211C
@@ -67455,6 +67921,8 @@ LABEL_ED2106:
 	aligned_string "fontcolor"
 	aligned_string "font"
 	aligned_string "func"
+
+
 LABEL_ED2138:
 	.long LABEL_ED219E
 	.long LABEL_ED2198
@@ -67526,6 +67994,8 @@ LABEL_ED224C:	aligned_string "newmsamode"
 LABEL_ED2258:	aligned_string "fontcolor"
 LABEL_ED2262:	aligned_string "font"
 LABEL_ED2268:	aligned_string "func"
+
+
 LABEL_ED226E:
 	.long LABEL_ED22B0
 	.long LABEL_ED22AA
@@ -67563,6 +68033,8 @@ LABEL_ED22F6:	aligned_string ""
 LABEL_ED22F8:	aligned_string "func"
 LABEL_ED22FE:	aligned_string "fixedrow"
 LABEL_ED2308:	aligned_string "fixedcol"
+
+
 LABEL_ED2312:
 	.long LABEL_ED2334
 	.long LABEL_ED232A
@@ -67572,6 +68044,8 @@ LABEL_ED2322:	aligned_string ""
 LABEL_ED2324:	aligned_string "func"
 LABEL_ED232A:	aligned_string "fixedrow"
 LABEL_ED2334:	aligned_string "fixedcol"
+
+
 LABEL_ED233E:
 	.long LABEL_ED2360
 	.long LABEL_ED2356
@@ -67581,6 +68055,8 @@ LABEL_ED234E:	aligned_string ""
 LABEL_ED2350:	aligned_string "func"
 LABEL_ED2356:	aligned_string "fixedrow"
 LABEL_ED2360:	aligned_string "fixedcol"
+
+
 LABEL_ED236A:
 	.long LABEL_ED238C
 	.long LABEL_ED2382
@@ -67612,6 +68088,8 @@ LABEL_ED23EE:	jr	nz, 0x6f
 	.byte 0x6e, 0x63, 0x00, 0xff
 	aligned_string "fixedrow"
 	aligned_string "fixedcol"
+
+
 LABEL_ED2438:
 	.long LABEL_ED24AA
 	.long LABEL_ED24A0
@@ -67633,6 +68111,7 @@ LABEL_ED24A0:	aligned_string "fixedrow"
 LABEL_ED24AA:	aligned_string "fixedcol"
 LABEL_ED24B4:
 	.byte 0x16, 0x25, 0xed, 0x00
+LABEL_ED24B8:
 	.long LABEL_ED250C
 	.long LABEL_ED2506
 	.long LABEL_ED24F6
@@ -67648,6 +68127,8 @@ LABEL_ED2506:
 	.byte 0x6e, 0x63, 0x00, 0xff
 	aligned_string "fixedrow"
 	aligned_string "fixedcol"
+
+
 LABEL_ED2520:
 	.long LABEL_ED258C
 	.long LABEL_ED2582
@@ -67663,6 +68144,8 @@ LABEL_ED2568:	aligned_string "nowstylesubctgdtno"
 LABEL_ED257C:	aligned_string "func"
 LABEL_ED2582:	aligned_string "fixedrow"
 LABEL_ED258C:	aligned_string "fixedcol"
+
+
 LABEL_ED2596:
 	.long LABEL_ED2654
 	.long LABEL_ED264A
@@ -67702,6 +68185,8 @@ LABEL_ED269E:	jr	nz, 0x6f
 LABEL_ED26AE:	.byte 0x6e, 0x63, 0x00, 0xff
 	aligned_string "fixedrow"
 	aligned_string "fixedcol"
+
+
 LABEL_ED26C8:
 	.long LABEL_ED277E
 	.long LABEL_ED2774
@@ -67728,6 +68213,8 @@ LABEL_ED2746:
 	.byte 0x6e, 0x63, 0x00, 0xff
 	aligned_string "fixedrow"
 	aligned_string "fixedcol"
+
+
 LABEL_ED2788:
 	.long LABEL_ED27C2
 	.long LABEL_ED27BC
@@ -67958,6 +68445,7 @@ LABEL_ED2CE8:	aligned_string "VariScreen"
 LABEL_ED2CF4:	aligned_string ""
 LABEL_ED2CF6:	aligned_string "NormScreen"
 	.byte 0x1c, 0x00, 0x84, 0x2d, 0xed, 0x00
+LABEL_ED2D08:
 	.long LABEL_ED2D78
 	.long LABEL_ED2D6C
 	.long LABEL_ED2D62
@@ -67975,6 +68463,7 @@ LABEL_ED2D6C:	aligned_string "EV_PMBKNAME"
 LABEL_ED2D78:	aligned_string "EV_CHORDDSP"
 	aligned_string "EV_CHORDSHOW"
 	.byte 0x08, 0x00, 0x56, 0x2f, 0xed, 0x00
+LABEL_ED2D98:
 	.long LABEL_ED2F4A
 	.long LABEL_ED2F3E
 	.long LABEL_ED2F30
@@ -68042,6 +68531,7 @@ LABEL_ED2F4A:	aligned_string "MT_SvariIni"
 	.byte 0x97, 0xfb, 0x00, 0xe1, 0xa6, 0xfb, 0x00, 0xe8
 	.byte 0xa6, 0xfb, 0x00, 0x26, 0x1f, 0xfc, 0x00, 0x22
 	.byte 0xd0, 0xfb, 0x00, 0x00, 0x00, 0x00, 0x00
+LABEL_ED2FDA:
 	.long LABEL_ED3282
 	.long LABEL_ED3272
 	.long LABEL_ED3262
@@ -68070,7 +68560,7 @@ LABEL_ED2F4A:	aligned_string "MT_SvariIni"
 	.long LABEL_ED3076
 	.long LABEL_ED3062
 	.long LABEL_ED3050
-	.byte 0x4e, 0x30, 0xed, 0x00
+	.long LABEL_ED304E
 LABEL_ED304E:
 	.byte 0x00, 0xff
 LABEL_ED3050:	aligned_string "IvPageOverWrProc"
@@ -68112,6 +68602,7 @@ LABEL_ED3282:	aligned_string "NormScreenProc"
 	.byte 0x00, 0x44, 0x7d, 0xfb, 0x00, 0x78, 0x7d, 0xfb
 	.byte 0x00, 0xac, 0x7d, 0xfb, 0x00, 0xe0, 0x7d, 0xfb
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00
+LABEL_ED32E6:
 	.long LABEL_ED3448
 	.long LABEL_ED343A
 	.long LABEL_ED342A
@@ -68132,7 +68623,7 @@ LABEL_ED3282:	aligned_string "NormScreenProc"
 	.long LABEL_ED3350
 	.long LABEL_ED3346
 	.long LABEL_ED333C
-	.byte 0x3a, 0x33, 0xed, 0x00
+	.long LABEL_ED333A
 LABEL_ED333A:
 	.byte 0x00, 0xff
 LABEL_ED333C:	aligned_string "TEST6FUNC"
@@ -71490,7 +71981,7 @@ ErrorDialog_RecoveryLine3:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 	aligned_string "ControlMenu"
-	.byte 0xb6, 0x80, 0xed, 0x00
+	.long LABEL_ED80B6
 	.long LABEL_ED80B4
 	.long LABEL_ED80AC
 	.long LABEL_ED80AA
@@ -71654,6 +72145,7 @@ LABEL_ED822C:
 	.byte 0xed, 0x00
 LABEL_ED8232:
 	.byte 0x00, 0xff, 0x62, 0x82, 0xed, 0x00
+LABEL_ED8238:
 	.long LABEL_ED8260
 	.long LABEL_ED825E
 	.long LABEL_ED825C
@@ -71746,7 +72238,8 @@ LABEL_ED835E:
 	.byte 0x00, 0xff
 LABEL_ED8360:	aligned_string ""
 LABEL_ED8362:	aligned_string "MUSICSTYL"
-	.byte 0xf4, 0x83, 0xed, 0x00
+	.long LABEL_ED83F4
+LABEL_ED8370:
 	.long LABEL_ED83F2
 	.long LABEL_ED83F0
 	.long LABEL_ED83EE
@@ -71789,6 +72282,7 @@ LABEL_ED83F0:	aligned_string ""
 LABEL_ED83F2:	aligned_string ""
 LABEL_ED83F4:	.byte 0x4d, 0x53, 0x43, 0x54
 	.byte 0x53, 0x45, 0x4c, 0x00, 0x6e, 0x84, 0xed, 0x00
+LABEL_ED8400:
 	.long LABEL_ED846C
 	.long LABEL_ED846A
 	.long LABEL_ED8468
@@ -71824,6 +72318,7 @@ LABEL_ED8468:	aligned_string ""
 LABEL_ED846A:	aligned_string ""
 LABEL_ED846C:	aligned_string ""
 LABEL_ED846E:	aligned_string "MSSCTSEL"
+LABEL_ED8478:
 	.long LABEL_ED84AC
 	.long LABEL_ED84AA
 	.long LABEL_ED84A8
@@ -71842,6 +72337,7 @@ LABEL_ED84A6:	aligned_string ""
 LABEL_ED84A8:	aligned_string ""
 LABEL_ED84AA:	aligned_string ""
 LABEL_ED84AC:	aligned_string "MSSONGLIST"
+LABEL_ED84B8:
 	.long LABEL_ED84E6
 	.long LABEL_ED84E4
 	.long LABEL_ED84E2
@@ -71858,6 +72354,7 @@ LABEL_ED84E0:	aligned_string ""
 LABEL_ED84E2:	aligned_string ""
 LABEL_ED84E4:	aligned_string ""
 LABEL_ED84E6:	aligned_string "MSSTLSEL"
+LABEL_ED84F0:
 	.long LABEL_ED8518
 	.long LABEL_ED8516
 	.long LABEL_ED8514
@@ -71872,6 +72369,7 @@ LABEL_ED8512:	aligned_string ""
 LABEL_ED8514:	aligned_string ""
 LABEL_ED8516:	aligned_string ""
 LABEL_ED8518:	aligned_string "PMBANK"
+LABEL_ED8520:
 	.long LABEL_ED8572
 	.long LABEL_ED8570
 	.long LABEL_ED856E
@@ -71919,6 +72417,7 @@ LABEL_ED85A4:
 LABEL_ED85A6:
 	.byte 0x00, 0xff
 LABEL_ED85A8:	aligned_string "PMNAME"
+LABEL_ED85B0:
 	.long LABEL_ED85DE
 	.long LABEL_ED85DC
 	.long LABEL_ED85DA
@@ -72894,6 +73393,7 @@ LABEL_ED9D1E:
 	.byte 0x02, 0x03, 0x04, 0x05, 0x06, 0xff, 0x0f, 0xff
 	.byte 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e
 	.byte 0x02, 0x01, 0x00, 0xff, 0x97, 0x67, 0xfc, 0x00
+LABEL_ED9D68:
 	.long LABEL_FC67BC
 	.long LABEL_FC65E8
 	.long LABEL_FC64EA
@@ -72937,6 +73437,7 @@ LABEL_ED9D1E:
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
 	.byte 0xff, 0xff, 0xff, 0xff, 0xde, 0x63, 0xfc, 0x00
+LABEL_ED9EA8:
 	.long LABEL_FC645A
 	.long LABEL_FC647F
 	.long LABEL_FC64EA
@@ -73011,6 +73512,7 @@ LABEL_ED9F94:
 LABEL_ED9F9C:
 	.byte 0x08, 0x08, 0x08, 0x08
 	.byte 0x08, 0x08, 0x08, 0x08, 0xfc, 0x9e, 0xed, 0x00
+LABEL_ED9FA8:
 	.long LABEL_ED9F04
 	.long LABEL_ED9F0C
 	.long LABEL_ED9F14
@@ -73020,6 +73522,7 @@ LABEL_ED9F9C:
 	.long LABEL_ED9F34
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x3c, 0x9f, 0xed, 0x00
+LABEL_ED9FD0:
 	.long LABEL_ED9F44
 	.long LABEL_ED9F4C
 	.long LABEL_ED9F54
@@ -73037,7 +73540,7 @@ LABEL_ED9F9C:
 	.byte 0x1c, 0x00, 0x00, 0x00, 0x1d, 0x00, 0x0f, 0x0f
 	.byte 0x1e, 0x00, 0x00, 0x00
 LABEL_EDA02C:
-	.byte 0x72, 0x69, 0xfc, 0x00
+	.long LABEL_FC6972
 	.long LABEL_FC6994
 	.long LABEL_FC6995
 	.long LABEL_FC6996
@@ -78031,6 +78534,7 @@ LABEL_EE0142:
 	.byte 0x01, 0xa0, 0x02, 0x00, 0x80, 0x09
 	.byte 0x40, 0x00, 0x01, 0x06, 0x00, 0xff, 0x01, 0x01
 	.byte 0x01, 0x00, 0x00, 0xff, 0xa4, 0xba, 0xed, 0x00
+LABEL_EE0158:
 	.long LABEL_EDBC50
 	.long LABEL_EDE9F2
 	.long LABEL_EDBC94
@@ -78044,6 +78548,7 @@ LABEL_EE0142:
 	.byte 0xe4, 0x8e, 0x00, 0x00, 0xe6, 0x8e, 0x00, 0x00
 	.byte 0xe8, 0x8e, 0x00, 0x00, 0xea, 0x8e, 0x00, 0x00
 	.byte 0xf4, 0x8e, 0x00, 0x00, 0xec, 0xc1, 0x00, 0x00
+LABEL_EE0198:
 	.long LABEL_EDC89C
 	.long LABEL_EDC430
 	.long LABEL_EDBA44
@@ -78138,6 +78643,8 @@ LABEL_EE0142:
 	.long LABEL_EDBDD0
 	.long LABEL_EDBDE2
 	.long LABEL_EDBDF4
+
+
 LABEL_EE0310:
 	.long LABEL_EDBE06
 	.long LABEL_EDBE18
@@ -79878,6 +80385,8 @@ LABEL_EE1574:
 	.byte 0x1c, 0x00, 0x20, 0x00, 0x27, 0x00, 0x2e, 0x00
 	.byte 0x35, 0x00, 0x3c, 0x00, 0x43, 0x00, 0x4a, 0x00
 	.byte 0x51, 0x00, 0x00, 0xf7
+
+
 	.long LABEL_FD8261
 	.long LABEL_FD8262
 	.long LABEL_FD8263
@@ -79989,6 +80498,7 @@ LABEL_EE2F26:
 	.byte 0x65, 0x66, 0x99, 0x98, 0x93, 0xff, 0x00, 0x00
 	.byte 0x15, 0x00, 0x1b, 0x00, 0x21, 0x00, 0x27, 0x00
 	.byte 0x2d, 0x00, 0x33, 0x00
+LABEL_EE2F8C:
 	.long LABEL_FD8DF9
 	.long LABEL_FD7AA9
 	.long LABEL_FD7AA9
@@ -80033,6 +80543,7 @@ LABEL_EE2F26:
 	.byte 0x10, 0x00, 0x00, 0x00, 0x02, 0x00, 0x04, 0x00
 	.byte 0x07, 0x00, 0x0a, 0x00, 0x0d, 0x00, 0x10, 0x00
 	.byte 0x00, 0x00, 0x00, 0xff
+LABEL_EE304C:
 	.long LABEL_FDA06E
 	.long LABEL_FDA06E
 	.long LABEL_FDA06E
@@ -82190,6 +82701,7 @@ LABEL_EE5FC8:
 	.fill 8, 1, 0x05
 	.fill 8, 1, 0x05
 	.byte 0x0c, 0x0c, 0x0d, 0x0d, 0xc6, 0x4f, 0xee, 0x00
+LABEL_EE6048:
 	.long LABEL_EE50BC
 	.long LABEL_EE50DA
 	.long LABEL_EE5104
@@ -83116,6 +83628,7 @@ LABEL_EE75C0:
 	.byte 0x63, 0x00, 0x02, 0x7a, 0xf0, 0xff, 0x00, 0x00
 	.byte 0x00, 0x00
 
+
 LABEL_EE75FA:
 	.long LABEL_EE64DA
 	.long LABEL_EE650C
@@ -83128,6 +83641,7 @@ LABEL_EE75FA:
 	.long LABEL_EE699C
 	.long LABEL_EE69E8
 	.zero 16
+LABEL_EE7632:
 	.long LABEL_EE67CC
 	.long LABEL_EE736E
 	.long LABEL_EE73A4
@@ -83142,6 +83656,7 @@ LABEL_EE75FA:
 	.long LABEL_EE758A
 	.long LABEL_EE75C0
 	.zero 16
+LABEL_EE7676:
 	.long LABEL_EE63BA
 	.long LABEL_EE63E0
 	.long LABEL_EE6406
@@ -83159,18 +83674,21 @@ LABEL_EE75FA:
 	.long LABEL_EE675E
 	.long LABEL_EE683A
 	.long 0x0
+LABEL_EE76D6:
 	.long LABEL_EE6952
 	.long LABEL_EE6A5C
 	.long LABEL_EE6A9E
 	.long LABEL_EE6AE0
 	.long LABEL_EE6B22
 	.zero 12
+LABEL_EE76F6:
 	.long LABEL_EE6C24
 	.long LABEL_EE6CA2
 	.long LABEL_EE6D26
 	.long LABEL_EE6DDA
 	.long LABEL_EE6E54
 	.long 0x0
+LABEL_EE770E:
 	.long LABEL_EE6F08
 	.long LABEL_EE6FB0
 	.long LABEL_EE7010
@@ -83180,11 +83698,13 @@ LABEL_EE75FA:
 	.zero 12
 	.long LABEL_EE6B64
 	.zero 32
+LABEL_EE7756:
 	.long LABEL_EE6B9C
 	.long LABEL_EE6BBE
 	.long LABEL_EE6BE0
 	.long LABEL_EE6C02
 	.zero 16
+LABEL_EE7776:
 	.long LABEL_EE71B6
 	.long LABEL_EE7218
 	.long LABEL_EE727A
@@ -83746,6 +84266,7 @@ LABEL_EE7CA7:
 	.long LABEL_EE8348
 	.long LABEL_EE8364
 
+LABEL_EE7D27:
 	.long LABEL_EE8380
 	.long LABEL_EE8384
 	.long LABEL_EE8388
@@ -83908,6 +84429,7 @@ LABEL_EE7CA7:
 	.long LABEL_EE86B0
 	.byte 0xff
 
+
 LABEL_EE7FA8:
 	.long LABEL_FEA812
 	.long LABEL_FC7B07
@@ -83921,6 +84443,7 @@ LABEL_EE7FA8:
 	.long LABEL_FB7E14
 	.long 0xFFFFFFFF
 
+
 LABEL_EE7FD4:
 	.long LABEL_FEA812
 	.long LABEL_FC7B07
@@ -83933,6 +84456,7 @@ LABEL_EE7FD4:
 	.long LABEL_F84710
 	.long 0xFFFFFFFF
 
+
 LABEL_EE7FFC:
 	.long LABEL_FEA812
 	.long LABEL_FC7B07
@@ -83944,6 +84468,7 @@ LABEL_EE7FFC:
 	.long LABEL_F84710
 	.long 0xFFFFFFFF
 
+
 LABEL_EE8020:
 	.long LABEL_FEA812
 	.long LABEL_FC7B07
@@ -83953,6 +84478,7 @@ LABEL_EE8020:
 	.long LABEL_FB40B7
 	.long LABEL_F98697
 	.long 0xFFFFFFFF
+
 
 LABEL_EE8040:
 	.long LABEL_FEA812
@@ -83964,6 +84490,7 @@ LABEL_EE8040:
 	.long LABEL_F98697
 	.long 0xFFFFFFFF
 
+
 LABEL_EE8060:
 	.long LABEL_FEA812
 	.long LABEL_FC7B07
@@ -83973,6 +84500,7 @@ LABEL_EE8060:
 	.long LABEL_FB40B7
 	.long LABEL_F98697
 	.long 0xFFFFFFFF
+
 
 LABEL_EE8080:
 	.long LABEL_FEA812
@@ -83984,6 +84512,7 @@ LABEL_EE8080:
 	.long LABEL_F98697
 	.long 0xFFFFFFFF
 
+
 LABEL_EE80A0:
 	.long LABEL_FEA812
 	.long LABEL_FC7B07
@@ -83993,6 +84522,7 @@ LABEL_EE80A0:
 	.long LABEL_FB40B7
 	.long LABEL_F98697
 	.long 0xFFFFFFFF
+
 
 LABEL_EE80C0:
 	.long LABEL_FEA812
@@ -84004,6 +84534,7 @@ LABEL_EE80C0:
 	.long LABEL_F98697
 	.long 0xFFFFFFFF
 
+
 LABEL_EE80E0:
 	.long LABEL_FEA812
 	.long LABEL_FC7B07
@@ -84013,6 +84544,7 @@ LABEL_EE80E0:
 	.long LABEL_FB40B7
 	.long LABEL_F98697
 	.long 0xFFFFFFFF
+
 
 LABEL_EE8100:
 	.long LABEL_FEA812
@@ -84024,6 +84556,7 @@ LABEL_EE8100:
 	.long LABEL_F98697
 	.long 0xFFFFFFFF
 
+
 LABEL_EE8120:
 	.long LABEL_FEA812
 	.long LABEL_FC7B07
@@ -84033,6 +84566,7 @@ LABEL_EE8120:
 	.long LABEL_FB40B7
 	.long LABEL_F98697
 	.long 0xFFFFFFFF
+
 
 LABEL_EE8140:
 	.long LABEL_FEA812
@@ -84044,6 +84578,7 @@ LABEL_EE8140:
 	.long LABEL_F98697
 	.long 0xFFFFFFFF
 
+
 LABEL_EE8160:
 	.long LABEL_FEA812
 	.long LABEL_FC7B07
@@ -84053,6 +84588,7 @@ LABEL_EE8160:
 	.long LABEL_FB40B7
 	.long LABEL_F98697
 	.long 0xFFFFFFFF
+
 
 LABEL_EE8180:
 	.long LABEL_FEA812
@@ -84064,6 +84600,7 @@ LABEL_EE8180:
 	.long LABEL_F98697
 	.long 0xFFFFFFFF
 
+
 LABEL_EE81A0:
 	.long LABEL_FEA812
 	.long LABEL_FC7B07
@@ -84074,6 +84611,7 @@ LABEL_EE81A0:
 	.long LABEL_F98697
 	.long 0xFFFFFFFF
 
+
 LABEL_EE81C0:
 	.long LABEL_FEA812
 	.long LABEL_FC7B07
@@ -84082,6 +84620,7 @@ LABEL_EE81C0:
 	.long LABEL_FB40B7
 	.long LABEL_F98697
 	.long 0xFFFFFFFF
+
 
 LABEL_EE81DC:
 	.long LABEL_FEA812
@@ -84092,6 +84631,7 @@ LABEL_EE81DC:
 	.long LABEL_F98697
 	.long 0xFFFFFFFF
 
+
 LABEL_EE81F8:
 	.long LABEL_FEA812
 	.long LABEL_FC7B07
@@ -84100,6 +84640,7 @@ LABEL_EE81F8:
 	.long LABEL_FB40B7
 	.long LABEL_F98697
 	.long 0xFFFFFFFF
+
 
 LABEL_EE8214:
 	.long LABEL_FEA812
@@ -84110,6 +84651,7 @@ LABEL_EE8214:
 	.long LABEL_F98697
 	.long 0xFFFFFFFF
 
+
 LABEL_EE8230:
 	.long LABEL_FEA812
 	.long LABEL_FC7B07
@@ -84118,6 +84660,7 @@ LABEL_EE8230:
 	.long LABEL_FB40B7
 	.long LABEL_F98697
 	.long 0xFFFFFFFF
+
 
 LABEL_EE824C:
 	.long LABEL_FEA812
@@ -84128,6 +84671,7 @@ LABEL_EE824C:
 	.long LABEL_F98697
 	.long 0xFFFFFFFF
 
+
 LABEL_EE8268:
 	.long LABEL_FEA812
 	.long LABEL_FC7B07
@@ -84136,6 +84680,7 @@ LABEL_EE8268:
 	.long LABEL_FB40B7
 	.long LABEL_F98697
 	.long 0xFFFFFFFF
+
 
 LABEL_EE8284:
 	.long LABEL_FEA812
@@ -84146,6 +84691,7 @@ LABEL_EE8284:
 	.long LABEL_F98697
 	.long 0xFFFFFFFF
 
+
 LABEL_EE82A0:
 	.long LABEL_FEA812
 	.long LABEL_FC7B07
@@ -84154,6 +84700,7 @@ LABEL_EE82A0:
 	.long LABEL_FB40B7
 	.long LABEL_F98697
 	.long 0xFFFFFFFF
+
 
 LABEL_EE82BC:
 	.long LABEL_FEA812
@@ -84164,6 +84711,7 @@ LABEL_EE82BC:
 	.long LABEL_F98697
 	.long 0xFFFFFFFF
 
+
 LABEL_EE82D8:
 	.long LABEL_FEA812
 	.long LABEL_FC7B07
@@ -84172,6 +84720,7 @@ LABEL_EE82D8:
 	.long LABEL_FB40B7
 	.long LABEL_F98697
 	.long 0xFFFFFFFF
+
 
 LABEL_EE82F4:
 	.long LABEL_FEA812
@@ -84182,6 +84731,7 @@ LABEL_EE82F4:
 	.long LABEL_F98697
 	.long 0xFFFFFFFF
 
+
 LABEL_EE8310:
 	.long LABEL_FEA812
 	.long LABEL_FC7B07
@@ -84190,6 +84740,7 @@ LABEL_EE8310:
 	.long LABEL_FB40B7
 	.long LABEL_F98697
 	.long 0xFFFFFFFF
+
 
 LABEL_EE832C:
 	.long LABEL_FEA812
@@ -84200,6 +84751,7 @@ LABEL_EE832C:
 	.long LABEL_F98697
 	.long 0xFFFFFFFF
 
+
 LABEL_EE8348:
 	.long LABEL_FEA812
 	.long LABEL_FC7B07
@@ -84208,6 +84760,7 @@ LABEL_EE8348:
 	.long LABEL_FB40B7
 	.long LABEL_F98697
 	.long 0xFFFFFFFF
+
 
 LABEL_EE8364:
 	.long LABEL_FEA812
@@ -84339,7 +84892,7 @@ LABEL_EE8428:
 	.long LABEL_F8476E
 	.byte 0xff, 0xff, 0xff, 0xff
 LABEL_EE8434:
-	.byte 0x97, 0x86, 0xf9, 0x00
+	.long LABEL_F98697
 	.long LABEL_F8476E
 	.byte 0xff, 0xff, 0xff, 0xff
 LABEL_EE8440:
@@ -84386,7 +84939,7 @@ LABEL_EE84AC:
 	.long LABEL_F454F1
 	.byte 0xff, 0xff, 0xff, 0xff
 LABEL_EE84BC:
-	.byte 0xf1, 0x54, 0xf4, 0x00
+	.long LABEL_F454F1
 	.long LABEL_FEAB09
 	.byte 0xff, 0xff, 0xff, 0xff
 LABEL_EE84C8:
@@ -84394,7 +84947,7 @@ LABEL_EE84C8:
 	.long LABEL_FEAB4D
 	.byte 0xff, 0xff, 0xff, 0xff
 LABEL_EE84D4:
-	.byte 0xf1, 0x54, 0xf4, 0x00
+	.long LABEL_F454F1
 	.long LABEL_FEAB91
 	.byte 0xff, 0xff, 0xff, 0xff
 LABEL_EE84E0:
@@ -84421,6 +84974,7 @@ LABEL_EE8518:
 	.byte 0xff, 0xff, 0xff, 0xff
 LABEL_EE851C:
 	.byte 0xed, 0x7b, 0xfc, 0x00
+LABEL_EE8520:
 	.long LABEL_FEAD62
 	.long LABEL_FDE67D
 	.long LABEL_F98697
@@ -84448,6 +85002,8 @@ LABEL_EE8558:
 	.fill 4, 1, 0xff
 LABEL_EE856C:
 	.fill 4, 1, 0xff
+
+
 LABEL_EE8570:
 	.long LABEL_FC7B2C
 	.long LABEL_FDE514
@@ -84457,7 +85013,8 @@ LABEL_EE8570:
 	.long LABEL_FB4168
 	.byte 0xff, 0xff, 0xff, 0xff
 LABEL_EE858C:
-	.byte 0xcc, 0x8b, 0xfd, 0x00
+	.long LABEL_FD8BCC
+LABEL_EE8590:
 	.long LABEL_FEAC83
 	.long LABEL_FDE981
 	.long LABEL_FC7BBA
@@ -84498,6 +85055,7 @@ LABEL_EE8608:
 	.long LABEL_F6E62E
 	.long LABEL_F5C55C
 	.byte 0x8b, 0x75, 0xef, 0x00
+LABEL_EE8618:
 	.long LABEL_F86AE9
 	.long LABEL_FDE983
 	.long LABEL_F8B4CC
@@ -84563,6 +85121,7 @@ LABEL_EE86B0:
 	.long LABEL_FB4163
 	.long LABEL_F847DF
 	.byte 0xff, 0xff, 0xff, 0xff
+LABEL_EE86D0:
 	.long LABEL_EE89D1
 	.long LABEL_EE89D9
 	.long LABEL_EE89E1
@@ -85099,6 +85658,7 @@ LABEL_EE8C71:
 LABEL_EE8C75:
 	.fill 3, 1, 0xff
 	.fill 6, 1, 0xff
+LABEL_EE8C7E:
 	.long LABEL_EF1235
 	.long LABEL_EED52B
 	.long LABEL_E1FFB6
@@ -85122,6 +85682,8 @@ LABEL_EE8C75:
 	.byte 0x40, 0x00, 0x80, 0x00, 0x00, 0x01, 0x00, 0x02
 	.byte 0x00, 0x04, 0x00, 0x08, 0x00, 0x10, 0x00, 0x20
 	.byte 0x00, 0x40, 0x00, 0x80, 0xae, 0xe9, 0xfd, 0x00
+
+
 	.long LABEL_FDE9AE
 	.long LABEL_FDEB87
 	.long LABEL_FDE9AE
@@ -87898,6 +88460,7 @@ LABEL_EEE900:
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
 	.zero 8
+LABEL_EEECC0:
 	.long LABEL_E952A2
 	.long LABEL_E9529E
 	.long LABEL_E95540
@@ -87931,6 +88494,7 @@ LABEL_EEE900:
 	.long LABEL_E95414
 	.long LABEL_E9540A
 	.byte 0x08, 0x00, 0x00, 0x00
+LABEL_EEED44:
 	.long LABEL_E9D9B0
 	.long LABEL_E9D9A6
 	.long LABEL_E9D99C
@@ -87963,6 +88527,7 @@ LABEL_EEE900:
 	.byte 0xff, 0xff, 0xff, 0xff, 0x02, 0x00, 0xff, 0xff
 	.byte 0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff
 	.byte 0x09, 0x00, 0xff, 0xff
+LABEL_EEEDD4:
 	.long LABEL_E9F148
 	.long LABEL_E9F24C
 	.long LABEL_E9F374
@@ -88083,7 +88648,7 @@ LABEL_EEE900:
 	.long LABEL_FF00FF
 	.long LABEL_FF00FF
 	.long LABEL_FF00FF
-	.byte 0x6a, 0xc6, 0xe8, 0x00
+	.long LABEL_E8C66A
 	.long Bitmap_DrawbarNumberedSlider_1
 	.long Bitmap_DrawbarNumberedSlider_2
 	.long Bitmap_DrawbarNumberedSlider_2
@@ -88217,6 +88782,8 @@ LABEL_EEE900:
 	.long LABEL_EADA98
 	.long LABEL_EADA96
 	.zero 84
+
+
 	.long LABEL_EADB56
 	.long LABEL_EADB4A
 	.long LABEL_EADB3E
@@ -88551,6 +89118,7 @@ LABEL_EF02B2:
 	.zero 94
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0x00, 0x00
 	.byte 0x00
+
 
 LABEL_EF0319:
 	.long LABEL_EEC318
@@ -90042,6 +90610,8 @@ LABEL_EF1226:
 LABEL_EF122A:
 	.byte 0x27, 0x00, 0xf1, 0x14, 0x04, 0xa8, 0xb0, 0xfe
 	.byte 0x27, 0x01, 0x0e
+
+
 LABEL_EF1235:
 	.long LABEL_EF17A1
 	.long LABEL_EF17F2
@@ -93224,7 +93794,6 @@ LABEL_EF2EC0:
 	.byte 0xf8, 0x02, 0x00, 0x00, 0xba, 0xfc, 0x02, 0x00
 	.byte 0x00, 0xba, 0xfa, 0x02, 0x00, 0x00, 0xba, 0xfe
 	.byte 0x02, 0x7f, 0x00, 0x0e
-
 
 
 LABEL_EF2EF4:
@@ -97569,6 +98138,7 @@ LABEL_EF628F:
 	.byte 0xc8, 0x33, 0x07, 0x76, 0x08, 0x00, 0x1d, 0x36
 	.byte 0xaf, 0xef, 0x1b, 0xa6, 0x62, 0xef, 0x1d, 0xe7
 	.byte 0xaf, 0xef, 0x0e
+LABEL_EF62A7:
 	.long LABEL_EF628F
 	.long LABEL_EF61E8
 	.long LABEL_EF61E8
@@ -97623,6 +98193,7 @@ LABEL_EF6327:
 	.byte 0xb4, 0x63, 0xef, 0xc1, 0xd3, 0x0d, 0x3c, 0xfe
 	.byte 0x1d, 0x2e, 0x90, 0xef, 0x1d, 0x9f, 0x78, 0xef
 	.byte 0x0e
+LABEL_EF63BD:
 	.long LABEL_EF646F
 	.long LABEL_EF6581
 	.long LABEL_EF665D
@@ -97647,6 +98218,7 @@ LABEL_EF6327:
 	.ascii ";C#d"
 	.byte 0xef, 0x00, 0xe3, 0x07
 	.byte 0xec, 0xf4, 0x25, 0x5b, 0xb5, 0xe8, 0x0e
+LABEL_EF6423:
 	.long LABEL_EF61E8
 	.long LABEL_EF61E8
 	.long LABEL_EF61E8
@@ -97671,6 +98243,7 @@ LABEL_EF646F:
 	.byte 0x00, 0x7b, 0x11, 0x00, 0xdb, 0xec, 0x02, 0x3c
 	.byte 0x44, 0x8a, 0x64, 0xef, 0x00, 0xe3, 0x07, 0xf0
 	.byte 0xec, 0x23, 0x5c, 0xb3, 0xe8, 0x0e
+LABEL_EF648A:
 	.long LABEL_EF659C
 	.long LABEL_EF8B6D
 	.long LABEL_EF8DFB
@@ -97741,6 +98314,8 @@ LABEL_EF659C:
 	.byte 0x07, 0x76, 0x08, 0x00, 0x1d, 0xb1, 0x86, 0xef
 	.byte 0x1b, 0xdc, 0x65, 0xef, 0x1d, 0x74, 0x86, 0xef
 	.byte 0x0e
+
+
 	.long LABEL_EF659C
 	.long LABEL_EF61E8
 	.long LABEL_EF61E8
@@ -97778,6 +98353,7 @@ LABEL_EF665D:
 	.byte 0x11, 0x00, 0xdb, 0xec, 0x02, 0x3c, 0x44, 0x78
 	.byte 0x66, 0xef, 0x00, 0xe3, 0x07, 0xf0, 0xec, 0x23
 	.byte 0x5c, 0xb3, 0xe8, 0x0e, 0x9c, 0x65, 0xef, 0x00
+LABEL_EF667C:
 	.long LABEL_EF61E8
 	.long LABEL_EF61E8
 	.long LABEL_EF61E8
@@ -97820,6 +98396,7 @@ LABEL_EF6713:
 	.byte 0x33, 0x07, 0x7e, 0x08, 0x00, 0x1d, 0x59, 0x8d
 	.byte 0xef, 0x1b, 0x25, 0x67, 0xef, 0x1d, 0xaa, 0x8d
 	.byte 0xef, 0x0e
+LABEL_EF6726:
 	.long LABEL_EF659C
 	.long LABEL_EF61E8
 	.long LABEL_EF61E8
@@ -97859,6 +98436,7 @@ LABEL_EF67A6:
 	.byte 0xe3, 0x07, 0xf0, 0xec
 	.byte 0x23, 0x5c, 0xb3, 0xe8, 0x0e
 LABEL_EF67C1:	.asciz "œeï"
+LABEL_EF67C5:
 	.long LABEL_EF61E8
 	.long LABEL_EF61E8
 	.long LABEL_EF61E8
@@ -97897,6 +98475,7 @@ LABEL_EF6841:
 	.ascii "<D\\h"
 	.byte 0xef, 0x00, 0xe3
 	.byte 0x07, 0xf0, 0xec, 0x23, 0x5c, 0xb3, 0xe8, 0x0e
+LABEL_EF685C:
 	.long LABEL_EF659C
 	.long LABEL_EF61E8
 	.long LABEL_EF61E8
@@ -97939,6 +98518,7 @@ LABEL_EF68F7:
 	.byte 0x00, 0x1d, 0x8a, 0x8c, 0xef, 0x1b, 0x09, 0x69
 	.byte 0xef, 0x1d, 0xa7, 0x8c, 0xef, 0x0e, 0x9c, 0x65
 	.byte 0xef, 0x00
+LABEL_EF690E:
 	.long LABEL_EF61E8
 	.long LABEL_EF61E8
 	.long LABEL_EF68F7
@@ -97976,6 +98556,8 @@ LABEL_EF698A:
 	.byte 0xec, 0x02, 0x3c, 0x44, 0xa5, 0x69, 0xef, 0x00
 	.byte 0xe3, 0x07, 0xf0, 0xec, 0x23, 0x5c, 0xb3, 0xe8
 	.byte 0x0e
+
+
 	.long LABEL_EF659C
 	.long LABEL_EF61E8
 	.long LABEL_EF61E8
@@ -98038,6 +98620,7 @@ LABEL_EF6AD7:
 	.byte 0x00, 0x7b, 0x11, 0x00, 0xdb, 0xec, 0x02, 0x3c
 	.byte 0x44, 0xf2, 0x6a, 0xef, 0x00, 0xe3, 0x07, 0xf0
 	.byte 0xec, 0x23, 0x5c, 0xb3, 0xe8, 0x0e
+LABEL_EF6AF2:
 	.long LABEL_EF659C
 	.long LABEL_EF61E8
 	.long LABEL_EF61E8
@@ -98108,6 +98691,7 @@ LABEL_EF6C50:
 	.ascii "<Dkl"
 	.byte 0xef, 0x00, 0xe3, 0x07
 	.byte 0xf0, 0xec, 0x23, 0x5c, 0xb3, 0xe8, 0x0e
+LABEL_EF6C6B:
 	.long LABEL_EF659C
 	.long LABEL_EF61E8
 	.long LABEL_EF61E8
@@ -98190,6 +98774,7 @@ LABEL_EF6E29:
 	.ascii "<DDn"
 	.byte 0xef, 0x00, 0xe3
 	.byte 0x07, 0xf0, 0xec, 0x23, 0x5c, 0xb3, 0xe8, 0x0e
+LABEL_EF6E44:
 	.long LABEL_EF6EC4
 	.long LABEL_EF61E8
 	.long LABEL_EF61E8
@@ -98634,6 +99219,7 @@ LABEL_EF73A4:
 	.byte 0xe3, 0x07, 0xf0, 0xec
 	.byte 0x23, 0x5c, 0xb3, 0xe8, 0x0e
 LABEL_EF73BF:	.asciz "Änï"
+LABEL_EF73C3:
 	.long LABEL_EF61E8
 	.long LABEL_EF61E8
 	.long LABEL_EF61E8
@@ -98672,6 +99258,7 @@ LABEL_EF743F:
 	.ascii "<DZt"
 	.byte 0xef, 0x00, 0xe3
 	.byte 0x07, 0xf0, 0xec, 0x23, 0x5c, 0xb3, 0xe8, 0x0e
+LABEL_EF745A:
 	.long LABEL_EF6EC4
 	.long LABEL_EF61E8
 	.long LABEL_EF61E8
@@ -98709,6 +99296,7 @@ LABEL_EF74DA:
 	.byte 0x00, 0xdb, 0xec, 0x02, 0x3c, 0x44, 0xf5, 0x74
 	.byte 0xef, 0x00, 0xe3, 0x07, 0xf0, 0xec, 0x23, 0x5c
 	.byte 0xb3, 0xe8, 0x0e
+LABEL_EF74F5:
 	.long LABEL_EF61E8
 	.long LABEL_EF61E8
 	.long LABEL_EF61E8
@@ -98810,6 +99398,8 @@ LABEL_EF7580:
 	.byte 0xc0, 0x21, 0xc9, 0xcc, 0x3f, 0xc9, 0xd8, 0x7e
 	.byte 0x0c, 0x00, 0xf1, 0x54, 0x0d, 0xb3, 0xf1, 0xf9
 	.byte 0x10, 0xb1, 0xf1, 0xf9, 0x10, 0xb2, 0x0e
+
+
 	.long LABEL_EF61E8
 	.long LABEL_EF61E8
 	.long LABEL_EF61E8
@@ -98848,6 +99438,7 @@ LABEL_EF77DF:
 
 LABEL_EF7808:
 	ret
+
 
 LABEL_EF7809:
 	.long LABEL_EF788C
@@ -99185,6 +99776,7 @@ LABEL_EF80AF:
 	.byte 0xef, 0x21, 0x01, 0x1d, 0x0b, 0xd1, 0xef, 0x1b
 	.byte 0xe5, 0x80, 0xef, 0xef, 0xc8, 0x02, 0x00, 0x00
 	.byte 0x00, 0x1b, 0x6a, 0x81, 0xef, 0x0e
+LABEL_EF817F:
 	.long LABEL_EF61E8
 	.long LABEL_EF902E
 	.long LABEL_EF902E
@@ -99405,6 +99997,8 @@ LABEL_EF8768:
 	.byte 0xcc, 0x03, 0xce, 0xd6, 0xdb, 0xec, 0x02, 0x3c
 	.byte 0x44, 0xd7, 0x87, 0xef, 0x00, 0xe3, 0x07, 0xf0
 	.byte 0xec, 0x23, 0x5c, 0xb3, 0xe8, 0x0e
+
+
 LABEL_EF87D7:
 	.long LABEL_EF61E8
 	.long LABEL_EF87E7
@@ -99663,6 +100257,8 @@ LABEL_EF87FB:
 	.byte 0xec, 0x02, 0x3c, 0x44, 0x92, 0x8f, 0xef, 0x00
 	.byte 0xe3, 0x07, 0xf0, 0xec, 0x23, 0x5c, 0xb3, 0xe8
 	.byte 0x0e
+
+
 	.long LABEL_EF8FDB
 	.long LABEL_EF8FA2
 	.long LABEL_EF8FC1
@@ -100264,6 +100860,8 @@ LABEL_EF97E0:
 	.byte 0xd8, 0x13, 0xd8, 0xec, 0x02, 0xd8, 0x8d, 0x3a
 	.byte 0x42, 0xdf, 0x9d, 0xef, 0x00, 0xe3, 0x07, 0xe8
 	.byte 0xf4, 0x25, 0x5a, 0xb5, 0xe8, 0x5b, 0x0e
+
+
 	.long LABEL_EF9E03
 	.long LABEL_EF9DEF
 	.long LABEL_EF9DEF
@@ -100647,6 +101245,7 @@ LABEL_EFA4B8:
 	.byte 0xd8, 0xcc, 0x03, 0x00, 0xd8, 0xec, 0x02, 0xd8
 	.byte 0x8b, 0x3c, 0x44, 0x08, 0xa5, 0xef, 0x00, 0xe3
 	.byte 0x07, 0xf0, 0xec, 0x23, 0x5c, 0xb3, 0xe8, 0x0e
+LABEL_EFA508:
 	.long LABEL_EFA565
 	.long LABEL_EFA518
 	.long LABEL_EFA518
@@ -100745,6 +101344,7 @@ LABEL_EFA75F:
 	.byte 0xef, 0x00, 0xc1, 0x65, 0x0d, 0x21, 0xc9, 0xcc
 	.byte 0x03, 0xc3, 0x03, 0xec, 0xe0, 0x21, 0xf1, 0xef
 	.byte 0x0d, 0x41, 0x0e, 0x00, 0x00, 0x00, 0x0c, 0x0e
+LABEL_EFA7A8:
 	.long LABEL_EFA7BE
 	.long LABEL_EFA7B8
 	.long LABEL_EFA7B8
@@ -101167,6 +101767,7 @@ LABEL_EFB0D3:
 	.byte 0x02, 0xd8, 0x8b, 0x3c, 0x44, 0xa6, 0xb1, 0xef
 	.byte 0x00, 0xe3, 0x07, 0xf0, 0xec, 0x23, 0x5c, 0xb3
 	.byte 0xe8, 0x0e
+LABEL_EFB1A6:
 	.long LABEL_EF61E8
 	.long LABEL_EFB1D2
 	.long LABEL_EFB20F
@@ -101185,6 +101786,7 @@ LABEL_EFB1D2:
 	.byte 0xec, 0x02, 0xd8, 0x8b, 0x3c, 0x44, 0xf7, 0xb1
 	.byte 0xef, 0x00, 0xe3, 0x07, 0xf0, 0xec, 0x23, 0x5c
 	.byte 0xb3, 0xe8, 0x0e
+LABEL_EFB1F7:
 	.long LABEL_EFB311
 	.long LABEL_EFB325
 	.long LABEL_EFB325
@@ -101197,6 +101799,7 @@ LABEL_EFB20F:
 	.byte 0xc9, 0x69, 0xd8, 0x13, 0xd8, 0xec, 0x02, 0xd8
 	.byte 0x8b, 0x3c, 0x44, 0x34, 0xb2, 0xef, 0x00, 0xe3
 	.byte 0x07, 0xf0, 0xec, 0x23, 0x5c, 0xb3, 0xe8, 0x0e
+LABEL_EFB234:
 	.long LABEL_EFB311
 	.long LABEL_EFB325
 	.long LABEL_EFB325
@@ -101211,6 +101814,7 @@ LABEL_EFB24C:
 	.byte 0xe3, 0x07, 0xf0, 0xec
 	.byte 0x23, 0x5c, 0xb3, 0xe8, 0x0e
 LABEL_EFB271:	.asciz "èaï"
+LABEL_EFB275:
 	.long LABEL_EF61E8
 	.long LABEL_EF61E8
 	.long LABEL_EFB325
@@ -101225,6 +101829,7 @@ LABEL_EFB28E:
 	.byte 0x69, 0xd8, 0x13, 0xd8, 0xec, 0x02, 0xd8, 0x8b
 	.byte 0x3c, 0x44, 0xb3, 0xb2, 0xef, 0x00, 0xe3, 0x07
 	.byte 0xf0, 0xec, 0x23, 0x5c, 0xb3, 0xe8, 0x0e
+LABEL_EFB2B3:
 	.long LABEL_EFB308
 	.long LABEL_EFB311
 	.long LABEL_EFB311
@@ -101238,6 +101843,7 @@ LABEL_EFB2CB:
 	.byte 0xd8, 0xec, 0x02, 0xd8, 0x8b, 0x3c, 0x44, 0xf0
 	.byte 0xb2, 0xef, 0x00, 0xe3, 0x07, 0xf0, 0xec, 0x23
 	.byte 0x5c, 0xb3, 0xe8, 0x0e, 0x08, 0xb3, 0xef, 0x00
+LABEL_EFB2F4:
 	.long LABEL_EFB311
 	.long LABEL_EFB31F
 	.long LABEL_EFB325
@@ -101414,6 +102020,7 @@ LABEL_EFB7C9:
 	ldb a, 0xA
 	call LABEL_F99463
 	ret
+
 
 LABEL_EFB7DB:
 	.long LABEL_EFB875
@@ -102987,6 +103594,7 @@ LABEL_EFDCA6:
 	.byte 0x1f, 0x00, 0x7b, 0x11, 0x00, 0xdb, 0xec, 0x02
 	.byte 0x3c, 0x44, 0xc1, 0xdc, 0xef, 0x00, 0xe3, 0x07
 	.byte 0xf0, 0xec, 0x23, 0x5c, 0xb3, 0xe8, 0x0e
+LABEL_EFDCC1:
 	.long LABEL_EF659C
 	.long LABEL_EFDB94
 	.long LABEL_EF61E8
@@ -103346,6 +103954,8 @@ LABEL_EFDCA6:
 	.byte 0xec, 0x02, 0xeb, 0x12, 0x3a, 0x42, 0x65, 0xe7
 	.byte 0xef, 0x00, 0xe3, 0x07, 0xe8, 0xec, 0x23, 0x5a
 	.byte 0xb3, 0xe8, 0x0e
+
+
 	.long LABEL_EFE7A5
 	.long LABEL_EFE7A5
 	.long LABEL_EFE7A6
@@ -106632,18 +107242,6 @@ LABEL_F028DE:
 .endm
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 .macro RegObjTabl ParamA, ParamB, ParamC, ParamD, ParamE
 	mrid2 0xB7, 0x31
 	.if \ParamA <= 7
@@ -106664,17 +107262,6 @@ LABEL_F028DE:
 	.endif
 	call RegisterObjectTable
 .endm
-
-
-
-
-
-
-
-
-
-
-
 
 
 .macro RegMode ParamA, ParamBhi, ParamBlow, ParamC, ParamD, ParamE
@@ -106700,14 +107287,6 @@ LABEL_F028DE:
 .endm
 
 
-
-
-
-
-
-
-
-
 .macro RegTitle ParamA, ParamBhi, ParamBlow, ParamC, ParamD, ParamE
 	pushw \ParamA
 	pushw \ParamBhi
@@ -106729,14 +107308,6 @@ LABEL_F028DE:
 	.endif
 	call RegisterTitle
 .endm
-
-
-
-
-
-
-
-
 
 
 InitializeScoop:
@@ -115011,6 +115582,7 @@ LABEL_F0EF5B:
 	pop xiz
 	ret
 
+
 LABEL_F0EF8A:
 	.long LABEL_F0F608
 	.long LABEL_F100F1
@@ -115211,6 +115783,8 @@ LABEL_F0EF8A:
 	.byte 0xc8, 0x06, 0x23, 0xcf, 0x08, 0x28, 0xd8, 0x83
 	.byte 0xdb, 0x8c, 0xd9, 0xad, 0x33, 0x28, 0x00, 0x1d
 	.byte 0x47, 0xec, 0xf0, 0x0e, 0x96, 0x10, 0xf1, 0x00
+
+
 	.long LABEL_F10FCE
 	.long LABEL_F10F06
 	.long LABEL_F10CAE
@@ -117276,6 +117850,7 @@ LABEL_F12C97:
 	.byte 0x1b, 0x0a, 0x40, 0x00, 0xa7, 0x00, 0xb8, 0x00
 	.byte 0xb4, 0x00, 0x1b, 0x0a, 0xc0, 0x00, 0xa7, 0x00
 	.byte 0xf8, 0x00, 0xb4, 0x00, 0xae, 0x2b, 0xf1, 0x00
+LABEL_F12CAF:
 	.long LABEL_F12BE0
 	.long LABEL_F12C12
 	.long LABEL_F12C6F
@@ -117502,6 +118077,7 @@ LABEL_F132B4:
 	.byte 0x1b, 0x0a, 0x0d, 0x00, 0x4c, 0x00, 0xa6, 0x00
 	.byte 0xc8, 0x00, 0x1b, 0x0a, 0xb5, 0x00, 0x43, 0x00
 	.byte 0xf9, 0x00, 0xc8, 0x00, 0xa9, 0x32, 0xf1, 0x00
+LABEL_F13447:
 	.long LABEL_F131E5
 	.long LABEL_F131F0
 	.long LABEL_F131FB
@@ -117968,6 +118544,8 @@ LABEL_F14457:
 LABEL_F14463:
 	.byte 0x03, 0x0c, 0x60, 0x0c
 	.byte 0xf1, 0x00, 0xb6, 0x18, 0x03, 0x00, 0x0a, 0x00
+
+
 LABEL_F1446F:
 	.long LABEL_F1443F
 	.long LABEL_F1443F
@@ -127521,18 +128099,6 @@ LABEL_F1E13F:
 .endm
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 .macro RegObjTablHama ParamA, ParamB, ParamC, ParamD, ParamE
 	.if \ParamA <= 7
 	lds32 xwa, \ParamA
@@ -127556,17 +128122,6 @@ LABEL_F1E13F:
 .endm
 
 
-
-
-
-
-
-
-
-
-
-
-
 .macro RegTitleHama ParamA, ParamB, ParamC, ParamD, ParamE
 	pushw \ParamA
 	lda_24 xwa, \ParamB
@@ -127588,13 +128143,6 @@ LABEL_F1E13F:
 	.endif
 	call RegisterTitle
 .endm
-
-
-
-
-
-
-
 
 
 InitializeHama:
@@ -138505,6 +139053,7 @@ LABEL_F256B4:
 
 LABEL_F256B8:
 	ret
+
 
 LABEL_F256B9:
 	.long LABEL_F26627
@@ -214018,6 +214567,8 @@ LABEL_F59505:
 	ld xhl, 0xF59517
 	ld_sril3 XWA, 0x03, 0xEC, 0xE1
 	jp (xwa)
+
+
 LABEL_F59517:
 	.long LABEL_F59557
 	.long LABEL_F595AA
@@ -230878,6 +231429,7 @@ LABEL_F652A1:
 	call (xhl)
 	ret
 
+
 LABEL_F652BB:
 	.long LABEL_F652F8
 	.long LABEL_F65335
@@ -242605,7 +243157,7 @@ LABEL_F6F057:
 LABEL_F6F060:
 	.byte 0x80, 0xff, 0xff, 0xff, 0xff, 0x87, 0x81, 0x84
 	.byte 0x79, 0xf0, 0xf6, 0x00, 0x78, 0xf0, 0xf6, 0x00
-	.byte 0x7e, 0xf0, 0xf6, 0x00
+	.long LABEL_F6F07E
 	.long LABEL_F6F078
 
 LABEL_F6F078:
@@ -249655,10 +250207,8 @@ LABEL_F77399:
 	ret
 
 
-
 ; Computer Interface PCG Output routines
 	.include "computer_interface_pcg.s"
-
 
 
 AcSendEditSwProc:
@@ -276654,8 +277204,6 @@ EditControlProc:
 	.include "fdc_routines.s"
 
 ;==================== (guessed) end of floppy routines =========================
-
-
 
 
 CheckTitleFunc:
@@ -316679,9 +317227,6 @@ InitializeRoot:
 .endm
 
 
-
-
-
 .macro _VGA_READ regnum
 	.if \regnum <= 7
 	lds wa, \regnum
@@ -316690,8 +317235,6 @@ InitializeRoot:
 	.endif
 	calr _Read_VGA_Register
 .endm
-
-
 
 
 .macro _PALLETE_WRITE red, green, blue
@@ -316717,19 +317260,10 @@ InitializeRoot:
 .endm
 
 
-
-
-
-
-
-
-
 .macro _VGA_ATTRIBUTE field, value
 	_VGA_WRITE 0x3C0, \field
 	_VGA_WRITE 0x3C0, \value
 .endm
-
-
 
 
 .macro _VGA_SEQUENCER field, value
@@ -316738,23 +317272,16 @@ InitializeRoot:
 .endm
 
 
-
-
 .macro _VGA_GFX_CONTROLLER field, value
 	_VGA_WRITE 0x3CE, \field
 	_VGA_WRITE 0x3CF, \value
 .endm
 
 
-
-
 .macro _VGA_COLOR_CRTC field, value
 	_VGA_WRITE 0x3D4, \field
 	_VGA_WRITE 0x3D5, \value
 .endm
-
-
-
 
 
 LABEL_FB2B06:
@@ -345870,6 +346397,7 @@ LABEL_FCA4F7:
 	pop xiz
 	ret
 
+
 LABEL_FCA4F9:
 	.long LABEL_FCA554
 	.long LABEL_FCA573
@@ -346626,6 +347154,7 @@ LABEL_FCAD7D:
 LABEL_FCADA2:
 	.byte 0xff
 
+
 LABEL_FCADA3:
 	.long LABEL_FCB40B
 	.long LABEL_FCADC3
@@ -347378,6 +347907,7 @@ LABEL_FCB7CA:
 	ld xix, 0xFCB80D
 	ld_sril3 XIX, 0x07, 0xF0, 0xEC
 	jp (xix)
+
 
 LABEL_FCB80D:
 	.long LABEL_FCB81D
@@ -348154,6 +348684,8 @@ LABEL_FCC8B4:
 	.byte 0xdb, 0x12, 0xca, 0x8f, 0xcf, 0xcf, 0x0b, 0x6b
 	.byte 0x3f, 0xdb, 0xee, 0x02, 0x44, 0xcc, 0xc8, 0xfc
 	.byte 0x00, 0xe3, 0x07, 0xf0, 0xec, 0x24, 0xb4, 0xd8
+
+
 LABEL_FCC8CC:
 	.long LABEL_FCCE69
 	.long LABEL_FCC8FC
@@ -348201,6 +348733,8 @@ LABEL_FCC9AB:
 	.byte 0xdb, 0x12, 0xca, 0x8f, 0xcf, 0xdb, 0x6b, 0x1f
 	.byte 0xdb, 0xee, 0x02, 0x44, 0xe2, 0xc9, 0xfc, 0x00
 	.byte 0xe3, 0x07, 0xf0, 0xec, 0x24, 0xb4, 0xd8
+
+
 LABEL_FCC9E2:
 	.long LABEL_FCCE69
 	.long LABEL_FCC9F2
@@ -350611,6 +351145,8 @@ LABEL_FCFA4D:
 	.byte 0xec, 0x02, 0xdb, 0x12, 0x46, 0x67, 0xfa, 0xfc
 	.byte 0x00, 0xe3, 0x07, 0xf8, 0xec, 0x26, 0xb6, 0xe8
 	.byte 0x0e, 0xff
+
+
 LABEL_FCFA67:
 	.long LABEL_FCFACF
 	.long LABEL_FCFACF
@@ -350651,6 +351187,8 @@ LABEL_FCFACF:
 	.byte 0xef, 0x02, 0x44, 0x3d, 0xfb, 0xfc, 0x00, 0xe3
 	.byte 0x07, 0xf0, 0xec, 0x24, 0xb4, 0xe8, 0xc1, 0x6b
 	.byte 0x96, 0x69, 0x6e, 0xca, 0x0e, 0xff
+
+
 LABEL_FCFB3D:
 	.long LABEL_FCFB5D
 	.long LABEL_FCFB5D
@@ -350673,6 +351211,8 @@ LABEL_FCFB63:
 	.byte 0x66, 0x15, 0xd8, 0x12, 0xc1, 0x57, 0x96, 0x21
 	.byte 0xd8, 0xec, 0x02, 0x44, 0xb3, 0xfb, 0xfc, 0x00
 	.byte 0xe3, 0x07, 0xf0, 0xe0, 0x24, 0xb4, 0xe8, 0x0e
+
+
 LABEL_FCFBB3:
 	.long LABEL_FCFE0B
 	.long LABEL_FCFECD
@@ -351156,6 +351696,7 @@ LABEL_FD05FE:
 
 LABEL_FD0608:
 	ret
+
 
 LABEL_FD0609:
 	.long LABEL_FD0649
