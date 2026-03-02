@@ -283,7 +283,21 @@ LABEL_E0174A:
 	.byte 0x00, 0x91
 	.byte 0xff, 0xff
 
-LABEL_E0174E:
+; -----------------------------------------------------------------------------
+; SSF_GateStates_Mode05 (0xE0174E) -- SSF gate filter for UI mode 0x05
+; -----------------------------------------------------------------------------
+; State-value array referenced by SSF_PresentationGateTable[5]. Contains 14
+; allowed (chain, param) pairs -- all for event chain 0x92 with params 0x00
+; through 0x0D -- that permit GroupBoxNotify_SendSSFEvent (0xF98697) to send
+; event 0x1C00038.
+;
+; Format: array of 16-bit LE values, terminated by 0xFFFF.
+; Each value encodes (chain_index << 8) | param, compared against the packed
+; panel selection state (DRAM 0xC080 << 8) | (DRAM 0xC07D).
+;
+; Entries: 14 states + terminator = 30 bytes (0xE0174E-0xE0176B).
+; -----------------------------------------------------------------------------
+SSF_GateStates_Mode05:
 	.byte 0x00, 0x92
 	.byte 0x01, 0x92
 	.byte 0x02, 0x92
@@ -331,7 +345,7 @@ SSF_PresentationGateTable:
 	.long LABEL_E0157E
 	.long LABEL_E01580
 	.long LABEL_E0174A
-	.long LABEL_E0174E
+	.long SSF_GateStates_Mode05
 	.long LABEL_E0176C
 	.long LABEL_E0178A
 	.long LABEL_E0178E
