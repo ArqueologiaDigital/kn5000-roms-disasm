@@ -1084,10 +1084,10 @@ LABEL_F97CEF:
 	stdi8 35364, 0
 	calr FDC_COMMAND_DISPATCHER
 	cps l, 0
-	jr nz, LABEL_F97DE1	; JR NZ, LABEL_F97DE1 (original encoding)
+	.byte 0x6e, 0x74	; jr nz, +116 → LABEL_F97DE1 (fixed displacement)
 	ldda16 xwa, 35392
 	cp wa, 0xB
-	jr ugt, LABEL_F97DDB	; JR UGT, LABEL_F97DDB (original encoding)
+	.byte 0x6b, 0x64	; jr ugt, +100 → LABEL_F97DDB (fixed displacement)
 	add wa, wa
 	lda_24 xix, 0xea98ca
 	ld_sriw3 WA, 0x07, 0xF0, 0xE0
