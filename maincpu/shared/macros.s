@@ -15,6 +15,7 @@
 ; =============================================================================
 
 ; Widget type bytes (used in the 4-byte header: type, 0x00, 0x60, 0x01)
+.equ NAKA_TYPE_DIAGLIST,  0x16  ; Diagnostic list item (3 instances, FD test only)
 .equ NAKA_TYPE_PANEL,     0x1e  ; Panel/dialog (31 instances)
 .equ NAKA_TYPE_LABEL,     0x2b  ; Label/button with text (765 instances)
 .equ NAKA_TYPE_VALUE,     0x2e  ; Value display (148 instances)
