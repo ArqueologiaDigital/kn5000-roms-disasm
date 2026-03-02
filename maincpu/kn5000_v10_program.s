@@ -7196,10 +7196,7 @@ LABEL_E14B62:	aligned_string "Menghasilkan 1000 gaya permainan dengan Music Styl
 LABEL_E14B9A:	aligned_string "Italian"
 LABEL_E14BA2:	aligned_string "Explore los 1000 estilos musicales con el Music Stylist."
 LABEL_E14BDC:
-	.byte 0x47, 0x72, 0xe2, 0x63
-	.ascii "e au « Music Stylist "
-	lda_rid8 xhl, 0x2c, xwa
-	aligned_string "explorez l'un après l'autre les 1000 styles disponibles."
+	aligned_string "Grâce au « Music Stylist », explorez l'un après l'autre les 1000 styles disponibles."
 	.byte 0x57, 0xe4
 	aligned_string "hlen Sie aus 1000 stilistisch sortierten Gesamtregistrierungen im MUSIC STYLIST."
 	aligned_string "Explore 1000 Musical Styles with the Music Stylist."
@@ -7275,10 +7272,7 @@ LABEL_E152A8:
 	.byte 0xa1
 	aligned_string "Un mundo de sonidos de acordeón en la punta de sus dedos con el Accordion Register!"
 LABEL_E152FE:
-	.byte 0x41, 0x76
-	.ascii "ec la fonction «Accordion Register», tout le monde de l'accord"
-	dec	7, xbc
-	aligned_string "n sous vos doigts!"
+	aligned_string "Avec la fonction «Accordion Register», tout le monde de l'accordéon sous vos doigts!"
 	aligned_string "ACCORDION REGISTER eröffnet Ihnen die Welt der Akkordeon Klänge!"
 	aligned_string "A World of Accordion Sounds at your fingertips with the Accordion Register!"
 	.long LABEL_E15442
@@ -18966,11 +18960,7 @@ LABEL_E25AD8:	aligned_string "Turning on GENERAL MIDI MODE will replace your cur
 LABEL_E25B34:	aligned_string "Aktifkan GENERAL MIDI MODE untuk kembali ke  susunan GENERAL MIDI yang sekarang. "
 LABEL_E25B86:	aligned_string "Turning off GENERAL MIDI MODE will replace the GENERAL MIDI settings with the original factory settings!"
 LABEL_E25BF0:	aligned_string "Durch das Ausschalten des GENERAL MIDI MODE werden die GENERAL MIDI Einstellungen durch die Werkseinstellungen ersetzt."
-LABEL_E25C68:	.ascii "La d"
-	.byte 0xe9, 0x73, 0x61, 0x63
-	.ascii "tivation du mode GENERAL MIDI MODE remplacera tous les réglages GENERAL MIDI par les r"
-	inc	7, xbc
-	aligned_string "lages d'usines!"
+LABEL_E25C68:	aligned_string "La désactivation du mode GENERAL MIDI MODE remplacera tous les réglages GENERAL MIDI par les réglages d'usines!"
 LABEL_E25CD8:
 	.byte 0xa1
 	aligned_string "Al desconectar el modo MIDI General se reemplazan las configuraciones MIDI Generales por las configuraciones originales de fábrica!"
@@ -28284,9 +28274,7 @@ LABEL_E33886:
 	.ascii "es-vous s"
 	.byte 0x95, 0xd3, 0x3f, 0x20, 0x00
 LABEL_E33896:
-	.byte 0xbf, 0x45
-	jrl	ule, 0xe174
-	aligned_string " seguro? "
+	aligned_string "¿Está seguro? "
 	aligned_string "Apakah yakin akan dihapus ?"
 	aligned_string "Features for creating a song. "
 	aligned_string "Funktionen zur Erstellung eines Songs"
@@ -28320,20 +28308,14 @@ LABEL_E33E0A:	aligned_string "Using SONG CLEAR will erase any existing recording
 LABEL_E33E50:	.ascii "SONG CLEAR l"
 	.byte 0xf6
 	aligned_string "scht alle aufgenommenen Daten in diesem Song. "
-LABEL_E33E8C:	.ascii "L'utilisation de SONG CLEAR effacera tout enregistrement pr"
-	.byte 0xe9
-	jr	ule, 0xe9
-	.asciz "dent dans le séquenceur. "
+LABEL_E33E8C:	.asciz "L'utilisation de SONG CLEAR effacera tout enregistrement précédent dans le séquenceur. "
 	aligned_string "Al anular la canción se borra la grabación del secuenciador. "
 	aligned_string "Gunakan SONG CLEAR untuk menghapus suatu rekaman yang ada didalam Sequencer."
 LABEL_E33F70:	aligned_string "Using TRACK CLEAR will erase any existing recordings in the selected Tracks."
 LABEL_E33FBE:
 	.byte 0x54, 0x52
 	aligned_string "ACK CLEAR löscht alle Daten in den ausgewählten Spuren. "
-LABEL_E33FFA:	.ascii "L'utilisation de TRACK CLEAR effacera tout enregistrement pr"
-	inc	3, xbc
-	.byte 0xe9
-	.asciz "dent dans les pistes sélectionnées. "
+LABEL_E33FFA:	.asciz "L'utilisation de TRACK CLEAR effacera tout enregistrement précédent dans les pistes sélectionnées. "
 	.byte 0x41, 0x6c
 	aligned_string " anular la pista se borra la grabación de las pistas seleccionadas. "
 	aligned_string "Gunakan TRACK CLEAR bila akan menghapus suatu rekaman yang ada didalam Track yang terseleksi."
@@ -46434,9 +46416,7 @@ LABEL_E9587C:	aligned_string "PLEASE WAIT!"
 	.byte 0xe9, 0x00, 0xe6, 0x58, 0xe9, 0x00
 LABEL_E958E6:	aligned_string "Memori internal diterima untuk selama 80 menit setelah power dimatikan. Simpan hasil pekerjaan anda kedalam  Floppy Disk."
 LABEL_E95960:	aligned_string "REMINDER"
-	.ascii "La memoria interna es retenida alrededor de 80 minutos después de interrumpir la alimentación."
-	ldb	w, 0xa1
-	aligned_string "Guarde su trabajo en un disquete!"
+	aligned_string "La memoria interna es retenida alrededor de 80 minutos después de interrumpir la alimentación. ¡Guarde su trabajo en un disquete!"
 	aligned_string "La mémoire interne est conservée pendant environ 80 minutes après la coupure de l'alimentation générale de l'instrument. Sauvegardez SAVE votre travail sur disquette !"
 	aligned_string "Der Speicherinhalt bleibt etwa 80 Minuten nach Ausschalten des Keyboards erhalten. Speichern Sie Ihre Daten daher auf Diskette !"
 	aligned_string "The internal memory is retained for about 80 minutes after turning off the power. SAVE your work on Floppy Disk!"
@@ -46639,11 +46619,7 @@ LABEL_E97048:	aligned_string "ERROR 12"
 LABEL_E97052:	.ascii "La carga de las bater"
 	.byte 0xed
 	aligned_string "as es muy baja. Reemplace inmediatamente todas las baterías por baterías nuevas."
-LABEL_E970BA:	.ascii "La batterie interne est pratiquement d"
-	.byte 0xe9
-	.ascii "charg"
-	inc	5, xbc
-	.asciz ". Remplacez toutes les piles immédiatement."
+LABEL_E970BA:	.asciz "La batterie interne est pratiquement déchargée. Remplacez toutes les piles immédiatement."
 	aligned_string "Die verbleibende Kapazität der Batterien ist sehr schwach. Ersetzen Sie umgehend alle Batterien gegen neue."
 	aligned_string "The remaining battery power is very low. Replace all the batteries with new ones immediately."
 	.byte 0xd2, 0x72
@@ -46721,9 +46697,7 @@ LABEL_E9782E:	aligned_string "Este es un archivo MIDI de FORMATO 1 y no puede se
 LABEL_E979A2:	aligned_string "Satu masalah  terjadi terhadap data Sequencer anda. Ini mungkin berhubungan dengan dikset salah atau rusak."
 LABEL_E97A0E:	aligned_string "ERROR 20"
 	.asciz "Se ha producido un problema con sus datos SEQUENCER. Esto puede deberse a que el disco está estropeado."
-	.ascii "Je ne peux pas charger le SEQUENCER que vous me demandez! Cela est certainement dû à une perte de donn"
-	inc	5, xbc
-	aligned_string "s ou à une détérioration de la disquette."
+	aligned_string "Je ne peux pas charger le SEQUENCER que vous me demandez! Cela est certainement dû à une perte de données ou à une détérioration de la disquette."
 	aligned_string "Die Sequenzerdaten sind nicht in Ordnung. Das kann an einer beschädigten oder fehlerhaften Diskette liegen."
 	aligned_string "A problem has occurred with your Sequencer Data. This might be due to a damaged or faulty Disk."
 	.byte 0x5e, 0x7c
@@ -46787,10 +46761,7 @@ LABEL_E9810C:	.ascii "Es ist nicht m"
 LABEL_E981D0:	aligned_string "Satu Chord Track sudah ada. tidak mungkin menunjuk 2 Track untuk satu Chord."
 LABEL_E9821E:	aligned_string "ERROR 24"
 LABEL_E98228:	aligned_string "Ya existe una pista de ritmo. No es posible asignar dos pistas al acordes."
-LABEL_E98274:	.ascii "Vous avez d"
-	.byte 0xe9
-	jr	gt, 0xe0
-	aligned_string " choisi une piste pour le Chord! Vous ne pouvez pas assigner deux pistes à celui-ci."
+LABEL_E98274:	aligned_string "Vous avez déjà choisi une piste pour le Chord! Vous ne pouvez pas assigner deux pistes à celui-ci."
 LABEL_E982D8:	.ascii "Es ist nicht m"
 	.byte 0xf6
 	aligned_string "glich, zwei CHORD-Spuren die gleiche Spurzuweisung (TRACK ASSIGN) zu geben."
@@ -46816,10 +46787,7 @@ LABEL_E983EC:	aligned_string "ERROR 24"
 LABEL_E98574:	aligned_string "Satu APC Track sudah ada. Tidak mungkin menunjuk 2 Track untuk satu APC."
 LABEL_E985BE:	aligned_string "ERROR 24"
 LABEL_E985C8:	aligned_string "Ya existe una pista de ritmo. No es posible asignar dos pistas al acordes."
-LABEL_E98614:	.ascii "Vous avez d"
-	.byte 0xe9
-	jr	gt, 0xe0
-	aligned_string " choisi une piste pour le APC! Vous ne pouvez pas assigner deux pistes à celui-ci."
+LABEL_E98614:	aligned_string "Vous avez déjà choisi une piste pour le APC! Vous ne pouvez pas assigner deux pistes à celui-ci."
 	.byte 0x45, 0x73
 	aligned_string " ist nicht möglich, zwei APC-Spuren die gleiche Spurzuweisung (TRACK ASSIGN) zu geben."
 	aligned_string "A APC Track already exists. It is impossible to assign two Tracks to APC."
@@ -46903,9 +46871,7 @@ LABEL_E991EE:
 LABEL_E99206:	aligned_string "Ini tidak mungkin untuk mengubah Time Signature atau ukuran panjang Composer Pattern yang telah direkam. Jika anda ingin mengubahnya, pertama anda harus menghapus/menghilangkan semua Composer Pattern."
 LABEL_E992D0:	aligned_string "ERROR 30"
 	aligned_string "No es posible cambiar la signatura de tiempo ni la duración del compás de un patrón COMPOSER después de haber sido grabado. Si desea proseguir, usted tendrá que borrar primero todo el patrón COMPOSER."
-	.ascii "Je ne peux pas changer la mesure ou la dur"
-	inc	5, xbc
-	aligned_string " d'un style après qu'il ait été enregistré. Si vous désirez modifier ces données vous devez effacer la totalité du style et recommencer l'enregistrement."
+	aligned_string "Je ne peux pas changer la mesure ou la durée d'un style après qu'il ait été enregistré. Si vous désirez modifier ces données vous devez effacer la totalité du style et recommencer l'enregistrement."
 	.ascii "Nach einer Aufnahme im COMPOSER ist es nicht mehr möglich, das Takt-Maß bzw. die Pattern-Länge zu ände"
 	.byte 0x72, 0x6e, 0x2e, 0x00
 	aligned_string "It is not possible to change the Time Signature or measure length of a Composer Pattern after it has been recorded. If you want to proceed, you must first clear the entire Composer Pattern."
@@ -47023,10 +46989,7 @@ LABEL_E9A86A:
 	.byte 0xe9, 0x00
 LABEL_E9A882:	aligned_string "Hanya mungkin dimasukkan Melody Tracks. Tracks seperti Rhythm, Chord dan Control tidak dapat dimasukkan."
 LABEL_E9A8EC:	aligned_string "ERROR 46"
-	.byte 0x53, 0xf3
-	.ascii "lo es posible insertar pistas de melod"
-	inc	1, xiy
-	aligned_string "s. Las pistas tales como ritmo, acorde y control no pueden ser insertadas."
+	aligned_string "Sólo es posible insertar pistas de melodías. Las pistas tales como ritmo, acorde y control no pueden ser insertadas."
 	.ascii "Il est seulement possible d'insérer des pistes comportant une mélodie. Des pistes assignées à Rhythm, Chord and Control ne peuvent être insé"
 	.byte 0x72, 0xe9, 0x65, 0x73, 0x2e, 0x00, 0x45, 0x73
 	.byte 0x20, 0x6b, 0xf6
@@ -47091,11 +47054,7 @@ LABEL_E9B27C:
 LABEL_E9B294:	aligned_string "Tidak mungkin merekam dengan menggunakan Preset Banks, Compile banks atau Control Banks.  Silahkan pilih satu dari User Banks yang ada."
 LABEL_E9B31C:	aligned_string "ERROR 54"
 LABEL_E9B326:	aligned_string "No es posible grabar sobre los bancos preconfigurados, los bancos del compilador o los bancos de control. Por favor seleccione uno de los bancos de usuario."
-LABEL_E9B3C4:	.ascii "Il n'est pas possible d'effectuer un enregistrement en utilisant des banques pr"
-	.byte 0xe9, 0x73, 0xe9, 0x6c, 0x65
-	.ascii "ctionn"
-	inc	5, xbc
-	aligned_string "s, compilées ou de contrôle. Veuillez sélectionner l'une des banques réservées à l'utilisateur."
+LABEL_E9B3C4:	aligned_string "Il n'est pas possible d'effectuer un enregistrement en utilisant des banques présélectionnées, compilées ou de contrôle. Veuillez sélectionner l'une des banques réservées à l'utilisateur."
 LABEL_E9B480:	.ascii "Es ist nicht m"
 	.byte 0xf6, 0x67
 	aligned_string "lich auf Preset-, Re-Group- oder Control-Bänke aufzunehmen. Bitte wählen Sie eine der User-Bänke aus."
@@ -47108,9 +47067,7 @@ LABEL_E9B586:	aligned_string "Special Tracks seperti Chord/APC, Rhythm dan Contr
 LABEL_E9B634:	aligned_string "ERROR 55"
 	.byte 0x45, 0x6e
 	aligned_string " la canción que usted está tratando de copiar existen pistas especiales tales como acordes/acordes automáticos, ritmo y control que son incompatibles con la canción de destino, porque ésta utiliza el modo MIDI General."
-	.ascii "Des pistes assignées"
-	ldb	w, 0xe0
-	aligned_string " Chord/APC, Rhythm et Control existent dans la séquence que vous désirez copier et sont incompatibles avec la séquence de destination en mode GM."
+	aligned_string "Des pistes assignées à Chord/APC, Rhythm et Control existent dans la séquence que vous désirez copier et sont incompatibles avec la séquence de destination en mode GM."
 	.asciz "In dem Song den Sie kopieren möchten befinden sich Spuren wie Chord/APC, Rhythm und Control. Diese Spuren sind mit dem Ziel-Song nicht kompatibel, da dieser im GM-Modus gespeichert ist."
 	aligned_string "Special Tracks such as Chord/APC, Rhythm and Control exist in the song from which you are copying and are  incompatible with the destination song because it is in GM mode."
 	.byte 0x74, 0xbb, 0xe9, 0x00, 0xd2, 0xba
@@ -54879,9 +54836,7 @@ LABEL_EA8C22:	aligned_string "ATTENTION!"
 LABEL_EA8C74:	aligned_string "Apakah yakin akan dihapus ?"
 LABEL_EA8C90:	aligned_string "Are You Sure?"
 LABEL_EA8C9E:
-	.byte 0xbf, 0x45
-	jrl	ule, 0xe174
-	.asciz " seguro?"
+	.asciz "¿Está seguro?"
 	.ascii "Etes vous sû"
 	.byte 0x72, 0x3f, 0x00, 0xff
 	aligned_string "Sind Sie sicher ?"
