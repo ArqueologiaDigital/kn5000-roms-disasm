@@ -475,7 +475,9 @@ def process_file(asm_path, rom_path, dry_run=False):
         line_idx, offset = pos
         if offset == 0:
             stripped = lines[line_idx].strip()
-            if stripped and not LABEL_RE.match(stripped):
+            # Check if line already has ANY label (not just LABEL_XXXXXX)
+            has_label = bool(re.match(r'^[A-Za-z_][A-Za-z0-9_]*:', stripped))
+            if stripped and not has_label:
                 if dry_run:
                     label_additions += 1
                     continue
@@ -490,14 +492,11 @@ def process_file(asm_path, rom_path, dry_run=False):
                 lines.insert(line_idx, f'{label_name}:\n')
                 label_index = build_label_index(lines)
                 label_additions += 1
-            else:
-                # Already has a label — insert bare label before
-                if dry_run:
-                    label_additions += 1
-                    continue
-                lines.insert(line_idx, f'{label_name}:\n')
-                label_index = build_label_index(lines)
-                label_additions += 1
+            elif has_label:
+                # Line already has a label at this address — skip
+                # (don't add a redundant generic LABEL_ when a semantic
+                # or existing label is already present)
+                failed_labels += 1
         elif offset > 0:
             data = get_data_part(lines[line_idx].strip())
             if data.startswith('.byte '):

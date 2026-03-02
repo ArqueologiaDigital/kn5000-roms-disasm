@@ -6673,7 +6673,7 @@ LABEL_E1438A:	aligned_string ""
 LABEL_E1438C:	aligned_string ""
 LABEL_E1438E:	aligned_string ""
 LABEL_E14390:	aligned_string ""
-LABEL_E14392:	FTDEMO_FILENAME_43:
+FTDEMO_FILENAME_43:
 	aligned_string "ftdemo43"
 LABEL_E1439C:	aligned_string ""
 LABEL_E1439E:	aligned_string ""
@@ -6695,7 +6695,7 @@ LABEL_E143BC:	aligned_string ""
 LABEL_E143BE:	aligned_string ""
 LABEL_E143C0:	aligned_string ""
 LABEL_E143C2:	aligned_string ""
-LABEL_E143C4:	FTDEMO_FILENAME_48:
+FTDEMO_FILENAME_48:
 	aligned_string "ftdemo48"
 LABEL_E143CE:	aligned_string ""
 LABEL_E143D0:	aligned_string ""
@@ -6717,16 +6717,16 @@ LABEL_E143EE:	aligned_string ""
 LABEL_E143F0:	aligned_string ""
 LABEL_E143F2:	aligned_string ""
 LABEL_E143F4:	aligned_string ""
-LABEL_E143F6:	FTDEMO_FILENAME_47:
+FTDEMO_FILENAME_47:
 	aligned_string "ftdemo47"
 LABEL_E14400:	aligned_string ""
-LABEL_E14402:	LABEL_E14302:	aligned_string ""
-LABEL_E14404:	LABEL_E14304:	aligned_string ""
-LABEL_E14406:	LABEL_E14306:	aligned_string ""
+LABEL_E14402:	aligned_string ""
+LABEL_E14404:	aligned_string ""
+LABEL_E14406:	aligned_string ""
 LABEL_E14408:	aligned_string ""
-LABEL_E1440A:	LABEL_E1430A:	aligned_string ""
-LABEL_E1440C:	LABEL_E1430C:	aligned_string ""
-LABEL_E1440E:	LABEL_E1430E:	aligned_string ""
+LABEL_E1440A:	aligned_string ""
+LABEL_E1440C:	aligned_string ""
+LABEL_E1440E:	aligned_string ""
 LABEL_E14410:	aligned_string ""
 LABEL_E14412:	aligned_string ""
 LABEL_E14414:	aligned_string ""
@@ -6741,7 +6741,7 @@ LABEL_E14424:	aligned_string ""
 LABEL_E14426:	aligned_string ""
 LABEL_E14428:	aligned_string ""
 LABEL_E1442A:	aligned_string ""
-LABEL_E1442C:	FTDEMO_FILENAME_46:
+FTDEMO_FILENAME_46:
 	aligned_string "ftdemo46"
 LABEL_E14436:	aligned_string ""
 LABEL_E14438:	aligned_string ""
@@ -7140,7 +7140,7 @@ LABEL_E1482E:
 LABEL_E14846:
 
 MSG_BASS_PORT_EN:	aligned_string "Bass Port Speaker"
-LABEL_E14858:	MSG_BASS_PORT_DE:	.asciz "Italian"	; NOTE: Appears to be mislabeled in ROM
+MSG_BASS_PORT_DE:	.asciz "Italian"	; NOTE: Appears to be mislabeled in ROM
 MSG_BASS_PORT_ES_UNUSED:
 	.byte 0x00, 0xff
 MSG_BASS_PORT_FR:	aligned_string "Amplification des graves"
