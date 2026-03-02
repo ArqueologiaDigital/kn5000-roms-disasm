@@ -628,6 +628,7 @@ SOUND_DATA_STRINGS_VOCAL:	; STRINGS & VOCAL data (referenced from sound category
 	.incbin "includes/e04b30_e06baf.bin"
 
 SOUND_DATA_BRASS_PTRS:
+LABEL_E06BB0:
 	.long LABEL_E06DB0
 	.long LABEL_E06DB3
 	.long LABEL_E06DB6
@@ -1045,6 +1046,7 @@ SOUND_DATA_MALLET_ORCH_PERC:	; MALLET & ORCH PERC sound data
 SOUND_DATA_WORLD_PERC:
 
 
+LABEL_E0ADD0:
 	.long LABEL_E0AFD0
 	.long LABEL_E0AFD3
 	.long LABEL_E0AFD6
@@ -5854,6 +5856,7 @@ LABEL_E1366E:
 	.long FTDEMO_SCREEN06_KN5000_RAINBOW
 
 
+LABEL_E137D6:
 	.long LABEL_E108BA
 	.long LABEL_E108F8
 	.long LABEL_E10912
@@ -6109,6 +6112,7 @@ LABEL_E1366E:
 	.long 0x0
 
 
+LABEL_E13BCA:
 	.long LABEL_E14810
 	.long LABEL_E14802
 	.long LABEL_E147F8
@@ -6487,6 +6491,7 @@ LABEL_E1366E:
 	.long FTDEMO_FILENAME_46
 
 
+LABEL_E141AA:
 	.long LABEL_E1442A
 	.long LABEL_E14428
 	.long LABEL_E14426
@@ -6512,6 +6517,7 @@ LABEL_E1366E:
 	.long FTDEMO_FILENAME_47
 
 
+LABEL_E14206:
 	.long LABEL_E143F4
 	.long LABEL_E143F2
 	.long LABEL_E143F0
@@ -6535,6 +6541,7 @@ LABEL_E1366E:
 	.long FTDEMO_FILENAME_48
 
 
+LABEL_E1425A:
 	.long LABEL_E143C2
 	.long LABEL_E143C0
 	.long LABEL_E143BE
@@ -6558,6 +6565,7 @@ LABEL_E1366E:
 	.long FTDEMO_FILENAME_43
 
 
+LABEL_E142AE:
 	.long LABEL_E14390
 	.long LABEL_E1438E
 	.long LABEL_E1438C
@@ -8077,6 +8085,7 @@ LABEL_E16C84:	aligned_string ""
 	.long VwVariBoxProc
 	.byte 0x11, 0x00, 0x60, 0x01, 0x2c, 0x00
 	.byte 0x10, 0x00
+LABEL_E16FF2:
 	.long LABEL_E170C0
 	.long LABEL_E170B8
 	.long LABEL_E16BB8
@@ -11736,6 +11745,7 @@ LABEL_E1B7D2:
 	.byte 0x03, 0x00, 0x02, 0xd9, 0x03, 0x00
 	.long LABEL_E195F0
 	.byte 0x00, 0x00, 0x00, 0x00
+LABEL_E1B80E:
 	.long LABEL_E19610
 	.long LABEL_E19650
 	.long LABEL_E1967E
@@ -11770,6 +11780,7 @@ LABEL_E1B7D2:
 	.long LABEL_E19A0E
 	.long LABEL_E19A32
 	.byte 0x6e, 0xd9, 0x03, 0x00
+LABEL_E1B88E:
 	.long LABEL_E19A56
 	.long LABEL_E19A76
 	.long LABEL_E19AF4
@@ -11778,6 +11789,7 @@ LABEL_E1B7D2:
 	.byte 0x00, 0x00, 0x00, 0x00
 
 
+LABEL_E1B8A6:
 	.long LABEL_E19B5E
 	.long LABEL_E19B96
 	.long LABEL_E19BB0
@@ -11795,6 +11807,7 @@ LABEL_E1B7D2:
 	.zero 4
 
 
+LABEL_E1B8E2:
 	.long LABEL_E19E36
 	.long LABEL_E19E82
 	.long LABEL_E19EAC
@@ -11802,6 +11815,7 @@ LABEL_E1B7D2:
 	.byte 0x00, 0x00, 0x00, 0x00
 
 
+LABEL_E1B8F6:
 	.long LABEL_E19F20
 	.long LABEL_E19F56
 	.long LABEL_E19F94
@@ -11816,6 +11830,7 @@ LABEL_E1B7D2:
 	.byte 0x00, 0x00, 0x00, 0x00
 
 
+LABEL_E1B926:
 	.long LABEL_E1A1CE
 	.long LABEL_E1A204
 	.long LABEL_E1A22A
@@ -11852,6 +11867,7 @@ LABEL_E1B7D2:
 	.byte 0x00, 0x00, 0x00, 0x00
 
 
+LABEL_E1B9AE:
 	.long LABEL_E1A704
 	.long LABEL_E1A73E
 	.long LABEL_E1A762
@@ -11882,6 +11898,7 @@ LABEL_E1B7D2:
 	.byte 0x00, 0x00, 0x00, 0x00
 	.long LABEL_E1AB58
 
+LABEL_E1BA22:
 	.long LABEL_E1AB98
 	.long LABEL_E1ABB4
 	.long LABEL_E1ABE6
@@ -11900,6 +11917,7 @@ LABEL_E1B7D2:
 	.zero 4
 
 
+LABEL_E1BA62:
 	.long LABEL_E1ADDC
 	.long LABEL_E1AE10
 	.long LABEL_E1AE52
@@ -11909,6 +11927,7 @@ LABEL_E1B7D2:
 	.byte 0x00, 0x00, 0x00, 0x00
 
 
+LABEL_E1BA7E:
 	.long LABEL_E1AF32
 	.long LABEL_E1AF64
 	.long LABEL_E1AF90
@@ -11916,6 +11935,7 @@ LABEL_E1B7D2:
 	.zero 4
 
 
+LABEL_E1BA92:
 	.long LABEL_E1AFCE
 	.long LABEL_E1B00C
 	.long LABEL_E1B038
@@ -11928,6 +11948,7 @@ LABEL_E1B7D2:
 	.zero 4
 
 
+LABEL_E1BABA:
 	.long LABEL_E1B1A6
 	.long LABEL_E1B1E0
 	.long LABEL_E1B212
@@ -11939,6 +11960,7 @@ LABEL_E1B7D2:
 	.byte 0x00, 0x00, 0x00, 0x00
 
 
+LABEL_E1BADE:
 	.long LABEL_E1B356
 	.long LABEL_E1B390
 	.long LABEL_E1B3D0
@@ -11948,6 +11970,7 @@ LABEL_E1B7D2:
 	.zero 4
 
 
+LABEL_E1BAFA:
 	.long LABEL_E1BB10
 	.long LABEL_E1BB0E
 	.long LABEL_E1BB0C
@@ -12695,6 +12718,7 @@ LABEL_E1C7C0:	aligned_string "MspMenuScreen"
 	.byte 0xe1, 0x00
 
 
+LABEL_E1C7D2:
 	.long LABEL_E1C7E8
 	.long LABEL_E1C7E6
 	.long LABEL_E1C7E4
@@ -14493,6 +14517,7 @@ String_CONSOLE:	; E1FBC8
 	aligned_string "CONSOLE"
 	.byte 0x00, 0x00, 0x00, 0x00, 0xd4, 0xdc, 0x03, 0x00
 
+LABEL_E1FBD8:
 	.long LABEL_E1F794
 	.long LABEL_E1F7D2
 	.long LABEL_E1F810
@@ -15029,6 +15054,7 @@ LABEL_E2089E:
 	.byte 0x6e, 0x74, 0x00, 0xff, 0xd4, 0x08, 0xe2, 0x00
 
 
+LABEL_E208A8:
 	.long LABEL_E208CA
 	.long LABEL_E208C0
 	.long LABEL_E208BA
@@ -18080,6 +18106,7 @@ LABEL_E243B8:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x50, 0x2f, 0xe2, 0x00
 
 
+LABEL_E243F0:
 	.long LABEL_E22F8E
 	.long LABEL_E22FB4
 	.long LABEL_E22FDE
@@ -18110,6 +18137,7 @@ LABEL_E243B8:
 	.byte 0x00, 0x00, 0x00, 0x00
 
 
+LABEL_E24460:
 	.long LABEL_E23432
 	.long LABEL_E23470
 	.long LABEL_E234AE
@@ -18118,6 +18146,7 @@ LABEL_E243B8:
 	.byte 0x00, 0x00, 0x00, 0x00
 
 
+LABEL_E24478:
 	.long LABEL_E2353C
 	.long LABEL_E2356E
 	.long LABEL_E23592
@@ -18130,6 +18159,7 @@ LABEL_E243B8:
 	.long LABEL_E236DA
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x04, 0x37, 0xe2, 0x00
+LABEL_E244B0:
 	.long LABEL_E2373C
 	.long LABEL_E2375C
 	.long LABEL_E2377C
@@ -18138,6 +18168,7 @@ LABEL_E243B8:
 	.byte 0x00, 0x00, 0x00, 0x00
 
 
+LABEL_E244C8:
 	.long LABEL_E237DC
 	.long LABEL_E23814
 	.long LABEL_E23858
@@ -18145,6 +18176,7 @@ LABEL_E243B8:
 	.byte 0x00, 0x00, 0x00, 0x00, 0xbe, 0x38, 0xe2, 0x00
 
 
+LABEL_E244E0:
 	.long LABEL_E238F6
 	.long LABEL_E23938
 	.long LABEL_E23980
@@ -18159,6 +18191,7 @@ LABEL_E243B8:
 	.byte 0x00, 0x00, 0x00, 0x00
 
 
+LABEL_E24510:
 	.long LABEL_E23B66
 	.long LABEL_E23B9E
 	.long LABEL_E23BDC
@@ -18174,6 +18207,7 @@ LABEL_E243B8:
 	.byte 0x00, 0x00, 0x00, 0x00, 0xf4, 0x3d, 0xe2, 0x00
 
 
+LABEL_E24548:
 	.long LABEL_E23E2C
 	.long LABEL_E23E6E
 	.long LABEL_E23EB4
@@ -18188,6 +18222,7 @@ LABEL_E243B8:
 	.byte 0x00, 0x00, 0x00, 0x00
 
 
+LABEL_E24578:
 	.long LABEL_E246C2
 	.long LABEL_E246C0
 	.long LABEL_E246BE
@@ -19084,6 +19119,7 @@ LABEL_E261F2:	aligned_string "RIGHT1"
 	aligned_string "ExMD"
 
 
+LABEL_E262CA:
 	.long LABEL_E263D8
 	.long LABEL_E263CE
 	.long LABEL_E263C4
@@ -19898,6 +19934,7 @@ LABEL_E27556:
 	.byte 0x42, 0x43, 0x00, 0xff
 	aligned_string "EffectBox"
 	.byte 0x1a, 0x00
+LABEL_E27598:
 	.long LABEL_E275EA
 	.long LABEL_E275DA
 	.long LABEL_E275CC
@@ -25693,6 +25730,7 @@ LABEL_E2E624:	; registered from InitializeKubo
 	.byte 0x00, 0x00, 0x00, 0x00
 
 
+LABEL_E2E658:
 	.long LABEL_E28160
 	.long LABEL_E28196
 	.long LABEL_E281BE
@@ -25708,6 +25746,7 @@ LABEL_E2E624:	; registered from InitializeKubo
 	.byte 0x00, 0x00, 0x00, 0x00
 
 
+LABEL_E2E68C:
 	.long LABEL_E28320
 	.long LABEL_E28354
 	.long LABEL_E2837C
@@ -25748,6 +25787,7 @@ LABEL_E2E624:	; registered from InitializeKubo
 	.byte 0x00, 0x00, 0x00, 0x00, 0x88, 0x88, 0xe2, 0x00
 
 
+LABEL_E2E728:
 	.long LABEL_E288C4
 	.long LABEL_E288EE
 	.long LABEL_E28918
@@ -25762,6 +25802,7 @@ LABEL_E2E624:	; registered from InitializeKubo
 	.byte 0x00, 0x00, 0x00, 0x00
 
 
+LABEL_E2E758:
 	.long LABEL_E28A3C
 	.long LABEL_E28A76
 	.long LABEL_E28AB4
@@ -25777,6 +25818,7 @@ LABEL_E2E624:	; registered from InitializeKubo
 	.byte 0x00, 0x00, 0x00, 0x00, 0x54, 0x8c, 0xe2, 0x00
 
 
+LABEL_E2E790:
 	.long LABEL_E28C8E
 	.long LABEL_E28CB4
 	.long LABEL_E28CCA
@@ -25807,6 +25849,7 @@ LABEL_E2E624:	; registered from InitializeKubo
 	.byte 0x00, 0x00, 0x00, 0x00
 
 
+LABEL_E2E800:
 	.long LABEL_E29080
 	.long LABEL_E290B6
 	.long LABEL_E290D6
@@ -25818,6 +25861,7 @@ LABEL_E2E624:	; registered from InitializeKubo
 	.byte 0x00, 0x00, 0x00, 0x00, 0x22, 0x92, 0xe2, 0x00
 
 
+LABEL_E2E828:
 	.long LABEL_E29258
 	.long LABEL_E2927E
 	.long LABEL_E29298
@@ -25836,6 +25880,7 @@ LABEL_E2E624:	; registered from InitializeKubo
 	.byte 0x00, 0x00, 0x00, 0x00
 
 
+LABEL_E2E868:
 	.long LABEL_E29498
 	.long LABEL_E294CA
 	.long LABEL_E2950E
@@ -25849,6 +25894,7 @@ LABEL_E2E624:	; registered from InitializeKubo
 	.byte 0x00, 0x00, 0x00, 0x00, 0x34, 0x97, 0xe2, 0x00
 
 
+LABEL_E2E898:
 	.long LABEL_E2976E
 	.long LABEL_E29784
 	.long LABEL_E297B0
@@ -25870,6 +25916,7 @@ LABEL_E2E624:	; registered from InitializeKubo
 	.byte 0xb8, 0xe1, 0x03, 0x00, 0xe4, 0xe1, 0x03, 0x00
 
 
+LABEL_E2E8E8:
 	.long LABEL_E29A36
 	.long LABEL_E29A4C
 	.long LABEL_E29A70
@@ -25877,6 +25924,7 @@ LABEL_E2E624:	; registered from InitializeKubo
 	.byte 0x00, 0x00, 0x00, 0x00, 0xc2, 0x9a, 0xe2, 0x00
 
 
+LABEL_E2E900:
 	.long LABEL_E29AFC
 	.long LABEL_E29B1C
 	.long LABEL_E29B64
@@ -25890,6 +25938,7 @@ LABEL_E2E624:	; registered from InitializeKubo
 	.byte 0x00, 0x00, 0x00, 0x00, 0xf4, 0x9c, 0xe2, 0x00
 
 
+LABEL_E2E930:
 	.long LABEL_E29D2C
 	.long LABEL_E29D42
 	.long LABEL_E29D5C
@@ -25916,6 +25965,7 @@ LABEL_E2E624:	; registered from InitializeKubo
 	.byte 0x00, 0x00, 0x00, 0x00
 
 
+LABEL_E2E990:
 	.long LABEL_E2A09C
 	.long LABEL_E2A0D8
 	.long LABEL_E2A102
@@ -25933,6 +25983,7 @@ LABEL_E2E624:	; registered from InitializeKubo
 	.long LABEL_E2A364
 	.long LABEL_E2A38E
 	.byte 0x00, 0x00, 0x00, 0x00
+LABEL_E2E9D8:
 	.long LABEL_E2A3A4
 	.long LABEL_E2A3DA
 	.long LABEL_E2A404
@@ -25953,6 +26004,7 @@ LABEL_E2E624:	; registered from InitializeKubo
 	.byte 0x00, 0x00, 0x00, 0x00
 
 
+LABEL_E2EA20:
 	.long LABEL_E2A62A
 	.long LABEL_E2A664
 	.long LABEL_E2A682
@@ -25975,6 +26027,7 @@ LABEL_E2E624:	; registered from InitializeKubo
 	.byte 0x00, 0x00, 0x00, 0x00
 
 
+LABEL_E2EA70:
 	.long LABEL_E2A8D0
 	.long LABEL_E2A900
 	.long LABEL_E2A91C
@@ -26006,6 +26059,7 @@ LABEL_E2E624:	; registered from InitializeKubo
 	.long LABEL_E2AE3C
 	.long LABEL_E2AE52
 	.byte 0x00, 0x00, 0x00, 0x00
+LABEL_E2EAF0:
 	.long LABEL_E2AE7C
 	.long LABEL_E2AEB0
 	.long LABEL_E2AED8
@@ -26036,6 +26090,7 @@ LABEL_E2E624:	; registered from InitializeKubo
 	.byte 0x00, 0x00, 0x00, 0x00
 
 
+LABEL_E2EB60:
 	.long LABEL_E2B272
 	.long LABEL_E2B2A8
 	.long LABEL_E2B2DA
@@ -26049,6 +26104,7 @@ LABEL_E2E624:	; registered from InitializeKubo
 	.long LABEL_E2B478
 	.long LABEL_E2B48E
 	.byte 0x00, 0x00, 0x00, 0x00
+LABEL_E2EB98:
 	.long LABEL_E2B4B8
 	.long LABEL_E2B4EC
 	.long LABEL_E2B514
@@ -26078,6 +26134,7 @@ LABEL_E2E624:	; registered from InitializeKubo
 	.byte 0x00, 0x00, 0x00, 0x00, 0x86, 0xb8, 0xe2, 0x00
 
 
+LABEL_E2EC08:
 	.long LABEL_E2B8BC
 	.long LABEL_E2B8EE
 	.long LABEL_E2B918
@@ -26088,6 +26145,7 @@ LABEL_E2E624:	; registered from InitializeKubo
 	.byte 0x00, 0x00, 0x00, 0x00
 
 
+LABEL_E2EC28:
 	.long LABEL_E2BA28
 	.long LABEL_E2BA5E
 	.long LABEL_E2BA74
@@ -26105,6 +26163,7 @@ LABEL_E2E624:	; registered from InitializeKubo
 	.byte 0x00, 0x00, 0x00, 0x00, 0x48, 0xbc, 0xe2, 0x00
 
 
+LABEL_E2EC68:
 	.long LABEL_E2BC7E
 	.long LABEL_E2BC98
 	.long LABEL_E2BCB2
@@ -26129,6 +26188,7 @@ LABEL_E2E624:	; registered from InitializeKubo
 	.byte 0x00, 0x00, 0x00, 0x00
 
 
+LABEL_E2ECC0:
 	.long LABEL_E2BF7C
 	.long LABEL_E2BFB0
 	.long LABEL_E2BFD6
@@ -26153,6 +26213,7 @@ LABEL_E2E624:	; registered from InitializeKubo
 	.byte 0x00, 0x00, 0x00, 0x00
 
 
+LABEL_E2ED18:
 	.long LABEL_E2C328
 	.long LABEL_E2C35C
 	.long LABEL_E2C382
@@ -26172,6 +26233,7 @@ LABEL_E2E624:	; registered from InitializeKubo
 	.byte 0x00, 0x00, 0x00, 0x00, 0xfc, 0xc5, 0xe2, 0x00
 
 
+LABEL_E2ED60:
 	.long LABEL_E2C636
 	.long LABEL_E2C65C
 	.long LABEL_E2C686
@@ -26190,6 +26252,7 @@ LABEL_E2E624:	; registered from InitializeKubo
 	.byte 0x00, 0x00, 0x00, 0x00
 
 
+LABEL_E2EDA0:
 	.long LABEL_E2C8D6
 	.long LABEL_E2C90C
 	.long LABEL_E2C92C
@@ -26218,6 +26281,7 @@ LABEL_E2E624:	; registered from InitializeKubo
 	.byte 0x00, 0x00, 0x00, 0x00
 
 
+LABEL_E2EE08:
 	.long LABEL_E2CCC6
 	.long LABEL_E2CCFE
 	.long LABEL_E2CD28
@@ -26237,6 +26301,7 @@ LABEL_E2E624:	; registered from InitializeKubo
 	.byte 0x00, 0x00, 0x00, 0x00, 0xa0, 0xcf, 0xe2, 0x00
 
 
+LABEL_E2EE50:
 	.long LABEL_E2CFD8
 	.long LABEL_E2D002
 	.long LABEL_E2D028
@@ -26255,6 +26320,7 @@ LABEL_E2E624:	; registered from InitializeKubo
 	.byte 0x00, 0x00, 0x00, 0x00
 
 
+LABEL_E2EE90:
 	.long LABEL_E2D27A
 	.long LABEL_E2D2B2
 	.long LABEL_E2D2DC
@@ -26275,6 +26341,7 @@ LABEL_E2E624:	; registered from InitializeKubo
 	.byte 0x00, 0x00, 0x00, 0x00
 
 
+LABEL_E2EED8:
 	.long LABEL_E2D4F2
 	.long LABEL_E2D52C
 	.long LABEL_E2D552
@@ -26293,6 +26360,7 @@ LABEL_E2E624:	; registered from InitializeKubo
 	.byte 0x00, 0x00, 0x00, 0x00
 
 
+LABEL_E2EF18:
 	.long LABEL_E2D78A
 	.long LABEL_E2D7C4
 	.long LABEL_E2D7EE
@@ -26318,6 +26386,7 @@ LABEL_E2E624:	; registered from InitializeKubo
 	.long LABEL_E2DB52
 	.byte 0x04, 0xe2, 0x03, 0x00, 0x3a, 0xe2, 0x03, 0x00
 	.byte 0x70, 0xe2, 0x03, 0x00, 0xa6, 0xe2, 0x03, 0x00
+LABEL_E2EF90:
 	.long LABEL_E2DBBA
 	.long LABEL_E2DBE4
 	.long LABEL_E2DC0E
@@ -26329,6 +26398,7 @@ LABEL_E2E624:	; registered from InitializeKubo
 	.byte 0x00, 0x00, 0x00, 0x00, 0x10, 0xdd, 0xe2, 0x00
 
 
+LABEL_E2EFB8:
 	.long LABEL_E2DD48
 	.long LABEL_E2DD62
 	.long LABEL_E2DD8C
@@ -26392,6 +26462,7 @@ LABEL_E2E624:	; registered from InitializeKubo
 	.byte 0x00, 0x00, 0x00, 0x00, 0xf8, 0xf0, 0xe2, 0x00
 
 
+LABEL_E2F0B0:
 	.long LABEL_E2F0F6
 	.long LABEL_E2F0F4
 	.long LABEL_E2F0F2
@@ -28408,6 +28479,7 @@ LABEL_E33FFA:	.asciz "L'utilisation de TRACK CLEAR effacera tout enregistrement 
 	aligned_string "ExPR"
 	.byte 0x45, 0x78
 	.byte 0x41, 0x50, 0x00, 0xff, 0x66, 0x38, 0xe3, 0x00
+LABEL_E344D8:
 	.long LABEL_E33874
 	.long LABEL_E33886
 	.long LABEL_E33896
@@ -37042,6 +37114,7 @@ LABEL_E4C0D2:
 	.byte 0x4f, 0x44, 0xf7, 0x00, 0x9b, 0x46, 0xf7, 0x00
 	.byte 0x75, 0x45, 0xf7, 0x00, 0xbc, 0x46, 0xf7, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x52, 0x57, 0xe5, 0x00
+LABEL_E55308:
 	.long LABEL_E55746
 	.long LABEL_E55738
 	.long LABEL_E55728
@@ -37419,6 +37492,7 @@ LABEL_E559E0:	aligned_string "fixedcol"
 	.byte 0x00, 0x00, 0x00, 0x00, 0xa0, 0x5d, 0xe5, 0x00
 
 
+LABEL_E55CE0:
 	.long LABEL_E55D94
 	.long LABEL_E55D88
 	.long LABEL_E55D7C
@@ -40193,6 +40267,7 @@ LABEL_E5A38E:	aligned_string "MidiPartSetting"
 	aligned_string "MidiRealtimeMessage"
 
 
+LABEL_E5A448:
 	.long LABEL_E5A476
 	.long LABEL_E5A468
 	.long LABEL_E5A466
@@ -40445,6 +40520,7 @@ LABEL_E5A8F8:	aligned_string "MidiExclusive"
 	aligned_string "MidiPcgOutput"
 
 
+LABEL_E5A9F0:
 	.long LABEL_E5AA18
 	.long LABEL_E5AA16
 	.long LABEL_E5AA14
@@ -40913,6 +40989,7 @@ LABEL_E7F14A:	aligned_string "ATTENTION!"
 	aligned_string "Press a key to select the split point."
 
 
+LABEL_E7F778:
 	.long LABEL_E7F7DE
 	.long LABEL_E7F7D8
 	.long LABEL_E7F7D4
@@ -40974,6 +41051,7 @@ LABEL_E7F7DE:
 	aligned_string " Error! "
 
 
+LABEL_E7F900:
 	.long LABEL_E7F922
 	.long LABEL_E7F91C
 	.long LABEL_E7F916
@@ -41063,6 +41141,7 @@ LABEL_E7FCE4:	aligned_string " DIRECT "
 	.byte 0x31, 0x00, 0x31, 0x00, 0x3a, 0x00, 0x3a, 0x00
 	.byte 0x3a, 0x00, 0x34, 0x00, 0x3a, 0x00, 0x3d, 0x00
 	.byte 0x31, 0x00, 0x00, 0x00
+LABEL_E7FD9E:
 	.long LABEL_E7FDCC
 	.long LABEL_E7FDC2
 	.long LABEL_E7FDB8
@@ -41348,6 +41427,7 @@ LABEL_E80168:	aligned_string " ON  "
 	.byte 0x00, 0x00, 0x06, 0x00, 0x07, 0x00, 0x00, 0x00
 	.byte 0x07, 0x00, 0x00, 0x00, 0x01, 0x00, 0x02, 0x00
 	.byte 0x00, 0x00, 0x05, 0x00, 0x05, 0x00, 0x06, 0x00
+LABEL_E80660:
 	.long LABEL_E806AA
 	.long LABEL_E806A4
 	.long LABEL_E8069E
@@ -41917,6 +41997,7 @@ LABEL_E80CF4:
 	.byte 0x00, 0xff
 	aligned_string "IvSdpart"
 	.byte 0x25, 0x00, 0x94, 0x13, 0xe8, 0x00
+LABEL_E812E8:
 	.long LABEL_E81380
 	.long LABEL_E81372
 	.long LABEL_E81366
@@ -45353,6 +45434,7 @@ LABEL_E85730:
 	.long LABEL_E83D4E
 	.long LABEL_E83D72
 	.byte 0x00, 0x00, 0x00, 0x00
+LABEL_E857B8:
 	.long LABEL_E83D88
 	.long LABEL_E83DC8
 	.long LABEL_E83E10
@@ -45371,6 +45453,7 @@ LABEL_E85730:
 	.byte 0x00, 0x00, 0x00, 0x00
 
 
+LABEL_E857F8:
 	.long LABEL_E84006
 	.long LABEL_E84032
 	.long LABEL_E8404A
@@ -45418,6 +45501,7 @@ LABEL_E85730:
 	.byte 0x00, 0x00, 0x00, 0x00, 0xe4, 0x46, 0xe8, 0x00
 
 
+LABEL_E858B0:
 	.long LABEL_E84706
 	.long LABEL_E84720
 	.long LABEL_E84738
@@ -45457,6 +45541,7 @@ LABEL_E85730:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x50, 0x4e, 0xe8, 0x00
 
 
+LABEL_E85948:
 	.long LABEL_E84E72
 	.long LABEL_E84E88
 	.long LABEL_E84EAC
@@ -45483,6 +45568,7 @@ LABEL_E85730:
 	.byte 0x00, 0x00, 0x00, 0x00
 
 
+LABEL_E859A8:
 	.long LABEL_E851C8
 	.long LABEL_E851EA
 	.long LABEL_E85202
@@ -45497,6 +45583,7 @@ LABEL_E85730:
 	.byte 0x00, 0x00, 0x00, 0x00
 
 
+LABEL_E859D8:
 	.long LABEL_E8531A
 	.long LABEL_E85352
 	.long LABEL_E85394
@@ -45506,6 +45593,7 @@ LABEL_E85730:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x86, 0x5a, 0xe8, 0x00
 
 
+LABEL_E859F8:
 	.long LABEL_E85A7A
 	.long LABEL_E85A78
 	.long LABEL_E85A76
@@ -45876,6 +45964,7 @@ LABEL_E85F46:	aligned_string "Sdmixer"
 	.byte 0xe8, 0x00, 0x64, 0x60, 0xe8, 0x00
 
 
+LABEL_E85F76:
 	.long LABEL_E8605C
 	.long LABEL_E86054
 	.long LABEL_E8604C
@@ -45966,6 +46055,7 @@ LABEL_E86172:	aligned_string "Demofeature"
 	.byte 0xe8, 0x00, 0xe8, 0x62, 0xe8, 0x00
 
 
+LABEL_E86186:
 	.long LABEL_E862DE
 	.long LABEL_E862D2
 	.long LABEL_E862CA
@@ -46127,6 +46217,7 @@ LABEL_E863F4:	aligned_string "Accordion"
 	aligned_string "Mesage"
 
 
+LABEL_E864D0:
 	.long LABEL_E8652C
 	.long LABEL_E8652A
 	.long LABEL_E86528
@@ -46340,6 +46431,7 @@ LABEL_E95540:	aligned_string " RIGHT 1 "
 	jr	ov, 0x00
 	aligned_string " OFF"
 	aligned_string " -- "
+LABEL_E9566E:
 	.long LABEL_E956D4
 	.long LABEL_E956C6
 	.long LABEL_E956B8
@@ -46499,6 +46591,7 @@ LABEL_E96232:	aligned_string "An error has occurred while the disk was loading. 
 	.byte 0x58, 0x64, 0xe9, 0x00
 
 
+LABEL_E96348:
 	.long LABEL_E9641E
 	.long LABEL_E963E8
 	.long LABEL_E963BC
@@ -46720,6 +46813,7 @@ LABEL_E97A0E:	aligned_string "ERROR 20"
 	.byte 0x68, 0x81, 0xe9, 0x00
 
 
+LABEL_E97FF0:
 	.long LABEL_E9810C
 	.long LABEL_E980A8
 	.long LABEL_E9805E
@@ -46815,6 +46909,7 @@ LABEL_E98614:	aligned_string "Vous avez déjà choisi une piste pour le APC! Vous 
 	.byte 0x94, 0x8e, 0xe9, 0x00
 
 
+LABEL_E98D58:
 	.long LABEL_E98E52
 	.long LABEL_E98DFA
 	.long LABEL_E98DB0
@@ -46888,6 +46983,7 @@ LABEL_E992D0:	aligned_string "ERROR 30"
 	.byte 0x70, 0x9f, 0xe9, 0x00
 
 
+LABEL_E99CD8:
 	.long LABEL_E99EDC
 	.long LABEL_E99E34
 	.long LABEL_E99D90
@@ -46921,6 +47017,7 @@ LABEL_E99E34:	.ascii "Une erreur s'est produite pendant la r"
 	.byte 0x42, 0xa5, 0xe9, 0x00
 
 
+LABEL_E9A2C8:
 	.long LABEL_E9A494
 	.long LABEL_E9A3FE
 	.long LABEL_E9A382
@@ -47094,6 +47191,7 @@ LABEL_E9B634:	aligned_string "ERROR 55"
 	.byte 0xe0, 0xc7, 0xe9, 0x00
 
 
+LABEL_E9C528:
 	.long LABEL_E9C6FC
 	.long LABEL_E9C62A
 	.long LABEL_E9C54C
@@ -47136,6 +47234,7 @@ LABEL_E9C62A:	.ascii "RKB et LKB sont des pistes d"
 	.byte 0x60, 0xd1, 0xe9, 0x00
 
 
+LABEL_E9CF18:
 	.long LABEL_E9D0E0
 	.long LABEL_E9D04A
 	.long LABEL_E9CFB8
@@ -48631,6 +48730,7 @@ LABEL_E9FC3E:	aligned_string "To Starting an external DEMO, please insert a feat
 	.byte 0x25, 0x73
 	.byte 0x25, 0x64, 0x00, 0xff
 LABEL_E9FDDC:	aligned_string "Error! (GetInstanceID)"
+LABEL_E9FDF4:
 	.long LABEL_E9FE10
 	.long LABEL_E9FE0C
 	.long LABEL_E9FE06
@@ -49409,6 +49509,7 @@ LABEL_EA0F42:
 	aligned_string "c^kAAnGGmm"
 	aligned_string "PsFileNameBox"
 	.byte 0x0d, 0x00
+LABEL_EA1188:
 	.long LABEL_EA11E2
 	.long LABEL_EA11D4
 	.long LABEL_EA11C4
@@ -53547,6 +53648,7 @@ LABEL_EA625A:	aligned_string "FILE COPY"
 	aligned_string "HardDiskMenu"
 	.byte 0x00, 0xff
 	aligned_string "DiskMenu"
+LABEL_EA7228:
 	.long LABEL_EA75BC
 	.long LABEL_EA75AE
 	.long LABEL_EA75AC
@@ -55522,6 +55624,7 @@ LABEL_EAA508:
 	.byte 0x1e, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff
 
 
+LABEL_EAA750:
 	.long LABEL_EAA7EC
 	.long LABEL_EAA7E8
 	.long LABEL_EAA7E4
@@ -56722,6 +56825,7 @@ LABEL_EAC892:	aligned_string "dial"
 	aligned_string "list"
 
 
+LABEL_EAC8A0:
 	.long LABEL_EAC8C2
 	.long LABEL_EAC8B8
 	.long LABEL_EAC8B2
@@ -58445,6 +58549,7 @@ LABEL_EADB0E:
 	.byte 0xfa, 0x00, 0x8c, 0xa4, 0xfa, 0x00, 0xe4, 0x9c
 	.byte 0xfa, 0x00, 0x7b, 0x9c, 0xfa, 0x00, 0x09, 0xc5
 	.byte 0xfa, 0x00, 0x00, 0x00, 0x00, 0x00
+LABEL_EAFFF2:
 	.long LABEL_EB192A
 	.long LABEL_EB191A
 	.long LABEL_EB190A
@@ -67070,6 +67175,7 @@ LABEL_ED01CE:	.byte 0x75, 0x73, 0x34, 0x00
 	.byte 0x44, 0x20, 0x00, 0xff, 0x44, 0x7e
 	.byte 0x61, 0x30, 0x00, 0xff, 0x43, 0x20, 0x00, 0xff
 	.byte 0x20, 0x20, 0x00, 0xff, 0x22, 0x03, 0xed, 0x00
+LABEL_ED02A0:
 	.long LABEL_ED031E
 	.long LABEL_ED0318
 	.long LABEL_ED0314
@@ -67382,6 +67488,7 @@ LABEL_ED0C8C:	.asciz "Speichert die gesamte Einstellung einschließlich Rhythmus,
 	.byte 0xb9, 0xb6, 0xb7, 0xff, 0xdc, 0x11, 0xed, 0x00
 
 
+LABEL_ED0F48:
 	.long LABEL_ED11CA
 	.long LABEL_ED11B8
 	.long LABEL_ED11A6
@@ -67691,6 +67798,7 @@ LABEL_ED1714:
 	.byte 0x08, 0x00, 0x08, 0x00, 0x08, 0x00, 0x08, 0x00
 
 
+LABEL_ED1B40:
 	.long LABEL_ED1BA6
 	.long LABEL_ED1BA0
 	.long LABEL_ED1B9C
@@ -71981,6 +72089,7 @@ ErrorDialog_RecoveryLine3:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 	aligned_string "ControlMenu"
+LABEL_ED803C:
 	.long LABEL_ED80B6
 	.long LABEL_ED80B4
 	.long LABEL_ED80AC
@@ -73876,6 +73985,7 @@ Protocol_values_for_LED_rows:	; EDA616
 	.byte 0x83, 0x05, 0x18, 0x05, 0xd8, 0x54, 0x00, 0x00
 	.zero 8
 	.byte 0x00, 0x00, 0x63, 0x00
+LABEL_EDAA64:
 	.long LABEL_FC8542
 	.long LABEL_FC8542
 	.long LABEL_FC8542
@@ -74296,6 +74406,7 @@ Protocol_values_for_LED_rows:	; EDA616
 	.byte 0x00, 0x02, 0x01, 0x07, 0x08, 0x09, 0x0a, 0x0b
 	.byte 0x04, 0x05, 0x06, 0x03, 0x0f, 0x15, 0x15, 0x19
 	.byte 0x14, 0x0c, 0x0d, 0x0e, 0xec, 0xa6, 0xed, 0x00
+LABEL_EDB370:
 	.long LABEL_EDA704
 	.long LABEL_EDA71C
 	.long LABEL_EDA734
@@ -80387,6 +80498,7 @@ LABEL_EE1574:
 	.byte 0x51, 0x00, 0x00, 0xf7
 
 
+LABEL_EE2D6C:
 	.long LABEL_FD8261
 	.long LABEL_FD8262
 	.long LABEL_FD8263
@@ -85684,6 +85796,7 @@ LABEL_EE8C7E:
 	.byte 0x00, 0x40, 0x00, 0x80, 0xae, 0xe9, 0xfd, 0x00
 
 
+LABEL_EE8CF8:
 	.long LABEL_FDE9AE
 	.long LABEL_FDEB87
 	.long LABEL_FDE9AE
@@ -86769,6 +86882,7 @@ LABEL_EE8ED8:	.ascii "!\"#$"
 	.byte 0x0c, 0x10, 0x07, 0x0b, 0x0c, 0x11, 0x06, 0x08
 	.byte 0x0c, 0x0d, 0x07, 0x09, 0x0c, 0x0e, 0xf4, 0x0c
 	.byte 0x05, 0x0c, 0xf6, 0xfb, 0x8f, 0x8c, 0xfe, 0x00
+LABEL_EEAE08:
 	.long LABEL_FE8DC5
 	.long LABEL_FE8DD9
 	.long LABEL_FE8E38
@@ -87083,6 +87197,7 @@ LABEL_EE8ED8:	.ascii "!\"#$"
 	.byte 0x04, 0x05, 0x06, 0x07, 0x11, 0x12, 0x0c, 0x13
 	.byte 0x41, 0x3a, 0x5c, 0x00, 0x00, 0x00, 0x00, 0x00
 	.zero 24
+LABEL_EEC288:
 	.long LABEL_FEE3F6
 	.long LABEL_FEE3F7
 	.long LABEL_FEE3F8
@@ -87861,6 +87976,7 @@ LABEL_EED118:
 	.byte 0x37, 0x00, 0x97, 0x00, 0x59, 0x00, 0xa4, 0x00
 	.byte 0xf5, 0x00, 0x00, 0x00, 0xff, 0xff, 0x00, 0x00
 	.byte 0x00, 0x00, 0xff, 0x00, 0x00, 0x00
+LABEL_EEDD36:
 	.long LABEL_E1CE0E
 	.long LABEL_E1CE0A
 	.long LABEL_E1CE06
@@ -88288,6 +88404,7 @@ LABEL_EED118:
 	.zero 64
 	.byte 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.zero 64
+LABEL_EEE718:
 	.long LABEL_F50C83
 	.long LABEL_F5133C
 	.long LABEL_F51352
@@ -88645,6 +88762,7 @@ LABEL_EEEDD4:
 	.byte 0x1d, 0x00, 0x1d, 0x00, 0x16, 0x00, 0x14, 0x00
 	.byte 0x13, 0x00, 0x12, 0x00, 0x15, 0x00, 0x17, 0x00
 	.byte 0x11, 0x00, 0x10, 0x00, 0xff, 0x00, 0xff, 0x00
+LABEL_E14347:
 	.long LABEL_FF00FF
 	.long LABEL_FF00FF
 	.long LABEL_FF00FF
@@ -88770,6 +88888,7 @@ LABEL_EEEDD4:
 	.zero 8
 	.byte 0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0xf5, 0x00
 	.byte 0xff, 0x00, 0xff, 0x00, 0x00, 0xff, 0x00, 0xff
+LABEL_EEF350:
 	.long LABEL_EADAE0
 	.long LABEL_EADAD8
 	.long LABEL_EADAD0
@@ -88784,6 +88903,7 @@ LABEL_EEEDD4:
 	.zero 84
 
 
+LABEL_EEF3D0:
 	.long LABEL_EADB56
 	.long LABEL_EADB4A
 	.long LABEL_EADB3E
@@ -88846,6 +88966,7 @@ LABEL_EEEDD4:
 	.byte 0xee, 0x00, 0x00, 0x00, 0x00, 0x00, 0x86, 0x2e
 	.byte 0xeb, 0x00, 0x82, 0x2e, 0xeb, 0x00, 0xd2, 0xf0
 	.byte 0x03, 0x00, 0x04, 0x00, 0x00, 0x00, 0x02, 0x00
+LABEL_EEF588:
 	.long LABEL_EB3FDE
 	.long LABEL_EB3BDE
 	.long LABEL_EB4FDE
@@ -98316,6 +98437,7 @@ LABEL_EF659C:
 	.byte 0x0e
 
 
+LABEL_EF65DD:
 	.long LABEL_EF659C
 	.long LABEL_EF61E8
 	.long LABEL_EF61E8
@@ -99400,6 +99522,7 @@ LABEL_EF7580:
 	.byte 0x10, 0xb1, 0xf1, 0xf9, 0x10, 0xb2, 0x0e
 
 
+LABEL_EF62AB:
 	.long LABEL_EF61E8
 	.long LABEL_EF61E8
 	.long LABEL_EF61E8
@@ -100259,6 +100382,7 @@ LABEL_EF87FB:
 	.byte 0x0e
 
 
+LABEL_EF8F92:
 	.long LABEL_EF8FDB
 	.long LABEL_EF8FA2
 	.long LABEL_EF8FC1
@@ -100862,6 +100986,7 @@ LABEL_EF97E0:
 	.byte 0xf4, 0x25, 0x5a, 0xb5, 0xe8, 0x5b, 0x0e
 
 
+LABEL_EF9DDF:
 	.long LABEL_EF9E03
 	.long LABEL_EF9DEF
 	.long LABEL_EF9DEF
@@ -101548,6 +101673,7 @@ LABEL_EFAADB:
 	.byte 0x00, 0xc9, 0xce, 0x80, 0xf1, 0x19, 0x37, 0x41
 	.byte 0x1d, 0xec, 0xf4, 0xef, 0x1d, 0x07, 0x5c, 0xef
 	.byte 0x0e
+LABEL_EFABE4:
 	.long LABEL_EFAD94
 	.long LABEL_EFADF8
 	.long LABEL_EFACF7
@@ -103956,6 +104082,7 @@ LABEL_EFDCC1:
 	.byte 0xb3, 0xe8, 0x0e
 
 
+LABEL_EFE765:
 	.long LABEL_EFE7A5
 	.long LABEL_EFE7A5
 	.long LABEL_EFE7A6
@@ -115785,6 +115912,7 @@ LABEL_F0EF8A:
 	.byte 0x47, 0xec, 0xf0, 0x0e, 0x96, 0x10, 0xf1, 0x00
 
 
+LABEL_F0F4DA:
 	.long LABEL_F10FCE
 	.long LABEL_F10F06
 	.long LABEL_F10CAE
@@ -119174,6 +119302,7 @@ LABEL_F144D3:
 	.byte 0xaa, 0x11, 0x05, 0x0b, 0x68, 0x06, 0xff, 0x00
 	.byte 0x20, 0x73, 0x1b, 0x02, 0x00, 0x05, 0x0b, 0x67
 	.byte 0x06, 0xff, 0x00, 0x20, 0x1b, 0x19, 0x02, 0x00
+LABEL_F158A7:
 	.long LABEL_F15907
 	.long LABEL_F1593A
 	.long LABEL_F15907
@@ -119497,6 +119626,7 @@ LABEL_F15A91:
 	.byte 0x8a, 0x00, 0x0d, 0x00, 0x8d, 0x00, 0x18, 0x01
 	.byte 0xa8, 0x00, 0x1b, 0x0a, 0x0d, 0x00, 0x71, 0x00
 	.byte 0x18, 0x01, 0xa8, 0x00, 0xe6, 0x60, 0xf1, 0x00
+LABEL_F1612F:
 	.long LABEL_F16006
 	.long LABEL_F16006
 	.long LABEL_F1604A
@@ -119649,6 +119779,7 @@ LABEL_F15A91:
 	.byte 0x0f, 0x6a, 0x06, 0x80, 0x07, 0x20, 0x15, 0x65
 	.byte 0xf1, 0x00, 0x0d, 0x00, 0x8e, 0x1e, 0x4f, 0x46
 	.ascii "F          OFF          "
+LABEL_F1652F:
 	.long LABEL_F164EC
 	.long LABEL_F1649B
 	.long LABEL_F164A6
@@ -400685,7 +400816,6 @@ FIRMWARE_VERSION:	; FFFFE8
 	.set LABEL_E90133, 0xE90133
 	.set LABEL_E9013D, 0xE9013D
 	.set LABEL_E90B3B, 0xE90B3B
-	.set LABEL_E9566E, 0xE9566E
 	.set LABEL_E96344, 0xE96344
 	.set LABEL_E97114, 0xE97114
 	.set LABEL_E971DE, 0xE971DE
