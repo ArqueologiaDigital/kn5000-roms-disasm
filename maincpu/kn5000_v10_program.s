@@ -7240,15 +7240,14 @@ LABEL_E14F4A:	aligned_string "Konvertieren Sie Software vieler anderer Herstelle
 	.long LABEL_E14FF0
 LABEL_E14FF0:	aligned_string "Simpan pola-pola software favorit Anda kedalam Custom Rhythm Group ..... secara permanen!"
 LABEL_E1504A:	aligned_string "Italian"
-LABEL_E15052:
-	.byte 0xa1
-	aligned_string "Memorice sus patrones de software favoritos con el Custom Rhythm Group ... permanentemente!"
-LABEL_E150B0:	.ascii "Enregistrez vos motifs pr"
-	.byte 0xe9, 0x66, 0xe9, 0x72, 0xe9, 0x73, 0x20
-	.asciz "dans le groupe  « Custom Rhythm Group » ...de façon permanente!"
+LABEL_E15052:	aligned_string "¡Memorice sus patrones de software favoritos con el Custom Rhythm Group ... permanentemente!"
+LABEL_E150B0:	aligned_string "Enregistrez vos motifs préférés dans le groupe  « Custom Rhythm Group » ...de façon permanente!"
 LABEL_E15110:	aligned_string "Speichern Sie Ihre Lieblings Software-Rhythmen permanent in der CUSTOM-Rhythmus Gruppe!"
-LABEL_E15168:	.asciz "Store your favorite software patterns in the Custom Rhythm Group .....permanently!"
-	.byte 0xff, 0x2c, 0x52, 0xe1, 0x00
+LABEL_E15168:	aligned_string "Store your favorite software patterns in the Custom Rhythm Group .....permanently!"
+
+
+LABEL_E151BC:
+	.long LABEL_E1522C
 	.long LABEL_E15218
 	.long LABEL_E15204
 	.long LABEL_E151F0
@@ -7260,6 +7259,9 @@ LABEL_E151F0:	aligned_string "Accordion Register"
 LABEL_E15204:	aligned_string "Accordion Register"
 LABEL_E15218:	aligned_string "Accordion Register"
 LABEL_E1522C:	aligned_string "Accordion Register"
+
+
+LABEL_E15240:
 	.long LABEL_E15396
 	.long LABEL_E15354
 	.long LABEL_E152FE
@@ -7268,13 +7270,13 @@ LABEL_E1522C:	aligned_string "Accordion Register"
 	.long LABEL_E15258
 LABEL_E15258:	aligned_string "Suara-suara akordion pada ujung jari Anda ada pada Accordion Register!"
 LABEL_E152A0:	aligned_string "Italian"
-LABEL_E152A8:
-	.byte 0xa1
-	aligned_string "Un mundo de sonidos de acordeón en la punta de sus dedos con el Accordion Register!"
-LABEL_E152FE:
-	aligned_string "Avec la fonction «Accordion Register», tout le monde de l'accordéon sous vos doigts!"
-	aligned_string "ACCORDION REGISTER eröffnet Ihnen die Welt der Akkordeon Klänge!"
-	aligned_string "A World of Accordion Sounds at your fingertips with the Accordion Register!"
+LABEL_E152A8:	aligned_string "¡Un mundo de sonidos de acordeón en la punta de sus dedos con el Accordion Register!"
+LABEL_E152FE:	aligned_string "Avec la fonction «Accordion Register», tout le monde de l'accordéon sous vos doigts!"
+LABEL_E15354:	aligned_string "ACCORDION REGISTER eröffnet Ihnen die Welt der Akkordeon Klänge!"
+LABEL_E15396:	aligned_string "A World of Accordion Sounds at your fingertips with the Accordion Register!"
+
+
+LABEL_E153E2:
 	.long LABEL_E15442
 	.long LABEL_E15432
 	.long LABEL_E15422
@@ -7287,6 +7289,9 @@ LABEL_E15412:	aligned_string "Digital Drawbar"
 LABEL_E15422:	aligned_string "Digital Drawbar"
 LABEL_E15432:	aligned_string "Digital Drawbar"
 LABEL_E15442:	aligned_string "Digital Drawbar"
+
+
+LABEL_E15452:
 	.long LABEL_E15582
 	.long LABEL_E1553C
 	.long LABEL_E154E6
@@ -7295,17 +7300,14 @@ LABEL_E15442:	aligned_string "Digital Drawbar"
 	.long LABEL_E1546A
 LABEL_E1546A:	aligned_string "Suara-suara Organ Classic dengan Jazz dan Rock Drawbars!"
 LABEL_E154A4:	aligned_string "Italian"
-LABEL_E154AC:
-	.byte 0xa1, 0x53, 0x6f, 0x6e
-	aligned_string "idos de órgano clásicos con barras para Jazz y Rock!"
-LABEL_E154E6:
-	.byte 0x41, 0x76
-	.asciz "ec les tirettes harmoniques, des sonorités d'Orgues Classiques, de Jazz et de Rock!"
-LABEL_E1553C:	.ascii "Erzeugen Sie legend"
-	.byte 0xe4
-	aligned_string "re Orgelsounds mit den Jazz- und Rock-Zugriegeln!"
+LABEL_E154AC:	aligned_string "¡Sonidos de órgano clásicos con barras para Jazz y Rock!"
+LABEL_E154E6:	aligned_string "Avec les tirettes harmoniques, des sonorités d'Orgues Classiques, de Jazz et de Rock!"
+LABEL_E1553C:	aligned_string "Erzeugen Sie legendäre Orgelsounds mit den Jazz- und Rock-Zugriegeln!"
 LABEL_E15582:	aligned_string "Classic Organ Sounds with Jazz and Rock Drawbars!"
-	.byte 0x1c, 0x56, 0xe1, 0x00
+
+
+LABEL_E155B4:
+	.long LABEL_E1561C
 	.long LABEL_E1560A
 	.long LABEL_E155F8
 	.long LABEL_E155E6
@@ -400790,8 +400792,6 @@ FIRMWARE_VERSION:	; FFFFE8
 	.set LABEL_E01F7E, 0xE01F7E
 	.set LABEL_E14C32, 0xE14C32
 	.set LABEL_E14C86, 0xE14C86
-	.set LABEL_E15354, 0xE15354
-	.set LABEL_E15396, 0xE15396
 	.set LABEL_E16BAC, 0xE16BAC
 	.set LABEL_E1708A, 0xE1708A
 	.set LABEL_E17096, 0xE17096
