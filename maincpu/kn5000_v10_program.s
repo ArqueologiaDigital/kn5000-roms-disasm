@@ -305,7 +305,27 @@ LABEL_E0176C:
 	.incbin "includes/e0176c_e01f7f.bin"	; FIXME: describe this data structure
 
 
-LABEL_E01F80:
+; =============================================================================
+; SSF_PresentationGateTable (0xE01F80) -- 256-entry pointer lookup table
+; =============================================================================
+; Gates the SSF (Feature Demo) presentation system. Each entry is a .long
+; pointer to a 16-bit value array (terminated by 0xFFFF) that lists the panel
+; states in which the Feature Demo button should trigger event 0x1C00038.
+;
+; Index: DRAM byte at 0x8D38, loaded by LABEL_F0618F. Represents the current
+; UI mode (e.g., 0x00 = boot/init, 0x01 = normal operation, 0xE0 = demo menu,
+; 0xE4 = Feature Presentation sub-menu).
+;
+; Lookup: GroupBoxNotify_SendSSFEvent (0xF98697) reads table[index] to get a
+; pointer P. If P points to {0xFFFE}, the event fires unconditionally. If P
+; points to {0xFFFF}, the entry is disabled (no event). Otherwise, the array
+; at P is scanned for a match against the current panel selection state
+; (packed from DRAM bytes 0xC07D and 0xC080).
+;
+; Structure: 256 x .long entries (1024 bytes), addresses 0xE01F80-0xE02380.
+; Targets: arrays of 16-bit values in ROM range 0xE014CE-0xE01F7E.
+; =============================================================================
+SSF_PresentationGateTable:
 	.long LABEL_E014CE
 	.long LABEL_E014D0
 	.long LABEL_E0157E
@@ -277960,8 +277980,8 @@ LABEL_F98695:
 ;   1. Call 0xEF0797 — check bit 7 of DRAM 0x0406 (set once after boot by
 ;      Boot_DisplayScreen, cleared only during flash update). Returns HL=1
 ;      if set; returns early (HL=0) if not.
-;   2. Read *(0x8D38) = index R into ROM table at 0xE01F80.
-;   3. Read P = ROM[0xE01F80 + R*4] — base of a ROM state-value array.
+;   2. Read *(0x8D38) = index R into SSF_PresentationGateTable (ROM 0xE01F80).
+;   3. Read P = SSF_PresentationGateTable[R] — base of a ROM state-value array.
 ;   4. If P == 0 (null), return.
 ;   5. Walk the 16-bit array at P:
 ;      - If first entry == 0xFFFE: send event unconditionally.
