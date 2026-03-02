@@ -126,8 +126,8 @@ Bitmap_1bit_Turn_On_AGAIN:	; e01266
 
 .include "ssf_gate_states.s"
 
-; Region identifier: "HK" (Hong Kong variant), 16-byte padded string + version + sentinels.
-; Unreferenced — may be accessed via computed address or unused.
+; Possibly a region identifier: "HK" (Hong Kong variant?), 16-byte padded string + version + sentinels.
+; Unreferenced -- may be accessed via computed address or unused.
 LABEL_E02380:	.ascii "HK              "
 	.byte 0x01, 0x00, 0x00, 0x00
 	.byte 0xff, 0xff, 0xff, 0xff
