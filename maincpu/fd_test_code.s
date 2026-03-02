@@ -1,3 +1,10 @@
+; FDLoadSaveTest — Floppy disk save/load diagnostic test
+; Allocates a 2KB buffer, fills it with a counting pattern (0..0x3FF),
+; opens a test file via LABEL_F4EB97, writes the buffer (LABEL_F4EEB9),
+; closes and reopens the file, reads it back (LABEL_F4EE70), then
+; compares read-back data against the original pattern byte-by-byte.
+; Logs progress and errors via LABEL_F1E396 (diagnostic print).
+; Returns: hl = 0 on success, 0xFFFF on any failure
 FDLoadSaveTest:
 	dec 4, xsp
 	push xiz
@@ -186,9 +193,16 @@ LABEL_F1E796:
 	inc 4, xsp
 	ret
 
-; Iterate directory listing and log each entry
+; ListDirectoryEntries (LABEL_F1E79A)
+; Opens a directory (via 0xF5298A) using the path at (xsp+4) and the
+; format string at 0xE1FF1A.  Iterates all entries with ReadNextEntry
+; (0xF52AE8), logging each via LABEL_F1E396.  Closes the directory
+; handle (0xF52AAA) when done.
+; Args: (xsp+4) = path string pointer
+; Returns: hl = 0 on success, 0xFFFF on open failure
+; Stack frame: 266 bytes (local buffer at xsp+10 used as formatted string)
 LABEL_F1E79A:
-	.byte 0xf3, 0xfd, 0xf6, 0xfe, 0x37	; lda xsp, (xsp - 266)
+	lda xsp, (xsp - 266)
 	push xiz
 	lds wa, 0
 	lda_24 xwa, 0xe1ff1a
@@ -226,12 +240,22 @@ LABEL_F1E7E9:
 
 LABEL_F1E7F1:
 	pop xiz
-	.byte 0xf3, 0xfd, 0x0a, 0x01, 0x37	; lda xsp, (xsp + 266)
+	lda xsp, (xsp + 266)
 	ret
 
-; Event handler for FD test dialog (jump table dispatch)
+; FDTestDialogEventHandler (LABEL_F1E7F8)
+; Event handler for the FD SAVE/LOAD TEST dialog.
+; Dispatches on the 32-bit event ID in xbc:
+;   0x1E0008D  → Format and display event parameter (xde) via 0xFA44D0,
+;                 then send event 0x1E0008C via 0xFA9660.
+;   0x1C00017..0x1C0001D (7 entries) → Jump table at 0xE1FF34 (word offsets
+;                 added to xix base, dispatched via jp_dri).
+;   All others → Return 0 (unhandled).
+; Args: xbc = event ID, xde = event parameter
+; Returns: xhl = 0
+; Stack frame: 264 bytes
 LABEL_F1E7F8:
-	.byte 0xf3, 0xfd, 0xf8, 0xfe, 0x37	; lda xsp, (xsp - 264)
+	lda xsp, (xsp - 264)
 	ld (xsp + 8), 0x0
 	ld xwa, xbc
 	cp xwa, 0x1E0008D
@@ -273,9 +297,16 @@ LABEL_F1E868:
 	lds32 xhl, 0
 
 LABEL_F1E86A:
-	.byte 0xf3, 0xfd, 0x08, 0x01, 0x37	; lda xsp, (xsp + 264)
+	lda xsp, (xsp + 264)
 	ret
 
+; HamaListProc — Event handler for the FD test list widget
+; Handles event 0x1E00086 (list item selection): calls 0xFA6266 to get
+; the widget state, reads the data pointer at offset 42, then calls
+; LABEL_FF0F4D to load/save the selected file.
+; All other events are forwarded to the default handler (0xFA4409).
+; Args: xbc = event ID, xde = event parameter
+; Returns: xhl = 0 (handled) or forwarded result
 HamaListProc:
 	push xiz
 	ld xiz, xde
