@@ -7166,15 +7166,11 @@ LABEL_E14958:
 LABEL_E14960:
 
 	.byte 0xa1
-	.ascii "El port"
-	.byte 0xf3
-	.ascii "n para bajos y graves especiales del KN5000 produce un sonido potente y m"
-	.byte 0xe1
+	.ascii "El portÛn para bajos y graves especiales del KN5000 produce un sonido potente y m·"
 	aligned_string "s rico!"
 LABEL_E149BC:	.ascii "Le syst"
 	.byte 0xe8
-	.ascii "me sp"
-	.byte 0xe9
+	.ascii "me spÈ"
 	aligned_string "cial d'amplification des graves du KN-5000 donne encore plus de puissance et de richesse sonore!"
 LABEL_E14A2C:	aligned_string "Der spezielle Woofer & Bass Port des SX-KN5000 erzeugt einen kraft- und druckvollen Klang."
 LABEL_E14A88:	aligned_string "The KN5000's Special Woofer & Bass Port produce a Rich & Powerful sound!"
@@ -7189,8 +7185,7 @@ LABEL_E14AF6:	aligned_string "Italian"
 LABEL_E14AFE:	aligned_string "Estilos enormes"
 LABEL_E14B0E:
 	.byte 0x44, 0x69
-	.ascii "versit"
-	.byte 0xe9
+	.ascii "versitÈ"
 	aligned_string " des styles"
 LABEL_E14B24:	aligned_string "Riesige Auswahl an Styles"
 LABEL_E14B3E:	aligned_string "Huge Styles"
@@ -7205,12 +7200,9 @@ LABEL_E14B9A:	aligned_string "Italian"
 LABEL_E14BA2:	aligned_string "Explore los 1000 estilos musicales con el Music Stylist."
 LABEL_E14BDC:
 	.byte 0x47, 0x72, 0xe2, 0x63
-	.ascii "e au "
-	.byte 0xab, 0x20, 0x4d
-	.ascii "usic Stylist "
+	.ascii "e au ´ Music Stylist "
 	lda_rid8 xhl, 0x2c, xwa
-	.ascii "explorez l'un apr"
-	.byte 0xe8
+	.ascii "explorez l'un aprË"
 	aligned_string "s l'autre les 1000 styles disponibles."
 	.byte 0x57, 0xe4
 	aligned_string "hlen Sie aus 1000 stilistisch sortierten Gesamtregistrierungen im MUSIC STYLIST."
@@ -7228,17 +7220,13 @@ LABEL_E14D28:	.ascii "Disfrute m"
 	aligned_string "s con la gran variedad de programas de software de Technics"
 LABEL_E14D70:	.ascii "Encore plus de possibilit"
 	.byte 0xe9
-	.ascii "s gr"
-	.byte 0xe2, 0x63
+	.ascii "s gr‚c"
 	.byte 0x65, 0x20, 0xe0
-	.ascii " la diversit"
-	.byte 0xe9
+	.ascii " la diversitÈ"
 	aligned_string " du software Technics"
 LABEL_E14DB6:
 	.byte 0x4e, 0x75
-	.ascii "tzen Sie das gro"
-	.byte 0xdf
-	.asciz "e Technics-Softwareangebot zur individuellen Gestaltung Ihrer Musik."
+	.asciz "tzen Sie das groﬂe Technics-Softwareangebot zur individuellen Gestaltung Ihrer Musik."
 LABEL_E14E0E:	aligned_string "Add to your enjoyment with a wide range of Technics Software"
 	.byte 0x9e, 0x4f, 0xe1, 0x00
 	.long LABEL_E14F4A
@@ -7267,13 +7255,7 @@ LABEL_E15052:
 	aligned_string "Memorice sus patrones de software favoritos con el Custom Rhythm Group ... permanentemente!"
 LABEL_E150B0:	.ascii "Enregistrez vos motifs pr"
 	.byte 0xe9, 0x66, 0xe9, 0x72, 0xe9, 0x73, 0x20
-	.ascii "dans le groupe  "
-	.byte 0xab
-	.ascii " Custom Rhythm Group "
-	.byte 0xbb, 0x20
-	.ascii "...de fa"
-	.byte 0xe7
-	.asciz "on permanente!"
+	.asciz "dans le groupe  ´ Custom Rhythm Group ª ...de faÁon permanente!"
 LABEL_E15110:	aligned_string "Speichern Sie Ihre Lieblings Software-Rhythmen permanent in der CUSTOM-Rhythmus Gruppe!"
 LABEL_E15168:	.asciz "Store your favorite software patterns in the Custom Rhythm Group .....permanently!"
 	.byte 0xff, 0x2c, 0x52, 0xe1, 0x00
@@ -7298,22 +7280,14 @@ LABEL_E15258:	aligned_string "Suara-suara akordion pada ujung jari Anda ada pada
 LABEL_E152A0:	aligned_string "Italian"
 LABEL_E152A8:
 	.byte 0xa1
-	.ascii "Un mundo de sonidos de acorde"
-	.byte 0xf3
+	.ascii "Un mundo de sonidos de acordeÛ"
 	aligned_string "n en la punta de sus dedos con el Accordion Register!"
 LABEL_E152FE:
 	.byte 0x41, 0x76
-	.ascii "ec la fonction "
-	.byte 0xab
-	.ascii "Accordion Register"
-	.byte 0xbb
-	.ascii ", tout le monde de l'accord"
+	.ascii "ec la fonction ´Accordion Registerª, tout le monde de l'accord"
 	dec	7, xbc
 	aligned_string "n sous vos doigts!"
-	.ascii "ACCORDION REGISTER er"
-	.byte 0xf6
-	.ascii "ffnet Ihnen die Welt der Akkordeon Kl"
-	.byte 0xe4
+	.ascii "ACCORDION REGISTER erˆffnet Ihnen die Welt der Akkordeon Kl‰"
 	aligned_string "nge!"
 	aligned_string "A World of Accordion Sounds at your fingertips with the Accordion Register!"
 	.long LABEL_E15442
@@ -7338,16 +7312,11 @@ LABEL_E1546A:	aligned_string "Suara-suara Organ Classic dengan Jazz dan Rock Dra
 LABEL_E154A4:	aligned_string "Italian"
 LABEL_E154AC:
 	.byte 0xa1, 0x53, 0x6f, 0x6e
-	.ascii "idos de "
-	.byte 0xf3
-	.ascii "rgano cl"
-	.byte 0xe1
+	.ascii "idos de Ûrgano cl·"
 	aligned_string "sicos con barras para Jazz y Rock!"
 LABEL_E154E6:
 	.byte 0x41, 0x76
-	.ascii "ec les tirettes harmoniques, des sonorit"
-	.byte 0xe9
-	.asciz "s d'Orgues Classiques, de Jazz et de Rock!"
+	.asciz "ec les tirettes harmoniques, des sonoritÈs d'Orgues Classiques, de Jazz et de Rock!"
 LABEL_E1553C:	.ascii "Erzeugen Sie legend"
 	.byte 0xe4
 	aligned_string "re Orgelsounds mit den Jazz- und Rock-Zugriegeln!"
@@ -7374,17 +7343,11 @@ LABEL_E15646:	aligned_string "Acoustic Illusion memperluas musik Anda kedalam 3 
 LABEL_E15682:	aligned_string "Italian"
 LABEL_E1568A:
 	.byte 0xa1
-	.ascii "El Acoustic Illusion amplia su m"
-	.byte 0xfa
+	.ascii "El Acoustic Illusion amplia su m˙"
 	aligned_string "sica a 3 dimensiones!"
 LABEL_E156C2:	.ascii "La fonction "
 	.byte 0xab, 0x20
-	.ascii "Acoustic Illusion "
-	.byte 0xbb
-	.ascii " apporte "
-	.byte 0xe0, 0x20, 0x76, 0x6f
-	.ascii "tre musique une 3 "
-	.byte 0xe8
+	.ascii "Acoustic Illusion ª apporte ‡ votre musique une 3 Ë"
 	aligned_string "me dimension!"
 LABEL_E15712:	.ascii "ACCOUSTIC ILLUSION verleiht dem Klang dreidimensionale R"
 	.byte 0xe4
@@ -13968,35 +13931,12 @@ MSG_ARE_YOU_SURE_ID:	.asciz "Apakah yakin akan dihapus ?"	; Indonesian (28 bytes
 MSG_CUSTOM_SOUND_COPY_EN:
 	.asciz "The Custom sound memories included with this pattern will be copied into the Sound Group memories. Some of the Sound Group memories will be replaced by them. OK?"	; English (162 bytes)
 MSG_CUSTOM_SOUND_COPY_DE:
-	.ascii "Die Custom Sounds, die in diesem Pattern enthalten sind, werden in den Sound Memory Speicher kopiert. Dadurch werden einige Sounds "
-	.byte 0xfc
+	.ascii "Die Custom Sounds, die in diesem Pattern enthalten sind, werden in den Sound Memory Speicher kopiert. Dadurch werden einige Sounds ¸"
 	aligned_string "berschrieben. OK ?"	; German (152 bytes)
 MSG_CUSTOM_SOUND_COPY_FR:
-	.ascii "Les m"
-	.byte 0xe9
-	.ascii "moires de sonorit"
-	.byte 0xe9, 0x73, 0x20, 0xe9, 0x64, 0x69, 0x74, 0xe9
-	.ascii "es incluses dans ce Pattern seront copi"
-	.byte 0xe9
-	.ascii "es dans les m"
-	.byte 0xe9
-	.ascii "moires de groupes de sonorit"
-	.byte 0xe9
-	.ascii "s. Certaines des m"
-	.byte 0xe9
-	.ascii "moires de groupe de sonorit"
-	.byte 0xe9
-	.ascii "s seront remplac"
-	.byte 0xe9
-	.asciz "es. OK?"	; French (186 bytes)
+	.asciz "Les mÈmoires de sonoritÈs ÈditÈes incluses dans ce Pattern seront copiÈes dans les mÈmoires de groupes de sonoritÈs. Certaines des mÈmoires de groupe de sonoritÈs seront remplacÈes. OK?"	; French (186 bytes)
 MSG_CUSTOM_SOUND_COPY_ES:
-	.ascii "Las memorias de sonido personalizado de este esquema musical ser"
-	.byte 0xe1
-	.ascii "n copiadas a las memorias de los grupos de sonido.Algunas memorias de los grupos de sonido ser"
-	.byte 0xe1
-	.ascii "n reemplazadas. "
-	.byte 0xbf, 0x45, 0x73, 0x74, 0xe1
-	.asciz " de acuerdo?"	; Spanish (194 bytes)
+	.asciz "Las memorias de sonido personalizado de este esquema musical ser·n copiadas a las memorias de los grupos de sonido.Algunas memorias de los grupos de sonido ser·n reemplazadas. øEst· de acuerdo?"	; Spanish (194 bytes)
 MSG_CUSTOM_SOUND_COPY_EN2:	.asciz "The Custom sound memories included with this pattern will be copied into the Sound Group memories. Some of the Sound Group memories will be replaced by them. OK?"	; Duplicate (162 bytes)
 MSG_CUSTOM_SOUND_COPY_ID:	.asciz "Custom Sound Memory termasuk dengan Pattern yang akan digandakan kedalam SOUND GROUP MEMORIES. Beberapa Sound Group Memory dikembalikan. OK ?"	; Indonesian (142 bytes)
 	; Pointer table at 0xE1E994
@@ -14012,12 +13952,7 @@ MSG_CUSTOM_SOUND_COPY_ID:	.asciz "Custom Sound Memory termasuk dengan Pattern ya
 MSG_SOUND_GROUP_AFFECTED_EN:	aligned_string "Sound Group memories affected:"	; English (32 bytes)
 MSG_SOUND_GROUP_AFFECTED_DE:	aligned_string "Betroffene Sounds:"	; German (20 bytes)
 MSG_SOUND_GROUP_AFFECTED_FR:
-	.ascii "Les m"
-	.byte 0xe9
-	.ascii "moires de groupe de sonorit"
-	.byte 0xe9
-	.ascii "s rep"
-	.byte 0xe9, 0x72, 0xe9
+	.ascii "Les mÈmoires de groupe de sonoritÈs repÈrÈ"
 	aligned_string "es :"	; French (48 bytes)
 MSG_SOUND_GROUP_AFFECTED_ES:	.asciz "Las memorias de los grupos de sonido afectadas son:"	; Spanish (52 bytes)
 MSG_SOUND_GROUP_AFFECTED_EN2:	aligned_string "Sound Group memories affected:"	; Duplicate (32 bytes)
@@ -14035,35 +13970,11 @@ MSG_SOUND_GROUP_AFFECTED_ID:	aligned_string "Sound Group memory sudah bekerja :"
 MSG_CUSTOM_SOUND_FULL_EN:
 	.asciz "The Custom sound memory is full.Some sounds which are used by current Custom Rhythms will be deleted. OK?"	; English (106 bytes)
 MSG_CUSTOM_SOUND_FULL_DE:
-	.ascii "Der Custom Sound Speicher ist voll.inige Kl"
-	.byte 0xe4
-	.ascii "nge, die von Custom Rhythmen ben"
-	.byte 0xf6
-	.ascii "tigt werden, werden gel"
-	.byte 0xf6
-	.asciz "scht. OK ?"	; German (112 bytes)
+	.asciz "Der Custom Sound Speicher ist voll.inige Kl‰nge, die von Custom Rhythmen benˆtigt werden, werden gelˆscht. OK ?"	; German (112 bytes)
 MSG_CUSTOM_SOUND_FULL_FR:
-	.ascii "La m"
-	.byte 0xe9
-	.ascii "moire de sonorit"
-	.byte 0xe9, 0x73, 0x20, 0xe9, 0x64, 0x69, 0x74, 0xe9
-	.ascii "es est satur"
-	.byte 0xe9
-	.ascii "e.Certaines sonorit"
-	.byte 0xe9
-	.ascii "s utilis"
-	.byte 0xe9
-	.ascii "es par Custom Rhythms seront effac"
-	.byte 0xe9
-	.asciz "es. OK?"	; French (114 bytes)
+	.asciz "La mÈmoire de sonoritÈs ÈditÈes est saturÈe.Certaines sonoritÈs utilisÈes par Custom Rhythms seront effacÈes. OK?"	; French (114 bytes)
 MSG_CUSTOM_SOUND_FULL_ES:
-	.ascii "La memoria de sonido personalizado est"
-	.byte 0xe1
-	.ascii " llena.Algunos sonidos utilizados por los ritmos personalizados actuales ser"
-	.byte 0xe1
-	.ascii "n borrados. "
-	.byte 0xbf, 0x45, 0x73, 0x74, 0xe1
-	.asciz " de acuerdo?"	; Spanish (146 bytes)
+	.asciz "La memoria de sonido personalizado est· llena.Algunos sonidos utilizados por los ritmos personalizados actuales ser·n borrados. øEst· de acuerdo?"	; Spanish (146 bytes)
 MSG_CUSTOM_SOUND_FULL_EN2:	.asciz "The Custom sound memory is full.Some sounds which are used by current Custom Rhythms will be deleted. OK?"	; Duplicate (106 bytes)
 MSG_CUSTOM_SOUND_FULL_ID:	.asciz "Custom Sound memory sudah penuh.Beberapa suara (Sounds) yang digunakan dengan Custom Rhythms sekarang akan dihapus. Benar ?"	; Indonesian (124 bytes)
 	; Pointer table at 0xE1ED64
@@ -14113,10 +14024,7 @@ LABEL_E1EF5A:
 
 	aligned_string "Select the sound for each part."
 	.byte 0x57, 0xe4
-	.ascii "hlen Sie einen Klang f"
-	.byte 0xfc
-	.ascii "r jede gew"
-	.byte 0xfc
+	.ascii "hlen Sie einen Klang f¸r jede gew¸"
 	aligned_string "nschte Klanggruppe"
 LABEL_E1EFB2:	aligned_string "Select the sound for each part."
 LABEL_E1EFD2:	aligned_string "Select the sound for each part."
@@ -19017,8 +18925,7 @@ LABEL_E25338:	.asciz "Press the up/down button under the screen corresponding to
 	.byte 0xff
 LABEL_E2539C:
 	.byte 0x44, 0x72, 0xfc, 0x63
-	.ascii "ken Sie eine der Doppeltasten unter dem Display, entsprechend der Spur, die Sie per STEP RECORD aufnehmen m"
-	.byte 0xf6
+	.ascii "ken Sie eine der Doppeltasten unter dem Display, entsprechend der Spur, die Sie per STEP RECORD aufnehmen mˆ"
 	aligned_string "chten."
 LABEL_E25414:	aligned_string "Press the up/down button under the screen corresponding to the track that you want to STEP RECORD."
 LABEL_E25478:	aligned_string "Press the up/down button under the screen corresponding to the track that you want to STEP RECORD."
@@ -19035,12 +18942,7 @@ LABEL_E256E2:	aligned_string "Select whether or not After Touch is recorded by S
 LABEL_E2571E:	aligned_string "Any existing song will be cleared. Press OK to proceed."
 LABEL_E25756:
 	.byte 0x4a, 0x65
-	.ascii "der Song im Arbeitsspeicher wird gel"
-	.byte 0xf6, 0x73, 0x63, 0x68
-	.ascii "t. Dr"
-	.byte 0xfc, 0x63, 0x6b
-	.ascii "en Sie OK zur Best"
-	.byte 0xe4
+	.ascii "der Song im Arbeitsspeicher wird gelˆscht. Dr¸cken Sie OK zur Best‰"
 	aligned_string "tigung."
 LABEL_E257A4:	aligned_string "Any existing song will be cleared. Press OK to proceed."
 LABEL_E257DC:	aligned_string "Any existing song will be cleared. Press OK to proceed."
@@ -19069,13 +18971,11 @@ LABEL_E25916:	aligned_string "Apakah yakin akan dihapus ?"
 LABEL_E25932:	aligned_string "Turning on GENERAL MIDI MODE will replace your current settings with GENERAL MIDI settings!"
 LABEL_E2598E:
 	.byte 0x44, 0x75
-	.ascii "rch das Einschalten des GENERAL MIDI MODE werden alle Einstellungen zu GENERAL MIDI Einstellungen ge"
-	.byte 0xe4, 0x6e, 0x64, 0x65
+	.ascii "rch das Einschalten des GENERAL MIDI MODE werden alle Einstellungen zu GENERAL MIDI Einstellungen ge‰nde"
 	.byte 0x72, 0x74, 0x21, 0x00
 LABEL_E259FC:	.ascii "L'activation du mode GENERAL MIDI MODE remplacera tous les r"
 	.byte 0xe9
-	.ascii "glages actuels par les r"
-	.byte 0xe9
+	.ascii "glages actuels par les rÈ"
 	aligned_string "glages GENERAL MIDI!"
 LABEL_E25A68:
 	.byte 0xa1
@@ -19086,15 +18986,12 @@ LABEL_E25B86:	aligned_string "Turning off GENERAL MIDI MODE will replace the GEN
 LABEL_E25BF0:	aligned_string "Durch das Ausschalten des GENERAL MIDI MODE werden die GENERAL MIDI Einstellungen durch die Werkseinstellungen ersetzt."
 LABEL_E25C68:	.ascii "La d"
 	.byte 0xe9, 0x73, 0x61, 0x63
-	.ascii "tivation du mode GENERAL MIDI MODE remplacera tous les r"
-	.byte 0xe9
-	.ascii "glages GENERAL MIDI par les r"
+	.ascii "tivation du mode GENERAL MIDI MODE remplacera tous les rÈglages GENERAL MIDI par les r"
 	inc	7, xbc
 	aligned_string "lages d'usines!"
 LABEL_E25CD8:
 	.byte 0xa1
-	.ascii "Al desconectar el modo MIDI General se reemplazan las configuraciones MIDI Generales por las configuraciones originales de f"
-	.byte 0xe1
+	.ascii "Al desconectar el modo MIDI General se reemplazan las configuraciones MIDI Generales por las configuraciones originales de f·"
 	aligned_string "brica!"
 LABEL_E25D5E:	aligned_string "Turning off GENERAL MIDI MODE will replace the GENERAL MIDI settings with the original factory settings!"
 LABEL_E25DC8:	aligned_string "Non-aktifkan fungsi GENERAL MIDI MODE bila akan kembali ke susunan GENERAL MIDI sesuai susunan dari pabrik(originil factory settings)."
@@ -19108,17 +19005,11 @@ LABEL_E25E68:	aligned_string "Ubahlah assignment dari Tracks %2d dari %s ke %s a
 LABEL_E25EC2:	aligned_string "Changing the assignment of Track %2d from %s to %s will erase all the current data."
 LABEL_E25F16:
 	.byte 0x41, 0x6c
-	.ascii " cambiar la asignaci"
-	.byte 0xf3, 0x6e, 0x20, 0x64
-	.ascii "e pistas %2d de %s a %s se borrar"
-	.byte 0xe1
+	.ascii " cambiar la asignaciÛn de pistas %2d de %s a %s se borrar·"
 	aligned_string "n todos los datos actuales."
 LABEL_E25F6E:
 	.byte 0x54, 0x6f
-	.ascii "ut changement d'assignation des pistes %2d de%s "
-	.byte 0xe0
-	.ascii "%s effacera toutes les donn"
-	.byte 0xe9
+	.ascii "ut changement d'assignation des pistes %2d de%s ‡%s effacera toutes les donnÈ"
 	aligned_string "es actuelles."
 LABEL_E25FCC:	.ascii "Das "
 	.byte 0xc4
@@ -28117,17 +28008,7 @@ LABEL_E30932:	aligned_string "ApEditSyori"
 	.byte 0x39, 0x00, 0x38, 0x00, 0x36, 0x00, 0x35, 0x00
 	.byte 0x33, 0x00, 0x32, 0x00, 0x30, 0x00, 0x2f, 0x00
 	.byte 0x2d, 0x00, 0x2c, 0x00, 0x2a, 0x00, 0x29, 0x00
-	.ascii " 0.10 0.12 0.14 0.16 0.18 0.20 0.22 0.24 0.26 0.28 0.30 0.32 0.34 0.36 0.38 0.40 0.45 0.50 0.55 0.60 0.65 0.70 0.75 0.80 0.90 1.00 1.10 1.20 1.30 1.40 1.50 1.60 1.70 1.80 1.90 2.00 2.10 2.20 2.30 2.40 2.50 2.60 2.70 2.80 2.90 3.00 3.10 3.20 3.30 3.40 3.50 3.60 3.70 3.80 3.90 4.00 4.20 4.40 4.60 4.80 5.00 5.20 5.40 5.60 5.80 6.00 6.20 6.40 6.60 6.80 7.00 7.20 7.40 7.60 7.80 8.00 9.0010.0011.0012.0013.0014.0015.0016.0017.0018.0019.0020.0021.0022.0023.0024.0025.0026.0027.0028.0029.0030.00  .    .  -24.0-23.0-22.0-21.0-20.0-19.0-18.0-17.0-16.0-15.0-14.0-13.0-12.0-11.0-10.0- 9.0- 8.0- 7.0- 6.0- 5.0- 4.0- 3.0- 2.0- 1.0  0.0"
-	.byte 0xff
-	.ascii "   10   12   14   16   18   20   22   24   26   28   30   32   34   36   38   40   42   44   46   48   50   55   60   65   70   75   80   85   90   95  100  110  120  130  140  150  160  170  180  190  200  210  220  230  240  250  260  270  280  290  300  310  320  330  340  350  360  370  380  390  400  410  420  430  440  450  460  470  480  490  500  550  600  650  700  750  800  850  900  950 1000 1100 1200 1300 1400 1500 1600 1700 1800 1900 2000 2100 2200 2300 2400 2500 2600 2700 2800 2900 0.01 0.02 0.03 0.04 0.05 0.06 0.07 0.08 0.09 0.10 0.11 0.12 0.13 0.14 0.15 0.16 0.17 0.18 0.19 0.20 0.21 0.22 0.23 0.24 0.25 0.26 0.27 0.28 0.29 0.30 0.31 0.32 0.33 0.34 0.35 0.36 0.37 0.38 0.39 0.40 0.41 0.42 0.43 0.44 0.45 0.46 0.47 0.48 0.49 0.50 0.51 0.52 0.53 0.54 0.55 0.56 0.57 0.58 0.59 0.60 0.61 0.62 0.63 0.64 0.65 0.66 0.67 0.68 0.69 0.70 0.71 0.72 0.73 0.74 0.75 0.76 0.77 0.78 0.79 0.80 0.81 0.82 0.83 0.84 0.85 0.86 0.87 0.88 0.89 0.90 0.91 0.92 0.93 0.94 0.95 0.96 0.97 0.98 0.99 1.00  0.2  0.4  0.6  0.8  1.0  1.2  1.4  1.6  1.8  2.0  2.2  2.4  2.6  2.8  3.0  3.2  3.4  3.6  3.8  4.0  4.2  4.4  4.6  4.8  5.0  5.2  5.4  5.6  5.8  6.0  6.2  6.4  6.6  6.8  7.0  7.2  7.4  7.6  7.8  8.0  8.2  8.4  8.6  8.8  9.0  9.2  9.4  9.6  9.8 10.0 10.2 10.4 10.6 10.8 11.0 11.2 11.4 11.6 11.8 12.0 12.2 12.4 12.6 12.8 13.0 13.2 13.4 13.6 13.8 14.0 14.2 14.4 14.6 14.8 15.0 15.2 15.4 15.6 15.8 16.0 16.2 16.4 16.6 16.8 17.0 17.2 17.4 17.6 17.8 18.0 18.2 18.4 18.6 18.8 19.0 19.2 19.4 19.6 19.8 20.00.0010.0020.0030.0040.0050.0060.0070.0080.0090.0100.0110.0120.0130.0140.0150.0160.0170.0180.0190.0200.0210.0220.0230.0240.0250.0260.0270.0280.0290.0300.0310.0320.0330.0340.0350.0360.0370.0380.0390.0400.0410.0420.0430.0440.0450.0460.0470.0480.0490.0500.0510.0520.0530.0540.0550.0560.0570.0580.0590.0600.0610.0620.0630.0640.0650.0660.0670.0680.0690.0700.0710.0720.0730.0740.0750.0760.0770.0780.0790.0800.0810.0820.0830.0840.0850.0860.0870.0880.0890.0900.0910.0920.0930.0940.0950.0960.0970.0980.0990.100-1200-1100-1000- 900- 800- 700- 650- 600- 550- 500- 450- 400- 350- 300- 250- 200- 150- 100-  90-  80-  70-  60-  50-  40-  30-  20-  10-   9-   8-   7-   6-   5-   4-   3-   2-   1    0+   1+   2+   3+   4+   5+   6+   7+   8+   9+  10+  20+  30+  40+  50+  60+  70+  80+  90+ 100+ 150+ 200+ 250+ 300+ 350+ 400+ 450+ 500+ 550+ 600+ 650+ 700+ 800+ 900+1000+1100+1200"
-	.byte 0xff
-	.ascii " SLOW FAST  1.0  1.4  1.8  2.2  2.6  3.0  3.4  3.8  4.2  4.6  5.0  5.4  5.8  6.2  6.6  7.0  7.4  7.8  8.2  8.6  9.0  9.4  9.8 10.2 10.6 11.0 11.4 11.8 12.2 12.6 13.0 13.4 13.8 14.2 14.6 15.0 15.4 15.8 16.2 16.6 17.0 17.4 17.8 18.2 18.6 19.0 19.4 19.8 20.2 20.6 21.0 21.4 21.8 22.2 22.6 23.0 23.4 23.8 24.2 24.6 25.0 25.4 25.8 26.2 26.6 27.0 27.4 27.8 28.2 28.6 29.0 29.4 29.8 30.2 30.6 31.032.2533.5034.7536.0037.2538.5039.7541.0042.2543.5044.7546.0047.2548.5049.7551.0052.2553.5054.7556.0057.2558.5059.7561.00  0.0  0.1  0.2  0.3  0.4  0.5  0.6  0.7  0.8  0.9  1.0  1.1  1.2  1.3  1.4  1.5  1.6  1.7  1.8  1.9  2.0  2.2  2.4  2.6  2.8  3.0  3.2  3.4  3.6  3.8  4.0  4.2  4.4  4.6  4.8  5.0  5.2  5.4  5.6  5.8  6.0  6.2  6.4  6.6  6.8  7.0  7.2  7.4  7.6  7.8  8.0 8.55 9.10 9.6510.2010.7511.3011.8512.4012.9513.5014.0514.6015.1515.7016.2516.8017.3517.9018.4519.0019.5520.1020.6521.2021.7522.3022.8523.4023.9524.5025.0525.6026.1526.7027.2527.8028.3528.9029.4530.0030.5531.1031.6532.2032.7533.3033.8534.4034.95    0    1    2    3    4    5    6    7    8    9   10   20   30   40   50   60   70   80   90  100  120  140  160  180  200  220  240  260  280  300  320  340  360  380  400  420  440  460  480  500  520  540  560  580  600  620  640  660  680  700  720  740  760  780  800  820  840  860  880  900  920  940  960  980 1.0k 1.2k 1.6k 2.0k 2.4k 2.8k 3.2k 3.6k 4.0k 4.4k 4.8k 5.2k 5.6k 6.0k 6.4k 6.8k 7.2k 7.6k 8.0k 8.4k 8.8k 9.2k 9.6k10.0k10.8k11.6k12.4k13.2k14.0k14.8k15.6k16.4k17.2k18.0k18.8k19.6k  SIN  TRI  SQU"
-	.byte 0xff, 0x20, 0x20
-	.ascii "0.0  0.1  0.2  0.3  0.4  0.5  0.6  0.7  0.8  0.9  1.0  1.1  1.2  1.3  1.4  1.5  1.6  1.7  1.8  1.9  2.0  2.1  2.2  2.3  2.4  2.5  2.6  2.7  2.8  2.9  3.0  3.1  3.2  3.3  3.4  3.5  3.6  3.7  3.8  3.9  4.0  4.1  4.2  4.3  4.4  4.5  4.6  4.7  4.8  4.9  5.0  5.2  5.4  5.6  5.8  6.0  6.2  6.4  6.6  6.8  7.0  7.2  7.4  7.6  7.8  8.0  8.2  8.4  8.6  8.8  9.0  9.2  9.4  9.6  9.8 10.0 10.8 11.6 12.4 13.2 14.0 14.8 15.6 16.4 17.2 18.0 18.8 19.6 20.4 22.2 24.0 25.8 27.6 29.4 31.2 33.0 34.8 36.6 38.4 40.2-12.0-11.5-11.0-10.5-10.0- 9.5- 9.0- 8.5- 8.0- 7.5- 7.0- 6.5- 6.0- 5.5- 5.0- 4.5- 4.0- 3.5- 3.0- 2.5- 2.0- 1.5- 1.0- 0.5  0.0+ 0.5+ 1.0+ 1.5+ 2.0+ 2.5+ 3.0+ 3.5+ 4.0+ 4.5+ 5.0+ 5.5+ 6.0+ 6.5+ 7.0+ 7.5+ 8.0+ 8.5+ 9.0+ 9.5+10.0+10.5+11.0+11.5+12.0"
-	.byte 0xff
-	.ascii "  0.1  0.2  0.3  0.4  0.5  0.6  0.7  0.8  0.9  1.0  1.5  2.0  2.5  3.0  3.5  4.0  5.0  6.0  7.0  8.0  9.0 10.0 11.0 12.0 13.0 14.0 15.0 16.0 17.0 18.0 19.0 20.0   40   50   63   80  100  125  160  200  250  315  400  500  630  800   1k1.25k 1.6k   2k 2.5k3.15k   4k   5k 6.3k   8k  10k12.5k  16k"
-	.byte 0xff
-	.ascii "                HzHz        HzHzs s HzHz  Hzmsms                Hz  s ms            s s s s msms      Hz                msms    HzHz          Hz  Hz  msmsmsms                               VOLUME          :VOLUME          :REV SEND        :DRIVE           :ADJUST          :EMPHASIS GAIN   :DEPTH           :LFO SPEED       :SLOW LFO SPEED  :FAST LFO BALANCE:RESONANCE       :MANUAL          :SLOW/FAST       :TREBLE FAST     :       SLOW     :       WIND UP  :       WIND DOWN:BASS   FAST     :BASS   SLOW     :VOLUME ADJUST   :OSC SPEED       :DELAY L         :DELAY R         :FEEDBACK L      :FEEDBACK R      :DELAY DRY/WET   :CHORUS DRY/WET  :FLANGER DRY/WET :PHASER DRY/WET  :LOW  EMPHASIS FC:LOW  EMPHASIS  G:HIGH EMPHASIS FC:HIGH EMPHASIS  G:REVERB TIME     :PRE DELAY       :HIGH DAMP GAIN  :ER.LEVEL        :PITCH L         :PITCH R         :THRESHOLD       :RATIO           :ATTACK SENS.    :RELEASE SENS.   :ATTACK RATE     :RELEASE RATE    :GATE TIME       :MASK TIME       :HARS TIME       :LFO WAVEFORM    :OSC WAVEFORM    :BAND EMPHASIS FC:BAND EMPHASIS  Q:BAND EMPHASIS  G:LOW MIX         :HIGH MIX        :PHASE           :FEEDBACK        :SWEEP RANGE     :WAH CENTER FC   :HARS TIME L     :HARS TIME R     :BALANCE L       :BALANCE R       :FAST LFO SPEED L:FAST LFO SPEED R:MODULATION DEPTH:DELAY1 DRY/WET  :DELAY2 DRY/WET  :VIBRATO DRY/WET :WAH DRY/WET     :FAST LFO SPEED  :TREBLE DEPTH    :       FAST     :BASS DEPTH      :DELAY 1         :DELAY 2         :DELAY 3         :DELAY 4         :PAN   1         :PAN   2         :PAN   3         :PAN   4         :INTENSITY       :EXCITE          :                 h5"
+	.ascii " 0.10 0.12 0.14 0.16 0.18 0.20 0.22 0.24 0.26 0.28 0.30 0.32 0.34 0.36 0.38 0.40 0.45 0.50 0.55 0.60 0.65 0.70 0.75 0.80 0.90 1.00 1.10 1.20 1.30 1.40 1.50 1.60 1.70 1.80 1.90 2.00 2.10 2.20 2.30 2.40 2.50 2.60 2.70 2.80 2.90 3.00 3.10 3.20 3.30 3.40 3.50 3.60 3.70 3.80 3.90 4.00 4.20 4.40 4.60 4.80 5.00 5.20 5.40 5.60 5.80 6.00 6.20 6.40 6.60 6.80 7.00 7.20 7.40 7.60 7.80 8.00 9.0010.0011.0012.0013.0014.0015.0016.0017.0018.0019.0020.0021.0022.0023.0024.0025.0026.0027.0028.0029.0030.00  .    .  -24.0-23.0-22.0-21.0-20.0-19.0-18.0-17.0-16.0-15.0-14.0-13.0-12.0-11.0-10.0- 9.0- 8.0- 7.0- 6.0- 5.0- 4.0- 3.0- 2.0- 1.0  0.0ˇ   10   12   14   16   18   20   22   24   26   28   30   32   34   36   38   40   42   44   46   48   50   55   60   65   70   75   80   85   90   95  100  110  120  130  140  150  160  170  180  190  200  210  220  230  240  250  260  270  280  290  300  310  320  330  340  350  360  370  380  390  400  410  420  430  440  450  460  470  480  490  500  550  600  650  700  750  800  850  900  950 1000 1100 1200 1300 1400 1500 1600 1700 1800 1900 2000 2100 2200 2300 2400 2500 2600 2700 2800 2900 0.01 0.02 0.03 0.04 0.05 0.06 0.07 0.08 0.09 0.10 0.11 0.12 0.13 0.14 0.15 0.16 0.17 0.18 0.19 0.20 0.21 0.22 0.23 0.24 0.25 0.26 0.27 0.28 0.29 0.30 0.31 0.32 0.33 0.34 0.35 0.36 0.37 0.38 0.39 0.40 0.41 0.42 0.43 0.44 0.45 0.46 0.47 0.48 0.49 0.50 0.51 0.52 0.53 0.54 0.55 0.56 0.57 0.58 0.59 0.60 0.61 0.62 0.63 0.64 0.65 0.66 0.67 0.68 0.69 0.70 0.71 0.72 0.73 0.74 0.75 0.76 0.77 0.78 0.79 0.80 0.81 0.82 0.83 0.84 0.85 0.86 0.87 0.88 0.89 0.90 0.91 0.92 0.93 0.94 0.95 0.96 0.97 0.98 0.99 1.00  0.2  0.4  0.6  0.8  1.0  1.2  1.4  1.6  1.8  2.0  2.2  2.4  2.6  2.8  3.0  3.2  3.4  3.6  3.8  4.0  4.2  4.4  4.6  4.8  5.0  5.2  5.4  5.6  5.8  6.0  6.2  6.4  6.6  6.8  7.0  7.2  7.4  7.6  7.8  8.0  8.2  8.4  8.6  8.8  9.0  9.2  9.4  9.6  9.8 10.0 10.2 10.4 10.6 10.8 11.0 11.2 11.4 11.6 11.8 12.0 12.2 12.4 12.6 12.8 13.0 13.2 13.4 13.6 13.8 14.0 14.2 14.4 14.6 14.8 15.0 15.2 15.4 15.6 15.8 16.0 16.2 16.4 16.6 16.8 17.0 17.2 17.4 17.6 17.8 18.0 18.2 18.4 18.6 18.8 19.0 19.2 19.4 19.6 19.8 20.00.0010.0020.0030.0040.0050.0060.0070.0080.0090.0100.0110.0120.0130.0140.0150.0160.0170.0180.0190.0200.0210.0220.0230.0240.0250.0260.0270.0280.0290.0300.0310.0320.0330.0340.0350.0360.0370.0380.0390.0400.0410.0420.0430.0440.0450.0460.0470.0480.0490.0500.0510.0520.0530.0540.0550.0560.0570.0580.0590.0600.0610.0620.0630.0640.0650.0660.0670.0680.0690.0700.0710.0720.0730.0740.0750.0760.0770.0780.0790.0800.0810.0820.0830.0840.0850.0860.0870.0880.0890.0900.0910.0920.0930.0940.0950.0960.0970.0980.0990.100-1200-1100-1000- 900- 800- 700- 650- 600- 550- 500- 450- 400- 350- 300- 250- 200- 150- 100-  90-  80-  70-  60-  50-  40-  30-  20-  10-   9-   8-   7-   6-   5-   4-   3-   2-   1    0+   1+   2+   3+   4+   5+   6+   7+   8+   9+  10+  20+  30+  40+  50+  60+  70+  80+  90+ 100+ 150+ 200+ 250+ 300+ 350+ 400+ 450+ 500+ 550+ 600+ 650+ 700+ 800+ 900+1000+1100+1200ˇ SLOW FAST  1.0  1.4  1.8  2.2  2.6  3.0  3.4  3.8  4.2  4.6  5.0  5.4  5.8  6.2  6.6  7.0  7.4  7.8  8.2  8.6  9.0  9.4  9.8 10.2 10.6 11.0 11.4 11.8 12.2 12.6 13.0 13.4 13.8 14.2 14.6 15.0 15.4 15.8 16.2 16.6 17.0 17.4 17.8 18.2 18.6 19.0 19.4 19.8 20.2 20.6 21.0 21.4 21.8 22.2 22.6 23.0 23.4 23.8 24.2 24.6 25.0 25.4 25.8 26.2 26.6 27.0 27.4 27.8 28.2 28.6 29.0 29.4 29.8 30.2 30.6 31.032.2533.5034.7536.0037.2538.5039.7541.0042.2543.5044.7546.0047.2548.5049.7551.0052.2553.5054.7556.0057.2558.5059.7561.00  0.0  0.1  0.2  0.3  0.4  0.5  0.6  0.7  0.8  0.9  1.0  1.1  1.2  1.3  1.4  1.5  1.6  1.7  1.8  1.9  2.0  2.2  2.4  2.6  2.8  3.0  3.2  3.4  3.6  3.8  4.0  4.2  4.4  4.6  4.8  5.0  5.2  5.4  5.6  5.8  6.0  6.2  6.4  6.6  6.8  7.0  7.2  7.4  7.6  7.8  8.0 8.55 9.10 9.6510.2010.7511.3011.8512.4012.9513.5014.0514.6015.1515.7016.2516.8017.3517.9018.4519.0019.5520.1020.6521.2021.7522.3022.8523.4023.9524.5025.0525.6026.1526.7027.2527.8028.3528.9029.4530.0030.5531.1031.6532.2032.7533.3033.8534.4034.95    0    1    2    3    4    5    6    7    8    9   10   20   30   40   50   60   70   80   90  100  120  140  160  180  200  220  240  260  280  300  320  340  360  380  400  420  440  460  480  500  520  540  560  580  600  620  640  660  680  700  720  740  760  780  800  820  840  860  880  900  920  940  960  980 1.0k 1.2k 1.6k 2.0k 2.4k 2.8k 3.2k 3.6k 4.0k 4.4k 4.8k 5.2k 5.6k 6.0k 6.4k 6.8k 7.2k 7.6k 8.0k 8.4k 8.8k 9.2k 9.6k10.0k10.8k11.6k12.4k13.2k14.0k14.8k15.6k16.4k17.2k18.0k18.8k19.6k  SIN  TRI  SQUˇ  0.0  0.1  0.2  0.3  0.4  0.5  0.6  0.7  0.8  0.9  1.0  1.1  1.2  1.3  1.4  1.5  1.6  1.7  1.8  1.9  2.0  2.1  2.2  2.3  2.4  2.5  2.6  2.7  2.8  2.9  3.0  3.1  3.2  3.3  3.4  3.5  3.6  3.7  3.8  3.9  4.0  4.1  4.2  4.3  4.4  4.5  4.6  4.7  4.8  4.9  5.0  5.2  5.4  5.6  5.8  6.0  6.2  6.4  6.6  6.8  7.0  7.2  7.4  7.6  7.8  8.0  8.2  8.4  8.6  8.8  9.0  9.2  9.4  9.6  9.8 10.0 10.8 11.6 12.4 13.2 14.0 14.8 15.6 16.4 17.2 18.0 18.8 19.6 20.4 22.2 24.0 25.8 27.6 29.4 31.2 33.0 34.8 36.6 38.4 40.2-12.0-11.5-11.0-10.5-10.0- 9.5- 9.0- 8.5- 8.0- 7.5- 7.0- 6.5- 6.0- 5.5- 5.0- 4.5- 4.0- 3.5- 3.0- 2.5- 2.0- 1.5- 1.0- 0.5  0.0+ 0.5+ 1.0+ 1.5+ 2.0+ 2.5+ 3.0+ 3.5+ 4.0+ 4.5+ 5.0+ 5.5+ 6.0+ 6.5+ 7.0+ 7.5+ 8.0+ 8.5+ 9.0+ 9.5+10.0+10.5+11.0+11.5+12.0ˇ  0.1  0.2  0.3  0.4  0.5  0.6  0.7  0.8  0.9  1.0  1.5  2.0  2.5  3.0  3.5  4.0  5.0  6.0  7.0  8.0  9.0 10.0 11.0 12.0 13.0 14.0 15.0 16.0 17.0 18.0 19.0 20.0   40   50   63   80  100  125  160  200  250  315  400  500  630  800   1k1.25k 1.6k   2k 2.5k3.15k   4k   5k 6.3k   8k  10k12.5k  16kˇ                HzHz        HzHzs s HzHz  Hzmsms                Hz  s ms            s s s s msms      Hz                msms    HzHz          Hz  Hz  msmsmsms                               VOLUME          :VOLUME          :REV SEND        :DRIVE           :ADJUST          :EMPHASIS GAIN   :DEPTH           :LFO SPEED       :SLOW LFO SPEED  :FAST LFO BALANCE:RESONANCE       :MANUAL          :SLOW/FAST       :TREBLE FAST     :       SLOW     :       WIND UP  :       WIND DOWN:BASS   FAST     :BASS   SLOW     :VOLUME ADJUST   :OSC SPEED       :DELAY L         :DELAY R         :FEEDBACK L      :FEEDBACK R      :DELAY DRY/WET   :CHORUS DRY/WET  :FLANGER DRY/WET :PHASER DRY/WET  :LOW  EMPHASIS FC:LOW  EMPHASIS  G:HIGH EMPHASIS FC:HIGH EMPHASIS  G:REVERB TIME     :PRE DELAY       :HIGH DAMP GAIN  :ER.LEVEL        :PITCH L         :PITCH R         :THRESHOLD       :RATIO           :ATTACK SENS.    :RELEASE SENS.   :ATTACK RATE     :RELEASE RATE    :GATE TIME       :MASK TIME       :HARS TIME       :LFO WAVEFORM    :OSC WAVEFORM    :BAND EMPHASIS FC:BAND EMPHASIS  Q:BAND EMPHASIS  G:LOW MIX         :HIGH MIX        :PHASE           :FEEDBACK        :SWEEP RANGE     :WAH CENTER FC   :HARS TIME L     :HARS TIME R     :BALANCE L       :BALANCE R       :FAST LFO SPEED L:FAST LFO SPEED R:MODULATION DEPTH:DELAY1 DRY/WET  :DELAY2 DRY/WET  :VIBRATO DRY/WET :WAH DRY/WET     :FAST LFO SPEED  :TREBLE DEPTH    :       FAST     :BASS DEPTH      :DELAY 1         :DELAY 2         :DELAY 3         :DELAY 4         :PAN   1         :PAN   2         :PAN   3         :PAN   4         :INTENSITY       :EXCITE          :                 h5"
 	.byte 0xe3, 0x00, 0x56, 0x35
 	.byte 0xe3, 0x00, 0x44, 0x35, 0xe3, 0x00, 0x32, 0x35
 	.byte 0xe3, 0x00, 0x20, 0x35, 0xe3, 0x00, 0x0e, 0x35
@@ -28324,8 +28205,7 @@ LABEL_E33568:	aligned_string "  NO OPERATION  "
 	.ascii "EUeu"
 	adc	e, (xiy)
 	sbc	xiy, (xiy)
-	.ascii "GWgw"
-	.byte 0x87, 0x97
+	.ascii "GWgwáó"
 	.byte 0xa7, 0xb7, 0xc0, 0x00, 0x3a, 0x00, 0x24, 0x00
 	.byte 0x0e, 0x00, 0xc0, 0x00, 0x49, 0x00, 0x24, 0x00
 	.byte 0x0e, 0x00, 0xc0, 0x00, 0x58, 0x00, 0x24, 0x00
@@ -28391,8 +28271,7 @@ LABEL_E33568:	aligned_string "  NO OPERATION  "
 	.ascii "#<Vt"
 	ld_s	(xwa-47), de
 	.byte 0x98, 0xac
-	.ascii "t*$$$$(2$$2$("
-	.byte 0xff
+	.ascii "t*$$$$(2$$2$(ˇ"
 	.byte 0x05, 0x00, 0xb9, 0x00, 0xe6, 0x00, 0x10, 0x00
 	.byte 0x05, 0x00, 0xb9, 0x00, 0xbe, 0x00, 0x10, 0x00
 	.byte 0x0e, 0x00, 0x2b, 0x00, 0xfb, 0x00, 0x07, 0x00
@@ -28437,9 +28316,7 @@ LABEL_E33926:	aligned_string "Funktionen zur Bearbeitung eines Songs."
 LABEL_E3394E:	aligned_string "EASY RECORD sets the Sequencer to record your complete performance including Auto Play Chord. The selected song will be cleared. "
 LABEL_E339D0:	.ascii "EASY RECORD aktiviert die wichtigsten Spuren, um ein komplettes St"
 	.byte 0xfc
-	.ascii "ck mit Begleitautomatik aufzunehmen. Der aktuelle Song wird dadurch gel"
-	.byte 0xf6
-	.asciz "scht. "
+	.asciz "ck mit Begleitautomatik aufzunehmen. Der aktuelle Song wird dadurch gelˆscht. "
 LABEL_E33A62:	aligned_string "Press OK to proceed."
 LABEL_E33A78:	.ascii "Best"
 	.byte 0xe4
@@ -28447,34 +28324,21 @@ LABEL_E33A78:	.ascii "Best"
 LABEL_E33A90:	aligned_string "PANEL WRITE replaces the sounds and settings at the beginning of your song, which are selected when you press SEQUENCER RESET. Make the desired changes and press OK to store your new settings."
 LABEL_E33B52:	.ascii "PANEL WRITE ersetzt alle Kl"
 	.byte 0xe4, 0x6e, 0x67
-	.ascii "e und Einstellungen am Anfang Ihres Songs, die eingestellt werden, wenn SEQUENCER RESET gew"
-	.byte 0xe4
-	.ascii "hlt wird. Nehmen Sie alle gew"
-	.byte 0xfc
-	.ascii "nschten "
-	.byte 0xc4
-	.ascii "nderungen vor und best"
-	.byte 0xe4
+	.ascii "e und Einstellungen am Anfang Ihres Songs, die eingestellt werden, wenn SEQUENCER RESET gew‰hlt wird. Nehmen Sie alle gew¸nschten ƒnderungen vor und best‰"
 	aligned_string "tigen mit OK um diese zu speichern. "
 LABEL_E33C30:	aligned_string "Press the up/down buttons under the screen corresponding to the tracks that you want to clear. "
 LABEL_E33C90:
 	.byte 0x44, 0x72, 0xfc
-	.ascii "cken Sie einer der Doppeltasten unter dem Display, entsprechend der Spuren, die Sie l"
-	.byte 0xf6
-	.ascii "schen m"
-	.byte 0xf6
-	.asciz "chten "
+	.asciz "cken Sie einer der Doppeltasten unter dem Display, entsprechend der Spuren, die Sie lˆschen mˆchten "
 LABEL_E33CF8:	aligned_string "Press OK to complete TRACK CLEAR."
 LABEL_E33D1A:
 	.byte 0x44, 0x72, 0xfc, 0x63, 0x6b, 0x65
-	.ascii "n Sie OK um TRACK CLEAR auszuf"
-	.byte 0xfc
+	.ascii "n Sie OK um TRACK CLEAR auszuf¸"
 	aligned_string "hren. "
 LABEL_E33D46:	aligned_string "Press the up/down button under the screen corresponding to the track that you want to edit."
 LABEL_E33DA2:
 	.byte 0x44, 0x72, 0xfc, 0x63, 0x6b, 0x65
-	.ascii "n Sie eine der Doppeltasten unter dem Display, entsprechend der Spur, die Sie editieren m"
-	.byte 0xf6
+	.ascii "n Sie eine der Doppeltasten unter dem Display, entsprechend der Spur, die Sie editieren mˆ"
 	aligned_string "chten "
 LABEL_E33E0A:	aligned_string "Using SONG CLEAR will erase any existing recording in the Sequencer."
 LABEL_E33E50:	.ascii "SONG CLEAR l"
@@ -28483,34 +28347,21 @@ LABEL_E33E50:	.ascii "SONG CLEAR l"
 LABEL_E33E8C:	.ascii "L'utilisation de SONG CLEAR effacera tout enregistrement pr"
 	.byte 0xe9
 	jr	ule, 0xe9
-	.ascii "dent dans le s"
-	.byte 0xe9
-	.asciz "quenceur. "
-	.ascii "Al anular la canci"
-	.byte 0xf3, 0x6e
-	.ascii " se borra la grabaci"
-	.byte 0xf3
+	.asciz "dent dans le sÈquenceur. "
+	.ascii "Al anular la canciÛn se borra la grabaciÛ"
 	aligned_string "n del secuenciador. "
 	aligned_string "Gunakan SONG CLEAR untuk menghapus suatu rekaman yang ada didalam Sequencer."
 LABEL_E33F70:	aligned_string "Using TRACK CLEAR will erase any existing recordings in the selected Tracks."
 LABEL_E33FBE:
 	.byte 0x54, 0x52
-	.ascii "ACK CLEAR l"
-	.byte 0xf6
-	.ascii "scht alle Daten in den ausgew"
-	.byte 0xe4
+	.ascii "ACK CLEAR lˆscht alle Daten in den ausgew‰"
 	aligned_string "hlten Spuren. "
 LABEL_E33FFA:	.ascii "L'utilisation de TRACK CLEAR effacera tout enregistrement pr"
 	inc	3, xbc
 	.byte 0xe9
-	.ascii "dent dans les pistes s"
-	.byte 0xe9
-	.ascii "lectionn"
-	.byte 0xe9
-	.asciz "es. "
+	.asciz "dent dans les pistes sÈlectionnÈes. "
 	.byte 0x41, 0x6c
-	.ascii " anular la pista se borra la grabaci"
-	.byte 0xf3
+	.ascii " anular la pista se borra la grabaciÛ"
 	aligned_string "n de las pistas seleccionadas. "
 	aligned_string "Gunakan TRACK CLEAR bila akan menghapus suatu rekaman yang ada didalam Track yang terseleksi."
 	aligned_string "Press the START/STOP button to begin."
@@ -28794,9 +28645,7 @@ LABEL_E33FFA:	.ascii "L'utilisation de TRACK CLEAR effacera tout enregistrement 
 	.byte 0xc8, 0x00, 0x04, 0x01, 0x04, 0x01, 0x00, 0x00
 	.byte 0x07, 0x00, 0x0e, 0x00, 0x15, 0x00, 0x1c, 0x00
 	.byte 0x23, 0x00, 0x2a, 0x00
-	.ascii "        1    2    3    4    5    6    7    8    9   10   11   12   13   14   15   16  ALL      1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16ALLSONG 1SONG 2SONG 3SONG 4SONG 5SONG 6SONG 7SONG 8SONG 9SONG10         ALL     NOTE    CONTROL "
-	.byte 0xff
-	.ascii "~20~20~AD~B8~20~20~20~AD~20~20~20~20~AC~B8~20~20~20~AC~20~20~20~20~AB~B8~20~20~20~AB~20~20~20~20~AA~20~20"
+	.ascii "        1    2    3    4    5    6    7    8    9   10   11   12   13   14   15   16  ALL      1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16ALLSONG 1SONG 2SONG 3SONG 4SONG 5SONG 6SONG 7SONG 8SONG 9SONG10         ALL     NOTE    CONTROL ˇ~20~20~AD~B8~20~20~20~AD~20~20~20~20~AC~B8~20~20~20~AC~20~20~20~20~AB~B8~20~20~20~AB~20~20~20~20~AA~20~20"
 	.byte 0xff, 0x20, 0x2d, 0x32, 0x00
 	.byte 0x20, 0x2d, 0x31, 0x00, 0x25, 0x33, 0x64, 0x00
 	aligned_string "%d/4"
@@ -29024,14 +28873,12 @@ LABEL_E44636:
 	.byte 0xf9, 0x2d
 	.byte 0xf4, 0x00, 0xf8, 0x2d, 0xf4, 0x00, 0x09, 0x2e
 	.byte 0xf4, 0x00, 0x0c, 0x2e, 0xf4, 0x00, 0x5f, 0x5f
-	.ascii "______________"
-	.byte 0xf0, 0x50
+	.ascii "______________P"
 	.byte 0xa3, 0x00, 0x00, 0xff, 0x01, 0x02, 0x03, 0x04
 	.byte 0x05, 0x06, 0x08, 0x09, 0x0a, 0x20, 0x21, 0x22
 	.ascii "#$%'0245"
 	.byte 0x0f
-	.ascii "68@ABCDFGHIJK`abc"
-	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
+	.ascii "68@ABCDFGHIJK`abcˇˇˇˇˇˇ"
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
@@ -30040,8 +29887,7 @@ LABEL_E44DF8:
 	.byte 0x9f, 0x0b, 0x22, 0xeb, 0x8e, 0xa9, 0xc6, 0x30
 	.byte 0xdd, 0xc0, 0x67, 0xf1, 0x34, 0xaf, 0x19, 0x4e
 	.byte 0x6e, 0xe4, 0x9b, 0x46, 0xd6, 0x17, 0x76, 0xb0
-	.ascii "*o'x"
-	.byte 0xb5, 0x47, 0xdf, 0x59
+	.ascii "*o'xµGﬂY"
 	.byte 0xe2, 0x11, 0x8f, 0xce, 0x1e, 0x94, 0x3c, 0x08
 	.byte 0x4c, 0xf6, 0x8b, 0x63, 0x87, 0xc5, 0x03, 0xa8
 	.byte 0x50, 0xf9, 0x6a, 0x83, 0xd2, 0x52, 0x9d, 0xc1
@@ -30458,11 +30304,7 @@ LABEL_E44DF8:
 	.byte 0x11, 0x62, 0x11, 0x62, 0x11, 0x5b, 0x2e, 0xf7
 	.byte 0x2e, 0x1d, 0x30, 0xa1, 0x30, 0xcb, 0x2c, 0x3e
 	.byte 0x11
-	.ascii "=1u2"
-	.byte 0x99, 0x32, 0x3b
-	.ascii "3;3u2"
-	.byte 0xc3, 0x32, 0x3b
-	.ascii "3_3b"
+	.ascii "=1u2ô2;3;3u2√2;3_3b"
 	.byte 0x11, 0x62, 0x11, 0x62
 	.byte 0x11, 0x62, 0x11, 0xf3, 0x32, 0x11, 0x33, 0x89
 	.byte 0x33, 0xad
@@ -30586,11 +30428,9 @@ LABEL_E44DF8:
 	.byte 0x41, 0x23, 0x41, 0xc7, 0x42, 0xc7, 0x42, 0x23
 	.byte 0x41, 0x23, 0x41, 0xc7, 0x42, 0xc7, 0x42, 0x62
 	.byte 0x11, 0x62, 0x11, 0x62, 0x11, 0x62, 0x11, 0xcb
-	.ascii "AUBuC"
-	.byte 0xf3, 0x43, 0x31
+	.ascii "AUBuCÛC1"
 	.byte 0x3f, 0x3e, 0x11
-	.ascii "wD#A#A"
-	.byte 0xc7, 0x42, 0xc7
+	.ascii "wD#A#A«B«"
 	.byte 0x42, 0x23, 0x41, 0x23
 	.byte 0x41, 0xc7, 0x42, 0xc7, 0x42, 0x62, 0x11, 0x62
 	.byte 0x11, 0x62, 0x11, 0x62, 0x11, 0xcb, 0x41, 0x55
@@ -41058,20 +40898,14 @@ LABEL_E7F110:	aligned_string "Perhatian !"
 LABEL_E7F11C:	aligned_string "ATTENTION!"
 LABEL_E7F128:
 	.byte 0xa1
-	.ascii "ATENCI"
-	.byte 0xd3
+	.ascii "ATENCI”"
 	.byte 0x4e, 0x21, 0x00, 0xff
 LABEL_E7F134:	aligned_string "ATTENTION!"
 LABEL_E7F140:	aligned_string "ACHTUNG !"
 LABEL_E7F14A:	aligned_string "ATTENTION!"
 	aligned_string "Turning on GENERAL MIDI MODE will replace your current settings with GENERAL MIDI settings!"
-	.ascii "Durch das Einschalten des GENERAL MIDI MODE werden alle Einstellungen zu GENERAL MIDI Einstellungen ge"
-	.byte 0xe4
-	.asciz "ndert!"
-	.ascii "L'activation du mode GENERAL MIDI MODE remplacera tous les r"
-	.byte 0xe9, 0x67, 0x6c, 0x61
-	.ascii "ges actuels par les r"
-	.byte 0xe9
+	.asciz "Durch das Einschalten des GENERAL MIDI MODE werden alle Einstellungen zu GENERAL MIDI Einstellungen ge‰ndert!"
+	.ascii "L'activation du mode GENERAL MIDI MODE remplacera tous les rÈglages actuels par les rÈ"
 	aligned_string "glages GENERAL MIDI!"
 	.byte 0xa1
 	aligned_string "Al activar el modo MIDI General se reemplazan las configuraciones actuales por configuraciones MIDI Generales!"
@@ -41082,16 +40916,11 @@ LABEL_E7F14A:	aligned_string "ATTENTION!"
 	.byte 0xe7, 0x00, 0xfc, 0xf2, 0xe7, 0x00
 	aligned_string "Turning off GENERAL MIDI MODE will replace the GENERAL MIDI settings with the original factory settings!"
 	aligned_string "Durch das Ausschalten des GENERAL MIDI MODE werden die GENERAL MIDI Einstellungen durch die Werkseinstellungen ersetzt."
-	.ascii "La d"
-	.byte 0xe9, 0x73, 0x61, 0x63
-	.ascii "tivation du mode GENERAL MIDI MODE remplacera tous les r"
-	.byte 0xe9
-	.ascii "glages GENERAL MIDI par les r"
+	.ascii "La dÈsactivation du mode GENERAL MIDI MODE remplacera tous les rÈglages GENERAL MIDI par les r"
 	inc	7, xbc
 	aligned_string "lages d'usines!"
 	.byte 0xa1
-	.ascii "Al desconectar el modo MIDI General se reemplazan las configuraciones MIDI Generales por las configuraciones originales de f"
-	.byte 0xe1
+	.ascii "Al desconectar el modo MIDI General se reemplazan las configuraciones MIDI Generales por las configuraciones originales de f·"
 	aligned_string "brica!"
 	aligned_string "Non-aktifkan fungsi GENERAL MIDI MODE bila akan kembali ke susunan GENERAL MIDI sesuai susunan dari pabrik(originil factory settings)."
 	.byte 0x66, 0xf3
@@ -46635,20 +46464,10 @@ LABEL_E9587C:	aligned_string "PLEASE WAIT!"
 	.byte 0xe9, 0x00, 0xe6, 0x58, 0xe9, 0x00
 LABEL_E958E6:	aligned_string "Memori internal diterima untuk selama 80 menit setelah power dimatikan. Simpan hasil pekerjaan anda kedalam  Floppy Disk."
 LABEL_E95960:	aligned_string "REMINDER"
-	.ascii "La memoria interna es retenida alrededor de 80 minutos despu"
-	.byte 0xe9, 0x73
-	.ascii " de interrumpir la alimentaci"
-	.byte 0xf3, 0x6e, 0x2e
+	.ascii "La memoria interna es retenida alrededor de 80 minutos despuÈs de interrumpir la alimentaciÛn."
 	ldb	w, 0xa1
 	aligned_string "Guarde su trabajo en un disquete!"
-	.ascii "La m"
-	.byte 0xe9
-	.ascii "moire interne est conserv"
-	.byte 0xe9
-	.ascii "e pendant environ 80 minutes apr"
-	.byte 0xe8
-	.ascii "s la coupure de l'alimentation g"
-	.byte 0xe9, 0x6e, 0xe9
+	.ascii "La mÈmoire interne est conservÈe pendant environ 80 minutes aprËs la coupure de l'alimentation gÈnÈ"
 	aligned_string "rale de l'instrument. Sauvegardez SAVE votre travail sur disquette !"
 	aligned_string "Der Speicherinhalt bleibt etwa 80 Minuten nach Ausschalten des Keyboards erhalten. Speichern Sie Ihre Daten daher auf Diskette !"
 	aligned_string "The internal memory is retained for about 80 minutes after turning off the power. SAVE your work on Floppy Disk!"
@@ -46662,30 +46481,15 @@ LABEL_E95BA0:	aligned_string "Aturan sudah dibatalkan karena prosedur penyimpana
 LABEL_E95C32:	aligned_string "REMINDER"
 LABEL_E95C3C:	.ascii "Las configuraciones fueron canceladas porque no se complet"
 	.byte 0xf3, 0x20
-	.ascii "el procedimiento de almacenamiento oprimiendo el bot"
-	.byte 0xf3, 0x6e, 0x20, 0x4f
-	.ascii "K. Por favor, vuelva a ingresar las configuraciones y presione el bot"
-	.byte 0xf3
+	.ascii "el procedimiento de almacenamiento oprimiendo el botÛn OK. Por favor, vuelva a ingresar las configuraciones y presione el botÛ"
 	aligned_string "n OK para almacenarlas."
 LABEL_E95D0E:
 	.byte 0x56, 0x6f
-	.ascii "us n'avez pas press"
-	.byte 0xe9
-	.ascii " le bouton OK et les r"
-	.byte 0xe9
-	.ascii "glages n'ont pas "
-	.byte 0xe9, 0x74, 0xe9, 0x20
-	.ascii "enregistr"
-	.byte 0xe9
-	.ascii "s. Veuillez effectuer "
-	.byte 0xe0
-	.ascii " nouveau les r"
-	.byte 0xe9
+	.ascii "us n'avez pas pressÈ le bouton OK et les rÈglages n'ont pas ÈtÈ enregistrÈs. Veuillez effectuer ‡ nouveau les rÈ"
 	aligned_string "glages et presser OK pour les enregistrer. "
 LABEL_E95DAC:	.ascii "Die Einstellungen wurden nicht gespeichert da die Speicherung nicht mit OK best"
 	.byte 0xe4
-	.ascii "tigt wurde. Nehmen Sie die Einstellungen noch einmal vor und best"
-	.byte 0xe4
+	.ascii "tigt wurde. Nehmen Sie die Einstellungen noch einmal vor und best‰"
 	aligned_string "tigen dann mit OK."
 LABEL_E95E52:	aligned_string "The settings have been canceled because the storage procedure was not completed by pressing the OK button. Please enter the settings again and press OK to store them. "
 	.long LABEL_E95F3A
@@ -46706,14 +46510,11 @@ LABEL_E95F3A:	aligned_string "ERROR!"
 	.byte 0xe9, 0x00
 LABEL_E95F5A:	aligned_string "Data pada disk yang Anda pergunakan untuk produk lain (bukan untuk Technics)"
 LABEL_E95FA8:	aligned_string "ERROR 00"
-	.ascii "Los datos del disco que usted est"
-	.byte 0xe1
+	.ascii "Los datos del disco que usted est·"
 	aligned_string " utilizando son para un aparato diferente."
-	.ascii "Les informations contenues dans la disquette sont destin"
-	.byte 0xe9, 0x65, 0x73, 0x20, 0xe0
+	.ascii "Les informations contenues dans la disquette sont destinÈes ‡"
 	aligned_string " un autre instrument."
-	.ascii "Die Daten auf dieser Diskette stammen von einem anderen Ger"
-	.byte 0xe4
+	.ascii "Die Daten auf dieser Diskette stammen von einem anderen Ger‰"
 	.byte 0x74, 0x2e, 0x00, 0xff
 	aligned_string "The data on the disk that you are using is for a different product."
 LABEL_E960D8:
@@ -46728,8 +46529,7 @@ LABEL_E9613C:	aligned_string "ERROR 01"
 LABEL_E96146:	aligned_string "Se ha producido un error mientras se cargaba el disco. Pruebe otra vez."
 LABEL_E9618E:
 	.byte 0x55, 0x6e
-	.ascii "e erreur s'est produite pendant la proc"
-	.byte 0xe9
+	.ascii "e erreur s'est produite pendant la procÈ"
 	aligned_string "dure de chargement. Essayez encore!"
 LABEL_E961DC:	aligned_string "Beim Laden von der Diskette ist ein Fehler aufgetreten. Bitte noch einmal versuchen."
 LABEL_E96232:	aligned_string "An error has occurred while the disk was loading. Please try again!"
@@ -46768,8 +46568,7 @@ LABEL_E96482:
 LABEL_E9649A:	aligned_string "Kesalahan terjadi ketika disket sedang diisi. Harap dicoba lagi."
 LABEL_E964DC:	aligned_string "ERROR 05"
 LABEL_E964E6:	aligned_string "Se ha producido un error mientras se almacenaban datos en el disco. Pruebe otra vez."
-	.ascii "Une erreur s'est produite pendant la proc"
-	.byte 0xe9
+	.ascii "Une erreur s'est produite pendant la procÈ"
 	aligned_string "dure de sauvegarde. Essayez encore!"
 	aligned_string "Beim Speichern auf die Diskette ist ein Fehler aufgetreten. Bitte noch einmal versuchen."
 	aligned_string "An error has occurred while the disk was saving. Please try again!"
@@ -46783,22 +46582,15 @@ LABEL_E96640:	aligned_string "Disket yang Anda pergunakan sedang dikunci/diprote
 LABEL_E966A2:	aligned_string "ERROR 06"
 LABEL_E966AC:	.ascii "El disco que est"
 	.byte 0xe1, 0x20, 0x75, 0x74
-	.ascii "ilizando est"
-	.byte 0xe1, 0x20, 0x70, 0x72
-	.ascii "otegido contra escritura. Retire la protecci"
-	.byte 0xf3
+	.ascii "ilizando est· protegido contra escritura. Retire la protecciÛ"
 	aligned_string "n contra escritura y pruebe otra vez."
 LABEL_E96724:	.ascii "La disquette que vous utilisez est prot"
 	.byte 0xe9, 0x67, 0xe9, 0x65, 0x20
-	.ascii "contre l'"
-	.byte 0xe9
+	.ascii "contre l'È"
 	aligned_string "criture!Otez la protection de la disquette et recommencez!"
 LABEL_E96796:
 	.byte 0x49, 0x68
-	.ascii "re Diskette ist schreibgesch"
-	.byte 0xfc, 0x74, 0x7a, 0x74
-	.ascii ". Schieben Sie den Schreibschutz zur"
-	.byte 0xfc
+	.ascii "re Diskette ist schreibgesch¸tzt. Schieben Sie den Schreibschutz zur¸"
 	aligned_string "ck und speichern noch einmal."
 LABEL_E967FC:	aligned_string "The disk that you are using is write protected. Please remove the write protection and try again."
 LABEL_E9685E:
@@ -46808,14 +46600,9 @@ LABEL_E9685E:
 	.byte 0xe9, 0x00, 0x76, 0x68, 0xe9, 0x00
 LABEL_E96876:	aligned_string "Disket yang Anda dipergunakan sudah penuh. Harap pergunakan disket lain/"
 LABEL_E968C0:	aligned_string "ERROR 07"
-	.ascii "El disco que est"
-	.byte 0xe1
-	.ascii " utilizando est"
-	.byte 0xe1
+	.ascii "El disco que est· utilizando est·"
 	aligned_string " lleno. Utilice otro disco."
-	.ascii "La disquette que vous utilisez est satur"
-	.byte 0xe9
-	.asciz "e. Utilisez une autre disquette!"
+	.asciz "La disquette que vous utilisez est saturÈe. Utilisez une autre disquette!"
 	aligned_string "Ihre Diskette ist voll. Benutzen Sie bette eine andere."
 	aligned_string "The disk that you are using is full. Please use another disk."
 	.long LABEL_E96BF4
@@ -46828,19 +46615,11 @@ LABEL_E969E0:	aligned_string "Kesalahan sudah terjadi ketika disket sedang difor
 LABEL_E96A5E:	aligned_string "ERROR 08"
 LABEL_E96A68:	.ascii "Se ha producido un error mientras se hac"
 	.byte 0xed
-	.ascii "a el formato del disco. El disco que est"
-	.byte 0xe1
+	.ascii "a el formato del disco. El disco que est·"
 	aligned_string " utilizando puede estar defectuoso. Intente hacer el formato de otro disco."
 LABEL_E96B06:
 	.byte 0x55, 0x6e
-	.ascii "e erreur s'est produite pendant la proc"
-	.byte 0xe9
-	.ascii "dure de formatage. La disquette que vous utilisez est peut "
-	.byte 0xea
-	.ascii "tre d"
-	.byte 0xe9, 0x74, 0xe9
-	.ascii "rior"
-	.byte 0xe9
+	.ascii "e erreur s'est produite pendant la procÈdure de formatage. La disquette que vous utilisez est peut Ítre dÈtÈriorÈ"
 	aligned_string "e. Essayez de formater une autre disquette."
 LABEL_E96BA6:	aligned_string "Beim Formatieren ist ein Fehler aufgetreten. Benutzen Sie bette eine andere."
 LABEL_E96BF4:	aligned_string "An error has occurred while the disk was formatting. The disk that you are using may be faulty. Please try formatting another disk."
@@ -46855,8 +46634,7 @@ LABEL_E96C90:	aligned_string "Data didalam disk diprotek, tidak bisa dicopy. Mas
 LABEL_E96CD8:	aligned_string "(ERROR 09)cp_prtct"
 LABEL_E96CEC:	.ascii "Los datos del disco est"
 	.byte 0xe1
-	.ascii "n protegidos contra copia. Por favor, ingrese la contrase"
-	.byte 0xf1, 0x61, 0x2e
+	.ascii "n protegidos contra copia. Por favor, ingrese la contraseÒa."
 	.byte 0x00, 0xff
 LABEL_E96D42:	.ascii "Cette disquette est prot"
 	.byte 0xe9, 0x67, 0xe9
@@ -46878,8 +46656,7 @@ LABEL_E96E58:	.ascii "Los datos ya est"
 	aligned_string "n protegidos contra la copia."
 LABEL_E96E88:	.ascii "Ces donn"
 	.byte 0xe9
-	.ascii "es sont prot"
-	.byte 0xe9, 0x67, 0xe9
+	.ascii "es sont protÈgÈ"
 	aligned_string "es contre la copie!"
 LABEL_E96EB4:	.ascii "Diese Daten sind bereits kopiergesch"
 	.byte 0xfc
@@ -46892,8 +46669,7 @@ LABEL_E96F02:
 	.byte 0xe9, 0x00
 LABEL_E96F1A:	aligned_string "Password yang anda masukkan salah."
 LABEL_E96F3E:	aligned_string "ERROR 11"
-	.ascii "La contrase"
-	.byte 0xf1
+	.ascii "La contraseÒ"
 	aligned_string "a ingresada es incorrecta."
 	aligned_string "Votre mot de passe est incorrect"
 	aligned_string "Das eingegebene Password ist falsch."
@@ -46908,20 +46684,14 @@ LABEL_E96FFC:	aligned_string "Batu Baterei sudah lemah. Ganti segera semua batu 
 LABEL_E97048:	aligned_string "ERROR 12"
 LABEL_E97052:	.ascii "La carga de las bater"
 	.byte 0xed
-	.ascii "as es muy baja. Reemplace inmediatamente todas las bater"
-	.byte 0xed
-	.ascii "as por bater"
-	.byte 0xed
+	.ascii "as es muy baja. Reemplace inmediatamente todas las baterÌas por baterÌ"
 	aligned_string "as nuevas."
 LABEL_E970BA:	.ascii "La batterie interne est pratiquement d"
 	.byte 0xe9
 	.ascii "charg"
 	inc	5, xbc
-	.ascii ". Remplacez toutes les piles imm"
-	.byte 0xe9
-	.asciz "diatement."
-	.ascii "Die verbleibende Kapazit"
-	.byte 0xe4
+	.asciz ". Remplacez toutes les piles immÈdiatement."
+	.ascii "Die verbleibende Kapazit‰"
 	aligned_string "t der Batterien ist sehr schwach. Ersetzen Sie umgehend alle Batterien gegen neue."
 	aligned_string "The remaining battery power is very low. Replace all the batteries with new ones immediately."
 	.byte 0xd2, 0x72
@@ -46930,15 +46700,11 @@ LABEL_E970BA:	.ascii "La batterie interne est pratiquement d"
 	.byte 0xe9, 0x00, 0xf6, 0x71, 0xe9, 0x00
 	aligned_string "Lagu yang anda sedang coba untuk disimpan tidak ada isinya."
 	aligned_string "(ERROR 15)err_seq"
-	.ascii "La canci"
-	.byte 0xf3, 0x6e, 0x20, 0x71
-	.ascii "ue intenta grabar est"
-	.byte 0xe1, 0x20, 0x76
+	.ascii "La canciÛn que intenta grabar est· v"
 	.byte 0x61, 0x63, 0xed, 0x61, 0x2e, 0x00, 0x4c, 0x61
 	.byte 0x20, 0x73, 0xe9
 	aligned_string "quence que vous essayez de sauvegarder est vide"
-	.ascii "Der Song den Sie speichern m"
-	.byte 0xf6
+	.ascii "Der Song den Sie speichern mˆ"
 	aligned_string "chten ist leer."
 	aligned_string "The song you are trying to save is empty."
 	.byte 0x86, 0x74, 0xe9, 0x00
@@ -46951,15 +46717,11 @@ LABEL_E97314:	aligned_string "Standard MIDI File tidak kompatibel dengan KN-5000
 LABEL_E97364:	aligned_string "(ERROR 16)err_cnv"
 LABEL_E97376:
 	.byte 0x45, 0x73
-	.ascii "te archivo MIDI est"
-	.byte 0xe1
+	.ascii "te archivo MIDI est·"
 	aligned_string "ndar es incompatible con el KN5000 y no puede ser cargado."
 LABEL_E973C8:	.ascii "Cette s"
 	.byte 0xe9
-	.ascii "quence STANDARD MIDI FILE est incompatible avec le KN5000 et ne peut "
-	.byte 0xea, 0x74, 0x72
-	.ascii "e charg"
-	.byte 0xe9
+	.ascii "quence STANDARD MIDI FILE est incompatible avec le KN5000 et ne peut Ítre chargÈ"
 	.byte 0x65, 0x2e, 0x00, 0xff
 LABEL_E97424:	aligned_string "Dieses STANDARD MIDI FILE ist nicht kompatibel zum SX-KN5000 und kann daher nicht geladen werden."
 	aligned_string "This Standard MIDI File is incompatible with the KN5000 and cannot be loaded."
@@ -46977,9 +46739,7 @@ LABEL_E97520:	.ascii "Este no es un archivo MIDI est"
 	aligned_string "ndar."
 LABEL_E97546:
 	.byte 0x43, 0x65
-	.ascii "ci n'est pas une s"
-	.byte 0xe9
-	.asciz "quence STANDARD MIDI FILE."
+	.asciz "ci n'est pas une sÈquence STANDARD MIDI FILE."
 LABEL_E97576:	aligned_string "Dies ist kein STANDARD MIDI FILE."
 	aligned_string "This is not a STANDARD MIDI FILE."
 	.byte 0x58, 0x77, 0xe9, 0x00, 0xf0, 0x76
@@ -46989,16 +46749,11 @@ LABEL_E97576:	aligned_string "Dies ist kein STANDARD MIDI FILE."
 LABEL_E975D2:	aligned_string "Timebase (resolusi PPQ) yang anda coba untuk dimuat bukan 24/48/96/192/288/384 PPQ."
 LABEL_E97626:	aligned_string "(ERROR 18)err_timebase"
 	.byte 0x4c, 0x61
-	.ascii " base de tiempo (resoluci"
-	.byte 0xf3
+	.ascii " base de tiempo (resoluciÛ"
 	aligned_string "n de PPQ) que intenta cargar no es 24/48/96/192/288/384 PPQ."
-	.ascii "La r"
-	.byte 0xe9, 0x73, 0x6f, 0x6c
-	.ascii "ution {PPQ} que vous avez essay"
-	.byte 0xe9
+	.ascii "La rÈsolution {PPQ} que vous avez essayÈ"
 	aligned_string " de charger n'est pas 24/48/96/192/288/384 PPQ."
-	.ascii "Die Zeiteinheit (PPQ Aufl"
-	.byte 0xf6
+	.ascii "Die Zeiteinheit (PPQ Auflˆ"
 	aligned_string "sung) die Sie zu laden versuchten entspricht nicht 24/48/96/192/288/384 PPQ."
 	aligned_string "The timebase {PPQ resolution} that you tried to load is not 24/48/96/192/288/384 PPQ."
 LABEL_E977AE:
@@ -47009,10 +46764,7 @@ LABEL_E977AE:
 LABEL_E977C6:	aligned_string "Disket ini adalah satu FORMAT 1 MIDI FILE dan tidak dapat dimainkan kembali (Play Back)"
 LABEL_E9781E:	aligned_string "(ERROR 19)dctp"
 LABEL_E9782E:	aligned_string "Este es un archivo MIDI de FORMATO 1 y no puede ser reproducido."
-	.ascii "Ceci est une s"
-	.byte 0xe9, 0x71
-	.ascii "uence STANDARD MIDI FILE au FORMAT 1 et ne peut pas "
-	.byte 0xea
+	.ascii "Ceci est une sÈquence STANDARD MIDI FILE au FORMAT 1 et ne peut pas Í"
 	aligned_string "tre reproduite dans ce mode."
 	aligned_string "Dies ist ein FORMAT 1 MIDI FILE und kann daher nicht direkt abgespielt werden. Bitte laden Sie diesen Song komplett ein."
 	aligned_string "This is a FORMAT 1 MIDI FILE disk and cannot be played back."
@@ -47022,20 +46774,12 @@ LABEL_E9782E:	aligned_string "Este es un archivo MIDI de FORMATO 1 y no puede se
 	.byte 0xe9, 0x00
 LABEL_E979A2:	aligned_string "Satu masalah  terjadi terhadap data Sequencer anda. Ini mungkin berhubungan dengan dikset salah atau rusak."
 LABEL_E97A0E:	aligned_string "ERROR 20"
-	.ascii "Se ha producido un problema con sus datos SEQUENCER. Esto puede deberse a que el disco est"
-	.byte 0xe1
-	.asciz " estropeado."
-	.ascii "Je ne peux pas charger le SEQUENCER que vous me demandez! Cela est certainement d"
-	.byte 0xfb, 0x20, 0xe0
-	.ascii " une perte de donn"
+	.asciz "Se ha producido un problema con sus datos SEQUENCER. Esto puede deberse a que el disco est· estropeado."
+	.ascii "Je ne peux pas charger le SEQUENCER que vous me demandez! Cela est certainement d˚ ‡ une perte de donn"
 	inc	5, xbc
-	.ascii "s ou "
-	.byte 0xe0, 0x20, 0x75
-	.ascii "ne d"
-	.byte 0xe9, 0x74, 0xe9
+	.ascii "s ou ‡ une dÈtÈ"
 	aligned_string "rioration de la disquette."
-	.ascii "Die Sequenzerdaten sind nicht in Ordnung. Das kann an einer besch"
-	.byte 0xe4
+	.ascii "Die Sequenzerdaten sind nicht in Ordnung. Das kann an einer besch‰"
 	aligned_string "digten oder fehlerhaften Diskette liegen."
 	aligned_string "A problem has occurred with your Sequencer Data. This might be due to a damaged or faulty Disk."
 	.byte 0x5e, 0x7c
@@ -47057,15 +46801,9 @@ LABEL_E97A0E:	aligned_string "ERROR 20"
 	aligned_string "Perlu tekan PUNCH OUT untuk melengkapi prosedur."
 	aligned_string "ERROR 22"
 	aligned_string "Es necesario pulsar PUNCH OUT para completar este procedimiento."
-	.ascii "Vous devez presser PUNCH OUT pour terminer cette proc"
-	.byte 0xe9, 0x64, 0x75
+	.ascii "Vous devez presser PUNCH OUT pour terminer cette procÈdu"
 	.byte 0x72, 0x65, 0x2e, 0x00
-	.ascii "Um diesen Vorgang abzuschli"
-	.byte 0xdf
-	.ascii "en, m"
-	.byte 0xfc, 0x73, 0x73
-	.ascii "en Sie vorher PUNCH OUT dr"
-	.byte 0xfc
+	.ascii "Um diesen Vorgang abzuschliﬂen, m¸ssen Sie vorher PUNCH OUT dr¸"
 	aligned_string "cken."
 	aligned_string "It is necessary to press PUNCH OUT to complete this procedure."
 	.byte 0x86, 0x7f, 0xe9, 0x00, 0x24, 0x7f
@@ -47074,23 +46812,13 @@ LABEL_E97A0E:	aligned_string "ERROR 20"
 	.byte 0xe9, 0x00
 	aligned_string "Tidak mungkin diubah ke Time Signature (tanda waktu) karena sudah diset didalam Track yang sudah ada. "
 	aligned_string "ERROR 23"
-	.ascii "No es posible cambiar la signatura de tiempo porque "
-	.byte 0xe9
+	.ascii "No es posible cambiar la signatura de tiempo porque È"
 	aligned_string "ste ya ha sido ajustado en las pistas existentes."
-	.ascii "Je ne peux pas changer de mesure car vous en avez d"
-	.byte 0xe9
+	.ascii "Je ne peux pas changer de mesure car vous en avez dÈ"
 	jr	gt, 0xe0
-	.ascii " choisi une qui est m"
-	.byte 0xe9
-	.ascii "moris"
-	.byte 0xe9, 0x65, 0x20
-	.ascii "dans une piste enregistr"
+	.ascii " choisi une qui est mÈmorisÈe dans une piste enregistr"
 	.byte 0xe9, 0x65, 0x2e, 0x00
-	.ascii "Es ist jetzt nicht mehr m"
-	.byte 0xf6, 0x67, 0x6c
-	.ascii "ich das Taktvorzeichen zu "
-	.byte 0xe4
-	.asciz "ndern, da dieses bereits festgelegt wurde."
+	.asciz "Es ist jetzt nicht mehr mˆglich das Taktvorzeichen zu ‰ndern, da dieses bereits festgelegt wurde."
 	aligned_string "It is impossible to change the Time Signature because it has already been set in the existing Tracks."
 	.byte 0x68, 0x81, 0xe9, 0x00
 	.long LABEL_E9810C
@@ -47103,9 +46831,7 @@ LABEL_E98054:	aligned_string "ERROR 24"
 LABEL_E9805E:	aligned_string "Ya existe una pista de ritmo. No es posible asignar dos pistas al ritmo."
 LABEL_E980A8:	.ascii "Vous avez d"
 	.byte 0xe9, 0x6a, 0xe0, 0x20, 0x63
-	.ascii "hoisi une piste pour le rythme! Vous ne pouvez pas assigner deux pistes "
-	.byte 0xe0
-	.asciz " celui-ci."
+	.asciz "hoisi une piste pour le rythme! Vous ne pouvez pas assigner deux pistes ‡ celui-ci."
 LABEL_E9810C:	.ascii "Es ist nicht m"
 	.byte 0xf6
 	.asciz "glich, zwei RHYTHM-Spuren die gleiche Spurzuweisung (TRACK ASSIGN) zu geben."
@@ -47122,8 +46848,7 @@ LABEL_E98228:	aligned_string "Ya existe una pista de ritmo. No es posible asigna
 LABEL_E98274:	.ascii "Vous avez d"
 	.byte 0xe9
 	jr	gt, 0xe0
-	.ascii " choisi une piste pour le Chord! Vous ne pouvez pas assigner deux pistes "
-	.byte 0xe0
+	.ascii " choisi une piste pour le Chord! Vous ne pouvez pas assigner deux pistes ‡"
 	aligned_string " celui-ci."
 LABEL_E982D8:	.ascii "Es ist nicht m"
 	.byte 0xf6
@@ -47136,17 +46861,12 @@ LABEL_E98334:	aligned_string "A Chord Track already exists. It is impossible to 
 LABEL_E9839A:	aligned_string "Satu Control Track sudah ada. Tidak mungkin menunjuk 2 Track untuk satu Control."
 LABEL_E983EC:	aligned_string "ERROR 24"
 	.byte 0x59, 0x61
-	.ascii " existe una pista de ritmo. No es posible asignar dos pistas al autom"
-	.byte 0xe1
+	.ascii " existe una pista de ritmo. No es posible asignar dos pistas al autom·"
 	aligned_string "ticos."
 	.byte 0x56, 0x6f
-	.ascii "us avez d"
-	.byte 0xe9, 0x6a, 0xe0
-	.ascii " choisi une piste pour le Control! Vous ne pouvez pas assigner deux pistes "
-	.byte 0xe0
+	.ascii "us avez dÈj‡ choisi une piste pour le Control! Vous ne pouvez pas assigner deux pistes ‡"
 	aligned_string " celui-ci."
-	.ascii "Es ist nicht m"
-	.byte 0xf6
+	.ascii "Es ist nicht mˆ"
 	aligned_string "glich, zwei CONTROL-Spuren die gleiche Spurzuweisung (TRACK ASSIGN) zu geben."
 	aligned_string "A Control Track already exists. It is impossible to assign two Tracks to Control."
 	.byte 0xd0, 0x86, 0xe9, 0x00
@@ -47161,12 +46881,10 @@ LABEL_E985C8:	aligned_string "Ya existe una pista de ritmo. No es posible asigna
 LABEL_E98614:	.ascii "Vous avez d"
 	.byte 0xe9
 	jr	gt, 0xe0
-	.ascii " choisi une piste pour le APC! Vous ne pouvez pas assigner deux pistes "
-	.byte 0xe0
+	.ascii " choisi une piste pour le APC! Vous ne pouvez pas assigner deux pistes ‡"
 	aligned_string " celui-ci."
 	.byte 0x45, 0x73
-	.ascii " ist nicht m"
-	.byte 0xf6
+	.ascii " ist nicht mˆ"
 	aligned_string "glich, zwei APC-Spuren die gleiche Spurzuweisung (TRACK ASSIGN) zu geben."
 	aligned_string "A APC Track already exists. It is impossible to assign two Tracks to APC."
 	.byte 0x54, 0x88, 0xe9, 0x00, 0xfe, 0x87
@@ -47178,20 +46896,11 @@ LABEL_E98614:	.ascii "Vous avez d"
 	.byte 0x53, 0xf3
 	.ascii "lo es posible cambiar la velocidad en una pista de melod"
 	.byte 0xed, 0x61, 0x2e, 0x00
-	.ascii "Je ne peux changer la v"
-	.byte 0xe9
-	.ascii "locit"
-	.byte 0xe9, 0x20, 0x71
-	.ascii "ue d'une piste contenant une m"
+	.ascii "Je ne peux changer la vÈlocitÈ que d'une piste contenant une m"
 	dec	4, xbc
 	aligned_string "odie."
 	.byte 0x45, 0x73
-	.ascii " ist nicht m"
-	.byte 0xf6, 0x67, 0x6c, 0x69
-	.ascii "ch, die VELOCITY in einer Spur au"
-	.byte 0xdf
-	.ascii "er der Melodie-Spur zu ver"
-	.byte 0xe4, 0x6e, 0x64, 0x65
+	.ascii " ist nicht mˆglich, die VELOCITY in einer Spur auﬂer der Melodie-Spur zu ver‰nde"
 	.byte 0x72, 0x6e, 0x2e, 0x00
 	aligned_string "It is only possible to change the velocity on a Melody Track."
 	.byte 0x86, 0x8a, 0xe9, 0x00, 0x1e, 0x8a
@@ -47201,23 +46910,13 @@ LABEL_E98614:	.ascii "Vous avez d"
 	aligned_string "Ini hanya mungkin untuk menggabungkan Melody Tracks. Track seperti Rhythm, Chord dan Control tidak dapat digabungkan."
 	aligned_string "ERROR 26"
 	.byte 0x53, 0xf3
-	.ascii "lo es posible mezclar pistas de melod"
-	.byte 0xed
+	.ascii "lo es posible mezclar pistas de melodÌ"
 	aligned_string "as. Las pistas de ritmo, acorde y control no pueden mezclarse."
-	.ascii "Je ne peux fusionner que des pistes contenant une m"
-	.byte 0xe9, 0x6c, 0x6f
-	.ascii "die. Les pistes assign"
+	.ascii "Je ne peux fusionner que des pistes contenant une mÈlodie. Les pistes assign"
 	inc	5, xbc
-	.ascii "s au Rhythm, "
-	.byte 0xe0, 0x20, 0x43
-	.ascii "hord et "
-	.byte 0xe0
-	.ascii " Control ne peuvent "
-	.byte 0xea, 0x74, 0x72
-	.ascii "e fusionn"
+	.ascii "s au Rhythm, ‡ Chord et ‡ Control ne peuvent Ítre fusionn"
 	.byte 0xe9, 0x65, 0x73, 0x2e, 0x00, 0x53, 0x70
-	.ascii "uren wie RHYTHM, CHORD und CONTROL k"
-	.byte 0xf6
+	.ascii "uren wie RHYTHM, CHORD und CONTROL kˆ"
 	aligned_string "nnen nicht gemischt werden. Dieses geht nur mit Melodie-Spuren."
 	aligned_string "It is only possible to merge Melody Tracks. Tracks such as Rhythm, Chord and Control cannot be merged."
 	.byte 0xee, 0x8c
@@ -47227,29 +46926,11 @@ LABEL_E98614:	.ascii "Vous avez d"
 	aligned_string "Ini hanya mungkin untuk menggandakan Melody Tracks. Tracks seperti Rhythm, CHord and Control tidak dapat digandakan."
 	aligned_string "ERROR 27"
 	.byte 0x53, 0xf3
-	.ascii "lo es posible copiar pistas de melod"
-	.byte 0xed
+	.ascii "lo es posible copiar pistas de melodÌ"
 	aligned_string "as. Las pistas de ritmo, acorde y control no pueden mezclarse."
-	.ascii "Je ne peux copier que des pistes contenant une m"
-	.byte 0xe9, 0x6c, 0x6f, 0x64
-	.ascii "ie. Les pistes assign"
-	.byte 0xe9, 0x65, 0x73
-	.ascii " au Rhythm, "
-	.byte 0xe0, 0x20, 0x43, 0x68
-	.ascii "ord et "
-	.byte 0xe0
-	.ascii " Control ne peuvent pas "
-	.byte 0xea
-	.ascii "tre copi"
+	.ascii "Je ne peux copier que des pistes contenant une mÈlodie. Les pistes assignÈes au Rhythm, ‡ Chord et ‡ Control ne peuvent pas Ítre copi"
 	.byte 0xe9, 0x65, 0x73, 0x2e, 0x00, 0x45, 0x73
-	.ascii " ist nur m"
-	.byte 0xf6
-	.ascii "glich die "
-	.byte 0x84, 0x4d, 0x65
-	.ascii "lodie"
-	.byte 0x93, 0x2d, 0x53
-	.ascii "puren zu kopieren. Spuren wie RHYTHM, CHORD und CONTROL k"
-	.byte 0xf6
+	.ascii " ist nur mˆglich die ÑMelodieì-Spuren zu kopieren. Spuren wie RHYTHM, CHORD und CONTROL kˆ"
 	aligned_string "nnen nicht kopiert werden."
 	aligned_string "It is only possible to copy Melody Tracks. Tracks such as Rhythm, Chord and Control cannot be copied."
 	.byte 0x94, 0x8e, 0xe9, 0x00
@@ -47265,10 +46946,7 @@ LABEL_E98DB0:	.ascii "Esta canci"
 	.asciz "n dura demasiado para poder ser almacenada en un fichero MIDI."
 LABEL_E98DFA:	.ascii "Cette s"
 	.byte 0xe9
-	.ascii "quence est trop longue pour pouvoir "
-	.byte 0xea, 0x74
-	.ascii "re sauvegard"
-	.byte 0xe9
+	.ascii "quence est trop longue pour pouvoir Ítre sauvegardÈ"
 	aligned_string "e sous le format MIDI File."
 LABEL_E98E52:	aligned_string "Dieser Titel ist zu lang, um als MIDI File gespeichert zu werden."
 	aligned_string "This song is too long to be saved as a MIDI FILE."
@@ -47282,27 +46960,9 @@ LABEL_E98F68:	aligned_string "ERROR 29"
 LABEL_E98F72:	aligned_string "El fichero MIDI que usted ha tratado de cargar excede la capacidad de la memoria del KN3000 y no puede reproducirse. La memoria SEQUENCER ha sido borrada."
 	.byte 0x4c, 0x61
 	.byte 0x20, 0x73, 0xe9
-	.ascii "quence MIDI File que vous essayez de charger est trop longue pour ma capacit"
-	.byte 0xe9
-	.ascii " de m"
-	.byte 0xe9, 0x6d, 0x6f
-	.ascii "ire et je ne peux pas vous l'interpr"
-	.byte 0xe9, 0x74, 0x65, 0x72
-	.ascii ". J'ai r"
-	.byte 0xe9
-	.ascii "-initialis"
-	.byte 0xe9
-	.ascii " la m"
-	.byte 0xe9
-	.ascii "moire de mon s"
-	.byte 0xe9
+	.ascii "quence MIDI File que vous essayez de charger est trop longue pour ma capacitÈ de mÈmoire et je ne peux pas vous l'interprÈter. J'ai rÈ-initialisÈ la mÈmoire de mon sÈ"
 	aligned_string "quenceur."
-	.ascii "Der zu ladende MIDI File-Song "
-	.byte 0xfc
-	.ascii "berschreitet die interne Speicherkapazit"
-	.byte 0xe4
-	.ascii "t, und kann somit nicht gespielt werden. Der Sequenzer-Speicher wurde gel"
-	.byte 0xf6, 0x73, 0x63
+	.ascii "Der zu ladende MIDI File-Song ¸berschreitet die interne Speicherkapazit‰t, und kann somit nicht gespielt werden. Der Sequenzer-Speicher wurde gelˆsc"
 	.byte 0x68, 0x74, 0x2e, 0x00
 	aligned_string "The MIDI FILE that you have tried to load exceeds the memory capacity of the KN5000 and cannot be played. The Sequencer memory has been cleared."
 LABEL_E991EE:
@@ -47312,42 +46972,13 @@ LABEL_E991EE:
 	.byte 0xe9, 0x00, 0x06, 0x92, 0xe9, 0x00
 LABEL_E99206:	aligned_string "Ini tidak mungkin untuk mengubah Time Signature atau ukuran panjang Composer Pattern yang telah direkam. Jika anda ingin mengubahnya, pertama anda harus menghapus/menghilangkan semua Composer Pattern."
 LABEL_E992D0:	aligned_string "ERROR 30"
-	.ascii "No es posible cambiar la signatura de tiempo ni la duraci"
-	.byte 0xf3
-	.ascii "n del comp"
-	.byte 0xe1, 0x73
-	.ascii " de un patr"
-	.byte 0xf3
-	.ascii "n COMPOSER despu"
-	.byte 0xe9, 0x73, 0x20, 0x64
-	.ascii "e haber sido grabado. Si desea proseguir, usted tendr"
-	.byte 0xe1, 0x20, 0x71
-	.ascii "ue borrar primero todo el patr"
-	.byte 0xf3
+	.ascii "No es posible cambiar la signatura de tiempo ni la duraciÛn del comp·s de un patrÛn COMPOSER despuÈs de haber sido grabado. Si desea proseguir, usted tendr· que borrar primero todo el patrÛ"
 	aligned_string "n COMPOSER."
 	.ascii "Je ne peux pas changer la mesure ou la dur"
 	inc	5, xbc
-	.ascii " d'un style apr"
-	.byte 0xe8
-	.ascii "s qu'il ait "
-	.byte 0xe9, 0x74, 0xe9, 0x20
-	.ascii "enregistr"
-	.byte 0xe9
-	.ascii ". Si vous d"
-	.byte 0xe9, 0x73, 0x69
-	.ascii "rez modifier ces donn"
-	.byte 0xe9, 0x65, 0x73
-	.ascii " vous devez effacer la totalit"
-	.byte 0xe9
+	.ascii " d'un style aprËs qu'il ait ÈtÈ enregistrÈ. Si vous dÈsirez modifier ces donnÈes vous devez effacer la totalitÈ"
 	aligned_string " du style et recommencer l'enregistrement."
-	.ascii "Nach einer Aufnahme im COMPOSER ist es nicht mehr m"
-	.byte 0xf6, 0x67, 0x6c
-	.ascii "ich, das Takt-Ma"
-	.byte 0xdf
-	.ascii " bzw. die Pattern-L"
-	.byte 0xe4, 0x6e, 0x67, 0x65
-	.ascii " zu "
-	.byte 0xe4, 0x6e, 0x64, 0x65
+	.ascii "Nach einer Aufnahme im COMPOSER ist es nicht mehr mˆglich, das Takt-Maﬂ bzw. die Pattern-L‰nge zu ‰nde"
 	.byte 0x72, 0x6e, 0x2e, 0x00
 	aligned_string "It is not possible to change the Time Signature or measure length of a Composer Pattern after it has been recorded. If you want to proceed, you must first clear the entire Composer Pattern."
 	.byte 0x24, 0x99, 0xe9, 0x00, 0x78, 0x98
@@ -47356,36 +46987,13 @@ LABEL_E992D0:	aligned_string "ERROR 30"
 	.byte 0xe9, 0x00
 	aligned_string "Time Signature daripada Pattern yang anda sedang gandakan berbeda dari Composer Memory yang sedang dipergunakan. Juga : Ubahlah Time Signature dari Composer Memory atau, gandakan dari satu Pattern yang mempunyai Time Signature  yang sama."
 	aligned_string "ERROR 31"
-	.ascii "La signatura de tiempo del patr"
-	.byte 0xf3
-	.ascii "n del que est"
-	.byte 0xe1
-	.ascii " copiando es diferente de la que est"
-	.byte 0xe1, 0x20
-	.ascii "en la memoria COMPOSER que est"
-	.byte 0xe1, 0x20
-	.ascii "utilizando. Bien: Cambie la signatura de tiempode la memoria COMPOSER o: Copie un patr"
-	.byte 0xf3
+	.ascii "La signatura de tiempo del patrÛn del que est· copiando es diferente de la que est· en la memoria COMPOSER que est· utilizando. Bien: Cambie la signatura de tiempode la memoria COMPOSER o: Copie un patrÛ"
 	aligned_string "n que tenga la misma signatura de tiempo"
-	.ascii "La mesure du style que vous d"
-	.byte 0xe9, 0x73, 0x69
-	.ascii "rez copier est diff"
-	.byte 0xe9
-	.ascii "rente de celle qui est m"
-	.byte 0xe9, 0x6d, 0x6f, 0x72
+	.ascii "La mesure du style que vous dÈsirez copier est diffÈrente de celle qui est mÈmor"
 	.byte 0x69, 0x73, 0xe9
-	.ascii "e dans le COMPOSER que vous voulez utiliser. Vous pouvez: changer la mesure du COMPOSER ou: copier un style enre-gistr"
-	.byte 0xe9
-	.ascii " avec la m"
-	.byte 0xea
+	.ascii "e dans le COMPOSER que vous voulez utiliser. Vous pouvez: changer la mesure du COMPOSER ou: copier un style enre-gistrÈ avec la mÍ"
 	aligned_string "memesure."
-	.ascii "Das gerade kopierte Pattern hat ein anderes Takt-Ma"
-	.byte 0xdf
-	.ascii " als Ihr COMPOSER. Entweder: Sie "
-	.byte 0xe4, 0x6e, 0x64
-	.ascii "ern das Takt-Ma"
-	.byte 0xdf
-	.ascii " im COMPOSER. oder: Sie kopieren ein Pattern mit gleichem Takt-Ma"
+	.ascii "Das gerade kopierte Pattern hat ein anderes Takt-Maﬂ als Ihr COMPOSER. Entweder: Sie ‰ndern das Takt-Maﬂ im COMPOSER. oder: Sie kopieren ein Pattern mit gleichem Takt-Ma"
 	.byte 0xdf, 0x2e, 0x00
 	aligned_string "The Time Signature of the Pattern from which you are copying is different from the Composer Memory that you are using. Either: Change the Time Signature of the Composer Memory or: Copy from a Pattern that has the same Time Signature."
 	jr	nz, 0x9a
@@ -47406,22 +47014,11 @@ LABEL_E992D0:	aligned_string "ERROR 30"
 	.byte 0xe9, 0x00
 	aligned_string "Kode identifikasi (ID) dari data System Exclusive produk yang berbeda diterima oleh KN-5000"
 	aligned_string "ERROR 40"
-	.ascii "El c"
-	.byte 0xf3, 0x64, 0x69, 0x67
-	.ascii "o de identificaci"
-	.byte 0xf3
+	.ascii "El cÛdigo de identificaciÛ"
 	aligned_string "n (ID) de los datos exclusivos del sistema recibidos por el KN3000 son para un aparato diferente."
-	.ascii "Le code d'identificaiton (ID) de donn"
-	.byte 0xe9
-	.ascii "es de Syst"
-	.byte 0xe8, 0x6d, 0x65, 0x20
-	.ascii "Exclusif ne correspond pas au mien. Ces donn"
-	.byte 0xe9, 0x65, 0x73, 0x20
-	.ascii "ne sont pas destin"
-	.byte 0xe9, 0x65, 0x73, 0x20, 0xe0
+	.ascii "Le code d'identificaiton (ID) de donnÈes de SystËme Exclusif ne correspond pas au mien. Ces donnÈes ne sont pas destinÈes ‡"
 	aligned_string " un KN3000!"
-	.ascii "Der Identifikations (ID) Code der zu empfangenden System Exclusive Daten ist f"
-	.byte 0xfc
+	.ascii "Der Identifikations (ID) Code der zu empfangenden System Exclusive Daten ist f¸"
 	aligned_string "r ein anderes Produkt bestimmt."
 	aligned_string "The Identification (ID) code of the System Exclusive data received by the KN5000 is different product."
 	.byte 0x70, 0x9f, 0xe9, 0x00
@@ -47434,31 +47031,15 @@ LABEL_E99CEC:	aligned_string "Satu kesalahan sudah terjadi sejak penerimaan data
 LABEL_E99D86:	aligned_string "ERROR 41"
 LABEL_E99D90:	.ascii "Se ha producido un error durante la recepci"
 	.byte 0xf3
-	.ascii "n de datos exclusivos del sistema. Los datos del dispositivo de transmisi"
-	.byte 0xf3, 0x6e, 0x20
-	.ascii "quiz"
-	.byte 0xe1, 0x20, 0x6e, 0x6f
-	.ascii " est"
-	.byte 0xe9
+	.ascii "n de datos exclusivos del sistema. Los datos del dispositivo de transmisiÛn quiz· no estÈ"
 	aligned_string "n completos. Pruebe otra vez."
 LABEL_E99E34:	.ascii "Une erreur s'est produite pendant la r"
 	.byte 0xe9
-	.ascii "ception des donn"
-	.byte 0xe9
-	.ascii "es de Syst"
+	.ascii "ception des donnÈes de Syst"
 	dec	5, xwa
-	.ascii "e Exclusif. Il se peut que les donn"
-	.byte 0xe9
-	.ascii "es transmises soient incompl"
-	.byte 0xe8
-	.ascii "tes. Recommencez, s'il vous pla"
+	.ascii "e Exclusif. Il se peut que les donnÈes transmises soient incomplËtes. Recommencez, s'il vous pla"
 	.byte 0xee, 0x74, 0x21, 0x00
-	.ascii "Beim Empfang der System Exclusive Daten ist ein Fehler aufgetreten. M"
-	.byte 0xf6
-	.ascii "glicherweise war die "
-	.byte 0xdc
-	.ascii "bertragung unvollst"
-	.byte 0xe4
+	.ascii "Beim Empfang der System Exclusive Daten ist ein Fehler aufgetreten. Mˆglicherweise war die ‹bertragung unvollst‰"
 	aligned_string "ndig. Bitte noch einmal versuchen."
 	aligned_string "An error has occurred during System Exclusive data reception. The data from the transmitting device may be incomplete. Please try again."
 	.byte 0x4c, 0xa2, 0xe9, 0x00, 0xbe, 0xa1
@@ -47467,25 +47048,16 @@ LABEL_E99E34:	.ascii "Une erreur s'est produite pendant la r"
 	.byte 0xe9, 0x00
 	aligned_string "Satu kesalahan sudah terjadi sejak System Exclusive ditransfer. Data masih belum diterima dengan benar. Harap dicoba kembali."
 	aligned_string "ERROR 42"
-	.ascii "Se ha producido un error durante la transmisi"
-	.byte 0xf3
+	.ascii "Se ha producido un error durante la transmisiÛ"
 	aligned_string "n exclusiva del sistema. Los datos no se han recibido correctamente. Pruebe otra vez."
 	.byte 0x55, 0x6e
-	.ascii "e erreur s'est produite lors de la transmission des donn"
-	.byte 0xe9
-	.ascii "es de Syst"
-	.byte 0xe8
-	.ascii "me Exclusif. Les donn"
-	.byte 0xe9
-	.ascii "es n'ont pas "
-	.byte 0xe9
+	.ascii "e erreur s'est produite lors de la transmission des donnÈes de SystËme Exclusif. Les donnÈes n'ont pas È"
 	.byte 0x74, 0xe9, 0x20, 0x72, 0x65, 0xe7, 0x75, 0x65
 	.ascii "s correctement. Recommencez, s'il vous pla"
 	.byte 0xee, 0x74, 0x21, 0x00, 0x42, 0x65
 	.ascii "i der "
 	inc	2, ix
-	.ascii "ertragung der System Exclusive Daten ist ein Fehler aufgetreten. Die Daten wurden vom empfangenden Ger"
-	.byte 0xe4
+	.ascii "ertragung der System Exclusive Daten ist ein Fehler aufgetreten. Die Daten wurden vom empfangenden Ger‰"
 	aligned_string "t nicht korrekt verstanden."
 	aligned_string "An error has occurred during System Exclusive transmission. The data has not been received correctly. Please try again."
 	.byte 0x42, 0xa5, 0xe9, 0x00
@@ -47498,27 +47070,17 @@ LABEL_E9A2DC:	aligned_string "File yang sedang anda coba untuk dimuat/disimpan s
 LABEL_E9A378:	aligned_string "ERROR 43"
 LABEL_E9A382:	.ascii "El fichero que trata de cargar fue almacenado en un teclado KN anterior. S"
 	.byte 0xf3, 0x6c, 0x6f, 0x20
-	.ascii "es posible cargar utilizando la opci"
-	.byte 0xf3, 0x6e, 0x20, 0x93
+	.ascii "es posible cargar utilizando la opciÛn ì"
 	.byte 0x41, 0x4c, 0x4c, 0x94, 0x2e, 0x00
 LABEL_E9A3FE:
 	.byte 0x4c, 0x65
-	.ascii " fichier que vous essayez de charger a "
-	.byte 0xe9
+	.ascii " fichier que vous essayez de charger a È"
 	.byte 0x74, 0xe9
-	.ascii " sauvegard"
-	.byte 0xe9, 0x20, 0xe0, 0x20
-	.ascii "partir d'un clavier KN ant"
-	.byte 0xe9
-	.ascii "rieur. Vous ne pouvez le charger qu'en utilisant l'option "
-	.byte 0x93, 0x41, 0x4c
+	.ascii " sauvegardÈ ‡ partir d'un clavier KN antÈrieur. Vous ne pouvez le charger qu'en utilisant l'option ìAL"
 	.byte 0x4c, 0x94, 0x2e, 0x00
 LABEL_E9A494:	.ascii "Der Datensatz (File), den Sie gerade laden m"
 	.byte 0xf6
-	.ascii "chten, wurde auf einem "
-	.byte 0xe4
-	.ascii "lteren KN-Keybord gespeichert. In diesem Fall kann nur unter Verwendung der "
-	.byte 0x84, 0x41, 0x4c
+	.ascii "chten, wurde auf einem ‰lteren KN-Keybord gespeichert. In diesem Fall kann nur unter Verwendung der ÑAL"
 	.byte 0x4c, 0x93
 	aligned_string "-Option geladen werden."
 	aligned_string "The file that you are trying to load was saved on a previous KN keyboard. It is only possible to load using the \"PERFORMANCE\" option."
@@ -47533,22 +47095,17 @@ LABEL_E9A5E0:	aligned_string "Tidak mungkin untuk meng-edit satu Drum Kit. Silah
 LABEL_E9A662:	aligned_string "ERROR 44"
 LABEL_E9A66C:	.ascii "No es posible editar un juego de bater"
 	.byte 0xed
-	.ascii "a. Por favor, seleccione un sonido diferente de cualquier grupo excepto percusi"
-	.byte 0xf3
+	.ascii "a. Por favor, seleccione un sonido diferente de cualquier grupo excepto percusiÛ"
 	aligned_string "n de teclado."
 LABEL_E9A6F2:	.ascii "Il est impossible d'"
 	inc	4, xbc
 	.ascii "iter un Kit de percussions. Veuillez s"
 	dec	4, xbc
-	.ascii "ectionner une sonorit"
-	.byte 0xe9, 0x20, 0x64
-	.ascii "'un autre groupe except"
-	.byte 0xe9
+	.ascii "ectionner une sonoritÈ d'un autre groupe exceptÈ"
 	aligned_string " \"Keyboard Percussion\"."
 LABEL_E9A778:	.ascii "Es ist nicht m"
 	.byte 0xf6, 0x67
-	.ascii "lich ein Drum Kit zu editieren. Bitte w"
-	.byte 0xe4
+	.ascii "lich ein Drum Kit zu editieren. Bitte w‰"
 	aligned_string "hlen Sie einen Klang aus einer anderen Gruppe ausser Keyboard Percussion."
 LABEL_E9A7FA:	aligned_string "It is impossible to edit a Drum Kit. Please select a different sound from any group except Keyboard Percussion."
 LABEL_E9A86A:
@@ -47562,25 +47119,12 @@ LABEL_E9A8EC:	aligned_string "ERROR 46"
 	.ascii "lo es posible insertar pistas de melod"
 	inc	1, xiy
 	aligned_string "s. Las pistas tales como ritmo, acorde y control no pueden ser insertadas."
-	.ascii "Il est seulement possible d'ins"
-	.byte 0xe9
-	.ascii "rer des pistes comportant une m"
-	.byte 0xe9
-	.ascii "lodie. Des pistes assign"
-	.byte 0xe9, 0x65, 0x73, 0x20
+	.ascii "Il est seulement possible d'insÈrer des pistes comportant une mÈlodie. Des pistes assignÈes "
 	.byte 0xe0
-	.ascii " Rhythm, Chord and Control ne peuvent "
-	.byte 0xea
-	.ascii "tre ins"
-	.byte 0xe9
+	.ascii " Rhythm, Chord and Control ne peuvent Ítre insÈ"
 	.byte 0x72, 0xe9, 0x65, 0x73, 0x2e, 0x00, 0x45, 0x73
 	.byte 0x20, 0x6b, 0xf6
-	.ascii "nnen nur Melodie-Spuren eingef"
-	.byte 0xfc
-	.ascii "gt werden. Spuren wie Rhythm, Chord und Control k"
-	.byte 0xf6
-	.ascii "nnen nicht eingef"
-	.byte 0xfc
+	.ascii "nnen nur Melodie-Spuren eingef¸gt werden. Spuren wie Rhythm, Chord und Control kˆnnen nicht eingef¸"
 	aligned_string "gt werden."
 	aligned_string "It is only possible to insert Melody Tracks. Tracks such as Rhythm, Chord and Control cannot be inserted."
 	.byte 0xe2, 0xac, 0xe9, 0x00
@@ -47618,11 +47162,7 @@ LABEL_E9AE30:	.ascii "La disquette ins"
 	.asciz "e est de type\"2HD\". Dans ce mode, vous pouvez utiliser uniquement une disquette \"2DD\"."
 LABEL_E9AE9A:	.ascii "Die eingelegte Diskette ist ein "
 	.byte 0x84
-	.ascii "2HD\" Typ. In diesem Modus k"
-	.byte 0xf6, 0x6e
-	.ascii "nen nur "
-	.byte 0x84
-	.asciz "2DD\" Disketten verwendet werden."
+	.asciz "2HD\" Typ. In diesem Modus kˆnnen nur Ñ2DD\" Disketten verwendet werden."
 LABEL_E9AF02:	.asciz "The type of inserted DISK is \"2HD\".  It can be used only \"2DD\"  type in this mode."
 	.byte 0xff, 0xea, 0xb1
 	.byte 0xe9, 0x00, 0x36, 0xb1, 0xe9, 0x00, 0x8a, 0xb0
@@ -47630,37 +47170,12 @@ LABEL_E9AF02:	.asciz "The type of inserted DISK is \"2HD\".  It can be used only
 	.byte 0xe9, 0x00, 0x6e, 0xaf, 0xe9, 0x00
 LABEL_E9AF6E:	aligned_string "Jumlah lagu melebihi kapasitas KN-5000. Coba lagi sesudah dikurangi jumlahnya seperti menghilangkan TRACK atau MEASURE."
 LABEL_E9AFE6:	aligned_string "ERROR 49"
-	.ascii "La longitud de esta canci"
-	.byte 0xf3
-	.ascii "n supera la capacidad del KN5000. Por favor trate de reducir la longitud (por ejemplo, omita los par"
-	.byte 0xe1, 0x6d
-	.ascii "etros de pista o comp"
-	.byte 0xe1, 0x73, 0x29
+	.ascii "La longitud de esta canciÛn supera la capacidad del KN5000. Por favor trate de reducir la longitud (por ejemplo, omita los par·metros de pista o comp·s)"
 	.byte 0x2e, 0x00
-	.ascii "La taille de cette s"
-	.byte 0xe9, 0x71
-	.ascii "uence d"
-	.byte 0xe9
-	.ascii "passe la capacit"
-	.byte 0xe9
-	.ascii " du KN5000. Veuillez essayer "
-	.byte 0xe0, 0x20
-	.ascii " nouveau apr"
-	.byte 0xe8, 0x73, 0x20, 0x61
-	.ascii "voir diminu"
-	.byte 0xe9
-	.ascii " sa taille en "
-	.byte 0xe9
+	.ascii "La taille de cette sÈquence dÈpasse la capacitÈ du KN5000. Veuillez essayer ‡  nouveau aprËs avoir diminuÈ sa taille en È"
 	aligned_string "liminant des pistes TRACK ou des mesures MEASURE."
 	.byte 0x44, 0x69
-	.ascii "e Gr"
-	.byte 0xf6, 0xdf, 0x65, 0x20
-	.ascii "dieses Songs "
-	.byte 0xfc, 0x62, 0x65
-	.ascii "rsteigt die Kapazit"
-	.byte 0xe4
-	.ascii "t des SX-KN5000. Versuchen Sie es nocheinmal, nachdem Sie den Song verkleinert haben, z.B. durch L"
-	.byte 0xf6
+	.ascii "e Grˆﬂe dieses Songs ¸bersteigt die Kapazit‰t des SX-KN5000. Versuchen Sie es nocheinmal, nachdem Sie den Song verkleinert haben, z.B. durch Lˆ"
 	aligned_string "schen von Spuren oder von Takten."
 	aligned_string "The quantity of  this song is over the capacity of GN7/GN9/FN3. Please try again after reducing the quantity like omitting the TRACK or MEASURE."
 LABEL_E9B27C:
@@ -47677,24 +47192,12 @@ LABEL_E9B3C4:	.ascii "Il n'est pas possible d'effectuer un enregistrement en uti
 	.byte 0xe9, 0x73, 0xe9, 0x6c, 0x65
 	.ascii "ctionn"
 	inc	5, xbc
-	.ascii "s, compil"
-	.byte 0xe9
-	.ascii "es ou de contr"
-	.byte 0xf4
-	.ascii "le. Veuillez s"
-	.byte 0xe9
-	.ascii "lectionner l'une des banques r"
-	.byte 0xe9, 0x73
+	.ascii "s, compilÈes ou de contrÙle. Veuillez sÈlectionner l'une des banques rÈs"
 	.byte 0x65, 0x72, 0x76, 0xe9, 0x65, 0x73, 0x20, 0xe0
 	aligned_string " l'utilisateur."
 LABEL_E9B480:	.ascii "Es ist nicht m"
 	.byte 0xf6, 0x67
-	.ascii "lich auf Preset-, Re-Group- oder Control-B"
-	.byte 0xe4
-	.ascii "nke aufzunehmen. Bitte w"
-	.byte 0xe4
-	.ascii "hlen Sie eine der User-B"
-	.byte 0xe4
+	.ascii "lich auf Preset-, Re-Group- oder Control-B‰nke aufzunehmen. Bitte w‰hlen Sie eine der User-B‰"
 	aligned_string "nke aus."
 	aligned_string "It is not possible to record using preset banks, compile banks, or control banks.  Please select one of the user banks."
 	.byte 0x7e, 0xb8
@@ -47704,30 +47207,13 @@ LABEL_E9B480:	.ascii "Es ist nicht m"
 LABEL_E9B586:	aligned_string "Special Tracks seperti Chord/APC, Rhythm dan Control sudah tersedia dari lagu yang sedang anda gandakan dan tidak kompatibel dengan tujuan lagu karena ini ada dalam GM Mode."
 LABEL_E9B634:	aligned_string "ERROR 55"
 	.byte 0x45, 0x6e
-	.ascii " la canci"
-	.byte 0xf3
-	.ascii "n que usted est"
-	.byte 0xe1
-	.ascii " tratando de copiar existen pistas especiales tales como acordes/acordes autom"
-	.byte 0xe1
-	.ascii "ticos, ritmo y control que son incompatibles con la canci"
-	.byte 0xf3
-	.ascii "n de destino, porque "
-	.byte 0xe9
+	.ascii " la canciÛn que usted est· tratando de copiar existen pistas especiales tales como acordes/acordes autom·ticos, ritmo y control que son incompatibles con la canciÛn de destino, porque È"
 	aligned_string "sta utiliza el modo MIDI General."
-	.ascii "Des pistes assign"
-	.byte 0xe9, 0x65, 0x73
+	.ascii "Des pistes assignÈes"
 	ldb	w, 0xe0
-	.ascii " Chord/APC, Rhythm et Control existent dans la s"
-	.byte 0xe9
-	.ascii "quence que vous d"
-	.byte 0xe9, 0x73, 0x69, 0x72
-	.ascii "ez copier et sont incompatibles avec la s"
-	.byte 0xe9
+	.ascii " Chord/APC, Rhythm et Control existent dans la sÈquence que vous dÈsirez copier et sont incompatibles avec la sÈ"
 	aligned_string "quence de destination en mode GM."
-	.ascii "In dem Song den Sie kopieren m"
-	.byte 0xf6
-	.asciz "chten befinden sich Spuren wie Chord/APC, Rhythm und Control. Diese Spuren sind mit dem Ziel-Song nicht kompatibel, da dieser im GM-Modus gespeichert ist."
+	.asciz "In dem Song den Sie kopieren mˆchten befinden sich Spuren wie Chord/APC, Rhythm und Control. Diese Spuren sind mit dem Ziel-Song nicht kompatibel, da dieser im GM-Modus gespeichert ist."
 	aligned_string "Special Tracks such as Chord/APC, Rhythm and Control exist in the song from which you are copying and are  incompatible with the destination song because it is in GM mode."
 	.byte 0x74, 0xbb, 0xe9, 0x00, 0xd2, 0xba
 	.byte 0xe9, 0x00, 0x48, 0xba, 0xe9, 0x00, 0xbe, 0xb9
@@ -47736,27 +47222,13 @@ LABEL_E9B634:	aligned_string "ERROR 55"
 	aligned_string "Rekaman AUTO PUNCH belum berhasil karena pengoperasian SEQUENCER terganggu sebelum ukuran Punch Out  dinaikkan. "
 	aligned_string "ERROR 56"
 	.byte 0x4e, 0x6f
-	.ascii " ha tenido "
-	.byte 0xe9
-	.ascii "xito la grabaci"
-	.byte 0xf3
-	.ascii "n GOLPE AUTOMATICO porque se interrumpi"
-	.byte 0xf3
-	.ascii " la operaci"
-	.byte 0xf3
-	.ascii "n del secuenciador antes de llegar al comp"
-	.byte 0xe1
-	.asciz "s SIN GOLPE."
+	.asciz " ha tenido Èxito la grabaciÛn GOLPE AUTOMATICO porque se interrumpiÛ la operaciÛn del secuenciador antes de llegar al comp·s SIN GOLPE."
 	.ascii "L'enregistrement AUTO PUNCH a "
 	inc	3, xbc
 	.byte 0x68, 0x6f, 0x75, 0xe9
-	.ascii " car le fonctionnement du SEQUENCER a "
-	.byte 0xe9, 0x74, 0xe9, 0x20, 0x69, 0x6e
-	.ascii "terrompu avant que la mesure PUNCH OUT ait "
-	.byte 0xe9, 0x74, 0xe9
+	.ascii " car le fonctionnement du SEQUENCER a ÈtÈ interrompu avant que la mesure PUNCH OUT ait ÈtÈ"
 	aligned_string " atteinte."
-	.ascii "Der AUTO PUNCH-Aufnahmevorgang konnte nicht erfolgreich abgeschlossen werden, da der SEQUENCER-Betrieb vor Erreichen des PUNCH OUT-Taktma"
-	.byte 0xdf
+	.ascii "Der AUTO PUNCH-Aufnahmevorgang konnte nicht erfolgreich abgeschlossen werden, da der SEQUENCER-Betrieb vor Erreichen des PUNCH OUT-Taktmaﬂ"
 	aligned_string "es unterbrochen wurde."
 	aligned_string "AUTO PUNCH recording has been unsuccessful because SEQUENCER operation was interrupted before the PUNCH OUT measure was reached."
 	.byte 0xac, 0xbe
@@ -47766,23 +47238,12 @@ LABEL_E9B634:	aligned_string "ERROR 55"
 	aligned_string "Contoh-contoh Composer yang sudah dipilih mempunyai satu perbedaan tanda waktu (perbedaan Time Signature) atau nomor-nomor ukuran dari pattern lain dalam COMPOSER CHORD MAP."
 	aligned_string "ERROR 57"
 	.byte 0x45, 0x6c
-	.ascii " patr"
-	.byte 0xf3, 0x6e, 0x20
-	.ascii "del Composer seleccionado tiene una se"
-	.byte 0xf1, 0x61
-	.ascii "l musical de identificaci"
-	.byte 0xf3
-	.ascii "n o n"
-	.byte 0xfa
+	.ascii " patrÛn del Composer seleccionado tiene una seÒal musical de identificaciÛn o n˙"
 	aligned_string "mero de compases diferente de los otros patrones de este mapa de acordes del Composer."
-	.ascii "Le motif COMPOSER que vous avez choisi a une fraction de mesure ou un nombre de mesures diff"
-	.byte 0xe9
+	.ascii "Le motif COMPOSER que vous avez choisi a une fraction de mesure ou un nombre de mesures diffÈ"
 	aligned_string "rent des autres motifs de ce COMPOSER CHORD MAP."
 	.byte 0x44, 0x61
-	.ascii "s gew"
-	.byte 0xe4, 0x68, 0x6c
-	.ascii "te COMPOSER-Muster weist ein unterschiedliches Taktvorzeichen oder eine unterschiedliche Anzahl von Taktma"
-	.byte 0xdf
+	.ascii "s gew‰hlte COMPOSER-Muster weist ein unterschiedliches Taktvorzeichen oder eine unterschiedliche Anzahl von Taktmaﬂ"
 	aligned_string "en als andere Muster in dieser COMPOSER CHORD MAP auf. "
 	aligned_string "The COMPOSER pattern you have chosen has a different time signature or number of measures from the other patterns in this COMPOSER CHORD MAP."
 	.byte 0xe8, 0xc1, 0xe9, 0x00, 0x1e, 0xc1
@@ -47791,45 +47252,12 @@ LABEL_E9B634:	aligned_string "ERROR 55"
 	.byte 0xe9, 0x00
 	aligned_string "Lagu yang anda coba panggil,  melebihi kemampuan memori KN-5000 , dan tidak dapat dipanggil. Penyimpanan lagu pilihan sudah jelas."
 	aligned_string "ERROR 58"
-	.ascii "La canci"
-	.byte 0xf3
-	.ascii "n que ha tratado de cargar supera la memoria disponible del KN3000 y no puede cargarse. Se ha borrado la memoria de la canci"
-	.byte 0xf3
+	.ascii "La canciÛn que ha tratado de cargar supera la memoria disponible del KN3000 y no puede cargarse. Se ha borrado la memoria de la canciÛ"
 	aligned_string "n seleccionada."
 	.byte 0x4c, 0x65
-	.ascii " morceau que vous avez essay"
-	.byte 0xe9, 0x20, 0x64, 0x65
-	.ascii " charger d"
-	.byte 0xe9
-	.ascii "passe la capacit"
-	.byte 0xe9
-	.ascii " de m"
-	.byte 0xe9
-	.ascii "moire du KN3000 et ne peut donc pas "
-	.byte 0xea, 0x74
-	.ascii "re charg"
-	.byte 0xe9
-	.ascii ". La m"
-	.byte 0xe9
-	.ascii "moire de morceau s"
-	.byte 0xe9
-	.ascii "lectionn"
-	.byte 0xe9
-	.ascii "e a "
-	.byte 0xe9, 0x74, 0xe9
-	.ascii " effac"
+	.ascii " morceau que vous avez essayÈ de charger dÈpasse la capacitÈ de mÈmoire du KN3000 et ne peut donc pas Ítre chargÈ. La mÈmoire de morceau sÈlectionnÈe a ÈtÈ effac"
 	.byte 0xe9, 0x65, 0x2e, 0x20, 0x00, 0x44, 0x69
-	.ascii "e Melodie, die Sie zu laden versuchten, "
-	.byte 0xfc
-	.ascii "bersteigt die verf"
-	.byte 0xfc
-	.ascii "gbare Speicherkapazit"
-	.byte 0xe4
-	.ascii "t des Modells KN3000, und kann daher nicht geladen werden. Der Inhalt des gew"
-	.byte 0xe4
-	.ascii "hlten Melodiespeichers wurde gel"
-	.byte 0xf6
-	.asciz "scht. "
+	.asciz "e Melodie, die Sie zu laden versuchten, ¸bersteigt die verf¸gbare Speicherkapazit‰t des Modells KN3000, und kann daher nicht geladen werden. Der Inhalt des gew‰hlten Melodiespeichers wurde gelˆscht. "
 	aligned_string "The song that you have tried to load exceeds the KN5000's available memory and cannot be loaded. The selected song memory has been cleared. "
 	.byte 0x9e, 0xc4
 	.byte 0xe9, 0x00, 0xf2, 0xc3, 0xe9, 0x00, 0x4a, 0xc3
@@ -47841,33 +47269,11 @@ LABEL_E9B634:	aligned_string "ERROR 55"
 	.ascii "RKB et LKB sont des pistes d"
 	inc	4, xbc
 	.byte 0x69, 0xe9, 0x65, 0x73, 0x20, 0xe0, 0x20, 0x6c
-	.ascii "a compatibilit"
-	.byte 0xe9, 0x20
-	.ascii "avec les donn"
-	.byte 0xe9, 0x65, 0x73
-	.ascii " de s"
-	.byte 0xe9, 0x71, 0x75
-	.ascii "ence issues des mod"
-	.byte 0xe8
-	.ascii "les PR pr"
-	.byte 0xe9, 0x63, 0xe9
-	.ascii "dents. Elles ne peuvent "
-	.byte 0xea
-	.ascii "tre "
-	.byte 0xe9, 0x64, 0x69
+	.ascii "a compatibilitÈ avec les donnÈes de sÈquence issues des modËles PR prÈcÈdents. Elles ne peuvent Ítre Èdi"
 	.byte 0x74, 0xe9
-	.ascii "es ou r"
-	.byte 0xe9
-	.ascii "-enregistr"
-	.byte 0xe9, 0x65, 0x73, 0x2e
+	.ascii "es ou rÈ-enregistrÈes."
 	.byte 0x00, 0xff
-	.ascii "RKB und LKB sind spezielle Spuren f"
-	.byte 0xfc, 0x72, 0x20
-	.ascii "die Kompatibilit"
-	.byte 0xe4
-	.ascii "t mit Sequenzerdaten der aktuellen PR Digital Ensembles. Diese Spuren k"
-	.byte 0xf6
-	.asciz "nnen nicht aufgenommen oder editiert werden."
+	.asciz "RKB und LKB sind spezielle Spuren f¸r die Kompatibilit‰t mit Sequenzerdaten der aktuellen PR Digital Ensembles. Diese Spuren kˆnnen nicht aufgenommen oder editiert werden."
 	aligned_string "RKB and LKB are special tracks for compatibility with sequencer data from previous PR products. They cannot be edited or recorded on."
 	.byte 0xe0, 0xc7, 0xe9, 0x00
 	.long LABEL_E9C6FC
@@ -47885,21 +47291,9 @@ LABEL_E9C54C:	.ascii "RKB y LKB son pistas especiales que no pueden ser empleada
 LABEL_E9C62A:	.ascii "RKB et LKB sont des pistes d"
 	inc	4, xbc
 	jr	ge, 0xe9
-	.ascii "es qui ne peuvent "
-	.byte 0xea, 0x74, 0x72, 0x65
-	.ascii " utilis"
-	.byte 0xe9
-	.ascii "es en association avec les pistes assign"
-	.byte 0xe9, 0x65, 0x73, 0x20, 0xe0, 0x20, 0x52, 0x69
-	.ascii "ght1,Right2,Left et APC. Veuillez r"
-	.byte 0xe9
-	.ascii "- assigner RKB et LKB "
-	.byte 0xe0
-	.ascii " d'autres parties et essayez "
-	.byte 0xe0
+	.ascii "es qui ne peuvent Ítre utilisÈes en association avec les pistes assignÈes ‡ Right1,Right2,Left et APC. Veuillez rÈ- assigner RKB et LKB ‡ d'autres parties et essayez ‡"
 	aligned_string " nouveau."
-	.ascii "RKB und LKB sind spezielle Spuren, die nicht in Verbindung mit Right 1, Right 2, Left und APC Spuren verwendet werden k"
-	.byte 0xf6
+	.ascii "RKB und LKB sind spezielle Spuren, die nicht in Verbindung mit Right 1, Right 2, Left und APC Spuren verwendet werden kˆ"
 	aligned_string "nnen. Bitte belegen Sie die RKB und LKB Spuren mit einer anderen Klanggruppe und versuchen es noch einmal."
 	aligned_string "RKB and LKB are special tracks which cannot be used in conjunction with Right1,Right2,Left and APC tracks. Please re-assign RKB and LKB to any other part and try again."
 	.byte 0x9e, 0xca, 0xe9, 0x00, 0x28, 0xca
@@ -47908,21 +47302,12 @@ LABEL_E9C62A:	.ascii "RKB et LKB sont des pistes d"
 	.byte 0xe9, 0x00
 	aligned_string "Tidak mungkin untuk meng-edit Orchestral Kit dan Sound Effect Kit. Silahkan pilih satu Drum Kit yang berbeda."
 	aligned_string "(ERROR 61)dkit"
-	.ascii "No es posible editar ni el conjunto de orquesta ni el conjunto de efectos de sonido. Por favor, seleccione un conjunto de bater"
-	.byte 0xed
+	.ascii "No es posible editar ni el conjunto de orquesta ni el conjunto de efectos de sonido. Por favor, seleccione un conjunto de baterÌ"
 	aligned_string "a diferente."
 	.byte 0x49, 0x6c
-	.ascii " est impossible d'"
-	.byte 0xe9
-	.ascii "diter les kits \"Orchestral\" et \"Sound Effect\".Veuillez s"
-	.byte 0xe9
-	.ascii "lectionner un kit de percussions diff"
-	.byte 0xe9
+	.ascii " est impossible d'Èditer les kits \"Orchestral\" et \"Sound Effect\".Veuillez sÈlectionner un kit de percussions diffÈ"
 	aligned_string "rent."
-	.ascii "Das Orchestral Kit und das Sound Effect Kit k"
-	.byte 0xf6, 0x6e, 0x6e
-	.ascii "en nicht editiert werden. Bitte w"
-	.byte 0xe4
+	.ascii "Das Orchestral Kit und das Sound Effect Kit kˆnnen nicht editiert werden. Bitte w‰"
 	aligned_string "hlen Sie ein anderes Drum-Kit aus."
 	aligned_string "It is impossible to edit the Orchestral Kit and Sound Effect Kit. Please select a different Drum Kit ."
 	.byte 0x60, 0xce
@@ -47931,27 +47316,9 @@ LABEL_E9C62A:	.ascii "RKB et LKB sont des pistes d"
 	.byte 0xe9, 0x00, 0x1e, 0xcb, 0xe9, 0x00
 	aligned_string "Hubungan komputer tidak aktif karena \" pintu masuk \" komputer diset ke MIDI.  Silahkan matikan arus listrik (power off), dan atur posisi seting yang dikehendaki kemudian hidupkan kembali."
 	aligned_string "ERROR 62"
-	.ascii "La conexi"
-	.byte 0xf3, 0x6e, 0x20
-	.ascii "con la computadora no est"
-	.byte 0xe1
-	.ascii " activa porque su conmutador de puerto est"
-	.byte 0xe1, 0x20, 0x63, 0x6f
-	.ascii "nfigurado para MIDI. Por favor, desconecte la alimentaci"
-	.byte 0xf3
-	.ascii "n, coloque el conmutador en la posici"
-	.byte 0xf3, 0x6e
-	.ascii " deseada y conecte nuevamente la alimentaci"
+	.ascii "La conexiÛn con la computadora no est· activa porque su conmutador de puerto est· configurado para MIDI. Por favor, desconecte la alimentaciÛn, coloque el conmutador en la posiciÛn deseada y conecte nuevamente la alimentaci"
 	.byte 0xf3, 0x6e, 0x2e, 0x00, 0xff
-	.ascii "La connexion micro-ordinateur n'est pas active. Le s"
-	.byte 0xe9, 0x6c, 0x65, 0x63
-	.ascii "teur est sur la position IDI. Veuillez couper l'alimentation, s"
-	.byte 0xe9
-	.ascii "lectionner la position d"
-	.byte 0xe9, 0x73, 0x69, 0x72, 0xe9, 0x65, 0x2c, 0x20
-	.ascii "puis r"
-	.byte 0xe9, 0x74
-	.ascii "ablir l'alimentation g"
+	.ascii "La connexion micro-ordinateur n'est pas active. Le sÈlecteur est sur la position IDI. Veuillez couper l'alimentation, sÈlectionner la position dÈsirÈe, puis rÈtablir l'alimentation g"
 	dec	6, xbc
 	.byte 0xe9
 	aligned_string "rale de l'instrument."
@@ -47970,10 +47337,7 @@ LABEL_E9CFB8:	.ascii "Este mapa de bits tiene en un formato incorrecto para el K
 	aligned_string "s detalles, vea el Manual del Propietario."
 LABEL_E9D04A:	.ascii "Cette configuration Bitmap n'est pas au bon format pour le KN5000 et ne peut pas "
 	.byte 0xea
-	.ascii "tre charg"
-	.byte 0xe9, 0x65, 0x2e
-	.ascii " Reportez-vous au mode d'emploi pour plus de d"
-	.byte 0xe9
+	.ascii "tre chargÈe. Reportez-vous au mode d'emploi pour plus de dÈ"
 	aligned_string "tails. "
 LABEL_E9D0E0:	.ascii "Das Format dieses Bitmaps kann vom SX-KN5000 nicht geladen werden. Lesen Sie die Bedienungsanleitung f"
 	.byte 0xfc
@@ -47988,21 +47352,10 @@ LABEL_E9D1EA:	aligned_string "Pilihlah Panel Memory yang ingin anda berikan nama
 LABEL_E9D21E:	aligned_string "ERROR 64"
 LABEL_E9D228:	aligned_string "Por favor seleccione el Panel Memory al que desea dar nombre."
 	.byte 0x56, 0x65
-	.ascii "uillez s"
-	.byte 0xe9
-	.ascii "lectionner le "
-	.byte 0xab
-	.ascii " Panel Memory "
-	.byte 0xbb, 0x20
-	.ascii "auquel vous d"
-	.byte 0xe9
+	.ascii "uillez sÈlectionner le ´ Panel Memory ª auquel vous dÈ"
 	aligned_string "sirez assigner un nom."
 	.byte 0x42, 0x69
-	.ascii "tte w"
-	.byte 0xe4, 0x68, 0x6c
-	.ascii "en Sie den Panel Memory-Platz, dem Sie gern einen Namen vergeben m"
-	.byte 0xf6
-	.asciz "chten."
+	.asciz "tte w‰hlen Sie den Panel Memory-Platz, dem Sie gern einen Namen vergeben mˆchten."
 	aligned_string "Please select the Panel Memory that you want to name."
 	.byte 0x03, 0x00, 0xff, 0xff, 0x00, 0x00, 0x4e, 0x57
 	.byte 0xe9, 0x00, 0x42, 0x5f, 0xe9, 0x00, 0x03, 0x00
@@ -48301,8 +47654,7 @@ LABEL_E9DB0C:	aligned_string " RIGHT 1 "
 	.byte 0x02, 0x03, 0x05, 0x07, 0x08, 0x0a, 0x0c, 0x0d
 	.byte 0x0f, 0x11, 0x12, 0x14, 0x16, 0x17, 0x19, 0x1b
 	.byte 0x1c, 0x1e
-	.ascii " !#%&(*+-/023578:<=>?"
-	.byte 0xff
+	.ascii " !#%&(*+-/023578:<=>?ˇ"
 	aligned_string "440.0"
 	.byte 0x34, 0x25
 	.byte 0x64, 0x2e, 0x30, 0x00, 0x11, 0x00, 0x05, 0x00
@@ -48445,8 +47797,7 @@ LABEL_E9DEA4:
 	.byte 0x38, 0x00, 0x38, 0x00, 0x38, 0x00, 0x38, 0x00
 	.byte 0x38, 0x00, 0x38, 0x00, 0x38, 0x00, 0x38, 0x0e
 	.byte 0x38, 0x1e
-	.ascii "8>8>8~8~8"
-	.byte 0xee, 0x38, 0xce, 0x39, 0xce
+	.ascii "8>8>8~8~8Ó8Œ9Œ"
 	.byte 0x39, 0x8e, 0x3b, 0x8e, 0x3f, 0x0e, 0x3f, 0x0e
 	.byte 0x3e, 0x0e, 0x3e, 0x0e, 0x3c, 0x0e, 0x38, 0x0e
 	.byte 0x07, 0xf0, 0x1f, 0xfc, 0x3f, 0xfe, 0x3c, 0x1e
@@ -49522,8 +48873,7 @@ LABEL_E9FA8A:	aligned_string "To Starting an external DEMO, please insert a feat
 LABEL_E9FB10:	aligned_string "To Starting an external DEMO, please insert a feature demo disk.~0dLoading external demo data will erase any existing Sequencer data."
 LABEL_E9FB96:
 	.byte 0x55, 0x6d
-	.ascii " eine externe DEMO zu starten, legen Sie bitte eine Feature-Demo-Disk in das Laufwerk ein.~0dDurch das Laden einer externen Demo werden alle Sequenzerdaten gel"
-	.byte 0xf6
+	.ascii " eine externe DEMO zu starten, legen Sie bitte eine Feature-Demo-Disk in das Laufwerk ein.~0dDurch das Laden einer externen Demo werden alle Sequenzerdaten gelˆ"
 	aligned_string "scht."
 LABEL_E9FC3E:	aligned_string "To Starting an external DEMO, please insert a feature demo disk.~0dLoading external demo data will erase any existing Sequencer data."
 	.byte 0x01, 0x02, 0x04, 0xff
@@ -49811,8 +49161,7 @@ LABEL_EA04C2:
 	.byte 0x41, 0x3a, 0x5c, 0x00
 	.byte 0x2a, 0x2e, 0x42, 0x4d
 	.byte 0x50, 0x00
-	.ascii "``alw"
-	.byte 0xff
+	.ascii "``alwˇ"
 	.long LABEL_EA0594
 	.long LABEL_EA0590
 	.long LABEL_EA058C
@@ -55597,9 +54946,7 @@ LABEL_EA86E6:	aligned_string "The data is already copy protected. Please enter t
 LABEL_EA8726:	aligned_string "The data is already copy protected. Please enter the password."
 LABEL_EA8766:	aligned_string "The data is already copy protected. Please enter the password."
 	.byte 0x44, 0x69
-	.ascii "ese Daten sind bereits kopiergesch"
-	.byte 0xfc
-	.asciz "tzt. Bitte geben Sie das Password ein."
+	.asciz "ese Daten sind bereits kopiergesch¸tzt. Bitte geben Sie das Password ein."
 	aligned_string "The data is already copy protected. Please enter the password."
 	.byte 0xc2, 0x89, 0xea, 0x00, 0x72, 0x89, 0xea
 	.byte 0x00
@@ -55611,8 +54958,7 @@ LABEL_EA884A:	aligned_string "The songs in the Sequencer are copy protected. Ple
 LABEL_EA8894:	aligned_string "The songs in the Sequencer are copy protected. Please enter the password."
 LABEL_EA88DE:	aligned_string "The songs in the Sequencer are copy protected. Please enter the password."
 LABEL_EA8928:	aligned_string "The songs in the Sequencer are copy protected. Please enter the password."
-	.ascii "Die Songs im Sequenzer sind kopiergesch"
-	.byte 0xfc
+	.ascii "Die Songs im Sequenzer sind kopiergesch¸"
 	aligned_string "tzt. Bitte geben Sie das Password ein."
 	aligned_string "The songs in the Sequencer are copy protected. Please enter the password."
 	.byte 0xa4, 0x8b, 0xea, 0x00
@@ -55656,8 +55002,7 @@ LABEL_EA8C9E:
 	.byte 0xbf, 0x45
 	jrl	ule, 0xe174
 	.asciz " seguro?"
-	.ascii "Etes vous s"
-	.byte 0xfb
+	.ascii "Etes vous s˚"
 	.byte 0x72, 0x3f, 0x00, 0xff
 	aligned_string "Sind Sie sicher ?"
 	aligned_string "Are You Sure?"
@@ -55672,8 +55017,7 @@ LABEL_EA8D44:	aligned_string "Using DISK FORMAT will erase any current data on t
 LABEL_EA8D80:	aligned_string "Al formatear el disco  se borran los datos del disco."
 LABEL_EA8DB6:
 	.byte 0x4c, 0x27
-	.ascii "utilisation deDISK FORMAT effacera toute donn"
-	.byte 0xe9
+	.ascii "utilisation deDISK FORMAT effacera toute donnÈ"
 	aligned_string "e existante sur la disquette."
 LABEL_EA8E04:	.ascii "DISK FORMAT l"
 	.byte 0xf6
@@ -55691,61 +55035,30 @@ LABEL_EA8E88:	.ascii "Usando FILE DELETE si canceller"
 LABEL_EA8EFE:	aligned_string "Using FILE DELETE will erase the selected file completely. If you are uncertain please confirm your file selection."
 LABEL_EA8F72:	.ascii "El uso del FILE DELETE borrar"
 	.byte 0xe1
-	.ascii " completamente el archivo seleccionado. Si no est"
-	.byte 0xe1
-	.ascii " seguro, confirme la selecci"
-	.byte 0xf3
+	.ascii " completamente el archivo seleccionado. Si no est· seguro, confirme la selecciÛ"
 	aligned_string "n del archivo."
 LABEL_EA8FEE:
 	.byte 0x4c, 0x61
-	.ascii " fonction FILE DELETE va effacer compl"
-	.byte 0xe8, 0x74
-	.ascii "ement le fichier que vous m'avez indiqu"
-	.byte 0xe9
-	.ascii ". Si vous avez un doute, veuillez v"
-	.byte 0xe9
-	.ascii "rifier le num"
-	.byte 0xe9
+	.ascii " fonction FILE DELETE va effacer complËtement le fichier que vous m'avez indiquÈ. Si vous avez un doute, veuillez vÈrifier le numÈ"
 	aligned_string "ro du fichier."
 LABEL_EA9082:	.ascii "Die gew"
 	.byte 0xe4
-	.ascii "hlte Disketten-Bank wird komplett gel"
-	.byte 0xf6
+	.ascii "hlte Disketten-Bank wird komplett gelˆ"
 	aligned_string "scht."
 LABEL_EA90B6:	aligned_string "Using FILE DELETE will erase the selected file completely. If you are uncertain please confirm your file selection."
 	.byte 0xca, 0x93, 0xea, 0x00, 0x44, 0x93
 	.byte 0xea, 0x00, 0xa6, 0x92, 0xea, 0x00, 0x2c, 0x92
 	.byte 0xea, 0x00, 0xba, 0x91, 0xea, 0x00, 0x42, 0x91
 	.byte 0xea, 0x00
-	.ascii "Esiste gi"
-	.byte 0xe0
-	.ascii " un file nella locazione scelta, Procedendo. il file presente verr"
-	.byte 0xe0
+	.ascii "Esiste gi‡ un file nella locazione scelta, Procedendo. il file presente verr‡"
 	aligned_string " sostituito da quello che state salvando."
 	aligned_string "A file already exists at the chosen location. If you proceed it will be replaced by the file that you are saving."
-	.ascii "Ya existe un archivo en el lugar seleccionado. Si contin"
-	.byte 0xfa, 0x61, 0x2c, 0x20
-	.ascii "este archivo se ver"
-	.byte 0xe1
-	.ascii " reemplazado por el que est"
-	.byte 0xe1
+	.ascii "Ya existe un archivo en el lugar seleccionado. Si contin˙a, este archivo se ver· reemplazado por el que est·"
 	aligned_string " memorizando."
 	.byte 0x55, 0x6e
-	.ascii " fichier existe d"
-	.byte 0xe9, 0x6a, 0xe0
-	.ascii " sous le num"
-	.byte 0xe9
-	.ascii "ro que vous m'avez indiqu"
-	.byte 0xe9
-	.ascii ". Si je continue, il sera effac"
-	.byte 0xe9
-	.ascii " et remplac"
-	.byte 0xe9
+	.ascii " fichier existe dÈj‡ sous le numÈro que vous m'avez indiquÈ. Si je continue, il sera effacÈ et remplacÈ"
 	aligned_string " par le fichier que vous me demandez de sauvegarder."
-	.ascii "Die soeben gew"
-	.byte 0xe4
-	.ascii "hlte Disketten-Bank ist bereits wit Daten belegt. Wenn Sie jetzt trotzdem speichern, werden die alten Daten gel"
-	.byte 0xf6
+	.ascii "Die soeben gew‰hlte Disketten-Bank ist bereits wit Daten belegt. Wenn Sie jetzt trotzdem speichern, werden die alten Daten gelˆ"
 	aligned_string "scht."
 	aligned_string "A file already exists at the chosen location. If you proceed it will be replaced by the file that you are saving."
 	.byte 0x30, 0x95, 0xea, 0x00
@@ -56936,10 +56249,7 @@ LABEL_EAB1A0:
 	.byte 0x7f, 0x80, 0x81, 0xa1
 	.byte 0xa6, 0xaa, 0xab, 0xac, 0xad, 0xaf, 0xb0, 0xb2
 	.byte 0xb3, 0xb4, 0xb6, 0xb8
-	.ascii " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ["
-	.byte 0xa5
-	.ascii "]^_`abcdefghijklmnopqrstuvwxyz{|}"
-	.byte 0x8d, 0x8b, 0xc4, 0xd6, 0xdc, 0xe4
+	.ascii " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[•]^_`abcdefghijklmnopqrstuvwxyz{|}çãƒ÷‹‰"
 	.byte 0xf6, 0xfc, 0xdf, 0xa4, 0xa0, 0x96, 0x95, 0xd7
 	.byte 0x9e, 0x9b, 0x98, 0x8f, 0x8e, 0xb7, 0x9d, 0xa8
 	.byte 0xbd, 0xbe, 0x3f, 0x3f, 0x9c, 0xc7, 0x9c, 0xe7
@@ -68443,23 +67753,12 @@ LABEL_ED0512:	aligned_string "ATTENTION!"
 	.byte 0xed, 0x00, 0x36, 0x05, 0xed, 0x00
 LABEL_ED0536:	aligned_string "Menggunakan Initial Setting akan menghapus semua data yang telah diset dengan susunan data asli dari pabrik."
 LABEL_ED05A4:	aligned_string "Italian"
-	.ascii "El uso del ajuste inicial har"
-	.byte 0xe1
-	.ascii " que se reemplacen los datos actuales por los ajustes originales de f"
-	.byte 0xe1
+	.ascii "El uso del ajuste inicial har· que se reemplacen los datos actuales por los ajustes originales de f·"
 	aligned_string " brica!"
-	.ascii "La proc"
-	.byte 0xe9
-	.ascii "dure d'initialisation va remplacer tous les r"
-	.byte 0xe9, 0x67, 0x6c
-	.ascii "ages effectu"
-	.byte 0xe9, 0x73, 0x20, 0x70
-	.ascii "ar les pr"
-	.byte 0xe9, 0x73, 0xe9
+	.ascii "La procÈdure d'initialisation va remplacer tous les rÈglages effectuÈs par les prÈsÈ"
 	aligned_string "lections d'usine"
 	.byte 0x44, 0x75
-	.ascii "rch das Initialisieren werden alle aktuellen Einstellungen wieder in den Werkszustand zur"
-	.byte 0xfc
+	.ascii "rch das Initialisieren werden alle aktuellen Einstellungen wieder in den Werkszustand zur¸"
 	aligned_string "ckversetzt."
 	aligned_string "Using Initial Setting will replace any current data with the original factory settings!"
 	.byte 0xa8, 0x07
@@ -68485,8 +67784,7 @@ LABEL_ED083E:	aligned_string "                               Resets the PERFORMA
 LABEL_ED08AE:	aligned_string "                               Resets the PERFORMANCE or individual sections to the original factory settings."
 LABEL_ED091E:	aligned_string "                               Resets the PERFORMANCE or individual sections to the original factory settings."
 	.byte 0x53, 0x65
-	.ascii "tzt die PERFORMANCE Daten, d.h. die von Ihnen erstellten Daten und Einstellungen, auf die Werkseinstellung zur"
-	.byte 0xfc, 0x63
+	.ascii "tzt die PERFORMANCE Daten, d.h. die von Ihnen erstellten Daten und Einstellungen, auf die Werkseinstellung zur¸c"
 	.byte 0x6b, 0x2e, 0x00, 0xff
 	aligned_string "                               Resets the PERFORMANCE or individual sections to the original factory settings."
 	.byte 0x56, 0x0b, 0xed, 0x00
@@ -68870,17 +68168,11 @@ LABEL_ED1714:
 	aligned_string "USER INITIAL akan menggantikan penggunaan kertas tempel (stiker) yang sekarang dengan sticker/kertas tempel yg hitam-licin dan rata!"
 	aligned_string "Italian"
 	.byte 0xa1
-	.ascii "El USER INITIAL cambiar"
-	.byte 0xe1
-	.ascii " el patr"
-	.byte 0xd3
-	.ascii "n de fondo actual por un \"Plain Black\" (negro sin dise"
+	.ascii "El USER INITIAL cambiar· el patr”n de fondo actual por un \"Plain Black\" (negro sin dise"
 	.byte 0xf1, 0x6f, 0x29, 0x21, 0x00, 0xff, 0x55, 0x53
-	.ascii "ER INITIAL va remplacer votre fond de l'"
-	.byte 0xe9
+	.ascii "ER INITIAL va remplacer votre fond de l'È"
 	aligned_string "cran par un fond noir !"
-	.ascii "USER INITIAL ersetzt das aktuelle Hintergrundbild durch eine schwarze Fl"
-	.byte 0xe4
+	.ascii "USER INITIAL ersetzt das aktuelle Hintergrundbild durch eine schwarze Fl‰"
 	aligned_string "che !"
 	.asciz "USER INITIAL will replace the current user wallpaper with the \"Plain Black\" wallpaper!"
 	.byte 0xff, 0x00, 0x00, 0x26, 0x00, 0x2c, 0x00
@@ -75647,8 +74939,7 @@ Protocol_values_for_LED_rows:	; EDA616
 	.zero 8
 	.byte 0x93, 0x22, 0x06, 0x06, 0x7f, 0x7f, 0x02, 0x05
 	.byte 0x94, 0x00, 0xff
-	.ascii "                ??"
-	.byte 0xff, 0xff, 0xff
+	.ascii "                ??ˇˇˇ"
 	.byte 0xff, 0x00, 0x00, 0x00, 0xc0, 0x12, 0x00, 0x00
 	.zero 16
 	.byte 0xc1, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
@@ -76145,8 +75436,7 @@ LABEL_EDC21A:
 	.byte 0x05, 0x00, 0x00, 0xff, 0x00, 0x01, 0x02, 0x03
 	.byte 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b
 	.byte 0x0c, 0x0d, 0x0e, 0x0f, 0x1d, 0x1e, 0x1f, 0x20
-	.ascii "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxy"
-	.byte 0xff
+	.ascii "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyˇ"
 LABEL_EDC29A:
 	.byte 0x2c, 0xc2, 0xed, 0x00, 0x6d, 0x00
 	.byte 0x00, 0x00, 0x00, 0xff
@@ -76316,8 +75606,7 @@ LABEL_EDC54E:
 	.byte 0x0a, 0x0c, 0x0d, 0x0e, 0x0f, 0x11, 0x12, 0x13
 	.byte 0x15, 0x16, 0x17, 0x18, 0x1a, 0x1b, 0x1c, 0x1d
 	.byte 0x1f
-	.ascii " !#$%&()*+-./12346789;<=?@ABDEFGIJKMNOPRSTUWXY[\\]^`abcefgijklnopqstuwxyz|}~"
-	.byte 0x80, 0x81, 0x82, 0x83
+	.ascii " !#$%&()*+-./12346789;<=?@ABDEFGIJKMNOPRSTUWXY[\\]^`abcefgijklnopqstuwxyz|}~ÄÅÇÉ"
 	.byte 0x85, 0x86, 0x87, 0x88, 0x8a, 0x8b, 0x8c, 0x8e
 	.byte 0x8f, 0x90, 0x91, 0x93, 0x94, 0x95, 0x96, 0x98
 	.byte 0x99, 0x9a, 0x9c, 0x9d, 0x9e, 0x9f, 0xa1, 0xa2
@@ -76422,8 +75711,7 @@ LABEL_EDC78A:
 	.byte 0x0c, 0x0d, 0x0e, 0x0f, 0x10, 0x11, 0x12, 0x13
 	.byte 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1a, 0x1b
 	.byte 0x1c, 0x1d, 0x1e, 0x1f
-	.ascii " !\"#$%&'()*+,-./012"
-	.byte 0xff
+	.ascii " !\"#$%&'()*+,-./012ˇ"
 LABEL_EDC7F0:
 	.long LABEL_EDC78A
 	.byte 0x65, 0x00, 0x00, 0x00
@@ -82991,8 +82279,7 @@ LABEL_EE491A:
 	.byte 0x0b, 0x0b, 0x0b, 0x0c
 	.ascii "#!!!!!!!\"\"\"!!!!!!!!!!!"
 	.byte 0x0f
-	.ascii "! !!!!!!!  !"
-	.byte 0xff
+	.ascii "! !!!!!!!  !ˇ"
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff
 	.fill 8, 1, 0xff
 	.byte 0x0a, 0x00, 0x00, 0x00, 0x00, 0x01, 0xb0, 0x01
@@ -84169,8 +83456,7 @@ LABEL_EE650C:
 	.byte 0x74, 0x00, 0x00, 0x7a, 0x00, 0x06, 0x63, 0x00
 	.byte 0x00, 0x7a, 0x00, 0x0b, 0x21, 0x00, 0x00, 0x00
 	.byte 0x00
-	.ascii "&ffz"
-	.byte 0xf0
+	.ascii "&ffz"
 LABEL_EE6556:
 	.byte 0x00, 0x13
 	.byte 0x6b, 0x00, 0x4c, 0xcc, 0xcc, 0x6f, 0x5c, 0x28
@@ -84181,8 +83467,7 @@ LABEL_EE6556:
 	.byte 0x08, 0x64, 0x01, 0x00, 0x01, 0x5e, 0x7a, 0x00
 	.byte 0x06, 0x63, 0x00, 0x00, 0x7a, 0x00, 0x0b, 0x21
 	.byte 0x00, 0x00, 0x00, 0x00
-	.ascii "&ffz"
-	.byte 0xf0, 0xff
+	.ascii "&ffzˇ"
 LABEL_EE659A:
 	.byte 0x00, 0x13, 0x66, 0x00, 0x00, 0x00
 	.byte 0x00, 0x40, 0x00, 0x00, 0x66, 0x01, 0x00, 0x00
@@ -84197,8 +83482,7 @@ LABEL_EE659A:
 	.byte 0x7a, 0x00, 0x06, 0x74, 0x00, 0x00, 0x7a, 0x00
 	.byte 0x06, 0x63, 0x00, 0x00, 0x7a, 0x00, 0x0b, 0x21
 	.byte 0x00, 0x00, 0x00, 0x00
-	.ascii "&ffz"
-	.byte 0xf0, 0xff
+	.ascii "&ffzˇ"
 LABEL_EE6602:
 	.byte 0x00, 0x13, 0x66, 0x00, 0x00, 0x00
 	.byte 0x00, 0x06, 0x66, 0x66, 0x66, 0x02, 0x00, 0x00
@@ -84213,8 +83497,7 @@ LABEL_EE6602:
 	.byte 0x7a, 0x00, 0x06, 0x74, 0x00, 0x00, 0x7a, 0x00
 	.byte 0x06, 0x63, 0x00, 0x00, 0x7a, 0x00, 0x0b, 0x21
 	.byte 0x00, 0x00, 0x00, 0x00
-	.ascii "&ffz"
-	.byte 0xf0, 0xff
+	.ascii "&ffzˇ"
 LABEL_EE666A:
 	.byte 0x00, 0x13, 0x66, 0x00, 0x00, 0x00
 	.byte 0x00, 0x20, 0x00, 0x00, 0x66, 0x01, 0x00, 0x00
@@ -84234,8 +83517,7 @@ LABEL_EE66AC:
 	.byte 0x01, 0x40, 0x00, 0x00, 0x7a, 0x00, 0x06, 0x74
 	.byte 0x00, 0x00, 0x7a, 0x00, 0x06, 0x63, 0x00, 0x00
 	.byte 0x7a, 0x00, 0x0b, 0x21, 0x00, 0x00, 0x00, 0x00
-	.ascii "&ffz"
-	.byte 0xf0, 0xff
+	.ascii "&ffzˇ"
 LABEL_EE66EE:
 	.byte 0x00, 0x2d
 	.byte 0x24, 0x01, 0x00, 0x3f, 0xff, 0x58, 0x3f, 0xff
@@ -84251,8 +83533,7 @@ LABEL_EE66EE:
 	.byte 0x87, 0x06, 0x66, 0x66, 0x00, 0x72, 0xb0, 0x03
 	.byte 0x33, 0x33, 0x7a, 0x00, 0x06, 0x63, 0x00, 0x00
 	.byte 0x7a, 0x00, 0x0b, 0x21, 0x00, 0x00, 0x00, 0x00
-	.ascii "&ffz"
-	.byte 0xf0, 0xff
+	.ascii "&ffzˇ"
 LABEL_EE675E:
 	.byte 0x00, 0x07
 	.byte 0x61, 0x00, 0x61, 0x01, 0x7a, 0x00, 0x05, 0x62
@@ -84293,8 +83574,7 @@ LABEL_EE683A:
 	.byte 0x00, 0x06, 0x74, 0x00, 0x00, 0x7a, 0x00, 0x06
 	.byte 0x63, 0x00, 0x00, 0x7a, 0x00, 0x0b, 0x21, 0x00
 	.byte 0x00, 0x00, 0x00
-	.ascii "&ffz"
-	.byte 0xf0
+	.ascii "&ffz"
 LABEL_EE6868:
 	.byte 0x00, 0x0b, 0x66, 0x00, 0x00, 0x00, 0x00, 0x19
 	.byte 0x99, 0x99, 0x7a, 0x00, 0x0b, 0x6e, 0x00, 0x19
@@ -84311,8 +83591,7 @@ LABEL_EE689C:
 	.byte 0x05, 0x6f, 0x00, 0x7a, 0x00, 0x06, 0x63, 0x00
 	.byte 0x00, 0x7a, 0x00, 0x0b, 0x21, 0x00, 0x00, 0x00
 	.byte 0x00
-	.ascii "&ffz"
-	.byte 0xf0
+	.ascii "&ffz"
 LABEL_EE68CE:
 	.byte 0x00, 0x33
 	.byte 0x77, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xc8
@@ -84325,8 +83604,7 @@ LABEL_EE68CE:
 	.byte 0x06, 0x74, 0x00, 0x00, 0x7a, 0x00, 0x06, 0x63
 	.byte 0x00, 0x00, 0x7a, 0x00, 0x0b, 0x21, 0x00, 0x00
 	.byte 0x00, 0x00
-	.ascii "&ffz"
-	.byte 0xf0, 0xff
+	.ascii "&ffzˇ"
 LABEL_EE6920:
 	.byte 0x00, 0x09, 0x72, 0x00, 0x00, 0x72, 0x01, 0x00
 	.byte 0x7a, 0x00, 0x09, 0x72, 0x00, 0x01, 0x72, 0x01
@@ -84357,8 +83635,7 @@ LABEL_EE699C:
 	.byte 0x76, 0x03, 0x12, 0x14, 0x7a, 0x00, 0x06, 0x63
 	.byte 0x00, 0x01, 0x7a, 0x00, 0x0b, 0x21, 0x00, 0x00
 	.byte 0x00, 0x00
-	.ascii "&ffz"
-	.byte 0xf0, 0xff
+	.ascii "&ffzˇ"
 LABEL_EE69E8:
 	.byte 0x00, 0x08, 0x67, 0x00, 0x00, 0x00, 0x02, 0x7a
 	.byte 0x00, 0x08, 0x67, 0x01, 0x00, 0x00, 0x02, 0x7a
@@ -84465,8 +83742,7 @@ LABEL_EE6C24:
 	.byte 0x7a, 0x00, 0x06, 0x74, 0x00, 0x00, 0x7a, 0x00
 	.byte 0x06, 0x63, 0x00, 0x00, 0x7a, 0x00, 0x0b, 0x21
 	.byte 0x00, 0x00, 0x00, 0x00
-	.ascii "&ffz"
-	.byte 0xf0, 0xff
+	.ascii "&ffzˇ"
 LABEL_EE6CA2:
 	.byte 0x00, 0x13, 0x66, 0x00, 0x40, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x66, 0x02, 0x40, 0x00
@@ -84487,8 +83763,7 @@ LABEL_EE6CA2:
 	.byte 0x06, 0x63, 0x00
 	.byte 0x01, 0x7a, 0x00, 0x0b, 0x21, 0x00, 0x00, 0x00
 	.byte 0x00
-	.ascii "&ffz"
-	.byte 0xf0
+	.ascii "&ffz"
 LABEL_EE6D26:
 	.byte 0x00, 0x13
 	.byte 0x66, 0x00, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00
@@ -84513,8 +83788,7 @@ LABEL_EE6D26:
 	.byte 0x7a, 0x00, 0x06, 0x74, 0x00, 0x00, 0x7a, 0x00
 	.byte 0x06, 0x63, 0x00, 0x01, 0x7a, 0x00, 0x0b, 0x21
 	.byte 0x00, 0x00, 0x00, 0x00
-	.ascii "&ffz"
-	.byte 0xf0, 0xff
+	.ascii "&ffzˇ"
 LABEL_EE6DDA:
 	.byte 0x00, 0x13, 0x66, 0x00, 0x40, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x66, 0x04, 0x40, 0x00
@@ -84550,18 +83824,15 @@ LABEL_EE6E54:
 	.byte 0xc5, 0x1e, 0xb8, 0x3a, 0xe1, 0x47, 0x73, 0x03
 	.byte 0xc5, 0x1e, 0xb8, 0x3a, 0xe1, 0x47, 0x7a, 0x00
 	.byte 0x13, 0x66, 0x03
-	.ascii "&ff7"
-	.byte 0xae
+	.ascii "&ff7Æ"
 	.byte 0x14, 0x66, 0x05
-	.ascii "&ff7"
-	.byte 0xae
+	.ascii "&ff7Æ"
 	.byte 0x14, 0x7a, 0x00, 0x0d, 0x68, 0x00, 0x00, 0x00
 	.byte 0x00, 0x68, 0x01, 0x40, 0x00, 0x00, 0x7a, 0x00
 	.byte 0x06, 0x74, 0x00, 0x00, 0x7a, 0x00, 0x06, 0x63
 	.byte 0x00, 0x01, 0x7a, 0x00, 0x0b, 0x21, 0x00, 0x00
 	.byte 0x00, 0x00
-	.ascii "&ffz"
-	.byte 0xf0, 0xff
+	.ascii "&ffzˇ"
 LABEL_EE6F08:
 	.byte 0x00, 0x2d, 0x24, 0x01, 0x00, 0x3f, 0xff, 0x58
 	.byte 0x3f, 0xff, 0x58, 0x50, 0xa3, 0xd7, 0x50, 0xa3
@@ -84584,8 +83855,7 @@ LABEL_EE6F08:
 	.byte 0x8f, 0x5c, 0x3d, 0x70, 0xa3, 0x7a, 0x00, 0x06
 	.byte 0x63, 0x00, 0x01, 0x7a, 0x00, 0x0b, 0x21, 0x00
 	.byte 0x00, 0x00, 0x00
-	.ascii "&ffz"
-	.byte 0xf0
+	.ascii "&ffz"
 LABEL_EE6FB0:
 	.byte 0x00, 0x09, 0x70, 0x00, 0x00, 0x70, 0x01, 0x00
 	.byte 0x7a, 0x00, 0x09, 0x70, 0x00, 0x10, 0x70, 0x01
@@ -84599,8 +83869,7 @@ LABEL_EE6FB0:
 	.byte 0x06, 0x74, 0x00, 0x00, 0x7a, 0x00, 0x06, 0x63
 	.byte 0x00, 0x00, 0x7a, 0x00, 0x0b, 0x21, 0x00, 0x00
 	.byte 0x00, 0x00
-	.ascii "&ffz"
-	.byte 0xf0, 0xff
+	.ascii "&ffzˇ"
 LABEL_EE7010:
 	.byte 0x00, 0x09, 0x70, 0x00, 0x00, 0x70, 0x01, 0x00
 	.byte 0x7a, 0x00, 0x09, 0x70, 0x00, 0x10, 0x70, 0x01
@@ -84615,8 +83884,7 @@ LABEL_EE7010:
 	.byte 0x3d, 0x70, 0xa3, 0x7a, 0x00, 0x06, 0x63, 0x00
 	.byte 0x01, 0x7a, 0x00, 0x0b, 0x21, 0x00, 0x00, 0x00
 	.byte 0x00
-	.ascii "&ffz"
-	.byte 0xf0
+	.ascii "&ffz"
 LABEL_EE7076:
 	.byte 0x00, 0x09
 	.byte 0x70, 0x00, 0x00, 0x70, 0x01, 0x00, 0x7a, 0x00
@@ -84651,8 +83919,7 @@ LABEL_EE710C:
 	.byte 0x00, 0x06, 0x74, 0x00, 0x00, 0x7a, 0x00, 0x06
 	.byte 0x63, 0x00, 0x00, 0x7a, 0x00, 0x0b, 0x21, 0x00
 	.byte 0x00, 0x00, 0x00
-	.ascii "&ffz"
-	.byte 0xf0
+	.ascii "&ffz"
 LABEL_EE7168:
 	.byte 0x00, 0x09, 0x70, 0x00, 0x00, 0x70, 0x01, 0x00
 	.byte 0x7a, 0x00, 0x09, 0x70, 0x00, 0x10, 0x70, 0x01
@@ -84663,8 +83930,7 @@ LABEL_EE7168:
 	.byte 0x00, 0x6d, 0x02, 0x7a, 0x00, 0x07, 0x6d, 0x01
 	.byte 0x6d, 0x03, 0x7a, 0x00, 0x06, 0x63, 0x00, 0x00
 	.byte 0x7a, 0x00, 0x0b, 0x21, 0x00, 0x00, 0x00, 0x00
-	.ascii "&ffz"
-	.byte 0xf0, 0xff
+	.ascii "&ffzˇ"
 LABEL_EE71B6:
 	.byte 0x00, 0x09
 	.byte 0x70, 0x00, 0x00, 0x70, 0x01, 0x00, 0x7a, 0x00
@@ -88348,11 +87614,9 @@ LABEL_EEC518:
 	.byte 0x51, 0x52, 0x53, 0x2c
 	.byte 0xff, 0x2b, 0xff, 0x27
 	.byte 0xff, 0x29, 0x2f, 0xff, 0xff, 0xff, 0xff, 0xff
-	.ascii "@ABCDEFGHIJKLM"
-	.byte 0xff, 0xff
+	.ascii "@ABCDEFGHIJKLMˇˇ"
 	.byte 0xff, 0xff, 0xff, 0xff
-	.ascii "0123456789:;<=>?"
-	.byte 0xff, 0xff, 0xff, 0xff
+	.ascii "0123456789:;<=>?ˇˇˇˇ"
 	.fill 8, 1, 0xff
 	.byte 0xff, 0xff, 0xff, 0x4e, 0x4f, 0x50, 0xff, 0xff
 	.fill 8, 1, 0xff
@@ -88360,8 +87624,7 @@ LABEL_EEC598:
 	.fill 8, 1, 0xff
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x53
 	.byte 0x51, 0x52, 0xff, 0x2f, 0xff, 0xff, 0xff, 0x2b
-	.ascii "*0,<5PL'(JKI$"
-	.byte 0xff, 0x26, 0xff
+	.ascii "*0,<5PL'(JKI$ˇ&ˇ"
 	.byte 0xff, 0xff, 0xff, 0x2e, 0xff, 0x31, 0xff, 0x25
 	ldw	hl, 0xff34
 	.byte 0x2d, 0x36, 0x37, 0x38, 0x39
@@ -88382,8 +87645,7 @@ LABEL_EEC618:
 	.byte 0x2a, 0x2e, 0xff, 0xff, 0x33, 0x50, 0xff, 0x27
 	.byte 0x28, 0xff, 0xff, 0xff, 0x24, 0xff, 0x26, 0xff
 	.byte 0xff, 0x2b, 0xff, 0x2d, 0xff, 0x2f, 0xff, 0x25
-	.ascii "012,456789:"
-	.byte 0xff, 0x3d, 0xff, 0x3e, 0xff
+	.ascii "012,456789:ˇ=ˇ>ˇ"
 	.byte 0xff
 	ld	xbc, 0x45444342
 	.byte 0xff, 0xff
@@ -88454,8 +87716,7 @@ LABEL_EEC818:
 	.byte 0xff, 0xff, 0xff, 0xff
 	.byte 0x24, 0x2f, 0x26, 0x37
 	.byte 0x20, 0x39, 0x18, 0x35, 0x33, 0x1e, 0x19, 0x3a
-	.ascii "TUVWXYZ[\\]^_`abc@ABCDEFGHIJKLMstu012"
-	.byte 0xff, 0xff, 0xff, 0xff
+	.ascii "TUVWXYZ[\\]^_`abc@ABCDEFGHIJKLMstu012ˇˇˇˇ"
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
@@ -88506,8 +87767,7 @@ LABEL_EEC998:
 	.byte 0x1b, 0x1c, 0x1d, 0x3b, 0x1e, 0x36, 0xff, 0x27
 	.byte 0x50, 0x51, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 	.byte 0xff
-	.ascii ")*+,-./012345"
-	.byte 0xff, 0xff
+	.ascii ")*+,-./012345ˇˇ"
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
@@ -99097,8 +98357,7 @@ LABEL_EF5EEE:
 	.byte 0x11, 0x00, 0x2d, 0x68, 0x0c, 0xf1, 0x80, 0x11
 	.byte 0x00, 0x2b, 0x68, 0x05, 0xf1, 0x80, 0x11, 0x00
 	ldb	w, 0x0e
-	.ascii "9:;<=>"
-	.byte 0xc9, 0x8b, 0xca, 0xd2, 0xc8, 0x89, 0xc8, 0xd0
+	.ascii "9:;<=>…ã “»â»–"
 	.byte 0x1d, 0x0c, 0x19, 0xf0, 0xcf, 0x89, 0x5e, 0x5d
 	.byte 0x5c, 0x5b, 0x5a, 0x59
 	.byte 0x0e, 0x39, 0x3a, 0x3b
@@ -101865,8 +101124,7 @@ LABEL_EF97E0:
 	.byte 0xff, 0xff, 0xff, 0x03, 0x03, 0x03, 0x03, 0x03
 	.byte 0x03, 0x03, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x38
-	.ascii ";9:<=>E"
-	.byte 0x8f
+	.ascii ";9:<=>Eè"
 	.byte 0x0d, 0x00, 0x00, 0x8d, 0x02, 0x3f, 0x48, 0x7e
 	.byte 0x24, 0x00, 0x8d, 0x03, 0x3f, 0x07, 0x7e, 0x1d
 	.byte 0x00, 0x9d, 0x04, 0x21, 0xc1, 0x65, 0x0d, 0x21
@@ -101949,8 +101207,7 @@ LABEL_EF97E0:
 	.byte 0xf1, 0xef, 0x0d, 0x00, 0x01, 0x38, 0x3b, 0x39
 	.byte 0x3a, 0x3c, 0x3d, 0x3e
 	.byte 0x1d, 0x98, 0xf2, 0xef
-	.ascii "^]\\ZY[X"
-	.byte 0xc1
+	.ascii "^]\\ZY[X¡"
 	.byte 0x65, 0x0d, 0x3f, 0x03, 0x7e, 0xa4, 0xff, 0x1d
 	.byte 0x20, 0xd3, 0xef, 0x1b, 0xbd, 0x9c, 0xef, 0xc1
 	.byte 0x65, 0x0d, 0x3f, 0x03, 0x7e, 0x1b, 0x00, 0xf1
@@ -102097,8 +101354,7 @@ LABEL_EF9FAD:
 	.byte 0xec, 0xe4, 0x33, 0xb3, 0x00, 0xff, 0xc9, 0x8d
 	.byte 0xc9, 0xcf, 0xff, 0x7e, 0x19, 0x00, 0xd9, 0x61
 	.byte 0xd9, 0xcf, 0x1c, 0x00, 0x73, 0xdb, 0xff, 0x5e
-	.ascii "]\\ZY[X"
-	.byte 0xc1, 0x53
+	.ascii "]\\ZY[X¡S"
 	.byte 0x0d, 0x3c, 0xfe, 0x1b, 0x0e, 0xa1, 0xef, 0x45
 	.byte 0x8f, 0x0d, 0x00, 0x00, 0xb5, 0x00, 0xb0, 0xc1
 	.byte 0x57, 0x0d, 0x21, 0xbd, 0x01, 0x41, 0xbd, 0x05
@@ -102710,8 +101966,7 @@ LABEL_EFAADB:
 	.byte 0x00
 	.ascii "8;9:<=>"
 	.byte 0x1d, 0xd0, 0xbd, 0xef
-	.ascii "^]\\ZY[X]"
-	.byte 0xe7, 0x38, 0x9d, 0xf3
+	.ascii "^]\\ZY[X]Á8ùÛ"
 	.byte 0x07, 0xf4, 0xec, 0x35, 0x8d, 0x03, 0x20, 0xe7
 	.byte 0x38, 0x8d, 0x0e, 0x04, 0x04, 0x00, 0x03, 0x00
 	.byte 0x04, 0x00, 0x00, 0x08, 0x08, 0x00, 0x03, 0x00
@@ -103177,8 +102432,7 @@ LABEL_EFB839:
 	.ascii "9:<=>'"
 	.byte 0x05, 0x1d
 	.byte 0xc0, 0xb8, 0xef, 0x1d, 0x56, 0xb9, 0xef, 0x5e
-	.ascii "]\\ZY[X"
-	.byte 0xdb, 0xc8
+	.ascii "]\\ZY[X€»"
 	.byte 0x04, 0x00, 0x1b, 0x1e, 0xb8, 0xef
 LABEL_EFB859:
 	.byte 0xdb, 0xc8
@@ -103826,8 +103080,7 @@ LABEL_EFC419:
 	.byte 0x1d, 0x69
 	.byte 0xc3, 0xef, 0xf1, 0xc4, 0x0d, 0x41, 0xcc, 0x88
 	.byte 0xcd, 0x89, 0xda, 0xa9, 0x1d, 0xd1, 0xc4, 0xef
-	.ascii "^]\\ZY[X"
-	.byte 0xc1
+	.ascii "^]\\ZY[X¡"
 	.byte 0xc4, 0x0d, 0x21, 0x0e, 0x1d, 0xb4, 0xc6, 0xef
 	.byte 0x3a, 0x42, 0x9e, 0x0c, 0x00, 0x00, 0xd3, 0x07
 	.byte 0xe8, 0xf8, 0x25, 0x5a, 0x1d, 0xa0, 0xc6, 0xef
@@ -105435,9 +104688,7 @@ LABEL_EFEE71:
 	.byte 0x1d, 0x07, 0x5c, 0xef, 0x0e, 0x20, 0x20, 0x54
 	.ascii "EMPO  "
 	.byte 0x15, 0x3d
-	.ascii "                TEMPO  "
-	.byte 0x93
-	.ascii "=              "
+	.ascii "                TEMPO  ì=              "
 	.byte 0x1d
 	.byte 0x8b, 0x5b, 0xef, 0x1d, 0x71, 0xf4, 0xef, 0x45
 	.long LABEL_EFEF3A
@@ -105449,9 +104700,7 @@ LABEL_EFEE71:
 	.byte 0xe6, 0xf3, 0xef, 0x1d, 0x07, 0x5c, 0xef, 0x0e
 LABEL_EFEF3A:	.ascii "  TEMPO  "
 	.byte 0x15
-	.ascii "=                TEMPO  "
-	.byte 0x93
-	.ascii "=              "
+	.ascii "=                TEMPO  ì=              "
 	.byte 0x1d, 0x8b, 0x5b, 0xef, 0x1d, 0x71
 	.byte 0xf4, 0xef, 0x45, 0x90, 0xef, 0xef, 0x00, 0x44
 	.byte 0xca, 0x0e, 0x00, 0x00, 0x31, 0x19, 0x00, 0x85
@@ -105614,8 +104863,7 @@ LABEL_EFF144:
 	.byte 0x5c, 0x5e, 0xef, 0x45, 0x81, 0x11, 0x00, 0x00
 	.byte 0x95, 0x20, 0xb4, 0x50, 0x8d, 0x02, 0x21, 0xbc
 	.byte 0x02, 0x41, 0x0e
-	.ascii "        P.BEND= MOD.  = EXP.  = P.MEM = AFT.  =                          ONOFF"
-	.byte 0xe8, 0xd0, 0xc1, 0x21, 0x37, 0x21, 0xc1
+	.ascii "        P.BEND= MOD.  = EXP.  = P.MEM = AFT.  =                          ONOFFË–¡!7!¡"
 	.byte 0x12, 0x11, 0x20, 0xc9, 0xcc, 0x7f, 0xc8, 0xcc
 	.byte 0x7f, 0xc8, 0xe9, 0x01, 0xc8, 0x8d, 0xcd, 0xcc
 	.byte 0x80, 0xc8, 0xcc, 0x7f, 0xcd, 0xe1, 0x32, 0xe8
@@ -105647,8 +104895,7 @@ LABEL_EFF144:
 	.byte 0xf5, 0xf1, 0x50, 0xd9, 0x1c, 0xfa, 0x0e, 0x1d
 	.byte 0x8b, 0x5b, 0xef, 0x0e, 0xd9, 0xaf, 0x44, 0xd4
 	.byte 0x0e, 0x00, 0x00
-	.ascii "<0  "
-	.byte 0xf5
+	.ascii "<0  ı"
 	.byte 0xf1, 0x50, 0xd9, 0x1c, 0xfa, 0x5c, 0xd1, 0x62
 	.byte 0x0d, 0x3f, 0x00, 0x00, 0x76, 0x3e, 0x00, 0xf5
 	.byte 0xf0, 0x00, 0x1b, 0xf5, 0xf0, 0x00, 0x8b, 0xd1
@@ -105718,38 +104965,17 @@ LABEL_EFF56D:
 LABEL_EFF599:	.ascii "  C D"
 	ld	w, (xwa+68)
 	.byte 0x45, 0x88
-	.ascii "E F F"
-	.byte 0x8c
+	.ascii "E F Få"
 	.byte 0x47, 0x20, 0x41, 0x88, 0x41, 0x20, 0x42, 0x88
-	.ascii "B                 7    Maj7 aug  min  min7 dim  m7"
-	.byte 0x88
-	.ascii "5 mM7  7sus46    aug7   "
-	.byte 0x88
-	.ascii "5 7 "
-	.byte 0x88
-	.ascii "5 79   7 "
-	.byte 0x88
-	.ascii "9 M79  69   m6   m "
-	.byte 0x88, 0x35
-	.ascii " m79  m69  sus4 7 "
-	.byte 0x8c
-	.ascii "9 M7"
-	.byte 0x88
-	.ascii "5 M7"
-	.byte 0x8c, 0x35, 0x20, 0x6d
+	.ascii "B                 7    Maj7 aug  min  min7 dim  m7à5 mM7  7sus46    aug7   à5 7 à5 79   7 à9 M79  69   m6   m à5 m79  m69  sus4 7 å9 M7à5 M7å5 m"
 	.byte 0x4d, 0x37, 0x88
-	.ascii "5   139"
-	.byte 0x8c, 0x35, 0x20, 0x20, 0x88, 0x39
+	.ascii "5   139å5  à9"
 	.byte 0x20, 0x31, 0x33, 0x8c
-	.ascii "9 13  "
-	.byte 0x88, 0x31, 0x33, 0x88, 0x39, 0x88
+	.ascii "9 13  à13à9à"
 	.byte 0x31, 0x33, 0x8c, 0x39, 0x88, 0x31, 0x33, 0x20
-	.ascii "  13  "
-	.byte 0x88, 0x31
+	.ascii "  13  à1"
 	.byte 0x33, 0x37, 0x20, 0x8c
-	.ascii "11m7 11+7"
-	.byte 0x8c, 0x31, 0x31
-	.ascii " add9madd9                                                                                                                  "
+	.ascii "11m7 11+7å11 add9madd9                                                                                                                  "
 	.byte 0x13, 0x20, 0x20, 0x20
 	.byte 0x14, 0x2e, 0x20, 0x20, 0x14, 0x20, 0x20, 0x20
 	.byte 0x15, 0x20, 0x20, 0x20, 0x15, 0x2e, 0x20, 0x20
@@ -105795,8 +105021,7 @@ LABEL_EFF599:	.ascii "  C D"
 	.byte 0x13
 	.byte 0x8b, 0x32, 0x2b, 0x20, 0x13, 0x8b, 0x33, 0x2b
 	.byte 0x20, 0x13, 0x8b
-	.ascii "4          TENUNORMSTACCUTTD"
-	.byte 0xcf
+	.ascii "4          TENUNORMSTACCUTTDœ"
 	.byte 0x0e, 0x00, 0x00, 0xc1, 0x17, 0x37, 0x3f, 0xff
 	.byte 0x7e, 0x16, 0x00, 0x30, 0x20, 0x20, 0xbc, 0x00
 	.byte 0x50, 0xbc, 0x02, 0x50, 0xbc, 0x04, 0x50, 0xbc
@@ -105813,8 +105038,7 @@ LABEL_EFF599:	.ascii "  C D"
 	.byte 0x83, 0x11, 0x21, 0xbc, 0x08, 0x41, 0xbc, 0x05
 	.byte 0x00, 0x56, 0x0e, 0x20, 0x43, 0x43, 0x8c, 0x20
 	.byte 0x44, 0x44, 0x8c
-	.ascii " E FF"
-	.byte 0x8c, 0x20, 0x47, 0x47, 0x8c, 0x20, 0x41, 0x41
+	.ascii " E FFå GGå AA"
 	.byte 0x8c
 	.ascii " B-2-10 1 2 3 4 5 6 7 8 "
 	.byte 0xc1, 0xef, 0x0d, 0x3f, 0x0a, 0x76, 0x09
@@ -105899,8 +105123,7 @@ LABEL_EFF939:	.ascii "RT1 RT2 LFT P 4 P 5 P 6 P 7 P 8 P 9 P10 P11 P12 P13 P14 P1
 	.byte 0x02, 0x00, 0x27, 0x04, 0x45, 0xc8, 0xfb, 0xef
 	.byte 0x00, 0xf3, 0x07, 0xf4, 0xec, 0x35, 0xd9, 0xac
 	.byte 0x85, 0x11, 0x1d, 0x07, 0x5c, 0xef, 0x0e, 0x53
-	.ascii "USTAIN ON  OFF "
-	.byte 0xc1
+	.ascii "USTAIN ON  OFF ¡"
 	.byte 0xef, 0x0d, 0x3f, 0x01, 0x76, 0x09, 0x00, 0xf1
 	.byte 0xef, 0x0d, 0x00, 0x01, 0x1d, 0x8b, 0x5b, 0xef
 	.byte 0x1d, 0x28, 0xf0, 0xef, 0xc1, 0xf1, 0x10, 0x27
@@ -105912,8 +105135,7 @@ LABEL_EFF939:	.ascii "RT1 RT2 LFT P 4 P 5 P 6 P 7 P 8 P 9 P10 P11 P12 P13 P14 P1
 	.byte 0x45, 0xc8, 0xfb, 0xef, 0x00, 0xf3, 0x07, 0xf4
 	.byte 0xec, 0x35, 0xd9, 0xac, 0x85, 0x11, 0x1d, 0x07
 	.byte 0x5c, 0xef, 0x0e
-	.ascii "DSP EFFECT "
-	.byte 0xc1, 0xef
+	.ascii "DSP EFFECT ¡Ô"
 	.byte 0x0d, 0x3f, 0x01, 0x76, 0x09, 0x00, 0xf1, 0xef
 	.byte 0x0d, 0x00, 0x01, 0x1d, 0x8b, 0x5b, 0xef, 0x1d
 	.byte 0x28, 0xf0, 0xef, 0xc1, 0xf1, 0x10, 0x27, 0xce
@@ -105939,8 +105161,7 @@ LABEL_EFFC89:	.ascii "EFFECT "
 	.byte 0x10, 0x21, 0x1d, 0x5c, 0x5e, 0xef, 0x45, 0x81
 	.byte 0x11, 0x00, 0x00, 0xd9, 0xab, 0x85, 0x11, 0x1d
 	.byte 0x07, 0x5c, 0xef, 0x0e
-	.ascii "DSP EFFECT="
-	.byte 0xc1
+	.ascii "DSP EFFECT=¡"
 	.byte 0xef, 0x0d, 0x3f, 0x01, 0x76, 0x09, 0x00, 0xf1
 	.byte 0xef, 0x0d, 0x00, 0x01, 0x1d, 0x8b, 0x5b, 0xef
 	.byte 0x1d, 0x28, 0xf0, 0xef, 0xc1, 0xf1, 0x10, 0x27
@@ -106009,8 +105230,7 @@ LABEL_EFFEA1:	.ascii "APC OFF         BASIC           ADVANCED 1      PIANIST   
 	.byte 0x00, 0xf0, 0x00, 0x44, 0xda, 0x0e, 0x00, 0x00
 	.byte 0xd9, 0xab, 0x85, 0x11, 0x1d, 0x07, 0x5c, 0xef
 	.byte 0x0e
-	.ascii "APC MEMORY ON "
-	.byte 0xc1
+	.ascii "APC MEMORY ON ¡"
 	.byte 0xef, 0x0d, 0x3f, 0x01, 0x76, 0x0b, 0x00, 0xf1
 	.byte 0xef, 0x0d, 0x00, 0x01, 0x28, 0x1d, 0x8b, 0x5b
 	.byte 0xef, 0x48, 0xc8, 0xcc, 0xe0, 0xc9, 0xcc, 0xe0
@@ -106124,8 +105344,7 @@ LABEL_EFFEA1:	.ascii "APC OFF         BASIC           ADVANCED 1      PIANIST   
 	.byte 0x07, 0xdb, 0xec, 0x02, 0x45, 0xdf, 0x03, 0xf0
 	.byte 0x00, 0xf3, 0x07, 0xf4, 0xec, 0x35, 0xd9, 0xac
 	.byte 0x85, 0x11, 0x1d, 0x07, 0x5c, 0xef, 0x0e, 0x4d
-	.ascii ".S.A. OFF ON  #2  #3  >"
-	.byte 0xe1
+	.ascii ".S.A. OFF ON  #2  #3  >·"
 	.byte 0xfd, 0x10, 0x26, 0xe7, 0x38, 0x9e, 0x5e, 0xe7
 	.byte 0x38, 0x04
 	.ascii "8;9:<=>!"
@@ -107322,8 +106541,7 @@ LABEL_F01450:
 	.byte 0x10, 0x20, 0xf1, 0x7e, 0x26, 0x60, 0xd1, 0x9f
 	.byte 0x28, 0x23, 0x1d, 0xfc, 0xfa, 0xf1, 0xe1, 0xfd
 	.byte 0x10, 0x20, 0xf1
-	.ascii "z&`X"
-	.byte 0xd1
+	.ascii "z&`X—"
 	.byte 0xba, 0x28, 0xf2, 0x6e, 0x21, 0x35, 0x00, 0x01
 	.byte 0xd1, 0xbc, 0x28, 0xa5, 0xf1, 0x92, 0x26, 0x55
 	.byte 0xd1, 0xbc, 0x28, 0x25, 0x34, 0x00, 0x01, 0xd1
@@ -111276,8 +110494,7 @@ LABEL_F072A3:
 	.byte 0x10, 0x66, 0x14, 0xc7, 0xfb, 0xcf, 0x11, 0x66
 	.byte 0x0e, 0xaf, 0x0e, 0x20, 0xb0, 0x14, 0xad, 0x06
 	.byte 0x80
-	.ascii "?'kChL"
-	.byte 0xbf
+	.ascii "?'kChLø"
 	.byte 0x04, 0x30, 0x1e, 0xa6, 0x21, 0x8f, 0x04, 0x3f
 	.byte 0x00, 0x6e, 0x29, 0xc7, 0xfb, 0xcf, 0x11, 0x6e
 	.byte 0x05, 0xc7, 0xfb, 0xa9, 0x68, 0x03, 0xc7, 0xfb
@@ -116139,8 +115356,7 @@ LABEL_F0B9C4:
 	.byte 0x5b, 0xef, 0xf0, 0xef, 0x64, 0x68, 0x11, 0xc9
 	.byte 0xcf, 0x61, 0x67, 0x0c, 0xc9, 0xcf, 0x7a, 0x6b
 	.byte 0x07, 0xc9, 0xca
-	.ascii "a#Ah"
-	.byte 0xbb
+	.ascii "a#Ahª"
 	.byte 0xef, 0x66, 0x0e, 0xef, 0x6e, 0xb7, 0x31, 0xd8
 	.byte 0xa9, 0x1d, 0x3b, 0x6b, 0xf0, 0x87, 0x3f, 0x00
 	.byte 0x66, 0x3a, 0x87, 0x69, 0x87, 0x23, 0xd9, 0x12
@@ -116168,8 +115384,7 @@ LABEL_F0B9C4:
 	.byte 0xef, 0x64, 0xd7, 0xfa, 0x05, 0xef, 0x66, 0x0e
 	.byte 0xef, 0x6e, 0xb7, 0x31, 0xd8, 0xa9, 0x1d, 0x3b
 	.byte 0x6b, 0xf0, 0x87
-	.ascii "?_o:"
-	.byte 0x87
+	.ascii "?_o:á"
 	.byte 0x61, 0x87, 0x23, 0xd9, 0x12, 0xd8, 0xa9, 0x1d
 	.byte 0x2e, 0x6b, 0xf0, 0x87, 0x21, 0xd8, 0x12, 0xbf
 	.byte 0x02, 0x31, 0x1d, 0xd8, 0x74, 0xf0, 0xbf, 0x04
@@ -116691,8 +115906,7 @@ LABEL_F0ED7D:	.ascii ">89:;<="
 	.byte 0x5b, 0x5a, 0x59, 0x58, 0x5e
 	.byte 0x0e, 0x3e, 0xef
 	.byte 0x8e
-	.ascii "89:;<="
-	.byte 0x9e
+	.ascii "89:;<=û"
 	.byte 0x08, 0x20, 0xf1, 0xcc, 0x06, 0x50, 0x9e, 0x0a
 	.byte 0x20, 0xf1, 0xce, 0x06, 0x50, 0x9e, 0x0c, 0x20
 	.byte 0xf1, 0xd0, 0x06, 0x50, 0x9e, 0x0e, 0x20, 0xf1
@@ -116854,8 +116068,7 @@ LABEL_F0EF8A:
 	.long LABEL_F0F4F2
 	.long LABEL_F0F4F2
 	.long LABEL_F0F4F2
-	.ascii "89:;<=>"
-	.byte 0xf2
+	.ascii "89:;<=>Ú"
 	.byte 0xa8, 0xef, 0x03, 0x00, 0x00, 0x45, 0x39, 0x14
 	.byte 0xf1, 0x00, 0x44, 0x60, 0x14, 0xf1, 0x00, 0x1d
 	.byte 0x00, 0xec, 0xf0, 0xc1, 0x5c, 0x06, 0x3f, 0x00
@@ -117529,8 +116742,7 @@ LABEL_F102FC:
 	.byte 0xc9, 0xd8, 0x66
 	.byte 0x0e, 0xc9, 0xdb, 0x66, 0x24, 0xc9, 0xdc, 0x66
 	ldw	iz, 0xddc9
-	.ascii "oHhL"
-	.byte 0xf2
+	.ascii "oHhLÚ"
 	.byte 0xa8, 0xef, 0x03, 0x00, 0x01, 0x45, 0x6a, 0x35
 	.byte 0xf1, 0x00, 0x44, 0x74, 0x35, 0xf1, 0x00, 0x1d
 	.byte 0x00, 0xec, 0xf0, 0x1d, 0x6a, 0x03, 0xf1, 0x68
@@ -117633,8 +116845,7 @@ LABEL_F102FC:
 	.byte 0x45, 0x7a, 0x3a, 0xf1, 0x00, 0x44, 0x96, 0x3a
 	.byte 0xf1, 0x00, 0x1d, 0x0d, 0xec, 0xf0, 0x1d, 0x67
 	.byte 0x07, 0xf1
-	.ascii "hBE@:"
-	.byte 0xf1
+	.ascii "hBE@:Ò"
 	.byte 0x00, 0x44, 0x4a, 0x3a, 0xf1, 0x00, 0x1d, 0x00
 	.byte 0xec, 0xf0, 0x45, 0x5e, 0x3a, 0xf1, 0x00, 0x44
 	.byte 0x7a, 0x3a, 0xf1, 0x00, 0x1d, 0x0d, 0xec, 0xf0
@@ -118096,8 +117307,7 @@ LABEL_F10FCE:
 	.byte 0x00, 0x01, 0x02, 0x04, 0x08, 0x10, 0xe0, 0x00
 	.byte 0xf8, 0xf4, 0x1a, 0x0d, 0x06, 0x03, 0x01, 0x00
 	.zero 19
-	.ascii "  PP"
-	.byte 0x88
+	.ascii "  PPà"
 	.byte 0x88, 0x88, 0x88, 0x88, 0x88, 0xc8, 0xc8, 0xc8
 	.byte 0xc8, 0xc8, 0x88, 0x88, 0x88, 0x88, 0xd8, 0xd0
 	.byte 0x70, 0x20, 0x00, 0x00, 0x00, 0x00, 0x20, 0x07
@@ -119540,8 +118750,7 @@ LABEL_F132B4:
 	.byte 0x88
 	.byte 0x2d, 0x44, 0x2d, 0x32, 0x45
 	mul8_rid8 xwa, 0x2d, e
-	.ascii "-2F-2F"
-	.byte 0x8c, 0x2d
+	.ascii "-2F-2Få-"
 	.byte 0x47, 0x2d, 0x32, 0x41
 	.byte 0x88, 0x2d, 0x41, 0x2d
 	ldw	de, 0x8842
@@ -119551,89 +118760,25 @@ LABEL_F132B4:
 	.byte 0x20, 0x46, 0x8c, 0xb0, 0x47, 0xb0, 0x20, 0x41
 	.byte 0x88, 0xb0, 0x41, 0xb0, 0x20, 0x42, 0x88, 0xb0
 	.byte 0x42, 0xb0
-	.ascii " C0 D"
-	.byte 0x88
-	.ascii "0D0 E"
+	.ascii " C0 Dà0D0 E"
 	mul8_rid8 xwa, 0x30, e
-	.ascii "0 F0 F"
-	.byte 0x8c, 0x30
-	.ascii "G0 A"
-	.byte 0x88, 0x30, 0x41, 0x30
+	.ascii "0 F0 Få0G0 Aà0A0"
 	.byte 0x20, 0x42, 0x88
-	.ascii "0B0 C1 D"
-	.byte 0x88
-	.ascii "1D1 E"
-	.byte 0x88
-	.ascii "1E1 F1 F"
-	.byte 0x8c
-	.ascii "1G1 A"
-	.byte 0x88
-	.ascii "1A1 B"
-	.byte 0x88, 0x31
-	.ascii "B1 C2 D"
-	.byte 0x88
-	.ascii "2D2 E"
+	.ascii "0B0 C1 Dà1D1 Eà1E1 F1 Få1G1 Aà1A1 Bà1B1 C2 Dà2D2 E"
 	mul8_rid8 xwa, 0x32, e
-	.ascii "2 F2 F"
-	.byte 0x8c, 0x32
-	.ascii "G2 A"
-	.byte 0x88, 0x32, 0x41, 0x32
+	.ascii "2 F2 Få2G2 Aà2A2"
 	.byte 0x20, 0x42, 0x88
-	.ascii "2B2 C3 D"
-	.byte 0x88
-	.ascii "3D3 E"
-	.byte 0x88
-	.ascii "3E3 F3 F"
-	.byte 0x8c
-	.ascii "3G3 A"
-	.byte 0x88
-	.ascii "3A3 B"
-	.byte 0x88, 0x33
-	.ascii "B3 C4 D"
-	.byte 0x88
-	.ascii "4D4 E"
+	.ascii "2B2 C3 Dà3D3 Eà3E3 F3 Få3G3 Aà3A3 Bà3B3 C4 Dà4D4 E"
 	mul8_rid8 xwa, 0x34, e
-	.ascii "4 F4 F"
-	.byte 0x8c, 0x34
-	.ascii "G4 A"
-	.byte 0x88, 0x34, 0x41, 0x34
+	.ascii "4 F4 Få4G4 Aà4A4"
 	.byte 0x20, 0x42, 0x88
-	.ascii "4B4 C5 D"
-	.byte 0x88
-	.ascii "5D5 E"
-	.byte 0x88
-	.ascii "5E5 F5 F"
-	.byte 0x8c
-	.ascii "5G5 A"
-	.byte 0x88
-	.ascii "5A5 B"
-	.byte 0x88, 0x35
-	.ascii "B5 C6 D"
-	.byte 0x88
-	.ascii "6D6 E"
+	.ascii "4B4 C5 Dà5D5 Eà5E5 F5 Få5G5 Aà5A5 Bà5B5 C6 Dà6D6 E"
 	mul8_rid8 xwa, 0x36, e
-	.ascii "6 F6 F"
-	.byte 0x8c, 0x36
-	.ascii "G6 A"
-	.byte 0x88, 0x36, 0x41, 0x36
+	.ascii "6 F6 Få6G6 Aà6A6"
 	.byte 0x20, 0x42, 0x88
-	.ascii "6B6 C7 D"
-	.byte 0x88
-	.ascii "7D7 E"
-	.byte 0x88
-	.ascii "7E7 F7 F"
-	.byte 0x8c
-	.ascii "7G7 A"
-	.byte 0x88
-	.ascii "7A7 B"
-	.byte 0x88, 0x37
-	.ascii "B7 C8 D"
-	.byte 0x88
-	.ascii "8D8 E"
+	.ascii "6B6 C7 Dà7D7 Eà7E7 F7 Få7G7 Aà7A7 Bà7B7 C8 Dà8D8 E"
 	mul8_rid8 xwa, 0x38, e
-	.ascii "8 F8 F"
-	.byte 0x8c, 0x38
-	.ascii "G8  65.4 69.3 73.4 77.8 82.4 87.3 92.5 98.0103.8110.0116.5123.5130.8138.6146.8155.6164.8174.6185.0196.0207.6220.0233.1246.9261.6277.2293.6311.1329.6349.2370.0392.0415.3440.0466.1493.8523.2554.3587.3622.2659.2698.4739.9783.9830.5879.9932.2987.71.05K1.11K1.17K1.24K1.32K1.40K1.48K1.57K1.66K1.76K1.86K1.98K2.09K2.22K2.35K2.49K2.64K2.79K2.96K3.14K3.32K3.52K3.73K3.95K4.19K4.43K4.70K4.98K5.27K5.59K5.92K6.27K6.64K7.04K7.46K7.90K8.37K8.87K9.40K9.96K10.5K11.2K11.8K12.5K13.3K14.1K14.9K15.8K16.7K17.7K18.8K19.9K21.1K 22K  23K  24K  25K  26K  27K  28K  29K  30K  31K  32K  33K  34K  35K  36K  37K  38K  39K  40K  41K  42K  43K  44K  45K  46K  47K  48K "
+	.ascii "8 F8 Få8G8  65.4 69.3 73.4 77.8 82.4 87.3 92.5 98.0103.8110.0116.5123.5130.8138.6146.8155.6164.8174.6185.0196.0207.6220.0233.1246.9261.6277.2293.6311.1329.6349.2370.0392.0415.3440.0466.1493.8523.2554.3587.3622.2659.2698.4739.9783.9830.5879.9932.2987.71.05K1.11K1.17K1.24K1.32K1.40K1.48K1.57K1.66K1.76K1.86K1.98K2.09K2.22K2.35K2.49K2.64K2.79K2.96K3.14K3.32K3.52K3.73K3.95K4.19K4.43K4.70K4.98K5.27K5.59K5.92K6.27K6.64K7.04K7.46K7.90K8.37K8.87K9.40K9.96K10.5K11.2K11.8K12.5K13.3K14.1K14.9K15.8K16.7K17.7K18.8K19.9K21.1K 22K  23K  24K  25K  26K  27K  28K  29K  30K  31K  32K  33K  34K  35K  36K  37K  38K  39K  40K  41K  42K  43K  44K  45K  46K  47K  48K "
 	.byte 0x06, 0x0b, 0x10, 0x01, 0x50
 	.ascii "AGE3/3"
 	.byte 0x17, 0x0d
@@ -121808,8 +120953,7 @@ LABEL_F172B8:
 	.byte 0x02, 0x02, 0x00, 0x8f, 0x02, 0x61, 0x68, 0x07
 	.byte 0xcf, 0x61, 0xcf, 0xcf, 0x28, 0x67, 0xb3, 0x87
 	jr	lt, 0x87
-	.ascii "?2w;"
-	.byte 0xff, 0xef
+	.ascii "?2w;ˇÔ"
 	.byte 0x66, 0x0e, 0xef, 0x6a, 0x3e, 0xbf, 0x04, 0x41
 	.byte 0xd1, 0xa0, 0x07, 0x3f, 0xff, 0xff, 0x66, 0x45
 	.byte 0xc7, 0xf9, 0xa8, 0x8f, 0x04, 0x21, 0xc9, 0xc8
@@ -121962,8 +121106,7 @@ LABEL_F172B8:
 	.byte 0x21, 0xb2, 0x41, 0xdb, 0x61, 0xe9, 0x61, 0x9f
 	.byte 0x08, 0xf3, 0x67, 0xeb, 0x8f, 0x06, 0x61, 0x8f
 	.byte 0x06
-	.ascii "?2wn"
-	.byte 0xff, 0x5e, 0xbf
+	.ascii "?2wnˇ^ø"
 	.byte 0x0c, 0x37, 0x0e, 0xef, 0x68, 0x3e, 0xbf, 0x0a
 	.byte 0x43, 0xd8, 0x8e, 0x1e, 0x94, 0x07, 0x1e, 0xb9
 	.byte 0x07, 0x1e, 0x79, 0x08, 0xde, 0x88, 0xd8, 0xcc
@@ -160328,8 +159471,7 @@ LABEL_F346ED:
 	.byte 0xcf, 0x82, 0x6e, 0x18, 0xf1, 0xb1, 0x28, 0xc8
 	.byte 0x66, 0x07, 0x40, 0xb2, 0x4a, 0xe3, 0x00, 0x68
 	.byte 0x05, 0x40, 0xb8, 0x4a, 0xe3, 0x00, 0x38, 0xa1
-	.ascii " 8h6"
-	.byte 0xa1, 0x21, 0xf1, 0xb1
+	.ascii " 8h6°!Ò±"
 	.byte 0x28, 0xc9, 0x66, 0x07, 0x40, 0xbe, 0x4a, 0xe3
 	.byte 0x00, 0x68, 0x05, 0x40, 0xc4, 0x4a, 0xe3, 0x00
 	.byte 0x38, 0x39, 0x68, 0x1e, 0xaf, 0x04, 0x20, 0xb7
@@ -167026,8 +166168,7 @@ LABEL_F38BBE:
 	.byte 0x50, 0x1e, 0x47, 0xfc, 0xd1, 0x38, 0xf2, 0x20
 	.byte 0xd1, 0x3f, 0xf2, 0xa0, 0xf1, 0x68, 0x26, 0x50
 	.byte 0xf1, 0xec
-	.ascii "&PxC"
-	.byte 0xfc
+	.ascii "&PxC¸"
 
 LABEL_F38D95:
 	dec 4, xsp
@@ -186741,8 +185882,7 @@ LABEL_F448A4:
 	.ascii "%0h0"
 	.byte 0xf1, 0x1e, 0x26, 0x36
 	.byte 0xf1
-	.ascii " &0h&"
-	.byte 0xf1, 0xd7
+	.ascii " &0h&Ò◊"
 	.byte 0xf1, 0x36, 0xf1
 	.ascii ",&0h"
 	.byte 0x1c
@@ -186767,8 +185907,7 @@ LABEL_F448A4:
 	.byte 0xf0, 0xe0, 0x20, 0xf2, 0xb9, 0x49, 0xf4, 0x34
 	.byte 0xf3, 0x07, 0xf0, 0xe0, 0xd8, 0xf1, 0x10, 0x26
 	ldw	iz, 0x12f1
-	.ascii "&0h:"
-	.byte 0xf1
+	.ascii "&0h:Ò"
 	.byte 0x29, 0xf2, 0x36, 0xf1, 0xfa, 0x25, 0x30, 0x68
 	.byte 0x30, 0xf1, 0x1e, 0x26, 0x36, 0xf1, 0x20, 0x26
 	.byte 0x30, 0x68, 0x26, 0xf1, 0xd7, 0xf1, 0x36, 0xf1
@@ -188213,8 +187352,7 @@ LABEL_F45DE1:
 	.byte 0xcf, 0x82, 0x6e, 0x13, 0xc1, 0xb1, 0x28, 0x21
 	.byte 0xc9, 0x33, 0x00, 0x7e, 0x5c, 0x05, 0xc9, 0x31
 	.byte 0x00, 0xf1, 0xb1
-	.ascii "(Ah0"
-	.byte 0xc9
+	.ascii "(Ah0…"
 	.byte 0xcf, 0x86, 0x6e, 0x2b, 0xf1, 0xb2, 0x28, 0xca
 	.byte 0x7e, 0x47, 0x05, 0xf1, 0xb1, 0x28, 0xc9, 0x7e
 	.byte 0x40, 0x05, 0x1d, 0x8a, 0xf0, 0xf3, 0xf1, 0xb1
@@ -203381,8 +202519,7 @@ LABEL_F500EC:
 	.byte 0x66, 0x03, 0x33, 0xff, 0xff, 0xaf, 0x08, 0x20
 	.byte 0x80, 0x3f, 0x2e, 0x6e, 0x0a, 0xaf, 0x08, 0x20
 	.byte 0x88, 0x01
-	.ascii "? vO"
-	.byte 0xff, 0x5e
+	.ascii "? vOˇ^"
 	.byte 0x0e, 0xbf, 0xe0, 0x37, 0x2e, 0xaf, 0x26, 0x20
 	.byte 0xa8, 0x12, 0x20, 0x38, 0xaf, 0x2a, 0x20, 0xa8
 	.byte 0x0a, 0x20, 0xa8, 0x1c, 0x20, 0xb0, 0xe8, 0xef
@@ -211477,8 +210614,7 @@ LABEL_F565EE:
 	.byte 0x3f, 0x02, 0x6e, 0x05, 0x8b, 0x14, 0x21, 0x68
 	.byte 0x32, 0xc1, 0xd4, 0x33, 0x3f, 0x04, 0x6e, 0x05
 	.byte 0x8b
-	.ascii "<!h&"
-	.byte 0xc1, 0xd4, 0x33
+	.ascii "<!h&¡‘3"
 	.byte 0x3f, 0x08, 0x6e, 0x05, 0x8b, 0x64, 0x21, 0x68
 	.byte 0x1a, 0xc1, 0xd4, 0x33, 0x3f, 0x10, 0x6e, 0x07
 	.byte 0xc3, 0xed, 0x8c, 0x00, 0x21, 0x68, 0x0c, 0xc1
@@ -222193,8 +221329,7 @@ LABEL_F5DEFC:
 	.byte 0xf5, 0xee, 0x88, 0x68, 0x73, 0x1e, 0x4b, 0xfd
 	.byte 0xe1, 0x26, 0x34, 0x20, 0x1d, 0x5f, 0xe7, 0xf5
 	.byte 0xe1
-	.ascii "&4 hb"
-	.byte 0xe1, 0xf2
+	.ascii "&4 hb·Ú"
 	.byte 0x33, 0x22, 0xbf, 0x04, 0x30, 0x8a, 0x10, 0x23
 	.byte 0xb0, 0x43, 0x8a, 0x11, 0x25, 0xb8, 0x01, 0x45
 	.byte 0x80, 0x27, 0xdb, 0x12, 0xda, 0x12, 0xda, 0xee
@@ -222219,8 +221354,7 @@ LABEL_F5DEFC:
 	.byte 0xe7, 0xf5, 0xee, 0x88, 0x78, 0xa6, 0x00, 0x1e
 	.byte 0xce, 0xfc, 0xe1, 0x26, 0x34, 0x20, 0x1d, 0x5f
 	.byte 0xe7, 0xf5, 0xe1
-	.ascii "&4 x"
-	.byte 0x94
+	.ascii "&4 xî"
 	.byte 0x00, 0xc1, 0x33, 0x04, 0x21, 0xc1, 0x68, 0x33
 	.byte 0xf1, 0x6e, 0x1d, 0xc1, 0x69, 0x33, 0x21, 0xd8
 	.byte 0x12, 0xd8, 0xec, 0x02, 0x46, 0x60, 0x48, 0x09
@@ -222326,8 +221460,7 @@ LABEL_F5E3A6:
 	.byte 0xc1, 0x33, 0x04, 0x21, 0xc1, 0x68, 0x33, 0xf1
 	.byte 0x6e, 0xcd, 0xc1, 0xd4, 0x33, 0x21, 0xc1, 0x12
 	ldw	hl, 0xc1e9
-	.ascii "i3%h"
-	.byte 0xc3
+	.ascii "i3%h√"
 	.byte 0xd8, 0x12, 0xf2, 0xf8, 0x9f, 0xe4, 0x31, 0xc3
 	.byte 0x07, 0xe4, 0xe0, 0x27, 0xcd, 0x89, 0xd8, 0x12
 	.byte 0xd8, 0xec, 0x02, 0xf2, 0x12, 0x63, 0xe4, 0x31
@@ -222478,8 +221611,7 @@ LABEL_F5E700:
 	.byte 0xc1, 0xd4, 0x33, 0x21, 0x1d, 0x3b, 0xde, 0xf5
 	.ascii "[ZYX^]\\"
 	.byte 0x0e
-	.ascii "<=>89:;"
-	.byte 0xe8
+	.ascii "<=>89:;Ë"
 	.byte 0xd0, 0xc1, 0xd4, 0x33, 0x21, 0x1d, 0x69, 0xde
 	.byte 0xf5
 	.ascii "[ZYX^]\\"
@@ -233085,8 +232217,7 @@ LABEL_F65909:	.ascii "(1/2)+0  "
 	.byte 0x47, 0x4b, 0xc8, 0x05, 0xc8, 0x33, 0x07, 0x6e
 	.byte 0x21, 0xcf, 0xcf, 0x0f, 0x6e, 0x0e, 0x3c, 0x44
 	.byte 0x24, 0x5b, 0xf6, 0x00, 0xc3, 0x03, 0xf0, 0xe0
-	.ascii "!\\h*"
-	.byte 0xc9, 0x61, 0xc1, 0x2d
+	.ascii "!\\h*…a¡-"
 	.byte 0x34, 0xf1, 0x63, 0x22, 0xc1, 0x2d, 0x34, 0x21
 	.byte 0x68, 0x1c, 0xcf, 0xcf, 0x0f, 0x6e, 0x0e, 0x3c
 	.byte 0x44, 0x30, 0x5b, 0xf6, 0x00, 0xc3, 0x03, 0xf0
@@ -236087,8 +235218,7 @@ LABEL_F68027:	.ascii ":;<>"
 	.byte 0x3a, 0x3b, 0x3c, 0x3e
 	.byte 0x1d, 0x55
 	.byte 0x4f, 0xf6
-	.ascii "^\\[Zx"
-	.byte 0x97
+	.ascii "^\\[Zxó"
 	.byte 0x02
 
 LABEL_F68048:
@@ -236843,8 +235973,7 @@ LABEL_F686F7:
 	.byte 0x07, 0x9e, 0xfa, 0x40, 0x1b, 0x00, 0xb8, 0x00
 	.byte 0x41, 0x0c, 0x00, 0xc0, 0x01, 0xea, 0xa8, 0x78
 	.byte 0xf3, 0x01
-	.ascii ":;<> "
-	.byte 0x80
+	.ascii ":;<> Ä"
 	.byte 0x1d, 0xf6, 0x55, 0xf6
 	.byte 0x5e, 0x5c, 0x5b, 0x5a
 	.byte 0xc1, 0x80, 0x3a, 0x3f, 0x01, 0x66, 0x48, 0xf1
@@ -236887,8 +236016,7 @@ LABEL_F686F7:
 	.byte 0xb8, 0x00, 0x41, 0x0c, 0x00, 0xc0, 0x01, 0xea
 	.byte 0xa8, 0x78, 0xb9, 0x00, 0xd8, 0xa9, 0x1d, 0x45
 	cp	(xiy), bc
-	.ascii ":;<> "
-	.byte 0x80
+	.ascii ":;<> Ä"
 	.byte 0x1d, 0x19, 0x56, 0xf6
 	.byte 0x5e, 0x5c, 0x5b, 0x5a
 	.byte 0xc1, 0x80, 0x3a, 0x3f, 0x01, 0x66, 0x48, 0xf1
@@ -238788,8 +237916,7 @@ LABEL_F6A386:
 	.byte 0x24, 0xcc, 0xd8
 	.ascii "fW8;9:<=>"
 	.byte 0x1d, 0x47, 0xa3, 0xf6
-	.ascii "^]\\ZY[X"
-	.byte 0xdb
+	.ascii "^]\\ZY[X€"
 	.byte 0xd3, 0xcb, 0x8f, 0xc3, 0x07, 0xf4, 0xec, 0x27
 	.byte 0xcf, 0xcc, 0x0f, 0x1e, 0x54, 0x00, 0xec, 0xc8
 	.byte 0x04, 0x00, 0x00, 0x00, 0xdb, 0xd3, 0xcb, 0x8f
@@ -239000,13 +238127,10 @@ LABEL_F6A9D7:
 	.ascii "TE VEL   LENGTH"
 	.byte 0x06
 	.byte 0x14, 0x27, 0x21, 0x8d
-	.ascii "    "
-	.byte 0x8d
-	.ascii "    "
+	.ascii "    ç    "
 	ld	w, (xiy+32)
 	.byte 0x20, 0x20, 0x8d, 0x06, 0x14, 0x2f, 0x23, 0x8e
-	.ascii "    "
-	.byte 0x8e, 0x20, 0x20, 0x20
+	.ascii "    é   "
 	ldb	w, 0x8e
 	.ascii "    "
 	.byte 0x8e, 0x0a
@@ -239071,8 +238195,7 @@ LABEL_F6A9D7:
 	.byte 0x02, 0x0f, 0xbb, 0x39, 0x03, 0x00, 0x06, 0x4c
 	.byte 0xae, 0xf6, 0x00, 0x04, 0x00, 0x9a, 0x1b, 0x20
 	.byte 0x43, 0x43, 0x8c, 0x20, 0x44, 0x44, 0x8c, 0x20
-	.ascii "E FF"
-	.byte 0x8c, 0x20, 0x47, 0x47
+	.ascii "E FFå GG"
 	.byte 0x8c, 0x20, 0x41, 0x41, 0x8c, 0x20, 0x42, 0x2d
 	.ascii "2-10 1 2 3 4 5 6 7 8     "
 	.byte 0x18, 0x1f, 0x20, 0x18, 0x20, 0x20, 0x17
@@ -239180,8 +238303,7 @@ LABEL_F6A9D7:
 	.long LABEL_F900F1
 	.byte 0x01, 0x01, 0x42, 0x00, 0x60, 0x00, 0x7e, 0x00
 	.byte 0x9c, 0x00
-	.ascii "A-vari1A-vari2A-vari3A-vari4B-vari1B-vari2B-vari3B-vari4C-vari1C-vari2C-vari3C-vari4A-INT 1A-INT 2A-FILL1A-FILL2A-END 1A-END 2B-INT 1B-INT 2B-FILL1B-FILL2B-END 1B-END 2C-INT 1C-INT 2C-FILL1C-FILL2C-END 1C-END 2;"
-	.byte 0xc1, 0x3e, 0x35
+	.ascii "A-vari1A-vari2A-vari3A-vari4B-vari1B-vari2B-vari3B-vari4C-vari1C-vari2C-vari3C-vari4A-INT 1A-INT 2A-FILL1A-FILL2A-END 1A-END 2B-INT 1B-INT 2B-FILL1B-FILL2B-END 1B-END 2C-INT 1C-INT 2C-FILL1C-FILL2C-END 1C-END 2;¡>5"
 	.byte 0x21, 0x5b, 0x0e, 0x00, 0x01, 0x02, 0x03, 0x0c
 	.byte 0x0d, 0x0e, 0x0f, 0x10, 0x11, 0x04, 0x05, 0x06
 	.byte 0x07, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x08
@@ -239610,8 +238732,7 @@ LABEL_F6B3A5:
 	.byte 0x50, 0x68, 0x05, 0xbe, 0x03, 0x02, 0xff, 0xff
 	.byte 0xf1, 0x74, 0x39, 0x50, 0xd1, 0x76, 0x39, 0x20
 	.byte 0xf1
-	.ascii "x9Ph"
-	.byte 0x89, 0xd1, 0x76
+	.ascii "x9Phâ—v"
 	.byte 0x39, 0x23, 0x1e, 0xda, 0xf9, 0xbe, 0x03, 0x02
 	.byte 0xff, 0xff, 0x00, 0x00, 0x0e, 0xeb, 0xd3, 0xd1
 	.byte 0x72, 0x39, 0x23, 0xdb, 0xcf, 0x54, 0x01, 0x6f
@@ -276552,8 +275673,7 @@ LABEL_F8B4CC:
 	.byte 0x77, 0x66, 0x15, 0xc9, 0xcf, 0x6c, 0x66, 0x0d
 	.byte 0xc9, 0xcf, 0x61, 0xb0, 0xfe, 0x30, 0x61, 0x00
 	ldw	bc, 0x0064
-	.ascii "h>xL"
-	.byte 0xfe
+	.ascii "h>xL˛"
 	.byte 0xd8, 0x12, 0x68, 0x3c, 0xcb, 0xcf, 0x60, 0x66
 	.byte 0x05, 0xcb, 0xcf, 0x7e, 0x6e, 0x36, 0xc9, 0x8b
 	.byte 0xc9, 0xd8, 0xb0, 0xf6, 0xcb, 0xdd, 0xb0, 0xff
@@ -283036,8 +282156,7 @@ DirmdEmulator:
 LABEL_F9AEC6:	.ascii ":;<>"
 	.byte 0xae, 0x04, 0x20, 0xb0
 	.byte 0xe8
-	.ascii "^\\[Zhq"
-	.byte 0xf1
+	.ascii "^\\[ZhqÒ"
 	.byte 0xe0, 0xe3, 0x00, 0x00, 0x30, 0xff, 0x00, 0x1d
 	.byte 0x50, 0x14, 0xfb, 0x30, 0xf5, 0x00, 0x1d, 0x4a
 	.byte 0x14, 0xfb, 0x1d, 0xb7, 0x14, 0xfb, 0x30, 0xff
@@ -283050,8 +282169,7 @@ LABEL_F9AEC6:	.ascii ":;<>"
 	.byte 0xf1, 0xe0, 0xe3, 0x00
 	.byte 0x00, 0x68, 0x2d, 0xea, 0xcf, 0xff, 0x00, 0x00
 	.byte 0x00
-	.ascii "k%:;<>"
-	.byte 0xea
+	.ascii "k%:;<>Í"
 	.byte 0x89, 0xe9, 0xcc, 0x80, 0x00, 0x00, 0x00, 0xcb
 	.byte 0x8a, 0x29, 0xea, 0xcc, 0x1f, 0x00, 0x00, 0x00
 	.byte 0xea, 0x8b, 0x2a, 0xa8, 0x08, 0x22, 0xd9, 0x88
@@ -316197,8 +315315,7 @@ LABEL_FAFB48:
 	.byte 0xcc, 0x9f, 0x00, 0x84, 0x89, 0xdb, 0xcc, 0x80
 	.byte 0x00, 0x84, 0x21, 0xc9, 0xcc, 0x80, 0xd8, 0x12
 	cp	wa, hl
-	.ascii "n6h7"
-	.byte 0xe2, 0x52
+	.ascii "n6h7‚R"
 	.byte 0x04, 0x03, 0x26, 0x95, 0x23, 0xeb, 0x13, 0x9d
 	.byte 0x02, 0x20, 0xe8, 0x13, 0xe8, 0x8d, 0xed, 0xee
 	.byte 0x02, 0xe8, 0x85, 0xed, 0xee, 0x06, 0xeb, 0x85
@@ -316399,8 +315516,7 @@ LABEL_FAFB48:
 	.byte 0xcc, 0x9f, 0x83, 0x89, 0x84, 0x23, 0xcb, 0xcc
 	.byte 0x80, 0x83, 0x21, 0xc9, 0xcc, 0x80, 0xcb, 0xf1
 	.byte 0x66, 0x59, 0x83
-	.ascii "=`hT"
-	.byte 0xbf
+	.ascii "=`hTø"
 	.byte 0x2e, 0x30, 0x98, 0x02, 0x21, 0xe9, 0x13, 0xe9
 	.byte 0x8a, 0xea, 0xee, 0x02, 0xe9, 0x82, 0xea, 0xee
 	.byte 0x06, 0x90, 0x20, 0xe8, 0x13, 0xea, 0x80, 0xf2
@@ -318017,8 +317133,7 @@ LABEL_FB20F9:
 	.long LABEL_EAB18C
 	.byte 0x68, 0x05, 0x40, 0x90
 	.byte 0xb1, 0xea, 0x00
-	.ascii "89h#"
-	.byte 0xbf
+	.ascii "89h#ø"
 	.byte 0x04, 0x31, 0x0b, 0x00, 0x00, 0xcf, 0xda, 0x66
 	.byte 0x0b, 0xcf, 0xd9, 0x6e, 0x0e, 0x40, 0x94, 0xb1
 	.byte 0xea, 0x00, 0x68, 0x0c, 0x40, 0x98, 0xb1, 0xea
@@ -342750,8 +341865,7 @@ LABEL_FC5874:
 	.byte 0x66, 0x2e, 0xc9, 0xcf, 0x0f, 0x66, 0x22, 0xc9
 	.byte 0xcf, 0x0a, 0x66, 0x16, 0xc9, 0xdb, 0x66, 0x0b
 	cps	a, 1
-	.ascii "n=@."
-	.byte 0x9d, 0xed
+	.ascii "n=@.ùÌ"
 	.byte 0x00
 	.ascii "h!@0"
 	.byte 0x9d, 0xed, 0x00
@@ -367953,8 +367067,7 @@ LABEL_FDCCD7:
 	.byte 0x76, 0x9f, 0x00, 0xde, 0x8b, 0x8f, 0x06, 0x3f
 	.byte 0x70, 0x66, 0x46, 0x8f, 0x06, 0x3f, 0x67, 0x66
 	.byte 0x3b, 0x8f, 0x06
-	.ascii "?df5"
-	.byte 0x81
+	.ascii "?df5Å"
 	.byte 0x27, 0xdb, 0x13, 0xd7, 0xfa, 0xa9, 0x25, 0xff
 	.byte 0xaf, 0x0e, 0x20, 0xd7, 0xfa, 0x89, 0xb0, 0x51
 	.byte 0xaf, 0x22, 0x20, 0x8f, 0x04, 0x23, 0xb0, 0x43
@@ -389057,8 +388170,7 @@ LABEL_FEA514:
 	.byte 0x10, 0x00, 0x20, 0x00, 0x40, 0x00, 0x80, 0x00
 	.byte 0x00, 0x01, 0x00, 0x02, 0x00, 0x04, 0x00, 0x08
 	.byte 0x00, 0x10, 0x00, 0x20, 0x00, 0x40, 0x00, 0x80
-	.ascii "89;:<=>"
-	.byte 0xc2
+	.ascii "89;:<=>¬"
 	.byte 0xde, 0xce, 0x00, 0x21, 0xf1, 0xc0, 0xce, 0x41
 	.byte 0xc2, 0xdf, 0xce, 0x00, 0x21, 0xf1, 0xc1, 0xce
 	.byte 0x41, 0xc2, 0xe0, 0xce, 0x00, 0x21, 0xf1, 0xc2
@@ -390391,10 +389503,7 @@ LABEL_FEBC56:
 	.byte 0xee, 0x34, 0xd3, 0x07, 0xf0, 0xe0, 0x20, 0xf2
 	.byte 0x57, 0xbd, 0xfe, 0x34, 0xf3, 0x07, 0xf0, 0xe0
 	.byte 0xd8, 0xdb, 0xa8
-	.ascii "hE3@"
-	.byte 0xff
-	.ascii "h@3A"
-	.byte 0xff, 0x68, 0x3b, 0x33
+	.ascii "hE3@ˇh@3Aˇh;3"
 	.byte 0x42, 0xff, 0x68, 0x36, 0xdb, 0xab, 0x68, 0x32
 	.byte 0xdb, 0xac, 0x68, 0x2e, 0xdb, 0xad, 0x68, 0x2a
 	.byte 0x33, 0x10, 0x00, 0x68, 0x25, 0x33, 0x11, 0x00
@@ -397321,8 +396430,7 @@ LABEL_FF054A:
 	.byte 0xef, 0x64, 0x0e, 0x0e, 0xef, 0x6a, 0x3e, 0xbf
 	.byte 0x04, 0x41, 0xd9, 0xd8, 0x71, 0x87, 0x00, 0xde
 	.byte 0xa8, 0x8f, 0x04
-	.ascii "?@oH"
-	.byte 0x8f
+	.ascii "?@oHè"
 	.byte 0x04, 0x21, 0xd8, 0x12, 0xc7, 0xf8, 0x8b, 0xd9
 	.byte 0x12, 0x1e, 0x48, 0xfc, 0xde, 0x61, 0xde, 0xcf
 	.byte 0x14, 0x00, 0x67, 0xeb, 0x1e, 0xcb, 0xfd, 0x8f
