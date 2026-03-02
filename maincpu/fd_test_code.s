@@ -1,3 +1,43 @@
+; =============================================================================
+; FD SAVE/LOAD TEST — Factory Diagnostic for Floppy Disk I/O
+; =============================================================================
+;
+; Activation path:
+;   1. InitializeHama (called during boot) registers the HAMA (file/disk)
+;      subsystem's object tables and two diagnostic "Titles":
+;        - "TT_HDDEXT" (FDD/HD extension test) → widget table 0x7f
+;        - "TT_EXTAPR" (extension APR test)     → widget table 0xfc
+;      Both are registered via RegTitleHama with RegisterTitle, linking them
+;      to the TestTitleFunc callback.
+;
+;   2. When the title system activates one of these titles (exact user-facing
+;      menu path not yet traced; likely a hidden service/diagnostic mode),
+;      it sends lifecycle events to TestTitleFunc:
+;        Event 0x1C00007 + xde parameter:
+;          0 = Title new      3 = Title activate
+;          1 = Title old       4 = Title inactivate
+;          2 = Title INTERUPT  5 = Title INTERUPT RETURN
+;          6 = TBIOS Test
+;
+;   3. Once the dialog is active, user button presses generate event
+;      0x1C00013 dispatched to TestTitleFunc with xde parameter:
+;        2 = STOP FDD TEST           5 = Debug Test
+;        3 = START FDD TEST LOOP     6 = Debug Test
+;        4 = DIR (directory listing)
+;
+;   4. The NAKA widget system generates events 0x1C00017..0x1C0001D for
+;      the 7 dialog buttons, handled by FDTestDialogProc via jump table.
+;
+;   5. HamaListProc handles event 0x1E00086 (list item selection) for the
+;      file browser widget.
+;
+; The diagnostic screen shows TOTAL/OK/NG counters (3 type-0x16 DIAGLIST
+; widgets) and provides START/STOP buttons for the floppy disk test loop.
+; The test writes "A:IMMUNITY.TST" with a 2KB counting pattern, reads it
+; back, and verifies byte-by-byte.
+;
+; =============================================================================
+
 ; FDLoadSaveTest — Floppy disk save/load diagnostic test
 ; Allocates a 2KB buffer, fills it with a counting pattern (0..0x3FF),
 ; opens a test file via FileOpen, writes the buffer (FileWrite),

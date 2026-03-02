@@ -88644,6 +88644,12 @@ LABEL_F1E13F:
 .endm
 
 
+; InitializeHama - Register HAMA (file/disk) subsystem object tables and titles
+; Registers widget tables, view handlers, and two diagnostic titles:
+;   "TT_HDDEXT" (0xE1FD18) - FDD/HD extension test, widget table 0x7f
+;   "TT_EXTAPR" (0xE1FD22) - Extension APR test, widget table 0xfc
+; Both titles use TestTitleFunc (0xF1E39A) as their lifecycle callback.
+; Title handler (TestTitleFunc) pointer is stored at 0xE1FD2C in fd_test_data.s.
 InitializeHama:
 	lda xsp, (xsp - 14)
 
@@ -88670,6 +88676,12 @@ InitializeHama:
 FDTest_PrintDiag:
 	jp LABEL_FFFEA1
 
+; TestTitleFunc - Title lifecycle and action handler for FD diagnostic tests
+; Dispatches on two event codes:
+;   0x1C00007 (title lifecycle): xde selects handler from jump table at 0xE1FDFE
+;     0=new, 1=old, 2=activate, 3=inactivate, 4-5=interrupt, 6=TBIOS test
+;   0x1C00013 (user actions): xde selects handler from jump table at 0xE1FE0E
+;     2=STOP, 3=START LOOP, 4=DIR listing, 5-6=debug test
 TestTitleFunc:
 	push xiz
 	ld xiz, xwa
