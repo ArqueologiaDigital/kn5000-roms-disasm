@@ -40513,7 +40513,7 @@ DSP_ApplyAlgoForVoiceType:
 LABEL_036098:
 	ldmm16 17588, 17840	; LDW_16_16 (044b4h), (045b0h)
 	ldada xwa, 17550
-	call LABEL_038E31
+	call DSP_State_ApplyBuf
 	ret
 
 DSP_Reset:
@@ -40533,9 +40533,9 @@ DSP_Reset:
 	ldw bc, 0x91
 	ldirw
 	ldada xwa, 17550
-	call LABEL_038E6E
+	call DSP_State_LoadAndApplyAll
 	stdi16 17554, 0
-	call LABEL_038DEF
+	call DSP_State_DmaLoadPresets
 	ldda16 xiz, 61478
 	ld wa, iz
 	calr DSP_WriteAlgoInitPreset
@@ -40605,13 +40605,13 @@ LABEL_03617D:
 	cps a, 0
 	ret nz
 	ldada xwa, 17550
-	call LABEL_038E31
+	call DSP_State_ApplyBuf
 	ldda16 xwa, 17558
 	jrl DSP_ApplyAlgoForVoiceType
 
 LABEL_0361A0:
 	ldada xwa, 17550
-	jp LABEL_038E31
+	jp DSP_State_ApplyBuf
 
 LABEL_0361A8:
 	ldada xbc, 17738
@@ -40623,12 +40623,12 @@ LABEL_0361A8:
 LABEL_0361BA:
 	ld (xbc), wa
 	ldada xwa, 17550
-	call LABEL_038E31
+	call DSP_State_ApplyBuf
 	ret
 
 DSP_ReconfigAndStatus:
 	ldada xwa, 17550
-	call LABEL_038E31
+	call DSP_State_ApplyBuf
 	ldda16 xwa, 17558
 	jrl DSP_ApplyAlgoForVoiceType
 
@@ -43548,7 +43548,7 @@ LABEL_037003:
 	jr c, LABEL_037003
 	ret
 
-LABEL_03701A:
+EFF_DspChannel_InitFlags:
 	lds de, 0
 	cps de, 5
 	ret nc
@@ -44247,7 +44247,7 @@ EFF_StateLoad_Prepare:
 	calr EFF_SlotActive_UpdateFlags
 	calr EFF_DSPLink_ResetFlags
 	ld xwa, xiz
-	calr LABEL_03701A
+	calr EFF_DspChannel_InitFlags
 	pop xiz
 	ret
 
@@ -45758,7 +45758,7 @@ DSP_Read_Status:	; 0383F7h
 	extz hl
 	ret
 
-LABEL_038405:
+DSP_WriteParamWord:
 	dec 2, xsp
 	push xiz
 	ld (xsp + 4), bc
@@ -45779,7 +45779,7 @@ LABEL_038405:
 	inc 2, xsp
 	ret
 
-LABEL_038439:
+DSP_WriteParamCmd30:
 	dec 6, xsp
 	pushw iz
 	ld (xsp + 2), xde
@@ -45797,12 +45797,12 @@ LABEL_038439:
 	call 0x36A4F
 	ld xwa, (xsp + 2)
 	ld bc, iz
-	calr LABEL_038405
+	calr DSP_WriteParamWord
 	popw iz
 	inc 6, xsp
 	ret
 
-LABEL_03846C:
+DSP_WriteFreqParam_AlgoType:
 	dec 6, xsp
 	pushw iz
 	ld iz, de
@@ -45870,14 +45870,14 @@ LABEL_038528:
 	ld wa, iz
 	ld bc, (xsp + 6)
 	ld xde, (xsp + 2)
-	calr LABEL_038439
+	calr DSP_WriteParamCmd30
 
 LABEL_038533:
 	popw iz
 	inc 6, xsp
 	retd 0x2
 
-LABEL_038539:
+DSP_WriteFreqParam:
 	dec 6, xsp
 	pushw iz
 	ld iz, de
@@ -45945,14 +45945,14 @@ LABEL_0385F5:
 	ld wa, iz
 	ld bc, (xsp + 6)
 	ld xde, (xsp + 2)
-	calr LABEL_038439
+	calr DSP_WriteParamCmd30
 
 LABEL_038600:
 	popw iz
 	inc 6, xsp
 	retd 0x2
 
-LABEL_038606:
+DSP_WriteCoeffData_5B:
 	dec 2, xsp
 	push xiz
 	ld (xsp + 4), bc
@@ -45990,7 +45990,7 @@ LABEL_038606:
 	inc 2, xsp
 	ret
 
-LABEL_038675:
+DSP_UnpackParam3B:
 	ld xix, (xwa)
 	lds32 xbc, 0
 	ld c, (xix + 1)
@@ -46009,7 +46009,7 @@ LABEL_038675:
 	ld (xwa), xbc
 	ret
 
-LABEL_03869B:
+DSP_WriteLUTParamSet:
 	lda xsp, (xsp - 18)
 	pushw iz
 	ld (xsp + 14), bc
@@ -46094,33 +46094,33 @@ LABEL_038764:
 	ld iz, wa
 	add iz, (xsp + 14)
 	lda xwa, (xsp + 10)
-	calr LABEL_038675
+	calr DSP_UnpackParam3B
 	pushm (xsp + 24)
 	ld wa, iz
 	ld xbc, xhl
 	ld de, (xsp + 28)
-	calr LABEL_038539
+	calr DSP_WriteFreqParam
 	ld iz, hl
 	lda xwa, (xsp + 10)
-	calr LABEL_038675
+	calr DSP_UnpackParam3B
 	ld xwa, xhl
 	ld bc, (xsp + 26)
 	ld de, (xsp + 24)
-	calr LABEL_038606
+	calr DSP_WriteCoeffData_5B
 	ld iz, hl
 	lda xwa, (xsp + 10)
-	calr LABEL_038675
+	calr DSP_UnpackParam3B
 	ld xwa, xhl
 	ld bc, (xsp + 26)
 	ld de, (xsp + 24)
-	calr LABEL_038606
+	calr DSP_WriteCoeffData_5B
 	ld iz, hl
 	lda xwa, (xsp + 10)
-	calr LABEL_038675
+	calr DSP_UnpackParam3B
 	ld xwa, xhl
 	ld bc, (xsp + 26)
 	ld de, (xsp + 24)
-	calr LABEL_038606
+	calr DSP_WriteCoeffData_5B
 	ld iz, hl
 	ld bc, (xsp + 26)
 	lds wa, 3
@@ -46140,7 +46140,7 @@ LABEL_0387D5:
 	lda xsp, (xsp + 18)
 	retd 0x4
 
-LABEL_0387E6:
+DSP_WriteOscParam:
 	dec 6, xsp
 	pushw iz
 	ld iz, de
@@ -46208,14 +46208,14 @@ LABEL_0388A2:
 	ld wa, iz
 	ld bc, (xsp + 6)
 	ld xde, (xsp + 2)
-	calr LABEL_038439
+	calr DSP_WriteParamCmd30
 
 LABEL_0388AD:
 	popw iz
 	inc 6, xsp
 	retd 0x2
 
-LABEL_0388B3:
+DSP_WriteCoeffData_5B_Direct:
 	dec 2, xsp
 	push xiz
 	ld (xsp + 4), bc
@@ -46253,7 +46253,7 @@ LABEL_0388B3:
 	inc 2, xsp
 	ret
 
-LABEL_038922:
+DSP_WriteOscParam_Offset:
 	dec 6, xsp
 	pushw iz
 	ld iz, de
@@ -46699,7 +46699,7 @@ LABEL_038CF9:
 	inc 8, xsp
 	retd 0x4
 
-LABEL_038DEF:
+DSP_State_DmaLoadPresets:
 	lds wa, 3
 	call LABEL_01FFFD
 	lda_24 xwa, 0x045324
@@ -46717,7 +46717,7 @@ LABEL_038E0F:
 	.byte 0xe8, 0x89, 0xd8, 0xa9, 0x1d, 0xd1, 0x04, 0x02
 	jr	t, 0xdf
 
-LABEL_038E31:
+DSP_State_ApplyBuf:
 	push xiz
 	ld xiz, xwa
 	lds wa, 2
@@ -46742,7 +46742,7 @@ LABEL_038E4C:
 	pop xiz
 	ret
 
-LABEL_038E6E:
+DSP_State_LoadAndApplyAll:
 	lda_24 xde, 0x045324
 	stda32 19006, xde
 	ld xiy, xwa
@@ -46761,14 +46761,14 @@ LABEL_038E9F:
 	.byte 0xe9, 0xee, 0x02, 0x40, 0xa3, 0x29, 0x01, 0x00
 	.byte 0xe9, 0x80, 0xa0, 0x23, 0x0e
 
-LABEL_038EAC:
+DSP_ParamFetch_SingleTable:
 	sll xbc, 2
 	ld xwa, 0x12B33
 	add xwa, xbc
 	ld xhl, (xwa)
 	ret
 
-LABEL_038EB9:
+DSP_ParamFetch_AlgoTypeTable:
 	ld xix, (xwa)
 	ld e, (xix)
 	cps e, 2
@@ -46801,7 +46801,7 @@ LABEL_038EF1:
 	ld (xwa), xix
 	ret
 
-LABEL_038EF6:
+DSP_AlgoParam_Decode:
 	lda xsp, (xsp - 28)
 	push xiz
 	ld (xsp + 28), xwa
@@ -46863,7 +46863,7 @@ LABEL_038F86:
 	lda xsp, (xsp + 28)
 	ret
 
-LABEL_038F9B:
+DSP_PitchParam_Scale:
 	lda xsp, (xsp - 12)
 	push xiz
 	ld (xsp + 8), xbc
@@ -46892,7 +46892,7 @@ LABEL_038F9B:
 	lda xsp, (xsp + 12)
 	ret
 
-LABEL_038FE8:
+DSP_VolumeParam_Scale:
 	dec 4, xsp
 	push xiz
 	ld (xsp + 4), xwa
@@ -48044,7 +48044,7 @@ LABEL_039B1A:
 	ld wa, (xsp + 100)
 	ld xbc, (xsp + 40)
 	ld de, (xsp + 98)
-	call LABEL_0387E6
+	call DSP_WriteOscParam
 	lda xbc, (xsp + 82)
 	lda_24 xde, 0x012df7
 	lda xwa, (xsp + 6)
@@ -48055,7 +48055,7 @@ LABEL_039B1A:
 	ld xwa, (xsp + 34)
 	ld bc, (xsp + 96)
 	ld de, (xsp + 94)
-	call LABEL_0388B3
+	call DSP_WriteCoeffData_5B_Direct
 	lda xbc, (xsp + 70)
 	lda xwa, (xsp + 6)
 	call LABEL_03D41C
@@ -48069,7 +48069,7 @@ LABEL_039B1A:
 	ld xwa, (xsp + 30)
 	ld bc, (xsp + 96)
 	ld de, (xsp + 94)
-	call LABEL_0388B3
+	call DSP_WriteCoeffData_5B_Direct
 	lda xbc, (xsp + 70)
 	lda_24 xde, 0x012dff
 	lda xwa, (xsp + 6)
@@ -48080,7 +48080,7 @@ LABEL_039B1A:
 	ld xwa, (xsp + 26)
 	ld bc, (xsp + 96)
 	ld de, (xsp + 94)
-	call LABEL_0388B3
+	call DSP_WriteCoeffData_5B_Direct
 	lda xbc, (xsp + 66)
 	lda_24 xde, 0x012e03
 	lda xwa, (xsp + 6)
@@ -48091,7 +48091,7 @@ LABEL_039B1A:
 	ld xwa, (xsp + 22)
 	ld bc, (xsp + 96)
 	ld de, (xsp + 94)
-	call LABEL_0388B3
+	call DSP_WriteCoeffData_5B_Direct
 	ld xwa, (xsp + 86)
 	ld xbc, (xsp + 2)
 	ld (xwa), xbc
@@ -49503,7 +49503,7 @@ LABEL_03AD1E:
 	ld_sriw WA, (xsp + 0x00fe)
 	ld xbc, (xsp + 116)
 	ld_sriw DE, (xsp + 0x00ee)
-	call LABEL_0387E6
+	call DSP_WriteOscParam
 	ld iz, hl
 	st_dri3b A, 0xFD, 0xBE, 0x00
 	lda_24 xde, 0x012faf
@@ -49515,7 +49515,7 @@ LABEL_03AD1E:
 	ld xwa, (xsp + 110)
 	ld_sriw BC, (xsp + 0x00ec)
 	ld_sriw DE, (xsp + 0x00f6)
-	call LABEL_0388B3
+	call DSP_WriteCoeffData_5B_Direct
 	ld iz, hl
 	st_dri3b A, 0xFD, 0xB6, 0x00
 	lda_24 xde, 0x012fb3
@@ -49527,7 +49527,7 @@ LABEL_03AD1E:
 	ld xwa, (xsp + 106)
 	ld_sriw BC, (xsp + 0x00ec)
 	ld_sriw DE, (xsp + 0x00f6)
-	call LABEL_0388B3
+	call DSP_WriteCoeffData_5B_Direct
 	ld iz, hl
 	st_dri3b A, 0xFD, 0xB2, 0x00
 	lda_24 xde, 0x012fb7
@@ -49539,7 +49539,7 @@ LABEL_03AD1E:
 	ld xwa, (xsp + 102)
 	ld_sriw BC, (xsp + 0x00ec)
 	ld_sriw DE, (xsp + 0x00f6)
-	call LABEL_0388B3
+	call DSP_WriteCoeffData_5B_Direct
 	ld iz, hl
 	st_dri3b A, 0xFD, 0xAE, 0x00
 	lda_24 xde, 0x012fbb
@@ -49551,7 +49551,7 @@ LABEL_03AD1E:
 	ld xwa, (xsp + 98)
 	ld_sriw BC, (xsp + 0x00ec)
 	ld_sriw DE, (xsp + 0x00f6)
-	call LABEL_0388B3
+	call DSP_WriteCoeffData_5B_Direct
 	ld iz, hl
 	jrl LABEL_03B4F0
 
@@ -49641,7 +49641,7 @@ LABEL_03AE72:
 	ld_sriw WA, (xsp + 0x00fe)
 	ld xbc, (xsp + 76)
 	ld_sriw DE, (xsp + 0x00ee)
-	call LABEL_0387E6
+	call DSP_WriteOscParam
 	ld iz, hl
 	st_dri3b A, 0xFD, 0xBE, 0x00
 	lda_24 xde, 0x012fdb
@@ -49653,7 +49653,7 @@ LABEL_03AE72:
 	ld xwa, (xsp + 70)
 	ld_sriw BC, (xsp + 0x00ec)
 	ld_sriw DE, (xsp + 0x00f6)
-	call LABEL_0388B3
+	call DSP_WriteCoeffData_5B_Direct
 	ld iz, hl
 	st_dri3b A, 0xFD, 0xB6, 0x00
 	lda_24 xde, 0x012fdf
@@ -49665,7 +49665,7 @@ LABEL_03AE72:
 	ld xwa, (xsp + 66)
 	ld_sriw BC, (xsp + 0x00ec)
 	ld_sriw DE, (xsp + 0x00f6)
-	call LABEL_0388B3
+	call DSP_WriteCoeffData_5B_Direct
 	ld iz, hl
 	st_dri3b A, 0xFD, 0xB2, 0x00
 	lda_24 xde, 0x012fe3
@@ -49677,7 +49677,7 @@ LABEL_03AE72:
 	ld xwa, (xsp + 62)
 	ld_sriw BC, (xsp + 0x00ec)
 	ld_sriw DE, (xsp + 0x00f6)
-	call LABEL_0388B3
+	call DSP_WriteCoeffData_5B_Direct
 	ld iz, hl
 	st_dri3b A, 0xFD, 0xAE, 0x00
 	lda_24 xde, 0x012fe7
@@ -49689,7 +49689,7 @@ LABEL_03AE72:
 	ld xwa, (xsp + 58)
 	ld_sriw BC, (xsp + 0x00ec)
 	ld_sriw DE, (xsp + 0x00f6)
-	call LABEL_0388B3
+	call DSP_WriteCoeffData_5B_Direct
 	ld iz, hl
 	jrl LABEL_03B4F0
 
@@ -49965,7 +49965,7 @@ LABEL_03B419:
 	ld_sriw WA, (xsp + 0x00fe)
 	ld xbc, (xsp + 24)
 	ld_sriw DE, (xsp + 0x00ee)
-	call LABEL_0387E6
+	call DSP_WriteOscParam
 	ld iz, hl
 	st_dri3b A, 0xFD, 0xB6, 0x00
 	lda_24 xde, 0x01304f
@@ -49976,7 +49976,7 @@ LABEL_03B419:
 	call LABEL_03D44C
 	ld xwa, (xsp + 18)
 	ld_sriw BC, (xsp + 0x00ec)
-	call LABEL_038405
+	call DSP_WriteParamWord
 	ld iz, hl
 	st_dri3b A, 0xFD, 0xAE, 0x00
 	lda_24 xde, 0x013053
@@ -49987,7 +49987,7 @@ LABEL_03B419:
 	call LABEL_03D44C
 	ld xwa, (xsp + 14)
 	ld_sriw BC, (xsp + 0x00ec)
-	call LABEL_038405
+	call DSP_WriteParamWord
 	ld iz, hl
 	st_dri3b A, 0xFD, 0xBE, 0x00
 	lda_24 xde, 0x013057
@@ -49998,7 +49998,7 @@ LABEL_03B419:
 	call LABEL_03D44C
 	ld xwa, (xsp + 10)
 	ld_sriw BC, (xsp + 0x00ec)
-	call LABEL_038405
+	call DSP_WriteParamWord
 	ld iz, hl
 	st_dri3b A, 0xFD, 0xB2, 0x00
 	lda_24 xde, 0x01305b
@@ -50009,7 +50009,7 @@ LABEL_03B419:
 	call LABEL_03D44C
 	ld xwa, (xsp + 6)
 	ld_sriw BC, (xsp + 0x00ec)
-	call LABEL_038405
+	call DSP_WriteParamWord
 	ld iz, hl
 
 LABEL_03B4F0:
@@ -50371,7 +50371,7 @@ LABEL_03B901:
 	ld_sriw WA, (xsp + 0x00e6)
 	ld_sril XBC, (xsp + 0x0086)
 	ld de, iz
-	call LABEL_0387E6
+	call DSP_WriteOscParam
 	ldfr_werp HL, 0xFA
 	st_dri3b A, 0xFD, 0xBA, 0x00
 	lda_24 xde, 0x0130e7
@@ -50382,7 +50382,7 @@ LABEL_03B901:
 	call LABEL_03D44C
 	ld_sril XWA, (xsp + 0x0080)
 	ld bc, iz
-	call LABEL_038405
+	call DSP_WriteParamWord
 	ldfr_werp HL, 0xFA
 	st_dri3b A, 0xFD, 0xC2, 0x00
 	lda_24 xde, 0x0130eb
@@ -50393,7 +50393,7 @@ LABEL_03B901:
 	call LABEL_03D44C
 	ld xwa, (xsp + 124)
 	ld bc, iz
-	call LABEL_038405
+	call DSP_WriteParamWord
 	ldfr_werp HL, 0xFA
 	jrl LABEL_03C04F
 
@@ -50610,7 +50610,7 @@ LABEL_03BC44:
 	ld_sriw WA, (xsp + 0x00e6)
 	ld xbc, (xsp + 70)
 	ld de, iz
-	call LABEL_0387E6
+	call DSP_WriteOscParam
 	ldfr_werp HL, 0xFA
 	st_dri3b A, 0xFD, 0xBA, 0x00
 	lda_24 xde, 0x013157
@@ -50621,7 +50621,7 @@ LABEL_03BC44:
 	call LABEL_03D44C
 	ld xwa, (xsp + 64)
 	ld bc, iz
-	call LABEL_038405
+	call DSP_WriteParamWord
 	ldfr_werp HL, 0xFA
 	st_dri3b A, 0xFD, 0xC2, 0x00
 	lda_24 xde, 0x01315b
@@ -50632,7 +50632,7 @@ LABEL_03BC44:
 	call LABEL_03D44C
 	ld xwa, (xsp + 60)
 	ld bc, iz
-	call LABEL_038405
+	call DSP_WriteParamWord
 	ldfr_werp HL, 0xFA
 	jrl LABEL_03C04F
 
@@ -50847,7 +50847,7 @@ LABEL_03BF7D:
 	ld_sriw WA, (xsp + 0x00e6)
 	ld xbc, (xsp + 14)
 	ld de, iz
-	call LABEL_0387E6
+	call DSP_WriteOscParam
 	ldfr_werp HL, 0xFA
 	st_dri3b A, 0xFD, 0xC2, 0x00
 	lda_24 xde, 0x0131c7
@@ -50859,7 +50859,7 @@ LABEL_03BF7D:
 	ld xwa, (xsp + 8)
 	ld bc, iz
 	ld_sriw DE, (xsp + 0x00da)
-	call LABEL_0388B3
+	call DSP_WriteCoeffData_5B_Direct
 	ldfr_werp HL, 0xFA
 	st_dri3b A, 0xFD, 0xBE, 0x00
 	lda_24 xde, 0x0131cb
@@ -50871,7 +50871,7 @@ LABEL_03BF7D:
 	ld xwa, (xsp + 4)
 	ld bc, iz
 	ld_sriw DE, (xsp + 0x00da)
-	call LABEL_0388B3
+	call DSP_WriteCoeffData_5B_Direct
 	ldfr_werp HL, 0xFA
 
 LABEL_03C04F:
@@ -51626,52 +51626,52 @@ LABEL_03CBCC:
 	retd 0x14
 	lda xwa, (xsp + 42)
 	ld xbc, xde
-	call LABEL_038EAC
+	call DSP_ParamFetch_SingleTable
 	pushm (xsp + 4)
 	ld wa, iz
 	ld xbc, xhl
 	ld de, (xsp + 22)
-	call LABEL_0387E6
+	call DSP_WriteOscParam
 	ld (xsp + 14), hl
 	jr LABEL_03CBA8
 	lda xwa, (xsp + 42)
 	ld xbc, xde
-	call LABEL_038EB9
+	call DSP_ParamFetch_AlgoTypeTable
 	pushm (xsp + 6)
 	ld wa, iz
 	ld xbc, xhl
 	ld de, (xsp + 22)
-	call LABEL_03846C
+	call DSP_WriteFreqParam_AlgoType
 	ld (xsp + 14), hl
 	jr LABEL_03CBA8
 	lda xwa, (xsp + 42)
 	ld xbc, xde
-	call LABEL_038EF6
+	call DSP_AlgoParam_Decode
 	pushm (xsp + 4)
 	ld wa, iz
 	ld xbc, xhl
 	ld de, (xsp + 22)
-	call LABEL_0387E6
+	call DSP_WriteOscParam
 	ld (xsp + 14), hl
 	jrl LABEL_03CBA8
 	lda xwa, (xsp + 42)
 	ld xbc, xde
-	call LABEL_038F9B
+	call DSP_PitchParam_Scale
 	pushm (xsp + 6)
 	ld wa, iz
 	ld xbc, xhl
 	ld de, (xsp + 22)
-	call LABEL_038539
+	call DSP_WriteFreqParam
 	ld (xsp + 14), hl
 	jrl LABEL_03CBA8
 	lda xwa, (xsp + 42)
 	ld xbc, xde
-	call LABEL_038FE8
+	call DSP_VolumeParam_Scale
 	pushm (xsp + 4)
 	ld wa, iz
 	ld xbc, xhl
 	ld de, (xsp + 22)
-	call LABEL_0387E6
+	call DSP_WriteOscParam
 	ld (xsp + 14), hl
 	jrl LABEL_03CBA8
 	lda xwa, (xsp + 42)
@@ -51681,7 +51681,7 @@ LABEL_03CBCC:
 	ld wa, iz
 	ld xbc, xhl
 	ld de, (xsp + 22)
-	call LABEL_0387E6
+	call DSP_WriteOscParam
 	ld (xsp + 14), hl
 	jrl LABEL_03CBA8
 	lda xwa, (xsp + 42)
@@ -51693,7 +51693,7 @@ LABEL_03CBCC:
 	ld wa, iz
 	ld xbc, xhl
 	ld de, (xsp + 26)
-	call LABEL_038922
+	call DSP_WriteOscParam_Offset
 	ld (xsp + 14), hl
 	jrl LABEL_03CBA8
 	lda xwa, (xsp + 42)
@@ -51703,7 +51703,7 @@ LABEL_03CBCC:
 	ld wa, iz
 	ld xbc, xhl
 	ld de, (xsp + 22)
-	call LABEL_038539
+	call DSP_WriteFreqParam
 	ld (xsp + 14), hl
 	jrl LABEL_03CBA8
 	lda xwa, (xsp + 42)
@@ -51713,7 +51713,7 @@ LABEL_03CBCC:
 	ld wa, iz
 	ld xbc, xhl
 	ld de, (xsp + 22)
-	call LABEL_0387E6
+	call DSP_WriteOscParam
 	ld (xsp + 14), hl
 	jrl LABEL_03CBA8
 	lda xwa, (xsp + 42)
@@ -51723,7 +51723,7 @@ LABEL_03CBCC:
 	ld wa, iz
 	ld xbc, xhl
 	ld de, (xsp + 22)
-	call LABEL_038539
+	call DSP_WriteFreqParam
 	ld (xsp + 14), hl
 	jrl LABEL_03CBA8
 	lda xwa, (xsp + 42)
@@ -51733,7 +51733,7 @@ LABEL_03CBCC:
 	ld wa, iz
 	ld xbc, xhl
 	ld de, (xsp + 22)
-	call LABEL_038539
+	call DSP_WriteFreqParam
 	ld (xsp + 14), hl
 	jrl LABEL_03CBA8
 	lda xwa, (xsp + 42)
@@ -51744,7 +51744,7 @@ LABEL_03CBCC:
 	ld wa, iz
 	ld xbc, xhl
 	ld de, (xsp + 22)
-	call LABEL_038539
+	call DSP_WriteFreqParam
 	ld (xsp + 14), hl
 	jrl LABEL_03CBA8
 	lda xwa, (xsp + 42)
@@ -51754,7 +51754,7 @@ LABEL_03CBCC:
 	ld wa, iz
 	ld xbc, xhl
 	ld de, (xsp + 22)
-	call LABEL_0387E6
+	call DSP_WriteOscParam
 	ld (xsp + 14), hl
 	jrl LABEL_03CBA8
 	lda xwa, (xsp + 42)
@@ -51764,7 +51764,7 @@ LABEL_03CBCC:
 	ld wa, iz
 	ld xbc, xhl
 	ld de, (xsp + 22)
-	call LABEL_0387E6
+	call DSP_WriteOscParam
 	ld (xsp + 14), hl
 	jrl LABEL_03CBA8
 	lda xwa, (xsp + 42)
@@ -51774,7 +51774,7 @@ LABEL_03CBCC:
 	ld wa, iz
 	ld xbc, xhl
 	ld de, (xsp + 22)
-	call LABEL_0387E6
+	call DSP_WriteOscParam
 	ld (xsp + 14), hl
 	jrl LABEL_03CBA8
 	ld xwa, (xsp + 42)
@@ -51798,7 +51798,7 @@ LABEL_03CBCC:
 	ld wa, iz
 	ld xbc, xhl
 	ld de, (xsp + 22)
-	call LABEL_0387E6
+	call DSP_WriteOscParam
 	ld (xsp + 14), hl
 	jrl LABEL_03CBA8
 	pushm (xsp + 16)
@@ -51818,14 +51818,14 @@ LABEL_03CBCC:
 	ld wa, iz
 	ld xbc, xhl
 	ld de, (xsp + 22)
-	call LABEL_0387E6
+	call DSP_WriteOscParam
 	ld (xsp + 14), hl
 	jrl LABEL_03CBA8
 	pushm (xsp + 20)
 	pushm (xsp + 8)
 	lda xwa, (xsp + 46)
 	ld bc, iz
-	call LABEL_03869B
+	call DSP_WriteLUTParamSet
 	ld (xsp + 14), hl
 	jrl LABEL_03CBA8
 	lda xwa, (xsp + 42)
@@ -51835,7 +51835,7 @@ LABEL_03CBCC:
 	ld wa, iz
 	ld xbc, xhl
 	ld de, (xsp + 22)
-	call LABEL_0387E6
+	call DSP_WriteOscParam
 	ld (xsp + 14), hl
 	jrl LABEL_03CBA8
 	ld xwa, (xsp + 42)
@@ -51859,7 +51859,7 @@ LABEL_03CBCC:
 	ld wa, iz
 	ld xbc, xhl
 	ld de, (xsp + 22)
-	call LABEL_0387E6
+	call DSP_WriteOscParam
 	ld (xsp + 14), hl
 	jrl LABEL_03CBA8
 	lda xwa, (xsp + 42)
@@ -51869,7 +51869,7 @@ LABEL_03CBCC:
 	ld wa, iz
 	ld xbc, xhl
 	ld de, (xsp + 22)
-	call LABEL_0387E6
+	call DSP_WriteOscParam
 	ld (xsp + 14), hl
 	jrl LABEL_03CBA8
 
@@ -51881,7 +51881,7 @@ LABEL_03CE9F:
 	ld wa, iz
 	ld xbc, xhl
 	ld de, (xsp + 22)
-	call LABEL_0387E6
+	call DSP_WriteOscParam
 	ld (xsp + 14), hl
 	jrl LABEL_03CBA8
 
@@ -51896,7 +51896,7 @@ LABEL_03CEBC:
 	ld wa, iz
 	ld xbc, xhl
 	ld de, (xsp + 22)
-	call LABEL_0387E6
+	call DSP_WriteOscParam
 	ld (xsp + 14), hl
 	jrl LABEL_03CBA8
 
@@ -51908,7 +51908,7 @@ LABEL_03CEE2:
 	ld wa, iz
 	ld xbc, xhl
 	ld de, (xsp + 22)
-	call LABEL_0387E6
+	call DSP_WriteOscParam
 	ld (xsp + 14), hl
 	jrl LABEL_03CBA8
 
