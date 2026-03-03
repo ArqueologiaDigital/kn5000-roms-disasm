@@ -19,35 +19,35 @@ FileCopyFunc:
 	push xiz
 	ld xiz, xde
 	cp xbc, 0x1C00018
-	jrl z, LABEL_F8BC38
+	jrl z, FCopy_HandleScroll
 	cp xbc, 0x1C00017
-	jrl z, LABEL_F8BC38
+	jrl z, FCopy_HandleScroll
 	cp xbc, 0x1C0000B
-	jr z, LABEL_F8BC00
+	jr z, FCopy_HandleExecute
 	cp xbc, 0x1E50004
-	jrl nz, LABEL_F8BE18
+	jrl nz, FCopy_Return
 	stda32 32608, xiz
 	call 0xF895EF
 	stda16 32612, xhl
 	cps hl, 0
-	jr lt, LABEL_F8BBF1
+	jr lt, FCopy_ScrollNeg_Reset
 	cp hl, 0x13
-	jr ge, LABEL_F8BBE8
+	jr ge, FCopy_ScrollDown_Clamp
 	inc 1, hl
 	stda16 32614, xhl
-	jrl LABEL_F8BE18
+	jrl FCopy_Return
 
-LABEL_F8BBE8:
+FCopy_ScrollDown_Clamp:
 	dec 1, hl
 	stda16 32614, xhl
-	jrl LABEL_F8BE18
+	jrl FCopy_Return
 
-LABEL_F8BBF1:
+FCopy_ScrollNeg_Reset:
 	stdi16 32612, 0
 	stdi16 32614, 1
-	jrl LABEL_F8BE18
+	jrl FCopy_Return
 
-LABEL_F8BC00:
+FCopy_HandleExecute:
 	stdi8 34060, 0
 	ldda16 xwa, 32614
 	call LABEL_F89623
@@ -62,39 +62,39 @@ LABEL_F8BC00:
 	ld xbc, 0x1C0000F
 	ld xde, 0x850C
 	call 0xFA9D58
-	jrl LABEL_F8BE18
+	jrl FCopy_Return
 
-LABEL_F8BC38:
+FCopy_HandleScroll:
 	or xiz, xiz
-	jrl nz, LABEL_F8BCD7
+	jrl nz, FCopy_HandleCopyContext
 	ldda16 xwa, 32614
 	ld de, wa
 	cp xbc, 0x1C00018
-	jr nz, LABEL_F8BCAB
+	jr nz, FCopy_ScrollUp_Adjust
 	cps wa, 0
-	jr le, LABEL_F8BC55
+	jr le, FCopy_ScrollDown_CheckMin
 	dec 1, wa
 	stda16 32614, xwa
 
-LABEL_F8BC55:
+FCopy_ScrollDown_CheckMin:
 	ldda16 xwa, 32614
 	cpda16 xwa, 32612
-	jr nz, LABEL_F8BC6F
+	jr nz, FCopy_ScrollDown_Reload
 	cps wa, 0
-	jr le, LABEL_F8BC6B
+	jr le, FCopy_ScrollDown_RestoreOld
 	dec 1, wa
 	stda16 32614, xwa
-	jr LABEL_F8BC73
+	jr FCopy_Scroll_Apply
 
-LABEL_F8BC6B:
+FCopy_ScrollDown_RestoreOld:
 	stda16 32614, xde
 
-LABEL_F8BC6F:
+FCopy_ScrollDown_Reload:
 	ldda16 xwa, 32614
 
-LABEL_F8BC73:
+FCopy_Scroll_Apply:
 	cp wa, de
-	jrl z, LABEL_F8BE18
+	jrl z, FCopy_Return
 	stdi8 34060, 0
 	ldda16 xwa, 32614
 	call LABEL_F89623
@@ -108,38 +108,38 @@ LABEL_F8BC73:
 	ldda32 xwa, 32608
 	ld xbc, 0x1C0000F
 	ld xde, 0x850C
-	jr LABEL_F8BD19
+	jr FCopy_DispatchFA9D58
 
-LABEL_F8BCAB:
+FCopy_ScrollUp_Adjust:
 	cp xbc, 0x1C00017
-	jr nz, LABEL_F8BC6F
+	jr nz, FCopy_ScrollDown_Reload
 	cp wa, 0x13
-	jr ge, LABEL_F8BCBF
+	jr ge, FCopy_ScrollUp_CheckMax
 	inc 1, wa
 	stda16 32614, xwa
 
-LABEL_F8BCBF:
+FCopy_ScrollUp_CheckMax:
 	ldda16 xwa, 32614
 	cpda16 xwa, 32612
-	jr nz, LABEL_F8BC6F
+	jr nz, FCopy_ScrollDown_Reload
 	cp wa, 0x13
-	jr ge, LABEL_F8BC6B
+	jr ge, FCopy_ScrollDown_RestoreOld
 	inc 1, wa
 	stda16 32614, xwa
-	jr LABEL_F8BC73
+	jr FCopy_Scroll_Apply
 
-LABEL_F8BCD7:
+FCopy_HandleCopyContext:
 	cp xiz, 0x8
-	jrl nz, LABEL_F8BD97
+	jrl nz, FCopy_CopyExecute
 	call 0xF8943E
 	cps hl, 0
-	jrl z, LABEL_F8BD97
+	jrl z, FCopy_CopyExecute
 	ldda16 xwa, 32614
 	call LABEL_F8945F
 	cps hl, 0
-	jr z, LABEL_F8BD20
+	jr z, FCopy_CopyConfirm_Execute
 	cpi8_24 0x0340ea, 0x00
-	jr z, LABEL_F8BD20
+	jr z, FCopy_CopyConfirm_Execute
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C50000
 	lds32 xde, 1
@@ -148,11 +148,11 @@ LABEL_F8BCD7:
 	ld xbc, 0x1C00001
 	lds32 xde, 0
 
-LABEL_F8BD19:
+FCopy_DispatchFA9D58:
 	call 0xFA9D58
-	jrl LABEL_F8BE18
+	jrl FCopy_Return
 
-LABEL_F8BD20:
+FCopy_CopyConfirm_Execute:
 	ld xwa, 0x600026
 	ld xbc, 0x1C00001
 	lds32 xde, 5
@@ -185,11 +185,11 @@ LABEL_F8BD20:
 	lds32 xde, 0
 	call 0xFA9D58
 	ldw wa, 0xEE
-	jr LABEL_F8BE14
+	jr FCopy_NotifyComplete
 
-LABEL_F8BD97:
+FCopy_CopyExecute:
 	cp xiz, 0x32
-	jr nz, LABEL_F8BE18
+	jr nz, FCopy_Return
 	ld xwa, 0x600026
 	ld xbc, 0x1C00001
 	lds32 xde, 5
@@ -223,10 +223,10 @@ LABEL_F8BD97:
 	call 0xFA9D58
 	ldw wa, 0xEE
 
-LABEL_F8BE14:
+FCopy_NotifyComplete:
 	call LABEL_F994BD
 
-LABEL_F8BE18:
+FCopy_Return:
 	lds32 xhl, 0
 	pop xiz
 	ret
@@ -236,12 +236,12 @@ FileRenameFunc:
 	push xiz
 	ld (xsp + 4), xde
 	cp xbc, 0x1E00086
-	jrl z, LABEL_F8BEB6
+	jrl z, FRename_HandleApply
 	cp xbc, 0x1E0003A
-	jrl nz, LABEL_F8BF15
+	jrl nz, FRename_Return
 	call 0xF895EF
 	cps hl, 0
-	jr lt, LABEL_F8BE95
+	jr lt, FRename_TextChange_Error
 	ldada xiz, 34928
 	ld wa, hl
 	call LABEL_F89623
@@ -252,57 +252,57 @@ FileRenameFunc:
 	lda_24 xix, 0xeed778
 	ldada xwa, 34928
 	ld xhl, xwa
-	jr LABEL_F8BE6E
+	jr FRename_PadLoop_Cond
 
-LABEL_F8BE5D:
+FRename_PadLoop_CheckChar:
 	extz bc
 	ld_srib3 C, 0x07, 0xF0, 0xE4
 	and c, 0x7
-	jr nz, LABEL_F8BE6C
+	jr nz, FRename_PadLoop_Advance
 	ld (xde), 0x5F
 
-LABEL_F8BE6C:
+FRename_PadLoop_Advance:
 	inc 1, iy
 
-LABEL_F8BE6E:
+FRename_PadLoop_Cond:
 	cps iy, 6
-	jr ge, LABEL_F8BE7D
+	jr ge, FRename_PadLoop_Fill
 	st_dri3b B, 0x07, 0xEC, 0xF4
 	ld c, (xde)
 	cps c, 0
-	jr nz, LABEL_F8BE5D
+	jr nz, FRename_PadLoop_CheckChar
 
-LABEL_F8BE7D:
+FRename_PadLoop_Fill:
 	cps iy, 6
-	jr ge, LABEL_F8BE8F
+	jr ge, FRename_PadDone
 	ld xbc, xwa
 
-LABEL_F8BE83:
+FRename_FillLoop:
 	stib_dri 0x07, 0xE4, 0xF4, 0x5F
 	inc 1, iy
 	cps iy, 6
-	jr lt, LABEL_F8BE83
+	jr lt, FRename_FillLoop
 
-LABEL_F8BE8F:
+FRename_PadDone:
 	ld (xwa + 6), 0x0
-	jr LABEL_F8BEA3
+	jr FRename_TextChange_SendApply
 
-LABEL_F8BE95:
+FRename_TextChange_Error:
 	ld xwa, 0x8870
 	ld xbc, 0xEA06BE
 	call LABEL_F890DC
 
-LABEL_F8BEA3:
+FRename_TextChange_SendApply:
 	ld xwa, (xsp + 4)
 	ld xbc, 0x1E00086
 	ld xde, 0x8870
 	call 0xFA9D58
-	jr LABEL_F8BF15
+	jr FRename_Return
 
-LABEL_F8BEB6:
+FRename_HandleApply:
 	call 0xF8943E
 	cps hl, 0
-	jr z, LABEL_F8BF15
+	jr z, FRename_Return
 	ld xwa, 0x8870
 	ld xbc, (xsp + 4)
 	call LABEL_F890DC
@@ -328,7 +328,7 @@ LABEL_F8BEB6:
 	ldw wa, 0xEE
 	call LABEL_F994BD
 
-LABEL_F8BF15:
+FRename_Return:
 	lds32 xhl, 0
 	pop xiz
 	inc 4, xsp
@@ -339,12 +339,12 @@ FileRenameSmfFunc:
 	push xiz
 	ld (xsp + 4), xde
 	cp xbc, 0x1E00086
-	jrl z, LABEL_F8BFBB
+	jrl z, FRenameSmf_HandleApply
 	cp xbc, 0x1E0003A
-	jrl nz, LABEL_F8C020
+	jrl nz, FRenameSmf_Return
 	call LABEL_F89AC7
 	cps hl, 0
-	jr lt, LABEL_F8BF9A
+	jr lt, FRenameSmf_TextChange_Error
 	ldada xiz, 34928
 	ld wa, hl
 	call LABEL_F89BF0
@@ -355,54 +355,54 @@ FileRenameSmfFunc:
 	lda_24 xix, 0xeed778
 	ldada xwa, 34928
 	ld xhl, xwa
-	jr LABEL_F8BF6D
+	jr FRenameSmf_PadLoop_Cond
 
-LABEL_F8BF5C:
+FRenameSmf_PadLoop_CheckChar:
 	extz bc
 	ld_srib3 C, 0x07, 0xF0, 0xE4
 	and c, 0x7
-	jr nz, LABEL_F8BF6B
+	jr nz, FRenameSmf_PadLoop_Advance
 	ld (xde), 0x5F
 
-LABEL_F8BF6B:
+FRenameSmf_PadLoop_Advance:
 	inc 1, iy
 
-LABEL_F8BF6D:
+FRenameSmf_PadLoop_Cond:
 	cp iy, 0x8
-	jr ge, LABEL_F8BF7E
+	jr ge, FRenameSmf_PadLoop_Fill
 	st_dri3b B, 0x07, 0xEC, 0xF4
 	ld c, (xde)
 	cps c, 0
-	jr nz, LABEL_F8BF5C
+	jr nz, FRenameSmf_PadLoop_CheckChar
 
-LABEL_F8BF7E:
+FRenameSmf_PadLoop_Fill:
 	cp iy, 0x8
-	jr ge, LABEL_F8BF94
+	jr ge, FRenameSmf_PadDone
 	ld xbc, xwa
 
-LABEL_F8BF86:
+FRenameSmf_FillLoop:
 	stib_dri 0x07, 0xE4, 0xF4, 0x5F
 	inc 1, iy
 	cp iy, 0x8
-	jr lt, LABEL_F8BF86
+	jr lt, FRenameSmf_FillLoop
 
-LABEL_F8BF94:
+FRenameSmf_PadDone:
 	ld (xwa + 8), 0x0
-	jr LABEL_F8BFA8
+	jr FRenameSmf_TextChange_SendApply
 
-LABEL_F8BF9A:
+FRenameSmf_TextChange_Error:
 	ld xwa, 0x8870
 	ld xbc, 0xEA06C6
 	call LABEL_F890DC
 
-LABEL_F8BFA8:
+FRenameSmf_TextChange_SendApply:
 	ld xwa, (xsp + 4)
 	ld xbc, 0x1E00086
 	ld xde, 0x8870
 	call 0xFA9D58
-	jr LABEL_F8C020
+	jr FRenameSmf_Return
 
-LABEL_F8BFBB:
+FRenameSmf_HandleApply:
 	ld xwa, 0x8870
 	ld xbc, (xsp + 4)
 	call LABEL_F890DC
@@ -431,7 +431,7 @@ LABEL_F8BFBB:
 	ldw wa, 0xEE
 	call LABEL_F994BD
 
-LABEL_F8C020:
+FRenameSmf_Return:
 	lds32 xhl, 0
 	pop xiz
 	inc 4, xsp
@@ -440,71 +440,71 @@ LABEL_F8C020:
 FmmFormatFunc:
 	pushw iz
 	cp xbc, 0x1C00007
-	jrl z, LABEL_F8C0BE
+	jrl z, FmmFmt_HandleProgress
 	cp xbc, 0x1C00013
-	jrl nz, LABEL_F8C20A
+	jrl nz, FmmFmt_Return
 	cp xde, 0x3
-	jr z, LABEL_F8C0AE
+	jr z, FmmFmt_HandleCancel
 	cp xde, 0x2
-	jrl nz, LABEL_F8C20A
+	jrl nz, FmmFmt_Return
 	lds wa, 1
 	calr InitializeOperationState
 	ldmm8 32618, 36151
 	cpdi16 34048, 0
-	jr ge, LABEL_F8C06A
+	jr ge, FmmFmt_InitPhase_CheckDrive
 	call 0xF89520
 	extz hl
 	stda16 34048, xhl
 	calr SignalProgressUpdate
 
-LABEL_F8C06A:
+FmmFmt_InitPhase_CheckDrive:
 	ldda16 xwa, 34048
 	cps wa, 2
-	jr z, LABEL_F8C076
+	jr z, FmmFmt_InitPhase_DriveType23
 	cps wa, 3
-	jr nz, LABEL_F8C091
+	jr nz, FmmFmt_InitPhase_OtherDrive
 
-LABEL_F8C076:
+FmmFmt_InitPhase_DriveType23:
 	stda8 32616, a
 	ld xwa, 0x7B0036
 	ld xbc, 0x1C00001
 	lds32 xde, 0
 	call 0xFA9D58
 	stdi8 34046, 0
-	jr LABEL_F8C0A6
+	jr FmmFmt_InitPhase_SetActive
 
-LABEL_F8C091:
+FmmFmt_InitPhase_OtherDrive:
 	ld xwa, 0x7B003F
 	ld xbc, 0x1C00001
 	lds32 xde, 0
 	call 0xFA9D58
 	stdi8 34046, 2
 
-LABEL_F8C0A6:
+FmmFmt_InitPhase_SetActive:
 	stdi8 32620, 1
-	jrl LABEL_F8C20A
+	jrl FmmFmt_Return
 
-LABEL_F8C0AE:
+FmmFmt_HandleCancel:
 	calr CancelOperationCleanup
 	stdi8 34046, 0
 	stdi8 32620, 0
-	jrl LABEL_F8C20A
+	jrl FmmFmt_Return
 
-LABEL_F8C0BE:
+FmmFmt_HandleProgress:
 	cpdi8 32620, 0
-	jrl z, LABEL_F8C20A
+	jrl z, FmmFmt_Return
 	ldda8 a, 32618
 	extz wa
 	cp xde, 0xF
-	jrl z, LABEL_F8C1FC
+	jrl z, FmmFmt_HandleAbortFinal
 	ldda8 c, 34046
 	cp xde, 0xB
-	jrl z, LABEL_F8C1C0
+	jrl z, FmmFmt_HandleAbort
 	cp xde, 0xA
-	jrl nz, LABEL_F8C20A
+	jrl nz, FmmFmt_Return
 	ld a, c
 	cps c, 0
-	jrl nz, LABEL_F8C199
+	jrl nz, FmmFmt_ExecutePhase2
 	ld xwa, 0x600026
 	ld xbc, 0x1C00001
 	lds32 xde, 5
@@ -522,7 +522,7 @@ LABEL_F8C0BE:
 	lds32 xde, 0
 	call 0xFA9D58
 	cps iz, 0
-	jr ge, LABEL_F8C172
+	jr ge, FmmFmt_FormatSuccess
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
 	lds32 xde, 1
@@ -541,9 +541,9 @@ LABEL_F8C0BE:
 	stda8 32578, l
 	ldw wa, 0xEE
 	call LABEL_F994BD
-	jrl LABEL_F8C205
+	jrl FmmFmt_NotifyComplete
 
-LABEL_F8C172:
+FmmFmt_FormatSuccess:
 	ld xwa, 0x7B0036
 	ld xbc, 0x1C00002
 	lds32 xde, 0
@@ -553,11 +553,11 @@ LABEL_F8C172:
 	lds32 xde, 0
 	call 0xFA9D58
 	stdi8 34046, 1
-	jr LABEL_F8C20A
+	jr FmmFmt_Return
 
-LABEL_F8C199:
+FmmFmt_ExecutePhase2:
 	cps a, 2
-	jr nz, LABEL_F8C20A
+	jr nz, FmmFmt_Return
 	stdi8 32616, 3
 	ld xwa, 0x7B003F
 	ld xbc, 0x1C00002
@@ -566,19 +566,19 @@ LABEL_F8C199:
 	ld xwa, 0x7B0036
 	ld xbc, 0x1C00001
 	lds32 xde, 0
-	jr LABEL_F8C1F6
+	jr FmmFmt_DispatchAndNotify
 
-LABEL_F8C1C0:
+FmmFmt_HandleAbort:
 	ld e, c
 	cps c, 0
-	jr nz, LABEL_F8C1D1
+	jr nz, FmmFmt_AbortPhase2
 	call 0xF99490
 	stdi8 32620, 0
-	jr LABEL_F8C20A
+	jr FmmFmt_Return
 
-LABEL_F8C1D1:
+FmmFmt_AbortPhase2:
 	cps e, 2
-	jr nz, LABEL_F8C20A
+	jr nz, FmmFmt_Return
 	stdi8 32616, 2
 	ld xwa, 0x7B003F
 	ld xbc, 0x1C00002
@@ -588,45 +588,45 @@ LABEL_F8C1D1:
 	ld xbc, 0x1C00001
 	lds32 xde, 0
 
-LABEL_F8C1F6:
+FmmFmt_DispatchAndNotify:
 	call 0xFA9D58
-	jr LABEL_F8C205
+	jr FmmFmt_NotifyComplete
 
-LABEL_F8C1FC:
+FmmFmt_HandleAbortFinal:
 	call 0xF99490
 	stdi8 32620, 0
 
-LABEL_F8C205:
+FmmFmt_NotifyComplete:
 	stdi8 34046, 0
 
-LABEL_F8C20A:
+FmmFmt_Return:
 	lds32 xhl, 0
 	popw iz
 	ret
 
 UtilityTtlJgFunc:
 	cp xbc, 0x1C00007
-	jr nz, LABEL_F8C21F
+	jr nz, UtilTtlJg_Return
 	ldw wa, 0x7B
 	ldw bc, 0x7C
 	calr LABEL_F8B36E
 
-LABEL_F8C21F:
+UtilTtlJg_Return:
 	lds32 xhl, 0
 	ret
 
 FmmLoadTitleFunc:
 	pushw iz
 	cp xbc, 0x1C00007
-	jrl z, LABEL_F8C435
+	jrl z, FmmLoadTtl_HandleOk
 	cp xbc, 0x1C00013
-	jrl nz, LABEL_F8C450
+	jrl nz, FmmLoadTtl_Return
 	cp xde, 0x3
-	jrl z, LABEL_F8C420
+	jrl z, FmmLoadTtl_HandleCancelOp
 	cp xde, 0x9
-	jrl z, LABEL_F8C3FE
+	jrl z, FmmLoadTtl_HandleScrollNav
 	cp xde, 0x2
-	jrl nz, LABEL_F8C450
+	jrl nz, FmmLoadTtl_Return
 	stdi8 34046, 0
 	ldmm16 32624, 34048
 	lds wa, 1
@@ -637,50 +637,50 @@ FmmLoadTitleFunc:
 	call 0xFA9D58
 	ldmm8 32622, 36151
 	cpdi16 34048, 0
-	jr ge, LABEL_F8C28B
+	jr ge, FmmLoadTtl_StateDispatch
 	call 0xF89520
 	extz hl
 	stda16 34048, xhl
 	calr SignalProgressUpdate
 
-LABEL_F8C28B:
+FmmLoadTtl_StateDispatch:
 	ldda16 xwa, 34048
 	cps wa, 1
-	jrl z, LABEL_F8C355
+	jrl z, FmmLoadTtl_StateSuccess
 	cps wa, 0
-	jrl z, LABEL_F8C33F
+	jrl z, FmmLoadTtl_StateIdle
 	cps wa, 5
-	jr z, LABEL_F8C2FB
+	jr z, FmmLoadTtl_StateCancelLoad
 	cpdi16 34050, 0
-	jr ge, LABEL_F8C2B8
+	jr ge, FmmLoadTtl_CheckFileHandle
 	call 0xF8987D
 	stda16 34050, xhl
 	call LABEL_F8958D
 	call 0xF8953B
 	calr SignalProgressUpdate
 
-LABEL_F8C2B8:
+FmmLoadTtl_CheckFileHandle:
 	cpdi16 34050, 0
-	jrl nz, LABEL_F8C3A1
+	jrl nz, FmmLoadTtl_LoadSlots
 	cpdi16 34052, 0
-	jr ge, LABEL_F8C2D4
+	jr ge, FmmLoadTtl_CheckSmfHandle
 	call 0xF89C78
 	stda16 34052, xhl
 	calr SignalProgressUpdate
 
-LABEL_F8C2D4:
+FmmLoadTtl_CheckSmfHandle:
 	cpdi16 34052, 0
-	jrl le, LABEL_F8C3A1
+	jrl le, FmmLoadTtl_LoadSlots
 	cpdi8 32622, 100
-	jrl z, LABEL_F8C3A1
+	jrl z, FmmLoadTtl_LoadSlots
 	ld xwa, 0x600026
 	ld xbc, 0x1C00002
 	lds32 xde, 0
 	call 0xFA9D58
 	ldw wa, 0x64
-	jrl LABEL_F8C44C
+	jrl FmmLoadTtl_PlaySound
 
-LABEL_F8C2FB:
+FmmLoadTtl_StateCancelLoad:
 	ld xwa, 0x600026
 	ld xbc, 0x1C00002
 	lds32 xde, 0
@@ -698,17 +698,17 @@ LABEL_F8C2FB:
 	call 0xFA9D58
 	stdi8 32578, 0
 	ldw wa, 0xEE
-	jr LABEL_F8C39A
+	jr FmmLoadTtl_NotifyComplete
 
-LABEL_F8C33F:
+FmmLoadTtl_StateIdle:
 	ld xwa, 0x600026
 	ld xbc, 0x1C00002
 	lds32 xde, 0
 	call 0xFA9D58
 	ldw wa, 0x7D
-	jrl LABEL_F8C44C
+	jrl FmmLoadTtl_PlaySound
 
-LABEL_F8C355:
+FmmLoadTtl_StateSuccess:
 	ld xwa, 0x600026
 	ld xbc, 0x1C00002
 	lds32 xde, 0
@@ -728,11 +728,11 @@ LABEL_F8C355:
 	stdi8 32578, 2
 	ldw wa, 0xEE
 
-LABEL_F8C39A:
+FmmLoadTtl_NotifyComplete:
 	call LABEL_F994BD
-	jrl LABEL_F8C450
+	jrl FmmLoadTtl_Return
 
-LABEL_F8C3A1:
+FmmLoadTtl_LoadSlots:
 	ld xwa, 0x600026
 	ld xbc, 0x1C00002
 	lds32 xde, 0
@@ -750,53 +750,53 @@ LABEL_F8C3A1:
 	stdi8 35336, 0
 	lds iz, 0
 
-LABEL_F8C3E6:
+FmmLoadTtl_SlotLoop:
 	ldto_berp A, 0xF8
 	extz wa
 	call LABEL_F89321
 	inc 1, iz
 	cp iz, 0x8
-	jr lt, LABEL_F8C3E6
+	jr lt, FmmLoadTtl_SlotLoop
 	stdi8 35320, 4
-	jr LABEL_F8C450
+	jr FmmLoadTtl_Return
 
-LABEL_F8C3FE:
+FmmLoadTtl_HandleScrollNav:
 	cpdi16 32624, 0
-	jr lt, LABEL_F8C450
+	jr lt, FmmLoadTtl_Return
 	call 0xF895EF
 	ld iz, hl
 	cps iz, 0
-	jr lt, LABEL_F8C450
+	jr lt, FmmLoadTtl_Return
 	cp iz, 0x13
-	jr ge, LABEL_F8C450
+	jr ge, FmmLoadTtl_Return
 	ld wa, iz
 	inc 1, wa
 	call 0xF89605
-	jr LABEL_F8C450
+	jr FmmLoadTtl_Return
 
-LABEL_F8C420:
+FmmLoadTtl_HandleCancelOp:
 	calr CancelOperationCleanup
 	ld xwa, 0x610001
 	ld xbc, 0x1E0007F
 	lds32 xde, 1
 	call 0xFA9D58
-	jr LABEL_F8C450
+	jr FmmLoadTtl_Return
 
-LABEL_F8C435:
+FmmLoadTtl_HandleOk:
 	cp xde, 0xF
-	jr nz, LABEL_F8C450
+	jr nz, FmmLoadTtl_Return
 	cpdi8 36148, 7
-	jr nz, LABEL_F8C449
+	jr nz, FmmLoadTtl_Ok_DefaultSound
 	ldw wa, 0xD6
-	jr LABEL_F8C44C
+	jr FmmLoadTtl_PlaySound
 
-LABEL_F8C449:
+FmmLoadTtl_Ok_DefaultSound:
 	ldw wa, 0x60
 
-LABEL_F8C44C:
+FmmLoadTtl_PlaySound:
 	call 0xF99490
 
-LABEL_F8C450:
+FmmLoadTtl_Return:
 	lds32 xhl, 0
 	popw iz
 	ret
@@ -804,13 +804,13 @@ LABEL_F8C450:
 FmmSaveTitleFunc:
 	pushw iz
 	cp xbc, 0x1C00007
-	jrl z, LABEL_F8C515
+	jrl z, FmmSaveTtl_HandleOk
 	cp xbc, 0x1C00013
-	jrl nz, LABEL_F8C524
+	jrl nz, FmmSaveTtl_Return
 	cp xde, 0x3
-	jrl z, LABEL_F8C500
+	jrl z, FmmSaveTtl_HandleCancel
 	cp xde, 0x2
-	jrl nz, LABEL_F8C524
+	jrl nz, FmmSaveTtl_Return
 	stdi8 34046, 0
 	lds wa, 1
 	calr InitializeOperationState
@@ -819,25 +819,25 @@ FmmSaveTitleFunc:
 	lds32 xde, 5
 	call 0xFA9D58
 	cpdi16 34050, 0
-	jr ge, LABEL_F8C4AE
+	jr ge, FmmSaveTtl_CheckFont
 	call 0xF8987D
 	stda16 34050, xhl
 	call LABEL_F8958D
 	call 0xF8953B
 	calr SignalProgressUpdate
 
-LABEL_F8C4AE:
+FmmSaveTtl_CheckFont:
 	cpdi8 36151, 102
-	jr z, LABEL_F8C4E2
+	jr z, FmmSaveTtl_CommitSave
 	lds iz, 0
 
-LABEL_F8C4B7:
+FmmSaveTtl_SlotLoop:
 	ldto_berp A, 0xF8
 	extz wa
 	call LABEL_F8937F
 	inc 1, iz
 	cps iz, 6
-	jr lt, LABEL_F8C4B7
+	jr lt, FmmSaveTtl_SlotLoop
 	lds wa, 6
 	call LABEL_F89393
 	lds wa, 7
@@ -847,7 +847,7 @@ LABEL_F8C4B7:
 	ld xix, 0x8A0C
 	ldiw
 
-LABEL_F8C4E2:
+FmmSaveTtl_CommitSave:
 	ld xwa, 0x600026
 	ld xbc, 0x1C00002
 	lds32 xde, 0
@@ -855,25 +855,25 @@ LABEL_F8C4E2:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C0000A
 	lds32 xde, 0
-	jr LABEL_F8C50F
+	jr FmmSaveTtl_DispatchAndReturn
 
-LABEL_F8C500:
+FmmSaveTtl_HandleCancel:
 	calr CancelOperationCleanup
 	ld xwa, 0x670001
 	ld xbc, 0x1E0007F
 	lds32 xde, 1
 
-LABEL_F8C50F:
+FmmSaveTtl_DispatchAndReturn:
 	call 0xFA9D58
-	jr LABEL_F8C524
+	jr FmmSaveTtl_Return
 
-LABEL_F8C515:
+FmmSaveTtl_HandleOk:
 	cp xde, 0xF
-	jr nz, LABEL_F8C524
+	jr nz, FmmSaveTtl_Return
 	ldw wa, 0x60
 	call 0xF99490
 
-LABEL_F8C524:
+FmmSaveTtl_Return:
 	lds32 xhl, 0
 	popw iz
 	ret
@@ -883,11 +883,11 @@ DiskNameFunc:
 	push xiz
 	ld (xsp + 4), xde
 	cp xbc, 0x1E00086
-	jrl z, LABEL_F8C5E2
+	jrl z, DiskName_HandleApply
 	cp xbc, 0x1E0003A
-	jr z, LABEL_F8C56C
+	jr z, DiskName_TextChange
 	cp xbc, 0x1C0000B
-	jrl nz, LABEL_F8C609
+	jrl nz, DiskName_Return
 	lds wa, 0
 	calr InitializeOperationState
 	ldada xiz, 34700
@@ -898,9 +898,9 @@ DiskNameFunc:
 	ld xwa, (xsp + 4)
 	ld xbc, 0x1C0000F
 	ld xde, 0x878C
-	jr LABEL_F8C5DC
+	jr DiskName_Dispatch
 
-LABEL_F8C56C:
+DiskName_TextChange:
 	lds wa, 0
 	calr InitializeOperationState
 	ldada xiz, 34700
@@ -913,47 +913,47 @@ LABEL_F8C56C:
 	lda_24 xiz, 0xeed778
 	ldada xde, 34700
 	ld xhl, xde
-	jr LABEL_F8C5AA
+	jr DiskName_PadLoop_Cond
 
-LABEL_F8C594:
+DiskName_PadLoop_CheckChar:
 	ld_srib3 A, 0x07, 0xF0, 0xF4
 	extz wa
 	ld_srib3 A, 0x07, 0xF8, 0xE0
 	and a, 0x7
-	jr nz, LABEL_F8C5A8
+	jr nz, DiskName_PadLoop_Advance
 	ld (xbc), 0x5F
 
-LABEL_F8C5A8:
+DiskName_PadLoop_Advance:
 	inc 1, iy
 
-LABEL_F8C5AA:
+DiskName_PadLoop_Cond:
 	cp iy, 0xB
-	jr ge, LABEL_F8C5BA
+	jr ge, DiskName_PadLoop_Fill
 	st_dri3b A, 0x07, 0xEC, 0xF4
 	cp (xbc), 0x0
-	jr nz, LABEL_F8C594
+	jr nz, DiskName_PadLoop_CheckChar
 
-LABEL_F8C5BA:
+DiskName_PadLoop_Fill:
 	cp iy, 0xB
-	jr ge, LABEL_F8C5D0
+	jr ge, DiskName_PadDone
 	ld xwa, xde
 
-LABEL_F8C5C2:
+DiskName_FillLoop:
 	stib_dri 0x07, 0xE0, 0xF4, 0x5F
 	inc 1, iy
 	cp iy, 0xB
-	jr lt, LABEL_F8C5C2
+	jr lt, DiskName_FillLoop
 
-LABEL_F8C5D0:
+DiskName_PadDone:
 	ld (xde + 11), 0x0
 	ld xwa, (xsp + 4)
 	ld xbc, 0x1E00086
 
-LABEL_F8C5DC:
+DiskName_Dispatch:
 	call 0xFA9D58
-	jr LABEL_F8C609
+	jr DiskName_Return
 
-LABEL_F8C5E2:
+DiskName_HandleApply:
 	ld xwa, 0x878C
 	ld xbc, (xsp + 4)
 	call LABEL_F890DC
@@ -966,7 +966,7 @@ LABEL_F8C5E2:
 	ldw wa, 0x60
 	call 0xF99490
 
-LABEL_F8C609:
+DiskName_Return:
 	lds32 xhl, 0
 	pop xiz
 	inc 4, xsp
@@ -977,45 +977,45 @@ DiskInfoFunc:
 	push xiz
 	ld (xsp + 16), xde
 	cp xbc, 0x1C0000B
-	jrl nz, LABEL_F8C735
+	jrl nz, DiskInfo_Return
 	lds wa, 0
 	calr InitializeOperationState
 	cpdi16 34048, 0
-	jr ge, LABEL_F8C636
+	jr ge, DiskInfo_ReadDriveType
 	call 0xF89520
 	extz hl
 	stda16 34048, xhl
 
-LABEL_F8C636:
+DiskInfo_ReadDriveType:
 	ldda16 xwa, 34048
 	cps wa, 1
-	jr z, LABEL_F8C65A
+	jr z, DiskInfo_ResetCapacity
 	cps wa, 0
-	jr z, LABEL_F8C65A
+	jr z, DiskInfo_ResetCapacity
 	cps wa, 2
-	jr z, LABEL_F8C64A
+	jr z, DiskInfo_ReadCapacity
 	cps wa, 3
-	jr nz, LABEL_F8C65D
+	jr nz, DiskInfo_ZeroCapacity
 
-LABEL_F8C64A:
+DiskInfo_ReadCapacity:
 	call 0xF8953B
 	ld (xsp + 4), xhl
 	call LABEL_F89573
 	ld (xsp + 12), xhl
-	jr LABEL_F8C665
+	jr DiskInfo_ComputePercent
 
-LABEL_F8C65A:
+DiskInfo_ResetCapacity:
 	calr ResetProgressIndication
 
-LABEL_F8C65D:
+DiskInfo_ZeroCapacity:
 	lds32 xwa, 0
 	ld (xsp + 12), xwa
 	ld (xsp + 4), xwa
 
-LABEL_F8C665:
+DiskInfo_ComputePercent:
 	ld xwa, (xsp + 12)
 	cp xwa, 0x0
-	jr le, LABEL_F8C68F
+	jr le, DiskInfo_ZeroPercent
 	ld xwa, (xsp + 12)
 	sub xwa, (xsp + 4)
 	ld xbc, 0x64
@@ -1025,13 +1025,13 @@ LABEL_F8C665:
 	ld xwa, xiz
 	call LABEL_FF0C0E
 	ld (xsp + 8), xhl
-	jr LABEL_F8C694
+	jr DiskInfo_RenderStrings
 
-LABEL_F8C68F:
+DiskInfo_ZeroPercent:
 	lds32 xwa, 0
 	ld (xsp + 8), xwa
 
-LABEL_F8C694:
+DiskInfo_RenderStrings:
 	ld xwa, (xsp + 4)
 	ld xbc, xwa
 	sra xbc, 15
@@ -1077,7 +1077,7 @@ LABEL_F8C694:
 	ld xde, 0x87CE
 	call 0xFA9D58
 
-LABEL_F8C735:
+DiskInfo_Return:
 	lds32 xhl, 0
 	pop xiz
 	lda xsp, (xsp + 16)
@@ -1088,11 +1088,11 @@ SongNameFunc:
 	pushw iz
 	ld (xsp + 6), xde
 	cp xbc, 0x1C0000B
-	jr nz, LABEL_F8C7AD
+	jr nz, SongName_Return
 	call LABEL_F89AC7
 	ld iz, hl
 	cps iz, 0
-	jr lt, LABEL_F8C797
+	jr lt, SongName_NoSlot
 	lds wa, 0
 	calr InitializeOperationState
 	ldada xwa, 34830
@@ -1107,33 +1107,33 @@ SongNameFunc:
 	lda xbc, (xwa + 29)
 	ld xde, xbc
 	lda xhl, (xbc - 29)
-	jr LABEL_F8C786
+	jr SongName_TrimLoop_Cond
 
-LABEL_F8C781:
+SongName_TrimLoop_ZeroChar:
 	ld (xde), 0x0
 	dec 1, xde
 
-LABEL_F8C786:
+SongName_TrimLoop_Cond:
 	ld c, (xde)
 	cp c, 0x20
-	jr nz, LABEL_F8C791
+	jr nz, SongName_TrimDone
 	cp xde, xhl
-	jr ugt, LABEL_F8C781
+	jr ugt, SongName_TrimLoop_ZeroChar
 
-LABEL_F8C791:
+SongName_TrimDone:
 	call LABEL_F8929D
-	jr LABEL_F8C79C
+	jr SongName_SendDisplay
 
-LABEL_F8C797:
+SongName_NoSlot:
 	stdi8 34830, 0
 
-LABEL_F8C79C:
+SongName_SendDisplay:
 	ld xwa, (xsp + 6)
 	ld xbc, 0x1C0000F
 	ld xde, 0x880E
 	call 0xFA9D58
 
-LABEL_F8C7AD:
+SongName_Return:
 	lds32 xhl, 0
 	popw iz
 	inc 8, xsp
@@ -1144,11 +1144,11 @@ SaveFileNameNumFunc:
 	pushw iz
 	ld (xsp + 2), xde
 	cp xbc, 0x1C0000B
-	jr nz, LABEL_F8C7FC
+	jr nz, SaveFileNum_Return
 	call 0xF895EF
 	ld iz, hl
 	cps iz, 0
-	jr lt, LABEL_F8C7E6
+	jr lt, SaveFileNum_NoSlot
 	call LABEL_F892BC
 	ld xbc, xhl
 	ld de, iz
@@ -1157,18 +1157,18 @@ SaveFileNameNumFunc:
 	pushw 0x0
 	ld xwa, 0x8850
 	call LABEL_F891DD
-	jr LABEL_F8C7EB
+	jr SaveFileNum_SendDisplay
 
-LABEL_F8C7E6:
+SaveFileNum_NoSlot:
 	stdi8 34896, 0
 
-LABEL_F8C7EB:
+SaveFileNum_SendDisplay:
 	ld xwa, (xsp + 2)
 	ld xbc, 0x1C0000F
 	ld xde, 0x8850
 	call 0xFA9D58
 
-LABEL_F8C7FC:
+SaveFileNum_Return:
 	lds32 xhl, 0
 	popw iz
 	inc 4, xsp
@@ -1179,11 +1179,11 @@ SaveFileNameFunc:
 	push xiz
 	ld (xsp + 4), xde
 	cp xbc, 0x1E00086
-	jrl z, LABEL_F8C8AD
+	jrl z, SaveFileName_HandleApply
 	cp xbc, 0x1E0003A
-	jr z, LABEL_F8C84A
+	jr z, SaveFileName_TextChange
 	cp xbc, 0x1C0000B
-	jrl nz, LABEL_F8C8C2
+	jrl nz, SaveFileName_Return
 	ldada xiz, 34896
 	call LABEL_F892BC
 	ld xbc, xhl
@@ -1194,9 +1194,9 @@ SaveFileNameFunc:
 	ld xwa, (xsp + 4)
 	ld xbc, 0x1C0000F
 	ld xde, 0x8850
-	jr LABEL_F8C8A7
+	jr SaveFileName_Dispatch
 
-LABEL_F8C84A:
+SaveFileName_TextChange:
 	ldada xiz, 34896
 	call LABEL_F892BC
 	ld xbc, xhl
@@ -1206,54 +1206,54 @@ LABEL_F8C84A:
 	lda_24 xix, 0xeed778
 	ldada xde, 34896
 	ld xhl, xde
-	jr LABEL_F8C87A
+	jr SaveFileName_PadLoop_Cond
 
-LABEL_F8C869:
+SaveFileName_PadLoop_CheckChar:
 	extz wa
 	ld_srib3 A, 0x07, 0xF0, 0xE0
 	and a, 0x7
-	jr nz, LABEL_F8C878
+	jr nz, SaveFileName_PadLoop_Advance
 	ld (xbc), 0x5F
 
-LABEL_F8C878:
+SaveFileName_PadLoop_Advance:
 	inc 1, iy
 
-LABEL_F8C87A:
+SaveFileName_PadLoop_Cond:
 	cps iy, 6
-	jr ge, LABEL_F8C889
+	jr ge, SaveFileName_PadLoop_Fill
 	st_dri3b A, 0x07, 0xEC, 0xF4
 	ld a, (xbc)
 	cps a, 0
-	jr nz, LABEL_F8C869
+	jr nz, SaveFileName_PadLoop_CheckChar
 
-LABEL_F8C889:
+SaveFileName_PadLoop_Fill:
 	cps iy, 6
-	jr ge, LABEL_F8C89B
+	jr ge, SaveFileName_PadDone
 	ld xwa, xde
 
-LABEL_F8C88F:
+SaveFileName_FillLoop:
 	stib_dri 0x07, 0xE0, 0xF4, 0x5F
 	inc 1, iy
 	cps iy, 6
-	jr lt, LABEL_F8C88F
+	jr lt, SaveFileName_FillLoop
 
-LABEL_F8C89B:
+SaveFileName_PadDone:
 	ld (xde + 6), 0x0
 	ld xwa, (xsp + 4)
 	ld xbc, 0x1E00086
 
-LABEL_F8C8A7:
+SaveFileName_Dispatch:
 	call 0xFA9D58
-	jr LABEL_F8C8C2
+	jr SaveFileName_Return
 
-LABEL_F8C8AD:
+SaveFileName_HandleApply:
 	ld xwa, 0x8850
 	ld xbc, (xsp + 4)
 	call LABEL_F890DC
 	ld xwa, 0x8850
 	call LABEL_F892C2
 
-LABEL_F8C8C2:
+SaveFileName_Return:
 	lds32 xhl, 0
 	pop xiz
 	inc 4, xsp
@@ -1264,11 +1264,11 @@ CurFileNameFunc:
 	pushw iz
 	ld (xsp + 2), xde
 	cp xbc, 0x1C0000B
-	jr nz, LABEL_F8C913
+	jr nz, CurFileName_Return
 	call 0xF895EF
 	ld iz, hl
 	cps iz, 0
-	jr lt, LABEL_F8C8FD
+	jr lt, CurFileName_NoSlot
 	ld wa, iz
 	call LABEL_F89623
 	ld xbc, xhl
@@ -1278,18 +1278,18 @@ CurFileNameFunc:
 	pushw 0x0
 	ld xwa, 0x8870
 	call LABEL_F891DD
-	jr LABEL_F8C902
+	jr CurFileName_SendDisplay
 
-LABEL_F8C8FD:
+CurFileName_NoSlot:
 	stdi8 34928, 0
 
-LABEL_F8C902:
+CurFileName_SendDisplay:
 	ld xwa, (xsp + 2)
 	ld xbc, 0x1C0000F
 	ld xde, 0x8870
 	call 0xFA9D58
 
-LABEL_F8C913:
+CurFileName_Return:
 	lds32 xhl, 0
 	popw iz
 	inc 4, xsp
