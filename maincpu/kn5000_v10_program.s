@@ -230856,43 +230856,121 @@ LABEL_F98695:
 ; FA9945 routes 0x1C00038 to widgets registered via FA9752 whose match value
 ; (upper 16 bits of XDE) matches (0xC080<<8)|(0xC07D).
 ;
-; MAME investigation: this function's body is in the .byte block below and has
-; NOT yet been decoded to native LLVM instructions. Two ROM entry points exist
-; within this block: 0xF98697 (main entry) and 0xF98748 (alternate/secondary).
+; =============================================================================
+; KeyPress_StateDispatch -- Key press dispatcher
+;
+; Reads current state from 8D38, looks up pointer table at E01F80 to get
+; the key mapping array for that state. Then either:
+;   - PASS-THROUGH (0xFFFE): broadcasts ANY key as event 0x1C00038
+;   - SCAN (normal): searches for matching key code in the array
+;   - EMPTY (0xFFFF): returns immediately
+;
+; Event data in XDE = (chain << 24) | (param << 16) | (C07E << 8) | C07F
+; Target: XWA = 0xFFFFFFFF (broadcast to all handlers)
+; Event: XBC = 0x01C00038 (key press event)
+;
+; Entry: Called from control panel key processing
+; Uses: EF0797 (check key-scan enable), FA9945 (EventDispatch_Direct)
 ; =============================================================================
 LABEL_F98697:
-	.byte 0x1d, 0x97, 0x07, 0xef, 0xdb, 0xd8, 0xb0, 0xf6
-	.byte 0xc1, 0x38, 0x8d, 0x21, 0xd8, 0x12, 0xd8, 0xec
-	.byte 0x02, 0xf2, 0x80, 0x1f, 0xe0, 0x31, 0xe3, 0x07
-	.byte 0xe4, 0xe0, 0x24, 0xec, 0xe4, 0xb0, 0xf6, 0x94
-	.byte 0x3f, 0xfe, 0xff, 0x6e, 0x33, 0xea, 0xa8, 0xc1
-	.byte 0x80, 0xc0, 0x25, 0xea, 0xee, 0x08, 0xe8, 0xa8
-	.byte 0xc1, 0x7d, 0xc0, 0x21, 0xe8, 0x82, 0xea, 0xee
-	.byte 0x08, 0xe8, 0xa8, 0xc1, 0x7e, 0xc0, 0x21, 0xe8
-	.byte 0x82, 0xea, 0xee, 0x08, 0xe8, 0xa8, 0xc1, 0x7f
-	.byte 0xc0, 0x21, 0xe8, 0x82, 0x40, 0xff, 0xff, 0xff
-	.byte 0xff, 0x41, 0x38, 0x00, 0xc0, 0x01, 0x68, 0x4c
-	.byte 0x94, 0x3f, 0xff, 0xff, 0xb0, 0xf6, 0xc1, 0x7d
-	.byte 0xc0, 0x21, 0xc9, 0x8f, 0xdb, 0x12, 0xc1, 0x80
-	.byte 0xc0, 0x25, 0xcd, 0x8b, 0xd9, 0x12, 0xd9, 0xee
-	.byte 0x08, 0xdb, 0x81, 0x94, 0xf9, 0x6e, 0x31, 0x24
-	.byte 0x00, 0xea, 0x12, 0xea, 0xee, 0x08, 0x20, 0x00
-	.byte 0xe8, 0x12, 0xe8, 0x82, 0xea, 0xee, 0x08, 0xe8
-	.byte 0xa8, 0xc1, 0x7e, 0xc0, 0x21, 0xe8, 0x82, 0xea
-	.byte 0xee, 0x08, 0xe8, 0xa8, 0xc1, 0x7f, 0xc0, 0x21
-	.byte 0xe8, 0x82, 0x40, 0xff, 0xff, 0xff, 0xff, 0x41
-	.byte 0x38, 0x00, 0xc0, 0x01, 0x1b, 0x45, 0x99, 0xfa
-	.byte 0xec, 0x62, 0x94, 0x3f, 0xff, 0xff, 0x6e, 0xc3
-	.byte 0x0e
+	call 0xEF0797				; Check key-scan enable (bit 7 of RAM[0x0406])
+	cps hl, 0				; Returns HL=1 if enabled
+	ret z					; Return if scanning disabled
+	ldda8 a, 0x8D38				; Load current UI state ID
+	extz wa					; Zero-extend to 16-bit
+	sla wa, 2				; state * 4 (pointer table stride)
+	lda_24 xbc, 0xE01F80			; Base of state->key-map pointer table
+	.byte 0xe3, 0x07, 0xe4, 0xe0, 0x24	; ld xix, (xbc + wa)  [not in LLVM]
+	or xix, xix				; Test if pointer is null
+	ret z					; Return if no key map for this state
+	cpw (xix), 0xFFFE			; Check for PASS-THROUGH marker
+	jr nz, LABEL_F986EF			; Not pass-through, try normal scan
+	; --- Pass-through path: broadcast any key press ---
+	; Build XDE = (C080 << 24) | (C07D << 16) | (C07E << 8) | C07F
+	.byte 0xea, 0xa8			; ld xde, 0  [compact clear]
+	ldda8 e, 0xC080				; chain byte
+	sll xde, 8				; shift up
+	.byte 0xe8, 0xa8			; ld xwa, 0
+	ldda8 a, 0xC07D				; param byte
+	add xde, xwa				; merge into XDE
+	sll xde, 8
+	.byte 0xe8, 0xa8			; ld xwa, 0
+	ldda8 a, 0xC07E				; additional key data
+	add xde, xwa
+	sll xde, 8
+	.byte 0xe8, 0xa8			; ld xwa, 0
+	ldda8 a, 0xC07F				; additional key data
+	add xde, xwa
+	ld xwa, 0xFFFFFFFF			; broadcast target (all handlers)
+	ld xbc, 0x01C00038			; key press event code
+	jr LABEL_F9873B				; dispatch event
+LABEL_F986EF:
+	cpw (xix), 0xFFFF			; Check for EMPTY marker
+	ret z					; Return if no keys for this state
+	; --- Normal scan: search array for matching (chain<<8)|param ---
+	ldda8 a, 0xC07D				; param byte
+	ld l, a
+	extz hl
+	ldda8 e, 0xC080				; chain byte
+	ld c, e
+	extz bc
+	sll bc, 8				; BC = chain << 8
+	add bc, hl				; BC = (chain << 8) | param = key code
+LABEL_F9870A:
+	.byte 0x94, 0xf9			; cpw (xix), bc  [not in LLVM]
+	jr nz, LABEL_F9873F			; No match, advance to next entry
+	; --- Match found: build XDE = (D<<24)|(E<<16)|(C07E<<8)|C07F ---
+	ldb d, 0x00
+	extz xde				; Zero-extend DE -> XDE
+	sll xde, 8
+	ldb w, 0x00
+	extz xwa				; Zero-extend WA -> XWA
+	add xde, xwa
+	sll xde, 8
+	.byte 0xe8, 0xa8			; ld xwa, 0
+	ldda8 a, 0xC07E
+	add xde, xwa
+	sll xde, 8
+	.byte 0xe8, 0xa8			; ld xwa, 0
+	ldda8 a, 0xC07F
+	add xde, xwa
+	ld xwa, 0xFFFFFFFF			; broadcast target
+	ld xbc, 0x01C00038			; key press event code
+LABEL_F9873B:
+	jp 0xFA9945				; tail-call EventDispatch_Direct
+LABEL_F9873F:
+	inc 2, xix				; advance to next 16-bit entry
+	cpw (xix), 0xFFFF			; check for end-of-list
+	jr nz, LABEL_F9870A			; continue scanning
+	ret
+; =============================================================================
+; LABEL_F98748 -- Alternate key handler (special key codes 0x00, 0x10)
+;
+; Key code 0x10: calls FDDFA7, then dispatches event with state from 8D3A
+; Key code 0x00: if C07F bits 1:0 set and 26E2 bits 1:0 clear, jumps to
+;                LABEL_F98782 (activation handler)
+; =============================================================================
 LABEL_F98748:
-	.byte 0xc1, 0x7d, 0xc0, 0x21, 0xc9, 0xcf, 0x10
-	.byte 0x66, 0x18, 0xc9, 0xd8, 0xb0, 0xfe, 0xc1, 0x7f
-	.byte 0xc0, 0x21, 0xc9, 0xcc, 0x03, 0xb0, 0xf6, 0xc1
-	.byte 0xe2, 0x26, 0x21, 0xc9, 0xcc, 0x03, 0xb0, 0xfe
-	.byte 0x68, 0x19, 0x1d, 0xa7, 0xdf, 0xfd, 0xea, 0xa8
-	.byte 0xc1, 0x3a, 0x8d, 0x25, 0x40, 0xff, 0xff, 0xff
-	.byte 0xff, 0x41, 0x2f, 0x00, 0xc0, 0x01, 0x1d, 0x58
-	.byte 0x9d, 0xfa, 0x0e
+	ldda8 a, 0xC07D				; param byte (key code low)
+	cp a, 0x10				; Check for special key 0x10
+	jr z, LABEL_F98769			; Handle key 0x10
+	cps a, 0				; Check for key 0x00
+	ret nz					; Other keys: return
+	ldda8 a, 0xC07F				; additional key data
+	and a, 0x03				; check bits 1:0
+	ret z					; return if both clear
+	ldda8 a, 0x26E2				; load activation state
+	and a, 0x03				; check bits 1:0
+	ret nz					; return if already active
+	jr LABEL_F98782				; activate
+LABEL_F98769:
+	call 0xFDDFA7				; handler for key 0x10
+	.byte 0xea, 0xa8			; ld xde, 0  [compact clear]
+	ldda8 e, 0x8D3A				; load current state
+	ld xwa, 0xFFFFFFFF			; broadcast target
+	ld xbc, 0x01C0002F			; key event code (different from main handler)
+	call 0xFA9D58				; dispatch event
+	ret
 
 LABEL_F98782:
 	ldda8 a, 64614
