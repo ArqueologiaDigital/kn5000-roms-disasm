@@ -99,7 +99,7 @@ INT_HANDLER_13:
 	ret
 
 INT_HANDLER_14:
-	jp LABEL_01FB41
+	jp Timer_AudioTick_Handler
 	ret
 
 INT_HANDLER_15:
@@ -107,7 +107,7 @@ INT_HANDLER_15:
 	ret
 
 INT_HANDLER_16:
-	jp LABEL_01FDC8
+	jp INT16_TaskSwitch_Handler
 	ret
 
 INT_HANDLER_17:
@@ -206,7 +206,7 @@ LABEL_0004E1:
 
 
 	.org 0xF000 - 0x400, 0xFF
-LABEL_00F000:
+IRAM_FirmwareConfig:
 	.byte 0x8e, 0x00, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 	.fill 8, 1, 0xff
 	.byte 0xff, 0xff, 0x00, 0x00, 0x00, 0xff, 0x00, 0xff
@@ -344,16 +344,16 @@ LABEL_00F000:
 	.byte 0xff, 0xff, 0xff, 0xff, 0xfe, 0x7f, 0xf7, 0xff
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0x7f, 0x00, 0x00
 
-LABEL_00F420:
+FPConst_MaxNorm:
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xef, 0x7f
 
-LABEL_00F428:
+FPConst_Zero:
 	.long 0x0
 
-LABEL_00F42C:
+FPConst_Ln2:
 	.byte 0xcd, 0x3b, 0x7f, 0x66, 0x9e, 0xa0, 0xf6, 0x3f
 
-LABEL_00F434:	; Struct do buffer de transmissão da serial #1
+Serial1_TxBuf_Struct:	; Struct do buffer de transmissão da serial #1
 	.long 0xA00	;  0  <-- start
 	.long 0xDFF	;  4  <-- end
 	.long 0xA00	;  8  <-- current_write_pointer
@@ -361,7 +361,7 @@ LABEL_00F434:	; Struct do buffer de transmissão da serial #1
 	.long 0xA00	; 10
 	.short 0x3FF	; 14  <-- counter
 
-LABEL_00F44A:	; Struct do buffer de recepção da serial #1
+Serial1_RxBuf_Struct:	; Struct do buffer de recepção da serial #1
 	.long 0xE16	;  0
 	.long 0x1015	;  4
 	.long 0xE16	;  8
@@ -374,9 +374,9 @@ OFFSETS_F460:
 	.short 0x0	; Audio_PlayNote_Variant_1
 	.short 0x8	; Audio_PlayNote_Variant_2
 	.short 0xC	; Audio_PlayNote_Variant_3
-	.short 0x10	; LABEL_01FB86
-	.short 0x18	; LABEL_01FB8E
-	.short 0x21	; LABEL_01FB97
+	.short 0x10	; AudioTick_Variant_4
+	.short 0x18	; AudioTick_Variant_5
+	.short 0x21	; AudioTick_Variant_6
 
 
 ; ----------------------------------------------------------------------------
@@ -426,7 +426,7 @@ Voice_EnvelopeRate_Lookup:
 	.byte 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x06
 	.byte 0x40, 0x40
 
-LABEL_00F52b:
+Voice_ChannelPtrTable:
 	.byte 0x2d, 0x11, 0x00, 0x00
 	.byte 0x2d, 0x11, 0x00, 0x00
 	.byte 0x2d, 0x11, 0x00, 0x00
@@ -507,35 +507,35 @@ Voice_SFX_ModulationTable:
 	.byte 0x02, 0x05, 0x28, 0xf6, 0x00, 0x00, 0x02, 0x05
 	.zero 8
 
-LABEL_00F693:
+PitchBend_DispatchTable:
 	.byte 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03, 0x00
 	.byte 0x06, 0x00, 0x09, 0x00
 
-LABEL_00F6A7:
+Voice_GroupOffsets_A:
 	.byte 0x0c, 0x00, 0x0f, 0x00, 0x00, 0x00, 0x17, 0x00
 	.byte 0x1e, 0x00, 0x25, 0x00
 
-LABEL_00F6B3:
+Voice_GroupOffsets_B:
 	.byte 0x2c, 0x00, 0x33, 0x00, 0x00, 0x00, 0x13, 0x00
 	.byte 0x13, 0x00, 0x1b, 0x00
 
-LABEL_00F6BF:
+Voice_GroupOffsets_C:
 	.byte 0x36, 0x00, 0x3e, 0x00, 0x00, 0x00, 0x13, 0x00
 	.byte 0x13, 0x00, 0x1b, 0x00
 
-LABEL_00F6CB:
+Voice_BitMask_ChannelType:
 	.byte 0x36, 0x00, 0x3e, 0x00, 0x01, 0x04, 0x10, 0x40
 	.byte 0x02, 0x08, 0x20, 0x80, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x0b, 0x00, 0x00, 0x00
 	.zero 8
 	.byte 0x80, 0x60, 0x80, 0x62, 0x80, 0x64, 0x80, 0x65
 
-LABEL_00F6F3:
+MIDI_NoteFreqTable:
 	.byte 0x80, 0x67, 0x80, 0x69, 0x80, 0x6b, 0x80, 0x6c
 	.byte 0x00, 0x00, 0x05, 0x00, 0x0a, 0x00, 0x0f, 0x00
 
-LABEL_00F703:
+Voice_EnvelopeRateTable:
 	.byte 0x1a, 0x00, 0x25, 0x00, 0x30, 0x00, 0x3b, 0x00
 	.byte 0x46, 0x00, 0x51, 0x00, 0x5c, 0x00, 0x67, 0x00
 	.byte 0x72, 0x00, 0x7d, 0x00, 0x88, 0x00, 0x93, 0x00
@@ -544,12 +544,12 @@ LABEL_00F703:
 	.byte 0xf6, 0x00, 0x01, 0x01, 0x0c, 0x01, 0xe5, 0x00
 	.byte 0xf0, 0x00, 0xe2, 0x01, 0xfc, 0x00
 
-LABEL_00F739:
+Voice_PolyphonyConfig:
 	.byte 0xe2, 0x01, 0xe2, 0x01, 0xe2, 0x01, 0xe2, 0x01
 	.byte 0x17, 0x01, 0x2d, 0x01, 0x51, 0x01, 0x08, 0x00
 	.byte 0x10, 0x00, 0x18, 0x00, 0x1e, 0x00
 
-LABEL_00F74F:
+Voice_ParamScaleTable:
 	.byte 0xf6, 0x00, 0x24, 0x00, 0x2c, 0x00, 0x34, 0x00
 	.byte 0x4f, 0x00, 0x52, 0x00, 0x5e, 0x00, 0x6a, 0x00
 	.byte 0x76, 0x00, 0x82, 0x00, 0x8e, 0x00, 0x9a, 0x00
@@ -557,13 +557,13 @@ LABEL_00F74F:
 	.byte 0xd9, 0x00, 0xe6, 0x00, 0xee, 0x00, 0x00, 0x01
 	.byte 0x06, 0x03, 0x05, 0x08, 0x02, 0x04
 
-LABEL_00F77D:
+Const_ChannelMax:
 	.byte 0x07
 
-LABEL_00F77E:
+Const_Zero_Byte:
 	.byte 0x00
 
-LABEL_00F77F:
+PitchDetune_OffsetTable:
 	.byte 0x00, 0x00, 0x00, 0xff, 0xff, 0xfe, 0xff, 0xfd, 0xff
 	.byte 0xfc, 0xff, 0xfb, 0xff, 0xfa, 0xff, 0xf9, 0xff
 	.byte 0xf8, 0xff, 0x00, 0xf4, 0x00, 0x00, 0x00, 0x07
@@ -3067,7 +3067,7 @@ OFFSETS_14745:
 	.short 0x2F4
 	.short 0x88
 
-LABEL_014777:
+ToneGen_WorkArea:
 	.zero 9
 	.zero 8
 	.zero 8
@@ -9000,11 +9000,11 @@ Audio_DMA_RingBuffer_To_Maincpu:
 	pushw iz
 	lds iz, 0
 
-LABEL_01F859:
+Audio_DMA_RingBuf_ReadLoop:
 	ld xwa, 0xE00
 	calr READ_BYTE_FROM_RING_BUFFER
 	cp hl, 0xFFFF
-	jr z, LABEL_01F87B
+	jr z, Audio_DMA_RingBuf_CheckSend
 	ld wa, iz
 	inc 1, iz
 	ldada xbc, 1536
@@ -9012,18 +9012,18 @@ LABEL_01F859:
 	add xwa, xbc
 	ld (xwa), l
 	cp iz, 0x400
-	jr c, LABEL_01F859
+	jr c, Audio_DMA_RingBuf_ReadLoop
 
-LABEL_01F87B:
+Audio_DMA_RingBuf_CheckSend:
 	cps iz, 0
-	jr z, LABEL_01F88E
+	jr z, Audio_DMA_RingBuf_Done
 	ei 0
 	lds wa, 4
 	ld bc, iz
 	ld xde, 0x600
 	call 0x20C6B
 
-LABEL_01F88E:
+Audio_DMA_RingBuf_Done:
 	popw iz
 	ret
 
@@ -9031,20 +9031,20 @@ Serial1_DataTransmit_Loop:
 	ld a, (xsp + 4)
 	decm8 1, (xsp + 4)
 	cps a, 0
-	jr z, LABEL_01F8D2
+	jr z, Serial1_TX_Done
 
-LABEL_01F89A:
+Serial1_TX_LoopBody:
 	bitda 2, 4148
-	jr nz, LABEL_01F8B2
+	jr nz, Serial1_TX_ViaRingBuf
 	ld xwa, (xsp + 6)
 	ld_spib C, 0xE0
 	ld (xsp + 6), xwa
 	extz bc
 	ld wa, bc
 	calr Serial1_CommandHandler_RX_F4F5
-	jr LABEL_01F8C8
+	jr Serial1_TX_CheckNext
 
-LABEL_01F8B2:
+Serial1_TX_ViaRingBuf:
 	ld xwa, (xsp + 6)
 	ld_spib C, 0xE0
 	ld (xsp + 6), xwa
@@ -9053,13 +9053,13 @@ LABEL_01F8B2:
 	calr SAVE_BYTE_TO_RING_BUFFER
 	calr Serial1_Enable_TX_Interrupt
 
-LABEL_01F8C8:
+Serial1_TX_CheckNext:
 	ld a, (xsp + 4)
 	decm8 1, (xsp + 4)
 	cps a, 0
-	jr nz, LABEL_01F89A
+	jr nz, Serial1_TX_LoopBody
 
-LABEL_01F8D2:
+Serial1_TX_Done:
 	lds hl, 0
 	ret
 
@@ -9198,18 +9198,18 @@ RESET:	; 01F924
 	ldio 0xF6, 0x00
 	lds32 xwa, 0
 	stda32 4160, xwa
-	calr LABEL_01FC01
+	calr MemClear_DRAM_And_ExtRAM
 
-LABEL_01FAA6:
+PostReset_InitAudio:
 	lda_24 xwa, 0x04069a
 	ld xsp, xwa
-	call LABEL_01FDDA
+	call TaskSched_Init
 	lda_dd8l XBC, 0xE4
 	ld a, (xbc)
 	and a, 0x8F
 	or a, 0x30
 	ld (xbc), a
-	calr LABEL_01FC70
+	calr Audio_InitRingBuffers
 	ei 0
 	stdi16 4156, 0
 	jr __jrt_nop_01FACB
@@ -9235,18 +9235,18 @@ Audio_System_Init:	; 01FACBh
 
 Audio_Main_Loop:
 	bitda 5, 4158
-	jr z, LABEL_01FAF0
+	jr z, AudioLoop_CheckWatchdog
 	resda 5, 4158
 
-LABEL_01FAF0:
+AudioLoop_CheckWatchdog:
 	ldda32 xwa, 4160
 	cp xwa, 0x3E8
-	jr ule, LABEL_01FAFF
+	jr ule, AudioLoop_CheckPeriodicReinit
 	set_dd8 0, 0x38	; unmute (?) (here I'm assuming "MUTE" it is an active low signal)
 
-LABEL_01FAFF:
+AudioLoop_CheckPeriodicReinit:
 	bitda 1, 4158
-	jr z, LABEL_01FB2F
+	jr z, AudioLoop_CallProcessors
 	resda 1, 4158
 	call 0x20FBC
 	call 0x34CDB
@@ -9255,15 +9255,15 @@ LABEL_01FAFF:
 	inc 1, wa
 	stda16 61458, xwa
 	cp bc, 0xA
-	jr lt, LABEL_01FB29
+	jr lt, AudioLoop_DecrementDelay
 	stdi16 61458, 0
 
-LABEL_01FB29:
+AudioLoop_DecrementDelay:
 	cps iz, 0
-	jr z, LABEL_01FB2F
+	jr z, AudioLoop_CallProcessors
 	dec 1, iz
 
-LABEL_01FB2F:
+AudioLoop_CallProcessors:
 	call 0x3D01E
 	call 0x34D93
 	call 0x35AC8
@@ -9271,7 +9271,7 @@ LABEL_01FB2F:
 	jr Audio_Main_Loop
 
 
-LABEL_01FB41:
+Timer_AudioTick_Handler:
 	pushw bc
 	push xwa
 	push xix
@@ -9283,9 +9283,9 @@ LABEL_01FB41:
 	stda8 61460, a
 	extz bc
 	cps bc, 0
-	jr mi, LABEL_01FBB8
+	jr mi, AudioTick_Done
 	cps bc, 5
-	jr gt, LABEL_01FBB8
+	jr gt, AudioTick_Done
 	add bc, bc
 	lda_24 xix, 0x00f460
 	ld_sriw3 BC, 0x07, 0xF0, 0xE4
@@ -9296,41 +9296,41 @@ LABEL_01FB41:
 Audio_PlayNote_Variant_1:
 	setda 4, 4158
 	ldb a, 0x1
-	jr LABEL_01FB90
+	jr AudioTick_StoreTick
 
 Audio_PlayNote_Variant_2:
 	ldb a, 0x3
-	jr LABEL_01FB90
+	jr AudioTick_StoreTick
 
 Audio_PlayNote_Variant_3:
 	ldb a, 0x2
-	jr LABEL_01FB90
+	jr AudioTick_StoreTick
 
-LABEL_01FB86:
+AudioTick_Variant_4:
 	setda 4, 4158
 	ldb a, 0x0
-	jr LABEL_01FB90
+	jr AudioTick_StoreTick
 
-LABEL_01FB8E:
+AudioTick_Variant_5:
 	ldb a, 0x3
 
-LABEL_01FB90:
+AudioTick_StoreTick:
 	scf
 	stcfa_dd16 0x3E, 0x10
-	jr LABEL_01FBB8
+	jr AudioTick_Done
 
-LABEL_01FB97:
+AudioTick_Variant_6:
 	setda 2, 4158
 	stdi8 61460, 0
 	ldda8 a, 61462
 	inc 1, a
 	stda8 61462, a
 	cp a, 0x8
-	jr c, LABEL_01FBB8
+	jr c, AudioTick_Done
 	setda 5, 4158
 	stdi8 61462, 0
 
-LABEL_01FBB8:
+AudioTick_Done:
 	pop xix
 	pop xwa
 	popw bc
@@ -9346,7 +9346,7 @@ EMPTY_HANDLER_WITH_RESET:	; 01FBBD
 	reti
 
 
-LABEL_01FBC1:
+PrevBank_RegHelper:
 	.byte 0xd7, 0xfa, 0x04, 0xc2, 0xee, 0xfe, 0xff, 0x3f
 	.byte 0xff, 0x6e, 0x24, 0xc7, 0xfb, 0xa8, 0xc7, 0xfb
 	.byte 0x89, 0xd8, 0x12, 0xc7, 0xfb, 0x8b, 0xd9, 0x12
@@ -9362,74 +9362,74 @@ MUTE_AND_HALT:	; 01FBF4
 	halt
 
 
-LABEL_01FBF8:
+Timer_StatusHelper:
 	.byte 0x68, 0xfd, 0xc1, 0x3a, 0x10, 0x27, 0xdb, 0x12
 	ret
 
 
-LABEL_01FC01:
+MemClear_DRAM_And_ExtRAM:
 	ld xde, 0x3EE76
 	ld xbc, 0x66F2
 	ld ix, bc
 	srl xbc, 1
-	jr z, LABEL_01FC2E
+	jr z, MemClear_DRAM_OddByte
 	ld xhl, xde
 	stiw_dpi 0xE9, 0x00, 0x00
 	dec 1, xbc
 	or xbc, xbc
-	jr z, LABEL_01FC2E
+	jr z, MemClear_DRAM_OddByte
 	ldirw93
 	cpi_werp 0xE6, 0
-	jr z, LABEL_01FC2E
+	jr z, MemClear_DRAM_OddByte
 	ldto_werp WA, 0xE6
 
-LABEL_01FC29:
+MemClear_DRAM_BulkLoop:
 	ldirw93
-	djnz xwa, LABEL_01FC29
+	djnz xwa, MemClear_DRAM_BulkLoop
 
-LABEL_01FC2E:
+MemClear_DRAM_OddByte:
 	bit 0, ix
-	jr z, LABEL_01FC36
+	jr z, MemClear_ExtRAM
 	ld (xde), 0x0
 
-LABEL_01FC36:
+MemClear_ExtRAM:
 	ld xde, 0x600
 	ld xbc, 0x44CB
 	ld ix, bc
 	srl xbc, 1
-	jr z, LABEL_01FC63
+	jr z, MemClear_ExtRAM_OddByte
 	ld xhl, xde
 	stiw_dpi 0xE9, 0x00, 0x00
 	dec 1, xbc
 	or xbc, xbc
-	jr z, LABEL_01FC63
+	jr z, MemClear_ExtRAM_OddByte
 	ldirw93
 	cpi_werp 0xE6, 0
-	jr z, LABEL_01FC63
+	jr z, MemClear_ExtRAM_OddByte
 	ldto_werp WA, 0xE6
 
-LABEL_01FC5E:
+MemClear_ExtRAM_BulkLoop:
 	ldirw93
-	djnz xwa, LABEL_01FC5E
+	djnz xwa, MemClear_ExtRAM_BulkLoop
 
-LABEL_01FC63:
+MemClear_ExtRAM_OddByte:
 	bit 0, ix
-	jr z, LABEL_01FC6B
+	jr z, MemClear_ExtRAM_Finish
 	ld (xde), 0x0
 
-LABEL_01FC6B:
-	jrl LABEL_01FAA6
+MemClear_ExtRAM_Finish:
+	jrl PostReset_InitAudio
 	ret
 
 
-LABEL_01FC6F:
+Const_0x0E:
 	.byte 0x0e
 
 
-LABEL_01FC70:
-	call LABEL_0208B8
-	call LABEL_020966
-	jp LABEL_020A14
+Audio_InitRingBuffers:
+	call RingBuf_Init_1K
+	call RingBuf_Init_256
+	jp RingBuf_Init_512
 
 
 Audio_CmdHandler_20_3F:
@@ -9441,15 +9441,15 @@ Audio_CmdHandler_40_5F:
 	ld a, c
 	dec 1, c
 	cps a, 0
-	jr z, LABEL_01FC92
+	jr z, AudioCmd_40_5F_Done
 
-LABEL_01FC8A:
+AudioCmd_40_5F_SkipLoop:
 	ld a, c
 	dec 1, c
 	cps a, 0
-	jr nz, LABEL_01FC8A
+	jr nz, AudioCmd_40_5F_SkipLoop
 
-LABEL_01FC92:
+AudioCmd_40_5F_Done:
 	lds hl, 0
 	ret
 
@@ -9521,7 +9521,7 @@ DSP_Write_Channel_Loop:
 	ret
 
 
-LABEL_01FCFB:
+DSP_ConfigBlock_Opaque:
 	.byte 0x39, 0x3a, 0x0b, 0x01, 0x00, 0x1e, 0x24, 0x00
 	.byte 0xaf, 0x0a, 0x21, 0xee, 0x8a, 0x0b, 0x00, 0x00
 	.byte 0x1e, 0x19, 0x00, 0xe8, 0x89, 0xeb, 0x8a, 0x0b
@@ -9549,23 +9549,23 @@ LABEL_01FCFB:
 	.byte 0x00, 0x9c, 0x0a, 0x04, 0x00, 0x00, 0x88, 0x03
 	.byte 0x00, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01
 
-LABEL_01FDC2:
+Task_DequeueDispatch_Prio3:
 	ldb a, 0x3
-	jrl LABEL_020109
+	jrl TaskQueue_Dequeue
 	ret
 
 
-LABEL_01FDC8:
+INT16_TaskSwitch_Handler:
 	incdi16 1, 4306
 	incdi8 1, 4165
 	pushw wa
 	pushw bc
-	calr LABEL_01FDC2
+	calr Task_DequeueDispatch_Prio3
 	popw bc
 	popw wa
-	jrl LABEL_01FFD0
+	jrl TaskSwitch_Countdown
 
-LABEL_01FDDA:
+TaskSched_Init:
 	ld xsp, 0x40B1E
 	xor wa, wa
 	stda16 4166, xwa
@@ -9577,31 +9577,31 @@ LABEL_01FDDA:
 	lds de, 4
 	ldb b, 0x3
 
-LABEL_01FDF7:
+TaskSched_Init_QueueHeaders:
 	ld ix, hl
 	st_dpiw IX, 0xED
 	st_dpiw IX, 0xED
-	djnz8 b, LABEL_01FDF7
+	djnz8 b, TaskSched_Init_QueueHeaders
 	ldw ix, 0x1048
 	extz xix
 	ldb b, 0x3
 	ldb a, 0x0
 
-LABEL_01FE0B:
+TaskSched_Init_TaskDescriptors:
 	ld (xix + 9), a
 	ld (xix + 10), 0x0
 	ld (xix + 11), 0x0
 	add ix, 0xC
-	djnz8 b, LABEL_01FE0B
+	djnz8 b, TaskSched_Init_TaskDescriptors
 	ldw ix, 0x10CA
 	extz xix
 	ldb b, 0x1
 	ld xwa, 0xFFFFFFFF
 
-LABEL_01FE29:
+TaskSched_Init_FreeList_A:
 	ld (xix + 4), xwa
 	add ix, 0x8
-	djnz8 b, LABEL_01FE29
+	djnz8 b, TaskSched_Init_FreeList_A
 	ld xhl, 0x1FDBC
 	ldw de, 0x1080
 	extz xde
@@ -9611,11 +9611,11 @@ LABEL_01FE29:
 	extz xhl
 	ldb b, 0x2
 
-LABEL_01FE48:
+TaskSched_Init_QueueGroup_B:
 	ld ix, hl
 	st_dpiw IX, 0xED
 	st_dpiw IX, 0xED
-	djnz8 b, LABEL_01FE48
+	djnz8 b, TaskSched_Init_QueueGroup_B
 	ld xhl, 0x1FDBE
 	ldw de, 0x1092
 	extz xde
@@ -9625,20 +9625,20 @@ LABEL_01FE48:
 	extz xhl
 	ldb b, 0x4
 
-LABEL_01FE68:
+TaskSched_Init_QueueGroup_C:
 	ld ix, hl
 	st_dpiw IX, 0xED
 	st_dpiw IX, 0xED
-	djnz8 b, LABEL_01FE68
+	djnz8 b, TaskSched_Init_QueueGroup_C
 	ldw hl, 0x10A6
 	extz xhl
 	ldb b, 0x4
 	ld xwa, 0xFFFFFFFF
 
-LABEL_01FE7F:
+TaskSched_Init_FreeList_B:
 	ld (xhl + 4), xwa
 	add hl, 0x8
-	djnz8 b, LABEL_01FE7F
+	djnz8 b, TaskSched_Init_FreeList_B
 	ldw iy, 0x10C6
 	extz xiy
 	ld (xiy + 256), iy
@@ -9646,7 +9646,7 @@ LABEL_01FE7F:
 	ldw ix, 0x10A6
 	ldb b, 0x4
 
-LABEL_01FE99:
+TaskSched_Init_LinkFreeNodes:
 	extz xix
 	extz xiy
 	xor xwa, xwa
@@ -9656,64 +9656,64 @@ LABEL_01FE99:
 	ld (xwa), ix
 	ld (xiy + 2), ix
 	add ix, 0x8
-	djnz8 b, LABEL_01FE99
+	djnz8 b, TaskSched_Init_LinkFreeNodes
 	ldw hl, 0x1096
 	extz xhl
 	ldb b, 0x2
 
-LABEL_01FEBB:
+TaskSched_Init_QueueGroup_D:
 	ld ix, hl
 	st_dpiw IX, 0xED
 	st_dpiw IX, 0xED
-	djnz8 b, LABEL_01FEBB
+	djnz8 b, TaskSched_Init_QueueGroup_D
 	ldw hl, 0x109E
 	extz xhl
 	ldb b, 0x2
 
-LABEL_01FECD:
+TaskSched_Init_QueueGroup_E:
 	ld ix, hl
 	st_dpiw IX, 0xED
 	st_dpiw IX, 0xED
-	djnz8 b, LABEL_01FECD
+	djnz8 b, TaskSched_Init_QueueGroup_E
 	ld xwa, 0x1FEDF
-	jr LABEL_01FEE7
+	jr TaskSched_ConfigAndDispatch
 
-LABEL_01FEDF:
+TaskSched_Init_ConfigData:
 	.byte 0x01, 0x00, 0x01, 0x00, 0xc7, 0xfd, 0x01, 0x00
 
-LABEL_01FEE7:
-	call LABEL_02072A
-	calr LABEL_02084D
+TaskSched_ConfigAndDispatch:
+	call Task_ConfigTimer
+	calr IntMask_ClearBit3
 	ldio 0x8B, 0x1D
 	ld_sd8b A, 0xE5
 	and a, 0xF
 	or a, 0x20
 	st_dd8b A, 0xE5
-	calr LABEL_020849
+	calr IntMask_SetBit3
 	ldb a, 0x1
-	calr LABEL_01FFFD
+	calr TaskSched_SpawnTask
 	ei 6
 	stdi8 4164, 0
 	xor wa, wa
 	ldc_cr16 wa, 0x7C
 	stda16 4306, xwa
-	jrl LABEL_01FF21
+	jrl TaskSched_Dispatch
 
-LABEL_01FF18:
+TaskSched_Halt:
 	ei 0
 	stdi8 305, 255
 
-LABEL_01FF1F:
-	jr LABEL_01FF1F
+TaskSched_HaltLoop:
+	jr TaskSched_HaltLoop
 
-LABEL_01FF21:
+TaskSched_Dispatch:
 	stdi8 305, 0
 	ldda16 xwa, 4306
 	or wa, wa
-	jr nz, LABEL_01FF72
+	jr nz, TaskSched_ContextRestore
 	xor wa, wa
 	cpdm16 4166, xwa
-	jr z, LABEL_01FF4A
+	jr z, TaskSched_Dispatch_ScanQueues
 	ldda16 xiy, 4166
 	extz xiy
 	ld (xiy + 4), xsp
@@ -9721,20 +9721,20 @@ LABEL_01FF21:
 	xor wa, wa
 	stda16 4166, xwa
 
-LABEL_01FF4A:
+TaskSched_Dispatch_ScanQueues:
 	ldb b, 0x3
 	ldw ix, 0x106C
 	extz xix
 
-LABEL_01FF51:
+TaskSched_Dispatch_ScanLoop:
 	ld hl, (xix + 256)
 	cp hl, ix
-	jr nz, LABEL_01FF5F
+	jr nz, TaskSched_Dispatch_SwitchTo
 	inc 4, ix
-	djnz8 b, LABEL_01FF51
-	jr LABEL_01FF18
+	djnz8 b, TaskSched_Dispatch_ScanLoop
+	jr TaskSched_Halt
 
-LABEL_01FF5F:
+TaskSched_Dispatch_SwitchTo:
 	stda16 4166, xhl
 	extz xhl
 	ld a, (xhl + 11)
@@ -9742,7 +9742,7 @@ LABEL_01FF5F:
 	stda8 305, a
 	ld xsp, (xhl + 4)
 
-LABEL_01FF72:
+TaskSched_ContextRestore:
 	pop xiz
 	pop xiy
 	pop xix
@@ -9753,7 +9753,7 @@ LABEL_01FF72:
 	pop_sr
 	ret
 
-LABEL_01FF7B:
+TaskList_Operations_Opaque:
 	.byte 0xd1, 0xd2, 0x10, 0x20, 0xd8, 0x61, 0xf1, 0xd2
 	.byte 0x10, 0x50, 0xd8, 0x2e, 0x7c, 0x06, 0x00, 0x34
 	.byte 0xca, 0x10, 0xec, 0x12, 0x22, 0x01, 0xac, 0x04
@@ -9766,18 +9766,18 @@ LABEL_01FF7B:
 	.byte 0x00, 0x50, 0xf2, 0xa8, 0xff, 0x01, 0x30, 0x38
 	.byte 0xac, 0x04, 0x20, 0xb0, 0xd8
 
-LABEL_01FFD0:
+TaskSwitch_Countdown:
 	pushw wa
 	ldda16 xwa, 4306
 	cps wa, 1
-	jr z, LABEL_01FFE4
+	jr z, TaskSwitch_Expired
 	dec 1, wa
 	stda16 4306, xwa
 	ldc_cr16 wa, 0x7C
 	popw wa
 	reti
 
-LABEL_01FFE4:
+TaskSwitch_Expired:
 	xor wa, wa
 	stda16 4306, xwa
 	ldc_cr16 wa, 0x7C
@@ -9792,9 +9792,9 @@ LABEL_01FFE4:
 	push xix
 	push xiy
 	push xiz
-	jrl LABEL_01FF21
+	jrl TaskSched_Dispatch
 
-LABEL_01FFFD:
+TaskSched_SpawnTask:
 	push_sr
 	ei 6
 	push xhl
@@ -9816,7 +9816,7 @@ LABEL_01FFFD:
 	ld xix, xbc
 	ld a, (xix + 9)
 	cps a, 0
-	jrl nz, LABEL_01FF72
+	jrl nz, TaskSched_ContextRestore
 	ld (xix + 11), w
 	ld xiy, (xhl + 4)
 	sub xiy, 0x22
@@ -9842,7 +9842,7 @@ LABEL_01FFFD:
 	ld (xix + 2), wa
 	ld (xwa), ix
 	ld (xiy + 2), ix
-	jrl LABEL_01FF21
+	jrl TaskSched_Dispatch
 	ei 6
 	ld xsp, 0x40B1E
 	ldda16 xix, 4166
@@ -9858,10 +9858,10 @@ LABEL_01FFFD:
 	ld hl, (xix + 2)
 	ld (xhl + 256), wa
 	ld (xwa + 2), hl
-	jrl LABEL_01FF21
+	jrl TaskSched_Dispatch
 	ldda16 xhl, 4306
 	or hl, hl
-	jr nz, LABEL_0200BD
+	jr nz, TaskSched_ReturnZero
 	push xix
 	ldda16 xix, 4166
 	extz xix
@@ -9870,11 +9870,11 @@ LABEL_01FFFD:
 	pop xix
 	ret
 
-LABEL_0200BD:
+TaskSched_ReturnZero:
 	xor hl, hl
 	ret
 
-LABEL_0200C0:
+TaskSched_PreemptiveYield:
 	push_sr
 	ei 6
 	push xhl
@@ -9891,7 +9891,7 @@ LABEL_0200C0:
 	extz xiy
 	ld ix, (xiy + 256)
 	cp ix, (xiy + 2)
-	jrl z, LABEL_01FF72
+	jrl z, TaskSched_ContextRestore
 	extz xix
 	xor xwa, xwa
 	xor xhl, xhl
@@ -9907,9 +9907,9 @@ LABEL_0200C0:
 	ld (xix + 2), wa
 	ld (xwa), ix
 	ld (xiy + 2), ix
-	jrl LABEL_01FF21
+	jrl TaskSched_Dispatch
 
-LABEL_020109:
+TaskQueue_Dequeue:
 	push xwa
 	push xix
 	push xiy
@@ -9921,7 +9921,7 @@ LABEL_020109:
 	extz xiy
 	ld ix, (xiy + 256)
 	cp ix, (xiy + 2)
-	jr z, LABEL_020148
+	jr z, TaskQueue_Dequeue_Return
 	extz xix
 	xor xwa, xwa
 	xor xhl, xhl
@@ -9938,14 +9938,14 @@ LABEL_020109:
 	ld (xwa), ix
 	ld (xiy + 2), ix
 
-LABEL_020148:
+TaskQueue_Dequeue_Return:
 	pop xhl
 	pop xiy
 	pop xix
 	pop xwa
 	ret
 
-LABEL_02014D:
+TaskQueue_Operations_Opaque:
 	.byte 0x02, 0x06, 0x06
 	.byte 0x3b, 0x38, 0x39, 0x3a, 0x3c
 	.byte 0x3d, 0x3e, 0xd1, 0x46, 0x10, 0x24, 0xec, 0x12
@@ -10023,7 +10023,7 @@ LABEL_02014D:
 	.byte 0x7f, 0x10, 0xe8, 0x12, 0x02, 0x06, 0x06, 0xb0
 	.byte 0xb0, 0x03, 0x0e
 
-LABEL_020370:
+TaskSched_PreemptiveYield_INT:
 	push_sr
 	ei 6
 	push xhl
@@ -10041,19 +10041,19 @@ LABEL_020370:
 	extz xiy
 	ld ix, (xiy + 256)
 	cp ix, iy
-	jr nz, LABEL_0203A3
+	jr nz, TaskSched_PreemptiveYield_INT_Dequeue
 	extz hl
 	add hl, 0x1091
 	extz xhl
 	ld a, (xhl)
 	inc 1, a
-	jr z, LABEL_0203A0
+	jr z, TaskSched_PreemptiveYield_INT_Empty
 	ld (xhl), a
 
-LABEL_0203A0:
-	jrl LABEL_01FF72
+TaskSched_PreemptiveYield_INT_Empty:
+	jrl TaskSched_ContextRestore
 
-LABEL_0203A3:
+TaskSched_PreemptiveYield_INT_Dequeue:
 	extz xix
 	xor xwa, xwa
 	xor xhl, xhl
@@ -10075,7 +10075,7 @@ LABEL_0203A3:
 	ld (xix + 2), wa
 	ld (xwa), ix
 	ld (xiy + 2), ix
-	jrl LABEL_01FF21
+	jrl TaskSched_Dispatch
 	push xwa
 	push xix
 	push xiy
@@ -10090,16 +10090,16 @@ LABEL_0203A3:
 	ei 6
 	ld ix, (xiy + 256)
 	cp ix, iy
-	jr nz, LABEL_020411
+	jr nz, TaskQueue_Dequeue_Guard_Dequeue
 	extz hl
 	add hl, 0x1091
 	extz xhl
 	ld a, (xhl)
 	inc 1, a
-	jr z, LABEL_02040B
+	jr z, TaskQueue_Dequeue_Guard_Empty
 	ld (xhl), a
 
-LABEL_02040B:
+TaskQueue_Dequeue_Guard_Empty:
 	pop_sr
 	pop xhl
 	pop xiy
@@ -10107,7 +10107,7 @@ LABEL_02040B:
 	pop xwa
 	ret
 
-LABEL_020411:
+TaskQueue_Dequeue_Guard_Dequeue:
 	extz xix
 	xor xwa, xwa
 	xor xhl, xhl
@@ -10136,7 +10136,7 @@ LABEL_020411:
 	pop xwa
 	ret
 
-LABEL_02044F:
+TaskSched_Wait:
 	push_sr
 	ei 6
 	push xhl
@@ -10151,11 +10151,11 @@ LABEL_02044F:
 	add wa, 0x1091
 	extz xwa
 	cp (xwa), 0x0
-	jr z, LABEL_02046D
+	jr z, TaskSched_Wait_Block
 	decm8 1, (xwa)
-	jrl LABEL_01FF72
+	jrl TaskSched_ContextRestore
 
-LABEL_02046D:
+TaskSched_Wait_Block:
 	ldda16 xix, 4166
 	extz xix
 	xor xwa, xwa
@@ -10177,30 +10177,30 @@ LABEL_02046D:
 	ld (xix + 2), wa
 	ld (xwa), ix
 	ld (xiy + 2), ix
-	jrl LABEL_01FF21
+	jrl TaskSched_Dispatch
 	extz wa
 	add wa, 0x1091
 	extz xwa
 	push_sr
 	ei 6
 	cp (xwa), 0x0
-	jr z, LABEL_0204BF
+	jr z, TaskSem_TryDec_WouldBlock
 	decm8 1, (xwa)
 	xor hl, hl
-	jr LABEL_0204C2
+	jr TaskSem_TryDec_Return
 
-LABEL_0204BF:
+TaskSem_TryDec_WouldBlock:
 	ldw hl, 0xFFFF
 
-LABEL_0204C2:
+TaskSem_TryDec_Return:
 	pop_sr
 	ret
 
-LABEL_0204C4:
+TaskSem_AddrCalc_Opaque:
 	.byte 0xd8, 0x12, 0xd8, 0xc8, 0x91, 0x10, 0xe8, 0x12
 	.byte 0x80, 0x27, 0xdb, 0x12, 0x0e
 
-LABEL_0204D1:
+TaskMsgQ_Send:
 	push_sr
 	ei 6
 	push xhl
@@ -10219,12 +10219,12 @@ LABEL_0204D1:
 	extz xiy
 	ld ix, (xiy + 256)
 	cp ix, iy
-	jr nz, LABEL_020542
+	jr nz, TaskMsgQ_Send_DirectDeliver
 	ldda16 xix, 4294
 	extz xix
 	ld iy, (xix + 256)
 	cp iy, ix
-	jrl z, LABEL_02053A
+	jrl z, TaskMsgQ_Send_PoolEmpty
 	ldw (xsp + 24), 0x0
 	extz xix
 	xor xwa, xwa
@@ -10245,13 +10245,13 @@ LABEL_0204D1:
 	ld (xix + 2), wa
 	ld (xwa), ix
 	ld (xiy + 2), ix
-	jrl LABEL_01FF72
+	jrl TaskSched_ContextRestore
 
-LABEL_02053A:
+TaskMsgQ_Send_PoolEmpty:
 	ldw (xsp + 24), 0xFFFF
-	jrl LABEL_01FF72
+	jrl TaskSched_ContextRestore
 
-LABEL_020542:
+TaskMsgQ_Send_DirectDeliver:
 	ldw (xsp + 24), 0x0
 	extz xix
 	xor xwa, xwa
@@ -10276,7 +10276,7 @@ LABEL_020542:
 	ld (xix + 2), wa
 	ld (xwa), ix
 	ld (xiy + 2), ix
-	jrl LABEL_01FF21
+	jrl TaskSched_Dispatch
 	push xwa
 	push xix
 	push xiy
@@ -10294,12 +10294,12 @@ LABEL_020542:
 	ei 6
 	ld ix, (xiy + 256)
 	cp ix, iy
-	jr nz, LABEL_0205FC
+	jr nz, TaskMsgQ_Send_Guard_DirectDeliver
 	ldda16 xix, 4294
 	extz xix
 	ld iy, (xix + 256)
 	cp iy, ix
-	jrl z, LABEL_0205F5
+	jrl z, TaskMsgQ_Send_Guard_PoolEmpty
 	ldw (xsp + 4), 0x0
 	extz xix
 	xor xwa, xwa
@@ -10321,7 +10321,7 @@ LABEL_020542:
 	ld (xwa), ix
 	ld (xiy + 2), ix
 
-LABEL_0205ED:
+TaskMsgQ_Send_Guard_Return:
 	pop_sr
 	pop xbc
 	pop xhl
@@ -10331,11 +10331,11 @@ LABEL_0205ED:
 	pop xwa
 	ret
 
-LABEL_0205F5:
+TaskMsgQ_Send_Guard_PoolEmpty:
 	ldw (xsp + 4), 0xFFFF
-	jr LABEL_0205ED
+	jr TaskMsgQ_Send_Guard_Return
 
-LABEL_0205FC:
+TaskMsgQ_Send_Guard_DirectDeliver:
 	extz xix
 	xor xwa, xwa
 	xor xhl, xhl
@@ -10368,7 +10368,7 @@ LABEL_0205FC:
 	pop xwa
 	ret
 
-LABEL_020642:
+TaskMsgQ_Receive:
 	push_sr
 	ei 6
 	push xhl
@@ -10386,7 +10386,7 @@ LABEL_020642:
 	extz xiy
 	ld ix, (xiy + 256)
 	cp ix, iy
-	jr z, LABEL_02069C
+	jr z, TaskMsgQ_Receive_Empty
 	extz xix
 	xor xwa, xwa
 	xor xhl, xhl
@@ -10407,9 +10407,9 @@ LABEL_020642:
 	ld (xwa), ix
 	ld (xiy + 2), ix
 	ld (xsp + 24), xiz
-	jrl LABEL_01FF72
+	jrl TaskSched_ContextRestore
 
-LABEL_02069C:
+TaskMsgQ_Receive_Empty:
 	ldda16 xix, 4166
 	extz xix
 	xor xwa, xwa
@@ -10429,9 +10429,9 @@ LABEL_02069C:
 	ld (xix + 2), wa
 	ld (xwa), ix
 	ld (xiy + 2), ix
-	jrl LABEL_01FF21
+	jrl TaskSched_Dispatch
 
-LABEL_0206D3:
+TaskMsgQ_TryReceive:
 	push xix
 	push xiz
 	sll a, 2
@@ -10443,7 +10443,7 @@ LABEL_0206D3:
 	extz xiy
 	ld ix, (xiy + 256)
 	cp ix, iy
-	jr z, LABEL_020724
+	jr z, TaskMsgQ_TryReceive_Empty
 	extz xix
 	xor xwa, xwa
 	xor xhl, xhl
@@ -10464,18 +10464,18 @@ LABEL_0206D3:
 	ld (xwa), ix
 	ld (xiy + 2), ix
 	ld xhl, xiz
-	jr LABEL_020726
+	jr TaskMsgQ_TryReceive_Return
 
-LABEL_020724:
+TaskMsgQ_TryReceive_Empty:
 	xor xhl, xhl
 
-LABEL_020726:
+TaskMsgQ_TryReceive_Return:
 	pop_sr
 	pop xiz
 	pop xix
 	ret
 
-LABEL_02072A:
+Task_ConfigTimer:
 	push_sr
 	ei 6
 	push xhl
@@ -10496,7 +10496,7 @@ LABEL_02072A:
 	ld (xiy + 2), wa
 	ld xwa, (xix + 4)
 	ld (xiy + 4), xwa
-	jrl LABEL_01FF21
+	jrl TaskSched_Dispatch
 	push_sr
 	ei 6
 	push xhl
@@ -10512,7 +10512,7 @@ LABEL_02072A:
 	ld ix, wa
 	extz xix
 	cp (xix + 9), 0x4
-	jr nz, LABEL_0207AA
+	jr nz, Task_Reassign_NotRunning
 	extz xix
 	xor xwa, xwa
 	xor xhl, xhl
@@ -10533,11 +10533,11 @@ LABEL_02072A:
 	ld (xix + 2), wa
 	ld (xwa), ix
 	ld (xiy + 2), ix
-	jrl LABEL_01FF21
+	jrl TaskSched_Dispatch
 
-LABEL_0207AA:
+Task_Reassign_NotRunning:
 	ld (xix + 8), e
-	jrl LABEL_01FF72
+	jrl TaskSched_ContextRestore
 	push xwa
 	push xix
 	push xiy
@@ -10551,7 +10551,7 @@ LABEL_0207AA:
 	push_sr
 	ei 6
 	cp (xix + 9), 0x4
-	jr nz, LABEL_020801
+	jr nz, Task_Reassign_Guard_NotRunning
 	extz xix
 	xor xwa, xwa
 	xor xhl, xhl
@@ -10572,12 +10572,12 @@ LABEL_0207AA:
 	ld (xix + 2), wa
 	ld (xwa), ix
 	ld (xiy + 2), ix
-	jr LABEL_020804
+	jr Task_Reassign_Guard_Return
 
-LABEL_020801:
+Task_Reassign_Guard_NotRunning:
 	ld (xix + 8), e
 
-LABEL_020804:
+Task_Reassign_Guard_Return:
 	pop_sr
 	popw de
 	pop xhl
@@ -10586,7 +10586,7 @@ LABEL_020804:
 	pop xwa
 	ret
 
-LABEL_02080B:
+RingBuf_Access_Opaque_A:
 	.ascii "(<=;"
 	.byte 0x06, 0x06, 0xc9, 0x08
 	.byte 0x0c, 0xd8, 0xc8, 0x3c, 0x10, 0xd8, 0x8c, 0xec
@@ -10599,15 +10599,15 @@ LABEL_02080B:
 	.byte 0xd8, 0xef, 0x01, 0xd1, 0x40, 0x10, 0x80, 0xd1
 	.byte 0x40, 0x10, 0xf0, 0x6a, 0xfa, 0x0e
 
-LABEL_020849:
+IntMask_SetBit3:
 	set_dd8 3, 0x80
 	ret
 
-LABEL_02084D:
+IntMask_ClearBit3:
 	res_dd8 3, 0x80
 	ret
 
-LABEL_020851:
+RingBuf_Control_Opaque:
 	.byte 0xd1, 0xd2, 0x10, 0x61, 0x0e, 0xd1, 0xd2, 0x10
 	.byte 0x69, 0x0e, 0x2c, 0x3a, 0xf2, 0x2e, 0x0c, 0x04
 	.byte 0x32, 0x1e, 0x38, 0x03, 0x5a, 0x4c, 0x0e, 0xee
@@ -10622,16 +10622,16 @@ LABEL_020851:
 	.byte 0xf3, 0xdb, 0xa8, 0x66, 0x03, 0x33, 0xff, 0xff
 	.byte 0x0e, 0xd2, 0x2c, 0x0c, 0x04, 0x23, 0x0e
 
-LABEL_0208B8:
+RingBuf_Init_1K:
 	pushw ix
 	push xde
 	lda_24 xde, 0x040c2e
-	call LABEL_020B83
+	call RingBuf_Reset_1K
 	pop xde
 	popw ix
 	ret
 
-LABEL_0208C6:
+RingBuf_ReadWrite_Opaque_A:
 	.byte 0x2b, 0xd2, 0x26, 0x0c, 0x04, 0x23, 0xf2, 0x24
 	.byte 0x0c, 0x04, 0x53, 0x4b, 0x0e, 0x2c, 0x3a, 0xf2
 	.byte 0x2e, 0x0c, 0x04, 0x32, 0x1d, 0xbb, 0x0b, 0x02
@@ -10653,16 +10653,16 @@ LABEL_0208C6:
 	.byte 0x04, 0xf3, 0xdb, 0xa8, 0x66, 0x03, 0x33, 0xff
 	.byte 0xff, 0x0e, 0xd2, 0x36, 0x10, 0x04, 0x23, 0x0e
 
-LABEL_020966:
+RingBuf_Init_256:
 	pushw ix
 	push xde
 	lda_24 xde, 0x041038
-	call LABEL_020A65
+	call RingBuf_Reset_256
 	pop xde
 	popw ix
 	ret
 
-LABEL_020974:
+RingBuf_ReadWrite_Opaque_B:
 	.byte 0x2b, 0xd2, 0x30, 0x10, 0x04, 0x23, 0xf2, 0x2e
 	.byte 0x10, 0x04, 0x53, 0x4b, 0x0e, 0x2c, 0x3a, 0xf2
 	.byte 0x38, 0x10, 0x04, 0x32, 0x1d, 0x9d, 0x0a, 0x02
@@ -10684,11 +10684,11 @@ LABEL_020974:
 	.byte 0x04, 0xf3, 0xdb, 0xa8, 0x66, 0x03, 0x33, 0xff
 	.byte 0xff, 0x0e, 0xd2, 0x40, 0x11, 0x04, 0x23, 0x0e
 
-LABEL_020A14:
+RingBuf_Init_512:
 	pushw ix
 	push xde
 	lda_24 xde, 0x041142
-	call LABEL_020AF4
+	call RingBuf_Reset_512
 	pop xde
 	popw ix
 	ret
@@ -10697,7 +10697,7 @@ LABEL_020A14:
 ; Five small routines that load/store 16-bit pointer values
 ; from the audio buffer control block at 0x041138-0x041142.
 ; Each routine saves/restores caller registers.
-LABEL_020A22:
+AudioBuf_PtrUtils:
 	pushw	hl
 	ld16_24	hl, 266554
 	st16_24	266552, hl
@@ -10728,7 +10728,7 @@ LABEL_020A22:
 	popw	hl
 	ret
 
-LABEL_020A65:
+RingBuf_Reset_256:
 	ldw (xde - 10), 0x0
 	ldw (xde - 8), 0x0
 	ldw (xde - 4), 0x0
@@ -10736,7 +10736,7 @@ LABEL_020A65:
 	ldw (xde - 2), 0xFF
 	ret
 
-LABEL_020A7F:
+RingBuf_WrappedRead_Opaque_A:
 	.byte 0x9a, 0xf8, 0x24, 0x9a, 0xfc, 0xf4, 0x6e, 0x04
 	.byte 0x33, 0xff, 0xff, 0x0e, 0xdb, 0xd3, 0xc3, 0x07
 	.byte 0xe8, 0xf0, 0x27, 0xdc, 0x38, 0xff, 0x00, 0xba
@@ -10753,7 +10753,7 @@ LABEL_020A7F:
 	.byte 0x38, 0xff, 0x00, 0xba, 0xfc, 0x54, 0x9a, 0xfe
 	.byte 0x69, 0x9a, 0xfe, 0x23, 0x0e
 
-LABEL_020AF4:
+RingBuf_Reset_512:
 	ldw (xde - 10), 0x0
 	ldw (xde - 8), 0x0
 	ldw (xde - 4), 0x0
@@ -10761,7 +10761,7 @@ LABEL_020AF4:
 	ldw (xde - 2), 0x1FF
 	ret
 
-LABEL_020B0E:
+RingBuf_WrappedRead_Opaque_B:
 	.byte 0x9a, 0xf8, 0x24, 0x9a, 0xfc, 0xf4, 0x6e, 0x04
 	.byte 0x33, 0xff, 0xff, 0x0e, 0xdb, 0xd3, 0xc3, 0x07
 	.byte 0xe8, 0xf0, 0x27, 0xdc, 0x38, 0xff, 0x01, 0xba
@@ -10778,7 +10778,7 @@ LABEL_020B0E:
 	.byte 0x38, 0xff, 0x01, 0xba, 0xfc, 0x54, 0x9a, 0xfe
 	.byte 0x69, 0x9a, 0xfe, 0x23, 0x0e
 
-LABEL_020B83:
+RingBuf_Reset_1K:
 	ldw (xde - 10), 0x0
 	ldw (xde - 8), 0x0
 	ldw (xde - 4), 0x0
@@ -10786,7 +10786,7 @@ LABEL_020B83:
 	ldw (xde - 2), 0x3FF
 	ret
 
-LABEL_020B9D:
+RingBuf_WrappedRead_Opaque_C:
 	.byte 0x9a, 0xf8, 0x24, 0x9a, 0xfc, 0xf4, 0x6e, 0x04
 	.byte 0x33, 0xff, 0xff, 0x0e, 0xdb, 0xd3, 0xc3, 0x07
 	.byte 0xe8, 0xf0, 0x27, 0xdc, 0x38, 0xff, 0x03, 0xba
@@ -10949,7 +10949,7 @@ InterCPU_Wait_MSTAT1_Set:
 	set_dd8 0, 0x34	; SSTAT0 - timeout recovery: force ready state before exit
 	ret
 
-LABEL_020D13:
+InterCPU_LatchProtocol_Opaque:
 	.byte 0xd9, 0xa8, 0xf0, 0x34, 0xcc, 0x66, 0x12, 0xf0
 	.byte 0x34, 0xb0, 0xf2, 0x00, 0x00, 0x12, 0x00, 0xe3
 	.byte 0xf0, 0x34, 0xcc, 0x6e, 0x0f, 0xf0, 0x34, 0xb8
@@ -40527,7 +40527,7 @@ DSP_Reset:
 	ldda16 xwa, 17842
 	ldda16 xbc, 17844
 	ldda16 xde, 17846
-	call LABEL_03C067
+	call DSP_MixerCoeff_Compute
 	ld xiy, 0xF01E
 	ld xix, 0x448E
 	ldw bc, 0x91
@@ -40544,7 +40544,7 @@ DSP_Reset:
 	ldda16 xwa, 17842
 	ldda16 xbc, 17844
 	ldda16 xde, 17846
-	call LABEL_03C067
+	call DSP_MixerCoeff_Compute
 	popw iz
 	ret
 
@@ -40709,7 +40709,7 @@ DSP_WaitForDelay:
 
 DSP_WaitForTaskSlot_Loop:
 	lds wa, 3
-	call LABEL_0200C0
+	call TaskSched_PreemptiveYield
 	cpdm32 4160, xiz
 	jr c, DSP_WaitForTaskSlot_Loop
 
@@ -40722,7 +40722,7 @@ DSP_WaitForTaskSlot_Data:
 
 DSP_WakeAudioTask:
 	lds wa, 1
-	jp LABEL_02044F
+	jp TaskSched_Wait
 
 ; ----------------------------------------------------------------------------
 ; DSP_Send_Command - Send a command byte to DSP chip
@@ -45276,11 +45276,11 @@ DSP_AlgorithmChange:
 	call 0x3C181
 	ld xwa, (xsp + 2)
 	cpw (xwa + 4), 0x1
-	jr nz, LABEL_038044
+	jr nz, EFF_LoadConfigs_ForChannel
 	ld wa, iz
 	calr DSP_AntiReset_WithDebug
 
-LABEL_038044:
+EFF_LoadConfigs_ForChannel:
 	lda_24 xwa, 0x01e6be
 	ld xbc, xwa
 	ld wa, iz
@@ -45334,13 +45334,13 @@ EFF_WriteHeader:
 	ld e, a
 	extz de
 	cps de, 0
-	jr nz, LABEL_0380EA
+	jr nz, EFF_WriteHeader_Return
 	lda_24 xwa, 0x01e496
 	ld xbc, xwa
 	ld wa, de
 	call 0x3C181
 
-LABEL_0380EA:
+EFF_WriteHeader_Return:
 	popw iz
 	ret
 
@@ -45360,30 +45360,30 @@ EFF_Change_WithDebug:
 	call 0x3836C
 	ld wa, iz
 	cps wa, 1
-	jr nz, LABEL_03818A
+	jr nz, EFF_Change_ChannelNot1
 	ld wa, (xsp + 2)
 	cp wa, 0xA
-	jr z, LABEL_038142
+	jr z, EFF_Change_Case0xA
 	cp wa, 0x9
-	jr nz, LABEL_03815A
+	jr nz, EFF_Change_GenericLookup
 	ld wa, iz
 	lda_24 xbc, 0x01dfa5
 	call 0x3C161
 	ld wa, iz
 	lda_24 xbc, 0x01e0b9
 	call 0x3C161
-	jr LABEL_0381B8
+	jr EFF_Change_Return
 
-LABEL_038142:
+EFF_Change_Case0xA:
 	ld wa, iz
 	lda_24 xbc, 0x01e1de
 	call 0x3C161
 	ld wa, iz
 	lda_24 xbc, 0x01e342
 	call 0x3C161
-	jr LABEL_0381B8
+	jr EFF_Change_Return
 
-LABEL_03815A:
+EFF_Change_GenericLookup:
 	ld wa, (xsp + 2)
 	extz xwa
 	sll xwa, 2
@@ -45400,9 +45400,9 @@ LABEL_03815A:
 	ld wa, iz
 	ld xbc, (xbc)
 	call 0x3C161
-	jr LABEL_0381B8
+	jr EFF_Change_Return
 
-LABEL_03818A:
+EFF_Change_ChannelNot1:
 	ld wa, (xsp + 2)
 	extz xwa
 	sll xwa, 2
@@ -45420,7 +45420,7 @@ LABEL_03818A:
 	ld xbc, (xbc)
 	call 0x3C161
 
-LABEL_0381B8:
+EFF_Change_Return:
 	popw iz
 	inc 2, xsp
 	ret
@@ -45499,7 +45499,7 @@ EFF_VolumeUpdate_WithDebug:
 	ld (xsp + 6), bc
 	ld iz, wa
 	cpw (xsp + 4), 0x63
-	jrl z, LABEL_03835F
+	jrl z, EFF_VolumeUpdate_Return
 	lda_24 xwa, 0x01238b
 	call 0x38365
 	ld wa, iz
@@ -45531,16 +45531,16 @@ EFF_VolumeUpdate_WithDebug:
 	add xbc, (xsp + 12)
 	ld wa, (xbc + 54)
 	cps wa, 0
-	jr z, LABEL_0382EA
+	jr z, EFF_VolumeUpdate_ZeroAndReload
 	ld xwa, (xsp + 12)
 	push xwa
 	ld wa, iz
 	ld bc, (xsp + 10)
 	ld de, (xsp + 8)
 	call 0x3C190
-	jr LABEL_03835F
+	jr EFF_VolumeUpdate_Return
 
-LABEL_0382EA:
+EFF_VolumeUpdate_ZeroAndReload:
 	ld wa, (xsp + 4)
 	extz xwa
 	ld xbc, xwa
@@ -45589,7 +45589,7 @@ LABEL_0382EA:
 	ld wa, (xsp + 2)
 	ld (xde + 12), wa
 
-LABEL_03835F:
+EFF_VolumeUpdate_Return:
 	popw iz
 	inc 6, xsp
 	retd 0x4
@@ -45810,7 +45810,7 @@ DSP_WriteFreqParam_AlgoType:
 	ld (xsp + 6), wa
 	ld wa, iz
 	cps wa, 1
-	jrl z, LABEL_038528
+	jrl z, DSP_WriteFreqParam_AlgoType_UseCmd30
 	ld bc, iz
 	lds wa, 0
 	call 0x36A4F
@@ -45864,15 +45864,15 @@ DSP_WriteFreqParam_AlgoType:
 	extz wa
 	ld bc, iz
 	call 0x36A4F
-	jr LABEL_038533
+	jr DSP_WriteFreqParam_AlgoType_Return
 
-LABEL_038528:
+DSP_WriteFreqParam_AlgoType_UseCmd30:
 	ld wa, iz
 	ld bc, (xsp + 6)
 	ld xde, (xsp + 2)
 	calr DSP_WriteParamCmd30
 
-LABEL_038533:
+DSP_WriteFreqParam_AlgoType_Return:
 	popw iz
 	inc 6, xsp
 	retd 0x2
@@ -45885,7 +45885,7 @@ DSP_WriteFreqParam:
 	ld (xsp + 6), wa
 	ld wa, iz
 	cps wa, 1
-	jrl z, LABEL_0385F5
+	jrl z, DSP_WriteFreqParam_UseCmd30
 	ld bc, iz
 	lds wa, 0
 	call 0x36A4F
@@ -45939,15 +45939,15 @@ DSP_WriteFreqParam:
 	extz wa
 	ld bc, iz
 	call 0x36A4F
-	jr LABEL_038600
+	jr DSP_WriteFreqParam_Return
 
-LABEL_0385F5:
+DSP_WriteFreqParam_UseCmd30:
 	ld wa, iz
 	ld bc, (xsp + 6)
 	ld xde, (xsp + 2)
 	calr DSP_WriteParamCmd30
 
-LABEL_038600:
+DSP_WriteFreqParam_Return:
 	popw iz
 	inc 6, xsp
 	retd 0x2
@@ -46020,46 +46020,46 @@ DSP_WriteLUTParamSet:
 	ld_spib C, 0xE0
 	ld (xsp + 6), xwa
 	cps c, 1
-	jr z, LABEL_0386EA
+	jr z, DSP_WriteLUT_AlgoC1
 	ldw (xsp + 2), 0x24
 	cp xde, 0x2
-	jr z, LABEL_0386E0
+	jr z, DSP_WriteLUT_AlgoC0_TypeDE2
 	cp xde, 0x1
-	jr z, LABEL_0386D6
+	jr z, DSP_WriteLUT_AlgoC0_TypeDE1
 	lda_24 xwa, 0x01eafa
 	ld (xsp + 10), xwa
-	jr LABEL_03871B
+	jr DSP_WriteLUT_MainLoop_Init
 
-LABEL_0386D6:
+DSP_WriteLUT_AlgoC0_TypeDE1:
 	lda_24 xwa, 0x01eb67
 	ld (xsp + 10), xwa
-	jr LABEL_03871B
+	jr DSP_WriteLUT_MainLoop_Init
 
-LABEL_0386E0:
+DSP_WriteLUT_AlgoC0_TypeDE2:
 	lda_24 xwa, 0x01ebd4
 	ld (xsp + 10), xwa
-	jr LABEL_03871B
+	jr DSP_WriteLUT_MainLoop_Init
 
-LABEL_0386EA:
+DSP_WriteLUT_AlgoC1:
 	ldw (xsp + 2), 0x20
 	cp xde, 0x2
-	jr z, LABEL_038713
+	jr z, DSP_WriteLUT_AlgoC1_TypeDE2
 	cp xde, 0x1
-	jr z, LABEL_038709
+	jr z, DSP_WriteLUT_AlgoC1_TypeDE1
 	lda_24 xwa, 0x01ec41
 	ld (xsp + 10), xwa
-	jr LABEL_03871B
+	jr DSP_WriteLUT_MainLoop_Init
 
-LABEL_038709:
+DSP_WriteLUT_AlgoC1_TypeDE1:
 	lda_24 xwa, 0x01eca5
 	ld (xsp + 10), xwa
-	jr LABEL_03871B
+	jr DSP_WriteLUT_MainLoop_Init
 
-LABEL_038713:
+DSP_WriteLUT_AlgoC1_TypeDE2:
 	lda_24 xwa, 0x01ed09
 	ld (xsp + 10), xwa
 
-LABEL_03871B:
+DSP_WriteLUT_MainLoop_Init:
 	ld xbc, (xsp + 10)
 	lds32 xwa, 1
 	add (xsp + 10), xwa
@@ -46070,11 +46070,11 @@ LABEL_03871B:
 	ld wa, (xsp + 2)
 	srl wa, 2
 	cp (xsp + 4), wa
-	jrl nc, LABEL_0387D5
+	jrl nc, DSP_WriteLUT_MainLoop_Done
 
-LABEL_03873B:
+DSP_WriteLUT_MainLoop_Body:
 	cpw (xsp + 4), 0x0
-	jr z, LABEL_038764
+	jr z, DSP_WriteLUT_MainLoop_FirstEntry
 	ld bc, (xsp + 26)
 	lds wa, 1
 	call 0x36A2E
@@ -46088,7 +46088,7 @@ LABEL_03873B:
 	call 0x36A4F
 	ld iz, hl
 
-LABEL_038764:
+DSP_WriteLUT_MainLoop_FirstEntry:
 	ld wa, (xsp + 4)
 	sll wa, 2
 	ld iz, wa
@@ -46129,9 +46129,9 @@ LABEL_038764:
 	ld wa, (xsp + 2)
 	srl wa, 2
 	cp (xsp + 4), wa
-	jrl c, LABEL_03873B
+	jrl c, DSP_WriteLUT_MainLoop_Body
 
-LABEL_0387D5:
+DSP_WriteLUT_MainLoop_Done:
 	ld xwa, (xsp + 16)
 	ld xbc, (xsp + 6)
 	ld (xwa), xbc
@@ -46148,7 +46148,7 @@ DSP_WriteOscParam:
 	ld (xsp + 6), wa
 	ld wa, iz
 	cps wa, 1
-	jrl z, LABEL_0388A2
+	jrl z, DSP_WriteOscParam_UseCmd30
 	ld bc, iz
 	ldw wa, 0x8
 	call 0x36A4F
@@ -46202,15 +46202,15 @@ DSP_WriteOscParam:
 	extz wa
 	ld bc, iz
 	call 0x36A4F
-	jr LABEL_0388AD
+	jr DSP_WriteOscParam_Return
 
-LABEL_0388A2:
+DSP_WriteOscParam_UseCmd30:
 	ld wa, iz
 	ld bc, (xsp + 6)
 	ld xde, (xsp + 2)
 	calr DSP_WriteParamCmd30
 
-LABEL_0388AD:
+DSP_WriteOscParam_Return:
 	popw iz
 	inc 6, xsp
 	retd 0x2
@@ -46328,7 +46328,7 @@ DSP_WriteOscParam_Offset:
 	push xwa
 	ld xwa, xhl
 	ld de, (xsp + 18)
-	call LABEL_03CF53
+	call DSP_TableWalk_Search
 	ld wa, (xsp + 6)
 	mul wa, 0x3
 	ld bc, wa
@@ -46352,7 +46352,7 @@ DSP_WriteOscParam_Offset:
 	call 0x36A4F
 	ld (xsp + 4), hl
 	cpw (xsp + 18), 0x63
-	jr z, LABEL_038A95
+	jr z, DSP_AlgoSelect_TypeEq63
 	ld bc, iz
 	lds wa, 0
 	call 0x36A4F
@@ -46381,9 +46381,9 @@ DSP_WriteOscParam_Offset:
 	lds wa, 0
 	call 0x36A4F
 	ld (xsp + 4), hl
-	jr LABEL_038ACD
+	jr DSP_AlgoSelect_WriteHeader
 
-LABEL_038A95:
+DSP_AlgoSelect_TypeEq63:
 	ld bc, iz
 	lds wa, 0
 	call 0x36A4F
@@ -46405,9 +46405,9 @@ LABEL_038A95:
 	call 0x36A4F
 	ld (xsp + 4), hl
 
-LABEL_038ACD:
+DSP_AlgoSelect_WriteHeader:
 	cpw (xsp + 6), 0x0
-	jr nz, LABEL_038B10
+	jr nz, DSP_AlgoSelect_WriteHeaderNonZero
 	ld bc, iz
 	ldw wa, 0x8
 	call 0x36A4F
@@ -46428,9 +46428,9 @@ LABEL_038ACD:
 	lds wa, 7
 	call 0x36A4F
 	ld (xsp + 4), hl
-	jr LABEL_038B64
+	jr DSP_AlgoSelect_HeaderReturn
 
-LABEL_038B10:
+DSP_AlgoSelect_WriteHeaderNonZero:
 	ld wa, (xsp + 2)
 	srl wa, 7
 	and wa, 0x2
@@ -46461,7 +46461,7 @@ LABEL_038B10:
 	call 0x36A4F
 	ld (xsp + 4), hl
 
-LABEL_038B64:
+DSP_AlgoSelect_HeaderReturn:
 	ld hl, (xsp + 4)
 	popw iz
 	inc 8, xsp
@@ -46477,7 +46477,7 @@ LABEL_038B64:
 	push xwa
 	ld xwa, xhl
 	ld de, (xsp + 18)
-	call LABEL_03CF53
+	call DSP_TableWalk_Search
 	ld wa, (xsp + 6)
 	mul wa, 0x3
 	ld bc, wa
@@ -46530,7 +46530,7 @@ LABEL_038B64:
 	call 0x36A4F
 	ld (xsp + 4), hl
 	cpw (xsp + 6), 0x0
-	jr nz, LABEL_038C60
+	jr nz, DSP_OscAlgoSelect_WriteHeaderNonZero
 	ld bc, iz
 	ldw wa, 0x8
 	call 0x36A4F
@@ -46551,9 +46551,9 @@ LABEL_038B64:
 	ldw wa, 0x8
 	call 0x36A4F
 	ld (xsp + 4), hl
-	jr LABEL_038CB5
+	jr DSP_OscAlgoSelect_Return
 
-LABEL_038C60:
+DSP_OscAlgoSelect_WriteHeaderNonZero:
 	ld wa, (xsp + 2)
 	srl wa, 7
 	and wa, 0x2
@@ -46584,7 +46584,7 @@ LABEL_038C60:
 	call 0x36A4F
 	ld (xsp + 4), hl
 
-LABEL_038CB5:
+DSP_OscAlgoSelect_Return:
 	ld hl, (xsp + 4)
 	popw iz
 	inc 8, xsp
@@ -46598,25 +46598,25 @@ LABEL_038CB5:
 	push xwa
 	ld xwa, xde
 	ld de, (xsp + 20)
-	call LABEL_03CF53
+	call DSP_TableWalk_Search
 	ld xde, xhl
 	ld a, (xde)
 	extz wa
 	ld (xsp + 2), wa
 	cpw (xsp + 14), 0x0
-	jr z, LABEL_038CF9
+	jr z, DSP_TuneOffset_WriteSequence
 	ld wa, (xsp + 16)
 	cps wa, 1
-	jr z, LABEL_038CF6
+	jr z, DSP_TuneOffset_Increment
 	cps wa, 0
-	jr nz, LABEL_038CF9
+	jr nz, DSP_TuneOffset_WriteSequence
 	decm 1, (xsp + 2)
-	jr LABEL_038CF9
+	jr DSP_TuneOffset_WriteSequence
 
-LABEL_038CF6:
+DSP_TuneOffset_Increment:
 	incm 1, (xsp + 2)
 
-LABEL_038CF9:
+DSP_TuneOffset_WriteSequence:
 	ld bc, iz
 	lds wa, 1
 	call 0x36A2E
@@ -46701,16 +46701,16 @@ LABEL_038CF9:
 
 DSP_State_DmaLoadPresets:
 	lds wa, 3
-	call LABEL_01FFFD
+	call TaskSched_SpawnTask
 	lda_24 xwa, 0x045324
 	ld xbc, xwa
 	lds wa, 1
-	call LABEL_0204D1
+	call TaskMsgQ_Send
 	lda_24 xwa, 0x045446
 	ld xbc, xwa
 	lds wa, 1
-	jp LABEL_0204D1
-LABEL_038E0F:
+	jp TaskMsgQ_Send
+DSP_State_InlineData:
 	.byte 0x3e, 0xd8, 0xaa, 0x1d, 0x42, 0x06, 0x02, 0xeb
 	.byte 0x8e, 0xee, 0x88, 0x1d, 0x3d, 0x6e, 0x03, 0xf3
 	.byte 0xf9, 0x20, 0x01, 0x02, 0x00, 0x00, 0xee, 0x88
@@ -46721,15 +46721,15 @@ DSP_State_ApplyBuf:
 	push xiz
 	ld xiz, xwa
 	lds wa, 2
-	call LABEL_0206D3
+	call TaskMsgQ_TryReceive
 	stda32 19002, xhl
 	or xhl, xhl
-	jr nz, LABEL_038E4C
+	jr nz, DSP_State_ApplyBuf_DoCopy
 	lds wa, 1
-	call LABEL_020642
+	call TaskMsgQ_Receive
 	stda32 19002, xhl
 
-LABEL_038E4C:
+DSP_State_ApplyBuf_DoCopy:
 	ldda32 xix, 19002
 	ld xiy, xiz
 	ldw bc, 0x91
@@ -46738,7 +46738,7 @@ LABEL_038E4C:
 	stiw_dri 0xE1, 0x20, 0x01, 0x01, 0x00
 	ldda32 xbc, 19002
 	lds wa, 2
-	call LABEL_0204D1
+	call TaskMsgQ_Send
 	pop xiz
 	ret
 
@@ -46757,7 +46757,7 @@ DSP_State_LoadAndApplyAll:
 	stiw_dri 0xE1, 0x20, 0x01, 0x00, 0x00
 	ret
 
-LABEL_038E9F:
+DSP_State_LoadAndApply_InlineData:
 	.byte 0xe9, 0xee, 0x02, 0x40, 0xa3, 0x29, 0x01, 0x00
 	.byte 0xe9, 0x80, 0xa0, 0x23, 0x0e
 
@@ -46772,31 +46772,31 @@ DSP_ParamFetch_AlgoTypeTable:
 	ld xix, (xwa)
 	ld e, (xix)
 	cps e, 2
-	jr z, LABEL_038EE5
+	jr z, DSP_ParamFetch_AlgoType2
 	cps e, 1
-	jr z, LABEL_038ED7
+	jr z, DSP_ParamFetch_AlgoType1
 	cps e, 0
-	jr nz, LABEL_038EF1
+	jr nz, DSP_ParamFetch_AlgoTypeReturn
 	sll xbc, 2
 	ld xde, 0x12483
 	add xde, xbc
 	ld xhl, (xde)
-	jr LABEL_038EF1
+	jr DSP_ParamFetch_AlgoTypeReturn
 
-LABEL_038ED7:
+DSP_ParamFetch_AlgoType1:
 	sll xbc, 2
 	ld xde, 0x12613
 	add xde, xbc
 	ld xhl, (xde)
-	jr LABEL_038EF1
+	jr DSP_ParamFetch_AlgoTypeReturn
 
-LABEL_038EE5:
+DSP_ParamFetch_AlgoType2:
 	sll xbc, 2
 	ld xde, 0x127A3
 	add xde, xbc
 	ld xhl, (xde)
 
-LABEL_038EF1:
+DSP_ParamFetch_AlgoTypeReturn:
 	inc 1, xix
 	ld (xwa), xix
 	ret
@@ -46810,7 +46810,7 @@ DSP_AlgoParam_Decode:
 	ld (xsp + 4), xwa
 	ld a, (xwa)
 	cps a, 1
-	jr z, LABEL_038F50
+	jr z, DSP_AlgoParam_Decode_Type1
 	sll xbc, 2
 	ld xwa, 0x127A3
 	add xwa, xbc
@@ -46832,9 +46832,9 @@ DSP_AlgoParam_Decode:
 	lda xbc, (xsp + 12)
 	lda xwa, (xsp + 24)
 	call FP_DP_DecodeToInt
-	jr LABEL_038F86
+	jr DSP_AlgoParam_Decode_Return
 
-LABEL_038F50:
+DSP_AlgoParam_Decode_Type1:
 	sll xbc, 2
 	ld xiz, 0x127A3
 	add xiz, xbc
@@ -46852,7 +46852,7 @@ LABEL_038F50:
 	lda xwa, (xsp + 24)
 	call FP_DP_DecodeToInt
 
-LABEL_038F86:
+DSP_AlgoParam_Decode_Return:
 	lds32 xwa, 1
 	add (xsp + 4), xwa
 	ld xwa, (xsp + 28)
@@ -46873,7 +46873,7 @@ DSP_PitchParam_Scale:
 	lda xwa, (xsp + 4)
 	ld xbc, xwa
 	ld xwa, xiz
-	call LABEL_03CF07
+	call DSP_StreamDecode_3ByteWord
 	ld xiz, xhl
 	ld xwa, (xsp + 4)
 	sra xwa, 8
@@ -46900,34 +46900,34 @@ DSP_VolumeParam_Scale:
 	ld xiz, (xwa)
 	ld_spib A, 0xF8
 	cps a, 2
-	jrl z, LABEL_039148
+	jrl z, DSP_VolScale_Algo2_Seg1
 	cps a, 1
-	jrl z, LABEL_039087
+	jrl z, DSP_VolScale_Algo1_Seg1
 	cps a, 0
-	jrl nz, LABEL_0391FD
+	jrl nz, DSP_VolScale_Return
 	cp xbc, 0x32
-	jr gt, LABEL_039021
+	jr gt, DSP_VolScale_Algo0_Seg2
 	sla xbc, 7
 	sla xbc, 0
 	ld xwa, xbc
 	ld xbc, 0x6BAA8
 	call Int_SignedDiv_AltEntry
-	jrl LABEL_0391FD
+	jrl DSP_VolScale_Return
 
-LABEL_039021:
+DSP_VolScale_Algo0_Seg2:
 	cp xbc, 0x4B
-	jr gt, LABEL_039043
+	jr gt, DSP_VolScale_Algo0_Seg3
 	sub xbc, 0x19
 	sla xbc, 7
 	sla xbc, 0
 	ld xwa, xbc
 	ld xbc, 0x35D54
 	call Int_SignedDiv_AltEntry
-	jrl LABEL_0391FD
+	jrl DSP_VolScale_Return
 
-LABEL_039043:
+DSP_VolScale_Algo0_Seg3:
 	cp xbc, 0x58
-	jr gt, LABEL_039068
+	jr gt, DSP_VolScale_Algo0_Seg4
 	sla xbc, 2
 	sub xbc, 0xFA
 	sla xbc, 7
@@ -46935,9 +46935,9 @@ LABEL_039043:
 	ld xwa, xbc
 	ld xbc, 0x35D54
 	call Int_SignedDiv_AltEntry
-	jrl LABEL_0391FD
+	jrl DSP_VolScale_Return
 
-LABEL_039068:
+DSP_VolScale_Algo0_Seg4:
 	ld xwa, xbc
 	sla xwa, 3
 	add xwa, xbc
@@ -46946,21 +46946,21 @@ LABEL_039068:
 	sla xwa, 0
 	ld xbc, 0x35D54
 	call Int_SignedDiv_AltEntry
-	jrl LABEL_0391FD
+	jrl DSP_VolScale_Return
 
-LABEL_039087:
+DSP_VolScale_Algo1_Seg1:
 	cp xbc, 0xA
-	jr gt, LABEL_0390A3
+	jr gt, DSP_VolScale_Algo1_Seg2
 	sla xbc, 7
 	sla xbc, 0
 	ld xwa, xbc
 	ld xbc, 0xAC44
 	call Int_SignedDiv_AltEntry
-	jrl LABEL_0391FD
+	jrl DSP_VolScale_Return
 
-LABEL_0390A3:
+DSP_VolScale_Algo1_Seg2:
 	cp xbc, 0x13
-	jr gt, LABEL_0390CC
+	jr gt, DSP_VolScale_Algo1_Seg3
 	ld xwa, xbc
 	sla xwa, 2
 	add xwa, xbc
@@ -46970,11 +46970,11 @@ LABEL_0390A3:
 	sla xwa, 0
 	ld xbc, 0xAC44
 	call Int_SignedDiv_AltEntry
-	jrl LABEL_0391FD
+	jrl DSP_VolScale_Return
 
-LABEL_0390CC:
+DSP_VolScale_Algo1_Seg3:
 	cp xbc, 0x40
-	jr gt, LABEL_0390F6
+	jr gt, DSP_VolScale_Algo1_Seg4
 	ld xwa, xbc
 	sla xwa, 2
 	add xwa, xbc
@@ -46984,11 +46984,11 @@ LABEL_0390CC:
 	ld xbc, 0xAC44
 	call Int_SignedDiv_AltEntry
 	sla xhl, 8
-	jrl LABEL_0391FD
+	jrl DSP_VolScale_Return
 
-LABEL_0390F6:
+DSP_VolScale_Algo1_Seg4:
 	cp xbc, 0x57
-	jr gt, LABEL_039123
+	jr gt, DSP_VolScale_Algo1_Seg5
 	ld xwa, xbc
 	ld xbc, 0x190
 	call FP_MulAccum64
@@ -46998,9 +46998,9 @@ LABEL_0390F6:
 	ld xbc, 0xAC44
 	call Int_SignedDiv_AltEntry
 	sla xhl, 8
-	jrl LABEL_0391FD
+	jrl DSP_VolScale_Return
 
-LABEL_039123:
+DSP_VolScale_Algo1_Seg5:
 	ld xwa, xbc
 	ld xbc, 0x320
 	call FP_MulAccum64
@@ -47010,11 +47010,11 @@ LABEL_039123:
 	ld xbc, 0xAC44
 	call Int_SignedDiv_AltEntry
 	sla xhl, 8
-	jrl LABEL_0391FD
+	jrl DSP_VolScale_Return
 
-LABEL_039148:
+DSP_VolScale_Algo2_Seg1:
 	cp xbc, 0x32
-	jr gt, LABEL_03916C
+	jr gt, DSP_VolScale_Algo2_Seg2
 	ld xwa, xbc
 	add xwa, xwa
 	ld xde, 0xFA0
@@ -47024,11 +47024,11 @@ LABEL_039148:
 	ld xwa, xbc
 	ld xbc, xde
 	call Int_SignedDiv_AltEntry
-	jrl LABEL_0391FD
+	jrl DSP_VolScale_Return
 
-LABEL_03916C:
+DSP_VolScale_Algo2_Seg2:
 	cp xbc, 0x4B
-	jr gt, LABEL_03919B
+	jr gt, DSP_VolScale_Algo2_Seg3
 	ld xwa, xbc
 	add xwa, xwa
 	sub xwa, 0x66
@@ -47040,11 +47040,11 @@ LABEL_03916C:
 	ld xwa, xbc
 	ld xbc, xde
 	call Int_SignedDiv_AltEntry
-	jr LABEL_0391FD
+	jr DSP_VolScale_Return
 
-LABEL_03919B:
+DSP_VolScale_Algo2_Seg3:
 	cp xbc, 0x58
-	jr gt, LABEL_0391CE
+	jr gt, DSP_VolScale_Algo2_Seg4
 	ld xwa, xbc
 	sla xwa, 3
 	sub xwa, 0x260
@@ -47057,9 +47057,9 @@ LABEL_03919B:
 	ld xwa, xbc
 	ld xbc, xde
 	call Int_SignedDiv_AltEntry
-	jr LABEL_0391FD
+	jr DSP_VolScale_Return
 
-LABEL_0391CE:
+DSP_VolScale_Algo2_Seg4:
 	ld xwa, xbc
 	sla xwa, 3
 	add xwa, xbc
@@ -47076,14 +47076,14 @@ LABEL_0391CE:
 	ld xbc, xde
 	call Int_SignedDiv_AltEntry
 
-LABEL_0391FD:
+DSP_VolScale_Return:
 	ld xwa, (xsp + 4)
 	ld (xwa), xiz
 	pop xiz
 	inc 4, xsp
 	ret
 
-LABEL_039206:
+DSP_ParamInterp_2Point:
 	lda xsp, (xsp - 16)
 	push xiz
 	ld (xsp + 12), xbc
@@ -47093,12 +47093,12 @@ LABEL_039206:
 	lda xwa, (xsp + 8)
 	ld xbc, xwa
 	ld xwa, xiz
-	call LABEL_03CF07
+	call DSP_StreamDecode_3ByteWord
 	ld xiz, xhl
 	lda xwa, (xsp + 4)
 	ld xbc, xwa
 	ld xwa, xiz
-	call LABEL_03CF07
+	call DSP_StreamDecode_3ByteWord
 	ld xiz, xhl
 	ld xwa, (xsp + 4)
 	sub xwa, (xsp + 8)
@@ -47118,7 +47118,7 @@ LABEL_039206:
 	lda xsp, (xsp + 16)
 	ret
 
-LABEL_03925E:
+DSP_ParamInterp_FPScale:
 	lda xsp, (xsp - 12)
 	push xiz
 	ld (xsp + 8), xbc
@@ -47128,7 +47128,7 @@ LABEL_03925E:
 	lda xwa, (xsp + 4)
 	ld xbc, xwa
 	ld xwa, xiz
-	call LABEL_03CF07
+	call DSP_StreamDecode_3ByteWord
 	ld xiz, xhl
 	ld xwa, (xsp + 4)
 	sra xwa, 8
@@ -47147,7 +47147,7 @@ LABEL_03925E:
 	lda xsp, (xsp + 12)
 	ret
 
-LABEL_0392AC:
+DSP_ParamInterp_Div0xB4:
 	lda xsp, (xsp - 12)
 	push xiz
 	ld (xsp + 8), xbc
@@ -47157,7 +47157,7 @@ LABEL_0392AC:
 	lda xwa, (xsp + 4)
 	ld xbc, xwa
 	ld xwa, xiz
-	call LABEL_03CF07
+	call DSP_StreamDecode_3ByteWord
 	ld xiz, xhl
 	ld xwa, (xsp + 4)
 	sra xwa, 8
@@ -47174,12 +47174,12 @@ LABEL_0392AC:
 	lda xsp, (xsp + 12)
 	ret
 
-LABEL_0392F2:
+DSP_VolumeCurve_FP:
 	lda xsp, (xsp - 68)
 	ld (xsp + 64), xbc
 	ld xwa, (xsp + 64)
 	cp xwa, 0x4B
-	jrl gt, LABEL_039391
+	jrl gt, DSP_VolumeCurve_FP_HighRange
 	lda xbc, (xsp + 64)
 	lda xwa, (xsp + 36)
 	call FP_SP_CallWithBuf8
@@ -47223,9 +47223,9 @@ LABEL_0392F2:
 	lda xbc, (xsp + 48)
 	lda xwa, (xsp + 60)
 	call FP_DP_NormalizeMantissa
-	jrl LABEL_03941B
+	jrl DSP_VolumeCurve_FP_Finalize
 
-LABEL_039391:
+DSP_VolumeCurve_FP_HighRange:
 	lda xbc, (xsp + 64)
 	lda xwa, (xsp + 36)
 	call FP_SP_CallWithBuf8
@@ -47270,7 +47270,7 @@ LABEL_039391:
 	lda xwa, (xsp + 60)
 	call FP_DP_NormalizeMantissa
 
-LABEL_03941B:
+DSP_VolumeCurve_FP_Finalize:
 	lda xbc, (xsp + 60)
 	lda_24 xde, 0x012d0b
 	lda xwa, (xsp + 36)
@@ -47282,12 +47282,12 @@ LABEL_03941B:
 	lda xsp, (xsp + 68)
 	ret
 
-LABEL_03943B:
+DSP_FreqCurve_FP:
 	dec 4, xsp
 	push xiz
 	ld xiz, xbc
 	cp xiz, 0x14
-	jr gt, LABEL_039461
+	jr gt, DSP_FreqCurve_FP_Seg2
 	ld xwa, xiz
 	add xwa, xwa
 	ld xbc, 0xFA0
@@ -47296,11 +47296,11 @@ LABEL_03943B:
 	sla xwa, 7
 	sla xwa, 0
 	call Int_SignedDiv_AltEntry
-	jr LABEL_0394C9
+	jr DSP_FreqCurve_FP_Return
 
-LABEL_039461:
+DSP_FreqCurve_FP_Seg2:
 	cp xiz, 0x32
-	jr gt, LABEL_03948E
+	jr gt, DSP_FreqCurve_FP_Seg3
 	ld xwa, xiz
 	add xwa, xwa
 	sub xwa, 0x2A
@@ -47311,9 +47311,9 @@ LABEL_039461:
 	sla xwa, 7
 	sla xwa, 0
 	call Int_SignedDiv_AltEntry
-	jr LABEL_0394C9
+	jr DSP_FreqCurve_FP_Return
 
-LABEL_03948E:
+DSP_FreqCurve_FP_Seg3:
 	ld xwa, xiz
 	ld xbc, 0x16
 	call FP_MulAccum64
@@ -47331,12 +47331,12 @@ LABEL_03948E:
 	call Int_SignedDiv_AltEntry
 	sla xhl, 8
 
-LABEL_0394C9:
+DSP_FreqCurve_FP_Return:
 	pop xiz
 	inc 4, xsp
 	ret
 
-LABEL_0394CD:
+DSP_FreqInterp_2Point:
 	lda xsp, (xsp - 16)
 	push xiz
 	ld (xsp + 12), xbc
@@ -47346,12 +47346,12 @@ LABEL_0394CD:
 	lda xwa, (xsp + 8)
 	ld xbc, xwa
 	ld xwa, xiz
-	call LABEL_03CF07
+	call DSP_StreamDecode_3ByteWord
 	ld xiz, xhl
 	lda xwa, (xsp + 4)
 	ld xbc, xwa
 	ld xwa, xiz
-	call LABEL_03CF07
+	call DSP_StreamDecode_3ByteWord
 	ld xiz, xhl
 	ld xwa, (xsp + 4)
 	sub xwa, (xsp + 8)
@@ -47371,7 +47371,7 @@ LABEL_0394CD:
 	lda xsp, (xsp + 16)
 	ret
 
-LABEL_039525:
+DSP_ParamInterp_3Point_WithOffset:
 	lda xsp, (xsp - 20)
 	push xiz
 	ld (xsp + 12), xde
@@ -47382,12 +47382,12 @@ LABEL_039525:
 	lda xwa, (xsp + 8)
 	ld xbc, xwa
 	ld xwa, xiz
-	call LABEL_03CF07
+	call DSP_StreamDecode_3ByteWord
 	ld xiz, xhl
 	lda xwa, (xsp + 4)
 	ld xbc, xwa
 	ld xwa, xiz
-	call LABEL_03CF07
+	call DSP_StreamDecode_3ByteWord
 	ld xiz, xhl
 	ld xwa, (xsp + 8)
 	sra xwa, 8
@@ -47414,12 +47414,12 @@ LABEL_039525:
 	lda xsp, (xsp + 20)
 	ret
 
-LABEL_039599:
+DSP_ReverbCurve_FP:
 	lda xsp, (xsp - 68)
 	ld (xsp + 64), xbc
 	ld xwa, (xsp + 64)
 	cp xwa, 0x59
-	jr gt, LABEL_039627
+	jr gt, DSP_ReverbCurve_FP_HighRange
 	lda xbc, (xsp + 64)
 	lda xwa, (xsp + 28)
 	call FP_SP_CallWithBuf8
@@ -47459,9 +47459,9 @@ LABEL_039599:
 	lda xbc, (xsp + 40)
 	lda xwa, (xsp + 60)
 	call FP_DP_NormalizeMantissa
-	jr LABEL_0396A2
+	jr DSP_ReverbCurve_FP_Finalize
 
-LABEL_039627:
+DSP_ReverbCurve_FP_HighRange:
 	lda xbc, (xsp + 64)
 	lda xwa, (xsp + 28)
 	call FP_SP_CallWithBuf8
@@ -47502,7 +47502,7 @@ LABEL_039627:
 	lda xwa, (xsp + 60)
 	call FP_DP_NormalizeMantissa
 
-LABEL_0396A2:
+DSP_ReverbCurve_FP_Finalize:
 	lda xbc, (xsp + 60)
 	lda_24 xde, 0x012d4f
 	lda xwa, (xsp + 28)
@@ -47514,7 +47514,7 @@ LABEL_0396A2:
 	lda xsp, (xsp + 68)
 	ret
 
-LABEL_0396C2:
+DSP_ParamInterp_FPComplex:
 	lda xsp, (xsp - 52)
 	push xiz
 	ld (xsp + 48), xbc
@@ -47524,7 +47524,7 @@ LABEL_0396C2:
 	lda xwa, (xsp + 40)
 	ld xbc, xwa
 	ld xwa, xiz
-	call LABEL_03CF07
+	call DSP_StreamDecode_3ByteWord
 	ld xiz, xhl
 	lda xbc, (xsp + 40)
 	lda xwa, (xsp + 20)
@@ -47540,7 +47540,7 @@ LABEL_0396C2:
 	lda xwa, (xsp + 36)
 	ld xbc, xwa
 	ld xwa, xiz
-	call LABEL_03CF07
+	call DSP_StreamDecode_3ByteWord
 	ld xiz, xhl
 	ld xwa, (xsp + 36)
 	sra xwa, 8
@@ -47614,9 +47614,9 @@ LABEL_0396C2:
 	lda xsp, (xsp + 52)
 	ret
 
-LABEL_0397F3:
+DSP_PanCurve_PiecewiseLin:
 	cp xbc, 0x14
-	jr gt, LABEL_03981C
+	jr gt, DSP_PanCurve_Seg2
 	add xbc, xbc
 	ld xwa, xbc
 	ld xbc, 0xAC44
@@ -47625,11 +47625,11 @@ LABEL_0397F3:
 	ld xwa, xhl
 	ld xbc, 0x3E8
 	call Int_SignedDiv_AltEntry
-	jrl LABEL_0398CD
+	jrl DSP_PanCurve_Return
 
-LABEL_03981C:
+DSP_PanCurve_Seg2:
 	cp xbc, 0x1E
-	jr gt, LABEL_039848
+	jr gt, DSP_PanCurve_Seg3
 	ld xwa, xbc
 	sla xwa, 2
 	add xwa, xbc
@@ -47639,11 +47639,11 @@ LABEL_03981C:
 	ld xwa, xhl
 	ld xbc, 0x3E8
 	call Int_SignedDiv_AltEntry
-	jrl LABEL_0398CD
+	jrl DSP_PanCurve_Return
 
-LABEL_039848:
+DSP_PanCurve_Seg3:
 	cp xbc, 0x46
-	jr gt, LABEL_039875
+	jr gt, DSP_PanCurve_Seg4
 	ld xwa, xbc
 	sla xwa, 2
 	add xwa, xbc
@@ -47654,11 +47654,11 @@ LABEL_039848:
 	ld xwa, xhl
 	ld xbc, 0x3E8
 	call Int_SignedDiv_AltEntry
-	jr LABEL_0398CD
+	jr DSP_PanCurve_Return
 
-LABEL_039875:
+DSP_PanCurve_Seg4:
 	cp xbc, 0x50
-	jr gt, LABEL_0398A6
+	jr gt, DSP_PanCurve_Seg5
 	ld xwa, xbc
 	ld xbc, 0x32
 	call FP_MulAccum64
@@ -47669,9 +47669,9 @@ LABEL_039875:
 	ld xwa, xhl
 	ld xbc, 0x3E8
 	call Int_SignedDiv_AltEntry
-	jr LABEL_0398CD
+	jr DSP_PanCurve_Return
 
-LABEL_0398A6:
+DSP_PanCurve_Seg5:
 	ld xwa, xbc
 	ld xbc, 0x64
 	call FP_MulAccum64
@@ -47683,40 +47683,40 @@ LABEL_0398A6:
 	ld xbc, 0x3E8
 	call Int_SignedDiv_AltEntry
 
-LABEL_0398CD:
+DSP_PanCurve_Return:
 	ret
 
-LABEL_0398CE:
+DSP_DetuneCurve_SignedFP:
 	lda xsp, (xsp - 72)
 	push xiz
 	ld xiz, xbc
 	cp xiz, 0x0
-	jr lt, LABEL_0398E0
+	jr lt, DSP_DetuneCurve_NegateInput
 	ld xwa, xiz
-	jr LABEL_0398E9
+	jr DSP_DetuneCurve_CheckMagnitude
 
-LABEL_0398E0:
+DSP_DetuneCurve_NegateInput:
 	ld xwa, xiz
 	cpl wa
 	cpl_werp 0xE2
 	inc 1, xwa
 
-LABEL_0398E9:
+DSP_DetuneCurve_CheckMagnitude:
 	cp xwa, 0xA
-	jr gt, LABEL_039926
+	jr gt, DSP_DetuneCurve_CheckRange2
 	cp xiz, 0x0
-	jr lt, LABEL_0398FE
+	jr lt, DSP_DetuneCurve_Range1_NegArm
 	ld (xsp + 60), xiz
-	jr LABEL_03990A
+	jr DSP_DetuneCurve_Range1_Compute
 
-LABEL_0398FE:
+DSP_DetuneCurve_Range1_NegArm:
 	ld xwa, xiz
 	cpl wa
 	cpl_werp 0xE2
 	inc 1, xwa
 	ld (xsp + 60), xwa
 
-LABEL_03990A:
+DSP_DetuneCurve_Range1_Compute:
 	lda xbc, (xsp + 60)
 	lda xwa, (xsp + 36)
 	call FP_SP_CallWithBuf8
@@ -47724,36 +47724,36 @@ LABEL_03990A:
 	lda_24 xde, 0x012d77
 	lda xwa, (xsp + 68)
 	call FP_SP_Add_Outer
-	jrl LABEL_039A28
+	jrl DSP_DetuneCurve_ApplySign
 
-LABEL_039926:
+DSP_DetuneCurve_CheckRange2:
 	cp xiz, 0x0
-	jr lt, LABEL_039932
+	jr lt, DSP_DetuneCurve_Range2_NegArm
 	ld xwa, xiz
-	jr LABEL_03993B
+	jr DSP_DetuneCurve_CheckRange2Limit
 
-LABEL_039932:
+DSP_DetuneCurve_Range2_NegArm:
 	ld xwa, xiz
 	cpl wa
 	cpl_werp 0xE2
 	inc 1, xwa
 
-LABEL_03993B:
+DSP_DetuneCurve_CheckRange2Limit:
 	cp xwa, 0x13
-	jr gt, LABEL_039987
+	jr gt, DSP_DetuneCurve_CheckRange3
 	cp xiz, 0x0
-	jr lt, LABEL_039950
+	jr lt, DSP_DetuneCurve_Range2_NegStore
 	ld (xsp + 56), xiz
-	jr LABEL_03995C
+	jr DSP_DetuneCurve_Range2_Compute
 
-LABEL_039950:
+DSP_DetuneCurve_Range2_NegStore:
 	ld xwa, xiz
 	cpl wa
 	cpl_werp 0xE2
 	inc 1, xwa
 	ld (xsp + 56), xwa
 
-LABEL_03995C:
+DSP_DetuneCurve_Range2_Compute:
 	lda xbc, (xsp + 56)
 	lda xwa, (xsp + 36)
 	call FP_SP_CallWithBuf8
@@ -47765,36 +47765,36 @@ LABEL_03995C:
 	lda_24 xde, 0x012d7f
 	lda xwa, (xsp + 68)
 	call FP_SP_Sub
-	jrl LABEL_039A28
+	jrl DSP_DetuneCurve_ApplySign
 
-LABEL_039987:
+DSP_DetuneCurve_CheckRange3:
 	cp xiz, 0x0
-	jr lt, LABEL_039993
+	jr lt, DSP_DetuneCurve_Range3_NegArm
 	ld xwa, xiz
-	jr LABEL_03999C
+	jr DSP_DetuneCurve_CheckRange3Limit
 
-LABEL_039993:
+DSP_DetuneCurve_Range3_NegArm:
 	ld xwa, xiz
 	cpl wa
 	cpl_werp 0xE2
 	inc 1, xwa
 
-LABEL_03999C:
+DSP_DetuneCurve_CheckRange3Limit:
 	cp xwa, 0x1F
-	jr gt, LABEL_0399E7
+	jr gt, DSP_DetuneCurve_Range4_CheckSign
 	cp xiz, 0x0
-	jr lt, LABEL_0399B1
+	jr lt, DSP_DetuneCurve_Range3_NegStore
 	ld (xsp + 52), xiz
-	jr LABEL_0399BD
+	jr DSP_DetuneCurve_Range3_Compute
 
-LABEL_0399B1:
+DSP_DetuneCurve_Range3_NegStore:
 	ld xwa, xiz
 	cpl wa
 	cpl_werp 0xE2
 	inc 1, xwa
 	ld (xsp + 52), xwa
 
-LABEL_0399BD:
+DSP_DetuneCurve_Range3_Compute:
 	lda xbc, (xsp + 52)
 	lda xwa, (xsp + 36)
 	call FP_SP_CallWithBuf8
@@ -47806,22 +47806,22 @@ LABEL_0399BD:
 	lda_24 xde, 0x012d87
 	lda xwa, (xsp + 68)
 	call FP_SP_Sub
-	jr LABEL_039A28
+	jr DSP_DetuneCurve_ApplySign
 
-LABEL_0399E7:
+DSP_DetuneCurve_Range4_CheckSign:
 	cp xiz, 0x0
-	jr lt, LABEL_0399F4
+	jr lt, DSP_DetuneCurve_Range4_NegStore
 	ld (xsp + 48), xiz
-	jr LABEL_039A00
+	jr DSP_DetuneCurve_Range4_Compute
 
-LABEL_0399F4:
+DSP_DetuneCurve_Range4_NegStore:
 	ld xwa, xiz
 	cpl wa
 	cpl_werp 0xE2
 	inc 1, xwa
 	ld (xsp + 48), xwa
 
-LABEL_039A00:
+DSP_DetuneCurve_Range4_Compute:
 	lda xbc, (xsp + 48)
 	lda xwa, (xsp + 36)
 	call FP_SP_CallWithBuf8
@@ -47834,14 +47834,14 @@ LABEL_039A00:
 	lda xwa, (xsp + 68)
 	call FP_SP_Sub
 
-LABEL_039A28:
+DSP_DetuneCurve_ApplySign:
 	cp xiz, 0x0
-	jr ge, LABEL_039A3A
+	jr ge, DSP_DetuneCurve_Finalize
 	lda xbc, (xsp + 68)
 	lda xwa, (xsp + 68)
 	call FP_SP_CopyOrNegate4
 
-LABEL_039A3A:
+DSP_DetuneCurve_Finalize:
 	lda xbc, (xsp + 68)
 	lda_24 xde, 0x012d93
 	lda xwa, (xsp + 36)
@@ -47886,7 +47886,7 @@ LABEL_039A3A:
 	lda xsp, (xsp + 72)
 	ret
 
-LABEL_039ABD:
+DSP_BiquadWarp_FP:
 	lda xsp, (xsp - 88)
 	pushw iz
 	ld (xsp + 86), xwa
@@ -47897,7 +47897,7 @@ LABEL_039ABD:
 	ld_spib L, 0xE0
 	ld (xsp + 2), xwa
 	and l, 0xF0
-	jr nz, LABEL_039AF2
+	jr nz, DSP_BiquadWarp_ReadPrevEntry
 	ld wa, de
 	extz xwa
 	add xwa, xwa
@@ -47909,9 +47909,9 @@ LABEL_039ABD:
 	add xwa, xwa
 	add xwa, xbc
 	ld iz, (xwa)
-	jr LABEL_039B08
+	jr DSP_BiquadWarp_ClampHL
 
-LABEL_039AF2:
+DSP_BiquadWarp_ReadPrevEntry:
 	ld wa, de
 	dec 1, wa
 	extz xwa
@@ -47924,17 +47924,17 @@ LABEL_039AF2:
 	add xwa, xbc
 	ld iz, (xwa)
 
-LABEL_039B08:
+DSP_BiquadWarp_ClampHL:
 	cp hl, 0x59
-	jr le, LABEL_039B11
+	jr le, DSP_BiquadWarp_ClampIZ
 	ldw hl, 0x59
 
-LABEL_039B11:
+DSP_BiquadWarp_ClampIZ:
 	cp iz, 0x58
-	jr le, LABEL_039B1A
+	jr le, DSP_BiquadWarp_ComputeCoeffs
 	ldw iz, 0x58
 
-LABEL_039B1A:
+DSP_BiquadWarp_ComputeCoeffs:
 	ldw wa, 0x63
 	sub wa, hl
 	exts xwa
@@ -48099,7 +48099,7 @@ LABEL_039B1A:
 	lda xsp, (xsp + 88)
 	retd 0x8
 
-LABEL_039D26:
+DSP_ParamInterp_Div0xC6:
 	lda xsp, (xsp - 24)
 	push xiz
 	ld (xsp + 20), xbc
@@ -48110,12 +48110,12 @@ LABEL_039D26:
 	lda xwa, (xsp + 16)
 	ld xbc, xwa
 	ld xwa, (xsp + 4)
-	call LABEL_03CF07
+	call DSP_StreamDecode_3ByteWord
 	ld (xsp + 4), xhl
 	lda xwa, (xsp + 12)
 	ld xbc, xwa
 	ld xwa, (xsp + 4)
-	call LABEL_03CF07
+	call DSP_StreamDecode_3ByteWord
 	ld (xsp + 4), xhl
 	ld xwa, (xsp + 20)
 	ld (xsp + 8), xwa
@@ -48141,7 +48141,7 @@ LABEL_039D26:
 	lda xsp, (xsp + 24)
 	ret
 
-LABEL_039D98:
+DSP_ParamEQ_Curve_FP:
 	lda xsp, (xsp - 100)
 	push xiz
 	ld (xsp + 96), xbc
@@ -48151,7 +48151,7 @@ LABEL_039D98:
 	lda xwa, (xsp + 88)
 	ld xbc, xwa
 	ld xwa, xiz
-	call LABEL_03CF07
+	call DSP_StreamDecode_3ByteWord
 	ld xiz, xhl
 	lda xbc, (xsp + 88)
 	lda xwa, (xsp + 12)
@@ -48166,7 +48166,7 @@ LABEL_039D98:
 	call VoiceFloat_SubSP
 	ld xwa, (xsp + 96)
 	cp xwa, 0xF
-	jrl gt, LABEL_039F49
+	jrl gt, DSP_ParamEQ_Range2
 	lda xbc, (xsp + 96)
 	lda xwa, (xsp + 12)
 	call FP_SP_CallWithBuf8
@@ -48213,7 +48213,7 @@ LABEL_039D98:
 	lds de, 1
 	call 0x3D2AC
 	cps hl, 0
-	jr nz, LABEL_039EDA
+	jr nz, DSP_ParamEQ_Range1_NonzeroCoeff
 	lda xbc, (xsp + 72)
 	lda xwa, (xsp + 64)
 	call FP_DP_NegMantissaLS
@@ -48241,9 +48241,9 @@ LABEL_039D98:
 	lda xbc, (xsp + 64)
 	lda xwa, (xsp + 92)
 	call FP_DP_NormalizeMantissa
-	jrl LABEL_03A204
+	jrl DSP_ParamEQ_Finalize
 
-LABEL_039EDA:
+DSP_ParamEQ_Range1_NonzeroCoeff:
 	lda xbc, (xsp + 72)
 	lda_24 xde, 0x012e47
 	lda xwa, (xsp + 12)
@@ -48279,12 +48279,12 @@ LABEL_039EDA:
 	lda xbc, (xsp + 64)
 	lda xwa, (xsp + 92)
 	call FP_DP_NormalizeMantissa
-	jrl LABEL_03A204
+	jrl DSP_ParamEQ_Finalize
 
-LABEL_039F49:
+DSP_ParamEQ_Range2:
 	ld xwa, (xsp + 96)
 	cp xwa, 0x17
-	jrl gt, LABEL_03A003
+	jrl gt, DSP_ParamEQ_Range3
 	lda xbc, (xsp + 96)
 	lda xwa, (xsp + 12)
 	call FP_SP_CallWithBuf8
@@ -48338,12 +48338,12 @@ LABEL_039F49:
 	lda xbc, (xsp + 64)
 	lda xwa, (xsp + 92)
 	call FP_DP_NormalizeMantissa
-	jrl LABEL_03A204
+	jrl DSP_ParamEQ_Finalize
 
-LABEL_03A003:
+DSP_ParamEQ_Range3:
 	ld xwa, (xsp + 96)
 	cp xwa, 0x37
-	jrl gt, LABEL_03A0BD
+	jrl gt, DSP_ParamEQ_Range4
 	lda xbc, (xsp + 96)
 	lda xwa, (xsp + 12)
 	call FP_SP_CallWithBuf8
@@ -48397,12 +48397,12 @@ LABEL_03A003:
 	lda xbc, (xsp + 64)
 	lda xwa, (xsp + 92)
 	call FP_DP_NormalizeMantissa
-	jrl LABEL_03A204
+	jrl DSP_ParamEQ_Finalize
 
-LABEL_03A0BD:
+DSP_ParamEQ_Range4:
 	ld xwa, (xsp + 96)
 	cp xwa, 0x4B
-	jrl gt, LABEL_03A177
+	jrl gt, DSP_ParamEQ_Range5
 	lda xbc, (xsp + 96)
 	lda xwa, (xsp + 12)
 	call FP_SP_CallWithBuf8
@@ -48456,9 +48456,9 @@ LABEL_03A0BD:
 	lda xbc, (xsp + 64)
 	lda xwa, (xsp + 92)
 	call FP_DP_NormalizeMantissa
-	jrl LABEL_03A204
+	jrl DSP_ParamEQ_Finalize
 
-LABEL_03A177:
+DSP_ParamEQ_Range5:
 	lda xbc, (xsp + 96)
 	lda xwa, (xsp + 12)
 	call FP_SP_CallWithBuf8
@@ -48505,7 +48505,7 @@ LABEL_03A177:
 	lda xwa, (xsp + 92)
 	call FP_DP_NormalizeMantissa
 
-LABEL_03A204:
+DSP_ParamEQ_Finalize:
 	ld xwa, (xsp + 100)
 	ld (xwa), xiz
 	lda xbc, (xsp + 92)
@@ -48520,7 +48520,7 @@ LABEL_03A204:
 	lda xsp, (xsp + 100)
 	ret
 
-LABEL_03A22A:
+DSP_ParamInterp_2Point_B:
 	lda xsp, (xsp - 16)
 	push xiz
 	ld (xsp + 12), xbc
@@ -48530,12 +48530,12 @@ LABEL_03A22A:
 	lda xwa, (xsp + 8)
 	ld xbc, xwa
 	ld xwa, xiz
-	call LABEL_03CF07
+	call DSP_StreamDecode_3ByteWord
 	ld xiz, xhl
 	lda xwa, (xsp + 4)
 	ld xbc, xwa
 	ld xwa, xiz
-	call LABEL_03CF07
+	call DSP_StreamDecode_3ByteWord
 	ld xiz, xhl
 	ld xwa, (xsp + 4)
 	sub xwa, (xsp + 8)
@@ -48555,7 +48555,7 @@ LABEL_03A22A:
 	lda xsp, (xsp + 16)
 	ret
 
-LABEL_03A282:
+DSP_VolScale_B:
 	dec 4, xsp
 	push xiz
 	ld (xsp + 4), xwa
@@ -48563,34 +48563,34 @@ LABEL_03A282:
 	ld xiz, (xwa)
 	ld_spib A, 0xF8
 	cps a, 2
-	jrl z, LABEL_03A3E2
+	jrl z, DSP_VolScale_B_Algo2_Seg1
 	cps a, 1
-	jrl z, LABEL_03A321
+	jrl z, DSP_VolScale_B_Algo1_Seg1
 	cps a, 0
-	jrl nz, LABEL_03A497
+	jrl nz, DSP_VolScale_B_Return
 	cp xbc, 0x32
-	jr gt, LABEL_03A2BB
+	jr gt, DSP_VolScale_B_Algo0_Seg2
 	sla xbc, 7
 	sla xbc, 0
 	ld xwa, xbc
 	ld xbc, 0x6BAA8
 	call Int_SignedDiv_AltEntry
-	jrl LABEL_03A497
+	jrl DSP_VolScale_B_Return
 
-LABEL_03A2BB:
+DSP_VolScale_B_Algo0_Seg2:
 	cp xbc, 0x4B
-	jr gt, LABEL_03A2DD
+	jr gt, DSP_VolScale_B_Algo0_Seg3
 	sub xbc, 0x19
 	sla xbc, 7
 	sla xbc, 0
 	ld xwa, xbc
 	ld xbc, 0x35D54
 	call Int_SignedDiv_AltEntry
-	jrl LABEL_03A497
+	jrl DSP_VolScale_B_Return
 
-LABEL_03A2DD:
+DSP_VolScale_B_Algo0_Seg3:
 	cp xbc, 0x58
-	jr gt, LABEL_03A302
+	jr gt, DSP_VolScale_B_Algo0_Seg4
 	sla xbc, 2
 	sub xbc, 0xFA
 	sla xbc, 7
@@ -48598,9 +48598,9 @@ LABEL_03A2DD:
 	ld xwa, xbc
 	ld xbc, 0x35D54
 	call Int_SignedDiv_AltEntry
-	jrl LABEL_03A497
+	jrl DSP_VolScale_B_Return
 
-LABEL_03A302:
+DSP_VolScale_B_Algo0_Seg4:
 	ld xwa, xbc
 	sla xwa, 3
 	add xwa, xbc
@@ -48609,21 +48609,21 @@ LABEL_03A302:
 	sla xwa, 0
 	ld xbc, 0x35D54
 	call Int_SignedDiv_AltEntry
-	jrl LABEL_03A497
+	jrl DSP_VolScale_B_Return
 
-LABEL_03A321:
+DSP_VolScale_B_Algo1_Seg1:
 	cp xbc, 0xA
-	jr gt, LABEL_03A33D
+	jr gt, DSP_VolScale_B_Algo1_Seg2
 	sla xbc, 7
 	sla xbc, 0
 	ld xwa, xbc
 	ld xbc, 0xAC44
 	call Int_SignedDiv_AltEntry
-	jrl LABEL_03A497
+	jrl DSP_VolScale_B_Return
 
-LABEL_03A33D:
+DSP_VolScale_B_Algo1_Seg2:
 	cp xbc, 0x13
-	jr gt, LABEL_03A366
+	jr gt, DSP_VolScale_B_Algo1_Seg3
 	ld xwa, xbc
 	sla xwa, 2
 	add xwa, xbc
@@ -48633,11 +48633,11 @@ LABEL_03A33D:
 	sla xwa, 0
 	ld xbc, 0xAC44
 	call Int_SignedDiv_AltEntry
-	jrl LABEL_03A497
+	jrl DSP_VolScale_B_Return
 
-LABEL_03A366:
+DSP_VolScale_B_Algo1_Seg3:
 	cp xbc, 0x40
-	jr gt, LABEL_03A390
+	jr gt, DSP_VolScale_B_Algo1_Seg4
 	ld xwa, xbc
 	sla xwa, 2
 	add xwa, xbc
@@ -48647,11 +48647,11 @@ LABEL_03A366:
 	ld xbc, 0xAC44
 	call Int_SignedDiv_AltEntry
 	sla xhl, 8
-	jrl LABEL_03A497
+	jrl DSP_VolScale_B_Return
 
-LABEL_03A390:
+DSP_VolScale_B_Algo1_Seg4:
 	cp xbc, 0x57
-	jr gt, LABEL_03A3BD
+	jr gt, DSP_VolScale_B_Algo1_Seg5
 	ld xwa, xbc
 	ld xbc, 0x190
 	call FP_MulAccum64
@@ -48661,9 +48661,9 @@ LABEL_03A390:
 	ld xbc, 0xAC44
 	call Int_SignedDiv_AltEntry
 	sla xhl, 8
-	jrl LABEL_03A497
+	jrl DSP_VolScale_B_Return
 
-LABEL_03A3BD:
+DSP_VolScale_B_Algo1_Seg5:
 	ld xwa, xbc
 	ld xbc, 0x320
 	call FP_MulAccum64
@@ -48673,11 +48673,11 @@ LABEL_03A3BD:
 	ld xbc, 0xAC44
 	call Int_SignedDiv_AltEntry
 	sla xhl, 8
-	jrl LABEL_03A497
+	jrl DSP_VolScale_B_Return
 
-LABEL_03A3E2:
+DSP_VolScale_B_Algo2_Seg1:
 	cp xbc, 0x32
-	jr gt, LABEL_03A406
+	jr gt, DSP_VolScale_B_Algo2_Seg2
 	ld xwa, xbc
 	add xwa, xwa
 	ld xde, 0xFA0
@@ -48687,11 +48687,11 @@ LABEL_03A3E2:
 	ld xwa, xbc
 	ld xbc, xde
 	call Int_SignedDiv_AltEntry
-	jrl LABEL_03A497
+	jrl DSP_VolScale_B_Return
 
-LABEL_03A406:
+DSP_VolScale_B_Algo2_Seg2:
 	cp xbc, 0x4B
-	jr gt, LABEL_03A435
+	jr gt, DSP_VolScale_B_Algo2_Seg3
 	ld xwa, xbc
 	add xwa, xwa
 	sub xwa, 0x66
@@ -48703,11 +48703,11 @@ LABEL_03A406:
 	ld xwa, xbc
 	ld xbc, xde
 	call Int_SignedDiv_AltEntry
-	jr LABEL_03A497
+	jr DSP_VolScale_B_Return
 
-LABEL_03A435:
+DSP_VolScale_B_Algo2_Seg3:
 	cp xbc, 0x58
-	jr gt, LABEL_03A468
+	jr gt, DSP_VolScale_B_Algo2_Seg4
 	ld xwa, xbc
 	sla xwa, 3
 	sub xwa, 0x260
@@ -48720,9 +48720,9 @@ LABEL_03A435:
 	ld xwa, xbc
 	ld xbc, xde
 	call Int_SignedDiv_AltEntry
-	jr LABEL_03A497
+	jr DSP_VolScale_B_Return
 
-LABEL_03A468:
+DSP_VolScale_B_Algo2_Seg4:
 	ld xwa, xbc
 	sla xwa, 3
 	add xwa, xbc
@@ -48739,14 +48739,14 @@ LABEL_03A468:
 	ld xbc, xde
 	call Int_SignedDiv_AltEntry
 
-LABEL_03A497:
+DSP_VolScale_B_Return:
 	ld xwa, (xsp + 4)
 	ld (xwa), xiz
 	pop xiz
 	inc 4, xsp
 	ret
 
-LABEL_03A4A0:
+DSP_PanScale_Simple:
 	ld xwa, xbc
 	ld xbc, 0xAC44
 	call FP_MulAccum64
@@ -48755,7 +48755,7 @@ LABEL_03A4A0:
 	call Int_SignedDiv_AltEntry
 	ret
 
-LABEL_03A4B7:
+DSP_ParamInterp_MultiStep:
 	lda xsp, (xsp - 20)
 	push xiz
 	ld (xsp + 16), xbc
@@ -48765,22 +48765,22 @@ LABEL_03A4B7:
 	ld_spib A, 0xF8
 	and a, 0xF0
 	cp a, 0x20
-	jr z, LABEL_03A4EA
+	jr z, DSP_ParamInterp_MultiStep_Mode0x20
 	cp a, 0x10
-	jr z, LABEL_03A4DB
+	jr z, DSP_ParamInterp_MultiStep_Mode0x10
 	ld xwa, (xsp + 16)
-	jr LABEL_03A4F7
+	jr DSP_ParamInterp_MultiStep_Dispatch
 
-LABEL_03A4DB:
+DSP_ParamInterp_MultiStep_Mode0x10:
 	ld wa, (xsp + 28)
 	dec 1, wa
 	extz xwa
 	add xwa, xwa
 	add xwa, xde
 	ld wa, (xwa)
-	jr LABEL_03A4F7
+	jr DSP_ParamInterp_MultiStep_Dispatch
 
-LABEL_03A4EA:
+DSP_ParamInterp_MultiStep_Mode0x20:
 	ld wa, (xsp + 28)
 	dec 2, wa
 	extz xwa
@@ -48788,109 +48788,109 @@ LABEL_03A4EA:
 	add xwa, xde
 	ld wa, (xwa)
 
-LABEL_03A4F7:
+DSP_ParamInterp_MultiStep_Dispatch:
 	cps wa, 2
-	jrl z, LABEL_03A5A1
+	jrl z, DSP_ParamInterp_MultiStep_Order2
 	cps wa, 1
-	jr z, LABEL_03A551
+	jr z, DSP_ParamInterp_MultiStep_Order1
 	lda xwa, (xsp + 8)
 	ld xbc, xwa
 	ld xwa, xiz
-	call LABEL_03CF07
+	call DSP_StreamDecode_3ByteWord
 	ld xiz, xhl
 	lda xwa, (xsp + 4)
 	ld xbc, xwa
 	ld xwa, xiz
-	call LABEL_03CF07
+	call DSP_StreamDecode_3ByteWord
 	ld xiz, xhl
 	lda xwa, (xsp + 12)
 	ld xbc, xwa
 	ld xwa, xiz
-	call LABEL_03CF07
+	call DSP_StreamDecode_3ByteWord
 	ld xiz, xhl
 	lda xwa, (xsp + 12)
 	ld xbc, xwa
 	ld xwa, xiz
-	call LABEL_03CF07
+	call DSP_StreamDecode_3ByteWord
 	ld xiz, xhl
 	lda xwa, (xsp + 12)
 	ld xbc, xwa
 	ld xwa, xiz
-	call LABEL_03CF07
+	call DSP_StreamDecode_3ByteWord
 	ld xiz, xhl
 	lda xwa, (xsp + 12)
 	ld xbc, xwa
 	ld xwa, xiz
-	call LABEL_03CF07
+	call DSP_StreamDecode_3ByteWord
 	ld xiz, xhl
-	jrl LABEL_03A5EF
+	jrl DSP_ParamInterp_MultiStep_Compute
 
-LABEL_03A551:
+DSP_ParamInterp_MultiStep_Order1:
 	lda xwa, (xsp + 12)
 	ld xbc, xwa
 	ld xwa, xiz
-	call LABEL_03CF07
+	call DSP_StreamDecode_3ByteWord
 	ld xiz, xhl
 	lda xwa, (xsp + 12)
 	ld xbc, xwa
 	ld xwa, xiz
-	call LABEL_03CF07
+	call DSP_StreamDecode_3ByteWord
 	ld xiz, xhl
 	lda xwa, (xsp + 8)
 	ld xbc, xwa
 	ld xwa, xiz
-	call LABEL_03CF07
+	call DSP_StreamDecode_3ByteWord
 	ld xiz, xhl
 	lda xwa, (xsp + 4)
 	ld xbc, xwa
 	ld xwa, xiz
-	call LABEL_03CF07
+	call DSP_StreamDecode_3ByteWord
 	ld xiz, xhl
 	lda xwa, (xsp + 12)
 	ld xbc, xwa
 	ld xwa, xiz
-	call LABEL_03CF07
+	call DSP_StreamDecode_3ByteWord
 	ld xiz, xhl
 	lda xwa, (xsp + 12)
 	ld xbc, xwa
 	ld xwa, xiz
-	call LABEL_03CF07
+	call DSP_StreamDecode_3ByteWord
 	ld xiz, xhl
-	jr LABEL_03A5EF
+	jr DSP_ParamInterp_MultiStep_Compute
 
-LABEL_03A5A1:
+DSP_ParamInterp_MultiStep_Order2:
 	lda xwa, (xsp + 12)
 	ld xbc, xwa
 	ld xwa, xiz
-	call LABEL_03CF07
+	call DSP_StreamDecode_3ByteWord
 	ld xiz, xhl
 	lda xwa, (xsp + 12)
 	ld xbc, xwa
 	ld xwa, xiz
-	call LABEL_03CF07
+	call DSP_StreamDecode_3ByteWord
 	ld xiz, xhl
 	lda xwa, (xsp + 12)
 	ld xbc, xwa
 	ld xwa, xiz
-	call LABEL_03CF07
+	call DSP_StreamDecode_3ByteWord
 	ld xiz, xhl
 	lda xwa, (xsp + 12)
 	ld xbc, xwa
 	ld xwa, xiz
-	call LABEL_03CF07
+	call DSP_StreamDecode_3ByteWord
 	ld xiz, xhl
 	lda xwa, (xsp + 8)
 	ld xbc, xwa
 	ld xwa, xiz
-	call LABEL_03CF07
+	call DSP_StreamDecode_3ByteWord
 	ld xiz, xhl
 	lda xwa, (xsp + 4)
 	ld xbc, xwa
 	ld xwa, xiz
-	call LABEL_03CF07
+	call DSP_StreamDecode_3ByteWord
 	ld xiz, xhl
 
-LABEL_03A5EF:
+DSP_ParamInterp_MultiStep_Compute:
 	ld xwa, (xsp + 4)
 	sub xwa, (xsp + 8)
 	sra xwa, 8
@@ -48909,7 +48909,7 @@ LABEL_03A5EF:
 	lda xsp, (xsp + 20)
 	retd 0x4
 
-LABEL_03A620:
+DSP_FilterLUT_Fetch:
 	lda xsp, (xsp - 50)
 	pushw iz
 	ld (xsp + 44), xde
@@ -48927,18 +48927,18 @@ LABEL_03A620:
 	extz bc
 	ld wa, (xsp + 2)
 	cps wa, 2
-	jrl z, LABEL_03A82D
+	jrl z, DSP_FilterLUT_ModeType2
 	cps wa, 1
-	jrl z, LABEL_03A803
+	jrl z, DSP_FilterLUT_ModeType1
 	cps wa, 0
-	jrl nz, LABEL_03A909
+	jrl nz, DSP_FilterLUT_StoreResults
 	ld wa, bc
 	cp wa, 0x20
-	jrl z, LABEL_03A77C
+	jrl z, DSP_FilterLUT_Mode0x20
 	cp wa, 0x10
-	jrl z, LABEL_03A6F5
+	jrl z, DSP_FilterLUT_Mode0x10
 	cps wa, 0
-	jrl nz, LABEL_03A77C
+	jrl nz, DSP_FilterLUT_Mode0x20
 	ld wa, iz
 	extz xwa
 	add xwa, xwa
@@ -48982,9 +48982,9 @@ LABEL_03A620:
 	lda xbc, (xsp + 24)
 	lda xwa, (xsp + 32)
 	call FP_DP_NormalizeMantissa
-	jrl LABEL_03A909
+	jrl DSP_FilterLUT_StoreResults
 
-LABEL_03A6F5:
+DSP_FilterLUT_Mode0x10:
 	ld wa, iz
 	dec 1, wa
 	extz xwa
@@ -49028,9 +49028,9 @@ LABEL_03A6F5:
 	lda xbc, (xsp + 24)
 	lda xwa, (xsp + 32)
 	call FP_DP_NormalizeMantissa
-	jrl LABEL_03A909
+	jrl DSP_FilterLUT_StoreResults
 
-LABEL_03A77C:
+DSP_FilterLUT_Mode0x20:
 	ld wa, iz
 	dec 2, wa
 	extz xwa
@@ -49074,9 +49074,9 @@ LABEL_03A77C:
 	lda xbc, (xsp + 24)
 	lda xwa, (xsp + 32)
 	call FP_DP_NormalizeMantissa
-	jrl LABEL_03A909
+	jrl DSP_FilterLUT_StoreResults
 
-LABEL_03A803:
+DSP_FilterLUT_ModeType1:
 	ld xwa, 0x3DCCCCCD
 	ld (xsp + 36), xwa
 	ld wa, iz
@@ -49089,16 +49089,16 @@ LABEL_03A803:
 	st_dri3b A, 0x07, 0xE4, 0xE0
 	lda xwa, (xsp + 40)
 	call FP_SP_Raw4Copy
-	jrl LABEL_03A909
+	jrl DSP_FilterLUT_StoreResults
 
-LABEL_03A82D:
+DSP_FilterLUT_ModeType2:
 	ld xwa, 0x40000000
 	ld (xsp + 36), xwa
 	ld wa, bc
 	cp wa, 0x20
-	jr z, LABEL_03A8A6
+	jr z, DSP_FilterLUT_ModeType2_SubMode
 	cps wa, 0
-	jr nz, LABEL_03A8A6
+	jr nz, DSP_FilterLUT_ModeType2_SubMode
 	ld wa, iz
 	extz xwa
 	add xwa, xwa
@@ -49131,9 +49131,9 @@ LABEL_03A82D:
 	lda xbc, (xsp + 24)
 	lda xwa, (xsp + 32)
 	call FP_DP_NormalizeMantissa
-	jr LABEL_03A909
+	jr DSP_FilterLUT_StoreResults
 
-LABEL_03A8A6:
+DSP_FilterLUT_ModeType2_SubMode:
 	ld wa, iz
 	dec 1, wa
 	extz xwa
@@ -49167,7 +49167,7 @@ LABEL_03A8A6:
 	lda xwa, (xsp + 32)
 	call FP_DP_NormalizeMantissa
 
-LABEL_03A909:
+DSP_FilterLUT_StoreResults:
 	ld xbc, (xsp + 64)
 	ld wa, (xsp + 2)
 	ld (xbc), wa
@@ -49185,7 +49185,7 @@ LABEL_03A909:
 	lda xsp, (xsp + 50)
 	retd 0x10
 
-LABEL_03A933:
+DSP_BiquadCoeff_Compute:
 	st_dri3b L, 0xFD, 0x14, 0xFF
 	pushw iz
 	st_dri3w WA, 0xFD, 0xEC, 0x00
@@ -49200,15 +49200,15 @@ LABEL_03A933:
 	ld wa, de
 	st_dri3b A, 0xFD, 0xF6, 0x00
 	st_dri3b B, 0xFD, 0xF2, 0x00
-	calr LABEL_03A620
+	calr DSP_FilterLUT_Fetch
 	st_dri3l XHL, 0xFD, 0xFE, 0x00
 	ld_sriw WA, (xsp + 0x00ea)
 	cps wa, 2
-	jrl z, LABEL_03B08A
+	jrl z, DSP_BiquadCoeff_Algo2
 	cps wa, 1
-	jrl z, LABEL_03AE72
+	jrl z, DSP_BiquadCoeff_Algo1
 	cps wa, 0
-	jrl nz, LABEL_03B4F0
+	jrl nz, DSP_BiquadCoeff_Epilogue
 	st_dri3b A, 0xFD, 0xE6, 0x00
 	lda xwa, (xsp + 78)
 	call FP_DP_NegMantissaLS
@@ -49264,17 +49264,17 @@ LABEL_03A933:
 	lds bc, 1
 	call FP_SP_CmpZero32
 	cps hl, 0
-	jr nz, LABEL_03AA65
+	jr nz, DSP_BiquadCoeff_Algo0_SignZero
 	ld_sril XWA, (xsp + 0x00de)
 	st_dri3l XWA, 0xFD, 0x8A, 0x00
-	jr LABEL_03AA73
+	jr DSP_BiquadCoeff_Algo0_AfterSign
 
-LABEL_03AA65:
+DSP_BiquadCoeff_Algo0_SignZero:
 	st_dri3b A, 0xFD, 0xDE, 0x00
 	st_dri3b W, 0xFD, 0x8A, 0x00
 	call FP_SP_CopyOrNegate4
 
-LABEL_03AA73:
+DSP_BiquadCoeff_Algo0_AfterSign:
 	st_dri3b A, 0xFD, 0x8A, 0x00
 	lda_24 xde, 0x012f6f
 	lda xwa, (xsp + 86)
@@ -49323,17 +49323,17 @@ LABEL_03AA73:
 	lds bc, 1
 	call FP_SP_CmpZero32
 	cps hl, 0
-	jr nz, LABEL_03AB23
+	jr nz, DSP_BiquadCoeff_Algo0_Sign2Zero
 	ld_sril XWA, (xsp + 0x00de)
 	ld (xsp + 126), xwa
-	jr LABEL_03AB2F
+	jr DSP_BiquadCoeff_Algo0_AfterSign2
 
-LABEL_03AB23:
+DSP_BiquadCoeff_Algo0_Sign2Zero:
 	st_dri3b A, 0xFD, 0xDE, 0x00
 	lda xwa, (xsp + 126)
 	call FP_SP_CopyOrNegate4
 
-LABEL_03AB2F:
+DSP_BiquadCoeff_Algo0_AfterSign2:
 	lda xbc, (xsp + 126)
 	lda_24 xde, 0x012f83
 	lda xwa, (xsp + 86)
@@ -49380,7 +49380,7 @@ LABEL_03AB2F:
 	lds bc, 1
 	call FP_SP_CmpZero32
 	cps hl, 0
-	jr nz, LABEL_03AC3E
+	jr nz, DSP_BiquadCoeff_Algo0_NegBranch
 	st_dri3b A, 0xFD, 0xCA, 0x00
 	st_dri3b B, 0xFD, 0xD6, 0x00
 	st_dri3b W, 0xFD, 0xBE, 0x00
@@ -49407,9 +49407,9 @@ LABEL_03AB2F:
 	st_dri3b B, 0xFD, 0xD6, 0x00
 	st_dri3b W, 0xFD, 0xAE, 0x00
 	call VoiceFloat_SubSP
-	jr LABEL_03ACB1
+	jr DSP_BiquadCoeff_Algo0_Assembly
 
-LABEL_03AC3E:
+DSP_BiquadCoeff_Algo0_NegBranch:
 	st_dri3b A, 0xFD, 0xD6, 0x00
 	st_dri3b B, 0xFD, 0xCA, 0x00
 	st_dri3b W, 0xFD, 0xBE, 0x00
@@ -49437,7 +49437,7 @@ LABEL_03AC3E:
 	st_dri3b W, 0xFD, 0xAE, 0x00
 	call VoiceFloat_SubSP
 
-LABEL_03ACB1:
+DSP_BiquadCoeff_Algo0_Assembly:
 	st_dri3b A, 0xFD, 0xBE, 0x00
 	st_dri3b B, 0xFD, 0xBA, 0x00
 	lda xwa, (xsp + 86)
@@ -49463,11 +49463,11 @@ LABEL_03ACB1:
 	lds de, 0
 	call 0x3D306
 	cps hl, 0
-	jr nz, LABEL_03AD1E
+	jr nz, DSP_BiquadCoeff_Algo0_Fixup
 	ld xwa, 0x3F800000
 	st_dri3l XWA, 0xFD, 0x9E, 0x00
 
-LABEL_03AD1E:
+DSP_BiquadCoeff_Algo0_Fixup:
 	st_dri3b A, 0xFD, 0x9E, 0x00
 	st_dri3b B, 0xFD, 0xBE, 0x00
 	lda xwa, (xsp + 2)
@@ -49553,9 +49553,9 @@ LABEL_03AD1E:
 	ld_sriw DE, (xsp + 0x00f6)
 	call DSP_WriteCoeffData_5B_Direct
 	ld iz, hl
-	jrl LABEL_03B4F0
+	jrl DSP_BiquadCoeff_Epilogue
 
-LABEL_03AE72:
+DSP_BiquadCoeff_Algo1:
 	st_dri3b A, 0xFD, 0xE6, 0x00
 	lda xwa, (xsp + 118)
 	call FP_DP_NegMantissaLS
@@ -49691,9 +49691,9 @@ LABEL_03AE72:
 	ld_sriw DE, (xsp + 0x00f6)
 	call DSP_WriteCoeffData_5B_Direct
 	ld iz, hl
-	jrl LABEL_03B4F0
+	jrl DSP_BiquadCoeff_Epilogue
 
-LABEL_03B08A:
+DSP_BiquadCoeff_Algo2:
 	st_dri3b A, 0xFD, 0xE6, 0x00
 	lda xwa, (xsp + 118)
 	call FP_DP_NegMantissaLS
@@ -49780,17 +49780,17 @@ LABEL_03B08A:
 	lds bc, 1
 	call FP_SP_CmpZero32
 	cps hl, 0
-	jr nz, LABEL_03B1D9
+	jr nz, DSP_BiquadCoeff_Algo2_Sign1Zero
 	ld_sril XWA, (xsp + 0x00de)
 	ld (xsp + 38), xwa
-	jr LABEL_03B1E5
+	jr DSP_BiquadCoeff_Algo2_AfterSign1
 
-LABEL_03B1D9:
+DSP_BiquadCoeff_Algo2_Sign1Zero:
 	st_dri3b A, 0xFD, 0xDE, 0x00
 	lda xwa, (xsp + 38)
 	call FP_SP_CopyOrNegate4
 
-LABEL_03B1E5:
+DSP_BiquadCoeff_Algo2_AfterSign1:
 	lda xbc, (xsp + 38)
 	lda_24 xde, 0x013023
 	lda xwa, (xsp + 2)
@@ -49839,17 +49839,17 @@ LABEL_03B1E5:
 	lds bc, 1
 	call FP_SP_CmpZero32
 	cps hl, 0
-	jr nz, LABEL_03B28F
+	jr nz, DSP_BiquadCoeff_Algo2_Sign2Zero
 	ld_sril XWA, (xsp + 0x00de)
 	ld (xsp + 26), xwa
-	jr LABEL_03B29B
+	jr DSP_BiquadCoeff_Algo2_AfterSign2
 
-LABEL_03B28F:
+DSP_BiquadCoeff_Algo2_Sign2Zero:
 	st_dri3b A, 0xFD, 0xDE, 0x00
 	lda xwa, (xsp + 26)
 	call FP_SP_CopyOrNegate4
 
-LABEL_03B29B:
+DSP_BiquadCoeff_Algo2_AfterSign2:
 	lda xbc, (xsp + 26)
 	lda_24 xde, 0x013037
 	lda xwa, (xsp + 2)
@@ -49896,7 +49896,7 @@ LABEL_03B29B:
 	lds bc, 1
 	call FP_SP_CmpZero32
 	cps hl, 0
-	jr nz, LABEL_03B3A6
+	jr nz, DSP_BiquadCoeff_Algo2_NegBranch
 	st_dri3b A, 0xFD, 0xD2, 0x00
 	lda xwa, (xsp + 2)
 	call FP_SP_CopyOrNegate4
@@ -49923,9 +49923,9 @@ LABEL_03B29B:
 	st_dri3b B, 0xFD, 0xD6, 0x00
 	st_dri3b W, 0xFD, 0xB6, 0x00
 	call VoiceFloat_SubSP
-	jr LABEL_03B419
+	jr DSP_BiquadCoeff_Algo2_WriteParams
 
-LABEL_03B3A6:
+DSP_BiquadCoeff_Algo2_NegBranch:
 	st_dri3b A, 0xFD, 0xC6, 0x00
 	lda xwa, (xsp + 2)
 	call FP_SP_CopyOrNegate4
@@ -49953,7 +49953,7 @@ LABEL_03B3A6:
 	st_dri3b W, 0xFD, 0xB6, 0x00
 	call VoiceFloat_SubSP
 
-LABEL_03B419:
+DSP_BiquadCoeff_Algo2_WriteParams:
 	st_dri3b A, 0xFD, 0xBA, 0x00
 	lda_24 xde, 0x01304b
 	lda xwa, (xsp + 2)
@@ -50012,7 +50012,7 @@ LABEL_03B419:
 	call DSP_WriteParamWord
 	ld iz, hl
 
-LABEL_03B4F0:
+DSP_BiquadCoeff_Epilogue:
 	ld_sril XWA, (xsp + 0x00f2)
 	ld (xwa), iz
 	ld_sril XHL, (xsp + 0x00fe)
@@ -50020,7 +50020,7 @@ LABEL_03B4F0:
 	st_dri3b L, 0xFD, 0xEC, 0x00
 	retd 0x10
 
-LABEL_03B505:
+DSP_SOS_LUT_Fetch:
 	lda xsp, (xsp - 34)
 	pushw iz
 	ld (xsp + 28), xde
@@ -50037,7 +50037,7 @@ LABEL_03B505:
 	and c, 0xF0
 	ld a, c
 	cp a, 0x10
-	jr z, LABEL_03B596
+	jr z, DSP_SOS_LUT_Mode0x10
 	ld wa, iz
 	extz xwa
 	add xwa, xwa
@@ -50070,9 +50070,9 @@ LABEL_03B505:
 	lda xbc, (xsp + 12)
 	lda xwa, (xsp + 20)
 	call FP_DP_NormalizeMantissa
-	jr LABEL_03B5F9
+	jr DSP_SOS_LUT_CheckType2
 
-LABEL_03B596:
+DSP_SOS_LUT_Mode0x10:
 	ld wa, iz
 	dec 1, wa
 	extz xwa
@@ -50106,10 +50106,10 @@ LABEL_03B596:
 	lda xwa, (xsp + 20)
 	call FP_DP_NormalizeMantissa
 
-LABEL_03B5F9:
+DSP_SOS_LUT_CheckType2:
 	ld wa, (xsp + 2)
 	cps wa, 2
-	jr nz, LABEL_03B624
+	jr nz, DSP_SOS_LUT_StoreResults
 	ld xwa, (xsp + 40)
 	ld_spib C, 0xE0
 	ld (xsp + 40), xwa
@@ -50122,7 +50122,7 @@ LABEL_03B5F9:
 	lda xwa, (xsp + 24)
 	call FP_SP_Raw4Copy
 
-LABEL_03B624:
+DSP_SOS_LUT_StoreResults:
 	ld xbc, (xsp + 48)
 	ld wa, (xsp + 2)
 	ld (xbc), wa
@@ -50137,7 +50137,7 @@ LABEL_03B624:
 	lda xsp, (xsp + 34)
 	retd 0xC
 
-LABEL_03B646:
+DSP_SOS_Coeff_Compute:
 	st_dri3b L, 0xFD, 0x2E, 0xFF
 	push xiz
 	ld iz, wa
@@ -50150,15 +50150,15 @@ LABEL_03B646:
 	ld wa, de
 	st_dri3b A, 0xFD, 0xDE, 0x00
 	st_dri3b B, 0xFD, 0xDA, 0x00
-	calr LABEL_03B505
+	calr DSP_SOS_LUT_Fetch
 	st_dri3l XHL, 0xFD, 0xE6, 0x00
 	ld_sriw WA, (xsp + 0x00b0)
 	cps wa, 2
-	jrl z, LABEL_03BD18
+	jrl z, DSP_SOS_Algo2
 	cps wa, 1
-	jrl z, LABEL_03B9DD
+	jrl z, DSP_SOS_Algo1
 	cps wa, 0
-	jrl nz, LABEL_03C04F
+	jrl nz, DSP_SOS_Coeff_Epilogue
 	st_dri3b A, 0xFD, 0xCE, 0x00
 	lda_24 xde, 0x01307f
 	lda xwa, (xsp + 56)
@@ -50187,7 +50187,7 @@ LABEL_03B646:
 	lds bc, 1
 	call FP_SP_CmpZero32
 	cps hl, 0
-	jrl nz, LABEL_03B7F4
+	jrl nz, DSP_SOS_Algo0_NonzeroCoeff
 	st_dri3b A, 0xFD, 0xD2, 0x00
 	lda xwa, (xsp + 72)
 	call FP_DP_NegMantissaLS
@@ -50262,9 +50262,9 @@ LABEL_03B646:
 	lda xde, (xsp + 56)
 	st_dri3b W, 0xFD, 0xC6, 0x00
 	call VoiceFloat_SubSP
-	jrl LABEL_03B901
+	jrl DSP_SOS_Algo0_FinalChain
 
-LABEL_03B7F4:
+DSP_SOS_Algo0_NonzeroCoeff:
 	st_dri3b A, 0xFD, 0xD2, 0x00
 	lda xwa, (xsp + 72)
 	call FP_DP_NegMantissaLS
@@ -50340,7 +50340,7 @@ LABEL_03B7F4:
 	st_dri3b W, 0xFD, 0xCA, 0x00
 	call VoiceFloat_SubSP
 
-LABEL_03B901:
+DSP_SOS_Algo0_FinalChain:
 	lda_24 xbc, 0x0130db
 	st_dri3b B, 0xFD, 0xCA, 0x00
 	lda xwa, (xsp + 120)
@@ -50395,9 +50395,9 @@ LABEL_03B901:
 	ld bc, iz
 	call DSP_WriteParamWord
 	ldfr_werp HL, 0xFA
-	jrl LABEL_03C04F
+	jrl DSP_SOS_Coeff_Epilogue
 
-LABEL_03B9DD:
+DSP_SOS_Algo1:
 	st_dri3b A, 0xFD, 0xCE, 0x00
 	lda_24 xde, 0x0130ef
 	lda xwa, (xsp + 120)
@@ -50426,7 +50426,7 @@ LABEL_03B9DD:
 	lds bc, 1
 	call FP_SP_CmpZero32
 	cps hl, 0
-	jrl nz, LABEL_03BB3F
+	jrl nz, DSP_SOS_Algo1_NonzeroCoeff
 	st_dri3b A, 0xFD, 0xD2, 0x00
 	lda xwa, (xsp + 72)
 	call FP_DP_NegMantissaLS
@@ -50501,9 +50501,9 @@ LABEL_03B9DD:
 	lda xde, (xsp + 120)
 	st_dri3b W, 0xFD, 0xC6, 0x00
 	call VoiceFloat_SubSP
-	jrl LABEL_03BC44
+	jrl DSP_SOS_Algo1_FinalChain
 
-LABEL_03BB3F:
+DSP_SOS_Algo1_NonzeroCoeff:
 	st_dri3b A, 0xFD, 0xD2, 0x00
 	lda xwa, (xsp + 72)
 	call FP_DP_NegMantissaLS
@@ -50579,7 +50579,7 @@ LABEL_03BB3F:
 	st_dri3b W, 0xFD, 0xCA, 0x00
 	call VoiceFloat_SubSP
 
-LABEL_03BC44:
+DSP_SOS_Algo1_FinalChain:
 	st_dri3b A, 0xFD, 0xCA, 0x00
 	lda_24 xde, 0x01314b
 	lda xwa, (xsp + 120)
@@ -50634,9 +50634,9 @@ LABEL_03BC44:
 	ld bc, iz
 	call DSP_WriteParamWord
 	ldfr_werp HL, 0xFA
-	jrl LABEL_03C04F
+	jrl DSP_SOS_Coeff_Epilogue
 
-LABEL_03BD18:
+DSP_SOS_Algo2:
 	st_dri3b A, 0xFD, 0xCE, 0x00
 	lda_24 xde, 0x01315f
 	lda xwa, (xsp + 120)
@@ -50665,7 +50665,7 @@ LABEL_03BD18:
 	lds bc, 1
 	call FP_SP_CmpZero32
 	cps hl, 0
-	jrl nz, LABEL_03BE78
+	jrl nz, DSP_SOS_Algo2_NonzeroCoeff
 	st_dri3b A, 0xFD, 0xD2, 0x00
 	lda xwa, (xsp + 72)
 	call FP_DP_NegMantissaLS
@@ -50740,9 +50740,9 @@ LABEL_03BD18:
 	lda xde, (xsp + 120)
 	st_dri3b W, 0xFD, 0xC6, 0x00
 	call VoiceFloat_SubSP
-	jrl LABEL_03BF7D
+	jrl DSP_SOS_Algo2_FinalChain
 
-LABEL_03BE78:
+DSP_SOS_Algo2_NonzeroCoeff:
 	st_dri3b A, 0xFD, 0xD2, 0x00
 	lda xwa, (xsp + 72)
 	call FP_DP_NegMantissaLS
@@ -50818,7 +50818,7 @@ LABEL_03BE78:
 	st_dri3b W, 0xFD, 0xCA, 0x00
 	call VoiceFloat_SubSP
 
-LABEL_03BF7D:
+DSP_SOS_Algo2_FinalChain:
 	st_dri3b A, 0xFD, 0xCA, 0x00
 	lda_24 xde, 0x0131bb
 	lda xwa, (xsp + 120)
@@ -50874,7 +50874,7 @@ LABEL_03BF7D:
 	call DSP_WriteCoeffData_5B_Direct
 	ldfr_werp HL, 0xFA
 
-LABEL_03C04F:
+DSP_SOS_Coeff_Epilogue:
 	ld_sril XBC, (xsp + 0x00dc)
 	ldto_werp WA, 0xFA
 	ld (xbc), wa
@@ -50883,7 +50883,7 @@ LABEL_03C04F:
 	st_dri3b L, 0xFD, 0xD2, 0x00
 	retd 0x10
 
-LABEL_03C067:
+DSP_MixerCoeff_Compute:
 	lda xsp, (xsp - 20)
 	push xiz
 	ld (xsp + 20), de
@@ -50998,17 +50998,17 @@ DSP_WriteGlobalConfig:
 DSP_WriteParameter:
 	ld xix, (xsp + 4)
 	cps wa, 1
-	jr nz, LABEL_03C20E
+	jr nz, DSP_WriteParam_Generic
 	cp bc, 0x9
-	jr z, LABEL_03C1A3
+	jr z, DSP_WriteParam_EFFCase
 	cp bc, 0xA
-	jr nz, LABEL_03C20E
+	jr nz, DSP_WriteParam_Generic
 
-LABEL_03C1A3:
+DSP_WriteParam_EFFCase:
 	cp bc, 0xA
-	jr z, LABEL_03C1DF
+	jr z, DSP_WriteParam_EFFCase0xA
 	cp bc, 0x9
-	jrl nz, LABEL_03C24F
+	jrl nz, DSP_WriteParam_Return
 	lda_24 xhl, 0x01e17f
 	lda_24 xbc, 0x01e19e
 	push xbc
@@ -51026,9 +51026,9 @@ LABEL_03C1A3:
 	lda_24 xbc, 0x014777
 	ld xde, xhl
 	call 0x3C9E6
-	jr LABEL_03C24F
+	jr DSP_WriteParam_Return
 
-LABEL_03C1DF:
+DSP_WriteParam_EFFCase0xA:
 	lda_24 xhl, 0x01e40a
 	lda_24 xbc, 0x01e42d
 	push xbc
@@ -51046,9 +51046,9 @@ LABEL_03C1DF:
 	lda_24 xbc, 0x014777
 	ld xde, xhl
 	call 0x3C9E6
-	jr LABEL_03C24F
+	jr DSP_WriteParam_Return
 
-LABEL_03C20E:
+DSP_WriteParam_Generic:
 	ld hl, bc
 	extz xhl
 	sll xhl, 2
@@ -51076,13 +51076,13 @@ LABEL_03C20E:
 	ld xde, xhl
 	call 0x3C9E6
 
-LABEL_03C24F:
+DSP_WriteParam_Return:
 	retd 0x4
 	ret
 
 DSP_Bytecode_NotifyStateChange:
 	lds wa, 1
-	jp LABEL_020370
+	jp TaskSched_PreemptiveYield_INT
 
 DSP_BytecodeInterpreter_Init:
 	lda xsp, (xsp - 18)
@@ -51443,21 +51443,21 @@ DSP_ParameterWriteEngine:
 	push xwa
 	ld xwa, xiz
 	ld bc, (xsp + 34)
-	calr LABEL_03CFA5
+	calr DSP_TableWalk_SearchWithState
 	ld xiz, xhl
 	cpw (xsp + 10), 0x0
-	jr z, LABEL_03CA30
+	jr z, DSP_ParamLoop_CheckBound
 	ld wa, (xsp + 10)
-	calr LABEL_03CFED
-	jr LABEL_03CAA7
+	calr DSP_NopReturn
+	jr DSP_ParamLoop_Return
 
-LABEL_03CA30:
+DSP_ParamLoop_CheckBound:
 	cp xiz, (xsp + 6)
-	jr nc, LABEL_03CAA7
+	jr nc, DSP_ParamLoop_Return
 
-LABEL_03CA35:
+DSP_ParamLoop_Iterate:
 	cpw (xsp + 4), 0x0
-	jr nz, LABEL_03CA61
+	jr nz, DSP_ParamLoop_CallTranslator
 	ld bc, (xsp + 4)
 	lds wa, 1
 	call 0x36A2E
@@ -51471,7 +51471,7 @@ LABEL_03CA35:
 	call 0x36A4F
 	ld (xsp + 10), hl
 
-LABEL_03CA61:
+DSP_ParamLoop_CallTranslator:
 	push xiz
 	ld xwa, (xsp + 16)
 	push xwa
@@ -51487,24 +51487,24 @@ LABEL_03CA61:
 	calr DSP_PerParameterTranslator
 	ld xiz, xhl
 	cpw (xsp + 10), 0x0
-	jr z, LABEL_03CA8F
+	jr z, DSP_ParamLoop_PostCall
 	ld wa, (xsp + 10)
-	calr LABEL_03CFED
-	jr LABEL_03CAA7
+	calr DSP_NopReturn
+	jr DSP_ParamLoop_Return
 
-LABEL_03CA8F:
+DSP_ParamLoop_PostCall:
 	cpw (xsp + 4), 0x0
-	jr nz, LABEL_03CAA2
+	jr nz, DSP_ParamLoop_SendEndCmd
 	ld bc, (xsp + 4)
 	lds wa, 3
 	call 0x36A2E
 	ld (xsp + 10), hl
 
-LABEL_03CAA2:
+DSP_ParamLoop_SendEndCmd:
 	cp xiz, (xsp + 6)
-	jr c, LABEL_03CA35
+	jr c, DSP_ParamLoop_Iterate
 
-LABEL_03CAA7:
+DSP_ParamLoop_Return:
 	pop xiz
 	lda xsp, (xsp + 18)
 	retd 0xA
@@ -51552,9 +51552,9 @@ DSP_PerParameterTranslator:
 	add xbc, xde
 	ld xwa, (xbc + 8)
 	ld (xsp + 10), xwa
-	jrl LABEL_03CBB6
+	jrl DSP_Translator_CheckEnd
 
-LABEL_03CB18:
+DSP_Translator_ReadOpcode:
 	ld xbc, (xsp + 42)
 	lds32 xwa, 1
 	add (xsp + 42), xwa
@@ -51565,9 +51565,9 @@ LABEL_03CB18:
 	push xwa
 	ld xwa, (xsp + 42)
 	ldto_werp BC, 0xFA
-	calr LABEL_03CF53
+	calr DSP_TableWalk_Search
 	cpw (xsp + 14), 0x0
-	jrl nz, LABEL_03CBCC
+	jrl nz, DSP_Translator_Return
 	ld a, (xhl)
 	ldfr_berp A, 0xF8
 	extz iz
@@ -51579,34 +51579,34 @@ LABEL_03CB18:
 	exts xde
 	ldto_werp WA, 0xFA
 	cp wa, 0x21
-	jrl z, LABEL_03CEE2
+	jrl z, DSP_Op_0x21_Interp2Point
 	cp wa, 0x24
-	jrl z, LABEL_03CEBC
+	jrl z, DSP_Op_0x24_MultiStepInterp
 	cp wa, 0x40
-	jrl z, LABEL_03CE9F
+	jrl z, DSP_Op_0x40_PanScale
 	sub wa, 0x61
 	cps wa, 0
-	jrl c, LABEL_03CEFF
+	jrl c, DSP_Op_Unknown_Error
 	cp wa, 0x18
-	jrl ugt, LABEL_03CEFF
+	jrl ugt, DSP_Op_Unknown_Error
 	add wa, wa
 	lda_24 xix, 0x014745
 	ld_sriw3 WA, 0x07, 0xF0, 0xE0
 	lda_24 xix, 0x03cb8e
 	jp_dri 8, 0x07, 0xF0, 0xE0
-LABEL_03CB8E:
+DSP_Translator_JumpTable:
 	.byte 0xbf, 0x2a, 0x30, 0xea, 0x89, 0x1d, 0x9f, 0x8e
 	.byte 0x03, 0x9f, 0x04, 0x04, 0xde, 0x88, 0xeb, 0x89
 	.byte 0x9f, 0x16, 0x22, 0x1d, 0xe6, 0x87, 0x03, 0xbf
 	.byte 0x0e, 0x53
 
-LABEL_03CBA8:
+DSP_Translator_PostDispatch:
 	cpw (xsp + 20), 0x1
-	jr nz, LABEL_03CBB6
+	jr nz, DSP_Translator_CheckEnd
 	call DSP2_SPI_BusIdle
 	calr DSP_Bytecode_NotifyStateChange
 
-LABEL_03CBB6:
+DSP_Translator_CheckEnd:
 	ld xbc, (xsp + 42)
 	lds32 xwa, 1
 	add (xsp + 42), xwa
@@ -51614,9 +51614,9 @@ LABEL_03CBB6:
 	extz wa
 	ldfr_werp WA, 0xFA
 	cp wa, 0x7A
-	jrl nz, LABEL_03CB18
+	jrl nz, DSP_Translator_ReadOpcode
 
-LABEL_03CBCC:
+DSP_Translator_Return:
 	ld xbc, (xsp + 26)
 	ld wa, (xsp + 14)
 	ld (xbc), wa
@@ -51633,7 +51633,7 @@ LABEL_03CBCC:
 	ld de, (xsp + 22)
 	call DSP_WriteOscParam
 	ld (xsp + 14), hl
-	jr LABEL_03CBA8
+	jr DSP_Translator_PostDispatch
 	lda xwa, (xsp + 42)
 	ld xbc, xde
 	call DSP_ParamFetch_AlgoTypeTable
@@ -51643,7 +51643,7 @@ LABEL_03CBCC:
 	ld de, (xsp + 22)
 	call DSP_WriteFreqParam_AlgoType
 	ld (xsp + 14), hl
-	jr LABEL_03CBA8
+	jr DSP_Translator_PostDispatch
 	lda xwa, (xsp + 42)
 	ld xbc, xde
 	call DSP_AlgoParam_Decode
@@ -51653,7 +51653,7 @@ LABEL_03CBCC:
 	ld de, (xsp + 22)
 	call DSP_WriteOscParam
 	ld (xsp + 14), hl
-	jrl LABEL_03CBA8
+	jrl DSP_Translator_PostDispatch
 	lda xwa, (xsp + 42)
 	ld xbc, xde
 	call DSP_PitchParam_Scale
@@ -51663,7 +51663,7 @@ LABEL_03CBCC:
 	ld de, (xsp + 22)
 	call DSP_WriteFreqParam
 	ld (xsp + 14), hl
-	jrl LABEL_03CBA8
+	jrl DSP_Translator_PostDispatch
 	lda xwa, (xsp + 42)
 	ld xbc, xde
 	call DSP_VolumeParam_Scale
@@ -51673,20 +51673,20 @@ LABEL_03CBCC:
 	ld de, (xsp + 22)
 	call DSP_WriteOscParam
 	ld (xsp + 14), hl
-	jrl LABEL_03CBA8
+	jrl DSP_Translator_PostDispatch
 	lda xwa, (xsp + 42)
 	ld xbc, xde
-	call LABEL_039206
+	call DSP_ParamInterp_2Point
 	pushm (xsp + 4)
 	ld wa, iz
 	ld xbc, xhl
 	ld de, (xsp + 22)
 	call DSP_WriteOscParam
 	ld (xsp + 14), hl
-	jrl LABEL_03CBA8
+	jrl DSP_Translator_PostDispatch
 	lda xwa, (xsp + 42)
 	ld xbc, xde
-	call LABEL_03925E
+	call DSP_ParamInterp_FPScale
 	pushm (xsp + 8)
 	ld xwa, (xsp + 12)
 	push xwa
@@ -51695,88 +51695,88 @@ LABEL_03CBCC:
 	ld de, (xsp + 26)
 	call DSP_WriteOscParam_Offset
 	ld (xsp + 14), hl
-	jrl LABEL_03CBA8
+	jrl DSP_Translator_PostDispatch
 	lda xwa, (xsp + 42)
 	ld xbc, xde
-	call LABEL_0392AC
+	call DSP_ParamInterp_Div0xB4
 	pushm (xsp + 6)
 	ld wa, iz
 	ld xbc, xhl
 	ld de, (xsp + 22)
 	call DSP_WriteFreqParam
 	ld (xsp + 14), hl
-	jrl LABEL_03CBA8
+	jrl DSP_Translator_PostDispatch
 	lda xwa, (xsp + 42)
 	ld xbc, xde
-	call LABEL_0392F2
+	call DSP_VolumeCurve_FP
 	pushm (xsp + 4)
 	ld wa, iz
 	ld xbc, xhl
 	ld de, (xsp + 22)
 	call DSP_WriteOscParam
 	ld (xsp + 14), hl
-	jrl LABEL_03CBA8
+	jrl DSP_Translator_PostDispatch
 	lda xwa, (xsp + 42)
 	ld xbc, xde
-	call LABEL_03943B
+	call DSP_FreqCurve_FP
 	pushm (xsp + 6)
 	ld wa, iz
 	ld xbc, xhl
 	ld de, (xsp + 22)
 	call DSP_WriteFreqParam
 	ld (xsp + 14), hl
-	jrl LABEL_03CBA8
+	jrl DSP_Translator_PostDispatch
 	lda xwa, (xsp + 42)
 	ld xbc, xde
-	call LABEL_0394CD
+	call DSP_FreqInterp_2Point
 	pushm (xsp + 6)
 	ld wa, iz
 	ld xbc, xhl
 	ld de, (xsp + 22)
 	call DSP_WriteFreqParam
 	ld (xsp + 14), hl
-	jrl LABEL_03CBA8
+	jrl DSP_Translator_PostDispatch
 	lda xwa, (xsp + 42)
 	ld xbc, xde
 	ld xde, (xsp + 10)
-	call LABEL_039525
+	call DSP_ParamInterp_3Point_WithOffset
 	pushm (xsp + 6)
 	ld wa, iz
 	ld xbc, xhl
 	ld de, (xsp + 22)
 	call DSP_WriteFreqParam
 	ld (xsp + 14), hl
-	jrl LABEL_03CBA8
+	jrl DSP_Translator_PostDispatch
 	lda xwa, (xsp + 42)
 	ld xbc, xde
-	call LABEL_039599
+	call DSP_ReverbCurve_FP
 	pushm (xsp + 4)
 	ld wa, iz
 	ld xbc, xhl
 	ld de, (xsp + 22)
 	call DSP_WriteOscParam
 	ld (xsp + 14), hl
-	jrl LABEL_03CBA8
+	jrl DSP_Translator_PostDispatch
 	lda xwa, (xsp + 42)
 	ld xbc, xde
-	call LABEL_0396C2
+	call DSP_ParamInterp_FPComplex
 	pushm (xsp + 4)
 	ld wa, iz
 	ld xbc, xhl
 	ld de, (xsp + 22)
 	call DSP_WriteOscParam
 	ld (xsp + 14), hl
-	jrl LABEL_03CBA8
+	jrl DSP_Translator_PostDispatch
 	lda xwa, (xsp + 42)
 	ld xbc, xde
-	call LABEL_0397F3
+	call DSP_PanCurve_PiecewiseLin
 	pushm (xsp + 4)
 	ld wa, iz
 	ld xbc, xhl
 	ld de, (xsp + 22)
 	call DSP_WriteOscParam
 	ld (xsp + 14), hl
-	jrl LABEL_03CBA8
+	jrl DSP_Translator_PostDispatch
 	ld xwa, (xsp + 42)
 	push xwa
 	pushw iz
@@ -51788,19 +51788,19 @@ LABEL_03CBCC:
 	ld wa, (xsp + 36)
 	ld bc, (xsp + 34)
 	ld de, (xsp + 32)
-	call LABEL_03A933
+	call DSP_BiquadCoeff_Compute
 	ld (xsp + 42), xhl
-	jrl LABEL_03CBA8
+	jrl DSP_Translator_PostDispatch
 	lda xwa, (xsp + 42)
 	ld xbc, xde
-	call LABEL_0398CE
+	call DSP_DetuneCurve_SignedFP
 	pushm (xsp + 4)
 	ld wa, iz
 	ld xbc, xhl
 	ld de, (xsp + 22)
 	call DSP_WriteOscParam
 	ld (xsp + 14), hl
-	jrl LABEL_03CBA8
+	jrl DSP_Translator_PostDispatch
 	pushm (xsp + 16)
 	pushw iz
 	pushm (xsp + 24)
@@ -51808,36 +51808,36 @@ LABEL_03CBCC:
 	lda xwa, (xsp + 50)
 	ld xbc, (xsp + 42)
 	ld de, (xsp + 26)
-	call LABEL_039ABD
+	call DSP_BiquadWarp_FP
 	ld (xsp + 14), hl
-	jrl LABEL_03CBA8
+	jrl DSP_Translator_PostDispatch
 	lda xwa, (xsp + 42)
 	ld xbc, xde
-	call LABEL_039D26
+	call DSP_ParamInterp_Div0xC6
 	pushm (xsp + 4)
 	ld wa, iz
 	ld xbc, xhl
 	ld de, (xsp + 22)
 	call DSP_WriteOscParam
 	ld (xsp + 14), hl
-	jrl LABEL_03CBA8
+	jrl DSP_Translator_PostDispatch
 	pushm (xsp + 20)
 	pushm (xsp + 8)
 	lda xwa, (xsp + 46)
 	ld bc, iz
 	call DSP_WriteLUTParamSet
 	ld (xsp + 14), hl
-	jrl LABEL_03CBA8
+	jrl DSP_Translator_PostDispatch
 	lda xwa, (xsp + 42)
 	ld xbc, xde
-	call LABEL_039D98
+	call DSP_ParamEQ_Curve_FP
 	pushm (xsp + 4)
 	ld wa, iz
 	ld xbc, xhl
 	ld de, (xsp + 22)
 	call DSP_WriteOscParam
 	ld (xsp + 14), hl
-	jrl LABEL_03CBA8
+	jrl DSP_Translator_PostDispatch
 	ld xwa, (xsp + 42)
 	push xwa
 	pushw iz
@@ -51849,74 +51849,74 @@ LABEL_03CBCC:
 	ld wa, (xsp + 36)
 	ld bc, (xsp + 34)
 	ld de, (xsp + 32)
-	call LABEL_03B646
+	call DSP_SOS_Coeff_Compute
 	ld (xsp + 42), xhl
-	jrl LABEL_03CBA8
+	jrl DSP_Translator_PostDispatch
 	lda xwa, (xsp + 42)
 	ld xbc, xde
-	call LABEL_03A22A
+	call DSP_ParamInterp_2Point_B
 	pushm (xsp + 4)
 	ld wa, iz
 	ld xbc, xhl
 	ld de, (xsp + 22)
 	call DSP_WriteOscParam
 	ld (xsp + 14), hl
-	jrl LABEL_03CBA8
+	jrl DSP_Translator_PostDispatch
 	lda xwa, (xsp + 42)
 	ld xbc, xde
-	call LABEL_03A282
+	call DSP_VolScale_B
 	pushm (xsp + 4)
 	ld wa, iz
 	ld xbc, xhl
 	ld de, (xsp + 22)
 	call DSP_WriteOscParam
 	ld (xsp + 14), hl
-	jrl LABEL_03CBA8
+	jrl DSP_Translator_PostDispatch
 
-LABEL_03CE9F:
+DSP_Op_0x40_PanScale:
 	lda xwa, (xsp + 42)
 	ld xbc, xde
-	call LABEL_03A4A0
+	call DSP_PanScale_Simple
 	pushm (xsp + 4)
 	ld wa, iz
 	ld xbc, xhl
 	ld de, (xsp + 22)
 	call DSP_WriteOscParam
 	ld (xsp + 14), hl
-	jrl LABEL_03CBA8
+	jrl DSP_Translator_PostDispatch
 
-LABEL_03CEBC:
+DSP_Op_0x24_MultiStepInterp:
 	pushm (xsp + 18)
 	pushm (xsp + 18)
 	lda xwa, (xsp + 46)
 	ld xbc, xde
 	ld xde, (xsp + 38)
-	call LABEL_03A4B7
+	call DSP_ParamInterp_MultiStep
 	pushm (xsp + 4)
 	ld wa, iz
 	ld xbc, xhl
 	ld de, (xsp + 22)
 	call DSP_WriteOscParam
 	ld (xsp + 14), hl
-	jrl LABEL_03CBA8
+	jrl DSP_Translator_PostDispatch
 
-LABEL_03CEE2:
+DSP_Op_0x21_Interp2Point:
 	lda xwa, (xsp + 42)
 	ld xbc, xde
-	call LABEL_039206
+	call DSP_ParamInterp_2Point
 	pushm (xsp + 4)
 	ld wa, iz
 	ld xbc, xhl
 	ld de, (xsp + 22)
 	call DSP_WriteOscParam
 	ld (xsp + 14), hl
-	jrl LABEL_03CBA8
+	jrl DSP_Translator_PostDispatch
 
-LABEL_03CEFF:
+DSP_Op_Unknown_Error:
 	ldw (xsp + 14), 0x5
-	jrl LABEL_03CBCC
+	jrl DSP_Translator_Return
 
-LABEL_03CF07:
+DSP_StreamDecode_3ByteWord:
 	ld xde, xwa
 	st_dpib W, 0xE8
 	ld a, (xwa)
@@ -51947,11 +51947,11 @@ LABEL_03CF07:
 	ld xhl, xde
 	ret
 
-LABEL_03CF53:
+DSP_TableWalk_Search:
 	ld xhl, xwa
-	jr LABEL_03CF7D
+	jr DSP_TableWalk_ReadHeader
 
-LABEL_03CF57:
+DSP_TableWalk_CheckEntry:
 	ld ix, iy
 	extz xix
 	add xix, xhl
@@ -51959,24 +51959,24 @@ LABEL_03CF57:
 	ld a, (xhl)
 	extz wa
 	cp wa, bc
-	jr nz, LABEL_03CF7B
+	jr nz, DSP_TableWalk_SkipEntry
 	ld wa, de
 	extz xwa
 	inc 1, xwa
 	add xhl, xwa
 	cp xhl, xix
-	jr c, LABEL_03CF77
+	jr c, DSP_TableWalk_FoundInRange
 	lds bc, 4
-	jr LABEL_03CF9D
+	jr DSP_TableWalk_Return
 
-LABEL_03CF77:
+DSP_TableWalk_FoundInRange:
 	lds bc, 0
-	jr LABEL_03CF9D
+	jr DSP_TableWalk_Return
 
-LABEL_03CF7B:
+DSP_TableWalk_SkipEntry:
 	ld xhl, xix
 
-LABEL_03CF7D:
+DSP_TableWalk_ReadHeader:
 	ld a, (xhl + 1)
 	ldfr_berp A, 0xF0
 	extz ix
@@ -51988,21 +51988,21 @@ LABEL_03CF7D:
 	ld wa, iy
 	srl wa, 8
 	cp wa, 0xF0
-	jr nz, LABEL_03CF57
+	jr nz, DSP_TableWalk_CheckEntry
 	lds bc, 3
 
-LABEL_03CF9D:
+DSP_TableWalk_Return:
 	ld xwa, (xsp + 4)
 	ld (xwa), bc
 	retd 0x4
 
-LABEL_03CFA5:
+DSP_TableWalk_SearchWithState:
 	ld xhl, xde
-	jr LABEL_03CFC6
+	jr DSP_TableWalk_State_ReadHeader
 
-LABEL_03CFA9:
+DSP_TableWalk_State_CheckEntry:
 	cps bc, 0
-	jr nz, LABEL_03CFBE
+	jr nz, DSP_TableWalk_State_Advance
 	lds ix, 0
 	ld xde, (xsp + 4)
 	ld bc, iy
@@ -52010,15 +52010,15 @@ LABEL_03CFA9:
 	add xbc, xwa
 	ld (xde), xbc
 	inc 2, xwa
-	jr LABEL_03CFE6
+	jr DSP_TableWalk_State_Return
 
-LABEL_03CFBE:
+DSP_TableWalk_State_Advance:
 	ld de, iy
 	extz xde
 	add xwa, xde
 	dec 1, bc
 
-LABEL_03CFC6:
+DSP_TableWalk_State_ReadHeader:
 	ld e, (xwa + 1)
 	ldfr_berp E, 0xF0
 	extz ix
@@ -52030,15 +52030,15 @@ LABEL_03CFC6:
 	ld de, iy
 	srl de, 8
 	cp de, 0xF0
-	jr nz, LABEL_03CFA9
+	jr nz, DSP_TableWalk_State_CheckEntry
 	lds ix, 2
 
-LABEL_03CFE6:
+DSP_TableWalk_State_Return:
 	ld (xhl), ix
 	ld xhl, xwa
 	retd 0x4
 
-LABEL_03CFED:
+DSP_NopReturn:
 	ret
 
 
