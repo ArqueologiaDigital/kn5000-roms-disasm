@@ -63,17 +63,17 @@ MdCmptCnctFunc:
 	cp xde, 0x1E00042
 	jr z, CmptCnctDrawConnectionDiagram
 	lds32 xhl, 0
-	jrl LABEL_F74C1B
+	jrl MdCmptCnct_Epilogue
 
 CmptCnctDrawConnectionDiagram:
 	ld bc, (xhl + 4)
 	ld xwa, (xhl + 8)
 	cps bc, 2
-	jr z, LABEL_F74BD2
+	jr z, CmptCnct_DrawDiagram2
 	cps bc, 1
-	jr z, LABEL_F74BB5
+	jr z, CmptCnct_DrawDiagram1
 	cps bc, 0
-	jr nz, LABEL_F74BEF
+	jr nz, CmptCnct_DrawDiagramDefault
 	pushw 0xE7
 	pushw 0xF848
 	push xwa
@@ -85,7 +85,7 @@ CmptCnctDrawConnectionDiagram:
 	ldw de, 0x128
 	jr CmptCnctBitmapDrawComplete
 
-LABEL_F74BB5:
+CmptCnct_DrawDiagram1:
 	pushw 0xE7
 	pushw 0xF862
 	push xwa
@@ -97,7 +97,7 @@ LABEL_F74BB5:
 	ldw de, 0x128
 	jr CmptCnctBitmapDrawComplete
 
-LABEL_F74BD2:
+CmptCnct_DrawDiagram2:
 	pushw 0xE7
 	pushw 0xF87C
 	push xwa
@@ -109,7 +109,7 @@ LABEL_F74BD2:
 	ldw de, 0x128
 	jr CmptCnctBitmapDrawComplete
 
-LABEL_F74BEF:
+CmptCnct_DrawDiagramDefault:
 	pushw 0xE7
 	pushw 0xF896
 	push xwa
@@ -123,16 +123,16 @@ LABEL_F74BEF:
 CmptCnctBitmapDrawComplete:
 	call 0xFAC3DB
 	ld xhl, xiz
-	jr LABEL_F74C1B
+	jr MdCmptCnct_Epilogue
 
 CmptCnctInvalidInputReturn:
 	ld xhl, 0x2C00
-	jr LABEL_F74C1B
+	jr MdCmptCnct_Epilogue
 
 CmptCnctBlockingReturn:
 	lds32 xhl, 1
 
-LABEL_F74C1B:
+MdCmptCnct_Epilogue:
 	pop xiz
 	inc 4, xsp
 	ret
@@ -141,64 +141,64 @@ MdPcgModeFunc:
 	push xiz
 	ld xiz, xwa
 	cp xbc, 0x1E0003F
-	jr z, LABEL_F74C94
+	jr z, PcgMode_BlockingReturn
 	cp xbc, 0x1E0003E
-	jr z, LABEL_F74C94
+	jr z, PcgMode_BlockingReturn
 	cp xbc, 0x1E00041
-	jr z, LABEL_F74C94
+	jr z, PcgMode_BlockingReturn
 	cp xbc, 0x1E00040
-	jr z, LABEL_F74C8D
+	jr z, PcgMode_InvalidReturn
 	cp xbc, 0x1E00042
 	jr z, PcgModeGridEventStart
 	lds32 xhl, 0
-	jr LABEL_F74C96
+	jr MdPcgMode_Epilogue
 
 PcgModeGridEventStart:
 	ld xwa, xde
 	ld de, (xwa + 4)
 	inc 8, xwa
 	cps de, 3
-	jr z, LABEL_F74C71
+	jr z, PcgMode_CopyStrCustom
 	ld xbc, (xwa)
 	cps de, 1
 	jr z, PcgModeDisplayString_Bank1
 	cps de, 0
 	jr nz, PcgModeDefaultCase
 	ld xwa, 0xE7F8B0
-	jr LABEL_F74C81
+	jr PcgMode_CopyStrEntry
 
 PcgModeDisplayString_Bank1:
 	ld xwa, 0xE7F8BA
-	jr LABEL_F74C81
+	jr PcgMode_CopyStrEntry
 
-LABEL_F74C71:
+PcgMode_CopyStrCustom:
 	pushw 0xE7
 	pushw 0xF8C4
 	ld xwa, (xwa)
 	push xwa
-	jr LABEL_F74C83
+	jr PcgMode_CallStrcpy
 
 PcgModeDefaultCase:
 	ld xwa, 0xE7F8CE
 
-LABEL_F74C81:
+PcgMode_CopyStrEntry:
 	push xwa
 	push xbc
 
-LABEL_F74C83:
+PcgMode_CallStrcpy:
 	call Strcpy
 	inc 8, xsp
 	ld xhl, xiz
-	jr LABEL_F74C96
+	jr MdPcgMode_Epilogue
 
-LABEL_F74C8D:
+PcgMode_InvalidReturn:
 	ld xhl, 0x2201
-	jr LABEL_F74C96
+	jr MdPcgMode_Epilogue
 
-LABEL_F74C94:
+PcgMode_BlockingReturn:
 	lds32 xhl, 1
 
-LABEL_F74C96:
+MdPcgMode_Epilogue:
 	pop xiz
 	ret
 
@@ -206,64 +206,64 @@ MdDrumTypeFunc:
 	push xiz
 	ld xiz, xwa
 	cp xbc, 0x1E0003F
-	jr z, LABEL_F74D0D
+	jr z, DrumType_BlockingReturn
 	cp xbc, 0x1E0003E
-	jr z, LABEL_F74D0D
+	jr z, DrumType_BlockingReturn
 	cp xbc, 0x1E00041
-	jr z, LABEL_F74D0D
+	jr z, DrumType_BlockingReturn
 	cp xbc, 0x1E00040
-	jr z, LABEL_F74D06
+	jr z, DrumType_InvalidReturn
 	cp xbc, 0x1E00042
-	jr z, LABEL_F74CC7
+	jr z, DrumType_GridEvent
 	lds32 xhl, 0
-	jr LABEL_F74D0F
+	jr MdDrumType_Epilogue
 
-LABEL_F74CC7:
+DrumType_GridEvent:
 	ld xwa, xde
 	ld de, (xwa + 4)
 	inc 8, xwa
 	cps de, 3
-	jr z, LABEL_F74CEA
+	jr z, DrumType_CopyStrCustom
 	ld xbc, (xwa)
 	cps de, 1
-	jr z, LABEL_F74CE3
+	jr z, DrumType_CopyStrBank1
 	cps de, 0
-	jr nz, LABEL_F74CF5
+	jr nz, DrumType_CopyStrDefault
 	ld xwa, 0xE7F8D8
-	jr LABEL_F74CFA
+	jr DrumType_CopyStrEntry
 
-LABEL_F74CE3:
+DrumType_CopyStrBank1:
 	ld xwa, 0xE7F8E2
-	jr LABEL_F74CFA
+	jr DrumType_CopyStrEntry
 
-LABEL_F74CEA:
+DrumType_CopyStrCustom:
 	pushw 0xE7
 	pushw 0xF8EC
 	ld xwa, (xwa)
 	push xwa
-	jr LABEL_F74CFC
+	jr DrumType_CallStrcpy
 
-LABEL_F74CF5:
+DrumType_CopyStrDefault:
 	ld xwa, 0xE7F8F6
 
-LABEL_F74CFA:
+DrumType_CopyStrEntry:
 	push xwa
 	push xbc
 
-LABEL_F74CFC:
+DrumType_CallStrcpy:
 	call Strcpy
 	inc 8, xsp
 	ld xhl, xiz
-	jr LABEL_F74D0F
+	jr MdDrumType_Epilogue
 
-LABEL_F74D06:
+DrumType_InvalidReturn:
 	ld xhl, 0x2205
-	jr LABEL_F74D0F
+	jr MdDrumType_Epilogue
 
-LABEL_F74D0D:
+DrumType_BlockingReturn:
 	lds32 xhl, 1
 
-LABEL_F74D0F:
+MdDrumType_Epilogue:
 	pop xiz
 	ret
 
@@ -296,12 +296,12 @@ SetupLoadOptionJumpTable:
 
 SetupLoadInvalidIndex:
 	lds32 xhl, 0
-	jr LABEL_F74D87
+	jr MdSetupLoad_Epilogue
 	lda_24 xhl, 0x00ffc0
-	jr LABEL_F74D87
+	jr MdSetupLoad_Epilogue
 	lds32 xhl, 1
 
-LABEL_F74D87:
+MdSetupLoad_Epilogue:
 	pop xiz
 	lda xsp, (xsp + 16)
 	ret

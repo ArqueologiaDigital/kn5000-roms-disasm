@@ -13,15 +13,15 @@
 
 TtMdPcgOut:
 	cp xbc, 0x1C0000C
-	jr z, LABEL_F773D7
+	jr z, TtMdPcgOut_Exit
 	cp xbc, 0x1C0000B
-	jr z, LABEL_F773D7
+	jr z, TtMdPcgOut_Exit
 	cp xbc, 0x1C00002
-	jr z, LABEL_F773D7
+	jr z, TtMdPcgOut_Exit
 	cp xbc, 0x1C00001
-	jr nz, LABEL_F773D7
+	jr nz, TtMdPcgOut_Exit
 	or xde, xde
-	jr nz, LABEL_F773D7
+	jr nz, TtMdPcgOut_Exit
 	ld xwa, 0x590001
 	call 0xFA6266
 	ld xwa, (xhl + 42)
@@ -29,7 +29,7 @@ TtMdPcgOut:
 	ld xwa, (xhl + 46)
 	ldw (xwa), 0x1
 
-LABEL_F773D7:
+TtMdPcgOut_Exit:
 	lds32 xhl, 0
 	ret
 
@@ -41,19 +41,19 @@ AcPcgOutGridBoxProc:
 	ld xiz, xwa
 	ld xbc, (xsp + 16)
 	cp xbc, 0x1E0008D
-	jrl z, LABEL_F7762B
+	jrl z, PcgOutGrid_DispatchDelegate
 	ld xwa, (xsp + 16)
 	cp xwa, 0x1E0008B
-	jrl z, LABEL_F775FE
+	jrl z, PcgOutGrid_CopyStrBank1
 	cp xwa, 0x1E0008A
-	jrl z, LABEL_F775F5
+	jrl z, PcgOutGrid_CopyStrBank0
 	cp xwa, 0x1C00001
 	jr z, PcgOutGridBoxEventDispatch
 	sub xbc, 0x1C00017
 	cp xbc, 0x0
-	jrl lt, LABEL_F77642
+	jrl lt, PcgOutGrid_DefaultHandler
 	cp xbc, 0x6
-	jrl gt, LABEL_F77642
+	jrl gt, PcgOutGrid_DefaultHandler
 	add xbc, xbc
 	add xbc, 0xE7FF20
 	ld bc, (xbc)
@@ -106,7 +106,7 @@ PcgOutGridBoxEventDispatch:
 	ld xde, (xsp + 12)
 	call 0xFA9660
 	or xhl, xhl
-	jr z, LABEL_F774F6
+	jr z, PcgOutGrid_CheckAltPrev
 	ld xwa, xiz
 	ld xbc, 0x1E0008F
 	lds32 xde, 0
@@ -122,15 +122,15 @@ PcgOutGridBoxEventDispatch:
 	ld xbc, (xsp + 16)
 	ld xde, (xsp + 12)
 	call 0xF9A5BD
-	jrl LABEL_F7763E
+	jrl PcgOutGrid_ReturnZero
 
-LABEL_F774F6:
+PcgOutGrid_CheckAltPrev:
 	ld xwa, xiz
 	ld xbc, 0x1E00091
 	ld xde, (xsp + 12)
 	call 0xFA9660
 	or xhl, xhl
-	jrl z, LABEL_F7763E
+	jrl z, PcgOutGrid_ReturnZero
 	ld xwa, xiz
 	call 0xFA6266
 	ld xwa, (xhl + 70)
@@ -160,13 +160,13 @@ LABEL_F774F6:
 	ld xde, (xsp + 12)
 	call 0xFA9660
 	or xhl, xhl
-	jr z, LABEL_F7759F
+	jr z, PcgOutGrid_CheckAltNext
 	ld xwa, xiz
 	ld xbc, 0x1E0008F
 	lds32 xde, 0
 	call 0xFA9660
 	cps hl, 3
-	jrl ge, LABEL_F7763E
+	jrl ge, PcgOutGrid_ReturnZero
 	inc 1, hl
 	extz xhl
 	add xhl, 0xFFFF0000
@@ -178,15 +178,15 @@ LABEL_F774F6:
 	ld xbc, (xsp + 16)
 	ld xde, (xsp + 12)
 	call 0xF9A5BD
-	jrl LABEL_F7763E
+	jrl PcgOutGrid_ReturnZero
 
-LABEL_F7759F:
+PcgOutGrid_CheckAltNext:
 	ld xwa, xiz
 	ld xbc, 0x1E00091
 	ld xde, (xsp + 12)
 	call 0xFA9660
 	or xhl, xhl
-	jrl z, LABEL_F7763E
+	jrl z, PcgOutGrid_ReturnZero
 	ld xwa, xiz
 	call 0xFA6266
 	ld xwa, (xhl + 70)
@@ -209,18 +209,18 @@ LABEL_F7759F:
 
 PcgOutGridDialConfirm:
 	call 0xF9A53B
-	jr LABEL_F7763E
+	jr PcgOutGrid_ReturnZero
 
-LABEL_F775F5:
+PcgOutGrid_CopyStrBank0:
 	ld xwa, xiz
 	ld xiz, 0x3E
-	jr LABEL_F77605
+	jr PcgOutGrid_CopyStrCommon
 
-LABEL_F775FE:
+PcgOutGrid_CopyStrBank1:
 	ld xwa, xiz
 	ld xiz, 0x42
 
-LABEL_F77605:
+PcgOutGrid_CopyStrCommon:
 	call 0xFA6266
 	add xhl, xiz
 	ld xwa, (xhl)
@@ -229,35 +229,35 @@ LABEL_F77605:
 	push xwa
 	call Strcpy
 	inc 8, xsp
-	jr LABEL_F7763E
+	jr PcgOutGrid_ReturnZero
 	ld xwa, xiz
 	call 0xFA6266
 	ld xwa, (xhl + 70)
 	ld xbc, (xsp + 16)
 	ld xde, (xsp + 12)
-	jr LABEL_F7763A
+	jr PcgOutGrid_CallDelegate
 
-LABEL_F7762B:
+PcgOutGrid_DispatchDelegate:
 	ld xwa, xiz
 	call 0xFA6266
 	ld xwa, (xhl + 70)
 	ld xbc, (xsp + 16)
 	ld xde, (xsp + 12)
 
-LABEL_F7763A:
+PcgOutGrid_CallDelegate:
 	call 0xFA49B7
 
-LABEL_F7763E:
+PcgOutGrid_ReturnZero:
 	lds32 xhl, 0
-	jr LABEL_F7764E
+	jr PcgOutGrid_Epilogue
 
-LABEL_F77642:
+PcgOutGrid_DefaultHandler:
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
 	ld xde, (xsp + 12)
 	call 0xFA4409
 
-LABEL_F7764E:
+PcgOutGrid_Epilogue:
 	pop xiz
 	lda xsp, (xsp + 16)
 	ret
@@ -460,11 +460,11 @@ PcgOutCheckGridDataStructure:
 	jrl nz, PcgOutGridCheckComplete
 	ld de, (xwa)
 	cps de, 3
-	jrl z, LABEL_F77C77
+	jrl z, PcgOutCheck_SendPreset3
 	cps de, 2
-	jr z, LABEL_F77BC7
+	jr z, PcgOutCheck_SendPreset2
 	cps de, 1
-	jr z, LABEL_F77B9E
+	jr z, PcgOutCheck_SendPreset1
 	cps de, 0
 	jrl nz, PcgOutGridCheckComplete
 	ld8_24 a, 0x02476a
@@ -480,9 +480,9 @@ PcgOutCheckGridDataStructure:
 	ld xwa, xhl
 	lda xde, (xsp + 4)
 	ld xbc, 0x1E0008C
-	jrl LABEL_F77D7F
+	jrl PcgOutCheck_SetFinalProp
 
-LABEL_F77B9E:
+PcgOutCheck_SendPreset1:
 	ld8_24 a, 0x02476c
 	inc 1, a
 	extz wa
@@ -496,11 +496,11 @@ LABEL_F77B9E:
 	ld xwa, xhl
 	lda xde, (xsp + 4)
 	ld xbc, 0x1E0008C
-	jrl LABEL_F77D7F
+	jrl PcgOutCheck_SetFinalProp
 
-LABEL_F77BC7:
+PcgOutCheck_SendPreset2:
 	cpi8_24 0x024770, 0xff
-	jr nz, LABEL_F77C14
+	jr nz, PcgOutCheck_SendPreset2Named
 	pushw 0xE7
 	pushw 0xFFAA
 	push xbc
@@ -522,9 +522,9 @@ LABEL_F77BC7:
 	ld xwa, xhl
 	lda xde, (xsp + 4)
 	ld xbc, 0x1E0008C
-	jrl LABEL_F77D7F
+	jrl PcgOutCheck_SetFinalProp
 
-LABEL_F77C14:
+PcgOutCheck_SendPreset2Named:
 	ld8_24 a, 0x02476e
 	exts wa
 	pushw wa
@@ -556,12 +556,12 @@ LABEL_F77C14:
 	ld xwa, xhl
 	lda xde, (xsp + 4)
 	ld xbc, 0x1E0008C
-	jrl LABEL_F77D7F
+	jrl PcgOutCheck_SetFinalProp
 
-LABEL_F77C77:
+PcgOutCheck_SendPreset3:
 	ldw (xwa), 0x2
 	cpi8_24 0x024770, 0xff
-	jr nz, LABEL_F77CEF
+	jr nz, PcgOutCheck_SendPreset3Named
 	pushw 0xE7
 	pushw 0xFFC6
 	push xbc
@@ -595,9 +595,9 @@ LABEL_F77C77:
 	ld xwa, xhl
 	lda xde, (xsp + 4)
 	ld xbc, 0x1E0008C
-	jrl LABEL_F77D7F
+	jrl PcgOutCheck_SetFinalProp
 
-LABEL_F77CEF:
+PcgOutCheck_SendPreset3Named:
 	ld8_24 a, 0x02476e
 	exts wa
 	pushw wa
@@ -645,7 +645,7 @@ LABEL_F77CEF:
 	lda xde, (xsp + 4)
 	ld xbc, 0x1E0008C
 
-LABEL_F77D7F:
+PcgOutCheck_SetFinalProp:
 	call 0xFA9660
 
 PcgOutGridCheckComplete:
@@ -656,7 +656,7 @@ PcgOutGridCheckComplete:
 
 PcgOutSendFunc:
 	cp xbc, 0x1C00008
-	jr nz, LABEL_F77DD7
+	jr nz, PcgOutSendFunc_Exit
 	lda_24 xde, 0x024752
 	ld8_24 a, 0x02476a
 	ld (xde), a
@@ -665,11 +665,11 @@ PcgOutSendFunc:
 	lda xbc, (xde + 2)
 	ld8_24 l, 0x024770
 	cp l, 0xFF
-	jr nz, LABEL_F77DB9
+	jr nz, PcgOutSend_StoreBankIndex
 	ldw (xbc), 0xFFFF
-	jr LABEL_F77DC9
+	jr PcgOutSend_TransmitMidi
 
-LABEL_F77DB9:
+PcgOutSend_StoreBankIndex:
 	exts hl
 	ld8_24 a, 0x02476e
 	exts wa
@@ -677,18 +677,18 @@ LABEL_F77DB9:
 	add wa, hl
 	ld (xbc), wa
 
-LABEL_F77DC9:
+PcgOutSend_TransmitMidi:
 	ld xwa, 0x1430000
 	ld xbc, 0x1E30000
 	call 0xFA4A63
 
-LABEL_F77DD7:
+PcgOutSendFunc_Exit:
 	lds32 xhl, 0
 	ret
 
 MainPcgOutSend:
 	cp xbc, 0x1E30000
-	jr nz, LABEL_F77DF2
+	jr nz, MainPcgOutSend_Exit
 	ld a, (xde)
 	extz wa
 	ld c, (xde + 1)
@@ -696,7 +696,7 @@ MainPcgOutSend:
 	ld de, (xde + 2)
 	call LABEL_FDB904
 
-LABEL_F77DF2:
+MainPcgOutSend_Exit:
 	lds32 xhl, 0
 	ret
 
