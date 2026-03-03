@@ -15,32 +15,32 @@
 
 LoadTtlJgFunc:
 	cp xbc, 0x1C00007
-	jr nz, LABEL_F8B808
+	jr nz, LoadTtl_Return
 	ldw wa, 0x61
 	ldw bc, 0x64
 	calr LABEL_F8B36E
 
-LABEL_F8B808:
+LoadTtl_Return:
 	lds32 xhl, 0
 	ret
 
 SaveTtlJgFunc:
 	cp xbc, 0x1C00007
-	jr nz, LABEL_F8B819
+	jr nz, SaveTtl_Return
 	ldw wa, 0x67
 	calr LABEL_F8B435
 
-LABEL_F8B819:
+SaveTtl_Return:
 	lds32 xhl, 0
 	ret
 
 SaveSmfTtlJgFunc:
 	cp xbc, 0x1C00007
-	jr nz, LABEL_F8B82A
+	jr nz, SaveSmfTtl_Return
 	ldw wa, 0x6B
 	calr LABEL_F8B435
 
-LABEL_F8B82A:
+SaveSmfTtl_Return:
 	lds32 xhl, 0
 	ret
 
@@ -52,19 +52,19 @@ DirectPlayTtlJgFunc:
 
 SongMedleyTtlJgFunc:
 	cp xbc, 0x1C00007
-	jr nz, LABEL_F8B849
+	jr nz, SongMedleyTtl_Return
 	ldw wa, 0x77
 	calr LABEL_F8B435
 
-LABEL_F8B849:
+SongMedleyTtl_Return:
 	lds32 xhl, 0
 	ret
 
 SetupFlashFunc:
 	cp xbc, 0x1E5000C
-	jr z, LABEL_F8B87C
+	jr z, SetupFlash_HandleLoadEvent
 	cp xbc, 0x1E5000B
-	jr nz, LABEL_F8B882
+	jr nz, SetupFlash_Return
 	stdi8 32578, 37
 	ldw wa, 0xEE
 	call LABEL_F994BD
@@ -73,23 +73,23 @@ SetupFlashFunc:
 	stdi8 32578, 35
 	ldw wa, 0xEE
 	call LABEL_F994BD
-	jr LABEL_F8B882
+	jr SetupFlash_Return
 
-LABEL_F8B87C:
+SetupFlash_HandleLoadEvent:
 	lds wa, 6
 	call LABEL_FC5625
 
-LABEL_F8B882:
+SetupFlash_Return:
 	lds32 xhl, 0
 	ret
 
 FmmUtilityTitleFunc:
 	cp xbc, 0x1C00013
-	jrl nz, LABEL_F8BA11
+	jrl nz, FmmUtility_Return
 	cp xde, 0x3
-	jrl z, LABEL_F8BA0E
+	jrl z, FmmUtility_HandleAbort
 	cp xde, 0x2
-	jrl nz, LABEL_F8BA11
+	jrl nz, FmmUtility_Return
 	stdi8 34046, 0
 	lds wa, 1
 	calr InitializeOperationState
@@ -99,50 +99,50 @@ FmmUtilityTitleFunc:
 	call 0xFA9E07
 	ldmm8 32604, 36151
 	cpdi16 34048, 0
-	jr ge, LABEL_F8B8D5
+	jr ge, FmmUtility_DispatchState
 	call 0xF89520
 	extz hl
 	stda16 34048, xhl
 	calr SignalProgressUpdate
 
-LABEL_F8B8D5:
+FmmUtility_DispatchState:
 	ldda16 xwa, 34048
 	cps wa, 1
-	jrl z, LABEL_F8B9A1
+	jrl z, FmmUtility_HandleSuccess
 	cps wa, 0
-	jrl z, LABEL_F8B988
+	jrl z, FmmUtility_HandleError
 	cps wa, 5
-	jr z, LABEL_F8B944
+	jr z, FmmUtility_HandleCancel
 	cpdi16 34050, 0
-	jr ge, LABEL_F8B902
+	jr ge, FmmUtility_ScanFormat
 	call 0xF8987D
 	stda16 34050, xhl
 	call LABEL_F8958D
 	call 0xF8953B
 	calr SignalProgressUpdate
 
-LABEL_F8B902:
+FmmUtility_ScanFormat:
 	cpdi16 34050, 0
-	jrl nz, LABEL_F8B9EC
+	jrl nz, FmmUtility_ContinueWait
 	cpdi16 34052, 0
-	jr ge, LABEL_F8B91E
+	jr ge, FmmUtility_CheckCapacity
 	call 0xF89C78
 	stda16 34052, xhl
 	calr SignalProgressUpdate
 
-LABEL_F8B91E:
+FmmUtility_CheckCapacity:
 	cpdi16 34052, 0
-	jrl le, LABEL_F8B9EC
+	jrl le, FmmUtility_ContinueWait
 	cpdi8 32604, 124
-	jrl z, LABEL_F8B9EC
+	jrl z, FmmUtility_ContinueWait
 	ld xwa, 0x7B0013
 	ld xbc, 0x1E50006
 	lds32 xde, 0
 	call 0xFA9E07
 	ldw wa, 0x7C
-	jr LABEL_F8B99B
+	jr FmmUtility_CallHandler
 
-LABEL_F8B944:
+FmmUtility_HandleCancel:
 	ld xwa, 0x7B0013
 	ld xbc, 0x1E50006
 	lds32 xde, 0
@@ -160,20 +160,20 @@ LABEL_F8B944:
 	call 0xFA9D58
 	stdi8 32578, 0
 	ldw wa, 0xEE
-	jr LABEL_F8B9E6
+	jr FmmUtility_ShowStatus
 
-LABEL_F8B988:
+FmmUtility_HandleError:
 	ld xwa, 0x7B0013
 	ld xbc, 0x1E50006
 	lds32 xde, 0
 	call 0xFA9E07
 	ldw wa, 0x7D
 
-LABEL_F8B99B:
+FmmUtility_CallHandler:
 	call 0xF99490
-	jr LABEL_F8BA11
+	jr FmmUtility_Return
 
-LABEL_F8B9A1:
+FmmUtility_HandleSuccess:
 	calr ResetProgressIndication
 	ld xwa, 0x7B0013
 	ld xbc, 0x1E50006
@@ -193,11 +193,11 @@ LABEL_F8B9A1:
 	stdi8 32578, 2
 	ldw wa, 0xEE
 
-LABEL_F8B9E6:
+FmmUtility_ShowStatus:
 	call LABEL_F994BD
-	jr LABEL_F8BA11
+	jr FmmUtility_Return
 
-LABEL_F8B9EC:
+FmmUtility_ContinueWait:
 	ld xwa, 0x7B0013
 	ld xbc, 0x1E50006
 	lds32 xde, 0
@@ -206,22 +206,22 @@ LABEL_F8B9EC:
 	ld xbc, 0x1C0000A
 	lds32 xde, 0
 	call 0xFA9D58
-	jr LABEL_F8BA11
+	jr FmmUtility_Return
 
-LABEL_F8BA0E:
+FmmUtility_HandleAbort:
 	calr CancelOperationCleanup
 
-LABEL_F8BA11:
+FmmUtility_Return:
 	lds32 xhl, 0
 	ret
 
 FmmSmfUtilityTitleFunc:
 	cp xbc, 0x1C00013
-	jrl nz, LABEL_F8BBA0
+	jrl nz, FmmSmfUtility_Return
 	cp xde, 0x3
-	jrl z, LABEL_F8BB9D
+	jrl z, FmmSmfUtility_HandleAbort
 	cp xde, 0x2
-	jrl nz, LABEL_F8BBA0
+	jrl nz, FmmSmfUtility_Return
 	stdi8 34046, 0
 	lds wa, 1
 	calr InitializeOperationState
@@ -231,50 +231,50 @@ FmmSmfUtilityTitleFunc:
 	call 0xFA9E07
 	ldmm8 32606, 36151
 	cpdi16 34048, 0
-	jr ge, LABEL_F8BA64
+	jr ge, FmmSmfUtility_DispatchState
 	call 0xF89520
 	extz hl
 	stda16 34048, xhl
 	calr SignalProgressUpdate
 
-LABEL_F8BA64:
+FmmSmfUtility_DispatchState:
 	ldda16 xwa, 34048
 	cps wa, 1
-	jrl z, LABEL_F8BB30
+	jrl z, FmmSmfUtility_HandleSuccess
 	cps wa, 0
-	jrl z, LABEL_F8BB17
+	jrl z, FmmSmfUtility_HandleError
 	cps wa, 5
-	jr z, LABEL_F8BAD3
+	jr z, FmmSmfUtility_HandleCancel
 	cpdi16 34052, 0
-	jr ge, LABEL_F8BA91
+	jr ge, FmmSmfUtility_ScanFormat
 	call 0xF89C78
 	stda16 34052, xhl
 	call LABEL_F8958D
 	call 0xF8953B
 	calr SignalProgressUpdate
 
-LABEL_F8BA91:
+FmmSmfUtility_ScanFormat:
 	cpdi16 34052, 0
-	jrl nz, LABEL_F8BB7B
+	jrl nz, FmmSmfUtility_ContinueWait
 	cpdi16 34050, 0
-	jr ge, LABEL_F8BAAD
+	jr ge, FmmSmfUtility_CheckCapacity
 	call 0xF8987D
 	stda16 34050, xhl
 	calr SignalProgressUpdate
 
-LABEL_F8BAAD:
+FmmSmfUtility_CheckCapacity:
 	cpdi16 34050, 0
-	jrl le, LABEL_F8BB7B
+	jrl le, FmmSmfUtility_ContinueWait
 	cpdi8 32606, 123
-	jrl z, LABEL_F8BB7B
+	jrl z, FmmSmfUtility_ContinueWait
 	ld xwa, 0x7B002A
 	ld xbc, 0x1E50006
 	lds32 xde, 0
 	call 0xFA9E07
 	ldw wa, 0x7B
-	jr LABEL_F8BB2A
+	jr FmmSmfUtility_CallHandler
 
-LABEL_F8BAD3:
+FmmSmfUtility_HandleCancel:
 	ld xwa, 0x7B002A
 	ld xbc, 0x1E50006
 	lds32 xde, 0
@@ -292,20 +292,20 @@ LABEL_F8BAD3:
 	call 0xFA9D58
 	stdi8 32578, 0
 	ldw wa, 0xEE
-	jr LABEL_F8BB75
+	jr FmmSmfUtility_ShowStatus
 
-LABEL_F8BB17:
+FmmSmfUtility_HandleError:
 	ld xwa, 0x7B002A
 	ld xbc, 0x1E50006
 	lds32 xde, 0
 	call 0xFA9E07
 	ldw wa, 0x7D
 
-LABEL_F8BB2A:
+FmmSmfUtility_CallHandler:
 	call 0xF99490
-	jr LABEL_F8BBA0
+	jr FmmSmfUtility_Return
 
-LABEL_F8BB30:
+FmmSmfUtility_HandleSuccess:
 	calr ResetProgressIndication
 	ld xwa, 0x7B002A
 	ld xbc, 0x1E50006
@@ -325,11 +325,11 @@ LABEL_F8BB30:
 	stdi8 32578, 2
 	ldw wa, 0xEE
 
-LABEL_F8BB75:
+FmmSmfUtility_ShowStatus:
 	call LABEL_F994BD
-	jr LABEL_F8BBA0
+	jr FmmSmfUtility_Return
 
-LABEL_F8BB7B:
+FmmSmfUtility_ContinueWait:
 	ld xwa, 0x7B002A
 	ld xbc, 0x1E50006
 	lds32 xde, 0
@@ -338,12 +338,12 @@ LABEL_F8BB7B:
 	ld xbc, 0x1C0000A
 	lds32 xde, 0
 	call 0xFA9D58
-	jr LABEL_F8BBA0
+	jr FmmSmfUtility_Return
 
-LABEL_F8BB9D:
+FmmSmfUtility_HandleAbort:
 	calr CancelOperationCleanup
 
-LABEL_F8BBA0:
+FmmSmfUtility_Return:
 	lds32 xhl, 0
 	ret
 
