@@ -16,13 +16,13 @@
 
 FmmSmfLoadTitleFunc:
 	cp xbc, 0x1C00007
-	jrl z, LABEL_F8DCE2
+	jrl z, SmfLoad_HandleOk
 	cp xbc, 0x1C00013
-	jrl nz, LABEL_F8DCFD
+	jrl nz, SmfLoad_Return
 	cp xde, 0x3
-	jrl z, LABEL_F8DCDD
+	jrl z, SmfLoad_CancelCleanup
 	cp xde, 0x2
-	jrl nz, LABEL_F8DCFD
+	jrl nz, SmfLoad_Return
 	stdi8 34046, 0
 	lds wa, 1
 	calr InitializeOperationState
@@ -32,50 +32,50 @@ FmmSmfLoadTitleFunc:
 	call 0xFA9D58
 	ldmm8 32906, 36151
 	cpdi16 34048, 0
-	jr ge, LABEL_F8DBA6
+	jr ge, SmfLoad_DispatchState
 	call 0xF89520
 	extz hl
 	stda16 34048, xhl
 	calr SignalProgressUpdate
 
-LABEL_F8DBA6:
+SmfLoad_DispatchState:
 	ldda16 xwa, 34048
 	cps wa, 1
-	jrl z, LABEL_F8DC70
+	jrl z, SmfLoad_Success
 	cps wa, 0
-	jrl z, LABEL_F8DC5A
+	jrl z, SmfLoad_ErrorCancel
 	cps wa, 5
-	jr z, LABEL_F8DC16
+	jr z, SmfLoad_AbortPartial
 	cpdi16 34052, 0
-	jr ge, LABEL_F8DBD3
+	jr ge, SmfLoad_CheckFileCount
 	call 0xF89C78
 	stda16 34052, xhl
 	call LABEL_F8958D
 	call 0xF8953B
 	calr SignalProgressUpdate
 
-LABEL_F8DBD3:
+SmfLoad_CheckFileCount:
 	cpdi16 34052, 0
-	jrl nz, LABEL_F8DCBB
+	jrl nz, SmfLoad_SendWait
 	cpdi16 34050, 0
-	jr ge, LABEL_F8DBEF
+	jr ge, SmfLoad_CheckSlotCount
 	call 0xF8987D
 	stda16 34050, xhl
 	calr SignalProgressUpdate
 
-LABEL_F8DBEF:
+SmfLoad_CheckSlotCount:
 	cpdi16 34050, 0
-	jrl le, LABEL_F8DCBB
+	jrl le, SmfLoad_SendWait
 	cpdi8 32906, 97
-	jrl z, LABEL_F8DCBB
+	jrl z, SmfLoad_SendWait
 	ld xwa, 0x600026
 	ld xbc, 0x1C00002
 	lds32 xde, 0
 	call 0xFA9D58
 	ldw wa, 0x61
-	jrl LABEL_F8DCF9
+	jrl SmfLoad_CallHandler
 
-LABEL_F8DC16:
+SmfLoad_AbortPartial:
 	ld xwa, 0x600026
 	ld xbc, 0x1C00002
 	lds32 xde, 0
@@ -93,17 +93,17 @@ LABEL_F8DC16:
 	call 0xFA9D58
 	stdi8 32578, 0
 	ldw wa, 0xEE
-	jr LABEL_F8DCB5
+	jr SmfLoad_CallStatusDisplay
 
-LABEL_F8DC5A:
+SmfLoad_ErrorCancel:
 	ld xwa, 0x600026
 	ld xbc, 0x1C00002
 	lds32 xde, 0
 	call 0xFA9D58
 	ldw wa, 0x7D
-	jrl LABEL_F8DCF9
+	jrl SmfLoad_CallHandler
 
-LABEL_F8DC70:
+SmfLoad_Success:
 	calr ResetProgressIndication
 	ld xwa, 0x600026
 	ld xbc, 0x1C00002
@@ -123,11 +123,11 @@ LABEL_F8DC70:
 	stdi8 32578, 2
 	ldw wa, 0xEE
 
-LABEL_F8DCB5:
+SmfLoad_CallStatusDisplay:
 	call LABEL_F994BD
-	jr LABEL_F8DCFD
+	jr SmfLoad_Return
 
-LABEL_F8DCBB:
+SmfLoad_SendWait:
 	ld xwa, 0x600026
 	ld xbc, 0x1C00002
 	lds32 xde, 0
@@ -136,37 +136,37 @@ LABEL_F8DCBB:
 	ld xbc, 0x1C0000A
 	lds32 xde, 0
 	call 0xFA9D58
-	jr LABEL_F8DCFD
+	jr SmfLoad_Return
 
-LABEL_F8DCDD:
+SmfLoad_CancelCleanup:
 	calr CancelOperationCleanup
-	jr LABEL_F8DCFD
+	jr SmfLoad_Return
 
-LABEL_F8DCE2:
+SmfLoad_HandleOk:
 	cp xde, 0xF
-	jr nz, LABEL_F8DCFD
+	jr nz, SmfLoad_Return
 	cpdi8 36148, 7
-	jr nz, LABEL_F8DCF6
+	jr nz, SmfLoad_OkReturnCode
 	ldw wa, 0xD6
-	jr LABEL_F8DCF9
+	jr SmfLoad_CallHandler
 
-LABEL_F8DCF6:
+SmfLoad_OkReturnCode:
 	ldw wa, 0x60
 
-LABEL_F8DCF9:
+SmfLoad_CallHandler:
 	call 0xF99490
 
-LABEL_F8DCFD:
+SmfLoad_Return:
 	lds32 xhl, 0
 	ret
 
 FmmSmfSaveTitleFunc:
 	cp xbc, 0x1C00013
-	jr nz, LABEL_F8DD72
+	jr nz, SmfSave_Return
 	cp xde, 0x3
-	jr z, LABEL_F8DD6F
+	jr z, SmfSave_CancelCleanup
 	cp xde, 0x2
-	jr nz, LABEL_F8DD72
+	jr nz, SmfSave_Return
 	stdi8 34046, 0
 	lds wa, 1
 	calr InitializeOperationState
@@ -175,14 +175,14 @@ FmmSmfSaveTitleFunc:
 	lds32 xde, 5
 	call 0xFA9D58
 	cpdi16 34052, 0
-	jr ge, LABEL_F8DD4D
+	jr ge, SmfSave_SendWait
 	call 0xF89C78
 	stda16 34052, xhl
 	call LABEL_F8958D
 	call 0xF8953B
 	calr SignalProgressUpdate
 
-LABEL_F8DD4D:
+SmfSave_SendWait:
 	ld xwa, 0x600026
 	ld xbc, 0x1C00002
 	lds32 xde, 0
@@ -191,12 +191,12 @@ LABEL_F8DD4D:
 	ld xbc, 0x1C0000A
 	lds32 xde, 0
 	call 0xFA9D58
-	jr LABEL_F8DD72
+	jr SmfSave_Return
 
-LABEL_F8DD6F:
+SmfSave_CancelCleanup:
 	calr CancelOperationCleanup
 
-LABEL_F8DD72:
+SmfSave_Return:
 	lds32 xhl, 0
 	ret
 
@@ -205,35 +205,35 @@ RenderSmfFilename:
 	stib_dri 0x07, 0xE0, 0xE4, 0x00
 	lds ix, 0
 	lda_24 xhl, 0xeed778
-	jr LABEL_F8DD97
+	jr RenderSmf_LoopCheck
 
-LABEL_F8DD86:
+RenderSmf_CheckSeparator:
 	extz bc
 	ld_srib3 C, 0x07, 0xEC, 0xE4
 	and c, 0x7
-	jr nz, LABEL_F8DD95
+	jr nz, RenderSmf_IncIndex
 	ld (xde), 0x5F
 
-LABEL_F8DD95:
+RenderSmf_IncIndex:
 	inc 1, ix
 
-LABEL_F8DD97:
+RenderSmf_LoopCheck:
 	cp ix, 0x8
-	jr ge, LABEL_F8DDA8
+	jr ge, RenderSmf_PadCheck
 	st_dri3b B, 0x07, 0xE0, 0xF0
 	ld c, (xde)
 	cps c, 0
-	jr nz, LABEL_F8DD86
+	jr nz, RenderSmf_CheckSeparator
 
-LABEL_F8DDA8:
+RenderSmf_PadCheck:
 	cp ix, 0x8
 	ret ge
 
-LABEL_F8DDAE:
+RenderSmf_PadLoop:
 	stib_dri 0x07, 0xE0, 0xF0, 0x5F
 	inc 1, ix
 	cp ix, 0x8
-	jr lt, LABEL_F8DDAE
+	jr lt, RenderSmf_PadLoop
 	ret
 
 SaveFileNameSmfFunc:
@@ -242,18 +242,18 @@ SaveFileNameSmfFunc:
 	ld (xsp + 4), xde
 	ldada xwa, 34896
 	cp xbc, 0x1E00086
-	jr z, LABEL_F8DE48
+	jr z, SaveFN_HandleApply
 	cp xbc, 0x1E0003A
-	jr z, LABEL_F8DE1C
+	jr z, SaveFN_HandleTextChange
 	cp xbc, 0x1C0000B
-	jr z, LABEL_F8DDF2
+	jr z, SaveFN_HandleActivate
 	cp xbc, 0x1E50004
-	jrl nz, LABEL_F8DE74
+	jrl nz, SaveFN_Return
 	ld xwa, (xsp + 4)
 	stda32 32908, xwa
-	jrl LABEL_F8DE74
+	jrl SaveFN_Return
 
-LABEL_F8DDF2:
+SaveFN_HandleActivate:
 	ld (xwa), 0x0
 	lda xiz, (xwa + 1)
 	call LABEL_F892D5
@@ -265,9 +265,9 @@ LABEL_F8DDF2:
 	ldda32 xwa, 32908
 	ld xbc, 0x1C0000F
 	ld xde, 0x8850
-	jr LABEL_F8DE42
+	jr SaveFN_SendEvent
 
-LABEL_F8DE1C:
+SaveFN_HandleTextChange:
 	ld xiz, xwa
 	call LABEL_F892D5
 	ld xbc, xhl
@@ -280,11 +280,11 @@ LABEL_F8DE1C:
 	ld xbc, 0x1E00086
 	ld xde, 0x8850
 
-LABEL_F8DE42:
+SaveFN_SendEvent:
 	call 0xFA9D58
-	jr LABEL_F8DE74
+	jr SaveFN_Return
 
-LABEL_F8DE48:
+SaveFN_HandleApply:
 	ld xbc, (xsp + 4)
 	ldw de, 0x8
 	call LABEL_F890F2
@@ -297,7 +297,7 @@ LABEL_F8DE48:
 	ld xwa, 0x8850
 	call LABEL_F892DB
 
-LABEL_F8DE74:
+SaveFN_Return:
 	lds32 xhl, 0
 	pop xiz
 	inc 4, xsp
@@ -306,13 +306,13 @@ LABEL_F8DE74:
 SmfSeqToSongNumFunc:
 	push xiz
 	cp xbc, 0x1C0000B
-	jr z, LABEL_F8DE91
+	jr z, SeqToSong_BuildEntry
 	cp xbc, 0x1E50004
-	jr nz, LABEL_F8DECD
+	jr nz, SeqToSong_Return
 	stda32 32912, xde
-	jr LABEL_F8DECD
+	jr SeqToSong_Return
 
-LABEL_F8DE91:
+SeqToSong_BuildEntry:
 	ldada xwa, 32916
 	stib_dpi 0xE0, 0x00
 	ld xbc, 0xEA073C
@@ -331,7 +331,7 @@ LABEL_F8DE91:
 	ld xde, 0x8094
 	call 0xFA9D58
 
-LABEL_F8DECD:
+SeqToSong_Return:
 	lds32 xhl, 0
 	pop xiz
 	ret
@@ -339,13 +339,13 @@ LABEL_F8DECD:
 SmfSeqFromSongNumFunc:
 	push xiz
 	cp xbc, 0x1C0000B
-	jr z, LABEL_F8DEE8
+	jr z, SeqFromSong_BuildEntry
 	cp xbc, 0x1E50004
-	jr nz, LABEL_F8DF24
+	jr nz, SeqFromSong_Return
 	stda32 33044, xde
-	jr LABEL_F8DF24
+	jr SeqFromSong_Return
 
-LABEL_F8DEE8:
+SeqFromSong_BuildEntry:
 	ldada xwa, 33048
 	stib_dpi 0xE0, 0x00
 	ld xbc, 0xEA0748
@@ -364,43 +364,43 @@ LABEL_F8DEE8:
 	ld xde, 0x8118
 	call 0xFA9D58
 
-LABEL_F8DF24:
+SeqFromSong_Return:
 	lds32 xhl, 0
 	pop xiz
 	ret
 
 SmfSeqSongNameFunc:
 	cp xbc, 0x1C0000B
-	jr z, LABEL_F8DF3E
+	jr z, SeqSongName_BuildEntry
 	cp xbc, 0x1E50004
-	jr nz, LABEL_F8DF5A
+	jr nz, SeqSongName_Return
 	stda32 33176, xde
-	jr LABEL_F8DF5A
+	jr SeqSongName_Return
 
-LABEL_F8DF3E:
+SeqSongName_BuildEntry:
 	ldda8 a, 35144
 	extz wa
 	lds bc, 0
 	lds de, 0
-	calr LABEL_F919E3
+	calr BuildSlotLabel
 	ld xde, xhl
 	ldda32 xwa, 33176
 	ld xbc, 0x1C0000F
 	call 0xFA9D58
 
-LABEL_F8DF5A:
+SeqSongName_Return:
 	lds32 xhl, 0
 	ret
 
 SmfLoadAsFunc:
 	cp xbc, 0x1C0000B
-	jr z, LABEL_F8DF73
+	jr z, SmfLoadAs_Apply
 	cp xbc, 0x1E50004
-	jr nz, LABEL_F8DF93
+	jr nz, SmfLoadAs_Return
 	stda32 33180, xde
-	jr LABEL_F8DF93
+	jr SmfLoadAs_Return
 
-LABEL_F8DF73:
+SmfLoadAs_Apply:
 	ldda8 a, 35142
 	extz wa
 	sla wa, 2
@@ -410,53 +410,53 @@ LABEL_F8DF73:
 	ld xbc, 0x1C0000F
 	call 0xFA9D58
 
-LABEL_F8DF93:
+SmfLoadAs_Return:
 	lds32 xhl, 0
 	ret
 
 TrimAndPadSmfFilename:
 	lds ix, 0
 	ld xhl, xwa
-	jr LABEL_F8DFB6
+	jr TrimPad_LoopCheck
 
-LABEL_F8DF9C:
+TrimPad_LoopBody:
 	cp e, 0x7E
-	jr nz, LABEL_F8DFA5
+	jr nz, TrimPad_CheckCtrl
 	ldb e, 0x5F
-	jr LABEL_F8DFAE
+	jr TrimPad_StoreChar
 
-LABEL_F8DFA5:
+TrimPad_CheckCtrl:
 	ld e, (xwa)
 	cp e, 0x20
-	jr nc, LABEL_F8DFB0
+	jr nc, TrimPad_AdvancePointers
 	ldb e, 0x20
 
-LABEL_F8DFAE:
+TrimPad_StoreChar:
 	ld (xwa), e
 
-LABEL_F8DFB0:
+TrimPad_AdvancePointers:
 	inc 1, ix
 	inc 1, xwa
 	inc 1, xhl
 
-LABEL_F8DFB6:
+TrimPad_LoopCheck:
 	cp ix, bc
-	jr nc, LABEL_F8DFC0
+	jr nc, TrimPad_PadCheck
 	ld e, (xhl)
 	cps e, 0
-	jr nz, LABEL_F8DF9C
+	jr nz, TrimPad_LoopBody
 
-LABEL_F8DFC0:
+TrimPad_PadCheck:
 	cp ix, bc
-	jr nc, LABEL_F8DFCE
+	jr nc, TrimPad_NullTerminate
 
-LABEL_F8DFC4:
+TrimPad_PadLoop:
 	stib_dpi 0xE0, 0x20
 	inc 1, ix
 	cp ix, bc
-	jr c, LABEL_F8DFC4
+	jr c, TrimPad_PadLoop
 
-LABEL_F8DFCE:
+TrimPad_NullTerminate:
 	ld (xwa), 0x0
 	ret
 
@@ -469,7 +469,7 @@ DisplaySmfFileList:
 	calr InitializeOperationState
 	lds iz, 0
 
-LABEL_F8DFE2:
+DispFileList_LoopBody:
 	ld de, iz
 	sll de, 5
 	ldada xbc, 34060
@@ -505,7 +505,7 @@ LABEL_F8DFE2:
 	call 0xFA9D58
 	inc 1, iz
 	cp iz, 0xA
-	jr lt, LABEL_F8DFE2
+	jr lt, DispFileList_LoopBody
 	popw iz
 	inc 6, xsp
 	ret
@@ -513,26 +513,26 @@ LABEL_F8DFE2:
 ValidateSmfFilename:
 	lds iy, 0
 	lds hl, 0
-	jr LABEL_F8E05A
+	jr ValidateFN_LoopHead
 
-LABEL_F8E04E:
+ValidateFN_CheckSpace:
 	cp e, 0x20
-	jr z, LABEL_F8E056
+	jr z, ValidateFN_AdvancePointer
 	ldb l, 0x0
 	ret
 
-LABEL_F8E056:
+ValidateFN_AdvancePointer:
 	inc 1, iy
 	inc 1, hl
 
-LABEL_F8E05A:
+ValidateFN_LoopHead:
 	ld_srib3 E, 0x07, 0xE0, 0xF4
 	cps e, 0
-	jr z, LABEL_F8E067
+	jr z, ValidateFN_ReturnValid
 	cp hl, bc
-	jr c, LABEL_F8E04E
+	jr c, ValidateFN_CheckSpace
 
-LABEL_F8E067:
+ValidateFN_ReturnValid:
 	ldb l, 0x1
 	ret
 
@@ -546,23 +546,23 @@ FmmSmfFileNameFunc:
 	ldda32 xwa, 33184
 	ld xbc, (xsp + 28)
 	cp xbc, 0x1C00018
-	jrl z, LABEL_F8E134
+	jrl z, SmfFN_NavSetup
 	cp xbc, 0x1C00017
-	jrl z, LABEL_F8E134
+	jrl z, SmfFN_NavSetup
 	cp xbc, 0x1C0000B
-	jrl z, LABEL_F8E11E
+	jrl z, SmfFN_HandleActivate
 	ld xbc, xiz
 	sub xde, 0x1E50002
 	cp xde, 0x0
-	jrl lt, LABEL_F8E12F
+	jrl lt, SmfFN_ReturnZero
 	cp xde, 0x5
-	jr gt, LABEL_F8E12F
+	jr gt, SmfFN_ReturnZero
 	add xde, xde
 	add xde, 0xEA079E
 	ld de, (xde)
 	lda_24 xix, 0xf8e0c8
 	jp_dri 8, 0x07, 0xF0, 0xE8
-LABEL_F8E0C8:
+SmfFN_JumpTable:
 	.byte 0xf1, 0xa0, 0x81, 0x61, 0xe8, 0xa8, 0xf1, 0xa4
 	.byte 0x81, 0x60, 0xf1, 0xa8, 0x81, 0x60, 0xc1, 0x36
 	.byte 0x8d, 0x3f, 0x6b, 0x66, 0x14, 0x1d, 0xc7, 0x9a
@@ -575,71 +575,71 @@ LABEL_F8E0C8:
 	.byte 0xea, 0x13, 0xe1, 0xa0, 0x81, 0x20, 0x41, 0x02
 	.byte 0x00, 0xe5, 0x01, 0x78, 0x89, 0x07
 
-LABEL_F8E11E:
+SmfFN_HandleActivate:
 	ldda16 xbc, 33196
 	exts xbc
 	divs bc, 0xA
 	muls bc, 0xA
 	calr DisplaySmfFileList
 
-LABEL_F8E12F:
+SmfFN_ReturnZero:
 	lds32 xhl, 0
-	jrl LABEL_F8E8B4
+	jrl SmfFN_Return
 
-LABEL_F8E134:
+SmfFN_NavSetup:
 	ld xbc, 0x1C50001
 	lds32 xde, 1
 	call 0xFA9D58
 	ldda16 xix, 33196
 	ld (xsp + 4), ix
 	or xiz, xiz
-	jr nz, LABEL_F8E192
+	jr nz, SmfFN_PageUp
 	cpdi8 34046, 0
-	jr nz, LABEL_F8E192
+	jr nz, SmfFN_PageUp
 	ld xwa, (xsp + 28)
 	cp xwa, 0x1C00018
-	jr nz, LABEL_F8E180
+	jr nz, SmfFN_NavUp
 	ld bc, ix
 	inc 1, bc
 	cpdi8 36150, 107
-	jr z, LABEL_F8E170
+	jr z, SmfFN_NavDown_WrapCheck
 	cpda16 xbc, 34052
-	jr lt, LABEL_F8E17B
-	jrl LABEL_F8E75D
+	jr lt, SmfFN_NavDown_Apply
+	jrl SmfFN_UpdateDisplay
 
-LABEL_F8E170:
+SmfFN_NavDown_WrapCheck:
 	ldda16 xwa, 34052
 	inc 1, wa
 	cp bc, wa
-	jrl ge, LABEL_F8E75D
+	jrl ge, SmfFN_UpdateDisplay
 
-LABEL_F8E17B:
+SmfFN_NavDown_Apply:
 	inc 1, ix
-	jrl LABEL_F8E211
+	jrl SmfFN_StoreIndex
 
-LABEL_F8E180:
+SmfFN_NavUp:
 	cp xwa, 0x1C00017
-	jrl nz, LABEL_F8E75D
+	jrl nz, SmfFN_UpdateDisplay
 	cps ix, 0
-	jrl le, LABEL_F8E75D
+	jrl le, SmfFN_UpdateDisplay
 	dec 1, ix
-	jr LABEL_F8E211
+	jr SmfFN_StoreIndex
 
-LABEL_F8E192:
+SmfFN_PageUp:
 	cp xiz, 0x1
-	jr nz, LABEL_F8E1AE
+	jr nz, SmfFN_PageDown
 	cpdi8 34046, 0
-	jr nz, LABEL_F8E1AE
+	jr nz, SmfFN_PageDown
 	cp ix, 0xA
-	jrl lt, LABEL_F8E75D
+	jrl lt, SmfFN_UpdateDisplay
 	sub ix, 0xA
-	jr LABEL_F8E211
+	jr SmfFN_StoreIndex
 
-LABEL_F8E1AE:
+SmfFN_PageDown:
 	cp xiz, 0x2
-	jrl nz, LABEL_F8E23C
+	jrl nz, SmfFN_HandleSave
 	cpdi8 34046, 0
-	jr nz, LABEL_F8E23C
+	jr nz, SmfFN_HandleSave
 	ld iy, ix
 	add iy, 0xA
 	ldda16 xbc, 34052
@@ -647,57 +647,57 @@ LABEL_F8E1AE:
 	exts xde
 	divs de, 0xA
 	cpdi8 36150, 107
-	jr z, LABEL_F8E205
+	jr z, SmfFN_PageDown_WrapCheck
 	ld hl, bc
 	cp iy, bc
-	jr lt, LABEL_F8E20D
+	jr lt, SmfFN_PageDown_Add10
 	ld bc, hl
 	dec 1, bc
 	ld wa, bc
 	exts xwa
 	divs wa, 0xA
 	cp de, wa
-	jrl ge, LABEL_F8E75D
+	jrl ge, SmfFN_UpdateDisplay
 	exts xhl
 	divs hl, 0xA
 	ldto_werp WA, 0xEE
 	cps wa, 0
-	jrl z, LABEL_F8E75D
+	jrl z, SmfFN_UpdateDisplay
 	stda16 33196, xbc
 	ld hl, bc
-	jrl LABEL_F8E761
+	jrl SmfFN_RefreshIfChanged
 
-LABEL_F8E205:
+SmfFN_PageDown_WrapCheck:
 	ld hl, bc
 	inc 1, bc
 	cp iy, bc
-	jr ge, LABEL_F8E21A
+	jr ge, SmfFN_PageDown_ClampCheck
 
-LABEL_F8E20D:
+SmfFN_PageDown_Add10:
 	add ix, 0xA
 
-LABEL_F8E211:
+SmfFN_StoreIndex:
 	stda16 33196, xix
 	ld hl, ix
-	jrl LABEL_F8E761
+	jrl SmfFN_RefreshIfChanged
 
-LABEL_F8E21A:
+SmfFN_PageDown_ClampCheck:
 	ld wa, hl
 	exts xwa
 	divs wa, 0xA
 	cp de, wa
-	jrl ge, LABEL_F8E75D
+	jrl ge, SmfFN_UpdateDisplay
 	exts xbc
 	divs bc, 0xA
 	ldto_werp WA, 0xE6
 	cps wa, 0
-	jrl z, LABEL_F8E75D
+	jrl z, SmfFN_UpdateDisplay
 	stda16 33196, xhl
-	jrl LABEL_F8E761
+	jrl SmfFN_RefreshIfChanged
 
-LABEL_F8E23C:
+SmfFN_HandleSave:
 	cp xiz, 0x3
-	jrl nz, LABEL_F8E348
+	jrl nz, SmfFN_HandleOpen
 	ld xwa, 0x600026
 	ld xbc, 0x1C00001
 	lds32 xde, 5
@@ -712,7 +712,7 @@ LABEL_F8E23C:
 	ld (xsp + 6), hl
 	calr SignalProgressUpdate
 	cpw (xsp + 6), 0x0
-	jr lt, LABEL_F8E2F3
+	jr lt, SmfFN_Save_Finish
 	ldda16 xwa, 33196
 	call LABEL_F8A07F
 	ld xbc, xhl
@@ -723,7 +723,7 @@ LABEL_F8E23C:
 	ldw bc, 0x10
 	calr ValidateSmfFilename
 	cps l, 0
-	jr z, LABEL_F8E2AC
+	jr z, SmfFN_Save_WriteSlot
 	ldda16 xwa, 33196
 	call LABEL_F89BF0
 	ld xbc, xhl
@@ -731,7 +731,7 @@ LABEL_F8E23C:
 	ldw de, 0x8
 	call LABEL_F890F2
 
-LABEL_F8E2AC:
+SmfFN_Save_WriteSlot:
 	lda xwa, (xsp + 8)
 	ldw bc, 0x10
 	calr TrimAndPadSmfFilename
@@ -746,14 +746,14 @@ LABEL_F8E2AC:
 	call LABEL_F890F2
 	ld8_24 a, 0x00ffe3
 	cpda8 a, 35144
-	jr nz, LABEL_F8E2F3
+	jr nz, SmfFN_Save_Finish
 	lda_24 xwa, 0x00f180
 	st_dri3b W, 0xE1, 0x00, 0x01
 	lda xbc, (xsp + 8)
 	ldw de, 0x10
 	call LABEL_F890F2
 
-LABEL_F8E2F3:
+SmfFN_Save_Finish:
 	ld xwa, 0x600026
 	ld xbc, 0x1C00002
 	lds32 xde, 0
@@ -763,14 +763,14 @@ LABEL_F8E2F3:
 	lds32 xde, 1
 	call 0xFA9D58
 	cpdi16 61854, 0
-	jr z, LABEL_F8E320
+	jr z, SmfFN_Save_NoAltSlot
 	ldw wa, 0xA
-	jr LABEL_F8E322
+	jr SmfFN_Save_CallResult
 
-LABEL_F8E320:
+SmfFN_Save_NoAltSlot:
 	lds wa, 1
 
-LABEL_F8E322:
+SmfFN_Save_CallResult:
 	call LABEL_F99463
 	ld wa, (xsp + 6)
 	lds bc, 1
@@ -781,11 +781,11 @@ LABEL_F8E322:
 	lds32 xde, 0
 	call 0xFA9D58
 	ldw wa, 0xEE
-	jrl LABEL_F8E5A5
+	jrl SmfFN_CallStatusDisplayAndExit
 
-LABEL_F8E348:
+SmfFN_HandleOpen:
 	cp xiz, 0x4
-	jrl nz, LABEL_F8E41B
+	jrl nz, SmfFN_HandleOpen2
 	ld xwa, 0x600026
 	ld xbc, 0x1C00001
 	lds32 xde, 5
@@ -794,9 +794,9 @@ LABEL_F8E348:
 	ld xwa, xhl
 	call LABEL_F8947D
 	cps l, 0
-	jr z, LABEL_F8E3A6
+	jr z, SmfFN_Open_Execute
 	cpi8_24 0x0340ea, 0x00
-	jr z, LABEL_F8E3A6
+	jr z, SmfFN_Open_Execute
 	ld xwa, 0x600026
 	ld xbc, 0x1C00002
 	lds32 xde, 0
@@ -808,9 +808,9 @@ LABEL_F8E348:
 	ld xwa, 0x600037
 	ld xbc, 0x1C00001
 	lds32 xde, 0
-	jrl LABEL_F8E759
+	jrl SmfFN_DispatchEvent
 
-LABEL_F8E3A6:
+SmfFN_Open_Execute:
 	lds wa, 0
 	calr InitializeOperationState
 	ldda8 a, 35144
@@ -844,11 +844,11 @@ LABEL_F8E3A6:
 	lds32 xde, 0
 	call 0xFA9D58
 	ldw wa, 0xEE
-	jrl LABEL_F8E5A5
+	jrl SmfFN_CallStatusDisplayAndExit
 
-LABEL_F8E41B:
+SmfFN_HandleOpen2:
 	cp xiz, 0x32
-	jrl nz, LABEL_F8E4A9
+	jrl nz, SmfFN_HandleDelete
 	ld xwa, 0x600026
 	ld xbc, 0x1C00001
 	lds32 xde, 5
@@ -886,13 +886,13 @@ LABEL_F8E41B:
 	lds32 xde, 0
 	call 0xFA9D58
 	ldw wa, 0xEE
-	jrl LABEL_F8E5A5
+	jrl SmfFN_CallStatusDisplayAndExit
 
-LABEL_F8E4A9:
+SmfFN_HandleDelete:
 	cp xiz, 0x5
-	jrl nz, LABEL_F8E53C
+	jrl nz, SmfFN_HandleDelete2
 	cpi8_24 0x0340ea, 0x00
-	jr z, LABEL_F8E4D9
+	jr z, SmfFN_Delete_Execute
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C50000
 	lds32 xde, 1
@@ -900,9 +900,9 @@ LABEL_F8E4A9:
 	ld xwa, 0x7B0051
 	ld xbc, 0x1C00001
 	lds32 xde, 0
-	jrl LABEL_F8E759
+	jrl SmfFN_DispatchEvent
 
-LABEL_F8E4D9:
+SmfFN_Delete_Execute:
 	ld xwa, 0x600026
 	ld xbc, 0x1C00001
 	lds32 xde, 5
@@ -925,20 +925,20 @@ LABEL_F8E4D9:
 	call 0xFA9D58
 	ldda16 xwa, 33196
 	cpda16 xwa, 34052
-	jr lt, LABEL_F8E537
+	jr lt, SmfFN_Delete_AdjustIndex
 	cps wa, 0
-	jr le, LABEL_F8E537
+	jr le, SmfFN_Delete_AdjustIndex
 	dec 1, wa
 	stda16 33196, xwa
 	ld (xsp + 4), wa
 
-LABEL_F8E537:
+SmfFN_Delete_AdjustIndex:
 	ldw wa, 0xEE
-	jr LABEL_F8E5A5
+	jr SmfFN_CallStatusDisplayAndExit
 
-LABEL_F8E53C:
+SmfFN_HandleDelete2:
 	cp xiz, 0x33
-	jr nz, LABEL_F8E5AC
+	jr nz, SmfFN_IgnoredEvents
 	ld xwa, 0x600026
 	ld xbc, 0x1C00001
 	lds32 xde, 5
@@ -961,114 +961,114 @@ LABEL_F8E53C:
 	call 0xFA9D58
 	ldda16 xwa, 33196
 	cpda16 xwa, 34052
-	jr lt, LABEL_F8E5A2
+	jr lt, SmfFN_Delete2_AdjustIndex
 	cps wa, 0
-	jr le, LABEL_F8E5A2
+	jr le, SmfFN_Delete2_AdjustIndex
 	dec 1, wa
 	stda16 33196, xwa
 	ld (xsp + 4), wa
 
-LABEL_F8E5A2:
+SmfFN_Delete2_AdjustIndex:
 	ldw wa, 0xEE
 
-LABEL_F8E5A5:
+SmfFN_CallStatusDisplayAndExit:
 	call LABEL_F994BD
-	jrl LABEL_F8E75D
+	jrl SmfFN_UpdateDisplay
 
-LABEL_F8E5AC:
+SmfFN_IgnoredEvents:
 	cp xiz, 0xA
-	jrl z, LABEL_F8E75D
+	jrl z, SmfFN_UpdateDisplay
 	cp xiz, 0xB
-	jrl z, LABEL_F8E75D
+	jrl z, SmfFN_UpdateDisplay
 	cp xiz, 0xC
-	jrl z, LABEL_F8E75D
+	jrl z, SmfFN_UpdateDisplay
 	cp xiz, 0xD
-	jrl z, LABEL_F8E75D
+	jrl z, SmfFN_UpdateDisplay
 	cp xiz, 0x14
-	jr nz, LABEL_F8E5FA
+	jr nz, SmfFN_HandleScrollFlag1
 	cpdi8 34046, 0
-	jr nz, LABEL_F8E5FA
+	jr nz, SmfFN_HandleScrollFlag1
 	ld xwa, (xsp + 28)
 	cp xwa, 0x1C00017
-	jr nz, LABEL_F8E5F2
+	jr nz, SmfFN_SetScrollDir0
 	stdi8 35138, 1
-	jrl LABEL_F8E75D
+	jrl SmfFN_UpdateDisplay
 
-LABEL_F8E5F2:
+SmfFN_SetScrollDir0:
 	stdi8 35138, 0
-	jrl LABEL_F8E75D
+	jrl SmfFN_UpdateDisplay
 
-LABEL_F8E5FA:
+SmfFN_HandleScrollFlag1:
 	cp xiz, 0x15
-	jr nz, LABEL_F8E635
+	jr nz, SmfFN_HandleScrollFlag2
 	ldda8 c, 35142
 	ld a, c
 	inc 1, a
 	cps a, 3
-	jr nc, LABEL_F8E620
+	jr nc, SmfFN_LoadAs_Wrap
 	inc 1, c
 	stda8 35142, c
 	ld xwa, (xsp + 32)
 	ld xbc, 0x1C0000B
 	lds32 xde, 0
-	jr LABEL_F8E62F
+	jr SmfFN_LoadAs_Apply
 
-LABEL_F8E620:
+SmfFN_LoadAs_Wrap:
 	stdi8 35142, 0
 	ld xwa, (xsp + 32)
 	ld xbc, 0x1C0000B
 	lds32 xde, 0
 
-LABEL_F8E62F:
+SmfFN_LoadAs_Apply:
 	calr SmfLoadAsFunc
-	jrl LABEL_F8E75D
+	jrl SmfFN_UpdateDisplay
 
-LABEL_F8E635:
+SmfFN_HandleScrollFlag2:
 	cp xiz, 0x16
-	jr nz, LABEL_F8E658
+	jr nz, SmfFN_HandleScrollFlag3
 	ld xwa, (xsp + 28)
 	cp xwa, 0x1C00017
-	jr nz, LABEL_F8E650
+	jr nz, SmfFN_SetTrackFlag0
 	stdi8 35146, 1
-	jrl LABEL_F8E75D
+	jrl SmfFN_UpdateDisplay
 
-LABEL_F8E650:
+SmfFN_SetTrackFlag0:
 	stdi8 35146, 0
-	jrl LABEL_F8E75D
+	jrl SmfFN_UpdateDisplay
 
-LABEL_F8E658:
+SmfFN_HandleScrollFlag3:
 	ld xwa, (xsp + 28)
 	cp xiz, 0x17
-	jr nz, LABEL_F8E67B
+	jr nz, SmfFN_HandleScrollFlag4
 	cp xwa, 0x1C00017
-	jr nz, LABEL_F8E673
+	jr nz, SmfFN_SetTransposeFlag0
 	stdi8 35148, 1
-	jrl LABEL_F8E75D
+	jrl SmfFN_UpdateDisplay
 
-LABEL_F8E673:
+SmfFN_SetTransposeFlag0:
 	stdi8 35148, 0
-	jrl LABEL_F8E75D
+	jrl SmfFN_UpdateDisplay
 
-LABEL_F8E67B:
+SmfFN_HandleScrollFlag4:
 	cp xiz, 0x18
-	jr nz, LABEL_F8E69B
+	jr nz, SmfFN_HandleSeqSongNum
 	cp xwa, 0x1C00017
-	jr nz, LABEL_F8E693
+	jr nz, SmfFN_SetFlag35140_0
 	stdi8 35140, 1
-	jrl LABEL_F8E75D
+	jrl SmfFN_UpdateDisplay
 
-LABEL_F8E693:
+SmfFN_SetFlag35140_0:
 	stdi8 35140, 0
-	jrl LABEL_F8E75D
+	jrl SmfFN_UpdateDisplay
 
-LABEL_F8E69B:
+SmfFN_HandleSeqSongNum:
 	ldda8 c, 35144
 	ld a, c
 	inc 1, a
 	cp xiz, 0x1E
-	jr nz, LABEL_F8E6ED
+	jr nz, SmfFN_HandleSeqFromSong
 	cp a, 0xA
-	jr nc, LABEL_F8E6CF
+	jr nc, SmfFN_SeqToSong_Wrap
 	inc 1, c
 	stda8 35144, c
 	ld xwa, (xsp + 32)
@@ -1078,9 +1078,9 @@ LABEL_F8E69B:
 	ld xwa, (xsp + 32)
 	ld xbc, 0x1C0000B
 	lds32 xde, 0
-	jr LABEL_F8E735
+	jr SmfFN_SeqSongName_Dispatch
 
-LABEL_F8E6CF:
+SmfFN_SeqToSong_Wrap:
 	stdi8 35144, 0
 	ld xwa, (xsp + 32)
 	ld xbc, 0x1C0000B
@@ -1089,13 +1089,13 @@ LABEL_F8E6CF:
 	ld xwa, (xsp + 32)
 	ld xbc, 0x1C0000B
 	lds32 xde, 0
-	jr LABEL_F8E735
+	jr SmfFN_SeqSongName_Dispatch
 
-LABEL_F8E6ED:
+SmfFN_HandleSeqFromSong:
 	cp xiz, 0x1F
-	jr nz, LABEL_F8E73A
+	jr nz, SmfFN_HandleMedleyConfirm
 	cp a, 0xA
-	jr nc, LABEL_F8E719
+	jr nc, SmfFN_SeqFromSong_Wrap
 	inc 1, c
 	stda8 35144, c
 	ld xwa, (xsp + 32)
@@ -1105,9 +1105,9 @@ LABEL_F8E6ED:
 	ld xwa, (xsp + 32)
 	ld xbc, 0x1C0000B
 	lds32 xde, 0
-	jr LABEL_F8E735
+	jr SmfFN_SeqSongName_Dispatch
 
-LABEL_F8E719:
+SmfFN_SeqFromSong_Wrap:
 	stdi8 35144, 0
 	ld xwa, (xsp + 32)
 	ld xbc, 0x1C0000B
@@ -1117,30 +1117,30 @@ LABEL_F8E719:
 	ld xbc, 0x1C0000B
 	lds32 xde, 0
 
-LABEL_F8E735:
+SmfFN_SeqSongName_Dispatch:
 	calr SmfSeqSongNameFunc
-	jr LABEL_F8E75D
+	jr SmfFN_UpdateDisplay
 
-LABEL_F8E73A:
+SmfFN_HandleMedleyConfirm:
 	cp xiz, 0x28
-	jr nz, LABEL_F8E75D
+	jr nz, SmfFN_UpdateDisplay
 	cpdi16 33198, 0
-	jr z, LABEL_F8E75D
+	jr z, SmfFN_UpdateDisplay
 	ldda32 xwa, 33188
 	or xwa, xwa
-	jr z, LABEL_F8E75D
+	jr z, SmfFN_UpdateDisplay
 	ld xbc, 0x1C0000A
 	lds32 xde, 0
 
-LABEL_F8E759:
+SmfFN_DispatchEvent:
 	call 0xFA9D58
 
-LABEL_F8E75D:
+SmfFN_UpdateDisplay:
 	ldda16 xhl, 33196
 
-LABEL_F8E761:
+SmfFN_RefreshIfChanged:
 	cp (xsp + 4), hl
-	jrl z, LABEL_F8E85B
+	jrl z, SmfFN_SendOkState
 	ld wa, hl
 	call LABEL_F89BA4
 	ldda16 xwa, 33196
@@ -1159,7 +1159,7 @@ LABEL_F8E761:
 	divs de, 0xA
 	ldda32 xwa, 33184
 	cp de, bc
-	jr nz, LABEL_F8E7EF
+	jr nz, SmfFN_RedrawPage
 	ld bc, (xsp + 4)
 	exts xbc
 	divs bc, 0xA
@@ -1183,33 +1183,33 @@ LABEL_F8E761:
 	ldda32 xwa, 33184
 	ld xbc, 0x1C0000F
 	call 0xFA9D58
-	jr LABEL_F8E80A
+	jr SmfFN_UpdateFilenameField
 
-LABEL_F8E7EF:
+SmfFN_RedrawPage:
 	muls bc, 0xA
 	calr DisplaySmfFileList
 	cpdi8 36150, 108
-	jr nz, LABEL_F8E80A
+	jr nz, SmfFN_UpdateFilenameField
 	ld xwa, (xsp + 32)
 	ld xbc, 0x1C0000B
 	lds32 xde, 0
 	calr FmmSmfMedleyFunc
 
-LABEL_F8E80A:
+SmfFN_UpdateFilenameField:
 	cpdi8 36150, 107
-	jr nz, LABEL_F8E85B
+	jr nz, SmfFN_SendOkState
 	ldada xiz, 34896
 	ldda16 xwa, 33196
 	cpda16 xwa, 34052
-	jr lt, LABEL_F8E830
+	jr lt, SmfFN_FetchFilename
 	cps wa, 0
-	jr le, LABEL_F8E830
+	jr le, SmfFN_FetchFilename
 	ld xwa, xiz
 	ld xbc, 0xEA0790
 	call LABEL_F890DC
-	jr LABEL_F8E845
+	jr SmfFN_WriteFilenameField
 
-LABEL_F8E830:
+SmfFN_FetchFilename:
 	call LABEL_F89BF0
 	ld xbc, xhl
 	ld xwa, xiz
@@ -1217,7 +1217,7 @@ LABEL_F8E830:
 	ld xwa, 0x8850
 	call LABEL_F8929D
 
-LABEL_F8E845:
+SmfFN_WriteFilenameField:
 	ld xwa, 0x8850
 	call LABEL_F892DB
 	ld xwa, (xsp + 32)
@@ -1225,19 +1225,19 @@ LABEL_F8E845:
 	lds32 xde, 0
 	calr SaveFileNameSmfFunc
 
-LABEL_F8E85B:
+SmfFN_SendOkState:
 	ldda32 xwa, 33184
 	ld xbc, 0x1C50001
 	lds32 xde, 0
-	jr LABEL_F8E8A7
+	jr SmfFN_DispatchFinalEvent
 	stda32 33188, xbc
-	jrl LABEL_F8E12F
+	jrl SmfFN_ReturnZero
 	stda32 33192, xbc
-	jrl LABEL_F8E12F
+	jrl SmfFN_ReturnZero
 	stda16 33198, xiz
-	jrl LABEL_F8E12F
+	jrl SmfFN_ReturnZero
 	cpdi8 34046, 0
-	jrl z, LABEL_F8E12F
+	jrl z, SmfFN_ReturnZero
 	ld wa, iz
 	stda16 33196, xwa
 	call LABEL_F89BA4
@@ -1249,13 +1249,13 @@ LABEL_F8E85B:
 	ldda32 xwa, 33184
 	ld xbc, 0x1E50002
 
-LABEL_F8E8A7:
+SmfFN_DispatchFinalEvent:
 	call 0xFA9D58
-	jrl LABEL_F8E12F
+	jrl SmfFN_ReturnZero
 	ldda16 xhl, 33196
 	exts xhl
 
-LABEL_F8E8B4:
+SmfFN_Return:
 	pop xiz
 	lda xsp, (xsp + 32)
 	ret
@@ -1269,7 +1269,7 @@ DisplaySmfSequenceList:
 	calr InitializeOperationState
 	lds iz, 0
 
-LABEL_F8E8C9:
+DispSeqList_LoopBody:
 	ld de, iz
 	sll de, 5
 	ldada xbc, 34060
@@ -1305,7 +1305,7 @@ LABEL_F8E8C9:
 	call 0xFA9D58
 	inc 1, iz
 	cp iz, 0xA
-	jr lt, LABEL_F8E8C9
+	jr lt, DispSeqList_LoopBody
 	popw iz
 	inc 6, xsp
 	ret
