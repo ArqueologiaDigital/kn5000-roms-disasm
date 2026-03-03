@@ -1772,12 +1772,12 @@ LABEL_00F77F:
 	.byte 0x00
 
 CALL_TABLE_12159:
-	.long LABEL_0355AD
-	.long LABEL_035656
-	.long LABEL_0355AD
-	.long LABEL_0355AD
-	.long LABEL_0355AD
-	.long LABEL_0355AD
+	.long ToneGen_SetupPolyVoice
+	.long ToneGen_SetupPercussionVoice
+	.long ToneGen_SetupPolyVoice
+	.long ToneGen_SetupPolyVoice
+	.long ToneGen_SetupPolyVoice
+	.long ToneGen_SetupPolyVoice
 
 Audio_DSP_StateTable_Packed:
 	.byte 0x00, 0x00, 0x18, 0xe8, 0x00, 0x00, 0x7f
@@ -33182,10 +33182,10 @@ LABEL_0309C0:
 	ld a, (xsp + 10)
 	extz wa
 	ld bc, (xsp + 8)
-	call LABEL_03522E
+	call DSP_WriteAlgoBuffer
 	ldw wa, 0xFF
 	ldw bc, 0xFF
-	call LABEL_035490
+	call DSP_VoiceState_Dispatch
 	ld xwa, (xsp + 4)
 	ld (xwa), 0x0
 	jr LABEL_0309E4
@@ -38353,7 +38353,7 @@ DSP_System_Init_Continue:
 	call 0x360A7
 	lds wa, 0
 	call LABEL_021ECB
-	call LABEL_03555F
+	call DSP_ResetWriteBufferPtr
 	call LABEL_034B4B
 	sti8_24 0x041342, 0x00
 	jp LABEL_02A8F3
@@ -38364,7 +38364,7 @@ Audio_Process_Init:
 	cpi8_24 0x041342, 0x00
 	jr nz, LABEL_034CED
 	call LABEL_027A46
-	call LABEL_03611E
+	call DSP_SlotState_DisplayRestore
 	jr LABEL_034CF5
 
 LABEL_034CED:
@@ -38755,7 +38755,7 @@ LABEL_035000:
 	ld hl, wa
 	ret
 
-LABEL_035007:
+DSP_InitChannelSlot:
 	dec 6, xsp
 	push xiz
 	ld (xsp + 8), bc
@@ -38846,7 +38846,7 @@ LABEL_035007:
 	inc 6, xsp
 	ret
 
-LABEL_0350FA:
+DSP_FlushAllSlots:
 	dec 4, xsp
 	pushw iz
 	extz wa
@@ -38889,7 +38889,7 @@ LABEL_035156:
 LABEL_03515E:
 	ld xwa, (xsp + 2)
 	ld bc, iz
-	calr LABEL_035007
+	calr DSP_InitChannelSlot
 	inc 1, iz
 	cp iz, 0x80
 	jr c, LABEL_03515E
@@ -38932,7 +38932,7 @@ LABEL_0351B3:
 	.byte 0x31, 0xc3, 0x07, 0xe4, 0xe0, 0x21, 0xc9, 0x8b
 	.byte 0xd9, 0x12, 0xda, 0x88, 0x78, 0x18, 0xff
 
-LABEL_0351E2:
+DSP1_ResolveStreamPtr:
 	ld xhl, 0x50000
 	ld_sril XBC, (xhl + 0x0088)
 	add wa, bc
@@ -38947,7 +38947,7 @@ LABEL_0351E2:
 	add xhl, xwa
 	ret
 
-LABEL_035203:
+DSP_ResetAlgoDefaults:
 	lds hl, 0
 	cp hl, 0x10
 	ret nc
@@ -38968,7 +38968,7 @@ LABEL_03520B:
 	jr c, LABEL_03520B
 	ret
 
-LABEL_03522E:
+DSP_WriteAlgoBuffer:
 	push xiz
 	ld e, c
 	cp a, 0x1A
@@ -39066,7 +39066,7 @@ LABEL_035321:
 	pop xiz
 	ret
 
-LABEL_035323:
+DSP_Reinit_VoiceSlots:
 	dec 4, xsp
 	push xiz
 	cp a, 0x40
@@ -39079,7 +39079,7 @@ LABEL_035323:
 	ldfr_werp WA, 0xFA
 	add wa, bc
 	ldfr_werp WA, 0xFA
-	calr LABEL_0351E2
+	calr DSP1_ResolveStreamPtr
 	ld (xsp + 4), xhl
 	ldto_werp WA, 0xFA
 	extz xwa
@@ -39109,7 +39109,7 @@ LABEL_03536E:
 
 LABEL_03538B:
 	ldto_werp WA, 0xFA
-	calr LABEL_0351E2
+	calr DSP1_ResolveStreamPtr
 	ld (xsp + 4), xhl
 	ldto_werp WA, 0xFA
 	extz xwa
@@ -39143,7 +39143,7 @@ LABEL_0353D9:
 	ld32_24 xwa, 0x04531c
 	st_dri3b W, 0xE1, 0x80, 0x49
 	extz bc
-	calr LABEL_035007
+	calr DSP_InitChannelSlot
 	jr LABEL_035418
 
 LABEL_0353F4:
@@ -39155,7 +39155,7 @@ LABEL_0353FE:
 	ld32_24 xwa, 0x04531c
 	st_dri3b W, 0xE1, 0x80, 0x49
 	ldto_werp BC, 0xFA
-	calr LABEL_035007
+	calr DSP_InitChannelSlot
 	inc1_werp 0xFA
 	cp_erpw 0xFA, 0x80, 0x00
 	jr c, LABEL_0353FE
@@ -39167,14 +39167,14 @@ LABEL_035418:
 	jr LABEL_03547B
 
 LABEL_035427:
-	calr LABEL_035203
+	calr DSP_ResetAlgoDefaults
 	lds iz, 0
 	cp iz, 0x28
 	jr nc, LABEL_035466
 
 LABEL_035432:
 	ld wa, iz
-	calr LABEL_0351E2
+	calr DSP1_ResolveStreamPtr
 	ld (xsp + 4), xhl
 	ld wa, iz
 	extz xwa
@@ -39194,7 +39194,7 @@ LABEL_035432:
 LABEL_035466:
 	lds wa, 0
 	ldw bc, 0x40
-	calr LABEL_0350FA
+	calr DSP_FlushAllSlots
 	calr LABEL_034FE6
 	ld32_24 xwa, 0x04531c
 	st_dri3w HL, 0xE1, 0xA8, 0x72
@@ -39208,7 +39208,7 @@ LABEL_03547B:
 	inc 4, xsp
 	ret
 
-LABEL_035490:
+DSP_VoiceState_Dispatch:
 	push_werp 0xFA
 	ldi_berp 0xFB, 0
 	cp_erpb 0xFB, 0x1A
@@ -39288,7 +39288,7 @@ LABEL_03555B:
 	pop_werp 0xFA
 	ret
 
-LABEL_03555F:
+DSP_ResetWriteBufferPtr:
 	lda_24 xwa, 0x007800
 	st32_24 0x045320, xwa
 	lda_24 xwa, 0x007800
@@ -39304,7 +39304,7 @@ LABEL_035575:
 LABEL_035576:
 	ret
 
-LABEL_035577:
+DSP_VelocityToVolume:
 	ld bc, wa
 	mul xbc, xwa
 	srl bc, 2
@@ -39312,7 +39312,7 @@ LABEL_035577:
 	add hl, 0x3F
 	ret
 
-LABEL_035585:
+DSP_GetEffectRouting:
 	lds hl, 0
 	cpi8_24 0x041377, 0x00
 	jr z, LABEL_03559B
@@ -39329,7 +39329,7 @@ LABEL_03559B:
 	or hl, wa
 	ret
 
-LABEL_0355AD:
+ToneGen_SetupPolyVoice:
 	dec 4, xsp
 	ld (xsp), e
 	ld e, c
@@ -39364,9 +39364,9 @@ LABEL_0355AD:
 LABEL_035609:
 	ld a, (xsp + 8)
 	extz wa
-	calr LABEL_035577
+	calr DSP_VelocityToVolume
 	orddm16 15136, xhl
-	calr LABEL_035585
+	calr DSP_GetEffectRouting
 	orddm16 15138, xhl
 	ld a, (xsp)
 	extz wa
@@ -39388,7 +39388,7 @@ LABEL_035609:
 	inc 4, xsp
 	retd 0x2
 
-LABEL_035656:
+ToneGen_SetupPercussionVoice:
 	dec 2, xsp
 	ld (xsp), a
 	ld xiy, 0x12115
@@ -39411,7 +39411,7 @@ LABEL_035656:
 	lda_24 xbc, 0x012195
 	ld_sriw3 WA, 0x07, 0xE4, 0xE0
 	orddm16 15132, xwa
-	calr LABEL_035585
+	calr DSP_GetEffectRouting
 	orddm16 15138, xhl
 	ordi16 15136, 4095
 	ld16_24 xwa, 0x01217d
@@ -39650,7 +39650,7 @@ LABEL_035874:
 ; Entry: XWA = pointer to buffer control block
 ;        C = byte to write
 ; Same as RingBuffer_Write4K but wraps at 2047 (AND 0x07FF).
-LABEL_03587B:
+DSP_RingBuf_Write2K:
 	ld	xde, xwa
 	ld	hl, (xde)
 	incm	1, (xde)
@@ -39710,7 +39710,7 @@ DSP_CmdHandler_StateReset:
 LABEL_03590A:
 	lds ix, 0
 	cp ix, de
-	jr nc, LABEL_035933
+	jr nc, DSP_Enqueue_ReturnOK
 
 DSP_RingBuf_Enqueue:
 	ldada xwa, 15200
@@ -39727,7 +39727,7 @@ DSP_RingBuf_Enqueue:
 	cp ix, de
 	jr c, DSP_RingBuf_Enqueue
 
-LABEL_035933:
+DSP_Enqueue_ReturnOK:
 	lds hl, 0
 	ret
 
@@ -39749,7 +39749,7 @@ Extract_14Bit_PayloadSize:
 ;   byte[2] bits 6:0 -> XHL bits 13:7
 ;   byte[3] bits 6:0 -> XHL bits 6:0
 ; Exit: XHL = packed 21-bit value
-LABEL_035950:
+DSP_Pack3x7bitFields:
 	ld	c, (xwa+2)
 	res	7, c
 	ldb	b, 0
@@ -40320,10 +40320,10 @@ LABEL_035ED7:
 	ld c, a
 	extz bc
 	ld wa, de
-	call LABEL_035323
+	call DSP_Reinit_VoiceSlots
 	ldw wa, 0xFF
 	ldw bc, 0xFF
-	call LABEL_035490
+	call DSP_VoiceState_Dispatch
 	jrl DSP_Process_ReadNext
 
 LABEL_035EFA:
@@ -40334,7 +40334,7 @@ LABEL_035EFA:
 	ld c, a
 	extz bc
 	ld wa, de
-	call LABEL_035490
+	call DSP_VoiceState_Dispatch
 	jrl DSP_Process_ReadNext
 
 LABEL_035F13:
@@ -40472,7 +40472,7 @@ DSP_Process_Exit:
 	lda xsp, (xsp + 10)
 	ret
 
-LABEL_036049:
+DSP_WriteAlgoInitPreset:
 	call 0x37E30
 	ld wa, hl
 	cps wa, 2
@@ -40504,7 +40504,7 @@ LABEL_036079:
 LABEL_036088:
 	jp 0x34D93
 
-LABEL_03608C:
+DSP_ApplyAlgoForVoiceType:
 	cp wa, 0x35
 	jr z, LABEL_036098
 	cp wa, 0xF
@@ -40538,9 +40538,9 @@ DSP_Reset:
 	call LABEL_038DEF
 	ldda16 xiz, 61478
 	ld wa, iz
-	calr LABEL_036049
+	calr DSP_WriteAlgoInitPreset
 	ld wa, iz
-	calr LABEL_03608C
+	calr DSP_ApplyAlgoForVoiceType
 	ldda16 xwa, 17842
 	ldda16 xbc, 17844
 	ldda16 xde, 17846
@@ -40551,9 +40551,9 @@ DSP_Reset:
 LABEL_03611D:
 	.byte 0x0e
 
-LABEL_03611E:
+DSP_SlotState_DisplayRestore:
 	lds wa, 0
-	call LABEL_036DF5
+	call DSP_SlotMuteState_ReadAndClear
 	cps hl, 3
 	jr nz, LABEL_03613B
 	lda_24 xwa, 0x0121f3
@@ -40607,7 +40607,7 @@ LABEL_03617D:
 	ldada xwa, 17550
 	call LABEL_038E31
 	ldda16 xwa, 17558
-	jrl LABEL_03608C
+	jrl DSP_ApplyAlgoForVoiceType
 
 LABEL_0361A0:
 	ldada xwa, 17550
@@ -40630,7 +40630,7 @@ DSP_ReconfigAndStatus:
 	ldada xwa, 17550
 	call LABEL_038E31
 	ldda16 xwa, 17558
-	jrl LABEL_03608C
+	jrl DSP_ApplyAlgoForVoiceType
 
 DSP_GetConfigBuffer:
 	ldada xhl, 17550
@@ -40720,7 +40720,7 @@ LABEL_036325:
 LABEL_036327:
 	.byte 0x1b, 0x0f, 0x8e, 0x03
 
-LABEL_03632B:
+DSP_WakeAudioTask:
 	lds wa, 1
 	jp LABEL_02044F
 
@@ -40814,7 +40814,7 @@ DSP_Send_Cmd_Cleanup:
 	inc 8, xsp
 	ret
 
-LABEL_03640A:
+DSP2_SPI_ClockPulseHigh:
 	set_dd8 2, 0x3C
 	jr __jrt_nop_03640F
 __jrt_nop_03640F:
@@ -41097,7 +41097,7 @@ LABEL_0364BA:
 	lda_24 xwa, 0x01220d
 	jp 0x38365
 
-LABEL_0364C4:
+DSP2_SPI_BusIdle:
 	res_dd8 2, 0x3C
 	res_dd8 0, 0x3C
 	jr __jrt_nop_0364CC
@@ -41781,13 +41781,13 @@ DSP2_Send_Command:
 	ld (xsp + 6), bc
 	ld (xsp + 8), a
 	ldw (xsp + 4), 0x0
-	calr LABEL_03632B
+	calr DSP_WakeAudioTask
 	ei 6
 	ld a, (xsp + 8)
 	ldfr_berp A, 0xFB
 	ld wa, (xsp + 6)
 	call 0x383BF
-	calr LABEL_03640A
+	calr DSP2_SPI_ClockPulseHigh
 	ldw iz, 0x8
 	cps iz, 0
 	jrl le, LABEL_036721
@@ -42889,14 +42889,14 @@ LABEL_036A6C:
 	popw iz
 	ret
 
-LABEL_036A70:
+DSP_StateTable_Reset:
 	ld xiy, xwa
 	ld xix, 0x45CA
 	ldw bc, 0x91
 	ldirw
 	ret
 
-LABEL_036A7D:
+DSP_AlgoChange_CheckAndFlag:
 	ld bc, (xwa + 6)
 	cpda16 xbc, 17872
 	jr nz, LABEL_036A94
@@ -42913,7 +42913,7 @@ LABEL_036A9B:
 	stdi16 18750, 0
 	ret
 
-LABEL_036AA2:
+DSP_SlotParam_DiffAndFlag:
 	lds hl, 0
 	cps hl, 5
 	ret nc
@@ -42958,7 +42958,7 @@ LABEL_036AF6:
 	jr c, LABEL_036AA8
 	ret
 
-LABEL_036AFD:
+DSP_EFFParam_DiffAllAndFlag:
 	push xiz
 	lds de, 0
 	cps de, 5
@@ -43237,29 +43237,29 @@ LABEL_036D7E:
 	pop xiz
 	ret
 
-LABEL_036D80:
+DSP_State_DiffAll:
 	push xiz
 	ld xiz, xwa
 	ld xwa, xiz
-	calr LABEL_036A7D
+	calr DSP_AlgoChange_CheckAndFlag
 	ld xwa, xiz
-	calr LABEL_036AA2
+	calr DSP_SlotParam_DiffAndFlag
 	ld xwa, xiz
-	calr LABEL_036AFD
+	calr DSP_EFFParam_DiffAllAndFlag
 	pop xiz
 	ret
 
-LABEL_036D94:
+DSP_State_DiffAndPrepare:
 	push xiz
 	ld xiz, xwa
 	ld xwa, xiz
-	calr LABEL_036D80
+	calr DSP_State_DiffAll
 	ld xwa, xiz
 	calr EFF_StateLoad_Prepare
 	pop xiz
 	ret
 
-LABEL_036DA3:
+DSP_Config_ClampLimits:
 	cpw (xwa + 6), 0x1
 	jr ule, LABEL_036DAF
 	ldw (xwa + 6), 0x0
@@ -43300,7 +43300,7 @@ LABEL_036DEA:
 	.byte 0xd2, 0x66, 0x55, 0x04, 0x23, 0xd2, 0x44, 0x54
 	.byte 0x04, 0x83, 0x0e
 
-LABEL_036DF5:
+DSP_SlotMuteState_ReadAndClear:
 	ld bc, wa
 	add bc, bc
 	ldada xde, 17852
@@ -43339,23 +43339,23 @@ LABEL_036E12:
 	ld	xhl, xwa
 	ret
 
-LABEL_036E3D:
+DSP_State_ApplyAll:
 	push xiz
 	ld xiz, xwa
 	stdi16 17864, 0
 	ld xwa, xiz
-	calr LABEL_036DA3
+	calr DSP_Config_ClampLimits
 	ld xwa, xiz
-	calr LABEL_036D94
+	calr DSP_State_DiffAndPrepare
 	ld xwa, xiz
 	calr DSP_State_Dispatcher
 	ld xwa, xiz
-	calr LABEL_036A70
+	calr DSP_StateTable_Reset
 	ldda16 xhl, 17864
 	pop xiz
 	ret
 
-LABEL_036E60:
+EFF_SlotActive_UpdateFlags:
 	lds de, 0
 	cpdi16 18750, 1
 	jr nz, LABEL_036E87
@@ -43511,7 +43511,7 @@ LABEL_036FCA:
 	jrl c, LABEL_036E8D
 	ret
 
-LABEL_036FD2:
+EFF_DSPLink_ResetFlags:
 	cpdi16 18750, 1
 	jr nz, LABEL_036FFD
 	stdi16 18746, 1
@@ -44244,8 +44244,8 @@ EFF_StateLoad_Prepare:
 	push xiz
 	ld xiz, xwa
 	ld xwa, xiz
-	calr LABEL_036E60
-	calr LABEL_036FD2
+	calr EFF_SlotActive_UpdateFlags
+	calr EFF_DSPLink_ResetFlags
 	ld xwa, xiz
 	calr LABEL_03701A
 	pop xiz
@@ -46752,7 +46752,7 @@ LABEL_038E6E:
 	ldda32 xwa, 19006
 	stiw_dri 0xE1, 0x20, 0x01, 0x01, 0x00
 	ldda32 xwa, 19006
-	call LABEL_036E3D
+	call DSP_State_ApplyAll
 	ldda32 xwa, 19006
 	stiw_dri 0xE1, 0x20, 0x01, 0x00, 0x00
 	ret
@@ -50945,7 +50945,7 @@ LABEL_03C067:
 	srl xwa, 0
 	lds bc, 1
 	call 0x36A4F
-	call LABEL_0364C4
+	call DSP2_SPI_BusIdle
 	call 0x3C253
 	ldw wa, 0x30
 	lds bc, 1
@@ -50966,7 +50966,7 @@ LABEL_03C067:
 	srl xwa, 0
 	lds bc, 1
 	call 0x36A4F
-	call LABEL_0364C4
+	call DSP2_SPI_BusIdle
 	call 0x3C253
 	pop xiz
 	lda xsp, (xsp + 20)
@@ -51377,7 +51377,7 @@ DSP_Bytecode_Programs:
 	.byte 0x73, 0x8f, 0xfe, 0x68, 0x53
 
 DSP_Bytecode_Op0D_StateChange:
-	call LABEL_0364C4
+	call DSP2_SPI_BusIdle
 	calr DSP_Bytecode_NotifyStateChange
 	jr DSP_BytecodeInterpreter_CheckEnd
 
@@ -51603,7 +51603,7 @@ LABEL_03CB8E:
 LABEL_03CBA8:
 	cpw (xsp + 20), 0x1
 	jr nz, LABEL_03CBB6
-	call LABEL_0364C4
+	call DSP2_SPI_BusIdle
 	calr DSP_Bytecode_NotifyStateChange
 
 LABEL_03CBB6:
