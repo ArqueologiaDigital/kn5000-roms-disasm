@@ -13,19 +13,19 @@ FmmComposerLoadFunc:
 	dec 2, xsp
 	pushw iz
 	cp xbc, 0x1C00018
-	jrl z, LABEL_F8D380
+	jrl z, CompLoad_HandleScroll
 	cp xbc, 0x1C00017
-	jrl z, LABEL_F8D380
+	jrl z, CompLoad_HandleScroll
 	cp xbc, 0x1C0000B
-	jrl z, LABEL_F8D30B
+	jrl z, CompLoad_HandleShow
 	cp xbc, 0x1E50004
-	jrl z, LABEL_F8D2D7
+	jrl z, CompLoad_HandleSelection
 	cp xbc, 0x1C00013
-	jrl nz, LABEL_F8D4CA
+	jrl nz, CompLoad_Return
 	cp xde, 0x3
-	jrl z, LABEL_F8D2D1
+	jrl z, CompLoad_HandleAbort
 	cp xde, 0x2
-	jrl nz, LABEL_F8D4CA
+	jrl nz, CompLoad_Return
 	stdi8 34046, 0
 	lds wa, 1
 	calr InitializeOperationState
@@ -34,29 +34,29 @@ FmmComposerLoadFunc:
 	lds32 xde, 5
 	call 0xFA9D58
 	cpdi16 34048, 0
-	jr ge, LABEL_F8D1E4
+	jr ge, CompLoad_DispatchState
 	call 0xF89520
 	extz hl
 	stda16 34048, xhl
 	calr SignalProgressUpdate
 
-LABEL_F8D1E4:
+CompLoad_DispatchState:
 	ldda16 xwa, 34048
 	cps wa, 1
-	jrl z, LABEL_F8D289
+	jrl z, CompLoad_HandleSuccess
 	cps wa, 0
-	jr z, LABEL_F8D26F
+	jr z, CompLoad_HandleError
 	cps wa, 5
-	jr z, LABEL_F8D22F
+	jr z, CompLoad_HandleCancel
 	cpdi16 34050, 0
-	jr ge, LABEL_F8D210
+	jr ge, CompLoad_ContinueWait
 	call 0xF8987D
 	stda16 34050, xhl
 	call LABEL_F8958D
 	call 0xF8953B
 	calr SignalProgressUpdate
 
-LABEL_F8D210:
+CompLoad_ContinueWait:
 	ld xwa, 0x600026
 	ld xbc, 0x1C00002
 	lds32 xde, 0
@@ -64,9 +64,9 @@ LABEL_F8D210:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C0000A
 	lds32 xde, 0
-	jrl LABEL_F8D4C6
+	jrl CompLoad_DispatchWidget
 
-LABEL_F8D22F:
+CompLoad_HandleCancel:
 	ld xwa, 0x600026
 	ld xbc, 0x1C00002
 	lds32 xde, 0
@@ -83,18 +83,18 @@ LABEL_F8D22F:
 	call 0xFA9D58
 	stdi8 32578, 0
 	ldw wa, 0xEE
-	jr LABEL_F8D2CA
+	jr CompLoad_CallStatusDisplay
 
-LABEL_F8D26F:
+CompLoad_HandleError:
 	ld xwa, 0x600026
 	ld xbc, 0x1C00002
 	lds32 xde, 0
 	call 0xFA9D58
 	ldw wa, 0x7D
 	call 0xF99490
-	jrl LABEL_F8D4CA
+	jrl CompLoad_Return
 
-LABEL_F8D289:
+CompLoad_HandleSuccess:
 	calr ResetProgressIndication
 	ld xwa, 0x600026
 	ld xbc, 0x1C00002
@@ -113,37 +113,37 @@ LABEL_F8D289:
 	stdi8 32578, 2
 	ldw wa, 0xEE
 
-LABEL_F8D2CA:
+CompLoad_CallStatusDisplay:
 	call LABEL_F994BD
-	jrl LABEL_F8D4CA
+	jrl CompLoad_Return
 
-LABEL_F8D2D1:
+CompLoad_HandleAbort:
 	calr CancelOperationCleanup
-	jrl LABEL_F8D4CA
+	jrl CompLoad_Return
 
-LABEL_F8D2D7:
+CompLoad_HandleSelection:
 	stda32 32636, xde
 	call 0xF895EF
 	stda16 32640, xhl
 	cps hl, 0
-	jr lt, LABEL_F8D2F7
+	jr lt, CompLoad_Selection_Negative
 	exts xhl
 	ldda32 xwa, 32636
 	ld xbc, 0x1E50002
 	ld xde, xhl
-	jrl LABEL_F8D4C6
+	jrl CompLoad_DispatchWidget
 
-LABEL_F8D2F7:
+CompLoad_Selection_Negative:
 	stdi16 32640, 0
 	ldda32 xwa, 32636
 	ld xbc, 0x1E50002
 	lds32 xde, 0
-	jrl LABEL_F8D4C6
+	jrl CompLoad_DispatchWidget
 
-LABEL_F8D30B:
+CompLoad_HandleShow:
 	lds iz, 0
 
-LABEL_F8D30D:
+CompLoad_DrawItemLoop:
 	ld wa, iz
 	ld hl, wa
 	sll hl, 5
@@ -155,16 +155,16 @@ LABEL_F8D30D:
 	lds bc, 3
 	call LABEL_F89408
 	cps l, 0
-	jr z, LABEL_F8D335
+	jr z, CompLoad_DrawItem_Empty
 	ld wa, iz
 	call LABEL_F89623
 	ld xbc, xhl
-	jr LABEL_F8D33A
+	jr CompLoad_DrawItem_Continue
 
-LABEL_F8D335:
+CompLoad_DrawItem_Empty:
 	lda_24 xbc, 0xea06ec
 
-LABEL_F8D33A:
+CompLoad_DrawItem_Continue:
 	ld de, iz
 	ld wa, de
 	sll wa, 5
@@ -188,69 +188,69 @@ LABEL_F8D33A:
 	call 0xFA9D58
 	inc 1, iz
 	cp iz, 0x14
-	jr lt, LABEL_F8D30D
-	jrl LABEL_F8D4CA
+	jr lt, CompLoad_DrawItemLoop
+	jrl CompLoad_Return
 
-LABEL_F8D380:
+CompLoad_HandleScroll:
 	ldda16 xwa, 32640
 	ld (xsp + 2), wa
 	or xde, xde
-	jr nz, LABEL_F8D3B0
+	jr nz, CompLoad_PageScroll
 	cp xbc, 0x1C00018
-	jr nz, LABEL_F8D39E
+	jr nz, CompLoad_ScrollUp
 	cp wa, 0x13
-	jrl ge, LABEL_F8D473
+	jrl ge, CompLoad_GetSelection
 	inc 1, wa
-	jr LABEL_F8D3DE
+	jr CompLoad_StorePosition
 
-LABEL_F8D39E:
+CompLoad_ScrollUp:
 	cp xbc, 0x1C00017
-	jrl nz, LABEL_F8D473
+	jrl nz, CompLoad_GetSelection
 	cps wa, 0
-	jrl le, LABEL_F8D473
+	jrl le, CompLoad_GetSelection
 	dec 1, wa
-	jr LABEL_F8D3DE
+	jr CompLoad_StorePosition
 
-LABEL_F8D3B0:
+CompLoad_PageScroll:
 	cp xde, 0x1
-	jr nz, LABEL_F8D3C5
+	jr nz, CompLoad_PageDown
 	cp wa, 0xA
-	jrl lt, LABEL_F8D473
+	jrl lt, CompLoad_GetSelection
 	sub wa, 0xA
-	jr LABEL_F8D3DE
+	jr CompLoad_StorePosition
 
-LABEL_F8D3C5:
+CompLoad_PageDown:
 	cp xde, 0x2
-	jr nz, LABEL_F8D3E5
+	jr nz, CompLoad_OpLoad
 	ld bc, wa
 	add bc, 0xA
 	cp bc, 0x13
-	jrl gt, LABEL_F8D473
+	jrl gt, CompLoad_GetSelection
 	add wa, 0xA
 
-LABEL_F8D3DE:
+CompLoad_StorePosition:
 	stda16 32640, xwa
-	jrl LABEL_F8D477
+	jrl CompLoad_UpdateDisplay
 
-LABEL_F8D3E5:
+CompLoad_OpLoad:
 	cp xde, 0x3
-	jrl nz, LABEL_F8D473
+	jrl nz, CompLoad_GetSelection
 	call 0xF8943E
 	cps hl, 0
-	jr z, LABEL_F8D473
+	jr z, CompLoad_GetSelection
 	ld xwa, 0x600026
 	ld xbc, 0x1C00001
 	lds32 xde, 5
 	call 0xFA9D58
 	lds iz, 0
 
-LABEL_F8D408:
+CompLoad_HideButtons_Loop:
 	ldto_berp A, 0xF8
 	extz wa
 	call LABEL_F89335
 	inc 1, iz
 	cp iz, 0x8
-	jr lt, LABEL_F8D408
+	jr lt, CompLoad_HideButtons_Loop
 	lds wa, 3
 	call LABEL_F89321
 	lds wa, 0
@@ -278,12 +278,12 @@ LABEL_F8D408:
 	ldw wa, 0xEE
 	call LABEL_F994BD
 
-LABEL_F8D473:
+CompLoad_GetSelection:
 	ldda16 xwa, 32640
 
-LABEL_F8D477:
+CompLoad_UpdateDisplay:
 	cp (xsp + 2), wa
-	jr z, LABEL_F8D4CA
+	jr z, CompLoad_Return
 	call 0xF89605
 	ldda16 xde, 32640
 	exts xde
@@ -306,10 +306,10 @@ LABEL_F8D477:
 	ldda32 xwa, 32636
 	ld xbc, 0x1C0000F
 
-LABEL_F8D4C6:
+CompLoad_DispatchWidget:
 	call 0xFA9D58
 
-LABEL_F8D4CA:
+CompLoad_Return:
 	lds32 xhl, 0
 	popw iz
 	inc 2, xsp
@@ -324,92 +324,92 @@ RenderFilterDisplay:
 	lda_dpi XHL, 0xE0
 	ld (xsp + 2), xwa
 	cp (xsp), 0x0
-	jr nz, LABEL_F8D4FA
+	jr nz, RenderFilter_CheckType1
 	call LABEL_F8964C
 	cps l, 0
-	jr z, LABEL_F8D4FA
+	jr z, RenderFilter_CheckType1
 	ld xwa, (xsp + 2)
 	ld xbc, 0xEA06EE
-	jrl LABEL_F8D5A9
+	jrl RenderFilter_CopyAndReturn
 
-LABEL_F8D4FA:
+RenderFilter_CheckType1:
 	cp (xsp), 0x1
-	jr nz, LABEL_F8D53A
+	jr nz, RenderFilter_CheckGeneric
 	call LABEL_F8964C
 	cps l, 0
-	jr z, LABEL_F8D53A
+	jr z, RenderFilter_CheckGeneric
 	lds wa, 0
 	call LABEL_F893D1
 	cps l, 0
-	jr z, LABEL_F8D530
+	jr z, RenderFilter_Type1_Unavail
 	lds wa, 0
 	call LABEL_F892F5
 	cps l, 0
-	jr z, LABEL_F8D526
+	jr z, RenderFilter_Type1_Restricted
 	ld xwa, (xsp + 2)
 	ld xbc, 0xEA06F4
-	jrl LABEL_F8D5A9
+	jrl RenderFilter_CopyAndReturn
 
-LABEL_F8D526:
+RenderFilter_Type1_Restricted:
 	ld xwa, (xsp + 2)
 	ld xbc, 0xEA06FA
-	jr LABEL_F8D5A9
+	jr RenderFilter_CopyAndReturn
 
-LABEL_F8D530:
+RenderFilter_Type1_Unavail:
 	ld xwa, (xsp + 2)
 	ld xbc, 0xEA0700
-	jr LABEL_F8D5A9
+	jr RenderFilter_CopyAndReturn
 
-LABEL_F8D53A:
+RenderFilter_CheckGeneric:
 	ld a, (xsp)
 	extz wa
 	call LABEL_F893D1
 	cps l, 0
-	jr z, LABEL_F8D566
+	jr z, RenderFilter_CheckType2
 	ld a, (xsp)
 	extz wa
 	call LABEL_F892F5
 	cps l, 0
-	jr z, LABEL_F8D55C
+	jr z, RenderFilter_Generic_Restricted
 	ld xwa, (xsp + 2)
 	ld xbc, 0xEA0706
-	jr LABEL_F8D5A9
+	jr RenderFilter_CopyAndReturn
 
-LABEL_F8D55C:
+RenderFilter_Generic_Restricted:
 	ld xwa, (xsp + 2)
 	ld xbc, 0xEA070C
-	jr LABEL_F8D5A9
+	jr RenderFilter_CopyAndReturn
 
-LABEL_F8D566:
+RenderFilter_CheckType2:
 	cp (xsp), 0x2
-	jr nz, LABEL_F8D5A1
+	jr nz, RenderFilter_Default
 	ldw wa, 0x8
 	call LABEL_F893D1
 	cps l, 0
-	jr z, LABEL_F8D5A1
+	jr z, RenderFilter_Default
 	ldw wa, 0x9
 	call LABEL_F893D1
 	cps l, 0
-	jr z, LABEL_F8D5A1
+	jr z, RenderFilter_Default
 	ld a, (xsp)
 	extz wa
 	call LABEL_F892F5
 	cps l, 0
-	jr z, LABEL_F8D597
+	jr z, RenderFilter_Type2_Restricted
 	ld xwa, (xsp + 2)
 	ld xbc, 0xEA0712
-	jr LABEL_F8D5A9
+	jr RenderFilter_CopyAndReturn
 
-LABEL_F8D597:
+RenderFilter_Type2_Restricted:
 	ld xwa, (xsp + 2)
 	ld xbc, 0xEA0718
-	jr LABEL_F8D5A9
+	jr RenderFilter_CopyAndReturn
 
-LABEL_F8D5A1:
+RenderFilter_Default:
 	ld xwa, (xsp + 2)
 	ld xbc, 0xEA071E
 
-LABEL_F8D5A9:
+RenderFilter_CopyAndReturn:
 	call LABEL_F890DC
 	inc 6, xsp
 	ret
@@ -418,21 +418,21 @@ FmmLoadFilterFunc:
 	dec 6, xsp
 	ld (xsp + 2), xde
 	cp xbc, 0x1C00018
-	jr z, LABEL_F8D61D
+	jr z, LoadFilter_HandleScroll
 	cp xbc, 0x1C00017
-	jr z, LABEL_F8D61D
+	jr z, LoadFilter_HandleScroll
 	cp xbc, 0x1C0000B
-	jr z, LABEL_F8D5E0
+	jr z, LoadFilter_HandleShow
 	cp xbc, 0x1E50004
-	jrl nz, LABEL_F8D77F
+	jrl nz, LoadFilter_Return
 	ld xwa, (xsp + 2)
 	stda32 32642, xwa
-	jrl LABEL_F8D77F
+	jrl LoadFilter_Return
 
-LABEL_F8D5E0:
+LoadFilter_HandleShow:
 	ldw (xsp), 0x0
 
-LABEL_F8D5E4:
+LoadFilter_DrawLoop:
 	ld wa, (xsp)
 	sll wa, 4
 	ldada xbc, 32646
@@ -451,65 +451,65 @@ LABEL_F8D5E4:
 	call 0xFA9D58
 	incm 1, (xsp)
 	cpw (xsp), 0x8
-	jr lt, LABEL_F8D5E4
-	jrl LABEL_F8D77F
+	jr lt, LoadFilter_DrawLoop
+	jrl LoadFilter_Return
 
-LABEL_F8D61D:
+LoadFilter_HandleScroll:
 	ld xwa, (xsp + 2)
 	cp xwa, 0x8
-	jrl nc, LABEL_F8D6C6
+	jrl nc, LoadFilter_OpLoad
 	cp xbc, 0x1C00017
-	jr nz, LABEL_F8D65F
+	jr nz, LoadFilter_ScrollDown
 	cp xwa, 0x1
-	jr nz, LABEL_F8D645
+	jr nz, LoadFilter_ScrollUp_CheckZero
 	call LABEL_F8964C
 	cps l, 0
-	jr z, LABEL_F8D645
+	jr z, LoadFilter_ScrollUp_CheckZero
 	lds wa, 0
-	jr LABEL_F8D659
+	jr LoadFilter_ShowButton
 
-LABEL_F8D645:
+LoadFilter_ScrollUp_CheckZero:
 	ld xwa, (xsp + 2)
 	or xwa, xwa
-	jr nz, LABEL_F8D654
+	jr nz, LoadFilter_ScrollUp_Restore
 	call LABEL_F8964C
 	cps l, 0
-	jr nz, LABEL_F8D68E
+	jr nz, LoadFilter_UpdateDisplay
 
-LABEL_F8D654:
+LoadFilter_ScrollUp_Restore:
 	ld xwa, (xsp + 2)
 	extz wa
 
-LABEL_F8D659:
+LoadFilter_ShowButton:
 	call LABEL_F89321
-	jr LABEL_F8D68E
+	jr LoadFilter_UpdateDisplay
 
-LABEL_F8D65F:
+LoadFilter_ScrollDown:
 	ld xwa, (xsp + 2)
 	cp xwa, 0x1
-	jr nz, LABEL_F8D676
+	jr nz, LoadFilter_ScrollDown_CheckZero
 	call LABEL_F8964C
 	cps l, 0
-	jr z, LABEL_F8D676
+	jr z, LoadFilter_ScrollDown_CheckZero
 	lds wa, 0
-	jr LABEL_F8D68A
+	jr LoadFilter_HideButton
 
-LABEL_F8D676:
+LoadFilter_ScrollDown_CheckZero:
 	ld xwa, (xsp + 2)
 	or xwa, xwa
-	jr nz, LABEL_F8D685
+	jr nz, LoadFilter_ScrollDown_Restore
 	call LABEL_F8964C
 	cps l, 0
-	jr nz, LABEL_F8D68E
+	jr nz, LoadFilter_UpdateDisplay
 
-LABEL_F8D685:
+LoadFilter_ScrollDown_Restore:
 	ld xwa, (xsp + 2)
 	extz wa
 
-LABEL_F8D68A:
+LoadFilter_HideButton:
 	call LABEL_F89335
 
-LABEL_F8D68E:
+LoadFilter_UpdateDisplay:
 	ld xwa, (xsp + 2)
 	ld c, a
 	extz bc
@@ -527,18 +527,18 @@ LABEL_F8D68E:
 	ldda32 xwa, 32642
 	ld xbc, 0x1C0000F
 	call 0xFA9D58
-	jrl LABEL_F8D77F
+	jrl LoadFilter_Return
 
-LABEL_F8D6C6:
+LoadFilter_OpLoad:
 	ld xwa, (xsp + 2)
 	cp xwa, 0xA
-	jrl nz, LABEL_F8D77F
+	jrl nz, LoadFilter_Return
 	call 0xF8943E
 	cps hl, 0
-	jrl z, LABEL_F8D77F
+	jrl z, LoadFilter_Return
 	call LABEL_F892EF
 	cps hl, 0
-	jrl z, LABEL_F8D77F
+	jrl z, LoadFilter_Return
 	ld xwa, 0x600026
 	ld xbc, 0x1C00001
 	lds32 xde, 5
@@ -564,28 +564,28 @@ LABEL_F8D6C6:
 	lds32 xde, 1
 	call 0xFA9D58
 	cpdi16 61854, 0
-	jr z, LABEL_F8D762
+	jr z, LoadFilter_Load_ShowCode1
 	lds wa, 2
 	call LABEL_F892F5
 	cps l, 0
-	jr z, LABEL_F8D762
+	jr z, LoadFilter_Load_ShowCode1
 	lds wa, 2
 	call LABEL_F893D1
 	cps l, 0
-	jr nz, LABEL_F8D75D
+	jr nz, LoadFilter_Load_ShowCodeA
 	ldw wa, 0x8
 	call LABEL_F893D1
 	cps l, 0
-	jr z, LABEL_F8D762
+	jr z, LoadFilter_Load_ShowCode1
 
-LABEL_F8D75D:
+LoadFilter_Load_ShowCodeA:
 	ldw wa, 0xA
-	jr LABEL_F8D764
+	jr LoadFilter_Load_CallHandler
 
-LABEL_F8D762:
+LoadFilter_Load_ShowCode1:
 	lds wa, 1
 
-LABEL_F8D764:
+LoadFilter_Load_CallHandler:
 	call LABEL_F99463
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
@@ -594,7 +594,7 @@ LABEL_F8D764:
 	ldw wa, 0xEE
 	call LABEL_F994BD
 
-LABEL_F8D77F:
+LoadFilter_Return:
 	lds32 xhl, 0
 	inc 6, xsp
 	ret
@@ -611,26 +611,26 @@ RenderSaveFilterDisplay:
 	extz wa
 	call LABEL_F89353
 	cps l, 0
-	jr z, LABEL_F8D7C3
+	jr z, RenderSaveFilter_Unavail
 	cp (xsp), 0x1
-	jr nz, LABEL_F8D7B9
+	jr nz, RenderSaveFilter_Available
 	call LABEL_F893AB
 	cps l, 0
-	jr z, LABEL_F8D7B9
+	jr z, RenderSaveFilter_Available
 	ld xwa, (xsp + 2)
 	ld xbc, 0xEA0724
-	jr LABEL_F8D7CB
+	jr RenderSaveFilter_CopyAndReturn
 
-LABEL_F8D7B9:
+RenderSaveFilter_Available:
 	ld xwa, (xsp + 2)
 	ld xbc, 0xEA072A
-	jr LABEL_F8D7CB
+	jr RenderSaveFilter_CopyAndReturn
 
-LABEL_F8D7C3:
+RenderSaveFilter_Unavail:
 	ld xwa, (xsp + 2)
 	ld xbc, 0xEA0730
 
-LABEL_F8D7CB:
+RenderSaveFilter_CopyAndReturn:
 	call LABEL_F890DC
 	inc 6, xsp
 	ret
@@ -639,21 +639,21 @@ FmmSaveFilterFunc:
 	dec 6, xsp
 	ld (xsp + 2), xde
 	cp xbc, 0x1C00018
-	jr z, LABEL_F8D83F
+	jr z, SaveFilter_HandleScroll
 	cp xbc, 0x1C00017
-	jr z, LABEL_F8D83F
+	jr z, SaveFilter_HandleScroll
 	cp xbc, 0x1C0000B
-	jr z, LABEL_F8D802
+	jr z, SaveFilter_HandleShow
 	cp xbc, 0x1E50004
-	jrl nz, LABEL_F8DB48
+	jrl nz, SaveFilter_Return
 	ld xwa, (xsp + 2)
 	stda32 32774, xwa
-	jrl LABEL_F8DB48
+	jrl SaveFilter_Return
 
-LABEL_F8D802:
+SaveFilter_HandleShow:
 	ldw (xsp), 0x0
 
-LABEL_F8D806:
+SaveFilter_DrawLoop:
 	ld wa, (xsp)
 	sll wa, 4
 	ldada xbc, 32778
@@ -672,66 +672,66 @@ LABEL_F8D806:
 	call 0xFA9D58
 	incm 1, (xsp)
 	cpw (xsp), 0x8
-	jr lt, LABEL_F8D806
-	jrl LABEL_F8DB48
+	jr lt, SaveFilter_DrawLoop
+	jrl SaveFilter_Return
 
-LABEL_F8D83F:
+SaveFilter_HandleScroll:
 	ld xwa, (xsp + 2)
 	cp xwa, 0x8
-	jrl nc, LABEL_F8D8EF
+	jrl nc, SaveFilter_SelectAll
 	cp xwa, 0x1
-	jr nz, LABEL_F8D8A4
+	jr nz, SaveFilter_ScrollOther
 	cp xbc, 0x1C00017
-	jr nz, LABEL_F8D875
+	jr nz, SaveFilter_ScrollDown
 	call LABEL_F893AB
 	cps l, 0
-	jr z, LABEL_F8D86E
+	jr z, SaveFilter_ScrollUp_Unavail
 	call LABEL_F893CA
 	ld xwa, (xsp + 2)
 	extz wa
-	jr LABEL_F8D8B7
+	jr SaveFilter_UnlockFilter
 
-LABEL_F8D86E:
+SaveFilter_ScrollUp_Unavail:
 	ld xwa, (xsp + 2)
 	extz wa
-	jr LABEL_F8D8B1
+	jr SaveFilter_LockFilter
 
-LABEL_F8D875:
+SaveFilter_ScrollDown:
 	ld xwa, (xsp + 2)
 	extz wa
 	call LABEL_F89353
 	cps l, 0
-	jr z, LABEL_F8D891
+	jr z, SaveFilter_ScrollDown_Unlock
 	call LABEL_F893AB
 	cps l, 0
-	jr nz, LABEL_F8D8BB
+	jr nz, SaveFilter_UpdateDisplay
 	ld xwa, (xsp + 2)
 	extz wa
-	jr LABEL_F8D8B7
+	jr SaveFilter_UnlockFilter
 
-LABEL_F8D891:
+SaveFilter_ScrollDown_Unlock:
 	call LABEL_F893AB
 	cps l, 0
-	jr nz, LABEL_F8D8BB
+	jr nz, SaveFilter_UpdateDisplay
 	call LABEL_F893C3
 	ld xwa, (xsp + 2)
 	extz wa
-	jr LABEL_F8D8B1
+	jr SaveFilter_LockFilter
 
-LABEL_F8D8A4:
+SaveFilter_ScrollOther:
 	ld xwa, (xsp + 2)
 	extz wa
 	cp xbc, 0x1C00017
-	jr nz, LABEL_F8D8B7
+	jr nz, SaveFilter_UnlockFilter
 
-LABEL_F8D8B1:
+SaveFilter_LockFilter:
 	call LABEL_F8937F
-	jr LABEL_F8D8BB
+	jr SaveFilter_UpdateDisplay
 
-LABEL_F8D8B7:
+SaveFilter_UnlockFilter:
 	call LABEL_F89393
 
-LABEL_F8D8BB:
+SaveFilter_UpdateDisplay:
 	ld xwa, (xsp + 2)
 	ld c, a
 	extz bc
@@ -748,27 +748,27 @@ LABEL_F8D8BB:
 	st_dri3b B, 0x07, 0xE4, 0xE0
 	ldda32 xwa, 32774
 	ld xbc, 0x1C0000F
-	jrl LABEL_F8D9FD
+	jrl SaveFilter_DispatchWidget
 
-LABEL_F8D8EF:
+SaveFilter_SelectAll:
 	ld xwa, (xsp + 2)
 	cp xwa, 0x8
-	jr nz, LABEL_F8D94F
+	jr nz, SaveFilter_DeselectAll
 	call LABEL_F893CA
 	ldw (xsp), 0x0
 
-LABEL_F8D902:
+SaveFilter_SelectAll_Loop:
 	ld wa, (xsp)
 	extz wa
 	cpw (xsp), 0x6
-	jr ge, LABEL_F8D912
+	jr ge, SaveFilter_SelectAll_Unlock
 	call LABEL_F8937F
-	jr LABEL_F8D916
+	jr SaveFilter_SelectAll_Update
 
-LABEL_F8D912:
+SaveFilter_SelectAll_Unlock:
 	call LABEL_F89393
 
-LABEL_F8D916:
+SaveFilter_SelectAll_Update:
 	ld wa, (xsp)
 	sll wa, 4
 	ldada xbc, 32778
@@ -787,17 +787,17 @@ LABEL_F8D916:
 	call 0xFA9D58
 	incm 1, (xsp)
 	cpw (xsp), 0x8
-	jr lt, LABEL_F8D902
-	jrl LABEL_F8DB48
+	jr lt, SaveFilter_SelectAll_Loop
+	jrl SaveFilter_Return
 
-LABEL_F8D94F:
+SaveFilter_DeselectAll:
 	ld xwa, (xsp + 2)
 	cp xwa, 0x9
-	jr nz, LABEL_F8D9A3
+	jr nz, SaveFilter_OpSave
 	call LABEL_F893CA
 	ldw (xsp), 0x0
 
-LABEL_F8D962:
+SaveFilter_DeselectAll_Loop:
 	ld wa, (xsp)
 	extz wa
 	call LABEL_F8937F
@@ -819,31 +819,31 @@ LABEL_F8D962:
 	call 0xFA9D58
 	incm 1, (xsp)
 	cpw (xsp), 0x8
-	jr lt, LABEL_F8D962
-	jrl LABEL_F8DB48
+	jr lt, SaveFilter_DeselectAll_Loop
+	jrl SaveFilter_Return
 
-LABEL_F8D9A3:
+SaveFilter_OpSave:
 	ld xwa, (xsp + 2)
 	cp xwa, 0xA
-	jrl nz, LABEL_F8DA76
+	jrl nz, SaveFilter_OpFormat
 	call LABEL_F8934D
 	cps hl, 0
-	jrl z, LABEL_F8DA76
+	jrl z, SaveFilter_OpFormat
 	calr SelectPasswordMode
 	cps hl, 0
-	jr z, LABEL_F8D9D1
+	jr z, SaveFilter_Save_NoPwd
 	lds32 xde, 0
 	ldda8 e, 35340
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C50004
-	jr LABEL_F8D9FD
+	jr SaveFilter_DispatchWidget
 
-LABEL_F8D9D1:
+SaveFilter_Save_NoPwd:
 	call 0xF8943E
 	cps hl, 0
-	jr z, LABEL_F8DA04
+	jr z, SaveFilter_Save_Execute
 	cpi8_24 0x0340ea, 0x00
-	jr z, LABEL_F8DA04
+	jr z, SaveFilter_Save_Execute
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C50000
 	lds32 xde, 1
@@ -852,11 +852,11 @@ LABEL_F8D9D1:
 	ld xbc, 0x1C00001
 	lds32 xde, 0
 
-LABEL_F8D9FD:
+SaveFilter_DispatchWidget:
 	call 0xFA9D58
-	jrl LABEL_F8DB48
+	jrl SaveFilter_Return
 
-LABEL_F8DA04:
+SaveFilter_Save_Execute:
 	ld xwa, 0x600026
 	ld xbc, 0x1C00001
 	lds32 xde, 5
@@ -888,12 +888,12 @@ LABEL_F8DA04:
 	lds32 xde, 0
 	call 0xFA9D58
 	ldw wa, 0xEE
-	jr LABEL_F8DAF1
+	jr SaveFilter_CallStatusDisplay
 
-LABEL_F8DA76:
+SaveFilter_OpFormat:
 	ld xwa, (xsp + 2)
 	cp xwa, 0x32
-	jr nz, LABEL_F8DAF7
+	jr nz, SaveFilter_ResetAll
 	ld xwa, 0x600026
 	ld xbc, 0x1C00001
 	lds32 xde, 5
@@ -926,18 +926,18 @@ LABEL_F8DA76:
 	call 0xFA9D58
 	ldw wa, 0xEE
 
-LABEL_F8DAF1:
+SaveFilter_CallStatusDisplay:
 	call LABEL_F994BD
-	jr LABEL_F8DB48
+	jr SaveFilter_Return
 
-LABEL_F8DAF7:
+SaveFilter_ResetAll:
 	ld xwa, (xsp + 2)
 	cp xwa, 0xB
-	jr nz, LABEL_F8DB48
+	jr nz, SaveFilter_Return
 	call LABEL_F893CA
 	ldw (xsp), 0x0
 
-LABEL_F8DB0A:
+SaveFilter_ResetAll_Loop:
 	ld wa, (xsp)
 	extz wa
 	call LABEL_F89393
@@ -959,9 +959,9 @@ LABEL_F8DB0A:
 	call 0xFA9D58
 	incm 1, (xsp)
 	cpw (xsp), 0x8
-	jr lt, LABEL_F8DB0A
+	jr lt, SaveFilter_ResetAll_Loop
 
-LABEL_F8DB48:
+SaveFilter_Return:
 	lds32 xhl, 0
 	inc 6, xsp
 	ret
