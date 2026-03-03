@@ -40417,30 +40417,30 @@ LABEL_035FCB:
 
 LABEL_035FD3:
 	cp_erpb 0xFB, 0x30
-	jr c, LABEL_036009
+	jr c, CmdHandler2D_EnqueueOrReturn
 	cp_erpb 0xFB, 0x3F
-	jr ugt, LABEL_036009
+	jr ugt, CmdHandler2D_EnqueueOrReturn
 	ldda8 a, 17264
 	lds32 xbc, 0
 	ld c, a
 	ld xwa, (xsp + 4)
 	calr DSP_RingBuf_ReadAndCompare
 	cpdi8 17258, 127
-	jr z, LABEL_036001
+	jr z, CmdHandler2D_MsgSizeMatch
 	ldto_berp A, 0xFB
 	sub a, 0x30
 	ldfr_berp A, 0xF8
 	extz iz
 	jr DSP_Process_ReadNext
 
-LABEL_036001:
+CmdHandler2D_MsgSizeMatch:
 	ld xwa, (xsp + 4)
 	calr DSP_RingBuf_Skip
 	jr DSP_Process_ReadNext
 
-LABEL_036009:
+CmdHandler2D_EnqueueOrReturn:
 	cp_erpb 0xFB, 0x40
-	jr nz, LABEL_036025
+	jr nz, CmdHandler2D_QueuedPath
 	ldda8 a, 17264
 	lds32 xbc, 0
 	ld c, a
@@ -40450,7 +40450,7 @@ LABEL_036009:
 	calr DSP_RingBuf_Skip
 	jr DSP_Process_ReadNext
 
-LABEL_036025:
+CmdHandler2D_QueuedPath:
 	ld xwa, (xsp + 4)
 	calr DSP_RingBuf_Skip
 	jr DSP_Process_ReadNext
@@ -40476,41 +40476,41 @@ DSP_WriteAlgoInitPreset:
 	call 0x37E30
 	ld wa, hl
 	cps wa, 2
-	jr nz, LABEL_036064
+	jr nz, DSP_WriteAlgoInitPreset_PresetPath
 	lda_24 xwa, 0x0121f3
 	push xwa
 	pushw 0x4
 	call 0x34D5F
 	inc 6, xsp
-	jr LABEL_036088
+	jr DSP_WriteAlgoInitPreset_Epilogue
 
-LABEL_036064:
+DSP_WriteAlgoInitPreset_PresetPath:
 	cps wa, 1
-	jr nz, LABEL_036079
+	jr nz, DSP_WriteAlgoInitPreset_DefaultPath
 	lda_24 xwa, 0x0121ef
 	push xwa
 	pushw 0x4
 	call 0x34D5F
 	inc 6, xsp
-	jr LABEL_036088
+	jr DSP_WriteAlgoInitPreset_Epilogue
 
-LABEL_036079:
+DSP_WriteAlgoInitPreset_DefaultPath:
 	lda_24 xwa, 0x0121eb
 	push xwa
 	pushw 0x4
 	call 0x34D5F
 	inc 6, xsp
 
-LABEL_036088:
+DSP_WriteAlgoInitPreset_Epilogue:
 	jp 0x34D93
 
 DSP_ApplyAlgoForVoiceType:
 	cp wa, 0x35
-	jr z, LABEL_036098
+	jr z, DSP_ApplyAlgoForVoiceType_TypeF
 	cp wa, 0xF
 	ret nz
 
-LABEL_036098:
+DSP_ApplyAlgoForVoiceType_TypeF:
 	ldmm16 17588, 17840	; LDW_16_16 (044b4h), (045b0h)
 	ldada xwa, 17550
 	call DSP_State_ApplyBuf
@@ -40548,14 +40548,14 @@ DSP_Reset:
 	popw iz
 	ret
 
-LABEL_03611D:
+DSP_ApplyAlgoForVoiceType_Data:
 	.byte 0x0e
 
 DSP_SlotState_DisplayRestore:
 	lds wa, 0
 	call DSP_SlotMuteState_ReadAndClear
 	cps hl, 3
-	jr nz, LABEL_03613B
+	jr nz, DSP_SlotState_DisplayRestore_ActivePath
 	lda_24 xwa, 0x0121f3
 	push xwa
 	pushw 0x4
@@ -40563,9 +40563,9 @@ DSP_SlotState_DisplayRestore:
 	inc 6, xsp
 	jp 0x34D93
 
-LABEL_03613B:
+DSP_SlotState_DisplayRestore_ActivePath:
 	cps hl, 2
-	jr nz, LABEL_036152
+	jr nz, DSP_SlotState_DisplayRestore_Epilogue
 	lda_24 xwa, 0x0121ef
 	push xwa
 	pushw 0x4
@@ -40573,7 +40573,7 @@ LABEL_03613B:
 	inc 6, xsp
 	jp 0x34D93
 
-LABEL_036152:
+DSP_SlotState_DisplayRestore_Epilogue:
 	cps hl, 1
 	ret nz
 	lda_24 xwa, 0x0121eb
@@ -40586,22 +40586,22 @@ LABEL_036152:
 
 DSP_ApplyConfig:
 	cp e, 0xFF
-	jr nz, LABEL_036177
+	jr nz, DSP_ApplyConfig_ActivePath
 	stdi16 17550, 1
-	jr LABEL_03617D
+	jr DSP_ApplyConfig_InactivePath
 
-LABEL_036177:
+DSP_ApplyConfig_ActivePath:
 	stdi16 17550, 0
 
-LABEL_03617D:
+DSP_ApplyConfig_InactivePath:
 	cps a, 3
-	jr z, LABEL_0361A8
+	jr z, DSP_ApplyConfig_BufSelectB
 	cps a, 4
-	jr z, LABEL_0361A0
+	jr z, DSP_ApplyConfig_BufSelectA
 	cps a, 2
-	jr z, LABEL_0361A0
+	jr z, DSP_ApplyConfig_BufSelectA
 	cps a, 1
-	jr z, LABEL_0361A0
+	jr z, DSP_ApplyConfig_BufSelectA
 	cps a, 0
 	ret nz
 	ldada xwa, 17550
@@ -40609,18 +40609,18 @@ LABEL_03617D:
 	ldda16 xwa, 17558
 	jrl DSP_ApplyAlgoForVoiceType
 
-LABEL_0361A0:
+DSP_ApplyConfig_BufSelectA:
 	ldada xwa, 17550
 	jp DSP_State_ApplyBuf
 
-LABEL_0361A8:
+DSP_ApplyConfig_BufSelectB:
 	ldada xbc, 17738
 	lds wa, 0
 	cpdi16 17850, 0
-	jr z, LABEL_0361BA
+	jr z, DSP_ApplyConfig_Epilogue
 	ldda16 xwa, 17848
 
-LABEL_0361BA:
+DSP_ApplyConfig_Epilogue:
 	ld (xbc), wa
 	ldada xwa, 17550
 	call DSP_State_ApplyBuf
@@ -40639,31 +40639,31 @@ DSP_GetConfigBuffer:
 EFF_GetSlotBuffer:
 	ld bc, wa
 	cps bc, 4
-	jr z, LABEL_0361EF
+	jr z, EFF_GetSlotBuffer_NoSlot
 	cps bc, 3
-	jr z, LABEL_0361EF
+	jr z, EFF_GetSlotBuffer_NoSlot
 	cps bc, 2
-	jr z, LABEL_0361EF
+	jr z, EFF_GetSlotBuffer_NoSlot
 	cps bc, 1
-	jr z, LABEL_0361EF
+	jr z, EFF_GetSlotBuffer_NoSlot
 	cps bc, 0
-	jr nz, LABEL_0361FF
+	jr nz, EFF_GetSlotBuffer_LoopBody
 
-LABEL_0361EF:
+EFF_GetSlotBuffer_NoSlot:
 	mul wa, 0x38
 	ldada xbc, 17558
 	extz xwa
 	add xwa, xbc
 	ld xhl, xwa
-	jr LABEL_036204
+	jr EFF_GetSlotBuffer_Epilogue
 
-LABEL_0361FF:
+EFF_GetSlotBuffer_LoopBody:
 	ld xhl, 0xFFFFFFFF
 
-LABEL_036204:
+EFF_GetSlotBuffer_Epilogue:
 	ret
 
-LABEL_036205:
+DSP_StateTable_DefaultData:
 	.byte 0xd8, 0x12, 0xf1, 0xb2, 0x45, 0x50, 0xd1, 0xb4
 	.byte 0x45, 0x21, 0xd1, 0xb6, 0x45, 0x22, 0x1b, 0x67
 	.byte 0xc0, 0x03, 0xd1, 0xb2, 0x45, 0x23, 0x0e, 0xd8
@@ -40705,19 +40705,19 @@ DSP_WaitForDelay:
 	addda32 xwa, 4160
 	ld xiz, xwa
 	cpdm32 4160, xiz
-	jr nc, LABEL_036325
+	jr nc, DSP_WaitForTaskSlot_Epilogue
 
-LABEL_036319:
+DSP_WaitForTaskSlot_Loop:
 	lds wa, 3
 	call LABEL_0200C0
 	cpdm32 4160, xiz
-	jr c, LABEL_036319
+	jr c, DSP_WaitForTaskSlot_Loop
 
-LABEL_036325:
+DSP_WaitForTaskSlot_Epilogue:
 	pop xiz
 	ret
 
-LABEL_036327:
+DSP_WaitForTaskSlot_Data:
 	.byte 0x1b, 0x0f, 0x8e, 0x03
 
 DSP_WakeAudioTask:
@@ -40819,280 +40819,280 @@ DSP2_SPI_ClockPulseHigh:
 	jr __jrt_nop_03640F
 __jrt_nop_03640F:
 
-LABEL_03640F:
+DSP2_ClkHigh_Nop01:
 	nop
 	jr __jrt_nop_036412
 __jrt_nop_036412:
 
-LABEL_036412:
+DSP2_ClkHigh_Nop02:
 	nop
 	jr __jrt_nop_036415
 __jrt_nop_036415:
 
-LABEL_036415:
+DSP2_ClkHigh_Nop03:
 	nop
 	jr __jrt_nop_036418
 __jrt_nop_036418:
 
-LABEL_036418:
+DSP2_ClkHigh_Nop04:
 	nop
 	jr __jrt_nop_03641B
 __jrt_nop_03641B:
 
-LABEL_03641B:
+DSP2_ClkHigh_Nop05:
 	nop
 	jr __jrt_nop_03641E
 __jrt_nop_03641E:
 
-LABEL_03641E:
+DSP2_ClkHigh_Nop06:
 	nop
 	jr __jrt_nop_036421
 __jrt_nop_036421:
 
-LABEL_036421:
+DSP2_ClkHigh_Nop07:
 	nop
 	jr __jrt_nop_036424
 __jrt_nop_036424:
 
-LABEL_036424:
+DSP2_ClkHigh_Nop08:
 	nop
 	jr __jrt_nop_036427
 __jrt_nop_036427:
 
-LABEL_036427:
+DSP2_ClkHigh_Nop09:
 	nop
 	jr __jrt_nop_03642A
 __jrt_nop_03642A:
 
-LABEL_03642A:
+DSP2_ClkHigh_Nop10:
 	nop
 	jr __jrt_nop_03642D
 __jrt_nop_03642D:
 
-LABEL_03642D:
+DSP2_ClkHigh_Nop11:
 	nop
 	jr __jrt_nop_036430
 __jrt_nop_036430:
 
-LABEL_036430:
+DSP2_ClkHigh_Nop12:
 	nop
 	jr __jrt_nop_036433
 __jrt_nop_036433:
 
-LABEL_036433:
+DSP2_ClkHigh_Nop13:
 	nop
 	jr __jrt_nop_036436
 __jrt_nop_036436:
 
-LABEL_036436:
+DSP2_ClkHigh_Nop14:
 	nop
 	jr __jrt_nop_036439
 __jrt_nop_036439:
 
-LABEL_036439:
+DSP2_ClkHigh_Nop15:
 	nop
 	jr __jrt_nop_03643C
 __jrt_nop_03643C:
 
-LABEL_03643C:
+DSP2_ClkHigh_Nop16:
 	nop
 	jr __jrt_nop_03643F
 __jrt_nop_03643F:
 
-LABEL_03643F:
+DSP2_ClkHigh_Nop17:
 	nop
 	jr __jrt_nop_036442
 __jrt_nop_036442:
 
-LABEL_036442:
+DSP2_ClkHigh_Nop18:
 	nop
 	jr __jrt_nop_036445
 __jrt_nop_036445:
 
-LABEL_036445:
+DSP2_ClkHigh_Nop19:
 	nop
 	set_dd8 0, 0x3C
 	jr __jrt_nop_03644B
 __jrt_nop_03644B:
 
-LABEL_03644B:
+DSP2_ClkHigh_Nop20:
 	nop
 	res_dd8 0, 0x3C
 	jr __jrt_nop_036451
 __jrt_nop_036451:
 
-LABEL_036451:
+DSP2_ClkHigh_Nop21:
 	nop
 	jr __jrt_nop_036454
 __jrt_nop_036454:
 
-LABEL_036454:
+DSP2_ClkHigh_Nop22:
 	nop
 	jr __jrt_nop_036457
 __jrt_nop_036457:
 
-LABEL_036457:
+DSP2_ClkHigh_Nop23:
 	nop
 	jr __jrt_nop_03645A
 __jrt_nop_03645A:
 
-LABEL_03645A:
+DSP2_ClkHigh_Nop24:
 	nop
 	jr __jrt_nop_03645D
 __jrt_nop_03645D:
 
-LABEL_03645D:
+DSP2_ClkHigh_Nop25:
 	nop
 	jr __jrt_nop_036460
 __jrt_nop_036460:
 
-LABEL_036460:
+DSP2_ClkHigh_Nop26:
 	nop
 	jr __jrt_nop_036463
 __jrt_nop_036463:
 
-LABEL_036463:
+DSP2_ClkHigh_Nop27:
 	nop
 	jr __jrt_nop_036466
 __jrt_nop_036466:
 
-LABEL_036466:
+DSP2_ClkHigh_Nop28:
 	nop
 	jr __jrt_nop_036469
 __jrt_nop_036469:
 
-LABEL_036469:
+DSP2_ClkHigh_Nop29:
 	nop
 	jr __jrt_nop_03646C
 __jrt_nop_03646C:
 
-LABEL_03646C:
+DSP2_ClkHigh_Nop30:
 	nop
 	jr __jrt_nop_03646F
 __jrt_nop_03646F:
 
-LABEL_03646F:
+DSP2_ClkHigh_Nop31:
 	nop
 	jr __jrt_nop_036472
 __jrt_nop_036472:
 
-LABEL_036472:
+DSP2_ClkHigh_Nop32:
 	nop
 	jr __jrt_nop_036475
 __jrt_nop_036475:
 
-LABEL_036475:
+DSP2_ClkHigh_Nop33:
 	nop
 	jr __jrt_nop_036478
 __jrt_nop_036478:
 
-LABEL_036478:
+DSP2_ClkHigh_Nop34:
 	nop
 	jr __jrt_nop_03647B
 __jrt_nop_03647B:
 
-LABEL_03647B:
+DSP2_ClkHigh_Nop35:
 	nop
 	jr __jrt_nop_03647E
 __jrt_nop_03647E:
 
-LABEL_03647E:
+DSP2_ClkHigh_Nop36:
 	nop
 	res_dd8 2, 0x3C
 	jr __jrt_nop_036484
 __jrt_nop_036484:
 
-LABEL_036484:
+DSP2_ClkHigh_Nop37:
 	nop
 	jr __jrt_nop_036487
 __jrt_nop_036487:
 
-LABEL_036487:
+DSP2_ClkHigh_Nop38:
 	nop
 	jr __jrt_nop_03648A
 __jrt_nop_03648A:
 
-LABEL_03648A:
+DSP2_ClkHigh_Nop39:
 	nop
 	jr __jrt_nop_03648D
 __jrt_nop_03648D:
 
-LABEL_03648D:
+DSP2_ClkHigh_Nop40:
 	nop
 	jr __jrt_nop_036490
 __jrt_nop_036490:
 
-LABEL_036490:
+DSP2_ClkHigh_Nop41:
 	nop
 	jr __jrt_nop_036493
 __jrt_nop_036493:
 
-LABEL_036493:
+DSP2_ClkHigh_Nop42:
 	nop
 	jr __jrt_nop_036496
 __jrt_nop_036496:
 
-LABEL_036496:
+DSP2_ClkHigh_Nop43:
 	nop
 	jr __jrt_nop_036499
 __jrt_nop_036499:
 
-LABEL_036499:
+DSP2_ClkHigh_Nop44:
 	nop
 	jr __jrt_nop_03649C
 __jrt_nop_03649C:
 
-LABEL_03649C:
+DSP2_ClkHigh_Nop45:
 	nop
 	jr __jrt_nop_03649F
 __jrt_nop_03649F:
 
-LABEL_03649F:
+DSP2_ClkHigh_Nop46:
 	nop
 	jr __jrt_nop_0364A2
 __jrt_nop_0364A2:
 
-LABEL_0364A2:
+DSP2_ClkHigh_Nop47:
 	nop
 	jr __jrt_nop_0364A5
 __jrt_nop_0364A5:
 
-LABEL_0364A5:
+DSP2_ClkHigh_Nop48:
 	nop
 	jr __jrt_nop_0364A8
 __jrt_nop_0364A8:
 
-LABEL_0364A8:
+DSP2_ClkHigh_Nop49:
 	nop
 	jr __jrt_nop_0364AB
 __jrt_nop_0364AB:
 
-LABEL_0364AB:
+DSP2_ClkHigh_Nop50:
 	nop
 	jr __jrt_nop_0364AE
 __jrt_nop_0364AE:
 
-LABEL_0364AE:
+DSP2_ClkHigh_Nop51:
 	nop
 	jr __jrt_nop_0364B1
 __jrt_nop_0364B1:
 
-LABEL_0364B1:
+DSP2_ClkHigh_Nop52:
 	nop
 	jr __jrt_nop_0364B4
 __jrt_nop_0364B4:
 
-LABEL_0364B4:
+DSP2_ClkHigh_Nop53:
 	nop
 	jr __jrt_nop_0364B7
 __jrt_nop_0364B7:
 
-LABEL_0364B7:
+DSP2_ClkHigh_Nop54:
 	nop
 	jr __jrt_nop_0364BA
 __jrt_nop_0364BA:
 
-LABEL_0364BA:
+DSP2_ClkHigh_Nop55:
 	nop
 	lda_24 xwa, 0x01220d
 	jp 0x38365
@@ -41103,674 +41103,674 @@ DSP2_SPI_BusIdle:
 	jr __jrt_nop_0364CC
 __jrt_nop_0364CC:
 
-LABEL_0364CC:
+DSP2_BusIdle_Nop01:
 	nop
 	jr __jrt_nop_0364CF
 __jrt_nop_0364CF:
 
-LABEL_0364CF:
+DSP2_BusIdle_Nop02:
 	nop
 	jr __jrt_nop_0364D2
 __jrt_nop_0364D2:
 
-LABEL_0364D2:
+DSP2_BusIdle_Nop03:
 	nop
 	jr __jrt_nop_0364D5
 __jrt_nop_0364D5:
 
-LABEL_0364D5:
+DSP2_BusIdle_Nop04:
 	nop
 	jr __jrt_nop_0364D8
 __jrt_nop_0364D8:
 
-LABEL_0364D8:
+DSP2_BusIdle_Nop05:
 	nop
 	jr __jrt_nop_0364DB
 __jrt_nop_0364DB:
 
-LABEL_0364DB:
+DSP2_BusIdle_Nop06:
 	nop
 	jr __jrt_nop_0364DE
 __jrt_nop_0364DE:
 
-LABEL_0364DE:
+DSP2_BusIdle_Nop07:
 	nop
 	jr __jrt_nop_0364E1
 __jrt_nop_0364E1:
 
-LABEL_0364E1:
+DSP2_BusIdle_Nop08:
 	nop
 	jr __jrt_nop_0364E4
 __jrt_nop_0364E4:
 
-LABEL_0364E4:
+DSP2_BusIdle_Nop09:
 	nop
 	jr __jrt_nop_0364E7
 __jrt_nop_0364E7:
 
-LABEL_0364E7:
+DSP2_BusIdle_Nop10:
 	nop
 	jr __jrt_nop_0364EA
 __jrt_nop_0364EA:
 
-LABEL_0364EA:
+DSP2_BusIdle_Nop11:
 	nop
 	jr __jrt_nop_0364ED
 __jrt_nop_0364ED:
 
-LABEL_0364ED:
+DSP2_BusIdle_Nop12:
 	nop
 	jr __jrt_nop_0364F0
 __jrt_nop_0364F0:
 
-LABEL_0364F0:
+DSP2_BusIdle_Nop13:
 	nop
 	jr __jrt_nop_0364F3
 __jrt_nop_0364F3:
 
-LABEL_0364F3:
+DSP2_BusIdle_Nop14:
 	nop
 	jr __jrt_nop_0364F6
 __jrt_nop_0364F6:
 
-LABEL_0364F6:
+DSP2_BusIdle_Nop15:
 	nop
 	jr __jrt_nop_0364F9
 __jrt_nop_0364F9:
 
-LABEL_0364F9:
+DSP2_BusIdle_Nop16:
 	nop
 	jr __jrt_nop_0364FC
 __jrt_nop_0364FC:
 
-LABEL_0364FC:
+DSP2_BusIdle_Nop17:
 	nop
 	jr __jrt_nop_0364FF
 __jrt_nop_0364FF:
 
-LABEL_0364FF:
+DSP2_BusIdle_Nop18:
 	nop
 	jr __jrt_nop_036502
 __jrt_nop_036502:
 
-LABEL_036502:
+DSP2_BusIdle_Nop19:
 	nop
 	set_dd8 2, 0x3C
 	jr __jrt_nop_036508
 __jrt_nop_036508:
 
-LABEL_036508:
+DSP2_BusIdle_Nop20:
 	nop
 	jr __jrt_nop_03650B
 __jrt_nop_03650B:
 
-LABEL_03650B:
+DSP2_BusIdle_Nop21:
 	nop
 	jr __jrt_nop_03650E
 __jrt_nop_03650E:
 
-LABEL_03650E:
+DSP2_BusIdle_Nop22:
 	nop
 	jr __jrt_nop_036511
 __jrt_nop_036511:
 
-LABEL_036511:
+DSP2_BusIdle_Nop23:
 	nop
 	jr __jrt_nop_036514
 __jrt_nop_036514:
 
-LABEL_036514:
+DSP2_BusIdle_Nop24:
 	nop
 	jr __jrt_nop_036517
 __jrt_nop_036517:
 
-LABEL_036517:
+DSP2_BusIdle_Nop25:
 	nop
 	jr __jrt_nop_03651A
 __jrt_nop_03651A:
 
-LABEL_03651A:
+DSP2_BusIdle_Nop26:
 	nop
 	jr __jrt_nop_03651D
 __jrt_nop_03651D:
 
-LABEL_03651D:
+DSP2_BusIdle_Nop27:
 	nop
 	jr __jrt_nop_036520
 __jrt_nop_036520:
 
-LABEL_036520:
+DSP2_BusIdle_Nop28:
 	nop
 	jr __jrt_nop_036523
 __jrt_nop_036523:
 
-LABEL_036523:
+DSP2_BusIdle_Nop29:
 	nop
 	jr __jrt_nop_036526
 __jrt_nop_036526:
 
-LABEL_036526:
+DSP2_BusIdle_Nop30:
 	nop
 	jr __jrt_nop_036529
 __jrt_nop_036529:
 
-LABEL_036529:
+DSP2_BusIdle_Nop31:
 	nop
 	jr __jrt_nop_03652C
 __jrt_nop_03652C:
 
-LABEL_03652C:
+DSP2_BusIdle_Nop32:
 	nop
 	jr __jrt_nop_03652F
 __jrt_nop_03652F:
 
-LABEL_03652F:
+DSP2_BusIdle_Nop33:
 	nop
 	jr __jrt_nop_036532
 __jrt_nop_036532:
 
-LABEL_036532:
+DSP2_BusIdle_Nop34:
 	nop
 	jr __jrt_nop_036535
 __jrt_nop_036535:
 
-LABEL_036535:
+DSP2_BusIdle_Nop35:
 	nop
 	jr __jrt_nop_036538
 __jrt_nop_036538:
 
-LABEL_036538:
+DSP2_BusIdle_Nop36:
 	nop
 	jr __jrt_nop_03653B
 __jrt_nop_03653B:
 
-LABEL_03653B:
+DSP2_BusIdle_Nop37:
 	nop
 	jr __jrt_nop_03653E
 __jrt_nop_03653E:
 
-LABEL_03653E:
+DSP2_BusIdle_Nop38:
 	nop
 	set_dd8 0, 0x3C
 	jr __jrt_nop_036544
 __jrt_nop_036544:
 
-LABEL_036544:
+DSP2_BusIdle_Nop39:
 	nop
 	jr __jrt_nop_036547
 __jrt_nop_036547:
 
-LABEL_036547:
+DSP2_BusIdle_Nop40:
 	nop
 	jr __jrt_nop_03654A
 __jrt_nop_03654A:
 
-LABEL_03654A:
+DSP2_BusIdle_Nop41:
 	nop
 	jr __jrt_nop_03654D
 __jrt_nop_03654D:
 
-LABEL_03654D:
+DSP2_BusIdle_Nop42:
 	nop
 	jr __jrt_nop_036550
 __jrt_nop_036550:
 
-LABEL_036550:
+DSP2_BusIdle_Nop43:
 	nop
 	jr __jrt_nop_036553
 __jrt_nop_036553:
 
-LABEL_036553:
+DSP2_BusIdle_Nop44:
 	nop
 	jr __jrt_nop_036556
 __jrt_nop_036556:
 
-LABEL_036556:
+DSP2_BusIdle_Nop45:
 	nop
 	jr __jrt_nop_036559
 __jrt_nop_036559:
 
-LABEL_036559:
+DSP2_BusIdle_Nop46:
 	nop
 	jr __jrt_nop_03655C
 __jrt_nop_03655C:
 
-LABEL_03655C:
+DSP2_BusIdle_Nop47:
 	nop
 	jr __jrt_nop_03655F
 __jrt_nop_03655F:
 
-LABEL_03655F:
+DSP2_BusIdle_Nop48:
 	nop
 	jr __jrt_nop_036562
 __jrt_nop_036562:
 
-LABEL_036562:
+DSP2_BusIdle_Nop49:
 	nop
 	jr __jrt_nop_036565
 __jrt_nop_036565:
 
-LABEL_036565:
+DSP2_BusIdle_Nop50:
 	nop
 	jr __jrt_nop_036568
 __jrt_nop_036568:
 
-LABEL_036568:
+DSP2_BusIdle_Nop51:
 	nop
 	jr __jrt_nop_03656B
 __jrt_nop_03656B:
 
-LABEL_03656B:
+DSP2_BusIdle_Nop52:
 	nop
 	jr __jrt_nop_03656E
 __jrt_nop_03656E:
 
-LABEL_03656E:
+DSP2_BusIdle_Nop53:
 	nop
 	jr __jrt_nop_036571
 __jrt_nop_036571:
 
-LABEL_036571:
+DSP2_BusIdle_Nop54:
 	nop
 	jr __jrt_nop_036574
 __jrt_nop_036574:
 
-LABEL_036574:
+DSP2_BusIdle_Nop55:
 	nop
 	jr __jrt_nop_036577
 __jrt_nop_036577:
 
-LABEL_036577:
+DSP2_BusIdle_Nop56:
 	nop
 	jr __jrt_nop_03657A
 __jrt_nop_03657A:
 
-LABEL_03657A:
+DSP2_BusIdle_Nop57:
 	nop
 	jr __jrt_nop_03657D
 __jrt_nop_03657D:
 
-LABEL_03657D:
+DSP2_BusIdle_Nop58:
 	nop
 	jr __jrt_nop_036580
 __jrt_nop_036580:
 
-LABEL_036580:
+DSP2_BusIdle_Nop59:
 	nop
 	jr __jrt_nop_036583
 __jrt_nop_036583:
 
-LABEL_036583:
+DSP2_BusIdle_Nop60:
 	nop
 	jr __jrt_nop_036586
 __jrt_nop_036586:
 
-LABEL_036586:
+DSP2_BusIdle_Nop61:
 	nop
 	jr __jrt_nop_036589
 __jrt_nop_036589:
 
-LABEL_036589:
+DSP2_BusIdle_Nop62:
 	nop
 	jr __jrt_nop_03658C
 __jrt_nop_03658C:
 
-LABEL_03658C:
+DSP2_BusIdle_Nop63:
 	nop
 	jr __jrt_nop_03658F
 __jrt_nop_03658F:
 
-LABEL_03658F:
+DSP2_BusIdle_Nop64:
 	nop
 	jr __jrt_nop_036592
 __jrt_nop_036592:
 
-LABEL_036592:
+DSP2_BusIdle_Nop65:
 	nop
 	jr __jrt_nop_036595
 __jrt_nop_036595:
 
-LABEL_036595:
+DSP2_BusIdle_Nop66:
 	nop
 	jr __jrt_nop_036598
 __jrt_nop_036598:
 
-LABEL_036598:
+DSP2_BusIdle_Nop67:
 	nop
 	jr __jrt_nop_03659B
 __jrt_nop_03659B:
 
-LABEL_03659B:
+DSP2_BusIdle_Nop68:
 	nop
 	jr __jrt_nop_03659E
 __jrt_nop_03659E:
 
-LABEL_03659E:
+DSP2_BusIdle_Nop69:
 	nop
 	jr __jrt_nop_0365A1
 __jrt_nop_0365A1:
 
-LABEL_0365A1:
+DSP2_BusIdle_Nop70:
 	nop
 	jr __jrt_nop_0365A4
 __jrt_nop_0365A4:
 
-LABEL_0365A4:
+DSP2_BusIdle_Nop71:
 	nop
 	jr __jrt_nop_0365A7
 __jrt_nop_0365A7:
 
-LABEL_0365A7:
+DSP2_BusIdle_Nop72:
 	nop
 	jr __jrt_nop_0365AA
 __jrt_nop_0365AA:
 
-LABEL_0365AA:
+DSP2_BusIdle_Nop73:
 	nop
 	jr __jrt_nop_0365AD
 __jrt_nop_0365AD:
 
-LABEL_0365AD:
+DSP2_BusIdle_Nop74:
 	nop
 	jr __jrt_nop_0365B0
 __jrt_nop_0365B0:
 
-LABEL_0365B0:
+DSP2_BusIdle_Nop75:
 	nop
 	jr __jrt_nop_0365B3
 __jrt_nop_0365B3:
 
-LABEL_0365B3:
+DSP2_BusIdle_Nop76:
 	nop
 	jr __jrt_nop_0365B6
 __jrt_nop_0365B6:
 
-LABEL_0365B6:
+DSP2_BusIdle_Nop77:
 	nop
 	jr __jrt_nop_0365B9
 __jrt_nop_0365B9:
 
-LABEL_0365B9:
+DSP2_BusIdle_Nop78:
 	nop
 	jr __jrt_nop_0365BC
 __jrt_nop_0365BC:
 
-LABEL_0365BC:
+DSP2_BusIdle_Nop79:
 	nop
 	jr __jrt_nop_0365BF
 __jrt_nop_0365BF:
 
-LABEL_0365BF:
+DSP2_BusIdle_Nop80:
 	nop
 	jr __jrt_nop_0365C2
 __jrt_nop_0365C2:
 
-LABEL_0365C2:
+DSP2_BusIdle_Nop81:
 	nop
 	jr __jrt_nop_0365C5
 __jrt_nop_0365C5:
 
-LABEL_0365C5:
+DSP2_BusIdle_Nop82:
 	nop
 	jr __jrt_nop_0365C8
 __jrt_nop_0365C8:
 
-LABEL_0365C8:
+DSP2_BusIdle_Nop83:
 	nop
 	jr __jrt_nop_0365CB
 __jrt_nop_0365CB:
 
-LABEL_0365CB:
+DSP2_BusIdle_Nop84:
 	nop
 	jr __jrt_nop_0365CE
 __jrt_nop_0365CE:
 
-LABEL_0365CE:
+DSP2_BusIdle_Nop85:
 	nop
 	jr __jrt_nop_0365D1
 __jrt_nop_0365D1:
 
-LABEL_0365D1:
+DSP2_BusIdle_Nop86:
 	nop
 	jr __jrt_nop_0365D4
 __jrt_nop_0365D4:
 
-LABEL_0365D4:
+DSP2_BusIdle_Nop87:
 	nop
 	jr __jrt_nop_0365D7
 __jrt_nop_0365D7:
 
-LABEL_0365D7:
+DSP2_BusIdle_Nop88:
 	nop
 	jr __jrt_nop_0365DA
 __jrt_nop_0365DA:
 
-LABEL_0365DA:
+DSP2_BusIdle_Nop89:
 	nop
 	jr __jrt_nop_0365DD
 __jrt_nop_0365DD:
 
-LABEL_0365DD:
+DSP2_BusIdle_Nop90:
 	nop
 	jr __jrt_nop_0365E0
 __jrt_nop_0365E0:
 
-LABEL_0365E0:
+DSP2_BusIdle_Nop91:
 	nop
 	jr __jrt_nop_0365E3
 __jrt_nop_0365E3:
 
-LABEL_0365E3:
+DSP2_BusIdle_Nop92:
 	nop
 	jr __jrt_nop_0365E6
 __jrt_nop_0365E6:
 
-LABEL_0365E6:
+DSP2_BusIdle_Nop93:
 	nop
 	jr __jrt_nop_0365E9
 __jrt_nop_0365E9:
 
-LABEL_0365E9:
+DSP2_BusIdle_Nop94:
 	nop
 	jr __jrt_nop_0365EC
 __jrt_nop_0365EC:
 
-LABEL_0365EC:
+DSP2_BusIdle_Nop95:
 	nop
 	jr __jrt_nop_0365EF
 __jrt_nop_0365EF:
 
-LABEL_0365EF:
+DSP2_BusIdle_Nop96:
 	nop
 	jr __jrt_nop_0365F2
 __jrt_nop_0365F2:
 
-LABEL_0365F2:
+DSP2_BusIdle_Nop97:
 	nop
 	jr __jrt_nop_0365F5
 __jrt_nop_0365F5:
 
-LABEL_0365F5:
+DSP2_BusIdle_Nop98:
 	nop
 	jr __jrt_nop_0365F8
 __jrt_nop_0365F8:
 
-LABEL_0365F8:
+DSP2_BusIdle_Nop99:
 	nop
 	jr __jrt_nop_0365FB
 __jrt_nop_0365FB:
 
-LABEL_0365FB:
+DSP2_BusIdle_Nop100:
 	nop
 	jr __jrt_nop_0365FE
 __jrt_nop_0365FE:
 
-LABEL_0365FE:
+DSP2_BusIdle_Nop101:
 	nop
 	jr __jrt_nop_036601
 __jrt_nop_036601:
 
-LABEL_036601:
+DSP2_BusIdle_Nop102:
 	nop
 	jr __jrt_nop_036604
 __jrt_nop_036604:
 
-LABEL_036604:
+DSP2_BusIdle_Nop103:
 	nop
 	jr __jrt_nop_036607
 __jrt_nop_036607:
 
-LABEL_036607:
+DSP2_BusIdle_Nop104:
 	nop
 	jr __jrt_nop_03660A
 __jrt_nop_03660A:
 
-LABEL_03660A:
+DSP2_BusIdle_Nop105:
 	nop
 	jr __jrt_nop_03660D
 __jrt_nop_03660D:
 
-LABEL_03660D:
+DSP2_BusIdle_Nop106:
 	nop
 	jr __jrt_nop_036610
 __jrt_nop_036610:
 
-LABEL_036610:
+DSP2_BusIdle_Nop107:
 	nop
 	jr __jrt_nop_036613
 __jrt_nop_036613:
 
-LABEL_036613:
+DSP2_BusIdle_Nop108:
 	nop
 	jr __jrt_nop_036616
 __jrt_nop_036616:
 
-LABEL_036616:
+DSP2_BusIdle_Nop109:
 	nop
 	jr __jrt_nop_036619
 __jrt_nop_036619:
 
-LABEL_036619:
+DSP2_BusIdle_Nop110:
 	nop
 	jr __jrt_nop_03661C
 __jrt_nop_03661C:
 
-LABEL_03661C:
+DSP2_BusIdle_Nop111:
 	nop
 	jr __jrt_nop_03661F
 __jrt_nop_03661F:
 
-LABEL_03661F:
+DSP2_BusIdle_Nop112:
 	nop
 	jr __jrt_nop_036622
 __jrt_nop_036622:
 
-LABEL_036622:
+DSP2_BusIdle_Nop113:
 	nop
 	jr __jrt_nop_036625
 __jrt_nop_036625:
 
-LABEL_036625:
+DSP2_BusIdle_Nop114:
 	nop
 	jr __jrt_nop_036628
 __jrt_nop_036628:
 
-LABEL_036628:
+DSP2_BusIdle_Nop115:
 	nop
 	jr __jrt_nop_03662B
 __jrt_nop_03662B:
 
-LABEL_03662B:
+DSP2_BusIdle_Nop116:
 	nop
 	jr __jrt_nop_03662E
 __jrt_nop_03662E:
 
-LABEL_03662E:
+DSP2_BusIdle_Nop117:
 	nop
 	jr __jrt_nop_036631
 __jrt_nop_036631:
 
-LABEL_036631:
+DSP2_BusIdle_Nop118:
 	nop
 	jr __jrt_nop_036634
 __jrt_nop_036634:
 
-LABEL_036634:
+DSP2_BusIdle_Nop119:
 	nop
 	jr __jrt_nop_036637
 __jrt_nop_036637:
 
-LABEL_036637:
+DSP2_BusIdle_Nop120:
 	nop
 	jr __jrt_nop_03663A
 __jrt_nop_03663A:
 
-LABEL_03663A:
+DSP2_BusIdle_Nop121:
 	nop
 	jr __jrt_nop_03663D
 __jrt_nop_03663D:
 
-LABEL_03663D:
+DSP2_BusIdle_Nop122:
 	nop
 	jr __jrt_nop_036640
 __jrt_nop_036640:
 
-LABEL_036640:
+DSP2_BusIdle_Nop123:
 	nop
 	jr __jrt_nop_036643
 __jrt_nop_036643:
 
-LABEL_036643:
+DSP2_BusIdle_Nop124:
 	nop
 	jr __jrt_nop_036646
 __jrt_nop_036646:
 
-LABEL_036646:
+DSP2_BusIdle_Nop125:
 	nop
 	jr __jrt_nop_036649
 __jrt_nop_036649:
 
-LABEL_036649:
+DSP2_BusIdle_Nop126:
 	nop
 	jr __jrt_nop_03664C
 __jrt_nop_03664C:
 
-LABEL_03664C:
+DSP2_BusIdle_Nop127:
 	nop
 	jr __jrt_nop_03664F
 __jrt_nop_03664F:
 
-LABEL_03664F:
+DSP2_BusIdle_Nop128:
 	nop
 	jr __jrt_nop_036652
 __jrt_nop_036652:
 
-LABEL_036652:
+DSP2_BusIdle_Nop129:
 	nop
 	jr __jrt_nop_036655
 __jrt_nop_036655:
 
-LABEL_036655:
+DSP2_BusIdle_Nop130:
 	nop
 	jr __jrt_nop_036658
 __jrt_nop_036658:
 
-LABEL_036658:
+DSP2_BusIdle_Nop131:
 	nop
 	jr __jrt_nop_03665B
 __jrt_nop_03665B:
 
-LABEL_03665B:
+DSP2_BusIdle_Nop132:
 	nop
 	jr __jrt_nop_03665E
 __jrt_nop_03665E:
 
-LABEL_03665E:
+DSP2_BusIdle_Nop133:
 	nop
 	jr __jrt_nop_036661
 __jrt_nop_036661:
 
-LABEL_036661:
+DSP2_BusIdle_Nop134:
 	nop
 	lda_24 xwa, 0x012215
 	jp 0x38365
@@ -41790,468 +41790,468 @@ DSP2_Send_Command:
 	calr DSP2_SPI_ClockPulseHigh
 	ldw iz, 0x8
 	cps iz, 0
-	jrl le, LABEL_036721
+	jrl le, DSP2_SendCmd_PostLoop_Entry
 
-LABEL_036696:
+DSP2_SendCmd_BitLoop:
 	bit_erpb 0xFB, 0x07
-	jr z, LABEL_0366A1
+	jr z, DSP2_SendCmd_BitClear
 	set_dd8 0, 0x3C
-	jr LABEL_0366A4
+	jr DSP2_SendCmd_BitSet_Done
 
-LABEL_0366A1:
+DSP2_SendCmd_BitClear:
 	res_dd8 0, 0x3C
 
-LABEL_0366A4:
+DSP2_SendCmd_BitSet_Done:
 	jr __jrt_nop_0366A6
 __jrt_nop_0366A6:
 
-LABEL_0366A6:
+DSP2_SendCmd_ClkHigh_Nop01:
 	nop
 	sll_erpb 0xFB, 0x01
 	set_dd8 2, 0x3C
 	jr __jrt_nop_0366B0
 __jrt_nop_0366B0:
 
-LABEL_0366B0:
+DSP2_SendCmd_ClkHigh_Nop02:
 	nop
 	jr __jrt_nop_0366B3
 __jrt_nop_0366B3:
 
-LABEL_0366B3:
+DSP2_SendCmd_ClkHigh_Nop03:
 	nop
 	jr __jrt_nop_0366B6
 __jrt_nop_0366B6:
 
-LABEL_0366B6:
+DSP2_SendCmd_ClkHigh_Nop04:
 	nop
 	jr __jrt_nop_0366B9
 __jrt_nop_0366B9:
 
-LABEL_0366B9:
+DSP2_SendCmd_ClkHigh_Nop05:
 	nop
 	jr __jrt_nop_0366BC
 __jrt_nop_0366BC:
 
-LABEL_0366BC:
+DSP2_SendCmd_ClkHigh_Nop06:
 	nop
 	jr __jrt_nop_0366BF
 __jrt_nop_0366BF:
 
-LABEL_0366BF:
+DSP2_SendCmd_ClkHigh_Nop07:
 	nop
 	jr __jrt_nop_0366C2
 __jrt_nop_0366C2:
 
-LABEL_0366C2:
+DSP2_SendCmd_ClkHigh_Nop08:
 	nop
 	jr __jrt_nop_0366C5
 __jrt_nop_0366C5:
 
-LABEL_0366C5:
+DSP2_SendCmd_ClkHigh_Nop09:
 	nop
 	jr __jrt_nop_0366C8
 __jrt_nop_0366C8:
 
-LABEL_0366C8:
+DSP2_SendCmd_ClkHigh_Nop10:
 	nop
 	jr __jrt_nop_0366CB
 __jrt_nop_0366CB:
 
-LABEL_0366CB:
+DSP2_SendCmd_ClkHigh_Nop11:
 	nop
 	jr __jrt_nop_0366CE
 __jrt_nop_0366CE:
 
-LABEL_0366CE:
+DSP2_SendCmd_ClkHigh_Nop12:
 	nop
 	jr __jrt_nop_0366D1
 __jrt_nop_0366D1:
 
-LABEL_0366D1:
+DSP2_SendCmd_ClkHigh_Nop13:
 	nop
 	jr __jrt_nop_0366D4
 __jrt_nop_0366D4:
 
-LABEL_0366D4:
+DSP2_SendCmd_ClkHigh_Nop14:
 	nop
 	jr __jrt_nop_0366D7
 __jrt_nop_0366D7:
 
-LABEL_0366D7:
+DSP2_SendCmd_ClkHigh_Nop15:
 	nop
 	jr __jrt_nop_0366DA
 __jrt_nop_0366DA:
 
-LABEL_0366DA:
+DSP2_SendCmd_ClkHigh_Nop16:
 	nop
 	jr __jrt_nop_0366DD
 __jrt_nop_0366DD:
 
-LABEL_0366DD:
+DSP2_SendCmd_ClkLow_Nop01:
 	nop
 	res_dd8 2, 0x3C
 	jr __jrt_nop_0366E3
 __jrt_nop_0366E3:
 
-LABEL_0366E3:
+DSP2_SendCmd_ClkLow_Nop02:
 	nop
 	jr __jrt_nop_0366E6
 __jrt_nop_0366E6:
 
-LABEL_0366E6:
+DSP2_SendCmd_ClkLow_Nop03:
 	nop
 	jr __jrt_nop_0366E9
 __jrt_nop_0366E9:
 
-LABEL_0366E9:
+DSP2_SendCmd_ClkLow_Nop04:
 	nop
 	jr __jrt_nop_0366EC
 __jrt_nop_0366EC:
 
-LABEL_0366EC:
+DSP2_SendCmd_ClkLow_Nop05:
 	nop
 	jr __jrt_nop_0366EF
 __jrt_nop_0366EF:
 
-LABEL_0366EF:
+DSP2_SendCmd_ClkLow_Nop06:
 	nop
 	jr __jrt_nop_0366F2
 __jrt_nop_0366F2:
 
-LABEL_0366F2:
+DSP2_SendCmd_ClkLow_Nop07:
 	nop
 	jr __jrt_nop_0366F5
 __jrt_nop_0366F5:
 
-LABEL_0366F5:
+DSP2_SendCmd_ClkLow_Nop08:
 	nop
 	jr __jrt_nop_0366F8
 __jrt_nop_0366F8:
 
-LABEL_0366F8:
+DSP2_SendCmd_ClkLow_Nop09:
 	nop
 	jr __jrt_nop_0366FB
 __jrt_nop_0366FB:
 
-LABEL_0366FB:
+DSP2_SendCmd_ClkLow_Nop10:
 	nop
 	jr __jrt_nop_0366FE
 __jrt_nop_0366FE:
 
-LABEL_0366FE:
+DSP2_SendCmd_ClkLow_Nop11:
 	nop
 	jr __jrt_nop_036701
 __jrt_nop_036701:
 
-LABEL_036701:
+DSP2_SendCmd_ClkLow_Nop12:
 	nop
 	jr __jrt_nop_036704
 __jrt_nop_036704:
 
-LABEL_036704:
+DSP2_SendCmd_ClkLow_Nop13:
 	nop
 	jr __jrt_nop_036707
 __jrt_nop_036707:
 
-LABEL_036707:
+DSP2_SendCmd_ClkLow_Nop14:
 	nop
 	jr __jrt_nop_03670A
 __jrt_nop_03670A:
 
-LABEL_03670A:
+DSP2_SendCmd_ClkLow_Nop15:
 	nop
 	jr __jrt_nop_03670D
 __jrt_nop_03670D:
 
-LABEL_03670D:
+DSP2_SendCmd_ClkLow_Nop16:
 	nop
 	jr __jrt_nop_036710
 __jrt_nop_036710:
 
-LABEL_036710:
+DSP2_SendCmd_ClkLow_Nop17:
 	nop
 	jr __jrt_nop_036713
 __jrt_nop_036713:
 
-LABEL_036713:
+DSP2_SendCmd_ClkLow_Nop18:
 	nop
 	jr __jrt_nop_036716
 __jrt_nop_036716:
 
-LABEL_036716:
+DSP2_SendCmd_ClkLow_Nop19:
 	nop
 	jr __jrt_nop_036719
 __jrt_nop_036719:
 
-LABEL_036719:
+DSP2_SendCmd_ClkLow_Nop20:
 	nop
 	sub iz, 0x1
-	jrl gt, LABEL_036696
+	jrl gt, DSP2_SendCmd_BitLoop
 
-LABEL_036721:
+DSP2_SendCmd_PostLoop_Entry:
 	jr __jrt_nop_036723
 __jrt_nop_036723:
 
-LABEL_036723:
+DSP2_SendCmd_PostLoop_Nop01:
 	nop
 	set_dd8 2, 0x3C
 	jr __jrt_nop_036729
 __jrt_nop_036729:
 
-LABEL_036729:
+DSP2_SendCmd_PostLoop_Nop02:
 	nop
 	jr __jrt_nop_03672C
 __jrt_nop_03672C:
 
-LABEL_03672C:
+DSP2_SendCmd_PostLoop_Nop03:
 	nop
 	jr __jrt_nop_03672F
 __jrt_nop_03672F:
 
-LABEL_03672F:
+DSP2_SendCmd_PostLoop_Nop04:
 	nop
 	jr __jrt_nop_036732
 __jrt_nop_036732:
 
-LABEL_036732:
+DSP2_SendCmd_PostLoop_Nop05:
 	nop
 	jr __jrt_nop_036735
 __jrt_nop_036735:
 
-LABEL_036735:
+DSP2_SendCmd_PostLoop_Nop06:
 	nop
 	jr __jrt_nop_036738
 __jrt_nop_036738:
 
-LABEL_036738:
+DSP2_SendCmd_PostLoop_Nop07:
 	nop
 	jr __jrt_nop_03673B
 __jrt_nop_03673B:
 
-LABEL_03673B:
+DSP2_SendCmd_PostLoop_Nop08:
 	nop
 	jr __jrt_nop_03673E
 __jrt_nop_03673E:
 
-LABEL_03673E:
+DSP2_SendCmd_PostLoop_Nop09:
 	nop
 	jr __jrt_nop_036741
 __jrt_nop_036741:
 
-LABEL_036741:
+DSP2_SendCmd_PostLoop_Nop10:
 	nop
 	jr __jrt_nop_036744
 __jrt_nop_036744:
 
-LABEL_036744:
+DSP2_SendCmd_PostLoop_Nop11:
 	nop
 	jr __jrt_nop_036747
 __jrt_nop_036747:
 
-LABEL_036747:
+DSP2_SendCmd_PostLoop_Nop12:
 	nop
 	jr __jrt_nop_03674A
 __jrt_nop_03674A:
 
-LABEL_03674A:
+DSP2_SendCmd_PostLoop_Nop13:
 	nop
 	jr __jrt_nop_03674D
 __jrt_nop_03674D:
 
-LABEL_03674D:
+DSP2_SendCmd_PostLoop_Nop14:
 	nop
 	jr __jrt_nop_036750
 __jrt_nop_036750:
 
-LABEL_036750:
+DSP2_SendCmd_PostLoop_Nop15:
 	nop
 	jr __jrt_nop_036753
 __jrt_nop_036753:
 
-LABEL_036753:
+DSP2_SendCmd_PostLoop_Nop16:
 	nop
 	jr __jrt_nop_036756
 __jrt_nop_036756:
 
-LABEL_036756:
+DSP2_SendCmd_PostLoop_Nop17:
 	nop
 	res_dd8 2, 0x3C
 	jr __jrt_nop_03675C
 __jrt_nop_03675C:
 
-LABEL_03675C:
+DSP2_SendCmd_PostClkLow_Nop01:
 	nop
 	jr __jrt_nop_03675F
 __jrt_nop_03675F:
 
-LABEL_03675F:
+DSP2_SendCmd_PostClkLow_Nop02:
 	nop
 	jr __jrt_nop_036762
 __jrt_nop_036762:
 
-LABEL_036762:
+DSP2_SendCmd_PostClkLow_Nop03:
 	nop
 	jr __jrt_nop_036765
 __jrt_nop_036765:
 
-LABEL_036765:
+DSP2_SendCmd_PostClkLow_Nop04:
 	nop
 	jr __jrt_nop_036768
 __jrt_nop_036768:
 
-LABEL_036768:
+DSP2_SendCmd_PostClkLow_Nop05:
 	nop
 	jr __jrt_nop_03676B
 __jrt_nop_03676B:
 
-LABEL_03676B:
+DSP2_SendCmd_PostClkLow_Nop06:
 	nop
 	jr __jrt_nop_03676E
 __jrt_nop_03676E:
 
-LABEL_03676E:
+DSP2_SendCmd_PostClkLow_Nop07:
 	nop
 	jr __jrt_nop_036771
 __jrt_nop_036771:
 
-LABEL_036771:
+DSP2_SendCmd_PostClkLow_Nop08:
 	nop
 	jr __jrt_nop_036774
 __jrt_nop_036774:
 
-LABEL_036774:
+DSP2_SendCmd_PostClkLow_Nop09:
 	nop
 	jr __jrt_nop_036777
 __jrt_nop_036777:
 
-LABEL_036777:
+DSP2_SendCmd_PostClkLow_Nop10:
 	nop
 	jr __jrt_nop_03677A
 __jrt_nop_03677A:
 
-LABEL_03677A:
+DSP2_SendCmd_PostClkLow_Nop11:
 	nop
 	jr __jrt_nop_03677D
 __jrt_nop_03677D:
 
-LABEL_03677D:
+DSP2_SendCmd_PostClkLow_Nop12:
 	nop
 	jr __jrt_nop_036780
 __jrt_nop_036780:
 
-LABEL_036780:
+DSP2_SendCmd_PostClkLow_Nop13:
 	nop
 	jr __jrt_nop_036783
 __jrt_nop_036783:
 
-LABEL_036783:
+DSP2_SendCmd_PostClkLow_Nop14:
 	nop
 	jr __jrt_nop_036786
 __jrt_nop_036786:
 
-LABEL_036786:
+DSP2_SendCmd_PostClkLow_Nop15:
 	nop
 	jr __jrt_nop_036789
 __jrt_nop_036789:
 
-LABEL_036789:
+DSP2_SendCmd_PostClkLow_Nop16:
 	nop
 	jr __jrt_nop_03678C
 __jrt_nop_03678C:
 
-LABEL_03678C:
+DSP2_SendCmd_PostClkLow_Nop17:
 	nop
 	jr __jrt_nop_03678F
 __jrt_nop_03678F:
 
-LABEL_03678F:
+DSP2_SendCmd_PostClkLow_Nop18:
 	nop
 	jr __jrt_nop_036792
 __jrt_nop_036792:
 
-LABEL_036792:
+DSP2_SendCmd_PostClkLow_Nop19:
 	nop
 	ld wa, (xsp + 6)
 	call 0x383DB
 	jr __jrt_nop_03679C
 __jrt_nop_03679C:
 
-LABEL_03679C:
+DSP2_SendCmd_Epilogue_Nop01:
 	nop
 	jr __jrt_nop_03679F
 __jrt_nop_03679F:
 
-LABEL_03679F:
+DSP2_SendCmd_Epilogue_Nop02:
 	nop
 	jr __jrt_nop_0367A2
 __jrt_nop_0367A2:
 
-LABEL_0367A2:
+DSP2_SendCmd_Epilogue_Nop03:
 	nop
 	jr __jrt_nop_0367A5
 __jrt_nop_0367A5:
 
-LABEL_0367A5:
+DSP2_SendCmd_Epilogue_Nop04:
 	nop
 	jr __jrt_nop_0367A8
 __jrt_nop_0367A8:
 
-LABEL_0367A8:
+DSP2_SendCmd_Epilogue_Nop05:
 	nop
 	jr __jrt_nop_0367AB
 __jrt_nop_0367AB:
 
-LABEL_0367AB:
+DSP2_SendCmd_Epilogue_Nop06:
 	nop
 	jr __jrt_nop_0367AE
 __jrt_nop_0367AE:
 
-LABEL_0367AE:
+DSP2_SendCmd_Epilogue_Nop07:
 	nop
 	jr __jrt_nop_0367B1
 __jrt_nop_0367B1:
 
-LABEL_0367B1:
+DSP2_SendCmd_Epilogue_Nop08:
 	nop
 	jr __jrt_nop_0367B4
 __jrt_nop_0367B4:
 
-LABEL_0367B4:
+DSP2_SendCmd_Epilogue_Nop09:
 	nop
 	jr __jrt_nop_0367B7
 __jrt_nop_0367B7:
 
-LABEL_0367B7:
+DSP2_SendCmd_Epilogue_Nop10:
 	nop
 	jr __jrt_nop_0367BA
 __jrt_nop_0367BA:
 
-LABEL_0367BA:
+DSP2_SendCmd_Epilogue_Nop11:
 	nop
 	jr __jrt_nop_0367BD
 __jrt_nop_0367BD:
 
-LABEL_0367BD:
+DSP2_SendCmd_Epilogue_Nop12:
 	nop
 	jr __jrt_nop_0367C0
 __jrt_nop_0367C0:
 
-LABEL_0367C0:
+DSP2_SendCmd_Epilogue_Nop13:
 	nop
 	jr __jrt_nop_0367C3
 __jrt_nop_0367C3:
 
-LABEL_0367C3:
+DSP2_SendCmd_Epilogue_Nop14:
 	nop
 	jr __jrt_nop_0367C6
 __jrt_nop_0367C6:
 
-LABEL_0367C6:
+DSP2_SendCmd_Epilogue_Nop15:
 	nop
 	jr __jrt_nop_0367C9
 __jrt_nop_0367C9:
 
-LABEL_0367C9:
+DSP2_SendCmd_Epilogue_Nop16:
 	nop
 	ei 0
 	lda_24 xwa, 0x01221d
@@ -42365,468 +42365,468 @@ DSP2_Send_Data:
 	call 0x383BF
 	ldw iz, 0x8
 	cps iz, 0
-	jrl le, LABEL_03696A
+	jrl le, DSP2_SendData_PostLoop_Entry
 
-LABEL_0368DF:
+DSP2_SendData_BitLoop:
 	bit_erpb 0xFB, 0x07
-	jr z, LABEL_0368EA
+	jr z, DSP2_SendData_BitClear
 	set_dd8 0, 0x3C
-	jr LABEL_0368ED
+	jr DSP2_SendData_BitSet_Done
 
-LABEL_0368EA:
+DSP2_SendData_BitClear:
 	res_dd8 0, 0x3C
 
-LABEL_0368ED:
+DSP2_SendData_BitSet_Done:
 	jr __jrt_nop_0368EF
 __jrt_nop_0368EF:
 
-LABEL_0368EF:
+DSP2_SendData_ClkHigh_Nop01:
 	nop
 	sll_erpb 0xFB, 0x01
 	set_dd8 2, 0x3C
 	jr __jrt_nop_0368F9
 __jrt_nop_0368F9:
 
-LABEL_0368F9:
+DSP2_SendData_ClkHigh_Nop02:
 	nop
 	jr __jrt_nop_0368FC
 __jrt_nop_0368FC:
 
-LABEL_0368FC:
+DSP2_SendData_ClkHigh_Nop03:
 	nop
 	jr __jrt_nop_0368FF
 __jrt_nop_0368FF:
 
-LABEL_0368FF:
+DSP2_SendData_ClkHigh_Nop04:
 	nop
 	jr __jrt_nop_036902
 __jrt_nop_036902:
 
-LABEL_036902:
+DSP2_SendData_ClkHigh_Nop05:
 	nop
 	jr __jrt_nop_036905
 __jrt_nop_036905:
 
-LABEL_036905:
+DSP2_SendData_ClkHigh_Nop06:
 	nop
 	jr __jrt_nop_036908
 __jrt_nop_036908:
 
-LABEL_036908:
+DSP2_SendData_ClkHigh_Nop07:
 	nop
 	jr __jrt_nop_03690B
 __jrt_nop_03690B:
 
-LABEL_03690B:
+DSP2_SendData_ClkHigh_Nop08:
 	nop
 	jr __jrt_nop_03690E
 __jrt_nop_03690E:
 
-LABEL_03690E:
+DSP2_SendData_ClkHigh_Nop09:
 	nop
 	jr __jrt_nop_036911
 __jrt_nop_036911:
 
-LABEL_036911:
+DSP2_SendData_ClkHigh_Nop10:
 	nop
 	jr __jrt_nop_036914
 __jrt_nop_036914:
 
-LABEL_036914:
+DSP2_SendData_ClkHigh_Nop11:
 	nop
 	jr __jrt_nop_036917
 __jrt_nop_036917:
 
-LABEL_036917:
+DSP2_SendData_ClkHigh_Nop12:
 	nop
 	jr __jrt_nop_03691A
 __jrt_nop_03691A:
 
-LABEL_03691A:
+DSP2_SendData_ClkHigh_Nop13:
 	nop
 	jr __jrt_nop_03691D
 __jrt_nop_03691D:
 
-LABEL_03691D:
+DSP2_SendData_ClkHigh_Nop14:
 	nop
 	jr __jrt_nop_036920
 __jrt_nop_036920:
 
-LABEL_036920:
+DSP2_SendData_ClkHigh_Nop15:
 	nop
 	jr __jrt_nop_036923
 __jrt_nop_036923:
 
-LABEL_036923:
+DSP2_SendData_ClkHigh_Nop16:
 	nop
 	jr __jrt_nop_036926
 __jrt_nop_036926:
 
-LABEL_036926:
+DSP2_SendData_ClkHigh_Nop17:
 	nop
 	res_dd8 2, 0x3C
 	jr __jrt_nop_03692C
 __jrt_nop_03692C:
 
-LABEL_03692C:
+DSP2_SendData_ClkLow_Nop01:
 	nop
 	jr __jrt_nop_03692F
 __jrt_nop_03692F:
 
-LABEL_03692F:
+DSP2_SendData_ClkLow_Nop02:
 	nop
 	jr __jrt_nop_036932
 __jrt_nop_036932:
 
-LABEL_036932:
+DSP2_SendData_ClkLow_Nop03:
 	nop
 	jr __jrt_nop_036935
 __jrt_nop_036935:
 
-LABEL_036935:
+DSP2_SendData_ClkLow_Nop04:
 	nop
 	jr __jrt_nop_036938
 __jrt_nop_036938:
 
-LABEL_036938:
+DSP2_SendData_ClkLow_Nop05:
 	nop
 	jr __jrt_nop_03693B
 __jrt_nop_03693B:
 
-LABEL_03693B:
+DSP2_SendData_ClkLow_Nop06:
 	nop
 	jr __jrt_nop_03693E
 __jrt_nop_03693E:
 
-LABEL_03693E:
+DSP2_SendData_ClkLow_Nop07:
 	nop
 	jr __jrt_nop_036941
 __jrt_nop_036941:
 
-LABEL_036941:
+DSP2_SendData_ClkLow_Nop08:
 	nop
 	jr __jrt_nop_036944
 __jrt_nop_036944:
 
-LABEL_036944:
+DSP2_SendData_ClkLow_Nop09:
 	nop
 	jr __jrt_nop_036947
 __jrt_nop_036947:
 
-LABEL_036947:
+DSP2_SendData_ClkLow_Nop10:
 	nop
 	jr __jrt_nop_03694A
 __jrt_nop_03694A:
 
-LABEL_03694A:
+DSP2_SendData_ClkLow_Nop11:
 	nop
 	jr __jrt_nop_03694D
 __jrt_nop_03694D:
 
-LABEL_03694D:
+DSP2_SendData_ClkLow_Nop12:
 	nop
 	jr __jrt_nop_036950
 __jrt_nop_036950:
 
-LABEL_036950:
+DSP2_SendData_ClkLow_Nop13:
 	nop
 	jr __jrt_nop_036953
 __jrt_nop_036953:
 
-LABEL_036953:
+DSP2_SendData_ClkLow_Nop14:
 	nop
 	jr __jrt_nop_036956
 __jrt_nop_036956:
 
-LABEL_036956:
+DSP2_SendData_ClkLow_Nop15:
 	nop
 	jr __jrt_nop_036959
 __jrt_nop_036959:
 
-LABEL_036959:
+DSP2_SendData_ClkLow_Nop16:
 	nop
 	jr __jrt_nop_03695C
 __jrt_nop_03695C:
 
-LABEL_03695C:
+DSP2_SendData_ClkLow_Nop17:
 	nop
 	jr __jrt_nop_03695F
 __jrt_nop_03695F:
 
-LABEL_03695F:
+DSP2_SendData_ClkLow_Nop18:
 	nop
 	jr __jrt_nop_036962
 __jrt_nop_036962:
 
-LABEL_036962:
+DSP2_SendData_ClkLow_Nop19:
 	nop
 	sub iz, 0x1
-	jrl gt, LABEL_0368DF
+	jrl gt, DSP2_SendData_BitLoop
 
-LABEL_03696A:
+DSP2_SendData_PostLoop_Entry:
 	jr __jrt_nop_03696C
 __jrt_nop_03696C:
 
-LABEL_03696C:
+DSP2_SendData_PostLoop_Nop01:
 	nop
 	set_dd8 2, 0x3C
 	jr __jrt_nop_036972
 __jrt_nop_036972:
 
-LABEL_036972:
+DSP2_SendData_PostLoop_Nop02:
 	nop
 	jr __jrt_nop_036975
 __jrt_nop_036975:
 
-LABEL_036975:
+DSP2_SendData_PostLoop_Nop03:
 	nop
 	jr __jrt_nop_036978
 __jrt_nop_036978:
 
-LABEL_036978:
+DSP2_SendData_PostLoop_Nop04:
 	nop
 	jr __jrt_nop_03697B
 __jrt_nop_03697B:
 
-LABEL_03697B:
+DSP2_SendData_PostLoop_Nop05:
 	nop
 	jr __jrt_nop_03697E
 __jrt_nop_03697E:
 
-LABEL_03697E:
+DSP2_SendData_PostLoop_Nop06:
 	nop
 	jr __jrt_nop_036981
 __jrt_nop_036981:
 
-LABEL_036981:
+DSP2_SendData_PostLoop_Nop07:
 	nop
 	jr __jrt_nop_036984
 __jrt_nop_036984:
 
-LABEL_036984:
+DSP2_SendData_PostLoop_Nop08:
 	nop
 	jr __jrt_nop_036987
 __jrt_nop_036987:
 
-LABEL_036987:
+DSP2_SendData_PostLoop_Nop09:
 	nop
 	jr __jrt_nop_03698A
 __jrt_nop_03698A:
 
-LABEL_03698A:
+DSP2_SendData_PostLoop_Nop10:
 	nop
 	jr __jrt_nop_03698D
 __jrt_nop_03698D:
 
-LABEL_03698D:
+DSP2_SendData_PostLoop_Nop11:
 	nop
 	jr __jrt_nop_036990
 __jrt_nop_036990:
 
-LABEL_036990:
+DSP2_SendData_PostLoop_Nop12:
 	nop
 	jr __jrt_nop_036993
 __jrt_nop_036993:
 
-LABEL_036993:
+DSP2_SendData_PostLoop_Nop13:
 	nop
 	jr __jrt_nop_036996
 __jrt_nop_036996:
 
-LABEL_036996:
+DSP2_SendData_PostLoop_Nop14:
 	nop
 	jr __jrt_nop_036999
 __jrt_nop_036999:
 
-LABEL_036999:
+DSP2_SendData_PostLoop_Nop15:
 	nop
 	jr __jrt_nop_03699C
 __jrt_nop_03699C:
 
-LABEL_03699C:
+DSP2_SendData_PostLoop_Nop16:
 	nop
 	jr __jrt_nop_03699F
 __jrt_nop_03699F:
 
-LABEL_03699F:
+DSP2_SendData_PostLoop_Nop17:
 	nop
 	res_dd8 2, 0x3C
 	jr __jrt_nop_0369A5
 __jrt_nop_0369A5:
 
-LABEL_0369A5:
+DSP2_SendData_PostClkLow_Nop01:
 	nop
 	jr __jrt_nop_0369A8
 __jrt_nop_0369A8:
 
-LABEL_0369A8:
+DSP2_SendData_PostClkLow_Nop02:
 	nop
 	jr __jrt_nop_0369AB
 __jrt_nop_0369AB:
 
-LABEL_0369AB:
+DSP2_SendData_PostClkLow_Nop03:
 	nop
 	jr __jrt_nop_0369AE
 __jrt_nop_0369AE:
 
-LABEL_0369AE:
+DSP2_SendData_PostClkLow_Nop04:
 	nop
 	jr __jrt_nop_0369B1
 __jrt_nop_0369B1:
 
-LABEL_0369B1:
+DSP2_SendData_PostClkLow_Nop05:
 	nop
 	jr __jrt_nop_0369B4
 __jrt_nop_0369B4:
 
-LABEL_0369B4:
+DSP2_SendData_PostClkLow_Nop06:
 	nop
 	jr __jrt_nop_0369B7
 __jrt_nop_0369B7:
 
-LABEL_0369B7:
+DSP2_SendData_PostClkLow_Nop07:
 	nop
 	jr __jrt_nop_0369BA
 __jrt_nop_0369BA:
 
-LABEL_0369BA:
+DSP2_SendData_PostClkLow_Nop08:
 	nop
 	jr __jrt_nop_0369BD
 __jrt_nop_0369BD:
 
-LABEL_0369BD:
+DSP2_SendData_PostClkLow_Nop09:
 	nop
 	jr __jrt_nop_0369C0
 __jrt_nop_0369C0:
 
-LABEL_0369C0:
+DSP2_SendData_PostClkLow_Nop10:
 	nop
 	jr __jrt_nop_0369C3
 __jrt_nop_0369C3:
 
-LABEL_0369C3:
+DSP2_SendData_PostClkLow_Nop11:
 	nop
 	jr __jrt_nop_0369C6
 __jrt_nop_0369C6:
 
-LABEL_0369C6:
+DSP2_SendData_PostClkLow_Nop12:
 	nop
 	jr __jrt_nop_0369C9
 __jrt_nop_0369C9:
 
-LABEL_0369C9:
+DSP2_SendData_PostClkLow_Nop13:
 	nop
 	jr __jrt_nop_0369CC
 __jrt_nop_0369CC:
 
-LABEL_0369CC:
+DSP2_SendData_PostClkLow_Nop14:
 	nop
 	jr __jrt_nop_0369CF
 __jrt_nop_0369CF:
 
-LABEL_0369CF:
+DSP2_SendData_PostClkLow_Nop15:
 	nop
 	jr __jrt_nop_0369D2
 __jrt_nop_0369D2:
 
-LABEL_0369D2:
+DSP2_SendData_PostClkLow_Nop16:
 	nop
 	jr __jrt_nop_0369D5
 __jrt_nop_0369D5:
 
-LABEL_0369D5:
+DSP2_SendData_PostClkLow_Nop17:
 	nop
 	jr __jrt_nop_0369D8
 __jrt_nop_0369D8:
 
-LABEL_0369D8:
+DSP2_SendData_PostClkLow_Nop18:
 	nop
 	jr __jrt_nop_0369DB
 __jrt_nop_0369DB:
 
-LABEL_0369DB:
+DSP2_SendData_PostClkLow_Nop19:
 	nop
 	ld wa, (xsp + 6)
 	call 0x383DB
 	jr __jrt_nop_0369E5
 __jrt_nop_0369E5:
 
-LABEL_0369E5:
+DSP2_SendData_Epilogue_Nop01:
 	nop
 	jr __jrt_nop_0369E8
 __jrt_nop_0369E8:
 
-LABEL_0369E8:
+DSP2_SendData_Epilogue_Nop02:
 	nop
 	jr __jrt_nop_0369EB
 __jrt_nop_0369EB:
 
-LABEL_0369EB:
+DSP2_SendData_Epilogue_Nop03:
 	nop
 	jr __jrt_nop_0369EE
 __jrt_nop_0369EE:
 
-LABEL_0369EE:
+DSP2_SendData_Epilogue_Nop04:
 	nop
 	jr __jrt_nop_0369F1
 __jrt_nop_0369F1:
 
-LABEL_0369F1:
+DSP2_SendData_Epilogue_Nop05:
 	nop
 	jr __jrt_nop_0369F4
 __jrt_nop_0369F4:
 
-LABEL_0369F4:
+DSP2_SendData_Epilogue_Nop06:
 	nop
 	jr __jrt_nop_0369F7
 __jrt_nop_0369F7:
 
-LABEL_0369F7:
+DSP2_SendData_Epilogue_Nop07:
 	nop
 	jr __jrt_nop_0369FA
 __jrt_nop_0369FA:
 
-LABEL_0369FA:
+DSP2_SendData_Epilogue_Nop08:
 	nop
 	jr __jrt_nop_0369FD
 __jrt_nop_0369FD:
 
-LABEL_0369FD:
+DSP2_SendData_Epilogue_Nop09:
 	nop
 	jr __jrt_nop_036A00
 __jrt_nop_036A00:
 
-LABEL_036A00:
+DSP2_SendData_Epilogue_Nop10:
 	nop
 	jr __jrt_nop_036A03
 __jrt_nop_036A03:
 
-LABEL_036A03:
+DSP2_SendData_Epilogue_Nop11:
 	nop
 	jr __jrt_nop_036A06
 __jrt_nop_036A06:
 
-LABEL_036A06:
+DSP2_SendData_Epilogue_Nop12:
 	nop
 	jr __jrt_nop_036A09
 __jrt_nop_036A09:
 
-LABEL_036A09:
+DSP2_SendData_Epilogue_Nop13:
 	nop
 	jr __jrt_nop_036A0C
 __jrt_nop_036A0C:
 
-LABEL_036A0C:
+DSP2_SendData_Epilogue_Nop14:
 	nop
 	jr __jrt_nop_036A0F
 __jrt_nop_036A0F:
 
-LABEL_036A0F:
+DSP2_SendData_Epilogue_Nop15:
 	nop
 	jr __jrt_nop_036A12
 __jrt_nop_036A12:
 
-LABEL_036A12:
+DSP2_SendData_Epilogue_Nop16:
 	nop
 	ei 0
 	ld a, (xsp + 8)
@@ -42844,22 +42844,22 @@ DSP_DispatchCommand:
 	lds iz, 0
 	ld de, bc
 	cps de, 1
-	jr z, LABEL_036A42
+	jr z, DSP_DispatchCommand_DSP2Path
 	cps de, 0
-	jr nz, LABEL_036A49
+	jr nz, DSP_DispatchCommand_InvalidChip
 	extz wa
 	calr DSP_Send_Command
-	jr LABEL_036A4B
+	jr DSP_DispatchCommand_Epilogue
 
-LABEL_036A42:
+DSP_DispatchCommand_DSP2Path:
 	extz wa
 	calr DSP2_Send_Command
-	jr LABEL_036A4B
+	jr DSP_DispatchCommand_Epilogue
 
-LABEL_036A49:
+DSP_DispatchCommand_InvalidChip:
 	inc 1, iz
 
-LABEL_036A4B:
+DSP_DispatchCommand_Epilogue:
 	ld hl, iz
 	popw iz
 	ret
@@ -42869,22 +42869,22 @@ DSP_DispatchData:
 	lds iz, 0
 	ld de, bc
 	cps de, 1
-	jr z, LABEL_036A63
+	jr z, DSP_DispatchData_DSP2Path
 	cps de, 0
-	jr nz, LABEL_036A6A
+	jr nz, DSP_DispatchData_InvalidChip
 	extz wa
 	calr DSP_Send_Data
-	jr LABEL_036A6C
+	jr DSP_DispatchData_Epilogue
 
-LABEL_036A63:
+DSP_DispatchData_DSP2Path:
 	extz wa
 	calr DSP2_Send_Data
-	jr LABEL_036A6C
+	jr DSP_DispatchData_Epilogue
 
-LABEL_036A6A:
+DSP_DispatchData_InvalidChip:
 	inc 1, iz
 
-LABEL_036A6C:
+DSP_DispatchData_Epilogue:
 	ld hl, iz
 	popw iz
 	ret
@@ -42899,17 +42899,17 @@ DSP_StateTable_Reset:
 DSP_AlgoChange_CheckAndFlag:
 	ld bc, (xwa + 6)
 	cpda16 xbc, 17872
-	jr nz, LABEL_036A94
+	jr nz, DSP_AlgoChange_NoChange
 	cpw (xwa + 2), 0x1
-	jr z, LABEL_036A94
+	jr z, DSP_AlgoChange_NoChange
 	cpw (xwa + 4), 0x1
-	jr nz, LABEL_036A9B
+	jr nz, DSP_AlgoChange_FlagAndClear
 
-LABEL_036A94:
+DSP_AlgoChange_NoChange:
 	stdi16 18750, 1
 	ret
 
-LABEL_036A9B:
+DSP_AlgoChange_FlagAndClear:
 	stdi16 18750, 0
 	ret
 
@@ -42918,7 +42918,7 @@ DSP_SlotParam_DiffAndFlag:
 	cps hl, 5
 	ret nc
 
-LABEL_036AA8:
+DSP_SlotParam_DiffLoop:
 	ld bc, hl
 	mul bc, 0x38
 	ldada xde, 17874
@@ -42935,16 +42935,16 @@ LABEL_036AA8:
 	add xde, xwa
 	ld bc, (xde)
 	cp bc, (xix)
-	jr z, LABEL_036AE4
+	jr z, DSP_SlotParam_DiffMatch
 	ld bc, hl
 	mul bc, 0x32
 	ldada xde, 18752
 	extz xbc
 	add xbc, xde
 	ldw (xbc), 0x1
-	jr LABEL_036AF6
+	jr DSP_SlotParam_DiffMismatch
 
-LABEL_036AE4:
+DSP_SlotParam_DiffMatch:
 	ld bc, hl
 	mul bc, 0x32
 	ldada xde, 18752
@@ -42952,19 +42952,19 @@ LABEL_036AE4:
 	add xbc, xde
 	ldw (xbc), 0x0
 
-LABEL_036AF6:
+DSP_SlotParam_DiffMismatch:
 	inc 1, hl
 	cps hl, 5
-	jr c, LABEL_036AA8
+	jr c, DSP_SlotParam_DiffLoop
 	ret
 
 DSP_EFFParam_DiffAllAndFlag:
 	push xiz
 	lds de, 0
 	cps de, 5
-	jrl nc, LABEL_036D7E
+	jrl nc, DSP_EFFParam_DiffEpilogue
 
-LABEL_036B05:
+DSP_EFFParam_DiffOuter:
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
@@ -42974,9 +42974,9 @@ LABEL_036B05:
 	ldw (xbc), 0x0
 	lds hl, 0
 	cps hl, 1
-	jrl nc, LABEL_036BA8
+	jrl nc, DSP_EFFParam_DiffInner
 
-LABEL_036B22:
+DSP_EFFParam_DiffMid:
 	ld ix, hl
 	add ix, ix
 	ld bc, de
@@ -43000,7 +43000,7 @@ LABEL_036B22:
 	add xiy, xwa
 	ld bc, (xiy + 10)
 	cp bc, (xiz)
-	jr z, LABEL_036B89
+	jr z, DSP_EFFParam_DiffMidMatch
 	ld ix, hl
 	add ix, ix
 	ld bc, de
@@ -43017,9 +43017,9 @@ LABEL_036B22:
 	extz xbc
 	add xbc, xix
 	ldw (xbc), 0x1
-	jr LABEL_036BA1
+	jr DSP_EFFParam_DiffMidNext
 
-LABEL_036B89:
+DSP_EFFParam_DiffMidMatch:
 	ld ix, hl
 	add ix, ix
 	ld bc, de
@@ -43030,17 +43030,17 @@ LABEL_036B89:
 	add xbc, xix
 	ldw (xbc), 0x0
 
-LABEL_036BA1:
+DSP_EFFParam_DiffMidNext:
 	inc 1, hl
 	cps hl, 1
-	jrl c, LABEL_036B22
+	jrl c, DSP_EFFParam_DiffMid
 
-LABEL_036BA8:
+DSP_EFFParam_DiffInner:
 	lds hl, 0
 	cp hl, 0x11
-	jrl nc, LABEL_036C39
+	jrl nc, DSP_EFFParam_DiffLevel4
 
-LABEL_036BB1:
+DSP_EFFParam_DiffInnerBody:
 	ld ix, hl
 	add ix, ix
 	ld bc, de
@@ -43064,7 +43064,7 @@ LABEL_036BB1:
 	add xiy, xwa
 	ld bc, (xiy + 12)
 	cp bc, (xiz)
-	jr z, LABEL_036C18
+	jr z, DSP_EFFParam_DiffInnerMatch
 	ld ix, hl
 	add ix, ix
 	ld bc, de
@@ -43081,9 +43081,9 @@ LABEL_036BB1:
 	extz xbc
 	add xbc, xix
 	ldw (xbc), 0x1
-	jr LABEL_036C30
+	jr DSP_EFFParam_DiffInnerNext
 
-LABEL_036C18:
+DSP_EFFParam_DiffInnerMatch:
 	ld ix, hl
 	add ix, ix
 	ld bc, de
@@ -43094,17 +43094,17 @@ LABEL_036C18:
 	add xbc, xix
 	ldw (xbc), 0x0
 
-LABEL_036C30:
+DSP_EFFParam_DiffInnerNext:
 	inc 1, hl
 	cp hl, 0x11
-	jrl c, LABEL_036BB1
+	jrl c, DSP_EFFParam_DiffInnerBody
 
-LABEL_036C39:
+DSP_EFFParam_DiffLevel4:
 	lds hl, 0
 	cps hl, 1
-	jrl nc, LABEL_036CC6
+	jrl nc, DSP_EFFParam_DiffAlgoSection
 
-LABEL_036C40:
+DSP_EFFParam_DiffLevel4Body:
 	ld ix, hl
 	add ix, ix
 	ld bc, de
@@ -43128,7 +43128,7 @@ LABEL_036C40:
 	add xiy, xwa
 	ld bc, (xiy + 48)
 	cp bc, (xiz)
-	jr z, LABEL_036CA7
+	jr z, DSP_EFFParam_DiffLevel4Match
 	ld ix, hl
 	add ix, ix
 	ld bc, de
@@ -43145,9 +43145,9 @@ LABEL_036C40:
 	extz xbc
 	add xbc, xix
 	ldw (xbc), 0x1
-	jr LABEL_036CBF
+	jr DSP_EFFParam_DiffLevel4Next
 
-LABEL_036CA7:
+DSP_EFFParam_DiffLevel4Match:
 	ld ix, hl
 	add ix, ix
 	ld bc, de
@@ -43158,12 +43158,12 @@ LABEL_036CA7:
 	add xbc, xix
 	ldw (xbc), 0x0
 
-LABEL_036CBF:
+DSP_EFFParam_DiffLevel4Next:
 	inc 1, hl
 	cps hl, 1
-	jrl c, LABEL_036C40
+	jrl c, DSP_EFFParam_DiffLevel4Body
 
-LABEL_036CC6:
+DSP_EFFParam_DiffAlgoSection:
 	ld bc, de
 	mul bc, 0x38
 	inc 8, bc
@@ -43181,7 +43181,7 @@ LABEL_036CC6:
 	add xhl, xwa
 	ld bc, (xhl + 54)
 	cp bc, (xix)
-	jr z, LABEL_036D1F
+	jr z, DSP_EFFParam_AlgoChangePath
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
@@ -43196,9 +43196,9 @@ LABEL_036CC6:
 	extz xbc
 	add xbc, xhl
 	ldw (xbc), 0x1
-	jr LABEL_036D35
+	jr DSP_EFFParam_DiffOuterNext
 
-LABEL_036D1F:
+DSP_EFFParam_AlgoChangePath:
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
@@ -43207,7 +43207,7 @@ LABEL_036D1F:
 	add xbc, xhl
 	ldw (xbc), 0x0
 
-LABEL_036D35:
+DSP_EFFParam_DiffOuterNext:
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
@@ -43231,9 +43231,9 @@ LABEL_036D35:
 	ldw (xbc), 0x0
 	inc 1, de
 	cps de, 5
-	jrl c, LABEL_036B05
+	jrl c, DSP_EFFParam_DiffOuter
 
-LABEL_036D7E:
+DSP_EFFParam_DiffEpilogue:
 	pop xiz
 	ret
 
@@ -43261,15 +43261,15 @@ DSP_State_DiffAndPrepare:
 
 DSP_Config_ClampLimits:
 	cpw (xwa + 6), 0x1
-	jr ule, LABEL_036DAF
+	jr ule, DSP_Config_ClampLoop
 	ldw (xwa + 6), 0x0
 
-LABEL_036DAF:
+DSP_Config_ClampLoop:
 	lds hl, 0
 	cps hl, 5
 	ret nc
 
-LABEL_036DB5:
+DSP_Config_ClampApply:
 	ld bc, hl
 	extz xbc
 	ld xde, xbc
@@ -43279,7 +43279,7 @@ LABEL_036DB5:
 	inc 8, xde
 	add xde, xwa
 	cpw (xde), 0x63
-	jr ule, LABEL_036DE3
+	jr ule, DSP_Config_ClampNext
 	ld bc, hl
 	extz xbc
 	ld xde, xbc
@@ -43290,13 +43290,13 @@ LABEL_036DB5:
 	add xde, xwa
 	ldw (xde), 0x63
 
-LABEL_036DE3:
+DSP_Config_ClampNext:
 	inc 1, hl
 	cps hl, 5
-	jr c, LABEL_036DB5
+	jr c, DSP_Config_ClampApply
 	ret
 
-LABEL_036DEA:
+DSP_Config_ClampData:
 	.byte 0xd2, 0x66, 0x55, 0x04, 0x23, 0xd2, 0x44, 0x54
 	.byte 0x04, 0x83, 0x0e
 
@@ -43318,7 +43318,7 @@ DSP_SlotMuteState_ReadAndClear:
 ; Entry: XWA = pointer to structure with byte[0] and byte[1]
 ; Exit: XHL = XWA + computed offset (address into sample data)
 ;   offset = (byte[0] << 8) + byte[1], capped at 0xF0
-LABEL_036E12:
+CalcSampleAddr:
 	ld	c, (xwa+1)
 	and	c, 255
 	ld	e, c
@@ -43358,12 +43358,12 @@ DSP_State_ApplyAll:
 EFF_SlotActive_UpdateFlags:
 	lds de, 0
 	cpdi16 18750, 1
-	jr nz, LABEL_036E87
+	jr nz, EFF_SlotActive_SlotActive
 	lds hl, 0
 	cps hl, 5
 	ret nc
 
-LABEL_036E70:
+EFF_SlotActive_CheckSlot:
 	ld wa, hl
 	add wa, wa
 	ldada xbc, 18736
@@ -43372,15 +43372,15 @@ LABEL_036E70:
 	ldw (xwa), 0x1
 	inc 1, hl
 	cps hl, 5
-	jr c, LABEL_036E70
+	jr c, EFF_SlotActive_CheckSlot
 	ret
 
-LABEL_036E87:
+EFF_SlotActive_SlotActive:
 	lds hl, 0
 	cps hl, 5
 	ret nc
 
-LABEL_036E8D:
+EFF_SlotActive_SlotInactive:
 	ld bc, hl
 	extz xbc
 	ld xix, xbc
@@ -43391,27 +43391,27 @@ LABEL_036E8D:
 	add xix, xwa
 	ld bc, (xix)
 	cp bc, 0x33
-	jr z, LABEL_036EB9
+	jr z, EFF_SlotActive_VoiceCheck
 	cp bc, 0x34
-	jr z, LABEL_036EB9
+	jr z, EFF_SlotActive_VoiceCheck
 	cp bc, 0x45
-	jr z, LABEL_036EB9
+	jr z, EFF_SlotActive_VoiceCheck
 	cp bc, 0x46
-	jr nz, LABEL_036EBB
+	jr nz, EFF_SlotActive_VoiceInactive
 
-LABEL_036EB9:
+EFF_SlotActive_VoiceCheck:
 	lds de, 1
 
-LABEL_036EBB:
+EFF_SlotActive_VoiceInactive:
 	ld bc, hl
 	mul bc, 0x32
 	ldada xix, 18752
 	extz xbc
 	add xbc, xix
 	cpw (xbc), 0x1
-	jr z, LABEL_036F0B
+	jr z, EFF_SlotActive_LoopNext
 	cpw (xwa), 0x1
-	jr nz, LABEL_036EED
+	jr nz, EFF_SlotActive_AlgoCheck
 	ld bc, hl
 	mul bc, 0x32
 	add bc, 0x10
@@ -43419,9 +43419,9 @@ LABEL_036EBB:
 	extz xbc
 	add xbc, xix
 	cpw (xbc), 0x1
-	jr z, LABEL_036F0B
+	jr z, EFF_SlotActive_LoopNext
 
-LABEL_036EED:
+EFF_SlotActive_AlgoCheck:
 	ld bc, hl
 	mul bc, 0x32
 	add bc, 0x10
@@ -43429,11 +43429,11 @@ LABEL_036EED:
 	extz xbc
 	add xbc, xix
 	cpw (xbc), 0x1
-	jrl nz, LABEL_036FBA
+	jrl nz, EFF_SlotActive_InnerLoopNext
 	cps de, 1
-	jrl nz, LABEL_036FBA
+	jrl nz, EFF_SlotActive_InnerLoopNext
 
-LABEL_036F0B:
+EFF_SlotActive_LoopNext:
 	ld bc, hl
 	add bc, bc
 	ldada xix, 18736
@@ -43487,7 +43487,7 @@ LABEL_036F0B:
 	inc 8, xix
 	add xix, xwa
 	cpw (xix + 48), 0x63
-	jr z, LABEL_036FCA
+	jr z, EFF_SlotActive_Epilogue
 	ld bc, hl
 	mul bc, 0x32
 	add bc, 0x10
@@ -43495,9 +43495,9 @@ LABEL_036F0B:
 	extz xbc
 	add xbc, xix
 	ldw (xbc), 0x1
-	jr LABEL_036FCA
+	jr EFF_SlotActive_Epilogue
 
-LABEL_036FBA:
+EFF_SlotActive_InnerLoopNext:
 	ld bc, hl
 	add bc, bc
 	ldada xix, 18736
@@ -43505,21 +43505,21 @@ LABEL_036FBA:
 	add xbc, xix
 	ldw (xbc), 0x0
 
-LABEL_036FCA:
+EFF_SlotActive_Epilogue:
 	inc 1, hl
 	cps hl, 5
-	jrl c, LABEL_036E8D
+	jrl c, EFF_SlotActive_SlotInactive
 	ret
 
 EFF_DSPLink_ResetFlags:
 	cpdi16 18750, 1
-	jr nz, LABEL_036FFD
+	jr nz, EFF_DSPLink_ResetFlags_LoopNext
 	stdi16 18746, 1
 	lds de, 1
 	cps de, 2
 	ret nc
 
-LABEL_036FE6:
+EFF_DSPLink_ResetFlags_ZeroPath:
 	ld wa, de
 	add wa, wa
 	ldada xbc, 18746
@@ -43528,15 +43528,15 @@ LABEL_036FE6:
 	ldw (xwa), 0x0
 	inc 1, de
 	cps de, 2
-	jr c, LABEL_036FE6
+	jr c, EFF_DSPLink_ResetFlags_ZeroPath
 	ret
 
-LABEL_036FFD:
+EFF_DSPLink_ResetFlags_LoopNext:
 	lds de, 0
 	cps de, 2
 	ret nc
 
-LABEL_037003:
+EFF_DSPLink_ResetFlags_InnerBody:
 	ld wa, de
 	add wa, wa
 	ldada xbc, 18746
@@ -43545,7 +43545,7 @@ LABEL_037003:
 	ldw (xwa), 0x0
 	inc 1, de
 	cps de, 2
-	jr c, LABEL_037003
+	jr c, EFF_DSPLink_ResetFlags_InnerBody
 	ret
 
 EFF_DspChannel_InitFlags:
@@ -43553,9 +43553,9 @@ EFF_DspChannel_InitFlags:
 	cps de, 5
 	ret nc
 
-LABEL_037020:
+EFF_DspChannel_Init_AlgoCheck:
 	cpdi16 18750, 1
-	jr nz, LABEL_03703A
+	jr nz, EFF_DspChannel_Init_SlotNext
 	ld bc, de
 	mul bc, 0x32
 	ldada xhl, 18752
@@ -43563,19 +43563,19 @@ LABEL_037020:
 	add xbc, xhl
 	ldw (xbc), 0x1
 
-LABEL_03703A:
+EFF_DspChannel_Init_SlotNext:
 	ld bc, de
 	mul bc, 0x32
 	ldada xhl, 18752
 	extz xbc
 	add xbc, xhl
 	cpw (xbc), 0x1
-	jrl nz, LABEL_03716D
+	jrl nz, EFF_DspChannel_Init_OuterNext
 	lds ix, 0
 	cp ix, 0x11
-	jr nc, LABEL_037077
+	jr nc, EFF_DspChannel_Init_CoeffLoop
 
-LABEL_037057:
+EFF_DspChannel_Init_FreqLoop:
 	ld hl, ix
 	add hl, hl
 	ld bc, de
@@ -43587,14 +43587,14 @@ LABEL_037057:
 	ldw (xbc), 0x1
 	inc 1, ix
 	cp ix, 0x11
-	jr c, LABEL_037057
+	jr c, EFF_DspChannel_Init_FreqLoop
 
-LABEL_037077:
+EFF_DspChannel_Init_CoeffLoop:
 	lds ix, 0
 	cps ix, 1
-	jr nc, LABEL_03709B
+	jr nc, EFF_DspChannel_Init_Coeff2Loop
 
-LABEL_03707D:
+EFF_DspChannel_Init_CoeffNext:
 	ld hl, ix
 	add hl, hl
 	ld bc, de
@@ -43606,14 +43606,14 @@ LABEL_03707D:
 	ldw (xbc), 0x1
 	inc 1, ix
 	cps ix, 1
-	jr c, LABEL_03707D
+	jr c, EFF_DspChannel_Init_CoeffNext
 
-LABEL_03709B:
+EFF_DspChannel_Init_Coeff2Loop:
 	lds ix, 0
 	cps ix, 1
-	jr nc, LABEL_0370BF
+	jr nc, EFF_DspChannel_Init_MultiTableDirty
 
-LABEL_0370A1:
+EFF_DspChannel_Init_Coeff2Next:
 	ld hl, ix
 	add hl, hl
 	ld bc, de
@@ -43625,9 +43625,9 @@ LABEL_0370A1:
 	ldw (xbc), 0x1
 	inc 1, ix
 	cps ix, 1
-	jr c, LABEL_0370A1
+	jr c, EFF_DspChannel_Init_Coeff2Next
 
-LABEL_0370BF:
+EFF_DspChannel_Init_MultiTableDirty:
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
@@ -43664,23 +43664,23 @@ LABEL_0370BF:
 	add xbc, xhl
 	ldw (xbc), 0x1
 	cps de, 1
-	jr nz, LABEL_03716D
+	jr nz, EFF_DspChannel_Init_OuterNext
 	ld bc, (xwa + 46)
 	inc 1, bc
 	ld hl, (xwa + 8)
 	cp hl, 0x35
-	jr z, LABEL_037159
+	jr z, EFF_DspChannel_Init_AlgoTypePath
 	cp hl, 0xF
-	jr z, LABEL_037159
+	jr z, EFF_DspChannel_Init_AlgoTypePath
 	add bc, bc
 	add bc, 0x14
 	ldada xhl, 18736
 	extz xbc
 	add xbc, xhl
 	ldw (xbc), 0x1
-	jr LABEL_03716D
+	jr EFF_DspChannel_Init_OuterNext
 
-LABEL_037159:
+EFF_DspChannel_Init_AlgoTypePath:
 	inc 1, bc
 	add bc, bc
 	add bc, 0x14
@@ -43689,7 +43689,7 @@ LABEL_037159:
 	add xbc, xhl
 	ldw (xbc), 0x1
 
-LABEL_03716D:
+EFF_DspChannel_Init_OuterNext:
 	ld bc, de
 	extz xbc
 	ld xhl, xbc
@@ -43699,7 +43699,7 @@ LABEL_03716D:
 	inc 8, xhl
 	add xhl, xwa
 	cpw (xhl), 0x27
-	jrl nz, LABEL_037438
+	jrl nz, EFF_DspChanInit_AlgoType9_Dirty
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
@@ -43707,7 +43707,7 @@ LABEL_03716D:
 	extz xbc
 	add xbc, xhl
 	cpw (xbc), 0x1
-	jr z, LABEL_0371CE
+	jr z, EFF_DspChanInit_AlgoType0_Dirty
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
@@ -43715,7 +43715,7 @@ LABEL_03716D:
 	extz xbc
 	add xbc, xhl
 	cpw (xbc), 0x1
-	jr z, LABEL_0371CE
+	jr z, EFF_DspChanInit_AlgoType0_Dirty
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
@@ -43723,9 +43723,9 @@ LABEL_03716D:
 	extz xbc
 	add xbc, xhl
 	cpw (xbc), 0x1
-	jr nz, LABEL_037210
+	jr nz, EFF_DspChanInit_AlgoType1_Dirty
 
-LABEL_0371CE:
+EFF_DspChanInit_AlgoType0_Dirty:
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
@@ -43748,7 +43748,7 @@ LABEL_0371CE:
 	add xbc, xhl
 	ldw (xbc), 0x0
 
-LABEL_037210:
+EFF_DspChanInit_AlgoType1_Dirty:
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
@@ -43756,7 +43756,7 @@ LABEL_037210:
 	extz xbc
 	add xbc, xhl
 	cpw (xbc), 0x1
-	jr z, LABEL_037258
+	jr z, EFF_DspChanInit_AlgoType2_Dirty
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
@@ -43764,7 +43764,7 @@ LABEL_037210:
 	extz xbc
 	add xbc, xhl
 	cpw (xbc), 0x1
-	jr z, LABEL_037258
+	jr z, EFF_DspChanInit_AlgoType2_Dirty
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
@@ -43772,9 +43772,9 @@ LABEL_037210:
 	extz xbc
 	add xbc, xhl
 	cpw (xbc), 0x1
-	jr nz, LABEL_03729A
+	jr nz, EFF_DspChanInit_AlgoType3_Dirty
 
-LABEL_037258:
+EFF_DspChanInit_AlgoType2_Dirty:
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
@@ -43797,7 +43797,7 @@ LABEL_037258:
 	add xbc, xhl
 	ldw (xbc), 0x0
 
-LABEL_03729A:
+EFF_DspChanInit_AlgoType3_Dirty:
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
@@ -43805,7 +43805,7 @@ LABEL_03729A:
 	extz xbc
 	add xbc, xhl
 	cpw (xbc), 0x1
-	jr z, LABEL_0372E2
+	jr z, EFF_DspChanInit_AlgoType4_Dirty
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
@@ -43813,7 +43813,7 @@ LABEL_03729A:
 	extz xbc
 	add xbc, xhl
 	cpw (xbc), 0x1
-	jr z, LABEL_0372E2
+	jr z, EFF_DspChanInit_AlgoType4_Dirty
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
@@ -43821,9 +43821,9 @@ LABEL_03729A:
 	extz xbc
 	add xbc, xhl
 	cpw (xbc), 0x1
-	jr nz, LABEL_037324
+	jr nz, EFF_DspChanInit_AlgoType5_Dirty
 
-LABEL_0372E2:
+EFF_DspChanInit_AlgoType4_Dirty:
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
@@ -43846,7 +43846,7 @@ LABEL_0372E2:
 	add xbc, xhl
 	ldw (xbc), 0x0
 
-LABEL_037324:
+EFF_DspChanInit_AlgoType5_Dirty:
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
@@ -43854,7 +43854,7 @@ LABEL_037324:
 	extz xbc
 	add xbc, xhl
 	cpw (xbc), 0x1
-	jr z, LABEL_03736C
+	jr z, EFF_DspChanInit_AlgoType6_Dirty
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
@@ -43862,7 +43862,7 @@ LABEL_037324:
 	extz xbc
 	add xbc, xhl
 	cpw (xbc), 0x1
-	jr z, LABEL_03736C
+	jr z, EFF_DspChanInit_AlgoType6_Dirty
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
@@ -43870,9 +43870,9 @@ LABEL_037324:
 	extz xbc
 	add xbc, xhl
 	cpw (xbc), 0x1
-	jr nz, LABEL_0373AE
+	jr nz, EFF_DspChanInit_AlgoType7_Dirty
 
-LABEL_03736C:
+EFF_DspChanInit_AlgoType6_Dirty:
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
@@ -43895,7 +43895,7 @@ LABEL_03736C:
 	add xbc, xhl
 	ldw (xbc), 0x0
 
-LABEL_0373AE:
+EFF_DspChanInit_AlgoType7_Dirty:
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
@@ -43903,7 +43903,7 @@ LABEL_0373AE:
 	extz xbc
 	add xbc, xhl
 	cpw (xbc), 0x1
-	jr z, LABEL_0373F6
+	jr z, EFF_DspChanInit_AlgoType8_Dirty
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
@@ -43911,7 +43911,7 @@ LABEL_0373AE:
 	extz xbc
 	add xbc, xhl
 	cpw (xbc), 0x1
-	jr z, LABEL_0373F6
+	jr z, EFF_DspChanInit_AlgoType8_Dirty
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
@@ -43919,9 +43919,9 @@ LABEL_0373AE:
 	extz xbc
 	add xbc, xhl
 	cpw (xbc), 0x1
-	jr nz, LABEL_037438
+	jr nz, EFF_DspChanInit_AlgoType9_Dirty
 
-LABEL_0373F6:
+EFF_DspChanInit_AlgoType8_Dirty:
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
@@ -43944,7 +43944,7 @@ LABEL_0373F6:
 	add xbc, xhl
 	ldw (xbc), 0x0
 
-LABEL_037438:
+EFF_DspChanInit_AlgoType9_Dirty:
 	ld bc, de
 	extz xbc
 	ld xhl, xbc
@@ -43954,7 +43954,7 @@ LABEL_037438:
 	inc 8, xhl
 	add xhl, xwa
 	cpw (xhl), 0x4F
-	jrl nz, LABEL_037561
+	jrl nz, EFF_DspChanInit_AlgoType4F_Epilogue
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
@@ -43962,7 +43962,7 @@ LABEL_037438:
 	extz xbc
 	add xbc, xhl
 	cpw (xbc), 0x1
-	jr nz, LABEL_037495
+	jr nz, EFF_DspChanInit_AlgoType4F_SubA
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
@@ -43978,7 +43978,7 @@ LABEL_037438:
 	add xbc, xhl
 	ldw (xbc), 0x0
 
-LABEL_037495:
+EFF_DspChanInit_AlgoType4F_SubA:
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
@@ -43986,7 +43986,7 @@ LABEL_037495:
 	extz xbc
 	add xbc, xhl
 	cpw (xbc), 0x1
-	jr nz, LABEL_0374D9
+	jr nz, EFF_DspChanInit_AlgoType4F_SubB
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
@@ -44002,7 +44002,7 @@ LABEL_037495:
 	add xbc, xhl
 	ldw (xbc), 0x0
 
-LABEL_0374D9:
+EFF_DspChanInit_AlgoType4F_SubB:
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
@@ -44010,7 +44010,7 @@ LABEL_0374D9:
 	extz xbc
 	add xbc, xhl
 	cpw (xbc), 0x1
-	jr nz, LABEL_03751D
+	jr nz, EFF_DspChanInit_AlgoType4F_SubC
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
@@ -44026,7 +44026,7 @@ LABEL_0374D9:
 	add xbc, xhl
 	ldw (xbc), 0x0
 
-LABEL_03751D:
+EFF_DspChanInit_AlgoType4F_SubC:
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
@@ -44034,7 +44034,7 @@ LABEL_03751D:
 	extz xbc
 	add xbc, xhl
 	cpw (xbc), 0x1
-	jr nz, LABEL_037561
+	jr nz, EFF_DspChanInit_AlgoType4F_Epilogue
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
@@ -44050,7 +44050,7 @@ LABEL_03751D:
 	add xbc, xhl
 	ldw (xbc), 0x0
 
-LABEL_037561:
+EFF_DspChanInit_AlgoType4F_Epilogue:
 	ld bc, de
 	extz xbc
 	ld xhl, xbc
@@ -44060,7 +44060,7 @@ LABEL_037561:
 	inc 8, xhl
 	add xhl, xwa
 	cpw (xhl), 0x35
-	jr z, LABEL_037592
+	jr z, EFF_DspChanInit_AlgoType35_Dirty
 	ld bc, de
 	extz xbc
 	ld xhl, xbc
@@ -44070,9 +44070,9 @@ LABEL_037561:
 	inc 8, xhl
 	add xhl, xwa
 	cpw (xhl), 0xF
-	jrl nz, LABEL_03768E
+	jrl nz, EFF_DspChanInit_AlgoType35_SubC
 
-LABEL_037592:
+EFF_DspChanInit_AlgoType35_Dirty:
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
@@ -44080,7 +44080,7 @@ LABEL_037592:
 	extz xbc
 	add xbc, xhl
 	cpw (xbc), 0x1
-	jrl nz, LABEL_03768E
+	jrl nz, EFF_DspChanInit_AlgoType35_SubC
 	ld bc, de
 	extz xbc
 	ld xhl, xbc
@@ -44090,7 +44090,7 @@ LABEL_037592:
 	inc 8, xhl
 	add xhl, xwa
 	cpw (xhl + 30), 0x1
-	jr nz, LABEL_03761E
+	jr nz, EFF_DspChanInit_AlgoType35_SubA
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
@@ -44119,9 +44119,9 @@ LABEL_037592:
 	extz xbc
 	add xbc, xhl
 	ldw (xbc), 0x1
-	jr LABEL_037676
+	jr EFF_DspChanInit_AlgoType35_SubB
 
-LABEL_03761E:
+EFF_DspChanInit_AlgoType35_SubA:
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
@@ -44151,7 +44151,7 @@ LABEL_03761E:
 	add xbc, xhl
 	ldw (xbc), 0x1
 
-LABEL_037676:
+EFF_DspChanInit_AlgoType35_SubB:
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
@@ -44159,9 +44159,9 @@ LABEL_037676:
 	extz xbc
 	add xbc, xhl
 	ldw (xbc), 0x1
-	jr LABEL_037702
+	jr EFF_DspChanInit_AlgoType35_SubF
 
-LABEL_03768E:
+EFF_DspChanInit_AlgoType35_SubC:
 	ld bc, de
 	extz xbc
 	ld xhl, xbc
@@ -44171,7 +44171,7 @@ LABEL_03768E:
 	inc 8, xhl
 	add xhl, xwa
 	cpw (xhl), 0x3F
-	jr nz, LABEL_0376EC
+	jr nz, EFF_DspChanInit_AlgoType35_SubE
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
@@ -44179,7 +44179,7 @@ LABEL_03768E:
 	extz xbc
 	add xbc, xhl
 	cpw (xbc), 0x1
-	jr z, LABEL_0376D6
+	jr z, EFF_DspChanInit_AlgoType35_SubD
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
@@ -44187,9 +44187,9 @@ LABEL_03768E:
 	extz xbc
 	add xbc, xhl
 	cpw (xbc), 0x1
-	jr nz, LABEL_0376EC
+	jr nz, EFF_DspChanInit_AlgoType35_SubE
 
-LABEL_0376D6:
+EFF_DspChanInit_AlgoType35_SubD:
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
@@ -44198,7 +44198,7 @@ LABEL_0376D6:
 	add xbc, xhl
 	ldw (xbc), 0x1
 
-LABEL_0376EC:
+EFF_DspChanInit_AlgoType35_SubE:
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
@@ -44207,7 +44207,7 @@ LABEL_0376EC:
 	add xbc, xhl
 	ldw (xbc), 0x1
 
-LABEL_037702:
+EFF_DspChanInit_AlgoType35_SubF:
 	ld bc, de
 	mul bc, 0x32
 	add bc, 0x10
@@ -44215,7 +44215,7 @@ LABEL_037702:
 	extz xbc
 	add xbc, xhl
 	cpw (xbc), 0x1
-	jr nz, LABEL_037746
+	jr nz, EFF_DspChanInit_AlgoType35_Epilogue
 	ld bc, de
 	extz xbc
 	ld xhl, xbc
@@ -44234,10 +44234,10 @@ LABEL_037702:
 	add xbc, xhl
 	ldw (xbc), 0x1
 
-LABEL_037746:
+EFF_DspChanInit_AlgoType35_Epilogue:
 	inc 1, de
 	cps de, 5
-	jrl c, LABEL_037020
+	jrl c, EFF_DspChannel_Init_AlgoCheck
 	ret
 
 EFF_StateLoad_Prepare:
@@ -44256,23 +44256,23 @@ EFF_MuteLoop:
 	lds de, 0
 	lds iz, 0
 	cps iz, 5
-	jr nc, LABEL_0377CB
+	jr nc, EFF_MuteLoop_Epilogue
 
-LABEL_037769:
+EFF_MuteLoop_SlotBody:
 	ld wa, iz
 	add wa, wa
 	ldada xbc, 18736
 	extz xwa
 	add xwa, xbc
 	cpw (xwa), 0x1
-	jr nz, LABEL_0377C5
+	jr nz, EFF_MuteLoop_SlotNext
 	ld wa, iz
 	mul wa, 0x32
 	ldada xbc, 18752
 	extz xwa
 	add xwa, xbc
 	cpw (xwa), 0x1
-	jr nz, LABEL_0377BD
+	jr nz, EFF_MuteLoop_NoMute
 	ld wa, iz
 	mul wa, 0x38
 	ldada xbc, 17874
@@ -44283,7 +44283,7 @@ LABEL_037769:
 	ld xbc, 0x12226
 	add xbc, xwa
 	cp (xbc), 0x0
-	jr z, LABEL_0377BD
+	jr z, EFF_MuteLoop_NoMute
 	ld wa, iz
 	add wa, wa
 	ldada xbc, 17852
@@ -44291,23 +44291,23 @@ LABEL_037769:
 	add xwa, xbc
 	ldw (xwa), 0x1
 
-LABEL_0377BD:
+EFF_MuteLoop_NoMute:
 	ld wa, iz
 	call 0x37EB4
 	lds de, 1
 
-LABEL_0377C5:
+EFF_MuteLoop_SlotNext:
 	inc 1, iz
 	cps iz, 5
-	jr c, LABEL_037769
+	jr c, EFF_MuteLoop_SlotBody
 
-LABEL_0377CB:
+EFF_MuteLoop_Epilogue:
 	cps de, 1
-	jr nz, LABEL_0377D6
+	jr nz, EFF_MuteLoop_NoFlush
 	ldw wa, 0x14
 	call 0x38392
 
-LABEL_0377D6:
+EFF_MuteLoop_NoFlush:
 	popw iz
 	ret
 
@@ -44315,16 +44315,16 @@ DSP_ResetLoop:
 	pushw iz
 	lds iz, 0
 	cps iz, 2
-	jr nc, LABEL_0377EB
+	jr nc, DSP_ResetLoop_Epilogue
 
-LABEL_0377DF:
+DSP_ResetLoop_Body:
 	ld wa, iz
 	call 0x37E62
 	inc 1, iz
 	cps iz, 2
-	jr c, LABEL_0377DF
+	jr c, DSP_ResetLoop_Body
 
-LABEL_0377EB:
+DSP_ResetLoop_Epilogue:
 	popw iz
 	ret
 
@@ -44332,25 +44332,25 @@ DSP_MuteLoop:
 	pushw iz
 	lds iz, 0
 	cps iz, 2
-	jr nc, LABEL_037812
+	jr nc, DSP_MuteLoop_Epilogue
 
-LABEL_0377F4:
+DSP_MuteLoop_Body:
 	ld wa, iz
 	add wa, wa
 	ldada xbc, 18746
 	extz xwa
 	add xwa, xbc
 	cpw (xwa), 0x1
-	jr nz, LABEL_03780C
+	jr nz, DSP_MuteLoop_Next
 	ld wa, iz
 	call 0x37EE9
 
-LABEL_03780C:
+DSP_MuteLoop_Next:
 	inc 1, iz
 	cps iz, 2
-	jr c, LABEL_0377F4
+	jr c, DSP_MuteLoop_Body
 
-LABEL_037812:
+DSP_MuteLoop_Epilogue:
 	popw iz
 	ret
 
@@ -44358,25 +44358,25 @@ DSP_UnmuteLoop:
 	pushw iz
 	lds iz, 0
 	cps iz, 2
-	jr nc, LABEL_037839
+	jr nc, DSP_UnmuteLoop_Epilogue
 
-LABEL_03781B:
+DSP_UnmuteLoop_Body:
 	ld wa, iz
 	add wa, wa
 	ldada xbc, 18746
 	extz xwa
 	add xwa, xbc
 	cpw (xwa), 0x1
-	jr nz, LABEL_037833
+	jr nz, DSP_UnmuteLoop_Next
 	ld wa, iz
 	call 0x37F1C
 
-LABEL_037833:
+DSP_UnmuteLoop_Next:
 	inc 1, iz
 	cps iz, 2
-	jr c, LABEL_03781B
+	jr c, DSP_UnmuteLoop_Body
 
-LABEL_037839:
+DSP_UnmuteLoop_Epilogue:
 	popw iz
 	ret
 
@@ -44388,10 +44388,10 @@ DSP_AlgorithmChangeCheck:
 
 Unsigned_Max_Select:
 	cp bc, wa
-	jr ule, LABEL_03784E
+	jr ule, Unsigned_Max_Select_Return
 	ld wa, bc
 
-LABEL_03784E:
+Unsigned_Max_Select_Return:
 	ld hl, wa
 	ret
 
@@ -44410,9 +44410,9 @@ EFF_ParamIterator_Process:
 	add xbc, (xsp + 4)
 	ld wa, (xbc)
 	cp wa, 0xF
-	jrl z, LABEL_03790C
+	jrl z, EFF_ParamIter_SpecialAlgoPath
 	cp wa, 0x35
-	jrl z, LABEL_03790C
+	jrl z, EFF_ParamIter_SpecialAlgoPath
 	ld wa, (xsp + 8)
 	extz xwa
 	ld xbc, xwa
@@ -44424,15 +44424,15 @@ EFF_ParamIterator_Process:
 	ld wa, (xbc + 44)
 	ldfr_werp WA, 0xFA
 	cp_erpw 0xFA, 0x11, 0x00
-	jr ule, LABEL_0378A4
+	jr ule, EFF_ParamIter_CountClamp
 	ldi_erpw 0xFA, 0x11, 0x00
 
-LABEL_0378A4:
+EFF_ParamIter_CountClamp:
 	lds iz, 0
 	cp_werp IZ, 0xFA
-	jrl nc, LABEL_037987
+	jrl nc, EFF_ParamIter_Epilogue
 
-LABEL_0378AC:
+EFF_ParamIter_StdLoop:
 	ld bc, iz
 	add bc, bc
 	ld wa, (xsp + 8)
@@ -44442,7 +44442,7 @@ LABEL_0378AC:
 	extz xwa
 	add xwa, xbc
 	cpw (xwa), 0x1
-	jr nz, LABEL_037903
+	jr nz, EFF_ParamIter_StdLoopNext
 	ld wa, (xsp + 8)
 	extz xwa
 	ld xbc, xwa
@@ -44452,7 +44452,7 @@ LABEL_0378AC:
 	inc 8, xbc
 	add xbc, (xsp + 4)
 	cp iz, (xbc + 38)
-	jr z, LABEL_037903
+	jr z, EFF_ParamIter_StdLoopNext
 	ld wa, (xsp + 8)
 	extz xwa
 	ld xbc, xwa
@@ -44468,13 +44468,13 @@ LABEL_0378AC:
 	ld de, iz
 	call 0x38200
 
-LABEL_037903:
+EFF_ParamIter_StdLoopNext:
 	inc 1, iz
 	cp_werp IZ, 0xFA
-	jr c, LABEL_0378AC
-	jr LABEL_037987
+	jr c, EFF_ParamIter_StdLoop
+	jr EFF_ParamIter_Epilogue
 
-LABEL_03790C:
+EFF_ParamIter_SpecialAlgoPath:
 	ld wa, (xsp + 8)
 	extz xwa
 	ld xbc, xwa
@@ -44489,9 +44489,9 @@ LABEL_03790C:
 	lda_24 xbc, 0x0122a6
 	st_dri3b H, 0x07, 0xE4, 0xE0
 	cp (xiz), 0xC
-	jr z, LABEL_037987
+	jr z, EFF_ParamIter_Epilogue
 
-LABEL_03793A:
+EFF_ParamIter_SpecialLoop:
 	ld a, (xiz)
 	extz wa
 	ld bc, wa
@@ -44503,7 +44503,7 @@ LABEL_03793A:
 	extz xbc
 	add xbc, xwa
 	cpw (xbc), 0x1
-	jr nz, LABEL_037980
+	jr nz, EFF_ParamIter_SpecialLoopNext
 	ld wa, (xsp + 8)
 	extz xwa
 	ld xbc, xwa
@@ -44521,12 +44521,12 @@ LABEL_03793A:
 	ld bc, (xbc)
 	call 0x38200
 
-LABEL_037980:
+EFF_ParamIter_SpecialLoopNext:
 	inc 1, xiz
 	cp (xiz), 0xC
-	jr nz, LABEL_03793A
+	jr nz, EFF_ParamIter_SpecialLoop
 
-LABEL_037987:
+EFF_ParamIter_Epilogue:
 	pop xiz
 	inc 6, xsp
 	ret
@@ -44554,33 +44554,33 @@ EFF_Change_Handler:
 	extz xwa
 	add xwa, xbc
 	cpw (xwa), 0x1
-	jrl nz, LABEL_037A5B
+	jrl nz, EFF_Change_Handler_Epilogue
 	ld wa, iz
 	cps wa, 2
-	jr nz, LABEL_0379E2
+	jr nz, EFF_Change_Handler_NonSlot2
 	ld xwa, (xsp + 2)
 	cpw (xwa + 4), 0x1
-	jr nz, LABEL_0379EE
+	jr nz, EFF_Change_Handler_SlotDispatch
 	ld wa, iz
 	ld xbc, (xsp + 2)
 	ld bc, (xbc + 6)
 	call 0x37F4F
-	jr LABEL_0379EE
+	jr EFF_Change_Handler_SlotDispatch
 
-LABEL_0379E2:
+EFF_Change_Handler_NonSlot2:
 	ld wa, iz
 	ld xbc, (xsp + 2)
 	ld bc, (xbc + 6)
 	call 0x37F4F
 
-LABEL_0379EE:
+EFF_Change_Handler_SlotDispatch:
 	ld wa, iz
 	cps wa, 4
-	jr z, LABEL_037A19
+	jr z, EFF_Change_Handler_Slot234_AlgoPath
 	cps wa, 3
-	jr z, LABEL_037A19
+	jr z, EFF_Change_Handler_Slot234_AlgoPath
 	cps wa, 2
-	jr z, LABEL_037A19
+	jr z, EFF_Change_Handler_Slot234_AlgoPath
 	ld wa, iz
 	extz xwa
 	ld xbc, xwa
@@ -44592,12 +44592,12 @@ LABEL_0379EE:
 	ld wa, iz
 	ld bc, (xbc)
 	call 0x380EC
-	jr LABEL_037A5B
+	jr EFF_Change_Handler_Epilogue
 
-LABEL_037A19:
+EFF_Change_Handler_Slot234_AlgoPath:
 	ld xwa, (xsp + 2)
 	cpw (xwa + 4), 0x1
-	jr nz, LABEL_037A40
+	jr nz, EFF_Change_Handler_Slot234_AltPath
 	ld wa, iz
 	extz xwa
 	ld xbc, xwa
@@ -44609,9 +44609,9 @@ LABEL_037A19:
 	ld wa, iz
 	ld bc, (xbc)
 	call 0x380EC
-	jr LABEL_037A5B
+	jr EFF_Change_Handler_Epilogue
 
-LABEL_037A40:
+EFF_Change_Handler_Slot234_AltPath:
 	ld wa, iz
 	extz xwa
 	ld xbc, xwa
@@ -44624,7 +44624,7 @@ LABEL_037A40:
 	ld bc, (xbc)
 	call 0x381BC
 
-LABEL_037A5B:
+EFF_Change_Handler_Epilogue:
 	ld wa, iz
 	ld xbc, (xsp + 2)
 	calr EFF_VolumeChange_Check
@@ -44639,33 +44639,33 @@ EFF_HeaderChangeDataLoop:
 	ldi_werp 0xFA, 0
 	lds iz, 4
 	cp iz, 0xFFFF
-	jr le, LABEL_037AD6
+	jr le, EFF_HeaderChangeLoop_Epilogue
 
-LABEL_037A78:
+EFF_HeaderChangeLoop_Body:
 	ld xwa, (xsp + 4)
 	cpw (xwa + 2), 0x1
-	jr z, LABEL_037A8C
+	jr z, EFF_HeaderChangeLoop_CallAlgo
 	ld xwa, (xsp + 4)
 	cpw (xwa + 4), 0x1
-	jr nz, LABEL_037A92
+	jr nz, EFF_HeaderChangeLoop_PostAlgo
 
-LABEL_037A8C:
+EFF_HeaderChangeLoop_CallAlgo:
 	ld wa, iz
 	call 0x380AB
 
-LABEL_037A92:
+EFF_HeaderChangeLoop_PostAlgo:
 	ld wa, iz
 	mul wa, 0x32
 	ldada xbc, 18752
 	extz xwa
 	add xwa, xbc
 	cpw (xwa), 0x1
-	jr z, LABEL_037AAF
+	jr z, EFF_HeaderChangeLoop_ActiveSlot
 	ld xwa, (xsp + 4)
 	cpw (xwa), 0x1
-	jr nz, LABEL_037AC6
+	jr nz, EFF_HeaderChangeLoop_CallChange
 
-LABEL_037AAF:
+EFF_HeaderChangeLoop_ActiveSlot:
 	lda_24 xwa, 0x01ed72
 	ld_srib3 A, 0x07, 0xE0, 0xF8
 	ld c, a
@@ -44674,15 +44674,15 @@ LABEL_037AAF:
 	calr Unsigned_Max_Select
 	ldfr_werp HL, 0xFA
 
-LABEL_037AC6:
+EFF_HeaderChangeLoop_CallChange:
 	ld wa, iz
 	ld xbc, (xsp + 4)
 	calr EFF_Change_Handler
 	dec 1, iz
 	cp iz, 0xFFFF
-	jr gt, LABEL_037A78
+	jr gt, EFF_HeaderChangeLoop_Body
 
-LABEL_037AD6:
+EFF_HeaderChangeLoop_Epilogue:
 	cpi_werp 0xFA, 0
 	jr z, LABEL_037AE2
 	ldto_werp WA, 0xFA
@@ -44699,9 +44699,9 @@ EFF_LinkLoop:
 	ld (xsp + 2), xwa
 	lds iz, 4
 	cp iz, 0xFFFF
-	jr le, LABEL_037B39
+	jr le, EFF_LinkLoop_Epilogue
 
-LABEL_037AF4:
+EFF_LinkLoop_Body:
 	ld wa, iz
 	mul wa, 0x32
 	add wa, 0x10
@@ -44709,7 +44709,7 @@ LABEL_037AF4:
 	extz xwa
 	add xwa, xbc
 	cpw (xwa), 0x1
-	jr nz, LABEL_037B31
+	jr nz, EFF_LinkLoop_Next
 	ld wa, iz
 	muls wa, 0x38
 	ld bc, wa
@@ -44717,18 +44717,18 @@ LABEL_037AF4:
 	ld xwa, (xsp + 2)
 	st_dri3b W, 0x07, 0xE0, 0xE4
 	cpw (xwa + 54), 0x1
-	jr nz, LABEL_037B31
+	jr nz, EFF_LinkLoop_Next
 	ld wa, iz
 	ld xbc, (xsp + 2)
 	ld bc, (xbc + 6)
 	call 0x37FAE
 
-LABEL_037B31:
+EFF_LinkLoop_Next:
 	dec 1, iz
 	cp iz, 0xFFFF
-	jr gt, LABEL_037AF4
+	jr gt, EFF_LinkLoop_Body
 
-LABEL_037B39:
+EFF_LinkLoop_Epilogue:
 	popw iz
 	inc 4, xsp
 	ret
@@ -44740,9 +44740,9 @@ EFF_SecondaryLinkPath:
 	lds iz, 0
 	ldi_werp 0xFA, 4
 	cp_erpw 0xFA, 0xFF, 0xFF
-	jr le, LABEL_037B96
+	jr le, EFF_SecLinkPath_Pass1Epilogue
 
-LABEL_037B4F:
+EFF_SecLinkPath_Pass1Body:
 	ldto_werp WA, 0xFA
 	mul wa, 0x32
 	add wa, 0x10
@@ -44750,7 +44750,7 @@ LABEL_037B4F:
 	extz xwa
 	add xwa, xbc
 	cpw (xwa), 0x1
-	jr nz, LABEL_037B8C
+	jr nz, EFF_SecLinkPath_Pass1Next
 	ldto_werp WA, 0xFA
 	muls wa, 0x38
 	ld bc, wa
@@ -44758,30 +44758,30 @@ LABEL_037B4F:
 	ld xwa, (xsp + 4)
 	st_dri3b W, 0x07, 0xE0, 0xE4
 	cpw (xwa + 54), 0x0
-	jr nz, LABEL_037B8C
+	jr nz, EFF_SecLinkPath_Pass1Next
 	ld wa, iz
 	ldw bc, 0x14
 	calr Unsigned_Max_Select
 	ld iz, hl
 
-LABEL_037B8C:
+EFF_SecLinkPath_Pass1Next:
 	dec1_werp 0xFA
 	cp_erpw 0xFA, 0xFF, 0xFF
-	jr gt, LABEL_037B4F
+	jr gt, EFF_SecLinkPath_Pass1Body
 
-LABEL_037B96:
+EFF_SecLinkPath_Pass1Epilogue:
 	cps iz, 0
-	jr z, LABEL_037BA0
+	jr z, EFF_SecLinkPath_Pass2Start
 	ld wa, iz
 	call 0x38392
 
-LABEL_037BA0:
+EFF_SecLinkPath_Pass2Start:
 	lds iz, 0
 	ldi_werp 0xFA, 4
 	cp_erpw 0xFA, 0xFF, 0xFF
-	jr le, LABEL_037C17
+	jr le, EFF_SecLinkPath_Pass2Epilogue
 
-LABEL_037BAC:
+EFF_SecLinkPath_Pass2Body:
 	ldto_werp WA, 0xFA
 	mul wa, 0x32
 	add wa, 0x10
@@ -44789,7 +44789,7 @@ LABEL_037BAC:
 	extz xwa
 	add xwa, xbc
 	cpw (xwa), 0x1
-	jr nz, LABEL_037C0D
+	jr nz, EFF_SecLinkPath_Pass2Next
 	ldto_werp WA, 0xFA
 	muls wa, 0x38
 	ld bc, wa
@@ -44797,17 +44797,17 @@ LABEL_037BAC:
 	ld xwa, (xsp + 4)
 	st_dri3b W, 0x07, 0xE0, 0xE4
 	cpw (xwa + 54), 0x0
-	jr nz, LABEL_037C0D
+	jr nz, EFF_SecLinkPath_Pass2Next
 	cpi_werp 0xFA, 3
-	jr z, LABEL_037BF6
+	jr z, EFF_SecLinkPath_Pass2MaxVol
 	cpi3_erpw 2, 0xFA
-	jr z, LABEL_037BF6
+	jr z, EFF_SecLinkPath_Pass2MaxVol
 	ldto_werp WA, 0xFA
 	ld xbc, (xsp + 4)
 	ld bc, (xbc + 6)
 	call 0x37F4F
 
-LABEL_037BF6:
+EFF_SecLinkPath_Pass2MaxVol:
 	ld de, iz
 	lda_24 xwa, 0x01ed72
 	ld_srib3 A, 0x07, 0xE0, 0xFA
@@ -44817,18 +44817,18 @@ LABEL_037BF6:
 	calr Unsigned_Max_Select
 	ld iz, hl
 
-LABEL_037C0D:
+EFF_SecLinkPath_Pass2Next:
 	dec1_werp 0xFA
 	cp_erpw 0xFA, 0xFF, 0xFF
-	jr gt, LABEL_037BAC
+	jr gt, EFF_SecLinkPath_Pass2Body
 
-LABEL_037C17:
+EFF_SecLinkPath_Pass2Epilogue:
 	cps iz, 0
-	jr z, LABEL_037C21
+	jr z, EFF_SecLinkPath_Epilogue
 	ld wa, iz
 	call 0x38392
 
-LABEL_037C21:
+EFF_SecLinkPath_Epilogue:
 	pop xiz
 	inc 4, xsp
 	ret
@@ -44839,9 +44839,9 @@ EFF_VolumeLoop:
 	ld (xsp + 2), xwa
 	lds iz, 0
 	cps iz, 5
-	jrl nc, LABEL_037D3C
+	jrl nc, EFF_VolumeLoop_Epilogue
 
-LABEL_037C32:
+EFF_VolumeLoop_Body:
 	ld wa, iz
 	extz xwa
 	ld xbc, xwa
@@ -44859,7 +44859,7 @@ LABEL_037C32:
 	extz xwa
 	add xwa, xbc
 	cpw (xwa), 0x1
-	jrl nz, LABEL_037D35
+	jrl nz, EFF_VolumeLoop_Next
 	ld wa, iz
 	extz xwa
 	ld xbc, xwa
@@ -44878,7 +44878,7 @@ LABEL_037C32:
 	inc 8, xbc
 	add xbc, (xsp + 2)
 	cpw (xbc), 0x3F
-	jrl nz, LABEL_037D16
+	jrl nz, EFF_VolumeLoop_ApplyDelta
 	ld wa, iz
 	extz xwa
 	ld xbc, xwa
@@ -44920,7 +44920,7 @@ LABEL_037C32:
 	inc 8, xbc
 	add xbc, (xsp + 2)
 	cpw (xbc + 4), 0x0
-	jr ge, LABEL_037D16
+	jr ge, EFF_VolumeLoop_ApplyDelta
 	ld wa, iz
 	extz xwa
 	ld xbc, xwa
@@ -44931,7 +44931,7 @@ LABEL_037C32:
 	add xbc, (xsp + 2)
 	ldw (xbc + 4), 0x0
 
-LABEL_037D16:
+EFF_VolumeLoop_ApplyDelta:
 	ld wa, iz
 	extz xwa
 	ld xbc, xwa
@@ -44946,12 +44946,12 @@ LABEL_037D16:
 	ld bc, (xbc)
 	call 0x3826E
 
-LABEL_037D35:
+EFF_VolumeLoop_Next:
 	inc 1, iz
 	cps iz, 5
-	jrl c, LABEL_037C32
+	jrl c, EFF_VolumeLoop_Body
 
-LABEL_037D3C:
+EFF_VolumeLoop_Epilogue:
 	popw iz
 	inc 4, xsp
 	ret
@@ -44962,24 +44962,24 @@ EFF_DisconnectLoop:
 	ld (xsp + 2), xwa
 	lds iz, 4
 	cp iz, 0xFFFF
-	jr le, LABEL_037D6A
+	jr le, EFF_DisconnectLoop_Epilogue
 
-LABEL_037D4E:
+EFF_DisconnectLoop_Body:
 	cps iz, 3
-	jr z, LABEL_037D62
+	jr z, EFF_DisconnectLoop_Next
 	cps iz, 2
-	jr z, LABEL_037D62
+	jr z, EFF_DisconnectLoop_Next
 	ld wa, iz
 	ld xbc, (xsp + 2)
 	ld bc, (xbc + 6)
 	call 0x37F4F
 
-LABEL_037D62:
+EFF_DisconnectLoop_Next:
 	dec 1, iz
 	cp iz, 0xFFFF
-	jr gt, LABEL_037D4E
+	jr gt, EFF_DisconnectLoop_Body
 
-LABEL_037D6A:
+EFF_DisconnectLoop_Epilogue:
 	popw iz
 	inc 4, xsp
 	ret
@@ -44988,30 +44988,30 @@ DSP_State_Dispatcher:
 	push xiz
 	ld xiz, xwa
 	cpw (xiz + 4), 0x1
-	jr nz, LABEL_037D7D
+	jr nz, DSP_StateDispatcher_MutePath
 	calr DSP_ResetLoop
-	jr LABEL_037D82
+	jr DSP_StateDispatcher_PostMute
 
-LABEL_037D7D:
+DSP_StateDispatcher_MutePath:
 	ld xwa, xiz
 	calr EFF_MuteLoop
 
-LABEL_037D82:
+DSP_StateDispatcher_PostMute:
 	calr DSP_MuteLoop
 	ld xwa, xiz
 	calr DSP_AlgorithmChangeCheck
 	cpw (xiz + 4), 0x1
-	jr z, LABEL_037D98
+	jr z, DSP_StateDispatcher_DisconnectPath
 	cpw (xiz + 2), 0x1
-	jr nz, LABEL_037DA3
+	jr nz, DSP_StateDispatcher_UnmutePath
 
-LABEL_037D98:
+DSP_StateDispatcher_DisconnectPath:
 	lds wa, 0
 	call 0x380AB
 	ld xwa, xiz
 	calr EFF_DisconnectLoop
 
-LABEL_037DA3:
+DSP_StateDispatcher_UnmutePath:
 	calr DSP_UnmuteLoop
 	ld xwa, xiz
 	calr EFF_HeaderChangeDataLoop
@@ -45023,9 +45023,9 @@ LABEL_037DA3:
 	calr EFF_SecondaryLinkPath
 	lds de, 4
 	cp de, 0xFFFF
-	jr le, LABEL_037E2E
+	jr le, DSP_StateDispatcher_Epilogue
 
-LABEL_037DC2:
+DSP_StateDispatcher_AlgoLoop:
 	ld wa, de
 	muls wa, 0x38
 	inc 8, wa
@@ -45036,13 +45036,13 @@ LABEL_037DC2:
 	extz xwa
 	add xwa, xbc
 	cpw (xwa), 0x1
-	jr nz, LABEL_037E26
+	jr nz, DSP_StateDispatcher_AlgoNext
 	ld wa, ix
 	extz xwa
 	ld xbc, 0x12226
 	add xbc, xwa
 	cp (xbc), 0x0
-	jr z, LABEL_037E16
+	jr z, DSP_StateDispatcher_AlgoClear
 	ld wa, de
 	add wa, wa
 	ldada xbc, 17852
@@ -45057,9 +45057,9 @@ LABEL_037DC2:
 	inc 1, a
 	extz wa
 	ld (xhl), wa
-	jr LABEL_037E26
+	jr DSP_StateDispatcher_AlgoNext
 
-LABEL_037E16:
+DSP_StateDispatcher_AlgoClear:
 	ld wa, de
 	add wa, wa
 	ldada xbc, 17852
@@ -45067,12 +45067,12 @@ LABEL_037E16:
 	add xwa, xbc
 	ldw (xwa), 0x0
 
-LABEL_037E26:
+DSP_StateDispatcher_AlgoNext:
 	dec 1, de
 	cp de, 0xFFFF
-	jr gt, LABEL_037DC2
+	jr gt, DSP_StateDispatcher_AlgoLoop
 
-LABEL_037E2E:
+DSP_StateDispatcher_Epilogue:
 	pop xiz
 	ret
 
