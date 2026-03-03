@@ -39700,7 +39700,7 @@ LABEL_EE8440:
 	.byte 0xff, 0xff, 0xff, 0xff
 LABEL_EE8448:
 	.long LABEL_FC7B61
-	.long LABEL_F59A97
+	.long AccWrap_ReplayStop
 	.long LABEL_FDE2A8
 	.long LABEL_F3C8BA
 	.long LABEL_F98697
@@ -39807,7 +39807,7 @@ LABEL_EE856C:
 LABEL_EE8570:
 	.long LABEL_FC7B2C
 	.long LABEL_FDE514
-	.long LABEL_F5C573
+	.long AccStyle_JumpTable2
 	.long LABEL_F98697
 	.long LABEL_F98748
 	.long BitMapOut_ByteData_RenderD
@@ -39834,7 +39834,7 @@ LABEL_EE85B4:
 LABEL_EE85C8:
 	.long LABEL_FC7BEE
 	.long LABEL_FDE7B5
-	.long LABEL_F59A9B
+	.long AccWrap_ReplayStopAlt
 	.long LABEL_FEADC7
 	.long BitMapOut_ByteData_DisplayUpdate
 	.long LABEL_FDBA3A
@@ -39853,7 +39853,7 @@ LABEL_EE85FC:
 LABEL_EE8608:
 	.long LABEL_FC7BBB
 	.long AccompSeq_JumpTable
-	.long LABEL_F5C55C
+	.long AccStyle_JumpTable
 	.byte 0x8b, 0x75, 0xef, 0x00
 LABEL_EE8618:
 	.long Demo_SelectEntry_ByteTable
@@ -44481,7 +44481,7 @@ MainLoop:
 	ei 0
 	call 0xEF086F
 	call LABEL_FC7A10
-	call LABEL_F59B01
+	call AccWrap_FlagSync
 	tset_dd16 2, 0x13, 0x04
 	jr nz, LABEL_EF1259
 
@@ -44537,7 +44537,7 @@ LABEL_EF12BE:
 	ldda8 a, 12931
 	and a, 0x3
 	jr nz, LABEL_EF12D4
-	call LABEL_F59AAE
+	call AccWrap_DeferredAction
 
 LABEL_EF12D4:
 	tset_dd16 0, 0x73, 0x04
@@ -44554,7 +44554,7 @@ LABEL_EF12DE:
 LABEL_EF12F0:
 	call LABEL_F980EE
 	calr LABEL_EF13AF
-	call LABEL_F5BD7A
+	call AccDir_PeriodicEntry
 	calr Seq_EventProcessingTick
 	call 0xEF2E71
 	and hl, hl
@@ -45086,7 +45086,7 @@ SeqTiming_Snapshot_PostSnap:
 	cpda16 xwa, 13170
 	jr c, SeqTiming_Snapshot_CheckFracOverflow
 	push xhl
-	call LABEL_F5B47E
+	call AccTiming_InitAllParts
 	xor wa, wa
 	stda16 1118, xwa
 	pop xhl
@@ -45094,7 +45094,7 @@ SeqTiming_Snapshot_PostSnap:
 SeqTiming_Snapshot_CheckFracOverflow:
 	cpda8 l, 13174
 	jr c, SeqTiming_Snapshot_Return
-	call LABEL_F5B4EB
+	call AccTiming_MasterTick
 
 SeqTiming_Snapshot_Return:
 	ret
@@ -66600,7 +66600,7 @@ InitializeSeMenuDefaults:
 	call SeMenu_SetSoundBank
 	lds wa, 0
 	call SeMenu_SetPatchBank
-	call LABEL_F59AB9
+	call AccWrap_PlayModeDispatch
 	lds wa, 1
 	call SeMenu_SetEditEnable
 	lds wa, 1
@@ -83525,7 +83525,7 @@ PlayHalt:
 	call SeqBuf_Init
 	call LABEL_FE118D
 	call LABEL_FCAC3A
-	call LABEL_F59AB9
+	call AccWrap_PlayModeDispatch
 	cp (xsp), 0x0
 	jr z, LABEL_F1ED85
 	setda 2, 10407
@@ -85619,7 +85619,7 @@ LABEL_F20458:
 	ldda16	wa, 61854
 	stda16	10357, wa
 	stdi8	3424, 0
-	call LABEL_F59AB9
+	call AccWrap_PlayModeDispatch
 	.byte 0xc1, 0xa7, 0x28, 0x3e, 0x04		; or (0x28A7), 0x04  [C1 prefix]
 	ret
 LABEL_F2046F:
@@ -85893,7 +85893,7 @@ LABEL_F206CF:
 	ret
 
 LABEL_F206D0:
-	call LABEL_F59AB9
+	call AccWrap_PlayModeDispatch
 	anddi8 10412, 251
 	ret
 
@@ -85931,7 +85931,7 @@ LABEL_F20712:
 	and a, 0x30
 	ld wa, iz
 	jr nz, LABEL_F20740
-	call LABEL_F59AB9
+	call AccWrap_PlayModeDispatch
 	ldw bc, 0xF000
 
 LABEL_F2072C:
@@ -117604,7 +117604,7 @@ BmDrEdit_InitCommon_CheckSongActive:
 BmDrEdit_InitCommon_SetupDisplay:
 	setda 0, 9834
 	setda 0, 9954
-	call LABEL_F59AB9
+	call AccWrap_PlayModeDispatch
 	setda 2, 10407
 	stdi8 10588, 0
 	ldda16 xwa, 10595
@@ -120235,7 +120235,7 @@ LABEL_F3884C:
 	ldmm8 10417, 10300
 	stdi16 61854, 0
 	call 0xFDDE6F
-	call LABEL_F59AB9
+	call AccWrap_PlayModeDispatch
 	ldda8 a, 36152
 	cp a, 0x95
 	jr z, LABEL_F38878
@@ -120319,7 +120319,7 @@ LABEL_F38912:
 	setda 1, 8970
 	resda 3, 10407
 	setda 4, 10419
-	call LABEL_F59AB9
+	call AccWrap_PlayModeDispatch
 	jp LABEL_F3E611
 
 LABEL_F3892C:
@@ -120329,7 +120329,7 @@ LABEL_F3892C:
 	jr z, LABEL_F38948
 	call LABEL_F98782
 	calr LABEL_F38E44
-	call LABEL_F59AB9
+	call AccWrap_PlayModeDispatch
 	resda 0, 9954
 
 LABEL_F38948:
@@ -121379,7 +121379,7 @@ LABEL_F394DE:
 
 LABEL_F394E1:
 	resda 0, 10406
-	call LABEL_F59AF3
+	call AccWrap_PositionClear
 	resda 1, 8974
 	stdi8 7560, 0
 	stdi8 7562, 0
@@ -121953,7 +121953,7 @@ LABEL_F39A7E:
 	jr z, LABEL_F39B15
 	setda 1, 8974
 	stdi16 4360, 1024
-	call LABEL_F5D678
+	call AccTone_ReadAndProcess
 	extz hl
 	inc 1, hl
 	ld wa, hl
@@ -121969,7 +121969,7 @@ LABEL_F39AC0:
 	jr z, LABEL_F39B15
 	setda 1, 8974
 	stdi16 4360, 4
-	call LABEL_F5D678
+	call AccTone_ReadAndProcess
 	extz hl
 	inc 1, hl
 	ld wa, hl
@@ -121982,7 +121982,7 @@ LABEL_F39AE5:
 	jr z, LABEL_F39B15
 	setda 1, 8974
 	stdi16 4360, 8
-	call LABEL_F5D678
+	call AccTone_ReadAndProcess
 	extz hl
 	inc 1, hl
 	ld wa, hl
@@ -122069,7 +122069,7 @@ LABEL_F39BA0:
 	resda 5, 10419
 	stdi16 9004, 0
 	resda 0, 10406
-	call LABEL_F59AF3
+	call AccWrap_PositionClear
 	ei 6
 	stdi16 1052, 0
 	stdi8 1051, 0
@@ -122694,7 +122694,7 @@ LABEL_F3A1D6:
 LABEL_F3A1E5:
 	bitda 0, 10406
 	jr z, LABEL_F3A1F3
-	call LABEL_F59AEC
+	call AccWrap_FullStop
 	setda 1, 10407
 
 LABEL_F3A1F3:
@@ -122740,7 +122740,7 @@ LABEL_F3A239:
 	call LABEL_F3F179
 	call LABEL_F3DF7C
 	call AccompSeq_StopSequence
-	call LABEL_F59AB9
+	call AccWrap_PlayModeDispatch
 	ldda8 a, 10418
 	res 2, a
 	res 1, a
@@ -122799,7 +122799,7 @@ LABEL_F3A2DD:
 	res 1, a
 	stda8 10418, a
 	call AccompSeq_StopSequence
-	call LABEL_F59AB9
+	call AccWrap_PlayModeDispatch
 	call LABEL_F4398F
 	stdi8 7568, 1
 	stdi8 7584, 1
@@ -124314,7 +124314,7 @@ LABEL_F3B059:
 	jr nz, LABEL_F3B0D2
 	bitda 2, 1054
 	jr z, LABEL_F3B0D2
-	call LABEL_F59ADA
+	call AccWrap_PlayModeStartPlay
 	jr LABEL_F3B0D2
 
 LABEL_F3B08A:
@@ -125060,7 +125060,7 @@ LABEL_F3B6CA:
 	stda8 13430, e
 
 LABEL_F3B6D6:
-	call LABEL_F59AE1
+	call AccWrap_ReplaySavedPedal
 	jrl LABEL_F3B50E
 
 LABEL_F3B6DD:
@@ -126581,7 +126581,7 @@ LABEL_F3C425:
 	stda8 13430, a
 
 LABEL_F3C46C:
-	call LABEL_F59AE1
+	call AccWrap_ReplaySavedPedal
 
 LABEL_F3C470:
 	ldw wa, 0x14
@@ -126938,7 +126938,7 @@ LABEL_F3C795:
 	ret z
 	bitda 2, 1054
 	ret z
-	jp LABEL_F59ADA
+	jp AccWrap_PlayModeStartPlay
 
 LABEL_F3C7A7:
 	dec 8, xsp
@@ -127198,7 +127198,7 @@ LABEL_F3CA4E:
 	stdi8 8976, 1
 	stdi16 61854, 0
 	call 0xFDDE6F
-	call LABEL_F59AF3
+	call AccWrap_PositionClear
 	resda 0, 10406
 	ldw wa, 0x32
 	call LABEL_F3DFFF
@@ -127245,12 +127245,12 @@ LABEL_F3CAD5:
 	jr z, LABEL_F3CAF4
 	bitda 2, 1057
 	ret z
-	call LABEL_F59AD3
+	call AccWrap_PlayModeStopExpr
 	stdi8 8956, 0
 	jr LABEL_F3CAF8
 
 LABEL_F3CAF4:
-	call LABEL_F59AB9
+	call AccWrap_PlayModeDispatch
 
 LABEL_F3CAF8:
 	resda 5, 10419
@@ -129686,7 +129686,7 @@ LABEL_F3E124:
 
 LABEL_F3E146:
 	resda 0, 10406
-	call LABEL_F59AF3
+	call AccWrap_PositionClear
 
 LABEL_F3E14E:
 	call 0xFDDE6F
@@ -131100,7 +131100,7 @@ LABEL_F3ED7E:
 	ldda16 xwa, 61854
 	cpda16 xwa, 10296
 	jr z, LABEL_F3ED94
-	call LABEL_F59AF3
+	call AccWrap_PositionClear
 	resda 0, 10406
 
 LABEL_F3ED94:
@@ -136892,7 +136892,7 @@ LABEL_F42298:
 	jr z, LABEL_F42298
 	setda 1, 8974
 	stdi16 4360, 1024
-	call LABEL_F5D678
+	call AccTone_ReadAndProcess
 	extz hl
 	inc 1, hl
 	ld wa, hl
@@ -136908,7 +136908,7 @@ LABEL_F422EC:
 	jr z, LABEL_F42298
 	setda 1, 8974
 	stdi16 4360, 4
-	call LABEL_F5D678
+	call AccTone_ReadAndProcess
 	extz hl
 	inc 1, hl
 	ld wa, hl
@@ -136921,7 +136921,7 @@ LABEL_F42311:
 	jrl z, LABEL_F42298
 	setda 1, 8974
 	stdi16 4360, 8
-	call LABEL_F5D678
+	call AccTone_ReadAndProcess
 	extz hl
 	inc 1, hl
 	ld wa, hl
@@ -137872,7 +137872,7 @@ LABEL_F42BEF:
 	jr z, LABEL_F42C6A
 	ld (xiy), 0xB0
 	stdi16 4360, 4
-	call LABEL_F5D678
+	call AccTone_ReadAndProcess
 	extz hl
 	inc 1, hl
 	ld wa, hl
@@ -137891,7 +137891,7 @@ LABEL_F42C6A:
 	jr z, LABEL_F42CA1
 	ld (xbc), 0xB0
 	stdi16 4360, 1024
-	call LABEL_F5D678
+	call AccTone_ReadAndProcess
 	extz hl
 	inc 1, hl
 	ld wa, hl
@@ -137910,7 +137910,7 @@ LABEL_F42CA1:
 	jr z, LABEL_F42CFB
 	ld (xbc), 0xB1
 	stdi16 4360, 8
-	call LABEL_F5D678
+	call AccTone_ReadAndProcess
 	extz hl
 	inc 1, hl
 	ld wa, hl
@@ -138568,11 +138568,11 @@ LABEL_F43388:
 	jr nz, LABEL_F433AD
 	bitda 2, 1054
 	jr z, LABEL_F433A9
-	call LABEL_F59AD3
+	call AccWrap_PlayModeStopExpr
 	jr LABEL_F433AD
 
 LABEL_F433A9:
-	call LABEL_F59AB9
+	call AccWrap_PlayModeDispatch
 
 LABEL_F433AD:
 	ld a, (xsp)
@@ -138610,7 +138610,7 @@ LABEL_F433F1:
 	setda 3, 10407
 
 LABEL_F433F5:
-	call LABEL_F59AB9
+	call AccWrap_PlayModeDispatch
 
 LABEL_F433F9:
 	ld a, (xsp)
@@ -138914,7 +138914,7 @@ LABEL_F43679:
 	stdi16 1052, 0
 	stdi8 1051, 0
 	ei 0
-	call LABEL_F59AC0
+	call AccWrap_PlayModeStart
 	bitda 2, 64848
 	ret z
 	calr LABEL_F3DAA4
@@ -139030,7 +139030,7 @@ LABEL_F437EB:
 	ret
 
 LABEL_F437FA:
-	call LABEL_F59AB9
+	call AccWrap_PlayModeDispatch
 	calr LABEL_F3E283
 	call LABEL_F3D782
 	stdi8 4596, 0
@@ -139055,7 +139055,7 @@ LABEL_F4382A:
 	jp LABEL_FEBDA1
 
 LABEL_F4384C:
-	call LABEL_F59AB9
+	call AccWrap_PlayModeDispatch
 	stdi16 10420, 0
 	ldw wa, 0x32
 	calr LABEL_F3DFFF
@@ -139105,7 +139105,7 @@ LABEL_F43876:
 	.byte 0x0e
 
 LABEL_F4398F:
-	call LABEL_F59AB9
+	call AccWrap_PlayModeDispatch
 	ldw bc, 0xFFFF
 	ldda8 a, 1056
 	bit 2, a
@@ -142988,7 +142988,7 @@ SeqPlayModeFunc:
 	resda 0, 9834
 	bitda 2, 1057
 	jr nz, LABEL_F46AEC
-	call LABEL_F59AB9
+	call AccWrap_PlayModeDispatch
 	jr LABEL_F46AEC
 
 LABEL_F46AE3:
@@ -143007,7 +143007,7 @@ SeqRealModeFunc:
 	jr z, LABEL_F46B39
 	or xde, xde
 	jrl nz, LABEL_F46BC5
-	call LABEL_F59AB9
+	call AccWrap_PlayModeDispatch
 	call LABEL_F3E155
 	ldw wa, 0x4C
 	call LABEL_FC793D
@@ -144070,7 +144070,7 @@ MainExe_SeqStopFinish:
 	call LABEL_F3F35A
 	stdi16 61854, 0
 	call 0xFDDE6F
-	call LABEL_F59AF3
+	call AccWrap_PositionClear
 	resda 0, 10406
 	sti16_24 0x00ffec, 0x0000
 	stdi8 9980, 1
@@ -147156,7 +147156,7 @@ LABEL_F49545:
 	ldto_berp A, 0xFB
 	stda8 1078, a
 	ldmm16 9652, 9656
-	call LABEL_F59AEC
+	call AccWrap_FullStop
 	pop xiz
 	ret
 
@@ -160252,7 +160252,7 @@ LABEL_F532BB:
 	call SubCPU_Payload_GetErrorFlag
 	cps hl, 0
 	jr z, LABEL_F532CB
-	call LABEL_F5CE20
+	call AccDemo_Init_Wrap
 
 LABEL_F532CB:
 	anddi8 13043, 254
@@ -160324,9 +160324,9 @@ Seq_DispatcherTick_Process:
 	call Rhythm_SaveState
 	call 0xF5EC75
 	call Rhythm_AdvanceTick
-	call LABEL_F5BD76
-	call LABEL_F5C558
-	call LABEL_F5BF49
+	call AccDir_Entry
+	call AccStyle_Entry
+	call AccProcess_Entry
 
 LABEL_F53366:
 	ret
@@ -160498,7 +160498,7 @@ LABEL_F53519:
 	stdi8 13033, 24
 	bitda 0, 12931
 	jr z, LABEL_F5358E
-	call LABEL_F59A58
+	call AccTuning_DisableIfNoStyle
 	bitda 0, 13155
 	jr nz, LABEL_F5356A
 	calr LABEL_F537F0
@@ -160516,7 +160516,7 @@ LABEL_F5356A:
 LABEL_F53582:
 	calr LABEL_F53CA4
 	calr LABEL_F53CCA
-	call LABEL_F5979A
+	call AccTuning_CheckChange
 	jr LABEL_F53596
 
 LABEL_F5358E:
@@ -161319,7 +161319,7 @@ LABEL_F53D77:
 
 LABEL_F53D9A:
 	calr LABEL_F53D77
-	call LABEL_F590B4
+	call AccVoice_TableLookup_Inner
 	extz xiy
 	add xhl, xiy
 	ld xiy, xhl
@@ -161387,7 +161387,7 @@ LABEL_F53E0B:
 	pop xix
 	pop xwa
 	pop xiy
-	call LABEL_F597B4
+	call AccTuning_LoadFromROM
 	nop
 	nop
 	nop
@@ -161431,7 +161431,7 @@ LABEL_F53EAD:
 	ld xix, 0x3246
 	lds bc, 7
 	ldir85
-	call LABEL_F5984E
+	call AccTuning_LoadMaster
 	pop xiy
 	nop
 	nop
@@ -161448,7 +161448,7 @@ LABEL_F53EC9:
 	ldir85
 	ld xix, 0x324F
 	ld (xix), 0x40
-	call LABEL_F5986F
+	call AccTuning_LoadCoarse
 	pop xiy
 	nop
 	nop
@@ -161465,7 +161465,7 @@ LABEL_F53EED:
 	ldir85
 	ld xix, 0x3256
 	ld (xix), 0xC
-	call LABEL_F5989C
+	call AccTuning_LoadFine
 	pop xiy
 	nop
 	nop
@@ -161482,7 +161482,7 @@ LABEL_F53F11:
 	ldir85
 	ld xix, 0x325D
 	ld (xix), 0x74
-	call LABEL_F598C9
+	call AccTuning_LoadOctave
 	pop xiy
 	nop
 	nop
@@ -161499,7 +161499,7 @@ LABEL_F53F35:
 	ldir85
 	ld xix, 0x3264
 	ld (xix), 0x40
-	call LABEL_F598F6
+	call AccTuning_LoadTranspose
 	pop xiy
 	nop
 	nop
@@ -161571,7 +161571,7 @@ LABEL_F53FB3:
 
 LABEL_F54001:
 	anddi8 13100, 252
-	call LABEL_F5CA04
+	call AccVoiceReg_WritePart1
 	ret
 
 LABEL_F5400B:
@@ -161674,7 +161674,7 @@ LABEL_F540B6:
 
 LABEL_F5410C:
 	anddi8 13100, 251
-	call LABEL_F5C9B8
+	call AccVoiceReg_WritePart2
 	ret
 
 LABEL_F54116:
@@ -161749,7 +161749,7 @@ LABEL_F5418E:
 
 LABEL_F541E4:
 	anddi8 13100, 247
-	call LABEL_F5C8D4
+	call AccVoiceReg_WritePart3
 	ret
 
 LABEL_F541EE:
@@ -161804,7 +161804,7 @@ LABEL_F5423F:
 
 LABEL_F54295:
 	anddi8 13100, 239
-	call LABEL_F5C920
+	call AccVoiceReg_WritePart4
 	ret
 
 LABEL_F5429F:
@@ -161859,7 +161859,7 @@ LABEL_F542F0:
 
 LABEL_F54346:
 	anddi8 13100, 223
-	call LABEL_F5C96C
+	call AccVoiceReg_WritePart5
 	ret
 
 LABEL_F54350:
@@ -161948,7 +161948,7 @@ Rhythm_SendChanPressure:
 LABEL_F54422:
 	call LABEL_F562FA
 	call LABEL_F54350
-	call LABEL_F5C56C
+	call AccStyle_InitVRAM_Wrap
 	ret
 
 LABEL_F5442F:
@@ -164111,7 +164111,7 @@ Rhythm_VoiceAssign_SaveShadow:
 	stda8 13168, a
 	ldda8 a, 13116
 	stda8 13118, a
-	call LABEL_F59A10
+	call AccTuning_SaveState
 	calr Rhythm_SeqResetCheck
 	ret
 
@@ -164534,7 +164534,7 @@ LABEL_F55E57:
 	ordi8 13115, 1
 
 LABEL_F55E69:
-	call LABEL_F599BF
+	call AccTuning_Toggle
 
 LABEL_F55E6D:
 	bitda 0, 13115
@@ -164564,7 +164564,7 @@ LABEL_F55E90:
 	stda8 13029, a
 	stda8 13031, a
 	stda8 13168, a
-	call LABEL_F59A19
+	call AccTuning_Init
 	cpdi8 13029, 128
 	jr nc, LABEL_F55ED6
 	calr LABEL_F55F87
@@ -164910,7 +164910,7 @@ LABEL_F562C5:
 	ret
 
 LABEL_F562C6:
-	call LABEL_F58D45
+	call AccInit_AllPartPositions
 	ld xwa, 0xE46BB9
 	add xwa, 0x6
 	stda32 12947, xwa
@@ -164928,17 +164928,17 @@ LABEL_F562DA:
 
 LABEL_F562FA:
 	ld xhl, 0x2A94
-	call LABEL_F595E5
+	call AccBuf_ResetOnePosition
 	ld xhl, 0x2B94
-	call LABEL_F595E5
+	call AccBuf_ResetOnePosition
 	ld xhl, 0x2C94
-	call LABEL_F595E5
+	call AccBuf_ResetOnePosition
 	ld xhl, 0x2D94
-	call LABEL_F595E5
+	call AccBuf_ResetOnePosition
 	ld xhl, 0x2E94
-	call LABEL_F595E5
+	call AccBuf_ResetOnePosition
 	ld xhl, 0x2F94
-	call LABEL_F595E5
+	call AccBuf_ResetOnePosition
 	ret
 
 LABEL_F56331:
@@ -165309,7 +165309,7 @@ LABEL_F567D5:
 LABEL_F567E0:
 	ldda8 w, 13268
 	ldda16 xiz, 13270
-	call LABEL_F58FF9
+	call AccVoice_SelectByMask
 	ldda16 xiy, 13272
 	ld_srib3 A, 0x07, 0xEC, 0xF4
 	cp a, 0x83
@@ -165409,7 +165409,7 @@ LABEL_F568A8:
 	incdi8 1, 13037
 	cpdi8 13037, 32
 	jr nz, LABEL_F568C8
-	call LABEL_F59AB9
+	call AccWrap_PlayModeDispatch
 	call LABEL_F5E931
 	stdi8 13045, 255
 	ordi8 13044, 33
@@ -166792,8 +166792,8 @@ AccVoice_ScanLoop:
 	call LABEL_F56CD0
 	ld iy, wa
 	ldda8 a, 12933
-	call LABEL_F590A9
-	call LABEL_F592EF
+	call AccVoice_TableLookup
+	call AccVoice_ScanForD3
 	inc 1, e
 	jr AccVoice_ScanLoop
 
@@ -167838,7 +167838,7 @@ AccTick_Main:
 	calr AccPedal_CheckCombined
 	bitda 6, 13044
 	jrl nz, AccTick_Return
-	call LABEL_F59923
+	call AccTuning_ApplyChange
 	bitda 7, 13100
 	jr z, AccTick_AfterSync
 	call LABEL_F53F59
@@ -167868,7 +167868,7 @@ AccTick_CheckNoteOn:
 	bitda 7, 13043
 	jr z, AccTick_CheckCollect
 	anddi8 13043, 127
-	call LABEL_F59686
+	call AccTempo_CalcPosition
 	bitda 0, 13070
 	jr nz, AccTick_DispatchNoteOn
 	bitda 0, 13071
@@ -167888,16 +167888,16 @@ AccTick_CheckNoteOn:
 	jr z, AccTick_FlushAndRepeat
 
 AccTick_DispatchNoteOn:
-	call LABEL_F59472
+	call AccFlags_Aggregate
 
 AccTick_FlushAndRepeat:
-	call LABEL_F59659
+	call AccNote_FlushAll
 	jrl AccTick_AfterSync
 
 AccTick_CheckCollect:
 	bitda 2, 12931
 	jr z, AccTick_Return
-	call LABEL_F591D1
+	call AccState_CollectAll
 
 AccTick_Return:
 	ret
@@ -167936,7 +167936,7 @@ AccVoice_InitCh1_D7:
 	pushw hl
 	push xiy
 	ld xhl, 0x2C94
-	calr LABEL_F58F5F
+	calr AccBuf_DrainAndReset
 	ldb a, 0xD7
 	ldb w, 0x2
 	ldb e, 0x40
@@ -167978,7 +167978,7 @@ AccVoice_InitCh2_D4:
 	pushw hl
 	push xiy
 	ld xhl, 0x2D94
-	calr LABEL_F58F5F
+	calr AccBuf_DrainAndReset
 	ldb a, 0xD4
 	ldb w, 0x2
 	ldb e, 0x40
@@ -168004,7 +168004,7 @@ AccVoice_InitCh3_D5:
 	pushw hl
 	push xiy
 	ld xhl, 0x2E94
-	calr LABEL_F58F5F
+	calr AccBuf_DrainAndReset
 	ldb a, 0xD5
 	ldb w, 0x2
 	ldb e, 0x40
@@ -168030,7 +168030,7 @@ AccVoice_InitCh4_D6:
 	pushw hl
 	push xiy
 	ld xhl, 0x2F94
-	calr LABEL_F58F5F
+	calr AccBuf_DrainAndReset
 	ldb a, 0xD6
 	ldb w, 0x2
 	ldb e, 0x40
@@ -168078,7 +168078,7 @@ AccPedal_CheckCounter:
 	jr nz, AccPedal_CombinedReturn
 
 AccPedal_TriggerReInit:
-	calr LABEL_F596A9
+	calr AccInit_FullReInit
 
 AccPedal_CombinedReturn:
 	ret
@@ -168171,7 +168171,7 @@ AccSeq_DualPartScan:
 	ldda16 xiz, 12951
 	stda16 13270, xiz
 	ldb w, 0x1
-	calr LABEL_F58FF9
+	calr AccVoice_SelectByMask
 	calr AccSeq_PatternScanner
 	ldda16 xwa, 13270
 	stda16 12951, xwa
@@ -168191,7 +168191,7 @@ AccSeq_DualPartScan:
 	ldda16 xiz, 12953
 	stda16 13270, xiz
 	ldb w, 0x2
-	calr LABEL_F58FF9
+	calr AccVoice_SelectByMask
 	calr AccSeq_PatternScanner
 	ldda16 xwa, 13270
 	stda16 12953, xwa
@@ -168307,7 +168307,7 @@ AccSeq_Scanner_Unknown:
 	incdi8 1, 13038
 	cpdi8 13038, 32
 	jr c, AccSeq_Scanner_Skip1
-	call LABEL_F59AB9
+	call AccWrap_PlayModeDispatch
 	call LABEL_F5E931
 	stdi8 13045, 255
 	ordi8 13044, 65
@@ -168333,7 +168333,7 @@ AccBuf_AdvanceWithPageTurn:
 	push xhl
 	pushw iz
 	ld iz, (xhl + 3)
-	calr LABEL_F59059
+	calr AccWave_BankResolve
 	ld a, (xhl + 6)
 	popw iz
 	pop xhl
@@ -168349,7 +168349,7 @@ AccBuf_Advance:
 	jr nz, AccBuf_AdvanceSimpleReturn
 	ld hl, (xhl + 3)
 	ld iz, hl
-	calr LABEL_F59059
+	calr AccWave_BankResolve
 	lds iy, 6
 
 AccBuf_AdvanceSimpleReturn:
@@ -168366,7 +168366,7 @@ AccSeq_FourChannelScan:
 	ldda16 xiz, 12955
 	stda16 13270, xiz
 	ldb w, 0x4
-	calr LABEL_F58FF9
+	calr AccVoice_SelectByMask
 	calr AccSeq_PatternScanner
 	ldda16 xwa, 13270
 	stda16 12955, xwa
@@ -168388,7 +168388,7 @@ AccSeq_FourChannelScan:
 	ldda16 xiz, 12957
 	stda16 13270, xiz
 	ldb w, 0x8
-	calr LABEL_F58FF9
+	calr AccVoice_SelectByMask
 	calr AccSeq_PatternScanner
 	ldda16 xwa, 13270
 	stda16 12957, xwa
@@ -168410,7 +168410,7 @@ AccSeq_FourChannelScan:
 	ldda16 xiz, 12959
 	stda16 13270, xiz
 	ldb w, 0x10
-	calr LABEL_F58FF9
+	calr AccVoice_SelectByMask
 	calr AccSeq_PatternScanner
 	ldda16 xwa, 13270
 	stda16 12959, xwa
@@ -168432,7 +168432,7 @@ AccSeq_FourChannelScan:
 	ldda16 xiz, 12961
 	stda16 13270, xiz
 	ldb w, 0x20
-	calr LABEL_F58FF9
+	calr AccVoice_SelectByMask
 	calr AccSeq_PatternScanner
 	ldda16 xwa, 13270
 	stda16 12961, xwa
@@ -168453,7 +168453,7 @@ AccStyle_Init:
 	stda8 13030, a
 	ldda8 a, 13031
 	stda8 13029, a
-	call LABEL_F59A19
+	call AccTuning_Init
 	cpdi8 13029, 128
 	jr nc, AccStyle_ExtendedInit
 	ldda8 a, 13114
@@ -168512,7 +168512,7 @@ AccStyle_Finalize:
 	jr __jrt_nop_F587C4
 __jrt_nop_F587C4:
 
-LABEL_F587C4:
+AccInit_ClearAllFlags:
 	anddi8 13068, 254
 	anddi8 13069, 254
 	anddi8 13070, 252
@@ -168535,147 +168535,147 @@ LABEL_F587C4:
 	call LABEL_F5E821
 	ret
 
-LABEL_F58816:
+AccVoice_SetupAllParts:
 	cpdi8 13029, 128
-	jr c, LABEL_F58823
+	jr c, AccVoice_SetupAll_Extended
 	ldda32 xiy, 13006
-	jr LABEL_F58830
+	jr AccVoice_SetupAll_Dispatch
 
-LABEL_F58823:
+AccVoice_SetupAll_Extended:
 	ldda32 xiy, 13006
 	ld_srib A, (xiy + 0x03d1)
 	stda8 12933, a
 
-LABEL_F58830:
-	calr LABEL_F58843
-	calr LABEL_F5887A
-	calr LABEL_F588B1
-	calr LABEL_F588E8
-	calr LABEL_F5891F
-	calr LABEL_F58956
+AccVoice_SetupAll_Dispatch:
+	calr AccVoice_SetupKbd1
+	calr AccVoice_SetupKbd2
+	calr AccVoice_SetupAcc1
+	calr AccVoice_SetupAcc2
+	calr AccVoice_SetupAcc3
+	calr AccVoice_SetupAcc4
 	ret
 
-LABEL_F58843:
+AccVoice_SetupKbd1:
 	anddi8 12971, 15
 	cpdi8 13029, 128
-	jr nc, LABEL_F58866
+	jr nc, AccVoice_SetupKbd1_Free
 	stdi8 13268, 1
 	ldda8 a, 12963
 	call LABEL_F5657E
 	call LABEL_F56CD0
 	stda16 12935, xwa
-	jr LABEL_F58879
+	jr AccVoice_SetupKbd1_Return
 
-LABEL_F58866:
+AccVoice_SetupKbd1_Free:
 	stdi8 13268, 1
 	call LABEL_F56C6D
 	stda16 12951, xwa
 	stdi16 12935, 6
 
-LABEL_F58879:
+AccVoice_SetupKbd1_Return:
 	ret
 
-LABEL_F5887A:
+AccVoice_SetupKbd2:
 	anddi8 12972, 15
 	cpdi8 13029, 128
-	jr nc, LABEL_F5889D
+	jr nc, AccVoice_SetupKbd2_Free
 	stdi8 13268, 2
 	ldda8 a, 12964
 	call LABEL_F5657E
 	call LABEL_F56CD0
 	stda16 12937, xwa
-	jr LABEL_F588B0
+	jr AccVoice_SetupKbd2_Return
 
-LABEL_F5889D:
+AccVoice_SetupKbd2_Free:
 	stdi8 13268, 2
 	call LABEL_F56C6D
 	stda16 12953, xwa
 	stdi16 12937, 6
 
-LABEL_F588B0:
+AccVoice_SetupKbd2_Return:
 	ret
 
-LABEL_F588B1:
+AccVoice_SetupAcc1:
 	anddi8 12973, 15
 	cpdi8 13029, 128
-	jr nc, LABEL_F588D4
+	jr nc, AccVoice_SetupAcc1_Free
 	stdi8 13268, 4
 	ldda8 a, 12965
 	call LABEL_F5657E
 	call LABEL_F56CD0
 	stda16 12939, xwa
-	jr LABEL_F588E7
+	jr AccVoice_SetupAcc1_Return
 
-LABEL_F588D4:
+AccVoice_SetupAcc1_Free:
 	stdi8 13268, 4
 	call LABEL_F56C6D
 	stda16 12955, xwa
 	stdi16 12939, 6
 
-LABEL_F588E7:
+AccVoice_SetupAcc1_Return:
 	ret
 
-LABEL_F588E8:
+AccVoice_SetupAcc2:
 	anddi8 12974, 15
 	cpdi8 13029, 128
-	jr nc, LABEL_F5890B
+	jr nc, AccVoice_SetupAcc2_Free
 	stdi8 13268, 8
 	ldda8 a, 12966
 	call LABEL_F5657E
 	call LABEL_F56CD0
 	stda16 12941, xwa
-	jr LABEL_F5891E
+	jr AccVoice_SetupAcc2_Return
 
-LABEL_F5890B:
+AccVoice_SetupAcc2_Free:
 	stdi8 13268, 8
 	call LABEL_F56C6D
 	stda16 12957, xwa
 	stdi16 12941, 6
 
-LABEL_F5891E:
+AccVoice_SetupAcc2_Return:
 	ret
 
-LABEL_F5891F:
+AccVoice_SetupAcc3:
 	anddi8 12975, 15
 	cpdi8 13029, 128
-	jr nc, LABEL_F58942
+	jr nc, AccVoice_SetupAcc3_Free
 	stdi8 13268, 16
 	ldda8 a, 12967
 	call LABEL_F5657E
 	call LABEL_F56CD0
 	stda16 12943, xwa
-	jr LABEL_F58955
+	jr AccVoice_SetupAcc3_Return
 
-LABEL_F58942:
+AccVoice_SetupAcc3_Free:
 	stdi8 13268, 16
 	call LABEL_F56C6D
 	stda16 12959, xwa
 	stdi16 12943, 6
 
-LABEL_F58955:
+AccVoice_SetupAcc3_Return:
 	ret
 
-LABEL_F58956:
+AccVoice_SetupAcc4:
 	anddi8 12976, 15
 	cpdi8 13029, 128
-	jr nc, LABEL_F5897A
+	jr nc, AccVoice_SetupAcc4_Free
 	stdi8 13268, 32
 	ldda8 a, 12968
 	call LABEL_F5657E
 	call LABEL_F56CD0
 	stda16 12945, xwa
-	jrl LABEL_F5898D
+	jrl AccVoice_SetupAcc4_Return
 
-LABEL_F5897A:
+AccVoice_SetupAcc4_Free:
 	stdi8 13268, 32
 	call LABEL_F56C6D
 	stda16 12961, xwa
 	stdi16 12945, 6
 
-LABEL_F5898D:
+AccVoice_SetupAcc4_Return:
 	ret
 
-LABEL_F5898E:
+AccVoice_ResetAll:
 	anddi8 12971, 15
 	anddi8 12972, 15
 	anddi8 12973, 15
@@ -168683,55 +168683,55 @@ LABEL_F5898E:
 	anddi8 12975, 15
 	anddi8 12976, 15
 	cpdi8 13029, 128
-	jr c, LABEL_F589C4
+	jr c, AccVoice_Reset_UseStyle
 	bitda 0, 13155
-	jr z, LABEL_F589BE
-	calr LABEL_F58ABE
-	jr LABEL_F58A0C
+	jr z, AccVoice_Reset_UseSecondary
+	calr AccVoice_Reassign
+	jr AccVoice_Reset_SetMasks
 
-LABEL_F589BE:
+AccVoice_Reset_UseSecondary:
 	ldda32 xiy, 13011
-	jr LABEL_F589C8
+	jr AccVoice_Reset_SelectMode
 
-LABEL_F589C4:
+AccVoice_Reset_UseStyle:
 	ldda32 xiy, 13006
 
-LABEL_F589C8:
+AccVoice_Reset_SelectMode:
 	ldw hl, 0x20
 	bitda 0, 13066
-	jr nz, LABEL_F589DD
+	jr nz, AccVoice_Reset_LoadParams
 	ldw hl, 0x22
 	bitda 2, 13066
-	jr nz, LABEL_F589DD
+	jr nz, AccVoice_Reset_LoadParams
 	ldw hl, 0x420
 
-LABEL_F589DD:
-	calr LABEL_F58CDB
+AccVoice_Reset_LoadParams:
+	calr AccVoice_LoadAllParts
 	cpdi8 13029, 128
-	jr c, LABEL_F589F1
+	jr c, AccVoice_Reset_Extended
 	ldda32 xiy, 13006
 	call LABEL_F53E55
-	jr LABEL_F58A07
+	jr AccVoice_Reset_ApplyAll
 
-LABEL_F589F1:
+AccVoice_Reset_Extended:
 	ldda8 a, 12963
 	ldb w, 0x3
 	bitda 3, 13066
-	jr z, LABEL_F589FF
+	jr z, AccVoice_Reset_SetMode
 	ldb w, 0x4
 
-LABEL_F589FF:
+AccVoice_Reset_SetMode:
 	call LABEL_F56486
 	call LABEL_F53E0B
 
-LABEL_F58A07:
+AccVoice_Reset_ApplyAll:
 	ordi8 13100, 63
 
-LABEL_F58A0C:
+AccVoice_Reset_SetMasks:
 	bitda 3, 13066
-	jrl nz, LABEL_F58A88
+	jrl nz, AccVoice_Reset_Mode3
 	bitda 2, 13066
-	jr nz, LABEL_F58A51
+	jr nz, AccVoice_Reset_Mode2
 	anddi8 13066, 254
 	ordi8 13078, 63
 	xor a, a
@@ -168745,9 +168745,9 @@ LABEL_F58A0C:
 	stda8 13096, a
 	stda8 13098, a
 	anddi8 12931, 251
-	jrl LABEL_F58ABD
+	jrl AccVoice_Reset_Return
 
-LABEL_F58A51:
+AccVoice_Reset_Mode2:
 	anddi8 13066, 251
 	ordi8 13079, 63
 	xor a, a
@@ -168761,9 +168761,9 @@ LABEL_F58A51:
 	stda8 13096, a
 	stda8 13098, a
 	anddi8 12931, 251
-	jr LABEL_F58ABD
+	jr AccVoice_Reset_Return
 
-LABEL_F58A88:
+AccVoice_Reset_Mode3:
 	anddi8 13066, 247
 	ordi8 13080, 63
 	xor a, a
@@ -168778,19 +168778,19 @@ LABEL_F58A88:
 	stda8 13098, a
 	anddi8 12931, 251
 
-LABEL_F58ABD:
+AccVoice_Reset_Return:
 	ret
 
-LABEL_F58ABE:
+AccVoice_Reassign:
 	bitda 3, 13066
-	jrl nz, LABEL_F58B2B
+	jrl nz, AccVoice_Reassign_Mode3
 	bitda 2, 13066
-	jr nz, LABEL_F58AFD
+	jr nz, AccVoice_Reassign_Mode2
 	ldda8 a, 13029
 	and a, 0x7F
 	call LABEL_F53DF1
 	cpda8 a, 13156
-	jr z, LABEL_F58AF3
+	jr z, AccVoice_Reassign_MatchA
 	anddi8 64607, 251
 	ldb e, 0x48
 	ldb d, 0x5
@@ -168798,20 +168798,20 @@ LABEL_F58ABE:
 	ldb a, 0x0
 	call LABEL_F534EF
 	ldda32 xiy, 13006
-	jr LABEL_F58B5B
+	jr AccVoice_Reassign_Apply
 
-LABEL_F58AF3:
+AccVoice_Reassign_MatchA:
 	ldda8 a, 13157
 	call LABEL_F53D20
-	jr LABEL_F58B5B
+	jr AccVoice_Reassign_Apply
 
-LABEL_F58AFD:
+AccVoice_Reassign_Mode2:
 	ldda8 a, 13029
 	and a, 0x7F
 	call LABEL_F53DF1
 	ld xhl, 0xE46BB0
 	bit_dri 1, 0x03, 0xEC, 0xE0
-	jr z, LABEL_F58B69
+	jr z, AccVoice_Reassign_Fallback
 	anddi8 64607, 247
 	ldb e, 0x48
 	ldb d, 0x5
@@ -168819,14 +168819,14 @@ LABEL_F58AFD:
 	ldb a, 0x0
 	call LABEL_F534EF
 	ldda32 xiy, 13006
-	jr LABEL_F58B5B
+	jr AccVoice_Reassign_Apply
 
-LABEL_F58B2B:
+AccVoice_Reassign_Mode3:
 	ldda8 a, 13029
 	and a, 0x7F
 	call LABEL_F53DF1
 	cpda8 a, 13158
-	jr z, LABEL_F58B53
+	jr z, AccVoice_Reassign_MatchB
 	anddi8 64608, 251
 	ldb e, 0x48
 	ldb d, 0x6
@@ -168834,31 +168834,31 @@ LABEL_F58B2B:
 	ldb a, 0x0
 	call LABEL_F534EF
 	ldda32 xiy, 13006
-	jr LABEL_F58B5B
+	jr AccVoice_Reassign_Apply
 
-LABEL_F58B53:
+AccVoice_Reassign_MatchB:
 	ldda8 a, 13159
 	call LABEL_F53D20
 
-LABEL_F58B5B:
-	calr LABEL_F58D45
+AccVoice_Reassign_Apply:
+	calr AccInit_AllPartPositions
 	call LABEL_F53E55
 	ordi8 13100, 63
-	jr LABEL_F58B81
+	jr AccVoice_Reassign_Return
 
-LABEL_F58B69:
+AccVoice_Reassign_Fallback:
 	ldda32 xiy, 13011
 	ldw hl, 0x22
-	calr LABEL_F58CDB
+	calr AccVoice_LoadAllParts
 	xor xhl, xhl
 	ldw hl, 0x126
 	call LABEL_F53E0B
 	ordi8 13100, 63
 
-LABEL_F58B81:
+AccVoice_Reassign_Return:
 	ret
 
-LABEL_F58B82:
+AccVoice_SplitPointSetup:
 	anddi8 12971, 15
 	anddi8 12972, 15
 	anddi8 12973, 15
@@ -168866,43 +168866,43 @@ LABEL_F58B82:
 	anddi8 12975, 15
 	anddi8 12976, 15
 	cpdi8 13029, 128
-	jr c, LABEL_F58BB8
+	jr c, AccVoice_Split_UseStyle
 	bitda 0, 13155
-	jr z, LABEL_F58BB2
-	calr LABEL_F58C66
-	jr LABEL_F58BF3
+	jr z, AccVoice_Split_UseSecondary
+	calr AccVoice_SplitReassign
+	jr AccVoice_Split_SetForward
 
-LABEL_F58BB2:
+AccVoice_Split_UseSecondary:
 	ldda32 xiy, 13011
-	jr LABEL_F58BBC
+	jr AccVoice_Split_LoadAndApply
 
-LABEL_F58BB8:
+AccVoice_Split_UseStyle:
 	ldda32 xiy, 13006
 
-LABEL_F58BBC:
+AccVoice_Split_LoadAndApply:
 	ldda8 a, 12963
 	call LABEL_F566BA
-	calr LABEL_F58CDB
+	calr AccVoice_LoadAllParts
 	ldda8 a, 12963
 	call LABEL_F56702
 	cpdi8 13029, 128
-	jr c, LABEL_F58BE0
+	jr c, AccVoice_Split_StyleMode
 	ldda32 xiy, 13006
 	call LABEL_F53E55
-	jr LABEL_F58BEE
+	jr AccVoice_Split_Apply63
 
-LABEL_F58BE0:
+AccVoice_Split_StyleMode:
 	ldda8 a, 12963
 	ldb w, 0x2
 	call LABEL_F56486
 	call LABEL_F53E0B
 
-LABEL_F58BEE:
+AccVoice_Split_Apply63:
 	ordi8 13100, 63
 
-LABEL_F58BF3:
+AccVoice_Split_SetForward:
 	bitda 0, 13065
-	jr z, LABEL_F58C30
+	jr z, AccVoice_Split_SetReverse
 	anddi8 13065, 254
 	ordi8 13074, 63
 	xor a, a
@@ -168916,9 +168916,9 @@ LABEL_F58BF3:
 	stda8 13096, a
 	stda8 13098, a
 	anddi8 12931, 251
-	jr LABEL_F58C65
+	jr AccVoice_Split_Return
 
-LABEL_F58C30:
+AccVoice_Split_SetReverse:
 	anddi8 13065, 253
 	ordi8 13075, 63
 	xor a, a
@@ -168933,17 +168933,17 @@ LABEL_F58C30:
 	stda8 13098, a
 	anddi8 12931, 251
 
-LABEL_F58C65:
+AccVoice_Split_Return:
 	ret
 
-LABEL_F58C66:
+AccVoice_SplitReassign:
 	bitda 0, 13065
-	jr z, LABEL_F58C9E
+	jr z, AccVoice_SplitReassign_Reverse
 	ldda8 a, 13029
 	and a, 0x7F
 	call LABEL_F53DF1
 	cpda8 a, 13160
-	jr z, LABEL_F58C94
+	jr z, AccVoice_SplitReassign_MatchFwd
 	anddi8 64607, 191
 	ldb e, 0x48
 	ldb d, 0x5
@@ -168951,19 +168951,19 @@ LABEL_F58C66:
 	ldb a, 0x0
 	call LABEL_F534EF
 	ldda32 xiy, 13006
-	jr LABEL_F58CCE
+	jr AccVoice_SplitReassign_Apply
 
-LABEL_F58C94:
+AccVoice_SplitReassign_MatchFwd:
 	ldda8 a, 13161
 	call LABEL_F53D20
-	jr LABEL_F58CCE
+	jr AccVoice_SplitReassign_Apply
 
-LABEL_F58C9E:
+AccVoice_SplitReassign_Reverse:
 	ldda8 a, 13029
 	and a, 0x7F
 	call LABEL_F53DF1
 	cpda8 a, 13162
-	jr z, LABEL_F58CC6
+	jr z, AccVoice_SplitReassign_MatchRev
 	anddi8 64607, 127
 	ldb e, 0x48
 	ldb d, 0x5
@@ -168971,19 +168971,19 @@ LABEL_F58C9E:
 	ldb a, 0x0
 	call LABEL_F534EF
 	ldda32 xiy, 13006
-	jr LABEL_F58CCE
+	jr AccVoice_SplitReassign_Apply
 
-LABEL_F58CC6:
+AccVoice_SplitReassign_MatchRev:
 	ldda8 a, 13163
 	call LABEL_F53D20
 
-LABEL_F58CCE:
-	calr LABEL_F58D45
+AccVoice_SplitReassign_Apply:
+	calr AccInit_AllPartPositions
 	call LABEL_F53E55
 	ordi8 13100, 63
 	ret
 
-LABEL_F58CDB:
+AccVoice_LoadAllParts:
 	ld_srib A, (xiy + 0x03d1)
 	stda8 12933, a
 	ldfr_werp HL, 0x3C
@@ -169012,7 +169012,7 @@ LABEL_F58CDB:
 	stda16 12945, xwa
 	ret
 
-LABEL_F58D45:
+AccInit_AllPartPositions:
 	stdi8 13268, 1
 	call LABEL_F56C6D
 	stda16 12951, xwa
@@ -169039,7 +169039,7 @@ LABEL_F58D45:
 	stdi16 12937, 6
 	ret
 
-LABEL_F58DB8:
+AccVoice_ThirdLayer:
 	anddi8 12971, 15
 	anddi8 12972, 15
 	anddi8 12973, 15
@@ -169047,52 +169047,52 @@ LABEL_F58DB8:
 	anddi8 12975, 15
 	anddi8 12976, 15
 	cpdi8 13029, 128
-	jr c, LABEL_F58DEE
+	jr c, AccVoice_ThirdLayer_Style
 	bitda 0, 13155
-	jr z, LABEL_F58DE8
-	calr LABEL_F58E8E
-	jr LABEL_F58E35
+	jr z, AccVoice_ThirdLayer_Secondary
+	calr AccVoice_ThirdLayerReassign
+	jr AccVoice_ThirdLayer_SetMasks
 
-LABEL_F58DE8:
+AccVoice_ThirdLayer_Secondary:
 	ldda32 xiy, 13011
-	jr LABEL_F58DF2
+	jr AccVoice_ThirdLayer_SelectMode
 
-LABEL_F58DEE:
+AccVoice_ThirdLayer_Style:
 	ldda32 xiy, 13006
 
-LABEL_F58DF2:
+AccVoice_ThirdLayer_SelectMode:
 	ldw hl, 0x24
 	bitda 0, 13067
-	jr nz, LABEL_F58DFE
+	jr nz, AccVoice_ThirdLayer_LoadParams
 	ldw hl, 0x424
 
-LABEL_F58DFE:
-	calr LABEL_F58CDB
+AccVoice_ThirdLayer_LoadParams:
+	calr AccVoice_LoadAllParts
 	ldda8 a, 12963
 	call LABEL_F56702
 	cpdi8 13029, 128
-	jr c, LABEL_F58E1A
+	jr c, AccVoice_ThirdLayer_StyleMode
 	ldda32 xiy, 13006
 	call LABEL_F53E55
-	jr LABEL_F58E30
+	jr AccVoice_ThirdLayer_Apply
 
-LABEL_F58E1A:
+AccVoice_ThirdLayer_StyleMode:
 	ldda8 a, 12963
 	ldb w, 0x5
 	bitda 1, 13067
-	jr z, LABEL_F58E28
+	jr z, AccVoice_ThirdLayer_SetModeW
 	ldb w, 0x6
 
-LABEL_F58E28:
+AccVoice_ThirdLayer_SetModeW:
 	call LABEL_F56486
 	call LABEL_F53E0B
 
-LABEL_F58E30:
+AccVoice_ThirdLayer_Apply:
 	ordi8 13100, 63
 
-LABEL_F58E35:
+AccVoice_ThirdLayer_SetMasks:
 	bitda 0, 13067
-	jr z, LABEL_F58E65
+	jr z, AccVoice_ThirdLayer_Reverse
 	anddi8 13067, 254
 	ordi8 13076, 63
 	xor a, a
@@ -169103,9 +169103,9 @@ LABEL_F58E35:
 	stda8 13075, a
 	stda8 13077, a
 	stda8 13149, a
-	jr LABEL_F58E8D
+	jr AccVoice_ThirdLayer_Return
 
-LABEL_F58E65:
+AccVoice_ThirdLayer_Reverse:
 	anddi8 13067, 253
 	ordi8 13077, 63
 	xor a, a
@@ -169117,17 +169117,17 @@ LABEL_F58E65:
 	stda8 13076, a
 	stda8 13149, a
 
-LABEL_F58E8D:
+AccVoice_ThirdLayer_Return:
 	ret
 
-LABEL_F58E8E:
+AccVoice_ThirdLayerReassign:
 	bitda 0, 13067
-	jr z, LABEL_F58EC6
+	jr z, AccVoice_ThirdReassign_Reverse
 	ldda8 a, 13029
 	and a, 0x7F
 	call LABEL_F53DF1
 	cpda8 a, 13164
-	jr z, LABEL_F58EBC
+	jr z, AccVoice_ThirdReassign_MatchFwd
 	anddi8 64607, 239
 	ldb e, 0x48
 	ldb d, 0x5
@@ -169135,19 +169135,19 @@ LABEL_F58E8E:
 	ldb a, 0x0
 	call LABEL_F534EF
 	ldda32 xiy, 13006
-	jr LABEL_F58EF6
+	jr AccVoice_ThirdReassign_Apply
 
-LABEL_F58EBC:
+AccVoice_ThirdReassign_MatchFwd:
 	ldda8 a, 13165
 	call LABEL_F53D20
-	jr LABEL_F58EF6
+	jr AccVoice_ThirdReassign_Apply
 
-LABEL_F58EC6:
+AccVoice_ThirdReassign_Reverse:
 	ldda8 a, 13029
 	and a, 0x7F
 	call LABEL_F53DF1
 	cpda8 a, 13166
-	jr z, LABEL_F58EEE
+	jr z, AccVoice_ThirdReassign_MatchRev
 	anddi8 64607, 223
 	ldb e, 0x48
 	ldb d, 0x5
@@ -169155,19 +169155,19 @@ LABEL_F58EC6:
 	ldb a, 0x0
 	call LABEL_F534EF
 	ldda32 xiy, 13006
-	jr LABEL_F58EF6
+	jr AccVoice_ThirdReassign_Apply
 
-LABEL_F58EEE:
+AccVoice_ThirdReassign_MatchRev:
 	ldda8 a, 13167
 	call LABEL_F53D20
 
-LABEL_F58EF6:
-	calr LABEL_F58D45
+AccVoice_ThirdReassign_Apply:
+	calr AccInit_AllPartPositions
 	call LABEL_F53E55
 	ordi8 13100, 63
 	ret
 
-LABEL_F58F03:
+AccBuf_WriteAllNotesOff:
 	ld xhl, 0x2A94
 	ld iy, (xhl + 4)
 	ld bc, (xhl + 2)
@@ -169184,95 +169184,95 @@ LABEL_F58F03:
 	ld (xhl + 4), iy
 	ret
 
-LABEL_F58F3C:
+AccBuf_AllNotesOffPadding:
 	.byte 0x00, 0x00
 
-LABEL_F58F3E:
+AccBuf_ResetAll4:
 	ld xhl, 0x2C94
-	calr LABEL_F58F5F
+	calr AccBuf_DrainAndReset
 	ld xhl, 0x2D94
-	calr LABEL_F58F5F
+	calr AccBuf_DrainAndReset
 	ld xhl, 0x2E94
-	calr LABEL_F58F5F
+	calr AccBuf_DrainAndReset
 	ld xhl, 0x2F94
-	calr LABEL_F58F5F
+	calr AccBuf_DrainAndReset
 	ret
 
-LABEL_F58F5F:
+AccBuf_DrainAndReset:
 	ld iy, (xhl + 6)
 	ld bc, (xhl + 2)
 
-LABEL_F58F65:
+AccBuf_DrainReset_Loop:
 	cp iy, (xhl + 4)
-	jr z, LABEL_F58FDD
+	jr z, AccBuf_DrainReset_Done
 	ld_srib3 A, 0x07, 0xEC, 0xF4
 	cp a, 0xD0
-	jr z, LABEL_F58F7A
+	jr z, AccBuf_DrainReset_D0Found
 	call LABEL_F54059
-	jr LABEL_F58F65
+	jr AccBuf_DrainReset_Loop
 
-LABEL_F58F7A:
+AccBuf_DrainReset_D0Found:
 	call LABEL_F54059
 	call LABEL_F54059
 	ld_srib3 A, 0x07, 0xEC, 0xF4
 	cps a, 2
-	jr nz, LABEL_F58F9B
+	jr nz, AccBuf_DrainReset_Sub1
 	call LABEL_F54059
 	stib_dri 0x07, 0xEC, 0xF4, 0x40
 	call LABEL_F54059
-	jr LABEL_F58F65
+	jr AccBuf_DrainReset_Loop
 
-LABEL_F58F9B:
+AccBuf_DrainReset_Sub1:
 	cps a, 1
-	jr nz, LABEL_F58FAF
+	jr nz, AccBuf_DrainReset_Sub3
 	call LABEL_F54059
 	stib_dri 0x07, 0xEC, 0xF4, 0x00
 	call LABEL_F54059
-	jr LABEL_F58F65
+	jr AccBuf_DrainReset_Loop
 
-LABEL_F58FAF:
+AccBuf_DrainReset_Sub3:
 	cps a, 3
-	jr nz, LABEL_F58FC3
+	jr nz, AccBuf_DrainReset_Sub5
 	call LABEL_F54059
 	stib_dri 0x07, 0xEC, 0xF4, 0x00
 	call LABEL_F54059
-	jr LABEL_F58F65
+	jr AccBuf_DrainReset_Loop
 
-LABEL_F58FC3:
+AccBuf_DrainReset_Sub5:
 	cps a, 5
-	jr nz, LABEL_F58FD7
+	jr nz, AccBuf_DrainReset_Other
 	call LABEL_F54059
 	stib_dri 0x07, 0xEC, 0xF4, 0x7F
 	call LABEL_F54059
-	jr LABEL_F58F65
+	jr AccBuf_DrainReset_Loop
 
-LABEL_F58FD7:
+AccBuf_DrainReset_Other:
 	call LABEL_F54059
-	jr LABEL_F58F65
+	jr AccBuf_DrainReset_Loop
 
-LABEL_F58FDD:
+AccBuf_DrainReset_Done:
 	ret
 
-LABEL_F58FDE:
+AccTiming_CallHelper:
 	bitda 1, 12932
-	jr z, LABEL_F58FF8
+	jr z, AccTiming_HelperReturn
 	call SeqEvt_CallTimingHelper
 	call LABEL_FE94D0
 	call LABEL_F535C6
 	call LABEL_F53CA4
 	call LABEL_F54C22
 
-LABEL_F58FF8:
+AccTiming_HelperReturn:
 	ret
 
-LABEL_F58FF9:
+AccVoice_SelectByMask:
 	cpdi8 13029, 128
-	jr c, LABEL_F59035
+	jr c, AccVoice_SelectByMask_Default
 	ldfr_berp W, 0x31
 	andda8 w, 13079
-	jr nz, LABEL_F59035
+	jr nz, AccVoice_SelectByMask_Default
 	bitda 0, 13155
-	jr nz, LABEL_F59030
+	jr nz, AccVoice_SelectByMask_Direct
 	ldda8 a, 13078
 	orda8 a, 13080
 	orda8 a, 13074
@@ -169281,20 +169281,20 @@ LABEL_F58FF9:
 	orda8 a, 13077
 	orda8 a, 13096
 	and_berp A, 0x31
-	jr nz, LABEL_F59035
+	jr nz, AccVoice_SelectByMask_Default
 
-LABEL_F59030:
-	calr LABEL_F59059
-	jr LABEL_F5903D
+AccVoice_SelectByMask_Direct:
+	calr AccWave_BankResolve
+	jr AccVoice_SelectReturn
 
-LABEL_F59035:
+AccVoice_SelectByMask_Default:
 	ldda8 a, 12933
-	call LABEL_F590A9
+	call AccVoice_TableLookup
 
-LABEL_F5903D:
+AccVoice_SelectReturn:
 	ret
 
-LABEL_F5903E:
+AccWave_BankResolve_Short:
 	cp	iz, 65534
 	jr	nz, 7
 	ld	xhl, 613312
@@ -169305,16 +169305,16 @@ LABEL_F5903E:
 	add	xhl, 613376
 	ret
 
-LABEL_F59059:
+AccWave_BankResolve:
 	push xwa
 	push xix
 	push xiz
 	cp iz, 0xFFFE
-	jr nz, LABEL_F59069
+	jr nz, AccWave_BankResolve_Normal
 	ld xhl, 0x95BC0
-	jr LABEL_F59085
+	jr AccWave_BankResolve_Epilogue
 
-LABEL_F59069:
+AccWave_BankResolve_Normal:
 	ld wa, iz
 	and iz, 0xFFF
 	extz xiz
@@ -169325,29 +169325,29 @@ LABEL_F59069:
 	ld_sril3 XIX, 0x07, 0xF0, 0xE0
 	add xhl, xix
 
-LABEL_F59085:
+AccWave_BankResolve_Epilogue:
 	pop xiz
 	pop xix
 	pop xwa
 	ret
 
-LABEL_F59089:
+AccWave_BankTable:
 	.byte 0x00, 0x5c, 0x09, 0x00, 0x00, 0x14, 0x30, 0x00
 	.byte 0x00, 0xac, 0x31, 0x00, 0x00, 0x14, 0x33, 0x00
 	.byte 0x00, 0xac, 0x34, 0x00, 0x00, 0x14, 0x36, 0x00
 	.byte 0x00, 0xac, 0x37, 0x00, 0x00, 0x14, 0x39, 0x00
 
-LABEL_F590A9:
-	call LABEL_F590B4
+AccVoice_TableLookup:
+	call AccVoice_TableLookup_Inner
 	add xhl, 0x8000
 	ret
 
-LABEL_F590B4:
+AccVoice_TableLookup_Inner:
 	cp a, 0x3F
-	jr ule, LABEL_F590BB
+	jr ule, AccVoice_TableLookup_Compute
 	xor a, a
 
-LABEL_F590BB:
+AccVoice_TableLookup_Compute:
 	xor xhl, xhl
 	xor w, w
 	ld hl, wa
@@ -169357,7 +169357,7 @@ LABEL_F590BB:
 	addda32 xhl, 12919
 	ret
 
-LABEL_F590D1:
+AccVoice_OffsetTable:
 	.byte 0x00, 0x00, 0x40, 0x00, 0x00, 0x00, 0x41, 0x00
 	.byte 0x00, 0x00, 0x42, 0x00, 0x00, 0x00, 0x43, 0x00
 	.byte 0x00, 0x00, 0x44, 0x00, 0x00, 0x00, 0x45, 0x00
@@ -169391,74 +169391,74 @@ LABEL_F590D1:
 	.byte 0x00, 0x00, 0x7c, 0x00, 0x00, 0x00, 0x7d, 0x00
 	.byte 0x00, 0x00, 0x7e, 0x00, 0x00, 0x00, 0x7f, 0x00
 
-LABEL_F591D1:
+AccState_CollectAll:
 	bitda 3, 1054
-	jrl nz, LABEL_F592CC
+	jrl nz, AccState_CollectReturn
 	bitda 2, 1054
-	jrl z, LABEL_F592CC
+	jrl z, AccState_CollectReturn
 	ld xhl, 0x3094
 	xor iy, iy
 	ld_srib3 A, 0x07, 0xEC, 0xF4
 
-LABEL_F591EB:
+AccState_CollectKbd1_Loop:
 	or_srib_rm A, 0x07, 0xEC, 0xF4
 	add iy, 0x6
 	cp iy, 0x30
-	jr c, LABEL_F591EB
+	jr c, AccState_CollectKbd1_Loop
 	ld xhl, 0x30C4
 	xor iy, iy
 
-LABEL_F59201:
+AccState_CollectKbd2_Loop:
 	or_srib_rm A, 0x07, 0xEC, 0xF4
 	add iy, 0x6
 	cp iy, 0x30
-	jr c, LABEL_F59201
+	jr c, AccState_CollectKbd2_Loop
 	ld xhl, 0x30F4
 	xor iy, iy
 
-LABEL_F59217:
+AccState_CollectAcc1_Loop:
 	or_srib_rm A, 0x07, 0xEC, 0xF4
 	add iy, 0x9
 	cp iy, 0x48
-	jr c, LABEL_F59217
+	jr c, AccState_CollectAcc1_Loop
 	ld xhl, 0x313C
 	xor iy, iy
 
-LABEL_F5922D:
+AccState_CollectAcc2_Loop:
 	or_srib_rm A, 0x07, 0xEC, 0xF4
 	add iy, 0x9
 	cp iy, 0x48
-	jr c, LABEL_F5922D
+	jr c, AccState_CollectAcc2_Loop
 	ld xhl, 0x3184
 	xor iy, iy
 
-LABEL_F59243:
+AccState_CollectAcc3_Loop:
 	or_srib_rm A, 0x07, 0xEC, 0xF4
 	add iy, 0x9
 	cp iy, 0x48
-	jr c, LABEL_F59243
+	jr c, AccState_CollectAcc3_Loop
 	ld xhl, 0x31CC
 	xor iy, iy
 
-LABEL_F59259:
+AccState_CollectAcc4_Loop:
 	or_srib_rm A, 0x07, 0xEC, 0xF4
 	add iy, 0x9
 	cp iy, 0x48
-	jr c, LABEL_F59259
+	jr c, AccState_CollectAcc4_Loop
 	bit 7, a
-	jr nz, LABEL_F592CC
+	jr nz, AccState_CollectReturn
 	cpdi16 10420, 0
-	jr nz, LABEL_F59283
+	jr nz, AccState_CollectAcc4_Active
 	cpdi16 10408, 0
-	jr nz, LABEL_F59283
-	call LABEL_F59ACF
-	jr LABEL_F59287
+	jr nz, AccState_CollectAcc4_Active
+	call AccWrap_PlayModeStopSync
+	jr AccState_Apply
 
-LABEL_F59283:
-	call LABEL_F59ADA
+AccState_CollectAcc4_Active:
+	call AccWrap_PlayModeStartPlay
 
-LABEL_F59287:
-	call LABEL_F59795
+AccState_Apply:
+	call AccInit_CallF435A9
 	ldda8 a, 52959
 	stda8 36162, a
 	ldda8 a, 52960
@@ -169476,34 +169476,34 @@ LABEL_F59287:
 	stda8 13080, a
 	ordi8 13471, 2
 
-LABEL_F592CC:
+AccState_CollectReturn:
 	ret
 
-LABEL_F592CD:
+AccState_ScanLookupTable:
 	.byte 0x00, 0x01, 0x02, 0x03, 0x04, 0x00, 0x01, 0x02
 	.byte 0x03, 0x04, 0x00, 0x01, 0x02, 0x03, 0x04, 0x00
 	.byte 0x01, 0x02, 0x03, 0x04, 0x00, 0x00, 0x00, 0x00
 	.zero 10
 
-LABEL_F592EF:
+AccVoice_ScanForD3:
 	ld_srib3 A, 0x07, 0xEC, 0xF4
 	cp a, 0x83
-	jr z, LABEL_F59315
+	jr z, AccVoice_ScanDone2
 	cp a, 0xD3
-	jr nz, LABEL_F5930F
+	jr nz, AccVoice_ScanSkip
 	call AccBuf_Advance
 	call AccBuf_Advance
 	ld_srib3 A, 0x07, 0xEC, 0xF4
 	stda8 13107, a
 
-LABEL_F5930F:
+AccVoice_ScanSkip:
 	call AccBuf_Advance
-	jr LABEL_F592EF
+	jr AccVoice_ScanForD3
 
-LABEL_F59315:
+AccVoice_ScanDone2:
 	ret
 
-LABEL_F59316:
+AccVoice_SetupByteData:
 	.byte 0xf1, 0xd4, 0x33, 0x00, 0x04, 0xc1, 0x49, 0x33
 	.byte 0x25, 0xf1, 0x33, 0x33, 0x00, 0x00, 0xe1, 0xce
 	.byte 0x32, 0x25, 0xc1, 0xa5, 0x32, 0xf5, 0x66, 0x1c
@@ -169549,70 +169549,70 @@ LABEL_F59316:
 	.byte 0x7e, 0x65, 0xf5, 0x1d, 0xd0, 0x6c, 0xf5, 0xf1
 	.byte 0x91, 0x32, 0x50, 0x0e
 
-LABEL_F59472:
+AccFlags_Aggregate:
 	anddi8 13094, 192
 	anddi8 13095, 192
-	calr LABEL_F595C4
+	calr AccBuf_ResetAll4Positions
 	bitda 0, 13070
-	jr z, LABEL_F594A8
+	jr z, AccFlags_BuildIndex
 	ordi8 13069, 1
 	bitda 1, 13070
-	jr z, LABEL_F5949D
+	jr z, AccFlags_CheckDecay
 	cpdi8 13114, 0
-	jr z, LABEL_F594A8
+	jr z, AccFlags_BuildIndex
 	decdi8 1, 13114
-	jr LABEL_F594A8
+	jr AccFlags_BuildIndex
 
-LABEL_F5949D:
+AccFlags_CheckDecay:
 	cpdi8 13114, 3
-	jr z, LABEL_F594A8
+	jr z, AccFlags_BuildIndex
 	incdi8 1, 13114
 
-LABEL_F594A8:
+AccFlags_BuildIndex:
 	xor w, w
 	ldda8 a, 13066
 	and a, 0xD
-	jr z, LABEL_F594B6
+	jr z, AccFlags_CheckDir65
 	or w, 0x1
 
-LABEL_F594B6:
+AccFlags_CheckDir65:
 	ldda8 a, 13065
 	and a, 0x3
-	jr z, LABEL_F594C2
+	jr z, AccFlags_CheckDir67
 	or w, 0x2
 
-LABEL_F594C2:
+AccFlags_CheckDir67:
 	ldda8 a, 13067
 	and a, 0x3
-	jr z, LABEL_F594CE
+	jr z, AccFlags_CheckNoteOn
 	or w, 0x4
 
-LABEL_F594CE:
+AccFlags_CheckNoteOn:
 	bitda 0, 13068
-	jr z, LABEL_F594F3
+	jr z, AccFlags_CheckSync69
 	or w, 0x8
 	bitda 6, 13424
-	jr z, LABEL_F594E5
+	jr z, AccFlags_PedalBit7
 	or w, 0x2
 	ordi8 13065, 1
 
-LABEL_F594E5:
+AccFlags_PedalBit7:
 	bitda 7, 13424
-	jr z, LABEL_F594F3
+	jr z, AccFlags_CheckSync69
 	or w, 0x2
 	ordi8 13065, 2
 
-LABEL_F594F3:
+AccFlags_CheckSync69:
 	bitda 0, 13069
-	jr z, LABEL_F594FC
+	jr z, AccFlags_CheckSync71
 	or w, 0x8
 
-LABEL_F594FC:
+AccFlags_CheckSync71:
 	bitda 0, 13071
-	jr z, LABEL_F59505
+	jr z, AccFlags_Dispatch
 	or w, 0x8
 
-LABEL_F59505:
+AccFlags_Dispatch:
 	and w, 0xF
 	sla w, 2
 	ld xhl, 0xF59517
@@ -169620,44 +169620,44 @@ LABEL_F59505:
 	jp (xwa)
 
 
-LABEL_F59517:
-	.long LABEL_F59557
-	.long LABEL_F595AA
-	.long LABEL_F5959A
-	.long LABEL_F5959A
-	.long LABEL_F5957A
-	.long LABEL_F5957A
-	.long LABEL_F5957A
-	.long LABEL_F5957A
-	.long LABEL_F59557
-	.long LABEL_F595B0
-	.long LABEL_F595A0
-	.long LABEL_F595A0
-	.long LABEL_F59588
-	.long LABEL_F59588
-	.long LABEL_F59588
-	.long LABEL_F59588
-LABEL_F59557:
+AccFlags_JumpTable:
+	.long AccFlags_Handler0
+	.long AccFlags_Handler1
+	.long AccFlags_Handler2
+	.long AccFlags_Handler2
+	.long AccFlags_Handler4
+	.long AccFlags_Handler4
+	.long AccFlags_Handler4
+	.long AccFlags_Handler4
+	.long AccFlags_Handler0
+	.long AccFlags_Handler9
+	.long AccFlags_Handler10
+	.long AccFlags_Handler10
+	.long AccFlags_Handler8
+	.long AccFlags_Handler8
+	.long AccFlags_Handler8
+	.long AccFlags_Handler8
+AccFlags_Handler0:
 	.byte 0x1d, 0xff, 0x86, 0xf5, 0x1d, 0x16, 0x88, 0xf5
 	.byte 0xc1, 0x16, 0x33, 0x3c, 0xc0, 0xc1, 0x17, 0x33
 	.byte 0x3c, 0xc0, 0xc1, 0x18, 0x33, 0x3c, 0xc0, 0xc1
 	.byte 0x12, 0x33, 0x3c, 0xc0, 0xc1, 0x13, 0x33, 0x3c
 	.byte 0xc0, 0x68, 0x3e
-LABEL_F5957A:
+AccFlags_Handler4:
 	.byte 0x1d, 0xde, 0x8f, 0xf5, 0x1d, 0x84, 0x97, 0xf5
 	.byte 0x1d, 0xb8, 0x8d, 0xf5, 0x68, 0x30
-LABEL_F59588:
+AccFlags_Handler8:
 	.byte 0x1d, 0xff, 0x86, 0xf5, 0x1d, 0xde, 0x8f, 0xf5
 	.byte 0x1d, 0x84, 0x97, 0xf5, 0x1d, 0xb8, 0x8d, 0xf5
 	jr	t, 0x1e
-LABEL_F5959A:
+AccFlags_Handler2:
 	.byte 0x1d, 0x82, 0x8b, 0xf5, 0x68, 0x18
-LABEL_F595A0:
+AccFlags_Handler10:
 	.byte 0x1d, 0xff, 0x86, 0xf5, 0x1d, 0x82, 0x8b, 0xf5
 	jr	t, 0x0e
-LABEL_F595AA:
+AccFlags_Handler1:
 	.byte 0x1d, 0x8e, 0x89, 0xf5, 0x68, 0x08
-LABEL_F595B0:
+AccFlags_Handler9:
 	call	16090879
 	call	16091534
 	call	16078240
@@ -169665,18 +169665,18 @@ LABEL_F595B0:
 	calr	59
 	ret
 
-LABEL_F595C4:
+AccBuf_ResetAll4Positions:
 	ld xhl, 0x2C94
-	calr LABEL_F595E5
+	calr AccBuf_ResetOnePosition
 	ld xhl, 0x2D94
-	calr LABEL_F595E5
+	calr AccBuf_ResetOnePosition
 	ld xhl, 0x2E94
-	calr LABEL_F595E5
+	calr AccBuf_ResetOnePosition
 	ld xhl, 0x2F94
-	calr LABEL_F595E5
+	calr AccBuf_ResetOnePosition
 	ret
 
-LABEL_F595E5:
+AccBuf_ResetOnePosition:
 	ld (xhl + 256), 0xA
 	ld (xhl + 2), 0xFF
 	ldw wa, 0xA
@@ -169687,7 +169687,7 @@ LABEL_F595E5:
 	ei 0
 	ret
 
-LABEL_F595FE:
+AccBuf_ResetByteData:
 	.byte 0x21, 0x00, 0x43, 0xf4, 0x30, 0x00, 0x00, 0xdd
 	.byte 0xd5, 0xf3, 0x07, 0xec, 0xf4, 0x41, 0xdd, 0xc8
 	.byte 0x09, 0x00, 0xdd, 0xcf, 0x48, 0x00, 0x67, 0xf1
@@ -169701,10 +169701,10 @@ LABEL_F595FE:
 	.byte 0xdd, 0xc8, 0x09, 0x00, 0xdd, 0xcf, 0x48, 0x00
 	.byte 0x67, 0xf1, 0x0e
 
-LABEL_F59659:
+AccNote_FlushAll:
 	ldda8 a, 13100
 	and a, 0x3F
-	jr z, LABEL_F59685
+	jr z, AccNote_FlushReturn
 	call LABEL_F53F76
 	call LABEL_F53F86
 	ldb a, 0x1
@@ -169715,10 +169715,10 @@ LABEL_F59659:
 	call LABEL_F5429F
 	anddi8 13100, 192
 
-LABEL_F59685:
+AccNote_FlushReturn:
 	ret
 
-LABEL_F59686:
+AccTempo_CalcPosition:
 	ldb a, 0x5F
 	ldda8 w, 1112
 	dec 1, w
@@ -169731,75 +169731,75 @@ LABEL_F59686:
 	stda8 13034, a
 	ret
 
-LABEL_F596A9:
+AccInit_FullReInit:
 	call 0xF543D7
 	call LABEL_F54350
-	calr LABEL_F58F03
+	calr AccBuf_WriteAllNotesOff
 	call 0xF54406
-	calr LABEL_F58F3E
+	calr AccBuf_ResetAll4
 	ldda8 a, 13074
 	orda8 a, 13075
 	and a, 0x3F
-	jr z, LABEL_F596F4
+	jr z, AccInit_ReInit_CheckNoteOn
 	bitda 0, 13057
-	jr z, LABEL_F596F4
+	jr z, AccInit_ReInit_CheckNoteOn
 	ordi8 13068, 1
 	ldda8 a, 13074
 	and a, 0x3F
-	jr z, LABEL_F596E9
+	jr z, AccInit_ReInit_AdjustDecay
 	cpdi8 13114, 0
-	jr z, LABEL_F596F4
+	jr z, AccInit_ReInit_CheckNoteOn
 	decdi8 1, 13114
-	jr LABEL_F596F4
+	jr AccInit_ReInit_CheckNoteOn
 
-LABEL_F596E9:
+AccInit_ReInit_AdjustDecay:
 	cpdi8 13114, 3
-	jr z, LABEL_F596F4
+	jr z, AccInit_ReInit_CheckNoteOn
 	incdi8 1, 13114
 
-LABEL_F596F4:
+AccInit_ReInit_CheckNoteOn:
 	bitda 0, 13068
-	jr z, LABEL_F59711
+	jr z, AccInit_ReInit_CheckModes
 	ldda8 a, 13094
 	and a, 0x3F
-	jr nz, LABEL_F59711
+	jr nz, AccInit_ReInit_CheckModes
 	calr AccStyle_Init
-	calr LABEL_F58816
+	calr AccVoice_SetupAllParts
 	ldda8 a, 1075
 	stda8 1112, a
 
-LABEL_F59711:
+AccInit_ReInit_CheckModes:
 	ldda8 a, 13066
 	and a, 0xD
-	jr z, LABEL_F5971D
-	calr LABEL_F5898E
+	jr z, AccInit_ReInit_CheckSplit
+	calr AccVoice_ResetAll
 
-LABEL_F5971D:
+AccInit_ReInit_CheckSplit:
 	ldda8 a, 13065
 	and a, 0x3
-	jr nz, LABEL_F5973E
+	jr nz, AccInit_ReInit_ApplySplit
 	bitda 6, 13424
-	jr z, LABEL_F59733
+	jr z, AccInit_ReInit_CheckPedalBit7
 	ordi8 13065, 1
-	jr LABEL_F5973E
+	jr AccInit_ReInit_ApplySplit
 
-LABEL_F59733:
+AccInit_ReInit_CheckPedalBit7:
 	bitda 7, 13424
-	jr z, LABEL_F59741
+	jr z, AccInit_ReInit_CheckThird
 	ordi8 13065, 2
 
-LABEL_F5973E:
-	calr LABEL_F58B82
+AccInit_ReInit_ApplySplit:
+	calr AccVoice_SplitPointSetup
 
-LABEL_F59741:
+AccInit_ReInit_CheckThird:
 	ldda8 a, 13067
 	and a, 0x3
-	jr z, LABEL_F59754
-	calr LABEL_F58FDE
-	call LABEL_F59784
-	calr LABEL_F58DB8
+	jr z, AccInit_ReInit_ClearHighBits
+	calr AccTiming_CallHelper
+	call AccInit_ResetSongCounter
+	calr AccVoice_ThirdLayer
 
-LABEL_F59754:
+AccInit_ReInit_ClearHighBits:
 	anddi8 12971, 240
 	anddi8 12972, 240
 	anddi8 12973, 240
@@ -169808,45 +169808,45 @@ LABEL_F59754:
 	anddi8 12976, 240
 	calr AccSeq_DualPartScan
 	bitda 6, 13044
-	jr nz, LABEL_F5977E
+	jr nz, AccInit_ReInit_SetDirty
 	calr AccSeq_FourChannelScan
 
-LABEL_F5977E:
+AccInit_ReInit_SetDirty:
 	ordi8 13100, 128
 	ret
 
-LABEL_F59784:
+AccInit_ResetSongCounter:
 	cpdi8 13026, 0
-	jr nz, LABEL_F5978F
+	jr nz, AccInit_ResetSong_Store
 	call LABEL_F435A9
 
-LABEL_F5978F:
+AccInit_ResetSong_Store:
 	stdi8 13026, 0
 	ret
 
-LABEL_F59795:
+AccInit_CallF435A9:
 	call LABEL_F435A9
 	ret
 
-LABEL_F5979A:
+AccTuning_CheckChange:
 	cpdi8 13029, 128
-	jr nc, LABEL_F597B3
+	jr nc, AccTuning_ChangeReturn
 	ldda8 a, 13201
 	xorda8 a, 13202
 	bit 0, a
-	jr z, LABEL_F597B3
+	jr z, AccTuning_ChangeReturn
 	ordi8 13203, 1
 
-LABEL_F597B3:
+AccTuning_ChangeReturn:
 	ret
 
-LABEL_F597B4:
+AccTuning_LoadFromROM:
 	push xwa
 	push xhl
-	call LABEL_F5CDE1
+	call AccHelper_ComputeVoiceOffset
 	add xhl, 0x1E7810
 	bitm 7, (xhl + 1)
-	jrl z, LABEL_F5984B
+	jrl z, AccTuning_LoadReturn
 	ld a, (xhl + 4)
 	stda8 12884, a
 	ld a, (xhl + 5)
@@ -169889,30 +169889,30 @@ LABEL_F597B4:
 	and a, 0x7F
 	stda8 12871, a
 
-LABEL_F5984B:
+AccTuning_LoadReturn:
 	pop xhl
 	pop xwa
 	ret
 
-LABEL_F5984E:
-	call LABEL_F5CDE1
+AccTuning_LoadMaster:
+	call AccHelper_ComputeVoiceOffset
 	add xhl, 0x1E7810
 	bitm 7, (xhl + 1)
-	jr z, LABEL_F5986E
+	jr z, AccTuning_LoadMasterReturn
 	ld a, (xhl + 256)
 	stda8 12870, a
 	ld a, (xhl + 1)
 	and a, 0x7F
 	stda8 12871, a
 
-LABEL_F5986E:
+AccTuning_LoadMasterReturn:
 	ret
 
-LABEL_F5986F:
-	call LABEL_F5CDE1
+AccTuning_LoadCoarse:
+	call AccHelper_ComputeVoiceOffset
 	add xhl, 0x1E7810
 	bitm 7, (xhl + 1)
-	jr z, LABEL_F5989B
+	jr z, AccTuning_LoadCoarseReturn
 	ld a, (xhl + 2)
 	stda8 12877, a
 	ld a, (xhl + 3)
@@ -169923,14 +169923,14 @@ LABEL_F5986F:
 	srl a, 7
 	stda8 12880, a
 
-LABEL_F5989B:
+AccTuning_LoadCoarseReturn:
 	ret
 
-LABEL_F5989C:
-	call LABEL_F5CDE1
+AccTuning_LoadFine:
+	call AccHelper_ComputeVoiceOffset
 	add xhl, 0x1E7810
 	bitm 7, (xhl + 1)
-	jr z, LABEL_F598C8
+	jr z, AccTuning_LoadFineReturn
 	ld a, (xhl + 4)
 	stda8 12884, a
 	ld a, (xhl + 5)
@@ -169941,14 +169941,14 @@ LABEL_F5989C:
 	srl a, 7
 	stda8 12887, a
 
-LABEL_F598C8:
+AccTuning_LoadFineReturn:
 	ret
 
-LABEL_F598C9:
-	call LABEL_F5CDE1
+AccTuning_LoadOctave:
+	call AccHelper_ComputeVoiceOffset
 	add xhl, 0x1E7810
 	bitm 7, (xhl + 1)
-	jr z, LABEL_F598F5
+	jr z, AccTuning_LoadOctaveReturn
 	ld a, (xhl + 6)
 	stda8 12891, a
 	ld a, (xhl + 7)
@@ -169959,14 +169959,14 @@ LABEL_F598C9:
 	srl a, 7
 	stda8 12894, a
 
-LABEL_F598F5:
+AccTuning_LoadOctaveReturn:
 	ret
 
-LABEL_F598F6:
-	call LABEL_F5CDE1
+AccTuning_LoadTranspose:
+	call AccHelper_ComputeVoiceOffset
 	add xhl, 0x1E7810
 	bitm 7, (xhl + 1)
-	jr z, LABEL_F59922
+	jr z, AccTuning_LoadTransposeReturn
 	ld a, (xhl + 8)
 	stda8 12898, a
 	ld a, (xhl + 9)
@@ -169977,73 +169977,73 @@ LABEL_F598F6:
 	srl a, 7
 	stda8 12901, a
 
-LABEL_F59922:
+AccTuning_LoadTransposeReturn:
 	ret
 
-LABEL_F59923:
+AccTuning_ApplyChange:
 	bitda 0, 13203
-	jrl z, LABEL_F599B9
-	call LABEL_F5CDE1
+	jrl z, AccTuning_ApplyReturn
+	call AccHelper_ComputeVoiceOffset
 	add xhl, 0x1E7810
 	bitda 0, 13201
-	jr z, LABEL_F59940
+	jr z, AccTuning_ApplyChange_ClearBit
 	ormi8 (xhl + 1), 0x80
-	jr LABEL_F59944
+	jr AccTuning_ApplyChange_SelectMode
 
-LABEL_F59940:
+AccTuning_ApplyChange_ClearBit:
 	andmi8 (xhl + 1), 0x7F
 
-LABEL_F59944:
+AccTuning_ApplyChange_SelectMode:
 	ldda8 a, 13078
 	orda8 a, 13079
 	and a, 0x3F
-	jrl nz, LABEL_F59985
+	jrl nz, AccTuning_Mode_078
 	ldda8 a, 13080
 	and a, 0x3F
-	jr nz, LABEL_F59989
+	jr nz, AccTuning_Mode_080
 	ldda8 a, 13076
 	and a, 0x3F
-	jr nz, LABEL_F5998D
+	jr nz, AccTuning_Mode_076
 	orda8 a, 13077
 	and a, 0x3F
-	jr nz, LABEL_F59991
+	jr nz, AccTuning_Mode_077
 	ldda8 a, 13074
 	orda8 a, 13075
 	and a, 0x3F
-	jr nz, LABEL_F59995
+	jr nz, AccTuning_Mode_074
 	ldda8 a, 13149
 	and a, 0x3F
-	jr nz, LABEL_F59999
-	jr LABEL_F5999D
+	jr nz, AccTuning_Mode_149
+	jr AccTuning_Mode_None
 
-LABEL_F59985:
+AccTuning_Mode_078:
 	ldb w, 0x3
-	jr LABEL_F5999F
+	jr AccTuning_ApplyVoice
 
-LABEL_F59989:
+AccTuning_Mode_080:
 	ldb w, 0x4
-	jr LABEL_F5999F
+	jr AccTuning_ApplyVoice
 
-LABEL_F5998D:
+AccTuning_Mode_076:
 	ldb w, 0x5
-	jr LABEL_F5999F
+	jr AccTuning_ApplyVoice
 
-LABEL_F59991:
+AccTuning_Mode_077:
 	ldb w, 0x6
-	jr LABEL_F5999F
+	jr AccTuning_ApplyVoice
 
-LABEL_F59995:
+AccTuning_Mode_074:
 	ldb w, 0x2
-	jr LABEL_F5999F
+	jr AccTuning_ApplyVoice
 
-LABEL_F59999:
+AccTuning_Mode_149:
 	ldb w, 0x1
-	jr LABEL_F5999F
+	jr AccTuning_ApplyVoice
 
-LABEL_F5999D:
+AccTuning_Mode_None:
 	ldb w, 0x0
 
-LABEL_F5999F:
+AccTuning_ApplyVoice:
 	ldda8 a, 12963
 	ldda32 xiy, 13006
 	call LABEL_F56486
@@ -170051,98 +170051,98 @@ LABEL_F5999F:
 	ordi8 13100, 63
 	ordi8 13100, 128
 
-LABEL_F599B9:
+AccTuning_ApplyReturn:
 	anddi8 13203, 254
 	ret
 
-LABEL_F599BF:
+AccTuning_Toggle:
 	cpdi8 13029, 128
-	jr nc, LABEL_F59A06
+	jr nc, AccTuning_Toggle_NoStyle
 	ldda8 a, 13201
 	xorda8 a, 13202
 	bit 0, a
-	jr z, LABEL_F599F4
-	call LABEL_F5CDE1
+	jr z, AccTuning_Toggle_CheckDirty
+	call AccHelper_ComputeVoiceOffset
 	add xhl, 0x1E7810
 	bitda 0, 13201
-	jr z, LABEL_F599E9
+	jr z, AccTuning_Toggle_ClearBit
 	ormi8 (xhl + 1), 0x80
-	jr LABEL_F599ED
+	jr AccTuning_Toggle_SetFlag
 
-LABEL_F599E9:
+AccTuning_Toggle_ClearBit:
 	andmi8 (xhl + 1), 0x7F
 
-LABEL_F599ED:
+AccTuning_Toggle_SetFlag:
 	ordi8 13115, 1
-	jr LABEL_F59A0F
+	jr AccTuning_Toggle_Return
 
-LABEL_F599F4:
+AccTuning_Toggle_CheckDirty:
 	bitda 0, 13203
-	jr z, LABEL_F59A0F
+	jr z, AccTuning_Toggle_Return
 	anddi8 13203, 254
 	ordi8 13115, 1
-	jr LABEL_F59A0F
+	jr AccTuning_Toggle_Return
 
-LABEL_F59A06:
+AccTuning_Toggle_NoStyle:
 	anddi8 13201, 254
-	call LABEL_F59A75
+	call AccTuning_LEDOff
 
-LABEL_F59A0F:
+AccTuning_Toggle_Return:
 	ret
 
-LABEL_F59A10:
+AccTuning_SaveState:
 	ldda8 a, 13201
 	stda8 13202, a
 	ret
 
-LABEL_F59A19:
+AccTuning_Init:
 	push xwa
 	push xhl
 	cpdi8 13029, 128
-	jr nc, LABEL_F59A44
-	call LABEL_F5CDE1
+	jr nc, AccTuning_Init_NoTuning
+	call AccHelper_ComputeVoiceOffset
 	add xhl, 0x1E7810
 	bitm 7, (xhl + 1)
-	jr z, LABEL_F59A44
+	jr z, AccTuning_Init_NoTuning
 	ordi8 13201, 1
-	call LABEL_F59A69
+	call AccTuning_LEDOn
 	ldda8 a, 13201
 	stda8 13202, a
-	jr LABEL_F59A55
+	jr AccTuning_Init_Epilogue
 
-LABEL_F59A44:
+AccTuning_Init_NoTuning:
 	anddi8 13201, 254
-	call LABEL_F59A75
+	call AccTuning_LEDOff
 	ldda8 a, 13201
 	stda8 13202, a
 
-LABEL_F59A55:
+AccTuning_Init_Epilogue:
 	pop xhl
 	pop xwa
 	ret
 
-LABEL_F59A58:
+AccTuning_DisableIfNoStyle:
 	cpdi8 13029, 128
-	jr c, LABEL_F59A68
+	jr c, AccTuning_DisableReturn
 	anddi8 13201, 254
-	call LABEL_F59A75
+	call AccTuning_LEDOff
 
-LABEL_F59A68:
+AccTuning_DisableReturn:
 	ret
 
-LABEL_F59A69:
+AccTuning_LEDOn:
 	stdi8 13200, 1
 	ldb a, 0x4A
 	call LABEL_FC793D
 	ret
 
-LABEL_F59A75:
+AccTuning_LEDOff:
 	stdi8 13200, 0
 	ldb a, 0x4A
 	call LABEL_FC793D
 	ret
 
-LABEL_F59A81:
+AccWrap_JumpTable:
 	jp	16095894
 	jp	16095893
 	jp	16095893
@@ -170150,143 +170150,143 @@ LABEL_F59A81:
 	jp	16095893
 	ret
 	ret
-LABEL_F59A97:
+AccWrap_ReplayStop:
 	.byte 0x1b, 0x20
 	.byte 0x9b, 0xf5
-LABEL_F59A9B:
+AccWrap_ReplayStopAlt:
 	.byte 0x1b, 0x6f, 0x9b, 0xf5
 
-LABEL_F59A9F:
+AccWrap_AutoPlayCheck:
 	push xiz
-	call LABEL_F5A82A
+	call AccAutoPlay_NoteDispatch
 	pop xiz
 	ret
 
-LABEL_F59AA6:
+AccWrap_PlayModeByteData:
 	.byte 0x1b, 0xa6, 0xb0, 0xf5, 0x1b, 0x34, 0xad, 0xf5
 
-LABEL_F59AAE:
-	jp LABEL_F5AD8B
+AccWrap_DeferredAction:
+	jp AccAutoPlay_DeferredAction
 
-LABEL_F59AB2:
+AccWrap_AutoPlayStateMachine:
 	push xiz
-	call LABEL_F5A9B9
+	call AccAutoPlay_StateMachine
 	pop xiz
 	ret
 
-LABEL_F59AB9:
+AccWrap_PlayModeDispatch:
 	push xiz
-	call LABEL_F5ADCA
+	call AccPlayMode_Dispatch
 	pop xiz
 	ret
 
-LABEL_F59AC0:
+AccWrap_PlayModeStart:
 	push xiz
-	call LABEL_F5AF5F
+	call AccPlayMode_StartPlayFull
 	pop xiz
 	ret
 
-LABEL_F59AC7:
+AccWrap_PlayModeStopData:
 	.byte 0x1b, 0xb2, 0xaf, 0xf5
 
-LABEL_F59ACB:
-	jp LABEL_F5AFD8
+AccWrap_PlayModeStartAccPlay:
+	jp AccPlayMode_StartAccPlayFull
 
-LABEL_F59ACF:
-	jp LABEL_F5AF3C
+AccWrap_PlayModeStopSync:
+	jp AccPlayMode_StopToSync2
 
-LABEL_F59AD3:
+AccWrap_PlayModeStopExpr:
 	push xiz
-	call LABEL_F5AFD0
+	call AccPlayMode_StopExprD
 	pop xiz
 	ret
 
-LABEL_F59ADA:
+AccWrap_PlayModeStartPlay:
 	push xiz
-	call LABEL_F5AF4D
+	call AccPlayMode_StartPlay2
 	pop xiz
 	ret
 
-LABEL_F59AE1:
+AccWrap_ReplaySavedPedal:
 	push xiz
-	call LABEL_F5B15B
+	call AccReplay_SavedPedal
 	pop xiz
 	ret
 
-LABEL_F59AE8:
-	jp LABEL_F5B23F
+AccWrap_ReplaySavedExpr:
+	jp AccReplay_SavedExpression
 
-LABEL_F59AEC:
+AccWrap_FullStop:
 	push xiz
-	call LABEL_F5B2C6
+	call AccReplay_FullStop
 	pop xiz
 	ret
 
-LABEL_F59AF3:
+AccWrap_PositionClear:
 	push xiz
-	call LABEL_F5B3E8
+	call AccPos_ClearOnStart
 	pop xiz
 	ret
 
-LABEL_F59AFA:
+AccWrap_PositionSaveData:
 	.byte 0x3e, 0x1d, 0x14, 0xb4, 0xf5, 0x5e, 0x0e
 
-LABEL_F59B01:
-	jp LABEL_F5B448
-LABEL_F59B05:
+AccWrap_FlagSync:
+	jp AccFlags_SyncTo64607
+AccWrap_PlayModeStopData2:
 	.byte 0x1b, 0xa5, 0xb0, 0xf5
 
-LABEL_F59B09:
+AccWrap_AutoPlayZoneTrack:
 	push xiz
-	call LABEL_F5A932
+	call AccAutoPlay_ZoneTrack
 	pop xiz
 	ret
 
-LABEL_F59B10:
+AccWrap_AutoPlayByteData:
 	.byte 0x1b, 0xbc, 0xab, 0xf5, 0x3e, 0x1e, 0x24, 0x14
 	.byte 0x5e, 0x0e, 0x3e, 0x1e, 0x94, 0x14, 0x5e, 0x0e
 
-LABEL_F59B20:
+AccPedal_EventDispatch:
 	ldda8 a, 49277
 	stda8 13450, a
 	cps a, 5
-	jr z, LABEL_F59B32
+	jr z, AccPedal_TypeSustainOrExpr
 	cps a, 6
-	jr z, LABEL_F59B32
-	jr LABEL_F59B52
+	jr z, AccPedal_TypeSustainOrExpr
+	jr AccPedal_CheckType0
 
-LABEL_F59B32:
+AccPedal_TypeSustainOrExpr:
 	ldda8 a, 49278
 	stda8 13438, a
 	ldda8 a, 49279
 	cp a, 0xFF
-	jr nz, LABEL_F59B45
+	jr nz, AccPedal_ParseValue
 	xor a, a
 
-LABEL_F59B45:
+AccPedal_ParseValue:
 	stda8 13439, a
-	calr LABEL_F59B95
-	calr LABEL_F59CD9
-	calr LABEL_F59D25
+	calr AccPedal_SustainHandler
+	calr AccPedal_ExprToggle
+	calr AccPedal_DistributeParams
 
-LABEL_F59B52:
+AccPedal_CheckType0:
 	ldda8 a, 49277
 	cps a, 0
-	jr z, LABEL_F59B69
+	jr z, AccPedal_SavePosition
 	cps a, 7
-	jr nz, LABEL_F59B6C
+	jr nz, AccPedal_EventReturn
 	ldda8 a, 49279
 	and a, 0x30
 	cps a, 0
-	jr z, LABEL_F59B6C
+	jr z, AccPedal_EventReturn
 
-LABEL_F59B69:
-	calr LABEL_F5B3B6
+AccPedal_SavePosition:
+	calr AccPos_SaveOnStop
 
-LABEL_F59B6C:
+AccPedal_EventReturn:
 	ret
 
-LABEL_F59B6D:
+AccPedal_RawHandler:
 	nop
 	nop
 	ldda8	a, 49277
@@ -170303,16 +170303,16 @@ LABEL_F59B6D:
 	nop
 	nop
 
-LABEL_F59B95:
+AccPedal_SustainHandler:
 	cpdi8 13450, 5
-	jrl nz, LABEL_F59CA6
+	jrl nz, AccPedal_SustainReturn
 	ldda8 a, 13438
 	andda8 a, 13439
 	bit 0, a
-	jr nz, LABEL_F59BAE
-	jp LABEL_F59CA6
+	jr nz, AccPedal_Sustain_CallReset
+	jp AccPedal_SustainReturn
 
-LABEL_F59BAE:
+AccPedal_Sustain_CallReset:
 	push xwa
 	push xhl
 	push xbc
@@ -170329,145 +170329,145 @@ LABEL_F59BAE:
 	pop xhl
 	pop xwa
 	cpdi8 32523, 0
-	jr z, LABEL_F59BCE
+	jr z, AccPedal_Sustain_CheckStyle
 	call LABEL_F71E32
-	jrl LABEL_F59CA6
+	jrl AccPedal_SustainReturn
 
-LABEL_F59BCE:
+AccPedal_Sustain_CheckStyle:
 	cpdi8 36150, 111
-	jr z, LABEL_F59BEA
+	jr z, AccPedal_Sustain_SpecialStyle
 	cpdi8 36150, 112
-	jr z, LABEL_F59BEA
+	jr z, AccPedal_Sustain_SpecialStyle
 	cpdi8 36150, 113
-	jr z, LABEL_F59BEA
+	jr z, AccPedal_Sustain_SpecialStyle
 	cpdi8 36150, 114
-	jr nz, LABEL_F59BF2
+	jr nz, AccPedal_Sustain_CheckPlay
 
-LABEL_F59BEA:
+AccPedal_Sustain_SpecialStyle:
 	ordi8 3381, 1
-	jrl LABEL_F59CA6
+	jrl AccPedal_SustainReturn
 
-LABEL_F59BF2:
+AccPedal_Sustain_CheckPlay:
 	bitda 2, 10407
-	jr z, LABEL_F59C1C
-	calr LABEL_F5ADCA
+	jr z, AccPedal_Sustain_CheckMultiStyle
+	calr AccPlayMode_Dispatch
 	bitda 3, 3411
-	jr z, LABEL_F59C19
+	jr z, AccPedal_Sustain_PlayJump
 	cpdi8 3429, 0
-	jr z, LABEL_F59C19
+	jr z, AccPedal_Sustain_PlayJump
 	call LABEL_EF9626
 	ldb a, 0x86
 	bitda 1, 3411
-	jr nz, LABEL_F59C16
+	jr nz, AccPedal_Sustain_WriteTempo
 	ldb a, 0x85
 
-LABEL_F59C16:
-	calr LABEL_F5B08C
+AccPedal_Sustain_WriteTempo:
+	calr AccTempo_WriteStopMarker
 
-LABEL_F59C19:
-	jrl LABEL_F59CA6
+AccPedal_Sustain_PlayJump:
+	jrl AccPedal_SustainReturn
 
-LABEL_F59C1C:
+AccPedal_Sustain_CheckMultiStyle:
 	cpdi8 36150, 120
-	jr z, LABEL_F59C69
+	jr z, AccPedal_Sustain_MultiMatch
 	cpdi8 36150, 122
-	jr z, LABEL_F59C69
+	jr z, AccPedal_Sustain_MultiMatch
 	cpdi8 36150, 115
-	jr z, LABEL_F59C69
+	jr z, AccPedal_Sustain_MultiMatch
 	cpdi8 36150, 116
-	jr z, LABEL_F59C69
+	jr z, AccPedal_Sustain_MultiMatch
 	cpdi8 36150, 117
-	jr z, LABEL_F59C69
+	jr z, AccPedal_Sustain_MultiMatch
 	cpdi8 36150, 118
-	jr z, LABEL_F59C69
+	jr z, AccPedal_Sustain_MultiMatch
 	cpdi8 36150, 119
-	jr z, LABEL_F59C69
+	jr z, AccPedal_Sustain_MultiMatch
 	cpdi8 36150, 121
-	jr z, LABEL_F59C69
+	jr z, AccPedal_Sustain_MultiMatch
 	cpdi8 36150, 108
-	jr z, LABEL_F59C69
+	jr z, AccPedal_Sustain_MultiMatch
 	cpdi8 36150, 109
-	jr z, LABEL_F59C69
+	jr z, AccPedal_Sustain_MultiMatch
 	cpdi8 36150, 110
-	jr nz, LABEL_F59C70
+	jr nz, AccPedal_Sustain_Normal
 
-LABEL_F59C69:
+AccPedal_Sustain_MultiMatch:
 	ordi8 3381, 1
-	jr LABEL_F59CA6
+	jr AccPedal_SustainReturn
 
-LABEL_F59C70:
+AccPedal_Sustain_Normal:
 	bitda 2, 10418
-	jr nz, LABEL_F59CA6
+	jr nz, AccPedal_SustainReturn
 	pushw wa
-	calr LABEL_F59CA9
+	calr AccPedal_StyleCheck
 	cps a, 1
 	popw wa
-	jr z, LABEL_F59CA6
+	jr z, AccPedal_SustainReturn
 	ei 6
 	ldda8 a, 1056
 	bit 2, a
-	jr nz, LABEL_F59CA1
+	jr nz, AccPedal_Sustain_CallPlayMode
 	bit 0, a
-	jr z, LABEL_F59CA1
+	jr z, AccPedal_Sustain_CallPlayMode
 	xor a, a
 	stda8 1056, a
 	stda8 1054, a
 	stda8 1057, a
 	ei 0
-	jr LABEL_F59CA6
+	jr AccPedal_SustainReturn
 
-LABEL_F59CA1:
+AccPedal_Sustain_CallPlayMode:
 	ei 0
-	calr LABEL_F5AE1C
+	calr AccPlayMode_TransitionRouter
 
-LABEL_F59CA6:
+AccPedal_SustainReturn:
 	ret
 
-LABEL_F59CA7:
+AccPedal_SustainPadding:
 	.byte 0x00, 0x00
 
-LABEL_F59CA9:
+AccPedal_StyleCheck:
 	cpdi8 36150, 111
-	jr z, LABEL_F59CD6
+	jr z, AccPedal_StyleCheck_Ineligible
 	cpdi8 36150, 108
-	jr c, LABEL_F59CC0
+	jr c, AccPedal_StyleCheck_Extended
 	cpdi8 36150, 122
-	jr ugt, LABEL_F59CC0
-	jr LABEL_F59CD6
+	jr ugt, AccPedal_StyleCheck_Extended
+	jr AccPedal_StyleCheck_Ineligible
 
-LABEL_F59CC0:
+AccPedal_StyleCheck_Extended:
 	cpdi8 36148, 19
-	jr z, LABEL_F59CD6
+	jr z, AccPedal_StyleCheck_Ineligible
 	cpdi8 36150, 120
-	jr z, LABEL_F59CD0
-	jr LABEL_F59CD2
+	jr z, AccPedal_StyleCheck_Match120
+	jr AccPedal_StyleCheck_Eligible
 
-LABEL_F59CD0:
-	jr LABEL_F59CD6
+AccPedal_StyleCheck_Match120:
+	jr AccPedal_StyleCheck_Ineligible
 
-LABEL_F59CD2:
+AccPedal_StyleCheck_Eligible:
 	ldb a, 0x0
-	jr LABEL_F59CD8
+	jr AccPedal_StyleCheckReturn
 
-LABEL_F59CD6:
+AccPedal_StyleCheck_Ineligible:
 	ldb a, 0x1
 
-LABEL_F59CD8:
+AccPedal_StyleCheckReturn:
 	ret
 
-LABEL_F59CD9:
+AccPedal_ExprToggle:
 	cpdi8 13450, 5
-	jr nz, LABEL_F59D22
+	jr nz, AccPedal_ExprReturn
 	ldda8 a, 13438
 	andda8 a, 13439
 	bit 1, a
-	jr z, LABEL_F59D22
+	jr z, AccPedal_ExprReturn
 	ldb a, 0x2
 	xordm8 64607, a
 	cpdi8 37112, 255
-	jr z, LABEL_F59D22
+	jr z, AccPedal_ExprReturn
 	bitda 3, 64854
-	jr z, LABEL_F59D22
+	jr z, AccPedal_ExprReturn
 	ldda8 e, 64607
 	and e, 0x2
 	ld xix, 0x38E8
@@ -170479,22 +170479,22 @@ LABEL_F59CD9:
 	call MidiPkt_DispatchViaTable_4DCE
 	inc 4, xsp
 
-LABEL_F59D22:
+AccPedal_ExprReturn:
 	ret
 
-LABEL_F59D23:
+AccPedal_ExprPadding:
 	.byte 0x00, 0x00
 
-LABEL_F59D25:
+AccPedal_DistributeParams:
 	cpdi8 36148, 14
-	jr z, LABEL_F59D32
+	jr z, AccPedal_Distribute_JumpMain
 	bitda 0, 10406
-	jr z, LABEL_F59D36
+	jr z, AccPedal_Distribute_ClearAll
 
-LABEL_F59D32:
-	jp LABEL_F59DA2
+AccPedal_Distribute_JumpMain:
+	jp AccPedal_DistributeReturn
 
-LABEL_F59D36:
+AccPedal_Distribute_ClearAll:
 	xor wa, wa
 	stda8 13440, a
 	stda8 13441, a
@@ -170504,340 +170504,340 @@ LABEL_F59D36:
 	stda8 13445, a
 	stda8 13446, a
 	stda8 13447, a
-	calr LABEL_F59E14
+	calr AccPedal_ProcessAllBits
 	bitda 3, 3411
-	jr z, LABEL_F59D7A
+	jr z, AccPedal_Distribute_CheckRecord
 	anddi8 64607, 15
 	stdi8 13441, 0
 	stdi8 13443, 0
 	stdi8 13445, 0
 	stdi8 13447, 0
 
-LABEL_F59D7A:
-	calr LABEL_F59FF2
+AccPedal_Distribute_CheckRecord:
+	calr AccPedal_StateSync
 	bitda 3, 3411
-	jr z, LABEL_F59DA2
+	jr z, AccPedal_DistributeReturn
 	cpdi8 3429, 0
-	jr z, LABEL_F59DA2
+	jr z, AccPedal_DistributeReturn
 	xor wa, wa
 	stda8 13440, a
 	stda8 13441, a
 	stda8 13444, a
 	stda8 13445, a
-	calr LABEL_F5A1C3
-	calr LABEL_F59DA5
+	calr AccPedal_MapToAcc
+	calr AccPedal_SendEvents
 
-LABEL_F59DA2:
+AccPedal_DistributeReturn:
 	ret
 
-LABEL_F59DA3:
+AccPedal_DistributePadding:
 	.byte 0x00, 0x00
 
-LABEL_F59DA5:
+AccPedal_SendEvents:
 	ldda8 a, 13440
 	xor a, 0xFF
 	andda8 a, 13441
 	cps a, 0
-	jr z, LABEL_F59DC2
+	jr z, AccPedal_SendEvents_Group2
 	ldb b, 0x5
 	ldb c, 0x48
 	ld d, a
 	ldda8 e, 13440
 	call LABEL_FCAA9C
 
-LABEL_F59DC2:
+AccPedal_SendEvents_Group2:
 	ldda8 a, 13444
 	xor a, 0xFF
 	andda8 a, 13445
 	cps a, 0
-	jr z, LABEL_F59DDF
+	jr z, AccPedal_SendEvents_OnSustain
 	ldb b, 0x6
 	ldb c, 0x48
 	ld d, a
 	ldda8 e, 13444
 	call LABEL_FCAA9C
 
-LABEL_F59DDF:
+AccPedal_SendEvents_OnSustain:
 	ldda8 a, 13440
 	andda8 a, 13441
 	cps a, 0
-	jr z, LABEL_F59DF9
+	jr z, AccPedal_SendEvents_OnExpr
 	ldb b, 0x5
 	ldb c, 0x48
 	ld d, a
 	ldda8 e, 13440
 	call LABEL_FCAA9C
 
-LABEL_F59DF9:
+AccPedal_SendEvents_OnExpr:
 	ldda8 a, 13444
 	andda8 a, 13445
 	cps a, 0
-	jr z, LABEL_F59E13
+	jr z, AccPedal_SendEventsReturn
 	ldb b, 0x6
 	ldb c, 0x48
 	ld d, a
 	ldda8 e, 13444
 	call LABEL_FCAA9C
 
-LABEL_F59E13:
+AccPedal_SendEventsReturn:
 	ret
 
-LABEL_F59E14:
-	calr LABEL_F59E2C
-	calr LABEL_F59E87
-	calr LABEL_F59EE5
-	calr LABEL_F59F28
-	calr LABEL_F59F65
-	calr LABEL_F59F98
-	calr LABEL_F59FCB
+AccPedal_ProcessAllBits:
+	calr AccPedal_Bit2_Sustain
+	calr AccPedal_Bit2_Expression
+	calr AccPedal_Bit7_Portamento
+	calr AccPedal_Bit6_Hold
+	calr AccPedal_Bit4_Sostenuto
+	calr AccPedal_Bit5_Soft
+	calr AccPedal_Bit3_Damper
 	ret
 
-LABEL_F59E2A:
+AccPedal_ProcessBitsPadding:
 	.byte 0x00, 0x00
 
-LABEL_F59E2C:
+AccPedal_Bit2_Sustain:
 	cpdi8 13450, 5
-	jr nz, LABEL_F59E86
+	jr nz, AccPedal_Bit2_Return
 	ldda8 a, 13438
 	andda8 a, 13439
 	bit 2, a
-	jr z, LABEL_F59E60
+	jr z, AccPedal_Bit2_Off
 	ordi16 4360, 4
 	cpdi8 37112, 127
-	jr z, LABEL_F59E52
-	calr LABEL_F5A2B4
-	jr LABEL_F59E60
+	jr z, AccPedal_Bit2_CheckPlay
+	calr AccPedal_SustainOn
+	jr AccPedal_Bit2_Off
 
-LABEL_F59E52:
+AccPedal_Bit2_CheckPlay:
 	bitda 2, 1054
-	jr nz, LABEL_F59E5D
-	calr LABEL_F5A2B4
-	jr LABEL_F59E60
+	jr nz, AccPedal_Bit2_Sostenuto
+	calr AccPedal_SustainOn
+	jr AccPedal_Bit2_Off
 
-LABEL_F59E5D:
-	calr LABEL_F5A434
+AccPedal_Bit2_Sostenuto:
+	calr AccPedal_SostenutoOn
 
-LABEL_F59E60:
+AccPedal_Bit2_Off:
 	bitda 2, 13439
-	jr z, LABEL_F59E86
+	jr z, AccPedal_Bit2_Return
 	bitda 2, 13438
-	jr nz, LABEL_F59E86
+	jr nz, AccPedal_Bit2_Return
 	cpdi8 37112, 127
-	jr z, LABEL_F59E78
-	calr LABEL_F5A35A
-	jr LABEL_F59E86
+	jr z, AccPedal_Bit2_OffPlay
+	calr AccPedal_SustainOff
+	jr AccPedal_Bit2_Return
 
-LABEL_F59E78:
+AccPedal_Bit2_OffPlay:
 	bitda 2, 1054
-	jr nz, LABEL_F59E83
-	calr LABEL_F5A35A
-	jr LABEL_F59E86
+	jr nz, AccPedal_Bit2_OffSostenuto
+	calr AccPedal_SustainOff
+	jr AccPedal_Bit2_Return
 
-LABEL_F59E83:
-	calr LABEL_F5A4DA
+AccPedal_Bit2_OffSostenuto:
+	calr AccPedal_SostenutoOff
 
-LABEL_F59E86:
+AccPedal_Bit2_Return:
 	ret
 
-LABEL_F59E87:
+AccPedal_Bit2_Expression:
 	cpdi8 13450, 6
-	jr nz, LABEL_F59EE4
+	jr nz, AccPedal_Expr_Return
 	ldda8 a, 13438
 	andda8 a, 13439
 	bit 2, a
-	jr z, LABEL_F59EBE
+	jr z, AccPedal_Expr_Off
 	lds de, 4
 	sla de, 8
 	orddm16 4360, xde
 	cpdi8 37112, 127
-	jr z, LABEL_F59EB0
-	calr LABEL_F5A374
-	jr LABEL_F59EBE
+	jr z, AccPedal_Expr_CheckPlay
+	calr AccPedal_ExprOn
+	jr AccPedal_Expr_Off
 
-LABEL_F59EB0:
+AccPedal_Expr_CheckPlay:
 	bitda 2, 1054
-	jr nz, LABEL_F59EBB
-	calr LABEL_F5A374
-	jr LABEL_F59EBE
+	jr nz, AccPedal_Expr_Soft
+	calr AccPedal_ExprOn
+	jr AccPedal_Expr_Off
 
-LABEL_F59EBB:
-	calr LABEL_F5A4FC
+AccPedal_Expr_Soft:
+	calr AccPedal_SoftOn
 
-LABEL_F59EBE:
+AccPedal_Expr_Off:
 	bitda 2, 13439
-	jr z, LABEL_F59EE4
+	jr z, AccPedal_Expr_Return
 	bitda 2, 13438
-	jr nz, LABEL_F59EE4
+	jr nz, AccPedal_Expr_Return
 	cpdi8 37112, 127
-	jr z, LABEL_F59ED6
-	calr LABEL_F5A41A
-	jr LABEL_F59EE4
+	jr z, AccPedal_Expr_OffPlay
+	calr AccPedal_ExprOff
+	jr AccPedal_Expr_Return
 
-LABEL_F59ED6:
+AccPedal_Expr_OffPlay:
 	bitda 2, 1054
-	jr nz, LABEL_F59EE1
-	calr LABEL_F5A41A
-	jr LABEL_F59EE4
+	jr nz, AccPedal_Expr_OffSoft
+	calr AccPedal_ExprOff
+	jr AccPedal_Expr_Return
 
-LABEL_F59EE1:
-	calr LABEL_F5A5A2
+AccPedal_Expr_OffSoft:
+	calr AccPedal_SoftOff
 
-LABEL_F59EE4:
+AccPedal_Expr_Return:
 	ret
 
-LABEL_F59EE5:
+AccPedal_Bit7_Portamento:
 	cpdi8 13450, 5
-	jr nz, LABEL_F59F27
+	jr nz, AccPedal_Bit7_Return
 	ldda8 a, 13438
 	andda8 a, 13439
 	bit 7, a
-	jr z, LABEL_F59F0D
+	jr z, AccPedal_Bit7_Off
 	ordi16 4360, 128
 	bitda 2, 1054
-	jr z, LABEL_F59F0A
-	calr LABEL_F5A762
-	jr LABEL_F59F0D
+	jr z, AccPedal_Bit7_Damper
+	calr AccPedal_PortamentoOn
+	jr AccPedal_Bit7_Off
 
-LABEL_F59F0A:
-	calr LABEL_F5A68C
+AccPedal_Bit7_Damper:
+	calr AccPedal_DamperOn
 
-LABEL_F59F0D:
+AccPedal_Bit7_Off:
 	bitda 7, 13439
-	jr z, LABEL_F59F27
+	jr z, AccPedal_Bit7_Return
 	bitda 7, 13438
-	jr nz, LABEL_F59F27
+	jr nz, AccPedal_Bit7_Return
 	bitda 2, 1054
-	jr z, LABEL_F59F24
-	calr LABEL_F5A808
-	jr LABEL_F59F27
+	jr z, AccPedal_Bit7_OffDamper
+	calr AccPedal_PortamentoOff
+	jr AccPedal_Bit7_Return
 
-LABEL_F59F24:
-	calr LABEL_F5A748
+AccPedal_Bit7_OffDamper:
+	calr AccPedal_DamperOff
 
-LABEL_F59F27:
+AccPedal_Bit7_Return:
 	ret
 
-LABEL_F59F28:
+AccPedal_Bit6_Hold:
 	cpdi8 13450, 5
-	jr nz, LABEL_F59F64
+	jr nz, AccPedal_Bit6_Return
 	ldda8 a, 13438
 	andda8 a, 13439
 	bit 6, a
-	jr z, LABEL_F59F4D
+	jr z, AccPedal_Bit6_HoldOff
 	ordi16 4360, 64
 	bitda 2, 1054
-	jr z, LABEL_F59F4D
-	calr LABEL_F5A5C4
+	jr z, AccPedal_Bit6_HoldOff
+	calr AccPedal_HoldOn
 	jr __jrt_nop_F59F4D
 __jrt_nop_F59F4D:
 
-LABEL_F59F4D:
+AccPedal_Bit6_HoldOff:
 	bitda 6, 13439
-	jr z, LABEL_F59F64
+	jr z, AccPedal_Bit6_Return
 	bitda 6, 13438
-	jr nz, LABEL_F59F64
+	jr nz, AccPedal_Bit6_Return
 	bitda 2, 1054
-	jr z, LABEL_F59F64
-	calr LABEL_F5A66A
+	jr z, AccPedal_Bit6_Return
+	calr AccPedal_HoldOff
 	jr __jrt_nop_F59F64
 __jrt_nop_F59F64:
 
-LABEL_F59F64:
+AccPedal_Bit6_Return:
 	ret
 
-LABEL_F59F65:
+AccPedal_Bit4_Sostenuto:
 	cpdi8 13450, 5
-	jr nz, LABEL_F59F97
+	jr nz, AccPedal_Bit4_Return
 	ldda8 a, 13438
 	andda8 a, 13439
 	bit 4, a
-	jr z, LABEL_F59F82
+	jr z, AccPedal_Bit4_Off
 	bitda 2, 1054
-	jr z, LABEL_F59F82
-	calr LABEL_F5A434
+	jr z, AccPedal_Bit4_Off
+	calr AccPedal_SostenutoOn
 
-LABEL_F59F82:
+AccPedal_Bit4_Off:
 	bitda 4, 13439
-	jr z, LABEL_F59F97
+	jr z, AccPedal_Bit4_Return
 	bitda 4, 13438
-	jr nz, LABEL_F59F97
+	jr nz, AccPedal_Bit4_Return
 	bitda 2, 1054
-	jr z, LABEL_F59F97
-	calr LABEL_F5A4DA
+	jr z, AccPedal_Bit4_Return
+	calr AccPedal_SostenutoOff
 
-LABEL_F59F97:
+AccPedal_Bit4_Return:
 	ret
 
-LABEL_F59F98:
+AccPedal_Bit5_Soft:
 	cpdi8 13450, 5
-	jr nz, LABEL_F59FCA
+	jr nz, AccPedal_Bit5_Return
 	ldda8 a, 13438
 	andda8 a, 13439
 	bit 5, a
-	jr z, LABEL_F59FB5
+	jr z, AccPedal_Bit5_Off
 	bitda 2, 1054
-	jr z, LABEL_F59FB5
-	calr LABEL_F5A4FC
+	jr z, AccPedal_Bit5_Off
+	calr AccPedal_SoftOn
 
-LABEL_F59FB5:
+AccPedal_Bit5_Off:
 	bitda 5, 13439
-	jr z, LABEL_F59FCA
+	jr z, AccPedal_Bit5_Return
 	bitda 5, 13438
-	jr nz, LABEL_F59FCA
+	jr nz, AccPedal_Bit5_Return
 	bitda 2, 1054
-	jr z, LABEL_F59FCA
-	calr LABEL_F5A5A2
+	jr z, AccPedal_Bit5_Return
+	calr AccPedal_SoftOff
 
-LABEL_F59FCA:
+AccPedal_Bit5_Return:
 	ret
 
-LABEL_F59FCB:
+AccPedal_Bit3_Damper:
 	cpdi8 13450, 5
-	jr nz, LABEL_F59FF1
+	jr nz, AccPedal_Bit3_Return
 	ldda8 a, 13438
 	andda8 a, 13439
 	bit 3, a
-	jr z, LABEL_F59FE2
-	calr LABEL_F5A68C
+	jr z, AccPedal_Bit3_Off
+	calr AccPedal_DamperOn
 
-LABEL_F59FE2:
+AccPedal_Bit3_Off:
 	bitda 3, 13439
-	jr z, LABEL_F59FF1
+	jr z, AccPedal_Bit3_Return
 	bitda 3, 13438
-	jr nz, LABEL_F59FF1
-	calr LABEL_F5A748
+	jr nz, AccPedal_Bit3_Return
+	calr AccPedal_DamperOff
 
-LABEL_F59FF1:
+AccPedal_Bit3_Return:
 	ret
 
-LABEL_F59FF2:
+AccPedal_StateSync:
 	cpdi8 37112, 127
-	jr z, LABEL_F5A000
+	jr z, AccPedal_Sync_SendEvents
 	cpdi8 37112, 255
-	jr nz, LABEL_F5A003
+	jr nz, AccPedal_Sync_DispatchAll
 
-LABEL_F5A000:
-	calr LABEL_F59DA5
+AccPedal_Sync_SendEvents:
+	calr AccPedal_SendEvents
 
-LABEL_F5A003:
+AccPedal_Sync_DispatchAll:
 	cpdi8 37112, 255
-	jr z, LABEL_F5A01A
-	call LABEL_F5A01B
-	call LABEL_F5A088
-	call LABEL_F5A0F5
-	call LABEL_F5A15C
+	jr z, AccPedal_Sync_Return
+	call AccPedal_SendCtrl1
+	call AccPedal_SendCtrl2
+	call AccPedal_SendCtrl3
+	call AccPedal_SendCtrl4
 
-LABEL_F5A01A:
+AccPedal_Sync_Return:
 	ret
 
-LABEL_F5A01B:
+AccPedal_SendCtrl1:
 	ldda8 a, 13442
 	xor a, 0xFF
 	andda8 a, 13443
 	cps a, 0
-	jr z, LABEL_F5A087
+	jr z, AccPedal_SendCtrl1_Return
 	bitda 3, 64854
-	jr z, LABEL_F5A051
+	jr z, AccPedal_SendCtrl1_CheckPort
 	ldb b, 0x5
 	ld d, a
 	ldda8 e, 13442
@@ -170850,17 +170850,17 @@ LABEL_F5A01B:
 	call MidiPkt_DispatchViaTable_4DCE
 	inc 4, xsp
 
-LABEL_F5A051:
+AccPedal_SendCtrl1_CheckPort:
 	bitda 4, 64848
-	jr nz, LABEL_F5A087
+	jr nz, AccPedal_SendCtrl1_Return
 	ldda8 a, 37092
 	and a, 0x8F
 	stda8 37093, a
 	cpdi8 37112, 127
-	jr nz, LABEL_F5A06E
+	jr nz, AccPedal_SendCtrl1_UpdateMask
 	anddi8 37093, 127
 
-LABEL_F5A06E:
+AccPedal_SendCtrl1_UpdateMask:
 	ldda8 a, 13442
 	xor a, 0xFF
 	andda8 a, 13443
@@ -170870,17 +170870,17 @@ LABEL_F5A06E:
 	ldda8 e, 13442
 	call LABEL_FD055E
 
-LABEL_F5A087:
+AccPedal_SendCtrl1_Return:
 	ret
 
-LABEL_F5A088:
+AccPedal_SendCtrl2:
 	ldda8 a, 13446
 	xor a, 0xFF
 	andda8 a, 13447
 	cps a, 0
-	jr z, LABEL_F5A0F4
+	jr z, AccPedal_SendCtrl2_Return
 	bitda 3, 64854
-	jr z, LABEL_F5A0BE
+	jr z, AccPedal_SendCtrl2_CheckPort
 	ldb b, 0x6
 	ld d, a
 	ldda8 e, 13446
@@ -170893,17 +170893,17 @@ LABEL_F5A088:
 	call MidiPkt_DispatchViaTable_4DCE
 	inc 4, xsp
 
-LABEL_F5A0BE:
+AccPedal_SendCtrl2_CheckPort:
 	bitda 4, 64848
-	jr nz, LABEL_F5A0F4
+	jr nz, AccPedal_SendCtrl2_Return
 	ldda8 a, 37092
 	and a, 0x8F
 	stda8 37093, a
 	cpdi8 37112, 127
-	jr nz, LABEL_F5A0DB
+	jr nz, AccPedal_SendCtrl2_UpdateMask
 	anddi8 37093, 127
 
-LABEL_F5A0DB:
+AccPedal_SendCtrl2_UpdateMask:
 	ldda8 a, 13446
 	xor a, 0xFF
 	andda8 a, 13447
@@ -170913,16 +170913,16 @@ LABEL_F5A0DB:
 	ldda8 e, 13446
 	call LABEL_FD055E
 
-LABEL_F5A0F4:
+AccPedal_SendCtrl2_Return:
 	ret
 
-LABEL_F5A0F5:
+AccPedal_SendCtrl3:
 	ldda8 a, 13442
 	andda8 a, 13443
 	cps a, 0
-	jr z, LABEL_F5A15B
+	jr z, AccPedal_SendCtrl3_Return
 	bitda 3, 64854
-	jr z, LABEL_F5A128
+	jr z, AccPedal_SendCtrl3_CheckPort
 	ldb b, 0x5
 	ld d, a
 	ldda8 e, 13442
@@ -170935,17 +170935,17 @@ LABEL_F5A0F5:
 	call MidiPkt_DispatchViaTable_4DCE
 	inc 4, xsp
 
-LABEL_F5A128:
+AccPedal_SendCtrl3_CheckPort:
 	bitda 4, 64848
-	jr nz, LABEL_F5A15B
+	jr nz, AccPedal_SendCtrl3_Return
 	ldda8 a, 37092
 	and a, 0x8F
 	stda8 37093, a
 	cpdi8 37112, 127
-	jr nz, LABEL_F5A145
+	jr nz, AccPedal_SendCtrl3_UpdateMask
 	anddi8 37093, 127
 
-LABEL_F5A145:
+AccPedal_SendCtrl3_UpdateMask:
 	ldda8 a, 13442
 	andda8 a, 13443
 	ldb b, 0x5
@@ -170954,16 +170954,16 @@ LABEL_F5A145:
 	ldda8 e, 13442
 	call LABEL_FD055E
 
-LABEL_F5A15B:
+AccPedal_SendCtrl3_Return:
 	ret
 
-LABEL_F5A15C:
+AccPedal_SendCtrl4:
 	ldda8 a, 13446
 	andda8 a, 13447
 	cps a, 0
-	jr z, LABEL_F5A1C2
+	jr z, AccPedal_SendCtrl4_Return
 	bitda 3, 64854
-	jr z, LABEL_F5A18F
+	jr z, AccPedal_SendCtrl4_CheckPort
 	ldb b, 0x6
 	ld d, a
 	ldda8 e, 13446
@@ -170976,17 +170976,17 @@ LABEL_F5A15C:
 	call MidiPkt_DispatchViaTable_4DCE
 	inc 4, xsp
 
-LABEL_F5A18F:
+AccPedal_SendCtrl4_CheckPort:
 	bitda 4, 64848
-	jr nz, LABEL_F5A1C2
+	jr nz, AccPedal_SendCtrl4_Return
 	ldda8 a, 37092
 	and a, 0x8F
 	stda8 37093, a
 	cpdi8 37112, 127
-	jr nz, LABEL_F5A1AC
+	jr nz, AccPedal_SendCtrl4_UpdateMask
 	anddi8 37093, 127
 
-LABEL_F5A1AC:
+AccPedal_SendCtrl4_UpdateMask:
 	ldda8 a, 13446
 	andda8 a, 13447
 	ldb b, 0x6
@@ -170995,250 +170995,250 @@ LABEL_F5A1AC:
 	ldda8 e, 13446
 	call LABEL_FD055E
 
-LABEL_F5A1C2:
+AccPedal_SendCtrl4_Return:
 	ret
 
-LABEL_F5A1C3:
+AccPedal_MapToAcc:
 	cpdi8 13450, 5
-	jr nz, LABEL_F5A1EB
+	jr nz, AccPedal_MapToAcc_Send
 	ldda8 a, 13438
 	andda8 a, 13439
 	bit 6, a
-	jr z, LABEL_F5A1EB
+	jr z, AccPedal_MapToAcc_Send
 	call LABEL_EF9626
 	bitda 1, 3411
-	jr z, LABEL_F5A1EB
+	jr z, AccPedal_MapToAcc_Send
 	ordi8 13441, 64
 	ordi8 13440, 64
 
-LABEL_F5A1EB:
+AccPedal_MapToAcc_Send:
 	cpdi8 13450, 5
-	jr nz, LABEL_F5A21F
+	jr nz, AccPedal_MapToAcc_UpdateMask
 	ldda8 a, 13438
 	andda8 a, 13439
 	bit 7, a
-	jr z, LABEL_F5A21F
+	jr z, AccPedal_MapToAcc_UpdateMask
 	call LABEL_EF9626
 	bitda 1, 3411
-	jr z, LABEL_F5A215
+	jr z, AccPedal_MapToAcc_CheckDir
 	ordi8 13441, 128
 	ordi8 13440, 128
-	jr LABEL_F5A21F
+	jr AccPedal_MapToAcc_UpdateMask
 
-LABEL_F5A215:
+AccPedal_MapToAcc_CheckDir:
 	ordi8 13441, 8
 	ordi8 13440, 8
 
-LABEL_F5A21F:
+AccPedal_MapToAcc_UpdateMask:
 	cpdi8 13450, 5
-	jr nz, LABEL_F5A253
+	jr nz, AccPedal_MapToAcc_SetMask
 	ldda8 a, 13438
 	andda8 a, 13439
 	bit 2, a
-	jr z, LABEL_F5A253
+	jr z, AccPedal_MapToAcc_SetMask
 	call LABEL_EF9626
 	bitda 1, 3411
-	jr z, LABEL_F5A249
+	jr z, AccPedal_MapToAcc_ClearMask
 	ordi8 13441, 16
 	ordi8 13440, 16
-	jr LABEL_F5A253
+	jr AccPedal_MapToAcc_SetMask
 
-LABEL_F5A249:
+AccPedal_MapToAcc_ClearMask:
 	ordi8 13441, 4
 	ordi8 13440, 4
 
-LABEL_F5A253:
+AccPedal_MapToAcc_SetMask:
 	cpdi8 13450, 6
-	jr nz, LABEL_F5A287
+	jr nz, AccPedal_MapToAcc_Return
 	ldda8 a, 13438
 	andda8 a, 13439
 	bit 2, a
-	jr z, LABEL_F5A287
+	jr z, AccPedal_MapToAcc_Return
 	call LABEL_EF9626
 	bitda 1, 3411
-	jr z, LABEL_F5A27D
+	jr z, AccPedal_MapToAcc_Apply
 	ordi8 13441, 32
 	ordi8 13440, 32
-	jr LABEL_F5A287
+	jr AccPedal_MapToAcc_Return
 
-LABEL_F5A27D:
+AccPedal_MapToAcc_Apply:
 	ordi8 13445, 4
 	ordi8 13444, 4
 
-LABEL_F5A287:
+AccPedal_MapToAcc_Return:
 	cpdi8 13450, 5
-	jr nz, LABEL_F5A2B1
+	jr nz, AccPedal_MapPadding
 	ldda8 a, 13438
 	andda8 a, 13439
 	bit 5, a
-	jr z, LABEL_F5A2B1
+	jr z, AccPedal_MapPadding
 	call LABEL_EF9626
 	bitda 1, 3411
-	jr z, LABEL_F5A2B1
+	jr z, AccPedal_MapPadding
 	ordi8 13441, 32
 	ordi8 13440, 32
 	jr __jrt_nop_F5A2B1
 __jrt_nop_F5A2B1:
 
-LABEL_F5A2B1:
+AccPedal_MapPadding:
 	ret
 
-LABEL_F5A2B2:
+AccPedal_MapPadding2:
 	.byte 0x00, 0x00
 
-LABEL_F5A2B4:
+AccPedal_SustainOn:
 	bitda 2, 13424
-	jrl nz, LABEL_F5A34B
+	jrl nz, AccPedal_SustainOn_AltRoute
 	ordi8 13424, 4
 	bitda 2, 64607
-	jr nz, LABEL_F5A2D7
+	jr nz, AccPedal_SustainOn_SetMask
 	ordi8 64607, 4
 	ordi8 13442, 4
 	ordi8 13440, 4
-	jr LABEL_F5A2ED
+	jr AccPedal_SustainOn_Update64607
 
-LABEL_F5A2D7:
+AccPedal_SustainOn_SetMask:
 	cpdi8 37112, 127
-	jr nz, LABEL_F5A2ED
+	jr nz, AccPedal_SustainOn_Update64607
 	anddi8 64607, 251
 	anddi8 13442, 251
 	anddi8 13440, 251
 
-LABEL_F5A2ED:
+AccPedal_SustainOn_Update64607:
 	ordi8 13441, 4
 	ordi8 13443, 4
 	bitda 3, 64607
-	jr z, LABEL_F5A316
+	jr z, AccPedal_SustainOn_Post
 	anddi8 64607, 247
 	anddi8 13440, 247
 	ordi8 13441, 8
 	anddi8 13442, 247
 	ordi8 13443, 8
 
-LABEL_F5A316:
+AccPedal_SustainOn_Post:
 	bitda 2, 64608
-	jr z, LABEL_F5A335
+	jr z, AccPedal_SustainOn_Finalize
 	anddi8 64608, 251
 	anddi8 13444, 251
 	ordi8 13445, 4
 	anddi8 13446, 251
 	ordi8 13447, 4
 
-LABEL_F5A335:
+AccPedal_SustainOn_Finalize:
 	bitda 6, 64607
-	jr z, LABEL_F5A340
+	jr z, AccPedal_SustainOn_CheckAlt
 	anddi8 64607, 191
 
-LABEL_F5A340:
+AccPedal_SustainOn_CheckAlt:
 	bitda 7, 64607
-	jr z, LABEL_F5A34B
+	jr z, AccPedal_SustainOn_AltRoute
 	anddi8 64607, 127
 
-LABEL_F5A34B:
+AccPedal_SustainOn_AltRoute:
 	cpdi8 37112, 127
-	jr z, LABEL_F5A357
+	jr z, AccPedal_SustainOn_Return
 	anddi8 13424, 251
 
-LABEL_F5A357:
+AccPedal_SustainOn_Return:
 	ret
 
-LABEL_F5A358:
+AccPedal_SustainOff_Padding:
 	.byte 0x00, 0x00
 
-LABEL_F5A35A:
+AccPedal_SustainOff:
 	bitda 2, 13424
-	jr z, LABEL_F5A365
+	jr z, AccPedal_SustainOff_Clear
 	anddi8 13424, 251
 
-LABEL_F5A365:
+AccPedal_SustainOff_Clear:
 	cpdi8 37112, 127
-	jr z, LABEL_F5A371
+	jr z, AccPedal_SustainOff_Return
 	anddi8 64607, 251
 
-LABEL_F5A371:
+AccPedal_SustainOff_Return:
 	ret
 
-LABEL_F5A372:
+AccPedal_ExprOn_Padding:
 	.byte 0x00, 0x00
 
-LABEL_F5A374:
+AccPedal_ExprOn:
 	bitda 0, 13424
-	jrl nz, LABEL_F5A40B
+	jrl nz, AccPedal_ExprOn_AltRoute
 	ordi8 13424, 1
 	bitda 2, 64608
-	jr nz, LABEL_F5A397
+	jr nz, AccPedal_ExprOn_SetMask
 	ordi8 64608, 4
 	ordi8 13446, 4
 	ordi8 13444, 4
-	jr LABEL_F5A3AD
+	jr AccPedal_ExprOn_Update64607
 
-LABEL_F5A397:
+AccPedal_ExprOn_SetMask:
 	cpdi8 37112, 127
-	jr nz, LABEL_F5A3AD
+	jr nz, AccPedal_ExprOn_Update64607
 	anddi8 64608, 251
 	anddi8 13446, 251
 	anddi8 13444, 251
 
-LABEL_F5A3AD:
+AccPedal_ExprOn_Update64607:
 	ordi8 13445, 4
 	ordi8 13447, 4
 	bitda 3, 64607
-	jr z, LABEL_F5A3D6
+	jr z, AccPedal_ExprOn_Post
 	anddi8 64607, 247
 	anddi8 13440, 247
 	ordi8 13441, 8
 	anddi8 13442, 247
 	ordi8 13443, 8
 
-LABEL_F5A3D6:
+AccPedal_ExprOn_Post:
 	bitda 2, 64607
-	jr z, LABEL_F5A3F5
+	jr z, AccPedal_ExprOn_Finalize
 	anddi8 64607, 251
 	anddi8 13440, 251
 	ordi8 13441, 4
 	anddi8 13442, 251
 	ordi8 13443, 4
 
-LABEL_F5A3F5:
+AccPedal_ExprOn_Finalize:
 	bitda 6, 64607
-	jr z, LABEL_F5A400
+	jr z, AccPedal_ExprOn_CheckAlt
 	anddi8 64607, 191
 
-LABEL_F5A400:
+AccPedal_ExprOn_CheckAlt:
 	bitda 7, 64607
-	jr z, LABEL_F5A40B
+	jr z, AccPedal_ExprOn_AltRoute
 	anddi8 64607, 127
 
-LABEL_F5A40B:
+AccPedal_ExprOn_AltRoute:
 	cpdi8 37112, 127
-	jr z, LABEL_F5A417
+	jr z, AccPedal_ExprOn_Return
 	anddi8 13424, 254
 
-LABEL_F5A417:
+AccPedal_ExprOn_Return:
 	ret
 
-LABEL_F5A418:
+AccPedal_ExprOff_Padding:
 	.byte 0x00, 0x00
 
-LABEL_F5A41A:
+AccPedal_ExprOff:
 	bitda 0, 13424
-	jr z, LABEL_F5A425
+	jr z, AccPedal_ExprOff_Clear
 	anddi8 13424, 254
 
-LABEL_F5A425:
+AccPedal_ExprOff_Clear:
 	cpdi8 37112, 127
-	jr z, LABEL_F5A431
+	jr z, AccPedal_ExprOff_Return
 	anddi8 64608, 251
 
-LABEL_F5A431:
+AccPedal_ExprOff_Return:
 	ret
 
-LABEL_F5A432:
+AccPedal_SostenutoOn_Padding:
 	.byte 0x00, 0x00
 
-LABEL_F5A434:
+AccPedal_SostenutoOn:
 	bitda 4, 13424
-	jrl nz, LABEL_F5A4D7
+	jrl nz, AccPedal_SostenutoOn_Return
 	ordi8 13424, 16
 	ordi8 64607, 16
 	ordi8 13441, 16
@@ -171246,70 +171246,70 @@ LABEL_F5A434:
 	ordi8 13443, 16
 	ordi8 13442, 16
 	bitda 5, 64607
-	jr z, LABEL_F5A464
+	jr z, AccPedal_SostenutoOn_SetMask
 	anddi8 64607, 223
 
-LABEL_F5A464:
+AccPedal_SostenutoOn_SetMask:
 	bitda 6, 64607
-	jr z, LABEL_F5A46F
+	jr z, AccPedal_SostenutoOn_Update
 	anddi8 64607, 191
 
-LABEL_F5A46F:
+AccPedal_SostenutoOn_Update:
 	bitda 7, 64607
-	jr z, LABEL_F5A47A
+	jr z, AccPedal_SostenutoOn_Post
 	anddi8 64607, 127
 
-LABEL_F5A47A:
+AccPedal_SostenutoOn_Post:
 	bitda 2, 64607
-	jr z, LABEL_F5A499
+	jr z, AccPedal_SostenutoOn_Finalize
 	anddi8 64607, 251
 	ordi8 13443, 4
 	anddi8 13442, 251
 	ordi8 13441, 4
 	anddi8 13440, 251
 
-LABEL_F5A499:
+AccPedal_SostenutoOn_Finalize:
 	bitda 3, 64607
-	jr z, LABEL_F5A4B8
+	jr z, AccPedal_SostenutoOn_CheckAlt
 	anddi8 64607, 247
 	ordi8 13443, 8
 	anddi8 13442, 247
 	ordi8 13441, 8
 	anddi8 13440, 247
 
-LABEL_F5A4B8:
+AccPedal_SostenutoOn_CheckAlt:
 	bitda 2, 64608
-	jr z, LABEL_F5A4D7
+	jr z, AccPedal_SostenutoOn_Return
 	anddi8 64608, 251
 	ordi8 13447, 4
 	anddi8 13446, 251
 	ordi8 13445, 4
 	anddi8 13444, 251
 
-LABEL_F5A4D7:
+AccPedal_SostenutoOn_Return:
 	ret
 
-LABEL_F5A4D8:
+AccPedal_SostenutoOff_Padding:
 	.byte 0x00, 0x00
 
-LABEL_F5A4DA:
+AccPedal_SostenutoOff:
 	bitda 4, 13424
-	jr z, LABEL_F5A4F9
+	jr z, AccPedal_SostenutoOff_Return
 	anddi8 13424, 239
 	ordi8 13441, 16
 	anddi8 13440, 239
 	ordi8 13443, 16
 	anddi8 13442, 239
 
-LABEL_F5A4F9:
+AccPedal_SostenutoOff_Return:
 	ret
 
-LABEL_F5A4FA:
+AccPedal_SostenutoOff_Padding2:
 	.byte 0x00, 0x00
 
-LABEL_F5A4FC:
+AccPedal_SoftOn:
 	bitda 5, 13424
-	jrl nz, LABEL_F5A59F
+	jrl nz, AccPedal_SoftOn_Return
 	ordi8 13424, 32
 	ordi8 64607, 32
 	ordi8 13441, 32
@@ -171317,70 +171317,70 @@ LABEL_F5A4FC:
 	ordi8 13443, 32
 	ordi8 13442, 32
 	bitda 4, 64607
-	jr z, LABEL_F5A52C
+	jr z, AccPedal_SoftOn_SetMask
 	anddi8 64607, 239
 
-LABEL_F5A52C:
+AccPedal_SoftOn_SetMask:
 	bitda 6, 64607
-	jr z, LABEL_F5A537
+	jr z, AccPedal_SoftOn_Update
 	anddi8 64607, 191
 
-LABEL_F5A537:
+AccPedal_SoftOn_Update:
 	bitda 7, 64607
-	jr z, LABEL_F5A542
+	jr z, AccPedal_SoftOn_Post
 	anddi8 64607, 127
 
-LABEL_F5A542:
+AccPedal_SoftOn_Post:
 	bitda 2, 64607
-	jr z, LABEL_F5A561
+	jr z, AccPedal_SoftOn_Finalize
 	anddi8 64607, 251
 	ordi8 13443, 4
 	anddi8 13442, 251
 	ordi8 13441, 4
 	anddi8 13440, 251
 
-LABEL_F5A561:
+AccPedal_SoftOn_Finalize:
 	bitda 3, 64607
-	jr z, LABEL_F5A580
+	jr z, AccPedal_SoftOn_CheckAlt
 	anddi8 64607, 247
 	ordi8 13443, 8
 	anddi8 13442, 247
 	ordi8 13441, 8
 	anddi8 13440, 247
 
-LABEL_F5A580:
+AccPedal_SoftOn_CheckAlt:
 	bitda 2, 64608
-	jr z, LABEL_F5A59F
+	jr z, AccPedal_SoftOn_Return
 	anddi8 64608, 251
 	ordi8 13447, 4
 	anddi8 13446, 251
 	ordi8 13445, 4
 	anddi8 13444, 251
 
-LABEL_F5A59F:
+AccPedal_SoftOn_Return:
 	ret
 
-LABEL_F5A5A0:
+AccPedal_SoftOff_Padding:
 	.byte 0x00, 0x00
 
-LABEL_F5A5A2:
+AccPedal_SoftOff:
 	bitda 5, 13424
-	jr z, LABEL_F5A5C1
+	jr z, AccPedal_SoftOff_Return
 	anddi8 13424, 223
 	ordi8 13441, 32
 	anddi8 13440, 223
 	ordi8 13443, 32
 	anddi8 13442, 223
 
-LABEL_F5A5C1:
+AccPedal_SoftOff_Return:
 	ret
 
-LABEL_F5A5C2:
+AccPedal_HoldOn_Padding:
 	.byte 0x00, 0x00
 
-LABEL_F5A5C4:
+AccPedal_HoldOn:
 	bitda 6, 13424
-	jrl nz, LABEL_F5A667
+	jrl nz, AccPedal_HoldOn_Return
 	ordi8 13424, 64
 	ordi8 64607, 64
 	ordi8 13441, 64
@@ -171388,155 +171388,155 @@ LABEL_F5A5C4:
 	ordi8 13443, 64
 	ordi8 13442, 64
 	bitda 4, 64607
-	jr z, LABEL_F5A5F4
+	jr z, AccPedal_HoldOn_SetMask
 	anddi8 64607, 239
 
-LABEL_F5A5F4:
+AccPedal_HoldOn_SetMask:
 	bitda 5, 64607
-	jr z, LABEL_F5A5FF
+	jr z, AccPedal_HoldOn_Update
 	anddi8 64607, 223
 
-LABEL_F5A5FF:
+AccPedal_HoldOn_Update:
 	bitda 2, 64607
-	jr z, LABEL_F5A61E
+	jr z, AccPedal_HoldOn_Post
 	anddi8 64607, 251
 	ordi8 13443, 4
 	anddi8 13442, 251
 	ordi8 13441, 4
 	anddi8 13440, 251
 
-LABEL_F5A61E:
+AccPedal_HoldOn_Post:
 	bitda 3, 64607
-	jr z, LABEL_F5A63D
+	jr z, AccPedal_HoldOn_Finalize
 	anddi8 64607, 247
 	ordi8 13443, 8
 	anddi8 13442, 247
 	ordi8 13441, 8
 	anddi8 13440, 247
 
-LABEL_F5A63D:
+AccPedal_HoldOn_Finalize:
 	bitda 2, 64608
-	jr z, LABEL_F5A65C
+	jr z, AccPedal_HoldOn_CheckAlt
 	anddi8 64608, 251
 	ordi8 13447, 4
 	anddi8 13446, 251
 	ordi8 13445, 4
 	anddi8 13444, 251
 
-LABEL_F5A65C:
+AccPedal_HoldOn_CheckAlt:
 	bitda 7, 64607
-	jr z, LABEL_F5A667
+	jr z, AccPedal_HoldOn_Return
 	anddi8 64607, 127
 
-LABEL_F5A667:
+AccPedal_HoldOn_Return:
 	ret
 
-LABEL_F5A668:
+AccPedal_HoldOff_Padding:
 	.byte 0x00, 0x00
 
-LABEL_F5A66A:
+AccPedal_HoldOff:
 	bitda 6, 13424
-	jr z, LABEL_F5A689
+	jr z, AccPedal_HoldOff_Return
 	anddi8 13424, 191
 	ordi8 13441, 64
 	anddi8 13440, 191
 	ordi8 13443, 64
 	anddi8 13442, 191
 
-LABEL_F5A689:
+AccPedal_HoldOff_Return:
 	ret
 
-LABEL_F5A68A:
+AccPedal_HoldOff_Padding2:
 	.byte 0x00, 0x00
 
-LABEL_F5A68C:
+AccPedal_DamperOn:
 	bitda 3, 13424
-	jrl nz, LABEL_F5A739
+	jrl nz, AccPedal_DamperOn_FinalCheck
 	ordi8 13424, 8
 	bitda 3, 64607
-	jr nz, LABEL_F5A6AF
+	jr nz, AccPedal_DamperOn_SetMask
 	ordi8 64607, 8
 	ordi8 13442, 8
 	ordi8 13440, 8
-	jr LABEL_F5A6C5
+	jr AccPedal_DamperOn_Update
 
-LABEL_F5A6AF:
+AccPedal_DamperOn_SetMask:
 	cpdi8 37112, 127
-	jr nz, LABEL_F5A6C5
+	jr nz, AccPedal_DamperOn_Update
 	anddi8 64607, 247
 	anddi8 13442, 247
 	anddi8 13440, 247
 
-LABEL_F5A6C5:
+AccPedal_DamperOn_Update:
 	ordi8 13441, 8
 	ordi8 13443, 8
 	bitda 2, 64607
-	jr z, LABEL_F5A6EE
+	jr z, AccPedal_DamperOn_Post
 	anddi8 64607, 251
 	anddi8 13440, 251
 	ordi8 13441, 4
 	anddi8 13442, 251
 	ordi8 13443, 4
 
-LABEL_F5A6EE:
+AccPedal_DamperOn_Post:
 	bitda 2, 64608
-	jr z, LABEL_F5A70D
+	jr z, AccPedal_DamperOn_Finalize
 	anddi8 64608, 251
 	anddi8 13444, 251
 	ordi8 13445, 4
 	anddi8 13446, 251
 	ordi8 13447, 4
 
-LABEL_F5A70D:
+AccPedal_DamperOn_Finalize:
 	bitda 6, 64607
-	jr z, LABEL_F5A718
+	jr z, AccPedal_DamperOn_CheckAlt
 	anddi8 64607, 191
 
-LABEL_F5A718:
+AccPedal_DamperOn_CheckAlt:
 	bitda 7, 64607
-	jr z, LABEL_F5A723
+	jr z, AccPedal_DamperOn_AltRoute
 	anddi8 64607, 127
 
-LABEL_F5A723:
+AccPedal_DamperOn_AltRoute:
 	bitda 4, 64607
-	jr z, LABEL_F5A72E
+	jr z, AccPedal_DamperOn_Apply
 	anddi8 64607, 239
 
-LABEL_F5A72E:
+AccPedal_DamperOn_Apply:
 	bitda 5, 64607
-	jr z, LABEL_F5A739
+	jr z, AccPedal_DamperOn_FinalCheck
 	anddi8 64607, 223
 
-LABEL_F5A739:
+AccPedal_DamperOn_FinalCheck:
 	cpdi8 37112, 127
-	jr z, LABEL_F5A745
+	jr z, AccPedal_DamperOn_Return
 	anddi8 13424, 247
 
-LABEL_F5A745:
+AccPedal_DamperOn_Return:
 	ret
 
-LABEL_F5A746:
+AccPedal_DamperOff_Padding:
 	.byte 0x00, 0x00
 
-LABEL_F5A748:
+AccPedal_DamperOff:
 	bitda 3, 13424
-	jr z, LABEL_F5A753
+	jr z, AccPedal_DamperOff_Clear
 	anddi8 13424, 247
 
-LABEL_F5A753:
+AccPedal_DamperOff_Clear:
 	cpdi8 37112, 127
-	jr z, LABEL_F5A75F
+	jr z, AccPedal_DamperOff_Return
 	anddi8 64607, 247
 
-LABEL_F5A75F:
+AccPedal_DamperOff_Return:
 	ret
 
-LABEL_F5A760:
+AccPedal_DamperOff_Padding2:
 	.byte 0x00, 0x00
 
-LABEL_F5A762:
+AccPedal_PortamentoOn:
 	bitda 7, 13424
-	jrl nz, LABEL_F5A805
+	jrl nz, AccPedal_PortamentoOn_Return
 	ordi8 13424, 128
 	ordi8 64607, 128
 	ordi8 13441, 128
@@ -171544,79 +171544,79 @@ LABEL_F5A762:
 	ordi8 13443, 128
 	ordi8 13442, 128
 	bitda 4, 64607
-	jr z, LABEL_F5A792
+	jr z, AccPedal_PortamentoOn_SetMask
 	anddi8 64607, 239
 
-LABEL_F5A792:
+AccPedal_PortamentoOn_SetMask:
 	bitda 5, 64607
-	jr z, LABEL_F5A79D
+	jr z, AccPedal_PortamentoOn_Update
 	anddi8 64607, 223
 
-LABEL_F5A79D:
+AccPedal_PortamentoOn_Update:
 	bitda 2, 64607
-	jr z, LABEL_F5A7BC
+	jr z, AccPedal_PortamentoOn_Post
 	anddi8 64607, 251
 	ordi8 13443, 4
 	anddi8 13442, 251
 	ordi8 13441, 4
 	anddi8 13440, 251
 
-LABEL_F5A7BC:
+AccPedal_PortamentoOn_Post:
 	bitda 3, 64607
-	jr z, LABEL_F5A7DB
+	jr z, AccPedal_PortamentoOn_Finalize
 	anddi8 64607, 247
 	ordi8 13443, 8
 	anddi8 13442, 247
 	ordi8 13441, 8
 	anddi8 13440, 247
 
-LABEL_F5A7DB:
+AccPedal_PortamentoOn_Finalize:
 	bitda 2, 64608
-	jr z, LABEL_F5A7FA
+	jr z, AccPedal_PortamentoOn_CheckAlt
 	anddi8 64608, 251
 	ordi8 13447, 4
 	anddi8 13446, 251
 	ordi8 13445, 4
 	anddi8 13444, 251
 
-LABEL_F5A7FA:
+AccPedal_PortamentoOn_CheckAlt:
 	bitda 6, 64607
-	jr z, LABEL_F5A805
+	jr z, AccPedal_PortamentoOn_Return
 	anddi8 64607, 191
 
-LABEL_F5A805:
+AccPedal_PortamentoOn_Return:
 	ret
 
-LABEL_F5A806:
+AccPedal_PortamentoOff_Padding:
 	.byte 0x00, 0x00
 
-LABEL_F5A808:
+AccPedal_PortamentoOff:
 	bitda 7, 13424
-	jr z, LABEL_F5A827
+	jr z, AccPedal_PortamentoOff_Return
 	anddi8 13424, 127
 	ordi8 13441, 128
 	anddi8 13440, 127
 	ordi8 13443, 128
 	anddi8 13442, 127
 
-LABEL_F5A827:
+AccPedal_PortamentoOff_Return:
 	ret
 
-LABEL_F5A828:
+AccPedal_PortamentoOff_Padding2:
 	.byte 0x00, 0x00
 
-LABEL_F5A82A:
+AccAutoPlay_NoteDispatch:
 	ld w, a
 	ld a, c
 	cpdi8 32523, 0
-	jr nz, LABEL_F5A867
+	jr nz, AccAutoPlay_NoteDispatch_Process
 	pushw wa
-	calr LABEL_F59CA9
+	calr AccPedal_StyleCheck
 	cps a, 1
 	popw wa
-	jr z, LABEL_F5A867
+	jr z, AccAutoPlay_NoteDispatch_Process
 	bitda 2, 10407
-	jr nz, LABEL_F5A867
+	jr nz, AccAutoPlay_NoteDispatch_Process
 	push xwa
 	push xhl
 	push xbc
@@ -171632,318 +171632,318 @@ LABEL_F5A82A:
 	pop xbc
 	pop xhl
 	pop xwa
-	calr LABEL_F5A89D
+	calr AccAutoPlay_SplitDetect
 	cps c, 0
-	jr z, LABEL_F5A862
+	jr z, AccAutoPlay_NoteDispatch_Check
 	ordi8 13464, 1
 
-LABEL_F5A862:
+AccAutoPlay_NoteDispatch_Check:
 	ordi8 13464, 128
 
-LABEL_F5A867:
+AccAutoPlay_NoteDispatch_Process:
 	cpdi16 10408, 0
-	jr z, LABEL_F5A89C
+	jr z, AccAutoPlay_NoteDispatch_Return
 	bitda 2, 1054
-	jr nz, LABEL_F5A89C
+	jr nz, AccAutoPlay_NoteDispatch_Return
 	bitda 1, 64607
-	jr z, LABEL_F5A89C
+	jr z, AccAutoPlay_NoteDispatch_Return
 	bitda 3, 10419
-	jr z, LABEL_F5A89C
+	jr z, AccAutoPlay_NoteDispatch_Return
 	bitda 0, 10418
-	jr nz, LABEL_F5A89C
+	jr nz, AccAutoPlay_NoteDispatch_Return
 	bitda 2, 10417
-	jr nz, LABEL_F5A89C
+	jr nz, AccAutoPlay_NoteDispatch_Return
 	bitda 0, 13464
-	jr z, LABEL_F5A89C
+	jr z, AccAutoPlay_NoteDispatch_Return
 	anddi8 10419, 247
 	call 0xFDDE6F
 
-LABEL_F5A89C:
+AccAutoPlay_NoteDispatch_Return:
 	ret
 
-LABEL_F5A89D:
+AccAutoPlay_SplitDetect:
 	ldb c, 0x0
 	cpdi16 10408, 0
-	jr z, LABEL_F5A8B9
+	jr z, AccAutoPlay_SplitDetect_Check
 	bitda 3, 10419
-	jr z, LABEL_F5A8B9
+	jr z, AccAutoPlay_SplitDetect_Check
 	bitda 0, 10418
-	jr nz, LABEL_F5A931
+	jr nz, AccAutoPlay_SplitDetect_Return
 	bitda 2, 10417
-	jr nz, LABEL_F5A931
+	jr nz, AccAutoPlay_SplitDetect_Return
 
-LABEL_F5A8B9:
+AccAutoPlay_SplitDetect_Check:
 	bit 7, w
-	jr z, LABEL_F5A8CF
+	jr z, AccAutoPlay_SplitDetect_Process
 	push_a
-	calr LABEL_F5AA96
+	calr AccAutoPlay_ModeAvail
 	pop_a
 	cp l, a
-	jr c, LABEL_F5A8CB
+	jr c, AccAutoPlay_SplitDetect_Upper
 	ldb c, 0x1
-	jr LABEL_F5A931
+	jr AccAutoPlay_SplitDetect_Return
 
-LABEL_F5A8CB:
+AccAutoPlay_SplitDetect_Upper:
 	ldb c, 0x0
-	jr LABEL_F5A931
+	jr AccAutoPlay_SplitDetect_Return
 
-LABEL_F5A8CF:
+AccAutoPlay_SplitDetect_Process:
 	bitda 0, 64851
-	jr nz, LABEL_F5A908
+	jr nz, AccAutoPlay_SplitDetect_NoSplit
 	and w, 0xF
 	ldda8 l, 63939
 	and l, 0xF
 	cp l, w
-	jr z, LABEL_F5A8F7
+	jr z, AccAutoPlay_SplitDetect_Lower
 	ldda8 l, 64485
 	bit 7, l
-	jr nz, LABEL_F5A904
+	jr nz, AccAutoPlay_SplitDetect_Apply
 	and l, 0xF
 	cp l, w
-	jr nz, LABEL_F5A904
+	jr nz, AccAutoPlay_SplitDetect_Apply
 	ldb c, 0x1
-	jr LABEL_F5A931
+	jr AccAutoPlay_SplitDetect_Return
 
-LABEL_F5A8F7:
+AccAutoPlay_SplitDetect_Lower:
 	push_a
-	calr LABEL_F5AA96
+	calr AccAutoPlay_ModeAvail
 	pop_a
 	cp l, a
-	jr c, LABEL_F5A904
+	jr c, AccAutoPlay_SplitDetect_Apply
 	ldb c, 0x1
-	jr LABEL_F5A931
+	jr AccAutoPlay_SplitDetect_Return
 
-LABEL_F5A904:
+AccAutoPlay_SplitDetect_Apply:
 	ldb c, 0x0
-	jr LABEL_F5A931
+	jr AccAutoPlay_SplitDetect_Return
 
-LABEL_F5A908:
+AccAutoPlay_SplitDetect_NoSplit:
 	and w, 0xF
 	ldda8 l, 63991
 	bit 7, l
-	jr nz, LABEL_F5A91F
+	jr nz, AccAutoPlay_SplitDetect_Store
 	and l, 0xF
 	cp l, w
-	jr nz, LABEL_F5A91F
+	jr nz, AccAutoPlay_SplitDetect_Store
 	ldb c, 0x1
-	jr LABEL_F5A931
+	jr AccAutoPlay_SplitDetect_Return
 
-LABEL_F5A91F:
+AccAutoPlay_SplitDetect_Store:
 	ldda8 l, 64485
 	bit 7, l
-	jr nz, LABEL_F5A931
+	jr nz, AccAutoPlay_SplitDetect_Return
 	and l, 0xF
 	cp l, w
-	jr nz, LABEL_F5A931
+	jr nz, AccAutoPlay_SplitDetect_Return
 	ldb c, 0x1
 
-LABEL_F5A931:
+AccAutoPlay_SplitDetect_Return:
 	ret
 
-LABEL_F5A932:
+AccAutoPlay_ZoneTrack:
 	cpdi8 32523, 0
-	jr nz, LABEL_F5A957
+	jr nz, AccAutoPlay_ZoneTrack_Update
 	pushw wa
-	calr LABEL_F59CA9
+	calr AccPedal_StyleCheck
 	cps a, 1
 	popw wa
-	jr z, LABEL_F5A957
+	jr z, AccAutoPlay_ZoneTrack_Update
 	bitda 2, 10407
-	jr nz, LABEL_F5A957
-	calr LABEL_F5A958
+	jr nz, AccAutoPlay_ZoneTrack_Update
+	calr AccAutoPlay_ZoneTrack_Apply
 	ldda16 xhl, 13468
 	stda16 13466, xhl
 	stda16 13468, xwa
 
-LABEL_F5A957:
+AccAutoPlay_ZoneTrack_Update:
 	ret
 
-LABEL_F5A958:
+AccAutoPlay_ZoneTrack_Apply:
 	ld xix, 0xCEFF
 	ld wa, (xix + 2)
 	cps wa, 0
-	jr nz, LABEL_F5A968
+	jr nz, AccAutoPlay_ZoneTrack_Check
 	ldb l, 0x80
-	jr LABEL_F5A972
+	jr AccAutoPlay_ZoneTrack_Store
 
-LABEL_F5A968:
+AccAutoPlay_ZoneTrack_Check:
 	cps wa, 1
-	jr nz, LABEL_F5A970
+	jr nz, AccAutoPlay_ZoneTrack_Upper
 	ldb l, 0x0
-	jr LABEL_F5A972
+	jr AccAutoPlay_ZoneTrack_Store
 
-LABEL_F5A970:
+AccAutoPlay_ZoneTrack_Upper:
 	ldb l, 0xF0
 
-LABEL_F5A972:
+AccAutoPlay_ZoneTrack_Store:
 	ld w, l
-	calr LABEL_F5A99E
+	calr AccAutoPlay_ZoneTrack_SetFlag
 	stdi16 14568, 0
 	ld bc, (xix + 256)
 	ldb e, 0x5
 
-LABEL_F5A982:
+AccAutoPlay_ZoneTrack_Clear:
 	cps bc, 0
-	jr z, LABEL_F5A999
+	jr z, AccAutoPlay_ZoneTrack_Default
 	ld_srib3 A, 0x03, 0xF0, 0xE8
 	cp l, a
-	jr c, LABEL_F5A993
+	jr c, AccAutoPlay_ZoneTrack_Finalize
 	incdi16 1, 14568
 
-LABEL_F5A993:
+AccAutoPlay_ZoneTrack_Finalize:
 	inc 2, e
 	dec 1, bc
-	jr LABEL_F5A982
+	jr AccAutoPlay_ZoneTrack_Clear
 
-LABEL_F5A999:
+AccAutoPlay_ZoneTrack_Default:
 	ldda16 xwa, 14568
 	ret
 
-LABEL_F5A99E:
+AccAutoPlay_ZoneTrack_SetFlag:
 	ldb c, 0x0
 	bit 7, w
-	jr z, LABEL_F5A9AA
-	calr LABEL_F5AA96
-	jr LABEL_F5A9B7
+	jr z, AccAutoPlay_ZoneTrack_Done
+	calr AccAutoPlay_ModeAvail
+	jr AccAutoPlay_ZoneTrack_Return2
 
-LABEL_F5A9AA:
+AccAutoPlay_ZoneTrack_Done:
 	bitda 0, 64851
-	jr nz, LABEL_F5A9B5
-	calr LABEL_F5AA96
-	jr LABEL_F5A9B7
+	jr nz, AccAutoPlay_ZoneTrack_Final
+	calr AccAutoPlay_ModeAvail
+	jr AccAutoPlay_ZoneTrack_Return2
 
-LABEL_F5A9B5:
+AccAutoPlay_ZoneTrack_Final:
 	ldb l, 0x7F
 
-LABEL_F5A9B7:
+AccAutoPlay_ZoneTrack_Return2:
 	ret
 
-LABEL_F5A9B8:
+AccAutoPlay_ZoneTrack_Return:
 	.byte 0x0e
 
-LABEL_F5A9B9:
-	calr LABEL_F5A9FC
+AccAutoPlay_StateMachine:
+	calr AccAutoPlay_TriggerCheck
 	bitda 6, 13422
-	jr z, LABEL_F5A9DE
+	jr z, AccAutoPlay_SM_CheckEligible
 	cpdi16 61854, 0
-	jr z, LABEL_F5A9DE
+	jr z, AccAutoPlay_SM_CheckEligible
 	cpdi16 10408, 0
-	jr nz, LABEL_F5A9DE
-	calr LABEL_F5AAFB
+	jr nz, AccAutoPlay_SM_CheckEligible
+	calr AccAutoPlay_SetConfig
 	bitda 7, 13421
-	jr nz, LABEL_F5A9DE
-	calr LABEL_F5ABF3
+	jr nz, AccAutoPlay_SM_CheckEligible
+	calr AccAutoPlay_Disable
 
-LABEL_F5A9DE:
+AccAutoPlay_SM_CheckEligible:
 	stdi8 13428, 0
-	calr LABEL_F5AD34
+	calr AccAutoPlay_ActionDispatch
 	bitda 0, 13428
-	jr z, LABEL_F5A9F9
+	jr z, AccAutoPlay_SM_Return
 	stdi8 13428, 0
 	ordi8 13422, 4
-	calr LABEL_F5B0A6
+	calr AccReplay_FullRestart
 
-LABEL_F5A9F9:
+AccAutoPlay_SM_Return:
 	ret
 
-LABEL_F5A9FA:
+AccAutoPlay_SM_Padding:
 	.byte 0x00, 0x00
 
-LABEL_F5A9FC:
+AccAutoPlay_TriggerCheck:
 	bitda 2, 10407
-	jrl nz, LABEL_F5AA93
-	calr LABEL_F5AAFB
+	jrl nz, AccAutoPlay_ModeAvail_Padding2
+	calr AccAutoPlay_SetConfig
 	bitda 0, 13464
-	jrl z, LABEL_F5AA93
+	jrl z, AccAutoPlay_ModeAvail_Padding2
 	bitda 0, 13465
-	jrl nz, LABEL_F5AA35
+	jrl nz, AccAutoPlay_Trigger_Activate
 	bitda 7, 13421
-	jr nz, LABEL_F5AA26
+	jr nz, AccAutoPlay_Trigger_Evaluate
 	bitda 2, 1054
-	jr nz, LABEL_F5AA29
+	jr nz, AccAutoPlay_Trigger_Process
 	bitda 1, 64607
-	jr z, LABEL_F5AA29
+	jr z, AccAutoPlay_Trigger_Process
 
-LABEL_F5AA26:
-	calr LABEL_F5AB35
+AccAutoPlay_Trigger_Evaluate:
+	calr AccAutoPlay_Configure
 
-LABEL_F5AA29:
+AccAutoPlay_Trigger_Process:
 	ordi8 13464, 1
 	ordi8 13465, 1
-	jr LABEL_F5AA8E
+	jr AccAutoPlay_ModeAvail_Padding
 
-LABEL_F5AA35:
+AccAutoPlay_Trigger_Activate:
 	bitda 7, 13464
-	jr nz, LABEL_F5AA8E
+	jr nz, AccAutoPlay_ModeAvail_Padding
 	bitda 7, 13421
-	jr z, LABEL_F5AA82
+	jr z, AccAutoPlay_Trigger_Return
 	cpdi16 13468, 0
-	jr nz, LABEL_F5AA66
+	jr nz, AccAutoPlay_Trigger_Configure
 	cpdi16 13466, 0
-	jr z, LABEL_F5AA66
-	calr LABEL_F5ACB6
+	jr z, AccAutoPlay_Trigger_Configure
+	calr AccAutoPlay_SeqHandoff
 	anddi8 13464, 254
 	anddi8 13465, 254
 	stdi16 13466, 0
-	jr LABEL_F5AA8E
+	jr AccAutoPlay_ModeAvail_Padding
 
-LABEL_F5AA66:
+AccAutoPlay_Trigger_Configure:
 	cpdi16 13468, 0
-	jr nz, LABEL_F5AA80
+	jr nz, AccAutoPlay_Trigger_Finalize
 	cpdi16 13466, 0
-	jr nz, LABEL_F5AA80
+	jr nz, AccAutoPlay_Trigger_Finalize
 	stdi8 13464, 0
 	stdi8 13465, 0
 
-LABEL_F5AA80:
-	jr LABEL_F5AA8E
+AccAutoPlay_Trigger_Finalize:
+	jr AccAutoPlay_ModeAvail_Padding
 
-LABEL_F5AA82:
+AccAutoPlay_Trigger_Return:
 	anddi8 13464, 254
 	anddi8 13465, 254
 	jr __jrt_nop_F5AA8E
 __jrt_nop_F5AA8E:
 
-LABEL_F5AA8E:
+AccAutoPlay_ModeAvail_Padding:
 	anddi8 13464, 127
 
-LABEL_F5AA93:
+AccAutoPlay_ModeAvail_Padding2:
 	ret
 
-LABEL_F5AA94:
+AccAutoPlay_ModeAvail_Padding3:
 	.byte 0x00, 0x00
 
-LABEL_F5AA96:
+AccAutoPlay_ModeAvail:
 	ldda8 l, 64770
 	and l, 0x3
 	cps l, 0
-	jr nz, LABEL_F5AAB3
+	jr nz, AccAutoPlay_ModeAvail_Process
 	ldda8 l, 64771
 	and l, 0x7F
 	dec 1, l
 	cp l, 0xFF
-	jr nz, LABEL_F5AAB1
+	jr nz, AccAutoPlay_ModeAvail_Check
 	ldb l, 0x0
 
-LABEL_F5AAB1:
-	jr LABEL_F5AAC1
+AccAutoPlay_ModeAvail_Check:
+	jr AccAutoPlay_ModeAvail_SetMode
 
-LABEL_F5AAB3:
+AccAutoPlay_ModeAvail_Process:
 	push l
 	lds32 xhl, 0
 	pop l
 	add xhl, 0xF5AACD
 	ld l, (xhl)
 
-LABEL_F5AAC1:
+AccAutoPlay_ModeAvail_SetMode:
 	cpdi8 36148, 14
-	jr nz, LABEL_F5AACA
+	jr nz, AccAutoPlay_ModeAvail_Return
 	ldb l, 0x7F
 
-LABEL_F5AACA:
+AccAutoPlay_ModeAvail_Return:
 	ret
 
-LABEL_F5AACB:
+AccAutoPlay_ModeAvail_Extended:
 	.byte 0x00, 0x00
 	.byte 0x3b, 0x36, 0x3b, 0x42, 0x47
 	.byte 0xf1
@@ -171953,124 +171953,124 @@ LABEL_F5AACB:
 	.byte 0x48, 0x00, 0xc1, 0x98, 0x34, 0x21, 0xf1, 0x99
 	.byte 0x34, 0x41, 0xc1, 0x98, 0x34, 0x3e, 0x01, 0x0e
 
-LABEL_F5AAFB:
+AccAutoPlay_SetConfig:
 	cpdi16 10408, 0
-	jr nz, LABEL_F5AB2F
+	jr nz, AccAutoPlay_SetConfig_Apply
 	cpdi16 61854, 0
-	jr nz, LABEL_F5AB2F
+	jr nz, AccAutoPlay_SetConfig_Apply
 	cpdi8 14235, 0
-	jr nz, LABEL_F5AB2F
+	jr nz, AccAutoPlay_SetConfig_Apply
 	ldda8 a, 64605
 	bit 3, a
-	jr nz, LABEL_F5AB2F
+	jr nz, AccAutoPlay_SetConfig_Apply
 	and a, 0x7
 	cps a, 0
-	jr z, LABEL_F5AB2F
+	jr z, AccAutoPlay_SetConfig_Apply
 	bitda 1, 64607
-	jr z, LABEL_F5AB2F
+	jr z, AccAutoPlay_SetConfig_Apply
 	ordi8 13421, 128
-	jr LABEL_F5AB34
+	jr AccAutoPlay_SetConfig_Return
 
-LABEL_F5AB2F:
+AccAutoPlay_SetConfig_Apply:
 	stdi8 13421, 0
 
-LABEL_F5AB34:
+AccAutoPlay_SetConfig_Return:
 	ret
 
-LABEL_F5AB35:
+AccAutoPlay_Configure:
 	anddi8 13422, 31
 	cpdi8 14235, 0
-	jr nz, LABEL_F5AB53
+	jr nz, AccAutoPlay_Configure_Mode1
 	cpdi16 10408, 0
-	jr nz, LABEL_F5AB5D
+	jr nz, AccAutoPlay_Configure_Mode2
 	cpdi16 61854, 0
-	jr z, LABEL_F5AB53
-	jr LABEL_F5AB79
+	jr z, AccAutoPlay_Configure_Mode1
+	jr AccAutoPlay_Configure_Store
 
-LABEL_F5AB53:
+AccAutoPlay_Configure_Mode1:
 	ordi8 13422, 160
-	calr LABEL_F5AC07
-	jr LABEL_F5AB85
+	calr AccAutoPlay_SubModeA
+	jr AccAutoPlay_Configure_Return
 
-LABEL_F5AB5D:
+AccAutoPlay_Configure_Mode2:
 	cpdi16 61854, 0
-	jr nz, LABEL_F5AB79
+	jr nz, AccAutoPlay_Configure_Store
 	bitda 2, 1056
-	jr z, LABEL_F5AB72
+	jr z, AccAutoPlay_Configure_Apply
 	ordi8 13422, 128
-	jr LABEL_F5AB77
+	jr AccAutoPlay_Configure_Check
 
-LABEL_F5AB72:
+AccAutoPlay_Configure_Apply:
 	ordi8 13422, 224
 
-LABEL_F5AB77:
-	jr LABEL_F5AB85
+AccAutoPlay_Configure_Check:
+	jr AccAutoPlay_Configure_Return
 
-LABEL_F5AB79:
+AccAutoPlay_Configure_Store:
 	bitda 2, 1056
-	jr nz, LABEL_F5AB85
-	calr LABEL_F5AD0B
-	calr LABEL_F5AC5C
+	jr nz, AccAutoPlay_Configure_Return
+	calr AccAutoPlay_ModeDecode
+	calr AccAutoPlay_SubModeB
 
-LABEL_F5AB85:
+AccAutoPlay_Configure_Return:
 	ret
 
-LABEL_F5AB86:
+AccAutoPlay_Configure_Extended:
 	; --- Bit-flag conditional: check bits, and/clear (0x3498)/(0x3499) (54 bytes) ---
 	.byte 0x00, 0x00				; nop; nop  [alignment padding]
 	.byte 0xf1, 0x6e, 0x34, 0xc9			; bit 1, (0x346E)  [F1 prefix]
-	jr nz, LABEL_F5AB9A
+	jr nz, AccAutoPlay_Configure_Final
 	.byte 0xc1, 0x99, 0x34, 0x3c, 0xfe		; and (0x3499), 0xFE  [C1 prefix]
 	.byte 0xc1, 0x98, 0x34, 0x3c, 0xfe		; and (0x3498), 0xFE  [C1 prefix]
-	jr t, LABEL_F5ABB9
-LABEL_F5AB9A:
+	jr t, AccAutoPlay_Configure_Return2
+AccAutoPlay_Configure_Final:
 	.byte 0xf1, 0x98, 0x34, 0xc8			; bit 0, (0x3498)  [F1 prefix]
-	jr nz, LABEL_F5ABB9
+	jr nz, AccAutoPlay_Configure_Return2
 	.byte 0xf1, 0x99, 0x34, 0xc8			; bit 0, (0x3499)  [F1 prefix]
-	jr z, LABEL_F5ABB9
+	jr z, AccAutoPlay_Configure_Return2
 	.byte 0xf1, 0x6d, 0x34, 0xcf			; bit 7, (0x346D)  [F1 prefix]
-	jr z, LABEL_F5ABAF
-	calr LABEL_F5ACB6
-LABEL_F5ABAF:
+	jr z, AccAutoPlay_Configure_Done
+	calr AccAutoPlay_SeqHandoff
+AccAutoPlay_Configure_Done:
 	.byte 0xc1, 0x99, 0x34, 0x3c, 0xfe		; and (0x3499), 0xFE  [C1 prefix]
 	.byte 0xc1, 0x98, 0x34, 0x3c, 0xfe		; and (0x3498), 0xFE  [C1 prefix]
-LABEL_F5ABB9:
+AccAutoPlay_Configure_Return2:
 	ret
 	.byte 0x00, 0x00				; nop; nop  [alignment padding]
 
 
-LABEL_F5ABBC:
+AccAutoPlay_PeriodicCheck:
 	bitda 1, 64607
-	jr nz, LABEL_F5ABC4
-	jr LABEL_F5ABF2
+	jr nz, AccAutoPlay_Periodic_Evaluate
+	jr AccAutoPlay_Periodic_Return
 
-LABEL_F5ABC4:
+AccAutoPlay_Periodic_Evaluate:
 	bitda 2, 13422
-	jr z, LABEL_F5ABDF
-	calr LABEL_F5AAFB
+	jr z, AccAutoPlay_Periodic_Process
+	calr AccAutoPlay_SetConfig
 	bitda 7, 13421
-	jr nz, LABEL_F5ABD8
-	calr LABEL_F5ABF3
+	jr nz, AccAutoPlay_Periodic_Padding
+	calr AccAutoPlay_Disable
 	jr __jrt_nop_F5ABD8
 __jrt_nop_F5ABD8:
 
-LABEL_F5ABD8:
+AccAutoPlay_Periodic_Padding:
 	anddi8 13422, 251
-	jr LABEL_F5ABF2
+	jr AccAutoPlay_Periodic_Return
 
-LABEL_F5ABDF:
+AccAutoPlay_Periodic_Process:
 	cpdi16 61854, 0
-	jr nz, LABEL_F5ABEF
+	jr nz, AccAutoPlay_Periodic_Toggle
 	cpdi16 10408, 0
-	jr z, LABEL_F5ABF2
+	jr z, AccAutoPlay_Periodic_Return
 
-LABEL_F5ABEF:
-	calr LABEL_F5ABF3
+AccAutoPlay_Periodic_Toggle:
+	calr AccAutoPlay_Disable
 
-LABEL_F5ABF2:
+AccAutoPlay_Periodic_Return:
 	ret
 
-LABEL_F5ABF3:
+AccAutoPlay_Disable:
 	anddi8 64607, 253
 	ldb w, 0x2
 	ldb a, 0x0
@@ -172079,241 +172079,241 @@ LABEL_F5ABF3:
 	call SwbtWr_QueuePostEvent
 	ret
 
-LABEL_F5AC05:
+AccAutoPlay_Disable_Return:
 	.byte 0x00, 0x00
 
-LABEL_F5AC07:
+AccAutoPlay_SubModeA:
 	bitda 7, 13421
-	jr z, LABEL_F5AC59
+	jr z, AccAutoPlay_SubModeA_Return
 	bitda 2, 1054
-	jr nz, LABEL_F5AC37
+	jr nz, AccAutoPlay_SubModeA_Apply
 	bitda 0, 12931
-	jr z, LABEL_F5AC2B
+	jr z, AccAutoPlay_SubModeA_Check
 	bitda 1, 12931
-	jr z, LABEL_F5AC2B
+	jr z, AccAutoPlay_SubModeA_Check
 	anddi8 13421, 239
 	ordi8 13421, 1
-	jr LABEL_F5AC59
+	jr AccAutoPlay_SubModeA_Return
 
-LABEL_F5AC2B:
+AccAutoPlay_SubModeA_Check:
 	anddi8 13421, 239
 	ordi8 13421, 4
-	jr LABEL_F5AC59
+	jr AccAutoPlay_SubModeA_Return
 
-LABEL_F5AC37:
+AccAutoPlay_SubModeA_Apply:
 	ldda8 a, 1056
 	bit 2, a
-	jr z, LABEL_F5AC59
+	jr z, AccAutoPlay_SubModeA_Return
 	bit 3, a
-	jr z, LABEL_F5AC59
+	jr z, AccAutoPlay_SubModeA_Return
 	anddi8 1056, 247
 	anddi8 1054, 247
 	anddi8 13421, 239
 	ordi8 13421, 8
 
-LABEL_F5AC59:
+AccAutoPlay_SubModeA_Return:
 	ret
 
-LABEL_F5AC5A:
+AccAutoPlay_SubModeA_Padding:
 	.byte 0x00, 0x00
 
-LABEL_F5AC5C:
+AccAutoPlay_SubModeB:
 	bitda 7, 13421
-	jr z, LABEL_F5ACB3
+	jr z, AccAutoPlay_SubModeB_Return
 	bitda 2, 1054
-	jr nz, LABEL_F5AC8C
+	jr nz, AccAutoPlay_SubModeB_Apply
 	bitda 0, 12931
-	jr z, LABEL_F5AC80
+	jr z, AccAutoPlay_SubModeB_Check
 	bitda 1, 12931
-	jr z, LABEL_F5AC80
+	jr z, AccAutoPlay_SubModeB_Check
 	anddi8 13421, 239
 	ordi8 13421, 2
-	jr LABEL_F5ACB3
+	jr AccAutoPlay_SubModeB_Return
 
-LABEL_F5AC80:
+AccAutoPlay_SubModeB_Check:
 	anddi8 13421, 239
 	ordi8 13421, 4
-	jr LABEL_F5ACB3
+	jr AccAutoPlay_SubModeB_Return
 
-LABEL_F5AC8C:
+AccAutoPlay_SubModeB_Apply:
 	ldda8 a, 1056
 	bit 2, a
-	jr z, LABEL_F5ACB3
+	jr z, AccAutoPlay_SubModeB_Return
 	bit 3, a
-	jr z, LABEL_F5ACB3
+	jr z, AccAutoPlay_SubModeB_Return
 	anddi8 1056, 247
 	anddi8 1054, 247
 	anddi8 1057, 247
 	anddi8 13421, 239
 	ordi8 13421, 8
 
-LABEL_F5ACB3:
+AccAutoPlay_SubModeB_Return:
 	ret
 
-LABEL_F5ACB4:
+AccAutoPlay_SubModeB_Padding:
 	.byte 0x00, 0x00
 
-LABEL_F5ACB6:
+AccAutoPlay_SeqHandoff:
 	cpdi8 14235, 0
-	jr nz, LABEL_F5AD08
+	jr nz, AccAutoPlay_SeqHandoff_Return
 	cpdi16 10410, 0
-	jr nz, LABEL_F5AD08
+	jr nz, AccAutoPlay_SeqHandoff_Return
 	bitda 2, 1054
-	jr z, LABEL_F5AD08
+	jr z, AccAutoPlay_SeqHandoff_Return
 	anddi8 13421, 247
 	ordi8 13421, 16
 	cpdi16 61854, 0
-	jr nz, LABEL_F5ACEC
+	jr nz, AccAutoPlay_SeqHandoff_Process
 	bitda 2, 1056
-	jr z, LABEL_F5AD08
+	jr z, AccAutoPlay_SeqHandoff_Return
 	ei 6
-	calr LABEL_F5AF3C
+	calr AccPlayMode_StopToSync2
 	ei 0
-	jr LABEL_F5AD08
+	jr AccAutoPlay_SeqHandoff_Return
 
-LABEL_F5ACEC:
+AccAutoPlay_SeqHandoff_Process:
 	bitda 2, 1057
-	jr z, LABEL_F5AD08
+	jr z, AccAutoPlay_SeqHandoff_Return
 	bitda 2, 1054
-	jr z, LABEL_F5AD01
+	jr z, AccAutoPlay_SeqHandoff_Finalize
 	ei 6
-	calr LABEL_F5AF9D
+	calr AccPlayMode_StopExprFull
 	ei 0
-	jr LABEL_F5AD08
+	jr AccAutoPlay_SeqHandoff_Return
 
-LABEL_F5AD01:
+AccAutoPlay_SeqHandoff_Finalize:
 	ei 6
-	calr LABEL_F5AFB2
+	calr AccPlayMode_StopExprC
 	ei 0
 
-LABEL_F5AD08:
+AccAutoPlay_SeqHandoff_Return:
 	ret
 
-LABEL_F5AD09:
+AccAutoPlay_SeqHandoff_Padding:
 	.byte 0x00, 0x00
 
-LABEL_F5AD0B:
+AccAutoPlay_ModeDecode:
 	ldda8 a, 10407
 	and a, 0x3
 	cps a, 2
-	jr nz, LABEL_F5AD1D
+	jr nz, AccAutoPlay_ModeDecode_Process
 	ordi8 13422, 160
-	jr LABEL_F5AD31
+	jr AccAutoPlay_ModeDecode_Return
 
-LABEL_F5AD1D:
+AccAutoPlay_ModeDecode_Process:
 	cps a, 1
-	jr nz, LABEL_F5AD28
+	jr nz, AccAutoPlay_ModeDecode_Apply
 	ordi8 13422, 96
-	jr LABEL_F5AD31
+	jr AccAutoPlay_ModeDecode_Return
 
-LABEL_F5AD28:
+AccAutoPlay_ModeDecode_Apply:
 	cps a, 3
-	jr nz, LABEL_F5AD31
+	jr nz, AccAutoPlay_ModeDecode_Return
 	ordi8 13422, 224
 
-LABEL_F5AD31:
+AccAutoPlay_ModeDecode_Return:
 	ret
 
-LABEL_F5AD32:
+AccAutoPlay_ModeDecode_Padding:
 	.byte 0x00, 0x00
 
-LABEL_F5AD34:
+AccAutoPlay_ActionDispatch:
 	ldda8 a, 13421
 	bit 7, a
-	jr z, LABEL_F5AD4D
+	jr z, AccAutoPlay_Action_Check
 	bitda 2, 13421
-	jr z, LABEL_F5AD83
+	jr z, AccAutoPlay_Action_Finalize
 	and a, 0xFB
 	or a, 0x8
 	stda8 13421, a
 
-LABEL_F5AD4D:
+AccAutoPlay_Action_Check:
 	ldda8 a, 13422
 	ld b, a
 	and a, 0xE0
 	cps a, 0
 	ld a, b
-	jr z, LABEL_F5AD88
+	jr z, AccAutoPlay_Action_Return
 	bit 7, a
-	jr z, LABEL_F5AD75
+	jr z, AccAutoPlay_Action_Activate
 	bit 5, a
-	jr nz, LABEL_F5AD6B
-	calr LABEL_F5AF27
-	jr LABEL_F5AD7D
+	jr nz, AccAutoPlay_Action_Process
+	calr AccPlayMode_StartAccPlay
+	jr AccAutoPlay_Action_Apply
 
-LABEL_F5AD6B:
+AccAutoPlay_Action_Process:
 	bit 6, a
-	jr z, LABEL_F5AD7A
-	calr LABEL_F5AEEC
-	jr LABEL_F5AD7D
+	jr z, AccAutoPlay_Action_Deactivate
+	calr AccPlayMode_StopExprB
+	jr AccAutoPlay_Action_Apply
 
-LABEL_F5AD75:
-	calr LABEL_F5AF5F
-	jr LABEL_F5AD7D
+AccAutoPlay_Action_Activate:
+	calr AccPlayMode_StartPlayFull
+	jr AccAutoPlay_Action_Apply
 
-LABEL_F5AD7A:
-	calr LABEL_F5AFD8
+AccAutoPlay_Action_Deactivate:
+	calr AccPlayMode_StartAccPlayFull
 
-LABEL_F5AD7D:
+AccAutoPlay_Action_Apply:
 	bitda 3, 13421
-	jr nz, LABEL_F5AD83
+	jr nz, AccAutoPlay_Action_Finalize
 
-LABEL_F5AD83:
+AccAutoPlay_Action_Finalize:
 	anddi8 13422, 31
 
-LABEL_F5AD88:
+AccAutoPlay_Action_Return:
 	ret
 
-LABEL_F5AD89:
+AccAutoPlay_Action_Padding:
 	.byte 0x00, 0x00
 
-LABEL_F5AD8B:
+AccAutoPlay_DeferredAction:
 	bitda 7, 13421
-	jr z, LABEL_F5ADC7
+	jr z, AccAutoPlay_Deferred_Return
 	bitda 0, 13421
-	jr z, LABEL_F5ADAD
+	jr z, AccAutoPlay_Deferred_Process
 	anddi8 13421, 238
 	ordi8 13421, 8
 	ei 6
-	calr LABEL_F5AFD8
+	calr AccPlayMode_StartAccPlayFull
 	ei 0
-	calr LABEL_F5B0A6
-	jr LABEL_F5ADC7
+	calr AccReplay_FullRestart
+	jr AccAutoPlay_Deferred_Return
 
-LABEL_F5ADAD:
+AccAutoPlay_Deferred_Process:
 	bitda 1, 13421
-	jr z, LABEL_F5ADC7
+	jr z, AccAutoPlay_Deferred_Return
 	anddi8 13421, 237
 	ordi8 13421, 8
 	ei 6
-	calr LABEL_F5AEB4
+	calr AccPlayMode_StartPlay
 	ei 0
-	calr LABEL_F5B0A6
+	calr AccReplay_FullRestart
 
-LABEL_F5ADC7:
+AccAutoPlay_Deferred_Return:
 	ret
 
-LABEL_F5ADC8:
+AccAutoPlay_Deferred_Padding:
 	.byte 0x00, 0x00
 
-LABEL_F5ADCA:
+AccPlayMode_Dispatch:
 	xor xhl, xhl
 	ei 6
 	bitda 2, 1054
-	jr z, LABEL_F5ADD7
+	jr z, AccPlayMode_Dispatch_Check
 	or l, 0x4
 
-LABEL_F5ADD7:
+AccPlayMode_Dispatch_Check:
 	bitda 2, 1057
-	jr z, LABEL_F5ADE0
+	jr z, AccPlayMode_Dispatch_Select
 	or l, 0x8
 
-LABEL_F5ADE0:
+AccPlayMode_Dispatch_Select:
 	bitda 2, 1056
-	jr z, LABEL_F5ADE9
+	jr z, AccPlayMode_Dispatch_Execute
 	or l, 0x10
 
-LABEL_F5ADE9:
+AccPlayMode_Dispatch_Execute:
 	ld xwa, 0xF5ADF9
 	add xhl, xwa
 	ld xwa, (xhl)
@@ -172321,296 +172321,296 @@ LABEL_F5ADE9:
 	ei 0
 	ret
 
-LABEL_F5ADF7:
+AccPlayMode_Dispatch_Table:
 	.byte 0x00, 0x00, 0x19, 0xae, 0xf5, 0x00, 0x4d, 0xaf
 	.byte 0xf5, 0x00, 0xd0, 0xaf, 0xf5, 0x00, 0x04, 0xb0
 	.byte 0xf5, 0x00, 0xb7, 0xaf, 0xf5, 0x00, 0x3c, 0xaf
 	.byte 0xf5, 0x00, 0xb2, 0xaf, 0xf5, 0x00, 0x9d, 0xaf
 	.byte 0xf5, 0x00, 0x0e, 0x00, 0x00
 
-LABEL_F5AE1C:
+AccPlayMode_TransitionRouter:
 	cpdi16 10408, 0
-	jr z, LABEL_F5AE36
+	jr z, AccPlayMode_Router_Process
 	cpdi16 61854, 0
-	jr z, LABEL_F5AE31
-	calr LABEL_F5AE49
-	jr LABEL_F5AE46
+	jr z, AccPlayMode_Router_Check
+	calr AccPlayMode_Router_Alt
+	jr AccPlayMode_Router_Return
 
-LABEL_F5AE31:
-	calr LABEL_F5AE57
-	jr LABEL_F5AE46
+AccPlayMode_Router_Check:
+	calr AccPlayMode_StartRecording
+	jr AccPlayMode_Router_Return
 
-LABEL_F5AE36:
+AccPlayMode_Router_Process:
 	cpdi16 61854, 0
-	jr z, LABEL_F5AE43
-	calr LABEL_F5AE77
-	jr LABEL_F5AE46
+	jr z, AccPlayMode_Router_Apply
+	calr AccPlayMode_StartAcc
+	jr AccPlayMode_Router_Return
 
-LABEL_F5AE43:
-	calr LABEL_F5AE9B
+AccPlayMode_Router_Apply:
+	calr AccPlayMode_StopToSync
 
-LABEL_F5AE46:
+AccPlayMode_Router_Return:
 	ret
 
-LABEL_F5AE47:
+AccPlayMode_Router_Padding:
 	.byte 0x00, 0x00
 
-LABEL_F5AE49:
+AccPlayMode_Router_Alt:
 	bitda 2, 1056
-	jr nz, LABEL_F5AE54
-	calr LABEL_F5AEB4
+	jr nz, AccPlayMode_Router_AltPadding
+	calr AccPlayMode_StartPlay
 	jr __jrt_nop_F5AE54
 __jrt_nop_F5AE54:
 
-LABEL_F5AE54:
+AccPlayMode_Router_AltPadding:
 	ret
 
-LABEL_F5AE55:
+AccPlayMode_StartRecording_Padding:
 	.byte 0x00, 0x00
 
-LABEL_F5AE57:
+AccPlayMode_StartRecording:
 	bitda 2, 1056
-	jr nz, LABEL_F5AE71
+	jr nz, AccPlayMode_StartRec_Apply
 	bitda 1, 10407
-	jr z, LABEL_F5AE6C
+	jr z, AccPlayMode_StartRec_Process
 	ei 6
-	calr LABEL_F5AEEC
+	calr AccPlayMode_StopExprB
 	ei 0
-	jr LABEL_F5AE74
+	jr AccPlayMode_StartRec_Return
 
-LABEL_F5AE6C:
-	calr LABEL_F5ADCA
-	jr LABEL_F5AE74
+AccPlayMode_StartRec_Process:
+	calr AccPlayMode_Dispatch
+	jr AccPlayMode_StartRec_Return
 
-LABEL_F5AE71:
-	calr LABEL_F5AED3
+AccPlayMode_StartRec_Apply:
+	calr AccPlayMode_StopExprA
 
-LABEL_F5AE74:
+AccPlayMode_StartRec_Return:
 	ret
 
-LABEL_F5AE75:
+AccPlayMode_StartRec_Padding:
 	.byte 0x00, 0x00
 
-LABEL_F5AE77:
+AccPlayMode_StartAcc:
 	bitda 2, 1056
-	jr nz, LABEL_F5AE95
+	jr nz, AccPlayMode_StartAcc_Apply
 	bitda 1, 10407
-	jr z, LABEL_F5AE8C
+	jr z, AccPlayMode_StartAcc_Process
 	ei 6
-	calr LABEL_F5AEEC
+	calr AccPlayMode_StopExprB
 	ei 0
-	jr LABEL_F5AE98
+	jr AccPlayMode_StartAcc_Return
 
-LABEL_F5AE8C:
+AccPlayMode_StartAcc_Process:
 	ei 6
-	calr LABEL_F5AF5F
+	calr AccPlayMode_StartPlayFull
 	ei 0
-	jr LABEL_F5AE98
+	jr AccPlayMode_StartAcc_Return
 
-LABEL_F5AE95:
-	calr LABEL_F5ADCA
+AccPlayMode_StartAcc_Apply:
+	calr AccPlayMode_Dispatch
 
-LABEL_F5AE98:
+AccPlayMode_StartAcc_Return:
 	ret
 
-LABEL_F5AE99:
+AccPlayMode_StartAcc_Padding:
 	.byte 0x00, 0x00
 
-LABEL_F5AE9B:
+AccPlayMode_StopToSync:
 	bitda 2, 1056
-	jr nz, LABEL_F5AEAA
+	jr nz, AccPlayMode_StopToSync_Process
 	ei 6
-	calr LABEL_F5AFD8
+	calr AccPlayMode_StartAccPlayFull
 	ei 0
-	jr LABEL_F5AEB1
+	jr AccPlayMode_StopToSync_Return
 
-LABEL_F5AEAA:
+AccPlayMode_StopToSync_Process:
 	ei 6
-	calr LABEL_F5AF3C
+	calr AccPlayMode_StopToSync2
 	ei 0
 
-LABEL_F5AEB1:
+AccPlayMode_StopToSync_Return:
 	ret
 
-LABEL_F5AEB2:
+AccPlayMode_StopToSync_Padding:
 	.byte 0x00, 0x00
 
-LABEL_F5AEB4:
+AccPlayMode_StartPlay:
 	bitda 2, 10407
-	jr nz, LABEL_F5AED0
+	jr nz, AccPlayMode_StartPlay_Return
 	bitda 1, 10407
-	jr nz, LABEL_F5AEC9
+	jr nz, AccPlayMode_StartPlay_Process
 	ei 6
-	calr LABEL_F5AF5F
+	calr AccPlayMode_StartPlayFull
 	ei 0
-	jr LABEL_F5AED0
+	jr AccPlayMode_StartPlay_Return
 
-LABEL_F5AEC9:
+AccPlayMode_StartPlay_Process:
 	ei 6
-	calr LABEL_F5AEEC
+	calr AccPlayMode_StopExprB
 	ei 0
 
-LABEL_F5AED0:
+AccPlayMode_StartPlay_Return:
 	ret
 
-LABEL_F5AED1:
+AccPlayMode_StartPlay_Padding:
 	.byte 0x00, 0x00
 
-LABEL_F5AED3:
+AccPlayMode_StopExprA:
 	bitda 2, 1054
-	jr nz, LABEL_F5AEE2
+	jr nz, AccPlayMode_StopExprA_Process
 	ei 6
-	calr LABEL_F5AF27
+	calr AccPlayMode_StartAccPlay
 	ei 0
-	jr LABEL_F5AEE9
+	jr AccPlayMode_StopExprA_Return
 
-LABEL_F5AEE2:
+AccPlayMode_StopExprA_Process:
 	ei 6
-	calr LABEL_F5AF4D
+	calr AccPlayMode_StartPlay2
 	ei 0
 
-LABEL_F5AEE9:
+AccPlayMode_StopExprA_Return:
 	ret
 
-LABEL_F5AEEA:
+AccPlayMode_StopExprA_Padding:
 	.byte 0x00, 0x00
 
-LABEL_F5AEEC:
+AccPlayMode_StopExprB:
 	bitda 0, 1056
-	jr nz, LABEL_F5AF1F
+	jr nz, AccPlayMode_StopExprB_Return
 	bitda 2, 1056
-	jr nz, LABEL_F5AF1F
+	jr nz, AccPlayMode_StopExprB_Return
 	bitda 2, 10418
-	jr nz, LABEL_F5AF14
+	jr nz, AccPlayMode_StopExprB_Process
 	bitda 1, 10418
-	jr z, LABEL_F5AF14
+	jr z, AccPlayMode_StopExprB_Process
 	call LABEL_F43737
 	stdi8 1054, 128
 	ordi8 10418, 4
-	jr LABEL_F5AF39
+	jr AccPlayMode_StartAccPlay_Return
 
-LABEL_F5AF14:
+AccPlayMode_StopExprB_Process:
 	stdi8 1056, 1
-	calr LABEL_F5B01B
-	calr LABEL_F5B061
+	calr AccTempo_ClearCounters
+	calr AccSync_MidiClock
 
-LABEL_F5AF1F:
+AccPlayMode_StopExprB_Return:
 	stdi8 1057, 1
-	calr LABEL_F5B04C
+	calr AccTempo_ClearSubPos
 
-LABEL_F5AF27:
+AccPlayMode_StartAccPlay:
 	stdi8 1054, 1
 	ordi8 13428, 1
-	calr LABEL_F5B02A
+	calr AccTempo_ClearPositions
 	ldb a, 0x85
-	calr LABEL_F5B084
+	calr AccTempo_WriteStartMarker
 
-LABEL_F5AF39:
+AccPlayMode_StartAccPlay_Return:
 	ret
 
-LABEL_F5AF3A:
+AccPlayMode_StartAccPlay_Padding:
 	.byte 0x00, 0x00
 
-LABEL_F5AF3C:
+AccPlayMode_StopToSync2:
 	bitda 3, 1056
-	jr nz, LABEL_F5AF4D
+	jr nz, AccPlayMode_StartPlay2
 	bitda 2, 1056
-	jr z, LABEL_F5AF4D
+	jr z, AccPlayMode_StartPlay2
 	stdi8 1056, 12
 
-LABEL_F5AF4D:
+AccPlayMode_StartPlay2:
 	stdi8 1054, 12
 	stdi8 13424, 0
 	ldb a, 0x86
-	calr LABEL_F5B084
+	calr AccTempo_WriteStartMarker
 	ret
 
-LABEL_F5AF5D:
+AccPlayMode_StartPlay2_Padding:
 	.byte 0x00, 0x00
 
-LABEL_F5AF5F:
+AccPlayMode_StartPlayFull:
 	bitda 2, 10418
-	jr nz, LABEL_F5AF7B
+	jr nz, AccPlayMode_StartPlayFull_Process
 	bitda 1, 10418
-	jr z, LABEL_F5AF7B
+	jr z, AccPlayMode_StartPlayFull_Process
 	call LABEL_F43737
 	stdi8 1054, 128
 	ordi8 10418, 4
-	jr LABEL_F5AF9A
+	jr AccPlayMode_StartPlayFull_Return
 
-LABEL_F5AF7B:
+AccPlayMode_StartPlayFull_Process:
 	stdi8 1057, 1
-	calr LABEL_F5B04C
+	calr AccTempo_ClearSubPos
 	bitda 0, 1056
-	jr nz, LABEL_F5AF9A
+	jr nz, AccPlayMode_StartPlayFull_Return
 	bitda 2, 1056
-	jr nz, LABEL_F5AF9A
+	jr nz, AccPlayMode_StartPlayFull_Return
 	stdi8 1056, 1
-	calr LABEL_F5B01B
-	calr LABEL_F5B061
+	calr AccTempo_ClearCounters
+	calr AccSync_MidiClock
 
-LABEL_F5AF9A:
+AccPlayMode_StartPlayFull_Return:
 	ret
 
-LABEL_F5AF9B:
+AccPlayMode_StartPlayFull_Padding:
 	.byte 0x00, 0x00
 
-LABEL_F5AF9D:
+AccPlayMode_StopExprFull:
 	stdi8 1054, 12
 	bitda 0, 10418
-	jr nz, LABEL_F5AFAD
+	jr nz, AccPlayMode_StopExprFull_Process
 	ordi8 13434, 4
 
-LABEL_F5AFAD:
+AccPlayMode_StopExprFull_Process:
 	ldb a, 0x86
-	calr LABEL_F5B084
+	calr AccTempo_WriteStartMarker
 
-LABEL_F5AFB2:
+AccPlayMode_StopExprC:
 	stdi8 1057, 12
 	bitda 3, 1056
-	jr nz, LABEL_F5AFC8
+	jr nz, AccPlayMode_StopExprC_Process
 	bitda 2, 1056
-	jr z, LABEL_F5AFC8
+	jr z, AccPlayMode_StopExprC_Process
 	stdi8 1056, 12
 
-LABEL_F5AFC8:
+AccPlayMode_StopExprC_Process:
 	stdi8 13424, 0
 	ret
 
-LABEL_F5AFCE:
+AccPlayMode_StopExprC_Return:
 	.byte 0x00, 0x00
 
-LABEL_F5AFD0:
+AccPlayMode_StopExprD:
 	stdi8 1057, 12
 	ret
 
-LABEL_F5AFD6:
+AccPlayMode_StopExprD_Return:
 	.byte 0x00, 0x00
 
-LABEL_F5AFD8:
+AccPlayMode_StartAccPlayFull:
 	stdi8 1054, 1
 	ordi8 13428, 1
-	calr LABEL_F5B02A
+	calr AccTempo_ClearPositions
 	ldb a, 0x85
-	calr LABEL_F5B084
+	calr AccTempo_WriteStartMarker
 	bitda 0, 1056
-	jr nz, LABEL_F5B001
+	jr nz, AccPlayMode_StartAccPlayFull_Return
 	bitda 2, 1056
-	jr nz, LABEL_F5B001
+	jr nz, AccPlayMode_StartAccPlayFull_Return
 	stdi8 1056, 1
-	calr LABEL_F5B01B
-	calr LABEL_F5B061
+	calr AccTempo_ClearCounters
+	calr AccSync_MidiClock
 
-LABEL_F5B001:
+AccPlayMode_StartAccPlayFull_Return:
 	ret
 
-LABEL_F5B002:
+AccPlayMode_StartAccPlayFull_Padding:
 	.byte 0x00, 0x00, 0xf1, 0x21, 0x04, 0x00, 0x0c, 0xf1
 	.byte 0x1e, 0x04, 0x00, 0x0c, 0xc1, 0x70, 0x34, 0x3c
 	.byte 0x0f, 0x21, 0x86, 0x1e, 0x6c, 0x00, 0x0e, 0x00
 	.byte 0x00
 
-LABEL_F5B01B:
+AccTempo_ClearCounters:
 	xor wa, wa
 	ei 6
 	stda8 1047, a
@@ -172618,60 +172618,60 @@ LABEL_F5B01B:
 	ei 0
 	ret
 
-LABEL_F5B02A:
+AccTempo_ClearPositions:
 	xor wa, wa
 	ei 6
 	bitda 0, 10406
-	jr nz, LABEL_F5B03C
+	jr nz, AccTempo_ClearPositions_Loop
 	stda8 1045, a
 	stda8 1046, a
 
-LABEL_F5B03C:
+AccTempo_ClearPositions_Loop:
 	stda8 1076, a
 	stda8 1077, a
 	ei 0
 	anddi8 10406, 254
 	ret
 
-LABEL_F5B04C:
+AccTempo_ClearSubPos:
 	xor wa, wa
 	ei 6
 	bitda 3, 10407
-	jr nz, LABEL_F5B05E
+	jr nz, AccTempo_ClearSubPos_Loop
 	stda16 1052, xwa
 	stda8 1051, a
 
-LABEL_F5B05E:
+AccTempo_ClearSubPos_Loop:
 	ei 0
 	ret
 
-LABEL_F5B061:
+AccSync_MidiClock:
 	bitda 2, 64850
-	jr z, LABEL_F5B081
+	jr z, AccSync_MidiClock_Return
 	ei 6
 	bitda 3, 10407
-	jr z, LABEL_F5B076
+	jr z, AccSync_MidiClock_Update
 	ordi8 1065, 4
-	jr LABEL_F5B07B
+	jr AccSync_MidiClock_Apply
 
-LABEL_F5B076:
+AccSync_MidiClock_Update:
 	ordi8 1065, 2
 
-LABEL_F5B07B:
+AccSync_MidiClock_Apply:
 	call MIDI_SC0_TX_DISPATCH
 	ei 0
 
-LABEL_F5B081:
+AccSync_MidiClock_Return:
 	ret
 
-LABEL_F5B082:
+AccSync_MidiClock_Padding:
 	.byte 0x00, 0x00
 
-LABEL_F5B084:
+AccTempo_WriteStartMarker:
 	cpdi16 10410, 0
-	jr z, LABEL_F5B0A2
+	jr z, AccTempo_WriteMarker_Return
 
-LABEL_F5B08C:
+AccTempo_WriteStopMarker:
 	ei 6
 	pushw wa
 	call TempoRingBuf_WriteByte_Ext
@@ -172682,19 +172682,19 @@ LABEL_F5B08C:
 	inc 2, xsp
 	ei 0
 
-LABEL_F5B0A2:
+AccTempo_WriteMarker_Return:
 	ret
 
-LABEL_F5B0A3:
+AccTempo_WriteMarker_Padding:
 	.byte 0x00, 0x00, 0x0e
 
-LABEL_F5B0A6:
+AccReplay_FullRestart:
 	stdi8 13428, 0
 	ordi8 13457, 1
-	calr LABEL_F5B11D
+	calr AccPlayMode_WaitIdle
 	xor bc, bc
 
-LABEL_F5B0B5:
+AccReplay_Restart_WaitIdle:
 	pushw bc
 	call SeqTiming_Snapshot
 	popw bc
@@ -172703,95 +172703,95 @@ LABEL_F5B0B5:
 	call 0xEF259B
 	popw bc
 	cps wa, 0
-	jr nz, LABEL_F5B0D1
+	jr nz, AccReplay_Restart_Snapshot
 	inc 1, bc
 	cp bc, 0x200
-	jr c, LABEL_F5B0B5
-	jr LABEL_F5B0FD
+	jr c, AccReplay_Restart_WaitIdle
+	jr AccReplay_Restart_ReInit
 
-LABEL_F5B0D1:
+AccReplay_Restart_Snapshot:
 	call LABEL_EF149F
 	xor wa, wa
 	call 0xEF259B
 	cps wa, 0
-	jr z, LABEL_F5B0FD
+	jr z, AccReplay_Restart_ReInit
 	call LABEL_EF149F
-	calr LABEL_F5B105
-	calr LABEL_F5B130
+	calr AccTiming_AlignTo8Tick
+	calr AccTempo_CheckSource
 	call SeqTiming_Snapshot
 
-LABEL_F5B0ED:
+AccReplay_Restart_Drain:
 	xor wa, wa
 	call 0xEF259B
 	cps wa, 0
-	jr z, LABEL_F5B0FD
+	jr z, AccReplay_Restart_ReInit
 	call LABEL_EF149F
-	jr LABEL_F5B0ED
+	jr AccReplay_Restart_Drain
 
-LABEL_F5B0FD:
+AccReplay_Restart_ReInit:
 	anddi8 13457, 254
 	ret
 
-LABEL_F5B103:
+AccReplay_Restart_Return:
 	.byte 0x00, 0x00
 
-LABEL_F5B105:
+AccTiming_AlignTo8Tick:
 	pushw hl
 	ldw bc, 0x8
 	ldda16 xwa, 1033
 	add wa, bc
 
-LABEL_F5B10F:
+AccTiming_Align_Compute:
 	ld hl, wa
 	subda16 xhl, 1033
 	cps hl, 0
-	jr le, LABEL_F5B11B
-	jr LABEL_F5B10F
+	jr le, AccTiming_Align_Return
+	jr AccTiming_Align_Compute
 
-LABEL_F5B11B:
+AccTiming_Align_Return:
 	popw hl
 	ret
 
-LABEL_F5B11D:
+AccPlayMode_WaitIdle:
 	xor bc, bc
 
-LABEL_F5B11F:
+AccPlayMode_WaitIdle_Check:
 	bitda 0, 1054
-	jr z, LABEL_F5B12D
+	jr z, AccPlayMode_WaitIdle_Loop
 	inc 1, bc
 	cp bc, 0x500
-	jr nz, LABEL_F5B11F
+	jr nz, AccPlayMode_WaitIdle_Check
 
-LABEL_F5B12D:
+AccPlayMode_WaitIdle_Loop:
 	ret
 
-LABEL_F5B12E:
+AccPlayMode_WaitIdle_Return:
 	.byte 0x00, 0x00
 
-LABEL_F5B130:
+AccTempo_CheckSource:
 	cpdi8 1115, 1
-	jr nz, LABEL_F5B143
+	jr nz, AccTempo_CheckSource_Process
 	cpdi8 52959, 0
-	jr z, LABEL_F5B143
+	jr z, AccTempo_CheckSource_Process
 	stdi8 1115, 0
 
-LABEL_F5B143:
+AccTempo_CheckSource_Process:
 	bitda 0, 1115
-	jr z, LABEL_F5B14F
+	jr z, AccTempo_CheckSource_Clear
 	bitda 2, 1054
-	jr nz, LABEL_F5B158
+	jr nz, AccTempo_CheckSource_Return
 
-LABEL_F5B14F:
+AccTempo_CheckSource_Clear:
 	call 0xF532E1
 	stdi8 1124, 0
 
-LABEL_F5B158:
+AccTempo_CheckSource_Return:
 	ret
 
-LABEL_F5B159:
+AccTempo_CheckSource_Padding:
 	.byte 0x00, 0x00
 
-LABEL_F5B15B:
+AccReplay_SavedPedal:
 	ldda8 a, 49277
 	pushw wa
 	ldda8 w, 49278
@@ -172806,7 +172806,7 @@ LABEL_F5B15B:
 	ldda8 a, 37112
 	pushw wa
 	stdi8 37112, 0
-	calr LABEL_F59B20
+	calr AccPedal_EventDispatch
 	popw wa
 	stda8 37112, a
 	popw wa
@@ -172829,16 +172829,16 @@ LABEL_F5B15B:
 	call LABEL_FDDF91
 	ret
 
-LABEL_F5B1C8:
+AccReplay_SavedPedal_Return:
 	.byte 0x00, 0x00
 
-LABEL_F5B1CA:
+AccReplay_SendPedalType5:
 	push xiz
-	calr LABEL_F5B1D0
+	calr AccReplay_SendPedalType6
 	pop xiz
 	ret
 
-LABEL_F5B1D0:
+AccReplay_SendPedalType6:
 	ld hl, wa
 	ldda8 a, 49277
 	pushw wa
@@ -172846,22 +172846,22 @@ LABEL_F5B1D0:
 	ldda8 a, 49279
 	pushw wa
 	cps l, 0
-	jr nz, LABEL_F5B1F5
+	jr nz, AccReplay_SendPedal_Process
 	stdi8 49277, 5
 	stdi8 49278, 4
 	stdi8 49279, 4
-	jr LABEL_F5B204
+	jr AccReplay_SendPedal_Dispatch
 
-LABEL_F5B1F5:
+AccReplay_SendPedal_Process:
 	stdi8 49277, 6
 	stdi8 49278, 4
 	stdi8 49279, 4
 
-LABEL_F5B204:
+AccReplay_SendPedal_Dispatch:
 	ldda8 a, 37112
 	pushw wa
 	stdi8 37112, 0
-	calr LABEL_F59B20
+	calr AccPedal_EventDispatch
 	popw wa
 	stda8 37112, a
 	popw wa
@@ -172880,10 +172880,10 @@ LABEL_F5B204:
 	call LABEL_FDDF91
 	ret
 
-LABEL_F5B23D:
+AccReplay_SendPedal_Return:
 	.byte 0x00, 0x00
 
-LABEL_F5B23F:
+AccReplay_SavedExpression:
 	ldda8 a, 49277
 	pushw wa
 	ldda8 w, 49278
@@ -172898,7 +172898,7 @@ LABEL_F5B23F:
 	ldda8 a, 37112
 	pushw wa
 	stdi8 37112, 255
-	calr LABEL_F59B20
+	calr AccPedal_EventDispatch
 	popw wa
 	stda8 37112, a
 	popw wa
@@ -172921,7 +172921,7 @@ LABEL_F5B23F:
 	call LABEL_FDDF91
 	ret
 
-LABEL_F5B2AC:
+AccReplay_SavedExpr_Return:
 	nop
 	nop
 	ld	xwa, 608256
@@ -172933,14 +172933,14 @@ LABEL_F5B2AC:
 	ret
 	.byte 0x00, 0x00
 
-LABEL_F5B2C6:
+AccReplay_FullStop:
 	ldda8 a, 64607
 	and a, 0xC
 	ldda8 c, 64608
 	and c, 0x4
 	or a, c
 	cps a, 0
-	jr z, LABEL_F5B2F8
+	jr z, AccReplay_Stop_ClearPedals
 	anddi8 64607, 243
 	lds wa, 0
 	ldb d, 0x5
@@ -172952,25 +172952,25 @@ LABEL_F5B2C6:
 	ldb e, 0x48
 	call SwbtWr_QueuePostEvent
 
-LABEL_F5B2F8:
+AccReplay_Stop_ClearPedals:
 	call 0xF532E1
 	cpdi8 13433, 0
-	jr z, LABEL_F5B310
+	jr z, AccReplay_Stop_ResetPosition
 	ldda8 a, 13433
 	adddm8 1079, a
 	stdi8 13433, 0
 
-LABEL_F5B310:
+AccReplay_Stop_ResetPosition:
 	anddi8 1079, 7
 	ldda8 a, 1079
 	cpda8 a, 1075
-	jr c, LABEL_F5B32F
+	jr c, AccReplay_Stop_Rebuild
 	subda8 a, 1075
 	stda8 1079, a
 	ldda8 a, 1075
 	stda8 13433, a
 
-LABEL_F5B32F:
+AccReplay_Stop_Rebuild:
 	xor wa, wa
 	stda8 1045, a
 	stda8 1046, a
@@ -172979,20 +172979,20 @@ LABEL_F5B32F:
 	ldda8 e, 1078
 	ldda8 d, 1079
 	cps de, 0
-	jr z, LABEL_F5B39A
+	jr z, AccReplay_Stop_Finalize
 	sub e, 0x18
-	jr nc, LABEL_F5B360
+	jr nc, AccReplay_Stop_CheckMode
 	add e, 0x60
 	dec 1, d
 	cp d, 0xFF
-	jr nz, LABEL_F5B360
+	jr nz, AccReplay_Stop_CheckMode
 	lds de, 0
 
-LABEL_F5B360:
+AccReplay_Stop_CheckMode:
 	xor bc, bc
 	anddi8 13434, 127
 
-LABEL_F5B367:
+AccReplay_Stop_Process:
 	stda8 1045, c
 	stda8 1046, b
 	pushw bc
@@ -173002,22 +173002,22 @@ LABEL_F5B367:
 	popw bc
 	add c, 0x18
 	cp c, 0x60
-	jr nz, LABEL_F5B383
+	jr nz, AccReplay_Stop_UpdateFlags
 	inc 1, b
 	xor c, c
 
-LABEL_F5B383:
+AccReplay_Stop_UpdateFlags:
 	bitda 7, 13434
-	jr nz, LABEL_F5B39A
+	jr nz, AccReplay_Stop_Finalize
 	cp bc, de
-	jr c, LABEL_F5B367
+	jr c, AccReplay_Stop_Process
 	ordi8 13434, 128
 	cp bc, de
-	jr z, LABEL_F5B367
+	jr z, AccReplay_Stop_Process
 	ld bc, de
-	jr LABEL_F5B367
+	jr AccReplay_Stop_Process
 
-LABEL_F5B39A:
+AccReplay_Stop_Finalize:
 	ldda8 a, 1078
 	stda8 1045, a
 	ldda8 a, 1079
@@ -173026,15 +173026,15 @@ LABEL_F5B39A:
 	call 0xF532E1
 	ret
 
-LABEL_F5B3B4:
+AccReplay_Stop_Return:
 	.byte 0x00, 0x00
 
-LABEL_F5B3B6:
+AccPos_SaveOnStop:
 	ldda8 a, 49279
 	cps a, 0
-	jr z, LABEL_F5B3E5
+	jr z, AccPos_SaveOnStop_Return
 	bitda 0, 10406
-	jr z, LABEL_F5B3E5
+	jr z, AccPos_SaveOnStop_Return
 	ei 6
 	ldda8 a, 1045
 	stda8 1078, a
@@ -173044,17 +173044,17 @@ LABEL_F5B3B6:
 	stda8 1045, a
 	stda8 1046, a
 	ei 0
-	calr LABEL_F5B2C6
+	calr AccReplay_FullStop
 
-LABEL_F5B3E5:
+AccPos_SaveOnStop_Return:
 	ret
 
-LABEL_F5B3E6:
+AccPos_SaveOnStop_Padding:
 	.byte 0x00, 0x00
 
-LABEL_F5B3E8:
+AccPos_ClearOnStart:
 	bitda 0, 12931
-	jr nz, LABEL_F5B411
+	jr nz, AccPos_ClearOnStart_Return
 	xor wa, wa
 	ei 6
 	stda8 1045, a
@@ -173066,10 +173066,10 @@ LABEL_F5B3E8:
 	ordi8 13517, 128
 	call 0xF532E1
 
-LABEL_F5B411:
+AccPos_ClearOnStart_Return:
 	ret
 
-LABEL_F5B412:
+AccPos_ClearOnStart_Padding:
 	.byte 0x00, 0x00, 0xc1, 0x34, 0x8d, 0x3f, 0x13, 0x6e
 	.byte 0x0c, 0xc1, 0x7a, 0x34, 0x3c, 0xfd, 0xc1, 0xa6
 	.byte 0x28, 0x3c, 0xfe, 0x68, 0x1e, 0xf1, 0x7a, 0x34
@@ -173078,64 +173078,64 @@ LABEL_F5B412:
 	.byte 0x34, 0x00, 0x00, 0x1e, 0x86, 0xfe, 0xc1, 0x7a
 	.byte 0x34, 0x3c, 0xfd, 0x0e, 0x00, 0x00
 
-LABEL_F5B448:
+AccFlags_SyncTo64607:
 	ldda8 e, 1056
 	anddi8 64607, 254
 	bit 2, e
-	jr z, LABEL_F5B45B
+	jr z, AccFlags_Sync_Process
 	ordi8 64607, 1
 
-LABEL_F5B45B:
+AccFlags_Sync_Process:
 	ld a, e
 	xorda8 a, 13435
 	bit 2, a
-	jr z, LABEL_F5B46C
+	jr z, AccFlags_Sync_UpdateLED
 	ldb a, 0x22
 	call LABEL_FC793D
 
-LABEL_F5B46C:
+AccFlags_Sync_UpdateLED:
 	stda8 13435, e
 	bitda 0, 13470
-	jr z, LABEL_F5B47B
+	jr z, AccFlags_Sync_Return
 	anddi8 13470, 254
 
-LABEL_F5B47B:
+AccFlags_Sync_Return:
 	ret
 
-LABEL_F5B47C:
+AccFlags_Sync_Padding:
 	.byte 0x00, 0x00
 
-LABEL_F5B47E:
+AccTiming_InitAllParts:
 	stdi16 13172, 65375
 	stdi16 13180, 6
 	stdi16 13182, 48
 	ld xbc, 0x3094
-	calr LABEL_F5B90B
+	calr AccKbdTiming_TableScan
 	ld xbc, 0x30C4
-	calr LABEL_F5B90B
+	calr AccKbdTiming_TableScan
 	stdi16 13180, 9
 	stdi16 13182, 72
 	stdi8 13196, 7
 	ld xbc, 0x30F4
-	calr LABEL_F5BCB2
+	calr AccAccTiming_TableScan
 	stdi8 13196, 4
 	ld xbc, 0x313C
-	calr LABEL_F5BCB2
+	calr AccAccTiming_TableScan
 	stdi8 13196, 5
 	ld xbc, 0x3184
-	calr LABEL_F5BCB2
+	calr AccAccTiming_TableScan
 	stdi8 13196, 6
 	ld xbc, 0x31CC
-	calr LABEL_F5BCB2
+	calr AccAccTiming_TableScan
 	ldda16 xwa, 13172
 	stda16 13170, xwa
 	jr __jrt_nop_F5B4EA
 __jrt_nop_F5B4EA:
 
-LABEL_F5B4EA:
+AccTiming_MasterTick_Return:
 	ret
 
-LABEL_F5B4EB:
+AccTiming_MasterTick:
 	stdi8 13175, 95
 	stdi16 13180, 6
 	stdi16 13182, 48
@@ -173143,14 +173143,14 @@ LABEL_F5B4EB:
 	stda8 13188, a
 	ld xhl, 0x2A94
 	ld xbc, 0x3094
-	calr LABEL_F5B61A
+	calr AccKbdTiming_ScanRingBuf
 	ldda8 a, 13188
 	stda8 13189, a
 	ldda8 a, 13190
 	stda8 13188, a
 	ld xhl, 0x2B94
 	ld xbc, 0x30C4
-	calr LABEL_F5B61A
+	calr AccKbdTiming_ScanRingBuf
 	ldda8 a, 13188
 	stda8 13190, a
 	stdi16 13180, 9
@@ -173163,7 +173163,7 @@ LABEL_F5B4EB:
 	stda8 13107, a
 	ld xhl, 0x2C94
 	ld xbc, 0x30F4
-	calr LABEL_F5B9A2
+	calr AccAccTiming_ScanRingBuf
 	ldda8 a, 13188
 	stda8 13191, a
 	ldda8 a, 13107
@@ -173175,7 +173175,7 @@ LABEL_F5B4EB:
 	stda8 13107, a
 	ld xhl, 0x2D94
 	ld xbc, 0x313C
-	calr LABEL_F5B9A2
+	calr AccAccTiming_ScanRingBuf
 	ldda8 a, 13188
 	stda8 13192, a
 	ldda8 a, 13107
@@ -173187,7 +173187,7 @@ LABEL_F5B4EB:
 	stda8 13107, a
 	ld xhl, 0x2E94
 	ld xbc, 0x3184
-	calr LABEL_F5B9A2
+	calr AccAccTiming_ScanRingBuf
 	ldda8 a, 13188
 	stda8 13193, a
 	ldda8 a, 13107
@@ -173199,7 +173199,7 @@ LABEL_F5B4EB:
 	stda8 13107, a
 	ld xhl, 0x2F94
 	ld xbc, 0x31CC
-	calr LABEL_F5B9A2
+	calr AccAccTiming_ScanRingBuf
 	ldda8 a, 13188
 	stda8 13194, a
 	ldda8 a, 13107
@@ -173209,92 +173209,92 @@ LABEL_F5B4EB:
 	jr __jrt_nop_F5B619
 __jrt_nop_F5B619:
 
-LABEL_F5B619:
+AccKbdTiming_Ret:
 	ret
 
-LABEL_F5B61A:
+AccKbdTiming_ScanRingBuf:
 	stdi8 14968, 255
 	ld ix, (xhl + 6)
 
-LABEL_F5B622:
+AccKbdTiming_EventLoop:
 	cp (xhl + 4), ix
-	jrl z, LABEL_F5B88B
+	jrl z, AccKbdTiming_ScanDone
 	ld_srib3 A, 0x07, 0xEC, 0xF0
 	inc 1, ix
 	cp ix, (xhl + 2)
-	jr ule, LABEL_F5B637
+	jr ule, AccKbdTiming_ClassifyEvent
 	ld ix, (xhl + 256)
 
-LABEL_F5B637:
+AccKbdTiming_ClassifyEvent:
 	ld w, a
 	cp a, 0xDF
-	jr z, LABEL_F5B643
+	jr z, AccKbdTiming_SpecialEvent
 	cp a, 0x9F
-	jr nz, LABEL_F5B64A
+	jr nz, AccKbdTiming_CheckNoteOn
 
-LABEL_F5B643:
+AccKbdTiming_SpecialEvent:
 	stdi8 13184, 2
-	jr LABEL_F5B670
+	jr AccKbdTiming_StoreEventData
 
-LABEL_F5B64A:
+AccKbdTiming_CheckNoteOn:
 	cp a, 0x90
-	jr nz, LABEL_F5B656
+	jr nz, AccKbdTiming_CheckProgramChg
 	stdi8 13184, 4
-	jr LABEL_F5B670
+	jr AccKbdTiming_StoreEventData
 
-LABEL_F5B656:
+AccKbdTiming_CheckProgramChg:
 	and a, 0xF0
 	cp a, 0xC0
-	jr nz, LABEL_F5B665
+	jr nz, AccKbdTiming_CheckControl
 	stdi8 13184, 5
-	jr LABEL_F5B670
+	jr AccKbdTiming_StoreEventData
 
-LABEL_F5B665:
+AccKbdTiming_CheckControl:
 	cp a, 0xD0
-	jrl nz, LABEL_F5B71D
+	jrl nz, AccKbdTiming_SkipEvent
 	stdi8 13184, 2
 
-LABEL_F5B670:
+AccKbdTiming_StoreEventData:
 	stda8 14969, a
 	ld_srib3 A, 0x07, 0xEC, 0xF0
 	stda16 13176, xix
 	inc 1, ix
 	cp ix, (xhl + 2)
-	jr ule, LABEL_F5B687
+	jr ule, AccKbdTiming_CheckTimestamp
 	ld ix, (xhl + 256)
 
-LABEL_F5B687:
+AccKbdTiming_CheckTimestamp:
 	cpda8 a, 1117
-	jrl ugt, LABEL_F5B845
+	jrl ugt, AccKbdTiming_TimestampOverflow
 	ld a, w
 	and a, 0xF0
 	cp w, 0x9F
-	jrl z, LABEL_F5B7BF
+	jrl z, AccKbdTiming_WriteNonNote
 	cp w, 0xDF
-	jrl z, LABEL_F5B7BF
+	jrl z, AccKbdTiming_WriteNonNote
 	cp a, 0x90
-	jrl nz, LABEL_F5B7BA
+	jrl nz, AccKbdTiming_WriteNonNote_Prep
 	cpdi8 14968, 0
-	jr nz, LABEL_F5B6BC
+	jr nz, AccKbdTiming_NoteSlotScan
 	pushw wa
 	ldb a, 0x8
 	stda8 14972, a
 	popw wa
-	calr LABEL_F5B88C
+	calr AccKbdTiming_CatchupReplay
 	stdi8 14968, 255
 
-LABEL_F5B6BC:
+AccKbdTiming_NoteSlotScan:
 	xor iz, iz
 
-LABEL_F5B6BE:
+AccKbdTiming_SlotLoop:
 	cpda16 xiz, 13182
-	jr nc, LABEL_F5B6D1
+	jr nc, AccKbdTiming_SlotOverflow
 	bit_dri 7, 0x07, 0xE4, 0xF8
-	jr z, LABEL_F5B726
+	jr z, AccKbdTiming_WriteNoteEvent
 	addda16 xiz, 13180
-	jr LABEL_F5B6BE
+	jr AccKbdTiming_SlotLoop
 
-LABEL_F5B6D1:
+AccKbdTiming_SlotOverflow:
 	pushw wa
 	xor xwa, xwa
 	ldda8 a, 13188
@@ -173308,29 +173308,29 @@ LABEL_F5B6D1:
 	ld_srib3 W, 0x07, 0xE4, 0xF8
 	and a, 0xF0
 	or a, 0x8
-	calr LABEL_F5B98E
+	calr AccSeq_WriteByte
 	ld a, w
-	calr LABEL_F5B98E
+	calr AccSeq_WriteByte
 	ldb a, 0x0
-	calr LABEL_F5B98E
+	calr AccSeq_WriteByte
 	popw iz
 	popw wa
 	incdi8 1, 13188
 	cpdi8 13188, 8
-	jr c, LABEL_F5B71B
+	jr c, AccKbdTiming_SlotOverflow_Done
 	stdi8 13188, 0
 
-LABEL_F5B71B:
-	jr LABEL_F5B726
+AccKbdTiming_SlotOverflow_Done:
+	jr AccKbdTiming_WriteNoteEvent
 
-LABEL_F5B71D:
+AccKbdTiming_SkipEvent:
 	ld ix, (xhl + 4)
 	ld (xhl + 6), ix
-	jrl LABEL_F5B622
+	jrl AccKbdTiming_EventLoop
 
-LABEL_F5B726:
+AccKbdTiming_WriteNoteEvent:
 	or a, 0x8
-	calr LABEL_F5B98E
+	calr AccSeq_WriteByte
 	ld a, w
 	lda_dri3 XBC, 0x07, 0xE4, 0xF8
 	inc 1, iz
@@ -173340,157 +173340,157 @@ LABEL_F5B726:
 	ld_srib3 A, 0x07, 0xEC, 0xF0
 	inc 1, ix
 	cp ix, (xhl + 2)
-	jr ule, LABEL_F5B74D
+	jr ule, AccKbdTiming_WriteNote_Byte2
 	ld ix, (xhl + 256)
 
-LABEL_F5B74D:
-	calr LABEL_F5B98E
+AccKbdTiming_WriteNote_Byte2:
+	calr AccSeq_WriteByte
 	lda_dri3 XBC, 0x07, 0xE4, 0xF8
 	inc 1, iz
 	ld_srib3 A, 0x07, 0xEC, 0xF0
 	inc 1, ix
 	cp ix, (xhl + 2)
-	jr ule, LABEL_F5B766
+	jr ule, AccKbdTiming_WriteNote_Byte3
 	ld ix, (xhl + 256)
 
-LABEL_F5B766:
-	calr LABEL_F5B98E
+AccKbdTiming_WriteNote_Byte3:
+	calr AccSeq_WriteByte
 	lda_dri3 XBC, 0x07, 0xE4, 0xF8
 	inc 1, iz
 	ld_srib3 A, 0x07, 0xEC, 0xF0
 	inc 1, ix
 	cp ix, (xhl + 2)
-	jr ule, LABEL_F5B77F
+	jr ule, AccKbdTiming_WriteNote_ReadTiming
 	ld ix, (xhl + 256)
 
-LABEL_F5B77F:
+AccKbdTiming_WriteNote_ReadTiming:
 	ld_srib3 W, 0x07, 0xEC, 0xF0
 	inc 1, ix
 	cp ix, (xhl + 2)
-	jr ule, LABEL_F5B78E
+	jr ule, AccKbdTiming_WriteNote_ClampTiming
 	ld ix, (xhl + 256)
 
-LABEL_F5B78E:
+AccKbdTiming_WriteNote_ClampTiming:
 	cp wa, 0xA
-	jr ugt, LABEL_F5B797
+	jr ugt, AccKbdTiming_WriteNote_AddBase
 	ldw wa, 0xA
 
-LABEL_F5B797:
+AccKbdTiming_WriteNote_AddBase:
 	addda16 xwa, 1118
 	cp a, 0x60
-	jr c, LABEL_F5B7A5
+	jr c, AccKbdTiming_WriteNote_StoreTiming
 	inc 1, w
 	sub a, 0x60
 
-LABEL_F5B7A5:
+AccKbdTiming_WriteNote_StoreTiming:
 	st_dri3w WA, 0x07, 0xE4, 0xF8
 	cpda16 xwa, 13170
-	jr nc, LABEL_F5B7B4
+	jr nc, AccKbdTiming_WriteNote_UpdateReadPos
 	stda16 13170, xwa
 
-LABEL_F5B7B4:
+AccKbdTiming_WriteNote_UpdateReadPos:
 	ld (xhl + 6), ix
-	jrl LABEL_F5B622
+	jrl AccKbdTiming_EventLoop
 
-LABEL_F5B7BA:
+AccKbdTiming_WriteNonNote_Prep:
 	ld w, a
 	or a, 0x8
 
-LABEL_F5B7BF:
-	calr LABEL_F5B98E
+AccKbdTiming_WriteNonNote:
+	calr AccSeq_WriteByte
 	ld_srib3 A, 0x07, 0xEC, 0xF0
 	inc 1, ix
 	cp ix, (xhl + 2)
-	jr ule, LABEL_F5B7D1
+	jr ule, AccKbdTiming_WriteNonNote_Byte2
 	ld ix, (xhl + 256)
 
-LABEL_F5B7D1:
-	calr LABEL_F5B98E
+AccKbdTiming_WriteNonNote_Byte2:
+	calr AccSeq_WriteByte
 	ld_srib3 A, 0x07, 0xEC, 0xF0
 	inc 1, ix
 	cp ix, (xhl + 2)
-	jr ule, LABEL_F5B7E3
+	jr ule, AccKbdTiming_WriteNonNote_Byte3
 	ld ix, (xhl + 256)
 
-LABEL_F5B7E3:
-	calr LABEL_F5B98E
+AccKbdTiming_WriteNonNote_Byte3:
+	calr AccSeq_WriteByte
 	cp w, 0xDF
-	jr nz, LABEL_F5B7FF
+	jr nz, AccKbdTiming_WriteNonNote_CheckType
 	ldb a, 0x0
 	stda8 13103, a
 	stda8 13104, a
 	stda8 13105, a
 	stda8 13106, a
-	jr LABEL_F5B83F
+	jr AccKbdTiming_WriteNonNote_Done
 
-LABEL_F5B7FF:
+AccKbdTiming_WriteNonNote_CheckType:
 	cp w, 0x9F
-	jr z, LABEL_F5B83F
+	jr z, AccKbdTiming_WriteNonNote_Done
 	cp w, 0xD0
-	jr z, LABEL_F5B83F
+	jr z, AccKbdTiming_WriteNonNote_Done
 	ld_srib3 A, 0x07, 0xEC, 0xF0
 	inc 1, ix
 	cp ix, (xhl + 2)
-	jr ule, LABEL_F5B818
+	jr ule, AccKbdTiming_WriteNonNote_Byte4
 	ld ix, (xhl + 256)
 
-LABEL_F5B818:
-	calr LABEL_F5B98E
+AccKbdTiming_WriteNonNote_Byte4:
+	calr AccSeq_WriteByte
 	ld_srib3 A, 0x07, 0xEC, 0xF0
 	inc 1, ix
 	cp ix, (xhl + 2)
-	jr ule, LABEL_F5B82A
+	jr ule, AccKbdTiming_WriteNonNote_Byte5
 	ld ix, (xhl + 256)
 
-LABEL_F5B82A:
-	calr LABEL_F5B98E
+AccKbdTiming_WriteNonNote_Byte5:
+	calr AccSeq_WriteByte
 	ld_srib3 A, 0x07, 0xEC, 0xF0
 	inc 1, ix
 	cp ix, (xhl + 2)
-	jr ule, LABEL_F5B83C
+	jr ule, AccKbdTiming_WriteNonNote_Byte6
 	ld ix, (xhl + 256)
 
-LABEL_F5B83C:
-	calr LABEL_F5B98E
+AccKbdTiming_WriteNonNote_Byte6:
+	calr AccSeq_WriteByte
 
-LABEL_F5B83F:
+AccKbdTiming_WriteNonNote_Done:
 	ld (xhl + 6), ix
-	jrl LABEL_F5B622
+	jrl AccKbdTiming_EventLoop
 
-LABEL_F5B845:
+AccKbdTiming_TimestampOverflow:
 	cpdi8 14969, 192
-	jr nz, LABEL_F5B851
+	jr nz, AccKbdTiming_Overflow_SubBase
 	stdi8 14968, 0
 
-LABEL_F5B851:
+AccKbdTiming_Overflow_SubBase:
 	subda8 a, 1117
 	cpda8 a, 13175
-	jr nc, LABEL_F5B85F
+	jr nc, AccKbdTiming_Overflow_CalcSkip
 	stda8 13175, a
 
-LABEL_F5B85F:
+AccKbdTiming_Overflow_CalcSkip:
 	ldda16 xix, 13176
 	lda_dri3 XBC, 0x07, 0xEC, 0xF0
 	inc 1, ix
 	cp ix, (xhl + 2)
-	jr ule, LABEL_F5B872
+	jr ule, AccKbdTiming_Overflow_AdvancePos
 	ld ix, (xhl + 256)
 
-LABEL_F5B872:
+AccKbdTiming_Overflow_AdvancePos:
 	xor wa, wa
 	ldda8 a, 13184
 	add ix, wa
 	cp ix, (xhl + 2)
-	jrl ule, LABEL_F5B622
+	jrl ule, AccKbdTiming_EventLoop
 	sub ix, (xhl + 2)
 	dec 1, ix
 	add ix, (xhl + 256)
-	jrl LABEL_F5B622
+	jrl AccKbdTiming_EventLoop
 
-LABEL_F5B88B:
+AccKbdTiming_ScanDone:
 	ret
 
-LABEL_F5B88C:
+AccKbdTiming_CatchupReplay:
 	push xwa
 	push xhl
 	push xbc
@@ -173501,41 +173501,41 @@ LABEL_F5B88C:
 	ld iy, ix
 	ld ix, (xhl + 6)
 
-LABEL_F5B898:
+AccKbdTiming_Catchup_Loop:
 	cp ix, iy
-	jr z, LABEL_F5B8F8
+	jr z, AccKbdTiming_Catchup_Done
 	ld_srib3 A, 0x07, 0xEC, 0xF0
 	ld w, a
 	and w, 0xF0
 	cp w, 0xC0
-	jr nz, LABEL_F5B8F3
+	jr nz, AccKbdTiming_Catchup_SkipNonC0
 	ld a, w
 	orda8 a, 14972
-	calr LABEL_F5B98E
-	calr LABEL_F5B900
-	calr LABEL_F5B900
+	calr AccSeq_WriteByte
+	calr AccKbdTiming_AdvancePos
+	calr AccKbdTiming_AdvancePos
 	ld_srib3 A, 0x07, 0xEC, 0xF0
-	calr LABEL_F5B98E
-	calr LABEL_F5B900
+	calr AccSeq_WriteByte
+	calr AccKbdTiming_AdvancePos
 	ld_srib3 A, 0x07, 0xEC, 0xF0
-	calr LABEL_F5B98E
-	calr LABEL_F5B900
+	calr AccSeq_WriteByte
+	calr AccKbdTiming_AdvancePos
 	ld_srib3 A, 0x07, 0xEC, 0xF0
-	calr LABEL_F5B98E
-	calr LABEL_F5B900
+	calr AccSeq_WriteByte
+	calr AccKbdTiming_AdvancePos
 	ld_srib3 A, 0x07, 0xEC, 0xF0
-	calr LABEL_F5B98E
-	calr LABEL_F5B900
+	calr AccSeq_WriteByte
+	calr AccKbdTiming_AdvancePos
 	ld_srib3 A, 0x07, 0xEC, 0xF0
-	calr LABEL_F5B98E
-	calr LABEL_F5B900
-	jr LABEL_F5B898
+	calr AccSeq_WriteByte
+	calr AccKbdTiming_AdvancePos
+	jr AccKbdTiming_Catchup_Loop
 
-LABEL_F5B8F3:
-	calr LABEL_F5B900
-	jr LABEL_F5B898
+AccKbdTiming_Catchup_SkipNonC0:
+	calr AccKbdTiming_AdvancePos
+	jr AccKbdTiming_Catchup_Loop
 
-LABEL_F5B8F8:
+AccKbdTiming_Catchup_Done:
 	pop xiz
 	pop xiy
 	pop xix
@@ -173545,23 +173545,23 @@ LABEL_F5B8F8:
 	pop xwa
 	ret
 
-LABEL_F5B900:
+AccKbdTiming_AdvancePos:
 	inc 1, ix
 	cp ix, (xhl + 2)
-	jr ule, LABEL_F5B90A
+	jr ule, AccKbdTiming_AdvancePos_Ret
 	ld ix, (xhl + 256)
 
-LABEL_F5B90A:
+AccKbdTiming_AdvancePos_Ret:
 	ret
 
-LABEL_F5B90B:
+AccKbdTiming_TableScan:
 	xor iz, iz
 
-LABEL_F5B90D:
+AccKbdTiming_TableScan_Loop:
 	cpda16 xiz, 13182
 	jp_24 nc, 0xF5B98D
 	bit_dri 7, 0x07, 0xE4, 0xF8
-	jr z, LABEL_F5B986
+	jr z, AccKbdTiming_TableScan_NextSlot
 	ld ix, iz
 	ld_srib3 A, 0x07, 0xE4, 0xF0
 	stda8 13185, a
@@ -173574,38 +173574,38 @@ LABEL_F5B90D:
 	inc 1, ix
 	ld_sriw3 WA, 0x07, 0xE4, 0xF0
 	cpda16 xwa, 1118
-	jr gt, LABEL_F5B96B
+	jr gt, AccKbdTiming_TableScan_Decrement
 	ldb a, 0xF0
 	andda8 a, 13185
 	or a, 0x8
-	calr LABEL_F5B98E
+	calr AccSeq_WriteByte
 	ldda8 a, 13186
-	calr LABEL_F5B98E
+	calr AccSeq_WriteByte
 	ldb a, 0x0
-	calr LABEL_F5B98E
+	calr AccSeq_WriteByte
 	and_srib_im 0x07, 0xE4, 0xF8, 0x7F
-	jr LABEL_F5B986
+	jr AccKbdTiming_TableScan_NextSlot
 
-LABEL_F5B96B:
+AccKbdTiming_TableScan_Decrement:
 	subda16 xwa, 1118
 	bit 7, a
-	jr z, LABEL_F5B977
+	jr z, AccKbdTiming_TableScan_StoreTiming
 	add a, 0x60
 
-LABEL_F5B977:
+AccKbdTiming_TableScan_StoreTiming:
 	st_dri3w WA, 0x07, 0xE4, 0xF0
 	cpda16 xwa, 13172
-	jr nc, LABEL_F5B986
+	jr nc, AccKbdTiming_TableScan_NextSlot
 	stda16 13172, xwa
 
-LABEL_F5B986:
+AccKbdTiming_TableScan_NextSlot:
 	addda16 xiz, 13180
-	jrl LABEL_F5B90D
+	jrl AccKbdTiming_TableScan_Loop
 
-LABEL_F5B98D:
+AccKbdTiming_TableScan_Done:
 	ret
 
-LABEL_F5B98E:
+AccSeq_WriteByte:
 	push xhl
 	push xbc
 	push xde
@@ -173623,127 +173623,127 @@ LABEL_F5B98E:
 	pop xhl
 	ret
 
-LABEL_F5B9A2:
+AccAccTiming_ScanRingBuf:
 	stdi8 14970, 255
 	ld ix, (xhl + 6)
 
-LABEL_F5B9AA:
+AccAccTiming_EventLoop:
 	cp (xhl + 4), ix
-	jrl z, LABEL_F5BCB1
+	jrl z, AccAccTiming_ScanDone
 	ld_srib3 A, 0x07, 0xEC, 0xF0
 	inc 1, ix
 	cp ix, (xhl + 2)
-	jr ule, LABEL_F5B9BF
+	jr ule, AccAccTiming_ClassifyEvent
 	ld ix, (xhl + 256)
 
-LABEL_F5B9BF:
+AccAccTiming_ClassifyEvent:
 	ld w, a
 	cp a, 0x90
-	jr nz, LABEL_F5B9CD
+	jr nz, AccAccTiming_Check0x91
 	stdi8 13184, 5
-	jr LABEL_F5B9FF
+	jr AccAccTiming_StoreEventData
 
-LABEL_F5B9CD:
+AccAccTiming_Check0x91:
 	cp a, 0x91
-	jr nz, LABEL_F5B9D9
+	jr nz, AccAccTiming_Check0x92
 	stdi8 13184, 7
-	jr LABEL_F5B9FF
+	jr AccAccTiming_StoreEventData
 
-LABEL_F5B9D9:
+AccAccTiming_Check0x92:
 	cp a, 0x92
-	jr nz, LABEL_F5B9E5
+	jr nz, AccAccTiming_CheckProgramChg
 	stdi8 13184, 6
-	jr LABEL_F5B9FF
+	jr AccAccTiming_StoreEventData
 
-LABEL_F5B9E5:
+AccAccTiming_CheckProgramChg:
 	and a, 0xF0
 	cp a, 0xC0
-	jr nz, LABEL_F5B9F4
+	jr nz, AccAccTiming_CheckControl
 	stdi8 13184, 5
-	jr LABEL_F5B9FF
+	jr AccAccTiming_StoreEventData
 
-LABEL_F5B9F4:
+AccAccTiming_CheckControl:
 	cp a, 0xD0
-	jrl nz, LABEL_F5BB07
+	jrl nz, AccAccTiming_SkipEvent
 	stdi8 13184, 2
 
-LABEL_F5B9FF:
+AccAccTiming_StoreEventData:
 	stda8 14971, a
 	ld_srib3 A, 0x07, 0xEC, 0xF0
 	stda16 13178, xix
 	inc 1, ix
 	cp ix, (xhl + 2)
-	jr ule, LABEL_F5BA16
+	jr ule, AccAccTiming_CheckTimestamp
 	ld ix, (xhl + 256)
 
-LABEL_F5BA16:
+AccAccTiming_CheckTimestamp:
 	cpda8 a, 1117
-	jrl ugt, LABEL_F5BC6B
+	jrl ugt, AccAccTiming_TimestampOverflow
 	ld a, w
 	and a, 0xF0
 	cp a, 0x90
-	jrl nz, LABEL_F5BBEC
+	jrl nz, AccAccTiming_WriteNonNote
 	cpdi8 14970, 0
-	jr nz, LABEL_F5BA41
+	jr nz, AccAccTiming_NoteSlotScan
 	pushw wa
 	ldda8 a, 13196
 	stda8 14972, a
 	popw wa
-	calr LABEL_F5B88C
+	calr AccKbdTiming_CatchupReplay
 	stdi8 14970, 255
 
-LABEL_F5BA41:
+AccAccTiming_NoteSlotScan:
 	pushw wa
 	ld_srib3 W, 0x07, 0xEC, 0xF0
 	xor iz, iz
 
-LABEL_F5BA49:
+AccAccTiming_NoteSlot_Loop:
 	cpda16 xiz, 13182
-	jr nc, LABEL_F5BAA4
+	jr nc, AccAccTiming_NoteSlot_FindFree
 	bit_dri 7, 0x07, 0xE4, 0xF8
-	jr z, LABEL_F5BA67
+	jr z, AccAccTiming_NoteSlot_NextSlot
 	ldfr_werp IZ, 0xFA
 	add iz, 0x2
 	cp_srib_mr W, 0x07, 0xE4, 0xF8
 	ldto_werp IZ, 0xFA
-	jr z, LABEL_F5BA6D
+	jr z, AccAccTiming_NoteSlot_SendNoteOff
 
-LABEL_F5BA67:
+AccAccTiming_NoteSlot_NextSlot:
 	addda16 xiz, 13180
-	jr LABEL_F5BA49
+	jr AccAccTiming_NoteSlot_Loop
 
-LABEL_F5BA6D:
+AccAccTiming_NoteSlot_SendNoteOff:
 	ld_srib3 A, 0x07, 0xE4, 0xF8
 	and_srib_im 0x07, 0xE4, 0xF8, 0x7F
 	and a, 0xF0
 	orda8 a, 13196
-	calr LABEL_F5B98E
+	calr AccSeq_WriteByte
 	ld a, w
-	calr LABEL_F5B98E
+	calr AccSeq_WriteByte
 	ldb a, 0x0
-	calr LABEL_F5B98E
+	calr AccSeq_WriteByte
 	bitda 0, 13197
-	jr nz, LABEL_F5BAA4
+	jr nz, AccAccTiming_NoteSlot_FindFree
 	ordi8 13197, 1
 	ldb a, 0x90
-	calr LABEL_F5B98E
+	calr AccSeq_WriteByte
 	ldb a, 0x0
-	calr LABEL_F5B98E
-	calr LABEL_F5B98E
+	calr AccSeq_WriteByte
+	calr AccSeq_WriteByte
 
-LABEL_F5BAA4:
+AccAccTiming_NoteSlot_FindFree:
 	popw wa
 	xor iz, iz
 
-LABEL_F5BAA7:
+AccAccTiming_NoteSlot_FreeLoop:
 	cpda16 xiz, 13182
-	jr nc, LABEL_F5BABA
+	jr nc, AccAccTiming_SlotOverflow
 	bit_dri 7, 0x07, 0xE4, 0xF8
-	jr z, LABEL_F5BB10
+	jr z, AccAccTiming_WriteNoteEvent
 	addda16 xiz, 13180
-	jr LABEL_F5BAA7
+	jr AccAccTiming_NoteSlot_FreeLoop
 
-LABEL_F5BABA:
+AccAccTiming_SlotOverflow:
 	pushw wa
 	xor xwa, xwa
 	ldda8 a, 13188
@@ -173757,29 +173757,29 @@ LABEL_F5BABA:
 	ld_srib3 W, 0x07, 0xE4, 0xF8
 	and a, 0xF0
 	orda8 a, 13196
-	calr LABEL_F5B98E
+	calr AccSeq_WriteByte
 	ld a, w
-	calr LABEL_F5B98E
+	calr AccSeq_WriteByte
 	ldb a, 0x0
-	calr LABEL_F5B98E
+	calr AccSeq_WriteByte
 	popw iz
 	popw wa
 	incdi8 1, 13188
 	cpdi8 13188, 8
-	jr c, LABEL_F5BB05
+	jr c, AccAccTiming_SlotOverflow_Done
 	stdi8 13188, 0
 
-LABEL_F5BB05:
-	jr LABEL_F5BB10
+AccAccTiming_SlotOverflow_Done:
+	jr AccAccTiming_WriteNoteEvent
 
-LABEL_F5BB07:
+AccAccTiming_SkipEvent:
 	ld ix, (xhl + 4)
 	ld (xhl + 6), ix
-	jrl LABEL_F5B9AA
+	jrl AccAccTiming_EventLoop
 
-LABEL_F5BB10:
+AccAccTiming_WriteNoteEvent:
 	orda8 a, 13196
-	calr LABEL_F5B98E
+	calr AccSeq_WriteByte
 	ld a, w
 	lda_dri3 XBC, 0x07, 0xE4, 0xF8
 	inc 1, iz
@@ -173789,188 +173789,188 @@ LABEL_F5BB10:
 	ld_srib3 A, 0x07, 0xEC, 0xF0
 	inc 1, ix
 	cp ix, (xhl + 2)
-	jr ule, LABEL_F5BB38
+	jr ule, AccAccTiming_WriteNote_Byte2
 	ld ix, (xhl + 256)
 
-LABEL_F5BB38:
-	calr LABEL_F5B98E
+AccAccTiming_WriteNote_Byte2:
+	calr AccSeq_WriteByte
 	lda_dri3 XBC, 0x07, 0xE4, 0xF8
 	inc 1, iz
 	ld_srib3 A, 0x07, 0xEC, 0xF0
 	inc 1, ix
 	cp ix, (xhl + 2)
-	jr ule, LABEL_F5BB51
+	jr ule, AccAccTiming_WriteNote_Byte3
 	ld ix, (xhl + 256)
 
-LABEL_F5BB51:
-	calr LABEL_F5B98E
+AccAccTiming_WriteNote_Byte3:
+	calr AccSeq_WriteByte
 	lda_dri3 XBC, 0x07, 0xE4, 0xF8
 	inc 1, iz
 	pushw wa
 	ld_srib3 A, 0x07, 0xEC, 0xF0
 	inc 1, ix
 	cp ix, (xhl + 2)
-	jr ule, LABEL_F5BB6B
+	jr ule, AccAccTiming_WriteNote_ReadTimingLo
 	ld ix, (xhl + 256)
 
-LABEL_F5BB6B:
+AccAccTiming_WriteNote_ReadTimingLo:
 	ld_srib3 W, 0x07, 0xEC, 0xF0
 	inc 1, ix
 	cp ix, (xhl + 2)
-	jr ule, LABEL_F5BB7A
+	jr ule, AccAccTiming_WriteNote_ReadTimingHi
 	ld ix, (xhl + 256)
 
-LABEL_F5BB7A:
+AccAccTiming_WriteNote_ReadTimingHi:
 	addda16 xwa, 1118
 	cp a, 0x60
-	jr c, LABEL_F5BB88
+	jr c, AccAccTiming_WriteNote_StoreTiming
 	inc 1, w
 	sub a, 0x60
 
-LABEL_F5BB88:
+AccAccTiming_WriteNote_StoreTiming:
 	st_dri3w WA, 0x07, 0xE4, 0xF8
 	inc 2, iz
 	cpda16 xwa, 13170
-	jr nc, LABEL_F5BB99
+	jr nc, AccAccTiming_WriteNote_ExtraBytes
 	stda16 13170, xwa
 
-LABEL_F5BB99:
+AccAccTiming_WriteNote_ExtraBytes:
 	popw wa
 	ld_srib3 A, 0x07, 0xEC, 0xF0
 	inc 1, ix
 	cp ix, (xhl + 2)
-	jr ule, LABEL_F5BBA9
+	jr ule, AccAccTiming_WriteNote_StoreExtra1
 	ld ix, (xhl + 256)
 
-LABEL_F5BBA9:
+AccAccTiming_WriteNote_StoreExtra1:
 	lda_dri3 XBC, 0x07, 0xE4, 0xF8
 	inc 1, iz
 	cp w, 0x90
-	jr z, LABEL_F5BBE6
+	jr z, AccAccTiming_WriteNote_Done
 	ld_srib3 A, 0x07, 0xEC, 0xF0
 	inc 1, ix
 	cp ix, (xhl + 2)
-	jr ule, LABEL_F5BBC4
+	jr ule, AccAccTiming_WriteNote_StoreExtra2
 	ld ix, (xhl + 256)
 
-LABEL_F5BBC4:
+AccAccTiming_WriteNote_StoreExtra2:
 	lda_dri3 XBC, 0x07, 0xE4, 0xF8
 	inc 1, iz
 	cp w, 0x92
-	jr z, LABEL_F5BBE6
+	jr z, AccAccTiming_WriteNote_Done
 	ld_srib3 A, 0x07, 0xEC, 0xF0
 	inc 1, ix
 	cp ix, (xhl + 2)
-	jr ule, LABEL_F5BBDF
+	jr ule, AccAccTiming_WriteNote_StoreExtra3
 	ld ix, (xhl + 256)
 
-LABEL_F5BBDF:
+AccAccTiming_WriteNote_StoreExtra3:
 	lda_dri3 XBC, 0x07, 0xE4, 0xF8
 	inc 1, iz
 
-LABEL_F5BBE6:
+AccAccTiming_WriteNote_Done:
 	ld (xhl + 6), ix
-	jrl LABEL_F5B9AA
+	jrl AccAccTiming_EventLoop
 
-LABEL_F5BBEC:
+AccAccTiming_WriteNonNote:
 	ld w, a
 	orda8 a, 13196
-	calr LABEL_F5B98E
+	calr AccSeq_WriteByte
 	ld_srib3 A, 0x07, 0xEC, 0xF0
 	inc 1, ix
 	cp ix, (xhl + 2)
-	jr ule, LABEL_F5BC04
+	jr ule, AccAccTiming_WriteNonNote_Byte2
 	ld ix, (xhl + 256)
 
-LABEL_F5BC04:
-	calr LABEL_F5B98E
+AccAccTiming_WriteNonNote_Byte2:
+	calr AccSeq_WriteByte
 	stda8 13108, a
 	ld_srib3 A, 0x07, 0xEC, 0xF0
 	inc 1, ix
 	cp ix, (xhl + 2)
-	jr ule, LABEL_F5BC1A
+	jr ule, AccAccTiming_WriteNonNote_Byte3
 	ld ix, (xhl + 256)
 
-LABEL_F5BC1A:
-	calr LABEL_F5B98E
+AccAccTiming_WriteNonNote_Byte3:
+	calr AccSeq_WriteByte
 	cp w, 0xD0
-	jr nz, LABEL_F5BC2F
+	jr nz, AccAccTiming_WriteNonNote_ExtBytes
 	cpdi8 13108, 3
-	jr nz, LABEL_F5BC65
+	jr nz, AccAccTiming_WriteNonNote_Done
 	stda8 13107, a
-	jr LABEL_F5BC65
+	jr AccAccTiming_WriteNonNote_Done
 
-LABEL_F5BC2F:
+AccAccTiming_WriteNonNote_ExtBytes:
 	ld_srib3 A, 0x07, 0xEC, 0xF0
 	inc 1, ix
 	cp ix, (xhl + 2)
-	jr ule, LABEL_F5BC3E
+	jr ule, AccAccTiming_WriteNonNote_Byte5
 	ld ix, (xhl + 256)
 
-LABEL_F5BC3E:
-	calr LABEL_F5B98E
+AccAccTiming_WriteNonNote_Byte5:
+	calr AccSeq_WriteByte
 	ld_srib3 A, 0x07, 0xEC, 0xF0
 	inc 1, ix
 	cp ix, (xhl + 2)
-	jr ule, LABEL_F5BC50
+	jr ule, AccAccTiming_WriteNonNote_Byte6
 	ld ix, (xhl + 256)
 
-LABEL_F5BC50:
-	calr LABEL_F5B98E
+AccAccTiming_WriteNonNote_Byte6:
+	calr AccSeq_WriteByte
 	ld_srib3 A, 0x07, 0xEC, 0xF0
 	inc 1, ix
 	cp ix, (xhl + 2)
-	jr ule, LABEL_F5BC62
+	jr ule, AccAccTiming_WriteNonNote_Byte7
 	ld ix, (xhl + 256)
 
-LABEL_F5BC62:
-	calr LABEL_F5B98E
+AccAccTiming_WriteNonNote_Byte7:
+	calr AccSeq_WriteByte
 
-LABEL_F5BC65:
+AccAccTiming_WriteNonNote_Done:
 	ld (xhl + 6), ix
-	jrl LABEL_F5B9AA
+	jrl AccAccTiming_EventLoop
 
-LABEL_F5BC6B:
+AccAccTiming_TimestampOverflow:
 	cpdi8 14971, 192
-	jr nz, LABEL_F5BC77
+	jr nz, AccAccTiming_Overflow_SubBase
 	stdi8 14970, 0
 
-LABEL_F5BC77:
+AccAccTiming_Overflow_SubBase:
 	subda8 a, 1117
 	cpda8 a, 13175
-	jr nc, LABEL_F5BC85
+	jr nc, AccAccTiming_Overflow_CalcSkip
 	stda8 13175, a
 
-LABEL_F5BC85:
+AccAccTiming_Overflow_CalcSkip:
 	ldda16 xix, 13178
 	lda_dri3 XBC, 0x07, 0xEC, 0xF0
 	inc 1, ix
 	cp ix, (xhl + 2)
-	jr ule, LABEL_F5BC98
+	jr ule, AccAccTiming_Overflow_AdvancePos
 	ld ix, (xhl + 256)
 
-LABEL_F5BC98:
+AccAccTiming_Overflow_AdvancePos:
 	xor wa, wa
 	ldda8 a, 13184
 	add ix, wa
 	cp ix, (xhl + 2)
-	jrl ule, LABEL_F5B9AA
+	jrl ule, AccAccTiming_EventLoop
 	sub ix, (xhl + 2)
 	dec 1, ix
 	add ix, (xhl + 256)
-	jrl LABEL_F5B9AA
+	jrl AccAccTiming_EventLoop
 
-LABEL_F5BCB1:
+AccAccTiming_ScanDone:
 	ret
 
-LABEL_F5BCB2:
+AccAccTiming_TableScan:
 	xor iz, iz
 
-LABEL_F5BCB4:
+AccAccTiming_TableScan_Loop:
 	cpda16 xiz, 13182
 	jp_24 nc, 0xF5BD35
 	bit_dri 7, 0x07, 0xE4, 0xF8
-	jr z, LABEL_F5BD2E
+	jr z, AccAccTiming_TableScan_NextSlot
 	ld ix, iz
 	ld_srib3 A, 0x07, 0xE4, 0xF0
 	stda8 13185, a
@@ -173983,38 +173983,38 @@ LABEL_F5BCB4:
 	inc 1, ix
 	ld_sriw3 WA, 0x07, 0xE4, 0xF0
 	cpda16 xwa, 1118
-	jr gt, LABEL_F5BD13
+	jr gt, AccAccTiming_TableScan_Decrement
 	ldb a, 0xF0
 	andda8 a, 13185
 	orda8 a, 13196
-	calr LABEL_F5B98E
+	calr AccSeq_WriteByte
 	ldda8 a, 13186
-	calr LABEL_F5B98E
+	calr AccSeq_WriteByte
 	ldb a, 0x0
-	calr LABEL_F5B98E
+	calr AccSeq_WriteByte
 	and_srib_im 0x07, 0xE4, 0xF8, 0x7F
-	jr LABEL_F5BD2E
+	jr AccAccTiming_TableScan_NextSlot
 
-LABEL_F5BD13:
+AccAccTiming_TableScan_Decrement:
 	subda16 xwa, 1118
 	bit 7, a
-	jr z, LABEL_F5BD1F
+	jr z, AccAccTiming_TableScan_StoreTiming
 	add a, 0x60
 
-LABEL_F5BD1F:
+AccAccTiming_TableScan_StoreTiming:
 	st_dri3w WA, 0x07, 0xE4, 0xF0
 	cpda16 xwa, 13172
-	jr nc, LABEL_F5BD2E
+	jr nc, AccAccTiming_TableScan_NextSlot
 	stda16 13172, xwa
 
-LABEL_F5BD2E:
+AccAccTiming_TableScan_NextSlot:
 	addda16 xiz, 13180
-	jrl LABEL_F5BCB4
+	jrl AccAccTiming_TableScan_Loop
 
-LABEL_F5BD35:
+AccAccTiming_TableScan_Done:
 	ret
 
-LABEL_F5BD36:
+AccTiming_SlotOffsetTables:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x06, 0x00, 0x00, 0x00
 	.byte 0x0c, 0x00, 0x00, 0x00, 0x12, 0x00, 0x00, 0x00
 	.byte 0x18, 0x00, 0x00, 0x00, 0x1e, 0x00, 0x00, 0x00
@@ -174024,45 +174024,45 @@ LABEL_F5BD36:
 	.byte 0x24, 0x00, 0x00, 0x00, 0x2d, 0x00, 0x00, 0x00
 	.byte 0x36, 0x00, 0x00, 0x00, 0x3f, 0x00, 0x00, 0x00
 
-LABEL_F5BD76:
-	jp LABEL_F5BD7E
+AccDir_Entry:
+	jp AccDir_Main
 
-LABEL_F5BD7A:
-	jp LABEL_F5BF0D
+AccDir_PeriodicEntry:
+	jp AccDir_PeriodicCheck
 
-LABEL_F5BD7E:
-	calr LABEL_F5BDC8
+AccDir_Main:
+	calr AccDir_ReadState
 	cpdi8 13479, 0
-	jr nz, LABEL_F5BD94
+	jr nz, AccDir_CheckLeftNote
 	cpdi8 13480, 0
-	jr z, LABEL_F5BD94
+	jr z, AccDir_CheckLeftNote
 	ordi8 13471, 1
 
-LABEL_F5BD94:
+AccDir_CheckLeftNote:
 	cpdi8 13481, 0
-	jr nz, LABEL_F5BDA7
+	jr nz, AccDir_CheckRightHandState
 	cpdi8 13482, 0
-	jr z, LABEL_F5BDA7
+	jr z, AccDir_CheckRightHandState
 	ordi8 13471, 8
 
-LABEL_F5BDA7:
+AccDir_CheckRightHandState:
 	ldda8 a, 13477
 	bit 0, a
-	jr nz, LABEL_F5BDBF
+	jr nz, AccDir_Finalize
 	bit 1, a
-	jr z, LABEL_F5BDBF
+	jr z, AccDir_Finalize
 	anddi8 13471, 246
 	stdi8 13478, 0
 
-LABEL_F5BDBF:
-	calr LABEL_F5BE39
-	calr LABEL_F5BE13
+AccDir_Finalize:
+	calr AccDir_AdjustDirection
+	calr AccDir_SavePrevState
 	ret
 
-LABEL_F5BDC6:
+AccDir_Padding1:
 	.byte 0x00, 0x00
 
-LABEL_F5BDC8:
+AccDir_ReadState:
 	ldda8 a, 64602
 	stda8 13476, a
 	ldda8 a, 13074
@@ -174076,23 +174076,23 @@ LABEL_F5BDC8:
 	ldda8 a, 13477
 	and a, 0xFE
 	bitda 0, 12931
-	jr z, LABEL_F5BDFE
+	jr z, AccDir_ReadState_StoreFlags
 	or a, 0x1
 
-LABEL_F5BDFE:
+AccDir_ReadState_StoreFlags:
 	stda8 13477, a
 	ldda8 a, 64921
 	bit 0, a
-	jr nz, LABEL_F5BE10
+	jr nz, AccDir_ReadState_Ret
 	anddi8 13471, 246
 
-LABEL_F5BE10:
+AccDir_ReadState_Ret:
 	ret
 
-LABEL_F5BE11:
+AccDir_Padding2:
 	.byte 0x00, 0x00
 
-LABEL_F5BE13:
+AccDir_SavePrevState:
 	ldda8 a, 13479
 	stda8 13480, a
 	ldda8 a, 13481
@@ -174100,84 +174100,84 @@ LABEL_F5BE13:
 	ldda8 a, 13477
 	and a, 0xFD
 	bit 0, a
-	jr z, LABEL_F5BE32
+	jr z, AccDir_SavePrevState_StoreFlags
 	or a, 0x2
 
-LABEL_F5BE32:
+AccDir_SavePrevState_StoreFlags:
 	stda8 13477, a
 	ret
 
-LABEL_F5BE37:
+AccDir_Padding3:
 	.byte 0x00, 0x00
 
-LABEL_F5BE39:
+AccDir_AdjustDirection:
 	ldda8 a, 13471
 	and a, 0x9
 	cps a, 0
 	jp_24 z, 0xF5BEC9
 	bitda 0, 13471
-	jr z, LABEL_F5BE86
+	jr z, AccDir_Adjust_LeftHand
 	anddi8 13471, 254
 	cpdi8 13476, 128
-	jr nc, LABEL_F5BE86
+	jr nc, AccDir_Adjust_LeftHand
 	ldda8 w, 64921
 	and w, 0x1
 	ldda8 a, 64609
 	and a, 0x30
 	srl a, 4
 	cps w, 0
-	jr z, LABEL_F5BE86
+	jr z, AccDir_Adjust_LeftHand
 	dec 1, a
 	cp a, 0xFF
-	jr nz, LABEL_F5BE77
+	jr nz, AccDir_Adjust_RightDec
 	ldb a, 0x0
 
-LABEL_F5BE77:
+AccDir_Adjust_RightDec:
 	sll a, 4
 	anddi8 64609, 207
 	orddm8 64609, a
-	calr LABEL_F5BECC
+	calr AccDir_DispatchEvent
 
-LABEL_F5BE86:
+AccDir_Adjust_LeftHand:
 	bitda 3, 13471
-	jr z, LABEL_F5BEC4
+	jr z, AccDir_Adjust_SetChanged
 	anddi8 13471, 247
 	cpdi8 13476, 128
-	jr nc, LABEL_F5BEC4
+	jr nc, AccDir_Adjust_SetChanged
 	ldda8 w, 64921
 	and w, 0x1
 	ldda8 a, 64609
 	and a, 0x30
 	srl a, 4
 	cps w, 0
-	jr z, LABEL_F5BEC4
+	jr z, AccDir_Adjust_SetChanged
 	inc 1, a
 	cps a, 4
-	jr c, LABEL_F5BEB5
+	jr c, AccDir_Adjust_LeftInc
 	ldb a, 0x3
 
-LABEL_F5BEB5:
+AccDir_Adjust_LeftInc:
 	sll a, 4
 	anddi8 64609, 207
 	orddm8 64609, a
-	calr LABEL_F5BECC
+	calr AccDir_DispatchEvent
 
-LABEL_F5BEC4:
+AccDir_Adjust_SetChanged:
 	stdi8 13478, 1
 
-LABEL_F5BEC9:
+AccDir_Adjust_Ret:
 	ret
 
-LABEL_F5BECA:
+AccDir_Padding4:
 	.byte 0x00, 0x00
 
-LABEL_F5BECC:
+AccDir_DispatchEvent:
 	ldda8 w, 64921
 	and w, 0x1
 	cps w, 0
-	jr z, LABEL_F5BF0A
+	jr z, AccDir_DispatchEvent_Ret
 	cpdi8 13476, 128
-	jr nc, LABEL_F5BF0A
+	jr nc, AccDir_DispatchEvent_Ret
 	ldb e, 0x48
 	ldb d, 0x7
 	ldda8 a, 64609
@@ -174186,51 +174186,51 @@ LABEL_F5BECC:
 	ldda8 a, 64921
 	and a, 0x70
 	cp a, 0x10
-	jr z, LABEL_F5BF0A
+	jr z, AccDir_DispatchEvent_Ret
 	ldda8 a, 64609
 	and a, 0x30
 	srl a, 4
 	stda8 36180, a
 	call LABEL_FB71D6
 
-LABEL_F5BF0A:
+AccDir_DispatchEvent_Ret:
 	ret
 
-LABEL_F5BF0B:
+AccDir_Padding5:
 	.byte 0x00, 0x00
 
-LABEL_F5BF0D:
+AccDir_PeriodicCheck:
 	bitda 4, 12932
-	jr z, LABEL_F5BF41
+	jr z, AccDir_Periodic_Ret
 	cpdi8 13478, 0
-	jr z, LABEL_F5BF1E
+	jr z, AccDir_Periodic_CheckCountdown
 	decdi8 1, 13478
 
-LABEL_F5BF1E:
+AccDir_Periodic_CheckCountdown:
 	cpdi8 13478, 0
-	jr nz, LABEL_F5BF41
+	jr nz, AccDir_Periodic_Ret
 	ldda8 a, 1045
 	cp a, 0x5D
-	jr nc, LABEL_F5BF33
+	jr nc, AccDir_Periodic_DisableAndReset
 	cp a, 0x30
-	jr ugt, LABEL_F5BF41
+	jr ugt, AccDir_Periodic_Ret
 
-LABEL_F5BF33:
+AccDir_Periodic_DisableAndReset:
 	anddi8 12932, 239
 	anddi8 12932, 251
 	call LABEL_FDDF91
 
-LABEL_F5BF41:
+AccDir_Periodic_Ret:
 	ret
 
-LABEL_F5BF42:
+AccDir_JumpTable:
 	.byte 0x00, 0x00, 0x1d, 0x4e, 0xbf, 0xf5, 0x0e
 
-LABEL_F5BF49:
-	call LABEL_F5C016
+AccProcess_Entry:
+	call AccProcess_TimerCompare
 	ret
 
-LABEL_F5BF4E:
+AccProcess_InlinedCode:
 	.byte 0xc1, 0x7d, 0xc0, 0x21, 0xc9, 0xcf, 0x12, 0xf2
 	.byte 0xe1, 0xbf, 0xf5, 0xde, 0xc1, 0x7e, 0xc0, 0x21
 	.byte 0xc1, 0x7f, 0xc0, 0xc1, 0xc9, 0xcc, 0x01, 0xc9
@@ -174257,103 +174257,103 @@ LABEL_F5BF4E:
 	.byte 0xff, 0x00, 0x00, 0xd8, 0x0a, 0x03, 0x00, 0x25
 	.byte 0x48, 0x24, 0x08, 0x1d, 0x12, 0xb4, 0xfd, 0x0e
 
-LABEL_F5C016:
+AccProcess_TimerCompare:
 	bitda 0, 13456
-	jr z, LABEL_F5C072
+	jr z, AccProcess_Timer_Ret
 	ldda16 xwa, 1033
 	ldda16 xbc, 13454
 	cp wa, bc
-	jr c, LABEL_F5C045
+	jr c, AccProcess_Timer_WrapCase
 	sub wa, bc
 	cp wa, 0x400
-	jr c, LABEL_F5C043
+	jr c, AccProcess_Timer_Skip
 	anddi8 13456, 254
 	xor wa, wa
 	stda16 13458, xwa
 	stda16 13460, xwa
 	stda16 13462, xwa
 
-LABEL_F5C043:
-	jr LABEL_F5C072
+AccProcess_Timer_Skip:
+	jr AccProcess_Timer_Ret
 
-LABEL_F5C045:
+AccProcess_Timer_WrapCase:
 	and xwa, 0xFFFF
 	and xbc, 0xFFFF
 	add xwa, 0x10000
 	sub xwa, xbc
 	cp wa, 0x400
-	jr c, LABEL_F5C072
+	jr c, AccProcess_Timer_Ret
 	anddi8 13456, 254
 	xor wa, wa
 	stda16 13458, xwa
 	stda16 13460, xwa
 	stda16 13462, xwa
 
-LABEL_F5C072:
+AccProcess_Timer_Ret:
 	ret
 
-LABEL_F5C073:
-	jp LABEL_F5C09D
+AccVoice_DispatchEntry:
+	jp AccVoice_Dispatch
 
-LABEL_F5C077:
+AccVoice_DispatchWithChannel:
 	push xiz
 	ld l, a
 	ld h, c
-	call LABEL_F5C09D
+	call AccVoice_Dispatch
 	ld xhl, xiy
 	pop xiz
 	ret
 
-LABEL_F5C084:
+AccVoice_GetChannelCount_Wrap:
 	push xiz
 	ld l, a
-	call LABEL_F5C46E
+	call AccVoice_GetChannelCount
 	pop xiz
 	ret
 
-LABEL_F5C08D:
-	call LABEL_F5C46E
+AccVoice_GetChannelCount_Direct:
+	call AccVoice_GetChannelCount
 	ret
 
-LABEL_F5C092:
+AccVoice_CopyFromROM_Wrap:
 	push xiz
 	ld l, a
-	call LABEL_F5C498
+	call AccVoice_CopyFromROM
 	ld xhl, xiy
 	pop xiz
 	ret
 
-LABEL_F5C09D:
+AccVoice_Dispatch:
 	push xwa
 	push xbc
 	push xde
 	push xhl
 	push xiy
 	cp l, 0x10
-	jr c, LABEL_F5C0A9
+	jr c, AccVoice_Dispatch_ClampH
 	xor l, l
 
-LABEL_F5C0A9:
+AccVoice_Dispatch_ClampH:
 	cp h, 0x50
-	jr c, LABEL_F5C0B0
+	jr c, AccVoice_Dispatch_CheckType
 	xor h, h
 
-LABEL_F5C0B0:
+AccVoice_Dispatch_CheckType:
 	cp l, 0xF
-	jr nz, LABEL_F5C0BA
-	calr LABEL_F5C0FB
-	jr LABEL_F5C0C7
+	jr nz, AccVoice_Dispatch_Type0E
+	calr AccVoice_ROMLookup
+	jr AccVoice_Dispatch_Epilogue
 
-LABEL_F5C0BA:
+AccVoice_Dispatch_Type0E:
 	cp l, 0xE
-	jr nz, LABEL_F5C0C4
-	calr LABEL_F5C160
-	jr LABEL_F5C0C7
+	jr nz, AccVoice_Dispatch_TypeDefault
+	calr AccVoice_IndexedTableLookup
+	jr AccVoice_Dispatch_Epilogue
 
-LABEL_F5C0C4:
-	calr LABEL_F5C0D4
+AccVoice_Dispatch_TypeDefault:
+	calr AccVoice_ComputedCopy
 
-LABEL_F5C0C7:
+AccVoice_Dispatch_Epilogue:
 	pop xiy
 	pop xhl
 	pop xde
@@ -174362,10 +174362,10 @@ LABEL_F5C0C7:
 	ld xiy, 0x34AB
 	ret
 
-LABEL_F5C0D2:
+AccVoice_Dispatch_Padding:
 	.byte 0x00, 0x00
 
-LABEL_F5C0D4:
+AccVoice_ComputedCopy:
 	ld a, l
 	xor w, w
 	muls wa, 0x14
@@ -174380,10 +174380,10 @@ LABEL_F5C0D4:
 	ldir85
 	ret
 
-LABEL_F5C0F9:
+AccVoice_ComputedCopy_Padding:
 	.byte 0x00, 0x00
 
-LABEL_F5C0FB:
+AccVoice_ROMLookup:
 	ld l, h
 	and hl, 0xF
 	sla hl, 2
@@ -174395,7 +174395,7 @@ LABEL_F5C0FB:
 	ldir85
 	ret
 
-LABEL_F5C11E:
+AccVoice_ROMLookup_OffsetTable:
 	.byte 0x00, 0x00, 0xa0, 0x00, 0x00, 0x00, 0x00, 0x01
 
 
@@ -174409,7 +174409,7 @@ LABEL_F5C11E:
 	.byte 0x00, 0x00, 0xa0, 0x00, 0x00, 0x00, 0xa0, 0x00
 	.byte 0x00, 0x00
 
-LABEL_F5C160:
+AccVoice_IndexedTableLookup:
 	ld l, h
 	xor h, h
 	sla hl, 2
@@ -174422,7 +174422,7 @@ LABEL_F5C160:
 	ldir85
 	ret
 
-LABEL_F5C186:
+AccVoice_IndexedTableLookup_BaseOffsets:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x30, 0x00, 0x00, 0x00
 	.byte 0x30, 0x00, 0x00, 0x00, 0x30, 0x00, 0x00, 0x00
 	.byte 0x30, 0x00, 0x00, 0x00, 0x30, 0x00, 0x00, 0x00
@@ -174538,34 +174538,34 @@ LABEL_F5C186:
 	.byte 0x30, 0x0c, 0x00, 0x00, 0xb0, 0x0b, 0x00, 0x00
 	.byte 0xb0, 0x0b, 0x00, 0x00, 0xb0, 0x0b, 0x00, 0x00
 
-LABEL_F5C46E:
+AccVoice_GetChannelCount:
 	push xix
 	cp l, 0x10
-	jr c, LABEL_F5C476
+	jr c, AccVoice_GetChannelCount_Lookup
 	xor l, l
 
-LABEL_F5C476:
+AccVoice_GetChannelCount_Lookup:
 	and hl, 0x1F
 	ld xix, 0xF5C488
 	ld_srib3 L, 0x07, 0xF0, 0xEC
 	pop xix
 	ret
 
-LABEL_F5C486:
+AccVoice_ChannelCountTable:
 	.byte 0x00, 0x00, 0x0f, 0x0c, 0x10, 0x09, 0x12, 0x0d
 	.byte 0x0c, 0x0e, 0x0c, 0x12, 0x0b, 0x0b, 0x0c, 0x0d
 	.byte 0x13, 0x0b
 
-LABEL_F5C498:
+AccVoice_CopyFromROM:
 	push xwa
 	push xbc
 	push xhl
 	push xiy
 	cp l, 0x10
-	jr c, LABEL_F5C4A3
+	jr c, AccVoice_CopyFromROM_Do
 	xor l, l
 
-LABEL_F5C4A3:
+AccVoice_CopyFromROM_Do:
 	ld a, l
 	xor w, w
 	muls wa, 0x10
@@ -174581,7 +174581,7 @@ LABEL_F5C4A3:
 	ld xiy, 0x34AB
 	ret
 
-LABEL_F5C4C7:
+AccVoice_CopyFromROM_DataBlock:
 	.byte 0x00, 0x00, 0x2b, 0x1e, 0xd0, 0xfb, 0x4b, 0xec
 	.byte 0xa8, 0x31, 0x08, 0x00, 0x95, 0x11, 0x45, 0x0d
 	.byte 0xc5, 0xf5, 0x00, 0x67, 0x05, 0x45, 0x34, 0xc5
@@ -174602,19 +174602,19 @@ LABEL_F5C4C7:
 	.byte 0x0e, 0x0a, 0x01, 0xff, 0xff, 0x00, 0xff, 0xff
 	.byte 0x00
 
-LABEL_F5C558:
-	jp LABEL_F5C59F
-LABEL_F5C55C:
+AccStyle_Entry:
+	jp AccStyle_Process
+AccStyle_JumpTable:
 	.byte 0x1b, 0xd7, 0xc5, 0xf5, 0x1b, 0x4f, 0xc6, 0xf5
 	.byte 0x1b, 0x9c, 0xc6, 0xf5, 0x1b, 0xda, 0xc6, 0xf5
 
-LABEL_F5C56C:
+AccStyle_InitVRAM_Wrap:
 	push xiz
-	call LABEL_F5CD52
+	call AccStyle_InitVRAM
 	pop xiz
 	ret
 
-LABEL_F5C573:
+AccStyle_JumpTable2:
 	.byte 0x1b, 0x0a, 0xc6, 0xf5, 0x1b, 0x64, 0xcd, 0xf5
 	.byte 0x1b, 0x7d, 0xcd, 0xf5, 0x1b, 0x96, 0xcd, 0xf5
 	.byte 0x1b, 0xaf, 0xcd, 0xf5, 0x1b, 0xc8, 0xcd, 0xf5
@@ -174622,132 +174622,132 @@ LABEL_F5C573:
 	.byte 0x0e, 0x00, 0x00, 0x00, 0x0e, 0x00, 0x00, 0x00
 	.byte 0x0e, 0x00, 0x00, 0x00
 
-LABEL_F5C59F:
+AccStyle_Process:
 	ldda8 a, 13198
 	and a, 0x1F
-	jr z, LABEL_F5C5CE
+	jr z, AccStyle_Process_SaveState
 	ldda8 a, 13199
 	and a, 0x1F
-	jr nz, LABEL_F5C5B4
-	calr LABEL_F5CA35
+	jr nz, AccStyle_Process_DoChain
+	calr AccVoiceState_Snapshot
 
-LABEL_F5C5B4:
-	calr LABEL_F5CDE1
+AccStyle_Process_DoChain:
+	calr AccHelper_ComputeVoiceOffset
 	ld xiy, xhl
 	add xiy, 0x1E7810
-	calr LABEL_F5CC63
-	calr LABEL_F5CC8E
-	calr LABEL_F5CCBF
-	calr LABEL_F5CCF0
-	calr LABEL_F5CD21
+	calr AccVoiceDelta_Part1
+	calr AccVoiceDelta_Part2
+	calr AccVoiceDelta_Part3
+	calr AccVoiceDelta_Part4
+	calr AccVoiceDelta_Part5
 
-LABEL_F5C5CE:
+AccStyle_Process_SaveState:
 	ldda8 a, 13198
 	stda8 13199, a
 	ret
 
-LABEL_F5C5D7:
+AccStyle_ToggleBit0:
 	; --- Routine 1: XOR toggle bit 0 at (0x3391), conditional calls (51 bytes) ---
 	.byte 0xc1, 0x34, 0x8d, 0x3f, 0x11		; cp (0x8D34), 0x11  [C1 prefix]
-	jr nz, LABEL_F5C5E0
-	jr t, LABEL_F5C609
-LABEL_F5C5E0:
+	jr nz, AccStyle_ToggleBit0_CheckC07D
+	jr t, AccStyle_ToggleBit0_Ret
+AccStyle_ToggleBit0_CheckC07D:
 	.byte 0xc1, 0x7d, 0xc0, 0x3f, 0x06		; cp (0xC07D), 0x06  [C1 prefix]
-	jr nz, LABEL_F5C609
+	jr nz, AccStyle_ToggleBit0_Ret
 	ldda8	a, 49278
 	andda8	a, 49279
 	bit 0, a
-	jr z, LABEL_F5C609
+	jr z, AccStyle_ToggleBit0_Ret
 	.byte 0xc1, 0x91, 0x33, 0x3d, 0x01		; xor (0x3391), 0x01  [C1 prefix]
 	.byte 0xf1, 0x91, 0x33, 0xc8			; bit 0, (0x3391)  [F1 prefix]
-	jr nz, LABEL_F5C605
-	call LABEL_F59A75
-	jr t, LABEL_F5C609
-LABEL_F5C605:
-	call LABEL_F59A69
-LABEL_F5C609:
+	jr nz, AccStyle_ToggleBit0_CallOn
+	call AccTuning_LEDOff
+	jr t, AccStyle_ToggleBit0_Ret
+AccStyle_ToggleBit0_CallOn:
+	call AccTuning_LEDOn
+AccStyle_ToggleBit0_Ret:
 	ret
-LABEL_F5C60A:
+AccStyle_IndexedLookup:
 	; --- Routine 2: indexed table lookup at 0xF5C8B4, store + DE/W setup (63 bytes) ---
 	.byte 0xc1, 0x34, 0x8d, 0x3f, 0x11		; cp (0x8D34), 0x11  [C1 prefix]
-	jr nz, LABEL_F5C648
+	jr nz, AccStyle_IndexedLookup_Ret
 	.byte 0xc1, 0x7d, 0xc0, 0x3f, 0x10		; cp (0xC07D), 0x10  [C1 prefix]
-	jr nz, LABEL_F5C648
+	jr nz, AccStyle_IndexedLookup_Ret
 	ldda8	a, 13198
 	and a, 0x1f
-	jr z, LABEL_F5C648
+	jr z, AccStyle_IndexedLookup_Ret
 	ldda8	l, 13198
 	and l, 0x1f
 	extz hl
 	ld xwa, 0x00F5C8B4
 	.byte 0xc3, 0x07, 0xe0, 0xec, 0x21		; ld a, (xwa+hl)  [register-indexed]
 	cpdm8	36154, a
-	jr z, LABEL_F5C648
+	jr z, AccStyle_IndexedLookup_Ret
 	stda8	36154, a
 	ldb e, 0x90
 	ldb d, 0x10
 	ldb w, 0xff
 	call SwbtWr_QueuePostEvent
-LABEL_F5C648:
+AccStyle_IndexedLookup_Ret:
 	ret
 
 
-LABEL_F5C649:
+AccStyle_ModeEnter_Wrap:
 	push xiz
-	calr LABEL_F5C64F
+	calr AccStyle_ModeEnter
 	pop xiz
 	ret
 
-LABEL_F5C64F:
+AccStyle_ModeEnter:
 	cpdi8 36149, 17
-	jr z, LABEL_F5C695
+	jr z, AccStyle_ModeEnter_Ret
 	stdi8 13198, 0
 	stdi8 13199, 0
 	stdi8 13215, 0
 	anddi8 13265, 254
 	cpdi16 61854, 0
-	jr z, LABEL_F5C685
+	jr z, AccStyle_ModeEnter_SetFlags
 	call LABEL_F436ED
 	stdi16 61854, 0
 	call 0xFDDE6F
 	ordi8 13265, 1
 
-LABEL_F5C685:
+AccStyle_ModeEnter_SetFlags:
 	ordi8 13517, 8
 	ordi8 13267, 1
 	ldb a, 0x4B
 	call LABEL_FC793D
 
-LABEL_F5C695:
+AccStyle_ModeEnter_Ret:
 	ret
 
-LABEL_F5C696:
+AccStyle_ModeExit_Wrap:
 	push xiz
-	calr LABEL_F5C69C
+	calr AccStyle_ModeExit
 	pop xiz
 	ret
 
-LABEL_F5C69C:
+AccStyle_ModeExit:
 	cpdi8 36148, 17
-	jr z, LABEL_F5C6D3
+	jr z, AccStyle_ModeExit_Ret
 	stdi8 13198, 0
 	stdi8 13199, 0
 	stdi8 13215, 0
 	anddi8 13517, 247
 	bitda 0, 13265
-	jr z, LABEL_F5C6CA
+	jr z, AccStyle_ModeExit_ClearFlags
 	anddi8 13265, 254
-	call LABEL_F59AB9
+	call AccWrap_PlayModeDispatch
 	call LABEL_F43704
 
-LABEL_F5C6CA:
+AccStyle_ModeExit_ClearFlags:
 	anddi8 13267, 252
 	call LABEL_F98782
 
-LABEL_F5C6D3:
+AccStyle_ModeExit_Ret:
 	ret
 
-LABEL_F5C6D4:
+AccStyle_InlinedBlock:
 	.byte 0x3e, 0x1e, 0x02, 0x00, 0x5e, 0x0e, 0xc1, 0x37
 	.byte 0x8d, 0x3f, 0xdc, 0x76, 0x62, 0x01, 0xc1, 0x5a
 	.byte 0xfc, 0x3f, 0x80, 0x67, 0x17, 0xf1, 0x9f, 0x33
@@ -174813,20 +174813,20 @@ LABEL_F5C6D4:
 	.byte 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.zero 8
 
-LABEL_F5C8D4:
+AccVoiceReg_WritePart3:
 	cpdi8 36148, 17
-	jr nz, LABEL_F5C91F
+	jr nz, AccVoiceReg_WritePart3_Ret
 	ldda8 a, 13198
 	and a, 0x1F
-	jr nz, LABEL_F5C91F
+	jr nz, AccVoiceReg_WritePart3_Ret
 	ldda8 a, 12830
 	ldda8 w, 12831
 	bit 4, w
-	jr z, LABEL_F5C8F7
+	jr z, AccVoiceReg_WritePart3_StoreBit4
 	or a, 0x80
 	and w, 0xEF
 
-LABEL_F5C8F7:
+AccVoiceReg_WritePart3_StoreBit4:
 	stda8 64342, a
 	and w, 0x7F
 	anddi8 64343, 128
@@ -174837,25 +174837,25 @@ LABEL_F5C8F7:
 	anddi8 64346, 191
 	orddm8 64346, a
 	ldb l, 0x4
-	calr LABEL_F5CAF6
+	calr AccVoiceState_DispatchChange
 
-LABEL_F5C91F:
+AccVoiceReg_WritePart3_Ret:
 	ret
 
-LABEL_F5C920:
+AccVoiceReg_WritePart4:
 	cpdi8 36148, 17
-	jr nz, LABEL_F5C96B
+	jr nz, AccVoiceReg_WritePart4_Ret
 	ldda8 a, 13198
 	and a, 0x1F
-	jr nz, LABEL_F5C96B
+	jr nz, AccVoiceReg_WritePart4_Ret
 	ldda8 a, 12835
 	ldda8 w, 12836
 	bit 4, w
-	jr z, LABEL_F5C943
+	jr z, AccVoiceReg_WritePart4_StoreBit4
 	or a, 0x80
 	and w, 0xEF
 
-LABEL_F5C943:
+AccVoiceReg_WritePart4_StoreBit4:
 	stda8 64368, a
 	and w, 0x7F
 	anddi8 64369, 128
@@ -174866,25 +174866,25 @@ LABEL_F5C943:
 	anddi8 64372, 191
 	orddm8 64372, a
 	ldb l, 0x8
-	calr LABEL_F5CAF6
+	calr AccVoiceState_DispatchChange
 
-LABEL_F5C96B:
+AccVoiceReg_WritePart4_Ret:
 	ret
 
-LABEL_F5C96C:
+AccVoiceReg_WritePart5:
 	cpdi8 36148, 17
-	jr nz, LABEL_F5C9B7
+	jr nz, AccVoiceReg_WritePart5_Ret
 	ldda8 a, 13198
 	and a, 0x1F
-	jr nz, LABEL_F5C9B7
+	jr nz, AccVoiceReg_WritePart5_Ret
 	ldda8 a, 12840
 	ldda8 w, 12841
 	bit 4, w
-	jr z, LABEL_F5C98F
+	jr z, AccVoiceReg_WritePart5_StoreBit4
 	or a, 0x80
 	and w, 0xEF
 
-LABEL_F5C98F:
+AccVoiceReg_WritePart5_StoreBit4:
 	stda8 64394, a
 	and w, 0x7F
 	anddi8 64395, 128
@@ -174895,25 +174895,25 @@ LABEL_F5C98F:
 	anddi8 64398, 191
 	orddm8 64398, a
 	ldb l, 0x10
-	calr LABEL_F5CAF6
+	calr AccVoiceState_DispatchChange
 
-LABEL_F5C9B7:
+AccVoiceReg_WritePart5_Ret:
 	ret
 
-LABEL_F5C9B8:
+AccVoiceReg_WritePart2:
 	cpdi8 36148, 17
-	jr nz, LABEL_F5CA03
+	jr nz, AccVoiceReg_WritePart2_Ret
 	ldda8 a, 13198
 	and a, 0x1F
-	jr nz, LABEL_F5CA03
+	jr nz, AccVoiceReg_WritePart2_Ret
 	ldda8 a, 12825
 	ldda8 w, 12826
 	bit 4, w
-	jr z, LABEL_F5C9DB
+	jr z, AccVoiceReg_WritePart2_StoreBit4
 	or a, 0x80
 	and w, 0xEF
 
-LABEL_F5C9DB:
+AccVoiceReg_WritePart2_StoreBit4:
 	stda8 64420, a
 	and w, 0x7F
 	anddi8 64421, 128
@@ -174924,17 +174924,17 @@ LABEL_F5C9DB:
 	anddi8 64424, 191
 	orddm8 64424, a
 	ldb l, 0x2
-	calr LABEL_F5CAF6
+	calr AccVoiceState_DispatchChange
 
-LABEL_F5CA03:
+AccVoiceReg_WritePart2_Ret:
 	ret
 
-LABEL_F5CA04:
+AccVoiceReg_WritePart1:
 	cpdi8 36148, 17
-	jr nz, LABEL_F5CA34
+	jr nz, AccVoiceReg_WritePart1_Ret
 	ldda8 a, 13198
 	and a, 0x1F
-	jr nz, LABEL_F5CA34
+	jr nz, AccVoiceReg_WritePart1_Ret
 	ldda8 a, 12820
 	or a, 0xF0
 	ldda8 w, 12821
@@ -174943,13 +174943,13 @@ LABEL_F5CA04:
 	anddi8 64447, 128
 	orddm8 64447, w
 	ldb l, 0x1
-	calr LABEL_F5CAF6
+	calr AccVoiceState_DispatchChange
 
-LABEL_F5CA34:
+AccVoiceReg_WritePart1_Ret:
 	ret
 
-LABEL_F5CA35:
-	calr LABEL_F5CDE1
+AccVoiceState_Snapshot:
+	calr AccHelper_ComputeVoiceOffset
 	ld xiy, xhl
 	add xiy, 0x1E7810
 	ldda8 a, 64446
@@ -175007,7 +175007,7 @@ LABEL_F5CA35:
 	ordi8 13203, 1
 	ret
 
-LABEL_F5CAF6:
+AccVoiceState_DispatchChange:
 	push xiy
 	ld xwa, 0xF5C8B4
 	ld_srib3 E, 0x03, 0xE0, 0xEC
@@ -175055,7 +175055,7 @@ LABEL_F5CAF6:
 	pop xiy
 	ret
 
-LABEL_F5CB63:
+AccVoiceState_PartLookupTable:
 	.byte 0x00, 0x00, 0x00, 0x00, 0xbe, 0xfb, 0x00, 0x00
 	.byte 0xa4, 0xfb, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x56, 0xfb, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
@@ -175073,12 +175073,12 @@ LABEL_F5CB63:
 	.byte 0x42, 0xff, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.zero 56
 
-LABEL_F5CC63:
+AccVoiceDelta_Part1:
 	ldda8 a, 64446
 	ldda8 w, 64447
 	and w, 0x7F
 	cpdm16 13205, xwa
-	jr z, LABEL_F5CC89
+	jr z, AccVoiceDelta_Part1_Store
 	and a, 0xF
 	ld (xiy + 256), a
 	andmi8 (xiy + 1), 0x80
@@ -175086,11 +175086,11 @@ LABEL_F5CC63:
 	or a, 0xF0
 	ordi8 13203, 1
 
-LABEL_F5CC89:
+AccVoiceDelta_Part1_Store:
 	stda16 13205, xwa
 	ret
 
-LABEL_F5CC8E:
+AccVoiceDelta_Part2:
 	ldda8 a, 64420
 	ldda8 w, 64421
 	and w, 0x7F
@@ -175099,17 +175099,17 @@ LABEL_F5CC8E:
 	sla l, 1
 	or w, l
 	cpdm16 13207, xwa
-	jr z, LABEL_F5CCBA
+	jr z, AccVoiceDelta_Part2_Store
 	ld (xiy + 2), a
 	andmi8 (xiy + 3), 0x0
 	or (xiy + 3), w
 	ordi8 13203, 1
 
-LABEL_F5CCBA:
+AccVoiceDelta_Part2_Store:
 	stda16 13207, xwa
 	ret
 
-LABEL_F5CCBF:
+AccVoiceDelta_Part3:
 	ldda8 a, 64342
 	ldda8 w, 64343
 	and w, 0x7F
@@ -175118,17 +175118,17 @@ LABEL_F5CCBF:
 	sla l, 1
 	or w, l
 	cpdm16 13209, xwa
-	jr z, LABEL_F5CCEB
+	jr z, AccVoiceDelta_Part3_Store
 	ld (xiy + 4), a
 	andmi8 (xiy + 5), 0x0
 	or (xiy + 5), w
 	ordi8 13203, 1
 
-LABEL_F5CCEB:
+AccVoiceDelta_Part3_Store:
 	stda16 13209, xwa
 	ret
 
-LABEL_F5CCF0:
+AccVoiceDelta_Part4:
 	ldda8 a, 64368
 	ldda8 w, 64369
 	and w, 0x7F
@@ -175137,17 +175137,17 @@ LABEL_F5CCF0:
 	sla l, 1
 	or w, l
 	cpdm16 13211, xwa
-	jr z, LABEL_F5CD1C
+	jr z, AccVoiceDelta_Part4_Store
 	ld (xiy + 6), a
 	andmi8 (xiy + 7), 0x0
 	or (xiy + 7), w
 	ordi8 13203, 1
 
-LABEL_F5CD1C:
+AccVoiceDelta_Part4_Store:
 	stda16 13211, xwa
 	ret
 
-LABEL_F5CD21:
+AccVoiceDelta_Part5:
 	ldda8 a, 64394
 	ldda8 w, 64395
 	and w, 0x7F
@@ -175156,17 +175156,17 @@ LABEL_F5CD21:
 	sla l, 1
 	or w, l
 	cpdm16 13213, xwa
-	jr z, LABEL_F5CD4D
+	jr z, AccVoiceDelta_Part5_Store
 	ld (xiy + 8), a
 	andmi8 (xiy + 9), 0x0
 	or (xiy + 9), w
 	ordi8 13203, 1
 
-LABEL_F5CD4D:
+AccVoiceDelta_Part5_Store:
 	stda16 13213, xwa
 	ret
 
-LABEL_F5CD52:
+AccStyle_InitVRAM:
 	xor a, a
 	ld xiy, 0xE47F7F
 	ld xix, 0x1E7800
@@ -175174,7 +175174,7 @@ LABEL_F5CD52:
 	ldir85
 	ret
 
-LABEL_F5CD64:
+AccStyle_SC0ByteSelect:
 	.long LABEL_E3E0F1
 	rcf
 	ldda8	a, 13198
@@ -175213,7 +175213,7 @@ LABEL_F5CD64:
 	stdi8	13198, 2
 	ret
 
-LABEL_F5CDE1:
+AccHelper_ComputeVoiceOffset:
 	xor xwa, xwa
 	ldda8 l, 64602
 	ldda8 h, 64603
@@ -175226,56 +175226,56 @@ LABEL_F5CDE1:
 	ld h, l
 	xor l, l
 
-LABEL_F5CE01:
+AccHelper_VoiceOffset_Loop:
 	cp h, l
-	jr z, LABEL_F5CE15
+	jr z, AccHelper_VoiceOffset_Done
 	pushw hl
 	push xwa
-	call LABEL_F5C08D
+	call AccVoice_GetChannelCount_Direct
 	pop xwa
 	inc 1, l
 	add a, l
 	popw hl
 	inc 1, l
-	jr LABEL_F5CE01
+	jr AccHelper_VoiceOffset_Loop
 
-LABEL_F5CE15:
+AccHelper_VoiceOffset_Done:
 	ld xhl, xwa
 	sla xwa, 3
 	sla xhl, 1
 	add xhl, xwa
 	ret
 
-LABEL_F5CE20:
-	calr LABEL_F5CE24
+AccDemo_Init_Wrap:
+	calr AccDemo_Init
 	ret
 
-LABEL_F5CE24:
+AccDemo_Init:
 	xor xbc, xbc
-	calr LABEL_F5CE7A
-	calr LABEL_F5CE90
-	calr LABEL_F5CF68
-	calr LABEL_F5CF7E
+	calr AccDemo_LoadRhythm
+	calr AccDemo_LoadVariation
+	calr AccDemo_LoadFillIn
+	calr AccDemo_LoadVariationData
 	calr Demo_LoadVariationC_Data
 	stdi16 13524, 190
 	anddi8 13043, 254
 	bitda 7, 13521
-	jr nz, LABEL_F5CE4A
+	jr nz, AccDemo_Init_ConfigTimers
 	call LABEL_F6413A
 
-LABEL_F5CE4A:
+AccDemo_Init_ConfigTimers:
 	anddi8 13521, 127
 	stdi8 14774, 0
 	stdi8 14775, 10
 	ret
 
-LABEL_F5CE5A:
+AccDemo_Init_DataBlock:
 	.byte 0x00, 0x00, 0x44, 0x00, 0x48, 0x09, 0x00, 0xf3
 	.byte 0xf1, 0xa0, 0x0b, 0x00, 0x00, 0xf3, 0xf1, 0xa1
 	.byte 0x0b, 0x00, 0x01, 0xf3, 0xf1, 0xa2, 0x0b, 0x00
 	.byte 0x02, 0xf3, 0xf1, 0xa3, 0x0b, 0x00, 0x03, 0x0e
 
-LABEL_F5CE7A:
+AccDemo_LoadRhythm:
 	ld xiy, 0xF5CFCC
 	ld xix, 0x94800
 	add xix, 0x0
@@ -175283,13 +175283,13 @@ LABEL_F5CE7A:
 	ldir85
 	ret
 
-LABEL_F5CE90:
+AccDemo_LoadVariation:
 	ldb a, 0x0
 	ld xix, 0x94800
 	add xix, 0x60
 	lds hl, 0
 
-LABEL_F5CE9F:
+AccDemo_LoadVariation_EntryLoop:
 	ld (xix), hl
 	inc 2, xix
 	ldw (xix), 0x0
@@ -175322,10 +175322,10 @@ LABEL_F5CE9F:
 	ldir85
 	add a, 0x1
 	cp a, 0x1E
-	jr lt, LABEL_F5CE9F
+	jr lt, AccDemo_LoadVariation_EntryLoop
 	ret
 
-LABEL_F5CEF3:
+AccDemo_LoadVariation_DataBlock:
 	.byte 0x45, 0x40, 0xd2, 0xf5, 0x00, 0x44, 0x00, 0x48
 	.byte 0x09, 0x00, 0xec, 0xc8, 0xa0, 0x0b, 0x00, 0x00
 	.byte 0x31, 0xa0, 0x00, 0x85, 0x11, 0x0e, 0xe8, 0xa8
@@ -175342,7 +175342,7 @@ LABEL_F5CEF3:
 	.byte 0x00, 0x00, 0xd8, 0xc8, 0x01, 0x00, 0xd8, 0xcf
 	.byte 0x3c, 0x00, 0x61, 0xb1, 0x0e
 
-LABEL_F5CF68:
+AccDemo_LoadFillIn:
 	ldw bc, 0x40
 	ld xix, 0x94800
 	add xix, 0x13C0
@@ -175350,7 +175350,7 @@ LABEL_F5CF68:
 	ldir85
 	ret
 
-LABEL_F5CF7E:
+AccDemo_LoadVariationData:
 	ld xix, 0x94800
 	add xix, 0x1400
 	ldb a, 0x1E
@@ -175452,7 +175452,7 @@ Demo_StyleRhythmData:
 	.zero 240
 	.byte 0x00, 0x00, 0x00, 0x87
 
-LABEL_F5D640:
+AccTone_LookupByProgram:
 	sub a, 0xF0
 	extz wa
 	sla wa, 2
@@ -175470,7 +175470,7 @@ LABEL_F5D640:
 	ld_srib3 L, 0x07, 0xE4, 0xE0
 	ret
 
-LABEL_F5D678:
+AccTone_ReadAndProcess:
 	dec 4, xsp
 	ldada xbc, 64602
 	ld e, (xbc)
@@ -175486,27 +175486,27 @@ LABEL_F5D678:
 	call LABEL_F5E6CF
 	lda xwa, (xsp + 2)
 	cp (xwa), 0x80
-	jr nc, LABEL_F5D6B6
+	jr nc, AccTone_Process_Under80
 	lda xbc, (xsp)
 	ld a, (xbc)
 	extz wa
 	ld c, (xbc + 1)
 	extz bc
-	calr LABEL_F5D6ED
-	jr LABEL_F5D6EA
+	calr AccTone_NoteLookup
+	jr AccTone_Process_Cleanup
 
-LABEL_F5D6B6:
+AccTone_Process_Under80:
 	cp (xwa), 0xF0
-	jr nc, LABEL_F5D6CB
+	jr nc, AccTone_Process_UnderF0
 	ld e, (xwa)
 	res 7, e
 	ld c, (xwa + 1)
 	extz de
 	extz bc
 	ld wa, de
-	jr LABEL_F5D6E7
+	jr AccTone_Process_CalcResult
 
-LABEL_F5D6CB:
+AccTone_Process_UnderF0:
 	ld a, (xwa)
 	sub a, 0xF0
 	extz wa
@@ -175518,14 +175518,14 @@ LABEL_F5D6CB:
 	ld wa, de
 	lds bc, 0
 
-LABEL_F5D6E7:
-	calr LABEL_F5D73A
+AccTone_Process_CalcResult:
+	calr AccTone_ExtendAndDispatch
 
-LABEL_F5D6EA:
+AccTone_Process_Cleanup:
 	inc 4, xsp
 	ret
 
-LABEL_F5D6ED:
+AccTone_NoteLookup:
 	ldfr_berp A, 0xF4
 	extz iy
 	ldda16 xde, 4360
@@ -175540,30 +175540,30 @@ LABEL_F5D6ED:
 	ld wa, iy
 	add wa, bc
 	cps ix, 4
-	jr z, LABEL_F5D723
+	jr z, AccTone_NoteLookup_ReadTable
 	ld bc, de
 	and bc, 0x400
 	cp bc, 0x400
-	jr nz, LABEL_F5D72B
+	jr nz, AccTone_NoteLookup_CheckBit3
 	inc 1, wa
 
-LABEL_F5D723:
+AccTone_NoteLookup_ReadTable:
 	extz xwa
 	add xhl, xwa
 	ld l, (xhl)
-	jr LABEL_F5D739
+	jr AccTone_NoteLookup_Ret
 
-LABEL_F5D72B:
+AccTone_NoteLookup_CheckBit3:
 	and de, 0x8
 	ldb l, 0x0
 	cp de, 0x8
 	ret nz
 	ldb l, 0x1
 
-LABEL_F5D739:
+AccTone_NoteLookup_Ret:
 	ret
 
-LABEL_F5D73A:
+AccTone_ExtendAndDispatch:
 	extz bc
 	extz wa
 	jr __jrt_nop_F5D740
@@ -175713,7 +175713,7 @@ LABEL_F5D8A2:
 	extz wa
 	ld c, (xbc + 1)
 	extz bc
-	calr LABEL_F5D6ED
+	calr AccTone_NoteLookup
 	jr LABEL_F5D8C2
 
 LABEL_F5D8C0:
@@ -176462,7 +176462,7 @@ LABEL_F5E8CC:
 	and xwa, 0xFF
 	xor xbc, xbc
 	ld c, d
-	call LABEL_F5D640
+	call AccTone_LookupByProgram
 	ld a, l
 	pop xhl
 	pop xbc
@@ -176502,7 +176502,7 @@ LABEL_F5E921:
 
 LABEL_F5E931:
 	push xiz
-	call LABEL_F5CE20
+	call AccDemo_Init_Wrap
 	calr LABEL_F5F444
 	pop xiz
 	ret
@@ -176516,7 +176516,7 @@ LABEL_F5E93B:
 LABEL_F5E95A:
 	push xiz
 	ordi8 13521, 128
-	call LABEL_F5CE20
+	call AccDemo_Init_Wrap
 	pop xiz
 	ret
 
@@ -176597,7 +176597,7 @@ LABEL_F5EAEE:
 	ld wa, (xiy)
 	cps wa, 0
 	jr z, LABEL_F5EB03
-	call LABEL_F5CE20
+	call AccDemo_Init_Wrap
 
 LABEL_F5EB03:
 	ret
@@ -184652,7 +184652,7 @@ LABEL_F63675:
 	call LABEL_F53309
 	ldda8 h, 37103
 	ldda8 l, 37102
-	call LABEL_F5C073
+	call AccVoice_DispatchEntry
 	ld xiy, 0x34AB
 	ldda32 xix, 13664
 	add xix, 0x40
@@ -186066,7 +186066,7 @@ DrumKitInit_Setup:
 	stdi8 14100, 4
 	stdi8 14101, 0
 	stdi8 14102, 1
-	call LABEL_F59AB9
+	call AccWrap_PlayModeDispatch
 	ordi8 10407, 4
 	stdi8 14235, 64
 	ldda8 a, 64602
@@ -186184,7 +186184,7 @@ DrumKitExit_ClearFlags:
 	calr DrumKit_PostMidiEvents
 
 DrumKitExit_PostRestore:
-	call LABEL_F59AB9
+	call AccWrap_PlayModeDispatch
 	calr DrumKit_ValidateBank
 	call LABEL_F43704
 	cpdi16 10408, 0
@@ -186194,7 +186194,7 @@ DrumKitExit_PostRestore:
 	jr DrumKitExit_CheckAutoPlay
 
 DrumKitExit_ExtraInit:
-	call LABEL_F59AB9
+	call AccWrap_PlayModeDispatch
 
 DrumKitExit_CheckAutoPlay:
 	bitda 0, 12931
@@ -186422,7 +186422,7 @@ RhythmPatInit_Entry:
 	stdi8	14235, 32
 	.byte 0xc1, 0x37, 0x8d, 0x3f, 0xb5		; cp (0x8D37), 0xB5  [C1 prefix]
 	jr nz, RhythmPatInit_Cleanup
-	call LABEL_F59AB9
+	call AccWrap_PlayModeDispatch
 	.byte 0xc1, 0xa7, 0x28, 0x3e, 0x04		; or (0x28A7), 0x04  [C1 prefix]
 	jr t, RhythmPatInit_Cleanup
 RhythmPatInit_Cleanup:
@@ -191784,7 +191784,7 @@ MainCmpCpFunc:
 	call LABEL_FC9B55
 	ld a, (xsp + 4)
 	extz wa
-	call LABEL_F5C092
+	call AccVoice_CopyFromROM_Wrap
 	extz xhl
 	pushw 0x10
 	push xhl
@@ -191820,7 +191820,7 @@ LABEL_F698E8:
 	extz wa
 	ld c, (xbc + 1)
 	extz bc
-	call LABEL_F5C077
+	call AccVoice_DispatchWithChannel
 	extz xhl
 	cpdi8 36152, 184
 	jr nz, LABEL_F69969
@@ -192443,7 +192443,7 @@ SndArgModeFunc:
 	push xhl
 	push xix
 	push xiz
-	call LABEL_F5C649
+	call AccStyle_ModeEnter_Wrap
 	pop xiz
 	pop xix
 	pop xhl
@@ -192455,7 +192455,7 @@ LABEL_F6A055:
 	push xhl
 	push xix
 	push xiz
-	call LABEL_F5C696
+	call AccStyle_ModeExit_Wrap
 	pop xiz
 	pop xix
 	pop xhl
@@ -192535,7 +192535,7 @@ SndArgNmGet:
 
 LABEL_F6A135:
 	ld a, (xsp + 4)
-	call LABEL_F5C084
+	call AccVoice_GetChannelCount_Wrap
 	ldfr_berp L, 0xFB
 	inc1_berp 0xFB
 	ldto_berp A, 0xFB
@@ -193750,7 +193750,7 @@ LABEL_F6BC35:
 	jr LABEL_F6BC43
 
 LABEL_F6BC3F:
-	call LABEL_F5CE20
+	call AccDemo_Init_Wrap
 
 LABEL_F6BC43:
 	call LABEL_F5F444
@@ -193834,7 +193834,7 @@ LABEL_F6BCA0:
 	call LABEL_FE118D
 	call LABEL_FCAC3A
 	call AccompSeq_StopSequence
-	call LABEL_F59AB9
+	call AccWrap_PlayModeDispatch
 	setda 2, 10407
 	call AudioInit_RefreshToneBank
 	call LABEL_FE106A
@@ -199938,7 +199938,7 @@ LABEL_F71EA0:
 	ret
 
 LABEL_F71EA1:
-	call LABEL_F59AB9
+	call AccWrap_PlayModeDispatch
 	call LABEL_F6F3B0
 	calr LABEL_F72133
 	call LABEL_FDDEF7
@@ -199977,7 +199977,7 @@ LABEL_F71EA1:
 	ret
 
 LABEL_F71F00:
-	call LABEL_F59AB9
+	call AccWrap_PlayModeDispatch
 	stdi8 1055, 12
 	calr LABEL_F7226B
 	push xwa
@@ -201339,7 +201339,7 @@ LABEL_F72B42:
 	jr z, LABEL_F72B73
 	bitda 2, 1055
 	jr nz, LABEL_F72B67
-	call LABEL_F59ACB
+	call AccWrap_PlayModeStartAccPlay
 	lds wa, 0
 	ei 6
 	stda8 1130, a
@@ -224506,7 +224506,7 @@ LABEL_F86E76:
 __jrt_nop_F86E7B:
 
 Demo_PreSetup:
-	call LABEL_F59AB9
+	call AccWrap_PlayModeDispatch
 	call SeqBuf_Init
 	call LABEL_F3CA4E
 	stdi8 1073, 0
@@ -231359,7 +231359,7 @@ InitializeOperationState:
 	call SeqBuf_Init
 	call LABEL_FE118D
 	call LABEL_FCAC3A
-	call LABEL_F59AB9
+	call AccWrap_PlayModeDispatch
 	cp (xsp), 0x0
 	jr z, LABEL_F8B221
 	setda 2, 10407
@@ -235396,7 +235396,7 @@ MainGetRhythmName:
 	extz wa
 	ld c, (xbc + 1)
 	extz bc
-	call LABEL_F5C077
+	call AccVoice_DispatchWithChannel
 	pushw 0xD
 	push xhl
 	ld xwa, (xsp + 8)
@@ -278755,7 +278755,7 @@ BitMapOut_ApplyPatch_Execute:
 BitMapOut_ApplyPatch_Loop:
 	ldto_berp A, 0xFB
 	extz wa
-	call LABEL_F5C084
+	call AccVoice_GetChannelCount_Wrap
 	extz hl
 	add iz, hl
 	inc 1, iz
@@ -280153,7 +280153,7 @@ LABEL_FB70F8:
 	push xix
 	push xiz
 	lds wa, 0
-	call LABEL_F5B1CA
+	call AccReplay_SendPedalType5
 	pop xiz
 	pop xix
 	pop xhl
@@ -280170,7 +280170,7 @@ LABEL_FB7124:
 	push xix
 	push xiz
 	lds wa, 1
-	call LABEL_F5B1CA
+	call AccReplay_SendPedalType5
 	pop xiz
 	pop xix
 	pop xhl
@@ -291863,7 +291863,7 @@ RVariScreenProc:
 	ld (xhl), wa
 	ld a, (xde)
 	extz wa
-	call LABEL_F5C084
+	call AccVoice_GetChannelCount_Wrap
 	ld xbc, (xiz + 52)
 	extz hl
 	ld (xbc), hl
@@ -291968,7 +291968,7 @@ RVari_Paint:
 	call LABEL_FC9B55
 	ld a, (xsp + 14)
 	extz wa
-	call LABEL_F5C092
+	call AccVoice_CopyFromROM_Wrap
 	extz xhl
 	pushw 0x10
 	push xhl
@@ -292049,7 +292049,7 @@ RVari_Select:
 	ld xbc, (xiz + 64)
 	ld bc, (xbc)
 	extz bc
-	call LABEL_F5C077
+	call AccVoice_DispatchWithChannel
 	extz xhl
 	pushw 0xD
 	push xhl
@@ -292188,7 +292188,7 @@ RVari_Select_CheckSameBank:
 	ld xbc, (xiz + 60)
 	ld bc, (xbc)
 	extz bc
-	call LABEL_F5C077
+	call AccVoice_DispatchWithChannel
 	extz xhl
 	pushw 0xD
 	push xhl
@@ -292444,7 +292444,7 @@ RVari_SelectE_FirstItem_Draw:
 	ld xbc, (xiz + 64)
 	ld bc, (xbc)
 	extz bc
-	call LABEL_F5C077
+	call AccVoice_DispatchWithChannel
 	extz xhl
 	pushw 0xD
 	push xhl
@@ -292643,7 +292643,7 @@ RVari_SelectO_Item_Draw:
 	ld xbc, (xiz + 60)
 	ld bc, (xbc)
 	extz bc
-	call LABEL_F5C077
+	call AccVoice_DispatchWithChannel
 	extz xhl
 	pushw 0xD
 	push xhl
@@ -292847,7 +292847,7 @@ RVari_SelNE_FirstItem_Draw:
 	ld c, b
 	add c, e
 	extz bc
-	call LABEL_F5C077
+	call AccVoice_DispatchWithChannel
 	extz xhl
 	pushw 0xD
 	push xhl
@@ -293016,7 +293016,7 @@ RVari_SelNE_SecondItem_Draw:
 	ld c, b
 	add c, e
 	extz bc
-	call LABEL_F5C077
+	call AccVoice_DispatchWithChannel
 	extz xhl
 	pushw 0xD
 	push xhl
@@ -293146,7 +293146,7 @@ RVari_Confirm_TypeF_Loop:
 	ld c, a
 	extz bc
 	ld wa, (xde)
-	call LABEL_F5C077
+	call AccVoice_DispatchWithChannel
 	extz xhl
 	pushw 0xD
 	push xhl
@@ -293410,7 +293410,7 @@ RVari_ConfirmE_Loop:
 	ldto_werp BC, 0xE6
 	add c, e
 	extz bc
-	call LABEL_F5C077
+	call AccVoice_DispatchWithChannel
 	extz xhl
 	pushw 0xD
 	push xhl
@@ -293580,7 +293580,7 @@ RVari_ConfirmNE_Loop:
 	mul c, 0xA
 	add c, (xsp + 8)
 	extz bc
-	call LABEL_F5C077
+	call AccVoice_DispatchWithChannel
 	extz xhl
 	pushw 0xD
 	push xhl
@@ -296347,7 +296347,7 @@ MainRvariIni:
 	call LABEL_FC9B55
 	ld a, (xiz)
 	extz wa
-	call LABEL_F5C084
+	call AccVoice_GetChannelCount_Wrap
 	ld (xiz + 3), l
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E20008
@@ -296464,7 +296464,7 @@ MainGetRhyGrpName:
 	call LABEL_FC9B55
 	ld a, (xsp + 4)
 	extz wa
-	call LABEL_F5C092
+	call AccVoice_CopyFromROM_Wrap
 	extz xhl
 	pushw 0x10
 	push xhl
@@ -296504,7 +296504,7 @@ MainGetRhyName:
 	extz wa
 	ld c, (xbc + 1)
 	extz bc
-	call LABEL_F5C077
+	call AccVoice_DispatchWithChannel
 	extz xhl
 	pushw 0xD
 	push xhl
@@ -314919,7 +314919,7 @@ LABEL_FD5C97:
 	push xhl
 	push xix
 	push xiz
-	call LABEL_F59AE8
+	call AccWrap_ReplaySavedExpr
 	pop xiz
 	pop xix
 	pop xhl
@@ -318457,7 +318457,7 @@ LABEL_FD86AC:
 	push xhl
 	push xix
 	push xiz
-	call LABEL_F59AB9
+	call AccWrap_PlayModeDispatch
 	call AccompSeq_StopSequence
 	pop xiz
 	pop xix
@@ -323174,7 +323174,7 @@ CompIface_ProcessInput:
 CompIface_CheckUpDown:
 	bitda 4, 49648
 	jr z, CompIface_RampDown
-	call LABEL_F59ADA
+	call AccWrap_PlayModeStartPlay
 	setda 7, 13517
 	jr CompIface_PostProcess
 
@@ -323186,7 +323186,7 @@ CompIface_RampDown:
 	setda 1, 9834
 
 CompIface_RampDown_Start:
-	call LABEL_F59AD3
+	call AccWrap_PlayModeStopExpr
 	jr CompIface_CallSync
 
 CompIface_FilterBySource:
@@ -323194,7 +323194,7 @@ CompIface_FilterBySource:
 	jr z, CompIface_FromSource2
 	bitda 4, 49648
 	jr z, CompIface_PostProcess
-	call LABEL_F59AB9
+	call AccWrap_PlayModeDispatch
 	jr CompIface_PostProcess
 
 CompIface_FromSource2:
@@ -323216,7 +323216,7 @@ CompIface_SetPedalBit:
 	setda 1, 9834
 
 CompIface_CallFilterA:
-	call LABEL_F59AB9
+	call AccWrap_PlayModeDispatch
 
 CompIface_CallSync:
 	call LABEL_F3CAC1
@@ -326770,7 +326770,7 @@ LABEL_FDDF12:
 
 LABEL_FDDF27:
 	ordi16 50582, 512
-	call LABEL_F5ABBC
+	call AccAutoPlay_PeriodicCheck
 	ldda16 xwa, 50582
 	and wa, 0x7
 	jr z, LABEL_FDDF42
@@ -329935,7 +329935,7 @@ LABEL_FE02DB:
 	ld_srib A, (xsp + 0x0153)
 	extz wa
 	extz bc
-	call LABEL_F59A9F
+	call AccWrap_AutoPlayCheck
 
 LABEL_FE0317:
 	inc 1, iz
@@ -330104,7 +330104,7 @@ LABEL_FE04B4:
 	call LABEL_FE33C3
 
 LABEL_FE04CE:
-	call LABEL_F59AB2
+	call AccWrap_AutoPlayStateMachine
 
 LABEL_FE04D2:
 	incm 1, (xsp + 6)
@@ -330357,7 +330357,7 @@ LABEL_FE0730:
 	extz wa
 	ld bc, wa
 	ldw wa, 0x80
-	call LABEL_F59A9F
+	call AccWrap_AutoPlayCheck
 
 LABEL_FE0762:
 	inc 1, iz
@@ -330599,7 +330599,7 @@ LABEL_FE09AA:
 	jrl nz, LABEL_FE0721
 
 LABEL_FE09BB:
-	call LABEL_F59AB2
+	call AccWrap_AutoPlayStateMachine
 	popw iz
 	lda xsp, (xsp + 18)
 	ret
@@ -338677,7 +338677,7 @@ LABEL_FE590B:
 	push xwa
 	call LABEL_FEA688
 	inc 4, xsp
-	call LABEL_F59B09
+	call AccWrap_AutoPlayZoneTrack
 	jp LABEL_FE946B
 
 LABEL_FE592A:
@@ -348372,7 +348372,7 @@ LABEL_FEC344:
 	stdi16 1052, 0
 	stdi8 1051, 0
 	ei 0
-	jp LABEL_F59AC0
+	jp AccWrap_PlayModeStart
 
 LABEL_FEC373:
 	cpdi16 53402, 0
@@ -348381,7 +348381,7 @@ LABEL_FEC373:
 	ret
 
 LABEL_FEC382:
-	call LABEL_F59AB9
+	call AccWrap_PlayModeDispatch
 	lds32 xwa, 0
 	cp xwa, 0x7FFE
 	jr ugt, LABEL_FEC3A0
@@ -348401,7 +348401,7 @@ LABEL_FEC3A0:
 	ret
 
 LABEL_FEC3B0:
-	call LABEL_F59AC0
+	call AccWrap_PlayModeStart
 	ei 6
 	ldda32 xwa, 53412
 	stda16 1052, xwa
@@ -348419,7 +348419,7 @@ LABEL_FEC3C9:
 	ldda8 a, 1051
 	stda32 53408, xwa
 	ei 0
-	call LABEL_F59AB9
+	call AccWrap_PlayModeDispatch
 	lds32 xwa, 0
 	cp xwa, 0x7FFE
 	ret ugt
