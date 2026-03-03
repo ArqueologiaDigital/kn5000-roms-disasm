@@ -15,28 +15,28 @@ FmmPasswordFunc:
 	ld (xsp + 4), xwa
 	ld wa, iz
 	cp xbc, 0x1E50010
-	jrl z, LABEL_F8CA7F
+	jrl z, Password_HandleLoadEvent
 	ldada xde, 35340
 	cp xbc, 0x1E5000F
-	jrl z, LABEL_F8C9FC
+	jrl z, Password_HandleSaveEvent
 	cp xbc, 0x1E5000E
-	jr z, LABEL_F8C980
+	jr z, Password_HandleDeleteEvent
 	cp xbc, 0x1E5000D
-	jrl nz, LABEL_F8CAA6
+	jrl nz, Password_Return
 	call CheckAnySlotHasData
 	cps l, 0
-	jr nz, LABEL_F8C95A
+	jr nz, Password_ShowError
 	call CheckSlotIndexValid
 	cps l, 0
-	jr z, LABEL_F8C969
+	jr z, Password_ClearAndSetSlot
 
-LABEL_F8C95A:
+Password_ShowError:
 	stdi8 32578, 10
 	ldw wa, 0xEE
 	call LABEL_F994BD
-	jrl LABEL_F8CAA6
+	jrl Password_Return
 
-LABEL_F8C969:
+Password_ClearAndSetSlot:
 	ld wa, iz
 	call ClearAllSongSlots
 	ld wa, iz
@@ -44,131 +44,131 @@ LABEL_F8C969:
 	ldada xwa, 35341
 	setm 7, (xwa)
 	setm 6, (xwa)
-	jrl LABEL_F8CAA6
+	jrl Password_Return
 
-LABEL_F8C980:
+Password_HandleDeleteEvent:
 	cp (xde), 0x3
-	jr nz, LABEL_F8C9AB
+	jr nz, Password_Delete_CheckLoadOnly
 	call CheckSlotIsSelected
 	cps l, 0
-	jr z, LABEL_F8C9AB
+	jr z, Password_Delete_CheckLoadOnly
 	ld wa, iz
 	call CheckIsCurrentSlot
 	cps l, 0
-	jr z, LABEL_F8C9AB
+	jr z, Password_Delete_CheckLoadOnly
 	ldada xwa, 35341
 	setm 7, (xwa)
 	setm 6, (xwa)
 	ld xwa, (xsp + 4)
 	ld xbc, 0x1C00017
 	lds32 xde, 4
-	jr LABEL_F8C9EB
+	jr Password_ForwardToFileName
 
-LABEL_F8C9AB:
+Password_Delete_CheckLoadOnly:
 	cpdi8 35340, 1
-	jr nz, LABEL_F8C9CC
+	jr nz, Password_Delete_CheckSaveOnly
 	ld wa, iz
 	call CheckSlotIsSelected
 	cps l, 0
-	jr z, LABEL_F8C9CC
+	jr z, Password_Delete_CheckSaveOnly
 	setda 7, 35341
 	ld xwa, (xsp + 4)
 	ld xbc, 0x1C00017
 	lds32 xde, 4
-	jr LABEL_F8C9EB
+	jr Password_ForwardToFileName
 
-LABEL_F8C9CC:
+Password_Delete_CheckSaveOnly:
 	cpdi8 35340, 2
-	jr nz, LABEL_F8C9F1
+	jr nz, Password_ShowErrorStatus
 	ld wa, iz
 	call CheckIsCurrentSlot
 	cps l, 0
-	jr z, LABEL_F8C9F1
+	jr z, Password_ShowErrorStatus
 	setda 6, 35341
 	ld xwa, (xsp + 4)
 	ld xbc, 0x1C00017
 	lds32 xde, 4
 
-LABEL_F8C9EB:
+Password_ForwardToFileName:
 	calr FmmFileNameFunc
-	jrl LABEL_F8CAA6
+	jrl Password_Return
 
-LABEL_F8C9F1:
+Password_ShowErrorStatus:
 	stdi8 32578, 11
 	ldw wa, 0xEE
-	jrl LABEL_F8CAA2
+	jrl Password_CallStatusDisplay
 
-LABEL_F8C9FC:
+Password_HandleSaveEvent:
 	cp (xde), 0x3
-	jr nz, LABEL_F8CA2A
+	jr nz, Password_Save_CheckLoadOnly
 	call CheckSlotIsSelected
 	cps l, 0
-	jr z, LABEL_F8CA2A
+	jr z, Password_Save_CheckLoadOnly
 	ld wa, iz
 	call CheckIsCurrentSlot
 	cps l, 0
-	jr z, LABEL_F8CA2A
+	jr z, Password_Save_CheckLoadOnly
 	ldada xwa, 35341
 	setm 7, (xwa)
 	setm 6, (xwa)
 	ld xwa, (xsp + 4)
 	ld xbc, 0x1C00017
 	ld xde, 0xA
-	jr LABEL_F8CA70
+	jr Password_ForwardToSaveFilter
 
-LABEL_F8CA2A:
+Password_Save_CheckLoadOnly:
 	cpdi8 35340, 1
-	jr nz, LABEL_F8CA4E
+	jr nz, Password_Save_CheckSaveOnly
 	ld wa, iz
 	call CheckSlotIsSelected
 	cps l, 0
-	jr z, LABEL_F8CA4E
+	jr z, Password_Save_CheckSaveOnly
 	setda 7, 35341
 	ld xwa, (xsp + 4)
 	ld xbc, 0x1C00017
 	ld xde, 0xA
-	jr LABEL_F8CA70
+	jr Password_ForwardToSaveFilter
 
-LABEL_F8CA4E:
+Password_Save_CheckSaveOnly:
 	cpdi8 35340, 2
-	jr nz, LABEL_F8CA75
+	jr nz, Password_SaveErrorStatus
 	ld wa, iz
 	call CheckIsCurrentSlot
 	cps l, 0
-	jr z, LABEL_F8CA75
+	jr z, Password_SaveErrorStatus
 	setda 6, 35341
 	ld xwa, (xsp + 4)
 	ld xbc, 0x1C00017
 	ld xde, 0xA
 
-LABEL_F8CA70:
+Password_ForwardToSaveFilter:
 	calr FmmSaveFilterFunc
-	jr LABEL_F8CAA6
+	jr Password_Return
 
-LABEL_F8CA75:
+Password_SaveErrorStatus:
 	stdi8 32578, 11
 	ldw wa, 0xEE
-	jr LABEL_F8CAA2
+	jr Password_CallStatusDisplay
 
-LABEL_F8CA7F:
+Password_HandleLoadEvent:
 	call CheckSlotIsSelected
 	cps l, 0
-	jr z, LABEL_F8CA9A
+	jr z, Password_LoadErrorStatus
 	setda 7, 35341
 	ld xwa, (xsp + 4)
 	ld xbc, 0x1C00017
 	lds32 xde, 4
 	calr FmmSeqSongNameFunc
-	jr LABEL_F8CAA6
+	jr Password_Return
 
-LABEL_F8CA9A:
+Password_LoadErrorStatus:
 	stdi8 32578, 11
 	ldw wa, 0xEE
 
-LABEL_F8CAA2:
+Password_CallStatusDisplay:
 	call LABEL_F994BD
 
-LABEL_F8CAA6:
+Password_Return:
 	lds32 xhl, 0
 	pop xiz
 	inc 4, xsp
@@ -181,60 +181,60 @@ SelectPasswordMode:
 	lds wa, 2
 	call LABEL_F89353
 	cps l, 0
-	jr z, LABEL_F8CACE
+	jr z, SelectMode_CheckSaveAvail
 	call CheckAnySlotHasData
 	cps l, 0
-	jr z, LABEL_F8CACE
+	jr z, SelectMode_CheckSaveAvail
 	bitda 7, 35341
-	jr nz, LABEL_F8CACE
+	jr nz, SelectMode_CheckSaveAvail
 	ldi_berp 0xFA, 1
 
-LABEL_F8CACE:
+SelectMode_CheckSaveAvail:
 	lds wa, 3
 	call LABEL_F89353
 	cps l, 0
-	jr z, LABEL_F8CAE9
+	jr z, SelectMode_DetermineMode
 	call CheckSlotIndexValid
 	cps l, 0
-	jr z, LABEL_F8CAE9
+	jr z, SelectMode_DetermineMode
 	bitda 6, 35341
-	jr nz, LABEL_F8CAE9
+	jr nz, SelectMode_DetermineMode
 	ldi_berp 0xFB, 1
 
-LABEL_F8CAE9:
+SelectMode_DetermineMode:
 	cpi_berp 0xFA, 0
-	jr z, LABEL_F8CB0B
+	jr z, SelectMode_SingleMode
 	cpi_berp 0xFB, 0
-	jr z, LABEL_F8CB0B
+	jr z, SelectMode_SingleMode
 	call GetCurrentSlotIndex
 	ld iz, hl
 	call FindFirstEmptySlot
 	ldb a, 0x1
 	cp hl, iz
-	jr nz, LABEL_F8CB05
+	jr nz, SelectMode_SetBothMode
 	ldb a, 0x3
 
-LABEL_F8CB05:
+SelectMode_SetBothMode:
 	stda8 35340, a
-	jr LABEL_F8CB24
+	jr SelectMode_Return
 
-LABEL_F8CB0B:
+SelectMode_SingleMode:
 	ldada xbc, 35340
 	cpi_berp 0xFA, 0
-	jr z, LABEL_F8CB19
+	jr z, SelectMode_CheckSaveOnlyMode
 	ld (xbc), 0x1
-	jr LABEL_F8CB24
+	jr SelectMode_Return
 
-LABEL_F8CB19:
+SelectMode_CheckSaveOnlyMode:
 	ldb a, 0x0
 	cpi_berp 0xFB, 0
-	jr z, LABEL_F8CB22
+	jr z, SelectMode_StoreMode
 	ldb a, 0x2
 
-LABEL_F8CB22:
+SelectMode_StoreMode:
 	ld (xbc), a
 
-LABEL_F8CB24:
+SelectMode_Return:
 	ldda8 l, 35340
 	extz hl
 	pop xiz
@@ -248,42 +248,42 @@ FmmFileNameFunc:
 	ld xbc, xiz
 	ld xwa, (xsp + 8)
 	cp xwa, 0x1E50000
-	jrl z, LABEL_F8D106
+	jrl z, FileName_HandleRegister
 	cp xwa, 0x1C00018
-	jrl z, LABEL_F8CC0C
+	jrl z, FileName_HandleScroll
 	cp xwa, 0x1C00017
-	jrl z, LABEL_F8CC0C
+	jrl z, FileName_HandleScroll
 	cp xwa, 0x1C0000B
-	jr z, LABEL_F8CBA2
+	jr z, FileName_HandleShow
 	cp xwa, 0x1E50004
-	jrl nz, LABEL_F8D16D
+	jrl nz, FileName_Return
 	stda32 32626, xbc
 	call 0xF895EF
 	stda16 32634, xhl
 	cps hl, 0
-	jr lt, LABEL_F8CB84
+	jr lt, FileName_ListSelect_Negative
 	exts xhl
 	ldda32 xwa, 32626
 	ld xbc, 0x1E50002
 	ld xde, xhl
-	jr LABEL_F8CB95
+	jr FileName_ListSelect_Forward
 
-LABEL_F8CB84:
+FileName_ListSelect_Negative:
 	stdi16 32634, 0
 	ldda32 xwa, 32626
 	ld xbc, 0x1E50002
 	lds32 xde, 0
 
-LABEL_F8CB95:
+FileName_ListSelect_Forward:
 	call 0xFA9D58
 	lds32 xwa, 0
 	stda32 32630, xwa
-	jrl LABEL_F8D16D
+	jrl FileName_Return
 
-LABEL_F8CBA2:
+FileName_HandleShow:
 	ldw (xsp + 6), 0x0
 
-LABEL_F8CBA7:
+FileName_DrawItemLoop:
 	ld wa, (xsp + 6)
 	ld hl, wa
 	sll hl, 5
@@ -317,62 +317,62 @@ LABEL_F8CBA7:
 	call 0xFA9D58
 	incm 1, (xsp + 6)
 	cpw (xsp + 6), 0x14
-	jr lt, LABEL_F8CBA7
-	jrl LABEL_F8D16D
+	jr lt, FileName_DrawItemLoop
+	jrl FileName_Return
 
-LABEL_F8CC0C:
+FileName_HandleScroll:
 	ldmw2 (xsp + 6), 0x7F7A
 	ld wa, (xsp + 6)
 	ld (xsp + 4), wa
 	or xiz, xiz
-	jr nz, LABEL_F8CC49
+	jr nz, FileName_PageUp
 	ld xwa, (xsp + 8)
 	cp xwa, 0x1C00018
-	jr nz, LABEL_F8CC33
+	jr nz, FileName_ScrollUp
 	cpw (xsp + 6), 0x13
-	jrl ge, LABEL_F8CFF8
+	jrl ge, FileName_GetSelection
 	incm 1, (xsp + 6)
-	jr LABEL_F8CC7B
+	jr FileName_ScrollApply
 
-LABEL_F8CC33:
+FileName_ScrollUp:
 	cp xwa, 0x1C00017
-	jrl nz, LABEL_F8CFF8
+	jrl nz, FileName_GetSelection
 	cpw (xsp + 6), 0x0
-	jrl le, LABEL_F8CFF8
+	jrl le, FileName_GetSelection
 	decm 1, (xsp + 6)
-	jr LABEL_F8CC7B
+	jr FileName_ScrollApply
 
-LABEL_F8CC49:
+FileName_PageUp:
 	cp xiz, 0x1
-	jr nz, LABEL_F8CC60
+	jr nz, FileName_PageDown
 	cpw (xsp + 6), 0xA
-	jrl lt, LABEL_F8CFF8
+	jrl lt, FileName_GetSelection
 	submi16 (xsp + 6), 0xA
-	jr LABEL_F8CC7B
+	jr FileName_ScrollApply
 
-LABEL_F8CC60:
+FileName_PageDown:
 	cp xiz, 0x2
-	jr nz, LABEL_F8CC86
+	jr nz, FileName_OpSave
 	ld wa, (xsp + 6)
 	add wa, 0xA
 	cp wa, 0x13
-	jrl gt, LABEL_F8CFF8
+	jrl gt, FileName_GetSelection
 	addmi16 (xsp + 6), 0xA
 
-LABEL_F8CC7B:
+FileName_ScrollApply:
 	mrdw5 0x9F, 0x06, 0x19, 0x7A, 0x7F
 	ld wa, (xsp + 6)
-	jrl LABEL_F8CFFC
+	jrl FileName_UpdateDisplay
 
-LABEL_F8CC86:
+FileName_OpSave:
 	cp xiz, 0x3
-	jrl nz, LABEL_F8CD39
+	jrl nz, FileName_OpLoad
 	call 0xF8943E
 	cps hl, 0
-	jrl z, LABEL_F8CD39
+	jrl z, FileName_OpLoad
 	call LABEL_F892EF
 	cps hl, 0
-	jrl z, LABEL_F8CD39
+	jrl z, FileName_OpLoad
 	ld xwa, 0x600026
 	ld xbc, 0x1C00001
 	lds32 xde, 5
@@ -397,57 +397,57 @@ LABEL_F8CC86:
 	lds32 xde, 1
 	call 0xFA9D58
 	cpdi16 61854, 0
-	jr z, LABEL_F8CD1D
+	jr z, FileName_OpSave_ShowCode1
 	lds wa, 2
 	call LABEL_F892F5
 	cps l, 0
-	jr z, LABEL_F8CD1D
+	jr z, FileName_OpSave_ShowCode1
 	lds wa, 2
 	call LABEL_F893D1
 	cps l, 0
-	jr nz, LABEL_F8CD18
+	jr nz, FileName_OpSave_ShowCodeA
 	ldw wa, 0x8
 	call LABEL_F893D1
 	cps l, 0
-	jr z, LABEL_F8CD1D
+	jr z, FileName_OpSave_ShowCode1
 
-LABEL_F8CD18:
+FileName_OpSave_ShowCodeA:
 	ldw wa, 0xA
-	jr LABEL_F8CD1F
+	jr FileName_OpSave_CallHandler
 
-LABEL_F8CD1D:
+FileName_OpSave_ShowCode1:
 	lds wa, 1
 
-LABEL_F8CD1F:
+FileName_OpSave_CallHandler:
 	call LABEL_F99463
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
 	lds32 xde, 0
 	call 0xFA9D58
 	ldw wa, 0xEE
-	jrl LABEL_F8CFF4
+	jrl FileName_CallStatusDisplay
 
-LABEL_F8CD39:
+FileName_OpLoad:
 	cp xiz, 0x4
-	jrl nz, LABEL_F8CE07
+	jrl nz, FileName_OpFormat
 	call LABEL_F8934D
 	cps hl, 0
-	jrl z, LABEL_F8CE07
+	jrl z, FileName_OpFormat
 	calr SelectPasswordMode
 	cps hl, 0
-	jr z, LABEL_F8CD65
+	jr z, FileName_OpLoad_NoPwd
 	lds32 xde, 0
 	ldda8 e, 35340
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C50004
-	jrl LABEL_F8CEB7
+	jrl FileName_OpDispatch
 
-LABEL_F8CD65:
+FileName_OpLoad_NoPwd:
 	call 0xF8943E
 	cps hl, 0
-	jr z, LABEL_F8CD94
+	jr z, FileName_OpLoad_Execute
 	cpi8_24 0x0340ea, 0x00
-	jr z, LABEL_F8CD94
+	jr z, FileName_OpLoad_Execute
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C50000
 	lds32 xde, 1
@@ -455,9 +455,9 @@ LABEL_F8CD65:
 	ld xwa, 0x600037
 	ld xbc, 0x1C00001
 	lds32 xde, 0
-	jrl LABEL_F8CEB7
+	jrl FileName_OpDispatch
 
-LABEL_F8CD94:
+FileName_OpLoad_Execute:
 	ld xwa, 0x600026
 	ld xbc, 0x1C00001
 	lds32 xde, 5
@@ -489,11 +489,11 @@ LABEL_F8CD94:
 	lds32 xde, 0
 	call 0xFA9D58
 	ldw wa, 0xEE
-	jrl LABEL_F8CFF4
+	jrl FileName_CallStatusDisplay
 
-LABEL_F8CE07:
+FileName_OpFormat:
 	cp xiz, 0x32
-	jr nz, LABEL_F8CE82
+	jr nz, FileName_OpDelete
 	ld xwa, 0x600026
 	ld xbc, 0x1C00001
 	lds32 xde, 5
@@ -525,16 +525,16 @@ LABEL_F8CE07:
 	lds32 xde, 0
 	call 0xFA9D58
 	ldw wa, 0xEE
-	jrl LABEL_F8CFF4
+	jrl FileName_CallStatusDisplay
 
-LABEL_F8CE82:
+FileName_OpDelete:
 	cp xiz, 0x5
-	jrl nz, LABEL_F8CF0B
+	jrl nz, FileName_OpFormatVariant
 	call 0xF8943E
 	cps hl, 0
-	jr z, LABEL_F8CF0B
+	jr z, FileName_OpFormatVariant
 	cpi8_24 0x0340ea, 0x00
-	jr z, LABEL_F8CEBE
+	jr z, FileName_OpDelete_Execute
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C50000
 	lds32 xde, 1
@@ -543,11 +543,11 @@ LABEL_F8CE82:
 	ld xbc, 0x1C00001
 	lds32 xde, 0
 
-LABEL_F8CEB7:
+FileName_OpDispatch:
 	call 0xFA9D58
-	jrl LABEL_F8CFF8
+	jrl FileName_GetSelection
 
-LABEL_F8CEBE:
+FileName_OpDelete_Execute:
 	ld xwa, 0x600026
 	ld xbc, 0x1C00001
 	lds32 xde, 5
@@ -569,11 +569,11 @@ LABEL_F8CEBE:
 	lds32 xde, 0
 	call 0xFA9D58
 	ldw wa, 0xEE
-	jrl LABEL_F8CFF4
+	jrl FileName_CallStatusDisplay
 
-LABEL_F8CF0B:
+FileName_OpFormatVariant:
 	cp xiz, 0x33
-	jr nz, LABEL_F8CF60
+	jr nz, FileName_OpNavigate
 	ld xwa, 0x600026
 	ld xbc, 0x1C00001
 	lds32 xde, 5
@@ -595,38 +595,38 @@ LABEL_F8CF0B:
 	lds32 xde, 0
 	call 0xFA9D58
 	ldw wa, 0xEE
-	jrl LABEL_F8CFF4
+	jrl FileName_CallStatusDisplay
 
-LABEL_F8CF60:
+FileName_OpNavigate:
 	cp xiz, 0x6
-	jrl nz, LABEL_F8CFF8
+	jrl nz, FileName_GetSelection
 	call 0xF8943E
 	cps hl, 0
-	jrl z, LABEL_F8CFF8
+	jrl z, FileName_GetSelection
 	ld xbc, (xsp + 8)
 	ldda16 xwa, 32634
 	cp xbc, 0x1C00018
-	jr nz, LABEL_F8CF91
+	jr nz, FileName_Navigate_ScrollUp
 	ld bc, wa
 	cp wa, 0x13
-	jr ge, LABEL_F8CFA5
+	jr ge, FileName_Navigate_CheckChanged
 	inc 1, bc
 	stda16 32634, xbc
-	jr LABEL_F8CFA5
+	jr FileName_Navigate_CheckChanged
 
-LABEL_F8CF91:
+FileName_Navigate_ScrollUp:
 	cp xbc, 0x1C00017
-	jr nz, LABEL_F8CFA5
+	jr nz, FileName_Navigate_CheckChanged
 	ld bc, wa
 	cps wa, 0
-	jr le, LABEL_F8CFA5
+	jr le, FileName_Navigate_CheckChanged
 	dec 1, bc
 	stda16 32634, xbc
 
-LABEL_F8CFA5:
+FileName_Navigate_CheckChanged:
 	ld wa, (xsp + 6)
 	cpda16 xwa, 32634
-	jr z, LABEL_F8CFF8
+	jr z, FileName_GetSelection
 	ld xwa, 0x600026
 	ld xbc, 0x1C00001
 	lds32 xde, 5
@@ -648,15 +648,15 @@ LABEL_F8CFA5:
 	call 0xFA9D58
 	ldw wa, 0xEE
 
-LABEL_F8CFF4:
+FileName_CallStatusDisplay:
 	call LABEL_F994BD
 
-LABEL_F8CFF8:
+FileName_GetSelection:
 	ldda16 xwa, 32634
 
-LABEL_F8CFFC:
+FileName_UpdateDisplay:
 	cp (xsp + 4), wa
-	jrl z, LABEL_F8D16D
+	jrl z, FileName_Return
 	call 0xF89605
 	stdi8 35320, 4
 	ldda16 xde, 32634
@@ -682,124 +682,124 @@ LABEL_F8CFFC:
 	call 0xFA9D58
 	ldw (xsp + 6), 0x0
 
-LABEL_F8D05A:
+FileName_UpdateButtons_Loop:
 	ld wa, (xsp + 6)
 	extz wa
 	call LABEL_F893D1
 	ld wa, (xsp + 6)
 	extz wa
 	cps l, 0
-	jr z, LABEL_F8D072
+	jr z, FileName_UpdateButtons_Hide
 	call LABEL_F89321
-	jr LABEL_F8D076
+	jr FileName_UpdateButtons_Check
 
-LABEL_F8D072:
+FileName_UpdateButtons_Hide:
 	call LABEL_F89335
 
-LABEL_F8D076:
+FileName_UpdateButtons_Check:
 	incm 1, (xsp + 6)
 	cpw (xsp + 6), 0x8
-	jr lt, LABEL_F8D05A
+	jr lt, FileName_UpdateButtons_Loop
 	ldw wa, 0x8
 	call LABEL_F893D1
 	cps l, 0
-	jr z, LABEL_F8D09C
+	jr z, FileName_CheckCallback
 	ldw wa, 0x9
 	call LABEL_F893D1
 	cps l, 0
-	jr z, LABEL_F8D09C
+	jr z, FileName_CheckCallback
 	lds wa, 2
 	call LABEL_F89321
 
-LABEL_F8D09C:
+FileName_CheckCallback:
 	ldda32 xwa, 32630
 	or xwa, xwa
-	jrl z, LABEL_F8D16D
+	jrl z, FileName_Return
 	cpdi8 36150, 103
-	jr z, LABEL_F8D0F3
+	jr z, FileName_Callback_Simple
 	call 0xF8943E
 	ld iz, hl
 	ldw wa, 0x8
 	call LABEL_F893D1
 	cps l, 0
-	jr z, LABEL_F8D0CB
+	jr z, FileName_Callback_SetFilter
 	ldw wa, 0x9
 	call LABEL_F893D1
 	cps l, 0
-	jr z, LABEL_F8D0CB
+	jr z, FileName_Callback_SetFilter
 	set 2, iz
 
-LABEL_F8D0CB:
+FileName_Callback_SetFilter:
 	call LABEL_F892EF
 	and iz, hl
 	bit 0, iz
-	jr z, LABEL_F8D0E4
+	jr z, FileName_Callback_Send
 	call LABEL_F8964C
 	cps l, 0
-	jr z, LABEL_F8D0E4
+	jr z, FileName_Callback_Send
 	res 0, iz
 	set 1, iz
 
-LABEL_F8D0E4:
+FileName_Callback_Send:
 	ld de, iz
 	extz xde
 	ldda32 xwa, 32630
 	ld xbc, 0x1E50001
-	jr LABEL_F8D169
+	jr FileName_DispatchWidget
 
-LABEL_F8D0F3:
+FileName_Callback_Simple:
 	call LABEL_F8934D
 	extz xhl
 	ldda32 xwa, 32630
 	ld xbc, 0x1E50001
 	ld xde, xhl
-	jr LABEL_F8D169
+	jr FileName_DispatchWidget
 
-LABEL_F8D106:
+FileName_HandleRegister:
 	stda32 32630, xbc
 	cpdi8 36150, 103
-	jr z, LABEL_F8D158
+	jr z, FileName_Register_Simple
 	call 0xF8943E
 	ld iz, hl
 	ldw wa, 0x8
 	call LABEL_F893D1
 	cps l, 0
-	jr z, LABEL_F8D130
+	jr z, FileName_Register_SetFilter
 	ldw wa, 0x9
 	call LABEL_F893D1
 	cps l, 0
-	jr z, LABEL_F8D130
+	jr z, FileName_Register_SetFilter
 	set 2, iz
 
-LABEL_F8D130:
+FileName_Register_SetFilter:
 	call LABEL_F892EF
 	and iz, hl
 	bit 0, iz
-	jr z, LABEL_F8D149
+	jr z, FileName_Register_Send
 	call LABEL_F8964C
 	cps l, 0
-	jr z, LABEL_F8D149
+	jr z, FileName_Register_Send
 	res 0, iz
 	set 1, iz
 
-LABEL_F8D149:
+FileName_Register_Send:
 	ld de, iz
 	extz xde
 	ldda32 xwa, 32630
 	ld xbc, 0x1E50001
-	jr LABEL_F8D169
+	jr FileName_DispatchWidget
 
-LABEL_F8D158:
+FileName_Register_Simple:
 	call LABEL_F8934D
 	extz xhl
 	ldda32 xwa, 32630
 	ld xbc, 0x1E50001
 	ld xde, xhl
 
-LABEL_F8D169:
+FileName_DispatchWidget:
 	call 0xFA9D58
 
-LABEL_F8D16D:
+FileName_Return:
 	lds32 xhl, 0
 	pop xiz
 	inc 8, xsp
