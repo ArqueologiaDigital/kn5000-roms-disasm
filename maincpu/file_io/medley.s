@@ -1785,7 +1785,7 @@ NavigateSongList:
 NavSong_CheckBounds:
 	cpdi16 34052, 0
 	jr le, NavSong_Exit
-	call LABEL_F89AC7
+	call GetFirstPageBase
 	cps hl, 0
 	jr lt, NavSong_Exit
 	ld iz, hl
@@ -1804,7 +1804,7 @@ NavSong_CheckEnd:
 	cp hl, iz
 	jr z, NavSong_Exit
 	ld wa, iz
-	call LABEL_F89BA4
+	call NavigateToFileIndex
 	ld wa, iz
 	call LABEL_F8A07F
 

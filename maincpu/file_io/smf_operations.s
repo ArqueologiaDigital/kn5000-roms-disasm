@@ -479,7 +479,7 @@ DispFileList_LoopBody:
 	ld (xde), a
 	ld wa, (xsp + 2)
 	add wa, iz
-	call LABEL_F89BF0
+	call GetRecordPtrForFile
 	ld xbc, xhl
 	ld wa, iz
 	sll wa, 5
@@ -725,7 +725,7 @@ SmfFN_HandleSave:
 	cps l, 0
 	jr z, SmfFN_Save_WriteSlot
 	ldda16 xwa, 33196
-	call LABEL_F89BF0
+	call GetRecordPtrForFile
 	ld xbc, xhl
 	lda xwa, (xsp + 8)
 	ldw de, 0x8
@@ -1142,7 +1142,7 @@ SmfFN_RefreshIfChanged:
 	cp (xsp + 4), hl
 	jrl z, SmfFN_SendOkState
 	ld wa, hl
-	call LABEL_F89BA4
+	call NavigateToFileIndex
 	ldda16 xwa, 33196
 	exts xwa
 	divs wa, 0xA
@@ -1210,7 +1210,7 @@ SmfFN_UpdateFilenameField:
 	jr SmfFN_WriteFilenameField
 
 SmfFN_FetchFilename:
-	call LABEL_F89BF0
+	call GetRecordPtrForFile
 	ld xbc, xhl
 	ld xwa, xiz
 	call LABEL_F890DC
@@ -1240,7 +1240,7 @@ SmfFN_SendOkState:
 	jrl z, SmfFN_ReturnZero
 	ld wa, iz
 	stda16 33196, xwa
-	call LABEL_F89BA4
+	call NavigateToFileIndex
 	ldda16 xwa, 33196
 	exts xwa
 	divs wa, 0xA

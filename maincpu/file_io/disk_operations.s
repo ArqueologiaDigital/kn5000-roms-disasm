@@ -342,12 +342,12 @@ FileRenameSmfFunc:
 	jrl z, FRenameSmf_HandleApply
 	cp xbc, 0x1E0003A
 	jrl nz, FRenameSmf_Return
-	call LABEL_F89AC7
+	call GetFirstPageBase
 	cps hl, 0
 	jr lt, FRenameSmf_TextChange_Error
 	ldada xiz, 34928
 	ld wa, hl
-	call LABEL_F89BF0
+	call GetRecordPtrForFile
 	ld xbc, xhl
 	ld xwa, xiz
 	call LABEL_F890DC
@@ -1089,7 +1089,7 @@ SongNameFunc:
 	ld (xsp + 6), xde
 	cp xbc, 0x1C0000B
 	jr nz, SongName_Return
-	call LABEL_F89AC7
+	call GetFirstPageBase
 	ld iz, hl
 	cps iz, 0
 	jr lt, SongName_NoSlot
