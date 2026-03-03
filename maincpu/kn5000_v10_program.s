@@ -277,51 +277,51 @@ LABEL_E06BB0:
 	.long LABEL_E06EA0
 	.long LABEL_E06EA3
 	.long LABEL_E06EA6
-	.long LABEL_E06EA9
-	.long LABEL_E06EAC
-	.long LABEL_E06EAF
-	.long LABEL_E06EB2
-	.long LABEL_E06EB5
-	.long LABEL_E06EB8
-	.long LABEL_E06EBB
-	.long LABEL_E06EBE
-	.long LABEL_E06EC1
-	.long LABEL_E06EC4
-	.long LABEL_E06EC7
-	.long LABEL_E06ECA
-	.long LABEL_E06ECD
-	.long LABEL_E06ED0
-	.long LABEL_E06ED3
-	.long LABEL_E06ED6
-	.long LABEL_E06ED9
-	.long LABEL_E06EDC
-	.long LABEL_E06EDF
-	.long LABEL_E06EE2
-	.long LABEL_E06EE5
-	.long LABEL_E06EE8
-	.long LABEL_E06EEB
-	.long LABEL_E06EEE
-	.long LABEL_E06EF1
-	.long LABEL_E06EF4
-	.long LABEL_E06EF7
-	.long LABEL_E06EFA
-	.long LABEL_E06EFD
-	.long LABEL_E06F00
-	.long LABEL_E06F03
-	.long LABEL_E06F06
-	.long LABEL_E06F09
-	.long LABEL_E06F0C
-	.long LABEL_E06F0F
-	.long LABEL_E06F12
-	.long LABEL_E06F15
-	.long LABEL_E06F18
-	.long LABEL_E06F1B
-	.long LABEL_E06F1E
-	.long LABEL_E06F21
-	.long LABEL_E06F24
-	.long LABEL_E06F27
-	.long LABEL_E06F2A
-	.long LABEL_E06F2D
+	.long Brass_PatchEntry_084
+	.long Brass_PatchEntry_085
+	.long Brass_PatchEntry_086
+	.long Brass_PatchEntry_087
+	.long Brass_PatchEntry_088
+	.long Brass_PatchEntry_089
+	.long Brass_PatchEntry_090
+	.long Brass_PatchEntry_091
+	.long Brass_PatchEntry_092
+	.long Brass_PatchEntry_093
+	.long Brass_PatchEntry_094
+	.long Brass_PatchEntry_095
+	.long Brass_PatchEntry_096
+	.long Brass_PatchEntry_097
+	.long Brass_PatchEntry_098
+	.long Brass_PatchEntry_099
+	.long Brass_PatchEntry_100
+	.long Brass_PatchEntry_101
+	.long Brass_PatchEntry_102
+	.long Brass_PatchEntry_103
+	.long Brass_PatchEntry_104
+	.long Brass_PatchEntry_105
+	.long Brass_PatchEntry_106
+	.long Brass_PatchEntry_107
+	.long Brass_PatchEntry_108
+	.long Brass_PatchEntry_109
+	.long Brass_PatchEntry_110
+	.long Brass_PatchEntry_111
+	.long Brass_PatchEntry_112
+	.long Brass_PatchEntry_113
+	.long Brass_PatchEntry_114
+	.long Brass_PatchEntry_115
+	.long Brass_PatchEntry_116
+	.long Brass_PatchEntry_117
+	.long Brass_PatchEntry_118
+	.long Brass_PatchEntry_119
+	.long Brass_PatchEntry_120
+	.long Brass_PatchEntry_121
+	.long Brass_PatchEntry_122
+	.long Brass_PatchEntry_123
+	.long Brass_PatchEntry_124
+	.long Brass_PatchEntry_125
+	.long Brass_PatchEntry_126
+	.long Brass_PatchEntry_127
+	.long Brass_PatchEntry_128
 LABEL_E06DB0:
 
 	.byte 0x00, 0x00, 0xff
@@ -498,108 +498,108 @@ LABEL_E06EA3:
 LABEL_E06EA6:
 	.byte 0x48, 0x03
 	.byte 0xff
-LABEL_E06EA9:
+Brass_PatchEntry_084:
 	.byte 0x75, 0x02, 0xff
-LABEL_E06EAC:
+Brass_PatchEntry_085:
 	.byte 0x1b, 0x03, 0xff
-LABEL_E06EAF:
+Brass_PatchEntry_086:
 	.byte 0x6a
 	.byte 0x01, 0xff
-LABEL_E06EB2:
+Brass_PatchEntry_087:
 	.byte 0x77, 0x00, 0xff
-LABEL_E06EB5:
+Brass_PatchEntry_088:
 	.byte 0x2e, 0x02, 0xff
-LABEL_E06EB8:
+Brass_PatchEntry_089:
 	.byte 0x74, 0x03, 0xff
-LABEL_E06EBB:
+Brass_PatchEntry_090:
 	.byte 0x6b, 0x01, 0xff
-LABEL_E06EBE:
+Brass_PatchEntry_091:
 	.byte 0x66, 0x02
 	.byte 0xff
-LABEL_E06EC1:
+Brass_PatchEntry_092:
 	.byte 0x6b, 0x02, 0xff
-LABEL_E06EC4:
+Brass_PatchEntry_093:
 	.byte 0x78, 0x00, 0xff
-LABEL_E06EC7:
+Brass_PatchEntry_094:
 	.byte 0x6a
 	.byte 0x02, 0xff
-LABEL_E06ECA:
+Brass_PatchEntry_095:
 	.byte 0x6b, 0x03, 0xff
-LABEL_E06ECD:
+Brass_PatchEntry_096:
 	.byte 0x3e, 0x02, 0xff
-LABEL_E06ED0:
+Brass_PatchEntry_097:
 	.byte 0x79, 0x03, 0xff
-LABEL_E06ED3:
+Brass_PatchEntry_098:
 	.byte 0x77, 0x01, 0xff
-LABEL_E06ED6:
+Brass_PatchEntry_099:
 	.byte 0x09, 0x02
 	.byte 0xff
-LABEL_E06ED9:
+Brass_PatchEntry_100:
 	.byte 0x15, 0x03, 0xff
-LABEL_E06EDC:
+Brass_PatchEntry_101:
 	.byte 0x6c, 0x03, 0xff
-LABEL_E06EDF:	aligned_string "j"
-LABEL_E06EE2:
+Brass_PatchEntry_102:	aligned_string "j"
+Brass_PatchEntry_103:
 	.byte 0x6a, 0x03, 0xff
-LABEL_E06EE5:
+Brass_PatchEntry_104:
 	.byte 0x78, 0x01, 0xff
-LABEL_E06EE8:
+Brass_PatchEntry_105:
 	.byte 0x26, 0x00, 0xff
-LABEL_E06EEB:
+Brass_PatchEntry_106:
 	.byte 0x21, 0x00, 0xff
-LABEL_E06EEE:
+Brass_PatchEntry_107:
 	.byte 0x24, 0x00
 	.byte 0xff
-LABEL_E06EF1:
+Brass_PatchEntry_108:
 	.byte 0x25, 0x00, 0xff
-LABEL_E06EF4:
+Brass_PatchEntry_109:
 	.byte 0x27, 0x00, 0xff
-LABEL_E06EF7:	aligned_string "I"
-LABEL_E06EFA:
+Brass_PatchEntry_110:	aligned_string "I"
+Brass_PatchEntry_111:
 	.byte 0x60, 0x02, 0xff
-LABEL_E06EFD:
+Brass_PatchEntry_112:
 	.byte 0x49, 0x01, 0xff
-LABEL_E06F00:
+Brass_PatchEntry_113:
 	.byte 0x0e, 0x02, 0xff
-LABEL_E06F03:
+Brass_PatchEntry_114:
 	.byte 0x7a, 0x00, 0xff
-LABEL_E06F06:
+Brass_PatchEntry_115:
 	.byte 0x0f, 0x00
 	.byte 0xff
-LABEL_E06F09:
+Brass_PatchEntry_116:
 	.byte 0x7a, 0x01, 0xff
-LABEL_E06F0C:
+Brass_PatchEntry_117:
 	.byte 0x7b, 0x03, 0xff
-LABEL_E06F0F:
+Brass_PatchEntry_118:
 	.byte 0x7a
 	.byte 0x02, 0xff
-LABEL_E06F12:
+Brass_PatchEntry_119:
 	.byte 0x7c, 0x00, 0xff
-LABEL_E06F15:
+Brass_PatchEntry_120:
 	.byte 0x7a, 0x03, 0xff
-LABEL_E06F18:
+Brass_PatchEntry_121:
 	.byte 0x7c, 0x01, 0xff
-LABEL_E06F1B:
+Brass_PatchEntry_122:
 	.byte 0x7c, 0x02, 0xff
-LABEL_E06F1E:
+Brass_PatchEntry_123:
 	.byte 0x7c, 0x03
 	.byte 0xff
-LABEL_E06F21:
+Brass_PatchEntry_124:
 	.byte 0x7d, 0x02, 0xff
-LABEL_E06F24:
+Brass_PatchEntry_125:
 	.byte 0x7b, 0x00, 0xff
-LABEL_E06F27:
+Brass_PatchEntry_126:
 	.byte 0x7b
 	.byte 0x01, 0xff
-LABEL_E06F2A:
+Brass_PatchEntry_127:
 	.byte 0x7d, 0x03, 0xff
-LABEL_E06F2D:
+Brass_PatchEntry_128:
 	.byte 0x7b, 0x02, 0xff
 
 SOUND_DATA_FLUTE:	; FLUTE sound data
 	.incbin "includes/e06f30_e078f1.bin"
 
-LABEL_E078F2:	; Additional FLUTE data (referenced by pointer table)
+SoundData_Flute_Extra:	; Additional FLUTE data (referenced by pointer table)
 	.incbin "includes/e078f2_e08baf.bin"
 
 SOUND_DATA_SAX_REED:	; SAX & REED sound data
@@ -611,399 +611,399 @@ SOUND_DATA_MALLET_ORCH_PERC:	; MALLET & ORCH PERC sound data
 SOUND_DATA_WORLD_PERC:
 
 
-LABEL_E0ADD0:
-	.long LABEL_E0AFD0
-	.long LABEL_E0AFD3
-	.long LABEL_E0AFD6
-	.long LABEL_E0AFD9
-	.long LABEL_E0AFDC
-	.long LABEL_E0AFDF
-	.long LABEL_E0AFE2
-	.long LABEL_E0AFE5
-	.long LABEL_E0AFE8
-	.long LABEL_E0AFEB
-	.long LABEL_E0AFEE
-	.long LABEL_E0AFF1
-	.long LABEL_E0AFF4
-	.long LABEL_E0AFF7
-	.long LABEL_E0AFFA
-	.long LABEL_E0AFFD
-	.long LABEL_E0B000
-	.long LABEL_E0B003
-	.long LABEL_E0B006
-	.long LABEL_E0B009
-	.long LABEL_E0B00C
-	.long LABEL_E0B00F
-	.long LABEL_E0B012
-	.long LABEL_E0B015
-	.long LABEL_E0B018
-	.long LABEL_E0B01B
-	.long LABEL_E0B01E
-	.long LABEL_E0B021
-	.long LABEL_E0B024
-	.long LABEL_E0B027
-	.long LABEL_E0B02A
-	.long LABEL_E0B02D
-	.long LABEL_E0B030
-	.long LABEL_E0B033
-	.long LABEL_E0B036
-	.long LABEL_E0B039
-	.long LABEL_E0B03C
-	.long LABEL_E0B03F
-	.long LABEL_E0B042
-	.long LABEL_E0B045
-	.long LABEL_E0B048
-	.long LABEL_E0B04B
-	.long LABEL_E0B04E
-	.long LABEL_E0B051
-	.long LABEL_E0B054
-	.long LABEL_E0B057
-	.long LABEL_E0B05A
-	.long LABEL_E0B05D
-	.long LABEL_E0B060
-	.long LABEL_E0B063
-	.long LABEL_E0B066
-	.long LABEL_E0B069
-	.long LABEL_E0B06C
-	.long LABEL_E0B06F
-	.long LABEL_E0B072
-	.long LABEL_E0B075
-	.long LABEL_E0B078
-	.long LABEL_E0B07B
-	.long LABEL_E0B07E
-	.long LABEL_E0B081
-	.long LABEL_E0B084
-	.long LABEL_E0B087
-	.long LABEL_E0B08A
-	.long LABEL_E0B08D
-	.long LABEL_E0B090
-	.long LABEL_E0B093
-	.long LABEL_E0B096
-	.long LABEL_E0B099
-	.long LABEL_E0B09C
-	.long LABEL_E0B09F
-	.long LABEL_E0B0A2
-	.long LABEL_E0B0A5
-	.long LABEL_E0B0A8
-	.long LABEL_E0B0AB
-	.long LABEL_E0B0AE
-	.long LABEL_E0B0B1
-	.long LABEL_E0B0B4
-	.long LABEL_E0B0B7
-	.long LABEL_E0B0BA
-	.long LABEL_E0B0BD
-	.long LABEL_E0B0C0
-	.long LABEL_E0B0C3
-	.long LABEL_E0B0C6
-	.long LABEL_E0B0C9
-	.long LABEL_E0B0CC
-	.long LABEL_E0B0CF
-	.long LABEL_E0B0D2
-	.long LABEL_E0B0D5
-	.long LABEL_E0B0D8
-	.long LABEL_E0B0DB
-	.long LABEL_E0B0DE
-	.long LABEL_E0B0E1
-	.long LABEL_E0B0E4
-	.long LABEL_E0B0E7
-	.long LABEL_E0B0EA
-	.long LABEL_E0B0ED
-	.long LABEL_E0B0F0
-	.long LABEL_E0B0F3
-	.long LABEL_E0B0F6
-	.long LABEL_E0B0F9
-	.long LABEL_E0B0FC
-	.long LABEL_E0B0FF
-	.long LABEL_E0B102
-	.long LABEL_E0B105
-	.long LABEL_E0B108
-	.long LABEL_E0B10B
-	.long LABEL_E0B10E
-	.long LABEL_E0B111
-	.long LABEL_E0B114
-	.long LABEL_E0B117
-	.long LABEL_E0B11A
-	.long LABEL_E0B11D
-	.long LABEL_E0B120
-	.long LABEL_E0B123
-	.long LABEL_E0B126
-	.long LABEL_E0B129
-	.long LABEL_E0B12C
-	.long LABEL_E0B12F
-	.long LABEL_E0B132
-	.long LABEL_E0B135
-	.long LABEL_E0B138
-	.long LABEL_E0B13B
-	.long LABEL_E0B13E
-	.long LABEL_E0B141
-	.long LABEL_E0B144
-	.long LABEL_E0B147
-	.long LABEL_E0B14A
-	.long LABEL_E0B14D
+WorldPerc_PatchPtrTable:
+	.long WorldPerc_PatchEntry_000
+	.long WorldPerc_PatchEntry_001
+	.long WorldPerc_PatchEntry_002
+	.long WorldPerc_PatchEntry_003
+	.long WorldPerc_PatchEntry_004
+	.long WorldPerc_PatchEntry_005
+	.long WorldPerc_PatchEntry_006
+	.long WorldPerc_PatchEntry_007
+	.long WorldPerc_PatchEntry_008
+	.long WorldPerc_PatchEntry_009
+	.long WorldPerc_PatchEntry_010
+	.long WorldPerc_PatchEntry_011
+	.long WorldPerc_PatchEntry_012
+	.long WorldPerc_PatchEntry_013
+	.long WorldPerc_PatchEntry_014
+	.long WorldPerc_PatchEntry_015
+	.long WorldPerc_PatchEntry_016
+	.long WorldPerc_PatchEntry_017
+	.long WorldPerc_PatchEntry_018
+	.long WorldPerc_PatchEntry_019
+	.long WorldPerc_PatchEntry_020
+	.long WorldPerc_PatchEntry_021
+	.long WorldPerc_PatchEntry_022
+	.long WorldPerc_PatchEntry_023
+	.long WorldPerc_PatchEntry_024
+	.long WorldPerc_PatchEntry_025
+	.long WorldPerc_PatchEntry_026
+	.long WorldPerc_PatchEntry_027
+	.long WorldPerc_PatchEntry_028
+	.long WorldPerc_PatchEntry_029
+	.long WorldPerc_PatchEntry_030
+	.long WorldPerc_PatchEntry_031
+	.long WorldPerc_PatchEntry_032
+	.long WorldPerc_PatchEntry_033
+	.long WorldPerc_PatchEntry_034
+	.long WorldPerc_PatchEntry_035
+	.long WorldPerc_PatchEntry_036
+	.long WorldPerc_PatchEntry_037
+	.long WorldPerc_PatchEntry_038
+	.long WorldPerc_PatchEntry_039
+	.long WorldPerc_PatchEntry_040
+	.long WorldPerc_PatchEntry_041
+	.long WorldPerc_PatchEntry_042
+	.long WorldPerc_PatchEntry_043
+	.long WorldPerc_PatchEntry_044
+	.long WorldPerc_PatchEntry_045
+	.long WorldPerc_PatchEntry_046
+	.long WorldPerc_PatchEntry_047
+	.long WorldPerc_PatchEntry_048
+	.long WorldPerc_PatchEntry_049
+	.long WorldPerc_PatchEntry_050
+	.long WorldPerc_PatchEntry_051
+	.long WorldPerc_PatchEntry_052
+	.long WorldPerc_PatchEntry_053
+	.long WorldPerc_PatchEntry_054
+	.long WorldPerc_PatchEntry_055
+	.long WorldPerc_PatchEntry_056
+	.long WorldPerc_PatchEntry_057
+	.long WorldPerc_PatchEntry_058
+	.long WorldPerc_PatchEntry_059
+	.long WorldPerc_PatchEntry_060
+	.long WorldPerc_PatchEntry_061
+	.long WorldPerc_PatchEntry_062
+	.long WorldPerc_PatchEntry_063
+	.long WorldPerc_PatchEntry_064
+	.long WorldPerc_PatchEntry_065
+	.long WorldPerc_PatchEntry_066
+	.long WorldPerc_PatchEntry_067
+	.long WorldPerc_PatchEntry_068
+	.long WorldPerc_PatchEntry_069
+	.long WorldPerc_PatchEntry_070
+	.long WorldPerc_PatchEntry_071
+	.long WorldPerc_PatchEntry_072
+	.long WorldPerc_PatchEntry_073
+	.long WorldPerc_PatchEntry_074
+	.long WorldPerc_PatchEntry_075
+	.long WorldPerc_PatchEntry_076
+	.long WorldPerc_PatchEntry_077
+	.long WorldPerc_PatchEntry_078
+	.long WorldPerc_PatchEntry_079
+	.long WorldPerc_PatchEntry_080
+	.long WorldPerc_PatchEntry_081
+	.long WorldPerc_PatchEntry_082
+	.long WorldPerc_PatchEntry_083
+	.long WorldPerc_PatchEntry_084
+	.long WorldPerc_PatchEntry_085
+	.long WorldPerc_PatchEntry_086
+	.long WorldPerc_PatchEntry_087
+	.long WorldPerc_PatchEntry_088
+	.long WorldPerc_PatchEntry_089
+	.long WorldPerc_PatchEntry_090
+	.long WorldPerc_PatchEntry_091
+	.long WorldPerc_PatchEntry_092
+	.long WorldPerc_PatchEntry_093
+	.long WorldPerc_PatchEntry_094
+	.long WorldPerc_PatchEntry_095
+	.long WorldPerc_PatchEntry_096
+	.long WorldPerc_PatchEntry_097
+	.long WorldPerc_PatchEntry_098
+	.long WorldPerc_PatchEntry_099
+	.long WorldPerc_PatchEntry_100
+	.long WorldPerc_PatchEntry_101
+	.long WorldPerc_PatchEntry_102
+	.long WorldPerc_PatchEntry_103
+	.long WorldPerc_PatchEntry_104
+	.long WorldPerc_PatchEntry_105
+	.long WorldPerc_PatchEntry_106
+	.long WorldPerc_PatchEntry_107
+	.long WorldPerc_PatchEntry_108
+	.long WorldPerc_PatchEntry_109
+	.long WorldPerc_PatchEntry_110
+	.long WorldPerc_PatchEntry_111
+	.long WorldPerc_PatchEntry_112
+	.long WorldPerc_PatchEntry_113
+	.long WorldPerc_PatchEntry_114
+	.long WorldPerc_PatchEntry_115
+	.long WorldPerc_PatchEntry_116
+	.long WorldPerc_PatchEntry_117
+	.long WorldPerc_PatchEntry_118
+	.long WorldPerc_PatchEntry_119
+	.long WorldPerc_PatchEntry_120
+	.long WorldPerc_PatchEntry_121
+	.long WorldPerc_PatchEntry_122
+	.long WorldPerc_PatchEntry_123
+	.long WorldPerc_PatchEntry_124
+	.long WorldPerc_PatchEntry_125
+	.long WorldPerc_PatchEntry_126
+	.long WorldPerc_PatchEntry_127
 
-LABEL_E0AFD0:
+WorldPerc_PatchEntry_000:
 	.byte 0x00, 0x00, 0xff
-LABEL_E0AFD3:
+WorldPerc_PatchEntry_001:
 	.byte 0x01, 0x00, 0xff
-LABEL_E0AFD6:
+WorldPerc_PatchEntry_002:
 	.byte 0x02, 0x00
 	.byte 0xff
-LABEL_E0AFD9:
+WorldPerc_PatchEntry_003:
 	.byte 0x03, 0x00, 0xff
-LABEL_E0AFDC:
+WorldPerc_PatchEntry_004:
 	.byte 0x04, 0x00, 0xff
-LABEL_E0AFDF:
+WorldPerc_PatchEntry_005:
 	.byte 0x05
 	.byte 0x00, 0xff
-LABEL_E0AFE2:
+WorldPerc_PatchEntry_006:
 	.byte 0x06, 0x00, 0xff
-LABEL_E0AFE5:
+WorldPerc_PatchEntry_007:
 	.byte 0x07, 0x00, 0xff
-LABEL_E0AFE8:
+WorldPerc_PatchEntry_008:
 	.byte 0x08, 0x00, 0xff
-LABEL_E0AFEB:
+WorldPerc_PatchEntry_009:
 	.byte 0x09, 0x00, 0xff
-LABEL_E0AFEE:
+WorldPerc_PatchEntry_010:
 	.byte 0x0a, 0x00
 	.byte 0xff
-LABEL_E0AFF1:
+WorldPerc_PatchEntry_011:
 	.byte 0x0b, 0x00, 0xff
-LABEL_E0AFF4:
+WorldPerc_PatchEntry_012:
 	.byte 0x0c, 0x00, 0xff
-LABEL_E0AFF7:
+WorldPerc_PatchEntry_013:
 	.byte 0x0d
 	.byte 0x00, 0xff
-LABEL_E0AFFA:
+WorldPerc_PatchEntry_014:
 	.byte 0x0e, 0x00, 0xff
-LABEL_E0AFFD:
+WorldPerc_PatchEntry_015:
 	.byte 0x0f, 0x00, 0xff
-LABEL_E0B000:
+WorldPerc_PatchEntry_016:
 	.byte 0x10, 0x00, 0xff
-LABEL_E0B003:
+WorldPerc_PatchEntry_017:
 	.byte 0x11, 0x00, 0xff
-LABEL_E0B006:
+WorldPerc_PatchEntry_018:
 	.byte 0x12, 0x00
 	.byte 0xff
-LABEL_E0B009:
+WorldPerc_PatchEntry_019:
 	.byte 0x13, 0x00, 0xff
-LABEL_E0B00C:
+WorldPerc_PatchEntry_020:
 	.byte 0x14, 0x00, 0xff
-LABEL_E0B00F:
+WorldPerc_PatchEntry_021:
 	.byte 0x15
 	.byte 0x00, 0xff
-LABEL_E0B012:
+WorldPerc_PatchEntry_022:
 	.byte 0x16, 0x00, 0xff
-LABEL_E0B015:
+WorldPerc_PatchEntry_023:
 	.byte 0x17, 0x00, 0xff
-LABEL_E0B018:
+WorldPerc_PatchEntry_024:
 	.byte 0x18, 0x00, 0xff
-LABEL_E0B01B:
+WorldPerc_PatchEntry_025:
 	.byte 0x19, 0x00, 0xff
-LABEL_E0B01E:
+WorldPerc_PatchEntry_026:
 	.byte 0x1a, 0x00
 	.byte 0xff
-LABEL_E0B021:
+WorldPerc_PatchEntry_027:
 	.byte 0x1b, 0x00, 0xff
-LABEL_E0B024:
+WorldPerc_PatchEntry_028:
 	.byte 0x1c, 0x00, 0xff
-LABEL_E0B027:
+WorldPerc_PatchEntry_029:
 	.byte 0x1d
 	.byte 0x00, 0xff
-LABEL_E0B02A:
+WorldPerc_PatchEntry_030:
 	.byte 0x1e, 0x00, 0xff
-LABEL_E0B02D:
+WorldPerc_PatchEntry_031:
 	.byte 0x1f, 0x00, 0xff
-LABEL_E0B030:
+WorldPerc_PatchEntry_032:
 	.byte 0x20, 0x00, 0xff
-LABEL_E0B033:
+WorldPerc_PatchEntry_033:
 	.byte 0x21, 0x00, 0xff
-LABEL_E0B036:
+WorldPerc_PatchEntry_034:
 	.byte 0x22, 0x00
 	.byte 0xff
-LABEL_E0B039:
+WorldPerc_PatchEntry_035:
 	.byte 0x23, 0x00, 0xff
-LABEL_E0B03C:
+WorldPerc_PatchEntry_036:
 	.byte 0x24, 0x00, 0xff
-LABEL_E0B03F:	aligned_string "%"
-LABEL_E0B042:
+WorldPerc_PatchEntry_037:	aligned_string "%"
+WorldPerc_PatchEntry_038:
 	.byte 0x26, 0x00, 0xff
-LABEL_E0B045:
+WorldPerc_PatchEntry_039:
 	.byte 0x27, 0x00, 0xff
-LABEL_E0B048:
+WorldPerc_PatchEntry_040:
 	.byte 0x28, 0x00, 0xff
-LABEL_E0B04B:
+WorldPerc_PatchEntry_041:
 	.byte 0x29, 0x00, 0xff
-LABEL_E0B04E:
+WorldPerc_PatchEntry_042:
 	.byte 0x2a, 0x00
 	.byte 0xff
-LABEL_E0B051:
+WorldPerc_PatchEntry_043:
 	.byte 0x2b, 0x00, 0xff
-LABEL_E0B054:
+WorldPerc_PatchEntry_044:
 	.byte 0x2c, 0x00, 0xff
-LABEL_E0B057:	aligned_string "-"
-LABEL_E0B05A:
+WorldPerc_PatchEntry_045:	aligned_string "-"
+WorldPerc_PatchEntry_046:
 	.byte 0x2e, 0x00, 0xff
-LABEL_E0B05D:
+WorldPerc_PatchEntry_047:
 	.byte 0x2f, 0x00, 0xff
-LABEL_E0B060:
+WorldPerc_PatchEntry_048:
 	.byte 0x30, 0x00, 0xff
-LABEL_E0B063:
+WorldPerc_PatchEntry_049:
 	.byte 0x31, 0x00, 0xff
-LABEL_E0B066:
+WorldPerc_PatchEntry_050:
 	.byte 0x32, 0x00
 	.byte 0xff
-LABEL_E0B069:
+WorldPerc_PatchEntry_051:
 	.byte 0x33, 0x00, 0xff
-LABEL_E0B06C:
+WorldPerc_PatchEntry_052:
 	.byte 0x34, 0x00, 0xff
-LABEL_E0B06F:	aligned_string "5"
-LABEL_E0B072:
+WorldPerc_PatchEntry_053:	aligned_string "5"
+WorldPerc_PatchEntry_054:
 	.byte 0x36, 0x00, 0xff
-LABEL_E0B075:
+WorldPerc_PatchEntry_055:
 	.byte 0x37, 0x00, 0xff
-LABEL_E0B078:
+WorldPerc_PatchEntry_056:
 	.byte 0x38, 0x00, 0xff
-LABEL_E0B07B:
+WorldPerc_PatchEntry_057:
 	.byte 0x39, 0x00, 0xff
-LABEL_E0B07E:
+WorldPerc_PatchEntry_058:
 	.byte 0x3a, 0x00
 	.byte 0xff
-LABEL_E0B081:
+WorldPerc_PatchEntry_059:
 	.byte 0x3b, 0x00, 0xff
-LABEL_E0B084:
+WorldPerc_PatchEntry_060:
 	.byte 0x3c, 0x00, 0xff
-LABEL_E0B087:	aligned_string "="
-LABEL_E0B08A:
+WorldPerc_PatchEntry_061:	aligned_string "="
+WorldPerc_PatchEntry_062:
 	.byte 0x3e, 0x00, 0xff
-LABEL_E0B08D:
+WorldPerc_PatchEntry_063:
 	.byte 0x3f, 0x00, 0xff
-LABEL_E0B090:
+WorldPerc_PatchEntry_064:
 	.byte 0x40, 0x00, 0xff
-LABEL_E0B093:
+WorldPerc_PatchEntry_065:
 	.byte 0x41, 0x00, 0xff
-LABEL_E0B096:
+WorldPerc_PatchEntry_066:
 	.byte 0x42, 0x00
 	.byte 0xff
-LABEL_E0B099:
+WorldPerc_PatchEntry_067:
 	.byte 0x43, 0x00, 0xff
-LABEL_E0B09C:
+WorldPerc_PatchEntry_068:
 	.byte 0x44, 0x00, 0xff
-LABEL_E0B09F:	aligned_string "E"
-LABEL_E0B0A2:
+WorldPerc_PatchEntry_069:	aligned_string "E"
+WorldPerc_PatchEntry_070:
 	.byte 0x46, 0x00, 0xff
-LABEL_E0B0A5:
+WorldPerc_PatchEntry_071:
 	.byte 0x47, 0x00, 0xff
-LABEL_E0B0A8:
+WorldPerc_PatchEntry_072:
 	.byte 0x48, 0x00, 0xff
-LABEL_E0B0AB:
+WorldPerc_PatchEntry_073:
 	.byte 0x49, 0x00, 0xff
-LABEL_E0B0AE:
+WorldPerc_PatchEntry_074:
 	.byte 0x4a, 0x00
 	.byte 0xff
-LABEL_E0B0B1:
+WorldPerc_PatchEntry_075:
 	.byte 0x4b, 0x00, 0xff
-LABEL_E0B0B4:
+WorldPerc_PatchEntry_076:
 	.byte 0x4c, 0x00, 0xff
-LABEL_E0B0B7:	aligned_string "M"
-LABEL_E0B0BA:
+WorldPerc_PatchEntry_077:	aligned_string "M"
+WorldPerc_PatchEntry_078:
 	.byte 0x4e, 0x00, 0xff
-LABEL_E0B0BD:
+WorldPerc_PatchEntry_079:
 	.byte 0x4f, 0x00, 0xff
-LABEL_E0B0C0:
+WorldPerc_PatchEntry_080:
 	.byte 0x50, 0x00, 0xff
-LABEL_E0B0C3:
+WorldPerc_PatchEntry_081:
 	.byte 0x51, 0x00, 0xff
-LABEL_E0B0C6:
+WorldPerc_PatchEntry_082:
 	.byte 0x52, 0x00
 	.byte 0xff
-LABEL_E0B0C9:
+WorldPerc_PatchEntry_083:
 	.byte 0x53, 0x00, 0xff
-LABEL_E0B0CC:
+WorldPerc_PatchEntry_084:
 	.byte 0x54, 0x00, 0xff
-LABEL_E0B0CF:	aligned_string "U"
-LABEL_E0B0D2:
+WorldPerc_PatchEntry_085:	aligned_string "U"
+WorldPerc_PatchEntry_086:
 	.byte 0x56, 0x00, 0xff
-LABEL_E0B0D5:
+WorldPerc_PatchEntry_087:
 	.byte 0x57, 0x00, 0xff
-LABEL_E0B0D8:
+WorldPerc_PatchEntry_088:
 	.byte 0x58, 0x00, 0xff
-LABEL_E0B0DB:
+WorldPerc_PatchEntry_089:
 	.byte 0x59, 0x00, 0xff
-LABEL_E0B0DE:
+WorldPerc_PatchEntry_090:
 	.byte 0x5a, 0x00
 	.byte 0xff
-LABEL_E0B0E1:
+WorldPerc_PatchEntry_091:
 	.byte 0x5b, 0x00, 0xff
-LABEL_E0B0E4:
+WorldPerc_PatchEntry_092:
 	.byte 0x5c, 0x00, 0xff
-LABEL_E0B0E7:	aligned_string "]"
-LABEL_E0B0EA:
+WorldPerc_PatchEntry_093:	aligned_string "]"
+WorldPerc_PatchEntry_094:
 	.byte 0x5e, 0x00, 0xff
-LABEL_E0B0ED:
+WorldPerc_PatchEntry_095:
 	.byte 0x5f, 0x00, 0xff
-LABEL_E0B0F0:
+WorldPerc_PatchEntry_096:
 	.byte 0x60, 0x00, 0xff
-LABEL_E0B0F3:
+WorldPerc_PatchEntry_097:
 	.byte 0x61, 0x00, 0xff
-LABEL_E0B0F6:
+WorldPerc_PatchEntry_098:
 	.byte 0x62, 0x00
 	.byte 0xff
-LABEL_E0B0F9:
+WorldPerc_PatchEntry_099:
 	.byte 0x63, 0x00, 0xff
-LABEL_E0B0FC:
+WorldPerc_PatchEntry_100:
 	.byte 0x64, 0x00, 0xff
-LABEL_E0B0FF:	aligned_string "e"
-LABEL_E0B102:
+WorldPerc_PatchEntry_101:	aligned_string "e"
+WorldPerc_PatchEntry_102:
 	.byte 0x66, 0x00, 0xff
-LABEL_E0B105:
+WorldPerc_PatchEntry_103:
 	.byte 0x67, 0x00, 0xff
-LABEL_E0B108:
+WorldPerc_PatchEntry_104:
 	.byte 0x68, 0x00, 0xff
-LABEL_E0B10B:
+WorldPerc_PatchEntry_105:
 	.byte 0x69, 0x00, 0xff
-LABEL_E0B10E:
+WorldPerc_PatchEntry_106:
 	.byte 0x6a, 0x00
 	.byte 0xff
-LABEL_E0B111:
+WorldPerc_PatchEntry_107:
 	.byte 0x6b, 0x00, 0xff
-LABEL_E0B114:
+WorldPerc_PatchEntry_108:
 	.byte 0x6c, 0x00, 0xff
-LABEL_E0B117:	aligned_string "m"
-LABEL_E0B11A:
+WorldPerc_PatchEntry_109:	aligned_string "m"
+WorldPerc_PatchEntry_110:
 	.byte 0x6e, 0x00, 0xff
-LABEL_E0B11D:
+WorldPerc_PatchEntry_111:
 	.byte 0x6f, 0x00, 0xff
-LABEL_E0B120:
+WorldPerc_PatchEntry_112:
 	.byte 0x70, 0x00, 0xff
-LABEL_E0B123:
+WorldPerc_PatchEntry_113:
 	.byte 0x71, 0x00, 0xff
-LABEL_E0B126:
+WorldPerc_PatchEntry_114:
 	.byte 0x72, 0x00
 	.byte 0xff
-LABEL_E0B129:
+WorldPerc_PatchEntry_115:
 	.byte 0x73, 0x00, 0xff
-LABEL_E0B12C:
+WorldPerc_PatchEntry_116:
 	.byte 0x74, 0x00, 0xff
-LABEL_E0B12F:	aligned_string "u"
-LABEL_E0B132:
+WorldPerc_PatchEntry_117:	aligned_string "u"
+WorldPerc_PatchEntry_118:
 	.byte 0x76, 0x00, 0xff
-LABEL_E0B135:
+WorldPerc_PatchEntry_119:
 	.byte 0x77, 0x00, 0xff
-LABEL_E0B138:
+WorldPerc_PatchEntry_120:
 	.byte 0x78, 0x00, 0xff
-LABEL_E0B13B:
+WorldPerc_PatchEntry_121:
 	.byte 0x79, 0x00, 0xff
-LABEL_E0B13E:
+WorldPerc_PatchEntry_122:
 	.byte 0x7a, 0x00
 	.byte 0xff
-LABEL_E0B141:
+WorldPerc_PatchEntry_123:
 	.byte 0x7b, 0x00, 0xff
-LABEL_E0B144:
+WorldPerc_PatchEntry_124:
 	.byte 0x7c, 0x00, 0xff
-LABEL_E0B147:	aligned_string "}"
-LABEL_E0B14A:
+WorldPerc_PatchEntry_125:	aligned_string "}"
+WorldPerc_PatchEntry_126:
 	.byte 0x7e, 0x00, 0xff
-LABEL_E0B14D:
+WorldPerc_PatchEntry_127:
 	.byte 0x7f, 0x00, 0xff
 SOUND_DATA_ORGAN_ACCORDION:
 	.byte 0xf0, 0x00, 0xf0, 0x00, 0xf0, 0x00, 0xf0, 0x00
@@ -1060,146 +1060,146 @@ SOUND_DATA_GM_SPECIAL:
 SOUND_DATA_DRUM_KITS:
 	.incbin "includes/e0b418_e0b4ec.bin"
 
-LABEL_E0B4ED:
+StyleUI_ParamBlock_BAL:
 	.incbin "includes/e0b4ed_e0b5e6.bin"
 
-LABEL_E0B5E7:
+StyleUI_ParamBlock_VALUE:
 	.incbin "includes/e0b5e7_e0b60d.bin"
 
-LABEL_E0B60E:
+StyleUI_ParamBlock_Common:
 	.incbin "includes/e0b60e_e0b6a5.bin"
 
-LABEL_E0B6A6:
+StyleUI_ParamBlock_Short:
 	.incbin "includes/e0b6a6_e0b6cc.bin"
 
-LABEL_E0B6CD:
+StyleUI_ParamBlock_Extended:
 	.incbin "includes/e0b6cd_e0b783.bin"
 
-LABEL_E0B784:
+StyleUI_ParamBlock_Medium:
 	.incbin "includes/e0b784_e0b842.bin"
 
-LABEL_E0B843:
+StyleUI_ParamBlock_MEAS:
 	.incbin "includes/e0b843_e0b8dd.bin"
 
-LABEL_E0B8DE:
+StyleUI_ParamBlock_AltA:
 	.incbin "includes/e0b8de_e0b904.bin"
 
-LABEL_E0B905:
+StyleUI_ParamBlock_AltB:
 	.incbin "includes/e0b905_e0b92d.bin"
 
-LABEL_E0B92E:
+StyleUI_ParamBlock_AltC:
 	.incbin "includes/e0b92e_e0b99c.bin"
 
-LABEL_E0B99D:
+StyleUI_ParamBlock_AltD:
 	.incbin "includes/e0b99d_e0b9ec.bin"
 
-LABEL_E0B9ED:
+StyleUI_ParamBlock_AltE:
 	.incbin "includes/e0b9ed_e0ba5f.bin"
 
 
-LABEL_E0BA60:
-	.long LABEL_E0B4ED
-	.long LABEL_E0C95B
-	.long LABEL_E0B6CD
-	.long LABEL_E0B784
-	.long LABEL_E0B60E
-	.long LABEL_E0B60E
-	.long LABEL_E0B6CD
-	.long LABEL_E0B60E
-	.long LABEL_E0B60E
-	.long LABEL_E0B5E7
-	.long LABEL_E0B5E7
-	.long LABEL_E0CA13
-	.long LABEL_E0B843
-	.long LABEL_E0B843
-	.long LABEL_E0B843
-	.long LABEL_E0B843
-	.long LABEL_E0B92E
-	.long LABEL_E0B843
-	.long LABEL_E0B99D
-	.long LABEL_E0B5E7
-	.long LABEL_E0CA13
-	.long LABEL_E0B784
-	.long LABEL_E0B843
-	.long LABEL_E0B6A6
-	.long LABEL_E0B6A6
-	.long LABEL_E0B784
-	.long LABEL_E0B6CD
-	.long LABEL_E0B6A6
-	.long LABEL_E0B6A6
-	.long LABEL_E0B6A6
-	.long LABEL_E0CAF7
-	.long LABEL_E0B8DE
-	.long LABEL_E0B8DE
-	.long LABEL_E0B8DE
-	.long LABEL_E0B8DE
-	.long LABEL_E0B99D
-	.long LABEL_E0B905
-	.long LABEL_E0B9ED
-	.long LABEL_E0B4ED
-	.long LABEL_E0B60E
-	.long LABEL_E0B6CD
-	.long LABEL_E0B784
-	.long LABEL_E0B60E
-	.long LABEL_E0B60E
-	.long LABEL_E0B6CD
-	.long LABEL_E0B60E
-	.long LABEL_E0B60E
-	.long LABEL_E0B5E7
-	.long LABEL_E0B5E7
-	.long LABEL_E0CA13
-	.long LABEL_E0B843
-	.long LABEL_E0B843
-	.long LABEL_E0B843
-	.long LABEL_E0B843
-	.long LABEL_E0B92E
-	.long LABEL_E0B843
-	.long LABEL_E0B99D
-	.long LABEL_E0B5E7
-	.long LABEL_E0B6A6
-	.long LABEL_E0B784
-	.long LABEL_E0B843
-	.long LABEL_E0B6A6
-	.long LABEL_E0B6A6
-	.long LABEL_E0B784
-	.long LABEL_E0B6CD
-	.long LABEL_E0B6A6
-	.long LABEL_E0B6A6
-	.long LABEL_E0B6A6
-	.long LABEL_E0CAF7
-	.long LABEL_E0B8DE
-	.long LABEL_E0B8DE
-	.long LABEL_E0B8DE
-	.long LABEL_E0B8DE
-	.long LABEL_E0B99D
-	.long LABEL_E0B905
-	.long LABEL_E0B9ED
+StyleUI_ParamBlockPtrTable:
+	.long StyleUI_ParamBlock_BAL
+	.long StyleUI_ScreenData_MeasCursor
+	.long StyleUI_ParamBlock_Extended
+	.long StyleUI_ParamBlock_Medium
+	.long StyleUI_ParamBlock_Common
+	.long StyleUI_ParamBlock_Common
+	.long StyleUI_ParamBlock_Extended
+	.long StyleUI_ParamBlock_Common
+	.long StyleUI_ParamBlock_Common
+	.long StyleUI_ParamBlock_VALUE
+	.long StyleUI_ParamBlock_VALUE
+	.long StyleUI_ScreenData_YesCtl
+	.long StyleUI_ParamBlock_MEAS
+	.long StyleUI_ParamBlock_MEAS
+	.long StyleUI_ParamBlock_MEAS
+	.long StyleUI_ParamBlock_MEAS
+	.long StyleUI_ParamBlock_AltC
+	.long StyleUI_ParamBlock_MEAS
+	.long StyleUI_ParamBlock_AltD
+	.long StyleUI_ParamBlock_VALUE
+	.long StyleUI_ScreenData_YesCtl
+	.long StyleUI_ParamBlock_Medium
+	.long StyleUI_ParamBlock_MEAS
+	.long StyleUI_ParamBlock_Short
+	.long StyleUI_ParamBlock_Short
+	.long StyleUI_ParamBlock_Medium
+	.long StyleUI_ParamBlock_Extended
+	.long StyleUI_ParamBlock_Short
+	.long StyleUI_ParamBlock_Short
+	.long StyleUI_ParamBlock_Short
+	.long StyleUI_ScreenData_CtlOnly
+	.long StyleUI_ParamBlock_AltA
+	.long StyleUI_ParamBlock_AltA
+	.long StyleUI_ParamBlock_AltA
+	.long StyleUI_ParamBlock_AltA
+	.long StyleUI_ParamBlock_AltD
+	.long StyleUI_ParamBlock_AltB
+	.long StyleUI_ParamBlock_AltE
+	.long StyleUI_ParamBlock_BAL
+	.long StyleUI_ParamBlock_Common
+	.long StyleUI_ParamBlock_Extended
+	.long StyleUI_ParamBlock_Medium
+	.long StyleUI_ParamBlock_Common
+	.long StyleUI_ParamBlock_Common
+	.long StyleUI_ParamBlock_Extended
+	.long StyleUI_ParamBlock_Common
+	.long StyleUI_ParamBlock_Common
+	.long StyleUI_ParamBlock_VALUE
+	.long StyleUI_ParamBlock_VALUE
+	.long StyleUI_ScreenData_YesCtl
+	.long StyleUI_ParamBlock_MEAS
+	.long StyleUI_ParamBlock_MEAS
+	.long StyleUI_ParamBlock_MEAS
+	.long StyleUI_ParamBlock_MEAS
+	.long StyleUI_ParamBlock_AltC
+	.long StyleUI_ParamBlock_MEAS
+	.long StyleUI_ParamBlock_AltD
+	.long StyleUI_ParamBlock_VALUE
+	.long StyleUI_ParamBlock_Short
+	.long StyleUI_ParamBlock_Medium
+	.long StyleUI_ParamBlock_MEAS
+	.long StyleUI_ParamBlock_Short
+	.long StyleUI_ParamBlock_Short
+	.long StyleUI_ParamBlock_Medium
+	.long StyleUI_ParamBlock_Extended
+	.long StyleUI_ParamBlock_Short
+	.long StyleUI_ParamBlock_Short
+	.long StyleUI_ParamBlock_Short
+	.long StyleUI_ScreenData_CtlOnly
+	.long StyleUI_ParamBlock_AltA
+	.long StyleUI_ParamBlock_AltA
+	.long StyleUI_ParamBlock_AltA
+	.long StyleUI_ParamBlock_AltA
+	.long StyleUI_ParamBlock_AltD
+	.long StyleUI_ParamBlock_AltB
+	.long StyleUI_ParamBlock_AltE
 
-LABEL_E0BB90:
+StyleUI_ScreenData_Main:
 	.incbin "includes/e0bb90_e0c95a.bin"
 
-LABEL_E0C95B:
+StyleUI_ScreenData_MeasCursor:
 	.incbin "includes/e0c95b_e0ca12.bin"
 
-LABEL_E0CA13:
+StyleUI_ScreenData_YesCtl:
 	.incbin "includes/e0ca13_e0caf6.bin"
 
-LABEL_E0CAF7:
+StyleUI_ScreenData_CtlOnly:
 	.incbin "includes/e0caf7_e0cd1d.bin"
 
-LABEL_E0CD1E:
+GUI_FormatStrings:
 	.incbin "includes/e0cd1e_e0cfdd.bin"
 
-LABEL_E0CFDE:
+GUI_DisplayStructData:
 	.incbin "includes/e0cfde_e0e406.bin"
 
-LABEL_E0E407:
+ToneGen_ParamTable:
 	.incbin "includes/e0e407_e0e973.bin"
 .include "naka/naka_e0e974_e15b20.s"
 	.ascii "     Init       "
 	.zero 16
 
-LABEL_E15B80:
+MSP_DefaultSettings:
 	.byte 0x48, 0x00, 0x4b, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x5a, 0x5a, 0x5a, 0x00, 0x00
 	.byte 0x01, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01, 0x01
@@ -1244,7 +1244,7 @@ LABEL_E15B80:
 	.byte 0x01, 0x02, 0x01, 0x03, 0x01, 0x04, 0x01, 0x05
 	.zero 36
 
-LABEL_E16184:
+Composer_SettingsBlock:
 	.byte 0x48, 0x00, 0x4b, 0x00, 0x00, 0x03
 	.zero 90
 
@@ -1328,175 +1328,175 @@ LABEL_E16184:
 	.long SndArrLangCheck
 	.long PsStylCnvVerProc
 	.long 0
-LABEL_E163AC:
-	.long LABEL_E169AE
-	.long LABEL_E1699E
-	.long LABEL_E16990
-	.long LABEL_E16980
-	.long LABEL_E16972
-	.long LABEL_E16964
-	.long LABEL_E16956
-	.long LABEL_E16944
-	.long LABEL_E16934
-	.long LABEL_E16926
-	.long LABEL_E16912
-	.long LABEL_E16900
-	.long LABEL_E168F0
-	.long LABEL_E168E0
-	.long LABEL_E168CE
-	.long LABEL_E168C0
-	.long LABEL_E168B2
-	.long LABEL_E168A2
-	.long LABEL_E16892
-	.long LABEL_E16880
-	.long LABEL_E16870
-	.long LABEL_E1685E
-	.long LABEL_E16852
-	.long LABEL_E16842
-	.long LABEL_E1682E
-	.long LABEL_E1681E
-	.long LABEL_E1680E
-	.long LABEL_E167FE
-	.long LABEL_E167EC
-	.long LABEL_E167DE
-	.long LABEL_E167CC
-	.long LABEL_E167BC
-	.long LABEL_E167AC
-	.long LABEL_E1679A
-	.long LABEL_E1678A
-	.long LABEL_E16778
-	.long LABEL_E16766
-	.long LABEL_E16752
-	.long LABEL_E16740
-	.long LABEL_E1672E
-	.long LABEL_E1671A
-	.long LABEL_E16708
-	.long LABEL_E166F4
-	.long LABEL_E166E0
-	.long LABEL_E166CC
-	.long LABEL_E166BA
-	.long LABEL_E166A6
-	.long LABEL_E16692
-	.long LABEL_E1667E
-	.long LABEL_E16668
-	.long LABEL_E16656
-	.long LABEL_E16646
-	.long LABEL_E16632
-	.long LABEL_E1661E
-	.long LABEL_E1660A
-	.long LABEL_E165FA
-	.long LABEL_E165E8
-	.long LABEL_E165D4
-	.long LABEL_E165C2
-	.long LABEL_E165B2
-	.long LABEL_E165A2
-	.long LABEL_E1658E
-	.long LABEL_E1657A
-	.long LABEL_E1656A
-	.long LABEL_E1655C
-	.long LABEL_E1654E
-	.long LABEL_E1653E
-	.long LABEL_E1652C
-	.long LABEL_E1651C
-	.long LABEL_E1650A
-	.long LABEL_E164F8
-	.long LABEL_E164E8
-	.long LABEL_E164D6
-	.long LABEL_E164D4
-LABEL_E164D4:	aligned_string ""
-LABEL_E164D6:	aligned_string "PsStylCnvVerProc"
-LABEL_E164E8:	aligned_string "SndArrLangCheck"
-LABEL_E164F8:	aligned_string "StylCnvLangCheck"
-LABEL_E1650A:	aligned_string "Memful2LangCheck"
-LABEL_E1651C:	aligned_string "MemfulLangCheck"
-LABEL_E1652C:	aligned_string "SndMem1LangCheck"
-LABEL_E1653E:	aligned_string "SndMemLangCheck"
-LABEL_E1654E:	aligned_string "SureLangCheck"
-LABEL_E1655C:	aligned_string "AttLangCheck"
-LABEL_E1656A:	aligned_string "S2cGridBoxProc"
-LABEL_E1657A:	aligned_string "PsCtmAttStrBoxProc"
-LABEL_E1658E:	aligned_string "CmpNameMenuBoxProc"
-LABEL_E165A2:	aligned_string "PsSCTxtBox2Proc"
-LABEL_E165B2:	aligned_string "PsSCTxtBoxProc"
-LABEL_E165C2:	aligned_string "PsParaListBoxProc"
-LABEL_E165D4:	aligned_string "AcSndArgGridBoxProc"
-LABEL_E165E8:	aligned_string "PsMspNameBnkProc"
-LABEL_E165FA:	aligned_string "AcApcToggleProc"
-LABEL_E1660A:	aligned_string "PsCstmCpNameBoxProc"
-LABEL_E1661E:	aligned_string "PsMspRecBnkBoxProc"
-LABEL_E16632:	aligned_string "PsMspRecPadBoxProc"
-LABEL_E16646:	aligned_string "PsMspMemBoxProc"
-LABEL_E16656:	aligned_string "PsMspMeasBoxProc"
-LABEL_E16668:	aligned_string "AcEasyCmpGridBoxProc"
-LABEL_E1667E:	aligned_string "PsMspBnkNameBoxProc"
-LABEL_E16692:	aligned_string "PsRgpSetBnkBoxProc"
-LABEL_E166A6:	aligned_string "AcCmpSetGridBoxProc"
-LABEL_E166BA:	aligned_string "PsNameMemBoxProc"
-LABEL_E166CC:	aligned_string "PsCmpCpFPtnBoxProc"
-LABEL_E166E0:	aligned_string "PsCmpCpFVariBoxProc"
-LABEL_E166F4:	aligned_string "PsCmpCpFGrpBoxProc"
-LABEL_E16708:	aligned_string "PsCstmCpSwBoxProc"
-LABEL_E1671A:	aligned_string "PsCstmCpBnkBoxProc"
-LABEL_E1672E:	aligned_string "AcS2cMemNoBoxProc"
-LABEL_E16740:	aligned_string "PsS2cTransBoxProc"
-LABEL_E16752:	aligned_string "PsSeqSongNoBoxProc"
-LABEL_E16766:	aligned_string "PsS2cLmeasBoxProc"
-LABEL_E16778:	aligned_string "PsS2cFmeasBoxProc"
-LABEL_E1678A:	aligned_string "PsCmpMemBoxProc"
-LABEL_E1679A:	aligned_string "PsCmpMeasBoxProc"
-LABEL_E167AC:	aligned_string "PsCmpQtzBoxProc"
-LABEL_E167BC:	aligned_string "AcCmpRecBoxProc"
-LABEL_E167CC:	aligned_string "AcCmpTempoBoxProc"
-LABEL_E167DE:	aligned_string "VwVariBoxProc"
-LABEL_E167EC:	aligned_string "AcMspBnkSlBoxProc"
-LABEL_E167FE:	aligned_string "AcApcMdBoxProc"
-LABEL_E1680E:	aligned_string "AcCmpMdBoxProc"
-LABEL_E1681E:	aligned_string "AcMemNoBoxProc"
-LABEL_E1682E:	aligned_string "MspRgpShowHideFunc"
-LABEL_E16842:	aligned_string "S2cShowHideFunc"
-LABEL_E16852:	aligned_string "MspBnkShow"
-LABEL_E1685E:	aligned_string "StylCnvStorOkFunc"
-LABEL_E16870:	aligned_string "CmpSetPageFunc"
-LABEL_E16880:	aligned_string "StylCnvStorBnkSel"
-LABEL_E16892:	aligned_string "SndArgGridCheck"
-LABEL_E168A2:	aligned_string "SndArgTtlCheck"
-LABEL_E168B2:	aligned_string "ApcOnBasFunc"
-LABEL_E168C0:	aligned_string "ApcOnOffFunc"
-LABEL_E168CE:	aligned_string "EasyCmpGridCheck"
-LABEL_E168E0:	aligned_string "MspPlayModeFunc"
-LABEL_E168F0:	aligned_string "MspNameBnkFunc"
-LABEL_E16900:	aligned_string "MspRGrpSetBnkFunc"
-LABEL_E16912:	aligned_string "MspRGrpSetGridCheck"
-LABEL_E16926:	aligned_string "S2cGridCheck"
-LABEL_E16934:	aligned_string "CmpSetGridCheck"
-LABEL_E16944:	aligned_string "CmpSetP1GridCheck"
-LABEL_E16956:	aligned_string "CmpClrNoFunc"
-LABEL_E16964:	aligned_string "CmpClrYesFunc"
-LABEL_E16972:	aligned_string "MspNameOkFunc"
-LABEL_E16980:	aligned_string "MspNamingCheck"
-LABEL_E16990:	aligned_string "CmpNameOkFunc"
-LABEL_E1699E:	aligned_string "CmpNamingCheck"
-LABEL_E169AE:	aligned_string "CmpBndRngFunc"
-LABEL_E169BC:
-	.long LABEL_E169C0
-LABEL_E169C0:	aligned_string ""
-LABEL_E169C2:
-	.long LABEL_E169D8
-	.long LABEL_E169D0
-	.long LABEL_E169CE
-LABEL_E169CE:	aligned_string ""
-LABEL_E169D0:	aligned_string "solobit"
-LABEL_E169D8:	aligned_string "recbit"
-LABEL_E169E0:
-	.long LABEL_E169E4
-LABEL_E169E4:	aligned_string ""
-LABEL_E169E6:
-	.long LABEL_E169EA
-LABEL_E169EA:	aligned_string ""
-LABEL_E169EC:
-	.long LABEL_E169F0
-LABEL_E169F0:	aligned_string ""
-LABEL_E169F2:
+Composer_CallbackNameTable:
+	.long FuncName_CmpBndRngFunc
+	.long FuncName_CmpNamingCheck
+	.long FuncName_CmpNameOkFunc
+	.long FuncName_MspNamingCheck
+	.long FuncName_MspNameOkFunc
+	.long FuncName_CmpClrYesFunc
+	.long FuncName_CmpClrNoFunc
+	.long FuncName_CmpSetP1GridCheck
+	.long FuncName_CmpSetGridCheck
+	.long FuncName_S2cGridCheck
+	.long FuncName_MspRGrpSetGridCheck
+	.long FuncName_MspRGrpSetBnkFunc
+	.long FuncName_MspNameBnkFunc
+	.long FuncName_MspPlayModeFunc
+	.long FuncName_EasyCmpGridCheck
+	.long FuncName_ApcOnOffFunc
+	.long FuncName_ApcOnBasFunc
+	.long FuncName_SndArgTtlCheck
+	.long FuncName_SndArgGridCheck
+	.long FuncName_StylCnvStorBnkSel
+	.long FuncName_CmpSetPageFunc
+	.long FuncName_StylCnvStorOkFunc
+	.long FuncName_MspBnkShow
+	.long FuncName_S2cShowHideFunc
+	.long FuncName_MspRgpShowHideFunc
+	.long FuncName_AcMemNoBoxProc
+	.long FuncName_AcCmpMdBoxProc
+	.long FuncName_AcApcMdBoxProc
+	.long FuncName_AcMspBnkSlBoxProc
+	.long FuncName_VwVariBoxProc
+	.long FuncName_AcCmpTempoBoxProc
+	.long FuncName_AcCmpRecBoxProc
+	.long FuncName_PsCmpQtzBoxProc
+	.long FuncName_PsCmpMeasBoxProc
+	.long FuncName_PsCmpMemBoxProc
+	.long FuncName_PsS2cFmeasBoxProc
+	.long FuncName_PsS2cLmeasBoxProc
+	.long FuncName_PsSeqSongNoBoxProc
+	.long FuncName_PsS2cTransBoxProc
+	.long FuncName_AcS2cMemNoBoxProc
+	.long FuncName_PsCstmCpBnkBoxProc
+	.long FuncName_PsCstmCpSwBoxProc
+	.long FuncName_PsCmpCpFGrpBoxProc
+	.long FuncName_PsCmpCpFVariBoxProc
+	.long FuncName_PsCmpCpFPtnBoxProc
+	.long FuncName_PsNameMemBoxProc
+	.long FuncName_AcCmpSetGridBoxProc
+	.long FuncName_PsRgpSetBnkBoxProc
+	.long FuncName_PsMspBnkNameBoxProc
+	.long FuncName_AcEasyCmpGridBoxProc
+	.long FuncName_PsMspMeasBoxProc
+	.long FuncName_PsMspMemBoxProc
+	.long FuncName_PsMspRecPadBoxProc
+	.long FuncName_PsMspRecBnkBoxProc
+	.long FuncName_PsCstmCpNameBoxProc
+	.long FuncName_AcApcToggleProc
+	.long FuncName_PsMspNameBnkProc
+	.long FuncName_AcSndArgGridBoxProc
+	.long FuncName_PsParaListBoxProc
+	.long FuncName_PsSCTxtBoxProc
+	.long FuncName_PsSCTxtBox2Proc
+	.long FuncName_CmpNameMenuBoxProc
+	.long FuncName_PsCtmAttStrBoxProc
+	.long FuncName_S2cGridBoxProc
+	.long FuncName_AttLangCheck
+	.long FuncName_SureLangCheck
+	.long FuncName_SndMemLangCheck
+	.long FuncName_SndMem1LangCheck
+	.long FuncName_MemfulLangCheck
+	.long FuncName_Memful2LangCheck
+	.long FuncName_StylCnvLangCheck
+	.long FuncName_SndArrLangCheck
+	.long FuncName_PsStylCnvVerProc
+	.long FuncName_Empty_0
+FuncName_Empty_0:	aligned_string ""
+FuncName_PsStylCnvVerProc:	aligned_string "PsStylCnvVerProc"
+FuncName_SndArrLangCheck:	aligned_string "SndArrLangCheck"
+FuncName_StylCnvLangCheck:	aligned_string "StylCnvLangCheck"
+FuncName_Memful2LangCheck:	aligned_string "Memful2LangCheck"
+FuncName_MemfulLangCheck:	aligned_string "MemfulLangCheck"
+FuncName_SndMem1LangCheck:	aligned_string "SndMem1LangCheck"
+FuncName_SndMemLangCheck:	aligned_string "SndMemLangCheck"
+FuncName_SureLangCheck:	aligned_string "SureLangCheck"
+FuncName_AttLangCheck:	aligned_string "AttLangCheck"
+FuncName_S2cGridBoxProc:	aligned_string "S2cGridBoxProc"
+FuncName_PsCtmAttStrBoxProc:	aligned_string "PsCtmAttStrBoxProc"
+FuncName_CmpNameMenuBoxProc:	aligned_string "CmpNameMenuBoxProc"
+FuncName_PsSCTxtBox2Proc:	aligned_string "PsSCTxtBox2Proc"
+FuncName_PsSCTxtBoxProc:	aligned_string "PsSCTxtBoxProc"
+FuncName_PsParaListBoxProc:	aligned_string "PsParaListBoxProc"
+FuncName_AcSndArgGridBoxProc:	aligned_string "AcSndArgGridBoxProc"
+FuncName_PsMspNameBnkProc:	aligned_string "PsMspNameBnkProc"
+FuncName_AcApcToggleProc:	aligned_string "AcApcToggleProc"
+FuncName_PsCstmCpNameBoxProc:	aligned_string "PsCstmCpNameBoxProc"
+FuncName_PsMspRecBnkBoxProc:	aligned_string "PsMspRecBnkBoxProc"
+FuncName_PsMspRecPadBoxProc:	aligned_string "PsMspRecPadBoxProc"
+FuncName_PsMspMemBoxProc:	aligned_string "PsMspMemBoxProc"
+FuncName_PsMspMeasBoxProc:	aligned_string "PsMspMeasBoxProc"
+FuncName_AcEasyCmpGridBoxProc:	aligned_string "AcEasyCmpGridBoxProc"
+FuncName_PsMspBnkNameBoxProc:	aligned_string "PsMspBnkNameBoxProc"
+FuncName_PsRgpSetBnkBoxProc:	aligned_string "PsRgpSetBnkBoxProc"
+FuncName_AcCmpSetGridBoxProc:	aligned_string "AcCmpSetGridBoxProc"
+FuncName_PsNameMemBoxProc:	aligned_string "PsNameMemBoxProc"
+FuncName_PsCmpCpFPtnBoxProc:	aligned_string "PsCmpCpFPtnBoxProc"
+FuncName_PsCmpCpFVariBoxProc:	aligned_string "PsCmpCpFVariBoxProc"
+FuncName_PsCmpCpFGrpBoxProc:	aligned_string "PsCmpCpFGrpBoxProc"
+FuncName_PsCstmCpSwBoxProc:	aligned_string "PsCstmCpSwBoxProc"
+FuncName_PsCstmCpBnkBoxProc:	aligned_string "PsCstmCpBnkBoxProc"
+FuncName_AcS2cMemNoBoxProc:	aligned_string "AcS2cMemNoBoxProc"
+FuncName_PsS2cTransBoxProc:	aligned_string "PsS2cTransBoxProc"
+FuncName_PsSeqSongNoBoxProc:	aligned_string "PsSeqSongNoBoxProc"
+FuncName_PsS2cLmeasBoxProc:	aligned_string "PsS2cLmeasBoxProc"
+FuncName_PsS2cFmeasBoxProc:	aligned_string "PsS2cFmeasBoxProc"
+FuncName_PsCmpMemBoxProc:	aligned_string "PsCmpMemBoxProc"
+FuncName_PsCmpMeasBoxProc:	aligned_string "PsCmpMeasBoxProc"
+FuncName_PsCmpQtzBoxProc:	aligned_string "PsCmpQtzBoxProc"
+FuncName_AcCmpRecBoxProc:	aligned_string "AcCmpRecBoxProc"
+FuncName_AcCmpTempoBoxProc:	aligned_string "AcCmpTempoBoxProc"
+FuncName_VwVariBoxProc:	aligned_string "VwVariBoxProc"
+FuncName_AcMspBnkSlBoxProc:	aligned_string "AcMspBnkSlBoxProc"
+FuncName_AcApcMdBoxProc:	aligned_string "AcApcMdBoxProc"
+FuncName_AcCmpMdBoxProc:	aligned_string "AcCmpMdBoxProc"
+FuncName_AcMemNoBoxProc:	aligned_string "AcMemNoBoxProc"
+FuncName_MspRgpShowHideFunc:	aligned_string "MspRgpShowHideFunc"
+FuncName_S2cShowHideFunc:	aligned_string "S2cShowHideFunc"
+FuncName_MspBnkShow:	aligned_string "MspBnkShow"
+FuncName_StylCnvStorOkFunc:	aligned_string "StylCnvStorOkFunc"
+FuncName_CmpSetPageFunc:	aligned_string "CmpSetPageFunc"
+FuncName_StylCnvStorBnkSel:	aligned_string "StylCnvStorBnkSel"
+FuncName_SndArgGridCheck:	aligned_string "SndArgGridCheck"
+FuncName_SndArgTtlCheck:	aligned_string "SndArgTtlCheck"
+FuncName_ApcOnBasFunc:	aligned_string "ApcOnBasFunc"
+FuncName_ApcOnOffFunc:	aligned_string "ApcOnOffFunc"
+FuncName_EasyCmpGridCheck:	aligned_string "EasyCmpGridCheck"
+FuncName_MspPlayModeFunc:	aligned_string "MspPlayModeFunc"
+FuncName_MspNameBnkFunc:	aligned_string "MspNameBnkFunc"
+FuncName_MspRGrpSetBnkFunc:	aligned_string "MspRGrpSetBnkFunc"
+FuncName_MspRGrpSetGridCheck:	aligned_string "MspRGrpSetGridCheck"
+FuncName_S2cGridCheck:	aligned_string "S2cGridCheck"
+FuncName_CmpSetGridCheck:	aligned_string "CmpSetGridCheck"
+FuncName_CmpSetP1GridCheck:	aligned_string "CmpSetP1GridCheck"
+FuncName_CmpClrNoFunc:	aligned_string "CmpClrNoFunc"
+FuncName_CmpClrYesFunc:	aligned_string "CmpClrYesFunc"
+FuncName_MspNameOkFunc:	aligned_string "MspNameOkFunc"
+FuncName_MspNamingCheck:	aligned_string "MspNamingCheck"
+FuncName_CmpNameOkFunc:	aligned_string "CmpNameOkFunc"
+FuncName_CmpNamingCheck:	aligned_string "CmpNamingCheck"
+FuncName_CmpBndRngFunc:	aligned_string "CmpBndRngFunc"
+StrDesc_Empty_0:
+	.long StrVal_Empty_0
+StrVal_Empty_0:	aligned_string ""
+StrDesc_RecordBits:
+	.long StrVal_RecBit
+	.long StrVal_SoloBit
+	.long StrVal_Empty_RecordBits
+StrVal_Empty_RecordBits:	aligned_string ""
+StrVal_SoloBit:	aligned_string "solobit"
+StrVal_RecBit:	aligned_string "recbit"
+StrDesc_Empty_1:
+	.long StrVal_Empty_1
+StrVal_Empty_1:	aligned_string ""
+StrDesc_Empty_2:
+	.long StrVal_Empty_2
+StrVal_Empty_2:	aligned_string ""
+StrDesc_Empty_3:
+	.long StrVal_Empty_3
+StrVal_Empty_3:	aligned_string ""
+StrDesc_Empty_4:
 	.long LABEL_E169F6
 LABEL_E169F6:	aligned_string ""
 LABEL_E169F8:
@@ -1691,42 +1691,42 @@ LABEL_E16C84:	aligned_string ""
 	.byte 0x00, 0x00
 	.long LABEL_E17316
 	.long LABEL_E17314
-	.long LABEL_E169BC
+	.long StrDesc_Empty_0
 	.long AcCmpRecBoxProc
 	naka_header NAKA_TYPE_0x12
 	.byte 0x26, 0x00
 	.byte 0x02, 0x00
 	.long LABEL_E17308
 	.long LABEL_E17304
-	.long LABEL_E169C2
+	.long StrDesc_RecordBits
 	.long PsCmpQtzBoxProc
 	naka_header NAKA_TYPE_0x12
 	.byte 0x24, 0x00
 	.byte 0x00, 0x00
 	.long LABEL_E172F8
 	.long LABEL_E172F6
-	.long LABEL_E169E0
+	.long StrDesc_Empty_1
 	.long PsCmpMeasBoxProc
 	naka_header NAKA_TYPE_0x12
 	.byte 0x24, 0x00
 	.byte 0x00, 0x00
 	.long LABEL_E172E8
 	.long LABEL_E172E6
-	.long LABEL_E169E6
+	.long StrDesc_Empty_2
 	.long PsCmpMemBoxProc
 	naka_header NAKA_TYPE_0x12
 	.byte 0x24, 0x00
 	.byte 0x00, 0x00
 	.long LABEL_E172DA
 	.long LABEL_E172D8
-	.long LABEL_E169EC
+	.long StrDesc_Empty_3
 	.long AcS2cMemNoBoxProc
 	naka_header NAKA_TYPE_0x12
 	.byte 0x24, 0x00
 	.byte 0x00, 0x00
 	.long LABEL_E172CA
 	.long LABEL_E172C8
-	.long LABEL_E169F2
+	.long StrDesc_Empty_4
 	.long PsS2cFmeasBoxProc
 	naka_header NAKA_TYPE_0x12
 	.byte 0x24, 0x00
@@ -2966,469 +2966,469 @@ LABEL_E1C0BE:	aligned_string "CmpAc3Vol"
 LABEL_E1C0C8:	aligned_string "CmpDrmVol"
 LABEL_E1C0D2:	aligned_string "CmpBalScreen"
 LABEL_E1C0E0:
-	.long LABEL_E1C1EC
-	.long LABEL_E1C1EA
-	.long LABEL_E1C1DC
-	.long LABEL_E1C1DA
-	.long LABEL_E1C1CC
-	.long LABEL_E1C1CA
-	.long LABEL_E1C1C8
-	.long LABEL_E1C1C6
-	.long LABEL_E1C1C4
-	.long LABEL_E1C1C2
-	.long LABEL_E1C1C0
-	.long LABEL_E1C1BE
-	.long LABEL_E1C1BC
-	.long LABEL_E1C1BA
-	.long LABEL_E1C1B8
-	.long LABEL_E1C1B6
-	.long LABEL_E1C1B4
-	.long LABEL_E1C1B2
-	.long LABEL_E1C1A8
-	.long LABEL_E1C1A6
-	.long LABEL_E1C1A4
-	.long LABEL_E1C1A2
-	.long LABEL_E1C1A0
-	.long LABEL_E1C19E
-	.long LABEL_E1C19C
-	.long LABEL_E1C19A
-	.long LABEL_E1C190
-	.long LABEL_E1C186
-	.long LABEL_E1C184
-	.long LABEL_E1C182
-	.long LABEL_E1C178
-	.long LABEL_E1C16C
-	.long LABEL_E1C16A
-	.long LABEL_E1C168
-LABEL_E1C168:	aligned_string ""
-LABEL_E1C16A:	aligned_string ""
-LABEL_E1C16C:	aligned_string "CmpCpFVari"
-LABEL_E1C178:	aligned_string "CmpCpFGrp"
-LABEL_E1C182:	aligned_string ""
-LABEL_E1C184:	aligned_string ""
-LABEL_E1C186:	aligned_string "CmpCpTPtn"
-LABEL_E1C190:	aligned_string "CmpCpTMem"
-LABEL_E1C19A:	aligned_string ""
-LABEL_E1C19C:	aligned_string ""
-LABEL_E1C19E:	aligned_string ""
-LABEL_E1C1A0:	aligned_string ""
-LABEL_E1C1A2:	aligned_string ""
-LABEL_E1C1A4:	aligned_string ""
-LABEL_E1C1A6:	aligned_string ""
-LABEL_E1C1A8:	aligned_string "CmpCpFPtn"
-LABEL_E1C1B2:	aligned_string ""
-LABEL_E1C1B4:	aligned_string ""
-LABEL_E1C1B6:	aligned_string ""
-LABEL_E1C1B8:	aligned_string ""
-LABEL_E1C1BA:	aligned_string ""
-LABEL_E1C1BC:	aligned_string ""
-LABEL_E1C1BE:	aligned_string ""
-LABEL_E1C1C0:	aligned_string ""
-LABEL_E1C1C2:	aligned_string ""
-LABEL_E1C1C4:	aligned_string ""
-LABEL_E1C1C6:	aligned_string ""
-LABEL_E1C1C8:	aligned_string ""
-LABEL_E1C1CA:	aligned_string ""
-LABEL_E1C1CC:	aligned_string "CmpNcpTitmSw"
-LABEL_E1C1DA:	aligned_string ""
-LABEL_E1C1DC:	aligned_string "CmpNcpFitmSw"
-LABEL_E1C1EA:	aligned_string ""
-LABEL_E1C1EC:	aligned_string "CmpNcpScreen"
-LABEL_E1C1FA:
-	.long LABEL_E1C30E
-	.long LABEL_E1C30C
-	.long LABEL_E1C30A
-	.long LABEL_E1C308
-	.long LABEL_E1C306
-	.long LABEL_E1C304
-	.long LABEL_E1C302
-	.long LABEL_E1C300
-	.long LABEL_E1C2FE
-	.long LABEL_E1C2FC
-	.long LABEL_E1C2FA
-	.long LABEL_E1C2F8
-	.long LABEL_E1C2F6
-	.long LABEL_E1C2F4
-	.long LABEL_E1C2F2
-	.long LABEL_E1C2F0
-	.long LABEL_E1C2EE
-	.long LABEL_E1C2EC
-	.long LABEL_E1C2EA
-	.long LABEL_E1C2E8
-	.long LABEL_E1C2E6
-	.long LABEL_E1C2E4
-	.long LABEL_E1C2E2
-	.long LABEL_E1C2E0
-	.long LABEL_E1C2D6
-	.long LABEL_E1C2D4
-	.long LABEL_E1C2D2
-	.long LABEL_E1C2D0
-	.long LABEL_E1C2C6
-	.long LABEL_E1C2B8
-	.long LABEL_E1C2AE
-	.long LABEL_E1C2A4
-	.long LABEL_E1C2A2
-	.long LABEL_E1C29A
-	.long LABEL_E1C298
-	.long LABEL_E1C296
-	.long LABEL_E1C294
-	.long LABEL_E1C292
-LABEL_E1C292:	aligned_string ""
-LABEL_E1C294:	aligned_string ""
-LABEL_E1C296:	aligned_string ""
-LABEL_E1C298:	aligned_string ""
-LABEL_E1C29A:	aligned_string "S2cGrid"
-LABEL_E1C2A2:	aligned_string ""
-LABEL_E1C2A4:	aligned_string "S2cLmeas"
-LABEL_E1C2AE:	aligned_string "S2cMemNo"
-LABEL_E1C2B8:	aligned_string "S2cSeqSongNo"
-LABEL_E1C2C6:	aligned_string "S2cFmeas"
-LABEL_E1C2D0:	aligned_string ""
-LABEL_E1C2D2:	aligned_string ""
-LABEL_E1C2D4:	aligned_string ""
-LABEL_E1C2D6:	aligned_string "S2cTrans"
-LABEL_E1C2E0:	aligned_string ""
-LABEL_E1C2E2:	aligned_string ""
-LABEL_E1C2E4:	aligned_string ""
-LABEL_E1C2E6:	aligned_string ""
-LABEL_E1C2E8:	aligned_string ""
-LABEL_E1C2EA:	aligned_string ""
-LABEL_E1C2EC:	aligned_string ""
-LABEL_E1C2EE:	aligned_string ""
-LABEL_E1C2F0:	aligned_string ""
-LABEL_E1C2F2:	aligned_string ""
-LABEL_E1C2F4:	aligned_string ""
-LABEL_E1C2F6:	aligned_string ""
-LABEL_E1C2F8:	aligned_string ""
-LABEL_E1C2FA:	aligned_string ""
-LABEL_E1C2FC:	aligned_string ""
-LABEL_E1C2FE:	aligned_string ""
-LABEL_E1C300:	aligned_string ""
-LABEL_E1C302:	aligned_string ""
-LABEL_E1C304:	aligned_string ""
-LABEL_E1C306:	aligned_string ""
-LABEL_E1C308:	aligned_string ""
-LABEL_E1C30A:	aligned_string ""
-LABEL_E1C30C:	aligned_string ""
-LABEL_E1C30E:	aligned_string "S2CScreen"
-LABEL_E1C318:
-	.long LABEL_E1C384
-	.long LABEL_E1C382
-	.long LABEL_E1C380
-	.long LABEL_E1C37E
-	.long LABEL_E1C37C
-	.long LABEL_E1C37A
-	.long LABEL_E1C378
-	.long LABEL_E1C376
-	.long LABEL_E1C374
-	.long LABEL_E1C368
-	.long LABEL_E1C35C
-	.long LABEL_E1C35A
-	.long LABEL_E1C358
-	.long LABEL_E1C356
-	.long LABEL_E1C354
-LABEL_E1C354:	aligned_string ""
-LABEL_E1C356:	aligned_string ""
-LABEL_E1C358:	aligned_string ""
-LABEL_E1C35A:	aligned_string ""
-LABEL_E1C35C:	aligned_string "EasyCmpGrid"
-LABEL_E1C368:	aligned_string "EsCmpMemNo"
-LABEL_E1C374:	aligned_string ""
-LABEL_E1C376:	aligned_string ""
-LABEL_E1C378:	aligned_string ""
-LABEL_E1C37A:	aligned_string ""
-LABEL_E1C37C:	aligned_string ""
-LABEL_E1C37E:	aligned_string ""
-LABEL_E1C380:	aligned_string ""
-LABEL_E1C382:	aligned_string ""
-LABEL_E1C384:	aligned_string "CmpEasyScreen"
-LABEL_E1C392:
-	.long LABEL_E1C3AE
-	.long LABEL_E1C3AC
-	.long LABEL_E1C3AA
-	.long LABEL_E1C3A8
-	.long LABEL_E1C3A6
-LABEL_E1C3A6:	aligned_string ""
-LABEL_E1C3A8:	aligned_string ""
-LABEL_E1C3AA:	aligned_string ""
-LABEL_E1C3AC:	aligned_string ""
-LABEL_E1C3AE:	aligned_string "CmpBendScreen"
-	.long LABEL_E1C402
-LABEL_E1C3C0:
-	.long LABEL_E1C400
-	.long LABEL_E1C3FE
-	.long LABEL_E1C3FC
-	.long LABEL_E1C3FA
-	.long LABEL_E1C3F8
-	.long LABEL_E1C3F6
-	.long LABEL_E1C3F4
-	.long LABEL_E1C3F2
-	.long LABEL_E1C3F0
-	.long LABEL_E1C3EE
-	.long LABEL_E1C3EC
-LABEL_E1C3EC:	aligned_string ""
-LABEL_E1C3EE:	aligned_string ""
-LABEL_E1C3F0:	aligned_string ""
-LABEL_E1C3F2:	aligned_string ""
-LABEL_E1C3F4:	aligned_string ""
-LABEL_E1C3F6:	aligned_string ""
-LABEL_E1C3F8:	aligned_string ""
-LABEL_E1C3FA:	aligned_string ""
-LABEL_E1C3FC:	aligned_string ""
-LABEL_E1C3FE:	aligned_string ""
-LABEL_E1C400:	aligned_string ""
-LABEL_E1C402:	aligned_string "CmpModeScreen"
-LABEL_E1C410:
-	.long LABEL_E1C550
-	.long LABEL_E1C54E
-	.long LABEL_E1C54C
-	.long LABEL_E1C53E
-	.long LABEL_E1C532
-	.long LABEL_E1C530
-	.long LABEL_E1C52E
-	.long LABEL_E1C52C
-	.long LABEL_E1C52A
-	.long LABEL_E1C528
-	.long LABEL_E1C51C
-	.long LABEL_E1C510
-	.long LABEL_E1C50E
-	.long LABEL_E1C502
-	.long LABEL_E1C4F6
-	.long LABEL_E1C4EA
-	.long LABEL_E1C4E8
-	.long LABEL_E1C4DA
-	.long LABEL_E1C4D8
-	.long LABEL_E1C4D6
-	.long LABEL_E1C4D4
-	.long LABEL_E1C4D2
-	.long LABEL_E1C4C6
-	.long LABEL_E1C4C4
-	.long LABEL_E1C4C2
-	.long LABEL_E1C4B2
-	.long LABEL_E1C4B0
-	.long LABEL_E1C4AE
-	.long LABEL_E1C4AC
-	.long LABEL_E1C4AA
-	.long LABEL_E1C49E
-	.long LABEL_E1C49C
-	.long LABEL_E1C49A
-	.long LABEL_E1C498
-LABEL_E1C498:	aligned_string ""
-LABEL_E1C49A:	aligned_string ""
-LABEL_E1C49C:	aligned_string ""
-LABEL_E1C49E:	aligned_string "CtmSMemStr"
-LABEL_E1C4AA:	aligned_string ""
-LABEL_E1C4AC:	aligned_string ""
-LABEL_E1C4AE:	aligned_string ""
-LABEL_E1C4B0:	aligned_string ""
-LABEL_E1C4B2:	aligned_string "CstmFuncSelWin"
-LABEL_E1C4C2:	aligned_string ""
-LABEL_E1C4C4:	aligned_string ""
-LABEL_E1C4C6:	aligned_string "CtmMFulStr"
-LABEL_E1C4D2:	aligned_string ""
-LABEL_E1C4D4:	aligned_string ""
-LABEL_E1C4D6:	aligned_string ""
-LABEL_E1C4D8:	aligned_string ""
-LABEL_E1C4DA:	aligned_string "CstmMemFulWin"
-LABEL_E1C4E8:	aligned_string ""
-LABEL_E1C4EA:	aligned_string "CstmCpTName"
-LABEL_E1C4F6:	aligned_string "CstmCpTChar"
-LABEL_E1C502:	aligned_string "CstmCpFChar"
-LABEL_E1C50E:	aligned_string ""
-LABEL_E1C510:	aligned_string "CstmCpToVal"
-LABEL_E1C51C:	aligned_string "CstmCpToSw"
-LABEL_E1C528:	aligned_string ""
-LABEL_E1C52A:	aligned_string ""
-LABEL_E1C52C:	aligned_string ""
-LABEL_E1C52E:	aligned_string ""
-LABEL_E1C530:	aligned_string ""
-LABEL_E1C532:	aligned_string "CstmCpFName"
-LABEL_E1C53E:	aligned_string "CstmCpFrmVal"
-LABEL_E1C54C:	aligned_string ""
-LABEL_E1C54E:	aligned_string ""
-LABEL_E1C550:	aligned_string "CmpCstmCpScreen"
-LABEL_E1C560:
-	.long LABEL_E1C6CE
-	.long LABEL_E1C6C2
-	.long LABEL_E1C6B6
-	.long LABEL_E1C6AA
-	.long LABEL_E1C6A8
-	.long LABEL_E1C6A6
-	.long LABEL_E1C698
-	.long LABEL_E1C690
-	.long LABEL_E1C688
-	.long LABEL_E1C67E
-	.long LABEL_E1C674
-	.long LABEL_E1C66A
-	.long LABEL_E1C660
-	.long LABEL_E1C656
-	.long LABEL_E1C64C
-	.long LABEL_E1C642
-	.long LABEL_E1C63A
-	.long LABEL_E1C62C
-	.long LABEL_E1C624
-	.long LABEL_E1C61A
-	.long LABEL_E1C612
-	.long LABEL_E1C608
-	.long LABEL_E1C5FE
-	.long LABEL_E1C5F2
-	.long LABEL_E1C5E6
-	.long LABEL_E1C5DC
-	.long LABEL_E1C5D2
-	.long LABEL_E1C5D0
-LABEL_E1C5D0:	aligned_string ""
-LABEL_E1C5D2:	aligned_string "Ctrl2Bnk"
-LABEL_E1C5DC:	aligned_string "Ctrl1Bnk"
-LABEL_E1C5E6:	aligned_string "Cmpile2Bnk"
-LABEL_E1C5F2:	aligned_string "Cmpile1Bnk"
-LABEL_E1C5FE:	aligned_string "User2Bnk"
-LABEL_E1C608:	aligned_string "User1Bnk"
-LABEL_E1C612:	aligned_string "HitBnk"
-LABEL_E1C61A:	aligned_string "LatinBnk"
-LABEL_E1C624:	aligned_string "JazzBnk"
-LABEL_E1C62C:	aligned_string "MspBkslP2Win"
-LABEL_E1C63A:	aligned_string "FunkBnk"
-LABEL_E1C642:	aligned_string "DanceBnk"
-LABEL_E1C64C:	aligned_string "Rock2Bnk"
-LABEL_E1C656:	aligned_string "Rock1Bnk"
-LABEL_E1C660:	aligned_string "ArpgioBnk"
-LABEL_E1C66A:	aligned_string "EnterBnk"
-LABEL_E1C674:	aligned_string "MovieBnk"
-LABEL_E1C67E:	aligned_string "ComicBnk"
-LABEL_E1C688:	aligned_string "Eff2Bnk"
-LABEL_E1C690:	aligned_string "Eff1Bnk"
-LABEL_E1C698:	.asciz "MspBkslP1Win"
+	.long StrCmpNcpScreen
+	.long StrCmpNcpFitmSw_Empty
+	.long StrCmpNcpFitmSw
+	.long StrCmpNcpTitmSw_Empty
+	.long StrCmpNcpTitmSw
+	.long StrCmpCpFPtn_EmptyD
+	.long StrCmpCpFPtn_EmptyC
+	.long StrCmpCpFPtn_EmptyB
+	.long StrCmpCpFPtn_EmptyA
+	.long StrCmpCpFPtn_Empty9
+	.long StrCmpCpFPtn_Empty8
+	.long StrCmpCpFPtn_Empty7
+	.long StrCmpCpFPtn_Empty6
+	.long StrCmpCpFPtn_Empty5
+	.long StrCmpCpFPtn_Empty4
+	.long StrCmpCpFPtn_Empty3
+	.long StrCmpCpFPtn_Empty2
+	.long StrCmpCpFPtn_Empty1
+	.long StrCmpCpFPtn
+	.long StrCmpCpTMem_Empty7
+	.long StrCmpCpTMem_Empty6
+	.long StrCmpCpTMem_Empty5
+	.long StrCmpCpTMem_Empty4
+	.long StrCmpCpTMem_Empty3
+	.long StrCmpCpTMem_Empty2
+	.long StrCmpCpTMem_Empty1
+	.long StrCmpCpTMem
+	.long StrCmpCpTPtn
+	.long StrCmpCpFGrp_Empty2
+	.long StrCmpCpFGrp_Empty1
+	.long StrCmpCpFGrp
+	.long StrCmpCpFVari
+	.long StrCmpCpFVari_Empty2
+	.long StrCmpCpFVari_Empty1
+StrCmpCpFVari_Empty1:	aligned_string ""
+StrCmpCpFVari_Empty2:	aligned_string ""
+StrCmpCpFVari:	aligned_string "CmpCpFVari"
+StrCmpCpFGrp:	aligned_string "CmpCpFGrp"
+StrCmpCpFGrp_Empty1:	aligned_string ""
+StrCmpCpFGrp_Empty2:	aligned_string ""
+StrCmpCpTPtn:	aligned_string "CmpCpTPtn"
+StrCmpCpTMem:	aligned_string "CmpCpTMem"
+StrCmpCpTMem_Empty1:	aligned_string ""
+StrCmpCpTMem_Empty2:	aligned_string ""
+StrCmpCpTMem_Empty3:	aligned_string ""
+StrCmpCpTMem_Empty4:	aligned_string ""
+StrCmpCpTMem_Empty5:	aligned_string ""
+StrCmpCpTMem_Empty6:	aligned_string ""
+StrCmpCpTMem_Empty7:	aligned_string ""
+StrCmpCpFPtn:	aligned_string "CmpCpFPtn"
+StrCmpCpFPtn_Empty1:	aligned_string ""
+StrCmpCpFPtn_Empty2:	aligned_string ""
+StrCmpCpFPtn_Empty3:	aligned_string ""
+StrCmpCpFPtn_Empty4:	aligned_string ""
+StrCmpCpFPtn_Empty5:	aligned_string ""
+StrCmpCpFPtn_Empty6:	aligned_string ""
+StrCmpCpFPtn_Empty7:	aligned_string ""
+StrCmpCpFPtn_Empty8:	aligned_string ""
+StrCmpCpFPtn_Empty9:	aligned_string ""
+StrCmpCpFPtn_EmptyA:	aligned_string ""
+StrCmpCpFPtn_EmptyB:	aligned_string ""
+StrCmpCpFPtn_EmptyC:	aligned_string ""
+StrCmpCpFPtn_EmptyD:	aligned_string ""
+StrCmpNcpTitmSw:	aligned_string "CmpNcpTitmSw"
+StrCmpNcpTitmSw_Empty:	aligned_string ""
+StrCmpNcpFitmSw:	aligned_string "CmpNcpFitmSw"
+StrCmpNcpFitmSw_Empty:	aligned_string ""
+StrCmpNcpScreen:	aligned_string "CmpNcpScreen"
+PtrTbl_S2cScreenStrs:
+	.long StrS2cScreen
+	.long StrS2cTrans_Empty17
+	.long StrS2cTrans_Empty16
+	.long StrS2cTrans_Empty15
+	.long StrS2cTrans_Empty14
+	.long StrS2cTrans_Empty13
+	.long StrS2cTrans_Empty12
+	.long StrS2cTrans_Empty11
+	.long StrS2cTrans_Empty10
+	.long StrS2cTrans_EmptyF
+	.long StrS2cTrans_EmptyE
+	.long StrS2cTrans_EmptyD
+	.long StrS2cTrans_EmptyC
+	.long StrS2cTrans_EmptyB
+	.long StrS2cTrans_EmptyA
+	.long StrS2cTrans_Empty9
+	.long StrS2cTrans_Empty8
+	.long StrS2cTrans_Empty7
+	.long StrS2cTrans_Empty6
+	.long StrS2cTrans_Empty5
+	.long StrS2cTrans_Empty4
+	.long StrS2cTrans_Empty3
+	.long StrS2cTrans_Empty2
+	.long StrS2cTrans_Empty1
+	.long StrS2cTrans
+	.long StrS2cFmeas_Empty3
+	.long StrS2cFmeas_Empty2
+	.long StrS2cFmeas_Empty1
+	.long StrS2cFmeas
+	.long StrS2cSeqSongNo
+	.long StrS2cMemNo
+	.long StrS2cLmeas
+	.long StrS2cLmeas_Empty
+	.long StrS2cGrid
+	.long StrS2cGrid_Empty4
+	.long StrS2cGrid_Empty3
+	.long StrS2cGrid_Empty2
+	.long StrS2cGrid_Empty1
+StrS2cGrid_Empty1:	aligned_string ""
+StrS2cGrid_Empty2:	aligned_string ""
+StrS2cGrid_Empty3:	aligned_string ""
+StrS2cGrid_Empty4:	aligned_string ""
+StrS2cGrid:	aligned_string "S2cGrid"
+StrS2cLmeas_Empty:	aligned_string ""
+StrS2cLmeas:	aligned_string "S2cLmeas"
+StrS2cMemNo:	aligned_string "S2cMemNo"
+StrS2cSeqSongNo:	aligned_string "S2cSeqSongNo"
+StrS2cFmeas:	aligned_string "S2cFmeas"
+StrS2cFmeas_Empty1:	aligned_string ""
+StrS2cFmeas_Empty2:	aligned_string ""
+StrS2cFmeas_Empty3:	aligned_string ""
+StrS2cTrans:	aligned_string "S2cTrans"
+StrS2cTrans_Empty1:	aligned_string ""
+StrS2cTrans_Empty2:	aligned_string ""
+StrS2cTrans_Empty3:	aligned_string ""
+StrS2cTrans_Empty4:	aligned_string ""
+StrS2cTrans_Empty5:	aligned_string ""
+StrS2cTrans_Empty6:	aligned_string ""
+StrS2cTrans_Empty7:	aligned_string ""
+StrS2cTrans_Empty8:	aligned_string ""
+StrS2cTrans_Empty9:	aligned_string ""
+StrS2cTrans_EmptyA:	aligned_string ""
+StrS2cTrans_EmptyB:	aligned_string ""
+StrS2cTrans_EmptyC:	aligned_string ""
+StrS2cTrans_EmptyD:	aligned_string ""
+StrS2cTrans_EmptyE:	aligned_string ""
+StrS2cTrans_EmptyF:	aligned_string ""
+StrS2cTrans_Empty10:	aligned_string ""
+StrS2cTrans_Empty11:	aligned_string ""
+StrS2cTrans_Empty12:	aligned_string ""
+StrS2cTrans_Empty13:	aligned_string ""
+StrS2cTrans_Empty14:	aligned_string ""
+StrS2cTrans_Empty15:	aligned_string ""
+StrS2cTrans_Empty16:	aligned_string ""
+StrS2cTrans_Empty17:	aligned_string ""
+StrS2cScreen:	aligned_string "S2CScreen"
+PtrTbl_EasyCompScreenStrs:
+	.long StrCmpEasyScreen
+	.long StrEsCmpMemNo_Empty8
+	.long StrEsCmpMemNo_Empty7
+	.long StrEsCmpMemNo_Empty6
+	.long StrEsCmpMemNo_Empty5
+	.long StrEsCmpMemNo_Empty4
+	.long StrEsCmpMemNo_Empty3
+	.long StrEsCmpMemNo_Empty2
+	.long StrEsCmpMemNo_Empty1
+	.long StrEsCmpMemNo
+	.long StrEasyCmpGrid
+	.long StrEasyCmpGrid_Empty4
+	.long StrEasyCmpGrid_Empty3
+	.long StrEasyCmpGrid_Empty2
+	.long StrEasyCmpGrid_Empty1
+StrEasyCmpGrid_Empty1:	aligned_string ""
+StrEasyCmpGrid_Empty2:	aligned_string ""
+StrEasyCmpGrid_Empty3:	aligned_string ""
+StrEasyCmpGrid_Empty4:	aligned_string ""
+StrEasyCmpGrid:	aligned_string "EasyCmpGrid"
+StrEsCmpMemNo:	aligned_string "EsCmpMemNo"
+StrEsCmpMemNo_Empty1:	aligned_string ""
+StrEsCmpMemNo_Empty2:	aligned_string ""
+StrEsCmpMemNo_Empty3:	aligned_string ""
+StrEsCmpMemNo_Empty4:	aligned_string ""
+StrEsCmpMemNo_Empty5:	aligned_string ""
+StrEsCmpMemNo_Empty6:	aligned_string ""
+StrEsCmpMemNo_Empty7:	aligned_string ""
+StrEsCmpMemNo_Empty8:	aligned_string ""
+StrCmpEasyScreen:	aligned_string "CmpEasyScreen"
+PtrTbl_BendScreenStrs:
+	.long StrCmpBendScreen
+	.long StrCmpBendScreen_Empty4
+	.long StrCmpBendScreen_Empty3
+	.long StrCmpBendScreen_Empty2
+	.long StrCmpBendScreen_Empty1
+StrCmpBendScreen_Empty1:	aligned_string ""
+StrCmpBendScreen_Empty2:	aligned_string ""
+StrCmpBendScreen_Empty3:	aligned_string ""
+StrCmpBendScreen_Empty4:	aligned_string ""
+StrCmpBendScreen:	aligned_string "CmpBendScreen"
+	.long StrCmpModeScreen
+PtrTbl_ModeScreenStrs:
+	.long StrCmpModeScreen_EmptyB
+	.long StrCmpModeScreen_EmptyA
+	.long StrCmpModeScreen_Empty9
+	.long StrCmpModeScreen_Empty8
+	.long StrCmpModeScreen_Empty7
+	.long StrCmpModeScreen_Empty6
+	.long StrCmpModeScreen_Empty5
+	.long StrCmpModeScreen_Empty4
+	.long StrCmpModeScreen_Empty3
+	.long StrCmpModeScreen_Empty2
+	.long StrCmpModeScreen_Empty1
+StrCmpModeScreen_Empty1:	aligned_string ""
+StrCmpModeScreen_Empty2:	aligned_string ""
+StrCmpModeScreen_Empty3:	aligned_string ""
+StrCmpModeScreen_Empty4:	aligned_string ""
+StrCmpModeScreen_Empty5:	aligned_string ""
+StrCmpModeScreen_Empty6:	aligned_string ""
+StrCmpModeScreen_Empty7:	aligned_string ""
+StrCmpModeScreen_Empty8:	aligned_string ""
+StrCmpModeScreen_Empty9:	aligned_string ""
+StrCmpModeScreen_EmptyA:	aligned_string ""
+StrCmpModeScreen_EmptyB:	aligned_string ""
+StrCmpModeScreen:	aligned_string "CmpModeScreen"
+PtrTbl_CstmCpScreenStrs:
+	.long StrCmpCstmCpScreen
+	.long StrCmpCstmCpScreen_Empty2
+	.long StrCmpCstmCpScreen_Empty1
+	.long StrCstmCpFrmVal
+	.long StrCstmCpFName
+	.long StrCstmCpFName_Empty5
+	.long StrCstmCpFName_Empty4
+	.long StrCstmCpFName_Empty3
+	.long StrCstmCpFName_Empty2
+	.long StrCstmCpFName_Empty1
+	.long StrCstmCpToSw
+	.long StrCstmCpToVal
+	.long StrCstmCpToVal_Empty
+	.long StrCstmCpFChar
+	.long StrCstmCpTChar
+	.long StrCstmCpTName
+	.long StrCstmCpTName_Empty
+	.long StrCstmMemFulWin
+	.long StrCstmMemFulWin_Empty4
+	.long StrCstmMemFulWin_Empty3
+	.long StrCstmMemFulWin_Empty2
+	.long StrCstmMemFulWin_Empty1
+	.long StrCtmMFulStr
+	.long StrCtmMFulStr_Empty2
+	.long StrCtmMFulStr_Empty1
+	.long StrCstmFuncSelWin
+	.long StrCstmFuncSelWin_Empty4
+	.long StrCstmFuncSelWin_Empty3
+	.long StrCstmFuncSelWin_Empty2
+	.long StrCstmFuncSelWin_Empty1
+	.long StrCtmSMemStr
+	.long StrCtmSMemStr_Empty3
+	.long StrCtmSMemStr_Empty2
+	.long StrCtmSMemStr_Empty1
+StrCtmSMemStr_Empty1:	aligned_string ""
+StrCtmSMemStr_Empty2:	aligned_string ""
+StrCtmSMemStr_Empty3:	aligned_string ""
+StrCtmSMemStr:	aligned_string "CtmSMemStr"
+StrCstmFuncSelWin_Empty1:	aligned_string ""
+StrCstmFuncSelWin_Empty2:	aligned_string ""
+StrCstmFuncSelWin_Empty3:	aligned_string ""
+StrCstmFuncSelWin_Empty4:	aligned_string ""
+StrCstmFuncSelWin:	aligned_string "CstmFuncSelWin"
+StrCtmMFulStr_Empty1:	aligned_string ""
+StrCtmMFulStr_Empty2:	aligned_string ""
+StrCtmMFulStr:	aligned_string "CtmMFulStr"
+StrCstmMemFulWin_Empty1:	aligned_string ""
+StrCstmMemFulWin_Empty2:	aligned_string ""
+StrCstmMemFulWin_Empty3:	aligned_string ""
+StrCstmMemFulWin_Empty4:	aligned_string ""
+StrCstmMemFulWin:	aligned_string "CstmMemFulWin"
+StrCstmCpTName_Empty:	aligned_string ""
+StrCstmCpTName:	aligned_string "CstmCpTName"
+StrCstmCpTChar:	aligned_string "CstmCpTChar"
+StrCstmCpFChar:	aligned_string "CstmCpFChar"
+StrCstmCpToVal_Empty:	aligned_string ""
+StrCstmCpToVal:	aligned_string "CstmCpToVal"
+StrCstmCpToSw:	aligned_string "CstmCpToSw"
+StrCstmCpFName_Empty1:	aligned_string ""
+StrCstmCpFName_Empty2:	aligned_string ""
+StrCstmCpFName_Empty3:	aligned_string ""
+StrCstmCpFName_Empty4:	aligned_string ""
+StrCstmCpFName_Empty5:	aligned_string ""
+StrCstmCpFName:	aligned_string "CstmCpFName"
+StrCstmCpFrmVal:	aligned_string "CstmCpFrmVal"
+StrCmpCstmCpScreen_Empty1:	aligned_string ""
+StrCmpCstmCpScreen_Empty2:	aligned_string ""
+StrCmpCstmCpScreen:	aligned_string "CmpCstmCpScreen"
+PtrTbl_MspBkslScreenStrs:
+	.long StrMspBkslScreen
+	.long StrMspBkslWin
+	.long StrMspBnkP1Ctl
+	.long StrMspBnkP2Ctl
+	.long StrMspBnkP2Ctl_Empty2
+	.long StrMspBnkP2Ctl_Empty1
+	.long StrMspBkslP1Win
+	.long StrEff1Bnk
+	.long StrEff2Bnk
+	.long StrComicBnk
+	.long StrMovieBnk
+	.long StrEnterBnk
+	.long StrArpgioBnk
+	.long StrRock1Bnk
+	.long StrRock2Bnk
+	.long StrDanceBnk
+	.long StrFunkBnk
+	.long StrMspBkslP2Win
+	.long StrJazzBnk
+	.long StrLatinBnk
+	.long StrHitBnk
+	.long StrUser1Bnk
+	.long StrUser2Bnk
+	.long StrCmpile1Bnk
+	.long StrCmpile2Bnk
+	.long StrCtrl1Bnk
+	.long StrCtrl2Bnk
+	.long StrCtrl2Bnk_Empty
+StrCtrl2Bnk_Empty:	aligned_string ""
+StrCtrl2Bnk:	aligned_string "Ctrl2Bnk"
+StrCtrl1Bnk:	aligned_string "Ctrl1Bnk"
+StrCmpile2Bnk:	aligned_string "Cmpile2Bnk"
+StrCmpile1Bnk:	aligned_string "Cmpile1Bnk"
+StrUser2Bnk:	aligned_string "User2Bnk"
+StrUser1Bnk:	aligned_string "User1Bnk"
+StrHitBnk:	aligned_string "HitBnk"
+StrLatinBnk:	aligned_string "LatinBnk"
+StrJazzBnk:	aligned_string "JazzBnk"
+StrMspBkslP2Win:	aligned_string "MspBkslP2Win"
+StrFunkBnk:	aligned_string "FunkBnk"
+StrDanceBnk:	aligned_string "DanceBnk"
+StrRock2Bnk:	aligned_string "Rock2Bnk"
+StrRock1Bnk:	aligned_string "Rock1Bnk"
+StrArpgioBnk:	aligned_string "ArpgioBnk"
+StrEnterBnk:	aligned_string "EnterBnk"
+StrMovieBnk:	aligned_string "MovieBnk"
+StrComicBnk:	aligned_string "ComicBnk"
+StrEff2Bnk:	aligned_string "Eff2Bnk"
+StrEff1Bnk:	aligned_string "Eff1Bnk"
+StrMspBkslP1Win:	.asciz "MspBkslP1Win"
 	.byte 0xff
-LABEL_E1C6A6:	aligned_string ""
-LABEL_E1C6A8:	aligned_string ""
-LABEL_E1C6AA:	aligned_string "MspBnkP2Ctl"
-LABEL_E1C6B6:	aligned_string "MspBnkP1Ctl"
-LABEL_E1C6C2:	aligned_string "MspBkslWin"
-LABEL_E1C6CE:	aligned_string "MspBkslScreen"
-	.long LABEL_E1C78A
-LABEL_E1C6E0:
-	.long LABEL_E1C77E
-	.long LABEL_E1C77C
-	.long LABEL_E1C772
-	.long LABEL_E1C768
-	.long LABEL_E1C75C
-	.long LABEL_E1C750
-	.long LABEL_E1C74E
-	.long LABEL_E1C744
-	.long LABEL_E1C73C
-	.long LABEL_E1C734
-	.long LABEL_E1C732
-	.long LABEL_E1C728
-	.long LABEL_E1C726
-	.long LABEL_E1C724
-	.long LABEL_E1C722
-	.long LABEL_E1C720
-LABEL_E1C720:	aligned_string ""
-LABEL_E1C722:	aligned_string ""
-LABEL_E1C724:	aligned_string ""
-LABEL_E1C726:	aligned_string ""
-LABEL_E1C728:	aligned_string "MspPadLbl"
-LABEL_E1C732:	aligned_string ""
-LABEL_E1C734:	aligned_string "MspMem"
-LABEL_E1C73C:	aligned_string "MspMeas"
-LABEL_E1C744:	aligned_string "MspTempo"
-LABEL_E1C74E:	aligned_string ""
-LABEL_E1C750:	aligned_string "MspRecBox2"
-LABEL_E1C75C:	aligned_string "RecBankName"
-LABEL_E1C768:	aligned_string "RecPadNo"
-LABEL_E1C772:	aligned_string "MspBnkLbl"
-LABEL_E1C77C:	aligned_string ""
-LABEL_E1C77E:	aligned_string "MspRecBox1"
-LABEL_E1C78A:	aligned_string "MspRecScreen"
-LABEL_E1C798:
-	.long LABEL_E1C7C0
-	.long LABEL_E1C7BE
-	.long LABEL_E1C7BC
-	.long LABEL_E1C7BA
-	.long LABEL_E1C7B8
-	.long LABEL_E1C7B6
-	.long LABEL_E1C7B4
-LABEL_E1C7B4:	aligned_string ""
-LABEL_E1C7B6:	aligned_string ""
-LABEL_E1C7B8:	aligned_string ""
-LABEL_E1C7BA:	aligned_string ""
-LABEL_E1C7BC:	aligned_string ""
-LABEL_E1C7BE:	aligned_string ""
-LABEL_E1C7C0:	aligned_string "MspMenuScreen"
+StrMspBnkP2Ctl_Empty1:	aligned_string ""
+StrMspBnkP2Ctl_Empty2:	aligned_string ""
+StrMspBnkP2Ctl:	aligned_string "MspBnkP2Ctl"
+StrMspBnkP1Ctl:	aligned_string "MspBnkP1Ctl"
+StrMspBkslWin:	aligned_string "MspBkslWin"
+StrMspBkslScreen:	aligned_string "MspBkslScreen"
+	.long StrMspRecScreen
+PtrTbl_MspRecScreenStrs:
+	.long StrMspRecBox1
+	.long StrMspRecBox1_Empty
+	.long StrMspBnkLbl
+	.long StrRecPadNo
+	.long StrRecBankName
+	.long StrMspRecBox2
+	.long StrMspRecBox2_Empty
+	.long StrMspTempo
+	.long StrMspMeas
+	.long StrMspMem
+	.long StrMspMem_Empty
+	.long StrMspPadLbl
+	.long StrMspPadLbl_Empty4
+	.long StrMspPadLbl_Empty3
+	.long StrMspPadLbl_Empty2
+	.long StrMspPadLbl_Empty1
+StrMspPadLbl_Empty1:	aligned_string ""
+StrMspPadLbl_Empty2:	aligned_string ""
+StrMspPadLbl_Empty3:	aligned_string ""
+StrMspPadLbl_Empty4:	aligned_string ""
+StrMspPadLbl:	aligned_string "MspPadLbl"
+StrMspMem_Empty:	aligned_string ""
+StrMspMem:	aligned_string "MspMem"
+StrMspMeas:	aligned_string "MspMeas"
+StrMspTempo:	aligned_string "MspTempo"
+StrMspRecBox2_Empty:	aligned_string ""
+StrMspRecBox2:	aligned_string "MspRecBox2"
+StrRecBankName:	aligned_string "RecBankName"
+StrRecPadNo:	aligned_string "RecPadNo"
+StrMspBnkLbl:	aligned_string "MspBnkLbl"
+StrMspRecBox1_Empty:	aligned_string ""
+StrMspRecBox1:	aligned_string "MspRecBox1"
+StrMspRecScreen:	aligned_string "MspRecScreen"
+PtrTbl_MspMenuScreenStrs:
+	.long StrMspMenuScreen
+	.long StrMspMenuScreen_Empty6
+	.long StrMspMenuScreen_Empty5
+	.long StrMspMenuScreen_Empty4
+	.long StrMspMenuScreen_Empty3
+	.long StrMspMenuScreen_Empty2
+	.long StrMspMenuScreen_Empty1
+StrMspMenuScreen_Empty1:	aligned_string ""
+StrMspMenuScreen_Empty2:	aligned_string ""
+StrMspMenuScreen_Empty3:	aligned_string ""
+StrMspMenuScreen_Empty4:	aligned_string ""
+StrMspMenuScreen_Empty5:	aligned_string ""
+StrMspMenuScreen_Empty6:	aligned_string ""
+StrMspMenuScreen:	aligned_string "MspMenuScreen"
 	and	xsp, xde
 	.byte 0xe1, 0x00
 
 
-LABEL_E1C7D2:
-	.long LABEL_E1C7E8
-	.long LABEL_E1C7E6
-	.long LABEL_E1C7E4
-	.long LABEL_E1C7E2
-LABEL_E1C7E2:	aligned_string ""
-LABEL_E1C7E4:	aligned_string ""
-LABEL_E1C7E6:	aligned_string ""
-LABEL_E1C7E8:	aligned_string ""
-LABEL_E1C7EA:	aligned_string "MspNamingScreen"
-LABEL_E1C7FA:
-	.long LABEL_E1C84E
-	.long LABEL_E1C844
-	.long LABEL_E1C842
-	.long LABEL_E1C836
-	.long LABEL_E1C834
-	.long LABEL_E1C832
-	.long LABEL_E1C830
-	.long LABEL_E1C826
-	.long LABEL_E1C824
-	.long LABEL_E1C822
-LABEL_E1C822:	aligned_string ""
-LABEL_E1C824:	aligned_string ""
-LABEL_E1C826:	aligned_string "RgpSetBnk"
-LABEL_E1C830:	aligned_string ""
-LABEL_E1C832:	aligned_string ""
-LABEL_E1C834:	aligned_string ""
-LABEL_E1C836:	aligned_string "MspRGrpGrid"
-LABEL_E1C842:	aligned_string ""
-LABEL_E1C844:	aligned_string "RGrpBnkSw"
-LABEL_E1C84E:	aligned_string "MspReGrpScreen"
-LABEL_E1C85E:
-	.long LABEL_E1C8A8
-	.long LABEL_E1C8A6
-	.long LABEL_E1C898
-	.long LABEL_E1C896
-	.long LABEL_E1C894
-	.long LABEL_E1C888
-	.long LABEL_E1C886
-	.long LABEL_E1C884
-	.long LABEL_E1C882
-LABEL_E1C882:	aligned_string ""
-LABEL_E1C884:	aligned_string ""
-LABEL_E1C886:	aligned_string ""
-LABEL_E1C888:	aligned_string "SndArgrGrid"
-LABEL_E1C894:	aligned_string ""
-LABEL_E1C896:	aligned_string ""
-LABEL_E1C898:	aligned_string "SndArgRhyName"
-LABEL_E1C8A6:	aligned_string ""
-LABEL_E1C8A8:	aligned_string "SndArgrScreen"
-LABEL_E1C8B6:
-	.long LABEL_E1C8EC
-	.long LABEL_E1C8EA
-	.long LABEL_E1C8E8
-	.long LABEL_E1C8E6
-	.long LABEL_E1C8DE
-	.long LABEL_E1C8D4
-	.long LABEL_E1C8D2
-LABEL_E1C8D2:	aligned_string ""
-LABEL_E1C8D4:
+PtrTbl_MspNamingScreenStrs:
+	.long StrMspNamingScreen_Empty4
+	.long StrMspNamingScreen_Empty3
+	.long StrMspNamingScreen_Empty2
+	.long StrMspNamingScreen_Empty1
+StrMspNamingScreen_Empty1:	aligned_string ""
+StrMspNamingScreen_Empty2:	aligned_string ""
+StrMspNamingScreen_Empty3:	aligned_string ""
+StrMspNamingScreen_Empty4:	aligned_string ""
+StrMspNamingScreen:	aligned_string "MspNamingScreen"
+PtrTbl_MspReGrpScreenStrs:
+	.long StrMspReGrpScreen
+	.long StrRGrpBnkSw
+	.long StrRGrpBnkSw_Empty
+	.long StrMspRGrpGrid
+	.long StrMspRGrpGrid_Empty3
+	.long StrMspRGrpGrid_Empty2
+	.long StrMspRGrpGrid_Empty1
+	.long StrRgpSetBnk
+	.long StrRgpSetBnk_Empty2
+	.long StrRgpSetBnk_Empty1
+StrRgpSetBnk_Empty1:	aligned_string ""
+StrRgpSetBnk_Empty2:	aligned_string ""
+StrRgpSetBnk:	aligned_string "RgpSetBnk"
+StrMspRGrpGrid_Empty1:	aligned_string ""
+StrMspRGrpGrid_Empty2:	aligned_string ""
+StrMspRGrpGrid_Empty3:	aligned_string ""
+StrMspRGrpGrid:	aligned_string "MspRGrpGrid"
+StrRGrpBnkSw_Empty:	aligned_string ""
+StrRGrpBnkSw:	aligned_string "RGrpBnkSw"
+StrMspReGrpScreen:	aligned_string "MspReGrpScreen"
+PtrTbl_SndArgrScreenStrs:
+	.long StrSndArgrScreen
+	.long StrSndArgrScreen_Empty
+	.long StrSndArgRhyName
+	.long StrSndArgRhyName_Empty2
+	.long StrSndArgRhyName_Empty1
+	.long StrSndArgrGrid
+	.long StrSndArgrGrid_Empty3
+	.long StrSndArgrGrid_Empty2
+	.long StrSndArgrGrid_Empty1
+StrSndArgrGrid_Empty1:	aligned_string ""
+StrSndArgrGrid_Empty2:	aligned_string ""
+StrSndArgrGrid_Empty3:	aligned_string ""
+StrSndArgrGrid:	aligned_string "SndArgrGrid"
+StrSndArgRhyName_Empty1:	aligned_string ""
+StrSndArgRhyName_Empty2:	aligned_string ""
+StrSndArgRhyName:	aligned_string "SndArgRhyName"
+StrSndArgrScreen_Empty:	aligned_string ""
+StrSndArgrScreen:	aligned_string "SndArgrScreen"
+PtrTbl_ApcSelScreenStrs:
+	.long StrApcSelScreen
+	.long StrApcSelScreen_Empty3
+	.long StrApcSelScreen_Empty2
+	.long StrApcSelScreen_Empty1
+	.long StrApcMem
+	.long StrApcOnBass
+	.long StrApcOnBass_Empty
+StrApcOnBass_Empty:	aligned_string ""
+StrApcOnBass:
 
 	aligned_string "ApcOnBass"
-LABEL_E1C8DE:	aligned_string "ApcMem"
-LABEL_E1C8E6:
+StrApcMem:	aligned_string "ApcMem"
+StrApcSelScreen_Empty1:
 	.byte 0x00, 0xff
-LABEL_E1C8E8:
+StrApcSelScreen_Empty2:
 	.byte 0x00, 0xff
-LABEL_E1C8EA:
+StrApcSelScreen_Empty3:
 	.byte 0x00, 0xff
-LABEL_E1C8EC:	aligned_string "ApcSelScreen"
+StrApcSelScreen:	aligned_string "ApcSelScreen"
 	aligned_string "MD_CMP"
 	aligned_string "MD_MSP"
 	aligned_string "MD_MSP_REC"
@@ -3500,85 +3500,85 @@ LABEL_E1C8EC:	aligned_string "ApcSelScreen"
 	.long MainStylCnvFunc
 	.long 0x0
 
-LABEL_E1CB02:
-	.long LABEL_E1CDD2
-	.long LABEL_E1CDC4
-	.long LABEL_E1CDB4
-	.long LABEL_E1CDA4
-	.long LABEL_E1CD92
-	.long LABEL_E1CD82
-	.long LABEL_E1CD74
-	.long LABEL_E1CD66
-	.long LABEL_E1CD5A
-	.long LABEL_E1CD4C
-	.long LABEL_E1CD3C
-	.long LABEL_E1CD2E
-	.long LABEL_E1CD1C
-	.long LABEL_E1CD0C
-	.long LABEL_E1CD00
-	.long LABEL_E1CCEE
-	.long LABEL_E1CCDA
-	.long LABEL_E1CCCA
-	.long LABEL_E1CCBA
-	.long LABEL_E1CCAA
-	.long LABEL_E1CC9A
-	.long LABEL_E1CC8C
-	.long LABEL_E1CC7C
-	.long LABEL_E1CC6E
-	.long LABEL_E1CC60
-	.long LABEL_E1CC4E
-	.long LABEL_E1CC3C
-	.long LABEL_E1CC30
-	.long LABEL_E1CC1C
-	.long LABEL_E1CC0A
-	.long LABEL_E1CBF6
-	.long LABEL_E1CBE2
-	.long LABEL_E1CBD0
-	.long LABEL_E1CBBC
-	.long LABEL_E1CBA8
-	.long LABEL_E1CB98
-	.long LABEL_E1CB96
-LABEL_E1CB96:	aligned_string ""
-LABEL_E1CB98:
+PtrTbl_FuncNameStrs:
+	.long StrCmpModeFunc
+	.long StrCmpSetTtlFunc
+	.long StrCmpRealTtlFunc
+	.long StrCmpBkslTtlFunc
+	.long StrCmpBksl_STtlFunc
+	.long StrCmpMenuTtlFunc
+	.long StrCmpNcpTtlFunc
+	.long StrCmEsyTtlFunc
+	.long StrS2cTtlFunc
+	.long StrCstmCpTtlFunc
+	.long StrMiddleNameFunc
+	.long StrMainCmpCpFunc
+	.long StrMiddleCmpClrFunc
+	.long StrMainCmpSetFunc
+	.long StrMainS2cFunc
+	.long StrMainMspRgpSetFunc
+	.long StrMainMspBnkNameFunc
+	.long StrMspBkslTtlFunc
+	.long StrMspMenuTtlFunc
+	.long StrMspNameTtlFunc
+	.long StrMspRecModeFunc
+	.long StrMspRecTtlFunc
+	.long StrSndArgModeFunc
+	.long StrSndArgTtlFunc
+	.long StrMainEsCmpFunc
+	.long StrCmpStepTitleFunc
+	.long StrMainCstmNameFunc
+	.long StrSndArgNmGet
+	.long StrStylCnvWaitTtlFunc
+	.long StrStylCnvTxtTtlFunc
+	.long StrStylCnvModlTtlFunc
+	.long StrStylCnvCnvtTtlFunc
+	.long StrStylCnvSelTtlFunc
+	.long StrStylCnvContTtlFunc
+	.long StrStylCnvStorTtlFunc
+	.long StrMainStylCnvFunc
+	.long StrFuncNames_Empty
+StrFuncNames_Empty:	aligned_string ""
+StrMainStylCnvFunc:
 
 	aligned_string "MainStylCnvFunc"
-LABEL_E1CBA8:	aligned_string "StylCnvStorTtlFunc"
-LABEL_E1CBBC:	aligned_string "StylCnvContTtlFunc"
-LABEL_E1CBD0:	aligned_string "StylCnvSelTtlFunc"
-LABEL_E1CBE2:	aligned_string "StylCnvCnvtTtlFunc"
-LABEL_E1CBF6:	aligned_string "StylCnvModlTtlFunc"
-LABEL_E1CC0A:	aligned_string "StylCnvTxtTtlFunc"
-LABEL_E1CC1C:	aligned_string "StylCnvWaitTtlFunc"
-LABEL_E1CC30:	aligned_string "SndArgNmGet"
-LABEL_E1CC3C:	aligned_string "MainCstmNameFunc"
-LABEL_E1CC4E:	aligned_string "CmpStepTitleFunc"
-LABEL_E1CC60:	aligned_string "MainEsCmpFunc"
-LABEL_E1CC6E:	aligned_string "SndArgTtlFunc"
-LABEL_E1CC7C:	aligned_string "SndArgModeFunc"
-LABEL_E1CC8C:	aligned_string "MspRecTtlFunc"
-LABEL_E1CC9A:	aligned_string "MspRecModeFunc"
-LABEL_E1CCAA:	aligned_string "MspNameTtlFunc"
-LABEL_E1CCBA:	aligned_string "MspMenuTtlFunc"
-LABEL_E1CCCA:	aligned_string "MspBkslTtlFunc"
-LABEL_E1CCDA:	aligned_string "MainMspBnkNameFunc"
-LABEL_E1CCEE:	aligned_string "MainMspRgpSetFunc"
-LABEL_E1CD00:	aligned_string "MainS2cFunc"
-LABEL_E1CD0C:	aligned_string "MainCmpSetFunc"
-LABEL_E1CD1C:	aligned_string "MiddleCmpClrFunc"
-LABEL_E1CD2E:	aligned_string "MainCmpCpFunc"
-LABEL_E1CD3C:	aligned_string "MiddleNameFunc"
-LABEL_E1CD4C:	aligned_string "CstmCpTtlFunc"
-LABEL_E1CD5A:	aligned_string "S2cTtlFunc"
-LABEL_E1CD66:	aligned_string "CmEsyTtlFunc"
-LABEL_E1CD74:	aligned_string "CmpNcpTtlFunc"
-LABEL_E1CD82:	aligned_string "CmpMenuTtlFunc"
-LABEL_E1CD92:	aligned_string "CmpBksl_STtlFunc"
-LABEL_E1CDA4:	aligned_string "CmpBkslTtlFunc"
-LABEL_E1CDB4:	aligned_string "CmpRealTtlFunc"
-LABEL_E1CDC4:	aligned_string "CmpSetTtlFunc"
-LABEL_E1CDD2:	aligned_string "CmpModeFunc"
+StrStylCnvStorTtlFunc:	aligned_string "StylCnvStorTtlFunc"
+StrStylCnvContTtlFunc:	aligned_string "StylCnvContTtlFunc"
+StrStylCnvSelTtlFunc:	aligned_string "StylCnvSelTtlFunc"
+StrStylCnvCnvtTtlFunc:	aligned_string "StylCnvCnvtTtlFunc"
+StrStylCnvModlTtlFunc:	aligned_string "StylCnvModlTtlFunc"
+StrStylCnvTxtTtlFunc:	aligned_string "StylCnvTxtTtlFunc"
+StrStylCnvWaitTtlFunc:	aligned_string "StylCnvWaitTtlFunc"
+StrSndArgNmGet:	aligned_string "SndArgNmGet"
+StrMainCstmNameFunc:	aligned_string "MainCstmNameFunc"
+StrCmpStepTitleFunc:	aligned_string "CmpStepTitleFunc"
+StrMainEsCmpFunc:	aligned_string "MainEsCmpFunc"
+StrSndArgTtlFunc:	aligned_string "SndArgTtlFunc"
+StrSndArgModeFunc:	aligned_string "SndArgModeFunc"
+StrMspRecTtlFunc:	aligned_string "MspRecTtlFunc"
+StrMspRecModeFunc:	aligned_string "MspRecModeFunc"
+StrMspNameTtlFunc:	aligned_string "MspNameTtlFunc"
+StrMspMenuTtlFunc:	aligned_string "MspMenuTtlFunc"
+StrMspBkslTtlFunc:	aligned_string "MspBkslTtlFunc"
+StrMainMspBnkNameFunc:	aligned_string "MainMspBnkNameFunc"
+StrMainMspRgpSetFunc:	aligned_string "MainMspRgpSetFunc"
+StrMainS2cFunc:	aligned_string "MainS2cFunc"
+StrMainCmpSetFunc:	aligned_string "MainCmpSetFunc"
+StrMiddleCmpClrFunc:	aligned_string "MiddleCmpClrFunc"
+StrMainCmpCpFunc:	aligned_string "MainCmpCpFunc"
+StrMiddleNameFunc:	aligned_string "MiddleNameFunc"
+StrCstmCpTtlFunc:	aligned_string "CstmCpTtlFunc"
+StrS2cTtlFunc:	aligned_string "S2cTtlFunc"
+StrCmEsyTtlFunc:	aligned_string "CmEsyTtlFunc"
+StrCmpNcpTtlFunc:	aligned_string "CmpNcpTtlFunc"
+StrCmpMenuTtlFunc:	aligned_string "CmpMenuTtlFunc"
+StrCmpBksl_STtlFunc:	aligned_string "CmpBksl_STtlFunc"
+StrCmpBkslTtlFunc:	aligned_string "CmpBkslTtlFunc"
+StrCmpRealTtlFunc:	aligned_string "CmpRealTtlFunc"
+StrCmpSetTtlFunc:	aligned_string "CmpSetTtlFunc"
+StrCmpModeFunc:	aligned_string "CmpModeFunc"
 
-LABEL_E1CDDE:
+NoteStepDisplayData:
 	ldb	w, 0x31
 	.byte 0x32, 0x00, 0x20, 0x31, 0x31, 0x00, 0x20, 0x31
 	.byte 0x30, 0x00, 0x20, 0x20, 0x39, 0x00, 0x20, 0x20
@@ -3593,885 +3593,885 @@ LABEL_E1CDDE:
 	.byte 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00
 	.byte 0x01, 0x00, 0x6a, 0x00, 0x1c, 0x01, 0x6a, 0x00
 	.byte 0x1c, 0x01, 0x0c, 0x02, 0xf5, 0x01, 0xf5, 0x01
-LABEL_E1CE48:
+NoteDataB_Natural:
 	.byte 0x42, 0x20, 0x00, 0xff
-LABEL_E1CE4C:
+NoteDataB_Flat:
 	.byte 0x42, 0x62, 0x00, 0xff
-LABEL_E1CE50:
+NoteDataA_Natural:
 	.byte 0x41, 0x20, 0x00, 0xff
-LABEL_E1CE54:
+NoteDataA_Flat:
 	.byte 0x41, 0x62, 0x00, 0xff
-LABEL_E1CE58:
+NoteDataG_Natural:
 	.byte 0x47, 0x20, 0x00, 0xff
-LABEL_E1CE5C:
+NoteDataF_Sharp:
 	.byte 0x46, 0x23, 0x00, 0xff
-LABEL_E1CE60:
+NoteDataF_Natural:
 	.byte 0x46, 0x20, 0x00, 0xff
-LABEL_E1CE64:
+NoteDataE_Natural:
 	.byte 0x45, 0x20, 0x00, 0xff
-LABEL_E1CE68:
+NoteDataE_Flat:
 	.byte 0x45, 0x62, 0x00, 0xff
-LABEL_E1CE6C:
+NoteDataD_Natural:
 	.byte 0x44, 0x20, 0x00, 0xff
-LABEL_E1CE70:
+NoteDataD_Flat:
 	.byte 0x44, 0x62, 0x00, 0xff
-LABEL_E1CE74:
+NoteDataC_Natural:
 	.byte 0x43, 0x20, 0x00, 0xff
-LABEL_E1CE78:	aligned_string "ENABLE "
-LABEL_E1CE80:	aligned_string "DISABLE"
-LABEL_E1CE88:	aligned_string "MINOR"
-LABEL_E1CE8E:	.asciz "MAJOR"
-LABEL_E1CE94:	aligned_string "7th   "
-LABEL_E1CE9C:	aligned_string "NORMAL"
-LABEL_E1CEA4:
+StrEnable:	aligned_string "ENABLE "
+StrDisable:	aligned_string "DISABLE"
+StrMinor:	aligned_string "MINOR"
+StrMajor:	.asciz "MAJOR"
+StrSeventh:	aligned_string "7th   "
+StrNormal:	aligned_string "NORMAL"
+StrTimeSig_4_8:
 	.byte 0x34, 0x2f, 0x38, 0x00
-LABEL_E1CEA8:
+StrTimeSig_3_8:
 	.byte 0x33, 0x2f, 0x38, 0x00
-LABEL_E1CEAC:
+StrTimeSig_2_8:
 	.byte 0x32, 0x2f, 0x38, 0x00
-LABEL_E1CEB0:
+StrTimeSig_1_8:
 	.byte 0x31, 0x2f, 0x38, 0x00
-LABEL_E1CEB4:
+StrTimeSig_8_4:
 	.byte 0x38, 0x2f, 0x34, 0x00
-LABEL_E1CEB8:
+StrTimeSig_7_4:
 	.byte 0x37, 0x2f, 0x34, 0x00
-LABEL_E1CEBC:
+StrTimeSig_6_4:
 	.byte 0x36, 0x2f, 0x34, 0x00
-LABEL_E1CEC0:
+StrTimeSig_5_4:
 	.byte 0x35, 0x2f, 0x34, 0x00
-LABEL_E1CEC4:
+StrTimeSig_4_4:
 	.byte 0x34, 0x2f, 0x34, 0x00
-LABEL_E1CEC8:
+StrTimeSig_3_4:
 	.byte 0x33, 0x2f, 0x34, 0x00
-LABEL_E1CECC:
+StrTimeSig_2_4:
 	.byte 0x32, 0x2f, 0x34, 0x00
-LABEL_E1CED0:
+StrTimeSig_1_4:
 	.byte 0x31, 0x2f, 0x34, 0x00
-LABEL_E1CED4:
+StrTimeSig_4_2:
 	.byte 0x34, 0x2f, 0x32, 0x00
-LABEL_E1CED8:
+StrTimeSig_3_2:
 	.byte 0x33, 0x2f, 0x32, 0x00
-LABEL_E1CEDC:
+StrTimeSig_2_2:
 	.byte 0x32, 0x2f, 0x32, 0x00
-LABEL_E1CEE0:
+StrTimeSig_1_2:
 	.byte 0x31, 0x2f, 0x32, 0x00, 0x25, 0x64, 0x00, 0xff
 	aligned_string "%s (%s)"
 	.byte 0x00, 0x00, 0x1a, 0x00, 0xa4, 0x00, 0xa4, 0x00
 	.byte 0x55, 0x00, 0x60, 0x00, 0x7e, 0x00, 0x82, 0x00
 	.byte 0x00, 0x00, 0x38, 0x00, 0x00, 0x00, 0x38, 0x00
 	.byte 0x72, 0x01, 0x72, 0x01, 0x72, 0x01
-LABEL_E1CF0E:	aligned_string "Right 63"
-LABEL_E1CF18:	aligned_string "Right 62"
-LABEL_E1CF22:	aligned_string "Right 61"
-LABEL_E1CF2C:	aligned_string "Right 60"
-LABEL_E1CF36:	aligned_string "Right 59"
-LABEL_E1CF40:	aligned_string "Right 58"
-LABEL_E1CF4A:	aligned_string "Right 57"
-LABEL_E1CF54:	aligned_string "Right 56"
-LABEL_E1CF5E:	aligned_string "Right 55"
-LABEL_E1CF68:	aligned_string "Right 54"
-LABEL_E1CF72:	aligned_string "Right 53"
-LABEL_E1CF7C:	aligned_string "Right 52"
-LABEL_E1CF86:	aligned_string "Right 51"
-LABEL_E1CF90:	aligned_string "Right 50"
-LABEL_E1CF9A:	aligned_string "Right 49"
-LABEL_E1CFA4:	aligned_string "Right 48"
-LABEL_E1CFAE:	aligned_string "Right 47"
-LABEL_E1CFB8:	aligned_string "Right 46"
-LABEL_E1CFC2:	aligned_string "Right 45"
-LABEL_E1CFCC:	aligned_string "Right 44"
-LABEL_E1CFD6:	aligned_string "Right 43"
-LABEL_E1CFE0:	aligned_string "Right 42"
-LABEL_E1CFEA:	aligned_string "Right 41"
-LABEL_E1CFF4:	aligned_string "Right 40"
-LABEL_E1CFFE:	aligned_string "Right 39"
-LABEL_E1D008:	aligned_string "Right 38"
-LABEL_E1D012:	aligned_string "Right 37"
-LABEL_E1D01C:	aligned_string "Right 36"
-LABEL_E1D026:	aligned_string "Right 35"
-LABEL_E1D030:	aligned_string "Right 34"
-LABEL_E1D03A:	aligned_string "Right 33"
-LABEL_E1D044:	aligned_string "Right 32"
-LABEL_E1D04E:	aligned_string "Right 31"
-LABEL_E1D058:	aligned_string "Right 30"
-LABEL_E1D062:	aligned_string "Right 29"
-LABEL_E1D06C:	aligned_string "Right 28"
-LABEL_E1D076:	aligned_string "Right 27"
-LABEL_E1D080:	aligned_string "Right 26"
-LABEL_E1D08A:	aligned_string "Right 25"
-LABEL_E1D094:	aligned_string "Right 24"
-LABEL_E1D09E:	aligned_string "Right 23"
-LABEL_E1D0A8:	aligned_string "Right 22"
-LABEL_E1D0B2:	aligned_string "Right 21"
-LABEL_E1D0BC:	aligned_string "Right 20"
-LABEL_E1D0C6:	aligned_string "Right 19"
-LABEL_E1D0D0:	aligned_string "Right 18"
-LABEL_E1D0DA:	aligned_string "Right 17"
-LABEL_E1D0E4:	aligned_string "Right 16"
-LABEL_E1D0EE:	aligned_string "Right 15"
-LABEL_E1D0F8:	aligned_string "Right 14"
-LABEL_E1D102:	aligned_string "Right 13"
-LABEL_E1D10C:	aligned_string "Right 12"
-LABEL_E1D116:	aligned_string "Right 11"
-LABEL_E1D120:	aligned_string "Right 10"
-LABEL_E1D12A:	aligned_string "Right  9"
-LABEL_E1D134:	aligned_string "Right  8"
-LABEL_E1D13E:	aligned_string "Right  7"
-LABEL_E1D148:	aligned_string "Right  6"
-LABEL_E1D152:	aligned_string "Right  5"
-LABEL_E1D15C:	aligned_string "Right  4"
-LABEL_E1D166:	aligned_string "Right  3"
-LABEL_E1D170:	aligned_string "Right  2"
-LABEL_E1D17A:	aligned_string "Right  1"
-LABEL_E1D184:	aligned_string " CENTER "
-LABEL_E1D18E:	aligned_string " Left  1"
-LABEL_E1D198:	aligned_string " Left  2"
-LABEL_E1D1A2:	aligned_string " Left  3"
-LABEL_E1D1AC:	aligned_string " Left  4"
-LABEL_E1D1B6:	aligned_string " Left  5"
-LABEL_E1D1C0:	aligned_string " Left  6"
-LABEL_E1D1CA:	aligned_string " Left  7"
-LABEL_E1D1D4:	aligned_string " Left  8"
-LABEL_E1D1DE:	aligned_string " Left  9"
-LABEL_E1D1E8:	aligned_string " Left 10"
-LABEL_E1D1F2:	aligned_string " Left 11"
-LABEL_E1D1FC:	aligned_string " Left 12"
-LABEL_E1D206:	aligned_string " Left 13"
-LABEL_E1D210:	aligned_string " Left 14"
-LABEL_E1D21A:	aligned_string " Left 15"
-LABEL_E1D224:	aligned_string " Left 16"
-LABEL_E1D22E:	aligned_string " Left 17"
-LABEL_E1D238:	aligned_string " Left 18"
-LABEL_E1D242:	aligned_string " Left 19"
-LABEL_E1D24C:	aligned_string " Left 20"
-LABEL_E1D256:	aligned_string " Left 21"
-LABEL_E1D260:	aligned_string " Left 22"
-LABEL_E1D26A:	aligned_string " Left 23"
-LABEL_E1D274:	aligned_string " Left 24"
-LABEL_E1D27E:	aligned_string " Left 25"
-LABEL_E1D288:	aligned_string " Left 26"
-LABEL_E1D292:	aligned_string " Left 27"
-LABEL_E1D29C:	aligned_string " Left 28"
-LABEL_E1D2A6:	aligned_string " Left 29"
-LABEL_E1D2B0:	aligned_string " Left 30"
-LABEL_E1D2BA:	aligned_string " Left 31"
-LABEL_E1D2C4:	aligned_string " Left 32"
-LABEL_E1D2CE:	aligned_string " Left 33"
-LABEL_E1D2D8:	aligned_string " Left 34"
-LABEL_E1D2E2:	aligned_string " Left 35"
-LABEL_E1D2EC:	aligned_string " Left 36"
-LABEL_E1D2F6:	aligned_string " Left 37"
-LABEL_E1D300:	aligned_string " Left 38"
-LABEL_E1D30A:	aligned_string " Left 39"
-LABEL_E1D314:	aligned_string " Left 40"
-LABEL_E1D31E:	aligned_string " Left 41"
-LABEL_E1D328:	aligned_string " Left 42"
-LABEL_E1D332:	aligned_string " Left 43"
-LABEL_E1D33C:	aligned_string " Left 44"
-LABEL_E1D346:	aligned_string " Left 45"
-LABEL_E1D350:	aligned_string " Left 46"
-LABEL_E1D35A:	aligned_string " Left 47"
-LABEL_E1D364:	aligned_string " Left 48"
-LABEL_E1D36E:	aligned_string " Left 49"
-LABEL_E1D378:	aligned_string " Left 40"
-LABEL_E1D382:	aligned_string " Left 51"
-LABEL_E1D38C:	aligned_string " Left 52"
-LABEL_E1D396:	aligned_string " Left 53"
-LABEL_E1D3A0:	aligned_string " Left 54"
-LABEL_E1D3AA:	aligned_string " Left 55"
-LABEL_E1D3B4:	aligned_string " Left 56"
-LABEL_E1D3BE:	aligned_string " Left 57"
-LABEL_E1D3C8:	aligned_string " Left 58"
-LABEL_E1D3D2:	aligned_string " Left 59"
-LABEL_E1D3DC:	aligned_string " Left 60"
-LABEL_E1D3E6:	aligned_string " Left 61"
-LABEL_E1D3F0:	aligned_string " Left 62"
-LABEL_E1D3FA:	aligned_string " Left 63"
-LABEL_E1D404:	aligned_string " Left 64"
+StrPanRight63:	aligned_string "Right 63"
+StrPanRight62:	aligned_string "Right 62"
+StrPanRight61:	aligned_string "Right 61"
+StrPanRight60:	aligned_string "Right 60"
+StrPanRight59:	aligned_string "Right 59"
+StrPanRight58:	aligned_string "Right 58"
+StrPanRight57:	aligned_string "Right 57"
+StrPanRight56:	aligned_string "Right 56"
+StrPanRight55:	aligned_string "Right 55"
+StrPanRight54:	aligned_string "Right 54"
+StrPanRight53:	aligned_string "Right 53"
+StrPanRight52:	aligned_string "Right 52"
+StrPanRight51:	aligned_string "Right 51"
+StrPanRight50:	aligned_string "Right 50"
+StrPanRight49:	aligned_string "Right 49"
+StrPanRight48:	aligned_string "Right 48"
+StrPanRight47:	aligned_string "Right 47"
+StrPanRight46:	aligned_string "Right 46"
+StrPanRight45:	aligned_string "Right 45"
+StrPanRight44:	aligned_string "Right 44"
+StrPanRight43:	aligned_string "Right 43"
+StrPanRight42:	aligned_string "Right 42"
+StrPanRight41:	aligned_string "Right 41"
+StrPanRight40:	aligned_string "Right 40"
+StrPanRight39:	aligned_string "Right 39"
+StrPanRight38:	aligned_string "Right 38"
+StrPanRight37:	aligned_string "Right 37"
+StrPanRight36:	aligned_string "Right 36"
+StrPanRight35:	aligned_string "Right 35"
+StrPanRight34:	aligned_string "Right 34"
+StrPanRight33:	aligned_string "Right 33"
+StrPanRight32:	aligned_string "Right 32"
+StrPanRight31:	aligned_string "Right 31"
+StrPanRight30:	aligned_string "Right 30"
+StrPanRight29:	aligned_string "Right 29"
+StrPanRight28:	aligned_string "Right 28"
+StrPanRight27:	aligned_string "Right 27"
+StrPanRight26:	aligned_string "Right 26"
+StrPanRight25:	aligned_string "Right 25"
+StrPanRight24:	aligned_string "Right 24"
+StrPanRight23:	aligned_string "Right 23"
+StrPanRight22:	aligned_string "Right 22"
+StrPanRight21:	aligned_string "Right 21"
+StrPanRight20:	aligned_string "Right 20"
+StrPanRight19:	aligned_string "Right 19"
+StrPanRight18:	aligned_string "Right 18"
+StrPanRight17:	aligned_string "Right 17"
+StrPanRight16:	aligned_string "Right 16"
+StrPanRight15:	aligned_string "Right 15"
+StrPanRight14:	aligned_string "Right 14"
+StrPanRight13:	aligned_string "Right 13"
+StrPanRight12:	aligned_string "Right 12"
+StrPanRight11:	aligned_string "Right 11"
+StrPanRight10:	aligned_string "Right 10"
+StrPanRight09:	aligned_string "Right  9"
+StrPanRight08:	aligned_string "Right  8"
+StrPanRight07:	aligned_string "Right  7"
+StrPanRight06:	aligned_string "Right  6"
+StrPanRight05:	aligned_string "Right  5"
+StrPanRight04:	aligned_string "Right  4"
+StrPanRight03:	aligned_string "Right  3"
+StrPanRight02:	aligned_string "Right  2"
+StrPanRight01:	aligned_string "Right  1"
+StrPanCenter:	aligned_string " CENTER "
+StrPanLeft01:	aligned_string " Left  1"
+StrPanLeft02:	aligned_string " Left  2"
+StrPanLeft03:	aligned_string " Left  3"
+StrPanLeft04:	aligned_string " Left  4"
+StrPanLeft05:	aligned_string " Left  5"
+StrPanLeft06:	aligned_string " Left  6"
+StrPanLeft07:	aligned_string " Left  7"
+StrPanLeft08:	aligned_string " Left  8"
+StrPanLeft09:	aligned_string " Left  9"
+StrPanLeft10:	aligned_string " Left 10"
+StrPanLeft11:	aligned_string " Left 11"
+StrPanLeft12:	aligned_string " Left 12"
+StrPanLeft13:	aligned_string " Left 13"
+StrPanLeft14:	aligned_string " Left 14"
+StrPanLeft15:	aligned_string " Left 15"
+StrPanLeft16:	aligned_string " Left 16"
+StrPanLeft17:	aligned_string " Left 17"
+StrPanLeft18:	aligned_string " Left 18"
+StrPanLeft19:	aligned_string " Left 19"
+StrPanLeft20:	aligned_string " Left 20"
+StrPanLeft21:	aligned_string " Left 21"
+StrPanLeft22:	aligned_string " Left 22"
+StrPanLeft23:	aligned_string " Left 23"
+StrPanLeft24:	aligned_string " Left 24"
+StrPanLeft25:	aligned_string " Left 25"
+StrPanLeft26:	aligned_string " Left 26"
+StrPanLeft27:	aligned_string " Left 27"
+StrPanLeft28:	aligned_string " Left 28"
+StrPanLeft29:	aligned_string " Left 29"
+StrPanLeft30:	aligned_string " Left 30"
+StrPanLeft31:	aligned_string " Left 31"
+StrPanLeft32:	aligned_string " Left 32"
+StrPanLeft33:	aligned_string " Left 33"
+StrPanLeft34:	aligned_string " Left 34"
+StrPanLeft35:	aligned_string " Left 35"
+StrPanLeft36:	aligned_string " Left 36"
+StrPanLeft37:	aligned_string " Left 37"
+StrPanLeft38:	aligned_string " Left 38"
+StrPanLeft39:	aligned_string " Left 39"
+StrPanLeft40:	aligned_string " Left 40"
+StrPanLeft41:	aligned_string " Left 41"
+StrPanLeft42:	aligned_string " Left 42"
+StrPanLeft43:	aligned_string " Left 43"
+StrPanLeft44:	aligned_string " Left 44"
+StrPanLeft45:	aligned_string " Left 45"
+StrPanLeft46:	aligned_string " Left 46"
+StrPanLeft47:	aligned_string " Left 47"
+StrPanLeft48:	aligned_string " Left 48"
+StrPanLeft49:	aligned_string " Left 49"
+StrPanLeft40b:	aligned_string " Left 40"
+StrPanLeft51:	aligned_string " Left 51"
+StrPanLeft52:	aligned_string " Left 52"
+StrPanLeft53:	aligned_string " Left 53"
+StrPanLeft54:	aligned_string " Left 54"
+StrPanLeft55:	aligned_string " Left 55"
+StrPanLeft56:	aligned_string " Left 56"
+StrPanLeft57:	aligned_string " Left 57"
+StrPanLeft58:	aligned_string " Left 58"
+StrPanLeft59:	aligned_string " Left 59"
+StrPanLeft60:	aligned_string " Left 60"
+StrPanLeft61:	aligned_string " Left 61"
+StrPanLeft62:	aligned_string " Left 62"
+StrPanLeft63:	aligned_string " Left 63"
+StrPanLeft64:	aligned_string " Left 64"
 	.byte 0x00, 0x00
 	.byte 0x48, 0x00, 0x00, 0x00, 0x48, 0x00, 0xf3, 0x00
 	.byte 0xf3, 0x00, 0xf3, 0x00, 0x7c, 0xd5, 0xe1, 0x00
-LABEL_E1D420:
-	.long LABEL_E1D574
-	.long LABEL_E1D56C
-	.long LABEL_E1D564
-	.long LABEL_E1D55C
-	.long LABEL_E1D554
-	.long LABEL_E1D54C
-	.long LABEL_E1D544
-	.long LABEL_E1D53C
-	.long LABEL_E1D534
-	.long LABEL_E1D52C
-	.long LABEL_E1D524
-	.long LABEL_E1D51C
-	.long LABEL_E1D514
-	.long LABEL_E1D50C
-	.long LABEL_E1D504
-	.long LABEL_E1D4FC
-	.long LABEL_E1D4F4
-	.long LABEL_E1D4EC
-	.long LABEL_E1D4E4
-	.long LABEL_E1D4DC
-	.long LABEL_E1D4D4
-	.long LABEL_E1D4CC
-	.long LABEL_E1D4C4
-	.long LABEL_E1D4BC
-	.long LABEL_E1D4B4
-	.long LABEL_E1D4AC
-	.long LABEL_E1D4A4
-	.long LABEL_E1D49C
-	.long LABEL_E1D494
-LABEL_E1D494:	aligned_string "C-END2 "
-LABEL_E1D49C:	aligned_string "C-END1 "
-LABEL_E1D4A4:	aligned_string "C-FILL2"
-LABEL_E1D4AC:	aligned_string "C-FILL1"
-LABEL_E1D4B4:	aligned_string "C-INT2 "
-LABEL_E1D4BC:	aligned_string "C-INT1 "
-LABEL_E1D4C4:	aligned_string "B-END2 "
-LABEL_E1D4CC:	aligned_string "B-END1 "
-LABEL_E1D4D4:	aligned_string "B-FILL2"
-LABEL_E1D4DC:	aligned_string "B-FILL1"
-LABEL_E1D4E4:	aligned_string "B-INT2 "
-LABEL_E1D4EC:	aligned_string "B-INT1 "
-LABEL_E1D4F4:	aligned_string "A-END2 "
-LABEL_E1D4FC:	aligned_string "A-END1 "
-LABEL_E1D504:	aligned_string "A-FILL2"
-LABEL_E1D50C:	aligned_string "A-FILL1"
-LABEL_E1D514:	aligned_string "A-INT2 "
-LABEL_E1D51C:	aligned_string "A-INT1 "
-LABEL_E1D524:	aligned_string "C-vari4"
-LABEL_E1D52C:	aligned_string "C-vari3"
-LABEL_E1D534:	aligned_string "C-vari2"
-LABEL_E1D53C:	aligned_string "C-vari1"
-LABEL_E1D544:	aligned_string "B-vari4"
-LABEL_E1D54C:	aligned_string "B-vari3"
-LABEL_E1D554:	aligned_string "B-vari2"
-LABEL_E1D55C:	aligned_string "B-vari1"
-LABEL_E1D564:	aligned_string "A-vari4"
-LABEL_E1D56C:	aligned_string "A-vari3"
-LABEL_E1D574:	aligned_string "A-vari2"
-LABEL_E1D57C:	aligned_string "A-vari1"
+PtrTbl_StyleSectShortNames:
+	.long StrStyleSect_A_Vari2
+	.long StrStyleSect_A_Vari3
+	.long StrStyleSect_A_Vari4
+	.long StrStyleSect_B_Vari1
+	.long StrStyleSect_B_Vari2
+	.long StrStyleSect_B_Vari3
+	.long StrStyleSect_B_Vari4
+	.long StrStyleSect_C_Vari1
+	.long StrStyleSect_C_Vari2
+	.long StrStyleSect_C_Vari3
+	.long StrStyleSect_C_Vari4
+	.long StrStyleSect_A_Int1
+	.long StrStyleSect_A_Int2
+	.long StrStyleSect_A_Fill1
+	.long StrStyleSect_A_Fill2
+	.long StrStyleSect_A_End1
+	.long StrStyleSect_A_End2
+	.long StrStyleSect_B_Int1
+	.long StrStyleSect_B_Int2
+	.long StrStyleSect_B_Fill1
+	.long StrStyleSect_B_Fill2
+	.long StrStyleSect_B_End1
+	.long StrStyleSect_B_End2
+	.long StrStyleSect_C_Int1
+	.long StrStyleSect_C_Int2
+	.long StrStyleSect_C_Fill1
+	.long StrStyleSect_C_Fill2
+	.long StrStyleSect_C_End1
+	.long StrStyleSect_C_End2
+StrStyleSect_C_End2:	aligned_string "C-END2 "
+StrStyleSect_C_End1:	aligned_string "C-END1 "
+StrStyleSect_C_Fill2:	aligned_string "C-FILL2"
+StrStyleSect_C_Fill1:	aligned_string "C-FILL1"
+StrStyleSect_C_Int2:	aligned_string "C-INT2 "
+StrStyleSect_C_Int1:	aligned_string "C-INT1 "
+StrStyleSect_B_End2:	aligned_string "B-END2 "
+StrStyleSect_B_End1:	aligned_string "B-END1 "
+StrStyleSect_B_Fill2:	aligned_string "B-FILL2"
+StrStyleSect_B_Fill1:	aligned_string "B-FILL1"
+StrStyleSect_B_Int2:	aligned_string "B-INT2 "
+StrStyleSect_B_Int1:	aligned_string "B-INT1 "
+StrStyleSect_A_End2:	aligned_string "A-END2 "
+StrStyleSect_A_End1:	aligned_string "A-END1 "
+StrStyleSect_A_Fill2:	aligned_string "A-FILL2"
+StrStyleSect_A_Fill1:	aligned_string "A-FILL1"
+StrStyleSect_A_Int2:	aligned_string "A-INT2 "
+StrStyleSect_A_Int1:	aligned_string "A-INT1 "
+StrStyleSect_C_Vari4:	aligned_string "C-vari4"
+StrStyleSect_C_Vari3:	aligned_string "C-vari3"
+StrStyleSect_C_Vari2:	aligned_string "C-vari2"
+StrStyleSect_C_Vari1:	aligned_string "C-vari1"
+StrStyleSect_B_Vari4:	aligned_string "B-vari4"
+StrStyleSect_B_Vari3:	aligned_string "B-vari3"
+StrStyleSect_B_Vari2:	aligned_string "B-vari2"
+StrStyleSect_B_Vari1:	aligned_string "B-vari1"
+StrStyleSect_A_Vari4:	aligned_string "A-vari4"
+StrStyleSect_A_Vari3:	aligned_string "A-vari3"
+StrStyleSect_A_Vari2:	aligned_string "A-vari2"
+StrStyleSect_A_Vari1:	aligned_string "A-vari1"
 	.byte 0x25, 0x33, 0x64, 0x00
 	.byte 0x25, 0x33, 0x64, 0x00
 	aligned_string "(SONG:%2d)"
-LABEL_E1D598:
-	.long LABEL_E1D724
-	.long LABEL_E1D720
-	.long LABEL_E1D71C
-	.long LABEL_E1D718
-	.long LABEL_E1D714
-	.long LABEL_E1D710
-	.long LABEL_E1D70C
-	.long LABEL_E1D708
-	.long LABEL_E1D704
-	.long LABEL_E1D700
-	.long LABEL_E1D6FC
-	.long LABEL_E1D6F8
-	.long LABEL_E1D6F4
-	.long LABEL_E1D6F0
-	.long LABEL_E1D6EC
-	.long LABEL_E1D6E8
-	.long LABEL_E1D6E4
-	.long LABEL_E1D6E0
-	.long LABEL_E1D6DC
-	.long LABEL_E1D6D8
-	.long LABEL_E1D6D4
-	.long LABEL_E1D6D0
-	.long LABEL_E1D6CC
-	.long LABEL_E1D6C8
-	.long LABEL_E1D6C4
-	.long LABEL_E1D6C0
-	.long LABEL_E1D6BC
-	.long LABEL_E1D6B8
-	.long LABEL_E1D6B4
-	.long LABEL_E1D6B0
-	.long LABEL_E1D6AC
-	.long LABEL_E1D6A8
-	.long LABEL_E1D6A4
-	.long LABEL_E1D6A0
-	.long LABEL_E1D69C
-	.long LABEL_E1D698
-	.long LABEL_E1D694
-	.long LABEL_E1D690
-	.long LABEL_E1D68C
-	.long LABEL_E1D688
-	.long LABEL_E1D684
-	.long LABEL_E1D680
-	.long LABEL_E1D67C
-	.long LABEL_E1D678
-	.long LABEL_E1D674
-	.long LABEL_E1D670
-	.long LABEL_E1D66C
-	.long LABEL_E1D668
-	.long LABEL_E1D664
-	.long LABEL_E1D660
-LABEL_E1D660:
+PtrTbl_TransposeStrs:
+	.long StrTranspose_Minus25
+	.long StrTranspose_Minus24
+	.long StrTranspose_Minus23
+	.long StrTranspose_Minus22
+	.long StrTranspose_Minus21
+	.long StrTranspose_Minus20
+	.long StrTranspose_Minus19
+	.long StrTranspose_Minus18
+	.long StrTranspose_Minus17
+	.long StrTranspose_Minus16
+	.long StrTranspose_Minus15
+	.long StrTranspose_Minus14
+	.long StrTranspose_Minus13
+	.long StrTranspose_Minus12
+	.long StrTranspose_Minus11
+	.long StrTranspose_Minus10
+	.long StrTranspose_Minus09
+	.long StrTranspose_Minus08
+	.long StrTranspose_Minus07
+	.long StrTranspose_Minus06
+	.long StrTranspose_Minus05
+	.long StrTranspose_Minus04
+	.long StrTranspose_Minus03
+	.long StrTranspose_Minus02
+	.long StrTranspose_Minus01
+	.long StrTranspose_Zero
+	.long StrTranspose_Plus01
+	.long StrTranspose_Plus02
+	.long StrTranspose_Plus03
+	.long StrTranspose_Plus04
+	.long StrTranspose_Plus05
+	.long StrTranspose_Plus06
+	.long StrTranspose_Plus07
+	.long StrTranspose_Plus08
+	.long StrTranspose_Plus09
+	.long StrTranspose_Plus10
+	.long StrTranspose_Plus11
+	.long StrTranspose_Plus12
+	.long StrTranspose_Plus13
+	.long StrTranspose_Plus14
+	.long StrTranspose_Plus15
+	.long StrTranspose_Plus16
+	.long StrTranspose_Plus17
+	.long StrTranspose_Plus18
+	.long StrTranspose_Plus19
+	.long StrTranspose_Plus20
+	.long StrTranspose_Plus21
+	.long StrTranspose_Plus22
+	.long StrTranspose_Plus23
+	.long StrTranspose_Plus24
+StrTranspose_Plus24:
 	.byte 0x2b, 0x32, 0x34, 0x00
-LABEL_E1D664:
+StrTranspose_Plus23:
 	.byte 0x2b, 0x32, 0x33, 0x00
-LABEL_E1D668:
+StrTranspose_Plus22:
 	.byte 0x2b, 0x32, 0x32, 0x00
-LABEL_E1D66C:
+StrTranspose_Plus21:
 	.byte 0x2b, 0x32, 0x31, 0x00
-LABEL_E1D670:
+StrTranspose_Plus20:
 	.byte 0x2b, 0x32, 0x30, 0x00
-LABEL_E1D674:
+StrTranspose_Plus19:
 	.byte 0x2b, 0x31, 0x39, 0x00
-LABEL_E1D678:
+StrTranspose_Plus18:
 	.byte 0x2b, 0x31, 0x38, 0x00
-LABEL_E1D67C:
+StrTranspose_Plus17:
 	.byte 0x2b, 0x31, 0x37, 0x00
-LABEL_E1D680:
+StrTranspose_Plus16:
 	.byte 0x2b, 0x31, 0x36, 0x00
-LABEL_E1D684:
+StrTranspose_Plus15:
 	.byte 0x2b, 0x31, 0x35, 0x00
-LABEL_E1D688:
+StrTranspose_Plus14:
 	.byte 0x2b, 0x31, 0x34, 0x00
-LABEL_E1D68C:
+StrTranspose_Plus13:
 	.byte 0x2b, 0x31, 0x33, 0x00
-LABEL_E1D690:
+StrTranspose_Plus12:
 	.byte 0x2b, 0x31, 0x32, 0x00
-LABEL_E1D694:
+StrTranspose_Plus11:
 	.byte 0x2b, 0x31, 0x31, 0x00
-LABEL_E1D698:
+StrTranspose_Plus10:
 	.byte 0x2b, 0x31, 0x30, 0x00
-LABEL_E1D69C:
+StrTranspose_Plus09:
 	.byte 0x2b, 0x20, 0x39, 0x00
-LABEL_E1D6A0:
+StrTranspose_Plus08:
 	.byte 0x2b, 0x20, 0x38, 0x00
-LABEL_E1D6A4:
+StrTranspose_Plus07:
 	.byte 0x2b, 0x20, 0x37, 0x00
-LABEL_E1D6A8:
+StrTranspose_Plus06:
 	.byte 0x2b, 0x20, 0x36, 0x00
-LABEL_E1D6AC:
+StrTranspose_Plus05:
 	.byte 0x2b, 0x20, 0x35, 0x00
-LABEL_E1D6B0:
+StrTranspose_Plus04:
 	.byte 0x2b, 0x20, 0x34, 0x00
-LABEL_E1D6B4:
+StrTranspose_Plus03:
 	.byte 0x2b, 0x20, 0x33, 0x00
-LABEL_E1D6B8:
+StrTranspose_Plus02:
 	.byte 0x2b, 0x20, 0x32, 0x00
-LABEL_E1D6BC:
+StrTranspose_Plus01:
 	.byte 0x2b, 0x20, 0x31, 0x00
-LABEL_E1D6C0:
+StrTranspose_Zero:
 	.byte 0x20, 0x20, 0x30, 0x00
-LABEL_E1D6C4:
+StrTranspose_Minus01:
 	.byte 0x2d, 0x20, 0x31, 0x00
-LABEL_E1D6C8:
+StrTranspose_Minus02:
 	.byte 0x2d, 0x20, 0x32, 0x00
-LABEL_E1D6CC:
+StrTranspose_Minus03:
 	.byte 0x2d, 0x20, 0x33, 0x00
-LABEL_E1D6D0:
+StrTranspose_Minus04:
 	.byte 0x2d, 0x20, 0x34, 0x00
-LABEL_E1D6D4:
+StrTranspose_Minus05:
 	.byte 0x2d, 0x20, 0x35, 0x00
-LABEL_E1D6D8:
+StrTranspose_Minus06:
 	.byte 0x2d, 0x20, 0x36, 0x00
-LABEL_E1D6DC:
+StrTranspose_Minus07:
 	.byte 0x2d, 0x20, 0x37, 0x00
-LABEL_E1D6E0:
+StrTranspose_Minus08:
 	.byte 0x2d, 0x20, 0x38, 0x00
-LABEL_E1D6E4:
+StrTranspose_Minus09:
 	.byte 0x2d, 0x20, 0x39, 0x00
-LABEL_E1D6E8:
+StrTranspose_Minus10:
 	.byte 0x2d, 0x31, 0x30, 0x00
-LABEL_E1D6EC:
+StrTranspose_Minus11:
 	.byte 0x2d, 0x31, 0x31, 0x00
-LABEL_E1D6F0:
+StrTranspose_Minus12:
 	.byte 0x2d, 0x31, 0x32, 0x00
-LABEL_E1D6F4:
+StrTranspose_Minus13:
 	.byte 0x2d, 0x31, 0x33, 0x00
-LABEL_E1D6F8:
+StrTranspose_Minus14:
 	.byte 0x2d, 0x31, 0x34, 0x00
-LABEL_E1D6FC:
+StrTranspose_Minus15:
 	.byte 0x2d, 0x31, 0x35, 0x00
-LABEL_E1D700:
+StrTranspose_Minus16:
 	.byte 0x2d, 0x31, 0x36, 0x00
-LABEL_E1D704:
+StrTranspose_Minus17:
 	.byte 0x2d, 0x31, 0x37, 0x00
-LABEL_E1D708:
+StrTranspose_Minus18:
 	.byte 0x2d, 0x31, 0x38, 0x00
-LABEL_E1D70C:
+StrTranspose_Minus19:
 	.byte 0x2d, 0x31, 0x39, 0x00
-LABEL_E1D710:
+StrTranspose_Minus20:
 	.byte 0x2d, 0x32, 0x30, 0x00
-LABEL_E1D714:
+StrTranspose_Minus21:
 	.byte 0x2d, 0x32, 0x31, 0x00
-LABEL_E1D718:
+StrTranspose_Minus22:
 	.byte 0x2d, 0x32, 0x32, 0x00
-LABEL_E1D71C:
+StrTranspose_Minus23:
 	.byte 0x2d, 0x32, 0x33, 0x00
-LABEL_E1D720:
+StrTranspose_Minus24:
 	.byte 0x2d, 0x32, 0x34, 0x00
-LABEL_E1D724:
+StrTranspose_Minus25:
 	.byte 0x2d, 0x32, 0x35, 0x00
 	.byte 0x76, 0x00, 0x26, 0x01, 0x76, 0x00, 0x26, 0x01
 	.byte 0x3c, 0x02, 0x00, 0x02, 0x00, 0x02, 0x91, 0x39
 	.byte 0x00, 0x00, 0x92, 0x39, 0x00, 0x00, 0x93, 0x39
 	.byte 0x00, 0x00, 0x94, 0x39, 0x00, 0x00, 0x95, 0x39
 	.byte 0x00, 0x00
-LABEL_E1D74A:
+StrBeat16:
 	.byte 0x31, 0x36, 0x20, 0x00
-LABEL_E1D74E:	.asciz "15 "
-LABEL_E1D752:
+StrBeat15:	.asciz "15 "
+StrBeat14:
 	.byte 0x31, 0x34, 0x20, 0x00
-LABEL_E1D756:	.asciz "13 "
-LABEL_E1D75A:
+StrBeat13:	.asciz "13 "
+StrBeat12:
 	.byte 0x31, 0x32, 0x20, 0x00
-LABEL_E1D75E:	.asciz "11 "
-LABEL_E1D762:
+StrBeat11:	.asciz "11 "
+StrBeat10:
 	.byte 0x31, 0x30, 0x20, 0x00
-LABEL_E1D766:	.asciz " 9 "
-LABEL_E1D76A:
+StrBeat09:	.asciz " 9 "
+StrBeat08:
 	.byte 0x20, 0x38, 0x20, 0x00
-LABEL_E1D76E:	.asciz " 7 "
-LABEL_E1D772:
+StrBeat07:	.asciz " 7 "
+StrBeat06:
 	.byte 0x20, 0x36, 0x20, 0x00
-LABEL_E1D776:	.asciz " 5 "
-LABEL_E1D77A:
+StrBeat05:	.asciz " 5 "
+StrBeat04:
 	.byte 0x20, 0x34, 0x20, 0x00
-LABEL_E1D77E:	.asciz " 3 "
-LABEL_E1D782:
+StrBeat03:	.asciz " 3 "
+StrBeat02:
 	.byte 0x20, 0x32, 0x20, 0x00
-LABEL_E1D786:	.asciz " 1 "
-LABEL_E1D78A:
+StrBeat01:	.asciz " 1 "
+StrBeatOff:
 	.byte 0x4f, 0x46, 0x46, 0x00, 0x00, 0x00
 	.byte 0x38, 0x00, 0x00, 0x00, 0x38, 0x00, 0xce, 0x00
 	.byte 0xce, 0x00, 0xce, 0x00, 0xa8, 0xd9, 0xe1, 0x00
-LABEL_E1D7A0:
-	.long LABEL_E1D998
-	.long LABEL_E1D988
-	.long LABEL_E1D978
-	.long LABEL_E1D968
-	.long LABEL_E1D958
-	.long LABEL_E1D948
-	.long LABEL_E1D938
-	.long LABEL_E1D928
-	.long LABEL_E1D918
-	.long LABEL_E1D908
-	.long LABEL_E1D8F8
-	.long LABEL_E1D8E8
-	.long LABEL_E1D8D8
-	.long LABEL_E1D8C8
-	.long LABEL_E1D8B8
-	.long LABEL_E1D8A8
-	.long LABEL_E1D898
-	.long LABEL_E1D888
-	.long LABEL_E1D878
-	.long LABEL_E1D868
-	.long LABEL_E1D858
-	.long LABEL_E1D848
-	.long LABEL_E1D838
-	.long LABEL_E1D828
-	.long LABEL_E1D818
-	.long LABEL_E1D808
-LABEL_E1D808:	aligned_string "     ALL      "
-LABEL_E1D818:	aligned_string "   ENDING2    "
-LABEL_E1D828:	aligned_string "   ENDING1    "
-LABEL_E1D838:	aligned_string "   FILL IN 2  "
-LABEL_E1D848:	aligned_string "   FILL IN 1  "
-LABEL_E1D858:	aligned_string "    INTRO2    "
-LABEL_E1D868:	aligned_string "    INTRO1    "
-LABEL_E1D878:	aligned_string "    Vari4     "
-LABEL_E1D888:	aligned_string "    Vari3     "
-LABEL_E1D898:	aligned_string "    Vari2     "
-LABEL_E1D8A8:	aligned_string "    Vari1     "
-LABEL_E1D8B8:	aligned_string "Vari4 FILL IN2"
-LABEL_E1D8C8:	aligned_string "Vari4 FILL IN1"
-LABEL_E1D8D8:	aligned_string "Vari3 FILL IN2"
-LABEL_E1D8E8:	aligned_string "Vari3 FILL IN1"
-LABEL_E1D8F8:	aligned_string "Vari2 FILL IN2"
-LABEL_E1D908:	aligned_string "Vari2 FILL IN1"
-LABEL_E1D918:	aligned_string "Vari1 FILL IN2"
-LABEL_E1D928:	aligned_string "Vari1 FILL IN1"
-LABEL_E1D938:	aligned_string "   ENDING2    "
-LABEL_E1D948:	aligned_string "   ENDING1    "
-LABEL_E1D958:	aligned_string "    INTRO2    "
-LABEL_E1D968:	aligned_string "    INTRO1    "
-LABEL_E1D978:	aligned_string "    Vari4     "
-LABEL_E1D988:	aligned_string "    Vari3     "
-LABEL_E1D998:	aligned_string "    Vari2     "
-LABEL_E1D9A8:	aligned_string "    Vari1     "
-LABEL_E1D9B8:
-	.long LABEL_E1DB52
-	.long LABEL_E1DB48
-	.long LABEL_E1DB3E
-	.long LABEL_E1DB34
-	.long LABEL_E1DB2A
-	.long LABEL_E1DB20
-	.long LABEL_E1DB16
-	.long LABEL_E1DB0C
-	.long LABEL_E1DB02
-	.long LABEL_E1DAF8
-	.long LABEL_E1DAEE
-	.long LABEL_E1DAE4
-	.long LABEL_E1DADA
-	.long LABEL_E1DAD0
-	.long LABEL_E1DAC6
-	.long LABEL_E1DABC
-	.long LABEL_E1DAB2
-	.long LABEL_E1DAA8
-	.long LABEL_E1DA9E
-	.long LABEL_E1DA94
-	.long LABEL_E1DA8A
-	.long LABEL_E1DA80
-	.long LABEL_E1DA76
-	.long LABEL_E1DA6C
-	.long LABEL_E1DA62
-	.long LABEL_E1DA58
-	.long LABEL_E1DA4E
-	.long LABEL_E1DA44
-	.long LABEL_E1DA3A
-	.long LABEL_E1DA30
-LABEL_E1DA30:	aligned_string "CUSTOM:20"
-LABEL_E1DA3A:	aligned_string "CUSTOM:19"
-LABEL_E1DA44:	aligned_string "CUSTOM:18"
-LABEL_E1DA4E:	aligned_string "CUSTOM:17"
-LABEL_E1DA58:	aligned_string "CUSTOM:16"
-LABEL_E1DA62:	aligned_string "CUSTOM:15"
-LABEL_E1DA6C:	aligned_string "CUSTOM:14"
-LABEL_E1DA76:	aligned_string "CUSTOM:13"
-LABEL_E1DA80:	aligned_string "CUSTOM:12"
-LABEL_E1DA8A:	aligned_string "CUSTOM:11"
-LABEL_E1DA94:	aligned_string "CUSTOM:10"
-LABEL_E1DA9E:	aligned_string "CUSTOM: 9"
-LABEL_E1DAA8:	aligned_string "CUSTOM: 8"
-LABEL_E1DAB2:	aligned_string "CUSTOM: 7"
-LABEL_E1DABC:	aligned_string "CUSTOM: 6"
-LABEL_E1DAC6:	aligned_string "CUSTOM: 5"
-LABEL_E1DAD0:	aligned_string "CUSTOM: 4"
-LABEL_E1DADA:	aligned_string "CUSTOM: 3"
-LABEL_E1DAE4:	aligned_string "CUSTOM: 2"
-LABEL_E1DAEE:	aligned_string "CUSTOM: 1"
-LABEL_E1DAF8:	aligned_string " aki     "
-LABEL_E1DB02:	aligned_string " aki     "
-LABEL_E1DB0C:	aligned_string " aki     "
-LABEL_E1DB16:	aligned_string " aki     "
-LABEL_E1DB20:	aligned_string " aki     "
-LABEL_E1DB2A:	aligned_string " aki     "
-LABEL_E1DB34:	aligned_string " aki     "
-LABEL_E1DB3E:	aligned_string "MEMORY C "
-LABEL_E1DB48:	aligned_string "MEMORY B "
-LABEL_E1DB52:	aligned_string "MEMORY A "
+PtrTbl_StylePatternLongNames:
+	.long StrStylePatt_Vari2b
+	.long StrStylePatt_Vari3b
+	.long StrStylePatt_Vari4b
+	.long StrStylePatt_Intro1b
+	.long StrStylePatt_Intro2b
+	.long StrStylePatt_Ending1b
+	.long StrStylePatt_Ending2b
+	.long StrStylePatt_V1FillIn1
+	.long StrStylePatt_V1FillIn2
+	.long StrStylePatt_V2FillIn1
+	.long StrStylePatt_V2FillIn2
+	.long StrStylePatt_V3FillIn1
+	.long StrStylePatt_V3FillIn2
+	.long StrStylePatt_V4FillIn1
+	.long StrStylePatt_V4FillIn2
+	.long StrStylePatt_Vari1
+	.long StrStylePatt_Vari2
+	.long StrStylePatt_Vari3
+	.long StrStylePatt_Vari4
+	.long StrStylePatt_Intro1
+	.long StrStylePatt_Intro2
+	.long StrStylePatt_FillIn1
+	.long StrStylePatt_FillIn2
+	.long StrStylePatt_Ending1
+	.long StrStylePatt_Ending2
+	.long StrStylePatt_All
+StrStylePatt_All:	aligned_string "     ALL      "
+StrStylePatt_Ending2:	aligned_string "   ENDING2    "
+StrStylePatt_Ending1:	aligned_string "   ENDING1    "
+StrStylePatt_FillIn2:	aligned_string "   FILL IN 2  "
+StrStylePatt_FillIn1:	aligned_string "   FILL IN 1  "
+StrStylePatt_Intro2:	aligned_string "    INTRO2    "
+StrStylePatt_Intro1:	aligned_string "    INTRO1    "
+StrStylePatt_Vari4:	aligned_string "    Vari4     "
+StrStylePatt_Vari3:	aligned_string "    Vari3     "
+StrStylePatt_Vari2:	aligned_string "    Vari2     "
+StrStylePatt_Vari1:	aligned_string "    Vari1     "
+StrStylePatt_V4FillIn2:	aligned_string "Vari4 FILL IN2"
+StrStylePatt_V4FillIn1:	aligned_string "Vari4 FILL IN1"
+StrStylePatt_V3FillIn2:	aligned_string "Vari3 FILL IN2"
+StrStylePatt_V3FillIn1:	aligned_string "Vari3 FILL IN1"
+StrStylePatt_V2FillIn2:	aligned_string "Vari2 FILL IN2"
+StrStylePatt_V2FillIn1:	aligned_string "Vari2 FILL IN1"
+StrStylePatt_V1FillIn2:	aligned_string "Vari1 FILL IN2"
+StrStylePatt_V1FillIn1:	aligned_string "Vari1 FILL IN1"
+StrStylePatt_Ending2b:	aligned_string "   ENDING2    "
+StrStylePatt_Ending1b:	aligned_string "   ENDING1    "
+StrStylePatt_Intro2b:	aligned_string "    INTRO2    "
+StrStylePatt_Intro1b:	aligned_string "    INTRO1    "
+StrStylePatt_Vari4b:	aligned_string "    Vari4     "
+StrStylePatt_Vari3b:	aligned_string "    Vari3     "
+StrStylePatt_Vari2b:	aligned_string "    Vari2     "
+StrStylePatt_Vari1b:	aligned_string "    Vari1     "
+PtrTbl_RhySlotLongNames:
+	.long StrRhySlot_MemoryA
+	.long StrRhySlot_MemoryB
+	.long StrRhySlot_MemoryC
+	.long StrRhySlot_AkiPlaceholderX
+	.long StrRhySlot_AkiPlaceholder1
+	.long StrRhySlot_AkiPlaceholder2
+	.long StrRhySlot_AkiPlaceholder3
+	.long StrRhySlot_AkiPlaceholder4
+	.long StrRhySlot_AkiPlaceholder5
+	.long StrRhySlot_AkiPlaceholder6
+	.long StrRhySlot_Custom01
+	.long StrRhySlot_Custom02
+	.long StrRhySlot_Custom03
+	.long StrRhySlot_Custom04
+	.long StrRhySlot_Custom05
+	.long StrRhySlot_Custom06
+	.long StrRhySlot_Custom07
+	.long StrRhySlot_Custom08
+	.long StrRhySlot_Custom09
+	.long StrRhySlot_Custom10
+	.long StrRhySlot_Custom11
+	.long StrRhySlot_Custom12
+	.long StrRhySlot_Custom13
+	.long StrRhySlot_Custom14
+	.long StrRhySlot_Custom15
+	.long StrRhySlot_Custom16
+	.long StrRhySlot_Custom17
+	.long StrRhySlot_Custom18
+	.long StrRhySlot_Custom19
+	.long StrRhySlot_Custom20
+StrRhySlot_Custom20:	aligned_string "CUSTOM:20"
+StrRhySlot_Custom19:	aligned_string "CUSTOM:19"
+StrRhySlot_Custom18:	aligned_string "CUSTOM:18"
+StrRhySlot_Custom17:	aligned_string "CUSTOM:17"
+StrRhySlot_Custom16:	aligned_string "CUSTOM:16"
+StrRhySlot_Custom15:	aligned_string "CUSTOM:15"
+StrRhySlot_Custom14:	aligned_string "CUSTOM:14"
+StrRhySlot_Custom13:	aligned_string "CUSTOM:13"
+StrRhySlot_Custom12:	aligned_string "CUSTOM:12"
+StrRhySlot_Custom11:	aligned_string "CUSTOM:11"
+StrRhySlot_Custom10:	aligned_string "CUSTOM:10"
+StrRhySlot_Custom09:	aligned_string "CUSTOM: 9"
+StrRhySlot_Custom08:	aligned_string "CUSTOM: 8"
+StrRhySlot_Custom07:	aligned_string "CUSTOM: 7"
+StrRhySlot_Custom06:	aligned_string "CUSTOM: 6"
+StrRhySlot_Custom05:	aligned_string "CUSTOM: 5"
+StrRhySlot_Custom04:	aligned_string "CUSTOM: 4"
+StrRhySlot_Custom03:	aligned_string "CUSTOM: 3"
+StrRhySlot_Custom02:	aligned_string "CUSTOM: 2"
+StrRhySlot_Custom01:	aligned_string "CUSTOM: 1"
+StrRhySlot_AkiPlaceholder6:	aligned_string " aki     "
+StrRhySlot_AkiPlaceholder5:	aligned_string " aki     "
+StrRhySlot_AkiPlaceholder4:	aligned_string " aki     "
+StrRhySlot_AkiPlaceholder3:	aligned_string " aki     "
+StrRhySlot_AkiPlaceholder2:	aligned_string " aki     "
+StrRhySlot_AkiPlaceholder1:	aligned_string " aki     "
+StrRhySlot_AkiPlaceholderX:	aligned_string " aki     "
+StrRhySlot_MemoryC:	aligned_string "MEMORY C "
+StrRhySlot_MemoryB:	aligned_string "MEMORY B "
+StrRhySlot_MemoryA:	aligned_string "MEMORY A "
 	aligned_string "MEMORY"
 	aligned_string "CUSTOM"
 	.byte 0x4d, 0x45, 0x4d, 0x4f
 	.byte 0x52, 0x59, 0x00, 0xff
 	.byte 0x43, 0x55, 0x53, 0x54
 	.byte 0x4f, 0x4d, 0x00, 0xff, 0x00, 0xdd, 0xe1, 0x00
-LABEL_E1DB80:
-	.long LABEL_E1DCF8
-	.long LABEL_E1DCF0
-	.long LABEL_E1DCE8
-	.long LABEL_E1DCE0
-	.long LABEL_E1DCD8
-	.long LABEL_E1DCD0
-	.long LABEL_E1DCC8
-	.long LABEL_E1DCC0
-	.long LABEL_E1DCB8
-	.long LABEL_E1DCB0
-	.long LABEL_E1DCA8
-	.long LABEL_E1DCA0
-	.long LABEL_E1DC98
-	.long LABEL_E1DC90
-	.long LABEL_E1DC88
-	.long LABEL_E1DC80
-	.long LABEL_E1DC78
-	.long LABEL_E1DC70
-	.long LABEL_E1DC68
-	.long LABEL_E1DC60
-	.long LABEL_E1DC58
-	.long LABEL_E1DC50
-	.long LABEL_E1DC48
-	.long LABEL_E1DC40
-	.long LABEL_E1DC38
-	.long LABEL_E1DC30
-	.long LABEL_E1DC28
-	.long LABEL_E1DC20
-	.long LABEL_E1DC18
-	.long LABEL_E1DC10
-	.long LABEL_E1DC08
-	.long LABEL_E1DC00
-LABEL_E1DC00:	aligned_string "C-ALL  "
-LABEL_E1DC08:	aligned_string "B-ALL  "
-LABEL_E1DC10:	aligned_string "A-ALL  "
-LABEL_E1DC18:	aligned_string "C-END2 "
-LABEL_E1DC20:	aligned_string "C-END1 "
-LABEL_E1DC28:	aligned_string "C-FILL2"
-LABEL_E1DC30:	aligned_string "C-FILL1"
-LABEL_E1DC38:	aligned_string "C-INT2 "
-LABEL_E1DC40:	aligned_string "C-INT1 "
-LABEL_E1DC48:	aligned_string "B-END2 "
-LABEL_E1DC50:	aligned_string "B-END1 "
-LABEL_E1DC58:	aligned_string "B-FILL2"
-LABEL_E1DC60:	aligned_string "B-FILL1"
-LABEL_E1DC68:	aligned_string "B-INT2 "
-LABEL_E1DC70:	aligned_string "B-INT1 "
-LABEL_E1DC78:	aligned_string "A-END2 "
-LABEL_E1DC80:	aligned_string "A-END1 "
-LABEL_E1DC88:	aligned_string "A-FILL2"
-LABEL_E1DC90:	aligned_string "A-FILL1"
-LABEL_E1DC98:	aligned_string "A-INT2 "
-LABEL_E1DCA0:	aligned_string "A-INT1 "
-LABEL_E1DCA8:	aligned_string "C-vari4"
-LABEL_E1DCB0:	aligned_string "C-vari3"
-LABEL_E1DCB8:	aligned_string "C-vari2"
-LABEL_E1DCC0:	aligned_string "C-vari1"
-LABEL_E1DCC8:	aligned_string "B-vari4"
-LABEL_E1DCD0:	aligned_string "B-vari3"
-LABEL_E1DCD8:	aligned_string "B-vari2"
-LABEL_E1DCE0:	aligned_string "B-vari1"
-LABEL_E1DCE8:	aligned_string "A-vari4"
-LABEL_E1DCF0:	aligned_string "A-vari3"
-LABEL_E1DCF8:	aligned_string "A-vari2"
-LABEL_E1DD00:	aligned_string "A-vari1"
-	.long LABEL_E1DD20
-	.long LABEL_E1DD1A
-	.long LABEL_E1DD14
-LABEL_E1DD14:	aligned_string "MUTE"
-LABEL_E1DD1A:	aligned_string "REC "
-LABEL_E1DD20:	aligned_string "    "
-LABEL_E1DD26:
-	.long LABEL_E1DD76
-	.long LABEL_E1DD6E
-	.long LABEL_E1DD68
-	.long LABEL_E1DD60
-	.long LABEL_E1DD5A
-	.long LABEL_E1DD52
-	.long LABEL_E1DD4C
-	.long LABEL_E1DD46
-LABEL_E1DD46:
+PtrTbl_StyleSectShortNames2:
+	.long StrStyleSect2_A_Vari2
+	.long StrStyleSect2_A_Vari3
+	.long StrStyleSect2_A_Vari4
+	.long StrStyleSect2_B_Vari1
+	.long StrStyleSect2_B_Vari2
+	.long StrStyleSect2_B_Vari3
+	.long StrStyleSect2_B_Vari4
+	.long StrStyleSect2_C_Vari1
+	.long StrStyleSect2_C_Vari2
+	.long StrStyleSect2_C_Vari3
+	.long StrStyleSect2_C_Vari4
+	.long StrStyleSect2_A_Int1
+	.long StrStyleSect2_A_Int2
+	.long StrStyleSect2_A_Fill1
+	.long StrStyleSect2_A_Fill2
+	.long StrStyleSect2_A_End1
+	.long StrStyleSect2_A_End2
+	.long StrStyleSect2_B_Int1
+	.long StrStyleSect2_B_Int2
+	.long StrStyleSect2_B_Fill1
+	.long StrStyleSect2_B_Fill2
+	.long StrStyleSect2_B_End1
+	.long StrStyleSect2_B_End2
+	.long StrStyleSect2_C_Int1
+	.long StrStyleSect2_C_Int2
+	.long StrStyleSect2_C_Fill1
+	.long StrStyleSect2_C_Fill2
+	.long StrStyleSect2_C_End1
+	.long StrStyleSect2_C_End2
+	.long StrStyleSect2_A_All
+	.long StrStyleSect2_B_All
+	.long StrStyleSect2_C_All
+StrStyleSect2_C_All:	aligned_string "C-ALL  "
+StrStyleSect2_B_All:	aligned_string "B-ALL  "
+StrStyleSect2_A_All:	aligned_string "A-ALL  "
+StrStyleSect2_C_End2:	aligned_string "C-END2 "
+StrStyleSect2_C_End1:	aligned_string "C-END1 "
+StrStyleSect2_C_Fill2:	aligned_string "C-FILL2"
+StrStyleSect2_C_Fill1:	aligned_string "C-FILL1"
+StrStyleSect2_C_Int2:	aligned_string "C-INT2 "
+StrStyleSect2_C_Int1:	aligned_string "C-INT1 "
+StrStyleSect2_B_End2:	aligned_string "B-END2 "
+StrStyleSect2_B_End1:	aligned_string "B-END1 "
+StrStyleSect2_B_Fill2:	aligned_string "B-FILL2"
+StrStyleSect2_B_Fill1:	aligned_string "B-FILL1"
+StrStyleSect2_B_Int2:	aligned_string "B-INT2 "
+StrStyleSect2_B_Int1:	aligned_string "B-INT1 "
+StrStyleSect2_A_End2:	aligned_string "A-END2 "
+StrStyleSect2_A_End1:	aligned_string "A-END1 "
+StrStyleSect2_A_Fill2:	aligned_string "A-FILL2"
+StrStyleSect2_A_Fill1:	aligned_string "A-FILL1"
+StrStyleSect2_A_Int2:	aligned_string "A-INT2 "
+StrStyleSect2_A_Int1:	aligned_string "A-INT1 "
+StrStyleSect2_C_Vari4:	aligned_string "C-vari4"
+StrStyleSect2_C_Vari3:	aligned_string "C-vari3"
+StrStyleSect2_C_Vari2:	aligned_string "C-vari2"
+StrStyleSect2_C_Vari1:	aligned_string "C-vari1"
+StrStyleSect2_B_Vari4:	aligned_string "B-vari4"
+StrStyleSect2_B_Vari3:	aligned_string "B-vari3"
+StrStyleSect2_B_Vari2:	aligned_string "B-vari2"
+StrStyleSect2_B_Vari1:	aligned_string "B-vari1"
+StrStyleSect2_A_Vari4:	aligned_string "A-vari4"
+StrStyleSect2_A_Vari3:	aligned_string "A-vari3"
+StrStyleSect2_A_Vari2:	aligned_string "A-vari2"
+StrStyleSect2_A_Vari1:	aligned_string "A-vari1"
+	.long StrTrackBlank
+	.long StrTrackRec
+	.long StrTrackMute
+StrTrackMute:	aligned_string "MUTE"
+StrTrackRec:	aligned_string "REC "
+StrTrackBlank:	aligned_string "    "
+PtrTbl_NotePositionStrs:
+	.long StrNotePos_Off
+	.long StrNotePos_AdFlatB8
+	.long StrNotePos_AdNatural
+	.long StrNotePos_AcFlatB8
+	.long StrNotePos_AcNatural
+	.long StrNotePos_FlatAltB8
+	.long StrNotePos_FlatAlt
+	.long StrNotePos_Natural
+StrNotePos_Natural:
 	ldb	w, 0x7e
 	.byte 0x61, 0x61, 0x20, 0x00
 	aligned_string " ~ab "
 	aligned_string " ~ab~b8"
 	aligned_string " ~ac "
-LABEL_E1DD60:	aligned_string " ~ac~b8"
-LABEL_E1DD68:	aligned_string " ~ad "
-LABEL_E1DD6E:	aligned_string " ~ad~b8"
-LABEL_E1DD76:
+StrNotePos_AcFlatB8:	aligned_string " ~ac~b8"
+StrNotePos_AdNatural:	aligned_string " ~ad "
+StrNotePos_AdFlatB8:	aligned_string " ~ad~b8"
+StrNotePos_Off:
 	.byte 0x4f, 0x46
 	.byte 0x46, 0x00, 0x25, 0x64, 0x00, 0xff, 0x25, 0x32
 	.byte 0x64, 0x00, 0x25, 0x33, 0x64, 0x00
-LABEL_E1DD86:
-	.long LABEL_E1DE4A
-	.long LABEL_E1DE48
-	.long LABEL_E1DE46
-	.long LABEL_E1DE44
-	.long LABEL_E1DE42
-	.long LABEL_E1DE40
-	.long LABEL_E1DE3E
-	.long LABEL_E1DE3C
-	.long LABEL_E1DE3A
-	.long LABEL_E1DE38
-	.long LABEL_E1DE36
-	.long LABEL_E1DE34
-	.long LABEL_E1DE32
-	.long LABEL_E1DE30
-	.long LABEL_E1DE2E
-	.long LABEL_E1DE2C
-	.long LABEL_E1DE2A
-	.long LABEL_E1DE28
-	.long LABEL_E1DE26
-	.long LABEL_E1DE24
-	.long LABEL_E1DE22
-	.long LABEL_E1DE20
-	.long LABEL_E1DE1E
-	.long LABEL_E1DE1C
-	.long LABEL_E1DE1A
-	.long LABEL_E1DE18
-	.long LABEL_E1DE16
-	.long LABEL_E1DE14
-	.long LABEL_E1DE12
-	.long LABEL_E1DE10
-	.long LABEL_E1DE0E
-	.long LABEL_E1DE0C
-	.long LABEL_E1DE0A
-LABEL_E1DE0A:
+PtrTbl_StyleVarGroupCodes:
+	.long StyleVarGrp_AEnd2b
+	.long StyleVarGrp_AEnd1
+	.long StyleVarGrp_AVari1
+	.long StyleVarGrp_AVari2
+	.long StyleVarGrp_BEnd1c
+	.long StyleVarGrp_BVari1
+	.long StyleVarGrp_BVari2
+	.long StyleVarGrp_BVari3
+	.long StyleVarGrp_BEnd1b
+	.long StyleVarGrp_CVari1
+	.long StyleVarGrp_CVari2
+	.long StyleVarGrp_CVari3
+	.long StyleVarGrp_AVari3
+	.long StyleVarGrp_AFill1
+	.long StyleVarGrp_AFill2
+	.long StyleVarGrp_AInt1
+	.long StyleVarGrp_AInt2
+	.long StyleVarGrp_AVari4
+	.long StyleVarGrp_BVari4
+	.long StyleVarGrp_BFill1
+	.long StyleVarGrp_BFill2
+	.long StyleVarGrp_BInt1
+	.long StyleVarGrp_BInt2
+	.long StyleVarGrp_BEnd1
+	.long StyleVarGrp_CVari4
+	.long StyleVarGrp_CFill1
+	.long StyleVarGrp_CFill2
+	.long StyleVarGrp_CInt1
+	.long StyleVarGrp_CInt2
+	.long StyleVarGrp_CEnd1
+	.long StyleVarGrp_AEnd2
+	.long StyleVarGrp_BEnd2
+	.long StyleVarGrp_CEnd2
+StyleVarGrp_CEnd2:
 	.byte 0x43, 0x00
-LABEL_E1DE0C:
+StyleVarGrp_BEnd2:
 	.byte 0x42, 0x00
-LABEL_E1DE0E:
+StyleVarGrp_AEnd2:
 	.byte 0x41, 0x00
-LABEL_E1DE10:
+StyleVarGrp_CEnd1:
 	.byte 0x43, 0x00
-LABEL_E1DE12:
+StyleVarGrp_CInt2:
 	.byte 0x43, 0x00
-LABEL_E1DE14:
+StyleVarGrp_CInt1:
 	.byte 0x43, 0x00
-LABEL_E1DE16:
+StyleVarGrp_CFill2:
 	.byte 0x43, 0x00
-LABEL_E1DE18:
+StyleVarGrp_CFill1:
 	.byte 0x43, 0x00
-LABEL_E1DE1A:
+StyleVarGrp_CVari4:
 	.byte 0x43, 0x00
-LABEL_E1DE1C:
+StyleVarGrp_BEnd1:
 	.byte 0x42, 0x00
-LABEL_E1DE1E:
+StyleVarGrp_BInt2:
 	.byte 0x42, 0x00
-LABEL_E1DE20:
+StyleVarGrp_BInt1:
 	.byte 0x42, 0x00
-LABEL_E1DE22:
+StyleVarGrp_BFill2:
 	.byte 0x42, 0x00
-LABEL_E1DE24:
+StyleVarGrp_BFill1:
 	.byte 0x42, 0x00
-LABEL_E1DE26:
+StyleVarGrp_BVari4:
 	.byte 0x42, 0x00
-LABEL_E1DE28:
+StyleVarGrp_AVari4:
 	.byte 0x41, 0x00
-LABEL_E1DE2A:
+StyleVarGrp_AInt2:
 	.byte 0x41, 0x00
-LABEL_E1DE2C:
+StyleVarGrp_AInt1:
 	.byte 0x41, 0x00
-LABEL_E1DE2E:
+StyleVarGrp_AFill2:
 	.byte 0x41, 0x00
-LABEL_E1DE30:
+StyleVarGrp_AFill1:
 	.byte 0x41, 0x00
-LABEL_E1DE32:
+StyleVarGrp_AVari3:
 	.byte 0x41, 0x00
-LABEL_E1DE34:
+StyleVarGrp_CVari3:
 	.byte 0x43, 0x00
-LABEL_E1DE36:
+StyleVarGrp_CVari2:
 	.byte 0x43, 0x00
-LABEL_E1DE38:
+StyleVarGrp_CVari1:
 	.byte 0x43, 0x00
-LABEL_E1DE3A:
+StyleVarGrp_BEnd1b:
 	.byte 0x43, 0x00
-LABEL_E1DE3C:
+StyleVarGrp_BVari3:
 	.byte 0x42, 0x00
-LABEL_E1DE3E:
+StyleVarGrp_BVari2:
 	.byte 0x42, 0x00
-LABEL_E1DE40:
+StyleVarGrp_BVari1:
 	.byte 0x42, 0x00
-LABEL_E1DE42:
+StyleVarGrp_BEnd1c:
 	.byte 0x42, 0x00
-LABEL_E1DE44:
+StyleVarGrp_AVari2:
 	.byte 0x41, 0x00
-LABEL_E1DE46:
+StyleVarGrp_AVari1:
 	.byte 0x41, 0x00
-LABEL_E1DE48:
+StyleVarGrp_AEnd1:
 	.byte 0x41, 0x00
-LABEL_E1DE4A:
+StyleVarGrp_AEnd2b:
 	.byte 0x41, 0x00, 0x6a, 0x00, 0x0e, 0x01
 	.byte 0x6a, 0x00, 0x0e, 0x01, 0xf0, 0x01, 0xd9, 0x01
 	.byte 0xd9, 0x01
-LABEL_E1DE5A:	aligned_string "     Waltz      "
-LABEL_E1DE6C:	aligned_string "  Rock Ballad   "
-LABEL_E1DE7E:	aligned_string "    Country     "
-LABEL_E1DE90:	aligned_string "     Latin      "
-LABEL_E1DEA2:	aligned_string "     Swing      "
-LABEL_E1DEB4:	aligned_string "  March/Polka   "
-LABEL_E1DEC6:	aligned_string "  Jazz Fusion   "
-LABEL_E1DED8:	aligned_string "   Dance Pop    "
-LABEL_E1DEEA:	aligned_string "    16 Beat     "
-LABEL_E1DEFC:	aligned_string "     8 Beat     "
+StrGenre_Waltz:	aligned_string "     Waltz      "
+StrGenre_RockBallad:	aligned_string "  Rock Ballad   "
+StrGenre_Country:	aligned_string "    Country     "
+StrGenre_Latin:	aligned_string "     Latin      "
+StrGenre_Swing:	aligned_string "     Swing      "
+StrGenre_MarchPolka:	aligned_string "  March/Polka   "
+StrGenre_JazzFusion:	aligned_string "  Jazz Fusion   "
+StrGenre_DancePop:	aligned_string "   Dance Pop    "
+StrGenre_16Beat:	aligned_string "    16 Beat     "
+StrGenre_8Beat:	aligned_string "     8 Beat     "
 	.byte 0x4f, 0x46
 	.byte 0x46, 0x00, 0x25, 0x33, 0x64, 0x00, 0x00, 0x00
 	.byte 0x48, 0x00, 0x00, 0x00, 0x48, 0x00, 0x18, 0x01
 	.byte 0x18, 0x01, 0x18, 0x01, 0x52, 0xdf, 0xe1, 0x00
-	.long LABEL_E1DF48
-	.long LABEL_E1DF3E
-	.long LABEL_E1DF34
-LABEL_E1DF34:	aligned_string "COMPILE2"
-LABEL_E1DF3E:	aligned_string "COMPILE1"
-LABEL_E1DF48:	aligned_string "User2   "
-LABEL_E1DF52:	aligned_string "User1   "
+	.long StrBankShort_User2
+	.long StrBankShort_Compile1
+	.long StrBankShort_Compile2
+StrBankShort_Compile2:	aligned_string "COMPILE2"
+StrBankShort_Compile1:	aligned_string "COMPILE1"
+StrBankShort_User2:	aligned_string "User2   "
+StrBankShort_User1:	aligned_string "User1   "
 	.byte 0x1c, 0x00, 0x1c, 0x00
 	.byte 0x69, 0x00, 0x69, 0x00, 0x69, 0x00, 0x20, 0x00
 	.byte 0x69, 0x00, 0x24, 0x00, 0x1c, 0x00, 0x00, 0x00
-LABEL_E1DF70:
-	.long LABEL_E1DFBC
-	.long LABEL_E1DFA8
-	.long LABEL_E1DF94
-	.long LABEL_E1DF80
-LABEL_E1DF80:	aligned_string "MSP COMPILE Bank2:"
-LABEL_E1DF94:	aligned_string "MSP COMPILE Bank1:"
-LABEL_E1DFA8:	aligned_string "MSP User Bank 2:  "
-LABEL_E1DFBC:	aligned_string "MSP User Bank 1:  "
-LABEL_E1DFD0:
-	.long LABEL_E1E160
-	.long LABEL_E1E14E
-	.long LABEL_E1E13C
-	.long LABEL_E1E12A
-	.long LABEL_E1E118
-	.long LABEL_E1E106
-	.long LABEL_E1E0F4
-	.long LABEL_E1E0E2
-	.long LABEL_E1E0D0
-	.long LABEL_E1E0BE
-	.long LABEL_E1E0AC
-	.long LABEL_E1E09A
-	.long LABEL_E1E088
-	.long LABEL_E1E076
-	.long LABEL_E1E064
-	.long LABEL_E1E052
-	.long LABEL_E1E040
-	.long LABEL_E1E02E
-	.long LABEL_E1E01C
-LABEL_E1E01C:	aligned_string " Control Preset2"
-LABEL_E1E02E:	aligned_string " Control Preset1"
-LABEL_E1E040:	aligned_string " Compile bank 2 "
-LABEL_E1E052:	aligned_string " Compile bank 1 "
-LABEL_E1E064:	aligned_string "  User Bank 2   "
-LABEL_E1E076:	aligned_string "  User Bank 1   "
-LABEL_E1E088:	aligned_string "Hit & Crescendo "
-LABEL_E1E09A:	aligned_string "     Latin      "
-LABEL_E1E0AC:	aligned_string "      Jazz      "
-LABEL_E1E0BE:	aligned_string "      Funk      "
-LABEL_E1E0D0:	aligned_string "     Dance      "
-LABEL_E1E0E2:	aligned_string "     Rock 2     "
-LABEL_E1E0F4:	aligned_string "     Rock 1     "
-LABEL_E1E106:	aligned_string "    Arpeggio    "
-LABEL_E1E118:	aligned_string "  Entertainer   "
-LABEL_E1E12A:	aligned_string "     Movie      "
-LABEL_E1E13C:	aligned_string "    Comical     "
-LABEL_E1E14E:	aligned_string "    Effect 2    "
-LABEL_E1E160:	aligned_string "    Effect 1    "
-LABEL_E1E172:
-	.long LABEL_E1E2AA
-	.long LABEL_E1E298
-	.long LABEL_E1E286
-	.long LABEL_E1E274
-	.long LABEL_E1E262
-	.long LABEL_E1E250
-	.long LABEL_E1E23E
-	.long LABEL_E1E22C
-	.long LABEL_E1E21A
-	.long LABEL_E1E208
-	.long LABEL_E1E1F6
-	.long LABEL_E1E1E4
-	.long LABEL_E1E1D2
-	.long LABEL_E1E1C0
-	.long LABEL_E1E1AE
-LABEL_E1E1AE:	aligned_string "User 2          "
-LABEL_E1E1C0:	aligned_string "User 1          "
-LABEL_E1E1D2:	aligned_string "Hit & Crescendo "
-LABEL_E1E1E4:	aligned_string "     Latin      "
-LABEL_E1E1F6:	aligned_string "      Jazz      "
-LABEL_E1E208:	aligned_string "      Funk      "
-LABEL_E1E21A:	aligned_string "     Dance      "
-LABEL_E1E22C:	aligned_string "     Rock 2     "
-LABEL_E1E23E:	aligned_string "     Rock 1     "
-LABEL_E1E250:	aligned_string "    Arpeggio    "
-LABEL_E1E262:	aligned_string "  Entertainer   "
-LABEL_E1E274:	aligned_string "     Movie      "
-LABEL_E1E286:	aligned_string "    Comical     "
-LABEL_E1E298:	aligned_string "    Effect 2    "
-LABEL_E1E2AA:	aligned_string "    Effect 1    "
+PtrTbl_MspCompileBankLabels:
+	.long StrMspUserBank1Label
+	.long StrMspUserBank2Label
+	.long StrMspCmpBank1Label
+	.long StrMspCmpBank2Label
+StrMspCmpBank2Label:	aligned_string "MSP COMPILE Bank2:"
+StrMspCmpBank1Label:	aligned_string "MSP COMPILE Bank1:"
+StrMspUserBank2Label:	aligned_string "MSP User Bank 2:  "
+StrMspUserBank1Label:	aligned_string "MSP User Bank 1:  "
+PtrTbl_MusicStyleBankNames:
+	.long StrMsBankLong_Effect1
+	.long StrMsBankLong_Effect2
+	.long StrMsBankLong_Comical
+	.long StrMsBankLong_Movie
+	.long StrMsBankLong_Entertainer
+	.long StrMsBankLong_Arpeggio
+	.long StrMsBankLong_Rock1
+	.long StrMsBankLong_Rock2
+	.long StrMsBankLong_Dance
+	.long StrMsBankLong_Funk
+	.long StrMsBankLong_Jazz
+	.long StrMsBankLong_Latin
+	.long StrMsBankLong_HitCrescendo
+	.long StrMsBankLong_UserBank1
+	.long StrMsBankLong_UserBank2
+	.long StrMsBankLong_CompileBank1
+	.long StrMsBankLong_CompileBank2
+	.long StrMsBankLong_CtrlPreset1
+	.long StrMsBankLong_CtrlPreset2
+StrMsBankLong_CtrlPreset2:	aligned_string " Control Preset2"
+StrMsBankLong_CtrlPreset1:	aligned_string " Control Preset1"
+StrMsBankLong_CompileBank2:	aligned_string " Compile bank 2 "
+StrMsBankLong_CompileBank1:	aligned_string " Compile bank 1 "
+StrMsBankLong_UserBank2:	aligned_string "  User Bank 2   "
+StrMsBankLong_UserBank1:	aligned_string "  User Bank 1   "
+StrMsBankLong_HitCrescendo:	aligned_string "Hit & Crescendo "
+StrMsBankLong_Latin:	aligned_string "     Latin      "
+StrMsBankLong_Jazz:	aligned_string "      Jazz      "
+StrMsBankLong_Funk:	aligned_string "      Funk      "
+StrMsBankLong_Dance:	aligned_string "     Dance      "
+StrMsBankLong_Rock2:	aligned_string "     Rock 2     "
+StrMsBankLong_Rock1:	aligned_string "     Rock 1     "
+StrMsBankLong_Arpeggio:	aligned_string "    Arpeggio    "
+StrMsBankLong_Entertainer:	aligned_string "  Entertainer   "
+StrMsBankLong_Movie:	aligned_string "     Movie      "
+StrMsBankLong_Comical:	aligned_string "    Comical     "
+StrMsBankLong_Effect2:	aligned_string "    Effect 2    "
+StrMsBankLong_Effect1:	aligned_string "    Effect 1    "
+PtrTbl_MusicStyleBankNames2:
+	.long StrMsBankLong2_Effect1
+	.long StrMsBankLong2_Effect2
+	.long StrMsBankLong2_Comical
+	.long StrMsBankLong2_Movie
+	.long StrMsBankLong2_Entertainer
+	.long StrMsBankLong2_Arpeggio
+	.long StrMsBankLong2_Rock1
+	.long StrMsBankLong2_Rock2
+	.long StrMsBankLong2_Dance
+	.long StrMsBankLong2_Funk
+	.long StrMsBankLong2_Jazz
+	.long StrMsBankLong2_Latin
+	.long StrMsBankLong2_HitCrescendo
+	.long StrMsBankLong2_User1
+	.long StrMsBankLong2_User2
+StrMsBankLong2_User2:	aligned_string "User 2          "
+StrMsBankLong2_User1:	aligned_string "User 1          "
+StrMsBankLong2_HitCrescendo:	aligned_string "Hit & Crescendo "
+StrMsBankLong2_Latin:	aligned_string "     Latin      "
+StrMsBankLong2_Jazz:	aligned_string "      Jazz      "
+StrMsBankLong2_Funk:	aligned_string "      Funk      "
+StrMsBankLong2_Dance:	aligned_string "     Dance      "
+StrMsBankLong2_Rock2:	aligned_string "     Rock 2     "
+StrMsBankLong2_Rock1:	aligned_string "     Rock 1     "
+StrMsBankLong2_Arpeggio:	aligned_string "    Arpeggio    "
+StrMsBankLong2_Entertainer:	aligned_string "  Entertainer   "
+StrMsBankLong2_Movie:	aligned_string "     Movie      "
+StrMsBankLong2_Comical:	aligned_string "    Comical     "
+StrMsBankLong2_Effect2:	aligned_string "    Effect 2    "
+StrMsBankLong2_Effect1:	aligned_string "    Effect 1    "
 	.byte 0x50, 0x41, 0x44, 0x25
 	.byte 0x64, 0x00, 0x00, 0x00, 0x48, 0x00, 0x00, 0x00
 	.byte 0x48, 0x00, 0x41, 0x01, 0x41, 0x01, 0x41, 0x01
-	.long LABEL_E1E2E8
-	.long LABEL_E1E2D8
-LABEL_E1E2D8:	aligned_string "COMPILE BANK:2"
-LABEL_E1E2E8:	aligned_string "COMPILE BANK:1"
+	.long StrCompileBank1
+	.long StrCompileBank2
+StrCompileBank2:	aligned_string "COMPILE BANK:2"
+StrCompileBank1:	aligned_string "COMPILE BANK:1"
 	aligned_string "MEASURE = %d"
 	aligned_string "MEMORY = %2d"
 	.byte 0x25, 0x64, 0x00, 0xff
-	.long LABEL_E1E332
-	.long LABEL_E1E320
-LABEL_E1E320:	aligned_string "SYNC TO RHYTHM   "
-LABEL_E1E332:	aligned_string "INSTANT START    "
+	.long StrInstantStart
+	.long StrSyncToRhythm
+StrSyncToRhythm:	aligned_string "SYNC TO RHYTHM   "
+StrInstantStart:	aligned_string "INSTANT START    "
 	.byte 0x23, 0x00, 0x23, 0x00
 	.byte 0x4c, 0x00, 0x4c, 0x00, 0x4c, 0x00, 0x32, 0x00
 	.byte 0x4c, 0x00, 0x36, 0x00, 0x32, 0x00, 0x00, 0x00
@@ -5966,368 +5966,368 @@ LABEL_E24968:	aligned_string ""
 LABEL_E2496A:	aligned_string ""
 LABEL_E2496C:	aligned_string ""
 LABEL_E2496E:	aligned_string "DpMdlySmfLyr"
-	.long LABEL_E24A34
+	.long DkMdlyPly_Name
 LABEL_E24980:
-	.long LABEL_E24A32
-	.long LABEL_E24A30
-	.long LABEL_E24A2E
-	.long LABEL_E24A2C
-	.long LABEL_E24A2A
-	.long LABEL_E24A28
-	.long LABEL_E24A26
-	.long LABEL_E24A24
-	.long LABEL_E24A22
-	.long LABEL_E24A20
-	.long LABEL_E24A1E
-	.long LABEL_E24A1C
-	.long LABEL_E24A1A
-	.long LABEL_E24A18
-	.long LABEL_E24A16
-	.long LABEL_E24A14
-	.long LABEL_E24A12
-	.long LABEL_E24A10
-	.long LABEL_E24A0E
-	.long LABEL_E24A0C
-	.long LABEL_E24A0A
-	.long LABEL_E24A08
-	.long LABEL_E24A06
-	.long LABEL_E24A04
-	.long LABEL_E24A02
-	.long LABEL_E24A00
-	.long LABEL_E249FE
-	.long LABEL_E249FC
-	.long LABEL_E249FA
-	.long LABEL_E249F8
-LABEL_E249F8:	aligned_string ""
-LABEL_E249FA:	aligned_string ""
-LABEL_E249FC:	aligned_string ""
-LABEL_E249FE:	aligned_string ""
-LABEL_E24A00:	aligned_string ""
-LABEL_E24A02:	aligned_string ""
-LABEL_E24A04:	aligned_string ""
-LABEL_E24A06:	aligned_string ""
-LABEL_E24A08:	aligned_string ""
-LABEL_E24A0A:	aligned_string ""
-LABEL_E24A0C:	aligned_string ""
-LABEL_E24A0E:	aligned_string ""
-LABEL_E24A10:	aligned_string ""
-LABEL_E24A12:	aligned_string ""
-LABEL_E24A14:	aligned_string ""
-LABEL_E24A16:	aligned_string ""
-LABEL_E24A18:	aligned_string ""
-LABEL_E24A1A:	aligned_string ""
-LABEL_E24A1C:	aligned_string ""
-LABEL_E24A1E:	aligned_string ""
-LABEL_E24A20:	aligned_string ""
-LABEL_E24A22:	aligned_string ""
-LABEL_E24A24:	aligned_string ""
-LABEL_E24A26:	aligned_string ""
-LABEL_E24A28:	aligned_string ""
-LABEL_E24A2A:	aligned_string ""
-LABEL_E24A2C:	aligned_string ""
-LABEL_E24A2E:	aligned_string ""
-LABEL_E24A30:	aligned_string ""
-LABEL_E24A32:	aligned_string ""
-LABEL_E24A34:	aligned_string "DkMdlyPly"
-LABEL_E24A3E:
-	.long LABEL_E24A8A
-	.long LABEL_E24A88
-	.long LABEL_E24A86
-	.long LABEL_E24A84
-	.long LABEL_E24A82
-	.long LABEL_E24A80
-	.long LABEL_E24A7E
-	.long LABEL_E24A7C
-	.long LABEL_E24A7A
-	.long LABEL_E24A78
-	.long LABEL_E24A76
-	.long LABEL_E24A74
-	.long LABEL_E24A72
-LABEL_E24A72:	aligned_string ""
-LABEL_E24A74:	aligned_string ""
-LABEL_E24A76:	aligned_string ""
-LABEL_E24A78:	aligned_string ""
-LABEL_E24A7A:	aligned_string ""
-LABEL_E24A7C:	aligned_string ""
-LABEL_E24A7E:	aligned_string ""
-LABEL_E24A80:	aligned_string ""
-LABEL_E24A82:	aligned_string ""
-LABEL_E24A84:	aligned_string ""
-LABEL_E24A86:	aligned_string ""
-LABEL_E24A88:	aligned_string ""
-LABEL_E24A8A:	aligned_string "SqMdlyPly"
-	.long LABEL_E24AB6
-LABEL_E24A98:
-	.long LABEL_E24AB4
-	.long LABEL_E24AB2
-	.long LABEL_E24AB0
-	.long LABEL_E24AAE
-	.long LABEL_E24AAC
-LABEL_E24AAC:	aligned_string ""
-LABEL_E24AAE:	aligned_string ""
-LABEL_E24AB0:	aligned_string ""
-LABEL_E24AB2:	aligned_string ""
-LABEL_E24AB4:	aligned_string ""
-LABEL_E24AB6:	aligned_string "SqTrSel"
+	.long DkMdlyPly_Str29
+	.long DkMdlyPly_Str28
+	.long DkMdlyPly_Str27
+	.long DkMdlyPly_Str26
+	.long DkMdlyPly_Str25
+	.long DkMdlyPly_Str24
+	.long DkMdlyPly_Str23
+	.long DkMdlyPly_Str22
+	.long DkMdlyPly_Str21
+	.long DkMdlyPly_Str20
+	.long DkMdlyPly_Str19
+	.long DkMdlyPly_Str18
+	.long DkMdlyPly_Str17
+	.long DkMdlyPly_Str16
+	.long DkMdlyPly_Str15
+	.long DkMdlyPly_Str14
+	.long DkMdlyPly_Str13
+	.long DkMdlyPly_Str12
+	.long DkMdlyPly_Str11
+	.long DkMdlyPly_Str10
+	.long DkMdlyPly_Str09
+	.long DkMdlyPly_Str08
+	.long DkMdlyPly_Str07
+	.long DkMdlyPly_Str06
+	.long DkMdlyPly_Str05
+	.long DkMdlyPly_Str04
+	.long DkMdlyPly_Str03
+	.long DkMdlyPly_Str02
+	.long DkMdlyPly_Str01
+	.long DkMdlyPly_Str00
+DkMdlyPly_Str00:	aligned_string ""
+DkMdlyPly_Str01:	aligned_string ""
+DkMdlyPly_Str02:	aligned_string ""
+DkMdlyPly_Str03:	aligned_string ""
+DkMdlyPly_Str04:	aligned_string ""
+DkMdlyPly_Str05:	aligned_string ""
+DkMdlyPly_Str06:	aligned_string ""
+DkMdlyPly_Str07:	aligned_string ""
+DkMdlyPly_Str08:	aligned_string ""
+DkMdlyPly_Str09:	aligned_string ""
+DkMdlyPly_Str10:	aligned_string ""
+DkMdlyPly_Str11:	aligned_string ""
+DkMdlyPly_Str12:	aligned_string ""
+DkMdlyPly_Str13:	aligned_string ""
+DkMdlyPly_Str14:	aligned_string ""
+DkMdlyPly_Str15:	aligned_string ""
+DkMdlyPly_Str16:	aligned_string ""
+DkMdlyPly_Str17:	aligned_string ""
+DkMdlyPly_Str18:	aligned_string ""
+DkMdlyPly_Str19:	aligned_string ""
+DkMdlyPly_Str20:	aligned_string ""
+DkMdlyPly_Str21:	aligned_string ""
+DkMdlyPly_Str22:	aligned_string ""
+DkMdlyPly_Str23:	aligned_string ""
+DkMdlyPly_Str24:	aligned_string ""
+DkMdlyPly_Str25:	aligned_string ""
+DkMdlyPly_Str26:	aligned_string ""
+DkMdlyPly_Str27:	aligned_string ""
+DkMdlyPly_Str28:	aligned_string ""
+DkMdlyPly_Str29:	aligned_string ""
+DkMdlyPly_Name:	aligned_string "DkMdlyPly"
+DkMdlyPly_SubTable:
+	.long SqMdlyPly_Name
+	.long DkMdlyPly_SubStr11
+	.long DkMdlyPly_SubStr10
+	.long DkMdlyPly_SubStr09
+	.long DkMdlyPly_SubStr08
+	.long DkMdlyPly_SubStr07
+	.long DkMdlyPly_SubStr06
+	.long DkMdlyPly_SubStr05
+	.long DkMdlyPly_SubStr04
+	.long DkMdlyPly_SubStr03
+	.long DkMdlyPly_SubStr02
+	.long DkMdlyPly_SubStr01
+	.long DkMdlyPly_SubStr00
+DkMdlyPly_SubStr00:	aligned_string ""
+DkMdlyPly_SubStr01:	aligned_string ""
+DkMdlyPly_SubStr02:	aligned_string ""
+DkMdlyPly_SubStr03:	aligned_string ""
+DkMdlyPly_SubStr04:	aligned_string ""
+DkMdlyPly_SubStr05:	aligned_string ""
+DkMdlyPly_SubStr06:	aligned_string ""
+DkMdlyPly_SubStr07:	aligned_string ""
+DkMdlyPly_SubStr08:	aligned_string ""
+DkMdlyPly_SubStr09:	aligned_string ""
+DkMdlyPly_SubStr10:	aligned_string ""
+DkMdlyPly_SubStr11:	aligned_string ""
+SqMdlyPly_Name:	aligned_string "SqMdlyPly"
+	.long SqTrSel_Name
+SqMdlyPly_SubTable:
+	.long SqMdlyPly_SubStr04
+	.long SqMdlyPly_SubStr03
+	.long SqMdlyPly_SubStr02
+	.long SqMdlyPly_SubStr01
+	.long SqMdlyPly_SubStr00
+SqMdlyPly_SubStr00:	aligned_string ""
+SqMdlyPly_SubStr01:	aligned_string ""
+SqMdlyPly_SubStr02:	aligned_string ""
+SqMdlyPly_SubStr03:	aligned_string ""
+SqMdlyPly_SubStr04:	aligned_string ""
+SqTrSel_Name:	aligned_string "SqTrSel"
 	muls8rr b, w
 	.byte 0xe2, 0x00
-	.long LABEL_E24AC6
-LABEL_E24AC6:	aligned_string ""
-LABEL_E24AC8:	aligned_string ""
-LABEL_E24ACA:
-	.long LABEL_E24B78
-	.long LABEL_E24B76
-	.long LABEL_E24B74
-	.long LABEL_E24B6A
-	.long LABEL_E24B60
-	.long LABEL_E24B5E
-	.long LABEL_E24B5C
-	.long LABEL_E24B5A
-	.long LABEL_E24B58
-	.long LABEL_E24B4A
-	.long LABEL_E24B48
-	.long LABEL_E24B46
-	.long LABEL_E24B44
-	.long LABEL_E24B38
-	.long LABEL_E24B36
-	.long LABEL_E24B34
-	.long LABEL_E24B32
-	.long LABEL_E24B30
-	.long LABEL_E24B2E
-	.long LABEL_E24B2C
-	.long LABEL_E24B2A
-	.long LABEL_E24B28
-	.long LABEL_E24B26
-LABEL_E24B26:	aligned_string ""
-LABEL_E24B28:	aligned_string ""
-LABEL_E24B2A:	aligned_string ""
-LABEL_E24B2C:	aligned_string ""
-LABEL_E24B2E:	aligned_string ""
-LABEL_E24B30:	aligned_string ""
-LABEL_E24B32:	aligned_string ""
-LABEL_E24B34:	aligned_string ""
-LABEL_E24B36:	aligned_string ""
-LABEL_E24B38:	aligned_string "SqTrAsSure"
-LABEL_E24B44:	aligned_string ""
-LABEL_E24B46:	aligned_string ""
-LABEL_E24B48:	aligned_string ""
-LABEL_E24B4A:	aligned_string "TrAsPartSelSw"
-LABEL_E24B58:	aligned_string ""
-LABEL_E24B5A:	aligned_string ""
-LABEL_E24B5C:	aligned_string ""
-LABEL_E24B5E:	aligned_string ""
-LABEL_E24B60:	aligned_string "TrAsGrid"
-LABEL_E24B6A:	aligned_string "TrAsOkSw"
-LABEL_E24B74:	aligned_string ""
-LABEL_E24B76:	aligned_string ""
-LABEL_E24B78:	aligned_string "SqTrAs"
-LABEL_E24B80:
-	.long LABEL_E24C66
-	.long LABEL_E24C64
-	.long LABEL_E24C62
-	.long LABEL_E24C60
-	.long LABEL_E24C52
-	.long LABEL_E24C44
-	.long LABEL_E24C38
-	.long LABEL_E24C36
-	.long LABEL_E24C34
-	.long LABEL_E24C32
-	.long LABEL_E24C24
-	.long LABEL_E24C22
-	.long LABEL_E24C20
-	.long LABEL_E24C1E
-	.long LABEL_E24C1C
-	.long LABEL_E24C1A
-	.long LABEL_E24C18
-	.long LABEL_E24C16
-	.long LABEL_E24C14
-	.long LABEL_E24C06
-	.long LABEL_E24C04
-	.long LABEL_E24C02
-	.long LABEL_E24C00
-	.long LABEL_E24BFE
-	.long LABEL_E24BFC
-	.long LABEL_E24BFA
-	.long LABEL_E24BF8
-	.long LABEL_E24BF6
-	.long LABEL_E24BF4
-LABEL_E24BF4:	aligned_string ""
-LABEL_E24BF6:	aligned_string ""
-LABEL_E24BF8:	aligned_string ""
-LABEL_E24BFA:	aligned_string ""
-LABEL_E24BFC:	aligned_string ""
-LABEL_E24BFE:	aligned_string ""
-LABEL_E24C00:	aligned_string ""
-LABEL_E24C02:	aligned_string ""
-LABEL_E24C04:	aligned_string ""
-LABEL_E24C06:	aligned_string "SqTrAsPsSure2"
-LABEL_E24C14:	aligned_string ""
-LABEL_E24C16:	aligned_string ""
-LABEL_E24C18:	aligned_string ""
-LABEL_E24C1A:	aligned_string ""
-LABEL_E24C1C:	aligned_string ""
-LABEL_E24C1E:	aligned_string ""
-LABEL_E24C20:	aligned_string ""
-LABEL_E24C22:	aligned_string ""
-LABEL_E24C24:	aligned_string "SqTrAsPsSure1"
-LABEL_E24C32:	aligned_string ""
-LABEL_E24C34:	aligned_string ""
-LABEL_E24C36:	aligned_string ""
-LABEL_E24C38:	aligned_string "TrAsPsGmSel"
-LABEL_E24C44:	aligned_string "TrAsPsTechSel"
-LABEL_E24C52:	aligned_string "TrAsPsIniSel"
-LABEL_E24C60:	aligned_string ""
-LABEL_E24C62:	aligned_string ""
-LABEL_E24C64:	aligned_string ""
-LABEL_E24C66:	aligned_string "SqTrAsPs"
-LABEL_E24C70:
-	.long LABEL_E24C92
-	.long LABEL_E24C90
-	.long LABEL_E24C8E
-	.long LABEL_E24C8C
-	.long LABEL_E24C8A
-	.long LABEL_E24C88
-LABEL_E24C88:	aligned_string ""
-LABEL_E24C8A:	aligned_string ""
-LABEL_E24C8C:	aligned_string ""
-LABEL_E24C8E:	aligned_string ""
-LABEL_E24C90:	aligned_string ""
-LABEL_E24C92:	aligned_string "SqSngSel"
-	.long LABEL_E24CC4
-LABEL_E24CA0:
-	.long LABEL_E24CC2
-	.long LABEL_E24CC0
-	.long LABEL_E24CBE
-	.long LABEL_E24CBC
-	.long LABEL_E24CBA
-	.long LABEL_E24CB8
-LABEL_E24CB8:	aligned_string ""
-LABEL_E24CBA:	aligned_string ""
-LABEL_E24CBC:	aligned_string ""
-LABEL_E24CBE:	aligned_string ""
-LABEL_E24CC0:	aligned_string ""
-LABEL_E24CC2:	aligned_string ""
-LABEL_E24CC4:	aligned_string "SqNameing"
-LABEL_E24CCE:
-	.long LABEL_E24CEA
-	.long LABEL_E24CE8
-	.long LABEL_E24CE6
-	.long LABEL_E24CE4
-	.long LABEL_E24CE2
-LABEL_E24CE2:	aligned_string ""
-LABEL_E24CE4:	aligned_string ""
-LABEL_E24CE6:	aligned_string ""
-LABEL_E24CE8:	aligned_string ""
-LABEL_E24CEA:	aligned_string "AfterTouchSet"
-	.long LABEL_E24CFC
-LABEL_E24CFC:	aligned_string ""
-LABEL_E24CFE:
-	.long LABEL_E24D26
-	.long LABEL_E24D24
-	.long LABEL_E24D22
-	.long LABEL_E24D20
-	.long LABEL_E24D1E
-	.long LABEL_E24D1C
-	.long LABEL_E24D1A
-LABEL_E24D1A:	aligned_string ""
-LABEL_E24D1C:	aligned_string ""
-LABEL_E24D1E:	aligned_string ""
-LABEL_E24D20:	aligned_string ""
-LABEL_E24D22:	aligned_string ""
-LABEL_E24D24:	aligned_string ""
-LABEL_E24D26:	aligned_string "StepPartBal"
-LABEL_E24D32:
-	.long LABEL_E24D4E
-	.long LABEL_E24D4C
-	.long LABEL_E24D4A
-	.long LABEL_E24D48
-	.long LABEL_E24D46
-LABEL_E24D46:	aligned_string ""
-LABEL_E24D48:	aligned_string ""
-LABEL_E24D4A:	aligned_string ""
-LABEL_E24D4C:	aligned_string ""
-LABEL_E24D4E:	aligned_string "DemoMenu"
-LABEL_E24D58:
-	.long LABEL_E24DDC
-	.long LABEL_E24DD2
-	.long LABEL_E24DC8
-	.long LABEL_E24DBE
-	.long LABEL_E24DB4
-	.long LABEL_E24DAA
-	.long LABEL_E24DA0
-	.long LABEL_E24D9E
-	.long LABEL_E24D9C
-	.long LABEL_E24D9A
-	.long LABEL_E24D98
-	.long LABEL_E24D8E
-	.long LABEL_E24D8C
-LABEL_E24D8C:	aligned_string ""
-LABEL_E24D8E:	aligned_string "DemoMed1"
-LABEL_E24D98:	aligned_string ""
-LABEL_E24D9A:	aligned_string ""
-LABEL_E24D9C:	aligned_string ""
-LABEL_E24D9E:	aligned_string ""
-LABEL_E24DA0:	aligned_string "DemoSong5"
-LABEL_E24DAA:	aligned_string "DemoSong4"
-LABEL_E24DB4:	aligned_string "DemoSong3"
-LABEL_E24DBE:	aligned_string "DemoSong2"
-LABEL_E24DC8:	aligned_string "DemoSong1"
-LABEL_E24DD2:	aligned_string "DemoSong0"
-LABEL_E24DDC:	aligned_string "DemoStyle"
-LABEL_E24DE6:
-	.long LABEL_E24E6E
-	.long LABEL_E24E64
-	.long LABEL_E24E5A
-	.long LABEL_E24E50
-	.long LABEL_E24E46
-	.long LABEL_E24E3A
-	.long LABEL_E24E2E
-	.long LABEL_E24E2C
-	.long LABEL_E24E2A
-	.long LABEL_E24E28
-	.long LABEL_E24E26
-	.long LABEL_E24E1C
-	.long LABEL_E24E1A
-LABEL_E24E1A:	aligned_string ""
-LABEL_E24E1C:	aligned_string "DemoMed2"
-LABEL_E24E26:	aligned_string ""
-LABEL_E24E28:	aligned_string ""
-LABEL_E24E2A:	aligned_string ""
-LABEL_E24E2C:	aligned_string ""
-LABEL_E24E2E:	aligned_string "DemoSong11"
-LABEL_E24E3A:	aligned_string "DemoSong10"
-LABEL_E24E46:	aligned_string "DemoSong9"
-LABEL_E24E50:	aligned_string "DemoSong8"
-LABEL_E24E5A:	aligned_string "DemoSong7"
-LABEL_E24E64:	aligned_string "DemoSong6"
-LABEL_E24E6E:	aligned_string "DemoSound"
-LABEL_E24E78:
-	.long LABEL_E24F08
-	.long LABEL_E24EFC
-	.long LABEL_E24EF0
-	.long LABEL_E24EE4
-	.long LABEL_E24ED8
-	.long LABEL_E24ECC
-	.long LABEL_E24EC0
-	.long LABEL_E24EBE
-	.long LABEL_E24EBC
-	.long LABEL_E24EBA
-	.long LABEL_E24EB8
-	.long LABEL_E24EAE
-	.long LABEL_E24EAC
-LABEL_E24EAC:	aligned_string ""
-LABEL_E24EAE:	aligned_string "DemoMed3"
-LABEL_E24EB8:	aligned_string ""
-LABEL_E24EBA:	aligned_string ""
-LABEL_E24EBC:	aligned_string ""
-LABEL_E24EBE:	aligned_string ""
-LABEL_E24EC0:	aligned_string "DemoSong17"
-LABEL_E24ECC:	aligned_string "DemoSong16"
-LABEL_E24ED8:	aligned_string "DemoSong15"
-LABEL_E24EE4:	aligned_string "DemoSong14"
-LABEL_E24EF0:	aligned_string "DemoSong13"
-LABEL_E24EFC:	aligned_string "DemoSong12"
-LABEL_E24F08:	aligned_string "DemoRhy"
+	.long SqTrSel_Str00
+SqTrSel_Str00:	aligned_string ""
+SqTrSel_Str01:	aligned_string ""
+SqTrAs_StrTable:
+	.long SqTrAs_Name
+	.long SqTrAs_Str13
+	.long SqTrAs_Str12
+	.long TrAsOkSw_Name
+	.long TrAsGrid_Name
+	.long TrAsGrid_Str03
+	.long TrAsGrid_Str02
+	.long TrAsGrid_Str01
+	.long TrAsGrid_Str00
+	.long TrAsPartSelSw_Name
+	.long SqTrAs_Str11
+	.long SqTrAs_Str10
+	.long SqTrAs_Str09
+	.long SqTrAsSure_Name
+	.long SqTrAs_Str08
+	.long SqTrAs_Str07
+	.long SqTrAs_Str06
+	.long SqTrAs_Str05
+	.long SqTrAs_Str04
+	.long SqTrAs_Str03
+	.long SqTrAs_Str02
+	.long SqTrAs_Str01
+	.long SqTrAs_Str00
+SqTrAs_Str00:	aligned_string ""
+SqTrAs_Str01:	aligned_string ""
+SqTrAs_Str02:	aligned_string ""
+SqTrAs_Str03:	aligned_string ""
+SqTrAs_Str04:	aligned_string ""
+SqTrAs_Str05:	aligned_string ""
+SqTrAs_Str06:	aligned_string ""
+SqTrAs_Str07:	aligned_string ""
+SqTrAs_Str08:	aligned_string ""
+SqTrAsSure_Name:	aligned_string "SqTrAsSure"
+SqTrAs_Str09:	aligned_string ""
+SqTrAs_Str10:	aligned_string ""
+SqTrAs_Str11:	aligned_string ""
+TrAsPartSelSw_Name:	aligned_string "TrAsPartSelSw"
+TrAsGrid_Str00:	aligned_string ""
+TrAsGrid_Str01:	aligned_string ""
+TrAsGrid_Str02:	aligned_string ""
+TrAsGrid_Str03:	aligned_string ""
+TrAsGrid_Name:	aligned_string "TrAsGrid"
+TrAsOkSw_Name:	aligned_string "TrAsOkSw"
+SqTrAs_Str12:	aligned_string ""
+SqTrAs_Str13:	aligned_string ""
+SqTrAs_Name:	aligned_string "SqTrAs"
+SqTrAsPs_StrTable:
+	.long SqTrAsPs_Name
+	.long SqTrAsPs_Str22
+	.long SqTrAsPs_Str21
+	.long SqTrAsPs_Str20
+	.long TrAsPsIniSel_Name
+	.long TrAsPsTechSel_Name
+	.long TrAsPsGmSel_Name
+	.long SqTrAsPs_Str19
+	.long SqTrAsPs_Str18
+	.long SqTrAsPs_Str17
+	.long SqTrAsPsSure1_Name
+	.long SqTrAsPs_Str16
+	.long SqTrAsPs_Str15
+	.long SqTrAsPs_Str14
+	.long SqTrAsPs_Str13
+	.long SqTrAsPs_Str12
+	.long SqTrAsPs_Str11
+	.long SqTrAsPs_Str10
+	.long SqTrAsPs_Str09
+	.long SqTrAsPsSure2_Name
+	.long SqTrAsPs_Str08
+	.long SqTrAsPs_Str07
+	.long SqTrAsPs_Str06
+	.long SqTrAsPs_Str05
+	.long SqTrAsPs_Str04
+	.long SqTrAsPs_Str03
+	.long SqTrAsPs_Str02
+	.long SqTrAsPs_Str01
+	.long SqTrAsPs_Str00
+SqTrAsPs_Str00:	aligned_string ""
+SqTrAsPs_Str01:	aligned_string ""
+SqTrAsPs_Str02:	aligned_string ""
+SqTrAsPs_Str03:	aligned_string ""
+SqTrAsPs_Str04:	aligned_string ""
+SqTrAsPs_Str05:	aligned_string ""
+SqTrAsPs_Str06:	aligned_string ""
+SqTrAsPs_Str07:	aligned_string ""
+SqTrAsPs_Str08:	aligned_string ""
+SqTrAsPsSure2_Name:	aligned_string "SqTrAsPsSure2"
+SqTrAsPs_Str09:	aligned_string ""
+SqTrAsPs_Str10:	aligned_string ""
+SqTrAsPs_Str11:	aligned_string ""
+SqTrAsPs_Str12:	aligned_string ""
+SqTrAsPs_Str13:	aligned_string ""
+SqTrAsPs_Str14:	aligned_string ""
+SqTrAsPs_Str15:	aligned_string ""
+SqTrAsPs_Str16:	aligned_string ""
+SqTrAsPsSure1_Name:	aligned_string "SqTrAsPsSure1"
+SqTrAsPs_Str17:	aligned_string ""
+SqTrAsPs_Str18:	aligned_string ""
+SqTrAsPs_Str19:	aligned_string ""
+TrAsPsGmSel_Name:	aligned_string "TrAsPsGmSel"
+TrAsPsTechSel_Name:	aligned_string "TrAsPsTechSel"
+TrAsPsIniSel_Name:	aligned_string "TrAsPsIniSel"
+SqTrAsPs_Str20:	aligned_string ""
+SqTrAsPs_Str21:	aligned_string ""
+SqTrAsPs_Str22:	aligned_string ""
+SqTrAsPs_Name:	aligned_string "SqTrAsPs"
+SqSngSel_StrTable:
+	.long SqSngSel_Name
+	.long SqSngSel_Str04
+	.long SqSngSel_Str03
+	.long SqSngSel_Str02
+	.long SqSngSel_Str01
+	.long SqSngSel_Str00
+SqSngSel_Str00:	aligned_string ""
+SqSngSel_Str01:	aligned_string ""
+SqSngSel_Str02:	aligned_string ""
+SqSngSel_Str03:	aligned_string ""
+SqSngSel_Str04:	aligned_string ""
+SqSngSel_Name:	aligned_string "SqSngSel"
+	.long SqNameing_Name
+SqNameing_StrTable:
+	.long SqNameing_Str05
+	.long SqNameing_Str04
+	.long SqNameing_Str03
+	.long SqNameing_Str02
+	.long SqNameing_Str01
+	.long SqNameing_Str00
+SqNameing_Str00:	aligned_string ""
+SqNameing_Str01:	aligned_string ""
+SqNameing_Str02:	aligned_string ""
+SqNameing_Str03:	aligned_string ""
+SqNameing_Str04:	aligned_string ""
+SqNameing_Str05:	aligned_string ""
+SqNameing_Name:	aligned_string "SqNameing"
+AfterTouchSet_StrTable:
+	.long AfterTouchSet_Name
+	.long AfterTouchSet_Str03
+	.long AfterTouchSet_Str02
+	.long AfterTouchSet_Str01
+	.long AfterTouchSet_Str00
+AfterTouchSet_Str00:	aligned_string ""
+AfterTouchSet_Str01:	aligned_string ""
+AfterTouchSet_Str02:	aligned_string ""
+AfterTouchSet_Str03:	aligned_string ""
+AfterTouchSet_Name:	aligned_string "AfterTouchSet"
+	.long AfterTouchSet_Pad
+AfterTouchSet_Pad:	aligned_string ""
+StepPartBal_StrTable:
+	.long StepPartBal_Name
+	.long StepPartBal_Str05
+	.long StepPartBal_Str04
+	.long StepPartBal_Str03
+	.long StepPartBal_Str02
+	.long StepPartBal_Str01
+	.long StepPartBal_Str00
+StepPartBal_Str00:	aligned_string ""
+StepPartBal_Str01:	aligned_string ""
+StepPartBal_Str02:	aligned_string ""
+StepPartBal_Str03:	aligned_string ""
+StepPartBal_Str04:	aligned_string ""
+StepPartBal_Str05:	aligned_string ""
+StepPartBal_Name:	aligned_string "StepPartBal"
+DemoMenu_StrTable:
+	.long DemoMenu_Name
+	.long DemoMenu_Str03
+	.long DemoMenu_Str02
+	.long DemoMenu_Str01
+	.long DemoMenu_Str00
+DemoMenu_Str00:	aligned_string ""
+DemoMenu_Str01:	aligned_string ""
+DemoMenu_Str02:	aligned_string ""
+DemoMenu_Str03:	aligned_string ""
+DemoMenu_Name:	aligned_string "DemoMenu"
+DemoStyle_StrTable:
+	.long DemoStyle_Name
+	.long DemoSong0_Name
+	.long DemoSong1_Name
+	.long DemoSong2_Name
+	.long DemoSong3_Name
+	.long DemoSong4_Name
+	.long DemoSong5_Name
+	.long DemoStyle_Str03
+	.long DemoStyle_Str02
+	.long DemoStyle_Str01
+	.long DemoStyle_Str00
+	.long DemoMed1_Name
+	.long DemoMed1_Str00
+DemoMed1_Str00:	aligned_string ""
+DemoMed1_Name:	aligned_string "DemoMed1"
+DemoStyle_Str00:	aligned_string ""
+DemoStyle_Str01:	aligned_string ""
+DemoStyle_Str02:	aligned_string ""
+DemoStyle_Str03:	aligned_string ""
+DemoSong5_Name:	aligned_string "DemoSong5"
+DemoSong4_Name:	aligned_string "DemoSong4"
+DemoSong3_Name:	aligned_string "DemoSong3"
+DemoSong2_Name:	aligned_string "DemoSong2"
+DemoSong1_Name:	aligned_string "DemoSong1"
+DemoSong0_Name:	aligned_string "DemoSong0"
+DemoStyle_Name:	aligned_string "DemoStyle"
+DemoSound_StrTable:
+	.long DemoSound_Name
+	.long DemoSong6_Name
+	.long DemoSong7_Name
+	.long DemoSong8_Name
+	.long DemoSong9_Name
+	.long DemoSong10_Name
+	.long DemoSong11_Name
+	.long DemoSound_Str03
+	.long DemoSound_Str02
+	.long DemoSound_Str01
+	.long DemoSound_Str00
+	.long DemoMed2_Name
+	.long DemoMed2_Str00
+DemoMed2_Str00:	aligned_string ""
+DemoMed2_Name:	aligned_string "DemoMed2"
+DemoSound_Str00:	aligned_string ""
+DemoSound_Str01:	aligned_string ""
+DemoSound_Str02:	aligned_string ""
+DemoSound_Str03:	aligned_string ""
+DemoSong11_Name:	aligned_string "DemoSong11"
+DemoSong10_Name:	aligned_string "DemoSong10"
+DemoSong9_Name:	aligned_string "DemoSong9"
+DemoSong8_Name:	aligned_string "DemoSong8"
+DemoSong7_Name:	aligned_string "DemoSong7"
+DemoSong6_Name:	aligned_string "DemoSong6"
+DemoSound_Name:	aligned_string "DemoSound"
+DemoRhy_StrTable:
+	.long DemoRhy_Name
+	.long DemoSong12_Name
+	.long DemoSong13_Name
+	.long DemoSong14_Name
+	.long DemoSong15_Name
+	.long DemoSong16_Name
+	.long DemoSong17_Name
+	.long DemoRhy_Str03
+	.long DemoRhy_Str02
+	.long DemoRhy_Str01
+	.long DemoRhy_Str00
+	.long DemoMed3_Name
+	.long DemoMed3_Str00
+DemoMed3_Str00:	aligned_string ""
+DemoMed3_Name:	aligned_string "DemoMed3"
+DemoRhy_Str00:	aligned_string ""
+DemoRhy_Str01:	aligned_string ""
+DemoRhy_Str02:	aligned_string ""
+DemoRhy_Str03:	aligned_string ""
+DemoSong17_Name:	aligned_string "DemoSong17"
+DemoSong16_Name:	aligned_string "DemoSong16"
+DemoSong15_Name:	aligned_string "DemoSong15"
+DemoSong14_Name:	aligned_string "DemoSong14"
+DemoSong13_Name:	aligned_string "DemoSong13"
+DemoSong12_Name:	aligned_string "DemoSong12"
+DemoRhy_Name:	aligned_string "DemoRhy"
 	aligned_string "MD_SEQ_STEP"
 	.byte 0x4d, 0x44, 0x5f, 0x44
 	.byte 0x45, 0x4d, 0x4f, 0x00
@@ -6371,211 +6371,211 @@ LABEL_E24F08:	aligned_string "DemoRhy"
 	.byte 0xf2, 0x00, 0x57, 0x25, 0xf2, 0x00, 0x4c, 0x15
 	.byte 0xf2, 0x00, 0xb8, 0x5a, 0xf4, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00
-LABEL_E250C2:
-	.long LABEL_E25328
-	.long LABEL_E25316
-	.long LABEL_E25306
-	.long LABEL_E252F6
-	.long LABEL_E252E6
-	.long LABEL_E252D4
-	.long LABEL_E252C6
-	.long LABEL_E252B6
-	.long LABEL_E252A6
-	.long LABEL_E25294
-	.long LABEL_E25282
-	.long LABEL_E25270
-	.long LABEL_E2525E
-	.long LABEL_E2524E
-	.long LABEL_E2523C
-	.long LABEL_E25228
-	.long LABEL_E2521A
-	.long LABEL_E2520E
-	.long LABEL_E25200
-	.long LABEL_E251F0
-	.long LABEL_E251E0
-	.long LABEL_E251D0
-	.long LABEL_E251C2
-	.long LABEL_E251B4
-	.long LABEL_E251A4
-	.long LABEL_E25192
-	.long LABEL_E25180
-	.long LABEL_E25170
-	.long LABEL_E25160
-	.long LABEL_E25150
-	.long LABEL_E25144
-	.long LABEL_E25142
-LABEL_E25142:	aligned_string ""
-LABEL_E25144:	aligned_string "ApPlaySyori"
-LABEL_E25150:	aligned_string "NameGetFuncCall"
-LABEL_E25160:	aligned_string "MiddleFuncCall"
-LABEL_E25170:	aligned_string "DemoRhyTtlFunc"
-LABEL_E25180:	aligned_string "DemoSoundTtlFunc"
-LABEL_E25192:	aligned_string "DemoStyleTtlFunc"
-LABEL_E251A4:	aligned_string "DemoMenuTtlFunc"
-LABEL_E251B4:	aligned_string "DemoModeFunc"
-LABEL_E251C2:	aligned_string "SqStepTtlFunc"
-LABEL_E251D0:	aligned_string "SqTrSelTtlFunc"
-LABEL_E251E0:	aligned_string "SeqStepModeFunc"
-LABEL_E251F0:	aligned_string "DpSmfLyrTtlFunc"
-LABEL_E25200:	aligned_string "DpSmfTtlFunc"
-LABEL_E2520E:	aligned_string "DpPdTtlFunc"
-LABEL_E2521A:	aligned_string "DpDocTtlFunc"
-LABEL_E25228:	aligned_string "DpMdlySmfLyrTtlFunc"
-LABEL_E2523C:	aligned_string "DpMdlySmfTtlFunc"
-LABEL_E2524E:	aligned_string "DpMdlyPdTtlFunc"
-LABEL_E2525E:	aligned_string "DpMdlyDocTtlFunc"
-LABEL_E25270:	aligned_string "DkMdlyPlyTtlFunc"
-LABEL_E25282:	aligned_string "SqMdlyPlyTtlFunc"
-LABEL_E25294:	aligned_string "SqTrAsPsSureFunc"
-LABEL_E252A6:	aligned_string "SqTrAsPsTtlFunc"
-LABEL_E252B6:	aligned_string "SqTrAsSureFunc"
-LABEL_E252C6:	aligned_string "SqTrAsTtlFunc"
-LABEL_E252D4:	aligned_string "SqSngNameTtlFunc"
-LABEL_E252E6:	aligned_string "SqSngSelTtlFunc"
-LABEL_E252F6:	aligned_string "SqAftSetTtlFunc"
-LABEL_E25306:	aligned_string "CDlikeSwTtlFunc"
-LABEL_E25316:	aligned_string "SeqSongMemoryFunc"
-LABEL_E25328:	aligned_string "SeqSongNameFunc"
-LABEL_E25338:	.asciz "Press the up/down button under the screen corresponding to the track that you want to STEP RECORD."
+TtlFunc_PtrTable:
+	.long SeqSongNameFunc_Name
+	.long SeqSongMemoryFunc_Name
+	.long CDlikeSwTtlFunc_Name
+	.long SqAftSetTtlFunc_Name
+	.long SqSngSelTtlFunc_Name
+	.long SqSngNameTtlFunc_Name
+	.long SqTrAsTtlFunc_Name
+	.long SqTrAsSureFunc_Name
+	.long SqTrAsPsTtlFunc_Name
+	.long SqTrAsPsSureFunc_Name
+	.long SqMdlyPlyTtlFunc_Name
+	.long DkMdlyPlyTtlFunc_Name
+	.long DpMdlyDocTtlFunc_Name
+	.long DpMdlyPdTtlFunc_Name
+	.long DpMdlySmfTtlFunc_Name
+	.long DpMdlySmfLyrTtlFunc_Name
+	.long DpDocTtlFunc_Name
+	.long DpPdTtlFunc_Name
+	.long DpSmfTtlFunc_Name
+	.long DpSmfLyrTtlFunc_Name
+	.long SeqStepModeFunc_Name
+	.long SqTrSelTtlFunc_Name
+	.long SqStepTtlFunc_Name
+	.long DemoModeFunc_Name
+	.long DemoMenuTtlFunc_Name
+	.long DemoStyleTtlFunc_Name
+	.long DemoSoundTtlFunc_Name
+	.long DemoRhyTtlFunc_Name
+	.long MiddleFuncCall_Name
+	.long NameGetFuncCall_Name
+	.long ApPlaySyori_Name
+	.long ApPlaySyori_Str00
+ApPlaySyori_Str00:	aligned_string ""
+ApPlaySyori_Name:	aligned_string "ApPlaySyori"
+NameGetFuncCall_Name:	aligned_string "NameGetFuncCall"
+MiddleFuncCall_Name:	aligned_string "MiddleFuncCall"
+DemoRhyTtlFunc_Name:	aligned_string "DemoRhyTtlFunc"
+DemoSoundTtlFunc_Name:	aligned_string "DemoSoundTtlFunc"
+DemoStyleTtlFunc_Name:	aligned_string "DemoStyleTtlFunc"
+DemoMenuTtlFunc_Name:	aligned_string "DemoMenuTtlFunc"
+DemoModeFunc_Name:	aligned_string "DemoModeFunc"
+SqStepTtlFunc_Name:	aligned_string "SqStepTtlFunc"
+SqTrSelTtlFunc_Name:	aligned_string "SqTrSelTtlFunc"
+SeqStepModeFunc_Name:	aligned_string "SeqStepModeFunc"
+DpSmfLyrTtlFunc_Name:	aligned_string "DpSmfLyrTtlFunc"
+DpSmfTtlFunc_Name:	aligned_string "DpSmfTtlFunc"
+DpPdTtlFunc_Name:	aligned_string "DpPdTtlFunc"
+DpDocTtlFunc_Name:	aligned_string "DpDocTtlFunc"
+DpMdlySmfLyrTtlFunc_Name:	aligned_string "DpMdlySmfLyrTtlFunc"
+DpMdlySmfTtlFunc_Name:	aligned_string "DpMdlySmfTtlFunc"
+DpMdlyPdTtlFunc_Name:	aligned_string "DpMdlyPdTtlFunc"
+DpMdlyDocTtlFunc_Name:	aligned_string "DpMdlyDocTtlFunc"
+DkMdlyPlyTtlFunc_Name:	aligned_string "DkMdlyPlyTtlFunc"
+SqMdlyPlyTtlFunc_Name:	aligned_string "SqMdlyPlyTtlFunc"
+SqTrAsPsSureFunc_Name:	aligned_string "SqTrAsPsSureFunc"
+SqTrAsPsTtlFunc_Name:	aligned_string "SqTrAsPsTtlFunc"
+SqTrAsSureFunc_Name:	aligned_string "SqTrAsSureFunc"
+SqTrAsTtlFunc_Name:	aligned_string "SqTrAsTtlFunc"
+SqSngNameTtlFunc_Name:	aligned_string "SqSngNameTtlFunc"
+SqSngSelTtlFunc_Name:	aligned_string "SqSngSelTtlFunc"
+SqAftSetTtlFunc_Name:	aligned_string "SqAftSetTtlFunc"
+CDlikeSwTtlFunc_Name:	aligned_string "CDlikeSwTtlFunc"
+SeqSongMemoryFunc_Name:	aligned_string "SeqSongMemoryFunc"
+SeqSongNameFunc_Name:	aligned_string "SeqSongNameFunc"
+MsgStepRec_En:	.asciz "Press the up/down button under the screen corresponding to the track that you want to STEP RECORD."
 	.byte 0xff
-LABEL_E2539C:	aligned_string "Drücken Sie eine der Doppeltasten unter dem Display, entsprechend der Spur, die Sie per STEP RECORD aufnehmen möchten."
-LABEL_E25414:	aligned_string "Press the up/down button under the screen corresponding to the track that you want to STEP RECORD."
-LABEL_E25478:	aligned_string "Press the up/down button under the screen corresponding to the track that you want to STEP RECORD."
-LABEL_E254DC:	aligned_string "Press the up/down button under the screen corresponding to the track that you want to STEP RECORD."
-LABEL_E25540:	aligned_string "Press the up/down button under the screen corresponding to the track that you want to STEP RECORD."
-LABEL_E255A4:	aligned_string "Select whether or not After Touch is recorded by Sequencer."
-LABEL_E255E0:	.asciz "Wählen Sie, ob After Touch Effekte vom Sequenzer aufgezeichnet werden sollen."
-LABEL_E2562E:	aligned_string "Select whether or not After Touch is recorded by Sequencer."
-LABEL_E2566A:	aligned_string "Select whether or not After Touch is recorded by Sequencer."
-LABEL_E256A6:	aligned_string "Select whether or not After Touch is recorded by Sequencer."
-LABEL_E256E2:	aligned_string "Select whether or not After Touch is recorded by Sequencer."
-LABEL_E2571E:	aligned_string "Any existing song will be cleared. Press OK to proceed."
-LABEL_E25756:	aligned_string "Jeder Song im Arbeitsspeicher wird gelöscht. Drücken Sie OK zur Bestätigung."
-LABEL_E257A4:	aligned_string "Any existing song will be cleared. Press OK to proceed."
-LABEL_E257DC:	aligned_string "Any existing song will be cleared. Press OK to proceed."
-LABEL_E25814:	aligned_string "Any existing song will be cleared. Press OK to proceed."
-LABEL_E2584C:	aligned_string "Any existing song will be cleared. Press OK to proceed."
-LABEL_E25884:	aligned_string "ATTENTION!"
-LABEL_E25890:	aligned_string "ACHTUNG !"
-LABEL_E2589A:	aligned_string "ATTENTION!"
-LABEL_E258A6:	aligned_string "¡ATENCIÓN!"
-LABEL_E258B2:	aligned_string "ATTENTION!"
-LABEL_E258BE:	aligned_string "Perhatian !"
-LABEL_E258CA:	aligned_string "Are You Sure?"
-LABEL_E258D8:	aligned_string "Sind Sie sicher ?"
-LABEL_E258EA:	aligned_string "Etes vous sûr?"
-LABEL_E258FA:	.asciz "¿Está seguro?"
-LABEL_E25908:	aligned_string "Are You Sure?"
-LABEL_E25916:	aligned_string "Apakah yakin akan dihapus ?"
-LABEL_E25932:	aligned_string "Turning on GENERAL MIDI MODE will replace your current settings with GENERAL MIDI settings!"
-LABEL_E2598E:	.asciz "Durch das Einschalten des GENERAL MIDI MODE werden alle Einstellungen zu GENERAL MIDI Einstellungen geändert!"
-LABEL_E259FC:	aligned_string "L'activation du mode GENERAL MIDI MODE remplacera tous les réglages actuels par les réglages GENERAL MIDI!"
-LABEL_E25A68:	.asciz "¡Al activar el modo MIDI General se reemplazan las configuraciones actuales por configuraciones MIDI Generales!"
-LABEL_E25AD8:	aligned_string "Turning on GENERAL MIDI MODE will replace your current settings with GENERAL MIDI settings!"
-LABEL_E25B34:	aligned_string "Aktifkan GENERAL MIDI MODE untuk kembali ke  susunan GENERAL MIDI yang sekarang. "
-LABEL_E25B86:	aligned_string "Turning off GENERAL MIDI MODE will replace the GENERAL MIDI settings with the original factory settings!"
-LABEL_E25BF0:	aligned_string "Durch das Ausschalten des GENERAL MIDI MODE werden die GENERAL MIDI Einstellungen durch die Werkseinstellungen ersetzt."
-LABEL_E25C68:	aligned_string "La désactivation du mode GENERAL MIDI MODE remplacera tous les réglages GENERAL MIDI par les réglages d'usines!"
-LABEL_E25CD8:	aligned_string "¡Al desconectar el modo MIDI General se reemplazan las configuraciones MIDI Generales por las configuraciones originales de fábrica!"
-LABEL_E25D5E:	aligned_string "Turning off GENERAL MIDI MODE will replace the GENERAL MIDI settings with the original factory settings!"
-LABEL_E25DC8:	aligned_string "Non-aktifkan fungsi GENERAL MIDI MODE bila akan kembali ke susunan GENERAL MIDI sesuai susunan dari pabrik(originil factory settings)."
-LABEL_E25E50:
-	.long LABEL_E26024
-	.long LABEL_E25FCC
-	.long LABEL_E25F6E
-	.long LABEL_E25F16
-	.long LABEL_E25EC2
-	.long LABEL_E25E68
-LABEL_E25E68:	aligned_string "Ubahlah assignment dari Tracks %2d dari %s ke %s akan menghapus semua data yang sekarang."
-LABEL_E25EC2:	aligned_string "Changing the assignment of Track %2d from %s to %s will erase all the current data."
-LABEL_E25F16:	.asciz "Al cambiar la asignación de pistas %2d de %s a %s se borrarán todos los datos actuales."
-LABEL_E25F6E:	aligned_string "Tout changement d'assignation des pistes %2d de%s à%s effacera toutes les données actuelles."
-LABEL_E25FCC:	aligned_string "Das Ändern der Spurzuordnung %2d von %s nach %s hat einen Verlust der Daten zur folge."
-LABEL_E26024:	aligned_string "Changing the assignment of Track %2d from %s to %s will erase all the current data."
-LABEL_E26078:
-	.long LABEL_E25338
-	.long LABEL_E2539C
-	.long LABEL_E25414
-	.long LABEL_E25478
-	.long LABEL_E254DC
-	.long LABEL_E25540
-	.long LABEL_E255A4
-	.long LABEL_E255E0
-	.long LABEL_E2562E
-	.long LABEL_E2566A
-	.long LABEL_E256A6
-	.long LABEL_E256E2
-	.long LABEL_E2571E
-	.long LABEL_E25756
-	.long LABEL_E257A4
-	.long LABEL_E257DC
-	.long LABEL_E25814
-	.long LABEL_E2584C
-	.long LABEL_E25884
-	.long LABEL_E25890
-	.long LABEL_E2589A
-	.long LABEL_E258A6
-	.long LABEL_E258B2
-	.long LABEL_E258BE
-	.long LABEL_E258CA
-	.long LABEL_E258D8
-	.long LABEL_E258EA
-	.long LABEL_E258FA
-	.long LABEL_E25908
-	.long LABEL_E25916
-	.long LABEL_E25932
-	.long LABEL_E2598E
-	.long LABEL_E259FC
-	.long LABEL_E25A68
-	.long LABEL_E25AD8
-	.long LABEL_E25B34
-	.long LABEL_E25B86
-	.long LABEL_E25BF0
-	.long LABEL_E25C68
-	.long LABEL_E25CD8
-	.long LABEL_E25D5E
-	.long LABEL_E25DC8
-	.long LABEL_E261F2
-	.long LABEL_E261EC
-	.long LABEL_E261E4
-	.long LABEL_E261DE
-	.long LABEL_E261D8
-	.long LABEL_E261D0
-	.long LABEL_E261C8
-	.long LABEL_E261C0
-	.long LABEL_E261BA
-	.long LABEL_E261B4
-	.long LABEL_E261AE
-	.long LABEL_E261A8
-	.long LABEL_E261A2
-	.long LABEL_E2619C
-	.long LABEL_E26198
-	.long LABEL_E26190
-	.long LABEL_E26188
-	.long LABEL_E26180
-	.long LABEL_E26178
-	.long LABEL_E26170
-LABEL_E26170:	aligned_string "PART15"
-LABEL_E26178:	aligned_string "PART14"
-LABEL_E26180:	aligned_string "PART13"
-LABEL_E26188:	aligned_string "RHYTHM"
-LABEL_E26190:	aligned_string "CONTROL"
-LABEL_E26198:
+MsgStepRec_De:	aligned_string "Drücken Sie eine der Doppeltasten unter dem Display, entsprechend der Spur, die Sie per STEP RECORD aufnehmen möchten."
+MsgStepRec_Fr:	aligned_string "Press the up/down button under the screen corresponding to the track that you want to STEP RECORD."
+MsgStepRec_Es:	aligned_string "Press the up/down button under the screen corresponding to the track that you want to STEP RECORD."
+MsgStepRec_Id:	aligned_string "Press the up/down button under the screen corresponding to the track that you want to STEP RECORD."
+MsgStepRec_En2:	aligned_string "Press the up/down button under the screen corresponding to the track that you want to STEP RECORD."
+MsgAftTchRec_En:	aligned_string "Select whether or not After Touch is recorded by Sequencer."
+MsgAftTchRec_De:	.asciz "Wählen Sie, ob After Touch Effekte vom Sequenzer aufgezeichnet werden sollen."
+MsgAftTchRec_Fr:	aligned_string "Select whether or not After Touch is recorded by Sequencer."
+MsgAftTchRec_Es:	aligned_string "Select whether or not After Touch is recorded by Sequencer."
+MsgAftTchRec_Id:	aligned_string "Select whether or not After Touch is recorded by Sequencer."
+MsgAftTchRec_En2:	aligned_string "Select whether or not After Touch is recorded by Sequencer."
+MsgSongClr_En:	aligned_string "Any existing song will be cleared. Press OK to proceed."
+MsgSongClr_De:	aligned_string "Jeder Song im Arbeitsspeicher wird gelöscht. Drücken Sie OK zur Bestätigung."
+MsgSongClr_Fr:	aligned_string "Any existing song will be cleared. Press OK to proceed."
+MsgSongClr_Es:	aligned_string "Any existing song will be cleared. Press OK to proceed."
+MsgSongClr_Id:	aligned_string "Any existing song will be cleared. Press OK to proceed."
+MsgSongClr_En2:	aligned_string "Any existing song will be cleared. Press OK to proceed."
+MsgAttention_En:	aligned_string "ATTENTION!"
+MsgAttention_De:	aligned_string "ACHTUNG !"
+MsgAttention_Fr:	aligned_string "ATTENTION!"
+MsgAttention_Es:	aligned_string "¡ATENCIÓN!"
+MsgAttention_Id:	aligned_string "ATTENTION!"
+MsgAttention_Id2:	aligned_string "Perhatian !"
+MsgAreYouSure_En:	aligned_string "Are You Sure?"
+MsgAreYouSure_De:	aligned_string "Sind Sie sicher ?"
+MsgAreYouSure_Fr:	aligned_string "Etes vous sûr?"
+MsgAreYouSure_Es:	.asciz "¿Está seguro?"
+MsgAreYouSure_Id:	aligned_string "Are You Sure?"
+MsgAreYouSure_Id2:	aligned_string "Apakah yakin akan dihapus ?"
+MsgGmModeOn_En:	aligned_string "Turning on GENERAL MIDI MODE will replace your current settings with GENERAL MIDI settings!"
+MsgGmModeOn_De:	.asciz "Durch das Einschalten des GENERAL MIDI MODE werden alle Einstellungen zu GENERAL MIDI Einstellungen geändert!"
+MsgGmModeOn_Fr:	aligned_string "L'activation du mode GENERAL MIDI MODE remplacera tous les réglages actuels par les réglages GENERAL MIDI!"
+MsgGmModeOn_Es:	.asciz "¡Al activar el modo MIDI General se reemplazan las configuraciones actuales por configuraciones MIDI Generales!"
+MsgGmModeOn_En2:	aligned_string "Turning on GENERAL MIDI MODE will replace your current settings with GENERAL MIDI settings!"
+MsgGmModeOn_Id:	aligned_string "Aktifkan GENERAL MIDI MODE untuk kembali ke  susunan GENERAL MIDI yang sekarang. "
+MsgGmModeOff_En:	aligned_string "Turning off GENERAL MIDI MODE will replace the GENERAL MIDI settings with the original factory settings!"
+MsgGmModeOff_De:	aligned_string "Durch das Ausschalten des GENERAL MIDI MODE werden die GENERAL MIDI Einstellungen durch die Werkseinstellungen ersetzt."
+MsgGmModeOff_Fr:	aligned_string "La désactivation du mode GENERAL MIDI MODE remplacera tous les réglages GENERAL MIDI par les réglages d'usines!"
+MsgGmModeOff_Es:	aligned_string "¡Al desconectar el modo MIDI General se reemplazan las configuraciones MIDI Generales por las configuraciones originales de fábrica!"
+MsgGmModeOff_En2:	aligned_string "Turning off GENERAL MIDI MODE will replace the GENERAL MIDI settings with the original factory settings!"
+MsgGmModeOff_Id:	aligned_string "Non-aktifkan fungsi GENERAL MIDI MODE bila akan kembali ke susunan GENERAL MIDI sesuai susunan dari pabrik(originil factory settings)."
+MsgTrkAssignChg_PtrTable:
+	.long MsgTrkAssignChg_En2
+	.long MsgTrkAssignChg_De
+	.long MsgTrkAssignChg_Fr
+	.long MsgTrkAssignChg_Es
+	.long MsgTrkAssignChg_En
+	.long MsgTrkAssignChg_Id
+MsgTrkAssignChg_Id:	aligned_string "Ubahlah assignment dari Tracks %2d dari %s ke %s akan menghapus semua data yang sekarang."
+MsgTrkAssignChg_En:	aligned_string "Changing the assignment of Track %2d from %s to %s will erase all the current data."
+MsgTrkAssignChg_Es:	.asciz "Al cambiar la asignación de pistas %2d de %s a %s se borrarán todos los datos actuales."
+MsgTrkAssignChg_Fr:	aligned_string "Tout changement d'assignation des pistes %2d de%s à%s effacera toutes les données actuelles."
+MsgTrkAssignChg_De:	aligned_string "Das Ändern der Spurzuordnung %2d von %s nach %s hat einen Verlust der Daten zur folge."
+MsgTrkAssignChg_En2:	aligned_string "Changing the assignment of Track %2d from %s to %s will erase all the current data."
+Msg_LangPtrTable:
+	.long MsgStepRec_En
+	.long MsgStepRec_De
+	.long MsgStepRec_Fr
+	.long MsgStepRec_Es
+	.long MsgStepRec_Id
+	.long MsgStepRec_En2
+	.long MsgAftTchRec_En
+	.long MsgAftTchRec_De
+	.long MsgAftTchRec_Fr
+	.long MsgAftTchRec_Es
+	.long MsgAftTchRec_Id
+	.long MsgAftTchRec_En2
+	.long MsgSongClr_En
+	.long MsgSongClr_De
+	.long MsgSongClr_Fr
+	.long MsgSongClr_Es
+	.long MsgSongClr_Id
+	.long MsgSongClr_En2
+	.long MsgAttention_En
+	.long MsgAttention_De
+	.long MsgAttention_Fr
+	.long MsgAttention_Es
+	.long MsgAttention_Id
+	.long MsgAttention_Id2
+	.long MsgAreYouSure_En
+	.long MsgAreYouSure_De
+	.long MsgAreYouSure_Fr
+	.long MsgAreYouSure_Es
+	.long MsgAreYouSure_Id
+	.long MsgAreYouSure_Id2
+	.long MsgGmModeOn_En
+	.long MsgGmModeOn_De
+	.long MsgGmModeOn_Fr
+	.long MsgGmModeOn_Es
+	.long MsgGmModeOn_En2
+	.long MsgGmModeOn_Id
+	.long MsgGmModeOff_En
+	.long MsgGmModeOff_De
+	.long MsgGmModeOff_Fr
+	.long MsgGmModeOff_Es
+	.long MsgGmModeOff_En2
+	.long MsgGmModeOff_Id
+	.long TrkName_Right1
+	.long TrkName_Left
+	.long TrkName_Right2
+	.long TrkName_Part8
+	.long TrkName_Part9
+	.long TrkName_Part10
+	.long TrkName_Part11
+	.long TrkName_Part12
+	.long TrkName_Part5
+	.long TrkName_Part6
+	.long TrkName_Part7
+	.long TrkName_Part4
+	.long TrkName_Drums
+	.long TrkName_Chord
+	.long TrkName_APC
+	.long TrkName_Control
+	.long TrkName_Rhythm
+	.long TrkName_Part13
+	.long TrkName_Part14
+	.long TrkName_Part15
+TrkName_Part15:	aligned_string "PART15"
+TrkName_Part14:	aligned_string "PART14"
+TrkName_Part13:	aligned_string "PART13"
+TrkName_Rhythm:	aligned_string "RHYTHM"
+TrkName_Control:	aligned_string "CONTROL"
+TrkName_APC:
 	.byte 0x41, 0x50, 0x43, 0x00
-LABEL_E2619C:	.asciz "CHORD"
-LABEL_E261A2:	aligned_string "DRUMS"
-LABEL_E261A8:	aligned_string "PART4"
-LABEL_E261AE:	.asciz "PART7"
-LABEL_E261B4:	.asciz "PART6"
-LABEL_E261BA:	aligned_string "PART5"
-LABEL_E261C0:	aligned_string "PART12"
-LABEL_E261C8:	aligned_string "PART11"
-LABEL_E261D0:	aligned_string "PART10"
-LABEL_E261D8:	aligned_string "PART9"
-LABEL_E261DE:	.asciz "PART8"
-LABEL_E261E4:	aligned_string "RIGHT2"
-LABEL_E261EC:	aligned_string "LEFT"
-LABEL_E261F2:	aligned_string "RIGHT1"
+TrkName_Chord:	.asciz "CHORD"
+TrkName_Drums:	aligned_string "DRUMS"
+TrkName_Part4:	aligned_string "PART4"
+TrkName_Part7:	.asciz "PART7"
+TrkName_Part6:	.asciz "PART6"
+TrkName_Part5:	aligned_string "PART5"
+TrkName_Part12:	aligned_string "PART12"
+TrkName_Part11:	aligned_string "PART11"
+TrkName_Part10:	aligned_string "PART10"
+TrkName_Part9:	aligned_string "PART9"
+TrkName_Part8:	.asciz "PART8"
+TrkName_Right2:	aligned_string "RIGHT2"
+TrkName_Left:	aligned_string "LEFT"
+TrkName_Right1:	aligned_string "RIGHT1"
 	aligned_string "Lyrc"
 	aligned_string "MEASURE = %3d"
 	ldb	w, 0x20
@@ -6590,47 +6590,47 @@ LABEL_E261F2:	aligned_string "RIGHT1"
 	aligned_string "ExMD"
 
 
-LABEL_E262CA:
-	.long LABEL_E263D8
-	.long LABEL_E263CE
-	.long LABEL_E263C4
-	.long LABEL_E263BA
-	.long LABEL_E263B0
-	.long LABEL_E263A6
-	.long LABEL_E2639C
-	.long LABEL_E26392
-	.long LABEL_E26388
-	.long LABEL_E2637E
-	.long LABEL_E26374
-	.long LABEL_E2636A
-	.long LABEL_E26360
-	.long LABEL_E26356
-	.long LABEL_E2634C
-	.long LABEL_E26342
-	.long LABEL_E26338
-	.long LABEL_E2632E
-	.long LABEL_E26324
-	.long LABEL_E2631A
-LABEL_E2631A:	aligned_string " PART 15 "
-LABEL_E26324:	aligned_string " PART 14 "
-LABEL_E2632E:	aligned_string " PART 13 "
-LABEL_E26338:	aligned_string " RHYTHM  "
-LABEL_E26342:	aligned_string " CONTROL "
-LABEL_E2634C:	aligned_string " APC     "
-LABEL_E26356:	aligned_string " CHORD   "
-LABEL_E26360:	aligned_string " DRUMS   "
-LABEL_E2636A:	aligned_string " PART 4  "
-LABEL_E26374:	aligned_string " PART 7  "
-LABEL_E2637E:	aligned_string " PART 6  "
-LABEL_E26388:	aligned_string " PART 5  "
-LABEL_E26392:	aligned_string " PART 12 "
-LABEL_E2639C:	aligned_string " PART 11 "
-LABEL_E263A6:	aligned_string " PART 10 "
-LABEL_E263B0:	aligned_string " PART 9  "
-LABEL_E263BA:	aligned_string " PART 8  "
-LABEL_E263C4:	aligned_string " RIGHT2  "
-LABEL_E263CE:	aligned_string " LEFT    "
-LABEL_E263D8:	aligned_string " RIGHT1  "
+ExMD_PartName_PtrTable:
+	.long ExMD_PartName_Right1
+	.long ExMD_PartName_Left
+	.long ExMD_PartName_Right2
+	.long ExMD_PartName_Part8
+	.long ExMD_PartName_Part9
+	.long ExMD_PartName_Part10
+	.long ExMD_PartName_Part11
+	.long ExMD_PartName_Part12
+	.long ExMD_PartName_Part5
+	.long ExMD_PartName_Part6
+	.long ExMD_PartName_Part7
+	.long ExMD_PartName_Part4
+	.long ExMD_PartName_Drums
+	.long ExMD_PartName_Chord
+	.long ExMD_PartName_APC
+	.long ExMD_PartName_Control
+	.long ExMD_PartName_Rhythm
+	.long ExMD_PartName_Part13
+	.long ExMD_PartName_Part14
+	.long ExMD_PartName_Part15
+ExMD_PartName_Part15:	aligned_string " PART 15 "
+ExMD_PartName_Part14:	aligned_string " PART 14 "
+ExMD_PartName_Part13:	aligned_string " PART 13 "
+ExMD_PartName_Rhythm:	aligned_string " RHYTHM  "
+ExMD_PartName_Control:	aligned_string " CONTROL "
+ExMD_PartName_APC:	aligned_string " APC     "
+ExMD_PartName_Chord:	aligned_string " CHORD   "
+ExMD_PartName_Drums:	aligned_string " DRUMS   "
+ExMD_PartName_Part4:	aligned_string " PART 4  "
+ExMD_PartName_Part7:	aligned_string " PART 7  "
+ExMD_PartName_Part6:	aligned_string " PART 6  "
+ExMD_PartName_Part5:	aligned_string " PART 5  "
+ExMD_PartName_Part12:	aligned_string " PART 12 "
+ExMD_PartName_Part11:	aligned_string " PART 11 "
+ExMD_PartName_Part10:	aligned_string " PART 10 "
+ExMD_PartName_Part9:	aligned_string " PART 9  "
+ExMD_PartName_Part8:	aligned_string " PART 8  "
+ExMD_PartName_Right2:	aligned_string " RIGHT2  "
+ExMD_PartName_Left:	aligned_string " LEFT    "
+ExMD_PartName_Right1:	aligned_string " RIGHT1  "
 	aligned_string "|-|TR 1|TR 2|TR 3|TR 4|TR 5|TR 6|TR 7|TR 8"
 	aligned_string "|-|TR 9|TR10|TR11|TR12|TR13|TR14|TR15|TR16"
 	.byte 0x8d, 0x00, 0xfa, 0x01, 0x8d, 0x00
@@ -6666,127 +6666,127 @@ LABEL_E263D8:	aligned_string " RIGHT1  "
 	.byte 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f, 0x10, 0x11
 	aligned_string "SONG%2d"
 	aligned_string "                      "
-LABEL_E26510:
-	.long LABEL_E265AA
-	.long LABEL_E265A4
-	.long LABEL_E2659E
-	.long LABEL_E26598
-	.long LABEL_E26592
-	.long LABEL_E2658C
-	.long LABEL_E26586
-	.long LABEL_E26580
-	.long LABEL_E2657A
-	.long LABEL_E26574
-	.long LABEL_E2656E
-	.long LABEL_E26568
-	.long LABEL_E26562
-	.long LABEL_E2655C
-	.long LABEL_E26556
-	.long LABEL_E26550
-LABEL_E26550:	aligned_string " 16 "
-LABEL_E26556:	aligned_string " 15 "
-LABEL_E2655C:	aligned_string " 14 "
-LABEL_E26562:	aligned_string " 13 "
-LABEL_E26568:	aligned_string " 12 "
-LABEL_E2656E:	aligned_string " 11 "
-LABEL_E26574:	aligned_string " 10 "
-LABEL_E2657A:	aligned_string "  9 "
-LABEL_E26580:	aligned_string "  8 "
-LABEL_E26586:	aligned_string "  7 "
-LABEL_E2658C:	aligned_string "  6 "
-LABEL_E26592:	aligned_string "  5 "
-LABEL_E26598:	aligned_string "  4 "
-LABEL_E2659E:	aligned_string "  3 "
-LABEL_E265A4:	aligned_string "  2 "
-LABEL_E265AA:	aligned_string "  1 "
+SongNum_PtrTable:
+	.long SongNum_01
+	.long SongNum_02
+	.long SongNum_03
+	.long SongNum_04
+	.long SongNum_05
+	.long SongNum_06
+	.long SongNum_07
+	.long SongNum_08
+	.long SongNum_09
+	.long SongNum_10
+	.long SongNum_11
+	.long SongNum_12
+	.long SongNum_13
+	.long SongNum_14
+	.long SongNum_15
+	.long SongNum_16
+SongNum_16:	aligned_string " 16 "
+SongNum_15:	aligned_string " 15 "
+SongNum_14:	aligned_string " 14 "
+SongNum_13:	aligned_string " 13 "
+SongNum_12:	aligned_string " 12 "
+SongNum_11:	aligned_string " 11 "
+SongNum_10:	aligned_string " 10 "
+SongNum_09:	aligned_string "  9 "
+SongNum_08:	aligned_string "  8 "
+SongNum_07:	aligned_string "  7 "
+SongNum_06:	aligned_string "  6 "
+SongNum_05:	aligned_string "  5 "
+SongNum_04:	aligned_string "  4 "
+SongNum_03:	aligned_string "  3 "
+SongNum_02:	aligned_string "  2 "
+SongNum_01:	aligned_string "  1 "
 	.byte 0x1e, 0x00, 0x1e, 0x00, 0x29, 0x00, 0x29, 0x00
 	.byte 0x29, 0x00, 0x22, 0x00, 0x29, 0x00, 0x2d, 0x00
 	.byte 0x1e, 0x00, 0x00, 0x00, 0x54, 0x66, 0xe2, 0x00
-LABEL_E265C8:
-	.long LABEL_E2664A
-	.long LABEL_E26640
-	.long LABEL_E26636
-	.long LABEL_E2662C
-	.long LABEL_E26622
-	.long LABEL_E26618
-	.long LABEL_E2660E
-	.long LABEL_E26604
-	.long LABEL_E265FA
-	.long LABEL_E265F0
-LABEL_E265F0:	aligned_string "  ALL   "
-LABEL_E265FA:	aligned_string " SONG10 "
-LABEL_E26604:	aligned_string " SONG 9 "
-LABEL_E2660E:	aligned_string " SONG 8 "
-LABEL_E26618:	aligned_string " SONG 7 "
-LABEL_E26622:	aligned_string " SONG 6 "
-LABEL_E2662C:	aligned_string " SONG 5 "
-LABEL_E26636:	aligned_string " SONG 4 "
-LABEL_E26640:	aligned_string " SONG 3 "
-LABEL_E2664A:	aligned_string " SONG 2 "
-LABEL_E26654:	aligned_string " SONG 1 "
+SongName_PtrTable:
+	.long SongName_02
+	.long SongName_03
+	.long SongName_04
+	.long SongName_05
+	.long SongName_06
+	.long SongName_07
+	.long SongName_08
+	.long SongName_09
+	.long SongName_10
+	.long SongName_All
+SongName_All:	aligned_string "  ALL   "
+SongName_10:	aligned_string " SONG10 "
+SongName_09:	aligned_string " SONG 9 "
+SongName_08:	aligned_string " SONG 8 "
+SongName_07:	aligned_string " SONG 7 "
+SongName_06:	aligned_string " SONG 6 "
+SongName_05:	aligned_string " SONG 5 "
+SongName_04:	aligned_string " SONG 4 "
+SongName_03:	aligned_string " SONG 3 "
+SongName_02:	aligned_string " SONG 2 "
+SongName_01:	aligned_string " SONG 1 "
 	.byte 0x1e, 0x00
 	.byte 0x1e, 0x00, 0x29, 0x00, 0x29, 0x00, 0x29, 0x00
 	.byte 0x22, 0x00, 0x29, 0x00, 0x2d, 0x00, 0x1e, 0x00
 	.byte 0x00, 0x00
-	.long LABEL_E26680
-	.long LABEL_E2667A
-LABEL_E2667A:	aligned_string " ON  "
-LABEL_E26680:	aligned_string " OFF "
+	.long ToggleStr_OFF
+	.long ToggleStr_ON
+ToggleStr_ON:	aligned_string " ON  "
+ToggleStr_OFF:	aligned_string " OFF "
 	.byte 0x01, 0x00
 	.byte 0x02, 0x00, 0x04, 0x00, 0x08, 0x00, 0x10, 0x00
 	.byte 0x20, 0x00, 0x40, 0x00, 0x80, 0x00, 0x00, 0x01
 	.byte 0x00, 0x02, 0x00, 0x04, 0x00, 0x08, 0x00, 0x10
 	.byte 0x00, 0x20, 0x00, 0x40, 0x00, 0x80
-LABEL_E266A6:
-	.long LABEL_E2675E
-	.long LABEL_E26756
-	.long LABEL_E2674E
-	.long LABEL_E26746
-	.long LABEL_E2673E
-	.long LABEL_E26736
-	.long LABEL_E2672E
-	.long LABEL_E26726
-	.long LABEL_E2671E
-	.long LABEL_E26716
-	.long LABEL_E2670E
-	.long LABEL_E26706
-	.long LABEL_E266FE
-	.long LABEL_E266F6
-	.long LABEL_E266EE
-	.long LABEL_E266E6
-LABEL_E266E6:	aligned_string " CH16 "
-LABEL_E266EE:	aligned_string " CH15 "
-LABEL_E266F6:	aligned_string " CH14 "
-LABEL_E266FE:	aligned_string " CH13 "
-LABEL_E26706:	aligned_string " CH12 "
-LABEL_E2670E:	aligned_string " CH11 "
-LABEL_E26716:	aligned_string " CH10 "
-LABEL_E2671E:	aligned_string " CH 9 "
-LABEL_E26726:	aligned_string " CH 8 "
-LABEL_E2672E:	aligned_string " CH 7 "
-LABEL_E26736:	aligned_string " CH 6 "
-LABEL_E2673E:	aligned_string " CH 5 "
-LABEL_E26746:	aligned_string " CH 4 "
-LABEL_E2674E:	aligned_string " CH 3 "
-LABEL_E26756:	aligned_string " CH 2 "
-LABEL_E2675E:	aligned_string " CH 1 "
+MidiCh_PtrTable:
+	.long MidiCh_01
+	.long MidiCh_02
+	.long MidiCh_03
+	.long MidiCh_04
+	.long MidiCh_05
+	.long MidiCh_06
+	.long MidiCh_07
+	.long MidiCh_08
+	.long MidiCh_09
+	.long MidiCh_10
+	.long MidiCh_11
+	.long MidiCh_12
+	.long MidiCh_13
+	.long MidiCh_14
+	.long MidiCh_15
+	.long MidiCh_16
+MidiCh_16:	aligned_string " CH16 "
+MidiCh_15:	aligned_string " CH15 "
+MidiCh_14:	aligned_string " CH14 "
+MidiCh_13:	aligned_string " CH13 "
+MidiCh_12:	aligned_string " CH12 "
+MidiCh_11:	aligned_string " CH11 "
+MidiCh_10:	aligned_string " CH10 "
+MidiCh_09:	aligned_string " CH 9 "
+MidiCh_08:	aligned_string " CH 8 "
+MidiCh_07:	aligned_string " CH 7 "
+MidiCh_06:	aligned_string " CH 6 "
+MidiCh_05:	aligned_string " CH 5 "
+MidiCh_04:	aligned_string " CH 4 "
+MidiCh_03:	aligned_string " CH 3 "
+MidiCh_02:	aligned_string " CH 2 "
+MidiCh_01:	aligned_string " CH 1 "
 	.byte 0x1e, 0x00
 	.byte 0x1e, 0x00, 0x52, 0x00, 0x52, 0x00, 0x52, 0x00
 	.byte 0x22, 0x00, 0x52, 0x00, 0x29, 0x00, 0x1e, 0x00
 	.byte 0x00, 0x00
 	aligned_string "( MEDLEY )"
 	aligned_string "          "
-LABEL_E26792:	aligned_string "          "
+MedleyDisp_Blank:	aligned_string "          "
 	aligned_string "( MEDLEY )"
 	.byte 0x20, 0x00, 0x24, 0x00, 0x3d, 0x00
 	.byte 0x3d, 0x00, 0x3d, 0x00, 0x28, 0x00, 0x2f, 0x00
 	.byte 0x36, 0x00, 0x24, 0x00, 0x00, 0x00
-LABEL_E267BE:	aligned_string "    "
+PlayModeStr_Play:	aligned_string "    "
 	.byte 0x50, 0x4c, 0x41, 0x59
 	.byte 0x00, 0xff, 0x20, 0x00, 0x24, 0x00, 0x3d, 0x00
 	.byte 0x3d, 0x00, 0x3d, 0x00, 0x28, 0x00, 0x2f, 0x00
 	.byte 0x36, 0x00, 0x24, 0x00, 0x00, 0x00
-LABEL_E267DE:	.asciz "     "
+PlayModeStr_Pause:	.asciz "     "
 	.byte 0x50, 0x41, 0x55, 0x53
 	.byte 0x45, 0x00, 0x20, 0x00, 0x24, 0x00, 0x3d, 0x00
 	.byte 0x3d, 0x00, 0x3d, 0x00, 0x28, 0x00, 0x2f, 0x00
@@ -6829,428 +6829,428 @@ LABEL_E267DE:	.asciz "     "
 	.byte 0xaf, 0xe7, 0xf2, 0x00, 0xdf, 0x59, 0xf3, 0x00
 	.byte 0x50, 0xe6, 0xf2, 0x00, 0x6c, 0xe4, 0xf2, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0xc0, 0x6e, 0xe2, 0x00
-LABEL_E26930:
-	.long LABEL_E26EAE
-	.long LABEL_E26EA0
-	.long LABEL_E26E92
-	.long LABEL_E26E84
-	.long LABEL_E26E70
-	.long LABEL_E26E62
-	.long LABEL_E26E54
-	.long LABEL_E26E48
-	.long LABEL_E26E2E
-	.long LABEL_E26E22
-	.long LABEL_E26E16
-	.long LABEL_E26E06
-	.long LABEL_E26DF0
-	.long LABEL_E26DE2
-	.long LABEL_E26DCC
-	.long LABEL_E26DBC
-	.long LABEL_E26DB0
-	.long LABEL_E26DA0
-	.long LABEL_E26D94
-	.long LABEL_E26D88
-	.long LABEL_E26D7C
-	.long LABEL_E26D6C
-	.long LABEL_E26D58
-	.long LABEL_E26D46
-	.long LABEL_E26D34
-	.long LABEL_E26D24
-	.long LABEL_E26D12
-	.long LABEL_E26D08
-	.long LABEL_E26CFC
-	.long LABEL_E26CEC
-	.long LABEL_E26CDC
-	.long LABEL_E26CD2
-	.long LABEL_E26CBC
-	.long LABEL_E26CB0
-	.long LABEL_E26CA2
-	.long LABEL_E26C92
-	.long LABEL_E26C82
-	.long LABEL_E26C74
-	.long LABEL_E26C68
-	.long LABEL_E26C54
-	.long LABEL_E26C46
-	.long LABEL_E26C38
-	.long LABEL_E26C2A
-	.long LABEL_E26C1C
-	.long LABEL_E26C0E
-	.long LABEL_E26BFA
-	.long LABEL_E26BE8
-	.long LABEL_E26BD6
-	.long LABEL_E26BC4
-	.long LABEL_E26BB2
-	.long LABEL_E26BA0
-	.long LABEL_E26B90
-	.long LABEL_E26B80
-	.long LABEL_E26B70
-	.long LABEL_E26B5E
-	.long LABEL_E26B4E
-	.long LABEL_E26B3E
-	.long LABEL_E26B28
-	.long LABEL_E26B1C
-	.long LABEL_E26B0C
-	.long LABEL_E26AFE
-	.long LABEL_E26AEE
-	.long LABEL_E26ADE
-	.long LABEL_E26ACE
-	.long LABEL_E26AC0
-	.long LABEL_E26AB2
-	.long LABEL_E26AA2
-	.long LABEL_E26A92
-	.long LABEL_E26A82
-	.long LABEL_E26A74
-	.long LABEL_E26A6A
-	.long LABEL_E26A56
-	.long LABEL_E26A54
-LABEL_E26A54:	aligned_string ""
-LABEL_E26A56:	aligned_string "AutoPunchTtlRqFunc"
-LABEL_E26A6A:	aligned_string "PanicFunc"
-LABEL_E26A74:	aligned_string "SureJudgeFunc"
-LABEL_E26A82:	aligned_string "EdMenuPageFunc"
-LABEL_E26A92:	aligned_string "StsAtPunchCheck"
-LABEL_E26AA2:	aligned_string "HelpFuncChkFunc"
-LABEL_E26AB2:	aligned_string "HelpOkSwFunc"
-LABEL_E26AC0:	aligned_string "HelpMenuCheck"
-LABEL_E26ACE:	aligned_string "HelpStsP4Check"
-LABEL_E26ADE:	aligned_string "HelpStsP3Check"
-LABEL_E26AEE:	aligned_string "HelpStsP2Check"
-LABEL_E26AFE:	aligned_string "HelpStsCheck"
-LABEL_E26B0C:	aligned_string "HelpLangChkFunc"
-LABEL_E26B1C:	aligned_string "HelpTtlFunc"
-LABEL_E26B28:	aligned_string "AcIndexWideToggleFunc"
-LABEL_E26B3E:	aligned_string "AttSongClrCheck"
-LABEL_E26B4E:	aligned_string "AttTrkClrCheck"
-LABEL_E26B5E:	aligned_string "StsNtDrEditCheck"
-LABEL_E26B70:	aligned_string "StsTrkClr2Check"
-LABEL_E26B80:	aligned_string "StsTrkClr1Check"
-LABEL_E26B90:	aligned_string "StsPnlWrtCheck"
-LABEL_E26BA0:	aligned_string "StsEasyRec2Check"
-LABEL_E26BB2:	aligned_string "StsEasyRec1Check"
-LABEL_E26BC4:	aligned_string "StsSeqMenu2Check"
-LABEL_E26BD6:	aligned_string "StsSeqMenu1Check"
-LABEL_E26BE8:	aligned_string "AttAttentionCheck"
-LABEL_E26BFA:	aligned_string "AttAreYouSureCheck"
-LABEL_E26C0E:	aligned_string "MimeOnOffFunc"
-LABEL_E26C1C:	aligned_string "BitmapDredt0k"
-LABEL_E26C2A:	aligned_string "BitmapDredt0d"
-LABEL_E26C38:	aligned_string "BitmapNtedt0k"
-LABEL_E26C46:	aligned_string "BitmapNtedt0d"
-LABEL_E26C54:	aligned_string "TrkMixerIntTtlFunc"
-LABEL_E26C68:	aligned_string "EqInOutFunc"
-LABEL_E26C74:	aligned_string "NoteEditFunc"
-LABEL_E26C82:	aligned_string "PunchInOutFunc"
-LABEL_E26C92:	aligned_string "PlySngSel2Func"
-LABEL_E26CA2:	aligned_string "PlySngSelFunc"
-LABEL_E26CB0:	aligned_string "SngSelFunc"
-LABEL_E26CBC:	aligned_string "EntertainerGridCheck"
-LABEL_E26CD2:	aligned_string "SqplyFunc"
-LABEL_E26CDC:	aligned_string "MetroOnOffFunc"
-LABEL_E26CEC:	aligned_string "CycleOnOffFunc"
-LABEL_E26CFC:	aligned_string "MainExeFunc"
-LABEL_E26D08:	aligned_string "SqedtFunc"
-LABEL_E26D12:	aligned_string "EqualizerCngFunc"
-LABEL_E26D24:	aligned_string "DspItem0CngFunc"
-LABEL_E26D34:	aligned_string "IvRealRecExitProc"
-LABEL_E26D46:	aligned_string "AcPanicEditSwProc"
-LABEL_E26D58:	aligned_string "IvAutoPunchExitProc"
-LABEL_E26D6C:	aligned_string "IvPunchExitProc"
-LABEL_E26D7C:	aligned_string "IvSdaccProc"
-LABEL_E26D88:	aligned_string "IvSddspProc"
-LABEL_E26D94:	aligned_string "IvSdrevProc"
-LABEL_E26DA0:	aligned_string "IvPnlWrExitProc"
-LABEL_E26DB0:	aligned_string "HelpTtlProc"
-LABEL_E26DBC:	aligned_string "IvPlayExitProc"
-LABEL_E26DCC:	aligned_string "AcIndexWideToggleProc"
-LABEL_E26DE2:	aligned_string "MsgToTtlProc"
-LABEL_E26DF0:	aligned_string "EqOnOffFuncToggleProc"
-LABEL_E26E06:	aligned_string "NoteEditBoxProc"
-LABEL_E26E16:	aligned_string "SngSel2Proc"
-LABEL_E26E22:	aligned_string "SngSelProc"
-LABEL_E26E2E:	aligned_string "AcEntertainerGridBoxProc"
-LABEL_E26E48:	aligned_string "AccIllProc"
-LABEL_E26E54:	aligned_string "SqedtVal3Proc"
-LABEL_E26E62:	aligned_string "SqplyValProc"
-LABEL_E26E70:	aligned_string "IvSongCopyExitProc"
-LABEL_E26E84:	aligned_string "SqedtFixProc"
-LABEL_E26E92:	aligned_string "SqedtVal2Proc"
-LABEL_E26EA0:	aligned_string "SqedtValProc"
-LABEL_E26EAE:	aligned_string "EqualizerBoxProc"
-LABEL_E26EC0:	aligned_string "EffectBoxProc"
+FuncDesc_PtrTable:
+	.long EqualizerBoxProc_Name
+	.long SqedtValProc_Name
+	.long SqedtVal2Proc_Name
+	.long SqedtFixProc_Name
+	.long IvSongCopyExitProc_Name
+	.long SqplyValProc_Name
+	.long SqedtVal3Proc_Name
+	.long AccIllProc_Name
+	.long AcEntertainerGridBoxProc_Name
+	.long SngSelProc_Name
+	.long SngSel2Proc_Name
+	.long NoteEditBoxProc_Name
+	.long EqOnOffFuncToggleProc_Name
+	.long MsgToTtlProc_Name
+	.long AcIndexWideToggleProc_Name
+	.long IvPlayExitProc_Name
+	.long HelpTtlProc_Name
+	.long IvPnlWrExitProc_Name
+	.long IvSdrevProc_Name
+	.long IvSddspProc_Name
+	.long IvSdaccProc_Name
+	.long IvPunchExitProc_Name
+	.long IvAutoPunchExitProc_Name
+	.long AcPanicEditSwProc_Name
+	.long IvRealRecExitProc_Name
+	.long DspItem0CngFunc_Name
+	.long EqualizerCngFunc_Name
+	.long SqedtFunc_Name
+	.long MainExeFunc_Name
+	.long CycleOnOffFunc_Name
+	.long MetroOnOffFunc_Name
+	.long SqplyFunc_Name
+	.long EntertainerGridCheck_Name
+	.long SngSelFunc_Name
+	.long PlySngSelFunc_Name
+	.long PlySngSel2Func_Name
+	.long PunchInOutFunc_Name
+	.long NoteEditFunc_Name
+	.long EqInOutFunc_Name
+	.long TrkMixerIntTtlFunc_Name
+	.long BitmapNtedt0d_Name
+	.long BitmapNtedt0k_Name
+	.long BitmapDredt0d_Name
+	.long BitmapDredt0k_Name
+	.long MimeOnOffFunc_Name
+	.long AttAreYouSureCheck_Name
+	.long AttAttentionCheck_Name
+	.long StsSeqMenu1Check_Name
+	.long StsSeqMenu2Check_Name
+	.long StsEasyRec1Check_Name
+	.long StsEasyRec2Check_Name
+	.long StsPnlWrtCheck_Name
+	.long StsTrkClr1Check_Name
+	.long StsTrkClr2Check_Name
+	.long StsNtDrEditCheck_Name
+	.long AttTrkClrCheck_Name
+	.long AttSongClrCheck_Name
+	.long AcIndexWideToggleFunc_Name
+	.long HelpTtlFunc_Name
+	.long HelpLangChkFunc_Name
+	.long HelpStsCheck_Name
+	.long HelpStsP2Check_Name
+	.long HelpStsP3Check_Name
+	.long HelpStsP4Check_Name
+	.long HelpMenuCheck_Name
+	.long HelpOkSwFunc_Name
+	.long HelpFuncChkFunc_Name
+	.long StsAtPunchCheck_Name
+	.long EdMenuPageFunc_Name
+	.long SureJudgeFunc_Name
+	.long PanicFunc_Name
+	.long AutoPunchTtlRqFunc_Name
+	.long AutoPunchTtlRqFunc_Pad
+AutoPunchTtlRqFunc_Pad:	aligned_string ""
+AutoPunchTtlRqFunc_Name:	aligned_string "AutoPunchTtlRqFunc"
+PanicFunc_Name:	aligned_string "PanicFunc"
+SureJudgeFunc_Name:	aligned_string "SureJudgeFunc"
+EdMenuPageFunc_Name:	aligned_string "EdMenuPageFunc"
+StsAtPunchCheck_Name:	aligned_string "StsAtPunchCheck"
+HelpFuncChkFunc_Name:	aligned_string "HelpFuncChkFunc"
+HelpOkSwFunc_Name:	aligned_string "HelpOkSwFunc"
+HelpMenuCheck_Name:	aligned_string "HelpMenuCheck"
+HelpStsP4Check_Name:	aligned_string "HelpStsP4Check"
+HelpStsP3Check_Name:	aligned_string "HelpStsP3Check"
+HelpStsP2Check_Name:	aligned_string "HelpStsP2Check"
+HelpStsCheck_Name:	aligned_string "HelpStsCheck"
+HelpLangChkFunc_Name:	aligned_string "HelpLangChkFunc"
+HelpTtlFunc_Name:	aligned_string "HelpTtlFunc"
+AcIndexWideToggleFunc_Name:	aligned_string "AcIndexWideToggleFunc"
+AttSongClrCheck_Name:	aligned_string "AttSongClrCheck"
+AttTrkClrCheck_Name:	aligned_string "AttTrkClrCheck"
+StsNtDrEditCheck_Name:	aligned_string "StsNtDrEditCheck"
+StsTrkClr2Check_Name:	aligned_string "StsTrkClr2Check"
+StsTrkClr1Check_Name:	aligned_string "StsTrkClr1Check"
+StsPnlWrtCheck_Name:	aligned_string "StsPnlWrtCheck"
+StsEasyRec2Check_Name:	aligned_string "StsEasyRec2Check"
+StsEasyRec1Check_Name:	aligned_string "StsEasyRec1Check"
+StsSeqMenu2Check_Name:	aligned_string "StsSeqMenu2Check"
+StsSeqMenu1Check_Name:	aligned_string "StsSeqMenu1Check"
+AttAttentionCheck_Name:	aligned_string "AttAttentionCheck"
+AttAreYouSureCheck_Name:	aligned_string "AttAreYouSureCheck"
+MimeOnOffFunc_Name:	aligned_string "MimeOnOffFunc"
+BitmapDredt0k_Name:	aligned_string "BitmapDredt0k"
+BitmapDredt0d_Name:	aligned_string "BitmapDredt0d"
+BitmapNtedt0k_Name:	aligned_string "BitmapNtedt0k"
+BitmapNtedt0d_Name:	aligned_string "BitmapNtedt0d"
+TrkMixerIntTtlFunc_Name:	aligned_string "TrkMixerIntTtlFunc"
+EqInOutFunc_Name:	aligned_string "EqInOutFunc"
+NoteEditFunc_Name:	aligned_string "NoteEditFunc"
+PunchInOutFunc_Name:	aligned_string "PunchInOutFunc"
+PlySngSel2Func_Name:	aligned_string "PlySngSel2Func"
+PlySngSelFunc_Name:	aligned_string "PlySngSelFunc"
+SngSelFunc_Name:	aligned_string "SngSelFunc"
+EntertainerGridCheck_Name:	aligned_string "EntertainerGridCheck"
+SqplyFunc_Name:	aligned_string "SqplyFunc"
+MetroOnOffFunc_Name:	aligned_string "MetroOnOffFunc"
+CycleOnOffFunc_Name:	aligned_string "CycleOnOffFunc"
+MainExeFunc_Name:	aligned_string "MainExeFunc"
+SqedtFunc_Name:	aligned_string "SqedtFunc"
+EqualizerCngFunc_Name:	aligned_string "EqualizerCngFunc"
+DspItem0CngFunc_Name:	aligned_string "DspItem0CngFunc"
+IvRealRecExitProc_Name:	aligned_string "IvRealRecExitProc"
+AcPanicEditSwProc_Name:	aligned_string "AcPanicEditSwProc"
+IvAutoPunchExitProc_Name:	aligned_string "IvAutoPunchExitProc"
+IvPunchExitProc_Name:	aligned_string "IvPunchExitProc"
+IvSdaccProc_Name:	aligned_string "IvSdaccProc"
+IvSddspProc_Name:	aligned_string "IvSddspProc"
+IvSdrevProc_Name:	aligned_string "IvSdrevProc"
+IvPnlWrExitProc_Name:	aligned_string "IvPnlWrExitProc"
+HelpTtlProc_Name:	aligned_string "HelpTtlProc"
+IvPlayExitProc_Name:	aligned_string "IvPlayExitProc"
+AcIndexWideToggleProc_Name:	aligned_string "AcIndexWideToggleProc"
+MsgToTtlProc_Name:	aligned_string "MsgToTtlProc"
+EqOnOffFuncToggleProc_Name:	aligned_string "EqOnOffFuncToggleProc"
+NoteEditBoxProc_Name:	aligned_string "NoteEditBoxProc"
+SngSel2Proc_Name:	aligned_string "SngSel2Proc"
+SngSelProc_Name:	aligned_string "SngSelProc"
+AcEntertainerGridBoxProc_Name:	aligned_string "AcEntertainerGridBoxProc"
+AccIllProc_Name:	aligned_string "AccIllProc"
+SqedtVal3Proc_Name:	aligned_string "SqedtVal3Proc"
+SqplyValProc_Name:	aligned_string "SqplyValProc"
+IvSongCopyExitProc_Name:	aligned_string "IvSongCopyExitProc"
+SqedtFixProc_Name:	aligned_string "SqedtFixProc"
+SqedtVal2Proc_Name:	aligned_string "SqedtVal2Proc"
+SqedtValProc_Name:	aligned_string "SqedtValProc"
+EqualizerBoxProc_Name:	aligned_string "EqualizerBoxProc"
+EffectBoxProc_Name:	aligned_string "EffectBoxProc"
 
 
-LABEL_E26ECE:
-	.long LABEL_E26EF8
-	.long LABEL_E26EF2
-	.long LABEL_E26EEC
-	.long LABEL_E26EE4
-	.long LABEL_E26EE2
-LABEL_E26EE2:	aligned_string ""
-LABEL_E26EE4:	aligned_string "ttl_no"
-LABEL_E26EEC:	aligned_string "data2"
-LABEL_E26EF2:	aligned_string "data"
-LABEL_E26EF8:	aligned_string "func"
-LABEL_E26EFE:
-	.long LABEL_E26F14
-	.long LABEL_E26F0C
-	.long LABEL_E26F0A
-LABEL_E26F0A:	aligned_string ""
-LABEL_E26F0C:	aligned_string "ttl_no"
-LABEL_E26F14:	aligned_string "func"
-LABEL_E26F1A:
-	.long LABEL_E26F48
-	.long LABEL_E26F3E
-	.long LABEL_E26F38
-	.long LABEL_E26F30
-	.long LABEL_E26F2E
-LABEL_E26F2E:	aligned_string ""
-LABEL_E26F30:	aligned_string "ttl_no"
-LABEL_E26F38:	aligned_string "func"
-LABEL_E26F3E:	aligned_string "fontcolor"
-LABEL_E26F48:	aligned_string "color"
+NakaDesc_FuncData2TtlNo:
+	.long NakaFld_Func_A
+	.long NakaFld_Data
+	.long NakaFld_Data2
+	.long NakaFld_TtlNo_A
+	.long NakaFld_FuncData2TtlNo_Pad
+NakaFld_FuncData2TtlNo_Pad:	aligned_string ""
+NakaFld_TtlNo_A:	aligned_string "ttl_no"
+NakaFld_Data2:	aligned_string "data2"
+NakaFld_Data:	aligned_string "data"
+NakaFld_Func_A:	aligned_string "func"
+NakaDesc_FuncTtlNo:
+	.long NakaFld_Func_B
+	.long NakaFld_TtlNo_B
+	.long NakaFld_FuncTtlNo_Pad
+NakaFld_FuncTtlNo_Pad:	aligned_string ""
+NakaFld_TtlNo_B:	aligned_string "ttl_no"
+NakaFld_Func_B:	aligned_string "func"
+NakaDesc_ColorFontFuncTtlNo:
+	.long NakaFld_Color_A
+	.long NakaFld_Fontcolor_A
+	.long NakaFld_Func_C
+	.long NakaFld_TtlNo_C
+	.long NakaFld_ColorFontFuncTtlNo_Pad
+NakaFld_ColorFontFuncTtlNo_Pad:	aligned_string ""
+NakaFld_TtlNo_C:	aligned_string "ttl_no"
+NakaFld_Func_C:	aligned_string "func"
+NakaFld_Fontcolor_A:	aligned_string "fontcolor"
+NakaFld_Color_A:	aligned_string "color"
 
 
-LABEL_E26F4E:
-	.long LABEL_E26F70
-	.long LABEL_E26F66
-	.long LABEL_E26F60
-	.long LABEL_E26F5E
-LABEL_E26F5E:	aligned_string ""
-LABEL_E26F60:	aligned_string "func"
-LABEL_E26F66:	aligned_string "fontcolor"
-LABEL_E26F70:	aligned_string "color"
+NakaDesc_ColorFontFunc:
+	.long NakaFld_Color_B
+	.long NakaFld_Fontcolor_B
+	.long NakaFld_Func_D
+	.long NakaFld_ColorFontFunc_Pad
+NakaFld_ColorFontFunc_Pad:	aligned_string ""
+NakaFld_Func_D:	aligned_string "func"
+NakaFld_Fontcolor_B:	aligned_string "fontcolor"
+NakaFld_Color_B:	aligned_string "color"
 
 
-LABEL_E26F76:
-	.long LABEL_E26F9A
-	.long LABEL_E26F90
-	.long LABEL_E26F88
-	.long LABEL_E26F86
-LABEL_E26F86:	aligned_string ""
-LABEL_E26F88:	aligned_string "border"
-LABEL_E26F90:	aligned_string "fontcolor"
-LABEL_E26F9A:	aligned_string "color"
-LABEL_E26FA0:
-	.long LABEL_E26FA4
-LABEL_E26FA4:	aligned_string ""
-LABEL_E26FA6:
-	.long LABEL_E26FD4
-	.long LABEL_E26FCA
-	.long LABEL_E26FC4
-	.long LABEL_E26FBC
-	.long LABEL_E26FBA
-LABEL_E26FBA:	aligned_string ""
-LABEL_E26FBC:	aligned_string "ttl_no"
-LABEL_E26FC4:	aligned_string "func"
-LABEL_E26FCA:	aligned_string "fontcolor"
-LABEL_E26FD4:	aligned_string "color"
+NakaDesc_ColorFontBorder:
+	.long NakaFld_Color_C
+	.long NakaFld_Fontcolor_C
+	.long NakaFld_Border
+	.long NakaFld_ColorFontBorder_Pad
+NakaFld_ColorFontBorder_Pad:	aligned_string ""
+NakaFld_Border:	aligned_string "border"
+NakaFld_Fontcolor_C:	aligned_string "fontcolor"
+NakaFld_Color_C:	aligned_string "color"
+NakaDesc_Empty_A:
+	.long NakaFld_Empty_A
+NakaFld_Empty_A:	aligned_string ""
+NakaDesc_ColorFontFuncTtlNo_B:
+	.long NakaFld_Color_D
+	.long NakaFld_Fontcolor_D
+	.long NakaFld_Func_E
+	.long NakaFld_TtlNo_D
+	.long NakaFld_ColorFontFuncTtlNo_B_Pad
+NakaFld_ColorFontFuncTtlNo_B_Pad:	aligned_string ""
+NakaFld_TtlNo_D:	aligned_string "ttl_no"
+NakaFld_Func_E:	aligned_string "func"
+NakaFld_Fontcolor_D:	aligned_string "fontcolor"
+NakaFld_Color_D:	aligned_string "color"
 
 
-LABEL_E26FDA:
-	.long LABEL_E26FFC
-	.long LABEL_E26FF2
-	.long LABEL_E26FEC
-	.long LABEL_E26FEA
-LABEL_E26FEA:	aligned_string ""
-LABEL_E26FEC:	aligned_string "func"
-LABEL_E26FF2:	aligned_string "fontcolor"
-LABEL_E26FFC:	aligned_string "color"
+NakaDesc_ColorFontFunc_B:
+	.long NakaFld_Color_E
+	.long NakaFld_Fontcolor_E
+	.long NakaFld_Func_F
+	.long NakaFld_ColorFontFunc_B_Pad
+NakaFld_ColorFontFunc_B_Pad:	aligned_string ""
+NakaFld_Func_F:	aligned_string "func"
+NakaFld_Fontcolor_E:	aligned_string "fontcolor"
+NakaFld_Color_E:	aligned_string "color"
 
 
-LABEL_E27002:
-	.long LABEL_E27030
-	.long LABEL_E27026
-	.long LABEL_E27020
-	.long LABEL_E27018
-	.long LABEL_E27016
-LABEL_E27016:	aligned_string ""
-LABEL_E27018:	aligned_string "ttl_no"
-LABEL_E27020:	aligned_string "func"
-LABEL_E27026:	aligned_string "fontcolor"
-LABEL_E27030:	aligned_string "color"
+NakaDesc_ColorFontFuncTtlNo_C:
+	.long NakaFld_Color_F
+	.long NakaFld_Fontcolor_F
+	.long NakaFld_Func_G
+	.long NakaFld_TtlNo_E
+	.long NakaFld_ColorFontFuncTtlNo_C_Pad
+NakaFld_ColorFontFuncTtlNo_C_Pad:	aligned_string ""
+NakaFld_TtlNo_E:	aligned_string "ttl_no"
+NakaFld_Func_G:	aligned_string "func"
+NakaFld_Fontcolor_F:	aligned_string "fontcolor"
+NakaFld_Color_F:	aligned_string "color"
 
 
-LABEL_E27036:
-	.long LABEL_E27058
-	.long LABEL_E2704E
-	.long LABEL_E27048
-	.long LABEL_E27046
-LABEL_E27046:	aligned_string ""
-LABEL_E27048:	aligned_string "func"
-LABEL_E2704E:	aligned_string "fixedrow"
-LABEL_E27058:	aligned_string "fixedcol"
+NakaDesc_FixedColRow:
+	.long NakaFld_Fixedcol
+	.long NakaFld_Fixedrow
+	.long NakaFld_Func_H
+	.long NakaFld_FixedColRow_Pad
+NakaFld_FixedColRow_Pad:	aligned_string ""
+NakaFld_Func_H:	aligned_string "func"
+NakaFld_Fixedrow:	aligned_string "fixedrow"
+NakaFld_Fixedcol:	aligned_string "fixedcol"
 
 
-LABEL_E27062:
-	.long LABEL_E2709A
-	.long LABEL_E27094
-	.long LABEL_E2708A
-	.long LABEL_E27084
-	.long LABEL_E2707C
-	.long LABEL_E2707A
-LABEL_E2707A:	aligned_string ""
-LABEL_E2707C:	aligned_string "ttl_no"
-LABEL_E27084:	aligned_string "func"
-LABEL_E2708A:	aligned_string "fontcolor"
-LABEL_E27094:	aligned_string "color"
-LABEL_E2709A:	aligned_string "font"
-LABEL_E270A0:
-	.long LABEL_E270A4
-LABEL_E270A4:	aligned_string ""
-LABEL_E270A6:
-	.long LABEL_E270BC
-	.long LABEL_E270B4
-	.long LABEL_E270B2
-LABEL_E270B2:	aligned_string ""
-LABEL_E270B4:	aligned_string "ttl_no"
-LABEL_E270BC:	aligned_string "func"
-LABEL_E270C2:
-	.long LABEL_E270C6
-LABEL_E270C6:	aligned_string ""
-LABEL_E270C8:
-	.long LABEL_E270CC
-LABEL_E270CC:	aligned_string ""
-LABEL_E270CE:
+NakaDesc_FontColorFuncTtlNo:
+	.long NakaFld_Font_A
+	.long NakaFld_Color_G
+	.long NakaFld_Fontcolor_G
+	.long NakaFld_Func_I
+	.long NakaFld_TtlNo_F
+	.long NakaFld_FontColorFuncTtlNo_Pad
+NakaFld_FontColorFuncTtlNo_Pad:	aligned_string ""
+NakaFld_TtlNo_F:	aligned_string "ttl_no"
+NakaFld_Func_I:	aligned_string "func"
+NakaFld_Fontcolor_G:	aligned_string "fontcolor"
+NakaFld_Color_G:	aligned_string "color"
+NakaFld_Font_A:	aligned_string "font"
+NakaDesc_Empty_B:
+	.long NakaFld_Empty_B
+NakaFld_Empty_B:	aligned_string ""
+NakaDesc_FuncTtlNo_B:
+	.long NakaFld_Func_J
+	.long NakaFld_TtlNo_G
+	.long NakaFld_FuncTtlNo_B_Pad
+NakaFld_FuncTtlNo_B_Pad:	aligned_string ""
+NakaFld_TtlNo_G:	aligned_string "ttl_no"
+NakaFld_Func_J:	aligned_string "func"
+NakaDesc_Empty_C:
+	.long NakaFld_Empty_C
+NakaFld_Empty_C:	aligned_string ""
+NakaDesc_Empty_D:
+	.long NakaFld_Empty_D
+NakaFld_Empty_D:	aligned_string ""
+NakaDesc_FuncIndex:
 	.long LABEL_E270EA
-	.long LABEL_E270E6
-	.long LABEL_E270E0
-	.long LABEL_E270DE
-LABEL_E270DE:	aligned_string ""
-LABEL_E270E0:	aligned_string "func"
-LABEL_E270E6:
+	.long NakaFld_TabIndex
+	.long NakaFld_Func_K
+	.long NakaFld_FuncIndex_Pad
+NakaFld_FuncIndex_Pad:	aligned_string ""
+NakaFld_Func_K:	aligned_string "func"
+NakaFld_TabIndex:
 	.byte 0x74, 0x61
 	jr	c, 0x00
 	aligned_string "index"
-LABEL_E270F0:
-	.long LABEL_E270FA
-	.long LABEL_E270F8
-LABEL_E270F8:	aligned_string ""
-LABEL_E270FA:	aligned_string "mode"
-LABEL_E27100:
-	.long LABEL_E27136
-	.long LABEL_E2712C
-	.long LABEL_E27126
-	.long LABEL_E27120
-	.long LABEL_E2711A
-	.long LABEL_E27118
-LABEL_E27118:	aligned_string ""
-LABEL_E2711A:	aligned_string "func"
-LABEL_E27120:	aligned_string "page"
-LABEL_E27126:	aligned_string "font"
-LABEL_E2712C:	aligned_string "fontcolor"
-LABEL_E27136:
+NakaDesc_Mode:
+	.long NakaFld_Mode
+	.long NakaFld_Mode_Pad
+NakaFld_Mode_Pad:	aligned_string ""
+NakaFld_Mode:	aligned_string "mode"
+NakaDesc_ColorFontPageFunc:
+	.long NakaFld_Color_H_Data
+	.long NakaFld_Fontcolor_H
+	.long NakaFld_Font_B
+	.long NakaFld_Page
+	.long NakaFld_Func_L
+	.long NakaFld_ColorFontPageFunc_Pad
+NakaFld_ColorFontPageFunc_Pad:	aligned_string ""
+NakaFld_Func_L:	aligned_string "func"
+NakaFld_Page:	aligned_string "page"
+NakaFld_Font_B:	aligned_string "font"
+NakaFld_Fontcolor_H:	aligned_string "fontcolor"
+NakaFld_Color_H_Data:
 	jr	ule, 0x6f
 	.byte 0x6c, 0x6f, 0x72, 0x00, 0x40, 0x71, 0xe2, 0x00
 	.byte 0x00, 0xff
-LABEL_E27142:
-	.long LABEL_E27146
-LABEL_E27146:	aligned_string ""
-LABEL_E27148:
-	.long LABEL_E2714C
-LABEL_E2714C:	aligned_string ""
-LABEL_E2714E:
-	.long LABEL_E27152
-LABEL_E27152:	aligned_string ""
-LABEL_E27154:
-	.long LABEL_E27158
-LABEL_E27158:	aligned_string ""
-LABEL_E2715A:
-	.long LABEL_E2715E
-LABEL_E2715E:	aligned_string ""
-LABEL_E27160:
-	.long LABEL_E27174
-	.long LABEL_E2716E
-	.long LABEL_E2716C
-LABEL_E2716C:	aligned_string ""
-LABEL_E2716E:	aligned_string "func"
-LABEL_E27174:	aligned_string "style"
-LABEL_E2717A:
-	.long LABEL_E2717E
-LABEL_E2717E:	aligned_string ""
+NakaDesc_Empty_E:
+	.long NakaFld_Empty_E
+NakaFld_Empty_E:	aligned_string ""
+NakaDesc_Empty_F:
+	.long NakaFld_Empty_F
+NakaFld_Empty_F:	aligned_string ""
+NakaDesc_Empty_G:
+	.long NakaFld_Empty_G
+NakaFld_Empty_G:	aligned_string ""
+NakaDesc_Empty_H:
+	.long NakaFld_Empty_H
+NakaFld_Empty_H:	aligned_string ""
+NakaDesc_Empty_I:
+	.long NakaFld_Empty_I
+NakaFld_Empty_I:	aligned_string ""
+NakaDesc_StyleFunc:
+	.long NakaFld_Style
+	.long NakaFld_Func_M
+	.long NakaFld_StyleFunc_Pad
+NakaFld_StyleFunc_Pad:	aligned_string ""
+NakaFld_Func_M:	aligned_string "func"
+NakaFld_Style:	aligned_string "style"
+NakaDesc_Empty_J:
+	.long NakaFld_Empty_J
+NakaFld_Empty_J:	aligned_string ""
 	.byte 0x4e, 0x34, 0xf3, 0x00
 
 
 	naka_header NAKA_TYPE_0x11
 	.byte 0x26, 0x00, 0x0a, 0x00, 0x8c, 0x75, 0xe2, 0x00
-	.long LABEL_E27586
-	.long LABEL_E26ECE
+	.long NakaInst_EqualizerBox
+	.long NakaDesc_FuncData2TtlNo
 	.byte 0xb0, 0x3f, 0xf3, 0x00
 
 
 	naka_header NAKA_TYPE_0x11
 	.byte 0x22, 0x00, 0x06, 0x00, 0x78, 0x75, 0xe2, 0x00
-	.long LABEL_E27574
-	.long LABEL_E26EFE
+	.long NakaInst_SqedtVal_B
+	.long NakaDesc_FuncTtlNo
 	.byte 0x73, 0x10, 0xf3, 0x00
 
 
 	naka_header NAKA_TYPE_0x10
 	.byte 0x20, 0x00, 0x0a, 0x00, 0x6a, 0x75, 0xe2, 0x00
-	.long LABEL_E27564
-	.long LABEL_E26F1A
+	.long NakaInst_SqedtVal
+	.long NakaDesc_ColorFontFuncTtlNo
 	.byte 0x55, 0x22, 0xf3, 0x00
 
 
 	naka_header NAKA_TYPE_0x10
 	.byte 0x1e, 0x00, 0x08, 0x00, 0x5a, 0x75, 0xe2, 0x00
-	.long LABEL_E27556
-	.long LABEL_E26F4E
+	.long NakaInst_SqedtVal2_End
+	.long NakaDesc_ColorFontFunc
 	.byte 0x4f, 0x15, 0xf3, 0x00
 
 
 	naka_header NAKA_TYPE_0x10
 	.byte 0x1c, 0x00, 0x06, 0x00, 0x4c, 0x75, 0xe2, 0x00
-	.long LABEL_E27548
-	.long LABEL_E26F76
+	.long NakaInst_SqedtFix
+	.long NakaDesc_ColorFontBorder
 	.byte 0x3f, 0x09, 0xf3, 0x00
 
 
 	naka_header NAKA_TYPE_0x47
 	.byte 0x16, 0x00, 0x00, 0x00, 0x38, 0x75, 0xe2, 0x00
-	.long LABEL_E27536
-	.long LABEL_E26FA0
+	.long NakaInst_IvSongCopyExit
+	.long NakaDesc_Empty_A
 	.byte 0x6f, 0x0a, 0xf3, 0x00
 
 
 	naka_header NAKA_TYPE_0x10
 	.byte 0x20, 0x00, 0x0a, 0x00, 0x2c, 0x75, 0xe2, 0x00
-	.long LABEL_E27526
-	.long LABEL_E26FA6
+	.long NakaInst_SqplyVal
+	.long NakaDesc_ColorFontFuncTtlNo_B
 	.byte 0x97, 0x1e, 0xf3, 0x00
 
 
 	naka_header NAKA_TYPE_0x10
 	.byte 0x1e, 0x00, 0x08, 0x00, 0x1c, 0x75, 0xe2, 0x00
-	.long LABEL_E27518
-	.long LABEL_E26FDA
+	.long NakaInst_SqedtVal3
+	.long NakaDesc_ColorFontFunc_B
 	.byte 0x37, 0x31, 0xf3, 0x00
 
 
 	naka_header NAKA_TYPE_0x10
 	.byte 0x20, 0x00, 0x0a, 0x00, 0x10, 0x75, 0xe2, 0x00
-	.long LABEL_E2750A
-	.long LABEL_E27002
+	.long NakaInst_AccIll
+	.long NakaDesc_ColorFontFuncTtlNo_C
 	.byte 0x48, 0x00, 0xf3, 0x00
 
 
 	naka_header NAKA_TYPE_0x54
 	.byte 0x4a, 0x00, 0x0c, 0x00, 0xf4, 0x74, 0xe2, 0x00
-	.long LABEL_E274F0
-	.long LABEL_E27036
+	.long NakaInst_AcEntertainerGridBox
+	.long NakaDesc_FixedColRow
 	.byte 0xab, 0xfd, 0xf2, 0x00
 
 
 	naka_header NAKA_TYPE_0x10
 	.byte 0x24, 0x00, 0x0e, 0x00, 0xe8, 0x74, 0xe2, 0x00
-	.long LABEL_E274E2
-	.long LABEL_E27062
+	.long NakaInst_SngSel
+	.long NakaDesc_FontColorFuncTtlNo
 	.byte 0x48, 0xfd, 0xf2, 0x00
 
 
 	naka_header NAKA_TYPE_0x10
 	.byte 0x16, 0x00, 0x00, 0x00, 0xda, 0x74, 0xe2, 0x00
-	.long LABEL_E274D8
-	.long LABEL_E270A0
+	.long NakaInst_SngSel2
+	.long NakaDesc_Empty_B
 	.byte 0x74, 0xf0, 0xf2, 0x00
 .include "naka/naka_e27408_e27556.s"
 	jr	gt, 0x00
@@ -7263,263 +7263,263 @@ LABEL_E2717E:	aligned_string ""
 	.byte 0x42, 0x43, 0x00, 0xff
 	aligned_string "EffectBox"
 	.byte 0x1a, 0x00
-LABEL_E27598:
-	.long LABEL_E275EA
-	.long LABEL_E275DA
-	.long LABEL_E275CC
-	.long LABEL_E275BE
-	.long LABEL_E275B0
+EvtEffDraw_PtrTable:
+	.long EvtName_EffFixDraw
+	.long EvtName_EffParaDraw
+	.long EvtName_EqLineDraw
+	.long EvtName_EqStrDraw
+	.long EvtName_GraphDraw
 	.byte 0x00, 0x00, 0x00, 0x00
-LABEL_E275B0:	aligned_string "EV_GRAPHDRAW"
-LABEL_E275BE:	aligned_string "EV_EQSTRDRAW"
-LABEL_E275CC:	aligned_string "EV_EQLINEDRAW"
-LABEL_E275DA:	aligned_string "EV_EFFPARADRAW"
-LABEL_E275EA:	aligned_string "EV_EFFFIXDRAW"
+EvtName_GraphDraw:	aligned_string "EV_GRAPHDRAW"
+EvtName_EqStrDraw:	aligned_string "EV_EQSTRDRAW"
+EvtName_EqLineDraw:	aligned_string "EV_EQLINEDRAW"
+EvtName_EffParaDraw:	aligned_string "EV_EFFPARADRAW"
+EvtName_EffFixDraw:	aligned_string "EV_EFFFIXDRAW"
 	.byte 0x05, 0x00
 
-LABEL_E275FA:
-	.long LABEL_E27F8E
-	.long LABEL_E27F7C
-	.long LABEL_E27F6A
-	.long LABEL_E27F58
-	.long LABEL_E27F46
-	.long LABEL_E27F34
-	.long LABEL_E27F22
-	.long LABEL_E27F10
-	.long LABEL_E27EFE
-	.long LABEL_E27EEE
-	.long LABEL_E27EE0
-	.long LABEL_E27ED2
-	.long LABEL_E27EC4
-	.long LABEL_E27EB6
-	.long LABEL_E27EA8
-	.long LABEL_E27E9A
-	.long LABEL_E27E8A
-	.long LABEL_E27E7C
-	.long LABEL_E27E6E
-	.long LABEL_E27E60
-	.long LABEL_E27E56
-	.long LABEL_E27E4C
-	.long LABEL_E27E3C
-	.long LABEL_E27E2C
-	.long LABEL_E27E1C
-	.long LABEL_E27E0A
-	.long LABEL_E27DF8
-	.long LABEL_E27DE6
-	.long LABEL_E27DD4
-	.long LABEL_E27DC0
-	.long LABEL_E27DAC
-	.long LABEL_E27D98
-	.long LABEL_E27D88
-	.long LABEL_E27D78
-	.long LABEL_E27D64
-	.long LABEL_E27D50
-	.long LABEL_E27D3C
-	.long LABEL_E27D28
-	.long LABEL_E27D16
-	.long LABEL_E27D04
-	.long LABEL_E27CF0
-	.long LABEL_E27CDE
-	.long LABEL_E27CCA
-	.long LABEL_E27CB6
-	.long LABEL_E27CA2
-	.long LABEL_E27C8E
-	.long LABEL_E27C7A
-	.long LABEL_E27C66
-	.long LABEL_E27C52
-	.long LABEL_E27C3E
-	.long LABEL_E27C2A
-	.long LABEL_E27C16
-	.long LABEL_E27C02
-	.long LABEL_E27BF4
-	.long LABEL_E27BE6
-	.long LABEL_E27BD8
-	.long LABEL_E27BCE
-	.long LABEL_E27BC2
-	.long LABEL_E27BB4
-	.long LABEL_E27BA6
-	.long LABEL_E27B9A
-	.long LABEL_E27B8E
-	.long LABEL_E27B7C
-	.long LABEL_E27B6A
-	.long LABEL_E27B5A
-	.long LABEL_E27B48
-	.long LABEL_E27B34
-	.long LABEL_E27B20
-	.long LABEL_E27B14
-	.long LABEL_E27B08
-	.long LABEL_E27AFC
-	.long LABEL_E27AE8
-	.long LABEL_E27AD4
-	.long LABEL_E27ABE
-	.long LABEL_E27AAA
-	.long LABEL_E27A96
-	.long LABEL_E27A86
-	.long LABEL_E27A74
-	.long LABEL_E27A60
-	.long LABEL_E27A4A
-	.long LABEL_E27A36
-	.long LABEL_E27A28
-	.long LABEL_E27A1A
-	.long LABEL_E27A0C
-	.long LABEL_E279FA
-	.long LABEL_E279EA
-	.long LABEL_E279DA
-	.long LABEL_E279C8
-	.long LABEL_E279B8
-	.long LABEL_E279A2
-	.long LABEL_E27992
-	.long LABEL_E2797C
-	.long LABEL_E27968
-	.long LABEL_E27958
-	.long LABEL_E27948
-	.long LABEL_E27938
-	.long LABEL_E27924
-	.long LABEL_E27916
-	.long LABEL_E27908
-	.long LABEL_E278FA
-	.long LABEL_E278EC
-	.long LABEL_E278DE
-	.long LABEL_E278D0
-	.long LABEL_E278C2
-	.long LABEL_E278B4
-	.long LABEL_E278A6
-	.long LABEL_E27898
-	.long LABEL_E2788A
-	.long LABEL_E27878
-	.long LABEL_E27864
-	.long LABEL_E27850
-	.long LABEL_E27844
-	.long LABEL_E27838
-	.long LABEL_E2782C
-	.long LABEL_E27816
-	.long LABEL_E27800
-	.long LABEL_E277F2
-	.long LABEL_E277E4
-	.long LABEL_E277DA
+MT_FuncName_PtrTable:
+	.long MT_GetEffFixString_Name
+	.long MT_GetEffDlt0Str_Name
+	.long MT_GetEffDlt1Str_Name
+	.long MT_GetEffDlt2Str_Name
+	.long MT_GetEffDlt3Str_Name
+	.long MT_GetEffDlt4Str_Name
+	.long MT_GetEffDlt5Str_Name
+	.long MT_GetEffDlt6Str_Name
+	.long MT_GetEffDlt7Str_Name
+	.long MT_GetItemExist_Name
+	.long MT_SetItemOff_Name
+	.long MT_GetItemOff_Name
+	.long MT_SetItemTop_Name
+	.long MT_GetItemTop_Name
+	.long MT_RetEffFix_Name
+	.long MT_RetEffPara_Name
+	.long MT_GetParaSize_Name
+	.long MT_CngEffType_Name
+	.long MT_CngEffPara_Name
+	.long MT_GetDispPos_Name
+	.long MT_IncVal_Name
+	.long MT_DecVal_Name
+	.long MT_GetTrkString_Name
+	.long MT_GetFMString_Name
+	.long MT_GetLMString_Name
+	.long MT_GetAdlyString_Name
+	.long MT_GetTrnsString_Name
+	.long MT_GetVeloString_Name
+	.long MT_GetMersString_Name
+	.long MT_GetQtzValString_Name
+	.long MT_GetQtzStrString_Name
+	.long MT_GetQtzWinString_Name
+	.long MT_GetTnString_Name
+	.long MT_GetCnString_Name
+	.long MT_GetMrgTrAString_Name
+	.long MT_GetMrgTrBString_Name
+	.long MT_GetMrgTrCString_Name
+	.long MT_GetMcpTrAString_Name
+	.long MT_GetMcpFMString_Name
+	.long MT_GetMcpLMString_Name
+	.long MT_GetMcpTrBString_Name
+	.long MT_GetMcpSMString_Name
+	.long MT_GetMcpRepString_Name
+	.long MT_GetMinsTrAString_Name
+	.long MT_GetMinsFMString_Name
+	.long MT_GetMinsLMString_Name
+	.long MT_GetMinsTrBString_Name
+	.long MT_GetMinsSMString_Name
+	.long MT_GetMinsRepString_Name
+	.long MT_GetScpFsngString_Name
+	.long MT_GetScpFtrString_Name
+	.long MT_GetScpTsngString_Name
+	.long MT_GetScpTtrString_Name
+	.long MT_SetCurPos_Name
+	.long MT_GetCurPos_Name
+	.long MT_CurToParam_Name
+	.long MT_ChkCur_Name
+	.long MT_ChkCur2_Name
+	.long MT_GetFromCur_Name
+	.long MT_SetFromCur_Name
+	.long MT_GetToCur_Name
+	.long MT_SetToCur_Name
+	.long MT_GetMeasString_Name
+	.long MT_GetBeatString_Name
+	.long MT_GetMemString_Name
+	.long MT_GetCycEnString_Name
+	.long MT_GetCycSrtMString_Name
+	.long MT_GetCycEndMString_Name
+	.long MT_SetCycle_Name
+	.long MT_SetMetro_Name
+	.long MT_SetPunch_Name
+	.long MT_GetSoloEnString_Name
+	.long MT_GetSclrNoString_Name
+	.long MT_GetSclrNameString_Name
+	.long MT_GetSclrKbString_Name
+	.long MT_GetSclrPerString_Name
+	.long MT_GetAccLvlStr_Name
+	.long MT_GetPMeasString_Name
+	.long MT_GetPInMeasString_Name
+	.long MT_GetPOutMeasString_Name
+	.long MT_GetPCntInString_Name
+	.long MT_GetEndPos_Name
+	.long MT_GetTriPos_Name
+	.long MT_GetLinePos_Name
+	.long MT_GetHakuString_Name
+	.long MT_GetPosString_Name
+	.long MT_GetIncString_Name
+	.long MT_GetNoteString_Name
+	.long MT_GetVelString_Name
+	.long MT_GetInputVelString_Name
+	.long MT_GetLenString_Name
+	.long MT_GetInputLenString_Name
+	.long MT_GetMeasTopNumSv_Name
+	.long MT_GetMeasCngSv_Name
+	.long MT_NoteBarDisp_Name
+	.long MT_NoteBarDisp2_Name
+	.long MT_NoteHilightDisp_Name
+	.long MT_GetEq0Str_Name
+	.long MT_GetEq1Str_Name
+	.long MT_GetEq2Str_Name
+	.long MT_GetEq3Str_Name
+	.long MT_GetEq4Str_Name
+	.long MT_GetEq5Str_Name
+	.long MT_GetEq6Str_Name
+	.long MT_GetEq7Str_Name
+	.long MT_GetTtlNow_Name
+	.long MT_GetKb1Str_Name
+	.long MT_GetKb2Str_Name
+	.long MT_GetDrNumString_Name
+	.long MT_GetDrNameString_Name
+	.long MT_ChkToggleEditSw_Name
+	.long MT_GetLang_Name
+	.long MT_SetLang_Name
+	.long MT_ChkLang_Name
+	.long MT_GetFSngNameString_Name
+	.long MT_GetTSngNameString_Name
+	.long MT_FlashWrite_Name
+	.long MT_FlashLoad_Name
+	.long MT_Panic_Name
 	.zero 4
-LABEL_E277DA:	aligned_string "MT_PANIC"
-LABEL_E277E4:	aligned_string "MT_FLASHLOAD"
-LABEL_E277F2:	aligned_string "MT_FLASHWRITE"
-LABEL_E27800:	aligned_string "MT_GetTSngNameString"
-LABEL_E27816:	aligned_string "MT_GetFSngNameString"
-LABEL_E2782C:	aligned_string "MT_ChkLang"
-LABEL_E27838:	aligned_string "MT_SetLang"
-LABEL_E27844:	aligned_string "MT_GetLang"
-LABEL_E27850:	aligned_string "MT_ChkToggleEditSw"
-LABEL_E27864:	aligned_string "MT_GetDrNameString"
-LABEL_E27878:	aligned_string "MT_GetDrNumString"
-LABEL_E2788A:	aligned_string "MT_GetKb2Str"
-LABEL_E27898:	aligned_string "MT_GetKb1Str"
-LABEL_E278A6:	aligned_string "MT_GetTtlNow"
-LABEL_E278B4:	aligned_string "MT_GetEq7Str"
-LABEL_E278C2:	aligned_string "MT_GetEq6Str"
-LABEL_E278D0:	aligned_string "MT_GetEq5Str"
-LABEL_E278DE:	aligned_string "MT_GetEq4Str"
-LABEL_E278EC:	aligned_string "MT_GetEq3Str"
-LABEL_E278FA:	aligned_string "MT_GetEq2Str"
-LABEL_E27908:	aligned_string "MT_GetEq1Str"
-LABEL_E27916:	aligned_string "MT_GetEq0Str"
-LABEL_E27924:	aligned_string "MT_NoteHilightDisp"
-LABEL_E27938:	aligned_string "MT_NoteBarDisp2"
-LABEL_E27948:	aligned_string "MT_NoteBarDisp"
-LABEL_E27958:	aligned_string "MT_GetMeasCngSv"
-LABEL_E27968:	aligned_string "MT_GetMeasTopNumSv"
-LABEL_E2797C:	aligned_string "MT_GetInputLenString"
-LABEL_E27992:	aligned_string "MT_GetLenString"
-LABEL_E279A2:	aligned_string "MT_GetInputVelString"
-LABEL_E279B8:	aligned_string "MT_GetVelString"
-LABEL_E279C8:	aligned_string "MT_GetNoteString"
-LABEL_E279DA:	aligned_string "MT_GetIncString"
-LABEL_E279EA:	aligned_string "MT_GetPosString"
-LABEL_E279FA:	aligned_string "MT_GetHakuString"
-LABEL_E27A0C:	aligned_string "MT_GetLinePos"
-LABEL_E27A1A:	aligned_string "MT_GetTriPos"
-LABEL_E27A28:	aligned_string "MT_GetEndPos"
-LABEL_E27A36:	aligned_string "MT_GetPCntInString"
-LABEL_E27A4A:	aligned_string "MT_GetPOutMeasString"
-LABEL_E27A60:	aligned_string "MT_GetPInMeasString"
-LABEL_E27A74:	aligned_string "MT_GetPMeasString"
-LABEL_E27A86:	aligned_string "MT_GetAccLvlStr"
-LABEL_E27A96:	aligned_string "MT_GetSclrPerString"
-LABEL_E27AAA:	aligned_string "MT_GetSclrKbString"
-LABEL_E27ABE:	aligned_string "MT_GetSclrNameString"
-LABEL_E27AD4:	aligned_string "MT_GetSclrNoString"
-LABEL_E27AE8:	aligned_string "MT_GetSoloEnString"
-LABEL_E27AFC:	aligned_string "MT_SetPunch"
-LABEL_E27B08:	aligned_string "MT_SetMetro"
-LABEL_E27B14:	aligned_string "MT_SetCycle"
-LABEL_E27B20:	aligned_string "MT_GetCycEndMString"
-LABEL_E27B34:	aligned_string "MT_GetCycSrtMString"
-LABEL_E27B48:	aligned_string "MT_GetCycEnString"
-LABEL_E27B5A:	aligned_string "MT_GetMemString"
-LABEL_E27B6A:	aligned_string "MT_GetBeatString"
-LABEL_E27B7C:	aligned_string "MT_GetMeasString"
-LABEL_E27B8E:	aligned_string "MT_SetToCur"
-LABEL_E27B9A:	aligned_string "MT_GetToCur"
-LABEL_E27BA6:	aligned_string "MT_SetFromCur"
-LABEL_E27BB4:	aligned_string "MT_GetFromCur"
-LABEL_E27BC2:	aligned_string "MT_ChkCur2"
-LABEL_E27BCE:	aligned_string "MT_ChkCur"
-LABEL_E27BD8:	aligned_string "MT_CurToParam"
-LABEL_E27BE6:	aligned_string "MT_GetCurPos"
-LABEL_E27BF4:	aligned_string "MT_SetCurPos"
-LABEL_E27C02:	aligned_string "MT_GetScpTtrString"
-LABEL_E27C16:	aligned_string "MT_GetScpTsngString"
-LABEL_E27C2A:	aligned_string "MT_GetScpFtrString"
-LABEL_E27C3E:	aligned_string "MT_GetScpFsngString"
-LABEL_E27C52:	aligned_string "MT_GetMinsRepString"
-LABEL_E27C66:	aligned_string "MT_GetMinsSMString"
-LABEL_E27C7A:	aligned_string "MT_GetMinsTrBString"
-LABEL_E27C8E:	aligned_string "MT_GetMinsLMString"
-LABEL_E27CA2:	aligned_string "MT_GetMinsFMString"
-LABEL_E27CB6:	aligned_string "MT_GetMinsTrAString"
-LABEL_E27CCA:	aligned_string "MT_GetMcpRepString"
-LABEL_E27CDE:	aligned_string "MT_GetMcpSMString"
-LABEL_E27CF0:	aligned_string "MT_GetMcpTrBString"
-LABEL_E27D04:	aligned_string "MT_GetMcpLMString"
-LABEL_E27D16:	aligned_string "MT_GetMcpFMString"
-LABEL_E27D28:	aligned_string "MT_GetMcpTrAString"
-LABEL_E27D3C:	aligned_string "MT_GetMrgTrCString"
-LABEL_E27D50:	aligned_string "MT_GetMrgTrBString"
-LABEL_E27D64:	aligned_string "MT_GetMrgTrAString"
-LABEL_E27D78:	aligned_string "MT_GetCnString"
-LABEL_E27D88:	aligned_string "MT_GetTnString"
-LABEL_E27D98:	aligned_string "MT_GetQtzWinString"
-LABEL_E27DAC:	aligned_string "MT_GetQtzStrString"
-LABEL_E27DC0:	aligned_string "MT_GetQtzValString"
-LABEL_E27DD4:	aligned_string "MT_GetMersString"
-LABEL_E27DE6:	aligned_string "MT_GetVeloString"
-LABEL_E27DF8:	aligned_string "MT_GetTrnsString"
-LABEL_E27E0A:	aligned_string "MT_GetAdlyString"
-LABEL_E27E1C:	aligned_string "MT_GetLMString"
-LABEL_E27E2C:	aligned_string "MT_GetFMString"
-LABEL_E27E3C:	aligned_string "MT_GetTrkString"
-LABEL_E27E4C:	aligned_string "MT_DecVal"
-LABEL_E27E56:	aligned_string "MT_IncVal"
-LABEL_E27E60:	aligned_string "MT_GetDispPos"
-LABEL_E27E6E:	aligned_string "MT_CngEffPara"
-LABEL_E27E7C:	aligned_string "MT_CngEffType"
-LABEL_E27E8A:	aligned_string "MT_GetParaSize"
-LABEL_E27E9A:	aligned_string "MT_RetEffPara"
-LABEL_E27EA8:	aligned_string "MT_RetEffFix"
-LABEL_E27EB6:	aligned_string "MT_GetItemTop"
-LABEL_E27EC4:	aligned_string "MT_SetItemTop"
-LABEL_E27ED2:	aligned_string "MT_GetItemOff"
-LABEL_E27EE0:	aligned_string "MT_SetItemOff"
-LABEL_E27EEE:	aligned_string "MT_GetItemExist"
-LABEL_E27EFE:	aligned_string "MT_GetEffDlt7Str"
-LABEL_E27F10:	aligned_string "MT_GetEffDlt6Str"
-LABEL_E27F22:	aligned_string "MT_GetEffDlt5Str"
-LABEL_E27F34:	aligned_string "MT_GetEffDlt4Str"
-LABEL_E27F46:	aligned_string "MT_GetEffDlt3Str"
-LABEL_E27F58:	aligned_string "MT_GetEffDlt2Str"
-LABEL_E27F6A:	aligned_string "MT_GetEffDlt1Str"
-LABEL_E27F7C:
+MT_Panic_Name:	aligned_string "MT_PANIC"
+MT_FlashLoad_Name:	aligned_string "MT_FLASHLOAD"
+MT_FlashWrite_Name:	aligned_string "MT_FLASHWRITE"
+MT_GetTSngNameString_Name:	aligned_string "MT_GetTSngNameString"
+MT_GetFSngNameString_Name:	aligned_string "MT_GetFSngNameString"
+MT_ChkLang_Name:	aligned_string "MT_ChkLang"
+MT_SetLang_Name:	aligned_string "MT_SetLang"
+MT_GetLang_Name:	aligned_string "MT_GetLang"
+MT_ChkToggleEditSw_Name:	aligned_string "MT_ChkToggleEditSw"
+MT_GetDrNameString_Name:	aligned_string "MT_GetDrNameString"
+MT_GetDrNumString_Name:	aligned_string "MT_GetDrNumString"
+MT_GetKb2Str_Name:	aligned_string "MT_GetKb2Str"
+MT_GetKb1Str_Name:	aligned_string "MT_GetKb1Str"
+MT_GetTtlNow_Name:	aligned_string "MT_GetTtlNow"
+MT_GetEq7Str_Name:	aligned_string "MT_GetEq7Str"
+MT_GetEq6Str_Name:	aligned_string "MT_GetEq6Str"
+MT_GetEq5Str_Name:	aligned_string "MT_GetEq5Str"
+MT_GetEq4Str_Name:	aligned_string "MT_GetEq4Str"
+MT_GetEq3Str_Name:	aligned_string "MT_GetEq3Str"
+MT_GetEq2Str_Name:	aligned_string "MT_GetEq2Str"
+MT_GetEq1Str_Name:	aligned_string "MT_GetEq1Str"
+MT_GetEq0Str_Name:	aligned_string "MT_GetEq0Str"
+MT_NoteHilightDisp_Name:	aligned_string "MT_NoteHilightDisp"
+MT_NoteBarDisp2_Name:	aligned_string "MT_NoteBarDisp2"
+MT_NoteBarDisp_Name:	aligned_string "MT_NoteBarDisp"
+MT_GetMeasCngSv_Name:	aligned_string "MT_GetMeasCngSv"
+MT_GetMeasTopNumSv_Name:	aligned_string "MT_GetMeasTopNumSv"
+MT_GetInputLenString_Name:	aligned_string "MT_GetInputLenString"
+MT_GetLenString_Name:	aligned_string "MT_GetLenString"
+MT_GetInputVelString_Name:	aligned_string "MT_GetInputVelString"
+MT_GetVelString_Name:	aligned_string "MT_GetVelString"
+MT_GetNoteString_Name:	aligned_string "MT_GetNoteString"
+MT_GetIncString_Name:	aligned_string "MT_GetIncString"
+MT_GetPosString_Name:	aligned_string "MT_GetPosString"
+MT_GetHakuString_Name:	aligned_string "MT_GetHakuString"
+MT_GetLinePos_Name:	aligned_string "MT_GetLinePos"
+MT_GetTriPos_Name:	aligned_string "MT_GetTriPos"
+MT_GetEndPos_Name:	aligned_string "MT_GetEndPos"
+MT_GetPCntInString_Name:	aligned_string "MT_GetPCntInString"
+MT_GetPOutMeasString_Name:	aligned_string "MT_GetPOutMeasString"
+MT_GetPInMeasString_Name:	aligned_string "MT_GetPInMeasString"
+MT_GetPMeasString_Name:	aligned_string "MT_GetPMeasString"
+MT_GetAccLvlStr_Name:	aligned_string "MT_GetAccLvlStr"
+MT_GetSclrPerString_Name:	aligned_string "MT_GetSclrPerString"
+MT_GetSclrKbString_Name:	aligned_string "MT_GetSclrKbString"
+MT_GetSclrNameString_Name:	aligned_string "MT_GetSclrNameString"
+MT_GetSclrNoString_Name:	aligned_string "MT_GetSclrNoString"
+MT_GetSoloEnString_Name:	aligned_string "MT_GetSoloEnString"
+MT_SetPunch_Name:	aligned_string "MT_SetPunch"
+MT_SetMetro_Name:	aligned_string "MT_SetMetro"
+MT_SetCycle_Name:	aligned_string "MT_SetCycle"
+MT_GetCycEndMString_Name:	aligned_string "MT_GetCycEndMString"
+MT_GetCycSrtMString_Name:	aligned_string "MT_GetCycSrtMString"
+MT_GetCycEnString_Name:	aligned_string "MT_GetCycEnString"
+MT_GetMemString_Name:	aligned_string "MT_GetMemString"
+MT_GetBeatString_Name:	aligned_string "MT_GetBeatString"
+MT_GetMeasString_Name:	aligned_string "MT_GetMeasString"
+MT_SetToCur_Name:	aligned_string "MT_SetToCur"
+MT_GetToCur_Name:	aligned_string "MT_GetToCur"
+MT_SetFromCur_Name:	aligned_string "MT_SetFromCur"
+MT_GetFromCur_Name:	aligned_string "MT_GetFromCur"
+MT_ChkCur2_Name:	aligned_string "MT_ChkCur2"
+MT_ChkCur_Name:	aligned_string "MT_ChkCur"
+MT_CurToParam_Name:	aligned_string "MT_CurToParam"
+MT_GetCurPos_Name:	aligned_string "MT_GetCurPos"
+MT_SetCurPos_Name:	aligned_string "MT_SetCurPos"
+MT_GetScpTtrString_Name:	aligned_string "MT_GetScpTtrString"
+MT_GetScpTsngString_Name:	aligned_string "MT_GetScpTsngString"
+MT_GetScpFtrString_Name:	aligned_string "MT_GetScpFtrString"
+MT_GetScpFsngString_Name:	aligned_string "MT_GetScpFsngString"
+MT_GetMinsRepString_Name:	aligned_string "MT_GetMinsRepString"
+MT_GetMinsSMString_Name:	aligned_string "MT_GetMinsSMString"
+MT_GetMinsTrBString_Name:	aligned_string "MT_GetMinsTrBString"
+MT_GetMinsLMString_Name:	aligned_string "MT_GetMinsLMString"
+MT_GetMinsFMString_Name:	aligned_string "MT_GetMinsFMString"
+MT_GetMinsTrAString_Name:	aligned_string "MT_GetMinsTrAString"
+MT_GetMcpRepString_Name:	aligned_string "MT_GetMcpRepString"
+MT_GetMcpSMString_Name:	aligned_string "MT_GetMcpSMString"
+MT_GetMcpTrBString_Name:	aligned_string "MT_GetMcpTrBString"
+MT_GetMcpLMString_Name:	aligned_string "MT_GetMcpLMString"
+MT_GetMcpFMString_Name:	aligned_string "MT_GetMcpFMString"
+MT_GetMcpTrAString_Name:	aligned_string "MT_GetMcpTrAString"
+MT_GetMrgTrCString_Name:	aligned_string "MT_GetMrgTrCString"
+MT_GetMrgTrBString_Name:	aligned_string "MT_GetMrgTrBString"
+MT_GetMrgTrAString_Name:	aligned_string "MT_GetMrgTrAString"
+MT_GetCnString_Name:	aligned_string "MT_GetCnString"
+MT_GetTnString_Name:	aligned_string "MT_GetTnString"
+MT_GetQtzWinString_Name:	aligned_string "MT_GetQtzWinString"
+MT_GetQtzStrString_Name:	aligned_string "MT_GetQtzStrString"
+MT_GetQtzValString_Name:	aligned_string "MT_GetQtzValString"
+MT_GetMersString_Name:	aligned_string "MT_GetMersString"
+MT_GetVeloString_Name:	aligned_string "MT_GetVeloString"
+MT_GetTrnsString_Name:	aligned_string "MT_GetTrnsString"
+MT_GetAdlyString_Name:	aligned_string "MT_GetAdlyString"
+MT_GetLMString_Name:	aligned_string "MT_GetLMString"
+MT_GetFMString_Name:	aligned_string "MT_GetFMString"
+MT_GetTrkString_Name:	aligned_string "MT_GetTrkString"
+MT_DecVal_Name:	aligned_string "MT_DecVal"
+MT_IncVal_Name:	aligned_string "MT_IncVal"
+MT_GetDispPos_Name:	aligned_string "MT_GetDispPos"
+MT_CngEffPara_Name:	aligned_string "MT_CngEffPara"
+MT_CngEffType_Name:	aligned_string "MT_CngEffType"
+MT_GetParaSize_Name:	aligned_string "MT_GetParaSize"
+MT_RetEffPara_Name:	aligned_string "MT_RetEffPara"
+MT_RetEffFix_Name:	aligned_string "MT_RetEffFix"
+MT_GetItemTop_Name:	aligned_string "MT_GetItemTop"
+MT_SetItemTop_Name:	aligned_string "MT_SetItemTop"
+MT_GetItemOff_Name:	aligned_string "MT_GetItemOff"
+MT_SetItemOff_Name:	aligned_string "MT_SetItemOff"
+MT_GetItemExist_Name:	aligned_string "MT_GetItemExist"
+MT_GetEffDlt7Str_Name:	aligned_string "MT_GetEffDlt7Str"
+MT_GetEffDlt6Str_Name:	aligned_string "MT_GetEffDlt6Str"
+MT_GetEffDlt5Str_Name:	aligned_string "MT_GetEffDlt5Str"
+MT_GetEffDlt4Str_Name:	aligned_string "MT_GetEffDlt4Str"
+MT_GetEffDlt3Str_Name:	aligned_string "MT_GetEffDlt3Str"
+MT_GetEffDlt2Str_Name:	aligned_string "MT_GetEffDlt2Str"
+MT_GetEffDlt1Str_Name:	aligned_string "MT_GetEffDlt1Str"
+MT_GetEffDlt0Str_Name:
 
 	aligned_string "MT_GetEffDlt0Str"
 
-LABEL_E27F8E:	aligned_string "MT_GetEffFixString"
+MT_GetEffFixString_Name:	aligned_string "MT_GetEffFixString"
 
 LABEL_E27FA2:
 	.byte 0x77, 0x00
@@ -16698,137 +16698,137 @@ LABEL_E55752:	aligned_string "TtMdmenu"
 LABEL_E55766:
 	.byte 0x00, 0xff
 LABEL_E55768:
-	.long LABEL_E5578A
-	.long LABEL_E55782
-	.long LABEL_E5577A
-	.long LABEL_E55778
-LABEL_E55778:	aligned_string ""
-LABEL_E5577A:	aligned_string "window1"
-LABEL_E55782:	aligned_string "window0"
-LABEL_E5578A:	aligned_string "page"
-LABEL_E55790:
-	.long LABEL_E557B6
-	.long LABEL_E557B0
-	.long LABEL_E557AC
-	.long LABEL_E557A6
-	.long LABEL_E557A4
-LABEL_E557A4:	aligned_string ""
-LABEL_E557A6:	.asciz "onoff"
-LABEL_E557AC:
+	.long NakaDesc_PageWindow_Page
+	.long NakaDesc_PageWindow_Window0
+	.long NakaDesc_PageWindow_Window1
+	.long NakaDesc_PageWindow_NullStr
+NakaDesc_PageWindow_NullStr:	aligned_string ""
+NakaDesc_PageWindow_Window1:	aligned_string "window1"
+NakaDesc_PageWindow_Window0:	aligned_string "window0"
+NakaDesc_PageWindow_Page:	aligned_string "page"
+NakaDesc_OnOffStyle_Table:
+	.long NakaDesc_OnOffStyle_Style
+	.long NakaDesc_OnOffStyle_Func
+	.long NakaDesc_OnOffStyle_Str
+	.long NakaDesc_OnOffStyle_Onoff
+	.long NakaDesc_OnOffStyle_NullStr
+NakaDesc_OnOffStyle_NullStr:	aligned_string ""
+NakaDesc_OnOffStyle_Onoff:	.asciz "onoff"
+NakaDesc_OnOffStyle_Str:
 	.byte 0x73, 0x74, 0x72, 0x00
-LABEL_E557B0:	aligned_string "func"
-LABEL_E557B6:
+NakaDesc_OnOffStyle_Func:	aligned_string "func"
+NakaDesc_OnOffStyle_Style:
 	.byte 0x73, 0x74, 0x79, 0x6c, 0x65, 0x00, 0xc0
 	.byte 0x57, 0xe5, 0x00
-LABEL_E557C0:
+NakaDesc_PmanOnOff_NullTerm:
 	.byte 0x00, 0xff
-LABEL_E557C2:
-	.long LABEL_E55800
-	.long LABEL_E557F8
-	.long LABEL_E557F0
-	.long LABEL_E557E6
-	.long LABEL_E557DC
-	.long LABEL_E557DA
-LABEL_E557DA:
+NakaDesc_PmanOnOff1_Table:
+	.long NakaDesc_PmanOnOff1_Data
+	.long NakaDesc_PmanOnOff1_OnStr
+	.long NakaDesc_PmanOnOff1_OffStr
+	.long NakaDesc_PmanOnOff1_PmanAdr
+	.long NakaDesc_PmanOnOff1_PmanOut
+	.long NakaDesc_PmanOnOff1_NullEntry
+NakaDesc_PmanOnOff1_NullEntry:
 	.byte 0x00, 0xff
-LABEL_E557DC:	aligned_string "pman_out"
-LABEL_E557E6:	aligned_string "pman_adr"
-LABEL_E557F0:	aligned_string "off_str"
-LABEL_E557F8:	aligned_string "on_str"
-LABEL_E55800:	aligned_string "data"
-LABEL_E55806:
-	.long LABEL_E55844
-	.long LABEL_E5583C
-	.long LABEL_E55834
-	.long LABEL_E5582A
-	.long LABEL_E55820
-	.long LABEL_E5581E
-LABEL_E5581E:
+NakaDesc_PmanOnOff1_PmanOut:	aligned_string "pman_out"
+NakaDesc_PmanOnOff1_PmanAdr:	aligned_string "pman_adr"
+NakaDesc_PmanOnOff1_OffStr:	aligned_string "off_str"
+NakaDesc_PmanOnOff1_OnStr:	aligned_string "on_str"
+NakaDesc_PmanOnOff1_Data:	aligned_string "data"
+NakaDesc_PmanOnOff2_Table:
+	.long NakaDesc_PmanOnOff2_Data
+	.long NakaDesc_PmanOnOff2_OnStr
+	.long NakaDesc_PmanOnOff2_OffStr
+	.long NakaDesc_PmanOnOff2_PmanAdr
+	.long NakaDesc_PmanOnOff2_PmanOut
+	.long NakaDesc_PmanOnOff2_NullEntry
+NakaDesc_PmanOnOff2_NullEntry:
 	.byte 0x00, 0xff
-LABEL_E55820:	aligned_string "pman_out"
-LABEL_E5582A:	aligned_string "pman_adr"
-LABEL_E55834:	aligned_string "off_str"
-LABEL_E5583C:	aligned_string "on_str"
-LABEL_E55844:	aligned_string "data"
+NakaDesc_PmanOnOff2_PmanOut:	aligned_string "pman_out"
+NakaDesc_PmanOnOff2_PmanAdr:	aligned_string "pman_adr"
+NakaDesc_PmanOnOff2_OffStr:	aligned_string "off_str"
+NakaDesc_PmanOnOff2_OnStr:	aligned_string "on_str"
+NakaDesc_PmanOnOff2_Data:	aligned_string "data"
 	.byte 0x6c, 0x58, 0xe5, 0x00, 0x62, 0x58
 	.byte 0xe5, 0x00, 0x5c, 0x58, 0xe5, 0x00, 0x5a, 0x58
 	.byte 0xe5, 0x00
-LABEL_E5585A:
+NakaDesc_GridBox1_NullEntry:
 	.byte 0x00, 0xff
-LABEL_E5585C:	aligned_string "func"
-LABEL_E55862:	aligned_string "fixedrow"
-LABEL_E5586C:	aligned_string "fixedcol"
+NakaDesc_GridBox1_Func:	aligned_string "func"
+NakaDesc_GridBox1_FixedRow:	aligned_string "fixedrow"
+NakaDesc_GridBox1_FixedCol:	aligned_string "fixedcol"
 	.byte 0x98, 0x58
 	.byte 0xe5, 0x00, 0x8e, 0x58, 0xe5, 0x00, 0x88, 0x58
 	.byte 0xe5, 0x00, 0x86, 0x58, 0xe5, 0x00
-LABEL_E55886:
+NakaDesc_GridBox2_NullEntry:
 	.byte 0x00, 0xff
-LABEL_E55888:	aligned_string "func"
-LABEL_E5588E:	aligned_string "fixedrow"
-LABEL_E55898:	aligned_string "fixedcol"
+NakaDesc_GridBox2_Func:	aligned_string "func"
+NakaDesc_GridBox2_FixedRow:	aligned_string "fixedrow"
+NakaDesc_GridBox2_FixedCol:	aligned_string "fixedcol"
 	.byte 0xc4, 0x58, 0xe5, 0x00, 0xba, 0x58
 	.byte 0xe5, 0x00, 0xb4, 0x58, 0xe5, 0x00, 0xb2, 0x58
 	.byte 0xe5, 0x00
-LABEL_E558B2:
+NakaDesc_GridBox3_NullEntry:
 	.byte 0x00, 0xff
-LABEL_E558B4:	aligned_string "func"
-LABEL_E558BA:	aligned_string "fixedrow"
-LABEL_E558C4:	aligned_string "fixedcol"
+NakaDesc_GridBox3_Func:	aligned_string "func"
+NakaDesc_GridBox3_FixedRow:	aligned_string "fixedrow"
+NakaDesc_GridBox3_FixedCol:	aligned_string "fixedcol"
 	.byte 0xf0, 0x58
 	.byte 0xe5, 0x00, 0xe6, 0x58, 0xe5, 0x00, 0xe0, 0x58
 	.byte 0xe5, 0x00, 0xde, 0x58, 0xe5, 0x00
-LABEL_E558DE:
+NakaDesc_GridBox4_NullEntry:
 	.byte 0x00, 0xff
-LABEL_E558E0:	aligned_string "func"
-LABEL_E558E6:	aligned_string "fixedrow"
-LABEL_E558F0:	aligned_string "fixedcol"
+NakaDesc_GridBox4_Func:	aligned_string "func"
+NakaDesc_GridBox4_FixedRow:	aligned_string "fixedrow"
+NakaDesc_GridBox4_FixedCol:	aligned_string "fixedcol"
 	.byte 0x1c, 0x59, 0xe5, 0x00, 0x12, 0x59
 	.byte 0xe5, 0x00, 0x0c, 0x59, 0xe5, 0x00, 0x0a, 0x59
 	.byte 0xe5, 0x00
-LABEL_E5590A:
+NakaDesc_GridBox5_NullEntry:
 	.byte 0x00, 0xff
-LABEL_E5590C:	aligned_string "func"
-LABEL_E55912:	aligned_string "fixedrow"
-LABEL_E5591C:	aligned_string "fixedcol"
+NakaDesc_GridBox5_Func:	aligned_string "func"
+NakaDesc_GridBox5_FixedRow:	aligned_string "fixedrow"
+NakaDesc_GridBox5_FixedCol:	aligned_string "fixedcol"
 	.byte 0x48, 0x59
 	.byte 0xe5, 0x00, 0x3e, 0x59, 0xe5, 0x00, 0x38, 0x59
 	.byte 0xe5, 0x00, 0x36, 0x59, 0xe5, 0x00
-LABEL_E55936:
+NakaDesc_GridBox6_NullEntry:
 	.byte 0x00, 0xff
-LABEL_E55938:	aligned_string "func"
-LABEL_E5593E:	aligned_string "fixedrow"
-LABEL_E55948:	aligned_string "fixedcol"
+NakaDesc_GridBox6_Func:	aligned_string "func"
+NakaDesc_GridBox6_FixedRow:	aligned_string "fixedrow"
+NakaDesc_GridBox6_FixedCol:	aligned_string "fixedcol"
 	.byte 0x74, 0x59, 0xe5, 0x00, 0x6a, 0x59
 	.byte 0xe5, 0x00, 0x64, 0x59, 0xe5, 0x00, 0x62, 0x59
 	.byte 0xe5, 0x00
-LABEL_E55962:
+NakaDesc_GridBox7_NullEntry:
 	.byte 0x00, 0xff
-LABEL_E55964:	aligned_string "func"
-LABEL_E5596A:	aligned_string "fixedrow"
-LABEL_E55974:	aligned_string "fixedcol"
-LABEL_E5597E:
-	.long LABEL_E559AA
-	.long LABEL_E559A0
-	.long LABEL_E5599A
-	.long LABEL_E55994
-	.long LABEL_E55992
-LABEL_E55992:
+NakaDesc_GridBox7_Func:	aligned_string "func"
+NakaDesc_GridBox7_FixedRow:	aligned_string "fixedrow"
+NakaDesc_GridBox7_FixedCol:	aligned_string "fixedcol"
+NakaDesc_PageGridBox1_Table:
+	.long NakaDesc_PageGridBox1_FixedCol
+	.long NakaDesc_PageGridBox1_FixedRow
+	.long NakaDesc_PageGridBox1_Func
+	.long NakaDesc_PageGridBox1_Page
+	.long NakaDesc_PageGridBox1_Null
+NakaDesc_PageGridBox1_Null:
 	.byte 0x00, 0xff
-LABEL_E55994:	aligned_string "page"
-LABEL_E5599A:	aligned_string "func"
-LABEL_E559A0:	aligned_string "fixedrow"
-LABEL_E559AA:	aligned_string "fixedcol"
-	.long LABEL_E559E0
-LABEL_E559B8:
-	.long LABEL_E559D6
-	.long LABEL_E559D0
-	.long LABEL_E559CA
-	.long LABEL_E559C8
-LABEL_E559C8:	aligned_string ""
-LABEL_E559CA:	aligned_string "page"
-LABEL_E559D0:	aligned_string "func"
-LABEL_E559D6:	aligned_string "fixedrow"
-LABEL_E559E0:	aligned_string "fixedcol"
+NakaDesc_PageGridBox1_Page:	aligned_string "page"
+NakaDesc_PageGridBox1_Func:	aligned_string "func"
+NakaDesc_PageGridBox1_FixedRow:	aligned_string "fixedrow"
+NakaDesc_PageGridBox1_FixedCol:	aligned_string "fixedcol"
+	.long NakaDesc_PageGridBox2_FixedCol
+NakaDesc_PageGridBox2_Table:
+	.long NakaDesc_PageGridBox2_FixedRow
+	.long NakaDesc_PageGridBox2_Func
+	.long NakaDesc_PageGridBox2_Page
+	.long NakaDesc_PageGridBox2_NullStr
+NakaDesc_PageGridBox2_NullStr:	aligned_string ""
+NakaDesc_PageGridBox2_Page:	aligned_string "page"
+NakaDesc_PageGridBox2_Func:	aligned_string "func"
+NakaDesc_PageGridBox2_FixedRow:	aligned_string "fixedrow"
+NakaDesc_PageGridBox2_FixedCol:	aligned_string "fixedcol"
 	.byte 0x19, 0x40, 0xf7, 0x00
 
 
@@ -16880,30 +16880,30 @@ LABEL_E559E0:	aligned_string "fixedcol"
 	.byte 0x00, 0x00, 0x00, 0x00, 0xa0, 0x5d, 0xe5, 0x00
 
 
-LABEL_E55CE0:
-	.long LABEL_E55D94
-	.long LABEL_E55D88
-	.long LABEL_E55D7C
-	.long LABEL_E55D6E
-	.long LABEL_E55D60
-	.long LABEL_E55D52
-	.long LABEL_E55D44
-	.long LABEL_E55D34
-	.long LABEL_E55D28
-	.long LABEL_E55D1E
-	.long LABEL_E55D10
+MidiMenu_MsgType_Table:
+	.long MsgType_ExcSend
+	.long MsgType_DrawKey
+	.long MsgType_MpstLoad
+	.long MsgType_MpstWrite
+	.long MsgType_FlashWrite
+	.long MsgType_FlashLoad
+	.long MsgType_VstPstOk
+	.long MsgType_VstSendOk
+	.long MsgType_RevLoad
+	.long MsgType_EqLoad
+	.long MsgType_RevEqLoad
 	.byte 0x00, 0x00, 0x00, 0x00
-LABEL_E55D10:	aligned_string "MT_REVEQLOAD"
-LABEL_E55D1E:	aligned_string "MT_EQLOAD"
-LABEL_E55D28:	aligned_string "MT_REVLOAD"
-LABEL_E55D34:	aligned_string "MT_VST_SEND_OK"
-LABEL_E55D44:	aligned_string "MT_VST_PST_OK"
-LABEL_E55D52:	aligned_string "MT_FLASHLOAD"
-LABEL_E55D60:	aligned_string "MT_FLASHWRITE"
-LABEL_E55D6E:	aligned_string "MT_MPSTWRITE"
-LABEL_E55D7C:	aligned_string "MT_MPSTLOAD"
-LABEL_E55D88:	aligned_string "MT_DRAWKEY"
-LABEL_E55D94:	aligned_string "MT_EXCSEND"
+MsgType_RevEqLoad:	aligned_string "MT_REVEQLOAD"
+MsgType_EqLoad:	aligned_string "MT_EQLOAD"
+MsgType_RevLoad:	aligned_string "MT_REVLOAD"
+MsgType_VstSendOk:	aligned_string "MT_VST_SEND_OK"
+MsgType_VstPstOk:	aligned_string "MT_VST_PST_OK"
+MsgType_FlashLoad:	aligned_string "MT_FLASHLOAD"
+MsgType_FlashWrite:	aligned_string "MT_FLASHWRITE"
+MsgType_MpstWrite:	aligned_string "MT_MPSTWRITE"
+MsgType_MpstLoad:	aligned_string "MT_MPSTLOAD"
+MsgType_DrawKey:	aligned_string "MT_DRAWKEY"
+MsgType_ExcSend:	aligned_string "MT_EXCSEND"
 	aligned_string "MT_PCGSEND"
 	.byte 0x0c, 0x00, 0xb5, 0x3f, 0xf7, 0x00, 0x19
 	.byte 0x40, 0xf7, 0x00, 0x36, 0x62, 0xf7, 0x00, 0xf5
@@ -16914,7 +16914,7 @@ LABEL_E55D94:	aligned_string "MT_EXCSEND"
 	.byte 0x73, 0xf7, 0x00, 0x29, 0x83, 0xf7, 0x00, 0x7c
 	.byte 0x86, 0xf7, 0x00, 0xdc, 0x9a, 0xf7, 0x00, 0xf4
 	.byte 0xa1, 0xf7, 0x00, 0x00, 0x00, 0x00, 0x00
-LABEL_E55DF2:
+MidiMenu_NakaProcName_Table:
 	.long LABEL_E55F70
 	.long LABEL_E55F5C
 	.long LABEL_E55F46
@@ -16931,8 +16931,8 @@ LABEL_E55DF2:
 	.long LABEL_E55E62
 	.long LABEL_E55E4E
 	.long LABEL_E55E38
-	.long LABEL_E55E36
-LABEL_E55E36:
+	.long NakaProc_NullEntry
+NakaProc_NullEntry:
 	.byte 0x00, 0xff
 .include "naka/naka_e55e38_e5a38e.s"
 	sub	hl, iz
@@ -16956,228 +16956,228 @@ LABEL_E55E36:
 	aligned_string "MidiRealtimeMessage"
 
 
-LABEL_E5A448:
-	.long LABEL_E5A476
-	.long LABEL_E5A468
-	.long LABEL_E5A466
-	.long LABEL_E5A464
-	.long LABEL_E5A462
-	.long LABEL_E5A460
-LABEL_E5A460:	aligned_string ""
-LABEL_E5A462:	aligned_string ""
-LABEL_E5A464:	aligned_string ""
-LABEL_E5A466:	aligned_string ""
-LABEL_E5A468:	aligned_string "ComSetGridBox"
-LABEL_E5A476:	aligned_string "MidiCommonSetting"
-LABEL_E5A488:
-	.long LABEL_E5A4B6
-	.long LABEL_E5A4A8
-	.long LABEL_E5A4A6
-	.long LABEL_E5A4A4
-	.long LABEL_E5A4A2
-	.long LABEL_E5A4A0
-LABEL_E5A4A0:	aligned_string ""
-LABEL_E5A4A2:	aligned_string ""
-LABEL_E5A4A4:	aligned_string ""
-LABEL_E5A4A6:	aligned_string ""
-LABEL_E5A4A8:	aligned_string "InOutGridBox"
-LABEL_E5A4B6:	aligned_string "MidiInOutSetting"
-LABEL_E5A4C8:
-	.long LABEL_E5A770
-	.long LABEL_E5A760
-	.long LABEL_E5A75E
-	.long LABEL_E5A75C
-	.long LABEL_E5A74E
-	.long LABEL_E5A740
-	.long LABEL_E5A73E
-	.long LABEL_E5A726
-	.long LABEL_E5A724
-	.long LABEL_E5A722
-	.long LABEL_E5A720
-	.long LABEL_E5A71E
-	.long LABEL_E5A708
-	.long LABEL_E5A706
-	.long LABEL_E5A704
-	.long LABEL_E5A702
-	.long LABEL_E5A700
-	.long LABEL_E5A6FE
-	.long LABEL_E5A6FC
-	.long LABEL_E5A6E8
-	.long LABEL_E5A6E6
-	.long LABEL_E5A6D4
-	.long LABEL_E5A6D2
-	.long LABEL_E5A6D0
-	.long LABEL_E5A6CE
-	.long LABEL_E5A6CC
-	.long LABEL_E5A6CA
-	.long LABEL_E5A6C8
-	.long LABEL_E5A6C6
-	.long LABEL_E5A6C4
-	.long LABEL_E5A6C2
-	.long LABEL_E5A6B2
-	.long LABEL_E5A69C
-	.long LABEL_E5A69A
-	.long LABEL_E5A698
-	.long LABEL_E5A696
-	.long LABEL_E5A686
-	.long LABEL_E5A670
-	.long LABEL_E5A66E
-	.long LABEL_E5A66C
-	.long LABEL_E5A66A
-	.long LABEL_E5A65C
-	.long LABEL_E5A65A
-	.long LABEL_E5A642
-	.long LABEL_E5A640
-	.long LABEL_E5A62A
-	.long LABEL_E5A628
-	.long LABEL_E5A626
-	.long LABEL_E5A624
-	.long LABEL_E5A622
-	.long LABEL_E5A620
-	.long LABEL_E5A61E
-	.long LABEL_E5A61C
-	.long LABEL_E5A61A
-	.long LABEL_E5A618
-	.long LABEL_E5A602
-	.long LABEL_E5A600
-	.long LABEL_E5A5EC
-	.long LABEL_E5A5EA
-	.long LABEL_E5A5E8
-	.long LABEL_E5A5E6
-	.long LABEL_E5A5E4
-	.long LABEL_E5A5E2
-	.long LABEL_E5A5E0
-	.long LABEL_E5A5DE
-	.long LABEL_E5A5DC
-	.long LABEL_E5A5DA
-	.long LABEL_E5A5D8
-LABEL_E5A5D8:	aligned_string ""
-LABEL_E5A5DA:	aligned_string ""
-LABEL_E5A5DC:	aligned_string ""
-LABEL_E5A5DE:	aligned_string ""
-LABEL_E5A5E0:	aligned_string ""
-LABEL_E5A5E2:	aligned_string ""
-LABEL_E5A5E4:	aligned_string ""
-LABEL_E5A5E6:	aligned_string ""
-LABEL_E5A5E8:	aligned_string ""
-LABEL_E5A5EA:	aligned_string ""
-LABEL_E5A5EC:	aligned_string "MpstMasterWithList"
-LABEL_E5A600:	aligned_string ""
-LABEL_E5A602:	aligned_string "MidiPresetMasterWith"
-LABEL_E5A618:	aligned_string ""
-LABEL_E5A61A:	aligned_string ""
-LABEL_E5A61C:	aligned_string ""
-LABEL_E5A61E:	aligned_string ""
-LABEL_E5A620:	aligned_string ""
-LABEL_E5A622:	aligned_string ""
-LABEL_E5A624:	aligned_string ""
-LABEL_E5A626:	aligned_string ""
-LABEL_E5A628:	aligned_string ""
-LABEL_E5A62A:	aligned_string "MpstMasterWithoutList"
-LABEL_E5A640:	aligned_string ""
-LABEL_E5A642:	aligned_string "MidiPresetMasterWithout"
-LABEL_E5A65A:	aligned_string ""
-LABEL_E5A65C:	aligned_string "MdpstSplitBox"
-LABEL_E5A66A:	aligned_string ""
-LABEL_E5A66C:	aligned_string ""
-LABEL_E5A66E:	aligned_string ""
-LABEL_E5A670:	aligned_string "MdPresetUserWriteList"
-LABEL_E5A686:	aligned_string "MidiPresetPage4"
-LABEL_E5A696:	aligned_string ""
-LABEL_E5A698:	aligned_string ""
-LABEL_E5A69A:	aligned_string ""
-LABEL_E5A69C:	aligned_string "MdPresetUserLoadList"
-LABEL_E5A6B2:	aligned_string "MidiPresetPage3"
-LABEL_E5A6C2:	aligned_string ""
-LABEL_E5A6C4:	aligned_string ""
-LABEL_E5A6C6:	aligned_string ""
-LABEL_E5A6C8:	aligned_string ""
-LABEL_E5A6CA:	aligned_string ""
-LABEL_E5A6CC:	aligned_string ""
-LABEL_E5A6CE:	aligned_string ""
-LABEL_E5A6D0:	aligned_string ""
-LABEL_E5A6D2:	aligned_string ""
-LABEL_E5A6D4:	aligned_string "MpstSlaveWithList"
-LABEL_E5A6E6:	aligned_string ""
-LABEL_E5A6E8:	aligned_string "MidiPresetSlaveWith"
-LABEL_E5A6FC:	aligned_string ""
-LABEL_E5A6FE:	aligned_string ""
-LABEL_E5A700:	aligned_string ""
-LABEL_E5A702:	aligned_string ""
-LABEL_E5A704:	aligned_string ""
-LABEL_E5A706:	aligned_string ""
-LABEL_E5A708:	aligned_string "MpstSlaveWithoutList"
-LABEL_E5A71E:	aligned_string ""
-LABEL_E5A720:	aligned_string ""
-LABEL_E5A722:	aligned_string ""
-LABEL_E5A724:	aligned_string ""
-LABEL_E5A726:	aligned_string "MidiPresetSlaveWithout"
-LABEL_E5A73E:	aligned_string ""
-LABEL_E5A740:	aligned_string "MpstPageCtl2"
-LABEL_E5A74E:	aligned_string "MpstPageCtl1"
-LABEL_E5A75C:	aligned_string ""
-LABEL_E5A75E:	aligned_string ""
-LABEL_E5A760:	aligned_string "MdPresetPageBox"
-LABEL_E5A770:	aligned_string "MidiPresets"
-	.long LABEL_E5A8F8
-LABEL_E5A780:
-	.long LABEL_E5A8F6
-	.long LABEL_E5A8F4
-	.long LABEL_E5A8E8
-	.long LABEL_E5A8E6
-	.long LABEL_E5A8E4
-	.long LABEL_E5A8D6
-	.long LABEL_E5A8D4
-	.long LABEL_E5A8D2
-	.long LABEL_E5A8D0
-	.long LABEL_E5A8C0
-	.long LABEL_E5A8B0
-	.long LABEL_E5A8A0
-	.long LABEL_E5A892
-	.long LABEL_E5A884
-	.long LABEL_E5A876
-	.long LABEL_E5A868
-	.long LABEL_E5A85A
-	.long LABEL_E5A858
-	.long LABEL_E5A856
-	.long LABEL_E5A854
-	.long LABEL_E5A846
-	.long LABEL_E5A838
-	.long LABEL_E5A82A
-	.long LABEL_E5A81C
-	.long LABEL_E5A80E
-	.long LABEL_E5A800
-	.long LABEL_E5A7F2
-	.long LABEL_E5A7F0
-LABEL_E5A7F0:	aligned_string ""
-LABEL_E5A7F2:	aligned_string "ExcRcvDotBox"
-LABEL_E5A800:	aligned_string "ExcRcvMspBox"
-LABEL_E5A80E:	aligned_string "ExcRcvSeqBox"
-LABEL_E5A81C:	aligned_string "ExcRcvCmpBox"
-LABEL_E5A82A:	aligned_string "ExcRcvSmemBox"
-LABEL_E5A838:	aligned_string "ExcRcvPmemBox"
-LABEL_E5A846:	aligned_string "ExcRcvShowBox"
-LABEL_E5A854:	aligned_string ""
-LABEL_E5A856:	aligned_string ""
-LABEL_E5A858:	aligned_string ""
-LABEL_E5A85A:	aligned_string "ExcRcvWindow"
-LABEL_E5A868:	aligned_string "ExcSendDotBox"
-LABEL_E5A876:	aligned_string "ExcSendMspBox"
-LABEL_E5A884:	aligned_string "ExcSendSeqBox"
-LABEL_E5A892:	aligned_string "ExcSendCmpBox"
-LABEL_E5A8A0:	aligned_string "ExcSendSmemBox"
-LABEL_E5A8B0:	aligned_string "ExcSendPmemBox"
-LABEL_E5A8C0:	aligned_string "ExcSendShowBox"
-LABEL_E5A8D0:	aligned_string ""
-LABEL_E5A8D2:	aligned_string ""
-LABEL_E5A8D4:	aligned_string ""
-LABEL_E5A8D6:	aligned_string "ExcSendWindow"
-LABEL_E5A8E4:	aligned_string ""
-LABEL_E5A8E6:	aligned_string ""
-LABEL_E5A8E8:	aligned_string "ExcListBox"
-LABEL_E5A8F4:	aligned_string ""
-LABEL_E5A8F6:	aligned_string ""
-LABEL_E5A8F8:	aligned_string "MidiExclusive"
+NakaObj_MidiCommonSetting_Table:
+	.long NakaObj_MidiCommonSetting_Name
+	.long NakaObj_MidiCommonSetting_GridBox
+	.long NakaObj_MidiCommonSetting_Null4
+	.long NakaObj_MidiCommonSetting_Null3
+	.long NakaObj_MidiCommonSetting_Null2
+	.long NakaObj_MidiCommonSetting_Null1
+NakaObj_MidiCommonSetting_Null1:	aligned_string ""
+NakaObj_MidiCommonSetting_Null2:	aligned_string ""
+NakaObj_MidiCommonSetting_Null3:	aligned_string ""
+NakaObj_MidiCommonSetting_Null4:	aligned_string ""
+NakaObj_MidiCommonSetting_GridBox:	aligned_string "ComSetGridBox"
+NakaObj_MidiCommonSetting_Name:	aligned_string "MidiCommonSetting"
+NakaObj_MidiInOutSetting_Table:
+	.long NakaObj_MidiInOutSetting_Name
+	.long NakaObj_MidiInOutSetting_GridBox
+	.long NakaObj_MidiInOutSetting_Null4
+	.long NakaObj_MidiInOutSetting_Null3
+	.long NakaObj_MidiInOutSetting_Null2
+	.long NakaObj_MidiInOutSetting_Null1
+NakaObj_MidiInOutSetting_Null1:	aligned_string ""
+NakaObj_MidiInOutSetting_Null2:	aligned_string ""
+NakaObj_MidiInOutSetting_Null3:	aligned_string ""
+NakaObj_MidiInOutSetting_Null4:	aligned_string ""
+NakaObj_MidiInOutSetting_GridBox:	aligned_string "InOutGridBox"
+NakaObj_MidiInOutSetting_Name:	aligned_string "MidiInOutSetting"
+NakaObj_MidiPresets_Table:
+	.long NakaObj_MidiPresets_Name
+	.long NakaObj_MidiPresets_PageBox
+	.long NakaObj_MidiPresets_PageBoxNull2
+	.long NakaObj_MidiPresets_PageBoxNull1
+	.long NakaObj_MidiPresets_PageCtl1
+	.long NakaObj_MidiPresets_PageCtl2
+	.long NakaObj_MidiPresets_PageCtlNull
+	.long NakaObj_MidiPresets_SlaveWithout
+	.long NakaObj_MidiPresets_SlaveWithoutNull4
+	.long NakaObj_MidiPresets_SlaveWithoutNull3
+	.long NakaObj_MidiPresets_SlaveWithoutNull2
+	.long NakaObj_MidiPresets_SlaveWithoutNull1
+	.long NakaObj_MidiPresets_SlaveWithoutList
+	.long NakaObj_MidiPresets_SW_Null6
+	.long NakaObj_MidiPresets_SW_Null5
+	.long NakaObj_MidiPresets_SW_Null4
+	.long NakaObj_MidiPresets_SW_Null3
+	.long NakaObj_MidiPresets_SW_Null2
+	.long NakaObj_MidiPresets_SW_Null1
+	.long NakaObj_MidiPresets_SlaveWith
+	.long NakaObj_MidiPresets_SlaveWithNull
+	.long NakaObj_MidiPresets_SlaveWithList
+	.long NakaObj_MidiPresets_SWO_Null9
+	.long NakaObj_MidiPresets_SWO_Null8
+	.long NakaObj_MidiPresets_SWO_Null7
+	.long NakaObj_MidiPresets_SWO_Null6
+	.long NakaObj_MidiPresets_SWO_Null5
+	.long NakaObj_MidiPresets_SWO_Null4
+	.long NakaObj_MidiPresets_SWO_Null3
+	.long NakaObj_MidiPresets_SWO_Null2
+	.long NakaObj_MidiPresets_SWO_Null1
+	.long NakaObj_MidiPresets_Page3
+	.long NakaObj_MidiPresets_UserLoadList
+	.long NakaObj_MidiPresets_Page3_Null3
+	.long NakaObj_MidiPresets_Page3_Null2
+	.long NakaObj_MidiPresets_Page3_Null1
+	.long NakaObj_MidiPresets_Page4
+	.long NakaObj_MidiPresets_UserWriteList
+	.long NakaObj_MidiPresets_Page4_Null3
+	.long NakaObj_MidiPresets_Page4_Null2
+	.long NakaObj_MidiPresets_Page4_Null1
+	.long NakaObj_MidiPresets_SplitBox
+	.long NakaObj_MidiPresets_SplitNull
+	.long NakaObj_MidiPresets_MasterWithout
+	.long NakaObj_MidiPresets_MasterWithoutNull
+	.long NakaObj_MidiPresets_MasterWithoutList
+	.long NakaObj_MidiPresets_MWO_Null9
+	.long NakaObj_MidiPresets_MWO_Null8
+	.long NakaObj_MidiPresets_MWO_Null7
+	.long NakaObj_MidiPresets_MWO_Null6
+	.long NakaObj_MidiPresets_MWO_Null5
+	.long NakaObj_MidiPresets_MWO_Null4
+	.long NakaObj_MidiPresets_MWO_Null3
+	.long NakaObj_MidiPresets_MWO_Null2
+	.long NakaObj_MidiPresets_MWO_Null1
+	.long NakaObj_MidiPresets_MasterWith
+	.long NakaObj_MidiPresets_MasterWithNull
+	.long NakaObj_MidiPresets_MasterWithList
+	.long NakaObj_MidiPresets_Null10
+	.long NakaObj_MidiPresets_Null9
+	.long NakaObj_MidiPresets_Null8
+	.long NakaObj_MidiPresets_Null7
+	.long NakaObj_MidiPresets_Null6
+	.long NakaObj_MidiPresets_Null5
+	.long NakaObj_MidiPresets_Null4
+	.long NakaObj_MidiPresets_Null3
+	.long NakaObj_MidiPresets_Null2
+	.long NakaObj_MidiPresets_Null1
+NakaObj_MidiPresets_Null1:	aligned_string ""
+NakaObj_MidiPresets_Null2:	aligned_string ""
+NakaObj_MidiPresets_Null3:	aligned_string ""
+NakaObj_MidiPresets_Null4:	aligned_string ""
+NakaObj_MidiPresets_Null5:	aligned_string ""
+NakaObj_MidiPresets_Null6:	aligned_string ""
+NakaObj_MidiPresets_Null7:	aligned_string ""
+NakaObj_MidiPresets_Null8:	aligned_string ""
+NakaObj_MidiPresets_Null9:	aligned_string ""
+NakaObj_MidiPresets_Null10:	aligned_string ""
+NakaObj_MidiPresets_MasterWithList:	aligned_string "MpstMasterWithList"
+NakaObj_MidiPresets_MasterWithNull:	aligned_string ""
+NakaObj_MidiPresets_MasterWith:	aligned_string "MidiPresetMasterWith"
+NakaObj_MidiPresets_MWO_Null1:	aligned_string ""
+NakaObj_MidiPresets_MWO_Null2:	aligned_string ""
+NakaObj_MidiPresets_MWO_Null3:	aligned_string ""
+NakaObj_MidiPresets_MWO_Null4:	aligned_string ""
+NakaObj_MidiPresets_MWO_Null5:	aligned_string ""
+NakaObj_MidiPresets_MWO_Null6:	aligned_string ""
+NakaObj_MidiPresets_MWO_Null7:	aligned_string ""
+NakaObj_MidiPresets_MWO_Null8:	aligned_string ""
+NakaObj_MidiPresets_MWO_Null9:	aligned_string ""
+NakaObj_MidiPresets_MasterWithoutList:	aligned_string "MpstMasterWithoutList"
+NakaObj_MidiPresets_MasterWithoutNull:	aligned_string ""
+NakaObj_MidiPresets_MasterWithout:	aligned_string "MidiPresetMasterWithout"
+NakaObj_MidiPresets_SplitNull:	aligned_string ""
+NakaObj_MidiPresets_SplitBox:	aligned_string "MdpstSplitBox"
+NakaObj_MidiPresets_Page4_Null1:	aligned_string ""
+NakaObj_MidiPresets_Page4_Null2:	aligned_string ""
+NakaObj_MidiPresets_Page4_Null3:	aligned_string ""
+NakaObj_MidiPresets_UserWriteList:	aligned_string "MdPresetUserWriteList"
+NakaObj_MidiPresets_Page4:	aligned_string "MidiPresetPage4"
+NakaObj_MidiPresets_Page3_Null1:	aligned_string ""
+NakaObj_MidiPresets_Page3_Null2:	aligned_string ""
+NakaObj_MidiPresets_Page3_Null3:	aligned_string ""
+NakaObj_MidiPresets_UserLoadList:	aligned_string "MdPresetUserLoadList"
+NakaObj_MidiPresets_Page3:	aligned_string "MidiPresetPage3"
+NakaObj_MidiPresets_SWO_Null1:	aligned_string ""
+NakaObj_MidiPresets_SWO_Null2:	aligned_string ""
+NakaObj_MidiPresets_SWO_Null3:	aligned_string ""
+NakaObj_MidiPresets_SWO_Null4:	aligned_string ""
+NakaObj_MidiPresets_SWO_Null5:	aligned_string ""
+NakaObj_MidiPresets_SWO_Null6:	aligned_string ""
+NakaObj_MidiPresets_SWO_Null7:	aligned_string ""
+NakaObj_MidiPresets_SWO_Null8:	aligned_string ""
+NakaObj_MidiPresets_SWO_Null9:	aligned_string ""
+NakaObj_MidiPresets_SlaveWithList:	aligned_string "MpstSlaveWithList"
+NakaObj_MidiPresets_SlaveWithNull:	aligned_string ""
+NakaObj_MidiPresets_SlaveWith:	aligned_string "MidiPresetSlaveWith"
+NakaObj_MidiPresets_SW_Null1:	aligned_string ""
+NakaObj_MidiPresets_SW_Null2:	aligned_string ""
+NakaObj_MidiPresets_SW_Null3:	aligned_string ""
+NakaObj_MidiPresets_SW_Null4:	aligned_string ""
+NakaObj_MidiPresets_SW_Null5:	aligned_string ""
+NakaObj_MidiPresets_SW_Null6:	aligned_string ""
+NakaObj_MidiPresets_SlaveWithoutList:	aligned_string "MpstSlaveWithoutList"
+NakaObj_MidiPresets_SlaveWithoutNull1:	aligned_string ""
+NakaObj_MidiPresets_SlaveWithoutNull2:	aligned_string ""
+NakaObj_MidiPresets_SlaveWithoutNull3:	aligned_string ""
+NakaObj_MidiPresets_SlaveWithoutNull4:	aligned_string ""
+NakaObj_MidiPresets_SlaveWithout:	aligned_string "MidiPresetSlaveWithout"
+NakaObj_MidiPresets_PageCtlNull:	aligned_string ""
+NakaObj_MidiPresets_PageCtl2:	aligned_string "MpstPageCtl2"
+NakaObj_MidiPresets_PageCtl1:	aligned_string "MpstPageCtl1"
+NakaObj_MidiPresets_PageBoxNull1:	aligned_string ""
+NakaObj_MidiPresets_PageBoxNull2:	aligned_string ""
+NakaObj_MidiPresets_PageBox:	aligned_string "MdPresetPageBox"
+NakaObj_MidiPresets_Name:	aligned_string "MidiPresets"
+	.long NakaObj_MidiExclusive_Name
+NakaObj_MidiExclusive_Table:
+	.long NakaObj_MidiExclusive_NameNull2
+	.long NakaObj_MidiExclusive_NameNull1
+	.long NakaObj_MidiExclusive_ListBox
+	.long NakaObj_MidiExclusive_ListNull2
+	.long NakaObj_MidiExclusive_ListNull1
+	.long NakaObj_MidiExclusive_SendWindow
+	.long NakaObj_MidiExclusive_SendWinNull3
+	.long NakaObj_MidiExclusive_SendWinNull2
+	.long NakaObj_MidiExclusive_SendWinNull1
+	.long NakaObj_MidiExclusive_SendShow
+	.long NakaObj_MidiExclusive_SendPmem
+	.long NakaObj_MidiExclusive_SendSmem
+	.long NakaObj_MidiExclusive_SendCmp
+	.long NakaObj_MidiExclusive_SendSeq
+	.long NakaObj_MidiExclusive_SendMsp
+	.long NakaObj_MidiExclusive_SendDot
+	.long NakaObj_MidiExclusive_RcvWindow
+	.long NakaObj_MidiExclusive_RcvWinNull3
+	.long NakaObj_MidiExclusive_RcvWinNull2
+	.long NakaObj_MidiExclusive_RcvWinNull1
+	.long NakaObj_MidiExclusive_RcvShow
+	.long NakaObj_MidiExclusive_RcvPmem
+	.long NakaObj_MidiExclusive_RcvSmem
+	.long NakaObj_MidiExclusive_RcvCmp
+	.long NakaObj_MidiExclusive_RcvSeq
+	.long NakaObj_MidiExclusive_RcvMsp
+	.long NakaObj_MidiExclusive_RcvDot
+	.long NakaObj_MidiExclusive_RcvDotNull
+NakaObj_MidiExclusive_RcvDotNull:	aligned_string ""
+NakaObj_MidiExclusive_RcvDot:	aligned_string "ExcRcvDotBox"
+NakaObj_MidiExclusive_RcvMsp:	aligned_string "ExcRcvMspBox"
+NakaObj_MidiExclusive_RcvSeq:	aligned_string "ExcRcvSeqBox"
+NakaObj_MidiExclusive_RcvCmp:	aligned_string "ExcRcvCmpBox"
+NakaObj_MidiExclusive_RcvSmem:	aligned_string "ExcRcvSmemBox"
+NakaObj_MidiExclusive_RcvPmem:	aligned_string "ExcRcvPmemBox"
+NakaObj_MidiExclusive_RcvShow:	aligned_string "ExcRcvShowBox"
+NakaObj_MidiExclusive_RcvWinNull1:	aligned_string ""
+NakaObj_MidiExclusive_RcvWinNull2:	aligned_string ""
+NakaObj_MidiExclusive_RcvWinNull3:	aligned_string ""
+NakaObj_MidiExclusive_RcvWindow:	aligned_string "ExcRcvWindow"
+NakaObj_MidiExclusive_SendDot:	aligned_string "ExcSendDotBox"
+NakaObj_MidiExclusive_SendMsp:	aligned_string "ExcSendMspBox"
+NakaObj_MidiExclusive_SendSeq:	aligned_string "ExcSendSeqBox"
+NakaObj_MidiExclusive_SendCmp:	aligned_string "ExcSendCmpBox"
+NakaObj_MidiExclusive_SendSmem:	aligned_string "ExcSendSmemBox"
+NakaObj_MidiExclusive_SendPmem:	aligned_string "ExcSendPmemBox"
+NakaObj_MidiExclusive_SendShow:	aligned_string "ExcSendShowBox"
+NakaObj_MidiExclusive_SendWinNull1:	aligned_string ""
+NakaObj_MidiExclusive_SendWinNull2:	aligned_string ""
+NakaObj_MidiExclusive_SendWinNull3:	aligned_string ""
+NakaObj_MidiExclusive_SendWindow:	aligned_string "ExcSendWindow"
+NakaObj_MidiExclusive_ListNull1:	aligned_string ""
+NakaObj_MidiExclusive_ListNull2:	aligned_string ""
+NakaObj_MidiExclusive_ListBox:	aligned_string "ExcListBox"
+NakaObj_MidiExclusive_NameNull1:	aligned_string ""
+NakaObj_MidiExclusive_NameNull2:	aligned_string ""
+NakaObj_MidiExclusive_Name:	aligned_string "MidiExclusive"
 	sub	(xde), xbc
 	.byte 0xe5, 0x00, 0x96, 0xa9, 0xe5, 0x00, 0x94, 0xa9
 	.byte 0xe5, 0x00, 0x92, 0xa9, 0xe5, 0x00, 0x90, 0xa9
@@ -17209,79 +17209,79 @@ LABEL_E5A8F8:	aligned_string "MidiExclusive"
 	aligned_string "MidiPcgOutput"
 
 
-LABEL_E5A9F0:
-	.long LABEL_E5AA18
-	.long LABEL_E5AA16
-	.long LABEL_E5AA14
-	.long LABEL_E5AA12
-	.long LABEL_E5AA10
-	.long LABEL_E5AA0E
-	.long LABEL_E5AA0C
-LABEL_E5AA0C:	aligned_string ""
-LABEL_E5AA0E:	aligned_string ""
-LABEL_E5AA10:	aligned_string ""
-LABEL_E5AA12:	aligned_string ""
-LABEL_E5AA14:	aligned_string ""
-LABEL_E5AA16:	aligned_string ""
-LABEL_E5AA18:	aligned_string "MidiComputerConnection"
-LABEL_E5AA30:
-	.long LABEL_E5AAB0
-	.long LABEL_E5AAAE
-	.long LABEL_E5AAAC
-	.long LABEL_E5AAAA
-	.long LABEL_E5AAA8
-	.long LABEL_E5AAA6
-	.long LABEL_E5AAA4
-	.long LABEL_E5AAA2
-	.long LABEL_E5AA96
-	.long LABEL_E5AA88
-	.long LABEL_E5AA86
-	.long LABEL_E5AA84
-	.long LABEL_E5AA82
-	.long LABEL_E5AA80
-	.long LABEL_E5AA7E
-	.long LABEL_E5AA7C
-	.long LABEL_E5AA7A
-	.long LABEL_E5AA78
-LABEL_E5AA78:	aligned_string ""
-LABEL_E5AA7A:	aligned_string ""
-LABEL_E5AA7C:	aligned_string ""
-LABEL_E5AA7E:	aligned_string ""
-LABEL_E5AA80:	aligned_string ""
-LABEL_E5AA82:	aligned_string ""
-LABEL_E5AA84:	aligned_string ""
-LABEL_E5AA86:	aligned_string ""
-LABEL_E5AA88:	aligned_string "PmemOutRight"
-LABEL_E5AA96:	aligned_string "PmemOutLeft"
-LABEL_E5AAA2:	aligned_string ""
-LABEL_E5AAA4:	aligned_string ""
-LABEL_E5AAA6:	aligned_string ""
-LABEL_E5AAA8:	aligned_string ""
-LABEL_E5AAAA:	aligned_string ""
-LABEL_E5AAAC:	aligned_string ""
-LABEL_E5AAAE:	aligned_string ""
-LABEL_E5AAB0:	aligned_string "MidiPanelMemoryOutput"
+NakaObj_MidiComputerConn_Table:
+	.long NakaObj_MidiComputerConn_Name
+	.long NakaObj_MidiComputerConn_Null6
+	.long NakaObj_MidiComputerConn_Null5
+	.long NakaObj_MidiComputerConn_Null4
+	.long NakaObj_MidiComputerConn_Null3
+	.long NakaObj_MidiComputerConn_Null2
+	.long NakaObj_MidiComputerConn_Null1
+NakaObj_MidiComputerConn_Null1:	aligned_string ""
+NakaObj_MidiComputerConn_Null2:	aligned_string ""
+NakaObj_MidiComputerConn_Null3:	aligned_string ""
+NakaObj_MidiComputerConn_Null4:	aligned_string ""
+NakaObj_MidiComputerConn_Null5:	aligned_string ""
+NakaObj_MidiComputerConn_Null6:	aligned_string ""
+NakaObj_MidiComputerConn_Name:	aligned_string "MidiComputerConnection"
+NakaObj_MidiPmemOutput_Table:
+	.long NakaObj_MidiPmemOutput_Name
+	.long NakaObj_MidiPmemOutput_RNull7
+	.long NakaObj_MidiPmemOutput_RNull6
+	.long NakaObj_MidiPmemOutput_RNull5
+	.long NakaObj_MidiPmemOutput_RNull4
+	.long NakaObj_MidiPmemOutput_RNull3
+	.long NakaObj_MidiPmemOutput_RNull2
+	.long NakaObj_MidiPmemOutput_RNull1
+	.long NakaObj_MidiPmemOutput_Left
+	.long NakaObj_MidiPmemOutput_Right
+	.long NakaObj_MidiPmemOutput_Null8
+	.long NakaObj_MidiPmemOutput_Null7
+	.long NakaObj_MidiPmemOutput_Null6
+	.long NakaObj_MidiPmemOutput_Null5
+	.long NakaObj_MidiPmemOutput_Null4
+	.long NakaObj_MidiPmemOutput_Null3
+	.long NakaObj_MidiPmemOutput_Null2
+	.long NakaObj_MidiPmemOutput_Null1
+NakaObj_MidiPmemOutput_Null1:	aligned_string ""
+NakaObj_MidiPmemOutput_Null2:	aligned_string ""
+NakaObj_MidiPmemOutput_Null3:	aligned_string ""
+NakaObj_MidiPmemOutput_Null4:	aligned_string ""
+NakaObj_MidiPmemOutput_Null5:	aligned_string ""
+NakaObj_MidiPmemOutput_Null6:	aligned_string ""
+NakaObj_MidiPmemOutput_Null7:	aligned_string ""
+NakaObj_MidiPmemOutput_Null8:	aligned_string ""
+NakaObj_MidiPmemOutput_Right:	aligned_string "PmemOutRight"
+NakaObj_MidiPmemOutput_Left:	aligned_string "PmemOutLeft"
+NakaObj_MidiPmemOutput_RNull1:	aligned_string ""
+NakaObj_MidiPmemOutput_RNull2:	aligned_string ""
+NakaObj_MidiPmemOutput_RNull3:	aligned_string ""
+NakaObj_MidiPmemOutput_RNull4:	aligned_string ""
+NakaObj_MidiPmemOutput_RNull5:	aligned_string ""
+NakaObj_MidiPmemOutput_RNull6:	aligned_string ""
+NakaObj_MidiPmemOutput_RNull7:	aligned_string ""
+NakaObj_MidiPmemOutput_Name:	aligned_string "MidiPanelMemoryOutput"
 	.byte 0x08, 0xab
 	.byte 0xe5, 0x00, 0xf8, 0xaa, 0xe5, 0x00, 0xf6, 0xaa
 	.byte 0xe5, 0x00, 0xf4, 0xaa, 0xe5, 0x00, 0xf2, 0xaa
 	.byte 0xe5, 0x00, 0xf0, 0xaa, 0xe5, 0x00, 0xee, 0xaa
 	.byte 0xe5, 0x00, 0xec, 0xaa, 0xe5, 0x00, 0xea, 0xaa
 	.byte 0xe5, 0x00
-LABEL_E5AAEA:
+NakaObj_MidiSetup_Null1:
 	.byte 0x00, 0xff
-LABEL_E5AAEC:
+NakaObj_MidiSetup_Null2:
 	.byte 0x00, 0xff
-LABEL_E5AAEE:
+NakaObj_MidiSetup_Null3:
 	.byte 0x00, 0xff
 	.byte 0x00, 0xff
-LABEL_E5AAF2:
+NakaObj_MidiSetup_Null4:
 	.byte 0x00, 0xff
-LABEL_E5AAF4:
+NakaObj_MidiSetup_Null5:
 	.byte 0x00, 0xff
-LABEL_E5AAF6:
+NakaObj_MidiSetup_Null6:
 	.byte 0x00, 0xff
-LABEL_E5AAF8:	aligned_string "MdSetOptGridBox"
-LABEL_E5AB08:	aligned_string "MidiSetup"
+NakaObj_MidiSetup_GridBox:	aligned_string "MdSetOptGridBox"
+NakaObj_MidiSetup_Name:	aligned_string "MidiSetup"
 	.byte 0xf4, 0xab, 0xe5, 0x00, 0xf2, 0xab
 	.byte 0xe5, 0x00, 0xf0, 0xab, 0xe5, 0x00, 0xe2, 0xab
 	.byte 0xe5, 0x00, 0xe0, 0xab, 0xe5, 0x00, 0xd2, 0xab
@@ -17295,77 +17295,77 @@ LABEL_E5AB08:	aligned_string "MidiSetup"
 	.byte 0xe5, 0x00, 0x7e, 0xab, 0xe5, 0x00, 0x7c, 0xab
 	.byte 0xe5, 0x00, 0x7a, 0xab, 0xe5, 0x00, 0x78, 0xab
 	.byte 0xe5, 0x00, 0x76, 0xab, 0xe5, 0x00
-LABEL_E5AB76:
+NakaObj_EntertainerVocal_Null1:
 	.byte 0x00, 0xff
 	.byte 0x00, 0xff
-LABEL_E5AB7A:
+NakaObj_EntertainerVocal_Null2:
 	.byte 0x00, 0xff
-LABEL_E5AB7C:
+NakaObj_EntertainerVocal_Null3:
 	.byte 0x00, 0xff
-LABEL_E5AB7E:
+NakaObj_EntertainerVocal_Null4:
 	.byte 0x00, 0xff
 	.byte 0x00, 0xff
-LABEL_E5AB82:
+NakaObj_EntertainerVocal_Null5:
 	.byte 0x00, 0xff
-LABEL_E5AB84:
+NakaObj_EntertainerVocal_Null6:
 	.byte 0x00, 0xff
-LABEL_E5AB86:
+NakaObj_EntertainerVocal_Null7:
 	.byte 0x00, 0xff
-LABEL_E5AB88:	aligned_string ""
-LABEL_E5AB8A:	aligned_string "VocalistPage2Box"
-LABEL_E5AB9C:	aligned_string "VocalistPage2"
-LABEL_E5ABAA:	aligned_string "HarmOnOffBox"
-LABEL_E5ABB8:	aligned_string ""
-LABEL_E5ABBA:	aligned_string "VocalistListBox"
+NakaObj_EntertainerVocal_Page2Null:	aligned_string ""
+NakaObj_EntertainerVocal_Page2Box:	aligned_string "VocalistPage2Box"
+NakaObj_EntertainerVocal_Page2:	aligned_string "VocalistPage2"
+NakaObj_EntertainerVocal_HarmOnOff:	aligned_string "HarmOnOffBox"
+NakaObj_EntertainerVocal_ListNull:	aligned_string ""
+NakaObj_EntertainerVocal_ListBox:	aligned_string "VocalistListBox"
 	.byte 0x00, 0xff
-LABEL_E5ABCC:
+NakaObj_EntertainerVocal_Page1Null1:
 	.byte 0x00, 0xff
-LABEL_E5ABCE:
+NakaObj_EntertainerVocal_Page1Null2:
 	.byte 0x00, 0xff
-LABEL_E5ABD0:	aligned_string ""
-LABEL_E5ABD2:	aligned_string "VocalistPage1"
-LABEL_E5ABE0:	aligned_string ""
-LABEL_E5ABE2:	aligned_string "VocalistPage"
+NakaObj_EntertainerVocal_Page1Null3:	aligned_string ""
+NakaObj_EntertainerVocal_Page1:	aligned_string "VocalistPage1"
+NakaObj_EntertainerVocal_PageNull:	aligned_string ""
+NakaObj_EntertainerVocal_Page:	aligned_string "VocalistPage"
 	.byte 0x00, 0xff
-LABEL_E5ABF2:
+NakaObj_EntertainerVocal_NameNull:
 	.byte 0x00, 0xff
-LABEL_E5ABF4:	aligned_string "EntertainerVocal"
+NakaObj_EntertainerVocal_Name:	aligned_string "EntertainerVocal"
 	.byte 0x4a, 0xac
 	.byte 0xe5, 0x00, 0x38, 0xac, 0xe5, 0x00, 0x36, 0xac
 	.byte 0xe5, 0x00, 0x34, 0xac, 0xe5, 0x00, 0x32, 0xac
 	.byte 0xe5, 0x00, 0x30, 0xac, 0xe5, 0x00, 0x2e, 0xac
 	.byte 0xe5, 0x00, 0x2c, 0xac, 0xe5, 0x00, 0x2a, 0xac
 	.byte 0xe5, 0x00
-LABEL_E5AC2A:
+NakaObj_EntertainerFade_Null1:
 	.byte 0x00, 0xff
-LABEL_E5AC2C:
+NakaObj_EntertainerFade_Null2:
 	.byte 0x00, 0xff
-LABEL_E5AC2E:
+NakaObj_EntertainerFade_Null3:
 	.byte 0x00, 0xff
 	.byte 0x00, 0xff
-LABEL_E5AC32:
+NakaObj_EntertainerFade_Null4:
 	.byte 0x00, 0xff
-LABEL_E5AC34:
+NakaObj_EntertainerFade_Null5:
 	.byte 0x00, 0xff
-LABEL_E5AC36:
+NakaObj_EntertainerFade_Null6:
 	.byte 0x00, 0xff
-LABEL_E5AC38:	aligned_string "FadeInOutGridBox"
-LABEL_E5AC4A:	aligned_string "EntertainerFade"
+NakaObj_EntertainerFade_GridBox:	aligned_string "FadeInOutGridBox"
+NakaObj_EntertainerFade_Name:	aligned_string "EntertainerFade"
 	.byte 0x82, 0xac, 0xe5, 0x00, 0x80, 0xac
 	.byte 0xe5, 0x00, 0x7e, 0xac, 0xe5, 0x00, 0x7c, 0xac
 	.byte 0xe5, 0x00, 0x7a, 0xac, 0xe5, 0x00, 0x78, 0xac
 	.byte 0xe5, 0x00, 0x76, 0xac, 0xe5, 0x00
-LABEL_E5AC76:
+NakaObj_SplitSetting_Null1:
 	.byte 0x00, 0xff
 	.byte 0x00, 0xff
-LABEL_E5AC7A:
+NakaObj_SplitSetting_Null2:
 	.byte 0x00, 0xff
-LABEL_E5AC7C:
+NakaObj_SplitSetting_Null3:
 	.byte 0x00, 0xff
-LABEL_E5AC7E:
+NakaObj_SplitSetting_Null4:
 	.byte 0x00, 0xff
-LABEL_E5AC80:	aligned_string ""
-LABEL_E5AC82:	aligned_string "SplitSetting"
+NakaObj_SplitSetting_NameNull:	aligned_string ""
+NakaObj_SplitSetting_Name:	aligned_string "SplitSetting"
 	aligned_string "MD_MIDI"
 	aligned_string "TT_REVEQMENU"
 	aligned_string "TT_SDOCT"
@@ -17393,22 +17393,22 @@ LABEL_E5AC82:	aligned_string "SplitSetting"
 	.byte 0x4b, 0x73, 0xf7, 0x00, 0x01, 0x42, 0xf7, 0x00
 	.byte 0x65, 0x43, 0xf7, 0x00, 0xdd, 0x46, 0xf7, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x3a, 0xae, 0xe5, 0x00
-LABEL_E5ADB0:
-	.long LABEL_E5AE2E
-	.long LABEL_E5AE20
-	.long LABEL_E5AE12
-	.long LABEL_E5ADFA
-	.long LABEL_E5ADE2
-	.long LABEL_E5ADCE
-	.long LABEL_E5ADCC
-LABEL_E5ADCC:	aligned_string ""
-LABEL_E5ADCE:	aligned_string "MainRevEqPresetLoad"
-LABEL_E5ADE2:	aligned_string "MainVocalistPage2OKFunc"
-LABEL_E5ADFA:	aligned_string "MainVocalistPage1OKFunc"
-LABEL_E5AE12:	aligned_string "MainFlashFunc"
-LABEL_E5AE20:	aligned_string "MainMpstFunc"
-LABEL_E5AE2E:	aligned_string "MainExcSend"
-LABEL_E5AE3A:	aligned_string "MainPcgOutSend"
+MainFunc_DispatchTable:
+	.long MainFunc_ExcSend
+	.long MainFunc_MpstFunc
+	.long MainFunc_FlashFunc
+	.long MainFunc_VocalistPage1OKFunc
+	.long MainFunc_VocalistPage2OKFunc
+	.long MainFunc_RevEqPresetLoad
+	.long MainFunc_NullEntry
+MainFunc_NullEntry:	aligned_string ""
+MainFunc_RevEqPresetLoad:	aligned_string "MainRevEqPresetLoad"
+MainFunc_VocalistPage2OKFunc:	aligned_string "MainVocalistPage2OKFunc"
+MainFunc_VocalistPage1OKFunc:	aligned_string "MainVocalistPage1OKFunc"
+MainFunc_FlashFunc:	aligned_string "MainFlashFunc"
+MainFunc_MpstFunc:	aligned_string "MainMpstFunc"
+MainFunc_ExcSend:	aligned_string "MainExcSend"
+MainFunc_PcgOutSend:	aligned_string "MainPcgOutSend"
 
 Bitmap_SplitPoint_no_split:	; e5ae4a
 	.incbin "images/BitmapSplitPoint_no_split.bin"
@@ -17461,17 +17461,17 @@ Bitmap_MIDIConnections_3:	; e74132
 Bitmap_Bmphk:	; e7be12
 	.incbin "images/BitmapBmphk.bin"
 
-LABEL_E7ECF2:
+MidiPart_PageDisplay_Data:
 	.byte 0xf5, 0x00, 0x06, 0x00, 0x3a, 0x01
 	.byte 0x17, 0x00, 0x18, 0x01, 0x0f, 0x00, 0x10, 0xed
 	.byte 0xe7, 0x00, 0x06, 0xed, 0xe7, 0x00
-LABEL_E7ED06:	aligned_string "PAGE 2/2"
-LABEL_E7ED10:	aligned_string "PAGE 1/2"
+MidiPart_PageStr_2of2:	aligned_string "PAGE 2/2"
+MidiPart_PageStr_1of2:	aligned_string "PAGE 1/2"
 	.byte 0x3a, 0xed, 0xe7, 0x00, 0x30, 0xed
 	.byte 0xe7, 0x00, 0x26, 0xed, 0xe7, 0x00
-LABEL_E7ED26:	aligned_string "PAGE 3/3"
-LABEL_E7ED30:	aligned_string "PAGE 2/3"
-LABEL_E7ED3A:	aligned_string "PAGE 1/3"
+MidiPart_PageStr_3of3:	aligned_string "PAGE 3/3"
+MidiPart_PageStr_2of3:	aligned_string "PAGE 2/3"
+MidiPart_PageStr_1of3:	aligned_string "PAGE 1/3"
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00
 	.byte 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00
@@ -17483,73 +17483,73 @@ LABEL_E7ED3A:	aligned_string "PAGE 1/3"
 	.byte 0x6a, 0x00, 0x1c, 0x01, 0x1e, 0x02, 0xf6, 0x01
 	.byte 0xf6, 0x01, 0x98, 0xed, 0xe7, 0x00, 0x92, 0xed
 	.byte 0xe7, 0x00
-LABEL_E7ED92:	aligned_string "ABOVE"
-LABEL_E7ED98:	aligned_string "BELOW"
-LABEL_E7ED9E:
-	.long LABEL_E7EE04
-	.long LABEL_E7EDFE
-	.long LABEL_E7EDFA
-	.long LABEL_E7EDF4
-	.long LABEL_E7EDF0
-	.long LABEL_E7EDEC
-	.long LABEL_E7EDE6
-	.long LABEL_E7EDE2
-	.long LABEL_E7EDDC
-	.long LABEL_E7EDD8
-	.long LABEL_E7EDD2
-	.long LABEL_E7EDCE
-LABEL_E7EDCE:
+MidiPart_AboveStr:	aligned_string "ABOVE"
+MidiPart_BelowStr:	aligned_string "BELOW"
+MidiPart_NoteNameTable:
+	.long MidiPart_NoteEntry_C_Code
+	.long MidiPart_NoteStr_D
+	.long MidiPart_NoteEntry_D_Code
+	.long MidiPart_NoteStr_E
+	.long MidiPart_NoteEntry_E_Code
+	.long MidiPart_NoteEntry_F_Code
+	.long MidiPart_NoteStr_G
+	.long MidiPart_NoteEntry_G_Code
+	.long MidiPart_NoteStr_A
+	.long MidiPart_NoteEntry_A_Code
+	.long MidiPart_NoteStr_B
+	.long MidiPart_NoteEntry_B_Code
+MidiPart_NoteEntry_B_Code:
 	.byte 0x42, 0x20, 0x00, 0xff
-LABEL_E7EDD2:	aligned_string "B~a0"
-LABEL_E7EDD8:
+MidiPart_NoteStr_B:	aligned_string "B~a0"
+MidiPart_NoteEntry_A_Code:
 	.byte 0x41, 0x20, 0x00, 0xff
-LABEL_E7EDDC:	aligned_string "A~a0"
-LABEL_E7EDE2:
+MidiPart_NoteStr_A:	aligned_string "A~a0"
+MidiPart_NoteEntry_G_Code:
 	.byte 0x47, 0x20, 0x00, 0xff
-LABEL_E7EDE6:	aligned_string "F~9e"
-LABEL_E7EDEC:
+MidiPart_NoteStr_G:	aligned_string "F~9e"
+MidiPart_NoteEntry_F_Code:
 	.byte 0x46, 0x20, 0x00, 0xff
-LABEL_E7EDF0:
+MidiPart_NoteEntry_E_Code:
 	.byte 0x45, 0x20, 0x00, 0xff
-LABEL_E7EDF4:	aligned_string "E~a0"
-LABEL_E7EDFA:
+MidiPart_NoteStr_E:	aligned_string "E~a0"
+MidiPart_NoteEntry_D_Code:
 	.byte 0x44, 0x20, 0x00, 0xff
-LABEL_E7EDFE:	aligned_string "D~a0"
-LABEL_E7EE04:
+MidiPart_NoteStr_D:	aligned_string "D~a0"
+MidiPart_NoteEntry_C_Code:
 	.byte 0x43, 0x20, 0x00, 0xff
-LABEL_E7EE08:
-	.long LABEL_E7EE5C
-	.long LABEL_E7EE58
-	.long LABEL_E7EE54
-	.long LABEL_E7EE50
-	.long LABEL_E7EE4C
-	.long LABEL_E7EE48
-	.long LABEL_E7EE44
-	.long LABEL_E7EE40
-	.long LABEL_E7EE3C
-	.long LABEL_E7EE38
-	.long LABEL_E7EE34
-LABEL_E7EE34:
+MidiPart_OctaveTable:
+	.long MidiPart_OctaveStr_m2
+	.long MidiPart_OctaveStr_m1
+	.long MidiPart_OctaveStr_0
+	.long MidiPart_OctaveStr_p1
+	.long MidiPart_OctaveStr_p2
+	.long MidiPart_OctaveStr_p3
+	.long MidiPart_OctaveStr_p4
+	.long MidiPart_OctaveStr_p5
+	.long MidiPart_OctaveStr_p6
+	.long MidiPart_OctaveStr_p7
+	.long MidiPart_OctaveStr_p8
+MidiPart_OctaveStr_p8:
 	.byte 0x20, 0x38, 0x00, 0xff
-LABEL_E7EE38:
+MidiPart_OctaveStr_p7:
 	.byte 0x20, 0x37, 0x00, 0xff
-LABEL_E7EE3C:
+MidiPart_OctaveStr_p6:
 	.byte 0x20, 0x36, 0x00, 0xff
-LABEL_E7EE40:
+MidiPart_OctaveStr_p5:
 	.byte 0x20, 0x35, 0x00, 0xff
-LABEL_E7EE44:
+MidiPart_OctaveStr_p4:
 	.byte 0x20, 0x34, 0x00, 0xff
-LABEL_E7EE48:
+MidiPart_OctaveStr_p3:
 	.byte 0x20, 0x33, 0x00, 0xff
-LABEL_E7EE4C:
+MidiPart_OctaveStr_p2:
 	.byte 0x20, 0x32, 0x00, 0xff
-LABEL_E7EE50:
+MidiPart_OctaveStr_p1:
 	.byte 0x20, 0x31, 0x00, 0xff
-LABEL_E7EE54:
+MidiPart_OctaveStr_0:
 	.byte 0x20, 0x30, 0x00, 0xff
-LABEL_E7EE58:
+MidiPart_OctaveStr_m1:
 	.byte 0x2d, 0x31, 0x00, 0xff
-LABEL_E7EE5C:
+MidiPart_OctaveStr_m2:
 	.byte 0x2d, 0x32, 0x00, 0xff
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
@@ -17589,9 +17589,9 @@ LABEL_E7EE5C:
 	aligned_string "   OFF    "
 	aligned_string "   Recv   "
 	aligned_string "  Trans   "
-LABEL_E7EFFC:	aligned_string "Recv+Trans"
+MidiPart_RecvTransStr:	aligned_string "Recv+Trans"
 	aligned_string "   NONE   "
-LABEL_E7F014:	aligned_string "  AFTER   "
+MidiPart_AfterStr:	aligned_string "  AFTER   "
 	aligned_string "  CC%3d   "
 	aligned_string "%s %s%s"
 	aligned_string "%s %s%s"
@@ -17602,7 +17602,7 @@ LABEL_E7F014:	aligned_string "  AFTER   "
 	.byte 0xf1, 0x00, 0x85, 0x02, 0x40, 0x01, 0x85, 0x02
 	.byte 0x9a, 0x01, 0xc5, 0x02, 0xc5, 0x02, 0x85, 0x02
 	.byte 0x10, 0x02, 0xc5, 0x02, 0xc5, 0x02, 0x85, 0x02
-LABEL_E7F070:
+MidiPart_ColWidthData:
 	.byte 0x00, 0x00, 0xca, 0x01, 0x4c, 0x00, 0xca, 0x01
 	.byte 0x73, 0x00, 0xca, 0x01, 0x9a, 0x00, 0xca, 0x01
 	.byte 0xcc, 0x00, 0xca, 0x01, 0x14, 0x01, 0xca, 0x01
@@ -17612,26 +17612,26 @@ LABEL_E7F070:
 	.byte 0x76, 0x06, 0xd4, 0x00, 0x76, 0x06, 0x00, 0x00
 	.byte 0x0e, 0x00, 0x00, 0x00, 0x0e, 0x00, 0x00, 0x00
 	.byte 0x0e, 0x00, 0xb6, 0xf0, 0xe7, 0x00
-LABEL_E7F0B6:	aligned_string "HARMONY PART LOCAL: ---"
+MidiPart_HarmLocalStr:	aligned_string "HARMONY PART LOCAL: ---"
 	.zero 10
 	.byte 0x00, 0x00, 0x00, 0x00, 0x60, 0x00, 0x00, 0x00
 	.byte 0x60, 0x00, 0xab, 0x00, 0x06, 0x01, 0x43, 0x63
 	.byte 0x45, 0x76, 0x00, 0xff
 	aligned_string "CcEv"
 	aligned_string "CcEv"
-LABEL_E7F0F8:
-	.long LABEL_E7F14A
-	.long LABEL_E7F140
-	.long LABEL_E7F134
-	.long LABEL_E7F128
-	.long LABEL_E7F11C
-	.long LABEL_E7F110
-LABEL_E7F110:	aligned_string "Perhatian !"
-LABEL_E7F11C:	aligned_string "ATTENTION!"
-LABEL_E7F128:	aligned_string "¡ATENCIÓN!"
-LABEL_E7F134:	aligned_string "ATTENTION!"
-LABEL_E7F140:	aligned_string "ACHTUNG !"
-LABEL_E7F14A:	aligned_string "ATTENTION!"
+GMMode_AttentionTable:
+	.long GMMode_Attention_English2
+	.long GMMode_Attention_German
+	.long GMMode_Attention_French
+	.long GMMode_Attention_Spanish
+	.long GMMode_Attention_English
+	.long GMMode_Attention_Indonesian
+GMMode_Attention_Indonesian:	aligned_string "Perhatian !"
+GMMode_Attention_English:	aligned_string "ATTENTION!"
+GMMode_Attention_Spanish:	aligned_string "¡ATENCIÓN!"
+GMMode_Attention_French:	aligned_string "ATTENTION!"
+GMMode_Attention_German:	aligned_string "ACHTUNG !"
+GMMode_Attention_English2:	aligned_string "ATTENTION!"
 	aligned_string "Turning on GENERAL MIDI MODE will replace your current settings with GENERAL MIDI settings!"
 	.asciz "Durch das Einschalten des GENERAL MIDI MODE werden alle Einstellungen zu GENERAL MIDI Einstellungen geändert!"
 	aligned_string "L'activation du mode GENERAL MIDI MODE remplacera tous les réglages actuels par les réglages GENERAL MIDI!"
@@ -17678,7 +17678,7 @@ LABEL_E7F14A:	aligned_string "ATTENTION!"
 	aligned_string "Press a key to select the split point."
 
 
-LABEL_E7F778:
+SplitPoint_NoteNameTable:
 	.long LABEL_E7F7DE
 	.long LABEL_E7F7D8
 	.long LABEL_E7F7D4
@@ -17686,18 +17686,18 @@ LABEL_E7F778:
 	.long LABEL_E7F7CA
 	.long LABEL_E7F7C6
 	.long LABEL_E7F7C0
-	.long LABEL_E7F7BC
-	.long LABEL_E7F7B6
-	.long LABEL_E7F7B2
-	.long LABEL_E7F7AC
-	.long LABEL_E7F7A8
-LABEL_E7F7A8:
+	.long SplitPoint_NoteEntry_G_Code
+	.long SplitPoint_NoteStr_A
+	.long SplitPoint_NoteEntry_A_Code
+	.long SplitPoint_NoteStr_B
+	.long SplitPoint_NoteEntry_B_Code
+SplitPoint_NoteEntry_B_Code:
 	.byte 0x42, 0x20, 0x00, 0xff
-LABEL_E7F7AC:	aligned_string "B~a0"
-LABEL_E7F7B2:
+SplitPoint_NoteStr_B:	aligned_string "B~a0"
+SplitPoint_NoteEntry_A_Code:
 	.byte 0x41, 0x20, 0x00, 0xff
-LABEL_E7F7B6:	aligned_string "A~a0"
-LABEL_E7F7BC:
+SplitPoint_NoteStr_A:	aligned_string "A~a0"
+SplitPoint_NoteEntry_G_Code:
 	.byte 0x47, 0x20, 0x00, 0xff
 LABEL_E7F7C0:	aligned_string "F~9e"
 LABEL_E7F7C6:	aligned_string "F "
@@ -23873,217 +23873,217 @@ LABEL_EAB8E2:	aligned_string "SlideBase"
 LABEL_EAB8EC:	aligned_string "GoldTechnics"
 	aligned_string "TrashIcon"
 	.byte 0x8a, 0xbe, 0xea, 0x00
-LABEL_EAB908:
-	.long LABEL_EABE7C
-	.long LABEL_EABE72
-	.long LABEL_EABE66
-	.long LABEL_EABE5A
-	.long LABEL_EABE4C
-	.long LABEL_EABE44
-	.long LABEL_EABE3C
-	.long LABEL_EABE32
-	.long LABEL_EABE28
-	.long LABEL_EABE1C
-	.long LABEL_EABE12
-	.long LABEL_EABE06
-	.long LABEL_EABDFA
-	.long LABEL_EABDEE
-	.long LABEL_EABDE2
-	.long LABEL_EABDD4
-	.long LABEL_EABDC8
-	.long LABEL_EABDBA
-	.long LABEL_EABDAE
-	.long LABEL_EABDA2
-	.long LABEL_EABD96
-	.long LABEL_EABD8A
-	.long LABEL_EABD7E
-	.long LABEL_EABD74
-	.long LABEL_EABD66
-	.long LABEL_EABD5A
-	.long LABEL_EABD4E
-	.long LABEL_EABD42
-	.long LABEL_EABD36
-	.long LABEL_EABD28
-	.long LABEL_EABD1C
-	.long LABEL_EABD10
-	.long LABEL_EABD06
-	.long LABEL_EABD04
+BmpFilenameTable_InstrIcons:
+	.long BmpStr_TechnicsIcon
+	.long BmpStr_SlideIcon
+	.long BmpStr_SlMoveIcon
+	.long BmpStr_MixCtrIcon
+	.long BmpStr_MixPointIcon
+	.long BmpStr_FwdIcon
+	.long BmpStr_BwdIcon
+	.long BmpStr_PauseIcon
+	.long BmpStr_StartIcon
+	.long BmpStr_BeforeIcon
+	.long BmpStr_NextIcon
+	.long BmpStr_BassIcon
+	.long BmpStr_BrassIcon
+	.long BmpStr_DrumIcon
+	.long BmpStr_FluteIcon
+	.long BmpStr_GuitarIcon
+	.long BmpStr_WorldIcon
+	.long BmpStr_MalletIcon
+	.long BmpStr_MemAIcon
+	.long BmpStr_MemBIcon
+	.long BmpStr_OrganIcon
+	.long BmpStr_OrchIcon
+	.long BmpStr_PianoIcon
+	.long BmpStr_SaxIcon
+	.long BmpStr_StringsIcon
+	.long BmpStr_SynthIcon
+	.long BmpStr_DrawbarIcon
+	.long BmpStr_AccordionIcon
+	.long BmpStr_LedSwOnIcon
+	.long BmpStr_LedSwOffIcon
+	.long BmpStr_GmSpecialIcon
+	.long BmpStr_MetroIcon
+	.long BmpStr_MicIcon
+	.long BmpStr_Sentinel
 	.zero 884
-LABEL_EABD04:	aligned_string ""
-LABEL_EABD06:	aligned_string "19mic.bmp"
-LABEL_EABD10:	aligned_string "18metro.bmp"
-LABEL_EABD1C:	aligned_string "14gmsp.bmp"
-LABEL_EABD28:	aligned_string "ledswoff.bmp"
-LABEL_EABD36:	aligned_string "ledswon.bmp"
-LABEL_EABD42:	aligned_string "13accod.bmp"
-LABEL_EABD4E:	aligned_string "12draw.bmp"
-LABEL_EABD5A:	aligned_string "10synth.bmp"
-LABEL_EABD66:	aligned_string "02string.bmp"
-LABEL_EABD74:	aligned_string "05sax.bmp"
-LABEL_EABD7E:	aligned_string "00piano.bmp"
-LABEL_EABD8A:	aligned_string "09orch.bmp"
-LABEL_EABD96:	aligned_string "08organ.bmp"
-LABEL_EABDA2:	aligned_string "17memb.bmp"
-LABEL_EABDAE:	aligned_string "16mema.bmp"
-LABEL_EABDBA:	aligned_string "06mallet.bmp"
-LABEL_EABDC8:	aligned_string "07world.bmp"
-LABEL_EABDD4:	aligned_string "01guitar.bmp"
-LABEL_EABDE2:	aligned_string "04flute.bmp"
-LABEL_EABDEE:	aligned_string "15drum.bmp"
-LABEL_EABDFA:	aligned_string "03brass.bmp"
-LABEL_EABE06:	aligned_string "11bass.bmp"
-LABEL_EABE12:	aligned_string "next.bmp"
-LABEL_EABE1C:	aligned_string "before.bmp"
-LABEL_EABE28:	aligned_string "start.bmp"
-LABEL_EABE32:	aligned_string "pause.bmp"
-LABEL_EABE3C:	aligned_string "bwd.bmp"
-LABEL_EABE44:	aligned_string "fwd.bmp"
-LABEL_EABE4C:	aligned_string "mixpoint.bmp"
-LABEL_EABE5A:	aligned_string "mixctr.bmp"
-LABEL_EABE66:	aligned_string "slmove.bmp"
-LABEL_EABE72:	aligned_string "slide.bmp"
-LABEL_EABE7C:	aligned_string "technics.bmp"
+BmpStr_Sentinel:	aligned_string ""
+BmpStr_MicIcon:	aligned_string "19mic.bmp"
+BmpStr_MetroIcon:	aligned_string "18metro.bmp"
+BmpStr_GmSpecialIcon:	aligned_string "14gmsp.bmp"
+BmpStr_LedSwOffIcon:	aligned_string "ledswoff.bmp"
+BmpStr_LedSwOnIcon:	aligned_string "ledswon.bmp"
+BmpStr_AccordionIcon:	aligned_string "13accod.bmp"
+BmpStr_DrawbarIcon:	aligned_string "12draw.bmp"
+BmpStr_SynthIcon:	aligned_string "10synth.bmp"
+BmpStr_StringsIcon:	aligned_string "02string.bmp"
+BmpStr_SaxIcon:	aligned_string "05sax.bmp"
+BmpStr_PianoIcon:	aligned_string "00piano.bmp"
+BmpStr_OrchIcon:	aligned_string "09orch.bmp"
+BmpStr_OrganIcon:	aligned_string "08organ.bmp"
+BmpStr_MemBIcon:	aligned_string "17memb.bmp"
+BmpStr_MemAIcon:	aligned_string "16mema.bmp"
+BmpStr_MalletIcon:	aligned_string "06mallet.bmp"
+BmpStr_WorldIcon:	aligned_string "07world.bmp"
+BmpStr_GuitarIcon:	aligned_string "01guitar.bmp"
+BmpStr_FluteIcon:	aligned_string "04flute.bmp"
+BmpStr_DrumIcon:	aligned_string "15drum.bmp"
+BmpStr_BrassIcon:	aligned_string "03brass.bmp"
+BmpStr_BassIcon:	aligned_string "11bass.bmp"
+BmpStr_NextIcon:	aligned_string "next.bmp"
+BmpStr_BeforeIcon:	aligned_string "before.bmp"
+BmpStr_StartIcon:	aligned_string "start.bmp"
+BmpStr_PauseIcon:	aligned_string "pause.bmp"
+BmpStr_BwdIcon:	aligned_string "bwd.bmp"
+BmpStr_FwdIcon:	aligned_string "fwd.bmp"
+BmpStr_MixPointIcon:	aligned_string "mixpoint.bmp"
+BmpStr_MixCtrIcon:	aligned_string "mixctr.bmp"
+BmpStr_SlMoveIcon:	aligned_string "slmove.bmp"
+BmpStr_SlideIcon:	aligned_string "slide.bmp"
+BmpStr_TechnicsIcon:	aligned_string "technics.bmp"
 	aligned_string "trash.bmp"
 	.byte 0x98, 0xbe, 0xea, 0x00
-LABEL_EABE98:	.byte 0x00, 0xff, 0xa4, 0xbe, 0xea, 0x00, 0xa2, 0xbe
+WidgetPropTab_Func:	.byte 0x00, 0xff, 0xa4, 0xbe, 0xea, 0x00, 0xa2, 0xbe
 	.byte 0xea, 0x00
-LABEL_EABEA2:
+WidgetPropSentinel_Func:
 	.byte 0x00, 0xff
-LABEL_EABEA4:	aligned_string "func"
+WidgetPropStr_FuncFunc:	aligned_string "func"
 	.byte 0xae, 0xbe, 0xea, 0x00
-LABEL_EABEAE:
+WidgetPropSentinelHdr_Object:
 	.byte 0x00, 0xff
-	.long LABEL_EABEB4
-LABEL_EABEB4:	aligned_string ""
-LABEL_EABEB6:
-	.long LABEL_EABF0C
-	.long LABEL_EABF04
-	.long LABEL_EABEFC
-	.long LABEL_EABEF2
-	.long LABEL_EABEEC
-	.long LABEL_EABEE2
-	.long LABEL_EABED8
-	.long LABEL_EABED6
-LABEL_EABED6:
+	.long WidgetPropStr_ObjectSentinel
+WidgetPropStr_ObjectSentinel:	aligned_string ""
+WidgetPropTab_Object:
+	.long WidgetPropStr_Proc
+	.long WidgetPropStr_Parent
+	.long WidgetPropStr_AllSize
+	.long WidgetPropStr_SelfSize
+	.long WidgetPropStr_ObjName
+	.long WidgetPropStr_PropData
+	.long WidgetPropStr_PropName
+	.long WidgetPropSentinel_Object
+WidgetPropSentinel_Object:
 	.byte 0x00, 0xff
-LABEL_EABED8:	aligned_string "propname"
-LABEL_EABEE2:	aligned_string "propdata"
-LABEL_EABEEC:	aligned_string "name"
-LABEL_EABEF2:	aligned_string "selfsize"
-LABEL_EABEFC:	aligned_string "allsize"
-LABEL_EABF04:	aligned_string "parent"
-LABEL_EABF0C:	aligned_string "proc"
-LABEL_EABF12:
-	.long LABEL_EABF3A
-	.long LABEL_EABF34
-	.long LABEL_EABF2E
-	.long LABEL_EABF28
-	.long LABEL_EABF26
-LABEL_EABF26:
+WidgetPropStr_PropName:	aligned_string "propname"
+WidgetPropStr_PropData:	aligned_string "propdata"
+WidgetPropStr_ObjName:	aligned_string "name"
+WidgetPropStr_SelfSize:	aligned_string "selfsize"
+WidgetPropStr_AllSize:	aligned_string "allsize"
+WidgetPropStr_Parent:	aligned_string "parent"
+WidgetPropStr_Proc:	aligned_string "proc"
+WidgetPropTab_PropList:
+	.long WidgetPropStr_PropListProc
+	.long WidgetPropStr_Count
+	.long WidgetPropStr_Size
+	.long WidgetPropStr_Prop
+	.long WidgetPropSentinel_PropList
+WidgetPropSentinel_PropList:
 	.byte 0x00, 0xff
-LABEL_EABF28:	aligned_string "prop"
-LABEL_EABF2E:	aligned_string "size"
-LABEL_EABF34:	aligned_string "count"
-LABEL_EABF3A:	aligned_string "proc"
-LABEL_EABF40:
-	.long LABEL_EABF68
-	.long LABEL_EABF62
-	.long LABEL_EABF5C
-	.long LABEL_EABF56
-	.long LABEL_EABF54
-LABEL_EABF54:	aligned_string ""
-LABEL_EABF56:	aligned_string "name"
-LABEL_EABF5C:	aligned_string "user"
-LABEL_EABF62:	aligned_string "title"
-LABEL_EABF68:	aligned_string "proc"
-LABEL_EABF6E:
-	.long LABEL_EABFB0
-	.long LABEL_EABFAC
-	.long LABEL_EABFA6
-	.long LABEL_EABFA0
-	.long LABEL_EABF9C
-	.long LABEL_EABF96
-	.long LABEL_EABF90
-	.long LABEL_EABF8E
-LABEL_EABF8E:
+WidgetPropStr_Prop:	aligned_string "prop"
+WidgetPropStr_Size:	aligned_string "size"
+WidgetPropStr_Count:	aligned_string "count"
+WidgetPropStr_PropListProc:	aligned_string "proc"
+WidgetPropTab_Task:
+	.long WidgetPropStr_TaskProc
+	.long WidgetPropStr_TaskTitle
+	.long WidgetPropStr_TaskUser
+	.long WidgetPropStr_TaskName
+	.long WidgetPropStr_TaskSentinel
+WidgetPropStr_TaskSentinel:	aligned_string ""
+WidgetPropStr_TaskName:	aligned_string "name"
+WidgetPropStr_TaskUser:	aligned_string "user"
+WidgetPropStr_TaskTitle:	aligned_string "title"
+WidgetPropStr_TaskProc:	aligned_string "proc"
+WidgetPropTab_ListNode:
+	.long WidgetPropStr_NodeProc
+	.long WidgetPropStr_Top
+	.long WidgetPropStr_NodeUser
+	.long WidgetPropStr_NodeName
+	.long WidgetPropStr_Now
+	.long WidgetPropStr_Prev
+	.long WidgetPropStr_Next
+	.long WidgetPropSentinel_ListNode
+WidgetPropSentinel_ListNode:
 	.byte 0x00, 0xff
-LABEL_EABF90:	aligned_string "next"
-LABEL_EABF96:	aligned_string "prev"
-LABEL_EABF9C:
+WidgetPropStr_Next:	aligned_string "next"
+WidgetPropStr_Prev:	aligned_string "prev"
+WidgetPropStr_Now:
 	.byte 0x6e, 0x6f, 0x77, 0x00
-LABEL_EABFA0:	aligned_string "name"
-LABEL_EABFA6:	aligned_string "user"
-LABEL_EABFAC:
+WidgetPropStr_NodeName:	aligned_string "name"
+WidgetPropStr_NodeUser:	aligned_string "user"
+WidgetPropStr_Top:
 	.byte 0x74, 0x6f, 0x70, 0x00
-LABEL_EABFB0:	aligned_string "proc"
+WidgetPropStr_NodeProc:	aligned_string "proc"
 	.byte 0xc0, 0xbf
 	.byte 0xea, 0x00, 0xbe, 0xbf, 0xea, 0x00
-LABEL_EABFBE:
+WidgetPropSentinel_Data0:
 	.byte 0x00, 0xff
-LABEL_EABFC0:	aligned_string "data"
+WidgetPropStr_Data0:	aligned_string "data"
 	.byte 0xd0, 0xbf
 	.byte 0xea, 0x00, 0xce, 0xbf, 0xea, 0x00
-LABEL_EABFCE:
+WidgetPropSentinel_Data1:
 	.byte 0x00, 0xff
-LABEL_EABFD0:	aligned_string "data"
+WidgetPropStr_Data1:	aligned_string "data"
 	.byte 0xe0, 0xbf
 	.byte 0xea, 0x00, 0xde, 0xbf, 0xea, 0x00
-LABEL_EABFDE:
+WidgetPropSentinel_Data2:
 	.byte 0x00, 0xff
-LABEL_EABFE0:	aligned_string "data"
+WidgetPropStr_Data2:	aligned_string "data"
 	.byte 0xf0, 0xbf
 	.byte 0xea, 0x00, 0xee, 0xbf, 0xea, 0x00
-LABEL_EABFEE:
+WidgetPropSentinel_Data3:
 	.byte 0x00, 0xff
-LABEL_EABFF0:	aligned_string "data"
+WidgetPropStr_Data3:	aligned_string "data"
 	.byte 0x00, 0xc0
 	.byte 0xea, 0x00, 0xfe, 0xbf, 0xea, 0x00
-LABEL_EABFFE:
+WidgetPropSentinel_Name0:
 	.byte 0x00, 0xff
-LABEL_EAC000:	aligned_string "name"
+WidgetPropStr_Name0:	aligned_string "name"
 	.byte 0x10, 0xc0
 	.byte 0xea, 0x00, 0x0e, 0xc0, 0xea, 0x00
-LABEL_EAC00E:
+WidgetPropSentinel_Name1:
 	.byte 0x00, 0xff
-LABEL_EAC010:	aligned_string "name"
+WidgetPropStr_Name1:	aligned_string "name"
 	.byte 0x20, 0xc0
 	.byte 0xea, 0x00, 0x1e, 0xc0, 0xea, 0x00
-LABEL_EAC01E:
+WidgetPropSentinel_Data4:
 	.byte 0x00, 0xff
-LABEL_EAC020:	aligned_string "data"
+WidgetPropStr_Data4:	aligned_string "data"
 	.byte 0x30, 0xc0
 	.byte 0xea, 0x00, 0x2e, 0xc0, 0xea, 0x00
-LABEL_EAC02E:
+WidgetPropSentinel_Name2:
 	.byte 0x00, 0xff
-LABEL_EAC030:	aligned_string "name"
-LABEL_EAC036:
-	.long LABEL_EAC07A
-	.long LABEL_EAC074
-	.long LABEL_EAC070
-	.long LABEL_EAC06A
-	.long LABEL_EAC064
-	.long LABEL_EAC05E
-	.long LABEL_EAC058
-	.long LABEL_EAC056
-LABEL_EAC056:
+WidgetPropStr_Name2:	aligned_string "name"
+WidgetPropTab_WidgetBase:
+	.long WidgetPropStr_Class
+	.long WidgetPropStr_Super
+	.long WidgetPropStr_Sub
+	.long WidgetPropStr_WidgetNext
+	.long WidgetPropStr_WidgetPrev
+	.long WidgetPropStr_Flag
+	.long WidgetPropStr_Rect
+	.long WidgetPropSentinel_WidgetBase
+WidgetPropSentinel_WidgetBase:
 	.byte 0x00, 0xff
-LABEL_EAC058:	aligned_string "rect"
-LABEL_EAC05E:	aligned_string "flag"
-LABEL_EAC064:	aligned_string "prev"
-LABEL_EAC06A:	aligned_string "next"
-LABEL_EAC070:
+WidgetPropStr_Rect:	aligned_string "rect"
+WidgetPropStr_Flag:	aligned_string "flag"
+WidgetPropStr_WidgetPrev:	aligned_string "prev"
+WidgetPropStr_WidgetNext:	aligned_string "next"
+WidgetPropStr_Sub:
 	.byte 0x73, 0x75, 0x62, 0x00
-LABEL_EAC074:	aligned_string "super"
-LABEL_EAC07A:	aligned_string "class"
-LABEL_EAC080:
-	.long LABEL_EAC0A0
-	.long LABEL_EAC098
-	.long LABEL_EAC092
-	.long LABEL_EAC090
-LABEL_EAC090:	aligned_string ""
-LABEL_EAC092:	aligned_string "index"
-LABEL_EAC098:	aligned_string "border"
-LABEL_EAC0A0:	aligned_string "color"
+WidgetPropStr_Super:	aligned_string "super"
+WidgetPropStr_Class:	aligned_string "class"
+WidgetPropTab_ColorScheme:
+	.long WidgetPropStr_Color
+	.long WidgetPropStr_Border
+	.long WidgetPropStr_ColorIndex
+	.long WidgetPropStr_ColorSentinel
+WidgetPropStr_ColorSentinel:	aligned_string ""
+WidgetPropStr_ColorIndex:	aligned_string "index"
+WidgetPropStr_Border:	aligned_string "border"
+WidgetPropStr_Color:	aligned_string "color"
 	and	w, w
 	.byte 0xea, 0x00, 0xbe, 0xc0, 0xea, 0x00, 0xb8, 0xc0
 	.byte 0xea, 0x00, 0xb6, 0xc0, 0xea, 0x00, 0x00, 0xff
@@ -24096,57 +24096,57 @@ LABEL_EAC0A0:	aligned_string "color"
 	.byte 0xea, 0x00, 0x00, 0xff
 	aligned_string "data"
 	aligned_string "func"
-	.long LABEL_EAC0EC
-LABEL_EAC0EC:	aligned_string ""
-LABEL_EAC0EE:
-	.long LABEL_EAC14A
-	.long LABEL_EAC144
-	.long LABEL_EAC13A
-	.long LABEL_EAC134
-	.long LABEL_EAC12C
-	.long LABEL_EAC124
-	.long LABEL_EAC11E
-	.long LABEL_EAC114
-	.long LABEL_EAC112
-LABEL_EAC112:
+	.long WidgetPropStr_SpinSentinel
+WidgetPropStr_SpinSentinel:	aligned_string ""
+WidgetPropTab_Spinbox:
+	.long WidgetPropStr_Caption
+	.long WidgetPropStr_Font
+	.long WidgetPropStr_FontColor
+	.long WidgetPropStr_Align
+	.long WidgetPropStr_Length
+	.long WidgetPropStr_EditSw
+	.long WidgetPropStr_Dial
+	.long WidgetPropStr_Selected
+	.long WidgetPropSentinel_Spinbox
+WidgetPropSentinel_Spinbox:
 	.byte 0x00, 0xff
-LABEL_EAC114:	aligned_string "selected"
-LABEL_EAC11E:	aligned_string "dial"
-LABEL_EAC124:	aligned_string "editsw"
-LABEL_EAC12C:	aligned_string "length"
-LABEL_EAC134:	aligned_string "align"
-LABEL_EAC13A:	aligned_string "fontcolor"
-LABEL_EAC144:	aligned_string "font"
-LABEL_EAC14A:	aligned_string "caption"
+WidgetPropStr_Selected:	aligned_string "selected"
+WidgetPropStr_Dial:	aligned_string "dial"
+WidgetPropStr_EditSw:	aligned_string "editsw"
+WidgetPropStr_Length:	aligned_string "length"
+WidgetPropStr_Align:	aligned_string "align"
+WidgetPropStr_FontColor:	aligned_string "fontcolor"
+WidgetPropStr_Font:	aligned_string "font"
+WidgetPropStr_Caption:	aligned_string "caption"
 	.byte 0x5c, 0xc1, 0xea, 0x00, 0x5a, 0xc1
 	.byte 0xea, 0x00
-LABEL_EAC15A:
+WidgetPropSentinel_Figures:
 	.byte 0x00, 0xff
-LABEL_EAC15C:	aligned_string "figures"
-	.long LABEL_EAC16E
-	.long LABEL_EAC16C
-LABEL_EAC16C:
+WidgetPropStr_Figures:	aligned_string "figures"
+	.long WidgetPropStr_FigFunc
+	.long WidgetPropSentinel_FigFunc
+WidgetPropSentinel_FigFunc:
 	.byte 0x00, 0xff
-LABEL_EAC16E:
+WidgetPropStr_FigFunc:
 	.byte 0x66, 0x75
 	.byte 0x6e, 0x63, 0x00, 0xff, 0x7e, 0xc1, 0xea, 0x00
-	.long LABEL_EAC17C
-LABEL_EAC17C:
+	.long WidgetPropSentinel_OnOff
+WidgetPropSentinel_OnOff:
 	.byte 0x00, 0xff
-LABEL_EAC17E:
+WidgetPropStr_OnOff:
 	.byte 0x6f, 0x6e
 	.byte 0x6f, 0x66, 0x66, 0x00, 0xc6, 0xc1, 0xea, 0x00
-LABEL_EAC188:
-	.long LABEL_EAC1BE
-	.long LABEL_EAC1BA
-	.long LABEL_EAC1B6
-	.long LABEL_EAC1AC
-	.long LABEL_EAC1A2
-	.long LABEL_EAC1A0
-LABEL_EAC1A0:	aligned_string ""
-LABEL_EAC1A2:	aligned_string "smallstep"
-LABEL_EAC1AC:	aligned_string "largestep"
-LABEL_EAC1B6:
+WidgetPropTab_RangeCtrl:
+	.long WidgetPropStr_RangeFigures
+	.long WidgetPropStr_Max
+	.long WidgetPropStr_Min
+	.long WidgetPropStr_LargeStep
+	.long WidgetPropStr_SmallStep
+	.long WidgetPropStr_RangeSentinel
+WidgetPropStr_RangeSentinel:	aligned_string ""
+WidgetPropStr_SmallStep:	aligned_string "smallstep"
+WidgetPropStr_LargeStep:	aligned_string "largestep"
+WidgetPropStr_Min:
 	jr	pl, 0x69
 	.byte 0x6e, 0x00, 0x6d, 0x61, 0x78, 0x00
 	aligned_string "figures"
@@ -24156,381 +24156,381 @@ LABEL_EAC1B6:
 	aligned_string "data"
 	.byte 0x66, 0x75
 	.byte 0x6e, 0x63, 0x00, 0xff, 0xf8, 0xc1, 0xea, 0x00
-	.long LABEL_EAC1F2
-	.long LABEL_EAC1F0
-LABEL_EAC1F0:	aligned_string ""
-LABEL_EAC1F2:	aligned_string "data"
-LABEL_EAC1F8:	aligned_string "func"
-LABEL_EAC1FE:
-	.long LABEL_EAC23A
-	.long LABEL_EAC230
-	.long LABEL_EAC22A
-	.long LABEL_EAC222
-	.long LABEL_EAC218
-	.long LABEL_EAC216
-LABEL_EAC216:
+	.long WidgetPropStr_DataProp
+	.long WidgetPropStr_DataFuncSentinel
+WidgetPropStr_DataFuncSentinel:	aligned_string ""
+WidgetPropStr_DataProp:	aligned_string "data"
+WidgetPropStr_FuncProp:	aligned_string "func"
+WidgetPropTab_TextLabel:
+	.long WidgetPropStr_LblFont
+	.long WidgetPropStr_LblFontColor
+	.long WidgetPropStr_LblAlign
+	.long WidgetPropStr_LblEditSw
+	.long WidgetPropStr_LblSelected
+	.long WidgetPropSentinel_TextLabel
+WidgetPropSentinel_TextLabel:
 	.byte 0x00, 0xff
-LABEL_EAC218:	aligned_string "selected"
-LABEL_EAC222:	aligned_string "editsw"
-LABEL_EAC22A:	aligned_string "align"
-LABEL_EAC230:	aligned_string "fontcolor"
-LABEL_EAC23A:	aligned_string "font"
-LABEL_EAC240:
-	.long LABEL_EAC25E
-	.long LABEL_EAC258
-	.long LABEL_EAC252
-	.long LABEL_EAC250
-LABEL_EAC250:	aligned_string ""
-LABEL_EAC252:	aligned_string "icon"
-LABEL_EAC258:	aligned_string "title"
-LABEL_EAC25E:
+WidgetPropStr_LblSelected:	aligned_string "selected"
+WidgetPropStr_LblEditSw:	aligned_string "editsw"
+WidgetPropStr_LblAlign:	aligned_string "align"
+WidgetPropStr_LblFontColor:	aligned_string "fontcolor"
+WidgetPropStr_LblFont:	aligned_string "font"
+WidgetPropTab_IconTitle:
+	.long WidgetPropStr_Str
+	.long WidgetPropStr_Title
+	.long WidgetPropStr_Icon
+	.long WidgetPropStr_IconTitleSentinel
+WidgetPropStr_IconTitleSentinel:	aligned_string ""
+WidgetPropStr_Icon:	aligned_string "icon"
+WidgetPropStr_Title:	aligned_string "title"
+WidgetPropStr_Str:
 	.byte 0x73, 0x74
 	.byte 0x72, 0x00, 0x90, 0xc2, 0xea, 0x00, 0x86, 0xc2
 	.byte 0xea, 0x00, 0x80, 0xc2, 0xea, 0x00, 0x78, 0xc2
 	.byte 0xea, 0x00, 0x76, 0xc2, 0xea, 0x00
-LABEL_EAC276:
+WidgetPropSentinel_StyledText:
 	.byte 0x00, 0xff
-LABEL_EAC278:	aligned_string "editsw"
-LABEL_EAC280:	aligned_string "align"
-LABEL_EAC286:	jr	z, 0x6f
+WidgetPropStr_StEditSw:	aligned_string "editsw"
+WidgetPropStr_StAlign:	aligned_string "align"
+WidgetPropStr_StFontColor:	jr	z, 0x6f
 	aligned_string "ntcolor"
 	aligned_string "font"
 	.byte 0xa0, 0xc2
 	.byte 0xea, 0x00, 0x9e, 0xc2, 0xea, 0x00, 0x00, 0xff
-LABEL_EAC29E:	aligned_string "style"
+WidgetPropStr_Style:	aligned_string "style"
 	.byte 0xba, 0xc2
 	.byte 0xea, 0x00, 0xb4, 0xc2, 0xea, 0x00, 0xb2, 0xc2
 	.byte 0xea, 0x00, 0x00, 0xff
-LABEL_EAC2B2:	aligned_string "func"
+WidgetPropStr_StyleFunc:	aligned_string "func"
 	aligned_string "style"
-	.long LABEL_EAC2CA
-	.long LABEL_EAC2C8
-LABEL_EAC2C8:	aligned_string ""
-LABEL_EAC2CA:	aligned_string "editsw2"
+	.long WidgetPropStr_EditSw2
+	.long WidgetPropStr_EditSw2Sentinel
+WidgetPropStr_EditSw2Sentinel:	aligned_string ""
+WidgetPropStr_EditSw2:	aligned_string "editsw2"
 	.byte 0xdc, 0xc2, 0xea, 0x00, 0xda, 0xc2
 	.byte 0xea, 0x00
-LABEL_EAC2DA:
+WidgetPropSentinel_Style2:
 	.byte 0x00, 0xff
-LABEL_EAC2DC:	.asciz "style"
+WidgetPropStr_Style2:	.asciz "style"
 	.byte 0xf6, 0xc2, 0xea, 0x00, 0xf0, 0xc2
 	.byte 0xea, 0x00, 0xee, 0xc2, 0xea, 0x00
-LABEL_EAC2EE:
+WidgetPropSentinel_StyleFunc2:
 	.byte 0x00, 0xff
-LABEL_EAC2F0:	aligned_string "func"
-LABEL_EAC2F6:	.byte 0x73, 0x74
+WidgetPropStr_StyleFunc2:	aligned_string "func"
+WidgetPropStr_StyleStr2:	.byte 0x73, 0x74
 	.byte 0x79, 0x6c, 0x65, 0x00, 0x06, 0xc3, 0xea, 0x00
-	.long LABEL_EAC304
-LABEL_EAC304:
+	.long WidgetPropSentinel_Style3
+WidgetPropSentinel_Style3:
 	.byte 0x00, 0xff
-LABEL_EAC306:
+WidgetPropStr_Page:
 	.byte 0x70, 0x61
 	.byte 0x67, 0x65, 0x00, 0xff, 0x22, 0xc3, 0xea, 0x00
-	.long LABEL_EAC31A
-	.long LABEL_EAC318
-LABEL_EAC318:	aligned_string ""
-LABEL_EAC31A:	aligned_string "pagemax"
-LABEL_EAC322:	aligned_string "pagemin"
-LABEL_EAC32A:
-	.long LABEL_EAC360
-	.long LABEL_EAC35A
-	.long LABEL_EAC352
-	.long LABEL_EAC34C
-	.long LABEL_EAC344
-	.long LABEL_EAC342
-LABEL_EAC342:
+	.long WidgetPropStr_PageMax
+	.long WidgetPropStr_PagedSentinel
+WidgetPropStr_PagedSentinel:	aligned_string ""
+WidgetPropStr_PageMax:	aligned_string "pagemax"
+WidgetPropStr_PageMin:	aligned_string "pagemin"
+WidgetPropTab_ToggleSwitch:
+	.long WidgetPropStr_ToggleFont
+	.long WidgetPropStr_StrOn
+	.long WidgetPropStr_StrOff
+	.long WidgetPropStr_OnOff2
+	.long WidgetPropStr_ToggleEditSw
+	.long WidgetPropSentinel_Toggle
+WidgetPropSentinel_Toggle:
 	.byte 0x00, 0xff
-LABEL_EAC344:	aligned_string "editsw"
-LABEL_EAC34C:	aligned_string "onoff"
-LABEL_EAC352:	aligned_string "stroff"
-LABEL_EAC35A:	aligned_string "stron"
-LABEL_EAC360:	aligned_string "font"
+WidgetPropStr_ToggleEditSw:	aligned_string "editsw"
+WidgetPropStr_OnOff2:	aligned_string "onoff"
+WidgetPropStr_StrOff:	aligned_string "stroff"
+WidgetPropStr_StrOn:	aligned_string "stron"
+WidgetPropStr_ToggleFont:	aligned_string "font"
 	.byte 0x6a, 0xc3
 	.byte 0xea, 0x00
-LABEL_EAC36A:
+WidgetPropSentinel_WinPage:
 	.byte 0x00, 0xff, 0x82, 0xc3, 0xea, 0x00
-	.long LABEL_EAC37A
-	.long LABEL_EAC378
-LABEL_EAC378:	aligned_string ""
-LABEL_EAC37A:	aligned_string "window"
-LABEL_EAC382:	aligned_string "page"
-	.long LABEL_EAC392
-	.long LABEL_EAC390
-LABEL_EAC390:	aligned_string ""
-LABEL_EAC392:	aligned_string "func"
-	.long LABEL_EAC3A2
-	.long LABEL_EAC3A0
-LABEL_EAC3A0:	aligned_string ""
-LABEL_EAC3A2:	aligned_string "part"
-LABEL_EAC3A8:
-	.long LABEL_EAC3CA
-	.long LABEL_EAC3C4
-	.long LABEL_EAC3BA
-	.long LABEL_EAC3B8
-LABEL_EAC3B8:	aligned_string ""
-LABEL_EAC3BA:	aligned_string "fontcolor"
-LABEL_EAC3C4:	aligned_string "font"
-LABEL_EAC3CA:
+	.long WidgetPropStr_Window
+	.long WidgetPropStr_WinPageSentinel
+WidgetPropStr_WinPageSentinel:	aligned_string ""
+WidgetPropStr_Window:	aligned_string "window"
+WidgetPropStr_PageProp:	aligned_string "page"
+	.long WidgetPropStr_Func2
+	.long WidgetPropStr_FuncSentinel2
+WidgetPropStr_FuncSentinel2:	aligned_string ""
+WidgetPropStr_Func2:	aligned_string "func"
+	.long WidgetPropStr_Part
+	.long WidgetPropStr_PartSentinel
+WidgetPropStr_PartSentinel:	aligned_string ""
+WidgetPropStr_Part:	aligned_string "part"
+WidgetPropTab_FontColor:
+	.long WidgetPropStr_FcStr
+	.long WidgetPropStr_FcFont
+	.long WidgetPropStr_FcFontColor
+	.long WidgetPropStr_FcSentinel
+WidgetPropStr_FcSentinel:	aligned_string ""
+WidgetPropStr_FcFontColor:	aligned_string "fontcolor"
+WidgetPropStr_FcFont:	aligned_string "font"
+WidgetPropStr_FcStr:
 	.byte 0x73, 0x74, 0x72, 0x00, 0xd8, 0xc3
 	.byte 0xea, 0x00, 0xd6, 0xc3, 0xea, 0x00
-LABEL_EAC3D6:
+WidgetPropSentinel_Bmp:
 	.byte 0x00, 0xff
-LABEL_EAC3D8:	.byte 0x62, 0x6d, 0x70, 0x00, 0xe6, 0xc3, 0xea, 0x00
-	.long LABEL_EAC3E4
-LABEL_EAC3E4:
+WidgetPropStr_Bmp:	.byte 0x62, 0x6d, 0x70, 0x00, 0xe6, 0xc3, 0xea, 0x00
+	.long WidgetPropSentinel_IconProp
+WidgetPropSentinel_IconProp:
 	.byte 0x00, 0xff
-LABEL_EAC3E6:
+WidgetPropStr_IconProp:
 	.byte 0x69, 0x63
 	.byte 0x6f, 0x6e, 0x00, 0xff, 0x04, 0xc4, 0xea, 0x00
-	.long LABEL_EAC3FA
-	.long LABEL_EAC3F8
-LABEL_EAC3F8:	aligned_string ""
-LABEL_EAC3FA:	aligned_string "linemode"
-LABEL_EAC404:	aligned_string "color"
+	.long WidgetPropStr_LineMode
+	.long WidgetPropStr_LineSentinel
+WidgetPropStr_LineSentinel:	aligned_string ""
+WidgetPropStr_LineMode:	aligned_string "linemode"
+WidgetPropStr_LineColor:	aligned_string "color"
 	.byte 0x28, 0xc4, 0xea, 0x00, 0x22, 0xc4
 	.byte 0xea, 0x00, 0x1c, 0xc4, 0xea, 0x00, 0x1a, 0xc4
 	.byte 0xea, 0x00
-LABEL_EAC41A:
+WidgetPropSentinel_Frame:
 	.byte 0x00, 0xff
-LABEL_EAC41C:	aligned_string "color"
-LABEL_EAC422:	aligned_string "width"
-LABEL_EAC428:	aligned_string "frame"
+WidgetPropStr_FrameColor:	aligned_string "color"
+WidgetPropStr_FrameWidth:	aligned_string "width"
+WidgetPropStr_Frame:	aligned_string "frame"
 	.byte 0x4c, 0xc4
 	.byte 0xea, 0x00, 0x46, 0xc4, 0xea, 0x00, 0x40, 0xc4
 	.byte 0xea, 0x00, 0x3e, 0xc4, 0xea, 0x00
-LABEL_EAC43E:
+WidgetPropSentinel_IndexedTab:
 	.byte 0x00, 0xff
-LABEL_EAC440:	aligned_string "index"
-LABEL_EAC446:	jr	z, 0x75
+WidgetPropStr_Index:	aligned_string "index"
+WidgetPropStr_FuncEncoded:	jr	z, 0x75
 	.byte 0x6e, 0x63, 0x00, 0xff
 	aligned_string "editsw"
-	.long LABEL_EAC46A
-	.long LABEL_EAC462
-	.long LABEL_EAC460
-LABEL_EAC460:	aligned_string ""
-LABEL_EAC462:	aligned_string "border"
-LABEL_EAC46A:	aligned_string "color"
-	.long LABEL_EAC474
-LABEL_EAC474:
+	.long WidgetPropStr_IdxColor
+	.long WidgetPropStr_IdxBorder
+	.long WidgetPropStr_IdxSentinel
+WidgetPropStr_IdxSentinel:	aligned_string ""
+WidgetPropStr_IdxBorder:	aligned_string "border"
+WidgetPropStr_IdxColor:	aligned_string "color"
+	.long WidgetPropSentinel_WinExit
+WidgetPropSentinel_WinExit:
 	.byte 0x00, 0xff, 0x8c, 0xc4
 	.byte 0xea, 0x00, 0x84, 0xc4, 0xea, 0x00, 0x82, 0xc4
 	.byte 0xea, 0x00
-LABEL_EAC482:
+WidgetPropSentinel_WinExit2:
 	.byte 0x00, 0xff
-LABEL_EAC484:	aligned_string "window"
-LABEL_EAC48C:	aligned_string "exit"
+WidgetPropStr_WinExit:	aligned_string "window"
+WidgetPropStr_Exit:	aligned_string "exit"
 	.byte 0xa6, 0xc4, 0xea, 0x00, 0xa0, 0xc4
 	.byte 0xea, 0x00, 0x9e, 0xc4, 0xea, 0x00
-LABEL_EAC49E:
+WidgetPropSentinel_Dialog:
 	.byte 0x00, 0xff
-LABEL_EAC4A0:	aligned_string "icon"
-LABEL_EAC4A6:	.byte 0x74, 0x69
+WidgetPropStr_DlgIcon:	aligned_string "icon"
+WidgetPropStr_DlgTitle:	.byte 0x74, 0x69
 	.byte 0x74, 0x6c, 0x65, 0x00, 0xcc, 0xc4, 0xea, 0x00
-	.long LABEL_EAC4C4
-	.long LABEL_EAC4BE
-	.long LABEL_EAC4BC
-LABEL_EAC4BC:	aligned_string ""
-LABEL_EAC4BE:	.asciz "child"
-LABEL_EAC4C4:	aligned_string "parent"
-LABEL_EAC4CC:	aligned_string "modal"
-LABEL_EAC4D2:
-	.long LABEL_EAC50C
-	.long LABEL_EAC506
-	.long LABEL_EAC4FC
-	.long LABEL_EAC4F2
-	.long LABEL_EAC4EC
-	.long LABEL_EAC4EA
-LABEL_EAC4EA:
+	.long WidgetPropStr_DlgParent
+	.long WidgetPropStr_Child
+	.long WidgetPropStr_DlgSentinel
+WidgetPropStr_DlgSentinel:	aligned_string ""
+WidgetPropStr_Child:	.asciz "child"
+WidgetPropStr_DlgParent:	aligned_string "parent"
+WidgetPropStr_Modal:	aligned_string "modal"
+WidgetPropTab_MultilineText:
+	.long WidgetPropStr_Text
+	.long WidgetPropStr_MlFontEncoded
+	.long WidgetPropStr_MlFontColor
+	.long WidgetPropStr_Alignment
+	.long WidgetPropStr_Lines
+	.long WidgetPropSentinel_Multiline
+WidgetPropSentinel_Multiline:
 	.byte 0x00, 0xff
-LABEL_EAC4EC:	aligned_string "lines"
-LABEL_EAC4F2:	aligned_string "alignment"
-LABEL_EAC4FC:	aligned_string "fontcolor"
-LABEL_EAC506:
+WidgetPropStr_Lines:	aligned_string "lines"
+WidgetPropStr_Alignment:	aligned_string "alignment"
+WidgetPropStr_MlFontColor:	aligned_string "fontcolor"
+WidgetPropStr_MlFontEncoded:
 	jr	z, 0x6f
 	.byte 0x6e, 0x74, 0x00, 0xff
-LABEL_EAC50C:	aligned_string "text"
+WidgetPropStr_Text:	aligned_string "text"
 	.byte 0x42, 0xc5, 0xea, 0x00, 0x3c, 0xc5
 	.byte 0xea, 0x00, 0x32, 0xc5, 0xea, 0x00, 0x28, 0xc5
 	.byte 0xea, 0x00, 0x26, 0xc5, 0xea, 0x00
-LABEL_EAC526:
+WidgetPropSentinel_RichText:
 	.byte 0x00, 0xff
-LABEL_EAC528:	aligned_string "alignment"
-LABEL_EAC532:	aligned_string "fontcolor"
-LABEL_EAC53C:	aligned_string "font"
-LABEL_EAC542:	.byte 0x73, 0x74, 0x72, 0x00, 0x78, 0xc5
+WidgetPropStr_RtAlignment:	aligned_string "alignment"
+WidgetPropStr_RtFontColor:	aligned_string "fontcolor"
+WidgetPropStr_RtFont:	aligned_string "font"
+WidgetPropStr_RtStr:	.byte 0x73, 0x74, 0x72, 0x00, 0x78, 0xc5
 	.byte 0xea, 0x00, 0x72, 0xc5, 0xea, 0x00, 0x6c, 0xc5
 	.byte 0xea, 0x00, 0x66, 0xc5, 0xea, 0x00, 0x60, 0xc5
 	.byte 0xea, 0x00, 0x5e, 0xc5, 0xea, 0x00
-LABEL_EAC55E:
+WidgetPropSentinel_UserWindow:
 	.byte 0x00, 0xff
-LABEL_EAC560:	aligned_string "name"
-LABEL_EAC566:	aligned_string "user"
-LABEL_EAC56C:	aligned_string "title"
-LABEL_EAC572:	aligned_string "proc"
-LABEL_EAC578:	aligned_string "mode"
+WidgetPropStr_UwName:	aligned_string "name"
+WidgetPropStr_UwUser:	aligned_string "user"
+WidgetPropStr_UwTitle:	aligned_string "title"
+WidgetPropStr_UwProc:	aligned_string "proc"
+WidgetPropStr_Mode:	aligned_string "mode"
 	.byte 0xae, 0xc5
 	.byte 0xea, 0x00, 0xa8, 0xc5, 0xea, 0x00, 0xa4, 0xc5
 	.byte 0xea, 0x00, 0x9e, 0xc5, 0xea, 0x00, 0x98, 0xc5
 	.byte 0xea, 0x00, 0x96, 0xc5, 0xea, 0x00
-LABEL_EAC596:
+WidgetPropSentinel_UserItem:
 	.byte 0x00, 0xff
-LABEL_EAC598:	aligned_string "name"
-LABEL_EAC59E:	aligned_string "user"
-LABEL_EAC5A4:
+WidgetPropStr_UiName:	aligned_string "name"
+WidgetPropStr_UiUser:	aligned_string "user"
+WidgetPropStr_UiTop:
 	.byte 0x74, 0x6f, 0x70, 0x00
-LABEL_EAC5A8:	aligned_string "proc"
-LABEL_EAC5AE:	.byte 0x74, 0x69
+WidgetPropStr_UiProc:	aligned_string "proc"
+WidgetPropStr_UiTitle:	.byte 0x74, 0x69
 	.byte 0x74, 0x6c, 0x65, 0x00, 0xb8, 0xc5, 0xea, 0x00
 	.byte 0x00, 0xff, 0xbe, 0xc5, 0xea, 0x00
-LABEL_EAC5BE:
+WidgetPropSentinel_EditOnOff:
 	.byte 0x00, 0xff
-	.long LABEL_EAC5D6
-	.long LABEL_EAC5CE
-	.long LABEL_EAC5CC
-LABEL_EAC5CC:	aligned_string ""
-LABEL_EAC5CE:	aligned_string "editsw"
-LABEL_EAC5D6:
+	.long WidgetPropStr_EoPart
+	.long WidgetPropStr_EoEditSw
+	.long WidgetPropStr_EoSentinel
+WidgetPropStr_EoSentinel:	aligned_string ""
+WidgetPropStr_EoEditSw:	aligned_string "editsw"
+WidgetPropStr_EoPart:
 	.byte 0x70, 0x61
 	.byte 0x72, 0x74, 0x00, 0xff, 0xf0, 0xc5, 0xea, 0x00
-	.long LABEL_EAC5EA
-	.long LABEL_EAC5E8
-LABEL_EAC5E8:	aligned_string ""
-LABEL_EAC5EA:	aligned_string "icon"
-LABEL_EAC5F0:	.byte 0x73, 0x74, 0x72, 0x00, 0x06, 0xc6, 0xea, 0x00
-	.long LABEL_EAC602
-	.long LABEL_EAC600
-LABEL_EAC600:	aligned_string ""
-LABEL_EAC602:
+	.long WidgetPropStr_IcStrIcon
+	.long WidgetPropStr_IcStrSentinel
+WidgetPropStr_IcStrSentinel:	aligned_string ""
+WidgetPropStr_IcStrIcon:	aligned_string "icon"
+WidgetPropStr_IcStr:	.byte 0x73, 0x74, 0x72, 0x00, 0x06, 0xc6, 0xea, 0x00
+	.long WidgetPropStr_StrBlock
+	.long WidgetPropStr_StrSentinel
+WidgetPropStr_StrSentinel:	aligned_string ""
+WidgetPropStr_StrBlock:
 	.byte 0x73, 0x74, 0x72, 0x00
-LABEL_EAC606:
+WidgetPropStr_StyleBlock:
 	.byte 0x73, 0x74
 	.byte 0x79, 0x6c, 0x65, 0x00, 0x1e, 0xc6, 0xea, 0x00
-	.long LABEL_EAC61A
-	.long LABEL_EAC618
-LABEL_EAC618:	aligned_string ""
-LABEL_EAC61A:
+	.long WidgetPropStr_StyleStr
+	.long WidgetPropStr_StyleSentinel
+WidgetPropStr_StyleSentinel:	aligned_string ""
+WidgetPropStr_StyleStr:
 	.byte 0x73, 0x74, 0x72, 0x00
-LABEL_EAC61E:
+WidgetPropStr_StyleBlock2:
 	.byte 0x73, 0x74
 	.byte 0x79, 0x6c, 0x65, 0x00, 0x42, 0xc6, 0xea, 0x00
-	.long LABEL_EAC63C
-	.long LABEL_EAC636
-	.long LABEL_EAC634
-LABEL_EAC634:	aligned_string ""
-LABEL_EAC636:	aligned_string "icon"
-LABEL_EAC63C:	aligned_string "mode"
-LABEL_EAC642:	.byte 0x73, 0x74, 0x72, 0x00, 0x66, 0xc6
+	.long WidgetPropStr_ImMode
+	.long WidgetPropStr_ImIcon
+	.long WidgetPropStr_ImSentinel
+WidgetPropStr_ImSentinel:	aligned_string ""
+WidgetPropStr_ImIcon:	aligned_string "icon"
+WidgetPropStr_ImMode:	aligned_string "mode"
+WidgetPropStr_ImStr:	.byte 0x73, 0x74, 0x72, 0x00, 0x66, 0xc6
 	.byte 0xea, 0x00, 0x5e, 0xc6, 0xea, 0x00, 0x58, 0xc6
 	.byte 0xea, 0x00, 0x56, 0xc6, 0xea, 0x00
-LABEL_EAC656:
+WidgetPropSentinel_IconScreen:
 	.byte 0x00, 0xff
-LABEL_EAC658:	aligned_string "icon"
-LABEL_EAC65E:	aligned_string "screen"
-LABEL_EAC666:	.byte 0x73, 0x74
+WidgetPropStr_IsIcon:	aligned_string "icon"
+WidgetPropStr_Screen:	aligned_string "screen"
+WidgetPropStr_IsStr:	.byte 0x73, 0x74
 	.byte 0x72, 0x00, 0x8a, 0xc6, 0xea, 0x00, 0x82, 0xc6
 	.byte 0xea, 0x00, 0x7c, 0xc6, 0xea, 0x00, 0x7a, 0xc6
 	.byte 0xea, 0x00
-LABEL_EAC67A:
+WidgetPropSentinel_IconWin:
 	.byte 0x00, 0xff
-LABEL_EAC67C:	aligned_string "icon"
-LABEL_EAC682:	aligned_string "window"
-LABEL_EAC68A:	.byte 0x73, 0x74, 0x72, 0x00, 0xa2, 0xc6
+WidgetPropStr_IwIcon:	aligned_string "icon"
+WidgetPropStr_IwWindow:	aligned_string "window"
+WidgetPropStr_IwStr:	.byte 0x73, 0x74, 0x72, 0x00, 0xa2, 0xc6
 	.byte 0xea, 0x00, 0x9c, 0xc6, 0xea, 0x00, 0x9a, 0xc6
 	.byte 0xea, 0x00
-LABEL_EAC69A:
+WidgetPropSentinel_DataFunc:
 	.byte 0x00, 0xff
-LABEL_EAC69C:	aligned_string "data"
-LABEL_EAC6A2:	aligned_string "func"
-	.long LABEL_EAC6B2
-	.long LABEL_EAC6B0
-LABEL_EAC6B0:	aligned_string ""
-LABEL_EAC6B2:	aligned_string "func"
-	.long LABEL_EAC6C2
-	.long LABEL_EAC6C0
-LABEL_EAC6C0:	aligned_string ""
-LABEL_EAC6C2:	aligned_string "editsw2"
+WidgetPropStr_DfData:	aligned_string "data"
+WidgetPropStr_DfFunc:	aligned_string "func"
+	.long WidgetPropStr_Func3
+	.long WidgetPropStr_FuncSentinel3
+WidgetPropStr_FuncSentinel3:	aligned_string ""
+WidgetPropStr_Func3:	aligned_string "func"
+	.long WidgetPropStr_EditSw2b
+	.long WidgetPropStr_EditSw2Sentinel2
+WidgetPropStr_EditSw2Sentinel2:	aligned_string ""
+WidgetPropStr_EditSw2b:	aligned_string "editsw2"
 	.byte 0xce, 0xc6, 0xea, 0x00
-LABEL_EAC6CE:
+WidgetPropSentinel_Mode:
 	.byte 0x00, 0xff
-	.long LABEL_EAC6D4
-LABEL_EAC6D4:
+	.long WidgetPropSentinel_Mode2
+WidgetPropSentinel_Mode2:
 	.byte 0x00, 0xff, 0xe0, 0xc6
 	.byte 0xea, 0x00, 0xde, 0xc6, 0xea, 0x00
-LABEL_EAC6DE:
+WidgetPropSentinel_Mode3:
 	.byte 0x00, 0xff
-LABEL_EAC6E0:	aligned_string "mode"
+WidgetPropStr_ModeProp:	aligned_string "mode"
 	.byte 0xf0, 0xc6
 	.byte 0xea, 0x00, 0xee, 0xc6, 0xea, 0x00
-LABEL_EAC6EE:
+WidgetPropSentinel_ScreenWin:
 	.byte 0x00, 0xff
-LABEL_EAC6F0:	aligned_string "screen"
-	.long LABEL_EAC702
-	.long LABEL_EAC700
-LABEL_EAC700:	aligned_string ""
-LABEL_EAC702:	aligned_string "window"
+WidgetPropStr_ScreenProp:	aligned_string "screen"
+	.long WidgetPropStr_WinProp
+	.long WidgetPropStr_WinSentinel
+WidgetPropStr_WinSentinel:	aligned_string ""
+WidgetPropStr_WinProp:	aligned_string "window"
 	.byte 0x0e, 0xc7, 0xea, 0x00
-LABEL_EAC70E:
+WidgetPropSentinel_Cursor:
 	.byte 0x00, 0xff
-	.long LABEL_EAC71A
-	.long LABEL_EAC718
-LABEL_EAC718:	aligned_string ""
-LABEL_EAC71A:	aligned_string "cursor"
+	.long WidgetPropStr_Cursor
+	.long WidgetPropStr_CursorSentinel
+WidgetPropStr_CursorSentinel:	aligned_string ""
+WidgetPropStr_Cursor:	aligned_string "cursor"
 	.byte 0x2c, 0xc7, 0xea, 0x00, 0x2a, 0xc7
 	.byte 0xea, 0x00
-LABEL_EAC72A:
+WidgetPropSentinel_Func3:
 	.byte 0x00, 0xff
-LABEL_EAC72C:	aligned_string "func"
+WidgetPropStr_Func3Prop:	aligned_string "func"
 	.byte 0x44, 0xc7, 0xea, 0x00, 0x40, 0xc7
 	.byte 0xea, 0x00, 0x3e, 0xc7, 0xea, 0x00
-LABEL_EAC73E:
+WidgetPropSentinel_TagIndex:
 	.byte 0x00, 0xff
-LABEL_EAC740:	aligned_string "tag"
-LABEL_EAC744:	.asciz "index"
+WidgetPropStr_Tag:	aligned_string "tag"
+WidgetPropStr_TagIndex:	.asciz "index"
 	.byte 0x5e, 0xc7, 0xea, 0x00, 0x58, 0xc7
 	.byte 0xea, 0x00, 0x56, 0xc7, 0xea, 0x00
-LABEL_EAC756:
+WidgetPropSentinel_ListData:
 	.byte 0x00, 0xff
-LABEL_EAC758:	aligned_string "data"
-LABEL_EAC75E:	.byte 0x66, 0x75
+WidgetPropStr_ListData:	aligned_string "data"
+WidgetPropStr_ListFunc:	.byte 0x66, 0x75
 	.byte 0x6e, 0x63, 0x00, 0xff, 0xa8, 0xc7, 0xea, 0x00
-LABEL_EAC768:
-	.long LABEL_EAC79E
-	.long LABEL_EAC798
-	.long LABEL_EAC790
-	.long LABEL_EAC786
-	.long LABEL_EAC782
-	.long LABEL_EAC780
-LABEL_EAC780:	aligned_string ""
-LABEL_EAC782:
+WidgetPropTab_TabColumn:
+	.long WidgetPropStr_TabFontColor
+	.long WidgetPropStr_TabAlign
+	.long WidgetPropStr_TabEditSw
+	.long WidgetPropStr_TabSelected
+	.long WidgetPropStr_TabTag
+	.long WidgetPropStr_TabSentinel
+WidgetPropStr_TabSentinel:	aligned_string ""
+WidgetPropStr_TabTag:
 	.byte 0x74, 0x61, 0x67, 0x00
-LABEL_EAC786:	aligned_string "selected"
-LABEL_EAC790:	aligned_string "editsw"
-LABEL_EAC798:	aligned_string "align"
-LABEL_EAC79E:	aligned_string "fontcolor"
-LABEL_EAC7A8:	aligned_string "font"
+WidgetPropStr_TabSelected:	aligned_string "selected"
+WidgetPropStr_TabEditSw:	aligned_string "editsw"
+WidgetPropStr_TabAlign:	aligned_string "align"
+WidgetPropStr_TabFontColor:	aligned_string "fontcolor"
+WidgetPropStr_TabFont:	aligned_string "font"
 	.byte 0xb8, 0xc7
 	.byte 0xea, 0x00, 0xb6, 0xc7, 0xea, 0x00
-LABEL_EAC7B6:
+WidgetPropSentinel_TabStr:
 	.byte 0x00, 0xff
-LABEL_EAC7B8:	.byte 0x73, 0x74, 0x72, 0x00, 0xc6, 0xc7, 0xea, 0x00
-	.long LABEL_EAC7C4
-LABEL_EAC7C4:
+WidgetPropStr_TabStr:	.byte 0x73, 0x74, 0x72, 0x00, 0xc6, 0xc7, 0xea, 0x00
+	.long WidgetPropSentinel_TabFunc
+WidgetPropSentinel_TabFunc:
 	.byte 0x00, 0xff
-LABEL_EAC7C6:
+WidgetPropStr_TabFunc:
 	.byte 0x66, 0x75
 	.byte 0x6e, 0x63, 0x00, 0xff, 0x04, 0xc8, 0xea, 0x00
-LABEL_EAC7D0:
-	.long LABEL_EAC7FA
-	.long LABEL_EAC7F4
-	.long LABEL_EAC7F0
-	.long LABEL_EAC7E6
-	.long LABEL_EAC7E4
-LABEL_EAC7E4:	aligned_string ""
-LABEL_EAC7E6:	aligned_string "selected"
-LABEL_EAC7F0:
+WidgetPropTab_GridCell:
+	.long WidgetPropStr_GridFontColor
+	.long WidgetPropStr_GridAlign
+	.long WidgetPropStr_GridRow
+	.long WidgetPropStr_GridSelected
+	.long WidgetPropStr_GridSentinel
+WidgetPropStr_GridSentinel:	aligned_string ""
+WidgetPropStr_GridSelected:	aligned_string "selected"
+WidgetPropStr_GridRow:
 	.byte 0x72, 0x6f, 0x77, 0x00
-LABEL_EAC7F4:	aligned_string "align"
-LABEL_EAC7FA:	aligned_string "fontcolor"
-LABEL_EAC804:	aligned_string "font"
+WidgetPropStr_GridAlign:	aligned_string "align"
+WidgetPropStr_GridFontColor:	aligned_string "fontcolor"
+WidgetPropStr_GridFont:	aligned_string "font"
 	.byte 0x80, 0xc8, 0xea, 0x00, 0x76, 0xc8
 	.byte 0xea, 0x00, 0x70, 0xc8, 0xea, 0x00, 0x6c, 0xc8
 	.byte 0xea, 0x00, 0x68, 0xc8, 0xea, 0x00, 0x5e, 0xc8
@@ -24538,125 +24538,125 @@ LABEL_EAC804:	aligned_string "font"
 	.byte 0xea, 0x00, 0x48, 0xc8, 0xea, 0x00, 0x42, 0xc8
 	.byte 0xea, 0x00, 0x3c, 0xc8, 0xea, 0x00, 0x3a, 0xc8
 	.byte 0xea, 0x00
-LABEL_EAC83A:
+WidgetPropSentinel_GridMeta:
 	.byte 0x00, 0xff
-LABEL_EAC83C:	aligned_string "crow"
-LABEL_EAC842:	aligned_string "prow"
-LABEL_EAC848:	aligned_string "pcol"
-LABEL_EAC84E:	aligned_string "selcol"
-LABEL_EAC856:	aligned_string "selrow"
-LABEL_EAC85E:	aligned_string "vertline"
+WidgetPropStr_CRow:	aligned_string "crow"
+WidgetPropStr_PRow:	aligned_string "prow"
+WidgetPropStr_PCol:	aligned_string "pcol"
+WidgetPropStr_SelCol:	aligned_string "selcol"
+WidgetPropStr_SelRow:	aligned_string "selrow"
+WidgetPropStr_VertLine:	aligned_string "vertline"
 	.byte 0x63, 0x6f, 0x6c, 0x00
-LABEL_EAC86C:
+WidgetPropStr_GridRowStr:
 	.byte 0x72, 0x6f, 0x77, 0x00
-LABEL_EAC870:	aligned_string "align"
-LABEL_EAC876:	jr	z, 0x6f
+WidgetPropStr_GridColAlign:	aligned_string "align"
+WidgetPropStr_GridColFont:	jr	z, 0x6f
 	aligned_string "ntcolor"
 	aligned_string "font"
 	.byte 0x9a, 0xc8
 	.byte 0xea, 0x00, 0x94, 0xc8, 0xea, 0x00, 0x92, 0xc8
 	.byte 0xea, 0x00, 0x00, 0xff
-LABEL_EAC892:	aligned_string "dial"
+WidgetPropStr_GridDial:	aligned_string "dial"
 	aligned_string "list"
 
 
-LABEL_EAC8A0:
-	.long LABEL_EAC8C2
-	.long LABEL_EAC8B8
-	.long LABEL_EAC8B2
-	.long LABEL_EAC8B0
-LABEL_EAC8B0:	aligned_string ""
-LABEL_EAC8B2:	aligned_string "func"
-LABEL_EAC8B8:	aligned_string "fixedrow"
-LABEL_EAC8C2:	aligned_string "fixedcol"
-	.long LABEL_EAC8D6
-	.long LABEL_EAC8D4
-LABEL_EAC8D4:
+WidgetPropTab_GridCtrl:
+	.long WidgetPropStr_FixedCol
+	.long WidgetPropStr_FixedRow
+	.long WidgetPropStr_GcFunc
+	.long WidgetPropStr_GcSentinel
+WidgetPropStr_GcSentinel:	aligned_string ""
+WidgetPropStr_GcFunc:	aligned_string "func"
+WidgetPropStr_FixedRow:	aligned_string "fixedrow"
+WidgetPropStr_FixedCol:	aligned_string "fixedcol"
+	.long WidgetPropStr_PageSub
+	.long WidgetPropSentinel_PageSub
+WidgetPropSentinel_PageSub:
 	.byte 0x00, 0xff
-LABEL_EAC8D6:
+WidgetPropStr_PageSub:
 	.byte 0x70, 0x61
 	.byte 0x67, 0x65, 0x00, 0xff, 0x06, 0xc9, 0xea, 0x00
-LABEL_EAC8E0:
-	.long LABEL_EAC900
-	.long LABEL_EAC8FA
-	.long LABEL_EAC8F2
-	.long LABEL_EAC8F0
-LABEL_EAC8F0:	aligned_string ""
-LABEL_EAC8F2:	aligned_string "recplay"
-LABEL_EAC8FA:	aligned_string "part"
-LABEL_EAC900:	aligned_string "onoff"
-LABEL_EAC906:	.byte 0x74, 0x72
+WidgetPropTab_SeqTrack:
+	.long WidgetPropStr_SeqOnOff
+	.long WidgetPropStr_SeqPart
+	.long WidgetPropStr_RecPlay
+	.long WidgetPropStr_SeqSentinel
+WidgetPropStr_SeqSentinel:	aligned_string ""
+WidgetPropStr_RecPlay:	aligned_string "recplay"
+WidgetPropStr_SeqPart:	aligned_string "part"
+WidgetPropStr_SeqOnOff:	aligned_string "onoff"
+WidgetPropStr_SeqTrack:	.byte 0x74, 0x72
 	.byte 0x61, 0x63, 0x6b, 0x00, 0x10, 0xc9, 0xea, 0x00
 	.byte 0x00, 0xff, 0x16, 0xc9, 0xea, 0x00
-LABEL_EAC916:
+WidgetPropSentinel_Addr:
 	.byte 0x00, 0xff
-	.long LABEL_EAC91C
-LABEL_EAC91C:
+	.long WidgetPropSentinel_Addr2
+WidgetPropSentinel_Addr2:
 	.byte 0x00, 0xff, 0x22, 0xc9
 	.byte 0xea, 0x00
-LABEL_EAC922:
+WidgetPropSentinel_Addr3:
 	.byte 0x00, 0xff, 0x2e, 0xc9, 0xea, 0x00
-	.long LABEL_EAC92C
-LABEL_EAC92C:
+	.long WidgetPropSentinel_Addr4
+WidgetPropSentinel_Addr4:
 	.byte 0x00, 0xff
-LABEL_EAC92E:
+WidgetPropStr_Adr:
 	.byte 0x61, 0x64
 	.byte 0x72, 0x00, 0x3c, 0xc9, 0xea, 0x00, 0x3a, 0xc9
 	.byte 0xea, 0x00
-LABEL_EAC93A:
+WidgetPropSentinel_Time:
 	.byte 0x00, 0xff
-LABEL_EAC93C:	aligned_string "time"
+WidgetPropStr_Time:	aligned_string "time"
 	.byte 0x46, 0xc9, 0xea, 0x00
-LABEL_EAC946:
+WidgetPropSentinel_Time2:
 	.byte 0x00, 0xff
-	.long LABEL_EAC94C
-LABEL_EAC94C:
+	.long WidgetPropSentinel_Time3
+WidgetPropSentinel_Time3:
 	.byte 0x00, 0xff, 0x52, 0xc9
 	.byte 0xea, 0x00
-LABEL_EAC952:
+WidgetPropSentinel_Time4:
 	.byte 0x00, 0xff, 0x58, 0xc9, 0xea, 0x00
 	.byte 0x00, 0xff, 0x5e, 0xc9, 0xea, 0x00
-LABEL_EAC95E:
+WidgetPropSentinel_GenFunc:
 	.byte 0x00, 0xff
-	.long LABEL_EAC96A
-	.long LABEL_EAC968
-LABEL_EAC968:	aligned_string ""
-LABEL_EAC96A:	aligned_string "func"
-LABEL_EAC970:
-	.long LABEL_EAC9A0
-	.long LABEL_EAC996
-	.long LABEL_EAC98C
-	.long LABEL_EAC986
-	.long LABEL_EAC984
-LABEL_EAC984:	aligned_string ""
-LABEL_EAC986:	.asciz "lines"
-LABEL_EAC98C:	aligned_string "alignment"
-LABEL_EAC996:	aligned_string "fontcolor"
-LABEL_EAC9A0:	aligned_string "font"
+	.long WidgetPropStr_GenFunc
+	.long WidgetPropStr_GenSentinel
+WidgetPropStr_GenSentinel:	aligned_string ""
+WidgetPropStr_GenFunc:	aligned_string "func"
+WidgetPropTab_MlTextFont:
+	.long WidgetPropStr_MtfFont
+	.long WidgetPropStr_MtfFontColor
+	.long WidgetPropStr_MtfAlignment
+	.long WidgetPropStr_MtfLines
+	.long WidgetPropStr_MtfSentinel
+WidgetPropStr_MtfSentinel:	aligned_string ""
+WidgetPropStr_MtfLines:	.asciz "lines"
+WidgetPropStr_MtfAlignment:	aligned_string "alignment"
+WidgetPropStr_MtfFontColor:	aligned_string "fontcolor"
+WidgetPropStr_MtfFont:	aligned_string "font"
 	.byte 0xb0, 0xc9
 	.byte 0xea, 0x00, 0xae, 0xc9, 0xea, 0x00
-LABEL_EAC9AE:
+WidgetPropSentinel_FuncTerm:
 	.byte 0x00, 0xff
-LABEL_EAC9B0:	aligned_string "func"
+WidgetPropStr_FuncTerm:	aligned_string "func"
 	.byte 0xba, 0xc9
 	.byte 0xea, 0x00
-LABEL_EAC9BA:
+WidgetPropSentinel_FuncTerm2:
 	.byte 0x00, 0xff, 0xc0, 0xc9, 0xea, 0x00
-LABEL_EAC9C0:	.byte 0x00, 0xff, 0xcc, 0xc9, 0xea, 0x00, 0xca, 0xc9
+WidgetPropSentinel_FuncTerm3:	.byte 0x00, 0xff, 0xcc, 0xc9, 0xea, 0x00, 0xca, 0xc9
 	.byte 0xea, 0x00
-LABEL_EAC9CA:
+WidgetPropSentinel_FuncTerm4:
 	.byte 0x00, 0xff
-LABEL_EAC9CC:	aligned_string "func"
+WidgetPropStr_FuncTerm4:	aligned_string "func"
 	.byte 0xd6, 0xc9, 0xea, 0x00
-LABEL_EAC9D6:
+WidgetPropSentinel_FuncTerm5:
 	.byte 0x00, 0xff
-	.long LABEL_EAC9DC
-LABEL_EAC9DC:
+	.long WidgetPropSentinel_FuncTerm6
+WidgetPropSentinel_FuncTerm6:
 	.byte 0x00, 0xff, 0xe8, 0xc9
 	.byte 0xea, 0x00, 0xe6, 0xc9, 0xea, 0x00
-LABEL_EAC9E6:
+WidgetPropSentinel_FileProp:
 	.byte 0x00, 0xff
-LABEL_EAC9E8:	aligned_string "file"
+WidgetPropStr_FileProp:	aligned_string "file"
 	.byte 0x85, 0x3d
 	.byte 0xfa, 0x00, 0xff, 0xff, 0xff, 0xff, 0x02, 0x00
 	.byte 0x00, 0x00, 0x8a, 0xda, 0xea, 0x00, 0x88, 0xda
@@ -25852,11 +25852,11 @@ LABEL_EADB0E:
 	.byte 0xfa, 0x00, 0x7b, 0x9c, 0xfa, 0x00, 0x09, 0xc5
 	.byte 0xfa, 0x00, 0x00, 0x00, 0x00, 0x00
 LABEL_EAFFF2:
-	.long LABEL_EB192A
-	.long LABEL_EB191A
-	.long LABEL_EB190A
-	.long LABEL_EB18FA
-	.long LABEL_EB18EA
+	.long Str_InitializeRoot
+	.long Str_InitializeMurai
+	.long Str_InitializeToshi
+	.long Str_InitializeEast
+	.long Str_InitializeSuna
 	.byte 0xda, 0x18
 LABEL_EB0008:
 	.byte 0xeb, 0x00, 0xca, 0x18, 0xeb, 0x00, 0xba, 0x18
@@ -26098,738 +26098,738 @@ LABEL_EB06C8:	aligned_string "SetWallPaper"
 LABEL_EB06D6:	aligned_string "InitPaletteRGB"
 LABEL_EB06E6:	aligned_string "SetPaletteRGB"
 LABEL_EB06F4:	aligned_string "DrawBitmapFast"
-LABEL_EB0704:	aligned_string "DrawBitmapSPFast"
-LABEL_EB0716:	aligned_string "GetNamingWindowID"
-LABEL_EB0728:	aligned_string "IvScreenProc"
-LABEL_EB0736:	aligned_string "CaptureLcd"
-LABEL_EB0742:	aligned_string "VwUserBitmapProc"
-LABEL_EB0754:	aligned_string "DrawBitmapSP"
-LABEL_EB0762:	aligned_string "GetPartSelect"
-LABEL_EB0770:	aligned_string "TrChordBoxProc"
-LABEL_EB0780:	aligned_string "TrTransposeBoxProc"
-LABEL_EB0794:	aligned_string "AcLanguageTextProc"
-LABEL_EB07A8:	aligned_string "PsTextBoxProc"
-LABEL_EB07B6:	aligned_string "IvShowHideProc"
-LABEL_EB07C6:	aligned_string "SetNotDrawFlag"
-LABEL_EB07D6:	aligned_string "ConvertStringsEx"
-LABEL_EB07E8:	aligned_string "SetVariFlag"
-LABEL_EB07F4:	aligned_string "IvIntEasySetProc"
-LABEL_EB0806:	aligned_string "IvIntVariProc"
-LABEL_EB0814:	aligned_string "IvIntCompleteProc"
-LABEL_EB0826:	aligned_string "IvIntErrorProc"
-LABEL_EB0836:	aligned_string "IvIntReminderProc"
-LABEL_EB0848:	aligned_string "CheckNotDrawFlag"
-LABEL_EB085A:	aligned_string "SetInterruptTime"
-LABEL_EB086C:	aligned_string "IvInterruptProc"
-LABEL_EB087C:	aligned_string "IntTimeIDProc"
-LABEL_EB088A:	aligned_string "DbMemoryDumpProc"
-LABEL_EB089C:	aligned_string "IvExitWindowProc"
-LABEL_EB08AE:	aligned_string "IvTrackSwitchProc"
-LABEL_EB08C0:	aligned_string "GetDirmdFlag"
-LABEL_EB08CE:	aligned_string "DirmdEmulator"
-LABEL_EB08DC:	aligned_string "IvDirmdScreenProc"
-LABEL_EB08EE:	aligned_string "AcTrackSwitchProc"
-LABEL_EB0900:	aligned_string "PsTrackSwitchProc"
-LABEL_EB0912:	aligned_string "DbDebugMenuProc"
-LABEL_EB0922:	aligned_string "AcGridBoxProc"
-LABEL_EB0930:	aligned_string "AcListBoxProc"
-LABEL_EB093E:	aligned_string "PsGridBoxProc"
-LABEL_EB094C:	aligned_string "PsListBoxProc"
-LABEL_EB095A:	aligned_string "GetDialFocus"
-LABEL_EB0968:	aligned_string "SetDialFocus"
-LABEL_EB0976:	aligned_string "IvCatchEventProc"
-LABEL_EB0988:	aligned_string "AcStrRadioBoxProc"
-LABEL_EB099A:	aligned_string "PsRadioBoxProc"
-LABEL_EB09AA:	aligned_string "AcRamBoxProc"
-LABEL_EB09B8:	aligned_string "AcIndexToggleProc"
-LABEL_EB09CA:	aligned_string "IvNamingProc"
-LABEL_EB09D8:	aligned_string "PsCursorBoxProc"
-LABEL_EB09E8:	aligned_string "AcNamingWindowProc"
-LABEL_EB09FC:	aligned_string "IvFixWinProc"
-LABEL_EB0A0A:	aligned_string "GetBoxCenter"
-LABEL_EB0A18:	aligned_string "DrawStringReverse"
-LABEL_EB0A2A:	aligned_string "IvExitScreenProc"
-LABEL_EB0A3C:	aligned_string "IvExitModeProc"
-LABEL_EB0A4C:	aligned_string "IvExitProc"
-LABEL_EB0A58:	aligned_string "GetFocusParam"
-LABEL_EB0A66:	aligned_string "GetFocusEvent"
-LABEL_EB0A74:	aligned_string "GetFocusObject"
-LABEL_EB0A84:	aligned_string "SetRootObject"
-LABEL_EB0A92:	aligned_string "SetAutoInc"
-LABEL_EB0A9E:	aligned_string "SetAutoIncDefault"
-LABEL_EB0AB0:	aligned_string "GetRootParam"
-LABEL_EB0ABE:	aligned_string "GetRootEvent"
-LABEL_EB0ACC:	aligned_string "GetRootObject"
-LABEL_EB0ADA:	aligned_string "KillApTimer"
-LABEL_EB0AE6:	aligned_string "ResetApTimer"
-LABEL_EB0AF4:	aligned_string "SetApTimer"
-LABEL_EB0B00:	aligned_string "ApTimer"
-LABEL_EB0B08:	aligned_string "InitializeTimer"
-LABEL_EB0B18:	aligned_string "DbMemoProc"
-LABEL_EB0B24:	aligned_string "PsWideToggleProc"
-LABEL_EB0B36:	aligned_string "AcFuncToggleProc"
-LABEL_EB0B48:	aligned_string "MainBitGet"
-LABEL_EB0B54:	aligned_string "MainBitPut"
-LABEL_EB0B60:	aligned_string "AcBitEditBoxProc"
-LABEL_EB0B72:	aligned_string "VwEditSwBoxProc"
-LABEL_EB0B82:	aligned_string "VwMenuBoxProc"
-LABEL_EB0B90:	aligned_string "AcMixerVolProc"
-LABEL_EB0BA0:	aligned_string "AcPmemNameProc"
-LABEL_EB0BB0:	aligned_string "AcRhythmNameProc"
-LABEL_EB0BC2:	aligned_string "AcSoundNameProc"
-LABEL_EB0BD2:	aligned_string "GetWallPaletteRGB"
-LABEL_EB0BE4:	aligned_string "ChangeWallPalette"
-LABEL_EB0BF6:	aligned_string "SetDialDown"
-LABEL_EB0C02:	aligned_string "SetDialUp"
-LABEL_EB0C0C:	aligned_string "SetDialEnable"
-LABEL_EB0C1A:	aligned_string "IvMainEditSwProc"
-LABEL_EB0C2C:	aligned_string "IvPageControlProc"
-LABEL_EB0C3E:	aligned_string "PsInvisibleBoxProc"
-LABEL_EB0C52:	aligned_string "PsToggleBoxProc"
-LABEL_EB0C62:	aligned_string "AcWindowPageProc"
-LABEL_EB0C74:	aligned_string "PsPageBoxProc"
-LABEL_EB0C82:	aligned_string "AcFuncEditSwProc"
-LABEL_EB0C94:	aligned_string "AcIndexEditSwProc"
-LABEL_EB0CA6:	aligned_string "PsWideESBoxProc"
-LABEL_EB0CB6:	aligned_string "PsEditSwBoxProc"
-LABEL_EB0CC6:	aligned_string "AcTitleMenuProc"
-LABEL_EB0CD6:	aligned_string "PsMenuBoxProc"
-LABEL_EB0CE4:	aligned_string "AcRamEditBoxProc"
-LABEL_EB0CF6:	aligned_string "AcLswEditBoxProc"
-LABEL_EB0D08:	aligned_string "AcNumEditBoxProc"
-LABEL_EB0D1A:	aligned_string "AcOnOffBoxProc"
-LABEL_EB0D2A:	aligned_string "PsTblEditBoxProc"
-LABEL_EB0D3C:	aligned_string "PsNumEditBoxProc"
-LABEL_EB0D4E:	aligned_string "PsEditBoxProc"
-LABEL_EB0D5C:	aligned_string "AcTempoBoxProc"
-LABEL_EB0D6C:	aligned_string "AcLswBoxProc"
-LABEL_EB0D7A:	aligned_string "PsParaBoxProc"
-LABEL_EB0D88:	aligned_string "VwBoxProc"
-LABEL_EB0D92:	aligned_string "TextBoxProc"
-LABEL_EB0D9E:	aligned_string "LineProc"
-LABEL_EB0DA8:	aligned_string "IconProc"
-LABEL_EB0DB2:	aligned_string "BitmapProc"
-LABEL_EB0DBE:	aligned_string "LabelProc"
-LABEL_EB0DC8:	aligned_string "StringBoxProc"
-LABEL_EB0DD6:	aligned_string "WindowProc"
-LABEL_EB0DE2:	aligned_string "GroupBoxProc"
-LABEL_EB0DF0:	aligned_string "TitleEditProc"
-LABEL_EB0DFE:	aligned_string "ModeEditProc"
-LABEL_EB0E0C:	aligned_string "MainRamGet"
-LABEL_EB0E18:	aligned_string "MainRamAdd"
-LABEL_EB0E24:	aligned_string "MainRamPut"
-LABEL_EB0E30:	aligned_string "ResetLswFilter"
-LABEL_EB0E40:	aligned_string "SetLswFilter"
-LABEL_EB0E4E:	aligned_string "MainLswPartGet"
-LABEL_EB0E5E:	aligned_string "MainLswGet"
-LABEL_EB0E6A:	aligned_string "MainLswPartAdd"
-LABEL_EB0E7A:	aligned_string "MainLswAdd"
-LABEL_EB0E86:	aligned_string "MainLswPartPut"
-LABEL_EB0E96:	aligned_string "MainLswPut"
-LABEL_EB0EA2:	aligned_string "DrawEditSw"
-LABEL_EB0EAE:	aligned_string "EditSwProc"
-LABEL_EB0EBA:	aligned_string "DrawTitleBar"
-LABEL_EB0EC8:	aligned_string "TtlScreenProc"
-LABEL_EB0ED6:	aligned_string "DrawDesignFrame"
-LABEL_EB0EE6:	aligned_string "GetClientFrame2"
-LABEL_EB0EF6:	aligned_string "GetClientFrame"
-LABEL_EB0F06:	aligned_string "FrameProc"
-LABEL_EB0F10:	aligned_string "GetEditSwPoint"
-LABEL_EB0F20:	aligned_string "ScreenProc"
-LABEL_EB0F2C:	aligned_string "BoxRightCheck"
-LABEL_EB0F3A:	aligned_string "BoxLeftCheck"
-LABEL_EB0F48:	aligned_string "GetFrameColor"
-LABEL_EB0F56:	aligned_string "DrawDesignBox"
-LABEL_EB0F64:	aligned_string "GetClientBox2"
-LABEL_EB0F72:	aligned_string "GetClientBox"
-LABEL_EB0F80:	aligned_string "BoxProc"
-LABEL_EB0F88:	aligned_string "SetBox"
-LABEL_EB0F90:	aligned_string "GetBox"
-LABEL_EB0F98:	aligned_string "GetViewInstance"
-LABEL_EB0FA8:	aligned_string "GetLinkView"
-LABEL_EB0FB4:	aligned_string "SetSuperView"
-LABEL_EB0FC2:	aligned_string "Unlink"
-LABEL_EB0FCA:	aligned_string "Link"
-LABEL_EB0FD0:	aligned_string "SubView"
-LABEL_EB0FD8:	aligned_string "SuperView"
-LABEL_EB0FE2:	aligned_string "PrevView"
-LABEL_EB0FEC:	aligned_string "NextView"
-LABEL_EB0FF6:	aligned_string "GetMovable"
-LABEL_EB1002:	aligned_string "SetMovable"
-LABEL_EB100E:	aligned_string "GetVisible"
-LABEL_EB101A:	aligned_string "SetVisible"
-LABEL_EB1026:	aligned_string "GetChange"
-LABEL_EB1030:	aligned_string "SetChange"
-LABEL_EB103A:	aligned_string "GetConst"
-LABEL_EB1044:	aligned_string "SetConst"
-LABEL_EB104E:	aligned_string "ViewableProc"
-LABEL_EB105C:	aligned_string "GetTitleOld"
-LABEL_EB1068:	aligned_string "GetTitleNow"
-LABEL_EB1074:	aligned_string "UnregisteredTitle"
-LABEL_EB1086:	aligned_string "RegisterTitle"
-LABEL_EB1094:	aligned_string "TitleProc"
-LABEL_EB109E:	aligned_string "GetModeOld"
-LABEL_EB10AA:	aligned_string "GetModeNow"
-LABEL_EB10B6:	aligned_string "UnregisteredMode"
-LABEL_EB10C8:	aligned_string "RegisterMode"
-LABEL_EB10D6:	aligned_string "ModeProc"
-LABEL_EB10E0:	aligned_string "MainFuncCall"
-LABEL_EB10EE:	aligned_string "ApFuncCall"
-LABEL_EB10FA:	aligned_string "MainFunctionProc"
-LABEL_EB110C:	aligned_string "ApFunctionProc"
-LABEL_EB111C:	aligned_string "FunctionProc"
-LABEL_EB112A:	aligned_string "TrackIDProc"
-LABEL_EB1136:	aligned_string "PartIDProc"
-LABEL_EB1142:	aligned_string "UserIDProc"
-LABEL_EB114E:	aligned_string "MainFuncIDProc"
-LABEL_EB115E:	aligned_string "ApFuncIDProc"
-LABEL_EB116C:	aligned_string "BitmapIDProc"
-LABEL_EB117A:	aligned_string "FrameIDProc"
-LABEL_EB1186:	aligned_string "LineModeIDProc"
-LABEL_EB1196:	aligned_string "EditSwStyleIDProc"
-LABEL_EB11A8:	aligned_string "EditSwIDProc"
-LABEL_EB11B6:	aligned_string "AlignmentIDProc"
-LABEL_EB11C6:	aligned_string "FontIDProc"
-LABEL_EB11D2:	aligned_string "IconIDProc"
-LABEL_EB11DE:	aligned_string "TitleIDProc"
-LABEL_EB11EA:	aligned_string "ModeIDProc"
-LABEL_EB11F6:	aligned_string "BorderIDProc"
-LABEL_EB1204:	aligned_string "ColorIDProc"
-LABEL_EB1210:	aligned_string "ViewFlagProc"
-LABEL_EB121E:	aligned_string "ViewIDProc"
-LABEL_EB122A:	aligned_string "ConstFlagProc"
-LABEL_EB1238:	aligned_string "NameProc"
-LABEL_EB1242:	aligned_string "StringProc"
-LABEL_EB124E:	aligned_string "PointYProc"
-LABEL_EB125A:	aligned_string "PointXProc"
-LABEL_EB1266:	aligned_string "POINTWProc"
-LABEL_EB1272:	aligned_string "RectY2Proc"
-LABEL_EB127E:	aligned_string "RectX2Proc"
-LABEL_EB128A:	aligned_string "RectY1Proc"
-LABEL_EB1296:	aligned_string "RectX1Proc"
-LABEL_EB12A2:	aligned_string "RECTWProc"
-LABEL_EB12AC:	aligned_string "EventIDProc"
-LABEL_EB12B8:	aligned_string "WindowIDProc"
-LABEL_EB12C6:	aligned_string "ScreenIDProc"
-LABEL_EB12D4:	aligned_string "ClassIDProc"
-LABEL_EB12E0:	aligned_string "pStringProc"
-LABEL_EB12EC:	aligned_string "pPropProc"
-LABEL_EB12F6:	aligned_string "pProcProc"
-LABEL_EB1300:	aligned_string "pFuncProc"
-LABEL_EB130A:	aligned_string "ObjectIDProc"
-LABEL_EB1318:	aligned_string "pUlongProc"
-LABEL_EB1324:	aligned_string "pSlongProc"
-LABEL_EB1330:	aligned_string "pUcharProc"
-LABEL_EB133C:	aligned_string "pScharProc"
-LABEL_EB1348:	aligned_string "pUwordProc"
-LABEL_EB1354:	aligned_string "pSwordProc"
-LABEL_EB1360:	aligned_string "pBoolProc"
-LABEL_EB136A:	aligned_string "boolProc"
-LABEL_EB1374:	aligned_string "ulongProc"
-LABEL_EB137E:	aligned_string "slongProc"
-LABEL_EB1388:	aligned_string "scharProc"
-LABEL_EB1392:	aligned_string "ucharProc"
-LABEL_EB139C:	aligned_string "uwordProc"
-LABEL_EB13A6:	aligned_string "swordProc"
-LABEL_EB13B0:	aligned_string "SupportClassProc"
-LABEL_EB13C2:	aligned_string "ClassProc"
-LABEL_EB13CC:	aligned_string "WordwrapStrings"
-LABEL_EB13DC:	aligned_string "CalcTotalWidth"
-LABEL_EB13EC:	aligned_string "ConvertStrings"
-LABEL_EB13FC:	aligned_string "GetCenteredDelta"
-LABEL_EB140E:	aligned_string "GetCharDescent"
-LABEL_EB141E:	aligned_string "GetCharHeight"
-LABEL_EB142C:	aligned_string "GetFrameSPSize"
-LABEL_EB143C:	aligned_string "ResNameProc"
-LABEL_EB1448:	aligned_string "ResStringProc"
-LABEL_EB1456:	aligned_string "ResMethodProc"
-LABEL_EB1464:	aligned_string "ResEventProc"
-LABEL_EB1472:	aligned_string "ResFontProc"
-LABEL_EB147E:	aligned_string "ResIconProc"
-LABEL_EB148A:	aligned_string "ResFrameProc"
-LABEL_EB1498:	aligned_string "ResBitmapProc"
-LABEL_EB14A6:	aligned_string "ResourceProc"
-LABEL_EB14B4:	aligned_string "ApPostEvent"
-LABEL_EB14C0:	aligned_string "MainGetEvent"
-LABEL_EB14CE:	aligned_string "MainPostEvent"
-LABEL_EB14DC:	aligned_string "MainSendEvent"
-LABEL_EB14EA:	aligned_string "MainDispatchEvent"
-LABEL_EB14FC:	aligned_string "SetCurrentTarget"
-LABEL_EB150E:	aligned_string "GetCurrentTarget"
-LABEL_EB1520:	aligned_string "GetEvent"
-LABEL_EB152A:	aligned_string "PostEvent"
-LABEL_EB1534:	aligned_string "SendEvent"
-LABEL_EB153E:	aligned_string "DispatchEvent"
-LABEL_EB154C:	aligned_string "InitializeEventQueue"
-LABEL_EB1562:	aligned_string "CheckViewObject"
-LABEL_EB1572:	aligned_string "CountObject"
-LABEL_EB157E:	aligned_string "UnRegisterObject"
-LABEL_EB1590:	aligned_string "RegisterObject"
-LABEL_EB15A0:	aligned_string "RegisterObjectTable"
-LABEL_EB15B4:	aligned_string "InitializeObjectTable"
-LABEL_EB15CA:	aligned_string "InheritedProc"
-LABEL_EB15D8:	aligned_string "ObjectProc"
-LABEL_EB15E4:	aligned_string "DrawStringAlignment"
-LABEL_EB15F8:	aligned_string "DrawStringRightJustify"
-LABEL_EB1610:	aligned_string "DrawStringLeftJustify"
-LABEL_EB1626:	aligned_string "DrawStringCentered"
-LABEL_EB163A:	aligned_string "DrawString"
-LABEL_EB1646:	aligned_string "DrawFrameSP"
-LABEL_EB1652:	aligned_string "DrawIcons"
-LABEL_EB165C:	aligned_string "DrawBitmap"
-LABEL_EB1668:	aligned_string "DrawWall"
-LABEL_EB1672:	aligned_string "MovePixels"
-LABEL_EB167E:	aligned_string "DrawFrameEx"
-LABEL_EB168A:	aligned_string "DrawFrame"
-LABEL_EB1694:	aligned_string "DrawBox"
-LABEL_EB169C:	aligned_string "DrawLineEx"
-LABEL_EB16A8:	aligned_string "DrawLine"
-LABEL_EB16B2:	aligned_string "ModifyPixelEx"
-LABEL_EB16C0:	aligned_string "ModifyPixel"
-LABEL_EB16CC:	aligned_string "ReadPixel"
-LABEL_EB16D6:	aligned_string "SetChangeRect"
-LABEL_EB16E4:	aligned_string "SetNeedUpdate"
-LABEL_EB16F2:	aligned_string "UpdateScreen"
-LABEL_EB1700:	aligned_string "InitializeGraphics"
-LABEL_EB1714:	aligned_string "InitializeUser31"
-LABEL_EB1726:	aligned_string "InitializeUser30"
-LABEL_EB1738:	aligned_string "InitializeUser29"
-LABEL_EB174A:	aligned_string "InitializeUser28"
-LABEL_EB175C:	aligned_string "InitializeUser27"
-LABEL_EB176E:	aligned_string "InitializeUser26"
-LABEL_EB1780:	aligned_string "InitializeUser25"
-LABEL_EB1792:	aligned_string "InitializeUser24"
-LABEL_EB17A4:	aligned_string "InitializeUser23"
-LABEL_EB17B6:	aligned_string "InitializeUser22"
-LABEL_EB17C8:	aligned_string "InitializeUser21"
-LABEL_EB17DA:	aligned_string "InitializeUser20"
-LABEL_EB17EC:	aligned_string "InitializeUser19"
-LABEL_EB17FE:	aligned_string "InitializeUser18"
-LABEL_EB1810:	aligned_string "InitializeUser17"
-LABEL_EB1822:	aligned_string "InitializeUser16"
-LABEL_EB1834:	aligned_string "InitializeUser15"
-LABEL_EB1846:	aligned_string "InitializeUser14"
-LABEL_EB1858:	aligned_string "InitializeUser13"
-LABEL_EB186A:	aligned_string "InitializeUser12"
-LABEL_EB187C:	aligned_string "InitializeNaka"
-LABEL_EB188C:	aligned_string "InitializeKSS"
-LABEL_EB189A:	aligned_string "InitializeHama"
-LABEL_EB18AA:	aligned_string "InitializeKubo"
-LABEL_EB18BA:	aligned_string "InitializeYoko"
-LABEL_EB18CA:	aligned_string "InitializeScoop"
-LABEL_EB18DA:	aligned_string "InitializeCheap"
-LABEL_EB18EA:	aligned_string "InitializeSuna"
-LABEL_EB18FA:	aligned_string "InitializeEast"
-LABEL_EB190A:	aligned_string "InitializeToshi"
-LABEL_EB191A:	aligned_string "InitializeMurai"
-LABEL_EB192A:	aligned_string "InitializeRoot"
+Str_DrawBitmapSPFast:	aligned_string "DrawBitmapSPFast"
+Str_GetNamingWindowID:	aligned_string "GetNamingWindowID"
+Str_IvScreenProc:	aligned_string "IvScreenProc"
+Str_CaptureLcd:	aligned_string "CaptureLcd"
+Str_VwUserBitmapProc:	aligned_string "VwUserBitmapProc"
+Str_DrawBitmapSP:	aligned_string "DrawBitmapSP"
+Str_GetPartSelect:	aligned_string "GetPartSelect"
+Str_TrChordBoxProc:	aligned_string "TrChordBoxProc"
+Str_TrTransposeBoxProc:	aligned_string "TrTransposeBoxProc"
+Str_AcLanguageTextProc:	aligned_string "AcLanguageTextProc"
+Str_PsTextBoxProc:	aligned_string "PsTextBoxProc"
+Str_IvShowHideProc:	aligned_string "IvShowHideProc"
+Str_SetNotDrawFlag:	aligned_string "SetNotDrawFlag"
+Str_ConvertStringsEx:	aligned_string "ConvertStringsEx"
+Str_SetVariFlag:	aligned_string "SetVariFlag"
+Str_IvIntEasySetProc:	aligned_string "IvIntEasySetProc"
+Str_IvIntVariProc:	aligned_string "IvIntVariProc"
+Str_IvIntCompleteProc:	aligned_string "IvIntCompleteProc"
+Str_IvIntErrorProc:	aligned_string "IvIntErrorProc"
+Str_IvIntReminderProc:	aligned_string "IvIntReminderProc"
+Str_CheckNotDrawFlag:	aligned_string "CheckNotDrawFlag"
+Str_SetInterruptTime:	aligned_string "SetInterruptTime"
+Str_IvInterruptProc:	aligned_string "IvInterruptProc"
+Str_IntTimeIDProc:	aligned_string "IntTimeIDProc"
+Str_DbMemoryDumpProc:	aligned_string "DbMemoryDumpProc"
+Str_IvExitWindowProc:	aligned_string "IvExitWindowProc"
+Str_IvTrackSwitchProc:	aligned_string "IvTrackSwitchProc"
+Str_GetDirmdFlag:	aligned_string "GetDirmdFlag"
+Str_DirmdEmulator:	aligned_string "DirmdEmulator"
+Str_IvDirmdScreenProc:	aligned_string "IvDirmdScreenProc"
+Str_AcTrackSwitchProc:	aligned_string "AcTrackSwitchProc"
+Str_PsTrackSwitchProc:	aligned_string "PsTrackSwitchProc"
+Str_DbDebugMenuProc:	aligned_string "DbDebugMenuProc"
+Str_AcGridBoxProc:	aligned_string "AcGridBoxProc"
+Str_AcListBoxProc:	aligned_string "AcListBoxProc"
+Str_PsGridBoxProc:	aligned_string "PsGridBoxProc"
+Str_PsListBoxProc:	aligned_string "PsListBoxProc"
+Str_GetDialFocus:	aligned_string "GetDialFocus"
+Str_SetDialFocus:	aligned_string "SetDialFocus"
+Str_IvCatchEventProc:	aligned_string "IvCatchEventProc"
+Str_AcStrRadioBoxProc:	aligned_string "AcStrRadioBoxProc"
+Str_PsRadioBoxProc:	aligned_string "PsRadioBoxProc"
+Str_AcRamBoxProc:	aligned_string "AcRamBoxProc"
+Str_AcIndexToggleProc:	aligned_string "AcIndexToggleProc"
+Str_IvNamingProc:	aligned_string "IvNamingProc"
+Str_PsCursorBoxProc:	aligned_string "PsCursorBoxProc"
+Str_AcNamingWindowProc:	aligned_string "AcNamingWindowProc"
+Str_IvFixWinProc:	aligned_string "IvFixWinProc"
+Str_GetBoxCenter:	aligned_string "GetBoxCenter"
+Str_DrawStringReverse:	aligned_string "DrawStringReverse"
+Str_IvExitScreenProc:	aligned_string "IvExitScreenProc"
+Str_IvExitModeProc:	aligned_string "IvExitModeProc"
+Str_IvExitProc:	aligned_string "IvExitProc"
+Str_GetFocusParam:	aligned_string "GetFocusParam"
+Str_GetFocusEvent:	aligned_string "GetFocusEvent"
+Str_GetFocusObject:	aligned_string "GetFocusObject"
+Str_SetRootObject:	aligned_string "SetRootObject"
+Str_SetAutoInc:	aligned_string "SetAutoInc"
+Str_SetAutoIncDefault:	aligned_string "SetAutoIncDefault"
+Str_GetRootParam:	aligned_string "GetRootParam"
+Str_GetRootEvent:	aligned_string "GetRootEvent"
+Str_GetRootObject:	aligned_string "GetRootObject"
+Str_KillApTimer:	aligned_string "KillApTimer"
+Str_ResetApTimer:	aligned_string "ResetApTimer"
+Str_SetApTimer:	aligned_string "SetApTimer"
+Str_ApTimer:	aligned_string "ApTimer"
+Str_InitializeTimer:	aligned_string "InitializeTimer"
+Str_DbMemoProc:	aligned_string "DbMemoProc"
+Str_PsWideToggleProc:	aligned_string "PsWideToggleProc"
+Str_AcFuncToggleProc:	aligned_string "AcFuncToggleProc"
+Str_MainBitGet:	aligned_string "MainBitGet"
+Str_MainBitPut:	aligned_string "MainBitPut"
+Str_AcBitEditBoxProc:	aligned_string "AcBitEditBoxProc"
+Str_VwEditSwBoxProc:	aligned_string "VwEditSwBoxProc"
+Str_VwMenuBoxProc:	aligned_string "VwMenuBoxProc"
+Str_AcMixerVolProc:	aligned_string "AcMixerVolProc"
+Str_AcPmemNameProc:	aligned_string "AcPmemNameProc"
+Str_AcRhythmNameProc:	aligned_string "AcRhythmNameProc"
+Str_AcSoundNameProc:	aligned_string "AcSoundNameProc"
+Str_GetWallPaletteRGB:	aligned_string "GetWallPaletteRGB"
+Str_ChangeWallPalette:	aligned_string "ChangeWallPalette"
+Str_SetDialDown:	aligned_string "SetDialDown"
+Str_SetDialUp:	aligned_string "SetDialUp"
+Str_SetDialEnable:	aligned_string "SetDialEnable"
+Str_IvMainEditSwProc:	aligned_string "IvMainEditSwProc"
+Str_IvPageControlProc:	aligned_string "IvPageControlProc"
+Str_PsInvisibleBoxProc:	aligned_string "PsInvisibleBoxProc"
+Str_PsToggleBoxProc:	aligned_string "PsToggleBoxProc"
+Str_AcWindowPageProc:	aligned_string "AcWindowPageProc"
+Str_PsPageBoxProc:	aligned_string "PsPageBoxProc"
+Str_AcFuncEditSwProc:	aligned_string "AcFuncEditSwProc"
+Str_AcIndexEditSwProc:	aligned_string "AcIndexEditSwProc"
+Str_PsWideESBoxProc:	aligned_string "PsWideESBoxProc"
+Str_PsEditSwBoxProc:	aligned_string "PsEditSwBoxProc"
+Str_AcTitleMenuProc:	aligned_string "AcTitleMenuProc"
+Str_PsMenuBoxProc:	aligned_string "PsMenuBoxProc"
+Str_AcRamEditBoxProc:	aligned_string "AcRamEditBoxProc"
+Str_AcLswEditBoxProc:	aligned_string "AcLswEditBoxProc"
+Str_AcNumEditBoxProc:	aligned_string "AcNumEditBoxProc"
+Str_AcOnOffBoxProc:	aligned_string "AcOnOffBoxProc"
+Str_PsTblEditBoxProc:	aligned_string "PsTblEditBoxProc"
+Str_PsNumEditBoxProc:	aligned_string "PsNumEditBoxProc"
+Str_PsEditBoxProc:	aligned_string "PsEditBoxProc"
+Str_AcTempoBoxProc:	aligned_string "AcTempoBoxProc"
+Str_AcLswBoxProc:	aligned_string "AcLswBoxProc"
+Str_PsParaBoxProc:	aligned_string "PsParaBoxProc"
+Str_VwBoxProc:	aligned_string "VwBoxProc"
+Str_TextBoxProc:	aligned_string "TextBoxProc"
+Str_LineProc:	aligned_string "LineProc"
+Str_IconProc:	aligned_string "IconProc"
+Str_BitmapProc:	aligned_string "BitmapProc"
+Str_LabelProc:	aligned_string "LabelProc"
+Str_StringBoxProc:	aligned_string "StringBoxProc"
+Str_WindowProc:	aligned_string "WindowProc"
+Str_GroupBoxProc:	aligned_string "GroupBoxProc"
+Str_TitleEditProc:	aligned_string "TitleEditProc"
+Str_ModeEditProc:	aligned_string "ModeEditProc"
+Str_MainRamGet:	aligned_string "MainRamGet"
+Str_MainRamAdd:	aligned_string "MainRamAdd"
+Str_MainRamPut:	aligned_string "MainRamPut"
+Str_ResetLswFilter:	aligned_string "ResetLswFilter"
+Str_SetLswFilter:	aligned_string "SetLswFilter"
+Str_MainLswPartGet:	aligned_string "MainLswPartGet"
+Str_MainLswGet:	aligned_string "MainLswGet"
+Str_MainLswPartAdd:	aligned_string "MainLswPartAdd"
+Str_MainLswAdd:	aligned_string "MainLswAdd"
+Str_MainLswPartPut:	aligned_string "MainLswPartPut"
+Str_MainLswPut:	aligned_string "MainLswPut"
+Str_DrawEditSw:	aligned_string "DrawEditSw"
+Str_EditSwProc:	aligned_string "EditSwProc"
+Str_DrawTitleBar:	aligned_string "DrawTitleBar"
+Str_TtlScreenProc:	aligned_string "TtlScreenProc"
+Str_DrawDesignFrame:	aligned_string "DrawDesignFrame"
+Str_GetClientFrame2:	aligned_string "GetClientFrame2"
+Str_GetClientFrame:	aligned_string "GetClientFrame"
+Str_FrameProc:	aligned_string "FrameProc"
+Str_GetEditSwPoint:	aligned_string "GetEditSwPoint"
+Str_ScreenProc:	aligned_string "ScreenProc"
+Str_BoxRightCheck:	aligned_string "BoxRightCheck"
+Str_BoxLeftCheck:	aligned_string "BoxLeftCheck"
+Str_GetFrameColor:	aligned_string "GetFrameColor"
+Str_DrawDesignBox:	aligned_string "DrawDesignBox"
+Str_GetClientBox2:	aligned_string "GetClientBox2"
+Str_GetClientBox:	aligned_string "GetClientBox"
+Str_BoxProc:	aligned_string "BoxProc"
+Str_SetBox:	aligned_string "SetBox"
+Str_GetBox:	aligned_string "GetBox"
+Str_GetViewInstance:	aligned_string "GetViewInstance"
+Str_GetLinkView:	aligned_string "GetLinkView"
+Str_SetSuperView:	aligned_string "SetSuperView"
+Str_Unlink:	aligned_string "Unlink"
+Str_Link:	aligned_string "Link"
+Str_SubView:	aligned_string "SubView"
+Str_SuperView:	aligned_string "SuperView"
+Str_PrevView:	aligned_string "PrevView"
+Str_NextView:	aligned_string "NextView"
+Str_GetMovable:	aligned_string "GetMovable"
+Str_SetMovable:	aligned_string "SetMovable"
+Str_GetVisible:	aligned_string "GetVisible"
+Str_SetVisible:	aligned_string "SetVisible"
+Str_GetChange:	aligned_string "GetChange"
+Str_SetChange:	aligned_string "SetChange"
+Str_GetConst:	aligned_string "GetConst"
+Str_SetConst:	aligned_string "SetConst"
+Str_ViewableProc:	aligned_string "ViewableProc"
+Str_GetTitleOld:	aligned_string "GetTitleOld"
+Str_GetTitleNow:	aligned_string "GetTitleNow"
+Str_UnregisteredTitle:	aligned_string "UnregisteredTitle"
+Str_RegisterTitle:	aligned_string "RegisterTitle"
+Str_TitleProc:	aligned_string "TitleProc"
+Str_GetModeOld:	aligned_string "GetModeOld"
+Str_GetModeNow:	aligned_string "GetModeNow"
+Str_UnregisteredMode:	aligned_string "UnregisteredMode"
+Str_RegisterMode:	aligned_string "RegisterMode"
+Str_ModeProc:	aligned_string "ModeProc"
+Str_MainFuncCall:	aligned_string "MainFuncCall"
+Str_ApFuncCall:	aligned_string "ApFuncCall"
+Str_MainFunctionProc:	aligned_string "MainFunctionProc"
+Str_ApFunctionProc:	aligned_string "ApFunctionProc"
+Str_FunctionProc:	aligned_string "FunctionProc"
+Str_TrackIDProc:	aligned_string "TrackIDProc"
+Str_PartIDProc:	aligned_string "PartIDProc"
+Str_UserIDProc:	aligned_string "UserIDProc"
+Str_MainFuncIDProc:	aligned_string "MainFuncIDProc"
+Str_ApFuncIDProc:	aligned_string "ApFuncIDProc"
+Str_BitmapIDProc:	aligned_string "BitmapIDProc"
+Str_FrameIDProc:	aligned_string "FrameIDProc"
+Str_LineModeIDProc:	aligned_string "LineModeIDProc"
+Str_EditSwStyleIDProc:	aligned_string "EditSwStyleIDProc"
+Str_EditSwIDProc:	aligned_string "EditSwIDProc"
+Str_AlignmentIDProc:	aligned_string "AlignmentIDProc"
+Str_FontIDProc:	aligned_string "FontIDProc"
+Str_IconIDProc:	aligned_string "IconIDProc"
+Str_TitleIDProc:	aligned_string "TitleIDProc"
+Str_ModeIDProc:	aligned_string "ModeIDProc"
+Str_BorderIDProc:	aligned_string "BorderIDProc"
+Str_ColorIDProc:	aligned_string "ColorIDProc"
+Str_ViewFlagProc:	aligned_string "ViewFlagProc"
+Str_ViewIDProc:	aligned_string "ViewIDProc"
+Str_ConstFlagProc:	aligned_string "ConstFlagProc"
+Str_NameProc:	aligned_string "NameProc"
+Str_StringProc:	aligned_string "StringProc"
+Str_PointYProc:	aligned_string "PointYProc"
+Str_PointXProc:	aligned_string "PointXProc"
+Str_POINTWProc:	aligned_string "POINTWProc"
+Str_RectY2Proc:	aligned_string "RectY2Proc"
+Str_RectX2Proc:	aligned_string "RectX2Proc"
+Str_RectY1Proc:	aligned_string "RectY1Proc"
+Str_RectX1Proc:	aligned_string "RectX1Proc"
+Str_RECTWProc:	aligned_string "RECTWProc"
+Str_EventIDProc:	aligned_string "EventIDProc"
+Str_WindowIDProc:	aligned_string "WindowIDProc"
+Str_ScreenIDProc:	aligned_string "ScreenIDProc"
+Str_ClassIDProc:	aligned_string "ClassIDProc"
+Str_pStringProc:	aligned_string "pStringProc"
+Str_pPropProc:	aligned_string "pPropProc"
+Str_pProcProc:	aligned_string "pProcProc"
+Str_pFuncProc:	aligned_string "pFuncProc"
+Str_ObjectIDProc:	aligned_string "ObjectIDProc"
+Str_pUlongProc:	aligned_string "pUlongProc"
+Str_pSlongProc:	aligned_string "pSlongProc"
+Str_pUcharProc:	aligned_string "pUcharProc"
+Str_pScharProc:	aligned_string "pScharProc"
+Str_pUwordProc:	aligned_string "pUwordProc"
+Str_pSwordProc:	aligned_string "pSwordProc"
+Str_pBoolProc:	aligned_string "pBoolProc"
+Str_boolProc:	aligned_string "boolProc"
+Str_ulongProc:	aligned_string "ulongProc"
+Str_slongProc:	aligned_string "slongProc"
+Str_scharProc:	aligned_string "scharProc"
+Str_ucharProc:	aligned_string "ucharProc"
+Str_uwordProc:	aligned_string "uwordProc"
+Str_swordProc:	aligned_string "swordProc"
+Str_SupportClassProc:	aligned_string "SupportClassProc"
+Str_ClassProc:	aligned_string "ClassProc"
+Str_WordwrapStrings:	aligned_string "WordwrapStrings"
+Str_CalcTotalWidth:	aligned_string "CalcTotalWidth"
+Str_ConvertStrings:	aligned_string "ConvertStrings"
+Str_GetCenteredDelta:	aligned_string "GetCenteredDelta"
+Str_GetCharDescent:	aligned_string "GetCharDescent"
+Str_GetCharHeight:	aligned_string "GetCharHeight"
+Str_GetFrameSPSize:	aligned_string "GetFrameSPSize"
+Str_ResNameProc:	aligned_string "ResNameProc"
+Str_ResStringProc:	aligned_string "ResStringProc"
+Str_ResMethodProc:	aligned_string "ResMethodProc"
+Str_ResEventProc:	aligned_string "ResEventProc"
+Str_ResFontProc:	aligned_string "ResFontProc"
+Str_ResIconProc:	aligned_string "ResIconProc"
+Str_ResFrameProc:	aligned_string "ResFrameProc"
+Str_ResBitmapProc:	aligned_string "ResBitmapProc"
+Str_ResourceProc:	aligned_string "ResourceProc"
+Str_ApPostEvent:	aligned_string "ApPostEvent"
+Str_MainGetEvent:	aligned_string "MainGetEvent"
+Str_MainPostEvent:	aligned_string "MainPostEvent"
+Str_MainSendEvent:	aligned_string "MainSendEvent"
+Str_MainDispatchEvent:	aligned_string "MainDispatchEvent"
+Str_SetCurrentTarget:	aligned_string "SetCurrentTarget"
+Str_GetCurrentTarget:	aligned_string "GetCurrentTarget"
+Str_GetEvent:	aligned_string "GetEvent"
+Str_PostEvent:	aligned_string "PostEvent"
+Str_SendEvent:	aligned_string "SendEvent"
+Str_DispatchEvent:	aligned_string "DispatchEvent"
+Str_InitializeEventQueue:	aligned_string "InitializeEventQueue"
+Str_CheckViewObject:	aligned_string "CheckViewObject"
+Str_CountObject:	aligned_string "CountObject"
+Str_UnRegisterObject:	aligned_string "UnRegisterObject"
+Str_RegisterObject:	aligned_string "RegisterObject"
+Str_RegisterObjectTable:	aligned_string "RegisterObjectTable"
+Str_InitializeObjectTable:	aligned_string "InitializeObjectTable"
+Str_InheritedProc:	aligned_string "InheritedProc"
+Str_ObjectProc:	aligned_string "ObjectProc"
+Str_DrawStringAlignment:	aligned_string "DrawStringAlignment"
+Str_DrawStringRightJustify:	aligned_string "DrawStringRightJustify"
+Str_DrawStringLeftJustify:	aligned_string "DrawStringLeftJustify"
+Str_DrawStringCentered:	aligned_string "DrawStringCentered"
+Str_DrawString:	aligned_string "DrawString"
+Str_DrawFrameSP:	aligned_string "DrawFrameSP"
+Str_DrawIcons:	aligned_string "DrawIcons"
+Str_DrawBitmap:	aligned_string "DrawBitmap"
+Str_DrawWall:	aligned_string "DrawWall"
+Str_MovePixels:	aligned_string "MovePixels"
+Str_DrawFrameEx:	aligned_string "DrawFrameEx"
+Str_DrawFrame:	aligned_string "DrawFrame"
+Str_DrawBox:	aligned_string "DrawBox"
+Str_DrawLineEx:	aligned_string "DrawLineEx"
+Str_DrawLine:	aligned_string "DrawLine"
+Str_ModifyPixelEx:	aligned_string "ModifyPixelEx"
+Str_ModifyPixel:	aligned_string "ModifyPixel"
+Str_ReadPixel:	aligned_string "ReadPixel"
+Str_SetChangeRect:	aligned_string "SetChangeRect"
+Str_SetNeedUpdate:	aligned_string "SetNeedUpdate"
+Str_UpdateScreen:	aligned_string "UpdateScreen"
+Str_InitializeGraphics:	aligned_string "InitializeGraphics"
+Str_InitializeUser31:	aligned_string "InitializeUser31"
+Str_InitializeUser30:	aligned_string "InitializeUser30"
+Str_InitializeUser29:	aligned_string "InitializeUser29"
+Str_InitializeUser28:	aligned_string "InitializeUser28"
+Str_InitializeUser27:	aligned_string "InitializeUser27"
+Str_InitializeUser26:	aligned_string "InitializeUser26"
+Str_InitializeUser25:	aligned_string "InitializeUser25"
+Str_InitializeUser24:	aligned_string "InitializeUser24"
+Str_InitializeUser23:	aligned_string "InitializeUser23"
+Str_InitializeUser22:	aligned_string "InitializeUser22"
+Str_InitializeUser21:	aligned_string "InitializeUser21"
+Str_InitializeUser20:	aligned_string "InitializeUser20"
+Str_InitializeUser19:	aligned_string "InitializeUser19"
+Str_InitializeUser18:	aligned_string "InitializeUser18"
+Str_InitializeUser17:	aligned_string "InitializeUser17"
+Str_InitializeUser16:	aligned_string "InitializeUser16"
+Str_InitializeUser15:	aligned_string "InitializeUser15"
+Str_InitializeUser14:	aligned_string "InitializeUser14"
+Str_InitializeUser13:	aligned_string "InitializeUser13"
+Str_InitializeUser12:	aligned_string "InitializeUser12"
+Str_InitializeNaka:	aligned_string "InitializeNaka"
+Str_InitializeKSS:	aligned_string "InitializeKSS"
+Str_InitializeHama:	aligned_string "InitializeHama"
+Str_InitializeKubo:	aligned_string "InitializeKubo"
+Str_InitializeYoko:	aligned_string "InitializeYoko"
+Str_InitializeScoop:	aligned_string "InitializeScoop"
+Str_InitializeCheap:	aligned_string "InitializeCheap"
+Str_InitializeSuna:	aligned_string "InitializeSuna"
+Str_InitializeEast:	aligned_string "InitializeEast"
+Str_InitializeToshi:	aligned_string "InitializeToshi"
+Str_InitializeMurai:	aligned_string "InitializeMurai"
+Str_InitializeRoot:	aligned_string "InitializeRoot"
 	.byte 0xb0, 0x00, 0x92, 0x20, 0xeb, 0x00
-LABEL_EB1940:
-	.long LABEL_EB208A
-	.long LABEL_EB2086
-	.long LABEL_EB2082
-	.long LABEL_EB207E
-	.long LABEL_EB207A
-	.long LABEL_EB2076
-	.long LABEL_EB2072
-	.long LABEL_EB206E
-	.long LABEL_EB206A
-	.long LABEL_EB2066
-	.long LABEL_EB2062
-	.long LABEL_EB205E
-	.long LABEL_EB205A
-	.long LABEL_EB2056
-	.long LABEL_EB2052
-	.long LABEL_EB204E
-	.long LABEL_EB204A
-	.long LABEL_EB2046
-	.long LABEL_EB2042
-	.long LABEL_EB203E
-	.long LABEL_EB203A
-	.long LABEL_EB2036
-	.long LABEL_EB2032
-	.long LABEL_EB202E
-	.long LABEL_EB202A
-	.long LABEL_EB2026
-	.long LABEL_EB2022
-	.long LABEL_EB201E
-	.long LABEL_EB201A
-	.long LABEL_EB2016
-	.long LABEL_EB2012
-	.long LABEL_EB200E
-	.long LABEL_EB200A
-	.long LABEL_EB2006
-	.long LABEL_EB2002
-	.long LABEL_EB1FFE
-	.long LABEL_EB1FFA
-	.long LABEL_EB1FF6
-	.long LABEL_EB1FF2
-	.long LABEL_EB1FEE
-	.long LABEL_EB1FEA
-	.long LABEL_EB1FE6
-	.long LABEL_EB1FE2
-	.long LABEL_EB1FDE
-	.long LABEL_EB1FDA
-	.long LABEL_EB1FD6
-	.long LABEL_EB1FD2
-	.long LABEL_EB1FCE
-	.long LABEL_EB1FCA
-	.long LABEL_EB1FC6
-	.long LABEL_EB1FC2
-	.long LABEL_EB1FBE
-	.long LABEL_EB1FBA
-	.long LABEL_EB1FB6
-	.long LABEL_EB1FB2
-	.long LABEL_EB1FAE
-	.long LABEL_EB1FAA
-	.long LABEL_EB1FA6
-	.long LABEL_EB1FA2
-	.long LABEL_EB1F9E
-	.long LABEL_EB1F9A
-	.long LABEL_EB1F96
-	.long LABEL_EB1F92
-	.long LABEL_EB1F8E
-	.long LABEL_EB1F8A
-	.long LABEL_EB1F86
-	.long LABEL_EB1F82
-	.long LABEL_EB1F7E
-	.long LABEL_EB1F7A
-	.long LABEL_EB1F76
-	.long LABEL_EB1F72
-	.long LABEL_EB1F6E
-	.long LABEL_EB1F6A
-	.long LABEL_EB1F66
-	.long LABEL_EB1F62
-	.long LABEL_EB1F5E
-	.long LABEL_EB1F5A
-	.long LABEL_EB1F56
-	.long LABEL_EB1F52
-	.long LABEL_EB1F4E
-	.long LABEL_EB1F4A
-	.long LABEL_EB1F46
-	.long LABEL_EB1F42
-	.long LABEL_EB1F3E
-	.long LABEL_EB1F3A
-	.long LABEL_EB1F36
-	.long LABEL_EB1F32
-	.long LABEL_EB1F2E
-	.long LABEL_EB1F2A
-	.long LABEL_EB1F26
-	.long LABEL_EB1F22
-	.long LABEL_EB1F1E
-	.long LABEL_EB1F1A
-	.long LABEL_EB1F16
-	.long LABEL_EB1F12
-	.long LABEL_EB1F0E
-	.long LABEL_EB1F0A
-	.long LABEL_EB1F06
-	.long LABEL_EB1F02
-	.long LABEL_EB1EFE
-	.long LABEL_EB1EFA
-	.long LABEL_EB1EF4
-	.long LABEL_EB1EEE
-	.long LABEL_EB1EE8
-	.long LABEL_EB1EE2
-	.long LABEL_EB1EDC
-	.long LABEL_EB1ED6
-	.long LABEL_EB1ED0
-	.long LABEL_EB1ECA
-	.long LABEL_EB1EC4
-	.long LABEL_EB1EBE
-	.long LABEL_EB1EB8
-	.long LABEL_EB1EB2
-	.long LABEL_EB1EAC
-	.long LABEL_EB1EA6
-	.long LABEL_EB1EA0
-	.long LABEL_EB1E9A
-	.long LABEL_EB1E94
-	.long LABEL_EB1E8E
-	.long LABEL_EB1E88
-	.long LABEL_EB1E82
-	.long LABEL_EB1E7C
-	.long LABEL_EB1E76
-	.long LABEL_EB1E70
-	.long LABEL_EB1E6A
-	.long LABEL_EB1E64
-	.long LABEL_EB1E5E
-	.long LABEL_EB1E58
-	.long LABEL_EB1E52
-	.long LABEL_EB1E4C
-	.long LABEL_EB1E46
-	.long LABEL_EB1E40
-	.long LABEL_EB1E3A
-	.long LABEL_EB1E34
-	.long LABEL_EB1E2E
-	.long LABEL_EB1E28
-	.long LABEL_EB1E22
-	.long LABEL_EB1E1C
-	.long LABEL_EB1E16
-	.long LABEL_EB1E10
-	.long LABEL_EB1E0A
-	.long LABEL_EB1E04
-	.long LABEL_EB1DFE
-	.long LABEL_EB1DF8
-	.long LABEL_EB1DF2
-	.long LABEL_EB1DEC
-	.long LABEL_EB1DE6
-	.long LABEL_EB1DE0
-	.long LABEL_EB1DDA
-	.long LABEL_EB1DD4
-	.long LABEL_EB1DCE
-	.long LABEL_EB1DC8
-	.long LABEL_EB1DC2
-	.long LABEL_EB1DBC
-	.long LABEL_EB1DB6
-	.long LABEL_EB1DB0
-	.long LABEL_EB1DAA
-	.long LABEL_EB1DA4
-	.long LABEL_EB1D9E
-	.long LABEL_EB1D98
-	.long LABEL_EB1D92
-	.long LABEL_EB1D8C
-	.long LABEL_EB1D86
-	.long LABEL_EB1D80
-	.long LABEL_EB1D7A
-	.long LABEL_EB1D74
-	.long LABEL_EB1D6E
-	.long LABEL_EB1D68
-	.long LABEL_EB1D62
-	.long LABEL_EB1D5C
-	.long LABEL_EB1D56
-	.long LABEL_EB1D50
-	.long LABEL_EB1D4A
-	.long LABEL_EB1D44
-	.long LABEL_EB1D3E
-	.long LABEL_EB1D3C
+IconNamePtrTable:
+	.long IconName_Default
+	.long IconName_i0
+	.long IconName_i1
+	.long IconName_i2
+	.long IconName_i3
+	.long IconName_i4
+	.long IconName_i5
+	.long IconName_i6
+	.long IconName_i7
+	.long IconName_i8
+	.long IconName_i9
+	.long IconName_i10
+	.long IconName_i11
+	.long IconName_i12
+	.long IconName_i13
+	.long IconName_i14
+	.long IconName_i15
+	.long IconName_i16
+	.long IconName_i17
+	.long IconName_i18
+	.long IconName_i19
+	.long IconName_i20
+	.long IconName_i21
+	.long IconName_i22
+	.long IconName_i23
+	.long IconName_i24
+	.long IconName_i25
+	.long IconName_i26
+	.long IconName_i27
+	.long IconName_i28
+	.long IconName_i29
+	.long IconName_i30
+	.long IconName_i31
+	.long IconName_i32
+	.long IconName_i33
+	.long IconName_i34
+	.long IconName_i35
+	.long IconName_i36
+	.long IconName_i37
+	.long IconName_i38
+	.long IconName_i39
+	.long IconName_i40
+	.long IconName_i41
+	.long IconName_i42
+	.long IconName_i43
+	.long IconName_i44
+	.long IconName_i45
+	.long IconName_i46
+	.long IconName_i47
+	.long IconName_i48
+	.long IconName_i49
+	.long IconName_i50
+	.long IconName_i51
+	.long IconName_i52
+	.long IconName_i53
+	.long IconName_i54
+	.long IconName_i55
+	.long IconName_i56
+	.long IconName_i57
+	.long IconName_i58
+	.long IconName_i59
+	.long IconName_i60
+	.long IconName_i61
+	.long IconName_i62
+	.long IconName_i63
+	.long IconName_i64
+	.long IconName_i65
+	.long IconName_i66
+	.long IconName_i67
+	.long IconName_i68
+	.long IconName_i69
+	.long IconName_i70
+	.long IconName_i71
+	.long IconName_i72
+	.long IconName_i73
+	.long IconName_i74
+	.long IconName_i75
+	.long IconName_i76
+	.long IconName_i77
+	.long IconName_i78
+	.long IconName_i79
+	.long IconName_i80
+	.long IconName_i81
+	.long IconName_i82
+	.long IconName_i83
+	.long IconName_i84
+	.long IconName_i85
+	.long IconName_i86
+	.long IconName_i87
+	.long IconName_i88
+	.long IconName_i89
+	.long IconName_i90
+	.long IconName_i91
+	.long IconName_i92
+	.long IconName_i93
+	.long IconName_i94
+	.long IconName_i95
+	.long IconName_i96
+	.long IconName_i97
+	.long IconName_i98
+	.long IconName_i99
+	.long IconName_i100
+	.long IconName_i101
+	.long IconName_i102
+	.long IconName_i103
+	.long IconName_i104
+	.long IconName_i105
+	.long IconName_i106
+	.long IconName_i107
+	.long IconName_i108
+	.long IconName_i109
+	.long IconName_i110
+	.long IconName_i111
+	.long IconName_i112
+	.long IconName_i113
+	.long IconName_i114
+	.long IconName_i115
+	.long IconName_i116
+	.long IconName_i117
+	.long IconName_i118
+	.long IconName_i119
+	.long IconName_i120
+	.long IconName_i121
+	.long IconName_i122
+	.long IconName_i123
+	.long IconName_i124
+	.long IconName_i125
+	.long IconName_i126
+	.long IconName_i127
+	.long IconName_i128
+	.long IconName_i129
+	.long IconName_i130
+	.long IconName_i131
+	.long IconName_i132
+	.long IconName_i133
+	.long IconName_i134
+	.long IconName_i135
+	.long IconName_i136
+	.long IconName_i137
+	.long IconName_i138
+	.long IconName_i139
+	.long IconName_i140
+	.long IconName_i141
+	.long IconName_i142
+	.long IconName_i143
+	.long IconName_i144
+	.long IconName_i145
+	.long IconName_i146
+	.long IconName_i147
+	.long IconName_i148
+	.long IconName_i149
+	.long IconName_i150
+	.long IconName_i151
+	.long IconName_i152
+	.long IconName_i153
+	.long IconName_i154
+	.long IconName_i155
+	.long IconName_i156
+	.long IconName_i157
+	.long IconName_i158
+	.long IconName_i159
+	.long IconName_i160
+	.long IconName_i161
+	.long IconName_i162
+	.long IconName_i163
+	.long IconName_i164
+	.long IconName_i165
+	.long IconName_i166
+	.long IconName_i167
+	.long IconName_i168
+	.long IconName_i169
+	.long IconName_i170
+	.long IconName_i171
+	.long IconName_i172
+	.long IconName_i173
+	.long IconName_Empty
 	.zero 316
-LABEL_EB1D3C:	aligned_string ""
-LABEL_EB1D3E:	aligned_string "i173"
-LABEL_EB1D44:	aligned_string "i172"
-LABEL_EB1D4A:	aligned_string "i171"
-LABEL_EB1D50:	aligned_string "i170"
-LABEL_EB1D56:	aligned_string "i169"
-LABEL_EB1D5C:	aligned_string "i168"
-LABEL_EB1D62:	aligned_string "i167"
-LABEL_EB1D68:	aligned_string "i166"
-LABEL_EB1D6E:	aligned_string "i165"
-LABEL_EB1D74:	aligned_string "i164"
-LABEL_EB1D7A:	aligned_string "i163"
-LABEL_EB1D80:	aligned_string "i162"
-LABEL_EB1D86:	aligned_string "i161"
-LABEL_EB1D8C:	aligned_string "i160"
-LABEL_EB1D92:	aligned_string "i159"
-LABEL_EB1D98:	aligned_string "i158"
-LABEL_EB1D9E:	aligned_string "i157"
-LABEL_EB1DA4:	aligned_string "i156"
-LABEL_EB1DAA:	aligned_string "i155"
-LABEL_EB1DB0:	aligned_string "i154"
-LABEL_EB1DB6:	aligned_string "i153"
-LABEL_EB1DBC:	aligned_string "i152"
-LABEL_EB1DC2:	aligned_string "i151"
-LABEL_EB1DC8:	aligned_string "i150"
-LABEL_EB1DCE:	aligned_string "i149"
-LABEL_EB1DD4:	aligned_string "i148"
-LABEL_EB1DDA:	aligned_string "i147"
-LABEL_EB1DE0:	aligned_string "i146"
-LABEL_EB1DE6:	aligned_string "i145"
-LABEL_EB1DEC:	aligned_string "i144"
-LABEL_EB1DF2:	aligned_string "i143"
-LABEL_EB1DF8:	aligned_string "i142"
-LABEL_EB1DFE:	aligned_string "i141"
-LABEL_EB1E04:	aligned_string "i140"
-LABEL_EB1E0A:	aligned_string "i139"
-LABEL_EB1E10:	aligned_string "i138"
-LABEL_EB1E16:	aligned_string "i137"
-LABEL_EB1E1C:	aligned_string "i136"
-LABEL_EB1E22:	aligned_string "i135"
-LABEL_EB1E28:	aligned_string "i134"
-LABEL_EB1E2E:	aligned_string "i133"
-LABEL_EB1E34:	aligned_string "i132"
-LABEL_EB1E3A:	aligned_string "i131"
-LABEL_EB1E40:	aligned_string "i130"
-LABEL_EB1E46:	aligned_string "i129"
-LABEL_EB1E4C:	aligned_string "i128"
-LABEL_EB1E52:	aligned_string "i127"
-LABEL_EB1E58:	aligned_string "i126"
-LABEL_EB1E5E:	aligned_string "i125"
-LABEL_EB1E64:	aligned_string "i124"
-LABEL_EB1E6A:	aligned_string "i123"
-LABEL_EB1E70:	aligned_string "i122"
-LABEL_EB1E76:	aligned_string "i121"
-LABEL_EB1E7C:	aligned_string "i120"
-LABEL_EB1E82:	aligned_string "i119"
-LABEL_EB1E88:	aligned_string "i118"
-LABEL_EB1E8E:	aligned_string "i117"
-LABEL_EB1E94:	aligned_string "i116"
-LABEL_EB1E9A:	aligned_string "i115"
-LABEL_EB1EA0:	aligned_string "i114"
-LABEL_EB1EA6:	aligned_string "i113"
-LABEL_EB1EAC:	aligned_string "i112"
-LABEL_EB1EB2:	aligned_string "i111"
-LABEL_EB1EB8:	aligned_string "i110"
-LABEL_EB1EBE:	aligned_string "i109"
-LABEL_EB1EC4:	aligned_string "i108"
-LABEL_EB1ECA:	aligned_string "i107"
-LABEL_EB1ED0:	aligned_string "i106"
-LABEL_EB1ED6:	aligned_string "i105"
-LABEL_EB1EDC:	aligned_string "i104"
-LABEL_EB1EE2:	aligned_string "i103"
-LABEL_EB1EE8:	aligned_string "i102"
-LABEL_EB1EEE:	aligned_string "i101"
-LABEL_EB1EF4:	aligned_string "i100"
-LABEL_EB1EFA:
+IconName_Empty:	aligned_string ""
+IconName_i173:	aligned_string "i173"
+IconName_i172:	aligned_string "i172"
+IconName_i171:	aligned_string "i171"
+IconName_i170:	aligned_string "i170"
+IconName_i169:	aligned_string "i169"
+IconName_i168:	aligned_string "i168"
+IconName_i167:	aligned_string "i167"
+IconName_i166:	aligned_string "i166"
+IconName_i165:	aligned_string "i165"
+IconName_i164:	aligned_string "i164"
+IconName_i163:	aligned_string "i163"
+IconName_i162:	aligned_string "i162"
+IconName_i161:	aligned_string "i161"
+IconName_i160:	aligned_string "i160"
+IconName_i159:	aligned_string "i159"
+IconName_i158:	aligned_string "i158"
+IconName_i157:	aligned_string "i157"
+IconName_i156:	aligned_string "i156"
+IconName_i155:	aligned_string "i155"
+IconName_i154:	aligned_string "i154"
+IconName_i153:	aligned_string "i153"
+IconName_i152:	aligned_string "i152"
+IconName_i151:	aligned_string "i151"
+IconName_i150:	aligned_string "i150"
+IconName_i149:	aligned_string "i149"
+IconName_i148:	aligned_string "i148"
+IconName_i147:	aligned_string "i147"
+IconName_i146:	aligned_string "i146"
+IconName_i145:	aligned_string "i145"
+IconName_i144:	aligned_string "i144"
+IconName_i143:	aligned_string "i143"
+IconName_i142:	aligned_string "i142"
+IconName_i141:	aligned_string "i141"
+IconName_i140:	aligned_string "i140"
+IconName_i139:	aligned_string "i139"
+IconName_i138:	aligned_string "i138"
+IconName_i137:	aligned_string "i137"
+IconName_i136:	aligned_string "i136"
+IconName_i135:	aligned_string "i135"
+IconName_i134:	aligned_string "i134"
+IconName_i133:	aligned_string "i133"
+IconName_i132:	aligned_string "i132"
+IconName_i131:	aligned_string "i131"
+IconName_i130:	aligned_string "i130"
+IconName_i129:	aligned_string "i129"
+IconName_i128:	aligned_string "i128"
+IconName_i127:	aligned_string "i127"
+IconName_i126:	aligned_string "i126"
+IconName_i125:	aligned_string "i125"
+IconName_i124:	aligned_string "i124"
+IconName_i123:	aligned_string "i123"
+IconName_i122:	aligned_string "i122"
+IconName_i121:	aligned_string "i121"
+IconName_i120:	aligned_string "i120"
+IconName_i119:	aligned_string "i119"
+IconName_i118:	aligned_string "i118"
+IconName_i117:	aligned_string "i117"
+IconName_i116:	aligned_string "i116"
+IconName_i115:	aligned_string "i115"
+IconName_i114:	aligned_string "i114"
+IconName_i113:	aligned_string "i113"
+IconName_i112:	aligned_string "i112"
+IconName_i111:	aligned_string "i111"
+IconName_i110:	aligned_string "i110"
+IconName_i109:	aligned_string "i109"
+IconName_i108:	aligned_string "i108"
+IconName_i107:	aligned_string "i107"
+IconName_i106:	aligned_string "i106"
+IconName_i105:	aligned_string "i105"
+IconName_i104:	aligned_string "i104"
+IconName_i103:	aligned_string "i103"
+IconName_i102:	aligned_string "i102"
+IconName_i101:	aligned_string "i101"
+IconName_i100:	aligned_string "i100"
+IconName_i99:
 	.byte 0x69, 0x39, 0x39, 0x00
-LABEL_EB1EFE:	.asciz "i98"
-LABEL_EB1F02:
+IconName_i98:	.asciz "i98"
+IconName_i97:
 	.byte 0x69, 0x39, 0x37, 0x00
-LABEL_EB1F06:	.asciz "i96"
-LABEL_EB1F0A:
+IconName_i96:	.asciz "i96"
+IconName_i95:
 	.byte 0x69, 0x39, 0x35, 0x00
-LABEL_EB1F0E:	.asciz "i94"
-LABEL_EB1F12:
+IconName_i94:	.asciz "i94"
+IconName_i93:
 	.byte 0x69, 0x39, 0x33, 0x00
-LABEL_EB1F16:	.asciz "i92"
-LABEL_EB1F1A:
+IconName_i92:	.asciz "i92"
+IconName_i91:
 	.byte 0x69, 0x39, 0x31, 0x00
-LABEL_EB1F1E:	.asciz "i90"
-LABEL_EB1F22:
+IconName_i90:	.asciz "i90"
+IconName_i89:
 	.byte 0x69, 0x38, 0x39, 0x00
-LABEL_EB1F26:	.asciz "i88"
-LABEL_EB1F2A:
+IconName_i88:	.asciz "i88"
+IconName_i87:
 	.byte 0x69, 0x38, 0x37, 0x00
-LABEL_EB1F2E:	.asciz "i86"
-LABEL_EB1F32:
+IconName_i86:	.asciz "i86"
+IconName_i85:
 	.byte 0x69, 0x38, 0x35, 0x00
-LABEL_EB1F36:	.asciz "i84"
-LABEL_EB1F3A:
+IconName_i84:	.asciz "i84"
+IconName_i83:
 	.byte 0x69, 0x38, 0x33, 0x00
-LABEL_EB1F3E:	.asciz "i82"
-LABEL_EB1F42:
+IconName_i82:	.asciz "i82"
+IconName_i81:
 	.byte 0x69, 0x38, 0x31, 0x00
-LABEL_EB1F46:	.asciz "i80"
-LABEL_EB1F4A:
+IconName_i80:	.asciz "i80"
+IconName_i79:
 	.byte 0x69, 0x37, 0x39, 0x00
-LABEL_EB1F4E:	.asciz "i78"
-LABEL_EB1F52:
+IconName_i78:	.asciz "i78"
+IconName_i77:
 	.byte 0x69, 0x37, 0x37, 0x00
-LABEL_EB1F56:	.asciz "i76"
-LABEL_EB1F5A:
+IconName_i76:	.asciz "i76"
+IconName_i75:
 	.byte 0x69, 0x37, 0x35, 0x00
-LABEL_EB1F5E:	.asciz "i74"
-LABEL_EB1F62:
+IconName_i74:	.asciz "i74"
+IconName_i73:
 	.byte 0x69, 0x37, 0x33, 0x00
-LABEL_EB1F66:	.asciz "i72"
-LABEL_EB1F6A:
+IconName_i72:	.asciz "i72"
+IconName_i71:
 	.byte 0x69, 0x37, 0x31, 0x00
-LABEL_EB1F6E:	.asciz "i70"
-LABEL_EB1F72:
+IconName_i70:	.asciz "i70"
+IconName_i69:
 	.byte 0x69, 0x36, 0x39, 0x00
-LABEL_EB1F76:	.asciz "i68"
-LABEL_EB1F7A:
+IconName_i68:	.asciz "i68"
+IconName_i67:
 	.byte 0x69, 0x36, 0x37, 0x00
-LABEL_EB1F7E:	.asciz "i66"
-LABEL_EB1F82:
+IconName_i66:	.asciz "i66"
+IconName_i65:
 	.byte 0x69, 0x36, 0x35, 0x00
-LABEL_EB1F86:	.asciz "i64"
-LABEL_EB1F8A:
+IconName_i64:	.asciz "i64"
+IconName_i63:
 	.byte 0x69, 0x36, 0x33, 0x00
-LABEL_EB1F8E:	.asciz "i62"
-LABEL_EB1F92:
+IconName_i62:	.asciz "i62"
+IconName_i61:
 	.byte 0x69, 0x36, 0x31, 0x00
-LABEL_EB1F96:	.asciz "i60"
-LABEL_EB1F9A:
+IconName_i60:	.asciz "i60"
+IconName_i59:
 	.byte 0x69, 0x35, 0x39, 0x00
-LABEL_EB1F9E:	.asciz "i58"
-LABEL_EB1FA2:
+IconName_i58:	.asciz "i58"
+IconName_i57:
 	.byte 0x69, 0x35, 0x37, 0x00
-LABEL_EB1FA6:	.asciz "i56"
-LABEL_EB1FAA:
+IconName_i56:	.asciz "i56"
+IconName_i55:
 	.byte 0x69, 0x35, 0x35, 0x00
-LABEL_EB1FAE:	.asciz "i54"
-LABEL_EB1FB2:
+IconName_i54:	.asciz "i54"
+IconName_i53:
 	.byte 0x69, 0x35, 0x33, 0x00
-LABEL_EB1FB6:	.asciz "i52"
-LABEL_EB1FBA:
+IconName_i52:	.asciz "i52"
+IconName_i51:
 	.byte 0x69, 0x35, 0x31, 0x00
-LABEL_EB1FBE:	.asciz "i50"
-LABEL_EB1FC2:
+IconName_i50:	.asciz "i50"
+IconName_i49:
 	.byte 0x69, 0x34, 0x39, 0x00
-LABEL_EB1FC6:	.asciz "i48"
-LABEL_EB1FCA:
+IconName_i48:	.asciz "i48"
+IconName_i47:
 	.byte 0x69, 0x34, 0x37, 0x00
-LABEL_EB1FCE:	.asciz "i46"
-LABEL_EB1FD2:
+IconName_i46:	.asciz "i46"
+IconName_i45:
 	.byte 0x69, 0x34, 0x35, 0x00
-LABEL_EB1FD6:	.asciz "i44"
-LABEL_EB1FDA:
+IconName_i44:	.asciz "i44"
+IconName_i43:
 	.byte 0x69, 0x34, 0x33, 0x00
-LABEL_EB1FDE:	.asciz "i42"
-LABEL_EB1FE2:
+IconName_i42:	.asciz "i42"
+IconName_i41:
 	.byte 0x69, 0x34, 0x31, 0x00
-LABEL_EB1FE6:	.asciz "i40"
-LABEL_EB1FEA:
+IconName_i40:	.asciz "i40"
+IconName_i39:
 	.byte 0x69, 0x33, 0x39, 0x00
-LABEL_EB1FEE:	.asciz "i38"
-LABEL_EB1FF2:
+IconName_i38:	.asciz "i38"
+IconName_i37:
 	.byte 0x69, 0x33, 0x37, 0x00
-LABEL_EB1FF6:	.asciz "i36"
-LABEL_EB1FFA:
+IconName_i36:	.asciz "i36"
+IconName_i35:
 	.byte 0x69, 0x33, 0x35, 0x00
-LABEL_EB1FFE:	.asciz "i34"
-LABEL_EB2002:
+IconName_i34:	.asciz "i34"
+IconName_i33:
 	.byte 0x69, 0x33, 0x33, 0x00
-LABEL_EB2006:	.asciz "i32"
-LABEL_EB200A:
+IconName_i32:	.asciz "i32"
+IconName_i31:
 	.byte 0x69, 0x33, 0x31, 0x00
-LABEL_EB200E:	.asciz "i30"
-LABEL_EB2012:
+IconName_i30:	.asciz "i30"
+IconName_i29:
 	.byte 0x69, 0x32, 0x39, 0x00
-LABEL_EB2016:	.asciz "i28"
-LABEL_EB201A:
+IconName_i28:	.asciz "i28"
+IconName_i27:
 	.byte 0x69, 0x32, 0x37, 0x00
-LABEL_EB201E:	.asciz "i26"
-LABEL_EB2022:
+IconName_i26:	.asciz "i26"
+IconName_i25:
 	.byte 0x69, 0x32, 0x35, 0x00
-LABEL_EB2026:	.asciz "i24"
-LABEL_EB202A:
+IconName_i24:	.asciz "i24"
+IconName_i23:
 	.byte 0x69, 0x32, 0x33, 0x00
-LABEL_EB202E:	.asciz "i22"
-LABEL_EB2032:
+IconName_i22:	.asciz "i22"
+IconName_i21:
 	.byte 0x69, 0x32, 0x31, 0x00
-LABEL_EB2036:	.asciz "i20"
-LABEL_EB203A:
+IconName_i20:	.asciz "i20"
+IconName_i19:
 	.byte 0x69, 0x31, 0x39, 0x00
-LABEL_EB203E:	.asciz "i18"
-LABEL_EB2042:
+IconName_i18:	.asciz "i18"
+IconName_i17:
 	.byte 0x69, 0x31, 0x37, 0x00
-LABEL_EB2046:	.asciz "i16"
-LABEL_EB204A:
+IconName_i16:	.asciz "i16"
+IconName_i15:
 	.byte 0x69, 0x31, 0x35, 0x00
-LABEL_EB204E:	.asciz "i14"
-LABEL_EB2052:
+IconName_i14:	.asciz "i14"
+IconName_i13:
 	.byte 0x69, 0x31, 0x33, 0x00
-LABEL_EB2056:	.asciz "i12"
-LABEL_EB205A:
+IconName_i12:	.asciz "i12"
+IconName_i11:
 	.byte 0x69, 0x31, 0x31, 0x00
-LABEL_EB205E:	.asciz "i10"
-LABEL_EB2062:
+IconName_i10:	.asciz "i10"
+IconName_i9:
 	.byte 0x69, 0x39, 0x00, 0xff
-LABEL_EB2066:	aligned_string "i8"
-LABEL_EB206A:
+IconName_i8:	aligned_string "i8"
+IconName_i7:
 	.byte 0x69, 0x37, 0x00, 0xff
-LABEL_EB206E:	aligned_string "i6"
-LABEL_EB2072:
+IconName_i6:	aligned_string "i6"
+IconName_i5:
 	.byte 0x69, 0x35, 0x00, 0xff
-LABEL_EB2076:	aligned_string "i4"
-LABEL_EB207A:
+IconName_i4:	aligned_string "i4"
+IconName_i3:
 	.byte 0x69, 0x33, 0x00, 0xff
-LABEL_EB207E:	aligned_string "i2"
-LABEL_EB2082:
+IconName_i2:	aligned_string "i2"
+IconName_i1:
 	.byte 0x69, 0x31, 0x00, 0xff
-LABEL_EB2086:	aligned_string "i0"
-LABEL_EB208A:	aligned_string "Default"
+IconName_i0:	aligned_string "i0"
+IconName_Default:	aligned_string "Default"
 	aligned_string "None"
-LABEL_EB2098:
+IconBitmapNamePtrTable:
 	.long LABEL_EB2AB8
 	.long LABEL_EB2AAE
 	.long LABEL_EB2AA6
@@ -26920,184 +26920,184 @@ LABEL_EB2098:
 	.long LABEL_EB27F8
 	.long LABEL_EB27F0
 	.long LABEL_EB27E8
-	.long LABEL_EB27E0
-	.long LABEL_EB27D8
-	.long LABEL_EB27CE
-	.long LABEL_EB27C4
-	.long LABEL_EB27BA
-	.long LABEL_EB27B0
-	.long LABEL_EB27A8
-	.long LABEL_EB27A0
-	.long LABEL_EB2796
-	.long LABEL_EB278E
-	.long LABEL_EB2786
-	.long LABEL_EB277E
-	.long LABEL_EB2774
-	.long LABEL_EB276A
-	.long LABEL_EB2760
-	.long LABEL_EB2756
-	.long LABEL_EB274C
-	.long LABEL_EB2742
-	.long LABEL_EB2738
-	.long LABEL_EB272E
-	.long LABEL_EB2724
-	.long LABEL_EB271A
-	.long LABEL_EB2710
-	.long LABEL_EB2706
-	.long LABEL_EB26FC
-	.long LABEL_EB26F2
-	.long LABEL_EB26E8
-	.long LABEL_EB26DE
-	.long LABEL_EB26D4
-	.long LABEL_EB26CA
-	.long LABEL_EB26C0
-	.long LABEL_EB26B6
-	.long LABEL_EB26AC
-	.long LABEL_EB26A2
-	.long LABEL_EB2698
-	.long LABEL_EB268E
-	.long LABEL_EB2684
-	.long LABEL_EB267A
-	.long LABEL_EB2670
-	.long LABEL_EB2666
-	.long LABEL_EB265C
-	.long LABEL_EB2652
-	.long LABEL_EB2648
-	.long LABEL_EB263E
-	.long LABEL_EB2634
-	.long LABEL_EB262A
-	.long LABEL_EB2620
-	.long LABEL_EB2616
-	.long LABEL_EB260C
-	.long LABEL_EB2602
-	.long LABEL_EB25F8
-	.long LABEL_EB25EE
-	.long LABEL_EB25E4
-	.long LABEL_EB25DA
-	.long LABEL_EB25D0
-	.long LABEL_EB25C6
-	.long LABEL_EB25BC
-	.long LABEL_EB25B2
-	.long LABEL_EB25A8
-	.long LABEL_EB259E
-	.long LABEL_EB2594
-	.long LABEL_EB258A
-	.long LABEL_EB2580
-	.long LABEL_EB2576
-	.long LABEL_EB256C
-	.long LABEL_EB2562
-	.long LABEL_EB2558
-	.long LABEL_EB254E
-	.long LABEL_EB2544
-	.long LABEL_EB253A
-	.long LABEL_EB2530
-	.long LABEL_EB2526
-	.long LABEL_EB251C
-	.long LABEL_EB2512
-	.long LABEL_EB2508
-	.long LABEL_EB24FE
-	.long LABEL_EB24F4
-	.long LABEL_EB24EA
-	.long LABEL_EB24E0
-	.long LABEL_EB24D6
-	.long LABEL_EB24CC
-	.long LABEL_EB24C2
-	.long LABEL_EB24B8
-	.long LABEL_EB24AE
-	.long LABEL_EB24A4
-	.long LABEL_EB249A
-	.long LABEL_EB2498
+	.long IconBitmapName_i88
+	.long IconBitmapName_i89
+	.long IconBitmapName_i90o
+	.long IconBitmapName_i91o
+	.long IconBitmapName_i92o
+	.long IconBitmapName_i93o
+	.long IconBitmapName_i94
+	.long IconBitmapName_i95
+	.long IconBitmapName_i96o
+	.long IconBitmapName_i97
+	.long IconBitmapName_i98
+	.long IconBitmapName_i99
+	.long IconBitmapName_i100
+	.long IconBitmapName_i101
+	.long IconBitmapName_i102
+	.long IconBitmapName_i103
+	.long IconBitmapName_i104
+	.long IconBitmapName_i105
+	.long IconBitmapName_i106
+	.long IconBitmapName_i107o
+	.long IconBitmapName_i108
+	.long IconBitmapName_i109
+	.long IconBitmapName_i110
+	.long IconBitmapName_i111
+	.long IconBitmapName_i112
+	.long IconBitmapName_i113
+	.long IconBitmapName_i114
+	.long IconBitmapName_i115
+	.long IconBitmapName_i116
+	.long IconBitmapName_i117
+	.long IconBitmapName_i118
+	.long IconBitmapName_i119
+	.long IconBitmapName_i120
+	.long IconBitmapName_i121
+	.long IconBitmapName_i122
+	.long IconBitmapName_i123
+	.long IconBitmapName_i124
+	.long IconBitmapName_i125
+	.long IconBitmapName_i126
+	.long IconBitmapName_i127
+	.long IconBitmapName_i128
+	.long IconBitmapName_i129
+	.long IconBitmapName_i130
+	.long IconBitmapName_i131
+	.long IconBitmapName_i132
+	.long IconBitmapName_i133
+	.long IconBitmapName_i134
+	.long IconBitmapName_i135
+	.long IconBitmapName_i136
+	.long IconBitmapName_i137
+	.long IconBitmapName_i138
+	.long IconBitmapName_i139
+	.long IconBitmapName_i140
+	.long IconBitmapName_i141
+	.long IconBitmapName_i142
+	.long IconBitmapName_i143
+	.long IconBitmapName_i144
+	.long IconBitmapName_i145
+	.long IconBitmapName_i146
+	.long IconBitmapName_i147
+	.long IconBitmapName_i148
+	.long IconBitmapName_i149
+	.long IconBitmapName_i150
+	.long IconBitmapName_i151
+	.long IconBitmapName_i152
+	.long IconBitmapName_i153
+	.long IconBitmapName_i154
+	.long IconBitmapName_i155
+	.long IconBitmapName_i156
+	.long IconBitmapName_i157
+	.long IconBitmapName_i158
+	.long IconBitmapName_i159
+	.long IconBitmapName_i160
+	.long IconBitmapName_i161
+	.long IconBitmapName_i162
+	.long IconBitmapName_i163
+	.long IconBitmapName_i164
+	.long IconBitmapName_i165
+	.long IconBitmapName_i166
+	.long IconBitmapName_i167
+	.long IconBitmapName_i168
+	.long IconBitmapName_i169
+	.long IconBitmapName_i170
+	.long IconBitmapName_i171
+	.long IconBitmapName_i172
+	.long IconBitmapName_i173
+	.long IconBitmapName_Empty
 	.zero 316
-LABEL_EB2498:	aligned_string ""
-LABEL_EB249A:	aligned_string "i173.bmp"
-LABEL_EB24A4:	aligned_string "i172.bmp"
-LABEL_EB24AE:	aligned_string "i171.bmp"
-LABEL_EB24B8:	aligned_string "i170.bmp"
-LABEL_EB24C2:	aligned_string "i169.bmp"
-LABEL_EB24CC:	aligned_string "i168.bmp"
-LABEL_EB24D6:	aligned_string "i167.bmp"
-LABEL_EB24E0:	aligned_string "i166.bmp"
-LABEL_EB24EA:	aligned_string "i165.bmp"
-LABEL_EB24F4:	aligned_string "i164.bmp"
-LABEL_EB24FE:	aligned_string "i163.bmp"
-LABEL_EB2508:	aligned_string "i162.bmp"
-LABEL_EB2512:	aligned_string "i161.bmp"
-LABEL_EB251C:	aligned_string "i160.bmp"
-LABEL_EB2526:	aligned_string "i159.bmp"
-LABEL_EB2530:	aligned_string "i158.bmp"
-LABEL_EB253A:	aligned_string "i157.bmp"
-LABEL_EB2544:	aligned_string "i156.bmp"
-LABEL_EB254E:	aligned_string "i155.bmp"
-LABEL_EB2558:	aligned_string "i154.bmp"
-LABEL_EB2562:	aligned_string "i153.bmp"
-LABEL_EB256C:	aligned_string "i152.bmp"
-LABEL_EB2576:	aligned_string "i151.bmp"
-LABEL_EB2580:	aligned_string "i150.bmp"
-LABEL_EB258A:	aligned_string "i149.bmp"
-LABEL_EB2594:	aligned_string "i148.bmp"
-LABEL_EB259E:	aligned_string "i147.bmp"
-LABEL_EB25A8:	aligned_string "i146.bmp"
-LABEL_EB25B2:	aligned_string "i145.bmp"
-LABEL_EB25BC:	aligned_string "i144.bmp"
-LABEL_EB25C6:	aligned_string "i143.bmp"
-LABEL_EB25D0:	aligned_string "i142.bmp"
-LABEL_EB25DA:	aligned_string "i141.bmp"
-LABEL_EB25E4:	aligned_string "i140.bmp"
-LABEL_EB25EE:	aligned_string "i139.bmp"
-LABEL_EB25F8:	aligned_string "i138.bmp"
-LABEL_EB2602:	aligned_string "i137.bmp"
-LABEL_EB260C:	aligned_string "i136.bmp"
-LABEL_EB2616:	aligned_string "i135.bmp"
-LABEL_EB2620:	aligned_string "i134.bmp"
-LABEL_EB262A:	aligned_string "i133.bmp"
-LABEL_EB2634:	aligned_string "i132.bmp"
-LABEL_EB263E:	aligned_string "i131.bmp"
-LABEL_EB2648:	aligned_string "i130.bmp"
-LABEL_EB2652:	aligned_string "i129.bmp"
-LABEL_EB265C:	aligned_string "i128.bmp"
-LABEL_EB2666:	aligned_string "i127.bmp"
-LABEL_EB2670:	aligned_string "i126.bmp"
-LABEL_EB267A:	aligned_string "i125.bmp"
-LABEL_EB2684:	aligned_string "i124.bmp"
-LABEL_EB268E:	aligned_string "i123.bmp"
-LABEL_EB2698:	aligned_string "i122.bmp"
-LABEL_EB26A2:	aligned_string "i121.bmp"
-LABEL_EB26AC:	aligned_string "i120.bmp"
-LABEL_EB26B6:	aligned_string "i119.bmp"
-LABEL_EB26C0:	aligned_string "i118.bmp"
-LABEL_EB26CA:	aligned_string "i117.bmp"
-LABEL_EB26D4:	aligned_string "i116.bmp"
-LABEL_EB26DE:	aligned_string "i115.bmp"
-LABEL_EB26E8:	aligned_string "i114.bmp"
-LABEL_EB26F2:	aligned_string "i113.bmp"
-LABEL_EB26FC:	aligned_string "i112.bmp"
-LABEL_EB2706:	aligned_string "i111.bmp"
-LABEL_EB2710:	aligned_string "i110.bmp"
-LABEL_EB271A:	aligned_string "i109.bmp"
-LABEL_EB2724:	aligned_string "i108.bmp"
-LABEL_EB272E:	aligned_string "i107o.bmp"
-LABEL_EB2738:	aligned_string "i106.bmp"
-LABEL_EB2742:	aligned_string "i105.bmp"
-LABEL_EB274C:	aligned_string "i104.bmp"
-LABEL_EB2756:	aligned_string "i103.bmp"
-LABEL_EB2760:	aligned_string "i102.bmp"
-LABEL_EB276A:	aligned_string "i101.bmp"
-LABEL_EB2774:	aligned_string "i100.bmp"
-LABEL_EB277E:	aligned_string "i99.bmp"
-LABEL_EB2786:	aligned_string "i98.bmp"
-LABEL_EB278E:
+IconBitmapName_Empty:	aligned_string ""
+IconBitmapName_i173:	aligned_string "i173.bmp"
+IconBitmapName_i172:	aligned_string "i172.bmp"
+IconBitmapName_i171:	aligned_string "i171.bmp"
+IconBitmapName_i170:	aligned_string "i170.bmp"
+IconBitmapName_i169:	aligned_string "i169.bmp"
+IconBitmapName_i168:	aligned_string "i168.bmp"
+IconBitmapName_i167:	aligned_string "i167.bmp"
+IconBitmapName_i166:	aligned_string "i166.bmp"
+IconBitmapName_i165:	aligned_string "i165.bmp"
+IconBitmapName_i164:	aligned_string "i164.bmp"
+IconBitmapName_i163:	aligned_string "i163.bmp"
+IconBitmapName_i162:	aligned_string "i162.bmp"
+IconBitmapName_i161:	aligned_string "i161.bmp"
+IconBitmapName_i160:	aligned_string "i160.bmp"
+IconBitmapName_i159:	aligned_string "i159.bmp"
+IconBitmapName_i158:	aligned_string "i158.bmp"
+IconBitmapName_i157:	aligned_string "i157.bmp"
+IconBitmapName_i156:	aligned_string "i156.bmp"
+IconBitmapName_i155:	aligned_string "i155.bmp"
+IconBitmapName_i154:	aligned_string "i154.bmp"
+IconBitmapName_i153:	aligned_string "i153.bmp"
+IconBitmapName_i152:	aligned_string "i152.bmp"
+IconBitmapName_i151:	aligned_string "i151.bmp"
+IconBitmapName_i150:	aligned_string "i150.bmp"
+IconBitmapName_i149:	aligned_string "i149.bmp"
+IconBitmapName_i148:	aligned_string "i148.bmp"
+IconBitmapName_i147:	aligned_string "i147.bmp"
+IconBitmapName_i146:	aligned_string "i146.bmp"
+IconBitmapName_i145:	aligned_string "i145.bmp"
+IconBitmapName_i144:	aligned_string "i144.bmp"
+IconBitmapName_i143:	aligned_string "i143.bmp"
+IconBitmapName_i142:	aligned_string "i142.bmp"
+IconBitmapName_i141:	aligned_string "i141.bmp"
+IconBitmapName_i140:	aligned_string "i140.bmp"
+IconBitmapName_i139:	aligned_string "i139.bmp"
+IconBitmapName_i138:	aligned_string "i138.bmp"
+IconBitmapName_i137:	aligned_string "i137.bmp"
+IconBitmapName_i136:	aligned_string "i136.bmp"
+IconBitmapName_i135:	aligned_string "i135.bmp"
+IconBitmapName_i134:	aligned_string "i134.bmp"
+IconBitmapName_i133:	aligned_string "i133.bmp"
+IconBitmapName_i132:	aligned_string "i132.bmp"
+IconBitmapName_i131:	aligned_string "i131.bmp"
+IconBitmapName_i130:	aligned_string "i130.bmp"
+IconBitmapName_i129:	aligned_string "i129.bmp"
+IconBitmapName_i128:	aligned_string "i128.bmp"
+IconBitmapName_i127:	aligned_string "i127.bmp"
+IconBitmapName_i126:	aligned_string "i126.bmp"
+IconBitmapName_i125:	aligned_string "i125.bmp"
+IconBitmapName_i124:	aligned_string "i124.bmp"
+IconBitmapName_i123:	aligned_string "i123.bmp"
+IconBitmapName_i122:	aligned_string "i122.bmp"
+IconBitmapName_i121:	aligned_string "i121.bmp"
+IconBitmapName_i120:	aligned_string "i120.bmp"
+IconBitmapName_i119:	aligned_string "i119.bmp"
+IconBitmapName_i118:	aligned_string "i118.bmp"
+IconBitmapName_i117:	aligned_string "i117.bmp"
+IconBitmapName_i116:	aligned_string "i116.bmp"
+IconBitmapName_i115:	aligned_string "i115.bmp"
+IconBitmapName_i114:	aligned_string "i114.bmp"
+IconBitmapName_i113:	aligned_string "i113.bmp"
+IconBitmapName_i112:	aligned_string "i112.bmp"
+IconBitmapName_i111:	aligned_string "i111.bmp"
+IconBitmapName_i110:	aligned_string "i110.bmp"
+IconBitmapName_i109:	aligned_string "i109.bmp"
+IconBitmapName_i108:	aligned_string "i108.bmp"
+IconBitmapName_i107o:	aligned_string "i107o.bmp"
+IconBitmapName_i106:	aligned_string "i106.bmp"
+IconBitmapName_i105:	aligned_string "i105.bmp"
+IconBitmapName_i104:	aligned_string "i104.bmp"
+IconBitmapName_i103:	aligned_string "i103.bmp"
+IconBitmapName_i102:	aligned_string "i102.bmp"
+IconBitmapName_i101:	aligned_string "i101.bmp"
+IconBitmapName_i100:	aligned_string "i100.bmp"
+IconBitmapName_i99:	aligned_string "i99.bmp"
+IconBitmapName_i98:	aligned_string "i98.bmp"
+IconBitmapName_i97:
 	jr	ge, 0x39
 	aligned_string "7.bmp"
 	jr	ge, 0x39
 	aligned_string "6o.bmp"
-LABEL_EB27A0:	aligned_string "i95.bmp"
-LABEL_EB27A8:	aligned_string "i94.bmp"
-LABEL_EB27B0:	aligned_string "i93o.bmp"
-LABEL_EB27BA:	aligned_string "i92o.bmp"
-LABEL_EB27C4:	aligned_string "i91o.bmp"
-LABEL_EB27CE:	aligned_string "i90o.bmp"
-LABEL_EB27D8:	aligned_string "i89.bmp"
-LABEL_EB27E0:	aligned_string "i88.bmp"
+IconBitmapName_i95:	aligned_string "i95.bmp"
+IconBitmapName_i94:	aligned_string "i94.bmp"
+IconBitmapName_i93o:	aligned_string "i93o.bmp"
+IconBitmapName_i92o:	aligned_string "i92o.bmp"
+IconBitmapName_i91o:	aligned_string "i91o.bmp"
+IconBitmapName_i90o:	aligned_string "i90o.bmp"
+IconBitmapName_i89:	aligned_string "i89.bmp"
+IconBitmapName_i88:	aligned_string "i88.bmp"
 LABEL_EB27E8:	aligned_string "i87.bmp"
 LABEL_EB27F0:	aligned_string "i86.bmp"
 LABEL_EB27F8:	aligned_string "i85.bmp"
@@ -42732,196 +42732,196 @@ LABEL_EEDD36:
 	.long LABEL_E1CDEA
 	.long LABEL_E1CDE6
 	.long LABEL_E1CDE2
-	.long LABEL_E1CDDE
-	.long LABEL_E1CE74
-	.long LABEL_E1CE70
-	.long LABEL_E1CE6C
-	.long LABEL_E1CE68
-	.long LABEL_E1CE64
-	.long LABEL_E1CE60
-	.long LABEL_E1CE5C
-	.long LABEL_E1CE58
-	.long LABEL_E1CE54
-	.long LABEL_E1CE50
-	.long LABEL_E1CE4C
-	.long LABEL_E1CE48
-	.long LABEL_E1CE80
-	.long LABEL_E1CE78
-	.long LABEL_E1CE8E
-	.long LABEL_E1CE88
-	.long LABEL_E1CE9C
-	.long LABEL_E1CE94
-	.long LABEL_E1CEE0
-	.long LABEL_E1CEDC
-	.long LABEL_E1CED8
-	.long LABEL_E1CED4
-	.long LABEL_E1CED0
-	.long LABEL_E1CECC
-	.long LABEL_E1CEC8
-	.long LABEL_E1CEC4
-	.long LABEL_E1CEC0
-	.long LABEL_E1CEBC
-	.long LABEL_E1CEB8
-	.long LABEL_E1CEB4
-	.long LABEL_E1CEB0
-	.long LABEL_E1CEAC
-	.long LABEL_E1CEA8
-	.long LABEL_E1CEA4
-	.long LABEL_E1D404
-	.long LABEL_E1D3FA
-	.long LABEL_E1D3F0
-	.long LABEL_E1D3E6
-	.long LABEL_E1D3DC
-	.long LABEL_E1D3D2
-	.long LABEL_E1D3C8
-	.long LABEL_E1D3BE
-	.long LABEL_E1D3B4
-	.long LABEL_E1D3AA
-	.long LABEL_E1D3A0
-	.long LABEL_E1D396
-	.long LABEL_E1D38C
-	.long LABEL_E1D382
-	.long LABEL_E1D378
-	.long LABEL_E1D36E
-	.long LABEL_E1D364
-	.long LABEL_E1D35A
-	.long LABEL_E1D350
-	.long LABEL_E1D346
-	.long LABEL_E1D33C
-	.long LABEL_E1D332
-	.long LABEL_E1D328
-	.long LABEL_E1D31E
-	.long LABEL_E1D314
-	.long LABEL_E1D30A
-	.long LABEL_E1D300
-	.long LABEL_E1D2F6
-	.long LABEL_E1D2EC
-	.long LABEL_E1D2E2
-	.long LABEL_E1D2D8
-	.long LABEL_E1D2CE
-	.long LABEL_E1D2C4
-	.long LABEL_E1D2BA
-	.long LABEL_E1D2B0
-	.long LABEL_E1D2A6
-	.long LABEL_E1D29C
-	.long LABEL_E1D292
-	.long LABEL_E1D288
-	.long LABEL_E1D27E
-	.long LABEL_E1D274
-	.long LABEL_E1D26A
-	.long LABEL_E1D260
-	.long LABEL_E1D256
-	.long LABEL_E1D24C
-	.long LABEL_E1D242
-	.long LABEL_E1D238
-	.long LABEL_E1D22E
-	.long LABEL_E1D224
-	.long LABEL_E1D21A
-	.long LABEL_E1D210
-	.long LABEL_E1D206
-	.long LABEL_E1D1FC
-	.long LABEL_E1D1F2
-	.long LABEL_E1D1E8
-	.long LABEL_E1D1DE
-	.long LABEL_E1D1D4
-	.long LABEL_E1D1CA
-	.long LABEL_E1D1C0
-	.long LABEL_E1D1B6
-	.long LABEL_E1D1AC
-	.long LABEL_E1D1A2
-	.long LABEL_E1D198
-	.long LABEL_E1D18E
-	.long LABEL_E1D184
-	.long LABEL_E1D17A
-	.long LABEL_E1D170
-	.long LABEL_E1D166
-	.long LABEL_E1D15C
-	.long LABEL_E1D152
-	.long LABEL_E1D148
-	.long LABEL_E1D13E
-	.long LABEL_E1D134
-	.long LABEL_E1D12A
-	.long LABEL_E1D120
-	.long LABEL_E1D116
-	.long LABEL_E1D10C
-	.long LABEL_E1D102
-	.long LABEL_E1D0F8
-	.long LABEL_E1D0EE
-	.long LABEL_E1D0E4
-	.long LABEL_E1D0DA
-	.long LABEL_E1D0D0
-	.long LABEL_E1D0C6
-	.long LABEL_E1D0BC
-	.long LABEL_E1D0B2
-	.long LABEL_E1D0A8
-	.long LABEL_E1D09E
-	.long LABEL_E1D094
-	.long LABEL_E1D08A
-	.long LABEL_E1D080
-	.long LABEL_E1D076
-	.long LABEL_E1D06C
-	.long LABEL_E1D062
-	.long LABEL_E1D058
-	.long LABEL_E1D04E
-	.long LABEL_E1D044
-	.long LABEL_E1D03A
-	.long LABEL_E1D030
-	.long LABEL_E1D026
-	.long LABEL_E1D01C
-	.long LABEL_E1D012
-	.long LABEL_E1D008
-	.long LABEL_E1CFFE
-	.long LABEL_E1CFF4
-	.long LABEL_E1CFEA
-	.long LABEL_E1CFE0
-	.long LABEL_E1CFD6
-	.long LABEL_E1CFCC
-	.long LABEL_E1CFC2
-	.long LABEL_E1CFB8
-	.long LABEL_E1CFAE
-	.long LABEL_E1CFA4
-	.long LABEL_E1CF9A
-	.long LABEL_E1CF90
-	.long LABEL_E1CF86
-	.long LABEL_E1CF7C
-	.long LABEL_E1CF72
-	.long LABEL_E1CF68
-	.long LABEL_E1CF5E
-	.long LABEL_E1CF54
-	.long LABEL_E1CF4A
-	.long LABEL_E1CF40
-	.long LABEL_E1CF36
-	.long LABEL_E1CF2C
-	.long LABEL_E1CF22
-	.long LABEL_E1CF18
-	.long LABEL_E1CF0E
-	.long LABEL_E1D78A
-	.long LABEL_E1D786
-	.long LABEL_E1D782
-	.long LABEL_E1D77E
-	.long LABEL_E1D77A
-	.long LABEL_E1D776
-	.long LABEL_E1D772
-	.long LABEL_E1D76E
-	.long LABEL_E1D76A
-	.long LABEL_E1D766
-	.long LABEL_E1D762
-	.long LABEL_E1D75E
-	.long LABEL_E1D75A
-	.long LABEL_E1D756
-	.long LABEL_E1D752
-	.long LABEL_E1D74E
-	.long LABEL_E1D74A
-	.long LABEL_E1DEFC
-	.long LABEL_E1DEEA
-	.long LABEL_E1DED8
-	.long LABEL_E1DEC6
-	.long LABEL_E1DEB4
-	.long LABEL_E1DEA2
-	.long LABEL_E1DE90
-	.long LABEL_E1DE7E
-	.long LABEL_E1DE6C
-	.long LABEL_E1DE5A
+	.long NoteStepDisplayData
+	.long NoteDataC_Natural
+	.long NoteDataD_Flat
+	.long NoteDataD_Natural
+	.long NoteDataE_Flat
+	.long NoteDataE_Natural
+	.long NoteDataF_Natural
+	.long NoteDataF_Sharp
+	.long NoteDataG_Natural
+	.long NoteDataA_Flat
+	.long NoteDataA_Natural
+	.long NoteDataB_Flat
+	.long NoteDataB_Natural
+	.long StrDisable
+	.long StrEnable
+	.long StrMajor
+	.long StrMinor
+	.long StrNormal
+	.long StrSeventh
+	.long StrTimeSig_1_2
+	.long StrTimeSig_2_2
+	.long StrTimeSig_3_2
+	.long StrTimeSig_4_2
+	.long StrTimeSig_1_4
+	.long StrTimeSig_2_4
+	.long StrTimeSig_3_4
+	.long StrTimeSig_4_4
+	.long StrTimeSig_5_4
+	.long StrTimeSig_6_4
+	.long StrTimeSig_7_4
+	.long StrTimeSig_8_4
+	.long StrTimeSig_1_8
+	.long StrTimeSig_2_8
+	.long StrTimeSig_3_8
+	.long StrTimeSig_4_8
+	.long StrPanLeft64
+	.long StrPanLeft63
+	.long StrPanLeft62
+	.long StrPanLeft61
+	.long StrPanLeft60
+	.long StrPanLeft59
+	.long StrPanLeft58
+	.long StrPanLeft57
+	.long StrPanLeft56
+	.long StrPanLeft55
+	.long StrPanLeft54
+	.long StrPanLeft53
+	.long StrPanLeft52
+	.long StrPanLeft51
+	.long StrPanLeft40b
+	.long StrPanLeft49
+	.long StrPanLeft48
+	.long StrPanLeft47
+	.long StrPanLeft46
+	.long StrPanLeft45
+	.long StrPanLeft44
+	.long StrPanLeft43
+	.long StrPanLeft42
+	.long StrPanLeft41
+	.long StrPanLeft40
+	.long StrPanLeft39
+	.long StrPanLeft38
+	.long StrPanLeft37
+	.long StrPanLeft36
+	.long StrPanLeft35
+	.long StrPanLeft34
+	.long StrPanLeft33
+	.long StrPanLeft32
+	.long StrPanLeft31
+	.long StrPanLeft30
+	.long StrPanLeft29
+	.long StrPanLeft28
+	.long StrPanLeft27
+	.long StrPanLeft26
+	.long StrPanLeft25
+	.long StrPanLeft24
+	.long StrPanLeft23
+	.long StrPanLeft22
+	.long StrPanLeft21
+	.long StrPanLeft20
+	.long StrPanLeft19
+	.long StrPanLeft18
+	.long StrPanLeft17
+	.long StrPanLeft16
+	.long StrPanLeft15
+	.long StrPanLeft14
+	.long StrPanLeft13
+	.long StrPanLeft12
+	.long StrPanLeft11
+	.long StrPanLeft10
+	.long StrPanLeft09
+	.long StrPanLeft08
+	.long StrPanLeft07
+	.long StrPanLeft06
+	.long StrPanLeft05
+	.long StrPanLeft04
+	.long StrPanLeft03
+	.long StrPanLeft02
+	.long StrPanLeft01
+	.long StrPanCenter
+	.long StrPanRight01
+	.long StrPanRight02
+	.long StrPanRight03
+	.long StrPanRight04
+	.long StrPanRight05
+	.long StrPanRight06
+	.long StrPanRight07
+	.long StrPanRight08
+	.long StrPanRight09
+	.long StrPanRight10
+	.long StrPanRight11
+	.long StrPanRight12
+	.long StrPanRight13
+	.long StrPanRight14
+	.long StrPanRight15
+	.long StrPanRight16
+	.long StrPanRight17
+	.long StrPanRight18
+	.long StrPanRight19
+	.long StrPanRight20
+	.long StrPanRight21
+	.long StrPanRight22
+	.long StrPanRight23
+	.long StrPanRight24
+	.long StrPanRight25
+	.long StrPanRight26
+	.long StrPanRight27
+	.long StrPanRight28
+	.long StrPanRight29
+	.long StrPanRight30
+	.long StrPanRight31
+	.long StrPanRight32
+	.long StrPanRight33
+	.long StrPanRight34
+	.long StrPanRight35
+	.long StrPanRight36
+	.long StrPanRight37
+	.long StrPanRight38
+	.long StrPanRight39
+	.long StrPanRight40
+	.long StrPanRight41
+	.long StrPanRight42
+	.long StrPanRight43
+	.long StrPanRight44
+	.long StrPanRight45
+	.long StrPanRight46
+	.long StrPanRight47
+	.long StrPanRight48
+	.long StrPanRight49
+	.long StrPanRight50
+	.long StrPanRight51
+	.long StrPanRight52
+	.long StrPanRight53
+	.long StrPanRight54
+	.long StrPanRight55
+	.long StrPanRight56
+	.long StrPanRight57
+	.long StrPanRight58
+	.long StrPanRight59
+	.long StrPanRight60
+	.long StrPanRight61
+	.long StrPanRight62
+	.long StrPanRight63
+	.long StrBeatOff
+	.long StrBeat01
+	.long StrBeat02
+	.long StrBeat03
+	.long StrBeat04
+	.long StrBeat05
+	.long StrBeat06
+	.long StrBeat07
+	.long StrBeat08
+	.long StrBeat09
+	.long StrBeat10
+	.long StrBeat11
+	.long StrBeat12
+	.long StrBeat13
+	.long StrBeat14
+	.long StrBeat15
+	.long StrBeat16
+	.long StrGenre_8Beat
+	.long StrGenre_16Beat
+	.long StrGenre_DancePop
+	.long StrGenre_JazzFusion
+	.long StrGenre_MarchPolka
+	.long StrGenre_Swing
+	.long StrGenre_Latin
+	.long StrGenre_Country
+	.long StrGenre_RockBallad
+	.long StrGenre_Waltz
 	.byte 0xff, 0xff
 	.byte 0xff, 0xff, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0xff, 0xff, 0xff, 0xff, 0x00, 0x00, 0x80, 0xf9
@@ -61647,7 +61647,7 @@ Scoop_EventLoop_36Entry_Data:
 	.byte 0xf5, 0x00, 0xeb, 0x88, 0x1d, 0xca, 0xca, 0xfa
 	.byte 0x5e, 0xf3, 0xfd, 0x0c, 0x01, 0x37, 0x0e, 0xf3
 	.byte 0xfd, 0xf4, 0xfe, 0x37, 0x3e, 0xe8, 0x8e, 0x45
-	.long LABEL_E0CD1E
+	.long GUI_FormatStrings
 	.byte 0xf3, 0xfd, 0x08, 0x01
 	.byte 0x34, 0xd9, 0xac, 0x95, 0x11, 0x9e, 0x02, 0x20
 	.byte 0xe8, 0x12, 0x8e, 0x04, 0x25, 0x8e, 0x05, 0x23
@@ -105261,7 +105261,7 @@ DemoMedDspCheck:
 LABEL_F2D0E9:
 	.byte 0xaa, 0x0e, 0x23, 0xaa, 0x12, 0x21, 0x40, 0x9e
 	.byte 0x67, 0xe2, 0x00, 0xeb, 0xe3, 0x6e, 0x05, 0x40
-	.long LABEL_E26792
+	.long MedleyDisp_Blank
 	push	xwa
 	push	xbc
 	call	16714354
@@ -105304,7 +105304,7 @@ DPPlayDspCheck:
 LABEL_F2D161:
 	.byte 0xaa, 0x0e, 0x23, 0xaa, 0x12, 0x21, 0x40, 0xc4
 	.byte 0x67, 0xe2, 0x00, 0xeb, 0xe3, 0x6e, 0x05, 0x40
-	.long LABEL_E267BE
+	.long PlayModeStr_Play
 	push	xwa
 	push	xbc
 	call	16714354
@@ -105347,7 +105347,7 @@ DPPauseDspCheck:
 LABEL_F2D1D9:
 	.byte 0xaa, 0x0e, 0x23, 0xaa, 0x12, 0x21, 0x40, 0xe4
 	.byte 0x67, 0xe2, 0x00, 0xeb, 0xe3, 0x6e, 0x05, 0x40
-	.long LABEL_E267DE
+	.long PlayModeStr_Pause
 	push	xwa
 	push	xbc
 	call	16714354
@@ -140914,7 +140914,7 @@ LABEL_F451C1:
 	.byte 0x1d, 0x88, 0x04, 0xf2, 0x78, 0xf5, 0x00, 0x1d
 	.byte 0x93, 0x04, 0xf2, 0x78, 0xee, 0x00, 0x1d, 0x9e
 	.byte 0x04, 0xf2, 0x78, 0xe7, 0x00, 0x1d, 0xa9, 0x04
-	.long LABEL_E078F2
+	.long SoundData_Flute_Extra
 	call	15860916
 	jrl	217
 	call	15860927
@@ -201842,7 +201842,7 @@ LABEL_F73938:
 	.byte 0x00, 0x00, 0xe8, 0xcf, 0x00, 0x00, 0x00, 0x00
 	.byte 0x77, 0x33, 0x05, 0xe8, 0xcf, 0x13, 0x00, 0x00
 	.byte 0x00, 0x7b, 0x2a, 0x05, 0xe8, 0x80, 0xe8, 0xc8
-	.long LABEL_E7F070
+	.long MidiPart_ColWidthData
 	.byte 0x90, 0x20, 0xf2, 0x98
 	.byte 0x3a, 0xf7, 0x34, 0xf3, 0x07, 0xf0, 0xe0, 0xd8
 	.byte 0x91, 0x20, 0xd8, 0xcf, 0x10, 0x00, 0x66, 0x0d
@@ -201978,7 +201978,7 @@ LABEL_F73CE9:
 	.byte 0x6e, 0x25, 0x40, 0xd8, 0xef, 0xe7, 0x00, 0x68
 	.byte 0x13, 0x40, 0xe4, 0xef, 0xe7, 0x00, 0x68, 0x0c
 	.byte 0x40, 0xf0, 0xef, 0xe7, 0x00, 0x68, 0x05, 0x40
-	.long LABEL_E7EFFC
+	.long MidiPart_RecvTransStr
 	.byte 0x38, 0xbf, 0x18, 0x30
 	.byte 0x38, 0x1d, 0x4d, 0x0f, 0xff, 0xef, 0x60, 0x1d
 	.byte 0xd0, 0x44, 0xfa, 0xeb, 0x88, 0xbf, 0x0c, 0x32
@@ -201987,7 +201987,7 @@ LABEL_F73CE9:
 	.byte 0xfc, 0xbf, 0x14, 0x31, 0xdb, 0xcf, 0x78, 0x00
 	.byte 0x66, 0x0d, 0xdb, 0xcf, 0x79, 0x00, 0x6e, 0x16
 	.byte 0x40, 0x08, 0xf0, 0xe7, 0x00, 0x68, 0x05, 0x40
-	.long LABEL_E7F014
+	.long MidiPart_AfterStr
 	.byte 0x38, 0x39, 0x1d, 0x4d
 	.byte 0x0f, 0xff, 0xef, 0x60, 0x68, 0x1b, 0x40, 0x0a
 	.byte 0x2d, 0x00, 0x00, 0x1d, 0x37, 0xd4, 0xfc, 0x2b
@@ -222901,7 +222901,7 @@ FDemoText_ByteData_LayoutEngine:
 	.byte 0xd2, 0x72, 0x5b, 0x02, 0x20, 0xd8, 0x61, 0xf2
 	.byte 0x72, 0x5b, 0x02, 0x50, 0xd8, 0xcf, 0x08, 0x00
 	.byte 0x69, 0x0b, 0xf2, 0x74, 0x5b, 0x02, 0x31, 0xf3
-	.long LABEL_E0E407
+	.long ToneGen_ParamTable
 	.byte 0x00, 0xdb, 0xa8, 0x0e
 	.byte 0xda, 0xd9, 0x66, 0x2e, 0xda, 0xd8, 0x6e, 0x2a
 	.byte 0x1e, 0x5e, 0x04, 0xd2, 0x72, 0x5b, 0x02, 0x20
@@ -272896,7 +272896,7 @@ LABEL_FB1450:
 	ld	wa, iz
 	call	16459925
 	inc	1, iz
-	.long LABEL_E0CFDE
+	.long GUI_DisplayStructData
 	jr	c, -39
 	sti16_24	257950, 4
 	sti16_24	197728, 1
@@ -359037,9 +359037,9 @@ FIRMWARE_VERSION:	; FFFFE8
 	.set LABEL_E1CE06, 0xE1CE06
 	.set LABEL_E1CE0A, 0xE1CE0A
 	.set LABEL_E1CE0E, 0xE1CE0E
-	.set LABEL_E1DD4C, 0xE1DD4C
-	.set LABEL_E1DD52, 0xE1DD52
-	.set LABEL_E1DD5A, 0xE1DD5A
+	.set StrNotePos_FlatAlt, 0xE1DD4C
+	.set StrNotePos_FlatAltB8, 0xE1DD52
+	.set StrNotePos_AcNatural, 0xE1DD5A
 	.set LABEL_E1FFB6, 0xE1FFB6
 	.set LABEL_E208A4, 0xE208A4
 	.set LABEL_E20B7C, 0xE20B7C
@@ -359063,9 +359063,9 @@ FIRMWARE_VERSION:	; FFFFE8
 	.set LABEL_E2405E, 0xE2405E
 	.set LABEL_E270EA, 0xE270EA
 	.set LABEL_E2713C, 0xE2713C
-	.set LABEL_E27564, 0xE27564
-	.set LABEL_E27574, 0xE27574
-	.set LABEL_E27586, 0xE27586
+	.set NakaInst_SqedtVal, 0xE27564
+	.set NakaInst_SqedtVal_B, 0xE27574
+	.set NakaInst_EqualizerBox, 0xE27586
 	.set LABEL_E278A9, 0xE278A9
 	.set LABEL_E2DF22, 0xE2DF22
 	.set LABEL_E2DF54, 0xE2DF54
@@ -359235,8 +359235,8 @@ FIRMWARE_VERSION:	; FFFFE8
 	.set LABEL_EA8CBC, 0xEA8CBC
 	.set LABEL_EAAEF4, 0xEAAEF4
 	.set LABEL_EAB18C, 0xEAB18C
-	.set LABEL_EAC1BA, 0xEAC1BA
-	.set LABEL_EAC1BE, 0xEAC1BE
+	.set WidgetPropStr_Max, 0xEAC1BA
+	.set WidgetPropStr_RangeFigures, 0xEAC1BE
 	.set LABEL_EADA96, 0xEADA96
 	.set LABEL_EADB1A, 0xEADB1A
 	.set LABEL_EADB26, 0xEADB26
@@ -359244,7 +359244,7 @@ FIRMWARE_VERSION:	; FFFFE8
 	.set LABEL_EADB3E, 0xEADB3E
 	.set LABEL_EADB4A, 0xEADB4A
 	.set LABEL_EADB56, 0xEADB56
-	.set LABEL_EB2796, 0xEB2796
+	.set IconBitmapName_i96o, 0xEB2796
 	.set LABEL_EB287E, 0xEB287E
 	.set LABEL_EB2886, 0xEB2886
 	.set LABEL_EB288E, 0xEB288E
