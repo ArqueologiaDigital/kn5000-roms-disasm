@@ -1758,12 +1758,12 @@ DiskSel_Exit:
 	lda xsp, (xsp + 14)
 	ret
 
-LABEL_F92C0E:
+GetPlayState1_Entry:
 GetPlayState1:
 	ldda8 l, 35138
 	ret
 
-LABEL_F92C13:
+GetPlayState2_Entry:
 GetPlayState2:
 	ldda8 l, 35140
 	ret
@@ -1772,7 +1772,7 @@ SmfMedley_RawData:
 	.byte 0xc9, 0xd8, 0xd8, 0x7e, 0xf1, 0x44, 0x89, 0x41
 	.byte 0x0e
 
-LABEL_F92C21:
+NavigateSongList_Entry:
 NavigateSongList:
 	dec 2, xsp
 	pushw iz
@@ -1813,7 +1813,7 @@ NavSong_Exit:
 	inc 2, xsp
 	ret
 
-LABEL_F92C70:
+NavigateDocList_Entry:
 NavigateDocList:
 	pushw iz
 	ld iz, wa
@@ -1848,7 +1848,7 @@ NavDoc_Exit:
 	popw iz
 	ret
 
-LABEL_F92CAC:
+NavigatePdList_Entry:
 NavigatePdList:
 	pushw iz
 	ld iz, wa
@@ -2222,7 +2222,7 @@ SmfMed_FinishInit:
 	stda32 33844, xwa
 	jrl SmfMed_Exit
 
-LABEL_F93051:
+SmfMed_HandleStop_Entry:
 SmfMed_HandleStop:
 	ldda8 a, 36150
 	cp a, 0x6F
@@ -2471,7 +2471,7 @@ SmfMed_Exit:
 	inc 4, xsp
 	ret
 
-LABEL_F93283:
+PdMed_FormatFileList_Entry:
 PdMed_FormatFileList:
 	dec 6, xsp
 	pushw iz
@@ -2803,7 +2803,7 @@ PdFmtSlot_Exit:
 	inc 6, xsp
 	ret
 
-LABEL_F935C0:
+FmmPdMedleyFunc_Entry:
 FmmPdMedleyFunc:
 	push xiz
 	ld xhl, xde
@@ -2942,7 +2942,7 @@ PdMed_ShowError:
 	call LABEL_F994BD
 	jrl PdMed_Exit
 
-LABEL_F9373F:
+PdMed_InitFromDisk_Entry:
 PdMed_InitFromDisk:
 	cpdi16 34054, 0
 	jr ge, PdMed_InitState
@@ -3225,7 +3225,7 @@ PdMed_Exit:
 	pop xiz
 	ret
 
-LABEL_F939CE:
+DocDiskNameFunc_Entry:
 DocDiskNameFunc:
 	push xiz
 	ld xiz, xde
@@ -3523,7 +3523,7 @@ DocName_Exit:
 	inc 4, xsp
 	ret
 
-LABEL_F93C9C:
+DocMed_FormatSlotList_Entry:
 DocMed_FormatSlotList:
 	dec 6, xsp
 	push xiz
@@ -3749,7 +3749,7 @@ DocMed_ShowError:
 	call LABEL_F994BD
 	jrl DocMed_Exit
 
-LABEL_F93EEA:
+DocMed_CheckInit_Entry:
 DocMed_CheckInit:
 	cpdi16 34056, 0
 	jr lt, DocMed_InitFromDisk
@@ -4041,7 +4041,7 @@ DocMed_Exit:
 	pop xiz
 	ret
 
-LABEL_F94193:
+SetSongSlotValue_Entry:
 SetSongSlotValue:
 	cp wa, 0xA
 	ret nc
@@ -4061,7 +4061,7 @@ SetSongSlotValue:
 	ld (xhl), bc
 	ret
 
-LABEL_F941C8:
+GetSongSlotValue_Entry:
 GetSongSlotValue:
 	lds hl, 0
 	cp wa, 0xA
@@ -4074,19 +4074,19 @@ GetSongSlotValue:
 	ld hl, (xbc)
 	ret
 
-LABEL_F941E5:
+CheckSongSlotHasData_Entry:
 CheckSongSlotHasData:
 	calr GetSongSlotValue
 	cps hl, 0
 	scc16 nz, hl
 	ret
 
-LABEL_F941ED:
+SongSlot_RawData_Start:
 SongSlot_RawData:
 	.byte 0x2e, 0xd9, 0x8e, 0x1e, 0xd5, 0xff, 0xde, 0xf3
 	.byte 0xdb, 0x76, 0x4e, 0x0e
 
-LABEL_F941F9:
+FindFirstEmptySlot_Entry:
 FindFirstEmptySlot:
 	pushw iz
 	lds iz, 0
@@ -4104,7 +4104,7 @@ FindEmpty_Exit:
 	popw iz
 	ret
 
-LABEL_F9420F:
+ClearAllSongSlots_Entry:
 ClearAllSongSlots:
 	push xiz
 	ld iz, wa
@@ -4120,7 +4120,7 @@ ClearSlots_Loop:
 	pop xiz
 	ret
 
-LABEL_F94229:
+ResetSlotsIfEmpty_Entry:
 ResetSlotsIfEmpty:
 	calr FindFirstEmptySlot
 	ld wa, hl
@@ -4129,7 +4129,7 @@ ResetSlotsIfEmpty:
 	calr ClearAllSongSlots
 	ret
 
-LABEL_F94236:
+CheckSlotIsSelected_Entry:
 CheckSlotIsSelected:
 	pushw iz
 	ld iz, wa
@@ -4139,24 +4139,24 @@ CheckSlotIsSelected:
 	popw iz
 	ret
 
-LABEL_F94242:
+CheckAnySlotHasData_Entry:
 CheckAnySlotHasData:
 	calr FindFirstEmptySlot
 	cps hl, 0
 	scc16 nz, hl
 	ret
 
-LABEL_F9424A:
+SetCurrentSlotIndex_Entry:
 SetCurrentSlotIndex:
 	st16_24 0x09480e, xwa
 	ret
 
-LABEL_F94250:
+GetCurrentSlotIndex_Entry:
 GetCurrentSlotIndex:
 	ld16_24 xhl, 0x09480e
 	ret
 
-LABEL_F94256:
+CheckIsCurrentSlot_Entry:
 CheckIsCurrentSlot:
 	pushw iz
 	ld iz, wa
@@ -4166,7 +4166,7 @@ CheckIsCurrentSlot:
 	popw iz
 	ret
 
-LABEL_F94262:
+CheckSlotIndexValid_Entry:
 CheckSlotIndexValid:
 	calr GetCurrentSlotIndex
 	cps hl, 0
