@@ -23269,7 +23269,9 @@ LABEL_0280FE:
 	.byte 0x68, 0x06, 0xd9, 0xf0, 0x62, 0x02, 0xd9, 0x88
 	.byte 0xd8, 0x8b, 0x0e
 
-LABEL_028839:
+; Voice_CC_SetVolume -- CC 0x07: Store volume via lookup table
+; Uses non-linear lookup table at ROM 0x011D16. Mute value: 0xFE00.
+Voice_CC_SetVolume:
 	cps c, 0
 	jr z, LABEL_0288B2
 	ld16_24 xde, 0x041343
@@ -23321,14 +23323,17 @@ LABEL_0288B2:
 	stiw_dri 0x07, 0xE4, 0xE0, 0x00, 0xFE
 	ret
 
-LABEL_0288C5:
+; Voice_CC_SetPan -- CC 0x0A: Store pan value at voice + 0x0E
+Voice_CC_SetPan:
 	extz wa
 	muls wa, 0x11F
 	lda_24 xde, 0x041376
 	lda_dri3 XHL, 0x07, 0xE8, 0xE0
 	ret
 
-LABEL_0288D6:
+; Voice_CC_SetExpression -- CC 0x0B: Store expression via lookup table
+; Uses same lookup table as Volume (0x011D16). Mute value: 0xFE00.
+Voice_CC_SetExpression:
 	cps c, 0
 	jr z, LABEL_02894F
 	ld16_24 xde, 0x041343
@@ -23380,7 +23385,8 @@ LABEL_02894F:
 	stiw_dri 0x07, 0xE4, 0xE0, 0x00, 0xFE
 	ret
 
-LABEL_028962:
+; Voice_CC_SetSustain -- CC 0x40: Set/clear sustain bit 0 at voice+0x0A
+Voice_CC_SetSustain:
 	cps c, 0
 	jr z, LABEL_028979
 	extz wa
@@ -23396,21 +23402,21 @@ LABEL_028979:
 	and_sriw_im 0x07, 0xE4, 0xE0, 0xFE, 0xFF
 	ret
 
-LABEL_02898C:
+Voice_CC_SetSostenuto:
 	extz wa
 	muls wa, 0x11F
 	lda_24 xde, 0x041377
 	lda_dri3 XHL, 0x07, 0xE8, 0xE0
 	ret
 
-LABEL_02899D:
+Voice_CC_SetSoftPedal:
 	extz wa
 	muls wa, 0x11F
 	lda_24 xde, 0x04137a
 	lda_dri3 XHL, 0x07, 0xE8, 0xE0
 	ret
 
-LABEL_0289AE:
+Voice_CC_SetSostenutoFlag:
 	cps c, 0
 	jr z, LABEL_0289C5
 	extz wa
@@ -23426,14 +23432,14 @@ LABEL_0289C5:
 	and_sriw_im 0x07, 0xE4, 0xE0, 0xFF, 0xBF
 	ret
 
-LABEL_0289D8:
+Voice_CC_SetPortamentoRate:
 	extz wa
 	muls wa, 0x11F
 	lda_24 xde, 0x04137b
 	lda_dri3 XHL, 0x07, 0xE8, 0xE0
 	ret
 
-LABEL_0289E9:
+Voice_CC_SetPortamentoDepth:
 	ld e, c
 	extz de
 	sub de, 0x80
@@ -23444,7 +23450,7 @@ LABEL_0289E9:
 	st_dri3w DE, 0x07, 0xE4, 0xE0
 	ret
 
-LABEL_028A04:
+Voice_CC_SetPortamentoTime:
 	ld e, c
 	sub e, 0x40
 	extz wa
@@ -23453,7 +23459,7 @@ LABEL_028A04:
 	lda_dri3 XIY, 0x07, 0xE4, 0xE0
 	ret
 
-LABEL_028A1A:
+Voice_CC_SetModWheelRange:
 	.byte 0xcb, 0xd8, 0x66, 0x13, 0xd8, 0x12, 0xd8, 0x09
 	.byte 0x1f, 0x01, 0xf2, 0x72, 0x13, 0x04, 0x31, 0xd3
 	.byte 0x07, 0xe4, 0xe0, 0x3e, 0x02, 0x00, 0x0e, 0xd8
@@ -23461,14 +23467,17 @@ LABEL_028A1A:
 	.byte 0x04, 0x31, 0xd3, 0x07, 0xe4, 0xe0, 0x3c, 0xfd
 	.byte 0xff, 0x0e
 
-LABEL_028A44:
+; Voice_CC_SetReverbDepth -- CC 0x91: Store reverb depth
+; Stores value at voice + 0x7F (base 0x04137F). Range 0x00-0x7F.
+Voice_CC_SetReverbDepth:
 	extz wa
 	muls wa, 0x11F
 	lda_24 xde, 0x04137f
 	lda_dri3 XHL, 0x07, 0xE8, 0xE0
 	ret
 
-LABEL_028A55:
+; Voice_CC_SetChorusEnable -- CC 0x95: Set/clear chorus bit 2 at voice+0x0A
+Voice_CC_SetChorusEnable:
 	cps c, 0
 	jr z, LABEL_028A6C
 	extz wa
@@ -23484,21 +23493,24 @@ LABEL_028A6C:
 	and_sriw_im 0x07, 0xE4, 0xE0, 0xFB, 0xFF
 	ret
 
-LABEL_028A7F:
+; Voice_CC_SetChorusDepth -- CC 0x97: Store chorus depth at voice+0x18
+Voice_CC_SetChorusDepth:
 	extz wa
 	muls wa, 0x11F
 	lda_24 xde, 0x041380
 	lda_dri3 XHL, 0x07, 0xE8, 0xE0
 	ret
 
-LABEL_028A90:
+; Voice_CC_SetDelayDepth -- CC 0x9B: Store delay depth at voice+0x25
+Voice_CC_SetDelayDepth:
 	extz wa
 	muls wa, 0x11F
 	lda_24 xde, 0x04138d
 	lda_dri3 XHL, 0x07, 0xE8, 0xE0
 	ret
 
-LABEL_028AA1:
+; Voice_CC_SetDelayEnable -- CC 0x9C: Set/clear delay bit 8 at voice+0x02
+Voice_CC_SetDelayEnable:
 	cps c, 0
 	jr z, LABEL_028AB8
 	extz wa
@@ -23514,7 +23526,8 @@ LABEL_028AB8:
 	and_sriw_im 0x07, 0xE4, 0xE0, 0xFF, 0xFE
 	ret
 
-LABEL_028ACB:
+; Voice_CC_SetDelayFeedback -- CC 0x9D: Store delay feedback at voice+0x26
+Voice_CC_SetDelayFeedback:
 	extz wa
 	muls wa, 0x11F
 	lda_24 xde, 0x04138e
@@ -24702,7 +24715,7 @@ LABEL_02A11C:
 	ld c, a
 	extz bc
 	ld wa, de
-	calr LABEL_0289AE
+	calr Voice_CC_SetSostenutoFlag
 	ld a, (xsp + 2)
 	extz wa
 	lds bc, 1
@@ -24932,7 +24945,7 @@ Voice_CC_Volume:
 	ld c, a
 	extz bc
 	ld wa, de
-	calr LABEL_028839
+	calr Voice_CC_SetVolume
 	ld a, (xiz + 1)
 	extz wa
 	call LABEL_02CD36
@@ -24948,7 +24961,7 @@ Voice_CC_Pan:
 	ld c, a
 	extz bc
 	ld wa, de
-	calr LABEL_0288C5
+	calr Voice_CC_SetPan
 	ld a, (xiz + 1)
 	extz wa
 	call LABEL_032E1E
@@ -24962,7 +24975,7 @@ Voice_CC_Expression:
 	ld c, a
 	extz bc
 	ld wa, de
-	calr LABEL_0288D6
+	calr Voice_CC_SetExpression
 	ld a, (xiz + 1)
 	extz wa
 	call LABEL_02CD36
@@ -24978,7 +24991,7 @@ Voice_CC_Sustain:
 	ld c, a
 	extz bc
 	ld wa, de
-	calr LABEL_028962
+	calr Voice_CC_SetSustain
 	ld a, (xiz + 1)
 	extz wa
 	call LABEL_02CCF5
@@ -24995,7 +25008,7 @@ Voice_CC_Sostenuto:
 	ld c, a
 	extz bc
 	ld wa, de
-	calr LABEL_02898C
+	calr Voice_CC_SetSostenuto
 	jrl Voice_CC_Exit
 
 Voice_CC_Soft:
@@ -25006,7 +25019,7 @@ Voice_CC_Soft:
 	ld c, a
 	extz bc
 	ld wa, de
-	calr LABEL_02899D
+	calr Voice_CC_SetSoftPedal
 	jrl Voice_CC_Exit
 
 Voice_CC_Portamento:
@@ -25043,7 +25056,7 @@ Voice_CC_Portamento:
 	ld c, a
 	extz bc
 	ld wa, de
-	calr LABEL_0289D8
+	calr Voice_CC_SetPortamentoRate
 	jrl Voice_CC_Exit
 	ld a, (xiz + 1)
 	ld e, a
@@ -25052,7 +25065,7 @@ Voice_CC_Portamento:
 	ld c, a
 	extz bc
 	ld wa, de
-	calr LABEL_0289E9
+	calr Voice_CC_SetPortamentoDepth
 	ld a, (xiz + 1)
 	extz wa
 	call LABEL_02CD36
@@ -25066,7 +25079,7 @@ Voice_CC_Portamento:
 	ld c, a
 	extz bc
 	ld wa, de
-	calr LABEL_028A04
+	calr Voice_CC_SetPortamentoTime
 	jr Voice_CC_Exit
 
 Voice_CC_91:
@@ -25077,7 +25090,7 @@ Voice_CC_91:
 	ld c, a
 	extz bc
 	ld wa, de
-	calr LABEL_028A44
+	calr Voice_CC_SetReverbDepth
 	jr Voice_CC_Exit
 
 Voice_CC_95:
@@ -25088,7 +25101,7 @@ Voice_CC_95:
 	ld c, a
 	extz bc
 	ld wa, de
-	calr LABEL_028A55
+	calr Voice_CC_SetChorusEnable
 	jr Voice_CC_Exit
 
 Voice_CC_97:
@@ -25099,7 +25112,7 @@ Voice_CC_97:
 	ld c, a
 	extz bc
 	ld wa, de
-	calr LABEL_028A7F
+	calr Voice_CC_SetChorusDepth
 	jr Voice_CC_Exit
 
 Voice_CC_9B:
@@ -25110,7 +25123,7 @@ Voice_CC_9B:
 	ld c, a
 	extz bc
 	ld wa, de
-	calr LABEL_028A90
+	calr Voice_CC_SetDelayDepth
 	jr Voice_CC_Exit
 
 Voice_CC_9C:
@@ -25121,7 +25134,7 @@ Voice_CC_9C:
 	ld c, a
 	extz bc
 	ld wa, de
-	calr LABEL_028AA1
+	calr Voice_CC_SetDelayEnable
 	jr Voice_CC_Exit
 
 Voice_CC_9D:
@@ -25132,7 +25145,7 @@ Voice_CC_9D:
 	ld c, a
 	extz bc
 	ld wa, de
-	calr LABEL_028ACB
+	calr Voice_CC_SetDelayFeedback
 
 Voice_CC_Exit:
 	pop xiz
@@ -25587,27 +25600,27 @@ LABEL_02A900:
 	ldto_berp A, 0xFB
 	extz wa
 	ldw bc, 0x7F
-	calr LABEL_028839
+	calr Voice_CC_SetVolume
 	ldto_berp A, 0xFB
 	extz wa
 	ldw bc, 0x40
-	calr LABEL_0288C5
+	calr Voice_CC_SetPan
 	ldto_berp A, 0xFB
 	extz wa
 	ldw bc, 0x7F
-	calr LABEL_0288D6
+	calr Voice_CC_SetExpression
 	ldto_berp A, 0xFB
 	extz wa
 	lds bc, 0
-	calr LABEL_028962
+	calr Voice_CC_SetSustain
 	ldto_berp A, 0xFB
 	extz wa
 	lds bc, 0
-	calr LABEL_02898C
+	calr Voice_CC_SetSostenuto
 	ldto_berp A, 0xFB
 	extz wa
 	lds bc, 0
-	calr LABEL_02899D
+	calr Voice_CC_SetSoftPedal
 	ldto_berp A, 0xFB
 	extz wa
 	lds bc, 0
@@ -25624,39 +25637,39 @@ LABEL_02A900:
 	ldto_berp A, 0xFB
 	extz wa
 	lds bc, 2
-	calr LABEL_0289D8
+	calr Voice_CC_SetPortamentoRate
 	ldto_berp A, 0xFB
 	extz wa
 	ldw bc, 0x80
-	calr LABEL_0289E9
+	calr Voice_CC_SetPortamentoDepth
 	ldto_berp A, 0xFB
 	extz wa
 	ldw bc, 0x40
-	calr LABEL_028A04
+	calr Voice_CC_SetPortamentoTime
 	ldto_berp A, 0xFB
 	extz wa
 	lds bc, 0
-	calr LABEL_028A44
+	calr Voice_CC_SetReverbDepth
 	ldto_berp A, 0xFB
 	extz wa
 	lds bc, 0
-	calr LABEL_028A55
+	calr Voice_CC_SetChorusEnable
 	ldto_berp A, 0xFB
 	extz wa
 	lds bc, 6
-	calr LABEL_028A7F
+	calr Voice_CC_SetChorusDepth
 	ldto_berp A, 0xFB
 	extz wa
 	lds bc, 1
-	calr LABEL_028A90
+	calr Voice_CC_SetDelayDepth
 	ldto_berp A, 0xFB
 	extz wa
 	lds bc, 0
-	calr LABEL_028AA1
+	calr Voice_CC_SetDelayEnable
 	ldto_berp A, 0xFB
 	extz wa
 	lds bc, 0
-	calr LABEL_028ACB
+	calr Voice_CC_SetDelayFeedback
 	inc1_berp 0xFB
 	cp_erpb 0xFB, 0x1A
 	jrl c, LABEL_02A900
@@ -26739,7 +26752,7 @@ LABEL_02B576:
 	ld c, a
 	extz bc
 	ld wa, de
-	call LABEL_03206F
+	call DSP_LookupVoiceBuffer
 	ld a, (xsp + 36)
 	ld c, a
 	extz bc
@@ -28163,7 +28176,7 @@ LABEL_02C450:
 	ld c, a
 	extz bc
 	ld wa, de
-	call LABEL_03206F
+	call DSP_LookupVoiceBuffer
 	ld xwa, (xsp + 14)
 	ld a, (xwa + 11)
 	ld c, a
@@ -32670,7 +32683,9 @@ LABEL_02F52A:
 	.byte 0xeb, 0x88, 0xd9, 0xa9, 0x1d, 0xb3, 0x0d, 0x02
 	.byte 0xd7, 0xfa, 0x05, 0xef, 0x64, 0x0e
 
-LABEL_030618:
+; DSP_EffectStateQuery -- Query whether effect is active for a voice
+; Reads bit 0 of voice struct at 0x041368; returns 1 (active) or 0.
+DSP_EffectStateQuery:
 	extz wa
 	muls wa, 0x11F
 	lda_24 xde, 0x041368
@@ -32966,14 +32981,22 @@ LABEL_03087F:
 	lda xsp, (xsp + 10)
 	ret
 
-LABEL_030960:
+; =============================================================================
+; DSP_AlgoSelect -- Select DSP algorithm for a voice slot
+; =============================================================================
+; Allocates a DSP algorithm slot in the voice structure array at 0x041368.
+; Multiplies algo index by 0x11F (287 bytes per voice), sets bit 0 of flags
+; to mark as allocated, configures the DSP processing chain.
+; Validates algo sub-type < 0x28 (40); returns error code 2 on failure.
+; Called from DSP_Cmd2B_AlgoSelect (sub-command 0x00 in Audio_Process_DSP).
+DSP_AlgoSelect:
 	dec 8, xsp
 	push xiz
 	ld (xsp + 4), xde
 	ld (xsp + 8), bc
 	ld (xsp + 10), a
 	cpw (xsp + 8), 0x28
-	jr nc, LABEL_0309DE
+	jr nc, DSP_AlgoSelect_InvalidParam
 	ld a, (xsp + 10)
 	extz wa
 	muls wa, 0x11F
@@ -32981,7 +33004,7 @@ LABEL_030960:
 	st_dri3b H, 0x07, 0xE4, 0xE0
 	ld wa, (xiz)
 	bit 0, wa
-	jr nz, LABEL_0309B4
+	jr nz, DSP_AlgoSelect_AlreadyAllocated
 	ormi16 (xiz), 0x1
 	ld a, (xsp + 10)
 	extz wa
@@ -32998,7 +33021,7 @@ LABEL_030960:
 	ld wa, hl
 	call LABEL_032938
 
-LABEL_0309B4:
+DSP_AlgoSelect_AlreadyAllocated:
 	ld wa, (xiz)
 	bit 0, wa
 	jr z, LABEL_0309C0
@@ -33017,7 +33040,7 @@ LABEL_0309C0:
 	ld (xwa), 0x0
 	jr LABEL_0309E4
 
-LABEL_0309DE:
+DSP_AlgoSelect_InvalidParam:
 	ld xwa, (xsp + 4)
 	ld (xwa), 0x2
 
@@ -33027,10 +33050,12 @@ LABEL_0309E4:
 	inc 8, xsp
 	ret
 
-LABEL_0309EA:
+; DSP_MixSendConfig -- Configure DSP mix/send routing
+; Copies 0x11 bytes of routing data via DSP_LookupVoiceBuffer.
+DSP_MixSendConfig:
 	push xiz
 	ld xiz, xde
-	call LABEL_03206F
+	call DSP_LookupVoiceBuffer
 	ld xbc, xhl
 	ldw hl, 0x11
 	lds de, 0
@@ -33229,7 +33254,16 @@ LABEL_030A0A:
 	.byte 0x81, 0x21, 0xb5, 0x41, 0xda, 0x61, 0xdb, 0xf2
 	.byte 0x67, 0xe1, 0x0e
 
-LABEL_030F7D:
+; =============================================================================
+; DSP_VoiceParamReadWrite -- Read/write a single DSP parameter
+; =============================================================================
+; Accesses DSP parameter storage at 0x44FCE + 0x1D8 + param_index.
+; If voice is allocated (bit 0 set), reads from single slot.
+; Otherwise iterates 4 sub-slots via DSP_VoiceParam_MultiSlot.
+; Args: wa = voice number (0-15), bc = param index (0-7),
+;       xde = pointer to voice parameter data area
+; Called from: sub-commands 0x10-0x17 (DSP param set) in Audio_Process_DSP
+DSP_VoiceParamReadWrite:
 	lda xsp, (xsp - 14)
 	push xiz
 	ld (xsp + 10), xde
@@ -33244,7 +33278,7 @@ LABEL_030F7D:
 	add xwa, xhl
 	ld wa, (xwa)
 	bit 0, wa
-	jr z, LABEL_030FC7
+	jr z, DSP_VoiceParam_MultiSlot
 	ld wa, (xsp + 14)
 	extz xwa
 	add xwa, 0x1D8
@@ -33255,7 +33289,7 @@ LABEL_030F7D:
 	ld (xwa), c
 	jrl LABEL_031067
 
-LABEL_030FC7:
+DSP_VoiceParam_MultiSlot:
 	ldw (xsp + 6), 0x0
 	cpw (xsp + 6), 0x4
 	jr nc, LABEL_03104B
@@ -33321,10 +33355,10 @@ LABEL_031067:
 	lda xsp, (xsp + 14)
 	ret
 
-LABEL_03106F:
+DSP_ReadVoiceParam5D:
 	push xiz
 	ld xiz, xde
-	call LABEL_03206F
+	call DSP_LookupVoiceBuffer
 	ld a, (xhl + 93)
 	ld (xiz), a
 	lds hl, 1
@@ -33353,7 +33387,9 @@ LABEL_03107F:
 	.byte 0x43, 0xdc, 0x61, 0xd8, 0xf4, 0x67, 0xed, 0xd8
 	.byte 0x8b, 0x5e, 0x0e
 
-LABEL_03111A:
+; DSP_SetVoiceCoefficients -- Write DSP voice coefficients
+; Complex parameter setter using voice+0x27 region with coefficient lookups.
+DSP_SetVoiceCoefficients:
 	lda xsp, (xsp - 10)
 	push xiz
 	ld (xsp + 8), xde
@@ -33375,7 +33411,7 @@ LABEL_03111A:
 	ld c, a
 	extz bc
 	ld wa, de
-	call LABEL_03206F
+	call DSP_LookupVoiceBuffer
 	ld a, (xsp + 12)
 	extz wa
 	add wa, wa
@@ -33927,7 +33963,9 @@ LABEL_031E68:
 	pop xiz
 	ret
 
-LABEL_031E6A:
+; DSP_WriteVoiceParam -- Write DSP voice parameter by mode
+; Dispatches on voice+16 bits 7:6 for 4 modes (0x00/0x40/0x80/0xC0).
+DSP_WriteVoiceParam:
 	dec 4, xsp
 	pushw iz
 	ld (xsp + 2), de
@@ -33995,10 +34033,10 @@ LABEL_031F00:
 	inc 4, xsp
 	retd 0x4
 
-LABEL_031F06:
+DSP_ReadVoiceParam11:
 	push xiz
 	ld xiz, xde
-	call LABEL_03206F
+	call DSP_LookupVoiceBuffer
 	ld a, (xhl + 17)
 	ld (xiz), a
 	lds hl, 1
@@ -34132,7 +34170,10 @@ LABEL_032054:
 LABEL_03206E:
 	ret
 
-LABEL_03206F:
+; DSP_LookupVoiceBuffer -- Resolve voice buffer pointer
+; Checks flag at 0x041343 and dispatches to one of two lookup functions.
+; Referenced 10 times throughout the DSP processing code.
+DSP_LookupVoiceBuffer:
 	ld16_24 xde, 0x041343
 	bit 0, de
 	jr z, LABEL_03207E
@@ -34294,7 +34335,7 @@ LABEL_0321E5:
 	jr ugt, LABEL_032220
 	ld wa, bc
 	ld bc, de
-	calr LABEL_03206F
+	calr DSP_LookupVoiceBuffer
 	ld a, (xsp + 2)
 	extz wa
 	muls wa, 0x11F
@@ -34381,7 +34422,7 @@ LABEL_0322F0:
 	jr ugt, LABEL_032312
 	ld wa, bc
 	ld bc, de
-	calr LABEL_03206F
+	calr DSP_LookupVoiceBuffer
 	ld a, (xsp + 2)
 	extz wa
 	muls wa, 0x11F
@@ -38602,7 +38643,7 @@ LABEL_0350FA:
 	pushw iz
 	extz wa
 	extz bc
-	call LABEL_03206F
+	call DSP_LookupVoiceBuffer
 	ld (xsp + 2), xhl
 	ld32_24 xde, 0x04531c
 	ld xwa, (xsp + 2)
@@ -39327,7 +39368,7 @@ LABEL_035816:
 	pop xiz
 	ret
 
-LABEL_035818:
+DSP_StoreBufferCount:
 	stda16 17254, xwa
 	ret
 
@@ -39427,7 +39468,7 @@ LABEL_0358C1:
 
 LABEL_0358CF:
 	cp de, 0x20
-	jr nz, LABEL_0358FE
+	jr nz, DSP_CmdHandler_StateReset
 	ld a, (xhl + 5)
 	extz wa
 	and wa, 0x7FF
@@ -39442,7 +39483,7 @@ LABEL_0358CF:
 	stdi16 17548, 1
 	jr LABEL_03590A
 
-LABEL_0358FE:
+DSP_CmdHandler_StateReset:
 	stdi16 17546, 0
 	stdi16 17548, 0
 
@@ -39659,18 +39700,32 @@ LABEL_035AC4:
 ;        Updates DSP2 voice parameters and effect processing
 ;        Part of main audio loop: ToneGen -> MIDI -> DSP -> Final
 ; ===========================================================================
+; =============================================================================
+; Audio_Process_DSP -- Main DSP command processing loop
+; =============================================================================
+; Consumes commands from the DSP ring buffer (2KB at 0x3B60).
+; Each message is 1 framing byte + 7 header bytes:
+;   0x2B = voice DSP param update (per-voice effects)
+;   0x2C = channel/voice configuration
+;   0x2D = DSP effect configuration (preset loads)
+; Sub-commands for 0x2B (header byte 2):
+;   0x00 -> DSP_AlgoSelect (select algorithm)
+;   0x03 -> DSP_EffectStateQuery (state control)
+;   0x10-0x17 -> DSP_VoiceParamReadWrite (set param 0-7)
+;   0x20 -> DSP_MixSendConfig (mix/send routing)
+; Jump table for params 0-7 at Sub CPU ROM 0x0121DB.
 Audio_Process_DSP:
 	lda xsp, (xsp - 10)
 	push xiz
 	ldada xwa, 15200
 	ld (xsp + 4), xwa
 	ld wa, (xwa + 4)
-	calr LABEL_035818
+	calr DSP_StoreBufferCount
 	cpdi16 17548, 0
-	jrl z, LABEL_036033
-	jrl LABEL_036044
+	jrl z, DSP_Process_ReadNext
+	jrl DSP_Process_Exit
 
-LABEL_035AE5:
+DSP_Process_NextCmd:
 	ld xwa, (xsp + 4)
 	ld wa, (xwa + 2)
 	inc 5, wa
@@ -39689,7 +39744,7 @@ LABEL_035AE5:
 	ld xwa, (xsp + 4)
 	incm 1, (xwa + 4)
 	stdi16 17548, 1
-	jrl LABEL_036044
+	jrl DSP_Process_Exit
 
 LABEL_035B1B:
 	ld xwa, (xsp + 4)
@@ -39697,11 +39752,11 @@ LABEL_035B1B:
 	ld wa, (xsp + 12)
 	stda8 17256, a
 	cp a, 0x2D
-	jrl z, LABEL_035F32
+	jrl z, DSP_CmdHandler_2D
 	cp a, 0x2C
-	jrl z, LABEL_035D78
+	jrl z, DSP_CmdHandler_2C
 	cp a, 0x2B
-	jrl nz, LABEL_03602D
+	jrl nz, DSP_Cmd_DefaultSkip
 	ldada xwa, 17264
 	ld xbc, xwa
 	ld xwa, (xsp + 4)
@@ -39709,11 +39764,11 @@ LABEL_035B1B:
 	ldda8 a, 17257
 	ldfr_berp A, 0xFB
 	cp_erpb 0xFB, 0x30
-	jrl c, LABEL_035D60
+	jrl c, DSP_Cmd2B_SkipAndContinue
 	cp_erpb 0xFB, 0x3F
-	jrl ugt, LABEL_035D60
+	jrl ugt, DSP_Cmd2B_SkipAndContinue
 	cpdi8 17258, 127
-	jrl nz, LABEL_035D1E
+	jrl nz, DSP_Cmd2B_VoiceParamWrite
 	ldto_berp A, 0xFB
 	ldfr_berp A, 0xF8
 	extz iz
@@ -39722,32 +39777,32 @@ LABEL_035B1B:
 	ld (xsp + 10), xwa
 	ldda8 a, 17259
 	cp a, 0x30
-	jrl z, LABEL_035D10
+	jrl z, DSP_Cmd2B_Noop
 	cp a, 0x27
-	jrl z, LABEL_035CF5
+	jrl z, DSP_Cmd2B_ReadParam11
 	cp a, 0x24
-	jrl z, LABEL_035CDA
+	jrl z, DSP_Cmd2B_SetParam
 	cp a, 0x22
-	jrl z, LABEL_035CBF
+	jrl z, DSP_Cmd2B_ReadParam5D
 	cp a, 0x20
-	jrl z, LABEL_035CA3
+	jrl z, DSP_Cmd2B_MixSendConfig
 	cps a, 3
-	jr z, LABEL_035BF1
+	jr z, DSP_Cmd2B_StateControl
 	cps a, 0
-	jr z, LABEL_035BC6
+	jr z, DSP_Cmd2B_AlgoSelect
 	extz wa
 	sub wa, 0x10
 	cps wa, 0
-	jrl lt, LABEL_035D14
+	jrl lt, DSP_Cmd2B_UnknownSkip
 	cps wa, 7
-	jrl gt, LABEL_035D14
+	jrl gt, DSP_Cmd2B_UnknownSkip
 	add wa, wa
 	lda_24 xix, 0x0121db
 	ld_sriw3 WA, 0x07, 0xF0, 0xE0
 	lda_24 xix, 0x035bc6
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
-LABEL_035BC6:
+DSP_Cmd2B_AlgoSelect:
 	ld wa, iz
 	call LABEL_02E213
 	cps hl, 0
@@ -39764,74 +39819,74 @@ LABEL_035BD6:
 	extz bc
 	ld wa, de
 	ld xde, (xsp + 10)
-	call LABEL_030960
-	jrl LABEL_035D4A
+	call DSP_AlgoSelect
+	jrl DSP_Cmd2B_PostProcess
 
-LABEL_035BF1:
+DSP_Cmd2B_StateControl:
 	ld a, (xsp + 8)
 	and a, 0xF
 	extz wa
 	ld xbc, (xsp + 10)
-	call LABEL_030618
-	jrl LABEL_035D4A
+	call DSP_EffectStateQuery
+	jrl DSP_Cmd2B_PostProcess
 	ld a, (xsp + 8)
 	and a, 0xF
 	extz wa
 	ld xde, (xsp + 10)
 	lds bc, 0
-	call LABEL_030F7D
-	jrl LABEL_035D4A
+	call DSP_VoiceParamReadWrite
+	jrl DSP_Cmd2B_PostProcess
 	ld a, (xsp + 8)
 	and a, 0xF
 	extz wa
 	ld xde, (xsp + 10)
 	lds bc, 1
-	call LABEL_030F7D
-	jrl LABEL_035D4A
+	call DSP_VoiceParamReadWrite
+	jrl DSP_Cmd2B_PostProcess
 	ld a, (xsp + 8)
 	and a, 0xF
 	extz wa
 	ld xde, (xsp + 10)
 	lds bc, 2
-	call LABEL_030F7D
-	jrl LABEL_035D4A
+	call DSP_VoiceParamReadWrite
+	jrl DSP_Cmd2B_PostProcess
 	ld a, (xsp + 8)
 	and a, 0xF
 	extz wa
 	ld xde, (xsp + 10)
 	lds bc, 3
-	call LABEL_030F7D
-	jrl LABEL_035D4A
+	call DSP_VoiceParamReadWrite
+	jrl DSP_Cmd2B_PostProcess
 	ld a, (xsp + 8)
 	and a, 0xF
 	extz wa
 	ld xde, (xsp + 10)
 	lds bc, 4
-	call LABEL_030F7D
-	jrl LABEL_035D4A
+	call DSP_VoiceParamReadWrite
+	jrl DSP_Cmd2B_PostProcess
 	ld a, (xsp + 8)
 	and a, 0xF
 	extz wa
 	ld xde, (xsp + 10)
 	lds bc, 5
-	call LABEL_030F7D
-	jrl LABEL_035D4A
+	call DSP_VoiceParamReadWrite
+	jrl DSP_Cmd2B_PostProcess
 	ld a, (xsp + 8)
 	and a, 0xF
 	extz wa
 	ld xde, (xsp + 10)
 	lds bc, 6
-	call LABEL_030F7D
-	jrl LABEL_035D4A
+	call DSP_VoiceParamReadWrite
+	jrl DSP_Cmd2B_PostProcess
 	ld a, (xsp + 8)
 	and a, 0xF
 	extz wa
 	ld xde, (xsp + 10)
 	lds bc, 7
-	call LABEL_030F7D
-	jrl LABEL_035D4A
+	call DSP_VoiceParamReadWrite
+	jrl DSP_Cmd2B_PostProcess
 
-LABEL_035CA3:
+DSP_Cmd2B_MixSendConfig:
 	ldda8 a, 17264
 	ld e, a
 	extz de
@@ -39840,10 +39895,10 @@ LABEL_035CA3:
 	extz bc
 	ld wa, de
 	ld xde, (xsp + 10)
-	call LABEL_0309EA
-	jrl LABEL_035D4A
+	call DSP_MixSendConfig
+	jrl DSP_Cmd2B_PostProcess
 
-LABEL_035CBF:
+DSP_Cmd2B_ReadParam5D:
 	ldda8 a, 17264
 	ld e, a
 	extz de
@@ -39852,10 +39907,10 @@ LABEL_035CBF:
 	extz bc
 	ld wa, de
 	ld xde, (xsp + 10)
-	call LABEL_03106F
-	jr LABEL_035D4A
+	call DSP_ReadVoiceParam5D
+	jr DSP_Cmd2B_PostProcess
 
-LABEL_035CDA:
+DSP_Cmd2B_SetParam:
 	ldda8 a, 17264
 	ld e, a
 	extz de
@@ -39864,10 +39919,10 @@ LABEL_035CDA:
 	extz bc
 	ld wa, de
 	ld xde, (xsp + 10)
-	call LABEL_03111A
-	jr LABEL_035D4A
+	call DSP_SetVoiceCoefficients
+	jr DSP_Cmd2B_PostProcess
 
-LABEL_035CF5:
+DSP_Cmd2B_ReadParam11:
 	ldda8 a, 17264
 	ld e, a
 	extz de
@@ -39876,20 +39931,20 @@ LABEL_035CF5:
 	extz bc
 	ld wa, de
 	ld xde, (xsp + 10)
-	call LABEL_031F06
-	jr LABEL_035D4A
+	call DSP_ReadVoiceParam11
+	jr DSP_Cmd2B_PostProcess
 
-LABEL_035D10:
+DSP_Cmd2B_Noop:
 	lds hl, 0
-	jr LABEL_035D4A
+	jr DSP_Cmd2B_PostProcess
 
-LABEL_035D14:
+DSP_Cmd2B_UnknownSkip:
 	ld xwa, (xsp + 4)
 	calr DSP_RingBuf_Skip
 	lds hl, 0
-	jr LABEL_035D4A
+	jr DSP_Cmd2B_PostProcess
 
-LABEL_035D1E:
+DSP_Cmd2B_VoiceParamWrite:
 	ldto_berp A, 0xFB
 	extz wa
 	ld iz, wa
@@ -39904,31 +39959,31 @@ LABEL_035D1E:
 	ld wa, iz
 	ldto_werp BC, 0xFA
 	ld de, hl
-	call LABEL_031E6A
+	call DSP_WriteVoiceParam
 
-LABEL_035D4A:
+DSP_Cmd2B_PostProcess:
 	cps hl, 0
-	jrl z, LABEL_036033
+	jrl z, DSP_Process_ReadNext
 	inc 8, hl
 	ldada xde, 17256
 	ld bc, hl
 	lds wa, 3
 	call 0x20C6B
-	jrl LABEL_036033
+	jrl DSP_Process_ReadNext
 
-LABEL_035D60:
+DSP_Cmd2B_SkipAndContinue:
 	cp_erpb 0xFB, 0x40
 	jr nz, LABEL_035D6F
 	ld xwa, (xsp + 4)
 	calr DSP_RingBuf_Skip
-	jrl LABEL_036033
+	jrl DSP_Process_ReadNext
 
 LABEL_035D6F:
 	ld xwa, (xsp + 4)
 	calr DSP_RingBuf_Skip
-	jrl LABEL_036033
+	jrl DSP_Process_ReadNext
 
-LABEL_035D78:
+DSP_CmdHandler_2C:
 	ldada xwa, 17264
 	ld xbc, xwa
 	ld xwa, (xsp + 4)
@@ -39938,7 +39993,7 @@ LABEL_035D78:
 	cpi_berp 0xFB, 0
 	jrl nz, LABEL_035E84
 	cpdi8 17258, 8
-	jrl nz, LABEL_036033
+	jrl nz, DSP_Process_ReadNext
 	ldda8 a, 17259
 	extz wa
 	cps wa, 0
@@ -39984,7 +40039,7 @@ LABEL_035DD2:
 LABEL_035E7B:
 	ld xwa, (xsp + 4)
 	calr DSP_RingBuf_Skip
-	jrl LABEL_036033
+	jrl DSP_Process_ReadNext
 
 LABEL_035E84:
 	cp_erpb 0xFB, 0x30
@@ -39992,7 +40047,7 @@ LABEL_035E84:
 	cp_erpb 0xFB, 0x3F
 	jrl ugt, LABEL_035F1A
 	cpdi8 17258, 127
-	jrl nz, LABEL_036033
+	jrl nz, DSP_Process_ReadNext
 	ldto_berp A, 0xFB
 	ldfr_berp A, 0xF8
 	extz iz
@@ -40007,16 +40062,16 @@ LABEL_035E84:
 	cps a, 4
 	jr z, LABEL_035ED7
 	cps a, 3
-	jrl z, LABEL_036033
+	jrl z, DSP_Process_ReadNext
 	cp a, 0x17
 	jr ugt, LABEL_035ECE
 	cp a, 0x10
-	jrl nc, LABEL_036033
+	jrl nc, DSP_Process_ReadNext
 
 LABEL_035ECE:
 	ld xwa, (xsp + 4)
 	calr DSP_RingBuf_Skip
-	jrl LABEL_036033
+	jrl DSP_Process_ReadNext
 
 LABEL_035ED7:
 	ldda8 a, 17264
@@ -40030,7 +40085,7 @@ LABEL_035ED7:
 	ldw wa, 0xFF
 	ldw bc, 0xFF
 	call LABEL_035490
-	jrl LABEL_036033
+	jrl DSP_Process_ReadNext
 
 LABEL_035EFA:
 	ldda8 a, 17264
@@ -40041,25 +40096,25 @@ LABEL_035EFA:
 	extz bc
 	ld wa, de
 	call LABEL_035490
-	jrl LABEL_036033
+	jrl DSP_Process_ReadNext
 
 LABEL_035F13:
 	call LABEL_02A78E
-	jrl LABEL_036033
+	jrl DSP_Process_ReadNext
 
 LABEL_035F1A:
 	cp_erpb 0xFB, 0x40
 	jr nz, LABEL_035F29
 	ld xwa, (xsp + 4)
 	calr DSP_RingBuf_Skip
-	jrl LABEL_036033
+	jrl DSP_Process_ReadNext
 
 LABEL_035F29:
 	ld xwa, (xsp + 4)
 	calr DSP_RingBuf_Skip
-	jrl LABEL_036033
+	jrl DSP_Process_ReadNext
 
-LABEL_035F32:
+DSP_CmdHandler_2D:
 	ldda8 a, 17257
 	ldfr_berp A, 0xFB
 	cpi_berp 0xFB, 0
@@ -40073,9 +40128,9 @@ LABEL_035F32:
 	ld wa, hl
 	exts xwa
 	cp xwa, 0xFFFFFFFF
-	jrl z, LABEL_036033
+	jrl z, DSP_Process_ReadNext
 	call 0x361C5
-	jrl LABEL_036033
+	jrl DSP_Process_ReadNext
 
 LABEL_035F66:
 	cp_erpb 0xFB, 0x0A
@@ -40089,7 +40144,7 @@ LABEL_035F66:
 	ld (xsp + 10), xhl
 	ld xwa, (xsp + 10)
 	cp xwa, 0xFFFFFFFF
-	jrl z, LABEL_036033
+	jrl z, DSP_Process_ReadNext
 	ldda8 a, 17262
 	ld c, a
 	extz bc
@@ -40109,17 +40164,17 @@ LABEL_035F66:
 	extz de
 	ld wa, ix
 	call 0x3616A
-	jr LABEL_036033
+	jr DSP_Process_ReadNext
 
 LABEL_035FC3:
 	ld xwa, (xsp + 4)
 	calr DSP_RingBuf_Skip
-	jr LABEL_036033
+	jr DSP_Process_ReadNext
 
 LABEL_035FCB:
 	ld xwa, (xsp + 4)
 	calr DSP_RingBuf_Skip
-	jr LABEL_036033
+	jr DSP_Process_ReadNext
 
 LABEL_035FD3:
 	cp_erpb 0xFB, 0x30
@@ -40137,12 +40192,12 @@ LABEL_035FD3:
 	sub a, 0x30
 	ldfr_berp A, 0xF8
 	extz iz
-	jr LABEL_036033
+	jr DSP_Process_ReadNext
 
 LABEL_036001:
 	ld xwa, (xsp + 4)
 	calr DSP_RingBuf_Skip
-	jr LABEL_036033
+	jr DSP_Process_ReadNext
 
 LABEL_036009:
 	cp_erpb 0xFB, 0x40
@@ -40154,26 +40209,26 @@ LABEL_036009:
 	calr DSP_RingBuf_ReadAndCompare
 	ld xwa, (xsp + 4)
 	calr DSP_RingBuf_Skip
-	jr LABEL_036033
+	jr DSP_Process_ReadNext
 
 LABEL_036025:
 	ld xwa, (xsp + 4)
 	calr DSP_RingBuf_Skip
-	jr LABEL_036033
+	jr DSP_Process_ReadNext
 
-LABEL_03602D:
+DSP_Cmd_DefaultSkip:
 	ld xwa, (xsp + 4)
 	calr DSP_RingBuf_Skip
 
-LABEL_036033:
+DSP_Process_ReadNext:
 	ld xwa, (xsp + 4)
 	calr DSP_RingBuf_Read
 	ld (xsp + 12), hl
 	ld wa, (xsp + 12)
 	cps wa, 0
-	jrl ge, LABEL_035AE5
+	jrl ge, DSP_Process_NextCmd
 
-LABEL_036044:
+DSP_Process_Exit:
 	pop xiz
 	lda xsp, (xsp + 10)
 	ret

@@ -474,7 +474,7 @@ PcgOutCheckGridDataStructure:
 	pushw 0xE7
 	pushw 0xFF9E
 	push xbc
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 	call 0xFA44D0
 	ld xwa, xhl
@@ -490,7 +490,7 @@ LABEL_F77B9E:
 	pushw 0xE7
 	pushw 0xFFA4
 	push xbc
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 	call 0xFA44D0
 	ld xwa, xhl
@@ -531,7 +531,7 @@ LABEL_F77C14:
 	pushw 0xE7
 	pushw 0xFFB8
 	push xbc
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 	call 0xFA44D0
 	ld xwa, xhl
@@ -550,7 +550,7 @@ LABEL_F77C14:
 	pushw 0xFFBE
 	lda xwa, (xsp + 18)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 	call 0xFA44D0
 	ld xwa, xhl
@@ -604,7 +604,7 @@ LABEL_F77CEF:
 	pushw 0xE7
 	pushw 0xFFDA
 	push xbc
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 	call 0xFA44D0
 	ld xwa, xhl
@@ -619,7 +619,7 @@ LABEL_F77CEF:
 	pushw 0xFFE0
 	lda xwa, (xsp + 18)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 	call 0xFA44D0
 	ld xwa, xhl
@@ -638,7 +638,7 @@ LABEL_F77CEF:
 	pushw 0xFFE6
 	lda xwa, (xsp + 18)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 	call 0xFA44D0
 	ld xwa, xhl

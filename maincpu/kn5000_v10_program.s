@@ -49433,7 +49433,7 @@ LABEL_EF4271:
 	ld (xsp + 4), xwa
 	ld xwa, (xsp + 14)
 	ld xbc, 0x12
-	call LABEL_FF0C12
+	call DivMod32
 	inc 1, xhl
 	ld xwa, (xsp + 4)
 	ld (xwa), hl
@@ -60527,7 +60527,7 @@ LABEL_F023CF:
 	pushw 0xCCFE
 	lda xwa, (xsp + 12)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 	jr LABEL_F02472
 
@@ -60537,7 +60537,7 @@ LABEL_F0244A:
 	pushw 0xCD02
 	lda xwa, (xsp + 12)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 	jr LABEL_F02472
 
@@ -60547,7 +60547,7 @@ LABEL_F0245F:
 	pushw 0xCD06
 	lda xwa, (xsp + 12)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 
 LABEL_F02472:
@@ -76303,7 +76303,7 @@ UI_COMPONENT_DISPATCH:	; F1A7CB
 	pushw 0xE1	; Push parameter
 	pushw 0xCEE4	; Push parameter
 	push xde	; Push XDE
-	call LABEL_FF0A72	; Call handler function
+	call Audio_SendCommand	; Call handler function
 	lda xsp, (xsp + 10)	; Clean up stack (10 bytes)
 	jrl LABEL_F1A86F	; Jump to end
 UI_COMPONENT_DISPATCH_CASE1:	; F1A7E5
@@ -76323,7 +76323,7 @@ UI_COMPONENT_DISPATCH_CASE1:	; F1A7E5
 	pushw 0xE1	; Push parameter
 	pushw 0xCEE8	; Push parameter
 	push xde	; Push XDE
-	call LABEL_FF0A72	; Call handler function
+	call Audio_SendCommand	; Call handler function
 	lda xsp, (xsp + 16)	; Clean up stack (16 bytes)
 	jr LABEL_F1A86F	; Jump to end
 UI_COMPONENT_DISPATCH_CASE2:	; F1A820
@@ -76360,7 +76360,7 @@ UI_COMPONENT_DISPATCH_CASE5_SKIP:	; F1A85A
 	push xwa	; Push parameter
 UI_COMPONENT_DISPATCH_PUSH_CALL:	; F1A868
 	push xde	; Push XDE
-	call LABEL_FF0A72	; Call handler function
+	call Audio_SendCommand	; Call handler function
 	inc 8, xsp	; Increment stack pointer
 
 LABEL_F1A86F:
@@ -76499,7 +76499,7 @@ LABEL_F1A992:
 	push xwa
 	lda xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	inc 8, xsp
 
 LABEL_F1A9AA:
@@ -76900,7 +76900,7 @@ LABEL_F1AD51:
 	push xwa
 	lda xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
@@ -76939,7 +76939,7 @@ LABEL_F1ADB2:
 	pushw 0xD584
 	lda xwa, (xsp + 10)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 	lda xbc, (xiz + 22)
 	lda xwa, (xiz + 32)
@@ -76993,7 +76993,7 @@ LABEL_F1AE4A:
 	pushw 0xD588
 	lda xwa, (xsp + 10)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 	lda xbc, (xiz + 22)
 	lda xwa, (xiz + 32)
@@ -77047,7 +77047,7 @@ LABEL_F1AEDC:
 	pushw 0xD58C
 	lda xwa, (xsp + 10)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 	lda xde, (xsp + 4)
 	ld xwa, xiz
@@ -77087,7 +77087,7 @@ LABEL_F1AF3A:
 	push xwa
 	lda xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	inc 8, xsp
 	lda xwa, (xiz + 22)
 	lda xbc, (xiz + 32)
@@ -77428,7 +77428,7 @@ LABEL_F1B341:
 	ld_sril3 XWA, 0x07, 0xE4, 0xE0
 	push xwa
 	push xde
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	inc 8, xsp
 
 LABEL_F1B38A:
@@ -77511,7 +77511,7 @@ LABEL_F1B44F:
 	push xwa
 	lda xwa, (xsp + 16)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	inc 8, xsp
 	lda xwa, (xiz + 22)
 	lda xbc, (xiz + 32)
@@ -77624,7 +77624,7 @@ LABEL_F1B57C:
 	push xwa
 	lda xwa, (xsp + 16)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	inc 8, xsp
 	lda xwa, (xiz + 22)
 	lda xbc, (xiz + 32)
@@ -77727,7 +77727,7 @@ LABEL_F1B685:
 	push xwa
 	lda xwa, (xsp + 16)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	inc 8, xsp
 	lda xwa, (xiz + 22)
 	lda xbc, (xiz + 32)
@@ -77834,7 +77834,7 @@ LABEL_F1B79A:
 	push xwa
 	lda xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
@@ -77906,7 +77906,7 @@ LABEL_F1B842:
 	push xbc
 
 LABEL_F1B844:
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
@@ -78059,7 +78059,7 @@ LABEL_F1B99A:
 	pushw 0x3A4F
 	lda xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
@@ -78116,7 +78116,7 @@ LABEL_F1BA11:
 	push xwa
 	lda xwa, (xsp + 16)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	inc 8, xsp
 	lda xwa, (xiz + 22)
 	lda xbc, (xiz + 32)
@@ -78234,7 +78234,7 @@ LABEL_F1BB51:
 	ld xwa, (xhl + 4)
 	push xwa
 	push xbc
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	inc 8, xsp
 	ld xwa, (xsp + 12)
 	ldw (xwa + 22), 0xF2
@@ -78253,7 +78253,7 @@ LABEL_F1BBAD:
 	ld xwa, (xhl)
 	push xwa
 	push xbc
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	inc 8, xsp
 	ld xwa, (xsp + 8)
 	ldw (xwa + 22), 0xF5
@@ -78317,7 +78317,7 @@ LABEL_F1BC28:
 	push xwa
 	lda xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
@@ -78386,7 +78386,7 @@ LABEL_F1BCCD:
 	pushw 0xDD7A
 	lda xwa, (xsp + 10)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 	lda xde, (xsp + 4)
 	ld_sril XWA, (xsp + 0x0108)
@@ -78454,7 +78454,7 @@ LABEL_F1BD8A:
 	pushw 0xDD7E
 	lda xwa, (xsp + 10)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 	lda xde, (xsp + 4)
 	ld_sril XWA, (xsp + 0x0108)
@@ -78528,7 +78528,7 @@ LABEL_F1BE66:
 	pushw 0xDD82
 	lda xwa, (xsp + 10)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 	lda xde, (xsp + 4)
 	ld_sril XWA, (xsp + 0x0104)
@@ -78561,7 +78561,7 @@ CmpNamingCheck:
 	pushw 0x34BC
 	pushw 0x2
 	pushw 0xC54
-	call LABEL_FF0CF3
+	call Strncpy
 	lda xsp, (xsp + 18)
 	sti8_24 0x020c61, 0x00
 	ld xhl, xiz
@@ -78637,7 +78637,7 @@ LABEL_F1BF76:
 	push xwa
 	lda xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	inc 8, xsp
 	lda xwa, (xiz + 22)
 	lda xbc, (xiz + 32)
@@ -78996,7 +78996,7 @@ LABEL_F1C3B5:
 
 LABEL_F1C3C9:
 	push xde
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	inc 8, xsp
 	jr LABEL_F1C3E3
 
@@ -79006,7 +79006,7 @@ LABEL_F1C3D2:
 	pushw 0xE1
 	pushw 0xDF12
 	push xde
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 
 LABEL_F1C3E3:
@@ -79071,7 +79071,7 @@ LABEL_F1C498:
 	push xwa
 	pushw 0x0
 	pushw 0x34BC
-	call LABEL_FF0CF3
+	call Strncpy
 	lda xsp, (xsp + 10)
 	stdi8 13516, 0
 
@@ -79099,7 +79099,7 @@ MspNamingCheck:
 	pushw 0x34BC
 	pushw 0x2
 	pushw 0xC70
-	call LABEL_FF0CF3
+	call Strncpy
 	lda xsp, (xsp + 18)
 	ld xhl, xiz
 	jr LABEL_F1C4FE
@@ -79171,7 +79171,7 @@ LABEL_F1C56E:
 	push xwa
 	lda xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
@@ -79423,7 +79423,7 @@ LABEL_F1C85D:
 	push xwa
 	ld_sril XWA, (xsp + 0x0118)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	inc 8, xsp
 	jr LABEL_F1C840
 
@@ -79808,7 +79808,7 @@ LABEL_F1CC61:
 	push xwa
 	lda xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
@@ -79822,7 +79822,7 @@ LABEL_F1CC83:
 	push xwa
 	lda xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
@@ -79836,7 +79836,7 @@ LABEL_F1CCA5:
 	push xwa
 	lda xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
@@ -79850,7 +79850,7 @@ LABEL_F1CCC7:
 	push xwa
 	lda xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
@@ -79947,7 +79947,7 @@ LABEL_F1CDD0:
 	ld_sril3 XWA, 0x07, 0xE4, 0xE0
 	push xwa
 	push xde
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	inc 8, xsp
 	jr LABEL_F1CE6A
 
@@ -79974,7 +79974,7 @@ LABEL_F1CE54:
 	pushw 0xE1
 	pushw 0xE2BC
 	push xde
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 
 LABEL_F1CE6A:
@@ -80028,7 +80028,7 @@ LABEL_F1CEBE:
 	push xwa
 	lda xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
@@ -80169,7 +80169,7 @@ LABEL_F1D005:
 	pushw 0xE2F8
 	lda xwa, (xsp + 10)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 	lda xde, (xsp + 4)
 	ld xwa, xiz
@@ -80232,7 +80232,7 @@ LABEL_F1D09D:
 	pushw 0xE306
 	lda xwa, (xsp + 10)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 	lda xde, (xsp + 4)
 	ld xwa, xiz
@@ -80352,7 +80352,7 @@ LABEL_F1D19D:
 	pushw 0xE314
 	lda xwa, (xsp + 10)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 	lda xde, (xsp + 4)
 	ld xwa, xiz
@@ -80914,7 +80914,7 @@ LABEL_F1D7C4:
 LABEL_F1D7C8:
 	push xwa
 	push xbc
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	inc 8, xsp
 
 LABEL_F1D7D0:
@@ -85818,7 +85818,7 @@ LABEL_F21867:
 	push xhl
 	pushw 0x0
 	pushw 0x1C1E
-	call LABEL_FF0CF3
+	call Strncpy
 	lda xsp, (xsp + 10)
 	ldada xbc, 7198
 	ld (xbc + 12), 0x0
@@ -85842,7 +85842,7 @@ LABEL_F218BB:
 	push xhl
 	pushw 0x0
 	pushw 0x1C2C
-	call LABEL_FF0CF3
+	call Strncpy
 	lda xsp, (xsp + 10)
 	ldada xbc, 7212
 	ld (xbc + 12), 0x0
@@ -85866,7 +85866,7 @@ LABEL_F218FF:
 	push xhl
 	pushw 0x0
 	pushw 0x1C3A
-	call LABEL_FF0CF3
+	call Strncpy
 	lda xsp, (xsp + 10)
 	ldada xbc, 7226
 	ld (xbc + 20), 0x0
@@ -87007,7 +87007,7 @@ LABEL_F227EC:
 	pushw 0xE2
 	pushw 0x202
 	push xiz
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 	ld (xiz + 4), 0x0
 	ld wa, (xsp + 4)
@@ -99905,7 +99905,7 @@ TrAsSureLangCheck:
 	push xwa
 	pushw 0x2
 	pushw 0xCB4
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 18)
 	lda_24 xhl, 0x03def8
 	ret
@@ -100055,7 +100055,7 @@ LABEL_F2AB6C:
 	pushm (xsp + 10)
 	push xhl
 	push xbc
-	call LABEL_FF0CF3
+	call Strncpy
 	lda xsp, (xsp + 10)
 	ld wa, (xsp + 10)
 	extz xwa
@@ -100180,7 +100180,7 @@ LABEL_F2AC98:
 	push xwa
 	pushw 0x2
 	pushw 0xDFE
-	call LABEL_FF0CF3
+	call Strncpy
 	lda xsp, (xsp + 10)
 	ld wa, (xsp + 10)
 	extz xwa
@@ -100248,7 +100248,7 @@ LABEL_F2AD62:
 	push xwa
 	pushw 0x2
 	pushw 0xDFE
-	call LABEL_FF0CF3
+	call Strncpy
 	lda xsp, (xsp + 10)
 	ld wa, (xsp + 10)
 	extz xwa
@@ -100361,7 +100361,7 @@ LABEL_F2AE87:
 	exts xwa
 	add xwa, xbc
 	push xwa
-	call LABEL_FF0CF3
+	call Strncpy
 	lda xsp, (xsp + 10)
 	lda_24 xbc, 0x020e4a
 	ld a, (xsp)
@@ -100420,7 +100420,7 @@ LABEL_F2AEE6:
 	lda_24 xwa, 0x020cbe
 	st_dri3b W, 0x07, 0xE0, 0xE4
 	push xwa
-	call LABEL_FF0CF3
+	call Strncpy
 	lda xsp, (xsp + 10)
 	lda_24 xbc, 0x020e4a
 	ld a, (xsp)
@@ -100651,7 +100651,7 @@ LABEL_F2B18D:
 	lda_24 xwa, 0x020cbe
 	st_dri3b W, 0x07, 0xE0, 0xE4
 	push xwa
-	call LABEL_FF0CF3
+	call Strncpy
 	lda xsp, (xsp + 14)
 	lda_24 xwa, 0x020e42
 	ld bc, iz
@@ -101148,7 +101148,7 @@ LABEL_F2B6B1:
 	pushw 0x6200
 	ld xwa, (xde + 18)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 	ld xhl, xiz
 	jr LABEL_F2B6CE
@@ -102468,7 +102468,7 @@ LABEL_F2C798:
 	push xwa
 	lda xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	inc 8, xsp
 	call 0xFA44D0
 	ld xwa, xhl
@@ -102492,7 +102492,7 @@ LABEL_F2C7C3:
 LABEL_F2C7E5:
 	push xwa
 	push xbc
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	inc 8, xsp
 	call 0xFA44D0
 	ld xwa, xhl
@@ -102535,7 +102535,7 @@ LABEL_F2C82E:
 LABEL_F2C84A:
 	push xwa
 	push xbc
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	inc 8, xsp
 	call 0xFA44D0
 	ld xwa, xhl
@@ -102567,7 +102567,7 @@ LABEL_F2C890:
 	push xwa
 	lda xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	inc 8, xsp
 
 LABEL_F2C89B:
@@ -102593,7 +102593,7 @@ LABEL_F2C8CB:
 	push xwa
 	lda xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	inc 8, xsp
 	call 0xFA44D0
 	ld xwa, xhl
@@ -102636,7 +102636,7 @@ LABEL_F2C930:
 	push xwa
 	lda xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	inc 8, xsp
 	call 0xFA44D0
 	ld xwa, xhl
@@ -102668,7 +102668,7 @@ LABEL_F2C979:
 	push xwa
 	lda xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	inc 8, xsp
 
 LABEL_F2C984:
@@ -102898,7 +102898,7 @@ LABEL_F2CB37:
 	pushw 0x64F0
 	lda xwa, (xsp + 10)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 	lda xde, (xsp + 4)
 	ld xwa, xiz
@@ -103349,7 +103349,7 @@ SeqNamingCheck:
 	pushw 0xF280
 	pushw 0x2
 	pushw 0xCA2
-	call LABEL_FF0CF3
+	call Strncpy
 	lda_24 xwa, 0x020ca2
 	ld (xwa + 16), 0x0
 	push xwa
@@ -103412,7 +103412,7 @@ LABEL_F2D078:
 LABEL_F2D093:
 	push xwa
 	push xbc
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
@@ -105551,7 +105551,7 @@ LABEL_F2FAD1:
 	pushw 0x4668
 	ld xwa, (xiz + 18)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 	jrl LABEL_F2FD33
 
@@ -105587,7 +105587,7 @@ LABEL_F2FAF2:
 	push xwa
 	ld xwa, (xiz + 18)
 	push xwa
-	call LABEL_FF0CF3
+	call Strncpy
 	lda xsp, (xsp + 10)
 	jrl LABEL_F2FD33
 
@@ -105697,7 +105697,7 @@ LABEL_F2FC30:
 	push xwa
 
 LABEL_F2FC35:
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 	jrl LABEL_F2FD33
 
@@ -105787,7 +105787,7 @@ LABEL_F2FD1D:
 LABEL_F2FD28:
 	ld xwa, (xiz + 18)
 	push xwa
-	call LABEL_FF0CF3
+	call Strncpy
 	lda xsp, (xsp + 10)
 
 LABEL_F2FD33:
@@ -106006,7 +106006,7 @@ LABEL_F2FF2B:
 	ld xwa, (xiz + 18)
 	inc 4, xwa
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xbc, (xiz + 18)
 	ld xwa, (xbc)
 	ld (xwa + 6), 0x3A
@@ -106016,7 +106016,7 @@ LABEL_F2FF2B:
 	ld xwa, (xbc)
 	inc 7, xwa
 	push xwa
-	call LABEL_FF0CF3
+	call Strncpy
 	lda xsp, (xsp + 28)
 	ld xwa, (xiz + 18)
 	ld (xwa + 23), 0x0
@@ -106531,7 +106531,7 @@ LABEL_F305C9:
 	pushw 0x479C
 	lda xwa, (xsp + 54)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 	call 0xFA44D0
 	ld xwa, xhl
@@ -106569,7 +106569,7 @@ LABEL_F306A6:
 	push xwa
 	ld xwa, (xsp + 26)
 	push xwa
-	call LABEL_FF0CF3
+	call Strncpy
 	lda xsp, (xsp + 10)
 	ld (xsp + 57), 0x0
 	call 0xFA44D0
@@ -106594,7 +106594,7 @@ LABEL_F306DA:
 	push xwa
 	ld xwa, (xsp + 38)
 	push xwa
-	call LABEL_FF0CF3
+	call Strncpy
 	lda xsp, (xsp + 10)
 	lda xwa, (xsp + 48)
 	ld (xwa + 7), 0x73
@@ -106620,7 +106620,7 @@ LABEL_F30725:
 	push xwa
 	ld xwa, (xsp + 42)
 	push xwa
-	call LABEL_FF0CF3
+	call Strncpy
 	lda xsp, (xsp + 10)
 	lda xwa, (xsp + 48)
 	ld (xwa + 6), 0x48
@@ -106651,7 +106651,7 @@ LABEL_F3076F:
 	push xwa
 	lda xwa, (xde + 3)
 	push xwa
-	call LABEL_FF0CF3
+	call Strncpy
 	lda xsp, (xsp + 10)
 	lda xwa, (xsp + 48)
 	ld (xwa + 8), 0x20
@@ -106668,7 +106668,7 @@ LABEL_F307BD:
 	pushw 0x47BA
 	ld xwa, (xsp + 26)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 	call 0xFA44D0
 	ld xwa, xhl
@@ -106692,7 +106692,7 @@ LABEL_F307E2:
 	ld xwa, (xbc)
 	push xwa
 	push xde
-	call LABEL_FF0CF3
+	call Strncpy
 	lda xsp, (xsp + 10)
 	ld (xsp + 57), 0x0
 	call 0xFA44D0
@@ -106740,7 +106740,7 @@ LABEL_F30826:
 	push xwa
 	ld xwa, (xsp + 42)
 	push xwa
-	call LABEL_FF0CF3
+	call Strncpy
 	lda xsp, (xsp + 10)
 	lda xwa, (xsp + 48)
 	ld (xwa + 7), 0x73
@@ -106759,7 +106759,7 @@ LABEL_F308A3:
 	add xwa, xde
 	push xwa
 	push xbc
-	call LABEL_FF0CF3
+	call Strncpy
 	lda xsp, (xsp + 10)
 	lda xwa, (xsp + 48)
 	ld (xwa + 6), 0x48
@@ -106784,7 +106784,7 @@ LABEL_F308D4:
 	ld xwa, (xsp + 26)
 	inc 3, xwa
 	push xwa
-	call LABEL_FF0CF3
+	call Strncpy
 	lda xsp, (xsp + 10)
 	lda xwa, (xsp + 48)
 	ld (xwa + 8), 0x20
@@ -106800,7 +106800,7 @@ LABEL_F3090F:
 	pushw 0x47C4
 	ld xwa, (xsp + 26)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 
 LABEL_F30926:
@@ -110682,7 +110682,7 @@ LABEL_F33752:
 	push xbc
 	lda xwa, (xsp + 44)
 	push xwa
-	call LABEL_FF0CF3
+	call Strncpy
 	lda xsp, (xsp + 10)
 	st_dri3b W, 0xFD, 0x3E, 0x01
 	st_dri3b A, 0xFD, 0x3A, 0x01
@@ -110745,7 +110745,7 @@ LABEL_F337F8:
 	push xbc
 	lda xwa, (xsp + 44)
 	push xwa
-	call LABEL_FF0CF3
+	call Strncpy
 	lda xsp, (xsp + 10)
 	st_dri3b W, 0xFD, 0x3E, 0x01
 	st_dri3b A, 0xFD, 0x3A, 0x01
@@ -110796,7 +110796,7 @@ LABEL_F337F8:
 	push xwa
 	lda xwa, (xsp + 44)
 	push xwa
-	call LABEL_FF0CF3
+	call Strncpy
 	lda xsp, (xsp + 10)
 	ld (xsp + 42), 0x0
 	jr LABEL_F338EC
@@ -110850,7 +110850,7 @@ LABEL_F338EC:
 	lda xbc, (xsp + 10)
 	push xbc
 	push xwa
-	call LABEL_FF0CF3
+	call Strncpy
 	lda xsp, (xsp + 10)
 	ld (xsp + 42), 0x0
 	jr LABEL_F33983
@@ -110978,7 +110978,7 @@ LABEL_F33AEA:
 	push xwa
 	lda xwa, (xsp + 44)
 	push xwa
-	call LABEL_FF0CF3
+	call Strncpy
 	lda xsp, (xsp + 10)
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 28)
@@ -112091,7 +112091,7 @@ LABEL_F34872:
 	push xwa
 
 LABEL_F3487A:
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 
 LABEL_F34881:
@@ -112536,7 +112536,7 @@ LABEL_F34F9F:
 	push xwa
 
 LABEL_F34FB3:
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 	jr LABEL_F34FE7
 
@@ -112560,7 +112560,7 @@ LABEL_F34FD9:
 	ld xwa, (xsp + 10)
 	ld xwa, (xwa + 18)
 	push xwa
-	call LABEL_FF0CF3
+	call Strncpy
 	lda xsp, (xsp + 10)
 
 LABEL_F34FE7:
@@ -112999,6 +112999,13 @@ LABEL_F35525:
 	pop xiz
 	ret
 
+; =============================================================================
+; DspItem0CngFunc -- DSP Effect Item Change Function (UI handler)
+; =============================================================================
+; Handles DSP effect editor events. Displays effect names (0xE32A7A ptr table),
+; parameter names (0xE324C4 via per-algo config at 0xE446DC), and values.
+; Sends parameter changes to Sub CPU via Audio_SendCommand.
+; Stack frame: 28 bytes.
 DspItem0CngFunc:
 	lda xsp, (xsp - 28)
 	ld (xsp + 20), xbc
@@ -113051,11 +113058,11 @@ DspItem0CngFunc:
 	ld c, l
 	extz bc
 	cp xix, 0x1E00045
-	jrl z, LABEL_F3572B
+	jrl z, DspItem0_TypeChangeHandler
 	cp xix, 0x1E8004C
-	jrl z, LABEL_F3570A
+	jrl z, DspItem0_SendEffectParam
 	cp xix, 0x1E00047
-	jr z, LABEL_F355F3
+	jr z, DspItem0_DisplayEffectName
 	ld xiy, (xsp)
 	sub xiy, 0x1E80000
 	cp xiy, 0x0
@@ -113068,7 +113075,7 @@ DspItem0CngFunc:
 	lda_24 xix, 0xf355f3
 	jp_dri 8, 0x07, 0xF0, 0xF4
 
-LABEL_F355F3:
+DspItem0_DisplayEffectName:
 	ld (xsp), xde
 	ldda16 xwa, 10614
 	extz xwa
@@ -113082,11 +113089,11 @@ LABEL_F355F3:
 	push xwa
 	call Strcpy
 	inc 8, xsp
-	jrl LABEL_F35725
+	jrl DspItem0_ExitWithHL
 	ld (xsp), xde
 	ldw (xsp + 18), 0x0
 
-LABEL_F3561F:
+DspItem0_DisplayParamNames:
 	pushw 0x11
 	ld8_24 a, 0x021098
 	extz wa
@@ -113107,14 +113114,14 @@ LABEL_F3561F:
 	ld xwa, (xwa + 18)
 	add xwa, xbc
 	push xwa
-	call LABEL_FF0CF3
+	call Strncpy
 	lda xsp, (xsp + 10)
 	incm 1, (xsp + 18)
 	cpw (xsp + 18), 0x8
-	jr c, LABEL_F3561F
+	jr c, DspItem0_DisplayParamNames
 	ldw (xsp + 18), 0x0
 
-LABEL_F3566C:
+DspItem0_DisplayParamValues:
 	pushw 0x2
 	ld8_24 a, 0x021098
 	extz wa
@@ -113137,49 +113144,49 @@ LABEL_F3566C:
 	ld xwa, (xwa + 18)
 	add xwa, xbc
 	push xwa
-	call LABEL_FF0CF3
+	call Strncpy
 	lda xsp, (xsp + 10)
 	incm 1, (xsp + 18)
 	cpw (xsp + 18), 0x8
-	jr c, LABEL_F3566C
-	jr LABEL_F35725
+	jr c, DspItem0_DisplayParamValues
+	jr DspItem0_ExitWithHL
 	ld (xsp), xde
 	ld xde, (xde + 18)
 	ld wa, bc
 	ld xbc, xde
-	jr LABEL_F35705
+	jr DspItem0_FormatParamValue
 	ld (xsp), xde
 	ld xbc, (xde + 18)
-	jr LABEL_F35705
+	jr DspItem0_FormatParamValue
 	ld (xsp), xde
 	ld xbc, (xde + 18)
 	ld wa, (xsp + 8)
-	jr LABEL_F35705
+	jr DspItem0_FormatParamValue
 	ld (xsp), xde
 	ld xbc, (xde + 18)
 	ld wa, (xsp + 10)
-	jr LABEL_F35705
+	jr DspItem0_FormatParamValue
 	ld (xsp), xde
 	ld xbc, (xde + 18)
 	ld wa, (xsp + 12)
-	jr LABEL_F35705
+	jr DspItem0_FormatParamValue
 	ld (xsp), xde
 	ld xbc, (xde + 18)
 	ld wa, (xsp + 14)
-	jr LABEL_F35705
+	jr DspItem0_FormatParamValue
 	ld (xsp), xde
 	ld xbc, (xde + 18)
 	ld wa, (xsp + 16)
-	jr LABEL_F35705
+	jr DspItem0_FormatParamValue
 	ld (xsp), xde
 	ld xbc, (xde + 18)
 	ld wa, (xsp + 18)
 
-LABEL_F35705:
-	calr LABEL_F35B02
-	jr LABEL_F35725
+DspItem0_FormatParamValue:
+	calr FormatParamValueStr
+	jr DspItem0_ExitWithHL
 
-LABEL_F3570A:
+DspItem0_SendEffectParam:
 	ld (xsp), xde
 	ld xwa, (xsp + 4)
 	pushm (xwa)
@@ -113188,14 +113195,14 @@ LABEL_F3570A:
 	ld xwa, (xsp + 6)
 	ld xwa, (xwa + 18)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 
-LABEL_F35725:
+DspItem0_ExitWithHL:
 	ld xhl, (xsp + 24)
-	jrl LABEL_F35809
+	jrl DspItem0_Epilogue
 
-LABEL_F3572B:
+DspItem0_TypeChangeHandler:
 	cp xde, 0x8
 	jr ugt, LABEL_F35747
 	add xde, xde
@@ -113206,79 +113213,79 @@ LABEL_F3572B:
 
 LABEL_F35747:
 	ldada xhl, 10614
-	jrl LABEL_F35809
+	jrl DspItem0_Epilogue
 	sla bc, 1
 	ld xwa, (xsp + 4)
 	st_dri3b C, 0x07, 0xE0, 0xE4
-	jrl LABEL_F35809
+	jrl DspItem0_Epilogue
 	sla wa, 1
 	ld bc, wa
 	ld xwa, (xsp + 4)
 	st_dri3b C, 0x07, 0xE0, 0xE4
-	jrl LABEL_F35809
+	jrl DspItem0_Epilogue
 	ld bc, (xsp + 8)
 	sla bc, 1
 	ld xwa, (xsp + 4)
 	st_dri3b C, 0x07, 0xE0, 0xE4
-	jrl LABEL_F35809
+	jrl DspItem0_Epilogue
 	ld bc, (xsp + 10)
 	add bc, bc
 	ld xwa, (xsp + 4)
 	st_dri3b C, 0x07, 0xE0, 0xE4
-	jr LABEL_F35809
+	jr DspItem0_Epilogue
 	ld bc, (xsp + 12)
 	add bc, bc
 	ld xwa, (xsp + 4)
 	st_dri3b C, 0x07, 0xE0, 0xE4
-	jr LABEL_F35809
+	jr DspItem0_Epilogue
 	ld bc, (xsp + 14)
 	add bc, bc
 	ld xwa, (xsp + 4)
 	st_dri3b C, 0x07, 0xE0, 0xE4
-	jr LABEL_F35809
+	jr DspItem0_Epilogue
 	ld bc, (xsp + 16)
 	add bc, bc
 	ld xwa, (xsp + 4)
 	st_dri3b C, 0x07, 0xE0, 0xE4
-	jr LABEL_F35809
+	jr DspItem0_Epilogue
 	ld bc, (xsp + 18)
 	add bc, bc
 	ld xwa, (xsp + 4)
 	st_dri3b C, 0x07, 0xE0, 0xE4
-	jr LABEL_F35809
+	jr DspItem0_Epilogue
 
 LABEL_F357C8:
 	lds32 xhl, 2
-	jr LABEL_F35809
+	jr DspItem0_Epilogue
 	lds32 xwa, 0
 	ldda8 a, 10666
 	cp xde, xwa
 	scc16 c, hl
 	extz xhl
-	jr LABEL_F35809
+	jr DspItem0_Epilogue
 	st8_24 0x02109a, e
 
 LABEL_F357DF:
 	lds32 xhl, 0
-	jr LABEL_F35809
+	jr DspItem0_Epilogue
 	lds32 xhl, 0
 	ld8_24 l, 0x02109a
-	jr LABEL_F35809
+	jr DspItem0_Epilogue
 	st8_24 0x021098, e
 	jr LABEL_F357DF
 	ldb h, 0x0
 	extz xhl
-	jr LABEL_F35809
+	jr DspItem0_Epilogue
 	lds32 xhl, 0
 	ldda8 l, 10666
-	jr LABEL_F35809
+	jr DspItem0_Epilogue
 
 LABEL_F35801:
 	call 0xFA5867
 	ldb h, 0x0
 	extz xhl
 
-LABEL_F35809:
+DspItem0_Epilogue:
 	lda xsp, (xsp + 28)
 	ret
 
@@ -113413,7 +113420,7 @@ LABEL_F3599D:
 LABEL_F359AE:
 	ld xwa, (xix + 18)
 	push xwa
-	call LABEL_FF0CF3
+	call Strncpy
 	lda xsp, (xsp + 10)
 	ld xhl, xiz
 	jr LABEL_F359C9
@@ -113530,7 +113537,7 @@ LABEL_F35AFF:
 	lds32 xhl, 0
 	ret
 
-LABEL_F35B02:
+FormatParamValueStr:
 	push xiz
 	ld xiz, xbc
 	ld (xiz), 0x20
@@ -113657,7 +113664,7 @@ LABEL_F35C52:
 	add xwa, xde
 	push xwa
 	push xhl
-	call LABEL_FF0CF3
+	call Strncpy
 	lda xsp, (xsp + 10)
 	jr LABEL_F35C93
 
@@ -113677,7 +113684,7 @@ LABEL_F35C7E:
 LABEL_F35C8A:
 	push xwa
 	push xhl
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 
 LABEL_F35C93:
@@ -132693,7 +132700,7 @@ LABEL_F40F63:
 	ld (xsp + 22), hl
 	ld xwa, (xsp + 8)
 	ld xbc, 0xFB
-	call LABEL_FF0C12
+	call DivMod32
 	ld xwa, (xsp + 12)
 	ldmw2 (xwa), 0x2955
 	ldda8 c, 10583
@@ -137467,7 +137474,7 @@ LABEL_F43C6C:
 	lds de, 0
 
 LABEL_F43C86:
-	call LABEL_FDB1F3
+	call AssswbWr
 
 LABEL_F43C8A:
 	push xiz
@@ -144963,12 +144970,12 @@ LABEL_F4938D:
 	extz bc
 	ld xwa, 0x28001
 	lds de, 3
-	call LABEL_FCD201
+	call SoundParam_NotifyChange
 	ldto_berp C, 0xFB
 	extz bc
 	ld xwa, 0x28000
 	lds de, 3
-	call LABEL_FCD201
+	call SoundParam_NotifyChange
 	pop_werp 0xFA
 	ret
 
@@ -189312,7 +189319,7 @@ LABEL_F697E3:
 	pushw 0x0
 	pushw 0x34BC
 	push xwa
-	call LABEL_FF0CF3
+	call Strncpy
 	lda xsp, (xsp + 10)
 	ldw wa, 0xCA
 
@@ -191527,7 +191534,7 @@ LABEL_F6BE07:
 	ld bc, (xwa)
 	lds32 xwa, 4
 	lds de, 3
-	call LABEL_FCD201
+	call SoundParam_NotifyChange
 	call LABEL_FCA318
 	ldda32 xbc, 15708
 	add xbc, 0x16C00
@@ -191684,7 +191691,7 @@ LABEL_F6BFBD:
 	ld bc, (xwa)
 	lds32 xwa, 4
 	lds de, 3
-	call LABEL_FCD201
+	call SoundParam_NotifyChange
 	call LABEL_FCA318
 
 LABEL_F6BFD5:
@@ -199856,7 +199863,7 @@ LABEL_F743CA:
 	ld xde, (xsp + 4)
 	call 0xFA4409
 	lds wa, 0
-	call LABEL_FC9E91
+	call SoundPreset_FindMatch
 	cp hl, 0xFFFF
 	jr z, LABEL_F743F5
 	extz xhl
@@ -199937,7 +199944,7 @@ LABEL_F74492:
 	ld xde, (xsp + 4)
 	call 0xFA4409
 	lds wa, 1
-	call LABEL_FC9E91
+	call SoundPreset_FindMatch
 	cp hl, 0xFFFF
 	jr z, LABEL_F744BD
 	extz xhl
@@ -200049,7 +200056,7 @@ LABEL_F745B8:
 	ld xde, (xsp + 4)
 	call 0xFA4409
 	lds wa, 2
-	call LABEL_FC9E91
+	call SoundPreset_FindMatch
 	cp hl, 0xFFFF
 	jr z, LABEL_F745E3
 	extz xhl
@@ -200169,19 +200176,19 @@ MainRevEqPresetLoad:
 	jr nz, LABEL_F7470D
 	lds wa, 0
 	ld bc, de
-	jr LABEL_F74709
+	jr MainRevEqPresetLoad_DoLoad
 
 LABEL_F746FF:
 	lds wa, 1
 	ld bc, de
-	jr LABEL_F74709
+	jr MainRevEqPresetLoad_DoLoad
 
 LABEL_F74705:
 	lds wa, 2
 	ld bc, de
 
-LABEL_F74709:
-	call LABEL_FC9F81
+MainRevEqPresetLoad_DoLoad:
+	call SoundPreset_Dispatch
 
 LABEL_F7470D:
 	lds32 xhl, 0
@@ -200387,7 +200394,7 @@ SplitPointFunc:
 	ld xwa, 0x4180
 	lds bc, 0
 	lds de, 1
-	call LABEL_FCD201
+	call SoundParam_NotifyChange
 	ld xwa, (xsp + 8)
 	ldfr_berp A, 0xFB
 	cp_erpb 0xFB, 0x24
@@ -200483,7 +200490,7 @@ LABEL_F749CC:
 	pushw 0xF81A
 	ld xwa, (xde + 8)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 14)
 	ld xwa, (xsp + 8)
 	ld de, (xwa + 4)
@@ -200517,7 +200524,7 @@ LABEL_F74A2C:
 	extz bc
 	ld xwa, 0x4181
 	lds de, 1
-	call LABEL_FCD201
+	call SoundParam_NotifyChange
 	ret
 
 R12OctaveFunc:
@@ -201453,7 +201460,7 @@ LABEL_F756C0:
 	pushw 0xF9B8
 	lda xwa, (xsp + 18)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 	call 0xFA44D0
 	ld xwa, xhl
@@ -204496,7 +204503,7 @@ LABEL_F79102:
 	pushw 0xE8
 	pushw 0x1B0
 	push xde
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 12)
 	call 0xFA44D0
 	ld xwa, xhl
@@ -204883,7 +204890,7 @@ LABEL_F799D2:
 	pushw 0x25A
 	ld xwa, (xsp + 18)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 
 LABEL_F799E8:
@@ -204905,7 +204912,7 @@ LABEL_F799F9:
 	pushw 0x260
 	ld xwa, (xsp + 18)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 	call 0xFA44D0
 	ld xwa, xhl
@@ -204945,7 +204952,7 @@ LABEL_F79A69:
 	pushw 0x26C
 	ld xwa, (xsp + 18)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 
 LABEL_F79A7F:
@@ -206330,7 +206337,7 @@ LABEL_F7AC8E:
 	pushw 0x6E8
 	lda xwa, (xsp + 30)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 
 LABEL_F7ACA9:
@@ -208679,7 +208686,7 @@ LswVolume:
 	pushw 0xE9
 	pushw 0x5588
 	push xbc
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 	jr LABEL_F7CD18
 
@@ -208804,7 +208811,7 @@ LswMute:
 	pushw 0xE9
 	pushw 0x5598
 	push xbc
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 	jr LABEL_F7CE26
 
@@ -208948,7 +208955,7 @@ LABEL_F7CF41:
 LABEL_F7CF4B:
 	push xwa
 	push xbc
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 	jr LABEL_F7CF63
 
@@ -209050,7 +209057,7 @@ LswReverb:
 	pushw 0xE9
 	pushw 0x55BC
 	push xbc
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 	jr LABEL_F7D035
 
@@ -209166,7 +209173,7 @@ LswDSPEffect:
 	pushw 0xE9
 	pushw 0x55C4
 	push xbc
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 	jr LABEL_F7D135
 
@@ -209461,7 +209468,7 @@ LswSustainLength:
 	pushw 0xE9
 	pushw 0x55E4
 	push xbc
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 	jr LABEL_F7D3C1
 
@@ -209565,7 +209572,7 @@ LswKeyShift:
 	pushw 0xE9
 	pushw 0x55EC
 	push xbc
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 	jr LABEL_F7D4BA
 
@@ -209683,7 +209690,7 @@ LswTuning:
 	pushw 0xE9
 	pushw 0x55FA
 	push xbc
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 	jr LABEL_F7D5BE
 
@@ -209794,7 +209801,7 @@ LswBendRange:
 	pushw 0xE9
 	pushw 0x560C
 	push xbc
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 	jr LABEL_F7D69F
 
@@ -210506,7 +210513,7 @@ LswMidiChannel:
 	pushw 0xE9
 	pushw 0x565C
 	push xbc
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 	jr LABEL_F7DCD6
 
@@ -210809,7 +210816,7 @@ LABEL_F7DF82:
 	push xbc
 
 LABEL_F7DF95:
-	call LABEL_FF0CF3
+	call Strncpy
 	lda xsp, (xsp + 10)
 
 LABEL_F7DF9C:
@@ -210952,7 +210959,7 @@ LABEL_F7E0FF:
 	pushw 0xD892
 	ld xwa, (xiz + 18)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 
 LABEL_F7E115:
@@ -211064,7 +211071,7 @@ LABEL_F7E1BF:
 	pushw 0xE9
 	pushw 0xD8A2
 	push xiz
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 20)
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E00023
@@ -212146,7 +212153,7 @@ LABEL_F7EDDD:
 	pushw 0xDB76
 	lda xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 	ld wa, iz
 	extz xwa
@@ -212617,7 +212624,7 @@ LswScalingKeyX:
 	pushw 0xE9
 	pushw 0xDE32
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 12)
 	jr LABEL_F7F2CA
 
@@ -212711,7 +212718,7 @@ LABEL_F7F359:
 	pushw 0xDE3E
 	lda xwa, (xsp + 10)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 	lda xde, (xsp + 4)
 	ld xwa, 0xF00001
@@ -212723,7 +212730,7 @@ LABEL_F7F359:
 	pushw 0xDE42
 	lda xwa, (xsp + 10)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 	lda xde, (xsp + 4)
 	ld xwa, 0xF00002
@@ -212735,7 +212742,7 @@ LABEL_F7F359:
 	pushw 0xDE46
 	lda xwa, (xsp + 10)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 	lda xde, (xsp + 4)
 	ld xwa, 0xF00003
@@ -212747,7 +212754,7 @@ LABEL_F7F359:
 	pushw 0xDE4A
 	lda xwa, (xsp + 10)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 	lda xde, (xsp + 4)
 	ld xwa, 0xF00004
@@ -212806,7 +212813,7 @@ LABEL_F7F450:
 	pushw 0xDE54
 	lda xwa, (xsp + 10)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 	lda xde, (xsp + 4)
 	ld xwa, 0xEF000A
@@ -214216,7 +214223,7 @@ LABEL_F80644:
 	pushw 0xF580
 	lda xwa, (xsp + 30)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 16)
 	lda xde, (xsp + 18)
 	ld xwa, (xsp + 90)
@@ -218007,7 +218014,7 @@ LABEL_F83FE3:
 	pushw 0xF99C
 	ld_sril XWA, (xsp + 0x011a)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 	jr LABEL_F83FDE
 
@@ -219962,7 +219969,7 @@ LABEL_F854AC:
 	inc 1, xwa
 	push xwa
 	push xbc
-	call LABEL_FF0CF3
+	call Strncpy
 	lda xsp, (xsp + 12)
 	ld xwa, (xsp + 12)
 	add xwa, xiz
@@ -230328,7 +230335,7 @@ LABEL_F980EE:
 	lds32 xwa, 3
 	lds bc, 5
 	lds de, 4
-	call LABEL_FCD201
+	call SoundParam_NotifyChange
 	jr LABEL_F9816F
 
 LABEL_F98150:
@@ -231807,7 +231814,7 @@ MainGetRhythmName:
 	push xhl
 	ld xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0CF3
+	call Strncpy
 	lda xsp, (xsp + 10)
 	ld xwa, (xsp + 2)
 	ld (xwa + 13), 0x0
@@ -231847,7 +231854,7 @@ MainGetPmemName:
 	pushw 0xF9A2
 	ld xwa, (xsp + 12)
 	push xwa
-	call LABEL_FF0CF3
+	call Strncpy
 	lda xsp, (xsp + 10)
 	ld xwa, (xsp + 2)
 	lda xbc, (xwa + 2)
@@ -235908,7 +235915,7 @@ LABEL_F9C15B:
 	pushw 0x9F08
 	lda xwa, (xsp + 14)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 14)
 	st_dri3b A, 0xFD, 0x04, 0x01
 	ld_sril XWA, (xsp + 0x0114)
@@ -236041,7 +236048,7 @@ LABEL_F9C2ED:
 	pushw 0x9F14
 	lda xwa, (xsp + 14)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 14)
 	st_dri3b A, 0xFD, 0x04, 0x01
 	ld_sril XWA, (xsp + 0x0114)
@@ -237615,7 +237622,7 @@ LABEL_F9D2DC:
 	pushw 0xA180
 	lda xwa, (xsp + 10)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 	jr LABEL_F9D313
 
@@ -239631,7 +239638,7 @@ LABEL_F9E787:
 	pushw 0xEA
 	pushw 0xA1EC
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 12)
 	lda xde, (xsp + 24)
 	ld_sril XWA, (xsp + 0x014e)
@@ -240026,7 +240033,7 @@ LABEL_F9EBFE:
 	pushw 0xEA
 	pushw 0xA266
 	push xde
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 12)
 	call 0xFA44D0
 	ld xwa, xhl
@@ -240430,7 +240437,7 @@ LABEL_F9F0A3:
 	pushw 0xA27C
 	lda xwa, (xsp + 28)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xwa, (xsp + 32)
 	push xwa
 	lda xwa, (xsp + 46)
@@ -240448,7 +240455,7 @@ LABEL_F9F0A3:
 	push xwa
 	lda xwa, (xsp + 20)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 20)
 	lda xde, (xsp + 4)
 	ld xwa, (xsp + 42)
@@ -240672,7 +240679,7 @@ LABEL_F9F308:
 	pushw 0xA2AC
 	lda xwa, (xsp + 22)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xwa, (xsp + 26)
 	push xwa
 	lda xwa, (xsp + 40)
@@ -240691,7 +240698,7 @@ LABEL_F9F308:
 	push xwa
 	ld xwa, (xsp + 42)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 18)
 	jrl LABEL_F9F4C9
 
@@ -241160,7 +241167,7 @@ LswEditCheck:
 	pushw 0xA2B2
 	ld xwa, (xde + 8)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 	ld xhl, xiz
 	jr LABEL_F9F888
@@ -243668,7 +243675,7 @@ LABEL_FA13E6:
 	pushw 0xA354
 	lda xwa, (xsp + 16)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 12)
 	st_dri3b A, 0xFD, 0x0C, 0x01
 	ld_sril XWA, (xsp + 0x0114)
@@ -245780,7 +245787,7 @@ LABEL_FA2705:
 	pushw 0xEA
 	pushw 0xA3CC
 	push xix
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 16)
 	jr LABEL_FA2779
 
@@ -245791,7 +245798,7 @@ LABEL_FA2756:
 	pushw 0xEA
 	pushw 0xA3DE
 	push xix
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 14)
 	jr LABEL_FA2779
 
@@ -245800,7 +245807,7 @@ LABEL_FA276A:
 	pushw 0xEA
 	pushw 0xA3EE
 	push xix
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 
 LABEL_FA2779:
@@ -245984,7 +245991,7 @@ LABEL_FA28D7:
 	pushw 0xA6B0
 	lda xwa, (xsp + 24)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 	lda xwa, (xsp + 24)
 	lda xbc, (xsp + 32)
@@ -246477,7 +246484,7 @@ LABEL_FA2E40:
 	push xwa
 	lda xwa, (xsp + 16)
 	push xwa
-	call LABEL_FF0CF3
+	call Strncpy
 	lda xsp, (xsp + 10)
 	ld wa, (xsp + 4)
 	extz xwa
@@ -246653,7 +246660,7 @@ LABEL_FA2FE8:
 	pushw 0xA6C6
 	lda xwa, (xsp + 38)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 22)
 	lda xwa, (xsp + 104)
 	lda xbc, (xsp + 100)
@@ -246692,7 +246699,7 @@ LABEL_FA2FE8:
 	pushw 0xA6D2
 	lda xwa, (xsp + 40)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 24)
 	lda xbc, (xsp + 100)
 	addmi16 (xbc), 0x30
@@ -247361,7 +247368,7 @@ LABEL_FA3724:
 	pushw 0xA824
 	lda xwa, (xsp + 124)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 	ld xwa, (xsp + 4)
 	ld xbc, (xwa + 24)
@@ -251947,7 +251954,7 @@ LABEL_FA667A:
 	push xwa
 	ld xwa, (xsp + 16)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 16)
 
 LABEL_FA6686:
@@ -252070,7 +252077,7 @@ LABEL_FA67B6:
 	push xwa
 	ld xwa, (xsp + 16)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 16)
 
 LABEL_FA67C2:
@@ -252193,7 +252200,7 @@ LABEL_FA68F2:
 	push xwa
 	ld xwa, (xsp + 16)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 16)
 
 LABEL_FA68FE:
@@ -252316,7 +252323,7 @@ LABEL_FA6A2E:
 	push xwa
 	ld xwa, (xsp + 16)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 16)
 
 LABEL_FA6A3A:
@@ -252440,7 +252447,7 @@ LABEL_FA6B6C:
 	push xwa
 	ld xwa, (xsp + 16)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 16)
 
 LABEL_FA6B78:
@@ -252563,7 +252570,7 @@ LABEL_FA6CA8:
 	push xwa
 	ld xwa, (xsp + 16)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 16)
 
 LABEL_FA6CB4:
@@ -252686,7 +252693,7 @@ LABEL_FA6DE8:
 	push xwa
 	ld xwa, (xsp + 16)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 16)
 
 LABEL_FA6DF4:
@@ -255184,7 +255191,7 @@ LABEL_FA8391:
 	ld xwa, (xsp + 8)
 	ld xwa, (xwa + 4)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	inc 8, xsp
 	jrl LABEL_FA8555
 
@@ -255204,7 +255211,7 @@ LABEL_FA83ED:
 	ld xwa, (xsp + 12)
 	ld xwa, (xwa + 4)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 12)
 	jrl LABEL_FA8555
 
@@ -255231,7 +255238,7 @@ LABEL_FA8421:
 	pushw 0xAACA
 	ld xwa, (xde + 4)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 14)
 	jrl LABEL_FA8555
 
@@ -255289,7 +255296,7 @@ LABEL_FA84A2:
 	ld xwa, (xsp + 12)
 	ld xwa, (xwa + 4)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 12)
 	jr LABEL_FA8555
 
@@ -255312,7 +255319,7 @@ LABEL_FA8503:
 	pushw 0xAAE0
 	ld xwa, (xbc + 4)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 14)
 	jr LABEL_FA8555
 
@@ -255498,7 +255505,7 @@ LABEL_FA86B9:
 	ld xwa, (xsp + 8)
 	ld xwa, (xwa + 4)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	inc 8, xsp
 	jrl LABEL_FA8847
 
@@ -255518,7 +255525,7 @@ LABEL_FA8715:
 	ld xwa, (xsp + 12)
 	ld xwa, (xwa + 4)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 12)
 	jrl LABEL_FA8847
 
@@ -255549,7 +255556,7 @@ LABEL_FA8749:
 	pushw 0xAAFE
 	ld xwa, (xde + 4)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 14)
 	jrl LABEL_FA8847
 
@@ -255582,7 +255589,7 @@ LABEL_FA87AA:
 	ld xwa, (xsp + 12)
 	ld xwa, (xwa + 4)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 12)
 	jr LABEL_FA8847
 
@@ -255605,7 +255612,7 @@ LABEL_FA87F6:
 	pushw 0xAB0C
 	ld xwa, (xbc + 4)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 14)
 	jr LABEL_FA8847
 
@@ -255649,7 +255656,7 @@ LABEL_FA886D:
 	pushw 0xAB1C
 	lda xwa, (xsp + 28)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 12)
 	jr LABEL_FA88F0
 
@@ -255678,7 +255685,7 @@ LABEL_FA88A0:
 	pushw 0xAB22
 	lda xwa, (xsp + 30)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 14)
 
 LABEL_FA88F0:
@@ -255850,7 +255857,7 @@ LABEL_FA8A49:
 	ld xwa, (xsp + 8)
 	ld xwa, (xwa + 4)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	inc 8, xsp
 	jrl LABEL_FA8BD7
 
@@ -255870,7 +255877,7 @@ LABEL_FA8AA5:
 	ld xwa, (xsp + 12)
 	ld xwa, (xwa + 4)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 12)
 	jrl LABEL_FA8BD7
 
@@ -255901,7 +255908,7 @@ LABEL_FA8AD9:
 	pushw 0xAB40
 	ld xwa, (xde + 4)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 14)
 	jrl LABEL_FA8BD7
 
@@ -255934,7 +255941,7 @@ LABEL_FA8B3A:
 	ld xwa, (xsp + 12)
 	ld xwa, (xwa + 4)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 12)
 	jr LABEL_FA8BD7
 
@@ -255957,7 +255964,7 @@ LABEL_FA8B86:
 	pushw 0xAB4E
 	ld xwa, (xbc + 4)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 14)
 	jr LABEL_FA8BD7
 
@@ -256001,7 +256008,7 @@ LABEL_FA8BFD:
 	pushw 0xAB5E
 	lda xwa, (xsp + 28)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 12)
 	jr LABEL_FA8C80
 
@@ -256030,7 +256037,7 @@ LABEL_FA8C30:
 	pushw 0xAB64
 	lda xwa, (xsp + 30)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 14)
 
 LABEL_FA8C80:
@@ -256196,7 +256203,7 @@ LABEL_FA8DE3:
 	pushw 0xEA
 	pushw 0xAB74
 	push xbc
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 12)
 	jrl LABEL_FA8EB3
 
@@ -256234,7 +256241,7 @@ LABEL_FA8E5D:
 	push xwa
 	ld xwa, (xiz + 4)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 12)
 	jr LABEL_FA8EB3
 
@@ -256258,7 +256265,7 @@ LABEL_FA8E6B:
 	pushw 0xAB90
 	ld xwa, (xwa)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 	jr LABEL_FA8EB3
 
@@ -256307,7 +256314,7 @@ LABEL_FA8ED5:
 	pushw 0xEA
 	pushw 0xAB98
 	push xbc
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 12)
 
 LABEL_FA8F14:
@@ -256441,7 +256448,7 @@ LABEL_FA9029:
 	pushw 0xEA
 	pushw 0xABA0
 	push xbc
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 12)
 	jrl LABEL_FA90F9
 
@@ -256479,7 +256486,7 @@ LABEL_FA90A3:
 	push xwa
 	ld xwa, (xiz + 4)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 12)
 	jr LABEL_FA90F9
 
@@ -256503,7 +256510,7 @@ LABEL_FA90B1:
 	pushw 0xABBC
 	ld xwa, (xwa)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 	jr LABEL_FA90F9
 
@@ -256552,7 +256559,7 @@ LABEL_FA911B:
 	pushw 0xEA
 	pushw 0xABC4
 	push xbc
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 12)
 
 LABEL_FA915A:
@@ -266536,7 +266543,7 @@ CaptureLcd:
 	pushw 0xAE50
 	lda xwa, (xsp + 18)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 20)
 	lds32 xwa, 1
 	addm32_24 0x03044a, xwa
@@ -269547,7 +269554,7 @@ LABEL_FB20B4:
 LABEL_FB20B9:
 	push xwa
 	push xbc
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 	ld a, (xiz + 6)
 	and a, 0x3F
@@ -275815,7 +275822,7 @@ LABEL_FB6E42:
 LABEL_FB6E54:
 	ldada xwa, 63906
 	push xwa
-	call LABEL_FF0CF3
+	call Strncpy
 	lda xsp, (xsp + 10)
 	ldw wa, 0x80
 	call LABEL_FB6028
@@ -276193,7 +276200,7 @@ LABEL_FB717F:
 	ld xwa, 0x302
 	lds bc, 1
 	lds de, 0
-	call LABEL_FCD201
+	call SoundParam_NotifyChange
 	ldw wa, 0x80
 	ld xbc, 0x3C2C4
 	call LABEL_FB43D5
@@ -276214,7 +276221,7 @@ LABEL_FB71C5:
 	lds de, 0
 
 LABEL_FB71CE:
-	call LABEL_FCD201
+	call SoundParam_NotifyChange
 	jp LABEL_EF14F3
 
 LABEL_FB71D6:
@@ -276289,7 +276296,7 @@ LABEL_FB726A:
 	extz bc
 	ld xwa, 0x300
 	lds de, 3
-	call LABEL_FCD201
+	call SoundParam_NotifyChange
 	ldda8 a, 36178
 	bit 5, a
 	jr z, LABEL_FB728D
@@ -278565,7 +278572,7 @@ LABEL_FB8820:
 	pushw 0xD18
 	lda xwa, (xsp + 30)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 22)
 	lda xwa, (xsp + 50)
 	lda xbc, (xsp + 46)
@@ -279766,7 +279773,7 @@ LABEL_FB9547:
 	pushw 0xD98
 	lda xwa, (xsp + 28)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 20)
 	lda xwa, (xsp + 50)
 	lda xbc, (xsp + 46)
@@ -281023,7 +281030,7 @@ LABEL_FBA1B2:
 	pushw 0xDD0
 	lda xwa, (xsp + 34)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 20)
 	lda xwa, (xsp + 40)
 	lda xbc, (xsp + 36)
@@ -281062,7 +281069,7 @@ LABEL_FBA262:
 	pushw 0xED
 	pushw 0xDEC
 	push xde
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 12)
 	ld xwa, 0xED0DF0
 	jr LABEL_FBA2AB
@@ -281079,7 +281086,7 @@ LABEL_FBA284:
 	pushw 0xED
 	pushw 0xDF6
 	push xde
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 12)
 	ld xwa, 0xED0DFA
 
@@ -281157,7 +281164,7 @@ LABEL_FBA2AB:
 	pushw 0xE00
 	lda xwa, (xsp + 26)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 12)
 	lda xwa, (xsp + 40)
 	lda xbc, (xsp + 36)
@@ -281963,7 +281970,7 @@ LABEL_FBAC96:
 	pushw 0xEF4
 	lda xwa, (xsp + 10)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 	call 0xFA44D0
 	ld xwa, xhl
@@ -282007,7 +282014,7 @@ LABEL_FBAD24:
 	pushw 0xF00
 	lda xwa, (xsp + 10)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 	call 0xFA44D0
 	ld xwa, xhl
@@ -282027,7 +282034,7 @@ LABEL_FBAD5B:
 	pushw 0xF04
 	lda xwa, (xsp + 10)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 	call 0xFA44D0
 	ld xwa, xhl
@@ -282531,7 +282538,7 @@ LABEL_FBB6EC:
 	pushw 0x120A
 	lda xwa, (xsp + 12)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 12)
 	call 0xFA44D0
 	ld xwa, xhl
@@ -282558,7 +282565,7 @@ LABEL_FBB756:
 	pushw 0x120E
 	lda xwa, (xsp + 12)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 12)
 	call 0xFA44D0
 	ld xwa, xhl
@@ -282585,7 +282592,7 @@ LABEL_FBB7A6:
 	pushw 0x1212
 	lda xwa, (xsp + 12)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 12)
 	call 0xFA44D0
 	ld xwa, xhl
@@ -282612,7 +282619,7 @@ LABEL_FBB7F6:
 	pushw 0x1216
 	lda xwa, (xsp + 12)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 12)
 	call 0xFA44D0
 	ld xwa, xhl
@@ -282639,7 +282646,7 @@ LABEL_FBB846:
 	pushw 0x121A
 	lda xwa, (xsp + 12)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 12)
 	call 0xFA44D0
 	ld xwa, xhl
@@ -282666,7 +282673,7 @@ LABEL_FBB896:
 	pushw 0x121E
 	lda xwa, (xsp + 12)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 12)
 	call 0xFA44D0
 	ld xwa, xhl
@@ -282693,7 +282700,7 @@ LABEL_FBB8E5:
 	pushw 0x1222
 	lda xwa, (xsp + 12)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 12)
 	call 0xFA44D0
 	ld xwa, xhl
@@ -283046,7 +283053,7 @@ LABEL_FBBCFC:
 	pushw 0xED
 	pushw 0x1404
 	push xde
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 12)
 	call 0xFA44D0
 	ld xwa, xhl
@@ -283114,7 +283121,7 @@ LABEL_FBBDC4:
 	pushw 0xED
 	pushw 0x1412
 	push xde
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 12)
 	call 0xFA44D0
 	ld xwa, xhl
@@ -284005,7 +284012,7 @@ LABEL_FBCB6E:
 	pushw 0xED
 	pushw 0x156A
 	push xbc
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 12)
 	call 0xFA44D0
 	ld xwa, xhl
@@ -284027,7 +284034,7 @@ LABEL_FBCBC6:
 	pushw 0xED
 	pushw 0x156E
 	push xbc
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 12)
 	call 0xFA44D0
 	ld xwa, xhl
@@ -284048,7 +284055,7 @@ LABEL_FBCC06:
 	pushw 0xED
 	pushw 0x1572
 	push xbc
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 12)
 	call 0xFA44D0
 	ld xwa, xhl
@@ -284069,7 +284076,7 @@ LABEL_FBCC41:
 	pushw 0xED
 	pushw 0x1576
 	push xbc
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 12)
 	call 0xFA44D0
 	ld xwa, xhl
@@ -284090,7 +284097,7 @@ LABEL_FBCC7B:
 	pushw 0xED
 	pushw 0x157A
 	push xbc
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 12)
 	call 0xFA44D0
 	ld xwa, xhl
@@ -284111,7 +284118,7 @@ LABEL_FBCCB5:
 	pushw 0xED
 	pushw 0x157E
 	push xbc
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 12)
 	call 0xFA44D0
 	ld xwa, xhl
@@ -284814,7 +284821,7 @@ LABEL_FBD4AA:
 	pushw 0xED
 	pushw 0x15CA
 	push xde
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 12)
 
 LABEL_FBD4D1:
@@ -284893,7 +284900,7 @@ LABEL_FBD57A:
 	pushw 0x15D2
 	lda xwa, (xsp + 10)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 	lda xde, (xsp + 4)
 	ld_sril XWA, (xsp + 0x0104)
@@ -285471,7 +285478,7 @@ LABEL_FBDBFC:
 	pushw 0x15E0
 	ld xwa, (xsp + 14)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	ld_sril XWA, (xsp + 0x0138)
 	inc 1, xwa
 	push xwa
@@ -285528,7 +285535,7 @@ LABEL_FBDC73:
 	pushw 0x15EA
 	ld xwa, (xsp + 14)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	ld_sril XWA, (xsp + 0x0138)
 	inc 2, xwa
 	push xwa
@@ -285898,7 +285905,7 @@ GmOnOffFunc:
 	pushw 0x1602
 	ld xwa, (xde + 8)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 	ld xhl, xiz
 	jrl LABEL_FBE1E2
@@ -286421,7 +286428,7 @@ LABEL_FBE703:
 	pushw 0x160A
 	lda xwa, (xsp + 40)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 	st_dri3b C, 0xFD, 0x26, 0x02
 	st_dri3b A, 0xFD, 0x22, 0x02
@@ -286703,7 +286710,7 @@ LABEL_FBE9F4:
 	pushw 0x160E
 	lda xwa, (xsp + 40)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 	st_dri3b C, 0xFD, 0x26, 0x02
 	st_dri3b A, 0xFD, 0x22, 0x02
@@ -286836,7 +286843,7 @@ LABEL_FBEAFA:
 	pushw 0x1612
 	st_dri3b W, 0xFD, 0x2A, 0x01
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 12)
 	st_dri3b W, 0xFD, 0x26, 0x02
 	st_dri3b A, 0xFD, 0x22, 0x02
@@ -287000,7 +287007,7 @@ LABEL_FBED2F:
 	pushw 0x161E
 	lda xwa, (xsp + 40)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 	st_dri3b W, 0xFD, 0x26, 0x02
 	st_dri3b B, 0xFD, 0x22, 0x02
@@ -287215,7 +287222,7 @@ LABEL_FBEF60:
 	pushw 0x1622
 	lda xwa, (xsp + 40)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 	st_dri3b W, 0xFD, 0x26, 0x02
 	st_dri3b B, 0xFD, 0x22, 0x02
@@ -288063,7 +288070,7 @@ LABEL_FBF85D:
 	pushw 0x164E
 	lda xwa, (xsp + 28)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 12)
 	st_dri3b C, 0xFD, 0x18, 0x02
 	st_dri3b A, 0xFD, 0x14, 0x02
@@ -288184,7 +288191,7 @@ LABEL_FBF85D:
 	pushw 0x1652
 	lda xwa, (xsp + 28)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 12)
 	st_dri3b W, 0xFD, 0x18, 0x02
 	st_dri3b A, 0xFD, 0x14, 0x02
@@ -288474,7 +288481,7 @@ LABEL_FBFDA9:
 	pushw 0x1656
 	lda xwa, (xsp + 26)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 	st_dri3b C, 0xFD, 0x18, 0x02
 	st_dri3b A, 0xFD, 0x14, 0x02
@@ -288672,7 +288679,7 @@ LABEL_FBFFE0:
 	pushw 0x165A
 	lda xwa, (xsp + 26)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 	st_dri3b C, 0xFD, 0x18, 0x02
 	st_dri3b A, 0xFD, 0x14, 0x02
@@ -289160,7 +289167,7 @@ LABEL_FC057B:
 	pushw 0x165E
 	lda xwa, (xsp + 28)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 12)
 	st_dri3b C, 0xFD, 0x18, 0x02
 	st_dri3b A, 0xFD, 0x14, 0x02
@@ -289297,7 +289304,7 @@ LABEL_FC06C8:
 	pushw 0x1662
 	st_dri3b W, 0xFD, 0x1C, 0x01
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 12)
 	st_dri3b W, 0xFD, 0x18, 0x02
 	st_dri3b A, 0xFD, 0x14, 0x02
@@ -289451,7 +289458,7 @@ LABEL_FC08CC:
 	pushw 0x166E
 	lda xwa, (xsp + 26)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 	st_dri3b C, 0xFD, 0x18, 0x02
 	st_dri3b A, 0xFD, 0x14, 0x02
@@ -289698,7 +289705,7 @@ LABEL_FC0B97:
 	pushw 0x1672
 	st_dri3b W, 0xFD, 0x1C, 0x01
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 12)
 	st_dri3b C, 0xFD, 0x18, 0x02
 	st_dri3b A, 0xFD, 0x14, 0x02
@@ -289869,7 +289876,7 @@ LABEL_FC0D78:
 	pushw 0x1676
 	st_dri3b W, 0xFD, 0x1A, 0x01
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 	st_dri3b C, 0xFD, 0x18, 0x02
 	st_dri3b A, 0xFD, 0x14, 0x02
@@ -291303,7 +291310,7 @@ LABEL_FC1D06:
 	pushw 0x167A
 	lda xwa, (xsp + 14)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 	st_dri3b W, 0xFD, 0x0C, 0x01
 	st_dri3b C, 0xFD, 0x08, 0x01
@@ -291573,7 +291580,7 @@ LABEL_FC1FDF:
 	pushw 0x1718
 	lda xwa, (xsp + 20)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 16)
 	st_dri3b A, 0xFD, 0x08, 0x01
 	ldw (xbc), 0xE6
@@ -291944,7 +291951,7 @@ LABEL_FC2519:
 	push xbc
 
 LABEL_FC251B:
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	inc 8, xsp
 	ld xhl, (xsp + 4)
 	jr LABEL_FC2533
@@ -292736,7 +292743,7 @@ LABEL_FC2DD0:
 	pushw 0x1BF8
 	lda xwa, (xsp + 16)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 16)
 
 LABEL_FC2E1E:
@@ -292782,7 +292789,7 @@ LABEL_FC2E55:
 	pushw 0x1C10
 	lda xwa, (xsp + 16)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 16)
 
 LABEL_FC2EA3:
@@ -292879,7 +292886,7 @@ LABEL_FC2F7F:
 	pushw 0xED
 	pushw 0x1C8C
 	push xbc
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 12)
 
 LABEL_FC2F9B:
@@ -292935,7 +292942,7 @@ LABEL_FC300A:
 	pushw 0x1C92
 	lda xwa, (xsp + 12)
 	push xwa
-	call LABEL_FF0A72
+	call Audio_SendCommand
 	lda xsp, (xsp + 12)
 	ld xwa, 0xC0
 	call LABEL_FCD437
@@ -293635,17 +293642,17 @@ LABEL_FC520F:
 	extz bc
 	lds32 xwa, 0
 	lds de, 0
-	call LABEL_FCD201
+	call SoundParam_NotifyChange
 	ldda8 c, 36462
 	extz bc
 	ld xwa, 0x102
 	lds de, 0
-	call LABEL_FCD201
+	call SoundParam_NotifyChange
 	ldda8 c, 36464
 	extz bc
 	ld xwa, 0x103
 	lds de, 0
-	call LABEL_FCD201
+	call SoundParam_NotifyChange
 	call LABEL_FB559F
 	jr __jrt_nop_FC5245
 __jrt_nop_FC5245:
@@ -296232,7 +296239,7 @@ LABEL_FC7CB9:
 	ld xwa, 0xC0
 	lds bc, 0
 	lds de, 1
-	call LABEL_FCD201
+	call SoundParam_NotifyChange
 	push xde
 	push xhl
 	push xix
@@ -296327,7 +296334,7 @@ LABEL_FC7D7B:
 	ld xwa, 0xC0
 	lds bc, 0
 	lds de, 1
-	call LABEL_FCD201
+	call SoundParam_NotifyChange
 	push xde
 	push xhl
 	push xix
@@ -296346,7 +296353,7 @@ LABEL_FC7DAE:
 	ld xwa, 0x4001
 	ldw bc, 0x7F
 	lds de, 2
-	call LABEL_FCD201
+	call SoundParam_NotifyChange
 	push xde
 	push xhl
 	push xix
@@ -298553,17 +298560,23 @@ LABEL_FC9E82:
 	pop xiz
 	ret
 
-LABEL_FC9E91:
+; =============================================================================
+; SoundPreset_FindMatch -- Find matching preset in ROM tables
+; =============================================================================
+; Compares current params against all presets to find active one.
+; Args: a = type (0/1/2), bc = search params
+; Returns: hl = matched index, or 0xFFFF if no match
+SoundPreset_FindMatch:
 	cps a, 2
-	jrl z, LABEL_FC9F1A
+	jrl z, SoundPreset_FindMatch_Combined
 	cps a, 1
 	jr z, LABEL_FC9EDE
 	cps a, 0
-	jr z, LABEL_FC9EA2
+	jr z, SoundPreset_FindMatch_Reverb
 	ldw hl, 0xFFFF
 	ret
 
-LABEL_FC9EA2:
+SoundPreset_FindMatch_Reverb:
 	pushw iz
 	lds iz, 0
 
@@ -298578,7 +298591,7 @@ LABEL_FC9EA5:
 	add xbc, xwa
 	ld xwa, (xbc)
 	push xwa
-	call LABEL_FF0D1E
+	call Mem_Compare
 	add xsp, 0xA
 	cps hl, 0
 	jr nz, LABEL_FC9ED1
@@ -298610,7 +298623,7 @@ LABEL_FC9EE1:
 	add xbc, xwa
 	ld xwa, (xbc)
 	push xwa
-	call LABEL_FF0D1E
+	call Mem_Compare
 	add xsp, 0xA
 	cps hl, 0
 	jr nz, LABEL_FC9F0D
@@ -298627,7 +298640,7 @@ LABEL_FC9F18:
 	popw iz
 	ret
 
-LABEL_FC9F1A:
+SoundPreset_FindMatch_Combined:
 	pushw iz
 	lds iz, 0
 
@@ -298642,7 +298655,7 @@ LABEL_FC9F1D:
 	add xbc, xwa
 	ld xwa, (xbc)
 	push xwa
-	call LABEL_FF0D1E
+	call Mem_Compare
 	add xsp, 0xA
 	cps hl, 0
 	jr nz, LABEL_FC9F74
@@ -298657,12 +298670,12 @@ LABEL_FC9F1D:
 	ld xwa, (xbc)
 	lda xwa, (xwa + 24)
 	push xwa
-	call LABEL_FF0D1E
+	call Mem_Compare
 	add xsp, 0xA
 	cps hl, 0
 	jr nz, LABEL_FC9F74
 	ld hl, iz
-	jr LABEL_FC9F7F
+	jr SoundPreset_ReturnResult
 
 LABEL_FC9F74:
 	inc 1, iz
@@ -298670,32 +298683,48 @@ LABEL_FC9F74:
 	jr c, LABEL_FC9F1D
 	ldw hl, 0xFFFF
 
-LABEL_FC9F7F:
+SoundPreset_ReturnResult:
 	popw iz
 	ret
 
-LABEL_FC9F81:
+; =============================================================================
+; SoundPreset_Dispatch -- Route preset load by type (reverb/EQ/combined)
+; =============================================================================
+; Dispatches to the appropriate preset loader based on the type parameter:
+;   type 0 -> ReverbPreset_Load (reverb-only, 24 bytes via cmd 0x63)
+;   type 1 -> EQPreset_Load (EQ-only, 24 bytes via cmd 0x64)
+;   type 2 -> CombinedPreset_Load (reverb+EQ, 48 bytes)
+; Args: a = preset type (0/1/2), bc = preset index
+; Called from: MainRevEqPresetLoad
+SoundPreset_Dispatch:
 	ld e, a
 	extz bc
 	cps e, 2
-	jr z, LABEL_FC9F99
+	jr z, SoundPreset_Dispatch_Combined
 	cps e, 1
-	jr z, LABEL_FC9F95
+	jr z, SoundPreset_Dispatch_EQ
 	cps e, 0
 	ret nz
 	ld wa, bc
-	jr LABEL_FC9F9F
+	jr ReverbPreset_Load
 
-LABEL_FC9F95:
+SoundPreset_Dispatch_EQ:
 	ld wa, bc
-	jr LABEL_FC9FF7
+	jr EQPreset_Load
 
-LABEL_FC9F99:
+SoundPreset_Dispatch_Combined:
 	ld wa, bc
-	calr LABEL_FCA04E
+	calr CombinedPreset_Load
 	ret
 
-LABEL_FC9F9F:
+; =============================================================================
+; ReverbPreset_Load -- Load and send a reverb preset to the Sub CPU
+; =============================================================================
+; Reads 24-byte reverb preset from ROM table at 0xEDB36C, copies to 0xFC8E,
+; then sends all 24 bytes via cmd 0x63 to the Sub CPU DSP ring buffer.
+; Preset: B0=algo_id, B1=REV_TIME, B3=PRE_DLY, B4=HI_DAMP, B5=ER_LVL, B22=99
+; Args: wa = preset index (0-9)
+ReverbPreset_Load:
 	pushw iz
 	extz wa
 	sla wa, 2
@@ -298709,7 +298738,7 @@ LABEL_FC9F9F:
 	lda xsp, (xsp + 10)
 	lds iz, 0
 
-LABEL_FC9FC2:
+ReverbPreset_SendLoop:
 	ldto_berp C, 0xF8
 	extz bc
 	ldada xwa, 64654
@@ -298720,18 +298749,24 @@ LABEL_FC9FC2:
 	extz de
 	pushw 0xFF
 	ldw wa, 0x63
-	call LABEL_FDB1F3
+	call AssswbWr
 	inc 1, iz
 	cp iz, 0x18
-	jr c, LABEL_FC9FC2
+	jr c, ReverbPreset_SendLoop
 	ld xwa, 0x4002
 	ldw bc, 0x7F
 	lds de, 1
-	call LABEL_FCD201
+	call SoundParam_NotifyChange
 	popw iz
 	ret
 
-LABEL_FC9FF7:
+; =============================================================================
+; EQPreset_Load -- Load and send an EQ preset to the Sub CPU
+; =============================================================================
+; Reads 24-byte EQ preset from ROM table at 0xEDB394, copies to 0xFCA8,
+; sends via cmd 0x64. EQ uses algo 0x4F with 4 big-endian 16-bit frequencies.
+; Args: wa = preset index (0-8)
+EQPreset_Load:
 	pushw iz
 	extz wa
 	sla wa, 2
@@ -298745,7 +298780,7 @@ LABEL_FC9FF7:
 	lda xsp, (xsp + 10)
 	lds iz, 0
 
-LABEL_FCA01A:
+EQPreset_SendLoop:
 	ldto_berp C, 0xF8
 	extz bc
 	ldada xwa, 64680
@@ -298756,18 +298791,24 @@ LABEL_FCA01A:
 	extz de
 	pushw 0xFF
 	ldw wa, 0x64
-	call LABEL_FDB1F3
+	call AssswbWr
 	inc 1, iz
 	cp iz, 0x18
-	jr c, LABEL_FCA01A
+	jr c, EQPreset_SendLoop
 	ld xwa, 0x4006
 	lds bc, 1
 	lds de, 1
-	call LABEL_FCD201
+	call SoundParam_NotifyChange
 	popw iz
 	ret
 
-LABEL_FCA04E:
+; =============================================================================
+; CombinedPreset_Load -- Load combined reverb+EQ preset (48 bytes)
+; =============================================================================
+; Reads 48 bytes (24 reverb + 24 EQ) from ROM table at 0xEDB3B8.
+; Sends reverb with cmd 0x63, EQ (at offset +24) with cmd 0x64.
+; Args: wa = preset index (0-8)
+CombinedPreset_Load:
 	dec 4, xsp
 	pushw iz
 	extz wa
@@ -298784,7 +298825,7 @@ LABEL_FCA04E:
 	lda xsp, (xsp + 10)
 	lds iz, 0
 
-LABEL_FCA079:
+CombinedPreset_SendReverbLoop:
 	ldto_berp C, 0xF8
 	extz bc
 	ldada xwa, 64654
@@ -298795,10 +298836,10 @@ LABEL_FCA079:
 	extz de
 	pushw 0xFF
 	ldw wa, 0x63
-	call LABEL_FDB1F3
+	call AssswbWr
 	inc 1, iz
 	cp iz, 0x18
-	jr c, LABEL_FCA079
+	jr c, CombinedPreset_SendReverbLoop
 	pushw 0x18
 	ld xwa, (xsp + 4)
 	lda xwa, (xwa + 24)
@@ -298809,7 +298850,7 @@ LABEL_FCA079:
 	lda xsp, (xsp + 10)
 	lds iz, 0
 
-LABEL_FCA0B7:
+CombinedPreset_SendEQLoop:
 	ldto_berp C, 0xF8
 	extz bc
 	ldada xwa, 64680
@@ -298820,18 +298861,18 @@ LABEL_FCA0B7:
 	extz de
 	pushw 0xFF
 	ldw wa, 0x64
-	call LABEL_FDB1F3
+	call AssswbWr
 	inc 1, iz
 	cp iz, 0x18
-	jr c, LABEL_FCA0B7
+	jr c, CombinedPreset_SendEQLoop
 	ld xwa, 0x4002
 	ldw bc, 0x7F
 	lds de, 1
-	call LABEL_FCD201
+	call SoundParam_NotifyChange
 	ld xwa, 0x4006
 	lds bc, 1
 	lds de, 1
-	call LABEL_FCD201
+	call SoundParam_NotifyChange
 	popw iz
 	inc 4, xsp
 	ret
@@ -301953,7 +301994,13 @@ LABEL_FCCE69:
 	.fill 8, 1, 0xff
 	.fill 5, 1, 0xff
 
-LABEL_FCD201:
+; =============================================================================
+; SoundParam_NotifyChange -- Notify UI of sound parameter change
+; =============================================================================
+; Hashes parameter ID and triggers UI refresh for affected widgets.
+; Called after preset loads: 0x4002 for reverb, 0x4006 for EQ.
+; Args: xwa = parameter ID
+SoundParam_NotifyChange:
 	lda xsp, (xsp - 10)
 	push xiz
 	ld (xsp + 10), de
@@ -301980,7 +302027,7 @@ LABEL_FCD201:
 	add xhl, xwa
 	ld xwa, xhl
 	ld xbc, 0x7FF
-	call LABEL_FF0C12
+	call DivMod32
 	ld ix, hl
 	jr LABEL_FCD282
 
@@ -302081,7 +302128,7 @@ LABEL_FCD31B:
 	ld xwa, xhl
 	ld bc, iz
 	ld de, (xsp + 6)
-	calr LABEL_FCD201
+	calr SoundParam_NotifyChange
 	popw iz
 	retd 0x2
 
@@ -302112,7 +302159,7 @@ LABEL_FCD32F:
 	add xhl, xwa
 	ld xwa, xhl
 	ld xbc, 0x7FF
-	call LABEL_FF0C12
+	call DivMod32
 	ld ix, hl
 	jr LABEL_FCD3B0
 
@@ -302221,7 +302268,7 @@ LABEL_FCD437:
 	add xhl, xwa
 	ld xwa, xhl
 	ld xbc, 0x7FF
-	call LABEL_FF0C12
+	call DivMod32
 	ld ix, hl
 	jr LABEL_FCD4B1
 
@@ -302346,7 +302393,7 @@ LABEL_FCD4FF:
 	add xhl, xbc
 	ld xwa, xhl
 	ld xbc, 0x7FF
-	call LABEL_FF0C12
+	call DivMod32
 	sll hl, 2
 	ldada xwa, 38872
 	extz xhl
@@ -302544,7 +302591,7 @@ LABEL_FCD7C5:
 	add xhl, xwa
 	ld xwa, xhl
 	ld xbc, 0x7FF
-	call LABEL_FF0C12
+	call DivMod32
 	ld ix, hl
 	jr LABEL_FCD850
 
@@ -303747,7 +303794,7 @@ LABEL_FCEEE6:
 	add xhl, xwa
 	ld xwa, xhl
 	ld xbc, 0x7FF
-	call LABEL_FF0C12
+	call DivMod32
 
 LABEL_FCEF2E:
 	ld wa, hl
@@ -303900,7 +303947,7 @@ LABEL_FCF015:
 	add xhl, xbc
 	ld xwa, xhl
 	ld xbc, 0x7FF
-	call LABEL_FF0C12
+	call DivMod32
 	ld bc, hl
 	sll hl, 2
 	ldada xde, 38872
@@ -308913,7 +308960,7 @@ LABEL_FD549A:
 	ld xwa, 0xC0
 	lds bc, 0
 	lds de, 1
-	call LABEL_FCD201
+	call SoundParam_NotifyChange
 	push xde
 	push xhl
 	push xix
@@ -311626,7 +311673,7 @@ LABEL_FD7181:
 	ld l, (xix)
 	extz hl
 	pushw hl
-	call LABEL_FDB1F3
+	call AssswbWr
 	jr LABEL_FD71E4
 
 LABEL_FD71DF:
@@ -312868,11 +312915,11 @@ LABEL_FD8643:
 	ld xwa, 0x2201
 	lds bc, 1
 	lds de, 0
-	call LABEL_FCD201
+	call SoundParam_NotifyChange
 	ld xwa, 0x2205
 	lds bc, 1
 	lds de, 0
-	call LABEL_FCD201
+	call SoundParam_NotifyChange
 
 LABEL_FD865D:
 	pop xiz
@@ -314301,7 +314348,7 @@ LABEL_FD972F:
 	pushw wa
 	ld a, e
 	ld de, hl
-	call LABEL_FDB1F3
+	call AssswbWr
 
 LABEL_FD973F:
 	pop xiz
@@ -316390,22 +316437,22 @@ LABEL_FDB12F:
 	cp a, 0x61
 	jr z, LABEL_FDB142
 	ldw hl, 0xFFFF
-	jrl LABEL_FDB1F1
+	jrl AssswbWr_Return
 
 LABEL_FDB142:
 	ld xwa, 0x4900
 	ld xde, 0xFC74
 	call LABEL_FDCA17
 	cps hl, 0
-	jrl lt, LABEL_FDB1EF
+	jrl lt, AssswbWr_ReturnFail
 	ld xwa, 0x4904
 	call LABEL_FDC7F9
 	ldfr_werp HL, 0xFA
 	cpi_werp 0xFA, 0
-	jrl lt, LABEL_FDB1EF
+	jrl lt, AssswbWr_ReturnFail
 	lds iz, 0
 	cpi_werp 0xFA, 0
-	jrl le, LABEL_FDB1EF
+	jrl le, AssswbWr_ReturnFail
 
 LABEL_FDB16F:
 	ld wa, iz
@@ -316421,22 +316468,22 @@ LABEL_FDB16F:
 	inc 1, iz
 	cp_werp IZ, 0xFA
 	jr lt, LABEL_FDB16F
-	jr LABEL_FDB1EF
+	jr AssswbWr_ReturnFail
 
 LABEL_FDB19B:
 	ld xwa, 0x4B00
 	ld xde, 0xFC8E
 	call LABEL_FDCA17
 	cps hl, 0
-	jr lt, LABEL_FDB1EF
+	jr lt, AssswbWr_ReturnFail
 	ld xwa, 0x4B04
 	call LABEL_FDC7F9
 	ldfr_werp HL, 0xFA
 	cpi_werp 0xFA, 0
-	jr lt, LABEL_FDB1EF
+	jr lt, AssswbWr_ReturnFail
 	lds iz, 0
 	cpi_werp 0xFA, 0
-	jr le, LABEL_FDB1EF
+	jr le, AssswbWr_ReturnFail
 
 LABEL_FDB1C5:
 	ld wa, iz
@@ -316453,18 +316500,16 @@ LABEL_FDB1C5:
 	cp_werp IZ, 0xFA
 	jr lt, LABEL_FDB1C5
 
-LABEL_FDB1EF:
+AssswbWr_ReturnFail:
 	lds hl, 0
 
-LABEL_FDB1F1:
+AssswbWr_Return:
 	pop xiz
 	ret
-LABEL_FDB1F3:
-
 AssswbWr:
 	ldda16 xhl, 37086
 	cp hl, 0x1FC
-	jr nc, LABEL_FDB221
+	jr nc, AssswbWr_BufferFull
 	ldada xix, 48444
 	extz xhl
 	add xhl, xix
@@ -316478,7 +316523,7 @@ AssswbWr:
 	inc 4, wa
 	stda16 37086, xwa
 
-LABEL_FDB221:
+AssswbWr_BufferFull:
 	retd 0x2
 
 AddswbWr:
@@ -317593,7 +317638,7 @@ LABEL_FDBBCF:
 	ld xwa, 0x40C1
 	lds bc, 0
 	lds de, 3
-	call LABEL_FCD201
+	call SoundParam_NotifyChange
 	resda 3, 49648
 	ldw wa, 0x4E
 	call LABEL_FC79C7
@@ -317624,14 +317669,14 @@ LABEL_FDBC35:
 	extz bc
 	ld xwa, 0x4005
 	lds de, 1
-	call LABEL_FCD201
+	call SoundParam_NotifyChange
 	cpdi8 49644, 127
 	ret nz
 	resda 0, 49648
 	ld xwa, 0x40C0
 	lds bc, 0
 	lds de, 1
-	call LABEL_FCD201
+	call SoundParam_NotifyChange
 	ret
 
 LABEL_FDBC66:
@@ -317655,7 +317700,7 @@ LABEL_FDBC88:
 	extz bc
 	ld xwa, 0x4005
 	lds de, 1
-	call LABEL_FCD201
+	call SoundParam_NotifyChange
 	cpdi8 49644, 0
 	ret nz
 	resda 1, 49648
@@ -317734,7 +317779,7 @@ LABEL_FDBD2B:
 	extz bc
 	ld xwa, 0x4005
 	lds de, 3
-	call LABEL_FCD201
+	call SoundParam_NotifyChange
 	ret
 
 Audio_ConfigureDSP:
@@ -317743,13 +317788,13 @@ Audio_ConfigureDSP:
 	ld xwa, 0x40C0
 	lds bc, 0
 	lds de, 1
-	call LABEL_FCD201
+	call SoundParam_NotifyChange
 	ldw wa, 0x4D
 	call LABEL_FC79C7
 	ld xwa, 0x40C1
 	lds bc, 0
 	lds de, 1
-	call LABEL_FCD201
+	call SoundParam_NotifyChange
 	ldw wa, 0x4E
 	call LABEL_FC79C7
 	ldw wa, 0x7F
@@ -319080,7 +319125,7 @@ LABEL_FDC901:
 	extz de
 	pushw 0xFF
 	lds bc, 0
-	call LABEL_FDB1F3
+	call AssswbWr
 	jrl LABEL_FDCA10
 
 LABEL_FDC978:
@@ -319128,7 +319173,7 @@ LABEL_FDC9B6:
 	ld l, (xsp + 10)
 	extz hl
 	pushw hl
-	call LABEL_FDB1F3
+	call AssswbWr
 
 LABEL_FDC9DE:
 	ld xwa, (xsp + 20)
@@ -319145,7 +319190,7 @@ LABEL_FDC9FD:
 	ld bc, (xsp + 18)
 	ld xwa, 0x4003
 	lds de, 3
-	call LABEL_FCD201
+	call SoundParam_NotifyChange
 	jr LABEL_FDCA10
 
 LABEL_FDCA0D:
@@ -319237,7 +319282,7 @@ LABEL_FDCACA:
 	ld bc, (xsp + 22)
 	ld xwa, 0x4003
 	lds de, 3
-	call LABEL_FCD201
+	call SoundParam_NotifyChange
 	jr LABEL_FDCADD
 
 LABEL_FDCADA:
@@ -319322,7 +319367,7 @@ LABEL_FDCB40:
 	pushw 0xFF
 	lds bc, 0
 	lds de, 1
-	call LABEL_FDB1F3
+	call AssswbWr
 	ld xwa, (xsp + 16)
 	calr LABEL_FDC35F
 	ld (xsp + 6), hl
@@ -319362,7 +319407,7 @@ LABEL_FDCBA4:
 	ld l, (xsp + 12)
 	extz hl
 	pushw hl
-	call LABEL_FDB1F3
+	call AssswbWr
 	inc 1, iz
 
 LABEL_FDCBEC:
@@ -319432,7 +319477,7 @@ LABEL_FDCC2B:
 	ld l, (xsp + 10)
 	extz hl
 	pushw hl
-	call LABEL_FDB1F3
+	call AssswbWr
 	ldi_erpw 0xFA, 0xFF, 0xFF
 
 LABEL_FDCC90:
@@ -342736,7 +342781,7 @@ LABEL_FEC405:
 	stda32 53412, xwa
 	ld xwa, xiz
 	ld xbc, 0x60
-	call LABEL_FF0C12
+	call DivMod32
 	ld a, l
 	stda8 1051, a
 	ldb w, 0x0
@@ -343152,7 +343197,7 @@ LABEL_FEC851:
 	ld xwa, 0xC0
 	lds bc, 1
 	lds de, 1
-	call LABEL_FCD201
+	call SoundParam_NotifyChange
 	push xiz
 	call LABEL_EF14D8
 	pop xiz
@@ -343364,7 +343409,7 @@ LABEL_FECA34:
 	ld bc, iz
 	lds32 xwa, 4
 	lds de, 3
-	call LABEL_FCD201
+	call SoundParam_NotifyChange
 	call LABEL_FCA318
 	stda32 59883, xiz
 	jr LABEL_FECA81
@@ -344454,7 +344499,7 @@ LABEL_FED313:
 	ld bc, wa
 	lds32 xwa, 4
 	lds de, 3
-	call LABEL_FCD201
+	call SoundParam_NotifyChange
 	call LABEL_FCA318
 	lds32 xwa, 0
 	stda32 59879, xwa
@@ -344522,7 +344567,7 @@ LABEL_FED3B7:
 	pushw 0xFF
 	ld de, wa
 	ldw wa, 0x63
-	call LABEL_FDB1F3
+	call AssswbWr
 	inc 1, iz
 	cp iz, 0x8
 	jr lt, LABEL_FED3B7
@@ -344737,7 +344782,7 @@ LABEL_FED5F8:
 	pushw 0xFF
 	ld de, wa
 	ldw wa, 0x63
-	call LABEL_FDB1F3
+	call AssswbWr
 	inc 1, iz
 	cp iz, 0x8
 	jr lt, LABEL_FED5F8
@@ -345060,7 +345105,7 @@ LABEL_FED9E6:
 	lds32 xwa, 4
 	ldw bc, 0x76
 	lds de, 3
-	call LABEL_FCD201
+	call SoundParam_NotifyChange
 	call LABEL_FCA318
 	pushw 0x2
 	lds wa, 0
@@ -345542,7 +345587,7 @@ LABEL_FEDDA2:
 	ld xwa, 0xC1
 	lds bc, 0
 	lds de, 1
-	call LABEL_FCD201
+	call SoundParam_NotifyChange
 	push xiz
 	call LABEL_EF14D8
 	pop xiz
@@ -345550,7 +345595,7 @@ LABEL_FEDDA2:
 	ld xwa, 0xC0
 	lds bc, 0
 	lds de, 1
-	call LABEL_FCD201
+	call SoundParam_NotifyChange
 	push xiz
 	call LABEL_EF14D8
 	pop xiz
@@ -345583,7 +345628,7 @@ LABEL_FEDE72:
 	ld xwa, 0xC1
 	lds bc, 0
 	lds de, 1
-	call LABEL_FCD201
+	call SoundParam_NotifyChange
 	push xiz
 	call LABEL_EF14D8
 	pop xiz
@@ -345591,7 +345636,7 @@ LABEL_FEDE72:
 	ld xwa, 0xC0
 	lds bc, 1
 	lds de, 1
-	call LABEL_FCD201
+	call SoundParam_NotifyChange
 	push xiz
 	call LABEL_EF14D8
 	pop xiz
@@ -345624,7 +345669,7 @@ LABEL_FEDEE2:
 	ld xwa, 0xC0
 	lds bc, 0
 	lds de, 1
-	call LABEL_FCD201
+	call SoundParam_NotifyChange
 	push xiz
 	call LABEL_EF14D8
 	pop xiz
@@ -345632,7 +345677,7 @@ LABEL_FEDEE2:
 	ld xwa, 0xC1
 	lds bc, 1
 	lds de, 1
-	call LABEL_FCD201
+	call SoundParam_NotifyChange
 	push xiz
 	call LABEL_EF14D8
 	pop xiz
@@ -345663,11 +345708,11 @@ LABEL_FEDF4E:
 	ld xwa, 0x2201
 	lds bc, 1
 	lds de, 2
-	call LABEL_FCD201
+	call SoundParam_NotifyChange
 	ld xwa, 0x2205
 	lds bc, 1
 	lds de, 2
-	call LABEL_FCD201
+	call SoundParam_NotifyChange
 
 LABEL_FEDF68:
 	popw iz
@@ -349121,7 +349166,15 @@ LABEL_FF0A5C:
 	add xhl, xwa
 	ret
 
-LABEL_FF0A72:
+; =============================================================================
+; Audio_SendCommand -- Send sound parameter command to Sub CPU
+; =============================================================================
+; Primary interface for all Main CPU -> Sub CPU audio parameter updates.
+; Acquires audio lock #7, formats command via Audio_CommandEncoder (printf-like
+; format string parser), writes to ring buffer at 0xBD3C via AssswbWr.
+; Referenced by 197+ locations (every Lsw* function, preset loaders, etc.).
+; Args: xwa = format string pointer, stack = format arguments
+Audio_SendCommand:
 	dec 4, xsp
 	pushw iz
 	lds wa, 7
@@ -349139,7 +349192,7 @@ LABEL_FF0A72:
 	push xwa
 	ld xwa, (xsp + 22)
 	push xwa
-	call LABEL_FF1048
+	call Audio_CommandEncoder
 	lda xsp, (xsp + 12)
 	ld iz, hl
 	lds wa, 7
@@ -349313,7 +349366,7 @@ LABEL_FF0C0E:
 	ldb d, 0x1
 	jr LABEL_FF0BC3
 
-LABEL_FF0C12:
+DivMod32:
 	calr LABEL_FF0C18
 	ld xhl, xde
 	ret
@@ -349465,7 +349518,9 @@ LABEL_FF0CF0:
 	exts hl
 	ret
 
-LABEL_FF0CF3:
+; Strncpy -- Copy string with length limit, zero-pad remainder
+; Args: (xsp+4)=dest, (xsp+8)=src, (xsp+12)=maxlen
+Strncpy:
 	ld bc, (xsp + 12)
 	ld xde, (xsp + 8)
 	ld xix, (xsp + 4)
@@ -349495,7 +349550,9 @@ LABEL_FF0D19:
 	jr nz, LABEL_FF0D13
 	ret
 
-LABEL_FF0D1E:
+; Mem_Compare -- Compare two memory blocks byte-by-byte
+; Returns: 0 if equal, nonzero if different
+Mem_Compare:
 	ld bc, (xsp + 12)
 	lds hl, 0
 	cps bc, 0
@@ -349788,7 +349845,7 @@ LABEL_FF0F35:
 	ld xwa, (xsp + 18)
 	push xwa
 	push xiz
-	call LABEL_FF0D1E
+	call Mem_Compare
 	lda xsp, (xsp + 14)
 	pop xiz
 	ret
@@ -349926,7 +349983,12 @@ LABEL_FF103E:
 	neg hl
 	ret
 
-LABEL_FF1048:
+; =============================================================================
+; Audio_CommandEncoder -- Printf-like audio command byte formatter
+; =============================================================================
+; Parses format string with % specifiers to build multi-byte command packets.
+; Stack frame: 74 bytes. Called exclusively by Audio_SendCommand.
+Audio_CommandEncoder:
 	lda xsp, (xsp - 74)
 	push xiz
 	ldw (xsp + 4), 0x0
@@ -351032,7 +351094,7 @@ LABEL_FF194A:
 	ld (xsp + 12), xwa
 	ld xwa, xiz
 	lda_dd8l XBC, 0x0A
-	call LABEL_FF0C12
+	call DivMod32
 	add xhl, 0x30
 	ld xwa, (xsp + 4)
 	ld (xwa), l
@@ -351060,7 +351122,7 @@ LABEL_FF1989:
 	ld (xsp + 12), xwa
 	ld xwa, xiz
 	lda_dd8l XBC, 0x0A
-	call LABEL_FF0C12
+	call DivMod32
 	add xhl, 0x30
 	ld xwa, (xsp + 4)
 	ld (xwa), l
@@ -352889,7 +352951,7 @@ LABEL_FF2827:
 	ld (xsp + 12), xwa
 	ld xwa, xiz
 	ld xbc, (xsp + 12)
-	call LABEL_FF0C12
+	call DivMod32
 	add l, 0x30
 	ld xwa, (xsp + 4)
 	ld (xwa), l
