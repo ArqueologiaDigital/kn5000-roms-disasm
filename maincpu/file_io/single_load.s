@@ -1230,7 +1230,7 @@ SingleLoadDstFunc:
 	lds wa, 0
 	calr InitializeOperationState
 	calr SignalProgressUpdate
-	calr LABEL_F8ECB3
+	calr WP_ScanAvailability
 	calr SignalProgressUpdate
 	cpdi8 35320, 1
 	jr z, LABEL_F90E2B
@@ -1368,7 +1368,7 @@ LABEL_F90FAA:
 	ld xwa, (xsp + 4)
 	cp xwa, 0x4
 	jrl nz, LABEL_F91072
-	calr LABEL_F8ED83
+	calr WP_FindNextSlot
 	cps l, 0
 	jrl z, LABEL_F90E68
 	cpdi8 35320, 1

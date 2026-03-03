@@ -14,20 +14,20 @@ FmmWallpaperLoadFunc:
 	ld xiz, xbc
 	ldda32 xwa, 33200
 	cp xiz, 0x1C00018
-	jrl z, LABEL_F8EAE9
+	jrl z, WPLoad_HandleScroll
 	cp xiz, 0x1C00017
-	jrl z, LABEL_F8EAE9
+	jrl z, WPLoad_HandleScroll
 	cp xiz, 0x1C0000B
-	jrl z, LABEL_F8EAD5
+	jrl z, WPLoad_HandleShow
 	cp xiz, 0x1E50004
-	jrl z, LABEL_F8EAA1
+	jrl z, WPLoad_HandleSelection
 	cp xiz, 0x1C00013
-	jrl nz, LABEL_F8ECAD
+	jrl nz, WPLoad_Return
 	ld xwa, (xsp + 6)
 	cp xwa, 0x3
-	jrl z, LABEL_F8EA9B
+	jrl z, WPLoad_HandleAbort
 	cp xwa, 0x2
-	jrl nz, LABEL_F8ECAD
+	jrl nz, WPLoad_Return
 	stdi8 34046, 0
 	lds wa, 1
 	calr InitializeOperationState
@@ -36,29 +36,29 @@ FmmWallpaperLoadFunc:
 	lds32 xde, 5
 	call 0xFA9D58
 	cpdi16 34048, 0
-	jr ge, LABEL_F8E9AC
+	jr ge, WPLoad_DispatchState
 	call 0xF89520
 	extz hl
 	stda16 34048, xhl
 	calr SignalProgressUpdate
 
-LABEL_F8E9AC:
+WPLoad_DispatchState:
 	ldda16 xwa, 34048
 	cps wa, 1
-	jrl z, LABEL_F8EA52
+	jrl z, WPLoad_HandleSuccess
 	cps wa, 0
-	jr z, LABEL_F8EA38
+	jr z, WPLoad_HandleError
 	cps wa, 5
-	jr z, LABEL_F8E9F7
+	jr z, WPLoad_HandleCancel
 	cpdi16 34058, 0
-	jr ge, LABEL_F8E9D8
+	jr ge, WPLoad_ContinueWait
 	call LABEL_F8B16F
 	stda16 34058, xhl
 	call LABEL_F8958D
 	call 0xF8953B
 	calr SignalProgressUpdate
 
-LABEL_F8E9D8:
+WPLoad_ContinueWait:
 	ld xwa, 0x600026
 	ld xbc, 0x1C00002
 	lds32 xde, 0
@@ -66,9 +66,9 @@ LABEL_F8E9D8:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C0000A
 	lds32 xde, 0
-	jrl LABEL_F8ECA9
+	jrl WPLoad_DispatchWidget
 
-LABEL_F8E9F7:
+WPLoad_HandleCancel:
 	ld xwa, 0x600026
 	ld xbc, 0x1C00002
 	lds32 xde, 0
@@ -85,18 +85,18 @@ LABEL_F8E9F7:
 	call 0xFA9D58
 	stdi8 32578, 0
 	ldw wa, 0xEE
-	jr LABEL_F8EA94
+	jr WPLoad_CallStatusDisplay
 
-LABEL_F8EA38:
+WPLoad_HandleError:
 	ld xwa, 0x600026
 	ld xbc, 0x1C00002
 	lds32 xde, 0
 	call 0xFA9D58
 	ldw wa, 0x7D
 	call 0xF99490
-	jrl LABEL_F8ECAD
+	jrl WPLoad_Return
 
-LABEL_F8EA52:
+WPLoad_HandleSuccess:
 	calr ResetProgressIndication
 	ld xwa, 0x600026
 	ld xbc, 0x1C00002
@@ -115,24 +115,24 @@ LABEL_F8EA52:
 	stdi8 32578, 2
 	ldw wa, 0xEE
 
-LABEL_F8EA94:
+WPLoad_CallStatusDisplay:
 	call LABEL_F994BD
-	jrl LABEL_F8ECAD
+	jrl WPLoad_Return
 
-LABEL_F8EA9B:
+WPLoad_HandleAbort:
 	calr CancelOperationCleanup
-	jrl LABEL_F8ECAD
+	jrl WPLoad_Return
 
-LABEL_F8EAA1:
+WPLoad_HandleSelection:
 	ld xwa, (xsp + 6)
 	stda32 33200, xwa
 	call LABEL_F8B015
 	stda16 33204, xhl
 	cps hl, 0
-	jr ge, LABEL_F8EABA
+	jr ge, WPLoad_Selection_Positive
 	stdi16 33204, 0
 
-LABEL_F8EABA:
+WPLoad_Selection_Positive:
 	ldda16 xwa, 33204
 	exts xwa
 	divs wa, 0xA
@@ -140,17 +140,17 @@ LABEL_F8EABA:
 	exts xde
 	ldda32 xwa, 33200
 	ld xbc, 0x1E50002
-	jrl LABEL_F8ECA9
+	jrl WPLoad_DispatchWidget
 
-LABEL_F8EAD5:
+WPLoad_HandleShow:
 	ldda16 xbc, 33204
 	exts xbc
 	divs bc, 0xA
 	muls bc, 0xA
 	calr DisplaySmfSequenceList
-	jrl LABEL_F8ECAD
+	jrl WPLoad_Return
 
-LABEL_F8EAE9:
+WPLoad_HandleScroll:
 	ld xbc, 0x1C50001
 	lds32 xde, 1
 	call 0xFA9D58
@@ -158,51 +158,51 @@ LABEL_F8EAE9:
 	ld (xsp + 4), hl
 	ld xwa, (xsp + 6)
 	or xwa, xwa
-	jr nz, LABEL_F8EB2D
+	jr nz, WPLoad_PageScroll
 	ld xwa, xiz
 	cp xwa, 0x1C00018
-	jr nz, LABEL_F8EB1B
+	jr nz, WPLoad_ScrollUp
 	ld wa, hl
 	inc 1, wa
 	cpda16 xwa, 34058
-	jrl ge, LABEL_F8EC05
+	jrl ge, WPLoad_GetSelection
 	inc 1, hl
-	jr LABEL_F8EB62
+	jr WPLoad_StorePosition
 
-LABEL_F8EB1B:
+WPLoad_ScrollUp:
 	cp xwa, 0x1C00017
-	jrl nz, LABEL_F8EC05
+	jrl nz, WPLoad_GetSelection
 	cps hl, 0
-	jrl le, LABEL_F8EC05
+	jrl le, WPLoad_GetSelection
 	dec 1, hl
-	jr LABEL_F8EB62
+	jr WPLoad_StorePosition
 
-LABEL_F8EB2D:
+WPLoad_PageScroll:
 	ld xwa, (xsp + 6)
 	cp xwa, 0x1
-	jr nz, LABEL_F8EB45
+	jr nz, WPLoad_PageDown
 	cp hl, 0xA
-	jrl lt, LABEL_F8EC05
+	jrl lt, WPLoad_GetSelection
 	sub hl, 0xA
-	jr LABEL_F8EB62
+	jr WPLoad_StorePosition
 
-LABEL_F8EB45:
+WPLoad_PageDown:
 	ld xwa, (xsp + 6)
 	cp xwa, 0x2
-	jr nz, LABEL_F8EB95
+	jr nz, WPLoad_OpLoad
 	ld wa, hl
 	add wa, 0xA
 	ldda16 xde, 34058
 	cp wa, de
-	jr ge, LABEL_F8EB6B
+	jr ge, WPLoad_PageDown_Boundary
 	add hl, 0xA
 
-LABEL_F8EB62:
+WPLoad_StorePosition:
 	stda16 33204, xhl
 	ld bc, hl
-	jrl LABEL_F8EC09
+	jrl WPLoad_UpdateDisplay
 
-LABEL_F8EB6B:
+WPLoad_PageDown_Boundary:
 	ld bc, de
 	dec 1, bc
 	ld ix, bc
@@ -211,19 +211,19 @@ LABEL_F8EB6B:
 	exts xhl
 	divs hl, 0xA
 	cp hl, ix
-	jrl ge, LABEL_F8EC05
+	jrl ge, WPLoad_GetSelection
 	exts xde
 	divs de, 0xA
 	ldto_werp WA, 0xEA
 	cps wa, 0
-	jr z, LABEL_F8EC05
+	jr z, WPLoad_GetSelection
 	stda16 33204, xbc
-	jr LABEL_F8EC09
+	jr WPLoad_UpdateDisplay
 
-LABEL_F8EB95:
+WPLoad_OpLoad:
 	ld xwa, (xsp + 6)
 	cp xwa, 0x3
-	jr nz, LABEL_F8EC05
+	jr nz, WPLoad_GetSelection
 	ld xwa, 0x600026
 	ld xbc, 0x1C00001
 	lds32 xde, 5
@@ -253,12 +253,12 @@ LABEL_F8EB95:
 	ldw wa, 0xEE
 	call LABEL_F994BD
 
-LABEL_F8EC05:
+WPLoad_GetSelection:
 	ldda16 xbc, 33204
 
-LABEL_F8EC09:
+WPLoad_UpdateDisplay:
 	cp (xsp + 4), bc
-	jrl z, LABEL_F8EC9E
+	jrl z, WPLoad_SendState
 	ld wa, bc
 	call LABEL_F8B0F1
 	ldda16 xwa, 33204
@@ -277,7 +277,7 @@ LABEL_F8EC09:
 	divs de, 0xA
 	ldda32 xwa, 33200
 	cp de, bc
-	jr nz, LABEL_F8EC97
+	jr nz, WPLoad_RedrawPage
 	ld bc, (xsp + 4)
 	exts xbc
 	divs bc, 0xA
@@ -301,34 +301,34 @@ LABEL_F8EC09:
 	ldda32 xwa, 33200
 	ld xbc, 0x1C0000F
 	call 0xFA9D58
-	jr LABEL_F8EC9E
+	jr WPLoad_SendState
 
-LABEL_F8EC97:
+WPLoad_RedrawPage:
 	muls bc, 0xA
 	calr DisplaySmfSequenceList
 
-LABEL_F8EC9E:
+WPLoad_SendState:
 	ldda32 xwa, 33200
 	ld xbc, 0x1C50001
 	lds32 xde, 0
 
-LABEL_F8ECA9:
+WPLoad_DispatchWidget:
 	call 0xFA9D58
 
-LABEL_F8ECAD:
+WPLoad_Return:
 	lds32 xhl, 0
 	pop xiz
 	inc 6, xsp
 	ret
 
-LABEL_F8ECB3:
+WP_ScanAvailability:
 	push xiz
 	call 0xF8943E
 	ldfr_werp HL, 0xFA
 	stdi16 35318, 0
 	lds iz, 0
 
-LABEL_F8ECC3:
+WPScan_LoopBody:
 	ld bc, iz
 	extz xbc
 	ld xwa, 0xEA07AA
@@ -337,17 +337,17 @@ LABEL_F8ECC3:
 	lds de, 1
 	ld a, c
 	and a, 0xF
-	jr z, LABEL_F8ECDB
+	jr z, WPScan_CheckAvail
 	slla de
 
-LABEL_F8ECDB:
+WPScan_CheckAvail:
 	and_werp DE, 0xFA
-	jrl z, LABEL_F8ED7A
+	jrl z, WPScan_LoopContinue
 	cps c, 3
-	jr nz, LABEL_F8ED11
+	jr nz, WPScan_TypeNotThree
 	call LABEL_F872E5
 	cps hl, 0
-	jrl z, LABEL_F8ED7A
+	jrl z, WPScan_LoopContinue
 	ld wa, iz
 	extz xwa
 	ld xbc, 0xEA07AA
@@ -355,25 +355,25 @@ LABEL_F8ECDB:
 	lds de, 1
 	ld a, (xbc)
 	and a, 0xF
-	jr z, LABEL_F8ED04
+	jr z, WPScan_MarkAvailable
 	slla de
 
-LABEL_F8ED04:
+WPScan_MarkAvailable:
 	orddm16 35318, xde
 	cpdi8 35320, 4
-	jr nc, LABEL_F8ED73
-	jr LABEL_F8ED7A
+	jr nc, WPScan_LimitReached
+	jr WPScan_LoopContinue
 
-LABEL_F8ED11:
+WPScan_TypeNotThree:
 	ld a, c
 	cps c, 2
-	jr nz, LABEL_F8ED4A
+	jr nz, WPScan_TypeGeneric
 	call LABEL_F87218
 	cps hl, 0
-	jr z, LABEL_F8ED7A
+	jr z, WPScan_LoopContinue
 	call LABEL_F87366
 	cps hl, 0
-	jr nz, LABEL_F8ED7A
+	jr nz, WPScan_LoopContinue
 	ld wa, iz
 	extz xwa
 	ld xbc, 0xEA07AA
@@ -381,19 +381,19 @@ LABEL_F8ED11:
 	lds de, 1
 	ld a, (xbc)
 	and a, 0xF
-	jr z, LABEL_F8ED3D
+	jr z, WPScan_TypeTwo_Mark
 	slla de
 
-LABEL_F8ED3D:
+WPScan_TypeTwo_Mark:
 	orddm16 35318, xde
 	cpdi8 35320, 4
-	jr nc, LABEL_F8ED73
-	jr LABEL_F8ED7A
+	jr nc, WPScan_LimitReached
+	jr WPScan_LoopContinue
 
-LABEL_F8ED4A:
+WPScan_TypeGeneric:
 	call LABEL_F87218
 	cps hl, 0
-	jr z, LABEL_F8ED7A
+	jr z, WPScan_LoopContinue
 	ld wa, iz
 	extz xwa
 	ld xbc, 0xEA07AA
@@ -401,39 +401,39 @@ LABEL_F8ED4A:
 	lds de, 1
 	ld a, (xbc)
 	and a, 0xF
-	jr z, LABEL_F8ED68
+	jr z, WPScan_Generic_Mark
 	slla de
 
-LABEL_F8ED68:
+WPScan_Generic_Mark:
 	orddm16 35318, xde
 	cpdi8 35320, 4
-	jr c, LABEL_F8ED7A
+	jr c, WPScan_LoopContinue
 
-LABEL_F8ED73:
+WPScan_LimitReached:
 	ldto_berp A, 0xF8
 	stda8 35320, a
 
-LABEL_F8ED7A:
+WPScan_LoopContinue:
 	inc 1, iz
 	cps iz, 4
-	jrl c, LABEL_F8ECC3
+	jrl c, WPScan_LoopBody
 	pop xiz
 	ret
 
-LABEL_F8ED83:
+WP_FindNextSlot:
 	pushw iz
 	ldda8 a, 35320
 	cps a, 4
-	jr nc, LABEL_F8EDCE
+	jr nc, WPFind_NotFound
 	ldda16 xbc, 35318
 	cps bc, 0
-	jr z, LABEL_F8EDCE
+	jr z, WPFind_NotFound
 	lds iz, 1
 	extz wa
 	ldfr_werp WA, 0xE6
 	lda_24 xde, 0xea07aa
 
-LABEL_F8EDA0:
+WPFind_SearchLoop:
 	ldto_werp HL, 0xE6
 	add hl, iz
 	and hl, 0x3
@@ -444,25 +444,25 @@ LABEL_F8EDA0:
 	lds iy, 1
 	ld a, (xix)
 	and a, 0xF
-	jr z, LABEL_F8EDBC
+	jr z, WPFind_CheckSlot
 	slla iy
 
-LABEL_F8EDBC:
+WPFind_CheckSlot:
 	and iy, bc
-	jr z, LABEL_F8EDC8
+	jr z, WPFind_NextSlot
 	stda8 35320, l
 	ldb l, 0x1
-	jr LABEL_F8EDD0
+	jr WPFind_Return
 
-LABEL_F8EDC8:
+WPFind_NextSlot:
 	inc 1, iz
 	cps iz, 4
-	jr c, LABEL_F8EDA0
+	jr c, WPFind_SearchLoop
 
-LABEL_F8EDCE:
+WPFind_NotFound:
 	ldb l, 0x0
 
-LABEL_F8EDD0:
+WPFind_Return:
 	popw iz
 	ret
 
