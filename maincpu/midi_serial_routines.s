@@ -26,10 +26,10 @@
 ; =============================================================================
 
 MIDI_INIT_SEQUENCES:
-	calr LABEL_FCEEA6
-	calr LABEL_FCEEC4
-	calr LABEL_FCEF89
-	calr LABEL_FCEFB9
+	calr SndParam_InitHashTable
+	calr SndParam_RegisterAllWidgets
+	calr SndParam_ClearHashTable
+	calr SndParam_ReregisterAll
 	ldada xbc, 38808
 	ld xwa, xbc
 	lda xbc, (xbc + 64)

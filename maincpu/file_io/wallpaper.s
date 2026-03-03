@@ -230,7 +230,7 @@ WPLoad_OpLoad:
 	call 0xFA9D58
 	lds wa, 0
 	calr InitializeOperationState
-	call LABEL_F88B8B
+	call LoadFromSecondaryPage
 	ld wa, hl
 	lds bc, 1
 	calr LABEL_F8B48E
@@ -493,7 +493,7 @@ WP_GetConfigName:
 	ld xwa, xiz
 	ld xbc, xhl
 	ldw de, 0x10	; Copy 16 bytes
-	call LABEL_F890F2
+	call FileIO_CopyString_WriteNull
 	ld (xiz + 16), 0x0	; Null terminate
 	ld xwa, xiz
 	ldw bc, 0x10
@@ -515,7 +515,7 @@ WP_GetNameByOffset:
 	lda_dpi XIY, 0xF8
 	ld xwa, xiz
 	ldw de, 0x10
-	call LABEL_F890F2
+	call FileIO_CopyString_WriteNull
 	ld (xiz + 16), 0x0
 	ld xwa, xiz
 	ldw bc, 0x10
@@ -536,7 +536,7 @@ WP_GetPresetName1:
 	add xbc, xwa
 	ld xbc, (xbc)	; Get string pointer
 	ld xwa, xiz
-	call LABEL_F890DC
+	call FileIO_CopyString
 	ld xwa, xiz
 	ldw bc, 0x10
 	calr TrimAndPadSmfFilename
@@ -573,7 +573,7 @@ WP_GetBankMemName:
 	add xbc, xhl
 	ld xwa, xiz
 	ldw de, 0xD	; Copy 13 bytes
-	call LABEL_F890F2
+	call FileIO_CopyString_WriteNull
 	ld (xiz + 13), 0x0
 	jr WP_GetBankMemName_Format
 WP_GetBankMemName_FromROM:
@@ -583,7 +583,7 @@ WP_GetBankMemName_FromROM:
 	add xbc, xde
 	ld xbc, (xbc)
 	ld xwa, xiz
-	call LABEL_F890DC
+	call FileIO_CopyString
 WP_GetBankMemName_Format:
 	ld xwa, xiz
 	ldw bc, 0x10
@@ -604,7 +604,7 @@ WP_GetPresetName3:
 	add xbc, xwa
 	ld xbc, (xbc)
 	ld xwa, xiz
-	call LABEL_F890DC
+	call FileIO_CopyString
 	ld xwa, xiz
 	ldw bc, 0x10
 	calr TrimAndPadSmfFilename
@@ -624,7 +624,7 @@ WP_GetUserName1:
 	ld xwa, xiz
 	ld xbc, xhl
 	ldw de, 0x10
-	call LABEL_F890F2
+	call FileIO_CopyString_WriteNull
 	ld (xiz + 16), 0x0
 	ld xwa, xiz
 	ldw bc, 0x10
@@ -642,7 +642,7 @@ WP_GetUserName2:
 	lda_dpi XIY, 0xF8
 	ld xwa, xiz
 	ldw de, 0x10
-	call LABEL_F890F2
+	call FileIO_CopyString_WriteNull
 	ld (xiz + 16), 0x0
 	ld xwa, xiz
 	ldw bc, 0x10
@@ -663,7 +663,7 @@ WP_GetUserName3:
 	ld xwa, xiz
 	ld xbc, xhl
 	ldw de, 0xD	; Copy 13 bytes
-	call LABEL_F890F2
+	call FileIO_CopyString_WriteNull
 	ld (xiz + 13), 0x0
 	ld xwa, xiz
 	ldw bc, 0xF

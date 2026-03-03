@@ -179,7 +179,7 @@ SelectPasswordMode:
 	ldi_berp 0xFB, 0
 	ldi_berp 0xFA, 0
 	lds wa, 2
-	call LABEL_F89353
+	call FileIO_FormatName_Return
 	cps l, 0
 	jr z, SelectMode_CheckSaveAvail
 	call CheckAnySlotHasData
@@ -191,7 +191,7 @@ SelectPasswordMode:
 
 SelectMode_CheckSaveAvail:
 	lds wa, 3
-	call LABEL_F89353
+	call FileIO_FormatName_Return
 	cps l, 0
 	jr z, SelectMode_DetermineMode
 	call CheckSlotIndexValid
@@ -306,7 +306,7 @@ FileName_DrawItemLoop:
 	pushw 0x6
 	pushw 0x0
 	ld xwa, xhl
-	call LABEL_F891DD
+	call FileIO_ReadHeader_ParseLoop
 	ld de, (xsp + 6)
 	sll de, 5
 	ldada xbc, 34060
@@ -370,7 +370,7 @@ FileName_OpSave:
 	call 0xF8943E
 	cps hl, 0
 	jrl z, FileName_OpLoad
-	call LABEL_F892EF
+	call FileIO_WriteRecordName_Loop
 	cps hl, 0
 	jrl z, FileName_OpLoad
 	ld xwa, 0x600026
@@ -399,15 +399,15 @@ FileName_OpSave:
 	cpdi16 61854, 0
 	jr z, FileName_OpSave_ShowCode1
 	lds wa, 2
-	call LABEL_F892F5
+	call FileIO_WriteRecordName_Done
 	cps l, 0
 	jr z, FileName_OpSave_ShowCode1
 	lds wa, 2
-	call LABEL_F893D1
+	call FileIO_CheckRecordValid
 	cps l, 0
 	jr nz, FileName_OpSave_ShowCodeA
 	ldw wa, 0x8
-	call LABEL_F893D1
+	call FileIO_CheckRecordValid
 	cps l, 0
 	jr z, FileName_OpSave_ShowCode1
 
@@ -430,7 +430,7 @@ FileName_OpSave_CallHandler:
 FileName_OpLoad:
 	cp xiz, 0x4
 	jrl nz, FileName_OpFormat
-	call LABEL_F8934D
+	call FileIO_FormatName_Done
 	cps hl, 0
 	jrl z, FileName_OpFormat
 	calr SelectPasswordMode
@@ -554,7 +554,7 @@ FileName_OpDelete_Execute:
 	call 0xFA9D58
 	lds wa, 0
 	calr InitializeOperationState
-	call LABEL_F8872D
+	call ReadSingleFile
 	ld wa, hl
 	lds bc, 5
 	calr LABEL_F8B48E
@@ -580,7 +580,7 @@ FileName_OpFormatVariant:
 	call 0xFA9D58
 	lds wa, 0
 	calr InitializeOperationState
-	call LABEL_F8872D
+	call ReadSingleFile
 	ld wa, hl
 	lds bc, 5
 	calr LABEL_F8B48E
@@ -634,7 +634,7 @@ FileName_Navigate_CheckChanged:
 	lds wa, 0
 	calr InitializeOperationState
 	ldda16 xwa, 32634
-	call LABEL_F88838
+	call ReadDualFileEx
 	ld wa, hl
 	lds bc, 5
 	calr LABEL_F8B48E
@@ -685,31 +685,31 @@ FileName_UpdateDisplay:
 FileName_UpdateButtons_Loop:
 	ld wa, (xsp + 6)
 	extz wa
-	call LABEL_F893D1
+	call FileIO_CheckRecordValid
 	ld wa, (xsp + 6)
 	extz wa
 	cps l, 0
 	jr z, FileName_UpdateButtons_Hide
-	call LABEL_F89321
+	call FileIO_FormatName_Loop
 	jr FileName_UpdateButtons_Check
 
 FileName_UpdateButtons_Hide:
-	call LABEL_F89335
+	call FileIO_FormatName_Copy
 
 FileName_UpdateButtons_Check:
 	incm 1, (xsp + 6)
 	cpw (xsp + 6), 0x8
 	jr lt, FileName_UpdateButtons_Loop
 	ldw wa, 0x8
-	call LABEL_F893D1
+	call FileIO_CheckRecordValid
 	cps l, 0
 	jr z, FileName_CheckCallback
 	ldw wa, 0x9
-	call LABEL_F893D1
+	call FileIO_CheckRecordValid
 	cps l, 0
 	jr z, FileName_CheckCallback
 	lds wa, 2
-	call LABEL_F89321
+	call FileIO_FormatName_Loop
 
 FileName_CheckCallback:
 	ldda32 xwa, 32630
@@ -720,17 +720,17 @@ FileName_CheckCallback:
 	call 0xF8943E
 	ld iz, hl
 	ldw wa, 0x8
-	call LABEL_F893D1
+	call FileIO_CheckRecordValid
 	cps l, 0
 	jr z, FileName_Callback_SetFilter
 	ldw wa, 0x9
-	call LABEL_F893D1
+	call FileIO_CheckRecordValid
 	cps l, 0
 	jr z, FileName_Callback_SetFilter
 	set 2, iz
 
 FileName_Callback_SetFilter:
-	call LABEL_F892EF
+	call FileIO_WriteRecordName_Loop
 	and iz, hl
 	bit 0, iz
 	jr z, FileName_Callback_Send
@@ -748,7 +748,7 @@ FileName_Callback_Send:
 	jr FileName_DispatchWidget
 
 FileName_Callback_Simple:
-	call LABEL_F8934D
+	call FileIO_FormatName_Done
 	extz xhl
 	ldda32 xwa, 32630
 	ld xbc, 0x1E50001
@@ -762,17 +762,17 @@ FileName_HandleRegister:
 	call 0xF8943E
 	ld iz, hl
 	ldw wa, 0x8
-	call LABEL_F893D1
+	call FileIO_CheckRecordValid
 	cps l, 0
 	jr z, FileName_Register_SetFilter
 	ldw wa, 0x9
-	call LABEL_F893D1
+	call FileIO_CheckRecordValid
 	cps l, 0
 	jr z, FileName_Register_SetFilter
 	set 2, iz
 
 FileName_Register_SetFilter:
-	call LABEL_F892EF
+	call FileIO_WriteRecordName_Loop
 	and iz, hl
 	bit 0, iz
 	jr z, FileName_Register_Send
@@ -790,7 +790,7 @@ FileName_Register_Send:
 	jr FileName_DispatchWidget
 
 FileName_Register_Simple:
-	call LABEL_F8934D
+	call FileIO_FormatName_Done
 	extz xhl
 	ldda32 xwa, 32630
 	ld xbc, 0x1E50001

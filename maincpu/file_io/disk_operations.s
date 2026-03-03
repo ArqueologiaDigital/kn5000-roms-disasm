@@ -57,7 +57,7 @@ FCopy_HandleExecute:
 	inc 1, de
 	pushw 0x6
 	pushw 0x0
-	call LABEL_F891DD
+	call FileIO_ReadHeader_ParseLoop
 	ldda32 xwa, 32608
 	ld xbc, 0x1C0000F
 	ld xde, 0x850C
@@ -104,7 +104,7 @@ FCopy_Scroll_Apply:
 	inc 1, de
 	pushw 0x6
 	pushw 0x0
-	call LABEL_F891DD
+	call FileIO_ReadHeader_ParseLoop
 	ldda32 xwa, 32608
 	ld xbc, 0x1C0000F
 	ld xde, 0x850C
@@ -160,7 +160,7 @@ FCopy_CopyConfirm_Execute:
 	lds wa, 0
 	calr InitializeOperationState
 	ldda16 xwa, 32614
-	call LABEL_F889D9
+	call WriteFileWithVerify
 	ld wa, hl
 	lds bc, 5
 	calr LABEL_F8B48E
@@ -197,7 +197,7 @@ FCopy_CopyExecute:
 	lds wa, 0
 	calr InitializeOperationState
 	ldda16 xwa, 32614
-	call LABEL_F889D9
+	call WriteFileWithVerify
 	ld wa, hl
 	lds bc, 5
 	calr LABEL_F8B48E
@@ -247,7 +247,7 @@ FileRenameFunc:
 	call GetFileEntryPtr
 	ld xbc, xhl
 	ld xwa, xiz
-	call LABEL_F890DC
+	call FileIO_CopyString
 	lds iy, 0
 	lda_24 xix, 0xeed778
 	ldada xwa, 34928
@@ -290,7 +290,7 @@ FRename_PadDone:
 FRename_TextChange_Error:
 	ld xwa, 0x8870
 	ld xbc, 0xEA06BE
-	call LABEL_F890DC
+	call FileIO_CopyString
 
 FRename_TextChange_SendApply:
 	ld xwa, (xsp + 4)
@@ -305,7 +305,7 @@ FRename_HandleApply:
 	jr z, FRename_Return
 	ld xwa, 0x8870
 	ld xbc, (xsp + 4)
-	call LABEL_F890DC
+	call FileIO_CopyString
 	ld xwa, 0x600026
 	ld xbc, 0x1C00001
 	lds32 xde, 5
@@ -313,7 +313,7 @@ FRename_HandleApply:
 	lds wa, 0
 	calr InitializeOperationState
 	ld xwa, 0x8870
-	call LABEL_F8879E
+	call ReadDualFile
 	ld wa, hl
 	lds bc, 5
 	calr LABEL_F8B48E
@@ -350,7 +350,7 @@ FileRenameSmfFunc:
 	call GetRecordPtrForFile
 	ld xbc, xhl
 	ld xwa, xiz
-	call LABEL_F890DC
+	call FileIO_CopyString
 	lds iy, 0
 	lda_24 xix, 0xeed778
 	ldada xwa, 34928
@@ -393,7 +393,7 @@ FRenameSmf_PadDone:
 FRenameSmf_TextChange_Error:
 	ld xwa, 0x8870
 	ld xbc, 0xEA06C6
-	call LABEL_F890DC
+	call FileIO_CopyString
 
 FRenameSmf_TextChange_SendApply:
 	ld xwa, (xsp + 4)
@@ -405,10 +405,10 @@ FRenameSmf_TextChange_SendApply:
 FRenameSmf_HandleApply:
 	ld xwa, 0x8870
 	ld xbc, (xsp + 4)
-	call LABEL_F890DC
+	call FileIO_CopyString
 	ld xwa, 0x8870
 	ld xbc, 0xEA06D0
-	call LABEL_F89113
+	call FileIO_BuildFilePath
 	ld xwa, 0x600026
 	ld xbc, 0x1C00001
 	lds32 xde, 5
@@ -416,7 +416,7 @@ FRenameSmf_HandleApply:
 	lds wa, 0
 	calr InitializeOperationState
 	ld xwa, 0x8870
-	call LABEL_F88B3A
+	call SearchAndOpen
 	ld wa, hl
 	lds bc, 5
 	calr LABEL_F8B48E
@@ -513,7 +513,7 @@ FmmFmt_HandleProgress:
 	calr InitializeOperationState
 	ldda8 a, 32616
 	extz wa
-	call LABEL_F89091
+	call FileIO_ValidateRecord_CheckSize
 	ld iz, hl
 	calr SignalProgressUpdate
 	calr ResetProgressIndication
@@ -753,7 +753,7 @@ FmmLoadTtl_LoadSlots:
 FmmLoadTtl_SlotLoop:
 	ldto_berp A, 0xF8
 	extz wa
-	call LABEL_F89321
+	call FileIO_FormatName_Loop
 	inc 1, iz
 	cp iz, 0x8
 	jr lt, FmmLoadTtl_SlotLoop
@@ -834,14 +834,14 @@ FmmSaveTtl_CheckFont:
 FmmSaveTtl_SlotLoop:
 	ldto_berp A, 0xF8
 	extz wa
-	call LABEL_F8937F
+	call FileIO_BuildRecordPath_Done
 	inc 1, iz
 	cps iz, 6
 	jr lt, FmmSaveTtl_SlotLoop
 	lds wa, 6
-	call LABEL_F89393
+	call FileIO_BuildRecordPath_Return
 	lds wa, 7
-	call LABEL_F89393
+	call FileIO_BuildRecordPath_Return
 	call LABEL_F893CA
 	ld xiy, 0xEA066A
 	ld xix, 0x8A0C
@@ -894,7 +894,7 @@ DiskNameFunc:
 	call LABEL_F8958D
 	ld xbc, xhl
 	ld xwa, xiz
-	call LABEL_F890DC
+	call FileIO_CopyString
 	ld xwa, (xsp + 4)
 	ld xbc, 0x1C0000F
 	ld xde, 0x878C
@@ -907,7 +907,7 @@ DiskName_TextChange:
 	call LABEL_F8958D
 	ld xbc, xhl
 	ld xwa, xiz
-	call LABEL_F890DC
+	call FileIO_CopyString
 	lds iy, 0
 	ldada xix, 34928
 	lda_24 xiz, 0xeed778
@@ -956,7 +956,7 @@ DiskName_Dispatch:
 DiskName_HandleApply:
 	ld xwa, 0x878C
 	ld xbc, (xsp + 4)
-	call LABEL_F890DC
+	call FileIO_CopyString
 	lds wa, 0
 	calr InitializeOperationState
 	ld xwa, 0x878C
@@ -1046,10 +1046,10 @@ DiskInfo_RenderStrings:
 	lda_24 xbc, 0xea0558
 	ld_sril3 XBC, 0x07, 0xE4, 0xE0
 	ld xwa, 0x87CE
-	call LABEL_F890DC
+	call FileIO_CopyString
 	ld xwa, 0x87CE
 	ld xbc, 0xEA06D6
-	call LABEL_F89113
+	call FileIO_BuildFilePath
 	ldada xwa, 34766
 	ld (xsp + 12), xwa
 	ld xwa, (xsp + 4)
@@ -1057,10 +1057,10 @@ DiskInfo_RenderStrings:
 	calr LABEL_F8B67F
 	ld xbc, xhl
 	ld xwa, (xsp + 12)
-	call LABEL_F89113
+	call FileIO_BuildFilePath
 	ld xwa, 0x87CE
 	ld xbc, 0xEA06DA
-	call LABEL_F89113
+	call FileIO_BuildFilePath
 	ldada xwa, 34766
 	ld (xsp + 12), xwa
 	ld xwa, (xsp + 8)
@@ -1068,10 +1068,10 @@ DiskInfo_RenderStrings:
 	calr LABEL_F8B67F
 	ld xbc, xhl
 	ld xwa, (xsp + 12)
-	call LABEL_F89113
+	call FileIO_BuildFilePath
 	ld xwa, 0x87CE
 	ld xbc, 0xEA06E4
-	call LABEL_F89113
+	call FileIO_BuildFilePath
 	ld xwa, (xsp + 16)
 	ld xbc, 0x1C0000F
 	ld xde, 0x87CE
@@ -1098,10 +1098,10 @@ SongNameFunc:
 	ldada xwa, 34830
 	ld (xsp + 2), xwa
 	ld wa, iz
-	call LABEL_F8A07F
+	call GetFileEntryByIndex
 	ld xbc, xhl
 	ld xwa, (xsp + 2)
-	call LABEL_F890DC
+	call FileIO_CopyString
 	ldada xwa, 34830
 	ld (xwa + 30), 0x0
 	lda xbc, (xwa + 29)
@@ -1121,7 +1121,7 @@ SongName_TrimLoop_Cond:
 	jr ugt, SongName_TrimLoop_ZeroChar
 
 SongName_TrimDone:
-	call LABEL_F8929D
+	call FileIO_GetRecordType_Extended
 	jr SongName_SendDisplay
 
 SongName_NoSlot:
@@ -1149,14 +1149,14 @@ SaveFileNameNumFunc:
 	ld iz, hl
 	cps iz, 0
 	jr lt, SaveFileNum_NoSlot
-	call LABEL_F892BC
+	call FileIO_GetRecordByType
 	ld xbc, xhl
 	ld de, iz
 	inc 1, de
 	pushw 0x6
 	pushw 0x0
 	ld xwa, 0x8850
-	call LABEL_F891DD
+	call FileIO_ReadHeader_ParseLoop
 	jr SaveFileNum_SendDisplay
 
 SaveFileNum_NoSlot:
@@ -1185,12 +1185,12 @@ SaveFileNameFunc:
 	cp xbc, 0x1C0000B
 	jrl nz, SaveFileName_Return
 	ldada xiz, 34896
-	call LABEL_F892BC
+	call FileIO_GetRecordByType
 	ld xbc, xhl
 	ld xwa, xiz
-	call LABEL_F890DC
+	call FileIO_CopyString
 	ld xwa, 0x8850
-	call LABEL_F8929D
+	call FileIO_GetRecordType_Extended
 	ld xwa, (xsp + 4)
 	ld xbc, 0x1C0000F
 	ld xde, 0x8850
@@ -1198,10 +1198,10 @@ SaveFileNameFunc:
 
 SaveFileName_TextChange:
 	ldada xiz, 34896
-	call LABEL_F892BC
+	call FileIO_GetRecordByType
 	ld xbc, xhl
 	ld xwa, xiz
-	call LABEL_F890DC
+	call FileIO_CopyString
 	lds iy, 0
 	lda_24 xix, 0xeed778
 	ldada xde, 34896
@@ -1249,9 +1249,9 @@ SaveFileName_Dispatch:
 SaveFileName_HandleApply:
 	ld xwa, 0x8850
 	ld xbc, (xsp + 4)
-	call LABEL_F890DC
+	call FileIO_CopyString
 	ld xwa, 0x8850
-	call LABEL_F892C2
+	call FileIO_GetRecordByType_Lookup
 
 SaveFileName_Return:
 	lds32 xhl, 0
@@ -1277,7 +1277,7 @@ CurFileNameFunc:
 	pushw 0x6
 	pushw 0x0
 	ld xwa, 0x8870
-	call LABEL_F891DD
+	call FileIO_ReadHeader_ParseLoop
 	jr CurFileName_SendDisplay
 
 CurFileName_NoSlot:

@@ -153,7 +153,7 @@ CompLoad_DrawItemLoop:
 	ldto_berp C, 0xF8
 	ld (xhl), c
 	lds bc, 3
-	call LABEL_F89408
+	call FileIO_CheckRecordByFile
 	cps l, 0
 	jr z, CompLoad_DrawItem_Empty
 	ld wa, iz
@@ -177,7 +177,7 @@ CompLoad_DrawItem_Continue:
 	pushw 0x6
 	pushw 0x0
 	ld xwa, xhl
-	call LABEL_F891DD
+	call FileIO_ReadHeader_ParseLoop
 	ld de, iz
 	sll de, 5
 	ldada xbc, 34060
@@ -247,12 +247,12 @@ CompLoad_OpLoad:
 CompLoad_HideButtons_Loop:
 	ldto_berp A, 0xF8
 	extz wa
-	call LABEL_F89335
+	call FileIO_FormatName_Copy
 	inc 1, iz
 	cp iz, 0x8
 	jr lt, CompLoad_HideButtons_Loop
 	lds wa, 3
-	call LABEL_F89321
+	call FileIO_FormatName_Loop
 	lds wa, 0
 	calr InitializeOperationState
 	call LABEL_F87A08
@@ -339,11 +339,11 @@ RenderFilter_CheckType1:
 	cps l, 0
 	jr z, RenderFilter_CheckGeneric
 	lds wa, 0
-	call LABEL_F893D1
+	call FileIO_CheckRecordValid
 	cps l, 0
 	jr z, RenderFilter_Type1_Unavail
 	lds wa, 0
-	call LABEL_F892F5
+	call FileIO_WriteRecordName_Done
 	cps l, 0
 	jr z, RenderFilter_Type1_Restricted
 	ld xwa, (xsp + 2)
@@ -363,12 +363,12 @@ RenderFilter_Type1_Unavail:
 RenderFilter_CheckGeneric:
 	ld a, (xsp)
 	extz wa
-	call LABEL_F893D1
+	call FileIO_CheckRecordValid
 	cps l, 0
 	jr z, RenderFilter_CheckType2
 	ld a, (xsp)
 	extz wa
-	call LABEL_F892F5
+	call FileIO_WriteRecordName_Done
 	cps l, 0
 	jr z, RenderFilter_Generic_Restricted
 	ld xwa, (xsp + 2)
@@ -384,16 +384,16 @@ RenderFilter_CheckType2:
 	cp (xsp), 0x2
 	jr nz, RenderFilter_Default
 	ldw wa, 0x8
-	call LABEL_F893D1
+	call FileIO_CheckRecordValid
 	cps l, 0
 	jr z, RenderFilter_Default
 	ldw wa, 0x9
-	call LABEL_F893D1
+	call FileIO_CheckRecordValid
 	cps l, 0
 	jr z, RenderFilter_Default
 	ld a, (xsp)
 	extz wa
-	call LABEL_F892F5
+	call FileIO_WriteRecordName_Done
 	cps l, 0
 	jr z, RenderFilter_Type2_Restricted
 	ld xwa, (xsp + 2)
@@ -410,7 +410,7 @@ RenderFilter_Default:
 	ld xbc, 0xEA071E
 
 RenderFilter_CopyAndReturn:
-	call LABEL_F890DC
+	call FileIO_CopyString
 	inc 6, xsp
 	ret
 
@@ -481,7 +481,7 @@ LoadFilter_ScrollUp_Restore:
 	extz wa
 
 LoadFilter_ShowButton:
-	call LABEL_F89321
+	call FileIO_FormatName_Loop
 	jr LoadFilter_UpdateDisplay
 
 LoadFilter_ScrollDown:
@@ -507,7 +507,7 @@ LoadFilter_ScrollDown_Restore:
 	extz wa
 
 LoadFilter_HideButton:
-	call LABEL_F89335
+	call FileIO_FormatName_Copy
 
 LoadFilter_UpdateDisplay:
 	ld xwa, (xsp + 2)
@@ -536,7 +536,7 @@ LoadFilter_OpLoad:
 	call 0xF8943E
 	cps hl, 0
 	jrl z, LoadFilter_Return
-	call LABEL_F892EF
+	call FileIO_WriteRecordName_Loop
 	cps hl, 0
 	jrl z, LoadFilter_Return
 	ld xwa, 0x600026
@@ -566,15 +566,15 @@ LoadFilter_OpLoad:
 	cpdi16 61854, 0
 	jr z, LoadFilter_Load_ShowCode1
 	lds wa, 2
-	call LABEL_F892F5
+	call FileIO_WriteRecordName_Done
 	cps l, 0
 	jr z, LoadFilter_Load_ShowCode1
 	lds wa, 2
-	call LABEL_F893D1
+	call FileIO_CheckRecordValid
 	cps l, 0
 	jr nz, LoadFilter_Load_ShowCodeA
 	ldw wa, 0x8
-	call LABEL_F893D1
+	call FileIO_CheckRecordValid
 	cps l, 0
 	jr z, LoadFilter_Load_ShowCode1
 
@@ -609,12 +609,12 @@ RenderSaveFilterDisplay:
 	ld (xsp + 2), xwa
 	ld a, c
 	extz wa
-	call LABEL_F89353
+	call FileIO_FormatName_Return
 	cps l, 0
 	jr z, RenderSaveFilter_Unavail
 	cp (xsp), 0x1
 	jr nz, RenderSaveFilter_Available
-	call LABEL_F893AB
+	call FileIO_GetRecordAttr_Check
 	cps l, 0
 	jr z, RenderSaveFilter_Available
 	ld xwa, (xsp + 2)
@@ -631,7 +631,7 @@ RenderSaveFilter_Unavail:
 	ld xbc, 0xEA0730
 
 RenderSaveFilter_CopyAndReturn:
-	call LABEL_F890DC
+	call FileIO_CopyString
 	inc 6, xsp
 	ret
 
@@ -683,7 +683,7 @@ SaveFilter_HandleScroll:
 	jr nz, SaveFilter_ScrollOther
 	cp xbc, 0x1C00017
 	jr nz, SaveFilter_ScrollDown
-	call LABEL_F893AB
+	call FileIO_GetRecordAttr_Check
 	cps l, 0
 	jr z, SaveFilter_ScrollUp_Unavail
 	call LABEL_F893CA
@@ -699,10 +699,10 @@ SaveFilter_ScrollUp_Unavail:
 SaveFilter_ScrollDown:
 	ld xwa, (xsp + 2)
 	extz wa
-	call LABEL_F89353
+	call FileIO_FormatName_Return
 	cps l, 0
 	jr z, SaveFilter_ScrollDown_Unlock
-	call LABEL_F893AB
+	call FileIO_GetRecordAttr_Check
 	cps l, 0
 	jr nz, SaveFilter_UpdateDisplay
 	ld xwa, (xsp + 2)
@@ -710,7 +710,7 @@ SaveFilter_ScrollDown:
 	jr SaveFilter_UnlockFilter
 
 SaveFilter_ScrollDown_Unlock:
-	call LABEL_F893AB
+	call FileIO_GetRecordAttr_Check
 	cps l, 0
 	jr nz, SaveFilter_UpdateDisplay
 	call LABEL_F893C3
@@ -725,11 +725,11 @@ SaveFilter_ScrollOther:
 	jr nz, SaveFilter_UnlockFilter
 
 SaveFilter_LockFilter:
-	call LABEL_F8937F
+	call FileIO_BuildRecordPath_Done
 	jr SaveFilter_UpdateDisplay
 
 SaveFilter_UnlockFilter:
-	call LABEL_F89393
+	call FileIO_BuildRecordPath_Return
 
 SaveFilter_UpdateDisplay:
 	ld xwa, (xsp + 2)
@@ -762,11 +762,11 @@ SaveFilter_SelectAll_Loop:
 	extz wa
 	cpw (xsp), 0x6
 	jr ge, SaveFilter_SelectAll_Unlock
-	call LABEL_F8937F
+	call FileIO_BuildRecordPath_Done
 	jr SaveFilter_SelectAll_Update
 
 SaveFilter_SelectAll_Unlock:
-	call LABEL_F89393
+	call FileIO_BuildRecordPath_Return
 
 SaveFilter_SelectAll_Update:
 	ld wa, (xsp)
@@ -800,7 +800,7 @@ SaveFilter_DeselectAll:
 SaveFilter_DeselectAll_Loop:
 	ld wa, (xsp)
 	extz wa
-	call LABEL_F8937F
+	call FileIO_BuildRecordPath_Done
 	ld wa, (xsp)
 	sll wa, 4
 	ldada xbc, 32778
@@ -826,7 +826,7 @@ SaveFilter_OpSave:
 	ld xwa, (xsp + 2)
 	cp xwa, 0xA
 	jrl nz, SaveFilter_OpFormat
-	call LABEL_F8934D
+	call FileIO_FormatName_Done
 	cps hl, 0
 	jrl z, SaveFilter_OpFormat
 	calr SelectPasswordMode
@@ -940,7 +940,7 @@ SaveFilter_ResetAll:
 SaveFilter_ResetAll_Loop:
 	ld wa, (xsp)
 	extz wa
-	call LABEL_F89393
+	call FileIO_BuildRecordPath_Return
 	ld wa, (xsp)
 	sll wa, 4
 	ldada xbc, 32778

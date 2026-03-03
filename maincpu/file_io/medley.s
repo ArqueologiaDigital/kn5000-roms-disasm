@@ -133,7 +133,7 @@ SeqName_LoadAndPlay:
 	lds wa, 0
 	calr InitializeOperationState
 	ldda16 xwa, 33496
-	call LABEL_F880AD
+	call LoadFileMultiPass
 	ld wa, hl
 	lds bc, 5
 	calr LABEL_F8B48E
@@ -160,7 +160,7 @@ SeqName_HandleAction32:
 	lds wa, 0
 	calr InitializeOperationState
 	ldda16 xwa, 33496
-	call LABEL_F880AD
+	call LoadFileMultiPass
 	ld wa, hl
 	lds bc, 5
 	calr LABEL_F8B48E
@@ -1053,12 +1053,12 @@ DiskSel_InitState:
 DiskSel_CheckFileLoop:
 	ld wa, iz
 	lds bc, 2
-	call LABEL_F89408
+	call FileIO_CheckRecordByFile
 	cps l, 0
 	jr nz, DiskSel_FileAvailable
 	ld wa, iz
 	ldw bc, 0x8
-	call LABEL_F89408
+	call FileIO_CheckRecordByFile
 	cps l, 0
 	jr z, DiskSel_MarkUnavail
 
@@ -1120,7 +1120,7 @@ DiskSel_CheckFinished:
 DiskSel_ClearSelections:
 	ldto_berp A, 0xF8
 	extz wa
-	call LABEL_F89321
+	call FileIO_FormatName_Loop
 	inc 1, iz
 	cp iz, 0x8
 	jr lt, DiskSel_ClearSelections
@@ -1232,7 +1232,7 @@ DiskSel_CheckRepeat:
 DiskSel_RepeatClear:
 	ldto_berp A, 0xF8
 	extz wa
-	call LABEL_F89321
+	call FileIO_FormatName_Loop
 	inc 1, iz
 	cp iz, 0x8
 	jr lt, DiskSel_RepeatClear
@@ -1404,12 +1404,12 @@ DiskSel_DisplayLoop:
 	ldto_berp C, 0xF8
 	ld (xhl), c
 	lds bc, 2
-	call LABEL_F89408
+	call FileIO_CheckRecordByFile
 	ld wa, iz
 	cps l, 0
 	jr nz, DiskSel_GetFileName
 	ldw bc, 0x8
-	call LABEL_F89408
+	call FileIO_CheckRecordByFile
 	cps l, 0
 	jr z, DiskSel_EmptyFileName
 	ld wa, iz
@@ -1435,7 +1435,7 @@ DiskSel_FormatEntry:
 	pushw 0x6
 	pushw 0x0
 	ld xwa, xhl
-	call LABEL_F891DD
+	call FileIO_ReadHeader_ParseLoop
 	ld de, iz
 	sll de, 5
 	ldada xbc, 34060
@@ -1636,7 +1636,7 @@ DiskSel_HandlePlayStart:
 DiskSel_PlayClearLoop:
 	ldto_berp A, 0xF8
 	extz wa
-	call LABEL_F89321
+	call FileIO_FormatName_Loop
 	inc 1, iz
 	cp iz, 0x8
 	jr lt, DiskSel_PlayClearLoop
@@ -1806,7 +1806,7 @@ NavSong_CheckEnd:
 	ld wa, iz
 	call NavigateToFileIndex
 	ld wa, iz
-	call LABEL_F8A07F
+	call GetFileEntryByIndex
 
 NavSong_Exit:
 	popw iz
@@ -1860,7 +1860,7 @@ NavigatePdList:
 NavPd_CheckBounds:
 	cpdi16 34054, 0
 	jr le, NavPd_Exit
-	call LABEL_F8A4C8
+	call GetCurrentFileIndexAlt
 	cps hl, 0
 	jr lt, NavPd_Exit
 	ld wa, hl
@@ -2091,7 +2091,7 @@ SmfMed_FindSongLoop:
 	calr SmfMed_FormatSlotList
 	incdi8 1, 35106
 	ld wa, iz
-	call LABEL_F8A07F
+	call GetFileEntryByIndex
 	ldda32 xwa, 33844
 	or xwa, xwa
 	jrl z, SmfMed_Exit
@@ -2134,7 +2134,7 @@ SmfMed_RepeatFindLoop:
 	calr SmfMed_FormatSlotList
 	incdi8 1, 35106
 	ld wa, iz
-	call LABEL_F8A07F
+	call GetFileEntryByIndex
 	ldda32 xwa, 33844
 	or xwa, xwa
 	jrl z, SmfMed_Exit
@@ -2417,7 +2417,7 @@ SmfMed_PlayFindLoop:
 	calr FmmSmfFileNameFunc
 	incdi8 1, 35106
 	ld wa, iz
-	call LABEL_F8A07F
+	call GetFileEntryByIndex
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009A
 	lds32 xde, 0
@@ -2440,7 +2440,7 @@ SmfMed_CheckAutoPlay:
 	calr FmmSmfFileNameFunc
 	ld iz, hl
 	ld wa, iz
-	call LABEL_F8A07F
+	call GetFileEntryByIndex
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009A
 	lds32 xde, 0
@@ -2489,7 +2489,7 @@ PdFmt_FormatLoop:
 	ld (xde), a
 	ld wa, (xsp + 2)
 	add wa, iz
-	call LABEL_F8A5F1
+	call GetFileRecordPtr
 	ld xbc, xhl
 	ld wa, iz
 	sll wa, 5
@@ -2504,7 +2504,7 @@ PdFmt_FormatLoop:
 	inc 1, de
 	pushw 0x14
 	pushw 0x1
-	call LABEL_F891DD
+	call FileIO_ReadHeader_ParseLoop
 	ld de, iz
 	sll de, 5
 	ldada xbc, 34060
@@ -2542,7 +2542,7 @@ FmmPdFileNameFunc:
 	cp xbc, 0x1E50004
 	jr nz, PdName_ReturnZero
 	stda32 33854, xde
-	call LABEL_F8A4C8
+	call GetCurrentFileIndexAlt
 	stda16 33858, xhl
 	cps hl, 0
 	jr ge, PdName_UpdateIndex
@@ -2637,7 +2637,7 @@ PdName_GetCurrentIndex:
 PdName_UpdateDisplay:
 	cp iz, wa
 	jrl z, PdName_ReturnZero
-	call LABEL_F8A5A5
+	call SetCurrentFileIndex
 	ldda16 xwa, 33858
 	exts xwa
 	divs wa, 0xA
@@ -2694,7 +2694,7 @@ PdName_SetIndexPlaying:
 	jrl z, PdName_ReturnZero
 	stda16 33858, xde
 	ld wa, de
-	call LABEL_F8A5A5
+	call SetCurrentFileIndex
 	ldda16 xwa, 33858
 	exts xwa
 	divs wa, 0xA
@@ -2950,7 +2950,7 @@ PdMed_InitFromDisk:
 	ld xbc, 0x1C00001
 	lds32 xde, 5
 	call 0xFA9D58
-	call LABEL_F8A625
+	call BuildPageRecordsAlt
 	stda16 34054, xhl
 	ld xwa, 0x600026
 	ld xbc, 0x1C00002
@@ -3311,7 +3311,7 @@ DocFmt_FormatLoop:
 	inc 1, de
 	pushw 0xC
 	pushw 0x0
-	call LABEL_F891DD
+	call FileIO_ReadHeader_ParseLoop
 	ld de, iz
 	sll de, 5
 	ldada xbc, 34060

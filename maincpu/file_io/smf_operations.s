@@ -256,12 +256,12 @@ SaveFileNameSmfFunc:
 SaveFN_HandleActivate:
 	ld (xwa), 0x0
 	lda xiz, (xwa + 1)
-	call LABEL_F892D5
+	call FileIO_GetRecordPtrAlt
 	ld xbc, xhl
 	ld xwa, xiz
-	call LABEL_F890DC
+	call FileIO_CopyString
 	ldada xwa, 34897
-	call LABEL_F8929D
+	call FileIO_GetRecordType_Extended
 	ldda32 xwa, 32908
 	ld xbc, 0x1C0000F
 	ld xde, 0x8850
@@ -269,10 +269,10 @@ SaveFN_HandleActivate:
 
 SaveFN_HandleTextChange:
 	ld xiz, xwa
-	call LABEL_F892D5
+	call FileIO_GetRecordPtrAlt
 	ld xbc, xhl
 	ld xwa, xiz
-	call LABEL_F890DC
+	call FileIO_CopyString
 	ld xwa, 0x8850
 	ldw bc, 0x8
 	calr RenderSmfFilename
@@ -287,15 +287,15 @@ SaveFN_SendEvent:
 SaveFN_HandleApply:
 	ld xbc, (xsp + 4)
 	ldw de, 0x8
-	call LABEL_F890F2
+	call FileIO_CopyString_WriteNull
 	ld xwa, 0x8850
 	ldw bc, 0x8
 	calr RenderSmfFilename
 	ld xwa, 0x8850
 	ld xbc, 0xEA0736
-	call LABEL_F89113
+	call FileIO_BuildFilePath
 	ld xwa, 0x8850
-	call LABEL_F892DB
+	call FileIO_WriteRecordName
 
 SaveFN_Return:
 	lds32 xhl, 0
@@ -316,7 +316,7 @@ SeqToSong_BuildEntry:
 	ldada xwa, 32916
 	stib_dpi 0xE0, 0x00
 	ld xbc, 0xEA073C
-	call LABEL_F890DC
+	call FileIO_CopyString
 	ldada xiz, 32917
 	ldda8 a, 35144
 	inc 1, a
@@ -325,7 +325,7 @@ SeqToSong_BuildEntry:
 	calr LABEL_F8B67F
 	ld xbc, xhl
 	ld xwa, xiz
-	call LABEL_F89113
+	call FileIO_BuildFilePath
 	ldda32 xwa, 32912
 	ld xbc, 0x1C0000F
 	ld xde, 0x8094
@@ -349,7 +349,7 @@ SeqFromSong_BuildEntry:
 	ldada xwa, 33048
 	stib_dpi 0xE0, 0x00
 	ld xbc, 0xEA0748
-	call LABEL_F890DC
+	call FileIO_CopyString
 	ldada xiz, 33049
 	ldda8 a, 35144
 	inc 1, a
@@ -358,7 +358,7 @@ SeqFromSong_BuildEntry:
 	calr LABEL_F8B67F
 	ld xbc, xhl
 	ld xwa, xiz
-	call LABEL_F89113
+	call FileIO_BuildFilePath
 	ldda32 xwa, 33044
 	ld xbc, 0x1C0000F
 	ld xde, 0x8118
@@ -494,7 +494,7 @@ DispFileList_LoopBody:
 	inc 1, de
 	pushw 0xC
 	pushw 0x1
-	call LABEL_F891DD
+	call FileIO_ReadHeader_ParseLoop
 	ld de, iz
 	sll de, 5
 	ldada xbc, 34060
@@ -714,11 +714,11 @@ SmfFN_HandleSave:
 	cpw (xsp + 6), 0x0
 	jr lt, SmfFN_Save_Finish
 	ldda16 xwa, 33196
-	call LABEL_F8A07F
+	call GetFileEntryByIndex
 	ld xbc, xhl
 	lda xwa, (xsp + 8)
 	ldw de, 0x10
-	call LABEL_F890F2
+	call FileIO_CopyString_WriteNull
 	lda xwa, (xsp + 8)
 	ldw bc, 0x10
 	calr ValidateSmfFilename
@@ -729,7 +729,7 @@ SmfFN_HandleSave:
 	ld xbc, xhl
 	lda xwa, (xsp + 8)
 	ldw de, 0x8
-	call LABEL_F890F2
+	call FileIO_CopyString_WriteNull
 
 SmfFN_Save_WriteSlot:
 	lda xwa, (xsp + 8)
@@ -743,7 +743,7 @@ SmfFN_Save_WriteSlot:
 	st_dri3b W, 0xE1, 0x00, 0x01
 	lda xbc, (xsp + 8)
 	ldw de, 0x10
-	call LABEL_F890F2
+	call FileIO_CopyString_WriteNull
 	ld8_24 a, 0x00ffe3
 	cpda8 a, 35144
 	jr nz, SmfFN_Save_Finish
@@ -751,7 +751,7 @@ SmfFN_Save_WriteSlot:
 	st_dri3b W, 0xE1, 0x00, 0x01
 	lda xbc, (xsp + 8)
 	ldw de, 0x10
-	call LABEL_F890F2
+	call FileIO_CopyString_WriteNull
 
 SmfFN_Save_Finish:
 	ld xwa, 0x600026
@@ -790,7 +790,7 @@ SmfFN_HandleOpen:
 	ld xbc, 0x1C00001
 	lds32 xde, 5
 	call 0xFA9D58
-	call LABEL_F892D5
+	call FileIO_GetRecordPtrAlt
 	ld xwa, xhl
 	call LABEL_F8947D
 	cps l, 0
@@ -819,7 +819,7 @@ SmfFN_Open_Execute:
 	extz bc
 	ldda8 e, 35148
 	extz de
-	call LABEL_F8805B
+	call LoadFileVariant
 	ld wa, hl
 	lds bc, 5
 	calr LABEL_F8B48E
@@ -861,7 +861,7 @@ SmfFN_HandleOpen2:
 	extz bc
 	ldda8 e, 35148
 	extz de
-	call LABEL_F8805B
+	call LoadFileVariant
 	ld wa, hl
 	lds bc, 5
 	calr LABEL_F8B48E
@@ -909,7 +909,7 @@ SmfFN_Delete_Execute:
 	call 0xFA9D58
 	lds wa, 0
 	calr InitializeOperationState
-	call LABEL_F88B22
+	call GetFirstRecordAndOpen
 	ld wa, hl
 	lds bc, 5
 	calr LABEL_F8B48E
@@ -945,7 +945,7 @@ SmfFN_HandleDelete2:
 	call 0xFA9D58
 	lds wa, 0
 	calr InitializeOperationState
-	call LABEL_F88B22
+	call GetFirstRecordAndOpen
 	ld wa, hl
 	lds bc, 5
 	calr LABEL_F8B48E
@@ -1206,20 +1206,20 @@ SmfFN_UpdateFilenameField:
 	jr le, SmfFN_FetchFilename
 	ld xwa, xiz
 	ld xbc, 0xEA0790
-	call LABEL_F890DC
+	call FileIO_CopyString
 	jr SmfFN_WriteFilenameField
 
 SmfFN_FetchFilename:
 	call GetRecordPtrForFile
 	ld xbc, xhl
 	ld xwa, xiz
-	call LABEL_F890DC
+	call FileIO_CopyString
 	ld xwa, 0x8850
-	call LABEL_F8929D
+	call FileIO_GetRecordType_Extended
 
 SmfFN_WriteFilenameField:
 	ld xwa, 0x8850
-	call LABEL_F892DB
+	call FileIO_WriteRecordName
 	ld xwa, (xsp + 32)
 	ld xbc, 0x1C0000B
 	lds32 xde, 0
@@ -1294,7 +1294,7 @@ DispSeqList_LoopBody:
 	inc 1, de
 	pushw 0xC
 	pushw 0x1
-	call LABEL_F891DD
+	call FileIO_ReadHeader_ParseLoop
 	ld de, iz
 	sll de, 5
 	ldada xbc, 34060

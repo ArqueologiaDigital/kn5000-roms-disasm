@@ -2059,7 +2059,7 @@ CmpFile_ShowDraw:
 	pushw 0x6
 	pushw 0x0
 	ld xbc, xiz
-	call LABEL_F891DD
+	call FileIO_ReadHeader_ParseLoop
 	ldda32 xwa, 33276
 	ld xbc, 0x1C0000F
 	ld xde, 0x8870
@@ -2099,7 +2099,7 @@ CmpFile_ScrollRedraw:
 	lda_24 xiz, 0xea0a52
 	stdi8 35320, 4
 	lds wa, 3
-	call LABEL_F893D1
+	call FileIO_CheckRecordValid
 	cps l, 0
 	jr z, CmpFile_RedrawDispatch
 	call LABEL_F872E5
@@ -2117,7 +2117,7 @@ CmpFile_RedrawDispatch:
 	pushw 0x6
 	pushw 0x0
 	ld xbc, xiz
-	call LABEL_F891DD
+	call FileIO_ReadHeader_ParseLoop
 	ldda32 xwa, 33276
 	ld xbc, 0x1C0000F
 	ld xde, 0x8870
@@ -2180,7 +2180,7 @@ FmmCmpLoad_DispatchState:
 FmmCmpLoad_ContinueLoad:
 	stdi8 35320, 4
 	lds wa, 3
-	call LABEL_F893D1
+	call FileIO_CheckRecordValid
 	cps l, 0
 	jr z, FmmCmpLoad_CloseProgress
 	call LABEL_F872E5
@@ -2285,7 +2285,7 @@ BuildSlotLabel_WriteColon:
 BuildSlotLabel_WriteContent:
 	ld xwa, xiz
 	ldw de, 0x10
-	call LABEL_F890F2
+	call FileIO_CopyString_WriteNull
 	ld (xiz + 16), 0x0
 	ld wa, (xsp + 4)
 	mul wa, 0x15
