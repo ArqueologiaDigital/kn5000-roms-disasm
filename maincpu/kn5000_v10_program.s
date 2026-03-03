@@ -233598,6 +233598,13 @@ GroupBoxProc_SSFItemLoop:
 	jr nz, GroupBoxProc_SSFItemLoop
 	jrl LABEL_F9A526
 
+	; --- Event 0x1E0006E: Cancel/Back handler ---
+	; Iterates the 17-entry widget structure array at 0x0274E8
+	; (28-byte entries: stride = (ix*8 - ix)*4 = ix*28).
+	; If event param (XWA) is nonzero: activates entries and sends 0x1C00026.
+	; If event param is zero: deactivates entries and sends 0x1C00026.
+	; Each entry has: byte[0]=active, byte[1]=enabled, dword[2]=workspace,
+	; dword[6]=event(0x1C00007), dword[10]=focus_id, offset[14]=secondary.
 LABEL_F9A2FB:
 	lds iz, 0
 
@@ -233723,11 +233730,16 @@ LABEL_F9A42E:
 	jrl ule, LABEL_F9A2FD
 	jrl LABEL_F9A526
 
+	; --- Event 0x1E0006F: Dial Enable ---
+	; Stores WA (from XBC param) into dial enable register at 0x03EF50.
 LABEL_F9A43A:
 	ld wa, bc
 	calr SetDialEnable
 	jrl LABEL_F9A526
 
+	; --- Event 0x1E00070: Dial Down ---
+	; Registers down-direction parameters (workspace, event 0x1C00007, param)
+	; into dial state at 0x03EF56/5E/66 and updates dial focus.
 LABEL_F9A442:
 	ld xde, (xsp + 30)
 	ld xwa, (xsp + 38)
@@ -233735,6 +233747,9 @@ LABEL_F9A442:
 	calr SetDialDown
 	jrl LABEL_F9A526
 
+	; --- Event 0x1E00071: Dial Up ---
+	; Registers up-direction parameters (workspace, event 0x1C00007, param)
+	; into dial state at 0x03EF52/5A/62 and updates dial focus.
 LABEL_F9A453:
 	ld xde, (xsp + 30)
 	ld xwa, (xsp + 38)
@@ -233742,14 +233757,22 @@ LABEL_F9A453:
 	calr SetDialUp
 	jrl LABEL_F9A526
 
+	; --- Event 0x1E00088: Get Dial Focus ---
+	; Returns current dial focus value from 0x03EF6A in XHL.
 LABEL_F9A464:
 	calr GetDialFocus
 	jrl LABEL_F9A536
 
+	; --- Event 0x1E00087: Set Dial Focus ---
+	; Stores dial focus (XWA) at 0x03EF6A and broadcasts 0x1C0002C.
 LABEL_F9A46A:
 	calr SetDialFocus
 	jrl LABEL_F9A526
 
+	; --- Events 0x1E00079/0x1E00078: UP/DOWN Navigation ---
+	; Calls 0xFA5867 (lookup), then dispatches 0x1E000B4 via FA9660.
+	; Falls through to loop that broadcasts 0x1C00009 (close/hide) to
+	; all active entries in the 0x0274E8 structure array.
 LABEL_F9A470:
 	call 0xFA5867
 	ld xwa, xhl
@@ -233814,6 +233837,8 @@ LABEL_F9A50C:
 	jr ule, LABEL_F9A4B1
 	jr LABEL_F9A526
 
+	; --- Event 0x1C00036: Display Update ---
+	; Enables display (FAA761 with WA=1), calls UpdateScreen, then disables.
 LABEL_F9A516:
 	lds wa, 1
 	call LABEL_FAA761
