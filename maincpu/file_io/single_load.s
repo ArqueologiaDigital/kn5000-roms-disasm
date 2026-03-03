@@ -2045,7 +2045,7 @@ CmpFile_HandleShow:
 	cpdi8 35320, 2
 	jr nz, CmpFile_ShowDefault
 	ldda16 xwa, 33280
-	call LABEL_F89623
+	call GetFileEntryPtr
 	ld xiz, xhl
 	jr CmpFile_ShowDraw
 
@@ -2107,7 +2107,7 @@ CmpFile_ScrollRedraw:
 	jr z, CmpFile_RedrawDispatch
 	stdi8 35320, 2
 	ldda16 xwa, 33280
-	call LABEL_F89623
+	call GetFileEntryPtr
 	ld xiz, xhl
 
 CmpFile_RedrawDispatch:

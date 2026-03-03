@@ -157,7 +157,7 @@ CompLoad_DrawItemLoop:
 	cps l, 0
 	jr z, CompLoad_DrawItem_Empty
 	ld wa, iz
-	call LABEL_F89623
+	call GetFileEntryPtr
 	ld xbc, xhl
 	jr CompLoad_DrawItem_Continue
 
@@ -325,7 +325,7 @@ RenderFilterDisplay:
 	ld (xsp + 2), xwa
 	cp (xsp), 0x0
 	jr nz, RenderFilter_CheckType1
-	call LABEL_F8964C
+	call GetCurrentFileType
 	cps l, 0
 	jr z, RenderFilter_CheckType1
 	ld xwa, (xsp + 2)
@@ -335,7 +335,7 @@ RenderFilterDisplay:
 RenderFilter_CheckType1:
 	cp (xsp), 0x1
 	jr nz, RenderFilter_CheckGeneric
-	call LABEL_F8964C
+	call GetCurrentFileType
 	cps l, 0
 	jr z, RenderFilter_CheckGeneric
 	lds wa, 0
@@ -462,7 +462,7 @@ LoadFilter_HandleScroll:
 	jr nz, LoadFilter_ScrollDown
 	cp xwa, 0x1
 	jr nz, LoadFilter_ScrollUp_CheckZero
-	call LABEL_F8964C
+	call GetCurrentFileType
 	cps l, 0
 	jr z, LoadFilter_ScrollUp_CheckZero
 	lds wa, 0
@@ -472,7 +472,7 @@ LoadFilter_ScrollUp_CheckZero:
 	ld xwa, (xsp + 2)
 	or xwa, xwa
 	jr nz, LoadFilter_ScrollUp_Restore
-	call LABEL_F8964C
+	call GetCurrentFileType
 	cps l, 0
 	jr nz, LoadFilter_UpdateDisplay
 
@@ -488,7 +488,7 @@ LoadFilter_ScrollDown:
 	ld xwa, (xsp + 2)
 	cp xwa, 0x1
 	jr nz, LoadFilter_ScrollDown_CheckZero
-	call LABEL_F8964C
+	call GetCurrentFileType
 	cps l, 0
 	jr z, LoadFilter_ScrollDown_CheckZero
 	lds wa, 0
@@ -498,7 +498,7 @@ LoadFilter_ScrollDown_CheckZero:
 	ld xwa, (xsp + 2)
 	or xwa, xwa
 	jr nz, LoadFilter_ScrollDown_Restore
-	call LABEL_F8964C
+	call GetCurrentFileType
 	cps l, 0
 	jr nz, LoadFilter_UpdateDisplay
 

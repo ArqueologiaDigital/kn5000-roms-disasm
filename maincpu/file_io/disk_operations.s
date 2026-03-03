@@ -50,7 +50,7 @@ FCopy_ScrollNeg_Reset:
 FCopy_HandleExecute:
 	stdi8 34060, 0
 	ldda16 xwa, 32614
-	call LABEL_F89623
+	call GetFileEntryPtr
 	ld xbc, xhl
 	ldada xwa, 34061
 	ldda16 xde, 32614
@@ -97,7 +97,7 @@ FCopy_Scroll_Apply:
 	jrl z, FCopy_Return
 	stdi8 34060, 0
 	ldda16 xwa, 32614
-	call LABEL_F89623
+	call GetFileEntryPtr
 	ld xbc, xhl
 	ldada xwa, 34061
 	ldda16 xde, 32614
@@ -244,7 +244,7 @@ FileRenameFunc:
 	jr lt, FRename_TextChange_Error
 	ldada xiz, 34928
 	ld wa, hl
-	call LABEL_F89623
+	call GetFileEntryPtr
 	ld xbc, xhl
 	ld xwa, xiz
 	call LABEL_F890DC
@@ -1270,7 +1270,7 @@ CurFileNameFunc:
 	cps iz, 0
 	jr lt, CurFileName_NoSlot
 	ld wa, iz
-	call LABEL_F89623
+	call GetFileEntryPtr
 	ld xbc, xhl
 	ld de, iz
 	inc 1, de

@@ -1415,7 +1415,7 @@ DiskSel_DisplayLoop:
 	ld wa, iz
 
 DiskSel_GetFileName:
-	call LABEL_F89623
+	call GetFileEntryPtr
 	ld xbc, xhl
 	jr DiskSel_FormatEntry
 

@@ -292,7 +292,7 @@ FileName_DrawItemLoop:
 	add xhl, xde
 	ld bc, (xsp + 6)
 	ld (xhl), c
-	call LABEL_F89623
+	call GetFileEntryPtr
 	ld xbc, xhl
 	ld de, (xsp + 6)
 	ld wa, de
@@ -734,7 +734,7 @@ FileName_Callback_SetFilter:
 	and iz, hl
 	bit 0, iz
 	jr z, FileName_Callback_Send
-	call LABEL_F8964C
+	call GetCurrentFileType
 	cps l, 0
 	jr z, FileName_Callback_Send
 	res 0, iz
@@ -776,7 +776,7 @@ FileName_Register_SetFilter:
 	and iz, hl
 	bit 0, iz
 	jr z, FileName_Register_Send
-	call LABEL_F8964C
+	call GetCurrentFileType
 	cps l, 0
 	jr z, FileName_Register_Send
 	res 0, iz
