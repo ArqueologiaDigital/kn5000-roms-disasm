@@ -118,7 +118,7 @@ IntTx0_CheckQueueEmpty:
 	ldda8 a, 1065
 	and a, 0x1F
 	jr nz, IntTx0_Epilogue
-	call LABEL_EF2853
+	call SeqAlt1_CheckEmpty
 	and hl, hl
 	jr nz, IntTx0_Epilogue
 	stdi8 234, 253
@@ -190,7 +190,7 @@ RxDisp_StatusByte:
 	bitda 5, 1074
 	jr nz, RxDisp_ClearSysExState
 	pushw wa
-	call LABEL_EF28C9
+	call SeqBuf2_WriteByte
 	inc 2, xsp
 	stdi8 1074, 4
 
@@ -808,10 +808,10 @@ SysEx_CaptureManufacturerId:
 	setda 1, 1074
 	ld a, d
 	pushw wa
-	call LABEL_EF28C9
+	call SeqBuf2_WriteByte
 	inc 2, xsp
 	pushw de
-	call LABEL_EF28C9
+	call SeqBuf2_WriteByte
 	inc 2, xsp
 
 SysEx_Return:
@@ -823,7 +823,7 @@ SysEx_InProgressByte:
 	bitda 5, 1074
 	jr nz, SysEx_InProgressReturn
 	pushw de
-	call LABEL_EF28C9
+	call SeqBuf2_WriteByte
 	inc 2, xsp
 
 SysEx_InProgressReturn:
@@ -984,7 +984,7 @@ MIDI_SC0_ENABLE_TX:
 	jr SC0TxEnable_Return
 
 SC0TxEnable_MidiActivePath:
-	call LABEL_EF286B
+	call SeqAlt1_Init
 	stdi8 1065, 0
 
 SC0TxEnable_Return:
