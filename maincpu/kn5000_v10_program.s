@@ -40462,7 +40462,7 @@ LABEL_EE8C7E:
 	.long LABEL_EF1235
 	.long LABEL_EED52B
 	.long LABEL_E1FFB6
-	.long LABEL_FCF962
+	.long MIDI_SC0_DISPATCH_TABLE
 	.long LABEL_EE2F26
 	.long LABEL_EE1574
 	.long LABEL_EDB2E4
@@ -43826,7 +43826,7 @@ LABEL_EF0C2C:
 	jr ule, LABEL_EF0C3E
 	ldb w, 0x0
 	ordi8 1065, 16
-	call LABEL_FCF972
+	call MIDI_SC0_TX_DISPATCH
 
 LABEL_EF0C3E:
 	stda8 1062, w
@@ -43864,7 +43864,7 @@ LABEL_EF0C83:
 	push_sr
 	ei 6
 	ordi8 1065, 8
-	call LABEL_FCF972
+	call MIDI_SC0_TX_DISPATCH
 	pop_sr
 
 LABEL_EF0CA3:
@@ -43892,7 +43892,7 @@ LABEL_EF0CD3:
 	push_sr
 	ei 6
 	ordi8 1065, 1
-	call LABEL_FCF972
+	call MIDI_SC0_TX_DISPATCH
 	pop_sr
 
 LABEL_EF0CE7:
@@ -44174,7 +44174,7 @@ LABEL_EF0F2A:
 	push_sr
 	ei 6
 	ordi8 1065, 2
-	call LABEL_FCF972
+	call MIDI_SC0_TX_DISPATCH
 	pop_sr
 
 LABEL_EF0F7A:
@@ -44208,7 +44208,7 @@ LABEL_EF0FA0:
 	push_sr
 	ei 6
 	ordi8 1065, 8
-	call LABEL_FCF972
+	call MIDI_SC0_TX_DISPATCH
 	pop_sr
 
 LABEL_EF0FC5:
@@ -44236,7 +44236,7 @@ LABEL_EF0FEB:
 	push_sr
 	ei 6
 	ordi8 1065, 1
-	call LABEL_FCF972
+	call MIDI_SC0_TX_DISPATCH
 	pop_sr
 
 LABEL_EF100E:
@@ -50097,7 +50097,7 @@ LABEL_EF4271:
 	ld (xsp + 14), xwa
 	ld xwa, (xsp + 14)
 	ld xbc, 0x12
-	call LABEL_FF0C18
+	call Math_DivideU32
 	ldada xiz, 1582
 	ldw (xiz + 2), 0x0
 	ld wa, hl
@@ -83572,7 +83572,7 @@ putc_mrx_bf_X:
 	ret
 
 midi_out_en_X:
-	jp LABEL_FCF972
+	jp MIDI_SC0_TX_DISPATCH
 
 GetAdr_sqbtof:
 	ldada xhl, 1052
@@ -88497,7 +88497,7 @@ SqStepTtlFunc:
 	ldirw
 	lda xwa, (xsp)
 	ld xbc, xhl
-	call LABEL_F9AE97
+	call DirmdEmulator_Entry
 	lda xsp, (xsp + 16)
 	ret
 
@@ -107574,7 +107574,7 @@ LABEL_F2FC3F:
 	ldda8 a, 10142
 	add xwa, xbc
 	ld xbc, 0xD
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	addda32 xhl, 7508
 	push xhl
 	jrl LABEL_F2FD28
@@ -133549,7 +133549,7 @@ LABEL_F4043A:
 	dec 1, xhl
 	ld xwa, xhl
 	ld xbc, 0xFB
-	call LABEL_FF0C18
+	call Math_DivideU32
 	stda32 9914, xhl
 
 LABEL_F40453:
@@ -133605,7 +133605,7 @@ LABEL_F40551:
 	sub xhl, xwa
 	ld xwa, xhl
 	ld xbc, 0xFB
-	call LABEL_FF0C18
+	call Math_DivideU32
 	inc 1, xhl
 
 LABEL_F40560:
@@ -133754,13 +133754,13 @@ LABEL_F406E2:
 	add xwa, 0xFB
 	dec 1, xwa
 	ld xbc, 0xFB
-	call LABEL_FF0C18
+	call Math_DivideU32
 	ld iz, hl
 	stda16 9882, xiz
 	ld wa, iz
 	extz xwa
 	ld xbc, 0xFB
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	subda32 xhl, 9922
 	ldb a, 0xFB
 	sub a, l
@@ -134556,7 +134556,7 @@ LABEL_F40E21:
 	extz xwa
 	ld (xsp + 4), xwa
 	ld xbc, 0xFB
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	ld (xsp + 4), xhl
 	ld wa, (xiz + 2)
 	extz xwa
@@ -134566,7 +134566,7 @@ LABEL_F40E21:
 	extz xwa
 	ld (xsp + 8), xwa
 	ld xbc, 0xFB
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	ld (xsp + 8), xhl
 	ld wa, (xiz + 2)
 	extz xwa
@@ -134677,7 +134677,7 @@ LABEL_F40F63:
 	sub (xsp + 8), xwa
 	ld xwa, (xsp + 8)
 	ld xbc, 0xFB
-	call LABEL_FF0C18
+	call Math_DivideU32
 	ld (xsp + 22), hl
 	ld xwa, (xsp + 8)
 	ld xbc, 0xFB
@@ -157905,7 +157905,7 @@ LABEL_F518ED:
 	ld xwa, (xwa + 30)
 	ld wa, (xwa + 40)
 	extz xwa
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	ret
 
 LABEL_F5190A:
@@ -172658,7 +172658,7 @@ LABEL_F5B076:
 	ordi8 1065, 2
 
 LABEL_F5B07B:
-	call LABEL_FCF972
+	call MIDI_SC0_TX_DISPATCH
 	ei 0
 
 LABEL_F5B081:
@@ -192115,10 +192115,10 @@ LABEL_F69C94:
 	ldda16 xbc, 13524
 	extz xbc
 	ld xwa, xhl
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	ld xwa, xhl
 	ld xbc, 0xBE
-	call LABEL_FF0C18
+	call Math_DivideU32
 	cp xhl, 0x63
 	jr ule, LABEL_F69CBD
 	ld xhl, 0x63
@@ -192703,7 +192703,7 @@ CmpStepTitleFunc:
 	ldirw
 	lda xwa, (xsp)
 	ld xbc, xhl
-	call LABEL_F9AE97
+	call DirmdEmulator_Entry
 	lda xsp, (xsp + 16)
 	ret
 
@@ -207397,7 +207397,7 @@ LABEL_F79957:
 	lds32 xwa, 0
 	ld8_24 a, 0x024774
 	ld xbc, 0x1A
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	cps iz, 2
 	jrl z, LABEL_F79A2D
 	lds32 xbc, 0
@@ -210967,7 +210967,7 @@ LABEL_F7C8E8:
 	ld wa, (xwa)
 	exts xwa
 	sla xwa, 12
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	ld xwa, xhl
 	sra xwa, 15
 	sra xwa, 0
@@ -215190,7 +215190,7 @@ LswScalingKeyX:
 	exts xhl
 	ld xwa, xhl
 	ld xbc, 0xC9
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	add xhl, 0x7F
 	sra xhl, 8
 	sub xhl, 0x64
@@ -229247,7 +229247,7 @@ LABEL_F89C03:
 	ld wa, bc
 	extz xwa
 	ld xbc, 0x52
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	ld xwa, 0x25EB2
 	add xwa, xhl
 	ld xhl, xwa
@@ -229536,7 +229536,7 @@ LABEL_F89E48:
 	ld wa, (xsp + 10)
 	extz xwa
 	ld xbc, 0x52
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	ld xwa, 0x25EB2
 	add xwa, xhl
 	ld xbc, 0xEA04BE
@@ -229558,7 +229558,7 @@ LABEL_F89E7B:
 	ld wa, (xsp + 10)
 	extz xwa
 	ld xbc, 0x52
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	ld xwa, 0x25EB2
 	add xwa, xhl
 	setm 5, (xwa + 80)
@@ -229576,7 +229576,7 @@ LABEL_F89EBD:
 	ld wa, (xsp + 10)
 	extz xwa
 	ld xbc, 0x52
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	lda_24 xwa, 0x025f02
 	add xwa, xhl
 	bitm 5, (xwa)
@@ -229599,7 +229599,7 @@ LABEL_F89EE3:
 	ld wa, (xsp + 10)
 	extz xwa
 	ld xbc, 0x52
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	ld xwa, 0x25EB2
 	add xwa, xhl
 	setm 5, (xwa + 80)
@@ -229614,7 +229614,7 @@ LABEL_F89F1D:
 	ld wa, (xsp + 10)
 	extz xwa
 	ld xbc, 0x52
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	lda_24 xwa, 0x025f02
 	add xwa, xhl
 	resm 5, (xwa)
@@ -229633,7 +229633,7 @@ LABEL_F89F3C:
 	ld wa, (xsp + 10)
 	extz xwa
 	ld xbc, 0x52
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	lda_24 xwa, 0x025f02
 	add xwa, xhl
 	resm 7, (xwa)
@@ -229657,7 +229657,7 @@ LABEL_F89F76:
 	ld wa, (xsp + 10)
 	extz xwa
 	ld xbc, 0x52
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	ld xwa, 0x25EB2
 	add xwa, xhl
 	setm 5, (xwa + 80)
@@ -229671,7 +229671,7 @@ LABEL_F89FAF:
 	ld wa, (xsp + 10)
 	extz xwa
 	ld xbc, 0x52
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	lda_24 xwa, 0x025f02
 	add xwa, xhl
 	setm 7, (xwa)
@@ -229681,7 +229681,7 @@ LABEL_F89FCC:
 	ld wa, (xsp + 10)
 	extz xwa
 	ld xbc, 0x52
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	ld xwa, 0x25EB2
 	add xwa, xhl
 	setm 5, (xwa + 80)
@@ -229716,7 +229716,7 @@ LABEL_F8A01D:
 	ld wa, (xsp + 10)
 	extz xwa
 	ld xbc, 0x52
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	lda_24 xwa, 0x025ec0
 	add xwa, xhl
 	ld xbc, 0xEA04B8
@@ -229731,7 +229731,7 @@ LABEL_F8A039:
 	extz xwa
 	lda_24 xiz, 0x025eb2
 	ld xbc, 0x52
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	ld xwa, xiz
 	add xwa, xhl
 	lda xwa, (xwa + 14)
@@ -229770,7 +229770,7 @@ LABEL_F8A092:
 	ld wa, bc
 	extz xwa
 	ld xbc, 0x52
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	lda_24 xwa, 0x025ec0
 	add xwa, xhl
 	lda_24 xbc, 0xea03f6
@@ -229787,7 +229787,7 @@ LABEL_F8A0C0:
 	ld wa, bc
 	extz xwa
 	ld xbc, 0x52
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	lda_24 xwa, 0x025ec0
 	add xwa, xhl
 	ld xhl, xwa
@@ -230100,7 +230100,7 @@ LABEL_F8A604:
 	ld wa, bc
 	extz xwa
 	ld xbc, 0x52
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	lda_24 xwa, 0x025ec0
 	add xwa, xhl
 	ld xhl, xwa
@@ -230498,7 +230498,7 @@ LABEL_F8A9B5:
 	ld wa, bc
 	extz xwa
 	ld xbc, 0x52
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	ld xwa, 0x25EB2
 	add xwa, xhl
 	ld xhl, xwa
@@ -230693,7 +230693,7 @@ LABEL_F8ABCE:
 	ld wa, bc
 	extz xwa
 	ld xbc, 0x52
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	lda_24 xwa, 0x025ec0
 	add xwa, xhl
 	cp (xwa), 0x0
@@ -230704,7 +230704,7 @@ LABEL_F8ABCE:
 	ld wa, bc
 	extz xwa
 	ld xbc, 0x52
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	lda_24 xwa, 0x025ec0
 	add xwa, xhl
 	ld xhl, xwa
@@ -231492,7 +231492,7 @@ LABEL_F8B337:
 	pushw wa
 	call LABEL_EF281B
 	inc 4, xsp
-	call LABEL_FCF972
+	call MIDI_SC0_TX_DISPATCH
 	ei 0
 
 LABEL_F8B36B:
@@ -233800,7 +233800,7 @@ LABEL_F980A0:
 	lds32 xwa, 0
 	ld xbc, 0x1C00000
 	lds32 xde, 0
-	call LABEL_F9AE97
+	call DirmdEmulator_Entry
 	lds wa, 1
 	call LABEL_FAA761
 	call UpdateScreen
@@ -238274,7 +238274,7 @@ DirmdTitleFunc:
 	ldirw
 	lda xwa, (xsp)
 	ld xbc, xhl
-	calr LABEL_F9AE97
+	calr DirmdEmulator_Entry
 	lda xsp, (xsp + 16)
 	ret
 
@@ -238296,7 +238296,7 @@ LABEL_F9AE12:
 	.byte 0xf8, 0x4e, 0xf3, 0xfd, 0x00, 0x01, 0x37, 0x0e
 	.byte 0x40, 0xac, 0x9b, 0xea, 0x00, 0x1d, 0xa1, 0x2e
 	.byte 0xfa, 0x1b, 0xc3, 0x24, 0xf8
-LABEL_F9AE97:
+DirmdEmulator_Entry:
 
 DirmdEmulator:
 	push xiz
@@ -251871,7 +251871,7 @@ CountObject:
 	ldto_werp WA, 0xFA
 	extz xwa
 	ld xbc, 0xE
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 
 LABEL_FA42A5:
 	ld xwa, (xsp + 4)
@@ -252927,7 +252927,7 @@ LABEL_FA4C66:
 	ld wa, (xsp + 8)
 	extz xwa
 	ld xbc, 0x16
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	add xhl, xiz
 	ldw (xhl + 18), 0xFFFF
 	ldw (xhl + 20), 0xFFFF
@@ -253025,7 +253025,7 @@ RegisterTitle:
 	ld (xsp + 4), xde
 	ld xiz, xbc
 	ld xbc, 0x16
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	ld xbc, 0x32ABC
 	add xbc, xhl
 	ld (xbc), xiz
@@ -253045,7 +253045,7 @@ RegisterTitle:
 
 UnregisteredTitle:
 	ld xbc, 0x16
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	ld xbc, 0x32ABC
 	add xbc, xhl
 	ld xwa, 0x1200000
@@ -253169,13 +253169,13 @@ LABEL_FA4F7E:
 	ld wa, (xsp + 22)
 	extz xwa
 	ld xbc, 0x16
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	add xhl, (xsp + 4)
 	jrl LABEL_FA5862
 	ld wa, (xsp + 22)
 	extz xwa
 	ld xbc, 0x16
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	add xhl, (xsp + 4)
 	ld xwa, (xhl)
 	ld xbc, 0x1E0002A
@@ -253185,21 +253185,21 @@ LABEL_FA4F7E:
 	ld wa, (xsp + 22)
 	extz xwa
 	ld xbc, 0x16
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	add xhl, (xsp + 4)
 	ld xhl, (xhl)
 	jrl LABEL_FA5862
 	ld wa, (xsp + 22)
 	extz xwa
 	ld xbc, 0x16
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	add xhl, (xsp + 4)
 	ld xhl, (xhl + 4)
 	jrl LABEL_FA5862
 	ld wa, (xsp + 22)
 	extz xwa
 	ld xbc, 0x16
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	add xhl, (xsp + 4)
 	ld hl, (xhl + 8)
 	exts xhl
@@ -253209,7 +253209,7 @@ LABEL_FA4FF9:
 	ld wa, (xsp + 22)
 	extz xwa
 	ld xbc, 0x16
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	add xhl, (xsp + 4)
 	ld xhl, (xhl + 10)
 	jrl LABEL_FA5862
@@ -253243,7 +253243,7 @@ LABEL_FA5053:
 	ld wa, (xsp + 22)
 	extz xwa
 	ld xbc, 0x16
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	add xhl, (xsp + 4)
 	ld xwa, (xhl + 4)
 	cp xwa, 0xFFFFFFFF
@@ -253271,13 +253271,13 @@ LABEL_FA50B1:
 	extz xiz
 	ld xwa, xiz
 	ld xbc, 0x16
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	add xhl, (xsp + 4)
 	ld xwa, xiz
 	cpw (xhl + 18), 0xFFFF
 	jrl z, LABEL_FA518C
 	ld xbc, 0x16
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	add xhl, (xsp + 4)
 	ld wa, (xhl + 18)
 	exts xwa
@@ -253307,7 +253307,7 @@ LABEL_FA50B1:
 	ld wa, (xsp + 12)
 	extz xwa
 	ld xbc, 0x16
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	add xhl, (xsp + 4)
 	ld xbc, (xsp + 18)
 	ld wa, bc
@@ -253334,7 +253334,7 @@ LABEL_FA50B1:
 	ld wa, (xsp + 12)
 	extz xwa
 	ld xbc, 0x16
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	add xhl, (xsp + 4)
 	ld xwa, (xsp + 8)
 	ld (xhl + 18), wa
@@ -253348,7 +253348,7 @@ LABEL_FA518C:
 	ld wa, (xsp + 22)
 	extz xwa
 	ld xbc, 0x16
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	add xhl, (xsp + 4)
 	ld xwa, (xhl + 4)
 	cp xwa, 0xFFFFFFFF
@@ -253383,7 +253383,7 @@ LABEL_FA51CE:
 	ld wa, (xsp + 12)
 	extz xwa
 	ld xbc, 0x16
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	add xhl, (xsp + 4)
 	ld32_24 xwa, 0x03ef8a
 	ld (xhl + 20), wa
@@ -253421,7 +253421,7 @@ LABEL_FA523F:
 	ld wa, (xsp + 12)
 	extz xwa
 	ld xbc, 0x16
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	add xhl, (xsp + 4)
 	lda xbc, (xhl + 18)
 	ld wa, (xbc)
@@ -253440,13 +253440,13 @@ LABEL_FA523F:
 	ld wa, (xsp + 12)
 	extz xwa
 	ld xbc, 0x16
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	add xhl, (xsp + 4)
 	ldw (xhl + 18), 0xFFFF
 	ld wa, (xsp + 12)
 	extz xwa
 	ld xbc, 0x16
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	ld xwa, xhl
 	add xwa, (xsp + 4)
 	ldw (xwa + 20), 0xFFFF
@@ -253472,7 +253472,7 @@ LABEL_FA523F:
 	ld wa, (xsp + 12)
 	extz xwa
 	ld xbc, 0x16
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	add xhl, (xsp + 4)
 	ldw (xhl + 20), 0xFFFF
 	ld16_24 xwa, 0x02bc32
@@ -253487,7 +253487,7 @@ LABEL_FA523F:
 	ld wa, (xsp + 12)
 	extz xwa
 	ld xbc, 0x16
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	add xhl, (xsp + 4)
 	cpw (xhl + 18), 0xFFFF
 	jrl nz, LABEL_FA5853
@@ -253498,7 +253498,7 @@ LABEL_FA5374:
 	ld wa, (xsp + 22)
 	extz xwa
 	ld xbc, 0x16
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	add xhl, (xsp + 4)
 	lda xbc, (xhl + 14)
 	ld xwa, (xbc)
@@ -253515,7 +253515,7 @@ LABEL_FA539C:
 	ld wa, (xsp + 22)
 	extz xwa
 	ld xbc, 0x16
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	add xhl, (xsp + 4)
 	ld xwa, (xsp + 30)
 	ld (xhl + 14), xwa
@@ -253525,7 +253525,7 @@ LABEL_FA53B6:
 	ld wa, (xsp + 22)
 	extz xwa
 	ld xbc, 0x16
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	add xhl, (xsp + 4)
 	cpw (xhl + 18), 0xFFFF
 	jrl z, LABEL_FA5853
@@ -253544,7 +253544,7 @@ LABEL_FA53EE:
 	ld wa, (xsp + 22)
 	extz xwa
 	ld xbc, 0x16
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	add xhl, (xsp + 4)
 	cpw (xhl + 18), 0xFFFF
 	jrl z, LABEL_FA5853
@@ -253564,7 +253564,7 @@ LABEL_FA542A:
 	ld wa, (xsp + 22)
 	extz xwa
 	ld xbc, 0x16
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	add xhl, (xsp + 4)
 	cpw (xhl + 18), 0xFFFF
 	jrl z, LABEL_FA5853
@@ -253604,7 +253604,7 @@ LABEL_FA5496:
 	ld wa, (xsp + 22)
 	extz xwa
 	ld xbc, 0x16
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	add xhl, (xsp + 4)
 	cpw (xhl + 18), 0xFFFF
 	jrl z, LABEL_FA5853
@@ -253625,7 +253625,7 @@ LABEL_FA54C9:
 	ld wa, (xsp + 22)
 	extz xwa
 	ld xbc, 0x16
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	add xhl, (xsp + 4)
 	cpw (xhl + 18), 0xFFFF
 	jr z, LABEL_FA54FF
@@ -253647,7 +253647,7 @@ LABEL_FA5508:
 	ld wa, (xsp + 22)
 	extz xwa
 	ld xbc, 0x16
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	add xhl, (xsp + 4)
 	cpw (xhl + 18), 0xFFFF
 	jr z, LABEL_FA5552
@@ -253689,7 +253689,7 @@ LABEL_FA556A:
 	ld wa, (xsp + 22)
 	extz xwa
 	ld xbc, 0x16
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	add xhl, (xsp + 4)
 	cpw (xhl + 18), 0xFFFF
 	jr z, LABEL_FA55A0
@@ -253711,7 +253711,7 @@ LABEL_FA55A8:
 	ld wa, (xsp + 22)
 	extz xwa
 	ld xbc, 0x16
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	add xhl, (xsp + 4)
 	cpw (xhl + 18), 0xFFFF
 	jr z, LABEL_FA55F2
@@ -253745,7 +253745,7 @@ LABEL_FA55F7:
 	ld wa, (xsp + 22)
 	extz xwa
 	ld xbc, 0x16
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	add xhl, (xsp + 4)
 	cpw (xhl + 18), 0xFFFF
 	jr z, LABEL_FA567C
@@ -253773,7 +253773,7 @@ LABEL_FA564D:
 	ld wa, (xsp + 22)
 	extz xwa
 	ld xbc, 0x16
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	add xhl, (xsp + 4)
 	cpw (xhl + 18), 0xFFFF
 	jr z, LABEL_FA567C
@@ -253802,7 +253802,7 @@ LABEL_FA569C:
 	ld wa, (xsp + 22)
 	extz xwa
 	ld xbc, 0x16
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	add xhl, (xsp + 4)
 	cpw (xhl + 18), 0xFFFF
 	scc16 nz, hl
@@ -253910,7 +253910,7 @@ LABEL_FA57B1:
 	ld wa, (xsp + 22)
 	extz xwa
 	ld xbc, 0x16
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	add xhl, (xsp + 4)
 	ld xwa, (xhl)
 	ld xbc, xiz
@@ -253944,7 +253944,7 @@ LABEL_FA580A:
 	ld wa, (xsp + 22)
 	extz xwa
 	ld xbc, 0x16
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	add xhl, (xsp + 4)
 	ld xwa, (xhl)
 	ld xbc, xiz
@@ -263265,7 +263265,7 @@ LABEL_FAABBE:
 	jr le, LABEL_FAAC43
 	ld xwa, (xsp + 12)
 	ld xbc, (xsp + 24)
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	ld (xsp + 12), xhl
 	lda xwa, (xsp + 56)
 	ld (xsp + 40), xwa
@@ -263314,7 +263314,7 @@ LABEL_FAABFC:
 LABEL_FAAC43:
 	ld xwa, (xsp + 16)
 	ld xbc, (xsp + 28)
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	ld (xsp + 16), xhl
 	lda xwa, (xsp + 56)
 	ld (xsp + 40), xwa
@@ -263467,7 +263467,7 @@ LABEL_FAADB1:
 	jrl le, LABEL_FAAE55
 	ld xwa, (xsp + 12)
 	ld xbc, (xsp + 24)
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	ld (xsp + 12), xhl
 	ld xwa, (xsp + 40)
 	ld (xsp + 32), xwa
@@ -263525,7 +263525,7 @@ LABEL_FAADF0:
 LABEL_FAAE55:
 	ld xwa, (xsp + 16)
 	ld xbc, (xsp + 28)
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	ld (xsp + 16), xhl
 	ld xwa, (xsp + 40)
 	ld (xsp + 32), xwa
@@ -263826,7 +263826,7 @@ LABEL_FAB0E0:
 	ld xiz, xhl
 	ld xwa, (xsp + 12)
 	ld xbc, xiz
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	ld (xsp + 12), xhl
 	ld xbc, (xsp + 28)
 	ld xwa, xbc
@@ -263895,7 +263895,7 @@ LABEL_FAB198:
 	ld xiz, xhl
 	ld xwa, (xsp + 16)
 	ld xbc, xiz
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	ld (xsp + 16), xhl
 	ld xbc, (xsp + 28)
 	ld xwa, xbc
@@ -266501,7 +266501,7 @@ LABEL_FAC821:
 	ld (xsp + 20), xhl
 	ld xwa, xhl
 	ld xbc, xiz
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	pushw hl
 	call Malloc
 	inc 2, xsp
@@ -266539,7 +266539,7 @@ LABEL_FAC8B6:
 	ld xbc, (xsp + 8)
 	dec 1, xbc
 	ld xwa, (xsp + 32)
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	ld (xsp + 32), xhl
 	add xhl, 0x56800
 	ld (xsp + 28), xhl
@@ -266588,7 +266588,7 @@ LABEL_FAC939:
 	push xwa
 	ld xwa, xiz
 	ld xbc, (xsp + 22)
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	add xhl, (xsp + 34)
 	push xhl
 	call 0xFF0D99
@@ -266603,7 +266603,7 @@ LABEL_FAC939:
 LABEL_FAC967:
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	ld xwa, 0x140
 	sub xwa, xhl
 	pushw wa
@@ -269632,7 +269632,7 @@ LABEL_FAE997:
 	ld (xsp + 18), xhl
 	ld xwa, xhl
 	ld xbc, (xsp + 30)
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	pushw hl
 	call Malloc
 	inc 2, xsp
@@ -269679,7 +269679,7 @@ LABEL_FAEA36:
 	ld xbc, (xsp + 2)
 	dec 1, xbc
 	ld xwa, (xsp + 30)
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	ld (xsp + 30), xhl
 	add xhl, 0x56800
 	ld (xsp + 22), xhl
@@ -269740,7 +269740,7 @@ LABEL_FAEACA:
 	push xwa
 	ld xwa, (xsp + 16)
 	ld xbc, (xsp + 20)
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	add xhl, (xsp + 28)
 	push xhl
 	call 0xFF0D99
@@ -269756,7 +269756,7 @@ LABEL_FAEACA:
 LABEL_FAEAFD:
 	ld xwa, (xsp + 10)
 	ld xbc, (xsp + 14)
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	ld xwa, 0x140
 	sub xwa, xhl
 	pushw wa
@@ -269833,7 +269833,7 @@ LABEL_FAEBA7:
 	ld wa, iz
 	extz xwa
 	ld xbc, (xsp + 24)
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	ld (xsp + 18), xhl
 	cpw (xsp + 22), 0x1
 	jr z, LABEL_FAEC4C
@@ -270044,7 +270044,7 @@ LABEL_FAEDA5:
 LABEL_FAEDB0:
 	ld xwa, xbc
 	ld xbc, 0xF4240
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	ld xwa, xhl
 	ld xbc, 0x13D620
 	call LABEL_FF0C0E
@@ -270176,7 +270176,7 @@ LABEL_FAEED1:
 	ld xbc, xwa
 	sub xbc, xde
 	ld xwa, xbc
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	ld (xsp + 24), xhl
 	ld xde, (xsp + 44)
 	and xde, 0xFF
@@ -270184,7 +270184,7 @@ LABEL_FAEED1:
 	and xbc, 0xFF
 	sub xbc, xde
 	ld xwa, xbc
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	ld (xsp + 20), xhl
 	ld xwa, (xsp + 24)
 	add (xsp + 20), xwa
@@ -270196,7 +270196,7 @@ LABEL_FAEED1:
 	srl xbc, 0
 	sub xbc, xwa
 	ld xwa, xbc
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	add xhl, (xsp + 20)
 	cp (xsp + 12), xhl
 	jr le, LABEL_FAEF68
@@ -301011,7 +301011,7 @@ LABEL_FC7DD8:
 	extz xiz
 	ld xwa, xiz
 	ld xbc, 0x2A2
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	add xhl, 0x99ECA0
 	ld xwa, xiz
 	sll xwa, 4
@@ -301034,7 +301034,7 @@ LABEL_FC7DD8:
 	ld wa, (xsp + 4)
 	extz xwa
 	ld xbc, 0x2A2
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	add xhl, 0x99ECA0
 	add xhl, 0x7C
 	st_dri3b W, 0xF9, 0x1E, 0x01
@@ -311112,7 +311112,7 @@ LABEL_FD2BD4:
 	ld xiz, xbc
 	add xiz, (xsp + 10)
 	ld xbc, 0x1A
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	add xhl, 0x34
 	add xhl, (xsp + 14)
 	ld xwa, xiz
@@ -311165,7 +311165,7 @@ LABEL_FD2C7E:
 	ld xiz, xbc
 	add xiz, (xsp + 10)
 	ld xbc, 0x1A
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	add xhl, 0x2F2
 	add xhl, (xsp + 14)
 	ld xwa, xiz
@@ -313086,7 +313086,7 @@ LABEL_FD46A4:
 	ld xiz, xbc
 	add xiz, (xsp + 10)
 	ld xbc, 0x1A
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	add xhl, 0x34
 	add xhl, (xsp + 14)
 	ld xwa, xiz
@@ -317014,7 +317014,7 @@ LABEL_FD749F:
 	or xbc, xbc
 	ret z
 	ld xwa, xde
-	call LABEL_FF0C18
+	call Math_DivideU32
 	sub xhl, 0x20
 	cpl hl
 	cpl_werp 0xEE
@@ -317036,7 +317036,7 @@ LABEL_FD74DE:
 	or xbc, xbc
 	ret z
 	ld xwa, xde
-	call LABEL_FF0C18
+	call Math_DivideU32
 	sub xhl, 0x20
 	cpl hl
 	cpl_werp 0xEE
@@ -319174,7 +319174,7 @@ LABEL_FD8C93:
 	calr LABEL_FD8B5C
 	jrl LABEL_FD8BA9
 
-LABEL_FD8CAE:
+SysEx_InitiateSend:
 	set 7, a
 	stda8 48380, a
 	bit 7, a
@@ -322713,7 +322713,7 @@ LABEL_FDB773:
 	call LABEL_EF2831
 	inc 6, xsp
 	ldfr_werp HL, 0xFA
-	call LABEL_FCF991
+	call MIDI_SC0_ENABLE_TX
 	jr LABEL_FDB7D5
 
 LABEL_FDB79C:
@@ -322843,7 +322843,7 @@ LABEL_FDB869:
 	call LABEL_EF281B
 	inc 2, xsp
 	ld (xsp + 2), hl
-	call LABEL_FCF991
+	call MIDI_SC0_ENABLE_TX
 
 LABEL_FDB896:
 	lds32 xwa, 1
@@ -322873,7 +322873,7 @@ LABEL_FDB8AD:
 	call LABEL_EF281B
 	inc 2, xsp
 	ld (xsp + 2), hl
-	call LABEL_FCF991
+	call MIDI_SC0_ENABLE_TX
 
 LABEL_FDB8CF:
 	lds32 xwa, 1
@@ -322992,7 +322992,7 @@ LABEL_FDB9B1:
 	call LABEL_EF2831
 	inc 6, xsp
 	ei 0
-	call LABEL_FCF991
+	call MIDI_SC0_ENABLE_TX
 	inc1_berp 0xFB
 	cp_erpb 0xFB, 0x0F
 	jr ule, LABEL_FDB9B1
@@ -323336,10 +323336,10 @@ LABEL_FDBCE8:
 	ldb w, 0x0
 	extz xwa
 	ld xbc, 0x1D4C0
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	ld xwa, xhl
 	ld xbc, xiz
-	call LABEL_FF0C18
+	call Math_DivideU32
 	pop xiz
 	ret
 
@@ -323350,13 +323350,13 @@ LABEL_FDBD04:
 	ldb w, 0x0
 	extz xwa
 	ld xbc, 0x1EF0
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	ld xwa, xhl
 	ld xbc, xiz
-	call LABEL_FF0C18
+	call Math_DivideU32
 	ld xbc, xhl
 	ld xwa, 0x7F00
-	call LABEL_FF0C18
+	call Math_DivideU32
 	pop xiz
 	ret
 
@@ -348462,7 +348462,7 @@ LABEL_FEC405:
 	ei 6
 	ld xwa, xiz
 	ld xbc, 0x60
-	call LABEL_FF0C18
+	call Math_DivideU32
 	stda16 1052, xhl
 	ldda16 xwa, 1052
 	extz xwa
@@ -348481,10 +348481,10 @@ LABEL_FEC478:
 	ld wa, (xsp + 4)
 	extz xwa
 	ld xbc, xiz
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	ld xwa, xhl
 	ld xbc, 0x60
-	call LABEL_FF0C18
+	call Math_DivideU32
 	ld xiz, xhl
 	pop xiz
 	inc 4, xsp
@@ -349076,7 +349076,7 @@ LABEL_FEC9F4:
 	ld bc, wa
 	extz xbc
 	ld xwa, 0x39387
-	call LABEL_FF0C18
+	call Math_DivideU32
 	ld xiz, xhl
 	ld xwa, 0x28
 	cp xiz, 0x28
@@ -354909,7 +354909,7 @@ LABEL_FF0A59:
 LABEL_FF0A5B:
 	ret
 
-LABEL_FF0A5C:
+Math_MultiplyAccumulate:
 	ldto_werp HL, 0xE2
 	mul xhl, xbc
 	ldto_werp DE, 0xE6
@@ -355103,7 +355103,7 @@ LABEL_FF0BD4:
 
 LABEL_FF0BE4:
 	pushw de
-	calr LABEL_FF0C18
+	calr Math_DivideU32
 	popw wa
 	cps w, 1
 	jr z, LABEL_FF0BF6
@@ -355135,11 +355135,11 @@ LABEL_FF0C0E:
 	jr LABEL_FF0BC3
 
 DivMod32:
-	calr LABEL_FF0C18
+	calr Math_DivideU32
 	ld xhl, xde
 	ret
 
-LABEL_FF0C18:
+Math_DivideU32:
 	cp xbc, 0x1
 	jr z, LABEL_FF0C51
 	jr c, LABEL_FF0C56
@@ -356868,7 +356868,7 @@ LABEL_FF194A:
 	ld (xwa), l
 	ld xwa, xiz
 	lda_dd8l XBC, 0x0A
-	call LABEL_FF0C18
+	call Math_DivideU32
 	ld xiz, xhl
 	or xiz, xiz
 	jr nz, LABEL_FF194A
@@ -356896,7 +356896,7 @@ LABEL_FF1989:
 	ld (xwa), l
 	ld xwa, xiz
 	lda_dd8l XBC, 0x0A
-	call LABEL_FF0C18
+	call Math_DivideU32
 	ld xiz, xhl
 	or xiz, xiz
 	jr nz, LABEL_FF1989
@@ -358627,7 +358627,7 @@ LABEL_FF2768:
 	ld wa, (xsp + 16)
 	exts xwa
 	ldada xbc, 301
-	call LABEL_FF0A5C
+	call Math_MultiplyAccumulate
 	ld xiz, xhl
 	cp xiz, 0x0
 	jr ge, LABEL_FF2790
@@ -358730,7 +358730,7 @@ LABEL_FF2827:
 LABEL_FF2848:
 	ld xwa, xiz
 	ld xbc, (xsp + 12)
-	call LABEL_FF0C18
+	call Math_DivideU32
 	ld xiz, xhl
 	or xiz, xiz
 	jr z, LABEL_FF285E

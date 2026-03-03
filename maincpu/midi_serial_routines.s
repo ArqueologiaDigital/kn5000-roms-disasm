@@ -8,7 +8,7 @@
 ;   INTTX0_HANDLER        - MIDI TX interrupt handler
 ;   INTRX0_HANDLER        - MIDI RX interrupt handler
 ;   READ_COM_SELECT_SWITCH - Reads COM port selection switch (MIDI/MAC/PC1/PC2)
-;   LABEL_FCF940          - SC0 serial port initialization
+;   SC0Init_EnableRegisters          - SC0 serial port initialization
 ;
 ; Hardware:
 ;   Serial Channel 0 (SC0) registers:
@@ -34,19 +34,19 @@ MIDI_INIT_SEQUENCES:
 	ld xwa, xbc
 	lda xbc, (xbc + 64)
 
-LABEL_FCF130:
+MidiInit_FillLoop:
 	stiw_dpi 0xE1, 0x00, 0x00
 	cp xwa, xbc
-	jr c, LABEL_FCF130
+	jr c, MidiInit_FillLoop
 	ret
 
-LABEL_FCF13A:
+MidiInit_Stub1:
 	ret
 
-LABEL_FCF13B:
+MidiInit_Stub2:
 	ret
 
-LABEL_FCF13C:
+MidiInit_Stub3:
 	ret
 
 INTRX0_CLEAR_ERROR_STATE:
@@ -65,65 +65,65 @@ INTTX0_HANDLER:	; FCF15B
 	pushw hl
 	ldda8 a, 1065
 	bit 0, a
-	jr nz, LABEL_FCF18B
+	jr nz, IntTx0_FlagBit0Branch
 	bit 4, a
-	jr nz, LABEL_FCF19C
+	jr nz, IntTx0_FlagBit4Branch
 	bit 1, a
-	jr nz, LABEL_FCF1A7
+	jr nz, IntTx0_FlagBit1Branch
 	bit 2, a
-	jr nz, LABEL_FCF1B8
+	jr nz, IntTx0_FlagBit2Branch
 	bit 3, a
-	jr z, LABEL_FCF1C9
+	jr z, IntTx0_DequeueAndSend
 	resda 3, 1065
 	bitda 4, 64848
-	jr nz, LABEL_FCF1A0
+	jr nz, IntTx0_SendHoldByte
 	stdi8 208, 252
-	jr LABEL_FCF1D7
+	jr IntTx0_CheckQueueEmpty
 
-LABEL_FCF18B:
+IntTx0_FlagBit0Branch:
 	resda 0, 1065
 	bitda 4, 64848
-	jr nz, LABEL_FCF1A0
+	jr nz, IntTx0_SendHoldByte
 	stdi8 208, 248
-	jr LABEL_FCF1D7
+	jr IntTx0_CheckQueueEmpty
 
-LABEL_FCF19C:
+IntTx0_FlagBit4Branch:
 	resda 4, 1065
 
-LABEL_FCF1A0:
+IntTx0_SendHoldByte:
 	stdi8 208, 254
-	jr LABEL_FCF1D7
+	jr IntTx0_CheckQueueEmpty
 
-LABEL_FCF1A7:
+IntTx0_FlagBit1Branch:
 	resda 1, 1065
 	bitda 4, 64848
-	jr nz, LABEL_FCF1A0
+	jr nz, IntTx0_SendHoldByte
 	stdi8 208, 250
-	jr LABEL_FCF1D7
+	jr IntTx0_CheckQueueEmpty
 
-LABEL_FCF1B8:
+IntTx0_FlagBit2Branch:
 	resda 2, 1065
 	bitda 4, 64848
-	jr nz, LABEL_FCF1A0
+	jr nz, IntTx0_SendHoldByte
 	stdi8 208, 251
-	jr LABEL_FCF1D7
+	jr IntTx0_CheckQueueEmpty
 
-LABEL_FCF1C9:
+IntTx0_DequeueAndSend:
 	call 0xEF280E
 	cp hl, 0xFFFF
-	jr z, LABEL_FCF1D7
+	jr z, IntTx0_CheckQueueEmpty
 	stda8 208, l
 
-LABEL_FCF1D7:
+IntTx0_CheckQueueEmpty:
 	ldda8 a, 1065
 	and a, 0x1F
-	jr nz, LABEL_FCF1ED
+	jr nz, IntTx0_Epilogue
 	call LABEL_EF2853
 	and hl, hl
-	jr nz, LABEL_FCF1ED
+	jr nz, IntTx0_Epilogue
 	stdi8 234, 253
 
-LABEL_FCF1ED:
+IntTx0_Epilogue:
 	popw hl
 	popw wa
 	reti
@@ -172,42 +172,42 @@ MIDI_RX_BYTE_DISPATCHER:
 	calr MIDI_RX_CONTEXT_RESTORE
 	ldda8 a, 47071
 	bit 7, a
-	jr z, LABEL_FCF289
+	jr z, RxDisp_DataByteDispatch
 	cp a, 0xF7
-	jr ule, LABEL_FCF245
+	jr ule, RxDisp_StatusByte
 	calr MIDI_SYSTEM_MESSAGE_HANDLER
-	jr LABEL_FCF28C
+	jr RxDisp_SaveContextAndReturn
 
-LABEL_FCF245:
+RxDisp_StatusByte:
 	stda8 1059, a
 	anddi8 1063, 189
 	bitda 0, 1074
-	jr z, LABEL_FCF28C
+	jr z, RxDisp_SaveContextAndReturn
 	bitda 1, 1074
-	jr z, LABEL_FCF271
+	jr z, RxDisp_ClearSysExState
 	cp a, 0xF7
-	jr nz, LABEL_FCF27D
+	jr nz, RxDisp_SysExError
 	bitda 5, 1074
-	jr nz, LABEL_FCF271
+	jr nz, RxDisp_ClearSysExState
 	pushw wa
 	call LABEL_EF28C9
 	inc 2, xsp
 	stdi8 1074, 4
 
-LABEL_FCF271:
+RxDisp_ClearSysExState:
 	stdi8 1059, 0
 	anddi8 1074, 204
-	jr LABEL_FCF28C
+	jr RxDisp_SaveContextAndReturn
 
-LABEL_FCF27D:
+RxDisp_SysExError:
 	stdi8 1074, 16
 	stdi8 1059, 0
-	jr LABEL_FCF28C
+	jr RxDisp_SaveContextAndReturn
 
-LABEL_FCF289:
+RxDisp_DataByteDispatch:
 	calr MIDI_CHANNEL_MESSAGE_DISPATCHER
 
-LABEL_FCF28C:
+RxDisp_SaveContextAndReturn:
 	calr MIDI_RX_CONTEXT_SAVE
 	pop xiz
 	pop xiy
@@ -220,222 +220,222 @@ LABEL_FCF28C:
 
 MIDI_SYSTEM_MESSAGE_HANDLER:
 	cp a, 0xFE
-	jr nz, LABEL_FCF2A1
+	jr nz, SysMsg_NotActiveSense
 	setda 7, 1063
 
-LABEL_FCF2A0:
+SysMsg_Return:
 	ret
 
-LABEL_FCF2A1:
+SysMsg_NotActiveSense:
 	bitda 4, 64848
-	jr nz, LABEL_FCF2A0
+	jr nz, SysMsg_Return
 	cp a, 0xFD
-	jr nc, LABEL_FCF2A0
+	jr nc, SysMsg_Return
 	bitda 6, 47074
-	jr nz, LABEL_FCF2A0
+	jr nz, SysMsg_Return
 	cpdi8 32523, 0
-	jr z, LABEL_FCF2CC
+	jr z, SysMsg_ClockTransportDispatch
 	cp a, 0xFA
-	jr nz, LABEL_FCF2C3
+	jr nz, SysMsg_CheckStop
 	call LABEL_F71E36
 	ret
 
-LABEL_FCF2C3:
+SysMsg_CheckStop:
 	cp a, 0xFC
-	jr nz, LABEL_FCF2CC
+	jr nz, SysMsg_ClockTransportDispatch
 	setda 0, 32565
 
-LABEL_FCF2CC:
+SysMsg_ClockTransportDispatch:
 	ld d, a
 	bitda 2, 64848
-	jrl z, LABEL_FCF5F9
+	jrl z, AltClk_DisabledClockPath
 	cp d, 0xF8
-	jr nz, LABEL_FCF342
+	jr nz, ClkTick_PerClockCounters
 	bitda 5, 10412
-	jr z, LABEL_FCF2E4
+	jr z, ClkTick_TempoThresholdCheck
 	incdi8 1, 1108
 
-LABEL_FCF2E4:
+ClkTick_TempoThresholdCheck:
 	ldda8 a, 1066
 	cp a, 0x70
-	jr ugt, LABEL_FCF301
+	jr ugt, ClkTick_HighTempoLoad
 	cps a, 4
-	jr ugt, LABEL_FCF2F7
+	jr ugt, ClkTick_MidRangeTempoMul
 	ldda16 xwa, 47064
-	jr LABEL_FCF305
+	jr ClkTick_WriteTimingReg
 
-LABEL_FCF2F7:
+ClkTick_MidRangeTempoMul:
 	extz xwa
 	xor w, w
 	muls_sd16w 0, 0xDA, 0xB7
-	jr LABEL_FCF305
+	jr ClkTick_WriteTimingReg
 
-LABEL_FCF301:
+ClkTick_HighTempoLoad:
 	ldda16 xwa, 47062
 
-LABEL_FCF305:
+ClkTick_WriteTimingReg:
 	stda16 146, xwa	; LD (TREG5L), WA
 	stdi8 1066, 0
 	bitda 0, 1055
-	jr z, LABEL_FCF319
+	jr z, ClkTick_BeatSubdivCheck
 	stdi8 1055, 6
 
-LABEL_FCF319:
+ClkTick_BeatSubdivCheck:
 	bitda 2, 1055
-	jr z, LABEL_FCF342
+	jr z, ClkTick_PerClockCounters
 	anddi8 1130, 252
 	incdi8 4, 1130
 	cpdi8 1130, 96
-	jr nz, LABEL_FCF342
+	jr nz, ClkTick_PerClockCounters
 	stdi8 1130, 0
 	incdi16 1, 1128
 	cpdi8 32523, 0
-	jr z, LABEL_FCF342
+	jr z, ClkTick_PerClockCounters
 	calr MIDI_QUEUE_TRACK_EVENT
 
-LABEL_FCF342:
+ClkTick_PerClockCounters:
 	ldda8 a, 1056
 	pushw wa
 	and a, 0x5
 	popw wa
-	jrl z, LABEL_FCF4DF
+	jrl z, Transport_NoClockSourcePath
 	cp d, 0xF8
-	jrl nz, LABEL_FCF48F
+	jrl nz, Transport_StopHandler
 	bit 0, a
-	jr z, LABEL_FCF377
+	jr z, ClkTick_Src2ClickIncrement
 	stdi8 1056, 6
 	bitda 0, 1054
-	jr z, LABEL_FCF369
+	jr z, ClkTick_Src1FineUpdate
 	stdi8 1054, 6
 
-LABEL_FCF369:
+ClkTick_Src1FineUpdate:
 	bitda 0, 1057
-	jr z, LABEL_FCF374
+	jr z, ClkTick_Src1CoarseUpdate
 	stdi8 1057, 6
 
-LABEL_FCF374:
-	jrl LABEL_FCF48F
+ClkTick_Src1CoarseUpdate:
+	jrl Transport_StopHandler
 
-LABEL_FCF377:
+ClkTick_Src2ClickIncrement:
 	bit 2, a
-	jr z, LABEL_FCF395
+	jr z, ClkTick_Src2FineBeatCheck
 	anddi8 1047, 252
 	incdi8 4, 1047
 	cpdi8 1047, 96
-	jr nz, LABEL_FCF395
+	jr nz, ClkTick_Src2FineBeatCheck
 	stdi8 1047, 0
 	incdi16 1, 1048
 
-LABEL_FCF395:
+ClkTick_Src2FineBeatCheck:
 	bitda 2, 1054
-	jr z, LABEL_FCF3EC
+	jr z, ClkTick_Src2ErrorDelta
 	anddi8 1045, 252
 	incdi8 4, 1045
 	cpdi8 1045, 96
-	jr nz, LABEL_FCF3EC
+	jr nz, ClkTick_Src2ErrorDelta
 	stdi8 1045, 0
 	incdi8 1, 1046
 	ldda8 a, 14235
 	and a, 0x1F
-	jr z, LABEL_FCF3C0
+	jr z, ClkTick_Src2CoarseOverflow
 	calr MIDI_QUEUE_TRACK_EVENT
 
-LABEL_FCF3C0:
+ClkTick_Src2CoarseOverflow:
 	ldda8 a, 1046
 	ldda8 w, 1075
 	ex_sd16b W, 0x58, 0x04
 	cp a, w
-	jr c, LABEL_FCF3EC
+	jr c, ClkTick_Src2ErrorDelta
 	stdi8 1046, 0
 	incdi8 1, 1076
 	incdi8 1, 1077
 	ldda8 a, 1077
 	cpda8 a, 13527
-	jr ule, LABEL_FCF3EC
+	jr ule, ClkTick_Src2ErrorDelta
 	stdi8 1077, 0
 
-LABEL_FCF3EC:
+ClkTick_Src2ErrorDelta:
 	ldda8 a, 1045
 	ld w, a
 	subda8 a, 1111
-	jr z, LABEL_FCF41D
-	jr ugt, LABEL_FCF3FD
+	jr z, ClkTick_Src3ClickCheck
+	jr ugt, ClkTick_Src2ErrorAccumulate
 	add a, 0x60
 
-LABEL_FCF3FD:
+ClkTick_Src2ErrorAccumulate:
 	stda8 1111, w
 	adddm8 1124, a
 	adddm8 1122, a
 	xor w, w
 	addda16 xwa, 1120
 	cp a, 0x60
-	jr c, LABEL_FCF419
+	jr c, ClkTick_Src2ErrorWriteback
 	sub a, 0x60
 	inc 1, w
 
-LABEL_FCF419:
+ClkTick_Src2ErrorWriteback:
 	stda16 1120, xwa
 
-LABEL_FCF41D:
+ClkTick_Src3ClickCheck:
 	bitda 2, 1057
-	jr z, LABEL_FCF48F
+	jr z, Transport_StopHandler
 	anddi8 1051, 252
 	incdi8 4, 1051
 	ldda8 a, 1051
 	bitda 0, 1073
-	jr z, LABEL_FCF452
+	jr z, ClkTick_Src3LowerSyncCheck
 	cpda8 a, 1071
-	jr nz, LABEL_FCF452
+	jr nz, ClkTick_Src3LowerSyncCheck
 	resda 0, 1073
 	stdi8 1054, 1
 	cpdi16 10410, 0
-	jr z, LABEL_FCF452
+	jr z, ClkTick_Src3LowerSyncCheck
 	ldb a, 0x85
 	calr MIDI_QUEUE_EVENT_PAIR
 
-LABEL_FCF452:
+ClkTick_Src3LowerSyncCheck:
 	bitda 3, 1073
-	jr z, LABEL_FCF474
+	jr z, ClkTick_Src3OverflowQueue
 	cpda8 a, 1072
-	jr nz, LABEL_FCF474
+	jr nz, ClkTick_Src3OverflowQueue
 	resda 3, 1073
 	stdi8 1054, 8
 	cpdi16 10410, 0
-	jr z, LABEL_FCF474
+	jr z, ClkTick_Src3OverflowQueue
 	ldb a, 0x86
 	calr MIDI_QUEUE_EVENT_PAIR
 
-LABEL_FCF474:
+ClkTick_Src3OverflowQueue:
 	cpdi8 1051, 96
-	jr nz, LABEL_FCF4DE
+	jr nz, Transport_Return
 	stdi8 1051, 0
 	incdi16 1, 1052
 	cpdi16 10410, 0
-	jr z, LABEL_FCF48F
+	jr z, Transport_StopHandler
 	calr MIDI_QUEUE_TRACK_EVENT
 
-LABEL_FCF48F:
+Transport_StopHandler:
 	bitda 2, 64850
-	jr z, LABEL_FCF4DE
+	jr z, Transport_Return
 	cp d, 0xFC
-	jr nz, LABEL_FCF4DE
+	jr nz, Transport_Return
 	stdi8 1056, 16
 	bitda 2, 1054
-	jr z, LABEL_FCF4C1
+	jr z, Transport_StopSrc3Snapshot
 	bitda 2, 1057
-	jr z, LABEL_FCF4AF
+	jr z, Transport_StopSrc1QueueEvent
 	setda 2, 13434
 
-LABEL_FCF4AF:
+Transport_StopSrc1QueueEvent:
 	stdi8 1054, 16
 	cpdi16 10410, 0
-	jr z, LABEL_FCF4C1
+	jr z, Transport_StopSrc3Snapshot
 	ldb a, 0x86
 	calr MIDI_QUEUE_EVENT_PAIR
 
-LABEL_FCF4C1:
+Transport_StopSrc3Snapshot:
 	bitda 2, 1057
-	jr z, LABEL_FCF4DE
+	jr z, Transport_Return
 	stdi8 1057, 16
 	pushw wa
 	ldda8 a, 1045
@@ -444,39 +444,39 @@ LABEL_FCF4C1:
 	stda8 1079, a
 	popw wa
 
-LABEL_FCF4DE:
+Transport_Return:
 	ret
 
-LABEL_FCF4DF:
+Transport_NoClockSourcePath:
 	bitda 2, 64850
-	jr z, LABEL_FCF4C1
+	jr z, Transport_StopSrc3Snapshot
 	bitda 2, 10407
-	jr nz, LABEL_FCF4F6
+	jr nz, Transport_NoClockReturn
 	cp d, 0xFA
-	jr z, LABEL_FCF50A
+	jr z, StartPlay_Body
 	cp d, 0xFB
-	jrl z, LABEL_FCF5BE
+	jrl z, Continue_SetRunning
 
-LABEL_FCF4F6:
+Transport_NoClockReturn:
 	ret
 
 MIDI_START_PLAYBACK_REQUEST:
 	cpdi16 61854, 0
-	jr z, LABEL_FCF509
+	jr z, StartPlay_Return
 	push_sr
 	ei 6
 	calr MIDI_RESET_PLAYBACK_STATE
 	calr MIDI_APPLY_STARTUP_TIMING
 	pop_sr
 
-LABEL_FCF509:
+StartPlay_Return:
 	ret
 
-LABEL_FCF50A:
+StartPlay_Body:
 	setda 5, 10412
 	stdi8 1108, 0
 	cpdi16 61854, 0
-	jr nz, LABEL_FCF56B
+	jr nz, ResetPlay_Return
 
 MIDI_RESET_PLAYBACK_STATE:
 	xor wa, wa
@@ -484,7 +484,7 @@ MIDI_RESET_PLAYBACK_STATE:
 	stda16 1048, xwa
 	stdi8 1056, 1
 	bitda 1, 10407
-	jr z, LABEL_FCF556
+	jr z, ResetPlay_Src3Check
 	stda8 1045, a
 	stda8 1046, a
 	stda8 1076, a
@@ -492,101 +492,101 @@ MIDI_RESET_PLAYBACK_STATE:
 	stdi8 1054, 1
 	resda 0, 10406
 	cpdi16 10410, 0
-	jr z, LABEL_FCF556
+	jr z, ResetPlay_Src3Check
 	ldb a, 0x85
 	calr MIDI_QUEUE_EVENT_PAIR
 
-LABEL_FCF556:
+ResetPlay_Src3Check:
 	bitda 0, 10407
-	jr z, LABEL_FCF56B
+	jr z, ResetPlay_Return
 	xor wa, wa
 	stda8 1051, a
 	stda16 1052, xwa
 	stdi8 1057, 1
 
-LABEL_FCF56B:
+ResetPlay_Return:
 	ret
 
 MIDI_APPLY_STARTUP_TIMING:
 	cpdi8 1108, 0
-	jr z, LABEL_FCF5B8
+	jr z, StartTiming_ClearAndReturn
 	bitda 0, 1056
-	jr z, LABEL_FCF5B8
+	jr z, StartTiming_ClearAndReturn
 	stdi8 1056, 6
 	ldda8 a, 1108
 	dec 1, a
 	sll a, 2
 	adddm8 1047, a
 	bitda 0, 1055
-	jr z, LABEL_FCF59A
+	jr z, StartTiming_Src1Adjust
 	stdi8 1055, 6
 	adddm8 1130, a
 
-LABEL_FCF59A:
+StartTiming_Src1Adjust:
 	bitda 0, 1054
-	jr z, LABEL_FCF5A9
+	jr z, StartTiming_Src2Adjust
 	stdi8 1054, 6
 	adddm8 1045, a
 
-LABEL_FCF5A9:
+StartTiming_Src2Adjust:
 	bitda 0, 1057
-	jr z, LABEL_FCF5B8
+	jr z, StartTiming_ClearAndReturn
 	stdi8 1057, 6
 	adddm8 1051, a
 
-LABEL_FCF5B8:
+StartTiming_ClearAndReturn:
 	stdi8 1108, 0
 	ret
 
-LABEL_FCF5BE:
+Continue_SetRunning:
 	stdi8 1056, 6
 	bitda 0, 10407
-	jr z, LABEL_FCF5F8
+	jr z, Continue_Return
 	stdi8 1057, 6
 	bitda 1, 10407
-	jr z, LABEL_FCF5F8
+	jr z, Continue_Return
 	bitda 0, 10406
-	jr nz, LABEL_FCF5E4
+	jr nz, Continue_ClearPositionAndSetSrc1
 	stdi8 1045, 0
 	stdi8 1046, 0
 
-LABEL_FCF5E4:
+Continue_ClearPositionAndSetSrc1:
 	stdi8 1076, 0
 	stdi8 1077, 0
 	anddi8 10406, 254
 	stdi8 1054, 6
 
-LABEL_FCF5F8:
+Continue_Return:
 	ret
 
-LABEL_FCF5F9:
+AltClk_DisabledClockPath:
 	stdi8 1066, 0
 	pushw wa
 	ldda8 a, 1056
 	and a, 0x5
 	popw wa
-	jr z, LABEL_FCF659
+	jr z, AltClk_NoSrcFlagPath
 	bitda 2, 64850
-	jr z, LABEL_FCF658
+	jr z, AltClk_Return
 	cp d, 0xFC
-	jr nz, LABEL_FCF658
+	jr nz, AltClk_Return
 	stdi8 1056, 12
 	bitda 2, 1054
-	jr z, LABEL_FCF63B
+	jr z, AltClk_StopSrc3Snapshot
 	bitda 2, 1057
-	jr z, LABEL_FCF629
+	jr z, AltClk_StopSrc1Queue
 	setda 2, 13434
 
-LABEL_FCF629:
+AltClk_StopSrc1Queue:
 	stdi8 1054, 12
 	cpdi16 10410, 0
-	jr z, LABEL_FCF63B
+	jr z, AltClk_StopSrc3Snapshot
 	ldb a, 0x86
 	calr MIDI_QUEUE_EVENT_PAIR
 
-LABEL_FCF63B:
+AltClk_StopSrc3Snapshot:
 	bitda 2, 1057
-	jr z, LABEL_FCF658
+	jr z, AltClk_Return
 	stdi8 1057, 12
 	pushw wa
 	ldda8 a, 1045
@@ -595,45 +595,45 @@ LABEL_FCF63B:
 	stda8 1079, a
 	popw wa
 
-LABEL_FCF658:
+AltClk_Return:
 	ret
 
-LABEL_FCF659:
+AltClk_NoSrcFlagPath:
 	bitda 2, 64850
-	jr z, LABEL_FCF66F
+	jr z, AltClk_NoMatchReturn
 	bitda 2, 10407
-	jr nz, LABEL_FCF66F
+	jr nz, AltClk_NoMatchReturn
 	cp d, 0xFA
-	jr z, LABEL_FCF670
+	jr z, AltClk_StartArmTx
 	cp d, 0xFB
-	jr z, LABEL_FCF67C
+	jr z, AltClk_ContinueArmTx
 
-LABEL_FCF66F:
+AltClk_NoMatchReturn:
 	ret
 
-LABEL_FCF670:
+AltClk_StartArmTx:
 	setda 1, 1065
 	stdi8 234, 221
-	jrl LABEL_FCF50A
+	jrl StartPlay_Body
 
-LABEL_FCF67C:
+AltClk_ContinueArmTx:
 	bitda 0, 10407
-	jr z, LABEL_FCF68E
+	jr z, AltClk_Src3DisabledReturn
 	setda 2, 1065
 	stdi8 234, 221
-	jrl LABEL_FCF5BE
+	jrl Continue_SetRunning
 
-LABEL_FCF68E:
+AltClk_Src3DisabledReturn:
 	ret
 
 MIDI_QUEUE_TRACK_EVENT:
 	bitda 0, 1113
-	jr nz, LABEL_FCF6BF
+	jr nz, QueueTrack_LinearBufWrite
 	pushw wa
 	ld xix, 0x1E753
 	ld wa, (xix - 2)
 	and wa, wa
-	jr z, LABEL_FCF6B7
+	jr z, QueueTrack_FifoWriteOrClear
 	ld hl, (xix - 4)
 	stib_dri 0x07, 0xF0, 0xEC, 0x81
 	minc1_16 hl, 0x7FF
@@ -641,12 +641,12 @@ MIDI_QUEUE_TRACK_EVENT:
 	ld (xix - 4), hl
 	ld (xix - 2), wa
 
-LABEL_FCF6B7:
+QueueTrack_FifoWriteOrClear:
 	popw wa
 	stdi16 1141, 0
 	ret
 
-LABEL_FCF6BF:
+QueueTrack_LinearBufWrite:
 	ld xix, 0x477
 	ldda16 xhl, 1141
 	stib_dri 0x07, 0xF0, 0xEC, 0x81
@@ -656,9 +656,9 @@ LABEL_FCF6BF:
 
 MIDI_QUEUE_EVENT_PAIR:
 	bitda 0, 1113
-	jr nz, LABEL_FCF713
+	jr nz, QueuePair_LinearBufWrite
 	cpdi16_24 124753, 2
-	jr c, LABEL_FCF70C
+	jr c, QueuePair_FifoFullReturn
 	push_sr
 	ei 6
 	ld xix, 0x1E753
@@ -672,11 +672,11 @@ MIDI_QUEUE_EVENT_PAIR:
 	decm 2, (xix - 2)
 	pop_sr
 
-LABEL_FCF70C:
+QueuePair_FifoFullReturn:
 	stdi16 1141, 0
 	ret
 
-LABEL_FCF713:
+QueuePair_LinearBufWrite:
 	ld xix, 0x477
 	ldda16 xhl, 1141
 	lda_dri3 XBC, 0x07, 0xF0, 0xEC
@@ -692,11 +692,11 @@ MIDI_CHANNEL_MESSAGE_DISPATCHER:
 	ldda8 a, 1059
 	ld d, a
 	bitda 0, 1074
-	jrl nz, LABEL_FCF849
+	jrl nz, SysEx_InProgressByte
 	bitda 6, 1063
-	jr nz, LABEL_FCF7AF
+	jr nz, ChanDisp_SysExInProgress
 	cps a, 0
-	jr z, LABEL_FCF781
+	jr z, ChanDisp_NoStatusReturn
 	and a, 0x70
 	srl a, 2
 	xor w, w
@@ -710,13 +710,13 @@ MIDI_CHANNEL_HANDLER_JUMP_TABLE:
 	.byte 0x00, 0xa8, 0xf7, 0xfc, 0x00, 0x00, 0xf8, 0xfc
 	.byte 0x00
 
-LABEL_FCF781:
+ChanDisp_NoStatusReturn:
 	ret
 
 MIDI_QUEUE_EVENT_TO_SEQUENCER:
 	ld xix, 0x1F37B
 	cpw (xix - 2), 0x3
-	jr c, LABEL_FCF79F
+	jr c, QueueToSeq_OverflowFlag
 	ld a, d
 	pushw wa
 	call 0xEF276D
@@ -726,36 +726,36 @@ MIDI_QUEUE_EVENT_TO_SEQUENCER:
 	inc 2, xsp
 	ret
 
-LABEL_FCF79F:
+QueueToSeq_OverflowFlag:
 	setda 2, 1063
 	incdi8 1, 47069
 	ret
 
-LABEL_FCF7A8:
+ChanDisp_QueueOverflow:
 	setda 6, 1063
 	ld c, e
 	ret
 
-LABEL_FCF7AF:
+ChanDisp_SysExInProgress:
 	bitda 1, 1063
-	jr z, LABEL_FCF7B7
+	jr z, ChanDisp_ThreeByteRoute
 	ldb d, 0xF2
 
-LABEL_FCF7B7:
+ChanDisp_ThreeByteRoute:
 	ld xix, 0x1F37B
 	cpw (xix - 2), 0x40
-	jr ugt, LABEL_FCF7D1
+	jr ugt, ChanDisp_EnqueueThreeBytes
 	pushw de
 	and d, 0xF0
 	cp d, 0x90
 	popw de
-	jr nz, LABEL_FCF7D1
+	jr nz, ChanDisp_EnqueueThreeBytes
 	cps e, 0
-	jr nz, LABEL_FCF7F6
+	jr nz, ChanDisp_NoteOnZeroReturn
 
-LABEL_FCF7D1:
+ChanDisp_EnqueueThreeBytes:
 	cpw (xix - 2), 0x4
-	jr c, LABEL_FCF7F7
+	jr c, ChanDisp_QueueOverflowSet
 	ld a, d
 	pushw wa
 	call 0xEF276D
@@ -769,10 +769,10 @@ LABEL_FCF7D1:
 	inc 2, xsp
 	anddi8 1063, 189
 
-LABEL_FCF7F6:
+ChanDisp_NoteOnZeroReturn:
 	ret
 
-LABEL_FCF7F7:
+ChanDisp_QueueOverflowSet:
 	setda 2, 1063
 	incdi8 1, 47069
 	ret
@@ -780,31 +780,31 @@ LABEL_FCF7F7:
 MIDI_SYSTEM_EXCLUSIVE_HANDLER:
 	stdi8 1059, 0
 	cp d, 0xF0
-	jr z, LABEL_FCF820
+	jr z, SysEx_StartByte
 	cp d, 0xF2
-	jr z, LABEL_FCF815
+	jr z, SysEx_SongPositionSetup
 	cp d, 0xF3
-	jr z, LABEL_FCF81D
+	jr z, SysEx_SongSelectQueue
 	ret
 
-LABEL_FCF815:
+SysEx_SongPositionSetup:
 	ordi8 1063, 66
 	ld c, e
 	ret
 
-LABEL_FCF81D:
+SysEx_SongSelectQueue:
 	jrl MIDI_QUEUE_EVENT_TO_SEQUENCER
 
-LABEL_FCF820:
+SysEx_StartByte:
 	stdi8 1074, 1
 	cp e, 0x50
-	jr z, LABEL_FCF834
+	jr z, SysEx_CaptureManufacturerId
 	cp e, 0x41
-	jr z, LABEL_FCF834
+	jr z, SysEx_CaptureManufacturerId
 	cp e, 0x7E
-	jr nz, LABEL_FCF848
+	jr nz, SysEx_Return
 
-LABEL_FCF834:
+SysEx_CaptureManufacturerId:
 	setda 1, 1074
 	ld a, d
 	pushw wa
@@ -814,19 +814,19 @@ LABEL_FCF834:
 	call LABEL_EF28C9
 	inc 2, xsp
 
-LABEL_FCF848:
+SysEx_Return:
 	ret
 
-LABEL_FCF849:
+SysEx_InProgressByte:
 	bitda 1, 1074
-	jr z, LABEL_FCF85C
+	jr z, SysEx_InProgressReturn
 	bitda 5, 1074
-	jr nz, LABEL_FCF85C
+	jr nz, SysEx_InProgressReturn
 	pushw de
 	call LABEL_EF28C9
 	inc 2, xsp
 
-LABEL_FCF85C:
+SysEx_InProgressReturn:
 	ret
 
 MIDI_RX_CONTEXT_RESTORE:
@@ -849,35 +849,35 @@ MIDI_RX_CONTEXT_SAVE:
 	stda32 1104, xiz
 	ret
 
-LABEL_FCF897:
+SC0Init_Entry:
 	resda 0, 47079
 	stdi8 47073, 0
-	calr LABEL_FCF91C
-	calr LABEL_FCF8B1
+	calr SC0Init_ClearContextSlots
+	calr SC0Init_StandardBaudTable
 	calr READ_COM_SELECT_SWITCH
 	call LABEL_FDBA02
-	calr LABEL_FCF940
+	calr SC0Init_EnableRegisters
 	ret
 
-LABEL_FCF8B1:
+SC0Init_StandardBaudTable:
 	call 0xEF0865
 	cps l, 4
-	jr z, LABEL_FCF8D8
+	jr z, SC0Init_AlternateBaudTable
 	stdi16 47060, 31250
 	stdi16 47062, 10416
 	stdi16 47064, 4166
 	stdi16 47066, 1000
 	stdi8 47068, 8	; BR0CR: clk=fc/4/8 = 500kHz (baudrate for MIDI ?!)
-	jr LABEL_FCF8F5
+	jr SC0Init_BaudTableReturn
 
-LABEL_FCF8D8:
+SC0Init_AlternateBaudTable:
 	stdi16 47060, 23437
 	stdi16 47062, 7812
 	stdi16 47064, 3125
 	stdi16 47066, 750
 	stdi8 47068, 6	; BR0CR: clk=fc/4/6 = 666.6kHz (baudrate for MIDI ?!)
 
-LABEL_FCF8F5:
+SC0Init_BaudTableReturn:
 	ret
 
 READ_COM_SELECT_SWITCH:	; FCF8F6
@@ -921,7 +921,7 @@ OFFSETS_FCF90C:
 	.byte 0x03	; PC2
 	.byte 0x00
 
-LABEL_FCF91C:
+SC0Init_ClearContextSlots:
 	stdi8 1080, 0
 	stdi8 1084, 0
 	stdi8 1088, 0
@@ -931,7 +931,7 @@ LABEL_FCF91C:
 	stdi8 1104, 0
 	ret
 
-LABEL_FCF940:
+SC0Init_EnableRegisters:
 	ei 6
 	stdi8 210, 41
 	stdi8 209, 0
@@ -942,14 +942,14 @@ LABEL_FCF940:
 	ei 0
 	ret
 
-LABEL_FCF961:
+SC0Init_PaddingStub:
 	ret
 
-LABEL_FCF962:
+MIDI_SC0_DISPATCH_TABLE:
 	.byte 0x97, 0xf8, 0xfc, 0x00, 0x61, 0xf9, 0xfc, 0x00
 	.byte 0x61, 0xf9, 0xfc, 0x00, 0x61, 0xf9, 0xfc, 0x00
 
-LABEL_FCF972:
+MIDI_SC0_TX_DISPATCH:
 	push xwa
 	push xbc
 	push xde
@@ -958,14 +958,14 @@ LABEL_FCF972:
 	push xiy
 	push xiz
 	cpdi8 47072, 0	; 000h means MIDI
-	jr nz, LABEL_FCF985
-	calr LABEL_FCF991
-	jr LABEL_FCF989
+	jr nz, SC0TxDisp_NonMidiPath
+	calr MIDI_SC0_ENABLE_TX
+	jr SC0TxDisp_RestoreAndReturn
 
-LABEL_FCF985:
+SC0TxDisp_NonMidiPath:
 	call LABEL_FDB903
 
-LABEL_FCF989:
+SC0TxDisp_RestoreAndReturn:
 	pop xiz
 	pop xiy
 	pop xix
@@ -975,19 +975,19 @@ LABEL_FCF989:
 	pop xwa
 	ret
 
-LABEL_FCF991:
+MIDI_SC0_ENABLE_TX:
 	push_sr
 	ei 6
 	cpdi8 1140, 85
-	jr z, LABEL_FCF9A2
+	jr z, SC0TxEnable_MidiActivePath
 	stdi8 234, 221
-	jr LABEL_FCF9AB
+	jr SC0TxEnable_Return
 
-LABEL_FCF9A2:
+SC0TxEnable_MidiActivePath:
 	call LABEL_EF286B
 	stdi8 1065, 0
 
-LABEL_FCF9AB:
+SC0TxEnable_Return:
 	pop_sr
 	ret
 
