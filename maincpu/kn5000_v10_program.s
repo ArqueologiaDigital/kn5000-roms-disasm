@@ -50085,7 +50085,7 @@ LABEL_EF4241:
 	lds32 xwa, 0
 	ld (xbc + 12), xwa
 	push xbc
-	call LABEL_F97CCA
+	call FDC_CommandEntry
 	lda xsp, (xsp + 20)
 	ret
 
@@ -50136,7 +50136,7 @@ LABEL_EF42D7:
 	ldada xwa, 1582
 	ldw (xwa), 0x3
 	push xwa
-	call LABEL_F97CCA
+	call FDC_CommandEntry
 	inc 4, xsp
 	cps hl, 0
 	jr z, LABEL_EF42FA
@@ -157947,7 +157947,7 @@ LABEL_F519A1:
 	ld (xsp + 12), xwa
 	lda xwa, (xsp)
 	push xwa
-	call LABEL_F97CCA
+	call FDC_CommandEntry
 	inc 4, xsp
 	lda xsp, (xsp + 16)
 	ret
@@ -158185,7 +158185,7 @@ LABEL_F51EAB:
 	calr LABEL_F51E5F
 	lda_24 xwa, 0xe45076
 	push xwa
-	call LABEL_F97CCA
+	call FDC_CommandEntry
 	inc 4, xsp
 	ldfr_berp L, 0xFB
 	cpi_berp 0xFB, 0
@@ -158199,7 +158199,7 @@ LABEL_F51EAB:
 LABEL_F51ED7:
 	lda_24 xwa, 0xe45056
 	push xwa
-	call LABEL_F97CCA
+	call FDC_CommandEntry
 	inc 4, xsp
 	ldfr_berp L, 0xFB
 	cpi_berp 0xFB, 0
@@ -158243,7 +158243,7 @@ LABEL_F51F0F:
 	ld (xsp + 36), xwa
 	lda xwa, (xsp + 24)
 	push xwa
-	call LABEL_F97CCA
+	call FDC_CommandEntry
 	lda xsp, (xsp + 22)
 	ldfr_berp L, 0xFB
 	cpi_berp 0xFB, 0
@@ -158280,7 +158280,7 @@ LABEL_F51F7C:
 	ld (xsp + 36), xwa
 	lda xwa, (xsp + 24)
 	push xwa
-	call LABEL_F97CCA
+	call FDC_CommandEntry
 	lda xsp, (xsp + 22)
 	ldfr_berp L, 0xFB
 	cpi_berp 0xFB, 0
@@ -158304,7 +158304,7 @@ LABEL_F51FE9:
 	ldw (xsp + 22), 0x3
 	lda xwa, (xsp + 14)
 	push xwa
-	call LABEL_F97CCA
+	call FDC_CommandEntry
 	lda xsp, (xsp + 12)
 	ldfr_berp L, 0xFB
 	cpi_berp 0xFB, 0
@@ -158328,7 +158328,7 @@ LABEL_F52026:
 	ldw (xsp + 22), 0x4
 	lda xwa, (xsp + 14)
 	push xwa
-	call LABEL_F97CCA
+	call FDC_CommandEntry
 	lda xsp, (xsp + 12)
 	ldfr_berp L, 0xFB
 	cpi_berp 0xFB, 0
@@ -158365,7 +158365,7 @@ LABEL_F52063:
 	ld (xsp + 36), xwa
 	lda xwa, (xsp + 24)
 	push xwa
-	call LABEL_F97CCA
+	call FDC_CommandEntry
 	lda xsp, (xsp + 22)
 	ldfr_berp L, 0xFB
 	cpi_berp 0xFB, 0
@@ -158389,7 +158389,7 @@ LABEL_F520D0:
 	ldw (xsp + 22), 0x6
 	lda xwa, (xsp + 14)
 	push xwa
-	call LABEL_F97CCA
+	call FDC_CommandEntry
 	lda xsp, (xsp + 12)
 	ldfr_berp L, 0xFB
 	cpi_berp 0xFB, 0
@@ -158413,7 +158413,7 @@ LABEL_F5210D:
 	ldw (xsp + 22), 0x7
 	lda xwa, (xsp + 14)
 	push xwa
-	call LABEL_F97CCA
+	call FDC_CommandEntry
 	lda xsp, (xsp + 12)
 	ldfr_berp L, 0xFB
 	cpi_berp 0xFB, 0
@@ -158448,7 +158448,7 @@ LABEL_F5214A:
 LABEL_F52180:
 	lda xwa, (xsp + 6)
 	push xwa
-	call LABEL_F97CCA
+	call FDC_CommandEntry
 	inc 4, xsp
 	ldfr_berp L, 0xFB
 	cpi_berp 0xFB, 0
@@ -158476,7 +158476,7 @@ LABEL_F521AC:
 LABEL_F521BF:
 	lda xwa, (xsp + 6)
 	push xwa
-	call LABEL_F97CCA
+	call FDC_CommandEntry
 	inc 4, xsp
 	ldfr_berp L, 0xFB
 	cpi_berp 0xFB, 0
@@ -158507,7 +158507,7 @@ LABEL_F521EB:
 	ld (xsp + 18), xwa
 	lda xwa, (xsp + 6)
 	push xwa
-	call LABEL_F97CCA
+	call FDC_CommandEntry
 	inc 4, xsp
 	ldfr_berp L, 0xFB
 	cpi_berp 0xFB, 0
@@ -158533,7 +158533,7 @@ LABEL_F5223E:
 	ld (xsp + 18), xwa
 	lda xwa, (xsp + 6)
 	push xwa
-	call LABEL_F97CCA
+	call FDC_CommandEntry
 	ldfr_berp L, 0xFB
 	ld xwa, (xsp + 6)
 	push xwa
@@ -158562,7 +158562,7 @@ LABEL_F52291:
 	calr LABEL_F51E5F
 	lda_24 xwa, 0xe45096
 	push xwa
-	call LABEL_F97CCA
+	call FDC_CommandEntry
 	inc 4, xsp
 	ldfr_berp L, 0xFB
 	cpi_berp 0xFB, 0
@@ -158576,7 +158576,7 @@ LABEL_F52291:
 LABEL_F522BD:
 	lda_24 xwa, 0xe45056
 	push xwa
-	call LABEL_F97CCA
+	call FDC_CommandEntry
 	inc 4, xsp
 	ldfr_berp L, 0xFB
 	cpi_berp 0xFB, 0
@@ -158620,7 +158620,7 @@ LABEL_F522F5:
 	ld (xsp + 36), xwa
 	lda xwa, (xsp + 24)
 	push xwa
-	call LABEL_F97CCA
+	call FDC_CommandEntry
 	lda xsp, (xsp + 22)
 	ldfr_berp L, 0xFB
 	cpi_berp 0xFB, 0
@@ -158657,7 +158657,7 @@ LABEL_F52362:
 	ld (xsp + 36), xwa
 	lda xwa, (xsp + 24)
 	push xwa
-	call LABEL_F97CCA
+	call FDC_CommandEntry
 	lda xsp, (xsp + 22)
 	ldfr_berp L, 0xFB
 	cpi_berp 0xFB, 0
@@ -158685,7 +158685,7 @@ LABEL_F523CF:
 LABEL_F523E6:
 	lda xwa, (xsp + 6)
 	push xwa
-	call LABEL_F97CCA
+	call FDC_CommandEntry
 	inc 4, xsp
 	ldfr_berp L, 0xFB
 	cpi_berp 0xFB, 0
@@ -158727,7 +158727,7 @@ LABEL_F52412:
 	ld (xsp + 36), xwa
 	lda xwa, (xsp + 24)
 	push xwa
-	call LABEL_F97CCA
+	call FDC_CommandEntry
 	lda xsp, (xsp + 22)
 	ldfr_berp L, 0xFB
 	cpi_berp 0xFB, 0
@@ -158755,7 +158755,7 @@ LABEL_F52486:
 LABEL_F5249D:
 	lda xwa, (xsp + 6)
 	push xwa
-	call LABEL_F97CCA
+	call FDC_CommandEntry
 	inc 4, xsp
 	ldfr_berp L, 0xFB
 	cpi_berp 0xFB, 0
@@ -158780,7 +158780,7 @@ LABEL_F524C9:
 	ldw (xsp + 14), 0x1
 	lda xwa, (xsp + 6)
 	push xwa
-	call LABEL_F97CCA
+	call FDC_CommandEntry
 	inc 4, xsp
 	ldfr_berp L, 0xFB
 	cpi_berp 0xFB, 0
@@ -158808,7 +158808,7 @@ LABEL_F52503:
 LABEL_F5251A:
 	lda xwa, (xsp + 6)
 	push xwa
-	call LABEL_F97CCA
+	call FDC_CommandEntry
 	inc 4, xsp
 	ldfr_berp L, 0xFB
 	cpi_berp 0xFB, 0
@@ -158839,7 +158839,7 @@ LABEL_F52546:
 	ld (xsp + 18), xwa
 	lda xwa, (xsp + 6)
 	push xwa
-	call LABEL_F97CCA
+	call FDC_CommandEntry
 	inc 4, xsp
 	ldfr_berp L, 0xFB
 	cpi_berp 0xFB, 0
@@ -158865,7 +158865,7 @@ LABEL_F52599:
 	ld (xsp + 18), xwa
 	lda xwa, (xsp + 6)
 	push xwa
-	call LABEL_F97CCA
+	call FDC_CommandEntry
 	ldfr_berp L, 0xFB
 	ld xwa, (xsp + 6)
 	push xwa
@@ -158927,7 +158927,7 @@ LABEL_F5261C:
 LABEL_F52657:
 	lda_24 xwa, 0xe450a6
 	push xwa
-	call LABEL_F97CCA
+	call FDC_CommandEntry
 	inc 4, xsp
 	cps hl, 0
 	jr z, LABEL_F5266D
@@ -158937,7 +158937,7 @@ LABEL_F52657:
 LABEL_F5266D:
 	lda_24 xwa, 0xe45096
 	push xwa
-	call LABEL_F97CCA
+	call FDC_CommandEntry
 	inc 4, xsp
 	cps hl, 0
 	jr z, LABEL_F52683
@@ -158947,7 +158947,7 @@ LABEL_F5266D:
 LABEL_F52683:
 	lda xwa, (xsp + 6)
 	push xwa
-	call LABEL_F97CCA
+	call FDC_CommandEntry
 	inc 4, xsp
 	cps hl, 0
 	jr nz, LABEL_F526D4
@@ -158983,7 +158983,7 @@ LABEL_F526CF:
 LABEL_F526D4:
 	lda_24 xwa, 0xe45076
 	push xwa
-	call LABEL_F97CCA
+	call FDC_CommandEntry
 	inc 4, xsp
 	cps hl, 0
 	jr z, LABEL_F526E9
@@ -158993,7 +158993,7 @@ LABEL_F526D4:
 LABEL_F526E9:
 	lda xwa, (xsp + 6)
 	push xwa
-	call LABEL_F97CCA
+	call FDC_CommandEntry
 	inc 4, xsp
 	cps hl, 0
 	jr nz, LABEL_F5272E
@@ -159997,7 +159997,7 @@ LABEL_F53034:
 	ld (xsp + 16), xwa
 	lda xwa, (xsp + 4)
 	push xwa
-	call LABEL_F97CCA
+	call FDC_CommandEntry
 	inc 4, xsp
 	pop xiz
 	lda xsp, (xsp + 22)
@@ -160133,7 +160133,7 @@ LABEL_F531B0:
 	ldw (xsp + 6), 0xE0
 	lda xwa, (xsp)
 	push xwa
-	call LABEL_F97CCA
+	call FDC_CommandEntry
 	inc 4, xsp
 	lda xsp, (xsp + 16)
 	ret
@@ -160143,7 +160143,7 @@ LABEL_F531CF:
 	ldw (xsp + 256), 0x7
 	lda xwa, (xsp)
 	push xwa
-	call LABEL_F97CCA
+	call FDC_CommandEntry
 	lda xsp, (xsp + 20)
 	ret
 

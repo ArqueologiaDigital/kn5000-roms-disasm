@@ -26,6 +26,10 @@ FDC_Read_Data:
 	ld8_24 l, 0x11000a
 	ret
 
+; --- FDC_Send_Command: Write command byte to FDC data register ---
+; Stores accumulator A to FDC data port (0x110008),
+; waits for FDC ready via status register polling,
+; then returns. Uses (R+d16) addressing for FDC port access.
 FDC_Send_Command:
 	.byte 0xf2, 0x08, 0x00, 0x11, 0x41, 0x0e, 0xc1, 0x22
 	.byte 0x8b, 0x19, 0x20, 0x8b, 0xf1, 0x22, 0x8b, 0x41
@@ -35,6 +39,14 @@ FDC_Write_Data:
 	st8_24 0x11000a, a
 	ret
 
+; --- FDC_WaitReady: Wait for FDC ready with timeout and DMA transfer ---
+; Two-phase wait loop (masks 0x1F and 0x90) checking FDC status register.
+; Uses prevbank (D7 FA) for timeout flag management.
+; Contains 7-entry command dispatch (commands 0-5 + default):
+;   Each entry: stdi8 35436, N; calr <handler>; stdi16 35362, 0
+; Handles DMA channel setup, result status checking, and retry logic.
+; Timeout limit: 500 timer ticks (checked against timer at address 1033).
+; Uses (R+d16) addressing extensively for FDC port and state variable access.
 FDC_WaitReady:
 	.byte 0x3e, 0xd1, 0x09, 0x04, 0x26, 0xd7, 0xfa, 0x03
 	.byte 0x80, 0x00, 0xd7, 0xfa, 0xcf, 0x80, 0x00, 0x6e
@@ -462,7 +474,7 @@ FDC_Wait_Ready_Timeout:
 	ldda16 xiz, 1033
 	ldi_erpw 0xFA, 0x80, 0x00
 	cp_erpw 0xFA, 0x80, 0x00
-	jr nz, LABEL_F97107
+	jr nz, FDC_WaitReady_TimedOut
 
 FDC_WaitReady_StatusLoop:
 	calr FDC_Read_Status
@@ -485,7 +497,7 @@ FDC_WaitReady_LoopContinue:
 	cp_erpw 0xFA, 0x80, 0x00
 	jr z, FDC_WaitReady_StatusLoop
 
-LABEL_F97107:
+FDC_WaitReady_TimedOut:
 	cpi_werp 0xFA, 0
 	jr z, FDC_WaitReady_Complete
 	lds wa, 2
@@ -501,18 +513,18 @@ FDC_Wait_Status_Timeout:
 	ldda16 xiz, 1033
 	ldi_erpw 0xFA, 0x80, 0x00
 	cp_erpw 0xFA, 0x80, 0x00
-	jr nz, LABEL_F9714F
+	jr nz, FDC_WaitStatus_TimedOut
 
 FDC_WaitStatus_StatusLoop:
 	calr FDC_Read_Status
 	and l, 0xE0
 	cp l, 0x80
-	jr z, LABEL_F97137
+	jr z, FDC_WaitStatus_CheckTimeout
 	cp l, 0xC0
-	jr nz, LABEL_F97137
+	jr nz, FDC_WaitStatus_CheckTimeout
 	ldi_werp 0xFA, 0
 
-LABEL_F97137:
+FDC_WaitStatus_CheckTimeout:
 	ldda16 xwa, 1033
 	sub wa, iz
 	cp wa, 0x1F4
@@ -523,18 +535,27 @@ FDC_WaitStatus_TimeoutCheck:
 	cp_erpw 0xFA, 0x80, 0x00
 	jr z, FDC_WaitStatus_StatusLoop
 
-LABEL_F9714F:
+FDC_WaitStatus_TimedOut:
 	cpi_werp 0xFA, 0
-	jr z, LABEL_F97159
+	jr z, FDC_WaitStatus_Complete
 	lds wa, 2
 	calr FDC_Set_Status
 
-LABEL_F97159:
+FDC_WaitStatus_Complete:
 	pop xiz
 	ret
 
 
-LABEL_F9715B:
+; --- FDC_ResultPhase_Read: Read FDC result phase data into buffer ---
+; Reads FDC status register in a loop, checking top 2 bits:
+;   0xC0 = command complete, 0x80 = data ready for transfer.
+; When data ready, reads byte from FDC and stores to buffer at 35424[index].
+; Includes timeout checking against timer at address 1033.
+; Contains 6 parameter-passing wrapper stubs at the end, each:
+;   dec 2,xsp / ld (xsp),a / calr <func> / ld a,(xsp) / extz wa /
+;   calr <store> / inc 2,xsp / ret
+; Uses (R+d16) and dec/inc xsp addressing (not in LLVM).
+FDC_ResultPhase_Read:
 	.byte 0xef, 0x6a, 0x3e, 0xbf, 0x04, 0x16, 0x09, 0x04
 	.byte 0xd7, 0xfa, 0x03, 0x80, 0x00, 0xd7, 0xfa, 0xcf
 	.byte 0x80, 0x00, 0x6e, 0x53, 0x1e, 0xa1, 0xf9, 0xcf
@@ -571,79 +592,79 @@ FDC_Exception_Status_Decoder:
 	ld a, c
 	and a, 0xC0
 	cp a, 0x40
-	jr z, LABEL_F9726A
+	jr z, FDC_StatusDecode_AbnormalTerm
 	cp a, 0x80
-	jr z, LABEL_F97267
+	jr z, FDC_StatusDecode_InvalidCommand
 	cp a, 0xC0
-	jr z, LABEL_F9725F
+	jr z, FDC_StatusDecode_DriveNotReady
 	cps a, 0
-	jr nz, LABEL_F972C5
+	jr nz, FDC_StatusDecode_UnknownIC
 	ldb l, 0x0
 	ret
 
-LABEL_F9725F:
+FDC_StatusDecode_DriveNotReady:
 	stdi8 35584, 255
 	ldb l, 0x0
 	ret
 
-LABEL_F97267:
+FDC_StatusDecode_InvalidCommand:
 	ldb l, 0x0
 	ret
 
-LABEL_F9726A:
+FDC_StatusDecode_AbnormalTerm:
 	bit 3, c
-	jr z, LABEL_F97272
+	jr z, FDC_StatusDecode_Overrun
 	ldb l, 0x31
 	ret
 
-LABEL_F97272:
+FDC_StatusDecode_Overrun:
 	bit 4, c
-	jr z, LABEL_F9727A
+	jr z, FDC_StatusDecode_CheckST2
 	ldb l, 0x32
 	ret
 
-LABEL_F9727A:
+FDC_StatusDecode_CheckST2:
 	ld c, (xde + 2)
 	bit 0, c
-	jr z, LABEL_F97288
+	jr z, FDC_StatusDecode_BadCylinder
 	ldw wa, 0x35
 	jrl FDC_Set_Status
 
-LABEL_F97288:
+FDC_StatusDecode_BadCylinder:
 	bit 1, c
-	jr z, LABEL_F97293
+	jr z, FDC_StatusDecode_WrongCylinder
 	ldw wa, 0x2F
 	jrl FDC_Set_Status
 
-LABEL_F97293:
+FDC_StatusDecode_WrongCylinder:
 	bit 2, c
-	jr z, LABEL_F9729E
+	jr z, FDC_StatusDecode_ScanEqual
 	ldw wa, 0x33
 	jrl FDC_Set_Status
 
-LABEL_F9729E:
+FDC_StatusDecode_ScanEqual:
 	bit 4, c
-	jr z, LABEL_F972A9
+	jr z, FDC_StatusDecode_DataFieldError
 	ldw wa, 0x34
 	jrl FDC_Set_Status
 
-LABEL_F972A9:
+FDC_StatusDecode_DataFieldError:
 	bit 5, c
-	jr z, LABEL_F972B4
+	jr z, FDC_StatusDecode_ControlMark
 	ldw wa, 0x36
 	jrl FDC_Set_Status
 
-LABEL_F972B4:
+FDC_StatusDecode_ControlMark:
 	bit 7, c
-	jr z, LABEL_F972BF
+	jr z, FDC_StatusDecode_DefaultError
 	ldw wa, 0x37
 	jrl FDC_Set_Status
 
-LABEL_F972BF:
+FDC_StatusDecode_DefaultError:
 	ldw wa, 0x8
 	jrl FDC_Set_Status
 
-LABEL_F972C5:
+FDC_StatusDecode_UnknownIC:
 	ldb l, 0x8
 	ret
 
@@ -651,7 +672,18 @@ LABEL_F972C5:
 ;==================== (guessed) start of floppy routines =======================
 
 
-LABEL_F972C8:
+; --- FDC_HardwareSetup: Configure FDC I/O ports and validate parameters ---
+; Section 1: I/O register initialization (3x ldio/mask/set/store sequences)
+;   for FDC-related I/O port configuration.
+; Section 2: Format type validation - cascading cp/jr checks against
+;   format codes (0x33, 0x34, 0x35, 0x36, 0x47, 0x4F, etc.).
+; Section 3: Format parameter loading - sector size, head count,
+;   track count from memory locations 35369-35386.
+; Section 4: DMA parameter validation - checks that sector count,
+;   byte count, buffer pointers are non-zero before proceeding.
+; Returns: HL=0xFFFF on failure, 0 on success.
+; Uses ldio, (R+d16) addressing. 460 bytes.
+FDC_HardwareSetup:
 	.byte 0x08, 0xf8, 0x0b, 0xf0, 0xe0, 0x31, 0x81, 0x21
 	.byte 0xc9, 0xcc, 0xf8, 0xc9, 0x31, 0x02, 0xb1, 0x41
 	.byte 0x08, 0xf8, 0x28, 0xf0, 0xed, 0x31, 0x81, 0x21
@@ -748,34 +780,39 @@ LABEL_F972C8:
 
 FDC_Set_Status:
 	cpdi8 35364, 0
-	jr nz, LABEL_F975D0
+	jr nz, FDC_SetStatus_AlreadySet
 	stda8 35364, a
 	cp a, 0x36
-	jr z, LABEL_F975CD
+	jr z, FDC_SetStatus_DataFieldErr
 	cp a, 0x35
-	jr z, LABEL_F975CA
+	jr z, FDC_SetStatus_MissingAddrMark
 	cp a, 0x33
-	jr nz, LABEL_F975D1
+	jr nz, FDC_SetStatus_Return
 	nop
-	jr LABEL_F975D1
+	jr FDC_SetStatus_Return
 
-LABEL_F975CA:
+FDC_SetStatus_MissingAddrMark:
 	nop
-	jr LABEL_F975D1
+	jr FDC_SetStatus_Return
 
-LABEL_F975CD:
+FDC_SetStatus_DataFieldErr:
 	nop
-	jr LABEL_F975D1
+	jr FDC_SetStatus_Return
 
-LABEL_F975D0:
+FDC_SetStatus_AlreadySet:
 	nop
 
-LABEL_F975D1:
+FDC_SetStatus_Return:
 	ldda8 l, 35364
 	ret
 
 
-LABEL_F975D6:
+; --- FDC_ClearStatus_InitTimer: Clear FDC status and start timeout ---
+; Clears FDC status byte (35364) to 0, initializes result buffer (35424)
+; to 0xFF, saves prevbank state, starts timer-based timeout loop.
+; Polls with cps bc, 0 for completion signal.
+; Uses prevbank (D7 FA) for timer state management.
+FDC_ClearStatus_InitTimer:
 	.byte 0xf1, 0x24, 0x8a, 0x00, 0x00, 0x0e, 0xf1, 0x60
 	.byte 0x8a, 0x00, 0xff, 0x0e, 0x3e, 0xd7, 0xfa, 0x03
 	.byte 0xf4, 0x01, 0xd1, 0x09, 0x04, 0x26, 0xd9, 0xa8
@@ -793,30 +830,37 @@ SOME_DELAY:	; F97612
 	cp hl, 0xFFFF
 	ret nc
 
-LABEL_F97621:
+SOME_DELAY_Loop:
 	ldda16 xbc, 1033
 	sub bc, de
 	cp bc, wa
 	ret ugt
 	inc 1, hl
 	cp hl, 0xFFFF
-	jr c, LABEL_F97621
+	jr c, SOME_DELAY_Loop
 	ret
 
 
-LABEL_F97634:
+FDC_InitSequence_Short:
 	.byte 0x30, 0x28, 0x00, 0x68, 0xd9
 
-LABEL_F97639:
+FDC_InitSequence_Full:
 	calr FDC_Init_Sequence_1
 	calr FDC_Pulse_PH0
 	stdi8 35434, 0
 	stdi8 35584, 0
-	calr LABEL_F972C8
+	calr FDC_HardwareSetup
 	calr FDC_INIT
 	jrl FDC_CONFIG_VERIFY
 
-LABEL_F97652:
+; --- FDC_SeekRecalibrate: Seek/recalibrate FDC head position ---
+; Saves current head number via prevbank register.
+; Sets head = 5 (recalibrate parameter), sends FDC command,
+; checks result status. If error, retries with seek command.
+; Second section loads command byte 0xC6 (Read ID) for verification.
+; Contains error checking and retry logic with FDC_Set_Status calls.
+; Restores head number from prevbank on exit.
+FDC_SeekRecalibrate:
 	.byte 0xd7, 0xfa
 	.byte 0x04, 0xc1, 0x36, 0x8a, 0x21, 0xc7, 0xfb, 0x99
 	.byte 0xf1, 0x36, 0x8a, 0x00, 0x05, 0xf1, 0x04, 0x8b
@@ -836,6 +880,19 @@ LABEL_F97652:
 	.byte 0x00, 0xc6, 0x1e, 0x81, 0xf9, 0x1e, 0x08, 0xff
 	.byte 0x30, 0xc6, 0x00, 0x1e, 0x1f, 0xfc, 0xc1, 0x24
 	.byte 0x8a, 0x3f, 0x00, 0xb0, 0xfe, 0x78, 0xfe, 0xfe
+; --- FDC_CMD_EXEC: Main FDC command execution engine ---
+; Two nearly identical halves: READ path (command type 1) and
+; WRITE path (command type 8), set in state variable 35432.
+; Each path:
+;   1. Clears status, waits for FDC ready
+;   2. Sets up DMA: clear byte counter (35356), compute sector size
+;      (1024 or 512 based on format), configure DMA direction
+;   3. Sector loop: decrement sector count, advance track/head,
+;      check against max sectors (35596)
+;   4. Accumulates transferred sector count at 35402
+;   5. Error handling: sets error flag (35588=255) on failure
+; Tail calls format-specific routines and status verification.
+; Uses (R+d16) addressing for all FDC state variable access. 672 bytes.
 FDC_CMD_EXEC:
 	.byte 0x2e, 0x1e, 0x16, 0xfe, 0xdb, 0xd8, 0x66, 0x08
 	.byte 0xf1, 0x68, 0x8a, 0x00, 0x01, 0x78, 0x36, 0x01
@@ -921,6 +978,16 @@ FDC_CMD_EXEC:
 	.byte 0x00, 0xc5, 0x1e, 0xe1, 0xf6, 0x1e, 0x68, 0xfc
 	.byte 0x30, 0xc5, 0x00, 0x1e, 0x7f, 0xf9, 0xc1, 0x24
 	.byte 0x8a, 0x3f, 0x00, 0xb0, 0xfe, 0x78, 0x5e, 0xfc
+; --- FDC_MODE_CONFIG: Configure FDC format parameters by disk type ---
+; Reads format type from state variable 35436.
+; Dispatch by type: 0=default, 2=MFM, 3/4/5 = other formats.
+; Sets per-format parameters:
+;   35374: sectors per track (2 or 3)
+;   35379: bytes per sector code (80/108/116 = 128/256/512 bytes)
+;   35382: head number, 35371: track number, 35380: gap length (0xE5)
+;   35372: side number, 35369: drive number
+; Then enters sector counting/validation loop.
+; Uses (R+d16) addressing for all state variables. 184 bytes.
 FDC_MODE_CONFIG:
 	.byte 0x1e, 0x25, 0xfc, 0xc1, 0x24, 0x8a, 0x3f, 0x00
 	.byte 0x7e, 0xad, 0x00, 0x1e, 0xea, 0x02, 0xc1, 0x24
@@ -945,6 +1012,15 @@ FDC_MODE_CONFIG:
 	.byte 0x80, 0x61, 0x80, 0x21, 0xf1, 0x36, 0x8a, 0x41
 	.byte 0xf1, 0x12, 0x8a, 0x41, 0xc1, 0x36, 0x8a, 0x21
 	.byte 0xd8, 0x12, 0xd1, 0x08, 0x8b, 0xf0, 0x63, 0xbe
+; --- FDC_MC_EXIT: FORMAT command execution and sector fill ---
+; Calls cleanup, sets up FORMAT command (command byte 0x4D).
+; Loads format buffer address from 35440, stores to DMA source (35404).
+; Main loop fills format buffer with [track, head, sector, size] tuples:
+;   For each sector: load index, compute buffer[index] address,
+;   store track/head/sector/size bytes, increment byte count (35356).
+; Handles odd sector counts separately.
+; Tail: DMA transfer initiation and multi-sector retry logic.
+; Uses (R+d16) addressing for buffer and state access. 536 bytes.
 FDC_MC_EXIT:
 	.byte 0xc1, 0x24, 0x8a, 0x3f, 0x00, 0xf2, 0xd0, 0x6b
 	.byte 0xf9, 0xee, 0x1e, 0x09, 0xfc, 0xf1, 0x04, 0x8b
@@ -1013,12 +1089,24 @@ FDC_MC_EXIT:
 	.byte 0xde, 0xd8, 0x66, 0x09, 0x30, 0x0a, 0x00, 0x1e
 	.byte 0xcc, 0xf9, 0xde, 0x1c, 0xf7, 0x4e, 0x0e, 0xf0
 	.byte 0x28, 0xb3, 0x30, 0x0e, 0x00, 0x78, 0xa5, 0xf6
+; --- FDC_STATUS_COPY: Copy FDC status and validate drive count ---
+; Copies status from source to destination via (R+d16) load/store.
+; Validates drive count (35396): 0 or 1 are valid, else error 0xFE.
+; Three exit paths with disk-changed flag (35434) management:
+;   Set flag (35434=255) or clear flag (35434=0).
 FDC_STATUS_COPY:
 	.byte 0xc1, 0x26, 0x8a, 0x19, 0x24, 0x8a, 0x0e, 0xd1
 	.byte 0x44, 0x8a, 0x20, 0xd8, 0xd9, 0x66, 0x0d, 0xd8
 	.byte 0xd8, 0x6e, 0x02, 0x68, 0x0d, 0x30, 0xfe, 0x00
 	.byte 0x1e, 0x3e, 0xf9, 0x0e, 0xf1, 0x6a, 0x8a, 0x00
 	.byte 0xff, 0x0e, 0xf1, 0x6a, 0x8a, 0x00, 0x00, 0x0e
+; --- FDC_INTERRUPT_HANDLER: FDC interrupt service routine ---
+; Enables interrupts via prevbank (D7 FA 04 = ei 4).
+; Checks FDC status register, reads result data.
+; Tests status bits to determine result type:
+;   bit 7 → status 0x32 (overrun), bit 5 → status 0x31 (no data),
+;   bit 6 → status 0x2F (bad cylinder).
+; Disables interrupts (D7 FA 05 = di 4) before return.
 FDC_INTERRUPT_HANDLER:
 	.byte 0xd7, 0xfa, 0x04, 0xc1, 0x24, 0x8a, 0x3f, 0x00
 	.byte 0x6e, 0x40, 0xd8, 0xac, 0x1e, 0x6e, 0xf6, 0xc1
@@ -1031,24 +1119,24 @@ FDC_INTERRUPT_HANDLER:
 	.byte 0x33, 0x06, 0x66, 0x06, 0x30, 0x2f, 0x00, 0x1e
 	.byte 0xe7, 0xf8, 0xd7, 0xfa, 0x05, 0x0e
 
-LABEL_F97CCA:
+FDC_CommandEntry:
 	push xiz
 	ld xiz, (xsp + 8)
 	cpw (xiz), 0x0
-	jr nz, LABEL_F97CD9
+	jr nz, FDC_CommandEntry_EnableIRQ
 	stdi8 35350, 0
 
-LABEL_F97CD9:
+FDC_CommandEntry_EnableIRQ:
 	ei 6
 	cpdi8 35350, 165
-	jr nz, LABEL_F97CEF
+	jr nz, FDC_CommandEntry_CopyParams
 	ei 0
 	ldw wa, 0xFB
 	calr FDC_Set_Status
 	extz hl
-	jrl LABEL_F97DEC
+	jrl FDC_Handler_Return
 
-LABEL_F97CEF:
+FDC_CommandEntry_CopyParams:
 	stdi8 35350, 165
 	ei 0
 	ld wa, (xiz)
@@ -1084,10 +1172,10 @@ LABEL_F97CEF:
 	stdi8 35364, 0
 	calr FDC_COMMAND_DISPATCHER
 	cps l, 0
-	.byte 0x6e, 0x74	; jr nz, +116 → LABEL_F97DE1 (fixed displacement)
+	.byte 0x6e, 0x74	; jr nz, +116 → FDC_Handler_ExitStatus (fixed displacement)
 	ldda16 xwa, 35392
 	cp wa, 0xB
-	.byte 0x6b, 0x64	; jr ugt, +100 → LABEL_F97DDB (fixed displacement)
+	.byte 0x6b, 0x64	; jr ugt, +100 → FDC_Handler_InvalidCommand (fixed displacement)
 	add wa, wa
 	lda_24 xix, 0xea98ca
 	ld_sriw3 WA, 0x07, 0xF0, 0xE0
@@ -1134,74 +1222,81 @@ LABEL_F97CEF:
 
 	.org 0xF97D8D - 0xE00000, 0xFF
 FDC_HANDLER_DISPATCH_BASE:
-	calr LABEL_F97639
-	jr LABEL_F97DE1
+	calr FDC_InitSequence_Full
+	jr FDC_Handler_ExitStatus
 
 FDC_HANDLER_01:
 	calr FDC_CMD_ENABLE
-	calr LABEL_F97652
-	jr LABEL_F97DE1
+	calr FDC_SeekRecalibrate
+	jr FDC_Handler_ExitStatus
 
 FDC_HANDLER_02:
 	calr FDC_CMD_ENABLE
 	calr FDC_STATUS_HANDLER
-	jr LABEL_F97DE1
+	jr FDC_Handler_ExitStatus
 
 FDC_HANDLER_03:
 	calr FDC_CMD_ENABLE
 	calr FDC_CMD_EXEC
-	jr LABEL_F97DE1
+	jr FDC_Handler_ExitStatus
 
 FDC_HANDLER_04:
 	calr FDC_CMD_ENABLE
 	calr FDC_SECTOR_XFER
-	jr LABEL_F97DE1
+	jr FDC_Handler_ExitStatus
 
 FDC_HANDLER_05:
 	calr FDC_CMD_ENABLE
 	calr FDC_MODE_CONFIG
-	jr LABEL_F97DE1
+	jr FDC_Handler_ExitStatus
 
 FDC_HANDLER_06:
 	calr FDC_CMD_ENABLE
-	jr LABEL_F97DE1
+	jr FDC_Handler_ExitStatus
 
 FDC_HANDLER_07:
 	calr FDC_CMD_DISABLE
-	jr LABEL_F97DE1
+	jr FDC_Handler_ExitStatus
 
 FDC_HANDLER_08:
 	calr FDC_STATUS_COPY
-	jr LABEL_F97DE1
+	jr FDC_Handler_ExitStatus
 
 FDC_HANDLER_09:
 	calr FDC_OUTPUT_CTRL
-	jr LABEL_F97DE1
+	jr FDC_Handler_ExitStatus
 
 FDC_HANDLER_10:
 	calr FDC_CMD_DISPATCH_SUB
-	jr LABEL_F97DE1
+	jr FDC_Handler_ExitStatus
 
 FDC_HANDLER_11:
 	calr FDC_CMD_ENABLE
 	calr FDC_INTERRUPT_HANDLER
-	jr LABEL_F97DE1
+	jr FDC_Handler_ExitStatus
 
-LABEL_F97DDB:
+FDC_Handler_InvalidCommand:
 	ldw wa, 0xFF
 	calr FDC_Set_Status
 
-LABEL_F97DE1:
+FDC_Handler_ExitStatus:
 	stdi8 35350, 90
 	ldda8 l, 35364
 	exts hl
 
-LABEL_F97DEC:
+FDC_Handler_Return:
 	pop xiz
 	ret
 
 
-LABEL_F97DEE:
+; --- FDC_ByteTransfer_PIO: Byte-at-a-time PIO data transfer ---
+; Checks if byte count (35356) is zero; returns immediately if so.
+; Dispatches by command type (35392):
+;   Command 3 (READ):  read from I/O port 0x120000 → buffer at 35406
+;   Command 4 (WRITE): read from buffer at 35406 → I/O port 0x120000
+; Increments buffer pointer (35406) after each byte.
+; Falls through to transfer completion handlers.
+FDC_ByteTransfer_PIO:
 	.byte 0xd1, 0x1c, 0x8a, 0x3f, 0x00, 0x00, 0xb0, 0xf6
 	.byte 0xd1, 0x40, 0x8a, 0x20, 0xd8, 0xdc, 0x66, 0x24
 	.byte 0xd8, 0xdb, 0xb0, 0xfe, 0xc2, 0x00, 0x00, 0x12
@@ -1247,57 +1342,57 @@ INT4_HANDLER:	; F97E50	"FDCINT"
 	push xwa
 	lds iz, 0
 
-LABEL_F97E59:
+INT4_PollStatusLoop:
 	ld wa, iz
 	inc 1, iz
 	cp wa, 0x64
-	jr gt, LABEL_F97EBC
+	jr gt, INT4_ExitRestore
 	calr FDC_Read_Status
 	bit 7, l
-	jr z, LABEL_F97E59
+	jr z, INT4_PollStatusLoop
 
-LABEL_F97E6B:
+INT4_WaitDataReady:
 	calr FDC_Read_Status
 	bit 7, l
-	jr z, LABEL_F97E6B
+	jr z, INT4_WaitDataReady
 	calr FDC_Read_Status
 	bit 6, l
-	jr nz, LABEL_F97E93
+	jr nz, INT4_StoreResultBase
 	ldb l, 0x0
 	cp l, 0x80
-	jr z, LABEL_F97E8D
+	jr z, INT4_SendSpecifyCmd
 
-LABEL_F97E82:
+INT4_WaitNonDMAMode:
 	calr FDC_Read_Status
 	and l, 0xF0
 	cp l, 0x80
-	jr nz, LABEL_F97E82
+	jr nz, INT4_WaitNonDMAMode
 
-LABEL_F97E8D:
+INT4_SendSpecifyCmd:
 	ldw wa, 0x8
 	calr FDC_Write_Data
 
-LABEL_F97E93:
+INT4_StoreResultBase:
 	ldada xiz, 35424
 	inc 1, xiz
 
-LABEL_F97E99:
+INT4_ReadResultLoop:
 	calr FDC_Wait_Status_Timeout
 	calr FDC_Read_Data
 	lda_dpi XSP, 0xF8
 
-LABEL_F97EA2:
+INT4_WaitResultReady:
 	calr FDC_Read_Status
 	bit 7, l
-	jr z, LABEL_F97EA2
+	jr z, INT4_WaitResultReady
 	calr FDC_Read_Status
 	bit 6, l
-	jr nz, LABEL_F97E99
+	jr nz, INT4_ReadResultLoop
 	calr FDC_Exception_Status_Decoder
 	cpdi8 35425, 128
-	jr nz, LABEL_F97E6B
+	jr nz, INT4_WaitDataReady
 
-LABEL_F97EBC:
+INT4_ExitRestore:
 	stdi8 35424, 0
 	pop xwa
 	pop xbc
@@ -1330,21 +1425,21 @@ Reset_Floppy_Disk_Controller:	; F97EC9
 	stdi16 35622, 0
 	stdi16 35624, 0
 	cps a, 0
-	jr nz, LABEL_F97F03
+	jr nz, FDC_Reset_SetDD_SectorCount
 	stdi16 35626, 224
-	jr LABEL_F97F09
+	jr FDC_Reset_BuildParams
 
-LABEL_F97F03:
+FDC_Reset_SetDD_SectorCount:
 	stdi16 35626, 211
 
-LABEL_F97F09:
+FDC_Reset_BuildParams:
 	stdi16 35628, 0
 	stdi16 35630, 0
 	lds32 xwa, 0
 	stda32 35632, xwa
 	ldada xwa, 35620
 	push xwa
-	calr LABEL_F97CCA
+	calr FDC_CommandEntry
 	stdi16 35620, 3
 	stdi16 35622, 0
 	stdi16 35624, 0
@@ -1355,7 +1450,7 @@ LABEL_F97F09:
 	stda32 35632, xwa
 	ldada xwa, 35620
 	push xwa
-	calr LABEL_F97CCA
+	calr FDC_CommandEntry
 	stdi16 35620, 3
 	stdi16 35622, 0
 	stdi16 35624, 0
@@ -1366,7 +1461,7 @@ LABEL_F97F09:
 	stda32 35632, xwa
 	ldada xwa, 35620
 	push xwa
-	calr LABEL_F97CCA
+	calr FDC_CommandEntry
 	stdi16 35620, 3
 	stdi16 35622, 0
 	stdi16 35624, 0
@@ -1377,7 +1472,7 @@ LABEL_F97F09:
 	stda32 35632, xwa
 	ldada xwa, 35620
 	push xwa
-	calr LABEL_F97CCA
+	calr FDC_CommandEntry
 	stdi16 35620, 3
 	stdi16 35622, 0
 	stdi16 35624, 0
@@ -1388,7 +1483,7 @@ LABEL_F97F09:
 	stda32 35632, xwa
 	ldada xwa, 35620
 	push xwa
-	calr LABEL_F97CCA
+	calr FDC_CommandEntry
 	lda xsp, (xsp + 20)
 	ldw wa, 0xC8
 	calr SOME_DELAY
