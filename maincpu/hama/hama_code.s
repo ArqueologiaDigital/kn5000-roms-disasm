@@ -111,15 +111,15 @@ TestTitleFunc:
 	ld xiz, xwa
 	lds wa, 0
 	cp xbc, 0x1C00007
-	jr z, LABEL_F1E41C
+	jr z, TitleFunc_LifecycleDispatch
 	cp xbc, 0x1C00013
-	jrl nz, LABEL_F1E4BD
+	jrl nz, TitleFunc_Return
 	ld xwa, xde
 	dec 2, xwa
 	cp xwa, 0x0
-	jrl c, LABEL_F1E4BD
+	jrl c, TitleFunc_Return
 	cp xwa, 0x5
-	jrl ugt, LABEL_F1E4BD
+	jrl ugt, TitleFunc_Return
 	add xwa, xwa
 	add xwa, 0xE1FE0E
 	ld wa, (xwa)
@@ -128,30 +128,30 @@ TestTitleFunc:
 
 ; User action dispatch table (event 0x1C00013, xde=2..6)
 ; Each entry loads a string address and calls FDTest_PrintDiag, then exits
-LABEL_F1E3DA:
+TitleFunc_ActionDispatch:
 	lda_24 xwa, 0xe1fd4c
 	calr FDTest_PrintDiag
-	jrl LABEL_F1E4BD
+	jrl TitleFunc_Return
 	lda_24 xwa, 0xe1fd58
 	calr FDTest_PrintDiag
-	jrl LABEL_F1E4BD
+	jrl TitleFunc_Return
 	lda_24 xwa, 0xe1fd64
 	calr FDTest_PrintDiag
-	jrl LABEL_F1E4BD
+	jrl TitleFunc_Return
 	lda_24 xwa, 0xe1fd74
 	calr FDTest_PrintDiag
-	jrl LABEL_F1E4BD
+	jrl TitleFunc_Return
 	lda_24 xwa, 0xe1fd86
 	calr FDTest_PrintDiag
-	jrl LABEL_F1E4BD
+	jrl TitleFunc_Return
 	lda_24 xwa, 0xe1fd96
 	calr FDTest_PrintDiag
-	jrl LABEL_F1E4BD
+	jrl TitleFunc_Return
 
-LABEL_F1E41C:
+TitleFunc_LifecycleDispatch:
 	ld xwa, xde
 	cp xwa, 0x7
-	jrl ugt, LABEL_F1E4BD
+	jrl ugt, TitleFunc_Return
 	add xwa, xwa
 	add xwa, 0xE1FDFE
 	ld wa, (xwa)
@@ -161,13 +161,13 @@ LABEL_F1E41C:
 ; Title lifecycle dispatch table (event 0x1C00007, xde=0..6)
 ; 0=new: print+call 0xF97EDB, 1=old: send event+call 0xFAA257
 ; 2=activate: run test stats+call 0xFAA135, 3=inactivate: print+DIR listing
-; 4=interrupt: print+call LABEL_F1E89A, 5=interrupt return: print+call LABEL_F1E8AC
-; 6=TBIOS test: call LABEL_F1E4C1
-LABEL_F1E43B:
+; 4=interrupt: print+call RegHamaTitle1_Entry, 5=interrupt return: print+call RegHamaTitle2_Entry
+; 6=TBIOS test: call ListDir2_Entry
+TitleFunc_LifecycleTable:
 	lda_24 xwa, 0xe1fdae
 	calr FDTest_PrintDiag
 	call 0xf97edb
-	jr LABEL_F1E4BD
+	jr TitleFunc_Return
 	ld xwa, 0x01c00007
 	push xwa
 	lds32 xwa, 2
@@ -179,10 +179,10 @@ LABEL_F1E43B:
 	lda_24 xwa, 0xe1fdba
 	calr FDTest_PrintDiag
 	lds wa, 0
-	jr LABEL_F1E4BD
+	jr TitleFunc_Return
 	lda_24 xwa, 0xe1fdca
 	calr FDTest_PrintDiag
-	calr LABEL_F1E51B
+	calr RunTestCounters_Entry
 	ld xwa, 0x01c00007
 	push xwa
 	lds32 xwa, 2
@@ -192,22 +192,22 @@ LABEL_F1E43B:
 	ld xde, 0xffffffff
 	call 0xfaa135
 	lds wa, 1
-	jr LABEL_F1E4BD
+	jr TitleFunc_Return
 	lda_24 xwa, 0xe1fde0
 	calr FDTest_PrintDiag
 	calr FDListDirectory
-	jr LABEL_F1E4BD
+	jr TitleFunc_Return
 	lda_24 xwa, 0xe1fde6
 	calr FDTest_PrintDiag
-	calr LABEL_F1E89A
-	jr LABEL_F1E4BD
+	calr RegHamaTitle1_Entry
+	jr TitleFunc_Return
 	lda_24 xwa, 0xe1fdf2
 	calr FDTest_PrintDiag
-	calr LABEL_F1E8AC
-	jr LABEL_F1E4BD
-	calr LABEL_F1E4C1
+	calr RegHamaTitle2_Entry
+	jr TitleFunc_Return
+	calr ListDir2_Entry
 
-LABEL_F1E4BD:
+TitleFunc_Return:
 	lds32 xhl, 0
 	pop xiz
 	ret
@@ -218,7 +218,7 @@ LABEL_F1E4BD:
 ; Args: (xsp+4) = directory path string pointer
 ; Returns: hl = 0 on success, 0xFFFF on open failure
 ; Stack frame: 266 bytes
-LABEL_F1E4C1:
+ListDir2_Entry:
 	lda xsp, (xsp - 266)
 	push xiz
 	lda_24 xwa, 0xe1fe1a
@@ -226,30 +226,30 @@ LABEL_F1E4C1:
 	call 0xf5298a
 	ld xiz, xhl
 	cp xiz, 0xffffffff
-	jr nz, LABEL_F1E4E2
+	jr nz, ListDir2_LogEntry
 	ldw hl, 0xffff
-	jr LABEL_F1E514
-LABEL_F1E4E2:
+	jr ListDir2_Return
+ListDir2_LogEntry:
 	lda xwa, (xsp + 10)
 	calr FDTest_PrintDiag
 	ld xbc, (xsp + 4)
 	ld xwa, xiz
 	call 0xf52ae8
 	cp hl, 0xffff
-	jr z, LABEL_F1E50C
-LABEL_F1E4F7:
+	jr z, ListDir2_CloseDir
+ListDir2_NextEntry:
 	lda xwa, (xsp + 10)
 	calr FDTest_PrintDiag
 	ld xbc, (xsp + 4)
 	ld xwa, xiz
 	call 0xf52ae8
 	cp hl, 0xffff
-	jr nz, LABEL_F1E4F7
-LABEL_F1E50C:
+	jr nz, ListDir2_NextEntry
+ListDir2_CloseDir:
 	ld xwa, xiz
 	call 0xf52aaa
 	lds hl, 0
-LABEL_F1E514:
+ListDir2_Return:
 	pop xiz
 	lda xsp, (xsp + 266)
 	ret
@@ -258,25 +258,25 @@ LABEL_F1E514:
 ; if status is 2 or 3, increments TOTAL/OK/NG counters at 0x03DCFE-0x03DD02,
 ; then displays updated counts via NAKA widget system (0xFA9D58).
 ; Returns: l = 0xFF if status invalid, otherwise falls through to display
-LABEL_F1E51B:
+RunTestCounters_Entry:
 	call 0xf525ec
 	cps l, 3
-	jr z, LABEL_F1E527
+	jr z, RunTestCounters_RunTest
 	cps l, 2
-	jr nz, LABEL_F1E53A
-LABEL_F1E527:
+	jr nz, RunTestCounters_BadStatus
+RunTestCounters_RunTest:
 	incdi16_24 1, 0x03dcfe
 	calr FDLoadSaveTest
 	cps hl, 0
-	jr nz, LABEL_F1E53D
+	jr nz, RunTestCounters_IncrNG
 	incdi16_24 1, 0x03dd00
-	jr LABEL_F1E542
-LABEL_F1E53A:
+	jr RunTestCounters_Display
+RunTestCounters_BadStatus:
 	ldb l, 0xff
 	ret
-LABEL_F1E53D:
+RunTestCounters_IncrNG:
 	incdi16_24 1, 0x03dd02
-LABEL_F1E542:
+RunTestCounters_Display:
 	lda_24 xwa, 0xe1fe28
 	calr FDTest_PrintDiag
 	ld16_24 de, 0x03dcfe
@@ -297,7 +297,7 @@ LABEL_F1E542:
 
 ; CreateAndRunFDOperation — Builds a 16-byte parameter struct on the stack,
 ; calls 0xF97CCA to execute the FD operation, then prints success/failure.
-LABEL_F1E589:
+CreateRunFDOp_Entry:
 	lda xsp, (xsp - 16)
 	lda_24 xwa, 0xe1fe38
 	calr FDTest_PrintDiag
@@ -314,14 +314,14 @@ LABEL_F1E589:
 	call 0xf97cca
 	inc 4, xsp
 	cps hl, 0
-	jr nz, LABEL_F1E5CE
+	jr nz, CreateRunFDOp_Fail
 	lda_24 xwa, 0xe1fe3e
 	calr FDTest_PrintDiag
-	jr LABEL_F1E5D6
-LABEL_F1E5CE:
+	jr CreateRunFDOp_Return
+CreateRunFDOp_Fail:
 	lda_24 xwa, 0xe1fe42
 	calr FDTest_PrintDiag
-LABEL_F1E5D6:
+CreateRunFDOp_Return:
 	lda xsp, (xsp + 16)
 	ret
 
@@ -329,7 +329,7 @@ LABEL_F1E5D6:
 
 ; RegisterHamaTitle1 — Registers title with widget table 0x7F (FDD/HD test)
 ; Calls 0xF51E4F with WA=2, then 0xF5289C with string at 0xE1FF42
-LABEL_F1E89A:
+RegHamaTitle1_Entry:
 	lds wa, 2
 	call 0xf51e4f
 	lda_24 xwa, 0xe1ff42
@@ -339,7 +339,7 @@ LABEL_F1E89A:
 
 ; RegisterHamaTitle2 — Registers title with widget table 0xFC (extension APR test)
 ; Calls 0xF51E4F with WA=3, then 0xF5289C with string at 0xE1FF4C
-LABEL_F1E8AC:
+RegHamaTitle2_Entry:
 	lds wa, 3
 	call 0xf51e4f
 	lda_24 xwa, 0xe1ff4c
@@ -349,7 +349,7 @@ LABEL_F1E8AC:
 
 ; SendEventWithParam — Sends event 0x1C00025 with xwa as parameter via 0xFA9660
 ; Args: xwa = event parameter (moved to xde)
-LABEL_F1E8BE:
+SendEvent_Entry:
 	ld xde, xwa
 	ld xwa, 0xffffffff
 	ld xbc, 0x01c00025
@@ -358,48 +358,48 @@ LABEL_F1E8BE:
 ; HamaEventDispatcher — Dispatches events for HAMA subsystem
 ; Handles 0x1C00007 (title lifecycle) and 0x1E00085 (extension event)
 ; For 0x1C00007: dispatches on xde (0x8A=file ops, 0x8B=extension bootstrap)
-LABEL_F1E8CE:
+HamaEvtDisp_Entry:
 	cp xbc, 0x01c00007
-	jr z, LABEL_F1E8E1
+	jr z, HamaEvtDisp_LifecycleCheck
 	cp xbc, 0x01e00085
-	jr nz, LABEL_F1E919
+	jr nz, HamaEvtDisp_Return
 	lds32 xhl, 0
 	ret
-LABEL_F1E8E1:
+HamaEvtDisp_LifecycleCheck:
 	cp xde, 0x8b
-	jr z, LABEL_F1E906
+	jr z, HamaEvtDisp_ExtBootstrap
 	cp xde, 0x8a
-	jr nz, LABEL_F1E919
+	jr nz, HamaEvtDisp_Return
 	lda_24 xwa, 0xe1ff58
-	calr LABEL_F1E8BE
-	calr LABEL_F1E91C
+	calr SendEvent_Entry
+	calr CheckFDStatusLoad_Entry
 	lda_24 xwa, 0xe1ff5e
-	calr LABEL_F1E8BE
-	jr LABEL_F1E919
-LABEL_F1E906:
+	calr SendEvent_Entry
+	jr HamaEvtDisp_Return
+HamaEvtDisp_ExtBootstrap:
 	lda_24 xwa, 0xe1ff68
-	calr LABEL_F1E8BE
-	calr LABEL_F1E972
+	calr SendEvent_Entry
+	calr LoadExtROM_Entry
 	lda_24 xwa, 0xe1ff6c
-	calr LABEL_F1E8BE
-LABEL_F1E919:
+	calr SendEvent_Entry
+HamaEvtDisp_Return:
 	lds32 xhl, 0
 	ret
 
 ; CheckFDStatusAndLoadFile — Checks FD status, loads file from disk into
 ; extension DRAM (0x200000) if status is 2 or 3
-LABEL_F1E91C:
+CheckFDStatusLoad_Entry:
 	push xiz
 	call 0xf525ec
 	extz hl
 	cps hl, 2
-	jr z, LABEL_F1E935
+	jr z, CheckFDStatusLoad_DoLoad
 	cps hl, 3
-	jr z, LABEL_F1E935
+	jr z, CheckFDStatusLoad_DoLoad
 	lda_24 xwa, 0xe1ff74
-	calr LABEL_F1E8BE
-	jr LABEL_F1E970
-LABEL_F1E935:
+	calr SendEvent_Entry
+	jr CheckFDStatusLoad_Return
+CheckFDStatusLoad_DoLoad:
 	lda_24 xwa, 0xe1ff80
 	push xwa
 	pushw 0xe1
@@ -408,11 +408,11 @@ LABEL_F1E935:
 	inc 8, xsp
 	ld xiz, xhl
 	or xiz, xiz
-	jr nz, LABEL_F1E957
+	jr nz, CheckFDStatusLoad_Transfer
 	lda_24 xwa, 0xe1ff90
-	calr LABEL_F1E8BE
-	jr LABEL_F1E970
-LABEL_F1E957:
+	calr SendEvent_Entry
+	jr CheckFDStatusLoad_Return
+CheckFDStatusLoad_Transfer:
 	push xiz
 	pushw 0x8000
 	pushw 0x1
@@ -422,13 +422,13 @@ LABEL_F1E957:
 	push xiz
 	call 0xf4f05a
 	lda xsp, (xsp + 16)
-LABEL_F1E970:
+CheckFDStatusLoad_Return:
 	pop xiz
 	ret
 
 ; LoadExtensionROM — Loads 4 bytes from extension ROM path at 0xE1FF9C
 ; into DRAM at 0x200000, checks result, jumps to extension entry point
-LABEL_F1E972:
+LoadExtROM_Entry:
 	pushw 0x4
 	pushw 0xe1
 	pushw 0xff9c
@@ -437,19 +437,19 @@ LABEL_F1E972:
 	call 0xff0cc1
 	add xsp, 0xa
 	cps hl, 0
-	jr z, LABEL_F1E997
+	jr z, LoadExtROM_JumpEntry
 	lda_24 xwa, 0xe1ffa2
-	jrl LABEL_F1E8BE
-LABEL_F1E997:
+	jrl SendEvent_Entry
+LoadExtROM_JumpEntry:
 	ld xhl, 0x200008
 	lda_24 xwa, 0x027ed2
 	jp (xhl)
 
-LABEL_F1E9A3:
+GetAprStatus_Entry:
 	ld8_24 l, 0x03dd04
 	ret
 
-LABEL_F1E9A9:
+LoadXaprInit_Entry:
 	pushw 0x4	; 4 bytes
 	pushw 0xE1
 	pushw 0xFFB0	; "XAPR"
@@ -462,23 +462,23 @@ LABEL_F1E9A9:
 	sti8_24 0x03dd04, 0x01
 	ret
 
-LABEL_F1E9CD:
+HamaStub1_Entry:
 	ret
 
-LABEL_F1E9CE:
+HamaStub2_Entry:
 	ret
 
-LABEL_F1E9CF:
+HamaStub3_Entry:
 	ret
 
-LABEL_F1E9D0:
+CallExtIfActive_Entry:
 	cpi8_24 0x03dd04, 0x00
 	ret z
 	ld xhl, 0x280010
 	call (xhl)
 	ret
 
-LABEL_F1E9E0:
+LoadAndRunXapr_Entry:
 	pushw 0x4	; 4 bytes
 	pushw 0xE1
 	pushw 0xFFC6	; "XAPR"
@@ -487,14 +487,14 @@ LABEL_F1E9E0:
 	call 0xFF0CC1
 	add xsp, 0xA
 	cps hl, 0
-	jr nz, LABEL_F1EA05
+	jr nz, LoadAndRunXapr_ClearFlag
 	sti8_24 0x03dd04, 0x01
-	jr LABEL_F1EA0B
+	jr LoadAndRunXapr_CallIfActive
 
-LABEL_F1EA05:
+LoadAndRunXapr_ClearFlag:
 	sti8_24 0x03dd04, 0x00
 
-LABEL_F1EA0B:
+LoadAndRunXapr_CallIfActive:
 	cpi8_24 0x03dd04, 0x00
 	ret z
 	ld xhl, 0x280008

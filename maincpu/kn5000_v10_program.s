@@ -44609,7 +44609,7 @@ MainLoop_SequencerPhase:
 	calr Seq_EventProcessingTick
 	call LABEL_EF77DF
 	call LABEL_F6DCA9
-	call LABEL_F1E9D0
+	call CallExtIfActive_Entry
 	jrl MainLoop
 
 Seq_TickWrapper:
@@ -231344,7 +231344,7 @@ LABEL_F8B1DF:
 	stdi8 34046, 0
 	calr ResetProgressIndication
 	call LABEL_F890AF
-	call LABEL_F1E9A3
+	call GetAprStatus_Entry
 	cps l, 0
 	ret nz
 	ld xwa, 0x600002
@@ -234226,7 +234226,7 @@ LABEL_F98559:
 LABEL_F9856E:
 	bit 5, a
 	jr z, LABEL_F9859C
-	call LABEL_F1E9A3
+	call GetAprStatus_Entry
 	cps l, 0
 	jr z, LABEL_F9858D
 	ld xwa, 0xFFFFFFFF
@@ -234243,7 +234243,7 @@ LABEL_F9858D:
 LABEL_F9859C:
 	bit 5, c
 	jrl z, LABEL_F98695
-	call LABEL_F1E9A3
+	call GetAprStatus_Entry
 	cps l, 0
 	jr z, LABEL_F985BC
 	ld xwa, 0xFFFFFFFF
@@ -326404,7 +326404,7 @@ LABEL_FDDB2E:
 	call Reset_Floppy_Disk_Controller
 	call LABEL_FEA7EB
 	call LABEL_F9800F
-	jp LABEL_F1E9E0
+	jp LoadAndRunXapr_Entry
 
 ; ===========================================================================
 ; ScreenGroup_Dispatch - Display a screen group and process its widgets
