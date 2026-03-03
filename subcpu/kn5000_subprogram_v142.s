@@ -10693,16 +10693,40 @@ LABEL_020A14:
 	popw ix
 	ret
 
+; --- Audio buffer pointer load/store utilities ---
+; Five small routines that load/store 16-bit pointer values
+; from the audio buffer control block at 0x041138-0x041142.
+; Each routine saves/restores caller registers.
 LABEL_020A22:
-	.byte 0x2b, 0xd2, 0x3a, 0x11, 0x04, 0x23, 0xf2, 0x38
-	.byte 0x11, 0x04, 0x53, 0x4b, 0x0e, 0x2c, 0x3a, 0xf2
-	.byte 0x42, 0x11, 0x04, 0x32, 0x1d, 0x2c, 0x0b, 0x02
-	.byte 0x5a, 0x4c, 0x0e, 0x2c, 0x3a, 0xf2, 0x42, 0x11
-	.byte 0x04, 0x32, 0x1d, 0x47, 0x0b, 0x02, 0x5a, 0x4c
-	.byte 0x0e, 0x2b, 0xd2, 0x3c, 0x11, 0x04, 0x23, 0xf2
-	.byte 0x3a, 0x11, 0x04, 0x53, 0x4b, 0x0e, 0x2b, 0xd2
-	.byte 0x3e, 0x11, 0x04, 0x23, 0xf2, 0x3c, 0x11, 0x04
-	.byte 0x53, 0x4b, 0x0e
+	pushw	hl
+	ld16_24	hl, 266554
+	st16_24	266552, hl
+	popw	hl
+	ret
+	pushw	ix
+	push	xde
+	lda_24	xde, 266562
+	call	133932
+	pop	xde
+	popw	ix
+	ret
+	pushw	ix
+	push	xde
+	lda_24	xde, 266562
+	call	133959
+	pop	xde
+	popw	ix
+	ret
+	pushw	hl
+	ld16_24	hl, 266556
+	st16_24	266554, hl
+	popw	hl
+	ret
+	pushw	hl
+	ld16_24	hl, 266558
+	st16_24	266556, hl
+	popw	hl
+	ret
 
 LABEL_020A65:
 	ldw (xde - 10), 0x0
@@ -31268,11 +31292,21 @@ LABEL_02E1ED:
 	inc 8, xsp
 	ret
 
+; --- CheckStatusBits_Zero: Check if status bits [7:6] are zero ---
+; Entry: WA = index
+; Exit: HL = 1 if status bits are 0b00, else HL = 0
 LABEL_02E1F4:
-	.byte 0xe8, 0x12, 0x41, 0x1f, 0x01, 0x00, 0x00, 0x1d
-	.byte 0xca, 0xd8, 0x03, 0xf2, 0x6e, 0x13, 0x04, 0x30
-	.byte 0xeb, 0x80, 0xa0, 0x20, 0x88, 0x10, 0x21, 0xc9
-	.byte 0xcc, 0xc0, 0xc9, 0xd8, 0xdb, 0x76, 0x0e
+	extz	xwa
+	ld	xbc, 287
+	call	252106
+	lda_24	xwa, 267118
+	add	xwa, xhl
+	ld	xwa, (xwa)
+	ld	a, (xwa+16)
+	and	a, 192
+	cps	a, 0
+	scc16	z, hl
+	ret
 
 LABEL_02E213:
 	extz xwa
@@ -31287,15 +31321,33 @@ LABEL_02E213:
 	scc16 z, hl
 	ret
 
+; --- CheckStatusBits_80: Check if status bits [7:6] are 0b10 ---
+; Entry: WA = index
+; Exit: HL = 1 if status bits are 0x80, else HL = 0
 LABEL_02E233:
-	.byte 0xe8, 0x12, 0x41, 0x1f, 0x01, 0x00, 0x00, 0x1d
-	.byte 0xca, 0xd8, 0x03, 0xf2, 0x6e, 0x13, 0x04, 0x30
-	.byte 0xeb, 0x80, 0xa0, 0x20, 0x88, 0x10, 0x21, 0xc9
-	.byte 0xcc, 0xc0, 0xc9, 0xcf, 0x80, 0xdb, 0x76, 0x0e
-	.byte 0xe8, 0x12, 0x41, 0x1f, 0x01, 0x00, 0x00, 0x1d
-	.byte 0xca, 0xd8, 0x03, 0xf2, 0x6e, 0x13, 0x04, 0x30
-	.byte 0xeb, 0x80, 0xa0, 0x20, 0x88, 0x10, 0x21, 0xc9
-	.byte 0xcc, 0xc0, 0xc9, 0xcf, 0xc0, 0xdb, 0x76, 0x0e
+	extz	xwa
+	ld	xbc, 287
+	call	252106
+	lda_24	xwa, 267118
+	add	xwa, xhl
+	ld	xwa, (xwa)
+	ld	a, (xwa+16)
+	and	a, 192
+	cp	a, 128
+	scc16	z, hl
+	ret
+; --- CheckStatusBits_C0: Check if status bits [7:6] are 0b11 ---
+	extz	xwa
+	ld	xbc, 287
+	call	252106
+	lda_24	xwa, 267118
+	add	xwa, xhl
+	ld	xwa, (xwa)
+	ld	a, (xwa+16)
+	and	a, 192
+	cp	a, 192
+	scc16	z, hl
+	ret
 
 LABEL_02E273:
 	ld xhl, xbc
@@ -38238,10 +38290,23 @@ LABEL_034D40:
 	pop xiz
 	ret
 
+; --- RingBuffer_Write4K: Write a byte to a 4KB circular buffer ---
+; Entry: XWA = pointer to buffer control block
+;        C = byte to write
+; Buffer layout: [0]=write_ptr(16), [4]=count(16), [6+]=data area
+; Write pointer wraps at 4095 (AND 0x0FFF).
 Audio_CmdHandler_ConstData:
-	.byte 0xe8, 0x8a, 0x92, 0x23, 0x92, 0x61, 0xdb, 0xcc
-	.byte 0xff, 0x0f, 0xdb, 0x8a, 0xea, 0x12, 0xea, 0x66
-	.byte 0xe8, 0x82, 0xb2, 0x43, 0x98, 0x04, 0x61, 0x0e
+	ld	xde, xwa
+	ld	hl, (xde)
+	incm	1, (xde)
+	and	hl, 4095
+	ld	de, hl
+	extz	xde
+	inc	6, xde
+	add	xde, xwa
+	ld	(xde), c
+	incm	1, (xwa+4)
+	ret
 
 ; ===========================================================================
 ; Audio_CmdHandler_00_1F - Audio command handler for DSP/audio control
@@ -39438,10 +39503,22 @@ LABEL_035874:
 	pop xiz
 	ret
 
+; --- RingBuffer_Write2K: Write a byte to a 2KB circular buffer ---
+; Entry: XWA = pointer to buffer control block
+;        C = byte to write
+; Same as RingBuffer_Write4K but wraps at 2047 (AND 0x07FF).
 LABEL_03587B:
-	.byte 0xe8, 0x8a, 0x92, 0x23, 0x92, 0x61, 0xdb, 0xcc
-	.byte 0xff, 0x07, 0xdb, 0x8a, 0xea, 0x12, 0xea, 0x66
-	.byte 0xe8, 0x82, 0xb2, 0x43, 0x98, 0x04, 0x61, 0x0e
+	ld	xde, xwa
+	ld	hl, (xde)
+	incm	1, (xde)
+	and	hl, 2047
+	ld	de, hl
+	extz	xde
+	inc	6, xde
+	add	xde, xwa
+	ld	(xde), c
+	incm	1, (xwa+4)
+	ret
 
 Audio_CmdHandler_60_7F:
 	ld xhl, (xsp + 6)
@@ -39523,13 +39600,32 @@ Extract_14Bit_PayloadSize:
 	or hl, bc
 	ret
 
+; --- Pack3x7bit: Extract and pack three 7-bit fields ---
+; Entry: XWA = pointer to a 4-byte structure
+;   byte[1] bits 6:0 -> XHL bits 20:14
+;   byte[2] bits 6:0 -> XHL bits 13:7
+;   byte[3] bits 6:0 -> XHL bits 6:0
+; Exit: XHL = packed 21-bit value
 LABEL_035950:
-	.byte 0x88, 0x02, 0x23, 0xcb, 0x30, 0x07, 0x22, 0x00
-	.byte 0xe9, 0x12, 0xe9, 0x8a, 0xea, 0xee, 0x07, 0x88
-	.byte 0x01, 0x23, 0xcb, 0x30, 0x07, 0x22, 0x00, 0xe9
-	.byte 0x12, 0xe9, 0xee, 0x0e, 0xea, 0xe1, 0x88, 0x03
-	.byte 0x21, 0xc9, 0x30, 0x07, 0x20, 0x00, 0xe8, 0x12
-	.byte 0xe8, 0x8b, 0xe9, 0xe3, 0x0e
+	ld	c, (xwa+2)
+	res	7, c
+	ldb	b, 0
+	extz	xbc
+	ld	xde, xbc
+	sll	xde, 7
+	ld	c, (xwa+1)
+	res	7, c
+	ldb	b, 0
+	extz	xbc
+	sll	xbc, 14
+	or	xbc, xde
+	ld	a, (xwa+3)
+	res	7, a
+	ldb	w, 0
+	extz	xwa
+	ld	xhl, xwa
+	or	xhl, xbc
+	ret
 
 Extract_14Bit_VoiceParam:
 	ld c, (xwa + 3)
@@ -43075,13 +43171,30 @@ LABEL_036DF5:
 	ldw (xwa), 0x0
 	ret
 
+; --- CalcSampleAddr: Compute sample address from 2-byte index ---
+; Entry: XWA = pointer to structure with byte[0] and byte[1]
+; Exit: XHL = XWA + computed offset (address into sample data)
+;   offset = (byte[0] << 8) + byte[1], capped at 0xF0
 LABEL_036E12:
-	.byte 0x88, 0x01, 0x23, 0xcb, 0xcc, 0xff, 0xcb, 0x8d
-	.byte 0xda, 0x12, 0x80, 0x23, 0xd9, 0x12, 0xd9, 0xee
-	.byte 0x08, 0xd9, 0x8b, 0x27, 0x00, 0xda, 0x83, 0xdb
-	.byte 0x89, 0xd9, 0xef, 0x08, 0xd9, 0xcf, 0xf0, 0x00
-	.byte 0x66, 0x06, 0xdb, 0x89, 0xe9, 0x12, 0xe9, 0x80
-	.byte 0xe8, 0x8b, 0x0e
+	ld	c, (xwa+1)
+	and	c, 255
+	ld	e, c
+	extz	de
+	ld	c, (xwa)
+	extz	bc
+	sll	bc, 8
+	ld	hl, bc
+	ldb	l, 0
+	add	hl, de
+	ld	bc, hl
+	srl	bc, 8
+	cp	bc, 240
+	jr	z, 6
+	ld	bc, hl
+	extz	xbc
+	add	xwa, xbc
+	ld	xhl, xwa
+	ret
 
 LABEL_036E3D:
 	push xiz
@@ -53352,11 +53465,23 @@ LABEL_03DD36:
 	pop xiz
 	ret
 
+; --- CallWithBuffer12: Allocate 12-byte stack buffer and call ---
+; Entry: XWA = source data, XBC = ptr to function table
+; Allocates 12 bytes on stack, calls function from table, then
+; calls cleanup function. Stack buffer passed in XWA/XBC.
 LABEL_03DD51:
-	.byte 0x3e, 0xbf, 0xf4, 0x37, 0xe8, 0x8e, 0xef, 0x88
-	.byte 0xa1, 0x21, 0x1d, 0xef, 0xdf, 0x03, 0xee, 0x88
-	.byte 0xef, 0x89, 0x1d, 0x46, 0xe0, 0x03, 0xbf, 0x0c
-	.byte 0x37, 0x5e, 0x0e
+	push	xiz
+	lda	xsp, (xsp-12)
+	ld	xiz, xwa
+	ld	xwa, xsp
+	ld	xbc, (xbc)
+	call	253935
+	ld	xwa, xiz
+	ld	xbc, xsp
+	call	254022
+	lda	xsp, (xsp+12)
+	pop	xiz
+	ret
 
 LABEL_03DD6C:
 	push xiz
@@ -53421,11 +53546,22 @@ LABEL_03DDCA:
 	pop xiz
 	ret
 
+; --- CallWithBuffer8: Allocate 8-byte stack buffer and call ---
+; Entry: XWA = source data, XBC = ptr to function table
+; Same pattern as CallWithBuffer12 but with 8-byte buffer.
 LABEL_03DDE5:
-	.byte 0x3e, 0xbf, 0xf8, 0x37, 0xe8, 0x8e, 0xef, 0x88
-	.byte 0xa1, 0x21, 0x1d, 0x33, 0xde, 0x03, 0xee, 0x88
-	.byte 0xef, 0x89, 0x1d, 0xb0, 0xe0, 0x03, 0xbf, 0x08
-	.byte 0x37, 0x5e, 0x0e
+	push	xiz
+	lda	xsp, (xsp-8)
+	ld	xiz, xwa
+	ld	xwa, xsp
+	ld	xbc, (xbc)
+	call	253491
+	ld	xwa, xiz
+	ld	xbc, xsp
+	call	254128
+	lda	xsp, (xsp+8)
+	pop	xiz
+	ret
 
 LABEL_03DE00:
 	push xiz
