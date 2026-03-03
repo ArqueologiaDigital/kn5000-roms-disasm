@@ -18,27 +18,27 @@ JumpInsertFunc:
 	ld xiz, xwa
 	sub xbc, 0x1E0003E
 	cp xbc, 0x0
-	jr lt, LABEL_F950D6
+	jr lt, JumpInsert_Error
 	cp xbc, 0x9
-	jr gt, LABEL_F950D6
+	jr gt, JumpInsert_Error
 	add xbc, xbc
 	add xbc, 0xEA96E4
 	ld bc, (xbc)
 	lda_24 xix, 0xf950b0
 	jp_dri 8, 0x07, 0xF0, 0xE4
-LABEL_F950B0:
+JumpInsert_DispatchBody:
 	.byte 0xaa, 0x0e, 0x20, 0xe8, 0xee, 0x02, 0x41, 0x8a
 	.byte 0x96, 0xea, 0x00, 0xe8, 0x81, 0xa1, 0x20, 0x38
 	.byte 0xaa, 0x12, 0x20, 0x38, 0x1d, 0x4d, 0x0f, 0xff
 	.byte 0xef, 0x60, 0xee, 0x8b, 0x68, 0x11, 0xeb, 0xa9
 	.byte 0x68, 0x0d, 0xeb, 0xac, 0x68, 0x09
 
-LABEL_F950D6:
+JumpInsert_Error:
 	lds32 xhl, 0
-	jr LABEL_F950DF
+	jr JumpInsert_Return
 	lda_24 xhl, 0x0340f2
 
-LABEL_F950DF:
+JumpInsert_Return:
 	pop xiz
 	ret
 
@@ -46,13 +46,13 @@ FilePriorityFunc:
 	push xiz
 	ld xiz, xwa
 	cp xbc, 0x1E00065
-	jr z, LABEL_F95132
+	jr z, FilePriority_DefaultReturn
 	cp xbc, 0x1E00064
-	jr z, LABEL_F9512E
+	jr z, FilePriority_ReturnOne
 	cp xbc, 0x1E00063
-	jr z, LABEL_F95127
+	jr z, FilePriority_ReturnPointer
 	cp xbc, 0x1E00062
-	jr nz, LABEL_F95132
+	jr nz, FilePriority_DefaultReturn
 	ld wa, (xde + 8)
 	and wa, 0x1
 	sla wa, 2
@@ -64,31 +64,31 @@ FilePriorityFunc:
 	call Strcpy
 	inc 8, xsp
 	ld xhl, xiz
-	jr LABEL_F95134
+	jr FilePriority_Return
 
-LABEL_F95127:
+FilePriority_ReturnPointer:
 	lda_24 xhl, 0x0340f4
-	jr LABEL_F95134
+	jr FilePriority_Return
 
-LABEL_F9512E:
+FilePriority_ReturnOne:
 	lds32 xhl, 1
-	jr LABEL_F95134
+	jr FilePriority_Return
 
-LABEL_F95132:
+FilePriority_DefaultReturn:
 	lds32 xhl, 0
 
-LABEL_F95134:
+FilePriority_Return:
 	pop xiz
 	ret
 
 SetupOkFunc:
 	cp xbc, 0x1C00007
-	jr nz, LABEL_F9514C
+	jr nz, SetupOk_Return
 	ld xwa, 0x1450030
 	ld xbc, 0x1E5000B
 	call 0xFA4A63
 
-LABEL_F9514C:
+SetupOk_Return:
 	lds32 xhl, 0
 	ret
 
@@ -96,15 +96,15 @@ SetupExitFunc:
 	push xiz
 	ld xiz, xde
 	cp xbc, 0x1C00002
-	jr nz, LABEL_F951B6
+	jr nz, SetupExit_Return
 	ld xde, xiz
 	call 0xFA4409
 	or xiz, xiz
-	jr nz, LABEL_F951B6
+	jr nz, SetupExit_Return
 	lds wa, 6
 	call LABEL_FC56A1
 	cps hl, 0
-	jr z, LABEL_F951B6
+	jr z, SetupExit_Return
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
 	lds32 xde, 1
@@ -123,7 +123,7 @@ SetupExitFunc:
 	ld xde, xiz
 	call 0xFA4A63
 
-LABEL_F951B6:
+SetupExit_Return:
 	lds32 xhl, 0
 	pop xiz
 	ret
@@ -134,30 +134,30 @@ TechnicsFileNaming:
 	ld xiz, xbc
 	ld (xsp + 4), xwa
 	cp xiz, 0x1C00007
-	jr z, LABEL_F95200
+	jr z, TechnicsFileNaming_HandleOk
 	cp xiz, 0x1E0007C
-	jr z, LABEL_F951FC
+	jr z, TechnicsFileNaming_Cancel
 	cp xiz, 0x1E00084
-	jr z, LABEL_F951F8
+	jr z, TechnicsFileNaming_Validate
 	cp xiz, 0x1E0003A
-	jr nz, LABEL_F9523A
+	jr nz, TechnicsFileNaming_DefaultReturn
 	call 0xFA1FC7
 	ld xwa, 0x145000E
 	ld xbc, xiz
 	ld xde, xhl
 	call 0xFA4A63
 	ld xhl, (xsp + 4)
-	jr LABEL_F9523C
+	jr TechnicsFileNaming_Return
 
-LABEL_F951F8:
+TechnicsFileNaming_Validate:
 	lds32 xhl, 1
-	jr LABEL_F9523C
+	jr TechnicsFileNaming_Return
 
-LABEL_F951FC:
+TechnicsFileNaming_Cancel:
 	lds32 xhl, 6
-	jr LABEL_F9523C
+	jr TechnicsFileNaming_Return
 
-LABEL_F95200:
+TechnicsFileNaming_HandleOk:
 	call 0xFA1FC7
 	ld xwa, xhl
 	ld xbc, 0x1E0003A
@@ -172,10 +172,10 @@ LABEL_F95200:
 	ld xde, 0x1A00067
 	call 0xFA9660
 
-LABEL_F9523A:
+TechnicsFileNaming_DefaultReturn:
 	lds32 xhl, 0
 
-LABEL_F9523C:
+TechnicsFileNaming_Return:
 	pop xiz
 	inc 4, xsp
 	ret
@@ -186,30 +186,30 @@ TechnicsFileRename:
 	ld xiz, xbc
 	ld (xsp + 4), xwa
 	cp xiz, 0x1C00007
-	jr z, LABEL_F95286
+	jr z, TechnicsFileRename_HandleOk
 	cp xiz, 0x1E0007C
-	jr z, LABEL_F95282
+	jr z, TechnicsFileRename_Cancel
 	cp xiz, 0x1E00084
-	jr z, LABEL_F9527E
+	jr z, TechnicsFileRename_Validate
 	cp xiz, 0x1E0003A
-	jr nz, LABEL_F952BD
+	jr nz, TechnicsFileRename_DefaultReturn
 	call 0xFA1FC7
 	ld xwa, 0x1450022
 	ld xbc, xiz
 	ld xde, xhl
 	call 0xFA4A63
 	ld xhl, (xsp + 4)
-	jr LABEL_F952BF
+	jr TechnicsFileRename_Return
 
-LABEL_F9527E:
+TechnicsFileRename_Validate:
 	lds32 xhl, 1
-	jr LABEL_F952BF
+	jr TechnicsFileRename_Return
 
-LABEL_F95282:
+TechnicsFileRename_Cancel:
 	lds32 xhl, 6
-	jr LABEL_F952BF
+	jr TechnicsFileRename_Return
 
-LABEL_F95286:
+TechnicsFileRename_HandleOk:
 	call 0xFA1FC7
 	ld xwa, xhl
 	ld xbc, 0x1E0003A
@@ -224,10 +224,10 @@ LABEL_F95286:
 	lds32 xde, 0
 	call LABEL_FA9752
 
-LABEL_F952BD:
+TechnicsFileRename_DefaultReturn:
 	lds32 xhl, 0
 
-LABEL_F952BF:
+TechnicsFileRename_Return:
 	pop xiz
 	inc 4, xsp
 	ret
@@ -238,30 +238,30 @@ SmfFileNaming:
 	ld xiz, xbc
 	ld (xsp + 4), xwa
 	cp xiz, 0x1C00007
-	jr z, LABEL_F9530C
+	jr z, SmfFileNaming_HandleOk
 	cp xiz, 0x1E0007C
-	jr z, LABEL_F95305
+	jr z, SmfFileNaming_Cancel
 	cp xiz, 0x1E00084
-	jr z, LABEL_F95301
+	jr z, SmfFileNaming_Validate
 	cp xiz, 0x1E0003A
-	jr nz, LABEL_F95346
+	jr nz, SmfFileNaming_DefaultReturn
 	call 0xFA1FC7
 	ld xwa, 0x145002F
 	ld xbc, xiz
 	ld xde, xhl
 	call 0xFA4A63
 	ld xhl, (xsp + 4)
-	jr LABEL_F95348
+	jr SmfFileNaming_Return
 
-LABEL_F95301:
+SmfFileNaming_Validate:
 	lds32 xhl, 1
-	jr LABEL_F95348
+	jr SmfFileNaming_Return
 
-LABEL_F95305:
+SmfFileNaming_Cancel:
 	ld xhl, 0x8
-	jr LABEL_F95348
+	jr SmfFileNaming_Return
 
-LABEL_F9530C:
+SmfFileNaming_HandleOk:
 	call 0xFA1FC7
 	ld xwa, xhl
 	ld xbc, 0x1E0003A
@@ -276,10 +276,10 @@ LABEL_F9530C:
 	ld xde, 0x1A0006B
 	call 0xFA9660
 
-LABEL_F95346:
+SmfFileNaming_DefaultReturn:
 	lds32 xhl, 0
 
-LABEL_F95348:
+SmfFileNaming_Return:
 	pop xiz
 	inc 4, xsp
 	ret
@@ -290,30 +290,30 @@ SmfFileRename:
 	ld xiz, xbc
 	ld (xsp + 4), xwa
 	cp xiz, 0x1C00007
-	jr z, LABEL_F95395
+	jr z, SmfFileRename_HandleOk
 	cp xiz, 0x1E0007C
-	jr z, LABEL_F9538E
+	jr z, SmfFileRename_Cancel
 	cp xiz, 0x1E00084
-	jr z, LABEL_F9538A
+	jr z, SmfFileRename_Validate
 	cp xiz, 0x1E0003A
-	jr nz, LABEL_F953CC
+	jr nz, SmfFileRename_DefaultReturn
 	call 0xFA1FC7
 	ld xwa, 0x1450023
 	ld xbc, xiz
 	ld xde, xhl
 	call 0xFA4A63
 	ld xhl, (xsp + 4)
-	jr LABEL_F953CE
+	jr SmfFileRename_Return
 
-LABEL_F9538A:
+SmfFileRename_Validate:
 	lds32 xhl, 1
-	jr LABEL_F953CE
+	jr SmfFileRename_Return
 
-LABEL_F9538E:
+SmfFileRename_Cancel:
 	ld xhl, 0x8
-	jr LABEL_F953CE
+	jr SmfFileRename_Return
 
-LABEL_F95395:
+SmfFileRename_HandleOk:
 	call 0xFA1FC7
 	ld xwa, xhl
 	ld xbc, 0x1E0003A
@@ -328,10 +328,10 @@ LABEL_F95395:
 	lds32 xde, 0
 	call LABEL_FA9752
 
-LABEL_F953CC:
+SmfFileRename_DefaultReturn:
 	lds32 xhl, 0
 
-LABEL_F953CE:
+SmfFileRename_Return:
 	pop xiz
 	inc 4, xsp
 	ret
@@ -342,30 +342,30 @@ FormatDiskNaming:
 	ld xiz, xbc
 	ld (xsp + 4), xwa
 	cp xiz, 0x1C00007
-	jr z, LABEL_F9541B
+	jr z, FormatDiskNaming_HandleOk
 	cp xiz, 0x1E0007C
-	jr z, LABEL_F95414
+	jr z, FormatDiskNaming_Cancel
 	cp xiz, 0x1E00084
-	jr z, LABEL_F95410
+	jr z, FormatDiskNaming_Validate
 	cp xiz, 0x1E0003A
-	jr nz, LABEL_F95442
+	jr nz, FormatDiskNaming_DefaultReturn
 	call 0xFA1FC7
 	ld xwa, 0x145000B
 	ld xbc, xiz
 	ld xde, xhl
 	call 0xFA4A63
 	ld xhl, (xsp + 4)
-	jr LABEL_F95444
+	jr FormatDiskNaming_Return
 
-LABEL_F95410:
+FormatDiskNaming_Validate:
 	lds32 xhl, 1
-	jr LABEL_F95444
+	jr FormatDiskNaming_Return
 
-LABEL_F95414:
+FormatDiskNaming_Cancel:
 	ld xhl, 0xB
-	jr LABEL_F95444
+	jr FormatDiskNaming_Return
 
-LABEL_F9541B:
+FormatDiskNaming_HandleOk:
 	call 0xFA1FC7
 	ld xwa, xhl
 	ld xbc, 0x1E0003A
@@ -376,10 +376,10 @@ LABEL_F9541B:
 	ld xde, 0x27474
 	call 0xFA4A63
 
-LABEL_F95442:
+FormatDiskNaming_DefaultReturn:
 	lds32 xhl, 0
 
-LABEL_F95444:
+FormatDiskNaming_Return:
 	pop xiz
 	inc 4, xsp
 	ret
@@ -398,9 +398,9 @@ DrawString_Centered:
 	lds de, 0
 	ld bc, (xsp + 18)
 	cpw (xsp + 4), 0x0
-	jr ule, LABEL_F954A7
+	jr ule, DrawStr_Epilogue
 
-LABEL_F9546E:
+DrawStr_LoopBody:
 	ld iy, (xsp + 2)
 	ld iz, de
 	add iz, bc
@@ -411,35 +411,35 @@ LABEL_F9546E:
 	st_dri3b W, 0x07, 0xEC, 0xE8
 	add xwa, (xsp + 6)
 	cp iz, iy
-	jr nc, LABEL_F95493
+	jr nc, DrawStr_WrapAround
 	ld a, (xwa)
 	ld (xix), a
-	jr LABEL_F9549E
+	jr DrawStr_LoopCheck
 
-LABEL_F95493:
+DrawStr_WrapAround:
 	ld hl, (xsp + 2)
 	exts xhl
 	sub xwa, xhl
 	ld a, (xwa)
 	ld (xix), a
 
-LABEL_F9549E:
+DrawStr_LoopCheck:
 	inc 1, de
 	ld wa, de
 	cp wa, (xsp + 4)
-	jr c, LABEL_F9546E
+	jr c, DrawStr_LoopBody
 
-LABEL_F954A7:
+DrawStr_Epilogue:
 	ld xwa, (xsp + 10)
 	stib_dri 0x07, 0xE0, 0xE8, 0x00
 	lds hl, 0
 	ld de, (xsp + 2)
 	inc 1, bc
 	cp bc, de
-	jr nc, LABEL_F954BD
+	jr nc, DrawStr_Return
 	ld hl, bc
 
-LABEL_F954BD:
+DrawStr_Return:
 	popw iz
 	lda xsp, (xsp + 12)
 	retd 0x2
@@ -449,15 +449,15 @@ WaitingFunc:
 	push xiz
 	ld (xsp + 68), xde
 	cp xbc, 0x1C0000B
-	jr z, LABEL_F954EC
+	jr z, WaitingFunc_DrawMessage
 	cp xbc, 0x1C00001
-	jr nz, LABEL_F9552D
+	jr nz, WaitingFunc_Return
 	ld xwa, (xsp + 68)
 	st16_24 0x02748a, xwa
 	sti16_24 0x02748c, 0x0000
-	jr LABEL_F9552D
+	jr WaitingFunc_Return
 
-LABEL_F954EC:
+WaitingFunc_DrawMessage:
 	ld8_24 a, 0x0340e4
 	extz wa
 	sla wa, 2
@@ -478,7 +478,7 @@ LABEL_F954EC:
 	ld xbc, 0x1C0000F
 	call 0xFA9660
 
-LABEL_F9552D:
+WaitingFunc_Return:
 	lds32 xhl, 0
 	pop xiz
 	lda xsp, (xsp + 68)
@@ -486,15 +486,15 @@ LABEL_F9552D:
 
 DiskMedleyShowHideFunc:
 	cp xbc, 0x1C00002
-	jr z, LABEL_F95554
+	jr z, DiskMedley_Return
 	cp xbc, 0x1C00001
-	jr nz, LABEL_F95554
+	jr nz, DiskMedley_Return
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
 	lds32 xde, 1
 	call 0xFA9660
 
-LABEL_F95554:
+DiskMedley_Return:
 	lds32 xhl, 0
 	ret
 
@@ -506,27 +506,27 @@ PsFileNameBoxProc:
 	st_dri3l XWA, 0xFD, 0xAA, 0x00
 	ld_sril XWA, (xsp + 0x00a6)
 	cp xwa, 0x1C50001
-	jrl z, LABEL_F95A80
+	jrl z, PsFileNameBox_HandleOkState
 	cp xwa, 0x1C50000
-	jrl z, LABEL_F95A50
+	jrl z, PsFileNameBox_HandleCancelState
 	cp xwa, 0x1C00002
-	jrl z, LABEL_F95A2F
+	jrl z, PsFileNameBox_HandleClose
 	cp xwa, 0x1C0001A
-	jrl z, LABEL_F959CB
+	jrl z, PsFileNameBox_HandleScrollDone
 	cp xwa, 0x1C00019
-	jrl z, LABEL_F959CB
+	jrl z, PsFileNameBox_HandleScrollDone
 	cp xwa, 0x1C00018
-	jrl z, LABEL_F95957
+	jrl z, PsFileNameBox_HandleScrollEvt
 	cp xwa, 0x1C00017
-	jrl z, LABEL_F95957
+	jrl z, PsFileNameBox_HandleScrollEvt
 	cp xwa, 0x1E50002
-	jrl z, LABEL_F95941
+	jrl z, PsFileNameBox_HandleListSelect
 	cp xwa, 0x1C0000F
-	jrl z, LABEL_F95777
+	jrl z, PsFileNameBox_HandleConfirm
 	cp xwa, 0x1C0000B
-	jrl z, LABEL_F95669
+	jrl z, PsFileNameBox_HandleShow
 	cp xwa, 0x1C00001
-	jrl nz, LABEL_F95AB0
+	jrl nz, PsFileNameBox_DefaultHandler
 	ld_sril XWA, (xsp + 0x00aa)
 	call 0xFA6266
 	ld xiz, xhl
@@ -539,11 +539,11 @@ PsFileNameBoxProc:
 	ld xbc, 0x1E50004
 	call 0xFA4A63
 	cpw (xiz + 46), 0x0
-	jr z, LABEL_F95657
+	jr z, PsFileNameBox_Init_Forward
 	cpw (xiz + 40), 0x1
-	jr nz, LABEL_F95631
+	jr nz, PsFileNameBox_Init_HideFirst
 	cpw (xiz + 38), 0x1
-	jr nz, LABEL_F95631
+	jr nz, PsFileNameBox_Init_HideFirst
 	ld_sril XWA, (xsp + 0x00aa)
 	ld xbc, 0x1C00017
 	lds32 xde, 0
@@ -551,9 +551,9 @@ PsFileNameBoxProc:
 	ld_sril XWA, (xsp + 0x00aa)
 	ld xbc, 0x1C00018
 	lds32 xde, 0
-	jr LABEL_F9564D
+	jr PsFileNameBox_Init_Configure
 
-LABEL_F95631:
+PsFileNameBox_Init_HideFirst:
 	ld_sril XWA, (xsp + 0x00aa)
 	ld xbc, 0x1C00018
 	lds32 xde, 0
@@ -562,18 +562,18 @@ LABEL_F95631:
 	ld xbc, 0x1C00017
 	lds32 xde, 0
 
-LABEL_F9564D:
+PsFileNameBox_Init_Configure:
 	call 0xF9A58A
 	lds wa, 1
 	call 0xF9A53B
 
-LABEL_F95657:
+PsFileNameBox_Init_Forward:
 	ld_sril XWA, (xsp + 0x00aa)
 	ld_sril XBC, (xsp + 0x00a6)
 	ld_sril XDE, (xsp + 0x00a2)
-	jrl LABEL_F95ABF
+	jrl PsFileNameBox_DispatchParent
 
-LABEL_F95669:
+PsFileNameBox_HandleShow:
 	ld_sril XWA, (xsp + 0x00aa)
 	ld_sril XBC, (xsp + 0x00a6)
 	ld_sril XDE, (xsp + 0x00a2)
@@ -588,7 +588,7 @@ LABEL_F95669:
 	call 0xFA4A63
 	ld xwa, (xsp + 14)
 	cpw (xwa + 38), 0x2
-	jr lt, LABEL_F95717
+	jr lt, PsFileNameBox_CheckScrollButtons
 	st_dri3b A, 0xFD, 0x92, 0x00
 	ld_sril XWA, (xsp + 0x00aa)
 	call 0xF995DD
@@ -606,9 +606,9 @@ LABEL_F95669:
 	dec 1, wa
 	st_dri3w WA, 0xFD, 0x9C, 0x00
 	ldw (xsp + 12), 0x1
-	jr LABEL_F9570C
+	jr PsFileNameBox_DrawItem_Check
 
-LABEL_F956E4:
+PsFileNameBox_DrawItem_Body:
 	ld wa, (xsp + 8)
 	mrdw3 0x9F, 0x0C, 0x40
 	ld_sriw BC, (xsp + 0x0092)
@@ -623,20 +623,20 @@ LABEL_F956E4:
 	call 0xFAA98A
 	incm 1, (xsp + 12)
 
-LABEL_F9570C:
+PsFileNameBox_DrawItem_Check:
 	ld xwa, (xsp + 14)
 	ld wa, (xwa + 38)
 	cp (xsp + 12), wa
-	jr c, LABEL_F956E4
+	jr c, PsFileNameBox_DrawItem_Body
 
-LABEL_F95717:
+PsFileNameBox_CheckScrollButtons:
 	ld xwa, (xsp + 14)
 	cpw (xwa + 46), 0x0
-	jrl z, LABEL_F95A2A
+	jrl z, PsFileNameBox_ReturnZero
 	cpw (xwa + 40), 0x1
-	jr nz, LABEL_F9574E
+	jr nz, PsFileNameBox_Scroll_HideDown
 	cpw (xwa + 38), 0x1
-	jr nz, LABEL_F9574E
+	jr nz, PsFileNameBox_Scroll_HideDown
 	ld_sril XWA, (xsp + 0x00aa)
 	ld xbc, 0x1C00017
 	lds32 xde, 0
@@ -644,9 +644,9 @@ LABEL_F95717:
 	ld_sril XWA, (xsp + 0x00aa)
 	ld xbc, 0x1C00018
 	lds32 xde, 0
-	jr LABEL_F9576A
+	jr PsFileNameBox_Scroll_Apply
 
-LABEL_F9574E:
+PsFileNameBox_Scroll_HideDown:
 	ld_sril XWA, (xsp + 0x00aa)
 	ld xbc, 0x1C00018
 	lds32 xde, 0
@@ -655,13 +655,13 @@ LABEL_F9574E:
 	ld xbc, 0x1C00017
 	lds32 xde, 0
 
-LABEL_F9576A:
+PsFileNameBox_Scroll_Apply:
 	call 0xF9A58A
 	lds wa, 1
 	call 0xF9A53B
-	jrl LABEL_F95A2A
+	jrl PsFileNameBox_ReturnZero
 
-LABEL_F95777:
+PsFileNameBox_HandleConfirm:
 	ld_sril XWA, (xsp + 0x00aa)
 	call 0xFA6266
 	ld (xsp + 10), xhl
@@ -669,22 +669,22 @@ LABEL_F95777:
 	ld (xsp + 4), xwa
 	ld xwa, (xwa + 50)
 	cpw (xwa), 0x0
-	jrl z, LABEL_F95A2A
+	jrl z, PsFileNameBox_ReturnZero
 	ld_sril XWA, (xsp + 0x00aa)
 	ld_sril XBC, (xsp + 0x00a6)
 	ld_sril XDE, (xsp + 0x00a2)
 	call 0xFA4409
 	ld_sril XWA, (xsp + 0x00a2)
 	or xwa, xwa
-	jrl z, LABEL_F95A2A
+	jrl z, PsFileNameBox_ReturnZero
 	ld xwa, (xsp + 10)
 	lda xhl, (xwa + 38)
 	ld de, (xwa + 40)
 	st_dri3b A, 0xFD, 0x92, 0x00
 	cps de, 1
-	jrl nz, LABEL_F95844
+	jrl nz, PsFileNameBox_Confirm_MultiItem
 	cpw (xhl), 0x1
-	jr nz, LABEL_F95844
+	jr nz, PsFileNameBox_Confirm_MultiItem
 	ld_sril XWA, (xsp + 0x00aa)
 	call 0xF995DD
 	st_dri3b W, 0xFD, 0x92, 0x00
@@ -705,7 +705,7 @@ LABEL_F95777:
 	lda xiy, (xwa + 32)
 	lda xhl, (xhl + 28)
 	cpw (xbc), 0x0
-	jr nz, LABEL_F95826
+	jr nz, PsFileNameBox_Confirm_Existing
 	st_dri3b W, 0xFD, 0x92, 0x00
 	st_dri3b A, 0xFD, 0x9E, 0x00
 	ld xhl, (xhl)
@@ -714,9 +714,9 @@ LABEL_F95777:
 	pushm (xix)
 	pushw 0x0
 	pushw 0x1
-	jr LABEL_F9583D
+	jr PsFileNameBox_Confirm_Execute
 
-LABEL_F95826:
+PsFileNameBox_Confirm_Existing:
 	st_dri3b W, 0xFD, 0x92, 0x00
 	st_dri3b A, 0xFD, 0x9E, 0x00
 	ld xhl, (xhl)
@@ -726,11 +726,11 @@ LABEL_F95826:
 	pushw 0x0
 	pushw 0x0
 
-LABEL_F9583D:
+PsFileNameBox_Confirm_Execute:
 	call 0xFAD084
-	jrl LABEL_F95A2A
+	jrl PsFileNameBox_ReturnZero
 
-LABEL_F95844:
+PsFileNameBox_Confirm_MultiItem:
 	ld wa, (xhl)
 	muls xwa, xde
 	ld de, wa
@@ -738,7 +738,7 @@ LABEL_F95844:
 	ld a, (xwa)
 	exts wa
 	cp wa, de
-	jrl ge, LABEL_F95A2A
+	jrl ge, PsFileNameBox_ReturnZero
 	ld_sril XWA, (xsp + 0x00aa)
 	call 0xF995DD
 	st_dri3b A, 0xFD, 0x92, 0x00
@@ -810,15 +810,15 @@ LABEL_F95844:
 	st_dri3b A, 0xFD, 0x9E, 0x00
 	lda xde, (xsp + 18)
 	cp iy, (xix)
-	jr nz, LABEL_F95929
+	jr nz, PsFileNameBox_Confirm_NewItem
 	st_dri3b W, 0xFD, 0x92, 0x00
 	ld xhl, (xhl)
 	push xhl
 	pushw 0x0
 	pushw 0xFF
-	jr LABEL_F9593A
+	jr PsFileNameBox_Confirm_Finish
 
-LABEL_F95929:
+PsFileNameBox_Confirm_NewItem:
 	st_dri3b W, 0xFD, 0x92, 0x00
 	ld xhl, (xhl)
 	push xhl
@@ -826,19 +826,19 @@ LABEL_F95929:
 	pushm (xhl + 32)
 	pushm (xhl + 22)
 
-LABEL_F9593A:
+PsFileNameBox_Confirm_Finish:
 	call 0xFACACA
-	jrl LABEL_F95A2A
+	jrl PsFileNameBox_ReturnZero
 
-LABEL_F95941:
+PsFileNameBox_HandleListSelect:
 	ld_sril XWA, (xsp + 0x00aa)
 	call 0xFA6266
 	ld xbc, (xhl + 42)
 	ld_sril XWA, (xsp + 0x00a2)
 	ld (xbc), wa
-	jrl LABEL_F95A2A
+	jrl PsFileNameBox_ReturnZero
 
-LABEL_F95957:
+PsFileNameBox_HandleScrollEvt:
 	ld_sril XWA, (xsp + 0x00aa)
 	call 0xFA6266
 	ld xiz, xhl
@@ -851,28 +851,28 @@ LABEL_F95957:
 	ld_sril XDE, (xsp + 0x00a2)
 	call 0xFA4409
 	cpw (xiz + 48), 0x0
-	jrl z, LABEL_F95A2A
+	jrl z, PsFileNameBox_ReturnZero
 	ld_sril XWA, (xsp + 0x00a2)
 	or xwa, xwa
-	jrl nz, LABEL_F95A2A
+	jrl nz, PsFileNameBox_ReturnZero
 	ld_sril XWA, (xsp + 0x00a6)
 	cp xwa, 0x1C00017
-	jr nz, LABEL_F959B6
+	jr nz, PsFileNameBox_ScrollEvt_Down
 	ld_sril XWA, (xsp + 0x00aa)
 	ld xbc, 0x1C00019
 	ld_sril XDE, (xsp + 0x00a2)
-	jr LABEL_F959C5
+	jr PsFileNameBox_ScrollEvt_Send
 
-LABEL_F959B6:
+PsFileNameBox_ScrollEvt_Down:
 	ld_sril XWA, (xsp + 0x00aa)
 	ld xbc, 0x1C0001A
 	ld_sril XDE, (xsp + 0x00a2)
 
-LABEL_F959C5:
+PsFileNameBox_ScrollEvt_Send:
 	call 0xF9A5BD
-	jr LABEL_F95A2A
+	jr PsFileNameBox_ReturnZero
 
-LABEL_F959CB:
+PsFileNameBox_HandleScrollDone:
 	ld_sril XWA, (xsp + 0x00aa)
 	ld_sril XBC, (xsp + 0x00a6)
 	ld_sril XDE, (xsp + 0x00a2)
@@ -880,33 +880,33 @@ LABEL_F959CB:
 	ld_sril XWA, (xsp + 0x00aa)
 	call 0xFA6266
 	cpw (xhl + 48), 0x0
-	jr z, LABEL_F95A2A
+	jr z, PsFileNameBox_ReturnZero
 	ld_sril XWA, (xsp + 0x00a2)
 	or xwa, xwa
-	jr nz, LABEL_F95A2A
+	jr nz, PsFileNameBox_ReturnZero
 	ld xwa, (xhl + 54)
 	cpw (xwa), 0x0
-	jr z, LABEL_F95A2A
+	jr z, PsFileNameBox_ReturnZero
 	ld_sril XBC, (xsp + 0x00a6)
 	ld xwa, (xhl + 34)
 	cp xbc, 0x1C00019
-	jr nz, LABEL_F95A1C
+	jr nz, PsFileNameBox_ScrollDone_PairDown
 	ld xbc, 0x1C00017
 	ld_sril XDE, (xsp + 0x00a2)
-	jr LABEL_F95A26
+	jr PsFileNameBox_ScrollDone_Forward
 
-LABEL_F95A1C:
+PsFileNameBox_ScrollDone_PairDown:
 	ld xbc, 0x1C00018
 	ld_sril XDE, (xsp + 0x00a2)
 
-LABEL_F95A26:
+PsFileNameBox_ScrollDone_Forward:
 	call 0xFA4A63
 
-LABEL_F95A2A:
+PsFileNameBox_ReturnZero:
 	lds32 xhl, 0
-	jrl LABEL_F95AC3
+	jrl PsFileNameBox_Return
 
-LABEL_F95A2F:
+PsFileNameBox_HandleClose:
 	ld_sril XWA, (xsp + 0x00aa)
 	call 0xFA6266
 	ld xwa, (xhl + 50)
@@ -914,55 +914,55 @@ LABEL_F95A2F:
 	ld_sril XWA, (xsp + 0x00aa)
 	ld_sril XBC, (xsp + 0x00a6)
 	ld_sril XDE, (xsp + 0x00a2)
-	jr LABEL_F95ABF
+	jr PsFileNameBox_DispatchParent
 
-LABEL_F95A50:
+PsFileNameBox_HandleCancelState:
 	ld_sril XWA, (xsp + 0x00aa)
 	call 0xFA6266
 	ld xbc, (xhl + 50)
 	ld_sril XWA, (xsp + 0x00a2)
 	or xwa, xwa
-	jr z, LABEL_F95A6B
+	jr z, PsFileNameBox_CancelState_Set
 	ldw (xbc), 0x0
-	jr LABEL_F95A6F
+	jr PsFileNameBox_CancelState_Forward
 
-LABEL_F95A6B:
+PsFileNameBox_CancelState_Set:
 	ldw (xbc), 0x1
 
-LABEL_F95A6F:
+PsFileNameBox_CancelState_Forward:
 	ld_sril XWA, (xsp + 0x00aa)
 	ld_sril XBC, (xsp + 0x00a6)
 	ld_sril XDE, (xsp + 0x00a2)
-	jr LABEL_F95ABF
+	jr PsFileNameBox_DispatchParent
 
-LABEL_F95A80:
+PsFileNameBox_HandleOkState:
 	ld_sril XWA, (xsp + 0x00aa)
 	call 0xFA6266
 	ld xbc, (xhl + 54)
 	ld_sril XWA, (xsp + 0x00a2)
 	or xwa, xwa
-	jr z, LABEL_F95A9B
+	jr z, PsFileNameBox_OkState_Set
 	ldw (xbc), 0x0
-	jr LABEL_F95A9F
+	jr PsFileNameBox_OkState_Forward
 
-LABEL_F95A9B:
+PsFileNameBox_OkState_Set:
 	ldw (xbc), 0x1
 
-LABEL_F95A9F:
+PsFileNameBox_OkState_Forward:
 	ld_sril XWA, (xsp + 0x00aa)
 	ld_sril XBC, (xsp + 0x00a6)
 	ld_sril XDE, (xsp + 0x00a2)
-	jr LABEL_F95ABF
+	jr PsFileNameBox_DispatchParent
 
-LABEL_F95AB0:
+PsFileNameBox_DefaultHandler:
 	ld_sril XWA, (xsp + 0x00aa)
 	ld_sril XBC, (xsp + 0x00a6)
 	ld_sril XDE, (xsp + 0x00a2)
 
-LABEL_F95ABF:
+PsFileNameBox_DispatchParent:
 	call 0xFA4409
 
-LABEL_F95AC3:
+PsFileNameBox_Return:
 	pop xiz
 	st_dri3b L, 0xFD, 0xAA, 0x00
 	ret
