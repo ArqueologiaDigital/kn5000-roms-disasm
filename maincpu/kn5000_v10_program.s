@@ -257523,46 +257523,154 @@ LABEL_FA993D:
 	inc 8, xsp
 	ret
 
+; =============================================================================
+; EventDispatch_Direct -- Direct event dispatch for key press routing
+;
+; Called from KeyPress_StateDispatch (F98697) with:
+;   XWA = target workspace (0xFFFFFFFF = broadcast)
+;   XBC = event code (e.g. 0x01C00038 = key press)
+;   XDE = event parameter (packed key data)
+;
+; If the event ring buffer (at 0x02EC34/0x02EC36) is empty, delegates
+; directly to BroadcastEvent (FA9D58) with the original parameters.
+;
+; If events are queued, scans the registration table (0x02BC34, 12-byte
+; entries) for handlers registered for event 0x01C00038 whose filter
+; (upper 16 bits) matches the event parameter. Updates matched entries
+; and accumulates result bits in QIZH, then dispatches via FA9D58.
+;
+; Stack frame: 22 bytes local + QIZ save
+;   (XSP+0x14) = saved XWA (target)
+;   (XSP+0x10) = saved XBC (event code)
+;   (XSP+0x0C) = saved XDE (event param)
+;   (XSP+0x0A) = param byte 1 (srl 8 of XDE & 0xFF)
+;   (XSP+0x08) = accumulator byte
+;   (XSP+0x06) = param byte 0 (XDE & 0xFF)
+;   (XSP+0x02) = working copy of event param
+; =============================================================================
 LABEL_FA9945:
-	.byte 0xbf, 0xea, 0x37, 0xd7, 0xfa, 0x04, 0xbf, 0x0c
-	.byte 0x62, 0xbf, 0x10, 0x61, 0xbf, 0x14, 0x60, 0xd8
-	.byte 0xac, 0x1d, 0xa7, 0x1e, 0xef, 0xd2, 0x36, 0xec
-	.byte 0x02, 0x21, 0xd2, 0x34, 0xec, 0x02, 0x22, 0xd9
-	.byte 0xf2, 0x6e, 0x12, 0xd8, 0xac, 0x1d, 0xd4, 0x1d
-	.byte 0xef, 0xaf, 0x14, 0x20, 0xaf, 0x10, 0x21, 0xaf
-	.byte 0x0c, 0x22, 0x78, 0xf3, 0x00, 0xaf, 0x0c, 0x20
-	.byte 0xbf, 0x02, 0x60, 0xe8, 0xcc, 0xff, 0x00, 0x00
-	.byte 0x00, 0xbf, 0x06, 0x41, 0xaf, 0x02, 0x20, 0xe8
-	.byte 0xef, 0x08, 0xe8, 0xcc, 0xff, 0x00, 0x00, 0x00
-	.byte 0xbf, 0x0a, 0x41, 0xc7, 0xfb, 0xa8, 0xbf, 0x08
-	.byte 0x00, 0x00, 0xda, 0x8c, 0xd9, 0x8b, 0xd9, 0xf2
-	.byte 0x66, 0x7c, 0xdc, 0x89, 0xd9, 0x09, 0x0c, 0x00
-	.byte 0xf2, 0x34, 0xbc, 0x02, 0x30, 0xf3, 0x07, 0xe0
-	.byte 0xe4, 0x30, 0xb8, 0x04, 0x31, 0xa1, 0x22, 0xea
-	.byte 0xcf, 0x38, 0x00, 0xc0, 0x01, 0x6e, 0x4b, 0xb8
-	.byte 0x08, 0x32, 0xa2, 0x20, 0xd8, 0xa8, 0xaf, 0x0c
-	.byte 0x25, 0xed, 0xcc, 0x00, 0x00, 0xff, 0xff, 0xe8
-	.byte 0xf5, 0x6e, 0x37, 0x40, 0x00, 0x00, 0xc0, 0x01
-	.byte 0xb1, 0x60, 0xa2, 0x20, 0xe8, 0x89, 0xe9, 0xcc
-	.byte 0xff, 0x00, 0x00, 0x00, 0xcb, 0x8a, 0xe8, 0xef
-	.byte 0x08, 0xe8, 0xcc, 0xff, 0x00, 0x00, 0x00, 0xc9
-	.byte 0x8d, 0xca, 0x8b, 0xcb, 0x06, 0xc7, 0xfb, 0x89
-	.byte 0xcb, 0xc1, 0xc7, 0xfb, 0x99, 0xca, 0xc5, 0xc7
-	.byte 0xfb, 0x89, 0xcd, 0x81, 0xc7, 0xfb, 0x99, 0x8f
-	.byte 0x08, 0xea, 0xdb, 0xf4, 0x66, 0x10, 0xdc, 0xcf
-	.byte 0xff, 0x03, 0x6e, 0x04, 0xdc, 0xa8, 0x68, 0x02
-	.byte 0xdc, 0x61, 0xdb, 0xf4, 0x6e, 0x84, 0xd8, 0xac
-	.byte 0x1d, 0xd4, 0x1d, 0xef, 0x8f, 0x06, 0x23, 0xcb
-	.byte 0x06, 0xc7, 0xfb, 0x89, 0xcb, 0xc1, 0xc7, 0xfb
-	.byte 0x99, 0x8f, 0x0a, 0x23, 0x8f, 0x06, 0xc3, 0xc7
-	.byte 0xfb, 0x89, 0xcb, 0x81, 0xc7, 0xfb, 0x99, 0x8f
-	.byte 0x06, 0x21, 0x8f, 0x08, 0xe9, 0x40, 0x00, 0x00
-	.byte 0xff, 0xff, 0xaf, 0x02, 0xc8, 0xe9, 0xa8, 0xc7
-	.byte 0xfb, 0x8b, 0xe9, 0xee, 0x08, 0xe8, 0xa8, 0x8f
-	.byte 0x08, 0x21, 0xe9, 0x80, 0xaf, 0x02, 0x88, 0xaf
-	.byte 0x14, 0x20, 0xaf, 0x10, 0x21, 0xaf, 0x02, 0x22
-	.byte 0x1e, 0xe8, 0x02, 0xd7, 0xfa, 0x05, 0xbf, 0x16
-	.byte 0x37, 0x0e
+	lda xsp, (xsp - 22)			; allocate 22 bytes stack frame
+	push qiz				; save QIZ
+	ld (xsp + 12), xde			; save event param
+	ld (xsp + 16), xbc			; save event code
+	ld (xsp + 20), xwa			; save target workspace
+	; --- Check if ring buffer is empty ---
+	.byte 0xd8, 0xac			; ld wa, 4  [compact imm, not in LLVM]
+	call 0xEF1EA7				; acquire lock/semaphore (id=4)
+	.byte 0xd2, 0x36, 0xec, 0x02, 0x21	; ld bc, (0x02EC36)  [16-bit from 24-bit addr]
+	.byte 0xd2, 0x34, 0xec, 0x02, 0x22	; ld de, (0x02EC34)  [16-bit from 24-bit addr]
+	cp de, bc				; compare read/write positions
+	jr nz, LABEL_FA997A			; buffer not empty, process events
+	; --- Buffer empty: release lock, dispatch directly ---
+	.byte 0xd8, 0xac			; ld wa, 4
+	call 0xEF1DD4				; release lock/semaphore (id=4)
+	ld xwa, (xsp + 20)			; restore target
+	ld xbc, (xsp + 16)			; restore event code
+	ld xde, (xsp + 12)			; restore event param
+	jrl LABEL_FA9A6D			; jump to dispatch via FA9D58
+LABEL_FA997A:
+	; --- Buffer not empty: extract param bytes from XDE ---
+	ld xwa, (xsp + 12)			; XWA = event param (XDE)
+	ld (xsp + 2), xwa			; save working copy
+	and xwa, 0x000000FF			; isolate low byte
+	ld (xsp + 6), a				; param byte 0 = XDE & 0xFF
+	ld xwa, (xsp + 2)			; reload working copy
+	srl xwa, 8				; shift right 8 bits
+	and xwa, 0x000000FF			; isolate byte
+	ld (xsp + 10), a			; param byte 1 = (XDE >> 8) & 0xFF
+	.byte 0xc7, 0xfb, 0xa8			; ld qizh, 0  [QIZH not in LLVM]
+	ld (xsp + 8), 0x00			; clear accumulator byte
+	; --- Scan registration table ---
+	ld ix, de				; IX = write position (start)
+	ld hl, bc				; HL = read position (end/sentinel)
+	cp de, bc				; check if already at end
+	jr z, LABEL_FA9A23			; empty range, skip scan
+LABEL_FA99A7:
+	ld bc, ix				; BC = current index
+	muls bc, 0x000C				; BC = index * 12 (entry size)
+	lda_24 xwa, 0x02BC34			; XWA = base of registration table
+	.byte 0xf3, 0x07, 0xe0, 0xe4, 0x30	; lda xwa, (xwa + bc)  [reg+reg, not in LLVM]
+	lda xbc, (xwa + 4)			; XBC = pointer to entry+4 (event code)
+	ld xde, (xbc)				; XDE = registered event code
+	cp xde, 0x01C00038			; compare with key press event
+	jr nz, LABEL_FA9A0F			; no match, skip this entry
+	; --- Event code matches: check filter ---
+	lda xde, (xwa + 8)			; XDE = pointer to entry+8 (filter)
+	ld xwa, (xde)				; XWA = registered filter value
+	.byte 0xd8, 0xa8			; ld wa, 0  [compact clear]
+	ld xiy, (xsp + 12)			; XIY = original event param
+	and xiy, 0xFFFF0000			; isolate upper 16 bits
+	cp xiy, xwa				; compare filter with event param upper bits
+	jr nz, LABEL_FA9A0F			; no match
+	; --- Filter matches: update registration and accumulate bits ---
+	ld xwa, 0x01C00000			; mark as active (clear low 16 bits)
+	ld (xbc), xwa				; write updated event code to entry+4
+	ld xwa, (xde)				; reload filter value
+	ld xbc, xwa				; copy to XBC
+	and xbc, 0x000000FF			; XBC low byte = filter byte 0
+	ld b, c					; B = filter byte 0
+	srl xwa, 8				; shift filter right 8
+	and xwa, 0x000000FF			; isolate byte
+	ld e, a					; E = filter byte 1
+	ld c, b					; C = filter byte 0
+	cpl c					; C = ~filter byte 0 (complement)
+	.byte 0xc7, 0xfb, 0x89			; ld a, qizh
+	and a, c				; clear bits in QIZH where filter has 1s
+	.byte 0xc7, 0xfb, 0x99			; ld qizh, a
+	and e, b				; E = filter & filter (= filter)
+	.byte 0xc7, 0xfb, 0x89			; ld a, qizh
+	add a, e				; set bits in QIZH where filter has 1s
+	.byte 0xc7, 0xfb, 0x99			; ld qizh, a
+	or (xsp + 8), b				; accumulate filter byte 0 into (xsp+8)
+LABEL_FA9A0F:
+	; --- Advance to next registration entry ---
+	cp ix, hl				; reached end sentinel?
+	jr z, LABEL_FA9A23			; yes, done scanning
+	cp ix, 0x03FF				; check for index wrap
+	jr nz, LABEL_FA9A1D			; no wrap needed
+	.byte 0xdc, 0xa8			; ld ix, 0  [compact clear, wrap to 0]
+	jr LABEL_FA9A1F				; skip increment
+LABEL_FA9A1D:
+	inc 1, ix				; next entry index
+LABEL_FA9A1F:
+	cp ix, hl				; check end again
+	jr nz, LABEL_FA99A7			; continue scanning
+LABEL_FA9A23:
+	; --- Done scanning: release lock and reassemble event param ---
+	.byte 0xd8, 0xac			; ld wa, 4
+	call 0xEF1DD4				; release lock/semaphore
+	ld c, (xsp + 6)				; C = param byte 0
+	cpl c					; C = ~param byte 0
+	.byte 0xc7, 0xfb, 0x89			; ld a, qizh
+	and a, c				; clear bits
+	.byte 0xc7, 0xfb, 0x99			; ld qizh, a
+	ld c, (xsp + 10)			; C = param byte 1
+	and c, (xsp + 6)			; C = byte1 & byte0
+	.byte 0xc7, 0xfb, 0x89			; ld a, qizh
+	add a, c				; accumulate
+	.byte 0xc7, 0xfb, 0x99			; ld qizh, a
+	ld a, (xsp + 6)				; A = param byte 0
+	or (xsp + 8), a				; accumulate into (xsp+8)
+	; --- Build final XDE from accumulated data ---
+	ld xwa, 0xFFFF0000			; mask for upper 16 bits
+	and (xsp + 2), xwa			; keep upper 16 bits of working param
+	.byte 0xe9, 0xa8			; ld xbc, 0  [compact clear]
+	.byte 0xc7, 0xfb, 0x8b			; ld c, qizh
+	sll xbc, 8				; shift QIZH value into byte 1 position
+	.byte 0xe8, 0xa8			; ld xwa, 0
+	ld a, (xsp + 8)				; A = accumulator byte
+	add xwa, xbc				; merge
+	add (xsp + 2), xwa			; merge into working param
+	; --- Dispatch event ---
+	ld xwa, (xsp + 20)			; restore target workspace
+	ld xbc, (xsp + 16)			; restore event code
+	ld xde, (xsp + 2)			; load modified event param
+LABEL_FA9A6D:
+	.byte 0x1e, 0xe8, 0x02			; calr 0xFA9D58 (BroadcastEvent / MainDispatchEvent)
+	pop qiz					; restore QIZ
+	lda xsp, (xsp + 22)			; deallocate stack frame
+	ret
+
 
 GetCurrentTarget:
 	ld32_24 xhl, 0x02f83c
