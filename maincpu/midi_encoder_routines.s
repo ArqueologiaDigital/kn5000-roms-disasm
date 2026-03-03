@@ -71,7 +71,7 @@ Encoder_ProcessModwheel:
 	ld l, a
 	extz hl	; Return value in HL
 	ret
-LABEL_FC6CAE:
+Encoder_ProcessModwheel_End:
 
 ; Encoder_ProcessVolume - Process volume/expression slider (Encoder ID 5)
 ; Input: A = raw encoder value
@@ -113,7 +113,7 @@ Encoder_PerformScaling:
 	sll xhl, 8	; Scale up (multiply by 256)
 	ld xwa, xhl
 	ld xbc, 0xEC	; Divisor
-	call LABEL_FF0C18	; Division routine
+	call Math_DivideU32	; Division routine
 	ldda8 a, 36572	; Get mode value
 	extz wa
 	add wa, wa	; Double for word table index
@@ -121,15 +121,15 @@ Encoder_PerformScaling:
 	ld_sriw3 BC, 0x07, 0xE4, 0xE0	; Get index offset
 	extz xbc
 	ld xwa, xhl
-	call LABEL_FF0A5C	; Processing routine
+	call Math_MultiplyAccumulate	; Processing routine
 	ld xwa, xhl
 	ld xbc, 0x14	; Constant
-	call LABEL_FF0C18	; Division
+	call Math_DivideU32	; Division
 	cp xhl, 0x7F	; Clamp to 127 max
 	ret ule	; Return if <= 127
 	ld xhl, 0x7F	; Clamp to 127
 	ret
-LABEL_FC6D2D:
+Encoder_ClampScaleAndNormalize_End:
 
 ; Encoder_ProcessBreath - Process breath controller input
 ; Input: A = raw encoder value
@@ -179,7 +179,7 @@ Encoder_ProcessBreath_SimplePassthrough:
 
 Encoder_ProcessBreath_Return:
 	ret
-LABEL_FC6D9F:
+Encoder_ProcessBreath_End:
 
 ; Encoder_ProcessFoot - Process foot controller input
 ; Input: A = raw encoder value
@@ -199,7 +199,7 @@ Encoder_ProcessFoot:
 	ld l, a
 	extz hl	; Return value in HL
 	ret
-LABEL_FC6DC9:
+Encoder_ProcessFoot_End:
 
 ; Encoder_ProcessExpression - Process expression controller input
 ; Input: A = raw encoder value
@@ -216,7 +216,7 @@ Encoder_ProcessExpression:
 	extz wa
 	ld hl, wa	; Return value in HL
 	ret
-LABEL_FC6DE9:
+Encoder_ProcessExpression_End:
 
 ; Encoder_PassthroughIdentity - Simple passthrough: returns input value in HL
 ; Input: A = value
@@ -225,14 +225,14 @@ Encoder_PassthroughIdentity:
 	ld l, a
 	extz hl
 	ret
-LABEL_FC6DEE:
+Encoder_PassthroughIdentity_End:
 
 ; Encoder_ReturnDefaultConstant - Returns constant 1
 ; Output: HL = 1
 Encoder_ReturnDefaultConstant:
 	lds hl, 1
 	ret
-LABEL_FC6DF1:
+Encoder_ReturnDefaultConstant_End:
 
 ; Encoder_ApplySystemModeSettings - Select processing mode based on system state
 ; Reads mode value from 0xC07D and configures encoder processing accordingly

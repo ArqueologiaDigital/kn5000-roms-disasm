@@ -63,7 +63,7 @@ SeMenuTitleFunc:
 	ldirw
 	lda xwa, (xsp)
 	ld xbc, xhl
-	call LABEL_F9AE97
+	call DirmdEmulator_Entry
 	lda xsp, (xsp + 16)
 	ret
 
@@ -81,7 +81,7 @@ SeEasyTitleFunc:
 	ldirw
 	lda xwa, (xsp)
 	ld xbc, xhl
-	call LABEL_F9AE97
+	call DirmdEmulator_Entry
 	lda xsp, (xsp + 16)
 	ret
 
@@ -99,7 +99,7 @@ SeTonTon1TitleFunc:
 	ldirw
 	lda xwa, (xsp)
 	ld xbc, xhl
-	call LABEL_F9AE97
+	call DirmdEmulator_Entry
 	lda xsp, (xsp + 16)
 	ret
 
@@ -117,7 +117,7 @@ SeTonTon2TitleFunc:
 	ldirw
 	lda xwa, (xsp)
 	ld xbc, xhl
-	call LABEL_F9AE97
+	call DirmdEmulator_Entry
 	lda xsp, (xsp + 16)
 	ret
 
@@ -135,7 +135,7 @@ SeTonRan1TitleFunc:
 	ldirw
 	lda xwa, (xsp)
 	ld xbc, xhl
-	call LABEL_F9AE97
+	call DirmdEmulator_Entry
 	lda xsp, (xsp + 16)
 	ret
 
@@ -153,7 +153,7 @@ SeTonRan2TitleFunc:
 	ldirw
 	lda xwa, (xsp)
 	ld xbc, xhl
-	call LABEL_F9AE97
+	call DirmdEmulator_Entry
 	lda xsp, (xsp + 16)
 	ret
 
@@ -171,7 +171,7 @@ SeTonHyb1TitleFunc:
 	ldirw
 	lda xwa, (xsp)
 	ld xbc, xhl
-	call LABEL_F9AE97
+	call DirmdEmulator_Entry
 	lda xsp, (xsp + 16)
 	ret
 
@@ -189,7 +189,7 @@ SePitPit1TitleFunc:
 	ldirw
 	lda xwa, (xsp)
 	ld xbc, xhl
-	call LABEL_F9AE97
+	call DirmdEmulator_Entry
 	lda xsp, (xsp + 16)
 	ret
 
@@ -207,7 +207,7 @@ SePitEnv1TitleFunc:
 	ldirw
 	lda xwa, (xsp)
 	ld xbc, xhl
-	call LABEL_F9AE97
+	call DirmdEmulator_Entry
 	lda xsp, (xsp + 16)
 	ret
 
@@ -225,7 +225,7 @@ SePitEnv2TitleFunc:
 	ldirw
 	lda xwa, (xsp)
 	ld xbc, xhl
-	call LABEL_F9AE97
+	call DirmdEmulator_Entry
 	lda xsp, (xsp + 16)
 	ret
 
@@ -243,7 +243,7 @@ SePitLfo1TitleFunc:
 	ldirw
 	lda xwa, (xsp)
 	ld xbc, xhl
-	call LABEL_F9AE97
+	call DirmdEmulator_Entry
 	lda xsp, (xsp + 16)
 	ret
 
@@ -261,7 +261,7 @@ SeAmpAmp1TitleFunc:
 	ldirw
 	lda xwa, (xsp)
 	ld xbc, xhl
-	call LABEL_F9AE97
+	call DirmdEmulator_Entry
 	lda xsp, (xsp + 16)
 	ret
 
@@ -279,11 +279,11 @@ SeAmpAmp2TitleFunc:
 	ldirw
 	lda xwa, (xsp)
 	ld xbc, xhl
-	call LABEL_F9AE97
+	call DirmdEmulator_Entry
 	lda xsp, (xsp + 16)
 	ret
 
-LABEL_F039B7:
+SeAmpAmp2TitleFunc_DisplayData:
 	.byte 0x1b, 0x33, 0xac, 0xf0, 0x1b, 0x18, 0xbc, 0xf0
 	.byte 0x9f, 0x04, 0x20, 0x9f, 0x06, 0x21, 0x1b, 0xe1
 	.byte 0x3d, 0xf0, 0x1b, 0x22, 0xbc, 0xf0
@@ -297,11 +297,11 @@ SeAmpEnv1TitleFunc:
 	ldirw
 	lda xwa, (xsp)
 	ld xbc, xhl
-	call LABEL_F9AE97
+	call DirmdEmulator_Entry
 	lda xsp, (xsp + 16)
 	ret
 
-LABEL_F039EA:
+SeAmpEnv1TitleFunc_DisplayData:
 	.byte 0x1b, 0xd4, 0xac, 0xf0, 0x1b, 0x23, 0xbc, 0xf0
 	.byte 0x9f, 0x04, 0x20, 0x9f, 0x06, 0x21, 0x1b, 0x0f
 	.byte 0x3e, 0xf0, 0x1b, 0x2d, 0xbc, 0xf0
@@ -315,11 +315,11 @@ SeAmpEnv2TitleFunc:
 	ldirw
 	lda xwa, (xsp)
 	ld xbc, xhl
-	call LABEL_F9AE97
+	call DirmdEmulator_Entry
 	lda xsp, (xsp + 16)
 	ret
 
-LABEL_F03A1D:
+SeAmpEnv2TitleFunc_DisplayData:
 	.byte 0x1b, 0xd0, 0xad, 0xf0, 0x1b, 0x2e, 0xbc, 0xf0
 	.byte 0x9f, 0x04, 0x20, 0x9f, 0x06, 0x21, 0x1b, 0x3d
 	.byte 0x3e, 0xf0, 0x1b, 0x38, 0xbc, 0xf0
@@ -333,11 +333,11 @@ SeAmpLfo1TitleFunc:
 	ldirw
 	lda xwa, (xsp)
 	ld xbc, xhl
-	call LABEL_F9AE97
+	call DirmdEmulator_Entry
 	lda xsp, (xsp + 16)
 	ret
 
-LABEL_F03A50:
+SeAmpLfo1TitleFunc_DisplayData:
 	.byte 0x1b, 0x7b, 0xae, 0xf0, 0x1b, 0x39, 0xbc, 0xf0
 	.byte 0x9f, 0x04, 0x20, 0x9f, 0x06, 0x21, 0x1b, 0x6b
 	.byte 0x3e, 0xf0, 0x1b, 0x43, 0xbc, 0xf0
@@ -351,11 +351,11 @@ SeFilLpq1TitleFunc:
 	ldirw
 	lda xwa, (xsp)
 	ld xbc, xhl
-	call LABEL_F9AE97
+	call DirmdEmulator_Entry
 	lda xsp, (xsp + 16)
 	ret
 
-LABEL_F03A83:
+SeFilLpq1TitleFunc_DisplayData:
 	.byte 0x1b, 0x4f, 0xb0, 0xf0, 0x1b, 0x9c, 0xbc, 0xf0
 	.byte 0x9f, 0x04, 0x20, 0x9f, 0x06, 0x21, 0x1b, 0x5e
 	.byte 0x4e, 0xf0, 0x1b, 0xa6, 0xbc, 0xf0
@@ -369,11 +369,11 @@ SeFilHpq1TitleFunc:
 	ldirw
 	lda xwa, (xsp)
 	ld xbc, xhl
-	call LABEL_F9AE97
+	call DirmdEmulator_Entry
 	lda xsp, (xsp + 16)
 	ret
 
-LABEL_F03AB6:
+SeFilHpq1TitleFunc_DisplayData:
 	.byte 0x1b, 0x8b, 0xb1, 0xf0, 0x1b, 0xa7, 0xbc, 0xf0
 	.byte 0x9f, 0x04, 0x20, 0x9f, 0x06, 0x21, 0x1b, 0x8c
 	.byte 0x4e, 0xf0, 0x1b, 0xb1, 0xbc, 0xf0
@@ -387,11 +387,11 @@ SeFilL241TitleFunc:
 	ldirw
 	lda xwa, (xsp)
 	ld xbc, xhl
-	call LABEL_F9AE97
+	call DirmdEmulator_Entry
 	lda xsp, (xsp + 16)
 	ret
 
-LABEL_F03AE9:
+SeFilL241TitleFunc_DisplayData:
 	.byte 0x1b, 0xa6, 0xb1, 0xf0, 0x1b, 0xb2, 0xbc, 0xf0
 	.byte 0x9f, 0x04, 0x20, 0x9f, 0x06, 0x21, 0x1b, 0xba
 	.byte 0x4e, 0xf0, 0x1b, 0xbc, 0xbc, 0xf0
@@ -405,11 +405,11 @@ SeFilH241TitleFunc:
 	ldirw
 	lda xwa, (xsp)
 	ld xbc, xhl
-	call LABEL_F9AE97
+	call DirmdEmulator_Entry
 	lda xsp, (xsp + 16)
 	ret
 
-LABEL_F03B1C:
+SeFilH241TitleFunc_DisplayData:
 	.byte 0x1b, 0xbd, 0xb1, 0xf0, 0x1b, 0xbd, 0xbc, 0xf0
 	.byte 0x9f, 0x04, 0x20, 0x9f, 0x06, 0x21, 0x1b, 0xe8
 	.byte 0x4e, 0xf0, 0x1b, 0xc7, 0xbc, 0xf0
@@ -423,11 +423,11 @@ SeFilBpf1TitleFunc:
 	ldirw
 	lda xwa, (xsp)
 	ld xbc, xhl
-	call LABEL_F9AE97
+	call DirmdEmulator_Entry
 	lda xsp, (xsp + 16)
 	ret
 
-LABEL_F03B4F:
+SeFilBpf1TitleFunc_DisplayData:
 	.byte 0x1b, 0xd4, 0xb1, 0xf0, 0x1b, 0xc8, 0xbc, 0xf0
 	.byte 0x9f, 0x04, 0x20, 0x9f, 0x06, 0x21, 0x1b, 0x16
 	.byte 0x4f, 0xf0, 0x1b, 0xd2, 0xbc, 0xf0
@@ -441,11 +441,11 @@ SeFilBcf1TitleFunc:
 	ldirw
 	lda xwa, (xsp)
 	ld xbc, xhl
-	call LABEL_F9AE97
+	call DirmdEmulator_Entry
 	lda xsp, (xsp + 16)
 	ret
 
-LABEL_F03B82:
+SeFilBcf1TitleFunc_DisplayData:
 	.byte 0x1b, 0xe7, 0xb1, 0xf0, 0x1b, 0xd3, 0xbc, 0xf0
 	.byte 0x9f, 0x04, 0x20, 0x9f, 0x06, 0x21, 0x1b, 0x44
 	.byte 0x4f, 0xf0, 0x1b, 0xdd, 0xbc, 0xf0
@@ -459,11 +459,11 @@ SeFilFil2TitleFunc:
 	ldirw
 	lda xwa, (xsp)
 	ld xbc, xhl
-	call LABEL_F9AE97
+	call DirmdEmulator_Entry
 	lda xsp, (xsp + 16)
 	ret
 
-LABEL_F03BB5:
+SeFilFil2TitleFunc_DisplayData:
 	.byte 0x1b, 0xf6, 0xb1, 0xf0, 0x1b, 0xde, 0xbc, 0xf0
 	.byte 0x9f, 0x04, 0x20, 0x9f, 0x06, 0x21, 0x1b, 0x72
 	.byte 0x4f, 0xf0, 0x1b, 0xe8, 0xbc, 0xf0
@@ -477,11 +477,11 @@ SeFilEnv1TitleFunc:
 	ldirw
 	lda xwa, (xsp)
 	ld xbc, xhl
-	call LABEL_F9AE97
+	call DirmdEmulator_Entry
 	lda xsp, (xsp + 16)
 	ret
 
-LABEL_F03BE8:
+SeFilEnv1TitleFunc_DisplayData:
 	.byte 0x1b, 0x97, 0xb2, 0xf0, 0x1b, 0xe9, 0xbc, 0xf0
 	.byte 0x9f, 0x04, 0x20, 0x9f, 0x06, 0x21, 0x1b, 0xa0
 	.byte 0x4f, 0xf0, 0x1b, 0xf3, 0xbc, 0xf0
@@ -495,11 +495,11 @@ SeFilEnv2TitleFunc:
 	ldirw
 	lda xwa, (xsp)
 	ld xbc, xhl
-	call LABEL_F9AE97
+	call DirmdEmulator_Entry
 	lda xsp, (xsp + 16)
 	ret
 
-LABEL_F03C1B:
+SeFilEnv2TitleFunc_DisplayData:
 	.byte 0x1b, 0x2d, 0xb3, 0xf0, 0x1b, 0xf4, 0xbc, 0xf0
 	.byte 0x9f, 0x04, 0x20, 0x9f, 0x06, 0x21, 0x1b, 0xce
 	.byte 0x4f, 0xf0, 0x1b, 0xfe, 0xbc, 0xf0
@@ -513,11 +513,11 @@ SeFilLfo1TitleFunc:
 	ldirw
 	lda xwa, (xsp)
 	ld xbc, xhl
-	call LABEL_F9AE97
+	call DirmdEmulator_Entry
 	lda xsp, (xsp + 16)
 	ret
 
-LABEL_F03C4E:
+SeFilLfo1TitleFunc_DisplayData:
 	.byte 0x1b, 0xd7, 0xb3, 0xf0, 0x1b, 0xff, 0xbc, 0xf0
 	.byte 0x9f, 0x04, 0x20, 0x9f, 0x06, 0x21, 0x1b, 0xfc
 	.byte 0x4f, 0xf0, 0x1b, 0x09, 0xbd, 0xf0
@@ -531,11 +531,11 @@ SeDigEffTitleFunc:
 	ldirw
 	lda xwa, (xsp)
 	ld xbc, xhl
-	call LABEL_F9AE97
+	call DirmdEmulator_Entry
 	lda xsp, (xsp + 16)
 	ret
 
-LABEL_F03C81:
+SeDigEffTitleFunc_DisplayData:
 	.byte 0x1b, 0xd8, 0xba, 0xf0, 0x1b, 0x19, 0xbd, 0xf0
 	.byte 0x9f, 0x04, 0x20, 0x9f, 0x06, 0x21, 0x1b, 0xc8
 	.byte 0xd7, 0xf0, 0x1b, 0x23, 0xbd, 0xf0
@@ -549,11 +549,11 @@ SeCtr2TitleFunc:
 	ldirw
 	lda xwa, (xsp)
 	ld xbc, xhl
-	call LABEL_F9AE97
+	call DirmdEmulator_Entry
 	lda xsp, (xsp + 16)
 	ret
 
-LABEL_F03CB4:
+SeCtr2TitleFunc_DisplayData:
 	.byte 0x1b, 0x81, 0xae, 0xf0, 0x1b, 0x4f, 0xbc, 0xf0
 	.byte 0x9f, 0x04, 0x20, 0x9f, 0x06, 0x21, 0x1b, 0x2f
 	.byte 0xbd, 0xf0, 0x1b, 0x59, 0xbc, 0xf0
@@ -567,11 +567,11 @@ SeCtr3TitleFunc:
 	ldirw
 	lda xwa, (xsp)
 	ld xbc, xhl
-	call LABEL_F9AE97
+	call DirmdEmulator_Entry
 	lda xsp, (xsp + 16)
 	ret
 
-LABEL_F03CE7:
+SeCtr3TitleFunc_DisplayData:
 	.byte 0x1b, 0x0b, 0xb0, 0xf0, 0x1b, 0x5a, 0xbc, 0xf0
 	.byte 0x9f, 0x04, 0x20, 0x9f, 0x06, 0x21, 0x1b, 0x5d
 	.byte 0xbd, 0xf0, 0x1b, 0x64, 0xbc, 0xf0
@@ -585,11 +585,11 @@ SeCopyTitleFunc:
 	ldirw
 	lda xwa, (xsp)
 	ld xbc, xhl
-	call LABEL_F9AE97
+	call DirmdEmulator_Entry
 	lda xsp, (xsp + 16)
 	ret
 
-LABEL_F03D1A:
+SeCopyTitleFunc_DisplayData:
 	.byte 0x1b, 0x7d, 0xbb, 0xf0, 0x1b, 0x24, 0xbd, 0xf0
 	.byte 0x9f, 0x04, 0x20, 0x9f, 0x06, 0x21, 0x1b, 0x3e
 	.byte 0xd7, 0xf0, 0x1b, 0x2e, 0xbd, 0xf0
@@ -603,11 +603,11 @@ SeWrtMemTitleFunc:
 	ldirw
 	lda xwa, (xsp)
 	ld xbc, xhl
-	call LABEL_F9AE97
+	call DirmdEmulator_Entry
 	lda xsp, (xsp + 16)
 	ret
 
-LABEL_F03D4D:
+SeWrtMemTitleFunc_DisplayData:
 	.byte 0x1b, 0xc4, 0xb9, 0xf0, 0x1b, 0x0a, 0xbd, 0xf0
 	.byte 0x9f, 0x04, 0x20, 0x9f, 0x06, 0x21, 0x1b, 0x6c
 	.byte 0xd7, 0xf0, 0x1b, 0x0b, 0xbd, 0xf0
@@ -621,7 +621,7 @@ SeWrtSndTitleFunc:
 	ldirw
 	lda xwa, (xsp)
 	ld xbc, xhl
-	call LABEL_F9AE97
+	call DirmdEmulator_Entry
 	lda xsp, (xsp + 16)
 	ret
 
