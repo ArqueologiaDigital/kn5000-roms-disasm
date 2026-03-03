@@ -47036,7 +47036,7 @@ LABEL_EF2738:
 	; --- Sub 1: call EF2FBC with XDE=0x01F271 (14 bytes) ---
 	pushw ix
 	push xde
-	.byte 0xf2, 0x71, 0xf2, 0x01, 0x32		; lda xde, 0x01F271  [F2 prefix]
+	lda_24	xde, 127601
 	call LABEL_EF2FBC
 	pop xde
 	popw ix
@@ -47044,22 +47044,22 @@ LABEL_EF2738:
 LABEL_EF2746:
 	; --- Sub 2: copy (0x01F26B)->HL->(0x01F269) (13 bytes) ---
 	pushw hl
-	.byte 0xd2, 0x6b, 0xf2, 0x01, 0x23		; ld hl, (0x01F26B)  [D2 prefix]
-	.byte 0xf2, 0x69, 0xf2, 0x01, 0x53		; ld (0x01F269), hl  [F2 prefix]
+	ld16_24	hl, 127595
+	st16_24	127593, hl
 	popw hl
 	ret
 LABEL_EF2753:
 	; --- Sub 3: copy (0x01F26D)->HL->(0x01F26B) (13 bytes) ---
 	pushw hl
-	.byte 0xd2, 0x6d, 0xf2, 0x01, 0x23		; ld hl, (0x01F26D)  [D2 prefix]
-	.byte 0xf2, 0x6b, 0xf2, 0x01, 0x53		; ld (0x01F26B), hl  [F2 prefix]
+	ld16_24	hl, 127597
+	st16_24	127595, hl
 	popw hl
 	ret
 LABEL_EF2760:
 	; --- Sub 4: calr EF30A1 with XDE=0x01F37B (13 bytes) ---
 	pushw ix
 	push xde
-	.byte 0xf2, 0x7b, 0xf3, 0x01, 0x32		; lda xde, 0x01F37B  [F2 prefix]
+	lda_24	xde, 127867
 	calr LABEL_EF30A1
 	pop xde
 	popw ix
@@ -47223,15 +47223,15 @@ LABEL_EF286B:
 LABEL_EF2879:
 	; --- Sub 1: copy (0x01F77D)->HL->(0x01F77B) (13 bytes) ---
 	pushw hl
-	.byte 0xd2, 0x7d, 0xf7, 0x01, 0x23		; ld hl, (0x01F77D)  [D2 prefix]
-	.byte 0xf2, 0x7b, 0xf7, 0x01, 0x53		; ld (0x01F77B), hl  [F2 prefix]
+	ld16_24	hl, 128893
+	st16_24	128891, hl
 	popw hl
 	ret
 LABEL_EF2886:
 	; --- Sub 2: call EF2FA1 with XDE=0x01F785 (14 bytes) ---
 	pushw ix
 	push xde
-	.byte 0xf2, 0x85, 0xf7, 0x01, 0x32		; lda xde, 0x01F785  [F2 prefix]
+	lda_24	xde, 128901
 	call LABEL_EF2FA1
 	pop xde
 	popw ix
@@ -47240,7 +47240,7 @@ LABEL_EF2894:
 	; --- Sub 3: call EF2FBC with XDE=0x01F785 (14 bytes) ---
 	pushw ix
 	push xde
-	.byte 0xf2, 0x85, 0xf7, 0x01, 0x32		; lda xde, 0x01F785  [F2 prefix]
+	lda_24	xde, 128901
 	call LABEL_EF2FBC
 	pop xde
 	popw ix
@@ -47248,15 +47248,15 @@ LABEL_EF2894:
 LABEL_EF28A2:
 	; --- Sub 4: copy (0x01F77F)->HL->(0x01F77D) (13 bytes) ---
 	pushw hl
-	.byte 0xd2, 0x7f, 0xf7, 0x01, 0x23		; ld hl, (0x01F77F)  [D2 prefix]
-	.byte 0xf2, 0x7d, 0xf7, 0x01, 0x53		; ld (0x01F77D), hl  [F2 prefix]
+	ld16_24	hl, 128895
+	st16_24	128893, hl
 	popw hl
 	ret
 LABEL_EF28AF:
 	; --- Sub 5: copy (0x01F781)->HL->(0x01F77F) (13 bytes) ---
 	pushw hl
-	.byte 0xd2, 0x81, 0xf7, 0x01, 0x23		; ld hl, (0x01F781)  [D2 prefix]
-	.byte 0xf2, 0x7f, 0xf7, 0x01, 0x53		; ld (0x01F77F), hl  [F2 prefix]
+	ld16_24	hl, 128897
+	st16_24	128895, hl
 	popw hl
 	ret
 
@@ -47319,15 +47319,15 @@ LABEL_EF2919:
 LABEL_EF2927:
 	; --- Sub 1: copy (0x01F887)->HL->(0x01F885) (13 bytes) ---
 	pushw hl
-	.byte 0xd2, 0x87, 0xf8, 0x01, 0x23		; ld hl, (0x01F887)  [D2 prefix]
-	.byte 0xf2, 0x85, 0xf8, 0x01, 0x53		; ld (0x01F885), hl  [F2 prefix]
+	ld16_24	hl, 129159
+	st16_24	129157, hl
 	popw hl
 	ret
 LABEL_EF2934:
 	; --- Sub 2: call EF3030 with XDE=0x01F88F (14 bytes) ---
 	pushw ix
 	push xde
-	.byte 0xf2, 0x8f, 0xf8, 0x01, 0x32		; lda xde, 0x01F88F  [F2 prefix]
+	lda_24	xde, 129167
 	call LABEL_EF3030
 	pop xde
 	popw ix
@@ -47336,7 +47336,7 @@ LABEL_EF2942:
 	; --- Sub 3: call EF304B with XDE=0x01F88F (14 bytes) ---
 	pushw ix
 	push xde
-	.byte 0xf2, 0x8f, 0xf8, 0x01, 0x32		; lda xde, 0x01F88F  [F2 prefix]
+	lda_24	xde, 129167
 	call LABEL_EF304B
 	pop xde
 	popw ix
@@ -47344,15 +47344,15 @@ LABEL_EF2942:
 LABEL_EF2950:
 	; --- Sub 4: copy (0x01F889)->HL->(0x01F887) (13 bytes) ---
 	pushw hl
-	.byte 0xd2, 0x89, 0xf8, 0x01, 0x23		; ld hl, (0x01F889)  [D2 prefix]
-	.byte 0xf2, 0x87, 0xf8, 0x01, 0x53		; ld (0x01F887), hl  [F2 prefix]
+	ld16_24	hl, 129161
+	st16_24	129159, hl
 	popw hl
 	ret
 LABEL_EF295D:
 	; --- Sub 5: copy (0x01F88B)->HL->(0x01F889) (13 bytes) ---
 	pushw hl
-	.byte 0xd2, 0x8b, 0xf8, 0x01, 0x23		; ld hl, (0x01F88B)  [D2 prefix]
-	.byte 0xf2, 0x89, 0xf8, 0x01, 0x53		; ld (0x01F889), hl  [F2 prefix]
+	ld16_24	hl, 129163
+	st16_24	129161, hl
 	popw hl
 	ret
 
@@ -47684,15 +47684,15 @@ LABEL_EF2C7F:
 LABEL_EF2C8D:
 	; --- Sub 1: copy (0x0201B9)->HL->(0x0201B7) (13 bytes) ---
 	pushw hl
-	.byte 0xd2, 0xb9, 0x01, 0x02, 0x23		; ld hl, (0x0201B9)  [D2 prefix]
-	.byte 0xf2, 0xb7, 0x01, 0x02, 0x53		; ld (0x0201B7), hl  [F2 prefix]
+	ld16_24	hl, 131513
+	st16_24	131511, hl
 	popw hl
 	ret
 LABEL_EF2C9A:
 	; --- Sub 2: call EF2FA1 with XDE=0x0201C1 (14 bytes) ---
 	pushw ix
 	push xde
-	.byte 0xf2, 0xc1, 0x01, 0x02, 0x32		; lda xde, 0x0201C1  [F2 prefix]
+	lda_24	xde, 131521
 	call LABEL_EF2FA1
 	pop xde
 	popw ix
@@ -47701,7 +47701,7 @@ LABEL_EF2CA8:
 	; --- Sub 3: call EF2FBC with XDE=0x0201C1 (14 bytes) ---
 	pushw ix
 	push xde
-	.byte 0xf2, 0xc1, 0x01, 0x02, 0x32		; lda xde, 0x0201C1  [F2 prefix]
+	lda_24	xde, 131521
 	call LABEL_EF2FBC
 	pop xde
 	popw ix
@@ -47709,15 +47709,15 @@ LABEL_EF2CA8:
 LABEL_EF2CB6:
 	; --- Sub 4: copy (0x0201BB)->HL->(0x0201B9) (13 bytes) ---
 	pushw hl
-	.byte 0xd2, 0xbb, 0x01, 0x02, 0x23		; ld hl, (0x0201BB)  [D2 prefix]
-	.byte 0xf2, 0xb9, 0x01, 0x02, 0x53		; ld (0x0201B9), hl  [F2 prefix]
+	ld16_24	hl, 131515
+	st16_24	131513, hl
 	popw hl
 	ret
 LABEL_EF2CC3:
 	; --- Sub 5: copy (0x0201BD)->HL->(0x0201BB) (13 bytes) ---
 	pushw hl
-	.byte 0xd2, 0xbd, 0x01, 0x02, 0x23		; ld hl, (0x0201BD)  [D2 prefix]
-	.byte 0xf2, 0xbb, 0x01, 0x02, 0x53		; ld (0x0201BB), hl  [F2 prefix]
+	ld16_24	hl, 131517
+	st16_24	131515, hl
 	popw hl
 	ret
 
@@ -47815,15 +47815,15 @@ LABEL_EF2DDB:
 LABEL_EF2DE9:
 	; --- Sub 1: copy (0x0203CD)->HL->(0x0203CB) (13 bytes) ---
 	pushw hl
-	.byte 0xd2, 0xcd, 0x03, 0x02, 0x23		; ld hl, (0x0203CD)  [D2 prefix]
-	.byte 0xf2, 0xcb, 0x03, 0x02, 0x53		; ld (0x0203CB), hl  [F2 prefix]
+	ld16_24	hl, 132045
+	st16_24	132043, hl
 	popw hl
 	ret
 LABEL_EF2DF6:
 	; --- Sub 2: call EF2FA1 with XDE=0x0203D5 (14 bytes) ---
 	pushw ix
 	push xde
-	.byte 0xf2, 0xd5, 0x03, 0x02, 0x32		; lda xde, 0x0203D5  [F2 prefix]
+	lda_24	xde, 132053
 	call LABEL_EF2FA1
 	pop xde
 	popw ix
@@ -47832,7 +47832,7 @@ LABEL_EF2E04:
 	; --- Sub 3: call EF2FBC with XDE=0x0203D5 (14 bytes) ---
 	pushw ix
 	push xde
-	.byte 0xf2, 0xd5, 0x03, 0x02, 0x32		; lda xde, 0x0203D5  [F2 prefix]
+	lda_24	xde, 132053
 	call LABEL_EF2FBC
 	pop xde
 	popw ix
@@ -47840,15 +47840,15 @@ LABEL_EF2E04:
 LABEL_EF2E12:
 	; --- Sub 4: copy (0x0203CF)->HL->(0x0203CD) (13 bytes) ---
 	pushw hl
-	.byte 0xd2, 0xcf, 0x03, 0x02, 0x23		; ld hl, (0x0203CF)  [D2 prefix]
-	.byte 0xf2, 0xcd, 0x03, 0x02, 0x53		; ld (0x0203CD), hl  [F2 prefix]
+	ld16_24	hl, 132047
+	st16_24	132045, hl
 	popw hl
 	ret
 LABEL_EF2E1F:
 	; --- Sub 5: copy (0x0203D1)->HL->(0x0203CF) (13 bytes) ---
 	pushw hl
-	.byte 0xd2, 0xd1, 0x03, 0x02, 0x23		; ld hl, (0x0203D1)  [D2 prefix]
-	.byte 0xf2, 0xcf, 0x03, 0x02, 0x53		; ld (0x0203CF), hl  [F2 prefix]
+	ld16_24	hl, 132049
+	st16_24	132047, hl
 	popw hl
 	ret
 
@@ -47917,15 +47917,15 @@ LABEL_EF2EB2:
 LABEL_EF2EC0:
 	; --- Sub 1: copy (0x0204D9)->HL->(0x0204D7) (13 bytes) ---
 	pushw hl
-	.byte 0xd2, 0xd9, 0x04, 0x02, 0x23		; ld hl, (0x0204D9)  [D2 prefix]
-	.byte 0xf2, 0xd7, 0x04, 0x02, 0x53		; ld (0x0204D7), hl  [F2 prefix]
+	ld16_24	hl, 132313
+	st16_24	132311, hl
 	popw hl
 	ret
 LABEL_EF2ECD:
 	; --- Sub 2: copy (0x0204DB)->HL->(0x0204D9) (13 bytes) ---
 	pushw hl
-	.byte 0xd2, 0xdb, 0x04, 0x02, 0x23		; ld hl, (0x0204DB)  [D2 prefix]
-	.byte 0xf2, 0xd9, 0x04, 0x02, 0x53		; ld (0x0204D9), hl  [F2 prefix]
+	ld16_24	hl, 132315
+	st16_24	132313, hl
 	popw hl
 	ret
 LABEL_EF2EDA:
@@ -52248,7 +52248,7 @@ LABEL_EF5FFC:
 	call LABEL_EF6033
 	calr LABEL_EF602A
 	call 0xEF5B36
-	.byte 0xf1, 0x08, 0x11, 0x02, 0x00, 0x00	; ld (0x1108), 0x0000  [F1 prefix]
+	stdi16	4360, 0
 	ret
 LABEL_EF6019:
 	; --- Param loader 1: C=0, A=0x0C, A=0x10, call FB1536 ---
@@ -52256,7 +52256,7 @@ LABEL_EF6019:
 	ldb a, 0x0C
 	ldb a, 0x10
 	call LABEL_FB1536
-	.byte 0xf2, 0xa8, 0xef, 0x03, 0x00, 0x00	; ld (0x03EFA8), 0x00  [F2 prefix]
+	sti8_24	257960, 0
 	ret
 LABEL_EF602A:
 	; --- Param loader 2: C=7, A=0x0C, call FB155F ---
@@ -52271,7 +52271,7 @@ LABEL_EF6033:
 LABEL_EF6038:
 	; --- Conditional handler: call EF6047, compare mem, ret ---
 	call LABEL_EF6047
-	.byte 0xc1, 0x36, 0x8d, 0x21			; ld a, (0x8D36)  [C1 prefix]
+	ldda8	a, 36150
 	.byte 0xc1, 0x37, 0x8d, 0xf1			; cp a, (0x8D37)  [C1 prefix]
 	jr z, LABEL_EF6046
 LABEL_EF6046:
@@ -52291,7 +52291,7 @@ LABEL_EF604C:
 LABEL_EF605C:
 	ldb a, 0x01
 	call LABEL_EF2063
-	.byte 0xcf, 0xd8				; cp l, 0  [compact prefix]
+	cps	l, 0
 	jr z, LABEL_EF606E
 	ldb a, 0x03
 	call LABEL_EF1C5F
@@ -52302,7 +52302,7 @@ LABEL_EF606E:
 LABEL_EF6073:
 	; --- XBC/XWA setup and call ---
 	ld xbc, 0x01C00007
-	.byte 0xe8, 0xa8				; ld xwa, 0  [compact zero-load]
+	lds32	xwa, 0
 	call 0xFA9868
 	ret
 LABEL_EF607F:
@@ -52550,11 +52550,11 @@ LABEL_EF6528:
 LABEL_EF6546:
 	; --- Setup: or flag, load value, clamp, store, calls (30 bytes) ---
 	.byte 0xc1, 0xe2, 0xe3, 0x3e, 0x08		; or (0xE3E2), 0x08  [C1 prefix]
-	.byte 0xc1, 0x16, 0x37, 0x21			; ld a, (0x3716)  [C1 prefix]
+	ldda8	a, 14102
 	ldb l, 0x00
 	ldb h, 0x03
 	call LABEL_EF6564
-	.byte 0xf1, 0x16, 0x37, 0x41			; ld (0x3716), a  [F1 prefix]
+	stda8	14102, a
 	call 0xEFF719
 	call 0xEF5C07
 	ret
@@ -53007,9 +53007,9 @@ LABEL_EF6C6B:
 	.long LABEL_EF61E8
 LABEL_EF6CEB:
 	; --- Dispatcher: 5-way branch on (0x10F2) value (318 bytes total) ---
-	.byte 0xc1, 0xf1, 0x10, 0x21			; ld a, (0x10F1)  [C1 prefix]
+	ldda8	a, 4337
 	ldb l, 0x03
-	.byte 0xc1, 0xf2, 0x10, 0x21			; ld a, (0x10F2)  [C1 prefix]
+	ldda8	a, 4338
 	cp a, l
 	jrl z, LABEL_EF6D2D
 	cp a, 0x08
@@ -53019,56 +53019,56 @@ LABEL_EF6CEB:
 	cp a, 0x0B
 	jrl z, LABEL_EF6D90
 	; --- Default handler: H=0x4C, L=0x34 ---
-	.byte 0xc1, 0xf3, 0x10, 0x21			; ld a, (0x10F3)  [C1 prefix]
+	ldda8	a, 4339
 	ldb l, 0x34
 	ldb h, 0x4C
 	call 0xEF6C37
-	.byte 0xf1, 0xf3, 0x10, 0x41			; ld (0x10F3), a  [F1 prefix]
-	.byte 0xf1, 0xf3, 0x0d, 0x00, 0x04		; ld (0x0DF3), 0x04  [F1 prefix]
+	stda8	4339, a
+	stdi8	3571, 4
 	call LABEL_EF6DB7
 	call 0xEFF9EC
 	jp 0xEF6DAD
 LABEL_EF6D2D:
 	; --- Case 0x03: H=0x7F, L=0x00 ---
-	.byte 0xc1, 0xf3, 0x10, 0x21			; ld a, (0x10F3)  [C1 prefix]
+	ldda8	a, 4339
 	ldb l, 0x00
 	ldb h, 0x7F
 	call 0xEF6C37
-	.byte 0xf1, 0xf3, 0x10, 0x41			; ld (0x10F3), a  [F1 prefix]
-	.byte 0xf1, 0xf3, 0x0d, 0x00, 0x04		; ld (0x0DF3), 0x04  [F1 prefix]
+	stda8	4339, a
+	stdi8	3571, 4
 	call LABEL_EF6DB7
 	call 0xEFF8DA
 	jp 0xEF6DAD
 LABEL_EF6D4E:
 	; --- Case 0x08: H=0x7F, L=0x00 ---
-	.byte 0xc1, 0xf3, 0x10, 0x21			; ld a, (0x10F3)  [C1 prefix]
+	ldda8	a, 4339
 	ldb l, 0x00
 	ldb h, 0x7F
 	call 0xEF6C37
-	.byte 0xf1, 0xf3, 0x10, 0x41			; ld (0x10F3), a  [F1 prefix]
-	.byte 0xf1, 0xf3, 0x0d, 0x00, 0x04		; ld (0x0DF3), 0x04  [F1 prefix]
+	stda8	4339, a
+	stdi8	3571, 4
 	call LABEL_EF6DB7
 	call 0xEFF98D
 	jp 0xEF6DAD
 LABEL_EF6D6F:
 	; --- Case 0x0A: H=0xFF, L=0x00 ---
-	.byte 0xc1, 0xf3, 0x10, 0x21			; ld a, (0x10F3)  [C1 prefix]
+	ldda8	a, 4339
 	ldb l, 0x00
 	ldb h, 0xFF
 	call 0xEF6C37
-	.byte 0xf1, 0xf3, 0x10, 0x41			; ld (0x10F3), a  [F1 prefix]
-	.byte 0xf1, 0xf3, 0x0d, 0x00, 0x04		; ld (0x0DF3), 0x04  [F1 prefix]
+	stda8	4339, a
+	stdi8	3571, 4
 	call LABEL_EF6DE3
 	call 0xEFFA59
 	jp 0xEF6DAD
 LABEL_EF6D90:
 	; --- Case 0x0B: H=0x0C, L=0x00 ---
-	.byte 0xc1, 0xf3, 0x10, 0x21			; ld a, (0x10F3)  [C1 prefix]
+	ldda8	a, 4339
 	ldb l, 0x00
 	ldb h, 0x0C
 	call 0xEF6C37
-	.byte 0xf1, 0xf3, 0x10, 0x41			; ld (0x10F3), a  [F1 prefix]
-	.byte 0xf1, 0xf3, 0x0d, 0x00, 0x04		; ld (0x0DF3), 0x04  [F1 prefix]
+	stda8	4339, a
+	stdi8	3571, 4
 	call LABEL_EF6DB7
 	call 0xEFFB02
 LABEL_EF6DAD:
@@ -53079,42 +53079,42 @@ LABEL_EF6DAD:
 LABEL_EF6DB7:
 	; --- Helper 1: guard on W, parameter setup + calls (44 bytes) ---
 	call 0xEFD286
-	.byte 0xc8, 0xd8				; cp w, 0  [compact prefix]
+	cps	w, 0
 	jrl z, LABEL_EF6DE2
-	.byte 0xc9, 0xd1				; xor a, a  [compact self-xor]
+	xor	a, a
 	call LABEL_EFD0B7
-	.byte 0xc1, 0xf3, 0x0d, 0x25			; ld e, (0x0DF3)  [C1 prefix]
+	ldda8	e, 3571
 	xor d, d
 	call 0xEFC4D1
 	call LABEL_EFC369
-	.byte 0xc1, 0xf3, 0x10, 0x20			; ld w, (0x10F3)  [C1 prefix]
+	ldda8	w, 4339
 	call 0xEFC49D
-	.byte 0xc9, 0xd1				; xor a, a  [compact self-xor]
+	xor	a, a
 	call LABEL_EFD10B
 LABEL_EF6DE2:
 	ret
 LABEL_EF6DE3:
 	; --- Helper 2: guard on W, bit manipulation + calls (70 bytes) ---
 	call 0xEFD286
-	.byte 0xc8, 0xd8				; cp w, 0  [compact prefix]
+	cps	w, 0
 	jrl z, LABEL_EF6E28
-	.byte 0xc9, 0xd1				; xor a, a  [compact self-xor]
+	xor	a, a
 	call LABEL_EFD0B7
 	call LABEL_EFC369
-	.byte 0xc1, 0xf3, 0x10, 0x20			; ld w, (0x10F3)  [C1 prefix]
+	ldda8	w, 4339
 	and w, 0x80
-	.byte 0xc8, 0xe8, 0x01				; rlc 1, w  [not in LLVM]
+	rlc	w
 	and a, 0xFE
 	or w, a
 	call 0xEFC49D
-	.byte 0xc1, 0xf3, 0x0d, 0x25			; ld e, (0x0DF3)  [C1 prefix]
+	ldda8	e, 3571
 	xor d, d
 	call 0xEFC4D1
 	call LABEL_EFC369
-	.byte 0xc1, 0xf3, 0x10, 0x20			; ld w, (0x10F3)  [C1 prefix]
+	ldda8	w, 4339
 	and w, 0x7F
 	call 0xEFC49D
-	.byte 0xc9, 0xd1				; xor a, a  [compact self-xor]
+	xor	a, a
 	call LABEL_EFD10B
 LABEL_EF6E28:
 	ret
@@ -53162,10 +53162,10 @@ LABEL_EF6E44:
 	.long LABEL_EF61E8
 LABEL_EF6EC4:
 	; --- State check/dispatch (61 bytes) ---
-	.byte 0xf1, 0x53, 0x0f, 0x00, 0x01		; ld (0x0F53), 0x01  [F1 prefix]
+	stdi8	3923, 1
 	pushw wa
-	.byte 0xd1, 0x1a, 0x37, 0x20			; ld wa, (0x371A)  [D1 prefix]
-	.byte 0xf1, 0xe8, 0x0e, 0x50			; ld (0x0EE8), wa  [F1 prefix]
+	ldda16	wa, 14106
+	stda16	3816, wa
 	popw wa
 	bit 0x07, w
 	jrl z, LABEL_EF6EE1
@@ -53174,7 +53174,7 @@ LABEL_EF6EC4:
 LABEL_EF6EE1:
 	call 0xEF959B
 LABEL_EF6EE5:
-	.byte 0xd1, 0x1a, 0x37, 0x20			; ld wa, (0x371A)  [D1 prefix]
+	ldda16	wa, 14106
 	.byte 0xd1, 0xe8, 0x0e, 0xf0			; cp wa, (0x0EE8)  [D1 prefix]
 	jrl nz, LABEL_EF6EFC
 	call 0xEF5C9D
@@ -53824,12 +53824,12 @@ LABEL_EF7809:
 LABEL_EF7819:
 	; --- Guard/init function (55 bytes) ---
 	call 0xEFD352
-	.byte 0xc8, 0xd8				; cp w, 0  [compact prefix]
+	cps	w, 0
 	jrl nz, LABEL_EF784F
 	call 0xEF885A
 	call 0xEFB769
 	call LABEL_F9951A
-	.byte 0xdb, 0xd8				; cp hl, 0  [compact prefix]
+	cps	hl, 0
 	jrl nz, LABEL_EF784F
 	.byte 0xf1, 0x57, 0x0f, 0xc8			; bit 0, (0x0F57)  [F1 prefix]
 	jrl z, LABEL_EF783F
@@ -54388,13 +54388,13 @@ LABEL_EF8772:
 	jrl nz, LABEL_EF877E
 	jp LABEL_EF87A2
 LABEL_EF877E:
-	.byte 0xc1, 0x8f, 0x0d, 0x21		; ld a, (0x0D8F)  [8-bit direct]
-	.byte 0xf1, 0xd0, 0x0d, 0x41		; ld (0x0DD0), a  [16-bit direct]
+	ldda8	a, 3471
+	stda8	3536, a
 	.byte 0xc1, 0xd1, 0x0d, 0xf1		; cp a, (0x0DD1)  [8-bit direct]
 	jrl nz, LABEL_EF8791
 	call 0xEF865B
 LABEL_EF8791:
-	.byte 0xc1, 0xd2, 0x0d, 0x20		; ld w, (0x0DD2)  [8-bit direct]
+	ldda8	w, 3538
 	ld xiy, 0x00000D8F
 	call 0xEFBDD0
 	call LABEL_EF87A3
@@ -54402,21 +54402,21 @@ LABEL_EF87A2:
 	ret
 LABEL_EF87A3:
 	.byte 0xc1, 0xd3, 0x0d, 0x3e, 0x01	; or (0x0DD3), 0x01  [8-bit direct]
-	.byte 0xc9, 0xd1				; xor a, a  [compact self-xor]
-	.byte 0xf1, 0xd2, 0x0d, 0x41		; ld (0x0DD2), a  [16-bit direct]
-	.byte 0xf1, 0x55, 0x0d, 0x00, 0xff	; ld (0x0D55), 0xFF  [16-bit direct]
+	xor	a, a
+	stda8	3538, a
+	stdi8	3413, 255
 	call 0xEFD286
 	cps w, 0
-	.byte 0x7e, 0x52, 0x00			; jrl nz, 0xEF880E  [target outside block, no label]
-	.byte 0xc1, 0x65, 0x0d, 0x27		; ld l, (0x0D65)  [8-bit direct]
+	jrl	nz, 82
+	ldda8	l, 3429
 	and l, 0x03
-	.byte 0xce, 0xd6				; xor h, h  [compact self-xor]
+	xor	h, h
 	sla hl, 2
 	push xix
 	ld xix, LABEL_EF87D7
 	.byte 0xe3, 0x07, 0xf0, 0xec, 0x23	; ld xhl, (xix + hl)  [R+R addressing]
 	pop xix
-	.byte 0xb3, 0xe8				; call t, xhl  [conditional register call]
+	call	(xhl)
 	ret
 
 
@@ -54702,19 +54702,19 @@ LABEL_EF8FE5:
 	; --- Conditional init (31 bytes) ---
 	.byte 0xc1, 0xef, 0x0d, 0x3f, 0x0f		; cp (0x0DEF), 0x0F  [C1 prefix]
 	jrl z, LABEL_EF8FF6
-	.byte 0xf1, 0xef, 0x0d, 0x00, 0x0f		; ld (0x0DEF), 0x0F  [F1 prefix]
+	stdi8	3567, 15
 	call 0xEFEFA9
 LABEL_EF8FF6:
 	call 0xEFEFAE
-	.byte 0xf1, 0x28, 0x37, 0x00, 0x00		; ld (0x3728), 0x00  [F1 prefix]
+	stdi8	14120, 0
 	call LABEL_EFF03F
 	ret
 LABEL_EF9004:
 	; --- Flag-check with calls (42 bytes) ---
-	.byte 0xc9, 0xd1				; xor a, a  [compact self-xor]
+	xor	a, a
 	call LABEL_EFD0B7
 	call LABEL_EFC7B2
-	.byte 0xc9, 0xd1				; xor a, a  [compact self-xor]
+	xor	a, a
 	call LABEL_EFD10B
 	call LABEL_EFC369
 	ld xhl, 0x00000D54
@@ -54723,7 +54723,7 @@ LABEL_EF9004:
 	jrl nz, LABEL_EF9028
 	.byte 0xb3, 0xba				; set 2, (xhl)  [not in LLVM]
 LABEL_EF9028:
-	.byte 0xf1, 0x5e, 0x0d, 0x00, 0x00		; ld (0x0D5E), 0x00  [F1 prefix]
+	stdi8	3422, 0
 	ret
 
 
@@ -55713,9 +55713,9 @@ LABEL_EFA518:
 LABEL_EFA532:
 	; --- Init: call FB1536, set 3 flags, call 6 handlers, call FB155F (51 bytes) ---
 	call LABEL_FB1536
-	.byte 0xf2, 0xe8, 0x05, 0x02, 0x00, 0xff	; ld (0x0205E8), 0xFF  [F2 prefix]
-	.byte 0xf2, 0xec, 0x05, 0x02, 0x00, 0xff	; ld (0x0205EC), 0xFF  [F2 prefix]
-	.byte 0xf2, 0xea, 0x05, 0x02, 0x00, 0xff	; ld (0x0205EA), 0xFF  [F2 prefix]
+	sti8_24	132584, 255
+	sti8_24	132588, 255
+	sti8_24	132586, 255
 	call 0xEFEFA9
 	call 0xEFEFAE
 	call 0xEFA63C
@@ -58026,7 +58026,7 @@ LABEL_EFDB40:
 LABEL_EFDBC2:
 	; --- Dispatch: set flag, load A, 3-way bounds selection, clamp+calls (70 bytes) ---
 	.byte 0xc1, 0xe2, 0xe3, 0x3e, 0x08		; or (0xE3E2), 0x08  [C1 prefix]
-	.byte 0xc1, 0x1d, 0x11, 0x21			; ld a, (0x111D)  [C1 prefix]
+	ldda8	a, 4381
 	xor l, l
 	ldb h, 0x7F
 	.byte 0xc1, 0x1c, 0x11, 0x3f, 0x01		; cp (0x111C), 0x01  [C1 prefix]
@@ -58045,7 +58045,7 @@ LABEL_EFDBED:
 	ldb h, 0xFF
 LABEL_EFDBF7:
 	call 0xEF6C37
-	.byte 0xf1, 0x1d, 0x11, 0x41			; ld (0x111D), a  [F1 prefix]
+	stda8	4381, a
 	call 0xEFDA9F
 	call 0xEFDA0A
 	ret
@@ -61342,9 +61342,9 @@ LABEL_F020D7:
 	.byte 0xbf, 0x00, 0x51				; ld (xsp+0), bc  [xsp+0 encoding]
 	ld wa, (xwa+8)
 	ld (xsp+2), wa
-	.byte 0xbf, 0x04, 0x30				; lda xwa, xsp+4  [indirect lea]
+	lda	xwa, (xsp+4)
 	ld xde, xwa
-	.byte 0xb7, 0x30				; lda xwa, xsp  [indirect lea]
+	lda	xwa, (xsp)
 	ld xbc, xwa
 	ld xwa, xde
 	ldw de, 0x00ff
@@ -61362,7 +61362,7 @@ LABEL_F02106:
 	ld (xsp+4), bc
 	ld wa, (xwa+8)
 	ld (xsp+6), wa
-	.byte 0xb7, 0x30				; lda xwa, xsp  [indirect lea]
+	lda	xwa, (xsp)
 	ldw bc, 0x00f5
 	call 0xFAB273
 	inc 8, xsp
@@ -69959,7 +69959,7 @@ LABEL_F0EC1A:
 	ret
 LABEL_F0EC23:
 	; --- Wrapper function 4: set flag, push, ld xwa=imm, call, pop, ret ---
-	.byte 0xf2, 0xa8, 0xef, 0x03, 0x00, 0x00	; ld (0x03EFA8), 0x00  [F2 prefix]
+	sti8_24	257960, 0
 	push xwa
 	ld xwa, 0x000006CA
 	call 0xFB19D4
@@ -69967,7 +69967,7 @@ LABEL_F0EC23:
 	ret
 LABEL_F0EC35:
 	; --- Wrapper function 5: same pattern ---
-	.byte 0xf2, 0xa8, 0xef, 0x03, 0x00, 0x00	; ld (0x03EFA8), 0x00  [F2 prefix]
+	sti8_24	257960, 0
 	push xwa
 	ld xwa, 0x000006CA
 	call 0xFB1A28
@@ -69975,19 +69975,19 @@ LABEL_F0EC35:
 	ret
 LABEL_F0EC47:
 	; --- Wrapper function 6: set flag + store 4 regs, call ---
-	.byte 0xf2, 0xa8, 0xef, 0x03, 0x00, 0x00	; ld (0x03EFA8), 0x00  [F2 prefix]
+	sti8_24	257960, 0
 	push xwa
-	.byte 0xf1, 0xcc, 0x06, 0x65			; ld (0x06CC), xiy  [F1 prefix]
-	.byte 0xf1, 0xd0, 0x06, 0x54			; ld (0x06D0), ix  [F1 prefix]
-	.byte 0xf1, 0xd2, 0x06, 0x51			; ld (0x06D2), bc  [F1 prefix]
-	.byte 0xf1, 0xd4, 0x06, 0x53			; ld (0x06D4), hl  [F1 prefix]
+	stda32	1740, xiy
+	stda16	1744, ix
+	stda16	1746, bc
+	stda16	1748, hl
 	ld xwa, 0x000006CA
 	call 0xFB1CFF
 	pop xwa
 	ret
 LABEL_F0EC69:
 	; --- Wrapper function 7: same as 4/5 pattern ---
-	.byte 0xf2, 0xa8, 0xef, 0x03, 0x00, 0x00	; ld (0x03EFA8), 0x00  [F2 prefix]
+	sti8_24	257960, 0
 	push xwa
 	ld xwa, 0x000006CA
 	call 0xFB1DB3
@@ -70009,7 +70009,7 @@ LABEL_F0EC84:
 	ret
 LABEL_F0EC8D:
 	; --- Wrapper function 10: set flag, push, ld xwa=imm, call, pop, ret ---
-	.byte 0xf2, 0xa8, 0xef, 0x03, 0x00, 0x00	; ld (0x03EFA8), 0x00  [F2 prefix]
+	sti8_24	257960, 0
 	push xwa
 	ld xwa, 0x000006CA
 	call 0xFB1AD0
@@ -70024,7 +70024,7 @@ LABEL_F0EC9F:
 	ret
 LABEL_F0ECA8:
 	; --- Wrapper function 12: set flag, push, ld xwa=imm, call, pop, ret ---
-	.byte 0xf2, 0xa8, 0xef, 0x03, 0x00, 0x00	; ld (0x03EFA8), 0x00  [F2 prefix]
+	sti8_24	257960, 0
 	push xwa
 	ld xwa, 0x000006CA
 	call 0xFB1AA6
@@ -70032,7 +70032,7 @@ LABEL_F0ECA8:
 	ret
 LABEL_F0ECBA:
 	; --- Wrapper function 13: set flag, push, ld xwa=imm, call, pop, ret ---
-	.byte 0xf2, 0xa8, 0xef, 0x03, 0x00, 0x00	; ld (0x03EFA8), 0x00  [F2 prefix]
+	sti8_24	257960, 0
 	push xwa
 	ld xwa, 0x000006CA
 	call LABEL_FB1E40
@@ -70555,7 +70555,7 @@ LABEL_F0F608:
 	.byte 0xf1, 0x0e
 LABEL_F0F6D9:
 	; --- Wrapper 1: conditional XIY/XIX setup + call (28 bytes) ---
-	.byte 0xf2, 0xa8, 0xef, 0x03, 0x00, 0x00	; ld (0x03EFA8), 0x00  [F2 prefix]
+	sti8_24	257960, 0
 	.byte 0xc1, 0xae, 0x06, 0x3f, 0x01		; cp (0x06AE), 0x01  [C1 prefix]
 	jr nz, LABEL_F0F6F4
 	ld xiy, 0x00F1616F
@@ -70565,7 +70565,7 @@ LABEL_F0F6F4:
 	ret
 LABEL_F0F6F5:
 	; --- Wrapper 2: XIY/XIX setup + 2 calls (25 bytes) ---
-	.byte 0xf2, 0xa8, 0xef, 0x03, 0x00, 0x00	; ld (0x03EFA8), 0x00  [F2 prefix]
+	sti8_24	257960, 0
 	ld xiy, 0x00F1115E
 	ld xix, 0x00F11168
 	call LABEL_F0EC00
@@ -70655,7 +70655,7 @@ LABEL_F0F939:
 	call LABEL_F0EC00
 	call 0xF0F04A
 	call 0xF0F7A5
-	.byte 0xf2, 0xa8, 0xef, 0x03, 0x00, 0x00	; ld (0x03EFA8), 0x00  [F2 prefix]
+	sti8_24	257960, 0
 	ld xiy, 0x00F131E5
 	ld xix, 0x00F132BF
 	call LABEL_F0EC0D
@@ -70663,14 +70663,14 @@ LABEL_F0F939:
 	ret
 LABEL_F0F96C:
 	; --- Helper 1: clear flag, setup XIY/XIX, call F0EC00 (21 bytes) ---
-	.byte 0xf2, 0xa8, 0xef, 0x03, 0x00, 0x00	; ld (0x03EFA8), 0x00  [F2 prefix]
+	sti8_24	257960, 0
 	ld xiy, 0x00F11964
 	ld xix, 0x00F11A14
 	call LABEL_F0EC00
 	ret
 LABEL_F0F981:
 	; --- Helper 2: clear flag, setup XIY/XIX, call F0EC00 (21 bytes) ---
-	.byte 0xf2, 0xa8, 0xef, 0x03, 0x00, 0x00	; ld (0x03EFA8), 0x00  [F2 prefix]
+	sti8_24	257960, 0
 	ld xiy, 0x00F11A14
 	ld xix, 0x00F11A19
 	call LABEL_F0EC00
@@ -70756,13 +70756,13 @@ LABEL_F0FB7B:
 	call 0xF0F392
 	.byte 0xc1, 0xae, 0x06, 0x3f, 0x01		; cp (0x06AE), 0x01  [C1 prefix]
 	jr z, LABEL_F0FBA4
-	.byte 0xf2, 0xa8, 0xef, 0x03, 0x00, 0x00	; ld (0x03EFA8), 0x00  [F2 prefix]
+	sti8_24	257960, 0
 	ld xiy, 0x00F12F95
 	ld xix, 0x00F13020
 	call LABEL_F0EC0D
 	jr t, LABEL_F0FBB8
 LABEL_F0FBA4:
-	.byte 0xf2, 0xa8, 0xef, 0x03, 0x00, 0x00	; ld (0x03EFA8), 0x00  [F2 prefix]
+	sti8_24	257960, 0
 	ld xiy, 0x00F163AA
 	ld xix, 0x00F163E1
 	call LABEL_F0EC0D
@@ -70771,7 +70771,7 @@ LABEL_F0FBB8:
 	ret
 LABEL_F0FBBD:
 	; --- Init helper: language-conditional XIX setup (35 bytes) ---
-	.byte 0xf2, 0xa8, 0xef, 0x03, 0x00, 0x00	; ld (0x03EFA8), 0x00  [F2 prefix]
+	sti8_24	257960, 0
 	ld xiy, 0x00F11C8F
 	.byte 0xc1, 0xae, 0x06, 0x3f, 0x01		; cp (0x06AE), 0x01  [C1 prefix]
 	jr z, LABEL_F0FBD6
@@ -70784,7 +70784,7 @@ LABEL_F0FBDB:
 	ret
 LABEL_F0FBE0:
 	; --- Tail helper: clear flag, setup XIY/XIX, call F0EC00 (21 bytes) ---
-	.byte 0xf2, 0xa8, 0xef, 0x03, 0x00, 0x00	; ld (0x03EFA8), 0x00  [F2 prefix]
+	sti8_24	257960, 0
 	ld xiy, 0x00F11D41
 	ld xix, 0x00F11D46
 	call LABEL_F0EC00
@@ -70875,7 +70875,7 @@ LABEL_F0FDBD:
 	call 0xF0F04A
 	call 0xF0F094
 	call LABEL_F0FE2D
-	.byte 0xf2, 0xa8, 0xef, 0x03, 0x00, 0x00	; ld (0x03EFA8), 0x00  [F2 prefix]
+	sti8_24	257960, 0
 	ld xiy, 0x00F12D66
 	ld xix, 0x00F12DC6
 	call LABEL_F0EC0D
@@ -70890,7 +70890,7 @@ LABEL_F0FDE2:
 	ret
 LABEL_F0FDF5:
 	; --- Init: language-conditional XIX selection (35 bytes) ---
-	.byte 0xf2, 0xa8, 0xef, 0x03, 0x00, 0x00	; ld (0x03EFA8), 0x00  [F2 prefix]
+	sti8_24	257960, 0
 	.byte 0xc1, 0xae, 0x06, 0x3f, 0x01		; cp (0x06AE), 0x01  [C1 prefix]
 	jr z, LABEL_F0FE09
 	ld xix, 0x00F12341
@@ -70903,16 +70903,16 @@ LABEL_F0FE0E:
 	ret
 LABEL_F0FE18:
 	; --- Tail: clear flag, XIY/XIX, call F0EC00 (21 bytes) ---
-	.byte 0xf2, 0xa8, 0xef, 0x03, 0x00, 0x00	; ld (0x03EFA8), 0x00  [F2 prefix]
+	sti8_24	257960, 0
 	ld xiy, 0x00F12341
 	ld xix, 0x00F12346
 	call LABEL_F0EC00
 	ret
 LABEL_F0FE2D:
 	; --- Data setup: load A, store, set flag=2, language-conditional XIX (58 bytes) ---
-	.byte 0xc1, 0x36, 0x8d, 0x21			; ld a, (0x8D36)  [C1 prefix]
-	.byte 0xf1, 0x78, 0x06, 0x41			; ld (0x0678), a  [F1 prefix]
-	.byte 0xf2, 0xa8, 0xef, 0x03, 0x00, 0x02	; ld (0x03EFA8), 0x02  [F2 prefix]
+	ldda8	a, 36150
+	stda8	1656, a
+	sti8_24	257960, 2
 	ld xiy, 0x00F12364
 	.byte 0xc1, 0xae, 0x06, 0x3f, 0x01		; cp (0x06AE), 0x01  [C1 prefix]
 	jr z, LABEL_F0FE4E
@@ -70922,7 +70922,7 @@ LABEL_F0FE4E:
 	ld xix, 0x00F1237C
 LABEL_F0FE53:
 	call LABEL_F0EC00
-	.byte 0xf2, 0xa8, 0xef, 0x03, 0x00, 0x00	; ld (0x03EFA8), 0x00  [F2 prefix]
+	sti8_24	257960, 0
 	ld xiy, 0x00F12D33
 	call LABEL_F0EC1A
 	ret
@@ -71031,28 +71031,28 @@ LABEL_F100D0:
 	.byte 0xf1, 0x0e
 LABEL_F100F1:
 	; --- Dispatch on A: XIY/XIX setup, 3 paths (53 bytes) ---
-	.byte 0xc9, 0xd8				; cp a, 0  [compact cp]
+	cps	a, 0
 	jr z, LABEL_F10100
 	cp a, 0x0A
 	jr nz, LABEL_F10116
 	call LABEL_F10126
 	jr t, LABEL_F10125
 LABEL_F10100:
-	.byte 0xf2, 0xa8, 0xef, 0x03, 0x00, 0x01		; ld (0x03EFA8), 0x01  [F2 prefix]
+	sti8_24	257960, 1
 	ld xiy, 0x00F1659F
 	ld xix, 0x00F165A9
 	call LABEL_F0EC00
 	ldb a, 0x00
 LABEL_F10116:
-	.byte 0xf2, 0xa8, 0xef, 0x03, 0x00, 0x00		; ld (0x03EFA8), 0x00  [F2 prefix]
+	sti8_24	257960, 0
 	ld xiy, 0x00F1652F
 	call 0xF10BE7
 LABEL_F10125:
 	ret
 LABEL_F10126:
 	; --- Helper: conditional XIY based on bit 7 of (0x066A) (32 bytes) ---
-	.byte 0xf2, 0xa8, 0xef, 0x03, 0x00, 0x00		; ld (0x03EFA8), 0x00  [F2 prefix]
-	.byte 0xc1, 0x6a, 0x06, 0x21			; ld a, (0x066A)  [C1 prefix]
+	sti8_24	257960, 0
+	ldda8	a, 1642
 	and a, 0x80
 	jr nz, LABEL_F1013C
 	ld xiy, 0x00F16506
@@ -71076,25 +71076,25 @@ LABEL_F10146:
 	.byte 0xe7, 0x0b, 0xf1, 0x0e
 LABEL_F10183:
 	; --- Dispatch on A: table lookup, 4 paths (92 bytes) ---
-	.byte 0xc9, 0xd8				; cp a, 0  [compact cp]
+	cps	a, 0
 	jr z, LABEL_F101B1
-	.byte 0xc9, 0xd9				; cp a, 1  [compact cp]
+	cps	a, 1
 	jr z, LABEL_F101C9
 	cp a, 0x0E
 	jr c, LABEL_F101CF
 	ld xiy, 0x00F12AFD
 	extz xwa
 	xor w, w
-	.byte 0xd8, 0xec, 0x02				; sla 2, wa  [not in LLVM]
+	sla	wa, 2
 	add xiy, xwa
 	ld xiz, xiy
 	ld xiy, (xiz)
 	ld xix, (xiz+4)
-	.byte 0xf2, 0xa8, 0xef, 0x03, 0x00, 0x00		; ld (0x03EFA8), 0x00  [F2 prefix]
+	sti8_24	257960, 0
 	call LABEL_F0EC0D
 	jr t, LABEL_F101DE
 LABEL_F101B1:
-	.byte 0xf2, 0xa8, 0xef, 0x03, 0x00, 0x01		; ld (0x03EFA8), 0x01  [F2 prefix]
+	sti8_24	257960, 1
 	ld xiy, 0x00F12B49
 	ld xix, 0x00F12B53
 	call LABEL_F0EC00
@@ -71105,7 +71105,7 @@ LABEL_F101C9:
 	jr t, LABEL_F101DE
 LABEL_F101CF:
 	ld xiy, 0x00F12AFD
-	.byte 0xf2, 0xa8, 0xef, 0x03, 0x00, 0x00		; ld (0x03EFA8), 0x00  [F2 prefix]
+	sti8_24	257960, 0
 	call 0xF10BE7
 LABEL_F101DE:
 	ret
@@ -71113,12 +71113,12 @@ LABEL_F101DE:
 
 LABEL_F101DF:
 	; --- Dispatcher: A==0 path with XIY/XIX setup + loop subroutine (187 bytes) ---
-	.byte 0xc9, 0xd8				; cp a, 0  [compact cp]
+	cps	a, 0
 	jr z, LABEL_F101E9
 	call LABEL_F10207
 	jr t, LABEL_F10206
 LABEL_F101E9:
-	.byte 0xf2, 0xa8, 0xef, 0x03, 0x00, 0x01		; ld (0x03EFA8), 0x01  [F2 prefix]
+	sti8_24	257960, 1
 	ld xiy, 0x00F12D01
 	ld xix, 0x00F12D0B
 	call LABEL_F0EC00
@@ -71128,7 +71128,7 @@ LABEL_F10206:
 	ret
 LABEL_F10207:
 	; --- Loop over 3 entries: indexed XIY/XIX pointer table lookups ---
-	.byte 0xf2, 0xa8, 0xef, 0x03, 0x00, 0x00		; ld (0x03EFA8), 0x00  [F2 prefix]
+	sti8_24	257960, 0
 	ld xiy, 0x00F12C44
 	ld xix, 0x00F12C4C
 	call LABEL_F0EC00
@@ -71145,7 +71145,7 @@ LABEL_F10230:
 	ld xiy, 0x00F12CAB
 	extz xbc
 	xor b, b
-	.byte 0xd9, 0xec, 0x02				; sla 2, bc  [not in LLVM]
+	sla	bc, 2
 	add xiy, xbc
 	ld xiy, (xiy)
 	ld xix, xiy
@@ -71164,7 +71164,7 @@ LABEL_F1026D:
 	ld xiy, 0x00F12CB7
 	extz xbc
 	xor b, b
-	.byte 0xd9, 0xec, 0x02				; sla 2, bc  [not in LLVM]
+	sla	bc, 2
 	add xiy, xbc
 	ld xiy, (xiy)
 	ld xix, xiy
@@ -71175,7 +71175,7 @@ LABEL_F10289:
 	pop c
 	add c, 0x01
 	add xiz, 0x00000001
-	.byte 0xcb, 0xdb				; cp c, 3  [compact cp]
+	cps	c, 3
 	jr nz, LABEL_F10230
 	ret
 
@@ -71376,7 +71376,7 @@ LABEL_F107AF:
 	call LABEL_F0EC00
 	call 0xF0F04A
 	call 0xF0F7A5
-	.byte 0xf2, 0xa8, 0xef, 0x03, 0x00, 0x00		; ld (0x03EFA8), 0x00  [F2 prefix]
+	sti8_24	257960, 0
 	ld xiy, 0x00F144E7
 	ld xix, 0x00F1459C
 	call LABEL_F0EC0D
@@ -71392,7 +71392,7 @@ LABEL_F107F0:
 	call LABEL_F107FD
 	.byte 0x15					; pop a  [compact 1-byte]
 	inc 1, a
-	.byte 0xc9, 0xde				; cp a, 6  [compact cp]
+	cps	a, 6
 	jr c, LABEL_F107F0
 	ret
 LABEL_F107FD:
@@ -71406,7 +71406,7 @@ LABEL_F107FD:
 	and d, 0x80
 	jr z, LABEL_F10820
 	ld xiy, 0x00F14640
-	.byte 0xf2, 0xa8, 0xef, 0x03, 0x00, 0x00		; ld (0x03EFA8), 0x00  [F2 prefix]
+	sti8_24	257960, 0
 	call 0xF10BE7
 LABEL_F10820:
 	ret
@@ -71429,10 +71429,10 @@ LABEL_F10831:
 	ld xbc, 0x00000660
 	add xbc, xwa
 	ld d, (xbc)
-	.byte 0xcc, 0xd8				; cp d, 0  [compact cp]
+	cps	d, 0
 	jr z, LABEL_F10853
 	ld xiy, 0x00F145C4
-	.byte 0xf2, 0xa8, 0xef, 0x03, 0x00, 0x00		; ld (0x03EFA8), 0x00  [F2 prefix]
+	sti8_24	257960, 0
 	call 0xF10BE7
 LABEL_F10853:
 	ret
@@ -71589,11 +71589,11 @@ LABEL_F10B10:
 	; --- Main: call helpers, setup XIY/XIX pairs, call F0EC00/F0EC0D (53 bytes) ---
 	call LABEL_F10B45
 	call LABEL_F0F6F5
-	.byte 0xf2, 0xa8, 0xef, 0x03, 0x00, 0x00	; ld (0x03EFA8), 0x00  [F2 prefix]
+	sti8_24	257960, 0
 	ld xiy, 0x00F1493C
 	ld xix, 0x00F149D9
 	call LABEL_F0EC00
-	.byte 0xf2, 0xa8, 0xef, 0x03, 0x00, 0x00	; ld (0x03EFA8), 0x00  [F2 prefix]
+	sti8_24	257960, 0
 	ld xiy, 0x00F14E28
 	ld xix, 0x00F14E46
 	call LABEL_F0EC0D
@@ -71601,14 +71601,14 @@ LABEL_F10B10:
 	ret
 LABEL_F10B45:
 	; --- Helper 1: clear flag, setup XIY/XIX, call F0EC00 (21 bytes) ---
-	.byte 0xf2, 0xa8, 0xef, 0x03, 0x00, 0x00	; ld (0x03EFA8), 0x00  [F2 prefix]
+	sti8_24	257960, 0
 	ld xiy, 0x00F14809
 	ld xix, 0x00F14838
 	call LABEL_F0EC00
 	ret
 LABEL_F10B5A:
 	; --- Helper 2: clear flag, setup XIY/XIX, call F0EC00 (21 bytes) ---
-	.byte 0xf2, 0xa8, 0xef, 0x03, 0x00, 0x00	; ld (0x03EFA8), 0x00  [F2 prefix]
+	sti8_24	257960, 0
 	ld xiy, 0x00F14838
 	ld xix, 0x00F1483D
 	call LABEL_F0EC00
@@ -71617,13 +71617,13 @@ LABEL_F10B5A:
 
 LABEL_F10B6F:
 	; --- Dispatch on A: 4 paths with language branching (99 bytes) ---
-	.byte 0xc9, 0xd8				; cp a, 0  [compact cp]
+	cps	a, 0
 	jr z, LABEL_F10BA8
 	cp a, 0x0B
 	jr z, LABEL_F10BC0
 	cp a, 0x0C
 	jr nz, LABEL_F10BC2
-	.byte 0xf2, 0xa8, 0xef, 0x03, 0x00, 0x00		; ld (0x03EFA8), 0x00  [F2 prefix]
+	sti8_24	257960, 0
 	.byte 0xc1, 0xae, 0x06, 0x3f, 0x01		; cp (0x06AE), 0x01  [C1 prefix]
 	jr z, LABEL_F10B98
 	ld xiy, 0x00F149D9
@@ -71635,7 +71635,7 @@ LABEL_F10B98:
 	call LABEL_F0EC0D
 	jr t, LABEL_F10BD1
 LABEL_F10BA8:
-	.byte 0xf2, 0xa8, 0xef, 0x03, 0x00, 0x01		; ld (0x03EFA8), 0x01  [F2 prefix]
+	sti8_24	257960, 1
 	ld xiy, 0x00F14DD2
 	ld xix, 0x00F14DF0
 	call LABEL_F0EC00
@@ -71644,7 +71644,7 @@ LABEL_F10BA8:
 LABEL_F10BC0:
 	ldb a, 0x07
 LABEL_F10BC2:
-	.byte 0xf2, 0xa8, 0xef, 0x03, 0x00, 0x00		; ld (0x03EFA8), 0x00  [F2 prefix]
+	sti8_24	257960, 0
 	ld xiy, 0x00F14A66
 	call 0xF10BE7
 LABEL_F10BD1:
@@ -85616,16 +85616,16 @@ LABEL_F20457:
 	ret
 LABEL_F20458:
 	; --- Setup: load/store/call/set flag ---
-	.byte 0xd1, 0x9e, 0xf1, 0x20			; ld wa, (0xF19E)  [D1 prefix]
-	.byte 0xf1, 0x75, 0x28, 0x50			; ld (0x2875), wa  [F1 prefix]
-	.byte 0xf1, 0x60, 0x0d, 0x00, 0x00		; ld (0x0D60), 0x00  [F1 prefix]
+	ldda16	wa, 61854
+	stda16	10357, wa
+	stdi8	3424, 0
 	call LABEL_F59AB9
 	.byte 0xc1, 0xa7, 0x28, 0x3e, 0x04		; or (0x28A7), 0x04  [C1 prefix]
 	ret
 LABEL_F2046F:
 	; --- Teardown: load/store/clear flags ---
-	.byte 0xd1, 0x75, 0x28, 0x20			; ld wa, (0x2875)  [D1 prefix]
-	.byte 0xf1, 0x9e, 0xf1, 0x50			; ld (0xF19E), wa  [F1 prefix]
+	ldda16	wa, 10357
+	stda16	61854, wa
 	.byte 0xc1, 0xa7, 0x28, 0x3c, 0xfb		; and (0x28A7), 0xFB  [C1 prefix]
 	.byte 0xc1, 0xb3, 0x28, 0x3e, 0x10		; or (0x28B3), 0x10  [C1 prefix]
 	.byte 0xc1, 0xa7, 0x28, 0x3c, 0xf7		; and (0x28A7), 0xF7  [C1 prefix]
@@ -85719,20 +85719,20 @@ LABEL_F20538:
 	ld iy, bc
 	ld e, c
 	.byte 0xc3, 0x07, 0xec, 0xf4, 0x21		; ld a, (xhl + iy)  [R+R addressing]
-	.byte 0xf1, 0x5f, 0x0d, 0x41			; ld (0x0D5F), a  [F1 prefix]
+	stda8	3423, a
 	inc 1, e
-	.byte 0xf1, 0x60, 0x0d, 0x45			; ld (0x0D60), e  [F1 prefix]
+	stda8	3424, e
 	ret
 LABEL_F20553:
 	; --- Validation: check range, optionally call ---
-	.byte 0xf1, 0x7f, 0x28, 0x02, 0x01, 0x00	; ld (0x287F), 0x0001  [F1 prefix]
-	.byte 0xf1, 0x37, 0x0d, 0x02, 0x00, 0x00	; ld (0x0D37), 0x0000  [F1 prefix]
+	stdi16	10367, 1
+	stdi16	3383, 0
 	.byte 0xc1, 0x60, 0x0d, 0x3f, 0x00		; cp (0x0D60), 0x00  [C1 prefix]
 	jr z, LABEL_F2057B
 	.byte 0xc1, 0x60, 0x0d, 0x3f, 0x10		; cp (0x0D60), 0x10  [C1 prefix]
 	jr ugt, LABEL_F2057B
-	.byte 0xf1, 0x08, 0x11, 0x02, 0x00, 0x00	; ld (0x1108), 0x0000  [F1 prefix]
-	.byte 0xd8, 0xd0				; xor wa, wa  [compact self-xor]
+	stdi16	4360, 0
+	xor	wa, wa
 	ldb a, 0x8A
 	call 0xF99490
 LABEL_F2057B:
@@ -95204,16 +95204,16 @@ LABEL_F264CE:
 	.byte 0xf1, 0x8c, 0x10, 0xc8			; bit 0, (0x108C)  [F1 prefix]
 	jr nz, LABEL_F264DD
 	call 0xF26C9E
-	.byte 0xf1, 0xe3, 0x10, 0x00, 0x00		; ld (0x10E3), 0x00  [F1 prefix]
+	stdi8	4323, 0
 LABEL_F264DD:
-	.byte 0xf1, 0x89, 0x10, 0x00, 0x03		; ld (0x1089), 0x03  [F1 prefix]
-	.byte 0xc1, 0xad, 0x0f, 0x21			; ld a, (0x0FAD)  [C1 prefix]
+	stdi8	4233, 3
+	ldda8	a, 4013
 	.byte 0xc1, 0xf8, 0x11, 0x3f, 0x02		; cp (0x11F8), 0x02  [C1 prefix]
 	jr nz, LABEL_F264F1
 	call LABEL_F264FF
 LABEL_F264F1:
-	.byte 0xf1, 0x8a, 0x10, 0x41			; ld (0x108A), a  [F1 prefix]
-	.byte 0xf1, 0x8b, 0x10, 0x00, 0x7f		; ld (0x108B), 0x7F  [F1 prefix]
+	stda8	4234, a
+	stdi8	4235, 127
 	call LABEL_F26A24
 	ret
 LABEL_F264FF:
@@ -174654,8 +174654,8 @@ LABEL_F5C5D7:
 LABEL_F5C5E0:
 	.byte 0xc1, 0x7d, 0xc0, 0x3f, 0x06		; cp (0xC07D), 0x06  [C1 prefix]
 	jr nz, LABEL_F5C609
-	.byte 0xc1, 0x7e, 0xc0, 0x21			; ld a, (0xC07E)  [C1 prefix]
-	.byte 0xc1, 0x7f, 0xc0, 0xc1			; and a, (0xC07F)  [C1 prefix]
+	ldda8	a, 49278
+	andda8	a, 49279
 	bit 0, a
 	jr z, LABEL_F5C609
 	.byte 0xc1, 0x91, 0x33, 0x3d, 0x01		; xor (0x3391), 0x01  [C1 prefix]
@@ -174673,17 +174673,17 @@ LABEL_F5C60A:
 	jr nz, LABEL_F5C648
 	.byte 0xc1, 0x7d, 0xc0, 0x3f, 0x10		; cp (0xC07D), 0x10  [C1 prefix]
 	jr nz, LABEL_F5C648
-	.byte 0xc1, 0x8e, 0x33, 0x21			; ld a, (0x338E)  [C1 prefix]
+	ldda8	a, 13198
 	and a, 0x1f
 	jr z, LABEL_F5C648
-	.byte 0xc1, 0x8e, 0x33, 0x27			; ld l, (0x338E)  [C1 prefix]
+	ldda8	l, 13198
 	and l, 0x1f
 	extz hl
 	ld xwa, 0x00F5C8B4
 	.byte 0xc3, 0x07, 0xe0, 0xec, 0x21		; ld a, (xwa+hl)  [register-indexed]
-	.byte 0xc1, 0x3a, 0x8d, 0xf9			; cp (0x8D3A), a  [C1 prefix]
+	cpdm8	36154, a
 	jr z, LABEL_F5C648
-	.byte 0xf1, 0x3a, 0x8d, 0x41			; ld (0x8D3A), a  [F1 prefix]
+	stda8	36154, a
 	ldb e, 0x90
 	ldb d, 0x10
 	ldb w, 0xff
@@ -186375,9 +186375,9 @@ LABEL_F64DA1:
 	ret
 LABEL_F64DA5:
 	; --- Offset calc 1: add 0/4/8 to L based on (0x34CD) bits 5:4 (30 bytes) ---
-	.byte 0xc1, 0xcd, 0x34, 0x25			; ld e, (0x34CD)  [C1 prefix]
+	ldda8	e, 13517
 	and e, 0x30
-	.byte 0xcd, 0xd8				; cp e, 0  [compact prefix]
+	cps	e, 0
 	jr nz, LABEL_F64DB2
 	jr t, LABEL_F64DBF
 LABEL_F64DB2:
@@ -186388,13 +186388,13 @@ LABEL_F64DB2:
 LABEL_F64DBC:
 	add l, 0x08
 LABEL_F64DBF:
-	.byte 0xf1, 0xd6, 0x34, 0x47			; ld (0x34D6), l  [F1 prefix]
+	stda8	13526, l
 	ret
 LABEL_F64DC4:
 	; --- Offset calc 2: add 8/0x0E/0x14 to L based on (0x34CD) bits 5:4 (33 bytes) ---
-	.byte 0xc1, 0xcd, 0x34, 0x25			; ld e, (0x34CD)  [C1 prefix]
+	ldda8	e, 13517
 	and e, 0x30
-	.byte 0xcd, 0xd8				; cp e, 0  [compact prefix]
+	cps	e, 0
 	jr nz, LABEL_F64DD4
 	add l, 0x08
 	jr t, LABEL_F64DE1
@@ -186406,7 +186406,7 @@ LABEL_F64DD4:
 LABEL_F64DDE:
 	add l, 0x14
 LABEL_F64DE1:
-	.byte 0xf1, 0xd6, 0x34, 0x47			; ld (0x34D6), l  [F1 prefix]
+	stda8	13526, l
 	ret
 LABEL_F64DE6:
 	; --- Push XIZ wrapper for inner routine (7 bytes) ---
@@ -186419,7 +186419,7 @@ LABEL_F64DED:
 	.byte 0xc1, 0x37, 0x8d, 0x3f, 0xb2		; cp (0x8D37), 0xB2  [C1 prefix]
 	jr z, LABEL_F64E0E
 	calr LABEL_F64E14
-	.byte 0xf1, 0x9b, 0x37, 0x00, 0x20		; ld (0x379B), 0x20  [F1 prefix]
+	stdi8	14235, 32
 	.byte 0xc1, 0x37, 0x8d, 0x3f, 0xb5		; cp (0x8D37), 0xB5  [C1 prefix]
 	jr nz, LABEL_F64E0E
 	call LABEL_F59AB9
@@ -190983,7 +190983,7 @@ LABEL_F68CFB:
 	jp_dri 8, 0x07, 0xF0, 0xE8
 LABEL_F68D1C:
 	; --- Multi-branch dispatch subroutine (195 bytes) ---
-	.byte 0xd8, 0xa8				; ld wa, 0  [compact zero-load]
+	lds	wa, 0
 	jrl t, LABEL_F68DDB
 	push xde
 	push xhl
@@ -190998,7 +190998,7 @@ LABEL_F68D1C:
 	ldw wa, 0x00B5
 	call 0xF99490
 	jrl t, LABEL_F68DDF
-	.byte 0xd8, 0xa9				; ld wa, 1  [compact zero-load]
+	lds	wa, 1
 	call LABEL_F99545
 	push xde
 	push xhl
@@ -191012,9 +191012,9 @@ LABEL_F68D1C:
 	pop xde
 	ld xwa, 0x00BA0009
 	ld xbc, 0x01C0000B
-	.byte 0xea, 0xa8				; ld xde, 0  [compact zero-load]
+	lds32	xde, 0
 	jr t, LABEL_F68D7D
-	.byte 0xd8, 0xa9				; ld wa, 1  [compact zero-load]
+	lds	wa, 1
 	call LABEL_F99545
 	push xde
 	push xhl
@@ -191028,7 +191028,7 @@ LABEL_F68D1C:
 	pop xde
 	ld xwa, 0x00BA0009
 	ld xbc, 0x01C0000B
-	.byte 0xea, 0xa8				; ld xde, 0  [compact zero-load]
+	lds32	xde, 0
 LABEL_F68D7D:
 	call 0xFA9E07
 	jr t, LABEL_F68DDF
@@ -191045,11 +191045,11 @@ LABEL_F68D7D:
 	pop xde
 	.byte 0xc1, 0x42, 0x7f, 0x3f, 0x00		; cp (0x7F42), 0x00  [8-bit direct]
 	jr nz, LABEL_F68DD9
-	.byte 0xf1, 0xab, 0x37, 0x35			; lda xiy, 0x37AB  [16-bit direct]
-	.byte 0xf1, 0xb9, 0x37, 0x34			; lda xix, 0x37B9  [16-bit direct]
-	.byte 0xf1, 0xb2, 0x37, 0x33			; lda xhl, 0x37B2  [16-bit direct]
-	.byte 0xf1, 0xc0, 0x37, 0x32			; lda xde, 0x37C0  [16-bit direct]
-	.byte 0xe9, 0xa8				; ld xbc, 0  [compact zero-load]
+	ldada	xiy, 14251
+	ldada	xix, 14265
+	ldada	xhl, 14258
+	ldada	xde, 14272
+	lds32	xbc, 0
 LABEL_F68DAF:
 	.byte 0xc5, 0xf4, 0x21			; ld a, (xiy+)  [post-increment]
 	.byte 0xf5, 0xf0, 0x41			; ld (xix+), a  [post-increment]
@@ -191071,7 +191071,7 @@ LABEL_F68DCD:
 	pop xhl
 	pop xde
 LABEL_F68DD9:
-	.byte 0xd8, 0xa8				; ld wa, 0  [compact zero-load]
+	lds	wa, 0
 LABEL_F68DDB:
 	call LABEL_F99525
 
@@ -192129,13 +192129,13 @@ LABEL_F69CBD:
 
 LABEL_F69CC2:
 	; --- Multi-condition guard with conditional calls (85 bytes) ---
-	.byte 0xc1, 0x7e, 0xc0, 0x23			; ld c, (0xC07E)  [C1 prefix]
-	.byte 0xc1, 0x7d, 0xc0, 0x21			; ld a, (0xC07D)  [C1 prefix]
-	.byte 0xc9, 0xdd				; cp a, 5  [compact cp]
+	ldda8	c, 49278
+	ldda8	a, 49277
+	cps	a, 5
 	jr nz, LABEL_F69CDB
 	.byte 0xc1, 0x7f, 0xc0, 0x3f, 0x00		; cp (0xC07F), 0x00  [C1 prefix]
 	jr z, LABEL_F69CDB
-	.byte 0xcb, 0xda				; cp c, 2  [compact cp]
+	cps	c, 2
 	ret nz
 	jr t, LABEL_F69D02
 LABEL_F69CDB:
@@ -192145,7 +192145,7 @@ LABEL_F69CDB:
 	ret z
 	cp c, 0x40
 	ret nz
-	.byte 0xc1, 0x36, 0x8d, 0x21			; ld a, (0x8D36)  [C1 prefix]
+	ldda8	a, 36150
 	cp a, 0xcb
 	ret z
 	cp a, 0xcc
@@ -192156,7 +192156,7 @@ LABEL_F69CDB:
 LABEL_F69D02:
 	ld xwa, 0x00028080
 	call LABEL_FCD437
-	.byte 0xdb, 0xd8				; cp hl, 0  [compact cp]
+	cps	hl, 0
 	ret z
 	ldw wa, 0x00ed
 	call LABEL_F994BD
@@ -198148,22 +198148,22 @@ LABEL_F6EAD5:
 
 LABEL_F6EADD:
 	; --- Routine 1: clear flag at (0x7F0B) if nonzero (15 bytes) ---
-	.byte 0xc1, 0x0b, 0x7f, 0x21			; ld a, (0x7F0B)  [C1 prefix]
-	.byte 0xc9, 0xd8				; cp a, 0  [compact]
+	ldda8	a, 32523
+	cps	a, 0
 	jr z, LABEL_F6EAEB
 	ldb a, 0x00
-	.byte 0xf1, 0x0b, 0x7f, 0x41			; ld (0x7F0B), a  [F1 prefix]
+	stda8	32523, a
 LABEL_F6EAEB:
 	ret
 LABEL_F6EAEC:
 	; --- Routine 2: multi-guard, all-register push, call F99490 (61 bytes) ---
-	.byte 0xc1, 0x7d, 0xc0, 0x21			; ld a, (0xC07D)  [C1 prefix]
+	ldda8	a, 49277
 	cp a, 0x1c
 	jr nz, LABEL_F6EB28
-	.byte 0xc1, 0x7e, 0xc0, 0x21			; ld a, (0xC07E)  [C1 prefix]
-	.byte 0xc1, 0x7f, 0xc0, 0xc1			; and a, (0xC07F)  [C1 prefix]
+	ldda8	a, 49278
+	andda8	a, 49279
 	and a, 0x03
-	.byte 0xc9, 0xd8				; cp a, 0  [compact]
+	cps	a, 0
 	jr z, LABEL_F6EB28
 	.byte 0xc1, 0x34, 0x8d, 0x3f, 0x13		; cp (0x8D34), 0x13  [C1 prefix]
 	jr z, LABEL_F6EB28
@@ -221142,7 +221142,7 @@ LABEL_F84563:
 	call 0xFA4D1F				; additional processing
 	cp xhl, 0x01800013			; check return code
 	jrl z, LABEL_F84687			; matched -- exit
-	.byte 0xd8, 0xaa			; ld wa, 2  [compact imm, not in LLVM]
+	lds	wa, 2
 	jr LABEL_F845D1				; skip to call FAF2C7
 	ld xwa, 0x02600024			; workspace for SendEvent
 	ld xbc, 0x01E00029			; presentation control event
@@ -221152,18 +221152,18 @@ LABEL_F84563:
 	jrl nz, LABEL_F84687			; exit if not 0x0F
 	ld xwa, 0x0120000B			; register event handler workspace
 	ld xbc, 0x01E000AC			; register event code AC
-	.byte 0xea, 0xa8			; ld xde, 0  [compact clear, not in LLVM]
+	lds32	xde, 0
 	call 0xFA49B7				; register event handler
 	call 0xF86A47				; additional presentation setup
 	ld xwa, 0x0120000B
 	ld xbc, 0x01E000AD			; register event code AD
-	.byte 0xea, 0xa8			; ld xde, 0
+	lds32	xde, 0
 	call 0xFA49B7				; register event handler
 	ld xwa, 0xFFFFFFFF			; broadcast target
 	ld xbc, 0x01C00015			; presentation state event
 	ld xde, 0x01A000E0			; event param
 	call 0xFA9752				; dispatch event
-	.byte 0xd8, 0xaa			; ld wa, 2
+	lds	wa, 2
 LABEL_F845D1:
 	call 0xFAF2C7				; presentation helper
 	jrl LABEL_F84687			; exit
@@ -223531,7 +223531,7 @@ LABEL_F86399:
 	ld xwa, 0x000248C8			; data source
 	ld xbc, 0x00000100			; size 256
 	ld xde, 0x00EA0008			; destination descriptor
-	.byte 0x1e, 0x35, 0xef			; calr 0xF85310  [render/blit]
+	calr	61237
 	call LABEL_F88C48			; finalize
 LABEL_F863DF:
 	pop xiz
@@ -223569,26 +223569,26 @@ LABEL_F863F2:
 	call 0xF88BC7				; open display resource
 	cps hl, 0
 	jr lt, LABEL_F8646C			; failed
-	.byte 0xe8, 0xa8			; ld xwa, 0  [compact, not in LLVM]
-	.byte 0xd9, 0xaa			; ld bc, 2
+	lds32	xwa, 0
+	lds	bc, 2
 	call 0xF88EE0				; set region param
 	call 0xF88F39				; get display info
 	ld xiz, xhl				; XIZ = info ptr
 	call 0xF88F10				; additional setup
 	ld xwa, xiz
-	.byte 0x1e, 0x8b, 0x01			; calr 0xF865D0  [process display data]
+	calr	395
 	ld xwa, xhl
 	st32_24 0x0249D0, xwa			; store result
 	pushw 0x00EA
 	pushw 0x005C
 	ld xbc, xiz				; info ptr
 	ld xde, 0x00EA0052			; destination descriptor
-	.byte 0x1e, 0xb4, 0xee			; calr 0xF85310  [render/blit]
+	calr	61108
 	call LABEL_F88C48			; finalize
 	cps hl, 0
 	jr nz, LABEL_F8646C			; finalize failed
 	calr LABEL_F862AE			; post-processing
-	.byte 0xd8, 0xa9			; ld wa, 1
+	lds	wa, 1
 	calr LABEL_F86471			; additional display update
 LABEL_F8646C:
 	pop xiz
@@ -223711,14 +223711,14 @@ LABEL_F8662F:
 LABEL_F8666C:
 	call 0xFA9D58				; dispatch event
 	jr MainPreControl_ReturnNull		; return null
-	.byte 0xf1, 0xa4, 0x28, 0x00, 0x13	; ld (0x28A4), 0x13  [16-bit direct, not in LLVM]
+	stdi8	10404, 19
 	call LABEL_F86B7C			; additional handler
 	jr MainPreControl_ReturnNull
 	.byte 0xd2, 0xd8, 0x51, 0x02, 0x3f, 0x00, 0x00	; cp (0x0251D8), 0x0000  [16-bit direct]
 	jr z, LABEL_F86625			; if zero, clear state
 	call LABEL_F42EA4			; process display state
 	jr LABEL_F86625
-	.byte 0xd2, 0xd8, 0x51, 0x02, 0x23	; ld hl, (0x0251D8)  [16-bit direct]
+	ld16_24	hl, 152024
 	exts xhl
 	ret
 
@@ -223863,10 +223863,10 @@ LABEL_F867FA:
 	jr nz, LABEL_F86819
 	.byte 0xf1, 0xad, 0x28, 0xcb			; bit 3, (0x28AD)  [F1 prefix]
 	jr nz, LABEL_F86819
-	.byte 0xdb, 0xa9				; ld hl, 1  [compact]
+	lds	hl, 1
 	ret
 LABEL_F86819:
-	.byte 0xdb, 0xa8				; ld hl, 0  [compact]
+	lds	hl, 0
 	ret
 LABEL_F8681C:
 	; --- Routine 2: load regs, jp FA9D58 (23 bytes) ---
@@ -223989,34 +223989,34 @@ LABEL_F868FA:
 
 LABEL_F868FD:
 	; --- Stack-frame function: alloc, multi-call dispatch (114 bytes) ---
-	.byte 0xbf, 0xea, 0x37				; lda xsp, xsp+0xEA  [stack alloc 22 bytes]
+	lda	xsp, (xsp-22)
 	push xiz
 	push xwa
-	.byte 0xbf, 0x0e, 0x30				; lda xwa, xsp+0x0E  [indirect+d8]
+	lda	xwa, (xsp+14)
 	push xwa
 	call 0xFF0F4D
-	.byte 0xef, 0x60				; inc 0, xsp  [nop stack adjust]
-	.byte 0xbf, 0x0a, 0x30				; lda xwa, xsp+0x0A  [indirect+d8]
-	.byte 0x1e, 0x59, 0xff				; calr 0xF8686B  [target outside block]
+	inc	8, xsp
+	lda	xwa, (xsp+10)
+	calr	65369
 	or xhl, xhl
 	jr z, LABEL_F8691A
-	.byte 0xdb, 0xa8				; ld hl, 0  [compact load]
+	lds	hl, 0
 	jr t, LABEL_F8696A
 LABEL_F8691A:
-	.byte 0xbf, 0x0a, 0x30				; lda xwa, xsp+0x0A  [indirect+d8]
+	lda	xwa, (xsp+10)
 	ld xbc, 0x00EA00A8
 	call 0xF88BC7
 	ld (xsp+4), hl
 	cpw (xsp+4), 0x0000
 	jr lt, LABEL_F86967
-	.byte 0xe8, 0xa8				; ld xwa, 0  [compact load]
-	.byte 0xd9, 0xaa				; ld bc, 2  [compact load]
+	lds32	xwa, 0
+	lds	bc, 2
 	call 0xF88EE0
 	call 0xF88F39
 	ld xiz, xhl
 	call 0xF88F10
 	ld xwa, xiz
-	.byte 0x1e, 0x89, 0xfc				; calr 0xF865D0  [target outside block]
+	calr	64649
 	ld (xsp+6), xhl
 	ld xwa, (xsp+6)
 	or xwa, xwa
@@ -224026,14 +224026,14 @@ LABEL_F8691A:
 	call 0xF88D74
 LABEL_F8695A:
 	call 0xF88C48
-	.byte 0xbf, 0x0a, 0x30				; lda xwa, xsp+0x0A  [indirect+d8]
+	lda	xwa, (xsp+10)
 	ld xbc, (xsp+6)
-	.byte 0x1e, 0x4b, 0xff				; calr 0xF868B2  [target outside block]
+	calr	65355
 LABEL_F86967:
 	ld hl, (xsp+4)
 LABEL_F8696A:
 	pop xiz
-	.byte 0xbf, 0x16, 0x37				; lda xsp, xsp+0x16  [stack dealloc]
+	lda	xsp, (xsp+22)
 	ret
 
 
@@ -225221,7 +225221,7 @@ LABEL_F8744F:
 	pushw iz				; save IZ (2 bytes, total frame=16)
 	ld xbc, xwa				; XBC = caller arg
 	lda xwa, (xsp + 2)			; XWA = stack buffer ptr
-	.byte 0xda, 0xa8			; ld de, 0  [compact, not in LLVM]
+	lds	de, 0
 	call 0xF891AB				; init display region descriptor
 	lda xwa, (xsp + 2)			; reload buffer ptr
 	ld xbc, 0x00EA0194			; resource ID for region 0
@@ -225231,13 +225231,13 @@ LABEL_F8744F:
 	call 0xF88BC2				; close resource (error path)
 	jr LABEL_F874BD				; return
 LABEL_F87474:
-	.byte 0xd8, 0xa8			; ld wa, 0  [compact, not in LLVM]
+	lds	wa, 0
 	calr LABEL_F871A6			; check mode availability
 	cps hl, 0
 	jr z, LABEL_F874B1			; mode not available, alt path
 	call 0xFDB434				; primary display setup
-	.byte 0xf1, 0x80, 0xf9, 0x30		; lda xwa, 0xF980  [16-bit direct, not in LLVM]
-	.byte 0xf1, 0xc0, 0xff, 0x31		; lda xbc, 0xFFC0  [16-bit direct, not in LLVM]
+	ldada	xwa, 63872
+	ldada	xbc, 65472
 	ld xde, xwa				; XDE = base (0xF980)
 	sub xbc, xde				; XBC = size (0xFFC0-0xF980)
 	call 0xF88D74				; configure memory range
@@ -225268,7 +225268,7 @@ LABEL_F874C2:
 	pushw iz
 	ld xbc, xwa
 	lda xwa, (xsp + 2)
-	.byte 0xda, 0xa9			; ld de, 1
+	lds	de, 1
 	call 0xF891AB
 	lda xwa, (xsp + 2)
 	ld xbc, 0x00EA0198			; resource ID for region 1
@@ -225278,24 +225278,24 @@ LABEL_F874C2:
 	call 0xF88BC2
 	jrl LABEL_F8757D
 LABEL_F874E8:
-	.byte 0xd8, 0xa9			; ld wa, 1
+	lds	wa, 1
 	calr LABEL_F871A6
 	cps hl, 0
 	jrl z, LABEL_F87574
 	calr LABEL_F873C8			; check extended mode
 	cps hl, 0
 	jr z, LABEL_F87550
-	.byte 0xd8, 0xa8			; ld wa, 0
+	lds	wa, 0
 	call 0xFB62C3
 	ld xwa, 0x00000010
-	.byte 0xd9, 0xa8			; ld bc, 0
+	lds	bc, 0
 	call 0xF88EE0				; set region param
 	lda_24 xwa, 0x1ED350			; VRAM base
 	add xwa, 0x00000010			; offset +0x10
 	ld xbc, 0x00000010			; size = 0x10
 	call 0xF88D74
 	ld xwa, 0x000000B0
-	.byte 0xd9, 0xa8			; ld bc, 0
+	lds	bc, 0
 	call 0xF88EE0
 	lda_24 xwa, 0x1ED350
 	ld bc, (xwa + 13)			; load field at offset 0x0D
@@ -225305,7 +225305,7 @@ LABEL_F874E8:
 	call 0xF88D74
 	call 0xF88BC2
 	ld iz, hl
-	.byte 0xd8, 0xa8			; ld wa, 0
+	lds	wa, 0
 	ld bc, iz
 	call 0xFB62C4
 	jr LABEL_F87577
@@ -225337,7 +225337,7 @@ LABEL_F87582:
 	push xiz				; save XIZ (4 bytes)
 	ld xbc, xwa
 	lda xwa, (xsp + 4)			; stack offset differs (XIZ=4 vs IZ=2)
-	.byte 0xda, 0xaf			; ld de, 7
+	lds	de, 7
 	call 0xF891AB
 	lda xwa, (xsp + 4)
 	ld xbc, 0x00EA019C			; resource ID for region 7
@@ -225347,7 +225347,7 @@ LABEL_F87582:
 	call 0xF88BC2
 	jr LABEL_F8760F
 LABEL_F875A7:
-	.byte 0xd8, 0xaf			; ld wa, 7
+	lds	wa, 7
 	calr LABEL_F871A6
 	cps hl, 0
 	jr z, LABEL_F87606
@@ -225362,13 +225362,13 @@ LABEL_F875A7:
 	pushw 0x0400				; fill size
 	push xiz				; buffer ptr
 	call 0xFF0FFA				; memset
-	.byte 0xef, 0x60			; inc 0, xsp  [not standard, stack cleanup?]
+	inc	8, xsp
 	ld xwa, xiz				; base address
 	ld xbc, 0x00000400			; size
 	call 0xF88D74
 	ld xwa, 0x003D3000			; flash/file area base
 	push xwa
-	.byte 0xd8, 0xa9			; ld wa, 1
+	lds	wa, 1
 	ld xbc, xiz				; buffer ptr
 	ldw de, 0x0400				; size
 	call 0xEF3C3C				; flash read/copy
@@ -225401,7 +225401,7 @@ LABEL_F87614:
 	ld (xsp + 16), xwa			; save caller arg
 	lda xwa, (xsp + 2)
 	ld xbc, (xsp + 16)
-	.byte 0xda, 0xaa			; ld de, 2
+	lds	de, 2
 	call 0xF891AB
 	lda xwa, (xsp + 2)
 	ld xbc, 0x00EA01A0			; resource ID for region 2
@@ -225411,7 +225411,7 @@ LABEL_F87614:
 	call 0xF88BC2
 	jrl LABEL_F876C6
 LABEL_F8763E:
-	.byte 0xd8, 0xaa			; ld wa, 2
+	lds	wa, 2
 	calr LABEL_F871A6
 	cps hl, 0
 	jr z, LABEL_F876B2
@@ -225610,7 +225610,7 @@ LABEL_F8784D:
 	pushw iz
 	ld xbc, xwa
 	lda xwa, (xsp + 2)
-	.byte 0xda, 0xab			; ld de, 3  [compact, not in LLVM]
+	lds	de, 3
 	call 0xF891AB
 	lda xwa, (xsp + 2)
 	ld xbc, 0x00EA01B0			; resource ID for region 3
@@ -225620,7 +225620,7 @@ LABEL_F8784D:
 	call 0xF88BC2
 	jr LABEL_F878AB
 LABEL_F87872:
-	.byte 0xd8, 0xab			; ld wa, 3
+	lds	wa, 3
 	calr LABEL_F871A6
 	cps hl, 0
 	jr z, LABEL_F8789F
@@ -225652,7 +225652,7 @@ LABEL_F878B0:
 	pushw iz
 	ld xbc, xwa
 	lda xwa, (xsp + 2)
-	.byte 0xda, 0xad			; ld de, 5
+	lds	de, 5
 	call 0xF891AB
 	lda xwa, (xsp + 2)
 	ld xbc, 0x00EA01B4			; resource ID for region 5
@@ -225662,7 +225662,7 @@ LABEL_F878B0:
 	call 0xF88BC2
 	jr LABEL_F8790E
 LABEL_F878D5:
-	.byte 0xd8, 0xad			; ld wa, 5
+	lds	wa, 5
 	calr LABEL_F871A6
 	cps hl, 0
 	jr z, LABEL_F87902
@@ -225694,7 +225694,7 @@ LABEL_F87913:
 	pushw iz
 	ld xbc, xwa
 	lda xwa, (xsp + 2)
-	.byte 0xda, 0xae			; ld de, 6
+	lds	de, 6
 	call 0xF891AB
 	lda xwa, (xsp + 2)
 	ld xbc, 0x00EA01B8			; resource ID for region 6
@@ -225704,7 +225704,7 @@ LABEL_F87913:
 	call 0xF88BC2
 	jr LABEL_F87952
 LABEL_F87938:
-	.byte 0xd8, 0xae			; ld wa, 6
+	lds	wa, 6
 	calr LABEL_F871A6
 	cps hl, 0
 	jr z, LABEL_F87949
@@ -225727,7 +225727,7 @@ LABEL_F87957:
 	pushw iz
 	ld xbc, xwa
 	lda xwa, (xsp + 18)
-	.byte 0xda, 0xac			; ld de, 4
+	lds	de, 4
 	call 0xF891AB
 	lda xwa, (xsp + 18)
 	ld xbc, 0x00EA01BC			; resource ID for region 4
@@ -225737,7 +225737,7 @@ LABEL_F87957:
 	call 0xF88BC2
 	jrl LABEL_F87A03
 LABEL_F8797D:
-	.byte 0xd8, 0xac			; ld wa, 4
+	lds	wa, 4
 	calr LABEL_F871A6
 	cps hl, 0
 	jr z, LABEL_F879AA
@@ -225753,7 +225753,7 @@ LABEL_F8797D:
 	call 0xFF04A0
 	jr LABEL_F879FD
 LABEL_F879AA:
-	.byte 0xde, 0xa8			; ld iz, 0  [compact, not in LLVM]
+	lds	iz, 0
 LABEL_F879AC:
 	call 0xF88CFC
 	cps hl, 0
@@ -225912,8 +225912,8 @@ LABEL_F87AF6:
 	lda xsp, (xsp - 22)
 	push xiz
 	ld (xsp + 22), xwa			; save arg
-	.byte 0xf1, 0xc0, 0xff, 0x31		; lda xbc, 0xFFC0  [16-bit direct, not in LLVM]
-	.byte 0xf1, 0x80, 0xf9, 0x30		; lda xwa, 0xF980  [16-bit direct, not in LLVM]
+	ldada	xbc, 65472
+	ldada	xwa, 63872
 	ld (xsp + 4), xbc			; save end address
 	sub (xsp + 4), xwa			; size = end - start
 	lda_24 xbc, 0x1E7800
@@ -225929,7 +225929,7 @@ LABEL_F87AF6:
 LABEL_F87B29:
 	lda xwa, (xsp + 8)			; local buffer
 	ld xbc, (xsp + 22)			; saved arg
-	.byte 0xda, 0xa8			; ld de, 0  [compact, not in LLVM]
+	lds	de, 0
 	call 0xF891AB				; init region
 	lda xwa, (xsp + 8)			; buffer
 	ld xbc, 0x00EA01F0			; resource ID region 0
@@ -225988,7 +225988,7 @@ LABEL_F87BB3:
 LABEL_F87BC0:
 	lda xwa, (xsp + 4)			; buffer
 	ld xbc, (xsp + 18)			; arg
-	.byte 0xda, 0xa9			; ld de, 1  [compact, not in LLVM]
+	lds	de, 1
 	call 0xF891AB
 	lda xwa, (xsp + 4)
 	ld xbc, 0x00EA01F4			; resource ID region 1
@@ -226005,7 +226005,7 @@ LABEL_F87BE2:
 	ld xbc, xiz
 	call 0xF88E28				; save VRAM range
 	ld xwa, 0x0000000F			; param
-	.byte 0xd9, 0xa8			; ld bc, 0  [compact, not in LLVM]
+	lds	bc, 0
 	call 0xF88EE0				; set region param
 	ldw wa, 0x0008
 	call 0xF88D2C				; configure
@@ -226047,7 +226047,7 @@ LABEL_F87C40:
 LABEL_F87C57:
 	lda xwa, (xsp + 4)
 	ld xbc, xiz
-	.byte 0xda, 0xaf			; ld de, 7  [compact, not in LLVM]
+	lds	de, 7
 	call 0xF891AB
 	lda xwa, (xsp + 4)
 	ld xbc, LABEL_EA01F8			; resource ID region 7
@@ -226094,7 +226094,7 @@ LABEL_F87CAC:
 LABEL_F87CCF:
 	lda xwa, (xsp + 8)
 	ld xbc, xiz
-	.byte 0xda, 0xaa			; ld de, 2  [compact, not in LLVM]
+	lds	de, 2
 	call 0xF891AB
 	lda xwa, (xsp + 8)
 	ld xbc, LABEL_EA01FC			; resource ID region 2
@@ -226141,7 +226141,7 @@ LABEL_F87D2C:
 LABEL_F87D47:
 	lda xwa, (xsp + 8)
 	ld xbc, xiz
-	.byte 0xda, 0xab			; ld de, 3  [compact, not in LLVM]
+	lds	de, 3
 	call 0xF891AB
 	lda xwa, (xsp + 8)
 	ld xbc, LABEL_EA0200			; resource ID region 3
@@ -226185,7 +226185,7 @@ LABEL_F87D96:
 LABEL_F87DB1:
 	lda xwa, (xsp + 8)
 	ld xbc, xiz
-	.byte 0xda, 0xad			; ld de, 5  [compact, not in LLVM]
+	lds	de, 5
 	call 0xF891AB
 	lda xwa, (xsp + 8)
 	ld xbc, 0x00EA0204			; resource ID region 5
@@ -226220,7 +226220,7 @@ LABEL_F87E00:
 	pushw iz
 	ld xbc, xwa
 	lda xwa, (xsp + 2)
-	.byte 0xda, 0xae			; ld de, 6  [compact, not in LLVM]
+	lds	de, 6
 	call 0xF891AB
 	lda xwa, (xsp + 2)
 	ld xbc, 0x00EA0208			; resource ID region 6
@@ -226257,7 +226257,7 @@ LABEL_F87E41:
 LABEL_F87E58:
 	lda xwa, (xsp + 4)
 	ld xbc, xiz
-	.byte 0xda, 0xac			; ld de, 4  [compact, not in LLVM]
+	lds	de, 4
 	call 0xF891AB
 	lda xwa, (xsp + 4)
 	ld xbc, 0x00EA020C			; resource ID region 4
@@ -228934,7 +228934,7 @@ LABEL_F8991C:
 	ld xix, 0x00025DB8			; record array base
 	add xix, xbc				; XIX = &records[index]
 	ld xiy, 0x00EA03DC			; destination descriptor
-	.byte 0xd9, 0xae			; ld bc, 6  [compact, not in LLVM]
+	lds	bc, 6
 	ldirw					; copy 6 words (12 bytes)
 	lda xbc, (xsp + 8)			; XBC = output buffer
 	ld hl, iz
@@ -228976,7 +228976,7 @@ LABEL_F8991C:
 	lda_24 xwa, 0x025DBA			; field at offset +2
 	add xwa, xbc
 	lda xbc, (xsp + 32)			; destination
-	.byte 0xda, 0xae			; ld de, 6  [compact, not in LLVM]
+	lds	de, 6
 	calr LABEL_F890F2			; copy 6 words
 	ld wa, iz				; --- clear record[index].flag ---
 	extz xwa
@@ -229020,7 +229020,7 @@ LABEL_F899EA:
 	lda_24 xwa, 0x025DBA
 	add xwa, xbc
 	lda xbc, (xsp + 32)
-	.byte 0xda, 0xae			; ld de, 6
+	lds	de, 6
 	calr LABEL_F890F2			; copy
 	ld wa, iz
 	extz xwa
@@ -229035,7 +229035,7 @@ LABEL_F899EA:
 LABEL_F89A47:
 	inc 2, xwa				; advance to next field
 	inc 8, xbc				; advance buffer (inc 0 encoding = 8)
-	.byte 0xda, 0xae			; ld de, 6
+	lds	de, 6
 	calr LABEL_F89153			; compare/copy
 	cps hl, 0
 	jr nz, LABEL_F89A5C			; mismatch, skip
@@ -234396,18 +234396,18 @@ LABEL_F98697:
 	jr nz, LABEL_F986EF			; Not pass-through, try normal scan
 	; --- Pass-through path: broadcast any key press ---
 	; Build XDE = (C080 << 24) | (C07D << 16) | (C07E << 8) | C07F
-	.byte 0xea, 0xa8			; ld xde, 0  [compact clear]
+	lds32	xde, 0
 	ldda8 e, 0xC080				; chain byte
 	sll xde, 8				; shift up
-	.byte 0xe8, 0xa8			; ld xwa, 0
+	lds32	xwa, 0
 	ldda8 a, 0xC07D				; param byte
 	add xde, xwa				; merge into XDE
 	sll xde, 8
-	.byte 0xe8, 0xa8			; ld xwa, 0
+	lds32	xwa, 0
 	ldda8 a, 0xC07E				; additional key data
 	add xde, xwa
 	sll xde, 8
-	.byte 0xe8, 0xa8			; ld xwa, 0
+	lds32	xwa, 0
 	ldda8 a, 0xC07F				; additional key data
 	add xde, xwa
 	ld xwa, 0xFFFFFFFF			; broadcast target (all handlers)
@@ -234426,7 +234426,7 @@ LABEL_F986EF:
 	sll bc, 8				; BC = chain << 8
 	add bc, hl				; BC = (chain << 8) | param = key code
 LABEL_F9870A:
-	.byte 0x94, 0xf9			; cpw (xix), bc  [not in LLVM]
+	cp	(xix), bc
 	jr nz, LABEL_F9873F			; No match, advance to next entry
 	; --- Match found: build XDE = (D<<24)|(E<<16)|(C07E<<8)|C07F ---
 	ldb d, 0x00
@@ -234436,11 +234436,11 @@ LABEL_F9870A:
 	extz xwa				; Zero-extend WA -> XWA
 	add xde, xwa
 	sll xde, 8
-	.byte 0xe8, 0xa8			; ld xwa, 0
+	lds32	xwa, 0
 	ldda8 a, 0xC07E
 	add xde, xwa
 	sll xde, 8
-	.byte 0xe8, 0xa8			; ld xwa, 0
+	lds32	xwa, 0
 	ldda8 a, 0xC07F
 	add xde, xwa
 	ld xwa, 0xFFFFFFFF			; broadcast target
@@ -234474,7 +234474,7 @@ LABEL_F98748:
 	jr LABEL_F98782				; activate
 LABEL_F98769:
 	call 0xFDDFA7				; handler for key 0x10
-	.byte 0xea, 0xa8			; ld xde, 0  [compact clear]
+	lds32	xde, 0
 	ldda8 e, 0x8D3A				; load current state
 	ld xwa, 0xFFFFFFFF			; broadcast target
 	ld xbc, 0x01C0002F			; key event code (different from main handler)
@@ -261136,14 +261136,14 @@ LABEL_FA9945:
 	ld (xsp + 16), xbc			; save event code
 	ld (xsp + 20), xwa			; save target workspace
 	; --- Check if ring buffer is empty ---
-	.byte 0xd8, 0xac			; ld wa, 4  [compact imm, not in LLVM]
+	lds	wa, 4
 	call 0xEF1EA7				; acquire lock/semaphore (id=4)
-	.byte 0xd2, 0x36, 0xec, 0x02, 0x21	; ld bc, (0x02EC36)  [16-bit from 24-bit addr]
-	.byte 0xd2, 0x34, 0xec, 0x02, 0x22	; ld de, (0x02EC34)  [16-bit from 24-bit addr]
+	ld16_24	bc, 191542
+	ld16_24	de, 191540
 	cp de, bc				; compare read/write positions
 	jr nz, LABEL_FA997A			; buffer not empty, process events
 	; --- Buffer empty: release lock, dispatch directly ---
-	.byte 0xd8, 0xac			; ld wa, 4
+	lds	wa, 4
 	call 0xEF1DD4				; release lock/semaphore (id=4)
 	ld xwa, (xsp + 20)			; restore target
 	ld xbc, (xsp + 16)			; restore event code
@@ -261178,7 +261178,7 @@ LABEL_FA99A7:
 	; --- Event code matches: check filter ---
 	lda xde, (xwa + 8)			; XDE = pointer to entry+8 (filter)
 	ld xwa, (xde)				; XWA = registered filter value
-	.byte 0xd8, 0xa8			; ld wa, 0  [compact clear]
+	lds	wa, 0
 	ld xiy, (xsp + 12)			; XIY = original event param
 	and xiy, 0xFFFF0000			; isolate upper 16 bits
 	cp xiy, xwa				; compare filter with event param upper bits
@@ -261209,7 +261209,7 @@ LABEL_FA9A0F:
 	jr z, LABEL_FA9A23			; yes, done scanning
 	cp ix, 0x03FF				; check for index wrap
 	jr nz, LABEL_FA9A1D			; no wrap needed
-	.byte 0xdc, 0xa8			; ld ix, 0  [compact clear, wrap to 0]
+	lds	ix, 0
 	jr LABEL_FA9A1F				; skip increment
 LABEL_FA9A1D:
 	inc 1, ix				; next entry index
@@ -261218,7 +261218,7 @@ LABEL_FA9A1F:
 	jr nz, LABEL_FA99A7			; continue scanning
 LABEL_FA9A23:
 	; --- Done scanning: release lock and reassemble event param ---
-	.byte 0xd8, 0xac			; ld wa, 4
+	lds	wa, 4
 	call 0xEF1DD4				; release lock/semaphore
 	ld c, (xsp + 6)				; C = param byte 0
 	cpl c					; C = ~param byte 0
@@ -261235,10 +261235,10 @@ LABEL_FA9A23:
 	; --- Build final XDE from accumulated data ---
 	ld xwa, 0xFFFF0000			; mask for upper 16 bits
 	and (xsp + 2), xwa			; keep upper 16 bits of working param
-	.byte 0xe9, 0xa8			; ld xbc, 0  [compact clear]
+	lds32	xbc, 0
 	.byte 0xc7, 0xfb, 0x8b			; ld c, qizh
 	sll xbc, 8				; shift QIZH value into byte 1 position
-	.byte 0xe8, 0xa8			; ld xwa, 0
+	lds32	xwa, 0
 	ld a, (xsp + 8)				; A = accumulator byte
 	add xwa, xbc				; merge
 	add (xsp + 2), xwa			; merge into working param
@@ -261247,7 +261247,7 @@ LABEL_FA9A23:
 	ld xbc, (xsp + 16)			; restore event code
 	ld xde, (xsp + 2)			; load modified event param
 LABEL_FA9A6D:
-	.byte 0x1e, 0xe8, 0x02			; calr 0xFA9D58 (BroadcastEvent / MainDispatchEvent)
+	calr	744
 	pop qiz					; restore QIZ
 	lda xsp, (xsp + 22)			; deallocate stack frame
 	ret
@@ -270714,7 +270714,7 @@ LABEL_FAF3A5:
 
 LABEL_FAF3E0:
 	; --- VRAM display rendering function pair 1: wrapper (FAF3E0-FAF41D) ---
-	.byte 0xef, 0x6a				; dec 2, xsp  [compact]
+	dec	2, xsp
 	push xiz
 	ld (xsp + 4), bc
 	ld xiz, xwa
@@ -270729,7 +270729,7 @@ LABEL_FAF3F9:
 	ldw wa, 0x000A
 	calr LABEL_FAA444
 	ld xwa, xhl
-	.byte 0xf2, 0x1e, 0xf4, 0xfa, 0x31		; lda xbc, LABEL_FAF41E  [F2 absolute addr]
+	lda_24	xbc, 16446494
 	ld (xwa), xbc
 	ld xiy, xiz
 	lda xix, (xwa + 4)
@@ -270740,7 +270740,7 @@ LABEL_FAF3F9:
 	calr LABEL_FAA36C
 LABEL_FAF41A:
 	pop xiz
-	.byte 0xef, 0x62				; inc 2, xsp  [compact]
+	inc	2, xsp
 	ret
 LABEL_FAF41E:
 	; --- Callback stub (FAF41E-FAF427) ---
@@ -270750,7 +270750,7 @@ LABEL_FAF41E:
 	jr t, LABEL_FAF428
 LABEL_FAF428:
 	; --- Main rendering routine 1 (FAF428-FAF541) ---
-	.byte 0xbf, 0xe4, 0x37			; lda xsp, (xsp + 0xFFE4)  [compact R+d8]
+	lda	xsp, (xsp-28)
 	push xiz
 	ld (xsp + 28), xwa
 	ld (xsp + 6), bc
@@ -270782,7 +270782,7 @@ LABEL_FAF46F:
 	sub iz, bc
 	jr ge, LABEL_FAF480
 	add (xsp + 6), iz
-	.byte 0xde, 0xa8				; ld iz, 0  [compact zero-load]
+	lds	iz, 0
 	jr t, LABEL_FAF493
 LABEL_FAF480:
 	ld wa, iz
@@ -270799,7 +270799,7 @@ LABEL_FAF493:
 	add xbc, xde
 	sll xbc, 6
 	.byte 0xf3, 0x07, 0xe4, 0xfa, 0x33		; lda xhl, (xbc + qiz)  [R+R addressing]
-	.byte 0xf2, 0x00, 0x3c, 0x04, 0x30		; lda xwa, 0x043C00  [F2 absolute addr]
+	lda_24	xwa, 277504
 	add xwa, xhl
 	ld (xsp + 16), xwa
 	ld xwa, 0x00056800
@@ -270819,7 +270819,7 @@ LABEL_FAF4C7:
 	pushw bc
 	call LABEL_FF103E
 	add hl, hl
-	.byte 0xf2, 0x94, 0xae, 0xea, 0x30		; lda xwa, 0xEAAE94  [F2 absolute addr]
+	lda_24	xwa, 15380116
 	.byte 0xd3, 0x07, 0xe0, 0xec, 0x22	; ld de, (xwa + hl)  [R+R addressing]
 	ldw bc, 0x001E
 	sub bc, de
@@ -270833,11 +270833,11 @@ LABEL_FAF4C7:
 	push xbc
 	push xhl
 	call 0xFF0D99
-	.byte 0xbf, 0x0c, 0x37			; lda xsp, (xsp + 12)  [compact R+d8]
+	lda	xsp, (xsp+12)
 	ld xwa, 0x00000140
 	add (xsp + 12), xwa
 	add (xsp + 16), xwa
-	.byte 0xe8, 0xa9				; ld xwa, 1  [compact load-1]
+	lds32	xwa, 1
 	add (xsp + 8), xwa
 LABEL_FAF515:
 	ld de, iz
@@ -270854,13 +270854,13 @@ LABEL_FAF515:
 	add bc, (xsp + 4)
 	ld (xwa + 4), bc
 	ld (xwa + 6), de
-	.byte 0x1e, 0x25, 0xb2			; calr 0xFAA762  [no label]
+	calr	45605
 	pop xiz
-	.byte 0xbf, 0x1c, 0x37			; lda xsp, (xsp + 28)  [compact R+d8]
+	lda	xsp, (xsp+28)
 	ret
 LABEL_FAF542:
 	; --- VRAM display rendering function pair 2: wrapper (FAF542-FAF57F) ---
-	.byte 0xef, 0x6a				; dec 2, xsp  [compact]
+	dec	2, xsp
 	push xiz
 	ld (xsp + 4), bc
 	ld xiz, xwa
@@ -270875,7 +270875,7 @@ LABEL_FAF55B:
 	ldw wa, 0x000A
 	calr LABEL_FAA444
 	ld xwa, xhl
-	.byte 0xf2, 0x80, 0xf5, 0xfa, 0x31		; lda xbc, LABEL_FAF580  [F2 absolute addr]
+	lda_24	xbc, 16446848
 	ld (xwa), xbc
 	ld xiy, xiz
 	lda xix, (xwa + 4)
@@ -270886,7 +270886,7 @@ LABEL_FAF55B:
 	calr LABEL_FAA36C
 LABEL_FAF57C:
 	pop xiz
-	.byte 0xef, 0x62				; inc 2, xsp  [compact]
+	inc	2, xsp
 	ret
 LABEL_FAF580:
 	; --- Callback stub 2 (FAF580-FAF589) ---
@@ -270896,7 +270896,7 @@ LABEL_FAF580:
 	jr t, LABEL_FAF58A
 LABEL_FAF58A:
 	; --- Main rendering routine 2 (FAF58A-FAF673) ---
-	.byte 0xbf, 0xe6, 0x37			; lda xsp, (xsp + 0xFFE6)  [compact R+d8]
+	lda	xsp, (xsp-26)
 	pushw iz
 	ld (xsp + 6), bc
 	add (xsp + 6), bc
@@ -270924,7 +270924,7 @@ LABEL_FAF5CC:
 	sub iz, bc
 	jr ge, LABEL_FAF5DA
 	add (xsp + 6), iz
-	.byte 0xde, 0xa8				; ld iz, 0  [compact zero-load]
+	lds	iz, 0
 	jr t, LABEL_FAF5ED
 LABEL_FAF5DA:
 	ld wa, iz
@@ -270942,7 +270942,7 @@ LABEL_FAF5ED:
 	sll xbc, 6
 	ld wa, (xsp + 2)
 	.byte 0xf3, 0x07, 0xe4, 0xe0, 0x33		; lda xhl, (xbc + wa)  [R+R addressing]
-	.byte 0xf2, 0x00, 0x3c, 0x04, 0x30		; lda xwa, 0x043C00  [F2 absolute addr]
+	lda_24	xwa, 277504
 	add xwa, xhl
 	ld (xsp + 16), xwa
 	ld xwa, 0x00069800
@@ -270961,11 +270961,11 @@ LABEL_FAF624:
 	ld xwa, (xsp + 22)
 	push xwa
 	call 0xFF0D99
-	.byte 0xbf, 0x0a, 0x37			; lda xsp, (xsp + 10)  [compact R+d8]
+	lda	xsp, (xsp+10)
 	ld xwa, 0x00000140
 	add (xsp + 12), xwa
 	add (xsp + 16), xwa
-	.byte 0xe8, 0xa9				; ld xwa, 1  [compact load-1]
+	lds32	xwa, 1
 	add (xsp + 8), xwa
 LABEL_FAF647:
 	ld de, iz
@@ -270982,9 +270982,9 @@ LABEL_FAF647:
 	add bc, (xsp + 4)
 	ld (xwa + 4), bc
 	ld (xwa + 6), de
-	.byte 0x1e, 0xf3, 0xb0			; calr 0xFAA762  [no label]
+	calr	45299
 	popw iz
-	.byte 0xbf, 0x1a, 0x37			; lda xsp, (xsp + 26)  [compact R+d8]
+	lda	xsp, (xsp+26)
 	ret
 
 
@@ -281413,26 +281413,26 @@ LABEL_FB7C74:
 
 LABEL_FB7C8F:
 	; --- Stack-frame: alloc 16, conditional XDE setup, call dispatch (59 bytes) ---
-	.byte 0xbf, 0xf0, 0x37				; lda xsp, xsp+0xF0  [stack alloc 16 bytes]
-	.byte 0xb7, 0x30				; lda xwa, xsp  [indirect lea]
+	lda	xsp, (xsp-16)
+	lda	xwa, (xsp)
 	.byte 0xb0, 0x02, 0x03, 0x00			; ld (xwa), 0x0003  [16-bit store]
 	push xwa
 	call 0xF97CCA
 	inc 4, xsp
-	.byte 0xc1, 0x24, 0x8a, 0x21			; ld a, (0x8A24)  [C1 prefix]
+	ldda8	a, 35364
 	cp a, 0xfc
 	jr nz, LABEL_FB7CB6
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x01C0001E
-	.byte 0xea, 0xaa				; ld xde, 2  [compact imm32]
+	lds32	xde, 2
 	jr t, LABEL_FB7CC2
 LABEL_FB7CB6:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x01C0001E
-	.byte 0xea, 0xa9				; ld xde, 1  [compact imm32]
+	lds32	xde, 1
 LABEL_FB7CC2:
 	call 0xFA9D58
-	.byte 0xbf, 0x10, 0x37				; lda xsp, xsp+0x10  [stack dealloc]
+	lda	xsp, (xsp+16)
 	ret
 
 
@@ -286785,11 +286785,11 @@ LABEL_FBB990:
 	; --- Init/check function (27 bytes) ---
 	ld xwa, 0x00004080
 	call LABEL_FCD437
-	.byte 0xdb, 0xd9				; cp hl, 1  [compact prefix]
+	cps	hl, 1
 	ret nz
 	ld xwa, 0x00004080
-	.byte 0xd9, 0xa8				; ld bc, 0  [compact zero-load]
-	.byte 0xda, 0xac				; ld de, 4  [compact load]
+	lds	bc, 0
+	lds	de, 4
 	call 0xFCD201
 	ret
 LABEL_FBB9AB:
@@ -296656,7 +296656,7 @@ MainSysControl:	; fc2bbf
 
 LABEL_FC2C12:
 	; --- Dispatch table: 9 call entries (54 bytes) ---
-	.byte 0xd8, 0xaa				; ld wa, 2  [compact load]
+	lds	wa, 2
 	call LABEL_FDDB46
 	jr t, LABEL_FC2C48
 LABEL_FC2C1A:
@@ -299800,11 +299800,11 @@ LABEL_FC7222:
 LABEL_FC7224:
 	; --- Routine 1: call FCD437(0x028100), set/res bit 0 at (xwa) (29 bytes) ---
 	push xiz
-	.byte 0xf1, 0x18, 0x8f, 0x36			; lda xiz, 0x8F18  [F1 prefix]
+	ldada	xiz, 36632
 	ld xwa, 0x00028100
 	call LABEL_FCD437
-	.byte 0xbe, 0x04, 0x30				; lda xwa, xiz+4  [indirect+d8]
-	.byte 0xdb, 0xd9				; cp hl, 1  [compact prefix]
+	lda	xwa, (xiz+4)
+	cps	hl, 1
 	jr nz, LABEL_FC723D
 	.byte 0xb0, 0xb8				; set 0, (xwa)  [not in LLVM]
 	jr t, LABEL_FC723F
@@ -299816,14 +299816,14 @@ LABEL_FC723F:
 LABEL_FC7241:
 	; --- Routine 2: 2x FCD437, set/res bit 1 at (xiz+4) (41 bytes) ---
 	push xiz
-	.byte 0xf1, 0x18, 0x8f, 0x36			; lda xiz, 0x8F18  [F1 prefix]
+	ldada	xiz, 36632
 	ld xwa, 0x00028100
 	call LABEL_FCD437
-	.byte 0xdb, 0xda				; cp hl, 2  [compact prefix]
+	cps	hl, 2
 	jr z, LABEL_FC7260
 	ld xwa, 0x00028101
 	call LABEL_FCD437
-	.byte 0xdb, 0xd9				; cp hl, 1  [compact prefix]
+	cps	hl, 1
 	jr nz, LABEL_FC7265
 LABEL_FC7260:
 	.byte 0xbe, 0x04, 0xb9				; set 1, (xiz+4)  [not in LLVM]
@@ -299836,14 +299836,14 @@ LABEL_FC7268:
 LABEL_FC726A:
 	; --- Routine 3: 2x FCD437, set/res bit 2 at (xiz+4) (41 bytes) ---
 	push xiz
-	.byte 0xf1, 0x18, 0x8f, 0x36			; lda xiz, 0x8F18  [F1 prefix]
+	ldada	xiz, 36632
 	ld xwa, 0x00028101
 	call LABEL_FCD437
-	.byte 0xdb, 0xda				; cp hl, 2  [compact prefix]
+	cps	hl, 2
 	jr z, LABEL_FC7289
 	ld xwa, 0x00028102
 	call LABEL_FCD437
-	.byte 0xdb, 0xd9				; cp hl, 1  [compact prefix]
+	cps	hl, 1
 	jr nz, LABEL_FC728E
 LABEL_FC7289:
 	.byte 0xbe, 0x04, 0xba				; set 2, (xiz+4)  [not in LLVM]
@@ -299858,14 +299858,14 @@ LABEL_FC7291:
 LABEL_FC7293:
 	; --- Routine 1: 2x FCD437, set/res bit 3 at (xiz+4) (41 bytes) ---
 	push xiz
-	.byte 0xf1, 0x18, 0x8f, 0x36			; lda xiz, 0x8F18  [F1 prefix]
+	ldada	xiz, 36632
 	ld xwa, 0x00028101
 	call LABEL_FCD437
-	.byte 0xdb, 0xdb				; cp hl, 3  [compact prefix]
+	cps	hl, 3
 	jr z, LABEL_FC72B2
 	ld xwa, 0x00028102
 	call LABEL_FCD437
-	.byte 0xdb, 0xda				; cp hl, 2  [compact prefix]
+	cps	hl, 2
 	jr nz, LABEL_FC72B7
 LABEL_FC72B2:
 	.byte 0xbe, 0x04, 0xbb				; set 3, (xiz+4)  [not in LLVM]
@@ -299878,11 +299878,11 @@ LABEL_FC72BA:
 LABEL_FC72BC:
 	; --- Routine 2: FCD437(0x4002), set/res bit 3 at (xwa) via xiz+6 (29 bytes) ---
 	push xiz
-	.byte 0xf1, 0x18, 0x8f, 0x36			; lda xiz, 0x8F18  [F1 prefix]
+	ldada	xiz, 36632
 	ld xwa, 0x00004002
 	call LABEL_FCD437
-	.byte 0xbe, 0x06, 0x30				; lda xwa, xiz+6  [indirect+d8]
-	.byte 0xdb, 0xd8				; cp hl, 0  [compact prefix]
+	lda	xwa, (xiz+6)
+	cps	hl, 0
 	jr z, LABEL_FC72D5
 	.byte 0xb0, 0xbb				; set 3, (xwa)  [not in LLVM]
 	jr t, LABEL_FC72D7
@@ -299894,11 +299894,11 @@ LABEL_FC72D7:
 LABEL_FC72D9:
 	; --- Routine 3: FCD437(0x4004), set/res bit 4 at (xwa) via xiz+6 (29 bytes) ---
 	push xiz
-	.byte 0xf1, 0x18, 0x8f, 0x36			; lda xiz, 0x8F18  [F1 prefix]
+	ldada	xiz, 36632
 	ld xwa, 0x00004004
 	call LABEL_FCD437
-	.byte 0xbe, 0x06, 0x30				; lda xwa, xiz+6  [indirect+d8]
-	.byte 0xdb, 0xd8				; cp hl, 0  [compact prefix]
+	lda	xwa, (xiz+6)
+	cps	hl, 0
 	jr z, LABEL_FC72F2
 	.byte 0xb0, 0xbc				; set 4, (xwa)  [not in LLVM]
 	jr t, LABEL_FC72F4
@@ -299912,27 +299912,27 @@ LABEL_FC72F4:
 LABEL_FC72F6:
 	; --- Routine 1: FCD437(0x4100), table lookup at 0xEDA626, nibble merge (39 bytes) ---
 	push xiz
-	.byte 0xf1, 0x18, 0x8f, 0x36			; lda xiz, 0x8F18  [F1 prefix]
+	ldada	xiz, 36632
 	ld xwa, 0x00004100
 	call LABEL_FCD437
 	lda_24 xwa, 0xEDA626
 	.byte 0xc3, 0x07, 0xe0, 0xec, 0x21		; ld a, (xwa+hl)  [register-indexed]
 	and a, 0x07
-	.byte 0xc9, 0xec, 0x04				; sla 4, a  [not in LLVM]
+	sla	a, 4
 	.byte 0x8e, 0x0a, 0x3c, 0x8f			; and (xiz+0x0A), 0x8F  [indirect ALU]
-	.byte 0x8e, 0x0a, 0xe9				; or (xiz+0x0A), a  [indirect ALU]
+	or	(xiz+10), a
 	pop xiz
 	ret
 LABEL_FC731D:
 	; --- Routine 2: F9945E+FCD4F7(0x5E), set/res bit 1 at (xwa) via xiz+6 (37 bytes) ---
 	push xiz
-	.byte 0xf1, 0x18, 0x8f, 0x36			; lda xiz, 0x8F18  [F1 prefix]
+	ldada	xiz, 36632
 	call LABEL_F9945E
-	.byte 0xdb, 0x12				; extz hl  [compact prefix]
-	.byte 0xdb, 0x88				; ld wa, hl  [compact prefix]
+	extz	hl
+	ld	wa, hl
 	ldw bc, 0x005E
 	call LABEL_FCD4F7
-	.byte 0xbe, 0x06, 0x30				; lda xwa, xiz+6  [indirect+d8]
+	lda	xwa, (xiz+6)
 	cp hl, 0x007F
 	jr nz, LABEL_FC733E
 	.byte 0xb0, 0xb9				; set 1, (xwa)  [not in LLVM]
@@ -299947,17 +299947,17 @@ LABEL_FC7340:
 LABEL_FC7342:
 	; --- Routine 1: 2x F9945E+FCD4F7(0x5D), set/res bit 2 at (xiz+6) (55 bytes) ---
 	push xiz
-	.byte 0xf1, 0x18, 0x8f, 0x36			; lda xiz, 0x8F18  [F1 prefix]
+	ldada	xiz, 36632
 	call LABEL_F9945E
-	.byte 0xdb, 0x12				; extz hl  [compact prefix]
-	.byte 0xdb, 0x88				; ld wa, hl  [compact prefix]
+	extz	hl
+	ld	wa, hl
 	ldw bc, 0x005D
 	call LABEL_FCD4F7
-	.byte 0xdb, 0xd8				; cp hl, 0  [compact prefix]
+	cps	hl, 0
 	jr z, LABEL_FC736F
 	call LABEL_F9945E
-	.byte 0xdb, 0x12				; extz hl  [compact prefix]
-	.byte 0xdb, 0x88				; ld wa, hl  [compact prefix]
+	extz	hl
+	ld	wa, hl
 	ldw bc, 0x005D
 	call LABEL_FCD4F7
 	cp hl, 0xFFFF
@@ -299973,13 +299973,13 @@ LABEL_FC7377:
 LABEL_FC7379:
 	; --- Routine 2: F9945E+FCD4F7(0x40), cp 0x7F, set/res bit 0 at (xwa) (37 bytes) ---
 	push xiz
-	.byte 0xf1, 0x18, 0x8f, 0x36			; lda xiz, 0x8F18  [F1 prefix]
+	ldada	xiz, 36632
 	call LABEL_F9945E
-	.byte 0xdb, 0x12				; extz hl  [compact prefix]
-	.byte 0xdb, 0x88				; ld wa, hl  [compact prefix]
+	extz	hl
+	ld	wa, hl
 	ldw bc, 0x0040
 	call LABEL_FCD4F7
-	.byte 0xbe, 0x06, 0x30				; lda xwa, xiz+6  [indirect+d8]
+	lda	xwa, (xiz+6)
 	cp hl, 0x007F
 	jr nz, LABEL_FC739A
 	.byte 0xb0, 0xb8				; set 0, (xwa)  [not in LLVM]
@@ -299992,21 +299992,21 @@ LABEL_FC739C:
 LABEL_FC739E:
 	; --- Routine 3: complex bit checks, and (xiz+0x0E), set 0 in A (59 bytes) ---
 	push xiz
-	.byte 0xf1, 0x18, 0x8f, 0x36			; lda xiz, 0x8F18  [F1 prefix]
+	ldada	xiz, 36632
 	.byte 0xf1, 0x1e, 0x04, 0xca			; bit 2, (0x041E)  [F1 prefix]
 	jr nz, LABEL_FC73D7
 	ld xwa, 0x00028103
 	call LABEL_FCD437
-	.byte 0xdb, 0xd8				; cp hl, 0  [compact prefix]
+	cps	hl, 0
 	jr nz, LABEL_FC73D7
 	.byte 0x8e, 0x0e, 0x3c, 0xf0			; and (xiz+0x0E), 0xF0  [indirect ALU]
 	.byte 0xf1, 0x21, 0x04, 0xca			; bit 2, (0x0421)  [F1 prefix]
 	jr z, LABEL_FC73D7
-	.byte 0xe8, 0xa9				; ld xwa, 1  [compact load]
+	lds32	xwa, 1
 	call LABEL_FCD437
-	.byte 0xdb, 0xd9				; cp hl, 1  [compact prefix]
+	cps	hl, 1
 	jr nz, LABEL_FC73D7
-	.byte 0xbe, 0x0e, 0x31				; lda xbc, xiz+0x0E  [indirect+d8]
+	lda	xbc, (xiz+14)
 	ld a, (xbc)
 	and a, 0xF0
 	set 0, a
@@ -300017,11 +300017,11 @@ LABEL_FC73D7:
 LABEL_FC73D9:
 	; --- Routine 4: FCD437(0x028103), set/res bit 0 at (xwa) via xiz+0x0D (29 bytes) ---
 	push xiz
-	.byte 0xf1, 0x18, 0x8f, 0x36			; lda xiz, 0x8F18  [F1 prefix]
+	ldada	xiz, 36632
 	ld xwa, 0x00028103
 	call LABEL_FCD437
-	.byte 0xbe, 0x0d, 0x30				; lda xwa, xiz+0x0D  [indirect+d8]
-	.byte 0xdb, 0xd9				; cp hl, 1  [compact prefix]
+	lda	xwa, (xiz+13)
+	cps	hl, 1
 	jr nz, LABEL_FC73F2
 	.byte 0xb0, 0xb8				; set 0, (xwa)  [not in LLVM]
 	jr t, LABEL_FC73F4
@@ -300033,11 +300033,11 @@ LABEL_FC73F4:
 LABEL_FC73F6:
 	; --- Routine 5: FCD437(0x028080), set/res bit 5 at (xwa) via xiz+3 (29 bytes) ---
 	push xiz
-	.byte 0xf1, 0x18, 0x8f, 0x36			; lda xiz, 0x8F18  [F1 prefix]
+	ldada	xiz, 36632
 	ld xwa, 0x00028080
 	call LABEL_FCD437
-	.byte 0xbe, 0x03, 0x30				; lda xwa, xiz+3  [indirect+d8]
-	.byte 0xdb, 0xd8				; cp hl, 0  [compact prefix]
+	lda	xwa, (xiz+3)
+	cps	hl, 0
 	jr nz, LABEL_FC740F
 	.byte 0xb0, 0xb5				; res 5, (xwa)  [not in LLVM]
 	jr t, LABEL_FC7411
@@ -300052,23 +300052,23 @@ LABEL_FC7413:
 	; --- Routine 1: stack frame, 3x FCD437 lookup, nibble merge (91 bytes) ---
 	dec 6, xsp
 	push xiz
-	.byte 0xf1, 0x18, 0x8f, 0x36			; lda xiz, 0x8F18  [F1 prefix]
+	ldada	xiz, 36632
 	ld (xsp+6), 0x48
 	ld xwa, 0x00028000
 	call LABEL_FCD437
 	ld (xsp+7), l
 	ld xwa, 0x00028001
 	call LABEL_FCD437
-	.byte 0xbf, 0x04, 0x30				; lda xwa, xsp+4  [indirect+d8]
+	lda	xwa, (xsp+4)
 	ld (xwa+4), l
 	call LABEL_FC9B55
-	.byte 0xbf, 0x04, 0x30				; lda xwa, xsp+4  [indirect+d8]
+	lda	xwa, (xsp+4)
 	cp (xwa), 0x0E
 	jr nc, LABEL_FC7454
 	ld xwa, 0x00028002
 	call LABEL_FCD437
-	.byte 0xdb, 0x12				; extz hl  [compact prefix]
-	.byte 0xdb, 0x88				; ld wa, hl  [compact prefix]
+	extz	hl
+	ld	wa, hl
 	jr t, LABEL_FC745C
 LABEL_FC7454:
 	ld a, (xwa+1)
@@ -300085,11 +300085,11 @@ LABEL_FC745C:
 LABEL_FC746E:
 	; --- Routine 2: FCD437(0x4200), set/res bit 7 at (xwa) via xiz+0x0A (29 bytes) ---
 	push xiz
-	.byte 0xf1, 0x18, 0x8f, 0x36			; lda xiz, 0x8F18  [F1 prefix]
+	ldada	xiz, 36632
 	ld xwa, 0x00004200
 	call LABEL_FCD437
-	.byte 0xbe, 0x0a, 0x30				; lda xwa, xiz+0x0A  [indirect+d8]
-	.byte 0xdb, 0xd9				; cp hl, 1  [compact prefix]
+	lda	xwa, (xiz+10)
+	cps	hl, 1
 	jr nz, LABEL_FC7487
 	.byte 0xb0, 0xbf				; set 7, (xwa)  [not in LLVM]
 	jr t, LABEL_FC7489
@@ -300100,27 +300100,27 @@ LABEL_FC7489:
 	ret
 LABEL_FC748B:
 	; --- Routine 3: read (0x8F58), mask+shift, merge into (0x8F1C) (20 bytes) ---
-	.byte 0xc1, 0x58, 0x8f, 0x21			; ld a, (0x8F58)  [C1 prefix]
+	ldda8	a, 36696
 	and a, 0x07
-	.byte 0xc9, 0xec, 0x04				; sla 4, a  [not in LLVM]
+	sla	a, 4
 	.byte 0xc1, 0x1c, 0x8f, 0x3c, 0x8f		; and (0x8F1C), 0x8F  [C1 prefix]
-	.byte 0xc1, 0x1c, 0x8f, 0xe9			; or (0x8F1C), a  [C1 prefix]
+	orddm8	36636, a
 	ret
 LABEL_FC749F:
 	; --- Routine 4: FCD437(0x300), decrement+mask+lookup via FC7C23 (40 bytes) ---
 	push xiz
-	.byte 0xf1, 0x18, 0x8f, 0x36			; lda xiz, 0x8F18  [F1 prefix]
+	ldada	xiz, 36632
 	ld xwa, 0x00000300
 	call LABEL_FCD437
-	.byte 0xdb, 0xd8				; cp hl, 0  [compact prefix]
+	cps	hl, 0
 	jr nz, LABEL_FC74B5
 	ldb l, 0x00
 	jr t, LABEL_FC74C2
 LABEL_FC74B5:
 	dec 1, l
 	and l, 0x07
-	.byte 0xdb, 0x12				; extz hl  [compact prefix]
-	.byte 0xdb, 0x88				; ld wa, hl  [compact prefix]
+	extz	hl
+	ld	wa, hl
 	call LABEL_FC7C23
 LABEL_FC74C2:
 	ld (xiz+9), l
@@ -300131,11 +300131,11 @@ LABEL_FC74C2:
 LABEL_FC74C7:
 	; --- Routine 1: call FCD437, set/res bit 4 based on HL (29 bytes) ---
 	push xiz
-	.byte 0xf1, 0x18, 0x8f, 0x36			; lda xiz, 0x8F18  [F1 prefix]
+	ldada	xiz, 36632
 	ld xwa, 0x00000400
 	call LABEL_FCD437
-	.byte 0xbe, 0x03, 0x30				; lda xwa, xiz+3  [indirect+d8]
-	.byte 0xdb, 0xd9				; cp hl, 1  [compact prefix]
+	lda	xwa, (xiz+3)
+	cps	hl, 1
 	jr nz, LABEL_FC74E0
 	.byte 0xb0, 0xbc				; set 4, (xwa)  [not in LLVM]
 	jr t, LABEL_FC74E2
@@ -300147,13 +300147,13 @@ LABEL_FC74E2:
 LABEL_FC74E4:
 	; --- Routine 2: call F99439, 3-way cp HL, set/res bit 7 (29 bytes) ---
 	push xiz
-	.byte 0xf1, 0x18, 0x8f, 0x36			; lda xiz, 0x8F18  [F1 prefix]
+	ldada	xiz, 36632
 	call LABEL_F99439
-	.byte 0xdb, 0xda				; cp hl, 2  [compact prefix]
+	cps	hl, 2
 	jr z, LABEL_FC74FF
-	.byte 0xdb, 0xd9				; cp hl, 1  [compact prefix]
+	cps	hl, 1
 	jr z, LABEL_FC74FD
-	.byte 0xdb, 0xd8				; cp hl, 0  [compact prefix]
+	cps	hl, 0
 	jr nz, LABEL_FC74FF
 	.byte 0xb6, 0xb7				; res 7, (xiz)  [not in LLVM]
 	jr t, LABEL_FC74FF
@@ -300165,10 +300165,10 @@ LABEL_FC74FF:
 LABEL_FC7501:
 	; --- Routine 3: call F9A541, set/res bit 7 based on HL (24 bytes) ---
 	push xiz
-	.byte 0xf1, 0x18, 0x8f, 0x36			; lda xiz, 0x8F18  [F1 prefix]
+	ldada	xiz, 36632
 	call LABEL_F9A541
-	.byte 0xbe, 0x04, 0x30				; lda xwa, xiz+4  [indirect+d8]
-	.byte 0xdb, 0xd8				; cp hl, 0  [compact prefix]
+	lda	xwa, (xiz+4)
+	cps	hl, 0
 	jr z, LABEL_FC7515
 	.byte 0xb0, 0xbf				; set 7, (xwa)  [not in LLVM]
 	jr t, LABEL_FC7517
@@ -300256,10 +300256,10 @@ LABEL_FC7519:
 LABEL_FC775B:
 	; --- Sub 1: set/res bit 6 of (XIZ) via FCD437 lookup (26 bytes) ---
 	push xiz
-	.byte 0xf1, 0x18, 0x8f, 0x36			; lda xiz, 0x8F18  [F1 prefix]
+	ldada	xiz, 36632
 	ld xwa, 0x000040C1
 	call LABEL_FCD437
-	.byte 0xdb, 0xd9				; cp hl, 1  [compact cp]
+	cps	hl, 1
 	jr nz, LABEL_FC7771
 	.byte 0xb6, 0xbe				; set 6, (xiz)  [not in LLVM]
 	jr t, LABEL_FC7773
@@ -300271,10 +300271,10 @@ LABEL_FC7773:
 LABEL_FC7775:
 	; --- Sub 2: multi-way HL compare, and/set bits at (XBC+0x0D) (74 bytes) ---
 	push xiz
-	.byte 0xf1, 0x18, 0x8f, 0x36			; lda xiz, 0x8F18  [F1 prefix]
+	ldada	xiz, 36632
 	ld xwa, 0x000040E0
 	call LABEL_FCD437
-	.byte 0xbe, 0x0d, 0x31				; lda xbc, xiz+0x0D  [indirect lea]
+	lda	xbc, (xiz+13)
 	ld a, (xbc)
 	cp hl, 0x0058
 	jr z, LABEL_FC77B5
@@ -300303,7 +300303,7 @@ LABEL_FC77BD:
 	ret
 LABEL_FC77BF:
 	; --- Sub 3: set/res bit 0 at (0x8F1D) based on bit 0 of (0x8F5C) (16 bytes) ---
-	.byte 0xf1, 0x1d, 0x8f, 0x30			; lda xwa, 0x8F1D  [F1 prefix]
+	ldada	xwa, 36637
 	.byte 0xf1, 0x5c, 0x8f, 0xc8			; bit 0, (0x8F5C)  [F1 prefix]
 	jr z, LABEL_FC77CC
 	.byte 0xb0, 0xb8				; set 0, (xwa)  [not in LLVM]
@@ -300313,9 +300313,9 @@ LABEL_FC77CC:
 	ret
 LABEL_FC77CF:
 	; --- Sub 4: conditionally set bit 3 at (0x8F25) based on (0x8D38) (33 bytes) ---
-	.byte 0xf1, 0x25, 0x8f, 0x30			; lda xwa, 0x8F25  [F1 prefix]
+	ldada	xwa, 36645
 	.byte 0xb0, 0xb3				; res 3, (xwa)  [not in LLVM]
-	.byte 0xc1, 0x38, 0x8d, 0x23			; ld c, (0x8D38)  [C1 prefix]
+	ldda8	c, 36152
 	cp c, 0xd3
 	jr z, LABEL_FC77ED
 	cp c, 0xd2
@@ -300330,13 +300330,13 @@ LABEL_FC77ED:
 LABEL_FC77F0:
 	; --- Sub 5: set/res bit 0 at (XIZ+4) via FC7C23 + (0x8F54) lookup (34 bytes) ---
 	push xiz
-	.byte 0xf1, 0x18, 0x8f, 0x36			; lda xiz, 0x8F18  [F1 prefix]
-	.byte 0xc1, 0x54, 0x8f, 0x21			; ld a, (0x8F54)  [C1 prefix]
+	ldada	xiz, 36632
+	ldda8	a, 36692
 	extz wa
 	call LABEL_FC7C23
-	.byte 0xc1, 0x4a, 0x8f, 0xc7			; and l, (0x8F4A)  [C1 prefix]
-	.byte 0xbe, 0x04, 0x30				; lda xwa, xiz+0x04  [indirect lea]
-	.byte 0xcf, 0xd8				; cp l, 0  [compact cp]
+	andda8	l, 36682
+	lda	xwa, (xiz+4)
+	cps	l, 0
 	jr z, LABEL_FC780E
 	.byte 0xb0, 0xb8				; set 0, (xwa)  [not in LLVM]
 	jr t, LABEL_FC7810
@@ -300348,13 +300348,13 @@ LABEL_FC7810:
 LABEL_FC7812:
 	; --- Sub 6: set/res bit 1 at (XIZ+4) via FC7C23 + (0x8F56) lookup (34 bytes) ---
 	push xiz
-	.byte 0xf1, 0x18, 0x8f, 0x36			; lda xiz, 0x8F18  [F1 prefix]
-	.byte 0xc1, 0x56, 0x8f, 0x21			; ld a, (0x8F56)  [C1 prefix]
+	ldada	xiz, 36632
+	ldda8	a, 36694
 	extz wa
 	call LABEL_FC7C23
-	.byte 0xc1, 0x4a, 0x8f, 0xc7			; and l, (0x8F4A)  [C1 prefix]
-	.byte 0xbe, 0x04, 0x30				; lda xwa, xiz+0x04  [indirect lea]
-	.byte 0xcf, 0xd8				; cp l, 0  [compact cp]
+	andda8	l, 36682
+	lda	xwa, (xiz+4)
+	cps	l, 0
 	jr z, LABEL_FC7830
 	.byte 0xb0, 0xb9				; set 1, (xwa)  [not in LLVM]
 	jr t, LABEL_FC7832
@@ -300366,13 +300366,13 @@ LABEL_FC7832:
 LABEL_FC7834:
 	; --- Sub 7: set/res bit 2 at (XIZ+4) via FC7C23 + (0x8F50) lookup (34 bytes) ---
 	push xiz
-	.byte 0xf1, 0x18, 0x8f, 0x36			; lda xiz, 0x8F18  [F1 prefix]
-	.byte 0xc1, 0x50, 0x8f, 0x21			; ld a, (0x8F50)  [C1 prefix]
+	ldada	xiz, 36632
+	ldda8	a, 36688
 	extz wa
 	call LABEL_FC7C23
-	.byte 0xc1, 0x4a, 0x8f, 0xc7			; and l, (0x8F4A)  [C1 prefix]
-	.byte 0xbe, 0x04, 0x30				; lda xwa, xiz+0x04  [indirect lea]
-	.byte 0xcf, 0xd8				; cp l, 0  [compact cp]
+	andda8	l, 36682
+	lda	xwa, (xiz+4)
+	cps	l, 0
 	jr z, LABEL_FC7852
 	.byte 0xb0, 0xba				; set 2, (xwa)  [not in LLVM]
 	jr t, LABEL_FC7854
@@ -300384,13 +300384,13 @@ LABEL_FC7854:
 LABEL_FC7856:
 	; --- Sub 8: set/res bit 3 at (XIZ+4) via FC7C23 + (0x8F52) lookup (34 bytes) ---
 	push xiz
-	.byte 0xf1, 0x18, 0x8f, 0x36			; lda xiz, 0x8F18  [F1 prefix]
-	.byte 0xc1, 0x52, 0x8f, 0x21			; ld a, (0x8F52)  [C1 prefix]
+	ldada	xiz, 36632
+	ldda8	a, 36690
 	extz wa
 	call LABEL_FC7C23
-	.byte 0xc1, 0x4a, 0x8f, 0xc7			; and l, (0x8F4A)  [C1 prefix]
-	.byte 0xbe, 0x04, 0x30				; lda xwa, xiz+0x04  [indirect lea]
-	.byte 0xcf, 0xd8				; cp l, 0  [compact cp]
+	andda8	l, 36682
+	lda	xwa, (xiz+4)
+	cps	l, 0
 	jr z, LABEL_FC7874
 	.byte 0xb0, 0xbb				; set 3, (xwa)  [not in LLVM]
 	jr t, LABEL_FC7876
@@ -300402,24 +300402,24 @@ LABEL_FC7876:
 LABEL_FC7878:
 	; --- Sub 9: guarded nibble set/res at (XIZ+0x0E) via (0x8F4E) lookup (76 bytes) ---
 	push xiz
-	.byte 0xf1, 0x18, 0x8f, 0x36			; lda xiz, 0x8F18  [F1 prefix]
+	ldada	xiz, 36632
 	.byte 0xf1, 0x1e, 0x04, 0xca			; bit 2, (0x041E)  [F1 prefix]
 	jr nz, LABEL_FC78C2
 	ld xwa, 0x00028103
 	call LABEL_FCD437
-	.byte 0xdb, 0xd8				; cp hl, 0  [compact cp]
+	cps	hl, 0
 	jr z, LABEL_FC789E
 	.byte 0xc1, 0x34, 0x8d, 0x3f, 0x13		; cp (0x8D34), 0x13  [C1 prefix]
 	jr z, LABEL_FC789E
 	.byte 0xc1, 0x0b, 0x7f, 0x3f, 0x00		; cp (0x7F0B), 0x00  [C1 prefix]
 	jr z, LABEL_FC78C2
 LABEL_FC789E:
-	.byte 0xc1, 0x4e, 0x8f, 0x21			; ld a, (0x8F4E)  [C1 prefix]
+	ldda8	a, 36686
 	extz wa
 	call LABEL_FC7C23
-	.byte 0xc1, 0x4a, 0x8f, 0xc7			; and l, (0x8F4A)  [C1 prefix]
-	.byte 0xbe, 0x0e, 0x30				; lda xwa, xiz+0x0E  [indirect lea]
-	.byte 0xcf, 0xd8				; cp l, 0  [compact cp]
+	andda8	l, 36682
+	lda	xwa, (xiz+14)
+	cps	l, 0
 	jr z, LABEL_FC78BF
 	ld c, (xwa)
 	and c, 0xf0
@@ -300434,13 +300434,13 @@ LABEL_FC78C2:
 LABEL_FC78C4:
 	; --- Sub 10: set/res bit 0 at (XIZ+0x0D) via FC7C23 + (0x8F4C) lookup (34 bytes) ---
 	push xiz
-	.byte 0xf1, 0x18, 0x8f, 0x36			; lda xiz, 0x8F18  [F1 prefix]
-	.byte 0xc1, 0x4c, 0x8f, 0x21			; ld a, (0x8F4C)  [C1 prefix]
+	ldada	xiz, 36632
+	ldda8	a, 36684
 	extz wa
 	call LABEL_FC7C23
-	.byte 0xc1, 0x4a, 0x8f, 0xc7			; and l, (0x8F4A)  [C1 prefix]
-	.byte 0xbe, 0x0d, 0x30				; lda xwa, xiz+0x0D  [indirect lea]
-	.byte 0xcf, 0xd8				; cp l, 0  [compact cp]
+	andda8	l, 36682
+	lda	xwa, (xiz+13)
+	cps	l, 0
 	jr z, LABEL_FC78E2
 	.byte 0xb0, 0xb8				; set 0, (xwa)  [not in LLVM]
 	jr t, LABEL_FC78E4
@@ -300452,11 +300452,11 @@ LABEL_FC78E4:
 LABEL_FC78E6:
 	; --- Sub 11: set/res bit 7 of (XIZ) via FC7C23 + (0x8F4C) lookup (29 bytes) ---
 	push xiz
-	.byte 0xf1, 0x18, 0x8f, 0x36			; lda xiz, 0x8F18  [F1 prefix]
-	.byte 0xc1, 0x4c, 0x8f, 0x21			; ld a, (0x8F4C)  [C1 prefix]
+	ldada	xiz, 36632
+	ldda8	a, 36684
 	extz wa
 	call LABEL_FC7C23
-	.byte 0xc1, 0x4a, 0x8f, 0xc7			; and l, (0x8F4A)  [C1 prefix]
+	andda8	l, 36682
 	jr z, LABEL_FC78FF
 	.byte 0xb6, 0xbf				; set 7, (xiz)  [not in LLVM]
 	jr t, LABEL_FC7901
@@ -300468,11 +300468,11 @@ LABEL_FC7901:
 LABEL_FC7903:
 	; --- Sub 12: set/res bit 5 of (XIZ) via FC7C23 + (0x8F4C) lookup (29 bytes) ---
 	push xiz
-	.byte 0xf1, 0x18, 0x8f, 0x36			; lda xiz, 0x8F18  [F1 prefix]
-	.byte 0xc1, 0x4c, 0x8f, 0x21			; ld a, (0x8F4C)  [C1 prefix]
+	ldada	xiz, 36632
+	ldda8	a, 36684
 	extz wa
 	call LABEL_FC7C23
-	.byte 0xc1, 0x4a, 0x8f, 0xc7			; and l, (0x8F4A)  [C1 prefix]
+	andda8	l, 36682
 	jr z, LABEL_FC791C
 	.byte 0xb6, 0xbd				; set 5, (xiz)  [not in LLVM]
 	jr t, LABEL_FC791E
@@ -300484,11 +300484,11 @@ LABEL_FC791E:
 LABEL_FC7920:
 	; --- Sub 13: set/res bit 6 of (XIZ) via FC7C23 + (0x8F4C) lookup (29 bytes) ---
 	push xiz
-	.byte 0xf1, 0x18, 0x8f, 0x36			; lda xiz, 0x8F18  [F1 prefix]
-	.byte 0xc1, 0x4c, 0x8f, 0x21			; ld a, (0x8F4C)  [C1 prefix]
+	ldada	xiz, 36632
+	ldda8	a, 36684
 	extz wa
 	call LABEL_FC7C23
-	.byte 0xc1, 0x4a, 0x8f, 0xc7			; and l, (0x8F4A)  [C1 prefix]
+	andda8	l, 36682
 	jr z, LABEL_FC7939
 	.byte 0xb6, 0xbe				; set 6, (xiz)  [not in LLVM]
 	jr t, LABEL_FC793B
@@ -300721,14 +300721,14 @@ LABEL_FC7B07:
 	.byte 0x8f, 0x3e, 0x40, 0x00, 0x0e
 LABEL_FC7B2C:
 	; --- Switch on A = (0xC07D): or bits into (0x8F3A)/(0x8F42) (53 bytes) ---
-	.byte 0xc1, 0x7d, 0xc0, 0x21			; ld a, (0xC07D)  [C1 prefix]
-	.byte 0xc9, 0xdc				; cp a, 4  [compact]
+	ldda8	a, 49277
+	cps	a, 4
 	jr z, LABEL_FC7B5A
-	.byte 0xc9, 0xdb				; cp a, 3  [compact]
+	cps	a, 3
 	jr z, LABEL_FC7B53
-	.byte 0xc9, 0xd9				; cp a, 1  [compact]
+	cps	a, 1
 	jr z, LABEL_FC7B4C
-	.byte 0xc9, 0xd8				; cp a, 0  [compact]
+	cps	a, 0
 	jr z, LABEL_FC7B4C
 	cp a, 0x10
 	ret nz
@@ -300762,14 +300762,14 @@ LABEL_FC7BBA:
 	.byte 0x0e
 LABEL_FC7BBB:
 	; --- Switch on A = (0xC07D): or bits into (0x8F42) (51 bytes) ---
-	.byte 0xc1, 0x7d, 0xc0, 0x21			; ld a, (0xC07D)  [C1 prefix]
+	ldda8	a, 49277
 	cp a, 0x14
 	jr z, LABEL_FC7BE6
-	.byte 0xc9, 0xdc				; cp a, 4  [compact]
+	cps	a, 4
 	jr z, LABEL_FC7BDF
 	cp a, 0x3f
 	jr z, LABEL_FC7BD8
-	.byte 0xc9, 0xde				; cp a, 6  [compact]
+	cps	a, 6
 	ret nz
 LABEL_FC7BD1:
 	.byte 0xd1, 0x42, 0x8f, 0x3e, 0x00, 0x04	; or (0x8F42), 0x0400  [D1 prefix]
@@ -306357,30 +306357,30 @@ LABEL_FCC8FC:
 	; --- Indexed dispatch: table lookup, conditional call paths (76 bytes) ---
 	cp c, 0x48
 	jr z, LABEL_FCC948
-	.byte 0xdb, 0x12				; extz hl  [compact prefix]
+	extz	hl
 	ld l, c
-	.byte 0xdb, 0xee, 0x02				; sll 2, hl  [compact shift]
-	.byte 0xe1, 0xf2, 0x90, 0x24			; ld xix, (0x90F2)  [E1 prefix]
+	sll	hl, 2
+	ldda32	xix, 37106
 	.byte 0xe3, 0x07, 0xf0, 0xec, 0x24		; ld xix, (xix+hl)  [register-indexed]
 	ld wa, (xix)
-	.byte 0xf1, 0xea, 0x90, 0x50			; ld (0x90EA), wa  [F1 prefix]
+	stda16	37098, wa
 	pushw wa
-	.byte 0xf1, 0xec, 0x90, 0x43			; ld (0x90EC), c  [F1 prefix]
+	stda8	37100, c
 	call 0xFCA3F6
 	popw wa
 	pushw hl
 	call LABEL_FCA450
-	.byte 0xdb, 0xe3				; or hl, hl  [compact prefix]
+	or	hl, hl
 	popw hl
 	jr nz, LABEL_FCC938
 	ld b, c
 	ldb c, 0x81
-	.byte 0xd1, 0xee, 0x90, 0x22			; ld de, (0x90EE)  [D1 prefix]
+	ldda16	de, 37102
 	call LABEL_FCA1FE
 LABEL_FCC938:
-	.byte 0xc1, 0x5b, 0x91, 0x23			; ld c, (0x915B)  [C1 prefix]
+	ldda8	c, 37211
 	xor b, b
-	.byte 0xc1, 0xf0, 0x90, 0x25			; ld e, (0x90F0)  [C1 prefix]
+	ldda8	e, 37104
 	ldb d, 0xFF
 	call LABEL_FCA1FE
 LABEL_FCC948:
@@ -306460,7 +306460,7 @@ LABEL_FCCA8E:
 	jr z, LABEL_FCCAA4
 	and e, d
 	jr z, LABEL_FCCAA4
-	.byte 0xc1, 0xa1, 0xfd, 0x25			; ld e, (0xFDA1)  [C1 prefix]
+	ldda8	e, 64929
 	and e, 0xc0
 	ldb d, 0xc0
 	call LABEL_FCA1FE
@@ -306474,8 +306474,8 @@ LABEL_FCCAA5:
 	jr z, LABEL_FCCAC8
 	and e, 0x7f
 	jr z, LABEL_FCCAC8
-	.byte 0xd9, 0xa8				; ld bc, 0  [compact load]
-	.byte 0xc1, 0x97, 0xfd, 0x25			; ld e, (0xFD97)  [C1 prefix]
+	lds	bc, 0
+	ldda8	e, 64919
 	and e, 0x7f
 	dec 1, e
 	ldb d, 0x7f
@@ -309277,42 +309277,42 @@ LABEL_FD02FF:
 	.byte 0x52, 0x1d, 0xa1, 0xc6, 0xfc, 0x0e
 LABEL_FD0335:
 	; --- Subroutine 1: table-indexed dispatch via XIX+A (54 bytes) ---
-	.byte 0xc1, 0x6a, 0x96, 0x21			; ld a, (0x966A)  [C1 prefix]
+	ldda8	a, 38506
 	cp a, 0x1f
 	jr ugt, LABEL_FD036A
-	.byte 0xc9, 0xee, 0x01				; sll 1, a  [not in LLVM]
+	sll	a, 1
 	ld xix, 0x00FD1587
 	.byte 0xd3, 0x03, 0xf0, 0xe0, 0x21		; ld bc, (xix+a)  [register-indexed]
 	cp c, 0xff
 	jr z, LABEL_FD036A
-	.byte 0xc1, 0x36, 0x96, 0x25			; ld e, (0x9636)  [C1 prefix]
+	ldda8	e, 38454
 	ldb d, 0x7f
-	.byte 0xc1, 0x37, 0x96, 0x21			; ld a, (0x9637)  [C1 prefix]
-	.byte 0xf1, 0x48, 0x96, 0x41			; ld (0x9648), a  [F1 prefix]
-	.byte 0xf1, 0x44, 0x96, 0x51			; ld (0x9644), bc  [F1 prefix]
-	.byte 0xf1, 0x46, 0x96, 0x52			; ld (0x9646), de  [F1 prefix]
+	ldda8	a, 38455
+	stda8	38472, a
+	stda16	38468, bc
+	stda16	38470, de
 	call 0xFCC726
 LABEL_FD036A:
 	ret
 LABEL_FD036B:
 	; --- Subroutine 2: conditional E setup from D (26 bytes) ---
-	.byte 0xc1, 0x36, 0x96, 0x21			; ld a, (0x9636)  [C1 prefix]
-	.byte 0xd1, 0x46, 0x96, 0x22			; ld de, (0x9646)  [D1 prefix]
+	ldda8	a, 38454
+	ldda16	de, 38470
 	xor e, e
 	cp a, 0x40
 	jr c, LABEL_FD037C
 	ld e, d
 LABEL_FD037C:
-	.byte 0xf1, 0x46, 0x96, 0x52			; ld (0x9646), de  [F1 prefix]
+	stda16	38470, de
 	call 0xFCC5B7
 	ret
 LABEL_FD0385:
 	; --- Subroutine 3: entry variant with E=A (23 bytes) ---
 	ld e, a
-	.byte 0xc1, 0x37, 0x96, 0x21			; ld a, (0x9637)  [C1 prefix]
-	.byte 0xf1, 0x48, 0x96, 0x41			; ld (0x9648), a  [F1 prefix]
-	.byte 0xf1, 0x44, 0x96, 0x51			; ld (0x9644), bc  [F1 prefix]
-	.byte 0xf1, 0x46, 0x96, 0x52			; ld (0x9646), de  [F1 prefix]
+	ldda8	a, 38455
+	stda8	38472, a
+	stda16	38468, bc
+	stda16	38470, de
 	call 0xFCC744
 	ret
 
@@ -313818,7 +313818,7 @@ LABEL_FD52A2:
 	ld e, (xwa)
 	cp e, 0x34
 	jr nz, LABEL_FD52B6
-	.byte 0xdb, 0xa9				; ld hl, 1  [compact]
+	lds	hl, 1
 	ret
 LABEL_FD52B6:
 	ld a, (xwa)
@@ -313826,14 +313826,14 @@ LABEL_FD52B6:
 	jr nz, LABEL_FD52C5
 	cp a, 0x36
 	jr nz, LABEL_FD52C5
-	.byte 0xdb, 0xaa				; ld hl, 2  [compact]
+	lds	hl, 2
 	ret
 LABEL_FD52C5:
 	cp c, 0x4e
 	jr nz, LABEL_FD52D2
 	cp a, 0x4e
 	jr nz, LABEL_FD52D2
-	.byte 0xdb, 0xab				; ld hl, 3  [compact]
+	lds	hl, 3
 	ret
 LABEL_FD52D2:
 	ldw hl, 0xFFFF
@@ -313951,14 +313951,14 @@ LABEL_FD543E:
 
 LABEL_FD5440:
 	; --- Routine 1: saturation clamp C = max(0, C-0x7F+A), return L (22 bytes) ---
-	.byte 0xc9, 0xd8				; cp a, 0  [compact]
+	cps	a, 0
 	jr z, LABEL_FD5453
-	.byte 0xcb, 0xd8				; cp c, 0  [compact]
+	cps	c, 0
 	jr z, LABEL_FD5453
 	sub c, 0x7f
-	.byte 0xc9, 0x83				; add c, a  [reg-reg ALU]
+	add	c, a
 	ld l, c
-	.byte 0xcf, 0xd8				; cp l, 0  [compact]
+	cps	l, 0
 	ret ge
 LABEL_FD5453:
 	ldb l, 0x00
@@ -313967,12 +313967,12 @@ LABEL_FD5456:
 	; --- Routine 2: table dispatch via 0x1ED360 + WA*16 (32 bytes) ---
 	cp wa, 0x0009
 	ret ugt
-	.byte 0xf2, 0x60, 0xd3, 0x1e, 0x31		; lda xbc, 0x1ED360  [F2 prefix]
-	.byte 0xd8, 0xee, 0x04				; sll 4, wa  [not in LLVM]
+	lda_24	xbc, 2020192
+	sll	wa, 4
 	extz xwa
 	add xbc, xwa
-	.byte 0x0b, 0x10, 0x00				; push 0x0010  [push imm16]
-	.byte 0x0b, 0x20, 0x00				; push 0x0020  [push imm16]
+	pushw	16
+	pushw	32
 	push xbc
 	call 0xFF0FFA
 	inc 8, xsp
@@ -314826,7 +314826,7 @@ LABEL_FD5BDD:
 	; --- Routine 1: stack-frame loop, XIZ alloc + 16 iterations (93 bytes) ---
 	dec 2, xsp
 	push xiz
-	.byte 0x0b, 0x0e, 0x00				; push 0x000E  [push imm16]
+	pushw	14
 	call 0xFF0E80
 	inc 2, xsp
 	ld xiz, xhl
@@ -314834,23 +314834,23 @@ LABEL_FD5BDD:
 	jr z, LABEL_FD5C36
 	.byte 0xbf, 0x04, 0x02, 0x00, 0x00		; ld (xsp+4), 0x0000  [5-byte form]
 LABEL_FD5BF4:
-	.byte 0x0b, 0x0e, 0x00				; push 0x000E  [push imm16]
-	.byte 0x0b, 0xee, 0x00				; push 0x00EE  [push imm16]
-	.byte 0x0b, 0xec, 0x2c				; push 0x2CEC  [push imm16]
+	pushw	14
+	pushw	238
+	pushw	11500
 	push xiz
 	call 0xFF0D99
-	.byte 0xbf, 0x0a, 0x37				; lda xsp, xsp+0x0A  [stack dealloc]
-	.byte 0x9f, 0x04, 0x20				; ld wa, (xsp+4)  [xsp+d8 addressing]
+	lda	xsp, (xsp+10)
+	ld	wa, (xsp+4)
 	ld (xiz+4), a
 	ld (xiz+9), 0x12
 	ld xwa, 0x00002D00
 	call LABEL_FCD437
 	ld (xiz+0x0c), l
 	push xiz
-	.byte 0x0b, 0x0e, 0x00				; push 0x000E  [push imm16]
+	pushw	14
 	call 0xFDB773
 	inc 6, xsp
-	.byte 0x9f, 0x04, 0x61				; incw 1, (xsp+4)  [not in LLVM]
+	incm	1, (xsp+4)
 	cpw (xsp+4), 0x0010
 	jr c, LABEL_FD5BF4
 	push xiz
@@ -314863,16 +314863,16 @@ LABEL_FD5C36:
 LABEL_FD5C3A:
 	; --- Routine 2: sla+lda helper, push args + call FF0D99 (32 bytes) ---
 	extz wa
-	.byte 0xd8, 0xec, 0x03				; sla 3, wa  [not in LLVM]
+	sla	wa, 3
 	lda_24 xbc, 0xEE2CFA
 	exts xwa
 	add xwa, xbc
-	.byte 0x0b, 0x08, 0x00				; push 0x0008  [push imm16]
+	pushw	8
 	push xwa
-	.byte 0x0b, 0x00, 0x00				; push 0x0000  [push imm16]
-	.byte 0x0b, 0x4a, 0xfc				; push 0xFC4A  [push imm16]
+	pushw	0
+	pushw	64586
 	call 0xFF0D99
-	.byte 0xbf, 0x0a, 0x37				; lda xsp, xsp+0x0A  [stack dealloc]
+	lda	xsp, (xsp+10)
 	ret
 
 
@@ -317502,19 +317502,19 @@ LABEL_FD7AA9:
 	; --- Main: guard check, loop with bit 4 flag, multiple calls (76 bytes) ---
 	.byte 0xc1, 0x36, 0x8d, 0x3f, 0x57		; cp (0x8D36), 0x57  [C1 prefix]
 	jr nz, LABEL_FD7AF0
-	.byte 0xe1, 0xac, 0xbc, 0x20			; ld xwa, (0xBCAC)  [E1 prefix]
-	.byte 0xd9, 0xa8				; ld bc, 0  [compact load]
+	ldda32	xwa, 48300
+	lds	bc, 0
 	call LABEL_FD5EB6
-	.byte 0xcf, 0xdf				; cp l, 7  [compact cp]
+	cps	l, 7
 	jr c, LABEL_FD7AF0
 	.byte 0xf1, 0x18, 0xbd, 0xbc			; set 4, (0xBD18)  [F1 prefix]
 	call LABEL_FD7317
 	jr t, LABEL_FD7AE0
 LABEL_FD7AC8:
-	.byte 0xe1, 0xac, 0xbc, 0x20			; ld xwa, (0xBCAC)  [E1 prefix]
-	.byte 0xd9, 0xac				; ld bc, 4  [compact load]
+	ldda32	xwa, 48300
+	lds	bc, 4
 	call LABEL_FD5EB6
-	.byte 0xcf, 0xd8				; cp l, 0  [compact cp]
+	cps	l, 0
 	jr z, LABEL_FD7ADC
 	.byte 0xf1, 0x18, 0xbd, 0xb4			; res 4, (0xBD18)  [F1 prefix]
 	jr t, LABEL_FD7AE9
@@ -317525,28 +317525,28 @@ LABEL_FD7AE0:
 	.byte 0xf1, 0x18, 0xbd, 0xcc			; bit 4, (0xBD18)  [F1 prefix]
 	jr nz, LABEL_FD7AC8
 LABEL_FD7AE9:
-	.byte 0x1e, 0x79, 0x07				; calr 0xFD8265  [target outside block]
+	calr	1913
 	call LABEL_FD7561
 LABEL_FD7AF0:
 	.byte 0xf1, 0x18, 0xbd, 0xb4			; res 4, (0xBD18)  [F1 prefix]
 	ret
 LABEL_FD7AF5:
 	; --- Helper 1: table dispatch via (XBC+WA) with guard checks (58 bytes) ---
-	.byte 0xe1, 0xac, 0xbc, 0x20			; ld xwa, (0xBCAC)  [E1 prefix]
-	.byte 0xd9, 0xac				; ld bc, 4  [compact load]
+	ldda32	xwa, 48300
+	lds	bc, 4
 	call LABEL_FD5EB6
-	.byte 0xcf, 0xd8				; cp l, 0  [compact cp]
+	cps	l, 0
 	ret nz
 	call LABEL_FD760F
-	.byte 0xe1, 0xac, 0xbc, 0x20			; ld xwa, (0xBCAC)  [E1 prefix]
+	ldda32	xwa, 48300
 	cp (xwa), 0x27
 	ret nc
 	ld a, (xwa)
 	extz wa
-	.byte 0xd8, 0xec, 0x02				; sla 2, wa  [not in LLVM]
+	sla	wa, 2
 	lda_24 xbc, 0xEE2D6C
 	.byte 0xe3, 0x07, 0xe4, 0xe0, 0x23		; ld xhl, (xbc+wa)  [register-indexed]
-	.byte 0xb3, 0xe8				; call t, xhl  [not in LLVM]
+	call	(xhl)
 	calr LABEL_FD7B2F
 	call LABEL_FD73A1
 	call 0xFD7316
@@ -317556,22 +317556,22 @@ LABEL_FD7B2F:
 	.byte 0xf1, 0x18, 0xbd, 0xcf			; bit 7, (0xBD18)  [F1 prefix]
 	ret z
 	call LABEL_FD8428
-	.byte 0xe1, 0xac, 0xbc, 0x20			; ld xwa, (0xBCAC)  [E1 prefix]
+	ldda32	xwa, 48300
 	ld a, (xwa+4)
-	.byte 0xc9, 0xd8				; cp a, 0  [compact cp]
+	cps	a, 0
 	jr nz, LABEL_FD7B4D
 	ld xwa, 0x00EE3594
-	.byte 0xd9, 0xad				; ld bc, 5  [compact load]
+	lds	bc, 5
 	jr t, LABEL_FD7B62
 LABEL_FD7B4D:
 	cp a, 0x16
 	jr nz, LABEL_FD7B5B
 	ld xwa, 0x00EE35B2
-	.byte 0xd9, 0xad				; ld bc, 5  [compact load]
+	lds	bc, 5
 	jr t, LABEL_FD7B62
 LABEL_FD7B5B:
 	ld xwa, 0x00EE359A
-	.byte 0xd9, 0xad				; ld bc, 5  [compact load]
+	lds	bc, 5
 LABEL_FD7B62:
 	call LABEL_FD69EE
 	ret
@@ -317586,23 +317586,23 @@ LABEL_FD7B7F:
 	; --- Two-path: 3x field extraction or single store (73 bytes) ---
 	.byte 0xc1, 0x20, 0xbd, 0x3f, 0x01		; cp (0xBD20), 0x01  [C1 prefix]
 	jr nz, LABEL_FD7BBB
-	.byte 0xe1, 0xac, 0xbc, 0x20			; ld xwa, (0xBCAC)  [E1 prefix]
-	.byte 0xd9, 0xae				; ld bc, 6  [compact load]
+	ldda32	xwa, 48300
+	lds	bc, 6
 	call LABEL_FD5EB6
-	.byte 0xf1, 0x68, 0xbc, 0x47			; ld (0xBC68), l  [F1 prefix]
-	.byte 0xe1, 0xac, 0xbc, 0x20			; ld xwa, (0xBCAC)  [E1 prefix]
-	.byte 0xd9, 0xaf				; ld bc, 7  [compact load]
+	stda8	48232, l
+	ldda32	xwa, 48300
+	lds	bc, 7
 	call LABEL_FD5EB6
-	.byte 0xf1, 0x69, 0xbc, 0x47			; ld (0xBC69), l  [F1 prefix]
-	.byte 0xe1, 0xac, 0xbc, 0x20			; ld xwa, (0xBCAC)  [E1 prefix]
+	stda8	48233, l
+	ldda32	xwa, 48300
 	ldw bc, 0x0008
 	call LABEL_FD5EB6
-	.byte 0xf1, 0x6a, 0xbc, 0x47			; ld (0xBC6A), l  [F1 prefix]
+	stda8	48234, l
 	.byte 0xf1, 0x18, 0xbd, 0xbf			; set 7, (0xBD18)  [F1 prefix]
-	.byte 0xf1, 0x20, 0xbd, 0x00, 0x02		; ld (0xBD20), 0x02  [F1 prefix]
+	stdi8	48416, 2
 	ret
 LABEL_FD7BBB:
-	.byte 0xe1, 0xac, 0xbc, 0x20			; ld xwa, (0xBCAC)  [E1 prefix]
+	ldda32	xwa, 48300
 	ld (xwa+4), 0x18
 	.byte 0xf1, 0x18, 0xbd, 0xb4			; res 4, (0xBD18)  [F1 prefix]
 	ret
@@ -317913,23 +317913,23 @@ LABEL_FD803E:
 	.byte 0xfd, 0x0e
 LABEL_FD8077:
 	; --- Section 1: load XWA, setup BC/DE, call, then compare HL ---
-	.byte 0xe1, 0xac, 0xbc, 0x20			; ld xwa, (0xBCAC)  [E1 prefix]
-	.byte 0xd9, 0xab				; ld bc, 3  [compact load]
+	ldda32	xwa, 48300
+	lds	bc, 3
 	ldw de, 0x000D
 	call LABEL_FD5E3A
-	.byte 0xd8, 0xac				; ld wa, 4  [compact load]
+	lds	wa, 4
 	call LABEL_FD5CAC
 	cp hl, 0xFFFF
 	.byte 0xf2, 0x8d, 0x6c, 0xfd, 0xee		; call nz, 0xFD6C8D  [conditional call]
 	; --- Section 2: reload XWA, setup BC, call, check L ---
-	.byte 0xe1, 0xac, 0xbc, 0x20			; ld xwa, (0xBCAC)  [E1 prefix]
+	ldda32	xwa, 48300
 	ldw bc, 0x000F
 	call LABEL_FD5EB6
-	.byte 0xcf, 0xd8				; cp l, 0  [compact prefix]
+	cps	l, 0
 	ret nz
 	; --- Section 3: reload XWA, setup BC/DE, call ---
-	.byte 0xe1, 0xac, 0xbc, 0x20			; ld xwa, (0xBCAC)  [E1 prefix]
-	.byte 0xd9, 0xab				; ld bc, 3  [compact load]
+	ldda32	xwa, 48300
+	lds	bc, 3
 	ldw de, 0x000E
 	call LABEL_FD5E3A
 	ret
@@ -319363,16 +319363,16 @@ LABEL_FD8E7F:
 
 LABEL_FD8E82:
 	; --- Input validation and dispatch (106 bytes, 2 functions) ---
-	.byte 0xd8, 0xa8				; ld wa, 0  [compact zero-load]
+	lds	wa, 0
 	call LABEL_FD5CAC
 	cp hl, 0xFFFF
 	ret z
 	.byte 0xc1, 0x36, 0x8d, 0x3f, 0x57		; cp (0x8D36), 0x57  [8-bit direct]
 	ret z
-	.byte 0xc1, 0x50, 0xfd, 0x21			; ld a, (0xFD50)  [8-bit direct]
+	ldda8	a, 64848
 	and a, 0x14
 	ret nz
-	.byte 0xe1, 0x54, 0xbc, 0x20			; ld xwa, (0xBC54)  [16-bit direct]
+	ldda32	xwa, 48212
 	ld e, (xwa + 17)
 	ld c, (xwa + 18)
 	ld a, e
@@ -319389,13 +319389,13 @@ LABEL_FD8EB6:
 	cp de, 0x0028
 	ret c
 	cp de, 0x012C
-	.byte 0xb0, 0xfb				; ret ugt
+	ret	ugt
 	ld wa, de
 	call LABEL_FD8522
 	calr LABEL_FD8ED5
 	ret
 LABEL_FD8ED5:
-	.byte 0xf1, 0xde, 0x90, 0x02, 0x00, 0x00	; ld (0x90DE), 0x0000  [16-bit direct]
+	stdi16	37086, 0
 	push xde
 	push xhl
 	push xix
@@ -320313,7 +320313,7 @@ LABEL_FD9CC8:
 
 LABEL_FD9D04:
 	; --- Stack-frame: XIZ struct field extraction + packed lookup (96 bytes) ---
-	.byte 0xbf, 0xf0, 0x37				; lda xsp, xsp+0xF0  [stack alloc 16 bytes]
+	lda	xsp, (xsp-16)
 	push xiz
 	ld xiz, xwa
 	ld a, (xiz+6)
@@ -320326,9 +320326,9 @@ LABEL_FD9D04:
 	inc 1, c
 	call LABEL_FD72AD
 	extz hl
-	.byte 0xdb, 0xee, 0x08				; sll 8, hl  [not in LLVM]
+	sll	hl, 8
 	or (xsp+4), hl
-	.byte 0xbf, 0x0e, 0x31				; lda xbc, xsp+0x0E  [indirect lea]
+	lda	xbc, (xsp+14)
 	ld a, (xiz+6)
 	ld (xbc), a
 	ld a, (xiz+7)
@@ -320343,12 +320343,12 @@ LABEL_FD9D04:
 	.byte 0xda, 0xfe				; sll a, de  [shift by register count]
 LABEL_FD9D50:
 	ld (xbc+4), de
-	.byte 0xbf, 0x06, 0x30				; lda xwa, xsp+6  [indirect lea]
+	lda	xwa, (xsp+6)
 	ld (xwa), xbc
 	ld (xwa+4), xiz
 	calr LABEL_FDA302
 	pop xiz
-	.byte 0xbf, 0x10, 0x37				; lda xsp, xsp+0x10  [stack dealloc]
+	lda	xsp, (xsp+16)
 	ret
 LABEL_FD9D63:
 	ret
@@ -353713,39 +353713,39 @@ LABEL_FEF768:
 
 LABEL_FEF76E:
 	; --- Set-if-changed handlers for E351-E354 (4x24 = 96 bytes) ---
-	.byte 0xc1, 0x51, 0xe3, 0xf9			; cp (0xE351), a  [C1 prefix]
+	cpdm8	58193, a
 	ret z
-	.byte 0xf1, 0x51, 0xe3, 0x41			; ld (0xE351), a  [F1 prefix]
+	stda8	58193, a
 	ld xwa, 0x0000E351
-	.byte 0xd9, 0xa9				; ld bc, 1  [compact load]
-	.byte 0xda, 0xa9				; ld de, 1  [compact load]
+	lds	bc, 1
+	lds	de, 1
 	call LABEL_FEF3E9
 	ret
 LABEL_FEF786:
-	.byte 0xc1, 0x52, 0xe3, 0xf9			; cp (0xE352), a  [C1 prefix]
+	cpdm8	58194, a
 	ret z
-	.byte 0xf1, 0x52, 0xe3, 0x41			; ld (0xE352), a  [F1 prefix]
+	stda8	58194, a
 	ld xwa, 0x0000E352
-	.byte 0xd9, 0xaa				; ld bc, 2  [compact load]
-	.byte 0xda, 0xa9				; ld de, 1  [compact load]
+	lds	bc, 2
+	lds	de, 1
 	call LABEL_FEF3E9
 	ret
 LABEL_FEF79E:
-	.byte 0xc1, 0x53, 0xe3, 0xf9			; cp (0xE353), a  [C1 prefix]
+	cpdm8	58195, a
 	ret z
-	.byte 0xf1, 0x53, 0xe3, 0x41			; ld (0xE353), a  [F1 prefix]
+	stda8	58195, a
 	ld xwa, 0x0000E353
-	.byte 0xd9, 0xae				; ld bc, 6  [compact load]
-	.byte 0xda, 0xa9				; ld de, 1  [compact load]
+	lds	bc, 6
+	lds	de, 1
 	call LABEL_FEF3E9
 	ret
 LABEL_FEF7B6:
-	.byte 0xc1, 0x54, 0xe3, 0xf9			; cp (0xE354), a  [C1 prefix]
+	cpdm8	58196, a
 	ret z
-	.byte 0xf1, 0x54, 0xe3, 0x41			; ld (0xE354), a  [F1 prefix]
+	stda8	58196, a
 	ld xwa, 0x0000E354
-	.byte 0xd9, 0xaf				; ld bc, 7  [compact load]
-	.byte 0xda, 0xa9				; ld de, 1  [compact load]
+	lds	bc, 7
+	lds	de, 1
 	call LABEL_FEF3E9
 	ret
 
