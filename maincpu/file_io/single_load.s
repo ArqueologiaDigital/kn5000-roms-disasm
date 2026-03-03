@@ -19,13 +19,13 @@
 
 SingleLoadModeFunc:
 	cp xbc, 0x1C0000B
-	jr z, LABEL_F8EF70
+	jr z, SLMode_HandleShow
 	cp xbc, 0x1E50004
-	jr nz, LABEL_F8EF90
+	jr nz, SLMode_Return
 	stda32 33206, xde
-	jr LABEL_F8EF90
+	jr SLMode_Return
 
-LABEL_F8EF70:
+SLMode_HandleShow:
 	ldda8 a, 35320
 	extz wa
 	sla wa, 2
@@ -35,19 +35,19 @@ LABEL_F8EF70:
 	ld xbc, 0x1C0000F
 	call 0xFA9D58
 
-LABEL_F8EF90:
+SLMode_Return:
 	lds32 xhl, 0
 	ret
 
 SingleLoadDstBankFunc:
 	cp xbc, 0x1C0000B
-	jr z, LABEL_F8EFA9
+	jr z, SLDstBank_HandleShow
 	cp xbc, 0x1E50004
-	jr nz, LABEL_F8EFC9
+	jr nz, SLDstBank_Return
 	stda32 33210, xde
-	jr LABEL_F8EFC9
+	jr SLDstBank_Return
 
-LABEL_F8EFA9:
+SLDstBank_HandleShow:
 	ldda8 a, 35320
 	extz wa
 	sla wa, 2
@@ -57,112 +57,112 @@ LABEL_F8EFA9:
 	ld xbc, 0x1C0000F
 	call 0xFA9D58
 
-LABEL_F8EFC9:
+SLDstBank_Return:
 	lds32 xhl, 0
 	ret
 
 SingleLoadDstMemFunc:
 	cp xbc, 0x1C0000B
-	jr z, LABEL_F8EFE2
+	jr z, SLDstMem_HandleShow
 	cp xbc, 0x1E50004
-	jr nz, LABEL_F8F01A
+	jr nz, SLDstMem_Return
 	stda32 33214, xde
-	jr LABEL_F8F01A
+	jr SLDstMem_Return
 
-LABEL_F8EFE2:
+SLDstMem_HandleShow:
 	ldda32 xwa, 33214
 	lda_24 xde, 0xea0624
 	cpdi8 35322, 0
-	jr z, LABEL_F8F003
+	jr z, SLDstMem_ShowFromBank
 	cpdi8 35320, 1
-	jr z, LABEL_F8F003
+	jr z, SLDstMem_ShowFromBank
 	ld xde, (xde + 16)
 	ld xbc, 0x1C0000F
-	jr LABEL_F8F016
+	jr SLDstMem_DispatchShow
 
-LABEL_F8F003:
+SLDstMem_ShowFromBank:
 	ldda8 c, 35320
 	extz bc
 	sla bc, 2
 	ld_sril3 XDE, 0x07, 0xE8, 0xE4
 	ld xbc, 0x1C0000F
 
-LABEL_F8F016:
+SLDstMem_DispatchShow:
 	call 0xFA9D58
 
-LABEL_F8F01A:
+SLDstMem_Return:
 	lds32 xhl, 0
 	ret
 
 SingleLoadSrcBankFunc:
 	cp xbc, 0x1C0000B
-	jr z, LABEL_F8F033
+	jr z, SLSrcBank_HandleShow
 	cp xbc, 0x1E50004
-	jr nz, LABEL_F8F068
+	jr nz, SLSrcBank_Return
 	stda32 33218, xde
-	jr LABEL_F8F068
+	jr SLSrcBank_Return
 
-LABEL_F8F033:
+SLSrcBank_HandleShow:
 	ldda32 xwa, 33218
 	lda_24 xde, 0xea05f2
 	ldda8 c, 35320
 	cps c, 0
-	jr nz, LABEL_F8F055
+	jr nz, SLSrcBank_ShowFromIndex
 	cpdi8 35338, 0
-	jr z, LABEL_F8F055
+	jr z, SLSrcBank_ShowFromIndex
 	ld xde, (xde + 16)
 	ld xbc, 0x1C0000F
-	jr LABEL_F8F064
+	jr SLSrcBank_DispatchShow
 
-LABEL_F8F055:
+SLSrcBank_ShowFromIndex:
 	extz bc
 	sla bc, 2
 	ld_sril3 XDE, 0x07, 0xE8, 0xE4
 	ld xbc, 0x1C0000F
 
-LABEL_F8F064:
+SLSrcBank_DispatchShow:
 	call 0xFA9D58
 
-LABEL_F8F068:
+SLSrcBank_Return:
 	lds32 xhl, 0
 	ret
 
 SingleLoadSrcMemFunc:
 	cp xbc, 0x1C0000B
-	jr z, LABEL_F8F081
+	jr z, SLSrcMem_HandleShow
 	cp xbc, 0x1E50004
-	jr nz, LABEL_F8F0B6
+	jr nz, SLSrcMem_Return
 	stda32 33222, xde
-	jr LABEL_F8F0B6
+	jr SLSrcMem_Return
 
-LABEL_F8F081:
+SLSrcMem_HandleShow:
 	ldda32 xwa, 33222
 	lda_24 xde, 0xea0624
 	ldda8 c, 35320
 	cps c, 1
-	jr z, LABEL_F8F099
+	jr z, SLSrcMem_ShowDirect
 	cpdi8 35322, 0
-	jr z, LABEL_F8F0A3
+	jr z, SLSrcMem_ShowFromIndex
 
-LABEL_F8F099:
+SLSrcMem_ShowDirect:
 	ld xde, (xde + 16)
 	ld xbc, 0x1C0000F
-	jr LABEL_F8F0B2
+	jr SLSrcMem_DispatchShow
 
-LABEL_F8F0A3:
+SLSrcMem_ShowFromIndex:
 	extz bc
 	sla bc, 2
 	ld_sril3 XDE, 0x07, 0xE8, 0xE4
 	ld xbc, 0x1C0000F
 
-LABEL_F8F0B2:
+SLSrcMem_DispatchShow:
 	call 0xFA9D58
 
-LABEL_F8F0B6:
+SLSrcMem_Return:
 	lds32 xhl, 0
 	ret
 
-LABEL_F8F0B9:
+SLSrcBankList_FuncBody:
 	.byte 0xef, 0x6e, 0x3e, 0xbf, 0x04, 0x43, 0xbf, 0x06
 	.byte 0x60, 0xf1, 0x4e, 0x89, 0x30, 0xf5, 0xe0, 0x00
 	.byte 0x00, 0xc1, 0xf8, 0x89, 0x23, 0xd9, 0x12, 0xd9
@@ -619,23 +619,23 @@ SingleLoadSrcFunc:
 	ld (xsp + 4), xbc
 	ld xwa, (xsp + 4)
 	cp xwa, 0x1E50003
-	jrl z, LABEL_F9006C
+	jrl z, SLSrc_ReturnCapture
 	cp xwa, 0x1C00018
-	jr z, LABEL_F8FF27
+	jr z, SLSrc_HandleScroll
 	cp xwa, 0x1C00017
-	jr z, LABEL_F8FF27
+	jr z, SLSrc_HandleScroll
 	cp xwa, 0x1C0000B
-	jr z, LABEL_F8FEEF
+	jr z, SLSrc_HandleShow
 	cp xwa, 0x1E50004
-	jrl nz, LABEL_F90068
+	jrl nz, SLSrc_Return
 	ld xwa, xiz
 	stda32 33248, xwa
 	ld xbc, 0x1E50002
 	ld xde, 0xFFFFFFFF
 	call 0xFA9D58
-	jrl LABEL_F90068
+	jrl SLSrc_Return
 
-LABEL_F8FEEF:
+SLSrc_HandleShow:
 	ldda32 xwa, 33248
 	ld xbc, 0x1E50002
 	ld xde, 0xFFFFFFFF
@@ -651,24 +651,24 @@ LABEL_F8FEEF:
 	ld xhl, (xhl)
 	call (xhl)
 	calr SignalProgressUpdate
-	jrl LABEL_F90068
+	jrl SLSrc_Return
 
-LABEL_F8FF27:
+SLSrc_HandleScroll:
 	cp xiz, 0x5
-	jr nz, LABEL_F8FF78
+	jr nz, SLSrc_ScrollMode6
 	cpdi8 35320, 1
-	jr z, LABEL_F8FF43
+	jr z, SLSrc_ScrollMode5_Prev
 	ldda32 xwa, 33248
 	ld xbc, 0x1E50002
 	lds32 xde, 1
-	jr LABEL_F8FF51
+	jr SLSrc_ScrollMode5_Dispatch
 
-LABEL_F8FF43:
+SLSrc_ScrollMode5_Prev:
 	ldda32 xwa, 33248
 	ld xbc, 0x1E50002
 	ld xde, 0xFFFFFFFF
 
-LABEL_F8FF51:
+SLSrc_ScrollMode5_Dispatch:
 	call 0xFA9D58
 	ldda32 xwa, 33248
 	ldda8 c, 35320
@@ -680,26 +680,26 @@ LABEL_F8FF51:
 	ld xde, xiz
 	ld xhl, (xhl)
 	call (xhl)
-	jrl LABEL_F90068
+	jrl SLSrc_Return
 
-LABEL_F8FF78:
+SLSrc_ScrollMode6:
 	cp xiz, 0x6
-	jr nz, LABEL_F8FFD0
+	jr nz, SLSrc_ScrollMode7
 	cpdi8 35320, 1
-	jr z, LABEL_F8FF9B
+	jr z, SLSrc_ScrollMode6_NoStep
 	cpdi8 35322, 0
-	jr nz, LABEL_F8FF9B
+	jr nz, SLSrc_ScrollMode6_NoStep
 	ldda32 xwa, 33248
 	ld xbc, 0x1E50002
 	lds32 xde, 3
-	jr LABEL_F8FFA9
+	jr SLSrc_ScrollMode6_Dispatch
 
-LABEL_F8FF9B:
+SLSrc_ScrollMode6_NoStep:
 	ldda32 xwa, 33248
 	ld xbc, 0x1E50002
 	ld xde, 0xFFFFFFFF
 
-LABEL_F8FFA9:
+SLSrc_ScrollMode6_Dispatch:
 	call 0xFA9D58
 	ldda32 xwa, 33248
 	ldda8 c, 35320
@@ -711,12 +711,12 @@ LABEL_F8FFA9:
 	ld xde, xiz
 	ld xhl, (xhl)
 	call (xhl)
-	jrl LABEL_F90068
+	jrl SLSrc_Return
 
-LABEL_F8FFD0:
+SLSrc_ScrollMode7:
 	ldda32 xwa, 33248
 	cp xiz, 0x7
-	jr nz, LABEL_F9000C
+	jr nz, SLSrc_ScrollMode8
 	ld xbc, 0x1E50002
 	ld xde, 0xFFFFFFFF
 	call 0xFA9D58
@@ -730,11 +730,11 @@ LABEL_F8FFD0:
 	ld xde, xiz
 	ld xhl, (xhl)
 	call (xhl)
-	jr LABEL_F90068
+	jr SLSrc_Return
 
-LABEL_F9000C:
+SLSrc_ScrollMode8:
 	cp xiz, 0x8
-	jr nz, LABEL_F90044
+	jr nz, SLSrc_ScrollMode40
 	ld xbc, 0x1E50002
 	ld xde, 0xFFFFFFFF
 	call 0xFA9D58
@@ -748,11 +748,11 @@ LABEL_F9000C:
 	ld xde, xiz
 	ld xhl, (xhl)
 	call (xhl)
-	jr LABEL_F90068
+	jr SLSrc_Return
 
-LABEL_F90044:
+SLSrc_ScrollMode40:
 	cp xiz, 0x28
-	jr nz, LABEL_F90068
+	jr nz, SLSrc_Return
 	ldda8 c, 35320
 	extz bc
 	sla bc, 2
@@ -763,19 +763,19 @@ LABEL_F90044:
 	ld xhl, (xhl)
 	call (xhl)
 
-LABEL_F90068:
+SLSrc_Return:
 	lds32 xhl, 0
-	jr LABEL_F90071
+	jr SLSrc_Epilogue
 
-LABEL_F9006C:
+SLSrc_ReturnCapture:
 	ld xhl, 0xFFFFFFFF
 
-LABEL_F90071:
+SLSrc_Epilogue:
 	pop xiz
 	inc 4, xsp
 	ret
 
-LABEL_F90075:
+SLDstBankList_FuncBody:
 	.byte 0xef, 0x6e, 0x3e, 0xbf, 0x04, 0x43, 0xbf, 0x06
 	.byte 0x60, 0xf1, 0xa2, 0x89, 0x30, 0xf5, 0xe0, 0x00
 	.byte 0x00, 0xc1, 0xf8, 0x89, 0x23, 0xd9, 0x12, 0xd9
@@ -1214,17 +1214,17 @@ SingleLoadDstFunc:
 	ld xiz, xwa
 	ld xwa, (xsp + 8)
 	cp xwa, 0x1E50003
-	jrl z, LABEL_F91283
+	jrl z, SLDst_ReturnCapture
 	cp xwa, 0x1C00018
-	jrl z, LABEL_F90F21
+	jrl z, SLDst_HandleScroll
 	cp xwa, 0x1C00017
-	jrl z, LABEL_F90F21
+	jrl z, SLDst_HandleScroll
 	cp xwa, 0x1C0000F
-	jrl z, LABEL_F90EEA
+	jrl z, SLDst_HandleConfirm
 	cp xwa, 0x1C0000B
-	jr z, LABEL_F90E6D
+	jr z, SLDst_HandleShow
 	cp xwa, 0x1E50004
-	jr nz, LABEL_F90E68
+	jr nz, SLDst_Return
 	ld xwa, (xsp + 4)
 	stda32 33264, xwa
 	lds wa, 0
@@ -1233,39 +1233,39 @@ SingleLoadDstFunc:
 	calr WP_ScanAvailability
 	calr SignalProgressUpdate
 	cpdi8 35320, 1
-	jr z, LABEL_F90E2B
+	jr z, SLDst_ShowHide_Internal
 	ld xwa, 0x61004A
 	ld xbc, 0x1E0009C
 	lds32 xde, 1
-	jr LABEL_F90E37
+	jr SLDst_ShowHide_Dispatch
 
-LABEL_F90E2B:
+SLDst_ShowHide_Internal:
 	ld xwa, 0x61004A
 	ld xbc, 0x1E0009C
 	lds32 xde, 0
 
-LABEL_F90E37:
+SLDst_ShowHide_Dispatch:
 	call 0xFA9D58
 	ldda32 xwa, 33264
 	ld xbc, 0x1E50002
 	ld xde, 0xFFFFFFFF
 	call 0xFA9D58
 	cpdi8 35320, 0
-	jr nz, LABEL_F90E63
+	jr nz, SLDst_ClearFloppyFlag
 	call LABEL_F873ED
 	cps hl, 0
-	jr z, LABEL_F90E63
+	jr z, SLDst_ClearFloppyFlag
 	stdi8 35338, 1
-	jr LABEL_F90E68
+	jr SLDst_Return
 
-LABEL_F90E63:
+SLDst_ClearFloppyFlag:
 	stdi8 35338, 0
 
-LABEL_F90E68:
+SLDst_Return:
 	lds32 xhl, 0
-	jrl LABEL_F91288
+	jrl SLDst_Epilogue
 
-LABEL_F90E6D:
+SLDst_HandleShow:
 	ld xwa, xiz
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
@@ -1304,9 +1304,9 @@ LABEL_F90E6D:
 	ld xde, (xsp + 4)
 	ld xhl, (xhl)
 	call (xhl)
-	jrl LABEL_F90E68
+	jrl SLDst_Return
 
-LABEL_F90EEA:
+SLDst_HandleConfirm:
 	ldda32 xwa, 33264
 	ld xbc, 0x1E50002
 	ld xde, 0xFFFFFFFF
@@ -1321,14 +1321,14 @@ LABEL_F90EEA:
 	lds32 xde, 0
 	ld xhl, (xhl)
 	call (xhl)
-	jrl LABEL_F90E68
+	jrl SLDst_Return
 
-LABEL_F90F21:
+SLDst_HandleScroll:
 	ld xwa, (xsp + 4)
 	cp xwa, 0x3
-	jr nz, LABEL_F90FAA
+	jr nz, SLDst_ScrollMode4
 	cpdi8 35320, 1
-	jr z, LABEL_F90FAA
+	jr z, SLDst_ScrollMode4
 	ld xwa, (xsp + 8)
 	cp xwa, 0x1C00017
 	scc8 z, a
@@ -1362,28 +1362,28 @@ LABEL_F90F21:
 	ld xwa, xiz
 	ld xbc, 0x1C0000B
 	lds32 xde, 0
-	jrl LABEL_F9106C
+	jrl SLDst_ScrollMode3_CallSrcMem
 
-LABEL_F90FAA:
+SLDst_ScrollMode4:
 	ld xwa, (xsp + 4)
 	cp xwa, 0x4
-	jrl nz, LABEL_F91072
+	jrl nz, SLDst_ScrollDispatch
 	calr WP_FindNextSlot
 	cps l, 0
-	jrl z, LABEL_F90E68
+	jrl z, SLDst_Return
 	cpdi8 35320, 1
-	jr z, LABEL_F90FD3
+	jr z, SLDst_ScrollMode4_Internal
 	ld xwa, 0x61004A
 	ld xbc, 0x1E0009C
 	lds32 xde, 1
-	jr LABEL_F90FDF
+	jr SLDst_ScrollMode4_Dispatch
 
-LABEL_F90FD3:
+SLDst_ScrollMode4_Internal:
 	ld xwa, 0x61004A
 	ld xbc, 0x1E0009C
 	lds32 xde, 0
 
-LABEL_F90FDF:
+SLDst_ScrollMode4_Dispatch:
 	call 0xFA9D58
 	ld xwa, xiz
 	ld xbc, 0x1C0000B
@@ -1427,16 +1427,16 @@ LABEL_F90FDF:
 	ld xbc, 0x1C0000B
 	lds32 xde, 0
 
-LABEL_F9106C:
+SLDst_ScrollMode3_CallSrcMem:
 	calr SingleLoadSrcFunc
-	jrl LABEL_F90E68
+	jrl SLDst_Return
 
-LABEL_F91072:
+SLDst_ScrollDispatch:
 	ld xwa, (xsp + 4)
 	cp xwa, 0xA
-	jr nz, LABEL_F910DF
+	jr nz, SLDst_Scroll_ChildReturn
 	cpdi8 35320, 4
-	jr z, LABEL_F910DF
+	jr z, SLDst_Scroll_ChildReturn
 	ld xwa, 0x600026
 	ld xbc, 0x1C00001
 	lds32 xde, 5
@@ -1463,14 +1463,14 @@ LABEL_F91072:
 	call 0xFA9D58
 	ldw wa, 0xEE
 	call LABEL_F994BD
-	jrl LABEL_F90E68
+	jrl SLDst_Return
 
-LABEL_F910DF:
+SLDst_Scroll_ChildReturn:
 	ld xwa, (xsp + 4)
 	cp xwa, 0x7
-	jr nz, LABEL_F9115A
+	jr nz, SLDst_Scroll_SubMode2
 	cpdi8 35320, 1
-	jr z, LABEL_F91124
+	jr z, SLDst_Scroll_SubMode
 	ldda32 xwa, 33264
 	ld xbc, 0x1E50002
 	lds32 xde, 1
@@ -1485,9 +1485,9 @@ LABEL_F910DF:
 	ld xde, (xsp + 4)
 	ld xhl, (xhl)
 	call (xhl)
-	jrl LABEL_F90E68
+	jrl SLDst_Return
 
-LABEL_F91124:
+SLDst_Scroll_SubMode:
 	ldda32 xwa, 33264
 	ld xbc, 0x1E50002
 	ld xde, 0xFFFFFFFF
@@ -1502,15 +1502,15 @@ LABEL_F91124:
 	ld xde, (xsp + 4)
 	ld xhl, (xhl)
 	call (xhl)
-	jrl LABEL_F90E68
+	jrl SLDst_Return
 
-LABEL_F9115A:
+SLDst_Scroll_SubMode2:
 	ldda32 xwa, 33264
 	ld xbc, (xsp + 4)
 	cp xbc, 0x8
-	jrl nz, LABEL_F91208
+	jrl nz, SLDst_Scroll_SubMode5
 	cpdi8 35320, 1
-	jr nz, LABEL_F911A0
+	jr nz, SLDst_Scroll_SubMode3
 	ld xbc, 0x1E50002
 	lds32 xde, 2
 	call 0xFA9D58
@@ -1524,11 +1524,11 @@ LABEL_F9115A:
 	ld xde, (xsp + 4)
 	ld xhl, (xhl)
 	call (xhl)
-	jrl LABEL_F90E68
+	jrl SLDst_Return
 
-LABEL_F911A0:
+SLDst_Scroll_SubMode3:
 	cpdi8 35322, 0
-	jr nz, LABEL_F911D6
+	jr nz, SLDst_Scroll_SubMode4
 	ld xbc, 0x1E50002
 	lds32 xde, 3
 	call 0xFA9D58
@@ -1542,9 +1542,9 @@ LABEL_F911A0:
 	ld xde, (xsp + 4)
 	ld xhl, (xhl)
 	call (xhl)
-	jrl LABEL_F90E68
+	jrl SLDst_Return
 
-LABEL_F911D6:
+SLDst_Scroll_SubMode4:
 	ld xbc, 0x1E50002
 	ld xde, 0xFFFFFFFF
 	call 0xFA9D58
@@ -1558,12 +1558,12 @@ LABEL_F911D6:
 	ld xde, (xsp + 4)
 	ld xhl, (xhl)
 	call (xhl)
-	jrl LABEL_F90E68
+	jrl SLDst_Return
 
-LABEL_F91208:
+SLDst_Scroll_SubMode5:
 	ld xbc, (xsp + 4)
 	cp xbc, 0x5
-	jr nz, LABEL_F91245
+	jr nz, SLDst_Scroll_SubMode6
 	ld xbc, 0x1E50002
 	ld xde, 0xFFFFFFFF
 	call 0xFA9D58
@@ -1577,12 +1577,12 @@ LABEL_F91208:
 	ld xde, (xsp + 4)
 	ld xhl, (xhl)
 	call (xhl)
-	jrl LABEL_F90E68
+	jrl SLDst_Return
 
-LABEL_F91245:
+SLDst_Scroll_SubMode6:
 	ld xbc, (xsp + 4)
 	cp xbc, 0x6
-	jrl nz, LABEL_F90E68
+	jrl nz, SLDst_Return
 	ld xbc, 0x1E50002
 	ld xde, 0xFFFFFFFF
 	call 0xFA9D58
@@ -1596,12 +1596,12 @@ LABEL_F91245:
 	ld xde, (xsp + 4)
 	ld xhl, (xhl)
 	call (xhl)
-	jrl LABEL_F90E68
+	jrl SLDst_Return
 
-LABEL_F91283:
+SLDst_ReturnCapture:
 	ld xhl, 0xFFFFFFFF
 
-LABEL_F91288:
+SLDst_Epilogue:
 	pop xiz
 	inc 8, xsp
 	ret
@@ -1612,23 +1612,23 @@ CmpSingleLoadSrcFunc:
 	ld (xsp + 4), xde
 	ld xiz, xbc
 	cp xiz, 0x1E50003
-	jrl z, LABEL_F9146D
+	jrl z, CmpSrc_ReturnCapture
 	cp xiz, 0x1C00018
-	jr z, LABEL_F9130B
+	jr z, CmpSrc_HandleScroll
 	cp xiz, 0x1C00017
-	jr z, LABEL_F9130B
+	jr z, CmpSrc_HandleScroll
 	cp xiz, 0x1C0000B
-	jr z, LABEL_F912D6
+	jr z, CmpSrc_HandleShow
 	cp xiz, 0x1E50004
-	jrl nz, LABEL_F91469
+	jrl nz, CmpSrc_Return
 	ld xwa, (xsp + 4)
 	stda32 33268, xwa
 	ld xbc, 0x1E50002
 	ld xde, 0xFFFFFFFF
 	call 0xFA9D58
-	jrl LABEL_F91469
+	jrl CmpSrc_Return
 
-LABEL_F912D6:
+CmpSrc_HandleShow:
 	ldda32 xwa, 33268
 	ld xbc, 0x1E50002
 	ld xde, 0xFFFFFFFF
@@ -1643,12 +1643,12 @@ LABEL_F912D6:
 	ld xde, (xsp + 4)
 	ld xhl, (xhl)
 	call (xhl)
-	jrl LABEL_F91469
+	jrl CmpSrc_Return
 
-LABEL_F9130B:
+CmpSrc_HandleScroll:
 	ld xwa, (xsp + 4)
 	cp xwa, 0x5
-	jr nz, LABEL_F91348
+	jr nz, CmpSrc_ScrollMode6
 	ldda32 xwa, 33268
 	ld xbc, 0x1E50002
 	lds32 xde, 1
@@ -1663,14 +1663,14 @@ LABEL_F9130B:
 	ld xde, (xsp + 4)
 	ld xhl, (xhl)
 	call (xhl)
-	jrl LABEL_F91469
+	jrl CmpSrc_Return
 
-LABEL_F91348:
+CmpSrc_ScrollMode6:
 	ld xwa, (xsp + 4)
 	cp xwa, 0x6
-	jr nz, LABEL_F913C1
+	jr nz, CmpSrc_ScrollMode7
 	cpdi8 35322, 0
-	jr nz, LABEL_F9138C
+	jr nz, CmpSrc_ScrollMode6_NoStep
 	ldda32 xwa, 33268
 	ld xbc, 0x1E50002
 	lds32 xde, 3
@@ -1685,9 +1685,9 @@ LABEL_F91348:
 	ld xde, (xsp + 4)
 	ld xhl, (xhl)
 	call (xhl)
-	jrl LABEL_F91469
+	jrl CmpSrc_Return
 
-LABEL_F9138C:
+CmpSrc_ScrollMode6_NoStep:
 	ldda32 xwa, 33268
 	ld xbc, 0x1E50002
 	ld xde, 0xFFFFFFFF
@@ -1702,13 +1702,13 @@ LABEL_F9138C:
 	ld xde, (xsp + 4)
 	ld xhl, (xhl)
 	call (xhl)
-	jrl LABEL_F91469
+	jrl CmpSrc_Return
 
-LABEL_F913C1:
+CmpSrc_ScrollMode7:
 	ldda32 xwa, 33268
 	ld xbc, (xsp + 4)
 	cp xbc, 0x7
-	jr nz, LABEL_F91400
+	jr nz, CmpSrc_ScrollMode8
 	ld xbc, 0x1E50002
 	ld xde, 0xFFFFFFFF
 	call 0xFA9D58
@@ -1722,14 +1722,14 @@ LABEL_F913C1:
 	ld xde, (xsp + 4)
 	ld xhl, (xhl)
 	call (xhl)
-	jr LABEL_F91469
+	jr CmpSrc_Return
 
-LABEL_F91400:
+CmpSrc_ScrollMode8:
 	ld xbc, (xsp + 4)
 	cp xbc, 0x8
-	jr nz, LABEL_F91442
+	jr nz, CmpSrc_ScrollMode40
 	cpdi8 35322, 0
-	jr nz, LABEL_F91442
+	jr nz, CmpSrc_ScrollMode40
 	ld xbc, 0x1E50002
 	ld xde, 0xFFFFFFFF
 	call 0xFA9D58
@@ -1743,12 +1743,12 @@ LABEL_F91400:
 	ld xde, (xsp + 4)
 	ld xhl, (xhl)
 	call (xhl)
-	jr LABEL_F91469
+	jr CmpSrc_Return
 
-LABEL_F91442:
+CmpSrc_ScrollMode40:
 	ld xbc, (xsp + 4)
 	cp xbc, 0x28
-	jr nz, LABEL_F91469
+	jr nz, CmpSrc_Return
 	ldda8 c, 35320
 	extz bc
 	sla bc, 2
@@ -1759,14 +1759,14 @@ LABEL_F91442:
 	ld xhl, (xhl)
 	call (xhl)
 
-LABEL_F91469:
+CmpSrc_Return:
 	lds32 xhl, 0
-	jr LABEL_F91472
+	jr CmpSrc_Epilogue
 
-LABEL_F9146D:
+CmpSrc_ReturnCapture:
 	ld xhl, 0xFFFFFFFF
 
-LABEL_F91472:
+CmpSrc_Epilogue:
 	pop xiz
 	inc 4, xsp
 	ret
@@ -1779,23 +1779,23 @@ CmpSingleLoadDstFunc:
 	ld xiz, xwa
 	ld xwa, (xsp + 8)
 	cp xwa, 0x1E50003
-	jrl z, LABEL_F91761
+	jrl z, CmpDst_ReturnCapture
 	cp xwa, 0x1C00018
-	jrl z, LABEL_F9153A
+	jrl z, CmpDst_HandleScroll
 	cp xwa, 0x1C00017
-	jrl z, LABEL_F9153A
+	jrl z, CmpDst_HandleScroll
 	cp xwa, 0x1C0000B
-	jr z, LABEL_F914C8
+	jr z, CmpDst_HandleShow
 	cp xwa, 0x1E50004
-	jrl nz, LABEL_F9175D
+	jrl nz, CmpDst_Return
 	ld xwa, (xsp + 4)
 	stda32 33272, xwa
 	ld xbc, 0x1E50002
 	ld xde, 0xFFFFFFFF
 	call 0xFA9D58
-	jrl LABEL_F9175D
+	jrl CmpDst_Return
 
-LABEL_F914C8:
+CmpDst_HandleShow:
 	ld xwa, xiz
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
@@ -1830,12 +1830,12 @@ LABEL_F914C8:
 	ld xde, (xsp + 4)
 	ld xhl, (xhl)
 	call (xhl)
-	jrl LABEL_F9175D
+	jrl CmpDst_Return
 
-LABEL_F9153A:
+CmpDst_HandleScroll:
 	ld xwa, (xsp + 4)
 	cp xwa, 0x3
-	jr nz, LABEL_F915BF
+	jr nz, CmpDst_ScrollModeA
 	ld xwa, (xsp + 8)
 	cp xwa, 0x1C00017
 	scc8 z, a
@@ -1870,14 +1870,14 @@ LABEL_F9153A:
 	ld xbc, 0x1C0000B
 	lds32 xde, 0
 	calr CmpSingleLoadSrcFunc
-	jrl LABEL_F9175D
+	jrl CmpDst_Return
 
-LABEL_F915BF:
+CmpDst_ScrollModeA:
 	ld xwa, (xsp + 4)
 	cp xwa, 0xA
-	jr nz, LABEL_F9162C
+	jr nz, CmpDst_ScrollMode7
 	cpdi8 35320, 4
-	jr z, LABEL_F9162C
+	jr z, CmpDst_ScrollMode7
 	ld xwa, 0x600026
 	ld xbc, 0x1C00001
 	lds32 xde, 5
@@ -1904,12 +1904,12 @@ LABEL_F915BF:
 	call 0xFA9D58
 	ldw wa, 0xEE
 	call LABEL_F994BD
-	jrl LABEL_F9175D
+	jrl CmpDst_Return
 
-LABEL_F9162C:
+CmpDst_ScrollMode7:
 	ld xwa, (xsp + 4)
 	cp xwa, 0x7
-	jr nz, LABEL_F9166A
+	jr nz, CmpDst_ScrollMode8
 	ldda32 xwa, 33272
 	ld xbc, 0x1E50002
 	lds32 xde, 1
@@ -1924,15 +1924,15 @@ LABEL_F9162C:
 	ld xde, (xsp + 4)
 	ld xhl, (xhl)
 	call (xhl)
-	jrl LABEL_F9175D
+	jrl CmpDst_Return
 
-LABEL_F9166A:
+CmpDst_ScrollMode8:
 	ldda32 xwa, 33272
 	ld xbc, (xsp + 4)
 	cp xbc, 0x8
-	jr nz, LABEL_F916E0
+	jr nz, CmpDst_ScrollMode5
 	cpdi8 35322, 0
-	jr nz, LABEL_F916AF
+	jr nz, CmpDst_ScrollMode8_NoStep
 	ld xbc, 0x1E50002
 	lds32 xde, 3
 	call 0xFA9D58
@@ -1946,9 +1946,9 @@ LABEL_F9166A:
 	ld xde, (xsp + 4)
 	ld xhl, (xhl)
 	call (xhl)
-	jrl LABEL_F9175D
+	jrl CmpDst_Return
 
-LABEL_F916AF:
+CmpDst_ScrollMode8_NoStep:
 	ld xbc, 0x1E50002
 	ld xde, 0xFFFFFFFF
 	call 0xFA9D58
@@ -1962,12 +1962,12 @@ LABEL_F916AF:
 	ld xde, (xsp + 4)
 	ld xhl, (xhl)
 	call (xhl)
-	jr LABEL_F9175D
+	jr CmpDst_Return
 
-LABEL_F916E0:
+CmpDst_ScrollMode5:
 	ld xbc, (xsp + 4)
 	cp xbc, 0x5
-	jr nz, LABEL_F9171C
+	jr nz, CmpDst_ScrollMode6
 	ld xbc, 0x1E50002
 	ld xde, 0xFFFFFFFF
 	call 0xFA9D58
@@ -1981,14 +1981,14 @@ LABEL_F916E0:
 	ld xde, (xsp + 4)
 	ld xhl, (xhl)
 	call (xhl)
-	jr LABEL_F9175D
+	jr CmpDst_Return
 
-LABEL_F9171C:
+CmpDst_ScrollMode6:
 	ld xbc, (xsp + 4)
 	cp xbc, 0x6
-	jr nz, LABEL_F9175D
+	jr nz, CmpDst_Return
 	cpdi8 35322, 0
-	jr nz, LABEL_F9175D
+	jr nz, CmpDst_Return
 	ld xbc, 0x1E50002
 	ld xde, 0xFFFFFFFF
 	call 0xFA9D58
@@ -2003,14 +2003,14 @@ LABEL_F9171C:
 	ld xhl, (xhl)
 	call (xhl)
 
-LABEL_F9175D:
+CmpDst_Return:
 	lds32 xhl, 0
-	jr LABEL_F91766
+	jr CmpDst_Epilogue
 
-LABEL_F91761:
+CmpDst_ReturnCapture:
 	ld xhl, 0xFFFFFFFF
 
-LABEL_F91766:
+CmpDst_Epilogue:
 	pop xiz
 	inc 8, xsp
 	ret
@@ -2020,39 +2020,39 @@ CmpSingleLoadFileFunc:
 	push xiz
 	ld (xsp + 4), xwa
 	cp xbc, 0x1C00018
-	jrl z, LABEL_F91800
+	jrl z, CmpFile_HandleScroll
 	cp xbc, 0x1C00017
-	jr z, LABEL_F91800
+	jr z, CmpFile_HandleScroll
 	cp xbc, 0x1C0000B
-	jr z, LABEL_F917B8
+	jr z, CmpFile_HandleShow
 	cp xbc, 0x1E50004
-	jrl nz, LABEL_F918A8
+	jrl nz, CmpFile_Return
 	stda32 33276, xde
 	call 0xF895EF
 	stda16 33280, xhl
 	cps hl, 0
-	jr ge, LABEL_F917A8
+	jr ge, CmpFile_Selection_Clamp
 	stdi16 33280, 0
 
-LABEL_F917A8:
+CmpFile_Selection_Clamp:
 	ldda32 xwa, 33276
 	ld xbc, 0x1E50002
 	ld xde, 0xFFFFFFFF
-	jr LABEL_F917F9
+	jr CmpFile_ShowDispatch
 
-LABEL_F917B8:
+CmpFile_HandleShow:
 	stdi8 34928, 0
 	cpdi8 35320, 2
-	jr nz, LABEL_F917D0
+	jr nz, CmpFile_ShowDefault
 	ldda16 xwa, 33280
 	call LABEL_F89623
 	ld xiz, xhl
-	jr LABEL_F917D5
+	jr CmpFile_ShowDraw
 
-LABEL_F917D0:
+CmpFile_ShowDefault:
 	lda_24 xiz, 0xea0a52
 
-LABEL_F917D5:
+CmpFile_ShowDraw:
 	ldada xwa, 34929
 	ldda16 xde, 33280
 	inc 1, de
@@ -2064,36 +2064,36 @@ LABEL_F917D5:
 	ld xbc, 0x1C0000F
 	ld xde, 0x8870
 
-LABEL_F917F9:
+CmpFile_ShowDispatch:
 	call 0xFA9D58
-	jrl LABEL_F918A8
+	jrl CmpFile_Return
 
-LABEL_F91800:
+CmpFile_HandleScroll:
 	ldda16 xwa, 33280
 	ld hl, wa
 	or xde, xde
-	jr nz, LABEL_F91818
+	jr nz, CmpFile_ScrollDown
 	ld bc, wa
 	inc 1, bc
 	cp bc, 0x14
-	jr ge, LABEL_F9182A
+	jr ge, CmpFile_ScrollRedraw
 	inc 1, wa
-	jr LABEL_F91826
+	jr CmpFile_ScrollStore
 
-LABEL_F91818:
+CmpFile_ScrollDown:
 	cp xde, 0x1
-	jr nz, LABEL_F9182A
+	jr nz, CmpFile_ScrollRedraw
 	cps wa, 0
-	jr le, LABEL_F9182A
+	jr le, CmpFile_ScrollRedraw
 	dec 1, wa
 
-LABEL_F91826:
+CmpFile_ScrollStore:
 	stda16 33280, xwa
 
-LABEL_F9182A:
+CmpFile_ScrollRedraw:
 	ldda16 xwa, 33280
 	cp wa, hl
-	jr z, LABEL_F918A8
+	jr z, CmpFile_Return
 	call 0xF89605
 	stdi8 34928, 0
 	lda_24 xiz, 0xea0a52
@@ -2101,16 +2101,16 @@ LABEL_F9182A:
 	lds wa, 3
 	call LABEL_F893D1
 	cps l, 0
-	jr z, LABEL_F91866
+	jr z, CmpFile_RedrawDispatch
 	call LABEL_F872E5
 	cps hl, 0
-	jr z, LABEL_F91866
+	jr z, CmpFile_RedrawDispatch
 	stdi8 35320, 2
 	ldda16 xwa, 33280
 	call LABEL_F89623
 	ld xiz, xhl
 
-LABEL_F91866:
+CmpFile_RedrawDispatch:
 	ldada xwa, 34929
 	ldda16 xde, 33280
 	inc 1, de
@@ -2131,7 +2131,7 @@ LABEL_F91866:
 	lds32 xde, 0
 	calr CmpSingleLoadDstFunc
 
-LABEL_F918A8:
+CmpFile_Return:
 	lds32 xhl, 0
 	pop xiz
 	inc 4, xsp
@@ -2139,11 +2139,11 @@ LABEL_F918A8:
 
 FmmCmpSingleLoadFunc:
 	cp xbc, 0x1C00013
-	jrl nz, LABEL_F919E0
+	jrl nz, FmmCmpLoad_Return
 	cp xde, 0x3
-	jrl z, LABEL_F919DD
+	jrl z, FmmCmpLoad_HandleAbort
 	cp xde, 0x2
-	jrl nz, LABEL_F919E0
+	jrl nz, FmmCmpLoad_Return
 	lds wa, 1
 	calr InitializeOperationState
 	ld xwa, 0x61004A
@@ -2155,43 +2155,43 @@ FmmCmpSingleLoadFunc:
 	lds32 xde, 5
 	call 0xFA9D58
 	cpdi16 34048, 0
-	jr ge, LABEL_F91903
+	jr ge, FmmCmpLoad_DispatchState
 	call 0xF89520
 	extz hl
 	stda16 34048, xhl
 	calr SignalProgressUpdate
 
-LABEL_F91903:
+FmmCmpLoad_DispatchState:
 	ldda16 xwa, 34048
 	cps wa, 1
-	jrl z, LABEL_F919B5
+	jrl z, FmmCmpLoad_HandleSuccess
 	cps wa, 0
-	jrl z, LABEL_F9199C
+	jrl z, FmmCmpLoad_HandleError
 	cps wa, 5
-	jr z, LABEL_F9197B
+	jr z, FmmCmpLoad_HandleCancel
 	cpdi16 34050, 0
-	jr ge, LABEL_F91930
+	jr ge, FmmCmpLoad_ContinueLoad
 	call 0xF8987D
 	stda16 34050, xhl
 	call LABEL_F8958D
 	call 0xF8953B
 	calr SignalProgressUpdate
 
-LABEL_F91930:
+FmmCmpLoad_ContinueLoad:
 	stdi8 35320, 4
 	lds wa, 3
 	call LABEL_F893D1
 	cps l, 0
-	jr z, LABEL_F9194F
+	jr z, FmmCmpLoad_CloseProgress
 	call LABEL_F872E5
 	cps hl, 0
-	jr z, LABEL_F9194C
+	jr z, FmmCmpLoad_SignalProgress
 	stdi8 35320, 2
 
-LABEL_F9194C:
+FmmCmpLoad_SignalProgress:
 	calr SignalProgressUpdate
 
-LABEL_F9194F:
+FmmCmpLoad_CloseProgress:
 	ld xwa, 0x600026
 	ld xbc, 0x1C00002
 	lds32 xde, 0
@@ -2202,9 +2202,9 @@ LABEL_F9194F:
 	call 0xFA9D58
 	stdi8 35326, 0
 	stdi8 35334, 0
-	jr LABEL_F919E0
+	jr FmmCmpLoad_Return
 
-LABEL_F9197B:
+FmmCmpLoad_HandleCancel:
 	ld xwa, 0x600026
 	ld xbc, 0x1C00002
 	lds32 xde, 0
@@ -2213,18 +2213,18 @@ LABEL_F9197B:
 	call 0xF99490
 	stdi8 32578, 0
 	ldw wa, 0xEE
-	jr LABEL_F919D7
+	jr FmmCmpLoad_CallStatusDisplay
 
-LABEL_F9199C:
+FmmCmpLoad_HandleError:
 	ld xwa, 0x600026
 	ld xbc, 0x1C00002
 	lds32 xde, 0
 	call 0xFA9D58
 	ldw wa, 0x7D
 	call 0xF99490
-	jr LABEL_F919E0
+	jr FmmCmpLoad_Return
 
-LABEL_F919B5:
+FmmCmpLoad_HandleSuccess:
 	calr ResetProgressIndication
 	ld xwa, 0x600026
 	ld xbc, 0x1C00002
@@ -2235,18 +2235,18 @@ LABEL_F919B5:
 	stdi8 32578, 2
 	ldw wa, 0xEE
 
-LABEL_F919D7:
+FmmCmpLoad_CallStatusDisplay:
 	call LABEL_F994BD
-	jr LABEL_F919E0
+	jr FmmCmpLoad_Return
 
-LABEL_F919DD:
+FmmCmpLoad_HandleAbort:
 	calr CancelOperationCleanup
 
-LABEL_F919E0:
+FmmCmpLoad_Return:
 	lds32 xhl, 0
 	ret
 
-LABEL_F919E3:
+BuildSlotLabel:
 	dec 2, xsp
 	push xiz
 	ld hl, bc
@@ -2265,24 +2265,24 @@ LABEL_F919E3:
 	add xiz, xix
 	lda_dpi XSP, 0xF8
 	cps e, 0
-	jr z, LABEL_F91A39
+	jr z, BuildSlotLabel_WriteContent
 	cpw (xsp + 4), 0x9
-	jr nz, LABEL_F91A27
+	jr nz, BuildSlotLabel_WriteLetter
 	stib_dpi 0xF8, 0x31
 	ld (xiz), 0x30
-	jr LABEL_F91A33
+	jr BuildSlotLabel_WriteColon
 
-LABEL_F91A27:
+BuildSlotLabel_WriteLetter:
 	stib_dpi 0xF8, 0x20
 	ld wa, (xsp + 4)
 	add a, 0x31
 	ld (xiz), a
 
-LABEL_F91A33:
+BuildSlotLabel_WriteColon:
 	inc 1, xiz
 	stib_dpi 0xF8, 0x3A
 
-LABEL_F91A39:
+BuildSlotLabel_WriteContent:
 	ld xwa, xiz
 	ldw de, 0x10
 	call LABEL_F890F2

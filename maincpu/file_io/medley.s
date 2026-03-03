@@ -51,7 +51,7 @@ SeqName_SendSlotLoop:
 	ld bc, iz
 	ld wa, bc
 	lds de, 1
-	calr LABEL_F919E3
+	calr BuildSlotLabel
 	ld xde, xhl
 	ldda32 xwa, 33492
 	ld xbc, 0x1C0000F
@@ -192,7 +192,7 @@ SeqName_UpdateDisplay:
 	ld wa, iz
 	ld bc, iz
 	lds de, 1
-	calr LABEL_F919E3
+	calr BuildSlotLabel
 	ld xde, xhl
 	ldda32 xwa, 33492
 	ld xbc, 0x1C0000F
@@ -200,7 +200,7 @@ SeqName_UpdateDisplay:
 	ldda16 xbc, 33496
 	ld wa, bc
 	lds de, 1
-	calr LABEL_F919E3
+	calr BuildSlotLabel
 	ld xde, xhl
 	ldda32 xwa, 33492
 	ld xbc, 0x1C0000F
@@ -218,7 +218,7 @@ SeqName_SetIndexPlaying:
 	ld wa, iz
 	ld bc, iz
 	lds de, 1
-	calr LABEL_F919E3
+	calr BuildSlotLabel
 	ld xde, xhl
 	ldda32 xwa, 33492
 	ld xbc, 0x1C0000F
@@ -226,7 +226,7 @@ SeqName_SetIndexPlaying:
 	ldda16 xbc, 33496
 	ld wa, bc
 	lds de, 1
-	calr LABEL_F919E3
+	calr BuildSlotLabel
 	ld xde, xhl
 	ldda32 xwa, 33492
 	ld xbc, 0x1C0000F
