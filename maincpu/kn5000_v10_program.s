@@ -1596,483 +1596,483 @@ LABEL_E16B0C:	aligned_string ""
 LABEL_E16B0E:
 	.long LABEL_E16B12
 LABEL_E16B12:	aligned_string ""
-LABEL_E16B14:
-	.long LABEL_E16B1E
-	.long LABEL_E16B1C
-LABEL_E16B1C:	aligned_string ""
-LABEL_E16B1E:	aligned_string "cstmno"
-LABEL_E16B26:
-	.long LABEL_E16B3C
-	.long LABEL_E16B34
-	.long LABEL_E16B32
-LABEL_E16B32:	aligned_string ""
-LABEL_E16B34:	aligned_string "pman_ad"
-LABEL_E16B3C:	aligned_string "func"
-LABEL_E16B42:
-	.long LABEL_E16B64
-	.long LABEL_E16B5A
-	.long LABEL_E16B54
-	.long LABEL_E16B52
-LABEL_E16B52:	aligned_string ""
-LABEL_E16B54:	aligned_string "func"
-LABEL_E16B5A:	aligned_string "fixedrow"
-LABEL_E16B64:	aligned_string "fixedcol"
+StrDesc_CstmCpNameBox:
+	.long StrFld_CstmCpName_CstmNo
+	.long StrVal_Empty_CstmCpName
+StrVal_Empty_CstmCpName:	aligned_string ""
+StrFld_CstmCpName_CstmNo:	aligned_string "cstmno"
+StrDesc_AcApcToggle:
+	.long StrFld_ApcToggle_Func
+	.long StrFld_ApcToggle_PmanAd
+	.long StrVal_Empty_AcApcToggle
+StrVal_Empty_AcApcToggle:	aligned_string ""
+StrFld_ApcToggle_PmanAd:	aligned_string "pman_ad"
+StrFld_ApcToggle_Func:	aligned_string "func"
+StrDesc_AcSndArgGrid:
+	.long StrFld_SndArgGrid_FixedCol
+	.long StrFld_SndArgGrid_FixedRow
+	.long StrFld_SndArgGrid_Func
+	.long StrVal_Empty_AcSndArgGrid
+StrVal_Empty_AcSndArgGrid:	aligned_string ""
+StrFld_SndArgGrid_Func:	aligned_string "func"
+StrFld_SndArgGrid_FixedRow:	aligned_string "fixedrow"
+StrFld_SndArgGrid_FixedCol:	aligned_string "fixedcol"
 
 
-LABEL_E16B6E:
-	.long LABEL_E16BA6
-	.long LABEL_E16B9C
-	.long LABEL_E16B94
-	.long LABEL_E16B90
-	.long LABEL_E16B88
-	.long LABEL_E16B86
-LABEL_E16B86:	aligned_string ""
-LABEL_E16B88:	aligned_string "sel_num"
-LABEL_E16B90:
+StrDesc_PsParaListBox:
+	.long StrFld_ParaList_Font
+	.long StrFld_ParaList_FontColor
+	.long StrFld_ParaList_Column
+	.long StrFld_ParaList_Row
+	.long StrFld_ParaList_SelNum
+	.long StrVal_Empty_PsParaList
+StrVal_Empty_PsParaList:	aligned_string ""
+StrFld_ParaList_SelNum:	aligned_string "sel_num"
+StrFld_ParaList_Row:
 	.byte 0x72, 0x6f, 0x77, 0x00
-LABEL_E16B94:	aligned_string "column"
-LABEL_E16B9C:	aligned_string "fontcolor"
-LABEL_E16BA6:
+StrFld_ParaList_Column:	aligned_string "column"
+StrFld_ParaList_FontColor:	aligned_string "fontcolor"
+StrFld_ParaList_Font:
 	jr	z, 0x6f
 	.byte 0x6e, 0x74, 0x00, 0xff, 0xb0, 0x6b, 0xe1, 0x00
 	.byte 0x00, 0xff
-LABEL_E16BB2:
-	.long LABEL_E16BB6
-LABEL_E16BB6:	aligned_string ""
-LABEL_E16BB8:
-	.long LABEL_E16C00
-	.long LABEL_E16BF6
-	.long LABEL_E16BF0
-	.long LABEL_E16BE8
-	.long LABEL_E16BDE
-	.long LABEL_E16BD6
-	.long LABEL_E16BD4
-LABEL_E16BD4:	aligned_string ""
-LABEL_E16BD6:	aligned_string "mspbnk"
-LABEL_E16BDE:	aligned_string "selected"
-LABEL_E16BE8:	aligned_string "editsw"
-LABEL_E16BF0:	aligned_string "align"
-LABEL_E16BF6:	aligned_string "fontcolor"
-LABEL_E16C00:	aligned_string "font"
+StrDesc_PsSCTxtBox2:
+	.long StrVal_Empty_PsSCTxtBox2
+StrVal_Empty_PsSCTxtBox2:	aligned_string ""
+StrDesc_VwVariBox:
+	.long StrFld_VwVari_Font
+	.long StrFld_VwVari_FontColor
+	.long StrFld_VwVari_Align
+	.long StrFld_VwVari_EditSw
+	.long StrFld_VwVari_Selected
+	.long StrFld_VwVari_MspBnk
+	.long StrVal_Empty_VwVariBox
+StrVal_Empty_VwVariBox:	aligned_string ""
+StrFld_VwVari_MspBnk:	aligned_string "mspbnk"
+StrFld_VwVari_Selected:	aligned_string "selected"
+StrFld_VwVari_EditSw:	aligned_string "editsw"
+StrFld_VwVari_Align:	aligned_string "align"
+StrFld_VwVari_FontColor:	aligned_string "fontcolor"
+StrFld_VwVari_Font:	aligned_string "font"
 
 
-LABEL_E16C06:
-	.long LABEL_E16C48
-	.long LABEL_E16C3C
-	.long LABEL_E16C38
-	.long LABEL_E16C2C
-	.long LABEL_E16C20
-	.long LABEL_E16C1E
-LABEL_E16C1E:	aligned_string ""
-LABEL_E16C20:	aligned_string "tail_y_rate"
-LABEL_E16C2C:	aligned_string "tail_x_rate"
-LABEL_E16C38:
+StrDesc_YajirushiBox:
+	.long StrFld_Yajirushi_Color
+	.long StrFld_Yajirushi_FrameOnly
+	.long StrFld_Yajirushi_Dir
+	.long StrFld_Yajirushi_TailXRate
+	.long StrFld_Yajirushi_TailYRate
+	.long StrVal_Empty_Yajirushi
+StrVal_Empty_Yajirushi:	aligned_string ""
+StrFld_Yajirushi_TailYRate:	aligned_string "tail_y_rate"
+StrFld_Yajirushi_TailXRate:	aligned_string "tail_x_rate"
+StrFld_Yajirushi_Dir:
 	.byte 0x64, 0x69, 0x72, 0x00
-LABEL_E16C3C:	aligned_string "frame_only"
-LABEL_E16C48:	aligned_string "color"
-LABEL_E16C4E:
-	.long LABEL_E16C52
-LABEL_E16C52:	aligned_string ""
-LABEL_E16C54:
-	.long LABEL_E16C76
-	.long LABEL_E16C6C
-	.long LABEL_E16C66
-	.long LABEL_E16C64
-LABEL_E16C64:	aligned_string ""
-LABEL_E16C66:	aligned_string "func"
-LABEL_E16C6C:	aligned_string "fixedrow"
-LABEL_E16C76:	aligned_string "fixedcol"
-LABEL_E16C80:
-	.long LABEL_E16C84
-LABEL_E16C84:	aligned_string ""
+StrFld_Yajirushi_FrameOnly:	aligned_string "frame_only"
+StrFld_Yajirushi_Color:	aligned_string "color"
+StrDesc_CmpNameMenuBox:
+	.long StrVal_Empty_CmpNameMenu
+StrVal_Empty_CmpNameMenu:	aligned_string ""
+StrDesc_S2cGridBox:
+	.long StrFld_S2cGrid_FixedCol
+	.long StrFld_S2cGrid_FixedRow
+	.long StrFld_S2cGrid_Func
+	.long StrVal_Empty_S2cGridBox
+StrVal_Empty_S2cGridBox:	aligned_string ""
+StrFld_S2cGrid_Func:	aligned_string "func"
+StrFld_S2cGrid_FixedRow:	aligned_string "fixedrow"
+StrFld_S2cGrid_FixedCol:	aligned_string "fixedcol"
+StrDesc_PsStylCnvVer:
+	.long StrVal_Empty_PsStylCnvVer
+StrVal_Empty_PsStylCnvVer:	aligned_string ""
 	.long AcMemNoBoxProc
 	naka_header NAKA_TYPE_0x12
 	.byte 0x24, 0x00
 	.byte 0x00, 0x00
-	.long LABEL_E17316
-	.long LABEL_E17314
+	.long StrName_AcMemNoBox
+	.long StrEmpty_AcMemNoBox
 	.long StrDesc_Empty_0
 	.long AcCmpRecBoxProc
 	naka_header NAKA_TYPE_0x12
 	.byte 0x26, 0x00
 	.byte 0x02, 0x00
-	.long LABEL_E17308
-	.long LABEL_E17304
+	.long StrName_AcCmpRecBox
+	.long StrPrefix_AcCmpRecBox
 	.long StrDesc_RecordBits
 	.long PsCmpQtzBoxProc
 	naka_header NAKA_TYPE_0x12
 	.byte 0x24, 0x00
 	.byte 0x00, 0x00
-	.long LABEL_E172F8
-	.long LABEL_E172F6
+	.long StrName_PsCmpQtzBox
+	.long StrEmpty_PsCmpQtzBox
 	.long StrDesc_Empty_1
 	.long PsCmpMeasBoxProc
 	naka_header NAKA_TYPE_0x12
 	.byte 0x24, 0x00
 	.byte 0x00, 0x00
-	.long LABEL_E172E8
-	.long LABEL_E172E6
+	.long StrName_PsCmpMeasBox
+	.long StrEmpty_PsCmpMeasBox
 	.long StrDesc_Empty_2
 	.long PsCmpMemBoxProc
 	naka_header NAKA_TYPE_0x12
 	.byte 0x24, 0x00
 	.byte 0x00, 0x00
-	.long LABEL_E172DA
-	.long LABEL_E172D8
+	.long StrName_PsCmpMemBox
+	.long StrEmpty_PsCmpMemBox
 	.long StrDesc_Empty_3
 	.long AcS2cMemNoBoxProc
 	naka_header NAKA_TYPE_0x12
 	.byte 0x24, 0x00
 	.byte 0x00, 0x00
-	.long LABEL_E172CA
-	.long LABEL_E172C8
+	.long StrName_AcS2cMemNoBox
+	.long StrEmpty_AcS2cMemNoBox
 	.long StrDesc_Empty_4
 	.long PsS2cFmeasBoxProc
 	naka_header NAKA_TYPE_0x12
 	.byte 0x24, 0x00
 	.byte 0x00, 0x00
-	.long LABEL_E172BA
-	.long LABEL_E172B8
+	.long StrName_PsS2cFmeasBox
+	.long StrEmpty_PsS2cFmeasBox
 	.long LABEL_E169F8
 	.long PsS2cLmeasBoxProc
 	naka_header NAKA_TYPE_0x12
 	.byte 0x24, 0x00
 	.byte 0x00, 0x00
-	.long LABEL_E172AA
-	.long LABEL_E172A8
+	.long StrName_PsS2cLmeasBox
+	.long StrEmpty_PsS2cLmeasBox
 	.long LABEL_E169FE
 	.long PsSeqSongNoBoxProc
 	naka_header NAKA_TYPE_0x12
 	.byte 0x24, 0x00
 	.byte 0x00, 0x00
-	.long LABEL_E17298
-	.long LABEL_E17296
+	.long StrName_PsSeqSongNoBox
+	.long StrEmpty_PsSeqSongNoBox
 	.long LABEL_E16A04
 	.long PsS2cTransBoxProc
 	naka_header NAKA_TYPE_0x12
 	.byte 0x24, 0x00
 	.byte 0x00, 0x00
-	.long LABEL_E17288
-	.long LABEL_E17286
+	.long StrName_PsS2cTransBox
+	.long StrEmpty_PsS2cTransBox
 	.long LABEL_E16A0A
 	.long PsCstmCpBnkBoxProc
 	naka_header NAKA_TYPE_0x12
 	.byte 0x26, 0x00
 	.byte 0x02, 0x00
-	.long LABEL_E17276
-	.long LABEL_E17274
+	.long StrName_PsCstmCpBnkBox
+	.long StrPrefix_PsCstmCpBnkBox
 	.long LABEL_E16A10
 	.long PsCstmCpSwBoxProc
 	naka_header NAKA_TYPE_0x12
 	.byte 0x26, 0x00
 	.byte 0x02, 0x00
-	.long LABEL_E17266
-	.long LABEL_E17264
+	.long StrName_PsCstmCpSwBox
+	.long StrPrefix_PsCstmCpSwBox
 	.long LABEL_E16A20
 	.long PsCtmAttStrBoxProc
 	naka_header NAKA_TYPE_0x12
 	.byte 0x24, 0x00
 	.byte 0x00, 0x00
-	.long LABEL_E17254
-	.long LABEL_E17252
+	.long StrName_PsCtmAttStrBox
+	.long StrEmpty_PsCtmAttStrBox
 	.long LABEL_E16A30
 	.long AcCmpMdBoxProc
 	naka_header NAKA_TYPE_0x15
 	.byte 0x34, 0x00
 	.byte 0x02, 0x00
-	.long LABEL_E17246
-	.long LABEL_E17244
+	.long StrName_AcCmpMdBox
+	.long StrPrefix_AcCmpMdBox
 	.long LABEL_E16A36
 	.long AcApcMdBoxProc
 	naka_header NAKA_TYPE_0x15
 	.byte 0x34, 0x00
 	.byte 0x02, 0x00
-	.long LABEL_E17238
-	.long LABEL_E17236
+	.long StrName_AcApcMdBox
+	.long StrPrefix_AcApcMdBox
 	.long LABEL_E16A44
 	.long AcMspBnkSlBoxProc
 	naka_header NAKA_TYPE_0x15
 	.byte 0x34, 0x00
 	.byte 0x02, 0x00
-	.long LABEL_E17228
-	.long LABEL_E17226
+	.long StrName_AcMspBnkSlBox
+	.long StrPrefix_AcMspBnkSlBox
 	.long LABEL_E16A56
 	.long PsMspBnkNameBoxProc
 	naka_header NAKA_TYPE_0x12
 	.byte 0x26, 0x00
 	.byte 0x02, 0x00
-	.long LABEL_E17216
-	.long LABEL_E17214
+	.long StrName_PsMspBnkNameBox
+	.long StrPrefix_PsMspBnkNameBox
 	.long LABEL_E16A68
 	.long AcCmpTempoBoxProc
 	naka_header NAKA_TYPE_0x12
 	.byte 0x24, 0x00
 	.byte 0x00, 0x00
-	.long LABEL_E17206
-	.long LABEL_E17204
+	.long StrName_AcCmpTempoBox
+	.long StrEmpty_AcCmpTempoBox
 	.long LABEL_E16A7A
 	.long PsCmpCpFGrpBoxProc
 	naka_header NAKA_TYPE_0x12
 	.byte 0x24, 0x00
 	.byte 0x00, 0x00
-	.long LABEL_E171F4
-	.long LABEL_E171F2
+	.long StrName_PsCmpCpFGrpBox
+	.long StrEmpty_PsCmpCpFGrpBox
 	.long LABEL_E16A80
 	.long PsCmpCpFVariBoxProc
 	naka_header NAKA_TYPE_0x12
 	.byte 0x24, 0x00
 	.byte 0x00, 0x00
-	.long LABEL_E171E2
-	.long LABEL_E171E0
+	.long StrName_PsCmpCpFVariBox
+	.long StrEmpty_PsCmpCpFVariBox
 	.long LABEL_E16A86
 	.long PsCmpCpFPtnBoxProc
 	naka_header NAKA_TYPE_0x12
 	.byte 0x24, 0x00
 	.byte 0x00, 0x00
-	.long LABEL_E171D0
-	.long LABEL_E171CE
+	.long StrName_PsCmpCpFPtnBox
+	.long StrEmpty_PsCmpCpFPtnBox
 	.long LABEL_E16A8C
 	.long PsNameMemBoxProc
 	naka_header NAKA_TYPE_0x12
 	.byte 0x24, 0x00
 	.byte 0x00, 0x00
-	.long LABEL_E171C0
-	.long LABEL_E171BE
+	.long StrName_PsNameMemBox
+	.long StrEmpty_PsNameMemBox
 	.long LABEL_E16A92
 	.long AcCmpSetGridBoxProc
 	naka_header NAKA_TYPE_0x54
 	.byte 0x4a, 0x00
 	.byte 0x0c, 0x00
-	.long LABEL_E171AE
-	.long LABEL_E171AA
+	.long StrName_AcCmpSetGridBox
+	.long StrPrefix_AcCmpSetGrid
 	.long LABEL_E16A98
 	.long PsRgpSetBnkBoxProc
 	naka_header NAKA_TYPE_0x12
 	.byte 0x24, 0x00
 	.byte 0x00, 0x00
-	.long LABEL_E1719A
-	.long LABEL_E17198
+	.long StrName_PsRgpSetBnkBox
+	.long StrEmpty_PsRgpSetBnkBox
 	.long LABEL_E16AC4
 	.long AcEasyCmpGridBoxProc
 	naka_header NAKA_TYPE_0x54
 	.byte 0x4a, 0x00
 	.byte 0x0c, 0x00
-	.long LABEL_E17186
-	.long LABEL_E17182
+	.long StrName_AcEasyCmpGridBox
+	.long StrPrefix_AcEasyCmpGrid
 	.long LABEL_E16ACA
 	.long PsMspMeasBoxProc
 	naka_header NAKA_TYPE_0x12
 	.byte 0x24, 0x00
 	.byte 0x00, 0x00
-	.long LABEL_E17174
-	.long LABEL_E17172
+	.long StrName_PsMspMeasBox
+	.long StrEmpty_PsMspMeasBox
 	.long LABEL_E16AF6
 	.long PsMspMemBoxProc
 	naka_header NAKA_TYPE_0x12
 	.byte 0x24, 0x00
 	.byte 0x00, 0x00
-	.long LABEL_E17166
-	.long LABEL_E17164
+	.long StrName_PsMspMemBox
+	.long StrEmpty_PsMspMemBox
 	.long LABEL_E16AFC
 	.long PsMspRecPadBoxProc
 	naka_header NAKA_TYPE_0x12
 	.byte 0x24, 0x00
 	.byte 0x00, 0x00
-	.long LABEL_E17154
-	.long LABEL_E17152
+	.long StrName_PsMspRecPadBox
+	.long StrEmpty_PsMspRecPadBox
 	.long LABEL_E16B02
 	.long PsMspRecBnkBoxProc
 	naka_header NAKA_TYPE_0x12
 	.byte 0x24, 0x00
 	.byte 0x00, 0x00
-	.long LABEL_E17142
-	.long LABEL_E17140
+	.long StrName_PsMspRecBnkBox
+	.long StrEmpty_PsMspRecBnkBox
 	.long LABEL_E16B08
 	.long PsMspNameBnkProc
 	naka_header NAKA_TYPE_0x12
 	.byte 0x24, 0x00
 	.byte 0x00, 0x00
-	.long LABEL_E17132
-	.long LABEL_E17130
+	.long StrName_PsMspNameBnk
+	.long StrEmpty_PsMspNameBnk
 	.long LABEL_E16B0E
 	.long PsCstmCpNameBoxProc
 	naka_header NAKA_TYPE_0x12
 	.byte 0x26, 0x00
 	.byte 0x02, 0x00
-	.long LABEL_E17120
+	.long StrName_PsCstmCpNameBox
 	.long LABEL_E1711E
-	.long LABEL_E16B14
+	.long StrDesc_CstmCpNameBox
 	.long AcApcToggleProc
 	naka_header NAKA_TYPE_0x26
 	.byte 0x30, 0x00
 	.byte 0x08, 0x00
 	.long LABEL_E17112
-	.long LABEL_E1710E
-	.long LABEL_E16B26
+	.long StrPrefix_AcApcToggle
+	.long StrDesc_AcApcToggle
 	.long AcSndArgGridBoxProc
 	naka_header NAKA_TYPE_0x54
 	.byte 0x4a, 0x00
 	.byte 0x0c, 0x00
-	.long LABEL_E170FE
-	.long LABEL_E170FA
-	.long LABEL_E16B42
+	.long StrName_AcSndArgGridBox
+	.long StrPrefix_AcSndArgGrid
+	.long StrDesc_AcSndArgGrid
 	.long PsParaListBoxProc
 	naka_header NAKA_TYPE_0x11
 	.byte 0x2a, 0x00
 	.byte 0x0e, 0x00
-	.long LABEL_E170EC
-	.long LABEL_E170E6
-	.long LABEL_E16B6E
+	.long StrName_PsParaListBox
+	.long StrExtra_ParaList_JpChars
+	.long StrDesc_PsParaListBox
 	.long PsSCTxtBoxProc
 	naka_header NAKA_TYPE_0x12
 	.byte 0x24, 0x00
 	.byte 0x00, 0x00
-	.long LABEL_E170DA
-	.long LABEL_E170D8
+	.long StrName_PsSCTxtBox
+	.long StrEmpty_PsSCTxtBox
 	.long LABEL_E16BAC
 	.long PsSCTxtBox2Proc
 	naka_header NAKA_TYPE_0x65
 	.byte 0x26, 0x00
 	.byte 0x00, 0x00
-	.long LABEL_E170CC
-	.long LABEL_E170CA
-	.long LABEL_E16BB2
+	.long StrName_PsSCTxtBox2
+	.long StrEmpty_PsSCTxtBox2
+	.long StrDesc_PsSCTxtBox2
 	.long VwVariBoxProc
 	naka_header NAKA_TYPE_0x11
 	.byte 0x2c, 0x00
 	.byte 0x10, 0x00
-LABEL_E16FF2:
-	.long LABEL_E170C0
-	.long LABEL_E170B8
-	.long LABEL_E16BB8
+NakaDesc_VwVariBox_DataPtrs:
+	.long StrName_VwVariBox
+	.long StrExtra_Yajirushi_JpChars2
+	.long StrDesc_VwVariBox
 	.long LABEL_F1DFB1
 	naka_header NAKA_TYPE_0x10
 	.byte 0x20, 0x00
 	.byte 0x0a, 0x00
-	.long LABEL_E170AE
-	.long LABEL_E170A8
-	.long LABEL_E16C06
+	.long StrName_YajirushiBox
+	.long StrExtra_Yajirushi_JpChars
+	.long StrDesc_YajirushiBox
 	.long CmpNameMenuBoxProc
 	naka_header NAKA_TYPE_0x3D
 	.byte 0x32, 0x00
 	.byte 0x00, 0x00
-	.long LABEL_E17098
+	.long StrName_CmpNameMenuBox
 	.long LABEL_E17096
-	.long LABEL_E16C4E
+	.long StrDesc_CmpNameMenuBox
 	.long S2cGridBoxProc
 	naka_header NAKA_TYPE_0x54
 	.byte 0x4a, 0x00
 	.byte 0x0c, 0x00
 	.long LABEL_E1708A
-	.long LABEL_E17086
-	.long LABEL_E16C54
+	.long StrPrefix_S2cGridBox
+	.long StrDesc_S2cGridBox
 	.long PsStylCnvVerProc
 	naka_header NAKA_TYPE_0x12
 	.byte 0x24, 0x00
 	.byte 0x00, 0x00
-	.long LABEL_E17078
-	.long LABEL_E17076
-	.long LABEL_E16C80
+	.long StrName_PsStylCnvVer
+	.long StrEmpty_PsStylCnvVer
+	.long StrDesc_PsStylCnvVer
 	.zero 24
-LABEL_E17076:	aligned_string ""
-LABEL_E17078:	aligned_string "PsStylCnvVer"
-LABEL_E17086:
+StrEmpty_PsStylCnvVer:	aligned_string ""
+StrName_PsStylCnvVer:	aligned_string "PsStylCnvVer"
+StrPrefix_S2cGridBox:
 	.byte 0x58, 0x58
 	jr	gt, 0x00
 	aligned_string "S2cGridBox"
 	.byte 0x00, 0xff
-LABEL_E17098:	aligned_string "CmpNameMenuBox"
-LABEL_E170A8:	aligned_string "^GBBB"
-LABEL_E170AE:	aligned_string "Yajirushi"
-LABEL_E170B8:	aligned_string "c^demC"
-LABEL_E170C0:	aligned_string "VwVariBox"
-LABEL_E170CA:	aligned_string ""
-LABEL_E170CC:	aligned_string "PSSCTxtBox2"
-LABEL_E170D8:	aligned_string ""
-LABEL_E170DA:	aligned_string "PsSCTxtBox"
-LABEL_E170E6:	.asciz "c^AAn"
-LABEL_E170EC:	aligned_string "PsParaListBox"
-LABEL_E170FA:
+StrName_CmpNameMenuBox:	aligned_string "CmpNameMenuBox"
+StrExtra_Yajirushi_JpChars:	aligned_string "^GBBB"
+StrName_YajirushiBox:	aligned_string "Yajirushi"
+StrExtra_Yajirushi_JpChars2:	aligned_string "c^demC"
+StrName_VwVariBox:	aligned_string "VwVariBox"
+StrEmpty_PsSCTxtBox2:	aligned_string ""
+StrName_PsSCTxtBox2:	aligned_string "PSSCTxtBox2"
+StrEmpty_PsSCTxtBox:	aligned_string ""
+StrName_PsSCTxtBox:	aligned_string "PsSCTxtBox"
+StrExtra_ParaList_JpChars:	.asciz "c^AAn"
+StrName_PsParaListBox:	aligned_string "PsParaListBox"
+StrPrefix_AcSndArgGrid:
 	.byte 0x58, 0x58, 0x6a, 0x00
-LABEL_E170FE:	aligned_string "AcSndArgGridBox"
-LABEL_E1710E:
+StrName_AcSndArgGridBox:	aligned_string "AcSndArgGridBox"
+StrPrefix_AcApcToggle:
 	jr	gt, 0x46
 	.byte 0x00, 0xff
 	aligned_string "AcApcToggle"
 	.byte 0x43, 0x00
-LABEL_E17120:	aligned_string "PsCstmCpNameBox"
-LABEL_E17130:	aligned_string ""
-LABEL_E17132:	aligned_string "PsMspNameBnk"
-LABEL_E17140:	aligned_string ""
-LABEL_E17142:	aligned_string "PsMspRecBnkBox"
-LABEL_E17152:	aligned_string ""
-LABEL_E17154:	aligned_string "PsMspRecPadBox"
-LABEL_E17164:	aligned_string ""
-LABEL_E17166:	aligned_string "PsMspMemBox"
-LABEL_E17172:	aligned_string ""
-LABEL_E17174:	aligned_string "PsMspMeasBox"
-LABEL_E17182:
+StrName_PsCstmCpNameBox:	aligned_string "PsCstmCpNameBox"
+StrEmpty_PsMspNameBnk:	aligned_string ""
+StrName_PsMspNameBnk:	aligned_string "PsMspNameBnk"
+StrEmpty_PsMspRecBnkBox:	aligned_string ""
+StrName_PsMspRecBnkBox:	aligned_string "PsMspRecBnkBox"
+StrEmpty_PsMspRecPadBox:	aligned_string ""
+StrName_PsMspRecPadBox:	aligned_string "PsMspRecPadBox"
+StrEmpty_PsMspMemBox:	aligned_string ""
+StrName_PsMspMemBox:	aligned_string "PsMspMemBox"
+StrEmpty_PsMspMeasBox:	aligned_string ""
+StrName_PsMspMeasBox:	aligned_string "PsMspMeasBox"
+StrPrefix_AcEasyCmpGrid:
 	.byte 0x58, 0x58, 0x6a, 0x00
-LABEL_E17186:	aligned_string "AcEasyCmpGridBox"
-LABEL_E17198:	aligned_string ""
-LABEL_E1719A:	aligned_string "PsRgpSetBnkBox"
-LABEL_E171AA:
+StrName_AcEasyCmpGridBox:	aligned_string "AcEasyCmpGridBox"
+StrEmpty_PsRgpSetBnkBox:	aligned_string ""
+StrName_PsRgpSetBnkBox:	aligned_string "PsRgpSetBnkBox"
+StrPrefix_AcCmpSetGrid:
 	.byte 0x58, 0x58, 0x6a, 0x00
-LABEL_E171AE:	aligned_string "AcCmpSetGridBox"
-LABEL_E171BE:	aligned_string ""
-LABEL_E171C0:	aligned_string "PsNameMemBox"
-LABEL_E171CE:	aligned_string ""
-LABEL_E171D0:	aligned_string "PsCmpCpFPtnBox"
-LABEL_E171E0:	aligned_string ""
-LABEL_E171E2:	aligned_string "PsCmpCpFVariBox"
-LABEL_E171F2:	aligned_string ""
-LABEL_E171F4:	aligned_string "PsCmpCpFGrpBox"
-LABEL_E17204:	aligned_string ""
-LABEL_E17206:	aligned_string "AcCmpTempoBox"
-LABEL_E17214:
+StrName_AcCmpSetGridBox:	aligned_string "AcCmpSetGridBox"
+StrEmpty_PsNameMemBox:	aligned_string ""
+StrName_PsNameMemBox:	aligned_string "PsNameMemBox"
+StrEmpty_PsCmpCpFPtnBox:	aligned_string ""
+StrName_PsCmpCpFPtnBox:	aligned_string "PsCmpCpFPtnBox"
+StrEmpty_PsCmpCpFVariBox:	aligned_string ""
+StrName_PsCmpCpFVariBox:	aligned_string "PsCmpCpFVariBox"
+StrEmpty_PsCmpCpFGrpBox:	aligned_string ""
+StrName_PsCmpCpFGrpBox:	aligned_string "PsCmpCpFGrpBox"
+StrEmpty_AcCmpTempoBox:	aligned_string ""
+StrName_AcCmpTempoBox:	aligned_string "AcCmpTempoBox"
+StrPrefix_PsMspBnkNameBox:
 	.byte 0x43, 0x00
-LABEL_E17216:	aligned_string "PsMspBnkNameBox"
-LABEL_E17226:
+StrName_PsMspBnkNameBox:	aligned_string "PsMspBnkNameBox"
+StrPrefix_AcMspBnkSlBox:
 	.byte 0x43, 0x00
-LABEL_E17228:	aligned_string "AcMspBnkSlBox"
-LABEL_E17236:
+StrName_AcMspBnkSlBox:	aligned_string "AcMspBnkSlBox"
+StrPrefix_AcApcMdBox:
 	.byte 0x43, 0x00
-LABEL_E17238:	aligned_string "AcApcMdBox"
-LABEL_E17244:
+StrName_AcApcMdBox:	aligned_string "AcApcMdBox"
+StrPrefix_AcCmpMdBox:
 	.byte 0x43, 0x00
-LABEL_E17246:	aligned_string "AcCmpMdBox"
-LABEL_E17252:	aligned_string ""
-LABEL_E17254:	aligned_string "PsCtmAttStrBox"
-LABEL_E17264:
+StrName_AcCmpMdBox:	aligned_string "AcCmpMdBox"
+StrEmpty_PsCtmAttStrBox:	aligned_string ""
+StrName_PsCtmAttStrBox:	aligned_string "PsCtmAttStrBox"
+StrPrefix_PsCstmCpSwBox:
 	.byte 0x43, 0x00
-LABEL_E17266:	aligned_string "PsCstmCpSwBox"
-LABEL_E17274:
+StrName_PsCstmCpSwBox:	aligned_string "PsCstmCpSwBox"
+StrPrefix_PsCstmCpBnkBox:
 	.byte 0x43, 0x00
-LABEL_E17276:	aligned_string "PsCstmCpBnkBox"
-LABEL_E17286:	aligned_string ""
-LABEL_E17288:	aligned_string "PsS2cTransBox"
-LABEL_E17296:	aligned_string ""
-LABEL_E17298:	aligned_string "PsSeqSongNoBox"
-LABEL_E172A8:	aligned_string ""
-LABEL_E172AA:	aligned_string "PsS2cLmeasBox"
-LABEL_E172B8:	aligned_string ""
-LABEL_E172BA:	aligned_string "PsS2cFmeasBox"
-LABEL_E172C8:	aligned_string ""
-LABEL_E172CA:	aligned_string "AcS2cMemNoBox"
-LABEL_E172D8:	aligned_string ""
-LABEL_E172DA:	aligned_string "PsCmpMemBox"
-LABEL_E172E6:	aligned_string ""
-LABEL_E172E8:	aligned_string "PsCmpMeasBox"
-LABEL_E172F6:	aligned_string ""
-LABEL_E172F8:	aligned_string "PsCmpQtzBox"
-LABEL_E17304:
+StrName_PsCstmCpBnkBox:	aligned_string "PsCstmCpBnkBox"
+StrEmpty_PsS2cTransBox:	aligned_string ""
+StrName_PsS2cTransBox:	aligned_string "PsS2cTransBox"
+StrEmpty_PsSeqSongNoBox:	aligned_string ""
+StrName_PsSeqSongNoBox:	aligned_string "PsSeqSongNoBox"
+StrEmpty_PsS2cLmeasBox:	aligned_string ""
+StrName_PsS2cLmeasBox:	aligned_string "PsS2cLmeasBox"
+StrEmpty_PsS2cFmeasBox:	aligned_string ""
+StrName_PsS2cFmeasBox:	aligned_string "PsS2cFmeasBox"
+StrEmpty_AcS2cMemNoBox:	aligned_string ""
+StrName_AcS2cMemNoBox:	aligned_string "AcS2cMemNoBox"
+StrEmpty_PsCmpMemBox:	aligned_string ""
+StrName_PsCmpMemBox:	aligned_string "PsCmpMemBox"
+StrEmpty_PsCmpMeasBox:	aligned_string ""
+StrName_PsCmpMeasBox:	aligned_string "PsCmpMeasBox"
+StrEmpty_PsCmpQtzBox:	aligned_string ""
+StrName_PsCmpQtzBox:	aligned_string "PsCmpQtzBox"
+StrPrefix_AcCmpRecBox:
 	.byte 0x43, 0x43, 0x00, 0xff
-LABEL_E17308:	aligned_string "AcCmpRecBox"
-LABEL_E17314:	aligned_string ""
-LABEL_E17316:	aligned_string "AcMemNoBox"
+StrName_AcCmpRecBox:	aligned_string "AcCmpRecBox"
+StrEmpty_AcMemNoBox:	aligned_string ""
+StrName_AcMemNoBox:	aligned_string "AcMemNoBox"
 	.byte 0x29, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00
-LABEL_E1732A:
+NakaMethodTable_PtrsStart:
 	.long LABEL_E176C4
 	.long LABEL_E176B6
 	.long LABEL_E176A6
@@ -4479,7 +4479,7 @@ StrInstantStart:	aligned_string "INSTANT START    "
 	.byte 0x4c, 0x01, 0x6e, 0x00, 0x4c, 0x01, 0x93, 0x03
 	.byte 0x56, 0x02, 0x6e, 0x03, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00
-	.long LABEL_EA0000
+	.long Presentation_RootEntry
 	.zero 4
 
 SLOT_NAME_PTRS:	; Pointer table for rhythm slot names
@@ -4831,31 +4831,31 @@ LABEL_E200ED:
 	.byte 0x3c, 0xd0, 0xf2, 0x00, 0x1a, 0xd2, 0xf2, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0xfc, 0x06, 0xe2, 0x00
 LABEL_E20320:
-	.long LABEL_E206EC
-	.long LABEL_E206DA
-	.long LABEL_E206C8
-	.long LABEL_E206B4
-	.long LABEL_E206A2
-	.long LABEL_E2068E
-	.long LABEL_E2067C
-	.long LABEL_E2066A
-	.long LABEL_E2065A
-	.long LABEL_E20648
-	.long LABEL_E2063A
-	.long LABEL_E2062C
-	.long LABEL_E2061A
-	.long LABEL_E2060E
-	.long LABEL_E20602
-	.long LABEL_E205F2
-	.long LABEL_E205E2
-	.long LABEL_E205D2
-	.long LABEL_E205C4
-	.long LABEL_E205B6
-	.long LABEL_E205A6
-	.long LABEL_E20596
-	.long LABEL_E20586
-	.long LABEL_E20576
-	.long LABEL_E20566
+	.long DbgStr_AfterLangCheck
+	.long DbgStr_TrAsPreLangCheck
+	.long DbgStr_AtentionLangCheck
+	.long DbgStr_AreYouSureLangCheck
+	.long DbgStr_GmOnSureLangCheck
+	.long DbgStr_GmOffSureLangCheck
+	.long DbgStr_TrAsSureLangCheck
+	.long DbgStr_SqTrAsPsSongFunc
+	.long DbgStr_DemoSongSelFunc
+	.long DbgStr_SmfMuteChSelFunc
+	.long DbgStr_SqAftSetFunc
+	.long DbgStr_MuteChSetFunc
+	.long DbgStr_SMFMuteOnOffFunc
+	.long DbgStr_Rt1MuteFunc
+	.long DbgStr_Rt2MuteFunc
+	.long DbgStr_DocOrchMuteFunc
+	.long DbgStr_PdOrchMuteFunc
+	.long DbgStr_SeqNamingCheck
+	.long DbgStr_SeqNameOKFunc
+	.long DbgStr_TrAsGridCheck
+	.long DbgStr_DemoMedDspCheck
+	.long DbgStr_DPPlayDspCheck
+	.long DbgStr_DPPauseDspCheck
+	.long DbgStr_MeasureBoxProc
+	.long DbgStr_MeasureBoxFunc
 	.long LABEL_E20550
 	.long LABEL_E2053A
 	.long LABEL_E20526
@@ -4898,122 +4898,122 @@ LABEL_E20514:	aligned_string "AcPDFileNoBoxProc"
 LABEL_E20526:	aligned_string "AcDocFileNoBoxProc"
 LABEL_E2053A:	aligned_string "AcSmfFileNameBoxProc"
 LABEL_E20550:	aligned_string "AcDiskFileNameBoxProc"
-LABEL_E20566:	aligned_string "MeasureBoxFunc"
-LABEL_E20576:	aligned_string "MeasureBoxProc"
-LABEL_E20586:	aligned_string "DPPauseDspCheck"
-LABEL_E20596:	aligned_string "DPPlayDspCheck"
-LABEL_E205A6:	aligned_string "DemoMedDspCheck"
-LABEL_E205B6:	aligned_string "TrAsGridCheck"
-LABEL_E205C4:	aligned_string "SeqNameOKFunc"
-LABEL_E205D2:	aligned_string "SeqNamingCheck"
-LABEL_E205E2:	aligned_string "PdOrchMuteFunc"
-LABEL_E205F2:	aligned_string "DocOrchMuteFunc"
-LABEL_E20602:	aligned_string "Rt2MuteFunc"
-LABEL_E2060E:	aligned_string "Rt1MuteFunc"
-LABEL_E2061A:	aligned_string "SMFMuteOnOffFunc"
-LABEL_E2062C:	aligned_string "MuteChSetFunc"
-LABEL_E2063A:	aligned_string "SqAftSetFunc"
-LABEL_E20648:	aligned_string "SmfMuteChSelFunc"
-LABEL_E2065A:	aligned_string "DemoSongSelFunc"
-LABEL_E2066A:	aligned_string "SqTrAsPsSongFunc"
-LABEL_E2067C:	aligned_string "TrAsSureLangCheck"
-LABEL_E2068E:	aligned_string "GmOffSureLangCheck"
-LABEL_E206A2:	aligned_string "GmOnSureLangCheck"
-LABEL_E206B4:	aligned_string "AreYouSureLangCheck"
-LABEL_E206C8:	aligned_string "AtentionLangCheck"
-LABEL_E206DA:	aligned_string "TrAsPreLangCheck"
-LABEL_E206EC:	aligned_string "AfterLangCheck"
-LABEL_E206FC:	aligned_string "PartSelLangCheck"
-LABEL_E2070E:
-	.long LABEL_E20712
-LABEL_E20712:	aligned_string ""
-LABEL_E20714:
+DbgStr_MeasureBoxFunc:	aligned_string "MeasureBoxFunc"
+DbgStr_MeasureBoxProc:	aligned_string "MeasureBoxProc"
+DbgStr_DPPauseDspCheck:	aligned_string "DPPauseDspCheck"
+DbgStr_DPPlayDspCheck:	aligned_string "DPPlayDspCheck"
+DbgStr_DemoMedDspCheck:	aligned_string "DemoMedDspCheck"
+DbgStr_TrAsGridCheck:	aligned_string "TrAsGridCheck"
+DbgStr_SeqNameOKFunc:	aligned_string "SeqNameOKFunc"
+DbgStr_SeqNamingCheck:	aligned_string "SeqNamingCheck"
+DbgStr_PdOrchMuteFunc:	aligned_string "PdOrchMuteFunc"
+DbgStr_DocOrchMuteFunc:	aligned_string "DocOrchMuteFunc"
+DbgStr_Rt2MuteFunc:	aligned_string "Rt2MuteFunc"
+DbgStr_Rt1MuteFunc:	aligned_string "Rt1MuteFunc"
+DbgStr_SMFMuteOnOffFunc:	aligned_string "SMFMuteOnOffFunc"
+DbgStr_MuteChSetFunc:	aligned_string "MuteChSetFunc"
+DbgStr_SqAftSetFunc:	aligned_string "SqAftSetFunc"
+DbgStr_SmfMuteChSelFunc:	aligned_string "SmfMuteChSelFunc"
+DbgStr_DemoSongSelFunc:	aligned_string "DemoSongSelFunc"
+DbgStr_SqTrAsPsSongFunc:	aligned_string "SqTrAsPsSongFunc"
+DbgStr_TrAsSureLangCheck:	aligned_string "TrAsSureLangCheck"
+DbgStr_GmOffSureLangCheck:	aligned_string "GmOffSureLangCheck"
+DbgStr_GmOnSureLangCheck:	aligned_string "GmOnSureLangCheck"
+DbgStr_AreYouSureLangCheck:	aligned_string "AreYouSureLangCheck"
+DbgStr_AtentionLangCheck:	aligned_string "AtentionLangCheck"
+DbgStr_TrAsPreLangCheck:	aligned_string "TrAsPreLangCheck"
+DbgStr_AfterLangCheck:	aligned_string "AfterLangCheck"
+DbgStr_PartSelLangCheck:	aligned_string "PartSelLangCheck"
+NakaPropTbl_IvNamingExit:
+	.long NakaPropStr_IvNamingExit_0
+NakaPropStr_IvNamingExit_0:	aligned_string ""
+NakaPropTbl_SelBox:
 	.long LABEL_E20772
 	.long LABEL_E20768
 	.long LABEL_E2075E
 	.long LABEL_E20756
-	.long LABEL_E20752
+	.long NakaPropStr_SelBox_Row
 	.long LABEL_E2074A
 	.long LABEL_E20744
 	.long LABEL_E2073A
-	.long LABEL_E20738
-LABEL_E20738:	aligned_string ""
+	.long NakaPropStr_SelBox_0
+NakaPropStr_SelBox_0:	aligned_string ""
 LABEL_E2073A:	aligned_string "auto_inc"
 LABEL_E20744:	aligned_string "dial"
 LABEL_E2074A:	aligned_string "sel_num"
-LABEL_E20752:
+NakaPropStr_SelBox_Row:
 	.byte 0x72, 0x6f, 0x77, 0x00
 LABEL_E20756:	aligned_string "column"
 LABEL_E2075E:	aligned_string "main_func"
 LABEL_E20768:	aligned_string "fontcolor"
 LABEL_E20772:	aligned_string "font"
-LABEL_E20778:
-	.long LABEL_E20782
-	.long LABEL_E20780
-LABEL_E20780:	aligned_string ""
-LABEL_E20782:
+NakaPropTbl_Ram:
+	.long NakaPropStr_Ram_1
+	.long NakaPropStr_Ram_0
+NakaPropStr_Ram_0:	aligned_string ""
+NakaPropStr_Ram_1:
 	.byte 0x72, 0x61, 0x6d, 0x00
-LABEL_E20786:
+NakaPropTbl_Func:
 	.long LABEL_E20790
-	.long LABEL_E2078E
-LABEL_E2078E:	aligned_string ""
+	.long NakaPropStr_Func_0
+NakaPropStr_Func_0:	aligned_string ""
 LABEL_E20790:	aligned_string "func"
-LABEL_E20796:
-	.long LABEL_E2079A
-LABEL_E2079A:	aligned_string ""
-LABEL_E2079C:
-	.long LABEL_E207A0
-LABEL_E207A0:	aligned_string ""
-LABEL_E207A2:
+NakaPropTbl_CurSongName:
+	.long NakaPropStr_CurSongName_0
+NakaPropStr_CurSongName_0:	aligned_string ""
+NakaPropTbl_TrAsGrid:
+	.long NakaPropStr_TrAsGrid_0
+NakaPropStr_TrAsGrid_0:	aligned_string ""
+NakaPropTbl_Grid:
 	.long LABEL_E207C4
 	.long LABEL_E207BA
 	.long LABEL_E207B4
-	.long LABEL_E207B2
-LABEL_E207B2:	aligned_string ""
+	.long NakaPropStr_Grid_0
+NakaPropStr_Grid_0:	aligned_string ""
 LABEL_E207B4:	aligned_string "func"
 LABEL_E207BA:	aligned_string "fixedrow"
 LABEL_E207C4:	aligned_string "fixedcol"
-LABEL_E207CE:
-	.long LABEL_E207D2
-LABEL_E207D2:	aligned_string ""
-LABEL_E207D4:
-	.long LABEL_E207D8
-LABEL_E207D8:	aligned_string ""
-LABEL_E207DA:
-	.long LABEL_E207DE
-LABEL_E207DE:	aligned_string ""
-LABEL_E207E0:
-	.long LABEL_E207E4
-LABEL_E207E4:	aligned_string ""
-LABEL_E207E6:
-	.long LABEL_E207EA
-LABEL_E207EA:	aligned_string ""
-LABEL_E207EC:
-	.long LABEL_E207F0
-LABEL_E207F0:	aligned_string ""
-LABEL_E207F2:
-	.long LABEL_E207F6
-LABEL_E207F6:	aligned_string ""
-LABEL_E207F8:
+NakaPropTbl_SmfFileName:
+	.long NakaPropStr_SmfFileName_0
+NakaPropStr_SmfFileName_0:	aligned_string ""
+NakaPropTbl_DocFileNo:
+	.long NakaPropStr_DocFileNo_0
+NakaPropStr_DocFileNo_0:	aligned_string ""
+NakaPropTbl_PdFileNo:
+	.long NakaPropStr_PdFileNo_0
+NakaPropStr_PdFileNo_0:	aligned_string ""
+NakaPropTbl_SmfSongName:
+	.long NakaPropStr_SmfSongName_0
+NakaPropStr_SmfSongName_0:	aligned_string ""
+NakaPropTbl_DocSongName:
+	.long NakaPropStr_DocSongName_0
+NakaPropStr_DocSongName_0:	aligned_string ""
+NakaPropTbl_PdSongName:
+	.long NakaPropStr_PdSongName_0
+NakaPropStr_PdSongName_0:	aligned_string ""
+NakaPropTbl_MeasureBox:
+	.long NakaPropStr_MeasureBox_0
+NakaPropStr_MeasureBox_0:	aligned_string ""
+NakaPropTbl_MuteToggle:
 	.long LABEL_E2081A
 	.long LABEL_E20810
 	.long LABEL_E2080A
-	.long LABEL_E20808
-LABEL_E20808:	aligned_string ""
+	.long NakaPropStr_MuteToggle_0
+NakaPropStr_MuteToggle_0:	aligned_string ""
 LABEL_E2080A:	aligned_string "func"
 LABEL_E20810:	aligned_string "fontcolor"
 LABEL_E2081A:	aligned_string "color"
-LABEL_E20820:
-	.long LABEL_E20824
-LABEL_E20824:	aligned_string ""
-LABEL_E20826:
+NakaPropTbl_LyricsBox:
+	.long NakaPropStr_LyricsBox_0
+NakaPropStr_LyricsBox_0:	aligned_string ""
+NakaPropTbl_TextLabel:
 	.long LABEL_E20868
 	.long LABEL_E2085E
 	.long LABEL_E20850
 	.long LABEL_E20846
 	.long LABEL_E20840
-	.long LABEL_E2083E
-LABEL_E2083E:	aligned_string ""
+	.long NakaPropStr_TextLabel_0
+NakaPropStr_TextLabel_0:	aligned_string ""
 LABEL_E20840:	aligned_string "lines"
 LABEL_E20846:	aligned_string "alignment"
 LABEL_E20850:	aligned_string "reversecolor"
@@ -5021,13 +5021,13 @@ LABEL_E2085E:	aligned_string "fontcolor"
 LABEL_E20868:	aligned_string "font"
 
 
-LABEL_E2086E:
+NakaPropTbl_TextLabel2:
 	.long LABEL_E2089E
 	.long LABEL_E20894
 	.long LABEL_E2088A
 	.long LABEL_E20884
-	.long LABEL_E20882
-LABEL_E20882:	aligned_string ""
+	.long NakaPropStr_TextLabel2_0
+NakaPropStr_TextLabel2_0:	aligned_string ""
 LABEL_E20884:	aligned_string "lines"
 LABEL_E2088A:	aligned_string "alignment"
 LABEL_E20894:	aligned_string "fontcolor"
@@ -5036,312 +5036,312 @@ LABEL_E2089E:
 	.byte 0x6e, 0x74, 0x00, 0xff, 0xd4, 0x08, 0xe2, 0x00
 
 
-LABEL_E208A8:
+NakaPropTbl_LyricsBoxFunc:
 	.long LABEL_E208CA
 	.long LABEL_E208C0
 	.long LABEL_E208BA
-	.long LABEL_E208B8
-LABEL_E208B8:	aligned_string ""
+	.long NakaPropStr_LyricsBoxFunc_0
+NakaPropStr_LyricsBoxFunc_0:	aligned_string ""
 LABEL_E208BA:	aligned_string "lines"
 LABEL_E208C0:	aligned_string "alignment"
 LABEL_E208CA:	aligned_string "fontcolor"
 LABEL_E208D4:	aligned_string "font"
-LABEL_E208DA:
-	.long LABEL_E208DE
-LABEL_E208DE:	aligned_string ""
-LABEL_E208E0:
-	.long LABEL_E208E4
-LABEL_E208E4:	aligned_string ""
-LABEL_E208E6:
-	.long LABEL_E208EA
-LABEL_E208EA:	.byte 0x00, 0xff, 0x61, 0xbb, 0xf2, 0x00
+NakaPropTbl_DemoMedleyDisp:
+	.long NakaPropStr_DemoMedleyDisp_0
+NakaPropStr_DemoMedleyDisp_0:	aligned_string ""
+NakaPropTbl_IvExitModeTrSel:
+	.long NakaPropStr_IvExitModeTrSel_0
+NakaPropStr_IvExitModeTrSel_0:	aligned_string ""
+NakaPropTbl_IvExitModeTrSelEnd:
+	.long NakaPropStr_IvExitModeTrSelEnd_0
+NakaPropStr_IvExitModeTrSelEnd_0:	.byte 0x00, 0xff, 0x61, 0xbb, 0xf2, 0x00
 
 
 	naka_header NAKA_TYPE_0x47
 	.byte 0x16, 0x00, 0x00, 0x00
-LABEL_E208F8:
-	.long LABEL_E20CA0
-	.long LABEL_E20C9E
-	.long LABEL_E2070E
+NakaWidgetList_AcModeBoxes:
+	.long NakaBoxName_IvNamingExit
+	.long NakaBoxData_IvNamingExit
+	.long NakaPropTbl_IvNamingExit
 	.long LABEL_F2BBF9
 	naka_header NAKA_TYPE_0x11
 	.byte 0x32, 0x00, 0x16, 0x00
-	.long LABEL_E20C90
-	.long LABEL_E20C86
-	.long LABEL_E20714
+	.long NakaBoxName_PsSongSelBoxProc
+	.long NakaBoxEnc_PsSongSelBox
+	.long NakaPropTbl_SelBox
 	.long AcModeSelBoxProc
 	naka_header NAKA_TYPE_0x15
 	.byte 0x34, 0x00, 0x02, 0x00
-	.long LABEL_E20C78
-	.long LABEL_E20C76
-	.long LABEL_E20778
+	.long NakaBoxName_AcModeSelBox
+	.long NakaBoxData_AcModeSelBox
+	.long NakaPropTbl_Ram
 	.long AcDemoSongBoxProc
 	naka_header NAKA_TYPE_0x15
 	.byte 0x36, 0x00, 0x04, 0x00
-	.long LABEL_E20C68
-	.long LABEL_E20C66
-	.long LABEL_E20786
+	.long NakaBoxName_AcDemoSongBox
+	.long NakaBoxData_AcDemoSongBox
+	.long NakaPropTbl_Func
 	.long AcCurrentSongBoxProc
 	naka_header NAKA_TYPE_0x12
 	.byte 0x24, 0x00, 0x00, 0x00
-	.long LABEL_E20C54
-	.long LABEL_E20C52
-	.long LABEL_E20796
+	.long NakaBoxName_AcCurrentSongBox
+	.long NakaBoxData_AcCurrentSongBox
+	.long NakaPropTbl_CurSongName
 	.long AcCurSongNameBoxProc
 	naka_header NAKA_TYPE_0x12
 	.byte 0x24, 0x00, 0x00, 0x00
-	.long LABEL_E20C40
-	.long LABEL_E20C3E
-	.long LABEL_E2079C
+	.long NakaBoxName_AcCurSongNameBox
+	.long NakaBoxData_AcCurSongNameBox
+	.long NakaPropTbl_TrAsGrid
 	.long AcTrAsGridBoxProc
 	naka_header NAKA_TYPE_0x54
 	.byte 0x4a, 0x00, 0x0c, 0x00
-	.long LABEL_E20C30
-	.long LABEL_E20C2C
-	.long LABEL_E207A2
+	.long NakaBoxName_AcTrAsGridBox
+	.long NakaBoxData_AcTrAsGridBox
+	.long NakaPropTbl_Grid
 	.long AcDiskFileNameBoxProc
 	naka_header NAKA_TYPE_0x12
 	.byte 0x24, 0x00, 0x00, 0x00
-	.long LABEL_E20C1A
-	.long LABEL_E20C18
-	.long LABEL_E207CE
+	.long NakaBoxName_AcDiskFileNameBox
+	.long NakaBoxData_AcDiskFileNameBox
+	.long NakaPropTbl_SmfFileName
 	.long AcSmfFileNameBoxProc
 	naka_header NAKA_TYPE_0x12
 	.byte 0x24, 0x00, 0x00, 0x00
-	.long LABEL_E20C06
-	.long LABEL_E20C04
-	.long LABEL_E207D4
+	.long NakaBoxName_AcSmfFileNameBox
+	.long NakaBoxData_AcSmfFileNameBox
+	.long NakaPropTbl_DocFileNo
 	.long AcDocFileNoBoxProc
 	naka_header NAKA_TYPE_0x12
 	.byte 0x24, 0x00, 0x00, 0x00
-	.long LABEL_E20BF4
-	.long LABEL_E20BF2
-	.long LABEL_E207DA
+	.long NakaBoxName_AcDocFileNoBox
+	.long NakaBoxData_AcDocFileNoBox
+	.long NakaPropTbl_PdFileNo
 	.long AcPDFileNoBoxProc
 	naka_header NAKA_TYPE_0x12
 	.byte 0x24, 0x00, 0x00, 0x00
-	.long LABEL_E20BE4
-	.long LABEL_E20BE2
-	.long LABEL_E207E0
+	.long NakaBoxName_AcPDFileNoBox
+	.long NakaBoxData_AcPDFileNoBox
+	.long NakaPropTbl_SmfSongName
 	.long AcSmfSongNameBoxProc
 	naka_header NAKA_TYPE_0x12
 	.byte 0x24, 0x00, 0x00, 0x00
-	.long LABEL_E20BD0
-	.long LABEL_E20BCE
-	.long LABEL_E207E6
+	.long NakaBoxName_AcSmfSongNameBox
+	.long NakaBoxData_AcSmfSongNameBox
+	.long NakaPropTbl_DocSongName
 	.long AcDocSongNameBoxProc
 	naka_header NAKA_TYPE_0x12
 	.byte 0x24, 0x00, 0x00, 0x00
-	.long LABEL_E20BBC
-	.long LABEL_E20BBA
-	.long LABEL_E207EC
+	.long NakaBoxName_AcDocSongNameBox
+	.long NakaBoxData_AcDocSongNameBox
+	.long NakaPropTbl_PdSongName
 	.long AcPDSongNameBoxProc
 	naka_header NAKA_TYPE_0x12
 	.byte 0x24, 0x00, 0x00, 0x00
-	.long LABEL_E20BAA
-	.long LABEL_E20BA8
-	.long LABEL_E207F2
+	.long NakaBoxName_AcPDSongNameBox
+	.long NakaBoxData_AcPDSongNameBox
+	.long NakaPropTbl_MeasureBox
 	.long MeasureBoxProc
 	naka_header NAKA_TYPE_0x10
 	.byte 0x1e, 0x00, 0x08, 0x00
-	.long LABEL_E20B9C
-	.long LABEL_E20B98
-	.long LABEL_E207F8
+	.long NakaBoxName_MeasureBox
+	.long NakaBoxData_MeasureBox
+	.long NakaPropTbl_MuteToggle
 	.long AcMuteToggleBoxProc
 	naka_header NAKA_TYPE_0x44
 	.byte 0x2c, 0x00, 0x00, 0x00
-	.long LABEL_E20B88
+	.long NakaBoxName_AcMuteToggleBox
 	.long LABEL_E20B86
-	.long LABEL_E20820
+	.long NakaPropTbl_LyricsBox
 	.long LyricsBoxProc
 	naka_header NAKA_TYPE_0x11
 	.byte 0x28, 0x00, 0x0c, 0x00
 	.long LABEL_E20B7C
-	.long LABEL_E20B76
-	.long LABEL_E20826
+	.long NakaBoxData_LyricsBox
+	.long NakaPropTbl_TextLabel
 	.long SongNameBoxProc
 	naka_header NAKA_TYPE_0x11
 	.byte 0x26, 0x00, 0x0a, 0x00
-	.long LABEL_E20B6A
-	.long LABEL_E20B64
-	.long LABEL_E2086E
+	.long NakaBoxName_SongNameBox
+	.long NakaBoxData_SongNameBox
+	.long NakaPropTbl_TextLabel2
 	.long ComporserNameBoxProc
 	naka_header NAKA_TYPE_0x11
 	.byte 0x26, 0x00, 0x0a, 0x00
-	.long LABEL_E20B52
-	.long LABEL_E20B4C
+	.long NakaBoxName_ComporserNameBox
+	.long NakaBoxData_ComporserNameBox
 	.long LABEL_E208A4
 	.long LyricsBoxFuncProc
 	naka_header NAKA_TYPE_0x27
 	.byte 0x16, 0x00, 0x00, 0x00
-	.long LABEL_E20B3E
-	.long LABEL_E20B3C
-	.long LABEL_E208DA
+	.long NakaBoxName_LyricsBoxFunc
+	.long NakaBoxData_LyricsBoxFunc
+	.long NakaPropTbl_DemoMedleyDisp
 	.long AcDemoMedleyDispBoxProc
 	naka_header NAKA_TYPE_0x12
 	.byte 0x24, 0x00, 0x00, 0x00
-	.long LABEL_E20B28
-	.long LABEL_E20B26
-	.long LABEL_E208E0
+	.long NakaBoxName_AcDemoMedleyDisp
+	.long NakaBoxData_AcDemoMedleyDisp
+	.long NakaPropTbl_IvExitModeTrSel
 	.long IvExitModeTrSelProc
 	naka_header NAKA_TYPE_0x47
 	.byte 0x16, 0x00, 0x00, 0x00
-	.long LABEL_E20B16
-	.long LABEL_E20B14
-	.long LABEL_E208E6
+	.long NakaBoxName_IvExitModeTrSel
+	.long NakaBoxData_IvExitModeTrSel
+	.long NakaPropTbl_IvExitModeTrSelEnd
 	.zero 24
-LABEL_E20B14:	aligned_string ""
-LABEL_E20B16:	aligned_string "IvExitModeTrSel"
-LABEL_E20B26:	aligned_string ""
-LABEL_E20B28:	aligned_string "AcDemoMedleyDispBox"
-LABEL_E20B3C:	aligned_string ""
-LABEL_E20B3E:	aligned_string "LyeicsBoxFunc"
-LABEL_E20B4C:	aligned_string "c^dB"
-LABEL_E20B52:	aligned_string "ComporserNameBox"
-LABEL_E20B64:	aligned_string "c^dB"
-LABEL_E20B6A:	aligned_string "SongNameBox"
-LABEL_E20B76:
+NakaBoxData_IvExitModeTrSel:	aligned_string ""
+NakaBoxName_IvExitModeTrSel:	aligned_string "IvExitModeTrSel"
+NakaBoxData_AcDemoMedleyDisp:	aligned_string ""
+NakaBoxName_AcDemoMedleyDisp:	aligned_string "AcDemoMedleyDispBox"
+NakaBoxData_LyricsBoxFunc:	aligned_string ""
+NakaBoxName_LyricsBoxFunc:	aligned_string "LyeicsBoxFunc"
+NakaBoxData_ComporserNameBox:	aligned_string "c^dB"
+NakaBoxName_ComporserNameBox:	aligned_string "ComporserNameBox"
+NakaBoxData_SongNameBox:	aligned_string "c^dB"
+NakaBoxName_SongNameBox:	aligned_string "SongNameBox"
+NakaBoxData_LyricsBox:
 	jr	ule, 0x5e
 	.byte 0x5e, 0x64, 0x42, 0x00
 	aligned_string "LyricsBox"
 	.byte 0x00, 0xff
-LABEL_E20B88:	aligned_string "AcMuteToggleBox"
-LABEL_E20B98:
+NakaBoxName_AcMuteToggleBox:	aligned_string "AcMuteToggleBox"
+NakaBoxData_MeasureBox:
 	.byte 0x5e, 0x5e, 0x6a, 0x00
-LABEL_E20B9C:	aligned_string "MeasureBox"
-LABEL_E20BA8:	aligned_string ""
-LABEL_E20BAA:	aligned_string "AcPDSongNameBox"
-LABEL_E20BBA:	aligned_string ""
-LABEL_E20BBC:	aligned_string "AcDocSongNameBox"
-LABEL_E20BCE:	aligned_string ""
-LABEL_E20BD0:	aligned_string "AcSmfSongNameBox"
-LABEL_E20BE2:	aligned_string ""
-LABEL_E20BE4:	aligned_string "AcPDFileNoBox"
-LABEL_E20BF2:	aligned_string ""
-LABEL_E20BF4:	aligned_string "AcDocFileNoBox"
-LABEL_E20C04:	aligned_string ""
-LABEL_E20C06:	aligned_string "AcSmfFileNameBox"
-LABEL_E20C18:	aligned_string ""
-LABEL_E20C1A:	aligned_string "AcDiskFileNameBox"
-LABEL_E20C2C:
+NakaBoxName_MeasureBox:	aligned_string "MeasureBox"
+NakaBoxData_AcPDSongNameBox:	aligned_string ""
+NakaBoxName_AcPDSongNameBox:	aligned_string "AcPDSongNameBox"
+NakaBoxData_AcDocSongNameBox:	aligned_string ""
+NakaBoxName_AcDocSongNameBox:	aligned_string "AcDocSongNameBox"
+NakaBoxData_AcSmfSongNameBox:	aligned_string ""
+NakaBoxName_AcSmfSongNameBox:	aligned_string "AcSmfSongNameBox"
+NakaBoxData_AcPDFileNoBox:	aligned_string ""
+NakaBoxName_AcPDFileNoBox:	aligned_string "AcPDFileNoBox"
+NakaBoxData_AcDocFileNoBox:	aligned_string ""
+NakaBoxName_AcDocFileNoBox:	aligned_string "AcDocFileNoBox"
+NakaBoxData_AcSmfFileNameBox:	aligned_string ""
+NakaBoxName_AcSmfFileNameBox:	aligned_string "AcSmfFileNameBox"
+NakaBoxData_AcDiskFileNameBox:	aligned_string ""
+NakaBoxName_AcDiskFileNameBox:	aligned_string "AcDiskFileNameBox"
+NakaBoxData_AcTrAsGridBox:
 	.byte 0x58, 0x58, 0x6a, 0x00
-LABEL_E20C30:	aligned_string "AcTrAsGridBox"
-LABEL_E20C3E:	aligned_string ""
-LABEL_E20C40:	aligned_string "AcCurSongNameBox"
-LABEL_E20C52:	aligned_string ""
-LABEL_E20C54:	aligned_string "AcCurrentSongBox"
-LABEL_E20C66:
+NakaBoxName_AcTrAsGridBox:	aligned_string "AcTrAsGridBox"
+NakaBoxData_AcCurSongNameBox:	aligned_string ""
+NakaBoxName_AcCurSongNameBox:	aligned_string "AcCurSongNameBox"
+NakaBoxData_AcCurrentSongBox:	aligned_string ""
+NakaBoxName_AcCurrentSongBox:	aligned_string "AcCurrentSongBox"
+NakaBoxData_AcDemoSongBox:
 	.byte 0x6a, 0x00
-LABEL_E20C68:	aligned_string "AcDemoSongBox"
-LABEL_E20C76:
+NakaBoxName_AcDemoSongBox:	aligned_string "AcDemoSongBox"
+NakaBoxData_AcModeSelBox:
 	.byte 0x43, 0x00
-LABEL_E20C78:	aligned_string "AcModeSelBox"
-LABEL_E20C86:	aligned_string "c^kAAnGG"
-LABEL_E20C90:	aligned_string "PsSongSelBox"
-LABEL_E20C9E:	aligned_string ""
-LABEL_E20CA0:	aligned_string "IvNamingExit"
+NakaBoxName_AcModeSelBox:	aligned_string "AcModeSelBox"
+NakaBoxEnc_PsSongSelBox:	aligned_string "c^kAAnGG"
+NakaBoxName_PsSongSelBoxProc:	aligned_string "PsSongSelBox"
+NakaBoxData_IvNamingExit:	aligned_string ""
+NakaBoxName_IvNamingExit:	aligned_string "IvNamingExit"
 	.byte 0x16, 0x00
-LABEL_E20CB0:
-	.long LABEL_E20E12
-	.long LABEL_E20E02
-	.long LABEL_E20DF2
-	.long LABEL_E20DE2
-	.long LABEL_E20DD2
-	.long LABEL_E20DC2
-	.long LABEL_E20DB4
-	.long LABEL_E20DA6
-	.long LABEL_E20D9A
-	.long LABEL_E20D8E
-	.long LABEL_E20D82
-	.long LABEL_E20D78
-	.long LABEL_E20D6C
-	.long LABEL_E20D60
-	.long LABEL_E20D4E
-	.long LABEL_E20D40
-	.long LABEL_E20D30
-	.long LABEL_E20D20
-	.long LABEL_E20D14
-	.long LABEL_E20D04
+EvtName_PtrTable:
+	.long EvtName_CurSongName
+	.long EvtName_DiskFileName
+	.long EvtName_SmfFileName
+	.long EvtName_SmfSongName
+	.long EvtName_DocFileName
+	.long EvtName_DocSongName
+	.long EvtName_DocFileNo
+	.long EvtName_PdSongName
+	.long EvtName_PdFileNo
+	.long EvtName_AllClear
+	.long EvtName_AllDraw
+	.long EvtName_Renew
+	.long EvtName_Reverse
+	.long EvtName_ScrollUp
+	.long EvtName_ComporserWrite
+	.long EvtName_SongWrite
+	.long EvtName_PlayStartIni
+	.long EvtName_PlayRequest
+	.long EvtName_GetEvent
+	.long EvtName_ChangeColor
 	.byte 0x00, 0x00, 0x00, 0x00
-LABEL_E20D04:	aligned_string "EV_ChangeColor"
-LABEL_E20D14:	aligned_string "EV_GetEvent"
-LABEL_E20D20:	aligned_string "EV_PlayRequest"
-LABEL_E20D30:	aligned_string "EV_PlayStartIni"
-LABEL_E20D40:	aligned_string "EV_SONGWRITE"
-LABEL_E20D4E:	aligned_string "EV_COMPORSERWRITE"
-LABEL_E20D60:	aligned_string "EV_SCROLLUP"
-LABEL_E20D6C:	aligned_string "EV_REVERSE"
-LABEL_E20D78:	aligned_string "EV_RENEW"
-LABEL_E20D82:	aligned_string "EV_ALLDRAW"
-LABEL_E20D8E:	aligned_string "EV_ALLCLEAR"
-LABEL_E20D9A:	aligned_string "EV_PDFILENO"
-LABEL_E20DA6:	aligned_string "EV_PDSONGNAME"
-LABEL_E20DB4:	aligned_string "EV_DOCFILENO"
-LABEL_E20DC2:	aligned_string "EV_DOCSONGNAME"
-LABEL_E20DD2:	aligned_string "EV_DOCFILENAME"
-LABEL_E20DE2:	aligned_string "EV_SMFSONGNAME"
-LABEL_E20DF2:	aligned_string "EV_SMFFILENAME"
-LABEL_E20E02:	aligned_string "EV_DISKFILENAME"
-LABEL_E20E12:	aligned_string "EV_CURSONGNAME"
+EvtName_ChangeColor:	aligned_string "EV_ChangeColor"
+EvtName_GetEvent:	aligned_string "EV_GetEvent"
+EvtName_PlayRequest:	aligned_string "EV_PlayRequest"
+EvtName_PlayStartIni:	aligned_string "EV_PlayStartIni"
+EvtName_SongWrite:	aligned_string "EV_SONGWRITE"
+EvtName_ComporserWrite:	aligned_string "EV_COMPORSERWRITE"
+EvtName_ScrollUp:	aligned_string "EV_SCROLLUP"
+EvtName_Reverse:	aligned_string "EV_REVERSE"
+EvtName_Renew:	aligned_string "EV_RENEW"
+EvtName_AllDraw:	aligned_string "EV_ALLDRAW"
+EvtName_AllClear:	aligned_string "EV_ALLCLEAR"
+EvtName_PdFileNo:	aligned_string "EV_PDFILENO"
+EvtName_PdSongName:	aligned_string "EV_PDSONGNAME"
+EvtName_DocFileNo:	aligned_string "EV_DOCFILENO"
+EvtName_DocSongName:	aligned_string "EV_DOCSONGNAME"
+EvtName_DocFileName:	aligned_string "EV_DOCFILENAME"
+EvtName_SmfSongName:	aligned_string "EV_SMFSONGNAME"
+EvtName_SmfFileName:	aligned_string "EV_SMFFILENAME"
+EvtName_DiskFileName:	aligned_string "EV_DISKFILENAME"
+EvtName_CurSongName:	aligned_string "EV_CURSONGNAME"
 	.byte 0x14, 0x00, 0x5a, 0x10, 0xe2, 0x00
-LABEL_E20E28:
-	.long LABEL_E2104A
-	.long LABEL_E21038
-	.long LABEL_E21022
-	.long LABEL_E21012
-	.long LABEL_E21002
-	.long LABEL_E20FF2
-	.long LABEL_E20FE2
-	.long LABEL_E20FD2
-	.long LABEL_E20FC2
-	.long LABEL_E20FB6
-	.long LABEL_E20FA4
-	.long LABEL_E20F92
-	.long LABEL_E20F80
-	.long LABEL_E20F6C
-	.long LABEL_E20F5A
-	.long LABEL_E20F48
-	.long LABEL_E20F36
-	.long LABEL_E20F24
-	.long LABEL_E20F14
-	.long LABEL_E20F02
-	.long LABEL_E20EF2
-	.long LABEL_E20EE0
-	.long LABEL_E20ED0
-	.long LABEL_E20EBE
-	.long LABEL_E20EA8
-	.long LABEL_E20E94
+MtName_PtrTable:
+	.long MtName_SongNameSet
+	.long MtName_PsSongSelBoxID
+	.long MtName_SetSelectedFileNum
+	.long MtName_TrAsTrackInc
+	.long MtName_TrAsTrackDec
+	.long MtName_TrAsPartInc
+	.long MtName_TrAsPartDec
+	.long MtName_TrAsPageInc
+	.long MtName_TrAsPageDec
+	.long MtName_AmdCall
+	.long MtName_DirectPlayMute
+	.long MtName_TrackMidiCall
+	.long MtName_GetCurSongName
+	.long MtName_GetDiskFileName
+	.long MtName_GetSmfFileName
+	.long MtName_GetSmfSongName
+	.long MtName_GetDocFileName
+	.long MtName_GetDocSongName
+	.long MtName_GetDocFileNo
+	.long MtName_GetPDSongName
+	.long MtName_GetPDFileNo
+	.long MtName_GetMeasString
+	.long MtName_GetToggleSw
+	.long MtName_LyricsCharaReq
+	.long MtName_GetLyricsSongName
+	.long MtName_GetComporserName
 	.byte 0x00, 0x00, 0x00, 0x00
-LABEL_E20E94:	aligned_string "MT_GetComporserName"
-LABEL_E20EA8:	aligned_string "MT_GetLyricsSongName"
-LABEL_E20EBE:	aligned_string "MT_LyricsCharaReq"
-LABEL_E20ED0:	aligned_string "MT_GetToggleSw"
-LABEL_E20EE0:	aligned_string "MT_GetMeasString"
-LABEL_E20EF2:	aligned_string "MT_GetPDFileNo"
-LABEL_E20F02:	aligned_string "MT_GetPDSongName"
-LABEL_E20F14:	aligned_string "MT_GetDocFileNo"
-LABEL_E20F24:	aligned_string "MT_GetDocSongName"
-LABEL_E20F36:	aligned_string "MT_GetDocFileName"
-LABEL_E20F48:	aligned_string "MT_GetSmfSongName"
-LABEL_E20F5A:	aligned_string "MT_GetSmfFileName"
-LABEL_E20F6C:	aligned_string "MT_GetDiskFileName"
-LABEL_E20F80:	aligned_string "MT_GetCurSongName"
-LABEL_E20F92:	aligned_string "MT_TrackMidiCall"
-LABEL_E20FA4:	aligned_string "MT_DirectPlayMute"
-LABEL_E20FB6:	aligned_string "MT_AmdCall"
-LABEL_E20FC2:	aligned_string "MT_TrAsPageDec"
-LABEL_E20FD2:	aligned_string "MT_TrAsPageInc"
-LABEL_E20FE2:	aligned_string "MT_TrAsPartDec"
-LABEL_E20FF2:	aligned_string "MT_TrAsPartInc"
-LABEL_E21002:	aligned_string "MT_TrAsTrackDec"
-LABEL_E21012:	aligned_string "MT_TrAsTrackInc"
-LABEL_E21022:	aligned_string "MT_SetSelectedFileNum"
-LABEL_E21038:	aligned_string "MT_PsSongSelBoxID"
-LABEL_E2104A:	aligned_string "MT_SongNameSet"
+MtName_GetComporserName:	aligned_string "MT_GetComporserName"
+MtName_GetLyricsSongName:	aligned_string "MT_GetLyricsSongName"
+MtName_LyricsCharaReq:	aligned_string "MT_LyricsCharaReq"
+MtName_GetToggleSw:	aligned_string "MT_GetToggleSw"
+MtName_GetMeasString:	aligned_string "MT_GetMeasString"
+MtName_GetPDFileNo:	aligned_string "MT_GetPDFileNo"
+MtName_GetPDSongName:	aligned_string "MT_GetPDSongName"
+MtName_GetDocFileNo:	aligned_string "MT_GetDocFileNo"
+MtName_GetDocSongName:	aligned_string "MT_GetDocSongName"
+MtName_GetDocFileName:	aligned_string "MT_GetDocFileName"
+MtName_GetSmfSongName:	aligned_string "MT_GetSmfSongName"
+MtName_GetSmfFileName:	aligned_string "MT_GetSmfFileName"
+MtName_GetDiskFileName:	aligned_string "MT_GetDiskFileName"
+MtName_GetCurSongName:	aligned_string "MT_GetCurSongName"
+MtName_TrackMidiCall:	aligned_string "MT_TrackMidiCall"
+MtName_DirectPlayMute:	aligned_string "MT_DirectPlayMute"
+MtName_AmdCall:	aligned_string "MT_AmdCall"
+MtName_TrAsPageDec:	aligned_string "MT_TrAsPageDec"
+MtName_TrAsPageInc:	aligned_string "MT_TrAsPageInc"
+MtName_TrAsPartDec:	aligned_string "MT_TrAsPartDec"
+MtName_TrAsPartInc:	aligned_string "MT_TrAsPartInc"
+MtName_TrAsTrackDec:	aligned_string "MT_TrAsTrackDec"
+MtName_TrAsTrackInc:	aligned_string "MT_TrAsTrackInc"
+MtName_SetSelectedFileNum:	aligned_string "MT_SetSelectedFileNum"
+MtName_PsSongSelBoxID:	aligned_string "MT_PsSongSelBoxID"
+MtName_SongNameSet:	aligned_string "MT_SongNameSet"
 	aligned_string "MT_DemoSongSel"
 	.byte 0x1b, 0x00, 0xf9, 0xbb, 0xf2, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x7e, 0x10, 0xe2, 0x00
-	.long LABEL_E2107C
+	.long NakaBoxData_PsSongSelBox
 .include "naka/naka_e2107c_e24034.s"
 	xor	(xwa), xiz
 	.byte 0x03, 0x00, 0x06, 0x00, 0x07, 0x00
@@ -5360,340 +5360,340 @@ LABEL_E24088:
 	.byte 0x28, 0x00, 0xd5, 0x00, 0x3a, 0x00, 0xf5, 0x00
 	.byte 0x00, 0x00, 0xff, 0xff, 0x04, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00, 0x00, 0x00, 0x90, 0x10, 0xe2, 0x00
-LABEL_E240B0:
-	.long LABEL_E210CC
-	.long LABEL_E210F0
-	.long LABEL_E2112E
-	.long LABEL_E21148
-	.long LABEL_E2116C
-	.long LABEL_E21190
-	.long LABEL_E211B8
-	.long LABEL_E211F4
-	.long LABEL_E2120E
-	.long LABEL_E21228
-	.long LABEL_E2125C
-	.long LABEL_E21294
-	.long LABEL_E212CA
-	.long LABEL_E212F4
-	.long LABEL_E2132C
-	.long LABEL_E21368
-	.long LABEL_E213A2
-	.long LABEL_E213E0
-	.long LABEL_E21404
-	.long LABEL_E21430
-	.long LABEL_E21456
-	.long LABEL_E2147E
-	.long LABEL_E214A2
-	.long LABEL_E214BC
-	.long LABEL_E214E0
-	.long LABEL_E2150E
-	.long LABEL_E21528
-	.long LABEL_E21556
-	.long LABEL_E21570
-	.long LABEL_E2159E
-	.long LABEL_E215B8
-	.long LABEL_E215E6
-	.long LABEL_E21600
-	.long LABEL_E2162E
-	.long LABEL_E21648
-	.long LABEL_E21662
-	.long LABEL_E2168E
-	.long LABEL_E216BA
-	.long LABEL_E216DE
-	.long LABEL_E21706
-	.long LABEL_E21722
-	.long LABEL_E21748
+NakaWidgetPtrTbl_SmfDp:
+	.long NakaWidget_SmfDpContainer
+	.long NakaWidget_SmfDpVolume
+	.long NakaWidget_SmfDpGroup
+	.long NakaWidget_SmfDpMuteRow0
+	.long NakaWidget_SmfDpMuteRow1
+	.long NakaWidget_SmfDpLyricsToggle
+	.long NakaWidget_SmfDpMuteToggle
+	.long NakaWidget_SmfDpMeasureBox
+	.long NakaWidget_SmfDpFileSelector
+	.long NakaWidget_SmfDpFileList
+	.long NakaWidget_SmfDpMixer
+	.long NakaWidget_SmfDpMic
+	.long NakaWidget_SmfDpMuteChLabel
+	.long NakaWidget_SmfDpMuteChPanel
+	.long NakaWidget_SmfMedleyItem
+	.long NakaWidget_SmfMixerItem
+	.long NakaWidget_SmfLyricsItem
+	.long NakaWidget_SmfDpSubPanel
+	.long NakaWidget_SmfDpDisplayMode
+	.long NakaWidget_SmfDpSkipLabel
+	.long NakaWidget_SmfDpLyricsToggle2
+	.long NakaWidget_SmfDpChLabel
+	.long NakaWidget_SmfDpMuteGroup
+	.long NakaWidget_SmfDpMuteSel1
+	.long NakaWidget_SmfDpMuteSel2
+	.long NakaWidget_SmfDpMuteCtrl1
+	.long NakaWidget_SmfDpMuteSel3
+	.long NakaWidget_SmfDpMuteCtrl2
+	.long NakaWidget_SmfDpMuteSel4
+	.long NakaWidget_SmfDpMuteCtrl3
+	.long NakaWidget_SmfDpMuteSel5
+	.long NakaWidget_SmfDpMuteCtrl4
+	.long NakaWidget_SmfDpMuteSel6
+	.long NakaWidget_SmfDpMuteCtrl5
+	.long NakaWidget_SmfDpMeasure
+	.long NakaWidget_SmfDpRT1Selector
+	.long NakaWidget_SmfDpRT2Selector
+	.long NakaWidget_SmfDpOrchSel
+	.long NakaWidget_SmfDpRT1Display
+	.long NakaWidget_SmfDpMuteSwRow0
+	.long NakaWidget_SmfDpMuteSwRow1
+	.long NakaWidget_SmfDpMuteSwRow2
 	.byte 0x00, 0x00, 0x00, 0x00, 0x6e, 0x17, 0xe2, 0x00
-LABEL_E24160:
-	.long LABEL_E217AA
-	.long LABEL_E217CE
-	.long LABEL_E217E8
-	.long LABEL_E2180C
-	.long LABEL_E21830
-	.long LABEL_E2184A
-	.long LABEL_E21864
-	.long LABEL_E21898
-	.long LABEL_E218CC
-	.long LABEL_E21904
-	.long LABEL_E2193C
+NakaWidgetPtrTbl_DocDp:
+	.long NakaWidget_DocDpContainer
+	.long NakaWidget_DocDpVolume
+	.long NakaWidget_DocDpGroup
+	.long NakaWidget_DocDpMuteRow0
+	.long NakaWidget_DocDpMeasure
+	.long NakaWidget_DocDpFileSelector
+	.long NakaWidget_DocDpFileList
+	.long NakaWidget_DocDpRT2Selector
+	.long NakaWidget_DocDpOrchSelector
+	.long NakaWidget_DocDpMixer
+	.long NakaWidget_DocDpMic
 	.byte 0x00, 0x00, 0x00, 0x00
-LABEL_E24190:
-	.long LABEL_E21972
-	.long LABEL_E219B8
-	.long LABEL_E219DC
-	.long LABEL_E219F6
-	.long LABEL_E21A1A
-	.long LABEL_E21A3E
-	.long LABEL_E21A58
-	.long LABEL_E21A72
-	.long LABEL_E21AA6
-	.long LABEL_E21ADE
-	.long LABEL_E21B16
+NakaWidgetPtrTbl_PdDp:
+	.long NakaWidget_PdDpContainer
+	.long NakaWidget_PdDpVolume
+	.long NakaWidget_PdDpGroup
+	.long NakaWidget_PdDpMuteRow0
+	.long NakaWidget_PdDpMuteRow1
+	.long NakaWidget_PdDpMeasure
+	.long NakaWidget_PdDpFileSelector
+	.long NakaWidget_PdDpFileList
+	.long NakaWidget_PdDpOrchSelector
+	.long NakaWidget_PdDpMixer
+	.long NakaWidget_PdDpMic
 	.byte 0x00, 0x00, 0x00, 0x00
-LABEL_E241C0:
-	.long LABEL_E21B4C
-	.long LABEL_E21B88
-	.long LABEL_E21BAC
-	.long LABEL_E21BC6
-	.long LABEL_E21BE0
-	.long LABEL_E21C16
-	.long LABEL_E21C30
+NakaWidgetPtrTbl_SmfMdly:
+	.long NakaWidget_SmfMdlyContainer
+	.long NakaWidget_SmfMdlyVolume
+	.long NakaWidget_SmfMdlyMeasure
+	.long NakaWidget_SmfMdlyFileSelector
+	.long NakaWidget_SmfMdlyMicWidget
+	.long NakaWidget_SmfMdlyOrchSel
+	.long NakaWidget_SmfMdlyOrchRow
 	.byte 0x00, 0x00, 0x00, 0x00
-LABEL_E241E0:
-	.long LABEL_E21C46
-	.long LABEL_E21C7C
-	.long LABEL_E21CBA
-	.long LABEL_E21CDE
-	.long LABEL_E21D06
-	.long LABEL_E21D20
-	.long LABEL_E21D44
-	.long LABEL_E21D68
-	.long LABEL_E21D96
-	.long LABEL_E21DBC
-	.long LABEL_E21DF8
-	.long LABEL_E21E12
-	.long LABEL_E21E28
-	.long LABEL_E21E5C
-	.long LABEL_E21E94
-	.long LABEL_E21ECA
+NakaWidgetPtrTbl_DocMdly:
+	.long NakaWidget_SmfMdlyContainer2
+	.long NakaWidget_SmfMdlyLyricsItem
+	.long NakaWidget_SmfMdlySubPanel
+	.long NakaWidget_SmfMdlyLyricsToggle
+	.long NakaWidget_SmfMdlyGroup
+	.long NakaWidget_SmfMdlyMuteRow0
+	.long NakaWidget_SmfMdlyMuteRow1
+	.long NakaWidget_SmfMdlyMuteToggle
+	.long NakaWidget_SmfMdlySkipLabel
+	.long NakaWidget_SmfMdlyMutePanel
+	.long NakaWidget_SmfMdlyMeasureBox
+	.long NakaWidget_SmfMdlyOffOnSel
+	.long NakaWidget_SmfMdlyOffOnList
+	.long NakaWidget_SmfMdlyMixerWidget
+	.long NakaWidget_SmfMdlyMicWidget2
+	.long NakaWidget_SmfMdlyMuteChLabel
 	.byte 0x00, 0x00, 0x00, 0x00, 0xf4, 0x1e, 0xe2, 0x00
-LABEL_E24228:
-	.long LABEL_E21F2A
-	.long LABEL_E21F60
-	.long LABEL_E21F7A
-	.long LABEL_E21F9E
-	.long LABEL_E21FC2
-	.long LABEL_E21FE6
-	.long LABEL_E22014
-	.long LABEL_E2203A
-	.long LABEL_E22054
-	.long LABEL_E2206A
-	.long LABEL_E2209E
-	.long LABEL_E220D2
-	.long LABEL_E2210A
-	.long LABEL_E22142
+NakaWidgetPtrTbl_PdMdly:
+	.long NakaWidget_SmfMdlyRootContainer
+	.long NakaWidget_DocMdlyContainer
+	.long NakaWidget_DocMdlyGroup
+	.long NakaWidget_DocMdlyMuteRow0
+	.long NakaWidget_DocMdlySubPanel
+	.long NakaWidget_DocMdlyMuteToggle
+	.long NakaWidget_DocMdlySkipLabel
+	.long NakaWidget_DocMdlyMeasureBox
+	.long NakaWidget_DocMdlyOffOnSel
+	.long NakaWidget_DocMdlyOffOnList
+	.long NakaWidget_DocMdlyRT2Sel
+	.long NakaWidget_DocMdlyOrchSel
+	.long NakaWidget_DocMdlyMixer
+	.long NakaWidget_DocMdlyMic
 	.byte 0x00, 0x00, 0x00, 0x00, 0x78, 0x21, 0xe2, 0x00
-LABEL_E24268:
-	.long LABEL_E221B8
-	.long LABEL_E221DC
-	.long LABEL_E221F6
-	.long LABEL_E2221A
-	.long LABEL_E2223E
-	.long LABEL_E2226C
-	.long LABEL_E22292
-	.long LABEL_E222AC
-	.long LABEL_E222C2
-	.long LABEL_E222F6
-	.long LABEL_E2232E
-	.long LABEL_E22366
+NakaWidgetPtrTbl_SmfMdly2:
+	.long NakaWidget_PdMdlyContainer
+	.long NakaWidget_PdMdlyGroup
+	.long NakaWidget_PdMdlyMuteRow0
+	.long NakaWidget_PdMdlyMuteRow1
+	.long NakaWidget_PdMdlyMuteToggle
+	.long NakaWidget_PdMdlySkipLabel
+	.long NakaWidget_PdMdlyMeasureBox
+	.long NakaWidget_PdMdlyOffOnSel
+	.long NakaWidget_PdMdlyOffOnList
+	.long NakaWidget_PdMdlyRT2Sel
+	.long NakaWidget_PdMdlyMixer
+	.long NakaWidget_PdMdlyMic
 	.byte 0x00, 0x00, 0x00, 0x00, 0x9c, 0x23, 0xe2, 0x00
-LABEL_E242A0:
-	.long LABEL_E223D2
-	.long LABEL_E223F6
-	.long LABEL_E22424
-	.long LABEL_E2244A
-	.long LABEL_E22464
-	.long LABEL_E2247A
-	.long LABEL_E224B0
+NakaWidgetPtrTbl_SongMdly:
+	.long NakaWidget_SmfMdly2Container
+	.long NakaWidget_SmfMdly2MuteToggle
+	.long NakaWidget_SmfMdly2SkipLabel
+	.long NakaWidget_SmfMdly2MeasureBox
+	.long NakaWidget_SmfMdly2OffOnSel
+	.long NakaWidget_SmfMdly2MicWidget
+	.long NakaWidget_SmfMdly2OrchSel
 	.byte 0x00, 0x00, 0x00, 0x00
-LABEL_E242C0:
-	.long LABEL_E224CA
-	.long LABEL_E22508
-	.long LABEL_E22522
-	.long LABEL_E22546
-	.long LABEL_E2256A
-	.long LABEL_E22588
-	.long LABEL_E225B6
-	.long LABEL_E225D0
-	.long LABEL_E225F4
-	.long LABEL_E2260A
-	.long LABEL_E2262E
-	.long LABEL_E22654
-	.long LABEL_E2266A
-	.long LABEL_E226A2
-	.long LABEL_E226C6
-	.long LABEL_E226EA
-	.long LABEL_E2270E
-	.long LABEL_E22732
-	.long LABEL_E22756
-	.long LABEL_E2277A
-	.long LABEL_E2279E
-	.long LABEL_E227C2
-	.long LABEL_E227E6
-	.long LABEL_E2280A
-	.long LABEL_E2282E
-	.long LABEL_E22852
-	.long LABEL_E22876
-	.long LABEL_E2289A
-	.long LABEL_E228BE
-	.long LABEL_E228E2
+NakaWidgetPtrTbl_SongMdly2:
+	.long NakaWidget_SongMdlyContainer
+	.long NakaWidget_SongMdlyGroup
+	.long NakaWidget_SongMdlyVolume
+	.long NakaWidget_SongMdlySongSel
+	.long NakaWidget_SongMdlySongList
+	.long NakaWidget_SongMdlyRT1Sel
+	.long NakaWidget_SongMdlyMeasureBox
+	.long NakaWidget_SongMdlyFileList
+	.long NakaWidget_SongMdlyMutePanel
+	.long NakaWidget_SongMdlyMuteList
+	.long NakaWidget_SongMdlySkipLabel
+	.long NakaWidget_SongMdlyOffOnSel
+	.long NakaWidget_SongMdlyMixer
+	.long NakaWidget_SongMdlyOrchSel
+	.long NakaWidget_SongMdlySongSel1
+	.long NakaWidget_SongMdlySongSel2
+	.long NakaWidget_SongMdlySongSel3
+	.long NakaWidget_SongMdlySongSel4
+	.long NakaWidget_SongMdlySongSel5
+	.long NakaWidget_SongMdlySongSel6
+	.long NakaWidget_SongMdlySongSel7
+	.long NakaWidget_SongMdlySongSel8
+	.long NakaWidget_SongMdlySongSel9
+	.long NakaWidget_SongMdlySongSel10
+	.long NakaWidget_SongMdlySongSel11
+	.long NakaWidget_SongMdlySongSel12
+	.long NakaWidget_SongMdlySongSel13
+	.long NakaWidget_SongMdlySongSel14
+	.long NakaWidget_SongMdlySongSel15
+	.long NakaWidget_SongMdlySongSel16
 	.byte 0x00, 0x00, 0x00, 0x00, 0x06, 0x29, 0xe2, 0x00
-LABEL_E24340:
-	.long LABEL_E2293C
-	.long LABEL_E22956
-	.long LABEL_E2297A
-	.long LABEL_E22998
-	.long LABEL_E229BC
-	.long LABEL_E229EA
-	.long LABEL_E22A10
-	.long LABEL_E22A2A
-	.long LABEL_E22A4E
-	.long LABEL_E22A64
-	.long LABEL_E22A7A
+NakaWidgetPtrTbl_StepRec:
+	.long NakaWidget_SongMdly2Group
+	.long NakaWidget_SongMdly2Volume
+	.long NakaWidget_SongMdly2SongList
+	.long NakaWidget_SongMdly2SongSel
+	.long NakaWidget_SongMdly2RT1Sel
+	.long NakaWidget_SongMdly2SkipLabel
+	.long NakaWidget_SongMdly2MeasureBox
+	.long NakaWidget_SongMdly2FileList
+	.long NakaWidget_SongMdly2MutePanel
+	.long NakaWidget_SongMdly2OffOnSel
+	.long NakaWidget_SongMdly2Mixer
 	.byte 0x00, 0x00, 0x00, 0x00
-LABEL_E24370:
-	.long LABEL_E22AB2
-	.long LABEL_E22AF0
-	.long LABEL_E22B1E
-	.long LABEL_E22B34
-	.long LABEL_E22B5E
+NakaWidgetPtrTbl_TrAs:
+	.long NakaWidget_StepRecContainer
+	.long NakaWidget_StepRecPartLabel
+	.long NakaWidget_StepRecPartPanel
+	.long NakaWidget_StepRecPartList
+	.long NakaWidget_StepRecOrchRow
 	.byte 0x00, 0x00, 0x00, 0x00
-	.long LABEL_E22B74
+	.long NakaWidget_StepRecSubPanel
 	.byte 0x00, 0x00, 0x00, 0x00
-	.long LABEL_E22B96
-	.long LABEL_E22BD0
-	.long LABEL_E22C0E
+	.long NakaWidget_TrAsContainer
+	.long NakaWidget_TrAsPresetItem
+	.long NakaWidget_TrAsFileList
 	.byte 0xa2, 0xde, 0x03, 0x00
-LABEL_E243A0:
-	.long LABEL_E22C34
-	.long LABEL_E22CBA
-	.long LABEL_E22CF2
-	.long LABEL_E22D28
-	.long LABEL_E22D5C
+NakaWidgetPtrTbl_TrAsPreset:
+	.long NakaWidget_TrAsGridDisplay
+	.long NakaWidget_TrAsTrackAssign
+	.long NakaWidget_TrAsLocalCont
+	.long NakaWidget_TrAsMidiOut
+	.long NakaWidget_TrAsMatrix
 	.byte 0xce, 0xde, 0x03, 0x00
-LABEL_E243B8:
-	.long LABEL_E22D86
-	.long LABEL_E22DAE
-	.long LABEL_E22DD6
-	.long LABEL_E22DF0
-	.long LABEL_E22E28
-	.long LABEL_E22E42
-	.long LABEL_E22E6C
-	.long LABEL_E22E96
-	.long LABEL_E22EC0
-	.long LABEL_E22EDA
-	.long LABEL_E22F08
-	.long LABEL_E22F36
+NakaWidgetPtrTbl_TrAsPreset2:
+	.long NakaWidget_TrAsRT1Toggle
+	.long NakaWidget_TrAsRT2Toggle
+	.long NakaWidget_TrAsMeasureBox
+	.long NakaWidget_TrAsSubContainer
+	.long NakaWidget_TrAsGroup
+	.long NakaWidget_TrAsPartList0
+	.long NakaWidget_TrAsPartList1
+	.long NakaWidget_TrAsPartList2
+	.long NakaWidget_TrAsMeasureBox2
+	.long NakaWidget_TrAsRT1Selector
+	.long NakaWidget_TrAsRT2Selector
+	.long NakaWidget_TrAsPresetSel
 	.byte 0x00, 0x00, 0x00, 0x00, 0x50, 0x2f, 0xe2, 0x00
 
 
-LABEL_E243F0:
-	.long LABEL_E22F8E
-	.long LABEL_E22FB4
-	.long LABEL_E22FDE
-	.long LABEL_E23022
-	.long LABEL_E2305E
-	.long LABEL_E230AC
-	.long LABEL_E230F4
-	.long LABEL_E2310E
-	.long LABEL_E2313C
-	.long LABEL_E23166
-	.long LABEL_E231A4
-	.long LABEL_E231BE
-	.long LABEL_E231EC
-	.long LABEL_E2321A
-	.long LABEL_E23234
-	.long LABEL_E2324E
-	.long LABEL_E23278
-	.long LABEL_E232A2
-	.long LABEL_E232CC
-	.long LABEL_E2330A
-	.long LABEL_E23324
-	.long LABEL_E2333E
-	.long LABEL_E23368
-	.long LABEL_E23392
-	.long LABEL_E233BC
-	.long LABEL_E233D6
-	.long LABEL_E23404
+NakaWidgetPtrTbl_TrAsPreset3:
+	.long NakaWidget_TrAsPresetSong
+	.long NakaWidget_TrAsPresetMatrix
+	.long NakaWidget_TrAsPresetPanel
+	.long NakaWidget_TrAsPresetInit
+	.long NakaWidget_TrAsPresetGmRec
+	.long NakaWidget_TrAsPresetMeasure
+	.long NakaWidget_TrAsPresetRT2Sel
+	.long NakaWidget_TrAsPresetList
+	.long NakaWidget_TrAsPresetGroup
+	.long NakaWidget_TrAsPresetContainer
+	.long NakaWidget_TrAsPresetMeasure2
+	.long NakaWidget_TrAsPresetRT1Sel
+	.long NakaWidget_TrAsPresetRT2Sel2
+	.long NakaWidget_TrAsPresetGroup2
+	.long NakaWidget_TrAsPresetTypeSel
+	.long NakaWidget_TrAsPresetList2
+	.long NakaWidget_TrAsPresetList3
+	.long NakaWidget_TrAsPresetList4
+	.long NakaWidget_TrAsPresetContainer2
+	.long NakaWidget_TrAsPresetGroup3
+	.long NakaWidget_TrAsPresetTypeSel2
+	.long NakaWidget_TrAsPresetList5
+	.long NakaWidget_TrAsPresetList6
+	.long NakaWidget_TrAsPresetList7
+	.long NakaWidget_TrAsPresetMeasure3
+	.long NakaWidget_TrAsPresetRT1Sel2
+	.long NakaWidget_TrAsPresetRT2Sel3
 	.byte 0x00, 0x00, 0x00, 0x00
 
 
-LABEL_E24460:
-	.long LABEL_E23432
-	.long LABEL_E23470
-	.long LABEL_E234AE
-	.long LABEL_E234E0
-	.long LABEL_E23512
+NakaWidgetPtrTbl_SongSelNam:
+	.long NakaWidget_SongSelNamContainer
+	.long NakaWidget_SongSelNamNameItem
+	.long NakaWidget_SongSelNamSongSel
+	.long NakaWidget_SongSelNamNameEdit
+	.long NakaWidget_SongSelNamDuration
 	.byte 0x00, 0x00, 0x00, 0x00
 
 
-LABEL_E24478:
-	.long LABEL_E2353C
-	.long LABEL_E2356E
-	.long LABEL_E23592
-	.long LABEL_E235C4
-	.long LABEL_E235DE
-	.long LABEL_E2360A
+NakaWidgetPtrTbl_Naming:
+	.long NakaWidget_NamingContainer
+	.long NakaWidget_NamingCharSel
+	.long NakaWidget_NamingSeqLabel
+	.long NakaWidget_NamingMeasureBox
+	.long NakaWidget_NamingDisplayMode
+	.long NakaWidget_NamingOrchRow
 	.byte 0x00, 0x00, 0x00, 0x00, 0x20, 0x36, 0xe2, 0x00
-	.long LABEL_E2365E
-	.long LABEL_E23688
-	.long LABEL_E236DA
+	.long NakaWidget_AftTouchDuration
+	.long NakaWidget_AftTouchChSel
+	.long NakaWidget_AftTouchList
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x04, 0x37, 0xe2, 0x00
-LABEL_E244B0:
-	.long LABEL_E2373C
-	.long LABEL_E2375C
-	.long LABEL_E2377C
-	.long LABEL_E2379C
-	.long LABEL_E237BC
+NakaWidgetPtrTbl_AftTouch:
+	.long NakaWidget_PartBal0
+	.long NakaWidget_PartBal1
+	.long NakaWidget_PartBal2
+	.long NakaWidget_PartBal3
+	.long NakaWidget_PartBal4
 	.byte 0x00, 0x00, 0x00, 0x00
 
 
-LABEL_E244C8:
-	.long LABEL_E237DC
-	.long LABEL_E23814
-	.long LABEL_E23858
-	.long LABEL_E238A4
+NakaWidgetPtrTbl_PartBal:
+	.long NakaWidget_DemoContainer
+	.long NakaWidget_DemoPerfItem
+	.long NakaWidget_DemoFeatPresItem
+	.long NakaWidget_DemoMeasureBox
 	.byte 0x00, 0x00, 0x00, 0x00, 0xbe, 0x38, 0xe2, 0x00
 
 
-LABEL_E244E0:
-	.long LABEL_E238F6
-	.long LABEL_E23938
-	.long LABEL_E23980
-	.long LABEL_E239C2
-	.long LABEL_E23A02
-	.long LABEL_E23A3E
-	.long LABEL_E23A82
-	.long LABEL_E23AB8
-	.long LABEL_E23AEE
-	.long LABEL_E23B28
-	.long LABEL_E23B42
+NakaWidgetPtrTbl_Demo:
+	.long NakaWidget_PerfMainMedley
+	.long NakaWidget_PerfAccordionMedley
+	.long NakaWidget_PerfFolkMedley
+	.long NakaWidget_PerfClassical
+	.long NakaWidget_PerfShow
+	.long NakaWidget_PerfContemporary
+	.long NakaWidget_PerfStyleSel
+	.long NakaWidget_PerfSoundSel
+	.long NakaWidget_PerfRhythmSel
+	.long NakaWidget_PerfMeasureBox
+	.long NakaWidget_PerfFileList
 	.byte 0x00, 0x00, 0x00, 0x00
 
 
-LABEL_E24510:
-	.long LABEL_E23B66
-	.long LABEL_E23B9E
-	.long LABEL_E23BDC
+NakaWidgetPtrTbl_Perf:
+	.long NakaWidget_Perf2Container
+	.long NakaWidget_Perf2Strings
+	.long NakaWidget_Perf2Gamelan
 	.long LABEL_E23C1A
-	.long LABEL_E23C58
-	.long LABEL_E23C94
+	.long NakaWidget_Perf2Guitar
+	.long NakaWidget_Perf2SaxBrass
 	.long LABEL_E23CD4
-	.long LABEL_E23D10
-	.long LABEL_E23D46
-	.long LABEL_E23D7C
-	.long LABEL_E23DB6
-	.long LABEL_E23DD0
+	.long NakaWidget_Perf2StyleSel
+	.long NakaWidget_Perf2SoundSel
+	.long NakaWidget_Perf2RhythmSel
+	.long NakaWidget_Perf2MeasureBox
+	.long NakaWidget_Perf2FileList
 	.byte 0x00, 0x00, 0x00, 0x00, 0xf4, 0x3d, 0xe2, 0x00
 
 
-LABEL_E24548:
-	.long LABEL_E23E2C
+NakaWidgetPtrTbl_Perf2:
+	.long NakaWidget_Perf3HokieDance
 	.long LABEL_E23E6E
 	.long LABEL_E23EB4
 	.long LABEL_E23EF6
 	.long LABEL_E23F3A
-	.long LABEL_E23F80
-	.long LABEL_E23FC8
-	.long LABEL_E23FFE
-	.long LABEL_E24034
+	.long NakaWidget_Perf3ModernBluegrass
+	.long NakaWidget_Perf3StyleSel
+	.long NakaWidget_Perf3SoundSel
+	.long NakaWidget_Perf3RhythmSel
 	.long LABEL_E2406E
 	.long LABEL_E24088
 	.byte 0x00, 0x00, 0x00, 0x00
 
 
-LABEL_E24578:
+NakaWinStateTbl_DpSmf:
 	.long LABEL_E246C2
 	.long LABEL_E246C0
 	.long LABEL_E246BE
@@ -5737,8 +5737,8 @@ LABEL_E24578:
 	.long LABEL_E24640
 	.long LABEL_E24634
 	.long LABEL_E2462A
-	.long LABEL_E24628
-LABEL_E24628:	aligned_string ""
+	.long NakaWinStateStr_DpSmf_0
+NakaWinStateStr_DpSmf_0:	aligned_string ""
 LABEL_E2462A:	aligned_string "Comporser"
 LABEL_E24634:	aligned_string "LyricsSong"
 LABEL_E24640:	aligned_string ""
@@ -5782,112 +5782,112 @@ LABEL_E246BC:	aligned_string ""
 LABEL_E246BE:	aligned_string ""
 LABEL_E246C0:	aligned_string ""
 LABEL_E246C2:	aligned_string "DpSmf"
-LABEL_E246C8:
+NakaWinStateTbl_DpDoc:
 	.long LABEL_E24728
-	.long LABEL_E24726
-	.long LABEL_E24724
-	.long LABEL_E24722
-	.long LABEL_E24720
-	.long LABEL_E2471E
-	.long LABEL_E2471C
+	.long NakaWinStateStr_DpDoc_9
+	.long NakaWinStateStr_DpDoc_8
+	.long NakaWinStateStr_DpDoc_7
+	.long NakaWinStateStr_DpDoc_6
+	.long NakaWinStateStr_DpDoc_5
+	.long NakaWinStateStr_DpDoc_4
 	.long LABEL_E24714
 	.long LABEL_E2470C
 	.long LABEL_E24702
-	.long LABEL_E24700
-	.long LABEL_E246FE
-	.long LABEL_E246FC
-LABEL_E246FC:	aligned_string ""
-LABEL_E246FE:	aligned_string ""
-LABEL_E24700:	aligned_string ""
+	.long NakaWinStateStr_DpDoc_2
+	.long NakaWinStateStr_DpDoc_1
+	.long NakaWinStateStr_DpDoc_0
+NakaWinStateStr_DpDoc_0:	aligned_string ""
+NakaWinStateStr_DpDoc_1:	aligned_string ""
+NakaWinStateStr_DpDoc_2:	aligned_string ""
 LABEL_E24702:	aligned_string "DOCOrchSw"
 LABEL_E2470C:	.asciz "DOCR2Sw"
 LABEL_E24714:	.asciz "DOCR1Sw"
-LABEL_E2471C:	aligned_string ""
-LABEL_E2471E:	aligned_string ""
-LABEL_E24720:	aligned_string ""
-LABEL_E24722:	aligned_string ""
-LABEL_E24724:	aligned_string ""
-LABEL_E24726:	aligned_string ""
+NakaWinStateStr_DpDoc_4:	aligned_string ""
+NakaWinStateStr_DpDoc_5:	aligned_string ""
+NakaWinStateStr_DpDoc_6:	aligned_string ""
+NakaWinStateStr_DpDoc_7:	aligned_string ""
+NakaWinStateStr_DpDoc_8:	aligned_string ""
+NakaWinStateStr_DpDoc_9:	aligned_string ""
 LABEL_E24728:	aligned_string "DpDoc"
-LABEL_E2472E:
+NakaWinStateTbl_DpPd:
 	.long LABEL_E24782
-	.long LABEL_E24780
-	.long LABEL_E2477E
-	.long LABEL_E2477C
-	.long LABEL_E2477A
-	.long LABEL_E24778
-	.long LABEL_E24776
+	.long NakaWinStateStr_DpPd_9
+	.long NakaWinStateStr_DpPd_8
+	.long NakaWinStateStr_DpPd_7
+	.long NakaWinStateStr_DpPd_6
+	.long NakaWinStateStr_DpPd_5
+	.long NakaWinStateStr_DpPd_4
 	.long LABEL_E2476E
 	.long LABEL_E24764
-	.long LABEL_E24762
-	.long LABEL_E24760
-	.long LABEL_E2475E
-LABEL_E2475E:	aligned_string ""
-LABEL_E24760:	aligned_string ""
-LABEL_E24762:	aligned_string ""
+	.long NakaWinStateStr_DpPd_2
+	.long NakaWinStateStr_DpPd_1
+	.long NakaWinStateStr_DpPd_0
+NakaWinStateStr_DpPd_0:	aligned_string ""
+NakaWinStateStr_DpPd_1:	aligned_string ""
+NakaWinStateStr_DpPd_2:	aligned_string ""
 LABEL_E24764:	aligned_string "PDOrchSw"
 LABEL_E2476E:	aligned_string "PDR1Sw"
-LABEL_E24776:	aligned_string ""
-LABEL_E24778:	aligned_string ""
-LABEL_E2477A:	aligned_string ""
-LABEL_E2477C:	aligned_string ""
-LABEL_E2477E:	aligned_string ""
-LABEL_E24780:	aligned_string ""
+NakaWinStateStr_DpPd_4:	aligned_string ""
+NakaWinStateStr_DpPd_5:	aligned_string ""
+NakaWinStateStr_DpPd_6:	aligned_string ""
+NakaWinStateStr_DpPd_7:	aligned_string ""
+NakaWinStateStr_DpPd_8:	aligned_string ""
+NakaWinStateStr_DpPd_9:	aligned_string ""
 LABEL_E24782:	aligned_string "DpPd"
-LABEL_E24788:
+NakaWinStateTbl_DpSmfLyr:
 	.long LABEL_E247C0
-	.long LABEL_E247BE
-	.long LABEL_E247BC
-	.long LABEL_E247BA
-	.long LABEL_E247B8
-	.long LABEL_E247B6
+	.long NakaWinStateStr_DpSmfLyr_6
+	.long NakaWinStateStr_DpSmfLyr_5
+	.long NakaWinStateStr_DpSmfLyr_4
+	.long NakaWinStateStr_DpSmfLyr_3
+	.long NakaWinStateStr_DpSmfLyr_2
 	.long LABEL_E247AA
-	.long LABEL_E247A8
-LABEL_E247A8:	aligned_string ""
+	.long NakaWinStateStr_DpSmfLyr_0
+NakaWinStateStr_DpSmfLyr_0:	aligned_string ""
 LABEL_E247AA:	aligned_string "LyricsFunc"
-LABEL_E247B6:	aligned_string ""
-LABEL_E247B8:	aligned_string ""
-LABEL_E247BA:	aligned_string ""
-LABEL_E247BC:	aligned_string ""
-LABEL_E247BE:	aligned_string ""
+NakaWinStateStr_DpSmfLyr_2:	aligned_string ""
+NakaWinStateStr_DpSmfLyr_3:	aligned_string ""
+NakaWinStateStr_DpSmfLyr_4:	aligned_string ""
+NakaWinStateStr_DpSmfLyr_5:	aligned_string ""
+NakaWinStateStr_DpSmfLyr_6:	aligned_string ""
 LABEL_E247C0:	aligned_string "DpSmfLyr"
-LABEL_E247CA:
+NakaWinStateTbl_DpMdlySmf:
 	.long LABEL_E2483A
-	.long LABEL_E24838
-	.long LABEL_E24836
-	.long LABEL_E24834
-	.long LABEL_E24832
-	.long LABEL_E24830
-	.long LABEL_E2482E
-	.long LABEL_E2482C
-	.long LABEL_E2482A
-	.long LABEL_E24828
-	.long LABEL_E24826
-	.long LABEL_E24824
+	.long NakaWinStateStr_DpMdlySmf_15
+	.long NakaWinStateStr_DpMdlySmf_14
+	.long NakaWinStateStr_DpMdlySmf_13
+	.long NakaWinStateStr_DpMdlySmf_12
+	.long NakaWinStateStr_DpMdlySmf_11
+	.long NakaWinStateStr_DpMdlySmf_10
+	.long NakaWinStateStr_DpMdlySmf_9
+	.long NakaWinStateStr_DpMdlySmf_8
+	.long NakaWinStateStr_DpMdlySmf_7
+	.long NakaWinStateStr_DpMdlySmf_6
+	.long NakaWinStateStr_DpMdlySmf_5
 	.long LABEL_E24816
-	.long LABEL_E24814
-	.long LABEL_E24812
-	.long LABEL_E24810
-	.long LABEL_E2480E
-LABEL_E2480E:	aligned_string ""
-LABEL_E24810:	aligned_string ""
-LABEL_E24812:	aligned_string ""
-LABEL_E24814:	aligned_string ""
+	.long NakaWinStateStr_DpMdlySmf_3
+	.long NakaWinStateStr_DpMdlySmf_2
+	.long NakaWinStateStr_DpMdlySmf_1
+	.long NakaWinStateStr_DpMdlySmf_0
+NakaWinStateStr_DpMdlySmf_0:	aligned_string ""
+NakaWinStateStr_DpMdlySmf_1:	aligned_string ""
+NakaWinStateStr_DpMdlySmf_2:	aligned_string ""
+NakaWinStateStr_DpMdlySmf_3:	aligned_string ""
 LABEL_E24816:	aligned_string "SMFMedMuteSw"
-LABEL_E24824:	aligned_string ""
-LABEL_E24826:	aligned_string ""
-LABEL_E24828:	aligned_string ""
-LABEL_E2482A:	aligned_string ""
-LABEL_E2482C:	aligned_string ""
-LABEL_E2482E:	aligned_string ""
-LABEL_E24830:	aligned_string ""
-LABEL_E24832:	aligned_string ""
-LABEL_E24834:	aligned_string ""
-LABEL_E24836:	aligned_string ""
-LABEL_E24838:	aligned_string ""
+NakaWinStateStr_DpMdlySmf_5:	aligned_string ""
+NakaWinStateStr_DpMdlySmf_6:	aligned_string ""
+NakaWinStateStr_DpMdlySmf_7:	aligned_string ""
+NakaWinStateStr_DpMdlySmf_8:	aligned_string ""
+NakaWinStateStr_DpMdlySmf_9:	aligned_string ""
+NakaWinStateStr_DpMdlySmf_10:	aligned_string ""
+NakaWinStateStr_DpMdlySmf_11:	aligned_string ""
+NakaWinStateStr_DpMdlySmf_12:	aligned_string ""
+NakaWinStateStr_DpMdlySmf_13:	aligned_string ""
+NakaWinStateStr_DpMdlySmf_14:	aligned_string ""
+NakaWinStateStr_DpMdlySmf_15:	aligned_string ""
 LABEL_E2483A:	aligned_string "DpMdlySmf"
 	.long LABEL_E248CA
-LABEL_E24848:
+NakaWinStateTbl_DpMdlyDoc:
 	.long LABEL_E248C0
 	.long LABEL_E248BE
 	.long LABEL_E248BC
@@ -18969,10 +18969,10 @@ LABEL_E86172:	aligned_string "Demofeature"
 
 
 LABEL_E86186:
-	.long LABEL_E862DE
-	.long LABEL_E862D2
-	.long LABEL_E862CA
-	.long LABEL_E862C2
+	.long Str_Drawbar_DrawPerc4
+	.long Str_Drawbar_DrawPerc223
+	.long Str_Drawbar_White23
+	.long Str_Drawbar_Black23
 	.byte 0xc0, 0x62, 0xe8, 0x00, 0xbe, 0x62, 0xe8, 0x00
 	.byte 0xbc, 0x62, 0xe8, 0x00, 0xba, 0x62, 0xe8, 0x00
 	.byte 0xb8, 0x62, 0xe8, 0x00, 0xb6, 0x62, 0xe8, 0x00
@@ -19010,12 +19010,12 @@ LABEL_E86186:
 	.byte 0x00, 0xff
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 	.byte 0x00, 0xff
-LABEL_E862C2:	aligned_string "Black23"
-LABEL_E862CA:	aligned_string "White23"
-LABEL_E862D2:	aligned_string "DrawPerc223"
-LABEL_E862DE:	aligned_string "DrawPerc4"
-LABEL_E862E8:	aligned_string ""
-LABEL_E862EA:	aligned_string "Drawbar"
+Str_Drawbar_Black23:	aligned_string "Black23"
+Str_Drawbar_White23:	aligned_string "White23"
+Str_Drawbar_DrawPerc223:	aligned_string "DrawPerc223"
+Str_Drawbar_DrawPerc4:	aligned_string "DrawPerc4"
+Str_Drawbar_Empty:	aligned_string ""
+Str_Drawbar_Drawbar:	aligned_string "Drawbar"
 	.byte 0xf4, 0x63, 0xe8, 0x00, 0xf2, 0x63
 	.byte 0xe8, 0x00, 0xf0, 0x63, 0xe8, 0x00, 0xee, 0x63
 	.byte 0xe8, 0x00, 0xec, 0x63, 0xe8, 0x00, 0xea, 0x63
@@ -19036,68 +19036,68 @@ LABEL_E862EA:	aligned_string "Drawbar"
 	.byte 0xe8, 0x00, 0x90, 0x63, 0xe8, 0x00, 0x8e, 0x63
 	.byte 0xe8, 0x00, 0x8c, 0x63, 0xe8, 0x00, 0x8a, 0x63
 	.byte 0xe8, 0x00
-LABEL_E8638A:
+DrawbarStrNull_E8638A:
 	.byte 0x00, 0xff
-LABEL_E8638C:
+DrawbarStrNull_E8638C:
 	.byte 0x00, 0xff
-LABEL_E8638E:
-	.byte 0x00, 0xff
-	.byte 0x00, 0xff
-LABEL_E86392:
-	.byte 0x00, 0xff
-LABEL_E86394:
-	.byte 0x00, 0xff
-LABEL_E86396:
+DrawbarStrNull_E8638E:
 	.byte 0x00, 0xff
 	.byte 0x00, 0xff
-LABEL_E8639A:
+DrawbarStrNull_E86392:
 	.byte 0x00, 0xff
-LABEL_E8639C:
+DrawbarStrNull_E86394:
 	.byte 0x00, 0xff
-LABEL_E8639E:
-	.byte 0x00, 0xff
-	.byte 0x00, 0xff
-LABEL_E863A2:
-	.byte 0x00, 0xff
-LABEL_E863A4:
-	.byte 0x00, 0xff
-LABEL_E863A6:	aligned_string "Accordion2"
-	.byte 0x00, 0xff
-LABEL_E863B4:
-	.byte 0x00, 0xff
-LABEL_E863B6:
+DrawbarStrNull_E86396:
 	.byte 0x00, 0xff
 	.byte 0x00, 0xff
-LABEL_E863BA:
+DrawbarStrNull_E8639A:
 	.byte 0x00, 0xff
-LABEL_E863BC:
+DrawbarStrNull_E8639C:
 	.byte 0x00, 0xff
-LABEL_E863BE:
-	.byte 0x00, 0xff
-	.byte 0x00, 0xff
-LABEL_E863C2:
-	.byte 0x00, 0xff
-LABEL_E863C4:
-	.byte 0x00, 0xff
-LABEL_E863C6:
+DrawbarStrNull_E8639E:
 	.byte 0x00, 0xff
 	.byte 0x00, 0xff
-LABEL_E863CA:
+DrawbarStrNull_E863A2:
 	.byte 0x00, 0xff
-LABEL_E863CC:	aligned_string "Accordion1"
-LABEL_E863D8:	aligned_string ""
-LABEL_E863DA:	aligned_string "AccordionPart"
+DrawbarStrNull_E863A4:
 	.byte 0x00, 0xff
-LABEL_E863EA:
+Str_Accordion_Accordion2:	aligned_string "Accordion2"
 	.byte 0x00, 0xff
-LABEL_E863EC:
+AccordionStrNull_E863B4:
 	.byte 0x00, 0xff
-LABEL_E863EE:
+AccordionStrNull_E863B6:
 	.byte 0x00, 0xff
 	.byte 0x00, 0xff
-LABEL_E863F2:
+AccordionStrNull_E863BA:
 	.byte 0x00, 0xff
-LABEL_E863F4:	aligned_string "Accordion"
+AccordionStrNull_E863BC:
+	.byte 0x00, 0xff
+AccordionStrNull_E863BE:
+	.byte 0x00, 0xff
+	.byte 0x00, 0xff
+AccordionStrNull_E863C2:
+	.byte 0x00, 0xff
+AccordionStrNull_E863C4:
+	.byte 0x00, 0xff
+AccordionStrNull_E863C6:
+	.byte 0x00, 0xff
+	.byte 0x00, 0xff
+AccordionStrNull_E863CA:
+	.byte 0x00, 0xff
+Str_Accordion_Accordion1:	aligned_string "Accordion1"
+Str_Accordion_Empty:	aligned_string ""
+Str_Accordion_AccordionPart:	aligned_string "AccordionPart"
+	.byte 0x00, 0xff
+AccordionStrNull_E863EA:
+	.byte 0x00, 0xff
+AccordionStrNull_E863EC:
+	.byte 0x00, 0xff
+AccordionStrNull_E863EE:
+	.byte 0x00, 0xff
+	.byte 0x00, 0xff
+AccordionStrNull_E863F2:
+	.byte 0x00, 0xff
+Str_Accordion_Accordion:	aligned_string "Accordion"
 	inc	4, w
 	.byte 0xe8, 0x00, 0xc6, 0x64, 0xe8, 0x00, 0xbc, 0x64
 	.byte 0xe8, 0x00, 0xba, 0x64, 0xe8, 0x00, 0xb8, 0x64
@@ -19130,46 +19130,46 @@ LABEL_E863F4:	aligned_string "Accordion"
 	aligned_string "Mesage"
 
 
-LABEL_E864D0:
-	.long LABEL_E8652C
-	.long LABEL_E8652A
-	.long LABEL_E86528
-	.long LABEL_E86526
-	.long LABEL_E8651A
-	.long LABEL_E86518
-	.long LABEL_E86516
-	.long LABEL_E8650C
-	.long LABEL_E8650A
-	.long LABEL_E86508
-	.long LABEL_E86502
-	.long LABEL_E86500
-LABEL_E86500:	aligned_string ""
-LABEL_E86502:	aligned_string "MPver"
-LABEL_E86508:	aligned_string ""
-LABEL_E8650A:	aligned_string ""
-LABEL_E8650C:	aligned_string "MPVersion"
-LABEL_E86516:	aligned_string ""
-LABEL_E86518:	aligned_string ""
-LABEL_E8651A:	aligned_string "AllInitial"
-LABEL_E86526:	aligned_string ""
-LABEL_E86528:	aligned_string ""
-LABEL_E8652A:	aligned_string ""
-LABEL_E8652C:	aligned_string "Welcom"
-	.long LABEL_E86582
-LABEL_E86538:
-	.long LABEL_E86576
-	.long LABEL_E8656C
-	.long LABEL_E86560
-	.long LABEL_E86554
-	.long LABEL_E86552
-	.long LABEL_E86550
-LABEL_E86550:	aligned_string ""
-LABEL_E86552:	aligned_string ""
-LABEL_E86554:	aligned_string "SoundTable"
-LABEL_E86560:	aligned_string "SubProgram"
-LABEL_E8656C:	aligned_string "MainTable"
-LABEL_E86576:	aligned_string "MainProgram"
-LABEL_E86582:	aligned_string "Softver"
+StrTable_WelcomVersion:
+	.long Str_Version_Welcom
+	.long Str_Version_Empty8
+	.long Str_Version_Empty7
+	.long Str_Version_Empty6
+	.long Str_Version_AllInitial
+	.long Str_Version_Empty5
+	.long Str_Version_Empty4
+	.long Str_Version_MPVersion
+	.long Str_Version_Empty3
+	.long Str_Version_Empty2
+	.long Str_Version_MPver
+	.long Str_Version_Empty1
+Str_Version_Empty1:	aligned_string ""
+Str_Version_MPver:	aligned_string "MPver"
+Str_Version_Empty2:	aligned_string ""
+Str_Version_Empty3:	aligned_string ""
+Str_Version_MPVersion:	aligned_string "MPVersion"
+Str_Version_Empty4:	aligned_string ""
+Str_Version_Empty5:	aligned_string ""
+Str_Version_AllInitial:	aligned_string "AllInitial"
+Str_Version_Empty6:	aligned_string ""
+Str_Version_Empty7:	aligned_string ""
+Str_Version_Empty8:	aligned_string ""
+Str_Version_Welcom:	aligned_string "Welcom"
+	.long Str_SoftVer_Softver
+StrTable_SoftwareVersionComps:
+	.long Str_SoftVer_MainProgram
+	.long Str_SoftVer_MainTable
+	.long Str_SoftVer_SubProgram
+	.long Str_SoftVer_SoundTable
+	.long Str_SoftVer_Empty2
+	.long Str_SoftVer_Empty1
+Str_SoftVer_Empty1:	aligned_string ""
+Str_SoftVer_Empty2:	aligned_string ""
+Str_SoftVer_SoundTable:	aligned_string "SoundTable"
+Str_SoftVer_SubProgram:	aligned_string "SubProgram"
+Str_SoftVer_MainTable:	aligned_string "MainTable"
+Str_SoftVer_MainProgram:	aligned_string "MainProgram"
+Str_SoftVer_Softver:	aligned_string "Softver"
 	aligned_string "MD_SOUND"
 	aligned_string "TT_SDMENU"
 	aligned_string "TT_SDPART"
@@ -19187,11 +19187,11 @@ LABEL_E86582:	aligned_string "Softver"
 	aligned_string "TT_SOFTVER"
 	.byte 0xfb, 0x65, 0xf8, 0x00, 0xda, 0x3b, 0xf8, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x66, 0x66, 0xe8, 0x00
-	.long LABEL_E86652
-	.long LABEL_E86650
-LABEL_E86650:	aligned_string ""
-LABEL_E86652:	aligned_string "MainMemDrawControl"
-LABEL_E86666:	aligned_string "MainPreControl"
+	.long Str_DrawCtrl_MainMemDrawCtrl
+	.long Str_DrawCtrl_Empty
+Str_DrawCtrl_Empty:	aligned_string ""
+Str_DrawCtrl_MainMemDrawCtrl:	aligned_string "MainMemDrawControl"
+Str_DrawCtrl_MainPreControl:	aligned_string "MainPreControl"
 
 Bitmap_Accita16:	; e86676
 	.incbin "images/BitmapAccita16.bin"
@@ -19201,15 +19201,15 @@ Bitmap_Accger16:	; e892fe
 
 Bitmap_SomeArrows:	; e8bf86
 	.incbin "images/BitmapSomeArrows.bin"
-LABEL_E8C66A:
+BitmapBound_DrawbarSlider1_Start:
 
 Bitmap_DrawbarNumberedSlider_1:	; e8c66a
 	.incbin "images/BitmapDrawbarNumberedSlider_1.bin"
-LABEL_E8D97E:
+BitmapBound_DrawbarSlider2_Start:
 
 Bitmap_DrawbarNumberedSlider_2:	; e8d97e
 	.incbin "images/BitmapDrawbarNumberedSlider_2.bin"
-LABEL_E8EC92:
+BitmapBound_DrawbarSlider3_Start:
 
 Bitmap_DrawbarNumberedSlider_3:	; e8ec92
 	.incbin "images/BitmapDrawbarNumberedSlider_3.bin"
@@ -19220,8 +19220,8 @@ Bitmap_Technics_Logo:	; e8ffa6
 Bitmap_KN5000_Logo:	; e9367e
 	.incbin "images/BitmapKN5000Logo.bin"
 
-LABEL_E9529E:	.asciz "ON "
-LABEL_E952A2:
+Str_Mixer_ON:	.asciz "ON "
+MixerPartTable_Start:
 	.byte 0x4f, 0x46, 0x46, 0x00, 0x45, 0x52
 	.byte 0x52, 0x00, 0xff, 0xff, 0x01, 0x80, 0xff, 0xff
 	.byte 0x01, 0x80, 0xff, 0xff, 0x01, 0x80, 0xff, 0xff
@@ -19267,38 +19267,38 @@ LABEL_E952A2:
 	.byte 0x13, 0x00, 0x14, 0x00, 0x17, 0x00, 0x1a, 0x00
 	.byte 0x20, 0x00, 0x21, 0x00, 0x19, 0x00, 0x22, 0x00
 	.byte 0xff, 0xff
-LABEL_E9540A:	aligned_string "         "
-LABEL_E95414:	aligned_string "  RHYTHM  "
-LABEL_E95420:	aligned_string " CONTROL "
-LABEL_E9542A:	aligned_string "   APC   "
-LABEL_E95434:	aligned_string "   MIC   "
-LABEL_E9543E:	aligned_string "METRONOME"
-LABEL_E95448:	aligned_string "   MSP   "
-LABEL_E95452:	aligned_string "  DRUMS  "
-LABEL_E9545C:	aligned_string "   BASS   "
-LABEL_E95468:	aligned_string " ACCOMP3 "
-LABEL_E95472:	aligned_string " ACCOMP2 "
-LABEL_E9547C:	aligned_string " ACCOMP1 "
-LABEL_E95486:	aligned_string "  R.BASS  "
-LABEL_E95492:	aligned_string "  CHORD  "
-LABEL_E9549C:	aligned_string " PART 16 "
-LABEL_E954A6:
+Str_PartName_Empty:	aligned_string "         "
+Str_PartName_Rhythm:	aligned_string "  RHYTHM  "
+Str_PartName_Control:	aligned_string " CONTROL "
+Str_PartName_APC:	aligned_string "   APC   "
+Str_PartName_MIC:	aligned_string "   MIC   "
+Str_PartName_Metronome:	aligned_string "METRONOME"
+Str_PartName_MSP:	aligned_string "   MSP   "
+Str_PartName_Drums:	aligned_string "  DRUMS  "
+Str_PartName_Bass:	aligned_string "   BASS   "
+Str_PartName_Accomp3:	aligned_string " ACCOMP3 "
+Str_PartName_Accomp2:	aligned_string " ACCOMP2 "
+Str_PartName_Accomp1:	aligned_string " ACCOMP1 "
+Str_PartName_RBass:	aligned_string "  R.BASS  "
+Str_PartName_Chord:	aligned_string "  CHORD  "
+Str_PartName_Part16:	aligned_string " PART 16 "
+Str_PartName_Part15:
 	ldb	w, 0x50
 	aligned_string "ART 15 "
-LABEL_E954B0:	aligned_string " PART 14 "
-LABEL_E954BA:	aligned_string " PART 13 "
-LABEL_E954C4:	aligned_string " PART 12 "
-LABEL_E954CE:	aligned_string " PART 11 "
-LABEL_E954D8:	aligned_string " PART 10 "
-LABEL_E954E2:	aligned_string "  PART 9  "
-LABEL_E954EE:	aligned_string "  PART 8  "
-LABEL_E954FA:	aligned_string "  PART 7  "
-LABEL_E95506:	aligned_string "  PART 6  "
-LABEL_E95512:	aligned_string "  PART 5  "
-LABEL_E9551E:	aligned_string "  PART 4  "
-LABEL_E9552A:	aligned_string "   LEFT   "
-LABEL_E95536:	aligned_string " RIGHT 2 "
-LABEL_E95540:	aligned_string " RIGHT 1 "
+Str_PartName_Part14:	aligned_string " PART 14 "
+Str_PartName_Part13:	aligned_string " PART 13 "
+Str_PartName_Part12:	aligned_string " PART 12 "
+Str_PartName_Part11:	aligned_string " PART 11 "
+Str_PartName_Part10:	aligned_string " PART 10 "
+Str_PartName_Part9:	aligned_string "  PART 9  "
+Str_PartName_Part8:	aligned_string "  PART 8  "
+Str_PartName_Part7:	aligned_string "  PART 7  "
+Str_PartName_Part6:	aligned_string "  PART 6  "
+Str_PartName_Part5:	aligned_string "  PART 5  "
+Str_PartName_Part4:	aligned_string "  PART 4  "
+Str_PartName_Left:	aligned_string "   LEFT   "
+Str_PartName_Right2:	aligned_string " RIGHT 2 "
+Str_PartName_Right1:	aligned_string " RIGHT 1 "
 	aligned_string "SdPT"
 	.byte 0xd5, 0x01, 0xd5, 0x01, 0xd5, 0x01, 0xd5, 0x01
 	.byte 0xb1, 0x03, 0xff, 0x02, 0xb1, 0x03, 0xb1, 0x03
@@ -19348,85 +19348,85 @@ LABEL_E95540:	aligned_string " RIGHT 1 "
 	jr	ov, 0x00
 	aligned_string " OFF"
 	aligned_string " -- "
-LABEL_E9566E:
-	.long LABEL_E956D4
-	.long LABEL_E956C6
-	.long LABEL_E956B8
-	.long LABEL_E956A8
-	.long LABEL_E95698
-	.long LABEL_E95686
-LABEL_E95686:	aligned_string "Indonesian Header"
-LABEL_E95698:	aligned_string "Italian Header"
-LABEL_E956A8:	aligned_string "Spanish Header"
-LABEL_E956B8:	aligned_string "French Header"
-LABEL_E956C6:	aligned_string "German Header"
-LABEL_E956D4:	aligned_string "English Header"
+StrTable_LangHeaders:
+	.long Str_Header_English
+	.long Str_Header_German
+	.long Str_Header_French
+	.long Str_Header_Spanish
+	.long Str_Header_Italian
+	.long Str_Header_Indonesian
+Str_Header_Indonesian:	aligned_string "Indonesian Header"
+Str_Header_Italian:	aligned_string "Italian Header"
+Str_Header_Spanish:	aligned_string "Spanish Header"
+Str_Header_French:	aligned_string "French Header"
+Str_Header_German:	aligned_string "German Header"
+Str_Header_English:	aligned_string "English Header"
 
 
-LABEL_E956E4:
-	.long LABEL_E95740
-	.long LABEL_E95734
-	.long LABEL_E95728
-	.long LABEL_E9571A
-	.long LABEL_E9570C
-	.long LABEL_E956FC
-LABEL_E956FC:	aligned_string "Indonesian Text"
-LABEL_E9570C:	aligned_string "Italian Text"
-LABEL_E9571A:	aligned_string "Spanish Text"
-LABEL_E95728:	aligned_string "French Text"
-LABEL_E95734:	aligned_string "German Text"
-LABEL_E95740:	aligned_string "English Text"
+StrTable_LangTexts:
+	.long Str_Text_English
+	.long Str_Text_German
+	.long Str_Text_French
+	.long Str_Text_Spanish
+	.long Str_Text_Italian
+	.long Str_Text_Indonesian
+Str_Text_Indonesian:	aligned_string "Indonesian Text"
+Str_Text_Italian:	aligned_string "Italian Text"
+Str_Text_Spanish:	aligned_string "Spanish Text"
+Str_Text_French:	aligned_string "French Text"
+Str_Text_German:	aligned_string "German Text"
+Str_Text_English:	aligned_string "English Text"
 
 
-LABEL_E9574E:
-	.long LABEL_E95786
-	.long LABEL_E95780
-	.long LABEL_E95778
-	.long LABEL_E95772
-	.long LABEL_E9576C
-	.long LABEL_E95766
-LABEL_E95766:
+StrTable_ErrorLabel:
+	.long Str_ErrorLabel_English
+	.long Str_ErrorLabel_German
+	.long Str_ErrorLabel_French
+	.long Str_ErrorLabel_Spanish
+	.long Str_ErrorLabel_Italian
+	.long Str_ErrorLabel_Indonesian
+Str_ErrorLabel_Indonesian:
 	.byte 0x45, 0x52, 0x52, 0x4f, 0x52, 0x00
-LABEL_E9576C:
+Str_ErrorLabel_Italian:
 	.byte 0x45, 0x52, 0x52, 0x4f, 0x52, 0x00
-LABEL_E95772:	aligned_string "ERROR"
-LABEL_E95778:	aligned_string "ERREUR"
-LABEL_E95780:	aligned_string "ERROR"
-LABEL_E95786:
+Str_ErrorLabel_Spanish:	aligned_string "ERROR"
+Str_ErrorLabel_French:	aligned_string "ERREUR"
+Str_ErrorLabel_German:	aligned_string "ERROR"
+Str_ErrorLabel_English:
 	.byte 0x45, 0x52
 	.byte 0x52, 0x4f, 0x52, 0x00, 0xde, 0x57, 0xe9, 0x00
-LABEL_E95790:
-	.long LABEL_E957D2
-	.long LABEL_E957C8
-	.long LABEL_E957BC
-	.long LABEL_E957B0
-	.long LABEL_E957A4
-LABEL_E957A4:	aligned_string "REMINDER !"
-LABEL_E957B0:	.asciz "REMINDER! "
+StrTable_ReminderLabel:
+	.long Str_Reminder_German
+	.long Str_Reminder_French
+	.long Str_Reminder_Spanish
+	.long Str_Reminder_Italian
+	.long Str_Reminder_Indonesian
+Str_Reminder_Indonesian:	aligned_string "REMINDER !"
+Str_Reminder_Italian:	.asciz "REMINDER! "
 	.byte 0xff
-LABEL_E957BC:	aligned_string "¡RECUERDE!"
-LABEL_E957C8:	aligned_string "RAPPEL! "
-LABEL_E957D2:	aligned_string "HINWEIS ! "
+Str_Reminder_Spanish:	aligned_string "¡RECUERDE!"
+Str_Reminder_French:	aligned_string "RAPPEL! "
+Str_Reminder_German:	aligned_string "HINWEIS ! "
 	aligned_string "REMINDER! "
-LABEL_E957EA:
+StrTable_CompletedLabel:
 	.byte 0x46, 0x58, 0xe9, 0x00, 0x34, 0x58
 	.byte 0xe9, 0x00, 0x2a, 0x58, 0xe9, 0x00, 0x1c, 0x58
 	.byte 0xe9, 0x00, 0x10, 0x58, 0xe9, 0x00, 0x02, 0x58
 	.byte 0xe9, 0x00
-LABEL_E95802:	aligned_string "LENGKAPILAH!"
-LABEL_E95810:	aligned_string "COMPLETED!"
+Str_Completed_Indonesian:	aligned_string "LENGKAPILAH!"
+Str_Completed_Italian:	aligned_string "COMPLETED!"
 	.byte 0xa1
 	aligned_string "FINALIZADO!"
 	aligned_string "TERMINE!"
 	aligned_string "Vorgang beendet!"
 	aligned_string "COMPLETED!"
-LABEL_E95852:
+StrTable_PleaseWaitLabel:
 	.byte 0xc0, 0x58, 0xe9, 0x00, 0xb2, 0x58
 	.byte 0xe9, 0x00, 0x9e, 0x58, 0xe9, 0x00, 0x8a, 0x58
 	.byte 0xe9, 0x00, 0x7c, 0x58, 0xe9, 0x00, 0x6a, 0x58
 	.byte 0xe9, 0x00
-LABEL_E9586A:	aligned_string "SILAHKAN TUNGGU!"
-LABEL_E9587C:	aligned_string "PLEASE WAIT!"
+Str_PleaseWait_Indonesian:	aligned_string "SILAHKAN TUNGGU!"
+Str_PleaseWait_Italian:	aligned_string "PLEASE WAIT!"
 	.byte 0xa1
 	.asciz "POR FAVOR, ESPERE!"
 	.byte 0x56, 0x45
@@ -19437,44 +19437,44 @@ LABEL_E9587C:	aligned_string "PLEASE WAIT!"
 	.byte 0xe9, 0x00, 0x94, 0x5a, 0xe9, 0x00, 0xec, 0x59
 	.byte 0xe9, 0x00, 0x6a, 0x59, 0xe9, 0x00, 0x60, 0x59
 	.byte 0xe9, 0x00, 0xe6, 0x58, 0xe9, 0x00
-LABEL_E958E6:	aligned_string "Memori internal diterima untuk selama 80 menit setelah power dimatikan. Simpan hasil pekerjaan anda kedalam  Floppy Disk."
-LABEL_E95960:	aligned_string "REMINDER"
+Str_MemReminder_Indonesian:	aligned_string "Memori internal diterima untuk selama 80 menit setelah power dimatikan. Simpan hasil pekerjaan anda kedalam  Floppy Disk."
+Str_MemReminder_Italian:	aligned_string "REMINDER"
 	aligned_string "La memoria interna es retenida alrededor de 80 minutos después de interrumpir la alimentación. ¡Guarde su trabajo en un disquete!"
 	aligned_string "La mémoire interne est conservée pendant environ 80 minutes après la coupure de l'alimentation générale de l'instrument. Sauvegardez SAVE votre travail sur disquette !"
 	aligned_string "Der Speicherinhalt bleibt etwa 80 Minuten nach Ausschalten des Keyboards erhalten. Speichern Sie Ihre Daten daher auf Diskette !"
 	aligned_string "The internal memory is retained for about 80 minutes after turning off the power. SAVE your work on Floppy Disk!"
-LABEL_E95B88:
-	.long LABEL_E95E52
-	.long LABEL_E95DAC
-	.long LABEL_E95D0E
-	.long LABEL_E95C3C
-	.long LABEL_E95C32
-	.long LABEL_E95BA0
-LABEL_E95BA0:	aligned_string "Aturan sudah dibatalkan karena prosedur penyimpanan tidak dilengkapi dengan tombol OK. Silahkan setting kembali dan tekan OK untuk menyimpannya."
-LABEL_E95C32:	aligned_string "REMINDER"
-LABEL_E95C3C:	.asciz "Las configuraciones fueron canceladas porque no se completó el procedimiento de almacenamiento oprimiendo el botón OK. Por favor, vuelva a ingresar las configuraciones y presione el botón OK para almacenarlas."
-LABEL_E95D0E:	.asciz "Vous n'avez pas pressé le bouton OK et les réglages n'ont pas été enregistrés. Veuillez effectuer à nouveau les réglages et presser OK pour les enregistrer. "
-LABEL_E95DAC:	aligned_string "Die Einstellungen wurden nicht gespeichert da die Speicherung nicht mit OK bestätigt wurde. Nehmen Sie die Einstellungen noch einmal vor und bestätigen dann mit OK."
-LABEL_E95E52:	aligned_string "The settings have been canceled because the storage procedure was not completed by pressing the OK button. Please enter the settings again and press OK to store them. "
-LABEL_E95EFA:
-	.long LABEL_E95F3A
-	.long LABEL_E95F32
-	.long LABEL_E95F2A
-	.long LABEL_E95F22
-	.long LABEL_E95F1A
-	.long LABEL_E95F12
-LABEL_E95F12:	aligned_string "ERROR!"
-LABEL_E95F1A:	aligned_string "ERROR!"
-LABEL_E95F22:	aligned_string "ERROR!"
-LABEL_E95F2A:	aligned_string "ERREUR!"
-LABEL_E95F32:	aligned_string "ERROR!"
-LABEL_E95F3A:	aligned_string "ERROR!"
+StrTable_SettingsNotSaved:
+	.long Str_SettingsNotSaved_EN
+	.long Str_SettingsNotSaved_DE
+	.long Str_SettingsNotSaved_FR
+	.long Str_SettingsNotSaved_ES
+	.long Str_SettingsNotSaved_IT
+	.long Str_SettingsNotSaved_ID
+Str_SettingsNotSaved_ID:	aligned_string "Aturan sudah dibatalkan karena prosedur penyimpanan tidak dilengkapi dengan tombol OK. Silahkan setting kembali dan tekan OK untuk menyimpannya."
+Str_SettingsNotSaved_IT:	aligned_string "REMINDER"
+Str_SettingsNotSaved_ES:	.asciz "Las configuraciones fueron canceladas porque no se completó el procedimiento de almacenamiento oprimiendo el botón OK. Por favor, vuelva a ingresar las configuraciones y presione el botón OK para almacenarlas."
+Str_SettingsNotSaved_FR:	.asciz "Vous n'avez pas pressé le bouton OK et les réglages n'ont pas été enregistrés. Veuillez effectuer à nouveau les réglages et presser OK pour les enregistrer. "
+Str_SettingsNotSaved_DE:	aligned_string "Die Einstellungen wurden nicht gespeichert da die Speicherung nicht mit OK bestätigt wurde. Nehmen Sie die Einstellungen noch einmal vor und bestätigen dann mit OK."
+Str_SettingsNotSaved_EN:	aligned_string "The settings have been canceled because the storage procedure was not completed by pressing the OK button. Please enter the settings again and press OK to store them. "
+StrTable_GenericError:
+	.long Str_GenericErr_English
+	.long Str_GenericErr_German
+	.long Str_GenericErr_French
+	.long Str_GenericErr_Spanish
+	.long Str_GenericErr_Italian
+	.long Str_GenericErr_Indonesian
+Str_GenericErr_Indonesian:	aligned_string "ERROR!"
+Str_GenericErr_Italian:	aligned_string "ERROR!"
+Str_GenericErr_Spanish:	aligned_string "ERROR!"
+Str_GenericErr_French:	aligned_string "ERREUR!"
+Str_GenericErr_German:	aligned_string "ERROR!"
+Str_GenericErr_English:	aligned_string "ERROR!"
 	.byte 0x94, 0x60, 0xe9, 0x00, 0x54, 0x60
 	.byte 0xe9, 0x00, 0x00, 0x60, 0xe9, 0x00, 0xb2, 0x5f
 	.byte 0xe9, 0x00, 0xa8, 0x5f, 0xe9, 0x00, 0x5a, 0x5f
 	.byte 0xe9, 0x00
-LABEL_E95F5A:	aligned_string "Data pada disk yang Anda pergunakan untuk produk lain (bukan untuk Technics)"
-LABEL_E95FA8:	aligned_string "ERROR 00"
+Str_DiskErr00_Indonesian:	aligned_string "Data pada disk yang Anda pergunakan untuk produk lain (bukan untuk Technics)"
+Str_DiskErr00_Italian:	aligned_string "ERROR 00"
 	aligned_string "Los datos del disco que usted está utilizando son para un aparato diferente."
 	aligned_string "Les informations contenues dans la disquette sont destinées à un autre instrument."
 	.ascii "Die Daten auf dieser Diskette stammen von einem anderen Gerä"
@@ -19482,19 +19482,19 @@ LABEL_E95FA8:	aligned_string "ERROR 00"
 	aligned_string "The data on the disk that you are using is for a different product."
 
 
-LABEL_E960D8:
-	.long LABEL_E96232
-	.long LABEL_E961DC
-	.long LABEL_E9618E
-	.long LABEL_E96146
-	.long LABEL_E9613C
-	.long LABEL_E960F0
-LABEL_E960F0:	aligned_string "Kesalahan sudah terjadi ketika disket sedang dipanggil. Harap dicoba lagi."
-LABEL_E9613C:	aligned_string "ERROR 01"
-LABEL_E96146:	aligned_string "Se ha producido un error mientras se cargaba el disco. Pruebe otra vez."
-LABEL_E9618E:	.asciz "Une erreur s'est produite pendant la procédure de chargement. Essayez encore!"
-LABEL_E961DC:	aligned_string "Beim Laden von der Diskette ist ein Fehler aufgetreten. Bitte noch einmal versuchen."
-LABEL_E96232:	aligned_string "An error has occurred while the disk was loading. Please try again!"
+StrTable_DiskErr01:
+	.long Str_DiskErr01_English
+	.long Str_DiskErr01_German
+	.long Str_DiskErr01_French
+	.long Str_DiskErr01_Spanish
+	.long Str_DiskErr01_Italian
+	.long Str_DiskErr01_Indonesian
+Str_DiskErr01_Indonesian:	aligned_string "Kesalahan sudah terjadi ketika disket sedang dipanggil. Harap dicoba lagi."
+Str_DiskErr01_Italian:	aligned_string "ERROR 01"
+Str_DiskErr01_Spanish:	aligned_string "Se ha producido un error mientras se cargaba el disco. Pruebe otra vez."
+Str_DiskErr01_French:	.asciz "Une erreur s'est produite pendant la procédure de chargement. Essayez encore!"
+Str_DiskErr01_German:	aligned_string "Beim Laden von der Diskette ist ein Fehler aufgetreten. Bitte noch einmal versuchen."
+Str_DiskErr01_English:	aligned_string "An error has occurred while the disk was loading. Please try again!"
 	ldb	w, 0x63
 	.byte 0xe9, 0x00, 0x04, 0x63, 0xe9, 0x00, 0xd8, 0x62
 	.byte 0xe9, 0x00, 0xbc, 0x62, 0xe9, 0x00, 0xb2, 0x62
@@ -19508,116 +19508,116 @@ LABEL_E96232:	aligned_string "An error has occurred while the disk was loading. 
 	.byte 0x58, 0x64, 0xe9, 0x00
 
 
-LABEL_E96348:
-	.long LABEL_E9641E
-	.long LABEL_E963E8
-	.long LABEL_E963BC
-	.long LABEL_E963B2
-	.long LABEL_E9635C
-LABEL_E9635C:	aligned_string "File yang dicoba untuk dikeluarkan/ditampilkan, kosong.( File didalam disket kosong )"
-LABEL_E963B2:	aligned_string "ERROR 03"
-LABEL_E963BC:	aligned_string "El disco que trató de cargar estaba vacío."
-LABEL_E963E8:	aligned_string "Le fichier que vous avez essayé de charger est vide!"
-LABEL_E9641E:	aligned_string "Die Diskettenbank, die Sie gerade laden wollen, ist leer."
+StrTable_DiskErr03:
+	.long Str_DiskErr03_German
+	.long Str_DiskErr03_French
+	.long Str_DiskErr03_Spanish
+	.long Str_DiskErr03_Italian
+	.long Str_DiskErr03_Indonesian
+Str_DiskErr03_Indonesian:	aligned_string "File yang dicoba untuk dikeluarkan/ditampilkan, kosong.( File didalam disket kosong )"
+Str_DiskErr03_Italian:	aligned_string "ERROR 03"
+Str_DiskErr03_Spanish:	aligned_string "El disco que trató de cargar estaba vacío."
+Str_DiskErr03_French:	aligned_string "Le fichier que vous avez essayé de charger est vide!"
+Str_DiskErr03_German:	aligned_string "Die Diskettenbank, die Sie gerade laden wollen, ist leer."
 	aligned_string "The file that you tried to load is empty."
-LABEL_E96482:
+StrTable_DiskErr05:
 	.byte 0xe4, 0x65, 0xe9, 0x00, 0x8a, 0x65
 	.byte 0xe9, 0x00, 0x3c, 0x65, 0xe9, 0x00, 0xe6, 0x64
 	.byte 0xe9, 0x00, 0xdc, 0x64, 0xe9, 0x00, 0x9a, 0x64
 	.byte 0xe9, 0x00
-LABEL_E9649A:	aligned_string "Kesalahan terjadi ketika disket sedang diisi. Harap dicoba lagi."
-LABEL_E964DC:	aligned_string "ERROR 05"
-LABEL_E964E6:	aligned_string "Se ha producido un error mientras se almacenaban datos en el disco. Pruebe otra vez."
+Str_DiskErr05_Indonesian:	aligned_string "Kesalahan terjadi ketika disket sedang diisi. Harap dicoba lagi."
+Str_DiskErr05_Italian:	aligned_string "ERROR 05"
+Str_DiskErr05_Spanish:	aligned_string "Se ha producido un error mientras se almacenaban datos en el disco. Pruebe otra vez."
 	aligned_string "Une erreur s'est produite pendant la procédure de sauvegarde. Essayez encore!"
 	aligned_string "Beim Speichern auf die Diskette ist ein Fehler aufgetreten. Bitte noch einmal versuchen."
 	aligned_string "An error has occurred while the disk was saving. Please try again!"
-LABEL_E96628:
-	.long LABEL_E967FC
-	.long LABEL_E96796
-	.long LABEL_E96724
-	.long LABEL_E966AC
-	.long LABEL_E966A2
-	.long LABEL_E96640
-LABEL_E96640:	aligned_string "Disket yang Anda pergunakan sedang dikunci/diprotek. Bukalah proteksinya dan silahkan coba lagi. "
-LABEL_E966A2:	aligned_string "ERROR 06"
-LABEL_E966AC:	aligned_string "El disco que está utilizando está protegido contra escritura. Retire la protección contra escritura y pruebe otra vez."
-LABEL_E96724:	aligned_string "La disquette que vous utilisez est protégée contre l'écriture!Otez la protection de la disquette et recommencez!"
-LABEL_E96796:	aligned_string "Ihre Diskette ist schreibgeschützt. Schieben Sie den Schreibschutz zurück und speichern noch einmal."
-LABEL_E967FC:	aligned_string "The disk that you are using is write protected. Please remove the write protection and try again."
-LABEL_E9685E:
+StrTable_DiskErr06:
+	.long Str_DiskErr06_English
+	.long Str_DiskErr06_German
+	.long Str_DiskErr06_French
+	.long Str_DiskErr06_Spanish
+	.long Str_DiskErr06_Italian
+	.long Str_DiskErr06_Indonesian
+Str_DiskErr06_Indonesian:	aligned_string "Disket yang Anda pergunakan sedang dikunci/diprotek. Bukalah proteksinya dan silahkan coba lagi. "
+Str_DiskErr06_Italian:	aligned_string "ERROR 06"
+Str_DiskErr06_Spanish:	aligned_string "El disco que está utilizando está protegido contra escritura. Retire la protección contra escritura y pruebe otra vez."
+Str_DiskErr06_French:	aligned_string "La disquette que vous utilisez est protégée contre l'écriture!Otez la protection de la disquette et recommencez!"
+Str_DiskErr06_German:	aligned_string "Ihre Diskette ist schreibgeschützt. Schieben Sie den Schreibschutz zurück und speichern noch einmal."
+Str_DiskErr06_English:	aligned_string "The disk that you are using is write protected. Please remove the write protection and try again."
+StrTable_DiskErr07:
 	.byte 0x8a, 0x69
 	.byte 0xe9, 0x00, 0x52, 0x69, 0xe9, 0x00, 0x08, 0x69
 	.byte 0xe9, 0x00, 0xca, 0x68, 0xe9, 0x00, 0xc0, 0x68
 	.byte 0xe9, 0x00, 0x76, 0x68, 0xe9, 0x00
-LABEL_E96876:	aligned_string "Disket yang Anda dipergunakan sudah penuh. Harap pergunakan disket lain/"
-LABEL_E968C0:	aligned_string "ERROR 07"
+Str_DiskErr07_Indonesian:	aligned_string "Disket yang Anda dipergunakan sudah penuh. Harap pergunakan disket lain/"
+Str_DiskErr07_Italian:	aligned_string "ERROR 07"
 	aligned_string "El disco que está utilizando está lleno. Utilice otro disco."
 	.asciz "La disquette que vous utilisez est saturée. Utilisez une autre disquette!"
 	aligned_string "Ihre Diskette ist voll. Benutzen Sie bette eine andere."
 	aligned_string "The disk that you are using is full. Please use another disk."
-LABEL_E969C8:
-	.long LABEL_E96BF4
-	.long LABEL_E96BA6
-	.long LABEL_E96B06
-	.long LABEL_E96A68
-	.long LABEL_E96A5E
-	.long LABEL_E969E0
-LABEL_E969E0:	aligned_string "Kesalahan sudah terjadi ketika disket sedang diformat. Disket yang anda pergunakan mungkin rusak. Cobalah format disket lain."
-LABEL_E96A5E:	aligned_string "ERROR 08"
-LABEL_E96A68:	.asciz "Se ha producido un error mientras se hacía el formato del disco. El disco que está utilizando puede estar defectuoso. Intente hacer el formato de otro disco."
-LABEL_E96B06:	aligned_string "Une erreur s'est produite pendant la procédure de formatage. La disquette que vous utilisez est peut être détériorée. Essayez de formater une autre disquette."
-LABEL_E96BA6:	aligned_string "Beim Formatieren ist ein Fehler aufgetreten. Benutzen Sie bette eine andere."
-LABEL_E96BF4:	aligned_string "An error has occurred while the disk was formatting. The disk that you are using may be faulty. Please try formatting another disk."
+StrTable_DiskErr08:
+	.long Str_DiskErr08_English
+	.long Str_DiskErr08_German
+	.long Str_DiskErr08_French
+	.long Str_DiskErr08_Spanish
+	.long Str_DiskErr08_Italian
+	.long Str_DiskErr08_Indonesian
+Str_DiskErr08_Indonesian:	aligned_string "Kesalahan sudah terjadi ketika disket sedang diformat. Disket yang anda pergunakan mungkin rusak. Cobalah format disket lain."
+Str_DiskErr08_Italian:	aligned_string "ERROR 08"
+Str_DiskErr08_Spanish:	.asciz "Se ha producido un error mientras se hacía el formato del disco. El disco que está utilizando puede estar defectuoso. Intente hacer el formato de otro disco."
+Str_DiskErr08_French:	aligned_string "Une erreur s'est produite pendant la procédure de formatage. La disquette que vous utilisez est peut être détériorée. Essayez de formater une autre disquette."
+Str_DiskErr08_German:	aligned_string "Beim Formatieren ist ein Fehler aufgetreten. Benutzen Sie bette eine andere."
+Str_DiskErr08_English:	aligned_string "An error has occurred while the disk was formatting. The disk that you are using may be faulty. Please try formatting another disk."
 
 
-LABEL_E96C78:
-	.long LABEL_E96DDC
-	.long LABEL_E96D84
-	.long LABEL_E96D42
-	.long LABEL_E96CEC
-	.long LABEL_E96CD8
-	.long LABEL_E96C90
-LABEL_E96C90:	aligned_string "Data didalam disk diprotek, tidak bisa dicopy. Masukkan kode password."
-LABEL_E96CD8:	aligned_string "(ERROR 09)cp_prtct"
-LABEL_E96CEC:	aligned_string "Los datos del disco están protegidos contra copia. Por favor, ingrese la contraseña."
-LABEL_E96D42:	.asciz "Cette disquette est protégée. Veuillez entrer votre mot de passe."
-LABEL_E96D84:	aligned_string "Die Daten auf dieser Diskette sind schreibgeschützt. Bitte geben Sie das Password ein."
-LABEL_E96DDC:	aligned_string "The data on the disk is copy protected. Please enter the password."
-LABEL_E96E20:
-	.long LABEL_E96EDE
-	.long LABEL_E96EB4
-	.long LABEL_E96E88
-	.long LABEL_E96E58
-	.long LABEL_E96E4E
-	.long LABEL_E96E38
-LABEL_E96E38:	aligned_string "Data  sudah diprotek."
-LABEL_E96E4E:	aligned_string "ERROR 10"
-LABEL_E96E58:	aligned_string "Los datos ya están protegidos contra la copia."
-LABEL_E96E88:	.asciz "Ces données sont protégées contre la copie!"
-LABEL_E96EB4:	.asciz "Diese Daten sind bereits kopiergeschützt."
-LABEL_E96EDE:	aligned_string "The data is already copy protected."
-LABEL_E96F02:
+StrTable_DiskErr09:
+	.long Str_DiskErr09_English
+	.long Str_DiskErr09_German
+	.long Str_DiskErr09_French
+	.long Str_DiskErr09_Spanish
+	.long Str_DiskErr09_Italian
+	.long Str_DiskErr09_Indonesian
+Str_DiskErr09_Indonesian:	aligned_string "Data didalam disk diprotek, tidak bisa dicopy. Masukkan kode password."
+Str_DiskErr09_Italian:	aligned_string "(ERROR 09)cp_prtct"
+Str_DiskErr09_Spanish:	aligned_string "Los datos del disco están protegidos contra copia. Por favor, ingrese la contraseña."
+Str_DiskErr09_French:	.asciz "Cette disquette est protégée. Veuillez entrer votre mot de passe."
+Str_DiskErr09_German:	aligned_string "Die Daten auf dieser Diskette sind schreibgeschützt. Bitte geben Sie das Password ein."
+Str_DiskErr09_English:	aligned_string "The data on the disk is copy protected. Please enter the password."
+StrTable_DiskErr10:
+	.long Str_DiskErr10_English
+	.long Str_DiskErr10_German
+	.long Str_DiskErr10_French
+	.long Str_DiskErr10_Spanish
+	.long Str_DiskErr10_Italian
+	.long Str_DiskErr10_Indonesian
+Str_DiskErr10_Indonesian:	aligned_string "Data  sudah diprotek."
+Str_DiskErr10_Italian:	aligned_string "ERROR 10"
+Str_DiskErr10_Spanish:	aligned_string "Los datos ya están protegidos contra la copia."
+Str_DiskErr10_French:	.asciz "Ces données sont protégées contre la copie!"
+Str_DiskErr10_German:	.asciz "Diese Daten sind bereits kopiergeschützt."
+Str_DiskErr10_English:	aligned_string "The data is already copy protected."
+StrTable_DiskErr11:
 	.byte 0xb8, 0x6f, 0xe9, 0x00, 0x92, 0x6f
 	.byte 0xe9, 0x00, 0x70, 0x6f, 0xe9, 0x00, 0x48, 0x6f
 	.byte 0xe9, 0x00, 0x3e, 0x6f, 0xe9, 0x00, 0x1a, 0x6f
 	.byte 0xe9, 0x00
-LABEL_E96F1A:	aligned_string "Password yang anda masukkan salah."
-LABEL_E96F3E:	aligned_string "ERROR 11"
+Str_DiskErr11_Indonesian:	aligned_string "Password yang anda masukkan salah."
+Str_DiskErr11_Italian:	aligned_string "ERROR 11"
 	aligned_string "La contraseña ingresada es incorrecta."
 	aligned_string "Votre mot de passe est incorrect"
 	aligned_string "Das eingegebene Password ist falsch."
 	aligned_string "The password that you entered is incorrect."
 	.byte 0x80, 0x71, 0xe9, 0x00
-LABEL_E96FE8:
+StrTable_DiskErr12:
 	.long LABEL_E97114
-	.long LABEL_E970BA
-	.long LABEL_E97052
-	.long LABEL_E97048
-	.long LABEL_E96FFC
-LABEL_E96FFC:	aligned_string "Batu Baterei sudah lemah. Ganti segera semua batu baterei dengan yang baru."
-LABEL_E97048:	aligned_string "ERROR 12"
-LABEL_E97052:	aligned_string "La carga de las baterías es muy baja. Reemplace inmediatamente todas las baterías por baterías nuevas."
-LABEL_E970BA:	.asciz "La batterie interne est pratiquement déchargée. Remplacez toutes les piles immédiatement."
+	.long Str_DiskErr12_French
+	.long Str_DiskErr12_Spanish
+	.long Str_DiskErr12_Italian
+	.long Str_DiskErr12_Indonesian
+Str_DiskErr12_Indonesian:	aligned_string "Batu Baterei sudah lemah. Ganti segera semua batu baterei dengan yang baru."
+Str_DiskErr12_Italian:	aligned_string "ERROR 12"
+Str_DiskErr12_Spanish:	aligned_string "La carga de las baterías es muy baja. Reemplace inmediatamente todas las baterías por baterías nuevas."
+Str_DiskErr12_French:	.asciz "La batterie interne est pratiquement déchargée. Remplacez toutes les piles immédiatement."
 	aligned_string "Die verbleibende Kapazität der Batterien ist sehr schwach. Ersetzen Sie umgehend alle Batterien gegen neue."
 	aligned_string "The remaining battery power is very low. Replace all the batteries with new ones immediately."
 	.byte 0xd2, 0x72
@@ -19633,51 +19633,51 @@ LABEL_E970BA:	.asciz "La batterie interne est pratiquement déchargée. Remplacez 
 	aligned_string "Der Song den Sie speichern möchten ist leer."
 	aligned_string "The song you are trying to save is empty."
 	.byte 0x86, 0x74, 0xe9, 0x00
-LABEL_E97300:
-	.long LABEL_E97424
-	.long LABEL_E973C8
-	.long LABEL_E97376
-	.long LABEL_E97364
-	.long LABEL_E97314
-LABEL_E97314:	aligned_string "Standard MIDI File tidak kompatibel dengan KN-5000 dan tidak bisa dimuat/diisi."
-LABEL_E97364:	aligned_string "(ERROR 16)err_cnv"
-LABEL_E97376:	aligned_string "Este archivo MIDI estándar es incompatible con el KN5000 y no puede ser cargado."
-LABEL_E973C8:	aligned_string "Cette séquence STANDARD MIDI FILE est incompatible avec le KN5000 et ne peut être chargée."
-LABEL_E97424:	aligned_string "Dieses STANDARD MIDI FILE ist nicht kompatibel zum SX-KN5000 und kann daher nicht geladen werden."
+StrTable_DiskErr16:
+	.long Str_DiskErr16_German
+	.long Str_DiskErr16_French
+	.long Str_DiskErr16_Spanish
+	.long Str_DiskErr16_Italian
+	.long Str_DiskErr16_Indonesian
+Str_DiskErr16_Indonesian:	aligned_string "Standard MIDI File tidak kompatibel dengan KN-5000 dan tidak bisa dimuat/diisi."
+Str_DiskErr16_Italian:	aligned_string "(ERROR 16)err_cnv"
+Str_DiskErr16_Spanish:	aligned_string "Este archivo MIDI estándar es incompatible con el KN5000 y no puede ser cargado."
+Str_DiskErr16_French:	aligned_string "Cette séquence STANDARD MIDI FILE est incompatible avec le KN5000 et ne peut être chargée."
+Str_DiskErr16_German:	aligned_string "Dieses STANDARD MIDI FILE ist nicht kompatibel zum SX-KN5000 und kann daher nicht geladen werden."
 	aligned_string "This Standard MIDI File is incompatible with the KN5000 and cannot be loaded."
-LABEL_E974D4:
+StrPtr_DiskErr17Table:
 	.byte 0x98, 0x75, 0xe9, 0x00
-LABEL_E974D8:
-	.long LABEL_E97576
-	.long LABEL_E97546
-	.long LABEL_E97520
-	.long LABEL_E9750A
-	.long LABEL_E974EC
-LABEL_E974EC:	aligned_string "Ini tidak STANDARD MIDI FILE."
-LABEL_E9750A:	aligned_string "(ERROR 17)err_no_midi"
-LABEL_E97520:	aligned_string "Este no es un archivo MIDI estándar."
-LABEL_E97546:	.asciz "Ceci n'est pas une séquence STANDARD MIDI FILE."
-LABEL_E97576:	aligned_string "Dies ist kein STANDARD MIDI FILE."
+StrTable_DiskErr17:
+	.long Str_DiskErr17_German
+	.long Str_DiskErr17_French
+	.long Str_DiskErr17_Spanish
+	.long Str_DiskErr17_Italian
+	.long Str_DiskErr17_Indonesian
+Str_DiskErr17_Indonesian:	aligned_string "Ini tidak STANDARD MIDI FILE."
+Str_DiskErr17_Italian:	aligned_string "(ERROR 17)err_no_midi"
+Str_DiskErr17_Spanish:	aligned_string "Este no es un archivo MIDI estándar."
+Str_DiskErr17_French:	.asciz "Ceci n'est pas une séquence STANDARD MIDI FILE."
+Str_DiskErr17_German:	aligned_string "Dies ist kein STANDARD MIDI FILE."
 	aligned_string "This is not a STANDARD MIDI FILE."
 	.byte 0x58, 0x77, 0xe9, 0x00, 0xf0, 0x76
 	.byte 0xe9, 0x00, 0x98, 0x76, 0xe9, 0x00, 0x3e, 0x76
 	.byte 0xe9, 0x00, 0x26, 0x76, 0xe9, 0x00, 0xd2, 0x75
 	.byte 0xe9, 0x00
-LABEL_E975D2:	aligned_string "Timebase (resolusi PPQ) yang anda coba untuk dimuat bukan 24/48/96/192/288/384 PPQ."
-LABEL_E97626:	aligned_string "(ERROR 18)err_timebase"
+Str_DiskErr18_Indonesian:	aligned_string "Timebase (resolusi PPQ) yang anda coba untuk dimuat bukan 24/48/96/192/288/384 PPQ."
+Str_DiskErr18_Italian:	aligned_string "(ERROR 18)err_timebase"
 	.byte 0x4c, 0x61
 	aligned_string " base de tiempo (resolución de PPQ) que intenta cargar no es 24/48/96/192/288/384 PPQ."
 	aligned_string "La résolution {PPQ} que vous avez essayé de charger n'est pas 24/48/96/192/288/384 PPQ."
 	aligned_string "Die Zeiteinheit (PPQ Auflösung) die Sie zu laden versuchten entspricht nicht 24/48/96/192/288/384 PPQ."
 	aligned_string "The timebase {PPQ resolution} that you tried to load is not 24/48/96/192/288/384 PPQ."
-LABEL_E977AE:
+StrTable_DiskErr19:
 	.byte 0x4c, 0x79
 	.byte 0xe9, 0x00, 0xd2, 0x78, 0xe9, 0x00, 0x70, 0x78
 	.byte 0xe9, 0x00, 0x2e, 0x78, 0xe9, 0x00, 0x1e, 0x78
 	.byte 0xe9, 0x00, 0xc6, 0x77, 0xe9, 0x00
-LABEL_E977C6:	aligned_string "Disket ini adalah satu FORMAT 1 MIDI FILE dan tidak dapat dimainkan kembali (Play Back)"
-LABEL_E9781E:	aligned_string "(ERROR 19)dctp"
-LABEL_E9782E:	aligned_string "Este es un archivo MIDI de FORMATO 1 y no puede ser reproducido."
+Str_DiskErr19_Indonesian:	aligned_string "Disket ini adalah satu FORMAT 1 MIDI FILE dan tidak dapat dimainkan kembali (Play Back)"
+Str_DiskErr19_Italian:	aligned_string "(ERROR 19)dctp"
+Str_DiskErr19_Spanish:	aligned_string "Este es un archivo MIDI de FORMATO 1 y no puede ser reproducido."
 	aligned_string "Ceci est une séquence STANDARD MIDI FILE au FORMAT 1 et ne peut pas être reproduite dans ce mode."
 	aligned_string "Dies ist ein FORMAT 1 MIDI FILE und kann daher nicht direkt abgespielt werden. Bitte laden Sie diesen Song komplett ein."
 	aligned_string "This is a FORMAT 1 MIDI FILE disk and cannot be played back."
@@ -19685,8 +19685,8 @@ LABEL_E9782E:	aligned_string "Este es un archivo MIDI de FORMATO 1 y no puede se
 	.byte 0xe9, 0x00, 0x80, 0x7a, 0xe9, 0x00, 0x18, 0x7a
 	.byte 0xe9, 0x00, 0x0e, 0x7a, 0xe9, 0x00, 0xa2, 0x79
 	.byte 0xe9, 0x00
-LABEL_E979A2:	aligned_string "Satu masalah  terjadi terhadap data Sequencer anda. Ini mungkin berhubungan dengan dikset salah atau rusak."
-LABEL_E97A0E:	aligned_string "ERROR 20"
+Str_DiskErr20_Indonesian:	aligned_string "Satu masalah  terjadi terhadap data Sequencer anda. Ini mungkin berhubungan dengan dikset salah atau rusak."
+Str_DiskErr20_Italian:	aligned_string "ERROR 20"
 	.asciz "Se ha producido un problema con sus datos SEQUENCER. Esto puede deberse a que el disco está estropeado."
 	aligned_string "Je ne peux pas charger le SEQUENCER que vous me demandez! Cela est certainement dû à une perte de données ou à une détérioration de la disquette."
 	aligned_string "Die Sequenzerdaten sind nicht in Ordnung. Das kann an einer beschädigten oder fehlerhaften Diskette liegen."
@@ -19730,37 +19730,37 @@ LABEL_E97A0E:	aligned_string "ERROR 20"
 	.byte 0x68, 0x81, 0xe9, 0x00
 
 
-LABEL_E97FF0:
-	.long LABEL_E9810C
-	.long LABEL_E980A8
-	.long LABEL_E9805E
-	.long LABEL_E98054
-	.long LABEL_E98004
-LABEL_E98004:	aligned_string "Satu Rhythm Track sudah ada. Tidak mungkin menunjuk 2 Track untuk satu Rhythm."
-LABEL_E98054:	aligned_string "ERROR 24"
-LABEL_E9805E:	aligned_string "Ya existe una pista de ritmo. No es posible asignar dos pistas al ritmo."
-LABEL_E980A8:	.asciz "Vous avez déjà choisi une piste pour le rythme! Vous ne pouvez pas assigner deux pistes à celui-ci."
-LABEL_E9810C:	.asciz "Es ist nicht möglich, zwei RHYTHM-Spuren die gleiche Spurzuweisung (TRACK ASSIGN) zu geben."
+StrTable_DiskErr24_Rhythm:
+	.long Str_Err24Rhythm_German
+	.long Str_Err24Rhythm_French
+	.long Str_Err24Rhythm_Spanish
+	.long Str_Err24Rhythm_Italian
+	.long Str_Err24Rhythm_Indonesian
+Str_Err24Rhythm_Indonesian:	aligned_string "Satu Rhythm Track sudah ada. Tidak mungkin menunjuk 2 Track untuk satu Rhythm."
+Str_Err24Rhythm_Italian:	aligned_string "ERROR 24"
+Str_Err24Rhythm_Spanish:	aligned_string "Ya existe una pista de ritmo. No es posible asignar dos pistas al ritmo."
+Str_Err24Rhythm_French:	.asciz "Vous avez déjà choisi une piste pour le rythme! Vous ne pouvez pas assigner deux pistes à celui-ci."
+Str_Err24Rhythm_German:	.asciz "Es ist nicht möglich, zwei RHYTHM-Spuren die gleiche Spurzuweisung (TRACK ASSIGN) zu geben."
 	aligned_string "A Rhythm Track already exists. It is impossible to assign two Tracks to Rhythm."
-LABEL_E981B8:
-	.long LABEL_E98334
-	.long LABEL_E982D8
-	.long LABEL_E98274
-	.long LABEL_E98228
-	.long LABEL_E9821E
-	.long LABEL_E981D0
-LABEL_E981D0:	aligned_string "Satu Chord Track sudah ada. tidak mungkin menunjuk 2 Track untuk satu Chord."
-LABEL_E9821E:	aligned_string "ERROR 24"
-LABEL_E98228:	aligned_string "Ya existe una pista de ritmo. No es posible asignar dos pistas al acordes."
-LABEL_E98274:	aligned_string "Vous avez déjà choisi une piste pour le Chord! Vous ne pouvez pas assigner deux pistes à celui-ci."
-LABEL_E982D8:	aligned_string "Es ist nicht möglich, zwei CHORD-Spuren die gleiche Spurzuweisung (TRACK ASSIGN) zu geben."
-LABEL_E98334:	aligned_string "A Chord Track already exists. It is impossible to assign two Tracks to Chord."
+StrTable_DiskErr24_Chord:
+	.long Str_Err24Chord_English
+	.long Str_Err24Chord_German
+	.long Str_Err24Chord_French
+	.long Str_Err24Chord_Spanish
+	.long Str_Err24Chord_Italian
+	.long Str_Err24Chord_Indonesian
+Str_Err24Chord_Indonesian:	aligned_string "Satu Chord Track sudah ada. tidak mungkin menunjuk 2 Track untuk satu Chord."
+Str_Err24Chord_Italian:	aligned_string "ERROR 24"
+Str_Err24Chord_Spanish:	aligned_string "Ya existe una pista de ritmo. No es posible asignar dos pistas al acordes."
+Str_Err24Chord_French:	aligned_string "Vous avez déjà choisi une piste pour le Chord! Vous ne pouvez pas assigner deux pistes à celui-ci."
+Str_Err24Chord_German:	aligned_string "Es ist nicht möglich, zwei CHORD-Spuren die gleiche Spurzuweisung (TRACK ASSIGN) zu geben."
+Str_Err24Chord_English:	aligned_string "A Chord Track already exists. It is impossible to assign two Tracks to Chord."
 	.byte 0x0a, 0x85, 0xe9, 0x00, 0xac, 0x84
 	.byte 0xe9, 0x00, 0x46, 0x84, 0xe9, 0x00, 0xf6, 0x83
 	.byte 0xe9, 0x00, 0xec, 0x83, 0xe9, 0x00, 0x9a, 0x83
 	.byte 0xe9, 0x00
-LABEL_E9839A:	aligned_string "Satu Control Track sudah ada. Tidak mungkin menunjuk 2 Track untuk satu Control."
-LABEL_E983EC:	aligned_string "ERROR 24"
+Str_Err24Ctrl_Indonesian:	aligned_string "Satu Control Track sudah ada. Tidak mungkin menunjuk 2 Track untuk satu Control."
+Str_Err24Ctrl_Italian:	aligned_string "ERROR 24"
 	.byte 0x59, 0x61
 	aligned_string " existe una pista de ritmo. No es posible asignar dos pistas al automáticos."
 	.byte 0x56, 0x6f
@@ -19768,16 +19768,16 @@ LABEL_E983EC:	aligned_string "ERROR 24"
 	aligned_string "Es ist nicht möglich, zwei CONTROL-Spuren die gleiche Spurzuweisung (TRACK ASSIGN) zu geben."
 	aligned_string "A Control Track already exists. It is impossible to assign two Tracks to Control."
 	.byte 0xd0, 0x86, 0xe9, 0x00
-LABEL_E98560:
+StrTable_DiskErr24_APC:
 	.long LABEL_E98676
-	.long LABEL_E98614
-	.long LABEL_E985C8
-	.long LABEL_E985BE
-	.long LABEL_E98574
-LABEL_E98574:	aligned_string "Satu APC Track sudah ada. Tidak mungkin menunjuk 2 Track untuk satu APC."
-LABEL_E985BE:	aligned_string "ERROR 24"
-LABEL_E985C8:	aligned_string "Ya existe una pista de ritmo. No es posible asignar dos pistas al acordes."
-LABEL_E98614:	aligned_string "Vous avez déjà choisi une piste pour le APC! Vous ne pouvez pas assigner deux pistes à celui-ci."
+	.long Str_Err24APC_French
+	.long Str_Err24APC_Spanish
+	.long Str_Err24APC_Italian
+	.long Str_Err24APC_Indonesian
+Str_Err24APC_Indonesian:	aligned_string "Satu APC Track sudah ada. Tidak mungkin menunjuk 2 Track untuk satu APC."
+Str_Err24APC_Italian:	aligned_string "ERROR 24"
+Str_Err24APC_Spanish:	aligned_string "Ya existe una pista de ritmo. No es posible asignar dos pistas al acordes."
+Str_Err24APC_French:	aligned_string "Vous avez déjà choisi une piste pour le APC! Vous ne pouvez pas assigner deux pistes à celui-ci."
 	.byte 0x45, 0x73
 	aligned_string " ist nicht möglich, zwei APC-Spuren die gleiche Spurzuweisung (TRACK ASSIGN) zu geben."
 	aligned_string "A APC Track already exists. It is impossible to assign two Tracks to APC."
@@ -19826,39 +19826,39 @@ LABEL_E98614:	aligned_string "Vous avez déjà choisi une piste pour le APC! Vous 
 	.byte 0x94, 0x8e, 0xe9, 0x00
 
 
-LABEL_E98D58:
-	.long LABEL_E98E52
-	.long LABEL_E98DFA
-	.long LABEL_E98DB0
-	.long LABEL_E98DA6
-	.long LABEL_E98D6C
-LABEL_E98D6C:	aligned_string "Lagu ini terlalu panjang untuk disimpan dalam MIDI FILE."
-LABEL_E98DA6:	aligned_string "ERROR 28"
-LABEL_E98DB0:	.asciz "Esta canción dura demasiado para poder ser almacenada en un fichero MIDI."
-LABEL_E98DFA:	aligned_string "Cette séquence est trop longue pour pouvoir être sauvegardée sous le format MIDI File."
-LABEL_E98E52:	aligned_string "Dieser Titel ist zu lang, um als MIDI File gespeichert zu werden."
+StrTable_DiskErr28:
+	.long Str_DiskErr28_German
+	.long Str_DiskErr28_French
+	.long Str_DiskErr28_Spanish
+	.long Str_DiskErr28_Italian
+	.long Str_DiskErr28_Indonesian
+Str_DiskErr28_Indonesian:	aligned_string "Lagu ini terlalu panjang untuk disimpan dalam MIDI FILE."
+Str_DiskErr28_Italian:	aligned_string "ERROR 28"
+Str_DiskErr28_Spanish:	.asciz "Esta canción dura demasiado para poder ser almacenada en un fichero MIDI."
+Str_DiskErr28_French:	aligned_string "Cette séquence est trop longue pour pouvoir être sauvegardée sous le format MIDI File."
+Str_DiskErr28_German:	aligned_string "Dieser Titel ist zu lang, um als MIDI File gespeichert zu werden."
 	aligned_string "This song is too long to be saved as a MIDI FILE."
-LABEL_E98EC6:
+StrTable_DiskErr29:
 	.byte 0x5c, 0x91
 	.byte 0xe9, 0x00, 0xc4, 0x90, 0xe9, 0x00, 0x0e, 0x90
 	.byte 0xe9, 0x00, 0x72, 0x8f, 0xe9, 0x00, 0x68, 0x8f
 	.byte 0xe9, 0x00, 0xde, 0x8e, 0xe9, 0x00
-LABEL_E98EDE:	aligned_string "MIDI FILE yang anda coba untuk dimuat melampaui kapasitas memori dari KN-5000 dan tidak dapat dimainkan.  Memori Sequencer sudah dihapus."
-LABEL_E98F68:	aligned_string "ERROR 29"
-LABEL_E98F72:	aligned_string "El fichero MIDI que usted ha tratado de cargar excede la capacidad de la memoria del KN3000 y no puede reproducirse. La memoria SEQUENCER ha sido borrada."
+Str_DiskErr29_Indonesian:	aligned_string "MIDI FILE yang anda coba untuk dimuat melampaui kapasitas memori dari KN-5000 dan tidak dapat dimainkan.  Memori Sequencer sudah dihapus."
+Str_DiskErr29_Italian:	aligned_string "ERROR 29"
+Str_DiskErr29_Spanish:	aligned_string "El fichero MIDI que usted ha tratado de cargar excede la capacidad de la memoria del KN3000 y no puede reproducirse. La memoria SEQUENCER ha sido borrada."
 	.byte 0x4c, 0x61
 	.byte 0x20, 0x73, 0xe9
 	aligned_string "quence MIDI File que vous essayez de charger est trop longue pour ma capacité de mémoire et je ne peux pas vous l'interpréter. J'ai ré-initialisé la mémoire de mon séquenceur."
 	.ascii "Der zu ladende MIDI File-Song überschreitet die interne Speicherkapazität, und kann somit nicht gespielt werden. Der Sequenzer-Speicher wurde gelösc"
 	.byte 0x68, 0x74, 0x2e, 0x00
 	aligned_string "The MIDI FILE that you have tried to load exceeds the memory capacity of the KN5000 and cannot be played. The Sequencer memory has been cleared."
-LABEL_E991EE:
+StrTable_DiskErr30:
 	.byte 0xd4, 0x94
 	.byte 0xe9, 0x00, 0x6a, 0x94, 0xe9, 0x00, 0xa4, 0x93
 	.byte 0xe9, 0x00, 0xda, 0x92, 0xe9, 0x00, 0xd0, 0x92
 	.byte 0xe9, 0x00, 0x06, 0x92, 0xe9, 0x00
-LABEL_E99206:	aligned_string "Ini tidak mungkin untuk mengubah Time Signature atau ukuran panjang Composer Pattern yang telah direkam. Jika anda ingin mengubahnya, pertama anda harus menghapus/menghilangkan semua Composer Pattern."
-LABEL_E992D0:	aligned_string "ERROR 30"
+Str_DiskErr30_Indonesian:	aligned_string "Ini tidak mungkin untuk mengubah Time Signature atau ukuran panjang Composer Pattern yang telah direkam. Jika anda ingin mengubahnya, pertama anda harus menghapus/menghilangkan semua Composer Pattern."
+Str_DiskErr30_Italian:	aligned_string "ERROR 30"
 	aligned_string "No es posible cambiar la signatura de tiempo ni la duración del compás de un patrón COMPOSER después de haber sido grabado. Si desea proseguir, usted tendrá que borrar primero todo el patrón COMPOSER."
 	aligned_string "Je ne peux pas changer la mesure ou la durée d'un style après qu'il ait été enregistré. Si vous désirez modifier ces données vous devez effacer la totalité du style et recommencer l'enregistrement."
 	.ascii "Nach einer Aufnahme im COMPOSER ist es nicht mehr möglich, das Takt-Maß bzw. die Pattern-Länge zu ände"
@@ -19900,16 +19900,16 @@ LABEL_E992D0:	aligned_string "ERROR 30"
 	.byte 0x70, 0x9f, 0xe9, 0x00
 
 
-LABEL_E99CD8:
+StrTable_DiskErr41:
 	.long LABEL_E99EDC
-	.long LABEL_E99E34
-	.long LABEL_E99D90
-	.long LABEL_E99D86
-	.long LABEL_E99CEC
-LABEL_E99CEC:	aligned_string "Satu kesalahan sudah terjadi sejak penerimaan data System Exclusive. Data dari yang dimaksudkan (transmitting device) tidak lengkap.  Harap dicoba lagi."
-LABEL_E99D86:	aligned_string "ERROR 41"
-LABEL_E99D90:	aligned_string "Se ha producido un error durante la recepción de datos exclusivos del sistema. Los datos del dispositivo de transmisión quizá no estén completos. Pruebe otra vez."
-LABEL_E99E34:	.ascii "Une erreur s'est produite pendant la r"
+	.long Str_DiskErr41_French
+	.long Str_DiskErr41_Spanish
+	.long Str_DiskErr41_Italian
+	.long Str_DiskErr41_Indonesian
+Str_DiskErr41_Indonesian:	aligned_string "Satu kesalahan sudah terjadi sejak penerimaan data System Exclusive. Data dari yang dimaksudkan (transmitting device) tidak lengkap.  Harap dicoba lagi."
+Str_DiskErr41_Italian:	aligned_string "ERROR 41"
+Str_DiskErr41_Spanish:	aligned_string "Se ha producido un error durante la recepción de datos exclusivos del sistema. Los datos del dispositivo de transmisión quizá no estén completos. Pruebe otra vez."
+Str_DiskErr41_French:	.ascii "Une erreur s'est produite pendant la r"
 	.byte 0xe9
 	.ascii "ception des données de Syst"
 	dec	5, xwa
@@ -19934,44 +19934,44 @@ LABEL_E99E34:	.ascii "Une erreur s'est produite pendant la r"
 	.byte 0x42, 0xa5, 0xe9, 0x00
 
 
-LABEL_E9A2C8:
-	.long LABEL_E9A494
-	.long LABEL_E9A3FE
-	.long LABEL_E9A382
-	.long LABEL_E9A378
-	.long LABEL_E9A2DC
-LABEL_E9A2DC:	aligned_string "File yang sedang anda coba untuk dimuat/disimpan sudah disimpan pada keyboard  KN terdahulu.Hanya mungkin menyimpan dengan menggunakan tambahan PERMAINAN."
-LABEL_E9A378:	aligned_string "ERROR 43"
-LABEL_E9A382:	.asciz "El fichero que trata de cargar fue almacenado en un teclado KN anterior. Sólo es posible cargar utilizando la opción “ALL”."
-LABEL_E9A3FE:	.asciz "Le fichier que vous essayez de charger a été sauvegardé à partir d'un clavier KN antérieur. Vous ne pouvez le charger qu'en utilisant l'option “ALL”."
-LABEL_E9A494:	.asciz "Der Datensatz (File), den Sie gerade laden möchten, wurde auf einem älteren KN-Keybord gespeichert. In diesem Fall kann nur unter Verwendung der „ALL“-Option geladen werden."
+StrTable_DiskErr43:
+	.long Str_DiskErr43_German
+	.long Str_DiskErr43_French
+	.long Str_DiskErr43_Spanish
+	.long Str_DiskErr43_Italian
+	.long Str_DiskErr43_Indonesian
+Str_DiskErr43_Indonesian:	aligned_string "File yang sedang anda coba untuk dimuat/disimpan sudah disimpan pada keyboard  KN terdahulu.Hanya mungkin menyimpan dengan menggunakan tambahan PERMAINAN."
+Str_DiskErr43_Italian:	aligned_string "ERROR 43"
+Str_DiskErr43_Spanish:	.asciz "El fichero que trata de cargar fue almacenado en un teclado KN anterior. Sólo es posible cargar utilizando la opción “ALL”."
+Str_DiskErr43_French:	.asciz "Le fichier que vous essayez de charger a été sauvegardé à partir d'un clavier KN antérieur. Vous ne pouvez le charger qu'en utilisant l'option “ALL”."
+Str_DiskErr43_German:	.asciz "Der Datensatz (File), den Sie gerade laden möchten, wurde auf einem älteren KN-Keybord gespeichert. In diesem Fall kann nur unter Verwendung der „ALL“-Option geladen werden."
 	aligned_string "The file that you are trying to load was saved on a previous KN keyboard. It is only possible to load using the \"PERFORMANCE\" option."
 
 
-LABEL_E9A5C8:
-	.long LABEL_E9A7FA
-	.long LABEL_E9A778
-	.long LABEL_E9A6F2
-	.long LABEL_E9A66C
-	.long LABEL_E9A662
-	.long LABEL_E9A5E0
-LABEL_E9A5E0:	aligned_string "Tidak mungkin untuk meng-edit satu Drum Kit. Silahkan pilih suara yang berbeda dari group apa saja, kecuali Keyboard Percussion."
-LABEL_E9A662:	aligned_string "ERROR 44"
-LABEL_E9A66C:	aligned_string "No es posible editar un juego de batería. Por favor, seleccione un sonido diferente de cualquier grupo excepto percusión de teclado."
-LABEL_E9A6F2:	.ascii "Il est impossible d'"
+StrTable_DiskErr44:
+	.long Str_DiskErr44_English
+	.long Str_DiskErr44_German
+	.long Str_DiskErr44_French
+	.long Str_DiskErr44_Spanish
+	.long Str_DiskErr44_Italian
+	.long Str_DiskErr44_Indonesian
+Str_DiskErr44_Indonesian:	aligned_string "Tidak mungkin untuk meng-edit satu Drum Kit. Silahkan pilih suara yang berbeda dari group apa saja, kecuali Keyboard Percussion."
+Str_DiskErr44_Italian:	aligned_string "ERROR 44"
+Str_DiskErr44_Spanish:	aligned_string "No es posible editar un juego de batería. Por favor, seleccione un sonido diferente de cualquier grupo excepto percusión de teclado."
+Str_DiskErr44_French:	.ascii "Il est impossible d'"
 	inc	4, xbc
 	.ascii "iter un Kit de percussions. Veuillez s"
 	dec	4, xbc
 	aligned_string "ectionner une sonorité d'un autre groupe excepté \"Keyboard Percussion\"."
-LABEL_E9A778:	.asciz "Es ist nicht möglich ein Drum Kit zu editieren. Bitte wählen Sie einen Klang aus einer anderen Gruppe ausser Keyboard Percussion."
-LABEL_E9A7FA:	aligned_string "It is impossible to edit a Drum Kit. Please select a different sound from any group except Keyboard Percussion."
-LABEL_E9A86A:
+Str_DiskErr44_German:	.asciz "Es ist nicht möglich ein Drum Kit zu editieren. Bitte wählen Sie einen Klang aus einer anderen Gruppe ausser Keyboard Percussion."
+Str_DiskErr44_English:	aligned_string "It is impossible to edit a Drum Kit. Please select a different sound from any group except Keyboard Percussion."
+StrTable_DiskErr46:
 	.byte 0x72, 0xaa, 0xe9, 0x00, 0xfe, 0xa9
 	.byte 0xe9, 0x00, 0x6c, 0xa9, 0xe9, 0x00, 0xf6, 0xa8
 	.byte 0xe9, 0x00, 0xec, 0xa8, 0xe9, 0x00, 0x82, 0xa8
 	.byte 0xe9, 0x00
-LABEL_E9A882:	aligned_string "Hanya mungkin dimasukkan Melody Tracks. Tracks seperti Rhythm, Chord dan Control tidak dapat dimasukkan."
-LABEL_E9A8EC:	aligned_string "ERROR 46"
+Str_DiskErr46_Indonesian:	aligned_string "Hanya mungkin dimasukkan Melody Tracks. Tracks seperti Rhythm, Chord dan Control tidak dapat dimasukkan."
+Str_DiskErr46_Italian:	aligned_string "ERROR 46"
 	aligned_string "Sólo es posible insertar pistas de melodías. Las pistas tales como ritmo, acorde y control no pueden ser insertadas."
 	.ascii "Il est seulement possible d'insérer des pistes comportant une mélodie. Des pistes assignées à Rhythm, Chord and Control ne peuvent être insé"
 	.byte 0x72, 0xe9, 0x65, 0x73, 0x2e, 0x00, 0x45, 0x73
@@ -19979,25 +19979,25 @@ LABEL_E9A8EC:	aligned_string "ERROR 46"
 	aligned_string "nnen nur Melodie-Spuren eingefügt werden. Spuren wie Rhythm, Chord und Control können nicht eingefügt werden."
 	aligned_string "It is only possible to insert Melody Tracks. Tracks such as Rhythm, Chord and Control cannot be inserted."
 	.byte 0xe2, 0xac, 0xe9, 0x00
-LABEL_E9AAE0:
-	.long LABEL_E9AC6C
-	.long LABEL_E9ABF8
-	.long LABEL_E9AB7A
-	.long LABEL_E9AB70
-	.long LABEL_E9AAF4
-LABEL_E9AAF4:	aligned_string "Tidak mungkin untuk menggunakan Sound Arranger dengan Composer Pattern. Silahkan pilih satu contoh preset (Preset Pattern)."
-LABEL_E9AB70:	aligned_string "ERROR 47"
-LABEL_E9AB7A:	aligned_string "No es posible utilizar el arreglador musical con un esquema del compositor. Por favor, seleccione un esquema preconfigurado."
-LABEL_E9ABF8:	.ascii "L'utilisation du \"Sound Arranger\" n'est pas possible avec un \"Composer\". Veuillez choisir un rythme pr"
+StrTable_DiskErr47:
+	.long Str_DiskErr47_German
+	.long Str_DiskErr47_French
+	.long Str_DiskErr47_Spanish
+	.long Str_DiskErr47_Italian
+	.long Str_DiskErr47_Indonesian
+Str_DiskErr47_Indonesian:	aligned_string "Tidak mungkin untuk menggunakan Sound Arranger dengan Composer Pattern. Silahkan pilih satu contoh preset (Preset Pattern)."
+Str_DiskErr47_Italian:	aligned_string "ERROR 47"
+Str_DiskErr47_Spanish:	aligned_string "No es posible utilizar el arreglador musical con un esquema del compositor. Por favor, seleccione un esquema preconfigurado."
+Str_DiskErr47_French:	.ascii "L'utilisation du \"Sound Arranger\" n'est pas possible avec un \"Composer\". Veuillez choisir un rythme pr"
 	.byte 0xe9, 0x73
 	.byte 0xe9
 	.ascii "lectionn"
 	.byte 0xe9, 0x2e, 0x00
-LABEL_E9AC6C:	aligned_string "Der Sound Arranger kann nicht mit einem Composer Pattern verwendet werden. Bitte wählen Sie einen Werksrhythmus aus."
+Str_DiskErr47_German:	aligned_string "Der Sound Arranger kann nicht mit einem Composer Pattern verwendet werden. Bitte wählen Sie einen Werksrhythmus aus."
 	aligned_string "It is not possible to use the Sound Arranger with a composer pattern. Please select a preset pattern."
 
 
-LABEL_E9AD48:
+StrTable_DiskErr48:
 	.long LABEL_E9AF02
 	.long LABEL_E9AE9A
 	.long LABEL_E9AE30
@@ -20179,56 +20179,56 @@ LABEL_E9D228:	aligned_string "Por favor seleccione el Panel Memory al que desea 
 	.byte 0x03, 0x00, 0xff, 0xff, 0x00, 0x00, 0x4e, 0x57
 	.byte 0xe9, 0x00, 0x42, 0x5f, 0xe9, 0x00, 0x03, 0x00
 	.byte 0xff, 0xff, 0x01, 0x00, 0x4e, 0x57, 0xe9, 0x00
-	.long LABEL_E960D8
+	.long StrTable_DiskErr01
 	.byte 0x03, 0x00, 0xff, 0xff
 	.byte 0x02, 0x00, 0x4e, 0x57, 0xe9, 0x00, 0x76, 0x62
 	.byte 0xe9, 0x00, 0x03, 0x00, 0xff, 0xff, 0x03, 0x00
-	.long LABEL_E9574E
+	.long StrTable_ErrorLabel
 	.long LABEL_E96344
 	.byte 0x00, 0x00, 0xff, 0xff, 0xff, 0xff, 0x6e, 0x56
 	.byte 0xe9, 0x00, 0xe4, 0x56, 0xe9, 0x00, 0x03, 0x00
 	.byte 0xff, 0xff, 0x05, 0x00, 0x4e, 0x57, 0xe9, 0x00
-	.long LABEL_E96482
+	.long StrTable_DiskErr05
 	.byte 0x03, 0x00, 0xff, 0xff
 	.byte 0x06, 0x00, 0x4e, 0x57, 0xe9, 0x00, 0x28, 0x66
 	.byte 0xe9, 0x00, 0x03, 0x00, 0xff, 0xff, 0x07, 0x00
-	.long LABEL_E9574E
-	.long LABEL_E9685E
+	.long StrTable_ErrorLabel
+	.long StrTable_DiskErr07
 	.byte 0x03, 0x00, 0xff, 0xff, 0x08, 0x00, 0x4e, 0x57
 	.byte 0xe9, 0x00, 0xc8, 0x69, 0xe9, 0x00, 0x03, 0x00
 	.byte 0xff, 0xff, 0x09, 0x00, 0x4e, 0x57, 0xe9, 0x00
-	.long LABEL_E96C78
+	.long StrTable_DiskErr09
 	.byte 0x03, 0x00, 0xff, 0xff
 	.byte 0x0a, 0x00, 0x4e, 0x57, 0xe9, 0x00, 0x20, 0x6e
 	.byte 0xe9, 0x00, 0x03, 0x00, 0xff, 0xff, 0x0b, 0x00
-	.long LABEL_E9574E
-	.long LABEL_E96F02
+	.long StrTable_ErrorLabel
+	.long StrTable_DiskErr11
 	.byte 0x03, 0x00, 0xff, 0xff, 0x0c, 0x00, 0x4e, 0x57
 	.byte 0xe9, 0x00, 0xe4, 0x6f, 0xe9, 0x00, 0x00, 0x00
 	.byte 0xff, 0xff, 0xff, 0xff, 0x6e, 0x56, 0xe9, 0x00
-	.long LABEL_E956E4
+	.long StrTable_LangTexts
 	.byte 0x03, 0x00, 0xff, 0xff
 	.byte 0x14, 0x00, 0x4e, 0x57, 0xe9, 0x00, 0x8a, 0x79
 	.byte 0xe9, 0x00, 0x03, 0x00, 0xff, 0xff, 0x15, 0x00
-	.long LABEL_E9574E
+	.long StrTable_ErrorLabel
 	.long LABEL_E97BDE
 	.byte 0x00, 0x00, 0xff, 0xff, 0xff, 0xff, 0x6e, 0x56
 	.byte 0xe9, 0x00, 0xe4, 0x56, 0xe9, 0x00, 0x00, 0x00
 	.byte 0xff, 0xff, 0xff, 0xff, 0x6e, 0x56, 0xe9, 0x00
-	.long LABEL_E956E4
+	.long StrTable_LangTexts
 	.byte 0x00, 0x00, 0xff, 0xff
 	.byte 0xff, 0xff, 0x6e, 0x56, 0xe9, 0x00, 0xe4, 0x56
 	.byte 0xe9, 0x00, 0x03, 0x00, 0xff, 0xff, 0x1e, 0x00
-	.long LABEL_E9574E
-	.long LABEL_E991EE
+	.long StrTable_ErrorLabel
+	.long StrTable_DiskErr30
 	.byte 0x01, 0x00, 0xff, 0xff, 0xff, 0xff, 0x6e, 0x56
 	.byte 0xe9, 0x00, 0xea, 0x57, 0xe9, 0x00, 0x01, 0x00
 	.byte 0xff, 0xff, 0xff, 0xff, 0x6e, 0x56, 0xe9, 0x00
-	.long LABEL_E957EA
+	.long StrTable_CompletedLabel
 	.byte 0x03, 0x00, 0xff, 0xff
 	.byte 0x1f, 0x00, 0x4e, 0x57, 0xe9, 0x00, 0x92, 0x95
 	.byte 0xe9, 0x00, 0x03, 0x00, 0xff, 0xff, 0x20, 0x00
-	.long LABEL_E9574E
+	.long StrTable_ErrorLabel
 	.long LABEL_E99A0E
 	.byte 0x03, 0x00, 0xff, 0xff, 0x16, 0x00, 0x4e, 0x57
 	.byte 0xe9, 0x00, 0x6a, 0x7c, 0xe9, 0x00, 0x03, 0x00
@@ -20237,7 +20237,7 @@ LABEL_E9D228:	aligned_string "Por favor seleccione el Panel Memory al que desea 
 	.byte 0x03, 0x00, 0xff, 0xff
 	.byte 0x18, 0x00, 0x4e, 0x57, 0xe9, 0x00, 0xec, 0x7f
 	.byte 0xe9, 0x00, 0x03, 0x00, 0xff, 0xff, 0x19, 0x00
-	.long LABEL_E9574E
+	.long StrTable_ErrorLabel
 	.long LABEL_E9871A
 	.byte 0x03, 0x00, 0xff, 0xff, 0x1a, 0x00, 0x4e, 0x57
 	.byte 0xe9, 0x00, 0x92, 0x88, 0xe9, 0x00, 0x03, 0x00
@@ -20246,8 +20246,8 @@ LABEL_E9D228:	aligned_string "Por favor seleccione el Panel Memory al que desea 
 	.byte 0x03, 0x00, 0xff, 0xff
 	.byte 0x1c, 0x00, 0x4e, 0x57, 0xe9, 0x00, 0x54, 0x8d
 	.byte 0xe9, 0x00, 0x03, 0x00, 0xff, 0xff, 0x1d, 0x00
-	.long LABEL_E9574E
-	.long LABEL_E98EC6
+	.long StrTable_ErrorLabel
+	.long StrTable_DiskErr29
 	.byte 0x03, 0x00, 0xff, 0xff, 0x2a, 0x00, 0x4e, 0x57
 	.byte 0xe9, 0x00, 0xfa, 0x9f, 0xe9, 0x00, 0x03, 0x00
 	.byte 0xff, 0xff, 0x29, 0x00, 0x4e, 0x57, 0xe9, 0x00
@@ -20255,53 +20255,53 @@ LABEL_E9D228:	aligned_string "Por favor seleccione el Panel Memory al que desea 
 	.byte 0x03, 0x00, 0xff, 0xff
 	.byte 0x28, 0x00, 0x4e, 0x57, 0xe9, 0x00, 0x7a, 0x9a
 	.byte 0xe9, 0x00, 0x01, 0x00, 0xff, 0xff, 0xff, 0xff
-	.long LABEL_E9566E
-	.long LABEL_E957EA
+	.long StrTable_LangHeaders
+	.long StrTable_CompletedLabel
 	.byte 0x02, 0x00, 0xff, 0xff, 0xff, 0xff, 0x8c, 0x57
 	.byte 0xe9, 0x00, 0xce, 0x58, 0xe9, 0x00, 0x05, 0x00
 	.byte 0xff, 0xff, 0xff, 0xff, 0x6e, 0x56, 0xe9, 0x00
-	.long LABEL_E95852
+	.long StrTable_PleaseWaitLabel
 	.byte 0x05, 0x00, 0xff, 0xff
 	.byte 0xff, 0xff, 0x6e, 0x56, 0xe9, 0x00, 0x52, 0x58
 	.byte 0xe9, 0x00, 0x05, 0x00, 0xff, 0xff, 0xff, 0xff
-	.long LABEL_E9566E
-	.long LABEL_E95852
+	.long StrTable_LangHeaders
+	.long StrTable_PleaseWaitLabel
 	.byte 0x05, 0x00, 0xff, 0xff, 0xff, 0xff, 0x6e, 0x56
 	.byte 0xe9, 0x00, 0x52, 0x58, 0xe9, 0x00, 0x01, 0x00
 	.byte 0xff, 0xff, 0xff, 0xff, 0x6e, 0x56, 0xe9, 0x00
-	.long LABEL_E957EA
+	.long StrTable_CompletedLabel
 	.byte 0x00, 0x00, 0xff, 0xff
 	.byte 0xff, 0xff, 0x6e, 0x56, 0xe9, 0x00, 0xe4, 0x56
 	.byte 0xe9, 0x00, 0x03, 0x00, 0xff, 0xff, 0x2b, 0x00
-	.long LABEL_E9574E
+	.long StrTable_ErrorLabel
 	.long LABEL_E9A2C4
 	.byte 0x01, 0x00, 0xff, 0xff, 0xff, 0xff, 0x6e, 0x56
 	.byte 0xe9, 0x00, 0xea, 0x57, 0xe9, 0x00, 0x03, 0x00
 	.byte 0xff, 0xff, 0x2c, 0x00, 0x4e, 0x57, 0xe9, 0x00
-	.long LABEL_E9A5C8
+	.long StrTable_DiskErr44
 	.byte 0x00, 0x00, 0xff, 0xff
 	.byte 0xff, 0xff, 0x6e, 0x56, 0xe9, 0x00, 0xe4, 0x56
 	.byte 0xe9, 0x00, 0x03, 0x00, 0xff, 0xff, 0x0f, 0x00
-	.long LABEL_E9574E
+	.long StrTable_ErrorLabel
 	.long LABEL_E971DE
 	.byte 0x03, 0x00, 0xff, 0xff, 0x10, 0x00, 0x4e, 0x57
 	.byte 0xe9, 0x00, 0xfc, 0x72, 0xe9, 0x00, 0x03, 0x00
 	.byte 0xff, 0xff, 0x11, 0x00, 0x4e, 0x57, 0xe9, 0x00
-	.long LABEL_E974D4
+	.long StrPtr_DiskErr17Table
 	.byte 0x03, 0x00, 0xff, 0xff
 	.byte 0x12, 0x00, 0x4e, 0x57, 0xe9, 0x00, 0xba, 0x75
 	.byte 0xe9, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff
-	.long LABEL_E9566E
-	.long LABEL_E956E4
+	.long StrTable_LangHeaders
+	.long StrTable_LangTexts
 	.byte 0x00, 0x00, 0xff, 0xff, 0xff, 0xff, 0x6e, 0x56
 	.byte 0xe9, 0x00, 0xe4, 0x56, 0xe9, 0x00, 0x03, 0x00
 	.byte 0xff, 0xff, 0x2e, 0x00, 0x4e, 0x57, 0xe9, 0x00
-	.long LABEL_E9A86A
+	.long StrTable_DiskErr46
 	.byte 0x03, 0x00, 0xff, 0xff
 	.byte 0x2f, 0x00, 0x4e, 0x57, 0xe9, 0x00, 0xdc, 0xaa
 	.byte 0xe9, 0x00, 0x03, 0x00, 0xff, 0xff, 0x30, 0x00
-	.long LABEL_E9574E
-	.long LABEL_E9AD48
+	.long StrTable_ErrorLabel
+	.long StrTable_DiskErr48
 	.byte 0x03, 0x00, 0xff, 0xff, 0x31, 0x00, 0x4e, 0x57
 	.byte 0xe9, 0x00, 0x56, 0xaf, 0xe9, 0x00, 0x03, 0x00
 	.byte 0xff, 0xff, 0x36, 0x00, 0x4e, 0x57, 0xe9, 0x00
@@ -20309,7 +20309,7 @@ LABEL_E9D228:	aligned_string "Por favor seleccione el Panel Memory al que desea 
 	.byte 0x03, 0x00, 0xff, 0xff
 	.byte 0x37, 0x00, 0x4e, 0x57, 0xe9, 0x00, 0x6e, 0xb5
 	.byte 0xe9, 0x00, 0x03, 0x00, 0xff, 0xff, 0x38, 0x00
-	.long LABEL_E9574E
+	.long StrTable_ErrorLabel
 	.long LABEL_E9B92A
 	.byte 0x03, 0x00, 0xff, 0xff, 0x39, 0x00, 0x4e, 0x57
 	.byte 0xe9, 0x00, 0xf6, 0xbb, 0xe9, 0x00, 0x03, 0x00
@@ -20318,17 +20318,17 @@ LABEL_E9D228:	aligned_string "Por favor seleccione el Panel Memory al que desea 
 	.byte 0x03, 0x00, 0xff, 0xff
 	.byte 0x3d, 0x00, 0x4e, 0x57, 0xe9, 0x00, 0x8a, 0xc8
 	.byte 0xe9, 0x00, 0x03, 0x00, 0xff, 0xff, 0x13, 0x00
-	.long LABEL_E9574E
-	.long LABEL_E977AE
+	.long StrTable_ErrorLabel
+	.long StrTable_DiskErr19
 	.byte 0x00, 0x00, 0xff, 0xff, 0xff, 0xff, 0x6e, 0x56
 	.byte 0xe9, 0x00, 0xe4, 0x56, 0xe9, 0x00, 0x00, 0x00
 	.byte 0xff, 0xff, 0xff, 0xff, 0x6e, 0x56, 0xe9, 0x00
-	.long LABEL_E956E4
+	.long StrTable_LangTexts
 	.byte 0x00, 0x00, 0xff, 0xff
 	.byte 0xff, 0xff, 0x6e, 0x56, 0xe9, 0x00, 0xe4, 0x56
 	.byte 0xe9, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff
-	.long LABEL_E9566E
-	.long LABEL_E956E4
+	.long StrTable_LangHeaders
+	.long StrTable_LangTexts
 	.byte 0x03, 0x00, 0xff, 0xff, 0x3b, 0x00, 0x4e, 0x57
 	.byte 0xe9, 0x00, 0x76, 0xc2, 0xe9, 0x00, 0x03, 0x00
 	.byte 0xff, 0xff, 0x3c, 0x00, 0x4e, 0x57, 0xe9, 0x00
@@ -20336,7 +20336,7 @@ LABEL_E9D228:	aligned_string "Por favor seleccione el Panel Memory al que desea 
 	.byte 0x03, 0x00, 0xff, 0xff
 	.byte 0x3e, 0x00, 0x4e, 0x57, 0xe9, 0x00, 0x06, 0xcb
 	.byte 0xe9, 0x00, 0x03, 0x00, 0xff, 0xff, 0x3f, 0x00
-	.long LABEL_E9574E
+	.long StrTable_ErrorLabel
 	.long LABEL_E9CF14
 	.byte 0x02, 0x00, 0xff, 0xff, 0xff, 0xff, 0x8c, 0x57
 	.byte 0xe9, 0x00, 0x88, 0x5b, 0xe9, 0x00, 0x03, 0x00
@@ -20345,17 +20345,17 @@ LABEL_E9D228:	aligned_string "Por favor seleccione el Panel Memory al que desea 
 	.byte 0x04, 0x00, 0xff, 0xff
 	.byte 0xff, 0xff, 0x6e, 0x56, 0xe9, 0x00, 0xfa, 0x5e
 	.byte 0xe9, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff
-	.long LABEL_E9566E
-	.long LABEL_E956E4
+	.long StrTable_LangHeaders
+	.long StrTable_LangTexts
 	.byte 0x01, 0x00, 0xff, 0xff, 0xff, 0xff, 0x6e, 0x56
 	.byte 0xe9, 0x00, 0xe4, 0x56, 0xe9, 0x00, 0x02, 0x00
 	.byte 0xff, 0xff, 0xff, 0xff, 0x6e, 0x56, 0xe9, 0x00
-	.long LABEL_E956E4
+	.long StrTable_LangTexts
 	.byte 0x03, 0x00, 0xff, 0xff
 	.byte 0xff, 0xff, 0x6e, 0x56, 0xe9, 0x00, 0xe4, 0x56
 	.byte 0xe9, 0x00, 0x04, 0x00, 0xff, 0xff, 0xff, 0xff
-	.long LABEL_E9566E
-	.long LABEL_E956E4
+	.long StrTable_LangHeaders
+	.long StrTable_LangTexts
 	.byte 0x00, 0x00, 0xff, 0xff, 0xff, 0xff, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x14, 0x00
 	.byte 0xee, 0x00, 0x02, 0x00, 0xee, 0x00, 0x05, 0x00
@@ -20738,7 +20738,7 @@ LABEL_E9DF2C:
 	.byte 0x00, 0x00, 0xda, 0x00, 0x76, 0x00, 0x02, 0x00
 	.byte 0x01, 0x00, 0x01, 0x00, 0x00, 0x00, 0x20, 0x01
 	.byte 0x3a, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00
-	.long LABEL_EA0000
+	.long Presentation_RootEntry
 	.byte 0x76, 0x00, 0x02, 0x00
 	.byte 0x01, 0x00, 0x01, 0x00, 0x00, 0x00, 0x1e, 0x01
 	.byte 0x3a, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00
@@ -20763,7 +20763,7 @@ LABEL_E9DF2C:
 	.byte 0x00, 0x00, 0xf2, 0x00, 0x76, 0x00, 0x02, 0x00
 	.byte 0x01, 0x00, 0x01, 0x00, 0x00, 0x00, 0x7e, 0x00
 	.byte 0x3a, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00
-	.long LABEL_EA0000
+	.long Presentation_RootEntry
 	.byte 0x76, 0x00, 0x02, 0x00
 	.byte 0x01, 0x00, 0x01, 0x00, 0x00, 0x00, 0x5e, 0x00
 	.byte 0x3a, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00
@@ -21021,7 +21021,7 @@ LABEL_E9DF2C:
 	.byte 0x00, 0x00, 0xda, 0x00, 0x76, 0x00, 0x02, 0x00
 	.byte 0x01, 0x00, 0x01, 0x00, 0x00, 0x00, 0x20, 0x01
 	.byte 0x3a, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00
-	.long LABEL_EA0000
+	.long Presentation_RootEntry
 	.byte 0x76, 0x00, 0x02, 0x00
 	.byte 0x01, 0x00, 0x01, 0x00, 0x00, 0x00, 0x1e, 0x01
 	.byte 0x3a, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00
@@ -21046,7 +21046,7 @@ LABEL_E9DF2C:
 	.byte 0x00, 0x00, 0xf2, 0x00, 0x76, 0x00, 0x02, 0x00
 	.byte 0x01, 0x00, 0x01, 0x00, 0x00, 0x00, 0x7e, 0x00
 	.byte 0x3a, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00
-	.long LABEL_EA0000
+	.long Presentation_RootEntry
 	.byte 0x76, 0x00, 0x02, 0x00
 	.byte 0x01, 0x00, 0x01, 0x00, 0x00, 0x00, 0x5e, 0x00
 	.byte 0x3a, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00
@@ -21221,57 +21221,57 @@ LABEL_E9DF2C:
 	.byte 0x80, 0x0b, 0xf8, 0x00, 0x21, 0x0d, 0xf8, 0x00
 	.byte 0xaf, 0x12, 0xf8, 0x00, 0x1b, 0x23, 0xf8, 0x00
 	.byte 0x90, 0x18, 0xf8, 0x00, 0x22, 0x22, 0xf8, 0x00
-LABEL_E9F148:
+MidiParam_PanelCfgTable:
 	.byte 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	.long LABEL_E9F24A
+	.long MidiParamStr1_End
 	.byte 0x1f, 0x00, 0x01, 0x00
 	.byte 0xf0, 0xff, 0x00, 0x00, 0x44, 0xf2, 0xe9, 0x00
 	.byte 0x0e, 0x00, 0x03, 0x00, 0xf0, 0xff, 0x00, 0x00
-	.long LABEL_E9F240
+	.long MidiParamStr1_Pan
 	.byte 0x0f, 0x00, 0x02, 0x00
 	.byte 0xf0, 0xff, 0x01, 0x00, 0x38, 0xf2, 0xe9, 0x00
 	.byte 0x20, 0x00, 0x05, 0x00, 0x00, 0x00, 0x00, 0x00
-	.long LABEL_E9F236
+	.long MidiParamStr1_Volume
 	.byte 0x0d, 0x00, 0x03, 0x00
 	.byte 0x04, 0x00, 0x01, 0x00, 0x2e, 0xf2, 0xe9, 0x00
 	.byte 0x0c, 0x00, 0x03, 0x00, 0x04, 0x00, 0x00, 0x00
-	.long LABEL_E9F226
+	.long MidiParamStr1_DspEff
 	.byte 0x03, 0x00, 0x04, 0x00
 	.byte 0x04, 0x00, 0x00, 0x00, 0x1a, 0xf2, 0xe9, 0x00
 	.byte 0x09, 0x00, 0x07, 0x00, 0x04, 0x00, 0x00, 0x00
-	.long LABEL_E9F210
+	.long MidiParamStr1_KeyShift
 	.byte 0x20, 0x00, 0x05, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x0e, 0xf2, 0xe9, 0x00
 	.byte 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	.long LABEL_E9F20C
+	.long MidiParamStr1_Empty
 	.byte 0x20, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x0a, 0xf2, 0xe9, 0x00
 	.byte 0x01, 0x00, 0x08, 0x00, 0x00, 0x00, 0x01, 0x00
-	.long LABEL_E9F204
+	.long MidiParamStr1_Midi
 	.byte 0x00, 0x00, 0x04, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0xfe, 0xf1, 0xe9, 0x00
 	.byte 0x20, 0x00, 0x05, 0x00, 0x00, 0x00, 0x00, 0x00
-	.long LABEL_E9F1FC
-LABEL_E9F1FC:
+	.long MidiParamStr1_Local
+MidiParamStr1_Local:
 	.byte 0x00, 0xff, 0x4c, 0x4f
 	.byte 0x43, 0x41, 0x4c, 0x00
-LABEL_E9F204:
+MidiParamStr1_Midi:
 	.byte 0x4d, 0x49, 0x44, 0x49
 	.byte 0x00, 0xff, 0x00, 0xff
-LABEL_E9F20C:
+MidiParamStr1_Empty:
 	.byte 0x00, 0xff, 0x00, 0xff
-LABEL_E9F210:	aligned_string "KEY SHIFT"
+MidiParamStr1_KeyShift:	aligned_string "KEY SHIFT"
 	aligned_string "DIGITAL EFF"
-LABEL_E9F226:	aligned_string "DSP EFF"
+MidiParamStr1_DspEff:	aligned_string "DSP EFF"
 	aligned_string "REVERB"
-LABEL_E9F236:	aligned_string ""
+MidiParamStr1_Volume:	aligned_string ""
 	aligned_string "VOLUME"
-LABEL_E9F240:
+MidiParamStr1_Pan:
 	.byte 0x50, 0x41, 0x4e, 0x00
 	.byte 0x53, 0x4f, 0x55, 0x4e
 	.byte 0x44, 0x00
-LABEL_E9F24A:	aligned_string ""
-LABEL_E9F24C:
+MidiParamStr1_End:	aligned_string ""
+Midi_PartToChMappingTable:
 	.byte 0x00, 0x00, 0x01, 0x00
 	.byte 0x02, 0x00, 0x03, 0x00, 0x04, 0x00, 0x05, 0x00
 	.byte 0x06, 0x00, 0x07, 0x00, 0x08, 0x00, 0x09, 0x00
@@ -21281,115 +21281,115 @@ LABEL_E9F24C:
 	.byte 0x11, 0x00, 0x10, 0x00, 0xff, 0x00, 0xff, 0x00
 	.byte 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00
 	.byte 0xff, 0x00, 0xff, 0x00
-LABEL_E9F28C:	aligned_string "      "
-LABEL_E9F294:	aligned_string "RHYTHM"
-LABEL_E9F29C:	aligned_string "CTRL  "
-LABEL_E9F2A4:	aligned_string "APC   "
-LABEL_E9F2AC:	aligned_string "MIC   "
-LABEL_E9F2B4:	aligned_string "METRO "
-LABEL_E9F2BC:	aligned_string "MSP   "
-LABEL_E9F2C4:	aligned_string "DRUMS "
-LABEL_E9F2CC:	aligned_string "BASS  "
-LABEL_E9F2D4:	aligned_string "ACOMP3"
-LABEL_E9F2DC:	aligned_string "ACOMP2"
-LABEL_E9F2E4:	aligned_string "ACOMP1"
-LABEL_E9F2EC:	aligned_string "R.BASS"
-LABEL_E9F2F4:	aligned_string "CHORD "
-LABEL_E9F2FC:	aligned_string "PART16"
-LABEL_E9F304:	aligned_string "PART15"
-LABEL_E9F30C:	aligned_string "PART14"
-LABEL_E9F314:	aligned_string "PART13"
-LABEL_E9F31C:	aligned_string "PART12"
-LABEL_E9F324:	aligned_string "PART11"
-LABEL_E9F32C:	aligned_string "PART10"
-LABEL_E9F334:	aligned_string "PART 9"
-LABEL_E9F33C:	aligned_string "PART 8"
-LABEL_E9F344:	aligned_string "PART 7"
-LABEL_E9F34C:	aligned_string "PART 6"
-LABEL_E9F354:	aligned_string "PART 5"
-LABEL_E9F35C:	aligned_string "PART 4"
-LABEL_E9F364:	aligned_string "LEFT  "
-LABEL_E9F36C:	aligned_string "RIGHT2"
-LABEL_E9F374:	aligned_string "RIGHT1"
-LABEL_E9F37C:	aligned_string "    "
-LABEL_E9F382:	aligned_string "RHY "
-LABEL_E9F388:	aligned_string "CTRL"
-LABEL_E9F38E:	aligned_string "APC "
-LABEL_E9F394:	aligned_string "MIC "
-LABEL_E9F39A:	aligned_string "METR"
-LABEL_E9F3A0:	aligned_string "MSP "
-LABEL_E9F3A6:	aligned_string "DRUM"
-LABEL_E9F3AC:	aligned_string "BASS"
-LABEL_E9F3B2:	aligned_string "ACP3"
-LABEL_E9F3B8:	aligned_string "ACP2"
-LABEL_E9F3BE:	aligned_string "ACP1"
-LABEL_E9F3C4:	aligned_string "R.BA"
-LABEL_E9F3CA:	aligned_string "CHRD"
-LABEL_E9F3D0:	aligned_string "PT16"
-LABEL_E9F3D6:	aligned_string "PT15"
-LABEL_E9F3DC:	aligned_string "PT14"
-LABEL_E9F3E2:	aligned_string "PT13"
-LABEL_E9F3E8:	aligned_string "PT12"
-LABEL_E9F3EE:	aligned_string "PT11"
-LABEL_E9F3F4:	aligned_string "PT10"
-LABEL_E9F3FA:	aligned_string "PT 9"
-LABEL_E9F400:	aligned_string "PT 8"
-LABEL_E9F406:	aligned_string "PT 7"
-LABEL_E9F40C:	aligned_string "PT 6"
-LABEL_E9F412:	aligned_string "PT 5"
-LABEL_E9F418:	aligned_string "PT 4"
-LABEL_E9F41E:	aligned_string "LEFT"
-LABEL_E9F424:	aligned_string "RT 2"
-LABEL_E9F42A:	aligned_string "RT 1"
-LABEL_E9F430:	aligned_string "CHORD "
-LABEL_E9F438:	aligned_string "R.BASS"
-LABEL_E9F440:	aligned_string "MSP   "
-LABEL_E9F448:	aligned_string "BASS  "
-LABEL_E9F450:	aligned_string "ACOMP1"
-LABEL_E9F458:	aligned_string "ACOMP2"
-LABEL_E9F460:	aligned_string "ACOMP3"
-LABEL_E9F468:	aligned_string "DRUMS "
-LABEL_E9F470:	aligned_string " TR16 "
-LABEL_E9F478:	aligned_string " TR15 "
-LABEL_E9F480:	aligned_string " TR14 "
-LABEL_E9F488:	aligned_string " TR13 "
-LABEL_E9F490:	aligned_string " TR12 "
-LABEL_E9F498:	aligned_string " TR11 "
-LABEL_E9F4A0:	aligned_string " TR10 "
-LABEL_E9F4A8:	aligned_string " TR 9 "
-LABEL_E9F4B0:	aligned_string " TR 8 "
-LABEL_E9F4B8:	aligned_string " TR 7 "
-LABEL_E9F4C0:	aligned_string " TR 6 "
-LABEL_E9F4C8:	aligned_string " TR 5 "
-LABEL_E9F4D0:	aligned_string " TR 4 "
-LABEL_E9F4D8:	aligned_string " TR 3 "
-LABEL_E9F4E0:	aligned_string " TR 2 "
-LABEL_E9F4E8:	aligned_string " TR 1 "
-LABEL_E9F4F0:	.asciz " -- "
+PartName6_Blank:	aligned_string "      "
+PartName6_Rhythm:	aligned_string "RHYTHM"
+PartName6_Ctrl:	aligned_string "CTRL  "
+PartName6_Apc:	aligned_string "APC   "
+PartName6_Mic:	aligned_string "MIC   "
+PartName6_Metro:	aligned_string "METRO "
+PartName6_Msp:	aligned_string "MSP   "
+PartName6_Drums:	aligned_string "DRUMS "
+PartName6_Bass:	aligned_string "BASS  "
+PartName6_Acomp3:	aligned_string "ACOMP3"
+PartName6_Acomp2:	aligned_string "ACOMP2"
+PartName6_Acomp1:	aligned_string "ACOMP1"
+PartName6_RBass:	aligned_string "R.BASS"
+PartName6_Chord:	aligned_string "CHORD "
+PartName6_Part16:	aligned_string "PART16"
+PartName6_Part15:	aligned_string "PART15"
+PartName6_Part14:	aligned_string "PART14"
+PartName6_Part13:	aligned_string "PART13"
+PartName6_Part12:	aligned_string "PART12"
+PartName6_Part11:	aligned_string "PART11"
+PartName6_Part10:	aligned_string "PART10"
+PartName6_Part9:	aligned_string "PART 9"
+PartName6_Part8:	aligned_string "PART 8"
+PartName6_Part7:	aligned_string "PART 7"
+PartName6_Part6:	aligned_string "PART 6"
+PartName6_Part5:	aligned_string "PART 5"
+PartName6_Part4:	aligned_string "PART 4"
+PartName6_Left:	aligned_string "LEFT  "
+PartName6_Right2:	aligned_string "RIGHT2"
+PartName6_Right1:	aligned_string "RIGHT1"
+PartName6_TableEnd:	aligned_string "    "
+PartName4_Rhythm:	aligned_string "RHY "
+PartName4_Ctrl:	aligned_string "CTRL"
+PartName4_Apc:	aligned_string "APC "
+PartName4_Mic:	aligned_string "MIC "
+PartName4_Metro:	aligned_string "METR"
+PartName4_Msp:	aligned_string "MSP "
+PartName4_Drums:	aligned_string "DRUM"
+PartName4_Bass:	aligned_string "BASS"
+PartName4_Acomp3:	aligned_string "ACP3"
+PartName4_Acomp2:	aligned_string "ACP2"
+PartName4_Acomp1:	aligned_string "ACP1"
+PartName4_RBass:	aligned_string "R.BA"
+PartName4_Chord:	aligned_string "CHRD"
+PartName4_Part16:	aligned_string "PT16"
+PartName4_Part15:	aligned_string "PT15"
+PartName4_Part14:	aligned_string "PT14"
+PartName4_Part13:	aligned_string "PT13"
+PartName4_Part12:	aligned_string "PT12"
+PartName4_Part11:	aligned_string "PT11"
+PartName4_Part10:	aligned_string "PT10"
+PartName4_Part9:	aligned_string "PT 9"
+PartName4_Part8:	aligned_string "PT 8"
+PartName4_Part7:	aligned_string "PT 7"
+PartName4_Part6:	aligned_string "PT 6"
+PartName4_Part5:	aligned_string "PT 5"
+PartName4_Part4:	aligned_string "PT 4"
+PartName4_Left:	aligned_string "LEFT"
+PartName4_Right2:	aligned_string "RT 2"
+PartName4_Right1:	aligned_string "RT 1"
+AccompName6_Chord:	aligned_string "CHORD "
+AccompName6_RBass:	aligned_string "R.BASS"
+AccompName6_Msp:	aligned_string "MSP   "
+AccompName6_Bass:	aligned_string "BASS  "
+AccompName6_Acomp1:	aligned_string "ACOMP1"
+AccompName6_Acomp2:	aligned_string "ACOMP2"
+AccompName6_Acomp3:	aligned_string "ACOMP3"
+AccompName6_Drums:	aligned_string "DRUMS "
+TrackName6_Tr16:	aligned_string " TR16 "
+TrackName6_Tr15:	aligned_string " TR15 "
+TrackName6_Tr14:	aligned_string " TR14 "
+TrackName6_Tr13:	aligned_string " TR13 "
+TrackName6_Tr12:	aligned_string " TR12 "
+TrackName6_Tr11:	aligned_string " TR11 "
+TrackName6_Tr10:	aligned_string " TR10 "
+TrackName6_Tr9:	aligned_string " TR 9 "
+TrackName6_Tr8:	aligned_string " TR 8 "
+TrackName6_Tr7:	aligned_string " TR 7 "
+TrackName6_Tr6:	aligned_string " TR 6 "
+TrackName6_Tr5:	aligned_string " TR 5 "
+TrackName6_Tr4:	aligned_string " TR 4 "
+TrackName6_Tr3:	aligned_string " TR 3 "
+TrackName6_Tr2:	aligned_string " TR 2 "
+TrackName6_Tr1:	aligned_string " TR 1 "
+TrackName6_Unassigned:	.asciz " -- "
 	.byte 0xff
-LABEL_E9F4F6:	aligned_string " -- "
-LABEL_E9F4FC:	aligned_string " -- "
-LABEL_E9F502:	aligned_string " -- "
-LABEL_E9F508:	aligned_string " -- "
-LABEL_E9F50E:	aligned_string " -- "
-LABEL_E9F514:	aligned_string " -- "
-LABEL_E9F51A:	aligned_string " -- "
-LABEL_E9F520:	aligned_string "TR16"
-LABEL_E9F526:	aligned_string "TR15"
-LABEL_E9F52C:	aligned_string "TR14"
-LABEL_E9F532:	aligned_string "TR13"
-LABEL_E9F538:	aligned_string "TR12"
-LABEL_E9F53E:	aligned_string "TR11"
-LABEL_E9F544:	aligned_string "TR10"
-LABEL_E9F54A:	aligned_string "TR 9"
-LABEL_E9F550:	aligned_string "TR 8"
-LABEL_E9F556:	aligned_string "TR 7"
-LABEL_E9F55C:	aligned_string "TR 6"
-LABEL_E9F562:	aligned_string "TR 5"
-LABEL_E9F568:	aligned_string "TR 4"
-LABEL_E9F56E:	aligned_string "TR 3"
-LABEL_E9F574:	aligned_string "TR 2"
-LABEL_E9F57A:	aligned_string "TR 1"
+TrackName6_Unassigned_02:	aligned_string " -- "
+TrackName6_Unassigned_03:	aligned_string " -- "
+TrackName6_Unassigned_04:	aligned_string " -- "
+TrackName6_Unassigned_05:	aligned_string " -- "
+TrackName6_Unassigned_06:	aligned_string " -- "
+TrackName6_Unassigned_07:	aligned_string " -- "
+TrackName6_Unassigned_08:	aligned_string " -- "
+TrackName4_Tr16:	aligned_string "TR16"
+TrackName4_Tr15:	aligned_string "TR15"
+TrackName4_Tr14:	aligned_string "TR14"
+TrackName4_Tr13:	aligned_string "TR13"
+TrackName4_Tr12:	aligned_string "TR12"
+TrackName4_Tr11:	aligned_string "TR11"
+TrackName4_Tr10:	aligned_string "TR10"
+TrackName4_Tr9:	aligned_string "TR 9"
+TrackName4_Tr8:	aligned_string "TR 8"
+TrackName4_Tr7:	aligned_string "TR 7"
+TrackName4_Tr6:	aligned_string "TR 6"
+TrackName4_Tr5:	aligned_string "TR 5"
+TrackName4_Tr4:	aligned_string "TR 4"
+TrackName4_Tr3:	aligned_string "TR 3"
+TrackName4_Tr2:	aligned_string "TR 2"
+TrackName4_Tr1:	aligned_string "TR 1"
 	aligned_string "%s SOUND : %s"
 	aligned_string "RIGHT 1: Sound Name xxxxx"
 	.byte 0x70, 0x07, 0x70, 0x07, 0x70, 0x07, 0x70, 0x07
@@ -21397,49 +21397,49 @@ LABEL_E9F57A:	aligned_string "TR 1"
 	.byte 0x23, 0x0c, 0x47, 0x0b, 0x20, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0xbe, 0xf6, 0xe9, 0x00
 	.byte 0x1f, 0x00, 0x01, 0x00, 0xf0, 0xff, 0x00, 0x00
-	.long LABEL_E9F6B8
+	.long MidiParamStr2_Sound
 	.byte 0x0e, 0x00, 0x03, 0x00
 	.byte 0xf0, 0xff, 0x00, 0x00, 0xb4, 0xf6, 0xe9, 0x00
 	.byte 0x0f, 0x00, 0x02, 0x00, 0xf0, 0xff, 0x01, 0x00
-	.long LABEL_E9F6AC
+	.long MidiParamStr2_Volume
 	.byte 0x20, 0x00, 0x05, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0xaa, 0xf6, 0xe9, 0x00
 	.byte 0x0d, 0x00, 0x03, 0x00, 0x04, 0x00, 0x01, 0x00
-	.long LABEL_E9F6A2
+	.long MidiParamStr2_Reverb
 	.byte 0x0c, 0x00, 0x03, 0x00
 	.byte 0x04, 0x00, 0x00, 0x00, 0x9a, 0xf6, 0xe9, 0x00
 	.byte 0x03, 0x00, 0x04, 0x00, 0x04, 0x00, 0x00, 0x00
-	.long LABEL_E9F68E
+	.long MidiParamStr2_DspEff
 	.byte 0x09, 0x00, 0x07, 0x00
 	.byte 0x04, 0x00, 0x00, 0x00, 0x84, 0xf6, 0xe9, 0x00
 	.byte 0x20, 0x00, 0x05, 0x00, 0x00, 0x00, 0x00, 0x00
-	.long LABEL_E9F682
+	.long MidiParamStr2_KeyShift
 	.byte 0x20, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x80, 0xf6, 0xe9, 0x00
 	.byte 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	.long LABEL_E9F67E
+	.long MidiParamStr2_Empty
 	.byte 0x01, 0x00, 0x08, 0x00
 	.byte 0x00, 0x00, 0x01, 0x00, 0x78, 0xf6, 0xe9, 0x00
 	.byte 0x00, 0x00, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00
-	.long LABEL_E9F672
+	.long MidiParamStr2_Local
 	.byte 0x20, 0x00, 0x05, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x70, 0xf6, 0xe9, 0x00
-LABEL_E9F670:	aligned_string ""
-LABEL_E9F672:	aligned_string "LOCAL"
+MidiParamStr2_End:	aligned_string ""
+MidiParamStr2_Local:	aligned_string "LOCAL"
 	aligned_string "MIDI"
-LABEL_E9F67E:	aligned_string ""
+MidiParamStr2_Empty:	aligned_string ""
 	.byte 0x00, 0xff
-LABEL_E9F682:	aligned_string ""
+MidiParamStr2_KeyShift:	aligned_string ""
 	aligned_string "KEY SHIFT"
-LABEL_E9F68E:	aligned_string "DIGITAL EFF"
+MidiParamStr2_DspEff:	aligned_string "DIGITAL EFF"
 	aligned_string "DSP EFF"
-LABEL_E9F6A2:	aligned_string "REVERB"
+MidiParamStr2_Reverb:	aligned_string "REVERB"
 	.byte 0x00, 0xff
-LABEL_E9F6AC:
+MidiParamStr2_Volume:
 
 	aligned_string "VOLUME"
 	.asciz "PAN"
-LABEL_E9F6B8:	aligned_string "SOUND"
+MidiParamStr2_Sound:	aligned_string "SOUND"
 	.byte 0x00, 0xff
 	.byte 0x00, 0x00, 0x01, 0x00, 0x02, 0x00, 0x03, 0x00
 	.byte 0x04, 0x00, 0x05, 0x00, 0x06, 0x00, 0x07, 0x00
@@ -21450,53 +21450,53 @@ LABEL_E9F6B8:	aligned_string "SOUND"
 	.byte 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00
 	.byte 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00
 	.byte 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	.long LABEL_E9F802
+	.long MidiParam_MixerCfgData
 	.byte 0x1f, 0x00, 0x0a, 0x00
 	.byte 0xf0, 0xff, 0x00, 0x00, 0xfc, 0xf7, 0xe9, 0x00
 	.byte 0x0e, 0x00, 0x03, 0x00, 0xf0, 0xff, 0x00, 0x00
-	.long LABEL_E9F7F8
+	.long MidiParamStr3_Pan
 	.byte 0x0f, 0x00, 0x02, 0x00
 	.byte 0xf0, 0xff, 0x01, 0x00, 0xf0, 0xf7, 0xe9, 0x00
 	.byte 0x20, 0x00, 0x06, 0x00, 0x00, 0x00, 0x00, 0x00
-	.long LABEL_E9F7EE
+	.long MidiParamStr3_Volume
 	.byte 0x0d, 0x00, 0x03, 0x00
 	.byte 0x04, 0x00, 0x01, 0x00, 0xe6, 0xf7, 0xe9, 0x00
 	.byte 0x0c, 0x00, 0x03, 0x00, 0x04, 0x00, 0x00, 0x00
-	.long LABEL_E9F7DE
+	.long MidiParamStr3_DspEff
 	.byte 0x03, 0x00, 0x04, 0x00
 	.byte 0x04, 0x00, 0x00, 0x00, 0xd2, 0xf7, 0xe9, 0x00
 	.byte 0x09, 0x00, 0x07, 0x00, 0x04, 0x00, 0x00, 0x00
-	.long LABEL_E9F7C8
+	.long MidiParamStr3_KeyShift
 	.byte 0x20, 0x00, 0x06, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0xc6, 0xf7, 0xe9, 0x00
 	.byte 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	.long LABEL_E9F7C4
+	.long MidiParamStr3_Empty
 	.byte 0x20, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0xc2, 0xf7, 0xe9, 0x00
 	.byte 0x01, 0x00, 0x08, 0x00, 0x00, 0x00, 0x01, 0x00
-	.long LABEL_E9F7BC
+	.long MidiParamStr3_Midi
 	.byte 0x00, 0x00, 0x04, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0xb6, 0xf7, 0xe9, 0x00
 	.byte 0x20, 0x00, 0x06, 0x00, 0x00, 0x00, 0x00, 0x00
-	.long LABEL_E9F7B4
-LABEL_E9F7B4:
+	.long MidiParamStr3_Local
+MidiParamStr3_Local:
 	.byte 0x00, 0xff, 0x4c, 0x4f
 	.byte 0x43, 0x41, 0x4c, 0x00
-LABEL_E9F7BC:
+MidiParamStr3_Midi:
 	.byte 0x4d, 0x49, 0x44, 0x49
 	.byte 0x00, 0xff, 0x00, 0xff
-LABEL_E9F7C4:
+MidiParamStr3_Empty:
 	.byte 0x00, 0xff, 0x00, 0xff
-LABEL_E9F7C8:	aligned_string "KEY SHIFT"
+MidiParamStr3_KeyShift:	aligned_string "KEY SHIFT"
 	aligned_string "DIGITAL EFF"
-LABEL_E9F7DE:	aligned_string "DSP EFF"
+MidiParamStr3_DspEff:	aligned_string "DSP EFF"
 	aligned_string "REVERB"
-LABEL_E9F7EE:	aligned_string ""
+MidiParamStr3_Volume:	aligned_string ""
 	aligned_string "VOLUME"
-LABEL_E9F7F8:
+MidiParamStr3_Pan:
 	.byte 0x50, 0x41, 0x4e, 0x00, 0x53, 0x4f, 0x55, 0x4e
 	.byte 0x44, 0x00
-LABEL_E9F802:
+MidiParam_MixerCfgData:
 	.byte 0x00, 0xff, 0x00, 0x00, 0x02, 0x00
 	.byte 0x01, 0x00, 0x07, 0x00, 0x08, 0x00, 0x09, 0x00
 	.byte 0x0a, 0x00, 0x0b, 0x00, 0x04, 0x00, 0x05, 0x00
@@ -21519,54 +21519,54 @@ LABEL_E9F802:
 	.byte 0x86, 0x82, 0x87, 0x82, 0x88, 0x82, 0xc1, 0x82
 	.byte 0xc0, 0x82, 0xcc, 0x82, 0xcb, 0x82, 0x93, 0x82
 	.byte 0x94, 0x82
-LABEL_E9F8AA:
-	.long LABEL_E9F926
-	.long LABEL_E9F922
-	.long LABEL_E9F91E
-	.long LABEL_E9F91A
-	.long LABEL_E9F916
-	.long LABEL_E9F912
-	.long LABEL_E9F90E
-	.long LABEL_E9F90A
-	.long LABEL_E9F906
-	.long LABEL_E9F902
-	.long LABEL_E9F8FE
-	.long LABEL_E9F8FA
-	.long LABEL_E9F8F6
-	.long LABEL_E9F8F2
-	.long LABEL_E9F8EE
-	.long LABEL_E9F8EA
-LABEL_E9F8EA:
+KeyShift_DisplayStrTable:
+	.long KeyShiftStr_Zero
+	.long KeyShiftStr_Plus1
+	.long KeyShiftStr_Plus2
+	.long KeyShiftStr_Plus3
+	.long KeyShiftStr_Plus4
+	.long KeyShiftStr_Plus5
+	.long KeyShiftStr_Plus6
+	.long KeyShiftStr_Plus7
+	.long KeyShiftStr_Minus8
+	.long KeyShiftStr_Minus7
+	.long KeyShiftStr_Minus6
+	.long KeyShiftStr_Minus5
+	.long KeyShiftStr_Minus4
+	.long KeyShiftStr_Minus3
+	.long KeyShiftStr_Minus2
+	.long KeyShiftStr_Minus1
+KeyShiftStr_Minus1:
 	.byte 0x2d, 0x31, 0x00, 0xff
-LABEL_E9F8EE:
+KeyShiftStr_Minus2:
 	.byte 0x2d, 0x32, 0x00, 0xff
-LABEL_E9F8F2:
+KeyShiftStr_Minus3:
 	.byte 0x2d, 0x33, 0x00, 0xff
-LABEL_E9F8F6:
+KeyShiftStr_Minus4:
 	.byte 0x2d, 0x34, 0x00, 0xff
-LABEL_E9F8FA:
+KeyShiftStr_Minus5:
 	.byte 0x2d, 0x35, 0x00, 0xff
-LABEL_E9F8FE:
+KeyShiftStr_Minus6:
 	.byte 0x2d, 0x36, 0x00, 0xff
-LABEL_E9F902:
+KeyShiftStr_Minus7:
 	.byte 0x2d, 0x37, 0x00, 0xff
-LABEL_E9F906:
+KeyShiftStr_Minus8:
 	.byte 0x2d, 0x38, 0x00, 0xff
-LABEL_E9F90A:
+KeyShiftStr_Plus7:
 	.byte 0x2b, 0x37, 0x00, 0xff
-LABEL_E9F90E:
+KeyShiftStr_Plus6:
 	.byte 0x2b, 0x36, 0x00, 0xff
-LABEL_E9F912:
+KeyShiftStr_Plus5:
 	.byte 0x2b, 0x35, 0x00, 0xff
-LABEL_E9F916:
+KeyShiftStr_Plus4:
 	.byte 0x2b, 0x34, 0x00, 0xff
-LABEL_E9F91A:
+KeyShiftStr_Plus3:
 	.byte 0x2b, 0x33, 0x00, 0xff
-LABEL_E9F91E:
+KeyShiftStr_Plus2:
 	.byte 0x2b, 0x32, 0x00, 0xff
-LABEL_E9F922:
+KeyShiftStr_Plus1:
 	.byte 0x2b, 0x31, 0x00, 0xff
-LABEL_E9F926:
+KeyShiftStr_Zero:
 	.byte 0x20, 0x30, 0x00, 0xff
 	aligned_string "Draw"
 	aligned_string "PAGE"
@@ -21594,19 +21594,19 @@ LABEL_E9F926:
 	.long LABEL_ED0128
 	.byte 0x1d, 0x00, 0x1d, 0x00
 	.byte 0x1d, 0x00, 0x28, 0x01, 0x24, 0x01, 0x24, 0x01
-LABEL_E9F9C8:
-	.long LABEL_E9FC3E
-	.long LABEL_E9FB96
-	.long LABEL_E9FB10
-	.long LABEL_E9FA8A
-	.long LABEL_E9FA82
-	.long LABEL_E9F9E0
-LABEL_E9F9E0:	aligned_string "Untuk memulai suatu DEMO eksternal, masukkanlah disket fasilitas Demo.~0dMemanggil satu data demo eksternal akan menghapus seluruh data yang ada Data Sequencer."
-LABEL_E9FA82:	aligned_string "Italian"
-LABEL_E9FA8A:	aligned_string "To Starting an external DEMO, please insert a feature demo disk.~0dLoading external demo data will erase any existing Sequencer data."
-LABEL_E9FB10:	aligned_string "To Starting an external DEMO, please insert a feature demo disk.~0dLoading external demo data will erase any existing Sequencer data."
-LABEL_E9FB96:	.asciz "Um eine externe DEMO zu starten, legen Sie bitte eine Feature-Demo-Disk in das Laufwerk ein.~0dDurch das Laden einer externen Demo werden alle Sequenzerdaten gelöscht."
-LABEL_E9FC3E:	aligned_string "To Starting an external DEMO, please insert a feature demo disk.~0dLoading external demo data will erase any existing Sequencer data."
+DemoDisk_LangPromptTable:
+	.long DemoDiskPrompt_English1
+	.long DemoDiskPrompt_German
+	.long DemoDiskPrompt_English3
+	.long DemoDiskPrompt_English2
+	.long DemoDiskPrompt_Italian
+	.long DemoDiskPrompt_Indonesian
+DemoDiskPrompt_Indonesian:	aligned_string "Untuk memulai suatu DEMO eksternal, masukkanlah disket fasilitas Demo.~0dMemanggil satu data demo eksternal akan menghapus seluruh data yang ada Data Sequencer."
+DemoDiskPrompt_Italian:	aligned_string "Italian"
+DemoDiskPrompt_English2:	aligned_string "To Starting an external DEMO, please insert a feature demo disk.~0dLoading external demo data will erase any existing Sequencer data."
+DemoDiskPrompt_English3:	aligned_string "To Starting an external DEMO, please insert a feature demo disk.~0dLoading external demo data will erase any existing Sequencer data."
+DemoDiskPrompt_German:	.asciz "Um eine externe DEMO zu starten, legen Sie bitte eine Feature-Demo-Disk in das Laufwerk ein.~0dDurch das Laden einer externen Demo werden alle Sequenzerdaten gelöscht."
+DemoDiskPrompt_English1:	aligned_string "To Starting an external DEMO, please insert a feature demo disk.~0dLoading external demo data will erase any existing Sequencer data."
 	.byte 0x01, 0x02, 0x04, 0xff
 	.byte 0x08, 0x10, 0x20, 0xff, 0x01, 0x04, 0x10, 0xff
 	.byte 0x02, 0x08, 0x20, 0xff, 0x00, 0x00, 0x00, 0x00
@@ -21647,85 +21647,85 @@ LABEL_E9FC3E:	aligned_string "To Starting an external DEMO, please insert a feat
 	aligned_string "NONE"
 	.byte 0x25, 0x73
 	.byte 0x25, 0x64, 0x00, 0xff
-LABEL_E9FDDC:	aligned_string "Error! (GetInstanceID)"
-LABEL_E9FDF4:
-	.long LABEL_E9FE10
-	.long LABEL_E9FE0C
-	.long LABEL_E9FE06
-	.long LABEL_E9FE04
-LABEL_E9FE04:	aligned_string ""
-LABEL_E9FE06:	aligned_string "NAME"
-LABEL_E9FE0C:
+ErrStr_GetInstanceID:	aligned_string "Error! (GetInstanceID)"
+FileType_NameTable:
+	.long FileTypeName_Song
+	.long FileTypeName_Src
+	.long FileTypeName_Name
+	.long FileTypeName_Empty
+FileTypeName_Empty:	aligned_string ""
+FileTypeName_Name:	aligned_string "NAME"
+FileTypeName_Src:
 	.byte 0x53, 0x52, 0x43, 0x00
-LABEL_E9FE10:	aligned_string "SONG"
+FileTypeName_Song:	aligned_string "SONG"
 	.zero 58
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff
 	.zero 8
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0x25, 0x38
 	.byte 0x73, 0x00, 0x7c, 0xfe, 0xe9, 0x00, 0x78, 0xfe
 	.byte 0xe9, 0x00, 0x76, 0xfe, 0xe9, 0x00
-LABEL_E9FE76:
+UIStr_Pan:
 	.byte 0x00, 0xff
 	.byte 0x50, 0x41, 0x4e, 0x00
-LABEL_E9FE7C:
+UIStr_No:
 	.byte 0x4e, 0x4f, 0x00, 0xff
-	.long LABEL_E9FE94
-	.long LABEL_E9FE8E
-	.long LABEL_E9FE8C
-LABEL_E9FE8C:	aligned_string ""
-LABEL_E9FE8E:
+	.long ImgAttr_Size
+	.long ImgAttr_Color
+	.long ImgAttr_Empty
+ImgAttr_Empty:	aligned_string ""
+ImgAttr_Color:
 	.byte 0x43, 0x4f, 0x4c, 0x4f, 0x52, 0x00
-LABEL_E9FE94:
+ImgAttr_Size:
 	.byte 0x53, 0x49, 0x5a, 0x45, 0x00, 0xff, 0x05, 0x00
 	.byte 0x00, 0x00, 0x07, 0x00, 0x00, 0x00, 0x08, 0x00
 	.byte 0x00, 0x00, 0x09, 0x00, 0x00, 0x00, 0x03, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00
 	.byte 0x00, 0x00, 0x04, 0x00, 0x00, 0x00, 0x02, 0x00
 	.byte 0x00, 0x00, 0x06, 0x00, 0x00, 0x00
-LABEL_E9FEC2:
-	.long LABEL_E9FF24
-	.long LABEL_E9FF20
-	.long LABEL_E9FF1A
-	.long LABEL_E9FF12
-	.long LABEL_E9FF0A
-	.long LABEL_E9FF04
-	.long LABEL_E9FEFC
-	.long LABEL_E9FEF4
-	.long LABEL_E9FEEC
-	.long LABEL_E9FEEA
-LABEL_E9FEEA:
+ImgAttr_NameTable:
+	.long ImgAttrName_Src
+	.long ImgAttrName_Alt
+	.long ImgAttrName_Align
+	.long ImgAttrName_Vspace
+	.long ImgAttrName_Hspace
+	.long ImgAttrName_Width
+	.long ImgAttrName_Height
+	.long ImgAttrName_Lowsrc
+	.long ImgAttrName_Border
+	.long ImgAttrName_Empty
+ImgAttrName_Empty:
 	.byte 0x00, 0xff
-LABEL_E9FEEC:
+ImgAttrName_Border:
 	.byte 0x42, 0x4f, 0x52, 0x44, 0x45, 0x52, 0x00, 0xff
-LABEL_E9FEF4:
+ImgAttrName_Lowsrc:
 	.byte 0x4c, 0x4f, 0x57, 0x53, 0x52, 0x43, 0x00, 0xff
-LABEL_E9FEFC:
+ImgAttrName_Height:
 	.byte 0x48, 0x45, 0x49, 0x47, 0x48, 0x54, 0x00, 0xff
-LABEL_E9FF04:
+ImgAttrName_Width:
 	.byte 0x57, 0x49, 0x44, 0x54, 0x48, 0x00
-LABEL_E9FF0A:	aligned_string "HSPACE"
-LABEL_E9FF12:	aligned_string "VSPACE"
-LABEL_E9FF1A:	aligned_string "ALIGN"
-LABEL_E9FF20:
+ImgAttrName_Hspace:	aligned_string "HSPACE"
+ImgAttrName_Vspace:	aligned_string "VSPACE"
+ImgAttrName_Align:	aligned_string "ALIGN"
+ImgAttrName_Alt:
 	.byte 0x41, 0x4c, 0x54, 0x00
-LABEL_E9FF24:
+ImgAttrName_Src:
 	.byte 0x53, 0x52, 0x43, 0x00
 	.zero 64
 	.byte 0x00, 0xff, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.zero 56
 	.byte 0x00, 0x00, 0x00, 0xff, 0xb6, 0xff, 0xe9, 0x00
-	.long LABEL_E9FFB4
-LABEL_E9FFB4:
+	.long ObjAttr_Empty
+ObjAttr_Empty:
 	.byte 0x00, 0xff
-LABEL_E9FFB6:
+ObjAttr_Obj:
 	.byte 0x4f, 0x42
 	.byte 0x4a, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.zero 56
 	.byte 0x00, 0x00, 0x00, 0xff, 0x00, 0x00, 0x00, 0x00
-LABEL_EA0000:
+Presentation_RootEntry:
 	.long LABEL_EF013F
 	.byte 0x00, 0xff, 0x00, 0xff
-LABEL_EA0008:	aligned_string "<PRESENTATION>"
+Presentation_TagStrTable:	aligned_string "<PRESENTATION>"
 	aligned_string "</PRESENTATION>"
 	.zero 32
 	aligned_string ".PRE"
@@ -21762,7 +21762,7 @@ LABEL_EA0008:	aligned_string "<PRESENTATION>"
 	.byte 0x00, 0x00, 0x10, 0x00, 0x4c, 0x01, 0xea, 0x00
 	.byte 0x00, 0x00, 0x03, 0x00, 0x48, 0x01, 0xea, 0x00
 	.byte 0x00, 0x00, 0x03, 0x00, 0x44, 0x01, 0xea
-LABEL_EA013F:
+Presentation_TagTableEnd:
 	.byte 0x00
 	.byte 0x00, 0x00, 0x02, 0x00, 0x48, 0x4b, 0x00, 0xff
 	.byte 0x48, 0x00, 0x4b, 0x00, 0x48, 0x00, 0x4b, 0x00
@@ -21786,11 +21786,11 @@ LABEL_EA013F:
 	.byte 0x14, 0x76, 0xf8, 0x00, 0x06, 0x00, 0x13, 0x79
 	.byte 0xf8, 0x00, 0x07, 0x00, 0x82, 0x75, 0xf8, 0x00
 	.byte 0x77, 0x62, 0x00, 0xff, 0x77, 0x62, 0x00, 0xff
-LABEL_EA01F8:
+Resource_Region7_Start:
 	.byte 0x77, 0x62, 0x00, 0xff
-LABEL_EA01FC:
+Resource_Region2_Start:
 	.byte 0x77, 0x62, 0x00, 0xff
-LABEL_EA0200:
+Resource_Region3_Start:
 	.byte 0x77, 0x62, 0x00, 0xff, 0x77, 0x62, 0x00, 0xff
 	.byte 0x77, 0x62, 0x00, 0xff, 0x77, 0x62, 0x00, 0xff
 	.byte 0x00, 0x00, 0xf6, 0x7a, 0xf8, 0x00, 0x01, 0x00
@@ -21801,7 +21801,7 @@ LABEL_EA0200:
 	.byte 0xf8, 0x00, 0x07, 0x00, 0x40, 0x7c, 0xf8, 0x00
 	.byte 0x72, 0x62, 0x00, 0xff, 0x77, 0x62, 0x00, 0xff
 	.byte 0x77, 0x62, 0x00, 0xff
-LABEL_EA024C:
+Resource_RegionPad:
 	.byte 0x72, 0x62, 0x00, 0xff
 	.byte 0x72, 0x62, 0x00, 0xff, 0x72, 0x62, 0x00, 0xff
 	.byte 0x72, 0x62, 0x00, 0xff, 0x72, 0x62, 0x00, 0xff
@@ -21819,42 +21819,42 @@ LABEL_EA024C:
 	.byte 0x41, 0x3a, 0x5c, 0x00, 0x00, 0x00, 0x00, 0x00
 	.zero 8
 	.byte 0x77, 0x62, 0x00, 0xff, 0x72, 0x62, 0x00, 0xff
-LABEL_EA0340:
-	.long LABEL_EA038C
-	.long LABEL_EA0388
-	.long LABEL_EA0384
-	.long LABEL_EA0380
-	.long LABEL_EA037C
-	.long LABEL_EA0378
-	.long LABEL_EA0374
-	.long LABEL_EA0370
-	.long LABEL_EA036C
-	.long LABEL_EA0368
-LABEL_EA0368:
+SeqFileType_CodeTable:
+	.long SeqFileTypeCode_Lsw
+	.long SeqFileTypeCode_Pmt
+	.long SeqFileTypeCode_Sqt
+	.long SeqFileTypeCode_Cmp
+	.long SeqFileTypeCode_Tm
+	.long SeqFileTypeCode_Msp
+	.long SeqFileTypeCode_Rcm
+	.long SeqFileTypeCode_Md
+	.long SeqFileTypeCode_Sqf
+	.long SeqFileTypeCode_Seq
+SeqFileTypeCode_Seq:
 	.byte 0x53, 0x45, 0x51, 0x00
-LABEL_EA036C:
+SeqFileTypeCode_Sqf:
 	.byte 0x53, 0x51, 0x46, 0x00
-LABEL_EA0370:
+SeqFileTypeCode_Md:
 	.byte 0x4d, 0x44, 0x20, 0x00
-LABEL_EA0374:
+SeqFileTypeCode_Rcm:
 	.byte 0x52, 0x43, 0x4d, 0x00
-LABEL_EA0378:
+SeqFileTypeCode_Msp:
 	.byte 0x4d, 0x53, 0x50, 0x00
-LABEL_EA037C:
+SeqFileTypeCode_Tm:
 	.byte 0x54, 0x4d, 0x20, 0x00
-LABEL_EA0380:
+SeqFileTypeCode_Cmp:
 	.byte 0x43, 0x4d, 0x50, 0x00
-LABEL_EA0384:
+SeqFileTypeCode_Sqt:
 	.byte 0x53, 0x51, 0x54, 0x00
-LABEL_EA0388:
+SeqFileTypeCode_Pmt:
 	.byte 0x50, 0x4d, 0x54, 0x00
-LABEL_EA038C:
+SeqFileTypeCode_Lsw:
 	.byte 0x4c, 0x53, 0x57, 0x00
 	.byte 0xff, 0xff, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00
 	.zero 64
 	.byte 0x00, 0x00, 0xff, 0x00, 0x00, 0x00, 0x00, 0x00
 	.zero 104
-LABEL_EA0448:	aligned_string ""
+Filename_TemplateArea:	aligned_string ""
 	aligned_string "______"
 	aligned_string "________.MID"
 	.byte 0x2e, 0x00
@@ -21870,7 +21870,7 @@ LABEL_EA0448:	aligned_string ""
 	aligned_string "     "
 	.byte 0x72, 0x62
 	.byte 0x00, 0xff
-LABEL_EA04C2:
+FileOp_StubAndDirNames:
 	jrl	le, 98
 	swi	7
 	jrl	le, 98
@@ -21908,90 +21908,90 @@ LABEL_EA04C2:
 	.byte 0x2a, 0x2e, 0x42, 0x4d
 	.byte 0x50, 0x00
 	.ascii "``alwÿ"
-LABEL_EA0558:
-	.long LABEL_EA0594
-	.long LABEL_EA0590
-	.long LABEL_EA058C
-	.long LABEL_EA0588
-	.long LABEL_EA0584
-	.long LABEL_EA0580
-	.long LABEL_EA057C
-	.long LABEL_EA0578
-LABEL_EA0578:
+DiskType_CodeTable:
+	.long DiskTypeCode_Dashes2
+	.long DiskTypeCode_Dashes1
+	.long DiskTypeCode_2DD2
+	.long DiskTypeCode_2HD
+	.long DiskTypeCode_2DD1
+	.long DiskTypeCode_Pd
+	.long DiskTypeCode_Doc2
+	.long DiskTypeCode_Doc1
+DiskTypeCode_Doc1:
 	.byte 0x44, 0x4f, 0x43, 0x00
-LABEL_EA057C:
+DiskTypeCode_Doc2:
 	.byte 0x44, 0x4f, 0x43, 0x00
-LABEL_EA0580:
+DiskTypeCode_Pd:
 	.byte 0x50, 0x44, 0x20, 0x00
-LABEL_EA0584:
+DiskTypeCode_2DD1:
 	.byte 0x32, 0x44, 0x44, 0x00
-LABEL_EA0588:
+DiskTypeCode_2HD:
 	.byte 0x32, 0x48, 0x44, 0x00
-LABEL_EA058C:
+DiskTypeCode_2DD2:
 	.byte 0x32, 0x44, 0x44, 0x00
-LABEL_EA0590:
+DiskTypeCode_Dashes1:
 	.byte 0x2d, 0x2d, 0x2d, 0x00
-LABEL_EA0594:
+DiskTypeCode_Dashes2:
 	.byte 0x2d, 0x2d, 0x2d, 0x00
-LABEL_EA0598:
-	.long LABEL_EA05E4
-	.long LABEL_EA05D6
-	.long LABEL_EA05C8
-	.long LABEL_EA05BA
-	.long LABEL_EA05AC
-LABEL_EA05AC:
+StorageArea_NameTable:
+	.long StorageAreaName_PanelMemory
+	.long StorageAreaName_Sequencer
+	.long StorageAreaName_Composer
+	.long StorageAreaName_SoundMemory
+	.long StorageAreaName_Blank
+StorageAreaName_Blank:
 	.byte 0x00
 	aligned_string "            "
-LABEL_EA05BA:
+StorageAreaName_SoundMemory:
 	.byte 0x00
 	.asciz "SOUND MEMORY"
-LABEL_EA05C8:
+StorageAreaName_Composer:
 	.byte 0x00
 	.asciz "  COMPOSER  "
-LABEL_EA05D6:
+StorageAreaName_Sequencer:
 	.byte 0x00
 	aligned_string " SEQUENCER  "
-LABEL_EA05E4:
+StorageAreaName_PanelMemory:
 	.byte 0x00
 	aligned_string "PANEL MEMORY"
 	.byte 0x1e, 0x06, 0xea, 0x00, 0x18, 0x06
 	.byte 0xea, 0x00, 0x12, 0x06, 0xea, 0x00, 0x0c, 0x06
 	.byte 0xea, 0x00, 0x06, 0x06, 0xea, 0x00
-LABEL_EA0606:
+BankStr_Dashes:
 	.byte 0x00, 0x2d
 	.byte 0x2d, 0x2d, 0x2d, 0x00
-LABEL_EA060C:
+BankStr_Bank1:
 	.byte 0x00, 0x42, 0x41, 0x4e
 	.byte 0x4b, 0x00
-LABEL_EA0612:
+BankStr_Bank2:
 	.byte 0x00
 	.asciz "BANK"
-LABEL_EA0618:	.byte 0x00
+BankStr_Dashes2:	.byte 0x00
 	.asciz "----"
-LABEL_EA061E:	.byte 0x00, 0x42
+BankStr_Bank3:	.byte 0x00, 0x42
 	.byte 0x41, 0x4e, 0x4b, 0x00, 0x60, 0x06, 0xea, 0x00
-LABEL_EA0628:
-	.long LABEL_EA0656
-	.long LABEL_EA064C
-	.long LABEL_EA0642
-	.long LABEL_EA0638
-LABEL_EA0638:
+DiskItem_TypeTable:
+	.long DiskItemType_Song
+	.long DiskItemType_Pattern
+	.long DiskItemType_Memory
+	.long DiskItemType_Dashes
+DiskItemType_Dashes:
 	.byte 0x00
 	aligned_string " ----- "
-LABEL_EA0642:
+DiskItemType_Memory:
 	.byte 0x00
 	.byte 0x4d, 0x45, 0x4d, 0x4f, 0x52
 	.byte 0x59, 0x20, 0x00, 0xff
-LABEL_EA064C:
+DiskItemType_Pattern:
 	.byte 0x00
 	aligned_string "PATTERN"
-LABEL_EA0656:
+DiskItemType_Song:
 	.byte 0x00
 	aligned_string " SONG  "
-LABEL_EA0660:	.byte 0x00
+BankStr_Memory:	.byte 0x00
 	aligned_string "MEMORY "
 	.byte 0x00, 0x00
-LABEL_EA066C:
+DiskOp_ChannelCfgTable:
 	.byte 0xd1, 0xb1, 0xf8, 0x00
 	.byte 0xdd, 0xb1, 0xf8, 0x00, 0xde, 0xb1, 0xf8, 0x00
 	.byte 0xdf, 0xb1, 0xf8, 0x00, 0xfe, 0xff, 0x01, 0x00
@@ -22029,16 +22029,16 @@ LABEL_EA066C:
 	.byte 0x49, 0x44, 0x00, 0xff
 	aligned_string "TO SONG : "
 	aligned_string "FROM SONG:"
-	.long LABEL_EA0780
-	.long LABEL_EA0770
-	.long LABEL_EA0760
-LABEL_EA0760:
+	.long Str_SmfConvert_GmToGm
+	.long Str_SmfConvert_TechToTech
+	.long Str_SmfConvert_GmToTech
+Str_SmfConvert_GmToTech:
 	.byte 0x00
 	aligned_string "  GM ~8d TECH"
-LABEL_EA0770:
+Str_SmfConvert_TechToTech:
 	.byte 0x00
 	aligned_string "TECH ~8d TECH"
-LABEL_EA0780:	.byte 0x00
+Str_SmfConvert_GmToGm:	.byte 0x00
 	aligned_string "  GM ~8d GM  "
 	aligned_string "________.MID"
 	.byte 0xb5, 0x07
@@ -22046,53 +22046,53 @@ LABEL_EA0780:	.byte 0x00
 	.byte 0xae, 0x07, 0x01, 0x02, 0x03, 0x04, 0xda, 0x07
 	.byte 0xea, 0x00, 0xca, 0x07, 0xea, 0x00, 0xba, 0x07
 	.byte 0xea, 0x00
-LABEL_EA07BA:	aligned_string "   MEMORY-C    "
-LABEL_EA07CA:	aligned_string "   MEMORY-B    "
-LABEL_EA07DA:	aligned_string "   MEMORY-A    "
-LABEL_EA07EA:
-	.long LABEL_EA0836
-	.long LABEL_EA082E
-	.long LABEL_EA0826
-	.long LABEL_EA081E
+Str_MemorySlot_C:	aligned_string "   MEMORY-C    "
+Str_MemorySlot_B:	aligned_string "   MEMORY-B    "
+Str_MemorySlot_A:	aligned_string "   MEMORY-A    "
+PtrTbl_VariationNames:
+	.long Str_Variation1
+	.long Str_Variation2
+	.long Str_Variation3
+	.long Str_Variation4
 	.byte 0x1c, 0x08, 0xea, 0x00, 0x1a, 0x08, 0xea, 0x00
 	.byte 0x18, 0x08, 0xea, 0x00, 0x16, 0x08, 0xea, 0x00
 	.byte 0x14, 0x08, 0xea, 0x00, 0x12, 0x08, 0xea, 0x00
 	.byte 0x00, 0xff
-LABEL_EA0814:
+Data_VariPad_EA0814:
 	.byte 0x00, 0xff
-LABEL_EA0816:
+Data_VariPad_EA0816:
 	.byte 0x00, 0xff
-LABEL_EA0818:
+Data_VariPad_EA0818:
 	.byte 0x00, 0xff
 	.byte 0x00, 0xff
-LABEL_EA081C:
+Data_VariPad_EA081C:
 	.byte 0x00, 0xff
-LABEL_EA081E:	aligned_string "VARI 4"
-LABEL_EA0826:	aligned_string "VARI 3"
-LABEL_EA082E:	aligned_string "VARI 2"
-LABEL_EA0836:	aligned_string "VARI 1"
+Str_Variation4:	aligned_string "VARI 4"
+Str_Variation3:	aligned_string "VARI 3"
+Str_Variation2:	aligned_string "VARI 2"
+Str_Variation1:	aligned_string "VARI 1"
 	.byte 0xd8, 0x08, 0xea, 0x00, 0xd6, 0x08, 0xea
 	.byte 0x00, 0xd4, 0x08, 0xea, 0x00, 0xd2, 0x08, 0xea
 	.byte 0x00
-LABEL_EA084E:
-	.long LABEL_EA08C0
-	.long LABEL_EA08AE
-	.long LABEL_EA089C
-	.long LABEL_EA088A
-	.long LABEL_EA0878
-	.long LABEL_EA0866
-LABEL_EA0866:	aligned_string "   ENDING 2     "
-LABEL_EA0878:	aligned_string "   ENDING 1     "
-LABEL_EA088A:	aligned_string "   FILL IN 2    "
-LABEL_EA089C:	aligned_string "   FILL IN 1    "
-LABEL_EA08AE:	aligned_string "    INTRO 2     "
-LABEL_EA08C0:	aligned_string "    INTRO 1     "
+PtrTbl_RhythmSectionNames:
+	.long Str_Intro1
+	.long Str_Intro2
+	.long Str_FillIn1
+	.long Str_FillIn2
+	.long Str_Ending1
+	.long Str_Ending2
+Str_Ending2:	aligned_string "   ENDING 2     "
+Str_Ending1:	aligned_string "   ENDING 1     "
+Str_FillIn2:	aligned_string "   FILL IN 2    "
+Str_FillIn1:	aligned_string "   FILL IN 1    "
+Str_Intro2:	aligned_string "    INTRO 2     "
+Str_Intro1:	aligned_string "    INTRO 1     "
 	.byte 0x00, 0xff
-LABEL_EA08D4:
+Data_DrumKitPad_EA08D4:
 	.byte 0x00, 0xff
-LABEL_EA08D6:
+Data_DrumKitPad_EA08D6:
 	.byte 0x00, 0xff
-LABEL_EA08D8:	.byte 0x00, 0xff, 0x26, 0x09, 0xea, 0x00, 0x14, 0x09
+PtrTbl_DrumKitNames:	.byte 0x00, 0xff, 0x26, 0x09, 0xea, 0x00, 0x14, 0x09
 	.byte 0xea, 0x00, 0x02, 0x09, 0xea, 0x00, 0x00, 0x00
 	.zero 26
 	aligned_string "    USER KIT    "
@@ -22106,20 +22106,20 @@ LABEL_EA08D8:	.byte 0x00, 0xff, 0x26, 0x09, 0xea, 0x00, 0x14, 0x09
 	aligned_string "      ALL       "
 	.byte 0x0a, 0xff, 0x1e, 0xff
 	.byte 0x3a, 0x20, 0x00, 0xff, 0x3a, 0x20, 0x00, 0xff
-LABEL_EA0980:	aligned_string "      ALL       "
+Str_AllOption_EA0980:	aligned_string "      ALL       "
 	.byte 0x14, 0xff, 0xa8, 0xff, 0x64, 0xf2
 	.byte 0xf8, 0x00, 0xa1, 0xf4, 0xf8, 0x00, 0x26, 0xf7
 	.byte 0xf8, 0x00, 0x5b, 0xfb, 0xf8, 0x00, 0x47, 0xfe
 	.byte 0xf8, 0x00, 0x3a, 0x20, 0x00, 0xff, 0x3a, 0x20
 	.byte 0x00, 0xff
-LABEL_EA09B2:	aligned_string "      ALL       "
+Str_AllOption_EA09B2:	aligned_string "      ALL       "
 	.byte 0x3a, 0x20, 0x00, 0xff
 	.byte 0x08, 0xff, 0x50, 0xff, 0x3a, 0x20, 0x00, 0xff
 	.byte 0x0a, 0xff, 0x3a, 0x20, 0x00, 0xff, 0x3a, 0x20
 	.byte 0x00, 0xff
 	aligned_string "      ALL       "
 	.byte 0x0a, 0xff, 0x1e, 0xff
-LABEL_EA09F0:
+Data_SaveLoadMenuTable:
 	.byte 0x3a, 0x20, 0x00, 0xff, 0x3a, 0x20, 0x00, 0xff
 	aligned_string "      ALL       "
 	.byte 0x3a, 0x20, 0x00, 0xff, 0x3a, 0x20, 0x00
@@ -22147,25 +22147,25 @@ LABEL_EA09F0:
 	.byte 0x00, 0xd8, 0x4b, 0xf9, 0x00, 0xe9, 0x4b, 0xf9
 	.byte 0x00, 0xad, 0x4d, 0xf9, 0x00, 0xbf, 0x4e, 0xf9
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00
-LABEL_EA0ACE:
-	.long LABEL_EA0CD6
-	.long LABEL_EA0CC4
-	.long LABEL_EA0CB4
-	.long LABEL_EA0CA2
-	.long LABEL_EA0C96
-	.long LABEL_EA0C88
-	.long LABEL_EA0C74
-	.long LABEL_EA0C60
-	.long LABEL_EA0C52
-	.long LABEL_EA0C44
-	.long LABEL_EA0C32
-	.long LABEL_EA0C26
+PtrTbl_DiskFuncNames:
+	.long Str_InsertOptionText
+	.long Str_TypePriorityText
+	.long Str_JumpInsertFunc
+	.long Str_FilePriorityFunc
+	.long Str_SetupOkFunc
+	.long Str_SetupExitFunc
+	.long Str_TechnicsFileNaming
+	.long Str_TechnicsFileRename
+	.long Str_SmfFileRename
+	.long Str_SmfFileNaming
+	.long Str_FormatDiskNaming
+	.long Str_WaitingFunc
 	.byte 0x0e, 0x0c
-LABEL_EA0B00:
+Data_DiskFuncPtrTbl_EA0B00:
 	.byte 0xea, 0x00, 0x00, 0x0c, 0xea, 0x00, 0xf6, 0x0b
 	.byte 0xea, 0x00, 0xea, 0x0b, 0xea, 0x00, 0xde, 0x0b
 	.byte 0xea, 0x00
-LABEL_EA0B12:
+Data_DiskFuncPtrTbl_EA0B12:
 	.byte 0xd4, 0x0b, 0xea, 0x00, 0xca, 0x0b
 	.byte 0xea, 0x00, 0xc0, 0x0b, 0xea, 0x00, 0xb8, 0x0b
 	.byte 0xea, 0x00, 0xb0, 0x0b, 0xea, 0x00, 0xa0, 0x0b
@@ -22173,163 +22173,163 @@ LABEL_EA0B12:
 	.byte 0xea, 0x00, 0x7a, 0x0b, 0xea, 0x00, 0x68, 0x0b
 	.byte 0xea, 0x00, 0x58, 0x0b, 0xea, 0x00, 0x48, 0x0b
 	.byte 0xea, 0x00, 0x46, 0x0b, 0xea, 0x00
-LABEL_EA0B46:
+Data_PasswordSep_EA0B46:
 	.byte 0x00, 0xff
-LABEL_EA0B48:	aligned_string "CheckPasswordNo"
-LABEL_EA0B58:	aligned_string "CheckPasswordOk"
-LABEL_EA0B68:	aligned_string "CheckPasswordText"
-LABEL_EA0B7A:	aligned_string "PasswordText"
-LABEL_EA0B88:	aligned_string "PasswordNo"
-LABEL_EA0B94:	aligned_string "PasswordOk"
-LABEL_EA0BA0:	aligned_string "WakeUpPassword"
-LABEL_EA0BB0:	aligned_string "SaveNo"
-LABEL_EA0BB8:	aligned_string "SaveYes"
-LABEL_EA0BC0:	aligned_string "DeleteNo"
-LABEL_EA0BCA:	aligned_string "DeleteYes"
-LABEL_EA0BD4:	aligned_string "SaveText"
-LABEL_EA0BDE:	aligned_string "DeleteText"
-LABEL_EA0BEA:	aligned_string "FormatText"
-LABEL_EA0BF6:	aligned_string "DiskSure"
-LABEL_EA0C00:	aligned_string "DiskAttention"
-LABEL_EA0C0E:	aligned_string "DiskMedleyShowHideFunc"
-LABEL_EA0C26:	aligned_string "WaitingFunc"
-LABEL_EA0C32:	aligned_string "FormatDiskNaming"
-LABEL_EA0C44:	aligned_string "SmfFileNaming"
-LABEL_EA0C52:	aligned_string "SmfFileRename"
-LABEL_EA0C60:	aligned_string "TechnicsFileRename"
-LABEL_EA0C74:	aligned_string "TechnicsFileNaming"
-LABEL_EA0C88:	aligned_string "SetupExitFunc"
-LABEL_EA0C96:	aligned_string "SetupOkFunc"
-LABEL_EA0CA2:	aligned_string "FilePriorityFunc"
-LABEL_EA0CB4:	aligned_string "JumpInsertFunc"
-LABEL_EA0CC4:	aligned_string "TypePriorityText"
-LABEL_EA0CD6:	aligned_string "InsertOptionText"
-LABEL_EA0CE8:
-	.long LABEL_EA0D5C
-	.long LABEL_EA0D52
-	.long LABEL_EA0D48
-	.long LABEL_EA0D40
-	.long LABEL_EA0D3C
-	.long LABEL_EA0D34
-	.long LABEL_EA0D2E
-	.long LABEL_EA0D24
-	.long LABEL_EA0D1C
-	.long LABEL_EA0D16
-	.long LABEL_EA0D14
-LABEL_EA0D14:	aligned_string ""
-LABEL_EA0D16:	.asciz "aicok"
-LABEL_EA0D1C:	aligned_string "paintok"
-LABEL_EA0D24:	aligned_string "auto_inc"
-LABEL_EA0D2E:	aligned_string "dial"
-LABEL_EA0D34:	aligned_string "sel_num"
-LABEL_EA0D3C:
+Str_CheckPasswordNo:	aligned_string "CheckPasswordNo"
+Str_CheckPasswordOk:	aligned_string "CheckPasswordOk"
+Str_CheckPasswordText:	aligned_string "CheckPasswordText"
+Str_PasswordText:	aligned_string "PasswordText"
+Str_PasswordNo:	aligned_string "PasswordNo"
+Str_PasswordOk:	aligned_string "PasswordOk"
+Str_WakeUpPassword:	aligned_string "WakeUpPassword"
+Str_SaveNo:	aligned_string "SaveNo"
+Str_SaveYes:	aligned_string "SaveYes"
+Str_DeleteNo:	aligned_string "DeleteNo"
+Str_DeleteYes:	aligned_string "DeleteYes"
+Str_SaveText:	aligned_string "SaveText"
+Str_DeleteText:	aligned_string "DeleteText"
+Str_FormatText:	aligned_string "FormatText"
+Str_DiskSure:	aligned_string "DiskSure"
+Str_DiskAttention:	aligned_string "DiskAttention"
+Str_DiskMedleyShowHideFunc:	aligned_string "DiskMedleyShowHideFunc"
+Str_WaitingFunc:	aligned_string "WaitingFunc"
+Str_FormatDiskNaming:	aligned_string "FormatDiskNaming"
+Str_SmfFileNaming:	aligned_string "SmfFileNaming"
+Str_SmfFileRename:	aligned_string "SmfFileRename"
+Str_TechnicsFileRename:	aligned_string "TechnicsFileRename"
+Str_TechnicsFileNaming:	aligned_string "TechnicsFileNaming"
+Str_SetupExitFunc:	aligned_string "SetupExitFunc"
+Str_SetupOkFunc:	aligned_string "SetupOkFunc"
+Str_FilePriorityFunc:	aligned_string "FilePriorityFunc"
+Str_JumpInsertFunc:	aligned_string "JumpInsertFunc"
+Str_TypePriorityText:	aligned_string "TypePriorityText"
+Str_InsertOptionText:	aligned_string "InsertOptionText"
+PtrTbl_UiWidgetProps_EA0CE8:
+	.long Str_UiProp_Font
+	.long Str_UiProp_FontColor
+	.long Str_UiProp_MainFunc
+	.long Str_UiProp_Column
+	.long Str_UiProp_Row
+	.long Str_UiProp_SelNum
+	.long Str_UiProp_Dial
+	.long Str_UiProp_AutoInc
+	.long Str_UiProp_Paintok
+	.long Str_UiProp_Aicok
+	.long Str_UiProp_Empty_EA0D14
+Str_UiProp_Empty_EA0D14:	aligned_string ""
+Str_UiProp_Aicok:	.asciz "aicok"
+Str_UiProp_Paintok:	aligned_string "paintok"
+Str_UiProp_AutoInc:	aligned_string "auto_inc"
+Str_UiProp_Dial:	aligned_string "dial"
+Str_UiProp_SelNum:	aligned_string "sel_num"
+Str_UiProp_Row:
 	.byte 0x72, 0x6f, 0x77, 0x00
-LABEL_EA0D40:	aligned_string "column"
-LABEL_EA0D48:	aligned_string "main_func"
-LABEL_EA0D52:	aligned_string "fontcolor"
-LABEL_EA0D5C:	aligned_string "font"
+Str_UiProp_Column:	aligned_string "column"
+Str_UiProp_MainFunc:	aligned_string "main_func"
+Str_UiProp_FontColor:	aligned_string "fontcolor"
+Str_UiProp_Font:	aligned_string "font"
 	.byte 0x86, 0x0d, 0xea, 0x00, 0x7e, 0x0d
 	.byte 0xea, 0x00, 0x74, 0x0d, 0xea, 0x00, 0x72, 0x0d
 	.byte 0xea, 0x00
-LABEL_EA0D72:
+Data_UiWidgetSep_EA0D72:
 	.byte 0x00, 0xff
-LABEL_EA0D74:	aligned_string "main_func"
-LABEL_EA0D7E:	jr	nc, 0x66
+Str_UiProp_MainFunc_EA0D74:	aligned_string "main_func"
+Str_UiProp_FwOn_EA0D7E:	jr	nc, 0x66
 	aligned_string "fwin"
 	.byte 0x6f, 0x6e
-LABEL_EA0D86:	.byte 0x77, 0x69, 0x6e, 0x00, 0x96, 0x0d, 0xea, 0x00
-	.long LABEL_EA0D94
-LABEL_EA0D94:	aligned_string ""
-LABEL_EA0D96:	aligned_string "main_func"
-	.long LABEL_EA0DB6
-	.long LABEL_EA0DAE
-	.long LABEL_EA0DAC
-LABEL_EA0DAC:	aligned_string ""
-LABEL_EA0DAE:	aligned_string "paintok"
-LABEL_EA0DB6:	aligned_string "main_func"
-LABEL_EA0DC0:
-	.long LABEL_EA0DE4
-	.long LABEL_EA0DDA
-	.long LABEL_EA0DD2
-	.long LABEL_EA0DD0
-LABEL_EA0DD0:	aligned_string ""
-LABEL_EA0DD2:	aligned_string "paintok"
-LABEL_EA0DDA:	aligned_string "main_func"
-LABEL_EA0DE4:	aligned_string "font"
+Str_UiProp_Win_EA0D86:	.byte 0x77, 0x69, 0x6e, 0x00, 0x96, 0x0d, 0xea, 0x00
+	.long Str_UiProp_Empty_EA0D94
+Str_UiProp_Empty_EA0D94:	aligned_string ""
+Str_UiProp_MainFunc_EA0D96:	aligned_string "main_func"
+	.long Str_UiProp_MainFunc_EA0DB6
+	.long Str_UiProp_Paintok_EA0DAE
+	.long Str_UiProp_Empty_EA0DAC
+Str_UiProp_Empty_EA0DAC:	aligned_string ""
+Str_UiProp_Paintok_EA0DAE:	aligned_string "paintok"
+Str_UiProp_MainFunc_EA0DB6:	aligned_string "main_func"
+PtrTbl_UiWidgetProps_EA0DC0:
+	.long Str_UiProp_Font_EA0DE4
+	.long Str_UiProp_MainFunc_EA0DDA
+	.long Str_UiProp_Paintok_EA0DD2
+	.long Str_UiProp_Empty_EA0DD0
+Str_UiProp_Empty_EA0DD0:	aligned_string ""
+Str_UiProp_Paintok_EA0DD2:	aligned_string "paintok"
+Str_UiProp_MainFunc_EA0DDA:	aligned_string "main_func"
+Str_UiProp_Font_EA0DE4:	aligned_string "font"
 	.byte 0xf4, 0x0d, 0xea, 0x00, 0xf2, 0x0d
 	.byte 0xea, 0x00
-LABEL_EA0DF2:
+Data_IndexPropSep_EA0DF2:
 	.byte 0x00, 0xff
-LABEL_EA0DF4:	aligned_string "index"
+Str_UiProp_Index:	aligned_string "index"
 	.byte 0x04, 0x0e, 0xea, 0x00, 0x02, 0x0e
 	.byte 0xea, 0x00
-LABEL_EA0E02:
+Data_MainFuncPropSep_EA0E02:
 	.byte 0x00, 0xff
-LABEL_EA0E04:	aligned_string "main_func"
+Str_UiProp_MainFunc_EA0E04:	aligned_string "main_func"
 	.byte 0x2c, 0x0e
 	.byte 0xea, 0x00, 0x26, 0x0e, 0xea, 0x00, 0x20, 0x0e
 	.byte 0xea, 0x00, 0x1e, 0x0e, 0xea, 0x00
-LABEL_EA0E1E:
+Data_PageIconPropSep_EA0E1E:
 	.byte 0x00, 0xff
-LABEL_EA0E20:	aligned_string "page"
-LABEL_EA0E26:	aligned_string "icon"
-LABEL_EA0E2C:	aligned_string "title"
-LABEL_EA0E32:
-	.long LABEL_EA0E74
-	.long LABEL_EA0E68
-	.long LABEL_EA0E64
-	.long LABEL_EA0E58
-	.long LABEL_EA0E4C
-	.long LABEL_EA0E4A
-LABEL_EA0E4A:
+Str_UiProp_Page:	aligned_string "page"
+Str_UiProp_Icon:	aligned_string "icon"
+Str_UiProp_Title:	aligned_string "title"
+PtrTbl_UiWidgetProps_EA0E32:
+	.long Str_UiProp_Color
+	.long Str_UiProp_FrameOnly
+	.long Str_UiProp_Dir
+	.long Str_UiProp_TailXRate
+	.long Str_UiProp_TailYRate
+	.long Data_TailPropSep_EA0E4A
+Data_TailPropSep_EA0E4A:
 	.byte 0x00, 0xff
-LABEL_EA0E4C:	aligned_string "tail_y_rate"
-LABEL_EA0E58:	aligned_string "tail_x_rate"
-LABEL_EA0E64:
+Str_UiProp_TailYRate:	aligned_string "tail_y_rate"
+Str_UiProp_TailXRate:	aligned_string "tail_x_rate"
+Str_UiProp_Dir:
 	.byte 0x64, 0x69, 0x72, 0x00
-LABEL_EA0E68:	aligned_string "frame_only"
-LABEL_EA0E74:	aligned_string "color"
-LABEL_EA0E7A:
-	.long LABEL_EA0EB8
-	.long LABEL_EA0EAE
-	.long LABEL_EA0EA8
-	.long LABEL_EA0E9E
-	.long LABEL_EA0E94
-	.long LABEL_EA0E92
-LABEL_EA0E92:
+Str_UiProp_FrameOnly:	aligned_string "frame_only"
+Str_UiProp_Color:	aligned_string "color"
+PtrTbl_UiWidgetProps_EA0E7A:
+	.long Str_UiProp_IndexMin
+	.long Str_UiProp_IndexMax
+	.long Str_UiProp_Dial_EA0EA8
+	.long Str_UiProp_DialInv
+	.long Str_UiProp_AutoInc_EA0E94
+	.long Data_DialPropSep_EA0E92
+Data_DialPropSep_EA0E92:
 	.byte 0x00, 0xff
-LABEL_EA0E94:	aligned_string "auto_inc"
-LABEL_EA0E9E:	aligned_string "dial_inv"
-LABEL_EA0EA8:	aligned_string "dial"
-LABEL_EA0EAE:	aligned_string "index_max"
-LABEL_EA0EB8:	aligned_string "index_min"
-LABEL_EA0EC2:
-	.long LABEL_EA0EF2
-	.long LABEL_EA0EE8
-	.long LABEL_EA0EE0
-	.long LABEL_EA0ED8
-	.long LABEL_EA0ED6
-LABEL_EA0ED6:
+Str_UiProp_AutoInc_EA0E94:	aligned_string "auto_inc"
+Str_UiProp_DialInv:	aligned_string "dial_inv"
+Str_UiProp_Dial_EA0EA8:	aligned_string "dial"
+Str_UiProp_IndexMax:	aligned_string "index_max"
+Str_UiProp_IndexMin:	aligned_string "index_min"
+PtrTbl_UiWidgetProps_EA0EC2:
+	.long Str_UiProp_Func
+	.long Str_UiProp_Interval
+	.long Str_UiProp_Length
+	.long Str_UiProp_Paintok_EA0ED8
+	.long Data_PaintokPropSep_EA0ED6
+Data_PaintokPropSep_EA0ED6:
 	.byte 0x00, 0xff
-LABEL_EA0ED8:	aligned_string "paintok"
-LABEL_EA0EE0:	aligned_string "length"
-LABEL_EA0EE8:	aligned_string "interval"
-LABEL_EA0EF2:	aligned_string "func"
-LABEL_EA0EF8:
-	.long LABEL_EA0F2E
-	.long LABEL_EA0F24
-	.long LABEL_EA0F1A
-	.long LABEL_EA0F0E
-	.long LABEL_EA0F0C
-LABEL_EA0F0C:	aligned_string ""
-LABEL_EA0F0E:	aligned_string "send_index"
-LABEL_EA0F1A:	aligned_string "interval"
-LABEL_EA0F24:	aligned_string "index_max"
-LABEL_EA0F2E:	aligned_string "index_min"
-	.long LABEL_EA0F42
-	.long LABEL_EA0F40
-LABEL_EA0F40:	aligned_string ""
-LABEL_EA0F42:
+Str_UiProp_Paintok_EA0ED8:	aligned_string "paintok"
+Str_UiProp_Length:	aligned_string "length"
+Str_UiProp_Interval:	aligned_string "interval"
+Str_UiProp_Func:	aligned_string "func"
+PtrTbl_UiWidgetProps_EA0EF8:
+	.long Str_UiProp_IndexMin_EA0F2E
+	.long Str_UiProp_IndexMax_EA0F24
+	.long Str_UiProp_Interval_EA0F1A
+	.long Str_UiProp_SendIndex
+	.long Str_UiProp_Empty_EA0F0C
+Str_UiProp_Empty_EA0F0C:	aligned_string ""
+Str_UiProp_SendIndex:	aligned_string "send_index"
+Str_UiProp_Interval_EA0F1A:	aligned_string "interval"
+Str_UiProp_IndexMax_EA0F24:	aligned_string "index_max"
+Str_UiProp_IndexMin_EA0F2E:	aligned_string "index_min"
+	.long Data_WinProp_EA0F42
+	.long Str_UiProp_Empty_EA0F40
+Str_UiProp_Empty_EA0F40:	aligned_string ""
+Data_WinProp_EA0F42:
 	.byte 0x77, 0x69, 0x6e, 0x00, 0x57, 0x55
 	.byte 0xf9, 0x00
 
@@ -22454,53 +22454,53 @@ LABEL_EA0F42:
 	aligned_string "c^kAAnGGmm"
 	aligned_string "PsFileNameBox"
 	.byte 0x0d, 0x00
-LABEL_EA1188:
-	.long LABEL_EA11E2
-	.long LABEL_EA11D4
-	.long LABEL_EA11C4
-	.long LABEL_EA11B2
-	.long LABEL_EA11A0
+PtrTbl_EventNames_EA1188:
+	.long Str_Ev_NotParaDraw
+	.long Str_Ev_NotPostAic
+	.long Str_Ev_IndexSwUpD
+	.long Str_Ev_IndexSwDownD
+	.long Str_Ev_WakeUpPassword
 	.byte 0x00, 0x00, 0x00, 0x00
-LABEL_EA11A0:	aligned_string "EV_WAKEUPPASSWORD"
-LABEL_EA11B2:	aligned_string "EV_INDEXSW_DOWN_D"
-LABEL_EA11C4:	aligned_string "EV_INDEXSW_UP_D"
-LABEL_EA11D4:	aligned_string "EV_NOTPOSTAIC"
-LABEL_EA11E2:	aligned_string "EV_NOTPARADRAW"
+Str_Ev_WakeUpPassword:	aligned_string "EV_WAKEUPPASSWORD"
+Str_Ev_IndexSwDownD:	aligned_string "EV_INDEXSW_DOWN_D"
+Str_Ev_IndexSwUpD:	aligned_string "EV_INDEXSW_UP_D"
+Str_Ev_NotPostAic:	aligned_string "EV_NOTPOSTAIC"
+Str_Ev_NotParaDraw:	aligned_string "EV_NOTPARADRAW"
 	.byte 0x05, 0x00, 0x4a, 0x13, 0xea, 0x00
-LABEL_EA11F8:
-	.long LABEL_EA133C
-	.long LABEL_EA1322
-	.long LABEL_EA1308
-	.long LABEL_EA12F4
-	.long LABEL_EA12E8
-	.long LABEL_EA12DA
-	.long LABEL_EA12CA
-	.long LABEL_EA12BA
-	.long LABEL_EA12AC
-	.long LABEL_EA129E
-	.long LABEL_EA1290
-	.long LABEL_EA1282
-	.long LABEL_EA1272
-	.long LABEL_EA1260
-	.long LABEL_EA124E
-	.long LABEL_EA123C
+PtrTbl_MsgTypeNames_EA11F8:
+	.long Str_Mt_SetFileSfx
+	.long Str_Mt_SetSelectedFileNumber
+	.long Str_Mt_GetSelectedFileNumber
+	.long Str_Mt_PsFileNameBoxId
+	.long Str_Mt_OnWindow
+	.long Str_Mt_OffWindow
+	.long Str_Mt_WhichWindow
+	.long Str_Mt_IWillWakeUp
+	.long Str_Mt_WakeUpTime
+	.long Str_Mt_WakeUpNow
+	.long Str_Mt_FlashWrite
+	.long Str_Mt_FlashLoad
+	.long Str_Mt_SetPassword
+	.long Str_Mt_CheckPassword
+	.long Str_Mt_CheckPassword2
+	.long Str_Mt_CheckPassword3
 	.byte 0x00, 0x00, 0x00, 0x00
-LABEL_EA123C:	aligned_string "MT_CheckPassword3"
-LABEL_EA124E:	aligned_string "MT_CheckPassword2"
-LABEL_EA1260:	aligned_string "MT_CheckPassword"
-LABEL_EA1272:	aligned_string "MT_SetPassword"
-LABEL_EA1282:	aligned_string "MT_FlashLoad"
-LABEL_EA1290:	aligned_string "MT_FlashWrite"
-LABEL_EA129E:	aligned_string "MT_WakeUpNow"
-LABEL_EA12AC:	aligned_string "MT_WakeUpTime"
-LABEL_EA12BA:	aligned_string "MT_IWillWakeUp"
-LABEL_EA12CA:	aligned_string "MT_WhichWindow"
-LABEL_EA12DA:	aligned_string "MT_OffWindow"
-LABEL_EA12E8:	aligned_string "MT_OnWindow"
-LABEL_EA12F4:	aligned_string "MT_PsFileNameBoxID"
-LABEL_EA1308:	aligned_string "MT_GetSelectedFileNumber"
-LABEL_EA1322:	aligned_string "MT_SetSelectedFileNumber"
-LABEL_EA133C:	aligned_string "MT_SetFileSfx"
+Str_Mt_CheckPassword3:	aligned_string "MT_CheckPassword3"
+Str_Mt_CheckPassword2:	aligned_string "MT_CheckPassword2"
+Str_Mt_CheckPassword:	aligned_string "MT_CheckPassword"
+Str_Mt_SetPassword:	aligned_string "MT_SetPassword"
+Str_Mt_FlashLoad:	aligned_string "MT_FlashLoad"
+Str_Mt_FlashWrite:	aligned_string "MT_FlashWrite"
+Str_Mt_WakeUpNow:	aligned_string "MT_WakeUpNow"
+Str_Mt_WakeUpTime:	aligned_string "MT_WakeUpTime"
+Str_Mt_IWillWakeUp:	aligned_string "MT_IWillWakeUp"
+Str_Mt_WhichWindow:	aligned_string "MT_WhichWindow"
+Str_Mt_OffWindow:	aligned_string "MT_OffWindow"
+Str_Mt_OnWindow:	aligned_string "MT_OnWindow"
+Str_Mt_PsFileNameBoxId:	aligned_string "MT_PsFileNameBoxID"
+Str_Mt_GetSelectedFileNumber:	aligned_string "MT_GetSelectedFileNumber"
+Str_Mt_SetSelectedFileNumber:	aligned_string "MT_SetSelectedFileNumber"
+Str_Mt_SetFileSfx:	aligned_string "MT_SetFileSfx"
 	aligned_string "MT_GetFileSfx"
 	.byte 0x11, 0x00, 0x57, 0x55, 0xf9, 0x00, 0x01, 0x5c
 	.byte 0xf9, 0x00, 0xca, 0x5a, 0xf9, 0x00, 0x2a, 0x5b
@@ -22510,7 +22510,7 @@ LABEL_EA133C:	aligned_string "MT_SetFileSfx"
 	.byte 0xf9, 0x00, 0xe8, 0x67, 0xf9, 0x00, 0x5a, 0x69
 	.byte 0xf9, 0x00, 0x80, 0x6a, 0xf9, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00
-LABEL_EA1392:
+PtrTbl_NakaModuleHandlers:
 	.long LABEL_EA14A2
 	.long LABEL_EA148E
 	.long LABEL_EA147E
@@ -22524,8 +22524,8 @@ LABEL_EA1392:
 	.long LABEL_EA13F2
 	.long LABEL_EA13DE
 	.long LABEL_EA13CC
-	.long LABEL_EA13CA
-LABEL_EA13CA:
+	.long Data_NakaSep_EA13CA
+Data_NakaSep_EA13CA:
 	.byte 0x00, 0xff
 .include "naka/naka_ea13cc_ea8c9e.s"
 	.ascii "Etes vous sû"
@@ -22533,31 +22533,31 @@ LABEL_EA13CA:
 	aligned_string "Sind Sie sicher ?"
 	aligned_string "Are You Sure?"
 	.byte 0x34, 0x8e, 0xea, 0x00
-LABEL_EA8CE0:
+PtrTbl_DiskFormatWarning:
 	.long LABEL_EA8E04
 	.long LABEL_EA8DB6
-	.long LABEL_EA8D80
-	.long LABEL_EA8D44
-	.long LABEL_EA8CF4
-LABEL_EA8CF4:	aligned_string "Gunakan Disk Format untuk menghapus suatu data yang ada sekarang didalam disk."
-LABEL_EA8D44:	aligned_string "Using DISK FORMAT will erase any current data on the disk."
-LABEL_EA8D80:	aligned_string "Al formatear el disco  se borran los datos del disco."
+	.long Str_DiskFormatWarn_Spanish
+	.long Str_DiskFormatWarn_English
+	.long Str_DiskFormatWarn_Indonesian
+Str_DiskFormatWarn_Indonesian:	aligned_string "Gunakan Disk Format untuk menghapus suatu data yang ada sekarang didalam disk."
+Str_DiskFormatWarn_English:	aligned_string "Using DISK FORMAT will erase any current data on the disk."
+Str_DiskFormatWarn_Spanish:	aligned_string "Al formatear el disco  se borran los datos del disco."
 LABEL_EA8DB6:	.asciz "L'utilisation deDISK FORMAT effacera toute donnée existante sur la disquette."
 LABEL_EA8E04:	.asciz "DISK FORMAT löscht alle Daten auf der Diskette."
 	aligned_string "Using DISK FORMAT will erase any current data on the disk."
-LABEL_EA8E70:
-	.long LABEL_EA90B6
+PtrTbl_FileDeleteWarning:
+	.long Str_FileDeleteWarn_English2
 	.long LABEL_EA9082
 	.long LABEL_EA8FEE
 	.long LABEL_EA8F72
-	.long LABEL_EA8EFE
+	.long Str_FileDeleteWarn_English
 	.long LABEL_EA8E88
 LABEL_EA8E88:	aligned_string "Usando FILE DELETE si cancelleràil file completamente. Se sei incerto per favore conferma la tua selezione del file."
-LABEL_EA8EFE:	aligned_string "Using FILE DELETE will erase the selected file completely. If you are uncertain please confirm your file selection."
+Str_FileDeleteWarn_English:	aligned_string "Using FILE DELETE will erase the selected file completely. If you are uncertain please confirm your file selection."
 LABEL_EA8F72:	.asciz "El uso del FILE DELETE borrará completamente el archivo seleccionado. Si no está seguro, confirme la selección del archivo."
 LABEL_EA8FEE:	aligned_string "La fonction FILE DELETE va effacer complètement le fichier que vous m'avez indiqué. Si vous avez un doute, veuillez vérifier le numéro du fichier."
 LABEL_EA9082:	.asciz "Die gewählte Disketten-Bank wird komplett gelöscht."
-LABEL_EA90B6:	aligned_string "Using FILE DELETE will erase the selected file completely. If you are uncertain please confirm your file selection."
+Str_FileDeleteWarn_English2:	aligned_string "Using FILE DELETE will erase the selected file completely. If you are uncertain please confirm your file selection."
 	.byte 0xca, 0x93, 0xea, 0x00, 0x44, 0x93
 	.byte 0xea, 0x00, 0xa6, 0x92, 0xea, 0x00, 0x2c, 0x92
 	.byte 0xea, 0x00, 0xba, 0x91, 0xea, 0x00, 0x42, 0x91
@@ -22570,42 +22570,42 @@ LABEL_EA90B6:	aligned_string "Using FILE DELETE will erase the selected file com
 	aligned_string "Die soeben gewählte Disketten-Bank ist bereits wit Daten belegt. Wenn Sie jetzt trotzdem speichern, werden die alten Daten gelöscht."
 	aligned_string "A file already exists at the chosen location. If you proceed it will be replaced by the file that you are saving."
 	.byte 0x30, 0x95, 0xea, 0x00
-LABEL_EA9440:
+PtrTbl_DiskInsertOpenPage:
 	.long LABEL_EA94F4
-	.long LABEL_EA94CC
-	.long LABEL_EA94A4
-	.long LABEL_EA947C
-	.long LABEL_EA9454
-LABEL_EA9454:	aligned_string "When a disk is inserted open this page."
-LABEL_EA947C:	aligned_string "When a disk is inserted open this page."
-LABEL_EA94A4:	aligned_string "When a disk is inserted open this page."
-LABEL_EA94CC:	aligned_string "When a disk is inserted open this page."
+	.long Str_DiskInsertOpen_Lang3
+	.long Str_DiskInsertOpen_Lang2
+	.long Str_DiskInsertOpen_Lang1
+	.long Str_DiskInsertOpen_Lang0
+Str_DiskInsertOpen_Lang0:	aligned_string "When a disk is inserted open this page."
+Str_DiskInsertOpen_Lang1:	aligned_string "When a disk is inserted open this page."
+Str_DiskInsertOpen_Lang2:	aligned_string "When a disk is inserted open this page."
+Str_DiskInsertOpen_Lang3:	aligned_string "When a disk is inserted open this page."
 LABEL_EA94F4:	.asciz "Diese Seite wird geöffnet, wenn Sie eine Diskette einlegen."
 	aligned_string "When a disk is inserted open this page."
-LABEL_EA9558:
-	.long LABEL_EA965E
+PtrTbl_FilePriorityMsg:
+	.long Str_FilePriority_Lang5
 	.long LABEL_EA9620
-	.long LABEL_EA95F4
-	.long LABEL_EA95C8
-	.long LABEL_EA959C
-	.long LABEL_EA9570
-LABEL_EA9570:	aligned_string "When a disk contains Technics & SMF files."
-LABEL_EA959C:	aligned_string "When a disk contains Technics & SMF files."
-LABEL_EA95C8:	aligned_string "When a disk contains Technics & SMF files."
-LABEL_EA95F4:	aligned_string "When a disk contains Technics & SMF files."
+	.long Str_FilePriority_Lang3
+	.long Str_FilePriority_Lang2
+	.long Str_FilePriority_Lang1
+	.long Str_FilePriority_Lang0
+Str_FilePriority_Lang0:	aligned_string "When a disk contains Technics & SMF files."
+Str_FilePriority_Lang1:	aligned_string "When a disk contains Technics & SMF files."
+Str_FilePriority_Lang2:	aligned_string "When a disk contains Technics & SMF files."
+Str_FilePriority_Lang3:	aligned_string "When a disk contains Technics & SMF files."
 LABEL_EA9620:	.asciz "Priorität, wenn eine Diskette Technics und SMF Files enthält."
-LABEL_EA965E:	aligned_string "When a disk contains Technics & SMF files."
-LABEL_EA968A:
-	.long LABEL_EA96D6
-	.long LABEL_EA96C8
-	.long LABEL_EA96BA
-	.long LABEL_EA96AC
-	.long LABEL_EA969E
-LABEL_EA969E:	aligned_string " SONG MEDLEY "
-LABEL_EA96AC:	aligned_string " DIRECT PLAY "
-LABEL_EA96BA:	aligned_string "    LOAD     "
-LABEL_EA96C8:	aligned_string "  DISK MENU  "
-LABEL_EA96D6:	aligned_string "     OFF     "
+Str_FilePriority_Lang5:	aligned_string "When a disk contains Technics & SMF files."
+PtrTbl_DiskStartupModeNames:
+	.long Str_DiskMode_Off
+	.long Str_DiskMode_DiskMenu
+	.long Str_DiskMode_Load
+	.long Str_DiskMode_DirectPlay
+	.long Str_DiskMode_SongMedley
+Str_DiskMode_SongMedley:	aligned_string " SONG MEDLEY "
+Str_DiskMode_DirectPlay:	aligned_string " DIRECT PLAY "
+Str_DiskMode_Load:	aligned_string "    LOAD     "
+Str_DiskMode_DiskMenu:	aligned_string "  DISK MENU  "
+Str_DiskMode_Off:	aligned_string "     OFF     "
 	calr	7680
 	nop
 	ldb	h, 0
@@ -22617,33 +22617,33 @@ LABEL_EA96D6:	aligned_string "     OFF     "
 	nop
 	calr	0
 	nop
-	.long LABEL_EA970C
-	.long LABEL_EA9700
-LABEL_EA9700:	aligned_string "   SMF    "
-LABEL_EA970C:	aligned_string " TECHNICS "
-LABEL_EA9718:
-	.long LABEL_EA97D8
-	.long LABEL_EA97BC
-	.long LABEL_EA9794
-	.long LABEL_EA976C
-	.long LABEL_EA9752
-	.long LABEL_EA9730
-LABEL_EA9730:	aligned_string "SILAHKAN TUNGGU!................"
-LABEL_EA9752:	aligned_string "PLEASE WAIT!............"
-LABEL_EA976C:	aligned_string "¡POR FAVOR, ESPERE!..................."
-LABEL_EA9794:	aligned_string "VEUILLEZ PATIENTER!..................."
-LABEL_EA97BC:	aligned_string "BITTE WARTEN!............."
-LABEL_EA97D8:	aligned_string "PLEASE WAIT!............"
+	.long Str_FileType_Technics
+	.long Str_FileType_Smf
+Str_FileType_Smf:	aligned_string "   SMF    "
+Str_FileType_Technics:	aligned_string " TECHNICS "
+PtrTbl_PleaseWaitStrings:
+	.long Str_PleaseWait_English2
+	.long Str_PleaseWait_German
+	.long Str_PleaseWait_French
+	.long Str_PleaseWait_Spanish
+	.long Str_PleaseWait_English
+	.long Str_PleaseWaitDisk_Indonesian
+Str_PleaseWaitDisk_Indonesian:	aligned_string "SILAHKAN TUNGGU!................"
+Str_PleaseWait_English:	aligned_string "PLEASE WAIT!............"
+Str_PleaseWait_Spanish:	aligned_string "¡POR FAVOR, ESPERE!..................."
+Str_PleaseWait_French:	aligned_string "VEUILLEZ PATIENTER!..................."
+Str_PleaseWait_German:	aligned_string "BITTE WARTEN!............."
+Str_PleaseWait_English2:	aligned_string "PLEASE WAIT!............"
 	.byte 0x86, 0x98, 0xea, 0x00, 0x78, 0x98
 	.byte 0xea, 0x00, 0x6a, 0x98, 0xea, 0x00, 0x5c, 0x98
 	.byte 0xea, 0x00, 0x4e, 0x98, 0xea, 0x00, 0x40, 0x98
 	.byte 0xea, 0x00, 0x32, 0x98, 0xea, 0x00, 0x24, 0x98
 	.byte 0xea, 0x00, 0x16, 0x98, 0xea, 0x00
-LABEL_EA9816:	aligned_string "  USER MIDI  "
-LABEL_EA9824:	aligned_string "RHYTHM CUSTOM"
-LABEL_EA9832:	aligned_string "     MSP     "
-LABEL_EA9840:	aligned_string "SOUND MEMORY "
-LABEL_EA984E:	ldb	w, 0x20
+Str_SaveType_UserMidi:	aligned_string "  USER MIDI  "
+Str_SaveType_RhythmCustom:	aligned_string "RHYTHM CUSTOM"
+Str_SaveType_Msp:	aligned_string "     MSP     "
+Str_SaveType_SoundMemory:	aligned_string "SOUND MEMORY "
+Str_SaveType_Composer:	ldb	w, 0x20
 	aligned_string "COMPOSER   "
 	aligned_string "  SEQUENCER  "
 	aligned_string "PANEL MEMORY "
@@ -22677,7 +22677,7 @@ FDC_HANDLER_OFFSETS:	; EA98CA
 	.short FDC_HANDLER_11 - FDC_HANDLER_DISPATCH_BASE	; 11: offset 0x46
 
 
-LABEL_EA98E2:
+Data_ScrollVelocityTable:
 	.byte 0x07, 0x00, 0x00, 0x00, 0x07, 0x00
 	.byte 0x00, 0x00, 0x07, 0x00, 0x00, 0x00, 0x07, 0x00
 	.byte 0x00, 0x00, 0x07, 0x00, 0x00, 0x00, 0x06, 0x00
@@ -22773,230 +22773,230 @@ LABEL_EA98E2:
 	.byte 0xbf, 0x02, 0x4f, 0x02, 0x4f, 0x02, 0x4f, 0x02
 	.byte 0xe8, 0x01, 0x1a, 0x9c, 0xea, 0x00, 0x0c, 0x9c
 	.byte 0xea, 0x00, 0xfe, 0x9b, 0xea, 0x00
-LABEL_EA9BFE:	aligned_string " !#$%&?.... "
-LABEL_EA9C0C:	aligned_string "abc...123..."
-LABEL_EA9C1A:	aligned_string "ABC...123..."
-LABEL_EA9C28:
-	.long LABEL_EA9D12
-	.long LABEL_EA9D10
-	.long LABEL_EA9D0E
-	.long LABEL_EA9D0C
-	.long LABEL_EA9D0A
-	.long LABEL_EA9D08
-	.long LABEL_EA9D06
-	.long LABEL_EA9D04
-	.long LABEL_EA9D02
-	.long LABEL_EA9D00
-	.long LABEL_EA9CFE
-	.long LABEL_EA9CFC
-	.long LABEL_EA9CFA
-	.long LABEL_EA9CF8
-	.long LABEL_EA9CF6
-	.long LABEL_EA9CF4
-	.long LABEL_EA9CF2
-	.long LABEL_EA9CF0
-	.long LABEL_EA9CEE
-	.long LABEL_EA9CEC
-	.long LABEL_EA9CEA
-	.long LABEL_EA9CE8
-	.long LABEL_EA9CE6
-	.long LABEL_EA9CE4
-	.long LABEL_EA9CE2
-	.long LABEL_EA9CE0
-	.long LABEL_EA9CDE
-	.long LABEL_EA9CDC
-	.long LABEL_EA9CDA
-	.long LABEL_EA9CD8
-	.long LABEL_EA9CD6
-	.long LABEL_EA9CD4
-	.long LABEL_EA9CD2
-	.long LABEL_EA9CD0
-	.long LABEL_EA9CCE
-	.long LABEL_EA9CCC
-	.long LABEL_EA9CCA
-	.long LABEL_EA9CC6
-	.long LABEL_EA9CC4
-LABEL_EA9CC4:	aligned_string ""
-LABEL_EA9CC6:	.asciz "SPC"
-LABEL_EA9CCA:
+Str_CharSet_Symbols:	aligned_string " !#$%&?.... "
+Str_CharSet_Lowercase:	aligned_string "abc...123..."
+Str_CharSet_Uppercase:	aligned_string "ABC...123..."
+PtrTbl_KeyboardChars_Upper:
+	.long KbChar_Upper_A
+	.long KbChar_Upper_B
+	.long KbChar_Upper_C
+	.long KbChar_Upper_D
+	.long KbChar_Upper_E
+	.long KbChar_Upper_F
+	.long KbChar_Upper_G
+	.long KbChar_Upper_H
+	.long KbChar_Upper_I
+	.long KbChar_Upper_J
+	.long KbChar_Upper_K
+	.long KbChar_Upper_L
+	.long KbChar_Upper_M
+	.long KbChar_Upper_N
+	.long KbChar_Upper_O
+	.long KbChar_Upper_P
+	.long KbChar_Upper_Q
+	.long KbChar_Upper_R
+	.long KbChar_Upper_S
+	.long KbChar_Upper_T
+	.long KbChar_Upper_U
+	.long KbChar_Upper_V
+	.long KbChar_Upper_W
+	.long KbChar_Upper_X
+	.long KbChar_Upper_Y
+	.long KbChar_Upper_Z
+	.long KbChar_Upper_Underscore
+	.long KbChar_Upper_0
+	.long KbChar_Upper_1
+	.long KbChar_Upper_2
+	.long KbChar_Upper_3
+	.long KbChar_Upper_4
+	.long KbChar_Upper_5
+	.long KbChar_Upper_6
+	.long KbChar_Upper_7
+	.long KbChar_Upper_8
+	.long KbChar_Upper_9
+	.long KbChar_Upper_Space
+	.long KbChar_Upper_Empty
+KbChar_Upper_Empty:	aligned_string ""
+KbChar_Upper_Space:	.asciz "SPC"
+KbChar_Upper_9:
 	.byte 0x39, 0x00
-LABEL_EA9CCC:
+KbChar_Upper_8:
 	.byte 0x38, 0x00
-LABEL_EA9CCE:
+KbChar_Upper_7:
 	.byte 0x37, 0x00
-LABEL_EA9CD0:
+KbChar_Upper_6:
 	.byte 0x36, 0x00
-LABEL_EA9CD2:
+KbChar_Upper_5:
 	.byte 0x35, 0x00
-LABEL_EA9CD4:
+KbChar_Upper_4:
 	.byte 0x34, 0x00
-LABEL_EA9CD6:
+KbChar_Upper_3:
 	.byte 0x33, 0x00
-LABEL_EA9CD8:
+KbChar_Upper_2:
 	.byte 0x32, 0x00
-LABEL_EA9CDA:
+KbChar_Upper_1:
 	.byte 0x31, 0x00
-LABEL_EA9CDC:
+KbChar_Upper_0:
 	.byte 0x30, 0x00
-LABEL_EA9CDE:
+KbChar_Upper_Underscore:
 	.byte 0x5f, 0x00
-LABEL_EA9CE0:
+KbChar_Upper_Z:
 	.byte 0x5a, 0x00
-LABEL_EA9CE2:
+KbChar_Upper_Y:
 	.byte 0x59, 0x00
-LABEL_EA9CE4:
+KbChar_Upper_X:
 	.byte 0x58, 0x00
-LABEL_EA9CE6:
+KbChar_Upper_W:
 	.byte 0x57, 0x00
-LABEL_EA9CE8:
+KbChar_Upper_V:
 	.byte 0x56, 0x00
-LABEL_EA9CEA:
+KbChar_Upper_U:
 	.byte 0x55, 0x00
-LABEL_EA9CEC:
+KbChar_Upper_T:
 	.byte 0x54, 0x00
-LABEL_EA9CEE:
+KbChar_Upper_S:
 	.byte 0x53, 0x00
-LABEL_EA9CF0:
+KbChar_Upper_R:
 	.byte 0x52, 0x00
-LABEL_EA9CF2:
+KbChar_Upper_Q:
 	.byte 0x51, 0x00
-LABEL_EA9CF4:
+KbChar_Upper_P:
 	.byte 0x50, 0x00
-LABEL_EA9CF6:
+KbChar_Upper_O:
 	.byte 0x4f, 0x00
-LABEL_EA9CF8:
+KbChar_Upper_N:
 	.byte 0x4e, 0x00
-LABEL_EA9CFA:
+KbChar_Upper_M:
 	.byte 0x4d, 0x00
-LABEL_EA9CFC:
+KbChar_Upper_L:
 	.byte 0x4c, 0x00
-LABEL_EA9CFE:
+KbChar_Upper_K:
 	.byte 0x4b, 0x00
-LABEL_EA9D00:
+KbChar_Upper_J:
 	.byte 0x4a, 0x00
-LABEL_EA9D02:
+KbChar_Upper_I:
 	.byte 0x49, 0x00
-LABEL_EA9D04:
+KbChar_Upper_H:
 	.byte 0x48, 0x00
-LABEL_EA9D06:
+KbChar_Upper_G:
 	.byte 0x47, 0x00
-LABEL_EA9D08:
+KbChar_Upper_F:
 	.byte 0x46, 0x00
-LABEL_EA9D0A:
+KbChar_Upper_E:
 	.byte 0x45, 0x00
-LABEL_EA9D0C:
+KbChar_Upper_D:
 	.byte 0x44, 0x00
-LABEL_EA9D0E:
+KbChar_Upper_C:
 	.byte 0x43, 0x00
-LABEL_EA9D10:
+KbChar_Upper_B:
 	.byte 0x42, 0x00
-LABEL_EA9D12:
+KbChar_Upper_A:
 	.byte 0x41, 0x00, 0xfe, 0x9d, 0xea, 0x00
-LABEL_EA9D18:
+PtrTbl_KeyboardChars_Lower:
 	.long LABEL_EA9DFC
 	.long LABEL_EA9DFA
 	.long LABEL_EA9DF8
 	.long LABEL_EA9DF6
-	.long LABEL_EA9DF4
-	.long LABEL_EA9DF2
-	.long LABEL_EA9DF0
-	.long LABEL_EA9DEE
-	.long LABEL_EA9DEC
-	.long LABEL_EA9DEA
-	.long LABEL_EA9DE8
-	.long LABEL_EA9DE6
-	.long LABEL_EA9DE4
-	.long LABEL_EA9DE2
-	.long LABEL_EA9DE0
-	.long LABEL_EA9DDE
-	.long LABEL_EA9DDC
-	.long LABEL_EA9DDA
-	.long LABEL_EA9DD8
-	.long LABEL_EA9DD6
-	.long LABEL_EA9DD4
-	.long LABEL_EA9DD2
-	.long LABEL_EA9DD0
-	.long LABEL_EA9DCE
-	.long LABEL_EA9DCC
-	.long LABEL_EA9DCA
-	.long LABEL_EA9DC8
-	.long LABEL_EA9DC6
-	.long LABEL_EA9DC4
-	.long LABEL_EA9DC2
-	.long LABEL_EA9DC0
-	.long LABEL_EA9DBE
-	.long LABEL_EA9DBC
-	.long LABEL_EA9DBA
-	.long LABEL_EA9DB8
-	.long LABEL_EA9DB6
-	.long LABEL_EA9DB2
-	.long LABEL_EA9DB0
-LABEL_EA9DB0:	aligned_string ""
-LABEL_EA9DB2:
+	.long KbChar_Lower_f
+	.long KbChar_Lower_g
+	.long KbChar_Lower_h
+	.long KbChar_Lower_i
+	.long KbChar_Lower_j
+	.long KbChar_Lower_k
+	.long KbChar_Lower_l
+	.long KbChar_Lower_m
+	.long KbChar_Lower_n
+	.long KbChar_Lower_o
+	.long KbChar_Lower_p
+	.long KbChar_Lower_q
+	.long KbChar_Lower_r
+	.long KbChar_Lower_s
+	.long KbChar_Lower_t
+	.long KbChar_Lower_u
+	.long KbChar_Lower_v
+	.long KbChar_Lower_w
+	.long KbChar_Lower_x
+	.long KbChar_Lower_y
+	.long KbChar_Lower_z
+	.long KbChar_Lower_Underscore
+	.long KbChar_Lower_0
+	.long KbChar_Lower_1
+	.long KbChar_Lower_2
+	.long KbChar_Lower_3
+	.long KbChar_Lower_4
+	.long KbChar_Lower_5
+	.long KbChar_Lower_6
+	.long KbChar_Lower_7
+	.long KbChar_Lower_8
+	.long KbChar_Lower_9
+	.long KbChar_Lower_Space
+	.long KbChar_Lower_Empty
+KbChar_Lower_Empty:	aligned_string ""
+KbChar_Lower_Space:
 	.byte 0x53, 0x50, 0x43, 0x00
-LABEL_EA9DB6:
+KbChar_Lower_9:
 	.byte 0x39, 0x00
-LABEL_EA9DB8:
+KbChar_Lower_8:
 	.byte 0x38, 0x00
-LABEL_EA9DBA:
+KbChar_Lower_7:
 	.byte 0x37, 0x00
-LABEL_EA9DBC:
+KbChar_Lower_6:
 	.byte 0x36, 0x00
-LABEL_EA9DBE:
+KbChar_Lower_5:
 	.byte 0x35, 0x00
-LABEL_EA9DC0:
+KbChar_Lower_4:
 	.byte 0x34, 0x00
-LABEL_EA9DC2:
+KbChar_Lower_3:
 	.byte 0x33, 0x00
-LABEL_EA9DC4:
+KbChar_Lower_2:
 	.byte 0x32, 0x00
-LABEL_EA9DC6:
+KbChar_Lower_1:
 	.byte 0x31, 0x00
-LABEL_EA9DC8:
+KbChar_Lower_0:
 	.byte 0x30, 0x00
-LABEL_EA9DCA:
+KbChar_Lower_Underscore:
 	.byte 0x5f, 0x00
-LABEL_EA9DCC:
+KbChar_Lower_z:
 	.byte 0x7a, 0x00
-LABEL_EA9DCE:
+KbChar_Lower_y:
 	.byte 0x79, 0x00
-LABEL_EA9DD0:
+KbChar_Lower_x:
 	.byte 0x78, 0x00
-LABEL_EA9DD2:
+KbChar_Lower_w:
 	.byte 0x77, 0x00
-LABEL_EA9DD4:
+KbChar_Lower_v:
 	.byte 0x76, 0x00
-LABEL_EA9DD6:
+KbChar_Lower_u:
 	.byte 0x75, 0x00
-LABEL_EA9DD8:
+KbChar_Lower_t:
 	.byte 0x74, 0x00
-LABEL_EA9DDA:
+KbChar_Lower_s:
 	.byte 0x73, 0x00
-LABEL_EA9DDC:
+KbChar_Lower_r:
 	.byte 0x72, 0x00
-LABEL_EA9DDE:
+KbChar_Lower_q:
 	.byte 0x71, 0x00
-LABEL_EA9DE0:
+KbChar_Lower_p:
 	.byte 0x70, 0x00
-LABEL_EA9DE2:
+KbChar_Lower_o:
 	.byte 0x6f, 0x00
-LABEL_EA9DE4:
+KbChar_Lower_n:
 	.byte 0x6e, 0x00
-LABEL_EA9DE6:
+KbChar_Lower_m:
 	.byte 0x6d, 0x00
-LABEL_EA9DE8:
+KbChar_Lower_l:
 	.byte 0x6c, 0x00
-LABEL_EA9DEA:
+KbChar_Lower_k:
 	.byte 0x6b, 0x00
-LABEL_EA9DEC:
+KbChar_Lower_j:
 	.byte 0x6a, 0x00
-LABEL_EA9DEE:
+KbChar_Lower_i:
 	.byte 0x69, 0x00
-LABEL_EA9DF0:
+KbChar_Lower_h:
 	.byte 0x68, 0x00
-LABEL_EA9DF2:
+KbChar_Lower_g:
 	.byte 0x67, 0x00
-LABEL_EA9DF4:
+KbChar_Lower_f:
 	.byte 0x66, 0x00
 LABEL_EA9DF6:
 	.byte 0x65, 0x00
@@ -40466,7 +40466,7 @@ LABEL_EE8C7E:
 	.long LABEL_EE2F26
 	.long LABEL_EE1574
 	.long LABEL_EDB2E4
-	.long LABEL_EA066C
+	.long DiskOp_ChannelCfgTable
 	.long LABEL_EB7932
 	.long LABEL_EDA02C
 	.long LABEL_ED9D1E
@@ -222462,7 +222462,7 @@ FDemoText_ByteData_DisplayRefresh:
 	.byte 0xee, 0x88, 0xaf, 0x08, 0xf0, 0x67, 0xbb, 0xe8
 	.byte 0xa9, 0xaf, 0x04, 0xa8, 0xaf, 0x04, 0x20, 0xe8
 	.byte 0xcf, 0x00, 0x00, 0x00, 0x00, 0x69, 0x8c, 0x40
-	.long LABEL_E9FDDC
+	.long ErrStr_GetInstanceID
 	.byte 0x1d, 0xa1, 0x2e, 0xfa
 	.byte 0x43, 0xff, 0xff, 0xff, 0xff, 0x5e, 0xf3, 0xfd
 	.byte 0x88, 0x00, 0x37, 0x0e, 0xbf, 0xea, 0x37, 0x2e
@@ -223626,7 +223626,7 @@ LABEL_F864A0:
 	.byte 0x1d, 0xa0, 0x0f, 0xff, 0x2b, 0x3e, 0xf3, 0xfd
 	.byte 0x12, 0x01, 0x30, 0x38, 0x1d, 0xf3, 0x0c, 0xff
 	.byte 0xf3, 0xfd, 0x16, 0x01, 0x30, 0xb8, 0x08, 0x00
-	.long LABEL_EA0B00
+	.long Data_DiskFuncPtrTbl_EA0B00
 	.byte 0x0b, 0x70, 0x00, 0x38
 	.byte 0x1d, 0xc1, 0x0d, 0xff, 0xbf, 0x16, 0x37, 0xf3
 	.byte 0xfd, 0x08, 0x01, 0x30, 0x41, 0x76, 0x00, 0xea
@@ -226050,7 +226050,7 @@ LABEL_F87C57:
 	lds	de, 7
 	call 0xF891AB
 	lda xwa, (xsp + 4)
-	ld xbc, LABEL_EA01F8			; resource ID region 7
+	ld xbc, Resource_Region7_Start			; resource ID region 7
 	call 0xF88BC7
 	cps hl, 0
 	jr ge, LABEL_F87C78
@@ -226097,7 +226097,7 @@ LABEL_F87CCF:
 	lds	de, 2
 	call 0xF891AB
 	lda xwa, (xsp + 8)
-	ld xbc, LABEL_EA01FC			; resource ID region 2
+	ld xbc, Resource_Region2_Start			; resource ID region 2
 	call 0xF88BC7
 	cps hl, 0
 	jr ge, LABEL_F87CF0
@@ -226144,7 +226144,7 @@ LABEL_F87D47:
 	lds	de, 3
 	call 0xF891AB
 	lda xwa, (xsp + 8)
-	ld xbc, LABEL_EA0200			; resource ID region 3
+	ld xbc, Resource_Region3_Start			; resource ID region 3
 	call 0xF88BC7
 	cps hl, 0
 	jr ge, LABEL_F87D68
@@ -226586,7 +226586,7 @@ FileIO_ByteBlock_F8817E:
 	.byte 0x1a, 0x30, 0xde, 0x89, 0x1d, 0x7e, 0x91, 0xf8
 	.byte 0xbf, 0x1a, 0x31, 0xbf, 0x0c, 0x30, 0xda, 0xa9
 	.byte 0x1d, 0xab, 0x91, 0xf8, 0xbf, 0x0c, 0x30, 0x41
-	.long LABEL_EA024C
+	.long Resource_RegionPad
 	.byte 0x1d, 0xc7, 0x8b, 0xf8
 	.byte 0xdb, 0xd8, 0x69, 0x07, 0x1d, 0xc2, 0x8b, 0xf8
 	.byte 0x78, 0x80, 0x00, 0xd8, 0xa9, 0x1e, 0xd0, 0xef
@@ -229809,7 +229809,7 @@ FileIO_ByteBlock_F8A0E1:
 	.byte 0x8a, 0xbf, 0x10, 0x30, 0xde, 0x89, 0x1e, 0x4c
 	.byte 0xf0, 0xbf, 0x10, 0x31, 0xbf, 0x02, 0x30, 0xda
 	.byte 0xa9, 0x1e, 0x6e, 0xf0, 0xbf, 0x02, 0x30, 0x41
-	.long LABEL_EA04C2
+	.long FileOp_StubAndDirNames
 	.byte 0x1d, 0xc7, 0x8b, 0xf8
 	.byte 0xdb, 0xd8, 0x69, 0x07, 0x43, 0x48, 0x04, 0xea
 	.byte 0x00, 0x68, 0x2f, 0x9f, 0x1a, 0x20, 0xd8, 0xee
@@ -229877,7 +229877,7 @@ FileIO_ByteBlock_F8A0E1:
 	.byte 0x02, 0x30, 0xda, 0xac, 0x1e, 0x63, 0xee, 0xbf
 	.byte 0x02, 0x30, 0x41, 0xd2, 0x04, 0xea, 0x00, 0x1d
 	.byte 0xc7, 0x8b, 0xf8, 0xdb, 0xd8, 0x69, 0x07, 0x43
-	.long LABEL_EA0448
+	.long Filename_TemplateArea
 	.byte 0x68, 0x30, 0x9f, 0x1a
 	.byte 0x20, 0xd8, 0x08, 0xd6, 0x01, 0xd8, 0xc8, 0x10
 	.byte 0x00, 0xe8, 0x12, 0xd9, 0xa8, 0x1d, 0xe0, 0x8e
@@ -229893,7 +229893,7 @@ FileIO_ByteBlock_F8A0E1:
 	.byte 0x02, 0x30, 0xda, 0xac, 0x1e, 0xeb, 0xed, 0xbf
 	.byte 0x02, 0x30, 0x41, 0xd6, 0x04, 0xea, 0x00, 0x1d
 	.byte 0xc7, 0x8b, 0xf8, 0xdb, 0xd8, 0x69, 0x07, 0x43
-	.long LABEL_EA0448
+	.long Filename_TemplateArea
 	.byte 0x68, 0x28, 0x40, 0x80
 	.byte 0x49, 0x00, 0x00, 0xd9, 0xa8, 0x1d, 0xe0, 0x8e
 	.byte 0xf8, 0x40, 0x40, 0x5c, 0x02, 0x00, 0x41, 0x10
@@ -251633,7 +251633,7 @@ LABEL_FA3DFD:
 	.byte 0x04, 0x63, 0xe3, 0xfd, 0x90, 0x00, 0x20, 0x41
 	.byte 0x14, 0x00, 0xe0, 0x01, 0x42, 0x10, 0x00, 0x60
 	.byte 0x01, 0x1d, 0x60, 0x96, 0xfa, 0xeb, 0xe3, 0x66
-	.long LABEL_EA0B12
+	.long Data_DiskFuncPtrTbl_EA0B12
 	.byte 0x0b, 0x90, 0xa8, 0xe3
 	.byte 0xfd, 0x8c, 0x00, 0x20, 0x38, 0x1d, 0xc1, 0x0d
 	.byte 0xff, 0xef, 0x60, 0xaf, 0x04, 0x23, 0x78, 0x16
@@ -359045,7 +359045,7 @@ FIRMWARE_VERSION:	; FFFFE8
 	.set LABEL_E20B7C, 0xE20B7C
 	.set LABEL_E20B86, 0xE20B86
 	.set LABEL_E21AD2, 0xE21AD2
-	.set LABEL_E22322, 0xE22322
+	.set NakaStr_PdMdlyOrcha, 0xE22322
 	.set LABEL_E2364A, 0xE2364A
 	.set LABEL_E23C12, 0xE23C12
 	.set LABEL_E23C1A, 0xE23C1A
