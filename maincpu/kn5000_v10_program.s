@@ -84225,7 +84225,7 @@ SetWall_CrossType_MapLookup:
 SetWall_CrossType_Reset:
 	pushw wa
 	xor a, a
-	call LABEL_F41803
+	call Part_InitVoiceDefaults
 	popw wa
 	anddi8 10361, 252
 	ret
@@ -116504,7 +116504,7 @@ BmDrEdit_CheckNoteType:
 	ld c, a
 	extz bc
 	lds wa, 0
-	call LABEL_F41783
+	call Part_ReadVoiceByte
 	cp l, 0xD
 	jr z, BmDrEdit_CheckNoteType_IsDrum
 	cp l, 0xF
@@ -116977,7 +116977,7 @@ BmDrEdit_SelectChannel_TestBit:
 	inc 1, c
 	extz bc
 	lds wa, 0
-	call LABEL_F4178A
+	call Part_ReadVoiceBit7
 	cps l, 0
 	jr z, BmDrEdit_SelectChannel_NotFound
 	ldto_berp A, 0xFB
@@ -117668,7 +117668,7 @@ LABEL_F3703A:
 	inc 1, c
 	extz bc
 	lds wa, 0
-	call LABEL_F4178A
+	call Part_ReadVoiceBit7
 	cps l, 0
 	jr z, LABEL_F37055
 
@@ -117696,13 +117696,13 @@ LABEL_F37055:
 	extz bc
 	lds wa, 0
 	lds de, 1
-	call LABEL_F4179D
+	call Part_SetClearVoiceBit7
 	ldda8 c, 10597
 	inc 1, c
 	extz bc
 	lds wa, 0
 	ld de, iz
-	call LABEL_F417F4
+	call Part_WriteVoiceWord
 	ldda8 c, 10597
 	inc 1, c
 	extz bc
@@ -117955,7 +117955,7 @@ LABEL_F372F9:
 	inc 1, c
 	extz bc
 	lds wa, 0
-	call LABEL_F417E5
+	call Part_ReadVoiceWord
 	cp hl, 0xFFFF
 	ret z
 	stda16 10415, xhl
@@ -118135,7 +118135,7 @@ LABEL_F374A1:
 	inc 1, c
 	extz bc
 	lds wa, 0
-	call LABEL_F415ED
+	call Part_ReadByte_Indexed
 	stda16 9830, xhl
 	ret
 
@@ -118883,7 +118883,7 @@ LABEL_F37B2B:
 	ld c, (xsp + 20)
 	extz bc
 	lds wa, 0
-	call LABEL_F415ED
+	call Part_ReadByte_Indexed
 	ld (xsp + 10), hl
 	ld wa, (xsp + 12)
 	ld (xsp + 8), wa
@@ -121345,23 +121345,23 @@ LABEL_F39434:
 LABEL_F39441:
 	lds wa, 0
 	ldw bc, 0xD
-	call LABEL_F4174D
+	call Part_FindVoiceByByte
 	stda8 8988, l
 	lds wa, 0
 	ldw bc, 0x10
-	call LABEL_F4174D
+	call Part_FindVoiceByByte
 	stda8 8990, l
 	lds wa, 0
 	ldw bc, 0xC
-	call LABEL_F4174D
+	call Part_FindVoiceByByte
 	stda8 8992, l
 	lds wa, 0
 	ldw bc, 0xE
-	call LABEL_F4174D
+	call Part_FindVoiceByByte
 	stda8 8994, l
 	lds wa, 0
 	ldw bc, 0xF
-	call LABEL_F4174D
+	call Part_FindVoiceByByte
 	stda8 8996, l
 	call LABEL_F3DF7C
 	call LABEL_F3DFC9
@@ -121454,7 +121454,7 @@ LABEL_F39552:
 	calr LABEL_F3C66A
 	lds wa, 0
 	ldw bc, 0xD
-	call LABEL_F4174D
+	call Part_FindVoiceByByte
 	cp l, 0xFF
 	jr z, LABEL_F395AB
 	ld a, l
@@ -121470,7 +121470,7 @@ LABEL_F39593:
 	extz hl
 	lds wa, 0
 	ld bc, hl
-	call LABEL_F4178A
+	call Part_ReadVoiceBit7
 	cps l, 0
 	jr z, LABEL_F395AB
 	setda 1, 10407
@@ -121542,7 +121542,7 @@ LABEL_F39651:
 LABEL_F3966D:
 	lds wa, 0
 	ldw bc, 0xD
-	call LABEL_F4174D
+	call Part_FindVoiceByByte
 	cp l, 0xFF
 	jr z, LABEL_F396A0
 	ld a, l
@@ -121558,7 +121558,7 @@ LABEL_F39688:
 	extz hl
 	lds wa, 0
 	ld bc, hl
-	call LABEL_F4178A
+	call Part_ReadVoiceBit7
 	cps l, 0
 	jr z, LABEL_F396A0
 	setda 1, 10407
@@ -121582,13 +121582,13 @@ LABEL_F396A8:
 LABEL_F396C5:
 	lds wa, 0
 	ldw bc, 0xD
-	call LABEL_F4174D
+	call Part_FindVoiceByByte
 	ldfr_berp L, 0xFA
 	cp_erpb 0xFA, 0xFF
 	jr nz, LABEL_F396EA
 	lds wa, 0
 	ldw bc, 0xE
-	call LABEL_F4174D
+	call Part_FindVoiceByByte
 	ldfr_berp L, 0xFA
 	cp_erpb 0xFA, 0xFF
 	jrl z, LABEL_F397AD
@@ -121613,7 +121613,7 @@ LABEL_F3970D:
 	ldto_berp C, 0xFA
 	extz bc
 	lds wa, 0
-	call LABEL_F4178A
+	call Part_ReadVoiceBit7
 	cps l, 0
 	jrl z, LABEL_F397AD
 	ldto_berp A, 0xFA
@@ -121702,7 +121702,7 @@ LABEL_F397E1:
 	ld c, (xsp + 10)
 	extz bc
 	lds wa, 0
-	call LABEL_F41783
+	call Part_ReadVoiceByte
 	cp l, 0xE
 	jrl nz, LABEL_F398B4
 	ldmw2 (xsp), 0x28AF
@@ -122433,15 +122433,15 @@ LABEL_F39EEC:
 LABEL_F39EF0:
 	lds wa, 0
 	ldw bc, 0xC
-	call LABEL_F4174D
+	call Part_FindVoiceByByte
 	stda8 8992, l
 	lds wa, 0
 	ldw bc, 0xE
-	call LABEL_F4174D
+	call Part_FindVoiceByByte
 	stda8 8994, l
 	lds wa, 0
 	ldw bc, 0xF
-	call LABEL_F4174D
+	call Part_FindVoiceByByte
 	stda8 8996, l
 	ldda8 a, 36150
 	cp a, 0x87
@@ -122760,7 +122760,7 @@ LABEL_F3A213:
 	extz bc
 	lds wa, 0
 	ldw de, 0xD
-	call LABEL_F416A7
+	call Part_WriteSubBlock32
 
 LABEL_F3A239:
 	ldw wa, 0x32
@@ -125146,7 +125146,7 @@ LABEL_F3B70D:
 	ld c, (xsp + 6)
 	extz bc
 	lds wa, 0
-	call LABEL_F41783
+	call Part_ReadVoiceByte
 	cp l, 0x10
 	jr nz, LABEL_F3B770
 	mrdb5 0x8F, 0x04, 0x19, 0x8C, 0x1D
@@ -126357,7 +126357,7 @@ LABEL_F3C1F6:
 	ldto_berp C, 0xFB
 	extz bc
 	lds wa, 0
-	call LABEL_F4178A
+	call Part_ReadVoiceBit7
 	cps l, 0
 	jr z, LABEL_F3C22B
 	ldto_berp A, 0xFB
@@ -126386,12 +126386,12 @@ LABEL_F3C22B:
 	extz bc
 	lds wa, 0
 	lds de, 1
-	call LABEL_F4179D
+	call Part_SetClearVoiceBit7
 	ldto_berp C, 0xFB
 	extz bc
 	lds wa, 0
 	ld de, iz
-	call LABEL_F417F4
+	call Part_WriteVoiceWord
 	ld wa, iz
 	lds bc, 0
 	call PartCtrl_WriteWord_Off1
@@ -126441,12 +126441,12 @@ LABEL_F3C2BB:
 	extz bc
 	lds wa, 0
 	lds de, 1
-	call LABEL_F4179D
+	call Part_SetClearVoiceBit7
 	ldto_berp C, 0xFB
 	extz bc
 	lds wa, 0
 	ld de, iz
-	call LABEL_F417F4
+	call Part_WriteVoiceWord
 	ld wa, iz
 	lds bc, 0
 	call PartCtrl_WriteWord_Off1
@@ -126525,7 +126525,7 @@ LABEL_F3C380:
 	stdi16 7578, 65535
 	lds wa, 0
 	ldw bc, 0xD
-	call LABEL_F4174D
+	call Part_FindVoiceByByte
 	ld (xsp + 4), l
 	cp (xsp + 4), 0xFF
 	jrl z, LABEL_F3C560
@@ -126727,7 +126727,7 @@ LABEL_F3C565:
 	ld (xsp + 16), wa
 	lds wa, 0
 	ldw bc, 0x10
-	call LABEL_F4174D
+	call Part_FindVoiceByByte
 	ld (xsp), l
 	cp (xsp), 0xFF
 	jrl z, LABEL_F3C666
@@ -126844,7 +126844,7 @@ LABEL_F3C66A:
 	ldirw
 	lds wa, 0
 	ldw bc, 0xF
-	call LABEL_F4174D
+	call Part_FindVoiceByByte
 	ld (xsp), l
 	cp (xsp), 0xFF
 	jrl z, LABEL_F3C758
@@ -127318,7 +127318,7 @@ LABEL_F3CB5E:
 	ld c, (xsp + 22)
 	extz bc
 	lds wa, 0
-	call LABEL_F4178A
+	call Part_ReadVoiceBit7
 	cps l, 0
 	jr nz, LABEL_F3CB82
 	ldw hl, 0xFFFF
@@ -127328,7 +127328,7 @@ LABEL_F3CB82:
 	ld c, (xsp + 22)
 	extz bc
 	lds wa, 0
-	call LABEL_F417E5
+	call Part_ReadVoiceWord
 	ld xwa, (xsp + 16)
 	ld (xwa), hl
 	ldw (xwa + 2), 0x5
@@ -127974,7 +127974,7 @@ LABEL_F3D129:
 	ld c, (xsp + 20)
 	extz bc
 	lds wa, 0
-	call LABEL_F415ED
+	call Part_ReadByte_Indexed
 	lda xwa, (xsp + 12)
 	lda xbc, (xwa + 2)
 	ld (xbc), hl
@@ -128201,7 +128201,7 @@ LABEL_F3D2FA:
 	ld c, (xsp + 4)
 	extz bc
 	lds wa, 0
-	call LABEL_F415ED
+	call Part_ReadByte_Indexed
 	ld (xsp + 22), hl
 	lda xwa, (xsp + 8)
 	ld hl, (xwa)
@@ -128493,7 +128493,7 @@ LABEL_F3D61F:
 	push_werp 0xFA
 	lds wa, 0
 	ldw bc, 0xE
-	call LABEL_F4174D
+	call Part_FindVoiceByByte
 	ldfr_berp L, 0xFB
 	cp_erpb 0xFB, 0xFF
 	jr z, LABEL_F3D680
@@ -128528,7 +128528,7 @@ LABEL_F3D644:
 LABEL_F3D680:
 	lds wa, 0
 	ldw bc, 0xF
-	call LABEL_F4174D
+	call Part_FindVoiceByByte
 	ldfr_berp L, 0xFB
 	cp_erpb 0xFB, 0xFF
 	jr z, LABEL_F3D70D
@@ -128600,7 +128600,7 @@ LABEL_F3D71E:
 	ldto_berp C, 0xFB
 	extz bc
 	lds wa, 0
-	call LABEL_F41783
+	call Part_ReadVoiceByte
 	cps l, 1
 	jr z, LABEL_F3D73B
 	cps l, 0
@@ -129023,7 +129023,7 @@ LABEL_F3DAF5:
 	ldto_berp C, 0xFB
 	extz bc
 	lds wa, 0
-	calr LABEL_F41783
+	calr Part_ReadVoiceByte
 	cp l, 0xF
 	jr z, LABEL_F3DB36
 	cp l, 0x10
@@ -129639,7 +129639,7 @@ LABEL_F3E07C:
 	extz de
 	lds wa, 0
 	ld bc, de
-	calr LABEL_F41783
+	calr Part_ReadVoiceByte
 	cp l, 0xF
 	ret z
 	cp l, 0x13
@@ -129665,7 +129665,7 @@ LABEL_F3E0BC:
 	ld c, (xsp)
 	extz bc
 	lds wa, 0
-	calr LABEL_F41783
+	calr Part_ReadVoiceByte
 	cp l, 0xF
 	jr nz, LABEL_F3E0D6
 	resda 7, 10414
@@ -129748,7 +129748,7 @@ LABEL_F3E182:
 	ldi_berp 0xFB, 1
 	lds wa, 0
 	ldw bc, 0xD
-	calr LABEL_F4174D
+	calr Part_FindVoiceByByte
 	cp l, 0xFF
 	jr nz, LABEL_F3E198
 	ldi_berp 0xFB, 0
@@ -129770,7 +129770,7 @@ LABEL_F3E1AE:
 	extz hl
 	lds wa, 0
 	ld bc, hl
-	calr LABEL_F4178A
+	calr Part_ReadVoiceBit7
 	cps l, 0
 	jr nz, LABEL_F3E1BE
 	ldi_berp 0xFB, 0
@@ -129841,7 +129841,7 @@ LABEL_F3E250:
 	ret z
 	lds wa, 0
 	ldw bc, 0xF
-	calr LABEL_F4174D
+	calr Part_FindVoiceByByte
 	cp l, 0xFF
 	ret z
 	dec 1, l
@@ -130612,7 +130612,7 @@ LABEL_F3E91B:
 	ldto_berp C, 0xFB
 	extz bc
 	lds wa, 0
-	calr LABEL_F417E5
+	calr Part_ReadVoiceWord
 	stda16 10415, xhl
 	stdi16 9830, 5
 	ldmw2 (xsp + 4), 0x232A
@@ -130714,7 +130714,7 @@ LABEL_F3EA04:
 	stda16 8984, xwa
 	lds wa, 0
 	ldw bc, 0xD
-	calr LABEL_F4174D
+	calr Part_FindVoiceByByte
 	cp l, 0xFF
 	jr z, LABEL_F3EA53
 	dec 1, l
@@ -130738,7 +130738,7 @@ LABEL_F3EA50:
 LABEL_F3EA53:
 	lds wa, 0
 	ldw bc, 0x10
-	calr LABEL_F4174D
+	calr Part_FindVoiceByByte
 	cp l, 0xFF
 	jr z, LABEL_F3EA81
 	dec 1, l
@@ -130946,7 +130946,7 @@ LABEL_F3EBC3:
 	ld c, (xsp + 2)
 	extz bc
 	lds wa, 0
-	calr LABEL_F41783
+	calr Part_ReadVoiceByte
 	ldfr_berp L, 0xFB
 	ld a, (xsp + 2)
 	extz wa
@@ -131022,7 +131022,7 @@ LABEL_F3EC73:
 	extz de
 	lds wa, 0
 	ld bc, de
-	calr LABEL_F41783
+	calr Part_ReadVoiceByte
 	cp l, 0xF
 	ret z
 	cp l, 0x13
@@ -131261,7 +131261,7 @@ LABEL_F3EEB0:
 	ld c, (xsp + 16)
 	extz bc
 	lds wa, 0
-	calr LABEL_F417E5
+	calr Part_ReadVoiceWord
 	lda xwa, (xsp + 4)
 	ld (xwa), hl
 	ldw (xwa + 2), 0x5
@@ -131330,7 +131330,7 @@ LABEL_F3EF49:
 	ld (xhl + 1), 0x0
 	lds wa, 0
 	ldw bc, 0xD
-	calr LABEL_F4174D
+	calr Part_FindVoiceByByte
 	ld (xsp), l
 	ld a, (xsp + 16)
 	cp a, (xsp)
@@ -131587,14 +131587,14 @@ LABEL_F3F1A8:
 	extz wa
 	ld c, (xsp + 6)
 	extz bc
-	calr LABEL_F4178A
+	calr Part_ReadVoiceBit7
 	cps l, 0
 	jrl z, LABEL_F3F2E9
 	ld a, (xsp + 4)
 	extz wa
 	ld c, (xsp + 6)
 	extz bc
-	calr LABEL_F417E5
+	calr Part_ReadVoiceWord
 	ld (xsp + 10), hl
 	cpw (xsp + 10), 0xFFFF
 	jrl z, LABEL_F3F2E9
@@ -131672,7 +131672,7 @@ LABEL_F3F270:
 	ld c, (xsp + 6)
 	extz bc
 	ld de, (xsp + 12)
-	calr LABEL_F417F4
+	calr Part_WriteVoiceWord
 	ld a, (xsp + 8)
 	dec 1, a
 	cpda8_24 a, 65507
@@ -131681,7 +131681,7 @@ LABEL_F3F270:
 	extz bc
 	lds wa, 0
 	ld de, (xsp + 12)
-	calr LABEL_F417F4
+	calr Part_WriteVoiceWord
 
 LABEL_F3F299:
 	ld wa, (xsp + 10)
@@ -131823,19 +131823,19 @@ LABEL_F3F3C6:
 	ldto_berp C, 0xFA
 	extz bc
 	lds de, 0
-	calr LABEL_F4179D
+	calr Part_SetClearVoiceBit7
 	ldto_berp A, 0xFB
 	extz wa
 	ldto_berp C, 0xFA
 	extz bc
-	calr LABEL_F417E5
+	calr Part_ReadVoiceWord
 	ld iz, hl
 	ldto_berp A, 0xFB
 	extz wa
 	ldto_berp C, 0xFA
 	extz bc
 	ldw de, 0xFFFF
-	calr LABEL_F417F4
+	calr Part_WriteVoiceWord
 	ldto_berp A, 0xFB
 	extz wa
 	ldto_berp C, 0xFA
@@ -131896,17 +131896,17 @@ LABEL_F3F469:
 	extz bc
 	lds wa, 0
 	lds de, 0
-	calr LABEL_F4179D
+	calr Part_SetClearVoiceBit7
 	ld c, (xsp + 2)
 	extz bc
 	lds wa, 0
-	calr LABEL_F417E5
+	calr Part_ReadVoiceWord
 	ld (xsp), hl
 	ld c, (xsp + 2)
 	extz bc
 	lds wa, 0
 	ldw de, 0xFFFF
-	calr LABEL_F417F4
+	calr Part_WriteVoiceWord
 	ld c, (xsp + 2)
 	extz bc
 	lds wa, 0
@@ -132319,14 +132319,14 @@ LABEL_F3F8D7:
 	extz wa
 	ldto_berp C, 0xF9
 	extz bc
-	calr LABEL_F4178A
+	calr Part_ReadVoiceBit7
 	cps l, 0
 	jr z, LABEL_F3F900
 	ldto_berp A, 0xFB
 	extz wa
 	ldto_berp C, 0xF9
 	extz bc
-	calr LABEL_F417E5
+	calr Part_ReadVoiceWord
 	ld wa, hl
 	cp wa, 0xFFFF
 	call_24 nz, 0xF41F7C
@@ -132364,14 +132364,14 @@ LABEL_F3F93D:
 	ldto_berp C, 0xF9
 	extz bc
 	lds de, 0
-	calr LABEL_F4179D
+	calr Part_SetClearVoiceBit7
 	ldda8 a, 10360
 	inc 1, a
 	extz wa
 	ldto_berp C, 0xF9
 	extz bc
 	ldw de, 0xFFFF
-	calr LABEL_F417F4
+	calr Part_WriteVoiceWord
 	inc1_berp 0xF9
 	cp_erpb 0xF9, 0x10
 	jr ule, LABEL_F3F93D
@@ -132424,12 +132424,12 @@ LABEL_F3F9EA:
 	extz bc
 	lds wa, 0
 	lds de, 0
-	calr LABEL_F4179D
+	calr Part_SetClearVoiceBit7
 	ldto_berp C, 0xF9
 	extz bc
 	lds wa, 0
 	ldw de, 0xFFFF
-	calr LABEL_F417F4
+	calr Part_WriteVoiceWord
 	inc1_berp 0xF9
 	cp_erpb 0xF9, 0x10
 	jr ule, LABEL_F3F9EA
@@ -132458,13 +132458,13 @@ LABEL_F3FA2B:
 	ldto_berp C, 0xFA
 	extz bc
 	lds de, 0
-	calr LABEL_F4179D
+	calr Part_SetClearVoiceBit7
 	ldto_berp A, 0xFB
 	extz wa
 	ldto_berp C, 0xFA
 	extz bc
 	ldw de, 0xFFFF
-	calr LABEL_F417F4
+	calr Part_WriteVoiceWord
 	ldto_berp A, 0xFB
 	extz wa
 	ldto_berp C, 0xFA
@@ -132721,7 +132721,7 @@ LABEL_F3FC57:
 	ld c, (xsp + 2)
 	extz bc
 	lds wa, 0
-	calr LABEL_F4178A
+	calr Part_ReadVoiceBit7
 	cps l, 0
 	jr nz, LABEL_F3FC72
 	stdi8 10362, 1
@@ -132731,7 +132731,7 @@ LABEL_F3FC72:
 	ld c, (xsp + 2)
 	extz bc
 	lds wa, 0
-	calr LABEL_F417E5
+	calr Part_ReadVoiceWord
 	ld iz, hl
 	cp iz, 0xFFFF
 	jr nz, LABEL_F3FC8B
@@ -132990,7 +132990,7 @@ LABEL_F3FEFB:
 
 LABEL_F3FF1A:
 	lds wa, 0
-	jrl LABEL_F41803
+	jrl Part_InitVoiceDefaults
 
 LABEL_F3FF1F:
 	ld xwa, 0xE445A6
@@ -133636,7 +133636,7 @@ LABEL_F40534:
 	ldda8 c, 9780
 	extz bc
 	lds wa, 0
-	calr LABEL_F415ED
+	calr Part_ReadByte_Indexed
 	ld wa, hl
 	dec 5, wa
 	extz xwa
@@ -134028,7 +134028,7 @@ LABEL_F40913:
 	extz wa
 	ldto_berp C, 0xFA
 	extz bc
-	calr LABEL_F4178A
+	calr Part_ReadVoiceBit7
 	cps l, 0
 	jr z, LABEL_F40933
 	ldto_berp A, 0xFB
@@ -134099,7 +134099,7 @@ LABEL_F40995:
 	extz wa
 	ld c, (xsp + 4)
 	extz bc
-	calr LABEL_F417E5
+	calr Part_ReadVoiceWord
 	ld iz, hl
 	cp iz, 0xFFFF
 	jr z, LABEL_F409C4
@@ -134107,7 +134107,7 @@ LABEL_F40995:
 	extz wa
 	ld c, (xsp + 4)
 	extz bc
-	calr LABEL_F4178A
+	calr Part_ReadVoiceBit7
 	cps l, 0
 	jr nz, LABEL_F409C8
 
@@ -134675,7 +134675,7 @@ LABEL_F40E21:
 	ld c, (xsp + 36)
 	extz bc
 	lds wa, 0
-	calr LABEL_F415ED
+	calr Part_ReadByte_Indexed
 	stda16 10294, xhl
 	calr LABEL_F40565
 	ldada xde, 10292
@@ -135025,7 +135025,7 @@ LABEL_F412BF:
 	ldda8 c, 10048
 	extz bc
 	lds wa, 0
-	calr LABEL_F415ED
+	calr Part_ReadByte_Indexed
 	stda16 10286, xhl
 	ldda8 c, 10048
 	extz bc
@@ -135459,7 +135459,7 @@ Part_WriteByte_Indexed:
 	ld bc, hl
 	jrl Part_WriteByte
 
-LABEL_F415ED:
+Part_ReadByte_Indexed:
 	ld e, c
 	ldw bc, 0x98
 	dec 1, e
@@ -135470,7 +135470,7 @@ LABEL_F415ED:
 	extz hl
 	ret
 
-LABEL_F41600:
+Part_SetAllVoicePos:
 	push xiz
 	ld iz, wa
 	ldi_berp 0xFB, 0
@@ -135490,7 +135490,7 @@ LABEL_F41606:
 	pop xiz
 	ret
 
-LABEL_F41629:
+Part_IncrementVoicePos:
 	push xiz
 	lds wa, 0
 	ldw bc, 0xB1
@@ -135523,7 +135523,7 @@ LABEL_F41667:
 	pop xiz
 	ret
 
-LABEL_F41669:
+Part_DecrementVoicePos:
 	push xiz
 	lds wa, 0
 	ldw bc, 0xB1
@@ -135556,7 +135556,7 @@ LABEL_F416A5:
 	pop xiz
 	ret
 
-LABEL_F416A7:
+Part_WriteSubBlock32:
 	cps a, 0
 	jr nz, LABEL_F416B1
 	ldada xhl, 61856
@@ -135577,7 +135577,7 @@ LABEL_F416C4:
 	ld (xwa - 1), e
 	jp 0xFDDE6F
 
-LABEL_F416D2:
+Part_ReadSubBlock32:
 	cps a, 0
 	jr nz, LABEL_F416DC
 	ldada xde, 61856
@@ -135598,7 +135598,7 @@ LABEL_F416EF:
 	ld l, (xwa - 1)
 	ret
 
-LABEL_F416FA:
+Part_WriteSubBlock48:
 	cps a, 0
 	jr nz, LABEL_F41704
 	ldada xhl, 61872
@@ -135625,7 +135625,7 @@ LABEL_F41725:
 	.byte 0xb0, 0x0a, 0x32, 0xe8, 0x82, 0xd9, 0x12, 0xf3
 	.byte 0x07, 0xe8, 0xe4, 0x30, 0x88, 0xff, 0x27, 0x0e
 
-LABEL_F4174D:
+Part_FindVoiceByByte:
 	dec 4, xsp
 	push_werp 0xFA
 	ld (xsp + 2), c
@@ -135637,7 +135637,7 @@ LABEL_F4175B:
 	extz wa
 	ldto_berp C, 0xFB
 	extz bc
-	calr LABEL_F416D2
+	calr Part_ReadSubBlock32
 	cp l, (xsp + 2)
 	jr nz, LABEL_F41772
 	ldto_berp L, 0xFB
@@ -135654,12 +135654,12 @@ LABEL_F4177D:
 	inc 4, xsp
 	ret
 
-LABEL_F41783:
+Part_ReadVoiceByte:
 	extz wa
 	extz bc
-	jrl LABEL_F416D2
+	jrl Part_ReadSubBlock32
 
-LABEL_F4178A:
+Part_ReadVoiceBit7:
 	extz wa
 	mul c, 0x3
 	dec 3, c
@@ -135669,7 +135669,7 @@ LABEL_F4178A:
 	and l, 0x80
 	ret
 
-LABEL_F4179D:
+Part_SetClearVoiceBit7:
 	dec 6, xsp
 	ld (xsp), e
 	ld (xsp + 2), c
@@ -135704,7 +135704,7 @@ LABEL_F417C9:
 	inc 6, xsp
 	ret
 
-LABEL_F417E5:
+Part_ReadVoiceWord:
 	extz wa
 	mul c, 0x3
 	dec 3, c
@@ -135712,7 +135712,7 @@ LABEL_F417E5:
 	extz bc
 	jrl Part_ReadWord
 
-LABEL_F417F4:
+Part_WriteVoiceWord:
 	extz wa
 	mul c, 0x3
 	dec 3, c
@@ -135720,7 +135720,7 @@ LABEL_F417F4:
 	extz bc
 	jrl Part_WriteWord
 
-LABEL_F41803:
+Part_InitVoiceDefaults:
 	dec 2, xsp
 	pushw iz
 	ld (xsp + 2), a
@@ -135838,7 +135838,7 @@ LABEL_F418FD:
 	extz de
 	lda_24 xhl, 0xe4454a
 	ld_srib3 E, 0x07, 0xEC, 0xE8
-	calr LABEL_F416A7
+	calr Part_WriteSubBlock32
 	inc1_berp 0xFB
 	cp_erpb 0xFB, 0x10
 	jr ule, LABEL_F418FD
@@ -135854,7 +135854,7 @@ LABEL_F41927:
 	extz de
 	lda_24 xhl, 0xe4456a
 	ld_srib3 E, 0x07, 0xEC, 0xE8
-	calr LABEL_F416FA
+	calr Part_WriteSubBlock48
 	inc1_berp 0xFB
 	cp_erpb 0xFB, 0x10
 	jr ule, LABEL_F41927
@@ -135878,7 +135878,7 @@ LABEL_F4195F:
 	extz de
 	lda_24 xhl, 0xe4455a
 	ld_srib3 E, 0x07, 0xEC, 0xE8
-	calr LABEL_F416A7
+	calr Part_WriteSubBlock32
 	inc1_berp 0xFB
 	cp_erpb 0xFB, 0x10
 	jr ule, LABEL_F4195F
@@ -135894,7 +135894,7 @@ LABEL_F41989:
 	extz de
 	lda_24 xhl, 0xe4456a
 	ld_srib3 E, 0x07, 0xEC, 0xE8
-	calr LABEL_F416FA
+	calr Part_WriteSubBlock48
 	inc1_berp 0xFB
 	cp_erpb 0xFB, 0x10
 	jr ule, LABEL_F41989
@@ -136145,7 +136145,7 @@ LABEL_F41B8C:
 	calr PartCtrl_SetClearBit7
 	ld xwa, (xsp + 12)
 	ld (xwa), iz
-	calr LABEL_F41669
+	calr Part_DecrementVoicePos
 	jr LABEL_F41BC1
 
 LABEL_F41BB9:
@@ -136183,7 +136183,7 @@ LABEL_F41BEE:
 	lds wa, 1
 	calr LABEL_F41444
 	ldw wa, 0x4D8
-	calr LABEL_F41600
+	calr Part_SetAllVoicePos
 	lds iz, 1
 
 LABEL_F41BFC:
@@ -136440,7 +136440,7 @@ LABEL_F41E36:
 	lds wa, 1
 	lds bc, 1
 	calr PartCtrl_SetClearBit7
-	calr LABEL_F41669
+	calr Part_DecrementVoicePos
 	lds wa, 1
 	calr PartCtrl_ReadWord_Off1
 	ldfr_werp HL, 0xFA
@@ -136491,7 +136491,7 @@ LABEL_F41E9F:
 	lds wa, 2
 	lds bc, 1
 	calr PartCtrl_SetClearBit7
-	calr LABEL_F41669
+	calr Part_DecrementVoicePos
 	lds wa, 2
 	calr PartCtrl_ReadWord_Off1
 	ldfr_werp HL, 0xFA
@@ -136554,13 +136554,13 @@ LABEL_F41F1F:
 	ldto_berp C, 0xFB
 	extz bc
 	lds de, 0
-	calr LABEL_F4179D
+	calr Part_SetClearVoiceBit7
 	ldto_berp A, 0xFA
 	extz wa
 	ldto_berp C, 0xFB
 	extz bc
 	ldw de, 0xFFFF
-	calr LABEL_F417F4
+	calr Part_WriteVoiceWord
 	ldto_berp A, 0xFA
 	extz wa
 	ldto_berp C, 0xFB
@@ -136634,7 +136634,7 @@ LABEL_F41FB5:
 	ld wa, iz
 	lds bc, 0
 	calr PartCtrl_WriteWord_Off1
-	calr LABEL_F41629
+	calr Part_IncrementVoicePos
 	ld wa, iz
 	lds bc, 5
 	ldw de, 0x82
@@ -136704,7 +136704,7 @@ LABEL_F42063:
 	ld wa, iz
 	lds bc, 1
 	calr PartCtrl_SetClearBit7
-	calr LABEL_F41669
+	calr Part_DecrementVoicePos
 
 LABEL_F4206D:
 	ld hl, iz
@@ -136824,7 +136824,7 @@ LABEL_F4218E:
 	inc 1, c
 	extz bc
 	lds wa, 0
-	calr LABEL_F417E5
+	calr Part_ReadVoiceWord
 	stda16 10415, xhl
 	stdi16 9830, 5
 	ret
@@ -136895,7 +136895,7 @@ LABEL_F42215:
 	inc 1, c
 	extz bc
 	lds wa, 0
-	calr LABEL_F4178A
+	calr Part_ReadVoiceBit7
 	cps l, 0
 	jr nz, LABEL_F42235
 	lds bc, 1
@@ -137535,7 +137535,7 @@ LABEL_F4289F:
 	ldto_berp C, 0xFB
 	extz bc
 	lds wa, 0
-	calr LABEL_F417E5
+	calr Part_ReadVoiceWord
 	lda xwa, (xsp + 6)
 	ld (xwa), hl
 	ldw (xwa + 2), 0x5
@@ -137697,7 +137697,7 @@ LABEL_F429F6:
 	ldto_berp C, 0xFA
 	extz bc
 	lds wa, 0
-	calr LABEL_F417E5
+	calr Part_ReadVoiceWord
 	lda xwa, (xsp + 8)
 	ld (xwa), hl
 	ldw (xwa + 2), 0x5
@@ -137792,7 +137792,7 @@ LABEL_F42ADE:
 	ldto_berp C, 0xFB
 	extz bc
 	lds wa, 0
-	calr LABEL_F416D2
+	calr Part_ReadSubBlock32
 	cp l, 0x10
 	jr nz, LABEL_F42B15
 	ldto_berp A, 0xFB
@@ -137808,7 +137808,7 @@ LABEL_F42AFB:
 	ldto_berp C, 0xFB
 	extz bc
 	lds wa, 0
-	calr LABEL_F4178A
+	calr Part_ReadVoiceBit7
 	cps l, 0
 	jr nz, LABEL_F42B1E
 
@@ -138146,7 +138146,7 @@ LABEL_F42EB8:
 LABEL_F42ECD:
 	ldto_berp A, 0xFB
 	extz wa
-	calr LABEL_F41803
+	calr Part_InitVoiceDefaults
 	ldto_berp A, 0xFB
 	extz wa
 	ldw bc, 0x1C
@@ -138723,7 +138723,7 @@ LABEL_F4342B:
 	ld (xsp), a
 	lds wa, 0
 	ldw bc, 0x10
-	calr LABEL_F4174D
+	calr Part_FindVoiceByByte
 	cp (xsp), l
 	jr nz, LABEL_F43452
 	ld a, (xsp)
@@ -138742,7 +138742,7 @@ LABEL_F4344F:
 LABEL_F43452:
 	lds wa, 0
 	ldw bc, 0xD
-	calr LABEL_F4174D
+	calr Part_FindVoiceByByte
 	cp (xsp), l
 	jr nz, LABEL_F43471
 	bitda 1, 10417
@@ -138750,7 +138750,7 @@ LABEL_F43452:
 	ld c, (xsp)
 	extz bc
 	lds wa, 0
-	calr LABEL_F4178A
+	calr Part_ReadVoiceBit7
 	cps l, 0
 	jr nz, LABEL_F434EF
 
@@ -138841,7 +138841,7 @@ LABEL_F43546:
 LABEL_F43558:
 	lds wa, 0
 	ldw bc, 0xE
-	calr LABEL_F4174D
+	calr Part_FindVoiceByByte
 	cp l, (xsp)
 	jr nz, LABEL_F4357B
 	ldda8 l, 10430
@@ -138852,7 +138852,7 @@ LABEL_F43558:
 	lds wa, 0
 	ld bc, hl
 	ldw de, 0xD
-	calr LABEL_F416A7
+	calr Part_WriteSubBlock32
 
 LABEL_F4357B:
 	inc 2, xsp
@@ -138863,14 +138863,14 @@ LABEL_F4357E:
 	ld (xsp), a
 	lds wa, 0
 	ldw bc, 0xD
-	calr LABEL_F4174D
+	calr Part_FindVoiceByByte
 	cp l, (xsp)
 	jr nz, LABEL_F435A6
 	extz hl
 	lds wa, 0
 	ld bc, hl
 	ldw de, 0xE
-	calr LABEL_F416A7
+	calr Part_WriteSubBlock32
 	resda 0, 8970
 	ld a, (xsp)
 	dec 1, a
@@ -139261,13 +139261,13 @@ LABEL_F43A01:
 	ld c, (xsp)
 	extz bc
 	lds wa, 0
-	calr LABEL_F4178A
+	calr Part_ReadVoiceBit7
 	cps l, 0
 	jr z, LABEL_F43A2E
 	ld c, (xsp)
 	extz bc
 	lds wa, 0
-	calr LABEL_F417E5
+	calr Part_ReadVoiceWord
 	ld wa, hl
 	cp wa, 0xFFFF
 	jr z, LABEL_F43A2E
@@ -139500,7 +139500,7 @@ LABEL_F43C09:
 	ld_srib3 E, 0x07, 0xE0, 0xE8
 	extz de
 	lds wa, 0
-	calr LABEL_F416A7
+	calr Part_WriteSubBlock32
 	inc1_berp 0xFB
 	cp_erpb 0xFB, 0x10
 	jr ule, LABEL_F43C09
@@ -140778,7 +140778,7 @@ LABEL_F44FBF:
 	inc 1, c
 	extz bc
 	lds wa, 0
-	call LABEL_F416D2
+	call Part_ReadSubBlock32
 	lds32 xbc, 0
 	ldto_berp C, 0xFB
 	sll xbc, 8
@@ -143207,7 +143207,7 @@ LABEL_F46C2E:
 	jr ule, LABEL_F46C2E
 	lds wa, 0
 	ldw bc, 0xD
-	call LABEL_F4174D
+	call Part_FindVoiceByByte
 	ldfr_berp L, 0xFB
 	cpi_berp 0xFB, 5
 	jr ugt, LABEL_F46C69
@@ -143215,7 +143215,7 @@ LABEL_F46C2E:
 	extz bc
 	lds wa, 0
 	ldw de, 0xE
-	call LABEL_F416A7
+	call Part_WriteSubBlock32
 	ldto_berp A, 0xFB
 	dec 1, a
 	stda8 10430, a
@@ -144569,7 +144569,7 @@ LABEL_F47BFB:
 	extz wa
 	ld c, (xsp + 4)
 	extz bc
-	call LABEL_F4178A
+	call Part_ReadVoiceBit7
 	cps l, 0
 	jr z, LABEL_F47C5D
 	ld a, (xsp + 8)
@@ -144577,7 +144577,7 @@ LABEL_F47BFB:
 	extz wa
 	ld c, (xsp + 4)
 	extz bc
-	call LABEL_F417E5
+	call Part_ReadVoiceWord
 	ld iz, hl
 	cp iz, 0xFFFF
 	jr z, LABEL_F47C55
@@ -144841,7 +144841,7 @@ LABEL_F47E9D:
 	ldw wa, 0x4D8
 	sub wa, bc
 	inc 1, wa
-	call LABEL_F41600
+	call Part_SetAllVoicePos
 	ldda16 xwa, 62001
 
 LABEL_F47EAC:
@@ -144956,7 +144956,7 @@ LABEL_F47FFE:
 	extz wa
 	ldto_berp C, 0xFB
 	extz bc
-	call LABEL_F4178A
+	call Part_ReadVoiceBit7
 	cps l, 0
 	jr z, LABEL_F4805F
 	ld a, (xsp + 4)
@@ -144964,7 +144964,7 @@ LABEL_F47FFE:
 	extz wa
 	ldto_berp C, 0xFB
 	extz bc
-	call LABEL_F417E5
+	call Part_ReadVoiceWord
 	ld wa, hl
 	cp wa, 0xFFFF
 	jr z, LABEL_F4805F
@@ -145130,14 +145130,14 @@ LABEL_F48221:
 	extz wa
 	ld c, (xsp + 6)
 	extz bc
-	call LABEL_F4178A
+	call Part_ReadVoiceBit7
 	cps l, 0
 	jrl z, LABEL_F4834F
 	ld a, (xsp + 4)
 	extz wa
 	ld c, (xsp + 6)
 	extz bc
-	call LABEL_F417E5
+	call Part_ReadVoiceWord
 	ld (xsp + 8), hl
 	cpw (xsp + 8), 0xFFFF
 	jrl z, LABEL_F4834F
@@ -145200,7 +145200,7 @@ LABEL_F482CF:
 	ld c, (xsp + 6)
 	extz bc
 	ld de, (xsp + 10)
-	call LABEL_F417F4
+	call Part_WriteVoiceWord
 	ld a, (xsp + 4)
 	dec 1, a
 	cpda8_24 a, 65507
@@ -145209,7 +145209,7 @@ LABEL_F482CF:
 	extz bc
 	lds wa, 0
 	ld de, (xsp + 10)
-	call LABEL_F417F4
+	call Part_WriteVoiceWord
 
 LABEL_F482FA:
 	ld wa, (xsp + 8)
@@ -145364,7 +145364,7 @@ LABEL_F48440:
 	extz wa
 	ld c, (xsp + 10)
 	extz bc
-	call LABEL_F4178A
+	call Part_ReadVoiceBit7
 	ld a, (xsp + 12)
 	extz wa
 	ld c, (xsp + 10)
@@ -145375,7 +145375,7 @@ LABEL_F48440:
 	jrl LABEL_F48563
 
 LABEL_F48471:
-	call LABEL_F417E5
+	call Part_ReadVoiceWord
 	ld (xsp + 4), hl
 	ld wa, (xsp + 4)
 	calr LABEL_F4868A
@@ -145466,7 +145466,7 @@ LABEL_F48519:
 	extz wa
 	ld c, (xsp + 10)
 	extz bc
-	call LABEL_F417E5
+	call Part_ReadVoiceWord
 	ld iz, hl
 	cp iz, 0xFFFF
 	jr z, LABEL_F48563
@@ -145551,7 +145551,7 @@ LABEL_F485DC:
 	cps iz, 2
 	jr ugt, LABEL_F485C2
 	ldto_werp WA, 0xFA
-	call LABEL_F41600
+	call Part_SetAllVoicePos
 	pop xiz
 	ret
 
@@ -145710,13 +145710,13 @@ LABEL_F486F1:
 	ld c, (xsp)
 	extz bc
 	lds de, 0
-	call LABEL_F4179D
+	call Part_SetClearVoiceBit7
 	ld a, (xsp + 2)
 	extz wa
 	ld c, (xsp)
 	extz bc
 	ldw de, 0xFFFF
-	call LABEL_F417F4
+	call Part_WriteVoiceWord
 	cp (xsp + 2), 0x0
 	jr nz, LABEL_F48746
 	ld a, (xsp)
@@ -145924,7 +145924,7 @@ LABEL_F488F7:
 	inc 1, c
 	extz bc
 	lds wa, 0
-	call LABEL_F4178A
+	call Part_ReadVoiceBit7
 	cps l, 0
 	jr z, LABEL_F48959
 	stdi16 9614, 0
@@ -146302,7 +146302,7 @@ LABEL_F48C33:
 	inc 1, c
 	extz bc
 	lds wa, 0
-	call LABEL_F4178A
+	call Part_ReadVoiceBit7
 	cps l, 0
 	jr z, LABEL_F48C91
 	call LABEL_F4218E
@@ -147291,7 +147291,7 @@ LABEL_F495ED:
 	inc 1, c
 	extz bc
 	lds wa, 0
-	call LABEL_F4178A
+	call Part_ReadVoiceBit7
 	cps l, 0
 	jr z, LABEL_F49631
 	call LABEL_F4218E
@@ -147846,14 +147846,14 @@ LABEL_F49AAE:
 	ldto_berp C, 0xFB
 	extz bc
 	lds de, 0
-	call LABEL_F4179D
+	call Part_SetClearVoiceBit7
 	ldda8 a, 10360
 	inc 1, a
 	extz wa
 	ldto_berp C, 0xFB
 	extz bc
 	ldw de, 0xFFFF
-	call LABEL_F417F4
+	call Part_WriteVoiceWord
 	inc1_berp 0xFB
 	cp_erpb 0xFB, 0x10
 	jr ule, LABEL_F49AAE
@@ -147870,12 +147870,12 @@ LABEL_F49AFB:
 	extz bc
 	lds wa, 0
 	lds de, 0
-	call LABEL_F4179D
+	call Part_SetClearVoiceBit7
 	ldto_berp C, 0xFB
 	extz bc
 	lds wa, 0
 	ldw de, 0xFFFF
-	call LABEL_F417F4
+	call Part_WriteVoiceWord
 	inc1_berp 0xFB
 	cp_erpb 0xFB, 0x10
 	jr ule, LABEL_F49AFB
@@ -147918,18 +147918,18 @@ SeqPart_InitSlots:
 	ldda8 c, 10359
 	extz bc
 	lds wa, 0
-	call LABEL_F4178A
+	call Part_ReadVoiceBit7
 	cps l, 0
 	jr z, SeqPart_InitFinish
 	ldda8 c, 10359
 	extz bc
 	lds wa, 0
 	lds de, 0
-	call LABEL_F4179D
+	call Part_SetClearVoiceBit7
 	ldda8 c, 10359
 	extz bc
 	lds wa, 0
-	call LABEL_F417E5
+	call Part_ReadVoiceWord
 	ld iz, hl
 	cp iz, 0xFFFF
 	jr z, SeqPart_InitFinish
@@ -147937,7 +147937,7 @@ SeqPart_InitSlots:
 	extz bc
 	lds wa, 0
 	ldw de, 0xFFFF
-	call LABEL_F417F4
+	call Part_WriteVoiceWord
 	ld wa, iz
 	call LABEL_F41F7C
 
@@ -147949,14 +147949,14 @@ SeqPart_InitFinish:
 	ldda8 c, 10359
 	extz bc
 	lds de, 0
-	call LABEL_F4179D
+	call Part_SetClearVoiceBit7
 	ld8_24 a, 0x00ffe3
 	inc 1, a
 	extz wa
 	ldda8 c, 10359
 	extz bc
 	ldw de, 0xFFFF
-	call LABEL_F417F4
+	call Part_WriteVoiceWord
 	ld8_24 a, 0x00ffe3
 	inc 1, a
 	extz wa
@@ -148230,12 +148230,12 @@ SeqPart_ClearSingle:
 	extz bc
 	lds wa, 0
 	lds de, 0
-	call LABEL_F4179D
+	call Part_SetClearVoiceBit7
 	ld c, (xsp)
 	extz bc
 	lds wa, 0
 	ldw de, 0xFFFF
-	call LABEL_F417F4
+	call Part_WriteVoiceWord
 	ld c, (xsp)
 	extz bc
 	lds wa, 0
@@ -148600,12 +148600,12 @@ SeqPart_AllocDone:
 	extz bc
 	lds wa, 0
 	lds de, 1
-	call LABEL_F4179D
+	call Part_SetClearVoiceBit7
 	ldda8 c, 9860
 	extz bc
 	lds wa, 0
 	ld de, iz
-	call LABEL_F417F4
+	call Part_WriteVoiceWord
 	stda16 10375, xiz
 	stdi16 10373, 5
 	ld wa, iz
@@ -149522,7 +149522,7 @@ SeqPart_WalkerNote:
 	ldda8 c, 9858
 	extz bc
 	lds wa, 0
-	call LABEL_F415ED
+	call Part_ReadByte_Indexed
 	stda16 10294, xhl
 	call LABEL_F40565
 	cpdi8 10362, 0
@@ -150005,12 +150005,12 @@ SeqPart_ExchangeInit:
 	extz bc
 	lds wa, 0
 	lds de, 1
-	call LABEL_F4179D
+	call Part_SetClearVoiceBit7
 	ldda8 c, 9810
 	extz bc
 	lds wa, 0
 	ld de, iz
-	call LABEL_F417F4
+	call Part_WriteVoiceWord
 	ld wa, iz
 	lds bc, 0
 	call PartCtrl_WriteWord_Off1
@@ -150095,7 +150095,7 @@ SeqPart_ExchangeAdvance:
 	ldda8 c, 9810
 	extz bc
 	lds wa, 0
-	call LABEL_F415ED
+	call Part_ReadByte_Indexed
 	stda16 9822, xhl
 	ldda8 c, 9810
 	extz bc
@@ -150414,7 +150414,7 @@ SeqPart_MainNavigate:
 	ldda8 c, 9810
 	extz bc
 	lds wa, 0
-	call LABEL_F4178A
+	call Part_ReadVoiceBit7
 	cps l, 0
 	jrl z, SeqPart_NavExit
 	call LABEL_F400A7
@@ -150950,7 +150950,7 @@ SeqPart_RestoreState:
 	ldda8 c, 9810
 	extz bc
 	lds wa, 0
-	call LABEL_F4178A
+	call Part_ReadVoiceBit7
 	cps l, 0
 	ret z
 	ldda8 a, 9810
@@ -152883,7 +152883,7 @@ SeqStep_TrackChangeSetup:
 	ldto_berp A, 0xFA
 	extz wa
 	extz bc
-	call LABEL_F416D2
+	call Part_ReadSubBlock32
 	ldfr_berp L, 0xF9
 	cp_erpb 0xF9, 0x0D
 	jr z, SeqStep_TrackChangeDrum
@@ -152938,7 +152938,7 @@ SeqStep_TrackChangeAdvance:
 	extz wa
 	ldto_berp C, 0xFB
 	extz bc
-	call LABEL_F416D2
+	call Part_ReadSubBlock32
 	ldto_berp A, 0xF9
 	cp a, l
 	jr z, SeqStep_TrackChangeLoopBody
@@ -152982,7 +152982,7 @@ SeqStep_TrackChangeLoopBody:
 	ldto_berp C, 0xFB
 	extz bc
 	lds de, 0
-	call LABEL_F416A7
+	call Part_WriteSubBlock32
 	cpdi16 62001, 0
 	jr z, SeqStep_TrackChangeLoop
 
@@ -153010,13 +153010,13 @@ SeqStep_TrackChangeLoopExit:
 	extz wa
 	ldda8 c, 9996
 	extz bc
-	call LABEL_F417E5
+	call Part_ReadVoiceWord
 	ld (xsp + 4), hl
 	ldto_berp A, 0xFA
 	extz wa
 	ldda8 c, 9996
 	extz bc
-	call LABEL_F4178A
+	call Part_ReadVoiceBit7
 	cps l, 0
 	jrl z, SeqStep_TrackChangeRecoverDone
 	cpw (xsp + 4), 0x0
@@ -153150,7 +153150,7 @@ SeqStep_TrackChangeRecover:
 	extz wa
 	ldda8 c, 9996
 	extz bc
-	call LABEL_F415ED
+	call Part_ReadByte_Indexed
 	ldfr_berp L, 0xFB
 	ldda8 a, 9994
 	extz wa
@@ -153189,7 +153189,7 @@ SeqStep_TrackChangeRecoverReturn:
 	extz wa
 	ldda8 c, 9996
 	extz bc
-	call LABEL_F416D2
+	call Part_ReadSubBlock32
 	ldfr_berp L, 0xFB
 	ldda8 a, 9994
 	extz wa
@@ -153197,7 +153197,7 @@ SeqStep_TrackChangeRecoverReturn:
 	extz bc
 	ldto_berp E, 0xFB
 	extz de
-	call LABEL_F416A7
+	call Part_WriteSubBlock32
 	ldda8 a, 9994
 	dec 1, a
 	cpda8_24 a, 65507
@@ -153207,7 +153207,7 @@ SeqStep_TrackChangeRecoverReturn:
 	ldto_berp E, 0xFB
 	extz de
 	lds wa, 0
-	call LABEL_F416A7
+	call Part_WriteSubBlock32
 
 SeqStep_TrackChangeRecoverAdvance:
 	ldda8 a, 9994
@@ -153272,7 +153272,7 @@ SeqStep_MultiTrackAdvance:
 	ldda8 c, 10359
 	inc 1, c
 	extz bc
-	call LABEL_F4178A
+	call Part_ReadVoiceBit7
 	cps l, 0
 	jrl z, SeqStep_PartCopyComplete
 	ldto_berp A, 0xF9
@@ -153280,7 +153280,7 @@ SeqStep_MultiTrackAdvance:
 	ldda8 c, 10359
 	inc 1, c
 	extz bc
-	call LABEL_F417E5
+	call Part_ReadVoiceWord
 	ld iz, hl
 	cps iz, 0
 	jrl z, SeqStep_PartCopyComplete
@@ -153412,7 +153412,7 @@ SeqStep_PartCopySetupDest:
 	ldda8 c, 10359
 	inc 1, c
 	extz bc
-	call LABEL_F415ED
+	call Part_ReadByte_Indexed
 	ldfr_berp L, 0xFB
 	ldda8 a, 9994
 	extz wa
@@ -153458,7 +153458,7 @@ SeqStep_VoiceReassignCheck:
 	ld wa, de
 
 SeqStep_VoiceReassignSetup:
-	call LABEL_F416D2
+	call Part_ReadSubBlock32
 	ldfr_berp L, 0xFB
 	ldda8 a, 9994
 	extz wa
@@ -153466,7 +153466,7 @@ SeqStep_VoiceReassignSetup:
 	extz bc
 	ldto_berp E, 0xFB
 	extz de
-	call LABEL_F416A7
+	call Part_WriteSubBlock32
 	ldda8 a, 9994
 	dec 1, a
 	cpda8_24 a, 65507
@@ -153476,7 +153476,7 @@ SeqStep_VoiceReassignSetup:
 	ldto_berp E, 0xFB
 	extz de
 	lds wa, 0
-	call LABEL_F416A7
+	call Part_WriteSubBlock32
 
 SeqStep_VoiceReassignProcess:
 	inc1_berp 0xFA
@@ -154113,14 +154113,14 @@ SeqStep_DeleteShiftFinal:
 	inc 1, c
 	extz bc
 	lds de, 1
-	call LABEL_F4179D
+	call Part_SetClearVoiceBit7
 	ldda8 a, 9994
 	extz wa
 	ldda8 c, 10359
 	inc 1, c
 	extz bc
 	ld de, iz
-	call LABEL_F417F4
+	call Part_WriteVoiceWord
 	ldda8 a, 9994
 	dec 1, a
 	cpda8_24 a, 65507
@@ -154130,13 +154130,13 @@ SeqStep_DeleteShiftFinal:
 	extz bc
 	lds wa, 0
 	lds de, 1
-	call LABEL_F4179D
+	call Part_SetClearVoiceBit7
 	ldda8 c, 10359
 	inc 1, c
 	extz bc
 	lds wa, 0
 	ld de, iz
-	call LABEL_F417F4
+	call Part_WriteVoiceWord
 
 SeqStep_BoundaryCheckA:
 	ld hl, iz
@@ -154163,7 +154163,7 @@ SeqStep_BoundaryAdvance:
 	ldda8 c, 10010
 	inc 1, c
 	extz bc
-	call LABEL_F4178A
+	call Part_ReadVoiceBit7
 	cps l, 0
 	jrl z, SeqStep_BoundaryFinal
 	ldto_berp A, 0xFB
@@ -154171,7 +154171,7 @@ SeqStep_BoundaryAdvance:
 	ldda8 c, 10010
 	inc 1, c
 	extz bc
-	call LABEL_F417E5
+	call Part_ReadVoiceWord
 	ld wa, hl
 	cps wa, 0
 	jr z, SeqStep_BoundaryDone
@@ -154190,7 +154190,7 @@ SeqStep_BoundaryExit:
 	inc 1, c
 	extz bc
 	lds de, 0
-	call LABEL_F4179D
+	call Part_SetClearVoiceBit7
 	ldda8 a, 10000
 	inc 1, a
 	extz wa
@@ -154198,7 +154198,7 @@ SeqStep_BoundaryExit:
 	inc 1, c
 	extz bc
 	ldw de, 0xFFFF
-	call LABEL_F417F4
+	call Part_WriteVoiceWord
 	ldda8 a, 10000
 	cpda8_24 a, 65507
 	jr nz, SeqStep_BoundaryError
@@ -154207,13 +154207,13 @@ SeqStep_BoundaryExit:
 	extz bc
 	lds wa, 0
 	lds de, 0
-	call LABEL_F4179D
+	call Part_SetClearVoiceBit7
 	ldda8 c, 10010
 	inc 1, c
 	extz bc
 	lds wa, 0
 	ldw de, 0xFFFF
-	call LABEL_F417F4
+	call Part_WriteVoiceWord
 
 SeqStep_BoundaryError:
 	ldda8 a, 10000
@@ -155147,14 +155147,14 @@ SeqStep_UpdateRefsAdvance:
 	extz wa
 	ldto_berp C, 0xFB
 	extz bc
-	call LABEL_F4178A
+	call Part_ReadVoiceBit7
 	cps l, 0
 	jr z, SeqStep_UpdateRefsDone
 	ldto_berp A, 0xFA
 	extz wa
 	ldto_berp C, 0xFB
 	extz bc
-	call LABEL_F417E5
+	call Part_ReadVoiceWord
 	cp hl, (xsp + 4)
 	jr nz, SeqStep_UpdateRefsDone
 	ldto_berp A, 0xFA
@@ -155162,7 +155162,7 @@ SeqStep_UpdateRefsAdvance:
 	ldto_berp C, 0xFB
 	extz bc
 	ld de, iz
-	call LABEL_F417F4
+	call Part_WriteVoiceWord
 
 SeqStep_UpdateRefsDone:
 	inc1_berp 0xFB
@@ -155356,7 +155356,7 @@ SeqStep_ReinitPartTable:
 	ldto_werp WA, 0xFA
 	call LABEL_F41444
 	ldda16 xwa, 62001
-	call LABEL_F41600
+	call Part_SetAllVoicePos
 	ldi_berp 0xFB, 1
 
 SeqStep_ReinitLoop:
