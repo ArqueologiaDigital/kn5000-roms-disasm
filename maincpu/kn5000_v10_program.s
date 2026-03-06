@@ -193167,7 +193167,7 @@ LABEL_F6A930:
 LABEL_F6A951:
 	ld xwa, 0xF6A95E
 	push xwa
-	call LABEL_FAA4EC
+	call DrawFunc_StackEntry
 	inc 4, xsp
 	ret
 
@@ -193179,7 +193179,7 @@ LABEL_F6A95E:
 LABEL_F6A968:
 	ld xwa, 0xF6A975
 	push xwa
-	call LABEL_FAA4EC
+	call DrawFunc_StackEntry
 	inc 4, xsp
 	ret
 
@@ -193191,7 +193191,7 @@ LABEL_F6A975:
 LABEL_F6A97F:
 	ld xwa, 0xF6A98C
 	push xwa
-	call LABEL_FAA4EC
+	call DrawFunc_StackEntry
 	inc 4, xsp
 	ret
 
@@ -247477,15 +247477,15 @@ PsPageBoxProc:
 	ld xde, xiz
 	calr VwBoxProc
 	cp xiz, 0x4
-	jr z, LABEL_FA1395
+	jr z, UI_VwBox_SendCurrentValue
 	cp xiz, 0x3
-	jr z, LABEL_FA1395
+	jr z, UI_VwBox_SendCurrentValue
 	cp xiz, 0x5
-	jr z, LABEL_FA1395
+	jr z, UI_VwBox_SendCurrentValue
 	or xiz, xiz
 	jrl nz, LABEL_FA148C
 
-LABEL_FA1395:
+UI_VwBox_SendCurrentValue:
 	ld_sril XWA, (xsp + 0x0114)
 	call 0xFA6266
 	ld xwa, (xhl + 28)
@@ -250789,18 +250789,18 @@ LABEL_FA3243:
 	cps c, 1
 	jr z, LABEL_FA32F8
 	cps c, 0
-	jr nz, LABEL_FA330A
+	jr nz, UI_ScrollBox_ComputeLayout
 	ld wa, (xsp + 4)
 	exts xwa
 	divs wa, 0x2
 	sub (xde), wa
-	jr LABEL_FA330A
+	jr UI_ScrollBox_ComputeLayout
 
 LABEL_FA32F8:
 	ld wa, (xwa)
 	inc 4, wa
 	ld (xde), wa
-	jr LABEL_FA330A
+	jr UI_ScrollBox_ComputeLayout
 
 LABEL_FA3300:
 	ld wa, (xwa + 4)
@@ -250808,7 +250808,7 @@ LABEL_FA3300:
 	sub wa, (xsp + 4)
 	ld (xde), wa
 
-LABEL_FA330A:
+UI_ScrollBox_ComputeLayout:
 	st_dri3b W, 0xFD, 0x12, 0x01
 	lda xbc, (xsp + 18)
 	call 0xFB2640
@@ -254106,7 +254106,7 @@ LABEL_FA5766:
 	ldw wa, 0x20
 
 LABEL_FA57AB:
-	calr LABEL_FA58E0
+	calr TitleProc_ClearResourceDirtyFlag
 	jrl TitleProc_ReturnZero
 
 LABEL_FA57B1:
@@ -254221,7 +254221,7 @@ SetVariFlag:
 
 LABEL_FA58B6:
 	ldw wa, 0x8
-	jr LABEL_FA58E0
+	jr TitleProc_ClearResourceDirtyFlag
 
 SetNotDrawFlag:
 	cps wa, 0
@@ -254231,7 +254231,7 @@ SetNotDrawFlag:
 
 LABEL_FA58C3:
 	lds wa, 4
-	jr LABEL_FA58E0
+	jr TitleProc_ClearResourceDirtyFlag
 
 TitleProc_SetResourceDirtyFlag:
 	ordm16_24 179248, xwa
@@ -254241,7 +254241,7 @@ TitleProc_SetResourceDirtyFlag:
 	ld xbc, 0x1E000BA
 	jrl MainFuncCall
 
-LABEL_FA58E0:
+TitleProc_ClearResourceDirtyFlag:
 	cpl wa
 	anddm16_24 179248, xwa
 	ld16_24 xde, 0x02bc30
@@ -262345,7 +262345,7 @@ LABEL_FAA2F4:
 	retd 0x8
 	push xiz
 
-LABEL_FAA2FB:
+DrawTask_EventLoop:
 	calr LABEL_FAA356
 	ld xiz, xhl
 	cpdi16_24 257870, 0
@@ -262363,18 +262363,18 @@ LABEL_FAA311:
 	ld xwa, xiz
 	calr LABEL_FAA48B
 	cpdi16_24 257870, 0
-	jr z, LABEL_FAA2FB
+	jr z, DrawTask_EventLoop
 	lds wa, 5
 	lds bc, 3
 	call TaskSched_ChangePriority
-	jr LABEL_FAA2FB
+	jr DrawTask_EventLoop
 
 LABEL_FAA333:
 	ld16_24 xwa, 0x030450
 	st16_24 0x03044e, xwa
 	lds wa, 1
 	call 0xEF1FEE
-	jr LABEL_FAA2FB
+	jr DrawTask_EventLoop
 
 InitDrawTask:
 	jr __jrt_nop_FAA347
@@ -262609,7 +262609,7 @@ LABEL_FAA4D8:
 	ret
 	ret
 
-LABEL_FAA4EC:
+DrawFunc_StackEntry:
 	ld xwa, (xsp + 4)
 	jr DrawFunc
 	push xiz
@@ -268017,14 +268017,14 @@ LABEL_FAD608:
 	lda xde, (xsp + 28)
 	ld xiy, xde
 	cps wa, 0
-	jr mi, LABEL_FAD649
+	jr mi, Draw_StyledBoxWithFrame
 	cp wa, 0xB
 	jr le, LABEL_FAD633
 	sub wa, 0xB4
 	cp wa, 0xC
-	jr lt, LABEL_FAD649
+	jr lt, Draw_StyledBoxWithFrame
 	cp wa, 0x18
-	jr gt, LABEL_FAD649
+	jr gt, Draw_StyledBoxWithFrame
 
 LABEL_FAD633:
 	add wa, wa
@@ -268033,7 +268033,7 @@ LABEL_FAD633:
 	lda_24 xix, 0xfad649
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
-LABEL_FAD649:
+Draw_StyledBoxWithFrame:
 	lda xwa, (xsp + 62)
 	ld bc, (xsp + 70)
 	calr DrawBox_Impl
@@ -272436,7 +272436,7 @@ ColorBlit2_LargeCodeBlock:
 	.byte 0x22, 0x1e, 0xe6, 0xf0, 0xaf, 0x10, 0x20, 0x1e
 	.byte 0xe8, 0x98, 0x4e, 0xbf, 0x12, 0x37, 0x0e
 
-LABEL_FB0E7F:
+DrawText_QueueOrDirect:
 	lda xsp, (xsp - 16)
 	push xiz
 	ld (xsp + 8), xde
@@ -273307,7 +273307,7 @@ LABEL_FB16BC:
 	push_sd24w 0xA4, 0xEF, 0x03
 	push_sd24w 0xA2, 0xEF, 0x03
 	ld xbc, (xsp + 14)
-	calr LABEL_FB0E7F
+	calr DrawText_QueueOrDirect
 	pop xiz
 	st_dri3b L, 0xFD, 0x12, 0x01
 	ret
@@ -273666,7 +273666,7 @@ LABEL_FB1F1A:
 	push_sd24w 0xA2, 0xEF, 0x03
 	ld xbc, (xsp + 20)
 	ld xde, (xsp + 16)
-	calr LABEL_FB0E7F
+	calr DrawText_QueueOrDirect
 	pop xiz
 	st_dri3b L, 0xFD, 0x1C, 0x01
 	ret
@@ -273769,7 +273769,7 @@ LABEL_FB20B9:
 	push xhl
 	push_sd24w 0xA4, 0xEF, 0x03
 	push_sd24w 0xA2, 0xEF, 0x03
-	calr LABEL_FB0E7F
+	calr DrawText_QueueOrDirect
 	pop xiz
 	st_dri3b L, 0xFD, 0x0C, 0x01
 	ret
