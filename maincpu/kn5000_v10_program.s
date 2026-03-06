@@ -89560,7 +89560,7 @@ LABEL_F22F85:
 	ldw (xhl + 3), 0xFFFF
 	jrl LABEL_F22E2F
 
-LABEL_F22FF0:
+SMF_InitSongPlayback:
 	call LABEL_F23005
 	call LABEL_F23134
 	call LABEL_F231D3
@@ -89946,8 +89946,8 @@ LABEL_F23324:
 	stda8 3830, a
 	stda8 4343, a
 	call LABEL_F236B7
-	call LABEL_F236D4
-	call LABEL_F236EE
+	call SeqTrack_ScanActiveChannels
+	call SeqTrack_ClearPlaybackBuffers
 	call LABEL_F26DD3
 	lds32 xbc, 0
 	ldda32 xwa, 6701
@@ -90013,11 +90013,11 @@ LABEL_F233A9:
 	call FloppyIO_ReadNextByte
 	stda8 3936, a
 	cpdi16 3936, 0
-	jrl nz, LABEL_F2341E
+	jrl nz, FloppyIO_WaitReadComplete
 	stdi16 6699, 48
 	jrl LABEL_F23671
 
-LABEL_F2341E:
+FloppyIO_WaitReadComplete:
 	ldda32 xbc, 6883
 	lds32 xwa, 0
 	cp xbc, xwa
@@ -90026,30 +90026,30 @@ LABEL_F2341E:
 	nop
 	nop
 	nop
-	jp LABEL_F2341E
+	jp FloppyIO_WaitReadComplete
 
 LABEL_F23436:
 	ldda8 a, 4600
 	call LABEL_F23779
 	cpdi16 3932, 0
-	jrl z, LABEL_F2347E
+	jrl z, FloppyIO_ReadAndValidateHeader
 	cpdi16 3932, 1
 	jrl nz, LABEL_F2366B
 	cpdi16 3934, 1
-	jrl z, LABEL_F2347E
-	call LABEL_F23790
-	call LABEL_F23801
+	jrl z, FloppyIO_ReadAndValidateHeader
+	call FloppyIO_SelectReadMode
+	call FloppyIO_ConfigureSwitchboard
 	call LABEL_F23855
 	cpdi8 4323, 0
 	jrl nz, Sequencer_ResetAfterFloppyIO
 	cpdi8 3830, 0
-	jrl z, LABEL_F23678
+	jrl z, SeqPlay_FinishFloppyLoadAndStart
 	cpdi16 6699, 49
 	jrl SeqPlay_ResetAndStop
 
-LABEL_F2347E:
-	call LABEL_F23790
-	call LABEL_F23801
+FloppyIO_ReadAndValidateHeader:
+	call FloppyIO_SelectReadMode
+	call FloppyIO_ConfigureSwitchboard
 	lds bc, 4
 	ld xiy, 0xF236B3
 
@@ -90098,7 +90098,7 @@ LABEL_F234CE:
 	xor wa, wa
 	stda16 61854, xwa
 	st16_24 0x00ffec, xwa
-	call LABEL_F238C4
+	call SeqTrack_AssignFloppyChannels
 	cpdi8 4323, 0
 	jrl nz, Sequencer_ResetAfterFloppyIO
 	cpdi8 3830, 0
@@ -90107,7 +90107,7 @@ LABEL_F234CE:
 	stdi8 4236, 0
 
 SMF_ReadLoopWithRetry:
-	call LABEL_F23963
+	call FloppyIO_ReadToTrackBuffer
 	push xwa
 	push xbc
 	lds32 xbc, 0
@@ -90129,12 +90129,12 @@ LABEL_F23520:
 
 LABEL_F23526:
 	push xiy
-	call LABEL_F23A17
+	call SeqTrack_ComputeTempoScaling
 	pop xiy
 	inc 1, xiy
 	cp xiy, 0xF
 	jrl ule, LABEL_F23526
-	call LABEL_F23B56
+	call SeqTrack_UpdateChannelVolumes
 	call FloppyIO_ReadNextByte
 	push xwa
 	push xbc
@@ -90154,7 +90154,7 @@ LABEL_F23551:
 LABEL_F23557:
 	cp a, 0xFF
 	jrl nz, LABEL_F2359B
-	call LABEL_F23BA0
+	call SMF_ParseTrackEvent
 	push xwa
 	push xbc
 	lds32 xbc, 0
@@ -90181,7 +90181,7 @@ LABEL_F2358C:
 	call LABEL_F23CCA
 	call LABEL_F23D00
 	call FloppyIO_ReturnReady
-	jrl LABEL_F23678
+	jrl SeqPlay_FinishFloppyLoadAndStart
 
 LABEL_F2359B:
 	cp a, 0xF7
@@ -90287,7 +90287,7 @@ LABEL_F23671:
 	call FloppyIO_ReturnReady
 	jrl LABEL_F236AA
 
-LABEL_F23678:
+SeqPlay_FinishFloppyLoadAndStart:
 	call LABEL_F23DF1
 	stdi16 6699, 1
 	call LABEL_F23E38
@@ -90322,7 +90322,7 @@ LABEL_F236CD:
 	djnz xbc, LABEL_F236CD
 	ret
 
-LABEL_F236D4:
+SeqTrack_ScanActiveChannels:
 	ld xhl, 0x11F9
 	xor iy, iy
 	xor a, a
@@ -90334,7 +90334,7 @@ LABEL_F236DD:
 	jrl ule, LABEL_F236DD
 	ret
 
-LABEL_F236EE:
+SeqTrack_ClearPlaybackBuffers:
 	push xwa
 	push xbc
 	push xix
@@ -90429,7 +90429,7 @@ LABEL_F23786:
 	popw wa
 	ret
 
-LABEL_F23790:
+FloppyIO_SelectReadMode:
 	push xwa
 	push xhl
 	push xbc
@@ -90473,7 +90473,7 @@ LABEL_F237C1:
 	.byte 0xce, 0xf5, 0x00, 0x00, 0xe8, 0xf5, 0x00, 0x00
 	.byte 0x02, 0xf6, 0x00, 0x00, 0x1c, 0xf6, 0x00, 0x00
 
-LABEL_F23801:
+FloppyIO_ConfigureSwitchboard:
 	cpdi8 4600, 0
 	jrl z, LABEL_F23818
 	ldb c, 0x0
@@ -90518,9 +90518,9 @@ LABEL_F23855:
 LABEL_F2386C:
 	stdi8 4009, 0
 	call LABEL_F23E8D
-	call LABEL_F236D4
+	call SeqTrack_ScanActiveChannels
 	call LABEL_F23F13
-	call LABEL_F236EE
+	call SeqTrack_ClearPlaybackBuffers
 	call LABEL_F23F2A
 	cpdi8 3830, 0
 	jrl z, LABEL_F23894
@@ -90544,7 +90544,7 @@ LABEL_F23894:
 LABEL_F238C3:
 	ret
 
-LABEL_F238C4:
+SeqTrack_AssignFloppyChannels:
 	xor iy, iy
 	xor ix, ix
 	stdi8 5113, 0
@@ -90601,7 +90601,7 @@ LABEL_F23958:
 LABEL_F23962:
 	ret
 
-LABEL_F23963:
+FloppyIO_ReadToTrackBuffer:
 	ld xix, 0x106E
 
 LABEL_F23968:
@@ -90684,7 +90684,7 @@ LABEL_F239DB:
 LABEL_F23A16:
 	ret
 
-LABEL_F23A17:
+SeqTrack_ComputeTempoScaling:
 	stdi16 3946, 0
 	sla iy, 1
 	push xix
@@ -90826,7 +90826,7 @@ LABEL_F23B43:
 LABEL_F23B55:
 	ret
 
-LABEL_F23B56:
+SeqTrack_UpdateChannelVolumes:
 	xor xiy, xiy
 
 LABEL_F23B58:
@@ -90861,7 +90861,7 @@ LABEL_F23B90:
 	jrl ule, LABEL_F23B58
 	ret
 
-LABEL_F23BA0:
+SMF_ParseTrackEvent:
 	call FloppyIO_ReadNextByte
 	push xwa
 	push xbc
@@ -91408,7 +91408,7 @@ LABEL_F23FD1:
 	jrl LABEL_F2410D
 
 LABEL_F23FDB:
-	call LABEL_F23963
+	call FloppyIO_ReadToTrackBuffer
 	push xwa
 	push xbc
 	lds32 xbc, 0
@@ -91429,8 +91429,8 @@ LABEL_F23FFB:
 	call LABEL_F23996
 	ldda16 xiy, 4237
 	call SoundGen_ClampVoiceIndexMin1
-	call LABEL_F23A17
-	call LABEL_F23B56
+	call SeqTrack_ComputeTempoScaling
+	call SeqTrack_UpdateChannelVolumes
 	call FloppyIO_ReadNextByte
 	push xwa
 	push xbc
@@ -91451,7 +91451,7 @@ LABEL_F24025:
 LABEL_F2402F:
 	cp a, 0xFF
 	jrl nz, LABEL_F2408B
-	call LABEL_F23BA0
+	call SMF_ParseTrackEvent
 	push xwa
 	push xbc
 	lds32 xbc, 0
@@ -91608,7 +91608,7 @@ LABEL_F24159:
 	cp hl, 0x10
 	jrl ule, LABEL_F24159
 	popw de
-	call LABEL_F238C4
+	call SeqTrack_AssignFloppyChannels
 	cpdi8 3830, 0
 	jrl nz, LABEL_F2435A
 	call LABEL_F26E05
@@ -225732,7 +225732,7 @@ LABEL_F877A3:
 	inc 1, iz
 	cp iz, 0xA
 	jr lt, LABEL_F877A3
-	call LABEL_F22FF0
+	call SMF_InitSongPlayback
 	ld wa, (xsp + 2)
 	call LABEL_F47E63
 	cpw (xsp + 2), 0x0
@@ -225772,7 +225772,7 @@ LABEL_F877CC:
 LABEL_F87830:
 	lds wa, 0
 	call FileData_LoadFromSlot
-	call LABEL_F22FF0
+	call SMF_InitSongPlayback
 	ld wa, (xsp + 2)
 	call LABEL_F47E69
 
