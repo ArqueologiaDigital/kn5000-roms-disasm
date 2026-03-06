@@ -116540,7 +116540,7 @@ BmDrEdit_SaveSeqState_SetMode95:
 BmDrEdit_SaveSeqState_Apply:
 	call 0xF99490
 	ldmm16 10595, 3407
-	call LABEL_F3EC49
+	call SeqVoice_FindSingleActive
 	ldmm8 7512, 36154
 	ret
 
@@ -119138,7 +119138,7 @@ LABEL_F37D9F:
 	extz wa
 	ld xbc, (xsp + 6)
 	ld bc, (xbc)
-	call LABEL_F3FE9C
+	call SeqData_SkipSections
 	ld xwa, (xsp + 6)
 	ld (xwa), hl
 	cpdi8 10362, 0
@@ -120282,7 +120282,7 @@ LABEL_F3884C:
 
 LABEL_F38878:
 	ldmm16 3407, 10595
-	call LABEL_F3EC49
+	call SeqVoice_FindSingleActive
 	ret
 
 NoteEditSy_SendCompoundWidgetUpdate:
@@ -121409,7 +121409,7 @@ LABEL_F394D5:
 	stdi8 8956, 4
 
 LABEL_F394DA:
-	call LABEL_F3E8F5
+	call SeqPlay_ResetStartState
 
 LABEL_F394DE:
 	ldb l, 0x0
@@ -121442,7 +121442,7 @@ LABEL_F394E1:
 	ldda16 xwa, 9000
 	lds bc, 0
 	call Voice_ScanAvailableChannel
-	call LABEL_F3EA04
+	call SeqPart_InitVoiceChannelConfig
 
 LABEL_F39552:
 	lds wa, 0
@@ -121502,7 +121502,7 @@ LABEL_F395AF:
 	ldda16 xwa, 9000
 	lds bc, 0
 	call Voice_ScanAvailableChannel
-	call LABEL_F3EA04
+	call SeqPart_InitVoiceChannelConfig
 	ldda16 xwa, 1052
 	cpda16 xwa, 9000
 	jr nz, LABEL_F39601
@@ -130556,7 +130556,7 @@ LABEL_F3E893:
 	call SeqAcc_InitPlaybackState
 
 LABEL_F3E897:
-	jr LABEL_F3E8F5
+	jr SeqPlay_ResetStartState
 
 SeqPlay_InitStartState:
 	setda 4, 10419
@@ -130604,7 +130604,7 @@ LABEL_F3E8EE:
 	stdi8 7518, 250
 	jr LABEL_F3E8DE
 
-LABEL_F3E8F5:
+SeqPlay_ResetStartState:
 	resda 4, 10419
 	stdi8 7518, 0
 	stdi8 9508, 0
@@ -130717,7 +130717,7 @@ LABEL_F3EA00:
 	inc 8, xsp
 	ret
 
-LABEL_F3EA04:
+SeqPart_InitVoiceChannelConfig:
 	dec 4, xsp
 	push xiz
 	ldda16 xwa, 9002
@@ -131006,7 +131006,7 @@ LABEL_F3EC43:
 	inc 2, xsp
 	ret
 
-LABEL_F3EC49:
+SeqVoice_FindSingleActive:
 	resda 0, 9954
 	ldb l, 0x0
 	ldb d, 0x1
@@ -131629,16 +131629,16 @@ LABEL_F3F1E9:
 	cpw (xsp + 12), 0x1
 	jr nz, LABEL_F3F209
 
-LABEL_F3F1F9:
+PartCtrl_SkipLinkedEntries:
 	ld wa, (xsp + 12)
 	calr PartCtrl_ReadWord
 	ld (xsp + 12), hl
 	cpw (xsp + 12), 0x1
-	jr z, LABEL_F3F1F9
+	jr z, PartCtrl_SkipLinkedEntries
 
 LABEL_F3F209:
 	cpw (xsp + 12), 0x2
-	jr z, LABEL_F3F1F9
+	jr z, PartCtrl_SkipLinkedEntries
 	ld wa, (xsp + 12)
 	calr PartCtrl_ReadWord
 	ld iz, hl
@@ -132641,18 +132641,18 @@ LABEL_F3FB8B:
 	calr Part_LinkVoiceToChain
 	ld iz, hl
 	cps iz, 0
-	jr ge, LABEL_F3FBBE
+	jr ge, PartCtrl_SaveChainPosition
 	stdi8 10362, 5
 	jr LABEL_F3FBC8
 
 LABEL_F3FBB0:
 	calr PartCtrl_TestBit7
 	cps l, 0
-	jr nz, LABEL_F3FBBE
+	jr nz, PartCtrl_SaveChainPosition
 	stdi8 10362, 2
 	jr LABEL_F3FBC8
 
-LABEL_F3FBBE:
+PartCtrl_SaveChainPosition:
 	stda16 10375, xiz
 	stdi16 10373, 5
 
@@ -132946,7 +132946,7 @@ LABEL_F3FE72:
 	ldda8 a, 10382
 	extz wa
 	ldto_werp BC, 0xFA
-	calr LABEL_F3FE9C
+	calr SeqData_SkipSections
 	ldfr_werp HL, 0xFA
 	cpdi8 10362, 0
 	jr nz, LABEL_F3FE9A
@@ -132961,7 +132961,7 @@ LABEL_F3FE9A:
 	pop xiz
 	ret
 
-LABEL_F3FE9C:
+SeqData_SkipSections:
 	dec 4, xsp
 	push_werp 0xFA
 	ld (xsp + 2), bc
