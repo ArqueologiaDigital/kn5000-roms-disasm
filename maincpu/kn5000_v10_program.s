@@ -116394,7 +116394,7 @@ BmDrEdit_ProcessTempoEvent_NoteOff:
 	jr nz, BmDrEdit_TempoEventLoop
 	resda 0, 10591
 	ldmm8 10594, 10592
-	calr LABEL_F38094
+	calr BmDrEdit_AdjustScrollToView
 	calr LABEL_F371A5
 	calr LABEL_F380E9
 	cpdi8 10362, 0
@@ -117215,7 +117215,7 @@ BmDrEdit_SetupAndWalkToNote:
 	stda16 10124, xhl
 	calr BmDrEdit_ClearAndScanToEnd
 	ldmm8 10594, 10118
-	calr LABEL_F38094
+	calr BmDrEdit_AdjustScrollToView
 
 BmDrEdit_SetupAndWalkDone:
 	pop_werp 0xFA
@@ -118255,7 +118255,7 @@ LABEL_F375B5:
 	call NoteEditSy_SendScrollCmd1
 	calr LABEL_F375D4
 	calr BmDrEdit_SaveEditState
-	calr LABEL_F38616
+	calr BmDrEdit_SeekForwardToEvent
 	calr BmDrEdit_RestoreEditState
 	cpdi8 10362, 0
 	jrl nz, BmDrEdit_RefreshDisplayState
@@ -119273,13 +119273,13 @@ LABEL_F37EDC:
 
 LABEL_F37F02:
 	stdi8 10080, 0
-	jr LABEL_F37F36
+	jr NoteEdit_FinalizeAndRefreshDisplay
 
 LABEL_F37F09:
 	cp l, 0x81
 	jr nz, LABEL_F37F14
 	incdi16 1, 10078
-	jr LABEL_F37F36
+	jr NoteEdit_FinalizeAndRefreshDisplay
 
 LABEL_F37F14:
 	ldda16 xwa, 10415
@@ -119292,7 +119292,7 @@ LABEL_F37F14:
 	stda16 10415, xwa
 	stda16 9830, xiz
 
-LABEL_F37F36:
+NoteEdit_FinalizeAndRefreshDisplay:
 	resda 0, 10591
 	call NoteEditSy_SendWidgetCmd0
 	calr NoteEdit_SendScrollCmds
@@ -119449,7 +119449,7 @@ LABEL_F3804F:
 	extz xwa
 	add xwa, xbc
 	cp (xwa), 0x0
-	jr z, LABEL_F38086
+	jr z, BmDrEdit_FindNextNonZeroEntry
 	ldb l, 0x0
 	ret
 
@@ -119463,11 +119463,11 @@ LABEL_F38078:
 	inc 1, e
 	inc 1, l
 	cpda8 e, 10146
-	jr c, LABEL_F38086
+	jr c, BmDrEdit_FindNextNonZeroEntry
 	ldb l, 0xFF
 	jr LABEL_F38093
 
-LABEL_F38086:
+BmDrEdit_FindNextNonZeroEntry:
 	ld a, e
 	extz wa
 	extz xwa
@@ -119478,13 +119478,13 @@ LABEL_F38086:
 LABEL_F38093:
 	ret
 
-LABEL_F38094:
+BmDrEdit_AdjustScrollToView:
 	dec 4, xsp
 	bitda 0, 10050
 	jr nz, LABEL_F380E6
 	ldmm8 10186, 10136
 
-LABEL_F380A2:
+BmDrEdit_ScrollAdjustLoop:
 	lda xwa, (xsp + 2)
 	lda xbc, (xsp)
 	calr BmDrEdit_SetupScrollRegion
@@ -119497,7 +119497,7 @@ LABEL_F380A2:
 	jr z, LABEL_F380E6
 	dec 1, c
 	stda8 10136, c
-	jr LABEL_F380A2
+	jr BmDrEdit_ScrollAdjustLoop
 
 LABEL_F380C5:
 	cp c, (xsp)
@@ -119507,7 +119507,7 @@ LABEL_F380C5:
 	jr nc, LABEL_F380E6
 	inc 1, c
 	stda8 10136, c
-	jr LABEL_F380A2
+	jr BmDrEdit_ScrollAdjustLoop
 
 LABEL_F380D8:
 	ldda8 a, 10186
@@ -119802,7 +119802,7 @@ LABEL_F383CB:
 	inc 1, a
 	extz wa
 	calr BmDrEdit_CopyEventDataBetweenParts
-	calr LABEL_F38616
+	calr BmDrEdit_SeekForwardToEvent
 	cpdi8 10362, 0
 	jr nz, LABEL_F38441
 	stdi8 10599, 144
@@ -119829,7 +119829,7 @@ BmDrEdit_CalcBeatMeasure:
 	stdi8 9688, 0
 	stda16 10098, xwa
 	cps wa, 0
-	jr z, LABEL_F3848D
+	jr z, BmDrEdit_ComputeMeasureAndBeat
 	lds de, 1
 	stdi8 9688, 1
 	ldada xbc, 10148
@@ -119848,11 +119848,11 @@ LABEL_F38477:
 	dec 1, wa
 	stda16 10098, xwa
 	cps wa, 0
-	jr z, LABEL_F3848D
+	jr z, BmDrEdit_ComputeMeasureAndBeat
 	incdi8 1, 9688
 	jr LABEL_F38467
 
-LABEL_F3848D:
+BmDrEdit_ComputeMeasureAndBeat:
 	ldda8 a, 9688
 	extz wa
 	stda16 10114, xwa
@@ -119924,18 +119924,18 @@ LABEL_F38521:
 	dec 1, hl
 	cp_srib_im 0x07, 0xE4, 0xEC, 0x00
 	jr z, LABEL_F38537
-	jr LABEL_F3853F
+	jr BmDrEdit_StoreEventPositionAndReturn
 
 LABEL_F3852F:
 	inc 1, de
 	sub hl, 0x1
-	jr lt, LABEL_F3853F
+	jr lt, BmDrEdit_StoreEventPositionAndReturn
 
 LABEL_F38537:
 	cp_srib_im 0x07, 0xE4, 0xEC, 0x00
 	jr z, LABEL_F3852F
 
-LABEL_F3853F:
+BmDrEdit_StoreEventPositionAndReturn:
 	stda16 10114, xde
 	ret
 
@@ -120040,7 +120040,7 @@ LABEL_F38606:
 	jr nc, LABEL_F385E6
 	jr LABEL_F385A2
 
-LABEL_F38616:
+BmDrEdit_SeekForwardToEvent:
 	push xiz
 	calr BmDrEdit_SyncChannelAndGetPos
 	ld iz, hl
@@ -120053,7 +120053,7 @@ LABEL_F38616:
 
 LABEL_F38632:
 	cp l, 0x81
-	jr nz, LABEL_F38663
+	jr nz, BmDrEdit_AdvanceAndCheckBeat
 	jrl LABEL_F38718
 
 LABEL_F3863A:
@@ -120077,7 +120077,7 @@ LABEL_F3865E:
 	cpi_berp 0xFB, 1
 	jr z, LABEL_F386E0
 
-LABEL_F38663:
+BmDrEdit_AdvanceAndCheckBeat:
 	call SeqData_AdvancePosition
 	call SeqData_ReadNextByte
 	cpda8 l, 10116
@@ -120097,12 +120097,12 @@ LABEL_F38685:
 
 LABEL_F38692:
 	cp l, 0x81
-	jr nz, LABEL_F386D4
+	jr nz, BmDrEdit_SkipEventAndContinue
 	ldda16 xwa, 10098
 	inc 1, wa
 	stda16 10098, xwa
 	cpda16 xwa, 10114
-	jr c, LABEL_F386D4
+	jr c, BmDrEdit_SkipEventAndContinue
 	call SeqData_SkipToNextEvent
 	call SeqData_ReadNextByte
 	cp l, 0x82
@@ -120126,7 +120126,7 @@ LABEL_F386CD:
 	jr nz, LABEL_F3865E
 	jr LABEL_F38718
 
-LABEL_F386D4:
+BmDrEdit_SkipEventAndContinue:
 	call SeqData_SkipToNextEvent
 	jrl LABEL_F38643
 
@@ -120153,7 +120153,7 @@ LABEL_F38701:
 
 LABEL_F3870D:
 	cp l, 0x81
-	jrl nz, LABEL_F38663
+	jrl nz, BmDrEdit_AdvanceAndCheckBeat
 	jr LABEL_F38718
 
 LABEL_F38715:
@@ -120360,7 +120360,7 @@ LABEL_F38912:
 	call AccWrap_PlayModeDispatch
 	jp SeqBuffer_ClearAndInitIteration
 
-LABEL_F3892C:
+SeqAcc_HandlePlaybackTick:
 	cpdi8 36150, 136
 	jr z, LABEL_F3894C
 	bitda 1, 8970
@@ -120388,27 +120388,27 @@ LABEL_F38956:
 	ld wa, bc
 	extz xwa
 	bit 15, wa
-	jr nz, LABEL_F3899E
+	jr nz, SeqAcc_StartPlayback
 	ldda16 xwa, 62008
 	cp bc, wa
 	jr ule, LABEL_F38985
 	subda16 xwa, 62015
 	stda16 9832, xwa
 	stda16 9964, xwa
-	jr LABEL_F3899E
+	jr SeqAcc_StartPlayback
 
 LABEL_F38985:
 	dec 1, wa
 	stda16 10435, xwa
-	calr LABEL_F389C9
+	calr SeqAcc_UpdateEndPosition
 	ldda16 xwa, 62008
 	subda16 xwa, 62015
 	stda16 9832, xwa
 	stda16 9964, xwa
 
-LABEL_F3899E:
+SeqAcc_StartPlayback:
 	setda 0, 62012
-	calr LABEL_F389D8
+	calr SeqAcc_SetupRepeatCount
 	call SeqPlay_InitStartState
 	jp SeqBuf_Init
 
@@ -120416,53 +120416,53 @@ LABEL_F389AD:
 	cpdi8 36150, 136
 	jr z, LABEL_F389BB
 	resda 0, 62012
-	calr LABEL_F389D8
+	calr SeqAcc_SetupRepeatCount
 
 LABEL_F389BB:
-	calr LABEL_F3892C
+	calr SeqAcc_HandlePlaybackTick
 	ldw wa, 0x4C
 	call CtrlPanel_SetIndicatorBit
 	jp SeqPlay_SaveStateAndCleanup
 
-LABEL_F389C9:
+SeqAcc_UpdateEndPosition:
 	ldda16 xwa, 10435
 	cpdm16 62015, xwa
 	ret ule
 	stda16 62015, xwa
 	ret
 
-LABEL_F389D8:
+SeqAcc_SetupRepeatCount:
 	stdi16 10438, 0
 	bitda 0, 62012
-	jr z, LABEL_F389F4
+	jr z, SeqAcc_CheckRepeatEdgeCases
 	ldda16 xwa, 62008
 	cpda16 xwa, 9832
-	jr nz, LABEL_F389F4
+	jr nz, SeqAcc_CheckRepeatEdgeCases
 	ldmm16 10438, 10408
 
-LABEL_F389F4:
+SeqAcc_CheckRepeatEdgeCases:
 	ldda16 xwa, 9832
 	extz xwa
 	bit 15, wa
-	jr z, LABEL_F38A0D
+	jr z, SeqAcc_UpdatePlaybackFlags
 	cpdi16 62008, 1
-	jr nz, LABEL_F38A0D
+	jr nz, SeqAcc_UpdatePlaybackFlags
 	ldmm16 10438, 10408
 
-LABEL_F38A0D:
+SeqAcc_UpdatePlaybackFlags:
 	ldda8 a, 10407
 	res 3, a
 	stda8 10407, a
 	ldda16 xbc, 9832
 	cps bc, 1
-	jr z, LABEL_F38A2E
+	jr z, SeqPlay_CheckFlagsAndInit
 	extz xbc
 	bit 15, bc
-	jr nz, LABEL_F38A2E
+	jr nz, SeqPlay_CheckFlagsAndInit
 	set 3, a
 	stda8 10407, a
 
-LABEL_F38A2E:
+SeqPlay_CheckFlagsAndInit:
 	jp SeqPlay_InitStartState
 
 LABEL_F38A32:
@@ -120489,7 +120489,7 @@ LABEL_F38A50:
 	ldmm16 8998, 10441
 	lda xwa, (xsp)
 	ld (xwa), 0x0
-	calr LABEL_F38A8A
+	calr SeqPlay_ActivatePartsAndSendOff
 	jr LABEL_F38A85
 
 LABEL_F38A75:
@@ -120505,7 +120505,7 @@ LABEL_F38A87:
 	inc 4, xsp
 	ret
 
-LABEL_F38A8A:
+SeqPlay_ActivatePartsAndSendOff:
 	dec 4, xsp
 	push_werp 0xFA
 	ld (xsp + 2), xwa
@@ -120539,7 +120539,7 @@ LABEL_F38AD0:
 	cp_erpb 0xFB, 0x10
 	jr ule, LABEL_F38AB3
 	ld xwa, (xsp + 2)
-	calr LABEL_F38D95
+	calr SeqPlay_ProcessPartVoices
 	pop_werp 0xFA
 	inc 4, xsp
 	ret
@@ -120590,29 +120590,29 @@ LABEL_F38B45:
 	res 7, a
 	stda8 10418, a
 	bitda 0, 62012
-	jr z, LABEL_F38B77
+	jr z, SeqPlay_InitTempoAndActivateParts
 	ldda16 xwa, 62008
 	cpda16 xwa, 9832
-	jr nz, LABEL_F38B77
+	jr nz, SeqPlay_InitTempoAndActivateParts
 	ldmm16 10438, 10408
 
-LABEL_F38B77:
+SeqPlay_InitTempoAndActivateParts:
 	call TempoRingBuf_Init
 	ldda16 xwa, 10408
 	cps wa, 0
-	jr z, LABEL_F38BA9
+	jr z, SeqPlay_InitAccAndSetMode
 	orddm16 61854, xwa
 	setda 3, 10419
 	call 0xFDDE6F
 	setda 0, 10437
 	ldda8 a, 10418
 	bit 0, a
-	jr z, LABEL_F38BA9
+	jr z, SeqPlay_InitAccAndSetMode
 	set 1, a
 	stda8 10418, a
 	ldmm16 9014, 9832
 
-LABEL_F38BA9:
+SeqPlay_InitAccAndSetMode:
 	call SeqAcc_InitPlaybackState
 	ldb a, 0xC
 	bitda 0, 10418
@@ -120686,7 +120686,7 @@ LABEL_F38BBE:
 	.byte 0xf1, 0xec
 	.ascii "&PxCü"
 
-LABEL_F38D95:
+SeqPlay_ProcessPartVoices:
 	dec 4, xsp
 	push xiz
 	ld (xsp + 4), xwa
@@ -120803,9 +120803,9 @@ LABEL_F38EA2:
 	ldda8 c, 10437
 	ld a, c
 	and a, 0x90
-	jr nz, LABEL_F38EE9
+	jr nz, SeqPlay_AbortAndCleanup
 	bit 5, c
-	jr z, LABEL_F38EE9
+	jr z, SeqPlay_AbortAndCleanup
 	stdi8 9696, 0
 
 LABEL_F38EC7:
@@ -120823,9 +120823,9 @@ LABEL_F38EDA:
 	bitda 7, 10437
 	jr z, LABEL_F38EEF
 
-LABEL_F38EE9:
+SeqPlay_AbortAndCleanup:
 	calr LABEL_F38FB1
-	jrl LABEL_F38FA7
+	jrl SeqPlay_FinalizeAndReturn
 
 LABEL_F38EEF:
 	lds bc, 1
@@ -120872,7 +120872,7 @@ LABEL_F38F3F:
 	resda 3, 10407
 	ldw wa, 0x23
 	call SoundCtrl_SaveAndSendCmd_EE
-	jr LABEL_F38FA7
+	jr SeqPlay_FinalizeAndReturn
 
 LABEL_F38F7E:
 	stdi16 10410, 0
@@ -120885,7 +120885,7 @@ LABEL_F38F7E:
 	call SeqBuf_WriteNoteOffEntry
 	call Part_ReinitAllActive
 
-LABEL_F38FA7:
+SeqPlay_FinalizeAndReturn:
 	calr LABEL_F38FF2
 	pop_werp 0xFA
 	lda xsp, (xsp + 10)
@@ -120895,18 +120895,18 @@ LABEL_F38FB1:
 	bitda 4, 10437
 	jr z, LABEL_F38FBC
 	ldw wa, 0xF
-	jr LABEL_F38FCB
+	jr SeqPlay_SendStopAndClearParts
 
 LABEL_F38FBC:
 	cpdi8 36153, 136
 	jr nz, LABEL_F38FC8
 	ldw wa, 0x3B
-	jr LABEL_F38FCB
+	jr SeqPlay_SendStopAndClearParts
 
 LABEL_F38FC8:
 	ldw wa, 0x18
 
-LABEL_F38FCB:
+SeqPlay_SendStopAndClearParts:
 	call SoundCtrl_SaveAndSendCmd_EE
 	resda 0, 36232
 	stdi16 10408, 0
@@ -121009,12 +121009,12 @@ LABEL_F390D8:
 	cpdi8 10584, 0
 	jr nz, LABEL_F390F0
 	cp l, 0x82
-	jr nz, LABEL_F39137
+	jr nz, SeqData_HandleEndMark
 	jr LABEL_F39154
 
 LABEL_F390F0:
 	cp l, 0x81
-	jr z, LABEL_F39137
+	jr z, SeqData_HandleEndMark
 
 LABEL_F390F5:
 	cp l, 0x82
@@ -121027,7 +121027,7 @@ LABEL_F390F5:
 	call SeqData_AdvancePosition
 	call SeqData_ReadNextByte
 	cpda8 l, 10584
-	jr c, LABEL_F39125
+	jr c, SeqData_SkipToNextCommand
 
 LABEL_F39118:
 	ldto_werp WA, 0xFA
@@ -121037,15 +121037,15 @@ LABEL_F39118:
 LABEL_F39123:
 	jr LABEL_F39159
 
-LABEL_F39125:
+SeqData_SkipToNextCommand:
 	call SeqData_AdvancePosition
 	call SeqData_ReadNextByte
 	bit 7, l
-	jr z, LABEL_F39125
+	jr z, SeqData_SkipToNextCommand
 	cp l, 0x81
 	jr nz, LABEL_F390F5
 
-LABEL_F39137:
+SeqData_HandleEndMark:
 	cp l, 0x81
 	jr nz, LABEL_F39123
 	ldda16 xwa, 10415
@@ -121083,17 +121083,17 @@ LABEL_F39171:
 	call SeqData_AdvancePosition
 	call SeqData_ReadNextByte
 	cpda8 l, 10584
-	jr ule, LABEL_F391A1
+	jr ule, SeqData_SkipToNextCommand_Fwd
 	ldto_werp WA, 0xFA
 	stda16 10415, xwa
 	stda16 9830, xiz
 	jr LABEL_F391DA
 
-LABEL_F391A1:
+SeqData_SkipToNextCommand_Fwd:
 	call SeqData_AdvancePosition
 	call SeqData_ReadNextByte
 	bit 7, l
-	jr z, LABEL_F391A1
+	jr z, SeqData_SkipToNextCommand_Fwd
 	cp l, 0x81
 	jr nz, LABEL_F39171
 
@@ -121151,7 +121151,7 @@ LABEL_F39229:
 	lds wa, 1
 	call LABEL_F46470
 	lda xwa, (xsp)
-	calr LABEL_F38A8A
+	calr SeqPlay_ActivatePartsAndSendOff
 
 LABEL_F3923A:
 	lda xsp, (xsp + 10)
@@ -121187,7 +121187,7 @@ LABEL_F3926C:
 LABEL_F39287:
 	cpl wa
 	anddm16 61854, xwa
-	jrl LABEL_F39396
+	jrl SeqPlay_ReactivatePartsAndResume
 
 LABEL_F39290:
 	pushw iz
@@ -121242,7 +121242,7 @@ LABEL_F3930C:
 	stda16 10438, xwa
 	anddm16 61854, xde
 	call 0xFDDE6F
-	calr LABEL_F39396
+	calr SeqPlay_ReactivatePartsAndResume
 	jr LABEL_F39394
 
 LABEL_F39327:
@@ -121287,7 +121287,7 @@ LABEL_F39394:
 	popw iz
 	ret
 
-LABEL_F39396:
+SeqPlay_ReactivatePartsAndResume:
 	dec 4, xsp
 	push_werp 0xFA
 	resda 3, 10419
@@ -121319,7 +121319,7 @@ LABEL_F393C7:
 	stda16 10410, xwa
 	lda xwa, (xsp + 2)
 	ld (xwa), 0x0
-	calr LABEL_F38D95
+	calr SeqPlay_ProcessPartVoices
 	ldmm16 10441, 10585
 	stdi8 10440, 0
 	ldmm16 8998, 10441
@@ -121337,7 +121337,7 @@ SeqAcc_InitPlaybackState:
 	cpdi16 61854, 0
 	jr nz, LABEL_F39434
 	cpdi16 10408, 0
-	jrl nz, LABEL_F394B5
+	jrl nz, SeqAcc_ClearStepCounter
 	ldda8 a, 10407
 	res 0, a
 	set 1, a
@@ -121387,17 +121387,17 @@ LABEL_F3949C:
 	cpdi16 8982, 0
 	jr nz, LABEL_F394BC
 	cpdi16 10408, 0
-	jr nz, LABEL_F394B5
+	jr nz, SeqAcc_ClearStepCounter
 
 LABEL_F394B0:
 	stdi8 8956, 0
 
-LABEL_F394B5:
+SeqAcc_ClearStepCounter:
 	stdi8 8968, 0
 	jr LABEL_F394DA
 
 LABEL_F394BC:
-	calr LABEL_F3993B
+	calr SeqPlay_CheckDrumPartAndClearCounters
 	cpdi16 10408, 0
 	jr nz, LABEL_F394DA
 	cpdi8 7570, 0
@@ -121509,17 +121509,17 @@ LABEL_F395AF:
 	cpdi8 1051, 0
 	jr nz, LABEL_F39601
 	ldi_berp 0xFB, 1
-	jr LABEL_F39614
+	jr SeqPlay_ConfigureVoiceChannels
 
 LABEL_F39601:
 	cpi_berp 0xFB, 0
-	jr nz, LABEL_F39614
+	jr nz, SeqPlay_ConfigureVoiceChannels
 	ldda8 c, 1051
 	extz bc
 	ldda16 xwa, 1052
 	call Voice_ScanAvailableChannel
 
-LABEL_F39614:
+SeqPlay_ConfigureVoiceChannels:
 	ldda16 xwa, 1052
 	call LABEL_F424FF
 	ldda8 c, 1051
@@ -121645,7 +121645,7 @@ LABEL_F3970D:
 	cp (xbc + 3), 0x0
 	jr nz, LABEL_F3975F
 	setda 0, 1115
-	calr LABEL_F397E1
+	calr SeqPlay_ProcessTempoVoiceEvent
 
 LABEL_F3975F:
 	jr LABEL_F397AD
@@ -121699,10 +121699,10 @@ LABEL_F397B1:
 	setda 0, 1115
 	ldto_berp A, 0xFA
 	extz wa
-	calr LABEL_F397E1
+	calr SeqPlay_ProcessTempoVoiceEvent
 	jr LABEL_F397A4
 
-LABEL_F397E1:
+SeqPlay_ProcessTempoVoiceEvent:
 	lda xsp, (xsp - 12)
 	ld (xsp + 10), a
 	ldw (xsp + 4), 0xFFFF
@@ -121838,7 +121838,7 @@ LABEL_F39935:
 	inc 4, xsp
 	ret
 
-LABEL_F3993B:
+SeqPlay_CheckDrumPartAndClearCounters:
 	ldda8 a, 8988
 	cp a, 0xFF
 	jr z, LABEL_F39961
@@ -122134,7 +122134,7 @@ LABEL_F39BF8:
 
 LABEL_F39BFC:
 	call Seq_SyncPositionAndOutputMIDITiming
-	calr LABEL_F3993B
+	calr SeqPlay_CheckDrumPartAndClearCounters
 	stdi8 8956, 1
 	ret
 
@@ -141909,7 +141909,7 @@ LABEL_F45C10:
 LABEL_F45CB7:
 	dec 1, wa
 	stda16 10435, xwa
-	call LABEL_F389C9
+	call SeqAcc_UpdateEndPosition
 	ldda16 xwa, 62008
 	subda16 xwa, 62015
 	stda16 9832, xwa
@@ -143500,7 +143500,7 @@ SqPunchTitleFunc:
 	jr LABEL_F46EBA
 
 LABEL_F46EB6:
-	call LABEL_F3892C
+	call SeqAcc_HandlePlaybackTick
 
 LABEL_F46EBA:
 	lds32 xhl, 0
