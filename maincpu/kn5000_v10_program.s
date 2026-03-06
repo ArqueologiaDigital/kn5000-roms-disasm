@@ -66063,13 +66063,13 @@ SeMenu_SetupSoundBankPair_NonZero:
 	extz wa
 	lds bc, 0
 	lds de, 0
-	call LABEL_FE65FC
+	call SndParam_UpdateChannelTuning
 	ld (xiz), l
 	ld a, (xsp + 8)
 	extz wa
 	lds bc, 0
 	lds de, 1
-	call LABEL_FE65FC
+	call SndParam_UpdateChannelTuning
 	ld xwa, (xsp + 10)
 	ld (xwa), l
 	cp (xiz), 0xFF
@@ -66078,7 +66078,7 @@ SeMenu_SetupSoundBankPair_NonZero:
 	extz wa
 	lds bc, 1
 	lds de, 1
-	call LABEL_FE65FC
+	call SndParam_UpdateChannelTuning
 	ld (xiz), l
 	ld xwa, (xsp + 10)
 	ld (xwa), l
@@ -330411,7 +330411,7 @@ LABEL_FE04ED:
 	extz de
 	ld xwa, xbc
 	ld xbc, (xsp + 2)
-	call LABEL_FE31BA
+	call NoteMap_CollectAndAllocVoice_Indirect
 	jrl NoteOnProcess_NextChannel
 
 LABEL_FE0544:
@@ -331390,7 +331390,7 @@ LABEL_FE0EA9:
 	extz de
 	ld xwa, xbc
 	ld xbc, xiz
-	call LABEL_FE31BA
+	call NoteMap_CollectAndAllocVoice_Indirect
 	jrl VoiceProcess_NextChannel
 
 LABEL_FE0F00:
@@ -334889,7 +334889,7 @@ LABEL_FE31B3:
 	lda xsp, (xsp + 10)
 	ret
 
-LABEL_FE31BA:
+NoteMap_CollectAndAllocVoice_Indirect:
 	st_dri3b L, 0xFD, 0x52, 0xFF
 	push_werp 0xFA
 	lda_dri3 XIY, 0xFD, 0xA6, 0x00
@@ -340497,7 +340497,7 @@ LABEL_FE65F1:
 	jrl c, LABEL_FE6558
 	ret
 
-LABEL_FE65FC:
+SndParam_UpdateChannelTuning:
 	cp a, 0xFF
 	jr z, LABEL_FE6622
 	extz wa
@@ -340682,7 +340682,7 @@ LABEL_FE678C:
 	and_srib_rm A, 0xFD, 0xEE, 0x01
 	ldfr_berp A, 0xFB
 	cps a, 0
-	jrl z, LABEL_FE6883
+	jrl z, NoteMap_AddChangedVoices
 	bit_erpb 0xFB, 0x00
 	jr z, LABEL_FE67F1
 	lda xwa, (xsp + 2)
@@ -340738,7 +340738,7 @@ LABEL_FE6820:
 
 LABEL_FE684F:
 	bit_erpb 0xFB, 0x03
-	jr z, LABEL_FE6883
+	jr z, NoteMap_AddChangedVoices
 	lda xwa, (xsp + 2)
 	ld xhl, xwa
 	st_dri3b W, 0xFD, 0xA6, 0x00
@@ -340748,20 +340748,20 @@ LABEL_FE684F:
 	ld xwa, xhl
 	call NoteMap_MergeEntries
 	cps l, 0
-	jr z, LABEL_FE6883
+	jr z, NoteMap_AddChangedVoices
 	lda xwa, (xsp + 2)
 	ldada xbc, 50020
 	ldw de, 0x15
 	call NoteMap_AddEntry
 	call AudioInit_RefreshToneBank
 
-LABEL_FE6883:
+NoteMap_AddChangedVoices:
 	ld_srib A, (xsp + 0x01f0)
 	xor_srib_rm A, 0xFD, 0xEE, 0x01
 	and_srib_rm A, 0xFD, 0xF0, 0x01
 	ldfr_berp A, 0xFB
 	cps a, 0
-	jrl z, LABEL_FE6957
+	jrl z, NoteMap_CollectEnabledVoices
 	bit_erpb 0xFB, 0x00
 	jr z, LABEL_FE68C9
 	lda xwa, (xsp + 2)
@@ -340817,7 +340817,7 @@ LABEL_FE68F8:
 
 LABEL_FE6927:
 	bit_erpb 0xFB, 0x03
-	jr z, LABEL_FE6957
+	jr z, NoteMap_CollectEnabledVoices
 	lda xwa, (xsp + 2)
 	ld xhl, xwa
 	st_dri3b W, 0xFD, 0x4A, 0x01
@@ -340827,13 +340827,13 @@ LABEL_FE6927:
 	ld xwa, xhl
 	call NoteMap_MergeEntries
 	cps l, 0
-	jr z, LABEL_FE6957
+	jr z, NoteMap_CollectEnabledVoices
 	lda xwa, (xsp + 2)
 	ldada xbc, 49662
 	ldw de, 0x15
 	call NoteMap_AddEntry
 
-LABEL_FE6957:
+NoteMap_CollectEnabledVoices:
 	ld_srib A, (xsp + 0x01f0)
 	and_srib_rm A, 0xFD, 0xEE, 0x01
 	ldfr_berp A, 0xFB
@@ -341293,7 +341293,7 @@ LABEL_FE6E35:
 	and_srib_rm A, 0xFD, 0xEE, 0x01
 	ldfr_berp A, 0xFB
 	cps a, 0
-	jrl z, LABEL_FE6F2C
+	jrl z, NoteMap_UpdateChangedVoices
 	bit_erpb 0xFB, 0x00
 	jr z, LABEL_FE6E9A
 	lda xwa, (xsp + 2)
@@ -341349,7 +341349,7 @@ LABEL_FE6EC9:
 
 LABEL_FE6EF8:
 	bit_erpb 0xFB, 0x03
-	jr z, LABEL_FE6F2C
+	jr z, NoteMap_UpdateChangedVoices
 	lda xwa, (xsp + 2)
 	ld xhl, xwa
 	st_dri3b W, 0xFD, 0xA6, 0x00
@@ -341359,20 +341359,20 @@ LABEL_FE6EF8:
 	ld xwa, xhl
 	call NoteMap_MergeEntries
 	cps l, 0
-	jr z, LABEL_FE6F2C
+	jr z, NoteMap_UpdateChangedVoices
 	lda xwa, (xsp + 2)
 	ldada xbc, 50020
 	ldw de, 0x15
 	call NoteMap_UpdateEntry
 	call AudioInit_RefreshToneBank
 
-LABEL_FE6F2C:
+NoteMap_UpdateChangedVoices:
 	ld_srib A, (xsp + 0x01f0)
 	xor_srib_rm A, 0xFD, 0xEE, 0x01
 	and_srib_rm A, 0xFD, 0xF0, 0x01
 	ldfr_berp A, 0xFB
 	cps a, 0
-	jrl z, LABEL_FE7000
+	jrl z, NoteMap_ReallocEnabledVoices
 	bit_erpb 0xFB, 0x00
 	jr z, LABEL_FE6F72
 	lda xwa, (xsp + 2)
@@ -341428,7 +341428,7 @@ LABEL_FE6FA1:
 
 LABEL_FE6FD0:
 	bit_erpb 0xFB, 0x03
-	jr z, LABEL_FE7000
+	jr z, NoteMap_ReallocEnabledVoices
 	lda xwa, (xsp + 2)
 	ld xhl, xwa
 	st_dri3b W, 0xFD, 0x4A, 0x01
@@ -341438,13 +341438,13 @@ LABEL_FE6FD0:
 	ld xwa, xhl
 	call NoteMap_MergeEntries
 	cps l, 0
-	jr z, LABEL_FE7000
+	jr z, NoteMap_ReallocEnabledVoices
 	lda xwa, (xsp + 2)
 	ldada xbc, 49662
 	ldw de, 0x15
 	call NoteMap_UpdateEntry
 
-LABEL_FE7000:
+NoteMap_ReallocEnabledVoices:
 	ld_srib A, (xsp + 0x01f0)
 	and_srib_rm A, 0xFD, 0xEE, 0x01
 	ldfr_berp A, 0xFB
@@ -342008,7 +342008,7 @@ LABEL_FE75E7:
 	ld e, a
 	extz de
 	ld xwa, xhl
-	call LABEL_FE31BA
+	call NoteMap_CollectAndAllocVoice_Indirect
 
 LABEL_FE7607:
 	st_dri3b L, 0xFD, 0x48, 0x01
@@ -342494,7 +342494,7 @@ LABEL_FE7B22:
 	lds de, 0
 	call NoteMap_ClaimVoiceSlot
 	cps l, 0
-	jr z, LABEL_FE7BA3
+	jr z, NoteMap_ClaimAndInitVoiceSlot_A
 	lda xwa, (xsp + 2)
 	ld xhl, xwa
 	ldada xbc, 49662
@@ -342509,15 +342509,15 @@ LABEL_FE7B22:
 	lda xwa, (xsp + 2)
 	call NoteMap_FindBestFreeVoice
 	cps l, 3
-	jr nz, LABEL_FE7BA3
+	jr nz, NoteMap_ClaimAndInitVoiceSlot_A
 	call NoteMap_FindBestMatch
 	cp l, 0xFF
-	jr z, LABEL_FE7BA3
+	jr z, NoteMap_ClaimAndInitVoiceSlot_A
 	ldada xwa, 49662
 	lds bc, 2
 	call NoteMap_InitVoiceSlots
 
-LABEL_FE7BA3:
+NoteMap_ClaimAndInitVoiceSlot_A:
 	stib_dri 0xFD, 0xA8, 0x00, 0x02
 	ldto_berp A, 0xF8
 	lda_dri3 XBC, 0xFD, 0xA9, 0x00
@@ -342665,7 +342665,7 @@ LABEL_FE7D05:
 	lds de, 0
 	call NoteMap_ClaimVoiceSlot
 	cps l, 0
-	jr z, LABEL_FE7D86
+	jr z, NoteMap_ClaimAndInitVoiceSlot_B
 	lda xwa, (xsp + 2)
 	ld xhl, xwa
 	ldada xbc, 49662
@@ -342680,15 +342680,15 @@ LABEL_FE7D05:
 	lda xwa, (xsp + 2)
 	call NoteMap_FindBestFreeVoice
 	cps l, 3
-	jr nz, LABEL_FE7D86
+	jr nz, NoteMap_ClaimAndInitVoiceSlot_B
 	call NoteMap_FindBestMatch
 	cp l, 0xFF
-	jr z, LABEL_FE7D86
+	jr z, NoteMap_ClaimAndInitVoiceSlot_B
 	ldada xwa, 49662
 	lds bc, 2
 	call NoteMap_InitVoiceSlots
 
-LABEL_FE7D86:
+NoteMap_ClaimAndInitVoiceSlot_B:
 	stib_dri 0xFD, 0xA8, 0x00, 0x02
 	ldto_berp A, 0xF8
 	lda_dri3 XBC, 0xFD, 0xA9, 0x00
@@ -342788,9 +342788,9 @@ LABEL_FE7E62:
 	lda_dri3 XHL, 0xFD, 0x4A, 0x01
 	lda_dri3 XBC, 0xFD, 0x4C, 0x01
 	cp_srib_im 0xFD, 0x4A, 0x01, 0xFF
-	jrl nz, LABEL_FE7F42
+	jrl nz, NoteMap_CrossChannelReassign
 	cp_srib_im 0xFD, 0x48, 0x01, 0xFF
-	jrl z, LABEL_FE7F42
+	jrl z, NoteMap_CrossChannelReassign
 	stib_dri 0xFD, 0xA6, 0x00, 0x00
 	stib_dri 0xFD, 0xA7, 0x00, 0x00
 	lda xwa, (xsp)
@@ -342850,7 +342850,7 @@ LABEL_FE7F04:
 	lds de, 0
 	call NoteMap_LookupVoice
 	cps l, 0
-	jr z, LABEL_FE7F42
+	jr z, NoteMap_CrossChannelReassign
 	lda xwa, (xsp)
 	ld xde, xwa
 	ld_srib A, (xsp + 0x0148)
@@ -342859,7 +342859,7 @@ LABEL_FE7F04:
 	ld xwa, xde
 	call NoteMap_SetChannelParam
 
-LABEL_FE7F42:
+NoteMap_CrossChannelReassign:
 	cp_srib_im 0xFD, 0x4A, 0x01, 0xFF
 	jr z, LABEL_FE7FA4
 	ld_srib A, (xsp + 0x014a)
