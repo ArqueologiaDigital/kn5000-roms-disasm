@@ -43597,7 +43597,7 @@ Vga_SelectWritePlane:
 	inc 2, xsp
 	ret
 
-LABEL_EF09EA:
+Vga_SetupMultiPlaneDisplay:
 	call 0xEF23EC
 	ld xwa, 0x1B4000
 	ld xbc, 0xF180
@@ -44715,7 +44715,7 @@ LABEL_EF145D:
 	cps b, 1
 	jr z, LABEL_EF1474
 	cps b, 2
-	jr z, LABEL_EF147E
+	jr z, MidiSerial_ProcessAndReinit
 
 LABEL_EF1465:
 	inc 1, iz
@@ -44725,7 +44725,7 @@ LABEL_EF1465:
 
 LABEL_EF146F:
 	bit 0, b
-	jr z, LABEL_EF147E
+	jr z, MidiSerial_ProcessAndReinit
 
 LABEL_EF1474:
 	pushw iz
@@ -44733,7 +44733,7 @@ LABEL_EF1474:
 	call LABEL_FE0245
 	jr LABEL_EF148F
 
-LABEL_EF147E:
+MidiSerial_ProcessAndReinit:
 	pushw iz
 	ld (xhl - 6), iy
 	call MidiSerial_ProcessInput
@@ -47060,7 +47060,7 @@ SeqMain_ReadByte_1024:
 	pushw ix
 	push xde
 	lda_24	xde, 127867
-	calr LABEL_EF30A1
+	calr Seq_RingBuf_Dequeue_1024
 	pop xde
 	popw ix
 	ret
@@ -47451,7 +47451,7 @@ SeqAlt2_ReadByte_1024:
 	pushw ix
 	push xde
 	lda_24 xde, 0x01fca3
-	calr LABEL_EF30A1
+	calr Seq_RingBuf_Dequeue_1024
 	pop xde
 	popw ix
 	ret
@@ -48130,7 +48130,7 @@ Seq_RingBuf_Init_1024:
 	ldw (xde - 2), 0x3FF
 	ret
 
-LABEL_EF30A1:
+Seq_RingBuf_Dequeue_1024:
 	ld ix, (xde - 8)
 	cp ix, (xde - 4)
 	jr nz, LABEL_EF30AD
@@ -49280,7 +49280,7 @@ LABEL_EF3AE9:
 	ldw hl, 0xFFFF
 	ret
 
-LABEL_EF3AED:
+Flash_WaitUntilReady:
 	extz wa
 	calr LABEL_EF387A
 	calr Flash_CheckReady
@@ -50667,7 +50667,7 @@ LABEL_EF47C2:
 ; "Technics KN5000 CMPCUSTOMDATA FILE"
 HANDLE_UPDATE_FILE_TYPE_ID_005h:	; EF47C7
 	lds wa, 1
-	call LABEL_EF3AED
+	call Flash_WaitUntilReady
 	calr SHOW_FD_TO_FLASH_MEMORY_MESSAGE
 	pushw 0x800
 	lds wa, 1
@@ -50679,7 +50679,7 @@ HANDLE_UPDATE_FILE_TYPE_ID_005h:	; EF47C7
 ; "Technics KN5000 HD-AEPRG DATA FILE"
 HANDLE_UPDATE_FILE_TYPE_ID_006h:	; EF47DF
 	lds wa, 2
-	call LABEL_EF3AED
+	call Flash_WaitUntilReady
 	calr SHOW_FD_TO_FLASH_MEMORY_MESSAGE
 	pushw 0x400
 	lds wa, 2
@@ -96310,7 +96310,7 @@ LABEL_F27106:
 	jrl LABEL_F281FE
 
 LABEL_F2710F:
-	call LABEL_EF09EA
+	call Vga_SetupMultiPlaneDisplay
 	ld16_24 xwa, 0x00ffec
 	stda16 4325, xwa
 	stdi8 4324, 255
@@ -194020,7 +194020,7 @@ LABEL_F6BCA0:
 	call Voice_InitTablePair
 	call Voice_InitTableGroup
 	call MIDI_SendAllSoundOff
-	call LABEL_EF09EA
+	call Vga_SetupMultiPlaneDisplay
 	jr LABEL_F6BCE0
 
 LABEL_F6BCD6:
