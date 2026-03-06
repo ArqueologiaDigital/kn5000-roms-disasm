@@ -67,12 +67,12 @@ SetupFlashFunc:
 	jr nz, SetupFlash_Return
 	stdi8 32578, 37
 	ldw wa, 0xEE
-	call LABEL_F994BD
+	call SoundCtrl_SendCommand
 	lds wa, 6
 	call LABEL_FC55A9
 	stdi8 32578, 35
 	ldw wa, 0xEE
-	call LABEL_F994BD
+	call SoundCtrl_SendCommand
 	jr SetupFlash_Return
 
 SetupFlash_HandleLoadEvent:
@@ -194,7 +194,7 @@ FmmUtility_HandleSuccess:
 	ldw wa, 0xEE
 
 FmmUtility_ShowStatus:
-	call LABEL_F994BD
+	call SoundCtrl_SendCommand
 	jr FmmUtility_Return
 
 FmmUtility_ContinueWait:
@@ -326,7 +326,7 @@ FmmSmfUtility_HandleSuccess:
 	ldw wa, 0xEE
 
 FmmSmfUtility_ShowStatus:
-	call LABEL_F994BD
+	call SoundCtrl_SendCommand
 	jr FmmSmfUtility_Return
 
 FmmSmfUtility_ContinueWait:

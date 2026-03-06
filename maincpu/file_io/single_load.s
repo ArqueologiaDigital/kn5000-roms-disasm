@@ -1462,7 +1462,7 @@ SLDst_ScrollDispatch:
 	lds32 xde, 0
 	call 0xFA9D58
 	ldw wa, 0xEE
-	call LABEL_F994BD
+	call SoundCtrl_SendCommand
 	jrl SLDst_Return
 
 SLDst_Scroll_ChildReturn:
@@ -1903,7 +1903,7 @@ CmpDst_ScrollModeA:
 	lds32 xde, 0
 	call 0xFA9D58
 	ldw wa, 0xEE
-	call LABEL_F994BD
+	call SoundCtrl_SendCommand
 	jrl CmpDst_Return
 
 CmpDst_ScrollMode7:
@@ -2236,7 +2236,7 @@ FmmCmpLoad_HandleSuccess:
 	ldw wa, 0xEE
 
 FmmCmpLoad_CallStatusDisplay:
-	call LABEL_F994BD
+	call SoundCtrl_SendCommand
 	jr FmmCmpLoad_Return
 
 FmmCmpLoad_HandleAbort:

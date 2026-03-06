@@ -116,7 +116,7 @@ WPLoad_HandleSuccess:
 	ldw wa, 0xEE
 
 WPLoad_CallStatusDisplay:
-	call LABEL_F994BD
+	call SoundCtrl_SendCommand
 	jrl WPLoad_Return
 
 WPLoad_HandleAbort:
@@ -251,7 +251,7 @@ WPLoad_OpLoad:
 	lds32 xde, 0
 	call 0xFA9D58
 	ldw wa, 0xEE
-	call LABEL_F994BD
+	call SoundCtrl_SendCommand
 
 WPLoad_GetSelection:
 	ldda16 xbc, 33204

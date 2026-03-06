@@ -124,7 +124,7 @@ SmfLoad_Success:
 	ldw wa, 0xEE
 
 SmfLoad_CallStatusDisplay:
-	call LABEL_F994BD
+	call SoundCtrl_SendCommand
 	jr SmfLoad_Return
 
 SmfLoad_SendWait:
@@ -972,7 +972,7 @@ SmfFN_Delete2_AdjustIndex:
 	ldw wa, 0xEE
 
 SmfFN_CallStatusDisplayAndExit:
-	call LABEL_F994BD
+	call SoundCtrl_SendCommand
 	jrl SmfFN_UpdateDisplay
 
 SmfFN_IgnoredEvents:

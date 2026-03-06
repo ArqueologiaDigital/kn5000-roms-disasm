@@ -224,7 +224,7 @@ FCopy_CopyExecute:
 	ldw wa, 0xEE
 
 FCopy_NotifyComplete:
-	call LABEL_F994BD
+	call SoundCtrl_SendCommand
 
 FCopy_Return:
 	lds32 xhl, 0
@@ -326,7 +326,7 @@ FRename_HandleApply:
 	lds32 xde, 0
 	call 0xFA9D58
 	ldw wa, 0xEE
-	call LABEL_F994BD
+	call SoundCtrl_SendCommand
 
 FRename_Return:
 	lds32 xhl, 0
@@ -429,7 +429,7 @@ FRenameSmf_HandleApply:
 	lds32 xde, 0
 	call 0xFA9D58
 	ldw wa, 0xEE
-	call LABEL_F994BD
+	call SoundCtrl_SendCommand
 
 FRenameSmf_Return:
 	lds32 xhl, 0
@@ -540,7 +540,7 @@ FmmFmt_HandleProgress:
 	calr LABEL_F8B48E
 	stda8 32578, l
 	ldw wa, 0xEE
-	call LABEL_F994BD
+	call SoundCtrl_SendCommand
 	jrl FmmFmt_NotifyComplete
 
 FmmFmt_FormatSuccess:
@@ -729,7 +729,7 @@ FmmLoadTtl_StateSuccess:
 	ldw wa, 0xEE
 
 FmmLoadTtl_NotifyComplete:
-	call LABEL_F994BD
+	call SoundCtrl_SendCommand
 	jrl FmmLoadTtl_Return
 
 FmmLoadTtl_LoadSlots:

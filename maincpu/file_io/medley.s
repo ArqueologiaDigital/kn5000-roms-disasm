@@ -177,7 +177,7 @@ SeqName_HandleAction32:
 	ldw wa, 0xEE
 
 SeqName_ShowAndExit:
-	call LABEL_F994BD
+	call SoundCtrl_SendCommand
 
 SeqName_GetCurrentIndex:
 	ldda16 xde, 33496
@@ -449,7 +449,7 @@ IntMed_HandleError:
 	jrl z, IntMed_Exit
 	stdi8 32578, 14
 	ldw wa, 0xEE
-	call LABEL_F994BD
+	call SoundCtrl_SendCommand
 	jrl IntMed_Exit
 
 IntMed_HandleStop:
@@ -1682,7 +1682,7 @@ DiskSel_PlayFindLoop:
 	ldw wa, 0xEE
 
 DiskSel_ShowErrorAndExit:
-	call LABEL_F994BD
+	call SoundCtrl_SendCommand
 	jrl DiskSel_Exit
 
 DiskSel_PlayNextSong:
@@ -2027,7 +2027,7 @@ SmfMed_Error3F:
 	ldw wa, 0xEE
 
 SmfMed_ShowError:
-	call LABEL_F994BD
+	call SoundCtrl_SendCommand
 	jrl SmfMed_Exit
 
 SmfMed_CheckPlayMode:
@@ -2061,7 +2061,7 @@ SmfMed_PlayError3F:
 	ldw wa, 0xEE
 
 SmfMed_ShowPlayError:
-	call LABEL_F994BD
+	call SoundCtrl_SendCommand
 	incdi8 1, 33852
 
 SmfMed_SetPlaying:
@@ -2939,7 +2939,7 @@ PdMed_HandleError:
 	ldw wa, 0xEE
 
 PdMed_ShowError:
-	call LABEL_F994BD
+	call SoundCtrl_SendCommand
 	jrl PdMed_Exit
 
 PdMed_InitFromDisk_Entry:
@@ -3746,7 +3746,7 @@ DocMed_HandleError:
 	ldw wa, 0xEE
 
 DocMed_ShowError:
-	call LABEL_F994BD
+	call SoundCtrl_SendCommand
 	jrl DocMed_Exit
 
 DocMed_CheckInit_Entry:

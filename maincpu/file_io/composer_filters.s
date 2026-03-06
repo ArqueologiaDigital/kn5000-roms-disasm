@@ -114,7 +114,7 @@ CompLoad_HandleSuccess:
 	ldw wa, 0xEE
 
 CompLoad_CallStatusDisplay:
-	call LABEL_F994BD
+	call SoundCtrl_SendCommand
 	jrl CompLoad_Return
 
 CompLoad_HandleAbort:
@@ -276,7 +276,7 @@ CompLoad_HideButtons_Loop:
 	lds32 xde, 0
 	call 0xFA9D58
 	ldw wa, 0xEE
-	call LABEL_F994BD
+	call SoundCtrl_SendCommand
 
 CompLoad_GetSelection:
 	ldda16 xwa, 32640
@@ -592,7 +592,7 @@ LoadFilter_Load_CallHandler:
 	lds32 xde, 0
 	call 0xFA9D58
 	ldw wa, 0xEE
-	call LABEL_F994BD
+	call SoundCtrl_SendCommand
 
 LoadFilter_Return:
 	lds32 xhl, 0
@@ -927,7 +927,7 @@ SaveFilter_OpFormat:
 	ldw wa, 0xEE
 
 SaveFilter_CallStatusDisplay:
-	call LABEL_F994BD
+	call SoundCtrl_SendCommand
 	jr SaveFilter_Return
 
 SaveFilter_ResetAll:

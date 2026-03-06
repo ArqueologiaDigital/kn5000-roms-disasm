@@ -33,7 +33,7 @@ FmmPasswordFunc:
 Password_ShowError:
 	stdi8 32578, 10
 	ldw wa, 0xEE
-	call LABEL_F994BD
+	call SoundCtrl_SendCommand
 	jrl Password_Return
 
 Password_ClearAndSetSlot:
@@ -166,7 +166,7 @@ Password_LoadErrorStatus:
 	ldw wa, 0xEE
 
 Password_CallStatusDisplay:
-	call LABEL_F994BD
+	call SoundCtrl_SendCommand
 
 Password_Return:
 	lds32 xhl, 0
@@ -649,7 +649,7 @@ FileName_Navigate_CheckChanged:
 	ldw wa, 0xEE
 
 FileName_CallStatusDisplay:
-	call LABEL_F994BD
+	call SoundCtrl_SendCommand
 
 FileName_GetSelection:
 	ldda16 xwa, 32634
