@@ -87529,7 +87529,7 @@ CDlikeSwTtl_ShowSongTitle:
 	ldada xbc, 7198
 	ld (xbc + 12), 0x0
 	lds wa, 1
-	call LABEL_FEC04E
+	call Acc_LoadAndStartPlayback
 	ld wa, hl
 	cps wa, 0
 	jp_24 nz, 0xF207F4
@@ -87553,7 +87553,7 @@ CDlikeSwTtl_ShowDocTitle:
 	ldada xbc, 7212
 	ld (xbc + 12), 0x0
 	lds wa, 2
-	call LABEL_FEC04E
+	call Acc_LoadAndStartPlayback
 	ld wa, hl
 	cps wa, 0
 	jp_24 nz, 0xF207F4
@@ -87577,7 +87577,7 @@ CDlikeSwTtl_ShowPdTitle:
 	ldada xbc, 7226
 	ld (xbc + 20), 0x0
 	lds wa, 4
-	call LABEL_FEC04E
+	call Acc_LoadAndStartPlayback
 	ld wa, hl
 	cps wa, 0
 	jp_24 nz, 0xF207F4
@@ -87653,7 +87653,7 @@ CDlikeSwTtl_SongConfirmDefault:
 	calr SeqRecPlay_EnablePlayOnly
 
 CDlikeSwTtl_SongConfirmJump:
-	jp LABEL_FEC1F3
+	jp Acc_StartFillIn
 
 CDlikeSwTtl_SongConfirmDispatch:
 	ldda8 a, 7498
@@ -87692,7 +87692,7 @@ CDlikeSwTtl_DocConfirmDefault:
 	calr SeqRecPlay_EnablePlayOnly
 
 CDlikeSwTtl_DocConfirmJump:
-	jp LABEL_FEC1F3
+	jp Acc_StartFillIn
 
 CDlikeSwTtl_PdConfirmStart:
 	call SeqState_GetFlags
@@ -87714,7 +87714,7 @@ CDlikeSwTtl_PdConfirmDefault:
 	calr SeqRecPlay_EnablePlayOnly
 
 CDlikeSwTtl_PdConfirmJump:
-	jp LABEL_FEC1F3
+	jp Acc_StartFillIn
 
 CDlikeSwTtl_SongNavDispatch:
 	pushw iz
@@ -93348,7 +93348,7 @@ LABEL_F25181:
 	pop xix
 	call LABEL_F26ECC
 	ld xwa, 0x1A57
-	call LABEL_FEE8F1
+	call SndParam_LookupOscEnvelope
 	cpdi16 6751, 9
 	jr z, LABEL_F251E5
 	ld xhl, 0x1A37
@@ -94067,7 +94067,7 @@ LABEL_F258B4:
 	stda8 6748, l
 	call LABEL_F26ECC
 	ld xwa, 0x1A57
-	call LABEL_FEE8F1
+	call SndParam_LookupOscEnvelope
 	cpdi16 6751, 9
 	jr z, LABEL_F25922
 	ld xhl, 0x1A37
@@ -94983,7 +94983,7 @@ LABEL_F261A8:
 	push xiy
 	call LABEL_F26ECC
 	ld xwa, 0x1A57
-	call LABEL_FEE8F1
+	call SndParam_LookupOscEnvelope
 	cpdi16 6751, 9
 	jr z, LABEL_F26218
 	ld xhl, 0x1A37
@@ -271034,7 +271034,7 @@ ClipBlit_Replace_ScanlineLoop:
 	ld xbc, (xsp + 8)
 	sub xbc, xwa
 	pushw bc
-	call LABEL_FF103E
+	call Math_AbsInt16
 	add hl, hl
 	lda_24	xwa, 15380116
 	.byte 0xd3, 0x07, 0xe0, 0xec, 0x22	; ld de, (xwa + hl)  [R+R addressing]
@@ -299703,7 +299703,7 @@ LABEL_FC6F86:
 	extz wa
 	sub wa, bc
 	pushw wa
-	call LABEL_FF103E
+	call Math_AbsInt16
 	inc 2, xsp
 	cps hl, 2
 	jr le, LABEL_FC6FF4
@@ -299713,7 +299713,7 @@ LABEL_FC6F86:
 	extz wa
 	sub wa, bc
 	pushw wa
-	call LABEL_FF103E
+	call Math_AbsInt16
 	inc 2, xsp
 	cps hl, 6
 	jr le, LABEL_FC6FDD
@@ -345636,7 +345636,7 @@ LABEL_FE99D0:
 	jr LABEL_FE99DD
 
 LABEL_FE99D5:
-	calr LABEL_FE9F18
+	calr NoteDisplay_InitState
 	jr LABEL_FE99DD
 
 LABEL_FE99DA:
@@ -345719,7 +345719,7 @@ LABEL_FE9A9C:
 LABEL_FE9AB0:
 	bitda_24 1, 52958
 	jr nz, LABEL_FE9B2B
-	calr LABEL_FE9D91
+	calr Voice_LookupNoteAndComputePitch
 	cps w, 0
 	jr nz, LABEL_FE9AFA
 	ld8_24 l, 0x00cee5
@@ -345739,7 +345739,7 @@ LABEL_FE9AB0:
 
 LABEL_FE9AE5:
 	decdi8_24 1, 52965
-	calr LABEL_FE9D91
+	calr Voice_LookupNoteAndComputePitch
 	incdi8_24 1, 52965
 	ldto_berp C, 0x34
 	ldto_lerp XIZ, 0x30
@@ -345765,7 +345765,7 @@ LABEL_FE9B1C:
 	jr LABEL_FE9B48
 
 LABEL_FE9B21:
-	calr LABEL_FE9F18
+	calr NoteDisplay_InitState
 	jr LABEL_FE9B48
 
 LABEL_FE9B26:
@@ -345780,7 +345780,7 @@ LABEL_FE9B2B:
 	jr LABEL_FE9B48
 
 LABEL_FE9B37:
-	calr LABEL_FE9D91
+	calr Voice_LookupNoteAndComputePitch
 	cps a, 0
 	jr z, LABEL_FE9B43
 	calr NoteDisplay_LookupBitmap
@@ -346024,7 +346024,7 @@ LABEL_FE9D60:
 LABEL_FE9D90:
 	ret
 
-LABEL_FE9D91:
+Voice_LookupNoteAndComputePitch:
 	ld8_24 c, 0x00cee5
 	ld b, c
 	pushw bc
@@ -346183,7 +346183,7 @@ LABEL_FE9F15:
 	pop xix
 	ret
 
-LABEL_FE9F18:
+NoteDisplay_InitState:
 	push xix
 	push xiz
 	st8_24 0x00cedf, a
@@ -346814,7 +346814,7 @@ LABEL_FEA792:
 
 LABEL_FEA798:
 	call Voice_UpdateNoteBitmap
-	call LABEL_FE9F18
+	call NoteDisplay_InitState
 
 LABEL_FEA7A0:
 	ldmi16 (xiz), 0xCEDF
@@ -347380,7 +347380,7 @@ LABEL_FEB259:
 LABEL_FEB268:
 	ld bc, iz
 	ld wa, (xsp + 2)
-	calr LABEL_FEBB37
+	calr MIDI_SendPitchBend
 	jr LABEL_FEB2BB
 
 LABEL_FEB272:
@@ -347856,7 +347856,7 @@ MIDI_SendControlChange:
 	inc 6, xsp
 	ret
 
-LABEL_FEBB37:
+MIDI_SendPitchBend:
 	dec 6, xsp
 	ld (xsp + 256), 0x4
 	ld (xsp + 1), 0xE0
@@ -348141,7 +348141,7 @@ LABEL_FEBE8B:
 LABEL_FEBE9A:
 	ldto_werp WA, 0xFA
 	ld bc, iz
-	calr LABEL_FEBB37
+	calr MIDI_SendPitchBend
 	ldto_werp WA, 0xFA
 	lds bc, 1
 	lds de, 0
@@ -348161,7 +348161,7 @@ LABEL_FEBEB6:
 LABEL_FEBECB:
 	ldto_werp WA, 0xFA
 	ld bc, iz
-	calr LABEL_FEBB37
+	calr MIDI_SendPitchBend
 	ldto_werp WA, 0xFA
 	lds bc, 1
 	lds de, 0
@@ -348363,7 +348363,7 @@ LABEL_FEC04C:
 	pop xiz
 	ret
 
-LABEL_FEC04E:
+Acc_LoadAndStartPlayback:
 	dec 6, xsp
 	pushw iz
 	ld (xsp + 2), xbc
@@ -348581,7 +348581,7 @@ Acc_StopPlayMode:
 	anddi16 59877, 65531
 	ret
 
-LABEL_FEC1F3:
+Acc_StartFillIn:
 	ldda16 xwa, 59877
 	bit 2, wa
 	ret nz
@@ -348633,7 +348633,7 @@ LABEL_FEC257:
 	pop xiz
 	ret
 
-LABEL_FEC259:
+FileIO_ReadVariableLengthData:
 	lda xsp, (xsp - 12)
 	ld (xsp + 4), xbc
 	ld (xsp + 8), xwa
@@ -349231,7 +349231,7 @@ LABEL_FEC80D:
 	lda xwa, (xsp + 2)
 	ld xbc, xwa
 	ld xwa, xde
-	calr LABEL_FEC259
+	calr FileIO_ReadVariableLengthData
 	ld xwa, xhl
 	cp xwa, 0x0
 	jr ge, LABEL_FEC82D
@@ -349945,7 +349945,7 @@ LABEL_FECDE2:
 	lda xwa, (xsp + 12)
 	ld xbc, xwa
 	ld xwa, xde
-	calr LABEL_FEC259
+	calr FileIO_ReadVariableLengthData
 	ld (xsp + 2), xhl
 	ld xwa, (xsp + 2)
 	cp xwa, 0x0
@@ -350137,7 +350137,7 @@ LABEL_FECF8B:
 	st_dri3b W, 0xFD, 0x10, 0x01
 	ld xbc, xwa
 	ld xwa, xde
-	calr LABEL_FEC259
+	calr FileIO_ReadVariableLengthData
 	ld (xsp + 2), xhl
 	ld xwa, (xsp + 2)
 	cp xwa, 0x0
@@ -351903,7 +351903,7 @@ LABEL_FEE008:
 	cps a, 1
 	jr nz, LABEL_FEE032
 	call FDC_DrainQueuesAndReset
-	calr LABEL_FEE07C
+	calr FileIO_InitTrackSlots
 	jr LABEL_FEE032
 
 LABEL_FEE025:
@@ -351912,7 +351912,7 @@ LABEL_FEE025:
 
 LABEL_FEE02B:
 	call LABEL_F530B3
-	calr LABEL_FEE07C
+	calr FileIO_InitTrackSlots
 
 LABEL_FEE032:
 	stdi16 4597, 120
@@ -351933,11 +351933,11 @@ LABEL_FEE039:
 	stda32 60413, xwa
 	stdi16 60417, 0
 	stdi8 59844, 0
-	calr LABEL_FEE07C
+	calr FileIO_InitTrackSlots
 	calr LABEL_FEE1A9
 	jrl LABEL_FEE2C9
 
-LABEL_FEE07C:
+FileIO_InitTrackSlots:
 	stdi16 53416, 0
 	stdi16 53418, 0
 	stdi16 53420, 2047
@@ -352999,7 +352999,7 @@ LABEL_FEE8EF:
 	pop xiz
 	ret
 
-LABEL_FEE8F1:
+SndParam_LookupOscEnvelope:
 	push xiz
 	ld xiz, xwa
 	ld a, (xiz + 5)
@@ -356204,7 +356204,7 @@ LABEL_FF1037:
 	djnz xde, LABEL_FF1037
 	ret
 
-LABEL_FF103E:
+Math_AbsInt16:
 	ld hl, (xsp + 4)
 	cps hl, 0
 	ret ge
