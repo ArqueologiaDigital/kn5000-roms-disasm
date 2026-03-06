@@ -52255,14 +52255,14 @@ LABEL_EF6019:
 	ldb c, 0x00
 	ldb a, 0x0C
 	ldb a, 0x10
-	call LABEL_FB1536
+	call Display_DeferOrDrawWall
 	sti8_24	257960, 0
 	ret
 LABEL_EF602A:
 	; --- Param loader 2: C=7, A=0x0C, call FB155F ---
 	ldb c, 0x07
 	ldb a, 0x0C
-	call LABEL_FB155F
+	call Display_DeferOrUpdateScreen
 	ret
 LABEL_EF6033:
 	; --- Simple wrapper: call EFA133 ---
@@ -55718,7 +55718,7 @@ LABEL_EFA518:
 	.byte 0xb2, 0x0e
 LABEL_EFA532:
 	; --- Init: call FB1536, set 3 flags, call 6 handlers, call FB155F (51 bytes) ---
-	call LABEL_FB1536
+	call Display_DeferOrDrawWall
 	sti8_24	132584, 255
 	sti8_24	132588, 255
 	sti8_24	132586, 255
@@ -55728,7 +55728,7 @@ LABEL_EFA532:
 	call LABEL_EF6F01
 	call 0xEF5C07
 	call 0xEF5C20
-	call LABEL_FB155F
+	call Display_DeferOrUpdateScreen
 	ret
 
 
@@ -59663,12 +59663,12 @@ Display_RedrawStatusBar:	; F00999
 	xor h, h
 	cp l, 0x12
 	jr nz, Scoop_SetupDisplayTables
-	call LABEL_FB1536
+	call Display_DeferOrDrawWall
 	sti8_24 0x03efa8, 0x00
 	ld xiy, 0xE0B99D
 	ld xix, 0xE0B9ED
 	call UIRender_TwoTableGeneral
-	call LABEL_FB155F
+	call Display_DeferOrUpdateScreen
 	jrl Scoop_Return
 
 Scoop_SetupDisplayTables:
@@ -70478,13 +70478,13 @@ SeMenu_WaveformSelect_Handler:
 	ldb c, 0x0
 	ldb a, 0xC
 	ldb a, 0x10
-	call LABEL_FB1536
+	call Display_DeferOrDrawWall
 	ret
 
 SeMenu_WaveformSelect_Process:
 	ldb c, 0x7
 	ldb a, 0xC
-	call LABEL_FB155F
+	call Display_DeferOrUpdateScreen
 	ret
 
 SeMenu_WaveformSelect_Apply:
@@ -234018,11 +234018,11 @@ LABEL_F980EE:
 	lds32 xiz, 0
 	ldfr_berp E, 0xF8
 	cp e, 0xE
-	jr nz, LABEL_F9816F
+	jr nz, SndParam_SendDiskMenuEvents
 	ldda8 e, 49279
 	ld a, e
 	and a, 0x3
-	jr z, LABEL_F9816F
+	jr z, SndParam_SendDiskMenuEvents
 	ldda8 c, 49278
 	ld a, c
 	and a, 0x3
@@ -234032,7 +234032,7 @@ LABEL_F980EE:
 	lds bc, 5
 	lds de, 4
 	call SoundParam_NotifyChange
-	jr LABEL_F9816F
+	jr SndParam_SendDiskMenuEvents
 
 LABEL_F98150:
 	and e, c
@@ -234045,7 +234045,7 @@ LABEL_F98150:
 
 LABEL_F9815F:
 	bit 0, e
-	jr z, LABEL_F9816F
+	jr z, SndParam_SendDiskMenuEvents
 	lds32 xwa, 3
 	ldw bc, 0xFFFF
 	lds de, 4
@@ -234053,7 +234053,7 @@ LABEL_F9815F:
 LABEL_F9816B:
 	call SndParam_LookupByKey
 
-LABEL_F9816F:
+SndParam_SendDiskMenuEvents:
 	ldda8 c, 49279
 	ldda8 a, 49278
 	and a, c
@@ -238888,13 +238888,13 @@ AcNamingWindowProc:
 	cp xwa, 0x1E00086
 	jrl z, LABEL_F9BE36
 	cp xwa, 0x1C00018
-	jrl z, LABEL_F9B803
+	jrl z, WndEvt_DispatchByEventCode
 	cp xwa, 0x1C0001A
-	jrl z, LABEL_F9B803
+	jrl z, WndEvt_DispatchByEventCode
 	cp xwa, 0x1C00017
-	jrl z, LABEL_F9B803
+	jrl z, WndEvt_DispatchByEventCode
 	cp xwa, 0x1C00019
-	jrl z, LABEL_F9B803
+	jrl z, WndEvt_DispatchByEventCode
 	lda xbc, (xsp + 34)
 	cp xwa, 0x1C0000F
 	jrl z, LABEL_F9B74B
@@ -239212,7 +239212,7 @@ LABEL_F9B7DC:
 	st16_24 0x0274dc, xwa
 	jrl LABEL_F9C115
 
-LABEL_F9B803:
+WndEvt_DispatchByEventCode:
 	ld xwa, (xsp + 50)
 	ld xbc, (xsp + 46)
 	ld xde, (xsp + 42)
@@ -239531,20 +239531,20 @@ LABEL_F9BF4A:
 	sub a, c
 	extz wa
 	st16_24 0x0274de, xwa
-	jrl LABEL_F9C003
+	jrl WndScroll_SendPageEvents
 
 LABEL_F9BF61:
 	cp a, 0x20
 	jr nz, LABEL_F9BF89
 	cpdi16_24 160994, 0
-	jrl nz, LABEL_F9C003
+	jrl nz, WndScroll_SendPageEvents
 	cpdi16_24 160986, 2
 	jr nz, LABEL_F9BF80
 	sti16_24 0x0274da, 0x0000
 
 LABEL_F9BF80:
 	sti16_24 0x0274de, 0x0025
-	jr LABEL_F9C003
+	jr WndScroll_SendPageEvents
 
 LABEL_F9BF89:
 	cp a, 0x5F
@@ -239555,7 +239555,7 @@ LABEL_F9BF89:
 
 LABEL_F9BF9E:
 	sti16_24 0x0274de, 0x001a
-	jr LABEL_F9C003
+	jr WndScroll_SendPageEvents
 
 LABEL_F9BFA7:
 	lda_24 xwa, 0xea9e00
@@ -239595,7 +239595,7 @@ LABEL_F9BFE9:
 	cp iz, (xbc)
 	jr ule, LABEL_F9BFB3
 
-LABEL_F9C003:
+WndScroll_SendPageEvents:
 	ld16_24 xde, 0x0274da
 	extz xde
 	ld xwa, (xsp + 50)
@@ -253951,7 +253951,7 @@ LABEL_FA55F7:
 	call Math_MultiplyAccumulate
 	add xhl, (xsp + 4)
 	cpw (xhl + 18), 0xFFFF
-	jr z, LABEL_FA567C
+	jr z, TitleProc_ToggleFlag
 	ld xwa, 0x1C00028
 	push xwa
 	lds32 xwa, 0
@@ -253961,7 +253961,7 @@ LABEL_FA55F7:
 	ld xde, 0xFFFFFFFF
 	call 0xFAA214
 	cps hl, 0
-	jr nz, LABEL_FA567C
+	jr nz, TitleProc_ToggleFlag
 	ld xwa, 0x1C00028
 	push xwa
 	lds32 xwa, 0
@@ -253970,7 +253970,7 @@ LABEL_FA55F7:
 	ld xbc, (xsp + 42)
 	ld xde, 0xFFFFFFFF
 	call 0xFAA135
-	jr LABEL_FA567C
+	jr TitleProc_ToggleFlag
 
 LABEL_FA564D:
 	ld wa, (xsp + 22)
@@ -253979,7 +253979,7 @@ LABEL_FA564D:
 	call Math_MultiplyAccumulate
 	add xhl, (xsp + 4)
 	cpw (xhl + 18), 0xFFFF
-	jr z, LABEL_FA567C
+	jr z, TitleProc_ToggleFlag
 	ld xwa, 0x1C00028
 	push xwa
 	lds32 xwa, 0
@@ -253989,7 +253989,7 @@ LABEL_FA564D:
 	ld xde, 0xFFFFFFFF
 	call 0xFAA257
 
-LABEL_FA567C:
+TitleProc_ToggleFlag:
 	ld16_24 xde, 0x02bc30
 	xor de, 0x1
 	st16_24 0x02bc30, xde
@@ -262820,9 +262820,9 @@ LABEL_FAA65A:
 	cps wa, 4
 	jr nz, LABEL_FAA690
 	cpdi16_24 257952, 4
-	jr z, LABEL_FAA6E9
+	jr z, Display_CheckScreenDimensions
 	cps wa, 4
-	jr nz, LABEL_FAA6E9
+	jr nz, Display_CheckScreenDimensions
 
 LABEL_FAA690:
 	calr LABEL_FAA5F5
@@ -262832,7 +262832,7 @@ LABEL_FAA690:
 
 LABEL_FAA69B:
 	ld wa, iz
-	call LABEL_FB28A4
+	call Table_LookupDword
 	ld (xsp + 6), xhl
 	ldto_berp A, 0xF8
 	extz wa
@@ -262841,18 +262841,18 @@ LABEL_FAA69B:
 	inc 1, iz
 	cp iz, 0x100
 	jr c, LABEL_FAA69B
-	jr LABEL_FAA6E9
+	jr Display_CheckScreenDimensions
 
 LABEL_FAA6BA:
 	cpdi16_24 197730, 0
-	jr z, LABEL_FAA6E9
+	jr z, Display_CheckScreenDimensions
 	lda xwa, (xsp + 6)
 	ld (xsp + 2), xwa
 	ldw iz, 0xE0
 
 LABEL_FAA6CC:
 	ld wa, iz
-	call LABEL_FB28A4
+	call Table_LookupDword
 	ld (xsp + 6), xhl
 	ldto_berp A, 0xF8
 	extz wa
@@ -262862,7 +262862,7 @@ LABEL_FAA6CC:
 	cp iz, 0xF0
 	jr c, LABEL_FAA6CC
 
-LABEL_FAA6E9:
+Display_CheckScreenDimensions:
 	lda_24 xwa, 0x030456
 	ld bc, (xwa + 6)
 	sub bc, (xwa + 2)
@@ -270574,7 +270574,7 @@ CaptureLcd:
 
 LABEL_FAF11B:
 	ld wa, iz
-	call LABEL_FB28A4
+	call Table_LookupDword
 	ld de, iz
 	sla de, 2
 	lda xwa, (xsp + 18)
@@ -270599,7 +270599,7 @@ LABEL_FAF11B:
 
 LABEL_FAF168:
 	ld wa, iz
-	call LABEL_FB28A4
+	call Table_LookupDword
 	ld de, iz
 	sla de, 2
 	lda xwa, (xsp + 18)
@@ -273120,7 +273120,7 @@ LABEL_FB1450:
 	popw	iz
 	ret
 
-LABEL_FB1536:
+Display_DeferOrDrawWall:
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
 	cps hl, 0
 	jr nz, LABEL_FB1550
@@ -273139,7 +273139,7 @@ LABEL_FB1550:
 	calr SetNeedUpdate
 	jrl DrawWall
 
-LABEL_FB155F:
+Display_DeferOrUpdateScreen:
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
 	cps hl, 0
 	jr nz, LABEL_FB1579
@@ -274382,7 +274382,7 @@ SetPaletteRGB:
 	ld (xde), xbc
 	ret
 
-LABEL_FB28A4:
+Table_LookupDword:
 	exts xwa
 	sll xwa, 2
 	ld xbc, 0x324FC
