@@ -43300,7 +43300,7 @@ LABEL_EF0792:
 	setda 7, 1030
 	ret
 
-LABEL_EF0797:
+Boot_CheckConfigFlag7:
 	ldcf_dd16 7, 0x06, 0x04
 	scc8 c, a
 	cps a, 1
@@ -43632,7 +43632,7 @@ LABEL_EF09EA:
 	calr Vga_SelectWritePlane
 	jp 0xEF23E8
 
-LABEL_EF0A73:
+Vga_RestoreMultiPlaneDisplay:
 	call 0xEF23EC
 	ld xwa, 0xF180
 	ld xbc, 0x1B4000
@@ -47027,7 +47027,7 @@ SeqEvtBuf_ReadAlternate:
 	pushw ix
 	push xde
 	lda_24 xde, 0x01f271
-	call LABEL_EF2FA1
+	call Seq_RingBuf_ReadByte_Large
 	pop xde
 	popw ix
 	ret
@@ -47232,7 +47232,7 @@ SeqAlt1_ReadAlternate:
 	pushw ix
 	push xde
 	lda_24	xde, 128901
-	call LABEL_EF2FA1
+	call Seq_RingBuf_ReadByte_Large
 	pop xde
 	popw ix
 	ret
@@ -47693,7 +47693,7 @@ SeqAlt3_CommitWrite:
 	pushw ix
 	push xde
 	lda_24	xde, 131521
-	call LABEL_EF2FA1
+	call Seq_RingBuf_ReadByte_Large
 	pop xde
 	popw ix
 	ret
@@ -47824,7 +47824,7 @@ SeqAlt5_CommitWrite:
 	pushw ix
 	push xde
 	lda_24	xde, 132053
-	call LABEL_EF2FA1
+	call Seq_RingBuf_ReadByte_Large
 	pop xde
 	popw ix
 	ret
@@ -48021,7 +48021,7 @@ LABEL_EF2F8F:
 	incm 1, (xde - 2)
 	ret
 
-LABEL_EF2FA1:
+Seq_RingBuf_ReadByte_Large:
 	ld ix, (xde - 10)
 	cp ix, (xde - 6)
 	jr nz, LABEL_EF2FAD
@@ -48984,7 +48984,7 @@ LABEL_EF3798:
 	pop xiz
 	ret
 
-LABEL_EF379A:
+Flash_IdentifyAndValidateChip:
 	dec 8, xsp
 	push xiz
 	ld (xsp + 10), a
@@ -49133,7 +49133,7 @@ LABEL_EF3923:
 	inc 2, xsp
 	ret
 
-LABEL_EF3929:
+Flash_EraseSectorWithBankSelect:
 	lda xsp, (xsp - 10)
 	push xiz
 	ld (xsp + 8), xbc
@@ -49302,10 +49302,10 @@ LABEL_EF3B05:
 	cps l, 4
 	call_24 nz, 0xEF3CD1
 	lds wa, 1
-	calr LABEL_EF379A
+	calr Flash_IdentifyAndValidateChip
 	st16_24 0x0205e0, xhl
 	lds wa, 2
-	calr LABEL_EF379A
+	calr Flash_IdentifyAndValidateChip
 	st16_24 0x0205e2, xhl
 	ret
 
@@ -49413,7 +49413,7 @@ Flash_EraseSectorAndWrite:
 	ld a, (xsp + 8)
 	extz wa
 	ld xbc, (xsp)
-	calr LABEL_EF3929
+	calr Flash_EraseSectorWithBankSelect
 	calr Flash_CheckReady
 	cp hl, 0xFFFF
 	jr nz, LABEL_EF3C2B
@@ -49448,7 +49448,7 @@ FlashWrite:
 	ld a, (xsp + 10)
 	extz wa
 	ld xbc, xiz
-	calr LABEL_EF3929
+	calr Flash_EraseSectorWithBankSelect
 	ld xbc, xiz
 	ldi_werp 0xE6, 0
 	lda_24 xde, 0x069800
@@ -50579,7 +50579,7 @@ LABEL_EF46EB:
 	inc 2, xsp
 	ret
 
-LABEL_EF4702:
+Flash_BurnWithProgress:
 	pushw iz
 	ldw iz, 0x32
 	lds32 xwa, 0
@@ -50635,7 +50635,7 @@ Erase_and_Burn____when_disk_is_valid:	; EF4745
 
 ; "Technics KN5000 Program DATA FILE 1/2"
 HANDLE_UPDATE_FILE_TYPE_ID_001h:	; EF4784
-	calr LABEL_EF4702
+	calr Flash_BurnWithProgress
 	calr SHOW_FD_TO_FLASH_MEMORY_MESSAGE
 	ldw wa, 0x24
 	ld xbc, 0x800000
@@ -50649,7 +50649,7 @@ HANDLE_UPDATE_FILE_TYPE_ID_001h:	; EF4784
 
 ; "Technics KN5000 Table DATA FILE 1/2"
 HANDLE_UPDATE_FILE_TYPE_ID_003h:	; EF47A4
-	calr LABEL_EF4702
+	calr Flash_BurnWithProgress
 	calr SHOW_FD_TO_FLASH_MEMORY_MESSAGE
 	ldw wa, 0x24
 	ld xbc, 0x800000
@@ -50695,11 +50695,11 @@ LABEL_EF47F5:
 HANDLE_UPDATE_FILE_TYPE_ID_007h:	; EF47FA
 	lds wa, 1
 	ld xbc, 0x3E0000
-	call LABEL_EF3929
+	call Flash_EraseSectorWithBankSelect
 	lds wa, 1
 	ld xbc, 0x3F0000
-	call LABEL_EF3929
-	calr LABEL_EF4702
+	call Flash_EraseSectorWithBankSelect
+	calr Flash_BurnWithProgress
 	calr SHOW_FD_TO_FLASH_MEMORY_MESSAGE
 	calr LZ_Decompress_Init
 	calr LZSS_Decompress_ToFlash
@@ -50708,7 +50708,7 @@ HANDLE_UPDATE_FILE_TYPE_ID_007h:	; EF47FA
 
 ; "Technics KN5000 Table DATA FILE PCK"
 HANDLE_UPDATE_FILE_TYPE_ID_008h:	; EF481E
-	calr LABEL_EF4702
+	calr Flash_BurnWithProgress
 	calr SHOW_FD_TO_FLASH_MEMORY_MESSAGE
 	calr LZ_Decompress_Init
 
@@ -50730,7 +50730,7 @@ SHOW_ILLEGAL_DISK_MESSAGE:	; EF482A
 LABEL_EF4841:
 	jr LABEL_EF4841
 
-LABEL_EF4843:
+BusyWait_XWA_Cycles:
 	lds32 xbc, 0
 	cp xbc, xwa
 	ret nc
@@ -50769,18 +50769,18 @@ LABEL_EF4883:
 
 LABEL_EF4889:
 	ld xwa, 0x186A0
-	jr LABEL_EF4843
+	jr BusyWait_XWA_Cycles
 
 LABEL_EF4890:
 	chgda_24 2, 1441796
 	ld xwa, 0x249F0
-	calr LABEL_EF4843
+	calr BusyWait_XWA_Cycles
 	jr LABEL_EF4890
 
 LABEL_EF489F:
 	chgda_24 3, 1441796
 	ld xwa, 0x249F0
-	calr LABEL_EF4843
+	calr BusyWait_XWA_Cycles
 	jr LABEL_EF489F
 
 ; ===========================================================================
@@ -51029,7 +51029,7 @@ HDAE5000_Parport_Setup:	; EF4BCC
 	sti8_24 0x160004, 0x00
 	sti8_24 0x160004, 0x0f
 	ld xwa, 0xDBBA0
-	calr LABEL_EF4843
+	calr BusyWait_XWA_Cycles
 	sti8_24 0x160004, 0x00
 
 Parport_WaitDataReady:
@@ -51418,7 +51418,7 @@ FLASH_MEM_UPDATE:	; EF4F6F
 
 LABEL_EF4FE4:
 	lds wa, 2
-	call LABEL_EF379A
+	call Flash_IdentifyAndValidateChip
 	cp hl, 0xFFFF
 	jr z, flash_update__not_today
 	cpi_berp 0xFB, 6	; Is it "HD-AEPRG DATA FILE"?
@@ -51986,7 +51986,7 @@ LABEL_EF5D4D:
 	pop xwa
 	ret
 
-LABEL_EF5D56:
+Scoop_ConditionalCurveUpdate:
 	bitda_24 0, 132582
 	jr nz, LABEL_EF5D5E
 	ret
@@ -53031,7 +53031,7 @@ LABEL_EF6CEB:
 	call 0xEF6C37
 	stda8	4339, a
 	stdi8	3571, 4
-	call LABEL_EF6DB7
+	call VoiceSlot_ReadParamsWithSaveRestore
 	call 0xEFF9EC
 	jp 0xEF6DAD
 LABEL_EF6D2D:
@@ -53042,7 +53042,7 @@ LABEL_EF6D2D:
 	call 0xEF6C37
 	stda8	4339, a
 	stdi8	3571, 4
-	call LABEL_EF6DB7
+	call VoiceSlot_ReadParamsWithSaveRestore
 	call 0xEFF8DA
 	jp 0xEF6DAD
 LABEL_EF6D4E:
@@ -53053,7 +53053,7 @@ LABEL_EF6D4E:
 	call 0xEF6C37
 	stda8	4339, a
 	stdi8	3571, 4
-	call LABEL_EF6DB7
+	call VoiceSlot_ReadParamsWithSaveRestore
 	call 0xEFF98D
 	jp 0xEF6DAD
 LABEL_EF6D6F:
@@ -53075,20 +53075,20 @@ LABEL_EF6D90:
 	call 0xEF6C37
 	stda8	4339, a
 	stdi8	3571, 4
-	call LABEL_EF6DB7
+	call VoiceSlot_ReadParamsWithSaveRestore
 	call 0xEFFB02
 LABEL_EF6DAD:
 	; --- Common tail ---
 	call 0xEF5C07
 	.byte 0xc1, 0xe2, 0xe3, 0x3e, 0x08		; or (0xE3E2), 0x08  [C1 prefix]
 	ret
-LABEL_EF6DB7:
+VoiceSlot_ReadParamsWithSaveRestore:
 	; --- Helper 1: guard on W, parameter setup + calls (44 bytes) ---
 	call 0xEFD286
 	cps	w, 0
 	jrl z, LABEL_EF6DE2
 	xor	a, a
-	call LABEL_EFD0B7
+	call VoiceSlot_SaveState
 	ldda8	e, 3571
 	xor d, d
 	call 0xEFC4D1
@@ -53096,7 +53096,7 @@ LABEL_EF6DB7:
 	ldda8	w, 4339
 	call 0xEFC49D
 	xor	a, a
-	call LABEL_EFD10B
+	call VoiceSlot_RestoreState
 LABEL_EF6DE2:
 	ret
 LABEL_EF6DE3:
@@ -53105,7 +53105,7 @@ LABEL_EF6DE3:
 	cps	w, 0
 	jrl z, LABEL_EF6E28
 	xor	a, a
-	call LABEL_EFD0B7
+	call VoiceSlot_SaveState
 	call VoiceSlot_ReadCurrentParams
 	ldda8	w, 4339
 	and w, 0x80
@@ -53121,7 +53121,7 @@ LABEL_EF6DE3:
 	and w, 0x7F
 	call 0xEFC49D
 	xor	a, a
-	call LABEL_EFD10B
+	call VoiceSlot_RestoreState
 LABEL_EF6E28:
 	ret
 
@@ -54718,10 +54718,10 @@ LABEL_EF8FF6:
 LABEL_EF9004:
 	; --- Flag-check with calls (42 bytes) ---
 	xor	a, a
-	call LABEL_EFD0B7
+	call VoiceSlot_SaveState
 	call LABEL_EFC7B2
 	xor	a, a
-	call LABEL_EFD10B
+	call VoiceSlot_RestoreState
 	call VoiceSlot_ReadCurrentParams
 	ld xhl, 0x00000D54
 	and a, 0xf0
@@ -54979,7 +54979,7 @@ AccPedal_ScanVoiceSlots:
 	push xiz
 	anddi8 3411, 253
 	xor a, a
-	call LABEL_EFD0B7
+	call VoiceSlot_SaveState
 	call LABEL_EFAD4E
 	call VoiceSlot_ReadCurrentParams
 	cp a, 0x81
@@ -55023,7 +55023,7 @@ LABEL_EF96A8:
 
 LABEL_EF96B1:
 	xor a, a
-	call LABEL_EFD10B
+	call VoiceSlot_RestoreState
 	pop xiz
 	pop xiy
 	pop xix
@@ -55925,7 +55925,7 @@ LABEL_EFAA34:
 
 LABEL_EFAA40:
 	bitda 3, 3411
-	jrl z, LABEL_EFAAA0
+	jrl z, ControllerMode_UpdateFlags
 	bitda 0, 3924
 	jrl z, LABEL_EFAA84
 	ldda8 c, 3925
@@ -55948,15 +55948,15 @@ LABEL_EFAA40:
 LABEL_EFAA84:
 	ld xiy, 0xD5E
 	cp (xiy), 0x0
-	jrl z, LABEL_EFAAA0
+	jrl z, ControllerMode_UpdateFlags
 	call LABEL_F9951A
 	cps hl, 0
-	jrl nz, LABEL_EFAAA0
+	jrl nz, ControllerMode_UpdateFlags
 	decm8 1, (xiy)
 	cp (xiy), 0x0
-	jrl nz, LABEL_EFAAA0
+	jrl nz, ControllerMode_UpdateFlags
 
-LABEL_EFAAA0:
+ControllerMode_UpdateFlags:
 	cpdi8 36150, 138
 	jrl nz, LABEL_EFAAB9
 	cpdi8 3429, 3
@@ -57609,7 +57609,7 @@ LABEL_EFD08E:
 	.byte 0x0f, 0x00, 0x06, 0x04, 0x05, 0x03, 0x07, 0x02
 	.byte 0x07, 0x01, 0x07, 0x07, 0x07
 
-LABEL_EFD0B7:
+VoiceSlot_SaveState:
 	pushw wa
 	push xhl
 	push xiz
@@ -57642,7 +57642,7 @@ LABEL_EFD0B7:
 	popw wa
 	ret
 
-LABEL_EFD10B:
+VoiceSlot_RestoreState:
 	pushw wa
 	push xhl
 	push xiz
@@ -59721,7 +59721,7 @@ Scoop_SetPartIndexAndDisplay:
 	ld_srib3 A, 0x03, 0xF4, 0xE0
 	stda8 4493, a
 	ld xiy, 0xE0B452
-	call LABEL_EF5D56
+	call Scoop_ConditionalCurveUpdate
 
 Scoop_Return:
 	ret
@@ -59825,7 +59825,7 @@ Scoop_InitDisplayFull:
 	ld_srib3 A, 0x03, 0xF4, 0xE0
 	stda8 4493, a
 	ld xiy, 0xE0B452
-	call LABEL_EF5D56
+	call Scoop_ConditionalCurveUpdate
 	ret
 
 Display_RedrawMainContent:	; F00C33
@@ -60363,7 +60363,7 @@ Scoop_ButtonLabels_DrawCategoryData:
 	pushw bc
 	push xiy
 	push xix
-	call LABEL_EF5D56
+	call Scoop_ConditionalCurveUpdate
 	pop xix
 	pop xiy
 	popw bc
@@ -60405,7 +60405,7 @@ Scoop_EventHandler_ValueChange:
 
 Scoop_EventHandler_ValueChangeData:
 	pushw bc
-	call LABEL_EF5D56
+	call Scoop_ConditionalCurveUpdate
 	popw bc
 	pop xiy
 
@@ -75234,7 +75234,7 @@ LABEL_F1700A:
 	ld wa, (xbc)
 	ld c, (xsp + 4)
 	extz bc
-	calr LABEL_F1710C
+	calr Pack12BitValueWithBank
 	ld wa, hl
 	ldto_werp BC, 0xFA
 	extz xbc
@@ -75262,7 +75262,7 @@ LABEL_F1704A:
 	ld wa, (xde + 96)
 	ld c, (xsp + 4)
 	extz bc
-	calr LABEL_F1710C
+	calr Pack12BitValueWithBank
 	ld wa, hl
 	ld de, iz
 	extz xde
@@ -75293,7 +75293,7 @@ LABEL_F170A2:
 	ld wa, (xwa + 1)
 	ld c, (xsp + 4)
 	extz bc
-	calr LABEL_F1710C
+	calr Pack12BitValueWithBank
 	ld wa, hl
 	ldto_werp BC, 0xFA
 	extz xbc
@@ -75306,7 +75306,7 @@ LABEL_F170A2:
 	ld wa, (xbc + 3)
 	ld c, (xsp + 4)
 	extz bc
-	calr LABEL_F1710C
+	calr Pack12BitValueWithBank
 	ld wa, hl
 	ldto_werp BC, 0xFA
 	extz xbc
@@ -75321,7 +75321,7 @@ LABEL_F170A2:
 	inc 2, xsp
 	ret
 
-LABEL_F1710C:
+Pack12BitValueWithBank:
 	ld hl, wa
 	cp hl, 0xFFFF
 	ret z
@@ -75402,7 +75402,7 @@ NoteEventBuffer_Store:
 NOTE_EVENT_DISPATCH_2:	; F171C4
 	ldda32 xwa, 3190
 	ld (xsp + 4), xwa
-	jrl LABEL_F1725A
+	jrl Flash_WriteSectorWithMirrorCopy
 NOTE_EVENT_DISPATCH_2b:	; F171CE
 	ldda32 xwa, 3194
 	ld (xsp + 4), xwa
@@ -75438,25 +75438,25 @@ LABEL_F17203:
 	jr LABEL_F172A4
 	ldda32 xwa, 3198
 	ld (xsp + 4), xwa
-	jr LABEL_F1725A
+	jr Flash_WriteSectorWithMirrorCopy
 	ldda32 xwa, 3202
 	ld (xsp + 4), xwa
 	jr LABEL_F171D5
 	ldda32 xwa, 3206
 	ld (xsp + 4), xwa
-	jr LABEL_F1725A
+	jr Flash_WriteSectorWithMirrorCopy
 	ldda32 xwa, 3210
 	ld (xsp + 4), xwa
 	jr LABEL_F171D5
 	ldda32 xwa, 3214
 	ld (xsp + 4), xwa
-	jr LABEL_F1725A
+	jr Flash_WriteSectorWithMirrorCopy
 
 LABEL_F17255:
 	cps a, 0
 	jrl nz, LABEL_F171D5
 
-LABEL_F1725A:
+Flash_WriteSectorWithMirrorCopy:
 	lds wa, 1
 	ld xbc, (xsp)
 	ld xde, (xsp + 4)
@@ -77808,9 +77808,9 @@ LABEL_F1A78B:
 	lda_24 xhl, 0x03da06
 	dec 1, wa
 	cps wa, 0
-	jrl lt, LABEL_F1A86F
+	jrl lt, WidgetHandler_PostEventAndReturnZero
 	cps wa, 7
-	jrl gt, LABEL_F1A86F
+	jrl gt, WidgetHandler_PostEventAndReturnZero
 	add wa, wa
 	lda_24 xix, 0xe1cef0
 	ld_sriw3 WA, 0x07, 0xF0, 0xE0
@@ -77828,7 +77828,7 @@ UI_COMPONENT_DISPATCH:	; F1A7CB
 	push xde	; Push XDE
 	call Audio_SendCommand	; Call handler function
 	lda xsp, (xsp + 10)	; Clean up stack (10 bytes)
-	jrl LABEL_F1A86F	; Jump to end
+	jrl WidgetHandler_PostEventAndReturnZero	; Jump to end
 UI_COMPONENT_DISPATCH_CASE1:	; F1A7E5
 	ldda8 a, 13518	; Load byte from UI state
 	srl a, 7	; Shift right logical by 7
@@ -77848,7 +77848,7 @@ UI_COMPONENT_DISPATCH_CASE1:	; F1A7E5
 	push xde	; Push XDE
 	call Audio_SendCommand	; Call handler function
 	lda xsp, (xsp + 16)	; Clean up stack (16 bytes)
-	jr LABEL_F1A86F	; Jump to end
+	jr WidgetHandler_PostEventAndReturnZero	; Jump to end
 UI_COMPONENT_DISPATCH_CASE2:	; F1A820
 	ldda8 c, 13545	; Load byte from UI state
 	ld xwa, 0x3D9C6	; Load table address
@@ -77886,7 +77886,7 @@ UI_COMPONENT_DISPATCH_PUSH_CALL:	; F1A868
 	call Audio_SendCommand	; Call handler function
 	inc 8, xsp	; Increment stack pointer
 
-LABEL_F1A86F:
+WidgetHandler_PostEventAndReturnZero:
 	cpw (xsp + 22), 0x4
 	jr z, LABEL_F1A888
 	call 0xFA44D0
@@ -98418,7 +98418,7 @@ LABEL_F281D9:
 
 LABEL_F281DF:
 	call SMF_CheckAndFlush
-	call LABEL_EF0A73
+	call Vga_RestoreMultiPlaneDisplay
 	ldda8 a, 4599
 	st8_24 0x00ffe3, a
 	call SoundBank_LoadToWorkRAM
@@ -98429,7 +98429,7 @@ LABEL_F281FE:
 	jr SMF_PopReturn
 
 LABEL_F28200:
-	call LABEL_EF0A73
+	call Vga_RestoreMultiPlaneDisplay
 	ldda8 a, 4599
 	st8_24 0x00ffe3, a
 	call SoundBank_LoadToWorkRAM
@@ -98449,7 +98449,7 @@ SMF_FlushAndFinalize:
 	ldda32 xhl, 6701
 	stda16 6699, xhl
 	pop xhl
-	call LABEL_EF0A73
+	call Vga_RestoreMultiPlaneDisplay
 	ldda8 a, 4599
 	st8_24 0x00ffe3, a
 	call SoundBank_LoadToWorkRAM
@@ -194025,7 +194025,7 @@ LABEL_F6BCA0:
 
 LABEL_F6BCD6:
 	resda 2, 10407
-	call LABEL_EF0A73
+	call Vga_RestoreMultiPlaneDisplay
 	jr LABEL_F6BCFC
 
 LABEL_F6BCE0:
@@ -221533,7 +221533,7 @@ FDemoText_ProcessVoiceFlags:
 	stda8 36166, a
 
 FDemoText_ProcessVoiceFlags_ReadState:
-	call LABEL_EF0797
+	call Boot_CheckConfigFlag7
 	cps hl, 0
 	jrl z, FDemoText_ProcessOutput_ClearAll
 	ld8_24 a, 0x0247ee
@@ -261572,7 +261572,7 @@ MainPostEvent:
 LABEL_FA9B6C:
 	lds wa, 7
 	call TaskSched_SignalEvent
-	call LABEL_EF0797
+	call Boot_CheckConfigFlag7
 	cps hl, 0
 	jrl z, LABEL_FA9C02
 	lds wa, 3
@@ -261803,7 +261803,7 @@ ApPostEvent:
 LABEL_FA9D67:
 	lds wa, 4
 	call TaskSched_SignalEvent
-	call LABEL_EF0797
+	call Boot_CheckConfigFlag7
 	cps hl, 0
 	jrl z, LABEL_FA9E03
 	lds wa, 3
@@ -261869,7 +261869,7 @@ ApDeliveryEvent:
 LABEL_FA9E17:
 	lds wa, 4
 	call TaskSched_SignalEvent
-	call LABEL_EF0797
+	call Boot_CheckConfigFlag7
 	cps hl, 0
 	jrl z, LABEL_FA9F03
 	lds wa, 3
@@ -280954,7 +280954,7 @@ Test_Custom_data_ROM_IC19:
 	pushw iz
 	ld (xsp + 6), a
 	lds wa, 1
-	call LABEL_EF379A
+	call Flash_IdentifyAndValidateChip
 	cp hl, 0xFFFF
 	jr nz, LABEL_FB75E9
 	setm 1, (xsp + 6)
