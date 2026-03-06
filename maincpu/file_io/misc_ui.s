@@ -392,7 +392,7 @@ DrawString_Centered:
 	ld (xsp + 10), xwa
 	ld xwa, (xsp + 6)
 	push xwa
-	call LABEL_FF0FA0
+	call Strlen
 	inc 4, xsp
 	ld (xsp + 2), hl
 	lds de, 0
@@ -464,7 +464,7 @@ WaitingFunc_DrawMessage:
 	lda_24 xbc, 0xea9718
 	ld_sril3 XIZ, 0x07, 0xE4, 0xE0
 	push xiz
-	call LABEL_FF0FA0
+	call Strlen
 	inc 4, xsp
 	srl hl, 1
 	push_sd24w 0x8C, 0x74, 0x02

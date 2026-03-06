@@ -35569,9 +35569,9 @@ LABEL_EE304C:
 	.byte 0x00, 0x20, 0xf0, 0x50, 0x2d, 0x01, 0x28, 0x12
 	.byte 0x48, 0x00, 0x20, 0x00, 0x01, 0x60, 0xf0, 0x50
 	.byte 0x2d, 0x01, 0x28, 0x12, 0x48, 0x02, 0x00, 0xff
-LABEL_EE3678:
+DisplayScript_NullNode:
 	.byte 0xff, 0xff, 0x78, 0x36, 0xee, 0x00, 0x12, 0x07
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0xff, 0x0a, 0x78, 0x36
 	.byte 0xee, 0x00
 LABEL_EE368A:
@@ -35589,48 +35589,48 @@ LABEL_EE36A2:
 	.byte 0xff, 0x09, 0x78, 0x36
 	.byte 0xee, 0x00, 0x01, 0x00, 0xae, 0x36, 0xee, 0x00
 	.byte 0xff, 0x08, 0x78, 0x36, 0xee, 0x00, 0x01, 0x24
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0x02, 0x25, 0x78, 0x36
 	.byte 0xee, 0x00, 0xff, 0x09, 0x78, 0x36, 0xee, 0x00
 	.byte 0x09, 0x00, 0xc6, 0x36, 0xee, 0x00, 0xff, 0x08
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0x7e, 0x01, 0x78, 0x36
 	.byte 0xee, 0x00, 0xff, 0x08, 0x78, 0x36, 0xee, 0x00
 LABEL_EE36F0:
 	.byte 0x7e, 0x02, 0x78, 0x36, 0xee, 0x00, 0xff, 0x08
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0x7e, 0x03, 0x78, 0x36
 	.byte 0xee, 0x00, 0xff, 0x08, 0x78, 0x36, 0xee, 0x00
 	.byte 0x7e, 0x04, 0x78, 0x36, 0xee, 0x00, 0xff, 0x08
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0x7e, 0x05, 0x78, 0x36
 	.byte 0xee, 0x00, 0xff, 0x08, 0x78, 0x36, 0xee, 0x00
 	.byte 0x7e, 0x04, 0x78, 0x36, 0xee, 0x00, 0xff, 0x08
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0x00, 0x14, 0x78, 0x36
 	.byte 0xee, 0x00, 0xff, 0x0d, 0x78, 0x36, 0xee, 0x00
 	.byte 0x30, 0x00, 0x2c, 0x37, 0xee, 0x00, 0xff, 0x0c
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0x00, 0x13, 0x78, 0x36
 	.byte 0xee, 0x00, 0xff, 0x10, 0x78, 0x36, 0xee, 0x00
 	.byte 0x20, 0x00, 0x44, 0x37, 0xee, 0x00, 0xff, 0x0f
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0x01, 0x00, 0x50, 0x37
 	.byte 0xee, 0x00, 0xff, 0x0e, 0x78, 0x36, 0xee, 0x00
 	.byte 0x00, 0x00, 0x5c, 0x37, 0xee, 0x00, 0xff, 0x0d
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0x00, 0x12, 0x78, 0x36
 	.byte 0xee, 0x00, 0xff, 0x10, 0x78, 0x36, 0xee, 0x00
 	.byte 0x10, 0x00, 0x74, 0x37, 0xee, 0x00, 0xff, 0x0f
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0x00, 0x00, 0x80, 0x37
 	.byte 0xee, 0x00, 0xff, 0x0e, 0x78, 0x36, 0xee, 0x00
 	.byte 0x00, 0x00, 0x8c, 0x37, 0xee, 0x00, 0xff, 0x0d
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0x00, 0x00, 0x98, 0x37
 	.byte 0xee, 0x00, 0x10, 0x00, 0x68, 0x37, 0xee, 0x00
 	.byte 0xff, 0x0c, 0x78, 0x36, 0xee, 0x00, 0x00, 0x19
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0xff, 0x0d, 0x78, 0x36
 	.byte 0xee, 0x00
 LABEL_EE37C2:
@@ -35640,7 +35640,7 @@ LABEL_EE37C2:
 	.byte 0xff, 0x0f, 0x78, 0x36
 	.byte 0xee, 0x00, 0x00, 0x00, 0xce, 0x37, 0xee, 0x00
 	.byte 0xff, 0x0e, 0x78, 0x36, 0xee, 0x00, 0x20, 0x17
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0xff, 0x10, 0x78, 0x36
 	.byte 0xee, 0x00
 LABEL_EE37F2:
@@ -35650,11 +35650,11 @@ LABEL_EE37F2:
 	.byte 0xff, 0x0e, 0x78, 0x36
 	.byte 0xee, 0x00, 0x00, 0x00, 0xfe, 0x37, 0xee, 0x00
 	.byte 0x20, 0x00, 0xda, 0x37, 0xee, 0x00, 0xff, 0x0d
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0x00, 0x00, 0x0a, 0x38
 	.byte 0xee, 0x00, 0x02, 0x00, 0xb6, 0x37, 0xee, 0x00
 	.byte 0xff, 0x0c, 0x78, 0x36, 0xee, 0x00, 0x40, 0x11
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0xff, 0x0d, 0x78, 0x36
 	.byte 0xee, 0x00
 LABEL_EE383A:
@@ -35664,7 +35664,7 @@ LABEL_EE383A:
 	.byte 0xff, 0x0f, 0x78, 0x36
 	.byte 0xee, 0x00, 0x00, 0x00, 0x46, 0x38, 0xee, 0x00
 	.byte 0xff, 0x0e, 0x78, 0x36, 0xee, 0x00, 0x60, 0x0f
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0xff, 0x10, 0x78, 0x36
 	.byte 0xee, 0x00
 LABEL_EE386A:
@@ -35674,12 +35674,12 @@ LABEL_EE386A:
 	.byte 0xff, 0x0e, 0x78, 0x36
 	.byte 0xee, 0x00, 0x00, 0x00, 0x76, 0x38, 0xee, 0x00
 	.byte 0x60, 0x00, 0x52, 0x38, 0xee, 0x00, 0xff, 0x0d
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 LABEL_EE3894:
 	.byte 0x00, 0x00, 0x82, 0x38
 	.byte 0xee, 0x00, 0x27, 0x00, 0x2e, 0x38, 0xee, 0x00
 	.byte 0xff, 0x0c, 0x78, 0x36, 0xee, 0x00, 0x50, 0x0e
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0xff, 0x10, 0x78, 0x36
 	.byte 0xee, 0x00
 LABEL_EE38B2:
@@ -35701,27 +35701,27 @@ LABEL_EE38E2:
 	.byte 0x10, 0x00, 0xbe, 0x38
 	.byte 0xee, 0x00, 0xff, 0x0d, 0x78, 0x36, 0xee, 0x00
 	.byte 0x00, 0x00, 0xee, 0x38, 0xee, 0x00, 0xff, 0x0c
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0x30, 0x0c, 0x78, 0x36
 	.byte 0xee, 0x00, 0xff, 0x10, 0x78, 0x36, 0xee, 0x00
 	.byte 0x59, 0x00, 0x0c, 0x39, 0xee, 0x00, 0xff, 0x0f
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0x04, 0x00, 0x18, 0x39
 	.byte 0xee, 0x00, 0xff, 0x0e, 0x78, 0x36, 0xee, 0x00
 	.byte 0x00, 0x00, 0x24, 0x39, 0xee, 0x00, 0xff, 0x0d
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0x00, 0x00, 0x30, 0x39
 	.byte 0xee, 0x00, 0xff, 0x0c, 0x78, 0x36, 0xee, 0x00
 	.byte 0x40, 0x0b, 0x78, 0x36, 0xee, 0x00, 0xff, 0x10
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0x0c, 0x00, 0x48, 0x39
 	.byte 0xee, 0x00, 0xff, 0x0f, 0x78, 0x36, 0xee, 0x00
 	.byte 0x00, 0x00, 0x54, 0x39, 0xee, 0x00, 0xff, 0x0e
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0x00, 0x00, 0x60, 0x39
 	.byte 0xee, 0x00, 0xff, 0x0d, 0x78, 0x36, 0xee, 0x00
 	.byte 0x00, 0x00, 0x6c, 0x39, 0xee, 0x00, 0xff, 0x0c
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0x20, 0x00, 0x78, 0x39
 	.byte 0xee, 0x00, 0x24, 0x00, 0x3c, 0x39, 0xee, 0x00
 	.byte 0x38, 0x00, 0x00, 0x39, 0xee, 0x00, 0x50, 0x00
@@ -35729,11 +35729,11 @@ LABEL_EE38E2:
 	.byte 0x60, 0x00, 0xa4, 0x37
 	.byte 0xee, 0x00, 0x61, 0x00, 0x38, 0x37, 0xee, 0x00
 	.byte 0x48, 0x00, 0x1c, 0x38, 0xee, 0x00, 0xff, 0x0b
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0x12, 0x00, 0x84, 0x39
 	.byte 0xee, 0x00, 0xff, 0x0a, 0x78, 0x36, 0xee, 0x00
 	.byte 0x28, 0x00, 0xb4, 0x39, 0xee, 0x00, 0xff, 0x09
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0x01, 0x00, 0xc0, 0x39
 	.byte 0xee, 0x00, 0xff, 0x08, 0x78, 0x36, 0xee, 0x00
 LABEL_EE39D8:
@@ -35748,11 +35748,11 @@ LABEL_EE39EA:
 	.byte 0xff, 0x0e, 0x78, 0x36
 	.byte 0xee, 0x00, 0x07, 0x01, 0x78, 0x36, 0xee, 0x00
 	.byte 0x02, 0x1d, 0x02, 0x3a, 0xee, 0x00, 0xff, 0x10
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0x00, 0x00, 0x08, 0x3a
 	.byte 0xee, 0x00, 0xff, 0x0f, 0x78, 0x36, 0xee, 0x00
 	.byte 0x00, 0x00, 0x14, 0x3a, 0xee, 0x00, 0xff, 0x0e
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0x07, 0x02, 0x78, 0x36
 	.byte 0xee, 0x00
 LABEL_EE3A32:
@@ -35764,11 +35764,11 @@ LABEL_EE3A32:
 LABEL_EE3A4A:
 	.byte 0x00, 0x00, 0x3e, 0x3a, 0xee, 0x00
 	.byte 0xff, 0x0e, 0x78, 0x36, 0xee, 0x00, 0x07, 0x02
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0x01, 0x1d, 0x56, 0x3a
 	.byte 0xee, 0x00, 0xff, 0x10, 0x78, 0x36, 0xee, 0x00
 	.byte 0x00, 0x00, 0x5c, 0x3a, 0xee, 0x00, 0xff, 0x0f
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0x00, 0x00, 0x68, 0x3a
 	.byte 0xee, 0x00, 0xff, 0x0e, 0x78, 0x36, 0xee, 0x00
 LABEL_EE3A80:
@@ -35783,11 +35783,11 @@ LABEL_EE3A92:
 	.byte 0xff, 0x0e, 0x78, 0x36
 	.byte 0xee, 0x00, 0x07, 0x03, 0x78, 0x36, 0xee, 0x00
 	.byte 0x01, 0x1d, 0xaa, 0x3a, 0xee, 0x00, 0xff, 0x10
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0x00, 0x00, 0xb0, 0x3a
 	.byte 0xee, 0x00, 0xff, 0x0f, 0x78, 0x36, 0xee, 0x00
 	.byte 0x00, 0x00, 0xbc, 0x3a, 0xee, 0x00, 0xff, 0x0e
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0x07, 0x04, 0x78, 0x36
 	.byte 0xee, 0x00
 LABEL_EE3ADA:
@@ -35797,11 +35797,11 @@ LABEL_EE3ADA:
 	.byte 0xff, 0x0f, 0x78, 0x36
 	.byte 0xee, 0x00, 0x00, 0x00, 0xe6, 0x3a, 0xee, 0x00
 	.byte 0xff, 0x0e, 0x78, 0x36, 0xee, 0x00, 0x07, 0x04
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0x01, 0x1d, 0xfe, 0x3a
 	.byte 0xee, 0x00, 0xff, 0x10, 0x78, 0x36, 0xee, 0x00
 	.byte 0x00, 0x00, 0x04, 0x3b, 0xee, 0x00, 0xff, 0x0f
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 LABEL_EE3B1C:
 	.byte 0x00, 0x00, 0x10, 0x3b
 	.byte 0xee, 0x00, 0xff, 0x0e, 0x78, 0x36, 0xee, 0x00
@@ -35817,11 +35817,11 @@ LABEL_EE3B3A:
 	.byte 0xff, 0x0e, 0x78, 0x36
 	.byte 0xee, 0x00, 0x07, 0x05, 0x78, 0x36, 0xee, 0x00
 	.byte 0x01, 0x1d, 0x52, 0x3b, 0xee, 0x00, 0xff, 0x10
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0x00, 0x00, 0x58, 0x3b
 	.byte 0xee, 0x00, 0xff, 0x0f, 0x78, 0x36, 0xee, 0x00
 	.byte 0x00, 0x00, 0x64, 0x3b, 0xee, 0x00, 0xff, 0x0e
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0x07, 0x06, 0x78, 0x36
 	.byte 0xee, 0x00
 LABEL_EE3B82:
@@ -35833,11 +35833,11 @@ LABEL_EE3B82:
 LABEL_EE3B9A:
 	.byte 0x00, 0x00, 0x8e, 0x3b, 0xee, 0x00
 	.byte 0xff, 0x0e, 0x78, 0x36, 0xee, 0x00, 0x07, 0x06
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0x01, 0x1d, 0xa6, 0x3b
 	.byte 0xee, 0x00, 0xff, 0x10, 0x78, 0x36, 0xee, 0x00
 	.byte 0x00, 0x00, 0xac, 0x3b, 0xee, 0x00, 0xff, 0x0f
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0x00, 0x00, 0xb8, 0x3b
 	.byte 0xee, 0x00, 0xff, 0x0e, 0x78, 0x36, 0xee, 0x00
 LABEL_EE3BD0:
@@ -35852,11 +35852,11 @@ LABEL_EE3BE2:
 	.byte 0xff, 0x0e, 0x78, 0x36
 	.byte 0xee, 0x00, 0x07, 0x08, 0x78, 0x36, 0xee, 0x00
 	.byte 0x01, 0x1b, 0xfa, 0x3b, 0xee, 0x00, 0xff, 0x10
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0x00, 0x00, 0x00, 0x3c
 	.byte 0xee, 0x00, 0xff, 0x0f, 0x78, 0x36, 0xee, 0x00
 	.byte 0x00, 0x00, 0x0c, 0x3c, 0xee, 0x00, 0xff, 0x0e
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0x07, 0x09, 0x78, 0x36
 	.byte 0xee, 0x00
 LABEL_EE3C2A:
@@ -35866,11 +35866,11 @@ LABEL_EE3C2A:
 	.byte 0xff, 0x0f, 0x78, 0x36
 	.byte 0xee, 0x00, 0x00, 0x00, 0x36, 0x3c, 0xee, 0x00
 	.byte 0xff, 0x0e, 0x78, 0x36, 0xee, 0x00, 0x07, 0x0a
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0x01, 0x1b, 0x4e, 0x3c
 	.byte 0xee, 0x00, 0xff, 0x10, 0x78, 0x36, 0xee, 0x00
 	.byte 0x00, 0x00, 0x54, 0x3c, 0xee, 0x00, 0xff, 0x0f
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 LABEL_EE3C6C:
 	.byte 0x00, 0x00, 0x60, 0x3c
 	.byte 0xee, 0x00, 0xff, 0x0e, 0x78, 0x36, 0xee, 0x00
@@ -35886,11 +35886,11 @@ LABEL_EE3C8A:
 	.byte 0xff, 0x0e, 0x78, 0x36
 	.byte 0xee, 0x00, 0x07, 0x0c, 0x78, 0x36, 0xee, 0x00
 	.byte 0x01, 0x1b, 0xa2, 0x3c, 0xee, 0x00, 0xff, 0x10
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0x00, 0x00, 0xa8, 0x3c
 	.byte 0xee, 0x00, 0xff, 0x0f, 0x78, 0x36, 0xee, 0x00
 	.byte 0x00, 0x00, 0xb4, 0x3c, 0xee, 0x00, 0xff, 0x0e
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0x07, 0x0d, 0x78, 0x36
 	.byte 0xee, 0x00
 LABEL_EE3CD2:
@@ -35900,11 +35900,11 @@ LABEL_EE3CD2:
 	.byte 0xff, 0x0f, 0x78, 0x36
 	.byte 0xee, 0x00, 0x00, 0x00, 0xde, 0x3c, 0xee, 0x00
 	.byte 0xff, 0x0e, 0x78, 0x36, 0xee, 0x00, 0x07, 0x0d
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0x01, 0x1d, 0xf6, 0x3c
 	.byte 0xee, 0x00, 0xff, 0x10, 0x78, 0x36, 0xee, 0x00
 	.byte 0x00, 0x00, 0xfc, 0x3c, 0xee, 0x00, 0xff, 0x0f
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0x00, 0x00, 0x08, 0x3d
 	.byte 0xee, 0x00, 0xff, 0x0e, 0x78, 0x36, 0xee, 0x00
 LABEL_EE3D20:
@@ -35921,7 +35921,7 @@ LABEL_EE3D20:
 	.byte 0x10, 0x00, 0x96, 0x3c
 	.byte 0xee, 0x00, 0x11, 0x00, 0xc0, 0x3c, 0xee, 0x00
 	.byte 0x18, 0x00, 0xea, 0x3c, 0xee, 0x00, 0xff, 0x0d
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0x00, 0x00, 0x20, 0x3a
 	.byte 0xee, 0x00, 0x02, 0x00, 0x74, 0x3a, 0xee, 0x00
 	.byte 0x03, 0x00, 0xc8, 0x3a, 0xee, 0x00, 0x04, 0x00
@@ -35929,7 +35929,7 @@ LABEL_EE3D20:
 	.byte 0x08, 0x00, 0x70, 0x3b
 	.byte 0xee, 0x00, 0x09, 0x00, 0xc4, 0x3b, 0xee, 0x00
 	.byte 0x18, 0x00, 0x14, 0x3d, 0xee, 0x00, 0xff, 0x0d
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0x03, 0x01, 0x78, 0x36
 	.byte 0xee, 0x00
 LABEL_EE3DAA:
@@ -35939,11 +35939,11 @@ LABEL_EE3DAA:
 	.byte 0xff, 0x0f, 0x78, 0x36
 	.byte 0xee, 0x00, 0x00, 0x00, 0xb6, 0x3d, 0xee, 0x00
 	.byte 0xff, 0x0e, 0x78, 0x36, 0xee, 0x00, 0x03, 0x01
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0x01, 0x1d, 0xce, 0x3d
 	.byte 0xee, 0x00, 0xff, 0x10, 0x78, 0x36, 0xee, 0x00
 	.byte 0x00, 0x00, 0xd4, 0x3d, 0xee, 0x00, 0xff, 0x0f
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0x00, 0x00, 0xe0, 0x3d
 	.byte 0xee, 0x00, 0xff, 0x0e, 0x78, 0x36, 0xee, 0x00
 LABEL_EE3DF8:
@@ -35960,12 +35960,12 @@ LABEL_EE3E16:
 	.byte 0xff, 0x0e, 0x78, 0x36
 	.byte 0xee, 0x00, 0x03, 0x02, 0x78, 0x36, 0xee, 0x00
 	.byte 0x01, 0x1d, 0x22, 0x3e, 0xee, 0x00, 0xff, 0x10
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0x00, 0x00, 0x28, 0x3e
 	.byte 0xee, 0x00, 0xff, 0x0f, 0x78, 0x36, 0xee, 0x00
 LABEL_EE3E40:
 	.byte 0x00, 0x00, 0x34, 0x3e, 0xee, 0x00, 0xff, 0x0e
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0x03, 0x03, 0x78, 0x36
 	.byte 0xee, 0x00
 LABEL_EE3E52:
@@ -35975,11 +35975,11 @@ LABEL_EE3E52:
 	.byte 0xff, 0x0f, 0x78, 0x36
 	.byte 0xee, 0x00, 0x00, 0x00, 0x5e, 0x3e, 0xee, 0x00
 	.byte 0xff, 0x0e, 0x78, 0x36, 0xee, 0x00, 0x03, 0x03
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0x01, 0x1d, 0x76, 0x3e
 	.byte 0xee, 0x00, 0xff, 0x10, 0x78, 0x36, 0xee, 0x00
 	.byte 0x00, 0x00, 0x7c, 0x3e, 0xee, 0x00, 0xff, 0x0f
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0x00, 0x00, 0x88, 0x3e
 	.byte 0xee, 0x00, 0xff, 0x0e, 0x78, 0x36, 0xee, 0x00
 LABEL_EE3EA0:
@@ -35994,11 +35994,11 @@ LABEL_EE3EB2:
 	.byte 0xff, 0x0e, 0x78, 0x36
 	.byte 0xee, 0x00, 0x03, 0x04, 0x78, 0x36, 0xee, 0x00
 	.byte 0x01, 0x1d, 0xca, 0x3e, 0xee, 0x00, 0xff, 0x10
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0x00, 0x00, 0xd0, 0x3e
 	.byte 0xee, 0x00, 0xff, 0x0f, 0x78, 0x36, 0xee, 0x00
 	.byte 0x00, 0x00, 0xdc, 0x3e, 0xee, 0x00, 0xff, 0x0e
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0x03, 0x05, 0x78, 0x36
 	.byte 0xee, 0x00
 LABEL_EE3EFA:
@@ -36008,11 +36008,11 @@ LABEL_EE3EFA:
 	.byte 0xff, 0x0f, 0x78, 0x36
 	.byte 0xee, 0x00, 0x00, 0x00, 0x06, 0x3f, 0xee, 0x00
 	.byte 0xff, 0x0e, 0x78, 0x36, 0xee, 0x00, 0x03, 0x05
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0x01, 0x1d, 0x1e, 0x3f
 	.byte 0xee, 0x00, 0xff, 0x10, 0x78, 0x36, 0xee, 0x00
 	.byte 0x00, 0x00, 0x24, 0x3f, 0xee, 0x00, 0xff, 0x0f
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0x00, 0x00, 0x30, 0x3f
 	.byte 0xee, 0x00, 0xff, 0x0e, 0x78, 0x36, 0xee, 0x00
 LABEL_EE3F48:
@@ -36029,12 +36029,12 @@ LABEL_EE3F66:
 	.byte 0xff, 0x0e, 0x78, 0x36
 	.byte 0xee, 0x00, 0x03, 0x06, 0x78, 0x36, 0xee, 0x00
 	.byte 0x01, 0x1d, 0x72, 0x3f, 0xee, 0x00, 0xff, 0x10
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0x00, 0x00, 0x78, 0x3f
 	.byte 0xee, 0x00, 0xff, 0x0f, 0x78, 0x36, 0xee, 0x00
 LABEL_EE3F90:
 	.byte 0x00, 0x00, 0x84, 0x3f, 0xee, 0x00, 0xff, 0x0e
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0x03, 0x07, 0x78, 0x36
 	.byte 0xee, 0x00
 LABEL_EE3FA2:
@@ -36044,11 +36044,11 @@ LABEL_EE3FA2:
 	.byte 0xff, 0x0f, 0x78, 0x36
 	.byte 0xee, 0x00, 0x00, 0x00, 0xae, 0x3f, 0xee, 0x00
 	.byte 0xff, 0x0e, 0x78, 0x36, 0xee, 0x00, 0x03, 0x07
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0x01, 0x1d, 0xc6, 0x3f
 	.byte 0xee, 0x00, 0xff, 0x10, 0x78, 0x36, 0xee, 0x00
 	.byte 0x00, 0x00, 0xcc, 0x3f, 0xee, 0x00, 0xff, 0x0f
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0x00, 0x00, 0xd8, 0x3f
 	.byte 0xee, 0x00, 0xff, 0x0e, 0x78, 0x36, 0xee, 0x00
 LABEL_EE3FF0:
@@ -36063,11 +36063,11 @@ LABEL_EE4002:
 	.byte 0xff, 0x0e, 0x78, 0x36
 	.byte 0xee, 0x00, 0x03, 0x08, 0x78, 0x36, 0xee, 0x00
 	.byte 0x01, 0x1d, 0x1a, 0x40, 0xee, 0x00, 0xff, 0x10
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0x00, 0x00, 0x20, 0x40
 	.byte 0xee, 0x00, 0xff, 0x0f, 0x78, 0x36, 0xee, 0x00
 	.byte 0x00, 0x00, 0x2c, 0x40, 0xee, 0x00, 0xff, 0x0e
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0x03, 0x09, 0x78, 0x36
 	.byte 0xee, 0x00
 LABEL_EE404A:
@@ -36077,11 +36077,11 @@ LABEL_EE404A:
 	.byte 0xff, 0x0f, 0x78, 0x36
 	.byte 0xee, 0x00, 0x00, 0x00, 0x56, 0x40, 0xee, 0x00
 	.byte 0xff, 0x0e, 0x78, 0x36, 0xee, 0x00, 0x03, 0x09
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0x01, 0x1d, 0x6e, 0x40
 	.byte 0xee, 0x00, 0xff, 0x10, 0x78, 0x36, 0xee, 0x00
 	.byte 0x00, 0x00, 0x74, 0x40, 0xee, 0x00, 0xff, 0x0f
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0x00, 0x00, 0x80, 0x40
 	.byte 0xee, 0x00, 0xff, 0x0e, 0x78, 0x36, 0xee, 0x00
 LABEL_EE4098:
@@ -36098,12 +36098,12 @@ LABEL_EE40B6:
 	.byte 0xff, 0x0e, 0x78, 0x36
 	.byte 0xee, 0x00, 0x03, 0x0a, 0x78, 0x36, 0xee, 0x00
 	.byte 0x01, 0x1d, 0xc2, 0x40, 0xee, 0x00, 0xff, 0x10
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0x00, 0x00, 0xc8, 0x40
 	.byte 0xee, 0x00, 0xff, 0x0f, 0x78, 0x36, 0xee, 0x00
 LABEL_EE40E0:
 	.byte 0x00, 0x00, 0xd4, 0x40, 0xee, 0x00, 0xff, 0x0e
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0x03, 0x0b, 0x78, 0x36
 	.byte 0xee, 0x00
 LABEL_EE40F2:
@@ -36113,11 +36113,11 @@ LABEL_EE40F2:
 	.byte 0xff, 0x0f, 0x78, 0x36
 	.byte 0xee, 0x00, 0x00, 0x00, 0xfe, 0x40, 0xee, 0x00
 	.byte 0xff, 0x0e, 0x78, 0x36, 0xee, 0x00, 0x03, 0x0b
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0x01, 0x1d, 0x16, 0x41
 	.byte 0xee, 0x00, 0xff, 0x10, 0x78, 0x36, 0xee, 0x00
 	.byte 0x00, 0x00, 0x1c, 0x41, 0xee, 0x00, 0xff, 0x0f
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0x00, 0x00, 0x28, 0x41
 	.byte 0xee, 0x00, 0xff, 0x0e, 0x78, 0x36, 0xee, 0x00
 LABEL_EE4140:
@@ -36159,11 +36159,11 @@ LABEL_EE41EE:
 	.byte 0xff, 0x0e, 0x78, 0x36
 	.byte 0xee, 0x00, 0x01, 0x01, 0x78, 0x36, 0xee, 0x00
 	.byte 0x01, 0x1d, 0xfa, 0x41, 0xee, 0x00, 0xff, 0x10
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0x00, 0x00, 0x00, 0x42
 	.byte 0xee, 0x00, 0xff, 0x0f, 0x78, 0x36, 0xee, 0x00
 	.byte 0x00, 0x00, 0x0c, 0x42, 0xee, 0x00, 0xff, 0x0e
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0x01, 0x02, 0x78, 0x36
 	.byte 0xee, 0x00
 LABEL_EE422A:
@@ -36173,11 +36173,11 @@ LABEL_EE422A:
 	.byte 0xff, 0x0f, 0x78, 0x36
 	.byte 0xee, 0x00, 0x00, 0x00, 0x36, 0x42, 0xee, 0x00
 	.byte 0xff, 0x0e, 0x78, 0x36, 0xee, 0x00, 0x01, 0x02
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0x01, 0x1d, 0x4e, 0x42
 	.byte 0xee, 0x00, 0xff, 0x10, 0x78, 0x36, 0xee, 0x00
 	.byte 0x00, 0x00, 0x54, 0x42, 0xee, 0x00, 0xff, 0x0f
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 LABEL_EE426C:
 	.byte 0x00, 0x00, 0x60, 0x42
 	.byte 0xee, 0x00, 0xff, 0x0e, 0x78, 0x36, 0xee, 0x00
@@ -36193,11 +36193,11 @@ LABEL_EE428A:
 	.byte 0xff, 0x0e, 0x78, 0x36
 	.byte 0xee, 0x00, 0x01, 0x03, 0x78, 0x36, 0xee, 0x00
 	.byte 0x01, 0x1d, 0xa2, 0x42, 0xee, 0x00, 0xff, 0x10
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0x00, 0x00, 0xa8, 0x42
 	.byte 0xee, 0x00, 0xff, 0x0f, 0x78, 0x36, 0xee, 0x00
 	.byte 0x00, 0x00, 0xb4, 0x42, 0xee, 0x00, 0xff, 0x0e
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0x01, 0x04, 0x78, 0x36
 	.byte 0xee, 0x00
 LABEL_EE42D2:
@@ -36207,11 +36207,11 @@ LABEL_EE42D2:
 	.byte 0xff, 0x0f, 0x78, 0x36
 	.byte 0xee, 0x00, 0x00, 0x00, 0xde, 0x42, 0xee, 0x00
 	.byte 0xff, 0x0e, 0x78, 0x36, 0xee, 0x00, 0x01, 0x04
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0x01, 0x1d, 0xf6, 0x42
 	.byte 0xee, 0x00, 0xff, 0x10, 0x78, 0x36, 0xee, 0x00
 	.byte 0x00, 0x00, 0xfc, 0x42, 0xee, 0x00, 0xff, 0x0f
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0x00, 0x00, 0x08, 0x43
 	.byte 0xee, 0x00, 0xff, 0x0e, 0x78, 0x36, 0xee, 0x00
 LABEL_EE4320:
@@ -36228,11 +36228,11 @@ LABEL_EE433E:
 	.byte 0xff, 0x0e, 0x78, 0x36
 	.byte 0xee, 0x00, 0x01, 0x05, 0x78, 0x36, 0xee, 0x00
 	.byte 0x01, 0x1d, 0x4a, 0x43, 0xee, 0x00, 0xff, 0x10
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0x00, 0x00, 0x50, 0x43
 	.byte 0xee, 0x00, 0xff, 0x0f, 0x78, 0x36, 0xee, 0x00
 	.byte 0x00, 0x00, 0x5c, 0x43, 0xee, 0x00, 0xff, 0x0e
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0x01, 0x06, 0x78, 0x36
 	.byte 0xee, 0x00
 LABEL_EE437A:
@@ -36242,11 +36242,11 @@ LABEL_EE437A:
 	.byte 0xff, 0x0f, 0x78, 0x36
 	.byte 0xee, 0x00, 0x00, 0x00, 0x86, 0x43, 0xee, 0x00
 	.byte 0xff, 0x0e, 0x78, 0x36, 0xee, 0x00, 0x01, 0x06
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0x01, 0x1d, 0x9e, 0x43
 	.byte 0xee, 0x00, 0xff, 0x10, 0x78, 0x36, 0xee, 0x00
 	.byte 0x00, 0x00, 0xa4, 0x43, 0xee, 0x00, 0xff, 0x0f
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 LABEL_EE43BC:
 	.byte 0x00, 0x00, 0xb0, 0x43
 	.byte 0xee, 0x00, 0xff, 0x0e, 0x78, 0x36, 0xee, 0x00
@@ -36262,11 +36262,11 @@ LABEL_EE43DA:
 	.byte 0xff, 0x0e, 0x78, 0x36
 	.byte 0xee, 0x00, 0x01, 0x07, 0x78, 0x36, 0xee, 0x00
 	.byte 0x01, 0x1d, 0xf2, 0x43, 0xee, 0x00, 0xff, 0x10
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0x00, 0x00, 0xf8, 0x43
 	.byte 0xee, 0x00, 0xff, 0x0f, 0x78, 0x36, 0xee, 0x00
 	.byte 0x00, 0x00, 0x04, 0x44, 0xee, 0x00, 0xff, 0x0e
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0x01, 0x08, 0x78, 0x36
 	.byte 0xee, 0x00
 LABEL_EE4422:
@@ -36276,11 +36276,11 @@ LABEL_EE4422:
 	.byte 0xff, 0x0f, 0x78, 0x36
 	.byte 0xee, 0x00, 0x00, 0x00, 0x2e, 0x44, 0xee, 0x00
 	.byte 0xff, 0x0e, 0x78, 0x36, 0xee, 0x00, 0x01, 0x08
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0x01, 0x1d, 0x46, 0x44
 	.byte 0xee, 0x00, 0xff, 0x10, 0x78, 0x36, 0xee, 0x00
 	.byte 0x00, 0x00, 0x4c, 0x44, 0xee, 0x00, 0xff, 0x0f
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0x00, 0x00, 0x58, 0x44
 	.byte 0xee, 0x00, 0xff, 0x0e, 0x78, 0x36, 0xee, 0x00
 LABEL_EE4470:
@@ -36297,11 +36297,11 @@ LABEL_EE448E:
 	.byte 0xff, 0x0e, 0x78, 0x36
 	.byte 0xee, 0x00, 0x01, 0x0a, 0x78, 0x36, 0xee, 0x00
 	.byte 0x01, 0x1b, 0x9a, 0x44, 0xee, 0x00, 0xff, 0x10
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0x00, 0x00, 0xa0, 0x44
 	.byte 0xee, 0x00, 0xff, 0x0f, 0x78, 0x36, 0xee, 0x00
 	.byte 0x00, 0x00, 0xac, 0x44, 0xee, 0x00, 0xff, 0x0e
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0x01, 0x0a, 0x78, 0x36
 	.byte 0xee, 0x00
 LABEL_EE44CA:
@@ -36332,7 +36332,7 @@ LABEL_EE4530:
 	.byte 0x12, 0x00, 0x10, 0x44
 	.byte 0xee, 0x00, 0x13, 0x00, 0x64, 0x44, 0xee, 0x00
 	.byte 0x08, 0x00, 0xe2, 0x44, 0xee, 0x00, 0xff, 0x0d
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0xee, 0x44, 0xee, 0x00
 	.byte 0xff, 0x0c, 0x78, 0x36, 0xee, 0x00, 0x00, 0x00
@@ -36352,7 +36352,7 @@ LABEL_EE45AE:
 LABEL_EE45BA:
 	.byte 0x00, 0x00, 0x74, 0x3d, 0xee, 0x00
 	.byte 0xff, 0x0c, 0x78, 0x36, 0xee, 0x00, 0xfe, 0x1a
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0xff, 0x0e, 0x78, 0x36
 	.long AudioInit_PartConfig_CheckCarry
 	.byte 0xc6, 0x45, 0xee, 0x00
@@ -36395,7 +36395,7 @@ LABEL_EE464A:
 	.byte 0xff, 0x0d, 0x78, 0x36
 	.byte 0xee, 0x00, 0x00, 0x00, 0x6e, 0x46, 0xee, 0x00
 	.byte 0xff, 0x0c, 0x78, 0x36, 0xee, 0x00, 0xfe, 0x20
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0xff, 0x10, 0x78, 0x36
 	.long AudioInit_PartConfig_CheckCarry
 	.byte 0x86, 0x46, 0xee, 0x00
@@ -36423,7 +36423,7 @@ LABEL_EE46C2:
 LABEL_EE46F2:
 	.byte 0x00, 0x00, 0xe6, 0x46, 0xee, 0x00
 	.byte 0xff, 0x0c, 0x78, 0x36, 0xee, 0x00, 0xfe, 0x1e
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0xff, 0x10, 0x78, 0x36
 	.long AudioInit_PartConfig_CheckCarry
 	.byte 0xfe, 0x46, 0xee, 0x00
@@ -36449,7 +36449,7 @@ LABEL_EE473A:
 	.byte 0xff, 0x0d, 0x78, 0x36
 	.byte 0xee, 0x00, 0x00, 0x00, 0x5e, 0x47, 0xee, 0x00
 	.byte 0xff, 0x0c, 0x78, 0x36, 0xee, 0x00, 0xfe, 0x1c
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0xff, 0x0e, 0x78, 0x36
 	.long AudioInit_PartConfig_CheckCarry
 	.byte 0x76, 0x47, 0xee, 0x00
@@ -36471,11 +36471,11 @@ LABEL_EE473A:
 	.byte 0x50, 0x00, 0xb6, 0x46
 	.byte 0xee, 0x00, 0x60, 0x00, 0x7a, 0x46, 0xee, 0x00
 	.byte 0x48, 0x00, 0x6a, 0x47, 0xee, 0x00, 0xff, 0x0b
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0x12, 0x00, 0xb2, 0x47
 	.byte 0xee, 0x00, 0xff, 0x0a, 0x78, 0x36, 0xee, 0x00
 	.byte 0x28, 0x00, 0xf4, 0x47, 0xee, 0x00, 0xff, 0x09
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0x01, 0x00, 0x00, 0x48
 	.byte 0xee, 0x00, 0xff, 0x08, 0x78, 0x36, 0xee, 0x00
 LABEL_EE4818:
@@ -36490,7 +36490,7 @@ LABEL_EE482A:
 	.byte 0xff, 0x0c, 0x78, 0x36
 	.byte 0xee, 0x00, 0x03, 0x00, 0x78, 0x36, 0xee, 0x00
 	.byte 0xfe, 0x26, 0x42, 0x48, 0xee, 0x00, 0xff, 0x0e
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0xfe, 0x00, 0x48, 0x48
 	.byte 0xee, 0x00, 0xff, 0x0d, 0x78, 0x36, 0xee, 0x00
 LABEL_EE4860:
@@ -36500,11 +36500,11 @@ LABEL_EE4860:
 	.long AudioInit_PartConfig_CheckCarry
 	.byte 0x66, 0x48, 0xee, 0x00
 	.byte 0xff, 0x0d, 0x78, 0x36, 0xee, 0x00, 0x05, 0x00
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0xfe, 0x26, 0x7e, 0x48
 	.byte 0xee, 0x00, 0xff, 0x0e, 0x78, 0x36, 0xee, 0x00
 	.byte 0xfe, 0x00, 0x84, 0x48, 0xee, 0x00, 0xff, 0x0d
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0x06, 0x00, 0x78, 0x36
 	.byte 0xee, 0x00
 LABEL_EE48A2:
@@ -36516,12 +36516,12 @@ LABEL_EE48AE:
 	.byte 0xff, 0x0d, 0x78, 0x36
 	.byte 0xee, 0x00, 0x01, 0x00, 0x78, 0x36, 0xee, 0x00
 	.byte 0xfe, 0x26, 0xba, 0x48, 0xee, 0x00, 0xff, 0x0e
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0xfe, 0x00, 0xc0, 0x48
 	.byte 0xee, 0x00, 0xff, 0x0d, 0x78, 0x36, 0xee, 0x00
 LABEL_EE48D8:
 	.byte 0x15, 0x00, 0xcc, 0x48, 0xee, 0x00, 0xff, 0x0c
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0x30, 0x00, 0x54, 0x48
 	.byte 0xee, 0x00, 0x33, 0x00, 0x72, 0x48, 0xee, 0x00
 	.byte 0x38, 0x00, 0x90, 0x48, 0xee, 0x00, 0x3a, 0x00
@@ -36539,7 +36539,7 @@ LABEL_EE491A:
 	.byte 0xff, 0x09, 0x78, 0x36
 	.byte 0xee, 0x00, 0x42, 0x00, 0x26, 0x49, 0xee, 0x00
 	.byte 0xff, 0x08, 0x78, 0x36, 0xee, 0x00, 0x25, 0x09
-	.long LABEL_EE3678
+	.long DisplayScript_NullNode
 	.byte 0x7f, 0x00, 0xd8, 0x36
 	.byte 0xee, 0x00, 0x7e, 0x0a, 0x78, 0x36, 0xee, 0x00
 	.byte 0x23, 0x00, 0xe4, 0x36, 0xee, 0x00, 0x24, 0x00
@@ -38583,28 +38583,28 @@ LABEL_EE7776:
 	.long LABEL_EE7BA3
 	.long LABEL_EE7BA7
 	.long LABEL_EE7BAF
-	.long LABEL_EE7C9F
-	.long LABEL_EE7C9F
-	.long LABEL_EE7C9F
-	.long LABEL_EE7C9F
-	.long LABEL_EE7C9F
-	.long LABEL_EE7C9F
+	.long UIState_DefaultConfig_A
+	.long UIState_DefaultConfig_A
+	.long UIState_DefaultConfig_A
+	.long UIState_DefaultConfig_A
+	.long UIState_DefaultConfig_A
+	.long UIState_DefaultConfig_A
 	.long LABEL_EE7BB3
 	.long LABEL_EE7BB7
 	.long LABEL_EE7BBB
 	.long LABEL_EE7BBF
 	.long LABEL_EE7BC3
-	.long LABEL_EE7C9F
-	.long LABEL_EE7C9F
-	.long LABEL_EE7C9F
-	.long LABEL_EE7C9F
-	.long LABEL_EE7C9F
-	.long LABEL_EE7C9F
-	.long LABEL_EE7C9F
-	.long LABEL_EE7C9F
-	.long LABEL_EE7C9F
-	.long LABEL_EE7C9F
-	.long LABEL_EE7C9F
+	.long UIState_DefaultConfig_A
+	.long UIState_DefaultConfig_A
+	.long UIState_DefaultConfig_A
+	.long UIState_DefaultConfig_A
+	.long UIState_DefaultConfig_A
+	.long UIState_DefaultConfig_A
+	.long UIState_DefaultConfig_A
+	.long UIState_DefaultConfig_A
+	.long UIState_DefaultConfig_A
+	.long UIState_DefaultConfig_A
+	.long UIState_DefaultConfig_A
 	.long LABEL_EE7BC7
 	.long LABEL_EE7BCB
 	.long LABEL_EE7BCF
@@ -38612,7 +38612,7 @@ LABEL_EE7776:
 	.long LABEL_EE7BD7
 	.long LABEL_EE7BDB
 	.long LABEL_EE7BDF
-	.long LABEL_EE7C9F
+	.long UIState_DefaultConfig_A
 	.long LABEL_EE7BE3
 	.long LABEL_EE7BE7
 	.long LABEL_EE7BEB
@@ -38620,71 +38620,71 @@ LABEL_EE7776:
 	.long LABEL_EE7BF3
 	.long LABEL_EE7BF7
 	.long LABEL_EE7BFB
-	.long LABEL_EE7C9F
+	.long UIState_DefaultConfig_A
 	.long LABEL_EE7BFF
 	.long LABEL_EE7C03
 	.long LABEL_EE7C07
-	.long LABEL_EE7C9F
-	.long LABEL_EE7C9F
-	.long LABEL_EE7C9F
-	.long LABEL_EE7C9F
-	.long LABEL_EE7C9F
+	.long UIState_DefaultConfig_A
+	.long UIState_DefaultConfig_A
+	.long UIState_DefaultConfig_A
+	.long UIState_DefaultConfig_A
+	.long UIState_DefaultConfig_A
 	.long LABEL_EE7C0B
 	.long LABEL_EE7C0F
 	.long LABEL_EE7C13
-	.long LABEL_EE7C9F
-	.long LABEL_EE7C9F
-	.long LABEL_EE7C9F
-	.long LABEL_EE7C9F
-	.long LABEL_EE7C9F
+	.long UIState_DefaultConfig_A
+	.long UIState_DefaultConfig_A
+	.long UIState_DefaultConfig_A
+	.long UIState_DefaultConfig_A
+	.long UIState_DefaultConfig_A
 	.long LABEL_EE7C17
 	.long LABEL_EE7C1B
-	.long LABEL_EE7C9F
-	.long LABEL_EE7C9F
-	.long LABEL_EE7C9F
-	.long LABEL_EE7C9F
-	.long LABEL_EE7C9F
-	.long LABEL_EE7C9F
-	.long LABEL_EE7C9F
-	.long LABEL_EE7C9F
-	.long LABEL_EE7C9F
-	.long LABEL_EE7C9F
-	.long LABEL_EE7C9F
-	.long LABEL_EE7C9F
-	.long LABEL_EE7C9F
-	.long LABEL_EE7C9F
+	.long UIState_DefaultConfig_A
+	.long UIState_DefaultConfig_A
+	.long UIState_DefaultConfig_A
+	.long UIState_DefaultConfig_A
+	.long UIState_DefaultConfig_A
+	.long UIState_DefaultConfig_A
+	.long UIState_DefaultConfig_A
+	.long UIState_DefaultConfig_A
+	.long UIState_DefaultConfig_A
+	.long UIState_DefaultConfig_A
+	.long UIState_DefaultConfig_A
+	.long UIState_DefaultConfig_A
+	.long UIState_DefaultConfig_A
+	.long UIState_DefaultConfig_A
 	.long LABEL_EE7C1F
 	.long LABEL_EE7C23
 	.long LABEL_EE7C2B
 	.long LABEL_EE7C2F
-	.long LABEL_EE7C9F
-	.long LABEL_EE7C9F
-	.long LABEL_EE7C9F
-	.long LABEL_EE7C9F
+	.long UIState_DefaultConfig_A
+	.long UIState_DefaultConfig_A
+	.long UIState_DefaultConfig_A
+	.long UIState_DefaultConfig_A
 	.long LABEL_EE7C33
 	.long LABEL_EE7C43
 	.long LABEL_EE7C47
-	.long LABEL_EE7C9F
-	.long LABEL_EE7C9F
-	.long LABEL_EE7C9F
-	.long LABEL_EE7C9F
-	.long LABEL_EE7C9F
-	.long LABEL_EE7C9F
-	.long LABEL_EE7C9F
-	.long LABEL_EE7C9F
-	.long LABEL_EE7C9F
-	.long LABEL_EE7C9F
-	.long LABEL_EE7C9F
-	.long LABEL_EE7C9F
-	.long LABEL_EE7C9F
+	.long UIState_DefaultConfig_A
+	.long UIState_DefaultConfig_A
+	.long UIState_DefaultConfig_A
+	.long UIState_DefaultConfig_A
+	.long UIState_DefaultConfig_A
+	.long UIState_DefaultConfig_A
+	.long UIState_DefaultConfig_A
+	.long UIState_DefaultConfig_A
+	.long UIState_DefaultConfig_A
+	.long UIState_DefaultConfig_A
+	.long UIState_DefaultConfig_A
+	.long UIState_DefaultConfig_A
+	.long UIState_DefaultConfig_A
 	.long LABEL_EE7C4B
 	.long LABEL_EE7C53
 	.long LABEL_EE7C57
-	.long LABEL_EE7C9F
+	.long UIState_DefaultConfig_A
 	.long LABEL_EE7C5B
 	.long LABEL_EE7C5F
 	.long LABEL_EE7C63
-	.long LABEL_EE7C9F
+	.long UIState_DefaultConfig_A
 	.long LABEL_EE7C67
 	.long LABEL_EE7C6B
 	.long LABEL_EE7C6F
@@ -38699,8 +38699,8 @@ LABEL_EE7776:
 	.long LABEL_EE7C93
 	.long LABEL_EE7C97
 	.long LABEL_EE7C9B
-	.long LABEL_EE7C9F
-	.long LABEL_EE7C9F
+	.long UIState_DefaultConfig_A
+	.long UIState_DefaultConfig_A
 	.byte 0xff
 LABEL_EE7A87:
 	.byte 0xff
@@ -39027,7 +39027,7 @@ LABEL_EE7C97:
 	.fill 3, 1, 0xff
 LABEL_EE7C9B:
 	.fill 4, 1, 0xff
-LABEL_EE7C9F:
+UIState_DefaultConfig_A:
 	.fill 1, 1, 0xff
 	.fill 7, 1, 0xff
 
@@ -39109,28 +39109,28 @@ LABEL_EE7D27:
 	.long LABEL_EE8440
 	.long LABEL_EE8448
 	.long LABEL_EE8468
-	.long LABEL_EE86B0
-	.long LABEL_EE86B0
-	.long LABEL_EE86B0
-	.long LABEL_EE86B0
-	.long LABEL_EE86B0
-	.long LABEL_EE86B0
+	.long UIState_DefaultConfig_B
+	.long UIState_DefaultConfig_B
+	.long UIState_DefaultConfig_B
+	.long UIState_DefaultConfig_B
+	.long UIState_DefaultConfig_B
+	.long UIState_DefaultConfig_B
 	.long LABEL_EE846C
 	.long LABEL_EE8470
 	.long LABEL_EE8474
 	.long LABEL_EE8478
 	.long LABEL_EE847C
-	.long LABEL_EE86B0
-	.long LABEL_EE86B0
-	.long LABEL_EE86B0
-	.long LABEL_EE86B0
-	.long LABEL_EE86B0
-	.long LABEL_EE86B0
-	.long LABEL_EE86B0
-	.long LABEL_EE86B0
-	.long LABEL_EE86B0
-	.long LABEL_EE86B0
-	.long LABEL_EE86B0
+	.long UIState_DefaultConfig_B
+	.long UIState_DefaultConfig_B
+	.long UIState_DefaultConfig_B
+	.long UIState_DefaultConfig_B
+	.long UIState_DefaultConfig_B
+	.long UIState_DefaultConfig_B
+	.long UIState_DefaultConfig_B
+	.long UIState_DefaultConfig_B
+	.long UIState_DefaultConfig_B
+	.long UIState_DefaultConfig_B
+	.long UIState_DefaultConfig_B
 	.long LABEL_EE8480
 	.long LABEL_EE8490
 	.long LABEL_EE84A0
@@ -39138,7 +39138,7 @@ LABEL_EE7D27:
 	.long LABEL_EE84BC
 	.long LABEL_EE84C8
 	.long LABEL_EE84D4
-	.long LABEL_EE86B0
+	.long UIState_DefaultConfig_B
 	.long LABEL_EE84E0
 	.long LABEL_EE84EC
 	.long LABEL_EE84F8
@@ -39146,71 +39146,71 @@ LABEL_EE7D27:
 	.long LABEL_EE8510
 	.long LABEL_EE8514
 	.long LABEL_EE8518
-	.long LABEL_EE86B0
+	.long UIState_DefaultConfig_B
 	.long LABEL_EE851C
 	.long LABEL_EE8534
 	.long LABEL_EE8540
-	.long LABEL_EE86B0
-	.long LABEL_EE86B0
-	.long LABEL_EE86B0
-	.long LABEL_EE86B0
-	.long LABEL_EE86B0
+	.long UIState_DefaultConfig_B
+	.long UIState_DefaultConfig_B
+	.long UIState_DefaultConfig_B
+	.long UIState_DefaultConfig_B
+	.long UIState_DefaultConfig_B
 	.long LABEL_EE854C
 	.long LABEL_EE8550
 	.long LABEL_EE8554
-	.long LABEL_EE86B0
-	.long LABEL_EE86B0
-	.long LABEL_EE86B0
-	.long LABEL_EE86B0
-	.long LABEL_EE86B0
+	.long UIState_DefaultConfig_B
+	.long UIState_DefaultConfig_B
+	.long UIState_DefaultConfig_B
+	.long UIState_DefaultConfig_B
+	.long UIState_DefaultConfig_B
 	.long LABEL_EE8558
 	.long LABEL_EE856C
-	.long LABEL_EE86B0
-	.long LABEL_EE86B0
-	.long LABEL_EE86B0
-	.long LABEL_EE86B0
-	.long LABEL_EE86B0
-	.long LABEL_EE86B0
-	.long LABEL_EE86B0
-	.long LABEL_EE86B0
-	.long LABEL_EE86B0
-	.long LABEL_EE86B0
-	.long LABEL_EE86B0
-	.long LABEL_EE86B0
-	.long LABEL_EE86B0
-	.long LABEL_EE86B0
+	.long UIState_DefaultConfig_B
+	.long UIState_DefaultConfig_B
+	.long UIState_DefaultConfig_B
+	.long UIState_DefaultConfig_B
+	.long UIState_DefaultConfig_B
+	.long UIState_DefaultConfig_B
+	.long UIState_DefaultConfig_B
+	.long UIState_DefaultConfig_B
+	.long UIState_DefaultConfig_B
+	.long UIState_DefaultConfig_B
+	.long UIState_DefaultConfig_B
+	.long UIState_DefaultConfig_B
+	.long UIState_DefaultConfig_B
+	.long UIState_DefaultConfig_B
 	.long LABEL_EE8570
 	.long LABEL_EE858C
 	.long LABEL_EE85A8
 	.long LABEL_EE85B4
-	.long LABEL_EE86B0
-	.long LABEL_EE86B0
-	.long LABEL_EE86B0
-	.long LABEL_EE86B0
+	.long UIState_DefaultConfig_B
+	.long UIState_DefaultConfig_B
+	.long UIState_DefaultConfig_B
+	.long UIState_DefaultConfig_B
 	.long LABEL_EE85C8
 	.long LABEL_EE85F0
 	.long LABEL_EE85FC
-	.long LABEL_EE86B0
-	.long LABEL_EE86B0
-	.long LABEL_EE86B0
-	.long LABEL_EE86B0
-	.long LABEL_EE86B0
-	.long LABEL_EE86B0
-	.long LABEL_EE86B0
-	.long LABEL_EE86B0
-	.long LABEL_EE86B0
-	.long LABEL_EE86B0
-	.long LABEL_EE86B0
-	.long LABEL_EE86B0
-	.long LABEL_EE86B0
+	.long UIState_DefaultConfig_B
+	.long UIState_DefaultConfig_B
+	.long UIState_DefaultConfig_B
+	.long UIState_DefaultConfig_B
+	.long UIState_DefaultConfig_B
+	.long UIState_DefaultConfig_B
+	.long UIState_DefaultConfig_B
+	.long UIState_DefaultConfig_B
+	.long UIState_DefaultConfig_B
+	.long UIState_DefaultConfig_B
+	.long UIState_DefaultConfig_B
+	.long UIState_DefaultConfig_B
+	.long UIState_DefaultConfig_B
 	.long LABEL_EE8608
 	.long LABEL_EE8640
 	.long LABEL_EE8644
-	.long LABEL_EE86B0
+	.long UIState_DefaultConfig_B
 	.long LABEL_EE8648
 	.long LABEL_EE864C
 	.long LABEL_EE8650
-	.long LABEL_EE86B0
+	.long UIState_DefaultConfig_B
 	.long LABEL_EE8658
 	.long LABEL_EE8660
 	.long LABEL_EE8668
@@ -39225,8 +39225,8 @@ LABEL_EE7D27:
 	.long LABEL_EE86A4
 	.long LABEL_EE86A8
 	.long LABEL_EE86AC
-	.long LABEL_EE86B0
-	.long LABEL_EE86B0
+	.long UIState_DefaultConfig_B
+	.long UIState_DefaultConfig_B
 	.byte 0xff
 
 
@@ -39238,7 +39238,7 @@ LABEL_EE7FA8:
 	.long LABEL_FC9554
 	.long SeMenu_NameEditor_End
 	.long BitMapOut_ByteData_RenderB
-	.long LABEL_F98697
+	.long UIState_KeyScan_Dispatch
 	.long FDemoText_ByteData_VoiceProbeA
 	.long LABEL_FB7E14
 	.long 0xFFFFFFFF
@@ -39252,7 +39252,7 @@ LABEL_EE7FD4:
 	.long LABEL_FC9554
 	.long SeMenu_NameEditor_End
 	.long BitMapOut_ByteData_RenderB
-	.long LABEL_F98697
+	.long UIState_KeyScan_Dispatch
 	.long FDemoText_ByteData_VoiceProbeA
 	.long 0xFFFFFFFF
 
@@ -39264,7 +39264,7 @@ LABEL_EE7FFC:
 	.long LABEL_FD0452
 	.long LABEL_FC9554
 	.long BitMapOut_ByteData_RenderB
-	.long LABEL_F98697
+	.long UIState_KeyScan_Dispatch
 	.long FDemoText_ByteData_VoiceProbeA
 	.long 0xFFFFFFFF
 
@@ -39276,7 +39276,7 @@ LABEL_EE8020:
 	.long LABEL_FD0452
 	.long LABEL_FC9554
 	.long BitMapOut_ByteData_RenderB
-	.long LABEL_F98697
+	.long UIState_KeyScan_Dispatch
 	.long 0xFFFFFFFF
 
 
@@ -39287,7 +39287,7 @@ LABEL_EE8040:
 	.long LABEL_FD0452
 	.long LABEL_FC9554
 	.long BitMapOut_ByteData_RenderB
-	.long LABEL_F98697
+	.long UIState_KeyScan_Dispatch
 	.long 0xFFFFFFFF
 
 
@@ -39298,7 +39298,7 @@ LABEL_EE8060:
 	.long LABEL_FD0452
 	.long LABEL_FC9554
 	.long BitMapOut_ByteData_RenderB
-	.long LABEL_F98697
+	.long UIState_KeyScan_Dispatch
 	.long 0xFFFFFFFF
 
 
@@ -39309,7 +39309,7 @@ LABEL_EE8080:
 	.long LABEL_FD0452
 	.long LABEL_FC9554
 	.long BitMapOut_ByteData_RenderB
-	.long LABEL_F98697
+	.long UIState_KeyScan_Dispatch
 	.long 0xFFFFFFFF
 
 
@@ -39320,7 +39320,7 @@ LABEL_EE80A0:
 	.long LABEL_FD0452
 	.long LABEL_FC9554
 	.long BitMapOut_ByteData_RenderB
-	.long LABEL_F98697
+	.long UIState_KeyScan_Dispatch
 	.long 0xFFFFFFFF
 
 
@@ -39331,7 +39331,7 @@ LABEL_EE80C0:
 	.long LABEL_FD0452
 	.long LABEL_FC9554
 	.long BitMapOut_ByteData_RenderB
-	.long LABEL_F98697
+	.long UIState_KeyScan_Dispatch
 	.long 0xFFFFFFFF
 
 
@@ -39342,7 +39342,7 @@ LABEL_EE80E0:
 	.long LABEL_FD0452
 	.long LABEL_FC9554
 	.long BitMapOut_ByteData_RenderB
-	.long LABEL_F98697
+	.long UIState_KeyScan_Dispatch
 	.long 0xFFFFFFFF
 
 
@@ -39353,7 +39353,7 @@ LABEL_EE8100:
 	.long LABEL_FD0452
 	.long LABEL_FC9554
 	.long BitMapOut_ByteData_RenderB
-	.long LABEL_F98697
+	.long UIState_KeyScan_Dispatch
 	.long 0xFFFFFFFF
 
 
@@ -39364,7 +39364,7 @@ LABEL_EE8120:
 	.long LABEL_FD0452
 	.long LABEL_FC9554
 	.long BitMapOut_ByteData_RenderB
-	.long LABEL_F98697
+	.long UIState_KeyScan_Dispatch
 	.long 0xFFFFFFFF
 
 
@@ -39375,7 +39375,7 @@ LABEL_EE8140:
 	.long LABEL_FD0452
 	.long LABEL_FC9554
 	.long BitMapOut_ByteData_RenderB
-	.long LABEL_F98697
+	.long UIState_KeyScan_Dispatch
 	.long 0xFFFFFFFF
 
 
@@ -39386,7 +39386,7 @@ LABEL_EE8160:
 	.long LABEL_FD0452
 	.long LABEL_FC9554
 	.long BitMapOut_ByteData_RenderB
-	.long LABEL_F98697
+	.long UIState_KeyScan_Dispatch
 	.long 0xFFFFFFFF
 
 
@@ -39397,7 +39397,7 @@ LABEL_EE8180:
 	.long LABEL_FD0452
 	.long LABEL_FC9554
 	.long BitMapOut_ByteData_RenderB
-	.long LABEL_F98697
+	.long UIState_KeyScan_Dispatch
 	.long 0xFFFFFFFF
 
 
@@ -39408,7 +39408,7 @@ LABEL_EE81A0:
 	.long LABEL_FD0452
 	.long LABEL_FC9554
 	.long BitMapOut_ByteData_RenderB
-	.long LABEL_F98697
+	.long UIState_KeyScan_Dispatch
 	.long 0xFFFFFFFF
 
 
@@ -39418,7 +39418,7 @@ LABEL_EE81C0:
 	.long LABEL_FDE084
 	.long LABEL_FD0452
 	.long BitMapOut_ByteData_RenderB
-	.long LABEL_F98697
+	.long UIState_KeyScan_Dispatch
 	.long 0xFFFFFFFF
 
 
@@ -39428,7 +39428,7 @@ LABEL_EE81DC:
 	.long LABEL_FDE084
 	.long LABEL_FD0452
 	.long BitMapOut_ByteData_RenderB
-	.long LABEL_F98697
+	.long UIState_KeyScan_Dispatch
 	.long 0xFFFFFFFF
 
 
@@ -39438,7 +39438,7 @@ LABEL_EE81F8:
 	.long LABEL_FDE084
 	.long LABEL_FD0452
 	.long BitMapOut_ByteData_RenderB
-	.long LABEL_F98697
+	.long UIState_KeyScan_Dispatch
 	.long 0xFFFFFFFF
 
 
@@ -39448,7 +39448,7 @@ LABEL_EE8214:
 	.long LABEL_FDE084
 	.long LABEL_FD0452
 	.long BitMapOut_ByteData_RenderB
-	.long LABEL_F98697
+	.long UIState_KeyScan_Dispatch
 	.long 0xFFFFFFFF
 
 
@@ -39458,7 +39458,7 @@ LABEL_EE8230:
 	.long LABEL_FDE084
 	.long LABEL_FD0452
 	.long BitMapOut_ByteData_RenderB
-	.long LABEL_F98697
+	.long UIState_KeyScan_Dispatch
 	.long 0xFFFFFFFF
 
 
@@ -39468,7 +39468,7 @@ LABEL_EE824C:
 	.long LABEL_FDE084
 	.long LABEL_FD0452
 	.long BitMapOut_ByteData_RenderB
-	.long LABEL_F98697
+	.long UIState_KeyScan_Dispatch
 	.long 0xFFFFFFFF
 
 
@@ -39478,7 +39478,7 @@ LABEL_EE8268:
 	.long LABEL_FDE084
 	.long LABEL_FD0452
 	.long BitMapOut_ByteData_RenderB
-	.long LABEL_F98697
+	.long UIState_KeyScan_Dispatch
 	.long 0xFFFFFFFF
 
 
@@ -39488,7 +39488,7 @@ LABEL_EE8284:
 	.long LABEL_FDE084
 	.long LABEL_FD0452
 	.long BitMapOut_ByteData_RenderB
-	.long LABEL_F98697
+	.long UIState_KeyScan_Dispatch
 	.long 0xFFFFFFFF
 
 
@@ -39498,7 +39498,7 @@ LABEL_EE82A0:
 	.long LABEL_FDE084
 	.long LABEL_FD0452
 	.long BitMapOut_ByteData_RenderB
-	.long LABEL_F98697
+	.long UIState_KeyScan_Dispatch
 	.long 0xFFFFFFFF
 
 
@@ -39508,7 +39508,7 @@ LABEL_EE82BC:
 	.long LABEL_FDE084
 	.long LABEL_FD0452
 	.long BitMapOut_ByteData_RenderB
-	.long LABEL_F98697
+	.long UIState_KeyScan_Dispatch
 	.long 0xFFFFFFFF
 
 
@@ -39518,7 +39518,7 @@ LABEL_EE82D8:
 	.long LABEL_FDE084
 	.long LABEL_FD0452
 	.long BitMapOut_ByteData_RenderB
-	.long LABEL_F98697
+	.long UIState_KeyScan_Dispatch
 	.long 0xFFFFFFFF
 
 
@@ -39528,7 +39528,7 @@ LABEL_EE82F4:
 	.long LABEL_FDE084
 	.long LABEL_FD0452
 	.long BitMapOut_ByteData_RenderB
-	.long LABEL_F98697
+	.long UIState_KeyScan_Dispatch
 	.long 0xFFFFFFFF
 
 
@@ -39538,7 +39538,7 @@ LABEL_EE8310:
 	.long LABEL_FDE084
 	.long LABEL_FD0452
 	.long BitMapOut_ByteData_RenderB
-	.long LABEL_F98697
+	.long UIState_KeyScan_Dispatch
 	.long 0xFFFFFFFF
 
 
@@ -39548,7 +39548,7 @@ LABEL_EE832C:
 	.long LABEL_FDE084
 	.long LABEL_FD0452
 	.long BitMapOut_ByteData_RenderB
-	.long LABEL_F98697
+	.long UIState_KeyScan_Dispatch
 	.long 0xFFFFFFFF
 
 
@@ -39558,7 +39558,7 @@ LABEL_EE8348:
 	.long LABEL_FDE084
 	.long LABEL_FD0452
 	.long BitMapOut_ByteData_RenderB
-	.long LABEL_F98697
+	.long UIState_KeyScan_Dispatch
 	.long 0xFFFFFFFF
 
 
@@ -39568,7 +39568,7 @@ LABEL_EE8364:
 	.long LABEL_FDE084
 	.long LABEL_FD0452
 	.long BitMapOut_ByteData_RenderB
-	.long LABEL_F98697
+	.long UIState_KeyScan_Dispatch
 	.long 0xFFFFFFFF
 
 LABEL_EE8380:
@@ -39678,32 +39678,32 @@ LABEL_EE840C:
 	.long 0xFFFFFFFF
 
 LABEL_EE8410:
-	.long LABEL_F98697
+	.long UIState_KeyScan_Dispatch
 	.long LABEL_FEB010
 	.long 0xFFFFFFFF
 
 LABEL_EE841C:
-	.long LABEL_F98697
+	.long UIState_KeyScan_Dispatch
 	.long FDemoText_ByteData_VoiceProbeC
 	.long 0xFFFFFFFF
 
 LABEL_EE8428:
-	.long LABEL_F98697
+	.long UIState_KeyScan_Dispatch
 	.long FDemoText_ByteData_VoiceProbeC
 	.byte 0xff, 0xff, 0xff, 0xff
 LABEL_EE8434:
-	.long LABEL_F98697
+	.long UIState_KeyScan_Dispatch
 	.long FDemoText_ByteData_VoiceProbeC
 	.byte 0xff, 0xff, 0xff, 0xff
 LABEL_EE8440:
-	.long LABEL_F98697
+	.long UIState_KeyScan_Dispatch
 	.byte 0xff, 0xff, 0xff, 0xff
 LABEL_EE8448:
 	.long LABEL_FC7B61
 	.long AccWrap_ReplayStop
 	.long LABEL_FDE2A8
 	.long LABEL_F3C8BA
-	.long LABEL_F98697
+	.long UIState_KeyScan_Dispatch
 	.long BitMapOut_ByteData_RenderE
 	.long DSPCfg_ProcessInput
 	.byte 0xff, 0xff, 0xff, 0xff
@@ -39722,20 +39722,20 @@ LABEL_EE847C:
 LABEL_EE8480:
 	.long LABEL_FEAA18
 	.long LABEL_FC7C14
-	.long LABEL_F98697
+	.long UIState_KeyScan_Dispatch
 	.byte 0xff, 0xff, 0xff, 0xff
 LABEL_EE8490:
 	.long LABEL_FEAA80
-	.long LABEL_F98697
+	.long UIState_KeyScan_Dispatch
 	.long LABEL_F454F1
 	.byte 0xff, 0xff, 0xff, 0xff
 LABEL_EE84A0:
 	.long LABEL_FEAAC4
-	.long LABEL_F98697
+	.long UIState_KeyScan_Dispatch
 	.byte 0xff, 0xff, 0xff, 0xff
 LABEL_EE84AC:
 	.byte 0xc5, 0xaa, 0xfe, 0x00
-	.long LABEL_F98697
+	.long UIState_KeyScan_Dispatch
 	.long LABEL_F454F1
 	.byte 0xff, 0xff, 0xff, 0xff
 LABEL_EE84BC:
@@ -39752,19 +39752,19 @@ LABEL_EE84D4:
 	.byte 0xff, 0xff, 0xff, 0xff
 LABEL_EE84E0:
 	.long LABEL_FEABD5
-	.long LABEL_F98697
+	.long UIState_KeyScan_Dispatch
 	.byte 0xff, 0xff, 0xff, 0xff
 LABEL_EE84EC:
 	.byte 0xd6, 0xab, 0xfe, 0x00
-	.long LABEL_F98697
+	.long UIState_KeyScan_Dispatch
 	.byte 0xff, 0xff, 0xff, 0xff
 LABEL_EE84F8:
 	.long LABEL_FEABD7
-	.long LABEL_F98697
+	.long UIState_KeyScan_Dispatch
 	.byte 0xff, 0xff, 0xff, 0xff
 LABEL_EE8504:
 	.byte 0xd8, 0xab, 0xfe, 0x00
-	.long LABEL_F98697
+	.long UIState_KeyScan_Dispatch
 	.byte 0xff, 0xff, 0xff, 0xff
 LABEL_EE8510:
 	.fill 4, 1, 0xff
@@ -39777,16 +39777,16 @@ LABEL_EE851C:
 LABEL_EE8520:
 	.long LABEL_FEAD62
 	.long LABEL_FDE67D
-	.long LABEL_F98697
+	.long UIState_KeyScan_Dispatch
 	.long DSPCfg_ProcessInput
 	.byte 0xff, 0xff, 0xff, 0xff
 LABEL_EE8534:
 	.byte 0xad, 0xe9, 0xfd, 0x00
-	.long LABEL_F98697
+	.long UIState_KeyScan_Dispatch
 	.byte 0xff, 0xff, 0xff, 0xff
 LABEL_EE8540:
 	.long LABEL_FEABD9
-	.long LABEL_F98697
+	.long UIState_KeyScan_Dispatch
 	.fill 4, 1, 0xff
 LABEL_EE854C:
 	.fill 4, 1, 0xff
@@ -39798,7 +39798,7 @@ LABEL_EE8558:
 	.long LABEL_FEAC82
 	.long LABEL_FDE7EB
 	.long LABEL_FC9A40
-	.long LABEL_F98697
+	.long UIState_KeyScan_Dispatch
 	.fill 4, 1, 0xff
 LABEL_EE856C:
 	.fill 4, 1, 0xff
@@ -39808,7 +39808,7 @@ LABEL_EE8570:
 	.long LABEL_FC7B2C
 	.long LABEL_FDE514
 	.long AccStyle_JumpTable2
-	.long LABEL_F98697
+	.long UIState_KeyScan_Dispatch
 	.long LABEL_F98748
 	.long BitMapOut_ByteData_RenderD
 	.byte 0xff, 0xff, 0xff, 0xff
@@ -39819,16 +39819,16 @@ LABEL_EE8590:
 	.long LABEL_FDE981
 	.long LABEL_FC7BBA
 	.long LABEL_F202EC
-	.long LABEL_F98697
+	.long UIState_KeyScan_Dispatch
 	.byte 0xff, 0xff, 0xff, 0xff
 LABEL_EE85A8:
 	.long LABEL_FEAD01
-	.long LABEL_F98697
+	.long UIState_KeyScan_Dispatch
 	.byte 0xff, 0xff, 0xff, 0xff
 LABEL_EE85B4:
 	.byte 0x82, 0xe9, 0xfd, 0x00
 	.long LABEL_FEE410
-	.long LABEL_F98697
+	.long UIState_KeyScan_Dispatch
 	.long Encoder_ApplySystemModeSettings
 	.byte 0xff, 0xff, 0xff, 0xff
 LABEL_EE85C8:
@@ -39838,17 +39838,17 @@ LABEL_EE85C8:
 	.long LABEL_FEADC7
 	.long BitMapOut_ByteData_DisplayUpdate
 	.long LABEL_FDBA3A
-	.long LABEL_F98697
+	.long UIState_KeyScan_Dispatch
 	.long BitMapOut_ByteData_TransitionSeq
 	.long DSPCfg_ProcessInput
 	.byte 0xff, 0xff, 0xff, 0xff
 LABEL_EE85F0:
-	.long LABEL_F98697
+	.long UIState_KeyScan_Dispatch
 	.long LABEL_FC9507
 	.byte 0xff, 0xff, 0xff, 0xff
 LABEL_EE85FC:
 	.byte 0x38, 0xae, 0xfe, 0x00
-	.long LABEL_F98697
+	.long UIState_KeyScan_Dispatch
 	.byte 0xff, 0xff, 0xff, 0xff
 LABEL_EE8608:
 	.long LABEL_FC7BBB
@@ -39860,7 +39860,7 @@ LABEL_EE8618:
 	.long LABEL_FDE983
 	.long LABEL_F8B4CC
 	.long BitMapOut_ByteData_RenderState
-	.long LABEL_F98697
+	.long UIState_KeyScan_Dispatch
 	.long LABEL_F69CC2
 	.long LABEL_F7AD49
 	.long LABEL_F6D84D
@@ -39913,7 +39913,7 @@ LABEL_EE86A8:
 	.fill 4, 1, 0xff
 LABEL_EE86AC:
 	.fill 4, 1, 0xff
-LABEL_EE86B0:
+UIState_DefaultConfig_B:
 	.byte 0xff, 0xff, 0xff, 0xff, 0x32, 0xb9, 0xfe, 0x00
 	.long LABEL_FDDDED
 	.byte 0xfd, 0x75, 0xef, 0x00
@@ -39996,28 +39996,28 @@ LABEL_EE86D0:
 	.long LABEL_EE8B6D
 	.long LABEL_EE8B71
 	.long LABEL_EE8B79
-	.long LABEL_EE8C75
-	.long LABEL_EE8C75
-	.long LABEL_EE8C75
-	.long LABEL_EE8C75
-	.long LABEL_EE8C75
-	.long LABEL_EE8C75
+	.long UIState_DefaultConfig_C
+	.long UIState_DefaultConfig_C
+	.long UIState_DefaultConfig_C
+	.long UIState_DefaultConfig_C
+	.long UIState_DefaultConfig_C
+	.long UIState_DefaultConfig_C
 	.long LABEL_EE8B7D
 	.long LABEL_EE8B81
 	.long LABEL_EE8B85
 	.long LABEL_EE8B89
 	.long LABEL_EE8B8D
-	.long LABEL_EE8C75
-	.long LABEL_EE8C75
-	.long LABEL_EE8C75
-	.long LABEL_EE8C75
-	.long LABEL_EE8C75
-	.long LABEL_EE8C75
-	.long LABEL_EE8C75
-	.long LABEL_EE8C75
-	.long LABEL_EE8C75
-	.long LABEL_EE8C75
-	.long LABEL_EE8C75
+	.long UIState_DefaultConfig_C
+	.long UIState_DefaultConfig_C
+	.long UIState_DefaultConfig_C
+	.long UIState_DefaultConfig_C
+	.long UIState_DefaultConfig_C
+	.long UIState_DefaultConfig_C
+	.long UIState_DefaultConfig_C
+	.long UIState_DefaultConfig_C
+	.long UIState_DefaultConfig_C
+	.long UIState_DefaultConfig_C
+	.long UIState_DefaultConfig_C
 	.long LABEL_EE8B91
 	.long LABEL_EE8B95
 	.long LABEL_EE8B99
@@ -40025,7 +40025,7 @@ LABEL_EE86D0:
 	.long LABEL_EE8BA1
 	.long LABEL_EE8BA5
 	.long LABEL_EE8BA9
-	.long LABEL_EE8C75
+	.long UIState_DefaultConfig_C
 	.long LABEL_EE8BAD
 	.long LABEL_EE8BB1
 	.long LABEL_EE8BB5
@@ -40033,71 +40033,71 @@ LABEL_EE86D0:
 	.long LABEL_EE8BBD
 	.long LABEL_EE8BC1
 	.long LABEL_EE8BC5
-	.long LABEL_EE8C75
+	.long UIState_DefaultConfig_C
 	.long LABEL_EE8BC9
 	.long LABEL_EE8BCD
 	.long LABEL_EE8BD1
-	.long LABEL_EE8C75
-	.long LABEL_EE8C75
-	.long LABEL_EE8C75
-	.long LABEL_EE8C75
-	.long LABEL_EE8C75
+	.long UIState_DefaultConfig_C
+	.long UIState_DefaultConfig_C
+	.long UIState_DefaultConfig_C
+	.long UIState_DefaultConfig_C
+	.long UIState_DefaultConfig_C
 	.long LABEL_EE8BD5
 	.long LABEL_EE8BD9
 	.long LABEL_EE8BDD
-	.long LABEL_EE8C75
-	.long LABEL_EE8C75
-	.long LABEL_EE8C75
-	.long LABEL_EE8C75
-	.long LABEL_EE8C75
+	.long UIState_DefaultConfig_C
+	.long UIState_DefaultConfig_C
+	.long UIState_DefaultConfig_C
+	.long UIState_DefaultConfig_C
+	.long UIState_DefaultConfig_C
 	.long LABEL_EE8BE1
 	.long LABEL_EE8BE5
-	.long LABEL_EE8C75
-	.long LABEL_EE8C75
-	.long LABEL_EE8C75
-	.long LABEL_EE8C75
-	.long LABEL_EE8C75
-	.long LABEL_EE8C75
-	.long LABEL_EE8C75
-	.long LABEL_EE8C75
-	.long LABEL_EE8C75
-	.long LABEL_EE8C75
-	.long LABEL_EE8C75
-	.long LABEL_EE8C75
-	.long LABEL_EE8C75
-	.long LABEL_EE8C75
+	.long UIState_DefaultConfig_C
+	.long UIState_DefaultConfig_C
+	.long UIState_DefaultConfig_C
+	.long UIState_DefaultConfig_C
+	.long UIState_DefaultConfig_C
+	.long UIState_DefaultConfig_C
+	.long UIState_DefaultConfig_C
+	.long UIState_DefaultConfig_C
+	.long UIState_DefaultConfig_C
+	.long UIState_DefaultConfig_C
+	.long UIState_DefaultConfig_C
+	.long UIState_DefaultConfig_C
+	.long UIState_DefaultConfig_C
+	.long UIState_DefaultConfig_C
 	.long LABEL_EE8BE9
 	.long LABEL_EE8BED
 	.long LABEL_EE8BF1
 	.long LABEL_EE8BF5
-	.long LABEL_EE8C75
-	.long LABEL_EE8C75
-	.long LABEL_EE8C75
-	.long LABEL_EE8C75
+	.long UIState_DefaultConfig_C
+	.long UIState_DefaultConfig_C
+	.long UIState_DefaultConfig_C
+	.long UIState_DefaultConfig_C
 	.long LABEL_EE8BF9
 	.long LABEL_EE8BFD
 	.long LABEL_EE8C01
-	.long LABEL_EE8C75
-	.long LABEL_EE8C75
-	.long LABEL_EE8C75
-	.long LABEL_EE8C75
-	.long LABEL_EE8C75
-	.long LABEL_EE8C75
-	.long LABEL_EE8C75
-	.long LABEL_EE8C75
-	.long LABEL_EE8C75
-	.long LABEL_EE8C75
-	.long LABEL_EE8C75
-	.long LABEL_EE8C75
-	.long LABEL_EE8C75
+	.long UIState_DefaultConfig_C
+	.long UIState_DefaultConfig_C
+	.long UIState_DefaultConfig_C
+	.long UIState_DefaultConfig_C
+	.long UIState_DefaultConfig_C
+	.long UIState_DefaultConfig_C
+	.long UIState_DefaultConfig_C
+	.long UIState_DefaultConfig_C
+	.long UIState_DefaultConfig_C
+	.long UIState_DefaultConfig_C
+	.long UIState_DefaultConfig_C
+	.long UIState_DefaultConfig_C
+	.long UIState_DefaultConfig_C
 	.long LABEL_EE8C05
 	.long LABEL_EE8C15
 	.long LABEL_EE8C29
-	.long LABEL_EE8C75
+	.long UIState_DefaultConfig_C
 	.long LABEL_EE8C31
 	.long LABEL_EE8C35
 	.long LABEL_EE8C39
-	.long LABEL_EE8C75
+	.long UIState_DefaultConfig_C
 	.long LABEL_EE8C3D
 	.long LABEL_EE8C41
 	.long LABEL_EE8C45
@@ -40112,8 +40112,8 @@ LABEL_EE86D0:
 	.long LABEL_EE8C69
 	.long LABEL_EE8C6D
 	.long LABEL_EE8C71
-	.long LABEL_EE8C75
-	.long LABEL_EE8C75
+	.long UIState_DefaultConfig_C
+	.long UIState_DefaultConfig_C
 	.byte 0xff
 LABEL_EE89D1:
 	.byte 0x16, 0x40, 0xfb, 0x00, 0xff, 0xff, 0xff
@@ -40455,7 +40455,7 @@ LABEL_EE8C6D:
 	.fill 1, 1, 0xff
 LABEL_EE8C71:
 	.fill 4, 1, 0xff
-LABEL_EE8C75:
+UIState_DefaultConfig_C:
 	.fill 3, 1, 0xff
 	.fill 6, 1, 0xff
 LABEL_EE8C7E:
@@ -52368,8 +52368,14 @@ LABEL_EF6159:
 	.byte 0x2e, 0x90, 0xef, 0x0e, 0xe8, 0x61, 0xef, 0x00
 	.long LABEL_EF7A61
 	.long LABEL_EF7A1C
-	.long LABEL_EF61E8
-LABEL_EF61E8:
+	.long DefaultHandler_Ret
+; ============================================================================
+; DefaultHandler_Ret - Null handler stub (immediate return)
+; ============================================================================
+; Returns immediately. Used as placeholder in 396+ jump table entries where
+; no specific handler is assigned. The default "do nothing" dispatch target.
+; ============================================================================
+DefaultHandler_Ret:
 	.byte 0x0e, 0x1d, 0x1a, 0x95
 	.byte 0xf9, 0xdb, 0xd8, 0x7e, 0x20, 0x00, 0xc1, 0x65
 	.byte 0x0d, 0x25, 0xcd, 0xcc, 0x03, 0xcc, 0xd4, 0xda
@@ -52399,36 +52405,36 @@ LABEL_EF628F:
 	.byte 0xaf, 0xef, 0x0e
 LABEL_EF62A7:
 	.long LABEL_EF628F
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
 	.long LABEL_EF7779
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
 	.long LABEL_EF6327
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
 	.long LABEL_EF628F
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
 	.byte 0xe8
 	.byte 0x61, 0xef, 0x00
 LABEL_EF6327:
@@ -52465,31 +52471,31 @@ LABEL_EF63BD:
 	.long LABEL_EF6AD7
 	.long LABEL_EF6C50
 	.long LABEL_EFDCA6
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
 	.byte 0xc1, 0xef, 0x0d
 	.byte 0x25, 0xcc, 0xd4, 0xda, 0xec, 0x02, 0xda, 0x8d
 	.ascii ";C#d"
 	.byte 0xef, 0x00, 0xe3, 0x07
 	.byte 0xec, 0xf4, 0x25, 0x5b, 0xb5, 0xe8, 0x0e
 LABEL_EF6423:
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
 	.long LABEL_EF6E29
 	.long LABEL_EF739A
 	.long LABEL_EF739A
@@ -52515,11 +52521,11 @@ LABEL_EF648A:
 	.long LABEL_EF80AF
 	.long LABEL_EFD9BC
 	.long LABEL_EF7D39
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
 	.long LABEL_EF6327
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
 	.long LABEL_EF659C
 	.long LABEL_EF8B6D
 	.long LABEL_EF8DFB
@@ -52528,13 +52534,13 @@ LABEL_EF648A:
 	.long LABEL_EF6546
 	.long LABEL_EF608C
 	.long LABEL_EF609D
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
 LABEL_EF650A:
 	.byte 0xc1, 0xe2
 	.byte 0xe3, 0x3e, 0x08, 0xc1, 0x14, 0x37, 0x21, 0x27
@@ -52597,74 +52603,74 @@ LABEL_EF659C:
 
 LABEL_EF65DD:
 	.long LABEL_EF659C
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
 	.long LABEL_EF608C
 	.long LABEL_EF609D
 	.long LABEL_EF6A25
 	.long LABEL_EF80AF
 	.long LABEL_EFD9BC
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
 	.long LABEL_EF6327
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
 	.long LABEL_EF659C
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
 	.long LABEL_EF608C
 	.long LABEL_EF609D
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
 LABEL_EF665D:
 	.byte 0xd9, 0x8b, 0xdb, 0xcf, 0x1f, 0x00, 0x7b
 	.byte 0x11, 0x00, 0xdb, 0xec, 0x02, 0x3c, 0x44, 0x78
 	.byte 0x66, 0xef, 0x00, 0xe3, 0x07, 0xf0, 0xec, 0x23
 	.byte 0x5c, 0xb3, 0xe8, 0x0e, 0x9c, 0x65, 0xef, 0x00
 LABEL_EF667C:
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
 	.long LABEL_EF608C
 	.long LABEL_EF609D
 	.long LABEL_EF6A25
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
 	.long LABEL_EF8768
 	.long LABEL_EF8752
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
 	.long LABEL_EF6327
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
 	.long LABEL_EF659C
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
 	.long LABEL_EF608C
 	.long LABEL_EF609D
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
 LABEL_EF66F8:
 	.byte 0xd9, 0x8b, 0xdb, 0xcf
 	.byte 0x1f, 0x00, 0x7b, 0x11, 0x00, 0xdb, 0xec, 0x02
@@ -52678,37 +52684,37 @@ LABEL_EF6713:
 	.byte 0xef, 0x0e
 LABEL_EF6726:
 	.long LABEL_EF659C
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
 	.long LABEL_EF6713
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
 	.long LABEL_EF608C
 	.long LABEL_EF609D
 	.long LABEL_EF6A25
 	.long LABEL_EF80AF
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
 	.long LABEL_EF6327
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
 	.long LABEL_EF659C
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
 	.long LABEL_EF6713
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
 	.long LABEL_EF608C
 	.long LABEL_EF609D
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
 LABEL_EF67A6:
 	.byte 0xd9, 0x8b, 0xdb, 0xcf, 0x1f, 0x00
 	.byte 0x7b, 0x11, 0x00, 0xdb, 0xec, 0x02, 0x3c, 0x44
@@ -52717,37 +52723,37 @@ LABEL_EF67A6:
 	.byte 0x23, 0x5c, 0xb3, 0xe8, 0x0e
 LABEL_EF67C1:	.asciz "œeï"
 LABEL_EF67C5:
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
 	.long LABEL_EF608C
 	.long LABEL_EF609D
 	.long LABEL_EF6A25
 	.long LABEL_EF80AF
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
 	.long LABEL_EF6327
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
 	.long LABEL_EF659C
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
 	.long LABEL_EF608C
 	.long LABEL_EF609D
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
 LABEL_EF6841:
 	.byte 0xd9, 0x8b, 0xdb
 	.byte 0xcf, 0x1f, 0x00, 0x7b, 0x11, 0x00, 0xdb, 0xec
@@ -52757,37 +52763,37 @@ LABEL_EF6841:
 	.byte 0x07, 0xf0, 0xec, 0x23, 0x5c, 0xb3, 0xe8, 0x0e
 LABEL_EF685C:
 	.long LABEL_EF659C
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
 	.long LABEL_EF608C
 	.long LABEL_EF609D
 	.long LABEL_EF6A25
 	.long LABEL_EF80AF
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
 	.long LABEL_EF6327
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
 	.long LABEL_EF659C
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
 	.long LABEL_EF608C
 	.long LABEL_EF609D
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
 LABEL_EF68DC:
 	.byte 0xd9, 0x8b, 0xdb, 0xcf, 0x1f, 0x00, 0x7b, 0x11
 	.byte 0x00, 0xdb, 0xec, 0x02, 0x3c, 0x44, 0x0a, 0x69
@@ -52799,37 +52805,37 @@ LABEL_EF68F7:
 	.byte 0xef, 0x1d, 0xa7, 0x8c, 0xef, 0x0e, 0x9c, 0x65
 	.byte 0xef, 0x00
 LABEL_EF690E:
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
 	.long LABEL_EF68F7
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
 	.long LABEL_EF608C
 	.long LABEL_EF609D
 	.long LABEL_EF6A25
 	.long LABEL_EF80AF
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
 	.long LABEL_EF6327
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
 	.long LABEL_EF659C
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
 	.long LABEL_EF68F7
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
 	.long LABEL_EF608C
 	.long LABEL_EF609D
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
 LABEL_EF698A:
 	ld	hl, bc
 	.byte 0xdb, 0xcf, 0x1f, 0x00, 0x7b, 0x11, 0x00, 0xdb
@@ -52840,37 +52846,37 @@ LABEL_EF698A:
 
 LABEL_EF69A5:
 	.long LABEL_EF659C
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
 	.long LABEL_EF608C
 	.long LABEL_EF609D
 	.long LABEL_EF6A25
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
 	.long LABEL_EF6327
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
 	.long LABEL_EF659C
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
 	.long LABEL_EF608C
 	.long LABEL_EF609D
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
 LABEL_EF6A25:
 	.byte 0xc8, 0x33, 0x07, 0x7e, 0x69, 0x00, 0xc1
 	.byte 0x65, 0x0d, 0x21, 0xc9, 0xd8, 0x76, 0x60, 0x00
@@ -52903,37 +52909,37 @@ LABEL_EF6AD7:
 	.byte 0xec, 0x23, 0x5c, 0xb3, 0xe8, 0x0e
 LABEL_EF6AF2:
 	.long LABEL_EF659C
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
 	.long LABEL_EF6B72
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
 	.long LABEL_EF608C
 	.long LABEL_EF609D
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
 	.long LABEL_EF6327
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
 	.long LABEL_EF659C
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
 	.long LABEL_EF6B72
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
 	.long LABEL_EF608C
 	.long LABEL_EF609D
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
 LABEL_EF6B72:
 	.byte 0xc1, 0xe2
 	.byte 0xe3, 0x3e, 0x08, 0xc1, 0xf7, 0x0e, 0x21, 0x27
@@ -52974,37 +52980,37 @@ LABEL_EF6C50:
 	.byte 0xf0, 0xec, 0x23, 0x5c, 0xb3, 0xe8, 0x0e
 LABEL_EF6C6B:
 	.long LABEL_EF659C
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
 	.long LABEL_EF6CEB
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
 	.long LABEL_EF608C
 	.long LABEL_EF609D
 	.long LABEL_EF6A25
 	.long LABEL_EF80AF
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
 	.long LABEL_EF6327
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
 	.long LABEL_EF659C
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
 	.long LABEL_EF6CEB
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
 	.long LABEL_EF608C
 	.long LABEL_EF609D
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
 LABEL_EF6CEB:
 	; --- Dispatcher: 5-way branch on (0x10F2) value (318 bytes total) ---
 	ldda8	a, 4337
@@ -53129,37 +53135,37 @@ LABEL_EF6E29:
 	.byte 0x07, 0xf0, 0xec, 0x23, 0x5c, 0xb3, 0xe8, 0x0e
 LABEL_EF6E44:
 	.long LABEL_EF6EC4
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
 	.long LABEL_EF955D
 	.long LABEL_EF9554
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
 	.long LABEL_EF80A6
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
 	.long LABEL_EF7779
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
 	.long LABEL_EF6327
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
 	.long LABEL_EF6EC4
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
 	.long LABEL_EF955D
 	.long LABEL_EF9554
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
 LABEL_EF6EC4:
 	; --- State check/dispatch (61 bytes) ---
 	stdi8	3923, 1
@@ -53595,37 +53601,37 @@ LABEL_EF73A4:
 	.byte 0x23, 0x5c, 0xb3, 0xe8, 0x0e
 LABEL_EF73BF:	.asciz "Änï"
 LABEL_EF73C3:
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
 	.long LABEL_EF875D
 	.long LABEL_EF8743
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
 	.long LABEL_EF6327
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
 	.long LABEL_EF6EC4
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
 LABEL_EF743F:
 	.byte 0xd9, 0x8b, 0xdb
 	.byte 0xcf, 0x1f, 0x00, 0x7b, 0x11, 0x00, 0xdb, 0xec
@@ -53635,75 +53641,75 @@ LABEL_EF743F:
 	.byte 0x07, 0xf0, 0xec, 0x23, 0x5c, 0xb3, 0xe8, 0x0e
 LABEL_EF745A:
 	.long LABEL_EF6EC4
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
 	.long LABEL_EF68F7
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
 	.long LABEL_EF955D
 	.long LABEL_EF9554
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
 	.long LABEL_EF80A6
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
 	.long LABEL_EF7779
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
 	.long LABEL_EF6327
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
 	.long LABEL_EF6EC4
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
 	.long LABEL_EF68F7
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
 	.long LABEL_EF955D
 	.long LABEL_EF9554
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
 LABEL_EF74DA:
 	.byte 0xd9, 0x8b, 0xdb, 0xcf, 0x1f, 0x00, 0x7b, 0x11
 	.byte 0x00, 0xdb, 0xec, 0x02, 0x3c, 0x44, 0xf5, 0x74
 	.byte 0xef, 0x00, 0xe3, 0x07, 0xf0, 0xec, 0x23, 0x5c
 	.byte 0xb3, 0xe8, 0x0e
 LABEL_EF74F5:
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
 	.long LABEL_EF7575
 	.long LABEL_EF7580
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
 LABEL_EF7575:
 	.byte 0xc8, 0x33, 0x07, 0x7e, 0x04
 	.byte 0x00, 0x1d, 0x97, 0x77, 0xef, 0x0e
@@ -53776,9 +53782,9 @@ LABEL_EF7580:
 
 
 LABEL_EF62AB:
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
 	.long LABEL_EF9785
 	.byte 0x00
 	.byte 0x03, 0x03, 0x03, 0x00, 0x01, 0x03, 0x03, 0x00
@@ -54174,10 +54180,10 @@ LABEL_EF80AF:
 	.byte 0xe5, 0x80, 0xef, 0xef, 0xc8, 0x02, 0x00, 0x00
 	.byte 0x00, 0x1b, 0x6a, 0x81, 0xef, 0x0e
 LABEL_EF817F:
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
 	.long LABEL_EF902E
 	.long LABEL_EF902E
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
 	.byte 0xc1, 0x65
 	.byte 0x0d, 0x3f, 0x03, 0x76, 0x06, 0x00, 0x20, 0x00
 	.byte 0x1b, 0x1d, 0x82, 0xef, 0x1d, 0xe8, 0x83, 0xef
@@ -54421,7 +54427,7 @@ LABEL_EF87A3:
 
 
 LABEL_EF87D7:
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
 	.long LABEL_EF87E7
 	.long LABEL_EF87F1
 	.long LABEL_EF87FB
@@ -56232,7 +56238,7 @@ LABEL_EFB0D3:
 	.byte 0x00, 0xe3, 0x07, 0xf0, 0xec, 0x23, 0x5c, 0xb3
 	.byte 0xe8, 0x0e
 LABEL_EFB1A6:
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
 	.long LABEL_EFB1D2
 	.long LABEL_EFB20F
 	.long LABEL_EFB24C
@@ -56254,9 +56260,9 @@ LABEL_EFB1F7:
 	.long LABEL_EFB311
 	.long LABEL_EFB325
 	.long LABEL_EFB325
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
 LABEL_EFB20F:
 	.byte 0x1d, 0x1e, 0xb4, 0xef, 0x1d
 	.byte 0xca, 0xb3, 0xef, 0xc9, 0xd8, 0x76, 0x17, 0x00
@@ -56267,9 +56273,9 @@ LABEL_EFB234:
 	.long LABEL_EFB311
 	.long LABEL_EFB325
 	.long LABEL_EFB325
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
 LABEL_EFB24C:
 	.byte 0x1d, 0x1e, 0xb4, 0xef, 0x1d, 0xca, 0xb3, 0xef
 	.byte 0xc9, 0xd8, 0x76, 0x17, 0x00, 0xc9, 0x69, 0xd8
@@ -56279,11 +56285,11 @@ LABEL_EFB24C:
 	.byte 0x23, 0x5c, 0xb3, 0xe8, 0x0e
 LABEL_EFB271:	.asciz "èaï"
 LABEL_EFB275:
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
 	.long LABEL_EFB325
 	.long LABEL_EFB325
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
 LABEL_EFB289:
 	.byte 0x1d, 0x25, 0xb3
 	.byte 0xef, 0x0e
@@ -56299,7 +56305,7 @@ LABEL_EFB2B3:
 	.long LABEL_EFB311
 	.long LABEL_EFB325
 	.long LABEL_EFB311
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
 LABEL_EFB2CB:
 	.byte 0x1d
 	.byte 0x1e, 0xb4, 0xef, 0x1d, 0xca, 0xb3, 0xef, 0xc9
@@ -56312,7 +56318,7 @@ LABEL_EFB2F4:
 	.long LABEL_EFB31F
 	.long LABEL_EFB325
 	.long LABEL_EFB31F
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
 LABEL_EFB308:
 	.byte 0x1d, 0x58, 0xc3, 0xef
 	.byte 0x1d, 0x11, 0xb3, 0xef, 0x0e
@@ -58097,36 +58103,36 @@ LABEL_EFDCA6:
 LABEL_EFDCC1:
 	.long LABEL_EF659C
 	.long LABEL_EFDB94
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
 	.long LABEL_EFDBC2
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
 	.long LABEL_EF608C
 	.long LABEL_EF609D
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
 	.long LABEL_EFDC2A
 	.long LABEL_EFDC43
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
 	.long LABEL_EF6327
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
 	.long LABEL_EF659C
 	.long LABEL_EFDB94
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
 	.long LABEL_EFDBC2
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
 	.long LABEL_EF608C
 	.long LABEL_EF609D
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
-	.long LABEL_EF61E8
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
+	.long DefaultHandler_Ret
 	.byte 0x1d
 	.byte 0xd6, 0xdf, 0xef, 0x1d, 0xbd, 0x95, 0xef, 0xd1
 	.byte 0x1a, 0x37, 0x20, 0xf1, 0x4e, 0x0e, 0x50, 0xc1
@@ -91822,7 +91828,7 @@ LABEL_F243A8:
 	ldb a, 0x81
 	pushw bc
 	push xiy
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	pop xiy
 	popw bc
 	cpdi8 4323, 0
@@ -92040,7 +92046,7 @@ LABEL_F24574:
 
 LABEL_F24596:
 	pushw bc
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	popw bc
 	cpdi8 4323, 0
 	jrl nz, LABEL_F24646
@@ -92067,7 +92073,7 @@ LABEL_F245C2:
 	popw bc
 	pushw bc
 	push xiy
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	pop xiy
 	popw bc
 	cpdi8 4323, 0
@@ -92075,14 +92081,14 @@ LABEL_F245C2:
 	ld a, c
 	pushw bc
 	push xiy
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	pop xiy
 	popw bc
 	cpdi8 4323, 0
 	jrl nz, LABEL_F24646
 	ld a, b
 	push xiy
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	pop xiy
 	cpdi8 4323, 0
 	jrl nz, LABEL_F24646
@@ -92725,7 +92731,14 @@ LABEL_F24BE1:
 	pop xix
 	ret
 
-LABEL_F24BEF:
+; ============================================================================
+; SoundGen_UpdateAndRefresh - Update sound generator parameters
+; ============================================================================
+; Two-step process: (1) loads data pointer/position from 10415/9830 and
+; extracts parameters, (2) calls refresh routine. Called 91+ times from
+; sound processing code in the accompaniment/style playback engine.
+; ============================================================================
+SoundGen_UpdateAndRefresh:
 	call LABEL_F2466E
 	call LABEL_F25DBA
 	ret
@@ -92793,7 +92806,7 @@ LABEL_F24C5B:
 	push xiy
 	call LABEL_F24647
 	ldb a, 0xD0
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	pop xiy
 	cpdi8 4323, 0
 	jrl nz, LABEL_F24CBE
@@ -92807,13 +92820,13 @@ LABEL_F24C5B:
 	call LABEL_F24C3B
 	pop xiy
 	push xiy
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	pop xiy
 	cpdi8 4323, 0
 	jrl nz, LABEL_F24CBE
 	ldda8 a, 4012
 	push xiy
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	pop xiy
 	cpdi8 4323, 0
 	jrl nz, LABEL_F24CBE
@@ -92858,7 +92871,7 @@ LABEL_F24CF7:
 	pop xix
 	ldb a, 0x90
 	push xix
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	pop xix
 	pop xiy
 	cpdi8 4323, 0
@@ -92874,7 +92887,7 @@ LABEL_F24CF7:
 	pop xiy
 	push xiy
 	push xix
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	pop xix
 	pop xiy
 	cpdi8 4323, 0
@@ -92935,7 +92948,7 @@ LABEL_F24DB9:
 LABEL_F24DBD:
 	push xiy
 	push xix
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	pop xix
 	pop xiy
 	cpdi8 4323, 0
@@ -92943,7 +92956,7 @@ LABEL_F24DBD:
 	ldda8 a, 4013
 	push xiy
 	push xix
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	pop xix
 	pop xiy
 	cpdi8 4323, 0
@@ -92955,7 +92968,7 @@ LABEL_F24DBD:
 	xor a, a
 	push xiy
 	push xix
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	pop xix
 	pop xiy
 	cpdi8 4323, 0
@@ -92963,7 +92976,7 @@ LABEL_F24DBD:
 	xor a, a
 	push xiy
 	push xix
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	pop xix
 	pop xiy
 	cpdi8 4323, 0
@@ -93167,7 +93180,7 @@ LABEL_F24FE0:
 	push xiy
 	call LABEL_F24647
 	ldb a, 0xD2
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	pop xiy
 	cpdi8 4323, 0
 	jrl nz, LABEL_F25055
@@ -93181,19 +93194,19 @@ LABEL_F24FE0:
 	call LABEL_F24C3B
 	pop xiy
 	push xiy
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	pop xiy
 	cpdi8 4323, 0
 	jrl nz, LABEL_F25055
 	ldda8 a, 4012
 	push xiy
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	pop xiy
 	cpdi8 4323, 0
 	jrl nz, LABEL_F25055
 	ldda8 a, 4013
 	push xiy
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	pop xiy
 	cpdi8 4323, 0
 	jrl nz, LABEL_F25055
@@ -93250,7 +93263,7 @@ LABEL_F25082:
 	rlc_i_8 w, 2
 	or a, w
 	push xhl
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	pop xhl
 	pop xiy
 	cpdi8 4323, 0
@@ -93268,7 +93281,7 @@ LABEL_F25082:
 	pop xhl
 	push xhl
 	push xiy
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	pop xiy
 	pop xhl
 	cpdi8 4323, 0
@@ -93279,7 +93292,7 @@ LABEL_F25082:
 	pop xix
 	push xhl
 	push xiy
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	pop xiy
 	pop xhl
 	cpdi8 4323, 0
@@ -93287,7 +93300,7 @@ LABEL_F25082:
 	xor a, a
 	push xhl
 	push xiy
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	pop xiy
 	pop xhl
 	cpdi8 4323, 0
@@ -93295,14 +93308,14 @@ LABEL_F25082:
 	ldda8 a, 6746
 	and a, 0x7F
 	push xiy
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	pop xiy
 	cpdi8 4323, 0
 	jrl nz, LABEL_F2535E
 	ldda8 a, 6747
 	and a, 0x7F
 	push xiy
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	pop xiy
 	cpdi8 4323, 0
 	jrl nz, LABEL_F2535E
@@ -93354,7 +93367,7 @@ LABEL_F251E5:
 	rlc_i_8 w, 2
 	or a, w
 	push xhl
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	pop xhl
 	pop xiy
 	cpdi8 4323, 0
@@ -93372,7 +93385,7 @@ LABEL_F251E5:
 	pop xhl
 	push xhl
 	push xiy
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	pop xiy
 	pop xhl
 	cpdi8 4323, 0
@@ -93383,7 +93396,7 @@ LABEL_F251E5:
 	pop xix
 	push xhl
 	push xiy
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	pop xiy
 	pop xhl
 	cpdi8 4323, 0
@@ -93391,7 +93404,7 @@ LABEL_F251E5:
 	xor a, a
 	push xhl
 	push xiy
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	pop xiy
 	pop xhl
 	cpdi8 4323, 0
@@ -93399,14 +93412,14 @@ LABEL_F251E5:
 	ldda8 a, 6746
 	and a, 0x7F
 	push xiy
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	pop xiy
 	cpdi8 4323, 0
 	jrl nz, LABEL_F2535E
 	ldda8 a, 6747
 	and a, 0x7F
 	push xiy
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	pop xiy
 	cpdi8 4323, 0
 	jrl nz, LABEL_F2535E
@@ -93427,7 +93440,7 @@ LABEL_F252A7:
 	push xiy
 	and w, 0x1
 	or a, w
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	pop xiy
 	cpdi8 4323, 0
 	jrl nz, LABEL_F2535E
@@ -93441,7 +93454,7 @@ LABEL_F252A7:
 	call LABEL_F24C3B
 	pop xiy
 	push xiy
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	pop xiy
 	cpdi8 4323, 0
 	jrl nz, LABEL_F2535E
@@ -93450,19 +93463,19 @@ LABEL_F252A7:
 	ld_srib3 A, 0x07, 0xF0, 0xF4
 	pop xix
 	push xiy
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	pop xiy
 	cpdi8 4323, 0
 	jrl nz, LABEL_F2535E
 	ldb a, 0x0
 	push xiy
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	pop xiy
 	cpdi8 4323, 0
 	jrl nz, LABEL_F2535E
 	ldda8 a, 4012
 	push xiy
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	pop xiy
 	cpdi8 4323, 0
 	jrl nz, LABEL_F2535E
@@ -93472,7 +93485,7 @@ LABEL_F252A7:
 	pop xix
 	and a, 0x70
 	srl a, 4
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	cpdi8 4323, 0
 	jrl nz, LABEL_F2535E
 	call LABEL_F25DE5
@@ -93494,7 +93507,7 @@ LABEL_F2535F:
 	and w, 0xF
 	ldb a, 0xA0
 	or a, w
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	pop xiy
 	cpdi8 4323, 0
 	jrl nz, LABEL_F253D1
@@ -93508,13 +93521,13 @@ LABEL_F2535F:
 	call LABEL_F24C3B
 	pop xiy
 	push xiy
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	pop xiy
 	cpdi8 4323, 0
 	jrl nz, LABEL_F253D1
 	ldda8 a, 4012
 	push xiy
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	pop xiy
 	cpdi8 4323, 0
 	jrl nz, LABEL_F253D1
@@ -93562,7 +93575,7 @@ LABEL_F25405:
 	ldb a, 0x90
 	or a, w
 	push xix
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	pop xix
 	pop xiy
 	cpdi8 4323, 0
@@ -93580,7 +93593,7 @@ LABEL_F25405:
 	pop xiy
 	push xiy
 	push xix
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	pop xix
 	pop xiy
 	cpdi8 4323, 0
@@ -93641,7 +93654,7 @@ LABEL_F254D6:
 LABEL_F254DA:
 	push xiy
 	push xix
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	pop xix
 	pop xiy
 	cpdi8 4323, 0
@@ -93654,7 +93667,7 @@ LABEL_F254DA:
 LABEL_F254F6:
 	push xiy
 	push xix
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	pop xix
 	pop xiy
 	cpdi8 4323, 0
@@ -93667,7 +93680,7 @@ LABEL_F254F6:
 	push xiy
 	push xix
 	pushw wa
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	popw wa
 	pop xix
 	pop xiy
@@ -93675,7 +93688,7 @@ LABEL_F254F6:
 	jrl nz, LABEL_F2555F
 	push xiy
 	push xix
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	pop xix
 	pop xiy
 	cpdi8 4323, 0
@@ -93878,7 +93891,7 @@ LABEL_F256F9:
 	and w, 0xF
 	ldb a, 0xE0
 	or a, w
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	pop xiy
 	cpdi8 4323, 0
 	jrl nz, LABEL_F25779
@@ -93892,19 +93905,19 @@ LABEL_F256F9:
 	call LABEL_F24C3B
 	pop xiy
 	push xiy
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	pop xiy
 	cpdi8 4323, 0
 	jrl nz, LABEL_F25779
 	push xiy
 	ldda8 a, 4012
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	pop xiy
 	cpdi8 4323, 0
 	jrl nz, LABEL_F25779
 	push xiy
 	ldda8 a, 4013
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	pop xiy
 	cpdi8 4323, 0
 	jrl nz, LABEL_F25779
@@ -93967,7 +93980,7 @@ LABEL_F257B0:
 	rlc_i_8 w, 2
 	or a, w
 	push xhl
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	pop xhl
 	pop xiy
 	cpdi8 4323, 0
@@ -93985,7 +93998,7 @@ LABEL_F257B0:
 	pop xhl
 	push xhl
 	push xiy
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	pop xiy
 	pop xhl
 	cpdi8 4323, 0
@@ -93994,7 +94007,7 @@ LABEL_F257B0:
 	and a, 0xF
 	push xhl
 	push xiy
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	pop xiy
 	pop xhl
 	cpdi8 4323, 0
@@ -94002,7 +94015,7 @@ LABEL_F257B0:
 	xor a, a
 	push xhl
 	push xiy
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	pop xiy
 	pop xhl
 	cpdi8 4323, 0
@@ -94010,14 +94023,14 @@ LABEL_F257B0:
 	ldda8 a, 6746
 	and a, 0x7F
 	push xiy
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	pop xiy
 	cpdi8 4323, 0
 	jrl nz, LABEL_F25AA3
 	ldda8 a, 6747
 	and a, 0x7F
 	push xiy
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	pop xiy
 	cpdi8 4323, 0
 	jrl nz, LABEL_F25AA3
@@ -94073,7 +94086,7 @@ LABEL_F25922:
 	rlc_i_8 w, 2
 	or a, w
 	push xhl
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	pop xhl
 	pop xiy
 	cpdi8 4323, 0
@@ -94091,7 +94104,7 @@ LABEL_F25922:
 	pop xhl
 	push xhl
 	push xiy
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	pop xiy
 	pop xhl
 	cpdi8 4323, 0
@@ -94100,7 +94113,7 @@ LABEL_F25922:
 	and a, 0xF
 	push xhl
 	push xiy
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	pop xiy
 	pop xhl
 	cpdi8 4323, 0
@@ -94108,7 +94121,7 @@ LABEL_F25922:
 	xor a, a
 	push xhl
 	push xiy
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	pop xiy
 	pop xhl
 	cpdi8 4323, 0
@@ -94116,14 +94129,14 @@ LABEL_F25922:
 	ldda8 a, 6746
 	and a, 0x7F
 	push xiy
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	pop xiy
 	cpdi8 4323, 0
 	jrl nz, LABEL_F25AA3
 	ldda8 a, 6747
 	and a, 0x7F
 	push xiy
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	pop xiy
 	cpdi8 4323, 0
 	jrl nz, LABEL_F25AA3
@@ -94146,7 +94159,7 @@ LABEL_F259DF:
 	or a, w
 	pop xiy
 	push xiy
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	pop xiy
 	cpdi8 4323, 0
 	jrl nz, LABEL_F25AA3
@@ -94160,26 +94173,26 @@ LABEL_F259DF:
 	call LABEL_F24C3B
 	pop xiy
 	push xiy
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	pop xiy
 	cpdi8 4323, 0
 	jrl nz, LABEL_F25AA3
 	ldda8 a, 4011
 	and a, 0xF
 	push xiy
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	pop xiy
 	cpdi8 4323, 0
 	jrl nz, LABEL_F25AA3
 	ldb a, 0x0
 	push xiy
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	pop xiy
 	cpdi8 4323, 0
 	jrl nz, LABEL_F25AA3
 	ldda8 a, 4012
 	push xiy
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	pop xiy
 	cpdi8 4323, 0
 	jrl nz, LABEL_F25AA3
@@ -94193,7 +94206,7 @@ LABEL_F259DF:
 	pop xix
 	and a, 0x70
 	srl a, 4
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	cpdi8 4323, 0
 	jrl nz, LABEL_F25AA3
 	call LABEL_F25DE5
@@ -95564,7 +95577,7 @@ LABEL_F26A24:
 	or a, 0x1
 
 LABEL_F26A47:
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	pop xiy
 	cpdi8 4323, 0
 	jrl nz, LABEL_F26AE5
@@ -95578,7 +95591,7 @@ LABEL_F26A47:
 	call LABEL_F24C3B
 	pop xiy
 	push xiy
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	pop xiy
 	cpdi8 4323, 0
 	jrl nz, LABEL_F26AE5
@@ -95592,27 +95605,27 @@ LABEL_F26A8C:
 	ld_srib3 A, 0x07, 0xF0, 0xF4
 	pop xix
 	push xiy
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	pop xiy
 	cpdi8 4323, 0
 	jr nz, LABEL_F26AE5
 	ldda8 a, 4233
 	push xiy
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	pop xiy
 	cpdi8 4323, 0
 	jr nz, LABEL_F26AE5
 	ldda8 a, 4234
 	and a, 0x7F
 	push xiy
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	pop xiy
 	cpdi8 4323, 0
 	jr nz, LABEL_F26AE5
 	ldda8 a, 4235
 	and a, 0x7F
 	push xiy
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	pop xiy
 	cpdi8 4323, 0
 	jr nz, LABEL_F26AE5
@@ -95630,7 +95643,7 @@ LABEL_F26AE6:
 	push xiy
 	call LABEL_F25AB4
 	ldb a, 0xB0
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	pop xiy
 	cpdi8 4323, 0
 	jr nz, LABEL_F26B7E
@@ -95644,32 +95657,32 @@ LABEL_F26AE6:
 	call LABEL_F24C3B
 	pop xiy
 	push xiy
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	pop xiy
 	cpdi8 4323, 0
 	jr nz, LABEL_F26B7E
 	ldda8 a, 4011
 	and a, 0xF
 	push xiy
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	pop xiy
 	cpdi8 4323, 0
 	jr nz, LABEL_F26B7E
 	ldda8 a, 4233
 	push xiy
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	pop xiy
 	cpdi8 4323, 0
 	jr nz, LABEL_F26B7E
 	ldda8 a, 4234
 	push xiy
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	pop xiy
 	cpdi8 4323, 0
 	jr nz, LABEL_F26B7E
 	ldda8 a, 4235
 	push xiy
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	pop xiy
 	cpdi8 4323, 0
 	jr nz, LABEL_F26B7E
@@ -95799,7 +95812,7 @@ LABEL_F26CC5:
 LABEL_F26CDF:
 	push xiy
 	pushw bc
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	popw bc
 	pop xiy
 	cpdi8 4323, 0
@@ -95813,7 +95826,7 @@ LABEL_F26CDF:
 	pushw bc
 	push xiy
 	call LABEL_F24C3B
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	pop xiy
 	popw bc
 	cpdi8 4323, 0
@@ -95842,7 +95855,7 @@ LABEL_F26D47:
 LABEL_F26D4C:
 	pushw bc
 	push xiy
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	pop xiy
 	popw bc
 	cpdi8 4323, 0
@@ -95854,20 +95867,20 @@ LABEL_F26D4C:
 	ld_srib3 A, 0x03, 0xE8, 0xE4
 	pop xde
 	push xiy
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	pop xiy
 	cpdi8 4323, 0
 	jrl nz, LABEL_F26DCE
 	ldda8 a, 4234
 	and a, 0x7F
 	push xiy
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	pop xiy
 	cpdi8 4323, 0
 	jrl nz, LABEL_F26DCE
 	ldb a, 0x7F
 	push xiy
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	pop xiy
 	cpdi8 4323, 0
 	jrl nz, LABEL_F26DCE
@@ -95946,28 +95959,28 @@ LABEL_F26E29:
 	pop xiy
 	ldda8 a, 6749
 	push xiy
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	pop xiy
 	ldb a, 0x0
 	push xiy
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	pop xiy
 	ldda8 a, 6750
 	push xiy
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	pop xiy
 	ld xde, 0xF26E7E
 	ld_srib3 A, 0x07, 0xE8, 0xF4
 	push xiy
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	pop xiy
 	ldb a, 0x2
 	push xiy
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	pop xiy
 	ldb a, 0x7F
 	push xiy
-	call LABEL_F24BEF
+	call SoundGen_UpdateAndRefresh
 	pop xiy
 	push xiy
 	call LABEL_F24B67
@@ -96398,7 +96411,7 @@ LABEL_F271F2:
 LABEL_F27248:
 	pop xbc
 	pop xwa
-	jp LABEL_F28217
+	jp SMF_FlushAndFinalize
 
 LABEL_F2724E:
 	ld xiy, 0xF2827C
@@ -96434,7 +96447,7 @@ LABEL_F27266:
 LABEL_F2728C:
 	pop xbc
 	pop xwa
-	jrl LABEL_F28217
+	jrl SMF_FlushAndFinalize
 
 LABEL_F27291:
 	djnz xbc, LABEL_F27266
@@ -96536,7 +96549,7 @@ LABEL_F272F8:
 LABEL_F27388:
 	pop xbc
 	pop xwa
-	jp LABEL_F28217
+	jp SMF_FlushAndFinalize
 
 LABEL_F2738E:
 	ldb w, 0x20
@@ -96559,7 +96572,7 @@ LABEL_F2738E:
 LABEL_F273AE:
 	pop xbc
 	pop xwa
-	jp LABEL_F28217
+	jp SMF_FlushAndFinalize
 
 LABEL_F273B4:
 	ldda8 a, 6881
@@ -96584,7 +96597,7 @@ LABEL_F273B4:
 LABEL_F273DC:
 	pop xbc
 	pop xwa
-	jp LABEL_F28217
+	jp SMF_FlushAndFinalize
 
 LABEL_F273E2:
 	call SMF_ResolveGlobalChannel
@@ -96612,7 +96625,7 @@ LABEL_F273E2:
 LABEL_F27411:
 	pop xbc
 	pop xwa
-	jp LABEL_F28217
+	jp SMF_FlushAndFinalize
 
 LABEL_F27417:
 	ldda8 a, 6881
@@ -96639,7 +96652,7 @@ LABEL_F27417:
 LABEL_F27442:
 	pop xbc
 	pop xwa
-	jp LABEL_F28217
+	jp SMF_FlushAndFinalize
 
 LABEL_F27448:
 	ldda8 a, 6881
@@ -96664,7 +96677,7 @@ LABEL_F27448:
 LABEL_F2746E:
 	pop xbc
 	pop xwa
-	jp LABEL_F28217
+	jp SMF_FlushAndFinalize
 
 LABEL_F27474:
 	ldda8 a, 6881
@@ -96689,7 +96702,7 @@ LABEL_F27474:
 LABEL_F27499:
 	pop xbc
 	pop xwa
-	jp LABEL_F28217
+	jp SMF_FlushAndFinalize
 
 LABEL_F2749F:
 	ldb w, 0x5D
@@ -96712,7 +96725,7 @@ LABEL_F2749F:
 LABEL_F274BF:
 	pop xbc
 	pop xwa
-	jp LABEL_F28217
+	jp SMF_FlushAndFinalize
 
 LABEL_F274C5:
 	ldb w, 0x40
@@ -96738,7 +96751,7 @@ LABEL_F274D0:
 LABEL_F274E8:
 	pop xbc
 	pop xwa
-	jp LABEL_F28217
+	jp SMF_FlushAndFinalize
 
 LABEL_F274EE:
 	ldb w, 0x5B
@@ -96760,7 +96773,7 @@ LABEL_F274EE:
 LABEL_F2750F:
 	pop xbc
 	pop xwa
-	jp LABEL_F28217
+	jp SMF_FlushAndFinalize
 
 LABEL_F27515:
 	ldda8 l, 10359
@@ -96807,7 +96820,7 @@ LABEL_F27515:
 LABEL_F2757F:
 	pop xbc
 	pop xwa
-	jp LABEL_F28217
+	jp SMF_FlushAndFinalize
 
 LABEL_F27585:
 	ldb w, 0x65
@@ -96828,7 +96841,7 @@ LABEL_F27585:
 LABEL_F275A1:
 	pop xbc
 	pop xwa
-	jp LABEL_F28217
+	jp SMF_FlushAndFinalize
 
 LABEL_F275A7:
 	ldb w, 0x64
@@ -96849,7 +96862,7 @@ LABEL_F275A7:
 LABEL_F275C3:
 	pop xbc
 	pop xwa
-	jp LABEL_F28217
+	jp SMF_FlushAndFinalize
 
 LABEL_F275C9:
 	ldda8 l, 10359
@@ -96886,7 +96899,7 @@ LABEL_F275C9:
 LABEL_F27619:
 	pop xbc
 	pop xwa
-	jp LABEL_F28217
+	jp SMF_FlushAndFinalize
 
 LABEL_F2761F:
 	ld l, c
@@ -96909,7 +96922,7 @@ LABEL_F2761F:
 LABEL_F27641:
 	pop xbc
 	pop xwa
-	jp LABEL_F28217
+	jp SMF_FlushAndFinalize
 
 LABEL_F27647:
 	ldb w, 0x65
@@ -96930,7 +96943,7 @@ LABEL_F27647:
 LABEL_F27663:
 	pop xbc
 	pop xwa
-	jp LABEL_F28217
+	jp SMF_FlushAndFinalize
 
 LABEL_F27669:
 	ldb w, 0x64
@@ -96951,7 +96964,7 @@ LABEL_F27669:
 LABEL_F27685:
 	pop xbc
 	pop xwa
-	jp LABEL_F28217
+	jp SMF_FlushAndFinalize
 
 LABEL_F2768B:
 	ldda8 l, 10359
@@ -96985,7 +96998,7 @@ LABEL_F2768B:
 LABEL_F276D7:
 	pop xbc
 	pop xwa
-	jp LABEL_F28217
+	jp SMF_FlushAndFinalize
 
 LABEL_F276DD:
 	ldb w, 0x26
@@ -97006,7 +97019,7 @@ LABEL_F276DD:
 LABEL_F276F9:
 	pop xbc
 	pop xwa
-	jp LABEL_F28217
+	jp SMF_FlushAndFinalize
 
 LABEL_F276FF:
 	ldb w, 0x65
@@ -97027,7 +97040,7 @@ LABEL_F276FF:
 LABEL_F2771B:
 	pop xbc
 	pop xwa
-	jp LABEL_F28217
+	jp SMF_FlushAndFinalize
 
 LABEL_F27721:
 	ldb w, 0x64
@@ -97048,7 +97061,7 @@ LABEL_F27721:
 LABEL_F2773D:
 	pop xbc
 	pop xwa
-	jp LABEL_F28217
+	jp SMF_FlushAndFinalize
 
 LABEL_F27743:
 	ldda8 l, 10359
@@ -97080,7 +97093,7 @@ LABEL_F27743:
 LABEL_F27789:
 	pop xbc
 	pop xwa
-	jp LABEL_F28217
+	jp SMF_FlushAndFinalize
 
 LABEL_F2778F:
 	ldb w, 0x26
@@ -97101,7 +97114,7 @@ LABEL_F2778F:
 LABEL_F277AB:
 	pop xbc
 	pop xwa
-	jp LABEL_F28217
+	jp SMF_FlushAndFinalize
 
 LABEL_F277B1:
 	incdi8 1, 10359
@@ -97225,7 +97238,7 @@ LABEL_F278C2:
 LABEL_F278E9:
 	pop xbc
 	pop xwa
-	jp LABEL_F28217
+	jp SMF_FlushAndFinalize
 
 LABEL_F278EF:
 	ldda16 xhl, 4213
@@ -97265,7 +97278,7 @@ LABEL_F2791E:
 LABEL_F2793E:
 	pop xbc
 	pop xwa
-	jp LABEL_F28217
+	jp SMF_FlushAndFinalize
 
 LABEL_F27944:
 	and a, 0xF
@@ -97286,7 +97299,7 @@ LABEL_F27944:
 LABEL_F27966:
 	pop xbc
 	pop xwa
-	jp LABEL_F28217
+	jp SMF_FlushAndFinalize
 
 LABEL_F2796C:
 	jrl LABEL_F2780C
@@ -97312,7 +97325,7 @@ LABEL_F2796F:
 LABEL_F27994:
 	pop xbc
 	pop xwa
-	jp LABEL_F28217
+	jp SMF_FlushAndFinalize
 
 LABEL_F2799A:
 	and a, 0xF
@@ -97333,7 +97346,7 @@ LABEL_F2799A:
 LABEL_F279BC:
 	pop xbc
 	pop xwa
-	jp LABEL_F28217
+	jp SMF_FlushAndFinalize
 
 LABEL_F279C2:
 	jrl LABEL_F2780C
@@ -97359,7 +97372,7 @@ LABEL_F279C5:
 LABEL_F279EA:
 	pop xbc
 	pop xwa
-	jp LABEL_F28217
+	jp SMF_FlushAndFinalize
 
 LABEL_F279F0:
 	ldda8 w, 4213
@@ -97378,7 +97391,7 @@ LABEL_F279F0:
 LABEL_F27A0E:
 	pop xbc
 	pop xwa
-	jp LABEL_F28217
+	jp SMF_FlushAndFinalize
 
 LABEL_F27A14:
 	jrl LABEL_F2780C
@@ -97412,7 +97425,7 @@ LABEL_F27A17:
 LABEL_F27A53:
 	pop xbc
 	pop xwa
-	jp LABEL_F28217
+	jp SMF_FlushAndFinalize
 
 LABEL_F27A59:
 	and a, 0xF
@@ -97433,7 +97446,7 @@ LABEL_F27A59:
 LABEL_F27A7B:
 	pop xbc
 	pop xwa
-	jp LABEL_F28217
+	jp SMF_FlushAndFinalize
 
 LABEL_F27A81:
 	jrl LABEL_F2780C
@@ -97491,7 +97504,7 @@ LABEL_F27AC0:
 LABEL_F27AE5:
 	pop xbc
 	pop xwa
-	jp LABEL_F28217
+	jp SMF_FlushAndFinalize
 
 LABEL_F27AEB:
 	pushw hl
@@ -97513,7 +97526,7 @@ LABEL_F27AEB:
 LABEL_F27B0F:
 	pop xbc
 	pop xwa
-	jp LABEL_F28217
+	jp SMF_FlushAndFinalize
 
 LABEL_F27B15:
 	ld xix, 0x11F9
@@ -97565,7 +97578,7 @@ LABEL_F27B6C:
 LABEL_F27B8C:
 	pop xbc
 	pop xwa
-	jp LABEL_F28217
+	jp SMF_FlushAndFinalize
 
 LABEL_F27B92:
 	cpdi8 4324, 0
@@ -97616,7 +97629,7 @@ LABEL_F27B92:
 LABEL_F27C16:
 	pop xbc
 	pop xwa
-	jp LABEL_F28217
+	jp SMF_FlushAndFinalize
 
 LABEL_F27C1C:
 	stdi16 4206, 0
@@ -97637,7 +97650,7 @@ LABEL_F27C1C:
 LABEL_F27C43:
 	pop xbc
 	pop xwa
-	jp LABEL_F28217
+	jp SMF_FlushAndFinalize
 
 LABEL_F27C49:
 	ldb a, 0xC0
@@ -97660,7 +97673,7 @@ LABEL_F27C49:
 LABEL_F27C70:
 	pop xbc
 	pop xwa
-	jp LABEL_F28217
+	jp SMF_FlushAndFinalize
 
 LABEL_F27C76:
 	jrl LABEL_F2780C
@@ -97683,7 +97696,7 @@ LABEL_F27C79:
 LABEL_F27C98:
 	pop xbc
 	pop xwa
-	jp LABEL_F28217
+	jp SMF_FlushAndFinalize
 
 LABEL_F27C9E:
 	stdi16 4206, 0
@@ -97714,7 +97727,7 @@ LABEL_F27C9E:
 LABEL_F27CE4:
 	pop xbc
 	pop xwa
-	jp LABEL_F28217
+	jp SMF_FlushAndFinalize
 
 LABEL_F27CEA:
 	ldb a, 0xC0
@@ -97737,7 +97750,7 @@ LABEL_F27CEA:
 LABEL_F27D11:
 	pop xbc
 	pop xwa
-	jp LABEL_F28217
+	jp SMF_FlushAndFinalize
 
 LABEL_F27D17:
 	jrl LABEL_F2780C
@@ -97820,7 +97833,7 @@ LABEL_F27DB1:
 LABEL_F27DD3:
 	pop xbc
 	pop xwa
-	jp LABEL_F28217
+	jp SMF_FlushAndFinalize
 
 LABEL_F27DD9:
 	ldb a, 0xB0
@@ -97845,7 +97858,7 @@ LABEL_F27DD9:
 LABEL_F27E00:
 	pop xbc
 	pop xwa
-	jp LABEL_F28217
+	jp SMF_FlushAndFinalize
 
 LABEL_F27E06:
 	ldb w, 0x64
@@ -97867,7 +97880,7 @@ LABEL_F27E06:
 LABEL_F27E27:
 	pop xbc
 	pop xwa
-	jp LABEL_F28217
+	jp SMF_FlushAndFinalize
 
 LABEL_F27E2D:
 	ldb w, 0x6
@@ -97893,7 +97906,7 @@ LABEL_F27E2D:
 LABEL_F27E5A:
 	pop xbc
 	pop xwa
-	jp LABEL_F28217
+	jp SMF_FlushAndFinalize
 
 LABEL_F27E60:
 	ldb w, 0x26
@@ -97916,7 +97929,7 @@ LABEL_F27E60:
 LABEL_F27E84:
 	pop xbc
 	pop xwa
-	jp LABEL_F28217
+	jp SMF_FlushAndFinalize
 
 LABEL_F27E8A:
 	jrl LABEL_F2780C
@@ -97948,7 +97961,7 @@ LABEL_F27E9C:
 LABEL_F27EBE:
 	pop xbc
 	pop xwa
-	jp LABEL_F28217
+	jp SMF_FlushAndFinalize
 
 LABEL_F27EC4:
 	ldb a, 0xB0
@@ -97973,7 +97986,7 @@ LABEL_F27EC4:
 LABEL_F27EEB:
 	pop xbc
 	pop xwa
-	jp LABEL_F28217
+	jp SMF_FlushAndFinalize
 
 LABEL_F27EF1:
 	ldb w, 0x64
@@ -97995,7 +98008,7 @@ LABEL_F27EF1:
 LABEL_F27F12:
 	pop xbc
 	pop xwa
-	jp LABEL_F28217
+	jp SMF_FlushAndFinalize
 
 LABEL_F27F18:
 	ldb w, 0x6
@@ -98016,7 +98029,7 @@ LABEL_F27F18:
 LABEL_F27F36:
 	pop xbc
 	pop xwa
-	jp LABEL_F28217
+	jp SMF_FlushAndFinalize
 
 LABEL_F27F3C:
 	ldb w, 0x26
@@ -98035,7 +98048,7 @@ LABEL_F27F3C:
 LABEL_F27F56:
 	pop xbc
 	pop xwa
-	jp LABEL_F28217
+	jp SMF_FlushAndFinalize
 
 LABEL_F27F5C:
 	jrl LABEL_F2780C
@@ -98067,7 +98080,7 @@ LABEL_F27F6E:
 LABEL_F27F90:
 	pop xbc
 	pop xwa
-	jp LABEL_F28217
+	jp SMF_FlushAndFinalize
 
 LABEL_F27F96:
 	ldb a, 0xB0
@@ -98092,7 +98105,7 @@ LABEL_F27F96:
 LABEL_F27FBD:
 	pop xbc
 	pop xwa
-	jp LABEL_F28217
+	jp SMF_FlushAndFinalize
 
 LABEL_F27FC3:
 	ldb w, 0x64
@@ -98114,7 +98127,7 @@ LABEL_F27FC3:
 LABEL_F27FE4:
 	pop xbc
 	pop xwa
-	jp LABEL_F28217
+	jp SMF_FlushAndFinalize
 
 LABEL_F27FEA:
 	ldb w, 0x6
@@ -98135,7 +98148,7 @@ LABEL_F27FEA:
 LABEL_F28008:
 	pop xbc
 	pop xwa
-	jp LABEL_F28217
+	jp SMF_FlushAndFinalize
 
 LABEL_F2800E:
 	ldb w, 0x26
@@ -98154,7 +98167,7 @@ LABEL_F2800E:
 LABEL_F28028:
 	pop xbc
 	pop xwa
-	jp LABEL_F28217
+	jp SMF_FlushAndFinalize
 
 LABEL_F2802E:
 	jrl LABEL_F2780C
@@ -98186,7 +98199,7 @@ LABEL_F2803F:
 LABEL_F28061:
 	pop xbc
 	pop xwa
-	jp LABEL_F28217
+	jp SMF_FlushAndFinalize
 
 LABEL_F28067:
 	ldb a, 0xB0
@@ -98209,7 +98222,7 @@ LABEL_F28067:
 LABEL_F2808E:
 	pop xbc
 	pop xwa
-	jp LABEL_F28217
+	jp SMF_FlushAndFinalize
 
 LABEL_F28094:
 	jrl LABEL_F2780C
@@ -98291,7 +98304,7 @@ LABEL_F2810B:
 LABEL_F2812D:
 	pop xbc
 	pop xwa
-	jp LABEL_F28217
+	jp SMF_FlushAndFinalize
 
 LABEL_F28133:
 	call SMF_WriteByteLoop
@@ -98308,7 +98321,7 @@ LABEL_F28133:
 LABEL_F28149:
 	pop xbc
 	pop xwa
-	jp LABEL_F28217
+	jp SMF_FlushAndFinalize
 
 LABEL_F2814F:
 	jrl LABEL_F2780C
@@ -98345,7 +98358,7 @@ LABEL_F28155:
 LABEL_F28193:
 	pop xbc
 	pop xwa
-	jp LABEL_F28217
+	jp SMF_FlushAndFinalize
 
 LABEL_F28199:
 	ldb a, 0xFF
@@ -98365,7 +98378,7 @@ LABEL_F28199:
 LABEL_F281B5:
 	pop xbc
 	pop xwa
-	jp LABEL_F28217
+	jp SMF_FlushAndFinalize
 
 LABEL_F281BB:
 	cpdi16 4347, 0
@@ -98384,7 +98397,7 @@ LABEL_F281BB:
 LABEL_F281D9:
 	pop xbc
 	pop xwa
-	jp LABEL_F28217
+	jp SMF_FlushAndFinalize
 
 LABEL_F281DF:
 	call SMF_CheckAndFlush
@@ -98406,7 +98419,15 @@ LABEL_F28200:
 	call LABEL_F2706D
 	jr SMF_PopReturn
 
-LABEL_F28217:
+; ============================================================================
+; SMF_FlushAndFinalize - Flush pending SMF data and finalize channel
+; ============================================================================
+; Saves current SMF write position (stda16 6699, xhl), then calls timer/
+; interrupt setup and SMF output finalization routines. All 65 call sites
+; are tail-calls (JP) from channel processing when data has been consumed.
+; This is the "done processing this channel" exit path.
+; ============================================================================
+SMF_FlushAndFinalize:
 	push xhl
 	ldda32 xhl, 6701
 	stda16 6699, xhl
@@ -102251,7 +102272,7 @@ LABEL_F2AF99:
 	call LABEL_FECC6B
 	pushw 0x2
 	pushw 0xE4E
-	call LABEL_FF0FA0
+	call Strlen
 	inc 4, xsp
 	cp hl, 0x22
 	jr c, LABEL_F2AFBA
@@ -102262,7 +102283,7 @@ LABEL_F2AFBA:
 	cp (xwa), 0x0
 	ret z
 	push xwa
-	call LABEL_FF0FA0
+	call Strlen
 	inc 4, xsp
 	dec 1, hl
 	extz xhl
@@ -102277,13 +102298,13 @@ LABEL_F2AFBA:
 	jrl nz, LABEL_F2B074
 
 LABEL_F2AFE6:
-	call LABEL_FF0FA0
+	call Strlen
 	inc 4, xsp
 	cps l, 1
 	jr z, LABEL_F2B002
 	pushw 0x2
 	pushw 0xE4E
-	call LABEL_FF0FA0
+	call Strlen
 	inc 4, xsp
 	extz hl
 	ld wa, hl
@@ -102329,7 +102350,7 @@ LABEL_F2B002:
 	ret
 
 LABEL_F2B074:
-	call LABEL_FF0FA0
+	call Strlen
 	inc 4, xsp
 	extz hl
 	ld wa, hl
@@ -102403,7 +102424,7 @@ LABEL_F2B122:
 	call LABEL_FECCA5
 	pushw 0x2
 	pushw 0xF4E
-	call LABEL_FF0FA0
+	call Strlen
 	inc 4, xsp
 	cp hl, 0x22
 	jr c, LABEL_F2B144
@@ -102441,7 +102462,7 @@ LABEL_F2B18D:
 	call_24 z, 0xF2B081
 	pushw 0x2
 	pushw 0xF4E
-	call LABEL_FF0FA0
+	call Strlen
 	ld iz, hl
 	pushw iz
 	pushw 0x2
@@ -102542,7 +102563,7 @@ LABEL_F2B2BD:
 	cp (xwa), 0x0
 	jrl z, LABEL_F2B3AF
 	push xbc
-	call LABEL_FF0FA0
+	call Strlen
 	inc 4, xsp
 	dec 1, hl
 	extz xhl
@@ -102557,13 +102578,13 @@ LABEL_F2B2BD:
 	jrl nz, LABEL_F2B38D
 
 LABEL_F2B2E7:
-	call LABEL_FF0FA0
+	call Strlen
 	inc 4, xsp
 	cps l, 1
 	jr z, LABEL_F2B319
 	pushw 0x2
 	pushw 0xE4E
-	call LABEL_FF0FA0
+	call Strlen
 	inc 4, xsp
 	extz hl
 	ld wa, hl
@@ -102615,7 +102636,7 @@ LABEL_F2B319:
 	jr LABEL_F2B3AF
 
 LABEL_F2B38D:
-	call LABEL_FF0FA0
+	call Strlen
 	inc 4, xsp
 	extz hl
 	ld wa, hl
@@ -116850,7 +116871,7 @@ BmDrEdit_ScanToEnd_AdvanceSong:
 	stdi16 9830, 255
 
 BmDrEdit_ScanToEnd_CheckEndMark:
-	call LABEL_F421A6
+	call SeqData_ReadNextByte
 	bit 7, l
 	jr z, BmDrEdit_ScanToEnd_Loop
 	ret
@@ -116869,7 +116890,7 @@ BmDrEdit_LoadAlternateAndCountNotes:
 	stdi16 10098, 0
 
 BmDrEdit_CountNotesLoop:
-	call LABEL_F421A6
+	call SeqData_ReadNextByte
 	cp l, 0x82
 	ret z
 	cp l, 0x84
@@ -116996,9 +117017,9 @@ BmDrEdit_CompareVelocity:
 	ldda16 xiz, 10415
 	ldda16 xwa, 9830
 	ldfr_werp WA, 0xFA
-	call LABEL_F40052
-	call LABEL_F40052
-	call LABEL_F421A6
+	call SeqData_AdvancePosition
+	call SeqData_AdvancePosition
+	call SeqData_ReadNextByte
 	stda16 10415, xiz
 	ldto_werp WA, 0xFA
 	stda16 9830, xwa
@@ -117035,8 +117056,8 @@ BmDrEdit_ReadEventAtPosition:
 	ldda16 xiz, 10415
 	ldda16 xwa, 9830
 	ldfr_werp WA, 0xFA
-	call LABEL_F40052
-	call LABEL_F421A6
+	call SeqData_AdvancePosition
+	call SeqData_ReadNextByte
 	stda8 10080, l
 	stda16 10415, xiz
 	ldto_werp WA, 0xFA
@@ -117045,7 +117066,7 @@ BmDrEdit_ReadEventAtPosition:
 	ret
 
 BmDrEdit_CheckNoteAtPosition:
-	call LABEL_F421A6
+	call SeqData_ReadNextByte
 	and l, 0xF0
 	cp l, 0x90
 	ret nz
@@ -117059,7 +117080,7 @@ BmDrEdit_WalkTrackForward:
 	res 1, a
 	res 4, a
 	stda8 10591, a
-	call LABEL_F421A6
+	call SeqData_ReadNextByte
 	cp l, 0x82
 	jr z, BmDrEdit_WalkTrack_EndOfTrack
 	cp l, 0x84
@@ -117077,7 +117098,7 @@ BmDrEdit_WalkTrackForward:
 
 BmDrEdit_WalkTrack_ProcessEvent:
 	call LABEL_F413CB
-	call LABEL_F421A6
+	call SeqData_ReadNextByte
 	cp l, 0x82
 	jr z, BmDrEdit_WalkTrack_EndOfTrack
 	cp l, 0x84
@@ -117145,7 +117166,7 @@ BmDrEdit_SetupAndWalkToNote:
 	ld wa, (xsp + 4)
 	cpda16 xwa, 10138
 	jr nz, BmDrEdit_SetupAndWalkDone
-	call LABEL_F421A6
+	call SeqData_ReadNextByte
 	and l, 0xF0
 	cp l, 0x90
 	jr nz, BmDrEdit_SetupAndWalkDone
@@ -117153,18 +117174,18 @@ BmDrEdit_SetupAndWalkToNote:
 	cps l, 0
 	jr nz, BmDrEdit_SetupAndWalkDone
 	setda 0, 10591
-	call LABEL_F40052
-	call LABEL_F40052
-	call LABEL_F421A6
+	call SeqData_AdvancePosition
+	call SeqData_AdvancePosition
+	call SeqData_ReadNextByte
 	stda8 10118, l
-	call LABEL_F40052
-	call LABEL_F421A6
+	call SeqData_AdvancePosition
+	call SeqData_ReadNextByte
 	stda8 10120, l
-	call LABEL_F40052
-	call LABEL_F421A6
+	call SeqData_AdvancePosition
+	call SeqData_ReadNextByte
 	ldfr_berp L, 0xFB
-	call LABEL_F40052
-	call LABEL_F421A6
+	call SeqData_AdvancePosition
+	call SeqData_ReadNextByte
 	res 7, l
 	res_erpb 0xFB, 0x07
 	extz hl
@@ -117188,7 +117209,7 @@ BmDrEdit_SaveAndFindNote:
 	calr BmDrEdit_SaveEditState
 
 BmDrEdit_FindNote_Loop:
-	call LABEL_F421A6
+	call SeqData_ReadNextByte
 	cp l, 0x81
 	jr z, BmDrEdit_FindNote_EndOfTrack
 	cp l, 0x82
@@ -117201,8 +117222,8 @@ BmDrEdit_FindNote_Loop:
 	calr BmDrEdit_CompareVelocity
 	cps l, 0
 	jr nz, BmDrEdit_FindNote_SkipNonNote
-	call LABEL_F40052
-	call LABEL_F421A6
+	call SeqData_AdvancePosition
+	call SeqData_ReadNextByte
 	cps l, 0
 	jrl z, BmDrEdit_ClearAndScanToEnd
 
@@ -117413,14 +117434,14 @@ BmDrEdit_PitchWrap_CheckEnd:
 
 BmDrEdit_CalcDurationPosition:
 	calr BmDrEdit_SaveEditState
-	call LABEL_F421A6
+	call SeqData_ReadNextByte
 	and l, 0xF0
 	cp l, 0x90
 	ret nz
-	call LABEL_F40052
-	call LABEL_F40052
-	call LABEL_F40052
-	call LABEL_F40052
+	call SeqData_AdvancePosition
+	call SeqData_AdvancePosition
+	call SeqData_AdvancePosition
+	call SeqData_AdvancePosition
 	ldda16 xwa, 10124
 	extz xwa
 	div wa, 0x60
@@ -117428,7 +117449,7 @@ BmDrEdit_CalcDurationPosition:
 	and wa, 0x7F
 	extz wa
 	call LABEL_F421B5
-	call LABEL_F40052
+	call SeqData_AdvancePosition
 	ldda16 xwa, 10124
 	extz xwa
 	div wa, 0x60
@@ -117439,13 +117460,13 @@ BmDrEdit_CalcDurationPosition:
 
 BmDrEdit_UpdateGateDisplay:
 	calr BmDrEdit_SaveEditState
-	call LABEL_F421A6
+	call SeqData_ReadNextByte
 	and l, 0xF0
 	cp l, 0x90
 	ret nz
-	call LABEL_F40052
-	call LABEL_F40052
-	call LABEL_F40052
+	call SeqData_AdvancePosition
+	call SeqData_AdvancePosition
+	call SeqData_AdvancePosition
 	ldda8 l, 10120
 	extz hl
 	ld wa, hl
@@ -117455,12 +117476,12 @@ BmDrEdit_UpdateGateDisplay:
 
 BmDrEdit_UpdateVelocityDisplay:
 	calr BmDrEdit_SaveEditState
-	call LABEL_F421A6
+	call SeqData_ReadNextByte
 	and l, 0xF0
 	cp l, 0x90
 	ret nz
-	call LABEL_F40052
-	call LABEL_F40052
+	call SeqData_AdvancePosition
+	call SeqData_AdvancePosition
 	ldda8 l, 10118
 	extz hl
 	ld wa, hl
@@ -117660,7 +117681,7 @@ LABEL_F37055:
 	call LABEL_F41C4C
 	ld wa, iz
 	ldw bc, 0xFFFF
-	call LABEL_F41C72
+	call PartCtrl_WriteWord
 	ldda8 c, 10597
 	inc 1, c
 	extz bc
@@ -117845,7 +117866,7 @@ LABEL_F37242:
 	call LABEL_F413CB
 
 LABEL_F37246:
-	call LABEL_F421A6
+	call SeqData_ReadNextByte
 	cp l, 0x81
 	jr nz, LABEL_F37227
 	stdi8 10080, 0
@@ -118056,7 +118077,7 @@ LABEL_F37428:
 	ret z
 
 LABEL_F3743D:
-	call LABEL_F421A6
+	call SeqData_ReadNextByte
 	cp l, 0x81
 	jr nz, LABEL_F37457
 	decdi16 1, 10098
@@ -118158,12 +118179,12 @@ LABEL_F37514:
 	call LABEL_F439AB
 
 LABEL_F37525:
-	call LABEL_F40052
-	call LABEL_F40052
-	call LABEL_F40052
-	call LABEL_F40052
-	call LABEL_F40052
-	call LABEL_F421A6
+	call SeqData_AdvancePosition
+	call SeqData_AdvancePosition
+	call SeqData_AdvancePosition
+	call SeqData_AdvancePosition
+	call SeqData_AdvancePosition
+	call SeqData_ReadNextByte
 	ldfr_berp L, 0xFB
 	cpdi8 10362, 0
 	jr z, LABEL_F3754E
@@ -118240,7 +118261,7 @@ LABEL_F375D7:
 	bitda 0, 10591
 	jr nz, LABEL_F3763C
 	calr LABEL_F3767B
-	call LABEL_F421A6
+	call SeqData_ReadNextByte
 	and l, 0xF0
 	cp l, 0x90
 	jr nz, LABEL_F3763C
@@ -118301,7 +118322,7 @@ LABEL_F3767B:
 	dec 4, xsp
 	calr BmDrEdit_LoadAlternateState
 	calr BmDrEdit_CheckNoteAtPosition
-	call LABEL_F421A6
+	call SeqData_ReadNextByte
 	and l, 0xF0
 	cp l, 0x90
 	jr nz, LABEL_F376A1
@@ -118473,7 +118494,7 @@ LABEL_F37806:
 	resda 3, 10591
 	cpdi16 10140, 0
 	jr nz, LABEL_F37838
-	call LABEL_F421A6
+	call SeqData_ReadNextByte
 	cp l, 0x81
 	jr z, LABEL_F3785C
 	and l, 0xF0
@@ -118553,7 +118574,7 @@ LABEL_F378A5:
 	stdi16 10098, 0
 
 LABEL_F378AB:
-	call LABEL_F421A6
+	call SeqData_ReadNextByte
 	cp l, 0x82
 	jr z, LABEL_F378C8
 	cp l, 0x84
@@ -118616,7 +118637,7 @@ LABEL_F3791A:
 	jr ule, LABEL_F3790E
 
 LABEL_F37943:
-	call LABEL_F421A6
+	call SeqData_ReadNextByte
 	and l, 0xF0
 	cp l, 0x90
 	jr nz, LABEL_F37969
@@ -118664,7 +118685,7 @@ LABEL_F379A5:
 LABEL_F379A8:
 	dec 4, xsp
 	resda 3, 10591
-	call LABEL_F421A6
+	call SeqData_ReadNextByte
 	cp l, 0x81
 	jr nz, LABEL_F379D4
 	ldda16 xwa, 10078
@@ -118688,7 +118709,7 @@ LABEL_F379D4:
 	jr LABEL_F37A36
 
 LABEL_F379E9:
-	call LABEL_F421A6
+	call SeqData_ReadNextByte
 	cp l, 0x81
 	jr nz, LABEL_F37A11
 	ldda16 xwa, 10078
@@ -118934,7 +118955,7 @@ LABEL_F37C1C:
 	ld a, (xwa)
 	extz wa
 	call LABEL_F421B5
-	call LABEL_F40052
+	call SeqData_AdvancePosition
 	inc 1, iz
 	cp iz, (xsp + 14)
 	jr c, LABEL_F37C1C
@@ -119211,7 +119232,7 @@ LABEL_F37E9C:
 	call LABEL_F41F7C
 	ld wa, (xsp + 8)
 	ldw bc, 0xFFFF
-	call LABEL_F41C72
+	call PartCtrl_WriteWord
 	lds hl, 0
 	pop_werp 0xFA
 	lda xsp, (xsp + 10)
@@ -119227,7 +119248,7 @@ LABEL_F37EDC:
 	inc 1, a
 	extz wa
 	calr LABEL_F37E3A
-	call LABEL_F421A6
+	call SeqData_ReadNextByte
 	cp l, 0x82
 	jr z, LABEL_F37F02
 	cp l, 0x84
@@ -119247,8 +119268,8 @@ LABEL_F37F14:
 	ldda16 xwa, 10415
 	ldfr_werp WA, 0xFA
 	ldda16 xiz, 9830
-	call LABEL_F40052
-	call LABEL_F421A6
+	call SeqData_AdvancePosition
+	call SeqData_ReadNextByte
 	stda8 10080, l
 	ldto_werp WA, 0xFA
 	stda16 10415, xwa
@@ -119746,18 +119767,18 @@ LABEL_F38309:
 	.byte 0x50, 0x0e
 
 LABEL_F383CB:
-	call LABEL_F40052
-	call LABEL_F40052
-	call LABEL_F421A6
+	call SeqData_AdvancePosition
+	call SeqData_AdvancePosition
+	call SeqData_ReadNextByte
 	stda8 10601, l
-	call LABEL_F40052
-	call LABEL_F421A6
+	call SeqData_AdvancePosition
+	call SeqData_ReadNextByte
 	stda8 10602, l
-	call LABEL_F40052
-	call LABEL_F421A6
+	call SeqData_AdvancePosition
+	call SeqData_ReadNextByte
 	stda8 10603, l
-	call LABEL_F40052
-	call LABEL_F421A6
+	call SeqData_AdvancePosition
+	call SeqData_ReadNextByte
 	stda8 10604, l
 	calr BmDrEdit_ClearAndScanToEnd
 	ldda8 a, 10597
@@ -119922,7 +119943,7 @@ LABEL_F38561:
 	stdi16 10098, 0
 
 LABEL_F3857B:
-	call LABEL_F421A6
+	call SeqData_ReadNextByte
 	cp l, 0x82
 	jr z, LABEL_F38589
 	cp l, 0x84
@@ -119945,7 +119966,7 @@ LABEL_F385A2:
 	call LABEL_F413CB
 
 LABEL_F385A6:
-	call LABEL_F421A6
+	call SeqData_ReadNextByte
 	cp l, 0x82
 	jr z, LABEL_F385B4
 	cp l, 0x84
@@ -119996,8 +120017,8 @@ LABEL_F38604:
 	ret
 
 LABEL_F38606:
-	call LABEL_F40052
-	call LABEL_F421A6
+	call SeqData_AdvancePosition
+	call SeqData_ReadNextByte
 	cpda8 l, 10116
 	jr nc, LABEL_F385E6
 	jr LABEL_F385A2
@@ -120023,7 +120044,7 @@ LABEL_F3863A:
 	ldi_berp 0xFB, 0
 
 LABEL_F38643:
-	call LABEL_F421A6
+	call SeqData_ReadNextByte
 	cp l, 0x82
 	jr z, LABEL_F38651
 	cp l, 0x84
@@ -120040,12 +120061,12 @@ LABEL_F3865E:
 	jr z, LABEL_F386E0
 
 LABEL_F38663:
-	call LABEL_F40052
-	call LABEL_F421A6
+	call SeqData_AdvancePosition
+	call SeqData_ReadNextByte
 	cpda8 l, 10116
 	jrl ugt, LABEL_F38715
 	call LABEL_F413CB
-	call LABEL_F421A6
+	call SeqData_ReadNextByte
 	cp l, 0x82
 	jr z, LABEL_F38685
 	cp l, 0x84
@@ -120066,7 +120087,7 @@ LABEL_F38692:
 	cpda16 xwa, 10114
 	jr c, LABEL_F386D4
 	call LABEL_F413CB
-	call LABEL_F421A6
+	call SeqData_ReadNextByte
 	cp l, 0x82
 	jr z, LABEL_F386B9
 	cp l, 0x84
@@ -120101,7 +120122,7 @@ LABEL_F386E0:
 	stdi8 10080, 0
 	cpdi16 10114, 0
 	jrl nz, LABEL_F3863A
-	call LABEL_F421A6
+	call SeqData_ReadNextByte
 	cp l, 0x82
 	jr z, LABEL_F38701
 	cp l, 0x84
@@ -120150,16 +120171,16 @@ LABEL_F38728:
 	stda16 10262, xwa
 	ldmm16 10264, 10415
 	ldmm16 10266, 9830
-	call LABEL_F421A6
+	call SeqData_ReadNextByte
 	and l, 0xF0
 	cp l, 0x90
 	jr nz, LABEL_F387ED
-	call LABEL_F40052
-	call LABEL_F421A6
+	call SeqData_AdvancePosition
+	call SeqData_ReadNextByte
 	extz hl
 	stda16 10262, xhl
-	call LABEL_F40052
-	call LABEL_F421A6
+	call SeqData_AdvancePosition
+	call SeqData_ReadNextByte
 	stda8 10268, l
 	lda xwa, (xsp + 4)
 	lda xbc, (xsp + 2)
@@ -120171,13 +120192,13 @@ LABEL_F38728:
 	jr ugt, LABEL_F387ED
 	mrdb5 0x8F, 0x04, 0x19, 0x26, 0x28
 	mrdb5 0x8F, 0x02, 0x19, 0x28, 0x28
-	call LABEL_F40052
-	call LABEL_F40052
-	call LABEL_F421A6
+	call SeqData_AdvancePosition
+	call SeqData_AdvancePosition
+	call SeqData_ReadNextByte
 	ldfr_berp L, 0xF8
 	extz iz
-	call LABEL_F40052
-	call LABEL_F421A6
+	call SeqData_AdvancePosition
+	call SeqData_ReadNextByte
 	extz hl
 	and iz, 0x7F
 	and hl, 0x7F
@@ -120685,7 +120706,7 @@ LABEL_F38DE4:
 	call LABEL_F41C4C
 	ld wa, iz
 	ldw bc, 0xFFFF
-	call LABEL_F41C72
+	call PartCtrl_WriteWord
 	ldto_berp C, 0xFB
 	dec 1, c
 	ld a, c
@@ -120967,7 +120988,7 @@ LABEL_F39099:
 LABEL_F390D8:
 	push xiz
 	stdi8 10362, 0
-	call LABEL_F421A6
+	call SeqData_ReadNextByte
 	cpdi8 10584, 0
 	jr nz, LABEL_F390F0
 	cp l, 0x82
@@ -120986,8 +121007,8 @@ LABEL_F390F5:
 	ldda16 xwa, 10415
 	ldfr_werp WA, 0xFA
 	ldda16 xiz, 9830
-	call LABEL_F40052
-	call LABEL_F421A6
+	call SeqData_AdvancePosition
+	call SeqData_ReadNextByte
 	cpda8 l, 10584
 	jr c, LABEL_F39125
 
@@ -121000,8 +121021,8 @@ LABEL_F39123:
 	jr LABEL_F39159
 
 LABEL_F39125:
-	call LABEL_F40052
-	call LABEL_F421A6
+	call SeqData_AdvancePosition
+	call SeqData_ReadNextByte
 	bit 7, l
 	jr z, LABEL_F39125
 	cp l, 0x81
@@ -121013,8 +121034,8 @@ LABEL_F39137:
 	ldda16 xwa, 10415
 	ldfr_werp WA, 0xFA
 	ldda16 xiz, 9830
-	call LABEL_F40052
-	call LABEL_F421A6
+	call SeqData_AdvancePosition
+	call SeqData_ReadNextByte
 	cp l, 0x82
 	jr nz, LABEL_F39118
 
@@ -121030,7 +121051,7 @@ LABEL_F3915B:
 	stdi8 10362, 0
 	cpdi8 10584, 0
 	jr z, LABEL_F391B3
-	call LABEL_F421A6
+	call SeqData_ReadNextByte
 	cp l, 0x81
 	jr z, LABEL_F391B3
 
@@ -121042,8 +121063,8 @@ LABEL_F39171:
 	ldda16 xwa, 10415
 	ldfr_werp WA, 0xFA
 	ldda16 xiz, 9830
-	call LABEL_F40052
-	call LABEL_F421A6
+	call SeqData_AdvancePosition
+	call SeqData_ReadNextByte
 	cpda8 l, 10584
 	jr ule, LABEL_F391A1
 	ldto_werp WA, 0xFA
@@ -121052,8 +121073,8 @@ LABEL_F39171:
 	jr LABEL_F391DA
 
 LABEL_F391A1:
-	call LABEL_F40052
-	call LABEL_F421A6
+	call SeqData_AdvancePosition
+	call SeqData_ReadNextByte
 	bit 7, l
 	jr z, LABEL_F391A1
 	cp l, 0x81
@@ -121630,7 +121651,7 @@ LABEL_F39761:
 	mriw4 0x92, 0x19, 0x66, 0x26
 
 LABEL_F39791:
-	call LABEL_F421A6
+	call SeqData_ReadNextByte
 	ldfr_berp L, 0xFB
 	cp_erpb 0xFB, 0x81
 	jr z, LABEL_F397A4
@@ -121647,14 +121668,14 @@ LABEL_F397AD:
 	ret
 
 LABEL_F397B1:
-	call LABEL_F40052
+	call SeqData_AdvancePosition
 	cp_erpb 0xFB, 0x85
 	jr z, LABEL_F39791
 	bit_erpb 0xFB, 0x07
 	jr z, LABEL_F39791
 	cp_erpb 0xFB, 0x90
 	jr nz, LABEL_F39791
-	call LABEL_F421A6
+	call SeqData_ReadNextByte
 	ldfr_berp L, 0xFB
 	cpi_berp 0xFB, 0
 	jr nz, LABEL_F397A4
@@ -121684,7 +121705,7 @@ LABEL_F397E1:
 	jrl nz, LABEL_F398AB
 
 LABEL_F3981C:
-	call LABEL_F421A6
+	call SeqData_ReadNextByte
 	bit 7, l
 	jr z, LABEL_F39883
 	cp l, 0x82
@@ -121696,13 +121717,13 @@ LABEL_F3981C:
 	and l, 0xF0
 	cp l, 0x90
 	jr nz, LABEL_F39860
-	call LABEL_F40052
+	call SeqData_AdvancePosition
 	cpdi8 10362, 0
 	jr nz, LABEL_F398AB
-	call LABEL_F421A6
+	call SeqData_ReadNextByte
 	cp l, 0x10
 	jr ugt, LABEL_F39895
-	call LABEL_F40052
+	call SeqData_AdvancePosition
 	cpdi8 10362, 0
 	jr nz, LABEL_F398AB
 	incm 1, (xsp + 6)
@@ -121723,7 +121744,7 @@ LABEL_F39860:
 	ld (xsp + 4), wa
 
 LABEL_F39883:
-	call LABEL_F40052
+	call SeqData_AdvancePosition
 	cpdi8 10362, 0
 	jr nz, LABEL_F398AB
 	cpw (xsp + 6), 0x3
@@ -121753,27 +121774,27 @@ LABEL_F398B8:
 	ld (xsp + 2), xwa
 	ld xwa, (xsp + 2)
 	ldw (xwa), 0xFFFF
-	call LABEL_F40052
+	call SeqData_AdvancePosition
 	cpdi8 10362, 0
 	jr nz, LABEL_F39916
-	call LABEL_F40052
+	call SeqData_AdvancePosition
 	cpdi8 10362, 0
 	jr nz, LABEL_F39916
-	call LABEL_F421A6
+	call SeqData_ReadNextByte
 	cp l, 0x48
 	jr nz, LABEL_F39933
-	call LABEL_F40052
+	call SeqData_AdvancePosition
 	cpdi8 10362, 0
 	jr nz, LABEL_F39916
-	call LABEL_F421A6
+	call SeqData_ReadNextByte
 	cps l, 3
 	jr nz, LABEL_F39933
-	call LABEL_F40052
+	call SeqData_AdvancePosition
 	cpdi8 10362, 0
 	jr nz, LABEL_F39916
-	call LABEL_F421A6
+	call SeqData_ReadNextByte
 	ldfr_berp L, 0xFB
-	call LABEL_F40052
+	call SeqData_AdvancePosition
 	cpdi8 10362, 0
 	jr z, LABEL_F3991B
 
@@ -121782,7 +121803,7 @@ LABEL_F39916:
 	jr LABEL_F39935
 
 LABEL_F3991B:
-	call LABEL_F421A6
+	call SeqData_ReadNextByte
 	and l, 0x7
 	cps l, 7
 	jr nz, LABEL_F39933
@@ -126367,7 +126388,7 @@ LABEL_F3C22B:
 	call LABEL_F41C4C
 	ld wa, iz
 	ldw bc, 0xFFFF
-	call LABEL_F41C72
+	call PartCtrl_WriteWord
 	ldto_berp A, 0xFB
 	extz wa
 	dec 1, a
@@ -126422,7 +126443,7 @@ LABEL_F3C2BB:
 	call LABEL_F41C4C
 	ld wa, iz
 	ldw bc, 0xFFFF
-	call LABEL_F41C72
+	call PartCtrl_WriteWord
 	ldto_berp C, 0xFB
 	extz bc
 	ld l, c
@@ -128073,7 +128094,7 @@ LABEL_F3D25E:
 	jr z, LABEL_F3D2A4
 	ld wa, iz
 	ldw bc, 0xFFFF
-	call LABEL_F41C72
+	call PartCtrl_WriteWord
 	cp_erpw 0xFA, 0xFF, 0xFF
 	jr z, LABEL_F3D2A4
 
@@ -128814,7 +128835,7 @@ LABEL_F3D952:
 	call LABEL_F41F7C
 	ld wa, (xsp + 4)
 	ldw bc, 0xFFFF
-	call LABEL_F41C72
+	call PartCtrl_WriteWord
 
 LABEL_F3D973:
 	pop xiz
@@ -130590,11 +130611,11 @@ LABEL_F3E91B:
 	jrl c, LABEL_F3EA00
 
 LABEL_F3E94C:
-	calr LABEL_F421A6
+	calr SeqData_ReadNextByte
 	cp l, 0x81
 	jr nz, LABEL_F3E95C
 	inc 1, iz
-	calr LABEL_F40052
+	calr SeqData_AdvancePosition
 	jrl LABEL_F3E9FA
 
 LABEL_F3E95C:
@@ -131633,7 +131654,7 @@ LABEL_F3F242:
 	cps wa, 0
 	jr z, LABEL_F3F270
 	ld bc, (xsp + 12)
-	calr LABEL_F41C72
+	calr PartCtrl_WriteWord
 	jr LABEL_F3F299
 
 LABEL_F3F270:
@@ -131704,7 +131725,7 @@ LABEL_F3F2E9:
 	calr LABEL_F41C4C
 	lds wa, 1
 	ldw bc, 0xFFFF
-	calr LABEL_F41C72
+	calr PartCtrl_WriteWord
 	lds wa, 1
 	lds bc, 5
 	ldw de, 0x82
@@ -131717,7 +131738,7 @@ LABEL_F3F2E9:
 	calr LABEL_F41C4C
 	lds wa, 2
 	ldw bc, 0xFFFF
-	calr LABEL_F41C72
+	calr PartCtrl_WriteWord
 	lds wa, 2
 	lds bc, 5
 	ldw de, 0x82
@@ -131832,12 +131853,12 @@ LABEL_F3F424:
 	extz wa
 	ldw bc, 0x1C
 	lds de, 0
-	calr LABEL_F41543
+	calr Part_WriteWord
 	ldto_berp A, 0xFB
 	extz wa
 	ldw bc, 0xCB
 	lds de, 0
-	calr LABEL_F4151E
+	calr Part_WriteByte
 	inc1_berp 0xFA
 	ldto_berp A, 0xFA
 	cp a, (xsp + 8)
@@ -132350,19 +132371,19 @@ LABEL_F3F93D:
 	extz wa
 	ldw bc, 0x1E
 	lds de, 0
-	calr LABEL_F41543
+	calr Part_WriteWord
 	ldda8 a, 10360
 	inc 1, a
 	extz wa
 	ldw bc, 0x1C
 	lds de, 0
-	calr LABEL_F41543
+	calr Part_WriteWord
 	ldda8 a, 10360
 	inc 1, a
 	extz wa
 	ldw bc, 0xCB
 	lds de, 0
-	calr LABEL_F4151E
+	calr Part_WriteByte
 	ldda8 a, 10360
 	cpda8_24 a, 65507
 	jr nz, LABEL_F3FA0C
@@ -132419,7 +132440,7 @@ LABEL_F3FA1B:
 	extz wa
 	ldw bc, 0x1C
 	lds de, 0
-	calr LABEL_F41543
+	calr Part_WriteWord
 	ldi_berp 0xFA, 1
 
 LABEL_F3FA2B:
@@ -132454,12 +132475,12 @@ LABEL_F3FA2B:
 	extz wa
 	ldw bc, 0x1E
 	lds de, 0
-	calr LABEL_F41543
+	calr Part_WriteWord
 	ldto_berp A, 0xFB
 	extz wa
 	ldw bc, 0xCB
 	lds de, 0
-	calr LABEL_F4151E
+	calr Part_WriteByte
 	inc1_berp 0xFB
 	cp_erpb 0xFB, 0x0A
 	jr ule, LABEL_F3FA1B
@@ -132759,7 +132780,7 @@ LABEL_F3FCBB:
 LABEL_F3FD04:
 	stda16 10415, xwa
 	stda16 9830, xde
-	calr LABEL_F421A6
+	calr SeqData_ReadNextByte
 	cp l, 0x82
 	jr z, LABEL_F3FD20
 	cp l, 0x84
@@ -132904,7 +132925,7 @@ LABEL_F3FE9C:
 	jr z, LABEL_F3FEEB
 
 LABEL_F3FEB0:
-	calr LABEL_F421A6
+	calr SeqData_ReadNextByte
 	cp l, 0x84
 	jr z, LABEL_F3FEBD
 	cp l, 0x82
@@ -132918,7 +132939,7 @@ LABEL_F3FEC4:
 	cp l, 0x81
 	jr nz, LABEL_F3FED8
 	inc1_berp 0xFB
-	calr LABEL_F40052
+	calr SeqData_AdvancePosition
 	cpdi8 10362, 0
 	jr z, LABEL_F3FEE3
 	jr LABEL_F3FEEB
@@ -133039,7 +133060,7 @@ LABEL_F3FFC2:
 	ld a, (xsp + 2)
 	extz wa
 	stda16 9830, xwa
-	calr LABEL_F421A6
+	calr SeqData_ReadNextByte
 	cp l, 0x84
 	jr nz, LABEL_F3FFDC
 	stdi8 10362, 6
@@ -133070,13 +133091,13 @@ LABEL_F40002:
 	jr z, LABEL_F40018
 	lds32 xwa, 1
 	adddm32 9690, xwa
-	calr LABEL_F40052
+	calr SeqData_AdvancePosition
 	cpdi8 10362, 0
 	jr nz, LABEL_F40050
 
 LABEL_F40018:
 	setda 1, 10363
-	calr LABEL_F421A6
+	calr SeqData_ReadNextByte
 	cp l, 0x82
 	jr nz, LABEL_F4002B
 	stdi8 10362, 7
@@ -133105,7 +133126,15 @@ LABEL_F40050:
 	pop xiz
 	ret
 
-LABEL_F40052:
+; ============================================================================
+; SeqData_AdvancePosition - Advance read position in sequence data
+; ============================================================================
+; Increments position counter at address 9830. When it reaches 0xFF,
+; advances the data pointer (10415) to the next block, validating:
+;   0xFFFF = end of data, > 0x4D8 = overflow error
+; Sets error codes in 10362 (values 8, 10, 11, 0).
+; ============================================================================
+SeqData_AdvancePosition:
 	pushw iz
 	ldda16 xwa, 9830
 	inc 1, wa
@@ -133198,7 +133227,7 @@ LABEL_F40118:
 	stdi16 9830, 5
 
 LABEL_F40130:
-	calr LABEL_F421A6
+	calr SeqData_ReadNextByte
 	ld a, l
 	and a, 0xF0
 	cp a, 0xC0
@@ -133269,7 +133298,7 @@ LABEL_F401C5:
 	ldmm16 9830, 10395
 
 LABEL_F401D1:
-	calr LABEL_F421A6
+	calr SeqData_ReadNextByte
 	ld a, l
 	and a, 0xF0
 	cp a, 0xC0
@@ -133329,14 +133358,14 @@ LABEL_F4023D:
 	jr z, LABEL_F40284
 
 LABEL_F4024A:
-	calr LABEL_F421A6
+	calr SeqData_ReadNextByte
 	ldfr_berp L, 0xFB
 	cp_erpb 0xFB, 0x82
 	jr z, LABEL_F40290
 	cp_erpb 0xFB, 0x81
 	jr nz, LABEL_F40268
 	inc 1, iz
-	calr LABEL_F40052
+	calr SeqData_AdvancePosition
 	cpdi8 10362, 0
 	jr nz, LABEL_F402A0
 
@@ -133353,7 +133382,7 @@ LABEL_F4027A:
 	jr nz, LABEL_F4024A
 
 LABEL_F40284:
-	calr LABEL_F421A6
+	calr SeqData_ReadNextByte
 	ldfr_berp L, 0xFB
 	cp_erpb 0xFB, 0x82
 	jr nz, LABEL_F402AB
@@ -133389,7 +133418,7 @@ LABEL_F402C9:
 LABEL_F402CB:
 	pushw iz
 	lds iz, 0
-	calr LABEL_F421A6
+	calr SeqData_ReadNextByte
 	stda8 9606, l
 	cp l, 0x82
 	jr z, LABEL_F40303
@@ -133397,10 +133426,10 @@ LABEL_F402CB:
 	jr z, LABEL_F40303
 
 LABEL_F402DF:
-	calr LABEL_F40052
+	calr SeqData_AdvancePosition
 	cpdi8 10362, 0
 	jr nz, LABEL_F40308
-	calr LABEL_F421A6
+	calr SeqData_ReadNextByte
 	bit 7, l
 	jr nz, LABEL_F40308
 	ld bc, iz
@@ -133789,10 +133818,10 @@ LABEL_F40746:
 LABEL_F4074D:
 	ld wa, iz
 	ldto_werp BC, 0xFA
-	calr LABEL_F41C72
+	calr PartCtrl_WriteWord
 	ldto_werp WA, 0xFA
 	ldw bc, 0xFFFF
-	calr LABEL_F41C72
+	calr PartCtrl_WriteWord
 	ldto_werp WA, 0xFA
 	ld bc, iz
 	calr LABEL_F41C4C
@@ -134337,7 +134366,7 @@ LABEL_F40C41:
 	ldw (xsp), 0x0
 
 LABEL_F40C55:
-	calr LABEL_F421A6
+	calr SeqData_ReadNextByte
 	cp l, 0x82
 	jr z, LABEL_F40C62
 	cp l, 0x84
@@ -134354,7 +134383,7 @@ LABEL_F40C69:
 	incm 1, (xsp + 4)
 
 LABEL_F40C73:
-	calr LABEL_F40052
+	calr SeqData_AdvancePosition
 	cpdi8 10362, 0
 	jr nz, LABEL_F40C86
 	ld wa, (xsp + 4)
@@ -135095,7 +135124,7 @@ LABEL_F413C7:
 	ret
 
 LABEL_F413CB:
-	calr LABEL_F421A6
+	calr SeqData_ReadNextByte
 	cp l, 0x82
 	ret z
 	cp l, 0x84
@@ -135103,21 +135132,21 @@ LABEL_F413CB:
 	ret
 
 LABEL_F413D9:
-	calr LABEL_F40052
+	calr SeqData_AdvancePosition
 	cpdi8 10362, 0
 	jr z, LABEL_F413E8
 	ldw wa, 0xD2
 	jr LABEL_F41407
 
 LABEL_F413E8:
-	calr LABEL_F421A6
+	calr SeqData_ReadNextByte
 	cp l, 0x82
 	ret z
 	cp l, 0x84
 	ret z
 	bit 7, l
 	ret nz
-	calr LABEL_F40052
+	calr SeqData_AdvancePosition
 	cpdi8 10362, 0
 	jr z, LABEL_F413E8
 	ldw wa, 0xD3
@@ -135160,7 +135189,7 @@ LABEL_F4144A:
 	extz wa
 	ldw bc, 0xAF
 	ld de, iz
-	calr LABEL_F41543
+	calr Part_WriteWord
 	inc1_berp 0xFB
 	cp_erpb 0xFB, 0x0A
 	jr ule, LABEL_F4144A
@@ -135274,7 +135303,17 @@ LABEL_F4150F:
 	jr c, LABEL_F4150F
 	ret
 
-LABEL_F4151E:
+; ============================================================================
+; Part_WriteByte - Write byte to part/channel data structure
+; ============================================================================
+; Input:  A = part number (0 = direct base, 1+ = indexed)
+;         BC = offset within part structure
+;         E = byte value to write
+; Address: 0xAB000 + (A-1)*2048 + BC  (2KB per part)
+; If A==0, uses direct base address from RAM[61824].
+; See also: Part_WriteWord (16-bit write companion)
+; ============================================================================
+Part_WriteByte:
 	cps a, 0
 	jr nz, LABEL_F4152C
 	ldada xwa, 61824
@@ -135296,7 +135335,16 @@ LABEL_F41540:
 	ld (xbc), e
 	ret
 
-LABEL_F41543:
+; ============================================================================
+; Part_WriteWord - Write 16-bit word to part/channel data structure
+; ============================================================================
+; Input:  A = part number (0 = direct base, 1+ = indexed)
+;         BC = offset within part structure
+;         DE = 16-bit value to write
+; Address: 0xAB000 + (A-1)*2048 + BC  (2KB per part)
+; See also: Part_WriteByte (8-bit write companion)
+; ============================================================================
+Part_WriteWord:
 	cps a, 0
 	jr nz, LABEL_F41551
 	ldada xwa, 61824
@@ -135372,7 +135420,7 @@ LABEL_F415B2:
 	extz hl
 	add bc, hl
 	extz wa
-	jrl LABEL_F41543
+	jrl Part_WriteWord
 
 LABEL_F415C8:
 	ldw de, 0x78
@@ -135393,7 +135441,7 @@ LABEL_F415DB:
 	extz wa
 	extz de
 	ld bc, hl
-	jrl LABEL_F4151E
+	jrl Part_WriteByte
 
 LABEL_F415ED:
 	ld e, c
@@ -135416,7 +135464,7 @@ LABEL_F41606:
 	extz wa
 	ldw bc, 0xB1
 	ld de, iz
-	calr LABEL_F41543
+	calr Part_WriteWord
 	inc1_berp 0xFB
 	cp_erpb 0xFB, 0x0A
 	jr ule, LABEL_F41606
@@ -135446,7 +135494,7 @@ LABEL_F41644:
 	extz wa
 	ldw bc, 0xB1
 	ld de, iz
-	calr LABEL_F41543
+	calr Part_WriteWord
 	inc1_berp 0xFB
 	cp_erpb 0xFB, 0x0A
 	jr ule, LABEL_F41644
@@ -135479,7 +135527,7 @@ LABEL_F41682:
 	extz wa
 	ldw bc, 0xB1
 	ld de, iz
-	calr LABEL_F41543
+	calr Part_WriteWord
 	inc1_berp 0xFB
 	cp_erpb 0xFB, 0x0A
 	jr ule, LABEL_F41682
@@ -135636,7 +135684,7 @@ LABEL_F417C9:
 	extz bc
 	extz hl
 	ld de, hl
-	calr LABEL_F4151E
+	calr Part_WriteByte
 	inc 6, xsp
 	ret
 
@@ -135654,7 +135702,7 @@ LABEL_F417F4:
 	dec 3, c
 	add c, 0xD1
 	extz bc
-	jrl LABEL_F41543
+	jrl Part_WriteWord
 
 LABEL_F41803:
 	dec 2, xsp
@@ -135664,69 +135712,69 @@ LABEL_F41803:
 	extz wa
 	lds bc, 0
 	ldw de, 0x5A
-	calr LABEL_F4151E
+	calr Part_WriteByte
 	ld a, (xsp + 2)
 	extz wa
 	lds bc, 1
 	ldw de, 0x5A
-	calr LABEL_F4151E
+	calr Part_WriteByte
 	ld a, (xsp + 2)
 	extz wa
 	lds bc, 2
 	ldw de, 0x5A
-	calr LABEL_F4151E
+	calr Part_WriteByte
 	ld a, (xsp + 2)
 	extz wa
 	lds bc, 3
 	ldw de, 0x5A
-	calr LABEL_F4151E
+	calr Part_WriteByte
 	ld a, (xsp + 2)
 	extz wa
 	lds bc, 4
 	lds de, 0
-	calr LABEL_F4151E
+	calr Part_WriteByte
 	ld a, (xsp + 2)
 	extz wa
 	lds bc, 5
 	lds de, 1
-	calr LABEL_F4151E
+	calr Part_WriteByte
 	ld a, (xsp + 2)
 	extz wa
 	lds bc, 6
 	ldw de, 0x8
-	calr LABEL_F4151E
+	calr Part_WriteByte
 	ld a, (xsp + 2)
 	extz wa
 	lds bc, 7
 	lds de, 0
-	calr LABEL_F4151E
+	calr Part_WriteByte
 	call LABEL_EF0839
 	ld a, (xsp + 2)
 	extz wa
 	extz hl
 	ldw bc, 0x8
 	ld de, hl
-	calr LABEL_F4151E
+	calr Part_WriteByte
 	ld a, (xsp + 2)
 	extz wa
 	ldw bc, 0x14
 	lds de, 0
-	calr LABEL_F41543
+	calr Part_WriteWord
 	ld a, (xsp + 2)
 	extz wa
 	ldw bc, 0x16
 	ldw de, 0x100
-	calr LABEL_F41543
+	calr Part_WriteWord
 	ld a, (xsp + 2)
 	extz wa
 	ldw bc, 0x18
 	ldw de, 0x2E
-	calr LABEL_F41543
+	calr Part_WriteWord
 	ld a, (xsp + 2)
 	extz wa
 	ldw bc, 0x1A
 	ldw de, 0x520
-	calr LABEL_F41543
+	calr Part_WriteWord
 	lds iz, 0
 
 LABEL_F418BA:
@@ -135735,7 +135783,7 @@ LABEL_F418BA:
 	ld bc, iz
 	add bc, 0x42
 	lds de, 0
-	calr LABEL_F4151E
+	calr Part_WriteByte
 	inc 1, iz
 	cp iz, 0xC
 	jr c, LABEL_F418BA
@@ -135753,7 +135801,7 @@ LABEL_F418E5:
 	ldw de, 0xFF
 
 LABEL_F418EB:
-	calr LABEL_F4151E
+	calr Part_WriteByte
 	popw iz
 	inc 2, xsp
 	ret
@@ -135850,7 +135898,7 @@ LABEL_F419CA:
 	extz wa
 	ldw bc, 0x1E
 	lds de, 0
-	calr LABEL_F41543
+	calr Part_WriteWord
 	inc1_berp 0xFB
 	cp_erpb 0xFB, 0x0A
 	jr ule, LABEL_F419CA
@@ -135862,7 +135910,7 @@ LABEL_F419E2:
 	extz wa
 	ldw bc, 0x1E
 	lds de, 0
-	calr LABEL_F41543
+	calr Part_WriteWord
 
 LABEL_F419F1:
 	pop_werp 0xFA
@@ -136068,14 +136116,14 @@ LABEL_F41B8C:
 	ld xwa, (xsp + 12)
 	ld wa, (xwa)
 	ld bc, iz
-	calr LABEL_F41C72
+	calr PartCtrl_WriteWord
 	ld xwa, (xsp + 12)
 	ld bc, (xwa)
 	ld wa, iz
 	calr LABEL_F41C4C
 	ld wa, iz
 	ldw bc, 0xFFFF
-	calr LABEL_F41C72
+	calr PartCtrl_WriteWord
 	ld wa, iz
 	lds bc, 1
 	calr LABEL_F41C99
@@ -136133,7 +136181,7 @@ LABEL_F41BFC:
 	ld bc, iz
 	inc 1, bc
 	ld wa, iz
-	calr LABEL_F41C72
+	calr PartCtrl_WriteWord
 	ld wa, iz
 	lds bc, 5
 	ldw de, 0x82
@@ -136146,7 +136194,7 @@ LABEL_F41BFC:
 	calr LABEL_F41C4C
 	ldw wa, 0x4D8
 	ldw bc, 0xFFFF
-	calr LABEL_F41C72
+	calr PartCtrl_WriteWord
 	popw iz
 	ret
 
@@ -136180,7 +136228,16 @@ LABEL_F41C5F:
 	ld hl, (xbc)
 	ret
 
-LABEL_F41C72:
+; ============================================================================
+; PartCtrl_WriteWord - Write 16-bit word to part control register
+; ============================================================================
+; Input:  WA = part number (1-based)
+;         BC = 16-bit value to write
+; Address: 0xB0000 + (WA-1)*256 + 3  (256 bytes per part)
+; Family: offset 1 (LABEL_F41C4C), offset 3 (this), read (LABEL_F41C5F),
+;         bit 7 test (LABEL_F41C85), bit 7 set/clear (LABEL_F41C99)
+; ============================================================================
+PartCtrl_WriteWord:
 	dec 1, wa
 	extz xwa
 	sll xwa, 8
@@ -136316,7 +136373,7 @@ LABEL_F41DB9:
 	calr LABEL_F41F7C
 	ld wa, (xsp + 256)
 	ldw bc, 0xFFFF
-	calr LABEL_F41C72
+	calr PartCtrl_WriteWord
 
 LABEL_F41DE4:
 	ld wa, (xsp + 256)
@@ -136335,7 +136392,7 @@ LABEL_F41DF2:
 	calr LABEL_F41F7C
 	lds wa, 1
 	ldw bc, 0xFFFF
-	calr LABEL_F41C72
+	calr PartCtrl_WriteWord
 
 LABEL_F41E0A:
 	lds wa, 1
@@ -136350,7 +136407,7 @@ LABEL_F41E0A:
 	calr LABEL_F41F7C
 	lds wa, 2
 	ldw bc, 0xFFFF
-	calr LABEL_F41C72
+	calr PartCtrl_WriteWord
 
 LABEL_F41E2C:
 	lds wa, 2
@@ -136389,13 +136446,13 @@ LABEL_F41E6F:
 	jr nz, LABEL_F41E80
 	ldto_werp WA, 0xFA
 	ldw bc, 0xFFFF
-	calr LABEL_F41C72
+	calr PartCtrl_WriteWord
 	jr LABEL_F41E90
 
 LABEL_F41E80:
 	ldto_werp WA, 0xFA
 	ld bc, iz
-	calr LABEL_F41C72
+	calr PartCtrl_WriteWord
 	ld wa, iz
 	ldto_werp BC, 0xFA
 
@@ -136408,7 +136465,7 @@ LABEL_F41E90:
 	calr LABEL_F41C4C
 	lds wa, 1
 	ldw bc, 0xFFFF
-	calr LABEL_F41C72
+	calr PartCtrl_WriteWord
 
 LABEL_F41E9F:
 	lds wa, 2
@@ -136440,13 +136497,13 @@ LABEL_F41ED7:
 	jr nz, LABEL_F41EE8
 	ldto_werp WA, 0xFA
 	ldw bc, 0xFFFF
-	calr LABEL_F41C72
+	calr PartCtrl_WriteWord
 	jr LABEL_F41EF8
 
 LABEL_F41EE8:
 	ldto_werp WA, 0xFA
 	ld bc, iz
-	calr LABEL_F41C72
+	calr PartCtrl_WriteWord
 	ld wa, iz
 	ldto_werp BC, 0xFA
 
@@ -136459,7 +136516,7 @@ LABEL_F41EF8:
 	calr LABEL_F41C4C
 	lds wa, 2
 	ldw bc, 0xFFFF
-	calr LABEL_F41C72
+	calr PartCtrl_WriteWord
 
 LABEL_F41F07:
 	pop xiz
@@ -136495,14 +136552,14 @@ LABEL_F41F1F:
 	add c, 0x76
 	extz bc
 	ldw de, 0xFFFF
-	calr LABEL_F41543
+	calr Part_WriteWord
 	ldto_berp A, 0xFA
 	extz wa
 	ldto_berp C, 0xFB
 	add c, 0x97
 	extz bc
 	lds de, 5
-	calr LABEL_F4151E
+	calr Part_WriteByte
 	inc1_berp 0xFB
 	cp_erpb 0xFB, 0x10
 	jr ule, LABEL_F41F1F
@@ -136549,7 +136606,7 @@ LABEL_F41FB5:
 	ld iz, wa
 	ldda16 xbc, 61999
 	ld wa, iz
-	calr LABEL_F41C72
+	calr PartCtrl_WriteWord
 	ldda16 xwa, 61999
 	ld bc, iz
 	calr LABEL_F41C4C
@@ -136594,13 +136651,13 @@ LABEL_F42011:
 LABEL_F42016:
 	ld wa, (xsp + 2)
 	ld bc, iz
-	calr LABEL_F41C72
+	calr PartCtrl_WriteWord
 	ld wa, iz
 	ld bc, (xsp + 2)
 	calr LABEL_F41C4C
 	ld wa, iz
 	ldw bc, 0xFFFF
-	calr LABEL_F41C72
+	calr PartCtrl_WriteWord
 	ld wa, iz
 	lds bc, 1
 	calr LABEL_F41C99
@@ -136722,7 +136779,7 @@ LABEL_F42156:
 	jr ule, LABEL_F4218A
 
 LABEL_F42163:
-	calr LABEL_F421A6
+	calr SeqData_ReadNextByte
 	cp l, 0x81
 	jr nz, LABEL_F42173
 	inc1_berp 0xFB
@@ -136756,7 +136813,14 @@ LABEL_F4218E:
 	stdi16 9830, 5
 	ret
 
-LABEL_F421A6:
+; ============================================================================
+; SeqData_ReadNextByte - Read next byte from sequence data stream
+; ============================================================================
+; Reads from Table Data ROM at 0x0B0000 region using current position (9830)
+; and data pointer (10415). Returns byte in L register.
+; Called by sequencer routines that check for end marks (0x81, 0x82, 0x84).
+; ============================================================================
+SeqData_ReadNextByte:
 	ldda16 xwa, 9830
 	ld c, a
 	extz bc
@@ -136949,7 +137013,7 @@ LABEL_F4235B:
 	jrl nc, LABEL_F4249C
 
 LABEL_F42362:
-	calr LABEL_F421A6
+	calr SeqData_ReadNextByte
 	ldfr_berp L, 0xFB
 	cp_erpb 0xFB, 0x81
 	jr nz, LABEL_F42378
@@ -137019,7 +137083,7 @@ LABEL_F423FD:
 	jrl LABEL_F4249C
 
 LABEL_F42407:
-	calr LABEL_F421A6
+	calr SeqData_ReadNextByte
 	ldfr_berp L, 0xFB
 	cp_erpb 0xFB, 0x81
 	jrl z, LABEL_F424B0
@@ -137241,7 +137305,7 @@ LABEL_F425FF:
 	calr LABEL_F41F7C
 	ld wa, iz
 	ldw bc, 0xFFFF
-	calr LABEL_F41C72
+	calr PartCtrl_WriteWord
 
 LABEL_F4260A:
 	popw iz
@@ -137289,7 +137353,7 @@ LABEL_F426CE:
 	calr LABEL_F41C4C
 	ld wa, iz
 	ldw bc, 0xFFFF
-	calr LABEL_F41C72
+	calr PartCtrl_WriteWord
 	ld wa, iz
 	lds bc, 1
 	calr LABEL_F41C99
@@ -138008,7 +138072,7 @@ LABEL_F42E33:
 	extz wa
 	ldw bc, 0xCB
 	lds de, 0
-	calr LABEL_F4151E
+	calr Part_WriteByte
 	inc1_berp 0xFB
 	cp_erpb 0xFB, 0x0A
 	jr ule, LABEL_F42E33
@@ -138071,12 +138135,12 @@ LABEL_F42ECD:
 	extz wa
 	ldw bc, 0x1C
 	lds de, 0
-	calr LABEL_F41543
+	calr Part_WriteWord
 	ldto_berp A, 0xFB
 	extz wa
 	ldw bc, 0x1E
 	lds de, 0
-	calr LABEL_F41543
+	calr Part_WriteWord
 	calr LABEL_F439B7
 	ldto_berp A, 0xFB
 	extz wa
@@ -138093,202 +138157,202 @@ LABEL_F42F03:
 	extz wa
 	ldw bc, 0x50
 	ldw de, 0xFFFF
-	calr LABEL_F41543
+	calr Part_WriteWord
 	ldto_berp A, 0xFB
 	extz wa
 	ldw bc, 0x52
 	lds de, 0
-	calr LABEL_F4151E
+	calr Part_WriteByte
 	ldto_berp A, 0xFB
 	extz wa
 	ldw bc, 0x53
 	lds de, 1
-	calr LABEL_F4151E
+	calr Part_WriteByte
 	ldto_berp A, 0xFB
 	extz wa
 	ldw bc, 0x54
 	lds de, 2
-	calr LABEL_F4151E
+	calr Part_WriteByte
 	ldto_berp A, 0xFB
 	extz wa
 	ldw bc, 0x55
 	lds de, 3
-	calr LABEL_F4151E
+	calr Part_WriteByte
 	ldto_berp A, 0xFB
 	extz wa
 	ldw bc, 0x56
 	lds de, 1
-	calr LABEL_F4151E
+	calr Part_WriteByte
 	ldto_berp A, 0xFB
 	extz wa
 	ldw bc, 0x57
 	lds de, 1
-	calr LABEL_F41543
+	calr Part_WriteWord
 	ldto_berp A, 0xFB
 	extz wa
 	ldw bc, 0x59
 	lds de, 1
-	calr LABEL_F41543
+	calr Part_WriteWord
 	ldto_berp A, 0xFB
 	extz wa
 	ldw bc, 0x5B
 	lds de, 1
-	calr LABEL_F4151E
+	calr Part_WriteByte
 	ldto_berp A, 0xFB
 	extz wa
 	ldw bc, 0x5C
 	lds de, 1
-	calr LABEL_F41543
+	calr Part_WriteWord
 	ldto_berp A, 0xFB
 	extz wa
 	ldw bc, 0x5E
 	lds de, 1
-	calr LABEL_F41543
+	calr Part_WriteWord
 	ldto_berp A, 0xFB
 	extz wa
 	ldw bc, 0x60
 	lds de, 0
-	calr LABEL_F4151E
+	calr Part_WriteByte
 	ldto_berp A, 0xFB
 	extz wa
 	ldw bc, 0x61
 	lds de, 1
-	calr LABEL_F4151E
+	calr Part_WriteByte
 	ldto_berp A, 0xFB
 	extz wa
 	ldw bc, 0x62
 	lds de, 1
-	calr LABEL_F41543
+	calr Part_WriteWord
 	ldto_berp A, 0xFB
 	extz wa
 	ldw bc, 0x64
 	lds de, 1
-	calr LABEL_F41543
+	calr Part_WriteWord
 	ldto_berp A, 0xFB
 	extz wa
 	ldw bc, 0x66
 	lds de, 1
-	calr LABEL_F4151E
+	calr Part_WriteByte
 	ldto_berp A, 0xFB
 	extz wa
 	ldw bc, 0x67
 	lds de, 1
-	calr LABEL_F41543
+	calr Part_WriteWord
 	ldto_berp A, 0xFB
 	extz wa
 	ldw bc, 0x69
 	lds de, 1
-	calr LABEL_F4151E
+	calr Part_WriteByte
 	ldto_berp A, 0xFB
 	extz wa
 	ldw bc, 0x6A
 	lds de, 1
-	calr LABEL_F41543
+	calr Part_WriteWord
 	ldto_berp A, 0xFB
 	extz wa
 	ldw bc, 0x6C
 	lds de, 1
-	calr LABEL_F41543
+	calr Part_WriteWord
 	ldto_berp A, 0xFB
 	extz wa
 	ldw bc, 0x6E
 	lds de, 1
-	calr LABEL_F4151E
+	calr Part_WriteByte
 	ldto_berp A, 0xFB
 	extz wa
 	ldw bc, 0x6F
 	lds de, 1
-	calr LABEL_F41543
+	calr Part_WriteWord
 	ldto_berp A, 0xFB
 	extz wa
 	ldw bc, 0x71
 	lds de, 1
-	calr LABEL_F4151E
+	calr Part_WriteByte
 	ldto_berp A, 0xFB
 	extz wa
 	ldw bc, 0x72
 	lds de, 1
-	calr LABEL_F41543
+	calr Part_WriteWord
 	ldto_berp A, 0xFB
 	extz wa
 	ldw bc, 0x74
 	lds de, 1
-	calr LABEL_F41543
+	calr Part_WriteWord
 	ldto_berp A, 0xFB
 	extz wa
 	ldw bc, 0x76
 	lds de, 3
-	calr LABEL_F4151E
+	calr Part_WriteByte
 	ldto_berp A, 0xFB
 	extz wa
 	ldw bc, 0x77
 	lds de, 0
-	calr LABEL_F4151E
+	calr Part_WriteByte
 	ldto_berp A, 0xFB
 	extz wa
 	ldw bc, 0xA8
 	lds de, 1
-	calr LABEL_F4151E
+	calr Part_WriteByte
 	ldto_berp A, 0xFB
 	extz wa
 	ldw bc, 0xA9
 	lds de, 1
-	calr LABEL_F41543
+	calr Part_WriteWord
 	ldto_berp A, 0xFB
 	extz wa
 	ldw bc, 0xAB
 	lds de, 1
-	calr LABEL_F41543
+	calr Part_WriteWord
 	ldto_berp A, 0xFB
 	extz wa
 	ldw bc, 0xAD
 	lds de, 0
-	calr LABEL_F4151E
+	calr Part_WriteByte
 	ldto_berp A, 0xFB
 	extz wa
 	ldw bc, 0xAE
 	lds de, 0
-	calr LABEL_F4151E
+	calr Part_WriteByte
 	ldto_berp A, 0xFB
 	extz wa
 	ldw bc, 0xB3
 	lds de, 0
-	calr LABEL_F4151E
+	calr Part_WriteByte
 	ldto_berp A, 0xFB
 	extz wa
 	ldw bc, 0xB4
 	lds de, 0
-	calr LABEL_F4151E
+	calr Part_WriteByte
 	ldto_berp A, 0xFB
 	extz wa
 	ldw bc, 0xB5
 	lds de, 0
-	calr LABEL_F4151E
+	calr Part_WriteByte
 	ldto_berp A, 0xFB
 	extz wa
 	ldw bc, 0xB6
 	lds de, 0
-	calr LABEL_F4151E
+	calr Part_WriteByte
 	ldto_berp A, 0xFB
 	extz wa
 	ldw bc, 0xB8
 	lds de, 1
-	calr LABEL_F41543
+	calr Part_WriteWord
 	ldto_berp A, 0xFB
 	extz wa
 	ldw bc, 0xBA
 	lds de, 2
-	calr LABEL_F41543
+	calr Part_WriteWord
 	ldto_berp A, 0xFB
 	extz wa
 	ldw bc, 0xBC
 	lds de, 0
-	calr LABEL_F4151E
+	calr Part_WriteByte
 	ldto_berp A, 0xFB
 	extz wa
 	ldw bc, 0xBF
 	lds de, 0
-	calr LABEL_F41543
+	calr Part_WriteWord
 	ldto_berp A, 0xFB
 	extz wa
 	ldw bc, 0xBE
@@ -138299,12 +138363,12 @@ LABEL_F42F03:
 	extz hl
 	ldw bc, 0xBE
 	ld de, hl
-	calr LABEL_F4151E
+	calr Part_WriteByte
 	ldto_berp A, 0xFB
 	extz wa
 	ldw bc, 0xCB
 	lds de, 0
-	calr LABEL_F4151E
+	calr Part_WriteByte
 	lds iz, 0
 
 LABEL_F43138:
@@ -138313,7 +138377,7 @@ LABEL_F43138:
 	ld bc, iz
 	add bc, 0x113
 	lds de, 0
-	calr LABEL_F4151E
+	calr Part_WriteByte
 	inc 1, iz
 	cp iz, 0x1CD
 	jr c, LABEL_F43138
@@ -138325,13 +138389,13 @@ LABEL_F43138:
 	extz wa
 	ldw bc, 0x110
 	ldw de, 0xFFFF
-	calr LABEL_F41543
+	calr Part_WriteWord
 	call LABEL_FC9E29
 	ldto_berp A, 0xFB
 	extz wa
 	ldw bc, 0x112
 	lds de, 1
-	calr LABEL_F4151E
+	calr Part_WriteByte
 	inc1_berp 0xFB
 	cp_erpb 0xFB, 0x0A
 	jrl ule, LABEL_F42ECD
@@ -144064,7 +144128,7 @@ MainExe_SeqStopFinish:
 	lds wa, 0
 	ldw bc, 0x50
 	ldw de, 0xFFFF
-	call LABEL_F41543
+	call Part_WriteWord
 	lds wa, 0
 	ldw bc, 0x32
 	call LABEL_F3F35A
@@ -144236,7 +144300,7 @@ LABEL_F47864:
 	lds wa, 1
 	lds bc, 4
 	lds de, 0
-	call LABEL_F4151E
+	call Part_WriteByte
 	calr LABEL_F47FA4
 	call SeqStep_FindLastUsedPart
 	ld8_24 a, 0x00ffe3
@@ -144275,7 +144339,7 @@ LABEL_F478CA:
 	lds wa, 1
 	lds bc, 4
 	lds de, 0
-	call LABEL_F4151E
+	call Part_WriteByte
 	sti8_24 0x00ffe3, 0x00
 	call SeqStep_FindLastUsedPart
 	ld8_24 a, 0x00ffe3
@@ -144311,7 +144375,7 @@ SeqSavePre:
 	lds wa, 1
 	lds bc, 4
 	lds de, 1
-	call LABEL_F4151E
+	call Part_WriteByte
 	ld xhl, xiz
 	pop xiz
 	ret
@@ -144322,7 +144386,7 @@ SeqSavePost:
 	lds wa, 1
 	lds bc, 4
 	lds de, 0
-	call LABEL_F4151E
+	call Part_WriteByte
 	cps iz, 0
 	jr lt, LABEL_F47958
 	resda 0, 36232
@@ -144545,7 +144609,7 @@ LABEL_F47C8B:
 	extz wa
 	ldw bc, 0xC7
 	lds de, 0
-	call LABEL_F4151E
+	call Part_WriteByte
 	ld8_24 a, 0x00ffe3
 	inc 1, a
 	extz wa
@@ -144556,7 +144620,7 @@ LABEL_F47C8B:
 	inc 1, a
 	extz wa
 	ldw bc, 0xC8
-	call LABEL_F41543
+	call Part_WriteWord
 	ld a, (xsp + 8)
 	extz wa
 	calr LABEL_F47FE1
@@ -144783,7 +144847,7 @@ LABEL_F47ED9:
 	ld bc, iz
 	inc 1, bc
 	ld wa, iz
-	call LABEL_F41C72
+	call PartCtrl_WriteWord
 	inc 1, iz
 	cpda16 xiz, 62001
 	jr ule, LABEL_F47EB8
@@ -144794,7 +144858,7 @@ LABEL_F47EEB:
 	call LABEL_F41C4C
 	ldw wa, 0x4D8
 	ldw bc, 0xFFFF
-	call LABEL_F41C72
+	call PartCtrl_WriteWord
 
 LABEL_F47EFF:
 	popw iz
@@ -144831,7 +144895,7 @@ LABEL_F47FA4:
 	lds wa, 1
 	ldw bc, 0xC7
 	lds de, 0
-	call LABEL_F4151E
+	call Part_WriteByte
 	lds wa, 1
 	ldw bc, 0xC8
 	call LABEL_F4158D
@@ -144839,7 +144903,7 @@ LABEL_F47FA4:
 	lds wa, 1
 	ldw bc, 0xC8
 	lds de, 0
-	call LABEL_F41543
+	call Part_WriteWord
 	stdi16 9832, 1
 	resda 3, 10407
 	ret
@@ -145104,7 +145168,7 @@ LABEL_F4829F:
 	cps wa, 0
 	jr z, LABEL_F482CF
 	ld bc, (xsp + 10)
-	call LABEL_F41C72
+	call PartCtrl_WriteWord
 	jr LABEL_F482FA
 
 LABEL_F482CF:
@@ -145173,7 +145237,7 @@ LABEL_F4834F:
 	call LABEL_F41C4C
 	lds wa, 1
 	ldw bc, 0xFFFF
-	call LABEL_F41C72
+	call PartCtrl_WriteWord
 	lds wa, 1
 	lds bc, 5
 	ldw de, 0x82
@@ -145186,7 +145250,7 @@ LABEL_F4834F:
 	call LABEL_F41C4C
 	lds wa, 2
 	ldw bc, 0xFFFF
-	call LABEL_F41C72
+	call PartCtrl_WriteWord
 	lds wa, 2
 	lds bc, 5
 	ldw de, 0x82
@@ -145212,7 +145276,7 @@ LABEL_F483B5:
 	extz wa
 	ldw bc, 0x112
 	lds de, 1
-	call LABEL_F4151E
+	call Part_WriteByte
 	ldto_berp A, 0xFB
 	extz wa
 	ldw bc, 0x110
@@ -145223,7 +145287,7 @@ LABEL_F483B5:
 	extz wa
 	ldw bc, 0x110
 	ldw de, 0xFFFF
-	call LABEL_F41543
+	call Part_WriteWord
 	call LABEL_FC9E29
 
 LABEL_F483F6:
@@ -145360,7 +145424,7 @@ LABEL_F484EA:
 	calr LABEL_F48749
 	ld wa, iz
 	ldw bc, 0xFFFF
-	call LABEL_F41C72
+	call PartCtrl_WriteWord
 
 LABEL_F48519:
 	ld a, (xsp + 12)
@@ -145488,7 +145552,7 @@ LABEL_F48605:
 	ld bc, (xsp + 2)
 
 LABEL_F48613:
-	call LABEL_F41C72
+	call PartCtrl_WriteWord
 	ld wa, iz
 	lds bc, 0
 	call LABEL_F41C4C
@@ -145856,7 +145920,7 @@ LABEL_F488F7:
 	jr z, LABEL_F48959
 
 LABEL_F4893A:
-	call LABEL_F421A6
+	call SeqData_ReadNextByte
 	ld a, l
 	and a, 0xF0
 	cp a, 0x90
@@ -146038,7 +146102,7 @@ LABEL_F48A95:
 
 LABEL_F48A97:
 	call LABEL_F421C6
-	call LABEL_F421A6
+	call SeqData_ReadNextByte
 	stda8 9607, l
 	call LABEL_F421C6
 	jr __jrt_nop_F48AA9
@@ -146070,7 +146134,7 @@ LABEL_F48ACE:
 
 LABEL_F48AD1:
 	call LABEL_F421C6
-	call LABEL_F421A6
+	call SeqData_ReadNextByte
 	stda8 9607, l
 	call LABEL_F421C6
 	ldda16 xwa, 9614
@@ -147486,7 +147550,7 @@ LABEL_F4986D:
 LABEL_F4988B:
 	pushw iz
 	lds iz, 0
-	call LABEL_F421A6
+	call SeqData_ReadNextByte
 	stda8 9606, l
 	cp l, 0x82
 	jr z, LABEL_F498A0
@@ -147499,7 +147563,7 @@ LABEL_F498A0:
 
 LABEL_F498A4:
 	call LABEL_F421C6
-	call LABEL_F421A6
+	call SeqData_ReadNextByte
 	bit 7, l
 	jr nz, LABEL_F498D5
 	cps iz, 5
@@ -147743,13 +147807,13 @@ LABEL_F49A85:
 	extz wa
 	ldw bc, 0x1C
 	lds de, 0
-	call LABEL_F41543
+	call Part_WriteWord
 	ldda8 a, 10360
 	inc 1, a
 	extz wa
 	ldw bc, 0xCB
 	lds de, 0
-	call LABEL_F4151E
+	call Part_WriteByte
 	ldi_berp 0xFB, 1
 
 LABEL_F49AAE:
@@ -148526,7 +148590,7 @@ SeqPart_AllocDone:
 	call LABEL_F41C4C
 	ld wa, iz
 	ldw bc, 0xFFFF
-	call LABEL_F41C72
+	call PartCtrl_WriteWord
 	lds hl, 0
 
 SeqPart_AllocReturn:
@@ -149817,7 +149881,7 @@ SeqPart_DrumPartHandler:
 	call LABEL_F3FE4C
 	cpdi8 10362, 0
 	jrl nz, SeqPart_DrumPartJumpExit
-	call LABEL_F421A6
+	call SeqData_ReadNextByte
 	cp l, 0x82
 	jrl z, SeqPart_DrumPartJumpExit
 	ldmm16 9938, 9830
@@ -149859,7 +149923,7 @@ SeqPart_DrumPartBoundary:
 	jr SeqPart_DrumPartJumpExit
 
 SeqPart_DrumPartExtended:
-	call LABEL_F421A6
+	call SeqData_ReadNextByte
 	cp l, 0x82
 	jr z, SeqPart_DrumPartBoundary
 	ldmm16 9942, 9830
@@ -149929,7 +149993,7 @@ SeqPart_ExchangeInit:
 	call LABEL_F41C4C
 	ld wa, iz
 	ldw bc, 0xFFFF
-	call LABEL_F41C72
+	call PartCtrl_WriteWord
 	setda 7, 10363
 
 SeqPart_ExchangeProcess:
@@ -150736,7 +150800,7 @@ SeqPart_ComputeStepCount:
 	stda32 9690, xwa
 
 SeqPart_StepCountLoop:
-	call LABEL_F421A6
+	call SeqData_ReadNextByte
 	cp l, 0x82
 	jr nz, SeqPart_StepCountCheck
 	ld bc, iz
@@ -150761,7 +150825,7 @@ SeqPart_StepCountCheck:
 	inc 1, iz
 
 SeqPart_StepCountDone:
-	call LABEL_F40052
+	call SeqData_AdvancePosition
 	cpdi8 10362, 0
 	jr z, SeqPart_StepCountLoop
 	jr SeqPart_StepCountPopReturn
@@ -151015,13 +151079,13 @@ SeqPart_TransposeWalkLoop:
 	jr z, SeqPart_TransposeClampHigh
 
 SeqPart_TransposeCheckNote:
-	call LABEL_F421A6
+	call SeqData_ReadNextByte
 	cp l, 0x82
 	jrl z, SeqPart_TransposePopReturn
 	cp l, 0x81
 	jr nz, SeqPart_TransposeClampLow
 	inc1_werp 0xFA
-	call LABEL_F40052
+	call SeqData_AdvancePosition
 
 SeqPart_TransposeApply:
 	ldda8 a, 10382
@@ -151040,16 +151104,16 @@ SeqPart_TransposeClampLow:
 	and l, 0xF0
 	cp l, 0x90
 	jr nz, SeqPart_TransposeDone
-	call LABEL_F40052
+	call SeqData_AdvancePosition
 	cpdi8 10362, 0
 	jr nz, SeqPart_TransposePopReturn
-	call LABEL_F40052
+	call SeqData_AdvancePosition
 	cpdi8 10362, 0
 	jr nz, SeqPart_TransposePopReturn
-	call LABEL_F40052
+	call SeqData_AdvancePosition
 	cpdi8 10362, 0
 	jr nz, SeqPart_TransposePopReturn
-	call LABEL_F421A6
+	call SeqData_ReadNextByte
 	extz hl
 	ldda8 a, 9812
 	exts wa
@@ -151069,7 +151133,7 @@ SeqPart_TransposeAdvance:
 	call LABEL_F421B5
 
 SeqPart_TransposeDone:
-	call LABEL_F40052
+	call SeqData_AdvancePosition
 	cpdi8 10362, 0
 	jr z, SeqPart_TransposeApply
 	jr SeqPart_TransposePopReturn
@@ -151386,7 +151450,7 @@ SeqPart_VelExprLoop:
 	jr z, SeqPart_VelExprCheckNote
 
 SeqPart_VelExprReadEvent:
-	call LABEL_F421A6
+	call SeqData_ReadNextByte
 	cp l, 0x82
 	jrl z, SeqPart_VelExprFinalExit
 	cp l, 0x81
@@ -151396,7 +151460,7 @@ SeqPart_VelExprReadEvent:
 	cpdi8 10362, 0
 	jrl nz, SeqPart_VelExprFinalExit
 	inc1_werp 0xFA
-	call LABEL_F40052
+	call SeqData_AdvancePosition
 	resda 0, 10363
 	ldmm16 10046, 9830
 	ldmm16 10044, 10415
@@ -151436,10 +151500,10 @@ SeqPart_VelExprApply:
 	jrl SeqPart_VelExprFinalExit
 
 SeqPart_VelExprClamp:
-	call LABEL_F40052
+	call SeqData_AdvancePosition
 	cpdi8 10362, 0
 	jrl nz, SeqPart_VelExprFinalExit
-	call LABEL_F421A6
+	call SeqData_ReadNextByte
 	stda8 9784, l
 	extz hl
 	ld xwa, (xsp + 4)
@@ -151461,7 +151525,7 @@ SeqPart_VelExprClamp:
 	ldda8 a, 9784
 	cpda8 a, 9790
 	jr ule, SeqPart_VelExprContinue
-	call LABEL_F40052
+	call SeqData_AdvancePosition
 	cpdi8 10362, 0
 	jrl z, SeqPart_VelExprCheckEnd
 	jrl SeqPart_VelExprFinalExit
@@ -151472,7 +151536,7 @@ SeqPart_VelExprWrite:
 	ldda8 a, 9784
 	cpda8 a, 9788
 	jr nc, SeqPart_VelExprContinue
-	call LABEL_F40052
+	call SeqData_AdvancePosition
 	cpdi8 10362, 0
 	jrl z, SeqPart_VelExprCheckEnd
 	jrl SeqPart_VelExprFinalExit
@@ -151485,7 +151549,7 @@ SeqPart_VelExprSkip:
 	jr ule, SeqPart_VelExprContinue
 
 SeqPart_VelExprAdvance:
-	call LABEL_F40052
+	call SeqData_AdvancePosition
 	cpdi8 10362, 0
 	jrl z, SeqPart_VelExprCheckEnd
 	jrl SeqPart_VelExprFinalExit
@@ -151516,7 +151580,7 @@ SeqPart_VelExprError:
 	ldda8 a, 9784
 	cpda8 a, 9790
 	jr nc, SeqPart_VelExprContinue
-	call LABEL_F40052
+	call SeqData_AdvancePosition
 	cpdi8 10362, 0
 	jrl z, SeqPart_VelExprCheckEnd
 	jrl SeqPart_VelExprFinalExit
@@ -151527,7 +151591,7 @@ SeqPart_VelExprReturn:
 	ldda8 a, 9784
 	cpda8 a, 9788
 	jr ule, SeqPart_VelExprContinue
-	call LABEL_F40052
+	call SeqData_AdvancePosition
 	cpdi8 10362, 0
 	jrl z, SeqPart_VelExprCheckEnd
 	jr SeqPart_VelExprFinalExit
@@ -151538,7 +151602,7 @@ SeqPart_VelExprFinish:
 	jr ule, SeqPart_VelExprContinue
 	cpda8 a, 9790
 	jr nc, SeqPart_VelExprContinue
-	call LABEL_F40052
+	call SeqData_AdvancePosition
 	cpdi8 10362, 0
 	jrl z, SeqPart_VelExprCheckEnd
 	jr SeqPart_VelExprFinalExit
@@ -151582,7 +151646,7 @@ SeqPart_VelExprClampMin:
 	extz hl
 	ld wa, hl
 	call LABEL_F421B5
-	call LABEL_F40052
+	call SeqData_AdvancePosition
 	cpdi8 10362, 0
 	jrl z, SeqPart_VelExprCheckEnd
 
@@ -151757,12 +151821,12 @@ SeqPart_InnerLoop:
 	jr z, SeqPart_InnerCheckNote
 
 SeqPart_InnerReadEvent:
-	call LABEL_F421A6
+	call SeqData_ReadNextByte
 	cp l, 0x82
 	jrl z, SeqPart_InnerReturn
 	cp l, 0x81
 	jr nz, SeqPart_InnerCheck90
-	call LABEL_F40052
+	call SeqData_AdvancePosition
 	cpdi8 10362, 0
 	jr nz, SeqPart_InnerReturn
 	inc1_werp 0xFA
@@ -151784,13 +151848,13 @@ SeqPart_InnerCheck90:
 	and l, 0xF0
 	cp l, 0x90
 	jr nz, SeqPart_InnerAdvance
-	call LABEL_F40052
+	call SeqData_AdvancePosition
 	cpdi8 10362, 0
 	jr nz, SeqPart_InnerReturn
-	call LABEL_F40052
+	call SeqData_AdvancePosition
 	cpdi8 10362, 0
 	jr nz, SeqPart_InnerReturn
-	call LABEL_F421A6
+	call SeqData_ReadNextByte
 	ldda8 c, 9762
 	cps c, 0
 	jr le, SeqPart_InnerVelAddNeg
@@ -151816,7 +151880,7 @@ SeqPart_InnerVelStore:
 	call LABEL_F421B5
 
 SeqPart_InnerAdvance:
-	call LABEL_F40052
+	call SeqData_AdvancePosition
 	cpdi8 10362, 0
 	jr z, SeqPart_InnerCheckType
 	jr SeqPart_InnerReturn
@@ -151959,12 +152023,12 @@ SeqPart_VoiceCheckSetupDone:
 	jr z, SeqPart_VoiceCheckValidate
 
 SeqPart_VoiceCheckSetupReturn:
-	call LABEL_F421A6
+	call SeqData_ReadNextByte
 	cp l, 0x82
 	jr z, SeqPart_VoiceCheckModeA
 	cp l, 0x81
 	jr nz, SeqPart_VoiceCheckFinal
-	call LABEL_F40052
+	call SeqData_AdvancePosition
 	cpdi8 10362, 0
 	jr nz, SeqPart_VoiceCheckModeA
 	inc1_werp 0xFA
@@ -151988,13 +152052,13 @@ SeqPart_VoiceCheckFinal:
 	and l, 0xF0
 	cp l, 0x90
 	jr nz, SeqPart_VoiceCheckDispatch
-	call LABEL_F40052
+	call SeqData_AdvancePosition
 	cpdi8 10362, 0
 	jr nz, SeqPart_VoiceCheckModeA
-	call LABEL_F40052
+	call SeqData_AdvancePosition
 	cpdi8 10362, 0
 	jr nz, SeqPart_VoiceCheckModeA
-	call LABEL_F421A6
+	call SeqData_ReadNextByte
 	cpda8 l, 9750
 	jr nz, SeqPart_VoiceCheckDispatch
 	ldda8 a, 9816
@@ -152121,7 +152185,7 @@ SeqPart_VoiceCheckWalkAdvance:
 	jr z, SeqPart_VoiceCheckWalkCleanup
 
 SeqPart_VoiceCheckWalkValidate:
-	call LABEL_F421A6
+	call SeqData_ReadNextByte
 	cp l, 0x82
 	jr nz, SeqPart_VoiceCheckWalkSkip
 	calr SeqStep_DeleteEvent
@@ -152136,7 +152200,7 @@ SeqPart_VoiceCheckWalkSkip:
 	cpdi8 10362, 0
 	jrl nz, SeqPart_VoiceCheckEndAdvance
 	inc 1, iz
-	call LABEL_F40052
+	call SeqData_AdvancePosition
 	stdi8 9824, 0
 	stdi8 9826, 0
 	resda 0, 10363
@@ -152170,10 +152234,10 @@ SeqPart_VoiceCheckWalkExit:
 SeqPart_VoiceCheckFinalReturn:
 	bit 7, l
 	jr z, SeqPart_VoiceCheckEndStore
-	call LABEL_F40052
+	call SeqData_AdvancePosition
 	cpdi8 10362, 0
 	jr nz, SeqPart_VoiceCheckEndAdvance
-	call LABEL_F421A6
+	call SeqData_ReadNextByte
 	ldfr_berp L, 0xFB
 	ldto_berp A, 0xFB
 	addda8 a, 9740
@@ -152189,7 +152253,7 @@ SeqPart_VoiceCheckEndCheck:
 	setda 0, 10363
 
 SeqPart_VoiceCheckEndStore:
-	call LABEL_F40052
+	call SeqData_AdvancePosition
 	cpdi8 10362, 0
 	jr z, SeqPart_VoiceCheckWalkError
 
@@ -152234,7 +152298,7 @@ SeqStep_NoteDispatch:
 SeqStep_NoteReadEvent:
 	ldmm16 9830, 10046
 	ldmm16 10415, 10044
-	call LABEL_F421A6
+	call SeqData_ReadNextByte
 	ld a, l
 	cp l, 0xD2
 	jrl z, SeqStep_NoteSetD2
@@ -152285,7 +152349,7 @@ SeqStep_NoteConsumeInit:
 
 SeqStep_NoteConsumeLoop:
 	ldi_berp 0xFA, 0
-	call LABEL_F40052
+	call SeqData_AdvancePosition
 	cpdi8 10362, 0
 	jr z, SeqStep_NoteConsumeAdvance
 	mrdw5 0x9F, 0x04, 0x19, 0xAF, 0x28
@@ -152297,7 +152361,7 @@ SeqStep_NoteConsumeAdvance:
 	ldto_berp A, 0xF9
 	cp_berp A, 0xFB
 	jr nz, SeqStep_NoteCheckVel
-	call LABEL_F40052
+	call SeqData_AdvancePosition
 	ldmm16 10044, 10415
 	ldmm16 10046, 9830
 	jrl SeqStep_NoteReadEvent
@@ -152305,7 +152369,7 @@ SeqStep_NoteConsumeAdvance:
 SeqStep_NoteCheckVel:
 	cpi_berp 0xFB, 1
 	jr nz, SeqStep_NoteVelContinue
-	call LABEL_F421A6
+	call SeqData_ReadNextByte
 	cp l, 0x5F
 	jr ule, SeqStep_NoteVelSkip
 	ldda8 a, 9824
@@ -152322,7 +152386,7 @@ SeqStep_NoteCheckVel:
 	stda8 9824, a
 
 SeqStep_NoteVelSave:
-	call LABEL_F421A6
+	call SeqData_ReadNextByte
 	sub l, 0x60
 	extz hl
 	ld wa, hl
@@ -152340,7 +152404,7 @@ SeqStep_NoteVelSkip:
 	jr z, SeqStep_NoteReturn
 
 SeqStep_NoteVelContinue:
-	call LABEL_F40052
+	call SeqData_AdvancePosition
 	cpdi8 10362, 0
 	jr z, SeqStep_NoteExitRestore
 
@@ -152356,7 +152420,7 @@ SeqStep_NoteExitRestore:
 	jr nz, SeqStep_NoteCheckVel
 
 SeqStep_NoteReturn:
-	call LABEL_F40052
+	call SeqData_AdvancePosition
 	ldmm16 10044, 10415
 	ldmm16 10046, 9830
 	ldi_berp 0xFA, 1
@@ -152465,7 +152529,7 @@ SeqStep_EventPosSetNote:
 	ldi_berp 0xF9, 0
 
 SeqStep_EventPosConsumeLoop:
-	call LABEL_F40052
+	call SeqData_AdvancePosition
 	cpdi8 10362, 0
 	jrl nz, SeqStep_EventExit
 	inc1_berp 0xF9
@@ -152474,14 +152538,14 @@ SeqStep_EventPosConsumeLoop:
 	jr nz, SeqStep_EventPosReturn
 
 SeqStep_EventPosConsumeCheck:
-	call LABEL_F40052
+	call SeqData_AdvancePosition
 	ldmm16 10044, 10415
 	ldmm16 10046, 9830
 
 SeqStep_EventPosConsumeAdvance:
 	ldmm16 10415, 10044
 	ldmm16 9830, 10046
-	call LABEL_F421A6
+	call SeqData_ReadNextByte
 	ld a, l
 	cp l, 0xD2
 	jr z, SeqStep_EventPosSetD2
@@ -152513,7 +152577,7 @@ SeqStep_EventPosReturn:
 SeqStep_EventPosExit:
 	cpi_berp 0xF9, 1
 	jr nz, SeqStep_EventPosDone
-	call LABEL_F421A6
+	call SeqData_ReadNextByte
 	bit 7, l
 	jr nz, SeqStep_EventStorePos
 	cp l, 0x5F
@@ -152529,7 +152593,7 @@ SeqStep_EventPosComplete:
 	jr z, SeqStep_EventRestore
 
 SeqStep_EventPosDone:
-	call LABEL_F40052
+	call SeqData_AdvancePosition
 	cpdi8 10362, 0
 	jr z, SeqStep_EventCleanup
 
@@ -152547,7 +152611,7 @@ SeqStep_EventCleanup:
 	jr nz, SeqStep_EventPosExit
 
 SeqStep_EventRestore:
-	call LABEL_F40052
+	call SeqData_AdvancePosition
 	ldmm16 10044, 10415
 	ldmm16 10046, 9830
 	ldi_berp 0xFB, 1
@@ -152572,7 +152636,7 @@ SeqStep_EventSetState:
 	ldb l, 0x0
 	bitda 0, 10014
 	jr nz, SeqStep_EventAdvancePos
-	call LABEL_F421A6
+	call SeqData_ReadNextByte
 	add l, 0x60
 
 SeqStep_EventAdvancePos:
@@ -152601,7 +152665,7 @@ SeqStep_VelNoteFwd:
 	jr nz, SeqStep_VelNoteFwdApply
 	ldmm16 10415, 10431
 	ldmm16 9830, 10433
-	call LABEL_F40052
+	call SeqData_AdvancePosition
 
 SeqStep_VelNoteFwdApply:
 	ldmm16 10046, 9830
@@ -152654,7 +152718,7 @@ SeqStep_DeleteConsumeInit:
 	lds iz, 0
 
 SeqStep_DeleteConsumeLoop:
-	call LABEL_F40052
+	call SeqData_AdvancePosition
 	cpdi8 10362, 0
 	jrl nz, SeqStep_DeleteExitRestore
 	inc 1, iz
@@ -152667,7 +152731,7 @@ SeqStep_DeleteConsumeLoop:
 SeqStep_DeleteConsumeAdvance:
 	cps iz, 1
 	jr nz, SeqStep_DeleteExit
-	call LABEL_F421A6
+	call SeqData_ReadNextByte
 	cp l, 0x5F
 	jr ule, SeqStep_DeleteReturn
 	ldda8 a, 9824
@@ -152702,7 +152766,7 @@ SeqStep_DeleteCheck:
 	jrl SeqStep_DeleteExitRestore
 
 SeqStep_DeleteExit:
-	call LABEL_F40052
+	call SeqData_AdvancePosition
 	cpdi8 10362, 0
 	jr nz, SeqStep_DeleteExitRestore
 	inc 1, iz
@@ -152716,14 +152780,14 @@ SeqStep_DeleteExit:
 SeqStep_DeleteCleanup:
 	cpi_berp 0xFB, 0
 	jr nz, SeqStep_DeleteExitRestore
-	call LABEL_F40052
+	call SeqData_AdvancePosition
 	ldmm16 10044, 10415
 	ldmm16 10046, 9830
 
 SeqStep_DeleteDone:
 	ldmm16 9830, 10046
 	ldmm16 10415, 10044
-	call LABEL_F421A6
+	call SeqData_ReadNextByte
 	ld a, l
 	cp l, 0xD2
 	jrl z, SeqStep_DeleteSetD2
@@ -152985,7 +153049,7 @@ SeqStep_TrackChangeFinal:
 	ldfr_werp HL, 0xFA
 	ld wa, (xsp + 6)
 	ldto_werp BC, 0xFA
-	call LABEL_F41C72
+	call PartCtrl_WriteWord
 	ld iz, (xsp + 6)
 	ldto_werp BC, 0xFA
 	ld wa, bc
@@ -152997,7 +153061,7 @@ SeqStep_TrackChangeFinal:
 	call LABEL_F41C4C
 	ld wa, (xsp + 6)
 	ldw bc, 0xFFFF
-	call LABEL_F41C72
+	call PartCtrl_WriteWord
 	mrdw5 0x9F, 0x06, 0x19, 0xAF, 0x28
 	ld wa, (xsp + 4)
 	dec 1, wa
@@ -153140,7 +153204,7 @@ SeqStep_TrackChangeRecoverLoop:
 	ldda8 a, 9994
 	extz wa
 	ldw bc, 0x1E
-	call LABEL_F41543
+	call Part_WriteWord
 	ldda8 a, 9994
 	dec 1, a
 	cpda8_24 a, 65507
@@ -153246,7 +153310,7 @@ SeqStep_PartCopy:
 	ldfr_werp HL, 0xFA
 	ld wa, (xsp + 4)
 	ldto_werp BC, 0xFA
-	call LABEL_F41C72
+	call PartCtrl_WriteWord
 	ldto_werp WA, 0xFA
 	lds bc, 1
 	call LABEL_F41C99
@@ -153255,7 +153319,7 @@ SeqStep_PartCopy:
 	call LABEL_F41C4C
 	ldto_werp WA, 0xFA
 	ldw bc, 0xFFFF
-	call LABEL_F41C72
+	call PartCtrl_WriteWord
 	ldto_werp WA, 0xFA
 	ld (xsp + 4), wa
 	ldto_werp WA, 0xFA
@@ -153423,7 +153487,7 @@ SeqStep_VoiceReassignUpdate:
 	extz bc
 	ld wa, bc
 	ldw bc, 0x1E
-	call LABEL_F41543
+	call Part_WriteWord
 
 SeqStep_VoiceReassignDone:
 	ldda8 c, 9992
@@ -153461,7 +153525,7 @@ SeqStep_VoiceReassignCleanup:
 	ldto_berp E, 0xFB
 	extz de
 	ldw bc, 0xBD
-	call LABEL_F4151E
+	call Part_WriteByte
 	ldto_berp A, 0xF9
 	extz wa
 	lda xbc, (xsp + 6)
@@ -153478,7 +153542,7 @@ SeqStep_VoiceReassignCleanup:
 	ldto_berp A, 0xFA
 	extz wa
 	ldw bc, 0x110
-	call LABEL_F41543
+	call Part_WriteWord
 	ldto_berp A, 0xF9
 	extz wa
 	ldto_berp C, 0xFA
@@ -153509,7 +153573,7 @@ SeqStep_EventAdvance:
 	ldmm16 9830, 10046
 
 SeqStep_EventAdvanceCheck:
-	call LABEL_F40052
+	call SeqData_AdvancePosition
 	cpdi8 10362, 0
 	jr z, SeqStep_EventAdvanceBit7
 
@@ -153523,15 +153587,15 @@ SeqStep_EventAdvanceRead:
 	ret
 
 SeqStep_EventAdvanceBit7:
-	call LABEL_F421A6
+	call SeqData_ReadNextByte
 	cp l, 0x7F
 	jr z, SeqStep_EventAdvanceDone
 
 SeqStep_EventAdvanceStore:
-	call LABEL_F40052
+	call SeqData_AdvancePosition
 	cpdi8 10362, 0
 	jr nz, SeqStep_EventAdvanceLoop
-	call LABEL_F421A6
+	call SeqData_ReadNextByte
 	bit 7, l
 	jr z, SeqStep_EventAdvanceStore
 	ldmm16 10044, 10415
@@ -153541,7 +153605,7 @@ SeqStep_EventAdvanceStore:
 SeqStep_EventAdvanceDone:
 	ldmm16 9830, 10046
 	ldmm16 10415, 10044
-	call LABEL_F421A6
+	call SeqData_ReadNextByte
 	ldfr_berp L, 0xFA
 	ldw wa, 0x81
 	call LABEL_F421B5
@@ -153551,12 +153615,12 @@ SeqStep_EventAdvanceReturn:
 	jr z, SeqStep_EventAdvanceLoop
 
 SeqStep_EventAdvanceError:
-	call LABEL_F40052
+	call SeqData_AdvancePosition
 	cpdi8 10362, 0
 	jr nz, SeqStep_EventAdvanceLoop
 	ldto_berp A, 0xFA
 	ldfr_berp A, 0xFB
-	call LABEL_F421A6
+	call SeqData_ReadNextByte
 	ldfr_berp L, 0xFA
 	ldto_berp A, 0xFB
 	extz wa
@@ -153577,22 +153641,22 @@ SeqStep_MeasureRead:
 	ldda16 xwa, 10046
 	stda16 9830, xwa
 	ldmm16 9796, 10046
-	call LABEL_F421A6
+	call SeqData_ReadNextByte
 	cp l, 0x82
 	jrl z, SeqStep_MeasureReadDone
 	cp l, 0x81
 	jrl z, SeqStep_MeasureReadDone
-	call LABEL_F40052
+	call SeqData_AdvancePosition
 	cpdi8 10362, 0
 	jrl nz, SeqStep_MeasureReadDone
-	call LABEL_F421A6
+	call SeqData_ReadNextByte
 	stda8 9804, l
 	ldmm16 9800, 9830
 	ldmm16 9802, 10415
 	calr SeqStep_AdvanceHelper1
 	cpdi8 10362, 0
 	jr nz, SeqStep_MeasureReadDone
-	call LABEL_F421A6
+	call SeqData_ReadNextByte
 	cp l, 0x82
 	jr z, SeqStep_MeasureReadDone
 	cp l, 0x81
@@ -153611,7 +153675,7 @@ SeqStep_MeasureReadCheck:
 	calr SeqStep_AdvanceHelper1
 	cpdi8 10362, 0
 	jr nz, SeqStep_MeasureReadDone
-	call LABEL_F421A6
+	call SeqData_ReadNextByte
 	cp l, 0x82
 	jr z, SeqStep_MeasureReadProcess
 	cp l, 0x81
@@ -153621,7 +153685,7 @@ SeqStep_MeasureReadProcess:
 	calr SeqStep_SkipToHighBit
 	cpdi8 10362, 0
 	jr nz, SeqStep_MeasureReadDone
-	call LABEL_F421A6
+	call SeqData_ReadNextByte
 	cp l, 0x82
 	jr z, SeqStep_MeasureReadDone
 	cp l, 0x81
@@ -153631,7 +153695,7 @@ SeqStep_MeasureReadProcess:
 	calr SeqStep_AdvanceHelper1
 	cpdi8 10362, 0
 	jr nz, SeqStep_MeasureReadDone
-	call LABEL_F421A6
+	call SeqData_ReadNextByte
 	cp l, 0x82
 	jr z, SeqStep_MeasureReadDone
 	cp l, 0x81
@@ -153647,21 +153711,21 @@ SeqStep_MeasureReadDone:
 SeqStep_SkipToHighBit:
 	ldmm16 9830, 9796
 	ldmm16 10415, 9798
-	call LABEL_F40052
+	call SeqData_AdvancePosition
 	cpdi8 10362, 0
 	ret nz
 
 SeqStep_SkipLoop:
-	call LABEL_F421A6
+	call SeqData_ReadNextByte
 	bit 7, l
 	jr nz, SeqStep_SkipCheck
-	call LABEL_F40052
+	call SeqData_AdvancePosition
 	cpdi8 10362, 0
 	jr z, SeqStep_SkipLoop
 	ret
 
 SeqStep_SkipCheck:
-	call LABEL_F421A6
+	call SeqData_ReadNextByte
 	cp l, 0x82
 	ret z
 	cp l, 0x81
@@ -153671,31 +153735,31 @@ SeqStep_SkipCheck:
 SeqStep_SkipDone:
 	ldmm16 9796, 9830
 	ldmm16 9798, 10415
-	call LABEL_F40052
+	call SeqData_AdvancePosition
 	cpdi8 10362, 0
 	ret nz
-	call LABEL_F421A6
+	call SeqData_ReadNextByte
 	stda8 9804, l
 	ret
 
 SeqStep_AdvanceHelper1:
 	ldmm16 9830, 9800
 	ldmm16 10415, 9802
-	call LABEL_F40052
+	call SeqData_AdvancePosition
 	cpdi8 10362, 0
 	ret nz
 
 SeqStep_AdvanceHelper2:
-	call LABEL_F421A6
+	call SeqData_ReadNextByte
 	bit 7, l
 	jr nz, SeqStep_AdvanceHelper2Loop
-	call LABEL_F40052
+	call SeqData_AdvancePosition
 	cpdi8 10362, 0
 	jr z, SeqStep_AdvanceHelper2
 	ret
 
 SeqStep_AdvanceHelper2Loop:
-	call LABEL_F421A6
+	call SeqData_ReadNextByte
 	cp l, 0x82
 	ret z
 	cp l, 0x81
@@ -153705,10 +153769,10 @@ SeqStep_AdvanceHelper2Loop:
 SeqStep_AdvanceHelper2Done:
 	ldmm16 9800, 9830
 	ldmm16 9802, 10415
-	call LABEL_F40052
+	call SeqData_AdvancePosition
 	cpdi8 10362, 0
 	ret nz
-	call LABEL_F421A6
+	call SeqData_ReadNextByte
 	stda8 9806, l
 	ret
 
@@ -153850,13 +153914,13 @@ SeqStep_InsertValidate:
 	ldfr_werp HL, 0xFA
 	ldda16 xwa, 10415
 	ldto_werp BC, 0xFA
-	call LABEL_F41C72
+	call PartCtrl_WriteWord
 	ldda16 xbc, 10415
 	ldto_werp WA, 0xFA
 	call LABEL_F41C4C
 	ldto_werp WA, 0xFA
 	ldw bc, 0xFFFF
-	call LABEL_F41C72
+	call PartCtrl_WriteWord
 	ldto_werp WA, 0xFA
 	lds bc, 5
 	ldw de, 0x82
@@ -153901,7 +153965,7 @@ SeqStep_PrepareCheck:
 	stda16 9830, xwa
 
 SeqStep_PrepareDone:
-	call LABEL_F421A6
+	call SeqData_ReadNextByte
 	stda16 10415, xiz
 	ldto_werp WA, 0xFA
 	stda16 9830, xwa
@@ -154019,7 +154083,7 @@ SeqStep_DeleteShiftFinal:
 	call LABEL_F41C4C
 	ld wa, iz
 	ldw bc, 0xFFFF
-	call LABEL_F41C72
+	call PartCtrl_WriteWord
 	ldda8 a, 9994
 	extz wa
 	ldda8 c, 10359
@@ -155046,7 +155110,7 @@ SeqStep_UpdateRefsAfterSwap:
 	cps wa, 0
 	jr z, SeqStep_UpdateRefsLoop
 	ld bc, iz
-	call LABEL_F41C72
+	call PartCtrl_WriteWord
 	jr SeqStep_UpdateRefsReturn
 
 SeqStep_UpdateRefsLoop:
@@ -155127,7 +155191,7 @@ SeqStep_UpdateLinksAdvance:
 	add c, 0x76
 	extz bc
 	ld de, iz
-	call LABEL_F41543
+	call Part_WriteWord
 
 SeqStep_UpdateLinksDone:
 	inc1_berp 0xFB
@@ -155164,7 +155228,7 @@ SeqStep_RebuildLoop:
 	ld bc, (xsp + 2)
 	inc 1, bc
 	ld wa, (xsp + 2)
-	call LABEL_F41C72
+	call PartCtrl_WriteWord
 	ld wa, (xsp + 2)
 	lds bc, 5
 	ldw de, 0x82
@@ -155186,7 +155250,7 @@ SeqStep_RebuildCheck:
 	ld bc, iz
 	inc 1, bc
 	ld wa, iz
-	call LABEL_F41C72
+	call PartCtrl_WriteWord
 	ld wa, (xsp + 2)
 	lds bc, 5
 	ldw de, 0x82
@@ -155209,7 +155273,7 @@ SeqStep_RebuildAdvance:
 SeqStep_RebuildDone:
 	ldw wa, 0x4D8
 	ldw bc, 0xFFFF
-	call LABEL_F41C72
+	call PartCtrl_WriteWord
 	ld wa, (xsp + 2)
 	lds bc, 5
 	ldw de, 0x82
@@ -155248,11 +155312,11 @@ SeqStep_ReinitPartTable:
 	extz de
 	lds wa, 1
 	ldw bc, 0xC7
-	call LABEL_F4151E
+	call Part_WriteByte
 	ld16_24 xde, 0x00ffec
 	lds wa, 1
 	ldw bc, 0xC8
-	call LABEL_F41543
+	call Part_WriteWord
 	calr SeqStep_FindAndCompact
 	ld (xsp + 4), xhl
 	ldda16 xiz, 61902
@@ -155277,7 +155341,7 @@ SeqStep_ReinitLoop:
 	extz wa
 	ldda16 xde, 61902
 	ldw bc, 0x4E
-	call LABEL_F41543
+	call Part_WriteWord
 	inc1_berp 0xFB
 	cp_erpb 0xFB, 0x0A
 	jr ule, SeqStep_ReinitLoop
@@ -155377,7 +155441,7 @@ FileOpen_ParseModeNext:
 FileOpen_AllocBuffer:
 	ld xwa, (xsp + 24)
 	push xwa
-	call LABEL_FF0FA0
+	call Strlen
 	inc 1, hl
 	pushw hl
 	calr SeqStep_MemAllocWrapper
@@ -155439,12 +155503,12 @@ FileOpen_StoreNormChar:
 FileOpen_MatchDevice:
 	ld xwa, (xsp + 16)
 	push xwa
-	call LABEL_FF0FA0
+	call Strlen
 	ld iz, hl
 	extz xiz
 	ld xwa, (xsp + 28)
 	push xwa
-	call LABEL_FF0FA0
+	call Strlen
 	inc 8, xsp
 	ld wa, hl
 	extz xwa
@@ -159386,7 +159450,7 @@ LABEL_F52A3F:
 	call Free
 	ld xwa, (xsp + 16)
 	push xwa
-	call LABEL_FF0FA0
+	call Strlen
 	inc 1, hl
 	pushw hl
 	call Malloc
@@ -161107,7 +161171,7 @@ LABEL_F53B5F:
 	and a, 0x7F
 
 LABEL_F53B62:
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	ld c, a
 	xor a, a
 	bitda 0, 13066
@@ -161336,7 +161400,7 @@ LABEL_F53DA8:
 LABEL_F53DBC:
 	ldda8 a, 13029
 	and a, 0x7F
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 
 LABEL_F53DC6:
 	stda8 1075, a
@@ -161353,7 +161417,14 @@ LABEL_F53DDC:
 	ld_srib3 A, 0x03, 0xEC, 0xE0
 	ret
 
-LABEL_F53DF1:
+; ============================================================================
+; AccPatch_SetVoiceParam - Set accompaniment voice parameter
+; ============================================================================
+; Clamps register A to <= 0x1D (29 voices), then indexes into table at
+; 0xE46B8A to set a voice parameter. Called 148+ times, typically in
+; rapid bursts during accompaniment patch configuration.
+; ============================================================================
+AccPatch_SetVoiceParam:
 	cp a, 0x1D
 	jr ule, LABEL_F53DF8
 	xor a, a
@@ -161551,19 +161622,19 @@ LABEL_F53FB3:
 	ld iy, (xhl + 4)
 	ld bc, (xhl + 2)
 	stib_dri 0x07, 0xEC, 0xF4, 0xC0
-	calr LABEL_F54059
+	calr RingBuf_AdvanceIndex
 	calr LABEL_F5400B
 	lda_dri3 XIY, 0x07, 0xEC, 0xF4
-	calr LABEL_F54059
+	calr RingBuf_AdvanceIndex
 	lda_dri3 XIX, 0x07, 0xEC, 0xF4
 	ldb w, 0x0
-	calr LABEL_F54059
+	calr RingBuf_AdvanceIndex
 	lda_dri3 XWA, 0x07, 0xEC, 0xF4
-	calr LABEL_F54059
+	calr RingBuf_AdvanceIndex
 	lda_dri3 XWA, 0x07, 0xEC, 0xF4
-	calr LABEL_F54059
+	calr RingBuf_AdvanceIndex
 	lda_dri3 XWA, 0x07, 0xEC, 0xF4
-	calr LABEL_F54059
+	calr RingBuf_AdvanceIndex
 	ld (xhl + 4), iy
 	ld xhl, 0x3214
 	ld (xhl), e
@@ -161603,7 +161674,7 @@ LABEL_F5403C:
 	ldda8 w, 1122
 	add a, w
 	lda_dri3 XBC, 0x07, 0xEC, 0xF4
-	calr LABEL_F54059
+	calr RingBuf_AdvanceIndex
 	ldda8 w, 13174
 	cp a, w
 	jr nc, LABEL_F54056
@@ -161613,7 +161684,15 @@ LABEL_F54056:
 	ei 0
 	ret
 
-LABEL_F54059:
+; ============================================================================
+; RingBuf_AdvanceIndex - Advance circular buffer index with wraparound
+; ============================================================================
+; Input:  IY = current index, BC = limit, XHL+256 = reset value
+; Output: IY = incremented index (wrapped if >= limit)
+; Called 110+ times, typically in bursts of 5-7 sequential calls while
+; storing/loading data parameters through the ring buffer.
+; ============================================================================
+RingBuf_AdvanceIndex:
 	add iy, 0x1
 	cp iy, bc
 	jr ule, LABEL_F54064
@@ -161653,21 +161732,21 @@ LABEL_F540B6:
 	ld iy, (xhl + 4)
 	ld bc, (xhl + 2)
 	stib_dri 0x07, 0xEC, 0xF4, 0xC0
-	calr LABEL_F54059
+	calr RingBuf_AdvanceIndex
 	calr LABEL_F5400B
 	lda_dri3 XIY, 0x07, 0xEC, 0xF4
-	calr LABEL_F54059
+	calr RingBuf_AdvanceIndex
 	lda_dri3 XIX, 0x07, 0xEC, 0xF4
-	calr LABEL_F54059
+	calr RingBuf_AdvanceIndex
 	ldda8 a, 13359
 	lda_dri3 XBC, 0x07, 0xEC, 0xF4
-	calr LABEL_F54059
+	calr RingBuf_AdvanceIndex
 	ldda8 a, 13360
 	lda_dri3 XBC, 0x07, 0xEC, 0xF4
-	calr LABEL_F54059
+	calr RingBuf_AdvanceIndex
 	ldda8 a, 13361
 	lda_dri3 XBC, 0x07, 0xEC, 0xF4
-	calr LABEL_F54059
+	calr RingBuf_AdvanceIndex
 	ld (xhl + 4), iy
 	ld xhl, 0x3219
 	calr LABEL_F54116
@@ -161728,21 +161807,21 @@ LABEL_F5418E:
 	ld iy, (xhl + 4)
 	ld bc, (xhl + 2)
 	stib_dri 0x07, 0xEC, 0xF4, 0xC0
-	calr LABEL_F54059
+	calr RingBuf_AdvanceIndex
 	calr LABEL_F5400B
 	lda_dri3 XIY, 0x07, 0xEC, 0xF4
-	calr LABEL_F54059
+	calr RingBuf_AdvanceIndex
 	lda_dri3 XIX, 0x07, 0xEC, 0xF4
-	calr LABEL_F54059
+	calr RingBuf_AdvanceIndex
 	ldda8 a, 13359
 	lda_dri3 XBC, 0x07, 0xEC, 0xF4
-	calr LABEL_F54059
+	calr RingBuf_AdvanceIndex
 	ldda8 a, 13360
 	lda_dri3 XBC, 0x07, 0xEC, 0xF4
-	calr LABEL_F54059
+	calr RingBuf_AdvanceIndex
 	ldda8 a, 13361
 	lda_dri3 XBC, 0x07, 0xEC, 0xF4
-	calr LABEL_F54059
+	calr RingBuf_AdvanceIndex
 	ld (xhl + 4), iy
 	ld xhl, 0x321E
 	calr LABEL_F54116
@@ -161783,21 +161862,21 @@ LABEL_F5423F:
 	ld iy, (xhl + 4)
 	ld bc, (xhl + 2)
 	stib_dri 0x07, 0xEC, 0xF4, 0xC0
-	calr LABEL_F54059
+	calr RingBuf_AdvanceIndex
 	calr LABEL_F5400B
 	lda_dri3 XIY, 0x07, 0xEC, 0xF4
-	calr LABEL_F54059
+	calr RingBuf_AdvanceIndex
 	lda_dri3 XIX, 0x07, 0xEC, 0xF4
-	calr LABEL_F54059
+	calr RingBuf_AdvanceIndex
 	ldda8 a, 13359
 	lda_dri3 XBC, 0x07, 0xEC, 0xF4
-	calr LABEL_F54059
+	calr RingBuf_AdvanceIndex
 	ldda8 a, 13360
 	lda_dri3 XBC, 0x07, 0xEC, 0xF4
-	calr LABEL_F54059
+	calr RingBuf_AdvanceIndex
 	ldda8 a, 13361
 	lda_dri3 XBC, 0x07, 0xEC, 0xF4
-	calr LABEL_F54059
+	calr RingBuf_AdvanceIndex
 	ld (xhl + 4), iy
 	ld xhl, 0x3223
 	calr LABEL_F54116
@@ -161838,21 +161917,21 @@ LABEL_F542F0:
 	ld iy, (xhl + 4)
 	ld bc, (xhl + 2)
 	stib_dri 0x07, 0xEC, 0xF4, 0xC0
-	calr LABEL_F54059
+	calr RingBuf_AdvanceIndex
 	calr LABEL_F5400B
 	lda_dri3 XIY, 0x07, 0xEC, 0xF4
-	calr LABEL_F54059
+	calr RingBuf_AdvanceIndex
 	lda_dri3 XIX, 0x07, 0xEC, 0xF4
-	calr LABEL_F54059
+	calr RingBuf_AdvanceIndex
 	ldda8 a, 13359
 	lda_dri3 XBC, 0x07, 0xEC, 0xF4
-	calr LABEL_F54059
+	calr RingBuf_AdvanceIndex
 	ldda8 a, 13360
 	lda_dri3 XBC, 0x07, 0xEC, 0xF4
-	calr LABEL_F54059
+	calr RingBuf_AdvanceIndex
 	ldda8 a, 13361
 	lda_dri3 XBC, 0x07, 0xEC, 0xF4
-	calr LABEL_F54059
+	calr RingBuf_AdvanceIndex
 	ld (xhl + 4), iy
 	ld xhl, 0x3228
 	calr LABEL_F54116
@@ -162161,22 +162240,22 @@ LABEL_F54688:
 	cps l, 0
 	jr nz, LABEL_F546D7
 	ldb a, 0xC
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13156, xwa
 	ldb a, 0xD
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13158, xwa
 	ldb a, 0xE
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13160, xwa
 	ldb a, 0xF
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13162, xwa
 	ldb a, 0x10
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13164, xwa
 	ldb a, 0x11
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13166, xwa
 	jrl LABEL_F54C21
 
@@ -162184,43 +162263,43 @@ LABEL_F546D7:
 	cps l, 1
 	jr nz, LABEL_F54714
 	ldb a, 0x12
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13156, xwa
 	ldb a, 0x13
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13158, xwa
 	ldb a, 0x14
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13160, xwa
 	ldb a, 0x15
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13162, xwa
 	ldb a, 0x16
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13164, xwa
 	ldb a, 0x17
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13166, xwa
 	jrl LABEL_F54C21
 
 LABEL_F54714:
 	ldb a, 0x18
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13156, xwa
 	ldb a, 0x19
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13158, xwa
 	ldb a, 0x1A
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13160, xwa
 	ldb a, 0x1B
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13162, xwa
 	ldb a, 0x1C
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13164, xwa
 	ldb a, 0x1D
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13166, xwa
 	jrl LABEL_F54C21
 
@@ -162230,22 +162309,22 @@ LABEL_F5474D:
 	cps l, 0
 	jr nz, LABEL_F54792
 	ldb a, 0xC
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13156, xwa
 	ldb a, 0xD
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13158, xwa
 	ldb a, 0xE
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13160, xwa
 	ldb a, 0xF
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13162, xwa
 	ldb a, 0x10
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13164, xwa
 	ldb a, 0x11
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13166, xwa
 	jrl LABEL_F54C21
 
@@ -162253,43 +162332,43 @@ LABEL_F54792:
 	cps l, 1
 	jr nz, LABEL_F547CF
 	ldb a, 0x12
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13156, xwa
 	ldb a, 0x13
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13158, xwa
 	ldb a, 0x14
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13160, xwa
 	ldb a, 0x15
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13162, xwa
 	ldb a, 0x16
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13164, xwa
 	ldb a, 0x17
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13166, xwa
 	jrl LABEL_F54C21
 
 LABEL_F547CF:
 	ldb a, 0x18
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13156, xwa
 	ldb a, 0x19
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13158, xwa
 	ldb a, 0x1A
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13160, xwa
 	ldb a, 0x1B
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13162, xwa
 	ldb a, 0x1C
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13164, xwa
 	ldb a, 0x1D
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13166, xwa
 	jrl LABEL_F54C21
 
@@ -162299,22 +162378,22 @@ LABEL_F54808:
 	cps l, 0
 	jr nz, LABEL_F5484D
 	ldb a, 0xC
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13156, xwa
 	ldb a, 0xD
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13158, xwa
 	ldb a, 0xE
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13160, xwa
 	ldb a, 0xF
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13162, xwa
 	ldb a, 0x10
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13164, xwa
 	ldb a, 0x11
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13166, xwa
 	jrl LABEL_F54C21
 
@@ -162322,43 +162401,43 @@ LABEL_F5484D:
 	cps l, 1
 	jr nz, LABEL_F5488A
 	ldb a, 0x12
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13156, xwa
 	ldb a, 0x13
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13158, xwa
 	ldb a, 0x14
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13160, xwa
 	ldb a, 0x15
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13162, xwa
 	ldb a, 0x16
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13164, xwa
 	ldb a, 0x17
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13166, xwa
 	jrl LABEL_F54C21
 
 LABEL_F5488A:
 	ldb a, 0x18
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13156, xwa
 	ldb a, 0x19
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13158, xwa
 	ldb a, 0x1A
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13160, xwa
 	ldb a, 0x1B
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13162, xwa
 	ldb a, 0x1C
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13164, xwa
 	ldb a, 0x1D
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13166, xwa
 	jrl LABEL_F54C21
 
@@ -162368,22 +162447,22 @@ LABEL_F548C3:
 	cps l, 0
 	jr nz, LABEL_F54908
 	ldb a, 0xC
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13156, xwa
 	ldb a, 0xD
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13158, xwa
 	ldb a, 0xE
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13160, xwa
 	ldb a, 0xF
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13162, xwa
 	ldb a, 0x10
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13164, xwa
 	ldb a, 0x11
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13166, xwa
 	jrl LABEL_F54C21
 
@@ -162391,43 +162470,43 @@ LABEL_F54908:
 	cps l, 1
 	jr nz, LABEL_F54945
 	ldb a, 0x12
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13156, xwa
 	ldb a, 0x13
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13158, xwa
 	ldb a, 0x14
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13160, xwa
 	ldb a, 0x15
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13162, xwa
 	ldb a, 0x16
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13164, xwa
 	ldb a, 0x17
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13166, xwa
 	jrl LABEL_F54C21
 
 LABEL_F54945:
 	ldb a, 0x18
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13156, xwa
 	ldb a, 0x19
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13158, xwa
 	ldb a, 0x1A
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13160, xwa
 	ldb a, 0x1B
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13162, xwa
 	ldb a, 0x1C
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13164, xwa
 	ldb a, 0x1D
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13166, xwa
 	jrl LABEL_F54C21
 
@@ -162437,22 +162516,22 @@ LABEL_F5497E:
 	cps l, 0
 	jr nz, LABEL_F549C3
 	ldb a, 0xC
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13156, xwa
 	ldb a, 0xD
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13158, xwa
 	ldb a, 0xE
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13160, xwa
 	ldb a, 0xF
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13162, xwa
 	ldb a, 0x10
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13164, xwa
 	ldb a, 0x11
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13166, xwa
 	jrl LABEL_F54C21
 
@@ -162460,43 +162539,43 @@ LABEL_F549C3:
 	cps l, 1
 	jr nz, LABEL_F54A00
 	ldb a, 0x12
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13156, xwa
 	ldb a, 0x13
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13158, xwa
 	ldb a, 0x14
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13160, xwa
 	ldb a, 0x15
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13162, xwa
 	ldb a, 0x16
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13164, xwa
 	ldb a, 0x17
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13166, xwa
 	jrl LABEL_F54C21
 
 LABEL_F54A00:
 	ldb a, 0x18
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13156, xwa
 	ldb a, 0x19
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13158, xwa
 	ldb a, 0x1A
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13160, xwa
 	ldb a, 0x1B
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13162, xwa
 	ldb a, 0x1C
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13164, xwa
 	ldb a, 0x1D
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13166, xwa
 	jrl LABEL_F54C21
 
@@ -162506,22 +162585,22 @@ LABEL_F54A39:
 	cps l, 0
 	jr nz, LABEL_F54A7E
 	ldb a, 0xC
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13156, xwa
 	ldb a, 0xD
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13158, xwa
 	ldb a, 0xE
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13160, xwa
 	ldb a, 0xF
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13162, xwa
 	ldb a, 0x10
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13164, xwa
 	ldb a, 0x11
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13166, xwa
 	jrl LABEL_F54C21
 
@@ -162529,43 +162608,43 @@ LABEL_F54A7E:
 	cps l, 1
 	jr nz, LABEL_F54ABB
 	ldb a, 0x12
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13156, xwa
 	ldb a, 0x13
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13158, xwa
 	ldb a, 0x14
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13160, xwa
 	ldb a, 0x15
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13162, xwa
 	ldb a, 0x16
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13164, xwa
 	ldb a, 0x17
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13166, xwa
 	jrl LABEL_F54C21
 
 LABEL_F54ABB:
 	ldb a, 0x18
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13156, xwa
 	ldb a, 0x19
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13158, xwa
 	ldb a, 0x1A
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13160, xwa
 	ldb a, 0x1B
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13162, xwa
 	ldb a, 0x1C
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13164, xwa
 	ldb a, 0x1D
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13166, xwa
 	jrl LABEL_F54C21
 
@@ -162575,22 +162654,22 @@ LABEL_F54AF4:
 	cps l, 0
 	jr nz, LABEL_F54B39
 	ldb a, 0xC
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13156, xwa
 	ldb a, 0xD
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13158, xwa
 	ldb a, 0xE
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13160, xwa
 	ldb a, 0xF
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13162, xwa
 	ldb a, 0x10
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13164, xwa
 	ldb a, 0x11
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13166, xwa
 	jrl LABEL_F54C21
 
@@ -162598,43 +162677,43 @@ LABEL_F54B39:
 	cps l, 1
 	jr nz, LABEL_F54B76
 	ldb a, 0x12
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13156, xwa
 	ldb a, 0x13
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13158, xwa
 	ldb a, 0x14
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13160, xwa
 	ldb a, 0x15
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13162, xwa
 	ldb a, 0x16
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13164, xwa
 	ldb a, 0x17
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13166, xwa
 	jrl LABEL_F54C21
 
 LABEL_F54B76:
 	ldb a, 0x18
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13156, xwa
 	ldb a, 0x19
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13158, xwa
 	ldb a, 0x1A
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13160, xwa
 	ldb a, 0x1B
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13162, xwa
 	ldb a, 0x1C
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13164, xwa
 	ldb a, 0x1D
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13166, xwa
 	jrl LABEL_F54C21
 
@@ -162642,43 +162721,43 @@ LABEL_F54BAF:
 	cps l, 0
 	jr nz, LABEL_F54BEB
 	ldb a, 0xC
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13156, xwa
 	ldb a, 0xD
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13158, xwa
 	ldb a, 0xE
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13160, xwa
 	ldb a, 0xF
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13162, xwa
 	ldb a, 0x10
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13164, xwa
 	ldb a, 0x11
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13166, xwa
 	jr LABEL_F54C21
 
 LABEL_F54BEB:
 	ldb a, 0x12
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13156, xwa
 	ldb a, 0x13
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13158, xwa
 	ldb a, 0x14
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13160, xwa
 	ldb a, 0x15
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13162, xwa
 	ldb a, 0x16
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13164, xwa
 	ldb a, 0x17
-	calr LABEL_F53DF1
+	calr AccPatch_SetVoiceParam
 	stda16 13166, xwa
 
 LABEL_F54C21:
@@ -162902,8 +162981,8 @@ RhythmEvt_NoteOnLoop:
 	jrl z, RhythmEvt_IterDone
 	ld_srib3 A, 0x07, 0xEC, 0xF4
 	stda16 13405, xiy
-	call LABEL_F54059
-	call LABEL_F54059
+	call RingBuf_AdvanceIndex
+	call RingBuf_AdvanceIndex
 	pushw iy
 	cp a, 0x90
 	jr z, RhythmEvt_NoteOn90
@@ -162913,7 +162992,7 @@ RhythmEvt_NoteOnLoop:
 
 RhythmEvt_NoteOn90:
 	calr Rhythm_AdvancePosition
-	call LABEL_F54059
+	call RingBuf_AdvanceIndex
 	jr RhythmEvt_ApplyTranspose
 
 RhythmEvt_NoteOn91:
@@ -162937,14 +163016,14 @@ RhythmEvt_PostProcess:
 	popw iy
 	lda_dri3 XBC, 0x07, 0xEC, 0xF4
 	calr Rhythm_AdvancePosition
-	call LABEL_F54059
-	call LABEL_F54059
+	call RingBuf_AdvanceIndex
+	call RingBuf_AdvanceIndex
 	jr RhythmEvt_NoteOnLoop
 
 RhythmEvt_SkipUnknown:
 	popw iy
 	ldda16 xiy, 13405
-	call LABEL_F54059
+	call RingBuf_AdvanceIndex
 	jrl RhythmEvt_NoteOnLoop
 
 RhythmEvt_IterDone:
@@ -162960,11 +163039,11 @@ RhythmEvt_FullLoop:
 	ld_srib3 A, 0x07, 0xEC, 0xF4
 	cp a, 0x90
 	jr nz, RhythmEvt_Full91
-	call LABEL_F54059
-	call LABEL_F54059
+	call RingBuf_AdvanceIndex
+	call RingBuf_AdvanceIndex
 	pushw iy
 	calr Rhythm_AdvancePosition
-	call LABEL_F54059
+	call RingBuf_AdvanceIndex
 	ld_srib3 A, 0x07, 0xEC, 0xF4
 	calr Rhythm_CheckVelocityThreshold
 	bitda 4, 13044
@@ -162981,26 +163060,26 @@ RhythmEvt_Full90_PostTransp:
 	popw iy
 	lda_dri3 XBC, 0x07, 0xEC, 0xF4
 	calr Rhythm_AdvancePosition
-	call LABEL_F54059
-	call LABEL_F54059
+	call RingBuf_AdvanceIndex
+	call RingBuf_AdvanceIndex
 	jr RhythmEvt_FullLoop
 
 RhythmEvt_Full91:
 	cp a, 0x91
 	jr nz, RhythmEvt_FullSkip
-	call LABEL_F54059
-	call LABEL_F54059
+	call RingBuf_AdvanceIndex
+	call RingBuf_AdvanceIndex
 	pushw iy
-	call LABEL_F54059
+	call RingBuf_AdvanceIndex
 	ld_srib3 A, 0x07, 0xEC, 0xF4
 	stda8 13360, a
 	calr Rhythm_AdvancePosition
 	ld_srib3 A, 0x07, 0xEC, 0xF4
 	stda8 13363, a
-	call LABEL_F54059
+	call RingBuf_AdvanceIndex
 	ld_srib3 A, 0x07, 0xEC, 0xF4
 	stda8 13364, a
-	call LABEL_F54059
+	call RingBuf_AdvanceIndex
 	ld_srib3 A, 0x07, 0xEC, 0xF4
 	calr Rhythm_CheckVelocityThreshold
 	bitda 4, 13044
@@ -163016,7 +163095,7 @@ RhythmEvt_Full91_PostTransp:
 	calr Rhythm_VoiceMapLookup
 	popw iy
 	lda_dri3 XBC, 0x07, 0xEC, 0xF4
-	call LABEL_F54059
+	call RingBuf_AdvanceIndex
 	ldda8 a, 13360
 	lda_dri3 XBC, 0x07, 0xEC, 0xF4
 	calr Rhythm_AdvancePosition
@@ -163024,7 +163103,7 @@ RhythmEvt_Full91_PostTransp:
 	jrl RhythmEvt_FullLoop
 
 RhythmEvt_FullSkip:
-	call LABEL_F54059
+	call RingBuf_AdvanceIndex
 	jrl RhythmEvt_FullLoop
 
 RhythmEvt_FullDone:
@@ -164279,7 +164358,7 @@ LABEL_F55BB3:
 
 LABEL_F55BCF:
 	and a, 0x7F
-	call LABEL_F53DF1
+	call AccPatch_SetVoiceParam
 	jr LABEL_F55BE2
 
 LABEL_F55BD8:
@@ -164946,13 +165025,13 @@ LABEL_F56331:
 	ld iy, (xhl + 4)
 	ld bc, (xhl + 2)
 	stib_dri 0x07, 0xEC, 0xF4, 0xD0
-	call LABEL_F54059
+	call RingBuf_AdvanceIndex
 	stib_dri 0x07, 0xEC, 0xF4, 0x01
-	call LABEL_F54059
+	call RingBuf_AdvanceIndex
 	stib_dri 0x07, 0xEC, 0xF4, 0x10
-	call LABEL_F54059
+	call RingBuf_AdvanceIndex
 	stib_dri 0x07, 0xEC, 0xF4, 0x01
-	call LABEL_F54059
+	call RingBuf_AdvanceIndex
 	ld (xhl + 4), iy
 	ret
 
@@ -166186,14 +166265,14 @@ AccKbd1_CheckReturn:
 AccBuf_WriteNoteEvent:
 	ldda8 a, 13357
 	lda_dri3 XBC, 0x07, 0xEC, 0xF4
-	call LABEL_F54059
+	call RingBuf_AdvanceIndex
 	call LABEL_F5401B
 	ldda8 a, 13359
 	lda_dri3 XBC, 0x07, 0xEC, 0xF4
-	call LABEL_F54059
+	call RingBuf_AdvanceIndex
 	ldda8 a, 13360
 	lda_dri3 XBC, 0x07, 0xEC, 0xF4
-	call LABEL_F54059
+	call RingBuf_AdvanceIndex
 	ldda8 a, 13361
 	cps a, 0
 	jr nz, AccBuf_WriteNote_VelNonZero
@@ -166201,10 +166280,10 @@ AccBuf_WriteNoteEvent:
 
 AccBuf_WriteNote_VelNonZero:
 	lda_dri3 XBC, 0x07, 0xEC, 0xF4
-	call LABEL_F54059
+	call RingBuf_AdvanceIndex
 	ldda8 a, 13362
 	lda_dri3 XBC, 0x07, 0xEC, 0xF4
-	call LABEL_F54059
+	call RingBuf_AdvanceIndex
 	ld (xhl + 4), iy
 	ret
 
@@ -166383,18 +166462,18 @@ AccKbd1_DrainLoop:
 	cp a, 0x90
 	jr nz, AccKbd1_DrainSkip
 	calr AccBuf_ProcessNoteEvent
-	call LABEL_F54059
+	call RingBuf_AdvanceIndex
 	jr AccKbd1_DrainLoop
 
 AccKbd1_DrainSkip:
-	call LABEL_F54059
+	call RingBuf_AdvanceIndex
 	jr AccKbd1_DrainLoop
 
 AccKbd1_DrainDone:
 	ret
 
 AccBuf_ProcessNoteEvent:
-	call LABEL_F54059
+	call RingBuf_AdvanceIndex
 	ld_srib3 W, 0x07, 0xEC, 0xF4
 	call Rhythm_AdvancePosition
 	ld_srib3 E, 0x07, 0xEC, 0xF4
@@ -166420,12 +166499,12 @@ AccBuf_NoteEvent_StoreTiming:
 	cp de, wa
 	jr ule, AccBuf_NoteEvent_SkipTiming
 	lda_dri3 XBC, 0x07, 0xEC, 0xF4
-	call LABEL_F54059
+	call RingBuf_AdvanceIndex
 	lda_dri3 XWA, 0x07, 0xEC, 0xF4
 	jr AccBuf_NoteEvent_Return
 
 AccBuf_NoteEvent_SkipTiming:
-	call LABEL_F54059
+	call RingBuf_AdvanceIndex
 
 AccBuf_NoteEvent_Return:
 	ei 0
@@ -166564,11 +166643,11 @@ AccKbd2_DrainLoop:
 	cp a, 0x90
 	jr nz, AccKbd2_DrainSkip
 	calr AccBuf_ProcessNoteEvent
-	call LABEL_F54059
+	call RingBuf_AdvanceIndex
 	jr AccKbd2_DrainLoop
 
 AccKbd2_DrainSkip:
-	call LABEL_F54059
+	call RingBuf_AdvanceIndex
 	jr AccKbd2_DrainLoop
 
 AccKbd2_DrainDone:
@@ -166845,14 +166924,14 @@ AccCh_ReturnStub:
 AccBuf_Write3ByteEvent:
 	ldda8 a, 13357
 	lda_dri3 XBC, 0x07, 0xEC, 0xF4
-	call LABEL_F54059
+	call RingBuf_AdvanceIndex
 	call LABEL_F5401B
 	ldda8 a, 13359
 	lda_dri3 XBC, 0x07, 0xEC, 0xF4
-	call LABEL_F54059
+	call RingBuf_AdvanceIndex
 	ldda8 a, 13360
 	lda_dri3 XBC, 0x07, 0xEC, 0xF4
-	call LABEL_F54059
+	call RingBuf_AdvanceIndex
 	ld (xhl + 4), iy
 	ret
 
@@ -166914,16 +166993,16 @@ AccBuf_WriteExtendedEvent:
 	stda8 13111, a
 	ldda8 a, 13357
 	lda_dri3 XBC, 0x07, 0xEC, 0xF4
-	call LABEL_F54059
+	call RingBuf_AdvanceIndex
 	call LABEL_F5401B
 	ldda8 a, 13359
 	stda8 13365, a
 	calr AccVoice_CheckStyle
 	lda_dri3 XBC, 0x07, 0xEC, 0xF4
-	call LABEL_F54059
+	call RingBuf_AdvanceIndex
 	ldda8 a, 13360
 	lda_dri3 XBC, 0x07, 0xEC, 0xF4
-	call LABEL_F54059
+	call RingBuf_AdvanceIndex
 	ldda8 a, 13361
 	cps a, 0
 	jr nz, AccBuf_ExtEvt_VelNonZero
@@ -166931,14 +167010,14 @@ AccBuf_WriteExtendedEvent:
 
 AccBuf_ExtEvt_VelNonZero:
 	lda_dri3 XBC, 0x07, 0xEC, 0xF4
-	call LABEL_F54059
+	call RingBuf_AdvanceIndex
 	ldda8 a, 13362
 	lda_dri3 XBC, 0x07, 0xEC, 0xF4
-	call LABEL_F54059
+	call RingBuf_AdvanceIndex
 	calr AccBuf_ExtEvt_WriteExtra
 	ldda8 a, 13365
 	lda_dri3 XBC, 0x07, 0xEC, 0xF4
-	call LABEL_F54059
+	call RingBuf_AdvanceIndex
 	ld (xhl + 4), iy
 	ret
 
@@ -166947,10 +167026,10 @@ AccBuf_ExtEvt_WriteExtra:
 	jr z, AccBuf_ExtEvt_ExtraReturn
 	ldda8 a, 13110
 	lda_dri3 XBC, 0x07, 0xEC, 0xF4
-	call LABEL_F54059
+	call RingBuf_AdvanceIndex
 	ldda8 a, 13111
 	lda_dri3 XBC, 0x07, 0xEC, 0xF4
-	call LABEL_F54059
+	call RingBuf_AdvanceIndex
 
 AccBuf_ExtEvt_ExtraReturn:
 	ret
@@ -167144,20 +167223,20 @@ AccCh1_DrainLoop:
 	cp a, 0x90
 	jr nz, AccCh1_DrainType91
 	call AccBuf_ProcessNoteEvent
-	call LABEL_F54059
-	call LABEL_F54059
+	call RingBuf_AdvanceIndex
+	call RingBuf_AdvanceIndex
 	jr AccCh1_DrainLoop
 
 AccCh1_DrainType91:
 	cp a, 0x91
 	jr nz, AccCh1_DrainOther
 	call AccBuf_ProcessNoteEvent
-	call LABEL_F54059
+	call RingBuf_AdvanceIndex
 	call Rhythm_AdvancePosition
 	jr AccCh1_DrainLoop
 
 AccCh1_DrainOther:
-	call LABEL_F54059
+	call RingBuf_AdvanceIndex
 	jr AccCh1_DrainLoop
 
 AccCh1_DrainDone:
@@ -167319,20 +167398,20 @@ AccCh2_DrainLoop:
 	cp a, 0x90
 	jr nz, AccCh2_DrainType91
 	call AccBuf_ProcessNoteEvent
-	call LABEL_F54059
-	call LABEL_F54059
+	call RingBuf_AdvanceIndex
+	call RingBuf_AdvanceIndex
 	jr AccCh2_DrainLoop
 
 AccCh2_DrainType91:
 	cp a, 0x91
 	jr nz, AccCh2_DrainOther
 	call AccBuf_ProcessNoteEvent
-	call LABEL_F54059
+	call RingBuf_AdvanceIndex
 	call Rhythm_AdvancePosition
 	jr AccCh2_DrainLoop
 
 AccCh2_DrainOther:
-	call LABEL_F54059
+	call RingBuf_AdvanceIndex
 	jr AccCh2_DrainLoop
 
 AccCh2_DrainDone:
@@ -167494,20 +167573,20 @@ AccCh3_DrainLoop:
 	cp a, 0x90
 	jr nz, AccCh3_DrainType91
 	call AccBuf_ProcessNoteEvent
-	call LABEL_F54059
-	call LABEL_F54059
+	call RingBuf_AdvanceIndex
+	call RingBuf_AdvanceIndex
 	jr AccCh3_DrainLoop
 
 AccCh3_DrainType91:
 	cp a, 0x91
 	jr nz, AccCh3_DrainOther
 	call AccBuf_ProcessNoteEvent
-	call LABEL_F54059
+	call RingBuf_AdvanceIndex
 	call Rhythm_AdvancePosition
 	jr AccCh3_DrainLoop
 
 AccCh3_DrainOther:
-	call LABEL_F54059
+	call RingBuf_AdvanceIndex
 	jr AccCh3_DrainLoop
 
 AccCh3_DrainDone:
@@ -167669,20 +167748,20 @@ AccCh4_DrainLoop:
 	cp a, 0x90
 	jr nz, AccCh4_DrainType91
 	call AccBuf_ProcessNoteEvent
-	call LABEL_F54059
-	call LABEL_F54059
+	call RingBuf_AdvanceIndex
+	call RingBuf_AdvanceIndex
 	jr AccCh4_DrainLoop
 
 AccCh4_DrainType91:
 	cp a, 0x91
 	jr nz, AccCh4_DrainOther
 	call AccBuf_ProcessNoteEvent
-	call LABEL_F54059
+	call RingBuf_AdvanceIndex
 	call Rhythm_AdvancePosition
 	jr AccCh4_DrainLoop
 
 AccCh4_DrainOther:
-	call LABEL_F54059
+	call RingBuf_AdvanceIndex
 	jr AccCh4_DrainLoop
 
 AccCh4_DrainDone:
@@ -167962,15 +168041,15 @@ AccBuf_WriteD0WithVoice:
 	ld iy, (xhl + 4)
 	ld bc, (xhl + 2)
 	stib_dri 0x07, 0xEC, 0xF4, 0xD0
-	call LABEL_F54059
+	call RingBuf_AdvanceIndex
 	ldda8 a, 13034
 	stda8 13358, a
 	call LABEL_F5401B
 	stib_dri 0x07, 0xEC, 0xF4, 0x03
-	call LABEL_F54059
+	call RingBuf_AdvanceIndex
 	ldda8 a, 13107
 	lda_dri3 XBC, 0x07, 0xEC, 0xF4
-	call LABEL_F54059
+	call RingBuf_AdvanceIndex
 	ld (xhl + 4), iy
 	ret
 
@@ -168788,7 +168867,7 @@ AccVoice_Reassign:
 	jr nz, AccVoice_Reassign_Mode2
 	ldda8 a, 13029
 	and a, 0x7F
-	call LABEL_F53DF1
+	call AccPatch_SetVoiceParam
 	cpda8 a, 13156
 	jr z, AccVoice_Reassign_MatchA
 	anddi8 64607, 251
@@ -168808,7 +168887,7 @@ AccVoice_Reassign_MatchA:
 AccVoice_Reassign_Mode2:
 	ldda8 a, 13029
 	and a, 0x7F
-	call LABEL_F53DF1
+	call AccPatch_SetVoiceParam
 	ld xhl, 0xE46BB0
 	bit_dri 1, 0x03, 0xEC, 0xE0
 	jr z, AccVoice_Reassign_Fallback
@@ -168824,7 +168903,7 @@ AccVoice_Reassign_Mode2:
 AccVoice_Reassign_Mode3:
 	ldda8 a, 13029
 	and a, 0x7F
-	call LABEL_F53DF1
+	call AccPatch_SetVoiceParam
 	cpda8 a, 13158
 	jr z, AccVoice_Reassign_MatchB
 	anddi8 64608, 251
@@ -168941,7 +169020,7 @@ AccVoice_SplitReassign:
 	jr z, AccVoice_SplitReassign_Reverse
 	ldda8 a, 13029
 	and a, 0x7F
-	call LABEL_F53DF1
+	call AccPatch_SetVoiceParam
 	cpda8 a, 13160
 	jr z, AccVoice_SplitReassign_MatchFwd
 	anddi8 64607, 191
@@ -168961,7 +169040,7 @@ AccVoice_SplitReassign_MatchFwd:
 AccVoice_SplitReassign_Reverse:
 	ldda8 a, 13029
 	and a, 0x7F
-	call LABEL_F53DF1
+	call AccPatch_SetVoiceParam
 	cpda8 a, 13162
 	jr z, AccVoice_SplitReassign_MatchRev
 	anddi8 64607, 127
@@ -169125,7 +169204,7 @@ AccVoice_ThirdLayerReassign:
 	jr z, AccVoice_ThirdReassign_Reverse
 	ldda8 a, 13029
 	and a, 0x7F
-	call LABEL_F53DF1
+	call AccPatch_SetVoiceParam
 	cpda8 a, 13164
 	jr z, AccVoice_ThirdReassign_MatchFwd
 	anddi8 64607, 239
@@ -169145,7 +169224,7 @@ AccVoice_ThirdReassign_MatchFwd:
 AccVoice_ThirdReassign_Reverse:
 	ldda8 a, 13029
 	and a, 0x7F
-	call LABEL_F53DF1
+	call AccPatch_SetVoiceParam
 	cpda8 a, 13166
 	jr z, AccVoice_ThirdReassign_MatchRev
 	anddi8 64607, 223
@@ -169172,15 +169251,15 @@ AccBuf_WriteAllNotesOff:
 	ld iy, (xhl + 4)
 	ld bc, (xhl + 2)
 	stib_dri 0x07, 0xEC, 0xF4, 0x9F
-	call LABEL_F54059
+	call RingBuf_AdvanceIndex
 	ldda8 a, 13034
 	stda8 13358, a
 	call LABEL_F5401B
 	ldb a, 0x7F
 	lda_dri3 XBC, 0x07, 0xEC, 0xF4
-	call LABEL_F54059
+	call RingBuf_AdvanceIndex
 	lda_dri3 XBC, 0x07, 0xEC, 0xF4
-	call LABEL_F54059
+	call RingBuf_AdvanceIndex
 	ld (xhl + 4), iy
 	ret
 
@@ -169208,46 +169287,46 @@ AccBuf_DrainReset_Loop:
 	ld_srib3 A, 0x07, 0xEC, 0xF4
 	cp a, 0xD0
 	jr z, AccBuf_DrainReset_D0Found
-	call LABEL_F54059
+	call RingBuf_AdvanceIndex
 	jr AccBuf_DrainReset_Loop
 
 AccBuf_DrainReset_D0Found:
-	call LABEL_F54059
-	call LABEL_F54059
+	call RingBuf_AdvanceIndex
+	call RingBuf_AdvanceIndex
 	ld_srib3 A, 0x07, 0xEC, 0xF4
 	cps a, 2
 	jr nz, AccBuf_DrainReset_Sub1
-	call LABEL_F54059
+	call RingBuf_AdvanceIndex
 	stib_dri 0x07, 0xEC, 0xF4, 0x40
-	call LABEL_F54059
+	call RingBuf_AdvanceIndex
 	jr AccBuf_DrainReset_Loop
 
 AccBuf_DrainReset_Sub1:
 	cps a, 1
 	jr nz, AccBuf_DrainReset_Sub3
-	call LABEL_F54059
+	call RingBuf_AdvanceIndex
 	stib_dri 0x07, 0xEC, 0xF4, 0x00
-	call LABEL_F54059
+	call RingBuf_AdvanceIndex
 	jr AccBuf_DrainReset_Loop
 
 AccBuf_DrainReset_Sub3:
 	cps a, 3
 	jr nz, AccBuf_DrainReset_Sub5
-	call LABEL_F54059
+	call RingBuf_AdvanceIndex
 	stib_dri 0x07, 0xEC, 0xF4, 0x00
-	call LABEL_F54059
+	call RingBuf_AdvanceIndex
 	jr AccBuf_DrainReset_Loop
 
 AccBuf_DrainReset_Sub5:
 	cps a, 5
 	jr nz, AccBuf_DrainReset_Other
-	call LABEL_F54059
+	call RingBuf_AdvanceIndex
 	stib_dri 0x07, 0xEC, 0xF4, 0x7F
-	call LABEL_F54059
+	call RingBuf_AdvanceIndex
 	jr AccBuf_DrainReset_Loop
 
 AccBuf_DrainReset_Other:
-	call LABEL_F54059
+	call RingBuf_AdvanceIndex
 	jr AccBuf_DrainReset_Loop
 
 AccBuf_DrainReset_Done:
@@ -181018,7 +181097,15 @@ LABEL_F614A3:
 	.byte 0x00, 0x00, 0x2b, 0xdb, 0xcc, 0xff, 0x0f, 0xdb
 	.byte 0xec, 0x04, 0x4b, 0x0e, 0x00, 0x00
 
-LABEL_F614B1:
+; ============================================================================
+; ToneGen_CalcBufferAddr - Compute tone generator buffer address
+; ============================================================================
+; Input:  HL = buffer index
+; Output: XHL = 0x95C00 + (HL & 0xFFFF) * 256
+; Calculates address into tone generator hardware buffer memory.
+; Called from MIDI voice processing code (handles status bytes 0x81-0x91).
+; ============================================================================
+ToneGen_CalcBufferAddr:
 	and xhl, 0xFFFF
 	sla xhl, 8
 	add xhl, 0x95C00
@@ -181155,7 +181242,7 @@ LABEL_F615C5:
 	pushw bc
 	calr LABEL_F61B58
 	ld de, hl
-	calr LABEL_F614B1
+	calr ToneGen_CalcBufferAddr
 	lds32 xix, 6
 	add xix, xhl
 	popw bc
@@ -181363,14 +181450,14 @@ LABEL_F61760:
 	stda16 13586, xwa
 	ordi8 13520, 32
 	ldda16 xhl, 13419
-	calr LABEL_F614B1
+	calr ToneGen_CalcBufferAddr
 	ldda16 xwa, 13385
 	ld_srib3 A, 0x07, 0xEC, 0xE0
 	cp a, 0x81
 	jr nz, LABEL_F617F5
 	calr LABEL_F62C6E
 	ldda16 xhl, 13419
-	calr LABEL_F614B1
+	calr ToneGen_CalcBufferAddr
 	ldda16 xwa, 13385
 	ld_srib3 A, 0x07, 0xEC, 0xE0
 	cp a, 0x90
@@ -181400,7 +181487,7 @@ LABEL_F617C7:
 	ldda16 xwa, 13385
 	stda16 13586, xwa
 	ldda16 xhl, 13419
-	calr LABEL_F614B1
+	calr ToneGen_CalcBufferAddr
 	ldda16 xwa, 13385
 	ld_srib3 A, 0x07, 0xEC, 0xE0
 	pushw wa
@@ -181499,7 +181586,7 @@ LABEL_F618AC:
 LABEL_F618BC:
 	ordi8 13520, 32
 	ldda16 xhl, 13419
-	calr LABEL_F614B1
+	calr ToneGen_CalcBufferAddr
 	ld_srib3 A, 0x07, 0xEC, 0xE0
 	cp a, 0x81
 	jr nz, LABEL_F618E4
@@ -181540,7 +181627,7 @@ LABEL_F61901:
 	stda8 13365, a
 	anddi8 13602, 253
 	ldda16 xhl, 13419
-	calr LABEL_F614B1
+	calr ToneGen_CalcBufferAddr
 	ldda16 xwa, 13385
 	ld_srib3 A, 0x07, 0xEC, 0xE0
 	cp a, 0x81
@@ -181551,7 +181638,7 @@ LABEL_F61901:
 LABEL_F6193B:
 	calr LABEL_F62D59
 	ldda16 xhl, 13419
-	calr LABEL_F614B1
+	calr ToneGen_CalcBufferAddr
 	ldda16 xwa, 13385
 	ld_srib3 A, 0x07, 0xEC, 0xE0
 	bit 7, a
@@ -181582,7 +181669,7 @@ LABEL_F61988:
 	call LABEL_F5ED8A
 	calr LABEL_F61B58
 	stda16 13419, xhl
-	calr LABEL_F614B1
+	calr ToneGen_CalcBufferAddr
 	lds ix, 6
 	stda16 13385, xix
 	stdi8 13365, 6
@@ -181732,7 +181819,7 @@ LABEL_F61AB1:
 LABEL_F61AC7:
 	calr LABEL_F62C6E
 	ldda16 xhl, 13419
-	calr LABEL_F614B1
+	calr ToneGen_CalcBufferAddr
 	ldda16 xwa, 13385
 	ld_srib3 A, 0x07, 0xEC, 0xE0
 	cp a, 0x81
@@ -181761,7 +181848,7 @@ LABEL_F61B0F:
 	call LABEL_F5ED8A
 	calr LABEL_F61B58
 	stda16 13419, xhl
-	calr LABEL_F614B1
+	calr ToneGen_CalcBufferAddr
 	lds ix, 6
 	stda16 13385, xix
 	stdi8 13365, 6
@@ -181919,7 +182006,7 @@ LABEL_F61C41:
 	ldb a, 0x5
 	stda8 14098, a
 	ldda16 xhl, 13419
-	calr LABEL_F614B1
+	calr ToneGen_CalcBufferAddr
 	ldda16 xwa, 13385
 	ld_srib3 A, 0x07, 0xEC, 0xE0
 	ldb e, 0x1
@@ -181943,7 +182030,7 @@ LABEL_F61C7C:
 	stda8 14112, e
 	calr LABEL_F62CCA
 	ldda16 xhl, 13419
-	calr LABEL_F614B1
+	calr ToneGen_CalcBufferAddr
 	ldda16 xwa, 13385
 	ld_srib3 A, 0x07, 0xEC, 0xE0
 	stda8 14113, a
@@ -181957,13 +182044,13 @@ LABEL_F61C9A:
 	stda8 14098, a
 	calr LABEL_F62CCA
 	ldda16 xhl, 13419
-	calr LABEL_F614B1
+	calr ToneGen_CalcBufferAddr
 	ldda16 xwa, 13385
 	ld_srib3 A, 0x07, 0xEC, 0xE0
 	stda8 14104, a
 	calr LABEL_F62C6E
 	ldda16 xhl, 13419
-	calr LABEL_F614B1
+	calr ToneGen_CalcBufferAddr
 	ldda16 xwa, 13385
 	ld_srib3 W, 0x07, 0xEC, 0xE0
 	stda8 14103, w
@@ -182384,7 +182471,7 @@ LABEL_F62090:
 	calr LABEL_F6216B
 	calr LABEL_F61B58
 	stda16 13419, xhl
-	calr LABEL_F614B1
+	calr ToneGen_CalcBufferAddr
 	stdi16 13385, 6
 	ldda8 a, 13562
 	ldda8 w, 13529
@@ -182405,7 +182492,7 @@ LABEL_F620C5:
 LABEL_F620CE:
 	ldda16 xiy, 13385
 	ldda16 xhl, 13419
-	calr LABEL_F614B1
+	calr ToneGen_CalcBufferAddr
 	ld_srib3 A, 0x07, 0xEC, 0xF4
 	cp a, 0x81
 	jr nz, LABEL_F620F8
@@ -182429,7 +182516,7 @@ LABEL_F620F8:
 	jr ule, LABEL_F62160
 	calr LABEL_F621A7
 	ldda16 xhl, 13419
-	calr LABEL_F614B1
+	calr ToneGen_CalcBufferAddr
 	ld_srib3 A, 0x07, 0xEC, 0xF4
 	cp a, 0x90
 	jr nz, LABEL_F62120
@@ -182491,7 +182578,7 @@ LABEL_F6216B:
 	ldda16 xwa, 13830
 	stda16 13594, xwa
 	ld hl, wa
-	calr LABEL_F614B1
+	calr ToneGen_CalcBufferAddr
 	ldda8 a, 13596
 	xor w, w
 	stda16 13598, xwa
@@ -182553,7 +182640,7 @@ LABEL_F621ED:
 
 LABEL_F62211:
 	ldda16 xhl, 13620
-	calr LABEL_F614B1
+	calr ToneGen_CalcBufferAddr
 	ld hl, (xhl + 3)
 	ldda32 xix, 13640
 	ld (xix), hl
@@ -182610,7 +182697,7 @@ LABEL_F622EA:
 
 LABEL_F622F2:
 	ld hl, wa
-	calr LABEL_F614B1
+	calr ToneGen_CalcBufferAddr
 	ld wa, (xhl + 3)
 	jr LABEL_F622DD
 
@@ -182645,7 +182732,7 @@ LABEL_F62311:
 	stda8 13365, a
 	ldda16 xiy, 13586
 	ldda16 xhl, 13419
-	calr LABEL_F614B1
+	calr ToneGen_CalcBufferAddr
 	ld_srib3 A, 0x07, 0xEC, 0xF4
 	cp a, 0x81
 	jrl z, LABEL_F623D2
@@ -182708,7 +182795,7 @@ LABEL_F623DA:
 	call LABEL_F5ED8A
 	calr LABEL_F61B58
 	ld de, hl
-	calr LABEL_F614B1
+	calr ToneGen_CalcBufferAddr
 	ldb c, 0x3
 	lds iy, 3
 	stdi8 13603, 0
@@ -182775,7 +182862,7 @@ LABEL_F62478:
 	sub c, 0x7
 	stda8 13365, c
 	ld hl, de
-	calr LABEL_F614B1
+	calr ToneGen_CalcBufferAddr
 	ld wa, (xhl + 1)
 	ldda32 xix, 13640
 	ld (xix), wa
@@ -182825,10 +182912,10 @@ LABEL_F624E7:
 	cp c, 0xFF
 	jr nz, LABEL_F62501
 	ld hl, de
-	calr LABEL_F614B1
+	calr ToneGen_CalcBufferAddr
 	ld hl, (xhl + 3)
 	ld de, hl
-	calr LABEL_F614B1
+	calr ToneGen_CalcBufferAddr
 	lds iy, 6
 	ldb c, 0x6
 
@@ -183037,7 +183124,7 @@ LABEL_F626A8:
 	stda16 13419, xwa
 	stdi8 13365, 0
 	ldda16 xhl, 13419
-	calr LABEL_F614B1
+	calr ToneGen_CalcBufferAddr
 	ldda16 xwa, 13385
 	ld_srib3 A, 0x07, 0xEC, 0xE0
 	cp a, 0x81
@@ -183045,7 +183132,7 @@ LABEL_F626A8:
 	calr LABEL_F62C6E
 	calr LABEL_F62C6E
 	ldda16 xhl, 13419
-	calr LABEL_F614B1
+	calr ToneGen_CalcBufferAddr
 	ldda16 xwa, 13385
 	ld_srib3 A, 0x07, 0xEC, 0xE0
 	bitda 4, 14235
@@ -183110,7 +183197,7 @@ LABEL_F62727:
 
 LABEL_F6274B:
 	ldda16 xhl, 13419
-	calr LABEL_F614B1
+	calr ToneGen_CalcBufferAddr
 	pushw ix
 	ldda16 xix, 13385
 	lda_dri3 XBC, 0x07, 0xEC, 0xF0
@@ -183138,7 +183225,7 @@ LABEL_F62778:
 	stda16 13419, xwa
 	stdi8 13365, 0
 	ldda16 xhl, 13419
-	calr LABEL_F614B1
+	calr ToneGen_CalcBufferAddr
 	ldda16 xwa, 13385
 	ld_srib3 A, 0x07, 0xEC, 0xE0
 	cp a, 0x81
@@ -183147,7 +183234,7 @@ LABEL_F62778:
 	calr LABEL_F62C6E
 	calr LABEL_F62C6E
 	ldda16 xhl, 13419
-	calr LABEL_F614B1
+	calr ToneGen_CalcBufferAddr
 	ldda16 xwa, 13385
 	ld_srib3 A, 0x07, 0xEC, 0xE0
 	bitda 0, 14125
@@ -183172,7 +183259,7 @@ LABEL_F627D7:
 
 LABEL_F627D9:
 	ldda16 xhl, 13419
-	calr LABEL_F614B1
+	calr ToneGen_CalcBufferAddr
 	pushw ix
 	ldda16 xix, 13385
 	lda_dri3 XBC, 0x07, 0xEC, 0xF0
@@ -183193,19 +183280,19 @@ LABEL_F627F6:
 	stda16 13419, xwa
 	stdi8 13365, 0
 	ldda16 xhl, 13419
-	calr LABEL_F614B1
+	calr ToneGen_CalcBufferAddr
 	ldda16 xwa, 13385
 	ld_srib3 A, 0x07, 0xEC, 0xE0
 	cp a, 0x81
 	jr z, LABEL_F6288D
 	ldda16 xhl, 13419
-	calr LABEL_F614B1
+	calr ToneGen_CalcBufferAddr
 	ldda16 xwa, 13385
 	ld_srib3 C, 0x07, 0xEC, 0xE0
 	calr LABEL_F62C6E
 	calr LABEL_F62C6E
 	ldda16 xhl, 13419
-	calr LABEL_F614B1
+	calr ToneGen_CalcBufferAddr
 	ldda16 xwa, 13385
 	ld_srib3 A, 0x07, 0xEC, 0xE0
 	cp c, 0xD3
@@ -183240,7 +183327,7 @@ LABEL_F62871:
 
 LABEL_F62873:
 	ldda16 xhl, 13419
-	calr LABEL_F614B1
+	calr ToneGen_CalcBufferAddr
 	pushw ix
 	ldda16 xix, 13385
 	lda_dri3 XBC, 0x07, 0xEC, 0xF0
@@ -183280,7 +183367,7 @@ LABEL_F6288E:
 
 LABEL_F62986:
 	ldda16 xhl, 13419
-	calr LABEL_F614B1
+	calr ToneGen_CalcBufferAddr
 	ldda16 xiy, 13586
 	ld_srib3 D, 0x07, 0xEC, 0xF4
 	xor h, h
@@ -183359,37 +183446,37 @@ LABEL_F62A0D:
 	stdi8 13365, 0
 	ldda16 xiy, 13385
 	ldda16 xhl, 13419
-	calr LABEL_F614B1
+	calr ToneGen_CalcBufferAddr
 	ld_srib3 A, 0x07, 0xEC, 0xF4
 	stda8 13366, a
 	calr LABEL_F62C6E
 	ldda16 xiy, 13385
 	ldda16 xhl, 13419
-	calr LABEL_F614B1
+	calr ToneGen_CalcBufferAddr
 	ld_srib3 A, 0x07, 0xEC, 0xF4
 	stda8 13367, a
 	calr LABEL_F62C6E
 	ldda16 xiy, 13385
 	ldda16 xhl, 13419
-	calr LABEL_F614B1
+	calr ToneGen_CalcBufferAddr
 	ld_srib3 A, 0x07, 0xEC, 0xF4
 	stda8 13368, a
 	calr LABEL_F62C6E
 	ldda16 xiy, 13385
 	ldda16 xhl, 13419
-	calr LABEL_F614B1
+	calr ToneGen_CalcBufferAddr
 	ld_srib3 A, 0x07, 0xEC, 0xF4
 	stda8 13369, a
 	calr LABEL_F62C6E
 	ldda16 xiy, 13385
 	ldda16 xhl, 13419
-	calr LABEL_F614B1
+	calr ToneGen_CalcBufferAddr
 	ld_srib3 A, 0x07, 0xEC, 0xF4
 	stda8 13370, a
 	calr LABEL_F62C6E
 	ldda16 xiy, 13385
 	ldda16 xhl, 13419
-	calr LABEL_F614B1
+	calr ToneGen_CalcBufferAddr
 	ld_srib3 A, 0x07, 0xEC, 0xF4
 	stda8 13371, a
 	ret
@@ -183411,7 +183498,7 @@ LABEL_F62AAC:
 	stdi8 13389, 6
 	ldda16 xiy, 13586
 	ldda16 xhl, 13419
-	calr LABEL_F614B1
+	calr ToneGen_CalcBufferAddr
 	ld_srib3 A, 0x07, 0xEC, 0xF4
 	cp a, 0x90
 	jr z, LABEL_F62AF7
@@ -183557,15 +183644,15 @@ LABEL_F62C40:
 	xor xiy, xiy
 	ldda16 xiy, 13385
 	ldda16 xhl, 13419
-	calr LABEL_F614B1
+	calr ToneGen_CalcBufferAddr
 	add xhl, xiy
 	ld a, (xhl + 1)
 	cp a, 0x87
 	jr nz, LABEL_F62C69
 	ldda16 xhl, 13419
-	calr LABEL_F614B1
+	calr ToneGen_CalcBufferAddr
 	ld hl, (xhl + 3)
-	calr LABEL_F614B1
+	calr ToneGen_CalcBufferAddr
 	ld a, (xhl + 6)
 
 LABEL_F62C69:
@@ -183583,7 +183670,7 @@ LABEL_F62C6E:
 	inc 1, iy
 	incdi8 1, 13365
 	ldda16 xhl, 13419
-	calr LABEL_F614B1
+	calr ToneGen_CalcBufferAddr
 	ld_srib3 A, 0x07, 0xEC, 0xF4
 	cp a, 0x87
 	jr z, LABEL_F62C92
@@ -183593,10 +183680,10 @@ LABEL_F62C6E:
 
 LABEL_F62C92:
 	ldda16 xhl, 13419
-	calr LABEL_F614B1
+	calr ToneGen_CalcBufferAddr
 	ld hl, (xhl + 3)
 	stda16 13419, xhl
-	calr LABEL_F614B1
+	calr ToneGen_CalcBufferAddr
 	lds iy, 6
 	stdi8 13365, 6
 	jr LABEL_F62CC1
@@ -183605,7 +183692,7 @@ LABEL_F62CAC:
 	call LABEL_F5ED8A
 	calr LABEL_F61B58
 	stda16 13419, xhl
-	calr LABEL_F614B1
+	calr ToneGen_CalcBufferAddr
 	lds iy, 6
 	stdi8 13365, 6
 
@@ -183625,7 +183712,7 @@ LABEL_F62CCA:
 	inc 1, iy
 	incdi8 1, 13365
 	ldda16 xhl, 13419
-	calr LABEL_F614B1
+	calr ToneGen_CalcBufferAddr
 	ld_srib3 A, 0x07, 0xEC, 0xF4
 	cp a, 0x87
 	jr nz, LABEL_F62CEA
@@ -183635,7 +183722,7 @@ LABEL_F62CEA:
 	inc 1, iy
 	incdi8 1, 13365
 	ldda16 xhl, 13419
-	calr LABEL_F614B1
+	calr ToneGen_CalcBufferAddr
 	ld_srib3 A, 0x07, 0xEC, 0xF4
 	cp a, 0x87
 	jr nz, LABEL_F62D04
@@ -183652,11 +183739,11 @@ LABEL_F62D0B:
 
 LABEL_F62D0D:
 	ldda16 xhl, 13419
-	calr LABEL_F614B1
+	calr ToneGen_CalcBufferAddr
 	xor iy, iy
 	ld hl, (xhl + 3)
 	stda16 13419, xhl
-	calr LABEL_F614B1
+	calr ToneGen_CalcBufferAddr
 	lds iy, 6
 	stdi8 13365, 6
 	ret
@@ -183669,13 +183756,13 @@ LABEL_F62D36:
 	push xhl
 	inc 1, xix
 	ld hl, de
-	calr LABEL_F614B1
+	calr ToneGen_CalcBufferAddr
 	ld a, (xix)
 	cp a, 0x87
 	jr nz, LABEL_F62D55
 	ld hl, (xhl + 3)
 	ld de, hl
-	calr LABEL_F614B1
+	calr ToneGen_CalcBufferAddr
 	ld xix, xhl
 	add xix, 0x6
 
@@ -183693,7 +183780,7 @@ LABEL_F62D59:
 	dec 1, iy
 	decdi8 1, 13365
 	ldda16 xhl, 13419
-	calr LABEL_F614B1
+	calr ToneGen_CalcBufferAddr
 	ld_srib3 A, 0x07, 0xEC, 0xF4
 	cp a, 0x87
 	jr nz, LABEL_F62DA7
@@ -183701,7 +183788,7 @@ LABEL_F62D59:
 	cp hl, 0xFFFF
 	jr z, LABEL_F62D90
 	stda16 13419, xhl
-	calr LABEL_F614B1
+	calr ToneGen_CalcBufferAddr
 	ldw iy, 0xFE
 	stdi8 13365, 254
 	jr LABEL_F62DA7
@@ -183709,7 +183796,7 @@ LABEL_F62D59:
 LABEL_F62D90:
 	ldda16 xhl, 13830
 	stda16 13419, xhl
-	calr LABEL_F614B1
+	calr ToneGen_CalcBufferAddr
 	ldda16 xhl, 13832
 	dec 1, hl
 	ld iy, hl
@@ -213344,7 +213431,7 @@ LABEL_F7DF0D:
 	lda_24 xbc, 0xe9d7ca
 	ld_sril3 XWA, 0x07, 0xE4, 0xE0
 	push xwa
-	call LABEL_FF0FA0
+	call Strlen
 	inc 4, xsp
 	ld de, hl
 	lds hl, 0
@@ -213629,7 +213716,7 @@ LABEL_F7E1BF:
 	add_sril_rm XDE, 0x07, 0xE0, 0xE4
 	ld xwa, (xde)
 	push xwa
-	call LABEL_FF0FA0
+	call Strlen
 	inc 6, hl
 	pushw hl
 	call Malloc
@@ -222523,7 +222610,7 @@ FDemoText_ProcessMarkup_CheckTagOpen:
 FDemoText_ProcessMarkup_LookupTag:
 	ld xwa, (xbc)
 	push xwa
-	call LABEL_FF0FA0
+	call Strlen
 	ld (xsp + 18), hl
 	pushm (xsp + 18)
 	ld xwa, (xsp + 92)
@@ -223216,7 +223303,7 @@ FDemoText_Layout_Setup:
 	sub (xsp + 22), iz
 	ld xwa, (xsp + 32)
 	push xwa
-	call LABEL_FF0FA0
+	call Strlen
 	ldfr_werp HL, 0xFA
 	ldto_werp WA, 0xFA
 	inc 1, wa
@@ -223451,7 +223538,7 @@ Seq_InitializeAndStart:
 	calr Seq_InitVoiceStructures
 	ld xwa, (xsp + 4)
 	push xwa
-	call LABEL_FF0FA0
+	call Strlen
 	inc 1, hl
 	pushw hl
 	call Malloc
@@ -223778,7 +223865,7 @@ Seq_StartWithFullInit:
 	jr lt, ApPreControl_ReturnNull
 	pushw 0x2
 	pushw 0x4878
-	call LABEL_FF0FA0
+	call Strlen
 	inc 1, hl
 	pushw hl
 	call Malloc
@@ -234381,7 +234468,16 @@ LABEL_F98695:
 ; Entry: Called from control panel key processing
 ; Uses: EF0797 (check key-scan enable), FA9945 (EventDispatch_Direct)
 ; =============================================================================
-LABEL_F98697:
+; ============================================================================
+; UIState_KeyScan_Dispatch - Key scanning and event dispatch
+; ============================================================================
+; Checks if scanning enabled (bit 7 of RAM[0x0406]), loads current UI state
+; from 0x8D38, indexes into keymap table at 0xE01F80. If map entry is
+; 0xFFFE, broadcasts pass-through event (0x01C00038). Otherwise searches
+; for matching (chain<<8)|param key code and dispatches corresponding event.
+; Plugged into each UI state as the standard key-scan handler.
+; ============================================================================
+UIState_KeyScan_Dispatch:
 	call 0xEF0797				; Check key-scan enable (bit 7 of RAM[0x0406])
 	cps hl, 0				; Returns HL=1 if enabled
 	ret z					; Return if scanning disabled
@@ -238880,7 +238976,7 @@ LABEL_F9B60F:
 	ld (xde), wa
 	lda xwa, (xsp + 12)
 	push xwa
-	call LABEL_FF0FA0
+	call Strlen
 	inc 4, xsp
 	sll hl, 3
 	lda xwa, (xsp + 26)
@@ -238925,7 +239021,7 @@ LABEL_F9B6BE:
 	ld (xde), wa
 	lda xwa, (xsp + 12)
 	push xwa
-	call LABEL_FF0FA0
+	call Strlen
 	inc 4, xsp
 	sll hl, 3
 	lda xwa, (xsp + 26)
@@ -240521,7 +240617,7 @@ LABEL_F9CB7E:
 	ld xwa, (xsp + 18)
 	ld xwa, (xwa + 26)
 	push xwa
-	call LABEL_FF0FA0
+	call Strlen
 	ld xwa, (xsp + 22)
 	ld wa, (xwa + 38)
 	add wa, hl
@@ -240592,7 +240688,7 @@ LABEL_F9CC2A:
 	call 0xFB275A
 	ld (xsp + 14), hl
 	push xiz
-	call LABEL_FF0FA0
+	call Strlen
 	inc 4, xsp
 	ld wa, (xsp + 14)
 	cp wa, hl
@@ -242387,7 +242483,7 @@ PsGridBox_ShowHide_CountLoop:
 	decm 1, (xsp + 8)
 	lda xwa, (xsp + 42)
 	push xwa
-	call LABEL_FF0FA0
+	call Strlen
 	inc 4, xsp
 	ld wa, (xsp + 18)
 	sub hl, wa
@@ -242432,7 +242528,7 @@ PsGridBox_ShowHide_ScanLoop:
 PsGridBox_ShowHide_CalcWidth:
 	ld xwa, (xsp + 16)
 	push xwa
-	call LABEL_FF0FA0
+	call Strlen
 	inc 4, xsp
 	ld wa, (xsp + 8)
 	mul xwa, xhl
@@ -243788,13 +243884,13 @@ PsEditBox_Paint:
 	call 0xFB2640
 	st_dri3b W, 0xFD, 0x0C, 0x01
 	push xwa
-	call LABEL_FF0FA0
+	call Strlen
 	ld xwa, (xsp + 12)
 	ld iz, (xwa + 40)
 	add iz, hl
 	st_dri3b W, 0xFD, 0x10, 0x01
 	push xwa
-	call LABEL_FF0FA0
+	call Strlen
 	inc 8, xsp
 	st_dri3b W, 0xFD, 0x0C, 0x02
 	lda xde, (xwa + 4)
@@ -243853,7 +243949,7 @@ PsEditBox_Confirm:
 	call 0xFB2640
 	st_dri3b W, 0xFD, 0x0C, 0x01
 	push xwa
-	call LABEL_FF0FA0
+	call Strlen
 	inc 4, xsp
 	ld xwa, (xsp + 8)
 	ld bc, (xwa + 40)
@@ -245903,7 +245999,7 @@ AcTitleMenu_Confirm_SetRight:
 	ld (xsp + 6), hl
 	lda xwa, (xsp + 12)
 	push xwa
-	call LABEL_FF0FA0
+	call Strlen
 	inc 4, xsp
 	ld de, (xsp + 6)
 	st_dri3b A, 0xFD, 0x28, 0x01
@@ -245965,11 +246061,11 @@ AcTitleMenu_Confirm_MultiLine:
 	exts xwa
 	add xwa, xde
 	push xwa
-	call LABEL_FF0FA0
+	call Strlen
 	ld iz, hl
 	lda xwa, (xsp + 16)
 	push xwa
-	call LABEL_FF0FA0
+	call Strlen
 	inc 8, xsp
 	ld xwa, (xsp + 8)
 	ld xbc, (xwa + 28)
@@ -246265,7 +246361,7 @@ VwMenuBox_Confirm_SetRight:
 	ld iz, hl
 	lda xwa, (xsp + 10)
 	push xwa
-	call LABEL_FF0FA0
+	call Strlen
 	inc 4, xsp
 	ld de, iz
 	st_dri3b A, 0xFD, 0x26, 0x01
@@ -246323,11 +246419,11 @@ VwMenuBox_Confirm_MultiLine:
 	jr z, VwMenuBox_Confirm_RenderBottom
 	st_dri3b W, 0x07, 0xE8, 0xF8
 	push xwa
-	call LABEL_FF0FA0
+	call Strlen
 	ldfr_werp HL, 0xFA
 	lda xwa, (xsp + 14)
 	push xwa
-	call LABEL_FF0FA0
+	call Strlen
 	inc 8, xsp
 	ld xwa, (xsp + 6)
 	ld xbc, (xwa + 28)
@@ -248622,7 +248718,7 @@ NamingCheck_NotHandled:
 
 NamingCheck_GetStrLen:
 	push xwa
-	call LABEL_FF0FA0
+	call Strlen
 	inc 4, xsp
 	extz xhl
 
@@ -250160,7 +250256,7 @@ LABEL_FA2E40:
 	call 0xFACACA
 	lda xwa, (xsp + 10)
 	push xwa
-	call LABEL_FF0FA0
+	call Strlen
 	inc 4, xsp
 	cp hl, (xsp + 4)
 	jrl nz, LABEL_FA2DBB
@@ -250172,7 +250268,7 @@ LABEL_FA2E40:
 	push xiz
 	ld (xsp + 4), xwa
 	push xwa
-	call LABEL_FF0FA0
+	call Strlen
 	inc 1, hl
 	pushw hl
 	call Malloc
@@ -251396,7 +251492,7 @@ LABEL_FA3BC1:
 LABEL_FA3BC7:
 	ld xwa, (xsp + 16)
 	push xwa
-	call LABEL_FF0FA0
+	call Strlen
 	ld xwa, (xsp + 24)
 	ld iz, (xwa + 36)
 	add iz, hl
@@ -251463,7 +251559,7 @@ LABEL_FA3C46:
 	ld iz, hl
 	ld xwa, (xsp + 10)
 	push xwa
-	call LABEL_FF0FA0
+	call Strlen
 	inc 4, xsp
 	ld wa, iz
 	cp wa, hl
@@ -252322,7 +252418,7 @@ LABEL_FA463F:
 	call 0xFA9660
 	st_dri3b W, 0xFD, 0x92, 0x00
 	push xwa
-	call LABEL_FF0FA0
+	call Strlen
 	inc 4, xsp
 	extz xhl
 	jrl LABEL_FA482F
@@ -254312,7 +254408,7 @@ Viewable_SetName:
 	ld (xsp + 4), xix
 	ld xwa, (xsp + 16)
 	push xwa
-	call LABEL_FF0FA0
+	call Strlen
 	ld (xsp + 12), hl
 	ld wa, (xsp + 14)
 	extz xwa
@@ -254320,13 +254416,13 @@ Viewable_SetName:
 	add xwa, (xsp + 8)
 	ld xwa, (xwa)
 	push xwa
-	call LABEL_FF0FA0
+	call Strlen
 	inc 8, xsp
 	cp hl, (xsp + 8)
 	jr nc, Viewable_SetName_Copy
 	ld xwa, (xsp + 16)
 	push xwa
-	call LABEL_FF0FA0
+	call Strlen
 	inc 1, hl
 	pushw hl
 	call Malloc
@@ -257910,7 +258006,7 @@ LABEL_FA7AE2:
 	ld xwa, (xsp + 6)
 	ld xwa, (xwa)
 	push xwa
-	call LABEL_FF0FA0
+	call Strlen
 	inc 1, hl
 	pushw hl
 	call Malloc
@@ -257965,16 +258061,16 @@ LABEL_FA7B74:
 	ld xiz, (xwa)
 	ld xwa, (xsp + 4)
 	push xwa
-	call LABEL_FF0FA0
+	call Strlen
 	ld (xsp + 16), hl
 	push xiz
-	call LABEL_FF0FA0
+	call Strlen
 	inc 8, xsp
 	cp hl, (xsp + 12)
 	jr nc, LABEL_FA7BB6
 	ld xwa, (xsp + 4)
 	push xwa
-	call LABEL_FF0FA0
+	call Strlen
 	inc 1, hl
 	pushw hl
 	call Malloc
@@ -266784,7 +266880,7 @@ DrawString:
 DrawString_DeferredPath:
 	ld xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0FA0
+	call Strlen
 	inc 4, xsp
 	inc 1, hl
 	ld wa, hl
@@ -266957,7 +267053,7 @@ DrawString_Impl_ClampDirtyBottom:
 	jr nz, DrawString_Impl_VariableWidthLoop
 	ld xwa, (xsp + 24)
 	push xwa
-	call LABEL_FF0FA0
+	call Strlen
 	inc 4, xsp
 	ld wa, (xsp + 16)
 	mul xwa, xhl
@@ -272245,7 +272341,7 @@ LABEL_FB0E7F:
 LABEL_FB0EBF:
 	ld xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0FA0
+	call Strlen
 	inc 4, xsp
 	inc 1, hl
 	ld wa, hl
@@ -272441,7 +272537,7 @@ LABEL_FB1074:
 	jr nz, LABEL_FB10A5
 	ld xwa, (xsp + 30)
 	push xwa
-	call LABEL_FF0FA0
+	call Strlen
 	inc 4, xsp
 	ld wa, (xsp + 20)
 	mul xwa, xhl
@@ -273943,7 +274039,7 @@ CalcTotalWidth:
 	ld (xsp + 12), xbc
 	ld xiz, xwa
 	push xiz
-	call LABEL_FF0FA0
+	call Strlen
 	inc 1, hl
 	pushw hl
 	call Malloc
@@ -273959,7 +274055,7 @@ CalcTotalWidth:
 	add xiz, 0x945C00
 	ld xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0FA0
+	call Strlen
 	inc 4, xsp
 	ld xbc, (xiz + 12)
 	or xbc, xbc
@@ -274025,7 +274121,7 @@ WordwrapStrings:
 	ldw (xsp + 10), 0x0
 	ld xiz, (xsp + 22)
 	push xiz
-	call LABEL_FF0FA0
+	call Strlen
 	inc 1, hl
 	pushw hl
 	call Malloc
@@ -282761,7 +282857,7 @@ LABEL_FB8A1E:
 	lda_24 xbc, 0xeba494
 	ld_sril3 XWA, 0x07, 0xE4, 0xE0
 	push xwa
-	call LABEL_FF0FA0
+	call Strlen
 	inc 4, xsp
 	ldw bc, 0x20
 	sub bc, hl
@@ -282820,7 +282916,7 @@ LABEL_FB8AAC:
 	lda_24 xbc, 0xeba494
 	ld_sril3 XWA, 0x07, 0xE4, 0xE0
 	push xwa
-	call LABEL_FF0FA0
+	call Strlen
 	inc 4, xsp
 	ldw bc, 0x20
 	sub bc, hl
@@ -283248,7 +283344,7 @@ LABEL_FB8F70:
 	lda_24 xbc, 0xecfca4
 	ld_sril3 XWA, 0x07, 0xE4, 0xE0
 	push xwa
-	call LABEL_FF0FA0
+	call Strlen
 	inc 4, xsp
 	ldw bc, 0x10
 	sub bc, hl
@@ -283299,7 +283395,7 @@ LABEL_FB8FE8:
 	lda_24 xbc, 0xecfca4
 	ld_sril3 XWA, 0x07, 0xE4, 0xE0
 	push xwa
-	call LABEL_FF0FA0
+	call Strlen
 	inc 4, xsp
 	ldw bc, 0x10
 	sub bc, hl
@@ -283933,7 +284029,7 @@ LABEL_FB96C2:
 	addda32_24 xwa, 213202
 	ld xwa, (xwa)
 	push xwa
-	call LABEL_FF0FA0
+	call Strlen
 	inc 4, xsp
 	ldw bc, 0x10
 	sub bc, hl
@@ -283986,7 +284082,7 @@ LABEL_FB9739:
 	addda32_24 xwa, 213202
 	ld xwa, (xwa)
 	push xwa
-	call LABEL_FF0FA0
+	call Strlen
 	inc 4, xsp
 	ldw bc, 0x10
 	sub bc, hl
@@ -285350,7 +285446,7 @@ MstGrid2_PadLeft_CheckA:
 	addda32_24 xbc, 213206
 	ld xwa, (xbc)
 	push xwa
-	call LABEL_FF0FA0
+	call Strlen
 	inc 4, xsp
 	ldw bc, 0x20
 	sub bc, hl
@@ -285398,7 +285494,7 @@ MstGrid2_PadLeft_CheckB:
 	addda32_24 xbc, 213210
 	ld xwa, (xbc)
 	push xwa
-	call LABEL_FF0FA0
+	call Strlen
 	inc 4, xsp
 	ldw bc, 0x20
 	sub bc, hl
@@ -285446,7 +285542,7 @@ MstGrid2_PadLeft_CheckC:
 	addda32_24 xbc, 213206
 	ld xwa, (xbc)
 	push xwa
-	call LABEL_FF0FA0
+	call Strlen
 	inc 4, xsp
 	ldw bc, 0x20
 	sub bc, hl
@@ -285503,7 +285599,7 @@ MstGrid2_PadLeft_CheckD:
 	addda32_24 xbc, 213210
 	ld xwa, (xbc)
 	push xwa
-	call LABEL_FF0FA0
+	call Strlen
 	inc 4, xsp
 	ldw bc, 0x20
 	sub bc, hl
@@ -315037,7 +315133,7 @@ LABEL_FD5D94:
 LABEL_FD5D99:
 	lds bc, 4
 	lds de, 6
-	calr LABEL_FD5E3A
+	calr MIDI_ReadChannelParam
 	jr LABEL_FD5DC0
 
 LABEL_FD5DA2:
@@ -315054,7 +315150,7 @@ LABEL_FD5DB5:
 	lds de, 3
 
 LABEL_FD5DB9:
-	calr LABEL_FD5E3A
+	calr MIDI_ReadChannelParam
 	setda 5, 1074
 
 LABEL_FD5DC0:
@@ -315109,7 +315205,7 @@ LABEL_FD5E10:
 	.byte 0xd8, 0x6e, 0xec, 0xaa, 0x0a, 0x20, 0xb0, 0x00
 	.byte 0xff, 0x0e
 
-LABEL_FD5E3A:
+MIDI_ReadChannelParam:
 	extz bc
 	cps bc, 0
 	ret mi
@@ -315234,7 +315330,7 @@ LABEL_FD5F9A:
 	ldda32 xwa, 48300
 	lds bc, 5
 	ld de, hl
-	calr LABEL_FD5E3A
+	calr MIDI_ReadChannelParam
 	ldto_berp A, 0xFB
 	extz wa
 	muls wa, 0x6
@@ -315246,7 +315342,7 @@ LABEL_FD5F9A:
 	jr z, LABEL_FD600A
 	ldda32 xwa, 48300
 	lds bc, 0
-	calr LABEL_FD5E3A
+	calr MIDI_ReadChannelParam
 	ldto_berp A, 0xFB
 	extz wa
 	muls wa, 0x6
@@ -315256,7 +315352,7 @@ LABEL_FD5F9A:
 	ld e, (xwa)
 	ldda32 xwa, 48300
 	lds bc, 1
-	calr LABEL_FD5E3A
+	calr MIDI_ReadChannelParam
 	ldto_berp A, 0xFB
 	extz wa
 	muls wa, 0x6
@@ -315308,7 +315404,7 @@ LABEL_FD6054:
 	ldda32 xwa, 48300
 	lds bc, 6
 	ld de, hl
-	calr LABEL_FD5E3A
+	calr MIDI_ReadChannelParam
 	ldto_berp A, 0xFB
 	extz wa
 	muls wa, 0x6
@@ -315318,7 +315414,7 @@ LABEL_FD6054:
 	ld e, (xwa + 1)
 	ldda32 xwa, 48300
 	lds bc, 0
-	calr LABEL_FD5E3A
+	calr MIDI_ReadChannelParam
 	ldto_berp A, 0xFB
 	extz wa
 	muls wa, 0x6
@@ -315330,7 +315426,7 @@ LABEL_FD6054:
 	jr z, LABEL_FD60E6
 	ldda32 xwa, 48300
 	lds bc, 0
-	calr LABEL_FD5E3A
+	calr MIDI_ReadChannelParam
 	ldto_berp A, 0xFB
 	extz wa
 	muls wa, 0x6
@@ -315341,7 +315437,7 @@ LABEL_FD6054:
 	ld e, (xwa)
 	ldda32 xwa, 48300
 	lds bc, 1
-	calr LABEL_FD5E3A
+	calr MIDI_ReadChannelParam
 	ldto_berp A, 0xFB
 	extz wa
 	muls wa, 0x6
@@ -315390,7 +315486,7 @@ LABEL_FD612A:
 	ldda32 xwa, 48300
 	lds bc, 7
 	ld de, hl
-	calr LABEL_FD5E3A
+	calr MIDI_ReadChannelParam
 	ldto_berp A, 0xFB
 	extz wa
 	muls wa, 0x6
@@ -315400,7 +315496,7 @@ LABEL_FD612A:
 	ld e, (xwa + 1)
 	ldda32 xwa, 48300
 	lds bc, 0
-	calr LABEL_FD5E3A
+	calr MIDI_ReadChannelParam
 	ldto_berp A, 0xFB
 	extz wa
 	muls wa, 0x6
@@ -315412,7 +315508,7 @@ LABEL_FD612A:
 	jr z, LABEL_FD61BC
 	ldda32 xwa, 48300
 	lds bc, 0
-	calr LABEL_FD5E3A
+	calr MIDI_ReadChannelParam
 	ldto_berp A, 0xFB
 	extz wa
 	muls wa, 0x6
@@ -315423,7 +315519,7 @@ LABEL_FD612A:
 	ld e, (xwa)
 	ldda32 xwa, 48300
 	lds bc, 1
-	calr LABEL_FD5E3A
+	calr MIDI_ReadChannelParam
 	ldto_berp A, 0xFB
 	extz wa
 	muls wa, 0x6
@@ -315472,7 +315568,7 @@ LABEL_FD6200:
 	ldda32 xwa, 48300
 	ldw bc, 0x8
 	ld de, hl
-	calr LABEL_FD5E3A
+	calr MIDI_ReadChannelParam
 	ldto_berp A, 0xFB
 	extz wa
 	muls wa, 0x6
@@ -315482,7 +315578,7 @@ LABEL_FD6200:
 	ld e, (xwa + 1)
 	ldda32 xwa, 48300
 	lds bc, 0
-	calr LABEL_FD5E3A
+	calr MIDI_ReadChannelParam
 	ldto_berp A, 0xFB
 	extz wa
 	muls wa, 0x6
@@ -315494,7 +315590,7 @@ LABEL_FD6200:
 	jr z, LABEL_FD6293
 	ldda32 xwa, 48300
 	lds bc, 0
-	calr LABEL_FD5E3A
+	calr MIDI_ReadChannelParam
 	ldto_berp A, 0xFB
 	extz wa
 	muls wa, 0x6
@@ -315505,7 +315601,7 @@ LABEL_FD6200:
 	ld e, (xwa)
 	ldda32 xwa, 48300
 	lds bc, 1
-	calr LABEL_FD5E3A
+	calr MIDI_ReadChannelParam
 	ldto_berp A, 0xFB
 	extz wa
 	muls wa, 0x6
@@ -315554,7 +315650,7 @@ LABEL_FD62D7:
 	ldda32 xwa, 48300
 	ldw bc, 0x9
 	ld de, hl
-	calr LABEL_FD5E3A
+	calr MIDI_ReadChannelParam
 	ldto_berp A, 0xFB
 	extz wa
 	muls wa, 0x6
@@ -315564,7 +315660,7 @@ LABEL_FD62D7:
 	ld e, (xwa + 1)
 	ldda32 xwa, 48300
 	lds bc, 0
-	calr LABEL_FD5E3A
+	calr MIDI_ReadChannelParam
 	ldto_berp A, 0xFB
 	extz wa
 	muls wa, 0x6
@@ -315576,7 +315672,7 @@ LABEL_FD62D7:
 	jr z, LABEL_FD636A
 	ldda32 xwa, 48300
 	lds bc, 0
-	calr LABEL_FD5E3A
+	calr MIDI_ReadChannelParam
 	ldto_berp A, 0xFB
 	extz wa
 	muls wa, 0x6
@@ -315587,7 +315683,7 @@ LABEL_FD62D7:
 	ld e, (xwa)
 	ldda32 xwa, 48300
 	lds bc, 1
-	calr LABEL_FD5E3A
+	calr MIDI_ReadChannelParam
 	ldto_berp A, 0xFB
 	extz wa
 	muls wa, 0x6
@@ -315636,7 +315732,7 @@ LABEL_FD63AE:
 	ldda32 xwa, 48300
 	ldw bc, 0xA
 	ld de, hl
-	calr LABEL_FD5E3A
+	calr MIDI_ReadChannelParam
 	ldto_berp A, 0xFB
 	extz wa
 	muls wa, 0x6
@@ -315646,7 +315742,7 @@ LABEL_FD63AE:
 	ld e, (xwa + 1)
 	ldda32 xwa, 48300
 	lds bc, 0
-	calr LABEL_FD5E3A
+	calr MIDI_ReadChannelParam
 	ldto_berp A, 0xFB
 	extz wa
 	muls wa, 0x6
@@ -315658,7 +315754,7 @@ LABEL_FD63AE:
 	jr z, LABEL_FD6441
 	ldda32 xwa, 48300
 	lds bc, 0
-	calr LABEL_FD5E3A
+	calr MIDI_ReadChannelParam
 	ldto_berp A, 0xFB
 	extz wa
 	muls wa, 0x6
@@ -315669,7 +315765,7 @@ LABEL_FD63AE:
 	ld e, (xwa)
 	ldda32 xwa, 48300
 	lds bc, 1
-	calr LABEL_FD5E3A
+	calr MIDI_ReadChannelParam
 	ldto_berp A, 0xFB
 	extz wa
 	muls wa, 0x6
@@ -315718,7 +315814,7 @@ LABEL_FD6485:
 	ldda32 xwa, 48300
 	ldw bc, 0xB
 	ld de, hl
-	calr LABEL_FD5E3A
+	calr MIDI_ReadChannelParam
 	ldto_berp A, 0xFB
 	extz wa
 	muls wa, 0x6
@@ -315728,7 +315824,7 @@ LABEL_FD6485:
 	ld e, (xwa + 1)
 	ldda32 xwa, 48300
 	lds bc, 0
-	calr LABEL_FD5E3A
+	calr MIDI_ReadChannelParam
 	ldto_berp A, 0xFB
 	extz wa
 	muls wa, 0x6
@@ -315740,7 +315836,7 @@ LABEL_FD6485:
 	jr z, LABEL_FD6518
 	ldda32 xwa, 48300
 	lds bc, 0
-	calr LABEL_FD5E3A
+	calr MIDI_ReadChannelParam
 	ldto_berp A, 0xFB
 	extz wa
 	muls wa, 0x6
@@ -315751,7 +315847,7 @@ LABEL_FD6485:
 	ld e, (xwa)
 	ldda32 xwa, 48300
 	lds bc, 1
-	calr LABEL_FD5E3A
+	calr MIDI_ReadChannelParam
 	ldto_berp A, 0xFB
 	extz wa
 	muls wa, 0x6
@@ -315800,7 +315896,7 @@ LABEL_FD655C:
 	ldda32 xwa, 48300
 	ldw bc, 0xC
 	ld de, hl
-	calr LABEL_FD5E3A
+	calr MIDI_ReadChannelParam
 	ldto_berp A, 0xFB
 	extz wa
 	muls wa, 0x6
@@ -315810,7 +315906,7 @@ LABEL_FD655C:
 	ld e, (xwa + 1)
 	ldda32 xwa, 48300
 	lds bc, 0
-	calr LABEL_FD5E3A
+	calr MIDI_ReadChannelParam
 	ldto_berp A, 0xFB
 	extz wa
 	muls wa, 0x6
@@ -315822,7 +315918,7 @@ LABEL_FD655C:
 	jr z, LABEL_FD65EF
 	ldda32 xwa, 48300
 	lds bc, 0
-	calr LABEL_FD5E3A
+	calr MIDI_ReadChannelParam
 	ldto_berp A, 0xFB
 	extz wa
 	muls wa, 0x6
@@ -315833,7 +315929,7 @@ LABEL_FD655C:
 	ld e, (xwa)
 	ldda32 xwa, 48300
 	lds bc, 1
-	calr LABEL_FD5E3A
+	calr MIDI_ReadChannelParam
 	ldto_berp A, 0xFB
 	extz wa
 	muls wa, 0x6
@@ -315882,7 +315978,7 @@ LABEL_FD6632:
 	extz hl
 	ldw bc, 0xD
 	ld de, hl
-	calr LABEL_FD5E3A
+	calr MIDI_ReadChannelParam
 	ldto_berp A, 0xFB
 	extz wa
 	muls wa, 0x6
@@ -315892,7 +315988,7 @@ LABEL_FD6632:
 	ld e, (xwa + 1)
 	ldda32 xwa, 48300
 	lds bc, 0
-	calr LABEL_FD5E3A
+	calr MIDI_ReadChannelParam
 	ldto_berp A, 0xFB
 	extz wa
 	muls wa, 0x6
@@ -315904,7 +316000,7 @@ LABEL_FD6632:
 	jr z, LABEL_FD66C1
 	ldda32 xwa, 48300
 	lds bc, 0
-	calr LABEL_FD5E3A
+	calr MIDI_ReadChannelParam
 	ldto_berp A, 0xFB
 	extz wa
 	muls wa, 0x6
@@ -315915,7 +316011,7 @@ LABEL_FD6632:
 	ld e, (xwa)
 	ldda32 xwa, 48300
 	lds bc, 1
-	calr LABEL_FD5E3A
+	calr MIDI_ReadChannelParam
 	ldto_berp A, 0xFB
 	extz wa
 	muls wa, 0x6
@@ -315963,7 +316059,7 @@ LABEL_FD6705:
 	extz hl
 	ldw bc, 0xE
 	ld de, hl
-	calr LABEL_FD5E3A
+	calr MIDI_ReadChannelParam
 	ldto_berp A, 0xFB
 	extz wa
 	muls wa, 0x6
@@ -315973,7 +316069,7 @@ LABEL_FD6705:
 	ld e, (xwa + 1)
 	ldda32 xwa, 48300
 	lds bc, 0
-	calr LABEL_FD5E3A
+	calr MIDI_ReadChannelParam
 	ldto_berp A, 0xFB
 	extz wa
 	muls wa, 0x6
@@ -315985,7 +316081,7 @@ LABEL_FD6705:
 	jr z, LABEL_FD6794
 	ldda32 xwa, 48300
 	lds bc, 0
-	calr LABEL_FD5E3A
+	calr MIDI_ReadChannelParam
 	ldto_berp A, 0xFB
 	extz wa
 	muls wa, 0x6
@@ -315996,7 +316092,7 @@ LABEL_FD6705:
 	ld e, (xwa)
 	ldda32 xwa, 48300
 	lds bc, 1
-	calr LABEL_FD5E3A
+	calr MIDI_ReadChannelParam
 	ldto_berp A, 0xFB
 	extz wa
 	muls wa, 0x6
@@ -316009,7 +316105,7 @@ LABEL_FD6705:
 	lds bc, 2
 
 LABEL_FD6791:
-	calr LABEL_FD5E3A
+	calr MIDI_ReadChannelParam
 
 LABEL_FD6794:
 	pop_werp 0xFA
@@ -316084,12 +316180,12 @@ LABEL_FD682B:
 	ldto_berp E, 0xF8
 	extz de
 	ldw bc, 0xC
-	calr LABEL_FD5E3A
+	calr MIDI_ReadChannelParam
 	ldto_berp E, 0xF9
 	extz de
 	ldda32 xwa, 48300
 	ldw bc, 0xD
-	calr LABEL_FD5E3A
+	calr MIDI_ReadChannelParam
 	ldto_berp E, 0xFA
 	extz de
 	ldda32 xwa, 48300
@@ -316133,7 +316229,7 @@ LABEL_FD686E:
 	ldw de, 0xE
 
 LABEL_FD68B3:
-	calr LABEL_FD5E3A
+	calr MIDI_ReadChannelParam
 
 LABEL_FD68B6:
 	pop xiz
@@ -316200,7 +316296,7 @@ LABEL_FD6940:
 	ldda32 xwa, 48300
 	lds bc, 4
 	ldw de, 0x11
-	calr LABEL_FD5E3A
+	calr MIDI_ReadChannelParam
 
 LABEL_FD6955:
 	pop_werp 0xFA
@@ -316239,7 +316335,7 @@ LABEL_FD699C:
 	extz hl
 	ldw bc, 0xF
 	ld de, hl
-	calr LABEL_FD5E3A
+	calr MIDI_ReadChannelParam
 	ldda32 xwa, 48212
 	lda xbc, (xwa + 15)
 	ld xhl, xbc
@@ -316272,7 +316368,7 @@ LABEL_FD69E2:
 	ldw de, 0x12
 
 LABEL_FD69E7:
-	calr LABEL_FD5E3A
+	calr MIDI_ReadChannelParam
 
 LABEL_FD69EA:
 	pop_werp 0xFA
@@ -316665,7 +316761,7 @@ LABEL_FD709F:
 	ldda32 xwa, 48300
 	lds bc, 4
 	lds de, 4
-	calr LABEL_FD5E3A
+	calr MIDI_ReadChannelParam
 	anddi8 1063, 211
 
 LABEL_FD70BE:
@@ -316686,7 +316782,7 @@ LABEL_FD70CD:
 	ldda32 xwa, 48300
 	lds bc, 4
 	lds de, 5
-	calr LABEL_FD5E3A
+	calr MIDI_ReadChannelParam
 	ret
 
 LABEL_FD70E3:	.ascii ":;<>"
@@ -317167,7 +317263,7 @@ LABEL_FD769D:
 	jr nz, LABEL_FD76B0
 	lds bc, 4
 	lds de, 0
-	call LABEL_FD5E3A
+	call MIDI_ReadChannelParam
 	jr LABEL_FD7709
 
 LABEL_FD76B0:
@@ -317916,7 +318012,7 @@ LABEL_FD8077:
 	ldda32	xwa, 48300
 	lds	bc, 3
 	ldw de, 0x000D
-	call LABEL_FD5E3A
+	call MIDI_ReadChannelParam
 	lds	wa, 4
 	call LABEL_FD5CAC
 	cp hl, 0xFFFF
@@ -317931,7 +318027,7 @@ LABEL_FD8077:
 	ldda32	xwa, 48300
 	lds	bc, 3
 	ldw de, 0x000E
-	call LABEL_FD5E3A
+	call MIDI_ReadChannelParam
 	ret
 
 
@@ -329986,7 +330082,7 @@ LABEL_FE0354:
 	st_dri3b W, 0xE1, 0xC4, 0x00
 	ld xde, xwa
 	ld xwa, xhl
-	call LABEL_FE5C2C
+	call NoteMap_MergeEntries
 	cps l, 0
 	jr z, LABEL_FE03B5
 	lda xwa, (xsp + 8)
@@ -330006,7 +330102,7 @@ LABEL_FE03B5:
 	st_dri3b W, 0xE1, 0xC8, 0x00
 	ld xde, xwa
 	ld xwa, xhl
-	call LABEL_FE5C2C
+	call NoteMap_MergeEntries
 	cps l, 0
 	jr z, LABEL_FE03E8
 	lda xwa, (xsp + 8)
@@ -330026,7 +330122,7 @@ LABEL_FE03E8:
 	st_dri3b W, 0xE1, 0xCC, 0x00
 	ld xde, xwa
 	ld xwa, xhl
-	call LABEL_FE5C2C
+	call NoteMap_MergeEntries
 	cps l, 0
 	jr z, LABEL_FE041B
 	lda xwa, (xsp + 8)
@@ -330046,7 +330142,7 @@ LABEL_FE041B:
 	st_dri3b W, 0xE1, 0xD0, 0x00
 	ld xde, xwa
 	ld xwa, xhl
-	call LABEL_FE5C2C
+	call NoteMap_MergeEntries
 	cps l, 0
 	jrl z, LABEL_FE04CE
 	lda xwa, (xsp + 8)
@@ -330084,7 +330180,7 @@ LABEL_FE0480:
 	st_dri3b W, 0xE1, 0xD0, 0x00
 	ld xde, xwa
 	ld xwa, xhl
-	call LABEL_FE5C2C
+	call NoteMap_MergeEntries
 	cps l, 0
 	jr z, LABEL_FE04B4
 	lda xwa, (xsp + 8)
@@ -330173,7 +330269,7 @@ LABEL_FE0544:
 	st_dri3b W, 0xE1, 0xC4, 0x00
 	ld xde, xwa
 	ld xwa, xhl
-	call LABEL_FE5C2C
+	call NoteMap_MergeEntries
 	cps l, 0
 	jr z, LABEL_FE05A4
 	lda xwa, (xsp + 8)
@@ -330193,7 +330289,7 @@ LABEL_FE05A4:
 	st_dri3b W, 0xE1, 0xC8, 0x00
 	ld xde, xwa
 	ld xwa, xhl
-	call LABEL_FE5C2C
+	call NoteMap_MergeEntries
 	cps l, 0
 	jr z, LABEL_FE05D7
 	lda xwa, (xsp + 8)
@@ -330213,7 +330309,7 @@ LABEL_FE05D7:
 	st_dri3b W, 0xE1, 0xCC, 0x00
 	ld xde, xwa
 	ld xwa, xhl
-	call LABEL_FE5C2C
+	call NoteMap_MergeEntries
 	cps l, 0
 	jr z, LABEL_FE060A
 	lda xwa, (xsp + 8)
@@ -330233,7 +330329,7 @@ LABEL_FE060A:
 	st_dri3b W, 0xE1, 0xD0, 0x00
 	ld xde, xwa
 	ld xwa, xhl
-	call LABEL_FE5C2C
+	call NoteMap_MergeEntries
 	cps l, 0
 	jrl z, LABEL_FE06BC
 	lda xwa, (xsp + 8)
@@ -330271,7 +330367,7 @@ LABEL_FE066E:
 	st_dri3b W, 0xE1, 0xD0, 0x00
 	ld xde, xwa
 	ld xwa, xhl
-	call LABEL_FE5C2C
+	call NoteMap_MergeEntries
 	cps l, 0
 	jr z, LABEL_FE06A2
 	lda xwa, (xsp + 8)
@@ -330460,7 +330556,7 @@ LABEL_FE0808:
 	st_dri3b W, 0xE1, 0xC4, 0x00
 	ld xde, xwa
 	ld xwa, xhl
-	call LABEL_FE5C2C
+	call NoteMap_MergeEntries
 	cps l, 0
 	jr z, LABEL_FE084F
 	ld xwa, 0xCB7A
@@ -330478,7 +330574,7 @@ LABEL_FE084F:
 	st_dri3b W, 0xE1, 0xC8, 0x00
 	ld xde, xwa
 	ld xwa, xhl
-	call LABEL_FE5C2C
+	call NoteMap_MergeEntries
 	cps l, 0
 	jr z, LABEL_FE0882
 	ld xwa, 0xCB7A
@@ -330496,7 +330592,7 @@ LABEL_FE0882:
 	st_dri3b W, 0xE1, 0xCC, 0x00
 	ld xde, xwa
 	ld xwa, xhl
-	call LABEL_FE5C2C
+	call NoteMap_MergeEntries
 	cps l, 0
 	jr z, LABEL_FE08B5
 	ld xwa, 0xCB7A
@@ -330514,7 +330610,7 @@ LABEL_FE08B5:
 	st_dri3b W, 0xE1, 0xD0, 0x00
 	ld xde, xwa
 	ld xwa, xhl
-	call LABEL_FE5C2C
+	call NoteMap_MergeEntries
 	cps l, 0
 	jrl z, LABEL_FE09AA
 	ld xwa, 0xCB7A
@@ -330535,7 +330631,7 @@ LABEL_FE08EE:
 	lda xwa, (xsp + 10)
 	ld xde, xwa
 	ld xwa, xhl
-	call LABEL_FE5C2C
+	call NoteMap_MergeEntries
 	cps l, 0
 	jr z, LABEL_FE0923
 	ld xwa, 0xCB7A
@@ -330547,7 +330643,7 @@ LABEL_FE0923:
 	lda xwa, (xsp + 6)
 	ld xde, xwa
 	ld xwa, xhl
-	call LABEL_FE5C2C
+	call NoteMap_MergeEntries
 	cps l, 0
 	jr z, LABEL_FE09AA
 	ld xwa, 0xCB7A
@@ -330573,7 +330669,7 @@ LABEL_FE095E:
 	st_dri3b W, 0xE1, 0xD0, 0x00
 	ld xde, xwa
 	ld xwa, xhl
-	call LABEL_FE5C2C
+	call NoteMap_MergeEntries
 	cps l, 0
 	jr z, LABEL_FE0992
 	ld xwa, 0xCB7A
@@ -331150,7 +331246,7 @@ LABEL_FE0F00:
 	st_dri3b W, 0xF9, 0xC4, 0x00
 	ld xde, xwa
 	ld xwa, xhl
-	call LABEL_FE5C2C
+	call NoteMap_MergeEntries
 	cps l, 0
 	jr z, LABEL_FE0F5C
 	lda xwa, (xsp + 8)
@@ -331168,7 +331264,7 @@ LABEL_FE0F5C:
 	st_dri3b W, 0xF9, 0xC8, 0x00
 	ld xde, xwa
 	ld xwa, xhl
-	call LABEL_FE5C2C
+	call NoteMap_MergeEntries
 	cps l, 0
 	jr z, LABEL_FE0F88
 	lda xwa, (xsp + 8)
@@ -331186,7 +331282,7 @@ LABEL_FE0F88:
 	st_dri3b W, 0xF9, 0xCC, 0x00
 	ld xde, xwa
 	ld xwa, xhl
-	call LABEL_FE5C2C
+	call NoteMap_MergeEntries
 	cps l, 0
 	jr z, LABEL_FE0FB4
 	lda xwa, (xsp + 8)
@@ -331204,7 +331300,7 @@ LABEL_FE0FB4:
 	st_dri3b W, 0xF9, 0xD0, 0x00
 	ld xde, xwa
 	ld xwa, xhl
-	call LABEL_FE5C2C
+	call NoteMap_MergeEntries
 	cps l, 0
 	jr z, LABEL_FE104F
 	lda xwa, (xsp + 8)
@@ -331239,7 +331335,7 @@ LABEL_FE100C:
 	st_dri3b W, 0xF9, 0xD0, 0x00
 	ld xde, xwa
 	ld xwa, xhl
-	call LABEL_FE5C2C
+	call NoteMap_MergeEntries
 	cps l, 0
 	jr z, LABEL_FE1039
 	lda xwa, (xsp + 8)
@@ -331294,7 +331390,7 @@ LABEL_FE106A:
 	st_dri3b W, 0xF9, 0xC4, 0x00
 	ld xde, xwa
 	ld xwa, xhl
-	call LABEL_FE5C2C
+	call NoteMap_MergeEntries
 	cps l, 0
 	jr z, LABEL_FE10CC
 	lda xwa, (xsp + 4)
@@ -331310,7 +331406,7 @@ LABEL_FE10CC:
 	st_dri3b W, 0xF9, 0xC4, 0x00
 	ld xde, xwa
 	ld xwa, xhl
-	call LABEL_FE5C2C
+	call NoteMap_MergeEntries
 	cps l, 0
 	jr z, LABEL_FE10F4
 	lda xwa, (xsp + 4)
@@ -331326,7 +331422,7 @@ LABEL_FE10F4:
 	st_dri3b W, 0xF9, 0xCC, 0x00
 	ld xde, xwa
 	ld xwa, xhl
-	call LABEL_FE5C2C
+	call NoteMap_MergeEntries
 	cps l, 0
 	jr z, LABEL_FE111C
 	lda xwa, (xsp + 4)
@@ -331342,7 +331438,7 @@ LABEL_FE111C:
 	st_dri3b W, 0xF9, 0xD0, 0x00
 	ld xde, xwa
 	ld xwa, xhl
-	call LABEL_FE5C2C
+	call NoteMap_MergeEntries
 	cps l, 0
 	jr z, LABEL_FE1186
 	lda xwa, (xsp + 4)
@@ -331359,7 +331455,7 @@ LABEL_FE1147:
 	st_dri3b W, 0xF9, 0xD0, 0x00
 	ld xde, xwa
 	ld xwa, xhl
-	call LABEL_FE5C2C
+	call NoteMap_MergeEntries
 	cps l, 0
 	jr z, LABEL_FE1170
 	lda xwa, (xsp + 4)
@@ -339035,7 +339131,16 @@ LABEL_FE5C28:
 	inc 6, xsp
 	ret
 
-LABEL_FE5C2C:
+; ============================================================================
+; NoteMap_MergeEntries - Filter and merge note mapping table entries
+; ============================================================================
+; Input:  XWA = destination table, XBC = source table, XDE = filter params
+; Output: L = count of merged entries
+; Copies 3-byte header, then iterates source entries (5 bytes each),
+; filtering by note range (upper/lower bounds via bit masking).
+; Matching entries are copied using ldirw + ldi85 (5-byte copy).
+; ============================================================================
+NoteMap_MergeEntries:
 	dec 4, xsp
 	push xiz
 	ld (xsp + 4), xde
@@ -340358,7 +340463,7 @@ LABEL_FE678C:
 	ldada xwa, 50216
 	ld xde, xwa
 	ld xwa, xhl
-	call LABEL_FE5C2C
+	call NoteMap_MergeEntries
 	cps l, 0
 	jr z, LABEL_FE67F1
 	lda xwa, (xsp + 2)
@@ -340376,7 +340481,7 @@ LABEL_FE67F1:
 	ldada xwa, 50220
 	ld xde, xwa
 	ld xwa, xhl
-	call LABEL_FE5C2C
+	call NoteMap_MergeEntries
 	cps l, 0
 	jr z, LABEL_FE6820
 	lda xwa, (xsp + 2)
@@ -340394,7 +340499,7 @@ LABEL_FE6820:
 	ldada xwa, 50224
 	ld xde, xwa
 	ld xwa, xhl
-	call LABEL_FE5C2C
+	call NoteMap_MergeEntries
 	cps l, 0
 	jr z, LABEL_FE684F
 	lda xwa, (xsp + 2)
@@ -340412,7 +340517,7 @@ LABEL_FE684F:
 	ldada xwa, 50228
 	ld xde, xwa
 	ld xwa, xhl
-	call LABEL_FE5C2C
+	call NoteMap_MergeEntries
 	cps l, 0
 	jr z, LABEL_FE6883
 	lda xwa, (xsp + 2)
@@ -340437,7 +340542,7 @@ LABEL_FE6883:
 	ldada xwa, 49858
 	ld xde, xwa
 	ld xwa, xhl
-	call LABEL_FE5C2C
+	call NoteMap_MergeEntries
 	cps l, 0
 	jr z, LABEL_FE68C9
 	lda xwa, (xsp + 2)
@@ -340455,7 +340560,7 @@ LABEL_FE68C9:
 	ldada xwa, 49862
 	ld xde, xwa
 	ld xwa, xhl
-	call LABEL_FE5C2C
+	call NoteMap_MergeEntries
 	cps l, 0
 	jr z, LABEL_FE68F8
 	lda xwa, (xsp + 2)
@@ -340473,7 +340578,7 @@ LABEL_FE68F8:
 	ldada xwa, 49866
 	ld xde, xwa
 	ld xwa, xhl
-	call LABEL_FE5C2C
+	call NoteMap_MergeEntries
 	cps l, 0
 	jr z, LABEL_FE6927
 	lda xwa, (xsp + 2)
@@ -340491,7 +340596,7 @@ LABEL_FE6927:
 	ldada xwa, 49870
 	ld xde, xwa
 	ld xwa, xhl
-	call LABEL_FE5C2C
+	call NoteMap_MergeEntries
 	cps l, 0
 	jr z, LABEL_FE6957
 	lda xwa, (xsp + 2)
@@ -340514,7 +340619,7 @@ LABEL_FE6957:
 	ldada xwa, 49858
 	ld xde, xwa
 	ld xwa, xhl
-	call LABEL_FE5C2C
+	call NoteMap_MergeEntries
 	lda xwa, (xsp + 2)
 	ldada xbc, 49662
 	lds de, 0
@@ -340530,7 +340635,7 @@ LABEL_FE6994:
 	ldada xwa, 49862
 	ld xde, xwa
 	ld xwa, xhl
-	call LABEL_FE5C2C
+	call NoteMap_MergeEntries
 	lda xwa, (xsp + 2)
 	ldada xbc, 49662
 	lds de, 1
@@ -340546,7 +340651,7 @@ LABEL_FE69BF:
 	ldada xwa, 49866
 	ld xde, xwa
 	ld xwa, xhl
-	call LABEL_FE5C2C
+	call NoteMap_MergeEntries
 	lda xwa, (xsp + 2)
 	ldada xbc, 49662
 	lds de, 2
@@ -340562,7 +340667,7 @@ LABEL_FE69EA:
 	ldada xwa, 49870
 	ld xde, xwa
 	ld xwa, xhl
-	call LABEL_FE5C2C
+	call NoteMap_MergeEntries
 	lda xwa, (xsp + 2)
 	ldada xbc, 49662
 	ldw de, 0x15
@@ -340614,7 +340719,7 @@ LABEL_FE6A61:
 	ldada xwa, 49858
 	ld xde, xwa
 	ld xwa, xhl
-	call LABEL_FE5C2C
+	call NoteMap_MergeEntries
 	cps l, 0
 	jr z, LABEL_FE6ABC
 	lda xwa, (xsp + 2)
@@ -340632,7 +340737,7 @@ LABEL_FE6ABC:
 	ldada xwa, 49862
 	ld xde, xwa
 	ld xwa, xhl
-	call LABEL_FE5C2C
+	call NoteMap_MergeEntries
 	cps l, 0
 	jr z, LABEL_FE6AEB
 	lda xwa, (xsp + 2)
@@ -340650,7 +340755,7 @@ LABEL_FE6AEB:
 	ldada xwa, 49866
 	ld xde, xwa
 	ld xwa, xhl
-	call LABEL_FE5C2C
+	call NoteMap_MergeEntries
 	cps l, 0
 	jrl z, LABEL_FE6DE0
 	lda xwa, (xsp + 2)
@@ -340673,7 +340778,7 @@ LABEL_FE6B1F:
 	ldada xwa, 50216
 	ld xde, xwa
 	ld xwa, xhl
-	call LABEL_FE5C2C
+	call NoteMap_MergeEntries
 	cps l, 0
 	jr z, LABEL_FE6B60
 	lda xwa, (xsp + 2)
@@ -340691,7 +340796,7 @@ LABEL_FE6B60:
 	ldada xwa, 50220
 	ld xde, xwa
 	ld xwa, xhl
-	call LABEL_FE5C2C
+	call NoteMap_MergeEntries
 	cps l, 0
 	jr z, LABEL_FE6B8F
 	lda xwa, (xsp + 2)
@@ -340709,7 +340814,7 @@ LABEL_FE6B8F:
 	ldada xwa, 50224
 	ld xde, xwa
 	ld xwa, xhl
-	call LABEL_FE5C2C
+	call NoteMap_MergeEntries
 	cps l, 0
 	jr z, LABEL_FE6BBE
 	lda xwa, (xsp + 2)
@@ -340782,7 +340887,7 @@ LABEL_FE6C49:
 	st_dri3b B, 0x07, 0xE4, 0xE0
 	ld xwa, xix
 	ld xbc, xhl
-	call LABEL_FE5C2C
+	call NoteMap_MergeEntries
 	cps l, 0
 	jrl z, LABEL_FE6DE0
 	lda xwa, (xsp + 2)
@@ -340877,7 +340982,7 @@ LABEL_FE6D47:
 	st_dri3b B, 0x07, 0xE4, 0xE0
 	ld xwa, xix
 	ld xbc, xhl
-	call LABEL_FE5C2C
+	call NoteMap_MergeEntries
 	cps l, 0
 	jr z, LABEL_FE6DE0
 	lda xwa, (xsp + 2)
@@ -340969,7 +341074,7 @@ LABEL_FE6E35:
 	ldada xwa, 50216
 	ld xde, xwa
 	ld xwa, xhl
-	call LABEL_FE5C2C
+	call NoteMap_MergeEntries
 	cps l, 0
 	jr z, LABEL_FE6E9A
 	lda xwa, (xsp + 2)
@@ -340987,7 +341092,7 @@ LABEL_FE6E9A:
 	ldada xwa, 50220
 	ld xde, xwa
 	ld xwa, xhl
-	call LABEL_FE5C2C
+	call NoteMap_MergeEntries
 	cps l, 0
 	jr z, LABEL_FE6EC9
 	lda xwa, (xsp + 2)
@@ -341005,7 +341110,7 @@ LABEL_FE6EC9:
 	ldada xwa, 50224
 	ld xde, xwa
 	ld xwa, xhl
-	call LABEL_FE5C2C
+	call NoteMap_MergeEntries
 	cps l, 0
 	jr z, LABEL_FE6EF8
 	lda xwa, (xsp + 2)
@@ -341023,7 +341128,7 @@ LABEL_FE6EF8:
 	ldada xwa, 50228
 	ld xde, xwa
 	ld xwa, xhl
-	call LABEL_FE5C2C
+	call NoteMap_MergeEntries
 	cps l, 0
 	jr z, LABEL_FE6F2C
 	lda xwa, (xsp + 2)
@@ -341048,7 +341153,7 @@ LABEL_FE6F2C:
 	ldada xwa, 49858
 	ld xde, xwa
 	ld xwa, xhl
-	call LABEL_FE5C2C
+	call NoteMap_MergeEntries
 	cps l, 0
 	jr z, LABEL_FE6F72
 	lda xwa, (xsp + 2)
@@ -341066,7 +341171,7 @@ LABEL_FE6F72:
 	ldada xwa, 49862
 	ld xde, xwa
 	ld xwa, xhl
-	call LABEL_FE5C2C
+	call NoteMap_MergeEntries
 	cps l, 0
 	jr z, LABEL_FE6FA1
 	lda xwa, (xsp + 2)
@@ -341084,7 +341189,7 @@ LABEL_FE6FA1:
 	ldada xwa, 49866
 	ld xde, xwa
 	ld xwa, xhl
-	call LABEL_FE5C2C
+	call NoteMap_MergeEntries
 	cps l, 0
 	jr z, LABEL_FE6FD0
 	lda xwa, (xsp + 2)
@@ -341102,7 +341207,7 @@ LABEL_FE6FD0:
 	ldada xwa, 49870
 	ld xde, xwa
 	ld xwa, xhl
-	call LABEL_FE5C2C
+	call NoteMap_MergeEntries
 	cps l, 0
 	jr z, LABEL_FE7000
 	lda xwa, (xsp + 2)
@@ -341125,7 +341230,7 @@ LABEL_FE7000:
 	ldada xwa, 49858
 	ld xde, xwa
 	ld xwa, xhl
-	call LABEL_FE5C2C
+	call NoteMap_MergeEntries
 	lda xwa, (xsp + 2)
 	ldada xbc, 49662
 	lds de, 0
@@ -341141,7 +341246,7 @@ LABEL_FE703D:
 	ldada xwa, 49862
 	ld xde, xwa
 	ld xwa, xhl
-	call LABEL_FE5C2C
+	call NoteMap_MergeEntries
 	lda xwa, (xsp + 2)
 	ldada xbc, 49662
 	lds de, 1
@@ -341157,7 +341262,7 @@ LABEL_FE7068:
 	ldada xwa, 49866
 	ld xde, xwa
 	ld xwa, xhl
-	call LABEL_FE5C2C
+	call NoteMap_MergeEntries
 	lda xwa, (xsp + 2)
 	ldada xbc, 49662
 	lds de, 2
@@ -341173,7 +341278,7 @@ LABEL_FE7093:
 	ldada xwa, 49870
 	ld xde, xwa
 	ld xwa, xhl
-	call LABEL_FE5C2C
+	call NoteMap_MergeEntries
 	lda xwa, (xsp + 2)
 	ldada xbc, 49662
 	ldw de, 0x15
@@ -341225,7 +341330,7 @@ LABEL_FE710A:
 	ldada xwa, 49858
 	ld xde, xwa
 	ld xwa, xhl
-	call LABEL_FE5C2C
+	call NoteMap_MergeEntries
 	cps l, 0
 	jr z, LABEL_FE7165
 	lda xwa, (xsp + 2)
@@ -341243,7 +341348,7 @@ LABEL_FE7165:
 	ldada xwa, 49862
 	ld xde, xwa
 	ld xwa, xhl
-	call LABEL_FE5C2C
+	call NoteMap_MergeEntries
 	cps l, 0
 	jr z, LABEL_FE7194
 	lda xwa, (xsp + 2)
@@ -341261,7 +341366,7 @@ LABEL_FE7194:
 	ldada xwa, 49866
 	ld xde, xwa
 	ld xwa, xhl
-	call LABEL_FE5C2C
+	call NoteMap_MergeEntries
 	cps l, 0
 	jrl z, LABEL_FE7281
 	lda xwa, (xsp + 2)
@@ -341284,7 +341389,7 @@ LABEL_FE71C8:
 	ldada xwa, 50216
 	ld xde, xwa
 	ld xwa, xhl
-	call LABEL_FE5C2C
+	call NoteMap_MergeEntries
 	cps l, 0
 	jr z, LABEL_FE7209
 	lda xwa, (xsp + 2)
@@ -341302,7 +341407,7 @@ LABEL_FE7209:
 	ldada xwa, 50220
 	ld xde, xwa
 	ld xwa, xhl
-	call LABEL_FE5C2C
+	call NoteMap_MergeEntries
 	cps l, 0
 	jr z, LABEL_FE7238
 	lda xwa, (xsp + 2)
@@ -341320,7 +341425,7 @@ LABEL_FE7238:
 	ldada xwa, 50224
 	ld xde, xwa
 	ld xwa, xhl
-	call LABEL_FE5C2C
+	call NoteMap_MergeEntries
 	cps l, 0
 	jr z, LABEL_FE7267
 	lda xwa, (xsp + 2)
@@ -341397,7 +341502,7 @@ LABEL_FE7310:	; NOTE: nothing seems to call here, but I saw this value on VGA un
 	st_dri3b B, 0x07, 0xE4, 0xE0
 	ld xwa, xix
 	ld xbc, xhl
-	call LABEL_FE5C2C
+	call NoteMap_MergeEntries
 	cps l, 0
 	jrl z, LABEL_FE7456
 	lda xwa, (xsp + 2)
@@ -341484,7 +341589,7 @@ LABEL_FE73D7:
 	st_dri3b B, 0x07, 0xE4, 0xE0
 	ld xwa, xix
 	ld xbc, xhl
-	call LABEL_FE5C2C
+	call NoteMap_MergeEntries
 	cps l, 0
 	jr z, LABEL_FE7456
 	lda xwa, (xsp + 2)
@@ -341553,7 +341658,7 @@ LABEL_FE747A:
 	ldada xwa, 50216
 	ld xde, xwa
 	ld xwa, xhl
-	call LABEL_FE5C2C
+	call NoteMap_MergeEntries
 	cps l, 0
 	jr z, LABEL_FE74DE
 	lda xwa, (xsp)
@@ -341571,7 +341676,7 @@ LABEL_FE74DE:
 	ldada xwa, 50220
 	ld xde, xwa
 	ld xwa, xhl
-	call LABEL_FE5C2C
+	call NoteMap_MergeEntries
 	cps l, 0
 	jr z, LABEL_FE750B
 	lda xwa, (xsp)
@@ -341589,7 +341694,7 @@ LABEL_FE750B:
 	ldada xwa, 50224
 	ld xde, xwa
 	ld xwa, xhl
-	call LABEL_FE5C2C
+	call NoteMap_MergeEntries
 	cps l, 0
 	jr z, LABEL_FE7538
 	lda xwa, (xsp)
@@ -341607,7 +341712,7 @@ LABEL_FE7538:
 	ldada xwa, 50228
 	ld xde, xwa
 	ld xwa, xhl
-	call LABEL_FE5C2C
+	call NoteMap_MergeEntries
 	cps l, 0
 	jrl z, LABEL_FE75E5
 	lda xwa, (xsp)
@@ -341643,7 +341748,7 @@ LABEL_FE759A:
 	ldada xwa, 50228
 	ld xde, xwa
 	ld xwa, xhl
-	call LABEL_FE5C2C
+	call NoteMap_MergeEntries
 	cps l, 0
 	jr z, LABEL_FE75CC
 	lda xwa, (xsp)
@@ -355608,7 +355713,7 @@ LABEL_FF0F35:
 	push xiz
 	ld xiz, (xsp + 8)
 	push xiz
-	call LABEL_FF0FA0
+	call Strlen
 	pushw hl
 	ld xwa, (xsp + 18)
 	push xwa
@@ -355657,7 +355762,16 @@ LABEL_FF0F90:
 	subdm32_24 251176, xwa
 	ret
 
-LABEL_FF0FA0:
+; ============================================================================
+; Strlen - Compute string length (C runtime)
+; ============================================================================
+; Input:  XWA = pointer to null-terminated string (pushed on stack)
+; Output: HL = length of string (excluding null terminator)
+;         Returns 0xFFFF if null terminator not found
+; Uses AudioCmd_MemChr to search for 0x00 byte, then computes result - start.
+; Located between Strcpy and Memset (standard C library functions).
+; ============================================================================
+Strlen:
 	push xiz
 	pushw 0xFFFF
 	pushw 0x0
@@ -356020,7 +356134,7 @@ AudioCmd_Percent_PadRightLoop:
 	ld xwa, (xwa - 4)
 	ld (xsp + 16), xwa
 	push xwa
-	call LABEL_FF0FA0
+	call Strlen
 	inc 4, xsp
 	ld wa, (xsp + 6)
 	bit 4, wa
@@ -356140,7 +356254,7 @@ AudioCmd_Decimal_ConvertToString:
 	calr AudioCmd_IntToStr
 	lda xwa, (xsp + 64)
 	push xwa
-	call LABEL_FF0FA0
+	call Strlen
 	lda xsp, (xsp + 12)
 	ld (xsp + 12), hl
 	ld xwa, (xsp + 16)
@@ -356335,7 +356449,7 @@ AudioCmd_Unsigned_ConvertToString:
 	calr AudioCmd_UIntToStr
 	lda xwa, (xsp + 52)
 	push xwa
-	call LABEL_FF0FA0
+	call Strlen
 	lda xsp, (xsp + 12)
 	ld iz, hl
 
@@ -356467,7 +356581,7 @@ AudioCmd_Hex_ConvertToString:
 	calr AudioCmd_HexToStr
 	lda xwa, (xsp + 42)
 	push xwa
-	call LABEL_FF0FA0
+	call Strlen
 	lda xsp, (xsp + 14)
 	ld (xsp + 18), hl
 
@@ -356642,7 +356756,7 @@ AudioCmd_Octal_ConvertToString:
 	calr AudioCmd_OctalToStr
 	lda xwa, (xsp + 28)
 	push xwa
-	call LABEL_FF0FA0
+	call Strlen
 	lda xsp, (xsp + 12)
 	ld iz, hl
 
@@ -357742,7 +357856,7 @@ AudioCmd_ESci_MantTrailLoop:
 	calr AudioCmd_IntToStr
 	ld xwa, (xsp + 30)
 	push xwa
-	call LABEL_FF0FA0
+	call Strlen
 	lda xsp, (xsp + 12)
 	ld iz, hl
 	ld c, (xsp + 10)
@@ -358826,7 +358940,7 @@ AudioCmd_StringLength:
 	push xiz
 	ld xiz, (xsp + 8)
 	push xiz
-	call LABEL_FF0FA0
+	call Strlen
 	inc 4, xsp
 	inc 1, hl
 	ld bc, hl
