@@ -83559,7 +83559,7 @@ LABEL_F1EDB2:
 	jp LABEL_FDBB2D
 
 EditSwRefresh:
-	call LABEL_FC3ED0
+	call CPanel_InitButtonState_SaveRegs
 	call RefreshSwEvent
 	jp 0xF98877
 
@@ -231576,7 +231576,7 @@ LABEL_F8B254:
 	jp LABEL_FDBB2D
 
 SignalProgressUpdate:
-	call LABEL_FC3ED0
+	call CPanel_InitButtonState_SaveRegs
 	jp RefreshSwEvent
 
 LABEL_F8B268:
@@ -281306,13 +281306,13 @@ LABEL_FB78DE:
 	jr z, EffectMode_DispatchUpdate
 	stdi8 36226, 0
 	calr LABEL_FB796E
-	calr LABEL_FB7C60
+	calr LED_SetAll_WithBlank
 	stdi8 58334, 16
 	jr EffectMode_DispatchUpdate
 
 LABEL_FB7904:
 	stdi8 36226, 0
-	calr LABEL_FB7C60
+	calr LED_SetAll_WithBlank
 	calr LABEL_FB796E
 
 EffectMode_DispatchUpdate:
@@ -281581,7 +281581,7 @@ LABEL_FB7BFF:
 	calr A_Short_Pause
 	calr A_Short_Pause
 	calr A_Short_Pause
-	jr LABEL_FB7C60
+	jr LED_SetAll_WithBlank
 
 LABEL_FB7C31:
 	push_werp 0xFA
@@ -281605,7 +281605,7 @@ LABEL_FB7C45:
 	pop_werp 0xFA
 	ret
 
-LABEL_FB7C60:
+LED_SetAll_WithBlank:
 	push_werp 0xFA
 	ldi_berp 0xFB, 0
 	jr LABEL_FB7C74
@@ -281657,7 +281657,7 @@ LABEL_FB7CCA:
 	push xiz
 	ldada xiz, 36204
 	ld xwa, xiz
-	call LABEL_FC6A12
+	call MIDI_ParseThreeByteParams
 	cp hl, 0xFFFF
 	jr z, LABEL_FB7CEC
 
@@ -281665,7 +281665,7 @@ LABEL_FB7CDB:
 	ld xwa, xiz
 	calr LABEL_FB7CEE
 	ld xwa, xiz
-	call LABEL_FC6A12
+	call MIDI_ParseThreeByteParams
 	cp hl, 0xFFFF
 	jr nz, LABEL_FB7CDB
 
@@ -287050,15 +287050,15 @@ LABEL_FBB9F4:
 	ld xde, xiz
 	call 0xFA4409
 	cp xiz, 0x4
-	jr z, LABEL_FBBA1A
+	jr z, GridBox_NotifySelection
 	cp xiz, 0x3
-	jr z, LABEL_FBBA1A
+	jr z, GridBox_NotifySelection
 	cp xiz, 0x5
-	jr z, LABEL_FBBA1A
+	jr z, GridBox_NotifySelection
 	or xiz, xiz
 	jrl nz, LABEL_FBBB46
 
-LABEL_FBBA1A:
+GridBox_NotifySelection:
 	ld xwa, (xsp + 4)
 	call 0xFA6266
 	lda xbc, (xhl + 22)
@@ -296903,7 +296903,7 @@ LABEL_FC2C44:
 
 MainSysControl_PostDispatchFinalize:
 	call RefreshSwEvent
-	call LABEL_FC3ED0
+	call CPanel_InitButtonState_SaveRegs
 	lds bc, 0
 
 LABEL_FC2C52:
@@ -297470,7 +297470,7 @@ CPanel_Poll:
 	calr CPanel_InterruptPoll_MainLoop
 	ret
 
-LABEL_FC3ED0:
+CPanel_InitButtonState_SaveRegs:
 	push xix
 	push xiz
 	push xhl
@@ -297517,7 +297517,7 @@ LABEL_FC4C4A:
 
 LABEL_FC4C4B:
 	ld xwa, 0xF9A0
-	calr LABEL_FC4DE1
+	calr DSPCfg_InitAllEntries
 	ld xwa, 0xFD60
 	calr LABEL_FC4E6E
 	call ToneGen_DispatchByMode
@@ -297531,7 +297531,7 @@ LABEL_FC4C63:
 
 LABEL_FC4C70:
 	ld xwa, xiz
-	calr LABEL_FC4DE1
+	calr DSPCfg_InitAllEntries
 	incm 1, (xsp + 4)
 	st_dri3b H, 0xF9, 0xC0, 0x03
 	cpw (xsp + 4), 0x50
@@ -297585,7 +297585,7 @@ LABEL_FC4CDE:
 	calr LABEL_FC4D7E
 	jrl LABEL_FC4D8E
 	ldada xwa, 62592
-	jrl LABEL_FC4DE1
+	jrl DSPCfg_InitAllEntries
 
 LABEL_FC4CEB:
 	jr __jrt_nop_FC4CED
@@ -297695,7 +297695,7 @@ LABEL_FC4DBB:
 	inc 4, xsp
 	ret
 
-LABEL_FC4DE1:
+DSPCfg_InitAllEntries:
 	dec 4, xsp
 	pushw iz
 	ld (xsp + 2), xwa
@@ -299278,7 +299278,7 @@ LABEL_FC69EE:
 
 LABEL_FC69FA:
 	ld xwa, xiz
-	calr LABEL_FC6A12
+	calr MIDI_ParseThreeByteParams
 	cp l, 0xFF
 	jr z, LABEL_FC6A10
 	ld xwa, xiz
@@ -299290,7 +299290,7 @@ LABEL_FC6A10:
 	pop xiz
 	ret
 
-LABEL_FC6A12:
+MIDI_ParseThreeByteParams:
 	dec 2, xsp
 	push xiz
 	ld xiz, xwa
@@ -302832,7 +302832,7 @@ LABEL_FC9644:
 	.byte 0xf6, 0xc1, 0x2f, 0x91, 0x21, 0xd8, 0x12, 0xc3
 	.byte 0x07, 0xec, 0xe0, 0x19, 0x32, 0x91, 0x0e
 
-LABEL_FC9663:
+SwbtWr_FlushAndAppendParams:
 	cpdi8 37162, 0
 	ret z
 	cpdi16 37086, 508
@@ -303069,7 +303069,7 @@ LABEL_FC99F3:
 	stdi8 37160, 0
 	stda8 37161, a
 	stdi8 37162, 127
-	calr LABEL_FC9663
+	calr SwbtWr_FlushAndAppendParams
 
 LABEL_FC9A19:
 	ldda8 a, 36576
@@ -303081,7 +303081,7 @@ LABEL_FC9A19:
 	stdi8 37160, 1
 	stda8 37161, a
 	stdi8 37162, 127
-	calr LABEL_FC9663
+	calr SwbtWr_FlushAndAppendParams
 	ret
 
 LABEL_FC9A40:
@@ -303822,7 +303822,7 @@ SwbtWr_WriteVoiceParam_PreserveRegs:
 	push xix
 	push xiy
 	push xiz
-	call LABEL_FC9663
+	call SwbtWr_FlushAndAppendParams
 	pop xiz
 	pop xiy
 	pop xix
