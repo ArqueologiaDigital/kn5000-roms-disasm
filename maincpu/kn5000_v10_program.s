@@ -90179,7 +90179,7 @@ LABEL_F23579:
 
 LABEL_F2358C:
 	call LABEL_F23CCA
-	call LABEL_F23D00
+	call SoundGen_ScanActiveVoiceBitmap
 	call FloppyIO_ReturnReady
 	jrl SeqPlay_FinishFloppyLoadAndStart
 
@@ -90234,7 +90234,7 @@ LABEL_F235E8:
 	jrl SMF_ReadLoopWithRetry
 
 LABEL_F235F3:
-	call LABEL_F23D7F
+	call FloppyIO_ReadMidiEventBytes
 	push xwa
 	push xbc
 	lds32 xbc, 0
@@ -90288,7 +90288,7 @@ LABEL_F23671:
 	jrl LABEL_F236AA
 
 SeqPlay_FinishFloppyLoadAndStart:
-	call LABEL_F23DF1
+	call VoiceChannels_LoadPartMapAndInitPan
 	stdi16 6699, 1
 	call LABEL_F23E38
 	call BitMapOut_RenderDisplay
@@ -90539,7 +90539,7 @@ LABEL_F23894:
 	call LABEL_F24137
 	cpdi8 3830, 0
 	jrl nz, LABEL_F238C3
-	call LABEL_F23DF1
+	call VoiceChannels_LoadPartMapAndInitPan
 
 LABEL_F238C3:
 	ret
@@ -91052,7 +91052,7 @@ LABEL_F23CCC:
 	call SoundGen_CaptureVoiceParams
 	ldb a, 0x82
 	call LABEL_F2466E
-	call LABEL_F24686
+	call SoundGen_StoreVoiceParamsToTables
 	popw hl
 
 LABEL_F23CF6:
@@ -91061,7 +91061,7 @@ LABEL_F23CF6:
 	jrl ule, LABEL_F23CCC
 	ret
 
-LABEL_F23D00:
+SoundGen_ScanActiveVoiceBitmap:
 	xor c, c
 
 LABEL_F23D02:
@@ -91131,12 +91131,12 @@ LABEL_F23D73:
 LABEL_F23D75:
 	cp c, w
 	jrl ule, LABEL_F23D39
-	call LABEL_F246A8
+	call MidiEvent_DispatchSetA
 
 LABEL_F23D7E:
 	ret
 
-LABEL_F23D7F:
+FloppyIO_ReadMidiEventBytes:
 	ld c, a
 	ldda8 a, 4010
 	ld l, a
@@ -91185,19 +91185,19 @@ LABEL_F23DD0:
 
 LABEL_F23DD3:
 	cpdi16 3932, 0
-	jrl z, LABEL_F23DEC
+	jrl z, FloppyIO_DispatchMidiEvent
 	cpdi16 3934, 1
-	jrl z, LABEL_F23DEC
-	call LABEL_F24727
+	jrl z, FloppyIO_DispatchMidiEvent
+	call MidiEvent_DispatchSetB
 	jrl LABEL_F23DF0
 
-LABEL_F23DEC:
-	call LABEL_F246A8
+FloppyIO_DispatchMidiEvent:
+	call MidiEvent_DispatchSetA
 
 LABEL_F23DF0:
 	ret
 
-LABEL_F23DF1:
+VoiceChannels_LoadPartMapAndInitPan:
 	ld xiy, 0xF23E18
 	cpdi8 4600, 1
 	jrl z, LABEL_F23E03
@@ -91545,7 +91545,7 @@ LABEL_F240E0:
 	jrl LABEL_F2410D
 
 LABEL_F240E8:
-	call LABEL_F23D7F
+	call FloppyIO_ReadMidiEventBytes
 	cpdi8 4323, 0
 	jrl nz, LABEL_F24108
 	push xwa
@@ -91581,7 +91581,7 @@ LABEL_F24112:
 	stda8 9860, a
 	pushw wa
 	push xhl
-	call LABEL_F24841
+	call SetWall_ValidateAndApply
 	pop xhl
 	popw wa
 	ret
@@ -91590,12 +91590,12 @@ LABEL_F24137:
 	cpdi16 62001, 16
 	jrl nc, LABEL_F24148
 	stdi8 4323, 255
-	jrl LABEL_F24351
+	jrl SoundGen_ResetVoiceBitmapAndFlag
 
 LABEL_F24148:
 	ldda16 xde, 62033
 	ld hl, de
-	call LABEL_F249F3
+	call ToneGen_CopyBlockToVoiceBuffer
 	stda16 10198, xiy
 	pushw de
 	lds hl, 1
@@ -91640,12 +91640,12 @@ MidiSysEx_CmdDispatchLoop:
 
 LABEL_F241C2:
 	ldb a, 0x81
-	call LABEL_F24AD8
+	call ToneGen_WriteAllChannels
 	jrl MidiSysEx_CmdDispatchLoop
 
 LABEL_F241CB:
 	ldb a, 0x82
-	call LABEL_F24AD8
+	call ToneGen_WriteAllChannels
 	xor hl, hl
 	xor iy, iy
 
@@ -91653,15 +91653,15 @@ LABEL_F241D5:
 	pushw hl
 	pushw iy
 	call SoundGen_CaptureVoiceParams
-	call LABEL_F24686
+	call SoundGen_StoreVoiceParamsToTables
 	popw iy
 	popw hl
 	inc 1, iy
 	inc 1, hl
 	cp iy, 0xF
 	jrl ule, LABEL_F241D5
-	call LABEL_F23D00
-	jrl LABEL_F24351
+	call SoundGen_ScanActiveVoiceBitmap
+	jrl SoundGen_ResetVoiceBitmapAndFlag
 
 LABEL_F241F3:
 	ldda16 xiy, 4211
@@ -91794,7 +91794,7 @@ LABEL_F2432D:
 	call ToneGen_WriteChannelRegs
 	jrl MidiSysEx_CmdDispatchLoop
 
-LABEL_F24351:
+SoundGen_ResetVoiceBitmapAndFlag:
 	call LABEL_F24B8C
 	ordi8 10419, 16
 
@@ -92013,14 +92013,14 @@ LABEL_F24511:
 	cp wa, 0x28
 	jrl ugt, LABEL_F24537
 	ldw wa, 0x28
-	jrl LABEL_F24541
+	jrl SoundGen_EncodeTempoByte
 
 LABEL_F24537:
 	cp wa, 0x12C
-	jrl c, LABEL_F24541
+	jrl c, SoundGen_EncodeTempoByte
 	ldw wa, 0x12C
 
-LABEL_F24541:
+SoundGen_EncodeTempoByte:
 	ld hl, wa
 	ld w, a
 	and a, 0x7F
@@ -92031,28 +92031,28 @@ LABEL_F24541:
 	or w, h
 	lds32 xiy, 7
 	cpdi16 3932, 0
-	jrl z, LABEL_F24574
+	jrl z, SoundGen_ApplyTempoToVoice
 	cpdi16 3934, 1
-	jrl z, LABEL_F24574
+	jrl z, SoundGen_ApplyTempoToVoice
 	ldda16 xiy, 4237
 	extz xiy
 	call SoundGen_ClampVoiceIndexMin1
 
-LABEL_F24574:
+SoundGen_ApplyTempoToVoice:
 	pushw wa
 	call SoundGen_CaptureVoiceParams
 	popw wa
 	ld bc, wa
 	ldb a, 0x80
 	cpdi16 3932, 0
-	jrl z, LABEL_F24596
+	jrl z, SoundGen_UpdateTempoAndScale
 	cpdi16 3934, 1
-	jrl z, LABEL_F24596
+	jrl z, SoundGen_UpdateTempoAndScale
 	ldb a, 0xA0
 	ldb w, 0x7
 	or a, w
 
-LABEL_F24596:
+SoundGen_UpdateTempoAndScale:
 	pushw bc
 	call SoundGen_UpdateAndRefresh
 	popw bc
@@ -92060,14 +92060,14 @@ LABEL_F24596:
 	jrl nz, LABEL_F24646
 	lds iy, 7
 	cpdi16 3932, 0
-	jrl z, LABEL_F245C2
+	jrl z, SoundGen_ScaleAndWriteTempo
 	cpdi16 3934, 1
-	jrl z, LABEL_F245C2
+	jrl z, SoundGen_ScaleAndWriteTempo
 	ldda16 xiy, 4237
 	extz xiy
 	call SoundGen_ClampVoiceIndexMin1
 
-LABEL_F245C2:
+SoundGen_ScaleAndWriteTempo:
 	sla iy, 1
 	push xix
 	ld xix, 0xFAE
@@ -92102,14 +92102,14 @@ LABEL_F245C2:
 	jrl nz, LABEL_F24646
 	lds32 xiy, 7
 	cpdi16 3932, 0
-	jrl z, LABEL_F2462C
+	jrl z, SoundGen_SetVoiceBitAndWriteRegs
 	cpdi16 3934, 1
-	jrl z, LABEL_F2462C
+	jrl z, SoundGen_SetVoiceBitAndWriteRegs
 	ldda16 xiy, 4237
 	extz xiy
 	call SoundGen_ClampVoiceIndexMin1
 
-LABEL_F2462C:
+SoundGen_SetVoiceBitAndWriteRegs:
 	ld bc, iy
 	ld16_24 xde, 0x00ffec
 	ld a, c
@@ -92146,7 +92146,7 @@ LABEL_F2466E:
 	pop xhl
 	ret
 
-LABEL_F24686:
+SoundGen_StoreVoiceParamsToTables:
 	push xix
 	ldda16 xwa, 9830
 	ld xix, 0xF218
@@ -92158,7 +92158,7 @@ LABEL_F24686:
 	pop xix
 	ret
 
-LABEL_F246A8:
+MidiEvent_DispatchSetA:
 	ld xix, 0xFAB
 	ldda8 a, 4011
 	pushw hl
@@ -92182,7 +92182,7 @@ LABEL_F246C6:
 	cp w, 0xB0
 	jrl z, LABEL_F24714
 	cp w, 0x80
-	jrl z, LABEL_F2470D
+	jrl z, MidiEvent_NoteOffA
 	cp w, 0xE0
 	jrl z, LABEL_F2471B
 	cp w, 0xC0
@@ -92198,11 +92198,11 @@ LABEL_F246F7:
 LABEL_F246FE:
 	ld w, (xix + 2)
 	cps w, 0
-	jrl z, LABEL_F2470D
+	jrl z, MidiEvent_NoteOffA
 	call LABEL_F24CBF
 	jrl LABEL_F24726
 
-LABEL_F2470D:
+MidiEvent_NoteOffA:
 	call LABEL_F24E3B
 	jrl LABEL_F24726
 
@@ -92220,7 +92220,7 @@ LABEL_F24722:
 LABEL_F24726:
 	ret
 
-LABEL_F24727:
+MidiEvent_DispatchSetB:
 	ld xix, 0xFAB
 	ldda8 a, 4011
 	pushw hl
@@ -92244,7 +92244,7 @@ LABEL_F24745:
 	cp w, 0xB0
 	jrl z, LABEL_F24793
 	cp w, 0x80
-	jrl z, LABEL_F2478C
+	jrl z, MidiEvent_NoteOffB
 	cp w, 0xE0
 	jrl z, LABEL_F2479A
 	cp w, 0xC0
@@ -92260,11 +92260,11 @@ LABEL_F24776:
 LABEL_F2477D:
 	ld w, (xix + 2)
 	cps w, 0
-	jrl z, LABEL_F2478C
+	jrl z, MidiEvent_NoteOffB
 	call LABEL_F253D2
 	jrl LABEL_F247A5
 
-LABEL_F2478C:
+MidiEvent_NoteOffB:
 	call LABEL_F25560
 	jrl LABEL_F247A5
 
@@ -92360,12 +92360,12 @@ LABEL_F24835:
 LABEL_F24837:
 	cp c, w
 	jrl ule, LABEL_F247FB
-	call LABEL_F24727
+	call MidiEvent_DispatchSetB
 
 LABEL_F24840:
 	ret
 
-LABEL_F24841:
+SetWall_ValidateAndApply:
 	stdi8 10194, 0
 	call SetWall_ParserInit
 	ldda8 a, 10359
@@ -92411,9 +92411,9 @@ LABEL_F248A8:
 	stda16 10200, xwa
 	ldda8 a, 9860
 	cpda8 a, 10359
-	jrl z, LABEL_F248F0
+	jrl z, SetWall_InitVoiceSlots
 	cpda8 a, 9858
-	jrl z, LABEL_F248F0
+	jrl z, SetWall_InitVoiceSlots
 	ldda8 a, 10359
 	pushw wa
 	ldda8 a, 9860
@@ -92422,10 +92422,10 @@ LABEL_F248A8:
 	popw wa
 	stda8 10359, a
 
-LABEL_F248F0:
+SetWall_InitVoiceSlots:
 	xor xhl, xhl
 	ldda8 l, 10359
-	call LABEL_F25B0B
+	call VoiceChannel_ClearRegisters
 	ld xix, 0x17FA
 	nop
 	ldda16 xwa, 10196
@@ -92436,7 +92436,7 @@ LABEL_F248F0:
 	stda16 10198, xiy
 	xor xhl, xhl
 	ldda8 l, 9858
-	call LABEL_F25B0B
+	call VoiceChannel_ClearRegisters
 	ld xix, 0x18FA
 	nop
 	ldda16 xwa, 10200
@@ -92516,13 +92516,13 @@ LABEL_F249D7:
 	jrl Scoop_ProcessCompareLoop
 
 LABEL_F249EB:
-	call LABEL_F25CAA
+	call VoiceChannel_FindNextValid
 	jrl Scoop_ProcessCompareLoop
 
 LABEL_F249F2:
 	ret
 
-LABEL_F249F3:
+ToneGen_CopyBlockToVoiceBuffer:
 	push xiz
 	ldda32 xiz, 4349
 	ldfr_lerp XIZ, 0x38
@@ -92577,7 +92577,7 @@ LABEL_F24A34:
 
 LABEL_F24A84:
 	xor hl, hl
-	call LABEL_F25D10
+	call VoiceChannel_ClearParamTable
 	ldda16 xiy, 10198
 	push xix
 	ld xix, 0x17FA
@@ -92609,7 +92609,7 @@ LABEL_F24AAA:
 LABEL_F24AD7:
 	ret
 
-LABEL_F24AD8:
+ToneGen_WriteAllChannels:
 	xor iy, iy
 
 LABEL_F24ADA:
@@ -92621,22 +92621,22 @@ LABEL_F24ADA:
 	pushw iy
 	pushw wa
 	pushw iy
-	call LABEL_F25D76
+	call ToneGen_WriteParamToBlock
 	popw iy
 	popw wa
 	cp a, 0x81
-	jrl nz, LABEL_F24B05
+	jrl nz, ToneGen_WriteAllChannels_Next
 	pushw wa
 	pushw iy
-	call LABEL_F25D8F
+	call ToneGen_AdvancePosition
 	popw iy
 	popw wa
 	cpdi8 4323, 0
-	jrl z, LABEL_F24B05
+	jrl z, ToneGen_WriteAllChannels_Next
 	popw iy
 	jrl LABEL_F24B17
 
-LABEL_F24B05:
+ToneGen_WriteAllChannels_Next:
 	popw iy
 	pushw wa
 	pushw iy
@@ -92664,8 +92664,8 @@ LABEL_F24B24:
 	pop xde
 	pushw bc
 	push xix
-	call LABEL_F25D76
-	call LABEL_F25D8F
+	call ToneGen_WriteParamToBlock
+	call ToneGen_AdvancePosition
 	pop xix
 	popw bc
 	cpdi8 4323, 0
@@ -92716,10 +92716,10 @@ LABEL_F24B91:
 	xorcf_a_16 de
 	ldto_werp DE, 0x3E
 	ldto_berp A, 0x3C
-	jrl c, LABEL_F24BE1
+	jrl c, ToneGen_UpdateBlocks_NextChannel
 	ld xix, 0xF250
 	bit_dri 7, 0x07, 0xF0, 0xEC
-	jrl z, LABEL_F24BE1
+	jrl z, ToneGen_UpdateBlocks_NextChannel
 	ld xix, 0xF250
 	st_dri3b D, 0x07, 0xF0, 0xEC
 	ld wa, (xix + 1)
@@ -92731,7 +92731,7 @@ LABEL_F24B91:
 	ld xix, 0xCBE
 	stib_dri 0x07, 0xF0, 0xF4, 0x05
 
-LABEL_F24BE1:
+ToneGen_UpdateBlocks_NextChannel:
 	inc 1, c
 	add hl, 0x3
 	cp c, 0xF
@@ -92927,7 +92927,7 @@ LABEL_F24CF7:
 	pop xde
 	pop xbc
 	pop xix
-	jp LABEL_F24DBD
+	jp Scoop_ApplySoundParams
 
 LABEL_F24D8C:
 	push xix
@@ -92948,12 +92948,12 @@ LABEL_F24D8C:
 	pop xde
 	pop xbc
 	pop xix
-	jp LABEL_F24DBD
+	jp Scoop_ApplySoundParams
 
 LABEL_F24DB9:
 	ldda8 a, 4012
 
-LABEL_F24DBD:
+Scoop_ApplySoundParams:
 	push xiy
 	push xix
 	call SoundGen_UpdateAndRefresh
@@ -93033,12 +93033,12 @@ LABEL_F24E40:
 	ldb l, 0x60
 	divs8rr a, l
 	cps a, 0
-	jrl nz, LABEL_F24E89
+	jrl nz, Scoop_ApplyMatchedVoiceEntry
 	cps w, 4
-	jrl ugt, LABEL_F24E89
+	jrl ugt, Scoop_ApplyMatchedVoiceEntry
 	ldb w, 0x5
 
-LABEL_F24E89:
+Scoop_ApplyMatchedVoiceEntry:
 	ldda32 xhl, 4349
 	lda_dri3 XWA, 0x07, 0xEC, 0xF0
 	pop xhl
@@ -93092,9 +93092,9 @@ LABEL_F24ED9:
 	cp a, 0x61
 	jrl z, LABEL_F24F86
 	cp a, 0x62
-	jrl z, LABEL_F24F8D
+	jrl z, Scoop_Cmd_ReleaseVoiceSlot
 	cp a, 0x63
-	jrl z, LABEL_F24F8D
+	jrl z, Scoop_Cmd_ReleaseVoiceSlot
 	cp a, 0x64
 	jrl z, LABEL_F24F9B
 	cp a, 0x65
@@ -93149,7 +93149,7 @@ LABEL_F24F86:
 	call LABEL_F25F8C
 	jrl LABEL_F24F9F
 
-LABEL_F24F8D:
+Scoop_Cmd_ReleaseVoiceSlot:
 	call LABEL_F25FCD
 	jrl LABEL_F24F9F
 
@@ -93633,7 +93633,7 @@ LABEL_F25405:
 	pop xde
 	pop xbc
 	pop xix
-	jp LABEL_F254DA
+	jp Scoop_ApplySoundParamsAlt
 
 LABEL_F254A9:
 	push xix
@@ -93654,12 +93654,12 @@ LABEL_F254A9:
 	pop xde
 	pop xbc
 	pop xix
-	jp LABEL_F254DA
+	jp Scoop_ApplySoundParamsAlt
 
 LABEL_F254D6:
 	ldda8 a, 4012
 
-LABEL_F254DA:
+Scoop_ApplySoundParamsAlt:
 	push xiy
 	push xix
 	call SoundGen_UpdateAndRefresh
@@ -93745,12 +93745,12 @@ LABEL_F25565:
 	ldb l, 0x60
 	divs8rr a, l
 	cps a, 0
-	jrl nz, LABEL_F255AC
+	jrl nz, Scoop_ApplyMatchedVoiceEntryAlt
 	cps w, 4
-	jrl ugt, LABEL_F255AC
+	jrl ugt, Scoop_ApplyMatchedVoiceEntryAlt
 	ldb w, 0x5
 
-LABEL_F255AC:
+Scoop_ApplyMatchedVoiceEntryAlt:
 	ldda32 xhl, 4349
 	lda_dri3 XWA, 0x07, 0xEC, 0xF0
 	pop xhl
@@ -93799,9 +93799,9 @@ LABEL_F255F2:
 	cp a, 0x61
 	jrl z, LABEL_F2569F
 	cp a, 0x62
-	jrl z, LABEL_F256A6
+	jrl z, Scoop_CmdAlt_ReleaseVoiceSlot
 	cp a, 0x63
-	jrl z, LABEL_F256A6
+	jrl z, Scoop_CmdAlt_ReleaseVoiceSlot
 	cp a, 0x64
 	jrl z, LABEL_F256B4
 	cp a, 0x65
@@ -93856,7 +93856,7 @@ LABEL_F2569F:
 	call LABEL_F25F8C
 	jrl LABEL_F256B8
 
-LABEL_F256A6:
+Scoop_CmdAlt_ReleaseVoiceSlot:
 	call LABEL_F25FCD
 	jrl LABEL_F256B8
 
@@ -94262,7 +94262,7 @@ LABEL_F25AEA:
 	pop xix
 	ret
 
-LABEL_F25B0B:
+VoiceChannel_ClearRegisters:
 	dec 1, hl
 	ld iy, hl
 	muls_erpb 0xF4, 0x03
@@ -94376,7 +94376,7 @@ LABEL_F25C1E:
 	ret
 
 LABEL_F25C1F:
-	call LABEL_F25CAA
+	call VoiceChannel_FindNextValid
 	bitda 0, 10194
 	jr z, LABEL_F25C1F
 	ret
@@ -94426,17 +94426,17 @@ LABEL_F25C9F:
 	jr z, LABEL_F25C9F
 	ret
 
-LABEL_F25CAA:
+VoiceChannel_FindNextValid:
 	ldda32 xhl, 4349
 	lda_dri3 XHL, 0x07, 0xEC, 0xF0
 	bitda 0, 10194
-	jr nz, LABEL_F25CCA
+	jr nz, VoiceChannel_ValidateAndLoop
 	call VoiceChannel_AdvanceIndex
 	ldda32 xhl, 4349
 	ldda8 a, 10204
 	lda_dri3 XBC, 0x07, 0xEC, 0xF0
 
-LABEL_F25CCA:
+VoiceChannel_ValidateAndLoop:
 	push xix
 	ld xix, 0x17FA
 	nop
@@ -94456,14 +94456,14 @@ LABEL_F25CCA:
 	ld_srib3 A, 0x07, 0xE8, 0xF4
 	pop xde
 	lda_dri3 XBC, 0x07, 0xEC, 0xF0
-	jr LABEL_F25CCA
+	jr VoiceChannel_ValidateAndLoop
 
 LABEL_F25D07:
 	stda16 10198, xiy
 	call LABEL_F25B8D
 	ret
 
-LABEL_F25D10:
+VoiceChannel_ClearParamTable:
 	ld xix, 0x1073
 	xor wa, wa
 	lds bc, 4
@@ -94503,14 +94503,14 @@ LABEL_F25D4E:
 
 LABEL_F25D67:
 	ldda16 xhl, 10415
-	call LABEL_F249F3
+	call ToneGen_CopyBlockToVoiceBuffer
 	lds iy, 5
 
 LABEL_F25D71:
 	stda16 10198, xiy
 	ret
 
-LABEL_F25D76:
+ToneGen_WriteParamToBlock:
 	ldda16 xhl, 10415
 	call ToneGen_ComputeBlockPtr
 	ldda16 xiy, 9830
@@ -94520,7 +94520,7 @@ LABEL_F25D76:
 	ld (xiy), a
 	ret
 
-LABEL_F25D8F:
+ToneGen_AdvancePosition:
 	ldda16 xwa, 9830
 	cp wa, 0xFF
 	jr nz, LABEL_F25DAE
@@ -97166,7 +97166,7 @@ LABEL_F277FA:
 SMF_ProcessEventLoop:
 	xor xhl, xhl
 	push xhl
-	call LABEL_F25D10
+	call VoiceChannel_ClearParamTable
 	call SMF_GetNextEvent
 	pop xhl
 	cp a, 0x82
@@ -98612,7 +98612,7 @@ SMF_AssignRemainingChannels:
 	stda8 9860, a
 	push xhl
 	pushw bc
-	call LABEL_F24841
+	call SetWall_ValidateAndApply
 	popw bc
 	pop xhl
 
