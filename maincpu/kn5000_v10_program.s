@@ -126174,6 +126174,14 @@ LABEL_F3C052:
 	inc 6, xsp
 	ret
 
+; ============================================================================
+; ToneVoice_AssignChannel - Assign a voice/patch to a tone channel
+; ============================================================================
+; Input:  WA = patch type (0x12=fixed, or patch index), DE = channel
+;         (xsp) = destination struct pointer
+; Output: Writes voice entry to dest[0] and value to dest[2]
+; Checks voice source flag at 10437, applies via tone gen update (F41AF8).
+; ============================================================================
 ToneVoice_AssignChannel:
 	dec 6, xsp
 	ld (xsp + 4), a
@@ -158254,6 +158262,14 @@ LABEL_F51E5C:
 	lds hl, 0
 	ret
 
+; ============================================================================
+; FDC_SetSectorLength - Set FDC sector length register
+; ============================================================================
+; Input:  WA = disk format type code
+; Output: Writes sector length to 0x01E53C
+; Maps format codes: 0x2F->0x001F, 0x30/31->0x0020, 6->0x0006, etc.
+; Called before FDC_CommandEntry to configure sector size.
+; ============================================================================
 FDC_SetSectorLength:
 	extz wa
 	cp wa, 0x31
@@ -165940,6 +165956,13 @@ LABEL_F56CBE:
 LABEL_F56CCF:
 	ret
 
+; ============================================================================
+; AccPart_GetParamAddr - Get parameter address for accompaniment part
+; ============================================================================
+; Input:  HL = base pointer, channel selector bitmask at 13268
+; Output: WA = parameter address for the selected part
+; Adds per-part offset (0x118-0x1D6) based on channel (kbd/acc1-5).
+; ============================================================================
 AccPart_GetParamAddr:
 	ldda8 a, 13268
 	xor a, 0xFF
@@ -185459,6 +185482,13 @@ LABEL_F63E2B:
 LABEL_F63E31:
 	.byte 0x00, 0x00
 
+; ============================================================================
+; RhythmBuf_LoadPattern - Load rhythm pattern from ROM to DRAM buffer
+; ============================================================================
+; Input:  XIY = source ROM pointer, XIZ = write offset, XDE = dest base
+; Output: Pattern data at 0x95C00 + index*256
+; Copies bytes until end marker (0x83) or buffer full (0xFE). Chains buffers.
+; ============================================================================
 RhythmBuf_LoadPattern:
 	bitda 0, 13744
 	jr z, LABEL_F63E3D
@@ -300690,6 +300720,13 @@ LABEL_FC793B:
 	ret
 
 
+; ============================================================================
+; CtrlPanel_SetIndicatorBit - Set a control panel LED indicator bit
+; ============================================================================
+; Input:  A = key code (upper nibble=group, lower nibble=bit index)
+; Output: ORs bitmask into panel LED register (36666/36670/36674/36678)
+; Looks up bitmask from table at 0xEDA66C.
+; ============================================================================
 CtrlPanel_SetIndicatorBit:
 	push_werp 0xFA
 	ld c, a
@@ -327576,6 +327613,14 @@ LABEL_FDE983:
 	.byte 0xd1, 0x94, 0xc5, 0x3c, 0xfe, 0xff, 0xd1, 0x94
 	.byte 0xc5, 0x3e, 0x04, 0x00, 0x0e, 0x0e
 
+; ============================================================================
+; AudioInit_ConfigStereoVoice - Configure stereo voice routing and panning
+; ============================================================================
+; Input:  Voice index (from voice type table at 0xEE8E62)
+; Output: Updates audio config flags at address 50588
+; Default handler in voice-source dispatch table. Routes voices by type:
+; simple stereo (type < 3) or extended routing with panning configuration.
+; ============================================================================
 AudioInit_ConfigStereoVoice:
 	ldda8 a, 36154
 	extz wa
@@ -336126,6 +336171,13 @@ LABEL_FE3E9A:
 	st_dri3b L, 0xFD, 0xAC, 0x00
 	ret
 
+; ============================================================================
+; NoteMap_AssignVoiceParams - Assign voice parameters for note-on events
+; ============================================================================
+; Input:  Voice channel parameters
+; Output: None
+; Iterates voice slots, validates format, looks up voice, assigns params.
+; ============================================================================
 NoteMap_AssignVoiceParams:
 	st_dri3b L, 0xFD, 0x52, 0xFF
 	push_werp 0xFA
@@ -347148,6 +347200,13 @@ LABEL_FEB010:
 	.byte 0x8f, 0x04, 0x21, 0xbe, 0x03, 0x41, 0x5e, 0xbf
 	.byte 0x0c, 0x37, 0x0e
 
+; ============================================================================
+; SndPart_SetParam - Set a sound part parameter by code
+; ============================================================================
+; Input:  WA = part number, DE = new value, BC = parameter code
+; Output: None
+; Dispatches on ~20 parameter codes to update part tables or send via MIDI.
+; ============================================================================
 SndPart_SetParam:
 	dec 2, xsp
 	pushw iz
@@ -347781,6 +347840,13 @@ LABEL_FEBADE:
 	jr le, LABEL_FEBADE
 	ret
 
+; ============================================================================
+; MIDI_SendControlChange - Send a MIDI Control Change message
+; ============================================================================
+; Input:  A = MIDI channel, C = controller number, E = value
+; Output: None (sends via SubCPU comm)
+; Builds [4, 0xB0, chan, ctrl, val] packet, transmits via MIDI_SendCmdPacket.
+; ============================================================================
 MIDI_SendControlChange:
 	dec 6, xsp
 	ld (xsp + 256), 0x4
@@ -348145,6 +348211,14 @@ LABEL_FEBF1D:
 	.byte 0xbf, 0xfe, 0x34, 0xf3, 0x07, 0xf0, 0xe0, 0xd8
 	.byte 0x27, 0x01, 0x0e
 
+; ============================================================================
+; MIDI_SendCmdPacket - Send a pre-built MIDI command packet
+; ============================================================================
+; Input:  XWA = pointer to command buffer (first byte = count)
+; Output: None
+; Iterates channel table at 53392, transmits via sendCOMM (XDE=0xD090).
+; Low-level MIDI/audio command packet sender.
+; ============================================================================
 MIDI_SendCmdPacket:
 	lds hl, 0
 	jr LABEL_FEBF60
@@ -348414,6 +348488,14 @@ LABEL_FEC10C:
 	popw iz
 	ret
 
+; ============================================================================
+; Song_AbortPlayback - Abort song playback and clean up resources
+; ============================================================================
+; Input:  None
+; Output: None
+; Sends MIDI All Notes Off to all 16 channels, releases playback lock,
+; closes file I/O, flushes task queues, resets state to zero.
+; ============================================================================
 Song_AbortPlayback:
 	calr LABEL_FEC49B
 	lds wa, 2
