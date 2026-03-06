@@ -83543,7 +83543,7 @@ LABEL_F1ED85:
 	call 0xFE0E75
 	call Voice_InitTablePair
 	call Voice_InitTableGroup
-	call LABEL_FEBEFC
+	call MIDI_SendAllSoundOff
 	call LABEL_FDBB32
 	inc 2, xsp
 	ret
@@ -93256,7 +93256,7 @@ LABEL_F25082:
 	stda8 6748, l
 	pop xix
 	ld xwa, 0x1A57
-	call LABEL_FEE964
+	call SndParam_ApplyVoiceValue
 	push xiy
 	push xhl
 	call SoundGen_CaptureVoiceParams
@@ -93973,7 +93973,7 @@ LABEL_F257B0:
 	pop xix
 	stda8 6748, l
 	ld xwa, 0x1A57
-	call LABEL_FEE964
+	call SndParam_ApplyVoiceValue
 	push xiy
 	push xhl
 	call SoundGen_ReadVoiceRegs
@@ -94953,7 +94953,7 @@ LABEL_F2614D:
 	pop xix
 	push xiy
 	ld xwa, 0x1A57
-	call LABEL_FEE964
+	call SndParam_ApplyVoiceValue
 	pop xiy
 	ldda8 l, 6746
 	ldda8 h, 6747
@@ -96056,7 +96056,7 @@ LABEL_F26ECC:
 	cpdi16 6751, 9
 	jr nz, LABEL_F26F07
 	ld xwa, 0x1A57
-	call LABEL_FEE964
+	call SndParam_ApplyVoiceValue
 	ld xhl, 0x1A37
 	ldda16 xbc, 6751
 	mul c, 0x2
@@ -129210,7 +129210,7 @@ LABEL_F3DC59:
 LABEL_F3DC65:
 	lda xwa, (xsp + 26)
 	lds de, 2
-	call LABEL_FEA6D8
+	call NoteDisplay_StoreAndDispatch
 	lda xwa, (xsp + 26)
 	mrib4 0x80, 0x19, 0xDF, 0xCE
 	mrdb5 0x88, 0x01, 0x19, 0xE0, 0xCE
@@ -129247,8 +129247,8 @@ LABEL_F3DCA6:
 	jr c, LABEL_F3DCA6
 
 LABEL_F3DCC8:
-	call LABEL_FE1CD5
-	call LABEL_FE1CB9
+	call Voice_InitSlotData
+	call Voice_FindAndAllocBestMatch
 
 LABEL_F3DCD0:
 	lda xwa, (xsp + 26)
@@ -129453,7 +129453,7 @@ LABEL_F3DE92:
 	jr c, LABEL_F3DE54
 	lda xwa, (xsp + 40)
 	lds de, 2
-	call LABEL_FEA6D8
+	call NoteDisplay_StoreAndDispatch
 	lda xwa, (xsp + 40)
 	cp (xsp + 44), 0x0
 	jr z, LABEL_F3DEFB
@@ -129523,8 +129523,8 @@ LABEL_F3DF35:
 LABEL_F3DF4F:
 	cp l, (xiz)
 	jr c, LABEL_F3DF35
-	call LABEL_FE1CD5
-	call LABEL_FE1CB9
+	call Voice_InitSlotData
+	call Voice_FindAndAllocBestMatch
 	lda xwa, (xsp + 40)
 	mrib4 0x80, 0x19, 0x42, 0x8D
 	mrdb5 0x88, 0x01, 0x19, 0x40, 0x8D
@@ -129546,14 +129546,14 @@ BitMapOut_PrepareAndDisplay:
 	ld (xbc), 0x0
 	lda xwa, (xsp + 12)
 	lds de, 2
-	call LABEL_FEA6D8
+	call NoteDisplay_StoreAndDispatch
 	lda xwa, (xsp + 12)
 	mrib4 0x80, 0x19, 0xDF, 0xCE
 	mrdb5 0x88, 0x01, 0x19, 0xE0, 0xCE
 	mrdb5 0x88, 0x02, 0x19, 0xE1, 0xCE
 	mrdb5 0x88, 0x03, 0x19, 0xDE, 0xCE
-	call LABEL_FE1CD5
-	call LABEL_FE1CB9
+	call Voice_InitSlotData
+	call Voice_FindAndAllocBestMatch
 	lda xwa, (xsp + 12)
 	mrib4 0x80, 0x19, 0x42, 0x8D
 	mrdb5 0x88, 0x01, 0x19, 0x40, 0x8D
@@ -129569,7 +129569,7 @@ LABEL_F3DFC9:
 	ld (xbc), 0x0
 	lda xwa, (xsp + 12)
 	lds de, 2
-	call LABEL_FEA6D8
+	call NoteDisplay_StoreAndDispatch
 	lda xwa, (xsp + 12)
 	mrib4 0x80, 0x19, 0x00, 0x23
 	mrdb5 0x88, 0x01, 0x19, 0x02, 0x23
@@ -160778,8 +160778,8 @@ LABEL_F536F1:
 	stda8 13015, a
 	stda8 52958, a
 	stda8 8966, a
-	call LABEL_FE1CD5
-	call LABEL_FE1CB9
+	call Voice_InitSlotData
+	call Voice_FindAndAllocBestMatch
 	ldda8 a, 64605
 	and a, 0x7
 	cps a, 0
@@ -194019,7 +194019,7 @@ LABEL_F6BCA0:
 	call 0xFE0E75
 	call Voice_InitTablePair
 	call Voice_InitTableGroup
-	call LABEL_FEBEFC
+	call MIDI_SendAllSoundOff
 	call LABEL_EF09EA
 	jr LABEL_F6BCE0
 
@@ -231558,7 +231558,7 @@ LABEL_F8B221:
 	call 0xFE0E75
 	call Voice_InitTablePair
 	call Voice_InitTableGroup
-	call LABEL_FEBEFC
+	call MIDI_SendAllSoundOff
 	call LABEL_FDBB32
 	inc 2, xsp
 	ret
@@ -287021,7 +287021,7 @@ LABEL_FBB9AB:
 	call NoteMap_SendAllNotesOff
 	call Voice_InitTableGroup
 	call Voice_InitTablePair
-	call LABEL_FEBEFC
+	call MIDI_SendAllSoundOff
 	pop xiz
 	pop xix
 	pop xhl
@@ -330171,7 +330171,7 @@ LABEL_FE0293:
 	extz de
 	ld xwa, xbc
 	ld xbc, (xsp + 2)
-	call LABEL_FE5FC1
+	call Voice_ApplyTransposeWithEncode
 	lds iz, 0
 	ldb c, 0x7F
 	jr LABEL_FE0319
@@ -330418,7 +330418,7 @@ LABEL_FE0544:
 	stib_dri 0xFD, 0xAE, 0x00, 0x00
 	stib_dri 0xFD, 0xAF, 0x00, 0x01
 	st_dri3b W, 0xFD, 0xAC, 0x00
-	call LABEL_FE433E
+	call Voice_LookupTableEntries
 	cps l, 0
 	jrl z, NoteOnProcess_NextChannel
 	st_dri3b W, 0xFD, 0xAC, 0x00
@@ -331398,7 +331398,7 @@ LABEL_FE0F00:
 	stib_dri 0xFD, 0xAE, 0x00, 0x00
 	stib_dri 0xFD, 0xAF, 0x00, 0x01
 	st_dri3b W, 0xFD, 0xAC, 0x00
-	call LABEL_FE433E
+	call Voice_LookupTableEntries
 	cps l, 0
 	jrl z, VoiceProcess_NextChannel
 	st_dri3b W, 0xFD, 0xAC, 0x00
@@ -331544,7 +331544,7 @@ NoteMap_ProcessAndMerge:
 	stib_dri 0xFD, 0xAA, 0x00, 0x00
 	stib_dri 0xFD, 0xAB, 0x00, 0x00
 	st_dri3b W, 0xFD, 0xA8, 0x00
-	call LABEL_FE433E
+	call Voice_LookupTableEntries
 	cps l, 0
 	jrl z, LABEL_FE1186
 	st_dri3b W, 0xFD, 0xA8, 0x00
@@ -332810,7 +332810,7 @@ LABEL_FE1CB3:
 	st_dri3b L, 0xFD, 0x50, 0x01
 	ret
 
-LABEL_FE1CB9:
+Voice_FindAndAllocBestMatch:
 	cpdi16 52770, 0
 	ret z
 	call NoteMap_FindBestMatch
@@ -332821,7 +332821,7 @@ LABEL_FE1CB9:
 	call NoteMap_AllocateVoice
 	ret
 
-LABEL_FE1CD5:
+Voice_InitSlotData:
 	ldda8 a, 52965
 	extz wa
 	stda16 52991, xwa
@@ -334476,7 +334476,7 @@ LABEL_FE2BAE:
 	.byte 0xaf, 0x08, 0x20, 0x1d, 0x51, 0x54, 0xfe, 0xd7
 	.byte 0xfa, 0x05, 0xbf, 0x0a, 0x37, 0x0e
 
-LABEL_FE2D74:
+NoteMap_CollectAndFindBestVoice:
 	st_dri3b L, 0xFD, 0x52, 0xFF
 	push_werp 0xFA
 	lda_dri3 XIY, 0xFD, 0xA6, 0x00
@@ -335250,7 +335250,7 @@ LABEL_FE355C:
 	lda xsp, (xsp + 10)
 	ret
 
-LABEL_FE3563:
+NoteMap_FindAndAllocBestVoice:
 	st_dri3b L, 0xFD, 0x52, 0xFF
 	push_werp 0xFA
 	lda_dri3 XIY, 0xFD, 0xA6, 0x00
@@ -336665,7 +336665,7 @@ LABEL_FE4337:
 	ldb l, 0x0
 	ret
 
-LABEL_FE433E:
+Voice_LookupTableEntries:
 	ldada xhl, 50634
 	ldada xix, 59368
 	ldb c, 0x20
@@ -339779,7 +339779,7 @@ LABEL_FE5FBA:
 	lda xsp, (xsp + 20)
 	ret
 
-LABEL_FE5FC1:
+Voice_ApplyTransposeWithEncode:
 	lda xsp, (xsp - 18)
 	push_werp 0xFA
 	ld (xsp + 14), e
@@ -340852,7 +340852,7 @@ LABEL_FE6957:
 	lda xwa, (xsp + 2)
 	ldada xbc, 49662
 	lds de, 0
-	call LABEL_FE2D74
+	call NoteMap_CollectAndFindBestVoice
 
 LABEL_FE6994:
 	bit_erpb 0xFB, 0x01
@@ -340868,7 +340868,7 @@ LABEL_FE6994:
 	lda xwa, (xsp + 2)
 	ldada xbc, 49662
 	lds de, 1
-	call LABEL_FE2D74
+	call NoteMap_CollectAndFindBestVoice
 
 LABEL_FE69BF:
 	bit_erpb 0xFB, 0x02
@@ -340884,7 +340884,7 @@ LABEL_FE69BF:
 	lda xwa, (xsp + 2)
 	ldada xbc, 49662
 	lds de, 2
-	call LABEL_FE2D74
+	call NoteMap_CollectAndFindBestVoice
 
 LABEL_FE69EA:
 	bit_erpb 0xFB, 0x03
@@ -340900,7 +340900,7 @@ LABEL_FE69EA:
 	lda xwa, (xsp + 2)
 	ldada xbc, 49662
 	ldw de, 0x15
-	call LABEL_FE2D74
+	call NoteMap_CollectAndFindBestVoice
 	jrl NoteMap_VoiceAssign_Finalize
 
 LABEL_FE6A1A:
@@ -341256,7 +341256,7 @@ NoteMap_VoiceAssign_Finalize:
 	st_dri3b W, 0xFD, 0x4A, 0x01
 	ldada xbc, 49662
 	lds de, 0
-	call LABEL_FE5FC1
+	call Voice_ApplyTransposeWithEncode
 	st_dri3b E, 0xFD, 0x4A, 0x01
 	st_dri3b D, 0xFD, 0xA6, 0x00
 	ldw bc, 0x52
@@ -341463,7 +341463,7 @@ LABEL_FE7000:
 	lda xwa, (xsp + 2)
 	ldada xbc, 49662
 	lds de, 0
-	call LABEL_FE3563
+	call NoteMap_FindAndAllocBestVoice
 
 LABEL_FE703D:
 	bit_erpb 0xFB, 0x01
@@ -341479,7 +341479,7 @@ LABEL_FE703D:
 	lda xwa, (xsp + 2)
 	ldada xbc, 49662
 	lds de, 1
-	call LABEL_FE3563
+	call NoteMap_FindAndAllocBestVoice
 
 LABEL_FE7068:
 	bit_erpb 0xFB, 0x02
@@ -341495,7 +341495,7 @@ LABEL_FE7068:
 	lda xwa, (xsp + 2)
 	ldada xbc, 49662
 	lds de, 2
-	call LABEL_FE3563
+	call NoteMap_FindAndAllocBestVoice
 
 LABEL_FE7093:
 	bit_erpb 0xFB, 0x03
@@ -341511,7 +341511,7 @@ LABEL_FE7093:
 	lda xwa, (xsp + 2)
 	ldada xbc, 49662
 	ldw de, 0x15
-	call LABEL_FE3563
+	call NoteMap_FindAndAllocBestVoice
 	jrl LABEL_FE7456
 
 LABEL_FE70C3:
@@ -341871,7 +341871,7 @@ LABEL_FE747A:
 	stib_dri 0xFD, 0xA6, 0x00, 0x00
 	stib_dri 0xFD, 0xA7, 0x00, 0x01
 	st_dri3b W, 0xFD, 0xA4, 0x00
-	call LABEL_FE433E
+	call Voice_LookupTableEntries
 	cps l, 0
 	jrl z, LABEL_FE7607
 	st_dri3b W, 0xFD, 0xA4, 0x00
@@ -342084,7 +342084,7 @@ LABEL_FE768D:
 	ld e, a
 	extz de
 	ld xwa, xhl
-	call LABEL_FE5FC1
+	call Voice_ApplyTransposeWithEncode
 	lda xwa, (xsp)
 	lds bc, 2
 	call NoteMap_FindEntry
@@ -342172,7 +342172,7 @@ LABEL_FE777D:
 	ld e, a
 	extz de
 	ld xwa, xhl
-	call LABEL_FE5FC1
+	call Voice_ApplyTransposeWithEncode
 	lda xwa, (xsp)
 	lds bc, 2
 	call NoteMap_FindEntry
@@ -345109,7 +345109,7 @@ LABEL_FE94F9:
 __jrt_nop_FE9501:
 
 LABEL_FE9501:
-	calr LABEL_FE9609
+	calr Voice_CheckAndResetSlotState
 	anddi8_24 52958, 191
 	ld16_24 xhl, 0x00cf01
 	anddi16_24 52993, 255
@@ -345138,13 +345138,13 @@ LABEL_FE9528:
 	jr LABEL_FE953F
 
 LABEL_FE953A:
-	calr LABEL_FE9609
+	calr Voice_CheckAndResetSlotState
 	jr LABEL_FE9570
 
 LABEL_FE953F:
 	bitda_24 6, 52958
 	jr z, LABEL_FE954B
-	calr LABEL_FE9609
+	calr Voice_CheckAndResetSlotState
 	jr LABEL_FE9570
 
 LABEL_FE954B:
@@ -345203,7 +345203,7 @@ LABEL_FE95B3:
 	jr LABEL_FE95C4
 
 Voice_CheckAndUpdateSlot:
-	calr LABEL_FE9609
+	calr Voice_CheckAndResetSlotState
 
 LABEL_FE95C4:
 	ret
@@ -345250,7 +345250,7 @@ LABEL_FE9603:
 LABEL_FE9608:
 	ret
 
-LABEL_FE9609:
+Voice_CheckAndResetSlotState:
 	ld16_24 xbc, 0x00ceff
 	stdi8 52915, 0
 	stdi8 52916, 0
@@ -345632,7 +345632,7 @@ LABEL_FE99B2:
 	jr LABEL_FE99D5
 
 LABEL_FE99D0:
-	calr LABEL_FE9EF9
+	calr NoteDisplay_ClearAndSetUpdate
 	jr LABEL_FE99DD
 
 LABEL_FE99D5:
@@ -345640,7 +345640,7 @@ LABEL_FE99D5:
 	jr LABEL_FE99DD
 
 LABEL_FE99DA:
-	calr LABEL_FE9F51
+	calr NoteDisplay_LookupBitmap
 
 LABEL_FE99DD:
 	ret
@@ -345761,7 +345761,7 @@ LABEL_FE9B0A:
 	jr LABEL_FE9B21
 
 LABEL_FE9B1C:
-	calr LABEL_FE9EF9
+	calr NoteDisplay_ClearAndSetUpdate
 	jr LABEL_FE9B48
 
 LABEL_FE9B21:
@@ -345769,7 +345769,7 @@ LABEL_FE9B21:
 	jr LABEL_FE9B48
 
 LABEL_FE9B26:
-	calr LABEL_FE9F51
+	calr NoteDisplay_LookupBitmap
 	jr LABEL_FE9B48
 
 LABEL_FE9B2B:
@@ -345783,11 +345783,11 @@ LABEL_FE9B37:
 	calr LABEL_FE9D91
 	cps a, 0
 	jr z, LABEL_FE9B43
-	calr LABEL_FE9F51
+	calr NoteDisplay_LookupBitmap
 	jr LABEL_FE9B48
 
 LABEL_FE9B43:
-	calr LABEL_FE9EF9
+	calr NoteDisplay_ClearAndSetUpdate
 	jr __jrt_nop_FE9B48
 __jrt_nop_FE9B48:
 
@@ -345823,7 +345823,7 @@ LABEL_FE9B71:
 	ordi8_24 52958, 2
 	sti8_24 0x00cee5, 0x07
 	dec 1, de
-	calr LABEL_FE9C48
+	calr VoiceSlot_CheckPitchIntervals
 	jrl LABEL_FE9C46
 
 LABEL_FE9BA1:
@@ -345845,7 +345845,7 @@ LABEL_FE9BA1:
 	sti8_24 0x00cee5, 0x07
 	dec 1, de
 	dec 1, de
-	calr LABEL_FE9C48
+	calr VoiceSlot_CheckPitchIntervals
 	jr LABEL_FE9C46
 
 LABEL_FE9BE1:
@@ -345861,7 +345861,7 @@ LABEL_FE9BE1:
 	anddi8_24 52958, 253
 	sti8_24 0x00cee5, 0x07
 	ld16_24 xde, 0x00ceff
-	calr LABEL_FE9C48
+	calr VoiceSlot_CheckPitchIntervals
 	calr LABEL_FE9D39
 	jr LABEL_FE9C46
 
@@ -345871,7 +345871,7 @@ LABEL_FE9C1A:
 	sti8_24 0x00cee1, 0x00
 	sti8_24 0x00cee5, 0x07
 	ld16_24 xde, 0x00ceff
-	calr LABEL_FE9C48
+	calr VoiceSlot_CheckPitchIntervals
 	calr LABEL_FE9D39
 	jr LABEL_FE9C46
 
@@ -345882,7 +345882,7 @@ LABEL_FE9C46:
 	pop xiz
 	ret
 
-LABEL_FE9C48:
+VoiceSlot_CheckPitchIntervals:
 	push xiz
 	cps de, 0
 	jr nz, LABEL_FE9C56
@@ -346169,7 +346169,7 @@ __jrt_nop_FE9EF8:
 LABEL_FE9EF8:
 	ret
 
-LABEL_FE9EF9:
+NoteDisplay_ClearAndSetUpdate:
 	push xix
 	push xiz
 	cpi8_24 0x00cee1, 0x00
@@ -346199,7 +346199,7 @@ LABEL_FE9F18:
 	pop xix
 	ret
 
-LABEL_FE9F51:
+NoteDisplay_LookupBitmap:
 	push xix
 	push xiz
 	st8_24 0x00cedf, a
@@ -346740,7 +346740,7 @@ LABEL_FEA6D4:
 	pop xiz
 	ret
 
-LABEL_FEA6D8:
+NoteDisplay_StoreAndDispatch:
 	lda xsp, (xsp - 20)
 	push xiz
 	ld xhl, xbc
@@ -346783,7 +346783,7 @@ LABEL_FEA738:
 	ldi85
 	cpdi8 52965, 0
 	jr nz, LABEL_FEA761
-	call LABEL_FE9EF9
+	call NoteDisplay_ClearAndSetUpdate
 	stdi8 52959, 0
 	stdi8 52960, 0
 	stdi8 52961, 0
@@ -346809,7 +346809,7 @@ LABEL_FEA761:
 	incdi8 1, 52965
 
 LABEL_FEA792:
-	call LABEL_FE9F51
+	call NoteDisplay_LookupBitmap
 	jr LABEL_FEA7A0
 
 LABEL_FEA798:
@@ -347914,7 +347914,7 @@ LABEL_FEBBA5:
 	lda xwa, (xsp + 8)
 	ld xbc, xwa
 	ld xwa, xde
-	call LABEL_FEE4BD
+	call SndParam_ApplyMaskClamp
 	ld (xsp + 2), 0x5
 	ld (xsp + 3), 0xC0
 	ld wa, (xsp + 12)
@@ -348179,7 +348179,7 @@ LABEL_FEBEED:
 	.byte 0x30, 0x50, 0x00, 0x31, 0x92, 0x00, 0xda, 0xa8
 	.byte 0x1e, 0x3e, 0xfd, 0x1b, 0x79, 0xbf, 0xfe
 
-LABEL_FEBEFC:
+MIDI_SendAllSoundOff:
 	pushw iz
 	lds iz, 0
 	cp iz, 0x18
@@ -348593,7 +348593,7 @@ LABEL_FEC1F3:
 LABEL_FEC208:
 	.byte 0xd1, 0xe5, 0xe9, 0x3c, 0xfb, 0xff, 0x0e
 
-LABEL_FEC20F:
+FileIO_ReadMultiByteRecord:
 	push xiz
 	calr FileIO_ReadNextRecord
 	ld iz, hl
@@ -349299,7 +349299,7 @@ LABEL_FEC89A:
 	ld wa, hl
 	cps wa, 0
 	ret lt
-	calr LABEL_FEC20F
+	calr FileIO_ReadMultiByteRecord
 	ld xwa, xhl
 	cp xwa, 0x0
 	jr ge, LABEL_FEC8C5
@@ -349315,7 +349315,7 @@ LABEL_FEC8CB:
 	ld wa, hl
 	cps wa, 0
 	ret lt
-	calr LABEL_FEC20F
+	calr FileIO_ReadMultiByteRecord
 	ld xwa, xhl
 	cp xwa, 0x0
 	jr ge, LABEL_FEC8E5
@@ -349332,7 +349332,7 @@ LABEL_FEC8EB:
 	ld wa, hl
 	cps wa, 0
 	ret lt
-	calr LABEL_FEC20F
+	calr FileIO_ReadMultiByteRecord
 	ld xwa, xhl
 	cp xwa, 0x0
 	ret lt
@@ -349493,7 +349493,7 @@ LABEL_FECA34:
 	jr LABEL_FECA81
 
 LABEL_FECA51:
-	calr LABEL_FEC20F
+	calr FileIO_ReadMultiByteRecord
 	ld (xsp + 4), xhl
 	ld xwa, (xsp + 4)
 	cp xwa, 0x0
@@ -352474,7 +352474,7 @@ LABEL_FEE4A7:
 	inc 2, xsp
 	ret
 
-LABEL_FEE4BD:
+SndParam_ApplyMaskClamp:
 	dec 4, xsp
 	push xiz
 	ld (xsp + 4), xbc
@@ -352671,7 +352671,7 @@ SndParam_ApplyProgramChangeAsync:
 	ld (xsp + 8), a
 	lda xwa, (xsp + 8)
 	lda xbc, (xsp + 6)
-	calr LABEL_FEE4BD
+	calr SndParam_ApplyMaskClamp
 	lds wa, 5
 	call TaskSched_WaitForEvent
 	ld a, (xsp + 8)
@@ -352714,7 +352714,7 @@ LABEL_FEE6B1:
 	ld (xsp + 6), a
 	lda xwa, (xsp + 6)
 	lda xbc, (xsp + 4)
-	calr LABEL_FEE4BD
+	calr SndParam_ApplyMaskClamp
 	lds wa, 5
 	call TaskSched_WaitForEvent
 	ld a, (xsp + 6)
@@ -353058,7 +353058,7 @@ LABEL_FEE957:
 	pop xiz
 	ret
 
-LABEL_FEE964:
+SndParam_ApplyVoiceValue:
 	push xiz
 	ld xiz, xwa
 	ld a, (xiz + 5)
@@ -353177,7 +353177,7 @@ LABEL_FEEA24:
 LABEL_FEEA63:
 	lda xwa, (xsp + 6)
 	lda xbc, (xsp + 4)
-	calr LABEL_FEE4BD
+	calr SndParam_ApplyMaskClamp
 	cp (xsp + 4), 0x40
 	jr z, LABEL_FEEA84
 	cp (xsp + 4), 0x41
