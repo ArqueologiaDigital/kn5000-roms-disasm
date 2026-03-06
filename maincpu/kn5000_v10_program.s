@@ -180466,7 +180466,7 @@ LABEL_F60E2C:
 	inc 1, ix
 	stda16 13926, xix
 	ldda16 xix, 13920
-	calr LABEL_F61076
+	calr AccPatch_CalcBlockCopyBounds
 	jr LABEL_F60E85
 
 LABEL_F60E60:
@@ -180490,7 +180490,7 @@ LABEL_F60E78:
 LABEL_F60E7B:
 	cpdi8 32578, 0
 	jr nz, LABEL_F60E85
-	calr LABEL_F61076
+	calr AccPatch_CalcBlockCopyBounds
 
 LABEL_F60E85:
 	ret
@@ -180702,7 +180702,7 @@ LABEL_F61062:
 LABEL_F61075:
 	ret
 
-LABEL_F61076:
+AccPatch_CalcBlockCopyBounds:
 	ldda16 xwa, 13828
 	sub wa, 0x6
 	ldda16 xbc, 13924
@@ -180787,7 +180787,7 @@ LABEL_F610FE:
 	subda16 xix, 13920
 	stda16 13926, xix
 	ldda16 xix, 13920
-	calr LABEL_F612E8
+	calr AccPatch_ForwardBlockCopy
 	jr LABEL_F61162
 
 LABEL_F6113B:
@@ -180813,7 +180813,7 @@ __jrt_nop_F61158:
 LABEL_F61158:
 	cpdi8 32578, 0
 	jr nz, LABEL_F61162
-	calr LABEL_F612E8
+	calr AccPatch_ForwardBlockCopy
 
 LABEL_F61162:
 	ret
@@ -180982,7 +180982,7 @@ LABEL_F612D4:
 LABEL_F612E7:
 	ret
 
-LABEL_F612E8:
+AccPatch_ForwardBlockCopy:
 	cpdi8 32578, 0
 	jr nz, LABEL_F6132B
 	ldw wa, 0xFE
@@ -181523,7 +181523,7 @@ LABEL_F6174C:
 LABEL_F61755:
 	anddi8 13520, 223
 
-LABEL_F6175A:
+ToneGen_CalcAndRestart:
 	calr LABEL_F61BAD
 	jrl LABEL_F61803
 
@@ -181560,12 +181560,12 @@ LABEL_F61760:
 	jr z, ToneGen_ProcessVoiceEvent
 	cp a, 0xD6
 	jr z, ToneGen_ProcessVoiceEvent
-	jr LABEL_F6175A
+	jr ToneGen_CalcAndRestart
 
 ToneGen_ProcessVoiceEvent:
 	calr AccVoice_ReadCurrentToneType
 	cps a, 0
-	jr nz, LABEL_F6175A
+	jr nz, ToneGen_CalcAndRestart
 	ldda16 xwa, 13419
 	stda16 13588, xwa
 	ldda16 xwa, 13385
@@ -181576,7 +181576,7 @@ ToneGen_ProcessVoiceEvent:
 	ld_srib3 A, 0x07, 0xEC, 0xE0
 	pushw wa
 	push xhl
-	calr LABEL_F61BDB
+	calr ToneGen_AdvancePeriodWrap
 	pop xhl
 	popw wa
 
@@ -181586,7 +181586,7 @@ LABEL_F617F5:
 	ld w, a
 	stda8 13564, w
 	popw wa
-	calr LABEL_F61C18
+	calr ToneGen_ClassifyAndDispatch
 
 LABEL_F61803:
 	anddi8 13519, 127
@@ -181643,7 +181643,7 @@ LABEL_F61868:
 	ldb w, 0xC
 
 LABEL_F6187A:
-	calr LABEL_F61A64
+	calr ToneGen_AdjustNoteWrap
 	ldb a, 0x4
 	stda8 14098, a
 	ldb w, 0xFF
@@ -181692,9 +181692,9 @@ LABEL_F618E4:
 
 LABEL_F618F3:
 	ldda8 e, 13564
-	calr LABEL_F61A64
+	calr ToneGen_AdjustNoteWrap
 	popw wa
-	calr LABEL_F61C18
+	calr ToneGen_ClassifyAndDispatch
 
 LABEL_F618FE:
 	ret
@@ -181853,7 +181853,7 @@ LABEL_F61A5F:
 LABEL_F61A62:
 	.byte 0x00, 0x00
 
-LABEL_F61A64:
+ToneGen_AdjustNoteWrap:
 	ld a, e
 	sub a, w
 	jr c, LABEL_F61A70
@@ -182027,11 +182027,11 @@ LABEL_F61BCE:
 
 LABEL_F61BD0:
 	cp a, 0x60
-	jr z, LABEL_F61BDB
+	jr z, ToneGen_AdvancePeriodWrap
 	stda8 13564, a
 	jr LABEL_F61C15
 
-LABEL_F61BDB:
+ToneGen_AdvancePeriodWrap:
 	stdi8 13564, 0
 	ldda8 a, 13563
 	inc 1, a
@@ -182061,7 +182061,7 @@ LABEL_F61C15:
 LABEL_F61C16:
 	.byte 0x00, 0x00
 
-LABEL_F61C18:
+ToneGen_ClassifyAndDispatch:
 	cp a, 0xD1
 	jr z, ToneGen_ClassifyStereoType
 	cp a, 0xD2
@@ -182533,7 +182533,7 @@ LABEL_F62034:
 	ldda16 xwa, 13834
 	stda16 13387, xwa
 	call AccPatch_InitSlotAndCopyData
-	calr LABEL_F621C6
+	calr ToneGen_AdvanceSeqList
 	stdi8 13566, 0
 	bitda 0, 12931
 	jr nz, LABEL_F6208D
@@ -182692,7 +182692,7 @@ LABEL_F621A7:
 LABEL_F621C4:
 	.byte 0x00, 0x00
 
-LABEL_F621C6:
+ToneGen_AdvanceSeqList:
 	calr LABEL_F6249A
 	ldda32 xhl, 13640
 	ld wa, (xhl)
@@ -183706,7 +183706,7 @@ LABEL_F62BE3:
 	ldda16 xwa, 13834
 	stda16 13387, xwa
 	call AccPatch_InitSlotAndCopyData
-	calr LABEL_F621C6
+	calr ToneGen_AdvanceSeqList
 	jr LABEL_F62C3D
 
 LABEL_F62C28:
