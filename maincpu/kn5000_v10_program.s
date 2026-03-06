@@ -159992,7 +159992,7 @@ LABEL_F52F33:
 	popw iz
 	ret
 
-LABEL_F52F35:
+FDC_DrainQueuesAndReset:
 	lds wa, 2
 	call TaskMsg_TryReceive
 	or xhl, xhl
@@ -160140,7 +160140,7 @@ LABEL_F530B0:
 	jrl TaskBuf_ReadNextByte
 
 LABEL_F530B3:
-	calr LABEL_F52F35
+	calr FDC_DrainQueuesAndReset
 	sti8_24 0x03e3ec, 0x00
 	jrl LABEL_F531CF
 
@@ -160368,7 +160368,7 @@ LABEL_F532B1:
 	ret
 
 LABEL_F532B2:
-	call LABEL_F562FA
+	call AccBuf_ResetAllPositions
 	call 0xF54651
 	ret
 
@@ -160977,7 +160977,7 @@ LABEL_F53898:
 	jr z, LABEL_F538D5
 
 LABEL_F538C7:
-	calr LABEL_F5392A
+	calr AccChannel_SetDirtyIfActive
 	calr LABEL_F5393B
 	calr LABEL_F53961
 	ordi8 13068, 1
@@ -161001,7 +161001,7 @@ LABEL_F538EC:
 	.byte 0xf7, 0x32, 0x21, 0xc8, 0xcc, 0x7f, 0xc8, 0xcc
 	.byte 0x07, 0xf1, 0xe8, 0x32, 0x41, 0x0e
 
-LABEL_F5392A:
+AccChannel_SetDirtyIfActive:
 	ldda16 xwa, 13027
 	and w, 0x7
 	cps w, 0
@@ -161194,7 +161194,7 @@ LABEL_F53AE2:
 	anddi8 13067, 253
 	anddi8 13094, 192
 	ordi8 13067, 1
-	calr LABEL_F5392A
+	calr AccChannel_SetDirtyIfActive
 
 LABEL_F53B0F:
 	bitda 1, 13053
@@ -161208,7 +161208,7 @@ LABEL_F53B0F:
 	anddi8 13067, 254
 	anddi8 13094, 192
 	ordi8 13067, 2
-	calr LABEL_F5392A
+	calr AccChannel_SetDirtyIfActive
 
 LABEL_F53B3C:
 	ret
@@ -161450,7 +161450,7 @@ AccVoice_LookupWithOffset:
 	ld xiy, xhl
 	ret
 
-LABEL_F53DA8:
+AccVoice_SelectAndApplyPatch:
 	cpdi8 13029, 128
 	jr nc, LABEL_F53DBC
 	ldda32 xiy, 13006
@@ -161641,11 +161641,11 @@ LABEL_F53F35:
 
 LABEL_F53F59:
 	calr LABEL_F53F76
-	calr LABEL_F53F86
-	calr LABEL_F54065
-	calr LABEL_F5413D
-	calr LABEL_F541EE
-	calr LABEL_F5429F
+	calr RhythmPart1_ProcessAccentData
+	calr RhythmPart2_ProcessAccentData
+	calr AccVoice_LoadRhythmParams_Part3
+	calr AccVoice_LoadRhythmParams_Part4
+	calr AccVoice_LoadRhythmParams_Part5
 	bitda 0, 12931
 	jr nz, LABEL_F53F75
 	call LABEL_F5442F
@@ -161660,7 +161660,7 @@ LABEL_F53F76:
 	ldir85
 	ret
 
-LABEL_F53F86:
+RhythmPart1_ProcessAccentData:
 	bitda 0, 12931
 	jr z, LABEL_F53F90
 	call LABEL_F5459F
@@ -161762,7 +161762,7 @@ RingBuf_AdvanceIndex:
 LABEL_F54064:
 	ret
 
-LABEL_F54065:
+RhythmPart2_ProcessAccentData:
 	bitda 0, 12931
 	jr z, LABEL_F5406F
 	call LABEL_F545C1
@@ -161837,7 +161837,7 @@ Rhythm_PackVelocityHighBit:
 LABEL_F5413C:
 	ret
 
-LABEL_F5413D:
+AccVoice_LoadRhythmParams_Part3:
 	bitda 0, 12931
 	jr z, LABEL_F54147
 	call LABEL_F545E5
@@ -161892,7 +161892,7 @@ LABEL_F541E4:
 	call AccVoiceReg_WritePart3
 	ret
 
-LABEL_F541EE:
+AccVoice_LoadRhythmParams_Part4:
 	bitda 0, 12931
 	jr z, LABEL_F541F8
 	call LABEL_F54609
@@ -161947,7 +161947,7 @@ LABEL_F54295:
 	call AccVoiceReg_WritePart4
 	ret
 
-LABEL_F5429F:
+AccVoice_LoadRhythmParams_Part5:
 	bitda 0, 12931
 	jr z, LABEL_F542A9
 	call LABEL_F5462D
@@ -162086,7 +162086,7 @@ Rhythm_SendChanPressure:
 	ret
 
 LABEL_F54422:
-	call LABEL_F562FA
+	call AccBuf_ResetAllPositions
 	call AccompVoice_BulkReadRegisters
 	call AccStyle_InitVRAM_Wrap
 	ret
@@ -164693,7 +164693,7 @@ LABEL_F55E90:
 	calr LABEL_F55EF0
 	anddi8 12931, 251
 	stdi8 1122, 0
-	calr LABEL_F562FA
+	calr AccBuf_ResetAllPositions
 	call AccompVoice_BulkReadRegisters
 	ldda8 a, 13047
 	and a, 0x7F
@@ -164773,7 +164773,7 @@ LABEL_F55F87:
 	ldda8 h, 13030
 	call AccVoice_LookupWithOffset
 	stda32 13006, xiy
-	call LABEL_F53DA8
+	call AccVoice_SelectAndApplyPatch
 	call LABEL_F5387B
 	ldda32 xiy, 13006
 	call Rhythm_UpdateTuningConfig
@@ -164865,7 +164865,7 @@ LABEL_F560C5:
 	ld a, l
 	call AccVoice_LookupWithOffset
 	stda32 13011, xiy
-	call LABEL_F53DA8
+	call AccVoice_SelectAndApplyPatch
 	ldda8 w, 13029
 	call LABEL_F54688
 	bitda 0, 13155
@@ -165066,7 +165066,7 @@ LABEL_F562DA:
 	anddi8 13080, 192
 	ret
 
-LABEL_F562FA:
+AccBuf_ResetAllPositions:
 	ld xhl, 0x2A94
 	call AccBuf_ResetOnePosition
 	ld xhl, 0x2B94
@@ -166442,7 +166442,7 @@ AccKbd1_ProcessNotes:
 	ldir85
 	ldda8 a, 13372
 	stda8 13036, a
-	call LABEL_F53F86
+	call RhythmPart1_ProcessAccentData
 	anddi8 13100, 254
 
 AccKbd1_ProcessReturn:
@@ -167263,7 +167263,7 @@ AccCh1_ProcessNotes:
 	ldir85
 	ldda8 a, 13372
 	stda8 13036, a
-	call LABEL_F54065
+	call RhythmPart2_ProcessAccentData
 	anddi8 13100, 251
 
 AccCh1_ProcessReturn:
@@ -167438,7 +167438,7 @@ AccCh2_ProcessNotes:
 	ldir85
 	ldda8 a, 13372
 	stda8 13036, a
-	call LABEL_F5413D
+	call AccVoice_LoadRhythmParams_Part3
 	anddi8 13100, 247
 
 AccCh2_ProcessReturn:
@@ -167613,7 +167613,7 @@ AccCh3_ProcessNotes:
 	ldir85
 	ldda8 a, 13372
 	stda8 13036, a
-	call LABEL_F541EE
+	call AccVoice_LoadRhythmParams_Part4
 	anddi8 13100, 239
 
 AccCh3_ProcessReturn:
@@ -167788,7 +167788,7 @@ AccCh4_ProcessNotes:
 	ldir85
 	ldda8 a, 13372
 	stda8 13036, a
-	call LABEL_F5429F
+	call AccVoice_LoadRhythmParams_Part5
 	anddi8 13100, 223
 
 AccCh4_ProcessReturn:
@@ -168655,7 +168655,7 @@ AccStyle_LoadAndApply:
 	call LABEL_F54688
 
 AccStyle_Finalize:
-	call LABEL_F53DA8
+	call AccVoice_SelectAndApplyPatch
 	jr __jrt_nop_F587C4
 __jrt_nop_F587C4:
 
@@ -169853,13 +169853,13 @@ AccNote_FlushAll:
 	and a, 0x3F
 	jr z, AccNote_FlushReturn
 	call LABEL_F53F76
-	call LABEL_F53F86
+	call RhythmPart1_ProcessAccentData
 	ldb a, 0x1
 	stda8 13036, a
-	call LABEL_F54065
-	call LABEL_F5413D
-	call LABEL_F541EE
-	call LABEL_F5429F
+	call RhythmPart2_ProcessAccentData
+	call AccVoice_LoadRhythmParams_Part3
+	call AccVoice_LoadRhythmParams_Part4
+	call AccVoice_LoadRhythmParams_Part5
 	anddi8 13100, 192
 
 AccNote_FlushReturn:
@@ -176864,16 +176864,16 @@ LABEL_F5ECC4:
 
 LABEL_F5ECDB:
 	bitda 1, 13519
-	jr z, LABEL_F5ED11
+	jr z, AccPatch_DetectModeChange
 	anddi8 13519, 253
 	ldda8 a, 13519
 	and a, 0xC
 	cps a, 0
-	jr nz, LABEL_F5ED11
+	jr nz, AccPatch_DetectModeChange
 	ldda8 a, 13820
 	and a, 0xC
 	cps a, 0
-	jr nz, LABEL_F5ED11
+	jr nz, AccPatch_DetectModeChange
 	calr LABEL_F5F1B7
 	push xwa
 	push xhl
@@ -176891,7 +176891,7 @@ LABEL_F5ECDB:
 	pop xhl
 	pop xwa
 
-LABEL_F5ED11:
+AccPatch_DetectModeChange:
 	call LABEL_F5FE07
 	ldda8 a, 12979
 	and a, 0x7
@@ -177019,7 +177019,7 @@ LABEL_F5EDE3:
 	calr LABEL_F5EF72
 	calr LABEL_F5EF1C
 	ordi8 13517, 128
-	calr LABEL_F5FFC1
+	calr AccPatch_ScanToSequenceStart
 	ret
 
 AccPatch_InitFromSlotIndex:
@@ -178667,7 +178667,7 @@ LABEL_F5FE68:
 	ldda8 a, 14235
 	cpda8 a, 13822
 	jr z, LABEL_F5FE78
-	calr LABEL_F5FFC1
+	calr AccPatch_ScanToSequenceStart
 	calr AccPatch_InitAndLoadSequence
 
 LABEL_F5FE78:
@@ -178787,7 +178787,7 @@ LABEL_F5FFBF:
 LABEL_F5FFC0:
 	.byte 0x0e
 
-LABEL_F5FFC1:
+AccPatch_ScanToSequenceStart:
 	calr AccPatch_InitCurrentSlotPointer
 
 LABEL_F5FFC4:
@@ -179199,7 +179199,7 @@ LABEL_F602EB:
 	ldda16 xwa, 13844
 	cpda16 xwa, 13796
 	jr nz, LABEL_F60305
-	calr LABEL_F603A7
+	calr AccPatch_CheckSequenceChanged
 	jrl LABEL_F60385
 
 LABEL_F60305:
@@ -179238,7 +179238,7 @@ LABEL_F60338:
 	jr LABEL_F602EB
 
 LABEL_F60340:
-	calr LABEL_F603A7
+	calr AccPatch_CheckSequenceChanged
 	calr AccPatch_AdvanceSeqIndex
 	ldda16 xwa, 13842
 	stda16 13790, xwa
@@ -179279,7 +179279,7 @@ AccPatch_PrepareSequencePlayback:
 	stda16 13796, xwa
 	ret
 
-LABEL_F603A7:
+AccPatch_CheckSequenceChanged:
 	cpdi16 13834, 0
 	jr z, LABEL_F603FB
 	ldda16 xwa, 13790
@@ -179299,7 +179299,7 @@ LABEL_F603A7:
 	jr LABEL_F603FB
 
 LABEL_F603E5:
-	calr LABEL_F603FE
+	calr AccPatch_CopySequenceEntry
 	calr LABEL_F60466
 	ldda16 xwa, 13790
 	stda16 13842, xwa
@@ -179312,7 +179312,7 @@ LABEL_F603FB:
 LABEL_F603FC:
 	.byte 0x00, 0x00
 
-LABEL_F603FE:
+AccPatch_CopySequenceEntry:
 	ldda16 xde, 13830
 	ldda16 xwa, 13832
 	stda16 13922, xwa
@@ -179534,7 +179534,7 @@ LABEL_F605DD:
 	stda16 13790, xwa
 	ldda16 xwa, 14076
 	stda16 13792, xwa
-	calr LABEL_F603A7
+	calr AccPatch_CheckSequenceChanged
 	stdi16 13834, 0
 	calr AccPatch_PrepareSequencePlayback
 	jrl AccPatch_ProcessSequenceEvents
@@ -181118,7 +181118,7 @@ LABEL_F613EB:
 	stdi16 14151, 1
 	calr AccPlayback_CalcTimingPosition
 	call AccPatch_GetCurrentSlotAddr
-	call LABEL_F5FFC1
+	call AccPatch_ScanToSequenceStart
 	stdi8 14098, 4
 	stdi8 14103, 255
 	stdi8 13602, 0
@@ -182858,7 +182858,7 @@ AccVoice_InitPlaybackState:
 	ldda8 a, 13365
 	stda16 13918, xwa
 	calr LABEL_F623DA
-	call LABEL_F603FE
+	call AccPatch_CopySequenceEntry
 	call AccPatch_GetCurrentSlotAddr
 	calr AccVoice_InitPatternBuffer
 	stdi8 14098, 4
@@ -183604,7 +183604,7 @@ LABEL_F62AF7:
 	ldda8 a, 13365
 	stda16 13918, xwa
 	calr LABEL_F623DA
-	call LABEL_F603FE
+	call AccPatch_CopySequenceEntry
 	ret
 
 LABEL_F62B27:
@@ -351902,12 +351902,12 @@ LABEL_FEE008:
 	jr z, LABEL_FEE025
 	cps a, 1
 	jr nz, LABEL_FEE032
-	call LABEL_F52F35
+	call FDC_DrainQueuesAndReset
 	calr LABEL_FEE07C
 	jr LABEL_FEE032
 
 LABEL_FEE025:
-	call LABEL_F52F35
+	call FDC_DrainQueuesAndReset
 	jr LABEL_FEE032
 
 LABEL_FEE02B:
