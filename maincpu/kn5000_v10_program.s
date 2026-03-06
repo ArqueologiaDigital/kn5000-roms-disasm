@@ -181512,7 +181512,7 @@ LABEL_F6173A:
 
 LABEL_F61745:
 	call AccPatch_GetCurrentSlotAddr
-	calr LABEL_F62090
+	calr ToneGen_ProcessVoiceSlots
 
 LABEL_F6174C:
 	calr LABEL_F61B7A
@@ -181609,7 +181609,7 @@ LABEL_F6182B:
 
 LABEL_F61836:
 	call AccPatch_GetCurrentSlotAddr
-	calr LABEL_F62090
+	calr ToneGen_ProcessVoiceSlots
 	anddi8 13602, 254
 
 LABEL_F61842:
@@ -182346,7 +182346,7 @@ LABEL_F61E94:
 	adddi16 13834, 6
 	ld (xiy), 0x90
 	inc 1, xiy
-	calr LABEL_F61EB1
+	calr ToneGen_WriteVoiceEventEntry
 	dec 1, e
 	jr LABEL_F61E94
 
@@ -182356,7 +182356,7 @@ LABEL_F61EAE:
 LABEL_F61EAF:
 	.byte 0x00, 0x00
 
-LABEL_F61EB1:
+ToneGen_WriteVoiceEventEntry:
 	ldda8 a, 13564
 	ld (xiy), a
 	inc 1, xiy
@@ -182399,14 +182399,14 @@ LABEL_F61EFA:
 	adddi16 13834, 6
 	ld (xiy), 0x90
 	inc 1, xiy
-	calr LABEL_F61EB1
+	calr ToneGen_WriteVoiceEventEntry
 	jr LABEL_F61F39
 
 LABEL_F61F1B:
 	adddi16 13834, 8
 	ld (xiy), 0x91
 	inc 1, xiy
-	calr LABEL_F61EB1
+	calr ToneGen_WriteVoiceEventEntry
 	ldda8 a, 13362
 	ld (xiy), a
 	inc 1, xiy
@@ -182479,19 +182479,19 @@ LABEL_F61FAC:
 
 LABEL_F61FBA:
 	bitda 5, 13546
-	jr z, LABEL_F61FDB
+	jr z, ToneGen_LoadRhythmPatternParams
 	bitda 3, 14235
-	jr nz, LABEL_F61FDB
+	jr nz, ToneGen_LoadRhythmPatternParams
 
 LABEL_F61FC6:
 	cps a, 7
-	jr nz, LABEL_F61FDB
+	jr nz, ToneGen_LoadRhythmPatternParams
 	stdi8 13361, 1
 	stdi8 13362, 3
 	stdi8 13363, 0
 	jr LABEL_F62001
 
-LABEL_F61FDB:
+ToneGen_LoadRhythmPatternParams:
 	xor xbc, xbc
 	ld c, a
 	sla a, 1
@@ -182521,7 +182521,7 @@ LABEL_F62002:
 
 LABEL_F62034:
 	andmi8 (xiy + 15), 0x7F
-	calr LABEL_F62090
+	calr ToneGen_ProcessVoiceSlots
 	ldda16 xwa, 13419
 	stda16 13826, xwa
 	xor w, w
@@ -182551,7 +182551,7 @@ LABEL_F6208D:
 LABEL_F6208E:
 	.byte 0x00, 0x00
 
-LABEL_F62090:
+ToneGen_ProcessVoiceSlots:
 	calr LABEL_F6216B
 	calr ToneGen_GetSlotIndex
 	stda16 13419, xhl
@@ -183060,7 +183060,7 @@ LABEL_F62540:
 	lds hl, 5
 	ldfr_werp DE, 0xE2
 	div xwa, xhl
-	jr LABEL_F625B0
+	jr ToneGen_CalcTempoBeatsAndTicks
 
 LABEL_F62585:
 	cps a, 0
@@ -183074,20 +183074,20 @@ LABEL_F62585:
 	ldw hl, 0x14
 	ldfr_werp DE, 0xE2
 	div xwa, xhl
-	jr LABEL_F625B0
+	jr ToneGen_CalcTempoBeatsAndTicks
 
 LABEL_F625A0:
 	cps a, 2
 	jr nz, LABEL_F625AB
 	srl de, 1
 	ld wa, de
-	jr LABEL_F625B0
+	jr ToneGen_CalcTempoBeatsAndTicks
 
 LABEL_F625AB:
 	srl de, 2
 	ld wa, de
 
-LABEL_F625B0:
+ToneGen_CalcTempoBeatsAndTicks:
 	ldb l, 0x60
 	div8rr a, l
 	stda8 13357, w
@@ -183168,9 +183168,9 @@ LABEL_F6265F:
 
 LABEL_F62661:
 	bitda 5, 13520
-	jr z, LABEL_F6268A
+	jr z, AccVoice_DispatchType5Handler
 	cpdi8 14098, 4
-	jr nz, LABEL_F6268A
+	jr nz, AccVoice_DispatchType5Handler
 	ldda8 a, 14125
 	and a, 0xC
 	cps a, 0
@@ -183181,10 +183181,10 @@ LABEL_F6267C:
 	ldda8 a, 14125
 	and a, 0x3
 	cps a, 0
-	jr z, LABEL_F6268A
+	jr z, AccVoice_DispatchType5Handler
 	calr LABEL_F62778
 
-LABEL_F6268A:
+AccVoice_DispatchType5Handler:
 	bitda 5, 13520
 	jr z, LABEL_F626A5
 	cpdi8 14098, 5
@@ -183469,17 +183469,17 @@ LABEL_F62986:
 
 LABEL_F629B6:
 	bitda 5, 13546
-	jr z, LABEL_F629CA
+	jr z, AccVoice_ResolveNoteOnOffType
 	bitda 3, 14235
-	jr nz, LABEL_F629CA
+	jr nz, AccVoice_ResolveNoteOnOffType
 
 LABEL_F629C2:
 	cps a, 7
-	jr nz, LABEL_F629CA
+	jr nz, AccVoice_ResolveNoteOnOffType
 	ldb e, 0x91
 	jr LABEL_F629E4
 
-LABEL_F629CA:
+AccVoice_ResolveNoteOnOffType:
 	xor xhl, xhl
 	ld l, a
 	sla a, 1
@@ -183639,19 +183639,19 @@ LABEL_F62B29:
 
 LABEL_F62B79:
 	bitda 5, 13546
-	jr z, LABEL_F62B96
+	jr z, AccVoice_WriteNoteEventToBuffer
 	bitda 3, 14235
-	jr nz, LABEL_F62B96
+	jr nz, AccVoice_WriteNoteEventToBuffer
 
 LABEL_F62B85:
 	cps a, 7
-	jr nz, LABEL_F62B96
+	jr nz, AccVoice_WriteNoteEventToBuffer
 	ld (xiy), 0x91
 	ld (xiy + 6), 0x3
 	ld (xiy + 7), 0x0
 	jr LABEL_F62BC0
 
-LABEL_F62B96:
+AccVoice_WriteNoteEventToBuffer:
 	xor xhl, xhl
 	ld l, a
 	sla a, 1
@@ -184465,7 +184465,7 @@ LABEL_F63278:
 	ldw bc, 0x54
 	ldir85
 	calr LABEL_F63312
-	calr LABEL_F6333C
+	calr AccPatch_LoadDualVoiceParamsB
 	calr LABEL_F63366
 	ret
 
@@ -184501,7 +184501,7 @@ LABEL_F63312:
 LABEL_F6333A:
 	.byte 0x00, 0x00
 
-LABEL_F6333C:
+AccPatch_LoadDualVoiceParamsB:
 	ldda32 xiy, 13664
 	ld hl, (xiy + 256)
 	stda16 13720, xhl
@@ -184705,13 +184705,13 @@ LABEL_F63538:
 	cpdi8 13551, 3
 	jr z, LABEL_F63581
 	calr LABEL_F63A6C
-	calr LABEL_F6333C
+	calr AccPatch_LoadDualVoiceParamsB
 	calr LABEL_F63B27
 	jr LABEL_F6358A
 
 LABEL_F63581:
 	calr LABEL_F6382E
-	calr LABEL_F6333C
+	calr AccPatch_LoadDualVoiceParamsB
 	calr LABEL_F63CAC
 
 LABEL_F6358A:
@@ -187967,7 +187967,7 @@ Tempo_DisplayBPMNoFrac:
 	jr z, Tempo_DisplayBPMWithDec
 
 Tempo_DisplayBPMDecimal:
-	calr LABEL_F66B9F
+	calr Voice_ScanTableByType
 	cps l, 1
 	jr nz, Tempo_DisplayBPMFraction
 	jr Tempo_DisplayBPMExit
@@ -187979,7 +187979,7 @@ Tempo_DisplayBPMWithDec:
 
 Tempo_DisplayBPMFinal:
 	stdi8 14744, 129
-	calr LABEL_F66B9F
+	calr Voice_ScanTableByType
 	cps l, 1
 	jr z, Tempo_DisplayBPMExit
 	inc1_berp 0xFB
@@ -187989,7 +187989,7 @@ Tempo_DisplayBPMFinal:
 
 Tempo_DisplayBPMClean:
 	stdi8 14744, 131
-	calr LABEL_F66B9F
+	calr Voice_ScanTableByType
 	cps l, 1
 	jr z, Tempo_DisplayBPMExit
 	ldb l, 0x0
@@ -188516,7 +188516,7 @@ LABEL_F66B9D:
 	pop xiz
 	ret
 
-LABEL_F66B9F:
+Voice_ScanTableByType:
 	push xiz
 	calr LABEL_F66CFB
 	ld xwa, xhl
