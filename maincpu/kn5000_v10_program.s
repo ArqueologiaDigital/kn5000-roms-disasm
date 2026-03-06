@@ -203171,10 +203171,10 @@ LABEL_F7498B:
 
 LABEL_F749A8:
 	lds wa, 1
-	call LABEL_FAA761
+	call SetNeedUpdate
 	call UpdateScreen
 	lds wa, 0
-	call LABEL_FAA761
+	call SetNeedUpdate
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E00078
 	lds32 xde, 0
@@ -215700,10 +215700,10 @@ AcWelcomScreen_Activate:
 	lds bc, 0
 	call 0xFAB273
 	lds wa, 1
-	call LABEL_FAA761
+	call SetNeedUpdate
 	call UpdateScreen
 	lds wa, 0
-	call LABEL_FAA761
+	call SetNeedUpdate
 	call 0xFAA5B6
 
 AcWelcomScreen_Activate_Setup:
@@ -219691,10 +219691,10 @@ IvDrawbar1_DrawbarUpdate_Render:
 	ld bc, (xde)
 	calr LABEL_F83B92
 	lds wa, 1
-	call LABEL_FAA761
+	call SetNeedUpdate
 	call UpdateScreen
 	lds wa, 0
-	call LABEL_FAA761
+	call SetNeedUpdate
 	ld xwa, (xsp + 4)
 	add xwa, xwa
 	ld xde, 0x2479E
@@ -233958,12 +233958,12 @@ LABEL_F9806C:
 	lds32 xde, 0
 	call PostEvent
 	lds wa, 0
-	call LABEL_FAA761
+	call SetNeedUpdate
 	call 0xFA9585
 	lds wa, 1
 
 LABEL_F98098:
-	call LABEL_FAA761
+	call SetNeedUpdate
 	call UpdateScreen
 
 LABEL_F980A0:
@@ -233972,7 +233972,7 @@ LABEL_F980A0:
 	lds wa, 2
 	call TaskSched_WaitForEvent
 	lds wa, 0
-	call LABEL_FAA761
+	call SetNeedUpdate
 	call INTTR4_BytecodeSnippet
 	cps l, 0
 	jr z, LABEL_F980A0
@@ -233989,7 +233989,7 @@ LABEL_F980A0:
 	lds32 xde, 0
 	call DirmdEmulator_Entry
 	lds wa, 1
-	call LABEL_FAA761
+	call SetNeedUpdate
 	call UpdateScreen
 	calr WakeUpMainTask
 	jr LABEL_F980A0
@@ -236950,7 +236950,7 @@ LABEL_F99EF1:
 LABEL_F99EFB:
 	call 0xFA9660
 	lds wa, 1
-	call LABEL_FAA761
+	call SetNeedUpdate
 	call UpdateScreen
 	lds wa, 0
 	jrl GroupBox_DisableDisplay
@@ -237012,7 +237012,7 @@ LABEL_F99FA2:
 
 LABEL_F99FA9:
 	lds wa, 1
-	call LABEL_FAA761
+	call SetNeedUpdate
 	call UpdateScreen
 	lds wa, 0
 	jrl GroupBox_DisableDisplay
@@ -237555,12 +237555,12 @@ GroupBox_CloseAll_Next:
 	; Enables display (FAA761 with WA=1), calls UpdateScreen, then disables.
 GroupBox_DisplayUpdate:
 	lds wa, 1
-	call LABEL_FAA761
+	call SetNeedUpdate
 	call UpdateScreen
 	lds wa, 0
 
 GroupBox_DisableDisplay:
-	call LABEL_FAA761
+	call SetNeedUpdate
 
 GroupBox_ReturnZero:
 	lds32 xhl, 0
@@ -237877,10 +237877,10 @@ Screen_Deactivate:
 	ld xde, xiz
 	calr GroupBoxProc
 	lds wa, 1
-	call LABEL_FAA761
+	call SetNeedUpdate
 	call UpdateScreen
 	lds wa, 0
-	call LABEL_FAA761
+	call SetNeedUpdate
 	jr Screen_ReturnZero
 
 Screen_OK:
@@ -262908,8 +262908,6 @@ LABEL_FAA75D:
 	popw iz
 	inc 8, xsp
 	ret
-LABEL_FAA761:
-
 SetNeedUpdate:
 	ret
 
@@ -273140,7 +273138,7 @@ __jrt_nop_FB1550:
 LABEL_FB1550:
 	sti16_24 0x03ef92, 0x0000
 	lds wa, 0
-	calr LABEL_FAA761
+	calr SetNeedUpdate
 	jrl DrawWall
 
 LABEL_FB155F:
@@ -273159,7 +273157,7 @@ __jrt_nop_FB1579:
 LABEL_FB1579:
 	sti16_24 0x03ef92, 0x0001
 	lds wa, 1
-	calr LABEL_FAA761
+	calr SetNeedUpdate
 	jrl UpdateScreen
 	ret
 
