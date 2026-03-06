@@ -120974,7 +120974,7 @@ LABEL_F39067:
 	ldda8 a, 9696
 	inc 1, a
 	extz wa
-	call LABEL_F40C02
+	call SeqVoice_CountEventsInBar
 	cpdi8 10362, 0
 	jr nz, LABEL_F39094
 	calr LABEL_F390D8
@@ -120994,7 +120994,7 @@ LABEL_F39099:
 	ldda8 a, 9696
 	inc 1, a
 	extz wa
-	call LABEL_F40C02
+	call SeqVoice_CountEventsInBar
 	cpdi8 10362, 0
 	call_24 z, 0xF3915B
 	ldmm16 10581, 10415
@@ -121449,7 +121449,7 @@ LABEL_F39552:
 	lds bc, 0
 	call Voice_ScanAvailableChannel
 	lds wa, 0
-	call LABEL_F424FF
+	call SeqScan_ProcessAllParts
 	calr SeqPlay_IterateAllChannels
 	lds wa, 0
 	lds bc, 0
@@ -121521,7 +121521,7 @@ LABEL_F39601:
 
 SeqPlay_ConfigureVoiceChannels:
 	ldda16 xwa, 1052
-	call LABEL_F424FF
+	call SeqScan_ProcessAllParts
 	ldda8 c, 1051
 	extz bc
 	ldda16 xwa, 1052
@@ -125646,7 +125646,7 @@ LABEL_F3BBC6:
 	extz bc
 	ld (xhl + 2), bc
 	ld wa, (xhl)
-	call LABEL_F41D69
+	call PartCtrl_WriteBytePair
 	pop xiz
 	lda xsp, (xsp + 18)
 	ret
@@ -128132,7 +128132,7 @@ LABEL_F3D281:
 	call PartCtrl_ReadWord
 	ldfr_werp HL, 0xFA
 	ld wa, iz
-	call LABEL_F41FB5
+	call PartCtrl_AppendToFreeList
 	cp_erpw 0xFA, 0xFF, 0xFF
 	jr nz, LABEL_F3D281
 
@@ -128400,7 +128400,7 @@ LABEL_F3D52E:
 	stdi16 10410, 0
 
 LABEL_F3D53E:
-	call LABEL_F41DF2
+	call Part_DeallocVoices1And2
 	pop xiz
 	lda xsp, (xsp + 28)
 	ret
@@ -128481,7 +128481,7 @@ SeqPlay_DispatchNoteParams:
 	ld c, (xhl + 8)
 	extz bc
 	ld wa, (xhl + 6)
-	call LABEL_F41D69
+	call PartCtrl_WriteBytePair
 	jr LABEL_F3D5FA
 
 LABEL_F3D5F3:
@@ -129579,11 +129579,11 @@ BitMapOut_PrepareAndDisplaySimple:
 	ret
 
 SeqBuf_AllocNextSlot:
-	jrl LABEL_F4270A
+	jrl Rhythm_ComputeNoteAllocation
 
 SeqBuf_AllocNextSlotAdjusted:
 	inc 1, wa
-	calr LABEL_F4270A
+	calr Rhythm_ComputeNoteAllocation
 	dec 1, hl
 	ret
 
@@ -131777,7 +131777,7 @@ LABEL_F3F345:
 	jr LABEL_F3F355
 
 LABEL_F3F352:
-	calr LABEL_F41DF2
+	calr Part_DeallocVoices1And2
 
 LABEL_F3F355:
 	pop xiz
@@ -131817,7 +131817,7 @@ LABEL_F3F395:
 	jr nz, LABEL_F3F3AE
 	cp (xsp + 10), 0x32
 	jr nz, LABEL_F3F3AE
-	calr LABEL_F41BEE
+	calr PartCtrl_InitChainLinkedList
 	sti16_24 0x00ffec, 0x0000
 	calr Part_UnlinkVoiceFromChain
 
@@ -134038,7 +134038,7 @@ LABEL_F408F8:
 	pop_werp 0xFA
 	ret
 
-LABEL_F408FC:
+SeqPart_CountActiveVoices:
 	push xiz
 	cpda8_24 a, 65507
 	jr nz, LABEL_F40909
@@ -134170,7 +134170,7 @@ LABEL_F409EF:
 	inc 6, xsp
 	ret
 
-LABEL_F409F3:
+SeqData_CopyBlockWithLookup:
 	lda xsp, (xsp - 34)
 	ld xiy, 0xE44600
 	ld xix, xsp
@@ -134254,7 +134254,7 @@ LABEL_F40AF0:
 	jr c, LABEL_F40AF0
 	ret
 
-LABEL_F40AFD:
+SeqVoice_SeekAndScanTracks:
 	dec 6, xsp
 	push xiz
 	ld (xsp + 6), xwa
@@ -134380,7 +134380,7 @@ LABEL_F40BFF:
 	lds hl, 0
 	ret
 
-LABEL_F40C02:
+SeqVoice_CountEventsInBar:
 	dec 8, xsp
 	ld (xsp + 6), a
 	calr SeqVoice_SetDefaultParams
@@ -134443,7 +134443,7 @@ LABEL_F40C89:
 	inc 8, xsp
 	ret
 
-LABEL_F40C8C:
+SeqPart_ComputePlaybackDelta:
 	push xiz
 	ld xiz, xwa
 	ldada xhl, 10284
@@ -134557,7 +134557,7 @@ LABEL_F40D73:
 
 LABEL_F40D77:
 	lda xwa, (xsp + 32)
-	calr LABEL_F40C8C
+	calr SeqPart_ComputePlaybackDelta
 	cps hl, 0
 	jrl nz, LABEL_F40E1B
 	ldada xbc, 10284
@@ -134617,7 +134617,7 @@ LABEL_F40DE6:
 	extz wa
 	ld (xbc + 2), wa
 	lda xwa, (xsp + 28)
-	calr LABEL_F40C8C
+	calr SeqPart_ComputePlaybackDelta
 	cps hl, 0
 	jr z, LABEL_F40E21
 
@@ -134825,7 +134825,7 @@ LABEL_F41037:
 	lda xsp, (xsp + 34)
 	ret
 
-LABEL_F4103C:
+SeqPart_ConsumeTicksFromBuffer:
 	dec 8, xsp
 	push xiz
 	ld (xsp + 4), xbc
@@ -134881,7 +134881,7 @@ LABEL_F410A0:
 	sub xiz, 0xFB
 	jr LABEL_F41061
 
-LABEL_F410A8:
+SeqPart_ApplyControlChanges:
 	dec 4, xsp
 	push_werp 0xFA
 	ld (xsp + 2), xwa
@@ -135051,7 +135051,7 @@ LABEL_F412AF:
 	ldmm16 10377, 9942
 
 LABEL_F412BF:
-	calr LABEL_F410A8
+	calr SeqPart_ApplyControlChanges
 	ldda8 c, 10048
 	extz bc
 	lds wa, 0
@@ -135102,7 +135102,7 @@ LABEL_F41345:
 	ldmm16 10377, 9938
 
 LABEL_F41355:
-	calr LABEL_F410A8
+	calr SeqPart_ApplyControlChanges
 
 SeqPart_AbortAndUpdateState:
 	calr SeqPlay_WriteErrorToVoiceTable
@@ -135180,11 +135180,11 @@ SeqData_SkipToNextEvent:
 LABEL_F413D9:
 	calr SeqData_AdvancePosition
 	cpdi8 10362, 0
-	jr z, LABEL_F413E8
+	jr z, SeqData_SkipEventParams
 	ldw wa, 0xD2
 	jr LABEL_F41407
 
-LABEL_F413E8:
+SeqData_SkipEventParams:
 	calr SeqData_ReadNextByte
 	cp l, 0x82
 	ret z
@@ -135194,7 +135194,7 @@ LABEL_F413E8:
 	ret nz
 	calr SeqData_AdvancePosition
 	cpdi8 10362, 0
-	jr z, LABEL_F413E8
+	jr z, SeqData_SkipEventParams
 	ldw wa, 0xD3
 
 LABEL_F41407:
@@ -135852,7 +135852,7 @@ LABEL_F418EB:
 	inc 2, xsp
 	ret
 
-LABEL_F418F2:
+Part_WriteAllVoiceSubBlocks_A:
 	dec 2, xsp
 	push_werp 0xFA
 	ld (xsp + 2), a
@@ -135892,7 +135892,7 @@ LABEL_F41927:
 	inc 2, xsp
 	ret
 
-LABEL_F41954:
+Part_WriteAllVoiceSubBlocks_B:
 	dec 2, xsp
 	push_werp 0xFA
 	ld (xsp + 2), a
@@ -136208,7 +136208,7 @@ LABEL_F41BE9:
 	lda xsp, (xsp + 12)
 	ret
 
-LABEL_F41BEE:
+PartCtrl_InitChainLinkedList:
 	pushw iz
 	lds wa, 1
 	calr Part_WriteWordBlock_OffsetAF
@@ -136359,7 +136359,7 @@ LABEL_F41CE1:
 	.byte 0x33, 0xff, 0xff, 0x68, 0x09, 0xb6, 0x53, 0xbe
 	.byte 0x02, 0x02, 0x05, 0x00, 0xdb, 0xa8, 0x5e, 0x0e
 
-LABEL_F41D69:
+PartCtrl_WriteBytePair:
 	push xiz
 	ld xiz, xde
 	ld hl, bc
@@ -136429,7 +136429,7 @@ LABEL_F41DE4:
 	inc 4, xsp
 	ret
 
-LABEL_F41DF2:
+Part_DeallocVoices1And2:
 	lds wa, 1
 	calr PartCtrl_ReadWord
 	ld wa, hl
@@ -136570,7 +136570,7 @@ LABEL_F41F07:
 
 Part_ClearAllVoiceChannels:
 	push_werp 0xFA
-	calr LABEL_F41BEE
+	calr PartCtrl_InitChainLinkedList
 	sti16_24 0x00ffec, 0x0000
 	calr Part_UnlinkVoiceFromChain
 	ldi_berp 0xFA, 0
@@ -136638,7 +136638,7 @@ LABEL_F41F96:
 	calr PartCtrl_ReadWord
 	ldfr_werp HL, 0xFA
 	ld wa, iz
-	calr LABEL_F41FB5
+	calr PartCtrl_AppendToFreeList
 	ldto_werp IZ, 0xFA
 	cp iz, 0xFFFF
 	jr nz, LABEL_F41F85
@@ -136647,7 +136647,7 @@ LABEL_F41FB3:
 	pop xiz
 	ret
 
-LABEL_F41FB5:
+PartCtrl_AppendToFreeList:
 	pushw iz
 	ld iz, wa
 	ldda16 xbc, 61999
@@ -136818,7 +136818,7 @@ LABEL_F420E5:
 	.byte 0xba, 0x02, 0x51, 0xdb, 0xa8, 0x5e, 0xef, 0x64
 	.byte 0x0e
 
-LABEL_F42156:
+SeqData_SkipToCurrentBar:
 	push_werp 0xFA
 	ldi_berp 0xFB, 0
 	cpdi8 8972, 0
@@ -136956,7 +136956,7 @@ LABEL_F42242:
 LABEL_F42256:
 	cpl bc
 	anddm16 8982, xbc
-	jrl LABEL_F424E7
+	jrl SeqScan_AdvancePartIndex
 
 LABEL_F4225F:
 	orddm16 8982, xbc
@@ -137112,7 +137112,7 @@ LABEL_F423D4:
 	inc 1, a
 	cpda8 a, 8988
 	jr nz, LABEL_F423FD
-	calr LABEL_F42156
+	calr SeqData_SkipToCurrentBar
 	jr LABEL_F423FD
 
 LABEL_F423EE:
@@ -137177,7 +137177,7 @@ LABEL_F4246B:
 	inc 1, a
 	cpda8 a, 8988
 	jr nz, SeqScan_CheckPartActiveAndStore
-	calr LABEL_F42156
+	calr SeqData_SkipToCurrentBar
 	jr SeqScan_CheckPartActiveAndStore
 
 LABEL_F42485:
@@ -137212,7 +137212,7 @@ SeqScan_StoreTrackEndData:
 
 LABEL_F424BF:
 	andda16 xde, 8982
-	jr z, LABEL_F424E7
+	jr z, SeqScan_AdvancePartIndex
 	inc 1, c
 	extz bc
 	ldda16 xhl, 10415
@@ -137227,7 +137227,7 @@ LABEL_F424BF:
 	ld (xwa), hl
 	ld (xwa + 2), de
 
-LABEL_F424E7:
+SeqScan_AdvancePartIndex:
 	ldda8 a, 9696
 	inc 1, a
 	stda8 9696, a
@@ -137238,7 +137238,7 @@ LABEL_F424E7:
 	lda xsp, (xsp + 14)
 	ret
 
-LABEL_F424FF:
+SeqScan_ProcessAllParts:
 	dec 6, xsp
 	push xiz
 	ld (xsp + 8), wa
@@ -137419,7 +137419,7 @@ LABEL_F42708:
 	pop xiz
 	ret
 
-LABEL_F4270A:
+Rhythm_ComputeNoteAllocation:
 	dec 4, xsp
 	ldw (xsp + 2), 0x0
 	ld (xsp), 0x0
@@ -138192,11 +138192,11 @@ LABEL_F42ECD:
 	extz wa
 	cps l, 0
 	jr nz, LABEL_F42F00
-	calr LABEL_F418F2
+	calr Part_WriteAllVoiceSubBlocks_A
 	jr LABEL_F42F03
 
 LABEL_F42F00:
-	calr LABEL_F41954
+	calr Part_WriteAllVoiceSubBlocks_B
 
 LABEL_F42F03:
 	ldto_berp A, 0xFB
@@ -139674,10 +139674,10 @@ LABEL_F43D4C:
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
 LABEL_F43D83:
-	call LABEL_F409F3
+	call SeqData_CopyBlockWithLookup
 	ldda8 a, 10360
 	extz wa
-	call LABEL_F408FC
+	call SeqPart_CountActiveVoices
 	ldda32 xwa, 10610
 	ld xbc, 0x1C0000F
 	ld xde, 0x1E
@@ -140467,10 +140467,10 @@ APP_EVENT_HANDLER_F447D3:
 	jr nc, LABEL_F4487E
 	inc 1, a
 	stda8 10360, a
-	call LABEL_F409F3
+	call SeqData_CopyBlockWithLookup
 	ldda8 a, 10360
 	extz wa
-	call LABEL_F408FC
+	call SeqPart_CountActiveVoices
 	ldda32 xwa, 10610
 	ld xbc, 0x1C0000F
 	ld xde, 0x1F
@@ -144170,12 +144170,12 @@ MainExe_SequencerStop:
 	cps l, 0
 	jr nz, MainExe_SeqStopMode1
 	lds wa, 0
-	call LABEL_F418F2
+	call Part_WriteAllVoiceSubBlocks_A
 	jr MainExe_SeqStopFinish
 
 MainExe_SeqStopMode1:
 	lds wa, 0
-	call LABEL_F41954
+	call Part_WriteAllVoiceSubBlocks_B
 
 MainExe_SeqStopFinish:
 	lds wa, 0
@@ -149944,7 +149944,7 @@ SeqPart_DrumPartHandler:
 	dec 1, wa
 	stda16 9948, xwa
 	ld xwa, 0x272C
-	call LABEL_F40AFD
+	call SeqVoice_SeekAndScanTracks
 	cpdi8 10362, 0
 	jrl nz, SeqPart_DrumPartJumpExit
 	ldda16 xwa, 9862
@@ -149987,7 +149987,7 @@ SeqPart_DrumPartExtended:
 	dec 1, wa
 	stda16 9948, xwa
 	ld xwa, 0x2732
-	call LABEL_F40AFD
+	call SeqVoice_SeekAndScanTracks
 	cpdi8 10362, 0
 	jr z, SeqPart_DrumPartBoundary
 
@@ -150613,7 +150613,7 @@ SeqPart_NavBackwardWrite:
 SeqPart_NavBackwardCleanup:
 	ld xwa, 0x26A8
 	ld xbc, 0x26AA
-	call LABEL_F4103C
+	call SeqPart_ConsumeTicksFromBuffer
 	cpdi8 10362, 0
 	jrl z, SeqPart_NavWalkerCleanup
 	jrl SeqPart_NavExit
@@ -150626,7 +150626,7 @@ SeqPart_NavBackwardReturn:
 	jrl nz, SeqPart_NavExit
 	ld xwa, 0x26B0
 	ld xbc, 0x26B2
-	call LABEL_F4103C
+	call SeqPart_ConsumeTicksFromBuffer
 	cpdi8 10362, 0
 	jr z, SeqPart_NavBackwardCleanup
 	jrl SeqPart_NavExit
