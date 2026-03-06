@@ -102,7 +102,7 @@ SetupExitFunc:
 	or xiz, xiz
 	jr nz, SetupExit_Return
 	lds wa, 6
-	call LABEL_FC56A1
+	call PanelDisplay_DispatchByMode
 	cps hl, 0
 	jr z, SetupExit_Return
 	ld xwa, 0xFFFFFFFF
