@@ -147486,18 +147486,18 @@ LABEL_F49742:
 LABEL_F4976F:
 	lda xwa, (xiy + 1)
 	cp hl, bc
-	jr nz, LABEL_F4978E
+	jr nz, SeqSearch_ComparePosition
 	ldda8 e, 9670
 	cp e, (xwa)
-	jr nz, LABEL_F4978E
+	jr nz, SeqSearch_ComparePosition
 	cpdi8 9672, 1
-	jr nz, LABEL_F4978E
+	jr nz, SeqSearch_ComparePosition
 	cps hl, 0
-	jr nz, LABEL_F4978E
+	jr nz, SeqSearch_ComparePosition
 	cps e, 0
 	jrl z, SeqSearch_AdvanceToPosition
 
-LABEL_F4978E:
+SeqSearch_ComparePosition:
 	cp bc, ix
 	ret ugt
 	cp bc, ix
@@ -161781,7 +161781,7 @@ LABEL_F5406F:
 	stda8 12995, a
 	ldda8 a, 12883
 	stda8 12999, a
-	calr LABEL_F54131
+	calr Rhythm_PackVelocityHighBit
 	bitda 0, 12931
 	jr nz, LABEL_F540B6
 	ld xhl, 0x3219
@@ -161828,7 +161828,7 @@ AccVoiceReg_StoreParamRecord:
 	ld (xhl + 4), a
 	ret
 
-LABEL_F54131:
+Rhythm_PackVelocityHighBit:
 	bit 7, e
 	jr z, LABEL_F5413C
 	or d, 0x10
@@ -161856,7 +161856,7 @@ LABEL_F54147:
 	stda8 12996, a
 	ldda8 a, 12890
 	stda8 13000, a
-	calr LABEL_F54131
+	calr Rhythm_PackVelocityHighBit
 	bitda 0, 12931
 	jr nz, LABEL_F5418E
 	ld xhl, 0x321E
@@ -161911,7 +161911,7 @@ LABEL_F541F8:
 	stda8 12997, a
 	ldda8 a, 12897
 	stda8 13001, a
-	calr LABEL_F54131
+	calr Rhythm_PackVelocityHighBit
 	bitda 0, 12931
 	jr nz, LABEL_F5423F
 	ld xhl, 0x3223
@@ -161966,7 +161966,7 @@ LABEL_F542A9:
 	stda8 12998, a
 	ldda8 a, 12904
 	stda8 13002, a
-	calr LABEL_F54131
+	calr Rhythm_PackVelocityHighBit
 	bitda 0, 12931
 	jr nz, LABEL_F542F0
 	ld xhl, 0x3228
@@ -162828,17 +162828,17 @@ LABEL_F54C22:
 	bitda 0, 12931
 	jrl z, LABEL_F54CAC
 	bitda 6, 10412
-	jr z, LABEL_F54C46
+	jr z, Rhythm_CompareAndTriggerNotes
 	bitda 2, 1057
-	jr z, LABEL_F54C46
+	jr z, Rhythm_CompareAndTriggerNotes
 	ldda8 a, 12927
 	cp a, 0x12
-	jr ule, LABEL_F54C46
+	jr ule, Rhythm_CompareAndTriggerNotes
 	cp a, 0x5C
-	jr ugt, LABEL_F54C46
+	jr ugt, Rhythm_CompareAndTriggerNotes
 	jrl LABEL_F54CAC
 
-LABEL_F54C46:
+Rhythm_CompareAndTriggerNotes:
 	bitda 1, 13015
 	jr nz, LABEL_F54C65
 	ldda8 a, 13016
@@ -162846,9 +162846,9 @@ LABEL_F54C46:
 	ldda8 l, 13023
 	ldda8 h, 13024
 	cp wa, hl
-	jr z, LABEL_F54C94
+	jr z, Rhythm_SaveCurrentNoteState
 	calr Rhythm_NoteOnAfterSetup_A
-	jr LABEL_F54C94
+	jr Rhythm_SaveCurrentNoteState
 
 LABEL_F54C65:
 	ldda8 a, 13016
@@ -162856,7 +162856,7 @@ LABEL_F54C65:
 	cp a, w
 	jr z, LABEL_F54C76
 	calr Rhythm_NoteOnAfterSetup_A
-	jr LABEL_F54C94
+	jr Rhythm_SaveCurrentNoteState
 
 LABEL_F54C76:
 	ldda8 a, 13017
@@ -162869,10 +162869,10 @@ LABEL_F54C85:
 	ldda8 a, 13018
 	ldda8 w, 13025
 	cp a, w
-	jr z, LABEL_F54C94
+	jr z, Rhythm_SaveCurrentNoteState
 	calr Rhythm_NoteOnAfterSetup_C
 
-LABEL_F54C94:
+Rhythm_SaveCurrentNoteState:
 	ldda8 a, 13016
 	stda8 13023, a
 	ldda8 a, 13017
@@ -163015,12 +163015,12 @@ RhythmEvt_ProcessNote:
 	jr nz, RhythmEvt_AlternateProcess
 	ldda8 a, 13023
 	stda8 13347, a
-	call LABEL_F5E8AA
+	call AccTuning_CallWithSaveRestore
 	ldda8 a, 13346
 	stda8 13348, a
 	ldda8 a, 13016
 	stda8 13347, a
-	call LABEL_F5E8AA
+	call AccTuning_CallWithSaveRestore
 	ldda8 a, 13346
 	cpdm8 13348, a
 	jr nz, RhythmEvt_AlternateProcess
@@ -163677,12 +163677,12 @@ Rhythm_ValidateAndSend:
 	jr nz, Rhythm_Validate_Mismatch
 	ldda8 a, 13023
 	stda8 13347, a
-	call LABEL_F5E8AA
+	call AccTuning_CallWithSaveRestore
 	ldda8 a, 13346
 	stda8 13348, a
 	ldda8 a, 13016
 	stda8 13347, a
-	call LABEL_F5E8AA
+	call AccTuning_CallWithSaveRestore
 	ldda8 a, 13346
 	cpdm8 13348, a
 	jr nz, Rhythm_Validate_Mismatch
@@ -164776,7 +164776,7 @@ LABEL_F55F87:
 	call LABEL_F53DA8
 	call LABEL_F5387B
 	ldda32 xiy, 13006
-	call LABEL_F56373
+	call Rhythm_UpdateTuningConfig
 	ldda32 xiy, 13006
 	ldda8 a, 13055
 	and a, 0x7
@@ -164935,7 +164935,7 @@ LABEL_F56178:
 
 LABEL_F5617F:
 	ldda32 xiy, 13011
-	calr LABEL_F56373
+	calr Rhythm_UpdateTuningConfig
 	ret
 
 LABEL_F56187:
@@ -165103,7 +165103,7 @@ LABEL_F56368:
 	call 0xF543E1
 	ret
 
-LABEL_F56373:
+Rhythm_UpdateTuningConfig:
 	ldda8 w, 13016
 	ldda8 a, 13112
 	calr LABEL_F563A2
@@ -165622,7 +165622,7 @@ LABEL_F5693B:
 LABEL_F56967:
 	ldda8 a, 13268
 	andda8 a, 13094
-	jr nz, LABEL_F569A4
+	jr nz, AccVoice_SetChordChangeFlags
 
 LABEL_F56971:
 	ldda8 a, 13065
@@ -165635,19 +165635,19 @@ LABEL_F56971:
 LABEL_F56983:
 	ldda8 a, 13268
 	andda8 a, 13095
-	jr nz, LABEL_F569A4
+	jr nz, AccVoice_SetChordChangeFlags
 
 LABEL_F5698D:
 	bitda 0, 13069
-	jr nz, LABEL_F569A4
+	jr nz, AccVoice_SetChordChangeFlags
 	ldda8 a, 13148
 	and a, 0x3F
 	jr z, LABEL_F569DA
 	bitda 7, 13153
-	jr nz, LABEL_F569A4
+	jr nz, AccVoice_SetChordChangeFlags
 	jr LABEL_F569DA
 
-LABEL_F569A4:
+AccVoice_SetChordChangeFlags:
 	ordi8 13043, 128
 	ordi8 13044, 1
 	ldda8 a, 13074
@@ -168610,7 +168610,7 @@ AccStyle_Init:
 	ldda8 h, 13030
 	call AccVoice_LookupWithOffset
 	stda32 13006, xiy
-	call LABEL_F56373
+	call Rhythm_UpdateTuningConfig
 	ldda8 a, 12963
 	ldb w, 0x0
 	call AccPart_GetVoiceParamOffsetTable
@@ -168647,7 +168647,7 @@ AccStyle_LoadAndApply:
 	ld a, l
 	call AccVoice_LookupWithOffset
 	stda32 13011, xiy
-	call LABEL_F56373
+	call Rhythm_UpdateTuningConfig
 	ldda32 xiy, 13006
 	call AccTuning_CopyAllPartsFromStyle
 	ordi8 13100, 63
@@ -176576,7 +176576,7 @@ LABEL_F5E847:	.ascii "<=>89:;"
 	.byte 0x89, 0x5b, 0x5a, 0xc9, 0x8d, 0x59, 0x58, 0x5e
 	.byte 0x5d, 0x5c, 0x0e
 
-LABEL_F5E8AA:
+AccTuning_CallWithSaveRestore:
 	push xix
 	push xiy
 	push xiz
@@ -176633,7 +176633,7 @@ LABEL_F5E918:
 	ret
 
 LABEL_F5E919:
-	calr LABEL_F5F444
+	calr AccPatch_CountAvailableSlots
 	ret
 
 LABEL_F5E91D:
@@ -176642,7 +176642,7 @@ LABEL_F5E91D:
 
 LABEL_F5E921:
 	calr LABEL_F5EAEE
-	calr LABEL_F5F444
+	calr AccPatch_CountAvailableSlots
 	call LABEL_F66EFD
 	stdi8 14775, 10
 	ret
@@ -176650,7 +176650,7 @@ LABEL_F5E921:
 LABEL_F5E931:
 	push xiz
 	call AccDemo_Init_Wrap
-	calr LABEL_F5F444
+	calr AccPatch_CountAvailableSlots
 	pop xiz
 	ret
 
@@ -177709,7 +177709,7 @@ LABEL_F5F41C:
 LABEL_F5F443:
 	ret
 
-LABEL_F5F444:
+AccPatch_CountAvailableSlots:
 	ldw wa, 0xBE
 	ldw de, 0x153
 	xor iy, iy
@@ -178668,7 +178668,7 @@ LABEL_F5FE68:
 	cpda8 a, 13822
 	jr z, LABEL_F5FE78
 	calr LABEL_F5FFC1
-	calr LABEL_F5FFEA
+	calr AccPatch_InitAndLoadSequence
 
 LABEL_F5FE78:
 	ldda8 a, 14235
@@ -178722,7 +178722,7 @@ LABEL_F5FECD:
 	stda16 14078, xwa
 	ldda16 xwa, 13828
 	stda16 14080, xwa
-	calr LABEL_F60ADB
+	calr AccPatch_InitSlotAndCopyData
 	calr LABEL_F60C06
 	calr LABEL_F60CE9
 	stdi16 13834, 0
@@ -178809,7 +178809,7 @@ LABEL_F5FFD7:
 LABEL_F5FFE8:
 	.byte 0x00, 0x00
 
-LABEL_F5FFEA:
+AccPatch_InitAndLoadSequence:
 	ld xhl, 0x361A
 	ldw bc, 0x8
 
@@ -178956,7 +178956,7 @@ LABEL_F6010E:
 	and w, c
 	cps w, 0
 	jr z, LABEL_F60119
-	calr LABEL_F5FFEA
+	calr AccPatch_InitAndLoadSequence
 	jr LABEL_F6017B
 
 LABEL_F60119:
@@ -178997,7 +178997,7 @@ LABEL_F60147:
 LABEL_F6015E:
 	bit 7, c
 	jr z, LABEL_F6016B
-	calr LABEL_F5FFEA
+	calr AccPatch_InitAndLoadSequence
 	jr LABEL_F6017B
 
 LABEL_F60168:
@@ -179014,7 +179014,7 @@ LABEL_F6017B:
 	jr nz, LABEL_F6018A
 	bitda 3, 13820
 	jr z, LABEL_F6018A
-	calr LABEL_F5FFEA
+	calr AccPatch_InitAndLoadSequence
 
 LABEL_F6018A:
 	ldda8 a, 13519
@@ -179108,7 +179108,7 @@ LABEL_F60230:
 	calr LABEL_F6024F
 	ldda8 a, 14086
 	stda8 14072, a
-	calr LABEL_F60275
+	calr AccPatch_ParseSequenceHeader
 	ldda16 xwa, 13842
 	stda16 13790, xwa
 	ldda16 xwa, 13844
@@ -179140,7 +179140,7 @@ LABEL_F60272:
 LABEL_F60273:
 	.byte 0x00, 0x00
 
-LABEL_F60275:
+AccPatch_ParseSequenceHeader:
 	ldda16 xwa, 13842
 	stda16 14074, xwa
 	ldda16 xwa, 13844
@@ -179169,7 +179169,7 @@ LABEL_F602A5:
 LABEL_F602B3:
 	bit 7, a
 	jr z, LABEL_F602A5
-	jr LABEL_F60275
+	jr AccPatch_ParseSequenceHeader
 
 LABEL_F602BA:
 	ldda16 xwa, 14074
@@ -179185,7 +179185,7 @@ LABEL_F602CB:
 
 LABEL_F602CD:
 	anddi8 13821, 254
-	calr LABEL_F60388
+	calr AccPatch_PrepareSequencePlayback
 	ldda16 xwa, 13790
 	stda16 13842, xwa
 	ldda16 xwa, 13792
@@ -179249,7 +179249,7 @@ LABEL_F60340:
 	jr z, LABEL_F60372
 	cpdi16 13834, 0
 	jr z, LABEL_F6036F
-	calr LABEL_F60388
+	calr AccPatch_PrepareSequencePlayback
 	stdi16 13834, 0
 
 LABEL_F6036F:
@@ -179268,11 +179268,11 @@ LABEL_F60385:
 LABEL_F60386:
 	.byte 0x00, 0x00
 
-LABEL_F60388:
+AccPatch_PrepareSequencePlayback:
 	calr LABEL_F6024F
 	ldda8 a, 14086
 	stda8 14072, a
-	calr LABEL_F60275
+	calr AccPatch_ParseSequenceHeader
 	ldda16 xwa, 13842
 	stda16 13794, xwa
 	ldda16 xwa, 13844
@@ -179446,13 +179446,13 @@ LABEL_F60514:
 	ret
 
 LABEL_F60515:
-	calr LABEL_F60388
+	calr AccPatch_PrepareSequencePlayback
 	ldda16 xwa, 13790
 	stda16 13842, xwa
 	ldda16 xwa, 13792
 	stda16 13844, xwa
 
-LABEL_F60528:
+AccPatch_ProcessSequenceEvents:
 	ldda16 xwa, 13842
 	cpda16 xwa, 13794
 	jr nz, LABEL_F6053F
@@ -179506,14 +179506,14 @@ LABEL_F6058D:
 	jr LABEL_F605CA
 
 LABEL_F605AE:
-	jrl LABEL_F60528
+	jrl AccPatch_ProcessSequenceEvents
 
 LABEL_F605B1:
 	calr AccPatch_AdvanceSeqIndex
 	calr AccPatch_SeqReadByte
 	cp a, 0x83
 	jr z, LABEL_F605FC
-	jrl LABEL_F60528
+	jrl AccPatch_ProcessSequenceEvents
 
 LABEL_F605BF:
 	lds bc, 3
@@ -179521,7 +179521,7 @@ LABEL_F605BF:
 LABEL_F605C1:
 	calr AccPatch_AdvanceSeqIndex
 	djnz xbc, LABEL_F605C1
-	jrl LABEL_F60528
+	jrl AccPatch_ProcessSequenceEvents
 
 LABEL_F605CA:
 	stdi16 13834, 8
@@ -179536,8 +179536,8 @@ LABEL_F605DD:
 	stda16 13792, xwa
 	calr LABEL_F603A7
 	stdi16 13834, 0
-	calr LABEL_F60388
-	jrl LABEL_F60528
+	calr AccPatch_PrepareSequencePlayback
+	jrl AccPatch_ProcessSequenceEvents
 
 LABEL_F605FC:
 	calr AccPatch_InitCurrentSlotPointer
@@ -179643,7 +179643,7 @@ LABEL_F6069B:
 	stda16 14078, xwa
 	ldda16 xwa, 13828
 	stda16 14080, xwa
-	calr LABEL_F60ADB
+	calr AccPatch_InitSlotAndCopyData
 	calr LABEL_F60C06
 	calr LABEL_F60CE9
 	stdi16 13834, 0
@@ -179723,7 +179723,7 @@ LABEL_F60721:
 	calr LABEL_F6069B
 
 LABEL_F60744:
-	calr LABEL_F60275
+	calr AccPatch_ParseSequenceHeader
 	ldda16 xwa, 13842
 	stda16 13826, xwa
 	ldda16 xwa, 13844
@@ -180105,7 +180105,7 @@ LABEL_F60AA1:
 	.byte 0xf0, 0x67, 0xe2, 0xf1, 0x0e, 0x36, 0x02, 0x00
 	.byte 0x00, 0x0e
 
-LABEL_F60ADB:
+AccPatch_InitSlotAndCopyData:
 	lds32 xhl, 0
 	ldda8 l, 13526
 	call AccPatch_GetCurrentSlotAddr
@@ -181346,16 +181346,16 @@ LABEL_F615E0:
 LABEL_F615E5:
 	stdi8 13582, 0
 	ldda8 c, 14142
-	calr LABEL_F61636
+	calr ToneGen_ParseEventBuffer
 	incdi8 1, 13582
 	ldda8 c, 14143
-	calr LABEL_F61636
+	calr ToneGen_ParseEventBuffer
 	incdi8 1, 13582
 	ldda8 c, 14144
-	calr LABEL_F61636
+	calr ToneGen_ParseEventBuffer
 	incdi8 1, 13582
 	ldda8 c, 14145
-	calr LABEL_F61636
+	calr ToneGen_ParseEventBuffer
 	ldda8 a, 36150
 	cpda8 a, 36152
 	jr nz, LABEL_F61621
@@ -181382,7 +181382,7 @@ LABEL_F61621:
 LABEL_F61634:
 	.byte 0x00, 0x00
 
-LABEL_F61636:
+ToneGen_ParseEventBuffer:
 	stdi8 13583, 0
 
 LABEL_F6163B:
@@ -182532,7 +182532,7 @@ LABEL_F62034:
 	stda16 13383, xwa
 	ldda16 xwa, 13834
 	stda16 13387, xwa
-	call LABEL_F60ADB
+	call AccPatch_InitSlotAndCopyData
 	calr LABEL_F621C6
 	stdi8 13566, 0
 	bitda 0, 12931
@@ -183705,7 +183705,7 @@ LABEL_F62BE3:
 	stda16 13383, xwa
 	ldda16 xwa, 13834
 	stda16 13387, xwa
-	call LABEL_F60ADB
+	call AccPatch_InitSlotAndCopyData
 	calr LABEL_F621C6
 	jr LABEL_F62C3D
 
@@ -193931,7 +193931,7 @@ LABEL_F6BC3F:
 	call AccDemo_Init_Wrap
 
 LABEL_F6BC43:
-	call LABEL_F5F444
+	call AccPatch_CountAvailableSlots
 	ret
 
 cmp_sv_mae:
