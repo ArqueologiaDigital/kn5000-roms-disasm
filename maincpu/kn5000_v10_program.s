@@ -39915,7 +39915,7 @@ LABEL_EE86AC:
 	.fill 4, 1, 0xff
 UIState_DefaultConfig_B:
 	.byte 0xff, 0xff, 0xff, 0xff, 0x32, 0xb9, 0xfe, 0x00
-	.long LABEL_FDDDED
+	.long AudioInit_ProcessModeChange
 	.byte 0xfd, 0x75, 0xef, 0x00
 	.long LABEL_FD0467
 	.long BitMapOut_ByteData_RenderC
@@ -83981,7 +83981,7 @@ SetWall_WriteSingle_SetMode:
 	ldda8 a, 3391
 	xor xbc, xbc
 	ldda8 c, 3390
-	call LABEL_FD5729
+	call SndParam_UpdateChannels
 	ret
 
 SetWall_WriteSlotAndSync:
@@ -84041,7 +84041,7 @@ SetWall_WriteAll_ModeSet:
 	ldda8 a, 3391
 	xor xbc, xbc
 	ldda8 c, 3390
-	call LABEL_FD5729
+	call SndParam_UpdateChannels
 	call SetWall_SyncToneGenToDRAM
 	call VoiceChannels_InitPanFromPreset
 	ret
@@ -84119,7 +84119,7 @@ SetWall_LocalWriteAll_Mode:
 	ldda8 a, 3391
 	xor xbc, xbc
 	ldda8 c, 3390
-	call LABEL_FD5729
+	call SndParam_UpdateChannels
 	call SetWall_SyncToneGenToDRAM
 	call VoiceChannels_InitPanFromPreset
 	ret
@@ -205137,7 +205137,7 @@ MainMpstFunc:
 	jr nz, LABEL_F765CB
 	ld xwa, (xsp)
 	stda8 47084, a
-	call LABEL_FD5476
+	call SndParam_ApplyAndSync
 	stdi8 32578, 35
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00016
@@ -305694,26 +305694,26 @@ LABEL_FCB709:
 	ld xiy, 0xFCBA26
 	ld xbc, 0xF
 	ldda8 l, 37304
-	jr LABEL_FCB747
+	jr MidiPart_FindChannelInTable
 
 LABEL_FCB719:
 	ld xiy, 0xFCBA17
 	ld xbc, 0xF
 	ldda8 l, 37304
-	jr LABEL_FCB747
+	jr MidiPart_FindChannelInTable
 
 LABEL_FCB729:
 	ld xiy, 0xFCBA17
 	ld xbc, 0xF
 	ldda8 l, 37305
-	jr LABEL_FCB747
+	jr MidiPart_FindChannelInTable
 
 LABEL_FCB739:
 	ld xiy, 0xFCBA35
 	ld xbc, 0x11
 	ldda8 l, 37304
 
-LABEL_FCB747:
+MidiPart_FindChannelInTable:
 	cp xbc, 0x0
 	jr z, LABEL_FCB76B
 	stda8 37320, l
@@ -314219,7 +314219,7 @@ LABEL_FD5456:
 	ret
 
 
-LABEL_FD5476:
+SndParam_ApplyAndSync:
 	push_werp 0xFA
 	ldda8 a, 47084
 	bit 7, a
@@ -314315,7 +314315,7 @@ LABEL_FD5535:
 
 LABEL_FD5539:
 	extz wa
-	calr LABEL_FD5682
+	calr SndParam_GetBlockPointer
 	or xhl, xhl
 	ret z
 	st_dri3b W, 0xED, 0x8A, 0x00
@@ -314343,7 +314343,7 @@ LABEL_FD5564:
 
 LABEL_FD556B:
 	extz wa
-	calr LABEL_FD5682
+	calr SndParam_GetBlockPointer
 	or xhl, xhl
 	ret z
 	ld xbc, xhl
@@ -314477,7 +314477,7 @@ LABEL_FD5677:
 	inc 2, xsp
 	ret
 
-LABEL_FD5682:
+SndParam_GetBlockPointer:
 	cp a, 0x19
 	jr nc, LABEL_FD5698
 	extz wa
@@ -314514,7 +314514,7 @@ LABEL_FD56BC:
 	ld (xsp + 4), xwa
 	extz bc
 	ld wa, bc
-	calr LABEL_FD5682
+	calr SndParam_GetBlockPointer
 	or xhl, xhl
 	jr z, LABEL_FD5725
 	st_dri3b A, 0xED, 0x8A, 0x00
@@ -314565,7 +314565,7 @@ LABEL_FD5725:
 	inc 4, xsp
 	ret
 
-LABEL_FD5729:
+SndParam_UpdateChannels:
 	dec 2, xsp
 	pushw iz
 	ld (xsp + 2), c
@@ -314622,12 +314622,12 @@ LABEL_FD578A:
 	ld (xsp + 4), 0x17
 
 LABEL_FD578E:
-	call LABEL_FD8623
+	call SoundMode_RenderWithNotify
 	jr LABEL_FD579C
 
 LABEL_FD5794:
 	ld (xsp + 4), 0x0
-	call LABEL_FD85DE
+	call SoundMode_FullRenderUpdate
 
 LABEL_FD579C:
 	lds32 xbc, 0
@@ -315191,7 +315191,7 @@ LABEL_FD5CB0:
 	.byte 0x06, 0x1e, 0x18, 0x00, 0x1e, 0xfd, 0x13, 0xd7
 	.byte 0xfa, 0x05, 0x0e
 
-LABEL_FD5CFB:
+SeqAlt_ProcessAndFinalize:
 	call LABEL_FD83F4
 	calr LABEL_FD5D0C
 	calr LABEL_FD5D22
@@ -316466,15 +316466,15 @@ LABEL_FD6959:
 	lds bc, 5
 	calr SeqData_ReadFieldByIndex
 	cp l, 0x7E
-	jr z, LABEL_FD6989
+	jr z, SeqData_ParseFieldAndDequeue
 	cp l, 0x2D
-	jr z, LABEL_FD6989
+	jr z, SeqData_ParseFieldAndDequeue
 	cp l, 0x2C
-	jr z, LABEL_FD6989
+	jr z, SeqData_ParseFieldAndDequeue
 	cp l, 0x2B
 	jr nz, LABEL_FD69EA
 
-LABEL_FD6989:
+SeqData_ParseFieldAndDequeue:
 	ldda32 xwa, 48212
 	calr MidiChan_DequeueVoiceEntry
 	ldda32 xwa, 48300
@@ -317399,7 +317399,7 @@ LABEL_FD7673:
 	lds bc, 7
 	call SeqBuf_FlushNoteOffs
 	setda 2, 48408
-	call LABEL_FD5CFB
+	call SeqAlt_ProcessAndFinalize
 	ldda32 xwa, 48300
 	lds bc, 0
 	call SeqData_ReadFieldByIndex
@@ -317437,7 +317437,7 @@ LABEL_FD76DA:
 	lds bc, 7
 	call SeqBuf_FlushNoteOffs
 	setda 2, 48408
-	call LABEL_FD5CFB
+	call SeqAlt_ProcessAndFinalize
 	ldda32 xwa, 48300
 	lds bc, 0
 	call SeqData_ReadFieldByIndex
@@ -317767,7 +317767,7 @@ LABEL_FD7AC8:
 	.byte 0xf1, 0x18, 0xbd, 0xb4			; res 4, (0xBD18)  [F1 prefix]
 	jr t, LABEL_FD7AE9
 LABEL_FD7ADC:
-	call LABEL_FD5CFB
+	call SeqAlt_ProcessAndFinalize
 LABEL_FD7AE0:
 	calr LABEL_FD7AF5
 	.byte 0xf1, 0x18, 0xbd, 0xcc			; bit 4, (0xBD18)  [F1 prefix]
@@ -318466,7 +318466,7 @@ LABEL_FD8484:
 	ldirw
 	ret
 
-LABEL_FD84C1:
+SoundMode_ResetAllParams:
 	calr LABEL_FD836F
 	calr LABEL_FD8350
 	calr LABEL_FD8484
@@ -318480,7 +318480,7 @@ LABEL_FD84C1:
 	ret
 
 LABEL_FD84EE:
-	jr LABEL_FD84C1
+	jr SoundMode_ResetAllParams
 
 LABEL_FD84F0:
 	jr LABEL_FD84EE
@@ -318556,11 +318556,11 @@ LABEL_FD857A:
 	jr z, LABEL_FD85A2
 	cp (xsp), 0x1
 	jr z, LABEL_FD859D
-	calr LABEL_FD8623
+	calr SoundMode_RenderWithNotify
 	jr LABEL_FD85A5
 
 LABEL_FD859D:
-	calr LABEL_FD85DE
+	calr SoundMode_FullRenderUpdate
 	jr LABEL_FD85A5
 
 LABEL_FD85A2:
@@ -318594,7 +318594,7 @@ LABEL_FD85D7:
 	inc 2, xsp
 	ret
 
-LABEL_FD85DE:
+SoundMode_FullRenderUpdate:
 	push xde
 	push xhl
 	push xix
@@ -318619,12 +318619,12 @@ LABEL_FD85DE:
 	calr LABEL_FD89D1
 	calr LABEL_FD89F7
 	calr LABEL_FD8A4E
-	calr LABEL_FD8A78
+	calr SoundParam_ApplyBit15Toggle
 	calr LABEL_FD8AA3
 	calr LABEL_FD84F6
-	jrl LABEL_FD8C32
+	jrl VoiceData_SyncAllToHardware
 
-LABEL_FD8623:
+SoundMode_RenderWithNotify:
 	push xde
 	push xhl
 	push xix
@@ -318658,7 +318658,7 @@ LABEL_FD865D:
 	calr LABEL_FD8A26
 	calr LABEL_FD8521
 	calr LABEL_FD8AA1
-	jrl LABEL_FD8C32
+	jrl VoiceData_SyncAllToHardware
 
 LABEL_FD866D:
 	push xde
@@ -318684,9 +318684,9 @@ LABEL_FD866D:
 	calr LABEL_FD89AB
 	calr LABEL_FD89D1
 	calr LABEL_FD8A4E
-	calr LABEL_FD8A78
+	calr SoundParam_ApplyBit15Toggle
 	calr LABEL_FD84F6
-	jrl LABEL_FD8C32
+	jrl VoiceData_SyncAllToHardware
 LABEL_FD86AC:
 	cpdi8 49277, 3
 	ret nz
@@ -318728,7 +318728,7 @@ LABEL_FD86FF:
 	ret nz
 	cps a, 0
 	ret nz
-	calr LABEL_FD8B29
+	calr SwbtWr_InitAndWriteAllBlocks
 	ret
 
 LABEL_FD870E:
@@ -318748,24 +318748,24 @@ LABEL_FD870E:
 	bitda 2, 49278
 	jr z, LABEL_FD874E
 	calr LABEL_FD851E
-	calr LABEL_FD85DE
+	calr SoundMode_FullRenderUpdate
 	bitda 0, 4330
-	jr nz, LABEL_FD8754
+	jr nz, SoundMode_ProcessToneAndParams
 	ldda8 a, 36150
 	cp a, 0x76
 	jr ugt, LABEL_FD8748
 	cp a, 0x6C
-	jr nc, LABEL_FD8754
+	jr nc, SoundMode_ProcessToneAndParams
 
 LABEL_FD8748:
 	call BitMapOut_ComputeRegionDelta
-	jr LABEL_FD8754
+	jr SoundMode_ProcessToneAndParams
 
 LABEL_FD874E:
-	calr LABEL_FD8623
+	calr SoundMode_RenderWithNotify
 	calr LABEL_FD851F
 
-LABEL_FD8754:
+SoundMode_ProcessToneAndParams:
 	calr LABEL_FD87C7
 	push xde
 	push xhl
@@ -318792,7 +318792,7 @@ LABEL_FD8754:
 	calr LABEL_FD8AC8
 	calr LABEL_FD8AF8
 	calr LABEL_FD8AF9
-	calr LABEL_FD8B29
+	calr SwbtWr_InitAndWriteAllBlocks
 	calr LABEL_FD8B59
 	calr LABEL_FD8B5A
 	calr LABEL_FD8B5B
@@ -319099,7 +319099,7 @@ LABEL_FD8A1D:
 	stdi8 47084, 157
 
 LABEL_FD8A22:
-	jp LABEL_FD5476
+	jp SndParam_ApplyAndSync
 
 LABEL_FD8A26:
 	ld8_24 a, 0x0340f9
@@ -319120,7 +319120,7 @@ LABEL_FD8A45:
 	stdi8 47084, 93
 
 LABEL_FD8A4A:
-	jp LABEL_FD5476
+	jp SndParam_ApplyAndSync
 
 LABEL_FD8A4E:
 	lda_24 xbc, 0xee2f36
@@ -319148,7 +319148,7 @@ LABEL_FD8A71:
 	jr c, LABEL_FD8A58
 	ret
 
-LABEL_FD8A78:
+SoundParam_ApplyBit15Toggle:
 	ldda16 xwa, 4597
 	bit 15, wa
 	ret z
@@ -319166,7 +319166,7 @@ LABEL_FD8A78:
 	ret
 
 LABEL_FD8AA1:
-	jr LABEL_FD8A78
+	jr SoundParam_ApplyBit15Toggle
 
 LABEL_FD8AA3:
 	dec 4, xsp
@@ -319236,7 +319236,7 @@ LABEL_FD8B08:
 	jr ule, LABEL_FD8B08
 	ret
 
-LABEL_FD8B29:
+SwbtWr_InitAndWriteAllBlocks:
 	stdi8 37159, 179
 	stdi8 37161, 127
 	stdi8 37160, 0
@@ -319365,7 +319365,7 @@ LABEL_FD8C2F:
 	inc 4, xsp
 	ret
 
-LABEL_FD8C32:
+VoiceData_SyncAllToHardware:
 	pushw iz
 	lds iz, 0
 
@@ -319415,7 +319415,7 @@ LABEL_FD8C93:
 	calr LABEL_FD8AC8
 	calr LABEL_FD8AF8
 	calr LABEL_FD8AF9
-	calr LABEL_FD8B29
+	calr SwbtWr_InitAndWriteAllBlocks
 	calr LABEL_FD8B59
 	calr LABEL_FD8B5A
 	calr LABEL_FD8B5B
@@ -319450,7 +319450,7 @@ LABEL_FD8CF1:
 
 LABEL_FD8CFD:
 	stdi8 48408, 0
-	jp LABEL_FD84C1
+	jp SoundMode_ResetAllParams
 LABEL_FD8D06:
 	call	16610860
 	jr	-23
@@ -319553,7 +319553,7 @@ LABEL_FD8DB4:
 
 LABEL_FD8DF0:
 	call MidiPkt_SendBankSelect
-	jp LABEL_FD84C1
+	jp SoundMode_ResetAllParams
 LABEL_FD8DF8:
 	.byte 0x0e
 LABEL_FD8DF9:
@@ -325771,14 +325771,14 @@ LABEL_FDD27E:
 	ld bc, (xsp + 30)
 	dec 1, bc
 	cps bc, 0
-	jr lt, LABEL_FDD2B3
+	jr lt, AssSwb_SwapEntriesAndDispatch
 	cp bc, 0x8
 	jr le, LABEL_FDD29D
 	sub bc, 0x12
 	cp bc, 0x9
-	jr lt, LABEL_FDD2B3
+	jr lt, AssSwb_SwapEntriesAndDispatch
 	cp bc, 0x14
-	jr gt, LABEL_FDD2B3
+	jr gt, AssSwb_SwapEntriesAndDispatch
 
 LABEL_FDD29D:
 	add bc, bc
@@ -325787,7 +325787,7 @@ LABEL_FDD29D:
 	lda_24 xix, 0xfdd2b3
 	jp_dri 8, 0x07, 0xF0, 0xE4
 
-LABEL_FDD2B3:
+AssSwb_SwapEntriesAndDispatch:
 	ldw (xsp + 4), 0xFFFF
 	jrl LABEL_FDDB11
 	ld c, (xwa)
@@ -326909,7 +326909,7 @@ LABEL_FDDDCB:
 	stdi8 51823, 0
 	jp LABEL_FEBA91
 
-LABEL_FDDDED:
+AudioInit_ProcessModeChange:
 	ldda16 xwa, 50580
 	bit 2, wa
 	ret z
@@ -327065,7 +327065,7 @@ AudioMode_SetStereoFlags:
 	ret z
 	ordi16 50582, 128
 	ordi16 50580, 4
-	calr LABEL_FDDDED
+	calr AudioInit_ProcessModeChange
 	ret
 
 AudioMode_ResetVoiceState:
@@ -327146,7 +327146,7 @@ LABEL_FDE068:
 
 LABEL_FDE07B:
 	ordi16 50580, 4
-	jrl LABEL_FDDDED
+	jrl AudioInit_ProcessModeChange
 ; ============================================================================
 ; UIState_ProcessMidiEvent - Process an incoming MIDI event in UI state
 ; ============================================================================
