@@ -36,7 +36,7 @@ TtComputerConnection:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00016
 	ld xde, 0x1A000EE
-	call LABEL_FA9752
+	call PostEvent
 
 ComputerConnectionTitleExit:
 	lds32 xhl, 0

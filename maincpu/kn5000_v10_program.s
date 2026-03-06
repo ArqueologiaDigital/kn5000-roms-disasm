@@ -82500,11 +82500,11 @@ SndArgTtlCheck:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
 	lds32 xde, 0
-	call LABEL_FA9752
+	call PostEvent
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00014
 	ld xde, 0x1800001
-	call LABEL_FA9752
+	call PostEvent
 
 LABEL_F1D837:
 	lds32 xhl, 0
@@ -103546,7 +103546,7 @@ LABEL_F2BBCA:
 	ld xde, 0x1A00083
 
 LABEL_F2BBE5:
-	call LABEL_FA9752
+	call PostEvent
 
 LABEL_F2BBE9:
 	ld xwa, (xsp + 8)
@@ -105451,15 +105451,15 @@ LABEL_F2D256:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00014
 	ld xde, 0x1800008
-	call LABEL_FA9752
+	call PostEvent
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
 	lds32 xde, 0
-	call LABEL_FA9752
+	call PostEvent
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00015
 	ld xde, 0x1A00084
-	call LABEL_FA9752
+	call PostEvent
 
 LABEL_F2D2B4:
 	ld xwa, xiz
@@ -105625,7 +105625,7 @@ AutoPunchTtlRqFunc:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00015
 	ld xde, 0x1A00088
-	call LABEL_FA9752
+	call PostEvent
 
 LABEL_F2E48D:
 	lds32 xhl, 0
@@ -105670,15 +105670,15 @@ LABEL_F2E4C9:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00014
 	ld xde, 0x1800008
-	call LABEL_FA9752
+	call PostEvent
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
 	lds32 xde, 0
-	call LABEL_FA9752
+	call PostEvent
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00015
 	ld xde, 0x1A00084
-	call LABEL_FA9752
+	call PostEvent
 
 LABEL_F2E522:
 	ld xwa, (xsp + 8)
@@ -105941,12 +105941,12 @@ LABEL_F2E749:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
 	lds32 xde, 0
-	call LABEL_FA9752
+	call PostEvent
 	stdi8 32578, 72
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00016
 	ld xde, 0x1A000EE
-	call LABEL_FA9752
+	call PostEvent
 	ld xwa, 0x1480029
 	ld xbc, 0x1E80075
 	ld xde, xiz
@@ -106014,12 +106014,12 @@ LABEL_F2E825:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
 	lds32 xde, 0
-	call LABEL_FA9752
+	call PostEvent
 	stdi8 32578, 72
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00016
 	ld xde, 0x1A000EE
-	call LABEL_FA9752
+	call PostEvent
 	ld xwa, 0x1480029
 	ld xbc, 0x1E80075
 	ld xde, xiz
@@ -106389,7 +106389,7 @@ LABEL_F2EBB3:
 	ld xde, (xwa + 22)
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00014
-	call LABEL_FA9752
+	call PostEvent
 
 LABEL_F2EBE9:
 	stdi8 58254, 0
@@ -106444,7 +106444,7 @@ LABEL_F2EC38:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00015
 	ld xde, 0x1A00084
-	call LABEL_FA9752
+	call PostEvent
 
 LABEL_F2EC64:
 	ld xwa, (xsp + 8)
@@ -106500,7 +106500,7 @@ LABEL_F2ECCE:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00015
 	ld xde, 0x1A00087
-	call LABEL_FA9752
+	call PostEvent
 
 LABEL_F2ECE1:
 	ld xwa, (xsp + 8)
@@ -106877,7 +106877,7 @@ MsgToTtlProc:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
 	lds32 xde, 0
-	call LABEL_FA9752
+	call PostEvent
 	call 0xFA5867
 	cp l, 0x90
 	jr nz, LABEL_F2F057
@@ -106894,7 +106894,7 @@ LABEL_F2F057:
 	ld xde, xhl
 
 LABEL_F2F06D:
-	call LABEL_FA9752
+	call PostEvent
 
 LABEL_F2F071:
 	lds32 xhl, 0
@@ -108780,7 +108780,7 @@ LABEL_F309A8:
 	ld xde, 0x1A00084
 
 LABEL_F309C3:
-	call LABEL_FA9752
+	call PostEvent
 
 LABEL_F309C7:
 	ld xwa, (xsp + 8)
@@ -108844,7 +108844,7 @@ LABEL_F30A40:
 	ld xde, 0x1A00080
 
 LABEL_F30A5B:
-	call LABEL_FA9752
+	call PostEvent
 
 LABEL_F30A5F:
 	ld xwa, (xsp + 8)
@@ -115756,7 +115756,7 @@ TrkMixerIntTtlFunc:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00016
 	ld xde, 0x1A000A5
-	call LABEL_FA9752
+	call PostEvent
 	lds32 xhl, 0
 	ret
 
@@ -202980,7 +202980,7 @@ LABEL_F747DE:
 	lds32 xde, 0
 
 LABEL_F747EA:
-	call LABEL_FA9752
+	call PostEvent
 
 LABEL_F747EE:
 	lds32 xhl, 0
@@ -202990,11 +202990,11 @@ GMNoFunc:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00002
 	lds32 xde, 0
-	call LABEL_FA9752
+	call PostEvent
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C0000A
 	lds32 xde, 0
-	call LABEL_FA9752
+	call PostEvent
 	lds32 xhl, 0
 	ret
 
@@ -203010,12 +203010,12 @@ GMYesFunc:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00002
 	lds32 xde, 0
-	call LABEL_FA9752
+	call PostEvent
 	stdi8 32578, 35
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00016
 	ld xde, 0x1A000EE
-	call LABEL_FA9752
+	call PostEvent
 	lds32 xhl, 0
 	ret
 
@@ -203032,11 +203032,11 @@ TtMdGm:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
 	lds32 xde, 0
-	call LABEL_FA9752
+	call PostEvent
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00014
 	ld xde, 0x1800001
-	call LABEL_FA9752
+	call PostEvent
 
 LABEL_F748A3:
 	lds32 xhl, 0
@@ -205477,12 +205477,12 @@ LABEL_F76D32:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
 	lds32 xde, 0
-	call LABEL_FA9752
+	call PostEvent
 	stdi8 32578, 72
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00016
 	ld xde, 0x1A000EE
-	call LABEL_FA9752
+	call PostEvent
 	ld xwa, 0x1430003
 	ld xbc, 0x1E30006
 	ld xde, (xsp + 12)
@@ -213773,7 +213773,7 @@ LABEL_F7E183:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E00023
 	ld xde, (xsp + 4)
-	call LABEL_FA9752
+	call PostEvent
 	ldw (xsp + 8), 0x0
 
 LABEL_F7E1BF:
@@ -213810,7 +213810,7 @@ LABEL_F7E1BF:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E00023
 	ld xde, xiz
-	call LABEL_FA9752
+	call PostEvent
 	ld wa, (xsp + 8)
 	extz xwa
 	sll xwa, 2
@@ -213965,7 +213965,7 @@ IvAccordion_Scroll:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C0001B
 	lds32 xde, 1
-	call LABEL_FA9752
+	call PostEvent
 	cpdi16_24 149372, 1
 	jrl nz, IvAccordion_ReturnHandled
 	ld16_24 xwa, 0x02477e
@@ -213988,7 +213988,7 @@ IvAccordion_Scroll_SetOff:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C0001B
 	lds32 xde, 1
-	call LABEL_FA9752
+	call PostEvent
 	cpdi16_24 149372, 0
 	jrl nz, IvAccordion_ReturnHandled
 	ld16_24 xwa, 0x02477e
@@ -214086,7 +214086,7 @@ IvAccordion_Update_NonNote:
 	lds32 xde, 0
 
 IvAccordion_Update_Dispatch:
-	call LABEL_FA9752
+	call PostEvent
 	jrl IvAccordion_ReturnHandled
 
 IvAccordion_Match:
@@ -214183,7 +214183,7 @@ LABEL_F7E67F:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C10000
 	ld xde, (xsp + 4)
-	call LABEL_FA9752
+	call PostEvent
 	jr LABEL_F7E6D0
 
 LABEL_F7E6A8:
@@ -215635,7 +215635,7 @@ AcWelcomScreen_Init_CheckSubCpu:
 	lds32 xde, 0
 
 AcWelcomScreen_Init_DispatchTimer:
-	call LABEL_FA9752
+	call PostEvent
 	jrl AcWelcomScreen_ReturnHandled
 
 AcWelcomScreen_Init_SwitchMode:
@@ -216475,7 +216475,7 @@ LABEL_F800F8:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00015
 	ld xde, 0x1A00002
-	call LABEL_FA9752
+	call PostEvent
 	ld xwa, (xsp + 90)
 	ld xbc, (xsp + 86)
 	ld xde, (xsp + 82)
@@ -216485,7 +216485,7 @@ LABEL_F80149:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00015
 	ld xde, 0x1A000D6
-	call LABEL_FA9752
+	call PostEvent
 	ld xwa, (xsp + 90)
 	ld xbc, (xsp + 86)
 	ld xde, (xsp + 82)
@@ -218406,7 +218406,7 @@ IvDrawbar_Release:
 	ld xwa, (xsp + 8)
 	ld xbc, 0x1E000A7
 	lds32 xde, 1
-	call LABEL_FA9752
+	call PostEvent
 	jrl IvDrawbar_ReturnHandled
 
 IvDrawbar_Release_Upper:
@@ -218483,7 +218483,7 @@ IvDrawbar_Update_GenericParam:
 	lds32 xde, 0
 
 IvDrawbar_Update_Dispatch:
-	call LABEL_FA9752
+	call PostEvent
 	jrl IvDrawbar_ReturnHandled
 
 IvDrawbar_Match:
@@ -221184,7 +221184,7 @@ LABEL_F84408:
 	ld xwa, 0xE4000A
 	ld xbc, 0x1C00001
 	lds32 xde, 5
-	call LABEL_FA9752
+	call PostEvent
 	jrl LABEL_F84332
 
 LABEL_F8445A:
@@ -223967,7 +223967,7 @@ Seq_StartWithFullInit:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C0000A
 	lds32 xde, 0
-	call LABEL_FA9752
+	call PostEvent
 	ld wa, iz
 	calr LABEL_F862B5
 	lds wa, 2
@@ -233900,19 +233900,19 @@ LABEL_F9800F:
 	ld xwa, 0x1A00000
 	ld xbc, 0x1E0009E
 	lds32 xde, 1
-	call LABEL_FA9752
+	call PostEvent
 	lds32 xwa, 0
 	ld xbc, 0x1C00001
 	lds32 xde, 0
-	call LABEL_FA9752
+	call PostEvent
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00014
 	ld xde, 0x1800001
-	call LABEL_FA9752
+	call PostEvent
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00016
 	ld xde, 0x1A000EF
-	jp LABEL_FA9752
+	jp PostEvent
 
 LABEL_F98066:
 	stdi8 32578, 35
@@ -233922,11 +233922,11 @@ LABEL_F9806C:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
 	lds32 xde, 0
-	call LABEL_FA9752
+	call PostEvent
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C0000A
 	lds32 xde, 0
-	call LABEL_FA9752
+	call PostEvent
 	lds wa, 0
 	call LABEL_FAA761
 	call 0xFA9585
@@ -248471,7 +248471,7 @@ IvExitMode_OK:
 	ld xde, (xiz + 22)
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00014
-	call LABEL_FA9752
+	call PostEvent
 	jr IvExitMode_OK_Forward
 
 IvExitMode_OK_SaveCheck:
@@ -248545,7 +248545,7 @@ IvExitScreen_OK:
 	ld xwa, (xiz + 22)
 	ld xbc, 0x1C00001
 	lds32 xde, 0
-	call LABEL_FA9752
+	call PostEvent
 	jr IvExitScreen_OK_Forward
 
 IvExitScreen_OK_SaveCheck:
@@ -248615,11 +248615,11 @@ IvExitWindow_OK:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00002
 	lds32 xde, 0
-	call LABEL_FA9752
+	call PostEvent
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C0000A
 	lds32 xde, 0
-	call LABEL_FA9752
+	call PostEvent
 	jr IvExitWindow_OK_Forward
 
 IvExitWindow_OK_SaveCheck:
@@ -250360,11 +250360,11 @@ LABEL_FA2E40:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00025
 	ld xde, xiz
-	call LABEL_FA9752
+	call PostEvent
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E00023
 	ld xde, xiz
-	call LABEL_FA9752
+	call PostEvent
 	pop xiz
 	inc 4, xsp
 	ret
@@ -261043,8 +261043,6 @@ LABEL_FA974B:
 	pop xiz
 	lda xsp, (xsp + 24)
 	ret
-LABEL_FA9752:
-
 PostEvent:
 	dec 8, xsp
 	push xiz
@@ -281883,11 +281881,11 @@ SystemInitMDFunc:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
 	lds32 xde, 0
-	call LABEL_FA9752
+	call PostEvent
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00014
 	ld xde, 0x1800001
-	call LABEL_FA9752
+	call PostEvent
 
 LABEL_FB7F45:
 	lds32 xhl, 0
@@ -281912,7 +281910,7 @@ LABEL_FB7F79:
 	ld xwa, 0x410007
 	ld xbc, 0x1C00001
 	lds32 xde, 0
-	call LABEL_FA9752
+	call PostEvent
 
 LABEL_FB7F89:
 	lds32 xhl, 0
@@ -281922,7 +281920,7 @@ SysIniNoFunc:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00015
 	ld xde, 0x1A00041
-	call LABEL_FA9752
+	call PostEvent
 	lds32 xhl, 0
 	ret
 
@@ -283721,7 +283719,7 @@ LABEL_FB922C:
 	ld xwa, (xsp + 66)
 	ld xbc, 0x1C0000B
 	lds32 xde, 0
-	call LABEL_FA9752
+	call PostEvent
 	jrl LABEL_FB95D6
 	ld xwa, (xsp + 66)
 	ld xbc, (xsp + 62)
@@ -285826,7 +285824,7 @@ LABEL_FBA7A2:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00015
 	ld xde, 0x1A000C1
-	call LABEL_FA9752
+	call PostEvent
 
 LABEL_FBA7B5:
 	lds32 xhl, 0
@@ -287065,7 +287063,7 @@ LABEL_FBBA41:
 	ld xwa, 0x450005
 	ld xbc, 0x1C00002
 	lds32 xde, 0
-	call LABEL_FA9752
+	call PostEvent
 	ld xwa, 0x45000D
 	ld xbc, 0x1C00001
 	lds32 xde, 0
@@ -287085,7 +287083,7 @@ LABEL_FBBAA2:
 	ld xwa, 0x45000D
 	ld xbc, 0x1C00002
 	lds32 xde, 0
-	call LABEL_FA9752
+	call PostEvent
 	ld xwa, 0x450005
 	ld xbc, 0x1C00001
 	lds32 xde, 0
@@ -287105,13 +287103,13 @@ LABEL_FBBAC4:
 	ld xwa, 0x450005
 	ld xbc, 0x1C00002
 	lds32 xde, 0
-	call LABEL_FA9752
+	call PostEvent
 	ld xwa, 0x45000D
 	ld xbc, 0x1C00001
 	lds32 xde, 0
 
 LABEL_FBBAFE:
-	call LABEL_FA9752
+	call PostEvent
 	jr LABEL_FBBB46
 
 LABEL_FBBB04:
@@ -287121,18 +287119,18 @@ LABEL_FBBB04:
 	ld xwa, 0x45000D
 	ld xbc, 0x1C00002
 	lds32 xde, 0
-	call LABEL_FA9752
+	call PostEvent
 	ld xwa, 0x450005
 	ld xbc, 0x1C00001
 	lds32 xde, 0
-	call LABEL_FA9752
+	call PostEvent
 	jr LABEL_FBBB46
 
 LABEL_FBBB30:
 	ld xwa, 0x45000D
 	ld xbc, 0x1C00001
 	lds32 xde, 0
-	call LABEL_FA9752
+	call PostEvent
 	sti8_24 0x0340e2, 0x01
 
 LABEL_FBBB46:
@@ -287630,7 +287628,7 @@ LABEL_FBC0FF:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00015
 	ld xde, 0x1A00040
-	call LABEL_FA9752
+	call PostEvent
 
 LABEL_FBC112:
 	ld xwa, xiz
@@ -287900,12 +287898,12 @@ LABEL_FBC4E6:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
 	lds32 xde, 0
-	call LABEL_FA9752
+	call PostEvent
 	stdi8 32578, 72
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00016
 	ld xde, 0x1A000EE
-	call LABEL_FA9752
+	call PostEvent
 	ld xwa, 0x142000E
 	ld xbc, 0x1E20015
 	ld xde, (xsp + 12)
@@ -288446,12 +288444,12 @@ LABEL_FBCD86:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
 	lds32 xde, 0
-	call LABEL_FA9752
+	call PostEvent
 	stdi8 32578, 36
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00016
 	ld xde, 0x1A000EE
-	call LABEL_FA9752
+	call PostEvent
 	resda 0, 36232
 
 LABEL_FBCDDB:
@@ -288843,11 +288841,11 @@ LABEL_FBD17D:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00016
 	ld xde, 0x1A000D1
-	call LABEL_FA9752
+	call PostEvent
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009A
 	lds32 xde, 1
-	call LABEL_FA9752
+	call PostEvent
 
 LABEL_FBD200:
 	ld xwa, (xsp + 22)
@@ -288856,11 +288854,11 @@ LABEL_FBD200:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00016
 	ld xde, 0x1A000D1
-	call LABEL_FA9752
+	call PostEvent
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009A
 	lds32 xde, 1
-	call LABEL_FA9752
+	call PostEvent
 
 LABEL_FBD22E:
 	lds32 xhl, 0
@@ -288910,11 +288908,11 @@ LABEL_FBD279:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00016
 	ld xde, 0x1A000D1
-	call LABEL_FA9752
+	call PostEvent
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009A
 	lds32 xde, 1
-	call LABEL_FA9752
+	call PostEvent
 
 LABEL_FBD2C6:
 	ld xwa, (xsp + 22)
@@ -288923,11 +288921,11 @@ LABEL_FBD2C6:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00016
 	ld xde, 0x1A000D1
-	call LABEL_FA9752
+	call PostEvent
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009A
 	lds32 xde, 1
-	call LABEL_FA9752
+	call PostEvent
 
 LABEL_FBD2F4:
 	lds32 xhl, 0
@@ -289376,7 +289374,7 @@ MsaMode_OK_Navigate:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00015
 	ld xde, 0x1A00040
-	call LABEL_FA9752
+	call PostEvent
 
 MsaMode_ReturnZero:
 	lds32 xhl, 0
@@ -289639,7 +289637,7 @@ PmemMode_OK_Navigate:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00015
 	ld xde, 0x1A00040
-	call LABEL_FA9752
+	call PostEvent
 
 PmemMode_OK_DefaultForward:
 	ld_sril XWA, (xsp + 0x0118)
@@ -290041,7 +290039,7 @@ AcPmBkEdit_OK:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00016
 	ld xde, 0x1A000D3
-	call LABEL_FA9752
+	call PostEvent
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009A
 	lds32 xde, 1
@@ -290055,11 +290053,11 @@ AcPmBkEdit_OK_Load:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00016
 	ld xde, 0x1A000D2
-	call LABEL_FA9752
+	call PostEvent
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009A
 	lds32 xde, 1
-	call LABEL_FA9752
+	call PostEvent
 	jr AcPmBkEdit_ReturnZero
 
 AcPmBkEdit_OK_LoadEmpty:
@@ -290074,7 +290072,7 @@ AcPmBkEdit_OK_SaveDelete:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00016
 	ld xde, 0x1A000D0
-	call LABEL_FA9752
+	call PostEvent
 	call 0xFA5867
 	ld xwa, xhl
 	ld xbc, 0x1E000AA
@@ -290087,7 +290085,7 @@ AcPmBkEdit_OK_SaveDelete:
 	lds32 xde, 1
 
 AcPmBkEdit_OK_NavComplete:
-	call LABEL_FA9752
+	call PostEvent
 
 AcPmBkEdit_ReturnZero:
 	lds32 xhl, 0
@@ -295642,7 +295640,7 @@ PmBank_OK_SaveDelete:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00016
 	ld xde, 0x1A000D1
-	call LABEL_FA9752
+	call PostEvent
 	call 0xFA5867
 	ld xwa, xhl
 	ld xbc, 0x1E000AA
@@ -295653,7 +295651,7 @@ PmBank_OK_SaveDelete:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009A
 	lds32 xde, 1
-	call LABEL_FA9752
+	call PostEvent
 
 PmBank_OK_Forward:
 	ld_sril XWA, (xsp + 0x0118)
@@ -296154,12 +296152,12 @@ LABEL_FC248A:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
 	lds32 xde, 0
-	call LABEL_FA9752
+	call PostEvent
 	stdi8 32578, 72
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00016
 	ld xde, 0x1A000EE
-	call LABEL_FA9752
+	call PostEvent
 	ld xwa, 0x142000F
 	ld xbc, 0x1E20015
 	ld xde, xiz
@@ -296381,7 +296379,7 @@ LABEL_FC271F:
 	ld xwa, 0x48000F
 	ld xbc, 0x1C00001
 	lds32 xde, 0
-	call LABEL_FA9752
+	call PostEvent
 
 LABEL_FC272F:
 	lds32 xhl, 0
@@ -296401,7 +296399,7 @@ WallUsrIniNoFunc:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00015
 	ld xde, 0x1A00048
-	call LABEL_FA9752
+	call PostEvent
 	lds32 xhl, 0
 	ret
 
@@ -296436,12 +296434,12 @@ WallUsrShowHideFunc:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
 	lds32 xde, 0
-	call LABEL_FA9752
+	call PostEvent
 	stdi8 32578, 72
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00016
 	ld xde, 0x1A000EE
-	call LABEL_FA9752
+	call PostEvent
 	ld xwa, 0x142000F
 	ld xbc, 0x1E20015
 	ld xde, xiz

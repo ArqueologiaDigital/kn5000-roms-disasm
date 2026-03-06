@@ -112,12 +112,12 @@ SetupExitFunc:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
 	lds32 xde, 0
-	call LABEL_FA9752
+	call PostEvent
 	stdi8 32578, 72
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00016
 	ld xde, 0x1A000EE
-	call LABEL_FA9752
+	call PostEvent
 	ld xwa, 0x1450030
 	ld xbc, 0x1E5000C
 	ld xde, xiz
@@ -222,7 +222,7 @@ TechnicsFileRename_HandleOk:
 	ld xwa, 0x7B0000
 	ld xbc, 0x1C00001
 	lds32 xde, 0
-	call LABEL_FA9752
+	call PostEvent
 
 TechnicsFileRename_DefaultReturn:
 	lds32 xhl, 0
@@ -326,7 +326,7 @@ SmfFileRename_HandleOk:
 	ld xwa, 0x7B0019
 	ld xbc, 0x1C00001
 	lds32 xde, 0
-	call LABEL_FA9752
+	call PostEvent
 
 SmfFileRename_DefaultReturn:
 	lds32 xhl, 0

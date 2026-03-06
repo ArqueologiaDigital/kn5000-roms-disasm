@@ -4348,7 +4348,7 @@ WakeUp_HandleOk:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C50000
 	lds32 xde, 1
-	call LABEL_FA9752
+	call PostEvent
 	ld xwa, 0x600040
 	ld xbc, 0x1C00001
 	lds32 xde, 0
@@ -4364,13 +4364,13 @@ WakeUp_StoreType:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C50000
 	lds32 xde, 1
-	call LABEL_FA9752
+	call PostEvent
 	ld xwa, 0x600045
 	ld xbc, 0x1C00001
 	lds32 xde, 0
 
 WakeUp_PostEvent:
-	call LABEL_FA9752
+	call PostEvent
 
 WakeUp_ReturnZero:
 	lds32 xhl, 0
@@ -4416,11 +4416,11 @@ PwdOk_HandleConfirm:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C50000
 	lds32 xde, 0
-	call LABEL_FA9752
+	call PostEvent
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C0000A
 	lds32 xde, 0
-	call LABEL_FA9752
+	call PostEvent
 	ld16_24 xde, 0x02741c
 	extz xde
 	ld xwa, 0x1450038
@@ -4470,11 +4470,11 @@ CheckOk_HandleConfirm:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C50000
 	lds32 xde, 0
-	call LABEL_FA9752
+	call PostEvent
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C0000A
 	lds32 xde, 0
-	call LABEL_FA9752
+	call PostEvent
 	ld xwa, 0x670001
 	ld xbc, 0x1E00056
 	lds32 xde, 0
@@ -4525,11 +4525,11 @@ PasswordNo:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C50000
 	lds32 xde, 0
-	call LABEL_FA9752
+	call PostEvent
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C0000A
 	lds32 xde, 0
-	call LABEL_FA9752
+	call PostEvent
 
 PwdNo_Exit:
 	lds32 xhl, 0
@@ -4545,11 +4545,11 @@ CheckPasswordNo:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C50000
 	lds32 xde, 0
-	call LABEL_FA9752
+	call PostEvent
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C0000A
 	lds32 xde, 0
-	call LABEL_FA9752
+	call PostEvent
 
 CheckNo_HandleConfirm:
 	lds32 xhl, 0
@@ -4605,15 +4605,15 @@ DeleteYes:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C50000
 	lds32 xde, 0
-	call LABEL_FA9752
+	call PostEvent
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C0000A
 	lds32 xde, 0
-	call LABEL_FA9752
+	call PostEvent
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00017
 	ld xde, 0x33
-	call LABEL_FA9752
+	call PostEvent
 
 PwdChange_HandleOk:
 	lds32 xhl, 0
@@ -4629,11 +4629,11 @@ DeleteNo:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C50000
 	lds32 xde, 0
-	call LABEL_FA9752
+	call PostEvent
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C0000A
 	lds32 xde, 0
-	call LABEL_FA9752
+	call PostEvent
 
 PwdChange_Type1:
 	lds32 xhl, 0
@@ -4659,15 +4659,15 @@ SaveYes:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C50000
 	lds32 xde, 0
-	call LABEL_FA9752
+	call PostEvent
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C0000A
 	lds32 xde, 0
-	call LABEL_FA9752
+	call PostEvent
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00017
 	ld xde, 0x32
-	call LABEL_FA9752
+	call PostEvent
 
 PwdDel_HandleOk:
 	lds32 xhl, 0
@@ -4683,11 +4683,11 @@ SaveNo:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C50000
 	lds32 xde, 0
-	call LABEL_FA9752
+	call PostEvent
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C0000A
 	lds32 xde, 0
-	call LABEL_FA9752
+	call PostEvent
 
 PwdDel_Type1:
 	lds32 xhl, 0
