@@ -121330,9 +121330,9 @@ LABEL_F393C7:
 SeqAcc_InitPlaybackState:
 	resda 5, 10419
 	ldw wa, 0x32
-	call LABEL_F3E3D9
+	call SeqNotePool_Init
 	resda 0, 1115
-	call LABEL_F3EB43
+	call SeqPlay_CheckRepeatActive
 	stda8 7570, l
 	cpdi16 61854, 0
 	jr nz, LABEL_F39434
@@ -126517,7 +126517,7 @@ LABEL_F3C352:
 	stda16 10410, xwa
 	ldda16 xwa, 8982
 	stda16 8984, xwa
-	call LABEL_F3EB43
+	call SeqPlay_CheckRepeatActive
 	call LABEL_F465AC
 	cpw (xsp + 4), 0x1
 	jr nz, LABEL_F3C37A
@@ -129617,7 +129617,7 @@ LABEL_F3E035:
 	cp (xsp + 8), 0x32
 	jr nz, LABEL_F3E04E
 	ldw wa, 0x32
-	calr LABEL_F3E3D9
+	calr SeqNotePool_Init
 
 LABEL_F3E04E:
 	lda xsp, (xsp + 10)
@@ -130038,7 +130038,7 @@ LABEL_F3E3D5:
 	lds hl, 1
 	jr LABEL_F3E3C4
 
-LABEL_F3E3D9:
+SeqNotePool_Init:
 	lda xsp, (xsp - 10)
 	push_werp 0xFA
 	ld (xsp + 10), a
@@ -130880,7 +130880,7 @@ LABEL_F3EB3F:
 	ldb l, 0x1
 	jr LABEL_F3EB36
 
-LABEL_F3EB43:
+SeqPlay_CheckRepeatActive:
 	ldb l, 0x0
 	ldda8 a, 36150
 	cp a, 0x87
