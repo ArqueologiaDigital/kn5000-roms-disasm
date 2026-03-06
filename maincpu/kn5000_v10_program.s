@@ -90356,6 +90356,14 @@ LABEL_F23709:
 	pop xwa
 	ret
 
+; ============================================================================
+; FloppyIO_ReadNextByte - Read the next byte from floppy disk buffer
+; ============================================================================
+; Input:  Implicit (reads from FDC buffer state)
+; Output: A = next byte from floppy buffer
+; Sequential byte reader for the floppy disk controller. Manages buffer
+; refills when the current buffer is exhausted.
+; ============================================================================
 FloppyIO_ReadNextByte:
 	push xix
 	ldda32 xix, 4376
@@ -132684,6 +132692,13 @@ LABEL_F3FC15:
 	popw iz
 	ret
 
+; ============================================================================
+; SeqPart_ReadByte_Secondary - Read byte from secondary sequencer part buffer
+; ============================================================================
+; Input:  Implicit (reads from secondary part state)
+; Output: A = byte value from secondary buffer
+; Reads a byte from the secondary (background) sequencer part data stream.
+; ============================================================================
 SeqPart_ReadByte_Secondary:
 	ldda16 xwa, 10377
 	ld c, a
@@ -132706,6 +132721,13 @@ LABEL_F3FC35:
 	ldda16 xwa, 10379
 	jrl LABEL_F41CC9
 
+; ============================================================================
+; SeqPart_WriteByte_Primary - Write byte to primary sequencer part buffer
+; ============================================================================
+; Input:  A = byte value to write
+; Output: None
+; Writes a byte to the primary (foreground) sequencer part data stream.
+; ============================================================================
 SeqPart_WriteByte_Primary:
 	ld e, a
 	ldda16 xbc, 10373
@@ -176907,6 +176929,14 @@ LABEL_F5ED6C:
 	.byte 0x00, 0x00, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04
 	.fill 6, 1, 0x08
 
+; ============================================================================
+; AccPatch_GetCurrentSlotAddr - Get address of current accompaniment patch slot
+; ============================================================================
+; Input:  None (reads current slot index from 13526)
+; Output: XIY = pointer to patch slot data (at 0x94800 + slot*96 + 96)
+; Reads the current patch slot index (0-29, capped), multiplies by 96-byte
+; stride, and returns a pointer into the accompaniment patch table at 0x94800.
+; ============================================================================
 AccPatch_GetCurrentSlotAddr:
 	lds32 xhl, 0
 	ldda8 l, 13526
@@ -176937,6 +176967,14 @@ LABEL_F5EDA9:
 	pop	xwa
 	ret
 
+; ============================================================================
+; AccPatch_GetEntryAddr - Get address of an accompaniment patch entry by index
+; ============================================================================
+; Input:  HL = patch entry index (0xFFFF = return immediately)
+; Output: XIX = pointer to patch entry (at 0x95C00 + index*256)
+; Converts a patch index to a memory address in the patch data table.
+; Each entry is 256 bytes. Returns immediately if index is 0xFFFF (invalid).
+; ============================================================================
 AccPatch_GetEntryAddr:
 	cp hl, 0xFFFF
 	jr z, LABEL_F5EDE2
@@ -197078,6 +197116,15 @@ LABEL_F6DEDE:
 	pop xiy
 	ret
 
+; ============================================================================
+; AccompSeq_AdvancePosition - Advance the accompaniment sequencer position
+; ============================================================================
+; Input:  None (reads from sequencer state at 32322-32324)
+; Output: None (updates position counters)
+; Increments the tick counter (32324). On tick overflow (wrap to 0),
+; increments the beat counter (32322). Checks for pattern end marker
+; (0x87) and handles looping by resetting position via sub-calls.
+; ============================================================================
 AccompSeq_AdvancePosition:
 	ldda16 xwa, 32324
 	inc 1, wa
@@ -235913,6 +235960,15 @@ UI_PostModeChangeEvent:
 	inc 2, xsp
 	ret
 
+; ============================================================================
+; SoundCtrl_SendCommand - Send a command to the sound controller
+; ============================================================================
+; Input:  A = command parameter (sound control value)
+; Output: None
+; Sends a message (event 0x1C00016) to the sound controller subsystem.
+; Packs the parameter into address 0x1A00000+param and dispatches via the
+; system event handler at 0xFA9D58.
+; ============================================================================
 SoundCtrl_SendCommand:
 	dec 2, xsp
 	ld (xsp), a
@@ -262318,6 +262374,15 @@ LABEL_FAA356:
 	ret
 
 
+; ============================================================================
+; DisplayCmd_DequeueAndExecute - Dequeue and execute display commands
+; ============================================================================
+; Input:  XWA = display context pointer
+; Output: XHL = result (0 = no commands, non-zero = command data pointer)
+; Waits for display event (event 3), dequeues a command from the draw queue,
+; signals completion, and adjusts task priority when the queue is empty.
+; Core display refresh loop using TaskSched_WaitForEvent/SignalEvent.
+; ============================================================================
 DisplayCmd_DequeueAndExecute:
 	dec 4, xsp
 	push xiz
@@ -262416,6 +262481,15 @@ LABEL_FAA437:
 	ld (xde - 10), ix
 	ret
 
+; ============================================================================
+; DrawQueue_Alloc - Allocate space in the draw command queue
+; ============================================================================
+; Input:  WA = size in bytes to allocate
+; Output: XHL = pointer to allocated buffer in draw queue
+; Manages a circular buffer at 0x030466 (8KB max, 0x2000 bytes).
+; Wraps around when the write pointer would exceed the buffer end.
+; Protected by event 4 acquire/release for thread safety.
+; ============================================================================
 DrawQueue_Alloc:
 	push xiz
 	ld iz, wa
@@ -300832,6 +300906,14 @@ LABEL_FC7B05:
 	pop xiz
 	ret
 
+; ============================================================================
+; UIState_UpdateControlBits - Update UI state control bit flags
+; ============================================================================
+; Input:  Control parameters from caller
+; Output: Updated control bit state
+; Modifies the UI state control flags that govern which UI elements are
+; active and which input modes are enabled.
+; ============================================================================
 UIState_UpdateControlBits:
 	.byte 0xc1, 0x7d, 0xc0, 0x21, 0xc9, 0xdd, 0x66, 0x16
 	.byte 0xc9, 0xdc, 0x66, 0x0b, 0xc9, 0xd8, 0xb0, 0xfe
@@ -309463,6 +309545,14 @@ LABEL_FD0416:
 	.byte 0x37, 0x96, 0x21, 0xf1, 0x48, 0x96, 0x41, 0xf1
 	.byte 0x44, 0x96, 0x51, 0xf1, 0x46, 0x96, 0x52, 0x1d
 	.byte 0x83, 0xc6, 0xfc, 0x0e
+; ============================================================================
+; UIState_ProcessDisplayUpdate - Process a display update event in UI state
+; ============================================================================
+; Input:  Display update event data
+; Output: None
+; Handles display refresh events within the UI state machine, updating
+; screen elements that need to be redrawn.
+; ============================================================================
 UIState_ProcessDisplayUpdate:
 	.byte 0xc1, 0x7d, 0xc0, 0x3f
 	.byte 0x0d, 0x6e, 0x0d, 0xc1, 0x7f, 0xc0, 0x21, 0xc9
@@ -315253,6 +315343,14 @@ LABEL_FD5E5C:
 	.byte 0x41, 0x0f, 0x00, 0x00, 0x00, 0xe9, 0x80, 0xb0
 	.byte 0x45, 0x0e
 
+; ============================================================================
+; SeqData_ReadFieldByIndex - Read a field from sequencer data by index
+; ============================================================================
+; Input:  Index parameter identifying which field to read
+; Output: Field value
+; Indexed accessor for sequencer data structures. Reads a specific field
+; from the current sequencer data block based on the given index.
+; ============================================================================
 SeqData_ReadFieldByIndex:
 	extz bc
 	cps bc, 0
@@ -327018,6 +327116,14 @@ LABEL_FDE068:
 LABEL_FDE07B:
 	ordi16 50580, 4
 	jrl LABEL_FDDDED
+; ============================================================================
+; UIState_ProcessMidiEvent - Process an incoming MIDI event in UI state
+; ============================================================================
+; Input:  MIDI event data
+; Output: None
+; Handles MIDI events (note on/off, control change, etc.) within the UI
+; state machine, updating relevant display elements.
+; ============================================================================
 UIState_ProcessMidiEvent:
 	cpdi8 49280, 24
 	ret ugt
@@ -334038,6 +334144,17 @@ LABEL_FE298A:
 	lda xsp, (xsp + 12)
 	ret
 
+; ============================================================================
+; NoteMap_AddEntry - Add a new entry to the note allocation map
+; ============================================================================
+; Input:  E = channel (must be 0x15 to proceed)
+;         XBC = note parameters
+;         XWA = note map base pointer
+; Output: None (updates note map in place)
+; Allocates voice resources for a new note by calling NoteMap_AllocateVoice
+; up to 3 times (for layers 0, 1, and optionally 2). Uses NoteMap_FindEntry
+; to check for existing entries and NoteMap_FindBestMatch for voice stealing.
+; ============================================================================
 NoteMap_AddEntry:
 	lda xsp, (xsp - 10)
 	push_werp 0xFA
@@ -336112,6 +336229,16 @@ LABEL_FE3FB0:
 	st_dri3b L, 0xFD, 0xAE, 0x00
 	ret
 
+; ============================================================================
+; NoteMap_AllocateVoice - Allocate a voice slot for a note
+; ============================================================================
+; Input:  XWA = note map base pointer
+;         BC = voice layer index (0, 1, or 2)
+; Output: L = allocated voice number (0xFF if none available)
+; Searches the voice table at 0xEE8F22 for an available slot matching the
+; requested instrument/channel. Uses a stride of 5 bytes per voice entry.
+; Called by NoteMap_AddEntry for each voice layer.
+; ============================================================================
 NoteMap_AllocateVoice:
 	st_dri3b L, 0xFD, 0x54, 0xFF
 	push xiz
@@ -336905,6 +337032,18 @@ LABEL_FE4720:
 	inc 4, xsp
 	retd 0x2
 
+; ============================================================================
+; NoteMap_LookupVoice - Look up voice assignment for a note event
+; ============================================================================
+; Input:  E = voice layer (0-4, rejects > 4)
+;         XWA = note map pointer
+;         (xsp+12) = MIDI channel (rejects > 0x20)
+;         XBC = voice parameter block
+; Output: L = voice slot index
+; Looks up voice tables at 0xEE8F2E-0xEE8F36, cross-referencing channel,
+; instrument, and layer to find the matching voice assignment.
+; Uses stride of 0xD (13) bytes per voice entry.
+; ============================================================================
 NoteMap_LookupVoice:
 	dec 4, xsp
 	push xiz
@@ -337710,6 +337849,16 @@ LABEL_FE4EF2:
 	lda xsp, (xsp + 14)
 	ret
 
+; ============================================================================
+; NoteMap_SetChannelParam - Set a MIDI channel parameter in the note map
+; ============================================================================
+; Input:  C = MIDI channel number
+;         XWA = pointer to parameter data (command byte at offset 0)
+; Output: None
+; Dispatches MIDI channel messages: handles control change (0xA0=all notes off),
+; program change, pitch bend, and other channel voice messages. Reads channel
+; configuration from voice table at 0xEE8EB8.
+; ============================================================================
 NoteMap_SetChannelParam:
 	lda xsp, (xsp - 28)
 	pushw iz
@@ -338410,6 +338559,17 @@ LABEL_FE5552:
 	inc 8, xsp
 	ret
 
+; ============================================================================
+; NoteMap_FindEntry - Find an existing entry in the note map
+; ============================================================================
+; Input:  C = search key / channel
+;         XWA = note map base pointer
+;         BC = search mode (0 = standard)
+; Output: L = entry index (0xFF if not found)
+; Searches the note map for an entry matching the given criteria. Uses a
+; stride of 5 bytes per entry. Checks active flags (bit 1 at offset 4)
+; and matches against channel assignment data at 0xEE8ED8.
+; ============================================================================
 NoteMap_FindEntry:
 	lda xsp, (xsp - 14)
 	push_werp 0xFA
@@ -343740,6 +343900,16 @@ LABEL_FE8AF9:
 LABEL_FE8AFB:
 	ret
 
+; ============================================================================
+; NoteMap_FindBestMatch - Find the best voice to steal for a new note
+; ============================================================================
+; Input:  Implicit (reads from note map state variables at 52770+)
+; Output: L = voice index to steal (0xFF if no suitable candidate)
+; Implements voice stealing algorithm: compares current note parameters
+; against the last-used voice state (addresses 52906-52960) to determine
+; if reuse is possible. Falls back to searching for the least-important
+; active voice when direct reuse is not available.
+; ============================================================================
 NoteMap_FindBestMatch:
 	ldb l, 0xFF
 	stdi8 59836, 0
@@ -346641,6 +346811,14 @@ LABEL_FEA7EB:
 	inc 6, xsp
 	ret
 
+; ============================================================================
+; UIState_ProcessKeyEvent - Process a key press/release event in UI state
+; ============================================================================
+; Input:  Key event data
+; Output: None
+; Dispatches keyboard and control panel button events within the UI state
+; machine to the appropriate page handler.
+; ============================================================================
 UIState_ProcessKeyEvent:
 	.byte 0xef, 0x6c, 0xbf, 0x00, 0x14, 0x80, 0xc0, 0xbf
 	.byte 0x01, 0x14, 0x7d, 0xc0, 0xbf, 0x02, 0x14, 0x7e
@@ -347996,6 +348174,14 @@ LABEL_FEBF60:
 LABEL_FEBF79:
 	ret
 
+; ============================================================================
+; SeqState_GetFlags - Get the current sequencer state flags
+; ============================================================================
+; Input:  None
+; Output: XHL = sequencer state flags (from address 59877)
+; Simple accessor that reads the 32-bit sequencer state word. Used by the
+; sequencer engine to check playback state, loop mode, and recording status.
+; ============================================================================
 SeqState_GetFlags:
 	ldda16 xhl, 59877
 	ret
@@ -355597,6 +355783,17 @@ LABEL_FF0DF9:
 	ld (xhl), 0x0
 	jr LABEL_FF0E68
 
+; ============================================================================
+; Itoa - Convert integer to ASCII string (C runtime)
+; ============================================================================
+; Input:  (xsp+26) = workspace register set selector
+;         BC = numeric base (e.g., 10 for decimal)
+;         XIZ+4 = output buffer pointer
+; Output: Null-terminated string written to buffer
+; Converts an integer to its string representation in the given base.
+; Handles negative numbers when base is 10 (prepends '-'). Digits above
+; 9 use lowercase letters (a-f). Uses repeated division algorithm.
+; ============================================================================
 Itoa:
 	ld wa, (xsp + 26)
 	ldfr_werp WA, 0xE6
@@ -355748,6 +355945,15 @@ LABEL_FF0F31:
 	inc 6, xsp
 	ret
 
+; ============================================================================
+; Strcmp - Compare two strings (C runtime)
+; ============================================================================
+; Input:  (xsp+8) = pointer to string 1 (XIZ)
+;         (xsp+18) = pointer to string 2 (XWA)
+; Output: HL = comparison result (0 = equal)
+; Computes length of string 1 via Strlen, then calls Mem_Compare to compare
+; that many bytes between the two strings.
+; ============================================================================
 Strcmp:
 	push xiz
 	ld xiz, (xsp + 8)
@@ -355783,6 +355989,15 @@ LABEL_FF0F75:
 	pop xiz
 	ret
 
+; ============================================================================
+; Heap_Alloc - Allocate memory from the heap (C runtime)
+; ============================================================================
+; Input:  XWA = size in bytes to allocate (0 = return heap base)
+; Output: XHL = pointer to allocated block (0xFFFFFFFF if insufficient space)
+; Simple bump allocator: advances the heap pointer at 0x03D524 by the
+; requested size. Checks available space at 0x03D528. Falls through to
+; Heap_Grow if space is available.
+; ============================================================================
 Heap_Alloc:
 	or xwa, xwa
 	jr nz, LABEL_FF0F83
@@ -355795,6 +356010,14 @@ LABEL_FF0F83:
 	ld xhl, 0xFFFFFFFF
 	ret
 
+; ============================================================================
+; Heap_Grow - Grow the heap by allocating more memory
+; ============================================================================
+; Input:  XWA = size in bytes to allocate
+; Output: XHL = pointer to newly allocated block (previous heap top)
+; Advances the heap top pointer (0x03D524) and decreases available space
+; counter (at address 251176). Called by Heap_Alloc after size check passes.
+; ============================================================================
 Heap_Grow:
 	ld32_24 xhl, 0x03d524
 	addm32_24 0x03d524, xwa
@@ -355851,6 +356074,14 @@ LABEL_FF0FBE:
 	dec 1, xhl
 	ret
 
+; ============================================================================
+; Itoa_WithBase - Convert integer to string with specified base (C runtime)
+; ============================================================================
+; Input:  WA = integer value, XBC = base pointer, XDE = format options
+; Output: String written to output buffer
+; Wrapper around AudioCmd_ItoaBaseN. Pushes parameters and delegates to
+; the audio command subsystem's integer-to-string conversion.
+; ============================================================================
 Itoa_WithBase:
 	pushw wa
 	push xbc
