@@ -49037,7 +49037,7 @@ LABEL_EF380E:
 	inc 8, xsp
 	ret
 
-LABEL_EF3815:
+Flash_ProgramWord:
 	dec 6, xsp
 	push xiz
 	ld (xsp + 4), de
@@ -49348,7 +49348,7 @@ LABEL_EF3B6F:
 	ld xhl, (xsp + 2)
 	ld_spiw DE, 0xED
 	ld (xsp + 2), xhl
-	calr LABEL_EF3815
+	calr Flash_ProgramWord
 	inc 1, iz
 	cp iz, 0x8000
 	jr c, LABEL_EF3B6F
@@ -49385,7 +49385,7 @@ LABEL_EF3BC1:
 	ld xhl, (xsp + 6)
 	ld_spiw DE, 0xED
 	ld (xsp + 6), xhl
-	calr LABEL_EF3815
+	calr Flash_ProgramWord
 	inc 1, iz
 	cp iz, 0x8000
 	jr c, LABEL_EF3BC1
@@ -49402,7 +49402,7 @@ LABEL_EF3BE7:
 	lda xsp, (xsp + 10)
 	ret
 
-LABEL_EF3BFC:
+Flash_EraseSectorAndWrite:
 	lda xsp, (xsp - 10)
 	ld (xsp), xde
 	ld (xsp + 4), xbc
@@ -49482,7 +49482,7 @@ LABEL_EF3C8F:
 	lds wa, 1
 	ld xbc, 0x69800
 	ld xde, 0x378700
-	calr LABEL_EF3BFC
+	calr Flash_EraseSectorAndWrite
 	ld xwa, 0x378700
 	push xwa
 	lds wa, 1
@@ -50425,7 +50425,7 @@ FDC_WriteCompressed_PartialTrackLoop:
 	ld xhl, (xsp + 10)
 	ld_spiw DE, 0xED
 	ld (xsp + 10), xhl
-	call LABEL_EF3815
+	call Flash_ProgramWord
 	inc1_werp 0xFA
 
 FDC_WriteCompressed_PartialTrackCheck:
@@ -50469,7 +50469,7 @@ FDC_WriteCompressed_FullTrackInner:
 	ld xhl, (xsp + 10)
 	ld_spiw DE, 0xED
 	ld (xsp + 10), xhl
-	call LABEL_EF3815
+	call Flash_ProgramWord
 	inc1_werp 0xFA
 	cp_erpw 0xFA, 0x00, 0x12
 	jr c, FDC_WriteCompressed_FullTrackInner
@@ -50505,7 +50505,7 @@ FDC_WriteCompressed_RemainderLoop:
 	ld xhl, (xsp + 10)
 	ld_spiw DE, 0xED
 	ld (xsp + 10), xhl
-	call LABEL_EF3815
+	call Flash_ProgramWord
 	inc1_werp 0xFA
 
 FDC_WriteCompressed_RemainderCheck:
@@ -50872,7 +50872,7 @@ LABEL_EF4923:
 	ld_spiw DE, 0xE1
 	ld (xsp + 4), xwa
 	lds wa, 1
-	call LABEL_EF3815
+	call Flash_ProgramWord
 	inc 1, xiz
 	cp xiz, 0x40000
 	jr c, LABEL_EF4923
@@ -51131,7 +51131,7 @@ Flash_AccumWrite_Word:
 	stda32 1622, xwa
 	ld de, (xde)
 	lds wa, 1
-	call LABEL_EF3815
+	call Flash_ProgramWord
 	stdi8 1620, 0
 
 Flash_AccumWrite_WordDone:
@@ -52518,7 +52518,7 @@ LABEL_EF648A:
 	.long SoundEvt_ShortPacketHandler
 	.long SoundEvt_LongPacketHandler
 	.long LABEL_EF6A25
-	.long LABEL_EF80AF
+	.long ToneParam_Evt09_BytecodeHandler
 	.long LABEL_EFD9BC
 	.long LABEL_EF7D39
 	.long DefaultHandler_Ret
@@ -52611,7 +52611,7 @@ LABEL_EF65DD:
 	.long SoundEvt_ShortPacketHandler
 	.long SoundEvt_LongPacketHandler
 	.long LABEL_EF6A25
-	.long LABEL_EF80AF
+	.long ToneParam_Evt09_BytecodeHandler
 	.long LABEL_EFD9BC
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
@@ -52692,7 +52692,7 @@ LABEL_EF6726:
 	.long SoundEvt_ShortPacketHandler
 	.long SoundEvt_LongPacketHandler
 	.long LABEL_EF6A25
-	.long LABEL_EF80AF
+	.long ToneParam_Evt09_BytecodeHandler
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
@@ -52731,7 +52731,7 @@ LABEL_EF67C5:
 	.long SoundEvt_ShortPacketHandler
 	.long SoundEvt_LongPacketHandler
 	.long LABEL_EF6A25
-	.long LABEL_EF80AF
+	.long ToneParam_Evt09_BytecodeHandler
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
@@ -52771,7 +52771,7 @@ LABEL_EF685C:
 	.long SoundEvt_ShortPacketHandler
 	.long SoundEvt_LongPacketHandler
 	.long LABEL_EF6A25
-	.long LABEL_EF80AF
+	.long ToneParam_Evt09_BytecodeHandler
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
@@ -52813,7 +52813,7 @@ LABEL_EF690E:
 	.long SoundEvt_ShortPacketHandler
 	.long SoundEvt_LongPacketHandler
 	.long LABEL_EF6A25
-	.long LABEL_EF80AF
+	.long ToneParam_Evt09_BytecodeHandler
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
@@ -52988,7 +52988,7 @@ LABEL_EF6C6B:
 	.long SoundEvt_ShortPacketHandler
 	.long SoundEvt_LongPacketHandler
 	.long LABEL_EF6A25
-	.long LABEL_EF80AF
+	.long ToneParam_Evt09_BytecodeHandler
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
@@ -53092,7 +53092,7 @@ LABEL_EF6DB7:
 	ldda8	e, 3571
 	xor d, d
 	call 0xEFC4D1
-	call LABEL_EFC369
+	call VoiceSlot_ReadCurrentParams
 	ldda8	w, 4339
 	call 0xEFC49D
 	xor	a, a
@@ -53106,7 +53106,7 @@ LABEL_EF6DE3:
 	jrl z, LABEL_EF6E28
 	xor	a, a
 	call LABEL_EFD0B7
-	call LABEL_EFC369
+	call VoiceSlot_ReadCurrentParams
 	ldda8	w, 4339
 	and w, 0x80
 	rlc	w
@@ -53116,7 +53116,7 @@ LABEL_EF6DE3:
 	ldda8	e, 3571
 	xor d, d
 	call 0xEFC4D1
-	call LABEL_EFC369
+	call VoiceSlot_ReadCurrentParams
 	ldda8	w, 4339
 	and w, 0x7F
 	call 0xEFC49D
@@ -54151,7 +54151,7 @@ LABEL_EF7DB5:
 LABEL_EF80A6:
 	.byte 0x1d, 0xaf, 0x80
 	.byte 0xef, 0x1d, 0x01, 0x6f, 0xef, 0x0e
-LABEL_EF80AF:
+ToneParam_Evt09_BytecodeHandler:
 	.byte 0xc8, 0x33
 	.byte 0x07, 0x7e, 0x5b, 0x00, 0x1d, 0x8f, 0x81, 0xef
 	.byte 0xc8, 0xd9, 0x76, 0x27, 0x00, 0x1d, 0x85, 0xd3
@@ -54722,7 +54722,7 @@ LABEL_EF9004:
 	call LABEL_EFC7B2
 	xor	a, a
 	call LABEL_EFD10B
-	call LABEL_EFC369
+	call VoiceSlot_ReadCurrentParams
 	ld xhl, 0x00000D54
 	and a, 0xf0
 	cp a, 0x90
@@ -54981,7 +54981,7 @@ LABEL_EF9626:
 	xor a, a
 	call LABEL_EFD0B7
 	call LABEL_EFAD4E
-	call LABEL_EFC369
+	call VoiceSlot_ReadCurrentParams
 	cp a, 0x81
 	jrl nz, LABEL_EF968F
 	jp LABEL_EF96A8
@@ -55004,7 +55004,7 @@ LABEL_EF9656:
 	jrl nc, LABEL_EF96B1
 
 LABEL_EF968B:
-	call LABEL_EFC369
+	call VoiceSlot_ReadCurrentParams
 
 LABEL_EF968F:
 	cp a, 0x85
@@ -56902,7 +56902,7 @@ LABEL_EFC1BF:
 	jrl z, LABEL_EFC1E3
 	cp a, 0x82
 	jrl z, LABEL_EFC1E3
-	call LABEL_EFC369
+	call VoiceSlot_ReadCurrentParams
 	cp a, 0x84
 	jrl z, LABEL_EFC1E3
 	ldb w, 0x0
@@ -57077,7 +57077,7 @@ LABEL_EFC367:
 	pop xiy
 	ret
 
-LABEL_EFC369:
+VoiceSlot_ReadCurrentParams:
 	call VoiceSlot_ComputeWordIndex
 	push xde
 	ld xde, 0xC9E
@@ -74796,7 +74796,7 @@ LABEL_F167AE:
 	.byte 0x00, 0xd8, 0xaf, 0x1e, 0x6d, 0x08, 0x78, 0xfa
 	.byte 0x15
 
-LABEL_F1691F:
+NoteEvent_LoadSoundGenParams:
 	st_dri3b L, 0xFD, 0x94, 0xFE
 	push xiz
 	ld xiy, 0xE15B20
@@ -75413,7 +75413,7 @@ LABEL_F171D5:
 	ld xwa, (xsp + 4)
 	st_dri3b B, 0xE1, 0x00, 0x68
 	lds wa, 1
-	call LABEL_EF3BFC
+	call Flash_EraseSectorAndWrite
 	ld xiy, (xsp + 4)
 	sub xiy, 0x9800
 	ld xwa, (xsp)
@@ -75460,7 +75460,7 @@ LABEL_F1725A:
 	lds wa, 1
 	ld xbc, (xsp)
 	ld xde, (xsp + 4)
-	call LABEL_EF3BFC
+	call Flash_EraseSectorAndWrite
 	ld xiy, (xsp + 4)
 	add xiy, 0x10000
 	ld xwa, (xsp)
@@ -75485,7 +75485,7 @@ LABEL_F17286:
 	ld xbc, (xsp)
 
 LABEL_F172A4:
-	call LABEL_EF3BFC
+	call Flash_EraseSectorAndWrite
 	lda xsp, (xsp + 10)
 	ret
 
@@ -76243,7 +76243,7 @@ LABEL_F18361:
 	ldda32 xbc, 3222
 	ldda32 xde, 3218
 	lds wa, 1
-	call LABEL_EF3BFC
+	call Flash_EraseSectorAndWrite
 	pop_werp 0xFA
 	ret
 
@@ -76496,7 +76496,7 @@ LABEL_F18A74:
 	jrl nz, LABEL_F18BF5
 	cp (xwa + 2), 0x4B
 	jrl nz, LABEL_F18BF5
-	calr LABEL_F1691F
+	calr NoteEvent_LoadSoundGenParams
 	ldda32 xwa, 3186
 	ld xbc, (xsp + 70)
 	ld_sril XIX, (xsp + 0x0406)
@@ -76508,7 +76508,7 @@ LABEL_F18A74:
 	jrl lt, LABEL_F18BF1
 	lds wa, 1
 	calr NoteEventBuffer_Store
-	calr LABEL_F1691F
+	calr NoteEvent_LoadSoundGenParams
 	ldda32 xwa, 3186
 	ld xbc, (xsp + 74)
 	ld_sril XIX, (xsp + 0x0406)
@@ -76520,7 +76520,7 @@ LABEL_F18A74:
 	jrl lt, LABEL_F18BF1
 	lds wa, 2
 	calr NoteEventBuffer_Store
-	calr LABEL_F1691F
+	calr NoteEvent_LoadSoundGenParams
 	ldda32 xwa, 3186
 	ld xbc, (xsp + 78)
 	ld_sril XIX, (xsp + 0x0406)
@@ -76532,7 +76532,7 @@ LABEL_F18A74:
 	jrl lt, LABEL_F18BF1
 	lds wa, 3
 	calr NoteEventBuffer_Store
-	calr LABEL_F1691F
+	calr NoteEvent_LoadSoundGenParams
 	ldda32 xwa, 3186
 	ld xbc, (xsp + 82)
 	ld_sril XIX, (xsp + 0x0406)
@@ -76544,7 +76544,7 @@ LABEL_F18A74:
 	jrl lt, LABEL_F18BF1
 	lds wa, 4
 	calr NoteEventBuffer_Store
-	calr LABEL_F1691F
+	calr NoteEvent_LoadSoundGenParams
 	ldda32 xwa, 3186
 	ld xbc, (xsp + 86)
 	ld_sril XIX, (xsp + 0x0406)
@@ -76556,7 +76556,7 @@ LABEL_F18A74:
 	jrl lt, LABEL_F18BF1
 	lds wa, 5
 	calr NoteEventBuffer_Store
-	calr LABEL_F1691F
+	calr NoteEvent_LoadSoundGenParams
 	ldda32 xwa, 3186
 	ld xbc, (xsp + 90)
 	ld_sril XIX, (xsp + 0x0406)
@@ -76568,7 +76568,7 @@ LABEL_F18A74:
 	jr lt, LABEL_F18BF1
 	lds wa, 6
 	calr NoteEventBuffer_Store
-	calr LABEL_F1691F
+	calr NoteEvent_LoadSoundGenParams
 	ldda32 xwa, 3186
 	ld xbc, (xsp + 94)
 	ld_sril XIX, (xsp + 0x0406)
@@ -76596,7 +76596,7 @@ LABEL_F18A74:
 	ldda32 xbc, 3222
 	ldda32 xde, 3218
 	lds wa, 1
-	call LABEL_EF3BFC
+	call Flash_EraseSectorAndWrite
 	call TmFlash_CopyToExtMem
 
 LABEL_F18BF1:
@@ -86239,7 +86239,7 @@ LABEL_F20A0A:
 	jr z, LABEL_F20A28
 	cpdi8 36150, 120
 	jr z, LABEL_F20A28
-	jr LABEL_F20A88
+	jr CDlikeSwTtl_StorePlaybackMode
 
 LABEL_F20A28:
 	pushw wa
@@ -86247,11 +86247,11 @@ LABEL_F20A28:
 	anddi8 10407, 247
 	call LABEL_F3CA8A
 	popw wa
-	jr LABEL_F20A88
+	jr CDlikeSwTtl_StorePlaybackMode
 
 LABEL_F20A3A:
 	cps w, 0
-	jr nz, LABEL_F20A88
+	jr nz, CDlikeSwTtl_StorePlaybackMode
 	cpdi8 36150, 122
 	jr z, LABEL_F20A82
 	cpdi8 36150, 120
@@ -86264,32 +86264,32 @@ LABEL_F20A3A:
 	jr z, LABEL_F20A72
 	cpdi8 36150, 118
 	jr z, LABEL_F20A72
-	jr LABEL_F20A88
+	jr CDlikeSwTtl_StorePlaybackMode
 
 LABEL_F20A6A:
 	pushw wa
 	call CDlikeSwTtl_ShowPdTitle
 	popw wa
-	jr LABEL_F20A88
+	jr CDlikeSwTtl_StorePlaybackMode
 
 LABEL_F20A72:
 	pushw wa
 	call CDlikeSwTtl_ShowSongTitle
 	popw wa
-	jr LABEL_F20A88
+	jr CDlikeSwTtl_StorePlaybackMode
 
 LABEL_F20A7A:
 	pushw wa
 	call CDlikeSwTtl_ShowDocTitle
 	popw wa
-	jr LABEL_F20A88
+	jr CDlikeSwTtl_StorePlaybackMode
 
 LABEL_F20A82:
 	pushw wa
 	call LABEL_F20A8D
 	popw wa
 
-LABEL_F20A88:
+CDlikeSwTtl_StorePlaybackMode:
 	stda8 4420, w
 
 LABEL_F20A8C:
@@ -92467,7 +92467,7 @@ LABEL_F248F0:
 	call LABEL_F25B8D
 	call LABEL_F25BD6
 
-LABEL_F24985:
+Scoop_ProcessCompareLoop:
 	cpdi8 10194, 255
 	jrl nz, LABEL_F24990
 	jrl LABEL_F249F2
@@ -92485,27 +92485,27 @@ LABEL_F2499B:
 
 LABEL_F249A6:
 	call LABEL_F25C1F
-	jrl LABEL_F24985
+	jrl Scoop_ProcessCompareLoop
 
 LABEL_F249AD:
 	call LABEL_F25C2A
-	jrl LABEL_F24985
+	jrl Scoop_ProcessCompareLoop
 
 LABEL_F249B4:
 	call LABEL_F25C9F
-	jrl LABEL_F24985
+	jrl Scoop_ProcessCompareLoop
 
 LABEL_F249BB:
 	bitda 0, 10194
 	jrl z, LABEL_F249C9
 	call LABEL_F25C9F
-	jrl LABEL_F24985
+	jrl Scoop_ProcessCompareLoop
 
 LABEL_F249C9:
 	bitda 1, 10194
 	jrl z, LABEL_F249D7
 	call LABEL_F25C1F
-	jrl LABEL_F24985
+	jrl Scoop_ProcessCompareLoop
 
 LABEL_F249D7:
 	ldda8 a, 10204
@@ -92513,11 +92513,11 @@ LABEL_F249D7:
 	cp a, w
 	jrl le, LABEL_F249EB
 	call LABEL_F26393
-	jrl LABEL_F24985
+	jrl Scoop_ProcessCompareLoop
 
 LABEL_F249EB:
 	call LABEL_F25CAA
-	jrl LABEL_F24985
+	jrl Scoop_ProcessCompareLoop
 
 LABEL_F249F2:
 	ret
@@ -93540,7 +93540,7 @@ LABEL_F2535F:
 	cpdi8 4323, 0
 	jrl nz, LABEL_F253D1
 	call ToneGen_SetSustainBit
-	call LABEL_F26278
+	call SoundGen_WriteVoiceParams
 	stdi8 4323, 0
 
 LABEL_F253D1:
@@ -93703,7 +93703,7 @@ LABEL_F254F6:
 	jrl nz, LABEL_F2555F
 	call ToneGen_SetSustainBit
 	push xix
-	call LABEL_F26278
+	call SoundGen_WriteVoiceParams
 	pop xix
 	ldda8 a, 4011
 	and a, 0xF
@@ -93930,7 +93930,7 @@ LABEL_F256F9:
 	cpdi8 4323, 0
 	jrl nz, LABEL_F25779
 	call ToneGen_SetSustainBit
-	call LABEL_F26278
+	call SoundGen_WriteVoiceParams
 	stdi8 4323, 0
 
 LABEL_F25779:
@@ -94043,7 +94043,7 @@ LABEL_F257B0:
 	cpdi8 4323, 0
 	jrl nz, LABEL_F25AA3
 	call ToneGen_SetSustainBit
-	call LABEL_F26278
+	call SoundGen_WriteVoiceParams
 	stdi8 4323, 0
 	jrl LABEL_F25AA3
 
@@ -94149,7 +94149,7 @@ LABEL_F25922:
 	cpdi8 4323, 0
 	jrl nz, LABEL_F25AA3
 	call ToneGen_SetSustainBit
-	call LABEL_F26278
+	call SoundGen_WriteVoiceParams
 	stdi8 4323, 0
 	jrl LABEL_F25AA3
 
@@ -94218,7 +94218,7 @@ LABEL_F259DF:
 	cpdi8 4323, 0
 	jrl nz, LABEL_F25AA3
 	call ToneGen_SetSustainBit
-	call LABEL_F26278
+	call SoundGen_WriteVoiceParams
 	stdi8 4323, 0
 	jrl LABEL_F25AA3
 
@@ -95035,7 +95035,7 @@ LABEL_F26276:
 	pop xiy
 	ret
 
-LABEL_F26278:
+SoundGen_WriteVoiceParams:
 	push xde
 	ldda16 xiy, 4237
 	call SoundGen_ClampVoiceIndexMin1
@@ -95695,7 +95695,7 @@ LABEL_F26AE6:
 	cpdi8 4323, 0
 	jr nz, LABEL_F26B7E
 	call ToneGen_SetSustainBit
-	call LABEL_F26278
+	call SoundGen_WriteVoiceParams
 	stdi8 4323, 0
 
 LABEL_F26B7E:
@@ -117725,9 +117725,9 @@ LABEL_F37055:
 	call Part_WriteByte_Indexed
 	stda16 10415, xiz
 	stdi16 9830, 5
-	calr LABEL_F37CC9
+	calr BmDrEdit_InsertStepEntry
 	incdi16 1, 9830
-	calr LABEL_F37CC9
+	calr BmDrEdit_InsertStepEntry
 
 LABEL_F370D7:
 	calr LABEL_F3773E
@@ -117946,7 +117946,7 @@ LABEL_F372CA:
 
 LABEL_F372DB:
 	calr LABEL_F374A1
-	calr LABEL_F37CC9
+	calr BmDrEdit_InsertStepEntry
 	cpdi8 10362, 0
 	jr nz, LABEL_F372F6
 	ldda16 xwa, 10098
@@ -117986,7 +117986,7 @@ LABEL_F37325:
 
 LABEL_F37340:
 	calr LABEL_F374A1
-	calr LABEL_F37CC9
+	calr BmDrEdit_InsertStepEntry
 	cpdi8 10362, 0
 	jr z, LABEL_F37350
 
@@ -118484,7 +118484,7 @@ LABEL_F377A1:
 	jr z, LABEL_F377F9
 
 LABEL_F377DB:
-	calr LABEL_F37CC9
+	calr BmDrEdit_InsertStepEntry
 	cpdi8 10362, 0
 	jr z, LABEL_F377EB
 	setda 2, 10591
@@ -119060,7 +119060,7 @@ LABEL_F37CC1:
 	extz de
 	jp PartCtrl_WriteByteToBuf
 
-LABEL_F37CC9:
+BmDrEdit_InsertStepEntry:
 	dec 2, xsp
 	calr BmDrEdit_SaveSongPosition
 	stdi8 10362, 0
@@ -119550,7 +119550,7 @@ LABEL_F3810B:
 
 LABEL_F38132:
 	calr LABEL_F374A1
-	calr LABEL_F37CC9
+	calr BmDrEdit_InsertStepEntry
 	cpdi8 10362, 0
 	jr z, LABEL_F3814D
 	ldw wa, 0xCD
@@ -119678,7 +119678,7 @@ LABEL_F38250:
 
 LABEL_F38256:
 	calr LABEL_F374A1
-	calr LABEL_F37CC9
+	calr BmDrEdit_InsertStepEntry
 	cpdi8 10362, 0
 	jr nz, LABEL_F3827D
 	incdi16 1, 10078
@@ -270497,7 +270497,7 @@ LABEL_FAF00B:
 	lds wa, 1
 	ld xbc, 0x56800
 	ld xde, 0x3C0000
-	call LABEL_EF3BFC
+	call Flash_EraseSectorAndWrite
 	ld xwa, 0x3D0000
 	push xwa
 	lds wa, 1
