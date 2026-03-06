@@ -90103,7 +90103,7 @@ LABEL_F234CE:
 	jrl nz, Sequencer_ResetAfterFloppyIO
 	cpdi8 3830, 0
 	jrl nz, SeqPlay_ResetAndStop
-	call LABEL_F26E05
+	call SoundGen_InitAllVoiceChannels
 	stdi8 4236, 0
 
 SMF_ReadLoopWithRetry:
@@ -90190,7 +90190,7 @@ LABEL_F2359B:
 	jrl nz, LABEL_F235C6
 
 LABEL_F235A7:
-	call LABEL_F26F08
+	call SMF_ProcessSysExBlock
 	push xwa
 	push xbc
 	lds32 xbc, 0
@@ -90372,7 +90372,7 @@ FloppyIO_ReadNextByte:
 	jrl ule, LABEL_F23752
 	ld l, a
 	pushw hl
-	call LABEL_F26DEC
+	call FileIO_ReadBlockToFilePos
 	popw hl
 	ld a, l
 	incdi16 1, 4327
@@ -91500,7 +91500,7 @@ LABEL_F2408B:
 	jrl nz, LABEL_F240BA
 
 LABEL_F24097:
-	call LABEL_F26F08
+	call SMF_ProcessSysExBlock
 	push xwa
 	push xbc
 	lds32 xbc, 0
@@ -91611,7 +91611,7 @@ LABEL_F24159:
 	call SeqTrack_AssignFloppyChannels
 	cpdi8 3830, 0
 	jrl nz, LABEL_F2435A
-	call LABEL_F26E05
+	call SoundGen_InitAllVoiceChannels
 	stdi8 6650, 0
 
 MidiSysEx_CmdDispatchLoop:
@@ -91924,7 +91924,7 @@ Sequencer_AdvanceBlockPosition:
 	cp xix, 0x17F9
 	jrl ule, LABEL_F2449F
 	push xix
-	call LABEL_F26DEC
+	call FileIO_ReadBlockToFilePos
 	pop xix
 	incdi16 1, 4327
 	pushw wa
@@ -92512,7 +92512,7 @@ LABEL_F249D7:
 	ldda8 w, 10206
 	cp a, w
 	jrl le, LABEL_F249EB
-	call LABEL_F26393
+	call ToneGen_AdvanceAndValidateVoice
 	jrl Scoop_ProcessCompareLoop
 
 LABEL_F249EB:
@@ -92862,7 +92862,7 @@ LABEL_F24CCE:
 	jrl LABEL_F24E3A
 
 LABEL_F24CE5:
-	call LABEL_F26E81
+	call SndParam_LookupChannelVoice
 	cp a, 0xFF
 	jr nz, LABEL_F24CF7
 	stdi8 4323, 0
@@ -93047,7 +93047,7 @@ Scoop_ApplyMatchedVoiceEntry:
 	stda16 10415, xhl
 	stda16 9830, xix
 	pushw wa
-	call LABEL_F25E03
+	call ToneGen_AdvanceBlockPosition
 	popw wa
 	push xix
 	push xiy
@@ -93142,23 +93142,23 @@ LABEL_F24F78:
 	jrl LABEL_F24F9F
 
 LABEL_F24F7F:
-	call LABEL_F25F34
+	call VoiceChannel_SelectNextParam
 	jrl LABEL_F24F9F
 
 LABEL_F24F86:
-	call LABEL_F25F8C
+	call VoiceChannel_SelectPrevParam
 	jrl LABEL_F24F9F
 
 Scoop_Cmd_ReleaseVoiceSlot:
-	call LABEL_F25FCD
+	call VoiceChannel_ClearChannelFlags
 	jrl LABEL_F24F9F
 
 LABEL_F24F94:
-	call LABEL_F26018
+	call VoiceChannel_NoteOnByChannel
 	jrl LABEL_F24F9F
 
 LABEL_F24F9B:
-	call LABEL_F260A1
+	call VoiceChannel_NoteOffByChannel
 
 LABEL_F24F9F:
 	ret
@@ -93231,7 +93231,7 @@ LABEL_F25056:
 	extz xiy
 	bitda 0, 4236
 	jrl nz, LABEL_F25070
-	call LABEL_F26136
+	call VoiceChannel_ApplyParamByMode
 	stdi8 4323, 0
 
 LABEL_F25070:
@@ -93562,7 +93562,7 @@ LABEL_F253E1:
 	jrl LABEL_F2555F
 
 LABEL_F253F3:
-	call LABEL_F26E81
+	call SndParam_LookupChannelVoice
 	cp a, 0xFF
 	jr nz, LABEL_F25405
 	stdi8 4323, 0
@@ -93759,7 +93759,7 @@ Scoop_ApplyMatchedVoiceEntryAlt:
 	stda16 10415, xhl
 	stda16 9830, xix
 	pushw wa
-	call LABEL_F25E03
+	call ToneGen_AdvanceBlockPosition
 	popw wa
 	ldda16 xix, 9830
 	ldda32 xhl, 4349
@@ -93849,23 +93849,23 @@ LABEL_F25691:
 	jrl LABEL_F256B8
 
 LABEL_F25698:
-	call LABEL_F25F34
+	call VoiceChannel_SelectNextParam
 	jrl LABEL_F256B8
 
 LABEL_F2569F:
-	call LABEL_F25F8C
+	call VoiceChannel_SelectPrevParam
 	jrl LABEL_F256B8
 
 Scoop_CmdAlt_ReleaseVoiceSlot:
-	call LABEL_F25FCD
+	call VoiceChannel_ClearChannelFlags
 	jrl LABEL_F256B8
 
 LABEL_F256AD:
-	call LABEL_F26018
+	call VoiceChannel_NoteOnByChannel
 	jrl LABEL_F256B8
 
 LABEL_F256B4:
-	call LABEL_F260A1
+	call VoiceChannel_NoteOffByChannel
 
 LABEL_F256B8:
 	ret
@@ -93944,7 +93944,7 @@ LABEL_F2577A:
 	and iy, 0xF
 	bitda 0, 4236
 	jrl nz, LABEL_F2579E
-	call LABEL_F26136
+	call VoiceChannel_ApplyParamByMode
 	stdi8 4323, 0
 
 LABEL_F2579E:
@@ -94421,7 +94421,7 @@ LABEL_F25C9E:
 	ret
 
 LABEL_F25C9F:
-	call LABEL_F26393
+	call ToneGen_AdvanceAndValidateVoice
 	bitda 1, 10194
 	jr z, LABEL_F25C9F
 	ret
@@ -94530,7 +94530,7 @@ ToneGen_AdvancePosition:
 	jr LABEL_F25DB9
 
 LABEL_F25DA8:
-	call LABEL_F2694C
+	call ToneGen_DispatchAndLinkBlock
 	jr LABEL_F25DB4
 
 LABEL_F25DAE:
@@ -94553,7 +94553,7 @@ LABEL_F25DBA:
 	jr LABEL_F25DE4
 
 LABEL_F25DD3:
-	call LABEL_F2694C
+	call ToneGen_DispatchAndLinkBlock
 	jr LABEL_F25DDF
 
 LABEL_F25DD9:
@@ -94580,7 +94580,7 @@ ToneGen_SetSustainBit:
 	popw bc
 	ret
 
-LABEL_F25E03:
+ToneGen_AdvanceBlockPosition:
 	ldda16 xwa, 9830
 	cp wa, 0xFF
 	jr nz, LABEL_F25E2A
@@ -94646,7 +94646,7 @@ LABEL_F25E96:
 	jr nz, LABEL_F25EAB
 	push xhl
 	push xiy
-	call LABEL_F26986
+	call VoiceChannel_GetCombinedStatus
 	pop xiy
 	pop xhl
 	lda_dri3 XBC, 0x07, 0xEC, 0xF4
@@ -94663,7 +94663,7 @@ LABEL_F25EAC:
 LABEL_F25EB8:
 	bitda 0, 4236
 	jr nz, LABEL_F25EC7
-	call LABEL_F26A05
+	call VoiceChannel_SetPanDirection
 	stdi8 4323, 0
 
 LABEL_F25EC7:
@@ -94688,7 +94688,7 @@ LABEL_F25EE7:
 LABEL_F25EE8:
 	bitda 0, 4236
 	jr nz, LABEL_F25EF7
-	call LABEL_F26B7F
+	call VoiceChannel_SetParamByte7
 	stdi8 4323, 0
 
 LABEL_F25EF7:
@@ -94702,7 +94702,7 @@ LABEL_F25EF7:
 LABEL_F25F0E:
 	bitda 0, 4236
 	jr nz, LABEL_F25F1D
-	call LABEL_F26B93
+	call VoiceChannel_MergeParamByte5
 	stdi8 4323, 0
 
 LABEL_F25F1D:
@@ -94713,7 +94713,7 @@ LABEL_F25F1D:
 	call VoiceChannel_UpdateWithPitch
 	ret
 
-LABEL_F25F34:
+VoiceChannel_SelectNextParam:
 	ldda16 xiy, 4011
 	and iy, 0xF
 	push xix
@@ -94752,7 +94752,7 @@ LABEL_F25F88:
 LABEL_F25F89:
 	.byte 0x0c, 0x7f, 0xff
 
-LABEL_F25F8C:
+VoiceChannel_SelectPrevParam:
 	ldda16 xiy, 4011
 	and iy, 0xF
 	push xix
@@ -94780,7 +94780,7 @@ LABEL_F25FC3:
 LABEL_F25FCC:
 	ret
 
-LABEL_F25FCD:
+VoiceChannel_ClearChannelFlags:
 	ldda8 c, 4011
 	and c, 0xF
 	ldfr_berp A, 0x3C
@@ -94809,7 +94809,7 @@ LABEL_F25FCD:
 	pop xix
 	ret
 
-LABEL_F26018:
+VoiceChannel_NoteOnByChannel:
 	ldda16 xiy, 4011
 	and iy, 0xF
 	ldda8 a, 4013
@@ -94841,7 +94841,7 @@ LABEL_F26018:
 
 LABEL_F26067:
 	pushw bc
-	call LABEL_F26BA7
+	call SoundGen_LookupChannelBankParams
 	popw bc
 	cp a, 0xFF
 	jr nz, LABEL_F260A0
@@ -94864,7 +94864,7 @@ LABEL_F26072:
 LABEL_F260A0:
 	ret
 
-LABEL_F260A1:
+VoiceChannel_NoteOffByChannel:
 	ldda16 xiy, 4011
 	and iy, 0xF
 	ldda8 a, 4013
@@ -94900,7 +94900,7 @@ LABEL_F260A1:
 
 LABEL_F260FC:
 	pushw bc
-	call LABEL_F26BA7
+	call SoundGen_LookupChannelBankParams
 	popw bc
 	cp a, 0xFF
 	jr nz, LABEL_F26135
@@ -94923,7 +94923,7 @@ LABEL_F26107:
 LABEL_F26135:
 	ret
 
-LABEL_F26136:
+VoiceChannel_ApplyParamByMode:
 	push xiy
 	call VoiceChannel_GetParamBlock
 	cpdi8 4600, 0
@@ -95092,7 +95092,7 @@ LABEL_F26304:
 	jr nz, LABEL_F26319
 	push xhl
 	push xiy
-	call LABEL_F26986
+	call VoiceChannel_GetCombinedStatus
 	pop xiy
 	pop xhl
 	lda_dri3 XBC, 0x07, 0xEC, 0xF4
@@ -95104,7 +95104,7 @@ LABEL_F26319:
 LABEL_F2631A:
 	bitda 0, 4236
 	jr nz, LABEL_F26329
-	call LABEL_F26A05
+	call VoiceChannel_SetPanDirection
 	stdi8 4323, 0
 
 LABEL_F26329:
@@ -95123,7 +95123,7 @@ LABEL_F26339:
 LABEL_F26347:
 	bitda 0, 4236
 	jr nz, LABEL_F26356
-	call LABEL_F26B7F
+	call VoiceChannel_SetParamByte7
 	stdi8 4323, 0
 
 LABEL_F26356:
@@ -95137,7 +95137,7 @@ LABEL_F26356:
 LABEL_F2636D:
 	bitda 0, 4236
 	jr nz, LABEL_F2637C
-	call LABEL_F26B93
+	call VoiceChannel_MergeParamByte5
 	stdi8 4323, 0
 
 LABEL_F2637C:
@@ -95148,17 +95148,17 @@ LABEL_F2637C:
 	call LABEL_F26AE6
 	ret
 
-LABEL_F26393:
+ToneGen_AdvanceAndValidateVoice:
 	ldda32 xhl, 4349
 	lda_dri3 XDE, 0x07, 0xEC, 0xF0
 	bitda 1, 10194
-	jr nz, LABEL_F263B3
+	jr nz, ToneGen_ValidateVoiceLoop
 	call VoiceChannel_AdvanceIndex
 	ldda32 xhl, 4349
 	ldda8 a, 10206
 	lda_dri3 XBC, 0x07, 0xEC, 0xF0
 
-LABEL_F263B3:
+ToneGen_ValidateVoiceLoop:
 	push xix
 	ld xix, 0x18FA
 	nop
@@ -95178,7 +95178,7 @@ LABEL_F263B3:
 	ld_srib3 A, 0x07, 0xF0, 0xF4
 	pop xix
 	lda_dri3 XBC, 0x07, 0xEC, 0xF0
-	jr LABEL_F263B3
+	jr ToneGen_ValidateVoiceLoop
 
 LABEL_F263F0:
 	stda16 10202, xiy
@@ -95482,7 +95482,7 @@ LABEL_F26928:
 LABEL_F2694B:
 	ret
 
-LABEL_F2694C:
+ToneGen_DispatchAndLinkBlock:
 	push xix
 	push xiy
 	call DispatchHandler_JumpToSubHandler
@@ -95503,7 +95503,7 @@ LABEL_F2694C:
 	pop xix
 	ret
 
-LABEL_F26986:
+VoiceChannel_GetCombinedStatus:
 	cpdi8 4012, 6
 	jr z, LABEL_F269A9
 	push xix
@@ -95555,7 +95555,7 @@ VoiceChannel_LookupParams:
 LABEL_F26A04:
 	ret
 
-LABEL_F26A05:
+VoiceChannel_SetPanDirection:
 	call VoiceChannel_GetParamBlock
 	ld w, (xiy + 4)
 	and w, 0xF7
@@ -95701,7 +95701,7 @@ LABEL_F26AE6:
 LABEL_F26B7E:
 	ret
 
-LABEL_F26B7F:
+VoiceChannel_SetParamByte7:
 	call VoiceChannel_GetParamBlock
 	ldda8 a, 4013
 	ld w, (xiy + 7)
@@ -95710,7 +95710,7 @@ LABEL_F26B7F:
 	ld (xiy + 7), w
 	ret
 
-LABEL_F26B93:
+VoiceChannel_MergeParamByte5:
 	call VoiceChannel_GetParamBlock
 	ldda8 a, 4013
 	ld w, (xiy + 5)
@@ -95719,7 +95719,7 @@ LABEL_F26B93:
 	ld (xiy + 5), w
 	ret
 
-LABEL_F26BA7:
+SoundGen_LookupChannelBankParams:
 	ldda16 xiy, 4011
 	and iy, 0xF
 	push xix
@@ -95796,14 +95796,14 @@ LABEL_F26C1E:
 LABEL_F26CAA:
 	push xiy
 	cpdi16 3932, 0
-	jr z, LABEL_F26CC5
+	jr z, SoundGen_CaptureAndBuildParams
 	cpdi16 3934, 2
-	jr c, LABEL_F26CC5
+	jr c, SoundGen_CaptureAndBuildParams
 	ldda16 xiy, 4237
 	extz xiy
 	call SoundGen_ClampVoiceIndexMin1
 
-LABEL_F26CC5:
+SoundGen_CaptureAndBuildParams:
 	push xiy
 	pushw bc
 	call SoundGen_CaptureVoiceParams
@@ -95811,13 +95811,13 @@ LABEL_F26CC5:
 	pop xiy
 	ldb a, 0xB0
 	cps c, 1
-	jr nz, LABEL_F26CDF
+	jr nz, SoundGen_UpdateAndWriteChannel
 	or a, 0x2
 	bitda 7, 4234
-	jr z, LABEL_F26CDF
+	jr z, SoundGen_UpdateAndWriteChannel
 	or a, 0x1
 
-LABEL_F26CDF:
+SoundGen_UpdateAndWriteChannel:
 	push xiy
 	pushw bc
 	call SoundGen_UpdateAndRefresh
@@ -95845,13 +95845,13 @@ LABEL_F26CDF:
 	and l, 0xF
 	xor h, h
 	cpdi16 3932, 0
-	jr z, LABEL_F26D36
+	jr z, SoundGen_SelectChannelTable
 	cpdi16 3934, 2
-	jr c, LABEL_F26D36
+	jr c, SoundGen_SelectChannelTable
 	ld a, l
 	jr LABEL_F26D4C
 
-LABEL_F26D36:
+SoundGen_SelectChannelTable:
 	ld xix, 0xF2436B
 	cpdi8 4600, 1
 	jr nz, LABEL_F26D47
@@ -95897,14 +95897,14 @@ LABEL_F26D4C:
 	and iy, 0xF
 	extz xiy
 	cpdi16 3932, 0
-	jr z, LABEL_F26DC5
+	jr z, SoundGen_CommitChannelRegs
 	cpdi16 3934, 2
-	jr c, LABEL_F26DC5
+	jr c, SoundGen_CommitChannelRegs
 	ldda16 xiy, 4237
 	extz xiy
 	call SoundGen_ClampVoiceIndexMin1
 
-LABEL_F26DC5:
+SoundGen_CommitChannelRegs:
 	call ToneGen_WriteChannelRegs
 	stdi8 4323, 0
 
@@ -95928,7 +95928,7 @@ LABEL_F26DD3:
 	pop xwa
 	ret
 
-LABEL_F26DEC:
+FileIO_ReadBlockToFilePos:
 	push xwa
 	push xbc
 	push xhl
@@ -95941,7 +95941,7 @@ LABEL_F26DEC:
 	pop xwa
 	ret
 
-LABEL_F26E05:
+SoundGen_InitAllVoiceChannels:
 	push xwa
 	push xbc
 	push xde
@@ -96007,7 +96007,7 @@ LABEL_F26E29:
 LABEL_F26E7E:
 	.byte 0x04, 0x05, 0x06
 
-LABEL_F26E81:
+SndParam_LookupChannelVoice:
 	push xhl
 	cpdi8 4600, 2
 	jr nz, LABEL_F26EC8
@@ -96069,7 +96069,7 @@ LABEL_F26ECC:
 LABEL_F26F07:
 	ret
 
-LABEL_F26F08:
+SMF_ProcessSysExBlock:
 	call LABEL_F26FB7
 	xor xiy, xiy
 	ld xiy, 0x1A61
@@ -96195,14 +96195,14 @@ LABEL_F26FFD:
 	pop xiz
 	ldda16 xhl, 6699
 	bit 15, hl
-	jr nz, LABEL_F27018
+	jr nz, SMF_SeekAndPreparePlayback
 	cps hl, 2
-	jr z, LABEL_F27018
+	jr z, SMF_SeekAndPreparePlayback
 	set 15, hl
 
-LABEL_F27018:
+SMF_SeekAndPreparePlayback:
 	bit 15, hl
-	jr nz, LABEL_F27057
+	jr nz, SMF_RestoreTimerState
 	anddi8 36232, 254
 	call SMF_CalcFilePosition
 	push xwa
@@ -96219,7 +96219,7 @@ LABEL_F27018:
 LABEL_F27046:
 	pop xbc
 	pop xwa
-	jr LABEL_F27057
+	jr SMF_RestoreTimerState
 
 LABEL_F2704A:
 	ld xwa, 0xFA2
@@ -96228,7 +96228,7 @@ LABEL_F2704A:
 	pop xbc
 	pop xwa
 
-LABEL_F27057:
+SMF_RestoreTimerState:
 	bitda 0, 10405
 	jr z, LABEL_F2706C
 	ld16_24 xwa, 0x00ffec
@@ -96283,14 +96283,14 @@ LABEL_F270CB:
 	ld a, c
 	scf
 	xorcf_a_16 de
-	jr c, LABEL_F270FF
+	jr c, SMF_LoopNextChannel
 	ld l, c
 	xor h, h
 	push xix
 	ld xix, 0xF1A0
 	cp_srib_im 0x07, 0xF0, 0xEC, 0x10
 	pop xix
-	jr z, LABEL_F270FF
+	jr z, SMF_LoopNextChannel
 	ld a, l
 	sla l, 1
 	add l, a
@@ -96300,7 +96300,7 @@ LABEL_F270CB:
 	pop xde
 	jr nz, LABEL_F2710F
 
-LABEL_F270FF:
+SMF_LoopNextChannel:
 	inc 1, c
 	cp c, 0xF
 	jr ule, LABEL_F270CB
