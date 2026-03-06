@@ -355791,11 +355791,11 @@ Heap_Alloc:
 
 LABEL_FF0F83:
 	cpdm32_24 251176, xwa
-	jr nc, LABEL_FF0F90
+	jr nc, Heap_Grow
 	ld xhl, 0xFFFFFFFF
 	ret
 
-LABEL_FF0F90:
+Heap_Grow:
 	ld32_24 xhl, 0x03d524
 	addm32_24 0x03d524, xwa
 	subdm32_24 251176, xwa
