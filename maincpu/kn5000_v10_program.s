@@ -121453,13 +121453,13 @@ LABEL_F39552:
 	calr SeqPlay_IterateAllChannels
 	lds wa, 0
 	lds bc, 0
-	calr LABEL_F3C380
+	calr SeqPlay_AssignAccompVoices
 	lds wa, 0
 	lds bc, 0
-	calr LABEL_F3C565
+	calr SeqPlay_AssignBassVoices
 	lds wa, 0
 	lds bc, 0
-	calr LABEL_F3C66A
+	calr SeqPlay_AssignChordVoices
 	lds wa, 0
 	ldw bc, 0xD
 	call Part_FindVoiceByByte
@@ -121525,15 +121525,15 @@ SeqPlay_ConfigureVoiceChannels:
 	ldda8 c, 1051
 	extz bc
 	ldda16 xwa, 1052
-	calr LABEL_F3C380
+	calr SeqPlay_AssignAccompVoices
 	ldda8 c, 1051
 	extz bc
 	ldda16 xwa, 1052
-	calr LABEL_F3C565
+	calr SeqPlay_AssignBassVoices
 	ldda8 c, 1051
 	extz bc
 	ldda16 xwa, 1052
-	calr LABEL_F3C66A
+	calr SeqPlay_AssignChordVoices
 	call LABEL_F487DF
 	bitda 0, 10406
 	jr z, LABEL_F39651
@@ -122500,7 +122500,7 @@ LABEL_F39F79:
 LABEL_F39F97:
 	bitda 1, 10419
 	jr nz, LABEL_F39FB7
-	calr LABEL_F3C1D1
+	calr SeqPlay_ReassignVoiceChannels
 	ldfr_berp L, 0xFB
 	cpi_berp 0xFB, 0
 	jr z, LABEL_F39FAE
@@ -122909,7 +122909,7 @@ LABEL_F3A384:
 	jr nz, LABEL_F3A3AF
 
 LABEL_F3A3AC:
-	calr LABEL_F3CBE7
+	calr SeqPlay_ReconfigureVoices
 
 LABEL_F3A3AF:
 	lda xwa, (xsp + 6)
@@ -123518,7 +123518,7 @@ LABEL_F3A8AE:
 	jr nz, SeqNote_FindExtraChannel
 
 LABEL_F3A8D8:
-	calr LABEL_F3CBE7
+	calr SeqPlay_ReconfigureVoices
 	stdi8 7530, 0
 	stdi8 10338, 0
 	stdi8 10340, 0
@@ -124407,7 +124407,7 @@ LABEL_F3B0DC:
 	jr nz, LABEL_F3B15E
 	ld a, (xsp + 8)
 	extz wa
-	calr LABEL_F3BF84
+	calr SeqNote_SetupVoice
 	cps l, 0
 	jr nz, LABEL_F3B11B
 	ld a, (xsp + 20)
@@ -124477,7 +124477,7 @@ LABEL_F3B19D:
 	cpl de
 	anddm16 8982, xde
 	ld wa, bc
-	calr LABEL_F3C75C
+	calr SeqCh_ClearActivePartBit
 	cpdi16 10408, 0
 	jr nz, LABEL_F3B1CA
 	cpdi8 7570, 0
@@ -124708,7 +124708,7 @@ LABEL_F3B31C:
 	jr nz, LABEL_F3B3B1
 	ld wa, bc
 	ld xbc, xde
-	calr LABEL_F3BF84
+	calr SeqNote_SetupVoice
 	cps l, 0
 	jr nz, SeqMidi_EmitEventToBuffer
 	ld a, (xsp + 14)
@@ -124778,7 +124778,7 @@ LABEL_F3B3EF:
 	cpl de
 	anddm16 8982, xde
 	ld wa, bc
-	calr LABEL_F3C75C
+	calr SeqCh_ClearActivePartBit
 	ldda16 xwa, 61854
 	ldda16 xbc, 10420
 	and wa, bc
@@ -125342,7 +125342,7 @@ LABEL_F3B8E7:
 	jrl c, LABEL_F3BAC2
 	ld bc, (xsp + 4)
 	ldw de, 0x5F
-	calr LABEL_F3BB2C
+	calr Part_AssignVoiceConfig
 	cp (xsp + 20), 0x1
 	jr nz, LABEL_F3B92B
 	lda xde, (xsp + 6)
@@ -125571,7 +125571,7 @@ LABEL_F3BB27:
 	lda xsp, (xsp + 18)
 	ret
 
-LABEL_F3BB2C:
+Part_AssignVoiceConfig:
 	lda xsp, (xsp - 18)
 	push xiz
 	ld (xsp + 18), e
@@ -125982,7 +125982,7 @@ LABEL_F3BEAD:
 	extz wa
 	ld e, (xiz + 1)
 	extz de
-	calr LABEL_F3BB2C
+	calr Part_AssignVoiceConfig
 	ld a, (xsp + 6)
 	extz wa
 	call LABEL_F3E543
@@ -126085,7 +126085,7 @@ LABEL_F3BF7E:
 	inc 4, xsp
 	ret
 
-LABEL_F3BF84:
+SeqNote_SetupVoice:
 	dec 6, xsp
 	push xiz
 	ld (xsp + 4), xbc
@@ -126350,7 +126350,7 @@ LABEL_F3C1C7:
 	ld (xbc), 0x0
 	jr LABEL_F3C18C
 
-LABEL_F3C1D1:
+SeqPlay_ReassignVoiceChannels:
 	dec 2, xsp
 	push xiz
 	ldmw2 (xsp + 4), 0x2668
@@ -126532,7 +126532,7 @@ LABEL_F3C37C:
 	inc 2, xsp
 	ret
 
-LABEL_F3C380:
+SeqPlay_AssignAccompVoices:
 	lda xsp, (xsp - 18)
 	push xiz
 	ld (xsp + 18), c
@@ -126737,7 +126737,7 @@ LABEL_F3C560:
 	lda xsp, (xsp + 18)
 	ret
 
-LABEL_F3C565:
+SeqPlay_AssignBassVoices:
 	lda xsp, (xsp - 18)
 	ld (xsp + 14), c
 	ld (xsp + 16), wa
@@ -126850,7 +126850,7 @@ LABEL_F3C666:
 	lda xsp, (xsp + 18)
 	ret
 
-LABEL_F3C66A:
+SeqPlay_AssignChordVoices:
 	lda xsp, (xsp - 14)
 	ld (xsp + 10), c
 	ld (xsp + 12), wa
@@ -126951,7 +126951,7 @@ LABEL_F3C758:
 	lda xsp, (xsp + 14)
 	ret
 
-LABEL_F3C75C:
+SeqCh_ClearActivePartBit:
 	ld c, a
 	ld a, c
 	extz wa
@@ -127275,7 +127275,7 @@ LABEL_F3CAB5:
 LABEL_F3CABD:
 	jp 0xFDDE6F
 
-LABEL_F3CAC1:
+SeqPlay_StopAndResetAll:
 	bitda 0, 10437
 	jr z, LABEL_F3CAD5
 	cpdi16 10408, 0
@@ -127325,7 +127325,7 @@ LABEL_F3CAF8:
 	call Demo_SelectEntry_AfterSongLoad
 	ret
 
-LABEL_F3CB5E:
+Part_ReadAndProcessVoiceData:
 	lda xsp, (xsp - 24)
 	ld (xsp + 16), xde
 	ld (xsp + 20), bc
@@ -127391,7 +127391,7 @@ LABEL_F3CBD7:
 	ld (xwa + 2), bc
 	jr LABEL_F3CBC7
 
-LABEL_F3CBE7:
+SeqPlay_ReconfigureVoices:
 	lda xsp, (xsp - 24)
 	push xiz
 	cpdi16 10408, 0
@@ -130683,7 +130683,7 @@ LABEL_F3E985:
 	ldto_berp A, 0xFB
 	extz wa
 	lda xde, (xsp + 8)
-	call LABEL_F3CB5E
+	call Part_ReadAndProcessVoiceData
 	ldto_berp C, 0xFB
 	extz bc
 	lda xwa, (xsp + 8)
@@ -131262,7 +131262,7 @@ LABEL_F3EE81:
 	extz wa
 	ldda8 c, 8972
 	extz bc
-	call LABEL_F3CB5E
+	call Part_ReadAndProcessVoiceData
 	jr LABEL_F3EEC4
 
 LABEL_F3EEA0:
@@ -139014,7 +139014,7 @@ LABEL_F43679:
 	ret nz
 	bitda 1, 10418
 	ret nz
-	call LABEL_F3C1D1
+	call SeqPlay_ReassignVoiceChannels
 	cps l, 0
 	jrl nz, LABEL_F4382A
 	cpdi16 10410, 0
@@ -154959,7 +154959,7 @@ SeqStep_PlaybackCallPattern:
 	jr SeqStep_PlaybackResultDispatch
 
 SeqStep_PlaybackResult1:
-	call LABEL_F3CAC1
+	call SeqPlay_StopAndResetAll
 	jr SeqStep_PlaybackReturn
 
 SeqStep_PlaybackResult4:
@@ -323467,7 +323467,7 @@ CompIface_CallFilterA:
 	call AccWrap_PlayModeDispatch
 
 CompIface_CallSync:
-	call LABEL_F3CAC1
+	call SeqPlay_StopAndResetAll
 
 CompIface_PostProcess:
 	call AccompSeq_StopSequence
