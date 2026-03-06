@@ -122081,7 +122081,7 @@ LABEL_F39B71:
 	extz wa
 
 LABEL_F39B76:
-	call LABEL_F43A75
+	call SeqData_ParseSequenceStream
 
 LABEL_F39B7A:
 	ld a, (xsp + 2)
@@ -122190,7 +122190,7 @@ LABEL_F39C3E:
 	sla bc, 3
 	ldada xde, 9016
 	stiw_dri 0x07, 0xE8, 0xE4, 0x00, 0x00
-	call LABEL_F43A75
+	call SeqData_ParseSequenceStream
 
 LABEL_F39C92:
 	inc1_berp 0xFB
@@ -124075,7 +124075,7 @@ LABEL_F3ADE2:
 LABEL_F3ADFB:
 	ldto_berp A, 0xFB
 	extz wa
-	call LABEL_F43A75
+	call SeqData_ParseSequenceStream
 	bit 0, iz
 	jr nz, LABEL_F3ADA4
 
@@ -131559,7 +131559,7 @@ LABEL_F3F125:
 LABEL_F3F161:
 	ldto_berp A, 0xFA
 	extz wa
-	calr LABEL_F434F2
+	calr SeqVoice_DeactivateAndReinit
 	inc1_berp 0xFA
 	cp_erpb 0xFA, 0x10
 	jr ule, LABEL_F3F125
@@ -138563,11 +138563,11 @@ LABEL_F4329E:
 	calr LABEL_F43410
 	ld a, (xsp)
 	extz wa
-	calr LABEL_F434F2
+	calr SeqVoice_DeactivateAndReinit
 	jr LABEL_F432C4
 
 LABEL_F432AA:
-	calr LABEL_F434F2
+	calr SeqVoice_DeactivateAndReinit
 	ld a, (xsp)
 	extz wa
 	calr Part_IsVoiceActive
@@ -138831,7 +138831,7 @@ LABEL_F434EF:
 	inc 2, xsp
 	ret
 
-LABEL_F434F2:
+SeqVoice_DeactivateAndReinit:
 	dec 2, xsp
 	ld (xsp), a
 	ld a, (xsp)
@@ -139038,7 +139038,7 @@ LABEL_F436ED:
 	ldw wa, 0x4C
 	jp CtrlPanel_SetIndicatorBit
 
-LABEL_F43704:
+SeqAcc_RestorePlaybackState:
 	pushw iz
 	ldda16 xiz, 10357
 	stda16 61854, xiz
@@ -139344,7 +139344,7 @@ LABEL_F43A59:
 	inc 6, xsp
 	ret
 
-LABEL_F43A75:
+SeqData_ParseSequenceStream:
 	lda xsp, (xsp - 16)
 	push xiz
 	ld (xsp + 18), a
@@ -140785,7 +140785,7 @@ LABEL_F44F9C:
 LABEL_F44FA2:
 	ldto_berp A, 0xFB
 	extz wa
-	calr LABEL_F44FBF
+	calr SeqVoice_DispatchEventToHandler
 	ldto_berp A, 0xFB
 	extz wa
 	calr LABEL_F45012
@@ -140795,7 +140795,7 @@ LABEL_F44FA2:
 	pop_werp 0xFA
 	ret
 
-LABEL_F44FBF:
+SeqVoice_DispatchEventToHandler:
 	dec 2, xsp
 	push_werp 0xFA
 	ld (xsp + 2), a
@@ -141012,7 +141012,7 @@ LABEL_F45172:
 	extz wa
 
 LABEL_F45195:
-	calr LABEL_F44FBF
+	calr SeqVoice_DispatchEventToHandler
 	jrl LABEL_F452BD
 
 LABEL_F4519B:
@@ -141890,21 +141890,21 @@ LABEL_F45C10:
 	lds wa, 0
 	jrl LABEL_F46378
 	bitda 2, 1057
-	jr nz, LABEL_F45CD1
+	jr nz, SeqAcc_SendParamsAndStart
 	ldda16 xbc, 9832
 	stda16 9964, xbc
 	ldda16 xbc, 9832
 	ld wa, bc
 	extz xwa
 	bit 15, wa
-	jr nz, LABEL_F45CD1
+	jr nz, SeqAcc_SendParamsAndStart
 	ldda16 xwa, 62008
 	cp bc, wa
 	jr ule, LABEL_F45CB7
 	subda16 xwa, 62015
 	stda16 9832, xwa
 	stda16 9964, xwa
-	jr LABEL_F45CD1
+	jr SeqAcc_SendParamsAndStart
 
 LABEL_F45CB7:
 	dec 1, wa
@@ -141915,7 +141915,7 @@ LABEL_F45CB7:
 	stda16 9832, xwa
 	stda16 9964, xwa
 
-LABEL_F45CD1:
+SeqAcc_SendParamsAndStart:
 	ldda32 xwa, 10610
 	ld xbc, 0x1C0000F
 	lds32 xde, 7
@@ -143203,7 +143203,7 @@ SeqEditModeFunc:
 	jr LABEL_F46BEF
 
 LABEL_F46BE7:
-	call LABEL_F43704
+	call SeqAcc_RestorePlaybackState
 	resda 2, 10407
 
 LABEL_F46BEF:
@@ -145459,7 +145459,7 @@ LABEL_F484E0:
 	ld wa, (xsp + 6)
 	ld bc, iz
 	lds de, 0
-	calr LABEL_F48749
+	calr PartCtrl_AppendToEventQueue
 
 LABEL_F484EA:
 	ld wa, iz
@@ -145474,7 +145474,7 @@ LABEL_F484EA:
 	ld e, (xsp + 10)
 	extz de
 	ldw wa, 0x40
-	calr LABEL_F48749
+	calr PartCtrl_AppendToEventQueue
 	ld wa, iz
 	ldw bc, 0xFFFF
 	call PartCtrl_WriteWord
@@ -145710,7 +145710,7 @@ LABEL_F486CF:
 	extz bc
 	ld e, (xsp)
 	extz de
-	calr LABEL_F48749
+	calr PartCtrl_AppendToEventQueue
 	ld a, (xsp + 2)
 	extz wa
 	ld c, (xsp)
@@ -145758,7 +145758,7 @@ LABEL_F48746:
 	inc 4, xsp
 	ret
 
-LABEL_F48749:
+PartCtrl_AppendToEventQueue:
 	ldda16 xhl, 58296
 	cp hl, 0xA
 	ret nc
@@ -146549,7 +146549,7 @@ LABEL_F48E49:
 	jr ule, LABEL_F48E66
 
 LABEL_F48E63:
-	jrl LABEL_F48F67
+	jrl SeqStep_HandleNoteOverflow
 
 LABEL_F48E66:
 	extz hl
@@ -146630,7 +146630,7 @@ LABEL_F48F16:
 	jr ule, LABEL_F48F28
 
 LABEL_F48F26:
-	jr LABEL_F48F67
+	jr SeqStep_HandleNoteOverflow
 
 LABEL_F48F28:
 	ld a, (xiy + 4)
@@ -146655,7 +146655,7 @@ LABEL_F48F38:
 	calr SeqTiming_CompareAndUpdateState
 	jrl SeqStep_ParseEventLoop
 
-LABEL_F48F67:
+SeqStep_HandleNoteOverflow:
 	dec 2, xsp
 	ld (xsp), a
 	cpdi8 1079, 255
@@ -147002,7 +147002,7 @@ LABEL_F492B6:
 	jr nz, LABEL_F492D4
 	ldda8 a, 9666
 	extz wa
-	calr LABEL_F48F67
+	calr SeqStep_HandleNoteOverflow
 	ldb l, 0xFF
 	ret
 
@@ -174885,7 +174885,7 @@ AccStyle_ModeExit:
 	jr z, AccStyle_ModeExit_ClearFlags
 	anddi8 13265, 254
 	call AccWrap_PlayModeDispatch
-	call LABEL_F43704
+	call SeqAcc_RestorePlaybackState
 
 AccStyle_ModeExit_ClearFlags:
 	anddi8 13267, 252
@@ -186364,7 +186364,7 @@ DrumKitExit_ClearFlags:
 DrumKitExit_PostRestore:
 	call AccWrap_PlayModeDispatch
 	calr DrumKit_ValidateBank
-	call LABEL_F43704
+	call SeqAcc_RestorePlaybackState
 	cpdi16 10408, 0
 	jr nz, DrumKitExit_ExtraInit
 	cpdi16 61854, 0
@@ -235696,7 +235696,7 @@ MainTrSwControl:
 	jr z, LABEL_F9916E
 	cp xbc, 0x1E00092
 	jr nz, LABEL_F99172
-	call LABEL_F44FBF
+	call SeqVoice_DispatchEventToHandler
 	ld xwa, (xsp)
 	extz wa
 	call LABEL_F45012
