@@ -145401,7 +145401,7 @@ LABEL_F48440:
 	extz bc
 	cps l, 0
 	jr nz, LABEL_F48471
-	calr LABEL_F486F1
+	calr Part_ClearVoiceSlot
 	jrl LABEL_F48563
 
 LABEL_F48471:
@@ -145429,7 +145429,7 @@ LABEL_F4849A:
 	cpi_werp 0xFA, 0
 	jr nz, LABEL_F484B4
 	ld wa, iz
-	calr LABEL_F487BE
+	calr VoiceAlloc_TestBitInMap
 	cps l, 0
 	jr z, LABEL_F484B4
 	setm 4, (xsp + 6)
@@ -145565,7 +145565,7 @@ LABEL_F485B5:
 
 LABEL_F485C2:
 	ld wa, iz
-	calr LABEL_F487BE
+	calr VoiceAlloc_TestBitInMap
 	cps l, 0
 	jr nz, LABEL_F485DC
 	ld wa, iz
@@ -145715,11 +145715,11 @@ LABEL_F486CF:
 	extz wa
 	ld c, (xsp)
 	extz bc
-	calr LABEL_F486F1
+	calr Part_ClearVoiceSlot
 	inc 4, xsp
 	ret
 
-LABEL_F486F1:
+Part_ClearVoiceSlot:
 	dec 4, xsp
 	ld (xsp), c
 	ld (xsp + 2), a
@@ -145812,7 +145812,7 @@ LABEL_F487B3:
 	or (xhl), e
 	ret
 
-LABEL_F487BE:
+VoiceAlloc_TestBitInMap:
 	dec 1, wa
 	ld hl, wa
 	srl hl, 3
@@ -145888,7 +145888,7 @@ LABEL_F48824:
 	ldmmw_dri 0x07, 0xE4, 0xE0, 0x8E, 0x25
 	ret
 
-LABEL_F4884E:
+SeqScan_StoreResultB:
 	ldda8 a, 9696
 	extz wa
 	ldada xbc, 9590
@@ -146137,8 +146137,8 @@ LABEL_F48A68:
 	jr ugt, LABEL_F48A8F
 
 LABEL_F48A81:
-	calr LABEL_F4884E
-	calr LABEL_F48B71
+	calr SeqScan_StoreResultB
+	calr SeqScan_UpdateBestPositionB
 	stda16 9614, xiz
 
 LABEL_F48A8B:
@@ -146196,8 +146196,8 @@ LABEL_F48AD1:
 	jr nc, LABEL_F48AF6
 
 LABEL_F48AED:
-	calr LABEL_F4884E
-	calr LABEL_F48B71
+	calr SeqScan_StoreResultB
+	calr SeqScan_UpdateBestPositionB
 	ldb l, 0x0
 	ret
 
@@ -146266,7 +146266,7 @@ LABEL_F48B62:
 	setda 0, 10406
 	ret
 
-LABEL_F48B71:
+SeqScan_UpdateBestPositionB:
 	ldda16 xbc, 9614
 	ldda16 xwa, 9616
 	cp wa, bc
@@ -146765,16 +146765,16 @@ LABEL_F49047:
 LABEL_F49059:
 	ldda16 xwa, 9620
 	cpda16 xwa, 1052
-	jr nz, LABEL_F49079
+	jr nz, SeqEvt_SaveScanAndDispatch
 	ldda8 a, 9607
 	cpda8 a, 1051
-	jr ule, LABEL_F49079
+	jr ule, SeqEvt_SaveScanAndDispatch
 	calr SeqVoice_InitFirstSlotSearch
 	ldfr_berp L, 0xFB
 	cpi_berp 0xFB, 0
 	jrl lt, SeqEvt_DispatchLoop_Return
 
-LABEL_F49079:
+SeqEvt_SaveScanAndDispatch:
 	ldmm16 9624, 10415
 	ldmm16 9628, 9830
 	ldmm16 9636, 9620
@@ -146792,7 +146792,7 @@ LABEL_F4909E:
 	extz hl
 	add wa, hl
 	stda16 9660, xwa
-	jrl LABEL_F49280
+	jrl SeqEvt_ResolveNotePosition
 
 LABEL_F490B1:
 	ld l, a
@@ -146860,16 +146860,16 @@ LABEL_F49141:
 LABEL_F49153:
 	ldda16 xwa, 9620
 	cpda16 xwa, 1052
-	jr nz, LABEL_F49173
+	jr nz, SeqEvt_SavePortamentoAndDispatch
 	ldda8 a, 9607
 	cpda8 a, 1051
-	jr ule, LABEL_F49173
+	jr ule, SeqEvt_SavePortamentoAndDispatch
 	calr SeqVoice_InitFirstSlotSearch
 	ldfr_berp L, 0xFB
 	cpi_berp 0xFB, 0
 	jrl lt, SeqEvt_DispatchLoop_Return
 
-LABEL_F49173:
+SeqEvt_SavePortamentoAndDispatch:
 	ldmm16 9624, 10415
 	ldmm16 9628, 9830
 	ldmm16 9636, 9620
@@ -146877,7 +146877,7 @@ LABEL_F49173:
 	ldda8 a, 9674
 	extz wa
 	stda16 9660, xwa
-	jrl LABEL_F49280
+	jrl SeqEvt_ResolveNotePosition
 
 LABEL_F49198:
 	cp (xwa), 0x82
@@ -146943,16 +146943,16 @@ LABEL_F49219:
 LABEL_F4922A:
 	ldda16 xwa, 9622
 	cpda16 xwa, 1052
-	jr nz, LABEL_F49249
+	jr nz, SeqEvt_SaveAccompAndDispatch
 	ldda8 a, 9607
 	cpda8 a, 1051
-	jr ule, LABEL_F49249
+	jr ule, SeqEvt_SaveAccompAndDispatch
 	calr SeqSearch_InitNotFound
 	ldfr_berp L, 0xFB
 	cpi_berp 0xFB, 0
 	jr lt, SeqEvt_DispatchLoop_Return
 
-LABEL_F49249:
+SeqEvt_SaveAccompAndDispatch:
 	ldmm16 9626, 10415
 	ldmm16 9630, 9830
 	ldmm16 9640, 9622
@@ -146971,8 +146971,8 @@ LABEL_F4926E:
 	extz hl
 	adddm16 9662, xhl
 
-LABEL_F49280:
-	calr LABEL_F492B6
+SeqEvt_ResolveNotePosition:
+	calr SeqEvt_SelectNearestTiming
 	ldfr_berp L, 0xFB
 	cpi_berp 0xFB, 0
 	jrl ge, SeqEvt_ReadAndDispatchLoop
@@ -146985,7 +146985,7 @@ SeqVoice_InitFirstSlotSearch:
 	stdi16 9636, 65535
 	stdi8 9638, 255
 	ldmm16 9660, 9652
-	jr LABEL_F492B6
+	jr SeqEvt_SelectNearestTiming
 
 SeqSearch_InitNotFound:
 	stdi16 9640, 65535
@@ -146994,7 +146994,7 @@ SeqSearch_InitNotFound:
 	jr __jrt_nop_F492B6
 __jrt_nop_F492B6:
 
-LABEL_F492B6:
+SeqEvt_SelectNearestTiming:
 	ldda16 xbc, 9636
 	cp bc, 0xFFFF
 	jr nz, LABEL_F492D4
@@ -147654,7 +147654,7 @@ LABEL_F498E0:
 	cp wa, de
 	jr nc, LABEL_F49971
 
-LABEL_F498F3:
+SeqScan_SaveBarPosition:
 	stda16 9616, xde
 
 LABEL_F498F7:
@@ -147713,12 +147713,12 @@ LABEL_F49971:
 	ldda8 a, 9680
 	ldda8 c, 9686
 	cp c, a
-	jrl c, LABEL_F498F3
+	jrl c, SeqScan_SaveBarPosition
 	cp c, a
 	ret ugt
 	ldda8 a, 9682
 	cpda8 a, 9688
-	jrl nc, LABEL_F498F3
+	jrl nc, SeqScan_SaveBarPosition
 	ret
 
 LABEL_F4998E:
@@ -158231,7 +158231,7 @@ LABEL_F51E10:
 LABEL_F51E18:
 	.byte 0xdb, 0xa9, 0x0e
 
-LABEL_F51E1B:
+FDC_StoreDiskType:
 	ld a, (xsp + 4)
 	st8_24 0x03e3e4, a
 	sti16_24 0x03e3e6, 0x0001
@@ -158246,7 +158246,7 @@ LABEL_F51E31:
 	ld16_24	hl, 254950
 	ret
 
-LABEL_F51E49:
+FDC_ReadDiskType:
 	ld8_24 l, 0x03e3e4
 	ret
 
@@ -159027,7 +159027,7 @@ GetMediaType:
 	ldto_berp A, 0xFB
 	extz wa
 	pushw wa
-	calr LABEL_F51E1B
+	calr FDC_StoreDiskType
 	inc 2, xsp
 	ldto_berp L, 0xFB
 	jrl LABEL_F5274A
@@ -159155,7 +159155,7 @@ GetMediaType_Epilogue:
 	ldto_berp A, 0xFB
 	extz wa
 	pushw wa
-	calr LABEL_F51E1B
+	calr FDC_StoreDiskType
 	inc 6, xsp
 	ldto_berp L, 0xFB
 
@@ -159169,13 +159169,13 @@ GetDiskFreeSpace:	; f52751
 	push xiz
 	ld xiz, xbc
 	ld (xsp + 4), xwa
-	calr LABEL_F51E49
+	calr FDC_ReadDiskType
 	ld a, l
 	extz wa
 	cps wa, 0
-	jr mi, LABEL_F5279B
+	jr mi, FileIO_ReadFreeSpaceViaFAT
 	cps wa, 6
-	jr gt, LABEL_F5279B
+	jr gt, FileIO_ReadFreeSpaceViaFAT
 	add wa, wa
 	lda_24 xix, 0xe45104
 	ld_sriw3 WA, 0x07, 0xF0, 0xE0
@@ -159188,7 +159188,7 @@ LABEL_F5277E:
 	.byte 0x16, 0x00, 0xb6, 0x60, 0x68, 0x07, 0x40, 0x00
 	ld	xwa, 0x60b6000b
 
-LABEL_F5279B:
+FileIO_ReadFreeSpaceViaFAT:
 	pushw 0xE4
 	pushw 0x50FE
 	pushw 0xE4
@@ -159219,13 +159219,13 @@ LABEL_F527CA:
 GetVolumeLabel:
 	lda xsp, (xsp - 56)
 	push xiz
-	calr LABEL_F51E49
+	calr FDC_ReadDiskType
 	ld a, l
 	extz wa
 	cps wa, 0
-	jr mi, LABEL_F527FC
+	jr mi, FileIO_ReadVolumeLabelEntry
 	cps wa, 6
-	jr gt, LABEL_F527FC
+	jr gt, FileIO_ReadVolumeLabelEntry
 	add wa, wa
 	lda_24 xix, 0xe45118
 	ld_sriw3 WA, 0x07, 0xF0, 0xE0
@@ -159235,7 +159235,7 @@ GetVolumeLabel:
 LABEL_F527F7:
 	.byte 0xeb, 0xa8, 0x78, 0x9b, 0x00
 
-LABEL_F527FC:
+FileIO_ReadVolumeLabelEntry:
 	pushw 0xE4
 	pushw 0x5112
 	pushw 0xE4
@@ -159561,7 +159561,7 @@ _findclose:
 	cpi8_24 0x03e3e4, 0x05
 	jr nz, LABEL_F52ABC
 	ld xwa, xiz
-	calr LABEL_F52CC4
+	calr FileIO_ValidateHandle
 	jr LABEL_F52AE6
 
 LABEL_F52ABC:
@@ -159816,7 +159816,7 @@ LABEL_F52C8E:
 
 LABEL_F52CB6:
 	ld xwa, xiz
-	calr LABEL_F52CC4
+	calr FileIO_ValidateHandle
 	ld xhl, 0xFFFFFFFF
 
 LABEL_F52CC0:
@@ -159824,7 +159824,7 @@ LABEL_F52CC0:
 	inc 4, xsp
 	ret
 
-LABEL_F52CC4:
+FileIO_ValidateHandle:
 	or xwa, xwa
 	jr nz, LABEL_F52CCC
 	ldw hl, 0xFFFF
