@@ -105230,9 +105230,9 @@ AcDemoMedleyDispBoxProc:
 	push xiz
 	ld xiz, xwa
 	cp xbc, 0x1C0000C
-	jr z, LABEL_F2D078
+	jr z, AcDemoMedley_HandleScrollEvent
 	cp xbc, 0x1C0000B
-	jr z, LABEL_F2D078
+	jr z, AcDemoMedley_HandleScrollEvent
 	cp xbc, 0x1C00002
 	jr z, LABEL_F2D070
 	cp xbc, 0x1C00001
@@ -105252,7 +105252,7 @@ LABEL_F2D072:
 	call 0xFA4409
 	jr LABEL_F2D0A9
 
-LABEL_F2D078:
+AcDemoMedley_HandleScrollEvent:
 	ld xwa, xiz
 	call 0xFA4409
 	lda xbc, (xsp + 4)
@@ -106046,14 +106046,14 @@ HelpTtlProc:
 	push xiz
 	ld xiz, xwa
 	cp xbc, 0x1C0000D
-	jr z, LABEL_F2E8C2
+	jr z, HelpTtlProc_HandleActivation
 	cp xbc, 0x1C00001
-	jr z, LABEL_F2E8C2
+	jr z, HelpTtlProc_HandleActivation
 	ld xwa, xiz
 	call 0xFA4409
 	jr LABEL_F2E929
 
-LABEL_F2E8C2:
+HelpTtlProc_HandleActivation:
 	ld xwa, xiz
 	call 0xFA4409
 	ld xwa, xiz
@@ -107013,9 +107013,9 @@ LABEL_F2F1A2:
 	lda xbc, (xwa + 26)
 	dec 1, xhl
 	cp xhl, 0x0
-	jr c, LABEL_F2F229
+	jr c, NoteEditBoxProc_SetupGridDisplay
 	cp xhl, 0x9
-	jr ugt, LABEL_F2F229
+	jr ugt, NoteEditBoxProc_SetupGridDisplay
 	add xhl, xhl
 	add xhl, 0xE34654
 	ld hl, (xhl)
@@ -107049,7 +107049,7 @@ LABEL_F2F1D9:
 	ld	xbc, 31981657
 	jr	11
 
-LABEL_F2F229:
+NoteEditBoxProc_SetupGridDisplay:
 	ld xwa, (xsp + 12)
 	ld xwa, (xwa + 26)
 	ld xbc, 0x1E8003E
@@ -107079,9 +107079,9 @@ LABEL_F2F251:
 	ld xwa, (xsp + 90)
 	dec 3, xwa
 	cp xwa, 0x0
-	jrl c, LABEL_F2F928
+	jrl c, NoteEditBoxProc_ClassifyGridPosition
 	cp xwa, 0xB
-	jrl ugt, LABEL_F2F928
+	jrl ugt, NoteEditBoxProc_ClassifyGridPosition
 	add xwa, xwa
 	add xwa, 0xE3463C
 	ld wa, (xwa)
@@ -107301,7 +107301,7 @@ LABEL_F2F2A0:
 	.byte 0xc9, 0x61, 0xf2, 0x96, 0x10, 0x02, 0x41, 0xc9
 	.byte 0xcf, 0x0b, 0x73, 0xe4, 0xfe, 0x78, 0x2b, 0x01
 
-LABEL_F2F928:
+NoteEditBoxProc_ClassifyGridPosition:
 	ld xwa, (xsp + 90)
 	cp xwa, 0x2
 	jr z, LABEL_F2F953
@@ -108639,7 +108639,7 @@ LABEL_F30826:
 	cp xwa, 0x1
 	jr z, LABEL_F308A3
 	or xwa, xwa
-	jrl nz, LABEL_F30926
+	jrl nz, SndParam_BuildDisplayEvent
 	ld (xbc), 0x20
 	pushw 0x5
 	ld xwa, (xsp + 26)
@@ -108704,7 +108704,7 @@ LABEL_F308D4:
 
 LABEL_F30909:
 	ld (xwa + 9), 0x0
-	jr LABEL_F30926
+	jr SndParam_BuildDisplayEvent
 
 LABEL_F3090F:
 	ld xwa, (xsp + 24)
@@ -108716,7 +108716,7 @@ LABEL_F3090F:
 	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 
-LABEL_F30926:
+SndParam_BuildDisplayEvent:
 	call 0xFA44D0
 	ld xwa, xhl
 	lda xde, (xsp + 40)
@@ -112863,9 +112863,9 @@ LABEL_F33A51:
 	lda xbc, (xwa + 28)
 	dec 1, xhl
 	cp xhl, 0x0
-	jr c, LABEL_F33AEA
+	jr c, EffectBoxProc_CopyNameAndSetup
 	cp xhl, 0x6
-	jr ugt, LABEL_F33AEA
+	jr ugt, EffectBoxProc_CopyNameAndSetup
 	add xhl, xhl
 	add xhl, 0xE34908
 	ld hl, (xhl)
@@ -112894,7 +112894,7 @@ LABEL_F33AAB:
 	ld	xbc, 31981576
 	jr	11
 
-LABEL_F33AEA:
+EffectBoxProc_CopyNameAndSetup:
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 28)
 	ld xbc, 0x1E80001
@@ -112993,7 +112993,7 @@ LABEL_F33B77:
 	ld_sril XWA, (xsp + 0x0156)
 	ld xbc, 0x1C80001
 	call 0xFA9660
-	jr LABEL_F33C7F
+	jr EffectBoxProc_RestoreAndJumpToDispatch
 
 LABEL_F33C23:
 	ld xwa, (xsp + 4)
@@ -113003,7 +113003,7 @@ LABEL_F33C23:
 	call 0xFA49B7
 	ldfr_berp L, 0xFB
 	cpi_berp 0xFB, 0
-	jr z, LABEL_F33C7F
+	jr z, EffectBoxProc_RestoreAndJumpToDispatch
 	dec1_berp 0xFB
 	lds32 xde, 0
 	ldto_berp E, 0xFB
@@ -113027,7 +113027,7 @@ LABEL_F33C65:
 	cp iz, 0x8
 	jr c, LABEL_F33C65
 
-LABEL_F33C7F:
+EffectBoxProc_RestoreAndJumpToDispatch:
 	ld_sril XWA, (xsp + 0x0156)
 	ld_sril XBC, (xsp + 0x0152)
 	ld_sril XDE, (xsp + 0x014e)
