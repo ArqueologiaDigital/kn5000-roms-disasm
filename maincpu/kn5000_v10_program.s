@@ -103834,7 +103834,7 @@ TrAsGrid_DispatchNavigate:
 	ld xbc, (xsp + 12)
 	ld xde, (xsp + 8)
 	call 0xF9A5BD
-	call LABEL_F9883C
+	call SleepMainTask
 	ld xwa, 0x147001C
 	ld xbc, 0x1E70005
 	ld xde, (xsp + 8)
@@ -103958,7 +103958,7 @@ TrAsGrid_DispatchNavigate2:
 	ld xbc, (xsp + 12)
 	ld xde, (xsp + 8)
 	call 0xF9A5BD
-	call LABEL_F9883C
+	call SleepMainTask
 	ld xwa, 0x147001C
 	ld xbc, 0x1E70004
 	ld xde, (xsp + 8)
@@ -104055,7 +104055,7 @@ TrAsGrid_HandleSelectEvent:
 	ld xbc, (xsp + 12)
 	ld xde, (xsp + 8)
 	call 0xF9A5BD
-	call LABEL_F9883C
+	call SleepMainTask
 	ld xwa, 0x147001C
 	ld xbc, 0x1E70008
 	ld xde, (xsp + 8)
@@ -104078,7 +104078,7 @@ TrAsGrid_DeselectCell:
 	ld xbc, (xsp + 12)
 	ld xde, (xsp + 8)
 	call 0xF9A5BD
-	call LABEL_F9883C
+	call SleepMainTask
 	ld xwa, 0x147001C
 	ld xbc, 0x1E70009
 	ld xde, (xsp + 8)
@@ -233983,7 +233983,7 @@ LABEL_F980A0:
 	cps hl, 0
 	jr z, LABEL_F980EA
 
-	calr LABEL_F9883C
+	calr SleepMainTask
 	lds32 xwa, 0
 	ld xbc, 0x1C00000
 	lds32 xde, 0
@@ -234756,8 +234756,6 @@ LABEL_F98830:
 LABEL_F98839:
 	lds32 xhl, 0
 	ret
-LABEL_F9883C:
-
 SleepMainTask:
 	ld xwa, 0x120000B
 	ld xbc, 0x1E000AC
@@ -238366,7 +238364,7 @@ LABEL_F9ACC6:
 	lds32 xde, 0
 	call 0xFA9660
 	ld xiz, xhl
-	call LABEL_F9883C
+	call SleepMainTask
 	ld xwa, xiz
 	ld xbc, 0x1C00002
 	ld xde, (xsp + 4)
@@ -238393,7 +238391,7 @@ LABEL_F9ACC6:
 	lds32 xde, 0
 	call 0xFA9660
 	ld xiz, xhl
-	call LABEL_F9883C
+	call SleepMainTask
 	ld xwa, xiz
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
@@ -238412,7 +238410,7 @@ LABEL_F9AD62:
 	lds32 xde, 0
 	call 0xFA9660
 	ld xiz, xhl
-	call LABEL_F9883C
+	call SleepMainTask
 	ld xwa, xiz
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
@@ -238431,7 +238429,7 @@ LABEL_F9AD8E:
 	lds32 xde, 0
 	call 0xFA9660
 	ld xiz, xhl
-	call LABEL_F9883C
+	call SleepMainTask
 	ld xwa, xiz
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
