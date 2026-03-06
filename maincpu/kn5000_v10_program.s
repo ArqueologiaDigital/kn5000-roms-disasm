@@ -83843,7 +83843,7 @@ SetWall_SlotSetup_Active:
 	ld xde, 0xF1A0
 	lda_dri3 XBC, 0x07, 0xE8, 0xF4
 	pop xde
-	call LABEL_F2296B
+	call CDlikeSwTtl_SendResetEvent
 	call SetWall_UpdateSlotIndex
 
 SetWall_SlotSetup_Return:
@@ -83856,7 +83856,7 @@ SetWall_SlotUpdate:
 
 SetWall_SlotUpdate_Active:
 	call LABEL_F2295B
-	call LABEL_F2296B
+	call CDlikeSwTtl_SendResetEvent
 	call SetWall_UpdateSlotIndex
 
 SetWall_SlotUpdate_Return:
@@ -85506,7 +85506,7 @@ SetWall_SyncToneGenToDRAM:
 	ordi8 10405, 1
 
 SetWall_Sync_CheckPanelBit:
-	call LABEL_F20433
+	call SeqTimer_PostTempoUpdate
 	cpdi8 62013, 255
 	jr z, SetWall_Sync_PanelOff
 	bitda 2, 64941
@@ -85603,7 +85603,7 @@ LABEL_F2041B:
 	stda8 10360, a
 	ret
 
-LABEL_F20433:
+SeqTimer_PostTempoUpdate:
 	ld xhl, 0xF460
 	ld xwa, 0x2DA
 	add xhl, xwa
@@ -85799,11 +85799,11 @@ LABEL_F20605:
 	jr DispatchHandler_ClearActiveFlag
 
 LABEL_F2060B:
-	call LABEL_F2079D
+	call SongMode_CheckAndDispatch
 	jr DispatchHandler_ClearActiveFlag
 
 LABEL_F20611:
-	call LABEL_F20903
+	call PartFormat_CheckAndDispatch
 	jr DispatchHandler_ClearActiveFlag
 
 LABEL_F20617:
@@ -85868,16 +85868,16 @@ LABEL_F20687:
 
 PlayMode_CheckAndDispatch:
 	cpdi8 3380, 1
-	jr nz, LABEL_F206AA
+	jr nz, PlayMode_SendModeCommand
 	stdi8 3380, 0
 	stdi8 4420, 0
 	call LABEL_F206D0
 	bitda 2, 3394
-	jr z, LABEL_F206AA
+	jr z, PlayMode_SendModeCommand
 	jr __jrt_nop_F206AA
 __jrt_nop_F206AA:
 
-LABEL_F206AA:
+PlayMode_SendModeCommand:
 	stdi8 4437, 0
 	cpdi8 36150, 122
 	jr z, LABEL_F206BD
@@ -85903,7 +85903,7 @@ LABEL_F206D0:
 	anddi8 10412, 251
 	ret
 
-LABEL_F206DA:
+PlayMode_StartAndSendCommand:
 	cpdi8 3380, 1
 	jr nz, LABEL_F20711
 	cpdi8 4420, 0
@@ -85991,18 +85991,18 @@ LABEL_F20774:
 	.byte 0x00, 0x0a, 0x0e, 0xf1, 0x34, 0x0d, 0x00, 0x00
 	.byte 0x0e
 
-LABEL_F2079D:
+SongMode_CheckAndDispatch:
 	cpdi8 3380, 1
-	jr nz, LABEL_F207BA
+	jr nz, SongMode_SendStopCommand
 	stdi8 3380, 0
 	stdi8 4420, 0
 	call LABEL_F207C8
 	bitda 2, 3394
-	jr z, LABEL_F207BA
+	jr z, SongMode_SendStopCommand
 	jr __jrt_nop_F207BA
 __jrt_nop_F207BA:
 
-LABEL_F207BA:
+SongMode_SendStopCommand:
 	stdi8 4437, 0
 	xor wa, wa
 	ldb a, 0x6D
@@ -86014,7 +86014,7 @@ LABEL_F207C8:
 	call Song_AbortPlayback
 	ret
 
-LABEL_F207D2:
+SongMode_StartPlayback:
 	cpdi8 3380, 1
 	jrl nz, LABEL_F207F3
 	cpdi8 4420, 0
@@ -86101,7 +86101,7 @@ LABEL_F208AE:
 	jr LABEL_F208D6
 
 PartFormat_SendPlaybackCmd:
-	call LABEL_F22B27
+	call PlayMode_SendStopEvent
 	xor wa, wa
 	ldb a, 0x6C
 	call 0xF99490
@@ -86129,18 +86129,18 @@ LABEL_F208D7:
 	.byte 0xf1, 0x44, 0x11, 0x00, 0x0a, 0x0e, 0xf1, 0x34
 	.byte 0x0d, 0x00, 0x00, 0x0e
 
-LABEL_F20903:
+PartFormat_CheckAndDispatch:
 	cpdi8 3380, 1
-	jr nz, LABEL_F20920
+	jr nz, PartFormat_SendStopCommand
 	stdi8 3380, 0
 	stdi8 4420, 0
 	call LABEL_F2092E
 	bitda 2, 3394
-	jr z, LABEL_F20920
+	jr z, PartFormat_SendStopCommand
 	jr __jrt_nop_F20920
 __jrt_nop_F20920:
 
-LABEL_F20920:
+PartFormat_SendStopCommand:
 	stdi8 4437, 0
 	xor wa, wa
 	ldb a, 0x6E
@@ -86152,7 +86152,7 @@ LABEL_F2092E:
 	call Song_AbortPlayback
 	ret
 
-LABEL_F20938:
+PartFormat_StartPlayback:
 	cpdi8 3380, 1
 	jrl nz, LABEL_F20959
 	cpdi8 4420, 0
@@ -86181,7 +86181,7 @@ LABEL_F20993:
 	jr nz, LABEL_F209B0
 	stdi8 3380, 0
 	stdi8 4420, 0
-	call LABEL_F209BE
+	call PlayMode_StopAndAbort
 	bitda 2, 3394
 	jr z, LABEL_F209B0
 	jr __jrt_nop_F209B0
@@ -86194,9 +86194,9 @@ LABEL_F209B0:
 	call 0xF99490
 	ret
 
-LABEL_F209BE:
+PlayMode_StopAndAbort:
 	anddi8 10412, 251
-	call LABEL_F22B27
+	call PlayMode_SendStopEvent
 	call Song_AbortPlayback
 	ret
 
@@ -86205,7 +86205,7 @@ PlayMode_SendCommand6C:
 	jrl nz, LABEL_F209ED
 	cpdi8 4420, 0
 	jrl nz, LABEL_F209ED
-	call LABEL_F209BE
+	call PlayMode_StopAndAbort
 	stdi8 4437, 1
 	xor wa, wa
 	ldb a, 0x6C
@@ -86403,7 +86403,7 @@ PlayMode_ResetAndSchedule:
 LABEL_F20BCE:
 	st8_24 0x00ffe3, a
 	call LABEL_F20BDC
-	call LABEL_F20433
+	call SeqTimer_PostTempoUpdate
 	ret
 
 LABEL_F20BDC:
@@ -86411,12 +86411,12 @@ LABEL_F20BDC:
 	stda16 10351, xwa
 	ldda16 xwa, 62001
 	stda16 10353, xwa
-	call LABEL_F20BFA
+	call SongBank_LoadToWorkArea
 	call LABEL_F20C2F
 	anddi8 10417, 254
 	ret
 
-LABEL_F20BFA:
+SongBank_LoadToWorkArea:
 	xor xwa, xwa
 	ld8_24 a, 0x00ffe3
 	sla xwa, 11
@@ -86840,7 +86840,7 @@ LABEL_F20FEF:
 	push xhl
 	push xix
 	push xiz
-	call LABEL_F206DA
+	call PlayMode_StartAndSendCommand
 	pop xiz
 	pop xix
 	pop xhl
@@ -86899,7 +86899,7 @@ LABEL_F21083:
 	push xhl
 	push xix
 	push xiz
-	call LABEL_F206DA
+	call PlayMode_StartAndSendCommand
 	pop xiz
 	pop xix
 	pop xhl
@@ -87128,7 +87128,7 @@ LABEL_F212DE:
 	push xhl
 	push xix
 	push xiz
-	call LABEL_F207D2
+	call SongMode_StartPlayback
 	pop xiz
 	pop xix
 	pop xhl
@@ -87140,7 +87140,7 @@ LABEL_F212EC:
 	push xhl
 	push xix
 	push xiz
-	call LABEL_F2079D
+	call SongMode_CheckAndDispatch
 	pop xiz
 	pop xix
 	pop xhl
@@ -87208,7 +87208,7 @@ LABEL_F2138E:
 	push xhl
 	push xix
 	push xiz
-	call LABEL_F20938
+	call PartFormat_StartPlayback
 	pop xiz
 	pop xix
 	pop xhl
@@ -87220,7 +87220,7 @@ LABEL_F2139C:
 	push xhl
 	push xix
 	push xiz
-	call LABEL_F20903
+	call PartFormat_CheckAndDispatch
 	pop xiz
 	pop xix
 	pop xhl
@@ -88315,9 +88315,9 @@ LABEL_F22135:
 	cp xde, 0x3
 	jr z, LABEL_F221A6
 	cp xde, 0x82
-	jr z, LABEL_F22182
+	jr z, SeqRecPlay_ToggleRecordOrPlay
 	cp xde, 0x2
-	jr z, LABEL_F22182
+	jr z, SeqRecPlay_ToggleRecordOrPlay
 	cp xde, 0x81
 	jr z, LABEL_F2217D
 	cp xde, 0x1
@@ -88327,7 +88327,7 @@ LABEL_F2217D:
 	ldw wa, 0xFFFF
 	jr LABEL_F221AD
 
-LABEL_F22182:
+SeqRecPlay_ToggleRecordOrPlay:
 	call SeqState_GetFlags
 	bit 1, hl
 	jr z, LABEL_F22194
@@ -88631,9 +88631,9 @@ SeqSongNameFunc:
 	cp xbc, 0x1E70003
 	jrl z, LABEL_F227A1
 	cp xbc, 0x1C00018
-	jr z, LABEL_F22713
+	jr z, SongBank_HandleNextPrev
 	cp xbc, 0x1C00017
-	jr z, LABEL_F22713
+	jr z, SongBank_HandleNextPrev
 	cp xbc, 0x1C0000B
 	jr z, LABEL_F226EE
 	cp xbc, 0x1E70002
@@ -88666,7 +88666,7 @@ LABEL_F226F0:
 	jr c, LABEL_F226F0
 	jrl LABEL_F227A1
 
-LABEL_F22713:
+SongBank_HandleNextPrev:
 	ldda16 xwa, 7120
 	ld iz, wa
 	cp xbc, 0x1C00018
@@ -88787,9 +88787,9 @@ SeqSongMemoryFunc:
 	cp xbc, 0x1E70003
 	jrl z, LABEL_F228FD
 	cp xbc, 0x1C00018
-	jr z, LABEL_F2288A
+	jr z, SongBank_HandleNextPrevAlt
 	cp xbc, 0x1C00017
-	jr z, LABEL_F2288A
+	jr z, SongBank_HandleNextPrevAlt
 	cp xbc, 0x1C0000B
 	jr z, LABEL_F22866
 	cp xbc, 0x1E70002
@@ -88821,7 +88821,7 @@ LABEL_F22868:
 	jr c, LABEL_F22868
 	jr LABEL_F228FD
 
-LABEL_F2288A:
+SongBank_HandleNextPrevAlt:
 	ldda16 xwa, 7196
 	ld iz, wa
 	cp xbc, 0x1C00018
@@ -88893,7 +88893,7 @@ LABEL_F2295B:
 	lds32 xde, 0
 	jp 0xFA9D58
 
-LABEL_F2296B:
+CDlikeSwTtl_SendResetEvent:
 	ld xwa, 0x8B0000
 	ld xbc, 0x1C00001
 	lds32 xde, 0
@@ -89036,7 +89036,7 @@ LABEL_F22B1A:
 	stdi8 7498, 0
 	ret
 
-LABEL_F22B27:
+PlayMode_SendStopEvent:
 	ld xwa, 0x6F0026
 	ld xbc, 0x1C70009
 	lds32 xde, 0
@@ -89088,7 +89088,7 @@ LABEL_F22B82:
 	push xhl
 	push xix
 	push xiz
-	call LABEL_F207D2
+	call SongMode_StartPlayback
 	pop xiz
 	pop xix
 	pop xhl
@@ -89099,7 +89099,7 @@ LABEL_F22B8F:
 	push xhl
 	push xix
 	push xiz
-	call LABEL_F20938
+	call PartFormat_StartPlayback
 	pop xiz
 	pop xix
 	pop xhl
@@ -100031,7 +100031,7 @@ SMF_SetupReadPointers:
 	stda16 10351, xwa
 	ldda16 xwa, 62001
 	stda16 10353, xwa
-	call LABEL_F20BFA
+	call SongBank_LoadToWorkArea
 	ret
 
 SMF_ResetPlaybackState:
