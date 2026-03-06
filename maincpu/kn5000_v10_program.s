@@ -85111,7 +85111,7 @@ SetWall_DualPass_TypeC0:
 	push_lerp 0x30
 	push xiy
 	push xhl
-	call LABEL_F532ED
+	call Rhythm_DispatchNote_Tramp
 	pop xhl
 	pop xiy
 	pop_lerp 0x30
@@ -85274,7 +85274,7 @@ SetWall_Replay_C0_ReadCC:
 	push_lerp 0x3C
 	push xiy
 	push xhl
-	call LABEL_F532ED
+	call Rhythm_DispatchNote_Tramp
 	pop xhl
 	pop xiy
 	pop_lerp 0x3C
@@ -159597,7 +159597,7 @@ _findnext:
 	cpi8_24 0x03e3e4, 0x05
 	jr nz, LABEL_F52AFE
 	ld xbc, xiz
-	calr LABEL_F52CCF
+	calr FileIO_ReadNextDirEntry
 	jrl LABEL_F52BAC
 
 LABEL_F52AFE:
@@ -159808,7 +159808,7 @@ LABEL_F52C8E:
 	call LABEL_F531E2
 	ld xwa, xiz
 	ld xbc, (xsp + 4)
-	calr LABEL_F52CCF
+	calr FileIO_ReadNextDirEntry
 	cps hl, 0
 	jr nz, LABEL_F52CB6
 	ld xhl, xiz
@@ -159834,7 +159834,7 @@ LABEL_F52CCC:
 	lds hl, 0
 	ret
 
-LABEL_F52CCF:
+FileIO_ReadNextDirEntry:
 	dec 4, xsp
 	push xiz
 	ld (xsp + 4), xbc
@@ -160097,7 +160097,7 @@ LABEL_F53009:
 	ld (xbc), wa
 	retd 0x4
 
-LABEL_F53034:
+FDC_ExecuteSectorCommand:
 	lda xsp, (xsp - 22)
 	push xiz
 	ld xiz, xbc
@@ -160142,7 +160142,7 @@ LABEL_F530B0:
 LABEL_F530B3:
 	calr FDC_DrainQueuesAndReset
 	sti8_24 0x03e3ec, 0x00
-	jrl LABEL_F531CF
+	jrl FDC_RecalibrateCommand
 
 LABEL_F530BF:
 	ld bc, wa
@@ -160206,7 +160206,7 @@ LABEL_F53158:
 	lda_24 xwa, 0x02434e
 	ld xbc, xwa
 	ldw wa, 0x9
-	calr LABEL_F53034
+	calr FDC_ExecuteSectorCommand
 	cp hl, 0x10
 	jr z, LABEL_F53187
 	cp hl, 0xFC
@@ -160263,7 +160263,7 @@ LABEL_F531B0:
 	lda xsp, (xsp + 16)
 	ret
 
-LABEL_F531CF:
+FDC_RecalibrateCommand:
 	lda xsp, (xsp - 16)
 	ldw (xsp + 256), 0x7
 	lda xwa, (xsp)
@@ -160290,9 +160290,9 @@ LABEL_F531E9:
 	add xwa, xbc
 	ld xbc, xwa
 	ld wa, de
-	calr LABEL_F53034
+	calr FDC_ExecuteSectorCommand
 	ldfr_werp HL, 0xFA
-	calr LABEL_F531CF
+	calr FDC_RecalibrateCommand
 	cpi_werp 0xFA, 0
 	jr z, LABEL_F53219
 	ldto_werp HL, 0xFA
@@ -160306,14 +160306,14 @@ LABEL_F53219:
 LABEL_F5321F:
 	lds iz, 0
 	cp iz, 0x50
-	jr ge, LABEL_F5326D
+	jr ge, FileIO_FillRemainingEntries
 
 LABEL_F53227:
 	ld wa, iz
 	muls wa, 0x2C
 	lda_24 xbc, 0x0235a8
 	cp_sriw_im 0x07, 0xE4, 0xE0, 0xFE, 0xFE
-	jr z, LABEL_F5326D
+	jr z, FileIO_FillRemainingEntries
 	pushw 0x14
 	ld wa, iz
 	muls wa, 0x2C
@@ -160333,7 +160333,7 @@ LABEL_F53227:
 	cp iz, 0x50
 	jr lt, LABEL_F53227
 
-LABEL_F5326D:
+FileIO_FillRemainingEntries:
 	st16_24 0x024750, xiz
 	cp iz, 0x50
 	jr ge, LABEL_F5329C
@@ -160390,12 +160390,12 @@ LABEL_F532D1:
 Seq_DispatcherEntry:
 	jp 0xF53318
 
-LABEL_F532E5:
+VoiceParam_ClampAndValidate_Tramp:
 	jp VoiceParam_ClampAndValidate
 LABEL_F532E9:
 	.byte 0x1b, 0xae, 0x5b, 0xf5
 
-LABEL_F532ED:
+Rhythm_DispatchNote_Tramp:
 	jp LABEL_F55BB3
 
 Rhythm_NoteDispatchWrapper:
@@ -160422,7 +160422,7 @@ LABEL_F53309:
 	pop xiz
 	ret
 
-LABEL_F53310:
+Rhythm_TransposeWithMod_Tramp:
 	jp Rhythm_TransposeWithMod
 LABEL_F53314:
 	.byte 0x1b, 0xe9, 0x5b, 0xf5
@@ -160606,7 +160606,7 @@ LABEL_F53519:
 	calr LABEL_F53597
 	calr LABEL_F53733
 	calr LABEL_F5375E
-	calr LABEL_F535C6
+	calr AccChord_ReadAndStoreKeys
 	calr LABEL_F5377C
 	calr LABEL_F53791
 	calr LABEL_F5379D
@@ -160626,7 +160626,7 @@ LABEL_F53519:
 	call AccTuning_DisableIfNoStyle
 	bitda 0, 13155
 	jr nz, LABEL_F5356A
-	calr LABEL_F537F0
+	calr AccPedal_ProcessAllChanges
 
 LABEL_F5356A:
 	calr LABEL_F53898
@@ -160639,7 +160639,7 @@ LABEL_F5356A:
 	calr LABEL_F53B3D
 
 LABEL_F53582:
-	calr LABEL_F53CA4
+	calr AccChord_CompareAndSetDirty
 	calr LABEL_F53CCA
 	call AccTuning_CheckChange
 	jr LABEL_F53596
@@ -160677,7 +160677,7 @@ LABEL_F535C4:
 	pop xbc
 	ret
 
-LABEL_F535C6:
+AccChord_ReadAndStoreKeys:
 	ldda8 a, 52960
 	stda8 13017, a
 	ldda8 a, 52959
@@ -160742,7 +160742,7 @@ LABEL_F5366D:
 	stda8 36162, a
 	ldda8 a, 52960
 	stda8 36160, a
-	calr LABEL_F53721
+	calr AccDisplay_RefreshIfDiskActive
 
 LABEL_F5368E:
 	ldda8 a, 13076
@@ -160793,7 +160793,7 @@ __jrt_nop_F53720:
 LABEL_F53720:
 	ret
 
-LABEL_F53721:
+AccDisplay_RefreshIfDiskActive:
 	push xwa
 	ldda8 a, 64605
 	and a, 0x7
@@ -160878,7 +160878,7 @@ LABEL_F537D4:
 	.byte 0x00, 0x00, 0x36, 0x00, 0x00, 0x98, 0x37, 0x00
 	.byte 0x00, 0x00, 0x39, 0x00
 
-LABEL_F537F0:
+AccPedal_ProcessAllChanges:
 	xor wa, wa
 	ld xhl, 0xE46BB0
 	ldda8 a, 1075
@@ -160943,10 +160943,10 @@ LABEL_F53869:
 	stda8 13055, a
 
 LABEL_F53877:
-	calr LABEL_F5387B
+	calr AccVoice_ReadBankAssign
 	ret
 
-LABEL_F5387B:
+AccVoice_ReadBankAssign:
 	xor wa, wa
 	ld xhl, 0xE46BB0
 	ldda8 a, 1075
@@ -161347,7 +161347,7 @@ LABEL_F53C8C:
 LABEL_F53CA3:
 	ret
 
-LABEL_F53CA4:
+AccChord_CompareAndSetDirty:
 	ldda8 a, 13016
 	cpda8 a, 13020
 	jr nz, LABEL_F53CB8
@@ -161454,7 +161454,7 @@ AccVoice_SelectAndApplyPatch:
 	cpdi8 13029, 128
 	jr nc, LABEL_F53DBC
 	ldda32 xiy, 13006
-	calr LABEL_F53DDC
+	calr AccStyle_ReadVoiceParam
 	stda8 13039, w
 	jr LABEL_F53DC6
 
@@ -161471,7 +161471,7 @@ LABEL_F53DC6:
 	stda16 12923, xwa
 	ret
 
-LABEL_F53DDC:
+AccStyle_ReadVoiceParam:
 	ld_srib W, (xiy + 0x03da)
 	ld_srib A, (xiy + 0x03d0)
 	ld xhl, 0xE46B8A
@@ -161556,7 +161556,7 @@ AccTuning_CopyAllPartsFromStyle:
 	pop xiy
 	ret
 
-LABEL_F53EAD:
+AccTuning_LoadAndApplyMaster:
 	push xiy
 	add xhl, 0x248
 	add xiy, xhl
@@ -164425,7 +164425,7 @@ LABEL_F55BCF:
 LABEL_F55BD8:
 	ld h, d
 	call AccVoice_LookupWithOffset
-	call LABEL_F53DDC
+	call AccStyle_ReadVoiceParam
 
 LABEL_F55BE2:
 	ret
@@ -164774,7 +164774,7 @@ LABEL_F55F87:
 	call AccVoice_LookupWithOffset
 	stda32 13006, xiy
 	call AccVoice_SelectAndApplyPatch
-	call LABEL_F5387B
+	call AccVoice_ReadBankAssign
 	ldda32 xiy, 13006
 	call Rhythm_UpdateTuningConfig
 	ldda32 xiy, 13006
@@ -164870,7 +164870,7 @@ LABEL_F560C5:
 	call LABEL_F54688
 	bitda 0, 13155
 	jr nz, LABEL_F560E5
-	call LABEL_F537F0
+	call AccPedal_ProcessAllChanges
 
 LABEL_F560E5:
 	ldda8 a, 13055
@@ -165867,14 +165867,14 @@ LABEL_F56BF0:
 LABEL_F56C02:
 	cpdi8 13268, 1
 	jr nz, LABEL_F56C14
-	call LABEL_F53EAD
+	call AccTuning_LoadAndApplyMaster
 	ordi8 13100, 1
 	jr LABEL_F56C6C
 
 LABEL_F56C14:
 	cpdi8 13268, 2
 	jr nz, LABEL_F56C26
-	call LABEL_F53EAD
+	call AccTuning_LoadAndApplyMaster
 	ordi8 13100, 2
 	jr LABEL_F56C6C
 
@@ -169405,8 +169405,8 @@ AccTiming_CallHelper:
 	jr z, AccTiming_HelperReturn
 	call SeqEvt_CallTimingHelper
 	call Voice_UpdatePlayModeState
-	call LABEL_F535C6
-	call LABEL_F53CA4
+	call AccChord_ReadAndStoreKeys
+	call AccChord_CompareAndSetDirty
 	call LABEL_F54C22
 
 AccTiming_HelperReturn:
@@ -169610,7 +169610,7 @@ AccState_Apply:
 	stda8 36162, a
 	ldda8 a, 52960
 	stda8 36160, a
-	call LABEL_F53721
+	call AccDisplay_RefreshIfDiskActive
 	anddi8 64607, 207
 	anddi8 12931, 251
 	xor a, a
@@ -184671,7 +184671,7 @@ RhythmROM_PatternDispatcher:
 	anddi8 13744, 249
 	ldda8 l, 13549
 	ldda8 h, 13550
-	call LABEL_F532E5
+	call VoiceParam_ClampAndValidate_Tramp
 	stda8 13549, l
 	stda8 13550, h
 	sla l, 1
@@ -189179,7 +189179,7 @@ LABEL_F6713F:
 LABEL_F6718B:
 	stdi8 37110, 72
 	call LABEL_FCA18C
-	call LABEL_F532E5
+	call VoiceParam_ClampAndValidate_Tramp
 	pushw hl
 	calr Rhythm_MapChannelToDrumIndex
 	popw hl
@@ -197670,7 +197670,7 @@ AccompSeq_VelFlags_CallDispatch:
 	push xde
 	push xhl
 	push xiy
-	call LABEL_F53310
+	call Rhythm_TransposeWithMod_Tramp
 	pop xiy
 	pop xhl
 	pop xde
@@ -197702,7 +197702,7 @@ AccompSeq_ExtVelFlags_Dispatch:
 	push xde
 	push xhl
 	push xiy
-	call LABEL_F53310
+	call Rhythm_TransposeWithMod_Tramp
 	pop xiy
 	pop xhl
 	pop xde
