@@ -188540,24 +188540,24 @@ LABEL_F66B9F:
 	cp c, 0x90
 	jr nz, LABEL_F66BEC
 	ldi_werp 0xFA, 6
-	jr LABEL_F66BEF
+	jr Voice_ScanTableEntries
 
 LABEL_F66BDB:
 	ldi_erpw 0xFA, 0x08, 0x00
-	jr LABEL_F66BEF
+	jr Voice_ScanTableEntries
 
 LABEL_F66BE2:
 	ldi_werp 0xFA, 3
-	jr LABEL_F66BEF
+	jr Voice_ScanTableEntries
 
 LABEL_F66BE7:
 	ldi_werp 0xFA, 1
-	jr LABEL_F66BEF
+	jr Voice_ScanTableEntries
 
 LABEL_F66BEC:
 	ldi_werp 0xFA, 0
 
-LABEL_F66BEF:
+Voice_ScanTableEntries:
 	lds iz, 0
 	cpi_werp 0xFA, 0
 	jr ule, LABEL_F66C1C
@@ -189460,13 +189460,13 @@ LABEL_F673AD:
 
 LABEL_F673DA:
 	bitda 0, 14281
-	jr nz, LABEL_F67414
+	jr nz, Rhythm_ClearChannelDrumIndex
 	bitda 1, 14281
-	jr nz, LABEL_F67414
+	jr nz, Rhythm_ClearChannelDrumIndex
 	bitda 2, 14281
-	jr nz, LABEL_F67414
+	jr nz, Rhythm_ClearChannelDrumIndex
 	bitda 3, 14281
-	jr nz, LABEL_F67414
+	jr nz, Rhythm_ClearChannelDrumIndex
 	add de, 0x3D2
 	ld_srib3 A, 0x07, 0xF0, 0xE8
 	calr Rhythm_MapChannelToDrumIndex
@@ -189484,7 +189484,7 @@ LABEL_F67410:
 LABEL_F67412:
 	jr LABEL_F67416
 
-LABEL_F67414:
+Rhythm_ClearChannelDrumIndex:
 	ldb a, 0x0
 
 LABEL_F67416:
@@ -195569,7 +195569,7 @@ FloppyState_Dispatch:
 	lda xsp, (xsp - 114)
 	push xiz
 
-LABEL_F6CC18:
+StyleConv_DispatchSoundMemState:
 	ld8_24 a, 0x0ffc00
 	cps a, 0
 	jr nz, LABEL_F6CC3B
@@ -195627,7 +195627,7 @@ LABEL_F6CC87:
 	cp a, 0x10
 	jr z, LABEL_F6CCC6
 	cps a, 0
-	jrl nz, LABEL_F6CC18
+	jrl nz, StyleConv_DispatchSoundMemState
 	stdi8 15622, 1
 	ld xwa, 0xFFC00
 	call ControlState_ProcessCommand
@@ -195903,7 +195903,7 @@ LABEL_F6CF47:
 	cps a, 2
 	jr z, LABEL_F6CF70
 	cps a, 1
-	jrl nz, LABEL_F6CC18
+	jrl nz, StyleConv_DispatchSoundMemState
 	cpdi8 36150, 22
 	jrl nz, LABEL_F6D841
 	ldw wa, 0x12
@@ -196185,7 +196185,7 @@ LABEL_F6D247:
 	cps wa, 1
 	jrl z, LABEL_F6D431
 	cps wa, 0
-	jrl nz, LABEL_F6CC18
+	jrl nz, StyleConv_DispatchSoundMemState
 	ldada xwa, 18312
 	ld xbc, xwa
 	st_dri3b B, 0xE1, 0x00, 0x01
@@ -196461,12 +196461,12 @@ LABEL_F6D50A:
 	ld xbc, 0xE4C162
 	call FileIO_OpenWithMode
 	cps hl, 0
-	jrl lt, LABEL_F6D5C6
+	jrl lt, DRI_ParseFieldsAndOpenFile
 	lds32 xwa, 0
 	lds bc, 2
 	call FileIO_SeekAndReadBlock
 	cps hl, 0
-	jrl lt, LABEL_F6D5C6
+	jrl lt, DRI_ParseFieldsAndOpenFile
 	ldw (xsp + 8), 0x1
 	call FileIO_SeekWriteBlock_Impl
 	ld (xsp + 14), xhl
@@ -196495,7 +196495,7 @@ LABEL_F6D580:
 LABEL_F6D595:
 	lds iz, 0
 	cpw (xsp + 4), 0x20
-	jr ge, LABEL_F6D5C6
+	jr ge, DRI_ParseFieldsAndOpenFile
 
 LABEL_F6D59E:
 	ld de, iz
@@ -196507,13 +196507,13 @@ LABEL_F6D59E:
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	ld (xde), a
 	cps a, 0
-	jr z, LABEL_F6D5C6
+	jr z, DRI_ParseFieldsAndOpenFile
 	incm 1, (xsp + 4)
 	inc 1, iz
 	cpw (xsp + 4), 0x20
 	jr lt, LABEL_F6D59E
 
-LABEL_F6D5C6:
+DRI_ParseFieldsAndOpenFile:
 	ldw (xsp + 4), 0x0
 	lda xwa, (xsp + 18)
 
@@ -196542,12 +196542,12 @@ LABEL_F6D5E4:
 	ld xbc, 0xE4C166
 	call FileIO_OpenWithMode
 	cps hl, 0
-	jrl lt, LABEL_F6D6B6
+	jrl lt, FileLoad_ResetAndStartProcessing
 	lds32 xwa, 0
 	lds bc, 2
 	call FileIO_SeekAndReadBlock
 	cps hl, 0
-	jrl lt, LABEL_F6D6B6
+	jrl lt, FileLoad_ResetAndStartProcessing
 	incm 1, (xsp + 8)
 	call FileIO_SeekWriteBlock_Impl
 	ld (xsp + 14), xhl
@@ -196580,7 +196580,7 @@ LABEL_F6D66C:
 LABEL_F6D681:
 	lds iz, 0
 	cpw (xsp + 4), 0x20
-	jr ge, LABEL_F6D6B6
+	jr ge, FileLoad_ResetAndStartProcessing
 
 LABEL_F6D68A:
 	ld wa, (xsp + 16)
@@ -196594,13 +196594,13 @@ LABEL_F6D68A:
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	ld (xde), a
 	cps a, 0
-	jr z, LABEL_F6D6B6
+	jr z, FileLoad_ResetAndStartProcessing
 	incm 1, (xsp + 4)
 	inc 1, iz
 	cpw (xsp + 4), 0x20
 	jr lt, LABEL_F6D68A
 
-LABEL_F6D6B6:
+FileLoad_ResetAndStartProcessing:
 	calr SoundMem_ClearRegion
 	sti8_24 0x0ffc00, 0xff
 	sti8_24 0x0ffc01, 0x00
@@ -196679,7 +196679,7 @@ LABEL_F6D76A:
 
 StylCnv_FinalizeAndCheckStatus:
 	calr TableData_JumpToEntry
-	jrl LABEL_F6CC18
+	jrl StyleConv_DispatchSoundMemState
 
 LABEL_F6D77E:
 	calr LABEL_F6C04F
@@ -198869,7 +198869,7 @@ LABEL_F6F07E:
 	call SubCPU_Payload_GetErrorFlag
 	cp hl, 0xFFFF
 	jr nz, LABEL_F6F08C
-	call LABEL_F6F309
+	call Voice_InitBankData
 
 LABEL_F6F08C:
 	ret
@@ -198882,7 +198882,7 @@ LABEL_F6F091:
 
 LABEL_F6F095:
 	push xiz
-	call LABEL_F6F309
+	call Voice_InitBankData
 	pop xiz
 	ret
 
@@ -198962,7 +198962,7 @@ HEADER__COMPILE_BANKS:	; F6F289
 HEADER__USER_BANKS:	; F6F2C9
 	.ascii "  User Bank 1     User Bank 2                                   "
 
-LABEL_F6F309:
+Voice_InitBankData:
 	calr LABEL_F6F0B1
 	ld xiy, 0xF6F42F
 	ld xix, 0x1E8820
@@ -199015,7 +199015,7 @@ LABEL_F6F385:
 	ld wa, (xiy)
 	cps wa, 0
 	jr z, LABEL_F6F399
-	calr LABEL_F6F309
+	calr Voice_InitBankData
 
 LABEL_F6F399:
 	ret
@@ -199026,7 +199026,7 @@ LABEL_F6F39A:
 	ld a, (xiy)
 	bit 0, a
 	jr z, LABEL_F6F3AF
-	calr LABEL_F6F309
+	calr Voice_InitBankData
 
 LABEL_F6F3AF:
 	ret
@@ -200376,7 +200376,7 @@ LABEL_F720B4:
 	ret
 
 LABEL_F720B5:
-	calr LABEL_F720C7
+	calr Voice_GetBankEntryPointer
 	ld a, (xiy + 256)
 	bit 0, a
 	jr z, LABEL_F720C6
@@ -200386,7 +200386,7 @@ LABEL_F720B5:
 LABEL_F720C6:
 	ret
 
-LABEL_F720C7:
+Voice_GetBankEntryPointer:
 	ldda8 a, 32532
 	cp a, 0xC
 	jr c, LABEL_F720D2
@@ -200499,7 +200499,7 @@ LABEL_F721C2:
 	ret
 
 LABEL_F721C3:
-	calr LABEL_F720C7
+	calr Voice_GetBankEntryPointer
 	push xiy
 	calr LABEL_F72A18
 	ld hl, wa
@@ -200541,7 +200541,7 @@ LABEL_F72221:
 	push xiy
 	push xhl
 	push xwa
-	calr LABEL_F720C7
+	calr Voice_GetBankEntryPointer
 	ldda8 a, 64866
 	ldda8 w, 64867
 	ld (xiy + 9), wa
@@ -201063,7 +201063,7 @@ LABEL_F7267F:
 	ret
 
 LABEL_F72680:
-	calr LABEL_F720C7
+	calr Voice_GetBankEntryPointer
 	ld wa, (xiy + 9)
 	ld e, w
 	ld w, a
@@ -206260,7 +206260,7 @@ LABEL_F78269:
 	cps hl, 1
 	jr nz, LABEL_F7827D
 	ld xwa, 0xE8008E
-	jr LABEL_F782B7
+	jr UI_DisplayStringAndDispatchEvent
 
 LABEL_F7827D:
 	ld bc, (xsp + 6)
@@ -206275,20 +206275,20 @@ LABEL_F7827D:
 	cps hl, 0
 	jr nz, LABEL_F782B2
 	ld xwa, 0xE80098
-	jr LABEL_F782B7
+	jr UI_DisplayStringAndDispatchEvent
 
 LABEL_F782A4:
 	ld xwa, 0xE800A2
-	jr LABEL_F782B7
+	jr UI_DisplayStringAndDispatchEvent
 
 LABEL_F782AB:
 	ld xwa, 0xE800AC
-	jr LABEL_F782B7
+	jr UI_DisplayStringAndDispatchEvent
 
 LABEL_F782B2:
 	ld xwa, 0xE800B6
 
-LABEL_F782B7:
+UI_DisplayStringAndDispatchEvent:
 	push xwa
 	lda xwa, (xsp + 16)
 	push xwa
@@ -219235,7 +219235,7 @@ LABEL_F83048:
 	calr SdpartScrollDelta
 	ld bc, hl
 	ld16_24 xwa, 0x0247c6
-	calr LABEL_F8307E
+	calr SdpartClampSignedScrollDelta
 	cpda16_24 xhl, 149446
 	jr z, LABEL_F8307A
 	extz xhl
@@ -219252,7 +219252,7 @@ LABEL_F8307C:
 	pop xiz
 	ret
 
-LABEL_F8307E:
+SdpartClampSignedScrollDelta:
 	ld hl, wa
 	cps wa, 7
 	jr le, LABEL_F83088
@@ -219352,7 +219352,7 @@ LABEL_F83157:
 	calr SdpartScrollDelta
 	ld bc, hl
 	ld16_24 xwa, 0x0247c8
-	calr LABEL_F8307E
+	calr SdpartClampSignedScrollDelta
 	cpda16_24 xhl, 149448
 	jr z, LABEL_F83189
 	extz xhl
@@ -219439,7 +219439,7 @@ LABEL_F83238:
 	calr SdpartScrollDelta
 	ld bc, hl
 	ld16_24 xwa, 0x0247cc
-	calr LABEL_F8307E
+	calr SdpartClampSignedScrollDelta
 	cpda16_24 xhl, 149452
 	jr z, LABEL_F8326A
 	extz xhl
@@ -219526,7 +219526,7 @@ LABEL_F83319:
 	calr SdpartScrollDelta
 	ld bc, hl
 	ld16_24 xwa, 0x0247ca
-	calr LABEL_F8307E
+	calr SdpartClampSignedScrollDelta
 	cpda16_24 xhl, 149450
 	jr z, LABEL_F8334B
 	extz xhl
