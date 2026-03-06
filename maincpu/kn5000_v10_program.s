@@ -40492,12 +40492,12 @@ LABEL_EE8CF8:
 	.long LABEL_FDEC16
 	.long LABEL_FDEC9E
 	.long AudioInit_ConfigStereoVoice
-	.long LABEL_FDEA9A
-	.long LABEL_FDEA9A
+	.long AudioInit_ConfigureVoiceFromFlags
+	.long AudioInit_ConfigureVoiceFromFlags
 	.long AudioInit_ConfigStereoVoice
-	.long LABEL_FDEA9A
-	.long LABEL_FDEA9A
-	.long LABEL_FDEA9A
+	.long AudioInit_ConfigureVoiceFromFlags
+	.long AudioInit_ConfigureVoiceFromFlags
+	.long AudioInit_ConfigureVoiceFromFlags
 	.long LABEL_FDEAE4
 	.long LABEL_FDEB5B
 	.long LABEL_FDEB5B
@@ -83541,8 +83541,8 @@ LABEL_F1ED85:
 	call AudioInit_RefreshToneBank
 	call NoteMap_ProcessAndMerge
 	call 0xFE0E75
-	call LABEL_FE1266
-	call LABEL_FE1215
+	call Voice_InitTablePair
+	call Voice_InitTableGroup
 	call LABEL_FEBEFC
 	call LABEL_FDBB32
 	inc 2, xsp
@@ -86981,7 +86981,7 @@ LABEL_F210FF:
 	ldw wa, 0x90
 	ldw bc, 0x10
 	call 0xFDB224
-	call LABEL_FDDFA7
+	call AudioMode_ResetVoiceState
 	jr LABEL_F21155
 
 LABEL_F2114B:
@@ -87666,11 +87666,11 @@ CDlikeSwTtl_SongConfirmDispatch:
 
 CDlikeSwTtl_SongConfirmState1:
 	calr SeqRecPlay_EnablePlayOnly
-	jp LABEL_FEC1C3
+	jp Acc_TransitionPlayMode
 
 CDlikeSwTtl_SongConfirmState2:
 	calr SeqRecPlay_EnableRecordOnly
-	jp LABEL_FEC1E1
+	jp Acc_StopPlayMode
 
 CDlikeSwTtl_DocConfirmStart:
 	call SeqState_GetFlags
@@ -87997,7 +87997,7 @@ LABEL_F21DD5:
 	bit 1, hl
 	jr z, LABEL_F21DE7
 	calr SeqRecPlay_EnableRecordOnly
-	call LABEL_FEC1E1
+	call Acc_StopPlayMode
 	jr LABEL_F21E3B
 
 LABEL_F21DE7:
@@ -88005,7 +88005,7 @@ LABEL_F21DE7:
 	bit 0, hl
 	jr z, LABEL_F21E3B
 	calr SeqRecPlay_EnablePlayOnly
-	call LABEL_FEC1C3
+	call Acc_TransitionPlayMode
 	jr LABEL_F21E3B
 
 LABEL_F21DF9:
@@ -88106,7 +88106,7 @@ LABEL_F21F04:
 	bit 1, hl
 	jr z, LABEL_F21F16
 	calr SeqRecPlay_EnableRecordOnly
-	call LABEL_FEC1E1
+	call Acc_StopPlayMode
 	jr LABEL_F21F6A
 
 LABEL_F21F16:
@@ -88114,7 +88114,7 @@ LABEL_F21F16:
 	bit 0, hl
 	jr z, LABEL_F21F6A
 	calr SeqRecPlay_EnablePlayOnly
-	call LABEL_FEC1C3
+	call Acc_TransitionPlayMode
 	jr LABEL_F21F6A
 
 LABEL_F21F28:
@@ -88219,7 +88219,7 @@ LABEL_F2205A:
 	bit 1, hl
 	jr z, LABEL_F2206C
 	calr SeqRecPlay_EnableRecordOnly
-	call LABEL_FEC1E1
+	call Acc_StopPlayMode
 	jr LABEL_F220C0
 
 LABEL_F2206C:
@@ -88227,7 +88227,7 @@ LABEL_F2206C:
 	bit 0, hl
 	jr z, LABEL_F220C0
 	calr SeqRecPlay_EnablePlayOnly
-	call LABEL_FEC1C3
+	call Acc_TransitionPlayMode
 	jr LABEL_F220C0
 
 LABEL_F2207E:
@@ -88332,7 +88332,7 @@ LABEL_F22182:
 	bit 1, hl
 	jr z, LABEL_F22194
 	calr SeqRecPlay_EnableRecordOnly
-	call LABEL_FEC1E1
+	call Acc_StopPlayMode
 	jr LABEL_F221E3
 
 LABEL_F22194:
@@ -88340,7 +88340,7 @@ LABEL_F22194:
 	bit 0, hl
 	jr z, LABEL_F221E3
 	calr SeqRecPlay_EnablePlayOnly
-	call LABEL_FEC1C3
+	call Acc_TransitionPlayMode
 	jr LABEL_F221E3
 
 LABEL_F221A6:
@@ -160830,7 +160830,7 @@ LABEL_F5375E:
 	jr ugt, LABEL_F5377B
 
 LABEL_F53772:
-	call LABEL_FDDF91
+	call AudioMode_SetStereoFlags
 	anddi8 12932, 247
 
 LABEL_F5377B:
@@ -172973,7 +172973,7 @@ AccReplay_SavedPedal:
 	ldb d, 0x6
 	ldb e, 0x48
 	call SwbtWr_QueuePostEvent
-	call LABEL_FDDF91
+	call AudioMode_SetStereoFlags
 	ret
 
 AccReplay_SavedPedal_Return:
@@ -173024,7 +173024,7 @@ AccReplay_SendPedal_Dispatch:
 	ldb d, 0x6
 	ldb e, 0x48
 	call SwbtWr_QueuePostEvent
-	call LABEL_FDDF91
+	call AudioMode_SetStereoFlags
 	ret
 
 AccReplay_SendPedal_Return:
@@ -173065,7 +173065,7 @@ AccReplay_SavedExpression:
 	ldb d, 0x6
 	ldb e, 0x48
 	call SwbtWr_QueuePostEvent
-	call LABEL_FDDF91
+	call AudioMode_SetStereoFlags
 	ret
 
 AccReplay_SavedExpr_Return:
@@ -174365,7 +174365,7 @@ AccDir_Periodic_CheckCountdown:
 AccDir_Periodic_DisableAndReset:
 	anddi8 12932, 239
 	anddi8 12932, 251
-	call LABEL_FDDF91
+	call AudioMode_SetStereoFlags
 
 AccDir_Periodic_Ret:
 	ret
@@ -186692,7 +186692,7 @@ RhythmFillIn_LookupAndApply:
 	stda8 14235, a
 	calr DrumKit_UpdateStatusFlags
 	call LABEL_FDDEEF
-	call LABEL_FDDFA7
+	call AudioMode_ResetVoiceState
 	ret
 
 RhythmFillIn_PatternTable:
@@ -186801,7 +186801,7 @@ RhythmVariation_Select:
 
 RhythmVariation_PostDispatch:
 	call LABEL_FDDEEF
-	call LABEL_FDDFA7
+	call AudioMode_ResetVoiceState
 
 RhythmVariation_Return:
 	ret
@@ -194017,8 +194017,8 @@ LABEL_F6BCA0:
 	call AudioInit_RefreshToneBank
 	call NoteMap_ProcessAndMerge
 	call 0xFE0E75
-	call LABEL_FE1266
-	call LABEL_FE1215
+	call Voice_InitTablePair
+	call Voice_InitTableGroup
 	call LABEL_FEBEFC
 	call LABEL_EF09EA
 	jr LABEL_F6BCE0
@@ -231556,8 +231556,8 @@ LABEL_F8B221:
 	call AudioInit_RefreshToneBank
 	call NoteMap_ProcessAndMerge
 	call 0xFE0E75
-	call LABEL_FE1266
-	call LABEL_FE1215
+	call Voice_InitTablePair
+	call Voice_InitTableGroup
 	call LABEL_FEBEFC
 	call LABEL_FDBB32
 	inc 2, xsp
@@ -235843,7 +235843,7 @@ MainTitleControl:
 ; Manages state transitions for the sequencer/demo screen mode changes.
 ; Saves current display state bytes (SFR 36150-36153) and clears animation
 ; state variables at 0x0274A2, 0x02749E, 0x02749A. Calls CtrlPanel_SetIndicatorBit
-; to initiate the actual screen transition, then LABEL_FDDFA7 for cleanup.
+; to initiate the actual screen transition, then AudioMode_ResetVoiceState for cleanup.
 ;
 ; Animation state addresses:
 ;   0x02749A - Transition progress counter
@@ -235870,7 +235870,7 @@ LABEL_F99391:
 	st32_24 0x0274a2, xwa
 	st32_24 0x02749e, xwa
 	st32_24 0x02749a, xwa
-	call LABEL_FDDFA7
+	call AudioMode_ResetVoiceState
 	jrl LABEL_F99436
 
 SeqState_DemoModeHandler:
@@ -287019,8 +287019,8 @@ LABEL_FBB9AB:
 	call NoteMap_ProcessAndMerge
 	call 0xFE0E75
 	call NoteMap_SendAllNotesOff
-	call LABEL_FE1215
-	call LABEL_FE1266
+	call Voice_InitTableGroup
+	call Voice_InitTablePair
 	call LABEL_FEBEFC
 	pop xiz
 	pop xix
@@ -327060,7 +327060,7 @@ LABEL_FDDF67:
 LABEL_FDDF8D:
 	jp AudioInit_DispatchChanges
 
-LABEL_FDDF91:
+AudioMode_SetStereoFlags:
 	bitda 0, 64617
 	ret z
 	ordi16 50582, 128
@@ -327068,7 +327068,7 @@ LABEL_FDDF91:
 	calr LABEL_FDDDED
 	ret
 
-LABEL_FDDFA7:
+AudioMode_ResetVoiceState:
 	bitda 1, 64615
 	jr z, LABEL_FDDFC1
 	ldda16 xwa, 50580
@@ -327709,7 +327709,7 @@ LABEL_FDEA8E:
 	call AudioInit_ConfigurePanning
 	jp AudioInit_CheckStereoMode
 
-LABEL_FDEA9A:
+AudioInit_ConfigureVoiceFromFlags:
 	ldda16 xbc, 50584
 	bit 0, bc
 	jr z, LABEL_FDEADF
@@ -330327,7 +330327,7 @@ LABEL_FE0453:
 	and wa, 0xA
 	jr z, LABEL_FE046F
 	st_dri3b W, 0xFD, 0xAC, 0x00
-	call LABEL_FE592A
+	call NoteMap_MarkEntriesAboveThreshold
 
 LABEL_FE046F:
 	st_dri3b W, 0xFD, 0xAC, 0x00
@@ -330514,7 +330514,7 @@ LABEL_FE0642:
 	bit 1, wa
 	jr z, LABEL_FE065D
 	st_dri3b W, 0xFD, 0xAC, 0x00
-	call LABEL_FE592A
+	call NoteMap_MarkEntriesAboveThreshold
 
 LABEL_FE065D:
 	st_dri3b W, 0xFD, 0xAC, 0x00
@@ -330803,7 +330803,7 @@ LABEL_FE08EE:
 	cps l, 0
 	jr z, LABEL_FE0923
 	ld xwa, 0xCB7A
-	call LABEL_FE592A
+	call NoteMap_MarkEntriesAboveThreshold
 
 LABEL_FE0923:
 	ld xhl, 0xCB7A
@@ -331090,7 +331090,7 @@ RhythmMidi_CC7F_PartLoop:
 	extz de
 	ld xwa, xbc
 	ld xbc, (xsp + 2)
-	call LABEL_FE3AD3
+	call NoteMap_LookupAndAllocVoice
 	inc1_berp 0xFB
 	cpi_berp 0xFB, 5
 	jr c, RhythmMidi_CC7F_PartLoop
@@ -331129,7 +331129,7 @@ RhythmMidi_CC7D_PartLoop:
 	extz de
 	ld xwa, xbc
 	ld xbc, (xsp + 2)
-	call LABEL_FE3AD3
+	call NoteMap_LookupAndAllocVoice
 	ldto_berp A, 0xFB
 	extz wa
 	lda xbc, (xsp + 6)
@@ -331158,7 +331158,7 @@ RhythmMidi_CC_Default:
 	extz de
 	ld xwa, xbc
 	ld xbc, (xsp + 2)
-	call LABEL_FE3AD3
+	call NoteMap_LookupAndAllocVoice
 	ldto_berp A, 0xFA
 	sub a, 0x10
 	extz wa
@@ -331212,7 +331212,7 @@ RhythmMidi_CC_PostLoop:
 	extz de
 	ld xwa, xbc
 	ld xbc, (xsp + 2)
-	call LABEL_FE3AD3
+	call NoteMap_LookupAndAllocVoice
 
 RhythmMidi_CC_PostNext:
 	inc1_berp 0xFB
@@ -331484,7 +331484,7 @@ LABEL_FE0FE4:
 	bit 1, wa
 	jr z, LABEL_FE0FFC
 	st_dri3b W, 0xFD, 0xAC, 0x00
-	call LABEL_FE592A
+	call NoteMap_MarkEntriesAboveThreshold
 
 LABEL_FE0FFC:
 	st_dri3b W, 0xFD, 0xAC, 0x00
@@ -331702,7 +331702,7 @@ LABEL_FE120C:
 	st_dri3b L, 0xFD, 0xA8, 0x00
 	ret
 
-LABEL_FE1215:
+Voice_InitTableGroup:
 	st_dri3b L, 0xFD, 0x58, 0xFF
 	push_werp 0xFA
 	ldada xwa, 49662
@@ -331723,7 +331723,7 @@ LABEL_FE1234:
 	lda xwa, (xsp + 6)
 	extz de
 	ld xbc, (xsp + 2)
-	call LABEL_FE3AD3
+	call NoteMap_LookupAndAllocVoice
 	inc1_berp 0xFB
 	cpi_berp 0xFB, 5
 	jr c, LABEL_FE1234
@@ -331733,7 +331733,7 @@ LABEL_FE125D:
 	st_dri3b L, 0xFD, 0xA8, 0x00
 	ret
 
-LABEL_FE1266:
+Voice_InitTablePair:
 	st_dri3b L, 0xFD, 0x58, 0xFF
 	push_werp 0xFA
 	ldada xwa, 49662
@@ -333929,7 +333929,7 @@ LABEL_FE26FE:
 	jrl NoteMap_EncodeExtControlChange
 
 LABEL_FE2728:
-	call LABEL_FE1215
+	call Voice_InitTableGroup
 	ld xwa, (xsp + 6)
 	ld (xwa + 1), 0x0
 	ldb l, 0x0
@@ -334173,7 +334173,7 @@ LABEL_FE2953:
 	jrl NoteMap_EncodeControlChange
 
 LABEL_FE297D:
-	call LABEL_FE1266
+	call Voice_InitTablePair
 	ld xwa, (xsp + 6)
 	ld (xwa + 1), 0x0
 	ldb l, 0x0
@@ -335788,7 +335788,7 @@ LABEL_FE3ACF:
 	lda xsp, (xsp + 10)
 	ret
 
-LABEL_FE3AD3:
+NoteMap_LookupAndAllocVoice:
 	st_dri3b L, 0xFD, 0x56, 0xFF
 	lda_dri3 XIY, 0xFD, 0xA4, 0x00
 	st_dri3l XBC, 0xFD, 0xA6, 0x00
@@ -339005,7 +339005,7 @@ LABEL_FE590B:
 	call AccWrap_AutoPlayZoneTrack
 	jp LABEL_FE946B
 
-LABEL_FE592A:
+NoteMap_MarkEntriesAboveThreshold:
 	dec 6, xsp
 	push xiz
 	ld (xsp + 6), xwa
@@ -339621,7 +339621,7 @@ LABEL_FE5E1E:
 	ld c, a
 	extz bc
 	ld wa, de
-	calr LABEL_FE66F8
+	calr Note_CheckTransposeRange
 	cps l, 0
 	jr nz, LABEL_FE5EBC
 	cp (xsp + 4), 0x0
@@ -339692,7 +339692,7 @@ SndParam_ApplyChannelEntry:
 	ld c, a
 	extz bc
 	ld wa, de
-	calr LABEL_FE66F8
+	calr Note_CheckTransposeRange
 	cps l, 0
 	jr nz, LABEL_FE5F62
 	cp (xsp + 6), 0x0
@@ -339905,7 +339905,7 @@ LABEL_FE60DF:
 	ld c, a
 	extz bc
 	ld wa, de
-	calr LABEL_FE66F8
+	calr Note_CheckTransposeRange
 	cps l, 0
 	jr z, LABEL_FE6120
 	cp (xsp + 8), 0xFF
@@ -340052,7 +340052,7 @@ LABEL_FE61E1:
 	ld c, a
 	extz bc
 	ld wa, de
-	calr LABEL_FE66F8
+	calr Note_CheckTransposeRange
 	cps l, 0
 	jr nz, LABEL_FE62A0
 	cp (xsp + 4), 0x0
@@ -340237,7 +340237,7 @@ LABEL_FE638B:
 	ld c, a
 	extz bc
 	ld wa, de
-	calr LABEL_FE66F8
+	calr Note_CheckTransposeRange
 	cps l, 0
 	jr nz, LABEL_FE644A
 	cp (xsp + 4), 0x0
@@ -340601,7 +340601,7 @@ LABEL_FE66D7:
 	inc 6, xsp
 	ret
 
-LABEL_FE66F8:
+Note_CheckTransposeRange:
 	dec 4, xsp
 	ld (xsp), c
 	ld (xsp + 2), a
@@ -341958,7 +341958,7 @@ LABEL_FE756F:
 	bit 1, wa
 	jr z, LABEL_FE7588
 	st_dri3b W, 0xFD, 0xA4, 0x00
-	call LABEL_FE592A
+	call NoteMap_MarkEntriesAboveThreshold
 
 LABEL_FE7588:
 	st_dri3b W, 0xFD, 0xA4, 0x00
@@ -343293,15 +343293,15 @@ RhythmBuf_EventDispatchLoop:
 	jrl z, LABEL_FE87B9
 	ld wa, (xsp + 4)
 	cp wa, 0xC8
-	jr z, LABEL_FE8433
+	jr z, Rhythm_ProcessEventDispatch
 	cp wa, 0xC7
-	jr z, LABEL_FE8433
+	jr z, Rhythm_ProcessEventDispatch
 	cp wa, 0xC6
-	jr z, LABEL_FE8433
+	jr z, Rhythm_ProcessEventDispatch
 	cp wa, 0xC5
-	jr z, LABEL_FE8433
+	jr z, Rhythm_ProcessEventDispatch
 	cp wa, 0xC4
-	jr z, LABEL_FE8433
+	jr z, Rhythm_ProcessEventDispatch
 	sub wa, 0xD0
 	cps wa, 0
 	jr lt, RhythmBuf_EventDispatchLoop
@@ -343313,7 +343313,7 @@ RhythmBuf_EventDispatchLoop:
 	lda_24 xix, 0xfe8433
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
-LABEL_FE8433:
+Rhythm_ProcessEventDispatch:
 	call RhythmBuf_ReadAlternate
 	ld (xsp + 6), hl
 	ld wa, (xsp + 6)
@@ -345455,7 +345455,7 @@ LABEL_FE980C:
 	.byte 0x01, 0x02, 0x01, 0x02, 0x01, 0x01, 0x02, 0x01
 	.byte 0x02, 0x01, 0x02, 0x01, 0x01, 0x02, 0x05, 0x06
 
-LABEL_FE981C:
+Voice_ComputeNoteBitPosition:
 	ld l, c
 	xor h, h
 	dec 1, hl
@@ -345589,11 +345589,11 @@ LABEL_FE9956:
 	jr LABEL_FE9984
 
 LABEL_FE996E:
-	calr LABEL_FE99DE
+	calr Voice_UpdateNoteBitmap
 	cps w, 0
 	jr nz, LABEL_FE9989
 	decdi8_24 1, 52965
-	calr LABEL_FE99DE
+	calr Voice_UpdateNoteBitmap
 	incdi8_24 1, 52965
 	jr LABEL_FE9989
 
@@ -345645,12 +345645,12 @@ LABEL_FE99DA:
 LABEL_FE99DD:
 	ret
 
-LABEL_FE99DE:
+Voice_UpdateNoteBitmap:
 	push xix
 	push xiz
 	ld8_24 c, 0x00cee5
 	ld b, c
-	calr LABEL_FE981C
+	calr Voice_ComputeNoteBitPosition
 	ld xiy, 0xEEBE44
 	calr LABEL_FE98B8
 	cps a, 0
@@ -346028,7 +346028,7 @@ LABEL_FE9D91:
 	ld8_24 c, 0x00cee5
 	ld b, c
 	pushw bc
-	calr LABEL_FE981C
+	calr Voice_ComputeNoteBitPosition
 	ld hl, de
 	and xhl, 0x7FF
 	sla hl, 1
@@ -346049,7 +346049,7 @@ LABEL_FE9DBE:
 
 LABEL_FE9DCE:
 	pushw bc
-	calr LABEL_FE981C
+	calr Voice_ComputeNoteBitPosition
 	ld hl, de
 	and hl, 0x7FF
 	sla hl, 1
@@ -346089,7 +346089,7 @@ LABEL_FE9E36:
 	ld c, l
 	ld b, h
 	push xhl
-	calr LABEL_FE981C
+	calr Voice_ComputeNoteBitPosition
 	ld hl, de
 	and hl, 0x7FF
 	sla hl, 1
@@ -346137,7 +346137,7 @@ LABEL_FE9E91:
 	ld bc, hl
 	inc 1, bc
 	ld b, c
-	calr LABEL_FE981C
+	calr Voice_ComputeNoteBitPosition
 	ld hl, de
 	and hl, 0x7FF
 	sla hl, 1
@@ -346801,11 +346801,11 @@ LABEL_FEA761:
 	ld a, c
 	cp a, 0xC
 	jr ule, LABEL_FEA798
-	call LABEL_FE99DE
+	call Voice_UpdateNoteBitmap
 	cps hl, 0
 	jr nz, LABEL_FEA792
 	decdi8 1, 52965
-	call LABEL_FE99DE
+	call Voice_UpdateNoteBitmap
 	incdi8 1, 52965
 
 LABEL_FEA792:
@@ -346813,7 +346813,7 @@ LABEL_FEA792:
 	jr LABEL_FEA7A0
 
 LABEL_FEA798:
-	call LABEL_FE99DE
+	call Voice_UpdateNoteBitmap
 	call LABEL_FE9F18
 
 LABEL_FEA7A0:
@@ -347645,35 +347645,35 @@ LABEL_FEB932:
 	cp xwa, 0xFFFFFFFF
 	jr z, LABEL_FEB945
 	lds wa, 0
-	call LABEL_FEF6FC
+	call COMM_SendPartDataBlock
 
 LABEL_FEB945:
 	ldda32 xwa, 53176
 	cp xwa, 0xFFFFFFFF
 	jr z, LABEL_FEB957
 	lds wa, 1
-	call LABEL_FEF6FC
+	call COMM_SendPartDataBlock
 
 LABEL_FEB957:
 	ldda32 xwa, 53180
 	cp xwa, 0xFFFFFFFF
 	jr z, LABEL_FEB969
 	lds wa, 4
-	call LABEL_FEF6FC
+	call COMM_SendPartDataBlock
 
 LABEL_FEB969:
 	ldda32 xwa, 53184
 	cp xwa, 0xFFFFFFFF
 	jr z, LABEL_FEB97B
 	lds wa, 2
-	call LABEL_FEF6FC
+	call COMM_SendPartDataBlock
 
 LABEL_FEB97B:
 	ldda32 xwa, 53188
 	cp xwa, 0xFFFFFFFF
 	jr z, LABEL_FEB98D
 	lds wa, 3
-	call LABEL_FEF6FC
+	call COMM_SendPartDataBlock
 
 LABEL_FEB98D:
 	cpdi16 53192, 65535
@@ -348561,7 +348561,7 @@ LABEL_FEC1BE:
 	lda xsp, (xsp + 14)
 	ret
 
-LABEL_FEC1C3:
+Acc_TransitionPlayMode:
 	ldda16 xwa, 59877
 	bit 0, wa
 	jr z, LABEL_FEC1DA
@@ -348574,7 +348574,7 @@ LABEL_FEC1DA:
 	anddi16 59877, 65531
 	ret
 
-LABEL_FEC1E1:
+Acc_StopPlayMode:
 	lds wa, 3
 	calr AccWrap_PlayModeStateMachine
 	anddi16 59877, 65533
@@ -349253,12 +349253,12 @@ LABEL_FEC83A:
 	cps l, 0
 	jr z, LABEL_FEC84C
 	lds wa, 1
-	calr LABEL_FEDDA2
+	calr SoundParam_InitDefaultBanks
 	jr LABEL_FEC851
 
 LABEL_FEC84C:
 	lds wa, 0
-	calr LABEL_FEDDA2
+	calr SoundParam_InitDefaultBanks
 
 LABEL_FEC851:
 	lds32 xwa, 4
@@ -350592,7 +350592,7 @@ LABEL_FED334:
 	pushw iz
 	calr MIDI_ResetAllChannels
 	lds wa, 2
-	calr LABEL_FEDDA2
+	calr SoundParam_InitDefaultBanks
 	lds32 xwa, 4
 	call SndParam_LookupReadOnly
 	ld wa, hl
@@ -350677,7 +350677,7 @@ LABEL_FED406:
 	pushw iz
 	calr MIDI_ResetAllChannels
 	lds wa, 2
-	calr LABEL_FEDDA2
+	calr SoundParam_InitDefaultBanks
 	lds32 xwa, 4
 	call SndParam_LookupReadOnly
 	ld wa, hl
@@ -351178,7 +351178,7 @@ LABEL_FED9E6:
 	calr MIDI_ResetAllChannels
 	stdi8 4330, 1
 	lds wa, 1
-	calr LABEL_FEDDA2
+	calr SoundParam_InitDefaultBanks
 	stdi16 4597, 32888
 	lds32 xwa, 4
 	ldw bc, 0x76
@@ -351628,7 +351628,7 @@ LABEL_FEDD9D:
 	lda xsp, (xsp + 10)
 	ret
 
-LABEL_FEDDA2:
+SoundParam_InitDefaultBanks:
 	lda xsp, (xsp - 96)
 	pushw iz
 	ld xiy, 0xEEC208
@@ -353804,7 +353804,7 @@ LABEL_FEF43E:
 	pop xiz
 	ret
 
-LABEL_FEF455:
+COMM_BuildAndSendPacket:
 	ldada xde, 58164
 	ld (xde), 0x2C
 	ld (xde + 1), 0x30
@@ -354063,7 +354063,7 @@ LABEL_FEF6F9:
 LABEL_FEF6FB:
 	ret
 
-LABEL_FEF6FC:
+COMM_SendPartDataBlock:
 	dec 2, xsp
 	push_werp 0xFA
 	ld (xsp + 2), a
@@ -354375,7 +354375,7 @@ LABEL_FEF973:
 LABEL_FEF993:
 	ldw wa, 0xFF
 	ldw bc, 0xFF
-	jp LABEL_FEF455
+	jp COMM_BuildAndSendPacket
 
 LABEL_FEF99D:
 	ret
@@ -354386,7 +354386,7 @@ LABEL_FEF99E:
 	ret nz
 	ldw wa, 0xFF
 	ldw bc, 0xFF
-	call LABEL_FEF455
+	call COMM_BuildAndSendPacket
 	ret
 
 LABEL_FEF9B3:
@@ -354969,7 +354969,7 @@ PostTmLoad:
 LABEL_FF04D6:
 	ldw wa, 0xFF
 	ldw bc, 0xFF
-	call LABEL_FEF455
+	call COMM_BuildAndSendPacket
 
 LABEL_FF04E0:
 	jp FDemoText_RefreshFullDisplay
@@ -354982,7 +354982,7 @@ PostTmSave:
 	ret ge
 	ldw wa, 0xFF
 	ldw bc, 0xFF
-	call LABEL_FEF455
+	call COMM_BuildAndSendPacket
 	ret
 
 PostTmSave_ByteBlock:
@@ -355012,7 +355012,7 @@ PostTmSave_Success:
 PostTmSave_Failure:
 	ldw wa, 0xFF
 	ldw bc, 0xFF
-	call LABEL_FEF455
+	call COMM_BuildAndSendPacket
 
 PostTmSave_JumpToRestore:
 	jp FDemoText_RefreshFullDisplay
