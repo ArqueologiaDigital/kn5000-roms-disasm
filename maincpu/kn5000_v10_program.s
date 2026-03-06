@@ -43556,7 +43556,7 @@ LABEL_EF0988:
 	scc16 z, hl
 	ret
 
-LABEL_EF0992:
+Vga_WritePortShortDelay:
 	lds de, 0
 
 LABEL_EF0994:
@@ -43574,26 +43574,26 @@ Vga_SelectWritePlane:
 	ld (xsp), a
 	ldw wa, 0x3C4
 	lds bc, 6
-	calr LABEL_EF0992
+	calr Vga_WritePortShortDelay
 	ldw wa, 0x3C5
 	lds bc, 1
-	calr LABEL_EF0992
+	calr Vga_WritePortShortDelay
 	ldw wa, 0x3C4
 	ldw bc, 0x8
-	calr LABEL_EF0992
+	calr Vga_WritePortShortDelay
 	ld a, (xsp)
 	sll a, 4
 	set 0, a
 	ld c, a
 	extz bc
 	ldw wa, 0x3C5
-	calr LABEL_EF0992
+	calr Vga_WritePortShortDelay
 	ldw wa, 0x3C4
 	lds bc, 6
-	calr LABEL_EF0992
+	calr Vga_WritePortShortDelay
 	ldw wa, 0x3C5
 	lds bc, 0
-	calr LABEL_EF0992
+	calr Vga_WritePortShortDelay
 	inc 2, xsp
 	ret
 
@@ -161526,7 +161526,7 @@ LABEL_F53E0B:
 	nop
 	ret
 
-LABEL_F53E55:
+AccTuning_CopyAllPartsFromStyle:
 	push xiy
 	ld xhl, xiy
 	add xiy, 0x18
@@ -164952,7 +164952,7 @@ LABEL_F5619C:
 	cpdi8 13029, 128
 	jr c, LABEL_F561B0
 	ldda32 xiy, 13006
-	call LABEL_F53E55
+	call AccTuning_CopyAllPartsFromStyle
 	jr LABEL_F561C5
 
 LABEL_F561B0:
@@ -165032,7 +165032,7 @@ LABEL_F56281:
 LABEL_F5628F:
 	call AccVoice_ResolveParamAddr
 	calr LABEL_F562C6
-	call LABEL_F53E55
+	call AccTuning_CopyAllPartsFromStyle
 	ordi8 13100, 63
 	bitda 0, 13055
 	jr z, LABEL_F562B6
@@ -165059,7 +165059,7 @@ LABEL_F562C6:
 LABEL_F562DA:
 	ldda32 xiy, 13006
 	calr LABEL_F562C6
-	call LABEL_F53E55
+	call AccTuning_CopyAllPartsFromStyle
 	ordi8 13100, 63
 	anddi8 13078, 192
 	anddi8 13079, 192
@@ -168649,7 +168649,7 @@ AccStyle_LoadAndApply:
 	stda32 13011, xiy
 	call LABEL_F56373
 	ldda32 xiy, 13006
-	call LABEL_F53E55
+	call AccTuning_CopyAllPartsFromStyle
 	ordi8 13100, 63
 	ldda8 w, 13029
 	call LABEL_F54688
@@ -168857,7 +168857,7 @@ AccVoice_Reset_LoadParams:
 	cpdi8 13029, 128
 	jr c, AccVoice_Reset_Extended
 	ldda32 xiy, 13006
-	call LABEL_F53E55
+	call AccTuning_CopyAllPartsFromStyle
 	jr AccVoice_Reset_ApplyAll
 
 AccVoice_Reset_Extended:
@@ -168989,7 +168989,7 @@ AccVoice_Reassign_MatchB:
 
 AccVoice_Reassign_Apply:
 	calr AccInit_AllPartPositions
-	call LABEL_F53E55
+	call AccTuning_CopyAllPartsFromStyle
 	ordi8 13100, 63
 	jr AccVoice_Reassign_Return
 
@@ -169035,7 +169035,7 @@ AccVoice_Split_LoadAndApply:
 	cpdi8 13029, 128
 	jr c, AccVoice_Split_StyleMode
 	ldda32 xiy, 13006
-	call LABEL_F53E55
+	call AccTuning_CopyAllPartsFromStyle
 	jr AccVoice_Split_Apply63
 
 AccVoice_Split_StyleMode:
@@ -169126,7 +169126,7 @@ AccVoice_SplitReassign_MatchRev:
 
 AccVoice_SplitReassign_Apply:
 	calr AccInit_AllPartPositions
-	call LABEL_F53E55
+	call AccTuning_CopyAllPartsFromStyle
 	ordi8 13100, 63
 	ret
 
@@ -169220,7 +169220,7 @@ AccVoice_ThirdLayer_LoadParams:
 	cpdi8 13029, 128
 	jr c, AccVoice_ThirdLayer_StyleMode
 	ldda32 xiy, 13006
-	call LABEL_F53E55
+	call AccTuning_CopyAllPartsFromStyle
 	jr AccVoice_ThirdLayer_Apply
 
 AccVoice_ThirdLayer_StyleMode:
@@ -169310,7 +169310,7 @@ AccVoice_ThirdReassign_MatchRev:
 
 AccVoice_ThirdReassign_Apply:
 	calr AccInit_AllPartPositions
-	call LABEL_F53E55
+	call AccTuning_CopyAllPartsFromStyle
 	ordi8 13100, 63
 	ret
 
@@ -185250,7 +185250,7 @@ LABEL_F63B44:
 	jr LABEL_F63B4C
 
 LABEL_F63B49:
-	calr LABEL_F63EDC
+	calr RhythmBuf_FillEmptyPattern
 
 LABEL_F63B4C:
 	anddi8 13744, 251
@@ -185264,7 +185264,7 @@ LABEL_F63B4C:
 	jr LABEL_F63B6E
 
 LABEL_F63B6B:
-	calr LABEL_F63EDC
+	calr RhythmBuf_FillEmptyPattern
 
 LABEL_F63B6E:
 	anddi8 13744, 251
@@ -185278,7 +185278,7 @@ LABEL_F63B6E:
 	jr LABEL_F63B90
 
 LABEL_F63B8D:
-	calr LABEL_F63EDC
+	calr RhythmBuf_FillEmptyPattern
 
 LABEL_F63B90:
 	anddi8 13744, 251
@@ -185292,7 +185292,7 @@ LABEL_F63B90:
 	jr LABEL_F63BB2
 
 LABEL_F63BAF:
-	calr LABEL_F63EDC
+	calr RhythmBuf_FillEmptyPattern
 
 LABEL_F63BB2:
 	anddi8 13744, 251
@@ -185306,7 +185306,7 @@ LABEL_F63BB2:
 	jr LABEL_F63BD4
 
 LABEL_F63BD1:
-	calr LABEL_F63EDC
+	calr RhythmBuf_FillEmptyPattern
 
 LABEL_F63BD4:
 	anddi8 13744, 251
@@ -185369,7 +185369,7 @@ LABEL_F63CC9:
 	jr LABEL_F63CFB
 
 LABEL_F63CF8:
-	calr LABEL_F63EDC
+	calr RhythmBuf_FillEmptyPattern
 
 LABEL_F63CFB:
 	anddi8 13744, 251
@@ -185395,7 +185395,7 @@ LABEL_F63CFB:
 	jr LABEL_F63D47
 
 LABEL_F63D44:
-	calr LABEL_F63EDC
+	calr RhythmBuf_FillEmptyPattern
 
 LABEL_F63D47:
 	anddi8 13744, 251
@@ -185421,7 +185421,7 @@ LABEL_F63D47:
 	jr LABEL_F63D93
 
 LABEL_F63D90:
-	calr LABEL_F63EDC
+	calr RhythmBuf_FillEmptyPattern
 
 LABEL_F63D93:
 	anddi8 13744, 251
@@ -185447,7 +185447,7 @@ LABEL_F63D93:
 	jr LABEL_F63DDF
 
 LABEL_F63DDC:
-	calr LABEL_F63EDC
+	calr RhythmBuf_FillEmptyPattern
 
 LABEL_F63DDF:
 	anddi8 13744, 251
@@ -185473,7 +185473,7 @@ LABEL_F63DDF:
 	jr LABEL_F63E2B
 
 LABEL_F63E28:
-	calr LABEL_F63EDC
+	calr RhythmBuf_FillEmptyPattern
 
 LABEL_F63E2B:
 	anddi8 13744, 251
@@ -185564,7 +185564,7 @@ LABEL_F63EC6:
 	.byte 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x01, 0x02
 	.byte 0x03, 0x04, 0x05, 0x06, 0x07, 0x08
 
-LABEL_F63EDC:
+RhythmBuf_FillEmptyPattern:
 	ldda32 xiy, 13664
 	ld l, (xiy + 12)
 	xor h, h
@@ -188948,19 +188948,19 @@ LABEL_F66F0B:
 
 LABEL_F66F43:
 	stdi8 14281, 64
-	calr LABEL_F6710B
+	calr RhythmDrum_LoadVoiceParams
 	stdi8 14281, 32
-	calr LABEL_F6710B
+	calr RhythmDrum_LoadVoiceParams
 	stdi8 14281, 16
-	calr LABEL_F6710B
+	calr RhythmDrum_LoadVoiceParams
 	stdi8 14281, 8
-	calr LABEL_F6710B
+	calr RhythmDrum_LoadVoiceParams
 	stdi8 14281, 4
-	calr LABEL_F6710B
+	calr RhythmDrum_LoadVoiceParams
 	stdi8 14281, 2
-	calr LABEL_F6710B
+	calr RhythmDrum_LoadVoiceParams
 	stdi8 14281, 1
-	calr LABEL_F6710B
+	calr RhythmDrum_LoadVoiceParams
 	ret
 
 LABEL_F66F7C:
@@ -189040,7 +189040,7 @@ LABEL_F67042:
 	ld (xix), w
 
 LABEL_F67058:
-	calr LABEL_F6710B
+	calr RhythmDrum_LoadVoiceParams
 	calr LABEL_F67459
 	calr LABEL_F67062
 	ret
@@ -189119,7 +189119,7 @@ LABEL_F670FE:
 	ld a, (xix)
 	ret
 
-LABEL_F6710B:
+RhythmDrum_LoadVoiceParams:
 	calr Rhythm_MapChannelToDrumIndex
 	ld xix, 0x37AB
 	add xix, xbc
@@ -189536,7 +189536,7 @@ LABEL_F67459:
 	push xix
 	ldir85
 	pop xix
-	calr LABEL_F6710B
+	calr RhythmDrum_LoadVoiceParams
 	ret
 
 LABEL_F67482:
@@ -189587,7 +189587,7 @@ LABEL_F674C9:
 
 LABEL_F674CB:
 	ld (xix), c
-	calr LABEL_F6710B
+	calr RhythmDrum_LoadVoiceParams
 	calr LABEL_F67062
 	ret
 
@@ -200631,13 +200631,13 @@ LABEL_F722AB:
 	ldb a, 0x91
 
 LABEL_F722F3:
-	calr LABEL_F72B01
+	calr MidiSeqBuf_WriteByte
 	calr LABEL_F72A9B
 	ldda8 a, 32567
-	calr LABEL_F72B01
+	calr MidiSeqBuf_WriteByte
 	calr LABEL_F72A9B
 	ldda8 a, 32568
-	calr LABEL_F72B01
+	calr MidiSeqBuf_WriteByte
 	pop xix
 	pop xhl
 	ldda8 a, 32568
@@ -200653,21 +200653,21 @@ LABEL_F722F3:
 	ld (xhl + 5), a
 	calr LABEL_F72A9B
 	ldda8 a, 32569
-	calr LABEL_F72B01
+	calr MidiSeqBuf_WriteByte
 	calr LABEL_F72A9B
 	ldb a, 0x10
-	calr LABEL_F72B01
+	calr MidiSeqBuf_WriteByte
 	calr LABEL_F72A9B
 	ldb a, 0x0
-	calr LABEL_F72B01
+	calr MidiSeqBuf_WriteByte
 	calr LABEL_F72A9B
 	cpdi8 32340, 0
 	jr z, LABEL_F72367
 	ldda8 a, 32341
-	calr LABEL_F72B01
+	calr MidiSeqBuf_WriteByte
 	calr LABEL_F72A9B
 	ldda8 a, 32342
-	calr LABEL_F72B01
+	calr MidiSeqBuf_WriteByte
 	calr LABEL_F72A9B
 
 LABEL_F72367:
@@ -200755,12 +200755,12 @@ LABEL_F72405:
 	ld a, e
 	and a, 0x7F
 	pushw de
-	calr LABEL_F72B01
+	calr MidiSeqBuf_WriteByte
 	calr LABEL_F72AD8
 	popw de
 	ld a, d
 	and a, 0x7F
-	calr LABEL_F72B01
+	calr MidiSeqBuf_WriteByte
 	popw wa
 	stda16 32530, xwa
 	popw wa
@@ -201496,7 +201496,7 @@ LABEL_F72AFC:
 	stda16 32530, xwa
 	ret
 
-LABEL_F72B01:
+MidiSeqBuf_WriteByte:
 	push xix
 	push xhl
 	ldda16 xhl, 32528
@@ -302851,7 +302851,7 @@ LABEL_FC9663:
 	stdi16 37086, 0
 
 LABEL_FC9684:
-	calr LABEL_FC9D8F
+	calr SwbtWr_AppendFixedParamBlock
 	ret
 
 LABEL_FC9688:
@@ -302877,7 +302877,7 @@ SwbtWr_WriteParamBlock:
 	stdi16 37086, 0
 
 LABEL_FC96BF:
-	jrl LABEL_FC9D8F
+	jrl SwbtWr_AppendFixedParamBlock
 	dec 2, xsp
 	ld (xsp), a
 	ldda8 c, 37169
@@ -303347,7 +303347,7 @@ LABEL_FC9D41:
 	.byte 0x3f, 0x48, 0x6e, 0x05, 0xb7, 0x00, 0x0f, 0x68
 	.byte 0xcf, 0x27, 0x00, 0xef, 0x60, 0x0e
 
-LABEL_FC9D8F:
+SwbtWr_AppendFixedParamBlock:
 	ldda16 xwa, 37086
 	ld de, wa
 	inc 1, wa
@@ -349747,7 +349747,7 @@ LABEL_FECC1A:
 	jr gt, LABEL_FECC40
 
 LABEL_FECC35:
-	calr LABEL_FECCDF
+	calr SongFile_DecodeMidiEvent
 	ld iz, hl
 	ld wa, iz
 	cps wa, 0
@@ -349841,7 +349841,7 @@ LABEL_FECCDB:
 	inc 4, xsp
 	ret
 
-LABEL_FECCDF:
+SongFile_DecodeMidiEvent:
 	st_dri3b L, 0xFD, 0xF0, 0xFD
 	pushw iz
 	lds iz, 0
@@ -349870,7 +349870,7 @@ LABEL_FECD18:
 	ldada xwa, 59897
 	ld xbc, xwa
 	ld wa, de
-	calr LABEL_FEE285
+	calr SysexRingBuf_WriteBytes
 	cps hl, 0
 	jr ge, LABEL_FECD39
 	ldw hl, 0xFFFD
@@ -350206,7 +350206,7 @@ LABEL_FED006:
 	ldada xwa, 59899
 	ld xbc, xwa
 	ld wa, de
-	calr LABEL_FEE285
+	calr SysexRingBuf_WriteBytes
 	cps hl, 0
 	jr ge, LABEL_FED06F
 	ldw hl, 0xFFFD
@@ -351869,7 +351869,7 @@ LABEL_FEDFDB:
 	jr ge, LABEL_FEDFEB
 
 LABEL_FEDFE4:
-	calr LABEL_FECCDF
+	calr SongFile_DecodeMidiEvent
 	cps hl, 0
 	jr z, LABEL_FEDFDB
 
@@ -352185,7 +352185,7 @@ LABEL_FEE281:
 	inc 6, xsp
 	ret
 
-LABEL_FEE285:
+SysexRingBuf_WriteBytes:
 	dec 6, xsp
 	pushw iz
 	ld (xsp + 4), xbc
