@@ -77,7 +77,7 @@ SetupFlashFunc:
 
 SetupFlash_HandleLoadEvent:
 	lds wa, 6
-	call LABEL_FC5625
+	call Audio_DispatchCommand
 
 SetupFlash_Return:
 	lds32 xhl, 0
