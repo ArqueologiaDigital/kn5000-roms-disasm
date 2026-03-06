@@ -96461,7 +96461,7 @@ LABEL_F27291:
 	djnz xbc, LABEL_F27266
 	stda32 4376, xix
 	cpdi8 6709, 0
-	jrl z, LABEL_F277BD
+	jrl z, SMF_FinishChannelAndGetNextEvent
 	call BitMapOut_ComputeRegionDelta
 	stdi8 10359, 0
 
@@ -96488,19 +96488,19 @@ LABEL_F272A9:
 	cp hl, 0xFFFF
 	jrl z, SMF_AdvanceChannelScan
 	cps c, 0
-	jr z, LABEL_F272F8
+	jr z, SMF_WriteChannelNoteData
 	push xhl
 	xor hl, hl
 
 LABEL_F272ED:
 	pop xhl
-	jr LABEL_F272F8
+	jr SMF_WriteChannelNoteData
 	cp l, c
 	jr z, LABEL_F272ED
 	pop xhl
-	jrl LABEL_F277BD
+	jrl SMF_FinishChannelAndGetNextEvent
 
-LABEL_F272F8:
+SMF_WriteChannelNoteData:
 	st_dri3b E, 0x07, 0xF4, 0xEC
 	ld c, (xiy + 256)
 	ld d, (xiy + 1)
@@ -96600,7 +96600,7 @@ LABEL_F273B4:
 	jr lt, LABEL_F273DC
 	pop xbc
 	pop xwa
-	jp LABEL_F27474
+	jp SMF_WriteChannelVolume
 
 LABEL_F273DC:
 	pop xbc
@@ -96680,14 +96680,14 @@ LABEL_F27448:
 	jr lt, LABEL_F2746E
 	pop xbc
 	pop xwa
-	jp LABEL_F27474
+	jp SMF_WriteChannelVolume
 
 LABEL_F2746E:
 	pop xbc
 	pop xwa
 	jp SMF_FlushAndFinalize
 
-LABEL_F27474:
+SMF_WriteChannelVolume:
 	ldda8 a, 6881
 	or a, 0xB0
 	ldb w, 0x7
@@ -97129,7 +97129,7 @@ SMF_AdvanceChannelScan:
 	cpdi8 10359, 15
 	jrl ule, LABEL_F272A9
 
-LABEL_F277BD:
+SMF_FinishChannelAndGetNextEvent:
 	call SMF_ChannelHelperReturn
 	xor wa, wa
 	stda16 3942, xwa
@@ -98399,7 +98399,7 @@ LABEL_F281B5:
 
 LABEL_F281BB:
 	cpdi16 4347, 0
-	jr nz, LABEL_F281DF
+	jr nz, SMF_FinalizeAndStartPlayback
 	call SMF_FlushToFile
 	push xwa
 	push xbc
@@ -98409,14 +98409,14 @@ LABEL_F281BB:
 	jr lt, LABEL_F281D9
 	pop xbc
 	pop xwa
-	jp LABEL_F281DF
+	jp SMF_FinalizeAndStartPlayback
 
 LABEL_F281D9:
 	pop xbc
 	pop xwa
 	jp SMF_FlushAndFinalize
 
-LABEL_F281DF:
+SMF_FinalizeAndStartPlayback:
 	call SMF_CheckAndFlush
 	call Vga_RestoreMultiPlaneDisplay
 	ldda8 a, 4599
@@ -102699,9 +102699,9 @@ SongNameBoxProc:
 	cp xiz, 0x1C70009
 	jr z, LABEL_F2B439
 	cp xiz, 0x1C0000C
-	jr z, LABEL_F2B41B
+	jr z, SongNameBox_HandleFocusGained
 	cp xiz, 0x1C0000B
-	jr z, LABEL_F2B41B
+	jr z, SongNameBox_HandleFocusGained
 	cp xiz, 0x1C00002
 	jr z, LABEL_F2B40C
 	cp xiz, 0x1C00001
@@ -102720,7 +102720,7 @@ LABEL_F2B414:
 	call 0xFA4409
 	jrl LABEL_F2B49F
 
-LABEL_F2B41B:
+SongNameBox_HandleFocusGained:
 	ld xwa, (xsp + 24)
 	ld xbc, xiz
 	ld xde, (xsp + 20)
@@ -102793,9 +102793,9 @@ ComporserNameBoxProc:
 	cp xiz, 0x1C70009
 	jr z, LABEL_F2B528
 	cp xiz, 0x1C0000C
-	jr z, LABEL_F2B50A
+	jr z, SongNameBox2_HandleFocusGained
 	cp xiz, 0x1C0000B
-	jr z, LABEL_F2B50A
+	jr z, SongNameBox2_HandleFocusGained
 	cp xiz, 0x1C00002
 	jr z, LABEL_F2B4FB
 	cp xiz, 0x1C00001
@@ -102814,7 +102814,7 @@ LABEL_F2B503:
 	call 0xFA4409
 	jrl LABEL_F2B58E
 
-LABEL_F2B50A:
+SongNameBox2_HandleFocusGained:
 	ld xwa, (xsp + 24)
 	ld xbc, xiz
 	ld xde, (xsp + 20)
@@ -103008,9 +103008,9 @@ AcDiskFileNameBoxProc:
 	cp xbc, 0x1C70001
 	jr z, LABEL_F2B72C
 	cp xbc, 0x1C0000C
-	jr z, LABEL_F2B714
+	jr z, AcDiskFileName_HandleFocusGained
 	cp xbc, 0x1C0000B
-	jr z, LABEL_F2B714
+	jr z, AcDiskFileName_HandleFocusGained
 	cp xbc, 0x1C00002
 	jr z, LABEL_F2B70C
 	cp xbc, 0x1C00001
@@ -103030,7 +103030,7 @@ LABEL_F2B70E:
 	call 0xFA4409
 	jr LABEL_F2B76E
 
-LABEL_F2B714:
+AcDiskFileName_HandleFocusGained:
 	ld xwa, xiz
 	call 0xFA4409
 	ld xwa, 0x147001D
@@ -103079,9 +103079,9 @@ AcSmfFileNameBoxProc:
 	cp xbc, 0x1C70002
 	jr z, LABEL_F2B7D3
 	cp xbc, 0x1C0000C
-	jr z, LABEL_F2B7BB
+	jr z, AcSmfFileName_HandleFocusGained
 	cp xbc, 0x1C0000B
-	jr z, LABEL_F2B7BB
+	jr z, AcSmfFileName_HandleFocusGained
 	cp xbc, 0x1C00002
 	jr z, LABEL_F2B7B3
 	cp xbc, 0x1C00001
@@ -103101,7 +103101,7 @@ LABEL_F2B7B5:
 	call 0xFA4409
 	jr LABEL_F2B815
 
-LABEL_F2B7BB:
+AcSmfFileName_HandleFocusGained:
 	ld xwa, xiz
 	call 0xFA4409
 	ld xwa, 0x147001D
@@ -103528,7 +103528,7 @@ LABEL_F2BB9A:
 	ld xde, (xsp + 4)
 	call 0xFA9660
 	or xhl, xhl
-	jr z, LABEL_F2BBE9
+	jr z, IvNamingExit_ForwardEvent
 	call 0xFA5867
 	cp xhl, 0x1A0008F
 	jr nz, LABEL_F2BBCA
@@ -103540,7 +103540,7 @@ LABEL_F2BB9A:
 LABEL_F2BBCA:
 	call 0xFA5867
 	cp xhl, 0x1A000A7
-	jr nz, LABEL_F2BBE9
+	jr nz, IvNamingExit_ForwardEvent
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00015
 	ld xde, 0x1A00083
@@ -103548,7 +103548,7 @@ LABEL_F2BBCA:
 LABEL_F2BBE5:
 	call PostEvent
 
-LABEL_F2BBE9:
+IvNamingExit_ForwardEvent:
 	ld xwa, (xsp + 8)
 	ld xbc, xiz
 	ld xde, (xsp + 4)
@@ -104586,7 +104586,7 @@ VoiceConfig_LookupByScreenType:
 	jr nz, LABEL_F2CA58
 	ld xwa, 0xE264DE
 
-LABEL_F2CA30:
+VoiceConfig_ReadFromTable:
 	add xwa, xiz
 	ld l, (xwa)
 	jr LABEL_F2CA5A
@@ -104613,11 +104613,11 @@ LABEL_F2CA46:
 
 LABEL_F2CA4A:
 	ld xwa, 0xE264E4
-	jr LABEL_F2CA30
+	jr VoiceConfig_ReadFromTable
 
 LABEL_F2CA51:
 	ld xwa, 0xE264EA
-	jr LABEL_F2CA30
+	jr VoiceConfig_ReadFromTable
 
 LABEL_F2CA58:
 	ldb l, 0x0
@@ -104705,9 +104705,9 @@ AcCurrentSongBoxProc:
 	push xiz
 	ld xiz, xwa
 	cp xbc, 0x1C0000C
-	jr z, LABEL_F2CB37
+	jr z, AcCurSongName_HandleFocusGained
 	cp xbc, 0x1C0000B
-	jr z, LABEL_F2CB37
+	jr z, AcCurSongName_HandleFocusGained
 	cp xbc, 0x1C00002
 	jr z, LABEL_F2CB2F
 	cp xbc, 0x1C00001
@@ -104727,7 +104727,7 @@ LABEL_F2CB31:
 	call 0xFA4409
 	jr LABEL_F2CB66
 
-LABEL_F2CB37:
+AcCurSongName_HandleFocusGained:
 	ld xwa, xiz
 	call 0xFA4409
 	ld8_24 a, 0x00ffe3
@@ -104929,7 +104929,7 @@ LABEL_F2CD37:
 	pop xiz
 	ret
 
-LABEL_F2CD39:
+SqAftSet_LookupTableEntry:
 	extz wa
 	add wa, wa
 	lda_24 xbc, 0xe26686
@@ -104979,7 +104979,7 @@ LABEL_F2CDB4:
 	jr nz, LABEL_F2CDD6
 	ld8_24 a, 0x02108a
 	extz wa
-	calr LABEL_F2CD39
+	calr SqAftSet_LookupTableEntry
 	ld xwa, 0x147001C
 	ld xbc, 0x1E7000B
 	lds32 xde, 0
@@ -105042,7 +105042,7 @@ LABEL_F2CE46:
 	sti8_24 0x021088, 0x01
 	ld8_24 a, 0x02108a
 	extz wa
-	calr LABEL_F2CD39
+	calr SqAftSet_LookupTableEntry
 	ld xwa, 0x147001C
 	ld xbc, 0x1E7000B
 	lds32 xde, 0
