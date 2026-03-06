@@ -114514,9 +114514,9 @@ LABEL_F35005:
 	jrl LABEL_F35239
 	extz wa
 	cps wa, 0
-	jrl mi, LABEL_F350F5
+	jrl mi, SqedtFunc_ReturnNegOne
 	cps wa, 6
-	jrl gt, LABEL_F350F5
+	jrl gt, SqedtFunc_ReturnNegOne
 	add wa, wa
 	lda_24 xix, 0xe34ce2
 	ld_sriw3 WA, 0x07, 0xF0, 0xE0
@@ -114551,10 +114551,10 @@ LABEL_F3502C:
 	.byte 0x08, 0x27, 0x08, 0x68, 0x06, 0x27, 0x0a, 0x68
 	.byte 0x02
 
-LABEL_F350F5:
+SqedtFunc_ReturnNegOne:
 	ldb l, 0xFF
 
-LABEL_F350F7:
+SqedtFunc_SignExtendAndReturn:
 	exts hl
 	exts xhl
 	jrl LABEL_F35239
@@ -114563,17 +114563,17 @@ LABEL_F350F7:
 	cp l, 0x9F
 	jr z, LABEL_F35111
 	cp l, 0x9C
-	jr nz, LABEL_F350F5
+	jr nz, SqedtFunc_ReturnNegOne
 	ldb l, 0x9
-	jr LABEL_F350F7
+	jr SqedtFunc_SignExtendAndReturn
 
 LABEL_F35111:
 	ldb l, 0xB
-	jr LABEL_F350F7
+	jr SqedtFunc_SignExtendAndReturn
 
 LABEL_F35115:
 	ldb l, 0xE
-	jr LABEL_F350F7
+	jr SqedtFunc_SignExtendAndReturn
 	extz wa
 	cps wa, 0
 	jrl mi, LABEL_F35005
@@ -115341,7 +115341,7 @@ LABEL_F3593C:
 	jrl LABEL_F359C9
 	ld xix, xde
 	pushw 0x5
-	jr LABEL_F35980
+	jr Equalizer_LookupParamString
 	ld xix, xde
 	pushw 0x5
 	lds wa, 2
@@ -115349,7 +115349,7 @@ LABEL_F3593C:
 	ld xix, xde
 	pushw 0x5
 	inc 4, xhl
-	jr LABEL_F35980
+	jr Equalizer_LookupParamString
 	ld xix, xde
 	pushw 0x5
 	lds wa, 6
@@ -115357,7 +115357,7 @@ LABEL_F3593C:
 	ld xix, xde
 	pushw 0x5
 	inc 8, xhl
-	jr LABEL_F35980
+	jr Equalizer_LookupParamString
 	ld xix, xde
 	pushw 0x5
 	ldw wa, 0xA
@@ -115366,7 +115366,7 @@ LABEL_F3593C:
 	pushw 0x5
 	lda xhl, (xhl + 12)
 
-LABEL_F35980:
+Equalizer_LookupParamString:
 	ld wa, (xhl)
 	extz xwa
 	ld xbc, xwa
@@ -117544,7 +117544,7 @@ BmDrEdit_NavigatePrevPage:
 
 BmDrEdit_RefreshAfterInsert:
 	calr BmDrEdit_AlignDisplayGrid
-	calr LABEL_F377A1
+	calr BmDrEdit_InsertNoteSequence
 	bitda 2, 10591
 	jr z, BmDrEdit_RefreshAfterInsert_CheckFull
 	ldw wa, 0xD0
@@ -117939,7 +117939,7 @@ LABEL_F372B4:
 	call SeqData_SetErrorCode
 
 LABEL_F372CA:
-	calr LABEL_F37897
+	calr BmDrEdit_CountMeasuresAndValidate
 	cpdi16 10098, 0
 	ret nz
 	stdi16 10098, 2
@@ -117974,7 +117974,7 @@ BmDrEdit_SeekToPartVoice:
 	call SeqData_SetErrorCode
 
 LABEL_F37325:
-	calr LABEL_F37897
+	calr BmDrEdit_CountMeasuresAndValidate
 	calr LABEL_F38220
 	cpdi8 10362, 0
 	jr nz, LABEL_F3734D
@@ -118294,7 +118294,7 @@ LABEL_F375D7:
 	jr ule, LABEL_F37675
 	bitda 1, 10591
 	jr z, LABEL_F3763C
-	calr LABEL_F377A1
+	calr BmDrEdit_InsertNoteSequence
 	bitda 2, 10591
 	jr nz, LABEL_F37656
 	jr LABEL_F37670
@@ -118306,7 +118306,7 @@ LABEL_F3763C:
 	jr nz, LABEL_F37670
 	bit 1, a
 	jr z, LABEL_F3765B
-	calr LABEL_F377A1
+	calr BmDrEdit_InsertNoteSequence
 	bitda 2, 10591
 	jr z, LABEL_F37670
 
@@ -118345,10 +118345,10 @@ LABEL_F3767B:
 	jr nz, LABEL_F376A1
 	calr BmDrEdit_CompareVelocity
 	cps l, 0
-	jr z, LABEL_F376AA
+	jr z, BmDrEdit_AdvanceToVisibleNote
 	calr BmDrEdit_WalkTrackForward
 	bitda 1, 10591
-	jr z, LABEL_F376AA
+	jr z, BmDrEdit_AdvanceToVisibleNote
 	jr LABEL_F376C6
 
 LABEL_F376A1:
@@ -118356,7 +118356,7 @@ LABEL_F376A1:
 	bitda 1, 10591
 	jr nz, LABEL_F376C6
 
-LABEL_F376AA:
+BmDrEdit_AdvanceToVisibleNote:
 	lda xwa, (xsp + 2)
 	lda xbc, (xsp)
 	calr BmDrEdit_SetupCoordinates
@@ -118366,7 +118366,7 @@ LABEL_F376AA:
 	jr ugt, LABEL_F376C6
 	calr BmDrEdit_WalkTrackForward
 	bitda 1, 10591
-	jr z, LABEL_F376AA
+	jr z, BmDrEdit_AdvanceToVisibleNote
 
 LABEL_F376C6:
 	inc 4, xsp
@@ -118462,7 +118462,7 @@ LABEL_F37795:
 	extz wa
 	jp SeqBuf_WriteNoteOffEntry
 
-LABEL_F377A1:
+BmDrEdit_InsertNoteSequence:
 	push xiz
 	ldda16 xwa, 10415
 	ldfr_werp WA, 0xFA
@@ -118581,7 +118581,7 @@ LABEL_F37895:
 	jr __jrt_nop_F37897
 __jrt_nop_F37897:
 
-LABEL_F37897:
+BmDrEdit_CountMeasuresAndValidate:
 	cpdi8 10362, 0
 	jr z, LABEL_F378A5
 	ldw wa, 0xD1
@@ -118620,7 +118620,7 @@ LABEL_F378D7:
 	calr LABEL_F37863
 	calr BmDrEdit_CalcBeatMeasure
 	bitda 0, 10591
-	jr nz, LABEL_F37969
+	jr nz, BmDrEdit_NavigateAfterEdit
 	calr LABEL_F37806
 	bitda 3, 10591
 	jr z, LABEL_F3791A
@@ -118657,10 +118657,10 @@ LABEL_F37943:
 	call SeqData_ReadNextByte
 	and l, 0xF0
 	cp l, 0x90
-	jr nz, LABEL_F37969
+	jr nz, BmDrEdit_NavigateAfterEdit
 	calr BmDrEdit_CompareVelocity
 	cps l, 0
-	jr nz, LABEL_F37969
+	jr nz, BmDrEdit_NavigateAfterEdit
 	lda xwa, (xsp + 2)
 	lda xbc, (xsp)
 	calr BmDrEdit_SetupCoordinates
@@ -118669,7 +118669,7 @@ LABEL_F37943:
 	cpda16 xwa, 10138
 	jr nc, LABEL_F379A2
 
-LABEL_F37969:
+BmDrEdit_NavigateAfterEdit:
 	calr LABEL_F379A8
 	bitda 3, 10591
 	jr z, LABEL_F37984
@@ -118871,7 +118871,7 @@ LABEL_F37B22:
 	stdi8 10590, 134
 	ret
 
-LABEL_F37B2B:
+BmDrEdit_ApplyVelocityChange:
 	lda xsp, (xsp - 20)
 	pushw iz
 	ld (xsp + 14), de
@@ -119070,7 +119070,7 @@ BmDrEdit_InsertStepEntry:
 	extz wa
 	lda xbc, (xsp)
 	lds de, 1
-	calr LABEL_F37B2B
+	calr BmDrEdit_ApplyVelocityChange
 	inc 2, xsp
 	ret
 
@@ -119101,7 +119101,7 @@ LABEL_F37CE8:
 	extz wa
 	ld xbc, 0x2967
 	lds de, 6
-	jrl LABEL_F37B2B
+	jrl BmDrEdit_ApplyVelocityChange
 
 LABEL_F37D47:
 	dec 8, xsp
@@ -119532,7 +119532,7 @@ LABEL_F380E9:
 	call SeqData_SetErrorCode
 
 LABEL_F3810B:
-	calr LABEL_F37897
+	calr BmDrEdit_CountMeasuresAndValidate
 	inc1_berp 0xFB
 	ldto_berp A, 0xFB
 	extz wa
@@ -119813,7 +119813,7 @@ LABEL_F383CB:
 	extz wa
 	ld xbc, 0x2967
 	lds de, 6
-	calr LABEL_F37B2B
+	calr BmDrEdit_ApplyVelocityChange
 	calr LABEL_F380E9
 	cpdi8 10362, 0
 	ret z
