@@ -178723,14 +178723,14 @@ LABEL_F5FECD:
 	ldda16 xwa, 13828
 	stda16 14080, xwa
 	calr AccPatch_InitSlotAndCopyData
-	calr LABEL_F60C06
-	calr LABEL_F60CE9
+	calr AccPatch_AdvancePlayPos
+	calr AccPatch_AdvanceAllSteps
 	stdi16 13834, 0
 
 LABEL_F5FF10:
 	cpdi16 13838, 0
 	jr z, LABEL_F5FF1B
-	calr LABEL_F60D35
+	calr AccPatch_DispatchQueuedNotes
 
 LABEL_F5FF1B:
 	ldda8 a, 14235
@@ -179591,19 +179591,19 @@ LABEL_F60644:
 LABEL_F6064B:
 	cp a, 0xD5
 	jr z, LABEL_F60688
-	calr LABEL_F60A97
+	calr AccPatch_SkipToMarker
 	jr LABEL_F60695
 
 LABEL_F60655:
 	lds bc, 5
-	calr LABEL_F606FC
+	calr AccPatch_ReadRingBufBytes
 	cpdi8 14061, 0
 	jr nz, LABEL_F60666
 	calr LABEL_F60A2B
 	jr LABEL_F60695
 
 LABEL_F60666:
-	calr LABEL_F60721
+	calr AccPatch_ParseAndResolve
 	calr LABEL_F607AC
 	jr LABEL_F60695
 
@@ -179621,8 +179621,8 @@ LABEL_F6067E:
 
 LABEL_F60688:
 	lds bc, 3
-	calr LABEL_F606FC
-	calr LABEL_F60721
+	calr AccPatch_ReadRingBufBytes
+	calr AccPatch_ParseAndResolve
 	calr LABEL_F60A53
 	jr __jrt_nop_F60695
 __jrt_nop_F60695:
@@ -179644,14 +179644,14 @@ LABEL_F6069B:
 	ldda16 xwa, 13828
 	stda16 14080, xwa
 	calr AccPatch_InitSlotAndCopyData
-	calr LABEL_F60C06
-	calr LABEL_F60CE9
+	calr AccPatch_AdvancePlayPos
+	calr AccPatch_AdvanceAllSteps
 	stdi16 13834, 0
 
 LABEL_F606C2:
 	cpdi16 13838, 0
 	jr z, LABEL_F606CD
-	calr LABEL_F60D35
+	calr AccPatch_DispatchQueuedNotes
 
 LABEL_F606CD:
 	stdi8 13823, 0
@@ -179683,7 +179683,7 @@ LABEL_F606EB:
 LABEL_F606FA:
 	.byte 0x00, 0x00
 
-LABEL_F606FC:
+AccPatch_ReadRingBufBytes:
 	lds32 xhl, 0
 
 LABEL_F606FE:
@@ -179710,7 +179710,7 @@ LABEL_F6071E:
 LABEL_F6071F:
 	.byte 0x00, 0x00
 
-LABEL_F60721:
+AccPatch_ParseAndResolve:
 	ldda8 a, 14059
 	stda8 14071, a
 	stda8 14072, a
@@ -179790,7 +179790,7 @@ LABEL_F607C6:
 	stdi8 14058, 144
 	bitda 4, 14235
 	jr nz, LABEL_F607E3
-	calr LABEL_F6084A
+	calr AccPatch_TransposeNote
 
 LABEL_F607E3:
 	ldda8 a, 14058
@@ -179831,12 +179831,12 @@ LABEL_F60839:
 	call MIDI_SendSysExCmd
 	jr LABEL_F60838
 
-LABEL_F6084A:
+AccPatch_TransposeNote:
 	ldda8 a, 13545
 	and a, 0xF
 	cps a, 0
 	jr z, LABEL_F60874
-	calr LABEL_F60939
+	calr AccPatch_ReadTransposeAmount
 	cpda8 a, 14926
 	jr ugt, LABEL_F6086C
 	subdm8 14060, a
@@ -179923,7 +179923,7 @@ LABEL_F60907:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01
 	.byte 0x11, 0x11
 
-LABEL_F60939:
+AccPatch_ReadTransposeAmount:
 	push xwa
 	push xhl
 	push xbc
@@ -180035,7 +180035,7 @@ LABEL_F609F0:
 LABEL_F60A2B:
 	bitda 4, 14235
 	jr nz, LABEL_F60A34
-	calr LABEL_F6084A
+	calr AccPatch_TransposeNote
 
 LABEL_F60A34:
 	ld xiy, 0x36EA
@@ -180089,10 +180089,10 @@ LABEL_F60A94:
 LABEL_F60A95:
 	.byte 0x00, 0x00
 
-LABEL_F60A97:
+AccPatch_SkipToMarker:
 	call TempoRingBuf_ReadByteToA
 	bit 7, a
-	jr z, LABEL_F60A97
+	jr z, AccPatch_SkipToMarker
 	ret
 
 LABEL_F60AA1:
@@ -180224,7 +180224,7 @@ LABEL_F60BE0:
 LABEL_F60C04:
 	.byte 0x00, 0x00
 
-LABEL_F60C06:
+AccPatch_AdvancePlayPos:
 	calr AccPatch_LoadTablePointers
 	ld de, (xix)
 	ld hl, (xiy)
@@ -180288,7 +180288,7 @@ LABEL_F60C5A:
 	.zero 24
 	.byte 0x00, 0x00, 0x00, 0x87, 0x32, 0x00, 0x00
 
-LABEL_F60CE9:
+AccPatch_AdvanceAllSteps:
 	ld xix, 0x361A
 
 LABEL_F60CEE:
@@ -180334,7 +180334,7 @@ LABEL_F60D2F:
 LABEL_F60D33:
 	.byte 0x00, 0x00
 
-LABEL_F60D35:
+AccPatch_DispatchQueuedNotes:
 	ld xix, 0x36AA
 
 LABEL_F60D3A:
@@ -180420,11 +180420,11 @@ LABEL_F60DEE:
 	calr AccPatch_AdvanceSeqIndex
 	calr AccPatch_AdvanceSeqIndex
 	popw wa
-	calr LABEL_F60E14
+	calr AccPatch_WriteSeqByte
 	calr AccPatch_AdvanceSeqIndex
 	popw de
 	ld a, d
-	calr LABEL_F60E14
+	calr AccPatch_WriteSeqByte
 
 LABEL_F60E01:
 	ldda16 xwa, 14074
@@ -180436,7 +180436,7 @@ LABEL_F60E01:
 LABEL_F60E12:
 	.byte 0x00, 0x00
 
-LABEL_F60E14:
+AccPatch_WriteSeqByte:
 	push xix
 	ldda16 xhl, 13842
 	calr AccPatch_GetEntryAddr
@@ -182429,7 +182429,7 @@ LABEL_F61F40:
 	and a, 0xF
 	cps a, 0
 	jr z, LABEL_F61F6E
-	call LABEL_F60939
+	call AccPatch_ReadTransposeAmount
 	cpda8 a, 14926
 	jr ugt, LABEL_F61F65
 	sub_srib_mr A, 0x07, 0xF0, 0xEC
