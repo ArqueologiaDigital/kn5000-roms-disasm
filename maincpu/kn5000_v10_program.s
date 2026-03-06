@@ -116860,7 +116860,7 @@ BmDrEdit_ScanToEnd_Loop:
 
 BmDrEdit_ScanToEnd_CheckNextSong:
 	ldda16 xwa, 10415
-	call LABEL_F41C39
+	call PartCtrl_ReadWord_Off1
 	cps hl, 0
 	jr nz, BmDrEdit_ScanToEnd_AdvanceSong
 	stdi8 10362, 255
@@ -117675,10 +117675,10 @@ LABEL_F37055:
 	ld iz, hl
 	ld wa, iz
 	lds bc, 1
-	call LABEL_F41C99
+	call PartCtrl_SetClearBit7
 	ld wa, iz
 	lds bc, 0
-	call LABEL_F41C4C
+	call PartCtrl_WriteWord_Off1
 	ld wa, iz
 	ldw bc, 0xFFFF
 	call PartCtrl_WriteWord
@@ -117699,13 +117699,13 @@ LABEL_F37055:
 	extz bc
 	lds wa, 0
 	ld de, iz
-	call LABEL_F415B2
+	call Part_WriteWord_Indexed
 	ldda8 c, 10597
 	inc 1, c
 	extz bc
 	lds wa, 0
 	lds de, 5
-	call LABEL_F415DB
+	call Part_WriteByte_Indexed
 	stda16 10415, xiz
 	stdi16 9830, 5
 	calr LABEL_F37CC9
@@ -118120,7 +118120,7 @@ LABEL_F374A1:
 	inc 1, c
 	extz bc
 	lds wa, 0
-	call LABEL_F415C8
+	call Part_ReadWord_Indexed
 	stda16 10415, xhl
 	ldda8 c, 10597
 	inc 1, c
@@ -118869,7 +118869,7 @@ LABEL_F37B2B:
 	ld c, (xsp + 20)
 	extz bc
 	lds wa, 0
-	call LABEL_F415C8
+	call Part_ReadWord_Indexed
 	ld (xsp + 12), hl
 	ld c, (xsp + 20)
 	extz bc
@@ -118884,7 +118884,7 @@ LABEL_F37B2B:
 	cpw (xsp + 6), 0xFF
 	jr ule, LABEL_F37BB7
 	ld wa, (xsp + 12)
-	call LABEL_F41C5F
+	call PartCtrl_ReadWord
 	ld (xsp + 8), hl
 	cpw (xsp + 8), 0xFFFF
 	jr nz, LABEL_F37BAF
@@ -118909,14 +118909,14 @@ LABEL_F37BB7:
 	extz bc
 	ld de, (xsp + 8)
 	lds wa, 0
-	call LABEL_F415B2
+	call Part_WriteWord_Indexed
 	ld c, (xsp + 20)
 	extz bc
 	ld wa, (xsp + 6)
 	ld e, a
 	extz de
 	lds wa, 0
-	call LABEL_F415DB
+	call Part_WriteByte_Indexed
 
 LABEL_F37BD7:
 	ld wa, (xsp + 12)
@@ -118982,7 +118982,7 @@ LABEL_F37C47:
 	cpw (xwa), 0x5
 	jr nc, LABEL_F37C7B
 	ld wa, (xiz)
-	call LABEL_F41C39
+	call PartCtrl_ReadWord_Off1
 	ld (xiz), hl
 	cpw (xiz), 0x4D8
 	jr ule, LABEL_F37C74
@@ -119013,7 +119013,7 @@ LABEL_F37C81:
 	cpw (xwa), 0xFF
 	jr ule, LABEL_F37CB5
 	ld wa, (xiz)
-	call LABEL_F41C5F
+	call PartCtrl_ReadWord
 	ld (xiz), hl
 	cpw (xiz), 0x4D8
 	jr ule, LABEL_F37CAE
@@ -119036,7 +119036,7 @@ LABEL_F37CB7:
 
 LABEL_F37CBB:
 	extz bc
-	jp LABEL_F41CB1
+	jp PartCtrl_ReadByte
 
 LABEL_F37CC1:
 	extz bc
@@ -119218,16 +119218,16 @@ LABEL_F37E9C:
 	extz bc
 	ld de, (xsp + 8)
 	lds wa, 0
-	call LABEL_F415B2
+	call Part_WriteWord_Indexed
 	ld c, (xsp + 10)
 	extz bc
 	ld wa, (xsp + 6)
 	ld e, a
 	extz de
 	lds wa, 0
-	call LABEL_F415DB
+	call Part_WriteByte_Indexed
 	ld wa, (xsp + 8)
-	call LABEL_F41C5F
+	call PartCtrl_ReadWord
 	ld wa, hl
 	call LABEL_F41F7C
 	ld wa, (xsp + 8)
@@ -120703,7 +120703,7 @@ LABEL_F38DE4:
 	setda 0, 9834
 	ld wa, iz
 	lds bc, 0
-	call LABEL_F41C4C
+	call PartCtrl_WriteWord_Off1
 	ld wa, iz
 	ldw bc, 0xFFFF
 	call PartCtrl_WriteWord
@@ -121092,7 +121092,7 @@ LABEL_F391B3:
 
 LABEL_F391C8:
 	ldda16 xwa, 10415
-	call LABEL_F41C39
+	call PartCtrl_ReadWord_Off1
 	stda16 10415, xhl
 	stdi16 9830, 255
 
@@ -126385,7 +126385,7 @@ LABEL_F3C22B:
 	call LABEL_F417F4
 	ld wa, iz
 	lds bc, 0
-	call LABEL_F41C4C
+	call PartCtrl_WriteWord_Off1
 	ld wa, iz
 	ldw bc, 0xFFFF
 	call PartCtrl_WriteWord
@@ -126440,7 +126440,7 @@ LABEL_F3C2BB:
 	call LABEL_F417F4
 	ld wa, iz
 	lds bc, 0
-	call LABEL_F41C4C
+	call PartCtrl_WriteWord_Off1
 	ld wa, iz
 	ldw bc, 0xFFFF
 	call PartCtrl_WriteWord
@@ -126468,12 +126468,12 @@ LABEL_F3C310:
 	orddm16 8980, xde
 	lds wa, 0
 	ld de, iz
-	call LABEL_F415B2
+	call Part_WriteWord_Indexed
 	ldto_berp C, 0xFB
 	extz bc
 	lds wa, 0
 	lds de, 5
-	call LABEL_F415DB
+	call Part_WriteByte_Indexed
 	ldto_berp A, 0xFB
 	extz wa
 	ld c, a
@@ -127960,7 +127960,7 @@ LABEL_F3D129:
 	ld c, (xsp + 20)
 	extz bc
 	lds wa, 0
-	call LABEL_F415C8
+	call Part_ReadWord_Indexed
 	ld (xsp + 12), hl
 	ld c, (xsp + 20)
 	extz bc
@@ -128032,12 +128032,12 @@ LABEL_F3D1DB:
 	extz bc
 	ld de, (xsp + 8)
 	lds wa, 0
-	call LABEL_F415B2
+	call Part_WriteWord_Indexed
 	ld c, (xsp + 20)
 	extz bc
 	ld de, (xsp + 10)
 	lds wa, 0
-	call LABEL_F415DB
+	call Part_WriteByte_Indexed
 	ld (xsp + 2), 0x0
 
 LABEL_F3D1FB:
@@ -128088,7 +128088,7 @@ LABEL_F3D25E:
 	push xiz
 	ld iz, wa
 	ld wa, iz
-	call LABEL_F41C5F
+	call PartCtrl_ReadWord
 	ldfr_werp HL, 0xFA
 	cp_erpw 0xFA, 0xFF, 0xFF
 	jr z, LABEL_F3D2A4
@@ -128102,9 +128102,9 @@ LABEL_F3D281:
 	ldto_werp IZ, 0xFA
 	ldto_werp WA, 0xFA
 	lds bc, 0
-	call LABEL_F41C99
+	call PartCtrl_SetClearBit7
 	ldto_werp WA, 0xFA
-	call LABEL_F41C5F
+	call PartCtrl_ReadWord
 	ldfr_werp HL, 0xFA
 	ld wa, iz
 	call LABEL_F41FB5
@@ -128187,7 +128187,7 @@ LABEL_F3D2FA:
 	ld c, (xsp + 4)
 	extz bc
 	lds wa, 0
-	call LABEL_F415C8
+	call Part_ReadWord_Indexed
 	ld (xsp + 20), hl
 	ld c, (xsp + 4)
 	extz bc
@@ -128332,12 +128332,12 @@ LABEL_F3D484:
 	ld (xhl + 2), wa
 	ld de, (xhl)
 	lds wa, 0
-	call LABEL_F415B2
+	call Part_WriteWord_Indexed
 	ld c, (xsp + 4)
 	extz bc
 	ld de, (xsp + 22)
 	lds wa, 0
-	call LABEL_F415DB
+	call Part_WriteByte_Indexed
 	lda xbc, (xsp + 24)
 	ld (xbc), 0x82
 	ld a, (xsp + 4)
@@ -128782,12 +128782,12 @@ LABEL_F3D8BA:
 LABEL_F3D8EA:
 	ld de, (xde)
 	lds wa, 0
-	call LABEL_F415B2
+	call Part_WriteWord_Indexed
 	ldto_berp C, 0xFB
 	extz bc
 	ld de, (xsp + 6)
 	lds wa, 0
-	call LABEL_F415DB
+	call Part_WriteByte_Indexed
 	lda xwa, (xsp + 4)
 	lda xbc, (xsp + 16)
 	lds de, 1
@@ -128815,12 +128815,12 @@ LABEL_F3D92E:
 	extz bc
 	ld de, (xsp + 4)
 	lds wa, 0
-	call LABEL_F415B2
+	call Part_WriteWord_Indexed
 	ldto_berp C, 0xFB
 	extz bc
 	ld de, (xsp + 6)
 	lds wa, 0
-	call LABEL_F415DB
+	call Part_WriteByte_Indexed
 	lda xwa, (xsp + 4)
 	lda xbc, (xsp + 16)
 	lds de, 1
@@ -128828,7 +128828,7 @@ LABEL_F3D92E:
 LABEL_F3D952:
 	call LABEL_F41AF8
 	ld wa, (xsp + 4)
-	call LABEL_F41C5F
+	call PartCtrl_ReadWord
 	ld wa, hl
 	cp wa, 0xFFFF
 	jr z, LABEL_F3D973
@@ -129888,12 +129888,12 @@ LABEL_F3E2A1:
 	extz bc
 	ld de, (xsp + 2)
 	lds wa, 0
-	calr LABEL_F415B2
+	calr Part_WriteWord_Indexed
 	ldto_berp C, 0xFB
 	extz bc
 	ld de, (xsp + 4)
 	lds wa, 0
-	calr LABEL_F415DB
+	calr Part_WriteByte_Indexed
 	lda xwa, (xsp + 2)
 	lda xbc, (xsp + 6)
 	lds de, 1
@@ -130646,14 +130646,14 @@ LABEL_F3E985:
 	extz bc
 	ldda16 xde, 10415
 	lds wa, 0
-	calr LABEL_F415B2
+	calr Part_WriteWord_Indexed
 	ldto_berp C, 0xFB
 	extz bc
 	ldda16 xwa, 9830
 	ld e, a
 	extz de
 	lds wa, 0
-	calr LABEL_F415DB
+	calr Part_WriteByte_Indexed
 	ldda16 xbc, 9000
 	ldto_berp A, 0xFB
 	extz wa
@@ -131606,7 +131606,7 @@ LABEL_F3F1E9:
 
 LABEL_F3F1F9:
 	ld wa, (xsp + 12)
-	calr LABEL_F41C5F
+	calr PartCtrl_ReadWord
 	ld (xsp + 12), hl
 	cpw (xsp + 12), 0x1
 	jr z, LABEL_F3F1F9
@@ -131615,11 +131615,11 @@ LABEL_F3F209:
 	cpw (xsp + 12), 0x2
 	jr z, LABEL_F3F1F9
 	ld wa, (xsp + 12)
-	calr LABEL_F41C5F
+	calr PartCtrl_ReadWord
 	ld iz, hl
 	ld wa, iz
 	lds bc, 0
-	calr LABEL_F41C4C
+	calr PartCtrl_WriteWord_Off1
 	ld wa, iz
 	calr LABEL_F41444
 	ldda32 xwa, 7514
@@ -131649,7 +131649,7 @@ LABEL_F3F242:
 	cp de, 0x100
 	jr c, LABEL_F3F242
 	ld wa, (xsp + 10)
-	calr LABEL_F41C39
+	calr PartCtrl_ReadWord_Off1
 	ld wa, hl
 	cps wa, 0
 	jr z, LABEL_F3F270
@@ -131676,12 +131676,12 @@ LABEL_F3F270:
 
 LABEL_F3F299:
 	ld wa, (xsp + 10)
-	calr LABEL_F41C5F
+	calr PartCtrl_ReadWord
 	ld wa, hl
 	cp wa, 0xFFFF
 	jr z, LABEL_F3F2AF
 	ld bc, (xsp + 12)
-	calr LABEL_F41C4C
+	calr PartCtrl_WriteWord_Off1
 	jr LABEL_F3F2D8
 
 LABEL_F3F2AF:
@@ -131690,7 +131690,7 @@ LABEL_F3F2AF:
 	ld c, (xsp + 6)
 	extz bc
 	ld de, (xsp + 12)
-	calr LABEL_F415B2
+	calr Part_WriteWord_Indexed
 	ld a, (xsp + 8)
 	dec 1, a
 	cpda8_24 a, 65507
@@ -131699,11 +131699,11 @@ LABEL_F3F2AF:
 	extz bc
 	lds wa, 0
 	ld de, (xsp + 12)
-	calr LABEL_F415B2
+	calr Part_WriteWord_Indexed
 
 LABEL_F3F2D8:
 	ld wa, (xsp + 10)
-	calr LABEL_F41C5F
+	calr PartCtrl_ReadWord
 	ld (xsp + 10), hl
 	cpw (xsp + 10), 0xFFFF
 	jrl nz, LABEL_F3F1DA
@@ -131719,10 +131719,10 @@ LABEL_F3F2E9:
 	jr nz, LABEL_F3F345
 	lds wa, 1
 	lds bc, 1
-	calr LABEL_F41C99
+	calr PartCtrl_SetClearBit7
 	lds wa, 1
 	lds bc, 0
-	calr LABEL_F41C4C
+	calr PartCtrl_WriteWord_Off1
 	lds wa, 1
 	ldw bc, 0xFFFF
 	calr PartCtrl_WriteWord
@@ -131732,10 +131732,10 @@ LABEL_F3F2E9:
 	calr LABEL_F41CC9
 	lds wa, 2
 	lds bc, 1
-	calr LABEL_F41C99
+	calr PartCtrl_SetClearBit7
 	lds wa, 2
 	lds bc, 0
-	calr LABEL_F41C4C
+	calr PartCtrl_WriteWord_Off1
 	lds wa, 2
 	ldw bc, 0xFFFF
 	calr PartCtrl_WriteWord
@@ -131832,13 +131832,13 @@ LABEL_F3F3C6:
 	ldto_berp C, 0xFA
 	extz bc
 	ldw de, 0xFFFF
-	calr LABEL_F415B2
+	calr Part_WriteWord_Indexed
 	ldto_berp A, 0xFB
 	extz wa
 	ldto_berp C, 0xFA
 	extz bc
 	lds de, 5
-	calr LABEL_F415DB
+	calr Part_WriteByte_Indexed
 	cp (xsp + 12), 0xB
 	jr nz, LABEL_F3F41F
 	cp (xsp + 10), 0x32
@@ -131902,12 +131902,12 @@ LABEL_F3F469:
 	extz bc
 	lds wa, 0
 	ldw de, 0xFFFF
-	calr LABEL_F415B2
+	calr Part_WriteWord_Indexed
 	ld c, (xsp + 2)
 	extz bc
 	lds wa, 0
 	lds de, 5
-	calr LABEL_F415DB
+	calr Part_WriteByte_Indexed
 	ld wa, (xsp)
 	calr LABEL_F41F7C
 	inc 4, xsp
@@ -132199,7 +132199,7 @@ LABEL_F3F799:
 	cps wa, 5
 	jr nc, LABEL_F3F809
 	ldda16 xwa, 10415
-	calr LABEL_F41C39
+	calr PartCtrl_ReadWord_Off1
 	ld iz, hl
 	cps iz, 0
 	jr z, LABEL_F3F7C7
@@ -132216,7 +132216,7 @@ LABEL_F3F7C7:
 
 LABEL_F3F7DD:
 	ld wa, iz
-	calr LABEL_F41C85
+	calr PartCtrl_TestBit7
 	cps l, 0
 	jr nz, LABEL_F3F7FF
 	stdi8 10362, 11
@@ -132335,14 +132335,14 @@ LABEL_F3F90C:
 	ldto_berp C, 0xF9
 	extz bc
 	ldw de, 0xFFFF
-	calr LABEL_F415B2
+	calr Part_WriteWord_Indexed
 	ldda8 a, 10360
 	inc 1, a
 	extz wa
 	ldto_berp C, 0xF9
 	extz bc
 	lds de, 5
-	calr LABEL_F415DB
+	calr Part_WriteByte_Indexed
 	inc1_berp 0xF9
 	cp_erpb 0xF9, 0x10
 	jr ule, LABEL_F3F90C
@@ -132399,12 +132399,12 @@ LABEL_F3F9C5:
 	extz bc
 	lds wa, 0
 	ldw de, 0xFFFF
-	calr LABEL_F415B2
+	calr Part_WriteWord_Indexed
 	ldto_berp C, 0xF9
 	extz bc
 	lds wa, 0
 	lds de, 5
-	calr LABEL_F415DB
+	calr Part_WriteByte_Indexed
 	inc1_berp 0xF9
 	cp_erpb 0xF9, 0x10
 	jr ule, LABEL_F3F9C5
@@ -132461,13 +132461,13 @@ LABEL_F3FA2B:
 	ldto_berp C, 0xFA
 	extz bc
 	ldw de, 0xFFFF
-	calr LABEL_F415B2
+	calr Part_WriteWord_Indexed
 	ldto_berp A, 0xFB
 	extz wa
 	ldto_berp C, 0xFA
 	extz bc
 	lds de, 5
-	calr LABEL_F415DB
+	calr Part_WriteByte_Indexed
 	inc1_berp 0xFA
 	cp_erpb 0xFA, 0x10
 	jr ule, LABEL_F3FA2B
@@ -132532,10 +132532,10 @@ LABEL_F3FAF3:
 
 LABEL_F3FB06:
 	ldda16 xwa, 10379
-	calr LABEL_F41C5F
+	calr PartCtrl_ReadWord
 	ld iz, hl
 	ld wa, iz
-	calr LABEL_F41C85
+	calr PartCtrl_TestBit7
 	cps l, 0
 	jr nz, LABEL_F3FB1F
 	stdi8 10362, 2
@@ -132560,10 +132560,10 @@ LABEL_F3FB2B:
 
 LABEL_F3FB3C:
 	ldda16 xwa, 10379
-	calr LABEL_F41C39
+	calr PartCtrl_ReadWord_Off1
 	ld iz, hl
 	ld wa, iz
-	calr LABEL_F41C85
+	calr PartCtrl_TestBit7
 	cps l, 0
 	jr nz, LABEL_F3FB5B
 	ldw wa, 0x47
@@ -132600,7 +132600,7 @@ LABEL_F3FB78:
 
 LABEL_F3FB8B:
 	ldda16 xwa, 10375
-	calr LABEL_F41C5F
+	calr PartCtrl_ReadWord
 	ld iz, hl
 	ld wa, iz
 	cp wa, 0xFFFF
@@ -132614,7 +132614,7 @@ LABEL_F3FB8B:
 	jr LABEL_F3FBC8
 
 LABEL_F3FBB0:
-	calr LABEL_F41C85
+	calr PartCtrl_TestBit7
 	cps l, 0
 	jr nz, LABEL_F3FBBE
 	stdi8 10362, 2
@@ -132639,10 +132639,10 @@ LABEL_F3FBCA:
 
 LABEL_F3FBDB:
 	ldda16 xwa, 10375
-	calr LABEL_F41C39
+	calr PartCtrl_ReadWord_Off1
 	ld iz, hl
 	ld wa, iz
-	calr LABEL_F41C85
+	calr PartCtrl_TestBit7
 	cps l, 0
 	jr nz, LABEL_F3FBFA
 	ldw wa, 0x48
@@ -132673,14 +132673,14 @@ LABEL_F3FC17:
 	ld c, a
 	extz bc
 	ldda16 xwa, 10379
-	jrl LABEL_F41CB1
+	jrl PartCtrl_ReadByte
 
 LABEL_F3FC26:
 	ldda16 xwa, 10373
 	ld c, a
 	extz bc
 	ldda16 xwa, 10375
-	jrl LABEL_F41CB1
+	jrl PartCtrl_ReadByte
 
 LABEL_F3FC35:
 	ld e, a
@@ -132730,7 +132730,7 @@ LABEL_F3FC8B:
 
 LABEL_F3FC98:
 	ld wa, iz
-	calr LABEL_F41C85
+	calr PartCtrl_TestBit7
 	cps l, 0
 	jr nz, LABEL_F3FCA8
 	stdi8 10362, 11
@@ -133047,7 +133047,7 @@ LABEL_F3FF78:
 
 LABEL_F3FFB2:
 	ld wa, iz
-	calr LABEL_F41C85
+	calr PartCtrl_TestBit7
 	cps l, 0
 	jr nz, LABEL_F3FFC2
 
@@ -133142,7 +133142,7 @@ SeqData_AdvancePosition:
 	cp wa, 0xFF
 	jr ule, LABEL_F400A5
 	ldda16 xwa, 10415
-	calr LABEL_F41C5F
+	calr PartCtrl_ReadWord
 	ld iz, hl
 	cp iz, 0xFFFF
 	jr nz, LABEL_F40079
@@ -133157,7 +133157,7 @@ LABEL_F40079:
 
 LABEL_F40086:
 	ld wa, iz
-	calr LABEL_F41C85
+	calr PartCtrl_TestBit7
 	cps l, 0
 	jr nz, LABEL_F40096
 	stdi8 10362, 11
@@ -133516,21 +133516,21 @@ LABEL_F4039F:
 	extz bc
 	lds wa, 0
 	ld de, iz
-	calr LABEL_F415B2
+	calr Part_WriteWord_Indexed
 	ldda16 xwa, 10365
 	ld c, a
 	extz bc
 	ld e, (xsp + 2)
 	extz de
 	lds wa, 0
-	calr LABEL_F415DB
+	calr Part_WriteByte_Indexed
 	ld8_24 a, 0x00ffe3
 	inc 1, a
 	extz wa
 	ldda16 xbc, 10365
 	extz bc
 	ld de, iz
-	calr LABEL_F415B2
+	calr Part_WriteWord_Indexed
 	ld8_24 a, 0x00ffe3
 	inc 1, a
 	extz wa
@@ -133538,7 +133538,7 @@ LABEL_F4039F:
 	extz bc
 	ld e, (xsp + 2)
 	extz de
-	calr LABEL_F415DB
+	calr Part_WriteByte_Indexed
 	popw iz
 	inc 2, xsp
 	ret
@@ -133561,7 +133561,7 @@ LABEL_F40416:
 	ldda8 c, 9780
 	extz bc
 	lds wa, 0
-	calr LABEL_F415C8
+	calr Part_ReadWord_Indexed
 	sub iz, hl
 	ld wa, iz
 	extz xwa
@@ -133824,7 +133824,7 @@ LABEL_F4074D:
 	calr PartCtrl_WriteWord
 	ldto_werp WA, 0xFA
 	ld bc, iz
-	calr LABEL_F41C4C
+	calr PartCtrl_WriteWord_Off1
 	ldto_werp IZ, 0xFA
 	incm 1, (xsp + 4)
 	ld wa, (xsp + 4)
@@ -134106,11 +134106,11 @@ LABEL_F409C8:
 
 LABEL_F409D3:
 	ld wa, iz
-	calr LABEL_F41C85
+	calr PartCtrl_TestBit7
 	cps l, 0
 	jr z, LABEL_F409EC
 	ld wa, iz
-	calr LABEL_F41C5F
+	calr PartCtrl_ReadWord
 	ld iz, hl
 	incm 1, (xsp + 2)
 	cp iz, 0xFFFF
@@ -134431,7 +134431,7 @@ LABEL_F40CC4:
 	sub wa, (xbc)
 	ld (xde), wa
 	ld wa, (xhl)
-	calr LABEL_F41C5F
+	calr PartCtrl_ReadWord
 	stda16 10284, xhl
 
 LABEL_F40CD8:
@@ -134465,7 +134465,7 @@ LABEL_F40D0E:
 LABEL_F40D12:
 	incm 1, (xiz)
 	ld wa, (xbc)
-	calr LABEL_F41C5F
+	calr PartCtrl_ReadWord
 	ldada xwa, 10284
 	ld (xwa), hl
 	cpw (xwa), 0x4D8
@@ -134499,7 +134499,7 @@ LABEL_F40D30:
 	cps bc, 5
 	jr nz, LABEL_F40D73
 	ld wa, (xhl)
-	calr LABEL_F41C39
+	calr PartCtrl_ReadWord_Off1
 	ldada xwa, 10288
 	ld (xwa), hl
 	ldw (xwa + 2), 0xFF
@@ -134534,7 +134534,7 @@ LABEL_F40D77:
 	jr nz, LABEL_F40DE2
 	ldada xwa, 10478
 	ld_sriw3 WA, 0x07, 0xE0, 0xE8
-	calr LABEL_F41C39
+	calr PartCtrl_ReadWord_Off1
 	ld c, (xsp + 36)
 	dec 1, c
 	ld e, c
@@ -134654,7 +134654,7 @@ LABEL_F40E21:
 	ld c, (xsp + 36)
 	extz bc
 	lds wa, 0
-	calr LABEL_F415C8
+	calr Part_ReadWord_Indexed
 	stda16 10292, xhl
 	ld c, (xsp + 36)
 	extz bc
@@ -134668,7 +134668,7 @@ LABEL_F40E21:
 	cps wa, 5
 	jr nz, LABEL_F40F40
 	ld wa, (xde)
-	calr LABEL_F41C39
+	calr PartCtrl_ReadWord_Off1
 	ld (xsp + 22), hl
 	ldda16 xwa, 10292
 	calr LABEL_F41F7C
@@ -134687,12 +134687,12 @@ LABEL_F40F44:
 	extz bc
 	ldda16 xde, 10292
 	lds wa, 0
-	calr LABEL_F415B2
+	calr Part_WriteWord_Indexed
 	ld c, (xsp + 36)
 	extz bc
 	ldda16 xde, 10294
 	lds wa, 0
-	calr LABEL_F415DB
+	calr Part_WriteByte_Indexed
 	jrl LABEL_F41035
 
 LABEL_F40F63:
@@ -134802,7 +134802,7 @@ LABEL_F4105D:
 LABEL_F41061:
 	ld xwa, (xsp + 8)
 	ld wa, (xwa)
-	calr LABEL_F41C5F
+	calr PartCtrl_ReadWord
 	cp hl, 0x4D8
 	jr ule, LABEL_F41076
 	stdi8 10362, 10
@@ -134812,7 +134812,7 @@ LABEL_F41076:
 	ld xwa, (xsp + 8)
 	ld (xwa), hl
 	ld wa, hl
-	calr LABEL_F41C85
+	calr PartCtrl_TestBit7
 	cps l, 0
 	jr nz, LABEL_F4108B
 	stdi8 10362, 11
@@ -134950,7 +134950,7 @@ LABEL_F411F8:
 	cps iz, 5
 	jr nc, LABEL_F41234
 	ldto_werp WA, 0xFA
-	calr LABEL_F41C39
+	calr PartCtrl_ReadWord_Off1
 	stda16 9900, xhl
 	lds wa, 5
 	sub wa, iz
@@ -135014,7 +135014,7 @@ LABEL_F412BF:
 	ldda8 c, 10048
 	extz bc
 	lds wa, 0
-	calr LABEL_F415C8
+	calr Part_ReadWord_Indexed
 	stda16 10284, xhl
 	ldada xde, 10288
 	ldto_werp WA, 0xFA
@@ -135088,7 +135088,7 @@ LABEL_F4137D:
 LABEL_F41381:
 	ld xwa, (xsp + 8)
 	ld wa, (xwa)
-	calr LABEL_F41C39
+	calr PartCtrl_ReadWord_Off1
 	cp hl, 0x4D8
 	jr ule, LABEL_F41396
 	stdi8 10362, 10
@@ -135098,7 +135098,7 @@ LABEL_F41396:
 	ld xwa, (xsp + 8)
 	ld (xwa), hl
 	ld wa, hl
-	calr LABEL_F41C85
+	calr PartCtrl_TestBit7
 	cps l, 0
 	jr nz, LABEL_F413AB
 	stdi8 10362, 11
@@ -135236,7 +135236,7 @@ LABEL_F41496:
 LABEL_F4149C:
 	jp 0xFDDE6F
 
-LABEL_F414A0:
+Part_CopyBlock16:
 	cps a, 0
 	jr nz, LABEL_F414AA
 	ldada xhl, 62080
@@ -135262,7 +135262,7 @@ LABEL_F414C4:
 	jr c, LABEL_F414C4
 	ret
 
-LABEL_F414CF:
+Part_CopyToBuffer:
 	cps a, 0
 	jr nz, LABEL_F414D9
 	ldada xde, 62560
@@ -135366,7 +135366,7 @@ LABEL_F41565:
 	ld (xbc), de
 	ret
 
-LABEL_F41568:
+Part_ReadByteDirect:
 	cps a, 0
 	jr nz, LABEL_F41576
 	ldada xwa, 61824
@@ -135388,7 +135388,7 @@ LABEL_F4158A:
 	ld l, (xbc)
 	ret
 
-LABEL_F4158D:
+Part_ReadWord:
 	cps a, 0
 	jr nz, LABEL_F4159B
 	ldada xwa, 61824
@@ -135410,7 +135410,7 @@ LABEL_F415AF:
 	ld hl, (xbc)
 	ret
 
-LABEL_F415B2:
+Part_WriteWord_Indexed:
 	ld l, c
 	ldw bc, 0x78
 	ld w, l
@@ -135422,7 +135422,7 @@ LABEL_F415B2:
 	extz wa
 	jrl Part_WriteWord
 
-LABEL_F415C8:
+Part_ReadWord_Indexed:
 	ldw de, 0x78
 	ld l, c
 	add l, c
@@ -135431,9 +135431,9 @@ LABEL_F415C8:
 	add de, hl
 	extz wa
 	ld bc, de
-	jr LABEL_F4158D
+	jr Part_ReadWord
 
-LABEL_F415DB:
+Part_WriteByte_Indexed:
 	ldw hl, 0x98
 	dec 1, c
 	extz bc
@@ -135450,7 +135450,7 @@ LABEL_F415ED:
 	extz de
 	add bc, de
 	extz wa
-	calr LABEL_F41568
+	calr Part_ReadByteDirect
 	extz hl
 	ret
 
@@ -135478,7 +135478,7 @@ LABEL_F41629:
 	push xiz
 	lds wa, 0
 	ldw bc, 0xB1
-	calr LABEL_F4158D
+	calr Part_ReadWord
 	ld iz, hl
 	cp iz, 0x4D8
 	jr c, LABEL_F4163F
@@ -135511,7 +135511,7 @@ LABEL_F41669:
 	push xiz
 	lds wa, 0
 	ldw bc, 0xB1
-	calr LABEL_F4158D
+	calr Part_ReadWord
 	ld iz, hl
 	cps iz, 0
 	jr nz, LABEL_F4167D
@@ -135649,7 +135649,7 @@ LABEL_F4178A:
 	dec 3, c
 	add c, 0xD0
 	extz bc
-	calr LABEL_F41568
+	calr Part_ReadByteDirect
 	and l, 0x80
 	ret
 
@@ -135665,7 +135665,7 @@ LABEL_F4179D:
 	dec 3, c
 	add c, 0xD0
 	extz bc
-	calr LABEL_F41568
+	calr Part_ReadByteDirect
 	cp (xsp), 0x0
 	jr z, LABEL_F417C6
 	set 7, l
@@ -135694,7 +135694,7 @@ LABEL_F417E5:
 	dec 3, c
 	add c, 0xD1
 	extz bc
-	jrl LABEL_F4158D
+	jrl Part_ReadWord
 
 LABEL_F417F4:
 	extz wa
@@ -135976,7 +135976,7 @@ LABEL_F41A5F:
 	jr nz, LABEL_F41A8A
 	ldw (xhl), 0x5
 	ld wa, (xiz)
-	calr LABEL_F41C5F
+	calr PartCtrl_ReadWord
 	ld (xiz), hl
 	cpw (xiz), 0xFFFF
 	jr z, LABEL_F41ACE
@@ -136015,7 +136015,7 @@ LABEL_F41A95:
 	jr nz, LABEL_F41AE5
 	ldw (xix), 0x5
 	ld wa, (xiz)
-	calr LABEL_F41C5F
+	calr PartCtrl_ReadWord
 	ld (xiz), hl
 	cpw (xiz), 0xFFFF
 	jr nz, LABEL_F41AD3
@@ -136090,7 +136090,7 @@ LABEL_F41B27:
 LABEL_F41B4E:
 	ld xwa, (xsp + 12)
 	ld wa, (xwa)
-	calr LABEL_F41C5F
+	calr PartCtrl_ReadWord
 	ldfr_werp HL, 0xFA
 	cp_erpw 0xFA, 0xFF, 0xFF
 	jr nz, LABEL_F41BB9
@@ -136102,7 +136102,7 @@ LABEL_F41B4E:
 
 LABEL_F41B6F:
 	ld wa, iz
-	calr LABEL_F41C5F
+	calr PartCtrl_ReadWord
 	ldfr_werp HL, 0xFA
 	ldto_werp WA, 0xFA
 	calr LABEL_F41444
@@ -136110,7 +136110,7 @@ LABEL_F41B6F:
 	jr z, LABEL_F41B8C
 	ldto_werp WA, 0xFA
 	lds bc, 0
-	calr LABEL_F41C4C
+	calr PartCtrl_WriteWord_Off1
 
 LABEL_F41B8C:
 	ld xwa, (xsp + 12)
@@ -136120,13 +136120,13 @@ LABEL_F41B8C:
 	ld xwa, (xsp + 12)
 	ld bc, (xwa)
 	ld wa, iz
-	calr LABEL_F41C4C
+	calr PartCtrl_WriteWord_Off1
 	ld wa, iz
 	ldw bc, 0xFFFF
 	calr PartCtrl_WriteWord
 	ld wa, iz
 	lds bc, 1
-	calr LABEL_F41C99
+	calr PartCtrl_SetClearBit7
 	ld xwa, (xsp + 12)
 	ld (xwa), iz
 	calr LABEL_F41669
@@ -136173,11 +136173,11 @@ LABEL_F41BEE:
 LABEL_F41BFC:
 	ld wa, iz
 	lds bc, 0
-	calr LABEL_F41C99
+	calr PartCtrl_SetClearBit7
 	ld bc, iz
 	dec 1, bc
 	ld wa, iz
-	calr LABEL_F41C4C
+	calr PartCtrl_WriteWord_Off1
 	ld bc, iz
 	inc 1, bc
 	ld wa, iz
@@ -136191,14 +136191,14 @@ LABEL_F41BFC:
 	jr ule, LABEL_F41BFC
 	lds wa, 1
 	lds bc, 0
-	calr LABEL_F41C4C
+	calr PartCtrl_WriteWord_Off1
 	ldw wa, 0x4D8
 	ldw bc, 0xFFFF
 	calr PartCtrl_WriteWord
 	popw iz
 	ret
 
-LABEL_F41C39:
+PartCtrl_ReadWord_Off1:
 	dec 1, wa
 	extz xwa
 	sll xwa, 8
@@ -136208,7 +136208,7 @@ LABEL_F41C39:
 	ld hl, (xbc)
 	ret
 
-LABEL_F41C4C:
+PartCtrl_WriteWord_Off1:
 	dec 1, wa
 	extz xwa
 	sll xwa, 8
@@ -136218,7 +136218,7 @@ LABEL_F41C4C:
 	ld (xde), bc
 	ret
 
-LABEL_F41C5F:
+PartCtrl_ReadWord:
 	dec 1, wa
 	extz xwa
 	sll xwa, 8
@@ -136234,8 +136234,8 @@ LABEL_F41C5F:
 ; Input:  WA = part number (1-based)
 ;         BC = 16-bit value to write
 ; Address: 0xB0000 + (WA-1)*256 + 3  (256 bytes per part)
-; Family: offset 1 (LABEL_F41C4C), offset 3 (this), read (LABEL_F41C5F),
-;         bit 7 test (LABEL_F41C85), bit 7 set/clear (LABEL_F41C99)
+; Family: offset 1 (PartCtrl_WriteWord_Off1), offset 3 (this), read (PartCtrl_ReadWord),
+;         bit 7 test (PartCtrl_TestBit7), bit 7 set/clear (PartCtrl_SetClearBit7)
 ; ============================================================================
 PartCtrl_WriteWord:
 	dec 1, wa
@@ -136247,7 +136247,7 @@ PartCtrl_WriteWord:
 	ld (xde), bc
 	ret
 
-LABEL_F41C85:
+PartCtrl_TestBit7:
 	dec 1, wa
 	extz xwa
 	sll xwa, 8
@@ -136257,7 +136257,7 @@ LABEL_F41C85:
 	and l, 0x80
 	ret
 
-LABEL_F41C99:
+PartCtrl_SetClearBit7:
 	dec 1, wa
 	extz xwa
 	sll xwa, 8
@@ -136272,7 +136272,7 @@ LABEL_F41CAE:
 	resm 7, (xde)
 	ret
 
-LABEL_F41CB1:
+PartCtrl_ReadByte:
 	extz bc
 	dec 1, wa
 	extz xwa
@@ -136329,7 +136329,7 @@ LABEL_F41D69:
 	ld (xhl), e
 	cp bc, 0xFF
 	jr nz, LABEL_F41DAE
-	calr LABEL_F41C5F
+	calr PartCtrl_ReadWord
 	ld wa, hl
 	cp wa, 0xFFFF
 	jr nz, LABEL_F41D9C
@@ -136366,7 +136366,7 @@ LABEL_F41DB9:
 	ld wa, (xbc + 2)
 	ld (xde + 2), wa
 	ld wa, (xde)
-	calr LABEL_F41C5F
+	calr PartCtrl_ReadWord
 	ld wa, hl
 	cp wa, 0xFFFF
 	jr z, LABEL_F41DE4
@@ -136385,7 +136385,7 @@ LABEL_F41DE4:
 
 LABEL_F41DF2:
 	lds wa, 1
-	calr LABEL_F41C5F
+	calr PartCtrl_ReadWord
 	ld wa, hl
 	cp wa, 0xFFFF
 	jr z, LABEL_F41E0A
@@ -136400,7 +136400,7 @@ LABEL_F41E0A:
 	ldw de, 0x82
 	calr LABEL_F41CC9
 	lds wa, 2
-	calr LABEL_F41C5F
+	calr PartCtrl_ReadWord
 	ld wa, hl
 	cp wa, 0xFFFF
 	jr z, LABEL_F41E2C
@@ -136418,18 +136418,18 @@ LABEL_F41E2C:
 LABEL_F41E36:
 	push xiz
 	lds wa, 1
-	calr LABEL_F41C85
+	calr PartCtrl_TestBit7
 	cps l, 0
 	jr nz, LABEL_F41E9F
 	lds wa, 1
 	lds bc, 1
-	calr LABEL_F41C99
+	calr PartCtrl_SetClearBit7
 	calr LABEL_F41669
 	lds wa, 1
-	calr LABEL_F41C39
+	calr PartCtrl_ReadWord_Off1
 	ldfr_werp HL, 0xFA
 	lds wa, 1
-	calr LABEL_F41C5F
+	calr PartCtrl_ReadWord
 	ld iz, hl
 	cpi_werp 0xFA, 0
 	jr nz, LABEL_F41E6F
@@ -136457,30 +136457,30 @@ LABEL_F41E80:
 	ldto_werp BC, 0xFA
 
 LABEL_F41E8D:
-	calr LABEL_F41C4C
+	calr PartCtrl_WriteWord_Off1
 
 LABEL_F41E90:
 	lds wa, 1
 	lds bc, 0
-	calr LABEL_F41C4C
+	calr PartCtrl_WriteWord_Off1
 	lds wa, 1
 	ldw bc, 0xFFFF
 	calr PartCtrl_WriteWord
 
 LABEL_F41E9F:
 	lds wa, 2
-	calr LABEL_F41C85
+	calr PartCtrl_TestBit7
 	cps l, 0
 	jr nz, LABEL_F41F07
 	lds wa, 2
 	lds bc, 1
-	calr LABEL_F41C99
+	calr PartCtrl_SetClearBit7
 	calr LABEL_F41669
 	lds wa, 2
-	calr LABEL_F41C39
+	calr PartCtrl_ReadWord_Off1
 	ldfr_werp HL, 0xFA
 	lds wa, 2
-	calr LABEL_F41C5F
+	calr PartCtrl_ReadWord
 	ld iz, hl
 	cpi_werp 0xFA, 0
 	jr nz, LABEL_F41ED7
@@ -136508,12 +136508,12 @@ LABEL_F41EE8:
 	ldto_werp BC, 0xFA
 
 LABEL_F41EF5:
-	calr LABEL_F41C4C
+	calr PartCtrl_WriteWord_Off1
 
 LABEL_F41EF8:
 	lds wa, 2
 	lds bc, 0
-	calr LABEL_F41C4C
+	calr PartCtrl_WriteWord_Off1
 	lds wa, 2
 	ldw bc, 0xFFFF
 	calr PartCtrl_WriteWord
@@ -136577,7 +136577,7 @@ LABEL_F41F7C:
 
 LABEL_F41F85:
 	ld wa, iz
-	calr LABEL_F41C85
+	calr PartCtrl_TestBit7
 	cps l, 0
 	jr nz, LABEL_F41F96
 	ldw wa, 0x28
@@ -136587,9 +136587,9 @@ LABEL_F41F85:
 LABEL_F41F96:
 	ld wa, iz
 	lds bc, 0
-	calr LABEL_F41C99
+	calr PartCtrl_SetClearBit7
 	ld wa, iz
-	calr LABEL_F41C5F
+	calr PartCtrl_ReadWord
 	ldfr_werp HL, 0xFA
 	ld wa, iz
 	calr LABEL_F41FB5
@@ -136609,15 +136609,15 @@ LABEL_F41FB5:
 	calr PartCtrl_WriteWord
 	ldda16 xwa, 61999
 	ld bc, iz
-	calr LABEL_F41C4C
+	calr PartCtrl_WriteWord_Off1
 	ld wa, iz
 	calr LABEL_F41444
 	ld wa, iz
 	lds bc, 0
-	calr LABEL_F41C99
+	calr PartCtrl_SetClearBit7
 	ld wa, iz
 	lds bc, 0
-	calr LABEL_F41C4C
+	calr PartCtrl_WriteWord_Off1
 	calr LABEL_F41629
 	ld wa, iz
 	lds bc, 5
@@ -136631,7 +136631,7 @@ LABEL_F41FEC:
 	pushw iz
 	ld (xsp + 2), wa
 	ld wa, (xsp + 2)
-	calr LABEL_F41C5F
+	calr PartCtrl_ReadWord
 	cp hl, 0xFFFF
 	jr z, LABEL_F42006
 	ldw wa, 0x8
@@ -136654,13 +136654,13 @@ LABEL_F42016:
 	calr PartCtrl_WriteWord
 	ld wa, iz
 	ld bc, (xsp + 2)
-	calr LABEL_F41C4C
+	calr PartCtrl_WriteWord_Off1
 	ld wa, iz
 	ldw bc, 0xFFFF
 	calr PartCtrl_WriteWord
 	ld wa, iz
 	lds bc, 1
-	calr LABEL_F41C99
+	calr PartCtrl_SetClearBit7
 	ld hl, iz
 
 LABEL_F42037:
@@ -136674,7 +136674,7 @@ LABEL_F4203B:
 	cp iz, 0xFFFF
 	jr z, LABEL_F4206D
 	ld wa, iz
-	calr LABEL_F41C5F
+	calr PartCtrl_ReadWord
 	ldfr_werp HL, 0xFA
 	ldto_werp WA, 0xFA
 	calr LABEL_F41444
@@ -136682,12 +136682,12 @@ LABEL_F4203B:
 	jr z, LABEL_F42063
 	ldto_werp WA, 0xFA
 	lds bc, 0
-	calr LABEL_F41C4C
+	calr PartCtrl_WriteWord_Off1
 
 LABEL_F42063:
 	ld wa, iz
 	lds bc, 1
-	calr LABEL_F41C99
+	calr PartCtrl_SetClearBit7
 	calr LABEL_F41669
 
 LABEL_F4206D:
@@ -136751,7 +136751,7 @@ LABEL_F420BB:
 	inc 5, wa
 	stda16 9830, xwa
 	ldda16 xwa, 10415
-	calr LABEL_F41C5F
+	calr PartCtrl_ReadWord
 	stda16 10415, xhl
 	ret
 
@@ -136825,7 +136825,7 @@ SeqData_ReadNextByte:
 	ld c, a
 	extz bc
 	ldda16 xwa, 10415
-	jrl LABEL_F41CB1
+	jrl PartCtrl_ReadByte
 
 LABEL_F421B5:
 	ld e, a
@@ -136840,7 +136840,7 @@ LABEL_F421C6:
 	cp wa, 0xFF
 	jr nz, LABEL_F421E2
 	ldda16 xwa, 10415
-	calr LABEL_F41C5F
+	calr PartCtrl_ReadWord
 	stda16 10415, xhl
 	stdi16 9830, 5
 	ret
@@ -136855,7 +136855,7 @@ LABEL_F421E9:
 	ldda16 xbc, 9830
 	cp bc, 0xFF
 	jr nz, LABEL_F42200
-	calr LABEL_F41C5F
+	calr PartCtrl_ReadWord
 	ld wa, hl
 	lds bc, 5
 	jr LABEL_F42202
@@ -136865,7 +136865,7 @@ LABEL_F42200:
 
 LABEL_F42202:
 	extz bc
-	jrl LABEL_F41CB1
+	jrl PartCtrl_ReadByte
 
 LABEL_F42207:
 	lda xsp, (xsp - 14)
@@ -137292,7 +137292,7 @@ LABEL_F425E2:
 	pushw iz
 	ld iz, wa
 	ld wa, iz
-	calr LABEL_F41C5F
+	calr PartCtrl_ReadWord
 	ld wa, hl
 	cp wa, 0xFFFF
 	jr z, LABEL_F4260A
@@ -137346,24 +137346,24 @@ LABEL_F426BE:
 
 LABEL_F426CE:
 	ld wa, iz
-	calr LABEL_F41C5F
+	calr PartCtrl_ReadWord
 	ldfr_werp HL, 0xFA
 	ld wa, iz
 	lds bc, 0
-	calr LABEL_F41C4C
+	calr PartCtrl_WriteWord_Off1
 	ld wa, iz
 	ldw bc, 0xFFFF
 	calr PartCtrl_WriteWord
 	ld wa, iz
 	lds bc, 1
-	calr LABEL_F41C99
+	calr PartCtrl_SetClearBit7
 	ldto_werp WA, 0xFA
 	stda16 61999, xwa
 	cp_erpw 0xFA, 0xFF, 0xFF
 	jr z, LABEL_F42702
 	ldto_werp WA, 0xFA
 	lds bc, 0
-	calr LABEL_F41C4C
+	calr PartCtrl_WriteWord_Off1
 
 LABEL_F42702:
 	decdi16 1, 62001
@@ -137825,12 +137825,12 @@ LABEL_F42B2E:
 	add iz, 0x2E0
 	lds wa, 0
 	ld bc, iz
-	calr LABEL_F41568
+	calr Part_ReadByteDirect
 	ldfr_berp L, 0xFB
 	ld bc, iz
 	inc 1, bc
 	lds wa, 0
-	calr LABEL_F41568
+	calr Part_ReadByteDirect
 	ldto_berp A, 0xFB
 	extz wa
 	extz hl
@@ -138087,7 +138087,7 @@ LABEL_F42E5A:
 	ldto_berp A, 0xFB
 	extz wa
 	ldw bc, 0x1C
-	calr LABEL_F4158D
+	calr Part_ReadWord
 	cps hl, 0
 	jr z, LABEL_F42E74
 	ldto_berp A, 0xFB
@@ -138356,7 +138356,7 @@ LABEL_F42F03:
 	ldto_berp A, 0xFB
 	extz wa
 	ldw bc, 0xBE
-	calr LABEL_F41568
+	calr Part_ReadByteDirect
 	set 0, l
 	ldto_berp A, 0xFB
 	extz wa
@@ -138384,7 +138384,7 @@ LABEL_F43138:
 	ldto_berp A, 0xFB
 	extz wa
 	lda xbc, (xsp + 4)
-	calr LABEL_F414A0
+	calr Part_CopyBlock16
 	ldto_berp A, 0xFB
 	extz wa
 	ldw bc, 0x110
@@ -139248,7 +139248,7 @@ LABEL_F43A01:
 	ld wa, hl
 	cp wa, 0xFFFF
 	jr z, LABEL_F43A2E
-	calr LABEL_F41C85
+	calr PartCtrl_TestBit7
 	cps l, 0
 	jr z, LABEL_F43A2E
 	lds hl, 1
@@ -139490,7 +139490,7 @@ LABEL_F43C37:
 	setda 4, 10419
 	lds wa, 0
 	ldw bc, 0xBD
-	calr LABEL_F41568
+	calr Part_ReadByteDirect
 	ldada xwa, 64941
 	cp l, 0xFF
 	jr nz, LABEL_F43C6C
@@ -144561,7 +144561,7 @@ LABEL_F47BFB:
 
 LABEL_F47C2D:
 	ld wa, iz
-	call LABEL_F41C5F
+	call PartCtrl_ReadWord
 	ldfr_werp HL, 0xFA
 	ld wa, iz
 	ldto_werp BC, 0xFA
@@ -144614,7 +144614,7 @@ LABEL_F47C8B:
 	inc 1, a
 	extz wa
 	ldw bc, 0x1E
-	call LABEL_F4158D
+	call Part_ReadWord
 	ld de, hl
 	ld8_24 a, 0x00ffe3
 	inc 1, a
@@ -144831,7 +144831,7 @@ LABEL_F47EAC:
 LABEL_F47EB8:
 	ld wa, iz
 	lds bc, 0
-	call LABEL_F41C99
+	call PartCtrl_SetClearBit7
 	ld wa, iz
 	lds bc, 5
 	ldw de, 0x82
@@ -144841,7 +144841,7 @@ LABEL_F47EB8:
 	ld bc, iz
 	dec 1, bc
 	ld wa, iz
-	call LABEL_F41C4C
+	call PartCtrl_WriteWord_Off1
 
 LABEL_F47ED9:
 	ld bc, iz
@@ -144855,7 +144855,7 @@ LABEL_F47ED9:
 LABEL_F47EEB:
 	ldda16 xwa, 61999
 	lds bc, 0
-	call LABEL_F41C4C
+	call PartCtrl_WriteWord_Off1
 	ldw wa, 0x4D8
 	ldw bc, 0xFFFF
 	call PartCtrl_WriteWord
@@ -144890,7 +144890,7 @@ LABEL_F47F01:
 LABEL_F47FA4:
 	lds wa, 1
 	ldw bc, 0xC7
-	call LABEL_F41568
+	call Part_ReadByteDirect
 	st8_24 0x00ffe3, l
 	lds wa, 1
 	ldw bc, 0xC7
@@ -144898,7 +144898,7 @@ LABEL_F47FA4:
 	call Part_WriteByte
 	lds wa, 1
 	ldw bc, 0xC8
-	call LABEL_F4158D
+	call Part_ReadWord
 	st16_24 0x00ffec, xhl
 	lds wa, 1
 	ldw bc, 0xC8
@@ -144954,7 +144954,7 @@ LABEL_F4803E:
 	ldada xde, 10702
 	inc_sriw 1, 0x07, 0xE8, 0xE4
 	incm 1, (xsp + 2)
-	call LABEL_F41C5F
+	call PartCtrl_ReadWord
 	ld wa, hl
 	cp wa, 0xFFFF
 	jr nz, LABEL_F4803E
@@ -145070,18 +145070,18 @@ LABEL_F480F8:
 LABEL_F481E3:
 	lds wa, 0
 	lds bc, 6
-	call LABEL_F41568
+	call Part_ReadByteDirect
 	cps l, 3
 	jr nc, LABEL_F4820F
 	setda 0, 62014
 	lds wa, 0
 	lds bc, 5
-	call LABEL_F41568
+	call Part_ReadByteDirect
 	cps l, 0
 	jr nz, LABEL_F4820F
 	lds wa, 0
 	lds bc, 6
-	call LABEL_F41568
+	call Part_ReadByteDirect
 	cps l, 3
 	jr nc, LABEL_F4820F
 	resda 0, 62014
@@ -145163,7 +145163,7 @@ LABEL_F4829F:
 	cp de, 0x100
 	jr c, LABEL_F4829F
 	ld wa, (xsp + 8)
-	call LABEL_F41C39
+	call PartCtrl_ReadWord_Off1
 	ld wa, hl
 	cps wa, 0
 	jr z, LABEL_F482CF
@@ -145190,12 +145190,12 @@ LABEL_F482CF:
 
 LABEL_F482FA:
 	ld wa, (xsp + 8)
-	call LABEL_F41C5F
+	call PartCtrl_ReadWord
 	ld wa, hl
 	cp wa, 0xFFFF
 	jr z, LABEL_F48312
 	ld bc, (xsp + 10)
-	call LABEL_F41C4C
+	call PartCtrl_WriteWord_Off1
 	jr LABEL_F4833D
 
 LABEL_F48312:
@@ -145204,7 +145204,7 @@ LABEL_F48312:
 	ld c, (xsp + 6)
 	extz bc
 	ld de, (xsp + 10)
-	call LABEL_F415B2
+	call Part_WriteWord_Indexed
 	ld a, (xsp + 4)
 	dec 1, a
 	cpda8_24 a, 65507
@@ -145213,11 +145213,11 @@ LABEL_F48312:
 	extz bc
 	lds wa, 0
 	ld de, (xsp + 10)
-	call LABEL_F415B2
+	call Part_WriteWord_Indexed
 
 LABEL_F4833D:
 	ld wa, (xsp + 8)
-	call LABEL_F41C5F
+	call PartCtrl_ReadWord
 	ld (xsp + 8), hl
 	cpw (xsp + 8), 0xFFFF
 	jrl nz, LABEL_F48255
@@ -145231,10 +145231,10 @@ LABEL_F4834F:
 	jrl ule, LABEL_F4821D
 	lds wa, 1
 	lds bc, 1
-	call LABEL_F41C99
+	call PartCtrl_SetClearBit7
 	lds wa, 1
 	lds bc, 0
-	call LABEL_F41C4C
+	call PartCtrl_WriteWord_Off1
 	lds wa, 1
 	ldw bc, 0xFFFF
 	call PartCtrl_WriteWord
@@ -145244,10 +145244,10 @@ LABEL_F4834F:
 	call LABEL_F41CC9
 	lds wa, 2
 	lds bc, 1
-	call LABEL_F41C99
+	call PartCtrl_SetClearBit7
 	lds wa, 2
 	lds bc, 0
-	call LABEL_F41C4C
+	call PartCtrl_WriteWord_Off1
 	lds wa, 2
 	ldw bc, 0xFFFF
 	call PartCtrl_WriteWord
@@ -145269,7 +145269,7 @@ LABEL_F483B5:
 	ldto_berp A, 0xFB
 	extz wa
 	ldw bc, 0x112
-	call LABEL_F41568
+	call Part_ReadByteDirect
 	cps l, 1
 	jr z, LABEL_F483F6
 	ldto_berp A, 0xFB
@@ -145280,7 +145280,7 @@ LABEL_F483B5:
 	ldto_berp A, 0xFB
 	extz wa
 	ldw bc, 0x110
-	call LABEL_F4158D
+	call Part_ReadWord
 	cps hl, 0
 	jr nz, LABEL_F483F6
 	ldto_berp A, 0xFB
@@ -145371,7 +145371,7 @@ LABEL_F48492:
 	ld wa, iz
 
 LABEL_F4849A:
-	call LABEL_F41C5F
+	call PartCtrl_ReadWord
 	ld (xsp + 4), hl
 	cpi_werp 0xFA, 0
 	jr nz, LABEL_F484B4
@@ -145432,13 +145432,13 @@ LABEL_F48519:
 	ld c, (xsp + 10)
 	extz bc
 	ld de, iz
-	call LABEL_F415B2
+	call Part_WriteWord_Indexed
 	ld a, (xsp + 12)
 	extz wa
 	ld c, (xsp + 10)
 	extz bc
 	ld de, (xsp + 8)
-	call LABEL_F415DB
+	call Part_WriteByte_Indexed
 	ld a, (xsp + 12)
 	extz wa
 	ld c, (xsp + 10)
@@ -145452,7 +145452,7 @@ LABEL_F48550:
 	ld wa, iz
 	calr LABEL_F4879F
 	ld wa, iz
-	call LABEL_F41C5F
+	call PartCtrl_ReadWord
 	ld iz, hl
 	cp iz, 0xFFFF
 	jr nz, LABEL_F48550
@@ -145547,7 +145547,7 @@ LABEL_F485EB:
 LABEL_F48605:
 	ld wa, (xsp + 2)
 	ld bc, iz
-	call LABEL_F41C4C
+	call PartCtrl_WriteWord_Off1
 	ld wa, iz
 	ld bc, (xsp + 2)
 
@@ -145555,7 +145555,7 @@ LABEL_F48613:
 	call PartCtrl_WriteWord
 	ld wa, iz
 	lds bc, 0
-	call LABEL_F41C4C
+	call PartCtrl_WriteWord_Off1
 	ld wa, iz
 	call LABEL_F41444
 	popw iz
@@ -145570,7 +145570,7 @@ LABEL_F48629:
 	ld iz, wa
 	ldw (xsp + 2), 0x0
 	ld wa, iz
-	call LABEL_F41C39
+	call PartCtrl_ReadWord_Off1
 	cp hl, (xsp + 6)
 	jr z, LABEL_F48649
 	setm 4, (xsp + 2)
@@ -145580,12 +145580,12 @@ LABEL_F48649:
 	cpw (xsp + 4), 0x0
 	jr nz, LABEL_F48667
 	ld wa, iz
-	call LABEL_F41C85
+	call PartCtrl_TestBit7
 	cps l, 0
 	jr z, LABEL_F48667
 	ld wa, iz
 	lds bc, 0
-	call LABEL_F41C99
+	call PartCtrl_SetClearBit7
 	setm 1, (xsp + 2)
 	jr LABEL_F48683
 
@@ -145593,12 +145593,12 @@ LABEL_F48667:
 	cpw (xsp + 4), 0x1
 	jr nz, LABEL_F48683
 	ld wa, iz
-	call LABEL_F41C85
+	call PartCtrl_TestBit7
 	cps l, 0
 	jr nz, LABEL_F48683
 	ld wa, iz
 	lds bc, 1
-	call LABEL_F41C99
+	call PartCtrl_SetClearBit7
 	setm 2, (xsp + 2)
 
 LABEL_F48683:
@@ -145612,7 +145612,7 @@ LABEL_F4868A:
 	jr ugt, LABEL_F4869C
 	cps wa, 0
 	jr z, LABEL_F4869C
-	call LABEL_F41C85
+	call PartCtrl_TestBit7
 	cps l, 0
 	jr nz, LABEL_F486A0
 
@@ -145634,7 +145634,7 @@ LABEL_F486AB:
 	ldto_berp C, 0xF8
 	extz bc
 	ld wa, (xsp + 2)
-	call LABEL_F41CB1
+	call PartCtrl_ReadByte
 	cp l, 0x82
 	jr z, LABEL_F486C9
 	cp l, 0x84
@@ -145675,13 +145675,13 @@ LABEL_F486F1:
 	ld c, (xsp)
 	extz bc
 	ldw de, 0xFFFF
-	call LABEL_F415B2
+	call Part_WriteWord_Indexed
 	ld a, (xsp + 2)
 	extz wa
 	ld c, (xsp)
 	extz bc
 	lds de, 5
-	call LABEL_F415DB
+	call Part_WriteByte_Indexed
 	ld a, (xsp + 2)
 	extz wa
 	ld c, (xsp)
@@ -145999,7 +145999,7 @@ LABEL_F489B9:
 	inc 5, wa
 	stda16 9830, xwa
 	ldda16 xwa, 10415
-	call LABEL_F41C5F
+	call PartCtrl_ReadWord
 	stda16 10415, xhl
 	ret
 
@@ -147237,12 +147237,12 @@ LABEL_F4957B:
 	add iz, 0x2E0
 	lds wa, 0
 	ld bc, iz
-	call LABEL_F41568
+	call Part_ReadByteDirect
 	ldfr_berp L, 0xFB
 	ld bc, iz
 	inc 1, bc
 	lds wa, 0
-	call LABEL_F41568
+	call Part_ReadByteDirect
 	ldto_berp A, 0xFB
 	stda8 9674, a
 	stda8 9676, l
@@ -147886,12 +147886,12 @@ SeqPart_InitSlots:
 	extz bc
 	lds wa, 0
 	ldw de, 0xFFFF
-	call LABEL_F415B2
+	call Part_WriteWord_Indexed
 	ldda8 c, 10359
 	extz bc
 	lds wa, 0
 	lds de, 5
-	call LABEL_F415DB
+	call Part_WriteByte_Indexed
 	ldda8 c, 10359
 	extz bc
 	lds wa, 0
@@ -147940,14 +147940,14 @@ SeqPart_InitFinish:
 	ldda8 c, 10359
 	extz bc
 	ldw de, 0xFFFF
-	call LABEL_F415B2
+	call Part_WriteWord_Indexed
 	ld8_24 a, 0x00ffe3
 	inc 1, a
 	extz wa
 	ldda8 c, 10359
 	extz bc
 	lds de, 5
-	call LABEL_F415DB
+	call Part_WriteByte_Indexed
 	popw iz
 	ret
 
@@ -148217,12 +148217,12 @@ SeqPart_ClearSingle:
 	extz bc
 	lds wa, 0
 	ldw de, 0xFFFF
-	call LABEL_F415B2
+	call Part_WriteWord_Indexed
 	ld c, (xsp)
 	extz bc
 	lds wa, 0
 	lds de, 5
-	call LABEL_F415DB
+	call Part_WriteByte_Indexed
 	ld a, (xsp)
 	extz wa
 	dec 1, a
@@ -148587,7 +148587,7 @@ SeqPart_AllocDone:
 	stdi16 10373, 5
 	ld wa, iz
 	lds bc, 0
-	call LABEL_F41C4C
+	call PartCtrl_WriteWord_Off1
 	ld wa, iz
 	ldw bc, 0xFFFF
 	call PartCtrl_WriteWord
@@ -149114,7 +149114,7 @@ SeqPart_FullLoadExit:
 
 SeqPart_FullLoadWriteBack:
 	ld wa, (xde)
-	call LABEL_F41C39
+	call PartCtrl_ReadWord_Off1
 	cps hl, 0
 	jr z, SeqPart_FullLoadErrorExit
 	ldada xwa, 10292
@@ -149321,7 +149321,7 @@ SeqPart_DualCopyReturn:
 	cps wa, 5
 	jr ugt, SeqPart_DualCopyErrorCheck
 	ld wa, (xde)
-	call LABEL_F41C39
+	call PartCtrl_ReadWord_Off1
 	ldada xwa, 10292
 	ld (xwa), hl
 	ldw (xwa + 2), 0xFF
@@ -149494,7 +149494,7 @@ SeqPart_WalkerNote:
 	ldda8 c, 9858
 	extz bc
 	lds wa, 0
-	call LABEL_F415C8
+	call Part_ReadWord_Indexed
 	stda16 10292, xhl
 	ldda8 c, 9858
 	extz bc
@@ -149568,7 +149568,7 @@ SeqPart_WalkerNextSet:
 	cps wa, 5
 	jr ugt, SeqPart_WalkerComplete
 	ld wa, (xde)
-	call LABEL_F41C39
+	call PartCtrl_ReadWord_Off1
 	ldada xwa, 10292
 	ld (xwa), hl
 	ldw (xwa + 2), 0xFF
@@ -149972,12 +149972,12 @@ SeqPart_ExchangeInit:
 	extz bc
 	lds wa, 0
 	ld de, iz
-	call LABEL_F415B2
+	call Part_WriteWord_Indexed
 	ldda8 c, 9810
 	extz bc
 	lds wa, 0
 	lds de, 5
-	call LABEL_F415DB
+	call Part_WriteByte_Indexed
 	ldda8 c, 9810
 	extz bc
 	lds wa, 0
@@ -149990,7 +149990,7 @@ SeqPart_ExchangeInit:
 	call LABEL_F417F4
 	ld wa, iz
 	lds bc, 0
-	call LABEL_F41C4C
+	call PartCtrl_WriteWord_Off1
 	ld wa, iz
 	ldw bc, 0xFFFF
 	call PartCtrl_WriteWord
@@ -150077,7 +150077,7 @@ SeqPart_ExchangeAdvance:
 	ldda8 c, 9810
 	extz bc
 	lds wa, 0
-	call LABEL_F415C8
+	call Part_ReadWord_Indexed
 	stda16 9820, xhl
 
 SeqPart_ExchangeCheckDone:
@@ -150190,7 +150190,7 @@ SeqPart_PosForwardStep:
 	cps bc, 4
 	ret ugt
 	ldda16 xwa, 10220
-	call LABEL_F41C39
+	call PartCtrl_ReadWord_Off1
 	stda16 10220, xhl
 	ldda16 xwa, 10220
 	cps wa, 0
@@ -150215,7 +150215,7 @@ SeqPart_PosForwardDone:
 	cps bc, 4
 	jr ugt, SeqPart_PosForwardUpdate
 	ldda16 xwa, 10220
-	call LABEL_F41C39
+	call PartCtrl_ReadWord_Off1
 	stda16 10220, xhl
 	ldda16 xwa, 10220
 	cps wa, 0
@@ -150229,7 +150229,7 @@ SeqPart_PosForwardUpdate:
 	cps wa, 4
 	ret ugt
 	ldda16 xwa, 9896
-	call LABEL_F41C39
+	call PartCtrl_ReadWord_Off1
 	stda16 9896, xhl
 	ldda16 xwa, 9896
 	cps wa, 0
@@ -150283,7 +150283,7 @@ SeqPart_PosBackwardLoop:
 	cps wa, 5
 	jr nz, SeqPart_PosBackwardCheck
 	ld wa, (xde)
-	call LABEL_F41C39
+	call PartCtrl_ReadWord_Off1
 	ldada xwa, 10292
 	ld (xwa), hl
 	cpw (xwa), 0x0
@@ -150322,7 +150322,7 @@ SeqPart_PosBackwardUpdate:
 	cps wa, 5
 	ret nc
 	ldda16 xwa, 10220
-	call LABEL_F41C39
+	call PartCtrl_ReadWord_Off1
 	stda16 10220, xhl
 	ldda16 xwa, 10220
 	cps wa, 0
@@ -150331,7 +150331,7 @@ SeqPart_PosBackwardUpdate:
 	jr SeqPart_PosBackwardReturn
 
 SeqPart_PosBackwardValidate:
-	call LABEL_F41C85
+	call PartCtrl_TestBit7
 	cps l, 0
 	ret nz
 	stdi8 10362, 11
@@ -150357,7 +150357,7 @@ SeqPart_PosEqualSpecial:
 	cps bc, 4
 	jr ugt, SeqPart_PosEqualStore
 	ldda16 xwa, 10216
-	call LABEL_F41C39
+	call PartCtrl_ReadWord_Off1
 	stda16 10216, xhl
 	ldda16 xwa, 10216
 	cps wa, 0
@@ -150495,7 +150495,7 @@ SeqPart_NavBackwardValidate:
 	cps wa, 5
 	jr nz, SeqPart_NavBackwardCheck
 	ld wa, (xde)
-	call LABEL_F41C39
+	call PartCtrl_ReadWord_Off1
 	ldada xwa, 10292
 	ld (xwa), hl
 	cpw (xwa), 0x0
@@ -150620,7 +150620,7 @@ SeqPart_NavProcessWalker:
 	cpw (xwa + 2), 0x5
 	jr nz, SeqPart_NavWalkerValidate
 	ld wa, (xwa)
-	call LABEL_F41C39
+	call PartCtrl_ReadWord_Off1
 	ldada xwa, 10292
 	ld (xwa), hl
 	cpw (xwa), 0x0
@@ -150676,7 +150676,7 @@ SeqPart_NavWalkerFinish:
 	cps wa, 5
 	jr nz, SeqPart_NavWalkerReturn
 	ld wa, (xde)
-	call LABEL_F41C39
+	call PartCtrl_ReadWord_Off1
 	ldada xwa, 10292
 	ld (xwa), hl
 	cpw (xwa), 0x0
@@ -152887,7 +152887,7 @@ SeqStep_TrackChangeDrumSetup:
 	ldto_berp A, 0xFA
 	extz wa
 	ldw bc, 0xBD
-	call LABEL_F41568
+	call Part_ReadByteDirect
 	ldfr_berp L, 0xFB
 	cp_erpb 0xFB, 0xFF
 	jr nz, SeqStep_TrackChangeProcess
@@ -153055,10 +153055,10 @@ SeqStep_TrackChangeFinal:
 	ld wa, bc
 	ld (xsp + 6), bc
 	lds bc, 1
-	call LABEL_F41C99
+	call PartCtrl_SetClearBit7
 	ld wa, (xsp + 6)
 	ld bc, iz
-	call LABEL_F41C4C
+	call PartCtrl_WriteWord_Off1
 	ld wa, (xsp + 6)
 	ldw bc, 0xFFFF
 	call PartCtrl_WriteWord
@@ -153088,7 +153088,7 @@ SeqStep_TrackChangeWriteBack:
 
 SeqStep_TrackChangeWriteDone:
 	ld wa, (xsp + 4)
-	call LABEL_F41C5F
+	call PartCtrl_ReadWord
 	ld (xsp + 4), hl
 	cpw (xsp + 4), 0xFFFF
 	jrl nz, SeqStep_TrackChangeComplete
@@ -153098,7 +153098,7 @@ SeqStep_TrackChangeWriteDone:
 	inc 1, c
 	extz bc
 	ldda16 xde, 10415
-	call LABEL_F415B2
+	call Part_WriteWord_Indexed
 	ldda8 a, 9994
 	dec 1, a
 	cpda8_24 a, 65507
@@ -153108,7 +153108,7 @@ SeqStep_TrackChangeWriteDone:
 	extz bc
 	ldda16 xde, 10415
 	lds wa, 0
-	call LABEL_F415B2
+	call Part_WriteWord_Indexed
 
 SeqStep_TrackChangeError:
 	ldda8 c, 9992
@@ -153136,7 +153136,7 @@ SeqStep_TrackChangeRecover:
 	extz bc
 	ldto_berp E, 0xFB
 	extz de
-	call LABEL_F415DB
+	call Part_WriteByte_Indexed
 	ldda8 a, 9994
 	dec 1, a
 	cpda8_24 a, 65507
@@ -153147,7 +153147,7 @@ SeqStep_TrackChangeRecover:
 	ldto_berp E, 0xFB
 	extz de
 	lds wa, 0
-	call LABEL_F415DB
+	call Part_WriteByte_Indexed
 
 SeqStep_TrackChangeRecoverDone:
 	ldda8 c, 9992
@@ -153190,7 +153190,7 @@ SeqStep_TrackChangeRecoverAdvance:
 	ldda8 a, 9994
 	extz wa
 	ldw bc, 0x1E
-	call LABEL_F4158D
+	call Part_ReadWord
 	ld de, hl
 	ldda8 a, 9998
 	dec 1, a
@@ -153313,10 +153313,10 @@ SeqStep_PartCopy:
 	call PartCtrl_WriteWord
 	ldto_werp WA, 0xFA
 	lds bc, 1
-	call LABEL_F41C99
+	call PartCtrl_SetClearBit7
 	ldto_werp WA, 0xFA
 	ld bc, (xsp + 4)
-	call LABEL_F41C4C
+	call PartCtrl_WriteWord_Off1
 	ldto_werp WA, 0xFA
 	ldw bc, 0xFFFF
 	call PartCtrl_WriteWord
@@ -153349,7 +153349,7 @@ SeqStep_PartCopyLoop:
 
 SeqStep_PartCopyFinish:
 	ld wa, iz
-	call LABEL_F41C5F
+	call PartCtrl_ReadWord
 	ld iz, hl
 	cp iz, 0xFFFF
 	jrl nz, SeqStep_MultiTrackCopyCheck
@@ -153359,7 +153359,7 @@ SeqStep_PartCopyFinish:
 	inc 1, c
 	extz bc
 	ldda16 xde, 10415
-	call LABEL_F415B2
+	call Part_WriteWord_Indexed
 	ldda8 a, 9994
 	dec 1, a
 	cpda8_24 a, 65507
@@ -153369,7 +153369,7 @@ SeqStep_PartCopyFinish:
 	extz bc
 	ldda16 xde, 10415
 	lds wa, 0
-	call LABEL_F415B2
+	call Part_WriteWord_Indexed
 
 SeqStep_PartCopyUpdateSrc:
 	ldda8 c, 9992
@@ -153398,7 +153398,7 @@ SeqStep_PartCopySetupDest:
 	extz bc
 	ldto_berp E, 0xFB
 	extz de
-	call LABEL_F415DB
+	call Part_WriteByte_Indexed
 	ldda8 a, 9994
 	dec 1, a
 	cpda8_24 a, 65507
@@ -153409,7 +153409,7 @@ SeqStep_PartCopySetupDest:
 	ldto_berp E, 0xFB
 	extz de
 	lds wa, 0
-	call LABEL_F415DB
+	call Part_WriteByte_Indexed
 
 SeqStep_PartCopyComplete:
 	ldda8 a, 10359
@@ -153471,7 +153471,7 @@ SeqStep_VoiceReassignValidate:
 	extz bc
 	ld wa, bc
 	ldw bc, 0x1E
-	call LABEL_F4158D
+	call Part_ReadWord
 	ld de, hl
 
 SeqStep_VoiceReassignStore:
@@ -153518,7 +153518,7 @@ SeqStep_VoiceReassignCleanup:
 	ldto_berp A, 0xF9
 	extz wa
 	ldw bc, 0xBD
-	call LABEL_F41568
+	call Part_ReadByteDirect
 	ldfr_berp L, 0xFB
 	ldto_berp A, 0xFA
 	extz wa
@@ -153533,11 +153533,11 @@ SeqStep_VoiceReassignCleanup:
 	ldto_berp A, 0xFA
 	extz wa
 	lda xbc, (xsp + 6)
-	call LABEL_F414A0
+	call Part_CopyBlock16
 	ldto_berp A, 0xF9
 	extz wa
 	ldw bc, 0x110
-	call LABEL_F4158D
+	call Part_ReadWord
 	ld de, hl
 	ldto_berp A, 0xFA
 	extz wa
@@ -153547,7 +153547,7 @@ SeqStep_VoiceReassignCleanup:
 	extz wa
 	ldto_berp C, 0xFA
 	extz bc
-	call LABEL_F414CF
+	call Part_CopyToBuffer
 	ldda8 c, 9994
 	dec 1, c
 	ld8_24 a, 0x00ffe3
@@ -153787,7 +153787,7 @@ SeqStep_DecrementPos:
 
 SeqStep_DecrementCheck:
 	ldda16 xwa, 10044
-	call LABEL_F41C39
+	call PartCtrl_ReadWord_Off1
 	cps hl, 0
 	ret z
 	stda16 10022, xhl
@@ -153854,7 +153854,7 @@ SeqStep_WalkReadNext:
 	cps wa, 5
 	jr nz, SeqStep_WalkAdvancePos
 	ldda16 xwa, 10431
-	call LABEL_F41C39
+	call PartCtrl_ReadWord_Off1
 	cps hl, 0
 	jr nz, SeqStep_WalkUpdatePos
 	ldw hl, 0xFFFF
@@ -153878,7 +153878,7 @@ SeqStep_WalkReadByte:
 	ld c, a
 	extz bc
 	ldda16 xwa, 10431
-	jp LABEL_F41CB1
+	jp PartCtrl_ReadByte
 
 SeqStep_InsertEvent:
 	calr SeqStep_PrepareReadBack
@@ -153917,7 +153917,7 @@ SeqStep_InsertValidate:
 	call PartCtrl_WriteWord
 	ldda16 xbc, 10415
 	ldto_werp WA, 0xFA
-	call LABEL_F41C4C
+	call PartCtrl_WriteWord_Off1
 	ldto_werp WA, 0xFA
 	ldw bc, 0xFFFF
 	call PartCtrl_WriteWord
@@ -153929,14 +153929,14 @@ SeqStep_InsertValidate:
 	extz bc
 	lds wa, 0
 	ldto_werp DE, 0xFA
-	call LABEL_F415B2
+	call Part_WriteWord_Indexed
 	ldda8 c, 9780
 	extz bc
 	lds wa, 0
 	lds de, 5
 
 SeqStep_InsertError:
-	call LABEL_F415DB
+	call Part_WriteByte_Indexed
 
 SeqStep_InsertDone:
 	mrdw5 0x9F, 0x04, 0x19, 0xAF, 0x28
@@ -153955,7 +153955,7 @@ SeqStep_PrepareReadBack:
 	cps wa, 5
 	jr nz, SeqStep_PrepareCheck
 	ldda16 xwa, 10415
-	call LABEL_F41C39
+	call PartCtrl_ReadWord_Off1
 	stda16 10415, xhl
 	stdi16 9830, 255
 	jr SeqStep_PrepareDone
@@ -154077,10 +154077,10 @@ SeqStep_DeleteShiftFinal:
 	stda16 10415, xiz
 	ld wa, iz
 	lds bc, 1
-	call LABEL_F41C99
+	call PartCtrl_SetClearBit7
 	ld wa, iz
 	lds bc, 0
-	call LABEL_F41C4C
+	call PartCtrl_WriteWord_Off1
 	ld wa, iz
 	ldw bc, 0xFFFF
 	call PartCtrl_WriteWord
@@ -154200,7 +154200,7 @@ SeqStep_BoundaryError:
 	inc 1, c
 	extz bc
 	ldw de, 0xFFFF
-	call LABEL_F415B2
+	call Part_WriteWord_Indexed
 	ldda8 a, 10000
 	inc 1, a
 	extz wa
@@ -154208,7 +154208,7 @@ SeqStep_BoundaryError:
 	inc 1, c
 	extz bc
 	lds de, 5
-	call LABEL_F415DB
+	call Part_WriteByte_Indexed
 	ldda8 a, 10000
 	cpda8_24 a, 65507
 	jr nz, SeqStep_BoundaryFinal
@@ -154217,13 +154217,13 @@ SeqStep_BoundaryError:
 	extz bc
 	lds wa, 0
 	ldw de, 0xFFFF
-	call LABEL_F415B2
+	call Part_WriteWord_Indexed
 	ldda8 c, 10010
 	inc 1, c
 	extz bc
 	lds wa, 0
 	lds de, 5
-	call LABEL_F415DB
+	call Part_WriteByte_Indexed
 
 SeqStep_BoundaryFinal:
 	pop_werp 0xFA
@@ -155007,7 +155007,7 @@ SeqStep_SearchBackward:
 
 SeqStep_SearchBackwardLoop:
 	ld wa, iz
-	call LABEL_F41C85
+	call PartCtrl_TestBit7
 	cps l, 0
 	jr nz, SeqStep_SearchBackwardDone
 	djnz xiz, SeqStep_SearchBackwardLoop
@@ -155023,7 +155023,7 @@ SeqStep_SearchForward:
 
 SeqStep_SearchForwardLoop:
 	ld wa, iz
-	call LABEL_F41C85
+	call PartCtrl_TestBit7
 	cps l, 0
 	jr z, SeqStep_SearchForwardDone
 	inc 1, iz
@@ -155094,7 +155094,7 @@ SeqStep_CopyPartReturn:
 	cp hl, 0x100
 	jr c, SeqStep_CopyPartReturn
 	lds bc, 0
-	call LABEL_F41C99
+	call PartCtrl_SetClearBit7
 	pop xiz
 	inc 4, xsp
 	ret
@@ -155105,7 +155105,7 @@ SeqStep_UpdateRefsAfterSwap:
 	ld iz, bc
 	ld (xsp + 4), wa
 	ld wa, iz
-	call LABEL_F41C39
+	call PartCtrl_ReadWord_Off1
 	ld wa, hl
 	cps wa, 0
 	jr z, SeqStep_UpdateRefsLoop
@@ -155160,12 +155160,12 @@ SeqStep_UpdateForwardLinks:
 	ld iz, bc
 	ld (xsp + 4), wa
 	ld wa, iz
-	call LABEL_F41C5F
+	call PartCtrl_ReadWord
 	ld wa, hl
 	cp wa, 0xFFFF
 	jr z, SeqStep_UpdateLinksLoop
 	ld bc, iz
-	call LABEL_F41C4C
+	call PartCtrl_WriteWord_Off1
 	jr SeqStep_UpdateLinksReturn
 
 SeqStep_UpdateLinksLoop:
@@ -155181,7 +155181,7 @@ SeqStep_UpdateLinksAdvance:
 	add_berp C, 0xFB
 	add c, 0x76
 	extz bc
-	call LABEL_F4158D
+	call Part_ReadWord
 	cp hl, (xsp + 4)
 	jr nz, SeqStep_UpdateLinksDone
 	ldto_berp A, 0xFA
@@ -155221,10 +155221,10 @@ SeqStep_RebuildLoop:
 	stdi16 62001, 0
 	ld wa, (xsp + 2)
 	lds bc, 0
-	call LABEL_F41C99
+	call PartCtrl_SetClearBit7
 	ld wa, (xsp + 2)
 	lds bc, 0
-	call LABEL_F41C4C
+	call PartCtrl_WriteWord_Off1
 	ld bc, (xsp + 2)
 	inc 1, bc
 	ld wa, (xsp + 2)
@@ -155242,11 +155242,11 @@ SeqStep_RebuildLoop:
 SeqStep_RebuildCheck:
 	ld wa, iz
 	lds bc, 0
-	call LABEL_F41C99
+	call PartCtrl_SetClearBit7
 	ld bc, iz
 	dec 1, bc
 	ld wa, iz
-	call LABEL_F41C4C
+	call PartCtrl_WriteWord_Off1
 	ld bc, iz
 	inc 1, bc
 	ld wa, iz
@@ -155263,12 +155263,12 @@ SeqStep_RebuildCheck:
 SeqStep_RebuildAdvance:
 	ldw wa, 0x4D8
 	lds bc, 0
-	call LABEL_F41C99
+	call PartCtrl_SetClearBit7
 	cpw (xsp + 2), 0x4D8
 	jr z, SeqStep_RebuildDone
 	ldw wa, 0x4D8
 	ldw bc, 0x4D7
-	call LABEL_F41C4C
+	call PartCtrl_WriteWord_Off1
 
 SeqStep_RebuildDone:
 	ldw wa, 0x4D8
