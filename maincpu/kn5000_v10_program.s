@@ -121149,7 +121149,7 @@ LABEL_F39205:
 LABEL_F39229:
 	ldmm16 8998, 10441
 	lds wa, 1
-	call LABEL_F46470
+	call AppEvent_SendModeToggle
 	lda xwa, (xsp)
 	calr SeqPlay_ActivatePartsAndSendOff
 
@@ -138151,7 +138151,7 @@ LABEL_F42E74:
 	stdi16 9506, 1
 	stdi8 10417, 0
 	lds wa, 0
-	call LABEL_F4781D
+	call VoiceParam_SetD6Group
 	pop_werp 0xFA
 	ret
 
@@ -141784,14 +141784,14 @@ ApPlaySyori:
 	stda32 10610, xwa
 	ldda8 c, 36150
 	cp c, 0x99
-	jrl z, LABEL_F45D7F
+	jrl z, SeqAccomp_DispatchRhythmEvents
 	cp c, 0x96
-	jrl z, LABEL_F45D7F
+	jrl z, SeqAccomp_DispatchRhythmEvents
 	ld xwa, (xsp + 2)
 	cp c, 0x7A
-	jr z, LABEL_F45B95
+	jr z, SeqAccomp_StartAndPostEvents
 	cp c, 0x78
-	jr z, LABEL_F45B95
+	jr z, SeqAccomp_StartAndPostEvents
 	extz bc
 	sub bc, 0x81
 	cps bc, 0
@@ -141814,7 +141814,7 @@ LABEL_F45B63:
 	.byte 0xd8, 0xde, 0x7e, 0xde, 0x88, 0xe8, 0x13, 0x78
 	.byte 0x2b, 0x07
 
-LABEL_F45B95:
+SeqAccomp_StartAndPostEvents:
 	ld xbc, 0x1C0000F
 	lds32 xde, 0
 	jrl SeqAccomp_StartHandler
@@ -141856,7 +141856,7 @@ LABEL_F45C10:
 	call 0xFA9D58
 	ld wa, iz
 	exts xwa
-	calr LABEL_F46494
+	calr AppEvent_SendPlayStatus
 	ldda8 a, 10418
 	and a, 0x1
 	cps a, 0
@@ -141947,7 +141947,7 @@ SeqAcc_SendParamsAndStart:
 	scc16 nz, iz
 	ld wa, iz
 	exts xwa
-	calr LABEL_F464B4
+	calr AppEvent_SendAccompStatus
 	ldda32 xwa, 10610
 	ld xbc, 0x1C0000F
 	lds32 xde, 3
@@ -141965,7 +141965,7 @@ SeqAcc_SendParamsAndStart:
 	lds32 xde, 6
 	jrl SeqAccomp_StartHandler
 
-LABEL_F45D7F:
+SeqAccomp_DispatchRhythmEvents:
 	call LABEL_F387F4
 	ldda32 xwa, 10610
 	ld xbc, 0x1C0000F
@@ -142191,7 +142191,7 @@ LABEL_F46232:
 
 LABEL_F46237:
 	ld xwa, (xsp + 2)
-	calr LABEL_F46494
+	calr AppEvent_SendPlayStatus
 	jrl LABEL_F4637B
 
 LABEL_F46240:
@@ -142245,7 +142245,7 @@ LABEL_F462B8:
 	lds32 xwa, 0
 
 LABEL_F462C0:
-	calr LABEL_F46484
+	calr AppEvent_SendVoiceUpdate
 	jrl LABEL_F4637B
 
 LABEL_F462C6:
@@ -142289,7 +142289,7 @@ LABEL_F46306:
 	cp a, 0x86
 	jr nz, LABEL_F46313
 	ld xwa, (xsp + 2)
-	calr LABEL_F464B4
+	calr AppEvent_SendAccompStatus
 	jr LABEL_F4637B
 
 LABEL_F46313:
@@ -142346,7 +142346,7 @@ LABEL_F46373:
 	extz wa
 
 LABEL_F46378:
-	calr LABEL_F46470
+	calr AppEvent_SendModeToggle
 
 LABEL_F4637B:
 	lds32 xhl, 0
@@ -142450,7 +142450,7 @@ LABEL_F4646B:
 	lda xsp, (xsp + 18)
 	ret
 
-LABEL_F46470:
+AppEvent_SendModeToggle:
 	cps a, 0
 	scc16 nz, de
 	extz xde
@@ -142458,13 +142458,13 @@ LABEL_F46470:
 	ld xbc, 0x1E0003B
 	jp 0xFA9E07
 
-LABEL_F46484:
+AppEvent_SendVoiceUpdate:
 	ld xde, xwa
 	ld xwa, 0x810003
 	ld xbc, 0x1E0003B
 	jp 0xFA9E07
 
-LABEL_F46494:
+AppEvent_SendPlayStatus:
 	ld xde, xwa
 	ld xwa, 0x850004
 	ld xbc, 0x1E0003B
@@ -142476,7 +142476,7 @@ LABEL_F464A4:
 	ld xbc, 0x1E0003B
 	jp 0xFA9E07
 
-LABEL_F464B4:
+AppEvent_SendAccompStatus:
 	ld xde, xwa
 	ld xwa, 0x860007
 	ld xbc, 0x1E0003B
@@ -142626,7 +142626,7 @@ LABEL_F46600:
 	stda8 7502, a
 	call SetWall_LoadToneGenData
 	cpdi8 36152, 129
-	jr nz, LABEL_F46660
+	jr nz, SeqAcc_ResetAndReinit
 	calr SeqVoice_DispatchAllEvents
 	lds32 xwa, 0
 	jr LABEL_F4665D
@@ -142643,14 +142643,14 @@ LABEL_F46630:
 	stda8 7502, a
 	call SetWall_LoadToneGenData
 	cpdi8 36152, 129
-	jr nz, LABEL_F46660
+	jr nz, SeqAcc_ResetAndReinit
 	calr SeqVoice_DispatchAllEvents
 	lds32 xwa, 0
 
 LABEL_F4665D:
-	calr LABEL_F46484
+	calr AppEvent_SendVoiceUpdate
 
-LABEL_F46660:
+SeqAcc_ResetAndReinit:
 	resda 0, 10417
 	resda 3, 10407
 	call SeqAcc_InitPlaybackState
@@ -143169,18 +143169,18 @@ LABEL_F46B39:
 	cpdi16 9832, 1
 	jr nz, LABEL_F46BA3
 	resda 3, 10407
-	jr LABEL_F46BB2
+	jr SeqAcc_SaveChannelAndReinit
 
 LABEL_F46BA3:
 	setda 3, 10407
-	jr LABEL_F46BB2
+	jr SeqAcc_SaveChannelAndReinit
 
 LABEL_F46BA9:
 	bit 1, a
 	jr z, LABEL_F46BC5
 	resda 3, 10407
 
-LABEL_F46BB2:
+SeqAcc_SaveChannelAndReinit:
 	ldda16 xiz, 61854
 	ldmm_sd24w 0xEC, 0xFF, 0x00, 0x9E, 0xF1
 	call SeqAcc_InitPlaybackState
@@ -143698,7 +143698,7 @@ LABEL_F47097:
 
 LABEL_F4709C:
 	lds wa, 0
-	calr LABEL_F4781D
+	calr VoiceParam_SetD6Group
 
 LABEL_F470A1:
 	lds32 xhl, 0
@@ -144245,9 +144245,9 @@ HelpLangChkMain:
 	cp xbc, 0x1C00001
 	jr nz, LABEL_F477D7
 	cpdi8 36152, 231
-	jr nz, LABEL_F4779A
+	jr nz, HelpLang_SetFlashAndLoadSlide
 	cpdi8 36153, 238
-	jr z, LABEL_F4779A
+	jr z, HelpLang_SetFlashAndLoadSlide
 	call 0xEF0865
 	cps l, 3
 	jr nz, LABEL_F4778A
@@ -144264,7 +144264,7 @@ LABEL_F4778A:
 LABEL_F47796:
 	call 0xFA9D58
 
-LABEL_F4779A:
+HelpLang_SetFlashAndLoadSlide:
 	stdi8 10608, 255
 	ld8_24 a, 0x0340e4
 	sll a, 2
@@ -144320,7 +144320,7 @@ LABEL_F47807:
 	lds bc, 0
 	jp 0xFA5E8C
 
-LABEL_F4781D:
+VoiceParam_SetD6Group:
 	pushw iz
 	cps a, 0
 	scc16 nz, iz
@@ -144368,15 +144368,15 @@ LABEL_F47864:
 
 LABEL_F47899:
 	stdi16 61999, 3
-	calr LABEL_F47E6C
+	calr SeqBar_ComputeAndSetPositions
 
 LABEL_F478A2:
-	calr LABEL_F481E3
+	calr SeqLoad_CheckAutoAccompFlag
 	ld8_24 a, 0x00ffe3
 	extz wa
 	call SeqData_CopyBlockToBuffer
-	calr LABEL_F483AF
-	calr LABEL_F48216
+	calr SeqLoad_InitPartPanPresets
+	calr SeqLoad_ProcessAllVoiceData
 	jp Seq_ResetAndRestartAccompaniment
 
 LABEL_F478BA:
@@ -144407,15 +144407,15 @@ LABEL_F478CA:
 
 LABEL_F47902:
 	stdi16 61999, 3
-	calr LABEL_F47E6C
+	calr SeqBar_ComputeAndSetPositions
 
 LABEL_F4790B:
-	calr LABEL_F481E3
+	calr SeqLoad_CheckAutoAccompFlag
 	ld8_24 a, 0x00ffe3
 	extz wa
 	call SeqData_CopyBlockToBuffer
-	calr LABEL_F483AF
-	calr LABEL_F48216
+	calr SeqLoad_InitPartPanPresets
+	calr SeqLoad_ProcessAllVoiceData
 	jp Seq_ResetAndRestartAccompaniment
 
 SeqSavePre:
@@ -144847,7 +144847,7 @@ LABEL_F47E66:
 LABEL_F47E69:
 	jrl LABEL_F478BE
 
-LABEL_F47E6C:
+SeqBar_ComputeAndSetPositions:
 	pushw iz
 	ldda16 xbc, 61999
 	ldda16 xwa, 61902
@@ -145120,7 +145120,7 @@ LABEL_F480F8:
 	.byte 0x1d, 0xab, 0x39, 0xf4, 0xee, 0x8b, 0x5e, 0xbf
 	.byte 0x0a, 0x37, 0x0e
 
-LABEL_F481E3:
+SeqLoad_CheckAutoAccompFlag:
 	lds wa, 0
 	lds bc, 6
 	call Part_ReadByteDirect
@@ -145147,7 +145147,7 @@ LABEL_F48211:
 	resda 1, 62014
 	ret
 
-LABEL_F48216:
+SeqLoad_ProcessAllVoiceData:
 	dec 8, xsp
 	push xiz
 	ld (xsp + 4), 0x1
@@ -145314,7 +145314,7 @@ LABEL_F483AB:
 	inc 8, xsp
 	ret
 
-LABEL_F483AF:
+SeqLoad_InitPartPanPresets:
 	push_werp 0xFA
 	ldi_berp 0xFB, 0
 
@@ -145439,7 +145439,7 @@ LABEL_F484B4:
 	ld wa, iz
 	ldto_werp BC, 0xFA
 	lds de, 1
-	calr LABEL_F48629
+	calr PartCtrl_CheckOwnerAndToggle
 	ld (xsp + 6), hl
 
 LABEL_F484C1:
@@ -145573,7 +145573,7 @@ LABEL_F485C2:
 	ld wa, iz
 	lds bc, 0
 	lds de, 0
-	calr LABEL_F48629
+	calr PartCtrl_CheckOwnerAndToggle
 	inc1_werp 0xFA
 
 LABEL_F485DC:
@@ -145615,7 +145615,7 @@ LABEL_F48613:
 	inc 2, xsp
 	ret
 
-LABEL_F48629:
+PartCtrl_CheckOwnerAndToggle:
 	dec 6, xsp
 	pushw iz
 	ld (xsp + 4), de
