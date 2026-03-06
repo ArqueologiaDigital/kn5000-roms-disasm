@@ -131115,7 +131115,7 @@ LABEL_F3ED22:
 LABEL_F3ED2A:
 	ldda8 a, 10404
 	extz wa
-	jp LABEL_F86FB7
+	jp Voice_GetPresetFieldWord
 
 LABEL_F3ED34:
 	ldda16 xwa, 61854
@@ -139511,7 +139511,7 @@ LABEL_F43BD9:
 	ldda8 a, 10404
 	ldfr_berp A, 0xFB
 	extz wa
-	call LABEL_F86FB7
+	call Voice_GetPresetFieldWord
 	stda16 61854, xhl
 	call 0xFDDE6F
 	ldto_berp A, 0xFB
@@ -224839,7 +224839,7 @@ LABEL_F86FB1:
 	st_dri3b C, 0xE1, 0xD0, 0x00
 	ret
 
-LABEL_F86FB7:
+Voice_GetPresetFieldWord:
 	extz wa
 	sla wa, 2
 	extz xwa
@@ -224883,7 +224883,7 @@ LABEL_F86FFF:
 	ld (xsp + 12), 0x0
 	ld a, (xsp + 14)
 	extz wa
-	calr LABEL_F86FB7
+	calr Voice_GetPresetFieldWord
 	ld (xsp + 2), hl
 	ld a, (xsp + 14)
 	extz wa
@@ -230964,7 +230964,7 @@ LABEL_F8AC94:
 	lds de, 3
 	calr FileIO_Search_SkipEntry
 	cps hl, 0
-	jr z, LABEL_F8ACD8
+	jr z, FileIO_StoreIndexedEntry
 	inc1_werp 0xFA
 	inc 1, iz
 
@@ -230973,13 +230973,13 @@ LABEL_F8ACBE:
 	st_dri3b W, 0x07, 0xE0, 0xF8
 	ld e, (xwa)
 	cp e, 0x2C
-	jr z, LABEL_F8ACD8
+	jr z, FileIO_StoreIndexedEntry
 	cps e, 0
-	jr z, LABEL_F8ACD8
+	jr z, FileIO_StoreIndexedEntry
 	cp_erpw 0xFA, 0x20, 0x00
 	jr lt, LABEL_F8AC94
 
-LABEL_F8ACD8:
+FileIO_StoreIndexedEntry:
 	ld8_24 a, 0x027412
 	exts wa
 	sla wa, 5
@@ -231287,7 +231287,7 @@ LABEL_F8AFA7:
 	ld (xwa), 0x5C
 	ret
 
-LABEL_F8AFC9:
+FileIO_ValidateModeAndRange:
 	ld8_24 c, 0x025db6
 	cps c, 2
 	jr z, LABEL_F8AFDA
@@ -231332,7 +231332,7 @@ LABEL_F8B012:
 
 LABEL_F8B015:
 	ld16_24 xwa, 0x0272c8
-	calr LABEL_F8AFC9
+	calr FileIO_ValidateModeAndRange
 	cps hl, 0
 	jr z, LABEL_F8B025
 	ldw hl, 0xFF98
@@ -231426,7 +231426,7 @@ LABEL_F8B0F1:
 	pushw iz
 	ld iz, wa
 	ld wa, iz
-	calr LABEL_F8AFC9
+	calr FileIO_ValidateModeAndRange
 	cp hl, 0xFFFF
 	jr nz, LABEL_F8B106
 	ld16_24 xhl, 0x0272c8
@@ -231463,7 +231463,7 @@ LABEL_F8B13D:
 	pushw iz
 	ld iz, wa
 	ld wa, iz
-	calr LABEL_F8AFC9
+	calr FileIO_ValidateModeAndRange
 	cps hl, 0
 	jr z, LABEL_F8B150
 	lda_24 xhl, 0xea0448
@@ -232041,7 +232041,7 @@ LABEL_F8B6E5:
 	ld (xiz), e
 	mul iy, 0x3E8
 	sub wa, iy
-	jr LABEL_F8B739
+	jr NumToAscii_HundredsDigit
 
 LABEL_F8B70F:
 	cp ix, hl
@@ -232052,11 +232052,11 @@ LABEL_F8B70F:
 	extz xiy
 	add xiy, xde
 	ld (xiy), 0x30
-	jr LABEL_F8B739
+	jr NumToAscii_HundredsDigit
 
 LABEL_F8B724:
 	cps c, 4
-	jr c, LABEL_F8B739
+	jr c, NumToAscii_HundredsDigit
 	ld hl, ix
 	inc 1, ix
 	ldada xde, 32586
@@ -232065,7 +232065,7 @@ LABEL_F8B724:
 	ld (xhl), 0x20
 	ld hl, ix
 
-LABEL_F8B739:
+NumToAscii_HundredsDigit:
 	cp wa, 0x64
 	jr c, LABEL_F8B763
 	ld iy, wa
@@ -232081,7 +232081,7 @@ LABEL_F8B739:
 	ld (xiz), e
 	mul iy, 0x64
 	sub wa, iy
-	jr LABEL_F8B78D
+	jr NumToAscii_TensDigit
 
 LABEL_F8B763:
 	cp ix, hl
@@ -232092,11 +232092,11 @@ LABEL_F8B763:
 	extz xiy
 	add xiy, xde
 	ld (xiy), 0x30
-	jr LABEL_F8B78D
+	jr NumToAscii_TensDigit
 
 LABEL_F8B778:
 	cps c, 3
-	jr c, LABEL_F8B78D
+	jr c, NumToAscii_TensDigit
 	ld hl, ix
 	inc 1, ix
 	ldada xde, 32586
@@ -232105,7 +232105,7 @@ LABEL_F8B778:
 	ld (xhl), 0x20
 	ld hl, ix
 
-LABEL_F8B78D:
+NumToAscii_TensDigit:
 	cp wa, 0xA
 	jr c, LABEL_F8B7B7
 	ld iy, wa
@@ -232121,7 +232121,7 @@ LABEL_F8B78D:
 	ld (xde), c
 	mul iy, 0xA
 	sub wa, iy
-	jr LABEL_F8B7DB
+	jr NumToAscii_OnesDigitAndFinish
 
 LABEL_F8B7B7:
 	ldada xde, 32586
@@ -232132,18 +232132,18 @@ LABEL_F8B7B7:
 	extz xbc
 	add xbc, xde
 	ld (xbc), 0x30
-	jr LABEL_F8B7DB
+	jr NumToAscii_OnesDigitAndFinish
 
 LABEL_F8B7CC:
 	cps c, 2
-	jr c, LABEL_F8B7DB
+	jr c, NumToAscii_OnesDigitAndFinish
 	ld bc, ix
 	inc 1, ix
 	extz xbc
 	add xbc, xde
 	ld (xbc), 0x20
 
-LABEL_F8B7DB:
+NumToAscii_OnesDigitAndFinish:
 	ld bc, ix
 	inc 1, ix
 	ldada xhl, 32586
@@ -234014,7 +234014,7 @@ LABEL_F980EE:
 	cp a, 0xA9
 	jrl nz, LABEL_F98695
 	cp e, 0x10
-	jrl ugt, LABEL_F98314
+	jrl ugt, CtrlPanel_HandlePortCommands
 	lds32 xiz, 0
 	ldfr_berp E, 0xF8
 	cp e, 0xE
@@ -234080,15 +234080,15 @@ SndParam_SendDiskMenuEvents:
 	ordm32_24 160922, xwa
 	ld xwa, (xbc)
 	andda32_24 xwa, 160926
-	jr z, LABEL_F98207
+	jr z, CtrlPanel_ProcessButtonPress
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00030
 	call 0xFA9D58
-	jr LABEL_F98207
+	jr CtrlPanel_ProcessButtonPress
 
 LABEL_F981DC:
 	bit 1, c
-	jr z, LABEL_F98207
+	jr z, CtrlPanel_ProcessButtonPress
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00009
 	call 0xFA9D58
@@ -234101,7 +234101,7 @@ LABEL_F981DC:
 	cpl_werp 0xE2
 	anddm32_24 160922, xwa
 
-LABEL_F98207:
+CtrlPanel_ProcessButtonPress:
 	ldda8 c, 49279
 	ldda8 a, 49278
 	and a, c
@@ -234131,15 +234131,15 @@ LABEL_F98207:
 	ordm32_24 160926, xwa
 	ld xwa, (xbc)
 	andda32_24 xwa, 160922
-	jr z, LABEL_F982A8
+	jr z, CtrlPanel_DispatchCombinedState
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00030
 	call 0xFA9D58
-	jr LABEL_F982A8
+	jr CtrlPanel_DispatchCombinedState
 
 LABEL_F9827D:
 	bit 0, c
-	jr z, LABEL_F982A8
+	jr z, CtrlPanel_DispatchCombinedState
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00009
 	call 0xFA9D58
@@ -234152,7 +234152,7 @@ LABEL_F9827D:
 	cpl_werp 0xE2
 	anddm32_24 160926, xwa
 
-LABEL_F982A8:
+CtrlPanel_DispatchCombinedState:
 	ld32_24 xwa, 0x02749e
 	andda32_24 xwa, 160922
 	st32_24 0x0274a2, xwa
@@ -234163,7 +234163,7 @@ LABEL_F982A8:
 	cp xwa, 0x91
 	jr z, LABEL_F982E2
 	cp xwa, 0x89
-	jr nz, LABEL_F98314
+	jr nz, CtrlPanel_HandlePortCommands
 	lds32 xwa, 7
 	ld xbc, 0x1C00001
 	lds32 xde, 0
@@ -234182,14 +234182,14 @@ LABEL_F982F3:
 
 LABEL_F98302:
 	call 0xFA9D58
-	jr LABEL_F98314
+	jr CtrlPanel_HandlePortCommands
 
 LABEL_F98308:
 	call Get_Firmware_Version
 	cp l, 0xFF
 	call_24 z, 0xFAF030
 
-LABEL_F98314:
+CtrlPanel_HandlePortCommands:
 	cpdi8 49277, 32
 	jr nz, LABEL_F9834A
 	cpdi8 49278, 0
@@ -235930,7 +235930,7 @@ LABEL_F99436:
 	lds32 xhl, 0
 	ret
 
-LABEL_F99439:
+CtrlPanel_GetSelectionState:
 	ld16_24 xwa, 0x0274a6
 	bit 0, wa
 	jr z, LABEL_F99446
@@ -236142,24 +236142,24 @@ GetClientBox2:
 	cps wa, 0
 	jr mi, LABEL_F99670
 	cp wa, 0xB
-	jr le, LABEL_F99648
+	jr le, CtrlPanel_DispatchByIndex
 	sub wa, 0x74
 	cp wa, 0xC
 	jr lt, LABEL_F99670
 	cp wa, 0x14
-	jr le, LABEL_F99648
+	jr le, CtrlPanel_DispatchByIndex
 	sub wa, 0x17
 	cp wa, 0x15
 	jr lt, LABEL_F99670
 	cp wa, 0x1D
-	jr le, LABEL_F99648
+	jr le, CtrlPanel_DispatchByIndex
 	sub wa, 0x17
 	cp wa, 0x1E
 	jr lt, LABEL_F99670
 	cp wa, 0x2A
 	jr gt, LABEL_F99670
 
-LABEL_F99648:
+CtrlPanel_DispatchByIndex:
 	add wa, wa
 	lda_24 xix, 0xea9a04
 	ld_sriw3 WA, 0x07, 0xF0, 0xE0
@@ -281374,7 +281374,7 @@ LABEL_FB796E:
 	ret
 
 LABEL_FB79AA:
-	call LABEL_F99439
+	call CtrlPanel_GetSelectionState
 	cps hl, 0
 	ret nz
 	ldda8 a, 36218
@@ -299859,7 +299859,7 @@ LABEL_FC70EB:
 	stda8 36702, l
 
 LABEL_FC70FF:
-	call LABEL_F99439
+	call CtrlPanel_GetSelectionState
 	cpda8 l, 36704
 	ret z
 	cps l, 2
@@ -300365,7 +300365,7 @@ LABEL_FC74E4:
 	; --- Routine 2: call F99439, 3-way cp HL, set/res bit 7 (29 bytes) ---
 	push xiz
 	ldada	xiz, 36632
-	call LABEL_F99439
+	call CtrlPanel_GetSelectionState
 	cps	hl, 2
 	jr z, LABEL_FC74FF
 	cps	hl, 1
