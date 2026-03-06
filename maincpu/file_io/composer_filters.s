@@ -76,7 +76,7 @@ CompLoad_HandleCancel:
 	lds32 xde, 1
 	call 0xFA9D58
 	lds wa, 1
-	call LABEL_F99463
+	call UI_PostPartChangeEvent
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
 	lds32 xde, 0
@@ -105,7 +105,7 @@ CompLoad_HandleSuccess:
 	lds32 xde, 1
 	call 0xFA9D58
 	lds wa, 1
-	call LABEL_F99463
+	call UI_PostPartChangeEvent
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
 	lds32 xde, 0
@@ -270,7 +270,7 @@ CompLoad_HideButtons_Loop:
 	lds32 xde, 1
 	call 0xFA9D58
 	lds wa, 1
-	call LABEL_F99463
+	call UI_PostPartChangeEvent
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
 	lds32 xde, 0
@@ -586,7 +586,7 @@ LoadFilter_Load_ShowCode1:
 	lds wa, 1
 
 LoadFilter_Load_CallHandler:
-	call LABEL_F99463
+	call UI_PostPartChangeEvent
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
 	lds32 xde, 0
@@ -882,7 +882,7 @@ SaveFilter_Save_Execute:
 	lds32 xde, 1
 	call 0xFA9D58
 	lds wa, 1
-	call LABEL_F99463
+	call UI_PostPartChangeEvent
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
 	lds32 xde, 0
@@ -919,7 +919,7 @@ SaveFilter_OpFormat:
 	lds32 xde, 1
 	call 0xFA9D58
 	lds wa, 1
-	call LABEL_F99463
+	call UI_PostPartChangeEvent
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
 	lds32 xde, 0

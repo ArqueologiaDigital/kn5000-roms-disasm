@@ -771,7 +771,7 @@ SmfFN_Save_NoAltSlot:
 	lds wa, 1
 
 SmfFN_Save_CallResult:
-	call LABEL_F99463
+	call UI_PostPartChangeEvent
 	ld wa, (xsp + 6)
 	lds bc, 1
 	calr LABEL_F8B48E
@@ -838,7 +838,7 @@ SmfFN_Open_Execute:
 	lds32 xde, 1
 	call 0xFA9D58
 	lds wa, 1
-	call LABEL_F99463
+	call UI_PostPartChangeEvent
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
 	lds32 xde, 0
@@ -880,7 +880,7 @@ SmfFN_HandleOpen2:
 	lds32 xde, 1
 	call 0xFA9D58
 	lds wa, 1
-	call LABEL_F99463
+	call UI_PostPartChangeEvent
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
 	lds32 xde, 0

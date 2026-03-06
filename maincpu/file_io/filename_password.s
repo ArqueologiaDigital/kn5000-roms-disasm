@@ -419,7 +419,7 @@ FileName_OpSave_ShowCode1:
 	lds wa, 1
 
 FileName_OpSave_CallHandler:
-	call LABEL_F99463
+	call UI_PostPartChangeEvent
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
 	lds32 xde, 0
@@ -483,7 +483,7 @@ FileName_OpLoad_Execute:
 	lds32 xde, 1
 	call 0xFA9D58
 	lds wa, 1
-	call LABEL_F99463
+	call UI_PostPartChangeEvent
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
 	lds32 xde, 0
@@ -519,7 +519,7 @@ FileName_OpFormat:
 	lds32 xde, 1
 	call 0xFA9D58
 	lds wa, 1
-	call LABEL_F99463
+	call UI_PostPartChangeEvent
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
 	lds32 xde, 0
