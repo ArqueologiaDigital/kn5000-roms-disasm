@@ -199166,20 +199166,20 @@ LABEL_F70BAA:
 	cp a, 0x90
 	jr nz, LABEL_F70BC0
 	stdi8 32270, 5
-	jr LABEL_F70BF1
+	jr SeqEvt_ReadAndDispatchEntry
 
 LABEL_F70BC0:
 	cp a, 0x91
 	jr nz, LABEL_F70BCC
 	stdi8 32270, 7
-	jr LABEL_F70BF1
+	jr SeqEvt_ReadAndDispatchEntry
 
 LABEL_F70BCC:
 	and a, 0xF0
 	cp a, 0xC0
 	jr nz, LABEL_F70BDB
 	stdi8 32270, 4
-	jr LABEL_F70BF1
+	jr SeqEvt_ReadAndDispatchEntry
 
 LABEL_F70BDB:
 	cp a, 0xD0
@@ -199192,7 +199192,7 @@ LABEL_F70BDB:
 LABEL_F70BEC:
 	stdi8 32270, 2
 
-LABEL_F70BF1:
+SeqEvt_ReadAndDispatchEntry:
 	ld_srib3 A, 0x07, 0xEC, 0xF0
 	stda16 32273, xix
 	calr SeqEvtBuf_AdvanceReadPos
@@ -200097,7 +200097,7 @@ LABEL_F71E58:
 LABEL_F71E5D:
 	cpdi8 32524, 0
 	jr z, LABEL_F71E69
-	calr LABEL_F71F00
+	calr AccPlay_MainUpdateLoop
 	jr LABEL_F71E6C
 
 LABEL_F71E69:
@@ -200163,7 +200163,7 @@ LABEL_F71EA1:
 	stdi8 36686, 4
 	ret
 
-LABEL_F71F00:
+AccPlay_MainUpdateLoop:
 	call AccWrap_PlayModeDispatch
 	stdi8 1055, 12
 	calr LABEL_F7226B
@@ -200242,14 +200242,14 @@ LABEL_F71F8E:
 
 LABEL_F71F98:
 	bitda 2, 32291
-	jr nz, LABEL_F71FB1
+	jr nz, TempoEvt_ProcessLoop
 	calr LABEL_F720B5
 	call CountAvailableVoiceSlots
 	calr LABEL_F721C3
 	ld xwa, 0x22
 	call CtrlPanel_SetIndicatorLED
 
-LABEL_F71FB1:
+TempoEvt_ProcessLoop:
 	call TempoRingBuf_CheckEmpty
 	cps hl, 0
 	jr nz, LABEL_F71FBD
@@ -200300,7 +200300,7 @@ LABEL_F71FFF:
 
 LABEL_F72029:
 	calr LABEL_F72A3B
-	jp LABEL_F71FB1
+	jp TempoEvt_ProcessLoop
 
 LABEL_F72030:
 	cpdi16 32280, 0
@@ -200354,7 +200354,7 @@ LABEL_F72083:
 	calr LABEL_F72A3B
 
 TempoEvent_ContinueLoop:
-	jp LABEL_F71FB1
+	jp TempoEvt_ProcessLoop
 
 LABEL_F7208A:
 	calr LABEL_F7256F
@@ -200749,14 +200749,14 @@ LABEL_F72405:
 	xor w, w
 	stda16 32530, xwa
 	pushw de
-	calr LABEL_F72AD8
-	calr LABEL_F72AD8
+	calr MidiSeqBuf_AdvanceWritePos
+	calr MidiSeqBuf_AdvanceWritePos
 	popw de
 	ld a, e
 	and a, 0x7F
 	pushw de
 	calr MidiSeqBuf_WriteByte
-	calr LABEL_F72AD8
+	calr MidiSeqBuf_AdvanceWritePos
 	popw de
 	ld a, d
 	and a, 0x7F
@@ -201474,7 +201474,7 @@ LABEL_F72AD3:
 	stda16 32530, xwa
 	ret
 
-LABEL_F72AD8:
+MidiSeqBuf_AdvanceWritePos:
 	ldda16 xwa, 32530
 	inc 1, wa
 	cp wa, 0xFF
@@ -201513,7 +201513,7 @@ LABEL_F72B16:
 	ordi8 32533, 4
 	ldb a, 0x8
 	call MIDI_SendSysExCmd
-	calr LABEL_F71F00
+	calr AccPlay_MainUpdateLoop
 	ret
 
 LABEL_F72B2E:
@@ -201538,7 +201538,7 @@ LABEL_F72B42:
 LABEL_F72B67:
 	stdi8 32523, 0
 	call LABEL_F61380
-	calr LABEL_F71F00
+	calr AccPlay_MainUpdateLoop
 
 LABEL_F72B73:
 	ret
@@ -204161,11 +204161,11 @@ LABEL_F75664:
 	ld_sril3 XBC, 0x07, 0xE4, 0xE0
 	ld xwa, xbc
 	cp xbc, 0x2A12
-	jr z, LABEL_F756E6
+	jr z, SndParam_FormatAndDisplay
 	cp xbc, 0x2A11
-	jr z, LABEL_F756E6
+	jr z, SndParam_FormatAndDisplay
 	cp xbc, 0x2A10
-	jr z, LABEL_F756E6
+	jr z, SndParam_FormatAndDisplay
 	cp xbc, 0x2A01
 	jr z, LABEL_F756C0
 	cp xbc, 0x2A00
@@ -204186,7 +204186,7 @@ LABEL_F756C0:
 	ld xbc, 0x1E0008C
 	jr LABEL_F75711
 
-LABEL_F756E6:
+SndParam_FormatAndDisplay:
 	call SndParam_LookupReadOnly
 	lda xbc, (xsp + 12)
 	ld xwa, 0xE7F9CC
