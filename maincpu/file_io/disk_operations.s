@@ -1023,7 +1023,7 @@ DiskInfo_ComputePercent:
 	ld xiz, xhl
 	ld xbc, (xsp + 12)
 	ld xwa, xiz
-	call LABEL_FF0C0E
+	call Math_DivideSigned32
 	ld (xsp + 8), xhl
 	jr DiskInfo_RenderStrings
 
