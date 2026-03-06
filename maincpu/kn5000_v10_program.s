@@ -160396,12 +160396,12 @@ LABEL_F532E9:
 	.byte 0x1b, 0xae, 0x5b, 0xf5
 
 Rhythm_DispatchNote_Tramp:
-	jp LABEL_F55BB3
+	jp Rhythm_DispatchNote
 
 Rhythm_NoteDispatchWrapper:
 	push xiz
 	ld d, c
-	call LABEL_F55BB3
+	call Rhythm_DispatchNote
 	xor xhl, xhl
 	ld l, a
 	pop xiz
@@ -160441,7 +160441,7 @@ Seq_DispatcherTick_Process:
 	calr LABEL_F53367
 	call LABEL_F534F4
 	calr LABEL_F53509
-	call LABEL_F54C22
+	call Rhythm_CompareAndTrigger
 	anddi8 13044, 159
 	call AccTick_Main
 	ldda8 a, 13044
@@ -161639,7 +161639,7 @@ LABEL_F53F35:
 	nop
 	ret
 
-LABEL_F53F59:
+Rhythm_ProcessAllPartsAndLoad:
 	calr LABEL_F53F76
 	calr RhythmPart1_ProcessAccentData
 	calr RhythmPart2_ProcessAccentData
@@ -161648,7 +161648,7 @@ LABEL_F53F59:
 	calr AccVoice_LoadRhythmParams_Part5
 	bitda 0, 12931
 	jr nz, LABEL_F53F75
-	call LABEL_F5442F
+	call AccVoice_LoadAllChannelParams
 
 LABEL_F53F75:
 	ret
@@ -162091,7 +162091,7 @@ LABEL_F54422:
 	call AccStyle_InitVRAM_Wrap
 	ret
 
-LABEL_F5442F:
+AccVoice_LoadAllChannelParams:
 	ld xix, 0x3214
 	ldb a, 0x98
 	and a, 0xF
@@ -162291,7 +162291,7 @@ LABEL_F5467E:
 LABEL_F54687:
 	ret
 
-LABEL_F54688:
+AccPatch_SetByChordIndex:
 	xor xhl, xhl
 	ld l, w
 	and l, 0x7F
@@ -162824,9 +162824,9 @@ LABEL_F54BEB:
 LABEL_F54C21:
 	ret
 
-LABEL_F54C22:
+Rhythm_CompareAndTrigger:
 	bitda 0, 12931
-	jrl z, LABEL_F54CAC
+	jrl z, Rhythm_SaveNoteState
 	bitda 6, 10412
 	jr z, Rhythm_CompareAndTriggerNotes
 	bitda 2, 1057
@@ -162836,7 +162836,7 @@ LABEL_F54C22:
 	jr ule, Rhythm_CompareAndTriggerNotes
 	cp a, 0x5C
 	jr ugt, Rhythm_CompareAndTriggerNotes
-	jrl LABEL_F54CAC
+	jrl Rhythm_SaveNoteState
 
 Rhythm_CompareAndTriggerNotes:
 	bitda 1, 13015
@@ -162880,7 +162880,7 @@ Rhythm_SaveCurrentNoteState:
 	ldda8 a, 13018
 	stda8 13025, a
 
-LABEL_F54CAC:
+Rhythm_SaveNoteState:
 	ldda8 a, 13016
 	stda8 13020, a
 	ldda8 a, 13017
@@ -162907,9 +162907,9 @@ Rhythm_NoteOnAfterSetup_A:
 	ret
 
 Rhythm_NoteOnAfterSetup_B:
-	calr LABEL_F54D96
-	calr LABEL_F54DBE
-	calr LABEL_F54DE1
+	calr Rhythm_SetupChannel_D4
+	calr Rhythm_SetupChannel_D5
+	calr Rhythm_SetupChannel_D6
 	calr Rhythm_AllNotesOff_D4
 	calr Rhythm_AllNotesOff_D5
 	calr Rhythm_AllNotesOff_D6
@@ -162934,7 +162934,7 @@ Rhythm_NoteOnAfterSetup_B:
 	ret
 
 Rhythm_NoteOnAfterSetup_C:
-	calr LABEL_F54D6E
+	calr Rhythm_SetupChannel_D7
 	calr Rhythm_AllNotesOff_D7
 	calr Rhythm_Send_Ch90_7F_07
 	calr Rhythm_NoteOffMax_D7
@@ -162949,13 +162949,13 @@ Rhythm_NoteOnAfterSetup_C:
 	ret
 
 LABEL_F54D61:
-	calr LABEL_F54D6E
-	calr LABEL_F54D96
-	calr LABEL_F54DBE
-	calr LABEL_F54DE1
+	calr Rhythm_SetupChannel_D7
+	calr Rhythm_SetupChannel_D4
+	calr Rhythm_SetupChannel_D5
+	calr Rhythm_SetupChannel_D6
 	ret
 
-LABEL_F54D6E:
+Rhythm_SetupChannel_D7:
 	ld xhl, 0x2C94
 	ldda8 a, 12995
 	stda8 13003, a
@@ -162967,7 +162967,7 @@ LABEL_F54D6E:
 	calr RhythmEvt_ProcessNote
 	ret
 
-LABEL_F54D96:
+Rhythm_SetupChannel_D4:
 	ld xhl, 0x2D94
 	ldda8 a, 12996
 	stda8 13003, a
@@ -162979,7 +162979,7 @@ LABEL_F54D96:
 	calr RhythmEvt_ProcessNote
 	ret
 
-LABEL_F54DBE:
+Rhythm_SetupChannel_D5:
 	ld xhl, 0x2E94
 	ldda8 a, 12997
 	stda8 13003, a
@@ -162990,7 +162990,7 @@ LABEL_F54DBE:
 	calr RhythmEvt_ProcessNote
 	ret
 
-LABEL_F54DE1:
+Rhythm_SetupChannel_D6:
 	ld xhl, 0x2F94
 	ldda8 a, 12998
 	stda8 13003, a
@@ -164404,7 +164404,7 @@ Rhythm_TranspMod_WrapDone:
 LABEL_F55BAE:
 	.byte 0x1d, 0x37, 0x34, 0xf5, 0x0e
 
-LABEL_F55BB3:
+Rhythm_DispatchNote:
 	ld l, a
 	ld h, d
 	call VoiceParam_ClampAndValidate
@@ -164720,7 +164720,7 @@ LABEL_F55EDB:
 	ldda8 a, 1075
 	stda8 1112, a
 	stdi8 13036, 1
-	call LABEL_F53F59
+	call Rhythm_ProcessAllPartsAndLoad
 	ret
 
 LABEL_F55EF0:
@@ -164781,7 +164781,7 @@ LABEL_F55F87:
 	ldda8 a, 13055
 	and a, 0x7
 	jr z, LABEL_F55FC8
-	calr LABEL_F56187
+	calr AccVoice_SelectPartOffset
 	jr LABEL_F55FDD
 
 LABEL_F55FC8:
@@ -164867,7 +164867,7 @@ LABEL_F560C5:
 	stda32 13011, xiy
 	call AccVoice_SelectAndApplyPatch
 	ldda8 w, 13029
-	call LABEL_F54688
+	call AccPatch_SetByChordIndex
 	bitda 0, 13155
 	jr nz, LABEL_F560E5
 	call AccPedal_ProcessAllChanges
@@ -164931,14 +164931,14 @@ LABEL_F56173:
 
 LABEL_F56178:
 	ldda32 xiy, 13011
-	calr LABEL_F56187
+	calr AccVoice_SelectPartOffset
 
 LABEL_F5617F:
 	ldda32 xiy, 13011
 	calr Rhythm_UpdateTuningConfig
 	ret
 
-LABEL_F56187:
+AccVoice_SelectPartOffset:
 	ldw hl, 0x20
 	bitda 0, 13055
 	jr nz, LABEL_F5619C
@@ -165031,7 +165031,7 @@ LABEL_F56281:
 
 LABEL_F5628F:
 	call AccVoice_ResolveParamAddr
-	calr LABEL_F562C6
+	calr AccPart_InitPositionsAndBase
 	call AccTuning_CopyAllPartsFromStyle
 	ordi8 13100, 63
 	bitda 0, 13055
@@ -165049,7 +165049,7 @@ LABEL_F562B6:
 LABEL_F562C5:
 	ret
 
-LABEL_F562C6:
+AccPart_InitPositionsAndBase:
 	call AccInit_AllPartPositions
 	ld xwa, 0xE46BB9
 	add xwa, 0x6
@@ -165058,7 +165058,7 @@ LABEL_F562C6:
 
 LABEL_F562DA:
 	ldda32 xiy, 13006
-	calr LABEL_F562C6
+	calr AccPart_InitPositionsAndBase
 	call AccTuning_CopyAllPartsFromStyle
 	ordi8 13100, 63
 	anddi8 13078, 192
@@ -165119,8 +165119,8 @@ Rhythm_UpdateTuningConfig:
 	ret
 
 LABEL_F563A2:
-	calr LABEL_F563E1
-	calr LABEL_F56402
+	calr Rhythm_LookupStyleIndex
+	calr AccVoice_LookupParamIndex
 	ld xhl, 0xF5646E
 	ld_srib3 A, 0x03, 0xEC, 0xE0
 	ret
@@ -165128,8 +165128,8 @@ LABEL_F563A2:
 LABEL_F563B3:
 	cpdi8 13029, 128
 	jr nc, LABEL_F563D4
-	calr LABEL_F563E1
-	calr LABEL_F56402
+	calr Rhythm_LookupStyleIndex
+	calr AccVoice_LookupParamIndex
 	ld xhl, 0xF56476
 	sla a, 1
 	ld_sriw3 HL, 0x03, 0xEC, 0xE0
@@ -165145,7 +165145,7 @@ LABEL_F563D8:
 	stda8 13120, w
 	ret
 
-LABEL_F563E1:
+Rhythm_LookupStyleIndex:
 	ld xhl, 0xF56439
 	cp w, 0x30
 	jr c, LABEL_F563ED
@@ -165159,7 +165159,7 @@ LABEL_F563ED:
 	xor h, h
 	ret
 
-LABEL_F56402:
+AccVoice_LookupParamIndex:
 	push xhl
 	ld xhl, 0xF56413
 	and wa, 0x3
@@ -165252,7 +165252,7 @@ AccPart_VoiceParamOffsets_ChordB:
 
 AccPart_LookupBoundVoiceParam:
 	ld w, a
-	calr LABEL_F5659B
+	calr AccStyle_ReadParamOffset
 	ld xhl, 0xF5669A
 	cp a, 0x14
 	jr c, LABEL_F56592
@@ -165263,7 +165263,7 @@ LABEL_F56592:
 	ld_sriw3 HL, 0x03, 0xEC, 0xE1
 	ret
 
-LABEL_F5659B:
+AccStyle_ReadParamOffset:
 	ld xhl, 0xF5664A
 	sla w, 1
 	ld_sriw3 HL, 0x03, 0xEC, 0xE1
@@ -165335,7 +165335,7 @@ LABEL_F565EE:
 	.byte 0x04, 0x04, 0x06, 0x04, 0x08, 0x04, 0x0a, 0x04
 	.byte 0x0c, 0x04, 0x0e, 0x04
 
-LABEL_F566BA:
+AccVoice_ComputeParamAddr:
 	cp a, 0xF
 	jr nc, LABEL_F566CD
 	ldw hl, 0x18
@@ -165372,7 +165372,7 @@ LABEL_F566FF:
 	extz xhl
 	ret
 
-LABEL_F56702:
+AccTuning_SetAllFromLookup:
 	calr LABEL_F5671E
 	stda8 12963, a
 	stda8 12964, a
@@ -165817,7 +165817,7 @@ LABEL_F56B7F:
 	incdi8 1, 13269
 	xor xhl, xhl
 	ldda8 w, 13269
-	call LABEL_F5659B
+	call AccStyle_ReadParamOffset
 	cp w, 0x83
 	jr nz, LABEL_F56BA9
 	ldda8 a, 13269
@@ -166090,7 +166090,7 @@ AccPedal_DirA_SetReverse:
 
 AccPedal_DirA_Apply:
 	ldda8 a, 13269
-	call LABEL_F566BA
+	call AccVoice_ComputeParamAddr
 	anddi8 13065, 252
 	ret
 
@@ -167988,7 +167988,7 @@ AccTick_Main:
 	call AccTuning_ApplyChange
 	bitda 7, 13100
 	jr z, AccTick_AfterSync
-	call LABEL_F53F59
+	call Rhythm_ProcessAllPartsAndLoad
 	anddi8 13100, 127
 
 AccTick_AfterSync:
@@ -168652,7 +168652,7 @@ AccStyle_LoadAndApply:
 	call AccTuning_CopyAllPartsFromStyle
 	ordi8 13100, 63
 	ldda8 w, 13029
-	call LABEL_F54688
+	call AccPatch_SetByChordIndex
 
 AccStyle_Finalize:
 	call AccVoice_SelectAndApplyPatch
@@ -169028,10 +169028,10 @@ AccVoice_Split_UseStyle:
 
 AccVoice_Split_LoadAndApply:
 	ldda8 a, 12963
-	call LABEL_F566BA
+	call AccVoice_ComputeParamAddr
 	calr AccVoice_LoadAllParts
 	ldda8 a, 12963
-	call LABEL_F56702
+	call AccTuning_SetAllFromLookup
 	cpdi8 13029, 128
 	jr c, AccVoice_Split_StyleMode
 	ldda32 xiy, 13006
@@ -169216,7 +169216,7 @@ AccVoice_ThirdLayer_SelectMode:
 AccVoice_ThirdLayer_LoadParams:
 	calr AccVoice_LoadAllParts
 	ldda8 a, 12963
-	call LABEL_F56702
+	call AccTuning_SetAllFromLookup
 	cpdi8 13029, 128
 	jr c, AccVoice_ThirdLayer_StyleMode
 	ldda32 xiy, 13006
@@ -169407,7 +169407,7 @@ AccTiming_CallHelper:
 	call Voice_UpdatePlayModeState
 	call AccChord_ReadAndStoreKeys
 	call AccChord_CompareAndSetDirty
-	call LABEL_F54C22
+	call Rhythm_CompareAndTrigger
 
 AccTiming_HelperReturn:
 	ret
@@ -178379,7 +178379,7 @@ LABEL_F5FAA9:
 	ld (xix + 3), a
 	ldda8 a, 13361
 	ld (xix + 4), a
-	call LABEL_F5442F
+	call AccVoice_LoadAllChannelParams
 	ret
 
 LABEL_F5FAC8:
