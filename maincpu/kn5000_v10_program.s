@@ -122044,7 +122044,7 @@ SeqCh_DispatchMidiEvent:
 	jr LABEL_F39B29
 
 LABEL_F39B26:
-	calr LABEL_F3B2FF
+	calr SeqNote_ProcessForChannelAlt
 
 LABEL_F39B29:
 	cps l, 0
@@ -122869,7 +122869,7 @@ LABEL_F3A342:
 	lda xsp, (xsp - 10)
 	push xiz
 	ldw (xsp + 4), 0x0
-	calr LABEL_F3A867
+	calr SeqNote_ProcessNoteOn
 	cps l, 0
 	jr nz, LABEL_F3A3CC
 	cpdi16 10408, 0
@@ -123471,7 +123471,7 @@ LABEL_F3A84B:
 	ordi16 7586, 32768
 	ret
 
-LABEL_F3A867:
+SeqNote_ProcessNoteOn:
 	lda xsp, (xsp - 10)
 	push xiz
 	ld (xsp + 6), 0x0
@@ -123511,11 +123511,11 @@ LABEL_F3A8AE:
 	jrl nz, SeqNote_ProcessCurrentChannel
 	ldda16 xwa, 7542
 	cp wa, (xsp + 4)
-	jr ugt, LABEL_F3A8EF
+	jr ugt, SeqNote_FindExtraChannel
 	cp wa, (xsp + 4)
 	jr nz, LABEL_F3A8D8
 	cp (xsp + 8), 0x5F
-	jr nz, LABEL_F3A8EF
+	jr nz, SeqNote_FindExtraChannel
 
 LABEL_F3A8D8:
 	calr LABEL_F3CBE7
@@ -123524,7 +123524,7 @@ LABEL_F3A8D8:
 	stdi8 10340, 0
 	stdi8 10342, 0
 
-LABEL_F3A8EF:
+SeqNote_FindExtraChannel:
 	cpdi16 10408, 0
 	jr z, SeqNote_AllocateMainChannel
 
@@ -123703,11 +123703,11 @@ LABEL_F3AABC:
 LABEL_F3AAD4:
 	sub a, 0x1A
 	cp (xsp + 4), de
-	jr c, LABEL_F3AB0D
+	jr c, SeqNote_UpdateScoreDisplay
 	cp (xsp + 4), de
 	jr nz, LABEL_F3AAE6
 	cp (xsp + 8), a
-	jr c, LABEL_F3AB0D
+	jr c, SeqNote_UpdateScoreDisplay
 
 LABEL_F3AAE6:
 	ldw wa, 0x14
@@ -123725,7 +123725,7 @@ LABEL_F3AAF3:
 	andda16 xwa, 8982
 	jr nz, LABEL_F3AABC
 
-LABEL_F3AB0D:
+SeqNote_UpdateScoreDisplay:
 	cpdi16 7578, 65535
 	jr nz, LABEL_F3AB30
 	jr LABEL_F3AB3B
@@ -123845,22 +123845,22 @@ LABEL_F3AC06:
 	st_dri3b B, 0x07, 0xE8, 0xE4
 	ld bc, (xde + 2)
 	cp (xsp + 4), bc
-	jr c, LABEL_F3AC38
+	jr c, SeqNote_DispatchActiveChannels
 	cp (xsp + 4), bc
 	jr nz, LABEL_F3AC2C
 	ld c, (xsp + 8)
 	cp c, (xde + 5)
-	jr c, LABEL_F3AC38
+	jr c, SeqNote_DispatchActiveChannels
 
 LABEL_F3AC2C:
-	calr LABEL_F3AE2E
+	calr SeqNote_FlushPartEventToBuffer
 
 LABEL_F3AC2F:
 	ldda8 a, 7602
 	cp a, 0xFF
 	jr nz, LABEL_F3AC06
 
-LABEL_F3AC38:
+SeqNote_DispatchActiveChannels:
 	ldda16 xwa, 7588
 	cp wa, (xsp + 4)
 	jr z, LABEL_F3AC49
@@ -123999,22 +123999,22 @@ LABEL_F3AD4E:
 	st_dri3b B, 0x07, 0xE8, 0xE4
 	ld bc, (xde + 2)
 	cp (xsp + 4), bc
-	jr c, LABEL_F3AD80
+	jr c, SeqNote_DispatchActiveChannels_NoteOff
 	cp (xsp + 4), bc
 	jr nz, LABEL_F3AD74
 	ld c, (xsp + 6)
 	cp c, (xde + 5)
-	jr c, LABEL_F3AD80
+	jr c, SeqNote_DispatchActiveChannels_NoteOff
 
 LABEL_F3AD74:
-	calr LABEL_F3AE2E
+	calr SeqNote_FlushPartEventToBuffer
 
 LABEL_F3AD77:
 	ldda8 a, 7602
 	cp a, 0xFF
 	jr nz, LABEL_F3AD4E
 
-LABEL_F3AD80:
+SeqNote_DispatchActiveChannels_NoteOff:
 	ldda16 xwa, 7588
 	cp wa, (xsp + 4)
 	jr z, LABEL_F3AD94
@@ -124064,7 +124064,7 @@ LABEL_F3ADDA:
 LABEL_F3ADE2:
 	ldto_berp A, 0xFB
 	extz wa
-	calr LABEL_F3B2FF
+	calr SeqNote_ProcessForChannelAlt
 	ld (xsp + 8), l
 	cp (xsp + 8), 0x0
 	jr z, LABEL_F3ADFB
@@ -124099,7 +124099,7 @@ LABEL_F3AE2A:
 	inc 6, xsp
 	ret
 
-LABEL_F3AE2E:
+SeqNote_FlushPartEventToBuffer:
 	dec 2, xsp
 	ld (xsp), a
 	ld a, (xsp)
@@ -124124,7 +124124,7 @@ LABEL_F3AE2E:
 	inc 2, xsp
 	ret
 
-LABEL_F3AE73:
+SeqPart_ScanNextEvent:
 	lda xsp, (xsp - 18)
 	push_werp 0xFA
 	ld (xsp + 18), a
@@ -124300,7 +124300,7 @@ LABEL_F3AFE7:
 	slaa bc
 
 LABEL_F3B012:
-	jr LABEL_F3B043
+	jr SeqNote_DeactivateChannelBit
 
 LABEL_F3B014:
 	cp (xsp + 8), 0x11
@@ -124323,10 +124323,10 @@ LABEL_F3B02D:
 	dec 1, a
 	lds bc, 1
 	and a, 0xF
-	jr z, LABEL_F3B043
+	jr z, SeqNote_DeactivateChannelBit
 	slaa bc
 
-LABEL_F3B043:
+SeqNote_DeactivateChannelBit:
 	cpl bc
 	anddm16 8982, xbc
 	jrl SeqNote_ReturnNotProcessed
@@ -124339,7 +124339,7 @@ LABEL_F3B04C:
 
 SeqNote_HandleMasterChannel:
 	cp (xsp + 20), 0x14
-	jr nz, LABEL_F3B096
+	jr nz, SeqNote_HandleAccompChannel
 	cp (xbc), 0x82
 	jr nz, LABEL_F3B08A
 	ld a, (xsp + 20)
@@ -124358,10 +124358,10 @@ SeqNote_HandleMasterChannel:
 LABEL_F3B08A:
 	ldda8 a, 8988
 	cp a, 0xFF
-	jr z, LABEL_F3B096
+	jr z, SeqNote_HandleAccompChannel
 	ld (xsp + 20), a
 
-LABEL_F3B096:
+SeqNote_HandleAccompChannel:
 	ld a, (xsp + 20)
 	cpda8 a, 8996
 	jr z, LABEL_F3B0A5
@@ -124375,9 +124375,9 @@ LABEL_F3B0A5:
 	cps hl, 0
 	jr nz, SeqNote_ReturnNotProcessed
 	cp (xsp + 20), 0x15
-	jr nz, LABEL_F3B0D7
+	jr nz, SeqNote_SetDrumChannelPair
 	cp (xsp + 10), 0x82
-	jr nz, LABEL_F3B0D7
+	jr nz, SeqNote_SetDrumChannelPair
 	ld c, (xsp + 20)
 	dec 1, c
 	extz bc
@@ -124389,7 +124389,7 @@ SeqNote_ReturnNotProcessed:
 	ldb l, 0x0
 	jrl LABEL_F3B2A9
 
-LABEL_F3B0D7:
+SeqNote_SetDrumChannelPair:
 	ldmi16 (xsp + 20), 0x2324
 
 LABEL_F3B0DC:
@@ -124430,7 +124430,7 @@ LABEL_F3B122:
 	ld a, (xsp + 20)
 	extz wa
 	lda xbc, (xsp + 10)
-	calr LABEL_F3B47A
+	calr AccPedalConfig_ApplyChannel0
 	ld (xsp + 4), l
 	jrl SeqNote_ConditionalWriteToBuffer
 
@@ -124443,7 +124443,7 @@ LABEL_F3B140:
 	ld a, (xsp + 20)
 	extz wa
 	lda xbc, (xsp + 10)
-	calr LABEL_F3B6EB
+	calr AccPedalConfig_ApplyChannelDirect
 	ld (xsp + 4), l
 	jrl SeqNote_ConditionalWriteToBuffer
 
@@ -124497,14 +124497,14 @@ LABEL_F3B1D1:
 	ld wa, bc
 	calr Chan_IsActive
 	cps l, 1
-	jr z, LABEL_F3B1F3
+	jr z, SeqNote_SendNoteOff
 	jrl SeqNote_ConditionalWriteToBuffer
 
 LABEL_F3B1DD:
 	ld wa, bc
 	calr Chan_IsActive
 	cps l, 1
-	jr z, LABEL_F3B1F3
+	jr z, SeqNote_SendNoteOff
 	jrl SeqNote_ConditionalWriteToBuffer
 
 LABEL_F3B1E9:
@@ -124513,12 +124513,12 @@ LABEL_F3B1E9:
 	cps l, 1
 	jrl nz, SeqNote_ConditionalWriteToBuffer
 
-LABEL_F3B1F3:
+SeqNote_SendNoteOff:
 	ld a, (xsp + 20)
 	dec 1, a
 	ld (xsp + 13), a
 	ld (xsp + 4), 0x4
-	jrl LABEL_F3B29A
+	jrl SeqNote_WriteEventToBuffer
 
 LABEL_F3B202:
 	ld wa, bc
@@ -124528,7 +124528,7 @@ LABEL_F3B202:
 	ld a, (xsp + 20)
 	extz wa
 	lda xbc, (xsp + 10)
-	calr LABEL_F3B782
+	calr AccPedalConfig_ApplyTempo
 	ld (xsp + 4), l
 	jr SeqNote_ConditionalWriteToBuffer
 
@@ -124543,7 +124543,7 @@ LABEL_F3B225:
 	dec 1, a
 	ld (xsp + 14), a
 	ld (xsp + 4), 0x5
-	jr LABEL_F3B29A
+	jr SeqNote_WriteEventToBuffer
 
 LABEL_F3B233:
 	ld a, (xsp + 20)
@@ -124554,7 +124554,7 @@ LABEL_F3B233:
 	lda xwa, (xsp + 10)
 	ld c, (xsp + 20)
 	extz bc
-	calr LABEL_F3B7D3
+	calr SeqNote_UpdatePlayPosition_A
 	jr SeqNote_ConditionalWriteToBuffer
 
 LABEL_F3B24C:
@@ -124566,7 +124566,7 @@ LABEL_F3B24C:
 	lda xwa, (xsp + 10)
 	ld c, (xsp + 20)
 	extz bc
-	calr LABEL_F3B843
+	calr SeqNote_UpdatePlayPosition_B
 	jr SeqNote_ConditionalWriteToBuffer
 
 LABEL_F3B265:
@@ -124576,7 +124576,7 @@ LABEL_F3B265:
 	jr nz, LABEL_F3B27E
 	ld a, (xsp + 20)
 	extz wa
-	calr LABEL_F3AE73
+	calr SeqPart_ScanNextEvent
 	cps l, 0
 	jr z, SeqNote_ConditionalWriteToBuffer
 	ldb l, 0x4
@@ -124599,7 +124599,7 @@ SeqNote_ConditionalWriteToBuffer:
 	cp (xsp + 4), 0x0
 	jr z, LABEL_F3B2A6
 
-LABEL_F3B29A:
+SeqNote_WriteEventToBuffer:
 	lda xwa, (xsp + 10)
 	ld c, (xsp + 4)
 	extz bc
@@ -124660,7 +124660,7 @@ LABEL_F3B2FB:
 	ldw hl, 0xFFFF
 	ret
 
-LABEL_F3B2FF:
+SeqNote_ProcessForChannelAlt:
 	lda xsp, (xsp - 12)
 	push xiz
 	ld (xsp + 14), a
@@ -124717,19 +124717,19 @@ LABEL_F3B31C:
 
 LABEL_F3B37F:
 	ldi_berp 0xFB, 5
-	jr LABEL_F3B393
+	jr SeqNote_WriteChannelToBuffer
 
 LABEL_F3B384:
 	ld wa, bc
 	ld xbc, xde
-	calr LABEL_F3B47A
+	calr AccPedalConfig_ApplyChannel0
 	ldfr_berp L, 0xFB
 
 SeqMidi_EmitEventToBuffer:
 	cpi_berp 0xFB, 0
 	jr z, LABEL_F3B39F
 
-LABEL_F3B393:
+SeqNote_WriteChannelToBuffer:
 	lda xwa, (xsp + 6)
 	ldto_berp C, 0xFB
 	extz bc
@@ -124742,7 +124742,7 @@ LABEL_F3B39F:
 LABEL_F3B3A5:
 	ld wa, bc
 	ld xbc, xde
-	calr LABEL_F3B6EB
+	calr AccPedalConfig_ApplyChannelDirect
 	ldfr_berp L, 0xFB
 	jr SeqMidi_EmitEventToBuffer
 
@@ -124793,12 +124793,12 @@ LABEL_F3B40C:
 LABEL_F3B413:
 	ld (xde), a
 	ldi_berp 0xFB, 4
-	jrl LABEL_F3B393
+	jrl SeqNote_WriteChannelToBuffer
 
 LABEL_F3B41B:
 	ld wa, bc
 	ld xbc, xde
-	calr LABEL_F3B782
+	calr AccPedalConfig_ApplyTempo
 	ldfr_berp L, 0xFB
 	jrl SeqMidi_EmitEventToBuffer
 
@@ -124808,12 +124808,12 @@ LABEL_F3B428:
 
 LABEL_F3B42E:
 	ld xwa, xde
-	calr LABEL_F3B7D3
+	calr SeqNote_UpdatePlayPosition_A
 	jrl SeqMidi_EmitEventToBuffer
 
 LABEL_F3B436:
 	ld xwa, xde
-	calr LABEL_F3B843
+	calr SeqNote_UpdatePlayPosition_B
 	jrl SeqMidi_EmitEventToBuffer
 
 LABEL_F3B43E:
@@ -124821,7 +124821,7 @@ LABEL_F3B43E:
 	call SeqData_SetErrorCode
 	ld a, (xsp + 14)
 	extz wa
-	calr LABEL_F3AE73
+	calr SeqPart_ScanNextEvent
 	cps l, 0
 	jrl z, SeqMidi_EmitEventToBuffer
 	ldb l, 0x4
@@ -124853,7 +124853,7 @@ LABEL_F3B477:
 	ldb l, 0x1
 	ret
 
-LABEL_F3B47A:
+AccPedalConfig_ApplyChannel0:
 	dec 2, xsp
 	push_werp 0xFA
 	ld (xsp + 2), a
@@ -124935,7 +124935,7 @@ LABEL_F3B513:
 	cpda8 a, 8990
 	jr nz, LABEL_F3B54D
 	cpdi8 7560, 0
-	jrl nz, LABEL_F3B623
+	jrl nz, AccPedalConfig_ClearFlag7560
 
 LABEL_F3B54D:
 	ldto_berp A, 0xFB
@@ -124999,7 +124999,7 @@ LABEL_F3B5D5:
 	cpda8 a, 8990
 	jr nz, LABEL_F3B5F2
 	cpdi8 7560, 0
-	jr nz, LABEL_F3B623
+	jr nz, AccPedalConfig_ClearFlag7560
 
 LABEL_F3B5F2:
 	ldto_berp A, 0xFB
@@ -125016,15 +125016,15 @@ LABEL_F3B606:
 	jrl z, AccPedalConfig_ReturnError7
 	ld a, (xsp + 2)
 	cpda8 a, 8990
-	jr nz, LABEL_F3B62B
+	jr nz, AccPedalConfig_StorePedalValues
 	cpdi8 7560, 0
-	jr z, LABEL_F3B62B
+	jr z, AccPedalConfig_StorePedalValues
 
-LABEL_F3B623:
+AccPedalConfig_ClearFlag7560:
 	stdi8 7560, 0
 	jrl LABEL_F3B50E
 
-LABEL_F3B62B:
+AccPedalConfig_StorePedalValues:
 	ldto_berp A, 0xFB
 	extz wa
 	stda8 13448, e
@@ -125071,9 +125071,9 @@ AccPedalConfig_ApplyChannelSettings:
 	ldto_berp C, 0xF0
 	ld e, a
 	cps d, 6
-	jr nz, LABEL_F3B6C2
+	jr nz, AccPedalConfig_CheckMaskBits
 	bit_erpb 0xFB, 0x02
-	jr z, LABEL_F3B6C2
+	jr z, AccPedalConfig_CheckMaskBits
 	jr LABEL_F3B6CA
 
 LABEL_F3B6A6:
@@ -125087,7 +125087,7 @@ LABEL_F3B6A6:
 	stda8 13430, e
 	jr AccPedalConfig_ReplayAndReturnOK
 
-LABEL_F3B6C2:
+AccPedalConfig_CheckMaskBits:
 	ldto_berp A, 0xFB
 	and a, 0xC
 	jr z, LABEL_F3B6DD
@@ -125113,16 +125113,16 @@ LABEL_F3B6E5:
 	inc 2, xsp
 	ret
 
-LABEL_F3B6EB:
+AccPedalConfig_ApplyChannelDirect:
 	dec 4, xsp
 	push xiz
 	ld xiz, xbc
 	ld (xsp + 6), a
 	cp (xiz + 2), 0x48
-	jr nz, LABEL_F3B774
+	jr nz, AccPedalConfig_ChannelDirect_Error
 	ld c, (xiz + 3)
 	cps c, 0
-	jr nz, LABEL_F3B774
+	jr nz, AccPedalConfig_ChannelDirect_Error
 	ld a, (xiz + 4)
 	ld (xsp + 4), a
 	bitm 0, (xiz)
@@ -125164,7 +125164,7 @@ LABEL_F3B770:
 	ldb l, 0x0
 	jr LABEL_F3B77E
 
-LABEL_F3B774:
+AccPedalConfig_ChannelDirect_Error:
 	ld a, (xsp + 6)
 	dec 1, a
 	ld (xiz + 6), a
@@ -125175,7 +125175,7 @@ LABEL_F3B77E:
 	inc 4, xsp
 	ret
 
-LABEL_F3B782:
+AccPedalConfig_ApplyTempo:
 	push_werp 0xFA
 	ld e, (xbc + 2)
 	ld a, (xbc + 3)
@@ -125206,7 +125206,7 @@ LABEL_F3B797:
 	pop_werp 0xFA
 	ret
 
-LABEL_F3B7D3:
+SeqNote_UpdatePlayPosition_A:
 	dec 6, xsp
 	ld (xsp), c
 	ld (xsp + 2), xwa
@@ -125260,7 +125260,7 @@ LABEL_F3B829:
 	.byte 0x2f, 0x04, 0x41, 0xf1, 0x31, 0x04, 0xb8, 0x06
 	.byte 0x00, 0x0e
 
-LABEL_F3B843:
+SeqNote_UpdatePlayPosition_B:
 	dec 6, xsp
 	ld (xsp), c
 	ld (xsp + 2), xwa
@@ -125351,7 +125351,7 @@ LABEL_F3B8E7:
 	ld (xde), wa
 	ld wa, (xbc + 2)
 	ld (xde + 2), wa
-	jr LABEL_F3B9AA
+	jr SeqVoice_ApplyToChannels
 
 LABEL_F3B92B:
 	ldto_berp A, 0xFA
@@ -125371,7 +125371,7 @@ LABEL_F3B92B:
 	ld c, e
 	extz bc
 	cp l, 0x41
-	jr nz, LABEL_F3B992
+	jr nz, SeqVoice_LoadDefaultParams
 	lds hl, 1
 	ldto_berp A, 0xFB
 	and a, 0xF
@@ -125380,7 +125380,7 @@ LABEL_F3B92B:
 
 LABEL_F3B969:
 	andda16 xhl, 10408
-	jr z, LABEL_F3B992
+	jr z, SeqVoice_LoadDefaultParams
 	lda xhl, (xsp + 6)
 	add bc, bc
 	ldada xwa, 10526
@@ -125393,9 +125393,9 @@ LABEL_F3B969:
 	ld a, (xde)
 	extz wa
 	ld (xhl + 2), wa
-	jr LABEL_F3B9AA
+	jr SeqVoice_ApplyToChannels
 
-LABEL_F3B992:
+SeqVoice_LoadDefaultParams:
 	lda xde, (xsp + 6)
 	sla bc, 2
 	ldada xwa, 9184
@@ -125406,7 +125406,7 @@ LABEL_F3B992:
 	ld wa, (xbc + 2)
 	ld (xde + 2), wa
 
-LABEL_F3B9AA:
+SeqVoice_ApplyToChannels:
 	ldto_berp A, 0xFA
 	extz wa
 	lda xbc, (xsp + 10)
@@ -154907,7 +154907,7 @@ SeqStep_PlaybackCheckBeat:
 SeqStep_PlaybackCheckPattern:
 	cpdi16 10420, 0
 	jr z, SeqStep_PlaybackNoAction
-	call LABEL_F3A867
+	call SeqNote_ProcessNoteOn
 	jr SeqStep_PlaybackResultDispatch
 
 SeqStep_PlaybackNoAction:
